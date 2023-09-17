@@ -1,0 +1,474 @@
+ RAD  *%%TS  SD  20070420  214257  RADDATZ     REL-V5R4M0  5722-WDS
+      *===============================================================*
+      *                                                               *
+      *  (C) Thomas Raddatz                                           *
+      *                                                               *
+      *  Bereich  : PEEK Version 1.2.0                                *
+      *  Programm : PEEK17FM                                          *
+      *  Typ      : DSPF                                              *
+      *                                                               *
+      *  erstellt : 17.10.1997  Raddatz                               *
+      *                                                               *
+      *===============================================================*
+      *                                                               *
+      *  Kurzdokumentation :                                          *
+      *                                                               *
+      *  Peek/400 - Erfassen der Suchkriterien                        *
+      *                                                               *
+      *===============================================================*
+      *
+ RAD  *%%EC
+ RAD A                                      DSPSIZ(24 80 *DS3                  -
+ RAD A                                             27 132 *DS4)
+ RAD A                                      PRINT
+ RAD A                                      ALTHELP(CA01)
+ RAD A                                      HELP(01)
+      *
+      *----------------------------------------------------*
+ RAD A          R BILD01
+ RAD  *%%TS  SD  20070420  214257  RADDATZ     REL-V5R4M0  5722-WDS
+ RAD A  *DS3                                WINDOW(MSGCTL)
+ RAD A  *DS4                                WINDOW(MSGCTL)
+ RAD A                                      CHANGE(93)
+ RAD A                                      CF01
+ RAD A                                      CF02
+ RAD A                                      CF03
+ RAD A                                      CF04
+ RAD A                                      CF05
+ RAD A                                      CF06
+ RAD A                                      CF07
+ RAD A                                      CF08
+ RAD A                                      CF09
+ RAD A                                      CF10
+ RAD A                                      CF11
+ RAD A                                      CF12
+ RAD A                                      CF13
+ RAD A                                      CF14
+ RAD A                                      CF15
+ RAD A                                      CF16
+ RAD A                                      CF17
+ RAD A                                      CF18
+ RAD A                                      CF19
+ RAD A                                      CF20
+ RAD A                                      CF21
+ RAD A                                      CF22
+ RAD A                                      CF23
+ RAD A                                      CF24
+ RAD A                                      ROLLUP(91)
+ RAD A                                      ROLLDOWN(92)
+ RAD A N88                                  DSPMOD(*DS4)
+ RAD A                                      OVERLAY
+ RAD A            TXT0090       11A  O  1 31MSGID(TXT 0090 PEEKGER)
+ RAD A                                      COLOR(WHT)
+ RAD A                                  2  1'                                  -
+ RAD A                                                                         -
+ RAD A                                       '
+ RAD A                                      DSPATR(UL)
+ RAD A                                      COLOR(BLU)
+ RAD A            TXT0091       12A  O  4  2MSGID(TXT 0091 PEEKGER)
+ RAD A                                      COLOR(WHT)
+ RAD A            $FLDNAME      40A  O  4 15
+ RAD A            TXT0092       12A  O  5  2MSGID(TXT 0092 PEEKGER)
+ RAD A                                      COLOR(WHT)
+ RAD A            $FLDLAENGE     5Y 0O  5 15EDTCDE(3)
+ RAD A  60                              5 21','
+ RAD A                                      COLOR(WHT)
+ RAD A  60        $FLDDEZST      2Y 0O  5 23EDTCDE(3)
+ RAD A            TXT0096       12A  O  5 33MSGID(TXT 0096 PEEKGER)
+ RAD A                                      COLOR(WHT)
+ RAD A            $BUFLAENGE     5Y 0O  5 46EDTCDE(3)
+ RAD A  61                              5 52'+ 2'
+ RAD A            TXT0095       14A  O  6  2MSGID(TXT 0095 PEEKGER)
+ RAD A                                      COLOR(WHT)
+ RAD A            #STARTPOS      5Y 0B  6 17
+ RAD A  31                                  DSPATR(RI)
+ RAD A  21                                  DSPATR(PC)
+ RAD A                                      EDTCDE(L)
+ RAD A            TXT0094       12A  O  8 10MSGID(TXT 0094 PEEKGER)
+ RAD A                                      COLOR(WHT)
+ RAD A            TXT0093       12A  O  8 50MSGID(TXT 0093 PEEKGER)
+ RAD A                                      COLOR(WHT)
+ RAD A            $OFS1          4Y 0B  9  2EDTCDE(3)
+ RAD A N50                                  DSPATR(PR)
+ RAD A  50                                  DSPATR(UL)
+ RAD A            #HEX11         8A  B  9 10
+ RAD A  30                                  DSPATR(RI)
+ RAD A  20                                  DSPATR(PC)
+ RAD A  51
+ RAD AO 70                                  DSPATR(PR)
+ RAD A N70N51                               DSPATR(UL)
+ RAD A            #HEX12         8A  B  9 19
+ RAD A  30                                  DSPATR(RI)
+ RAD A  20                                  DSPATR(PC)
+ RAD A  51
+ RAD AO 70                                  DSPATR(PR)
+ RAD A N70N51                               DSPATR(UL)
+ RAD A            #HEX13         8A  B  9 28
+ RAD A  30                                  DSPATR(RI)
+ RAD A  20                                  DSPATR(PC)
+ RAD A  51
+ RAD AO 70                                  DSPATR(PR)
+ RAD A N70N51                               DSPATR(UL)
+ RAD A            #HEX14         8A  B  9 37
+ RAD A  30                                  DSPATR(RI)
+ RAD A  20                                  DSPATR(PC)
+ RAD A  51
+ RAD AO 70                                  DSPATR(PR)
+ RAD A N70N51                               DSPATR(UL)
+ RAD A            $STR1         16A  B  9 50CHECK(LC)
+ RAD A N51
+ RAD AO 70                                  DSPATR(PR)
+ RAD A N70 51                               DSPATR(UL)
+ RAD A            $OFS2          4Y 0B 10  2EDTCDE(3)
+ RAD A N50                                  DSPATR(PR)
+ RAD A  50                                  DSPATR(UL)
+ RAD A            #HEX21         8A  B 10 10
+ RAD A  30                                  DSPATR(RI)
+ RAD A  20                                  DSPATR(PC)
+ RAD A  51
+ RAD AO 70                                  DSPATR(PR)
+ RAD A N70N51                               DSPATR(UL)
+ RAD A            #HEX22         8A  B 10 19
+ RAD A  30                                  DSPATR(RI)
+ RAD A  20                                  DSPATR(PC)
+ RAD A  51
+ RAD AO 70                                  DSPATR(PR)
+ RAD A N70N51                               DSPATR(UL)
+ RAD A            #HEX23         8A  B 10 28
+ RAD A  30                                  DSPATR(RI)
+ RAD A  20                                  DSPATR(PC)
+ RAD A  51
+ RAD AO 70                                  DSPATR(PR)
+ RAD A N70N51                               DSPATR(UL)
+ RAD A            #HEX24         8A  B 10 37
+ RAD A  30                                  DSPATR(RI)
+ RAD A  20                                  DSPATR(PC)
+ RAD A  51
+ RAD AO 70                                  DSPATR(PR)
+ RAD A N70N51                               DSPATR(UL)
+ RAD A            $STR2         16A  B 10 50CHECK(LC)
+ RAD A N51
+ RAD AO 70                                  DSPATR(PR)
+ RAD A N70 51                               DSPATR(UL)
+ RAD A            $OFS3          4Y 0B 11  2EDTCDE(3)
+ RAD A N50                                  DSPATR(PR)
+ RAD A  50                                  DSPATR(UL)
+ RAD A            #HEX31         8A  B 11 10
+ RAD A  30                                  DSPATR(RI)
+ RAD A  20                                  DSPATR(PC)
+ RAD A  51
+ RAD AO 70                                  DSPATR(PR)
+ RAD A N70N51                               DSPATR(UL)
+ RAD A            #HEX32         8A  B 11 19
+ RAD A  30                                  DSPATR(RI)
+ RAD A  20                                  DSPATR(PC)
+ RAD A  51
+ RAD AO 70                                  DSPATR(PR)
+ RAD A N70N51                               DSPATR(UL)
+ RAD A            #HEX33         8A  B 11 28
+ RAD A  30                                  DSPATR(RI)
+ RAD A  20                                  DSPATR(PC)
+ RAD A  51
+ RAD AO 70                                  DSPATR(PR)
+ RAD A N70N51                               DSPATR(UL)
+ RAD A            #HEX34         8A  B 11 37
+ RAD A  30                                  DSPATR(RI)
+ RAD A  20                                  DSPATR(PC)
+ RAD A  51
+ RAD AO 70                                  DSPATR(PR)
+ RAD A N70N51                               DSPATR(UL)
+ RAD A            $STR3         16A  B 11 50CHECK(LC)
+ RAD A N51
+ RAD AO 70                                  DSPATR(PR)
+ RAD A N70 51                               DSPATR(UL)
+ RAD A            $OFS4          4Y 0B 12  2EDTCDE(3)
+ RAD A N50                                  DSPATR(PR)
+ RAD A  50                                  DSPATR(UL)
+ RAD A            #HEX41         8A  B 12 10
+ RAD A  30                                  DSPATR(RI)
+ RAD A  20                                  DSPATR(PC)
+ RAD A  51
+ RAD AO 70                                  DSPATR(PR)
+ RAD A N70N51                               DSPATR(UL)
+ RAD A            #HEX42         8A  B 12 19
+ RAD A  30                                  DSPATR(RI)
+ RAD A  20                                  DSPATR(PC)
+ RAD A  51
+ RAD AO 70                                  DSPATR(PR)
+ RAD A N70N51                               DSPATR(UL)
+ RAD A            #HEX43         8A  B 12 28
+ RAD A  30                                  DSPATR(RI)
+ RAD A  20                                  DSPATR(PC)
+ RAD A  51
+ RAD AO 70                                  DSPATR(PR)
+ RAD A N70N51                               DSPATR(UL)
+ RAD A            #HEX44         8A  B 12 37
+ RAD A  30                                  DSPATR(RI)
+ RAD A  20                                  DSPATR(PC)
+ RAD A  51
+ RAD AO 70                                  DSPATR(PR)
+ RAD A N70N51                               DSPATR(UL)
+ RAD A            $STR4         16A  B 12 50CHECK(LC)
+ RAD A N51
+ RAD AO 70                                  DSPATR(PR)
+ RAD A N70 51                               DSPATR(UL)
+ RAD A            $OFS5          4Y 0B 13  2EDTCDE(3)
+ RAD A N50                                  DSPATR(PR)
+ RAD A  50                                  DSPATR(UL)
+ RAD A            #HEX51         8A  B 13 10
+ RAD A  30                                  DSPATR(RI)
+ RAD A  20                                  DSPATR(PC)
+ RAD A  51
+ RAD AO 70                                  DSPATR(PR)
+ RAD A N70N51                               DSPATR(UL)
+ RAD A            #HEX52         8A  B 13 19
+ RAD A  30                                  DSPATR(RI)
+ RAD A  20                                  DSPATR(PC)
+ RAD A  51
+ RAD AO 70                                  DSPATR(PR)
+ RAD A N70N51                               DSPATR(UL)
+ RAD A            #HEX53         8A  B 13 28
+ RAD A  30                                  DSPATR(RI)
+ RAD A  20                                  DSPATR(PC)
+ RAD A  51
+ RAD AO 70                                  DSPATR(PR)
+ RAD A N70N51                               DSPATR(UL)
+ RAD A            #HEX54         8A  B 13 37
+ RAD A  30                                  DSPATR(RI)
+ RAD A  20                                  DSPATR(PC)
+ RAD A  51
+ RAD AO 70                                  DSPATR(PR)
+ RAD A N70N51                               DSPATR(UL)
+ RAD A            $STR5         16A  B 13 50CHECK(LC)
+ RAD A N51
+ RAD AO 70                                  DSPATR(PR)
+ RAD A N70 51                               DSPATR(UL)
+ RAD A            $OFS6          4Y 0B 14  2EDTCDE(3)
+ RAD A N50                                  DSPATR(PR)
+ RAD A  50                                  DSPATR(UL)
+ RAD A            #HEX61         8A  B 14 10
+ RAD A  30                                  DSPATR(RI)
+ RAD A  20                                  DSPATR(PC)
+ RAD A  51
+ RAD AO 70                                  DSPATR(PR)
+ RAD A N70N51                               DSPATR(UL)
+ RAD A            #HEX62         8A  B 14 19
+ RAD A  30                                  DSPATR(RI)
+ RAD A  20                                  DSPATR(PC)
+ RAD A  51
+ RAD AO 70                                  DSPATR(PR)
+ RAD A N70N51                               DSPATR(UL)
+ RAD A            #HEX63         8A  B 14 28
+ RAD A  30                                  DSPATR(RI)
+ RAD A  20                                  DSPATR(PC)
+ RAD A  51
+ RAD AO 70                                  DSPATR(PR)
+ RAD A N70N51                               DSPATR(UL)
+ RAD A            #HEX64         8A  B 14 37
+ RAD A  30                                  DSPATR(RI)
+ RAD A  20                                  DSPATR(PC)
+ RAD A  51
+ RAD AO 70                                  DSPATR(PR)
+ RAD A N70N51                               DSPATR(UL)
+ RAD A            $STR6         16A  B 14 50CHECK(LC)
+ RAD A N51
+ RAD AO 70                                  DSPATR(PR)
+ RAD A N70 51                               DSPATR(UL)
+ RAD A            $OFS7          4Y 0B 15  2EDTCDE(3)
+ RAD A N50                                  DSPATR(PR)
+ RAD A  50                                  DSPATR(UL)
+ RAD A            #HEX71         8A  B 15 10
+ RAD A  30                                  DSPATR(RI)
+ RAD A  20                                  DSPATR(PC)
+ RAD A  51
+ RAD AO 70                                  DSPATR(PR)
+ RAD A N70N51                               DSPATR(UL)
+ RAD A            #HEX72         8A  B 15 19
+ RAD A  30                                  DSPATR(RI)
+ RAD A  20                                  DSPATR(PC)
+ RAD A  51
+ RAD AO 70                                  DSPATR(PR)
+ RAD A N70N51                               DSPATR(UL)
+ RAD A            #HEX73         8A  B 15 28
+ RAD A  30                                  DSPATR(RI)
+ RAD A  20                                  DSPATR(PC)
+ RAD A  51
+ RAD AO 70                                  DSPATR(PR)
+ RAD A N70N51                               DSPATR(UL)
+ RAD A            #HEX74         8A  B 15 37
+ RAD A  30                                  DSPATR(RI)
+ RAD A  20                                  DSPATR(PC)
+ RAD A  51
+ RAD AO 70                                  DSPATR(PR)
+ RAD A N70N51                               DSPATR(UL)
+ RAD A            $STR7         16A  B 15 50CHECK(LC)
+ RAD A N51
+ RAD AO 70                                  DSPATR(PR)
+ RAD A N70 51                               DSPATR(UL)
+ RAD A            $OFS8          4Y 0B 16  2EDTCDE(3)
+ RAD A N50                                  DSPATR(PR)
+ RAD A  50                                  DSPATR(UL)
+ RAD A            #HEX81         8A  B 16 10
+ RAD A  30                                  DSPATR(RI)
+ RAD A  20                                  DSPATR(PC)
+ RAD A  51
+ RAD AO 70                                  DSPATR(PR)
+ RAD A N70N51                               DSPATR(UL)
+ RAD A            #HEX82         8A  B 16 19
+ RAD A  30                                  DSPATR(RI)
+ RAD A  20                                  DSPATR(PC)
+ RAD A  51
+ RAD AO 70                                  DSPATR(PR)
+ RAD A N70N51                               DSPATR(UL)
+ RAD A            #HEX83         8A  B 16 28
+ RAD A  30                                  DSPATR(RI)
+ RAD A  20                                  DSPATR(PC)
+ RAD A  51
+ RAD AO 70                                  DSPATR(PR)
+ RAD A N70N51                               DSPATR(UL)
+ RAD A            #HEX84         8A  B 16 37
+ RAD A  30                                  DSPATR(RI)
+ RAD A  20                                  DSPATR(PC)
+ RAD A  51
+ RAD AO 70                                  DSPATR(PR)
+ RAD A N70N51                               DSPATR(UL)
+ RAD A            $STR8         16A  B 16 50CHECK(LC)
+ RAD A N51
+ RAD AO 70                                  DSPATR(PR)
+ RAD A N70 51                               DSPATR(UL)
+ RAD A                                 18  1'                                  -
+ RAD A                                                                         -
+ RAD A                                       '
+ RAD A                                      DSPATR(UL)
+ RAD A                                      COLOR(BLU)
+      *
+      *----------------------------------------------------*
+ ADD A          R PBBOT#1
+      *%%TS  SD  19971016  120515  RADDATZ     REL-V3R6M0  5716-PW1
+ ADD A  *DS3                                WINDOW(MSGCTL)
+ ADD A  *DS4                                WINDOW(MSGCTL)
+ ADD A N88                                  DSPMOD(*DS4)
+ ADD A                                      OVERLAY
+ RAD A            $$FKEY01      18A  O 19  2COLOR(BLU)
+ RAD A            $$FKEY02      18A  O 19 22COLOR(BLU)
+ RAD A            $$FKEY03      18A  O 19 42COLOR(BLU)
+      *
+      *----------------------------------------------------*
+ ADD A          R PBBOT#2
+      *%%TS  SD  19971016  120515  RADDATZ     REL-V3R6M0  5716-PW1
+ ADD A  *DS3                                WINDOW(MSGCTL)
+ ADD A  *DS4                                WINDOW(MSGCTL)
+ ADD A N88                                  DSPMOD(*DS4)
+ ADD A                                      OVERLAY
+ RAD A            $$FKEY04      18A  O 19  2COLOR(BLU)
+ RAD A            $$FKEY05      18A  O 19 22COLOR(BLU)
+ RAD A            $$FKEY06      18A  O 19 42COLOR(BLU)
+      *
+      *----------------------------------------------------*
+ ADD A          R PBBOT#3
+      *%%TS  SD  19971016  120515  RADDATZ     REL-V3R6M0  5716-PW1
+ ADD A  *DS3                                WINDOW(MSGCTL)
+ ADD A  *DS4                                WINDOW(MSGCTL)
+ ADD A N88                                  DSPMOD(*DS4)
+ ADD A                                      OVERLAY
+ RAD A            $$FKEY07      18A  O 19  2COLOR(BLU)
+ RAD A            $$FKEY08      18A  O 19 22COLOR(BLU)
+ RAD A            $$FKEY09      18A  O 19 42COLOR(BLU)
+      *
+      *----------------------------------------------------*
+ ADD A          R PBBOT#4
+      *%%TS  SD  19971016  120515  RADDATZ     REL-V3R6M0  5716-PW1
+ ADD A  *DS3                                WINDOW(MSGCTL)
+ ADD A  *DS4                                WINDOW(MSGCTL)
+ ADD A N88                                  DSPMOD(*DS4)
+ ADD A                                      OVERLAY
+ RAD A            $$FKEY10      18A  O 19  2COLOR(BLU)
+ RAD A            $$FKEY11      18A  O 19 22COLOR(BLU)
+ RAD A            $$FKEY12      18A  O 19 42COLOR(BLU)
+      *
+      *----------------------------------------------------*
+ ADD A          R PBBOT#5
+      *%%TS  SD  19980212  152449  RADDATZ     REL-V3R7M0  5716-PW1
+ ADD A  *DS3                                WINDOW(MSGCTL)
+ ADD A  *DS4                                WINDOW(MSGCTL)
+ ADD A N88                                  DSPMOD(*DS4)
+ ADD A                                      OVERLAY
+ RAD A            $$FKEY13      18A  O 19  2COLOR(BLU)
+ RAD A            $$FKEY14      18A  O 19 22COLOR(BLU)
+ RAD A            $$FKEY15      18A  O 19 42COLOR(BLU)
+      *
+      *----------------------------------------------------*
+ ADD A          R PBBOT#6
+      *%%TS  SD  19980216  152449  RADDATZ     REL-V3R7M0  5716-PW1
+ ADD A  *DS3                                WINDOW(MSGCTL)
+ ADD A  *DS4                                WINDOW(MSGCTL)
+ ADD A N88                                  DSPMOD(*DS4)
+ ADD A                                      OVERLAY
+ RAD A            $$FKEY16      18A  O 19  2COLOR(BLU)
+ RAD A            $$FKEY17      18A  O 19 22COLOR(BLU)
+ RAD A            $$FKEY18      18A  O 19 42COLOR(BLU)
+      *
+      *----------------------------------------------------*
+ ADD A          R PBBOT#7
+      *%%TS  SD  19980212  152449  RADDATZ     REL-V3R7M0  5716-PW1
+ ADD A  *DS3                                WINDOW(MSGCTL)
+ ADD A  *DS4                                WINDOW(MSGCTL)
+ ADD A N88                                  DSPMOD(*DS4)
+ ADD A                                      OVERLAY
+ RAD A            $$FKEY19      18A  O 19  2COLOR(BLU)
+ RAD A            $$FKEY20      18A  O 19 22COLOR(BLU)
+ RAD A            $$FKEY21      18A  O 19 42COLOR(BLU)
+      *
+      *----------------------------------------------------*
+ ADD A          R PBBOT#8
+      *%%TS  SD  19980212  152449  RADDATZ     REL-V3R7M0  5716-PW1
+ ADD A  *DS3                                WINDOW(MSGCTL)
+ ADD A  *DS4                                WINDOW(MSGCTL)
+ ADD A N88                                  DSPMOD(*DS4)
+ ADD A                                      OVERLAY
+ RAD A            $$FKEY22      18A  O 19  2COLOR(BLU)
+ RAD A            $$FKEY23      18A  O 19 22COLOR(BLU)
+ RAD A            $$FKEY24      18A  O 19 42COLOR(BLU)
+      *
+      *----------------------------------------------------*
+ ADD A          R MSGSFL                    SFL
+      *%%TS  SD  19971017  155045  RADDATZ     REL-V3R6M0  5716-PW1
+ RAD A  *DS3                                SFLMSGRCD(20)
+ RAD A  *DS4                                SFLMSGRCD(20)
+ ADD A            §MSGKY                    SFLMSGKEY
+ ADD A            §PGMQ                     SFLPGMQ(10)
+      *
+      *----------------------------------------------------*
+ ADD A          R MSGCTL                    SFLCTL(MSGSFL)
+      *%%TS  SD  19971021  180314  RADDATZ     REL-V3R6M0  5716-PW1
+ ADD A                                      KEEP
+ ADD A                                      LOCK
+ ADD A N88                                  DSPMOD(*DS4)
+ ADD A                                      SFLDSP
+ ADD A                                      SFLDSPCTL
+ ADD A                                      SFLINZ
+ ADD A N89                                  SFLEND
+ ADD A  *DS3                                SFLSIZ(0050)
+ ADD A  *DS4                                SFLSIZ(0050)
+ ADD A  *DS3                                SFLPAG(0001)
+ ADD A  *DS4                                SFLPAG(0001)
+ RAD A  *DS3                                WINDOW(&ZEI &POS 20 70 *NOMSGLIN)
+ RAD A  *DS4                                WINDOW(&ZEI &POS 20 70 *NOMSGLIN)
+ ADD A            §PGMQ                     SFLPGMQ(10)
+ RAD A            ZEI            3S 0P
+ RAD A            POS            3S 0P
+      *
+      *----------------------------------------------------*
+      *  RMVWDW ZUM LÖSCHEN DES WINDOWS
+      *
+ ADD A          R RMVWDW                    CLRL(*NO) OVERLAY FRCDTA
+ ADD A N88                                  DSPMOD(*DS4)
+      *
+      *  DER DUMMY SATZ MUSS VORHANDEN SEIN,
+      *  AUCH WENN KEIN ZUGRIFF AUF IHN ERFOLGT !!
+      *
+      *----------------------------------------------------*
+ ADD A          R DUMMY                     ASSUME
+      *%%TS  SD  19931014  095141  LASCHE      REL-V2R2M0  5738-PW1
+ ADD A N88                                  DSPMOD(*DS4)
+ ADD A                                 11  1' '

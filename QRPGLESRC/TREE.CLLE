@@ -1,0 +1,150 @@
+     /* ============================================================ */
+     /*                                                              */
+     /*  (c) Thomas Raddatz                                          */
+     /*                                                              */
+     /*  Bereich  : PEEK, Version 2.1.0                              */
+     /*  Programm : TREE                                             */
+     /*  Typ      : RPG                                              */
+     /*                                                              */
+     /*  erstellt : 27.05.98  Raddatz                                */
+     /*  geändert : 27.04.99  2.1.0                                  */
+     /*                                                              */
+     /* ============================================================ */
+     /*                                                              */
+     /*  Dokumentation:                                              */
+     /*                                                              */
+     /*  Befehlsausführungsprogramm für PEEK/400 (Tree)              */
+     /*                                                              */
+     /* ============================================================ */
+
+          PGM        PARM(&QFILE    +
+                          &Access   +
+                          &LANG4    +
+                          &CHGLIB   +
+                          &CHGFILE  +
+                          &CHGMBR   +
+                          &UPDMOD   +
+                          &CHGSQLW  +
+                          &CHGSQLO  +
+                          &SETTINGS +
+                          &WHERE    +
+                          &ORDERBY  )
+
+          DCL        VAR(&QFILE   )   TYPE(*CHAR)  LEN(20)
+          DCL        VAR(&LANG4   )   TYPE(*CHAR)  LEN( 4)
+          DCL        VAR(&CHGLIB  )   TYPE(*CHAR)  LEN( 1)
+          DCL        VAR(&CHGFILE )   TYPE(*CHAR)  LEN( 1)
+          DCL        VAR(&CHGMBR  )   TYPE(*CHAR)  LEN( 1)
+          DCL        VAR(&UPDMOD  )   TYPE(*CHAR)  LEN( 1)
+          DCL        VAR(&CHGSQLW )   TYPE(*CHAR)  LEN( 1)
+          DCL        VAR(&CHGSQLO )   TYPE(*CHAR)  LEN( 1)
+          DCL        VAR(&WHERE   )   TYPE(*CHAR)  LEN(514)
+          DCL        VAR(&ORDERBY )   TYPE(*CHAR)  LEN(514)
+
+          DCL        VAR(&QEnvFile  ) TYPE(*CHAR)  LEN( 20)
+          DCL        VAR(&envMbr    ) TYPE(*CHAR)  LEN( 10)
+          DCL        VAR(&envSave   ) TYPE(*CHAR)  LEN( 10)
+          DCL        VAR(&envLayout ) TYPE(*CHAR)  LEN( 10)
+          DCL        VAR(&settings  ) TYPE(*CHAR)  LEN( 20)
+          DCL        VAR(&Member  )   TYPE(*CHAR)  LEN(10)
+          DCL        VAR(&Access  )   TYPE(*CHAR)  LEN( 1)
+          DCL        VAR(&Language)   TYPE(*CHAR)  LEN(10)
+          DCL        VAR(&Prodlib )   TYPE(*CHAR)  LEN(10)
+          DCL        VAR(&Programm)   TYPE(*CHAR)  LEN(10)
+
+/* Fehlerbehandlung     */
+             DCL        VAR(&ERROR)      TYPE(*LGL) +
+                          VALUE('0')
+             DCL        VAR(&ERRMSGKEY)  TYPE(*CHAR) LEN(4)
+
+             DCL        VAR(&ERRMSGTYP)  TYPE(*CHAR) LEN(10) +
+                          VALUE('*DIAG')
+             DCL        VAR(&ERRNBRTYP)  TYPE(*CHAR) LEN(4) +
+                          VALUE(X'00000001')
+             DCL        VAR(&ERRPGMMSGQ) TYPE(*CHAR) LEN(10) +
+                          VALUE('*')
+             DCL        VAR(&ERRSTKCTR)  TYPE(*CHAR) LEN(4) +
+                          VALUE(X'00000001')
+             DCL        VAR(&ERRCODE  )  TYPE(*CHAR) LEN(4) +
+                          VALUE(X'00000000')
+
+/* Sende alle Fehler zur Error Handling Routine */
+             MONMSG     MSGID(CPF0000) EXEC(GOTO CMDLBL(ERROR))
+
+             CHGVAR     VAR(&ERROR    ) VALUE('0')
+
+ /* -------------------------------------------------------------- */
+ /*  Los geht's                                                    */
+ /* -------------------------------------------------------------- */
+
+             CHGVAR     VAR(&LANGUAGE) VALUE(&LANG4)
+             RTVOBJD    OBJ(*LIBL/PEEK) OBJTYPE(*CMD) RTNLIB(&PRODLIB)
+             CHGVAR     VAR(&Member   ) VALUE('*FIRST')
+             CHGVAR     VAR(&Programm ) VALUE('PEEK44')
+
+             CHGVAR     VAR(&qEnvFile ) VALUE('*NONE     *LIBL     ')
+             CHGVAR     VAR(&envMbr   ) VALUE('*FILE')
+             CHGVAR     VAR(&envSave  ) VALUE('*NO')
+             CHGVAR     VAR(&envLayout) VALUE('*NO')
+
+             CALL       PGM(&PRODLIB/PEEK00) PARM(      +
+                                             &QFile     +
+                                             &Member    +
+                                             &Access    +
+                                             &Language  +
+                                             &Prodlib   +
+                                             &Programm  +
+                                             &ChgLib    +
+                                             &ChgFile   +
+                                             &ChgMbr    +
+                                             &UpdMod    +
+                                             &ChgSqlW   +
+                                             &ChgSqlO   +
+                                             &QEnvFile  +
+                                             &envMbr    +
+                                             &envSave   +
+                                             &envLayout +
+                                             &settings  +
+                                             &Where     +
+                                             &OrderBy   +
+                                             )
+
+/* Verschiebe alle *INFO Nachrichten zur             */
+/* vorangegangenen Programmwarteschlange             */
+             CHGVAR     VAR(&ERRMSGTYP) VALUE('*INFO')
+             CHGVAR     VAR(&ERRSTKCTR) VALUE(X'00000002')
+             CALL       PGM(QMHMOVPM) PARM(&ERRMSGKEY &ERRMSGTYP +
+                          &ERRNBRTYP &ERRPGMMSGQ &ERRSTKCTR &ERRCODE)
+
+ ENDE:
+             RCLRSC     LVL(*)
+             MONMSG     MSGID(CPF0000)
+
+             RCLACTGRP  ACTGRP(PEEK) OPTION(*NORMAL)
+             MONMSG     MSGID(CPF0000)
+
+             IF         COND(&ERROR) THEN(DO)
+                /* Sende letzte *ESCAPE nochmals   */
+                CALL       PGM(QMHRSNEM) PARM(&ERRMSGKEY &ERRCODE)
+             ENDDO
+
+             RETURN
+
+/* ---------------- */
+/* Error            */
+/* Handling         */
+/* ---------------- */
+ ERROR:
+             IF         COND(&ERROR) THEN(GOTO CMDLBL(ENDE))
+             ELSE       CHGVAR     VAR(&ERROR) VALUE('1')
+
+/* Verschiebe alle *DIAG Nachrichten zur             */
+/* vorangegangenen Programmwarteschlange             */
+             CHGVAR     VAR(&ERRMSGTYP) VALUE('*DIAG')
+             CALL       PGM(QMHMOVPM) PARM(&ERRMSGKEY &ERRMSGTYP +
+                          &ERRNBRTYP &ERRPGMMSGQ &ERRSTKCTR &ERRCODE)
+
+             GOTO       CMDLBL(ENDE)
+
+             ENDPGM
+

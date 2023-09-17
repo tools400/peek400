@@ -1,0 +1,121 @@
+     /* ============================================================ */
+     /*                                                              */
+     /*  (c) Thomas Raddatz                                          */
+     /*                                                              */
+     /*  Bereich  : PEEK, Version 1.4.0                              */
+     /*  Programm : PEEK97                                           */
+     /*  Typ      : CLP                                              */
+     /*                                                              */
+     /*  erstellt : 29.12.1997  Raddatz                              */
+     /*                                                              */
+     /* ============================================================ */
+     /*                                                              */
+     /*  Dokumentation:                                              */
+     /*                                                              */
+     /*  Erstellen der Nachrichten-DS und CL-Sourcen für             */
+     /*  PEEKENG, PEEKFRA und PEEKGER.                               */
+     /*                                                              */
+     /* ============================================================ */
+
+          PGM        PARM(&MsgFLib    +
+                          )
+
+          DCL        VAR(&MsgFLib   ) TYPE(*CHAR)  LEN( 10)
+
+/* Fehlerbehandlung     */
+             DCL        VAR(&ERROR)      TYPE(*LGL) +
+                          VALUE('0')
+             DCL        VAR(&ERRMSGKEY)  TYPE(*CHAR) LEN(4)
+
+             DCL        VAR(&ERRMSGTYP)  TYPE(*CHAR) LEN(10) +
+                          VALUE('*DIAG')
+             DCL        VAR(&ERRNBRTYP)  TYPE(*CHAR) LEN(4) +
+                          VALUE(X'00000001')
+             DCL        VAR(&ERRPGMMSGQ) TYPE(*CHAR) LEN(10) +
+                          VALUE('*')
+             DCL        VAR(&ERRSTKCTR)  TYPE(*CHAR) LEN(4) +
+                          VALUE(X'00000001')
+             DCL        VAR(&ERRCODE  )  TYPE(*CHAR) LEN(4) +
+                          VALUE(X'00000000')
+
+/* Sende alle Fehler zur Error Handling Routine */
+             MONMSG     MSGID(CPF0000) EXEC(GOTO CMDLBL(ERROR))
+
+             CHGVAR     VAR(&ERROR    ) VALUE('0')
+
+ /* -------------------------------------------------------------- */
+ /*  Los geht's                                                    */
+ /* -------------------------------------------------------------- */
+
+ /* Msg-DS     */
+             CRTMSGDS   RANGE(*ALL) MSGF(&MSGFLIB/PEEKGER) +
+                          FILE(&MSGFLIB/QCOPYLE) REPLACE(*YES) +
+                          TYPE(*ILERPG) DEFINE(*NO)
+ /* Msg-Source     */
+ /* German         */
+             CRTMSGDS   RANGE(*ALL) MSGF(&MSGFLIB/PEEKGER) +
+                          FILE(&MSGFLIB/QMSG_GER) MBR(PEEKGER) +
+                          REPLACE(*YES) +
+                          TYPE(*CLP)
+ /* Msg-Source     */
+ /* English        */
+             CRTMSGDS   RANGE(*ALL) MSGF(&MSGFLIB/PEEKENG) +
+                          FILE(&MSGFLIB/QMSG_ENG) MBR(PEEKENG) +
+                          REPLACE(*YES) +
+                          TYPE(*CLP)
+ /* Msg-Source     */
+ /* Spanish        */
+             CRTMSGDS   RANGE(*ALL) MSGF(&MSGFLIB/PEEKSPA) +
+                          FILE(&MSGFLIB/QMSG_SPA) MBR(PEEKSPA) +
+                          REPLACE(*YES) +
+                          TYPE(*CLP)
+ /* Msg-Source     */
+ /* Italienisch    */
+             CRTMSGDS   RANGE(*ALL) MSGF(&MSGFLIB/PEEKITA) +
+                          FILE(&MSGFLIB/QMSG_ITA) MBR(PEEKITA) +
+                          REPLACE(*YES) +
+                          TYPE(*CLP)
+ /* Msg-Source     */
+ /* French         */
+             CRTMSGDS   RANGE(*ALL) MSGF(&MSGFLIB/PEEKFRA) +
+                          FILE(&MSGFLIB/QMSG_FRA) MBR(PEEKFRA) +
+                          REPLACE(*YES) +
+                          TYPE(*CLP)
+
+ ENDE:
+
+/* Verschiebe alle *INFO Nachrichten zur             */
+/* vorangegangenen Programmwarteschlange             */
+             CHGVAR     VAR(&ERRMSGTYP) VALUE('*INFO')
+             CALL       PGM(QMHMOVPM) PARM(&ERRMSGKEY &ERRMSGTYP +
+                          &ERRNBRTYP &ERRPGMMSGQ &ERRSTKCTR &ERRCODE)
+
+             RCLRSC     LVL(*)
+             MONMSG     MSGID(CPF0000)
+
+             IF         COND(&ERROR) THEN(DO)
+                /* Sende letzte *ESCAPE nochmals   */
+                CALL       PGM(QMHRSNEM) PARM(&ERRMSGKEY &ERRCODE)
+                MONMSG     MSGID(CPF0000)
+             ENDDO
+
+             RETURN
+
+/* ---------------- */
+/* Error            */
+/* Handling         */
+/* ---------------- */
+ ERROR:
+             IF         COND(&ERROR) THEN(GOTO CMDLBL(ENDE))
+             ELSE       CHGVAR     VAR(&ERROR) VALUE('1')
+
+/* Verschiebe alle *DIAG Nachrichten zur             */
+/* vorangegangenen Programmwarteschlange             */
+             CHGVAR     VAR(&ERRMSGTYP) VALUE('*DIAG')
+             CALL       PGM(QMHMOVPM) PARM(&ERRMSGKEY &ERRMSGTYP +
+                          &ERRNBRTYP &ERRPGMMSGQ &ERRSTKCTR &ERRCODE)
+
+             GOTO       CMDLBL(ENDE)
+
+             ENDPGM
+

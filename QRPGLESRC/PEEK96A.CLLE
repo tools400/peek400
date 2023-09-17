@@ -1,0 +1,105 @@
+     /* ============================================================ */
+     /*  (c) Thomas Raddatz                                          */
+     /*                                                              */
+     /*  Appl.    : PEEK, Version 3.4.2                              */
+     /*  Program  : PEEK96A                                          */
+     /*  Type     : CLLE                                             */
+     /*                                                              */
+     /*  Created  : 06.08.2008  Raddatz                              */
+     /* ============================================================ */
+     /*  Title:                                                      */
+     /*    Change object authority of Peek/400                       */
+     /*  Documentation:                                              */
+     /*    Changes the object owner of a given library and all       */
+     /*    objects of the library to a given user profile.           */
+     /* ============================================================ */
+             PGM        PARM(&LIB &NEWOWN)
+
+             DCL        VAR(&LIB       ) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&NEWOWN    ) TYPE(*CHAR) LEN(10)
+
+             DCL        VAR(&OBJTYPE   ) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&NEWOWN2   ) TYPE(*CHAR) LEN(10) VALUE('RADDATZ')
+
+             DCLF       FILE(QADSPOBJ)
+
+/* Error handler        */
+             DCL        VAR(&ERROR)      TYPE(*LGL) +
+                          VALUE('0')
+             DCL        VAR(&ERRMSGKEY)  TYPE(*CHAR) LEN(4)
+
+             DCL        VAR(&ERRMSGTYP)  TYPE(*CHAR) LEN(10) +
+                          VALUE('*DIAG')
+             DCL        VAR(&ERRNBRTYP)  TYPE(*CHAR) LEN(4) +
+                          VALUE(X'00000001')
+             DCL        VAR(&ERRPGMMSGQ) TYPE(*CHAR) LEN(10) +
+                          VALUE('*')
+             DCL        VAR(&ERRSTKCTR)  TYPE(*CHAR) LEN(4) +
+                          VALUE(X'00000001')
+             DCL        VAR(&ERRCODE  )  TYPE(*CHAR) LEN(4) +
+                          VALUE(X'00000000')
+
+/* Send all errors to the error handler */
+
+             MONMSG     MSGID(CPF0000) EXEC(GOTO CMDLBL(ERROR))
+
+             CHGVAR     VAR(&ERROR    ) VALUE('0')
+
+/* -------------------------------------------------------------- */
+/*  Let's start                                                   */
+/* -------------------------------------------------------------- */
+             CHGVAR     VAR(&NEWOWN2) VALUE(&NEWOWN)
+             MONMSG     MSGID(MCH3601) EXEC(DO)
+                RMVMSG     PGMQ(*SAME (*)) CLEAR(*ALL)
+             ENDDO
+
+             CALL       PGM(PEEK96B) PARM(&LIB '*N' '*LIB' &NEWOWN2)
+
+             DSPOBJD    OBJ(&LIB/*ALL) OBJTYPE(*ALL) DETAIL(*BASIC) +
+                          OUTPUT(*OUTFILE) OUTFILE(QTEMP/PEEK96A)
+
+             OVRDBF     FILE(QADSPOBJ) TOFILE(QTEMP/PEEK96A) +
+                          OVRSCOPE(*CALLLVL)
+
+ LOOP:       RCVF       RCDFMT(QLIDOBJD)
+             MONMSG   CPF0864  EXEC(GOTO EOF)
+
+             CHGVAR     VAR(&OBJTYPE) VALUE(&ODOBTP)
+             CALL       PGM(PEEK96B) PARM(&ODOBNM &ODLBNM &OBJTYPE &NEWOWN2)
+             GOTO       CMDLBL(LOOP)
+ EOF:
+
+/* -------------------------------------------------------------- */
+
+ENDE:
+/* Move all *INFO messages to the caller's           */
+/* message queue.                                    */
+             CHGVAR     VAR(&ERRMSGTYP) VALUE('*INFO')
+             CALL       PGM(QMHMOVPM) PARM(&ERRMSGKEY &ERRMSGTYP +
+                          &ERRNBRTYP &ERRPGMMSGQ &ERRSTKCTR &ERRCODE)
+
+             IF         COND(&ERROR) THEN(DO)
+                /* Resend last *ESCAPE message */
+                CALL       PGM(QMHRSNEM) PARM(&ERRMSGKEY &ERRCODE)
+                MONMSG     MSGID(CPF0000)
+             ENDDO
+
+             RETURN
+
+/* ---------------- */
+/* Error            */
+/* handler          */
+/* ---------------- */
+ ERROR:
+             IF         COND(&ERROR) THEN(GOTO CMDLBL(ENDE))
+             ELSE       CHGVAR     VAR(&ERROR) VALUE('1')
+
+/* Move all *DIAG messages to the caller's           */
+/* message queue.                                    */
+             CHGVAR     VAR(&ERRMSGTYP) VALUE('*DIAG')
+             CALL       PGM(QMHMOVPM) PARM(&ERRMSGKEY &ERRMSGTYP +
+                          &ERRNBRTYP &ERRPGMMSGQ &ERRSTKCTR &ERRCODE)
+
+             GOTO       CMDLBL(ENDE)
+
+             ENDPGM

@@ -1,0 +1,43 @@
+      *===============================================================*
+      *                                                               *
+      *  (c) Thomas Raddatz                                           *
+      *                                                               *
+      *  Bereich  : PEEK                                              *
+      *  Datei    : PEEKFMT      Available record formats             *
+      *  Typ      : PF                                                *
+      *  Erstellt : 02.10.1997   Raddatz                              *
+      *                                                               *
+      *===============================================================*
+      *
+ ADD A          R FPEEKFMT                  TEXT('PEEK - Formats')
+      *
+     A            FORMAT        10A
+ ADD A                                      TEXT('Formatname            -
+ ADD A                                                                  ')
+ ADD A                                      COLHDG('Formatname          ' -
+ ADD A                                             '                    ' -
+ ADD A                                             '                    ')
+      *
+ ADD A            SORTSEQ        5S 0
+ ADD A                                      TEXT('Sortierfolge          -
+ ADD A                                                                  ')
+ ADD A                                      COLHDG('Sortierfolge        ' -
+ ADD A                                             '                    ' -
+ ADD A                                             '                    ')
+ RAD  *
+ RAD A            FMTNBR         5S 0
+ RAD A                                      TEXT('Formatnummer          -
+ RAD A                                                                  ')
+ RAD A                                      COLHDG('Formatnummer        ' -
+ RAD A                                             '                    ' -
+ RAD A                                             '                    ')
+      *
+ ADD A            FMT          512A
+ ADD A                                      TEXT('Beschreibung Satzforma-
+ ADD A                                      t                           ')
+ ADD A                                      COLHDG('Beschreibung        ' -
+ ADD A                                             'Satzformat          ' -
+ ADD A                                             '                    ')
+      *
+ ADD A          K SORTSEQ
+      *

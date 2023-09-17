@@ -1,0 +1,151 @@
+     /* ============================================================ */
+     /*                                                              */
+     /*  (c) Thomas Raddatz                                          */
+     /*                                                              */
+     /*  Bereich  : PEEK, Version 3.1.1                              */
+     /*  Programm : PEEK95                                           */
+     /*  Typ      : CLLE                                             */
+     /*                                                              */
+     /*  erstellt : 12.08.2008  Thomas Raddatz                       */
+     /*                                                              */
+     /* ============================================================ */
+     /*                                                              */
+     /*  Dokumentation:                                              */
+     /*                                                              */
+     /*  Peek/400 - Sichern PEEK Bibliotheken nach USER              */
+     /*                                                              */
+     /* ============================================================ */
+
+          PGM        PARM(&DevLib     +
+                          )
+
+             DCL        VAR(&DEVLIB    ) TYPE(*CHAR) LEN(10)
+
+             DCL        VAR(&USER      ) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&V         ) TYPE(*CHAR) LEN( 1)
+             DCL        VAR(&R         ) TYPE(*CHAR) LEN( 1)
+             DCL        VAR(&M         ) TYPE(*CHAR) LEN( 1)
+             DCL        VAR(&TEXT      ) TYPE(*CHAR) LEN(50)
+             DCL        VAR(&VERSION   ) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&TGTRLS    ) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&PRODLIB   ) TYPE(*CHAR) LEN(10) VALUE('PEEK')
+             DCL        VAR(&SAVLIB    ) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&SAVFILE   ) TYPE(*CHAR) LEN(10)
+
+/* Fehlerbehandlung     */
+             DCL        VAR(&ERROR)      TYPE(*LGL) +
+                          VALUE('0')
+             DCL        VAR(&ERRMSGKEY)  TYPE(*CHAR) LEN(4)
+
+             DCL        VAR(&ERRMSGTYP)  TYPE(*CHAR) LEN(10) +
+                          VALUE('*DIAG')
+             DCL        VAR(&ERRNBRTYP)  TYPE(*CHAR) LEN(4) +
+                          VALUE(X'00000001')
+             DCL        VAR(&ERRPGMMSGQ) TYPE(*CHAR) LEN(10) +
+                          VALUE('*')
+             DCL        VAR(&ERRSTKCTR)  TYPE(*CHAR) LEN(4) +
+                          VALUE(X'00000001')
+             DCL        VAR(&ERRCODE  )  TYPE(*CHAR) LEN(4) +
+                          VALUE(X'00000000')
+
+/* Sende alle Fehler zur Error Handling Routine */
+             MONMSG     MSGID(CPF0000) EXEC(GOTO CMDLBL(ERROR))
+
+             CHGVAR     VAR(&ERROR    ) VALUE('0')
+
+ /* -------------------------------------------------------------- */
+ /*  Los geht's                                                    */
+ /* -------------------------------------------------------------- */
+
+ /* Löschen *UPDPGM     */
+             CALL       PGM(PEEK94) PARM(&DEVLIB)
+
+ /* Anpassen Berechtigungen   */
+             CALL       PGM(PEEK96A) PARM(&PRODLIB)
+
+ /* Version             */
+             CHGVAR     VAR(&V) VALUE(%SST(&DEVLIB  5 1))
+             CHGVAR     VAR(&R) VALUE(%SST(&DEVLIB  6 1))
+             CHGVAR     VAR(&M) VALUE(%SST(&DEVLIB  7 1))
+
+             CHGVAR     VAR(&VERSION) VALUE(      &V *tcat '.'  +
+                                            *tcat &R *tcat '.'  +
+                                            *tcat &M            )
+
+ /* Aktueller Benutzer  */
+             RTVJOBA    USER(&USER)
+
+ /* Zielrelease         */
+             RTVDTAARA  DTAARA(&DEVLIB/PEEKPGM (11 10)) RTNVAR(&TGTRLS)
+
+ /* Text f. Sicherungsdateien  */
+             CHGVAR     VAR(&TEXT) +
+                        VALUE('Peek/400 - PEEK, Version' *bcat &VERSION      +
+                                                         *tcat ' - ('        +
+                                                         *tcat &TGTRLS       +
+                                                         *tcat ')')          +
+
+ /* Sichern PEEK        */
+             CHGVAR     VAR(&SAVLIB) VALUE(&USER)
+             CHGVAR     VAR(&SAVFILE) VALUE(%SST(&DEVLIB 1 7))
+
+             DLTF       FILE(&SAVLIB/&SAVFILE)
+             MONMSG     MSGID(CPF2105)
+
+             CRTSAVF    FILE(&SAVLIB/&SAVFILE) TEXT(&TEXT)
+             SAVLIB     LIB(&PRODLIB) DEV(*SAVF) +
+                          SAVF(&SAVLIB/&SAVFILE) TGTRLS(&TGTRLS) +
+                          DTACPR(*YES ) OUTPUT(*PRINT)
+
+ /* Sichern PEEKxxxP    */
+             CHGVAR     VAR(&SAVLIB) VALUE(&USER)
+             CHGVAR     VAR(&SAVFILE) VALUE(&DEVLIB)
+
+             DLTF       FILE(&SAVLIB/&SAVFILE)
+             MONMSG     MSGID(CPF2105)
+
+             CRTSAVF    FILE(&SAVLIB/&SAVFILE) TEXT(&TEXT)
+             SAVLIB     LIB(&DEVLIB) DEV(*SAVF) +
+                          SAVF(&SAVLIB/&SAVFILE) TGTRLS(&TGTRLS) +
+                          OMITOBJ((&DEVLIB/PEEK95 *ALL)) +
+                          DTACPR(*HIGH) OUTPUT(*PRINT)
+
+ /* -------------------------------------------------------------- */
+
+ ENDE:
+
+/* Verschiebe alle *INFO Nachrichten zur             */
+/* vorangegangenen Programmwarteschlange             */
+             CHGVAR     VAR(&ERRMSGTYP) VALUE('*INFO')
+             CALL       PGM(QMHMOVPM) PARM(&ERRMSGKEY &ERRMSGTYP +
+                          &ERRNBRTYP &ERRPGMMSGQ &ERRSTKCTR &ERRCODE)
+
+             RCLRSC     LVL(*)
+             MONMSG     MSGID(CPF0000)
+
+             IF         COND(&ERROR) THEN(DO)
+                /* Sende letzte *ESCAPE nochmals   */
+                CALL       PGM(QMHRSNEM) PARM(&ERRMSGKEY &ERRCODE)
+                MONMSG     MSGID(CPF0000)
+             ENDDO
+
+             RETURN
+
+/* ---------------- */
+/* Error            */
+/* Handling         */
+/* ---------------- */
+ ERROR:
+             IF         COND(&ERROR) THEN(GOTO CMDLBL(ENDE))
+             ELSE       CHGVAR     VAR(&ERROR) VALUE('1')
+
+/* Verschiebe alle *DIAG Nachrichten zur             */
+/* vorangegangenen Programmwarteschlange             */
+             CHGVAR     VAR(&ERRMSGTYP) VALUE('*DIAG')
+             CALL       PGM(QMHMOVPM) PARM(&ERRMSGKEY &ERRMSGTYP +
+                          &ERRNBRTYP &ERRPGMMSGQ &ERRSTKCTR &ERRCODE)
+
+             GOTO       CMDLBL(ENDE)
+
+             ENDPGM
+

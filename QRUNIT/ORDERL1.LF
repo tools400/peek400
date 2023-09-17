@@ -1,0 +1,18 @@
+      * =================================================================== *
+      *   >>PRE-COMPILER<<                                                  *
+      *     >>CRTCMD<<  CRTLF         FILE(&LI/&OB) +                       *
+      *                               SRCFILE(&SL/&SF) SRCMBR(&SM);         *
+      *     >>IMPORTANT<<                                                   *
+      *       >>PARM<<                MBR(*NONE);                           *
+      *       >>PARM<<                MAXMBRS(10);                          *
+      *     >>END-IMPORTANT<<                                               *
+      *     >>EXECUTE<<                                                     *
+      *     >>CMD<<     ADDLFM FILE(&LI/ORDERL1) MBR(ORDERL1)       +       *
+      *                          DTAMBRS((&LI/ORDER    (ORDER   )));        *
+      *                        TEXT('Orders by Customer Number');           *
+      *   >>END-PRE-COMPILER<<                                              *
+      * =================================================================== *
+     A          R FORDER                    PFILE(ORDER)
+     A          K CUSTNBR
+     A          K ORDNBR
+      *

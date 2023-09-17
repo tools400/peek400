@@ -1,0 +1,152 @@
+     /* ============================================================ */
+     /*                                                              */
+     /*  (c) Thomas Raddatz                                          */
+     /*                                                              */
+     /*  Bereich  : PEEK, Version 3.1.5                              */
+     /*  Programm : PEEK94                                           */
+     /*  Typ      : CLLE                                             */
+     /*                                                              */
+     /*  erstellt : 17.10.2008  Thomas Raddatz                       */
+     /*                                                              */
+     /* ============================================================ */
+     /*                                                              */
+     /*  Dokumentation:                                              */
+     /*                                                              */
+     /*  Peek/400 - Neu Linken der Programme und SrvPgme             */
+     /*                                                              */
+     /* ============================================================ */
+     /*                                                              */
+     /*  Aufrufen Programm:                                          */
+     /*                                                              */
+     /*     CALL PGM(PEEK326P/PEEKCLONE) PARM(PEEK400 PEEK)          */
+     /*                                                              */
+     /* ============================================================ */
+
+          PGM        PARM(&NEWLIB     +
+                          &OLDLIB     +
+                          )
+
+             DCL        VAR(&NEWLIB    ) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&OLDLIB    ) TYPE(*CHAR) LEN(10)
+
+             DCLF       FILE(*LIBL/QADSPOBJ) RCDFMT(QLIDOBJD)
+
+             DCL        VAR(&TMPLIB    ) TYPE(*CHAR) LEN(10) VALUE('QTEMP')
+             DCL        VAR(&TMPFILE3  ) TYPE(*CHAR) LEN(10) VALUE('TOOLS400.3')
+
+/* Fehlerbehandlung     */
+             DCL        VAR(&ERROR)      TYPE(*LGL) +
+                          VALUE('0')
+             DCL        VAR(&ERRMSGKEY)  TYPE(*CHAR) LEN(4)
+
+             DCL        VAR(&ERRMSGTYP)  TYPE(*CHAR) LEN(10) +
+                          VALUE('*DIAG')
+             DCL        VAR(&ERRNBRTYP)  TYPE(*CHAR) LEN(4) +
+                          VALUE(X'00000001')
+             DCL        VAR(&ERRPGMMSGQ) TYPE(*CHAR) LEN(10) +
+                          VALUE('*')
+             DCL        VAR(&ERRSTKCTR)  TYPE(*CHAR) LEN(4) +
+                          VALUE(X'00000001')
+             DCL        VAR(&ERRCODE  )  TYPE(*CHAR) LEN(4) +
+                          VALUE(X'00000000')
+
+/* Sende alle Fehler zur Error Handling Routine */
+             MONMSG     MSGID(CPF0000) EXEC(GOTO CMDLBL(ERROR))
+
+             CHGVAR     VAR(&ERROR    ) VALUE('0')
+
+ /* -------------------------------------------------------------- */
+ /*  Erstellen neue Peek/400 Bibliothek                            */
+ /* -------------------------------------------------------------- */
+             IF         COND(&NEWLIB = &OLDLIB) THEN(DO)
+                GOTO       CMDLBL(UPD_BNDDIR)
+             ENDDO
+
+             CHKOBJ     OBJ(&NEWLIB) OBJTYPE(*LIB)
+             MONMSG     MSGID(CPF9801) EXEC(GOTO CMDLBL(SAVLIB))
+
+             SNDPGMMSG  MSGID(CPF9898) MSGF(*LIBL/QCPFMSG) +
+                          MSGDTA('Target library' *BCAT &NEWLIB +
+                          *BCAT 'does already exist') +
+                          TOPGMQ(*PRV (*CTLBDY)) MSGTYPE(*ESCAPE)
+
+ /* -------------------------------------------------------------- */
+ /*  Sichern Peek/400 Produktbibliothek                            */
+ /* -------------------------------------------------------------- */
+SAVLIB:
+             CRTSAVF    FILE(&TMPLIB/&TMPFILE3)
+
+             SAVLIB     LIB(&OLDLIB) DEV(*SAVF) +
+                          SAVF(&TMPLIB/&TMPFILE3) +
+                          UPDHST(*NO) +
+                          PRECHK(*YES)
+
+ /* -------------------------------------------------------------- */
+ /*  Erstellen neue Peek/400 Bibliothek                            */
+ /* -------------------------------------------------------------- */
+             RSTLIB     SAVLIB(&OLDLIB) DEV(*SAVF) +
+                          SAVF(&TMPLIB/&TMPFILE3) +
+                          RSTLIB(&NEWLIB)
+
+ /* -------------------------------------------------------------- */
+ /*  Aktualisieren Binderverzeichnis                               */
+ /* -------------------------------------------------------------- */
+ UPD_BNDDIR:
+             CALLPRC    PRC(PEEKCLONE1) +
+                          PARM((&NEWLIB *BYREF) +
+                               (&OLDLIB *BYREF) +
+                               (&TMPLIB *BYREF))
+
+ /* -------------------------------------------------------------- */
+ /*  Aktualisieren Programme, Serviceprogramme und Befehle         */
+ /* -------------------------------------------------------------- */
+
+             CALLPRC    PRC(PEEKCLONE2) +
+                          PARM((&NEWLIB *BYREF) +
+                               (&OLDLIB *BYREF) +
+                               (&TMPLIB *BYREF))
+
+ /* -------------------------------------------------------------- */
+
+ ENDE:
+             DLTOVR     FILE(*ALL) LVL(*)
+             MONMSG     MSGID(CPF0000)
+
+             DLTF       FILE(&TMPLIB/&TMPFILE3)
+             MONMSG     MSGID(CPF0000)
+
+/* Verschiebe alle *INFO Nachrichten zur             */
+/* vorangegangenen Programmwarteschlange             */
+             CHGVAR     VAR(&ERRMSGTYP) VALUE('*INFO')
+             CALL       PGM(QMHMOVPM) PARM(&ERRMSGKEY &ERRMSGTYP +
+                          &ERRNBRTYP &ERRPGMMSGQ &ERRSTKCTR &ERRCODE)
+
+             RCLRSC     LVL(*)
+             MONMSG     MSGID(CPF0000)
+
+             IF         COND(&ERROR) THEN(DO)
+                /* Sende letzte *ESCAPE nochmals   */
+                CALL       PGM(QMHRSNEM) PARM(&ERRMSGKEY &ERRCODE)
+                MONMSG     MSGID(CPF0000)
+             ENDDO
+
+             RETURN
+
+/* ---------------- */
+/* Error            */
+/* Handling         */
+/* ---------------- */
+ ERROR:
+             IF         COND(&ERROR) THEN(GOTO CMDLBL(ENDE))
+             ELSE       CHGVAR     VAR(&ERROR) VALUE('1')
+
+/* Verschiebe alle *DIAG Nachrichten zur             */
+/* vorangegangenen Programmwarteschlange             */
+             CHGVAR     VAR(&ERRMSGTYP) VALUE('*DIAG')
+             CALL       PGM(QMHMOVPM) PARM(&ERRMSGKEY &ERRMSGTYP +
+                          &ERRNBRTYP &ERRPGMMSGQ &ERRSTKCTR &ERRCODE)
+
+             GOTO       CMDLBL(ENDE)
+
+             ENDPGM
+

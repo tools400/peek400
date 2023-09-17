@@ -1,0 +1,44 @@
+      *===============================================================*
+      *                                                               *
+      *  (c) Thomas Raddatz                                           *
+      *                                                               *
+      *  Bereich  : PEEK                                              *
+      *  Datei    : PEEKWRK      temporäre Arbeitsdatei               *
+      *  Typ      : PF                                                *
+      *  Erstellt : 30.12.1997   Raddatz                              *
+      *                                                               *
+      *===============================================================*
+      *
+ ADD A          R FPEEKWRK                  TEXT('PEEK - Work')
+      *
+ ADD A            KEY            5P 0
+ ADD A                                      TEXT('Schlüsselfeld         -
+ ADD A                                                                  ')
+ ADD A                                      COLHDG('Schlüsselfeld       ' -
+ ADD A                                             'numerisch           ' -
+ ADD A                                             '                    ')
+      *
+ ADD A            KEY2          20A
+ ADD A                                      TEXT('Schlüsselfeld 2       -
+ ADD A                                                                  ')
+ ADD A                                      COLHDG('Schlüsselfeld 2     ' -
+ ADD A                                             'alphanumerisch      ' -
+ ADD A                                             '                    ')
+      *
+ ADD A            FORMAT        10A
+ ADD A                                      TEXT('Verwendetes Datenforma-
+ ADD A                                      t                           ')
+ ADD A                                      COLHDG('verwendetes         ' -
+ ADD A                                             'Datenformat         ' -
+ ADD A                                             '                    ')
+      *
+ ADD A            DATA         512A
+ ADD A                                      TEXT('Datenbereich          -
+ ADD A                                                                  ')
+ ADD A                                      COLHDG('Datenbereich        ' -
+ ADD A                                             '                    ' -
+ ADD A                                             '                    ')
+      *
+ ADD A          K KEY
+ ADD A          K KEY2
+      *

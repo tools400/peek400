@@ -1,0 +1,30 @@
+      * =================================================================== *
+      *   >>PRE-COMPILER<<                                                  *
+      *     >>CRTCMD<<  CRTPF         FILE(&LI/&OB) +                       *
+      *                               SRCFILE(&SL/&SF) SRCMBR(&SM);         *
+      *     >>IMPORTANT<<                                                   *
+      *       >>PARM<<                MBR(*NONE);                           *
+      *       >>PARM<<                MAXMBRS(10);                          *
+      *     >>END-IMPORTANT<<                                               *
+      *     >>EXECUTE<<                                                     *
+      *     >>CMD<<     ADDPFM FILE(&LI/&OB) MBR(Y2017);                    *
+      *     >>CMD<<     ADDPFM FILE(&LI/&OB) MBR(Y2018);                    *
+      *   >>END-PRE-COMPILER<<                                              *
+      * =================================================================== *
+     A                                      UNIQUE
+      *
+     A          R FORDER                    TEXT('Orders')
+      *
+     A            ORDNBR        10S 0       TEXT('Order number')
+     A                                      COLHDG('Order number')
+     A            CUSTNBR       10S 0       TEXT('Customer number')
+     A                                      COLHDG('Customer number')
+     A            COMMENTS      50A         TEXT('Comments')
+     A                                      COLHDG('Comments')
+     A            ORDCRTD         L         TEXT('Date order created')
+     A                                      COLHDG('Date order created')
+     A            ORDCRTT         T         TEXT('Time order created')
+     A                                      COLHDG('Time order created')
+      *
+     A          K ORDNBR
+      *

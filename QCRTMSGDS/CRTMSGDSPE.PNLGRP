@@ -1,0 +1,336 @@
+.*=====================================================================*
+.*                                                                     *
+.*  Kurzdokumentation :                                                *
+.*                                                                     *
+.*  Bereich . . . : CRTMSGDS                                           *
+.*  Objekt  . . . : CRTMSGDSP                                          *
+.*  Beschreibung  : Tool: CRTMSGDS   (Create Message DS  ) Eng         *
+.*  Author  . . . : Thomas Raddatz   <thomas.raddatz@tools400.de>      *
+.*  Datum . . . . : 01.06.2002                                         *
+.*                                                                     *
+.*=====================================================================*
+.*                                                                     *
+.*  This software is free software, you can redistribute it and/or     *
+.*  modify it under the terms of the GNU General Public License (GPL)  *
+.*  as published by the Free Software Foundation.                      *
+.*                                                                     *
+.*  See GNU General Public License for details.                        *
+.*          http://www.opensource.org                                  *
+.*          http://www.opensource.org/licenses/gpl-license.html        *
+.*                                                                     *
+.*=====================================================================*
+.*  History:                                                           *
+.*                                                                     *
+.*  Datum       Name          Änderung                                 *
+.*  ----------  ------------  ---------------------------------------  *
+.*                                                                     *
+.*=====================================================================*
+.* >>PRE-COMPILER<<                                                    *
+.*                                                                     *
+.*   >>CRTCMD<< CRTPNLGRP    PNLGRP(&LI/&OB) +                         *
+.*                           SRCFILE(&SL/&SF) +                        *
+.*                           SRCMBR(&SM);                              *
+.*                                                                     *
+.*   >>COMPILE<<                                                       *
+.*   >>END-COMPILE<<                                                   *
+.*                                                                     *
+.*   >>EXECUTE<<                                                       *
+.*                                                                     *
+.* >>END-PRE-COMPILER<<                                                *
+.*=====================================================================*
+:PNLGRP.
+.*
+:HELP name='CRTMSGDS/ALL'.
+:IMHELP name=CRTMSGDS.
+:IMHELP name='CRTMSGDS/RANGE     '.
+:IMHELP name='CRTMSGDS/MSGF      '.
+:IMHELP name='CRTMSGDS/FILE      '.
+:IMHELP name='CRTMSGDS/MBR       '.
+:IMHELP name='CRTMSGDS/REPLACE   '.
+:IMHELP name='CRTMSGDS/TYPE      '.
+:IMHELP name='CRTMSGDS/DEFINE    '.
+:EHELP.
+.*--------------------------------------------------------------------
+.* Hilfetext für den Befehl
+.*--------------------------------------------------------------------
+:HELP NAME='CRTMSGDS'.
+Create Message Data Structure (CRTMSGDS) - Help
+:P.
+The CRTMSGDS command is used to create a data structure for the
+data fields of a message description. Also it is used to create a CL
+program or a CL script for a message description. The CL script
+then can be execute with the RUNCLSTM command in order to reproduce
+the message description.
+.*
+:EHELP.
+.*
+.*--------------------------------------------------------------------
+.* Hilfetext für Schlüsselwort RANGE
+.*--------------------------------------------------------------------
+:HELP name='CRTMSGDS/RANGE     '.
+Range of message identifiers - Help
+:XH3.Range of message identifiers (RANGE)
+:P.
+Specifies the range of message identifiers in the
+specified message file which are processed by the command. All
+message descriptions in the message file specified on the
+:HP2.Message:EHP2. file prompt (MSGF parameter) can be processed
+by specifying *ALL on this parameter.
+:P.
+If the starting message identifier is not specified, the
+message descriptions begin with the first message in the
+specified message file.  If the ending message identifier
+is not specified, the default value, *ONLY, is used, and
+only the description of the starting message identifier is
+processed.
+.*
+:IMHELP name='COM/OPTPARM'.
+.*
+:XH3.Starting Message Identifier
+:P.
+The first of the two values in this parameter, called the
+starting message identifier, specifies the message
+identifier of the first message description to be processed.
+:P.
+:PARML.
+:PT.:PK DEF.*FIRST:EPK.
+:PD.The first message in the file specified on the :HP2.Message
+file:EHP2. prompt (MSGF parameter) is the first message
+whose description is processed.
+:PT.:PV.lower-value:EPV.
+:PD.Specify the 7-character identifier of the first
+message description to be processed.
+:EPARML.
+:P.
+:XH3.Ending Message Identifier
+:P.
+The second of the two values, called the ending message
+identifier, specifies the message identifier for the last
+message description to be processed.
+:P.
+:PARML.
+:PT.:PK DEF.*ONLY:EPK.
+:PD.Only the message identifier specified as a starting
+message identifier is processed.
+:PT.:PV.*LAST:EPV.
+:PD.The last message in the file is the last message whose
+description is processed.
+:PT.:PV.upper-value:EPV.
+:PD.Specify the 7-character identifier of the last message
+description to be processed.
+:EPARML.
+:P.
+:XH3.Other Single Values:
+:P.
+:PARML.
+:PT.:PV.*ALL:EPV.
+:PD.All message descriptions in the message file specified
+are processed.  This value can only be specified in the first
+element of this parameter.
+:EPARML.
+.*
+:EHELP.
+.*
+.*--------------------------------------------------------------------
+.* Hilfetext für Schlüsselwort MSGF
+.*--------------------------------------------------------------------
+:HELP name='CRTMSGDS/MSGF'.
+Message file - Help
+:XH3.Message file (MSGF)
+:P.
+Specifies the name and library of the message file from
+which the message descriptions are taken.
+.*
+:IMHELP name='COM/OPTPARM'.
+.*
+:PARML.
+:PT.:PK DEF.QCPFMSG:EPK.
+:PD.Message descriptions are taken from the system message
+file, QCPFMSG.
+:PT.:PV.message-file-name:EPV.
+:PD.Specify the name of the message file from which the
+message descriptions are taken.
+:EPARML.
+:P.
+The possible library values are:
+:P.
+:PARML.
+:PT.:PK DEF.*LIBL:EPK.
+:PD.All libraries in the job's library list are searched
+until the first match is found.
+:PT.:PV.*CURLIB:EPV.
+:PD.The current library for the job is used to locate the
+message file.  If no current library entry exists in
+the library list, QGPL is used.
+:PT.:PV.library-name:EPV.
+:PD.Specify the library where the message file is located.
+:EPARML.
+.*
+:EHELP.
+.*
+.*--------------------------------------------------------------------
+.* Hilfetext für Schlüsselwort FILE
+.*--------------------------------------------------------------------
+:HELP name='CRTMSGDS/FILE'.
+File - Help
+:XH3.File (FILE)
+:P.
+Specifies the name and library of the source file that contains the
+source member or where the member is added.
+.*
+:IMHELP name='COM/OPTPARM'.
+.*
+:PARML.
+:PT.:PK DEF.QCOPYLE:EPK.
+:PD.The source member is added to the QCOPYLE source file.
+:PT.:PV.source-file-name:EPV.
+:PD.Specify the name of the source file that the member
+is added to.
+:EPARML.
+:P.
+The possible library values are:
+:P.
+:PARML.
+:PT.:PK DEF.*LIBL:EPK.
+:PD.All libraries in the job's library list are searched
+until the first match is found.
+:PT.:PV.*CURLIB:EPV.
+:PD.The current library for the job is used to locate the
+message file.  If no current library entry exists in
+the library list, QGPL is used.
+:PT.:PV.library-name:EPV.
+:PD.Specify the library where the message file is located.
+:EPARML.
+.*
+:EHELP.
+.*
+.*--------------------------------------------------------------------
+.* Hilfetext für Schlüsselwort MBR
+.*--------------------------------------------------------------------
+:HELP name='CRTMSGDS/MBR'.
+Member - Help
+:XH3.Member (MBR)
+:P.
+Specifies the name of the source member that is used to take the output of
+the CRTMSGDS command. If *GEN is specified, then a separate member name
+is produced for each message description. If a member name is specified, then
+the output of all message description specified is directed to that member.
+.*
+:IMHELP name='COM/OPTPARM'.
+.*
+:PARML.
+:PT.:PK DEF.*GEN:EPK.
+:PD.The name of the source member is produced based on the message identifier.
+:PT.:PV.source-member-name:EPV.
+:PD.Specify the name of the source member that is taken to get the output
+of the CRTMSGDS command.
+:EPARML.
+.*
+:EHELP.
+.*
+.*--------------------------------------------------------------------
+.* Hilfetext für Schlüsselwort REPLACE
+.*--------------------------------------------------------------------
+:HELP name='CRTMSGDS/REPLACE'.
+Replace member - Help
+:XH3.Replace member (REPLACE)
+:P.
+Specifies whether an existing member is allowed to be replaced
+or not.
+.*
+:IMHELP name='COM/OPTPARM'.
+.*
+:PARML.
+:PT.:PK DEF.*NO:EPK.
+:PD.An existing member is not replaced. An error message is issued
+by the command instead.
+:PT.:PV.*YES:EPV.
+:PD.The content of an existing member is replaced.
+:EPARML.
+.*
+:EHELP.
+.*
+.*--------------------------------------------------------------------
+.* Hilfetext für Schlüsselwort TYPE
+.*--------------------------------------------------------------------
+:HELP name='CRTMSGDS/TYPE'.
+Source type - Help
+:XH3.Source type (TYPE)
+:P.
+Specifies the type of source that is produced by the CRTMSGDS command.
+.*
+:IMHELP name='COM/OPTPARM'.
+.*
+:PARML.
+:PT.:PK DEF.*ILERPG:EPK.
+:PD.An ILE-RPG data structure is produced.
+:PT.:PV.*RPG:EPV.
+:PD.A RPG-III data structure is produced.
+:PT.:PV.*C:EPV.
+:PD.A C data structure is produced.
+:PT.:PV.*CLP:EPV.
+:PD.A CL program is produced.
+:PT.:PV.*CLLE:EPV.
+:PD.An ILE CL program is produced.
+:PT.:PV.*SCRIPT:EPV.
+:PD.A CL script is produced.
+:EPARML.
+.*
+:EHELP.
+.*
+.*--------------------------------------------------------------------
+.* Hilfetext für Schlüsselwort DEFINE
+.*--------------------------------------------------------------------
+:HELP name='CRTMSGDS/DEFINE'.
+Create DEFINE specifications - Help
+:XH3.Create DEFINE specifications (DEFINE)
+:P.
+Specifies whether DEFINE specification are added to the source member
+or not. The value for this parameter can only be specified if
+:HP2.Source type:EHP2. (parameter TYPE) is set to *ILERPG or *C.
+.*
+:IMHELP name='COM/OPTPARM'.
+.*
+:PARML.
+:PT.:PK DEF.*YES:EPK.
+:PD.DEFINE specification are added to the source member.
+:PT.:PV.*NO:EPV.
+:PD.DEFINE specification are not added to the source member.
+:EPARML.
+.*
+:EHELP.
+.*
+.*====================================================================
+.*  Textbausteine, die an mehreren Stellen im Hilfetext
+.*  verwendet werden.
+.*====================================================================
+
+.*=====================================
+.*  Erforderlicher Parameter
+.*=====================================
+:HELP NAME='COM/REQPARM'.
+:P.
+This is a required parameter.
+:P.
+:IMHELP name='COM/VALUES'.
+:EHELP.
+
+.*=====================================
+.*  Optionaler Parameter
+.*=====================================
+:HELP NAME='COM/OPTPARM'.
+:P.
+This is an optional parameter.
+:P.
+:IMHELP name='COM/VALUES'.
+:EHELP.
+
+.*=====================================
+.*  Werteliste
+.*=====================================
+:HELP NAME='COM/VALUES'.
+:P.
+The possible values are:
+:EHELP.
+.*
+:EPNLGRP.

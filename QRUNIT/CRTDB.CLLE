@@ -1,0 +1,84 @@
+     /* =================================================================== */
+     /*   >>PRE-COMPILER<<                                                  */
+     /*     >>CRTCMD<<  CRTBNDCL      PGM(&LI/&OB) +                        */
+     /*                               SRCFILE(&SL/&SF) SRCMBR(&SM);         */
+     /*     >>IMPORTANT<<                                                   */
+     /*       >>PARM<<                DBGVIEW(*LIST);                       */
+     /*     >>END-IMPORTANT<<                                               */
+     /*     >>EXECUTE<<                                                     */
+     /*   >>END-PRE-COMPILER<<                                              */
+     /* =================================================================== */
+             PGM        PARM(&LIB)
+
+             DCL        VAR(&LIB) TYPE(*CHAR) LEN(10)
+
+             MONMSG     MSGID(CPF2105) /* Object not found */
+
+             DLTF       FILE(&LIB/HSTQRY)
+             DLTF       FILE(&LIB/MORDER)
+             DLTF       FILE(&LIB/ORDQRY)
+             DLTF       FILE(&LIB/HORDER1)
+
+             DLTF       FILE(&LIB/ITEM)
+             DLTF       FILE(&LIB/ORDER)
+             DLTF       FILE(&LIB/CUSTOMER)
+
+             DLTF       FILE(&LIB/HITEM)
+             DLTF       FILE(&LIB/HORDER)
+             DLTF       FILE(&LIB/HCUSTOMER)
+
+             STRPREPRC  USESRCFILE(&LIB/QRUNIT) USESRCMBR(CUSTOMER) +
+                          LIB(&LIB) OBJ(*DFT) SRCLIB(*DFT) +
+                          SRCFILE(*DFT) SRCMBR(*DFT)
+
+             STRPREPRC  USESRCFILE(&LIB/QRUNIT) USESRCMBR(ORDER) +
+                          LIB(&LIB) OBJ(*DFT) SRCLIB(*DFT) +
+                          SRCFILE(*DFT) SRCMBR(*DFT)
+
+             STRPREPRC  USESRCFILE(&LIB/QRUNIT) USESRCMBR(ITEM) +
+                          LIB(&LIB) OBJ(*DFT) SRCLIB(*DFT) +
+                          SRCFILE(*DFT) SRCMBR(*DFT)
+
+             STRPREPRC  USESRCFILE(&LIB/QRUNIT) USESRCMBR(HCUSTOMER) +
+                          LIB(&LIB) OBJ(*DFT) SRCLIB(*DFT) +
+                          SRCFILE(*DFT) SRCMBR(*DFT)
+
+             STRPREPRC  USESRCFILE(&LIB/QRUNIT) USESRCMBR(HORDER) +
+                          LIB(&LIB) OBJ(*DFT) SRCLIB(*DFT) +
+                          SRCFILE(*DFT) SRCMBR(*DFT)
+
+             STRPREPRC  USESRCFILE(&LIB/QRUNIT) USESRCMBR(HITEM) +
+                          LIB(&LIB) OBJ(*DFT) SRCLIB(*DFT) +
+                          SRCFILE(*DFT) SRCMBR(*DFT)
+
+    /* Create simple logical file */
+             STRPREPRC  USESRCFILE(&LIB/QRUNIT) USESRCMBR(ORDERL1) +
+                          LIB(&LIB) OBJ(*DFT) SRCLIB(*DFT) +
+                          SRCFILE(*DFT) SRCMBR(*DFT)
+
+    /* Create a multi-member join logical file */
+             STRPREPRC  USESRCFILE(&LIB/QRUNIT) USESRCMBR(HSTQRY) +
+                          LIB(&LIB) OBJ(*DFT) SRCLIB(*DFT) +
+                          SRCFILE(*DFT) SRCMBR(*DFT)
+
+    /* Create a multi-format logical file */
+             STRPREPRC  USESRCFILE(&LIB/QRUNIT) USESRCMBR(MORDER) +
+                          LIB(&LIB) OBJ(*DFT) SRCLIB(*DFT) +
+                          SRCFILE(*DFT) SRCMBR(*DFT)
+
+    /* Create a join logical file */
+             STRPREPRC  USESRCFILE(&LIB/QRUNIT) USESRCMBR(ORDQRY) +
+                          LIB(&LIB) OBJ(*DFT) SRCLIB(*DFT) +
+                          SRCFILE(*DFT) SRCMBR(*DFT)
+
+    /* Create a multi-member logical file */
+             STRPREPRC  USESRCFILE(&LIB/QRUNIT) USESRCMBR(HORDER1) +
+                          LIB(&LIB) OBJ(*DFT) SRCLIB(*DFT) +
+                          SRCFILE(*DFT) SRCMBR(*DFT)
+
+    /* Add some data */
+             STRPREPRC  USESRCFILE(&LIB/QRUNIT) USESRCMBR(DATA) +
+                          LIB(&LIB) OBJ(*DFT) SRCLIB(*DFT) +
+                          SRCFILE(*DFT) SRCMBR(*DFT)
+
+             ENDPGM

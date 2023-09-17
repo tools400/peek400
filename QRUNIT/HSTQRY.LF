@@ -1,0 +1,47 @@
+      * =================================================================== *
+      *   >>PRE-COMPILER<<                                                  *
+      *     >>CRTCMD<<  CRTLF         FILE(&LI/&OB) +                       *
+      *                               SRCFILE(&SL/&SF) SRCMBR(&SM);         *
+      *     >>IMPORTANT<<                                                   *
+      *       >>PARM<<                MBR(*NONE);                           *
+      *       >>PARM<<                MAXMBRS(10);                          *
+      *     >>END-IMPORTANT<<                                               *
+      *     >>EXECUTE<<                                                     *
+      *     >>CMD<<     ADDLFM FILE(&LI/&OB) MBR(Y2017) +                   *
+      *                        DTAMBRS((&LI/HORDER    (Y2017))  +           *
+      *                                (&LI/HITEM     (Y2017))  +           *
+      *                                (&LI/HCUSTOMER (Y2017))) +           *
+      *                        TEXT('Order history of 2017');               *
+      *     >>CMD<<     ADDLFM FILE(&LI/&OB) MBR(Y2018) +                   *
+      *                        DTAMBRS((&LI/HORDER    (Y2018))  +           *
+      *                                (&LI/HITEM     (Y2018))  +           *
+      *                                (&LI/HCUSTOMER (Y2018))) +           *
+      *                        TEXT('Order history of 2018');               *
+      *   >>END-PRE-COMPILER<<                                              *
+      * =================================================================== *
+     A          R FHSTQRY                   TEXT('History query file')
+     A                                      JFILE(HORDER HITEM HCUSTOMER)
+     A          J                           JOIN(HORDER HITEM)
+     A                                      JFLD(ORDNBR ORDNBR)
+     A          J                           JOIN(HORDER HCUSTOMER)
+     A                                      JFLD(CUSTNBR CUSTNBR)
+      *
+     A            ORDNBR                    JREF(1)
+     A            CUSTNBR                   JREF(3)
+     A            COMMENTS
+     A            ORDCRTD
+     A            ORDCRTT
+      *
+     A            NAME
+     A            STREET
+     A            ZIPCODE
+     A            CITY
+     A            COUNTRY
+      *
+     A            ITMSQN
+     A            ITMNBR
+     A            PRICE
+     A            QTYORD
+      *
+     A          K ORDNBR
+      *

@@ -1,0 +1,138 @@
+     /* ============================================================ */
+     /*                                                              */
+     /*  (c) Thomas Raddatz                                          */
+     /*                                                              */
+     /*  Bereich  : PEEK, Version 3.3.0                              */
+     /*  Programm : PEEKINIT1                                        */
+     /*  Typ      : CLLE                                             */
+     /*                                                              */
+     /*  erstellt : 13.04.2011                                       */
+     /*                                                              */
+     /* ============================================================ */
+     /*                                                              */
+     /*  Dokumentation:                                              */
+     /*                                                              */
+     /*  Erstellen PEEK oder TREE Befehl.                            */
+     /*                                                              */
+     /* ============================================================ */
+
+          PGM        PARM(&OBJECT &LANG4 &OBJLIB)
+
+          DCL        VAR(&OBJECT    ) TYPE(*CHAR)  LEN(10)
+          DCL        VAR(&LANG4     ) TYPE(*CHAR)  LEN( 4)
+          DCL        VAR(&OBJLIB    ) TYPE(*CHAR)  LEN(10)
+
+          DCL        VAR(&CMD       ) TYPE(*CHAR)  LEN(1024)
+          DCL        VAR(&CMDLEN    ) TYPE(*DEC )  LEN(15 5) +
+                          VALUE(1024)
+
+/* Fehlerbehandlung     */
+             DCL        VAR(&ERROR)      TYPE(*LGL) +
+                          VALUE('0')
+             DCL        VAR(&ERRMSGKEY)  TYPE(*CHAR) LEN(4)
+
+             DCL        VAR(&ERRMSGTYP)  TYPE(*CHAR) LEN(10) +
+                          VALUE('*DIAG')
+             DCL        VAR(&ERRNBRTYP)  TYPE(*CHAR) LEN(4) +
+                          VALUE(X'00000001')
+             DCL        VAR(&ERRPGMMSGQ) TYPE(*CHAR) LEN(10) +
+                          VALUE('*')
+             DCL        VAR(&ERRSTKCTR)  TYPE(*CHAR) LEN(4) +
+                          VALUE(X'00000001')
+             DCL        VAR(&ERRCODE  )  TYPE(*CHAR) LEN(4) +
+                          VALUE(X'00000000')
+
+/* Sende alle Fehler zur Error Handling Routine */
+             MONMSG     MSGID(CPF0000) EXEC(GOTO CMDLBL(ERROR))
+
+             CHGVAR     VAR(&ERROR    ) VALUE('0')
+
+ /* -------------------------------------------------------------- */
+ /*  Los geht's                                                    */
+ /* -------------------------------------------------------------- */
+
+             CHGVAR     VAR(&CMD) VALUE('CRTCMD'     +
+                                  *BCAT  'CMD('      +
+                                  *TCAT  &OBJLIB     +
+                                  *TCAT  '/'         +
+                                  *TCAT  &OBJECT     +
+                                  *TCAT  ')'         +
+                                  *BCAT  'PGM('      +
+                                  *TCAT  '*LIBL'     +
+                                  *TCAT  '/'         +
+                                  *TCAT  &OBJECT     +
+                                  *TCAT  ')'         +
+                                  *BCAT  'SRCFILE('  +
+                                  *TCAT  &OBJLIB     +
+                                  *TCAT  '/'         +
+                                  *TCAT  'QCMDSRC'   +
+                                  *TCAT  ')'         +
+                                  *BCAT  'SRCMBR('   +
+                                  *TCAT  &OBJECT     +
+                                  *TCAT  ')'         +
+                                  *BCAT  'PRDLIB('   +
+                                  *TCAT  &OBJLIB     +
+                                  *TCAT  ')'         +
+                                  *BCAT  'PMTFILE('  +
+                                  *TCAT  'PEEK' *TCAT &LANG4 +
+                                  *TCAT  ')'         +
+                                  *BCAT  'MODE('      +
+                                  *TCAT  '*ALL'       +
+                                  *TCAT  ')'          +
+                                  *BCAT  'ALLOW('     +
+                                  *TCAT  '*INTERACT'  +
+                                  *BCAT  '*IPGM'      +
+                                  *BCAT  '*IREXX'     +
+                                  *BCAT  '*EXEC'      +
+                                  *BCAT  '*IMOD'      +
+                                  *TCAT  ')'          +
+                                  *BCAT  'ALWLMTUSR(' +
+                                  *TCAT  '*NO'        +
+                                  *TCAT  ')'          +
+                                  *BCAT  'HLPPNLGRP(' +
+                                  *TCAT  '*LIBL'      +
+                                  *TCAT  '/'          +
+                                  *TCAT  &OBJECT *TCAT &LANG4 +
+                                  *TCAT  ')'          +
+                                  *BCAT  'HLPID('     +
+                                  *TCAT  &OBJECT      +
+                                  *TCAT  ')'          +
+                                  )
+             CALL       PGM(QCMDEXC) PARM(&CMD &CMDLEN)
+             DLTSPLF    FILE(&OBJECT) SPLNBR(*LAST)
+             MONMSG     MSGID(CPF0000)
+
+/* Verschiebe alle *INFO Nachrichten zur             */
+/* vorangegangenen Programmwarteschlange             */
+             CHGVAR     VAR(&ERRMSGTYP) VALUE('*INFO')
+             CHGVAR     VAR(&ERRSTKCTR) VALUE(X'00000002')
+             CALL       PGM(QMHMOVPM) PARM(&ERRMSGKEY &ERRMSGTYP +
+                          &ERRNBRTYP &ERRPGMMSGQ &ERRSTKCTR &ERRCODE)
+
+ ENDE:
+             IF         COND(&ERROR) THEN(DO)
+                /* Sende letzte *ESCAPE nochmals   */
+                CALL       PGM(QMHRSNEM) PARM(&ERRMSGKEY &ERRCODE)
+             ENDDO
+
+             RETURN
+
+/* ---------------- */
+/* Error            */
+/* Handling         */
+/* ---------------- */
+ ERROR:
+             IF         COND(&ERROR) THEN(GOTO CMDLBL(ENDE))
+             ELSE       CHGVAR     VAR(&ERROR) VALUE('1')
+
+/* Verschiebe alle *DIAG Nachrichten zur             */
+/* vorangegangenen Programmwarteschlange             */
+             CHGVAR     VAR(&ERRMSGTYP) VALUE('*DIAG')
+             CALL       PGM(QMHMOVPM) PARM(&ERRMSGKEY &ERRMSGTYP +
+                          &ERRNBRTYP &ERRPGMMSGQ &ERRSTKCTR &ERRCODE)
+
+             GOTO       CMDLBL(ENDE)
+
+
+             ENDPGM
+

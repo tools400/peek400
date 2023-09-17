@@ -1,0 +1,266 @@
+      *===============================================================*
+      *  (C) Thomas Raddatz                                           *
+      *  Bereich  : PEEK Version 3.5.0                                *
+      *  Typ      : DSPF                                              *
+      *===============================================================*
+      *  Kurzdokumentation :                                          *
+      *  Peek/400 - Display File, Template v3.5.0                     *
+      *===============================================================*
+     A                                      DSPSIZ(24 80 *DS3                  -
+     A                                             27 132 *DS4)
+     A                                      PRINT
+     A                                      ALTHELP(CA01)
+     A                                      HELP(01)
+     A                                      CF02
+     A                                      CF03
+     A                                      CF04
+     A                                      CF05
+     A                                      CF06
+     A                                      CF07
+     A                                      CF08
+     A                                      CF09
+     A                                      CF10
+     A                                      CF11
+     A                                      CF12
+     A                                      CF13
+     A                                      CF14
+     A                                      CF15
+     A                                      CF16
+     A                                      CF17
+     A                                      CF18
+     A                                      CF19
+     A                                      CF20
+     A                                      CF21
+     A                                      CF22
+     A                                      CF23
+     A                                      CF24
+     A                                      ROLLUP(91)
+     A                                      ROLLDOWN(92)
+      *
+      *----------------------------------------------------*
+     A          R HEAD
+     A  *DS3                                WINDOW(MSGCTL)
+     A  *DS4                                WINDOW(MSGCTL)
+     A N88                                  DSPMOD(*DS4)
+     A                                      OVERLAY
+     A            HDGMSGNBR      4A  H
+     A            RLKMSGNBR      4A  H
+     A            TXTHDGMSG     30A  O  1  2MSGID(TXT &HDGMSGNBR PEEKGER)
+     A                                      COLOR(BLU)
+     A            TXT0029        8A  O  1 45MSGID(TXT 0029 PEEKGER)
+     A                                      COLOR(BLU)
+     A            XXRCDN        10Y 0O  1 54COLOR(WHT)
+     A                                      EDTCDE(Z)
+     A  74        TXTRCDLOCK    40A  O  2  2MSGID(TXT &RLKMSGNBR PEEKGER)
+     A                                      COLOR(BLU)
+     A  95        TXT0030       18A  O  2 46MSGID(TXT 0030 PEEKGER)
+     A                                      COLOR(RED)
+     A N95        TXT0031       18A  O  2 46MSGID(TXT 0031 PEEKGER)
+     A                                      COLOR(RED)
+     A                                  3  1'                                  -
+     A                                                                    '
+     A                                      DSPATR(UL)
+     A                                      COLOR(BLU)
+      *
+      *----------------------------------------------------*
+     A          R FKEYS
+      *----------------------------------------------------*
+     A  *DS3                                WINDOW(MSGCTL)
+     A  *DS4                                WINDOW(MSGCTL)
+     A                                      OVERLAY
+     A N88                                  DSPMOD(*DS4)
+     A N83        TXT0066       11A  O 19 54MSGID(TXT 0066 PEEKGER)
+     A                                      COLOR(WHT)
+     A  83        TXT0067       11A  O 19 54MSGID(TXT 0067 PEEKGER)
+     A                                      COLOR(WHT)
+      *
+      *----------------------------------------------------*
+     A          R PBBOT01
+      *----------------------------------------------------*
+     A  *DS3                                WINDOW(MSGCTL)
+     A  *DS4                                WINDOW(MSGCTL)
+     A N88                                  DSPMOD(*DS4)
+     A                                      OVERLAY
+     A                                 20  1'                                  -
+     A                                                                    '
+     A                                      DSPATR(UL)
+     A                                      COLOR(BLU)
+     A            XXFKEY01      18A  O 21  1
+     A                                      COLOR(BLU)
+     A            XXFKEY02      18A  O 21 21
+     A                                      COLOR(BLU)
+     A            XXFKEY03      18A  O 21 41
+     A                                      COLOR(BLU)
+      *
+      *----------------------------------------------------*
+     A          R PBBOT02
+      *----------------------------------------------------*
+     A  *DS3                                WINDOW(MSGCTL)
+     A  *DS4                                WINDOW(MSGCTL)
+     A N88                                  DSPMOD(*DS4)
+     A                                      OVERLAY
+     A                                 20  1'                                  -
+     A                                                                    '
+     A                                      DSPATR(UL)
+     A                                      COLOR(BLU)
+     A            XXFKEY04      18A  O 21  1
+     A                                      COLOR(BLU)
+     A            XXFKEY05      18A  O 21 21
+     A                                      COLOR(BLU)
+     A            XXFKEY06      18A  O 21 41
+     A                                      COLOR(BLU)
+      *
+      *----------------------------------------------------*
+     A          R PBBOT03
+      *----------------------------------------------------*
+     A  *DS3                                WINDOW(MSGCTL)
+     A  *DS4                                WINDOW(MSGCTL)
+     A N88                                  DSPMOD(*DS4)
+     A                                      OVERLAY
+     A                                 20  1'                                  -
+     A                                                                    '
+     A                                      DSPATR(UL)
+     A                                      COLOR(BLU)
+     A            XXFKEY07      18A  O 21  1
+     A                                      COLOR(BLU)
+     A            XXFKEY08      18A  O 21 21
+     A                                      COLOR(BLU)
+     A            XXFKEY09      18A  O 21 41
+     A                                      COLOR(BLU)
+      *
+      *----------------------------------------------------*
+     A          R PBBOT04
+      *----------------------------------------------------*
+     A  *DS3                                WINDOW(MSGCTL)
+     A  *DS4                                WINDOW(MSGCTL)
+     A N88                                  DSPMOD(*DS4)
+     A                                      OVERLAY
+     A                                 20  1'                                  -
+     A                                                                    '
+     A                                      DSPATR(UL)
+     A                                      COLOR(BLU)
+     A            XXFKEY10      18A  O 21  1
+     A                                      COLOR(BLU)
+     A            XXFKEY11      18A  O 21 21
+     A                                      COLOR(BLU)
+     A            XXFKEY12      18A  O 21 41
+     A                                      COLOR(BLU)
+      *
+      *----------------------------------------------------*
+     A          R PBBOT05
+      *----------------------------------------------------*
+     A  *DS3                                WINDOW(MSGCTL)
+     A  *DS4                                WINDOW(MSGCTL)
+     A N88                                  DSPMOD(*DS4)
+     A                                      OVERLAY
+     A                                 20  1'                                  -
+     A                                                                    '
+     A                                      DSPATR(UL)
+     A                                      COLOR(BLU)
+     A            XXFKEY13      18A  O 21  1
+     A                                      COLOR(BLU)
+     A            XXFKEY14      18A  O 21 21
+     A                                      COLOR(BLU)
+     A            XXFKEY15      18A  O 21 41
+     A                                      COLOR(BLU)
+      *
+      *----------------------------------------------------*
+     A          R PBBOT06
+      *----------------------------------------------------*
+     A  *DS3                                WINDOW(MSGCTL)
+     A  *DS4                                WINDOW(MSGCTL)
+     A N88                                  DSPMOD(*DS4)
+     A                                      OVERLAY
+     A                                 20  1'                                  -
+     A                                                                    '
+     A                                      DSPATR(UL)
+     A                                      COLOR(BLU)
+     A            XXFKEY16      18A  O 21  1
+     A                                      COLOR(BLU)
+     A            XXFKEY17      18A  O 21 21
+     A                                      COLOR(BLU)
+     A            XXFKEY18      18A  O 21 41
+     A                                      COLOR(BLU)
+      *
+      *----------------------------------------------------*
+     A          R PBBOT07
+      *----------------------------------------------------*
+     A  *DS3                                WINDOW(MSGCTL)
+     A  *DS4                                WINDOW(MSGCTL)
+     A N88                                  DSPMOD(*DS4)
+     A                                      OVERLAY
+     A                                 20  1'                                  -
+     A                                                                    '
+     A                                      DSPATR(UL)
+     A                                      COLOR(BLU)
+     A            XXFKEY19      18A  O 21  1
+     A                                      COLOR(BLU)
+     A            XXFKEY20      18A  O 21 21
+     A                                      COLOR(BLU)
+     A            XXFKEY21      18A  O 21 41
+     A                                      COLOR(BLU)
+      *
+      *----------------------------------------------------*
+     A          R PBBOT08
+      *----------------------------------------------------*
+     A  *DS3                                WINDOW(MSGCTL)
+     A  *DS4                                WINDOW(MSGCTL)
+     A N88                                  DSPMOD(*DS4)
+     A                                      OVERLAY
+     A                                 20  1'                                  -
+     A                                                                    '
+     A                                      DSPATR(UL)
+     A                                      COLOR(BLU)
+     A            XXFKEY22      18A  O 21  1
+     A                                      COLOR(BLU)
+     A            XXFKEY23      18A  O 21 21
+     A                                      COLOR(BLU)
+     A            XXFKEY24      18A  O 21 41
+     A                                      COLOR(BLU)
+      *
+      *----------------------------------------------------*
+     A          R MSGSFL                    SFL
+      *----------------------------------------------------*
+     A  *DS3                                SFLMSGRCD(22)
+     A  *DS4                                SFLMSGRCD(22)
+     A            MSGKEY                    SFLMSGKEY
+     A            PGMQ                      SFLPGMQ(10)
+      *
+      *----------------------------------------------------*
+     A          R MSGCTL                    SFLCTL(MSGSFL)
+      *----------------------------------------------------*
+     A                                      KEEP
+     A                                      LOCK
+     A                                      SFLDSP
+     A                                      SFLDSPCTL
+     A                                      SFLINZ
+     A N89                                  SFLEND
+     A  *DS4                                SFLSIZ(0050)
+     A  *DS3                                SFLSIZ(0050)
+     A  *DS4                                SFLPAG(0001)
+     A  *DS3                                SFLPAG(0001)
+     A  *DS4                                WINDOW(&WNDTOPROW   +
+     A                                             &WNDLEFTCOL  +
+     A                                             22 64 *NOMSGLIN)
+     A  *DS3                                WINDOW(&WNDTOPROW   +
+     A                                             &WNDLEFTCOL  +
+     A                                             22 64 *NOMSGLIN)
+     A N88                                  DSPMOD(*DS4)
+     A            PGMQ                      SFLPGMQ(10)
+     A            WNDTOPROW      3S 0P
+     A            WNDLEFTCOL     3S 0P
+      *
+      *----------------------------------------------------*
+      *  RMVWDW ZUM LÖSCHEN DES WINDOWS
+     A          R RMVWDW                    CLRL(*NO) OVERLAY FRCDTA
+      *----------------------------------------------------*
+     A N88                                  DSPMOD(*DS4)
+      *
+      *----------------------------------------------------*
+      *  DER DUMMY SATZ MUSS VORHANDEN SEIN,
+      *  AUCH WENN KEIN ZUGRIFF AUF IHN ERFOLGT !!
+     A          R DUMMY                     ASSUME
+      *----------------------------------------------------*
+     A N88                                  DSPMOD(*DS4)
+     A                                 11  1' '
+      *

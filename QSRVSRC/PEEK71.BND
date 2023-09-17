@@ -1,0 +1,17 @@
+
+STRPGMEXP  PGMLVL(*CURRENT) SIGNATURE('CharacterTranslationServices') /* RADD */
+                                                                      /* RADD */
+  EXPORT SYMBOL('PEEK71_Transcoder_toJobCcsid')                       /* RADD */
+  EXPORT SYMBOL('PEEK71_Transcoder_toFieldCcsid')                     /* RADD */
+
+  EXPORT SYMBOL('PEEK71_Transcoder_new')                              /* RADD */
+  EXPORT SYMBOL('PEEK71_Transcoder_delete')                           /* RADD */
+  EXPORT SYMBOL('PEEK71_Transcoder_getFromCcsid')                     /* RADD */
+  EXPORT SYMBOL('PEEK71_Transcoder_getToCcsid')                       /* RADD */
+  EXPORT SYMBOL('PEEK71_Transcoder_xlateString')                      /* RADD */
+  EXPORT SYMBOL('PEEK71_Transcoder_xlateBuffer')                      /* RADD */
+  EXPORT SYMBOL('PEEK71_Transcoder_xlateRaw')                         /* RADD */
+  EXPORT SYMBOL('PEEK71_Transcoder_isNull')                           /* RADD */
+  EXPORT SYMBOL('PEEK71_Transcoder_null')                             /* RADD */
+
+ENDPGMEXP

@@ -1,0 +1,29 @@
+      * =================================================================== *
+      *   >>PRE-COMPILER<<                                                  *
+      *     >>CRTCMD<<  CRTPF         FILE(&LI/&OB) +                       *
+      *                               SRCFILE(&SL/&SF) SRCMBR(&SM);         *
+      *     >>IMPORTANT<<                                                   *
+      *       >>PARM<<                MAXMBRS(10);                          *
+      *     >>END-IMPORTANT<<                                               *
+      *     >>EXECUTE<<                                                     *
+      *   >>END-PRE-COMPILER<<                                              *
+      * =================================================================== *
+     A                                      UNIQUE
+      *
+     A          R FCUSTOMER                 TEXT('Customers')
+      *
+     A            CUSTNBR       10S 0       TEXT('Customer number')
+     A                                      COLHDG('Customer number')
+     A            NAME          40A         TEXT('First and last name')
+     A                                      COLHDG('First and last name')
+     A            STREET        40A         TEXT('Street')
+     A                                      COLHDG('Street')
+     A            ZIPCODE       10A         TEXT('Zip code')
+     A                                      COLHDG('Zip code')
+     A            CITY          40A         TEXT('City')
+     A                                      COLHDG('City')
+     A            COUNTRY       40A         TEXT('Country')
+     A                                      COLHDG('Country')
+      *
+     A          K CUSTNBR
+      *

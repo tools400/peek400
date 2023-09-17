@@ -1,0 +1,490 @@
+/* =================================================================== */                 /* RADD */
+/*                                                                     */                 /* RADD */
+/*  Kurzdokumentation :                                                */                 /* RADD */
+/*                                                                     */                 /* RADD */
+/*  Bereich . . . : CRTMSGDS                                           */                 /* RADD */
+/*  Objekt  . . . : CRTMSGDSC                                          */                 /* RADD */
+/*  Beschreibung  : Tool: CRTMSGDS   (Create Message DS  ) CPP         */                 /* RADD */
+/*  Author  . . . : Thomas Raddatz   <thomas.raddatz@tools400.de>      */                 /* RADD */
+/*  Datum . . . . : ?                                                  */                 /* RADD */
+/*                                                                     */                 /* RADD */
+/* =================================================================== */                 /* RADD */
+/*                                                                     */                 /* RADD */
+/*  This software is free software, you can redistribute it and/or     */                 /* RADD */
+/*  modify it under the terms of the GNU General Public License (GPL)  */                 /* RADD */
+/*  as published by the Free Software Foundation.                      */                 /* RADD */
+/*                                                                     */                 /* RADD */
+/*  See GNU General Public License for details.                        */                 /* RADD */
+/*          http://www.opensource.org                                  */                 /* RADD */
+/*          http://www.opensource.org/licenses/gpl-license.html        */                 /* RADD */
+/*                                                                     */                 /* RADD */
+/* =================================================================== */                 /* RADD */
+/*  History:                                                           */                 /* RADD */
+/*                                                                     */                 /* RADD */
+/*  Datum       Name          Änderung                                 */                 /* RADD */
+/*  ----------  ------------  ---------------------------------------  */                 /* RADD */
+/*  07.09.2001  Th.Raddatz    Fixed that REPLACE(*NO) appends source   */                 /* RADD */
+/*                            if member does already exist.            */                 /* RADD */
+/*                                                                     */                 /* RADD */
+/* =================================================================== */                 /* RADD */
+/* >>PRE-COMPILER<<                                                    */                 /* RADD */
+/*   >>CRTCMD<< CRTCLMOD     MODULE(&LI/&OB) +                         */                 /* RADD */
+/*                           SRCFILE(&SL/&SF) SRCMBR(&SM);             */                 /* RADD */
+/*   >>COMPILE<<                                                       */                 /* RADD */
+/*     >>PARM<< DBGVIEW(*LIST);                                        */                 /* RADD */
+/*     >>PARM<< TGTRLS(V7R1M0);                                        */
+/*   >>END-COMPILE<<                                                   */                 /* RADD */
+/*   >>EXECUTE<<                                                       */                 /* RADD */
+/*   >>CMD<<    CRTPGM  PGM(&LI/&OB) +                                 */
+/*                      MODULE(&LI/CRTMSGDSC +                         */
+/*                             &LI/CRTMSGDSR1 &LI/CRTMSGDSR2) +        */
+/*                      ACTGRP(*NEW) TGTRLS(V7R1M0);                   */
+/* >>END-PRE-COMPILER<<                                                */                 /* RADD */
+/* =================================================================== */                 /* RADD */
+             PGM        PARM(&MSGR &MSGF &CPYF &MBR +
+                          &REPLACE &TYP &DEFINE &I_MSGF)                                  /* RADD */
+
+/*  Parameter  */
+             /*  Input      */
+             DCL        VAR(&MSGR        ) TYPE(*CHAR) LEN( 40  )                         /* RADD */
+             DCL        VAR(&MSGF        ) TYPE(*CHAR) LEN( 20  )                         /* RADD */
+             DCL        VAR(&CPYF        ) TYPE(*CHAR) LEN( 20  )                         /* RADD */
+             DCL        VAR(&MBR         ) TYPE(*CHAR) LEN( 10  )                         /* RADD */
+             DCL        VAR(&REPLACE     ) TYPE(*CHAR) LEN(  1  )                         /* RADD */
+             DCL        VAR(&TYP         ) TYPE(*CHAR) LEN(  1  )                         /* RADD */
+             DCL        VAR(&DEFINE      ) TYPE(*CHAR) LEN(  1  )                         /* RADD */
+             DCL        VAR(&I_MSGF      ) TYPE(*CHAR) LEN( 10  )                         /* RADD */
+
+/* interne Felder       */                                                                /* RADD */
+             DCL        VAR(&MSGLIB      ) TYPE(*CHAR) LEN( 10  )                         /* RADD */
+             DCL        VAR(&MSGFILE     ) TYPE(*CHAR) LEN( 10  )                         /* RADD */
+             DCL        VAR(&CPYLIB      ) TYPE(*CHAR) LEN( 10  )                         /* RADD */
+             DCL        VAR(&CPYFILE     ) TYPE(*CHAR) LEN( 10  )                         /* RADD */
+             DCL        VAR(&MSGREFID    ) TYPE(*CHAR) LEN(  7  )                         /* RADD */
+             DCL        VAR(&MSGIDVON    ) TYPE(*CHAR) LEN(  7  )                         /* RADD */
+             DCL        VAR(&MSGIDBIS    ) TYPE(*CHAR) LEN(  7  )                         /* RADD */
+             DCL        VAR(&MSGIDTEMP   ) TYPE(*CHAR) LEN(  7  )                         /* RADD */
+             DCL        VAR(&MSGID       ) TYPE(*CHAR) LEN(  7  )                         /* RADD */
+             DCL        VAR(&RETRIEVEOP  ) TYPE(*CHAR) LEN(  7  )                         /* RADD */
+             DCL        VAR(&CPYMBR      ) TYPE(*CHAR) LEN( 10  )                         /* RADD */
+             DCL        VAR(&CPYTYP      ) TYPE(*CHAR) LEN( 10  )                         /* RADD */
+             DCL        VAR(&MBREXIST    ) TYPE(*CHAR) LEN( 10  )                         /* RADD */
+             DCL        VAR(&MBRDESC     ) TYPE(*CHAR) LEN( 50  )                         /* RADD */
+             DCL        VAR(&SOURCETYPE  ) TYPE(*CHAR) LEN( 10  )                         /* RADD */
+             DCL        VAR(&MBRTEXT     ) TYPE(*CHAR) LEN( 80  )                         /* RADD */
+             DCL        VAR(&ERRID       ) TYPE(*CHAR) LEN(  7  )                         /* RADD */
+             DCL        VAR(&ERRDT       ) TYPE(*CHAR) LEN( 80  )                         /* RADD */
+             DCL        VAR(&IS_FIRST    ) TYPE(*LGL)                                     /* RADD */
+             DCL        VAR(&IS_LAST     ) TYPE(*LGL)                                     /* RADD */
+                                                                                          /* RADD */
+/* Fehlerbehandlung     */                                                                /* RADD */
+             DCL        VAR(&ERROR)      TYPE(*LGL) +
+                          VALUE('0')                                                      /* RADD */
+             DCL        VAR(&TRUE)       TYPE(*LGL) +
+                          VALUE('1')                                                      /* RADD */
+             DCL        VAR(&FALSE)      TYPE(*LGL) +
+                          VALUE('0')                                                      /* RADD */
+             DCL        VAR(&ERRMSGKEY)  TYPE(*CHAR) LEN(4)                               /* RADD */
+                                                                                          /* RADD */
+             DCL        VAR(&ERRMSGTYP)  TYPE(*CHAR) LEN(10) +
+                          VALUE('*DIAG')                                                  /* RADD */
+             DCL        VAR(&ERRNBRTYP)  TYPE(*CHAR) LEN(4) +
+                          VALUE(X'00000001')                                              /* RADD */
+             DCL        VAR(&ERRPGMMSGQ) TYPE(*CHAR) LEN(10) +
+                          VALUE('*')                                                      /* RADD */
+             DCL        VAR(&ERRSTKCTR)  TYPE(*CHAR) LEN(4) +
+                          VALUE(X'00000001')                                              /* RADD */
+             DCL        VAR(&ERRCODE  )  TYPE(*CHAR) LEN(4) +
+                          VALUE(X'00000000')                                              /* RADD */
+                                                                                          /* RADD */
+/* Sende alle Fehler zur Error Handling Routine */                                        /* RADD */
+             MONMSG     MSGID(CPF0000) EXEC(GOTO CMDLBL(ERROR))                           /* RADD */
+                                                                                          /* RADD */
+             CHGVAR     VAR(&ERROR    ) VALUE(&FALSE)                                     /* RADD */
+                                                                                          /* RADD */
+/* -------------------------------------------------------------- */                      /* RADD */
+/*  Los geht's                                                    */                      /* RADD */
+/* -------------------------------------------------------------- */                      /* RADD */
+
+/* ---------------------------- */
+/* MSGF zerlegen in Lib         */
+/* und File                     */
+/* ---------------------------- */
+             CHGVAR     VAR(&MSGLIB    ) VALUE(%SST(&MSGF 11 10))
+             CHGVAR     VAR(&MSGFILE   ) VALUE(%SST(&MSGF  1 10))
+
+/* ---------------------------- */
+/* prüfen, Msg Datei vorhanden  */
+/* ---------------------------- */
+             CHKOBJ     OBJ(&MSGLIB/&MSGFILE) OBJTYPE(*MSGF)
+
+/* ---------------------------- */
+/* Lib durch qual. Namen        */
+/* ersetzen                     */
+/* ---------------------------- */
+             RTVOBJD    OBJ(&MSGLIB/&MSGFILE) OBJTYPE(*MSGF) +
+                          RTNLIB(&MSGLIB)
+
+/* ---------------------------- */
+/* CPYF zerlegen in Lib         */
+/* und File                     */
+/* ---------------------------- */
+             CHGVAR     VAR(&CPYLIB      ) VALUE(%SST(&CPYF 11 10))                       /* RADD */
+             CHGVAR     VAR(&CPYFILE     ) VALUE(%SST(&CPYF  1 10))                       /* RADD */
+
+/* ---------------------------- */
+/* Lib durch qual. Namen        */
+/* ersetzen                     */
+/* ---------------------------- */
+             RTVOBJD    OBJ(&CPYLIB/&CPYFILE) OBJTYPE(*FILE) +
+                          RTNLIB(&CPYLIB)
+                                                                                          /* RADD */
+/* ---------------------------- */                                                        /* RADD */
+/* prüfen, Cpy Datei vorhanden  */                                                        /* RADD */
+/* ---------------------------- */                                                        /* RADD */
+             CHKOBJ     OBJ(&CPYLIB/&CPYFILE) OBJTYPE(*FILE)                              /* RADD */
+
+/* ---------------------------- */
+/* Ermitteln der VON und BIS    */
+/* MSG-ID                       */
+/* ---------------------------- */
+             CHGVAR     VAR(&MSGIDVON  ) VALUE(%SST(&MSGR  3 7))
+             CHGVAR     VAR(&MSGIDBIS  ) VALUE(%SST(&MSGR 10 7))
+
+/* ---------------------------- */
+/* Wenn VON = '*ALL'            */
+/* dann VON auf *FIRST          */
+/* und BIS auf *LAST setzen     */
+/* ---------------------------- */
+               IF         COND(&MSGIDVON *EQ '*ALL') THEN(DO)
+                 CHGVAR     VAR(&MSGIDVON  ) VALUE('*FIRST')
+                 CHGVAR     VAR(&MSGIDBIS  ) VALUE('*LAST')
+               ENDDO
+
+/* ---------------------------- */
+/* Wenn VON = '*FIRST'          */
+/* dann die erste MSG ermitteln */
+/* ---------------------------- */
+               IF         COND(&MSGIDVON *EQ '*FIRST') THEN(DO)
+                 CHGVAR     VAR(&MSGREFID) VALUE('       ')                               /* RADD */
+                 CHGVAR     VAR(&RETRIEVEOP) VALUE('*FIRST ')
+                 CALLPRC      PRC(CRTMSGDSR1) PARM(&MSGLIB &MSGFILE +
+                                &MSGREFID +
+                                &RETRIEVEOP &MSGIDVON &ERRID &ERRDT)
+               ENDDO
+
+/* ---------------------------- */
+/* Wenn BIS = '*ONLY'           */
+/* dann die VON in BIS bringen  */
+/* ---------------------------- */
+               IF         COND(&MSGIDBIS *EQ '*ONLY') THEN(DO)
+                 CHGVAR     VAR(&MSGIDBIS  ) VALUE(&MSGIDVON)
+               ENDDO
+
+/* ---------------------------- */
+/* Prüfen, ob VON ein exis-     */
+/* tierende MSGID ist, wenn     */
+/* nicht, die folgende er-      */
+/* mitteln                      */
+/* ---------------------------- */
+             IF         COND(&MSGIDVON *NE '       ') THEN(DO)
+               RTVMSG     MSGID(&MSGIDVON) MSGF(&MSGLIB/&MSGFILE)
+               MONMSG     MSGID(CPF2419) EXEC(DO)
+                 CHGVAR     VAR(&MSGREFID)   VALUE(&MSGIDVON)                             /* RADD */
+                 CHGVAR     VAR(&RETRIEVEOP) VALUE('*NEXT  ')
+                CALLPRC    PRC(CRTMSGDSR1) PARM(&MSGLIB &MSGFILE +
+                                &MSGREFID +
+                                &RETRIEVEOP &MSGIDVON &ERRID &ERRDT)                      /* RADD */
+               ENDDO
+             ENDDO
+
+/* ---------------------------- */                                                        /* RADD */
+/* Wenn BIS = '*LAST'           */                                                        /* RADD */
+/* dann den höchsten Sortier-   */                                                        /* RADD */
+/* begriff in BIS bringen       */                                                        /* RADD */
+/* ---------------------------- */                                                        /* RADD */
+               IF         COND(&MSGIDBIS *EQ '*LAST') THEN(DO)                            /* RADD */
+                 CHGVAR     VAR(&MSGIDBIS  ) VALUE('ZZZFFFF')                             /* RADD */
+               ENDDO                                                                      /* RADD */
+                                                                                          /* RADD */
+/* ---------------------------- */                                                        /* RADD */
+/* Schleifenbeginn.             */                                                        /* RADD */
+/* ---------------------------- */                                                        /* RADD */
+             CHGVAR     VAR(&MSGID) VALUE(&MSGIDVON)                                      /* RADD */
+LOOP:
+                                                                                          /* RADD */
+/* ---------------------------- */                                                        /* RADD */
+/* Prüfen auf Schleifenende     */                                                        /* RADD */
+/* ---------------------------- */                                                        /* RADD */
+             IF         COND(&MSGID *NE '       ') THEN(DO)                               /* RADD */
+               IF         COND(&MSGID *GT &MSGIDBIS) THEN(DO)                             /* RADD */
+                 CHGVAR     VAR(&MSGID) VALUE('       ')                                  /* RADD */
+               ENDDO                                                                      /* RADD */
+             ENDDO                                                                        /* RADD */
+                                                                                          /* RADD */
+             IF         COND(&MSGID *EQ '       ') THEN(DO)                               /* RADD */
+               GOTO ENDE                                                                  /* RADD */
+             ENDDO                                                                        /* RADD */
+                                                                                          /* RADD */
+/* ---------------------------- */                                                        /* RADD */
+/*  Ermitteln der nächsten      */                                                        /* RADD */
+/*  Nachrichten-ID              */                                                        /* RADD */
+/* ---------------------------- */                                                        /* RADD */
+             CHGVAR     VAR(&RETRIEVEOP) VALUE('*NEXT  ')                                 /* RADD */
+             CHGVAR     VAR(&MSGREFID)   VALUE(&MSGID   )                                 /* RADD */
+             CALLPRC    PRC(CRTMSGDSR1) PARM(&MSGLIB &MSGFILE +
+                          &MSGREFID +
+                          &RETRIEVEOP &MSGIDTEMP &ERRID &ERRDT)                           /* RADD */
+             IF         COND(&MSGIDTEMP *EQ ' '  +
+                        *OR  &MSGIDTEMP *GT &MSGIDBIS) THEN(DO)                           /* RADD */
+               CHGVAR     VAR(&MSGIDBIS) VALUE(&MSGID)                                    /* RADD */
+             ENDDO                                                                        /* RADD */
+
+/* ---------------------------- */
+/*  Member bekommt den Namen    */
+/*  der MSG-ID                  */
+/* ---------------------------- */
+             IF         COND(&MBR *EQ '*GEN') THEN(DO)                                    /* RADD */
+/* Einzel-Mbr */                                                                          /* RADD */
+               CHGVAR     VAR(&CPYMBR    ) VALUE(&MSGID)                                  /* RADD */
+               CHGVAR     VAR(&IS_LAST) VALUE(&TRUE)                                      /* RADD */
+               CHGVAR     VAR(&IS_FIRST) VALUE(&TRUE)                                     /* RADD */
+             ENDDO                                                                        /* RADD */
+             ELSE       CMD(DO)                                                           /* RADD */
+/* Sammel-Mbr */                                                                          /* RADD */
+               CHGVAR     VAR(&CPYMBR    ) VALUE(&MBR)                                    /* RADD */
+               IF         COND(&MSGID *EQ &MSGIDVON) THEN(DO)                             /* RADD */
+                 CHGVAR     VAR(&IS_FIRST) VALUE(&TRUE)                                   /* RADD */
+               ENDDO                                                                      /* RADD */
+               ELSE       CMD(DO)                                                         /* RADD */
+                 CHGVAR     VAR(&IS_FIRST) VALUE(&FALSE)                                  /* RADD */
+               ENDDO                                                                      /* RADD */
+                                                                                          /* RADD */
+               IF         COND(&MSGID *EQ &MSGIDBIS) THEN(DO)                             /* RADD */
+                 CHGVAR     VAR(&IS_LAST) VALUE(&TRUE)                                    /* RADD */
+               ENDDO                                                                      /* RADD */
+               ELSE       CMD(DO)                                                         /* RADD */
+                 CHGVAR     VAR(&IS_LAST) VALUE(&FALSE)                                   /* RADD */
+               ENDDO                                                                      /* RADD */
+             ENDDO                                                                        /* RADD */
+                                                                                          /* RADD */
+/* ---------------------------- */                                                        /* RADD */
+/*  GENERIERUNGSART IN          */                                                        /* RADD */
+/*  SOURCETYP UMSETZEN          */                                                        /* RADD */
+/* ---------------------------- */                                                        /* RADD */
+                                                                                          /* RADD */
+             CHGVAR     VAR(&SOURCETYPE) VALUE('*NONE')                                   /* RADD */
+             CHGVAR     VAR(&CPYTYP    ) VALUE('          ')                              /* RADD */
+                                                                                          /* RADD */
+/* RPG-III */                                                                             /* RADD */
+             IF         COND(&TYP      *EQ '3'     ) THEN(DO)                             /* RADD */
+               CHGVAR     VAR(&SOURCETYPE) VALUE('*RPG')                                  /* RADD */
+               CHGVAR     VAR(&CPYTYP    ) VALUE('RPG')                                   /* RADD */
+             ENDDO                                                                        /* RADD */
+                                                                                          /* RADD */
+/* ILE-RPG */                                                                             /* RADD */
+             IF         COND(&TYP      *EQ '4'     ) THEN(DO)                             /* RADD */
+               CHGVAR     VAR(&SOURCETYPE) VALUE('*ILERPG')                               /* RADD */
+               CHGVAR     VAR(&CPYTYP    ) VALUE('RPGLE')                                 /* RADD */
+             ENDDO                                                                        /* RADD */
+                                                                                          /* RADD */
+/* CL-SRC  */                                                                             /* RADD */
+             IF         COND(&TYP      *EQ '1'     ) THEN(DO)                             /* RADD */
+               CHGVAR     VAR(&SOURCETYPE) VALUE('*CLP')                                  /* RADD */
+               CHGVAR     VAR(&CPYTYP    ) VALUE('CLP')                                   /* RADD */
+             ENDDO                                                                        /* RADD */
+/* CLLE-SRC */                                                                        /* RADD */
+             IF         COND(&TYP      *EQ '6'     ) THEN(DO)                         /* RADD */
+               CHGVAR     VAR(&SOURCETYPE) VALUE('*CLLE')                             /* RADD */
+               CHGVAR     VAR(&CPYTYP    ) VALUE('CLLE')                              /* RADD */
+             ENDDO                                                                    /* RADD */
+/* SCRIPT  */                                                                             /* RADD */
+             IF         COND(&TYP      *EQ '2'     ) THEN(DO)                             /* RADD */
+               CHGVAR     VAR(&SOURCETYPE) VALUE('*SCRIPT')                               /* RADD */
+               CHGVAR     VAR(&CPYTYP    ) VALUE('MID')                                   /* RADD */
+             ENDDO                                                                        /* RADD */
+/* C       */                                                                             /* RADD */
+             IF         COND(&TYP      *EQ '5'     ) THEN(DO)                             /* RADD */
+               CHGVAR     VAR(&SOURCETYPE) VALUE('*C')                                    /* RADD */
+               CHGVAR     VAR(&CPYTYP    ) VALUE('H')                                     /* RADD */
+             ENDDO                                                                        /* RADD */
+
+/* ---------------------------- */
+/*  Prüfen, ob Member vorhanden */
+/* ---------------------------- */
+             CHGVAR     VAR(&MBREXIST  ) VALUE('*EXIST    ')
+             CHKOBJ     OBJ(&CPYLIB/&CPYFILE) OBJTYPE(*FILE) +
+                          MBR(&CPYMBR)
+             /* Member nicht vorhanden  */
+             MONMSG     MSGID(CPF9815) EXEC(CHGVAR VAR(&MBREXIST) +
+                          VALUE('*NOT_EXIST'))
+
+/* ---------------------------- */
+/* Anhand der Auswahl CpyMbr    */
+/* clearen oder anlegen         */
+/* ---------------------------- */
+             IF         COND(&REPLACE *EQ 'Y') THEN(DO)                                   /* RADD */
+               IF         COND(&IS_FIRST *EQ &TRUE) THEN(DO)                              /* RADD */
+                                                                                          /* RADD */
+                 IF         COND(&MBREXIST *EQ '*EXIST') THEN(DO)                         /* RADD */
+                   CLRPFM     FILE(&CPYLIB/&CPYFILE) MBR(&CPYMBR)                         /* RADD */
+                 ENDDO                                                                    /* RADD */
+                                                                                          /* RADD */
+                 IF         COND(&MBREXIST *EQ '*NOT_EXIST') THEN(DO)                     /* RADD */
+                   ADDPFM     FILE(&CPYLIB/&CPYFILE) MBR(&CPYMBR) +
+                              TEXT('??????')                                              /* RADD */
+                 ENDDO                                                                    /* RADD */
+                                                                                          /* RADD */
+               ENDDO                                                                      /* RADD */
+               ELSE       CMD(DO)                                                         /* RADD */
+               /* Bei angegebener Teildatei,  */                                          /* RADD */
+               /* nur beim ersten Mal löschen */                                          /* RADD */
+               ENDDO                                                                      /* RADD */
+             ENDDO                                                                        /* RADD */
+             ELSE       CMD(DO)                                                           /* RADD */
+               IF         COND(&IS_FIRST *EQ &TRUE) THEN(DO)                              /* RADD */
+                                                                                          /* RADD */
+                 IF         COND(&MBREXIST *EQ '*EXIST') THEN(DO)                         /* RADD */
+                   IF         COND(&MBR *EQ '*GEN') THEN(DO)                              /* RADD */
+                     SNDPGMMSG  MSGID(USR0001) MSGF(*LIBL/&I_MSGF) +
+                                MSGDTA(&CPYFILE *CAT &CPYLIB *CAT +
+                                       &CPYMBR  *CAT &SOURCETYPE  ) +
+                                TOPGMQ(*PRV (*PGMBDY)) MSGTYPE(*DIAG)                     /* RADD */
+                     GOTO       CMDLBL(NEXT_MSGID)                                        /* RADD */
+                   ENDDO                                                                  /* RADD */
+                   ELSE       CMD(DO)                                                     /* RADD */
+                     SNDPGMMSG  MSGID(USR0001) MSGF(*LIBL/&I_MSGF) +
+                                MSGDTA(&CPYFILE *CAT &CPYLIB *CAT +
+                                       &CPYMBR  *CAT &SOURCETYPE  ) +
+                                TOPGMQ(*PRV (*PGMBDY)) MSGTYPE(*ESCAPE)                   /* RADD */
+                   ENDDO                                                                  /* RADD */
+                 ENDDO                                                                    /* RADD */
+                                                                                          /* RADD */
+                 IF         COND(&MBREXIST *EQ '*NOT_EXIST') THEN(DO)                     /* RADD */
+                   ADDPFM     FILE(&CPYLIB/&CPYFILE) MBR(&CPYMBR) +
+                              TEXT('??????')                                              /* RADD */
+                 ENDDO                                                                    /* RADD */
+               ENDDO                                                                      /* RADD */
+               ELSE       CMD(DO)                                                         /* RADD */
+               /* Bei angegebener Teildatei,  */                                          /* RADD */
+               /* nur beim ersten Mal prüfen  */                                          /* RADD */
+               ENDDO                                                                      /* RADD */
+                                                                                          /* RADD */
+             ENDDO                                                                        /* RADD */
+                                                                                          /* RADD */
+/* ---------------------------- */                                                        /* RADD */
+/*  START DER VERARBEITUNG      */                                                        /* RADD */
+/*  KENNZEICHNEN                */                                                        /* RADD */
+/* ---------------------------- */                                                        /* RADD */
+             CHGPFM     FILE(&CPYLIB/&CPYFILE) MBR(&CPYMBR) +
+                        SRCTYPE(*NONE)                      +
+                        TEXT('*INUSE')                                                    /* RADD */
+
+/* ---------------------------- */
+/*  OVRDBF AUF NEUES MEMBER     */
+/* ---------------------------- */
+             OVRDBF     FILE(SRC) TOFILE(&CPYLIB/&CPYFILE) +
+                          MBR(&CPYMBR) OVRSCOPE(*CALLLVL)                                 /* RADD */
+
+/* ---------------------------- */
+/*  SOURCEGENERIERUNGSPROGRAMM  */
+/*  AUFRUFEN                    */
+/* ---------------------------- */
+             CALLPRC    PRC(CRTMSGDSR2) PARM(&MSGLIB &MSGFILE +
+                          &MSGID &CPYLIB &CPYFILE &SOURCETYPE +
+                          &DEFINE &IS_FIRST &IS_LAST          +
+                          &MBRTEXT &ERRID &ERRDT)                                         /* RADD */
+             DLTOVR     FILE(*ALL) LVL(*)                                                 /* RADD */
+
+/* ---------------------------- */
+/*  Wenn Fehler beim Generieren */
+/*  aufgetreten ist             */
+/* ---------------------------- */
+             IF         COND(&ERRID    *NE ' '     ) THEN(DO)
+               SNDPGMMSG  MSGID(&ERRID) MSGF(QCPFMSG) MSGDTA(&ERRDT) +
+                          TOPGMQ(*PRV (*PGMBDY)) MSGTYPE(*ESCAPE)                         /* RADD */
+             ENDDO
+
+/* ---------------------------- */
+/*  Memberbeschreibung setzen   */
+/*  Einzel-Member               */                                                        /* RADD */
+/* ---------------------------- */
+             IF         COND(&IS_LAST *EQ &TRUE) THEN(DO)                                 /* RADD */
+              IF         COND(&MBR *EQ '*GEN') THEN(DO)                                   /* RADD */
+               CHGVAR     VAR(&MBRDESC) VALUE('MSG:' *BCAT &MBRTEXT)                      /* RADD */
+              ENDDO                                                                       /* RADD */
+              ELSE       CMD(DO)                                                          /* RADD */
+               CHGVAR     VAR(&MBRDESC) VALUE('MSG:' *BCAT &MSGIDVON +
+                                                     *BCAT '-'       +
+                                                     *BCAT &MSGIDBIS)                     /* RADD */
+              ENDDO                                                                       /* RADD */
+              CHGPFM     FILE(&CPYLIB/&CPYFILE) MBR(&CPYMBR) +
+                           SRCTYPE(&CPYTYP) TEXT(&MBRDESC)                                /* RADD */
+                                                                                          /* RADD */
+/* ---------------------------- */                                                        /* RADD */
+/*  Fertig ...                  */                                                        /* RADD */
+/* ---------------------------- */                                                        /* RADD */
+               SNDPGMMSG  MSGID(USR0002) MSGF(*LIBL/&I_MSGF) +
+                                MSGDTA(&CPYFILE *CAT &CPYLIB *CAT +
+                                       &CPYMBR  *CAT &SOURCETYPE  ) +
+                          TOPGMQ(*PRV (*PGMBDY)) MSGTYPE(*INFO)                           /* RADD */
+             ENDDO                                                                        /* RADD */
+
+/* ---------------------------- */
+/* Nächste MSG lesen            */                                                        /* RADD */
+/* Wenn es kein weitere MSG     */
+/* gibt (EOF) dann ist der      */
+/* Wert in &MSGID = *BLANK      */                                                        /* RADD */
+/* ---------------------------- */
+NEXT_MSGID:                                                                               /* RADD */
+                 CHGVAR     VAR(&MSGREFID)   VALUE(&MSGID   )                             /* RADD */
+                 CHGVAR     VAR(&RETRIEVEOP) VALUE('*NEXT  ')
+                 CALLPRC    PRC(CRTMSGDSR1) PARM(&MSGLIB &MSGFILE +
+                              &MSGREFID +
+                              &RETRIEVEOP &MSGID &ERRID &ERRDT)                           /* RADD */
+
+/* ---------------------------- */
+/* Schleifenende                */
+/* ---------------------------- */
+               GOTO LOOP
+
+
+
+ /* -------------------------------------------------------------- */                     /* RADD */
+ /*  Programm beenden                                              */                     /* RADD */
+ /* -------------------------------------------------------------- */                     /* RADD */
+                                                                                          /* RADD */
+ENDE:                                                                                     /* RADD */
+             DLTOVR     FILE(*ALL)                                                        /* RADD */
+             MONMSG     MSGID(CPF0000)                                                    /* RADD */
+                                                                                          /* RADD */
+             RCLRSC     LVL(*)                                                            /* RADD */
+                                                                                          /* RADD */
+/* -------------------------------------------------------------- */                      /* RADD */
+/*    Fehler aufgetreten ?                                        */                      /* RADD */
+/* -------------------------------------------------------------- */                      /* RADD */
+                                                                                          /* RADD */
+             IF         COND(&ERROR) THEN(DO)                                             /* RADD */
+               /* Sende letzte *ESCAPE nochmals   */                                      /* RADD */
+               CALL       PGM(QMHRSNEM) PARM(&ERRMSGKEY &ERRCODE)                         /* RADD */
+             ENDDO                                                                        /* RADD */
+                                                                                          /* RADD */
+             RETURN                                                                       /* RADD */
+                                                                                          /* RADD */
+/* ---------------- */                                                                    /* RADD */
+/* Nachrichten      */                                                                    /* RADD */
+/* weiterreichen    */                                                                    /* RADD */
+/* ---------------- */                                                                    /* RADD */
+                                                                                          /* RADD */
+ ERROR:                                                                                   /* RADD */
+             IF         COND(&ERROR) THEN(GOTO CMDLBL(ENDE))                              /* RADD */
+             ELSE       CHGVAR     VAR(&ERROR) VALUE(&TRUE)                               /* RADD */
+                                                                                          /* RADD */
+/* Verschiebe alle *DIAG Nachrichten zur             */                                   /* RADD */
+/* vorangegangenen Programmwarteschlange             */                                   /* RADD */
+             CALL       PGM(QMHMOVPM) PARM(&ERRMSGKEY &ERRMSGTYP +
+                          &ERRNBRTYP &ERRPGMMSGQ &ERRSTKCTR &ERRCODE)                     /* RADD */
+                                                                                          /* RADD */
+             GOTO       CMDLBL(ENDE)                                                      /* RADD */
+
+             ENDPGM

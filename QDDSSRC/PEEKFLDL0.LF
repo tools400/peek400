@@ -1,0 +1,16 @@
+      *===============================================================*
+      *                                                               *
+      *  (c) Thomas Raddatz                                           *
+      *                                                               *
+      *  Bereich  : PEEK                                              *
+      *  Datei    : PEEKFLDL0    File Format Description              *
+      *  Typ      : LF                                                *
+      *  Erstellt : 29.07.1999   Raddatz                              *
+      *                                                               *
+      *===============================================================*
+      *
+ ADD A          R FPEEKFLD                  TEXT('PEEK - FFD')
+ ADD A                                      PFILE(PEEKFLD)
+      ***
+ ADD A          K FLDSEQ
+      *

@@ -1,0 +1,136 @@
+     /* ============================================================ */
+     /*                                                              */
+     /*  (c) Thomas Raddatz                                          */
+     /*                                                              */
+     /*  Bereich  : PEEK, Version 1.4.0                              */
+     /*  Programm : PEEK80                                           */
+     /*  Typ      : CLP                                              */
+     /*                                                              */
+     /*  erstellt : 03.04.98  Raddatz                                */
+     /*                                                              */
+     /* ============================================================ */
+     /*                                                              */
+     /*  Dokumentation:                                              */
+     /*                                                              */
+     /*  Anpassen CCSID der Peek Dateien.                            */
+     /*                                                              */
+     /* ============================================================ */
+
+          PGM        PARM(&NEW_CCSID +
+                          &LIB       )
+
+          DCL        VAR(&NEW_CCSID ) TYPE(*DEC )  LEN(5 0)
+          DCL        VAR(&LIB       ) TYPE(*CHAR)  LEN( 10)
+
+          DCL        VAR(&FILELIST  ) TYPE(*CHAR)  LEN(100)
+          DCL        VAR(&START     ) TYPE(*DEC )  LEN(5 0)
+          DCL        VAR(&END       ) TYPE(*DEC )  LEN(5 0)
+          DCL        VAR(&STRPOS    ) TYPE(*DEC )  LEN(5 0)
+          DCL        VAR(&FILE      ) TYPE(*CHAR)  LEN( 10)
+          DCL        VAR(&OLD_CCSID ) TYPE(*DEC )  LEN(5 0)
+          DCL        VAR(&TEXT      ) TYPE(*CHAR)  LEN( 50)
+          DCL        VAR(&TEXT_CCSID) TYPE(*CHAR)  LEN(  5)
+
+/* Fehlerbehandlung     */
+          DCL        VAR(&ERROR)      TYPE(*LGL) +
+                       VALUE('0')
+          DCL        VAR(&ERRMSGKEY)  TYPE(*CHAR) LEN(4)
+
+          DCL        VAR(&ERRMSGTYP)  TYPE(*CHAR) LEN(10) +
+                       VALUE('*DIAG')
+          DCL        VAR(&ERRNBRTYP)  TYPE(*CHAR) LEN(4) +
+                       VALUE(X'00000001')
+          DCL        VAR(&ERRPGMMSGQ) TYPE(*CHAR) LEN(10) +
+                       VALUE('*')
+          DCL        VAR(&ERRSTKCTR)  TYPE(*CHAR) LEN(4) +
+                       VALUE(X'00000001')
+          DCL        VAR(&ERRCODE  )  TYPE(*CHAR) LEN(4) +
+                       VALUE(X'00000000')
+
+/* Sende alle Fehler zur Error Handling Routine */
+             MONMSG     MSGID(CPF0000) EXEC(GOTO CMDLBL(ERROR))
+
+             CHGVAR     VAR(&ERROR    ) VALUE('0')
+
+ /* -------------------------------------------------------------- */
+ /*  Los geht's                                                    */
+ /* -------------------------------------------------------------- */
+
+             CHGVAR     VAR(&FILELIST) VALUE('PEEKFLD   '  +
+                                       *CAT  'PEEKFMT   '  +
+                                       *CAT  'PEEKWRK   ')
+             CHGVAR     VAR(&START) VALUE(1)
+             CHGVAR     VAR(&END  ) VALUE(3)
+
+ /* CCSID:  *SAME  */
+             IF         COND(&NEW_CCSID *EQ -1      ) THEN(DO)
+               GOTO       CMDLBL(ENDE)
+             ENDDO
+
+ /* CCSID:  *JOB   */
+             IF         COND(&NEW_CCSID *EQ -2      ) THEN(DO)
+               RTVJOBA    CCSID(&NEW_CCSID)
+             ENDDO
+
+             IF         COND(&LIB *EQ '*PRODLIB') THEN(DO)
+               RTVOBJD    OBJ(*LIBL/PEEK05) OBJTYPE(*PGM) RTNLIB(&LIB)
+             ENDDO
+             ELSE       CMD(DO)
+               /* angegebene Produktbibliothek verwenden */
+             ENDDO
+
+ LOOP:
+             CHGVAR     VAR(&STRPOS) VALUE((&START * 10) -9)
+             CHGVAR     VAR(&FILE) VALUE(%SST(&FILELIST &STRPOS 10))
+
+             RTVOBJD    OBJ(&LIB/&FILE) OBJTYPE(*FILE) TEXT(&TEXT)
+             CHGVAR     VAR(&TEXT_CCSID) VALUE(%SST(&TEXT 46 5))
+             IF         COND(&TEXT_CCSID *GE '00000'  +
+                        *AND &TEXT_CCSID *LE '65535') THEN(DO)
+                CHGVAR     VAR(&OLD_CCSID) VALUE(&TEXT_CCSID)
+             ENDDO
+             ELSE       CMD(DO)
+                CHGVAR     VAR(&OLD_CCSID) VALUE(-1)
+             ENDDO
+
+             IF         COND(&FILE *NE ' ') THEN(DO)
+                IF         COND(&NEW_CCSID *NE &OLD_CCSID) THEN(DO)
+                   CHGVAR     VAR(&TEXT_CCSID) VALUE(&NEW_CCSID)
+                   CHGVAR     VAR(%SST(&TEXT 39 7)) VALUE('CCSID: ')
+                   CHGVAR     VAR(%SST(&TEXT 46 5)) VALUE(&TEXT_CCSID)
+                   CHGPF      FILE(&LIB/&FILE)   +
+                              CCSID(&NEW_CCSID)  +
+                              TEXT(&TEXT)
+                ENDDO
+                IF         COND(&START *LT &END) THEN(DO)
+                   CHGVAR     VAR(&START) VALUE(&START +1)
+                   GOTO       CMDLBL(LOOP)
+                ENDDO
+             ENDDO
+
+ ENDE:
+             IF         COND(&ERROR) THEN(DO)
+                /* Sende letzte *ESCAPE nochmals   */
+                CALL       PGM(QMHRSNEM) PARM(&ERRMSGKEY &ERRCODE)
+             ENDDO
+
+             RETURN
+
+/* ---------------- */
+/* Error            */
+/* Handling         */
+/* ---------------- */
+ ERROR:
+             IF         COND(&ERROR) THEN(GOTO CMDLBL(ENDE))
+             ELSE       CHGVAR     VAR(&ERROR) VALUE('1')
+
+/* Verschiebe alle *DIAG Nachrichten zur             */
+/* vorangegangenen Programmwarteschlange             */
+             CHGVAR     VAR(&ERRMSGTYP) VALUE('*DIAG')
+             CALL       PGM(QMHMOVPM) PARM(&ERRMSGKEY &ERRMSGTYP +
+                          &ERRNBRTYP &ERRPGMMSGQ &ERRSTKCTR &ERRCODE)
+
+             GOTO       CMDLBL(ENDE)
+
+             ENDPGM
+

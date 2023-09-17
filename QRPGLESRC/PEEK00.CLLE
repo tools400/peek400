@@ -1,0 +1,545 @@
+     /* ============================================================ */
+     /*                                                              */
+     /*  (c) Thomas Raddatz                                          */
+     /*                                                              */
+     /*  Bereich  : PEEK, Version 2.2.0                              */
+     /*  Programm : PEEK00                                           */
+     /*  Typ      : RPG                                              */
+     /*                                                              */
+     /*  erstellt : 26.09.97                                         */
+     /*  geändert : 27.04.99 für Version 2.1.0                       */
+     /*  geändert : 29.07.99 für Version 2.2.0                       */
+     /*  geändert : 22.11.04 für Version 2.3.1                       */
+     /*                                                              */
+     /* ============================================================ */
+     /*                                                              */
+     /*  Dokumentation:                                              */
+     /*                                                              */
+     /*  Initialisierungsprogramm für Programm PEEK05                */
+     /*                                                              */
+     /* ============================================================ */
+
+          PGM        PARM(&QFILE     +
+                          &MEMBER    +
+                          &ACCESS    +
+                          &LANGUAGE  +
+                          &PRODLIB   +
+                          &PROGRAM   +
+                          &CHGLIB    +
+                          &CHGFILE   +
+                          &CHGMBR    +
+                          &UPDMOD    +
+                          &CHGSQLW   +
+                          &CHGSQLO   +
+                          &QENVFILE  +
+                          &ENVMBR    +
+                          &ENVSAVE   +
+                          &ENVLAYOUT +
+                          &SETTINGS  +
+                          &WHERE     +
+                          &ORDERBY   )
+
+          DCL        VAR(&QFILE     ) TYPE(*CHAR)  LEN( 20)
+          DCL        VAR(&MEMBER    ) TYPE(*CHAR)  LEN( 10)
+          DCL        VAR(&ACCESS    ) TYPE(*CHAR)  LEN(  1)
+          DCL        VAR(&LANGUAGE  ) TYPE(*CHAR)  LEN( 10)
+          DCL        VAR(&PRODLIB   ) TYPE(*CHAR)  LEN( 10)
+          DCL        VAR(&PROGRAM   ) TYPE(*CHAR)  LEN( 10)
+          DCL        VAR(&CHGLIB    ) TYPE(*CHAR)  LEN(  1)
+          DCL        VAR(&CHGFILE   ) TYPE(*CHAR)  LEN(  1)
+          DCL        VAR(&CHGMBR    ) TYPE(*CHAR)  LEN(  1)
+          DCL        VAR(&UPDMOD    ) TYPE(*CHAR)  LEN(  1)
+          DCL        VAR(&CHGSQLW   ) TYPE(*CHAR)  LEN(  1)
+          DCL        VAR(&CHGSQLO   ) TYPE(*CHAR)  LEN(  1)
+          DCL        VAR(&QENVFILE  ) TYPE(*CHAR)  LEN( 20)
+          DCL        VAR(&ENVMBR    ) TYPE(*CHAR)  LEN( 10)
+          DCL        VAR(&ENVSAVE   ) TYPE(*CHAR)  LEN(  1)
+          DCL        VAR(&ENVLAYOUT ) TYPE(*CHAR)  LEN(  1)
+          DCL        VAR(&WHERE     ) TYPE(*CHAR)  LEN(514)
+          DCL        VAR(&SETTINGS  ) TYPE(*CHAR)  LEN(32)
+          DCL        VAR(&ORDERBY   ) TYPE(*CHAR)  LEN(514)
+
+          DCL        VAR(&PREFIX    ) TYPE(*CHAR)  LEN( 10)
+          DCL        VAR(&USER      ) TYPE(*CHAR)  LEN( 10)
+          DCL        VAR(&PEEKUSERNM) TYPE(*CHAR)  LEN( 10)
+          DCL        VAR(&PEEKUSERFI) TYPE(*CHAR)  LEN( 10)
+          DCL        VAR(&PEEKUSERLB) TYPE(*CHAR)  LEN( 10)
+          DCL        VAR(&PEEKUSERMB) TYPE(*CHAR)  LEN( 10)
+          DCL        VAR(&MSGID     ) TYPE(*CHAR)  LEN(  7)
+          DCL        VAR(&MSGDTA    ) TYPE(*CHAR)  LEN(512)
+
+          DCL        VAR(&MSGF      ) TYPE(*CHAR)  LEN( 10)
+    /*    DCL        VAR(&MODE      ) TYPE(*CHAR)  LEN( 10)             */
+    /*    DCL        VAR(&SECTION   ) TYPE(*CHAR)  LEN( 10)             */
+          DCL        VAR(&INZPEEKUSR) TYPE(*CHAR)  LEN(  1)
+          DCL        VAR(&TRUE      ) TYPE(*CHAR)  LEN(  1)  +
+                          VALUE('1')
+          DCL        VAR(&FALSE     ) TYPE(*CHAR)  LEN(  1)  +
+                          VALUE('0')
+          DCL        VAR(&CCSID     ) TYPE(*DEC )  LEN(5 0)
+          DCL        VAR(&TEMPLIB   ) TYPE(*CHAR)  LEN( 10)
+          DCL        VAR(&RECURSION ) TYPE(*LGL)   VALUE('0')
+
+/* Fehlerbehandlung     */
+             DCL        VAR(&ERROR)      TYPE(*LGL) +
+                          VALUE('0')
+             DCL        VAR(&ERRMSGKEY)  TYPE(*CHAR) LEN(4)
+
+             DCL        VAR(&ERRMSGTYP)  TYPE(*CHAR) LEN(10) +
+                          VALUE('*DIAG')
+             DCL        VAR(&ERRNBRTYP)  TYPE(*CHAR) LEN(4) +
+                          VALUE(X'00000001')
+             DCL        VAR(&ERRPGMMSGQ) TYPE(*CHAR) LEN(10) +
+                          VALUE('*')
+             DCL        VAR(&ERRSTKCTR)  TYPE(*CHAR) LEN(4) +
+                          VALUE(X'00000001')
+             DCL        VAR(&ERRCODE  )  TYPE(*CHAR) LEN(4) +
+                          VALUE(X'00000000')
+
+/* Sende alle Fehler zur Error Handling Routine */
+             MONMSG     MSGID(CPF0000) EXEC(GOTO CMDLBL(ERROR))
+
+             CHGVAR     VAR(&ERROR    ) VALUE('0')
+
+ /* -------------------------------------------------------------- */
+ /*  Los geht's                                                    */
+ /* -------------------------------------------------------------- */
+
+             CHGVAR     VAR(&INZPEEKUSR) VALUE(&FALSE)
+             RTVJOBA    USER(&USER)
+             CHGVAR     VAR(&TEMPLIB) VALUE('QTEMP')
+             CHGVAR     VAR(&CCSID)   VALUE(-2)
+
+ /*  setzen Produktbibliothek */
+             CALLPRC    PRC(P_SETPRDLB) PARM(&PRODLIB)
+
+ /*  PEEKUSR  */
+             CHGVAR     VAR(&PEEKUSERNM) VALUE(%SST(&SETTINGS 23 10))
+             CHGVAR     VAR(&PEEKUSERFI) VALUE(%SST(&SETTINGS  3 10))
+             CHGVAR     VAR(&PEEKUSERLB) VALUE(%SST(&SETTINGS 13 10))
+             CHGVAR     VAR(&PEEKUSERMB) VALUE('PEEKUSR')
+
+             CHKOBJ     OBJ(&PRODLIB/EXIT02) OBJTYPE(*PGM)
+             MONMSG     MSGID(CPF9801) EXEC(DO)                           /* B01 */
+                RCVMSG     PGMQ(*SAME (*)) MSGTYPE(*LAST) WAIT(0) +
+                             RMV(*YES)
+                IF         COND(&PEEKUSERNM *EQ '*DFT') THEN(DO)
+                   CHGVAR     VAR(&PEEKUSERNM) VALUE(&USER)
+                ENDDO
+                IF         COND(&PEEKUSERFI *EQ '*DFT') THEN(DO)
+                   CHGVAR     VAR(&PEEKUSERFI) VALUE(&USER)
+                   CHGVAR     VAR(&PEEKUSERLB) VALUE(&PRODLIB)
+                ENDDO
+                IF         COND(&PEEKUSERLB *EQ '*PRDLIB') THEN(DO)
+                   CHGVAR     VAR(&PEEKUSERLB) VALUE(&PRODLIB)
+                ENDDO
+                GOTO       CMDLBL(NO_EXIT02)
+             ENDDO                                                        /* E01 */
+
+             CALL       PGM(&PRODLIB/EXIT02) PARM(&PEEKUSERNM +
+                                                  &PEEKUSERFI +
+                                                  &PEEKUSERLB +
+                                                  &MSGID      +
+                                                  &MSGDTA)
+             IF         COND(&MSGID *NE ' ') THEN(DO)                     /* B01 */
+                SNDPGMMSG  MSGID(&MSGID) MSGF(*LIBL/QCPFMSG) +
+                           MSGDTA(&MSGDTA)                   +
+                           TOPGMQ(*PRV (*)) MSGTYPE(*INFO)
+                GOTO       CMDLBL(ENDE)
+             ENDDO                                                        /* E01 */
+
+NO_EXIT02:
+             CHKOBJ     OBJ(&PEEKUSERLB/&PEEKUSERFI) OBJTYPE(*FILE)
+             MONMSG     MSGID(CPF9801) EXEC(DO)                           /* B01 */
+                GOTO       CMDLBL(NO_PEEK62)
+             ENDDO                                                        /* E01 */
+             CALL       PGM(&PRODLIB/PEEK62) PARM(&PEEKUSERFI &PEEKUSERLB)
+NO_PEEK62:
+
+             CALLPRC    PRC(p_setUsr) PARM(&PEEKUSERNM &PEEKUSERFI &PEEKUSERLB)
+
+             CHKOBJ     OBJ(&PEEKUSERLB/&PEEKUSERFI) OBJTYPE(*FILE) +
+                          MBR(*NONE) +
+                          AUT(*NONE)
+             MONMSG     MSGID(CPF9801) EXEC(DO)                           /* B01 */
+               CALLPRC    PRC(p_crtUsrSg) PARM(&PEEKUSERLB +
+                                               &PEEKUSERFI +
+                                               &MSGID      +
+                                               &MSGDTA     )
+               IF         COND(&MSGID *NE ' ') THEN(DO)                   /* B02 */
+                 SNDPGMMSG  MSGID(&MSGID) MSGF(*LIBL/QCPFMSG) +
+                            MSGDTA(&MSGDTA)                   +
+                            TOPGMQ(*PRV (*)) MSGTYPE(*INFO)
+                 GOTO       CMDLBL(ENDE)
+               ENDDO                                                      /* E02 */
+               CHGVAR     VAR(&INZPEEKUSR) VALUE(&TRUE)
+             ENDDO                                                        /* E01 */
+
+             CHKOBJ     OBJ(&PEEKUSERLB/&PEEKUSERFI) OBJTYPE(*FILE) +
+                          MBR(&PEEKUSERMB) +
+                          AUT(*NONE)
+             MONMSG     MSGID(CPF9815) EXEC(DO)                           /* B01 */
+               ADDPFM     FILE(&PEEKUSERLB/&PEEKUSERFI) MBR(&PEEKUSERMB)
+               CHGVAR     VAR(&INZPEEKUSR) VALUE(&TRUE)
+             ENDDO                                                        /* E01 */
+
+      /*     OVRDBF     FILE(PEEKUSR) TOFILE(&PEEKUSERLB/&PEEKUSER) +      */
+      /*                  MBR(*FIRST) SECURE(*YES) +                       */
+      /*                  SHARE(*YES)              +                       */
+      /*                  OVRSCOPE(*ACTGRPDFN)     +                       */
+      /*                  OPNSCOPE(*ACTGRPDFN)                             */
+
+      /*     IF         COND(&INZPEEKUSR *EQ &TRUE) THEN(DO)     */       /* B01 */
+      /*       CHGVAR     VAR(&MODE   )    VALUE('*REPLACE')     */
+      /*       CHGVAR     VAR(&SECTION)    VALUE('*ALL'    )     */
+      /*       CALL       PGM(&PRODLIB/PEEK22) PARM(&MODE   +    */
+      /*                                            &SECTION)    */
+      /*       CHGVAR     VAR(&INZPEEKUSR) VALUE(&FALSE)         */
+      /*     ENDDO                                               */       /* E01 */
+
+ /*  PEEKGER  */
+             CHGVAR     VAR(&PREFIX) VALUE('PEEK')
+             CALL       PGM(&PRODLIB/PEEK31) PARM(&LANGUAGE +
+                                                  &PREFIX   +
+                                                  &MSGID    +
+                                                  &MSGDTA )
+             IF         COND(&MSGID *NE ' ') THEN(DO)                     /* B01 */
+                SNDPGMMSG  MSGID(&MSGID) MSGF(*LIBL/QCPFMSG) +
+                           MSGDTA(&MSGDTA)                   +
+                           TOPGMQ(*PRV (*)) MSGTYPE(*INFO)
+                GOTO       CMDLBL(ENDE)
+             ENDDO                                                        /* E01 */
+
+             CHGVAR     VAR(&MSGF) VALUE('PEEK' *TCAT &LANGUAGE)
+             OVRMSGF    MSGF(PEEKGER) TOMSGF(&PRODLIB/&MSGF) +
+                          SECURE(*YES)
+
+ /*  Rekursion*/
+             SNDPGMMSG  MSGID(USR8173) MSGF(&PRODLIB/PEEKGER) +
+                          TOPGMQ(*SAME (&PROGRAM &PROGRAM &PROGRAM)) +
+                          MSGTYPE(*INFO)
+             MONMSG     MSGID(CPF2469) EXEC(DO)                           /* B01 */
+ /*  ... Aufrufstapeleintrag nicht gefunden. */
+               GOTO       CMDLBL(START_PEEK)
+             ENDDO                                                        /* E01 */
+
+             CHGVAR     VAR(&RECURSION) VALUE('1')
+             RMVMSG     PGMQ(*SAME (*)) CLEAR(*ALL)
+             SNDPGMMSG  MSGID(USR8173) MSGF(&PRODLIB/PEEKGER) +
+                        TOPGMQ(*PRV) MSGTYPE(*INFO)
+             GOTO       CMDLBL(ENDE)
+
+ /*  Starten  */
+ Start_Peek:
+             SNDPGMMSG  MSGID(USR8101) MSGF(&PRODLIB/PEEKGER) +
+                        TOPGMQ(*EXT) MSGTYPE(*STATUS)
+
+ /*  CMTCTL   */
+
+ LBL_STRCMT:
+             STRCMTCTL  LCKLVL(*CHG) NFYOBJ(*NONE) CMTSCOPE(*ACTGRP)
+             MONMSG     MSGID(CPF8351) EXEC(DO)                           /* B01 */
+               ENDCMTCTL
+               GOTO LBL_STRCMT
+             ENDDO                                                        /* E01 */
+
+ /*  Check Objects in QTEMP */
+             CALL       PGM(&PRODLIB/PEEK67) PARM(&PRODLIB &TEMPLIB)
+
+ /*  PEEKFLD  */
+             CHKOBJ     OBJ(&TEMPLIB/PEEKFLD) OBJTYPE(*FILE) MBR(*NONE) +
+                          AUT(*NONE)
+             MONMSG     MSGID(CPF9801) EXEC(DO)                           /* B01 */
+               CRTDUPOBJ  OBJ(PEEKFLD) FROMLIB(&PRODLIB) +
+                          OBJTYPE(*FILE) TOLIB(&TEMPLIB) NEWOBJ(*OBJ) +
+                          DATA(*NO)
+             ENDDO                                                        /* E01 */
+
+             CHKOBJ     OBJ(&TEMPLIB/PEEKFLD) OBJTYPE(*FILE) MBR(*FIRST) +
+                          AUT(*NONE)
+             MONMSG     MSGID(CPF9815) EXEC(DO)                           /* B01 */
+               ADDPFM     FILE(&TEMPLIB/PEEKFLD) MBR(PEEKFLD)
+             ENDDO                                                        /* E01 */
+
+             OVRDBF     FILE(PEEKFLD) TOFILE(&TEMPLIB/PEEKFLD) +
+                          MBR(*FIRST) SECURE(*YES) +
+                          OVRSCOPE(*ACTGRPDFN) SHARE(*NO) +
+                          OPNSCOPE(*ACTGRPDFN)
+
+ /*  PEEKFMT  */
+             CHKOBJ     OBJ(&TEMPLIB/PEEKFMT) OBJTYPE(*FILE) MBR(*NONE) +
+                          AUT(*NONE)
+             MONMSG     MSGID(CPF9801) EXEC(DO)                           /* B01 */
+               CRTDUPOBJ  OBJ(PEEKFMT) FROMLIB(&PRODLIB) +
+                          OBJTYPE(*FILE) TOLIB(&TEMPLIB) NEWOBJ(*OBJ) +
+                          DATA(*NO)
+             ENDDO                                                        /* E01 */
+
+             CHKOBJ     OBJ(&TEMPLIB/PEEKFMT) OBJTYPE(*FILE) MBR(*FIRST) +
+                          AUT(*NONE)
+             MONMSG     MSGID(CPF9815) EXEC(DO)                           /* B01 */
+               ADDPFM     FILE(&TEMPLIB/PEEKFMT) MBR(PEEKFMT)
+             ENDDO                                                        /* E01 */
+
+             OVRDBF     FILE(PEEKFMT) TOFILE(&TEMPLIB/PEEKFMT) +
+                          MBR(*FIRST) SECURE(*YES) +
+                          OVRSCOPE(*ACTGRPDFN) SHARE(*NO) +
+                          OPNSCOPE(*ACTGRPDFN)
+
+ /*  PEEKWRK  */
+             CHKOBJ     OBJ(&TEMPLIB/PEEKWRK) OBJTYPE(*FILE) MBR(*NONE) +
+                          AUT(*NONE)
+             MONMSG     MSGID(CPF9801) EXEC(DO)                           /* B01 */
+               CRTDUPOBJ  OBJ(PEEKWRK) FROMLIB(&PRODLIB) +
+                          OBJTYPE(*FILE) TOLIB(&TEMPLIB) NEWOBJ(*OBJ) +
+                          DATA(*NO)
+             ENDDO                                                        /* E01 */
+
+             CHKOBJ     OBJ(&TEMPLIB/PEEKWRK) OBJTYPE(*FILE) MBR(*FIRST) +
+                          AUT(*NONE)
+             MONMSG     MSGID(CPF9815) EXEC(DO)                           /* B01 */
+               ADDPFM     FILE(&TEMPLIB/PEEKWRK) MBR(PEEKWRK)
+             ENDDO                                                        /* E01 */
+
+             OVRDBF     FILE(PEEKWRK) TOFILE(&TEMPLIB/PEEKWRK) +
+                          MBR(*FIRST) SECURE(*YES) +
+                          OVRSCOPE(*ACTGRPDFN) SHARE(*NO)  +
+                          OPNSCOPE(*ACTGRPDFN)
+
+             OVRDBF     FILE(PEEKWRK_) TOFILE(&TEMPLIB/PEEKWRK) +
+                          MBR(*FIRST) SECURE(*YES) +
+                          OVRSCOPE(*ACTGRPDFN) SHARE(*NO)  +
+                          OPNSCOPE(*ACTGRPDFN)
+
+ /*  CCSID    */
+             CALL       PGM(&PRODLIB/PEEK80) PARM(    +
+                                             &CCSID   +
+                                             &TEMPLIB +
+                                             )
+
+ /*  PEEKFLDL0 */
+             CHKOBJ     OBJ(&TEMPLIB/PEEKFLDL0) OBJTYPE(*FILE) +
+                          MBR(*NONE) AUT(*NONE)
+             MONMSG     MSGID(CPF9801) EXEC(DO)                           /* B01 */
+               CRTDUPOBJ  OBJ(PEEKFLDL0) FROMLIB(&PRODLIB) +
+                          OBJTYPE(*FILE) TOLIB(&TEMPLIB) NEWOBJ(*OBJ) +
+                          DATA(*NO)
+             ENDDO                                                        /* E01 */
+
+             CHKOBJ     OBJ(&TEMPLIB/PEEKFLDL0) OBJTYPE(*FILE) +
+                          MBR(*FIRST) AUT(*NONE)
+             MONMSG     MSGID(CPF9815) EXEC(DO)                           /* B01 */
+               ADDLFM     FILE(&TEMPLIB/PEEKFLDL0) MBR(PEEKFLDL0)
+             ENDDO                                                        /* E01 */
+
+             OVRDBF     FILE(PEEKFLDL0) TOFILE(&TEMPLIB/PEEKFLDL0) +
+                          MBR(*FIRST) SECURE(*YES) +
+                          OVRSCOPE(*ACTGRPDFN) SHARE(*NO) +
+                          OPNSCOPE(*ACTGRPDFN)
+
+ /*  PEEKFLDL1 */
+             CHKOBJ     OBJ(&TEMPLIB/PEEKFLDL1) OBJTYPE(*FILE) +
+                          MBR(*NONE) AUT(*NONE)
+             MONMSG     MSGID(CPF9801) EXEC(DO)                           /* B01 */
+               CRTDUPOBJ  OBJ(PEEKFLDL1) FROMLIB(&PRODLIB) +
+                          OBJTYPE(*FILE) TOLIB(&TEMPLIB) NEWOBJ(*OBJ) +
+                          DATA(*NO)
+             ENDDO                                                        /* E01 */
+
+             CHKOBJ     OBJ(&TEMPLIB/PEEKFLDL1) OBJTYPE(*FILE) +
+                          MBR(*FIRST) AUT(*NONE)
+             MONMSG     MSGID(CPF9815) EXEC(DO)                           /* B01 */
+               ADDLFM     FILE(&TEMPLIB/PEEKFLDL1) MBR(PEEKFLDL1)
+             ENDDO                                                        /* E01 */
+
+             OVRDBF     FILE(PEEKFLDL1) TOFILE(&TEMPLIB/PEEKFLDL1) +
+                          MBR(*FIRST) SECURE(*YES) +
+                          OVRSCOPE(*ACTGRPDFN) SHARE(*NO) +
+                          OPNSCOPE(*ACTGRPDFN)
+
+ /*  PEEKFLDL2 */
+             CHKOBJ     OBJ(&TEMPLIB/PEEKFLDL2) OBJTYPE(*FILE) +
+                          MBR(*NONE) AUT(*NONE)
+             MONMSG     MSGID(CPF9801) EXEC(DO)                           /* B01 */
+               CRTDUPOBJ  OBJ(PEEKFLDL2) FROMLIB(&PRODLIB) +
+                          OBJTYPE(*FILE) TOLIB(&TEMPLIB) NEWOBJ(*OBJ) +
+                          DATA(*NO)
+             ENDDO                                                        /* E01 */
+
+             CHKOBJ     OBJ(&TEMPLIB/PEEKFLDL2) OBJTYPE(*FILE) +
+                          MBR(*FIRST) AUT(*NONE)
+             MONMSG     MSGID(CPF9815) EXEC(DO)                           /* B01 */
+               ADDLFM     FILE(&TEMPLIB/PEEKFLDL2) MBR(PEEKFLDL2)
+             ENDDO                                                        /* E01 */
+
+             OVRDBF     FILE(PEEKFLDL2) TOFILE(&TEMPLIB/PEEKFLDL2) +
+                          MBR(*FIRST) SECURE(*YES) +
+                          OVRSCOPE(*ACTGRPDFN) SHARE(*NO) +
+                          OPNSCOPE(*ACTGRPDFN)
+
+ /*  PEEK05FM */
+             OVRDSPF    FILE(PEEK05FM) TOFILE(&PRODLIB/PEEK05FM) +
+                          SECURE(*YES) OVRSCOPE(*ACTGRPDFN)
+
+ /*  PEEK12FM */
+             OVRDSPF    FILE(PEEK12FM) TOFILE(&PRODLIB/PEEK12FM) +
+                          SECURE(*YES) OVRSCOPE(*ACTGRPDFN)
+
+ /*  PEEK14FM */
+             OVRDSPF    FILE(PEEK14FM) TOFILE(&PRODLIB/PEEK14FM) +
+                          SECURE(*YES) OVRSCOPE(*ACTGRPDFN)
+
+ /*  PEEK17FM */
+             OVRDSPF    FILE(PEEK17FM) TOFILE(&PRODLIB/PEEK17FM) +
+                          SECURE(*YES) OVRSCOPE(*ACTGRPDFN)
+
+ /*  PEEK24FM */
+             OVRDSPF    FILE(PEEK24FM) TOFILE(&PRODLIB/PEEK24FM) +
+                          SECURE(*YES) OVRSCOPE(*ACTGRPDFN)
+
+ /*  PEEK25FM */
+             OVRDSPF    FILE(PEEK25FM) TOFILE(&PRODLIB/PEEK25FM) +
+                          SECURE(*YES) OVRSCOPE(*ACTGRPDFN)
+
+ /*  PEEK26FM */
+             OVRDSPF    FILE(PEEK26FM) TOFILE(&PRODLIB/PEEK26FM) +
+                          SECURE(*YES) OVRSCOPE(*ACTGRPDFN)
+
+ /*  PEEK30FM */
+             OVRDSPF    FILE(PEEK30FM) TOFILE(&PRODLIB/PEEK30FM) +
+                          SECURE(*YES) OVRSCOPE(*ACTGRPDFN)
+
+ /*  PEEK34FM */
+             OVRDSPF    FILE(PEEK34FM) TOFILE(&PRODLIB/PEEK34FM) +
+                          SECURE(*YES) OVRSCOPE(*ACTGRPDFN)
+
+ /*  PEEK37FM */
+             OVRDSPF    FILE(PEEK37FM) TOFILE(&PRODLIB/PEEK37FM) +
+                          SECURE(*YES) OVRSCOPE(*ACTGRPDFN)
+
+ /*  PEEK40FM */
+             OVRDSPF    FILE(PEEK40FM) TOFILE(&PRODLIB/PEEK40FM) +
+                          SECURE(*YES) OVRSCOPE(*ACTGRPDFN)
+
+ /*  PEEK45FM */
+             OVRDSPF    FILE(PEEK45FM) TOFILE(&PRODLIB/PEEK45FM) +
+                          SECURE(*YES) OVRSCOPE(*ACTGRPDFN)
+
+ /*  PEEK47FM */
+             OVRDSPF    FILE(PEEK47FM) TOFILE(&PRODLIB/PEEK47FM) +
+                          SECURE(*YES) OVRSCOPE(*ACTGRPDFN)
+
+ /*  PEEK48FM */
+             OVRDSPF    FILE(PEEK48FM) TOFILE(&PRODLIB/PEEK48FM) +
+                          SECURE(*YES) OVRSCOPE(*ACTGRPDFN)
+
+ /*  PEEK49FM */
+             OVRDSPF    FILE(PEEK49FM) TOFILE(&PRODLIB/PEEK49FM) +
+                          SECURE(*YES) OVRSCOPE(*ACTGRPDFN)
+
+ /*  PEEK50FM */
+             OVRDSPF    FILE(PEEK50FM) TOFILE(&PRODLIB/PEEK50FM) +
+                          SECURE(*YES) OVRSCOPE(*ACTGRPDFN)
+
+ /*  PEEK52FM */
+             OVRDSPF    FILE(PEEK52FM) TOFILE(&PRODLIB/PEEK52FM) +
+                          SECURE(*YES) OVRSCOPE(*ACTGRPDFN)
+
+ /*  PEEK56FM */
+             OVRDSPF    FILE(PEEK56FM) TOFILE(&PRODLIB/PEEK56FM) +
+                          SECURE(*YES) OVRSCOPE(*ACTGRPDFN)
+
+ /*  PEEK57FM */
+             OVRDSPF    FILE(PEEK57FM) TOFILE(&PRODLIB/PEEK57FM) +
+                          SECURE(*YES) OVRSCOPE(*ACTGRPDFN)
+
+ /*  PEEK59FM */
+             OVRDSPF    FILE(PEEK59FM) TOFILE(&PRODLIB/PEEK59FM) +
+                          SECURE(*YES) OVRSCOPE(*ACTGRPDFN)
+
+ /*  PEEK64FM */
+             OVRDSPF    FILE(PEEK64FM) TOFILE(&PRODLIB/PEEK64FM) +
+                          SECURE(*YES) OVRSCOPE(*ACTGRPDFN)
+
+ /*  PEEK68FM */
+             OVRDSPF    FILE(PEEK68FM) TOFILE(&PRODLIB/PEEK68FM) +
+                          SECURE(*YES) OVRSCOPE(*ACTGRPDFN)
+
+ /*  PEEK69FM */
+             OVRDSPF    FILE(PEEK69FM) TOFILE(&PRODLIB/PEEK69FM) +
+                          SECURE(*YES) OVRSCOPE(*ACTGRPDFN)
+
+ /*  PROGRAMM STARTEN  */
+             RMVMSG     PGMQ(*SAME (*)) CLEAR(*ALL)
+
+             CALL       PGM(&PRODLIB/&PROGRAM)  PARM(      +
+                                                &QFILE     +
+                                                &MEMBER    +
+                                                &ACCESS    +
+                                                &PRODLIB   +
+                                                &CHGLIB    +
+                                                &CHGFILE   +
+                                                &CHGMBR    +
+                                                &UPDMOD    +
+                                                &CHGSQLW   +
+                                                &CHGSQLO   +
+                                                &QENVFILE  +
+                                                &ENVMBR    +
+                                                &ENVSAVE   +
+                                                &ENVLAYOUT +
+                                                &WHERE     +
+                                                &ORDERBY   +
+                                                )
+
+ ENDE:
+             IF         COND(&RECURSION *EQ '0') THEN(DO)                 /* B01 */
+
+                DLTOVR     FILE(*ALL) LVL(*ACTGRPDFN)
+                MONMSG     MSGID(CPF0000)
+
+                ENDCMTCTL
+                MONMSG     MSGID(CPF0000)
+
+                CLRPFM     FILE(&TEMPLIB/PEEKFMT)
+                MONMSG     MSGID(CPF0000)
+
+                CLRPFM     FILE(&TEMPLIB/PEEKFLD)
+                MONMSG     MSGID(CPF0000)
+
+                CLRPFM     FILE(&TEMPLIB/§PEEK§)
+                MONMSG     MSGID(CPF0000)
+
+             ENDDO                                                        /* E01 */
+
+/* Verschiebe alle *INFO Nachrichten zur             */
+/* vorangegangenen Programmwarteschlange             */
+             CHGVAR     VAR(&ERRMSGTYP) VALUE('*INFO')
+             CHGVAR     VAR(&ERRSTKCTR) VALUE(X'00000002')
+             CALL       PGM(QMHMOVPM) PARM(&ERRMSGKEY &ERRMSGTYP +
+                          &ERRNBRTYP &ERRPGMMSGQ &ERRSTKCTR &ERRCODE)
+
+             IF         COND(&ERROR) THEN(DO)                             /* B01 */
+                /* Sende letzte *ESCAPE nochmals   */
+                CALL       PGM(QMHRSNEM) PARM(&ERRMSGKEY &ERRCODE)
+             ENDDO                                                        /* E01 */
+
+             RETURN
+
+/* ---------------- */
+/* Error            */
+/* Handling         */
+/* ---------------- */
+ ERROR:
+             IF         COND(&ERROR) THEN(GOTO CMDLBL(ENDE))
+             ELSE       CHGVAR     VAR(&ERROR) VALUE('1')
+
+/* Verschiebe alle *DIAG Nachrichten zur             */
+/* vorangegangenen Programmwarteschlange             */
+             CHGVAR     VAR(&ERRMSGTYP) VALUE('*DIAG')
+             CALL       PGM(QMHMOVPM) PARM(&ERRMSGKEY &ERRMSGTYP +
+                          &ERRNBRTYP &ERRPGMMSGQ &ERRSTKCTR &ERRCODE)
+
+             GOTO       CMDLBL(ENDE)
+
+             ENDPGM
+

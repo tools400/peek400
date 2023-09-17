@@ -1,0 +1,42 @@
+STRPGMEXP PGMLVL(*CURRENT) SIGNATURE('Version_3_3_0')                 /* RADD */
+/* **************************************************************** *//* RADD */
+/*   *MODULE      PEEK051      PEEK015P     16/03/99  15:50:14      *//* RADD */
+/* **************************************************************** *//* RADD */
+  EXPORT SYMBOL('SQL_prepareStatement')                               /* RADD */
+  EXPORT SYMBOL('SQL_open')                                           /* RADD */
+  EXPORT SYMBOL('SQL_nextRow')                                        /* RADD */
+  EXPORT SYMBOL('SQL_previousRow')                                    /* RADD */
+  EXPORT SYMBOL('SQL_gotoBottom')                                     /* RADD */
+  EXPORT SYMBOL('SQL_gotoTop')                                        /* RADD */
+  EXPORT SYMBOL('SQL_close')                                          /* RADD */
+  EXPORT SYMBOL('SQL_quote')                                          /* RADD */
+  EXPORT SYMBOL('SQL_count')                                          /* RADD */
+ENDPGMEXP                                                             /* RADD */
+                                                                      /* RADD */
+STRPGMEXP PGMLVL(*PRV    ) SIGNATURE('Version_3_1_2')                 /* RADD */
+/* **************************************************************** */
+/*   *MODULE      PEEK051      PEEK015P     16/03/99  15:50:14      */
+/* **************************************************************** */
+  EXPORT SYMBOL('SQL_prepareStatement')                               /* RADD */
+  EXPORT SYMBOL('SQL_open')                                           /* RADD */
+  EXPORT SYMBOL('SQL_nextRow')                                        /* RADD */
+  EXPORT SYMBOL('SQL_previousRow')                                    /* RADD */
+  EXPORT SYMBOL('SQL_gotoBottom')                                     /* RADD */
+  EXPORT SYMBOL('SQL_gotoTop')                                        /* RADD */
+  EXPORT SYMBOL('SQL_close')                                          /* RADD */
+  EXPORT SYMBOL('SQL_quote')                                          /* RADD */
+ENDPGMEXP
+                                                                      /* RADD */
+STRPGMEXP PGMLVL(*PRV    )                                            /* RADD */
+/* **************************************************************** *//* RADD */
+/*   *MODULE      PEEK051      PEEK015P     16/03/99  15:50:14      *//* RADD */
+/* **************************************************************** *//* RADD */
+  EXPORT SYMBOL("F_PREPSTMT")                                         /* RADD */
+  EXPORT SYMBOL("F_OPNSQL")                                           /* RADD */
+  EXPORT SYMBOL("F_NXTROW")                                           /* RADD */
+  EXPORT SYMBOL("F_PRVROW")                                           /* RADD */
+  EXPORT SYMBOL("F_BOTROW")                                           /* RADD */
+  EXPORT SYMBOL("F_TOPROW")                                           /* RADD */
+  EXPORT SYMBOL("F_CLSSQL")                                           /* RADD */
+  EXPORT SYMBOL("F_QUOTEFLD")                                         /* RADD */
+ENDPGMEXP                                                             /* RADD */

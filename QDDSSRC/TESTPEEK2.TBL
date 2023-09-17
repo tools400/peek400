@@ -1,0 +1,68 @@
+/* -------------------------------------------------------- */
+/*  Generate SQL                                            */
+/*  Version:                   V5R4M0 060210                */
+/*  Generated on:              30.10.09 13:56:37            */
+/*  Relational Database:       S44CB499                     */
+/*  Standards Option:          ISO                          */
+/* -------------------------------------------------------- */
+/*    >>PRE-COMPILER<<                                      */
+/*      >>CRTCMD<< RUNCLSTM     USESRCFILE("&SL"/"&SF") +   */
+/*                              USESRCMBR("&SM");           */
+/*      >>COMPILE<<                                         */
+/*        >>PARM<< LIB("&LI");                              */
+/*        >>PARM<< NAMING(*SQL);                            */
+/*      >>END-COMPILE<<                                     */
+/*      >>EXECUTE<<                                         */
+/*    >>END-PRE-COMPILER<<                                  */
+/* -------------------------------------------------------- */
+/EXEC SQL
+CREATE TABLE &LI.TESTPEEK2 (                                       +
+  SEQNO       INTEGER                     NOT NULL WITH DEFAULT ,  +
+  LONG_CHAR   CHAR(2000)                  NOT NULL WITH DEFAULT ,  +
+  LONG_UCS2   GRAPHIC(2000)   CCSID 13488 NOT NULL WITH DEFAULT );
+/END-EXEC
+
+/EXEC SQL
+INSERT INTO &LI.TESTPEEK2 (SEQNO, LONG_CHAR, LONG_UCS2)            +
+VALUES(1,                                                          +
+     'The quick brown fox jumps over the lazy dog. (CHAR)' CONCAT  +
+     REPEAT(' ', 973) CONCAT                                       +
+     'Characters behind position 1024 (CHAR).' CONCAT              +
+     REPEAT(' ', 898) CONCAT                                       +
+     'End of the 2000 character field (CHAR).'                  ,  +
+     'The quick brown fox jumps over the lazy dog. (UCS2)' CONCAT  +
+     REPEAT(' ', 973) CONCAT                                       +
+     'Characters behind position 1024 (UCS2).' CONCAT              +
+     REPEAT(' ', 898) CONCAT                                       +
+     'End of the 2000 character field (UCS2).'                  );
+/END-EXEC
+
+/*   UPDATE PEEK358P.TESTPEEK2                                             */
+/*   SET LONG_CHAR =                                                       */
+/*        'The quick brown fox jumps over the lazy dog. (CHAR)' CONCAT     */
+/*        REPEAT(' ', 973) CONCAT                                          */
+/*        'Characters behind position 1024 (CHAR).' CONCAT                 */
+/*        REPEAT(' ', 898) CONCAT                                          */
+/*        'End of the 2000 character field (CHAR).'                      , */
+/*       LONG_UCS2 =                                                       */
+/*        'The quick brown fox jumps over the lazy dog. (UCS2)' CONCAT     */
+/*        REPEAT(' ', 973) CONCAT                                          */
+/*        'Characters behind position 1024 (UCS2).' CONCAT                 */
+/*        REPEAT(' ', 898) CONCAT                                          */
+/*        'End of the 2000 character field (UCS2).'                        */
+/*   WHERE SEQNO = 1                                                       */
+
+/*   SELECT seqno,                                                         */
+/*          SUBSTRING(long_char, 1, 51) as START,                          */
+/*          SUBSTRING(long_char, 1025, 38) as MIDDLE,                      */
+/*          SUBSTRING(long_char, 1962, 38) as END                          */
+/*   FROM PEEK358P.TESTPEEK2                                               */
+/*   WHERE seqno = 1                                                       */
+/*   UNION                                                                 */
+/*   SELECT seqno,                                                         */
+/*          SUBSTRING(long_ucs2, 1, 51) as START,                          */
+/*          SUBSTRING(long_ucs2, 1025, 38) as MIDDLE,                      */
+/*          SUBSTRING(long_ucs2, 1962, 38) as END                          */
+/*   FROM PEEK358P.TESTPEEK2                                               */
+/*   WHERE seqno = 1                                                       */
+

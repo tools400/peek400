@@ -1,0 +1,133 @@
+     /* ============================================================ */
+     /*                                                              */
+     /*  (c) Thomas Raddatz                                          */
+     /*                                                              */
+     /*  Bereich  : PEEK, Version 3.1.5                              */
+     /*  Programm : PEEK94                                           */
+     /*  Typ      : CLLE                                             */
+     /*                                                              */
+     /*  erstellt : 17.10.2008  Thomas Raddatz                       */
+     /*                                                              */
+     /* ============================================================ */
+     /*                                                              */
+     /*  Dokumentation:                                              */
+     /*                                                              */
+     /*  Peek/400 - Neu Linken der Programme und SrvPgme             */
+     /*                                                              */
+     /* ============================================================ */
+
+          PGM        PARM(&NEWLIB     +
+                          &OLDLIB     +
+                          &TMPLIB     +
+                          )
+
+             DCL        VAR(&NEWLIB    ) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&OLDLIB    ) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&TMPLIB    ) TYPE(*CHAR) LEN(10)
+
+             DCLF       FILE(*LIBL/QABNDBND) RCDFMT(QBNDSPBD)
+
+             DCL        VAR(&TMPFILE1  ) TYPE(*CHAR) LEN(10) VALUE('TOOLS400.1')
+             DCL        VAR(&NUMRCD1   ) TYPE(*DEC ) LEN(10 0)
+
+/* Fehlerbehandlung     */
+             DCL        VAR(&ERROR)      TYPE(*LGL) +
+                          VALUE('0')
+             DCL        VAR(&ERRMSGKEY)  TYPE(*CHAR) LEN(4)
+
+             DCL        VAR(&ERRMSGTYP)  TYPE(*CHAR) LEN(10) +
+                          VALUE('*DIAG')
+             DCL        VAR(&ERRNBRTYP)  TYPE(*CHAR) LEN(4) +
+                          VALUE(X'00000001')
+             DCL        VAR(&ERRPGMMSGQ) TYPE(*CHAR) LEN(10) +
+                          VALUE('*')
+             DCL        VAR(&ERRSTKCTR)  TYPE(*CHAR) LEN(4) +
+                          VALUE(X'00000001')
+             DCL        VAR(&ERRCODE  )  TYPE(*CHAR) LEN(4) +
+                          VALUE(X'00000000')
+
+/* Sende alle Fehler zur Error Handling Routine */
+             MONMSG     MSGID(CPF0000) EXEC(GOTO CMDLBL(ERROR))
+
+             CHGVAR     VAR(&ERROR    ) VALUE('0')
+
+ /* -------------------------------------------------------------- */
+ /*  Aktualisieren Binderverzeichnis                               */
+ /* -------------------------------------------------------------- */
+
+             OVRDBF     FILE(QABNDBND) TOFILE(&TMPLIB/&TMPFILE1) +
+                          OVRSCOPE(*CALLLVL)
+
+             DSPBNDDIR  BNDDIR(&NEWLIB/PEEK) +
+                          OUTPUT(*OUTFILE) +
+                          OUTFILE(&TMPLIB/&TMPFILE1) +
+                          OUTMBR(*FIRST *REPLACE)
+             RTVMBRD    FILE(&TMPLIB/&TMPFILE1) MBR(*FIRST) +
+                          NBRCURRCD(&NUMRCD1)
+
+             OPNDBF     FILE(*LIBL/QABNDBND) OPTION(*INP) OPNID(F1)
+ LOOP1:
+             RCVF       RCDFMT(QBNDSPBD)
+             MONMSG     MSGID(CPF0864) EXEC(DO)   /* End-Of-File */
+                GOTO EOF1
+             ENDDO
+
+                /* Entfernen alten Eintrag    */
+                RMVBNDDIRE BNDDIR(&BNDRLB/&BNDRNM) +
+                           OBJ((&BNOLNM/&BNOBNM &BNOBTP))
+
+                /* Hinzufügen neuen Eintrag   */
+                ADDBNDDIRE BNDDIR(&BNDRLB/&BNDRNM) +
+                           OBJ((&NEWLIB/&BNOBNM &BNOBTP)) +
+                           POSITION(*LAST)
+
+             CHGVAR     VAR(&NUMRCD1) VALUE(&NUMRCD1 - 1)
+             IF         COND(&NUMRCD1 *NE 0) THEN(GOTO CMDLBL(LOOP1))
+ EOF1:
+             CLOF       OPNID(F1)
+             DLTOVR     FILE(QABNDBND) LVL(*)
+
+ /* -------------------------------------------------------------- */
+
+ ENDE:
+             DLTOVR     FILE(*ALL) LVL(*)
+             MONMSG     MSGID(CPF0000)
+
+             DLTF       FILE(&TMPLIB/&TMPFILE1)
+             MONMSG     MSGID(CPF0000)
+
+/* Verschiebe alle *INFO Nachrichten zur             */
+/* vorangegangenen Programmwarteschlange             */
+             CHGVAR     VAR(&ERRMSGTYP) VALUE('*INFO')
+             CALL       PGM(QMHMOVPM) PARM(&ERRMSGKEY &ERRMSGTYP +
+                          &ERRNBRTYP &ERRPGMMSGQ &ERRSTKCTR &ERRCODE)
+
+             RCLRSC     LVL(*)
+             MONMSG     MSGID(CPF0000)
+
+             IF         COND(&ERROR) THEN(DO)
+                /* Sende letzte *ESCAPE nochmals   */
+                CALL       PGM(QMHRSNEM) PARM(&ERRMSGKEY &ERRCODE)
+                MONMSG     MSGID(CPF0000)
+             ENDDO
+
+             RETURN
+
+/* ---------------- */
+/* Error            */
+/* Handling         */
+/* ---------------- */
+ ERROR:
+             IF         COND(&ERROR) THEN(GOTO CMDLBL(ENDE))
+             ELSE       CHGVAR     VAR(&ERROR) VALUE('1')
+
+/* Verschiebe alle *DIAG Nachrichten zur             */
+/* vorangegangenen Programmwarteschlange             */
+             CHGVAR     VAR(&ERRMSGTYP) VALUE('*DIAG')
+             CALL       PGM(QMHMOVPM) PARM(&ERRMSGKEY &ERRMSGTYP +
+                          &ERRNBRTYP &ERRPGMMSGQ &ERRSTKCTR &ERRCODE)
+
+             GOTO       CMDLBL(ENDE)
+
+             ENDPGM
+

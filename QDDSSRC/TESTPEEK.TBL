@@ -1,0 +1,41 @@
+/* -------------------------------------------------------- */
+/*  Generate SQL                                            */
+/*  Version:                   V5R4M0 060210                */
+/*  Generated on:              30.10.09 13:56:37            */
+/*  Relational Database:       S44CB499                     */
+/*  Standards Option:          ISO                          */
+/* -------------------------------------------------------- */
+/*    >>PRE-COMPILER<<                                      */
+/*      >>CRTCMD<< RUNCLSTM     USESRCFILE("&SL"/"&SF") +   */
+/*                              USESRCMBR("&SM");           */
+/*      >>COMPILE<<                                         */
+/*        >>PARM<< LIB("&LI");                              */
+/*        >>PARM<< NAMING(*SQL);                            */
+/*      >>END-COMPILE<<                                     */
+/*      >>EXECUTE<<                                         */
+/*    >>END-PRE-COMPILER<<                                  */
+/* -------------------------------------------------------- */
+/EXEC SQL
+CREATE TABLE &LI.TESTPEEK (                                        +
+  ALPHA       CHAR(10)                             DEFAULT NULL ,  +
+  VARALPHA    CHAR(10)                             DEFAULT NULL ,  +
+  INTEGER     INTEGER                              DEFAULT NULL ,  +
+  PACKED      DECIMAL(10, 0)                       DEFAULT NULL ,  +
+  ZONED       NUMERIC(10, 0)                       DEFAULT NULL ,  +
+  "DATE"      DATE                                 DEFAULT NULL ,  +
+  "TIME"      TIME                                 DEFAULT NULL ,  +
+  "TIMESTAMP" TIMESTAMP                            DEFAULT NULL ,  +
+  NOT_NULL    CHAR(10)                    NOT NULL DEFAULT ''   ,  +
+  REAL        REAL                        NOT NULL DEFAULT 0    ,  +
+  "DOUBLE"    DOUBLE PRECISION            NOT NULL DEFAULT 0    ,  +
+  UCS2_NN     GRAPHIC(128)    CCSID 13488 NOT NULL DEFAULT ''   ,  +
+  UCS2        GRAPHIC(128)    CCSID 13488          DEFAULT NULL ,  +
+  VARUCS2_NN  VARGRAPHIC(128) CCSID 13488 NOT NULL DEFAULT ''   ,  +
+  VARUCS2     VARGRAPHIC(128) CCSID 13488          DEFAULT NULL ,  +
+  UTF16_NN    GRAPHIC(128)    CCSID 1200  NOT NULL DEFAULT ''   ,  +
+  UTF16       GRAPHIC(128)    CCSID 1200           DEFAULT NULL ,  +
+  VARUTF16_N  VARGRAPHIC(128) CCSID 1200  NOT NULL DEFAULT ''   ,  +
+  VARUTF16    VARGRAPHIC(128) CCSID 1200           DEFAULT NULL ,  +
+  UTF8        CHAR(10)        CCSID 1208           DEFAULT NULL ,  +
+  VARUTF8     CHAR(10)        CCSID 1208           DEFAULT NULL );
+/END-EXEC

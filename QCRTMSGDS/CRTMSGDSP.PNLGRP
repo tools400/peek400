@@ -1,0 +1,335 @@
+.*=====================================================================*
+.*                                                                     *
+.*  Kurzdokumentation :                                                *
+.*                                                                     *
+.*  Bereich . . . : CRTMSGDS                                           *
+.*  Objekt  . . . : CRTMSGDSP                                          *
+.*  Beschreibung  : Tool: CRTMSGDS   (Create Message DS  ) Ger         *
+.*  Author  . . . : Thomas Raddatz   <thomas.raddatz@tools400.de>      *
+.*  Datum . . . . : ?                                                  *
+.*                                                                     *
+.*=====================================================================*
+.*                                                                     *
+.*  This software is free software, you can redistribute it and/or     *
+.*  modify it under the terms of the GNU General Public License (GPL)  *
+.*  as published by the Free Software Foundation.                      *
+.*                                                                     *
+.*  See GNU General Public License for details.                        *
+.*          http://www.opensource.org                                  *
+.*          http://www.opensource.org/licenses/gpl-license.html        *
+.*                                                                     *
+.*=====================================================================*
+.*  History:                                                           *
+.*                                                                     *
+.*  Datum       Name          Änderung                                 *
+.*  ----------  ------------  ---------------------------------------  *
+.*                                                                     *
+.*=====================================================================*
+.* >>PRE-COMPILER<<                                                    *
+.*                                                                     *
+.*   >>CRTCMD<< CRTPNLGRP    PNLGRP(&LI/&OB) +                         *
+.*                           SRCFILE(&SL/&SF) +                        *
+.*                           SRCMBR(&SM);                              *
+.*                                                                     *
+.*   >>COMPILE<<                                                       *
+.*   >>END-COMPILE<<                                                   *
+.*                                                                     *
+.*   >>EXECUTE<<                                                       *
+.*                                                                     *
+.* >>END-PRE-COMPILER<<                                                *
+.*=====================================================================*
+:PNLGRP.
+.*
+:HELP name='CRTMSGDS/ALL'.
+:IMHELP name=CRTMSGDS.
+:IMHELP name='CRTMSGDS/RANGE     '.
+:IMHELP name='CRTMSGDS/MSGF      '.
+:IMHELP name='CRTMSGDS/FILE      '.
+:IMHELP name='CRTMSGDS/MBR       '.
+:IMHELP name='CRTMSGDS/REPLACE   '.
+:IMHELP name='CRTMSGDS/TYPE      '.
+:IMHELP name='CRTMSGDS/DEFINE    '.
+:EHELP.
+.*--------------------------------------------------------------------
+.* Hilfetext für den Befehl
+.*--------------------------------------------------------------------
+:HELP NAME='CRTMSGDS'.
+Nachrichten-DS erstellen (CRTMSGDS) - Hilfe
+:P.
+Der Befehl CRTMSGDS erstellt eine Datenstruktur für eine
+Nachrichtenbeschreibung. Außerdem ist es möglich mit dem Befehl
+CRTMSGDS ein CL Programm, bzw. ein CL-Script für den Befehl RUNCLSTM
+zu erstellen, welches den oder die Erstellungsbefehl(e) für eine
+oder mehrere Nachrichtenbeschreibungen enthält.
+.*
+:EHELP.
+.*
+.*--------------------------------------------------------------------
+.* Hilfetext für Schlüsselwort RANGE
+.*--------------------------------------------------------------------
+:HELP name='CRTMSGDS/RANGE     '.
+Bereich der Nachrichten-IDs - Hilfe
+:XH3.Bereich der Nachrichten-IDs (RANGE)
+:P.
+Gibt den Bereich der Nachrichten-IDs in der angegebenen Nachrichtendatei
+an, die verarbeitet werden. Alle Nachrichtenbeschreibungen
+in der bei :HP2.Nachrichtendatei:EHP2. (Parameter MSGF) angebenen
+Nachrichtendatei können durch die Angabe *ALL bei
+diesem Parameter verarbeitet werden.
+:P.
+Ist keine Anfangsnachrichten-ID angegeben, beginnt die Verarbeitung
+mit der ersten Nachricht in der angegebenen Nachrichtendatei. Ist
+keine Endnachrichten-ID angegeben, wird der Standardwert *ONLY verwendet,
+und es wird nur die Anfangsnachrichten-ID verarbeitet.
+.*
+:IMHELP name='COM/OPTPARM'.
+.*
+:XH3.Anfangsnachrichten-ID
+:P.
+Der erste der zwei Werte in diesem Parameter (die Anfangsnachrichten-ID
+genannt) gibt die Nachrichten-ID der Nachrichtenbeschreibung an, die
+zuerst verarbeitet werden soll.
+:P.
+:PARML.
+:PT.:PK DEF.*FIRST:EPK.
+:PD.Die Beschreibung der ersten Nachricht in der bei :HP2.Nachrichtendatei:EHP2.
+(Parameter MSGF) angegebenen Datei soll zuerst verarbeitet werden.
+:PT.:PV.Unterer Wert:EPV.
+:PD.Die ID (7 Zeichen) der Nachrichtenbeschreibung angeben, die zuerst
+verarbeitet werden soll.
+:EPARML.
+:P.
+:XH3.ID der letzten Nachricht
+:P.
+Der zweite der beiden Werte (Endenachrichten-ID genannt) gibt die
+Nachrichten-ID der Nachrichtenbeschreibung an, die zuletzt
+verarbeitet werden soll.
+:P.
+:PARML.
+:PT.:PK DEF.*ONLY:EPK.
+:PD.Nur die Beschreibung der Nachrichten-ID wird verarbeitet, die als
+Anfangsnachrichten-ID angegeben wurde.
+:PT.:PV.*LAST:EPV.
+:PD.Die Beschreibung der letzten Nachricht in der Datei wird zuletzt
+verarbeitet.
+:PT.:PV.Oberer Wert:EPV.
+:PD.Die ID (7 Zeichen) der Nachrichtenbeschreibung angeben, die zuletzt
+verarbeitet werden soll.
+:EPARML.
+:P.
+:XH3.Weitere Einzelwerte:
+:P.
+:PARML.
+:PT.:PV.*ALL:EPV.
+:PD.Alle Nachrichtenbeschreibungen in der angegebenen Nachrichtendatei
+werden verarbeitet. Dieser Wert kann nur im ersten Element dieses
+Parameters angegeben werden.
+:EPARML.
+.*
+:EHELP.
+.*
+.*--------------------------------------------------------------------
+.* Hilfetext für Schlüsselwort MSGF
+.*--------------------------------------------------------------------
+:HELP name='CRTMSGDS/MSGF'.
+Nachrichtendatei - Hilfe
+:XH3.Nachrichtendatei (MSGF)
+:P.
+Gibt den Namen und die Bibliothek der Nachrichtendatei an, aus der die
+Nachrichtenbeschreibungen stammen.
+.*
+:IMHELP name='COM/OPTPARM'.
+.*
+:PARML.
+:PT.:PK DEF.QCPFMSG:EPK.
+:PD.Die Nachrichtenbeschreibungen stammen aus der Systemnachrichtendatei
+QCPFMSG.
+:PT.:PV.Nachrichtendateiname:EPV.
+:PD.Den Namen der Nachrichtendatei angeben, aus der die
+Nachrichtenbeschreibungen stammen.
+:EPARML.
+:P.
+Gültige Bibliothekswerte sind:
+:P.
+:PARML.
+:PT.:PK DEF.*LIBL:EPK.
+:PD.Alle Bibliotheken in der Bibliotheksliste des Jobs werden
+durchsucht, bis die erste Übereinstimmung gefunden wird.
+:PT.:PV.*CURLIB:EPV.
+:PD.Die Nachrichtendatei wird in der aktuellen Bibliothek für den Job
+gesucht. Enthält die Bibliotheksliste keinen aktuellen
+Bibliothekseintrag, wird QGPL benutzt.
+:PT.:PV.Bibliotheksname:EPV.
+:PD.Bibliothek angeben, in der sich die Nachrichtendatei befindet.
+:EPARML.
+.*
+:EHELP.
+.*
+.*--------------------------------------------------------------------
+.* Hilfetext für Schlüsselwort FILE
+.*--------------------------------------------------------------------
+:HELP name='CRTMSGDS/FILE'.
+Datei - Hilfe
+:XH3.Datei (FILE)
+:P.
+Angeben, in welche Quellendatei die erstellte Quellenteildatei
+abgestellt werden soll.
+.*
+:IMHELP name='COM/OPTPARM'.
+.*
+:PARML.
+:PT.:PK DEF.QCOPYLE:EPK.
+:PD.Die Quellenteildatei wird in die Quellendatei QCOPYLE
+abgelegt.
+:PT.:PV.Quellendateiname:EPV.
+:PD.Quellendatei angeben, in die die Quellenteildatei abgelegt
+werden soll.
+:EPARML.
+:P.
+Gültige Bibliothekswerte sind:
+:P.
+:PARML.
+:PT.:PK DEF.*LIBL:EPK.
+:PD.Alle Bibliotheken in der Bibliotheksliste des Jobs werden
+durchsucht, bis die erste Übereinstimmung gefunden wird.
+:PT.:PV.*CURLIB:EPV.
+:PD.Die Quellendatei wird in der aktuellen Bibliothek für den Job
+gesucht. Enthält die Bibliotheksliste keinen aktuellen
+Bibliothekseintrag, wird QGPL benutzt.
+:PT.:PV.Bibliotheksname:EPV.
+:PD.Bibliothek angeben, in der sich die Quellendatei befindet.
+:EPARML.
+.*
+:EHELP.
+.*
+.*--------------------------------------------------------------------
+.* Hilfetext für Schlüsselwort MBR
+.*--------------------------------------------------------------------
+:HELP name='CRTMSGDS/MBR'.
+Teildatei - Hilfe
+:XH3.Teildatei (MBR)
+:P.
+Angeben, wie die Quellenteildatei heißen soll. Wird in diesem Parameter
+*GEN angegeben, so wird für jede verarbeitete Nachrichten-ID eine
+separate Quellenteildatei erstellt. Wird hingegen ein Name für die
+Quellenteildatei vorgegeben, so werden alle verarbeiteten Nachrichten-IDs
+in diese Quellenteildatei abgelegt.
+.*
+:IMHELP name='COM/OPTPARM'.
+.*
+:PARML.
+:PT.:PK DEF.*GEN:EPK.
+:PD.Der Name der Quellenteildatei wird aus der Nachrichten-ID
+generiert.
+:PT.:PV.Quellenteildateiname:EPV.
+:PD.Quellendateiname angeben.
+:EPARML.
+.*
+:EHELP.
+.*
+.*--------------------------------------------------------------------
+.* Hilfetext für Schlüsselwort REPLACE
+.*--------------------------------------------------------------------
+:HELP name='CRTMSGDS/REPLACE'.
+Bestehende Teildatei ersetzen - Hilfe
+:XH3.Bestehende Teildatei ersetzen (REPLACE)
+:P.
+Angeben, ob eine bestehende Quellenteildatei ersetzt werden darf.
+.*
+:IMHELP name='COM/OPTPARM'.
+.*
+:PARML.
+:PT.:PK DEF.*NO:EPK.
+:PD.Eine bestehende Quellenteildatei wird nicht ersetzt.
+:PT.:PV.*YES:EPV.
+:PD.Eine bestehende Quellenteildatei wird ersetzt, wenn sie bereits
+vorhanden ist. Der Inhalt der Quellenteildatei geht verloren.
+:EPARML.
+.*
+:EHELP.
+.*
+.*--------------------------------------------------------------------
+.* Hilfetext für Schlüsselwort TYPE
+.*--------------------------------------------------------------------
+:HELP name='CRTMSGDS/TYPE'.
+Zu generierende Sourceart - Hilfe
+:XH3.Zu generierende Sourceart (TYPE)
+:P.
+Angeben, welche Art von Quellcode generiert werden soll.
+.*
+:IMHELP name='COM/OPTPARM'.
+.*
+:PARML.
+:PT.:PK DEF.*ILERPG:EPK.
+:PD.Es wird eine Datenstruktur für RPG-IV erstellt.
+:PT.:PV.*RPG:EPV.
+:PD.Es wird eine Datenstruktur für RPG-III erstellt.
+:PT.:PV.*C:EPV.
+:PD.Es wird eine Datenstruktur für C erstellt.
+:PT.:PV.*CLP:EPV.
+:PD.Es wird ein CL-Programm erstellt.
+:PT.:PV.*CLLE:EPV.
+:PD.Es wird ein ILE CL-Programm erstellt.
+:PT.:PV.*SCRIPT:EPV.
+:PD.Es wird ein CL-Skript erstellt.
+:EPARML.
+.*
+:EHELP.
+.*
+.*--------------------------------------------------------------------
+.* Hilfetext für Schlüsselwort DEFINE
+.*--------------------------------------------------------------------
+:HELP name='CRTMSGDS/DEFINE'.
+DEFINE-Bestimmungen generieren - Hilfe
+:XH3.DEFINE-Bestimmungen generieren (DEFINE)
+:P.
+Angeben, ob DEFINE Bestimmungen generiert werden sollen. Dieser
+Parameter kann nur dann angegeben werden, wenn bei
+:HP2.Zu generierende Sourceart:EHP2. (Parameter TYPE) *ILERPG oder
+*C angegeben wird.
+.*
+:IMHELP name='COM/OPTPARM'.
+.*
+:PARML.
+:PT.:PK DEF.*YES:EPK.
+:PD.Es werden DEFINE-Anweisungen generiert.
+:PT.:PV.*NO:EPV.
+:PD.Es werden keine DEFINE-Anweisungen generiert.
+:EPARML.
+.*
+:EHELP.
+.*
+.*====================================================================
+.*  Textbausteine, die an mehreren Stellen im Hilfetext
+.*  verwendet werden.
+.*====================================================================
+
+.*=====================================
+.*  Erforderlicher Parameter
+.*=====================================
+:HELP NAME='COM/REQPARM'.
+:P.
+Dieser Parameter ist erforderlich.
+:P.
+:IMHELP name='COM/VALUES'.
+:EHELP.
+
+.*=====================================
+.*  Optionaler Parameter
+.*=====================================
+:HELP NAME='COM/OPTPARM'.
+:P.
+Dieser Parameter ist optional.
+:P.
+:IMHELP name='COM/VALUES'.
+:EHELP.
+
+.*=====================================
+.*  Werteliste
+.*=====================================
+:HELP NAME='COM/VALUES'.
+:P.
+Mögliche Werte sind:
+:EHELP.
+.*
+:EPNLGRP.

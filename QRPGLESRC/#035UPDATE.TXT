@@ -1,0 +1,14 @@
+
+   Remote:   dltlib peek
+
+   Local:    SAVRSTLIB LIB(PEEK) RMTLOCNAME(...)
+
+   Remote:   dltlib peek400#
+   Remote:   rnmobj peek400 *lib peek400#
+   Remote:   addlible peek
+   Remote:   peekclone TOLIB(PEEK400)
+   Remote:   call peekupdate ('PEEK400' 'PEEK400#')
+
+   RSTOBJ OBJ(*ALL) SAVLIB(PEEK) DEV(*SAVF) OBJTYPE(*ALL)
+          SAVF(libName/PEEKxxx) MBROPT(*ALL) ALWOBJDIF(*ALL) RSTLIB(PEEK)
+

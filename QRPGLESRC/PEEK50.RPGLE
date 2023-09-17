@@ -1,0 +1,1093 @@
+      *===============================================================*
+      *                                                               *
+      *  (c) Thomas Raddatz                                           *
+      *                                                               *
+      *  Bereich  : PEEK, Version 1.5.0                               *
+      *  Programm : PEEK50                                            *
+      *  Typ      : RPG                                               *
+      *                                                               *
+      *  erstellt : 11.02.1999  Raddatz                               *
+      *                                                               *
+      *===============================================================*
+      *                                                               *
+      *  Kurzdokumentation :                                          *
+      *                                                               *
+      *  Peek/400 - Erweiterte PIN-Funktion                           *
+      *                                                               *
+      *===============================================================*
+      /COPY QCOPYLE,H_SPEC
+      /COPY QCOPYLE,COPYRIGHT
+      *
+     FPEEK50FM  CF   E             WORKSTN USROPN
+     F                                     INFDS(§Workstn)
+     F                                     SFILE(PBSFL:SFLREC)
+     F                                     INFSR(*PSSR)
+      * Feldliste nach Sequenzfolge
+     FPEEKFLDL1 IF   E           K DISK    USROPN
+     F                                     INFSR(*PSSR)
+     F                                     INFDS(Peek_01_DS)
+     F                                     RENAME(FPEEKFLD:FPEEKFLDL1)
+     F                                     PREFIX(F_)
+      * Feldliste nach Eingangsfolge
+     FPEEKFLD   IF   E             DISK    USROPN
+     F                                     INFSR(*PSSR)
+     F                                     INFDS(Peek_00_DS)
+     F                                     PREFIX(F_)
+      * Arbeitsdatei nach Anzeigefolge
+     FPEEKWRK   UF   E           K DISK    USROPN
+     F                                     INFSR(*PSSR)
+     F                                     INFDS(Work_00_DS)
+     F                                     PREFIX(W_)
+      * Arbeitsdatei nach Eingangsfolge
+     FPEEKWRK_  UF A F 1024        DISK    USROPN
+     F                                     INFSR(*PSSR)
+     F                                     INFDS(Work_01_DS)
+      *
+      *---INFOSTRUKTUR FÜR AID-BYTE -----------------------*
+      /COPY QCOPYLE,DS_WORKSTN
+      *----------------------------------------------------*
+      *
+      *---Variablendefinition------------------------------*
+      /COPY QCOPYLE,D_VARDEF
+      /COPY QCOPYLE,D_INFDS
+      *----------------------------------------------------*
+      *
+      *---Variablendefinition ShortCmd---------------------*
+      /COPY QCOPYLE,ShortCmd_D
+      *----------------------------------------------------*
+      *
+      *---Nachrichten--------------------------------------*
+      /COPY QCOPYLE,API_ERROR
+      /COPY QCOPYLE,MSG_D_MAPI
+      *----------------------------------------------------*
+      *
+      *---Nachrichtenaufbau--------------------------------*
+      /COPY QCOPYLE,USR8100
+      /COPY QCOPYLE,USR8110
+      /COPY QCOPYLE,USR8136                                               Feld nicht gefunden
+      /COPY QCOPYLE,USR8205
+      /COPY QCOPYLE,USR8209
+      *----------------------------------------------------*
+      *
+      *---SDS-Datenstruktur--------------------------------*
+      /COPY QCOPYLE,ERR_D_SDS
+      *----------------------------------------------------*
+      *
+      *---API-Formate--------------------------------------*
+     D FLDL0100        DS                  likeds(FLDL0100_t) inz
+      /COPY QCOPYLE,FLDL0100
+      *----------------------------------------------------*
+      *
+      *---Farbattribute------------------------------------*
+      /COPY QCOPYLE,D_COLORATR
+      *----------------------------------------------------*
+      *
+      /COPY QCOPYLE,F_PEEK53
+      /COPY QCOPYLE,F_PEEK58
+      *
+      *----------------------------------------------------*
+      *  I N F D S - D E F I N I T I O N E N               *
+      *----------------------------------------------------*
+      *
+     DPeek_00_DS       DS                  likeds(r§infds)
+     DPeek_01_DS       DS                  likeds(r§infds)
+      *
+     D DS_PEEKWRK    E DS          1024    EXTNAME(PEEKWRK) INZ
+     D                                     PREFIX(W_)
+      *
+     DWork_00_DS       DS                  likeds(r§infds)
+     DWork_01_DS       DS                  likeds(r§infds)
+      *
+      *----------------------------------------------------*
+      *  F E L D - D E F I N I T I O N E N                 *
+      *----------------------------------------------------*
+      *
+      *---Definition der F-Tastenbildschirmfelder----------*
+      /COPY QCOPYLE,SCRNFKEYS
+      *----------------------------------------------------*
+      *
+      *---Arbeitsdatenbereich für PEEKWRK------------------*
+      /COPY QCOPYLE,WRK0002
+      *----------------------------------------------------*
+      *
+     D XDsp80          S              1A
+     D XCopyRight      S            512A
+     D XPinTabC        S             10A   DIM(12)
+     D XMsgID          S              7A
+     D XMsgDta         S            512A
+      *
+     D yPgm            S             10A   inz
+     D yKey            S             10A   inz
+     D yPosF24         S                   like(r§int4    ) inz
+     D yFKeys          S             18A   DIM(32)       INZ(*BLANKS)
+     D yNbrOfKeys      S                   like(r§int4    ) inz
+     D yMsgID          S              7A   INZ(*BLANKS)
+     D yMsgDta         S            512A   INZ(*BLANKS)
+      *
+     D YScnAID         S             10A   INZ(*BLANKS)
+     D YPgmCmd         S             10A   INZ(*BLANKS)
+     D YCmdDta         S                   LIKE(r§pgmCmdDt) INZ(*BLANKS)
+      *
+     D SflPage         S                   like(r§int4    ) inz
+     D SflPageDDS      S                   like(SflPage   ) inz
+     D SflRec          S                   like(SflPage   ) inz
+     D SflNbrRcd       S                   like(SflPage   ) inz
+      *
+     D SfBot           S                   like(r§int4    ) inz
+     D NbrFKeys        C                   CONST(3)
+     D Sfl_Cmd         S             10A   INZ(*BLANKS)
+      *
+     D §RcdNbr         S             10I 0 INZ
+      *
+     D IsSflError      S              1A   INZ(bFalse)
+     D IsNewPos        S              1A   INZ(bFalse)
+     D IsFound         S              1A   INZ(bFalse)
+      *
+     D PEEK21          S                   like(r§pgmCallN) inz
+     D PEEK23          S                   like(r§pgmCallN) inz
+      *
+     D R_Field         S                   INZ(*BLANKS) LIKE(##Field)
+     D LstField        S                   INZ(*BLANKS) LIKE(##Field)
+     D LstNbrRcd       S                   INZ(0) LIKE(SflPage)
+      *
+     D Wrk_SFSANR      S                   INZ(*ZEROS ) LIKE(SFSANR )
+     D X               S                   like(r§int4    ) inz
+     D NbrPinCol       S                   like(r§int4    ) inz
+      *
+      ********************************************************************
+      *                 S T E U E R  -  R O U T I N E                    *
+      ********************************************************************
+      *
+      *---ENTRY-LISTE--------------------------------------*
+      *
+     C     *ENTRY        PLIST
+     C                   PARM                    XDsp80
+     C                   PARM                    XCopyRight
+     C                   PARM                    XPinTabC
+     C                   PARM                    XMsgID
+     C                   PARM                    XMsgDta
+      *
+      *----------------------------------------------------*
+      *  Parameterliste für PEEK23
+     C     P_Peek23      PLIST
+     C                   PARM                    yPgm
+     C                   PARM                    yKey
+     C                   PARM                    yPosF24
+     C                   PARM                    yFKeys
+     C                   PARM                    yNbrOfKeys
+     C                   PARM                    yMsgID
+     C                   PARM                    yMsgDta
+      *
+      *----------------------------------------------------*
+      *  Parameterliste für PEEK21
+     C     P_Peek21      PLIST
+     C                   PARM                    YScnAID
+     C                   PARM                    YPgm
+     C                   PARM                    YPgmCmd
+     C                   PARM                    YCmdDta
+     C                   PARM                    YMsgID
+     C                   PARM                    YMsgDta
+      *
+      *----------------------------------------------------*
+      *  Schlüsselliste für PEEKFLDL1
+     C     F1Key         KLIST
+     C                   KFLD                    F_Seq
+      *
+      *----------------------------------------------------*
+      *  Schlüsselliste für PEEKWRK
+     C     W0KEY         KLIST
+     C                   KFLD                    W_Key
+      *
+      *---------------------------------------------------*
+      *
+     C                   EXSR      FIRST
+      *
+      *---------------------------------------------------*
+      *  Schleife für Programmbearbeitung
+      *
+     C                   DO        *HIVAL
+      *
+      *  Prüfen Positionierung der Subfile
+     C     SFSANR        IFLE      *ZEROS
+     C                   Z-ADD     1             SFSANR
+     C                   Endif
+      *
+      *  Nachrichten senden
+     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+      *
+      *  Warnung, bei mehr als 12 Spalten
+     C                   If        (NbrPinCol > %elem(XPinTabC))
+     C                   CLEAR                   USR8205
+     C                   MOVEL (P) 'USR8205'     §MsgID
+     C                   Eval      USR82051 = %elem(XPinTabC)
+     C                   MOVEL (P) USR8205       §MsgDta
+     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   Endif
+      *
+      *  Modus: DROP/FOLD
+     C                   MOVE      SFLMDE        *IN86
+      *
+      *  Nachrichten anzeigen
+     C                   MOVE      '0'           *IN89
+     C                   WRITE     MSGCTL
+      *
+      *  "Keine Sätze ..."
+     C     *IN80         IFEQ      '0'
+     C                   WRITE     PBLEER
+     C                   Endif
+      *
+      *  Anzeigen der Befehlstasten
+     C                   WRITE     PBBOT#0                                      Trennlinie
+      *
+     C                   SELECT
+     C                   When      (SFBOT = 2) and
+     C                             (yNbrOfKeys > NbrFKeys * (SFBOT - 1))
+     C                   WRITE     PBBOT#2                                      BT-Tasten 2
+     C                   When      (SFBOT = 3) and
+     C                             (yNbrOfKeys > NbrFKeys * (SFBOT - 1))
+     C                   WRITE     PBBOT#3                                      BT-Tasten 3
+     C                   When      (SFBOT = 4) and
+     C                             (yNbrOfKeys > NbrFKeys * (SFBOT - 1))
+     C                   WRITE     PBBOT#4                                      BT-Tasten 4
+     C                   When      (SFBOT = 5) and
+     C                             (yNbrOfKeys > NbrFKeys * (SFBOT - 1))
+     C                   WRITE     PBBOT#5                                      BT-Tasten 4
+     C                   When      (SFBOT = 6) and
+     C                             (yNbrOfKeys > NbrFKeys * (SFBOT - 1))
+     C                   WRITE     PBBOT#6                                      BT-Tasten 4
+     C                   OTHER
+     C                   WRITE     PBBOT#1                                      BT-Tasten 1
+     C                   Z-ADD     1             SFBOT
+     C                   Endsl
+      *
+      *  Anzeige der Subfile
+     C                   EXFMT     PBCTL
+     C                   MOVEL (P) '0'           *IN70
+      *
+      *  Nachrichten löschen
+     C                   Callp     p_rmvPgmMg(§§pgmName)
+      *
+      *  Aktuelle Satz-Nr.
+     C     SFLCSR        IFGT      *ZEROS
+     C                   Z-ADD     SFLCSR        SFSANR
+     C                   Endif
+      *
+      *  Mappen der gedrückten Taste
+      *  in Programmbefehl
+     C                   MOVEL (P) §ScnAID       YScnAID
+     C                   MOVEL (P) §§PgmName     YPgm
+     C                   CALL      PEEK21        P_Peek21
+     C     YMsgID        IFNE      *BLANKS
+     C                   MOVEL (P) YMsgID        §MsgID
+     C                   MOVEL (P) YMsgDta       §MsgDta
+     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   ITER
+     C                   Endif
+      *
+      *  Abfragen der Befehlstasten
+     C                   SELECT
+      *  F3  - Ende
+     C     YPgmCmd       WHENEQ    '*EXIT'
+     C                   EXSR      C_EndPgm
+     C                   LEAVE
+      *
+      *  F3  - Sichern & beenden
+     C     YPgmCmd       WHENEQ    '*SAVE_EXIT'
+     C                   EXSR      C_SaveExit
+     C                   LEAVE
+      *
+      *  F5  - Aktualisieren
+     C     YPgmCmd       WHENEQ    '*REFRESH'
+     C                   EXSR      C_Refresh
+     C                   ITER
+      *
+      *  F16 - Suchen
+     C     YPgmCmd       WHENEQ    '*SEARCH'
+     C                   EXSR      C_Search
+     C                   ITER
+      *
+      *   F17 - Anfang Datensatz
+     C     YPgmCmd       WHENEQ    '*TOP'
+     C                   EXSR      C_Top
+     C                   ITER
+      *   F18 - Ende Datensatz
+     C     YPgmCmd       WHENEQ    '*BOT'
+     C                   EXSR      C_Bot
+     C                   ITER
+      *
+      *  F22 - Alle Löschen
+     C     YPgmCmd       WHENEQ    '*CLRALL'
+     C                   EXSR      C_ClrAll
+     C                   ITER
+      *
+      *  F12 - Ende
+     C     YPgmCmd       WHENEQ    '*CANCEL'
+     C                   EXSR      C_EndPgm
+     C                   LEAVE
+      *
+      *  F24 - Weitere Tasten
+     C     YPgmCmd       WHENEQ    '*MOREKEYS'
+     C                   EXSR      C_MoreKeys
+      *
+      *  Datenfreigabe
+     C     YPgmCmd       WHENEQ    '*ENTER'
+     C                   EXSR      C_Enter
+      *  Page up
+     C     YPgmCmd       WHENEQ    '*PAGEUP'
+      *  Page down
+     C     YPgmCmd       WHENEQ    '*PAGEDOWN'
+      *
+     C                   OTHER
+      *  Falsche Taste gedrückt
+     C                   Callp     p_wrongKey(§scnAID: §§pgmName)
+     C                   Iter
+     C                   Endsl
+      *
+     C                   Enddo                                                  *HIVAL
+      *
+      *  Ende der Hauptschleife
+      *---------------------------------------------------*
+      *
+      *  Programm verlassen
+     C     ENDE          TAG
+      *
+     C                   CLOSE     PEEK50FM
+     C                   CLOSE     PEEKFLD
+     C                   CLOSE     PEEKFLDL1
+     C                   CLOSE     PEEKWRK
+     C                   CLOSE     PEEKWRK_
+      *
+     C                   RETURN
+      *
+      *============================================================*
+      *    C_Enter       "Datenfreigabetaste"                      *
+      *============================================================*
+      *
+     C     C_Enter       BEGSR
+      *
+     C                   EXSR      VReadC
+      *
+     C     ##Field       IFNE      *BLANKS
+     C                   EXSR      C_Search
+     C                   Endif
+      *
+     C                   ENDSR
+      *
+      *============================================================*
+      *    C_Search      F16 - Suchen                              *
+      *============================================================*
+      *
+     C     C_Search      BEGSR
+      *
+     C     ##Field       IFNE      *BLANKS
+     C                   MOVEL (P) ##Field       LstField
+     C                   MOVEL (P) *BLANKS       ##Field
+     C                   Endif
+      *
+     C     LstField      IFEQ      *BLANKS
+     C                   MOVEL (P) '1'           *IN70
+     C                   CLEAR                   USR8209
+     C                   MOVEL (P) 'USR8209'     §MsgID
+     C                   MOVEL (P) USR8209       §MsgDta
+     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   ELSE
+     C                   EXSR      PosToField
+     C     IsNewPos      IFEQ      bTrue
+     C                   Z-ADD     Wrk_SFSANR    SFSANR
+     C                   Endif
+     C                   Endif
+      *
+     C                   ENDSR
+      *
+      *============================================================*
+      *    PosToField    Subfile neu positionieren                 *
+      *============================================================*
+      *
+     C     PosToField    BEGSR
+      *
+ B01  ***  ##Field       IFEQ      R_Field
+      ***                MOVEL (P) bFalse        IsNewPos
+ X01  ***                ELSE
+      *
+     C     LstField      IFNE      R_Field
+     C                   Eval      LstNbrRcd = 0
+     C                   Endif
+      *
+     C     LstField      IFEQ      *BLANKS
+     C                   MOVEL (P) bFalse        IsNewPos
+     C                   Eval      LstNbrRcd = 0
+     C                   ELSE
+      *
+     C                   EXSR      SrchField
+     C     IsFound       IFEQ      bFalse
+     C                   MOVEL (P) bFalse        IsNewPos
+     C                   CLEAR                   USR8136
+     C                   MOVEL (P) 'USR8136'     §MsgID
+     C                   MOVEL (P) LstField      USR81361                       Feldname
+     C                   MOVEL (P) USR8136       §MsgDta
+     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   ELSE
+     C                   MOVEL (P) bTrue         IsNewPos
+     C                   Endif
+     C                   Endif
+      *
+     C                   MOVEL (P) LstField      R_Field
+ E01  ***                ENDIF
+      *
+     C                   ENDSR
+      *
+      *============================================================*
+      *    SrchField     Suchen Feld in Subfile                    *
+      *============================================================*
+      *
+     C     SrchField     BEGSR
+      *
+     C     *IN80         IFEQ      '0'
+     C                   MOVEL (P) bFalse        IsFound
+     C                   ELSE
+      *
+     C                   MOVEL (P) bFalse        IsFound
+     C                   Eval      LstNbrRcd = LstNbrRcd + 1
+      *
+     C     LstNbrRcd     DO        SflNbrRcd     SflRec
+     C     SflRec        CHAIN     PBSFL                              1111
+     C     *IN11         IFEQ      '1'
+     C                   MOVEL (P) bFalse        IsFound
+     C                   LEAVE
+     C                   Endif
+      *
+     C                   IF        LstField =
+     C                             %subst($$FNME: 1:(f_scan(' ':
+     C                                                      LstFIELD) - 1))
+     C                   MOVEL (P) bTrue         IsFound
+     C                   LEAVE
+     C                   ELSE
+     C     SFPAU         IFNE      *BLANKS
+      *  ... Satz geändert
+     C                   EXSR      VSfpauChg
+     C                   ELSE
+      *  ... Satz nicht geändert
+     C                   EXSR      VSfpauClr
+     C                   Endif
+      *  Setzen Bezugszahlen ...
+     C                   EXSR      PBSetBZ
+     C                   UPDATE    PBSFL
+     C                   ITER
+     C                   Endif
+      *
+     C                   Enddo
+      *
+     C     IsFound       IFEQ      bTrue
+     C                   Z-ADD     SflRec        Wrk_SFSANR
+     C                   Eval      LstNbrRcd = SflRec
+     C                   ELSE
+     C                   Z-ADD     *ZEROS        Wrk_SFSANR
+     C                   Eval      LstNbrRcd = 0
+     C                   Endif
+      *
+     C                   Endif
+      *
+     C                   ENDSR
+      *
+      *============================================================*
+      *    SrchInit      Initialisieren Suchfunktion               *
+      *============================================================*
+      *
+     C     SrchInit      BEGSR
+      *
+     C                   Eval      LstField  = ' '
+     C                   Eval      LstNbrRcd = 0
+     C                   Eval      R_Field   = LstField
+      *
+     C                   ENDSR
+      *
+      *============================================================*
+      *    VReadC        Verarbeiten der Subfileauswahlen          *
+      *============================================================*
+      *
+     C     VReadC        BEGSR
+      *
+     C                   MOVEL (P) bFalse        IsSflError
+      *
+     C     *IN80         IFEQ      '0'
+      *   keine Einträge in Subfile vorhanden ...
+     C                   ELSE
+      *
+     C     1             DO        SflNbrRcd
+     C                   READC     PBSFL                                  1111
+     C     *IN11         IFEQ      '1'
+     C                   LEAVE
+     C                   Endif
+      *
+     C     SflRec        CHAIN     PBSFL                              11
+      *
+     C                   EXSR      SflBzoff
+      *
+      *  Cursorpositionierung ...
+     C     IsSflError    IFEQ      bFalse
+     C                   Z-ADD     SflRec        SflCsr
+     C                   ELSE
+      *  Subfile nicht neu positionieren
+     C                   Endif
+      *
+      *  Linksbündig setzen ...
+     C     ' '           CHECK     SFPAU         X
+     C     X             IFGE      1
+     C                   SUBST (P) SFPAU:X       SFPAU
+     C                   Endif
+      *
+      *  Zuordnung AUSWAHL => Befehl ...
+     C     '#'           CAT   (P) SFPAU:0       YScnAID
+     C                   MOVEL (P) §§PgmName     YPgm
+     C                   CALL      PEEK21        P_Peek21
+     C     YMsgID        IFNE      *BLANKS
+      *  Fehlermeldung ...
+     C                   MOVEL (P) 'USR8110'     §MsgID
+     C                   MOVEL (P) SFPAU         §MsgDta
+     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   EXSR      VSfpauErr
+      *  Setzen Bezugszahlen ...
+     C                   EXSR      PBSetBZ
+     C                   UPDATE    PBSfl
+     C                   MOVEL (P) bTrue         IsSflError
+     C                   ITER
+     C                   Endif
+      *
+      *----------------------------*
+      *  Ausführen SFL-Befehl ...  *
+      *----------------------------*
+     C                   MOVEL (P) YPgmCmd       Sfl_Cmd
+      *
+     C                   SELECT
+     C     Sfl_Cmd       WHENEQ    '*NONE'
+     C                   OTHER
+      *  Unbekannter Programmbefehl
+     C                   MOVEL (P) 'USR8110'     §MsgID
+     C                   MOVEL (P) YPgmCmd       USR81101
+     C                   MOVEL (P) USR8110       §MsgDta
+     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   EXSR      VSfpauErr
+      *  Setzen Bezugszahlen ...
+     C                   EXSR      PBSetBZ
+     C                   UPDATE    PBSfl
+     C                   MOVEL (P) bTrue         IsSflError
+     C                   ITER
+     C                   Endsl
+      *
+      *----------------------------*
+      *  Verarbeiten               *
+      *  Datensatzänderungen       *
+      *----------------------------*
+     C                   EXSR      VPos
+     C                   EXSR      VSfpauClr
+      *
+      *  Setzen Bezugszahlen ...
+     C                   EXSR      PBSetBZ
+     C                   UPDATE    PBSfl
+     C                   Enddo
+      *
+     C                   Endif
+      *
+     C                   ENDSR
+      *
+      *============================================================*
+      *    C_EndPgm      F3/F12 - Programm beenden                 *
+      *============================================================*
+      *
+     C     C_EndPgm      BEGSR
+      *
+     C                   Callp     p_rmvPgmMg(§§pgmName)
+      *
+     C                   MOVEL (P) 'USR8100'     XMsgID
+     C                   MOVEL (P) YPgmCmd       USR81001
+     C                   MOVEL (P) USR8100       XMsgDta
+      *
+     C                   ENDSR
+      *
+      *============================================================*
+      *    C_SaveExit    F3     - Sichern und beenden              *
+      *============================================================*
+      *
+     C     C_SaveExit    BEGSR
+      *
+     C                   Clear                   XPinTabC
+     C                   Eval      X = 0
+      *
+     C                   Z-ADD     *ZEROS        W_Key
+     C     W0Key         Setll     FPEEKWRK
+      *
+     C                   DO        *HIVAL
+     C                   READ  (N) FPEEKWRK                               83
+     C     *IN83         IFEQ      '1'
+     C                   LEAVE
+     C                   Endif
+      *
+     C                   MOVEL (P) W_Data        WRK0002
+      *
+     C                   If        (x < %elem(XPinTabC)) and
+     C                             (Wrk_Seq <> 0)
+     C                   Eval      X = X + 1
+     C                   Eval      XPinTabC(x) = Wrk_FNme
+     C                   Endif
+     C                   Enddo
+      *
+     C                   Callp     p_rmvPgmMg(§§pgmName)
+      *
+     C                   MOVEL (P) 'USR8112'     XMsgID
+     C                   MOVEL (P) *BLANKS       XMsgDta
+      *
+     C                   ENDSR
+      *
+      *============================================================*
+      *    C_Refresh     F5  - Aktualisieren der Subfile           *
+      *============================================================*
+      *
+     C     C_Refresh     BEGSR
+      *
+      * - Subfile neu aufbauen
+     C                   Z-ADD     *ZEROS        W_Key
+     C                   EXSR      PBInit
+     C                   EXSR      PBSetLL
+     C                   EXSR      PBReadUp
+      *
+     C                   EXSR      SrchInit
+      *
+     C                   ENDSR
+      *
+      *============================================================*
+      *    C_Top         F17 - Anfang der Subfile                  *
+      *============================================================*
+      *
+     C     C_Top         BEGSR
+      *
+     C                   Z-ADD     1             SFSANR
+      *
+     C                   ENDSR
+      *
+      *============================================================*
+      *    C_Bot         F18 - Ende der Subfile                    *
+      *============================================================*
+      *
+     C     C_Bot         BEGSR
+      *
+     C                   Z-ADD     SflNbrRcd     SFSANR
+      *
+     C                   ENDSR
+      *
+      *============================================================*
+      *    C_ClrAll      F22 - Löschen alle Einträge               *
+      *                        der Pintabelle                      *
+      *============================================================*
+      *
+     C     C_ClrAll      BEGSR
+      *
+     C                   Z-ADD     *ZEROS        W_Key
+     C     W0Key         Setll     FPEEKWRK
+      *
+     C                   DO        *HIVAL
+     C                   READ      FPEEKWRK                               83
+     C     *IN83         IFEQ      '1'
+     C                   LEAVE
+     C                   Endif
+      *
+     C                   MOVEL (P) W_Data        WRK0002
+      *
+     C                   Eval      ##Seq = 0
+     C                   Exsr      FillRecord
+     C                   Exsr      FillKey
+      *
+     C                   MOVEL (P) WRK0002       W_Data
+     C                   Update    FPEEKWRK
+     C                   Enddo
+      *
+     C                   Exsr      C_Refresh
+      *
+     C                   ENDSR
+      *
+      *============================================================*
+      *    C_MoreKeys    F24 - Weitere Tasten                      *
+      *============================================================*
+      *
+     C     C_MoreKeys    BEGSR
+      *
+     C                   ADD       1             SFBOT
+      *
+     C                   ENDSR
+      *
+      *============================================================*
+      *    FillRecord    Füllen Datensatz in PEEKWRK               *
+      *============================================================*
+      *
+     C     FillRecord    BEGSR
+      *
+     C                   If        (##Seq   <> 0) and
+     C                             (WRK_Seq  = 0)
+     C                   Eval      NbrPinCol = NbrPinCol + 1
+     C                   Endif
+      *
+     C                   If        (##Seq    = 0) and
+     C                             (WRK_Seq <> 0)
+     C                   Eval      NbrPinCol = NbrPinCol - 1
+     C                   Endif
+      *
+     C                   Z-ADD     ##Seq         WRK_Seq
+      *
+     C                   ENDSR
+      *
+      *============================================================*
+      *    FillKey       Füllen Schlüsselfelder in PEEKWRK         *
+      *============================================================*
+      *
+     C     FillKey       BEGSR
+      *
+     C                   If        WRK_Seq = 0
+     C                   Z-ADD     *HIVAL        W_Key
+     C                   Else
+     C                   Z-ADD     WRK_Seq       W_Key
+     C                   Endif
+      *
+     C                   ENDSR
+      *
+      *============================================================*
+      *    SflBzoff      Aussetzen aller Subfilebezugszahlen       *
+      *                  für die MArkierung von Eingabefehlern     *
+      *============================================================*
+      *
+     C     SflBzoff      BEGSR
+      *
+      *  DSPATR(PC)
+     C                   MOVEA     '0000000000'  *IN(20)                        20-29
+      *  DSPATR(RI)
+     C                   MOVEA     '0000000000'  *IN(30)                        30-39
+      *
+     C                   ENDSR
+      *
+      *============================================================*
+      *    VPos          Verarbeiten der Eingaben                  *
+      *============================================================*
+      *
+     C     VPos          BEGSR
+      *
+     C     RecordNbr     CHAIN     PEEKWRK_      DS_PEEKWRK           11
+     C     *IN11         IFEQ      '1'
+      *  Weiß noch nicht, was zu tun ist ...
+     C                   ELSE
+     C                   MOVEL (P) W_Data        WRK0002
+     C                   EXSR      FillRecord
+     C                   EXSR      FillKey
+     C                   MOVEL (P) WRK0002       W_Data
+     C                   UPDATE    PEEKWRK_      DS_PEEKWRK
+     C                   Endif
+      *
+     C                   ENDSR
+      *
+      *============================================================*
+      *    VSfpauClr     Löschen Subfileauswahl                    *
+      *============================================================*
+      *
+     C     VSfpauClr     BEGSR
+      *
+     C                   MOVEL (P) *BLANKS       SFPAU
+     C                   MOVEL (P) '0'           *IN85                          DSPATR(RI)
+     C                   MOVEL (P) '0'           *IN84                          SFLNXTCHG
+      *
+     C                   ENDSR
+      *
+      *============================================================*
+      *    VSfpauErr     Anzeigen fehlerhafter Subfileauswahl      *
+      *============================================================*
+      *
+     C     VSfpauErr     BEGSR
+      *
+     C                   MOVEL (P) '1'           *IN85                          DSPATR(RI)
+     C                   EXSR      VSfpauChg
+      *
+     C                   ENDSR
+      *
+      *============================================================*
+      *    VSfpauChg     Datensatz in Subfile als geändert         *
+      *                  markieren                                 *
+      *============================================================*
+      *
+     C     VSfpauChg     BEGSR
+      *
+     C                   MOVEL (P) '1'           *IN84                          SFLNXTCHG
+      *
+     C                   ENDSR
+      *
+      *============================================================*
+      *    PBInit        Initialisieren der Subfile zur Anzeige    *
+      *                  der nächsten Seite                        *
+      *============================================================*
+      *
+     C     PBINIT        BEGSR
+      *
+     C                   MOVEL (P) '0'           *IN89
+     C                   WRITE     MSGCTL
+      *
+     C                   MOVEL (P) '0'           *IN80                          SFLDSP
+     C                   MOVEL (P) '1'           *IN81                          SFLDSPCTL
+     C                   MOVEL (P) '1'           *IN82                          SFLCLR
+     C                   MOVEL (P) '1'           *IN83                          SFLEND
+     C                   WRITE     PBCTL
+      *
+     C                   MOVEL (P) '0'           *IN82                          SFLCLR
+      *
+     C                   Z-ADD     *ZEROS        SFLREC
+     C                   Z-ADD     *ZEROS        SflNbrRcd
+      *
+     C                   ENDSR
+      *
+      *============================================================*
+      *    PBReadUP      Vorwärts füllen der Subfile               *
+      *============================================================*
+      *
+     C     PBReadUP      BEGSR
+      *
+     C                   DO        *HIVAL
+     C                   READ  (N) FPEEKWRK                               83
+     C     *IN83         IFEQ      '1'
+     C                   LEAVE
+     C                   Endif
+      *
+     C                   EXSR      PBFill
+      *
+     C                   ADD       1             SflRec
+      *  Setzen Bezugszahlen ...
+     C                   EXSR      PBSetBZ
+     C                   WRITE     PBSfl
+     C                   Z-ADD     SflRec        SflNbrRcd
+      *
+     C     SFLRec        IFGE      SflPage
+     C                   LEAVE
+     C                   Endif
+      *
+     C                   Enddo
+      *
+     C                   ENDSR
+      *
+      *============================================================*
+      *    PBFill        Füllen Subfilesatz                        *
+      *============================================================*
+      *
+     C     PBFill        BEGSR
+      *
+     C                   EXSR      SflBzoff
+      *
+     C                   EVAL      RecordNbr = Work_00_DS.RcdNbr
+      *
+     C                   EVAL      WRK0002 = W_Data
+      *
+     C     WRK_RcdNbr    CHAIN (N) FPEEKFLD                           11
+      *
+     C                   MOVEL (P) F_FFD         FLDL0100
+      *
+      *  ... Folgenummer
+     C                   Z-ADD     Wrk_Seq       ##Seq
+      *  ... Feldname
+     C                   MOVEL (P) Wrk_FNme      $$FNme
+      *  ... Feldbezeichnung
+     C                   MOVEL (P) Wrk_FTxt      $$FTxt
+      *  ... Keyfeldnummer
+     C     F_KSeq        IFNE      *ZEROS
+     C                   MOVE  (P) F_KSeq        $$KSeq
+     C                   MOVEL     'K'           $$KSeq
+     C                   ELSE
+     C                   MOVEL (P) *BLANKS       $$KSeq
+     C                   Endif
+      *
+      *  ... anzeigen Subfile
+     C                   MOVEL (P) '1'           *IN80                          SFLDSP
+      *
+      *  ... Löschen Subfileauswahl
+     C                   EXSR      VSfpauClr
+      *
+     C                   ENDSR
+      *
+      *============================================================*
+      *    PBSetLL       Setzen Dateizeiger                        *
+      *============================================================*
+      *
+     C     PBSetLL       BEGSR
+      *
+     C     W0Key         SETLL     FPEEKWRK
+      *
+     C                   ENDSR
+      *
+      *============================================================*
+      *    PBSetBZ       Setzen Bezugszahlen                       *
+      *============================================================*
+      *
+     C     PBSetBZ       BEGSR
+      *
+     C                   ENDSR
+      *
+      *============================================================*
+      *    SetScreen     Einstellen 132/80-Zeichen Auflösung       *
+      *============================================================*
+      *
+     C     SetScreen     BEGSR
+      *
+     C     XDsp80        IFEQ      '0'
+      *   132-Zeichen Anzeige
+     C                   MOVEL (P) '0'           *IN88
+     C                   Z-ADD     2             ZEI
+     C                   Z-ADD     2             POS
+     C                   ELSE
+      *    80-Zeichen Anzeige
+     C                   MOVEL (P) '1'           *IN88
+     C                   Z-ADD     2             ZEI
+     C                   Z-ADD     2             POS
+     C                   Endif
+      *
+     C                   Z-ADD     *HIVAL        SflPage
+     C                   Z-ADD     4             SflPageDDS
+      *
+     C                   ENDSR
+      *
+      *============================================================*
+      *    ClrPeekWrk    Löschen der Datei PEEKWRK                 *
+      *============================================================*
+      *
+     C     ClrPeekWrk    BEGSR
+      *
+     C                   MOVEL (P) 'PEEKWRK'     §File
+     C                   MOVEL (P) 'QTEMP'       §Lib
+     C                   MOVEL (P) '*FIRST'      §Mbr
+      /COPY QCOPYLE,CLRPFM
+      *
+     C                   ENDSR
+      *
+      *============================================================*
+      *    CopyToWork    Kopieren PEEKFLD nach PEEKWRK             *
+      *============================================================*
+      *
+     C     CopyToWork    BEGSR
+      *
+     C                   Eval      NbrPinCol = 0
+      *
+     C                   Z-ADD     *ZEROS        F_Seq
+     C     F1Key         SETLL     FPEEKFLDL1
+      *
+     C                   DO        *HIVAL
+     C                   READ  (N) FPEEKFLDL1                             11
+     C     *IN11         IFEQ      '1'
+     C                   LEAVE
+     C                   Endif
+      *
+     C                   CLEAR                   WRK0002
+     C                   CLEAR                   DS_PEEKWRK
+      *
+     C                   MOVEL (P) F_FFD         FLDL0100
+      *
+      *  ... Folgenummer
+     C                   Eval      x = %lookup(FLDL0100.F1FNME: XPinTabC: 1)
+     C**                 Eval      X = 1
+     C**   fieldName     LOOKUP    XPinTabC(X)                            99
+     C**   *IN99         IFEQ      '1'
+     C                   If        (x > 0)
+      *  ... gefunden
+     C                   Eval      ##Seq   = x * 10
+     C                   Eval      W_Key   = x * 10
+     C                   ELSE
+      *  ... nicht gefunden
+     C                   Eval      ##Seq   = 0
+     C                   Eval      W_Key   = *HIVAL
+     C                   Endif
+      *
+     C                   Exsr      FillRecord
+      *
+      *  ... sonstige Felder
+     C                   EVAL      WRK_RcdNbr = Peek_01_DS.RcdNbr
+     C                   EVAL      WRK_FNme = FLDL0100.F1FNme
+     C                   EVAL      WRK_FTxt = FLDL0100.F1FTxt
+      *
+     C                   EVAL      W_Format = 'WRK0002'
+     C                   EVAL      W_Data = WRK0002
+      *
+     C                   WRITE     PEEKWRK_      DS_PEEKWRK
+     C                   Enddo
+      *
+     C                   ENDSR
+      *
+      *============================================================*
+      *    First         Initialisierung                           *
+      *============================================================*
+      *
+     C     First         BEGSR
+      *
+      * - Öffnen der Dateien
+     C                   OPEN      PEEKFLD
+     C                   OPEN      PEEKFLDL1
+      *
+     C                   EXSR      ClrPeekWrk
+     C                   OPEN      PEEKWRK
+     C                   OPEN      PEEKWRK_
+     C                   EXSR      CopyToWork
+      *
+     C                   OPEN      PEEK50FM
+      *
+      * - Programm initialisieren
+     C                   Callp     p_rmvPgmMg(§§pgmName)
+      *
+     C                   MOVEL (P) *BLANKS       ##Field
+      *
+      * - Rückkehrcode
+     C                   MOVEL (P) *BLANKS       XMsgID
+     C                   MOVEL (P) *BLANKS       XMsgDta
+      *
+      * - Darstellung der Subfile
+     C                   MOVEL (P) '1'           SflMde
+      *
+      * - Darstellung der Befehlstasten
+     C                   Z-ADD     1             SfBot
+      *
+      * - Einstellen der Bildschirmauflösung 80/132-Zeichen
+     C                   EXSR      SetScreen
+      *
+      * - Anzuzeigender Subfilesatz
+     C                   Z-ADD     1             SFSANR
+      *
+      * - Subfile füllen
+     C                   EXSR      C_Refresh
+      *
+      * - Copyright
+     C                   MOVEL (P) 'USR9999'     §MsgID
+     C                   MOVEL (P) XCopyRight    §MsgDta
+     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+      *
+     C                   ENDSR
+      *
+      *============================================================*
+      *    *INZSR        Programminitialisierung                   *
+      *============================================================*
+      *
+     C     *INZSR        Begsr
+      *
+     C                   Eval      §PgmQ = '*'
+      *
+     C                   Eval      PEEK21 = f_pgmCallN('PEEK21')
+     C                   Eval      PEEK23 = f_pgmCallN('PEEK23')
+      *
+     C                   Eval      yPgm    = §§PgmName
+     C                   Eval      yKey    = '*ALL'
+     C                   Eval      yPosF24 = NbrFKeys
+     C                   Call      PEEK23        P_Peek23
+     C                   Movea (P) yFKeys        ScrnFKeys
+      *
+     C                   Endsr
+      *
+      *============================================================*
+      *    *PSSR         Fehlerbehandlung                          *
+      *============================================================*
+      *
+     C     *PSSR         BEGSR
+      *
+     C                   DUMP
+      *
+     C                   ENDSR     '*CANCL'
+      *
+      *---Nachrichten--------------------------------------*
+ CPY  ***/COPY QCOPYLE,MSG_C_MAPI
+      *----------------------------------------------------*
+      *

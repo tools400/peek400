@@ -1,0 +1,115 @@
+      *%%TS  SD  20120327  140342  RADDATZ     REL-V6R1M0  5761-WDS
+      *===============================================================*
+      *                                                               *
+      *  (C) Thomas Raddatz                                           *
+      *                                                               *
+      *  Bereich  : PEEK Version 1.4.0                                *
+      *  Typ      : DSPF                                              *
+      *                                                               *
+      *===============================================================*
+      *                                                               *
+      *  Kurzdokumentation :                                          *
+      *                                                               *
+      *  PEEK/400 - Programmtemplate                                  *
+      *                                                               *
+      *===============================================================*
+      * >>PRE-COMPILER<<                                              *
+      *   >>CRTCMD<< CRTDSPF      FILE(&LI/&OB) +                     *
+      *                           SRCFILE(&SL/&SF) +                  *
+      *                           SRCMBR(&SM);                        *
+      *   >>COMPILE<<                                                 *
+      *   >>END-COMPILE<<                                             *
+      *   >>EXECUTE<<                                                 *
+      *===============================================================*
+      *
+      *%%EC
+     A                                      DSPSIZ(24 80 *DS3                  -
+     A                                             27 132 *DS4)
+     A                                      PRINT
+     A                                      ALTHELP(CA01)
+     A                                      HELP(01)
+     A                                      CF02
+     A                                      CF03
+     A                                      CF04
+     A                                      CF05
+     A                                      CF06
+     A                                      CF07
+     A                                      CF08
+     A                                      CF09
+     A                                      CF10
+     A                                      CF11
+     A                                      CF12
+     A                                      CF13
+     A                                      CF14
+     A                                      CF15
+     A                                      CF16
+     A                                      CF17
+     A                                      CF18
+     A                                      CF19
+     A                                      CF20
+     A                                      CF21
+     A                                      CF22
+     A                                      CF23
+     A                                      CF24
+     A          R SCREEN01
+     A                                      CSRLOC(CSRROW     CSRCOL)
+     A            CSRROW         3S 0H
+     A            CSRCOL         3S 0H
+     A                                 04  2'Mandant................'
+     A            ##MANDANT R        B 04 29REFFLD(MANDANT -
+     A                                      OH010_DE/MARKTSTAMM)
+     A                                      COLOR(WHT)
+     A                                 05  2'MarktNr................'
+     A            ##MARKTNR R        B 05 29REFFLD(MARKTNR -
+     A                                      OH010_DE/MARKTSTAMM)
+     A                                      COLOR(WHT)
+     A                                 06  2'Herkunft...............'
+     A            ##HERKUNFTR        B 06 29REFFLD(HERKUNFT -
+     A                                      OH010_DE/MARKTSTAMM)
+     A                                      COLOR(WHT)
+     A                                 07  2'Strasse................'
+     A            ##STRASS01    15G  B 07 29
+     A                                      COLOR(WHT)
+     A                                      CCSID(13488  *MIN)
+     A            ##STRASS02    10G  B 08 29
+     A                                      COLOR(WHT)
+     A                                      CCSID(13488  *MIN)
+     A                                 09  2'Plz....................'
+     A            ##PLZ          7G  B 09 29
+     A                                      COLOR(WHT)
+     A                                      CCSID(13488  *MIN)
+     A                                 10  2'Ort....................'
+     A            ##ORT         25G  B 10 29
+     A                                      COLOR(WHT)
+     A                                      CCSID(13488  *MIN)
+     A          R SCREEN02
+     A                                      WINDOW(2    2    16 60 *NOMSGLIN)
+     A                                      CSRLOC(CSRROW     CSRCOL)
+     A            CSRROW         3S 0H
+     A            CSRCOL         3S 0H
+     A                                 04  2'Mandant................'
+     A            ##MANDANT R        B 04 29REFFLD(MANDANT -
+     A                                      OH010_DE/MARKTSTAMM)
+     A                                      COLOR(WHT)
+     A                                 05  2'MarktNr................'
+     A            ##MARKTNR R        B 05 29REFFLD(MARKTNR -
+     A                                      OH010_DE/MARKTSTAMM)
+     A                                      COLOR(WHT)
+     A                                 06  2'Herkunft...............'
+     A            ##HERKUNFTR        B 06 29REFFLD(HERKUNFT -
+     A                                      OH010_DE/MARKTSTAMM)
+     A                                      COLOR(WHT)
+     A                                 07  2'Strasse................'
+     A            ##STRASS01    15G  B 07 29
+     A                                      COLOR(WHT)
+     A                                      CCSID(13488  *MIN)
+     A            ##STRASS02    10G  B 08 29
+     A                                      COLOR(WHT)
+     A                                      CCSID(13488  *MIN)
+     A                                 09  2'Plz....................'
+     A            ##PLZ          7G  B 09 29
+     A                                      COLOR(WHT)
+     A                                      CCSID(13488  *MIN)
+     A                                 10  2'Ort....................'
+     A            ##ORT         25G  B 10 29CCSID(13488  *MIN)
+     A                                      COLOR(WHT)

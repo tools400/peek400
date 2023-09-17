@@ -1,0 +1,137 @@
+     /* ============================================================ */
+     /*                                                              */
+     /*  (c) Thomas Raddatz                                          */
+     /*                                                              */
+     /*  Bereich  : PEEK, Version 3.1.2                              */
+     /*  Programm : PEEKUPD2                                         */
+     /*  Typ      : CLLE                                             */
+     /*                                                              */
+     /*  erstellt : 15.08.2008  Raddatz                              */
+     /*                                                              */
+     /* ============================================================ */
+     /*                                                              */
+     /*  Dokumentation:                                              */
+     /*                                                              */
+     /*  Peek/400 - Aktualisieren neue PEEK/400 Bibliothek           */
+     /*                                                              */
+     /*  Übernimmt die Updateprogramme und Updatebildschirmdateien   */
+     /*  aus einer gegebenen alten PEEK/400 Bibliothek in die        */
+     /*  neue PEEK/400 Bibliothek.                                   */
+     /*                                                              */
+     /* ============================================================ */
+
+          PGM        PARM(&OLDLIB     +
+                          &NEWLIB     +
+                          &WORKLIB    +
+                          &WORKFILE   +
+                          )
+
+             DCLF       FILE(*LIBL/QADSPOBJ) RCDFMT(QLIDOBJD)
+
+             DCL        VAR(&OLDLIB    ) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&NEWLIB    ) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&WORKLIB   ) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&WORKFILE  ) TYPE(*CHAR) LEN(10)
+
+/* Fehlerbehandlung     */
+             DCL        VAR(&ERROR)      TYPE(*LGL) +
+                          VALUE('0')
+             DCL        VAR(&ERRMSGKEY)  TYPE(*CHAR) LEN(4)
+
+             DCL        VAR(&ERRMSGTYP)  TYPE(*CHAR) LEN(10) +
+                          VALUE('*DIAG')
+             DCL        VAR(&ERRNBRTYP)  TYPE(*CHAR) LEN(4) +
+                          VALUE(X'00000001')
+             DCL        VAR(&ERRPGMMSGQ) TYPE(*CHAR) LEN(10) +
+                          VALUE('*')
+             DCL        VAR(&ERRSTKCTR)  TYPE(*CHAR) LEN(4) +
+                          VALUE(X'00000001')
+             DCL        VAR(&ERRCODE  )  TYPE(*CHAR) LEN(4) +
+                          VALUE(X'00000000')
+
+/* Sende alle Fehler zur Error Handling Routine */
+             MONMSG     MSGID(CPF0000) EXEC(GOTO CMDLBL(ERROR))
+
+             CHGVAR     VAR(&ERROR    ) VALUE('0')
+
+ /* -------------------------------------------------------------- */
+ /*  Los geht's mit den Update Bildschirmen und Programmen         */
+ /* -------------------------------------------------------------- */
+             CHKOBJ     OBJ(&WORKLIB/&WORKFILE ) OBJTYPE(*FILE)
+             MONMSG     MSGID(CPF9801) EXEC(GOTO NO_UPD2)
+             DLTF       FILE(&WORKLIB/&WORKFILE )
+NO_UPD2:
+
+             DSPOBJD    OBJ(&OLDLIB/*ALL)     +
+                          OBJTYPE(*PGM *FILE) +
+                          DETAIL(*BASIC)      +
+                          OUTPUT(*OUTFILE)    +
+                          OUTFILE(&WORKLIB/&WORKFILE )
+
+             OVRDBF     FILE(QADSPOBJ) TOFILE(&WORKLIB/&WORKFILE ) +
+                          OVRSCOPE(*CALLLVL)
+
+ LOOP2:      RCVF       RCDFMT(QLIDOBJD)
+             MONMSG     MSGID(CPF0864) EXEC(GOTO CMDLBL(EOF2)) /* End of file */
+
+             IF         COND(%sst(&ODOBTX 44 7) *NE '*UPDPGM') THEN(DO)
+                GOTO       CMDLBL(LOOP2)
+             ENDDO
+
+             IF         COND(&ODOBTP *EQ '*PGM') THEN(DO)
+                CRTDUPOBJ  OBJ(&ODOBNM) FROMLIB(&ODLBNM) OBJTYPE(*PGM ) +
+                           TOLIB(&NEWLIB)
+                MONMSG     MSGID(CPF0000)
+             ENDDO                                                        /* E01 */
+
+             IF         COND(&ODOBTP *EQ '*FILE') THEN(DO)
+                CRTDUPOBJ  OBJ(&ODOBNM) FROMLIB(&ODLBNM) OBJTYPE(*FILE) +
+                           TOLIB(&NEWLIB) DATA(*YES)
+             ENDDO                                                        /* E01 */
+
+             GOTO       CMDLBL(LOOP2)
+EOF2:
+
+ /* -------------------------------------------------------------- */
+
+ENDE:
+             RCLRSC     LVL(*)
+
+             CHKOBJ     OBJ(&WORKLIB/&WORKFILE ) OBJTYPE(*FILE)
+             MONMSG     MSGID(CPF9801) EXEC(GOTO NO_UPD)
+             DLTF       FILE(&WORKLIB/&WORKFILE )
+             MONMSG     MSGID(CPF0000)
+NO_UPD:
+
+/* Verschiebe alle *INFO Nachrichten zur             */
+/* vorangegangenen Programmwarteschlange             */
+             CHGVAR     VAR(&ERRMSGTYP) VALUE('*INFO')
+             CALL       PGM(QMHMOVPM) PARM(&ERRMSGKEY &ERRMSGTYP +
+                          &ERRNBRTYP &ERRPGMMSGQ &ERRSTKCTR &ERRCODE)
+
+             IF         COND(&ERROR) THEN(DO)                             /* B01 */
+                /* Sende letzte *ESCAPE nochmals   */
+                CALL       PGM(QMHRSNEM) PARM(&ERRMSGKEY &ERRCODE)
+                MONMSG     MSGID(CPF0000)
+             ENDDO                                                        /* E01 */
+
+             RETURN
+
+/* ---------------- */
+/* Error            */
+/* Handling         */
+/* ---------------- */
+ERROR:
+             IF         COND(&ERROR) THEN(GOTO CMDLBL(ENDE))
+             ELSE       CHGVAR     VAR(&ERROR) VALUE('1')
+
+/* Verschiebe alle *DIAG Nachrichten zur             */
+/* vorangegangenen Programmwarteschlange             */
+             CHGVAR     VAR(&ERRMSGTYP) VALUE('*DIAG')
+             CALL       PGM(QMHMOVPM) PARM(&ERRMSGKEY &ERRMSGTYP +
+                          &ERRNBRTYP &ERRPGMMSGQ &ERRSTKCTR &ERRCODE)
+
+             GOTO       CMDLBL(ENDE)
+
+             ENDPGM
+

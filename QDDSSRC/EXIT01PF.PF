@@ -1,0 +1,105 @@
+      *===============================================================*
+      *                                                               *
+      *  (c) Thomas Raddatz                                           *
+      *                                                               *
+      *  Bereich  : PEEK, Version 2.1.0                               *
+      *  Datei    : EXIT01PF     Sicherheitsattribute                 *
+      *  Typ      : PF                                                *
+      *                                                               *
+      *  erstellt : 28.04.1999  Thomas Raddatz                        *
+      *                                                               *
+      *===============================================================*
+      *
+     A                                      UNIQUE
+      *
+     A          R FEXIT01                   TEXT('PEEK - Sicherheitsattribute')
+      *
+     A            USER          10A
+     A                                      TEXT('Benutzer-/Objekteintra-
+     A                                      g                           ')
+     A                                      COLHDG('Eintragsart         ' -
+     A                                             'Benutzername,       ' -
+     A                                             '*OBJ, *ALLUSR       ')
+      *
+     A            FILE          10A
+     A                                      TEXT('Datei oder Sicherheits-
+     A                                      attribut                    ')
+     A                                      COLHDG('Datei               ' -
+     A                                             'oder *SECATR        ' -
+     A                                             '                    ')
+      *
+     A            LIB           10A
+     A                                      TEXT('Bibliothek            -
+     A                                                                  ')
+     A                                      COLHDG('Bibliothek          ' -
+     A                                             'oder *ALLLIB        ' -
+     A                                             '                    ')
+      *
+     A            CHGLIB         1A
+     A                                      TEXT('Ändern Bibliothek erla-
+     A                                      ubt                         ')
+     A                                      COLHDG('Ändern Bibliothek   ' -
+     A                                             '"1"=Ja, "0"=Nein    ' -
+     A                                             '"-"=nicht definiert ')
+ RAD A                                      DFT('-')
+      *
+     A            CHGFILE        1A
+     A                                      TEXT('Ändern Datei erlaubt  -
+     A                                                                  ')
+     A                                      COLHDG('Ändern Datei        ' -
+     A                                             '"1"=Ja, "0"=Nein    ' -
+     A                                             '"-"=nicht definiert ')
+ RAD A                                      DFT('-')
+      *
+     A            CHGMBR         1A
+     A                                      TEXT('Ändern Teildatei erlau-
+     A                                      bt                          ')
+     A                                      COLHDG('Ändern Teildatei    ' -
+     A                                             '"1"=Ja, "0"=Nein    ' -
+     A                                             '"-"=nicht definiert ')
+ RAD A                                      DFT('-')
+      *
+     A            UPDMOD         1A
+     A                                      TEXT('Datensatzaktualisierun-
+     A                                      g                           ')
+     A                                      COLHDG('Aktualisierung      ' -
+     A                                             '"1"=Ja, "0"=Nein    ' -
+     A                                             '"-"=nicht definiert ')
+ RAD A                                      DFT('-')
+ RAD  *
+ RAD A            UPDKEY         1A
+ RAD A                                      TEXT('Datensatzschlüsselände-
+ RAD A                                      rung                        ')
+ RAD A                                      COLHDG('Schlüsseländerung   ' -
+ RAD A                                             '"1"=Ja, "0"=Nein    ' -
+ RAD A                                             '"-"=nicht definiert ')
+ RAD A                                      DFT('-')
+ RAD  *
+ RAD A            CHGSQLW        1A
+ RAD A                                      TEXT('Ändern SQL WHERE erlau-
+ RAD A                                      bt                          ')
+ RAD A                                      COLHDG('Ändern SQL WHERE    ' -
+ RAD A                                             '"1"=Ja, "0"=Nein    ' -
+ RAD A                                             '"-"=nicht definiert ')
+ RAD A                                      DFT('-')
+ RAD  *
+ RAD A            CHGSQLO        1A
+ RAD A                                      TEXT('Ändern SQL ORDER BY er-
+ RAD A                                      laubt                       ')
+ RAD A                                      COLHDG('Ändern SQL ORDER BY ' -
+ RAD A                                             '"1"=Ja, "0"=Nein    ' -
+ RAD A                                             '"-"=nicht definiert ')
+ RAD A                                      DFT('-')
+      *
+     A            ACCAUT         1A
+     A                                      TEXT('Zugriffsberechtigung  -
+     A                                                                  ')
+     A                                      COLHDG('Zugriffsberechtigung' -
+     A                                             '"1"=Ja, "0"=Nein    ' -
+     A                                             '"-"=nicht definiert ')
+ RAD A                                      DFT('-')
+      *
+     A          K USER
+     A          K FILE
+     A          K LIB
+      *

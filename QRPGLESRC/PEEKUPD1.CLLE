@@ -1,0 +1,144 @@
+     /* ============================================================ */
+     /*                                                              */
+     /*  (c) Thomas Raddatz                                          */
+     /*                                                              */
+     /*  Bereich  : PEEK, Version 3.1.2                              */
+     /*  Programm : PEEKUPD1                                         */
+     /*  Typ      : CLLE                                             */
+     /*                                                              */
+     /*  erstellt : 15.08.2008  Raddatz                              */
+     /*                                                              */
+     /* ============================================================ */
+     /*                                                              */
+     /*  Dokumentation:                                              */
+     /*                                                              */
+     /*  Peek/400 - Aktualisieren neue PEEK/400 Bibliothek           */
+     /*                                                              */
+     /*  Übernimmt die Benutzereinstellungen und Arbeitsumgebungen   */
+     /*  aus einer gegebenen alten PEEK/400 Bibliothek in die        */
+     /*  neue PEEK/400 Bibliothek.                                   */
+     /*                                                              */
+     /* ============================================================ */
+
+          PGM        PARM(&OLDLIB     +
+                          &NEWLIB     +
+                          &WORKLIB    +
+                          &WORKFILE   +
+                          )
+
+             DCLF       FILE(*LIBL/QAFDRFMT) RCDFMT(QWHFDFMT)
+
+             DCL        VAR(&OLDLIB    ) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&NEWLIB    ) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&WORKLIB   ) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&WORKFILE  ) TYPE(*CHAR) LEN(10)
+
+/* Fehlerbehandlung     */
+             DCL        VAR(&ERROR)      TYPE(*LGL) +
+                          VALUE('0')
+             DCL        VAR(&ERRMSGKEY)  TYPE(*CHAR) LEN(4)
+
+             DCL        VAR(&ERRMSGTYP)  TYPE(*CHAR) LEN(10) +
+                          VALUE('*DIAG')
+             DCL        VAR(&ERRNBRTYP)  TYPE(*CHAR) LEN(4) +
+                          VALUE(X'00000001')
+             DCL        VAR(&ERRPGMMSGQ) TYPE(*CHAR) LEN(10) +
+                          VALUE('*')
+             DCL        VAR(&ERRSTKCTR)  TYPE(*CHAR) LEN(4) +
+                          VALUE(X'00000001')
+             DCL        VAR(&ERRCODE  )  TYPE(*CHAR) LEN(4) +
+                          VALUE(X'00000000')
+
+/* Sende alle Fehler zur Error Handling Routine */
+             MONMSG     MSGID(CPF0000) EXEC(GOTO CMDLBL(ERROR))
+
+             CHGVAR     VAR(&ERROR    ) VALUE('0')
+
+ /* -------------------------------------------------------------- */
+ /*  Los geht's mit den PEEKUSR und PEEKENV Dateien                */
+ /* -------------------------------------------------------------- */
+             CHKOBJ     OBJ(&WORKLIB/&WORKFILE ) OBJTYPE(*FILE)
+             MONMSG     MSGID(CPF9801) EXEC(GOTO NO_UPD1)
+             DLTF       FILE(&WORKLIB/&WORKFILE )
+NO_UPD1:
+
+             DSPFD      FILE(&OLDLIB/*ALL)   +
+                          TYPE(*RCDFMT)      +
+                          FILEATR(*PF)       +
+                          OUTPUT(*OUTFILE)   +
+                          OUTFILE(&WORKLIB/&WORKFILE )
+
+             OVRDBF     FILE(QAFDRFMT) TOFILE(&WORKLIB/&WORKFILE ) +
+                          OVRSCOPE(*CALLLVL)
+
+ LOOP1:      RCVF       RCDFMT(QWHFDFMT)
+             MONMSG     MSGID(CPF0864) EXEC(GOTO CMDLBL(EOF1)) /* End of file */
+
+             IF         COND(&RFFILE *EQ 'PEEKUSR'  *OR    +
+                             &RFFILE *EQ 'PEEKENV') THEN(DO)
+                GOTO       CMDLBL(LOOP1)
+             ENDDO
+
+             IF         COND(&RFNAME *NE 'FPEEKUSR'  *AND   +
+                             &RFNAME *NE 'FPEEKENV') THEN(DO)
+                GOTO       CMDLBL(LOOP1)
+             ENDDO
+
+             CHKOBJ     OBJ(&NEWLIB/&RFFILE) OBJTYPE(*FILE)
+             MONMSG     MSGID(CPF9801) EXEC(DO)
+                CRTDUPOBJ  OBJ(&RFFILE) FROMLIB(&RFLIB) OBJTYPE(*FILE) +
+                           TOLIB(&NEWLIB) DATA(*YES)
+             MONMSG     MSGID(CPF0000) EXEC(DO)
+               CPYF       FROMFILE(&RFLIB/&RFFILE) +
+                            TOFILE(&NEWLIB/&RFFILE) FROMMBR(*ALL) +
+                            TOMBR(*FROMMBR) MBROPT(*REPLACE) +
+                            CRTFILE(*YES)
+             ENDDO
+             ENDDO
+
+             GOTO       CMDLBL(LOOP1)
+EOF1:
+
+ /* -------------------------------------------------------------- */
+
+ENDE:
+             RCLRSC     LVL(*)
+
+             CHKOBJ     OBJ(&WORKLIB/&WORKFILE ) OBJTYPE(*FILE)
+             MONMSG     MSGID(CPF9801) EXEC(GOTO NO_UPD3)
+             DLTF       FILE(&WORKLIB/&WORKFILE )
+             MONMSG     MSGID(CPF0000)
+NO_UPD3:
+
+/* Verschiebe alle *INFO Nachrichten zur             */
+/* vorangegangenen Programmwarteschlange             */
+             CHGVAR     VAR(&ERRMSGTYP) VALUE('*INFO')
+             CALL       PGM(QMHMOVPM) PARM(&ERRMSGKEY &ERRMSGTYP +
+                          &ERRNBRTYP &ERRPGMMSGQ &ERRSTKCTR &ERRCODE)
+
+             IF         COND(&ERROR) THEN(DO)                             /* B01 */
+                /* Sende letzte *ESCAPE nochmals   */
+                CALL       PGM(QMHRSNEM) PARM(&ERRMSGKEY &ERRCODE)
+                MONMSG     MSGID(CPF0000)
+             ENDDO                                                        /* E01 */
+
+             RETURN
+
+/* ---------------- */
+/* Error            */
+/* Handling         */
+/* ---------------- */
+ERROR:
+             IF         COND(&ERROR) THEN(GOTO CMDLBL(ENDE))
+             ELSE       CHGVAR     VAR(&ERROR) VALUE('1')
+
+/* Verschiebe alle *DIAG Nachrichten zur             */
+/* vorangegangenen Programmwarteschlange             */
+             CHGVAR     VAR(&ERRMSGTYP) VALUE('*DIAG')
+             CALL       PGM(QMHMOVPM) PARM(&ERRMSGKEY &ERRMSGTYP +
+                          &ERRNBRTYP &ERRPGMMSGQ &ERRSTKCTR &ERRCODE)
+
+             GOTO       CMDLBL(ENDE)
+
+             ENDPGM
+

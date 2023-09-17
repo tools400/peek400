@@ -1,0 +1,27 @@
+      * =================================================================== *
+      *   >>PRE-COMPILER<<                                                  *
+      *     >>CRTCMD<<  CRTLF         FILE(&LI/&OB) +                       *
+      *                               SRCFILE(&SL/&SF) SRCMBR(&SM);         *
+      *     >>IMPORTANT<<                                                   *
+      *       >>PARM<<                MBR(*NONE);                           *
+      *       >>PARM<<                MAXMBRS(10);                          *
+      *     >>END-IMPORTANT<<                                               *
+      *     >>EXECUTE<<                                                     *
+      *     >>CMD<<     ADDLFM FILE(&LI/&OB) MBR(ALL.YEARS)  +              *
+      *                        DTAMBRS(*ALL)                 +              *
+      *                        TEXT('Order history of all years');          *
+      *     >>CMD<<     ADDLFM FILE(&LI/&OB) MBR(Y2017)      +              *
+      *                        DTAMBRS((&LI/HORDER (Y2017))) +              *
+      *                        TEXT('Order history of 2017');               *
+      *     >>CMD<<     ADDLFM FILE(&LI/&OB) MBR(Y2018)      +              *
+      *                        DTAMBRS((&LI/HORDER (Y2018))) +              *
+      *                        TEXT('Order history of 2018');               *
+      *   >>END-PRE-COMPILER<<                                              *
+      * =================================================================== *
+     A          R FORDER                    TEXT('Order history of all years')
+     A                                      PFILE(HORDER)
+      *
+     A          K ORDCRTD
+     A          K ORDCRTT
+     A          K ORDNBR
+      *

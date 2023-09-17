@@ -1,0 +1,895 @@
+  Version 1.5.1
+  =============
+
+  11.03.1999, Bugfix:
+  *  Eingeben eines Aufsetzschlüssel bei Datums-, Zeit- und Zeitstempelfeldern.
+
+  11.03.1999, Änderung:
+  *  Das Schlüsselwort "WRDWRAP" wird nicht mehr generiert.
+
+  Version 2.0.0
+  =============
+
+  11.03.1999, Performance:
+  *  Hex to Char - Konvertierung jetzt über C-Funktion cvthc.
+
+  16.03.1999, Verbesserung:
+  *  SQl-Auswahl möglich für SELECT und ORDER BY.
+
+  17.03.1999, Verbesserung:
+  *  Anzeige der Schlüsselfelder bei SQL-Auswahl
+
+  18.03.1999, Bugfix:
+  *  Anzeige der Schlüsselfelder im Änderungsbildschirm
+
+  23.03.1999, Änderung:
+  *  Suchroutine in PEEK40 (Datenbankrelationen)
+  *  TOP/BOT in PEEK40 (Datenbankrelationen)
+
+  23.03.1999, Bugfix:
+  *  Wechsel SQL zu anderer Sortierfolge  war nicht möglich
+     nach mehrmaliger Eingabe einer SQL Auswahl
+
+  23.03.1999, Verbesserung
+  *  Auswahl eines Schlüssels über DBR aus PEEK48 (SQL-Auswahl)
+
+  Version 2.1.0
+  =============
+
+  27.04.1999, Verbesserung:
+  *  Freigeben/Sperren der Felder ##LIBRARY, ##FILE, ##MEMBER
+     Parameter: CHGLIB, CHGFILE, CHGMBR
+
+  28.04.1999, Verbesserung:
+  *  Vorgabe Bearbeitungsmodus, Änderungen nicht möglich
+     Parameter: UPDMOD
+
+  28.04.1999, Verbesserung:
+  *  Prüfen der Benutzerprofileinstellung LMTCPB für *CMDLIN
+
+  30.04.1999, Bugfix:
+  *  Verarbeitung der Generierungsangaben CASE und ALWLC
+
+  04.05.1999, Verbesserung:
+  *  Autom. Anlegen der PEEKUSR, auch wenn der Benutzer keine
+     Berechtigung dafür hat.
+     Hierzu muss beim Kunden die Berechtigung für das SrvPgm
+     PEEK53 entsprechend eingestellt werden. Bspw. durch:
+     CHGOBJOWN OBJ(PEEK/PEEK53) OBJTYPE(*SRVPGM) NEWOWN(QSECOFR)
+
+  04.05.1999, Verbesserung:
+  *  SET0014, *PRVFILE
+
+  06.05.1999, Verbesserung:
+  *  Anzeige der phys. Datei, wenn keine Relationen vorhanden sind
+     im Programm PEEK40 (- Anz. Datenbankrelationen   -)
+
+  06.05.1999, Verbesserung:
+  *  Pin-Col und Pin-Row bleiben erhalten, wenn sich die Datei nicht ändert
+     bei Umschalten Sortierfolge SQL und zurück.
+
+  Version 2.1.1
+  =============
+
+  24.06.1999, Bugfix:
+  *  Korrekte Anzeige numerischer Werte bei einer Verkleinerung der
+     Spaltenbreite über die Funktion *LAYOUT.
+
+  Version 2.2.0
+  =============
+
+  21.07.1999, Verbesserung:
+  *  Erstellen Serviceprogramm für allgemeine Funktionen.
+     (Vorbereitung zur Verarbeitung Felder variabler Länge.)
+
+  22.07.1999, Verbesserung:
+  *  Verarbeitung Felder variabler Länge im Aktualisierungs- und
+     im Anzeigeprogramm.
+
+  22.07.1999, Bugfix:
+  *  Synchronisation der Anzeige zwischen Aktualisierungs- und
+     Anzeigeprogramm.
+
+  23.07.1999, Bugfix:
+  *  Ausführen von Kurzbefehlen. Übergabe ShortCmd an PEEK42.
+     Parameterlänge zu kurz definiert.
+
+  29.07.1999, Verbesserung:
+  *  Hex-Editor: rechts/links verschieben mit F19/F20
+     (PEEK45).
+
+  06.08.1999, Verbesserung:
+  *  PEEK59, generische Window zur Nachrichtenabfrage (msgbox) erstellt.
+
+  11.07.2000, Bugfix:
+  *  Aktualisieren der Felder "File", "Library" und "Member"
+     beim Drücken der F5-Taste
+     (PEEK05).
+
+  18.07.2000, Bugfix:
+  *  Löschen der Felder: Aufsetzschlüssel und rel. Satznummer
+     beim Wechseln der Datei.
+     (PEEK05).
+
+  19.07.2000, Verbesserung:
+  *  F17/F18 (Anfang/Ende) eingebaut in Hex-Editor.
+     (PEEK45).
+
+  26.07.2000, Bugfix:
+  *  Teildateiliste bei Funktion SE war unvollständig.
+     (PEEK56).
+
+  06.12.2000, Verbesserung:
+  *  ALWCHGRCD(*NOKEY) eingebaut
+     (Befehl PEEK und div. Programme; Änderung in EXIT01PF und Erweiterung SET0013)
+
+  14.12.2000, Bugfix:
+  *  Wenn eine Datei nur für Input geöffnet werden konnte,
+     dann verursachten folgenden Funktionen einen Fehler:
+       - Pin Datensatz
+       - Kopieren Datensatz in ext. Datei
+       - Umschalten der Sortierfolge
+
+  25.02.2001, Verbesserung:
+  *  Verbesserte Unterstützung der Satzformatauswahl bei logischen Dateien.
+     Es werden jetzt nur noch die Datensätze des betreffenden Satzformats angezeigt.
+     PEEK12 wurde auf die Verwendung von Msg-Variablen angepasst.
+
+  11.03.2001, Bugfix:
+  *  Satzsperre für gepinnte Datensätze entfernt.
+       - Zugriff über FILE00 auf FILE04 geändert in PEEK05.PBPinRcd
+
+  09.04.2001, Bugfix:
+  *  Case-sensitive Suche.
+       - PEEK17 korrigiert.
+
+  09.04.2001, Verbesserung:
+  *  Vorbelegung des Parameters TOMBR() im Programm PEEK26 mit dem Namen der "von Teildatei".
+
+  09.04.2001, Verbesserung:
+  *  Anzeige von Datensätzen von multi-member Dateien. (PEEK14)
+
+  09.04.2001, Verbesserung:
+  *  Sortierung nach relativer Satznummer wird abgewiesen,
+     wenn die Datei auf mehreren Teildateien basiert.
+
+  26.04.2002, Bugfix:
+  *  Environments.
+       - PEEK54/PEEK55 Speichern/Laden der Pin-Tabellen in der Umgebungsdatei korrigiert.
+
+  26.04.2002, Bugfix:
+  *  Satzaufbau
+       - PEEK05 Löschen der datei PEEKFLD wenn eine Datei geschlossen wird.
+
+  26.04.2002, Änderung:
+  *  Environments.
+       - PEEK54/PEEK55 Abspeichern der geöffneten Datei.
+       - Auswahl zwischen *ENVIRONMENT oder *LAYOUT_ONLY
+
+  27.04.2002, Bugfix:
+  *  Hex-Editor
+       - Bei Feldern > 512 Byte wurden nur die ersten 512 Byte in den Satz
+         zurück geschrieben.
+
+  29.04.2002, Änderung:
+  *  Environments.
+       - PEEK54/PEEK55 Abspeichern der Umgebungsdaten benutzerunabhängig.
+       - Wechsel der Umgebungsdateibibliothek (PEEKENV) wurde nicht korrekt erkannt.
+
+  Version 2.2.1
+  =============
+
+  23.05.2002, Bugfix:
+  *  PEEK18.
+       - Fehler bei der Behandlung von 2-Byte Binärwerten korrigiert.
+
+  20.10.2003, Änderung:
+  *  PEEK58.
+       - Datentyp 'J' (DBCS-Only) erlaubt.
+       - Datentyp 'O' (DBCS-Open) erlaubt.
+       - Datentyp 'E' (DBCS-Either) erlaubt.
+
+  Version 2.2.2
+  =============
+
+  11.02.2004, Bugfix:
+  *  PEEK15/PEEK16:
+       - Generierung von Programmen für Dateien mit "input only" Feldern
+         fehlgeschlagen. Schlüsselwort DSPATR(PR) fälschlicherweise generiert.
+       - Generierung von Programmen für Dateien mit überdefinierten Feldern
+         "SST(LOLORT 1 3)" fehlgeschlagen. Anstatt F1FNME wurde F1IFNM benutzt.
+
+  23.03.2004, Verbesserung:
+  *  PEEK18:
+       - Unterstützung für  3I0 Felder eingebaut.
+       - Unterstützung für 20I0 Felder eingebaut.
+
+  01.04.2004, Bugfix:
+  *  PEEK20:
+       - YBUFFER für *HIVAL/*LOVAL Werte nicht korrekt gelöscht.
+         Fehler trat bei der weiteren Verarbeitung von Datums-,
+         Zeit- und Zeitmarkenfeldern auf.  Siehe auch ChkValue.
+
+  01.04.2004, Verbesserung:
+  *  PEEK16/PEEK18/PEEK36:
+       - Unterstützung für Zeitformate *HMS, *EUR eingebaut.
+       - Unterstützung für Datumsformate *EUR eingebaut.
+
+  28.04.2004, Bugfix:
+  *  PEEK05:
+       - Abbruch PEEK05 beim Öffnen von Dateien mit Satzlänge > 4096
+         Zeichen behoben.
+
+  28.04.2004, Verbesserung:
+  *  PEEK05/PEEK14/PEEK51/D_VARDEF:
+       - Maximale Datensatzlänge auf 32766 Byte geändert.
+
+  Version 2.3.0
+  =============
+
+  09.09.2004, Änderung:
+  *  PEEK30/PEEK33:
+       - Prüfung der Lizenznummer deaktiviert, wegen Umstellung der
+         Lizenzierung.
+
+  *  PEEK05/PEEK06/PEEK14:
+       - Parameter YPgmCall eingebaut, wegen Unterstützung von
+         Ersatzvariablen bei Kurzbefehlen.
+
+  *  PEEK05/PEEK42:
+       - Parameter YRcdNbr eingebaut, wegen Unterstützung von
+         Ersatzvariablen bei Kurzbefehlen.
+
+  Version 2.3.1
+  =============
+
+  *  PEEK58:
+       - Fehler in der Funktion f_basedPF() korrigiert.
+         Feld f_ok durch isBasedOnPF und isError ersetzt.
+
+  *  PEEK05:
+       - Fehler beim Öffnen einer SQL Auswahl und dem damit
+         verbundenem Wechsel zur physischen Datei korrigiert.
+         Bisher musste der Name der Teildatei mit dem Namen
+         der Datei übereinstimmen. Bei mehreren Möglichkeiten
+         (logische Teildatei verweist auf mehrere physische
+         Teildateien wird ein Auswahldialog angezeigt.)
+       - Ausgeben Fehlermeldung, wenn ein Datensatz einer
+         logischen Sicht gepinnt werden soll und die logische
+         Datei auf mehreren physischen Teildateien basiert.
+       - Überlesen leerer Subfileauswahlen.
+
+  *  PEEK40:
+       - Fehler beim Setzen der UNIQUE Markierung behoben.
+
+  Version 2.3.2
+  =============
+
+  *  PEEK15:
+       - Fehler beim Generieren der Display-File korrigiert,
+         wenn der resultierende Feldtext eine ungerade Anzahl
+         Hochkommate enthält.
+
+  *  PEEK15:
+       - Fehler beim Generieren der Display-File korrigiert.
+         Generieren Textbezeichnung.
+
+  Version 2.4
+  ===========
+
+  *  PEEK08/PEEK15/PEEK16:
+       - Anzeige eines Fortschrittsbalkens beim Generieren
+         der Update-Programme.
+
+  *  PEEK52:
+       - Fehlermeldung bei falscher Eingabe einer Ja/Nein
+         Auswahl korrigiert.
+
+  *  PEEK15:
+       - Generieren Display File mit Editcode 'P', wenn
+         ein numerisches Feld ohne Dezimalstellen keinen
+         Editcode angegeben hat.
+
+  *  PEEKUSR und PEEK62
+       - Feld DATA auf 256 Zeichen vergrößert.
+
+  *  PEEK15:
+       - Fehler "Length or start position is out of range for
+         the string operation" korrigiert. (r$ftxt)
+
+  Version 2.4.1
+  =============
+
+  *  PEEK06:
+       - Unterstützung für  3I0 Felder eingebaut.
+       - Unterstützung für 20I0 Felder eingebaut.
+
+  *  PEEK18:
+       - Unterstützung für  3I0 Schlüsselfelder eingebaut.
+       - Unterstützung für 20I0 Schlüsselfelder eingebaut.
+
+  *  PEEK48:
+       - Verbesserte Positionierung des Cursors nach Auswahl
+         eines Feldes mit F4 (*PROMT).
+
+  *  PEEK05:
+       - Programmabsturz, wenn "Feld-Nummer:" (##StrPage) 0 ist.
+
+  *  PEEKxx:
+       - Länge 'ShortCmd' angepasst.
+
+  Version 2.4.2
+  =============
+
+  *  PEEK05
+       - Fehler beim Verschieben der Anzeige nach rechts bei überlangen Feldern und
+         gepinnter Spalten behoben.
+
+  Version 3.0.0
+  =============
+  *  PEEK01:
+       - Abstellen der Position des Feldes im Satzformat. (lfd. Nummer)
+
+  *  PEEK08:
+       - Abstellen generierte Quellen Quellen in QPEEKGEN anstelle QCOPYLE und QRPGLESRC.
+
+  *  PEEK05, PEEK15, PEEK16, PEEK63:
+       - Unterstützung für NULL-fähige Felder eingebaut.
+
+  *  PEEK58:
+       - Neue Funktionen f_clrErrno, f_errno, f_strerror eingebaut.
+
+  *  PEEK45:
+       - Verbesserter Hex-Editor: Größer + Eingabe in Hex und String.
+
+  *  PEEK08:
+       - Einstellung für Statusnachricht wurde bei Umwandlungsfehler im
+         RPG Modul nicht wieder hergestellt.
+
+  *  PEEK64:
+       - Neuer Text-Editor für Feldgrößen bis 1024-Byte.
+
+  *  EXIT02:
+       - Ermittlung der Einstellungsdatei anhand des Gruppenprofils
+         deaktiviert.
+
+  *  PEEK05/PEEK15/PEEK16:
+       - Beibehalten Modus für Eingabe in Gross-/Kleinbuchstaben
+
+  *  PEEK52:
+       - Neue Auswahl "Satz gesperrt lesen?".
+
+  *  PEEKPGM:
+       - F13: Ändern Satzsperre. (*TGLRCDLCK)
+
+  *  PEEK00/PEEK53/PEEK62
+       - Dateiüberschreibung auf PEEKUSR entfernt.
+
+  *  PEEK05:
+       - Umschalten Eingabe der Schlüsselfelder auf Kleinbuchstaben (*TGLKEYLUC)
+
+  *  PEEK54/PEEK55:
+       - Speichern/Laden Modus der Schlüsseleingabe (Groß-/Kleinbuchstaben)
+
+  *  PEEK05:
+       - Fehler beim Laden der Environmentdaten, Parameter ENVFILE() des PEEK Befehls,
+         korrigiert.
+
+  *  PEEK56:
+       - Fehler beim Pürfen des Vorhandenseins der Environment Datei korrigiert.
+         Jetzt prüfen mit MBR(*NONE), anstelle MBR(*FIRST).
+       - Abspeichern SET0015, auch ohne Änderung im Feld ##MBR oder Subfiledaten.
+
+  *  PEEK56:
+       - Bildschirmdatei blieb unbeabsichtigt offen bei *ENTER. Wird nun
+         korrekt geschlossen.
+
+  *  PEEK58:
+       - Zeilenvorschubzeichen '°' in f_spltTxt() eingebaut.
+
+  *  PEEK59:
+       - Füllen der Funktionstastenbeueichnung korrigiert.
+
+  *  PEEKPGM:
+       - Window für Abfrage "Trotzdem ändern", wenn der Satz zwischenzeitlich
+         von einem anderen Benutzer geändert worden ist.
+
+  *  PEEK00:
+       - Löschen der Arbeitsdateien nach Meldung "Peek/400 kann nicht rekursiv
+         aufgerufen werden." verhindert.
+
+  *  PEEK05:
+       - Problem beim Verschieben der Anzeige nach links behoben, wenn sich nur
+         gepinnte Felder in der Anzeige befinden.
+
+  *  PEEK05, PEEK48, PEEK51
+       - Problem bei SQL-Abfragen auf Dateien mit NULL-fähigen Feldern behoben.
+
+  Version 3.1.0
+  =============
+  *  PEEKPGM:
+       - Funktionstaste F13 (*TGLRCDLCK) bei der Neuanlage und beim Kopieren deaktiviert.
+       - Problem beim Aktualisieren eines Datensatzes (optimistic locking) und konkurierender
+         Änderung durch einen anderen Job korrigiert.
+       - Abfrage "Trotzem Sperren" beim Anfordern einer Satzsperre und vorhandener
+         konkurierender Änderung durch einen anderen Job eingebaut.
+
+  *  PEEK05:
+       - Auswahl 6=Drucken eingebaut.
+
+  *  PEEK14:
+       - Funktionstaste F21=Drucken eingebaut.
+
+  *  PEEK65:
+       - Programm zum Drucken eines Datensatzes erstellt.
+
+  *  PEEK42:
+       - Aufbereiten Kurzauswahl: Programm erweitert, so dass das Format der
+         Parameter angegeben werden kann. Z.B.:
+            Gegeben sei ein Feld 'FA'. Für den Aufruf eines Programms muss dieses Feld
+            als 2-stelliger, gepackter Wert übergeben werden. Der entsprechende Kurzbefehl
+            sieht hierfür wie folgt aus:
+
+            CALL PGM(pgmName) PARM(%FA(P,2,0))
+                                       ! ! +-----  Nachkommastellen
+                                       ! +-------  Feldlänge
+                                       +---------  Datentyp
+
+            Die zur Zeit unterstützten RPG-Datentypen sind:
+            'A'      Alpha
+            'B'      Binary
+            'I'      Integer
+            'U'      Unsigned Integer
+            'P'      Packed
+            'S'      Zoned
+
+            Die Angabe der Nachkommastellen kann beim Datentyp 'A' entfallen, oder muss
+            mit 0 angegeben werden.
+
+  Version 3.1.1
+  =============
+  *  PEEK68:
+       - Auswahlprogramm für Subfileauswahlen.
+
+  Version 3.1.2
+  =============
+  *  PEEK05:
+       - Fehler bei SQL Zugriff korrigiert.
+
+  *  PEEK51:
+       - Namen der SQL Funktionen geändert.
+
+  *  PEEK63:
+       - Funktion CIO_setErrorMsg() erstellt.
+
+  *  PEEKUPDATE, PEEKUPD1, PEEKUPD2:
+       - Erweitert, so dass nun auch die Update-Programme in die neue Peek/400
+         Bibliothek dupliziert werden.
+
+  *  PEEK05:
+       - Fehlermeldungen bei SQL-open Fehlern verbessert.
+
+  *  PEEK63:
+       - Funktion CIO_getErrorMsg() hinzugefügt.
+
+  Version 3.1.3
+  =============
+  *  PEEK51:
+       - Funktionen SQL_nextRow() und SQL_previousRow() korrigiert. Beim rechts/links
+         verschieben der Anzeige verschob sich die Anzeige um jeweils eine Zeile nach unten.
+         Der oberste angezeigte Satz ging verloren.
+
+  *  PEEK63:
+       - Funktionen CIO_setEOF_read() und CIO_setEOF_readp() für Korrektur PEEK51 eingebaut.
+
+  Version 3.1.4
+  =============
+  *  PEEK34:
+       - Laufzeitfehler: MCH1210 (Receiver value too small to hold result.) für Feld
+         $$Digt korrigiert.
+
+  Version 3.1.5
+  =============
+  *  PEEK63:
+       - SETGT und SETLL Funktionen überarbeitet. Fehler korrigiert, der dazu führte, dass
+         ans Ende der Datei positioniert wurde, wenn am Anfang der Datei F5 gedrückt und dann
+         zwischen dem SETLL und dem READ der erste Satz gelöscht wurde.
+
+  Version 3.1.6
+  =============
+  *  PEEK42:
+       - Fehler bei der Aufbereitung der Kurzbefehle korrigiert. Der Unterstrich war nicht
+         in der Liste der gültigen Zeichen für Feldnamen.
+
+  *  PEEK34:
+       - Autom. ausführen von C_Enter bei F3 (SAVE).
+
+  *  PEEK16 und PGM:
+       - Vorbelegung für JIS Datums- und Zeitfeld eingebaut.
+
+  Version 3.2.0
+  =============
+  *  PEEK06 / PEEK15 / PEEK58 / ... :
+       - Unterstützung für Datentyp 'FLOAT' eingebaut.
+
+  *  PEEK01:
+       - Standard Edit Code zur Aufbereitung nummerischer Daten
+         auf 'J' geändert. Kommt jetzt aus den Benutzervoreinstellungen
+         SET0001.SET_editCode.
+
+  *  PEEK20:
+       - Erzeugen internen Schlüssel korrigiert für Fälle in denen der
+         Schlüssel länger als die zur Verfügung stehende Eingabezeile ist.
+
+  Version 3.2.1/3.2.2
+  ===================
+
+       - Standardmäßg wird jetzt ein Editcode (L) ohne Nullenunterdrückung
+         bei 0-Werten verwendet:
+            Positive number, two decimal positions  :   12345.67
+            Positive number, no decimal positions   :   1234567
+            Negative number, three decimal positions:   .125-
+            Negative number, no decimal positions   :   125-
+            Zero balance, two decimal positions     :   .00
+            Zero balance, no decimal positions      :   0
+         Einstellung in PEEKUSR:
+            *DSPATTR, Stelle 21 (SET_DspSgn):
+               0 = Keine Umsetzung des Edit Codes
+               1 = Altes Verhalten, 0=blanks
+               2 = Neues Verhalten, Edit Code 'L' (SET_editCode)
+            *DSPATTR, Stelle 33 (SET_editCode):
+               Edit Code, für SET_DspSgn=2
+
+  Version 3.2.3
+  =============
+
+  *  PEEK05:
+       - Reihenfolge beim Öffnen der Dateien hFile00 ... hFile03 geändert,
+         um Probleme bei dateien mit SHARE(*YES) zu verhindern. Dazu auch
+         die zu öffnende Datei mit SECURE(*YES) überschrieben.
+
+  Version 3.2.4
+  =============
+
+  *  Internes Release.
+
+
+  Version 3.2.5
+  =============
+
+  *  PEEK (Befehl)
+       - Generische Dateiauswahl.
+
+  *  PEEK34:
+       - Fehler in Funktion PEEK63.CIO_setllWithRRN() korrigiert.
+
+  *  PEEK58:
+       - Fehler in Funktion PEEK58.f_basedMbr() korrigiert.
+         Join Dateien wurden nicht richtig erkannt.
+       - Neu f_wordWrap und davon abhängige Prozeduren.
+
+  *  PEEK05:
+       - Änderung der Speicherung der Benutzerdaten, damit nach
+         einer Änderung der Einstellungen (*DSPATR) über Peek
+         diese mit dem Verlassen des Programms nicht verloren
+         gehen.
+       - F4 für Dateiauswahl.
+
+  *  PEEK15:
+       - EXIT03 eingebaut, um die Edit Codes der Felder der Peek
+         Update-Programme zu berechnen.
+
+  *  PEEK39:
+       - Sortieren der logischen Dateien nach Name.
+
+  *  PEEK40:
+       - Anzeige aller Schlüsselfelder.
+
+  *  PEEK22:
+       - Fehler korrigiert, dass nicht alle Tastenbelegungen
+         initialisiert worden sind.
+
+
+  Version 3.2.6
+  =============
+
+  *  PEEK05
+       - Generische Dateiauswahl durch 'Enter' und '*' am Ende
+         des Dateinamens.
+
+  *  PEEK15
+       - Überschreiben alternativen Feldnamen, wenn dieser länger
+         als 30 Zeichen ist.
+
+
+  Version 3.3
+  ===========
+
+  *  PEEKSPA
+       - Spanische Übersetzung von Antón Vigo.
+
+  *  PEEK05:
+       - Erweiterung der Befehle PEEK und TREE um die Parameter
+         WHERE(value | *NONE) und
+         ORDERBY(value | *NONE | *KEY) und
+
+  *  PEEK05:
+       - Anzeige der Anzahl der ausgewählten Sätze bei Zugriffsart *SQL.
+
+
+  Version 3.3.1
+  =============
+
+  *  PEEK63
+       - Obskures Problem bei Rlslock() behoben.
+
+
+  Version 3.3.2
+  =============
+
+  *  PEEK, TREE
+       - Parameter SETTINGS hinzugefügt.
+       - EXIT02 erweitert.
+       - Ermitteln der zu verwendenden Benutzereinstellungen überarbeitet.
+
+
+  Version 3.3.3
+  =============
+
+  *  PEEK20
+       - Aufbereitung des internen Aufsetzschlüssels für VARYING Felder
+         korrigiert.
+
+  *  PEEK05
+       - Fehler beim Löschen von Datensätzen aus einer logischen Datei
+         korrigiert, wenn das Satzformat der logischen Datei anders
+         benannt ist, als das Satzformat der physischen Datei.
+
+  *  PEEK05, PEEK54, PEEK56
+       - Die am Befehlsprompt eingegebene Arbeitsumgebung wird ab sofort
+         nicht mehr nur für das Laden der ersten Umgebung benutzt, sondern
+         für die gesamte Programmlaufzeit beibehalten.
+
+  *  PEEK05, PEEK, PEEK00
+       - Neuer Parameter ENVSAVE zur Steuerung, ob mit dem Verlassen des
+         Programms die Arbeitsumgebung automatisch gespeichert werden soll.
+
+
+  Version 3.4.0/3.4.1
+  ===================
+
+  *  Berechtigungen der Distributionsbibliothek und der enthaltenen Objekte
+     reduziert.
+
+  *  PEEK01, PEEK05, PEEK06, PEEK15, PEEK16, PEEK18, PEEK45, PEEK58, PEEK64, PEEK71
+       - Anzeige von GRAPHIC Felder, die eine CCSID haben und zur
+         Speicherung von DBCS Daten dienen.
+
+  *  PEEKINIT
+       - PEEKINIT geändert, so dass jetzt auch die Sprache in der Datei PEEKUSR
+         angepasst wird.
+
+  *  PEEKITA
+       - Spanische Übersetzung von Marco Alberici.
+
+
+  Version 3.4.2
+  =============
+
+  *  PEEK14
+       - Hex-Anzeige ausgehend von PEEK14 korrigiert.
+
+  *  PEEK05
+       - Sprachenabhängige Ausgabe der ENDE-Nachricht (USR8100) korrigiert.
+
+  *  PEEK05/PEEK14/PEEK15
+       - Neue Spaltenüberschrift: *FIELDTYPE
+
+
+  Version 3.4.3
+  =============
+
+  *  PEEK58
+       - Fehler bei der Aufbereitung der Feldlängen als Spalten-
+         überschrift korrigiert.
+
+
+  Version 3.5
+  ===========
+
+  *  PEEK04
+       - Fehlenden Aufruf für Ereignis *DELETE eingebaut.
+
+  *  PEEK15
+       - Überschreiben der Alias-Namen angepasst, so dass diese jetzt
+         grundsätzlich überschrieben werden, wenn das Schlüsselwort
+         REFFLD generiert wird. Ein Überschreiben des Alias-Namen nur
+         dann, wenn der Name länger als 30 Zeichen ist, reicht nicht aus,
+         da auch Namen in gemischter Groß-/Kleinschreibung unzulässig
+         sind.
+
+  *  PEEK21:
+       - EXIT05 eingebaut, um Befehlstasten und Subfileauswahlen filtern,
+         bzw. verändern zu können.
+
+  *  PEEK06:
+       - PEEK06 geändert, so dass alte Anzeigewerte nicht verschleppt werden.
+
+  *  Diverse Programme:
+       - Befehl PEEK um Parameter 'Nur Layout laden' ENVLAYOUT(*YES|*NO)
+         erweitert.
+       - Prüfung der Satzformat-ID beim Laden eines Layouts eingebaut.
+
+  *  Nachrichtenbeschreibungen:
+                   PEEKSPA     PEEKITA     PEEKFRA
+                  ---------   ---------   ---------
+       - PMT0019   pending     pending    pending
+       - TXT0145   pending       OK         OK
+       - USR8233   pending     pending    pending
+       - USR8234   pending     pending    pending
+
+  *  PEEK05, PEEK06, PEEK14, PEEK42, PEEK65:
+       - PEEK06 geändert, so bei der Aufbereitung der Überschrift keine
+         Umsetzung der CCSID erfolgt.
+
+  *  PEEK15
+       - Fehler bei Hex-Edit von nicht String (A, G) Feldern.
+         (Feldlänge 0 an PEEK45 übergeben.)
+
+  *  PEEK58, PEEK71
+       - RNX1000 in Procedur cvtToJobCcsid() von PEEK18.
+         (siehe auch: f_mustCvtCcsid())
+
+  *  PEEK05
+       - Einzeigen "Anzahl Datensätze" limitiert und max. 5000000
+         bei SQL Auswahl. Einstellbar über Schlüssel *SQLLMTCNT.
+         (siehe: SET0016)
+
+  *  PEEK05
+       - Öffnen der anzuzeigenden Datei mit CCSID 65535, um die
+         automatische Zeichenumsetzung abzuschalten und selbst
+         durchzuführen.
+
+  *  PEEK06
+       - Berechnung der anzuzeigende Länge von Feldern vom Typ 'G'
+         (Graphic) korrigiert.
+
+  *  PEEK05
+       - Anzeige der Satzformat-ID korrigiert.
+
+  *  PEEK14
+       - Lesen der Daten korrigiert, so dass jetzt ohne Zeichensatz-
+         konvertierung gelesen wird.
+
+  *  PEEKFRA
+       - Französische Übersetzung von Alain Lotzer.
+
+
+  Version 3.5.1
+  =============
+
+  *  PEEK58, PEEK05
+       - Falsche Aufbereitung der Satzfelder in PEEK14 bei logischen
+         Dateien mit abweichendem Satzaufbau zur physischen Datei.
+
+
+  Version 3.5.2
+  =============
+
+  *  PEEK63
+       - Endlosschleife aufgrund eines falschen Rückgabewerts bei
+         einem IO Fehler in der Funktion CIO_readp() korrigiert.
+
+  *  TREE
+       - "Pointer not set" Fehler korrigiert.
+
+
+  Version 3.5.3
+  =============
+
+  *  PEEK05
+       - Problem beim Wechseln des Satzformats (Pmt_Fmt) behoben.
+       - Probleme beim Aktualisieren Felder > 512 Zeichen korrigiert.
+
+  *  PEEK20
+       - Problem beim Aufbereiten des internen Aufsetzschlüssels bei
+         DBCS Feldern behoben.
+
+  *  PEEK64
+       - Programmfunktion *OK aufgrund einer falsch ausgelieferten PEEKUSR
+         gleichgesetzt zu *ENTER. Ebenso *NO für *EXIT.
+
+  *  PEEKITA (*MSGF)
+       - Von Marco Riva überarbeitete Italienische Übersetzung.
+
+  Version 3.5.4
+  =============
+
+  *  PEEK53
+       - Problem beim Kopieren der Defaultwerte aus PEEKUSR behoben.
+         Datei PEEKUSR wurde nicht korrekt geöffnet.
+
+  Version 3.5.5
+  =============
+
+  *  PEEK05
+       - Probleme beim Anzeigen von Datensätzen aus logischen Dateien
+         mit mehreren Satzformaten behoben.
+       - Senden einer Nachricht für jedes Feld, welches nicht angezeigt
+         oder geändert werden kann. (USR8196)
+       - Sonderwert *NONE für Teildatei zur Anzeige externer Datenstrukturen.
+
+  *  PEEK06
+       - Anzeigen Float Sonderwerte 'NaN' und 'Inf' eingebaut.
+
+  *  PEEK15
+       - Korrektur RNX0100 (Length or start position is out of range)
+         aufgrund einer ungeraden Anzahl Hochkommata in der Feldbeschreibung.
+
+  *  PEEK18
+       - Fehlernachricht RNX0100 (Length or start position is out of
+         range ...) korrigiert.
+
+  *  PEEK58
+       - Verbieten von Zoned und Packed Feldern mit mehr als 30 Stellen.
+
+  *  PEEK63:
+       - Problem bei der Fehlerabfrage in den Funktionen CIO_read()
+         und CIO_readp() behoben. (Trat auf bei logischen Dateien
+         mit mehreren Satzformaten.)
+
+  Version 3.5.6
+  =============
+
+  *  PEEK05
+       - Fehler RNQ0103 (The target for a numeric operation is too small to
+         hold the result) in PEEK05 beim Füllen von $$RECORDS korrigiert.
+  *  ALL:
+         Alle Felder von Typ 'binary' auf 'integer' umgestellt.
+
+  Version 3.5.7
+  =============
+
+  *  PEEK15
+       - Problem mit unzulässigen Sonderzeichen beim Überschreiben des Alias
+         Namens (Schlüsselwort: ALIAS) behoben.
+
+  Version 3.5.8
+  =============
+
+  *  Update Program
+       - Problem korrigiert, dass es bei Feldern größer 1024 Zeichen bei der
+         Verwendung des Text-Editors zu Datenverlusten kommt.
+         Der Text-Editor wird nun im Modus "Anzeigen" gestartet und es wird
+         die Fehlermeldung " Felder mit mehr als 1024-Zeichen können nicht
+         geändert werden." ausgegeben.
+  *  PEEK45/PEEK45FM
+       - Im Hex-Editor wurde das Feld für die Startposition von 4 auf 5
+         Stellen erweitert.
+  *  PEEK05
+       - Das Feld ##StrPage wird nun nicht mehr auf 1 gesetzt, wenn ##WndNbr
+         und ##StrPage geändert worden sind.
+         Damit lässt sich jetzt direkt das Feld wechseln und eine bestimmte
+         Seite des Feldes anzeigen.
+  *  PEEK14
+       - Beim Aufruf des Text-Editors werden jetzt auch Felder vom Datentyp
+         "Graphic" unterstützt.
+  *  PEEK15
+       - Problem korrigiert, dass es bei Feldern größer 1024 Zeichen bei der
+         Verwendung des Text-Editors zu Datenverlusten kommt.
+         Ausgebaute Felder im Generator: isCharFld, trimLen
+  *  PEEK16
+       - Problem korrigiert, dass es bei Feldern größer 1024 Zeichen bei der
+         Verwendung des Text-Editors zu Datenverlusten kommt.
+         Das kurze Buildschirmfeld wird nicht mehr in das Feld der Datei
+         übertragen, wenn das Dateifeld zu groß ist.
+  *  PEEK64
+       - Problem korrigiert, dass es bei Feldern größer 1024 Zeichen bei der
+         Verwendung des Text-Editors zu Datenverlusten kommt.
+         Mehrere Probleme korrigiert.
+  *  PEEK14
+       - Problem korrigiert, das beim Blättern der Subfile über das Ende der
+         Subfile hinaus zurück auf den ersten Satz gesprungen wird.
+  *  PEEK05
+       - Problem korrigiert, dass die Suche nach nummerischen Feldwerten nicht
+         mehr funktioniert hat.

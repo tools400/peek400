@@ -1,0 +1,6 @@
+                                                                      /* RADD */
+      STRPGMEXP PGMLVL(*CURRENT)                                      /* RADD */
+        EXPORT SYMBOL(P_INZPROGRESSMETER)                             /* RADD */
+        EXPORT SYMBOL(P_SHOWPROGRESSMETER)                            /* RADD */
+      ENDPGMEXP                                                       /* RADD */
+                                                                      /* RADD */

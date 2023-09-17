@@ -1,0 +1,810 @@
+             PGM        PARM(&DEVLIB)
+
+             DCL        VAR(&DEVLIB)  TYPE(*CHAR) LEN(10)
+             DCL        VAR(&SRCFILE) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&SRCMBR)  TYPE(*CHAR) LEN(10)
+
+             DCL        VAR(&TGTRLS)  TYPE(*CHAR) LEN(10) VALUE('V7R1M0')
+
+             /* GOTO       CMDLBL(CRTOBJ) */
+
+             /* ---------------------------------------------------- */
+             /*  Create utility CRTMSGDS                             */
+             /* ---------------------------------------------------- */
+
+             CRTMSGF    MSGF(&DEVLIB/CRTMSGDS) +
+                          TEXT('Create Message Data Structure Utility')
+
+             CRTCLPGM   PGM(QTEMP/#MSG_GER) +
+                          SRCFILE(&DEVLIB/QCRTMSGDS) SRCMBR(*PGM)
+
+             CALL       PGM(QTEMP/#MSG_GER) PARM(&DEVLIB)
+
+             DLTPGM     PGM(QTEMP/#MSG_GER)
+
+             CRTCMD     CMD(&DEVLIB/CRTMSGDS) PGM(&DEVLIB/CRTMSGDSC) +
+                          SRCFILE(&DEVLIB/QCRTMSGDS) SRCMBR(*CMD) +
+                          HLPPNLGRP(&DEVLIB/CRTMSGDSP) +
+                          HLPID(CRTMSGDS)
+
+             CRTPNLGRP  PNLGRP(&DEVLIB/CRTMSGDSP) +
+                          SRCFILE(&DEVLIB/QCRTMSGDS) SRCMBR(*PNLGRP)
+
+             CRTCLMOD   MODULE(&DEVLIB/CRTMSGDSC) +
+                          SRCFILE(&DEVLIB/QCRTMSGDS) SRCMBR(*MODULE) +
+                          DBGVIEW(*LIST) TGTRLS(&TGTRLS)
+
+             CRTRPGMOD  MODULE(&DEVLIB/CRTMSGDSR1) +
+                          SRCFILE(&DEVLIB/QCRTMSGDS) SRCMBR(*MODULE) +
+                          TRUNCNBR(*NO) DBGVIEW(*LIST) TGTRLS(&TGTRLS)
+
+             CRTRPGMOD  MODULE(&DEVLIB/CRTMSGDSR2) +
+                          SRCFILE(&DEVLIB/QCRTMSGDS) SRCMBR(*MODULE) +
+                          TRUNCNBR(*NO) DBGVIEW(*LIST) TGTRLS(&TGTRLS)
+
+             CRTPGM     PGM(&DEVLIB/CRTMSGDSC) +
+                          MODULE(&DEVLIB/CRTMSGDSC +
+                                 &DEVLIB/CRTMSGDSR1 &DEVLIB/CRTMSGDSR2) +
+                          ACTGRP(*NEW) TGTRLS(&TGTRLS)
+
+             DLTMOD     MODULE(&DEVLIB/CRTMSGDS*)
+
+             /* ---------------------------------------------------- */
+             /*  Create compile data area                            */
+             /* ---------------------------------------------------- */
+
+             CRTDTAARA  DTAARA(&DEVLIB/PEEKPGM) TYPE(*CHAR) LEN(400) +
+                          TEXT('Peek/400 - Generierungsangaben')
+
+             CHGDTAARA  DTAARA(&DEVLIB/PEEKPGM *ALL) VALUE( +
+                          '*ALL      VnRnMn                                  '   *CAT +
+                          '                                                  '   *CAT +
+                          'DEBUG(*YES) DECEDIT(''0,'') DATEDIT(*DMY.)          ' *CAT +
+                          'DATFMT(*ISO) TIMFMT(*ISO)                         '   *CAT +
+                          'EXTBININT(*YES) OPTION(*SRCSTMT : *NODEBUGIO)     '   *CAT +
+                          'ALWNULL(*USRCTL)                                  '   *CAT +
+                          'COPYRIGHT(''(c) 1997-2021 by Thomas Raddatz'')      ')
+
+             CHGDTAARA  DTAARA(&DEVLIB/PEEKPGM (11 10)) VALUE(&TGTRLS)
+
+             /* ---------------------------------------------------- */
+             /*  Create file and add initial data                    */
+             /* ---------------------------------------------------- */
+
+             CRTPF      FILE(&DEVLIB/EXIT01PF) +
+                          SRCFILE(&DEVLIB/QDDSSRC) SRCMBR(*FILE) +
+                          TEXT('Peek/400 - Sicherheitsattribute für EXIT01')
+
+             RUNSQLSTM  SRCFILE(&DEVLIB/QDDSSRC) SRCMBR(EXIT04LOG) +
+                          COMMIT(*NONE) NAMING(*SQL) DATFMT(*ISO) TIMFMT(*ISO) +
+                          DFTRDBCOL(&DEVLIB)
+
+             CRTPF      FILE(&DEVLIB/PEEKENV) +
+                          SRCFILE(&DEVLIB/QDDSSRC) SRCMBR(*FILE) +
+                          TEXT('Peek/400 - Arbeitsumgebungen')
+
+             CRTPF      FILE(&DEVLIB/PEEKFLD) +
+                          SRCFILE(&DEVLIB/QDDSSRC) SRCMBR(*FILE) +
+                          TEXT('Peek/400 - Satzaufbau')
+
+             CRTPF      FILE(&DEVLIB/PEEKFMT) +
+                          SRCFILE(&DEVLIB/QDDSSRC) SRCMBR(*FILE) +
+                          TEXT('Peek/400 - Satzformate')
+
+             CRTPF      FILE(&DEVLIB/PEEKWRK) +
+                          SRCFILE(&DEVLIB/QDDSSRC) SRCMBR(*FILE) +
+                          TEXT('Peek/400 - Arbeitsdatei')
+
+             CRTPF      FILE(&DEVLIB/PEEKUSR) +
+                          SRCFILE(&DEVLIB/QDDSSRC) SRCMBR(*FILE) +
+                          TEXT('Peek/400 - Template für Benutzervoreinstellungen')
+
+             CRTLF      FILE(&DEVLIB/PEEKFLDL0) +
+                          SRCFILE(&DEVLIB/QDDSSRC) SRCMBR(*FILE) +
+                          TEXT('Peek/400 - Satzaufbau')
+
+             CRTLF      FILE(&DEVLIB/PEEKFLDL1) +
+                          SRCFILE(&DEVLIB/QDDSSRC) SRCMBR(*FILE) +
+                          TEXT('Peek/400 - Satzaufbau')
+
+             CRTLF      FILE(&DEVLIB/PEEKFLDL2) +
+                          SRCFILE(&DEVLIB/QDDSSRC) SRCMBR(*FILE) +
+                          TEXT('Peek/400 - Satzaufbau')
+
+             CLRPFM     FILE(&DEVLIB/EXIT01PF)
+             CLRPFM     FILE(&DEVLIB/EXIT04LOG)
+
+             CLRPFM     FILE(&DEVLIB/PEEKENV)
+             CLRPFM     FILE(&DEVLIB/PEEKFLD)
+             CLRPFM     FILE(&DEVLIB/PEEKFMT)
+             CLRPFM     FILE(&DEVLIB/PEEKWRK)
+
+             RUNSQLSTM  SRCFILE(&DEVLIB/QDDSSRC) SRCMBR(PEEKUSRDTA) +
+                          COMMIT(*NONE) NAMING(*SQL) DATFMT(*ISO) TIMFMT(*ISO) +
+                          DFTRDBCOL(&DEVLIB)
+
+             /* ---------------------------------------------------- */
+             /*  Create PEEK compile program                         */
+             /* ---------------------------------------------------- */
+
+             CRTBNDCL   PGM(&DEVLIB/PEEK99) +
+                          SRCFILE(&DEVLIB/QRPGLESRC) SRCMBR(*PGM) DFTACTGRP(*YES) +
+                          TGTRLS(&TGTRLS)
+             CRTBNDCL   PGM(&DEVLIB/PEEK96B) +
+                          SRCFILE(&DEVLIB/QRPGLESRC) SRCMBR(*PGM) DFTACTGRP(*YES) +
+                          TGTRLS(&TGTRLS)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK99')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK96B')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             /* ---------------------------------------------------- */
+             /*  Create PEEK commands required for next step         */
+             /* ---------------------------------------------------- */
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QCMDSRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEKINIT')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             /* ---------------------------------------------------- */
+             /*  Create other PEEK helper programs                   */
+             /* ---------------------------------------------------- */
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK94')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK95')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK96')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK96A')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK96B')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK97')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK99')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             /* ---------------------------------------------------- */
+             /*  Create message file                                 */
+             /* ---------------------------------------------------- */
+
+             CRTMSGF    MSGF(&DEVLIB/PEEKENG) +
+                          TEXT('Peek/400 - Englische Übersetzung') CCSID(*HEX)
+             CRTCLPGM   PGM(&DEVLIB/PEEKENG) +
+                          SRCFILE(&DEVLIB/QMSG_ENG) SRCMBR(*PGM) TGTRLS(&TGTRLS)
+             CALL       PGM(&DEVLIB/PEEKENG) PARM(&DEVLIB)
+
+             CRTMSGF    MSGF(&DEVLIB/PEEKFRA) +
+                          TEXT('Peek/400 - Französische Übersetzung') CCSID(*HEX)
+             CRTCLPGM   PGM(&DEVLIB/PEEKFRA) +
+                          SRCFILE(&DEVLIB/QMSG_FRA) SRCMBR(*PGM) TGTRLS(&TGTRLS)
+             CALL       PGM(&DEVLIB/PEEKFRA) PARM(&DEVLIB)
+
+             CRTMSGF    MSGF(&DEVLIB/PEEKGER) +
+                          TEXT('Peek/400 - Deutsche Übersetzung') CCSID(*HEX)
+             CRTCLPGM   PGM(&DEVLIB/PEEKGER) +
+                          SRCFILE(&DEVLIB/QMSG_GER) SRCMBR(*PGM) TGTRLS(&TGTRLS)
+             CALL       PGM(&DEVLIB/PEEKGER) PARM(&DEVLIB)
+
+             CRTMSGF    MSGF(&DEVLIB/PEEKITA) +
+                          TEXT('Peek/400 - Italienische Übersetzung') CCSID(*HEX)
+             CRTCLPGM   PGM(&DEVLIB/PEEKITA) +
+                          SRCFILE(&DEVLIB/QMSG_ITA) SRCMBR(*PGM) TGTRLS(&TGTRLS)
+             CALL       PGM(&DEVLIB/PEEKITA) PARM(&DEVLIB)
+
+             CRTMSGF    MSGF(&DEVLIB/PEEKSPA) +
+                          TEXT('Peek/400 - Spanische Übersetzung') CCSID(*HEX)
+             CRTCLPGM   PGM(&DEVLIB/PEEKSPA) +
+                          SRCFILE(&DEVLIB/QMSG_SPA) SRCMBR(*PGM) TGTRLS(&TGTRLS)
+             CALL       PGM(&DEVLIB/PEEKSPA) PARM(&DEVLIB)
+
+             /* ---------------------------------------------------- */
+             /*  Create command: PEEK                                */
+             /* ---------------------------------------------------- */
+CRTOBJ:
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QCMDSRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QCMDSRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEKENG')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QCMDSRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEKFRA')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QCMDSRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEKGER')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QCMDSRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEKITA')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QCMDSRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEKSPA')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             /* ---------------------------------------------------- */
+             /*  Create command: TREE                                */
+             /* ---------------------------------------------------- */
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QCMDSRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('TREE')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QCMDSRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('TREEENG')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QCMDSRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('TREEFRA')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QCMDSRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('TREEGER')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QCMDSRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('TREEITA')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QCMDSRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('TREESPA')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             /* ---------------------------------------------------- */
+             /*  Create command: PEEKCLONE                           */
+             /* ---------------------------------------------------- */
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QCMDSRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEKCLONE')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEKCLONE2')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEKCLONE1')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEKCLONE')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             /* ---------------------------------------------------- */
+             /*  Create command: PEEKINIT                            */
+             /* ---------------------------------------------------- */
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QCMDSRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEKINIT')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEKINIT3')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEKINIT2')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEKINIT1')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEKINIT')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             /* ---------------------------------------------------- */
+             /*  Create service programs                             */
+             /* ---------------------------------------------------- */
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK61') /* Progress Meter */
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK58') /* Allgemeine Routinen */
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK53') /* Zugriff auf Benutzerdaten */
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK63C') /* Dateizugriffsroutinen  C-Helper */
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK63') /* Dateizugriffsroutinen */
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK51') /* SQL-Komponente */
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK71') /* Character Translation Services */
+             CALLSUBR   SUBR(CMPOBJ)
+
+             /* ---------------------------------------------------- */
+             /*  Compile PEEK application display & printer files    */
+             /* ---------------------------------------------------- */
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QDDSSRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK05FM')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QDDSSRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK12FM')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QDDSSRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK14FM')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QDDSSRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK17FM')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QDDSSRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK24FM')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QDDSSRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK25FM')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QDDSSRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK26FM')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QDDSSRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK30FM')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QDDSSRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK34FM')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QDDSSRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK37FM')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QDDSSRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK40FM')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QDDSSRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK45FM')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QDDSSRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK47FM')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QDDSSRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK48FM')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QDDSSRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK49FM')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QDDSSRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK50FM')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QDDSSRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK52FM')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QDDSSRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK56FM')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QDDSSRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK57FM')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QDDSSRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK59FM')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QDDSSRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK64FM')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QDDSSRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK68FM')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QDDSSRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK69FM')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QDDSSRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK65P')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             /* ---------------------------------------------------- */
+             /*  Compile PEEK application program                    */
+             /* ---------------------------------------------------- */
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('EXIT01')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('EXIT02')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('EXIT03')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('EXIT04')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('EXIT05')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEKUPD2')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEKUPD1')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEKUPDATE')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK00')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK01')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK02')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK03')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK04')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK05')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK06')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK07')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK08')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK09')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK10')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK11')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK12')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK13')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK14')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK15')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK16')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK17')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK18')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK19')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK20')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK21')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK22')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK23')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK24')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK25')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK26')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK27')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK28')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK29')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK30')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK31')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK32')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK33')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK34')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK35')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK36')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK37')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK38')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK39')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK40')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK41')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK42')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK44')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK45')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK46')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK47')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK48')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK49')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK50')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK51')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK52')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK53')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK54')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK55')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK56')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK57')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK58')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK59')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK60')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK61')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK62')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK63C')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK63')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK64')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK65')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK66')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK67')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK68')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK69')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK70')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK71')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK80')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             /* ---------------------------------------------------- */
+             /*  Recompile #INITDEV because of target releases       */
+             /* ---------------------------------------------------- */
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('#INITDEV')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             /* ==================================================== */
+             /*  Subroutine: Compile PEEK object                     */
+             /* ==================================================== */
+             SUBR       SUBR(CMPOBJ)
+
+               CALL       PGM(&DEVLIB/PEEK99) PARM( +
+                            &SRCFILE  /* source file          */  +
+                            &DEVLIB   /* source library       */  +
+                            &SRCMBR   /* source member        */  +
+                            &DEVLIB   /* object library       */  +
+                            '*NO'     /* submit to batch      */  +
+                            'PEEK'    /* binding directory    */  +
+                            &DEVLIB   /* development library  */  +
+                            '*NO'     /* create dist. library */  )
+
+             ENDSUBR
+
+END:
+             ENDPGM

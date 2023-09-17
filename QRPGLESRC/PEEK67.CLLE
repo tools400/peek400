@@ -1,0 +1,140 @@
+     /* ============================================================ */
+     /*                                                              */
+     /*  (c) Thomas Raddatz                                          */
+     /*                                                              */
+     /*  Bereich  : PEEK, Version 3.1.0                              */
+     /*  Programm : PEEK67                                           */
+     /*  Typ      : CLLE                                             */
+     /*                                                              */
+     /*  erstellt : 04.08.2008                                       */
+     /*                                                              */
+     /* ============================================================ */
+     /*                                                              */
+     /*  Dokumentation:                                              */
+     /*                                                              */
+     /*  Prüfen Objekte in QTEMP                                     */
+     /*                                                              */
+     /* ============================================================ */
+
+          PGM        PARM(&PRODLIB &TEMPLIB)
+
+          DCL        VAR(&PRODLIB   ) TYPE(*CHAR)  LEN( 10)
+          DCL        VAR(&TEMPLIB   ) TYPE(*CHAR)  LEN( 10)
+
+          DCL        VAR(&TEXT1     ) TYPE(*CHAR)  LEN( 50)
+          DCL        VAR(&TEXT2     ) TYPE(*CHAR)  LEN( 50)
+
+/* Fehlerbehandlung     */
+             DCL        VAR(&ERROR)      TYPE(*LGL) +
+                          VALUE('0')
+             DCL        VAR(&ERRMSGKEY)  TYPE(*CHAR) LEN(4)
+
+             DCL        VAR(&ERRMSGTYP)  TYPE(*CHAR) LEN(10) +
+                          VALUE('*DIAG')
+             DCL        VAR(&ERRNBRTYP)  TYPE(*CHAR) LEN(4) +
+                          VALUE(X'00000001')
+             DCL        VAR(&ERRPGMMSGQ) TYPE(*CHAR) LEN(10) +
+                          VALUE('*')
+             DCL        VAR(&ERRSTKCTR)  TYPE(*CHAR) LEN(4) +
+                          VALUE(X'00000001')
+             DCL        VAR(&ERRCODE  )  TYPE(*CHAR) LEN(4) +
+                          VALUE(X'00000000')
+
+/* Sende alle Fehler zur Error Handling Routine */
+             MONMSG     MSGID(CPF0000) EXEC(GOTO CMDLBL(ERROR))
+
+             CHGVAR     VAR(&ERROR    ) VALUE('0')
+
+ /* -------------------------------------------------------------- */
+ /*  Los geht's                                                    */
+ /* -------------------------------------------------------------- */
+
+ PEEKFLD:
+             CHKOBJ     OBJ(&TEMPLIB/PEEKFLD) OBJTYPE(*FILE) MBR(*NONE) +
+                          AUT(*NONE)
+             MONMSG     MSGID(CPF9801) EXEC(DO)
+                RMVMSG     PGMQ(*SAME (*)) CLEAR(*ALL)
+                GOTO       CMDLBL(PEEKFMT)
+             ENDDO
+
+             RTVOBJD    OBJ(&TEMPLIB/PEEKFLD) OBJTYPE(*FILE) TEXT(&TEXT1)
+             RTVOBJD    OBJ(&PRODLIB/PEEKFLD) OBJTYPE(*FILE) TEXT(&TEXT2)
+
+             IF         COND(%SST(&TEXT1 25 10) *NE %SST(&TEXT2 25 10)) THEN(DO)
+                DLTF       FILE(&TEMPLIB/PEEKFLDL0)
+                MONMSG     MSGID(CPF2105)
+                DLTF       FILE(&TEMPLIB/PEEKFLDL1)
+                MONMSG     MSGID(CPF2105)
+                DLTF       FILE(&TEMPLIB/PEEKFLDL2)
+                MONMSG     MSGID(CPF2105)
+                DLTF       FILE(&TEMPLIB/PEEKFLD  )
+                MONMSG     MSGID(CPF2105)
+             ENDDO
+
+ PEEKFMT:
+             CHKOBJ     OBJ(&TEMPLIB/PEEKFMT) OBJTYPE(*FILE) MBR(*NONE) +
+                          AUT(*NONE)
+             MONMSG     MSGID(CPF9801) EXEC(DO)
+                RMVMSG     PGMQ(*SAME (*)) CLEAR(*ALL)
+                GOTO       CMDLBL(PEEKWRK)
+             ENDDO
+
+             RTVOBJD    OBJ(&TEMPLIB/PEEKFMT) OBJTYPE(*FILE) TEXT(&TEXT1)
+             RTVOBJD    OBJ(&PRODLIB/PEEKFMT) OBJTYPE(*FILE) TEXT(&TEXT2)
+
+             IF         COND(%SST(&TEXT1 25 10) *NE %SST(&TEXT2 25 10)) THEN(DO)
+                DLTF       FILE(&TEMPLIB/PEEKFMT  )
+                MONMSG     MSGID(CPF2105)
+             ENDDO
+
+ PEEKWRK:
+             CHKOBJ     OBJ(&TEMPLIB/PEEKWRK) OBJTYPE(*FILE) MBR(*NONE) +
+                          AUT(*NONE)
+             MONMSG     MSGID(CPF9801) EXEC(DO)
+                RMVMSG     PGMQ(*SAME (*)) CLEAR(*ALL)
+                GOTO       CMDLBL(ENDE)
+             ENDDO
+
+             RTVOBJD    OBJ(&TEMPLIB/PEEKWRK) OBJTYPE(*FILE) TEXT(&TEXT1)
+             RTVOBJD    OBJ(&PRODLIB/PEEKWRK) OBJTYPE(*FILE) TEXT(&TEXT2)
+
+             IF         COND(%SST(&TEXT1 25 10) *NE %SST(&TEXT2 25 10)) THEN(DO)
+                DLTF       FILE(&TEMPLIB/PEEKWRK  )
+                MONMSG     MSGID(CPF2105)
+             ENDDO
+
+             RMVMSG     PGMQ(*SAME (*)) CLEAR(*ALL)
+
+ ENDE:
+/* Verschiebe alle *INFO Nachrichten zur             */
+/* vorangegangenen Programmwarteschlange             */
+             CHGVAR     VAR(&ERRMSGTYP) VALUE('*INFO')
+             CHGVAR     VAR(&ERRSTKCTR) VALUE(X'00000002')
+             CALL       PGM(QMHMOVPM) PARM(&ERRMSGKEY &ERRMSGTYP +
+                          &ERRNBRTYP &ERRPGMMSGQ &ERRSTKCTR &ERRCODE)
+
+             IF         COND(&ERROR) THEN(DO)                             /* B01 */
+                /* Sende letzte *ESCAPE nochmals   */
+                CALL       PGM(QMHRSNEM) PARM(&ERRMSGKEY &ERRCODE)
+             ENDDO                                                        /* E01 */
+
+             RETURN
+
+/* ---------------- */
+/* Error            */
+/* Handling         */
+/* ---------------- */
+ ERROR:
+             IF         COND(&ERROR) THEN(GOTO CMDLBL(ENDE))
+             ELSE       CHGVAR     VAR(&ERROR) VALUE('1')
+
+/* Verschiebe alle *DIAG Nachrichten zur             */
+/* vorangegangenen Programmwarteschlange             */
+             CHGVAR     VAR(&ERRMSGTYP) VALUE('*DIAG')
+             CALL       PGM(QMHMOVPM) PARM(&ERRMSGKEY &ERRMSGTYP +
+                          &ERRNBRTYP &ERRPGMMSGQ &ERRSTKCTR &ERRCODE)
+
+             GOTO       CMDLBL(ENDE)
+
+             ENDPGM
+

@@ -1,0 +1,90 @@
+STRPGMEXP PGMLVL(*CURRENT) SIGNATURE('Version_3_1_3')                 /* RADD */
+/* **************************************************************** *//* RADD */
+/*   *MODULE      PEEK063      PEEK300P     25/01/07  08:54:21      *//* RADD */
+/* **************************************************************** *//* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_open')                                    /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_isOpen')                                  /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_getFile')                                 /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_getLibrary')                              /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_getMember')                               /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_getRecordFormat')                         /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_getRecordLength')                         /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_getRRN')                                  /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_getInfDS')                                /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_isError')                                 /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_getError')                                /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_getErrorText')                            /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_chainWithRRN')                            /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_setllWithRRN')                            /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_setgtWithRRN')                            /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_chainWithKey')                            /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_setllWithKey')                            /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_setgtWithKey')                            /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_read')                                    /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_readp')                                   /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_delete')                                  /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_unlock')                                  /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_close')                                   /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_setErrorMsg')                             /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_getErrorMsg')                             /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_setEOF_read')                             /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_setEOF_readp')                            /* RADD */
+ENDPGMEXP                                                             /* RADD */
+STRPGMEXP PGMLVL(*PRV    ) SIGNATURE('Version_3_1_2')                 /* RADD */
+/* **************************************************************** *//* RADD */
+/*   *MODULE      PEEK063      PEEK300P     25/01/07  08:54:21      *//* RADD */
+/* **************************************************************** *//* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_open')                                    /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_isOpen')                                  /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_getFile')                                 /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_getLibrary')                              /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_getMember')                               /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_getRecordFormat')                         /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_getRecordLength')                         /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_getRRN')                                  /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_getInfDS')                                /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_isError')                                 /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_getError')                                /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_getErrorText')                            /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_chainWithRRN')                            /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_setllWithRRN')                            /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_setgtWithRRN')                            /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_chainWithKey')                            /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_setllWithKey')                            /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_setgtWithKey')                            /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_read')                                    /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_readp')                                   /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_delete')                                  /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_unlock')                                  /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_close')                                   /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_setErrorMsg')                             /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_getErrorMsg')                             /* RADD */
+ENDPGMEXP                                                             /* RADD */
+STRPGMEXP PGMLVL(*PRV    )                                            /* RADD */
+/* **************************************************************** *//* RADD */
+/*   *MODULE      PEEK063      PEEK300P     25/01/07  08:54:21      *//* RADD */
+/* **************************************************************** *//* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_open')                                    /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_isOpen')                                  /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_getFile')                                 /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_getLibrary')                              /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_getMember')                               /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_getRecordFormat')                         /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_getRecordLength')                         /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_getRRN')                                  /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_getInfDS')                                /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_isError')                                 /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_getError')                                /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_getErrorText')                            /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_chainWithRRN')                            /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_setllWithRRN')                            /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_setgtWithRRN')                            /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_chainWithKey')                            /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_setllWithKey')                            /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_setgtWithKey')                            /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_read')                                    /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_readp')                                   /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_delete')                                  /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_unlock')                                  /* RADD */
+  EXPORT SYMBOL('PEEK63_CIO_close')                                   /* RADD */
+ENDPGMEXP                                                             /* RADD */

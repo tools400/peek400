@@ -1,0 +1,289 @@
+      *%%TS  SD  19971015  095725  RADDATZ     REL-V3R6M0  5716-PW1
+      *===============================================================*
+      *                                                               *
+      *  (C) Thomas Raddatz                                           *
+      *                                                               *
+      *  Bereich  : PEEK Version 1.5.0                                *
+      *  Programm : PEEK14FM                                          *
+      *  Typ      : DSPF                                              *
+      *                                                               *
+      *  erstellt : 08.10.1997  Raddatz                               *
+      *                                                               *
+      *===============================================================*
+      *                                                               *
+      *  Kurzdokumentation :                                          *
+      *                                                               *
+      *  Peek/400 - Anzeigen Datensatz                                *
+      *                                                               *
+      *===============================================================*
+      *  BEZUGSZAHLEN:                                                *
+      *                                                               *
+      *  80 - SFLDSP, EXSR SFLC, SÄTZE GEF./NICHT GEFUNDEN            *
+      *  81 - SFLDSPCTL                                               *
+      *  82 - SFLCLR                                                  *
+      *  83 - SFLEND                                                  *
+      *  84 - SFLNXTCHG                                               *
+      *  85 - DSPATR(RI) FÜR SFPAU                                    *
+      *  86 - SFLDROP/SFLFOLD                                         *
+      *  87 - DSPATR(PC) FÜR AUFSETZKEY                               *
+      *  88 - 80/132-ZEICHEN ANZEIGE                                  *
+      *  89 - SFLEND, MSGCTL                                          *
+      *                                                               *   RADDAT
+      *  96 - Feld für Eingabe sperren  VDSP;VDEL                     *
+      *  98 - Feld für Eingabe sperren  VCHG                          *
+      *                                                               *   RADDAT
+      *  91 - Vorwärts blättern                                       *   RADDAT
+      *  92 - Rückwärts blättern                                      *   RADDAT
+      *                                                               *
+      *===============================================================*
+      ***                                   DSPSIZ(27 132 *DS4                 -
+      ***                                          24 80 *DS3)
+      *
+      *%%EC
+ ADD A                                      DSPSIZ(24 80 *DS3                  -
+ ADD A                                             27 132 *DS4)
+ ADD A                                      PRINT
+ ADD A                                      ALTHELP(CA01)
+ ADD A                                      HELP(01)
+      *
+      *----------------------------------------------------*
+ ADD A          R PBSFL                     SFL
+      *%%TS  SD  19971015  095725  RADDATZ     REL-V3R6M0  5716-PW1
+ ADD A  84                                  SFLNXTCHG
+ ADD A            R$FNME        10A  H
+ ADD  ***         RECORDNBR     10Y 0H
+ ADD  ***         $$RCDL0200   512A  H
+ ADD A            $$TEXT        25A  O  4  2
+ ADD A  70                                  COLOR(RED)
+ ADD A  60                                  DSPATR(ND)
+ ADD A            $$DATA        35A  O  4 29
+ ADD A N70                                  COLOR(WHT)
+      *----------------------------------------------------*
+ ADD A          R PBCTL                     SFLCTL(PBSFL)
+      *%%TS  SD  19971014  215425  RADDATZ     REL-V3R6M0  5716-PW1
+ ADD A  *DS3                                SFLSIZ(0016)
+ ADD A  *DS4                                SFLSIZ(0016)
+ ADD A  *DS3                                SFLPAG(0015)
+ ADD A  *DS4                                SFLPAG(0015)
+ ADD A  *DS3                                WINDOW(MSGCTL)
+ ADD A  *DS4                                WINDOW(MSGCTL)
+ ADD A                                      ROLLUP(91)
+ ADD A                                      ROLLDOWN(92)
+ ADD A                                      CF01
+ ADD A                                      CF02
+ ADD A                                      CF03
+ ADD A                                      CF04
+ ADD A                                      CF05
+ ADD A                                      CF06
+ ADD A                                      CF07
+ ADD A                                      CF08
+ ADD A                                      CF09
+ ADD A                                      CF10
+ ADD A                                      CF12
+ ADD A                                      CF13
+ ADD A                                      CF14
+ ADD A                                      CF15
+ ADD A                                      CF16
+ ADD A                                      CF17
+ ADD A                                      CF18
+ ADD A                                      CF19
+ ADD A                                      CF20
+ ADD A                                      CF21
+ ADD A                                      CF22
+ ADD A                                      CF23
+ ADD A                                      CF24
+ ADD A N88                                  DSPMOD(*DS4)
+ ADD A                                      OVERLAY
+ ADD A                                      SFLCSRRRN(&SFLCSR)
+ ADD A                                      SFLMODE(&SFLMDE)
+ ADD A  80                                  SFLDSP
+ ADD A  81                                  SFLDSPCTL
+ ADD A  82                                  SFLCLR
+ ADD A  83                                  SFLEND(*MORE)
+     A                                      CSRLOC(CSRROW     CSRCOL)
+     A            CSRROW         3S 0H
+     A            CSRCOL         3S 0H
+ ADD A            SFLMDE         1A  H
+ ADD A            SFLCSR         5S 0H
+ ADD A            SFSANR         4S 0H      SFLRCDNBR(CURSOR)
+ ADD A  70        TXT0026       30A  O  1  2MSGID(TXT 0026 PEEKGER )
+ ADD A                                      COLOR(BLU)
+ ADD A  75        TXT0027       30A  O  1  2MSGID(TXT 0027 PEEKGER )
+ ADD A                                      COLOR(BLU)
+ ADD A  79        TXT0028       30A  O  1  2MSGID(TXT 0028 PEEKGER )
+ ADD A                                      COLOR(BLU)
+ ADD A            TXT0029        8A  O  1 45MSGID(TXT 0029 PEEKGER )
+ ADD A                                      COLOR(BLU)
+ ADD A            $$RCDN        10  0O  1 54COLOR(WHT)
+ ADD A                                      EDTCDE(Z)
+ ADD A  55        TXT0030       18A  O  2 46MSGID(TXT 0030 PEEKGER )
+ ADD A                                      COLOR(RED)
+ ADD A N55        TXT0031       18A  O  2 46MSGID(TXT 0031 PEEKGER )
+ ADD A                                      COLOR(RED)
+ ADD A                                  3  1'                                  -
+ ADD A                                                                    '
+ ADD A                                      DSPATR(UL)
+ ADD A                                      COLOR(BLU)
+      *
+      *----------------------------------------------------*
+ ADD A          R PBBOT#1
+      *%%TS  SD  19971014  215425  RADDATZ     REL-V3R6M0  5716-PW1
+ ADD A  *DS3                                WINDOW(MSGCTL)
+ ADD A  *DS4                                WINDOW(MSGCTL)
+ ADD A N88                                  DSPMOD(*DS4)
+ ADD A                                      OVERLAY
+ ADD A                                 20  1'                                  -
+ ADD A                                                                    '
+ ADD A                                      DSPATR(UL)
+ ADD A                                      COLOR(BLU)
+ ADD A            $$FKEY01      18A  O 21  1
+ ADD A                                      COLOR(BLU)
+ ADD A            $$FKEY02      18A  O 21 21
+ ADD A                                      COLOR(BLU)
+ ADD A            $$FKEY03      18A  O 21 41
+ ADD A                                      COLOR(BLU)
+      *
+      *----------------------------------------------------*
+ ADD A          R PBBOT#2
+      *%%TS  SD  19971014  215425  RADDATZ     REL-V3R6M0  5716-PW1
+ ADD A  *DS3                                WINDOW(MSGCTL)
+ ADD A  *DS4                                WINDOW(MSGCTL)
+ ADD A N88                                  DSPMOD(*DS4)
+ ADD A                                      OVERLAY
+ ADD A                                 20  1'                                  -
+ ADD A                                                                    '
+ ADD A                                      DSPATR(UL)
+ ADD A                                      COLOR(BLU)
+ ADD A            $$FKEY04      18A  O 21  1
+ ADD A                                      COLOR(BLU)
+ ADD A            $$FKEY05      18A  O 21 21
+ ADD A                                      COLOR(BLU)
+ ADD A            $$FKEY06      18A  O 21 41
+ ADD A                                      COLOR(BLU)
+      *
+      *----------------------------------------------------*
+ ADD A          R PBBOT#3
+      *%%TS  SD  19971014  215425  RADDATZ     REL-V3R6M0  5716-PW1
+ ADD A  *DS3                                WINDOW(MSGCTL)
+ ADD A  *DS4                                WINDOW(MSGCTL)
+ ADD A N88                                  DSPMOD(*DS4)
+ ADD A                                      OVERLAY
+ ADD A                                 20  1'                                  -
+ ADD A                                                                    '
+ ADD A                                      DSPATR(UL)
+ ADD A                                      COLOR(BLU)
+ ADD A            $$FKEY07      18A  O 21  1
+ ADD A                                      COLOR(BLU)
+ ADD A            $$FKEY08      18A  O 21 21
+ ADD A                                      COLOR(BLU)
+ ADD A            $$FKEY09      18A  O 21 41
+ ADD A                                      COLOR(BLU)
+      *
+      *----------------------------------------------------*
+ ADD A          R PBBOT#4
+      *%%TS  SD  19971014  215425  RADDATZ     REL-V3R6M0  5716-PW1
+ ADD A  *DS3                                WINDOW(MSGCTL)
+ ADD A  *DS4                                WINDOW(MSGCTL)
+ ADD A N88                                  DSPMOD(*DS4)
+ ADD A                                      OVERLAY
+ ADD A                                 20  1'                                  -
+ ADD A                                                                    '
+ ADD A                                      DSPATR(UL)
+ ADD A                                      COLOR(BLU)
+ ADD A            $$FKEY10      18A  O 21  1
+ ADD A                                      COLOR(BLU)
+ ADD A            $$FKEY11      18A  O 21 21
+ ADD A                                      COLOR(BLU)
+ ADD A            $$FKEY12      18A  O 21 41
+ ADD A                                      COLOR(BLU)
+      *
+      *----------------------------------------------------*
+ ADD A          R PBBOT#5
+      *%%TS  SD  19971014  215425  RADDATZ     REL-V3R6M0  5716-PW1
+ ADD A  *DS3                                WINDOW(MSGCTL)
+ ADD A  *DS4                                WINDOW(MSGCTL)
+ ADD A N88                                  DSPMOD(*DS4)
+ ADD A                                      OVERLAY
+ ADD A                                 20  1'                                  -
+ ADD A                                                                    '
+ ADD A                                      DSPATR(UL)
+ ADD A                                      COLOR(BLU)
+ ADD A            $$FKEY13      18A  O 21  1
+ ADD A                                      COLOR(BLU)
+ ADD A            $$FKEY14      18A  O 21 21
+ ADD A                                      COLOR(BLU)
+ ADD A            $$FKEY15      18A  O 21 41
+ ADD A                                      COLOR(BLU)
+      *
+      *----------------------------------------------------*
+ ADD A          R PBBOT#6
+      *%%TS  SD  19971014  215425  RADDATZ     REL-V3R6M0  5716-PW1
+ ADD A  *DS3                                WINDOW(MSGCTL)
+ ADD A  *DS4                                WINDOW(MSGCTL)
+ ADD A N88                                  DSPMOD(*DS4)
+ ADD A                                      OVERLAY
+ ADD A                                 20  1'                                  -
+ ADD A                                                                    '
+ ADD A                                      DSPATR(UL)
+ ADD A                                      COLOR(BLU)
+ ADD A            $$FKEY16      18A  O 21  1
+ ADD A                                      COLOR(BLU)
+ ADD A            $$FKEY17      18A  O 21 21
+ ADD A                                      COLOR(BLU)
+ ADD A            $$FKEY18      18A  O 21 41
+ ADD A                                      COLOR(BLU)
+      *
+      *----------------------------------------------------*
+      *
+ ADD A          R PBLEER
+      *%%TS  SD  19971002  215603  RADDATZ     REL-V3R6M0  5716-PW1
+ ADD A  *DS4                                WINDOW(MSGCTL)
+ ADD A  *DS3                                WINDOW(MSGCTL)
+ ADD A N88                                  DSPMOD(*DS4)
+ ADD A                                      OVERLAY
+ ADD A            TXT0032       30A  B  7  4MSGID(TXT 0032 PEEKGER )
+ ADD A                                      COLOR(WHT)
+      *
+      *----------------------------------------------------*
+ ADD A          R MSGSFL                    SFL
+      *%%TS  SD  19971008  090717  RADDATZ     REL-V3R6M0  5716-PW1
+ ADD A  *DS3                                SFLMSGRCD(22)
+ ADD A  *DS4                                SFLMSGRCD(22)
+ ADD A            §MSGKY                    SFLMSGKEY
+ ADD A            §PGMQ                     SFLPGMQ(10)
+      *
+      *----------------------------------------------------*
+ ADD A          R MSGCTL                    SFLCTL(MSGSFL)
+      *%%TS  SD  19971008  100230  RADDATZ     REL-V3R6M0  5716-PW1
+ ADD A                                      KEEP
+ ADD A                                      LOCK
+ ADD A                                      SFLDSP
+ ADD A                                      SFLDSPCTL
+ ADD A                                      SFLINZ
+ ADD A N89                                  SFLEND
+ ADD A  *DS4                                SFLSIZ(0050)
+ ADD A  *DS3                                SFLSIZ(0050)
+ ADD A  *DS4                                SFLPAG(0001)
+ ADD A  *DS3                                SFLPAG(0001)
+ ADD A  *DS4                                WINDOW(&ZEI &POS 22 64 *NOMSGLIN)
+ ADD A  *DS3                                WINDOW(&ZEI &POS 22 64 *NOMSGLIN)
+ ADD A  70                                  WDWBORDER((*COLOR RED))
+ ADD A N88                                  DSPMOD(*DS4)
+ ADD A            §PGMQ                     SFLPGMQ(10)
+ ADD A            ZEI            3S 0P
+ ADD A            POS            3S 0P
+      *
+      *----------------------------------------------------*
+      *  RMVWDW ZUM LÖSCHEN DES WINDOWS
+      *
+ ADD A          R RMVWDW                    CLRL(*NO) OVERLAY FRCDTA
+ ADD A N88                                  DSPMOD(*DS4)
+      *
+      *  DER DUMMY SATZ MUSS VORHANDEN SEIN,
+      *  AUCH WENN KEIN ZUGRIFF AUF IHN ERFOLGT !!
+      *
+      *----------------------------------------------------*
+ ADD A          R DUMMY                     ASSUME
+      *%%TS  SD  19931014  095141  LASCHE      REL-V2R2M0  5738-PW1
+ ADD A N88                                  DSPMOD(*DS4)
+ ADD A                                 11  1' '

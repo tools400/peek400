@@ -1,0 +1,260 @@
+      *%%TS  SD  19971113  102731  RADDATZ     REL-V3R6M0  5716-PW1
+      *===============================================================*
+      *                                                               *
+      *  (C) Thomas Raddatz                                           *
+      *                                                               *
+      *  Bereich  : PEEK Version 1.2.0                                *
+      *  Programm : PEEK30FM                                          *
+      *  Typ      : DSPF                                              *
+      *                                                               *
+      *  erstellt : 17.10.1997  Raddatz                               *
+      *                                                               *
+      *===============================================================*
+      *                                                               *
+      *  Kurzdokumentation :                                          *
+      *                                                               *
+      *  Peek/400 - Prüfen der Lizenzdaten                            *
+      *                                                               *
+      *===============================================================*
+      *
+      *%%EC
+ ADD A                                      DSPSIZ(24 80 *DS3                  -
+ ADD A                                             27 132 *DS4)
+ ADD A                                      PRINT
+ ADD A                                      ALTHELP(CA01)
+ ADD A                                      HELP(01)
+      *
+      *----------------------------------------------------*
+ ADD A          R BILD01
+      *%%TS  SD  19971113  102731  RADDATZ     REL-V3R6M0  5716-PW1
+ ADD A  *DS3                                WINDOW(MSGCTL)
+ ADD A  *DS4                                WINDOW(MSGCTL)
+ ADD A                                      CF09
+ ADD A N88                                  DSPMOD(*DS4)
+ ADD A                                      OVERLAY
+ ADD A                                  2  2'      '
+ ADD A                                      DSPATR(RI)
+ ADD A                                      COLOR(GRN)
+ ADD A                                  2  9'      '
+ ADD A                                      DSPATR(RI)
+ ADD A                                      COLOR(GRN)
+ ADD A                                  2 16'      '
+ ADD A                                      DSPATR(RI)
+ ADD A                                      COLOR(GRN)
+ ADD A                                  2 23'  '
+ ADD A                                      DSPATR(RI)
+ ADD A                                      COLOR(GRN)
+ ADD A                                  2 28'  '
+ ADD A                                      DSPATR(RI)
+ ADD A                                      COLOR(GRN)
+ ADD A            TXT0075       30A  O  2 40MSGID(TXT 0075 PEEKGER )
+ ADD A                                      DSPATR(RI)
+ ADD A                                      COLOR(GRN)
+ ADD A                                  3  2'  '
+ ADD A                                      DSPATR(RI)
+ ADD A                                      COLOR(GRN)
+ ADD A                                  3  6'  '
+ ADD A                                      DSPATR(RI)
+ ADD A                                      COLOR(GRN)
+ ADD A                                  3  9'  '
+ ADD A                                      DSPATR(RI)
+ ADD A                                      COLOR(GRN)
+ ADD A                                  3 16'  '
+ ADD A                                      DSPATR(RI)
+ ADD A                                      COLOR(GRN)
+ ADD A                                  3 23'  '
+ ADD A                                      DSPATR(RI)
+ ADD A                                      COLOR(GRN)
+ ADD A                                  3 27'  '
+ ADD A                                      DSPATR(RI)
+ ADD A                                      COLOR(GRN)
+ ADD A                                  4  2'      '
+ ADD A                                      DSPATR(RI)
+ ADD A                                      COLOR(GRN)
+ ADD A                                  4  9'      '
+ ADD A                                      DSPATR(RI)
+ ADD A                                      COLOR(GRN)
+ ADD A                                  4 16'      '
+ ADD A                                      DSPATR(RI)
+ ADD A                                      COLOR(GRN)
+ ADD A                                  4 23'     '
+ ADD A                                      DSPATR(RI)
+ ADD A                                      COLOR(GRN)
+ ADD A                                  4 40' '
+ ADD A                                      COLOR(GRN)
+ ADD A                                      DSPATR(RI)
+ ADD A            TXT0068       28A  O  4 42MSGID(TXT 0068 PEEKGER )
+ ADD A                                      COLOR(WHT)
+ ADD A                                  5  2'  '
+ ADD A                                      DSPATR(RI)
+ ADD A                                      COLOR(GRN)
+ ADD A                                  5  9'  '
+ ADD A                                      DSPATR(RI)
+ ADD A                                      COLOR(GRN)
+ ADD A                                  5 16'  '
+ ADD A                                      DSPATR(RI)
+ ADD A                                      COLOR(GRN)
+ ADD A                                  5 23'  '
+ ADD A                                      DSPATR(RI)
+ ADD A                                      COLOR(GRN)
+ ADD A                                  5 27'  '
+ ADD A                                      DSPATR(RI)
+ ADD A                                      COLOR(GRN)
+ ADD A                                  6  2'  '
+ ADD A                                      DSPATR(RI)
+ ADD A                                      COLOR(GRN)
+ ADD A                                  6  9'      '
+ ADD A                                      DSPATR(RI)
+ ADD A                                      COLOR(GRN)
+ ADD A                                  6 16'      '
+ ADD A                                      DSPATR(RI)
+ ADD A                                      COLOR(GRN)
+ ADD A                                  6 23'  '
+ ADD A                                      DSPATR(RI)
+ ADD A                                      COLOR(GRN)
+ ADD A                                  6 28'  '
+ ADD A                                      DSPATR(RI)
+ ADD A                                      COLOR(GRN)
+ ADD A                                  6 40' '
+ ADD A                                      COLOR(GRN)
+ ADD A                                      DSPATR(RI)
+ ADD A            TXT0069       28A  O  6 42MSGID(TXT 0069 PEEKGER )
+ ADD A                                      COLOR(WHT)
+ ADD A                                  8  2'         '
+ ADD A                                      DSPATR(RI)
+ ADD A                                      COLOR(RED)
+ ADD A                                  8 12'Peek/400'
+ ADD A                                      COLOR(WHT)
+ ADD A                                  8 21'         '
+ ADD A                                      DSPATR(RI)
+ ADD A                                      COLOR(RED)
+ ADD A                                  8 40' '
+ ADD A                                      COLOR(GRN)
+ ADD A                                      DSPATR(RI)
+ ADD A            TXT0070       28A  O  8 42MSGID(TXT 0070 PEEKGER )
+ ADD A                                      COLOR(WHT)
+ ADD A            TXT0073       18   O  9  7MSGID(TXT 0073 PEEKGER )
+ ADD A                                      COLOR(WHT)
+ ADD A            TXT0074       18A  O 10  7MSGID(TXT 0074 PEEKGER )
+ ADD A                                      COLOR(WHT)
+ ADD A                                 10 40' '
+ ADD A                                      COLOR(GRN)
+ ADD A                                      DSPATR(RI)
+ ADD A            TXT0071       28A  O 10 42MSGID(TXT 0071 PEEKGER )
+ ADD A                                      COLOR(WHT)
+ ADD A            TXT0059       12A  O 12  2MSGID(TXT 0059 PEEKGER )
+ ADD A                                      COLOR(WHT)
+ ADD A            ##LICDATA     20A  B 12 16
+ ADD A  30                                  DSPATR(RI)
+ ADD A  20                                  DSPATR(PC)
+ ADD A                                 12 40' '
+ ADD A                                      COLOR(GRN)
+ ADD A                                      DSPATR(RI)
+ ADD A            TXT0072       28A  O 12 42MSGID(TXT 0072 PEEKGER )
+ ADD A                                      COLOR(WHT)
+ ADD A                                 14  2'Peek/400 wird als Shareware vertri-
+ ADD A                                      eben. Sie können das Programm'
+ ADD A                                      COLOR(WHT)
+ ADD A                                 15  2'über einen Zeitraum von 30 Tagen t-
+ ADD A                                      esten. Danach müssen Sie sich'
+ ADD A                                      COLOR(WHT)
+ ADD A                                 16  2'registrieren lassen oder Peek/400 -
+ ADD A                                      von Ihrem System löschen.    '
+ ADD A                                      COLOR(WHT)
+ ADD A                                 17  2'   Es wird keine Haftung für evtl.-
+ ADD A                                       auftr. Datenverlust übernommen!  '
+ ADD A                                      DSPATR(RI)
+ ADD A                                      COLOR(RED)
+ ADD A                                 18  1'                                  -
+ ADD A                                                                         -
+ ADD A                                       '
+ ADD A                                      DSPATR(UL)
+ ADD A                                      COLOR(BLU)
+ ADD A            TXT0060       15A  O 19  2MSGID(TXT 0060 PEEKGER )
+ ADD A                                      COLOR(BLU)
+      *----------------------------------------------------*
+     A          R BILD02
+      *%%TS  SD  19971106  180119  RADDATZ     REL-V3R6M0  5716-PW1
+     A  *DS3                                WINDOW(&ZEI &POS 8 44 *NOMSGLIN)
+     A  *DS4                                WINDOW(&ZEI &POS 8 44 *NOMSGLIN)
+     A                                      CF03
+     A                                      CF12
+     A N88                                  DSPMOD(*DS4)
+     A            ZEI            3S 0P
+     A            POS            3S 0P
+     A            TXT0058       20A  O  1 13MSGID(TXT 0058 PEEKGER )
+     A                                      COLOR(WHT)
+     A                                  2  1'                                  -
+     A                                                '
+     A                                      DSPATR(UL)
+     A                                      COLOR(BLU)
+     A            TXT0061       40A  O  5  3MSGID(TXT 0061 PEEKGER )
+     A                                      COLOR(WHT)
+     A                                  7  1'                                  -
+     A                                                '
+     A                                      DSPATR(UL)
+     A                                      COLOR(BLU)
+     A          R BILD03
+      *%%TS  SD  19971110  085924  RADDATZ     REL-V3R6M0  5716-PW1
+     A  *DS3                                WINDOW(&ZEI &POS 8 44 *NOMSGLIN)
+     A  *DS4                                WINDOW(&ZEI &POS 8 44 *NOMSGLIN)
+     A                                      CF03
+     A                                      CF12
+     A N88                                  DSPMOD(*DS4)
+     A            ZEI            3S 0P
+     A            POS            3S 0P
+     A            TXT0058       20A  O  1 13MSGID(TXT 0058 PEEKGER )
+     A                                      COLOR(WHT)
+     A                                  2  1'                                  -
+     A                                                '
+     A                                      DSPATR(UL)
+     A                                      COLOR(BLU)
+ ADD A            TXT0062       40   O  5  3MSGID(TXT 0062 PEEKGER )
+     A                                      COLOR(WHT)
+     A                                  7  1'                                  -
+     A                                                '
+     A                                      DSPATR(UL)
+     A                                      COLOR(BLU)
+      *
+      *----------------------------------------------------*
+ ADD A          R MSGSFL                    SFL
+      *%%TS  SD  19971113  095448  RADDATZ     REL-V3R6M0  5716-PW1
+ ADD A  *DS3                                SFLMSGRCD(20)
+ ADD A  *DS4                                SFLMSGRCD(20)
+ ADD A            §MSGKY                    SFLMSGKEY
+ ADD A            §PGMQ                     SFLPGMQ(10)
+      *
+      *----------------------------------------------------*
+ ADD A          R MSGCTL                    SFLCTL(MSGSFL)
+      *%%TS  SD  19971113  095448  RADDATZ     REL-V3R6M0  5716-PW1
+ ADD A                                      KEEP
+ ADD A                                      LOCK
+ ADD A N88                                  DSPMOD(*DS4)
+ ADD A                                      SFLDSP
+ ADD A                                      SFLDSPCTL
+ ADD A                                      SFLINZ
+ ADD A N89                                  SFLEND
+ ADD A  *DS3                                SFLSIZ(0050)
+ ADD A  *DS4                                SFLSIZ(0050)
+ ADD A  *DS3                                SFLPAG(0001)
+ ADD A  *DS4                                SFLPAG(0001)
+ ADD A  *DS3                                WINDOW(&ZEI &POS 20 70 *NOMSGLIN)
+ ADD A  *DS4                                WINDOW(&ZEI &POS 20 70 *NOMSGLIN)
+ ADD A            §PGMQ                     SFLPGMQ(10)
+ ADD A            ZEI            3S 0P
+ ADD A            POS            3S 0P
+      *
+      *----------------------------------------------------*
+      *  RMVWDW ZUM LÖSCHEN DES WINDOWS
+      *
+ ADD A          R RMVWDW                    CLRL(*NO) OVERLAY FRCDTA
+ ADD A N88                                  DSPMOD(*DS4)
+      *
+      *  DER DUMMY SATZ MUSS VORHANDEN SEIN,
+      *  AUCH WENN KEIN ZUGRIFF AUF IHN ERFOLGT !!
+      *
+      *----------------------------------------------------*
+ ADD A          R DUMMY                     ASSUME
+      *%%TS  SD  19931014  095141  LASCHE      REL-V2R2M0  5738-PW1
+ ADD A N88                                  DSPMOD(*DS4)
+ ADD A                                 11  1' '

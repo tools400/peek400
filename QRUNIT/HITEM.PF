@@ -1,0 +1,32 @@
+      * =================================================================== *
+      *   >>PRE-COMPILER<<                                                  *
+      *     >>CRTCMD<<  CRTPF         FILE(&LI/&OB) +                       *
+      *                               SRCFILE(&SL/&SF) SRCMBR(&SM);         *
+      *     >>IMPORTANT<<                                                   *
+      *       >>PARM<<                MBR(*NONE);                           *
+      *       >>PARM<<                MAXMBRS(10);                          *
+      *     >>END-IMPORTANT<<                                               *
+      *     >>EXECUTE<<                                                     *
+      *     >>CMD<<     ADDPFM FILE(&LI/&OB) MBR(Y2017);                    *
+      *     >>CMD<<     ADDPFM FILE(&LI/&OB) MBR(Y2018);                    *
+      *   >>END-PRE-COMPILER<<                                              *
+      * =================================================================== *
+     A                                      UNIQUE
+      *
+     A          R FITEM                     TEXT('Order items')
+      *
+     A            ORDNBR        10S 0       TEXT('Order number')
+     A                                      COLHDG('Order number')
+     A            ITMSQN        10S 0       TEXT('Item sequence number')
+     A                                      COLHDG('Item sequence number')
+     A            ITMNBR        10A         TEXT('Item number')
+     A                                      COLHDG('Customer number')
+     A            PRICE         15S 2       TEXT('Price per unit')
+     A                                      COLHDG('Price per unit')
+     A                                      EDTCDE(L)
+     A            QTYORD        10S 0       TEXT('Quantity ordered')
+     A                                      COLHDG('Quantity ordered')
+      *
+     A          K ORDNBR
+     A          K ITMSQN
+      *

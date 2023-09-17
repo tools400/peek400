@@ -1,0 +1,116 @@
+     /* ============================================================ */
+     /*                                                              */
+     /*  (c) Thomas Raddatz                                          */
+     /*                                                              */
+     /*  Bereich  : PEEK, Version 3.1.2                              */
+     /*  Programm : PEEKUPDATE                                       */
+     /*  Typ      : CLLE                                             */
+     /*                                                              */
+     /*  erstellt : 15.08.2008  Raddatz                              */
+     /*                                                              */
+     /* ============================================================ */
+     /*                                                              */
+     /*  Dokumentation:                                              */
+     /*                                                              */
+     /*  Peek/400 - Aktualisieren neue PEEK/400 Bibliothek           */
+     /*                                                              */
+     /*  Übernimmt die Benutzereinstellungen, Arbeitsumgebungen und  */
+     /*  auf Wunsch auch die Updateprogramme aus einer gegebenen,    */
+     /*  alten Peek/400 Bibliothek in die neue PEEK/400 Bibliothek.  */
+     /*                                                              */
+     /* ============================================================ */
+     /*                                                              */
+     /*  Aufrufen Programm:                                          */
+     /*                                                              */
+     /*     CALL PGM(PEEK326P/PEEKUPDATE) PARM(PEEK PEEK_OLD)        */
+     /*                                                              */
+     /* ============================================================ */
+
+          PGM        PARM(&NEWLIB     +
+                          &OLDLIB     +
+                          )
+
+             DCL        VAR(&NEWLIB    ) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&OLDLIB    ) TYPE(*CHAR) LEN(10)
+
+             DCL        VAR(&WORKLIB   ) TYPE(*CHAR) LEN(10) VALUE('QTEMP')
+             DCL        VAR(&WORKFILE  ) TYPE(*CHAR) LEN(10) VALUE('PEEKUPDATE')
+
+/* Fehlerbehandlung     */
+             DCL        VAR(&ERROR)      TYPE(*LGL) +
+                          VALUE('0')
+             DCL        VAR(&ERRMSGKEY)  TYPE(*CHAR) LEN(4)
+
+             DCL        VAR(&ERRMSGTYP)  TYPE(*CHAR) LEN(10) +
+                          VALUE('*DIAG')
+             DCL        VAR(&ERRNBRTYP)  TYPE(*CHAR) LEN(4) +
+                          VALUE(X'00000001')
+             DCL        VAR(&ERRPGMMSGQ) TYPE(*CHAR) LEN(10) +
+                          VALUE('*')
+             DCL        VAR(&ERRSTKCTR)  TYPE(*CHAR) LEN(4) +
+                          VALUE(X'00000001')
+             DCL        VAR(&ERRCODE  )  TYPE(*CHAR) LEN(4) +
+                          VALUE(X'00000000')
+
+/* Sende alle Fehler zur Error Handling Routine */
+             MONMSG     MSGID(CPF0000) EXEC(GOTO CMDLBL(ERROR))
+
+             CHGVAR     VAR(&ERROR    ) VALUE('0')
+
+ /* -------------------------------------------------------------- */
+ /*  Los geht's mit den PEEKUSR und PEEKENV Dateien                */
+ /* -------------------------------------------------------------- */
+             CALLPRC    PRC(PEEKUPD1) PARM((&OLDLIB   *BYREF) +
+                                           (&NEWLIB   *BYREF) +
+                                           (&WORKLIB  *BYREF) +
+                                           (&WORKFILE *BYREF))
+
+ /* -------------------------------------------------------------- */
+ /*  Los geht's mit den Update Bildschirmen und Programmen         */
+ /* -------------------------------------------------------------- */
+             CALLPRC    PRC(PEEKUPD2) PARM((&OLDLIB   *BYREF) +
+                                           (&NEWLIB   *BYREF) +
+                                           (&WORKLIB  *BYREF) +
+                                           (&WORKFILE *BYREF))
+
+ /* -------------------------------------------------------------- */
+
+ENDE:
+             CHKOBJ     OBJ(&WORKLIB/&WORKFILE) OBJTYPE(*FILE)
+             MONMSG     MSGID(CPF9801) EXEC(GOTO NO_UPD)
+             DLTF       FILE(&WORKLIB/&WORKFILE)
+             MONMSG     MSGID(CPF0000)
+NO_UPD:
+
+/* Verschiebe alle *INFO Nachrichten zur             */
+/* vorangegangenen Programmwarteschlange             */
+             CHGVAR     VAR(&ERRMSGTYP) VALUE('*INFO')
+             CALL       PGM(QMHMOVPM) PARM(&ERRMSGKEY &ERRMSGTYP +
+                          &ERRNBRTYP &ERRPGMMSGQ &ERRSTKCTR &ERRCODE)
+
+             IF         COND(&ERROR) THEN(DO)                             /* B01 */
+                /* Sende letzte *ESCAPE nochmals   */
+                CALL       PGM(QMHRSNEM) PARM(&ERRMSGKEY &ERRCODE)
+                MONMSG     MSGID(CPF0000)
+             ENDDO                                                        /* E01 */
+
+             RETURN
+
+/* ---------------- */
+/* Error            */
+/* Handling         */
+/* ---------------- */
+ERROR:
+             IF         COND(&ERROR) THEN(GOTO CMDLBL(ENDE))
+             ELSE       CHGVAR     VAR(&ERROR) VALUE('1')
+
+/* Verschiebe alle *DIAG Nachrichten zur             */
+/* vorangegangenen Programmwarteschlange             */
+             CHGVAR     VAR(&ERRMSGTYP) VALUE('*DIAG')
+             CALL       PGM(QMHMOVPM) PARM(&ERRMSGKEY &ERRMSGTYP +
+                          &ERRNBRTYP &ERRPGMMSGQ &ERRSTKCTR &ERRCODE)
+
+             GOTO       CMDLBL(ENDE)
+
+             ENDPGM
+

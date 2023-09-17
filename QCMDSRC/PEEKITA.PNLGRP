@@ -1,0 +1,543 @@
+.*=====================================================================*
+.*                                                                     *
+.*  Kurzdokumentation :                                                *
+.*                                                                     *
+.*  Bereich . . . : PEEK                                               *
+.*  Objekt  . . . : PEEKITA                                            *
+.*  Beschreibung  : Peek/400 - File Editor, Italienisch                *
+.*  Author  . . . : Thomas Raddatz   <thomas.raddatz@tools400.de>      *
+.*                  Marco Alberici                                     *
+.*  Datum . . . . : 15.04.2011                                         *
+.*                                                                     *
+.*=====================================================================*
+.*                                                                     *
+.*  This software is free software, you can redistribute it and/or     *
+.*  modify it under the terms of the GNU General Public License (GPL)  *
+.*  as published by the Free Software Foundation.                      *
+.*                                                                     *
+.*  See GNU General Public License for details.                        *
+.*          http://www.opensource.org                                  *
+.*          http://www.opensource.org/licenses/gpl-license.html        *
+.*                                                                     *
+.*=====================================================================*
+.*  History:                                                           *
+.*                                                                     *
+.*  Datum       Name          Änderung                                 *
+.*  ----------  ------------  ---------------------------------------  *
+.*                                                                     *
+.*=====================================================================*
+.* >>PRE-COMPILER<<                                                    *
+.*   >>CRTCMD<<  CALL PGM(&LI/PEEK99) PARM(+                           *
+.*                        '&SF' '&SL' '&SM' '&LI' '*NO' +              *
+.*                        'PEEK' '&LI' '*NO');                         *
+.*   >>EXECUTE<<                                                       *
+.* >>END-PRE-COMPILER<<                                                *
+.*=====================================================================*
+:PNLGRP.
+.*--------------------------------------------------------------------
+.* Hilfetext für den Befehl
+.*--------------------------------------------------------------------
+:HELP NAME='PEEK'.
+Esplorazione dati - Peek/400 (PEEK) - Aiuto
+:P.
+Peek/400 ü una applicazione utile per visualizzare, creare,
+modificare, cancellare i record dei file e membri di database.
+.*
+:EHELP.
+.*
+.*--------------------------------------------------------------------
+.* Hilfetext für Schlüsselwort FILE
+.*--------------------------------------------------------------------
+:HELP name='PEEK/FILE'.
+File  - Aiuto
+:XH3.File (FILE)
+:P.
+Specifica il nome del file di database e della libreria
+contenente i record da visualizzare.
+.*
+:IMHELP name='COM/REQPARM'.
+:P.
+:HP2.Qualif.   1: File:EHP2.
+.*
+:PARML.
+:PT.:PV.Nome:EPV.
+:PD.Nome del file fisico o logico che contiene i record.
+:EPARML.
+:P.
+:HP2.Qualif.   2: Libreria:EHP2.
+:P.
+:PARML.
+:PT.:PK DEF.*LIBL:EPK.
+:PD.La ricerca del file viene eseguita nelle librerie del
+lavoro attivo.
+:PT.:PV.*CURLIB:EPV.
+:PD.La libreria corrente ü usata per individuare il file
+ In assenza di una libreria corrente viene utilizzata
+la libreria QGPL.
+:PT.:PV.Nome:EPV.
+:PD.Nome della libreria in cui cercare.
+:EPARML.
+.*
+:EHELP.
+.*
+.*--------------------------------------------------------------------
+.* Hilfetext für Schlüsselwort MEMBER
+.*--------------------------------------------------------------------
+:HELP name='PEEK/MEMBER'.
+Member - Aiuto
+:XH3.Membro (MEMBER)
+:P.
+Specifare il mome del membro contenente i record.
+.*
+:IMHELP name='COM/OPTPARM'.
+.*
+:PARML.
+:PT.:PK DEF.*FIRST:EPK.
+:PD.Vengono mostrati a video i record del primo membro del
+file.
+:PT.:PV.*NONE:EPV.
+:PD.No member is opened. This special value can be used for
+displaying external data structures.
+:PT.:PV.Nome:EPV.
+:PD.Nome del membro contenente i record da mostrare.
+:EPARML.
+.*
+:EHELP.
+.*
+.*--------------------------------------------------------------------
+.* Hilfetext für Schlüsselwort ACCESS
+.*--------------------------------------------------------------------
+:HELP name='PEEK/ACCESS'.
+Modo di accesso ai dati - Aiuto
+:XH3.Tipo di accesso ai rk (ACCESS)
+:P.
+Specifica la sequenza di ordinamento e le regole di selezione
+dei record mostrati.
+.*
+:IMHELP name='COM/OPTPARM'.
+.*
+:PARML.
+:PT.:PK DEF.*KEY:EPK.
+:PD.Tutti i record del file specificato sono mostrati
+in ordine di chiave. Se il file non possiede chiave,
+i record sono ordinati per numero di record.
+:PT.:PV.*RRN:EPV.
+:PD.Tutti i record del file specificato sono mostrati
+ordinati per NRR.
+:PT.:PV.*SQL:EPV.
+:PD.Tutti i record che corrispondono ai criteri del parametro
+:HP2.SQL WHERE (WHERE):EHP2. sono scelti e mostrati in base alla
+sequenza di ordinamento data dal parametro :HP2.SQL ORDER BY
+(ORDERBY):EHP2..
+:EPARML.
+.*
+:EHELP.
+.*
+.*--------------------------------------------------------------------
+.* Hilfetext für Schlüsselwort LANGUAGE
+.*--------------------------------------------------------------------
+:HELP name='PEEK/LANGUAGE'.
+Lingua   - Aiuto
+:XH3.Lingua (LANGUAGE)
+:P.
+Specifica il linguaggio di interfaccia di Peek/400 e dei suoi
+messaggi. Il  nome del file messaggi inizia per 'PEEK' ed ü
+seguito da un id.lingua di tre caratteri, come  GER (Tedesco),
+ENG (Inglese) ITA (Italiano) o SPA (Spagnolo).
+.*
+:IMHELP name='COM/OPTPARM'.
+.*
+:PARML.
+:PT.:PK DEF.*DFT:EPK.
+:PD.Si usa il linguaggio della config.utente. Se Peek/400 ü
+avviato per la prima volta, il linguaggio ü reperito dalla
+chiave *LANGUAGE nel file PEEKUSR.
+:PT.:PV.Lingua:EPV.
+:PD.Specifica il codice lingua di 3 caratteri che ü usata
+per identificare il file messaggi contenente le costanti in uso.
+:EPARML.
+.*
+:EHELP.
+.*
+.*--------------------------------------------------------------------
+.* Hilfetext für Schlüsselwort ALWCHGLIB
+.*--------------------------------------------------------------------
+:HELP name='PEEK/ALWCHGLIB'.
+Permesso cambio libreria- Aiuto
+:XH3.Permesso cambio libreria (ALWCHGLIB)
+:P.
+Specifica se ü possibile o no cambiare il nome della libreria
+che contiene il file del quale sono in visualizzazione i record.
+.*
+:IMHELP name='COM/OPTPARM'.
+.*
+:PARML.
+:PT.:PK DEF.*DFT:EPK.
+:PD.Il valore attuale ü passato dal pgm di uscita EXIT01.
+:PT.:PV.*YES:EPV.
+:PD.La libreria puö essere cambiata in ogni momento.
+:PT.:PV.*NO:EPV.
+:PD.Non ü possibile cambiare la libreria dall'interno di
+Peek/400.
+:EPARML.
+.*
+:EHELP.
+.*
+.*--------------------------------------------------------------------
+.* Hilfetext für Schlüsselwort ALWCHGFILE
+.*--------------------------------------------------------------------
+:HELP name='PEEK/ALWCHGFILE'.
+Permesso cambio file - Aiuto
+:XH3.Possibilitä cambio file (ALWCHGFILE)
+:P.
+Specifica se ü possibile o no cambiare il nome del file
+che contiene i record in visualizzazione.
+.*
+:IMHELP name='COM/OPTPARM'.
+.*
+:PARML.
+:PT.:PK DEF.*DFT:EPK.
+:PD.Il valore attuale ü fornito dal pgm di uscita EXIT01.
+:PT.:PV.*YES:EPV.
+:PD.Il file puö esser cambiato in ogni momento.
+:PT.:PV.*NO:EPV.
+:PD.Non si puö modificare il file dall'interno di
+Peek/400.
+:EPARML.
+.*
+:EHELP.
+.*
+.*--------------------------------------------------------------------
+.* Hilfetext für Schlüsselwort ALWCHGMBR
+.*--------------------------------------------------------------------
+:HELP name='PEEK/ALWCHGMBR'.
+Permesso cambio membro - Aiuto
+:XH3.Permette il cambio membro (ALWCHGMBR)
+:P.
+Specifica se ü consentito o no modificare il nome del membro
+contenente i record in visualizzazione.
+.*
+:IMHELP name='COM/OPTPARM'.
+.*
+:PARML.
+:PT.:PK DEF.*DFT:EPK.
+:PD.Il valore attuale ü fornito dal pgm di uscita EXIT01.
+:PT.:PV.*YES:EPV.
+:PD.Il membro puö essere cambiato in ogni occasione.
+:PT.:PV.*NO:EPV.
+:PD.Il membro non puö essere cambiato dall'interno di
+Peek/400.
+:EPARML.
+.*
+:EHELP.
+.*
+.*--------------------------------------------------------------------
+.* Hilfetext für Schlüsselwort ALWCHGRCD
+.*--------------------------------------------------------------------
+:HELP name='PEEK/ALWCHGRCD'.
+Permessa modifica record - Aiuto
+:XH3.Permessa modifica record (ALWCHGRCD)
+:P.
+Specifica se si ü autorizzati ad inserire, modificare,
+cancellare o copiare record.
+.*
+:IMHELP name='COM/OPTPARM'.
+.*
+:PARML.
+:PT.:PK DEF.*DFT:EPK.
+:PD.Il valore attuale ü fornito dal pgm di uscita EXIT01.
+:PT.:PV.*YES:EPV.
+:PD.Si puö inserire, cancellare, copiare, modificare i record.
+:PT.:PV.*NOKEY:EPV.
+:PD.Si puö, con l'eccezione dei campi chiave.
+:PT.:PV.*NO:EPV.
+:PD.Non si puö inserire, cancellare, copiare, modificare i record.
+:EPARML.
+.*
+:EHELP.
+.*
+.*--------------------------------------------------------------------
+.* Hilfetext für Schlüsselwort ALWCHGSQLW
+.*--------------------------------------------------------------------
+:HELP name='PEEK/ALWCHGSQLW'.
+Permessa modifica SQL WHERE - Aiuto
+:XH3.Permessa modifica SQL WHERE (ALWCHGSQLW)
+:P.
+Specifica se ü permesso o non lo ü modificare la clausola
+SQL WHERE usata per filtrare i record da mostrare.
+.*
+:IMHELP name='COM/OPTPARM'.
+.*
+:PARML.
+:PT.:PK DEF.*DFT:EPK.
+:PD.Il valore attuale ü fornito dal pgm di uscita EXIT01.
+:PT.:PV.*YES:EPV.
+:PD.La clausola WHERE ü modificabile in ogni momento.
+:PT.:PV.*NO:EPV.
+:PD.La clausola WHERE ü protetta dalle modifiche.
+:EPARML.
+.*
+:EHELP.
+.*
+.*--------------------------------------------------------------------
+.* Hilfetext für Schlüsselwort ALWCHGSQLO
+.*--------------------------------------------------------------------
+:HELP name='PEEK/ALWCHGSQLO'.
+Permette di cambiare SQL ORDER BY - Aiuto
+:XH3.Permette di cambiare SQL ORDER BY (ALWCHGSQLO)
+:P.
+Specifica se ü permesso o non lo ü modificare la clausola
+SQL ORDER BY che definisce la sequenza di ordinamento dei
+record.
+.*
+:IMHELP name='COM/OPTPARM'.
+.*
+:PARML.
+:PT.:PK DEF.*DFT:EPK.
+:PD.Il valore attuale ü fornito dal pgm di uscita EXIT01.
+:PT.:PV.*YES:EPV.
+:PD.La clausola ORDER BY puö essere cambiata in ogni momento.
+:PT.:PV.*NO:EPV.
+:PD.La clausola ORDER BY ü protetta dalle modifiche.
+:EPARML.
+.*
+:EHELP.
+.*
+.*--------------------------------------------------------------------
+.* Hilfetext für Schlüsselwort ENVFILE
+.*--------------------------------------------------------------------
+:HELP name='PEEK/ENVFILE'.
+Ambiente    - Aiuto
+:XH3.Ambiente    (ENVFILE)
+:P.
+Specifica il nome e la libreria di un file usato per il
+salvataggio della configurazione di area di lavoro di Peek/400.
+.*
+:IMHELP name='COM/OPTPARM'.
+:P.
+:HP2.Qualif.   1: File:EHP2.
+.*
+:PARML.
+:PT.:PV.Nome:EPV.
+:PD.Nome del file di salvataggio area di lavoro Peek/400.
+:EPARML.
+:P.
+:HP2.Qualif.   2: Libreria:EHP2.
+:P.
+:PARML.
+:PT.:PK DEF.*LIBL:EPK.
+:PD.Tutte le librerie del lavoro attivo sono oggetto della
+ricerca.
+:PT.:PV.Nome:EPV.
+:PD.Nome della libreria che contiene il file di salvataggio
+della area di lavoro Peek/400.
+:EPARML.
+.*
+:EHELP.
+.*
+.*--------------------------------------------------------------------
+.* Hilfetext für Schlüsselwort ENVMBR
+.*--------------------------------------------------------------------
+:HELP name='PEEK/ENVMBR'.
+Member - Aiuto
+:XH3.Member (ENVMBR)
+:P.
+Specifica il nome membro da cui caricare la configurazione
+area di lavoro Peek/400
+.*
+:IMHELP name='COM/OPTPARM'.
+.*
+:PARML.
+:PT.:PK DEF.*FILE:EPK.
+:PD.Il nome del membro contenente i record ora visualizzati ü lo
+stesso del nome del membro da cui caricare la configurazione
+area di lavoro Peek/400
+:PT.:PV.*FIRST:EPV.
+:PD.Le impostazioni sono caricate dal primo membro.
+:PT.:PV.Nome:EPV.
+:PD.Le impostazioni area di lavoro sono caricate dal membro indicato.
+:EPARML.
+.*
+:EHELP.
+.*
+.*--------------------------------------------------------------------
+.* Hilfetext für Schlüsselwort ENVSAVE
+.*--------------------------------------------------------------------
+:HELP name='PEEK/ENVSAVE'.
+Salva in uscita- Aiuto
+:XH3.Salva in uscita (ENVSAVE)
+:P.
+Specifica se o no la attuale impostazione di ambiente ü salvata
+nel file e membro indicati quando si esce dalla applicazione.
+.*
+:IMHELP name='COM/OPTPARM'.
+.*
+:PARML.
+:PT.:PK DEF.*NO:EPK.
+:PD.Le impostazioni di ambiente in uso non sono salvate
+automaticamente nel file e membro indicati.
+:PT.:PV.*YES:EPV.
+:PD.Le impostazioni di ambiente in uso  sono salvate
+automaticamente nel file e membro indicati.
+:EPARML.
+.*
+:EHELP.
+.*
+.*--------------------------------------------------------------------
+.* Hilfetext für Schlüsselwort ENVLAYOUT
+.*--------------------------------------------------------------------
+:HELP name='PEEK/ENVLAYOUT'.
+Load layout only - Help
+:XH3.Load layout only (ENVLAYOUT)
+:P.
+Specifies whether or not to load only the layout from the
+specified environment file and keep the specified file
+and member.
+.*
+:IMHELP name='COM/OPTPARM'.
+.*
+:PARML.
+:PT.:PK DEF.*NO:EPK.
+:PD.The current environment settings are completely applied and
+the specified member is overridden by the member of the
+environment.
+:PT.:PV.*YES:EPV.
+:PD.Only the layout is loaded from the environment file. The
+specified file and member are kept untouched and opended.
+:EPARML.
+.*
+:EHELP.
+.*
+.*--------------------------------------------------------------------
+.* Hilfetext für Schlüsselwort SETTINGS
+.*--------------------------------------------------------------------
+:HELP name='PEEK/SETTINGS'.
+Impostazioni utente - Aiuto
+:XH3.Impostazioni utente (SETTINGS)
+:P.
+Specifica quali impostazioni vanno usate. Le impostazioni assunte sono
+memorizzate nella libreria prodotto. Il nome del file che le contiene
+ü uguale al nome profilo utente che ha eseguito il signon.
+.*
+:IMHELP name='COM/OPTPARM'.
+:P.
+:HP2.Element 1: File:EHP2.
+:P.
+:HP2.Qualif.   1: File:EHP2.
+.*
+:PARML.
+:PT.:PK DEF.*DFT:EPK.
+:PD.Il nome del profilo utente attivo identifica il file con
+le impostazioni.
+:PT.:PV.Nome:EPV.
+:PD.Nome del file che contiene le impostazioni.
+:EPARML.
+:P.
+:HP2.Qualif.   2: Libreria:EHP2.
+:P.
+:PARML.
+:PT.:PK DEF.*PRDLIB:EPK.
+:PD.Specifica che il file con le impostazioni ü nella libreria
+di prodotto Peek/400.
+:PT.:PV.*LIBL:EPV.
+:PD.La ricerca del file viene eseguita nelle librerie del
+lavoro attivo.
+:PT.:PV.*CURLIB:EPV.
+:PD.La libreria corrente ü usata per individuare il file.
+ In assenza di una libreria corrente viene utilizzata
+la libreria QGPL.
+:PT.:PV.Nome:EPV.
+:PD.Nome delle libreria contenente il file delle impostazioni.
+:EPARML.
+:P.
+:HP2.Elemento2: Profilo utente:EHP2.
+:P.
+:PARML.
+:PT.:PK DEF.*DFT:EPK.
+:PD.Il nome dell'utente del lavoro attuale determina le impostazioni.
+:PT.:PV.Nome:EPV.
+:PD.Nome di un profilo utente usato per reperire le impostazioni.
+:EPARML.
+.*
+:EHELP.
+.*
+.*--------------------------------------------------------------------
+.* Hilfetext für Schlüsselwort WHERE
+.*--------------------------------------------------------------------
+:HELP name='PEEK/WHERE'.
+SQL WHERE - Aiuto
+:XH3.SQL WHERE (WHERE)
+:P.
+Specifica una clausola SQL WHERE per filtrare i record da
+mostrare.
+.*
+:IMHELP name='COM/OPTPARM'.
+.*
+:PARML.
+:PT.:PK DEF.*NONE:EPK.
+:PD.Sono visualizzati tutti i rec.
+:PT.:PV.Criteri di scelta:EPV.
+:PD.Solo i record che soddisfano la clausola sono mostrati.
+:EPARML.
+.*
+:EHELP.
+.*
+.*--------------------------------------------------------------------
+.* Hilfetext für Schlüsselwort ORDERBY
+.*--------------------------------------------------------------------
+:HELP name='PEEK/ORDERBY'.
+SQL ORDER BY - Aiuto
+:XH3.SQL ORDER BY (ORDERBY)
+:P.
+Specifica una clausola SQL ORDER BY che definisce in che ordine
+sono mostrati i record.
+.*
+:IMHELP name='COM/OPTPARM'.
+.*
+:PARML.
+:PT.:PK DEF.*NONE:EPK.
+:PD.I record scelti sono ordinati per NRR.
+:PT.:PK DEF.*KEY:EPK.
+:PD.I record scelti sono mostrati in ordine di chiave. In
+mancanza di una chiave i record sono mostrati in ordine di
+RRN.
+:PT.:PV.Sort sequence:EPV.
+:PD.I record sono visualizzati nella sequenza specificata.
+:EPARML.
+.*
+:EHELP.
+.*
+.*====================================================================
+.*  Textbausteine, die an mehreren Stellen im Hilfetext
+.*  verwendet werden.
+.*====================================================================
+
+.*=====================================
+.*  Erforderlicher Parameter
+.*=====================================
+:HELP NAME='COM/REQPARM'.
+:P.
+Questo parametro ü necessario.
+:P.
+:IMHELP name='COM/VALUES'.
+:EHELP.
+
+.*=====================================
+.*  Optionaler Parameter
+.*=====================================
+:HELP NAME='COM/OPTPARM'.
+:P.
+Questo parametro ü facoltativo.
+:P.
+:IMHELP name='COM/VALUES'.
+:EHELP.
+
+.*=====================================
+.*  Werteliste
+.*=====================================
+:HELP NAME='COM/VALUES'.
+:P.
+I valori ammessi sono:
+:EHELP.
+.*
+:EPNLGRP.
