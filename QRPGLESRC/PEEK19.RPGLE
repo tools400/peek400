@@ -14,6 +14,14 @@
       *                                                               *
       *  Erstellen externen Aufsetzschlüssel                          *
       *                                                               *
+      * ============================================================= *
+      * >>PRE-COMPILER<<                                              *
+*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
       *===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
@@ -108,10 +116,10 @@
       *
      C                   EXSR      FIRST
       *
-     C                   MOVEL (P) *BLANKS       XKeyVal
-     C                   Z-ADD     1             X
+     C                   EVAL      XKeyVal = *BLANKS
+     C                   EVAL      X = 1
       *
-     C                   Z-ADD     1             F2KSeq
+     C                   EVAL      F2KSeq = 1
      C     F2KEY_L2      SETLL     FPEEKFLDL2
       *
      C                   DO        *HIVAL
@@ -120,7 +128,7 @@
      C                   LEAVE
      C                   Endif
       *
-     C                   MOVEL (P) F2FFD         FLDL0100
+     C                   EVAL      FLDL0100 = F2FFD
       *
      C                   Eval      yData      = F2FFD
      C                   Eval      yFormat    = F2Format
@@ -136,7 +144,7 @@
      C     1             DO        YOutBuffLn    Y
      C                   Eval      %subst(xKeyVal: x: 1) =
      C                                %subst(yOutBuffer: y: 1)
-     C                   ADD       1             X
+     C                   EVAL      X = X + 1
      C     X             IFGT      §keyBufLen
      C                   LEAVE
      C                   Endif
@@ -159,8 +167,8 @@
       * - Programm initialisieren
       ***                Callp     p_rmvPgmMg(§§pgmName)
       *
-     C                   MOVEL (P) *BLANKS       XMsgID
-     C                   MOVEL (P) *BLANKS       XMsgDta
+     C                   EVAL      XMsgID = *BLANKS
+     C                   EVAL      XMsgDta = *BLANKS
       *
      C                   ENDSR
       *

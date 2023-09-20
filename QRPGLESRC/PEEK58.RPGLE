@@ -15,11 +15,12 @@
       *                                                               *
       *  Peek/400 - Allgemeine Routinen                               *
       *                                                               *
-      * ============================================================= *
+      *===============================================================*
       * >>PRE-COMPILER<<                                              *
-      *   >>CRTCMD<<  CALL PGM(&LI/PEEK99) PARM(+                     *
-      *                        '&SF' '&SL' '&SM' '&LI' '*NO' +        *
-      *                        'PEEK' '&LI' '*NO');                   *
+      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
       *   >>EXECUTE<<                                                 *
       * >>END-PRE-COMPILER<<                                          *
       *===============================================================*
@@ -40,7 +41,11 @@
       *
       *---Variablendefinition------------------------------*
       /COPY QCOPYLE,D_VARDEF
+     D FILD0100        DS                  likeds(FILD0100_t) inz
+      /COPY QCOPYLE,FILD0100
+     D MBRD0100        DS                  likeds(MBRD0100_t) inz
       /COPY QCOPYLE,FLDL0100
+      /COPY QCOPYLE,MBRD0100
       /COPY QCOPYLE,D_CLib
       /COPY QCOPYLE,F_PEEK53
       *----------------------------------------------------*
@@ -106,9 +111,7 @@
       *===================================================================*
       *
      P f_dsplyLn       B                   Export
-      *
-      *  definieren Procedure Interface ...
-     D f_dsplyLn       PI                         like(r§int4      )
+     D                 PI                         like(r§int4      )
      D  i_FLDL0100                         const  likeds(fldl0100_t)
       *
       *  Funktionswert
@@ -130,16 +133,14 @@
       *
      C                   Return    fldLen
       *
-     P f_dsplyLn       E
+     P                 E
       *
       *===================================================================*
       *  Funktion:  f_buffLn                                   (Body)     *
       *===================================================================*
       *
      P f_buffLn        B                   Export
-      *
-      *  definieren Procedure Interface ...
-     D f_buffLn        PI                         like(r§int4      )
+     D                 PI                         like(r§int4      )
      D  i_FLDL0100                         const  likeds(fldl0100_t)
      D  i_withLen                          const  like(r§bool      )
      D                                            options(*nopass)
@@ -178,16 +179,14 @@
       *
      C                   Return    fldLen
       *
-     P f_buffLn        E
+     P                 E
       *
       *===================================================================*
       *  Funktion:  f_curFldLn                                 (Body)     *
       *===================================================================*
       *
      P f_curFldLn      B                   Export
-      *
-      *  definieren Procedure Interface ...
-     D f_curFldLn      PI                         like(r§int4      )
+     D                 PI                         like(r§int4      )
      D  i_buffer                           const  like(r§rcdbuf    )
      D  i_FLDL0100                         const  likeds(fldl0100_t)
       *
@@ -210,16 +209,14 @@
       *
      C                   Return    curFldLn
       *
-     P f_curFldLn      E
+     P                 E
       *
       *===================================================================*
       *  Funktion:  f_rtvFld                                   (Body)     *
       *===================================================================*
       *
      P f_rtvFld        B                   Export
-      *
-      *  definieren Procedure Interface ...
-     D f_rtvFld        PI                  opdesc like(r§int4      )
+     D                 PI                  opdesc like(r§int4      )
      D  o_buffer                                  like(r§rcdbuf    )
      D                                            options(*varsize)
      D  i_buffer                           const  like(r§rcdbuf    )
@@ -276,16 +273,14 @@
       *
      C                   Return    rtnLen
       *
-     P f_rtvFld        E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  p_fldToBuf                                 (Body)     *
       *===================================================================*
       *
      P p_fldToBuf      B                   Export
-      *
-      *  definieren Procedure Interface ...
-     D p_fldToBuf      PI
+     D                 PI
      D  io_buffer                                 like(r§rcdbuf    )
      D  i_fieldDta                                like(r§rcdbuf    )
      D  i_FLDL0100                         const  likeds(fldl0100_t)
@@ -364,16 +359,14 @@
       *
      C                   Return
       *
-     P p_fldToBuf      E
+     P                 E
       *
       *===================================================================*
       *  Funktion:  f_isVarLen                                 (Body)     *
       *===================================================================*
       *
      P f_isVarLen      B                   Export
-      *
-      *  definieren Procedure Interface ...
-     D f_isVarLen      PI                         like(r§bool      )
+     D                 PI                         like(r§bool      )
      D  i_FLDL0100                         const  likeds(fldl0100_t)
       * ------------------------------------------------------------------------
       *
@@ -383,16 +376,14 @@
      C                   Return    bFalse
      C                   Endif
       *
-     P f_isVarLen      E
+     P                 E
       *
       *===================================================================*
       *  Funktion:  f_binToDec                                 (Body)     *
       *===================================================================*
       *
      P f_binToDec      B                   Export
-      *
-      *  definieren Procedure Interface ...
-     D f_binToDec      PI                  opdesc like(r§int4    )
+     D                 PI                  opdesc like(r§int4    )
      D  i_string                  32767A   const options(*varsize)
      D  i_startPos                         const  like(r§int4    )
      D  i_length                           const  like(r§int4    )
@@ -437,16 +428,14 @@
      C     *pssr         Begsr
      C                   Endsr
       *
-     P f_binToDec      E
+     P                 E
       *
       *===================================================================*
       *  Funktion:  f_len                                      (Body)     *
       *===================================================================*
       *
      P f_len           B                   Export
-      *
-      *  definieren Procedure Interface ...
-     D f_len           PI                  opdesc like(r§int4    )
+     D                 PI                  opdesc like(r§int4    )
      D  i_string                  32767A   const options(*varsize)
       *
       * Parameters passed to CEEDOD
@@ -463,15 +452,14 @@
       *
      C                   Return    parmLen
       *
-     P f_len           E
+     P                 E
       *
       *===================================================================*
       *  Funktion:  f_scan                                     (Body)     *
       *===================================================================*
       *
      P f_scan          B                   Export
-      *
-     D f_scan          PI                  opdesc like(r§int4    )
+     D                 PI                  opdesc like(r§int4    )
      D  SrchArg                     100A   CONST  OPTIONS(*VARSIZE)
      D  String                      100A   CONST
       *
@@ -494,16 +482,14 @@
       *
      C                   Return    PosFound
       *
-     P f_scan          E
+     P                 E
       *
       *===================================================================*
       *  Funktion:  f_vldNme                                   (Body)     *
       *===================================================================*
       *
      P f_vldName       B                   Export
-      *
-      *  Definieren Procedure Interface
-     D f_vldName       PI                         like(r§bool    )
+     D                 PI                         like(r§bool    )
      D  i_name                       10A   const
      D  o_msgID                                   like(r§msgID   )
      D  o_msgDta                                  like(r§msgDta  )
@@ -603,16 +589,14 @@
       *
      C                   Return    isValid
       *
-     P f_vldName       E
+     P                 E
       *
       *===================================================================*
       *  Funktion:  f_vldFloat                                 (Body)     *
       *===================================================================*
       *
      P f_vldFloat      B                   Export
-      *
-      *  Definieren Procedure Interface
-     D f_vldFloat      PI                         like(r§bool    )
+     D                 PI                         like(r§bool    )
      D  i_buffer                     64A   const  varying
       *
       *  Arbeitsfelder
@@ -623,7 +607,7 @@
      D cDIGITS         C                   '0123456789'
       *
       *  Nachrichten
- CPY  *COPY QCOPYLE,USR8192
+      *COPY QCOPYLE,USR8192
       *-------------------------------------------------------------------*
       /FREE
 
@@ -710,16 +694,14 @@
 
       /END-FREE
       *
-     P f_vldFloat      E
+     P                 E
       *
       *===================================================================*
       *  Funktion:  f_execute                                  (Body)     *
       *===================================================================*
       *
      P f_execute       B                   Export
-      *
-      *  Definieren Procedure Interface
-     D f_execute       PI                  opdesc like(r§bool    )
+     D                 PI                  opdesc like(r§bool    )
      D  i_cmd                     32702A   const
      D                                     options(*VARSIZE)
      D  o_msgID                                   like(r§msgID   )
@@ -794,15 +776,14 @@
       *
      C                   Return    isOK
       *
-     P f_execute       E
+     P                 E
       *
       *===================================================================*
       *  Funktion:  f_basedPF                                  (Body)     *
       *===================================================================*
       *
      P f_basedPF       B                   Export
-      *
-     D f_basedPF       PI                         like(r§bool   )
+     D                 PI                         like(r§bool   )
      D  i_file                             value  like(r§file   )
      D  i_lib                              value  like(r§lib    )
      D  i_mbr                              value  like(r§mbr    )
@@ -850,10 +831,10 @@
       *      prüfen auf logische Datei
      C                   Eval      FILD0100 = yData
       *
-     C                   If        ATFILA = '*LGL'
+     C                   If        FILD0100.ATFILA = '*LGL'
       *      ... logical file
      C                   Select
-     C                   When      ATNOMB > 1
+     C                   When      FILD0100.ATNOMB > 1
       *          ... multi-based-member logical file
      C                   If        f_basedMbr(i_file: i_lib: i_mbr
      C                                        : i_rcdMbrNbr: i_rcdFmt
@@ -862,7 +843,7 @@
      C                   Return    bFalse
      C                   Endif
       *
-     C                   When      ATNOFM > 1
+     C                   When      FILD0100.ATNOFM > 1
       *          ... multi-format logical file
      C                   If        f_basedMbr(i_file: i_lib: i_mbr
      C                                        : i_rcdMbrNbr: i_rcdFmt
@@ -906,7 +887,7 @@
       *
      C                   Return    isBasedOnPF
       *
-     P f_basedPF       E
+     P                 E
       *
       *===================================================================*
       *  Funktion:  f_basedMbr                                 (Body)     *
@@ -1130,8 +1111,7 @@
       *===================================================================*
       *
      P f_numBased      B                   Export
-      *
-     D f_numBased      PI                         like(r§int4    )
+     D                 PI                         like(r§int4    )
      D  i_file                             const  like(r§file    )
      D  i_lib                              const  like(r§lib     )
      D  i_mbr                              const  like(r§mbr     )
@@ -1184,15 +1164,14 @@
       *
      C                   Return    f_numBased
       *
-     P f_numBased      E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  p_setPrdLb                                 (Body)     *
       *===================================================================*
       *
      P p_setPrdLb      B                   Export
-      *
-     D p_setPrdLb      PI
+     D                 PI
      D  i_lib                              const  like(r§lib     )
       *------------------------------------------------------------*
       *
@@ -1200,28 +1179,26 @@
       *
      C                   Return
       *
-     P p_setPrdLb      E
+     P                 E
       *
       *===================================================================*
       *  Funktion:  f_getPrdLb                                 (Body)     *
       *===================================================================*
       *
      P f_getPrdLb      B                   Export
-      *
-     D f_getPrdLb      PI                         like(r§lib     )
+     D                 PI                         like(r§lib     )
       *------------------------------------------------------------*
       *
      C                   Return    g_prdLib
       *
-     P f_getPrdLb      E
+     P                 E
       *
       *===================================================================*
       *  Funktion:  f_cmdLine                                  (Body)     *
       *===================================================================*
       *
      P f_cmdLine       B                   Export
-      *
-     D f_cmdLine       PI                         like(r§bool    )
+     D                 PI                         like(r§bool    )
       *------------------------------------------------------------*
       *
       *  Definieren Funktionswert ...
@@ -1261,15 +1238,14 @@
      C                   Return    f_cmdLine
       *
       *
-     P f_cmdLine       E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  p_expStr                                   (Body)     *
       *===================================================================*
       *
      P p_expStr        B                   Export
-      *
-     D p_expStr        PI                  opdesc
+     D                 PI                  opdesc
      D  o_string                  32767A          options(*varsize)
      D  i_string                  32767A   const  options(*varsize)
      D  i_stepVal                    10I 0 const  options(*nopass)
@@ -1325,15 +1301,14 @@
       *
      C                   Return
       *
-     P p_expStr        E
+     P                 E
       *
       *===================================================================*
       *  Funktion:  f_headline                                 (Body)     *
       *===================================================================*
       *
      P f_headline      B                   Export
-      *
-     D f_headline      PI            50A
+     D                 PI            50A
      D  i_headTyp                    10A   const
      D  i_FLDL0100                         const  likeds(fldl0100_t)
       *
@@ -1360,15 +1335,14 @@
       *
      C                   Return    heading
       *
-     P f_headline      E
+     P                 E
       *
       *===================================================================*
       *  Funktion:  f_isNumFld                                 (Body)     *
       *===================================================================*
       *
      P f_isNumFld      B                   Export
-      *
-     D f_isNumFld      PI                         like(r§bool      )
+     D                 PI                         like(r§bool      )
      D  i_FLDL0100                         const  likeds(fldl0100_t)
       *
       *  Funktionswert
@@ -1387,15 +1361,14 @@
       *
      C                   Return    isNumFld
       *
-     P f_isNumFld      E
+     P                 E
       *
       *===================================================================*
       *  Funktion:  f_isFloatFld                               (Body)     *
       *===================================================================*
       *
      P f_isFloatFld    B                   Export
-      *
-     D f_isFloatFld    PI                         like(r§bool      )
+     D                 PI                         like(r§bool      )
      D  i_FLDL0100                         const  likeds(fldl0100_t)
       *
       *  Funktionswert
@@ -1411,15 +1384,14 @@
       *
      C                   Return    isFloat
       *
-     P f_isFloatFld    E
+     P                 E
       *
       *===================================================================*
       *  Funktion:  f_isCharFld                                (Body)     *
       *===================================================================*
       *
      P f_isCharFld     B                   Export
-      *
-     D f_isCharFld     PI                         like(r§bool      )
+     D                 PI                         like(r§bool      )
      D  i_FLDL0100                         const  likeds(fldl0100_t)
       *
       *  Funktionswert
@@ -1436,15 +1408,14 @@
       *
      C                   Return    isCharFld
       *
-     P f_isCharFld     E
+     P                 E
       *
       *===================================================================*
       *  Funktion:  f_hasCcsid                                 (Body)     *
       *===================================================================*
       *
      P f_hasCcsid      B                   Export
-      *
-     D f_hasCcsid      PI                         like(r§bool      )
+     D                 PI                         like(r§bool      )
      D  i_FLDL0100                         const  likeds(fldl0100_t)
       *
       *  Funktionswert
@@ -1461,41 +1432,38 @@
       *
      C                   Return    hasCcsid
       *
-     P f_hasCcsid      E
+     P                 E
       *
       *===================================================================*
       *  Funktion:  f_appMsgF                                  (Body)     *
       *===================================================================*
       *
      P f_appMsgF       B                   Export
-      *
-     D f_appMsgF       PI                         like(r§file    )
+     D                 PI                         like(r§file    )
       *------------------------------------------------------------*
       *
      C                   Return    'PEEKGER'
       *
-     P f_appMsgF       E
+     P                 E
       *
       *===================================================================*
       *  Funktion:  f_appMsgFL                                 (Body)     *
       *===================================================================*
       *
      P f_appMsgFL      B                   Export
-      *
-     D f_appMsgFL      PI                         like(r§lib     )
+     D                 PI                         like(r§lib     )
       *------------------------------------------------------------*
       *
      C                   Return    '*LIBL'
       *
-     P f_appMsgFL      E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  p_rmvPgmMg                                 (Body)     *
       *===================================================================*
       *
      P p_rmvPgmMg      B                   Export
-      *
-     D p_rmvPgmMg      PI
+     D                 PI
      D  i_pgmNme                           const  like(r§pgm     )
       *
       *  Parameter für QMHRMVPM API
@@ -1544,15 +1512,14 @@
       *
      C                   Return
       *
-     P p_rmvPgmMg      E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  p_sndPgmMg                                 (Body)     *
       *===================================================================*
       *
      P p_sndPgmMg      B                   Export
-      *
-     D p_sndPgmMg      PI
+     D                 PI
      D  i_msgID                                   like(r§msgID   )
      D  i_msgDta                                  like(r§msgDta  )
      D  i_pgmNme                           const  like(r§pgm     )
@@ -1650,7 +1617,7 @@
       *
      C                   Return
       *
-     P p_sndPgmMg      E
+     P                 E
       *
       *===================================================================*
       *  Funktion:  f_canUseRefFld                             (Body)     *
@@ -1734,8 +1701,7 @@
       *===================================================================*
       *
      P f_isToLong      B                   Export
-      *
-     D f_isToLong      PI                         like(r§bool      )
+     D                 PI                         like(r§bool      )
      D  i_FLDL0100                         const  likeds(fldl0100_t)
       *
       *  Funktionswert
@@ -1751,15 +1717,14 @@
       *
      C                   Return    toLong
       *
-     P f_isToLong      E
+     P                 E
       *
       *===================================================================*
       *  Funktion:  f_isToLongMax                              (Body)     *
       *===================================================================*
       *
      P f_isToLongMax   B                   Export
-      *
-     D f_isToLongMax   PI                         like(r§bool      )
+     D                 PI                         like(r§bool      )
      D  i_FLDL0100                         const  likeds(fldl0100_t)
       *
       *  Funktionswert
@@ -1775,15 +1740,14 @@
       *
      C                   Return    toLong
       *
-     P f_isToLongMax   E
+     P                 E
       *
       *===================================================================*
       *  Funktion:  f_maxDspLn                                 (Body)     *
       *===================================================================*
       *
      P f_maxDspLn      B                   Export
-      *
-     D f_maxDspLn      PI                         like(r§int4    )
+     D                 PI                         like(r§int4    )
      D  i_FLDL0100                         const  likeds(fldl0100_t)
       *
      D maxLen          S             10I 0 inz
@@ -1796,15 +1760,14 @@
       *
      C                   Return    maxLen
       *
-     P f_maxDspLn      E
+     P                 E
       *
       *===================================================================*
       *  Funktion:  f_cntFldLn                                 (Body)     *
       *===================================================================*
       *
      P f_cntFldLn      B                   Export
-      *
-     D f_cntFldLn      PI                         like(r§int4    )
+     D                 PI                         like(r§int4    )
      D  i_FLDL0100                         const  likeds(fldl0100_t)
       *------------------------------------------------------------*
       *
@@ -1814,15 +1777,14 @@
      C                   Return    35
      C                   Endif
       *
-     P f_cntFldLn      E
+     P                 E
       *
       *===================================================================*
       *  Funktion:  f_nbrDspRw                                 (Body)     *
       *===================================================================*
       *
      P f_nbrDspRw      B                   Export
-      *
-     D f_nbrDspRw      PI                         like(r§int4      )
+     D                 PI                         like(r§int4      )
      D  i_FLDL0100                         const  likeds(fldl0100_t)
       *
       * Funktionswert
@@ -1848,16 +1810,14 @@
       *
      C                   Return    nbrDspRow
       *
-     P f_nbrDspRw      E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  p_decToBin                                 (Body)     *
       *===================================================================*
       *
      P p_decToBin      B                   Export
-      *
-      *  definieren Procedure Interface ...
-     D p_decToBin      PI                  opdesc
+     D                 PI                  opdesc
      D  io_string                 32767A          options(*varsize)
      D  i_startPos                         const  like(r§int4    )
      D  i_length                           const  like(r§int4    )
@@ -1904,15 +1864,14 @@
      C     *pssr         Begsr
      C                   Endsr
       *
-     P p_decToBin      E
+     P                 E
       *
       *===================================================================*
       *  Funktion:  f_isNotAlw                                 (Body)     *
       *===================================================================*
       *
      P f_isNotAlw      B                   Export
-      *
-     D f_isNotAlw      PI                         like(r§bool      )
+     D                 PI                         like(r§bool      )
      D  i_FLDL0100                         const  likeds(fldl0100_t)
       *
       * Funktionswert
@@ -1975,15 +1934,14 @@
       *
      C                   Return    notAllowed
       *
-     P f_isNotAlw      E
+     P                 E
       *
       *===================================================================*
       *  Funktion:  f_isKeyFld                                 (Body)     *
       *===================================================================*
       *
      P f_isKeyFld      B                   Export
-      *
-     D f_isKeyFld      PI                         like(r§bool      )
+     D                 PI                         like(r§bool      )
      D  i_FLDL0100                         const  likeds(fldl0100_t)
       *
       * Funktionswert
@@ -2001,29 +1959,27 @@
       *
      C                   Return    isKeyFld
       *
-     P f_isKeyFld      E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  f_pgmCallN                                 (Body)     *
       *===================================================================*
       *
      P f_pgmCallN      B                   Export
-      *
-     D f_pgmCallN      PI                         like(r§pgmCallN)
+     D                 PI                         like(r§pgmCallN)
      D  i_pgmNme                           const  like(r§pgm     )
       *------------------------------------------------------------*
       *
      C                   Return    %trimr(f_getPrdLb) + '/' + i_pgmNme
       *
-     P f_pgmCallN      E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  p_sndStsMg                                 (Body)     *
       *===================================================================*
       *
      P p_sndStsMg      B                   Export
-      *
-     D p_sndStsMg      PI
+     D                 PI
      D  i_msgID                            const like(r§msgID   )
      D  i_msgDta                           const like(r§msgDta  )
       *
@@ -2076,15 +2032,14 @@
       *
      C                   Return
       *
-     P p_sndStsMg      E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  f_rtvMsgD                                  (Body)     *
       *===================================================================*
       *
      P f_rtvMsgD       B                   Export
-      *
-     D f_rtvMsgD       PI          2048A
+     D                 PI          2048A
      D  i_msgID                            value  like(r§msgID   )
      D  i_msgDta                           value  like(r§msgDta  )
      D  i_rplcSubV                         const  like(r§bool    )
@@ -2175,15 +2130,14 @@
       *
      C                   Return    RTVM0100
       *
-     P f_rtvMsgD       E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  f_msgText                                  (Body)     *
       *===================================================================*
       *
      P f_msgText       B                   Export
-      *
-     D f_msgText       PI           512A
+     D                 PI           512A
      D  i_msgID                            value  like(r§msgID   )
      D  i_msgDta                           value  like(r§msgDta  )
      D  i_msgF                             value  like(r§file    )
@@ -2223,15 +2177,14 @@
       *
      C                   Return    msgText
       *
-     P f_msgText       E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  p_movPgmMg                                 (Body)     *
       *===================================================================*
       *
      P p_movPgmMg      B                   Export
-      *
-     D p_movPgmMg      PI
+     D                 PI
      D  i_pgmNme                           const  like(r§pgm     )
       *
       *  Parameter für QMHMOVPM
@@ -2274,15 +2227,14 @@
       *
      C                   Return
       *
-     P p_movPgmMg      E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  p_wrongKey                                 (Body)     *
       *===================================================================*
       *
      P p_wrongKey      B                   Export
-      *
-     D p_wrongKey      PI
+     D                 PI
      D  i_scnAID                           const  like(r§scnAID  )
      D  i_pgmNme                           const  like(r§pgm     )
       *
@@ -2298,15 +2250,14 @@
       *
      C                   Return
       *
-     P p_wrongKey      E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  p_keyToMsg                                 (Body)     *
       *===================================================================*
       *
      P p_keyToMsg      B                   Export
-      *
-     D p_keyToMsg      PI
+     D                 PI
      D  i_scnAID                           const  like(r§scnAID  )
      D  o_msgID                                   like(r§msgID   )
      D  o_msgDta                                  like(r§msgDta  )
@@ -2395,15 +2346,14 @@
       *
      C                   Return
       *
-     P p_keyToMsg      E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  f_spltTxt                                  (Body)     *
       *===================================================================*
       *
      P f_spltTxt       B                   Export
-      *
-     D f_spltTxt       PI                  opdesc like(r§int4    )
+     D                 PI                  opdesc like(r§int4    )
      D  i_text                    32767A   const  options(*varsize)
      D  i_strPos                           const  like(r§int4    )
      D  i_len                              const  like(r§int4    )
@@ -2504,15 +2454,14 @@
       *
      C                   Return    rtnLen
       *
-     P f_spltTxt       E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  p_center                                   (Body)     *
       *===================================================================*
       *
      P p_center        B                   Export
-      *
-     D p_center        PI                  opdesc
+     D                 PI                  opdesc
      D  io_text                   32767A          options(*varsize)
       *
       *  Arbeitsfelder
@@ -2572,15 +2521,14 @@
       *
      C                   Return
       *
-     P p_center        E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  f_addPtr                                   (Body)     *
       *===================================================================*
       *
      P f_addPtr        B                   Export
-      *
-     D f_addPtr        PI              *
+     D                 PI              *
      D  i_pointer                      *   value
      D  i_offset                      5I 0 value
       *
@@ -2604,15 +2552,14 @@
       *
      C                   Return    i_pointer
       *
-     P f_addPtr        E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  f_isKeyExc                                 (Body)     *
       *===================================================================*
       *
      P f_isKeyExc      B                   Export
-      *
-     D f_isKeyExc      PI                        like(r§bool    )
+     D                 PI                        like(r§bool    )
      D  i_data                             value like(R§SET0000 )
      D  i_exclKeys                         value like(r§pgmCmd  ) DIM(25)
       *
@@ -2638,7 +2585,7 @@
       *
      C                   Return    isExcluded
       *
-     P f_isKeyExc      E
+     P                 E
       *
       *===============================================================*
       *  Prepare NUM_Descr - RPG-IV implementation of NUM_DESCR macro
@@ -2660,8 +2607,6 @@
       *
      P f_NUM_Descr...
      P                 B                   export
-      *
-     D f_NUM_Descr...
      D                 PI            10I 0
      D  i_type                        3I 0 value
      D  i_length                      3I 0 value
@@ -2684,7 +2629,6 @@
       *
      C                   Return    NUM_Descr
       *
-     P f_NUM_Descr...
      P                 E
       *
       *========================================================================*
@@ -2692,8 +2636,6 @@
       *========================================================================*
      P f_NUM_Descr2...
      P                 B                          export
-      *
-     D f_NUM_Descr2...
      D                 PI            10I 0
      D  i_type                        1A   value
      D  i_length                      3I 0 value
@@ -2745,7 +2687,6 @@
 
       /END-FREE
       *
-     P f_NUM_Descr2...
      P                 E
       *
       *========================================================================*
@@ -2753,8 +2694,6 @@
       *========================================================================*
      P f_rpgToIntLength...
      P                 B                          export
-      *
-     D f_rpgToIntLength...
      D                 PI            10I 0
      D  i_length                     10I 0 value
       *
@@ -2780,7 +2719,6 @@
 
       /END-FREE
       *
-     P f_rpgToIntLength...
      P                 E
       *
       *===============================================================*
@@ -2789,8 +2727,6 @@
       *
      P p_clrErrno...
      P                 B                   export
-      *
-     D p_clrErrno...
      D                 PI
       *
      D runTimeError    S             10I 0 based(pRunTimeError)
@@ -2803,8 +2739,6 @@
        return;
 
       /END-FREE
-      *
-     P p_clrErrno...
      P                 E
       *
       *===============================================================*
@@ -2813,8 +2747,6 @@
       *
      P f_errno...
      P                 B                   export
-      *
-     D f_errno...
      D                 PI            10I 0
       *
      D runTimeError    S             10I 0 based(pRunTimeError)
@@ -2826,8 +2758,6 @@
        return runTimeError;
 
       /END-FREE
-      *
-     P f_errno...
      P                 E
       *
       *===============================================================*
@@ -2836,8 +2766,6 @@
       *
      P f_strerror...
      P                 B                   export
-      *
-     D f_strerror...
      D                 PI                         like(r§msgDta )
      D  i_errno                      10I 0 const
       *
@@ -2858,8 +2786,6 @@
        return errText;
 
       /END-FREE
-      *
-     P f_strerror...
      P                 E
       *
       *===============================================================*
@@ -2868,8 +2794,6 @@
       *
      P f_bitor...
      P                 B                   export
-      *
-     D f_bitor...
      D                 PI            10U 0
      D  i_arg1                       10U 0 value
      D  i_arg2                       10U 0 value
@@ -2900,8 +2824,6 @@
        return result;
 
       /END-FREE
-      *
-     P f_bitor...
      P                 E
       *
       *=========================================================================
@@ -2921,8 +2843,6 @@
       *=========================================================================
      P f_exist...
      P                 B                   export
-      *
-     D f_exist...
      D                 PI              N
      D  i_obj                        10A   const
      D  i_lib                        10A   const  options(*omit)
@@ -2954,18 +2874,7 @@
      D  crtDatTim                    13A   inz
      D  chgDatTim                    13A   inz
       *
-     D mbrd0100        DS                  qualified
-     D  bytePrv                      10I 0 inz
-     D  byteAvl                      10I 0 inz
-     D  filNme                       10A   inz
-     D  filLib                       10A   inz
-     D  mbr                          10A   inz
-     D  attr                         10A   inz
-     D  srcTyp                       10A   inz
-     D  crtDatTim                    13A   inz
-     D  chgDatTim                    13A   inz
-     D  text                         50A   inz
-     D  isSrcFile                     1A   inz
+     D mbrd0100        DS                  likeds(MBRD0100_t) inz
       *
      D qObj            DS                  likeds(qObj_t) inz
      D errCode         DS                  likeds(errCode_t ) inz
@@ -3033,8 +2942,6 @@
        return doesExist;
 
       /END-FREE
-      *
-     P f_exist...
      P                 E
       *
       *=========================================================================
@@ -3065,8 +2972,6 @@
       *
      P f_wordWrap...
      P                 B                   export
-      *
-     D f_wordWrap...
      D                 PI          4096A          varying
      D  i_string                   4096A   const  varying
      D  i_width                      10U 0 const
@@ -3222,8 +3127,6 @@
        return   text;
 
       /END-FREE
-      *
-     P f_wordWrap...
      P                 E
       *
       *=========================================================================
@@ -3233,8 +3136,6 @@
       *
      P lf_wordWrap...
      P                 B
-      *
-     D lf_wordWrap...
      D                 PI          4096A          varying
      D  i_string                   4096A   const  varying
      D  i_width                      10U 0 const
@@ -3316,8 +3217,6 @@
        return   text;
 
       /END-FREE
-      *
-     P lf_wordWrap...
      P                 E
       *
       *=========================================================================
@@ -3334,8 +3233,6 @@
       *
      P f_isBitOn...
      P                 B                   export
-      *
-     D f_isBitOn...
      D                 PI              N
      D  i_testBit                    10U 0 value
      D  i_value                      10U 0 value
@@ -3362,8 +3259,6 @@
        return   isOn;
 
       /END-FREE
-      *
-     P f_isBitOn...
      P                 E
       *
       *=========================================================================
@@ -3378,8 +3273,6 @@
       *
      P f_ucase...
      P                 B                   export
-      *
-     D f_ucase...
      D                 PI          4096A           varying
      D  i_string                   4096A   const   varying
       *
@@ -3443,8 +3336,6 @@
        return   string;
 
       /END-FREE
-      *
-     P f_ucase...
      P                 E
       *
       *=========================================================================
@@ -3461,8 +3352,6 @@
       *
      P f_endsWith...
      P                 B                   export
-      *
-     D f_endsWith...
      D                 PI              N
      D  i_suffix                   4096A   const   varying
      D  i_string                   4096A   const   varying
@@ -3489,7 +3378,6 @@
 
       /END-FREE
       *
-     P f_endsWith...
      P                 E
       *
       *=========================================================================
@@ -3503,8 +3391,6 @@
       *=========================================================================
      P f_sndMsgToCmdLine...
      P                 B                   export
-      *
-     D f_sndMsgToCmdLine...
      D                 PI
      D  i_msgID                       7A   const
      D  i_msgDta                    512A   const
@@ -3556,7 +3442,6 @@
 
       /END-FREE
       *
-     P f_sndMsgToCmdLine...
      P                 E
       *
       *===================================================================*
@@ -3565,9 +3450,6 @@
       *
      P f_fieldTypeAsString...
      P                 B                   Export
-      *
-      *  definieren Procedure Interface ...
-     D f_fieldTypeAsString...
      D                 PI           128A          varying
      D  i_FLDL0100                         const  likeds(fldl0100_t)
       *
@@ -3606,7 +3488,6 @@
 
       /END-FREE
       *
-     P f_fieldTypeAsString...
      P                 E
       *
       *===================================================================*
@@ -3615,9 +3496,6 @@
       *
      P f_nextHeaderType...
      P                 B                   Export
-      *
-      *  definieren Procedure Interface ...
-     D f_nextHeaderType...
      D                 PI            10A
      D  i_headerType                 10A   value
       *
@@ -3639,7 +3517,6 @@
 
       /END-FREE
       *
-     P f_nextHeaderType...
      P                 E
       *
       *===================================================================*

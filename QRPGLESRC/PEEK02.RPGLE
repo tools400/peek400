@@ -55,6 +55,14 @@
       *                                                               *
       *      PEEK02 - Funktion (4)       delete list (user space)     *
       *                                                               *
+      * ============================================================= *
+      * >>PRE-COMPILER<<                                              *
+      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
       *===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
@@ -194,12 +202,12 @@
       *
      C     Create        BEGSR
       *
-     C                   Z-ADD     *ZEROS        xAnz
+     C                   EVAL      xAnz = *ZEROS
       *
      C                   EXSR      CHKOBJ
       *
       *  create user space
-     C     *IN99         IFEQ      '1'
+     C                   IF        (%error())
      C                   CALL      'QUSCRTUS'
      C                   PARM                    SpaceName
      C                   PARM      'TEMP'        SpaceAttr
@@ -215,10 +223,10 @@
      C                   PARM                    SpacePtr
       *
       *  get file format description
-     C                   MOVEL     'FLDL0100'    DRFMT                          format
-     C                   MOVEL     xQFile        DRFNME                         qualf.file
-     C                   MOVEL     xRFmt         DRRCDF                         record form.
-     C                   MOVEL     '0'           DROVRR                         override
+     C                   EVAL      DRFMT = 'FLDL0100'                           format
+     C                   EVAL      DRFNME = xQFile                              qualf.file
+     C                   EVAL      DRRCDF = xRFmt                               record form.
+     C                   EVAL      DROVRR = '0'                                 override
       *
      C                   CALL      'QUSLFLD'
      C                   PARM                    SpaceName
@@ -248,16 +256,12 @@
       *
      C                   EXSR      CHKOBJ
       *
-     C     *IN99         IFEQ      '0'
+     C                   IF        (not %error())
       *
-     C                   MOVEL(P)  'DLTUSR'      YCMD
-     C                   CAT       'SPC':0       YCMD
-     C                   CAT       'USR':1       YCMD
-     C                   CAT       'SPC(':0      YCMD
-     C                   CAT       SpcLib:0      YCMD
-     C                   CAT       '/':0         YCMD
-     C                   CAT       SpcName:0     YCMD
-     C                   CAT       ')':0         YCMD
+     C                   EVAL      YCMD = 'DLTUSRSPC USRSPC(' +
+     C                                      %trim(SpcLib) + '/' +
+     C                                      %trim(SpcName) +
+     C                                    ')'
       *
      C                   CALL      'QCMDEXC'
      C                   PARM                    yCmd
@@ -273,13 +277,9 @@
       *
      C     Read          BEGSR
       *
-     C                   MOVE      *BLANKS       xListE
+     C                   EVAL      xListE = *BLANKS
       *
      C                   IF        GenHeader.numLstEnt > *ZEROS
-      **   OffsetLst     IFGE      maxData     TODO: remove this code
-      *   Ungültiger Wert in OffsetLst
-      **                 EXSR      CallUsAPI
-      **                 ELSE
       *
      C                   EVAL      ListPtr = SpacePtr + GenHeader.OffsetLst
       *
@@ -288,41 +288,10 @@
      C                   EVAL      GenHeader.NumLstEnt -= 1
       *
      C                   EVAL      xAnz = GenHeader.NumLstEnt
-      **                 Endif
      C                   ELSE
       *   Ungültiger Wert in NumLstEnt
      C                   EXSR      *PSSR
      C                   Endif
-      *
-     C                   ENDSR
-      *
-      *====================================================*
-      *  CallUsAPI  Abrufen Werte aus UserSpace mittels API*
-      *====================================================*
-      *                                                            TODO: remove this code
-     C     CallUsAPI     BEGSR
-      *
-      **   NumLstEnt     IFGT      *ZEROS
-      *
-      **                 EVAL      SpcStrPos = OffsetLst+1
-      *
-      **                 Z-ADD     EntrySize     SpcRtvLen
-      **                 CALL      'QUSRTVUS'
-      **                 PARM                    SpaceName
-      **                 PARM                    SpcStrPos
-      **                 PARM                    SpcRtvLen
-      **                 PARM                    RtvData
-      *
-      **                 MOVEL(P)  RtvData       xListE
-      **                 ADD       EntrySize     OffsetLst
-      **                 SUB       1             NumLstEnt
-      *
-      **                 Z-ADD     NumLstEnt     xAnz
-      *
-      **                 ELSE
-      *   Ungültiger Wert in NumLstEnt
-      **                 EXSR      *PSSR
-      **                 Endif
       *
      C                   ENDSR
       *
@@ -332,19 +301,12 @@
       *
      C     CHKOBJ        BEGSR
       *
-     C                   MOVEL(P)  'CHKOBJ'      YCMD
-     C                   CAT       'OBJ(':1      YCMD
-     C                   CAT       SpcLib:0      YCMD
-     C                   CAT       '/':0         YCMD
-     C                   CAT       SpcName:0     YCMD
-     C                   CAT       ')':0         YCMD
-     C                   CAT       'OBJ':1       YCMD
-     C                   CAT       'TYPE(':0     YCMD
-     C                   CAT       '*USR':0      YCMD
-     C                   CAT       'SPC':0       YCMD
-     C                   CAT       ')':0         YCMD
+     C                   EVAL      YCMD = 'CHKOBJ OBJ(' +
+     C                                      %trim(SpcLib) + '/' +
+     C                                      %trim(SpcName) +
+     C                                    ') OBJTYPE(*USRSPC)'
       *
-     C                   CALL      'QCMDEXC'                            99
+     C                   CALL(E)   'QCMDEXC'
      C                   PARM                    yCmd
      C                   PARM      256           yCmdL
       *
@@ -356,10 +318,8 @@
       *
      C     *INZSR        BEGSR
       *
-     C                   MOVEL(P)  'QTEMP'       SpcLib
-     C                   MOVEL(P)  '§PEEK§'      SpcName
-      *
-      **   DataLen       SUB       LstDataLen    maxData           TODO: remove this code
+     C                   EVAL      SpcLib = 'QTEMP'
+     C                   EVAL      SpcName = '§PEEK§'
       *
      C                   ENDSR
       *
@@ -371,7 +331,7 @@
       *
      C                   DUMP
       *
-     C                   Z-ADD     *ZEROS        xAnz
+     C                   EVAL      xAnz = *ZEROS
      C                   GOTO      ENDE
       *
      C                   ENDSR     '*CANCL'

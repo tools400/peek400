@@ -15,6 +15,14 @@
       *  Erstellen einer Liste aller verfügbaren Satzformate          *
       *  einer Datei.                                                 *
       *                                                               *
+      * ============================================================= *
+      * >>PRE-COMPILER<<                                              *
+*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
       *===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
@@ -31,6 +39,7 @@
       *
       *---Variablendefinition------------------------------*
       /COPY QCOPYLE,D_VARDEF
+      /COPY QCOPYLE,FLDL0100
       *----------------------------------------------------*
       *
       *---Copystrecken für Nachrichtenaufbau---------------*
@@ -46,6 +55,8 @@
       *---SDS-Datenstruktur--------------------------------*
       /COPY QCOPYLE,ERR_D_SDS
       *----------------------------------------------------*
+      *
+     D XQFILE          DS                  likeds(r§qObj)
       *
      D sortSeq         S                   LIKE(F_SortSeq) INZ(0)
       *
@@ -69,7 +80,7 @@
       ********************************************************************
       *
      C     *ENTRY        PLIST
-     C                   PARM                    XQFILE           20
+     C                   PARM                    XQFILE
       *
      C                   PARM                    XMsgID            7
      C                   PARM                    XMsgDta         512
@@ -79,23 +90,23 @@
       *---------------------------------------------------*
       *
       *  create list of record formats
-     C                   MOVEL(P)  XQFILE        YQFILE
-     C                   MOVEL(P)  '*CREATE'     YFUNK
-     C                   Z-ADD     *ZEROS        YANZ
-     C                   MOVEL(P)  *BLANKS       YLIST
+     C                   EVAL      YQFILE = XQFILE
+     C                   EVAL      YFUNK = '*CREATE'
+     C                   EVAL      YANZ = *ZEROS
+     C                   EVAL      YLIST = *BLANKS
      C                   CALL      PEEK11
      C                   PARM                    yQFile
      C                   PARM                    yFunk
      C                   PARM                    yAnz
      C                   PARM                    yList
       *
-     C                   Z-ADD     YANZ          nbrOfFmt
+     C                   EVAL      nbrOfFmt = YANZ
       *
-     C                   Z-ADD     *ZEROS        sortSeq
+     C                   EVAL      sortSeq = *ZEROS
       *  read each entry
      C     1             DO        nbrOfFmt      fmtCnt
       *
-     C                   MOVEL(P)  '*READ'       YFUNK
+     C                   EVAL      YFUNK = '*READ'
      C                   CALL      PEEK11
      C                   PARM                    YQFILE
      C                   PARM                    YFUNK
@@ -104,11 +115,11 @@
       *
      C                   CLEAR                   FPEEKFMT
       *
-     C                   MOVEL (P) 'RCDL0200'    F_FORMAT
-     C                   MOVEL (P) YLIST         F_FMT
-     C                   ADD       10            sortSeq
-     C                   Z-ADD     sortSeq       F_SortSeq
-     C                   Z-ADD     fmtCnt        F_FmtNbr
+     C                   EVAL      F_FORMAT = 'RCDL0200'
+     C                   EVAL      F_FMT = YLIST
+     C                   EVAL      sortSeq = sortSeq + 10
+     C                   EVAL      F_SortSeq = sortSeq
+     C                   EVAL      F_FmtNbr = fmtCnt
      C                   WRITE     FPEEKFMT
       *
      C                   Enddo
@@ -127,16 +138,16 @@
      C     ENDE          TAG
       *
      C     nbrOfFmt      IFEQ      *ZEROS
-     C                   MOVEL (P) 'USR0002'     XMsgID
-     C     10            SUBST (P) XQFile:1      USR00021
-     C     10            SUBST (P) XQFile:11     USR00022
-     C                   MOVEL (P) USR0002       XMsgDta
+     C                   EVAL      XMsgID = 'USR0002'
+     C                   EVAL      USR00021 = XQFILE.NAME
+     C                   EVAL      USR00022 = XQFILE.LIB
+     C                   EVAL      XMsgDta = USR0002
      C                   ELSE
-     C                   MOVEL (P) *BLANKS       XMsgID
-     C                   MOVEL (P) *BLANKS       XMsgDta
+     C                   EVAL      XMsgID = *BLANKS
+     C                   EVAL      XMsgDta = *BLANKS
      C                   Endif
       *
-     C                   MOVEL (P) '1'           *INLR
+     C                   EVAL      *INLR = '1'
       *
       *====================================================*
       *  First  --  Initialize program                     *
@@ -148,8 +159,8 @@
      C                   Callp     p_sndStsMg('USR8105': xQFile)
       *
       * - Los gehts'
-     C                   MOVEL (P) *BLANKS       XMsgID
-     C                   MOVEL (P) *BLANKS       XMsgDta
+     C                   EVAL      XMsgID = *BLANKS
+     C                   EVAL      XMsgDta = *BLANKS
       *
      C     1             SETLL     FPEEKFMT
       *
@@ -162,7 +173,7 @@
      C                   DELETE    FPEEKFMT
      C                   Enddo
       *
-     C                   Z-ADD     *ZEROS        nbrOfFmt
+     C                   EVAL      nbrOfFmt = *ZEROS
       *
      C                   ENDSR
       *

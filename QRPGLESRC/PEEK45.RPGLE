@@ -15,6 +15,14 @@
       *                                                               *
       *  Hexadezimale Feldeditierung                                  *
       *                                                               *
+      * ============================================================= *
+      * >>PRE-COMPILER<<                                              *
+*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
       *===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
@@ -735,18 +743,18 @@
       *
      C                   Callp     p_rmvPgmMg(§§pgmName)
       *
-     C                   MOVEL (P) 'USR8100'     XMsgID
+     C                   Eval      XMsgID = 'USR8100'
       *
      C                   SELECT
      C     §ScnAID       WHENEQ    §F3
-     C                   MOVEL (P) 'F3'          USR81001
+     C                   Eval      USR81001 = 'F3'
      C     §ScnAID       WHENEQ    §F12
-     C                   MOVEL (P) 'F12'         USR81001
+     C                   Eval      USR81001 = 'F12'
      C                   OTHER
-     C                   MOVEL (P) 'Fxx'         USR81001
+     C                   Eval      USR81001 = 'Fxx'
      C                   Endsl
       *
-     C                   MOVEL (P) USR8100       XMsgDta
+     C                   Eval      XMsgDta = USR8100
       *
      C                   Endsr
       *
@@ -855,7 +863,7 @@
       *
      C     c_moreKeys    BEGSR
       *
-     C                   ADD       1             SFBOT
+     C                   Eval      SFBOT = SFBOT + 1
       *
      C                   ENDSR
       *

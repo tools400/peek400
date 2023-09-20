@@ -15,11 +15,12 @@
       *                                                               *
       *  Peek/400 - Dateizugriffsroutinen                             *
       *                                                               *
-      * ============================================================= *
+      *===============================================================*
       * >>PRE-COMPILER<<                                              *
-      *   >>CRTCMD<<  CALL PGM(&LI/PEEK99) PARM(+                     *
-      *                        '&SF' '&SL' '&SM' '&LI' '*NO' +        *
-      *                        'PEEK' '&LI' '*NO');                   *
+      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
       *   >>EXECUTE<<                                                 *
       * >>END-PRE-COMPILER<<                                          *
       *===============================================================*
@@ -28,22 +29,22 @@
       /COPY QCOPYLE,COPYRIGHT
       *
       *---Variablendefinition------------------------------*
-      *COPY QCOPYLE,D_VARDEF
-      /COPY QCOPYLE,D_CLib                       ?
-      /COPY QCOPYLE,D_CLib2                      ?
+      /COPY QCOPYLE,FLDL0100
+      /COPY QCOPYLE,D_CLib
+      /COPY QCOPYLE,D_CLib2
       *----------------------------------------------------*
       *
-      /COPY QCOPYLE,F_PEEK53                     ?
-      /COPY QCOPYLE,F_PEEK58                     ?
-      /COPY QCOPYLE,F_PEEK63                     ?
+      /COPY QCOPYLE,F_PEEK53
+      /COPY QCOPYLE,F_PEEK58
+      /COPY QCOPYLE,F_PEEK63
       *
       *---Nachrichten--------------------------------------*
-      /COPY QCOPYLE,API_ERROR                    ?
-      /COPY QCOPYLE,MSG_D_MAPI                   ?
+      /COPY QCOPYLE,API_ERROR
+      /COPY QCOPYLE,MSG_D_MAPI
       *----------------------------------------------------*
       *
       *---Nachrichtenaufbau--------------------------------*
-      /COPY QCOPYLE,USR9994                      ?
+      /COPY QCOPYLE,USR9994
       *----------------------------------------------------*
       *
       *---Konstanten---------------------------------------*
@@ -70,7 +71,7 @@
       *----------------------------------------------------*
       *
       *---SDS-Datenstruktur--------------------------------*
-      /COPY QCOPYLE,ERR_D_SDS                    ?
+      /COPY QCOPYLE,ERR_D_SDS
       *----------------------------------------------------*
       *
      D clearErrorMsg...
@@ -108,8 +109,6 @@
       *
      P CIO_open...
      P                 B                   Export
-      *
-     D CIO_open...
      D                 PI                         like(r§bool    )
      D  o_hFile                                   likeds(r§hFile )
      D  i_file                             const  like(r§file    )
@@ -163,8 +162,6 @@
          return bTrue;
 
       /END-FREE
-      *
-     P CIO_open...
      P                 E
       *
       *===================================================================*
@@ -173,8 +170,6 @@
       *
      P CIO_isOpen...
      P                 B                   Export
-      *
-     D CIO_isOpen...
      D                 PI                         like(r§bool    )
      D  i_hFile                            const  likeds(r§hFile )
       * ------------------------------------------------------------------------
@@ -187,8 +182,6 @@
          return i_hFile.isOpen;
 
       /END-FREE
-      *
-     P CIO_isOpen...
      P                 E
       *
       *===================================================================*
@@ -197,8 +190,6 @@
       *
      P CIO_getFile...
      P                 B                   Export
-      *
-     D CIO_getFile...
      D                 PI                         like(r§file    )
      D  i_hFile                            const  likeds(r§hFile )
       * ------------------------------------------------------------------------
@@ -211,8 +202,6 @@
          return i_hFile.name;
 
       /END-FREE
-      *
-     P CIO_getFile...
      P                 E
       *
       *===================================================================*
@@ -222,8 +211,6 @@
       *
      P CIO_getLibrary...
      P                 B                   Export
-      *
-     D CIO_getLibrary...
      D                 PI                         like(r§lib     )
      D  i_hFile                            const  likeds(r§hFile )
       * ------------------------------------------------------------------------
@@ -236,8 +223,6 @@
          return i_hFile.lib;
 
       /END-FREE
-      *
-     P CIO_getLibrary...
      P                 E
       *
       *===================================================================*
@@ -246,8 +231,6 @@
       *
      P CIO_getMember...
      P                 B                   Export
-      *
-     D CIO_getMember...
      D                 PI                         like(r§lib     )
      D  i_hFile                            const  likeds(r§hFile )
       * ------------------------------------------------------------------------
@@ -260,8 +243,6 @@
          return i_hFile.mbr;
 
       /END-FREE
-      *
-     P CIO_getMember...
      P                 E
       *
       *===================================================================*
@@ -271,8 +252,6 @@
       *
      P CIO_getRecordFormat...
      P                 B                   Export
-      *
-     D CIO_getRecordFormat...
      D                 PI            10A
      D  i_hFile                            const  likeds(r§hFile )
       * ------------------------------------------------------------------------
@@ -285,8 +264,6 @@
          return i_hFile.rcdFormat;
 
       /END-FREE
-      *
-     P CIO_getRecordFormat...
      P                 E
       *
       *===================================================================*
@@ -295,8 +272,6 @@
       *
      P CIO_getRecordLength...
      P                 B                   Export
-      *
-     D CIO_getRecordLength...
      D                 PI            10I 0
      D  i_hFile                            const  likeds(r§hFile )
       *
@@ -312,8 +287,6 @@
          return RFILE.bufLen;
 
       /END-FREE
-      *
-     P CIO_getRecordLength...
      P                 E
       *
       *===================================================================*
@@ -323,8 +296,6 @@
       *
      P CIO_getRRN...
      P                 B                   Export
-      *
-     D CIO_getRRN...
      D                 PI            10I 0
      D  i_hFile                            const  likeds(r§hFile )
       *
@@ -344,8 +315,6 @@
          return RIOFB.rrn;
 
       /END-FREE
-      *
-     P CIO_getRRN...
      P                 E
       *
       *===================================================================*
@@ -384,8 +353,6 @@
       *
      P CIO_getInfDS...
      P                 B                   Export
-      *
-     D CIO_getInfDS...
      D                 PI                         likeds(r§infds )
      D  i_hFile                            const  likeds(r§hFile )
       *
@@ -407,8 +374,6 @@
          return infDS;
 
       /END-FREE
-      *
-     P CIO_getInfDS...
      P                 E
       *
       *===================================================================*
@@ -417,8 +382,6 @@
       *
      P CIO_isError...
      P                 B                   Export
-      *
-     D CIO_isError...
      D                 PI                         like(r§bool    )
      D  i_hFile                            const  likeds(r§hFile )
       * ------------------------------------------------------------------------
@@ -431,8 +394,6 @@
          endif;
 
       /END-FREE
-      *
-     P CIO_isError...
      P                 E
       *
       *===================================================================*
@@ -441,8 +402,6 @@
       *
      P CIO_setErrorMsg...
      P                 B                   Export
-      *
-     D CIO_setErrorMsg...
      D                 PI
      D  io_hFile                                  likeds(r§hFile )
      D  i_msgID                            const  like(r§msgID   )
@@ -457,8 +416,6 @@
          return;
 
       /END-FREE
-      *
-     P CIO_setErrorMsg...
      P                 E
       *
       *===================================================================*
@@ -467,8 +424,6 @@
       *
      P CIO_getErrorMsg...
      P                 B                   Export
-      *
-     D CIO_getErrorMsg...
      D                 PI
      D  i_hFile                            const  likeds(r§hFile )
      D  o_msgID                                   like(r§msgID   )
@@ -492,8 +447,6 @@
          return;
 
       /END-FREE
-      *
-     P CIO_getErrorMsg...
      P                 E
       *
       *===================================================================*
@@ -502,8 +455,6 @@
       *
      P CIO_getError...
      P                 B                   Export
-      *
-     D CIO_getError...
      D                 PI            10I 0
      D  i_hFile                            const  likeds(r§hFile )
       * ------------------------------------------------------------------------
@@ -512,8 +463,6 @@
          return i_hFile.errno;
 
       /END-FREE
-      *
-     P CIO_getError...
      P                 E
       *
       *===================================================================*
@@ -522,8 +471,6 @@
       *
      P CIO_getErrorText...
      P                 B                   Export
-      *
-     D CIO_getErrorText...
      D                 PI           512A          varying
      D  i_hFile                            const  likeds(r§hFile )
       * ------------------------------------------------------------------------
@@ -536,8 +483,6 @@
          endif;
 
       /END-FREE
-      *
-     P CIO_getErrorText...
      P                 E
       *
       *===================================================================*
@@ -546,8 +491,6 @@
       *
      P CIO_chainWithRRN...
      P                 B                   Export
-      *
-     D CIO_chainWithRRN...
      D                 PI                         like(r§bool     )
      D  io_hFile                                  likeds(r§hFile  )
      D  i_rrn                              const  like(r§rcdNbr   )
@@ -593,8 +536,6 @@
          return bTrue;
 
       /END-FREE
-      *
-     P CIO_chainWithRRN...
      P                 E
       *
       *===================================================================*
@@ -603,8 +544,6 @@
       *
      P CIO_chainWithKey...
      P                 B                   Export
-      *
-     D CIO_chainWithKey...
      D                 PI                         like(r§bool     )
      D  io_hFile                                  likeds(r§hFile  )
      D  i_key                              const  like(r§keyBuf   )
@@ -655,8 +594,6 @@
          return bTrue;
 
       /END-FREE
-      *
-     P CIO_chainWithKey...
      P                 E
       *
       *===================================================================*
@@ -665,8 +602,6 @@
       *
      P CIO_setllWithRRN...
      P                 B                   Export
-      *
-     D CIO_setllWithRRN...
      D                 PI                         like(r§bool     )
      D  io_hFile                                  likeds(r§hFile  )
      D  i_rrn                              const  like(r§rcdNbr   )
@@ -730,8 +665,6 @@
          return bTrue;
 
       /END-FREE
-      *
-     P CIO_setllWithRRN...
      P                 E
       *
       *===================================================================*
@@ -740,8 +673,6 @@
       *
      P CIO_setllWithKey...
      P                 B                   Export
-      *
-     D CIO_setllWithKey...
      D                 PI                         like(r§bool     )
      D  io_hFile                                  likeds(r§hFile  )
      D  i_key                              const  like(r§keyBuf   )
@@ -784,8 +715,6 @@
          return bTrue;
 
       /END-FREE
-      *
-     P CIO_setllWithKey...
      P                 E
       *
       *===================================================================*
@@ -794,8 +723,6 @@
       *
      P CIO_setgtWithRRN...
      P                 B                   Export
-      *
-     D CIO_setgtWithRRN...
      D                 PI                         like(r§bool     )
      D  io_hFile                                  likeds(r§hFile  )
      D  i_rrn                              const  like(r§rcdNbr   )
@@ -851,8 +778,6 @@
          return bTrue;
 
       /END-FREE
-      *
-     P CIO_setgtWithRRN...
      P                 E
       *
       *===================================================================*
@@ -861,8 +786,6 @@
       *
      P CIO_setgtWithKey...
      P                 B                   Export
-      *
-     D CIO_setgtWithKey...
      D                 PI                         like(r§bool     )
      D  io_hFile                                  likeds(r§hFile  )
      D  i_key                              const  like(r§keyBuf   )
@@ -905,8 +828,6 @@
          return bTrue;
 
       /END-FREE
-      *
-     P CIO_setgtWithKey...
      P                 E
       *
       *===================================================================*
@@ -915,8 +836,6 @@
       *
      P CIO_read...
      P                 B                   Export
-      *
-     D CIO_read...
      D                 PI                         like(r§bool     )
      D  io_hFile                                  likeds(r§hFile  )
      D  i_doLock                           const  like(r§bool     )
@@ -950,7 +869,7 @@
 
          if (io_hFile.lastOper = cOPER_SETLL_RRN) or
             (io_hFile.lastOper = cOPER_SETGT_RRN);
- B01        //?(io_hFile.lastOper = cOPER_SETLL_KEY) or
+            //?(io_hFile.lastOper = cOPER_SETLL_KEY) or
             //?(io_hFile.lastOper = cOPER_SETGT_KEY);
             function = '_Rreads';
             pRIOFB = Rreads(io_hFile.fd
@@ -990,8 +909,6 @@
          return bFalse;  // Return "found" to caller
 
       /END-FREE
-      *
-     P CIO_read...
      P                 E
       *
       *===================================================================*
@@ -1000,8 +917,6 @@
       *
      P CIO_readp...
      P                 B                   Export
-      *
-     D CIO_readp...
      D                 PI                         like(r§bool     )
      D  io_hFile                                  likeds(r§hFile  )
      D  i_doLock                           const  like(r§bool     )
@@ -1035,7 +950,7 @@
 
          if (io_hFile.lastOper = cOPER_SETLL_RRN) or
             (io_hFile.lastOper = cOPER_SETGT_RRN);
- B01        //?(io_hFile.lastOper = cOPER_SETLL_KEY) or
+            //?(io_hFile.lastOper = cOPER_SETLL_KEY) or
             //?(io_hFile.lastOper = cOPER_SETGT_KEY);
             function = '_Rreads';
             pRIOFB = Rreads(io_hFile.fd
@@ -1076,8 +991,6 @@
          return bFalse;  // Return "found" to caller
 
       /END-FREE
-      *
-     P CIO_readp...
      P                 E
       *
       *===================================================================*
@@ -1086,8 +999,6 @@
       *
      P CIO_delete...
      P                 B                   Export
-      *
-     D CIO_delete...
      D                 PI                         like(r§bool     )
      D  io_hFile                                  likeds(r§hFile  )
       *
@@ -1114,8 +1025,6 @@
          return bTrue;
 
       /END-FREE
-      *
-     P CIO_delete...
      P                 E
       *
       *===================================================================*
@@ -1124,8 +1033,6 @@
       *
      P CIO_unlock...
      P                 B                   Export
-      *
-     D CIO_unlock...
      D                 PI                         like(r§bool     )
      D  io_hFile                                  likeds(r§hFile  )
       *
@@ -1151,8 +1058,6 @@
          return bTrue;
 
       /END-FREE
-      *
-     P CIO_unlock...
      P                 E
       *
       *===================================================================*
@@ -1161,8 +1066,6 @@
       *
      P CIO_close...
      P                 B                   Export
-      *
-     D CIO_close...
      D                 PI                         like(r§bool    )
      D  io_hFile                                  likeds(r§hFile )
       * ------------------------------------------------------------------------
@@ -1184,8 +1087,6 @@
          return bTrue;
 
       /END-FREE
-      *
-     P CIO_close...
      P                 E
       *
       *===================================================================*
@@ -1195,8 +1096,6 @@
       *
      P CIO_setEOF_read...
      P                 B                   Export
-      *
-     D CIO_setEOF_read...
      D                 PI
      D  io_hFile                                  likeds(r§hFile )
       * ------------------------------------------------------------------------
@@ -1207,8 +1106,6 @@
          return;
 
       /END-FREE
-      *
-     P CIO_setEOF_read...
      P                 E
       *
       *===================================================================*
@@ -1218,8 +1115,6 @@
       *
      P CIO_setEOF_readp...
      P                 B                   Export
-      *
-     D CIO_setEOF_readp...
      D                 PI
      D  io_hFile                                  likeds(r§hFile )
       * ------------------------------------------------------------------------
@@ -1230,19 +1125,15 @@
          return;
 
       /END-FREE
-      *
-     P CIO_setEOF_readp...
      P                 E
       *
       *===================================================================*
-    R *  *** private ***
+      *  *** private ***
       *  Sets the EOF indicator for a READ or READP operation.
       *===================================================================*
       *
      P setEOF...
      P                 B
-      *
-     D setEOF...
      D                 PI
      D  io_hFile                                  likeds(r§hFile )
      D  i_operation                  10A   value
@@ -1266,19 +1157,15 @@
          return;
 
       /END-FREE
-      *
-     P setEOF...
      P                 E
       *
       *===================================================================*
-    R *  *** private ***
+      *  *** private ***
       *  Clears the error information.
       *===================================================================*
       *
      P clearErrorMsg...
      P                 B
-      *
-     D clearErrorMsg...
      D                 PI
      D  io_hFile                                  likeds(r§hFile )
       * ------------------------------------------------------------------------
@@ -1291,19 +1178,15 @@
          return;
 
       /END-FREE
-      *
-     P clearErrorMsg...
      P                 E
       *
       *===================================================================*
-    R *  *** private ***
+      *  *** private ***
       *  Clears the file IO-buffer and NULL-map.
       *===================================================================*
       *
      P clearBufferAndNullMap...
      P                 B
-      *
-     D clearBufferAndNullMap...
      D                 PI
      D  i_RFILE                            const  likeds(RFILE_t )
      D  io_rcdBuffer                              like(r§rcdBuf   )
@@ -1323,19 +1206,15 @@
          return;
 
       /END-FREE
-      *
-     P clearBufferAndNullMap...
      P                 E
       *
       *===================================================================*
-    R *  *** private ***
+      *  *** private ***
       *  Copies the file IN-NULL-map.
       *===================================================================*
       *
      P copyInNullMap...
      P                 B
-      *
-     D copyInNullMap...
      D                 PI
      D  i_RFILE                            const  likeds(RFILE_t )
      D  io_nullMap                                like(r§nullMap  )
@@ -1354,19 +1233,15 @@
          return;
 
       /END-FREE
-      *
-     P copyInNullMap...
      P                 E
       *
       *===================================================================*
-    R *  *** private ***
+      *  *** private ***
       *  Returns the value of the specified mode parameter.
       *===================================================================*
       *
      P getMode...
      P                 B
-      *
-     D getMode...
      D                 PI            16A          varying
      D  i_mode                      512A   value  varying
      D  i_parm                       16A   value  varying
@@ -1397,7 +1272,5 @@
          return %subst(i_mode: x: y-1-x);
 
       /END-FREE
-      *
-     P getMode...
      P                 E
       *

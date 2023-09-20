@@ -14,6 +14,14 @@
       *                                                               *
       *  Peek/400 - Feldeditor                                        *
       *                                                               *
+      * ============================================================= *
+      * >>PRE-COMPILER<<                                              *
+*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
       *===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
@@ -119,11 +127,7 @@
      D                                     overlay(pFldInhaltSbcs)
 
      D pLength         S                   like(r§int4        ) INZ
-     D x               S                   LIKE(r§int4        ) INZ
      D len             S                   LIKE(r§int4        ) INZ
-     D rem             S                   LIKE(r§int4        ) INZ
-     D offs            S                   LIKE(r§int4        ) INZ
-     D pUcs2Fld        S               *   inz
      D isFieldTooLarge...
      D                 S               N
      D maxFieldLength  S             10I 0
@@ -132,36 +136,9 @@
       /COPY QCOPYLE,F_PEEK58
       /COPY QCOPYLE,F_PEEK71
       *
-      *  memcpy -- Copy Bytes
-      *     The behavior is undefined if copying takes place
-      *     between objects that overlap.
-      *     The memcpy() function returns a pointer to dest.
-     D memcpy          PR              *          extproc('memcpy')
-     D  i_pDest                        *   value
-     D  i_pSrc                         *   value
-     D  i_count                      10U 0 value
-      *
      D                 DS
      D  #UCS2STR               1   2048C
      D  #UCS2                  1   2048C   CCSID(13488) DIM(16)
-      *
-     IBILD01
-     I              #UCS2_1                     #UCS2( 1)
-     I              #UCS2_2                     #UCS2( 2)
-     I              #UCS2_3                     #UCS2( 3)
-     I              #UCS2_4                     #UCS2( 4)
-     I              #UCS2_5                     #UCS2( 5)
-     I              #UCS2_6                     #UCS2( 6)
-     I              #UCS2_7                     #UCS2( 7)
-     I              #UCS2_8                     #UCS2( 8)
-     I              #UCS2_9                     #UCS2( 9)
-     I              #UCS2_10                    #UCS2(10)
-     I              #UCS2_11                    #UCS2(11)
-     I              #UCS2_12                    #UCS2(12)
-     I              #UCS2_13                    #UCS2(13)
-     I              #UCS2_14                    #UCS2(14)
-     I              #UCS2_15                    #UCS2(15)
-     I              #UCS2_16                    #UCS2(16)
       *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
@@ -256,6 +233,9 @@
       *
       *  Anzeigen Bildschirm
      C                   Exfmt     BILD01
+      *
+      *  Übernehmen Bildschirmfelder in Programmfelder
+     C                   Exsr      fillPgmFlds
       *
       *  Daten geändert
      C                   Eval      isDataChg = *in93
@@ -383,10 +363,6 @@
      C                   Eval      %subst(pFldInhaltUcs2: 1: %len(#UCS2STR)) =
      C                               #UCS2STR
       *
-     C**                 Eval      len = %len(%trimR(#UCS2STR)) * 2
-     C**                 Callp     memcpy(
-     C**                             %addr(pFldInhalt): %addr(#UCS2STR): len)
-      *
      C                   Endif
       *
     R ***                Eval      isPgmError = bTrue
@@ -438,14 +414,6 @@
      C                   Eval      len = %len(%trimr(#String))
      C                   Else
      C                   Eval      len = %len(%trimr(#UCS2STR))
-     C**                 Eval      len = 0
-     C**                 For       x = %elem(#UCS2) downto 1
-     C**                 If        %trimr(%trim(#UCS2(x))) <> ''
-     C**                 Eval      len = ((x-1) * %len(#UCS2(x))) +
-     C**                                 %len(%trimr(#UCS2(x)))
-     C**                 Leave
-     C**                 Endif
-     C**                 Endfor
      C                   Endif
       *
       *  Zeichenkette zu lang
@@ -466,24 +434,6 @@
      C                   Endsr
       *
       *============================================================*
-      *    setError      Eintragen Programmfehler                  *
-      *============================================================*
-      *
-     C     setError      BEGSR
-      *
-     C                   If        isPgmError = bTrue
-      *
-      *       Alte Fehlermeldung beibehalten
-      *
-     C                   Else
-     C                   Eval      isPgmError = bTrue
-     C                   Eval      §msgID  = yMsgID
-     C                   Eval      §msgDta = yMsgDta
-     C                   Endif
-      *
-     C                   Endsr
-      *
-      *============================================================*
       *    c_endPgm      F3/F12 - Programm beenden                 *
       *============================================================*
       *
@@ -491,18 +441,18 @@
       *
      C                   Callp     p_rmvPgmMg(§§pgmName)
       *
-     C                   MOVEL (P) 'USR8100'     XMsgID
+     C                   EVAL      XMsgID = 'USR8100'
       *
      C                   SELECT
      C     §ScnAID       WHENEQ    §F3
-     C                   MOVEL (P) 'F3'          USR81001
+     C                   EVAL      USR81001 = 'F3'
      C     §ScnAID       WHENEQ    §F12
-     C                   MOVEL (P) 'F12'         USR81001
+     C                   EVAL      USR81001 = 'F12'
      C                   OTHER
-     C                   MOVEL (P) 'Fxx'         USR81001
+     C                   EVAL      USR81001 = 'Fxx'
      C                   Endsl
       *
-     C                   MOVEL (P) USR8100       XMsgDta
+     C                   EVAL      XMsgDta = USR8100
       *
      C                   Endsr
       *
@@ -531,7 +481,7 @@
       *
      C     c_moreKeys    BEGSR
       *
-     C                   ADD       1             SFBOT
+     C                   EVAL      SFBOT = SFBOT + 1
       *
      C                   ENDSR
       *
@@ -540,9 +490,6 @@
       *============================================================*
       *
      C     fill##        Begsr
-      *
-      *  anzeigen Feldüberschrift
-    R ***                Eval      $FldName = f_headline(xHeadTyp: FLDL0100)
       *
       *  anzeigen Feldinhalt
      C                   If        (xIsUcs2 = 0)
@@ -553,17 +500,58 @@
      C                   Else
       *
      C                   Eval      #UCS2STR = pFldInhaltUcs2
+      *
+     C                   Eval      #UCS2_1 = #UCS2(1)
+     C                   Eval      #UCS2_2 = #UCS2(2)
+     C                   Eval      #UCS2_3 = #UCS2(3)
+     C                   Eval      #UCS2_4 = #UCS2(4)
+     C                   Eval      #UCS2_5 = #UCS2(5)
+     C                   Eval      #UCS2_6 = #UCS2(6)
+     C                   Eval      #UCS2_7 = #UCS2(7)
+     C                   Eval      #UCS2_8 = #UCS2(8)
+     C                   Eval      #UCS2_9 = #UCS2(9)
+     C                   Eval      #UCS2_10 = #UCS2(10)
+     C                   Eval      #UCS2_11 = #UCS2(11)
+     C                   Eval      #UCS2_12 = #UCS2(12)
+     C                   Eval      #UCS2_13 = #UCS2(13)
+     C                   Eval      #UCS2_14 = #UCS2(14)
+     C                   Eval      #UCS2_15 = #UCS2(15)
+     C                   Eval      #UCS2_16 = #UCS2(16)
+      *
      C                   Eval      *IN71 = '1'
       *
-     C**                 If        (xLength <= %size(#UCS2) * %elem(#UCS2))
-     C**                 Eval      len = xLength * 2
-     C**                 Else
-     C**                 Eval      len = %size(#UCS2) * %elem(#UCS2)
-     C**                 Endif
+     C                   Endif
       *
-     C**                 Clear                   #UCS2
-     C**                 Callp     memcpy(%addr(#UCS2): %addr(pFldInhalt): len)
-     C**                 Eval      *IN71 = '1'
+     C                   Endsr
+      *
+      *============================================================*
+      *    fillPgmFlds   Füllen Programmfelder                     *
+      *============================================================*
+      *
+     C     fillPgmFlds   Begsr
+      *
+     C                   If        (xIsUcs2 = 0)
+      *
+      *    Nothing to do here
+      *
+     C                   Else
+      *
+     C                   Eval      #UCS2(1) = #UCS2_1
+     C                   Eval      #UCS2(2) = #UCS2_2
+     C                   Eval      #UCS2(3) = #UCS2_3
+     C                   Eval      #UCS2(4) = #UCS2_4
+     C                   Eval      #UCS2(5) = #UCS2_5
+     C                   Eval      #UCS2(6) = #UCS2_6
+     C                   Eval      #UCS2(7) = #UCS2_7
+     C                   Eval      #UCS2(8) = #UCS2_8
+     C                   Eval      #UCS2(9) = #UCS2_9
+     C                   Eval      #UCS2(10) = #UCS2_10
+     C                   Eval      #UCS2(11) = #UCS2_11
+     C                   Eval      #UCS2(12) = #UCS2_12
+     C                   Eval      #UCS2(13) = #UCS2_13
+     C                   Eval      #UCS2(14) = #UCS2_14
+     C                   Eval      #UCS2(15) = #UCS2_15
+     C                   Eval      #UCS2(16) = #UCS2_16
       *
      C                   Endif
       *
@@ -661,10 +649,10 @@
      C                   endif
       *
       * - Feld zu groß Hinweis ausgeben
-     C                   MOVEL (P) 'USR8123'     §MsgID
-     C                   MOVEL (P) §White_U      USR81231
-     C                   MOVEL (P) §White        USR81232
-     C                   MOVEL (P) USR8123       §MsgDta
+     C                   EVAL      §MsgID = 'USR8123'
+     C                   EVAL      USR81231 = §White_U
+     C                   EVAL      USR81232 = §White
+     C                   EVAL      §MsgDta = USR8123
      C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
       *
       * - Füllen der Bildschirmfelder

@@ -15,6 +15,14 @@
       *  Peek/400 - Laden     Arbeitsumgebung                         *
       *                                                               *
       *===============================================================*
+      * >>PRE-COMPILER<<                                              *
+      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
+      *===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
       *
@@ -51,6 +59,7 @@
       *
       *---Variablendefinition------------------------------*
       /COPY QCOPYLE,D_VARDEF
+      /COPY QCOPYLE,FLDL0100
       *----------------------------------------------------*
       *
       *---------------------------------------------------*
@@ -276,9 +285,7 @@
       *===================================================================*
       *
      P p_main          B
-      *
-      *  definieren Procedure Interface ...
-     D p_main          PI
+     D                 PI
      D  i_file                             value  like(gi_file      )
      D  i_lib                              value  like(gi_lib       )
      D  i_mbr                              value  like(gi_mbr       )
@@ -381,14 +388,14 @@
      C                   Endif
       *
       *  Überschreiben Datei ...
-     C                   MOVEL (P) 'PEEKENV'     §File
-     C                   MOVEL (P) i_envFile     §ToFile
-     C                   MOVEL (P) i_envLib      §ToLib
-     C                   MOVEL (P) pEnvMbr       §Mbr
-     C                   MOVEL (P) '*ACTGRPDFN'  §OvrScope
-     C                   MOVEL (P) '*NO'         §Share
-     C                   MOVEL (P) '*NO'         §SeqOnly
-     C                   MOVEL (P) '*YES'        §Secure
+     C                   EVAL      §File = 'PEEKENV'
+     C                   EVAL      §ToFile = i_envFile
+     C                   EVAL      §ToLib = i_envLib
+     C                   EVAL      §Mbr = pEnvMbr
+     C                   EVAL      §OvrScope = '*ACTGRPDFN'
+     C                   EVAL      §Share = '*NO'
+     C                   EVAL      §SeqOnly = '*NO'
+     C                   EVAL      §Secure = '*YES'
       /COPY QCOPYLE,OVRDBF
       *
       *  Öffnen Datei ...
@@ -504,8 +511,8 @@
      C                   Close     PEEKENV
       *
       *  Löschen Überschreibung ...
-     C                   MOVEL (P) 'PEEKENV'     §File
-     C                   MOVEL (P) '*ACTGRPDFN'  §Lvl
+     C                   EVAL      §File = 'PEEKENV'
+     C                   EVAL      §Lvl = '*ACTGRPDFN'
       /COPY QCOPYLE,DLTOVR
       *
       *---------------------------------------------------*
@@ -515,16 +522,14 @@
       *
      C                   Return
       *
-     P p_main          E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  p_loadFile                                 (Body)     *
       *===================================================================*
       *
      P p_loadFile      B
-      *
-      *  definieren Procedure Interface ...
-     D p_loadFile      PI
+     D                 PI
      D  o_file                                    like(go_file)
       *
       *  definieren Arbeitsfelder ...
@@ -541,16 +546,14 @@
       *
      C                   Return
       *
-     P p_loadFile      E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  p_loadLib                                  (Body)     *
       *===================================================================*
       *
      P p_loadLib       B
-      *
-      *  definieren Procedure Interface ...
-     D p_loadLib       PI
+     D                 PI
      D  o_lib                                     like(go_lib)
       *
       *  definieren Arbeitsfelder ...
@@ -567,16 +570,14 @@
       *
      C                   Return
       *
-     P p_loadLib       E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  p_loadMbr                                  (Body)     *
       *===================================================================*
       *
      P p_loadMbr       B
-      *
-      *  definieren Procedure Interface ...
-     D p_loadMbr       PI
+     D                 PI
      D  o_mbr                                     like(go_mbr)
       *
       *  definieren Arbeitsfelder ...
@@ -593,16 +594,14 @@
       *
      C                   Return
       *
-     P p_loadMbr       E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  p_loadRcdFmt                               (Body)     *
       *===================================================================*
       *
      P p_loadRcdFmt    B
-      *
-      *  definieren Procedure Interface ...
-     D p_loadRcdFmt    PI
+     D                 PI
      D  o_rcdFmt                                  like(go_rcdFmt)
       *
       *  definieren Arbeitsfelder ...
@@ -619,16 +618,14 @@
       *
      C                   Return
       *
-     P p_loadRcdFmt    E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  p_loadRcdFmtID                             (Body)     *
       *===================================================================*
       *
      P p_loadRcdFmtID  B
-      *
-      *  definieren Procedure Interface ...
-     D p_loadRcdFmtID  PI
+     D                 PI
      D  o_rcdFmtID                                like(r§fmtID)
       *
       *  definieren Arbeitsfelder ...
@@ -645,16 +642,14 @@
       *
      C                   Return
       *
-     P p_loadRcdFmtID  E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  p_loadAccM                                 (Body)     *
       *===================================================================*
       *
      P p_loadAccM      B
-      *
-      *  definieren Procedure Interface ...
-     D p_loadAccM      PI
+     D                 PI
      D  o_accMode                                 like(go_accMode)
       *
       *  definieren Arbeitsfelder ...
@@ -671,16 +666,14 @@
       *
      C                   Return
       *
-     P p_loadAccM      E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  p_loadSqlS                                 (Body)     *
       *===================================================================*
       *
      P p_loadSqlS      B
-      *
-      *  definieren Procedure Interface ...
-     D p_loadSqlS      PI
+     D                 PI
      D  i_file                             const  like(gi_file   )
      D  i_lib                              const  like(gi_lib    )
      D  o_sqlSel                                  like(go_sqlSel )
@@ -729,16 +722,14 @@
       *
      C                   Return
       *
-     P p_loadSqlS      E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  p_loadSqlO                                 (Body)     *
       *===================================================================*
       *
      P p_loadSqlO      B
-      *
-      *  definieren Procedure Interface ...
-     D p_loadSqlO      PI
+     D                 PI
      D  i_file                             const  like(gi_file   )
      D  i_lib                              const  like(gi_lib    )
      D  o_sqlOrd                                  like(go_sqlOrd )
@@ -787,7 +778,7 @@
       *
      C                   Return
       *
-     P p_loadSqlO      E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  p_loadIsKeyLower                           (Body)     *
@@ -795,9 +786,6 @@
       *
      P p_loadIsKeyLower...
      P                 B
-      *
-      *  definieren Procedure Interface ...
-     D p_loadIsKeyLower...
      D                 PI
      D  i_file                             const  like(gi_file       )
      D  i_lib                              const  like(gi_lib        )
@@ -825,7 +813,6 @@
       *
      C                   Return
       *
-     P p_loadIsKeyLower...
      P                 E
       *
       *===================================================================*
@@ -833,9 +820,7 @@
       *===================================================================*
       *
      P p_loadPinR      B
-      *
-      *  definieren Procedure Interface ...
-     D p_loadPinR      PI
+     D                 PI
      D  i_file                             const  like(gi_file   )
      D  i_lib                              const  like(gi_lib    )
      D  o_pinTabR                                 like(go_pinTabR)
@@ -876,16 +861,14 @@
       *
      C                   Return
       *
-     P p_loadPinR      E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  p_loadPinC                                 (Body)     *
       *===================================================================*
       *
      P p_loadPinC      B
-      *
-      *  definieren Procedure Interface ...
-     D p_loadPinC      PI
+     D                 PI
      D  i_file                             const  like(gi_file   )
      D  i_lib                              const  like(gi_lib    )
      D  o_pinTabC                                 like(go_pinTabC)
@@ -930,16 +913,14 @@
       *
      C                   Return
       *
-     P p_loadPinC      E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  p_loadLyt                                  (Body)     *
       *===================================================================*
       *
      P p_loadLyt       B
-      *
-      *  definieren Procedure Interface ...
-     D p_loadLyt       PI
+     D                 PI
      D  i_file                             const  like(gi_file   )
      D  i_lib                              const  like(gi_lib    )
       *
@@ -991,5 +972,5 @@
       *
      C                   Return
       *
-     P p_loadLyt       E
+     P                 E
       *

@@ -28,6 +28,14 @@
       *                                                               *
       *  Konvertieren: interne <==> externe Darstellung               *
       *                                                               *
+      * ============================================================= *
+      * >>PRE-COMPILER<<                                              *
+*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
       *===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
@@ -193,10 +201,10 @@
       *
      C                   EXSR      FIRST
       *
-     C                   MOVEL (P) XData         FLDL0100
+     C                   Eval      FLDL0100 = XData
       *
-     C                   MOVEL (P) *BLANKS       XOutBuffer
-     C                   Z-ADD     *ZEROS        XOutBuffLn
+     C                   Eval      XOutBuffer = *BLANKS
+     C                   Eval      XOutBuffLn = *ZEROS
       *
      C                   SELECT
      C     XTgtFormat    WHENEQ    '*EXTERN'
@@ -251,20 +259,20 @@
       *  Ascending key ...
      C     F_Desc        IFEQ      'A'
       *  ... Keine Umsetzung erforderlich
-     C                   MOVEL (P) XTgtValue     R_TgtValue
+     C                   Eval      R_TgtValue = XTgtValue
      C                   ELSE
       *  Descending key ...
      C     XTgtValue     IFEQ      '*HIVAL'
      C     XTgtValue     OREQ      '*LOVAL'
       *  ... *HIVAL ==> *LOVAL und umgekehrt
      C     XTgtValue     IFEQ      '*HIVAL'
-     C                   MOVEL (P) '*LOVAL'      R_TgtValue
+     C                   Eval      R_TgtValue = '*LOVAL'
      C                   ELSE
-     C                   MOVEL (P) '*HIVAL'      R_TgtValue
+     C                   Eval      R_TgtValue = '*HIVAL'
      C                   Endif
      C                   ELSE
       *  ... Keine Umsetzung erforderlich
-     C                   MOVEL (P) XTgtValue     R_TgtValue
+     C                   Eval      R_TgtValue = XTgtValue
      C                   Endif
      C                   Endif
       *
@@ -437,24 +445,24 @@
       *
      C     F_to_Ext      BEGSR
       *
-     C                   EVAL      pFloat = %addr(xBuffer)
+     C                   Eval      pFloat = %addr(xBuffer)
       *
      C                   IF        f_buffLn(FLDL0100) = 4
      C                   Eval      Float = FLoat4
      C                   EXSR      ChgSignFloat
      C                   Eval      Float4 = FLoat
-     C                   EVAL      XOutBuffer = %editflt(Float4)
+     C                   Eval      XOutBuffer = %editflt(Float4)
      C                   Eval      XOutBuffLn = 14
      C                   ELSE
      C                   Eval      Float = FLoat8
      C                   EXSR      ChgSignFloat
      C                   Eval      Float8 = FLoat
-     C                   EVAL      XOutBuffer = %editflt(Float8)
+     C                   Eval      XOutBuffer = %editflt(Float8)
      C                   Eval      XOutBuffLn = 23
      C                   ENDIF
       *
       *  Entfernen führendes Vorzeichen
-     C                   EVAL      XOutBuffer = %subst(XOutBuffer: 2)
+     C                   Eval      XOutBuffer = %subst(XOutBuffer: 2)
      C                   Eval      XOutBuffLn = XOutBuffLn - 1
       *
      C                   EXSR      AddSign
@@ -468,7 +476,7 @@
       *
      C     A_to_Zoned    BEGSR
       *
-     C                   Z-ADD     *ZEROS        Zoned
+     C                   Eval      Zoned = *ZEROS
      C                   EXSR      ZonedToOutBuf
       *
      C                   ENDSR
@@ -526,7 +534,7 @@
       *
      C     F_to_Float    BEGSR
       *
-     C                   Z-ADD     *ZEROS        Float
+     C                   Eval      Float = *ZEROS
      C                   EXSR      ExtrFloat
       *
      C                   ENDSR
@@ -537,7 +545,7 @@
       *
      C     ExtrFloat     Begsr
       *
-     C                   EVAL      pFloat = %addr(xBuffer)
+     C                   Eval      pFloat = %addr(xBuffer)
       *
      C                   IF        f_buffLn(FLDL0100) = 4
      C                   Eval      Float = FLoat4
@@ -545,7 +553,7 @@
      C                   Eval      Float = FLoat8
      C                   ENDIF
       *
-     C                   EVAL      XOutBuffer = %editflt(Float)
+     C                   Eval      XOutBuffer = %editflt(Float)
      C                   Eval      XOutBuffLn = 23
       *
      C                   Endsr
@@ -558,12 +566,12 @@
       *
      C     SET_SignX     IFEQ      bFalse
       *          ohne Vorzeichen ausgeben
-     C                   MOVEL (P) bFalse        IsMinus
+     C                   Eval      IsMinus = bFalse
      C                   ELSE
      C     Zoned         IFLT      *ZEROS
-     C                   MOVEL (P) bTrue         IsMinus
+     C                   Eval      IsMinus = bTrue
      C                   ELSE
-     C                   MOVEL (P) bFalse        IsMinus
+     C                   Eval      IsMinus = bFalse
      C                   Endif
      C                   Endif
       *
@@ -581,12 +589,12 @@
       *
      C     SET_SignX     IFEQ      bFalse
       *          ohne Vorzeichen ausgeben
-     C                   MOVEL (P) bFalse        IsMinus
+     C                   Eval      IsMinus = bFalse
      C                   ELSE
      C     Float         IFLT      *ZEROS
-     C                   MOVEL (P) bTrue         IsMinus
+     C                   Eval      IsMinus = bTrue
      C                   ELSE
-     C                   MOVEL (P) bFalse        IsMinus
+     C                   Eval      IsMinus = bFalse
      C                   Endif
      C                   Endif
       *
@@ -607,18 +615,18 @@
      C                   ELSE
      C     IsMinus       IFEQ      bTrue
      C     SET§SignM     IFEQ      *BLANKS
-     C                   CAT   (P) ' ':1         XOutBuffer
+     C                   Eval      XOutBuffer = ' ' + XOutBuffer
      C                   ELSE
-     C                   CAT   (P) SET§SignM:0   XOutBuffer
+     C                   Eval      XOutBuffer = SET§SignM + XOutBuffer
      C                   Endif
-     C                   ADD       1             XOutBuffLn
+     C                   Eval      XOutBuffLn = XOutBuffLn + 1
      C                   ELSE
      C     SET§SignP     IFEQ      *BLANKS
-     C                   CAT   (P) ' ':1         XOutBuffer
+     C                   Eval      XOutBuffer = ' ' + XOutBuffer
      C                   ELSE
-     C                   CAT   (P) SET§SignP:0   XOutBuffer
+     C                   Eval      XOutBuffer = SET§SignP + XOutBuffer
      C                   Endif
-     C                   ADD       1             XOutBuffLn
+     C                   Eval      XOutBuffLn = XOutBuffLn + 1
      C                   Endif
      C                   Endif
       *
@@ -634,9 +642,9 @@
       *          ohne Delimeter ausgeben
      C                   ELSE
      C     XOutBuffLn    IFLT      §rcdBufLen
-     C                   ADD       1             XOutBuffLn
-     C                   Z-ADD     XOutBuffLn    BL
-     C                   MOVEL (P) SET_Dlmtr     XOutBuffTb(BL)
+     C                   Eval      XOutBuffLn = XOutBuffLn + 1
+     C                   Eval      BL = XOutBuffLn
+     C                   Eval      XOutBuffTb(BL) = SET_Dlmtr
      C                   ELSE
       *    Pufferbereich zu klein ...
      C                   Endif
@@ -752,7 +760,7 @@
      C                   EXSR      CvtToZoned
       *
       *  umsetzen gezont -> gezont ...
-     C                   Z-ADD     Zoned         Zoned
+     C                   Eval      Zoned = Zoned
       *
       *  extrahieren gezonten Wert ...
      C                   Eval      xOutBuffLn = f_buffLn(FLDL0100)
@@ -790,13 +798,13 @@
       *
      C                   SELECT
      C     R_TgtValue    WHENEQ    '*LOVAL'
-     C                   Z-ADD     *LOVAL        Binary1
+     C                   Eval      Binary1 = *LOVAL
      C     R_TgtValue    WHENEQ    '*HIVAL'
-     C                   Z-ADD     *HIVAL        Binary1
+     C                   Eval      Binary1 = *HIVAL
      C     R_TgtValue    WHENEQ    '*CURRENT'
       *  ... umsetzen in gezonten Wert
      C                   EXSR      CvtToZoned
-     C                   Z-ADD     Zoned         Binary1
+     C                   Eval      Binary1 = Zoned
      C                   Other
      C                   Endsl
       *
@@ -814,16 +822,13 @@
       *
      C                   SELECT
      C     R_TgtValue    WHENEQ    '*LOVAL'
-     C                   Z-ADD     *LOVAL        Binary2
-    R ***                Z-ADD     Binary2       Zoned
+     C                   Eval      Binary2 = *LOVAL
      C     R_TgtValue    WHENEQ    '*HIVAL'
-     C                   Z-ADD     *HIVAL        Binary2
-    R ***                Z-ADD     Binary2       Zoned
+     C                   Eval      Binary2 = *HIVAL
      C     R_TgtValue    WHENEQ    '*CURRENT'
       *  ... umsetzen in gezonten Wert
      C                   EXSR      CvtToZoned
-     C                   Z-ADD     Zoned         Binary2
-    R ***                Z-ADD     Binary2       Zoned
+     C                   Eval      Binary2 = Zoned
      C                   Other
      C                   Endsl
       *
@@ -841,13 +846,13 @@
       *
      C                   SELECT
      C     R_TgtValue    WHENEQ    '*LOVAL'
-     C                   Z-ADD     *LOVAL        Binary4
+     C                   Eval      Binary4 = *LOVAL
      C     R_TgtValue    WHENEQ    '*HIVAL'
-     C                   Z-ADD     *HIVAL        Binary4
+     C                   Eval      Binary4 = *HIVAL
      C     R_TgtValue    WHENEQ    '*CURRENT'
       *  ... umsetzen in gezonten Wert
      C                   EXSR      CvtToZoned
-     C                   Z-ADD     Zoned         Binary4
+     C                   Eval      Binary4 = Zoned
      C                   Other
      C                   Endsl
       *
@@ -865,13 +870,13 @@
       *
      C                   SELECT
      C     R_TgtValue    WHENEQ    '*LOVAL'
-     C                   Z-ADD     *LOVAL        Binary8
+     C                   Eval      Binary8 = *LOVAL
      C     R_TgtValue    WHENEQ    '*HIVAL'
-     C                   Z-ADD     *HIVAL        Binary8
+     C                   Eval      Binary8 = *HIVAL
      C     R_TgtValue    WHENEQ    '*CURRENT'
       *  ... umsetzen in gezonten Wert
      C                   EXSR      CvtToZoned
-     C                   Z-ADD     Zoned         Binary8
+     C                   Eval      Binary8 = Zoned
      C                   Other
      C                   Endsl
       *
@@ -923,17 +928,15 @@
      C                   SELECT
       *  kleinester Wert ...
      C     R_TgtValue    WHENEQ    '*LOVAL'
-     C                   MOVEL     *LOVAL        R_DateISO
+     C                   Eval      R_DateISO = *LOVAL
      C                   EXSR      dateToBuffer
-    R ***                MOVEL (P) R_DateISO     XOutBuffer
       *  größter Wert ...
      C     R_TgtValue    WHENEQ    '*HIVAL'
-     C                   MOVEL     *HIVAL        R_DateISO
+     C                   Eval      R_DateISO = *HIVAL
      C                   EXSR      dateToBuffer
-    R ***                MOVEL (P) R_DateISO     XOutBuffer
       *  aktueller Wert ...
      C     R_TgtValue    WHENEQ    '*CURRENT'
-     C                   MOVEL (P) XBuffer       XOutBuffer
+     C                   Eval      XOutBuffer = XBuffer
      C                   OTHER
      C                   Endsl
       *
@@ -956,21 +959,20 @@
      C                   SELECT
       *  ... *EUR (dd.mm.yyyy)
      C                   WHEN      FLDL0100.F1DTFM = '*EUR'
-     C     *EUR          MOVEL (P) R_DateISO     R_DateBuf
-     C                   EVAL      R_DftSp = '.'
+     C                   Eval      R_DateBuf = %char(R_DateISO: *EUR)
+     C                   Eval      R_DftSp = '.'
       *  ... *ISO (yyyy-mm-dd)
      C                   OTHER
-     C                   MOVEL (P) R_DateISO     R_DateBuf
-     C                   EVAL      R_DftSp = '-'
+     C                   Eval      R_DateBuf = %char(R_DateISO: *ISO)
+     C                   Eval      R_DftSp = '-'
      C                   ENDSL
       *
      C                   IF        (FLDL0100.F1DTSP <> ' '    ) and
      C                             (FLDL0100.F1DTSP <> R_DftSp)
-     C**   R_DftSp:F1DTSPXLATE     R_DateBuf     XOutBuffer
-     C                   EVAL      XOutBuffer =
+     C                   Eval      XOutBuffer =
      C                               %xlate(R_DftSp: FLDL0100.F1DTSP: R_DateBuf)
      C                   ELSE
-     C                   MOVEL (P) R_DateBuf     XOutBuffer
+     C                   Eval      XOutBuffer = R_DateBuf
      C                   ENDIF
       *
      C                   ENDSR
@@ -984,17 +986,15 @@
      C                   SELECT
       *  kleinester Wert ...
      C     R_TgtValue    WHENEQ    '*LOVAL'
-     C                   MOVEL     *LOVAL        R_TimeISO
+     C                   Eval      R_TimeISO = *LOVAL
      C                   EXSR      timeToBuffer
-    R ***                MOVEL (P) R_TimeISO     XOutBuffer
       *  größter Wert ...
      C     R_TgtValue    WHENEQ    '*HIVAL'
-     C                   MOVEL     *HIVAL        R_TimeISO
+     C                   Eval      R_TimeISO = *HIVAL
      C                   EXSR      timeToBuffer
-    R ***                MOVEL (P) R_TimeISO     XOutBuffer
       *  aktueller Wert ...
      C     R_TgtValue    WHENEQ    '*CURRENT'
-     C                   MOVEL (P) XBuffer       XOutBuffer
+     C                   Eval      XOutBuffer = XBuffer
      C                   OTHER
      C                   Endsl
       *
@@ -1017,31 +1017,30 @@
      C                   SELECT
       *  ... *HMS (hh:mm:ss)
      C                   WHEN      FLDL0100.F1DTFM = '*HMS'
-     C     *HMS          MOVEL (P) R_TimeISO     R_TimeBuf
-     C                   EVAL      R_DftSp = ':'
+     C                   Eval      R_TimeBuf = %char(R_TimeISO: *HMS)
+     C                   Eval      R_DftSp = ':'
       *  ... *EUR (hh.mm.ss)
      C                   WHEN      FLDL0100.F1DTFM = '*EUR'
-     C     *EUR          MOVEL (P) R_TimeISO     R_TimeBuf
-     C                   EVAL      R_DftSp = '.'
+     C                   Eval      R_TimeBuf = %char(R_TimeISO: *EUR)
+     C                   Eval      R_DftSp = '.'
       *  ... *ISO (hh.mm.ss)
      C                   OTHER
-     C                   MOVEL (P) R_TimeISO     R_TimeBuf
-     C                   EVAL      R_DftSp = '.'
+     C                   Eval      R_TimeBuf = %char(R_TimeISO: *ISO)
+     C                   Eval      R_DftSp = '.'
      C                   ENDSL
       *
      C                   IF        (FLDL0100.F1DTSP <> ' '    ) and
      C                             (FLDL0100.F1DTSP <> R_DftSp)
-     C**   R_DftSp:F1DTSPXLATE     R_TimeBuf     XOutBuffer
-     C                   EVAL      XOutBuffer =
+     C                   Eval      XOutBuffer =
      C                               %xlate(R_DftSp: FLDL0100.F1DTSP: R_TimeBuf)
      C                   ELSE
-     C                   MOVEL (P) R_TimeBuf     XOutBuffer
+     C                   Eval      XOutBuffer = R_TimeBuf
      C                   ENDIF
       *
      C                   ENDSR
       *
       *============================================================*
-      *    Z_to_Int      Stempel=> interne Darstellung             *
+      *    Z_to_Int      Zeitstempel=> interne Darstellung         *
       *============================================================*
       *
      C     Z_to_Int      BEGSR
@@ -1049,15 +1048,15 @@
      C                   SELECT
       *  kleinester Wert ...
      C     R_TgtValue    WHENEQ    '*LOVAL'
-     C                   MOVEL     *LOVAL        R_TimeStmp
-     C                   MOVEL (P) R_TimeStmp    XOutBuffer
+     C                   Eval      R_TimeStmp = *LOVAL
+     C                   Eval      XOutBuffer = %char(R_TimeStmp: *ISO)
       *  größter Wert ...
      C     R_TgtValue    WHENEQ    '*HIVAL'
-     C                   MOVEL     *HIVAL        R_TimeStmp
-     C                   MOVEL (P) R_TimeStmp    XOutBuffer
+     C                   Eval      R_TimeStmp = *HIVAL
+     C                   Eval      XOutBuffer = %char(R_TimeStmp: *ISO)
       *  aktueller Wert ...
      C     R_TgtValue    WHENEQ    '*CURRENT'
-     C                   MOVEL (P) XBuffer       XOutBuffer
+     C                   Eval      XOutBuffer = XBuffer
      C                   OTHER
      C                   Endsl
       *
@@ -1084,8 +1083,8 @@
      C     YMsgID        IFEQ      *BLANKS
       *   Alles in Ordnung ...
      C                   ELSE
-     C                   MOVEL (P) YMsgID        XMsgID
-     C                   MOVEL (P) YMsgDta       XMsgDta
+     C                   Eval      XMsgID = YMsgID
+     C                   Eval      XMsgDta = YMsgDta
      C                   GOTO      ENDE
      C                   Endif
       *
@@ -1097,15 +1096,15 @@
       *
      C     CvtToZoned    BEGSR
       *
-     C                   Z-ADD     *ZEROS        Zoned
+     C                   Eval      Zoned = *ZEROS
       *
      C                   SELECT
       *  kleinester Wert ...
      C     R_TgtValue    WHENEQ    '*LOVAL'
-     C                   Z-ADD     *LOVAL        Zoned
+     C                   Eval      Zoned = *LOVAL
       *  größter Wert ...
      C     R_TgtValue    WHENEQ    '*HIVAL'
-     C                   Z-ADD     *HIVAL        Zoned
+     C                   Eval      Zoned = *HIVAL
       *  aktueller Wert ...
      C     R_TgtValue    WHENEQ    '*CURRENT'
       *
@@ -1115,18 +1114,17 @@
      C                   ELSE
       *            mit Vorzeichen
       *      ... Vorzeichen extrahieren
-     C**   F1Digt        ADD       1             X
-     C                   EVAL      x = FLDL0100.F1Digt + 1
+     C                   Eval      x = FLDL0100.F1Digt + 1
      C     X             IFLE      §rcdBufLen
-     C     1             SUBST (P) XBuffer:X     A1
+     C                   Eval      A1 = %subst(XBuffer: X: 1)
      C                   ELSE
-     C                   MOVEL (P) *BLANKS       A1
+     C                   Eval      A1 = *BLANKS
      C                   Endif
       *      ... auf definiertes Minus-Zeichen prüfen
      C     A1            IFEQ      SET§SignM
-     C                   MOVEL (P) bTrue         IsMinus
+     C                   Eval      IsMinus = bTrue
      C                   ELSE
-     C                   MOVEL (P) bFalse        IsMinus
+     C                   Eval      IsMinus = bFalse
      C                   Endif
      C                   Endif
       *
@@ -1139,9 +1137,9 @@
       *  ... gültige numerische Daten prüfen
      C     §Numeric      CHECK     Zoned_A                                99
      C     *IN99         IFEQ      '1'                                          = Fehler
-     C                   EVAL      XMsgID = 'USR8138'
-     C                   EVAL      USR81381 = FLDL0100.F1FNme
-     C                   EVAL      XMsgDta = USR8138
+     C                   Eval      XMsgID = 'USR8138'
+     C                   Eval      USR81381 = FLDL0100.F1FNme
+     C                   Eval      XMsgDta = USR8138
      C                   GOTO      ENDE
      C                   ELSE
       *               Alles klar
@@ -1165,29 +1163,29 @@
       *
      C     CvtToFloat    BEGSR
       *
-     C                   Z-ADD     *ZEROS        Float
+     C                   Eval      Float = *ZEROS
       *
      C                   SELECT
       *  kleinester Wert ...
      C     R_TgtValue    WHENEQ    '*LOVAL'
      C                   IF        f_buffLn(FLDL0100) = 4
-     C                   EVAL      dsFloat.float4 = *LOVAL
+     C                   Eval      dsFloat.float4 = *LOVAL
      C                   ELSE
-     C                   EVAL      dsFloat.float8 = *LOVAL
+     C                   Eval      dsFloat.float8 = *LOVAL
      C                   ENDIF
       *  größter Wert ...
      C     R_TgtValue    WHENEQ    '*HIVAL'
      C                   IF        f_buffLn(FLDL0100) = 4
-     C                   EVAL      dsFloat.float4 = *HIVAL
+     C                   Eval      dsFloat.float4 = *HIVAL
      C                   ELSE
-     C                   EVAL      dsFloat.float8 = *HIVAL
+     C                   Eval      dsFloat.float8 = *HIVAL
      C                   ENDIF
       *  aktueller Wert ...
      C     R_TgtValue    WHENEQ    '*CURRENT'
      C                   IF        f_buffLn(FLDL0100) = 4
-     C                   EVAL      x = 14
+     C                   Eval      x = 14
      C                   ELSE
-     C                   EVAL      x = 23
+     C                   Eval      x = 23
      C                   ENDIF
       *
       *  ... Vorzeichen
@@ -1197,23 +1195,23 @@
       *            mit Vorzeichen
       *      ... Vorzeichen extrahieren
      C     X             IFLE      §rcdBufLen
-     C     1             SUBST (P) XBuffer:X     A1
+     C                   Eval      A1 = %subst(XBuffer: X: 1)
      C                   ELSE
-     C                   MOVEL (P) *BLANKS       A1
+     C                   Eval      A1 = *BLANKS
      C                   Endif
       *      ... auf definiertes Minus-Zeichen prüfen
      C     A1            IFEQ      SET§SignM
-     C                   MOVEL (P) bTrue         IsMinus
+     C                   Eval      IsMinus = bTrue
      C                   ELSE
-     C                   MOVEL (P) bFalse        IsMinus
+     C                   Eval      IsMinus = bFalse
      C                   Endif
      C                   Endif
       *
       *  ... gültige numerische Daten prüfen
      C                   IF        f_vldFloat(%subst(xBuffer: 1: x-1)) = bFalse
-     C                   EVAL      XMsgID = 'USR8138'
-     C                   EVAL      USR81381 = FLDL0100.F1FNme
-     C                   EVAL      XMsgDta = USR8138
+     C                   Eval      XMsgID = 'USR8138'
+     C                   Eval      USR81381 = FLDL0100.F1FNme
+     C                   Eval      XMsgDta = USR8138
      C                   GOTO      ENDE
      C                   ELSE
       *               Alles klar
@@ -1230,9 +1228,9 @@
      C                   Endif
       *
      C                   IF        f_buffLn(FLDL0100) = 4
-     C                   EVAL      dsFloat.float4 = Float
+     C                   Eval      dsFloat.float4 = Float
      C                   ELSE
-     C                   EVAL      dsFloat.float8 = Float
+     C                   Eval      dsFloat.float8 = Float
      C                   ENDIF
       *
      C                   OTHER
@@ -1365,15 +1363,15 @@
      C                   Eval      SET0003 = f_getUsrSg('*ACCESSKEY')
       *
      C     SET_SignP     IFEQ      *BLANKS
-     C                   MOVEL (P) *BLANKS       SET§SignP
+     C                   Eval      SET§SignP = *BLANKS
      C                   ELSE
-     C                   MOVEL (P) SET_SignP     SET§SignP
+     C                   Eval      SET§SignP = SET_SignP
      C                   Endif
       *
      C     SET_SignM     IFEQ      *BLANKS
-     C                   MOVEL (P) '-'           SET§SignM
+     C                   Eval      SET§SignM = '-'
      C                   ELSE
-     C                   MOVEL (P) SET_SignM     SET§SignM
+     C                   Eval      SET§SignM = SET_SignM
      C                   Endif
       *
      C                   ENDSR
@@ -1385,7 +1383,7 @@
       *
      C     GetKeyType    BEGSR
       *
-     C                   EVAL      F_Field = FLDL0100.F1FNme
+     C                   Eval      F_Field = FLDL0100.F1FNme
      C     F_Key         CHAIN     FPEEKFLD                           11
      C     *IN11         IFEQ      '1'
      C                   CLEAR                   FPEEKFLD
@@ -1402,8 +1400,8 @@
       * - Programm initialisieren
       ***                Callp     p_rmvPgmMg(§§pgmName)
       *
-     C                   MOVEL (P) *BLANKS       XMsgID
-     C                   MOVEL (P) *BLANKS       XMsgDta
+     C                   Eval      XMsgID = *BLANKS
+     C                   Eval      XMsgDta = *BLANKS
       *
      C                   Eval      ptrXBuffTb = %addr(xOutBuffer)
       *

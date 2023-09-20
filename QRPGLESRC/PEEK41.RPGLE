@@ -50,6 +50,14 @@
       *                parameter is supported using XFunc=5  (read)   *
       *                (must be splitted using a data structure)      *
       *                                                               *
+      * ============================================================= *
+      * >>PRE-COMPILER<<                                              *
+*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
       *===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
@@ -81,9 +89,7 @@
       *
      D FormatName      S              8A   INZ(*BLANKS)
       *
-     D QFile           DS
-     D  File                         10A   INZ(*BLANKS)
-     D  Lib                          10A   INZ(*BLANKS)
+     D QFile           DS                  likeds(r§qobj)
       *
      D RcdFormat       S             10A   INZ(*BLANKS)
      D Override        S              1A   INZ(*BLANKS)
@@ -191,7 +197,7 @@
      D LenOfSlOm       S                   like(r§int4    ) inz
      D NbrOfSlOm       S                   like(r§int4    ) inz
      D PosOfSlOm       S                   like(r§int4    ) inz
-     D OneByte         S              1A   INZ(x'00'  )
+     D**OneByte         S              1A   INZ(x'00'  )
      D XPos            S                   like(r§int4    ) inz
      D R_VALU          S                   like(SOVALU    ) inz
       *
@@ -199,6 +205,7 @@
       /COPY QCOPYLE,KEYL0100
       *
       *  FILD0100, my own API stucture
+     D FILD0100        DS                  likeds(FILD0100_t) inz
       /COPY QCOPYLE,FILD0100
       *
       *  SELL0100, my own API stucture
@@ -274,17 +281,17 @@
       *====================================================*
       *
      C     Create        BEGSR
-      *                                                                   RADDAT
-      *  Akt. Datum & Zeit ermitteln                                      RADDAT
+      *
+      *  Akt. Datum & Zeit ermitteln
      C                   EXSR      GetTime
       *
       *  retrieve file description
-     C                   MOVEL (P) 'FILD0100'    FormatName                     format
-     C                   MOVEL (P) XQFile        QFile                          qualf.file
-     C                   MOVEL (P) *BLANKS       RcdFormat                      record form.
-     C                   MOVEL (P) '0'           Override                       override
-     C                   MOVEL (P) '*LCL'        System
-     C                   MOVEL (P) '*EXT'        FormatType                     format typ
+     C                   EVAL      FormatName = 'FILD0100'                      format
+     C                   EVAL      QFile = XQFile                               qualf.file
+     C                   EVAL      RcdFormat = *BLANKS                          record form.
+     C                   EVAL      Override = '0'                               override
+     C                   EVAL      System = '*LCL'
+     C                   EVAL      FormatType = '*EXT'                          format typ
       *
      C                   CALL      'QDBRTVFD'
      C                   PARM                    RcvVar
@@ -299,9 +306,9 @@
      C                   PARM                    §ErrorCode
       *
      C     §ErrAvail     IFNE      *ZEROS
-     C                   Z-ADD     *ZEROS        XNbrOfEnt
+     C                   EVAL      XNbrOfEnt = *ZEROS
      C                   ELSE
-     C                   Z-ADD     1             XNbrOfEnt
+     C                   EVAL      XNbrOfEnt = 1
      C                   EVAL      pFileDefHd = %ADDR(RcvVarTab(1))
      C                   Endif
       *
@@ -318,101 +325,111 @@
      C                   CLEAR                   FILD0100
       *  Jahrhundert
      C     V_JAHR        IFEQ      19
-     C                   EVAL      ATRCEN = '0'
+     C                   EVAL      FILD0100.ATRCEN = '0'
      C                   ELSE
-     C                   EVAL      ATRCEN = '1'
+     C                   EVAL      FILD0100.ATRCEN = '1'
      C                   Endif
       *  Datum
-     C                   MOVEL (P) V_ADA6        ATRDAT
+     C                   EVAL      FILD0100.ATRDAT = %char(V_ADA6)
       *  Uhrzeit
-     C                   MOVEL (P) V_ATIM        ATRTIM
+     C                   EVAL      FILD0100.ATRTIM = %char(V_ATIM)
       *
      C     XNbrOfEnt     IFLE      *ZEROS
       *  Fehler aufgetreten
       *  Datei/Bibliothek
-     C                   MOVEL (P) '*ERROR'      ATFILE
-     C                   MOVEL (P) '*ERROR'      ATLIB
+     C                   EVAL      FILD0100.ATFILE = '*ERROR'
+     C                   EVAL      FILD0100.ATLIB = '*ERROR'
      C                   ELSE
       *  restliche Felder füllen
       *  Datei/Bibliothek
-     C                   MOVEL (P) RetFile       ATFILE
-     C                   MOVEL (P) RetLib        ATLIB
+     C                   EVAL      FILD0100.ATFILE = RetFile
+     C                   EVAL      FILD0100.ATLIB = RetLib
       *  Bit 2   - Qdbfhfpl - Type of file
       *                  D=Einheit, P=PF, L=LF, R=DDM PF, S=DDM LF
-     C                   MOVEL (P) QdbfhflgH     OneByte                        Key statement
-     C                   BITOFF    '0134567'     OneByte
-     C                   TESTB     '2'           OneByte                  99
-     C     *IN99         IFEQ      '1'
-     C                   MOVEL (P) '*LGL'        ATFILA                         logical
-     C                   MOVEL (P) 'L'           ATFTYP
+     C**                 EVAL      *in98 = %bitand(QdbfhflgH: x'20') = x'20'
+     C**                 EVAL      OneByte = QdbfhflgH                          Key statement
+     C**                 BITOFF    '0134567'     OneByte
+     C**                 TESTB     '2'           OneByte                  99
+     C**   *IN99         IFEQ      '1'
+     C                   IF        (%bitand(QdbfhflgH: x'20') = x'20')
+     C                   EVAL      FILD0100.ATFILA = '*LGL'                     logical
+     C                   EVAL      FILD0100.ATFTYP = 'L'
      C                   ELSE
-     C                   MOVEL (P) '*PHY'        ATFILA                         physical
-     C                   MOVEL (P) 'P'           ATFTYP
+     C                   EVAL      FILD0100.ATFILA = '*PHY'                     physical
+     C                   EVAL      FILD0100.ATFTYP = 'P'
      C                   Endif
       *
       *  Bit 4   - Qdbfhfsu - file type (FILETYPE)
-     C                   MOVEL (P) QdbfhflgH     OneByte                        Key statement
-     C                   BITOFF    '0123567'     OneByte
-     C                   TESTB     '4'           OneByte                  99
-     C     *IN99         IFEQ      '1'
+     C**                 EVAL      *in98 = %bitand(QdbfhflgH: x'08') = x'08'
+     C**                 EVAL      OneByte = QdbfhflgH                          Key statement
+     C**                 BITOFF    '0123567'     OneByte
+     C**                 TESTB     '4'           OneByte                  99
+     C**   *IN99         IFEQ      '1'
+     C                   IF        (%bitand(QdbfhflgH: x'08') = x'08')
       *                  MOVEL (P) '*SRC'        ATDTAT
      C                   ELSE
       *                  MOVEL (P) '*DTA'        ATDTAT
      C                   Endif
       *
       *  Dateiwartezeit - Qdbfwtfi
-     C                   Z-ADD     Qdbfwtfi      ATWAIT
+     C                   EVAL      FILD0100.ATWAIT = Qdbfwtfi
       *
       *  Satzwartezeit  - Qdbfbrwt
-     C                   Z-ADD     Qdbfbrwt      ATWATR
+     C                   EVAL      FILD0100.ATWATR = Qdbfbrwt
       *
       *  Bit 0   - Qdbfhflc - level check
-     C                   MOVEL (P) QdbfhflgL     OneByte                        Key statement
-     C                   BITOFF    '1234567'     OneByte
-     C                   TESTB     '0'           OneByte                  99
-     C     *IN99         IFEQ      '1'
-     C                   MOVEL (P) 'Y'           ATLVLC
+     C**                 EVAL      *in98 = %bitand(QdbfhflgL: x'80') = x'80'
+     C**                 EVAL      OneByte = QdbfhflgL                          Level Check
+     C**                 BITOFF    '1234567'     OneByte
+     C**                 TESTB     '0'           OneByte                  99
+     C**   *IN99         IFEQ      '1'
+     C                   IF        (%bitand(QdbfhflgL: x'80') = x'80')
+     C                   EVAL      FILD0100.ATLVLC = 'Y'
      C                   ELSE
-     C                   MOVEL (P) 'N'           ATLVLC
+     C                   EVAL      FILD0100.ATLVLC = 'N'
      C                   Endif
       *
       *  Textbeschreibung
-     C                   MOVEL (P) Qdbfhtxt      ATTXT
+     C                   EVAL      FILD0100.ATTXT = Qdbfhtxt
       *
       *  Extern/Intern beschriebene Datei
       *  Bit 7   - Qdbfpgmd - program described file indicator
-     C                   MOVEL (P) Qaaf2         OneByte                        Key statement
-     C                   BITOFF    '0123456'     OneByte
-     C                   TESTB     '7'           OneByte                  99
-     C     *IN99         IFEQ      '1'
-     C                   MOVEL (P) 'Y'           ATFLS                          program
+     C**                 EVAL      *in98 = %bitand(Qaaf2: x'0100') = x'0100'
+     C**                 EVAL      OneByte = Qaaf2                              Key statement
+     C**                 BITOFF    '0123456'     OneByte
+     C**                 TESTB     '7'           OneByte                  99
+     C**   *IN99         IFEQ      '1'
+     C                   IF        (%bitand(Qaaf2: x'0100') = x'0100')
+     C                   EVAL      FILD0100.ATFLS = 'Y'                         program
      C                   ELSE
-     C                   MOVEL (P) 'N'           ATFLS                          extern
+     C                   EVAL      FILD0100.ATFLS = 'N'                         extern
      C                   Endif
       *
       *  Zugriffspfad
      C                   SELECT
      C     Qdbfpact      WHENEQ    'AR'
-     C                   MOVEL (P) 'A'           ATACCP
+     C                   EVAL      FILD0100.ATACCP = 'A'
      C     Qdbfpact      WHENEQ    'KC'
      C     Qdbfpact      OREQ      'KF'
      C     Qdbfpact      OREQ      'KL'
      C     Qdbfpact      OREQ      'KN'
      C     Qdbfpact      OREQ      'KU'
-     C                   MOVEL (P) 'K'           ATACCP
+     C                   EVAL      FILD0100.ATACCP = 'K'
      C                   OTHER
-     C                   MOVEL (P) '?'           ATACCP
+     C                   EVAL      FILD0100.ATACCP = '?'
      C                   Endsl
       *
       *  Select/Omit Angaben
       *  Bit 1   - Qdbfkfso - select/omit
-     C                   MOVEL (P) QdbfhflgL     OneByte                        Key statement
-     C                   BITOFF    '0234567'     OneByte
-     C                   TESTB     '1'           OneByte                  99
-     C     *IN99         IFEQ      '1'
-     C                   Eval      ATSELO = 'Y'
+     C**                 EVAL      *in98 = %bitand(QdbfhflgL: x'40') = x'40'
+     C**                 EVAL      OneByte = QdbfhflgL                          Key statement
+     C**                 BITOFF    '0234567'     OneByte
+     C**                 TESTB     '1'           OneByte                  99
+     C**   *IN99         IFEQ      '1'
+     C                   IF        (%bitand(QdbfhflgL: x'40') = x'40')
+     C                   Eval      FILD0100.ATSELO = 'Y'
      C                   ELSE
-     C                   Eval      ATSELO = 'N'
+     C                   Eval      FILD0100.ATSELO = 'N'
      C                   Endif
       *
       *  Logical File Attributes
@@ -425,42 +442,42 @@
       *
       *  Join logical file
      C                   If        (isJoinFile = bTrue)
-     C                   Eval      ATJOIN = 'Y'
+     C                   Eval      FILD0100.ATJOIN = 'Y'
      C                   Else
-     C                   Eval      ATJOIN = 'N'
+     C                   Eval      FILD0100.ATJOIN = 'N'
      C                   Endif
       *
       *  Anzahl Satzformate
-     C                   If        (ATJOIN = 'Y')
-     C                   Eval      ATNOFM = 1
+     C                   If        (FILD0100.ATJOIN = 'Y')
+     C                   Eval      FILD0100.ATNOFM = 1
      C                   Else
-     C                   Eval      ATNOFM = Qdbflbnum
+     C                   Eval      FILD0100.ATNOFM = Qdbflbnum
      C                   Endif
       *
       *  Anzahl Teildateien
-     C                   Eval      ATNOMB = Qdbfhmnum
+     C                   Eval      FILD0100.ATNOMB = Qdbfhmnum
       *
       *  Auxiliary storage pool ID
-     C                   Eval      ATASP = Qdbfasp
+     C                   Eval      FILD0100.ATASP = Qdbfasp
       *
       *  nicht unterstützt:
-     C                   Eval      ATMXDD = ''
-     C                   Eval      ATMXDC = ''
-     C                   Eval      ATMXDB = ''
-     C                   Eval      ATFATR = ''
-     C                   Eval      ATSYSN = ''
-     C                   Eval      ATSHAR = ''
-     C                   Eval      ATFCCN = ''
-     C                   Eval      ATFCDT = ''
-     C                   Eval      ATFCTM = ''
-     C                   Eval      ATICAP = ''
-     C                   Eval      ATAQDV = ''
-     C                   Eval      ATMXDV = 0
-     C                   Eval      ATSPOL = ''
-     C                   Eval      ATNODV = 0
-     C                   Eval      ATUBL  = 0
-     C                   Eval      ATIDTA = ''
-     C                   Eval      ATCSEQ = ''
+     C                   Eval      FILD0100.ATMXDD = ''
+     C                   Eval      FILD0100.ATMXDC = ''
+     C                   Eval      FILD0100.ATMXDB = ''
+     C                   Eval      FILD0100.ATFATR = ''
+     C                   Eval      FILD0100.ATSYSN = ''
+     C                   Eval      FILD0100.ATSHAR = ''
+     C                   Eval      FILD0100.ATFCCN = ''
+     C                   Eval      FILD0100.ATFCDT = ''
+     C                   Eval      FILD0100.ATFCTM = ''
+     C                   Eval      FILD0100.ATICAP = ''
+     C                   Eval      FILD0100.ATAQDV = ''
+     C                   Eval      FILD0100.ATMXDV = 0
+     C                   Eval      FILD0100.ATSPOL = ''
+     C                   Eval      FILD0100.ATNODV = 0
+     C                   Eval      FILD0100.ATUBL  = 0
+     C                   Eval      FILD0100.ATIDTA = ''
+     C                   Eval      FILD0100.ATCSEQ = ''
       *
      C                   Endif
       *
@@ -509,15 +526,15 @@
      C                   EXSR      FindRcdFmt
      C     IsFound       IFEQ      bTrue
       *  store number of key fields ...
-     C                   Z-ADD     Qdbfbgky      NbrOfKeyFd
-     C                   Z-ADD     *ZEROS        PosOfKeyFd
+     C                   EVAL      NbrOfKeyFd = Qdbfbgky
+     C                   EVAL      PosOfKeyFd = *ZEROS
      C                   ELSE
       *  no key fields found ...
-     C                   Z-ADD     *ZEROS        NbrOfKeyFd
-     C                   Z-ADD     *HIVAL        PosOfKeyFd
+     C                   EVAL      NbrOfKeyFd = *ZEROS
+     C                   EVAL      PosOfKeyFd = *HIVAL
      C                   Endif
       *
-     C                   Z-ADD     NbrOfKeyFd    XNbrOfEnt
+     C                   EVAL      XNbrOfEnt = NbrOfKeyFd
       *
      C                   ENDSR
       *
@@ -530,77 +547,79 @@
      C     PosOfKeyFd    IFLT      NbrOfKeyFd
       *
      C     PosOfKeyFd    MULT      §KeySpecAy    Offset
-     C                   ADD       Qdbfksof      Offset
+     C                   EVAL      Offset = Offset + Qdbfksof
      C
      C                   EVAL      pKeySpecAy = %ADDR(RcvVarTab(Offset + 1))
       *
      C                   CLEAR                   KEYL0100
       *  Jahrhundert
-     C                   MOVEL (P) ATRCEN        APRCEN
+     C                   EVAL      APRCEN = FILD0100.ATRCEN
       *  Datum
-     C                   MOVEL (P) ATRDAT        APRDAT
+     C                   EVAL      APRDAT = FILD0100.ATRDAT
       *  Uhrzeit
-     C                   MOVEL (P) ATRTIM        APRTIM
+     C                   EVAL      APRTIM = FILD0100.ATRTIM
       *  Datei
-     C                   MOVEL (P) ATFILE        APFILE
+     C                   EVAL      APFILE = FILD0100.ATFILE
       *  Bibliothek
-     C                   MOVEL (P) ATLIB         APLIB
+     C                   EVAL      APLIB = FILD0100.ATLIB
       *  Anzahl Schlüsselfelder
-     C                   Z-ADD     NbrOfKeyFd    APNKYF
+     C                   EVAL      APNKYF = NbrOfKeyFd
       *  Feldname
-     C                   MOVEL (P) Qdbfkfld      APKEYF                         Feldname
+     C                   EVAL      APKEYF = Qdbfkfld                            Feldname
       *  Schlüsselfeldnummer
-     C     PosOfKeyFd    ADD       1             APKEYN
+     C                   EVAL      APKEYN = PosOfKeyFd + 1
       *  Dateiart
-     C                   MOVEL (P) ATFTYP        APFTYP                         file type
+     C                   EVAL      APFTYP = FILD0100.ATFTYP                     file type
       *------------------------------------------*
       *  Dateiattribute:                         *
       *------------------------------------------*
       *  Zugriffspfadwartung
-     C                   MOVEL (P) Qdbfkfdm      APMANT
+     C                   EVAL      APMANT = Qdbfkfdm
       *  Bit 0/1 - Reserved_1
       *  Bit 2   - Qdbfhfpl - Type of file
-     C                   MOVEL (P) ATFILA        APFILA                         physical
+     C                   EVAL      APFILA = FILD0100.ATFILA                     physical
       *  Bit 3   - Reserved_2
       *  Bit 5   - Reserved_3
       *  Bit 6   - Qdbfhfky - Access path
-     C                   MOVEL (P) QdbfhflgH     OneByte                        Key statement
-     C                   BITOFF    '0123457'     OneByte
-     C                   TESTB     '6'           OneByte                  99
-     C     *IN99         IFEQ      '1'
+     C**                 EVAL      *in98 = %bitand(QdbfhflgH: x'02') = x'02'
+     C**                 EVAL      OneByte = QdbfhflgH                          Key statement
+     C**                 BITOFF    '0123457'     OneByte
+     C**                 TESTB     '6'           OneByte                  99
+     C**   *IN99         IFEQ      '1'
+     C                   IF        (%bitand(QdbfhflgH: x'02') = x'02')
       *  ... keyed
      C                   SELECT
       *      ... arrival sequence
      C     Qdbfpact      WHENEQ    'AR'
-     C                   MOVEL (P) '*BLANKS'     APUNIQ                         no unique key
-     C                   MOVEL (P) '*BLANKS'     APKEYO                         no order
+     C                   EVAL      APUNIQ = '*BLANKS'                           no unique key
+     C                   EVAL      APKEYO = '*BLANKS'                           no order
       *      ... keyed, no unique, FCFO order
      C     Qdbfpact      WHENEQ    'KC'
-     C                   MOVEL (P) 'N'           APUNIQ                         no unique key
-     C                   MOVEL (P) 'C'           APKEYO                         FCFO oder
+     C                   EVAL      APUNIQ = 'N'                                 no unique key
+     C                   EVAL      APKEYO = 'C'                                 FCFO oder
       *      ... keyed, no unique, FIFO order
      C     Qdbfpact      WHENEQ    'KF'
-     C                   MOVEL (P) 'N'           APUNIQ                         no unique key
-     C                   MOVEL (P) 'F'           APKEYO                         FIFO order
+     C                   EVAL      APUNIQ = 'N'                                 no unique key
+     C                   EVAL      APKEYO = 'F'                                 FIFO order
       *      ... keyed, no unique, LIFO order
      C     Qdbfpact      WHENEQ    'KL'
-     C                   MOVEL (P) 'N'           APUNIQ                         no unique key
-     C                   MOVEL (P) 'L'           APKEYO                         LIFO order
+     C                   EVAL      APUNIQ = 'N'                                 no unique key
+     C                   EVAL      APKEYO = 'L'                                 LIFO order
       *      ... keyed, no unique, no order
      C     Qdbfpact      WHENEQ    'KN'
-     C                   MOVEL (P) 'N'           APUNIQ                         no unique key
-     C                   MOVEL (P) 'N'           APKEYO                         no order
+     C                   EVAL      APUNIQ = 'N'                                 no unique key
+     C                   EVAL      APKEYO = 'N'                                 no order
       *      ... keyed, unique, FIFO order - see DSPFD
      C     Qdbfpact      WHENEQ    'KU'
-     C                   MOVEL (P) 'Y'           APUNIQ                         no unique key
-     C                   MOVEL (P) 'N'           APKEYO                         FIFO order
+     C                   EVAL      APUNIQ = 'Y'                                 no unique key
+     C                   EVAL      APKEYO = 'N'                                 FIFO order
       *
      C                   OTHER
      C                   Endsl
      C                   ELSE
       *  ... arrival sequence
-     C                   MOVEL (P) '*BLANKS'     APUNIQ                         no unique key
-     C                   MOVEL (P) '*BLANKS'     APKEYO                         no access path
+     C                   EVAL      APUNIQ = '*BLANKS'                           no unique key
+     C                   EVAL      APKEYO = '*BLANKS'                           no access path
      C                   Endif
       *  Bit 7   - Reserved_4
       *
@@ -608,20 +627,24 @@
       *  Additional attribute flags              *
       *------------------------------------------*
       *  Bit 7   - Qdbfpkey - primary key
-     C                   MOVEL (P) Qaaf2H        OneByte                        Key statement
-     C                   BITOFF    '0123456'     OneByte
-     C                   TESTB     '7'           OneByte                  99
-     C     *IN99         IFEQ      '1'
-     C                   MOVEL (P) 'P'           APRIKY                         primary key
+     C**                 EVAL      *in98 = %bitand(Qaaf2H: x'01') = x'01'
+     C**                 EVAL      OneByte = Qaaf2H                             Key statement
+     C**                 BITOFF    '0123456'     OneByte
+     C**                 TESTB     '7'           OneByte                  99
+     C**   *IN99         IFEQ      '1'
+     C                   IF        (%bitand(Qaaf2H: x'01') = x'01')
+     C                   EVAL      APRIKY = 'P'                                 primary key
      C                   ELSE
       *  Bit 0   - Qdbfpkey - primary key
-     C                   MOVEL (P) Qaaf2L        OneByte                        Key statement
-     C                   BITOFF    '1234567'     OneByte
-     C                   TESTB     '0'           OneByte                  99
-     C     *IN99         IFEQ      '1'
-     C                   MOVEL (P) 'U'           APRIKY                         unique constr
+     C**                 EVAL      *in98 = %bitand(Qaaf2L: x'80') = x'80'
+     C**                 EVAL      OneByte = Qaaf2L                             Key statement
+     C**                 BITOFF    '1234567'     OneByte
+     C**                 TESTB     '0'           OneByte                  99
+     C**   *IN99         IFEQ      '1'
+     C                   IF        (%bitand(Qaaf2L: x'80') = x'80')
+     C                   EVAL      APRIKY = 'U'                                 unique constr
      C                   ELSE
-     C                   MOVEL (P) 'N'           APRIKY                         keine
+     C                   EVAL      APRIKY = 'N'                                 keine
      C                   Endif
      C                   Endif
       *
@@ -629,72 +652,85 @@
       *  Schlüsselfeldattribute:                 *
       *------------------------------------------*
       *  Bit 0   - Qdbfksad - Ascending/Descending indicator
-     C                   MOVEL (P) Qdbfksq       OneByte                        Key statement
-     C                   BITOFF    '1234567'     OneByte
-     C                   TESTB     '0'           OneByte                  99
-     C     *IN99         IFEQ      '1'
-     C                   MOVEL (P) 'D'           APKSEQ                         Descending
+     C**                 EVAL      *in98 = %bitand(Qdbfksq: x'80') = x'80'
+     C**                 EVAL      OneByte = Qdbfksq                            Key statement
+     C**                 BITOFF    '1234567'     OneByte
+     C**                 TESTB     '0'           OneByte                  99
+     C**   *IN99         IFEQ      '1'
+     C                   IF        (%bitand(Qdbfksq: x'80') = x'80')
+     C                   EVAL      APKSEQ = 'D'                                 Descending
      C                   ELSE
-     C                   MOVEL (P) 'A'           APKSEQ                         Ascending
+     C                   EVAL      APKSEQ = 'A'                                 Ascending
      C                   Endif
       *  Bit 1/2 - Qdbfksn  - Numeric key field seq. indicator
-     C                   MOVEL (P) Qdbfksq       OneByte                        Key statement
-     C                   BITOFF    '034567'      OneByte
+     C**                 EVAL      OneByte = Qdbfksq                            Key statement
+     C**                 BITOFF    '034567'      OneByte
       *
      C                   SELECT
-     C     OneByte       WHENEQ    x'00'
-     C                   MOVEL (P) 'N'           APKSIN                         Unsigned
-     C     OneByte       WHENEQ    x'20'
-     C                   MOVEL (P) 'A'           APKSIN                         AbsVal
-     C     OneByte       WHENEQ    x'40'
-     C                   MOVEL (P) 'S'           APKSIN                         Signed
+     C**   OneByte       WHENEQ    x'00'
+     C                   WHEN      (Qdbfksq = x'00')
+     C                   EVAL      APKSIN = 'N'                                 Unsigned
+     C**   OneByte       WHENEQ    x'20'
+     C                   WHEN      (Qdbfksq = x'20')
+     C                   EVAL      APKSIN = 'A'                                 AbsVal
+     C**   OneByte       WHENEQ    x'40'
+     C                   WHEN      (Qdbfksq = x'40')
+     C                   EVAL      APKSIN = 'S'                                 Signed
      C                   OTHER
-     C                   MOVEL (P) '?'           APKSIN                         unknown
+     C                   EVAL      APKSIN = '?'                                 unknown
      C                   Endsl
       *  Bit 3   - Reserved_60
       *  Bit 4   - Qdbfksac - Alternate collating seq. indicator
-     C                   MOVEL (P) Qdbfksq       OneByte                        Key statement
-     C                   BITOFF    '0123567'     OneByte
-     C                   TESTB     '4'           OneByte                  99
-     C     *IN99         IFEQ      '1'
-     C                   MOVEL (P) 'Y'           APKASQ                         altern. seq.
+     C**                 EVAL      *in98 = %bitand(Qdbfksq: x'08') = x'08'
+     C**                 EVAL      OneByte = Qdbfksq                            Key statement
+     C**                 BITOFF    '0123567'     OneByte
+     C**                 TESTB     '4'           OneByte                  99
+     C**   *IN99         IFEQ      '1'
+     C                   IF        (%bitand(Qdbfksq: x'08') = x'08')
+     C                   EVAL      APKASQ = 'Y'                                 altern. seq.
      C                   ELSE
-     C                   MOVEL (P) 'N'           APKASQ                         no alt. seq.
+     C                   EVAL      APKASQ = 'N'                                 no alt. seq.
      C                   Endif
       *  Bit 5   - Qdbfkszf - Force zone  seq. indicator
-     C                   MOVEL (P) Qdbfksq       OneByte                        Key statement
-     C                   BITOFF    '0123467'     OneByte
-     C                   TESTB     '5'           OneByte                  99
-     C     *IN99         IFEQ      '1'
-     C                   MOVEL (P) 'Z'           APKZD                          Zone
+     C**                 EVAL      *in98 = %bitand(Qdbfksq: x'04') = x'04'
+     C**                 EVAL      OneByte = Qdbfksq                            Key statement
+     C**                 BITOFF    '0123467'     OneByte
+     C**                 TESTB     '5'           OneByte                  99
+     C**   *IN99         IFEQ      '1'
+     C                   IF        (%bitand(Qdbfksq: x'04') = x'04')
+     C                   EVAL      APKZD = 'Z'                                  Zone
      C                   ELSE
       *  Bit 6   - Qdbfksdf - Force digit seq. indicator
-     C                   MOVEL (P) Qdbfksq       OneByte                        Key statement
-     C                   BITOFF    '0123457'     OneByte
-     C                   TESTB     '6'           OneByte                  99
-     C     *IN99         IFEQ      '1'
-     C                   MOVEL (P) 'D'           APKZD                          Digit
+     C**                 EVAL      *in98 = %bitand(Qdbfksq: x'02') = x'02'
+     C**                 EVAL      OneByte = Qdbfksq                            Key statement
+     C**                 BITOFF    '0123457'     OneByte
+     C**                 TESTB     '6'           OneByte                  99
+     C**   *IN99         IFEQ      '1'
+     C                   IF        (%bitand(Qdbfksq: x'02') = x'02')
+     C                   EVAL      APKZD = 'D'                                  Digit
      C                   ELSE
-     C                   MOVEL (P) 'N'           APKZD                          None
+     C                   EVAL      APKZD = 'N'                                  None
      C                   Endif
      C                   Endif
       *  Bit 7   - Qdbfkft  - external / internal name indicator
-     C                   MOVEL (P) Qdbfksq       OneByte                        Key statement
-     C                   BITOFF    '0123456'     OneByte
-     C                   TESTB     '7'           OneByte                  99
-     C     *IN99         IFEQ      '1'
+     C**                 EVAL      *in98 = %bitand(Qdbfksq: x'01') = x'01'
+     C**                 EVAL      OneByte = Qdbfksq                            Key statement
+     C**                 BITOFF    '0123456'     OneByte
+     C**                 TESTB     '7'           OneByte                  99
+     C**   *IN99         IFEQ      '1'
+     C                   IF        (%bitand(Qdbfksq: x'01') = x'01')
       ***                MOVEL (P) 'E'     z.Z. kein Feld vorhanden             external
      C                   ELSE
       ***                MOVEL (P) 'I'     z.Z. kein Feld vorhanden             internal
      C                   Endif
       *
-     C                   MOVEL (P) KEYL0100      XDATA
-     C     PosOfKeyFd    ADD       1             XNbrOfEnt
+     C                   EVAL      XDATA = KEYL0100
+     C                   EVAL      XNbrOfEnt = PosOfKeyFd + 1
       *  pointer to next field
-     C                   ADD       1             PosOfKeyFd
+     C                   EVAL      PosOfKeyFd = PosOfKeyFd + 1
      C                   ELSE
-     C                   Z-ADD     *ZEROS        XNbrOfEnt
-     C                   MOVEL (P) *BLANKS       XData
+     C                   EVAL      XNbrOfEnt = *ZEROS
+     C                   EVAL      XData = *BLANKS
      C                   Endif
       *
      C                   ENDSR
@@ -709,15 +745,15 @@
      C                   EXSR      FindRcdFmt
      C     IsFound       IFEQ      bTrue
       *  store number of select/omit statements ...
-     C                   Z-ADD     Qdbfsoon      NbrOfSlOm
-     C                   Z-ADD     *ZEROS        PosOfSlOm
+     C                   EVAL      NbrOfSlOm = Qdbfsoon
+     C                   EVAL      PosOfSlOm = *ZEROS
      C                   ELSE
       *  no select/omit statements found ...
-     C                   Z-ADD     *ZEROS        NbrOfSlOm
-     C                   Z-ADD     *HIVAL        PosOfSlOm
+     C                   EVAL      NbrOfSlOm = *ZEROS
+     C                   EVAL      PosOfSlOm = *HIVAL
      C                   Endif
       *
-     C                   Z-ADD     NbrOfSlOm     XNbrOfEnt
+     C                   EVAL      XNbrOfEnt = NbrOfSlOm
       *
      C                   ENDSR
       *
@@ -731,43 +767,43 @@
       *
       *  Set pointer to select/omit specification entry
      C     PosOfSlOm     MULT      §SelSpecAy    Offset
-     C                   ADD       Qdbfsoof      Offset
+     C                   EVAL      Offset = Offset + Qdbfsoof
       *
      C                   EVAL      pSelSpecAy = %ADDR(RcvVarTab(Offset + 1))
       *
      C                   CLEAR                   SELL0100
       *  Jahrhundert
-     C                   MOVEL (P) ATRCEN        SORCEN
+     C                   EVAL      SORCEN = FILD0100.ATRCEN
       *  Datum
-     C                   MOVEL (P) ATRDAT        SORDAT
+     C                   EVAL      SORDAT = FILD0100.ATRDAT
       *  Uhrzeit
-     C                   MOVEL (P) ATRTIM        SORTIM
+     C                   EVAL      SORTIM = FILD0100.ATRTIM
       *  Datei
-     C                   MOVEL (P) ATFILE        SOFILE
+     C                   EVAL      SOFILE = FILD0100.ATFILE
       *  Bibliothek
-     C                   MOVEL (P) ATLIB         SOLIB
+     C                   EVAL      SOLIB = FILD0100.ATLIB
       *  Dateiart
-     C                   MOVEL (P) ATFTYP        SOFTYP
+     C                   EVAL      SOFTYP = FILD0100.ATFTYP
       *  Dateiattribut
-     C                   MOVEL (P) ATFILA        SOFILA
+     C                   EVAL      SOFILA = FILD0100.ATFILA
       *  Reserviert
-     C                   MOVEL (P) *BLANKS       SOMXD
+     C                   EVAL      SOMXD = *BLANKS
       *  Dateiattribut
-     C                   MOVEL (P) ATFATR        SOFATR
+     C                   EVAL      SOFATR = FILD0100.ATFATR
       *  Systemname
-     C                   MOVEL (P) ATSYSN        SOSYSN
+     C                   EVAL      SOSYSN = FILD0100.ATSYSN
       *  ASP Zusatzspeicher
-     C                   Z-ADD     ATASP         SOASP
+     C                   EVAL      SOASP = FILD0100.ATASP
       *  Reserviert
-     C                   MOVEL (P) *BLANKS       SORES
+     C                   EVAL      SORES = *BLANKS
       *  Anzahl SELECT/OMIT Regeln
-     C                   Z-ADD     NbrOfSlOm     SONRUL
+     C                   EVAL      SONRUL = NbrOfSlOm
       *  Satzformat
-     C                   MOVEL (P) Qdbft         SORFMT
+     C                   EVAL      SORFMT = Qdbft
       *  SELECT/OMIT Regel
-     C                   MOVEL (P) Qdbfssso      SORULE
+     C                   EVAL      SORULE = Qdbfssso
       *  Vergleichoperator, z.B.:  EQ,NE,AL
-     C                   MOVEL (P) Qdbfssop      SOCOMP
+     C                   EVAL      SOCOMP = Qdbfssop
       *
       *  Wenn SELECT/OMIT-Parameter vorhanden sind, ...
      C     Qdbfsoso      IFLE      *ZEROS
@@ -776,39 +812,39 @@
       *  ... dann diese ermitteln und zurückliefern
       *
       *      ... Feldname
-     C                   MOVEL (P) Qdbfssfn      SOFLD
+     C                   EVAL      SOFLD = Qdbfssfn
       *      ... SELECT/OMIT Anzahl Vergleichswerte
-     C                   Z-ADD     Qdbfsspnum    SONVAL
+     C                   EVAL      SONVAL = Qdbfsspnum
       *
       *      ... Zeiger auf den ersten Wert setzen ...
-     C                   Z-ADD     Qdbfsoso      Offset
+     C                   EVAL      Offset = Qdbfsoso
      C                   EVAL      pSelParmAy = %ADDR(RcvVarTab(Offset + 1))
       *
       *      ...  ermitteln SELECT/OMIT Wert und Wertlänge
      C                   DO        *HIVAL
       *
-     C     Qdbfspln      SUB       20            LenOfSlOm
+     C                   EVAL      LenOfSlOm = Qdbfspln - 20
       *
      C     LenOfSlOm     IFGE      1
      C     LenOfSlOm     ANDLE     32
-     C     LenOfSlOm     SUBST (P) Qdbfspvl:1    R_VALU
+     C                   EVAL      R_VALU = %subst(Qdbfspvl: 1: LenOfSlOm)
      C                   ELSE
-     C                   MOVEL (P) *BLANKS       R_VALU
+     C                   EVAL      R_VALU = *BLANKS
      C                   Endif
       *
       *      ... SELECT/OMIT Wert
      C     SOVALU        IFEQ      *BLANKS
-     C                   MOVEL (P) R_VALU        SOVALU
+     C                   EVAL      SOVALU = R_VALU
      C                   ELSE
-     C                   CAT       R_VALU:1      SOVALU
+     C                   EVAL      SOVALU = %trimr(SOVALU) + ' ' + R_VALU
      C                   Endif
       *      ... SELECT/OMIT Wertlänge
-     C                   Z-ADD     LenOfSlOm     SOVALL
+     C                   EVAL      SOVALL = LenOfSlOm
       *
       *      ... wenn weitere Werte vorhanden sind, ...
      C     Qdbfspno      IFNE      *ZEROS
       *          ... dann den Zeiger auf den nächsten Wert ausrichten
-     C                   Z-ADD     Qdbfspno      Offset
+     C                   EVAL      Offset = Qdbfspno
      C                   EVAL      pSelParmAy = %ADDR(RcvVarTab(Offset + 1))
      C                   ELSE
       *          ... ansonsten die Verarbeitung beenden
@@ -817,21 +853,21 @@
       *
      C                   Enddo
       *  DYNSLT
-     C                   MOVEL (P) *BLANKS       SODYNS
+     C                   EVAL      SODYNS = *BLANKS
       *  JREF Field
-     C                   Z-ADD     Qdbfssfj      SOFJVL
+     C                   EVAL      SOFJVL = Qdbfssfj
       *  JREF Parameter
-     C                   Z-ADD     *ZEROS        SOPJVL
+     C                   EVAL      SOPJVL = *ZEROS
      C                   Endif
       *
-     C                   MOVEL (P) SELL0100      XDATA
+     C                   EVAL      XDATA = SELL0100
       *
-     C     PosOfSlOm     ADD       1             XNbrOfEnt
+     C                   EVAL      XNbrOfEnt = PosOfSlOm + 1
       *  pointer to next field
-     C                   ADD       1             PosOfSlOm
+     C                   EVAL      PosOfSlOm = PosOfSlOm + 1
      C                   ELSE
-     C                   Z-ADD     *ZEROS        XNbrOfEnt
-     C                   MOVEL (P) *BLANKS       XData
+     C                   EVAL      XNbrOfEnt = *ZEROS
+     C                   EVAL      XData = *BLANKS
      C                   Endif
       *
      C                   ENDSR
@@ -843,9 +879,10 @@
      C     ReadText      BEGSR
       *
       *  Textbeschreibung
-     C                   MOVEL (P) ATTXT         XData
-     C     ' '           CHECKR    XData         XPos
-     C                   Z-ADD     XPos          XNbrOfEnt
+     C                   EVAL      XData = FILD0100.ATTXT
+     C**   ' '           CHECKR    XData         XPos
+     C                   EVAL      XPos = %checkr(' ': XData)
+     C                   EVAL      XNbrOfEnt = XPos
       *
      C                   ENDSR
       *
@@ -855,8 +892,8 @@
       *
      C     FindRcdFmt    BEGSR
       *
-     C                   MOVEL (P) bFalse        IsFound
-     C                   Z-ADD     Qdbfos        Offset
+     C                   EVAL      IsFound = bFalse
+     C                   EVAL      Offset = Qdbfos
       *
      C     1             DO        Qdbflbnum     Counter
      C                   EVAL      pFileScpAy = %ADDR(RcvVarTab(Offset + 1))
@@ -864,12 +901,12 @@
      C     Qdbft         IFEQ      XRcdFormat
      C     XRcdFormat    OREQ      '*FIRST'
       *  Record format generic key field count ...
-     C                   MOVEL (P) bTrue         IsFound
+     C                   EVAL      IsFound = bTrue
      C                   LEAVE
      C                   ELSE
       *  No matching record format found ...
-     C                   ADD       §FileScpAy    Offset
-     C                   MOVEL (P) bFalse        IsFound
+     C                   EVAL      Offset = Offset + §FileScpAy
+     C                   EVAL      IsFound = bFalse
      C                   Endif
      C                   Enddo
       *
@@ -923,7 +960,7 @@
       *
      C                   DUMP
       *
-     C                   Z-ADD     *ZEROS        XNbrOfEnt
+     C                   EVAL      XNbrOfEnt = *ZEROS
      C                   GOTO      ENDE
       *
      C                   ENDSR     '*CANCL'

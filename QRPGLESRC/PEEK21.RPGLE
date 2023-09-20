@@ -15,6 +15,14 @@
       *                                                               *
       *  Mappen einer gedrückten Taste auf einen Programmbefehl       *
       *                                                               *
+      * ============================================================= *
+      * >>PRE-COMPILER<<                                              *
+*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
       *===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
@@ -25,6 +33,7 @@
       *
       *---Variablendefinition------------------------------*
       /COPY QCOPYLE,D_VARDEF
+      /COPY QCOPYLE,FLDL0100
       *----------------------------------------------------*
       *
       *---Variablendefinition ShortCmd---------------------*
@@ -118,7 +127,7 @@
       *
      C                   EXSR      FIRST
       *
-     C                   MOVEL (P) *BLANKS       Wrk_Key
+     C                   EVAL      Wrk_Key = *BLANKS
       *
      C     XScnAID_1     IFEQ      '#'
      C                   EXSR      MapSflOpt
@@ -136,7 +145,8 @@
       *
      C     MapSflOpt     BEGSR
       *
-     C                   SUBST (P) XscnAID:2     Wrk_Key
+     C**                 SUBST (P) XscnAID:2     Wrk_Key
+     C                   EVAL      Wrk_Key = %subst(XscnAID: 2)
       *
       *   Übersetzen key code vor dem Mapping:
      C                   CALLP     callExit05(xPgm: '*OPTION': Wrk_Key)
@@ -154,109 +164,109 @@
      C                   SELECT
       *  F1
      C     XScnAID       WHENEQ    §F1
-     C                   MOVEL (P) '*F01'        Wrk_Key
+     C                   EVAL      Wrk_Key = '*F01'
       *  F2
      C     XScnAID       WHENEQ    §F2
-     C                   MOVEL (P) '*F02'        Wrk_Key
+     C                   EVAL      Wrk_Key = '*F02'
       *  F3
      C     XScnAID       WHENEQ    §F3
-     C                   MOVEL (P) '*F03'        Wrk_Key
+     C                   EVAL      Wrk_Key = '*F03'
       *  F4
      C     XScnAID       WHENEQ    §F4
-     C                   MOVEL (P) '*F04'        Wrk_Key
+     C                   EVAL      Wrk_Key = '*F04'
       *  F5
      C     XScnAID       WHENEQ    §F5
-     C                   MOVEL (P) '*F05'        Wrk_Key
+     C                   EVAL      Wrk_Key = '*F05'
       *  F6
      C     XScnAID       WHENEQ    §F6
-     C                   MOVEL (P) '*F06'        Wrk_Key
+     C                   EVAL      Wrk_Key = '*F06'
       *  F7
      C     XScnAID       WHENEQ    §F7
-     C                   MOVEL (P) '*F07'        Wrk_Key
+     C                   EVAL      Wrk_Key = '*F07'
       *  F8
      C     XScnAID       WHENEQ    §F8
-     C                   MOVEL (P) '*F08'        Wrk_Key
+     C                   EVAL      Wrk_Key = '*F08'
       *  F9
      C     XScnAID       WHENEQ    §F9
-     C                   MOVEL (P) '*F09'        Wrk_Key
+     C                   EVAL      Wrk_Key = '*F09'
       *  F10
      C     XScnAID       WHENEQ    §F10
-     C                   MOVEL (P) '*F10'        Wrk_Key
+     C                   EVAL      Wrk_Key = '*F10'
       *  F11
      C     XScnAID       WHENEQ    §F11
-     C                   MOVEL (P) '*F11'        Wrk_Key
+     C                   EVAL      Wrk_Key = '*F11'
       *  F12
      C     XScnAID       WHENEQ    §F12
-     C                   MOVEL (P) '*F12'        Wrk_Key
+     C                   EVAL      Wrk_Key = '*F12'
       *  F13
      C     XScnAID       WHENEQ    §F13
-     C                   MOVEL (P) '*F13'        Wrk_Key
+     C                   EVAL      Wrk_Key = '*F13'
       *  F14
      C     XScnAID       WHENEQ    §F14
-     C                   MOVEL (P) '*F14'        Wrk_Key
+     C                   EVAL      Wrk_Key = '*F14'
       *  F15
      C     XScnAID       WHENEQ    §F15
-     C                   MOVEL (P) '*F15'        Wrk_Key
+     C                   EVAL      Wrk_Key = '*F15'
       *  F16
      C     XScnAID       WHENEQ    §F16
-     C                   MOVEL (P) '*F16'        Wrk_Key
+     C                   EVAL      Wrk_Key = '*F16'
       *  F17
      C     XScnAID       WHENEQ    §F17
-     C                   MOVEL (P) '*F17'        Wrk_Key
+     C                   EVAL      Wrk_Key = '*F17'
       *  F18
      C     XScnAID       WHENEQ    §F18
-     C                   MOVEL (P) '*F18'        Wrk_Key
+     C                   EVAL      Wrk_Key = '*F18'
       *  F19
      C     XScnAID       WHENEQ    §F19
-     C                   MOVEL (P) '*F19'        Wrk_Key
+     C                   EVAL      Wrk_Key = '*F19'
       *  F20
      C     XScnAID       WHENEQ    §F20
-     C                   MOVEL (P) '*F20'        Wrk_Key
+     C                   EVAL      Wrk_Key = '*F20'
       *  F21
      C     XScnAID       WHENEQ    §F21
-     C                   MOVEL (P) '*F21'        Wrk_Key
+     C                   EVAL      Wrk_Key = '*F21'
       *  F22
      C     XScnAID       WHENEQ    §F22
-     C                   MOVEL (P) '*F22'        Wrk_Key
+     C                   EVAL      Wrk_Key = '*F22'
       *  F23
      C     XScnAID       WHENEQ    §F23
-     C                   MOVEL (P) '*F23'        Wrk_Key
+     C                   EVAL      Wrk_Key = '*F23'
       *  F24
      C     XScnAID       WHENEQ    §F24
-     C                   MOVEL (P) '*F24'        Wrk_Key
+     C                   EVAL      Wrk_Key = '*F24'
       *  Clear
      C     XScnAID       WHENEQ    §Clear
-     C                   MOVEL (P) '*CLEAR'      Wrk_Key
+     C                   EVAL      Wrk_Key = '*CLEAR'
       *  Delete
      C     XScnAID       WHENEQ    §Delete
-     C                   MOVEL (P) '*DELETE'     Wrk_Key
+     C                   EVAL      Wrk_Key = '*DELETE'
       *  Datenfreigabe
      C     XScnAID       WHENEQ    §ENTER
-     C                   MOVEL (P) '*ENTER'      Wrk_Key
+     C                   EVAL      Wrk_Key = '*ENTER'
       *  Hilfe
      C     XScnAID       WHENEQ    §Help
-     C                   MOVEL (P) '*HELP'       Wrk_Key
+     C                   EVAL      Wrk_Key = '*HELP'
       *  Page down
      C     XScnAID       WHENEQ    §PageDown
-     C                   MOVEL (P) '*PAGEDOWN'   Wrk_Key
+     C                   EVAL      Wrk_Key = '*PAGEDOWN'
       *  Page up
      C     XScnAID       WHENEQ    §PageUp
-     C                   MOVEL (P) '*PAGEUP'     Wrk_Key
+     C                   EVAL      Wrk_Key = '*PAGEUP'
       *  Print screen
      C     XScnAID       WHENEQ    §PrintScn
-     C                   MOVEL (P) '*PRINT'      Wrk_Key
+     C                   EVAL      Wrk_Key = '*PRINT'
       *  Reset
      C     XScnAID       WHENEQ    §Reset
-     C                   MOVEL (P) '*RESET'      Wrk_Key
+     C                   EVAL      Wrk_Key = '*RESET'
       *  Light pen
      C     XScnAID       WHENEQ    §LightPen
-     C                   MOVEL (P) '*LIGHTPEN'   Wrk_Key
+     C                   EVAL      Wrk_Key = '*LIGHTPEN'
       *
      C                   OTHER
       *  Unbekanntes AID-Byte ...
       *  muß unbekannte HEX-Wert einer
       *  unbekannten Taste sein.
-     C                   MOVEL(P)  *BLANKS       Wrk_Key
+     C                   EVAL      Wrk_Key = *BLANKS
      C                   Callp     p_keyToMsg(xScnAID: xMsgID: xMsgDta)
      C                   Endsl
       *
@@ -278,7 +288,7 @@
      C     MapUsrInp     BEGSR
       *
       *   Übersetzen ...
-     C     '*'           CAT   (P) XPgm:0        Wrk_Sectn
+     C                   EVAL      Wrk_Sectn = '*' + %trim(XPgm)
      C                   IF        f_chainUsr(Wrk_Sectn :
      C                                        Wrk_Key   :
      C                                        Wrk_Data  ) = '0'   and
@@ -288,38 +298,38 @@
       *   Übersetzen key code nach dem Mapping:
      C                   CALLP     callExit05(xPgm: '*EVENT': Wrk_Data)
       *
-     C                   MOVEL (P) Wrk_Data      XPgmCmd
-     C                   MOVEL (P) *BLANKS       XCmdDta
-     C                   MOVEL (P) *BLANKS       XMsgID
-     C                   MOVEL (P) *BLANKS       XMsgDta
+     C                   EVAL      XPgmCmd = Wrk_Data
+     C                   EVAL      XCmdDta = *BLANKS
+     C                   EVAL      XMsgID = *BLANKS
+     C                   EVAL      XMsgDta = *BLANKS
      C                   ELSE
       *
       *   Übersetzen key code nach dem Mapping:
      C                   CALLP     callExit05(xPgm: '*USROPT': Wrk_Key)
       *
       *   Prüfen auf Kurzbefehl ...
-     C                   MOVEL (P) '*CMD'        Wrk_Sectn
+     C                   EVAL      Wrk_Sectn = '*CMD'
      C                   IF        f_chainUsr(Wrk_Sectn: Wrk_Key: Wrk_Data)='0'
-     C                   MOVEL (P) '*CMD'        XPgmCmd
-     C                   MOVEL (P) Wrk_Data      XCmdDta
-     C                   MOVEL (P) *BLANKS       XMsgID
-     C                   MOVEL (P) *BLANKS       XMsgDta
+     C                   EVAL      XPgmCmd = '*CMD'
+     C                   EVAL      XCmdDta = Wrk_Data
+     C                   EVAL      XMsgID = *BLANKS
+     C                   EVAL      XMsgDta = *BLANKS
      C                   ELSE
       *
      C                   EXSR      ChkEntry
       *  Wenn Tasten definiert sind,
       *  Dann Fehlermeldung ausgeben ...
      C     Wrk_EOF       IFEQ      bFalse
-     C                   MOVEL (P) *BLANKS       XPgmCmd
-     C                   MOVEL (P) *BLANKS       XCmdDta
-     C                   MOVEL (P) 'USR8143'     XMsgID
-     C                   MOVEL (P) Wrk_Key       USR81431
-     C                   MOVEL (P) USR8143       XMsgDta
+     C                   EVAL      XPgmCmd = *BLANKS
+     C                   EVAL      XCmdDta = *BLANKS
+     C                   EVAL      XMsgID = 'USR8143'
+     C                   EVAL      USR81431 = Wrk_Key
+     C                   EVAL      XMsgDta = USR8143
      C                   ELSE
-     C                   MOVEL (P) '*EXIT'       XPgmCmd
-     C                   MOVEL (P) *BLANKS       XCmdDta
-     C                   MOVEL (P) *BLANKS       XMsgID
-     C                   MOVEL (P) *BLANKS       XMsgDta
+     C                   EVAL      XPgmCmd = '*EXIT'
+     C                   EVAL      XCmdDta = *BLANKS
+     C                   EVAL      XMsgID = *BLANKS
+     C                   EVAL      XMsgDta = *BLANKS
      C                   Endif
      C                   Endif
      C                   Endif
@@ -333,16 +343,16 @@
      C     ChkEntry      BEGSR
       *
       *   Prüfen ...
-     C     '*'           CAT   (P) XPgm:0        Wrk_Sectn
+     C                   EVAL      Wrk_Sectn = '*' + %trim(XPgm)
      C                   Callp     p_setllUsr(Wrk_Sectn: '*F01')
      C                   IF        f_readeUsr(Wrk_Sectn: Tmp_Key) = '1'
-     C                   MOVEL (P) bTrue         Wrk_EOF
+     C                   EVAL      Wrk_EOF = bTrue
      C                   ELSE
      C     Tmp_Key       IFLT      '*F01'
      C     Tmp_Key       ORGT      '*F24'
-     C                   MOVEL (P) bTrue         Wrk_EOF
+     C                   EVAL      Wrk_EOF = bTrue
      C                   ELSE
-     C                   MOVEL (P) bFalse        Wrk_EOF
+     C                   EVAL      Wrk_EOF = bFalse
      C                   Endif
      C                   Endif
       *
@@ -357,14 +367,14 @@
       * - Programm initialisieren
       ***                Callp     p_rmvPgmMg(§§pgmName)
       *
-     C                   MOVEL (P) *BLANKS       XMsgID
-     C                   MOVEL (P) *BLANKS       XMsgDta
+     C                   EVAL      XMsgID = *BLANKS
+     C                   EVAL      XMsgDta = *BLANKS
       *   Prüfen auf Ausschlüsse ...
       *   Prüfen auf Ausschlüsse ...
      C                   IF        %parms >= 7
-     C                   MOVEA     XExclKeys     Wrk_ExclK
+     C                   EVAL      Wrk_ExclK = %subarr(XExclKeys: 1)
      C                   ELSE
-     C                   MOVEA     *BLANKS       Wrk_ExclK
+     C                   EVAL      Wrk_ExclK(*) = ''
      C                   ENDIF
       *
      C                   ENDSR

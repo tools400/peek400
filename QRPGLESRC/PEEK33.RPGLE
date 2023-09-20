@@ -16,9 +16,10 @@
       *                                                               *
       * ============================================================= *
       * >>PRE-COMPILER<<                                              *
-      *   >>CRTCMD<<  CALL PGM(&LI/PEEK99) PARM(+                     *
-      *                        '&SF' '&SL' '&SM' '&LI' '*NO' +        *
-      *                        'PEEK' '&LI' '*NO');                   *
+*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
       *   >>EXECUTE<<                                                 *
       * >>END-PRE-COMPILER<<                                          *
       *===============================================================*
@@ -26,16 +27,16 @@
       /COPY QCOPYLE,COPYRIGHT
       *
       *---Variablendefinition------------------------------*
-      /COPY QCOPYLE,D_VARDEF                     ?
+      /COPY QCOPYLE,D_VARDEF
       *----------------------------------------------------*
       *
       *---Nachrichten--------------------------------------*
-      /COPY QCOPYLE,API_ERROR                    ?
+      /COPY QCOPYLE,API_ERROR
       ***/COPY QCOPYLE,MSG_D_MAPI
       *----------------------------------------------------*
       *
       *---Farbattribute------------------------------------*
-      /COPY QCOPYLE,D_COLORATR                   ?
+      /COPY QCOPYLE,D_COLORATR
       *----------------------------------------------------*
       *
       *---Benutzereinstellungen----------------------------*
@@ -51,11 +52,6 @@
      D  SET_0012                      1A   INZ(x'8B')
       *
       /COPY QCOPYLE,SET0016                       SQL: Limit zum Anzeigen der Anzahl Datensät
-      *
-      *----------------------------------------------------*
-      *
-      *---Nachrichtenaufbau--------------------------------*
-      *----------------------------------------------------*
       *
       *---Benutzervoreinstellungen-------------------------*
       /COPY QCOPYLE,SET0007
@@ -147,8 +143,8 @@
       *
       *----------------------------------------------------*
       *
-     C                   MOVEL (P) *BLANKS       XMsgID
-     C                   MOVEL (P) *BLANKS       XMsgDta
+     C                   EVAL      XMsgID = *BLANKS
+     C                   EVAL      XMsgDta = *BLANKS
       *
       *  Ermitteln der abgespeicherten Versions-Nr. ...
      C                   EXSR      GetUsrSetg
@@ -163,7 +159,7 @@
       *
      C     ENDE          TAG
       *
-     C                   MOVEL (P) '1'           *INLR
+     C                   EVAL      *INLR = '1'
       *
       *============================================================*
       *    VPos          Durchführen der Aktualisierungsarbeiten   *
@@ -293,11 +289,12 @@
       *
      C     V01R01M00     BEGSR
       *
-     C                   MOVEA     TB010100      WrkTab
-     C                   Z-ADD     ELM010100     WrkElem
+     C**                 MOVEA     TB010100      WrkTab
+     C                   EVAL      WrkTab = %subarr(TB010100: 1)
+     C                   EVAL      WrkElem = ELM010100
      C                   EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V01R01M00'   SET_VSN
+     C                   EVAL      SET_VSN = 'V01R01M00'
       *
      C                   ENDSR
       *
@@ -307,11 +304,12 @@
       *
      C     V01R02M00     BEGSR
       *
-     C                   MOVEA     TB010200      WrkTab
-     C                   Z-ADD     ELM010200     WrkElem
+     C**                 MOVEA     TB010200      WrkTab
+     C                   EVAL      WrkTab = %subarr(TB010200: 1)
+     C                   EVAL      WrkElem = ELM010200
      C                   EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V01R02M00'   SET_VSN
+     C                   EVAL      SET_VSN = 'V01R02M00'
       *
      C                   ENDSR
       *
@@ -321,11 +319,12 @@
       *
      C     V01R03M00     BEGSR
       *
-     C                   MOVEA     TB010300      WrkTab
-     C                   Z-ADD     ELM010300     WrkElem
+     C**                 MOVEA     TB010300      WrkTab
+     C                   EVAL      WrkTab = %subarr(TB010300: 1)
+     C                   EVAL      WrkElem = ELM010300
      C                   EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V01R03M00'   SET_VSN
+     C                   EVAL      SET_VSN = 'V01R03M00'
       *
      C                   ENDSR
       *
@@ -335,11 +334,12 @@
       *
      C     V01R04M00     BEGSR
       *
-     C                   MOVEA     TB010400      WrkTab
-     C                   Z-ADD     ELM010400     WrkElem
+     C**                 MOVEA     TB010400      WrkTab
+     C                   EVAL      WrkTab = %subarr(TB010400: 1)
+     C                   EVAL      WrkElem = ELM010400
      C                   EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V01R04M00'   SET_VSN
+     C                   EVAL      SET_VSN = 'V01R04M00'
       *
      C                   ENDSR
       *
@@ -349,11 +349,12 @@
       *
      C     V01R05M00     BEGSR
       *
-     C                   MOVEA     TB010500      WrkTab
-     C                   Z-ADD     ELM010500     WrkElem
+     C**                 MOVEA     TB010500      WrkTab
+     C                   EVAL      WrkTab = %subarr(TB010500: 1)
+     C                   EVAL      WrkElem = ELM010500
      C                   EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V01R05M00'   SET_VSN
+     C                   EVAL      SET_VSN = 'V01R05M00'
       *
      C                   ENDSR
       *
@@ -367,7 +368,7 @@
       ***                Z-ADD     ELM010501     WrkElem
       ***                EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V01R05M01'   SET_VSN
+     C                   EVAL      SET_VSN = 'V01R05M01'
       *
      C                   ENDSR
       *
@@ -377,11 +378,12 @@
       *
      C     V02R00M00     BEGSR
       *
-     C                   MOVEA     TB020000      WrkTab
-     C                   Z-ADD     ELM020000     WrkElem
+     C**                 MOVEA     TB020000      WrkTab
+     C                   EVAL      WrkTab = %subarr(TB020000: 1)
+     C                   EVAL      WrkElem = ELM020000
      C                   EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V02R00M00'   SET_VSN
+     C                   EVAL      SET_VSN = 'V02R00M00'
       *
      C                   ENDSR
       *
@@ -391,11 +393,12 @@
       *
      C     V02R01M00     BEGSR
       *
-     C                   MOVEA     TB020100      WrkTab
-     C                   Z-ADD     ELM020100     WrkElem
+     C**                 MOVEA     TB020100      WrkTab
+     C                   EVAL      WrkTab = %subarr(TB020100: 1)
+     C                   EVAL      WrkElem = ELM020100
      C                   EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V02R01M00'   SET_VSN
+     C                   EVAL      SET_VSN = 'V02R01M00'
       *
      C                   ENDSR
       *
@@ -409,7 +412,7 @@
       ***                Z-ADD     ELM020101     WrkElem
       ***                EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V02R01M01'   SET_VSN
+     C                   EVAL      SET_VSN = 'V02R01M01'
       *
      C                   ENDSR
       *
@@ -419,11 +422,12 @@
       *
      C     V02R02M00     BEGSR
       *
-     C                   MOVEA     TB020200      WrkTab
-     C                   Z-ADD     ELM020200     WrkElem
+     C**                 MOVEA     TB020200      WrkTab
+     C                   EVAL      WrkTab = %subarr(TB020200: 1)
+     C                   EVAL      WrkElem = ELM020200
      C                   EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V02R02M00'   SET_VSN
+     C                   EVAL      SET_VSN = 'V02R02M00'
       *
      C                   ENDSR
       *
@@ -437,7 +441,7 @@
       ***                Z-ADD     ELM020201     WrkElem
       ***                EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V02R02M01'   SET_VSN
+     C                   EVAL      SET_VSN = 'V02R02M01'
       *
      C                   ENDSR
       *
@@ -451,7 +455,7 @@
       ***                Z-ADD     ELM020202     WrkElem
       ***                EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V02R02M02'   SET_VSN
+     C                   EVAL      SET_VSN = 'V02R02M02'
       *
      C                   ENDSR
       *
@@ -465,7 +469,7 @@
       ***                Z-ADD     ELM020300     WrkElem
       ***                EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V02R03M00'   SET_VSN
+     C                   EVAL      SET_VSN = 'V02R03M00'
       *
      C                   ENDSR
       *
@@ -479,7 +483,7 @@
       ***                Z-ADD     ELM020301     WrkElem
       ***                EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V02R03M01'   SET_VSN
+     C                   EVAL      SET_VSN = 'V02R03M01'
       *
      C                   ENDSR
       *
@@ -493,7 +497,7 @@
       ***                Z-ADD     ELM020301     WrkElem
       ***                EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V02R03M02'   SET_VSN
+     C                   EVAL      SET_VSN = 'V02R03M02'
       *
      C                   ENDSR
       *
@@ -507,7 +511,7 @@
       ***                Z-ADD     ELM020400     WrkElem
       ***                EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V02R04M00'   SET_VSN
+     C                   EVAL      SET_VSN = 'V02R04M00'
       *
      C                   ENDSR
       *
@@ -521,7 +525,7 @@
       ***                Z-ADD     ELM020401     WrkElem
       ***                EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V02R04M01'   SET_VSN
+     C                   EVAL      SET_VSN = 'V02R04M01'
       *
      C                   ENDSR
       *
@@ -535,7 +539,7 @@
       ***                Z-ADD     ELM020402     WrkElem
       ***                EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V02R04M02'   SET_VSN
+     C                   EVAL      SET_VSN = 'V02R04M02'
       *
      C                   ENDSR
       *
@@ -545,11 +549,12 @@
       *
      C     V03R00M00     BEGSR
       *
-     C                   MOVEA     TB030000      WrkTab
-     C                   Z-ADD     ELM030000     WrkElem
+     C**                 MOVEA     TB030000      WrkTab
+     C                   EVAL      WrkTab = %subarr(TB030000: 1)
+     C                   EVAL      WrkElem = ELM030000
      C                   EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V03R00M00'   SET_VSN
+     C                   EVAL      SET_VSN = 'V03R00M00'
       *
       *  Umsetzen Datenstruktur "Generieren Programme" (*CRTPGM, SET0012)
      C                   Eval      SET0012_ALT = f_getUsrSg('*CRTPGM')
@@ -574,11 +579,12 @@
       *
      C     V03R01M00     BEGSR
       *
-     C                   MOVEA     TB030100      WrkTab
-     C                   Z-ADD     ELM030100     WrkElem
+     C**                 MOVEA     TB030100      WrkTab
+     C                   EVAL      WrkTab = %subarr(TB030100: 1)
+     C                   EVAL      WrkElem = ELM030100
      C                   EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V03R01M00'   SET_VSN
+     C                   EVAL      SET_VSN = 'V03R01M00'
       *
      C                   ENDSR
       *
@@ -588,11 +594,12 @@
       *
      C     V03R01M01     BEGSR
       *
-     C                   MOVEA     TB030101      WrkTab
-     C                   Z-ADD     ELM030101     WrkElem
+     C**                 MOVEA     TB030101      WrkTab
+     C                   EVAL      WrkTab = %subarr(TB030101: 1)
+     C                   EVAL      WrkElem = ELM030101
      C                   EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V03R01M01'   SET_VSN
+     C                   EVAL      SET_VSN = 'V03R01M01'
       *
      C                   ENDSR
       *
@@ -606,7 +613,7 @@
       ***                Z-ADD     ELM030102     WrkElem
       ***                EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V03R01M02'   SET_VSN
+     C                   EVAL      SET_VSN = 'V03R01M02'
       *
      C                   ENDSR
       *
@@ -620,7 +627,7 @@
       ***                Z-ADD     ELM030103     WrkElem
       ***                EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V03R01M03'   SET_VSN
+     C                   EVAL      SET_VSN = 'V03R01M03'
       *
      C                   ENDSR
       *
@@ -634,7 +641,7 @@
       ***                Z-ADD     ELM030104     WrkElem
       ***                EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V03R01M04'   SET_VSN
+     C                   EVAL      SET_VSN = 'V03R01M04'
       *
      C                   ENDSR
       *
@@ -648,7 +655,7 @@
       ***                Z-ADD     ELM030105     WrkElem
       ***                EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V03R01M05'   SET_VSN
+     C                   EVAL      SET_VSN = 'V03R01M05'
       *
      C                   ENDSR
       *
@@ -662,7 +669,7 @@
       ***                Z-ADD     ELM030105     WrkElem
       ***                EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V03R01M06'   SET_VSN
+     C                   EVAL      SET_VSN = 'V03R01M06'
       *
      C                   ENDSR
       *
@@ -676,7 +683,7 @@
       ***                Z-ADD     ELM030106     WrkElem
       ***                EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V03R02M00'   SET_VSN
+     C                   EVAL      SET_VSN = 'V03R02M00'
       *
      C                   ENDSR
       *
@@ -690,7 +697,7 @@
       ***                Z-ADD     ELM030106     WrkElem
       ***                EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V03R02M01'   SET_VSN
+     C                   EVAL      SET_VSN = 'V03R02M01'
       *
       *  Eintragen Art und Weise der Umsetzung von Edit Codes in der Subfile:
      C                   Eval      SET0001 = f_getUsrSg('*DSPATTR')
@@ -712,7 +719,7 @@
       ***                Z-ADD     ELM030106     WrkElem
       ***                EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V03R02M02'   SET_VSN
+     C                   EVAL      SET_VSN = 'V03R02M02'
       *
       *  Ändern Default Edit Code von 'J' auf 'L'
      C                   Eval      SET0001 = f_getUsrSg('*DSPATTR')
@@ -735,7 +742,7 @@
       ***                Z-ADD     ELM030106     WrkElem
       ***                EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V03R02M03'   SET_VSN
+     C                   EVAL      SET_VSN = 'V03R02M03'
       *
      C                   ENDSR
       *
@@ -749,7 +756,7 @@
       ***                Z-ADD     ELM030204     WrkElem
       ***                EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V03R02M04'   SET_VSN
+     C                   EVAL      SET_VSN = 'V03R02M04'
       *
      C                   ENDSR
       *
@@ -759,11 +766,12 @@
       *
      C     V03R02M05     BEGSR
       *
-     C                   MOVEA     TB030205      WrkTab
-     C                   Z-ADD     ELM030205     WrkElem
+     C**                 MOVEA     TB030205      WrkTab
+     C                   EVAL      WrkTab = %subarr(TB030205: 1)
+     C                   EVAL      WrkElem = ELM030205
      C                   EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V03R02M05'   SET_VSN
+     C                   EVAL      SET_VSN = 'V03R02M05'
       *
      C                   ENDSR
       *
@@ -777,7 +785,7 @@
       ***                Z-ADD     ELM030206     WrkElem
       ***                EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V03R02M06'   SET_VSN
+     C                   EVAL      SET_VSN = 'V03R02M06'
       *
      C                   ENDSR
       *
@@ -791,7 +799,7 @@
       ***                Z-ADD     ELM030300     WrkElem
       ***                EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V03R03M00'   SET_VSN
+     C                   EVAL      SET_VSN = 'V03R03M00'
       *
      C                   ENDSR
       *
@@ -805,7 +813,7 @@
       ***                Z-ADD     ELM030301     WrkElem
       ***                EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V03R03M01'   SET_VSN
+     C                   EVAL      SET_VSN = 'V03R03M01'
       *
      C                   ENDSR
       *
@@ -819,7 +827,7 @@
       ***                Z-ADD     ELM030302     WrkElem
       ***                EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V03R03M02'   SET_VSN
+     C                   EVAL      SET_VSN = 'V03R03M02'
       *
      C                   ENDSR
       *
@@ -833,7 +841,7 @@
       ***                Z-ADD     ELM030303     WrkElem
       ***                EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V03R03M03'   SET_VSN
+     C                   EVAL      SET_VSN = 'V03R03M03'
       *
      C                   ENDSR
       *
@@ -847,7 +855,7 @@
       ***                Z-ADD     ELM030400     WrkElem
       ***                EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V03R04M00'   SET_VSN
+     C                   EVAL      SET_VSN = 'V03R04M00'
       *
      C                   ENDSR
       *
@@ -857,11 +865,12 @@
       *
      C     V03R04M01     BEGSR
       *
-     C                   MOVEA     TB030401      WrkTab
-     C                   Z-ADD     ELM030401     WrkElem
+     C**                 MOVEA     TB030401      WrkTab
+     C                   EVAL      WrkTab = %subarr(TB030401: 1)
+     C                   EVAL      WrkElem = ELM030401
      C                   EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V03R04M01'   SET_VSN
+     C                   EVAL      SET_VSN = 'V03R04M01'
       *
      C                   ENDSR
       *
@@ -875,7 +884,7 @@
       ***                Z-ADD     ELM030402     WrkElem
       ***                EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V03R04M02'   SET_VSN
+     C                   EVAL      SET_VSN = 'V03R04M02'
       *
      C                   ENDSR
       *
@@ -889,7 +898,7 @@
       ***                Z-ADD     ELM030403     WrkElem
       ***                EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V03R04M03'   SET_VSN
+     C                   EVAL      SET_VSN = 'V03R04M03'
       *
      C                   ENDSR
       *
@@ -899,11 +908,12 @@
       *
      C     V03R05M00     BEGSR
       *
-     C                   MOVEA     TB030500      WrkTab
-     C                   Z-ADD     ELM030500     WrkElem
+     C**                 MOVEA     TB030500      WrkTab
+     C                   EVAL      WrkTab = %subarr(TB030500: 1)
+     C                   EVAL      WrkElem = ELM030500
      C                   EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V03R05M00'   SET_VSN
+     C                   EVAL      SET_VSN = 'V03R05M00'
       *
       *  Anlegen Einstellung für max. Anzahl Sätze für SQL-COUNT()
      C                   Eval      SET0016 = f_getUsrSg('*SQLLMTCNT')
@@ -920,7 +930,7 @@
       ***                Z-ADD     ELM030501     WrkElem
       ***                EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V03R05M01'   SET_VSN
+     C                   EVAL      SET_VSN = 'V03R05M01'
       *
      C                   ENDSR
       *
@@ -934,7 +944,7 @@
       ***                Z-ADD     ELM030502     WrkElem
       ***                EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V03R05M02'   SET_VSN
+     C                   EVAL      SET_VSN = 'V03R05M02'
       *
      C                   ENDSR
       *
@@ -948,7 +958,7 @@
       ***                Z-ADD     ELM030503     WrkElem
       ***                EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V03R05M03'   SET_VSN
+     C                   EVAL      SET_VSN = 'V03R05M03'
       *
      C                   ENDSR
       *
@@ -962,7 +972,7 @@
       ***                Z-ADD     ELM030503     WrkElem
       ***                EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V03R05M04'   SET_VSN
+     C                   EVAL      SET_VSN = 'V03R05M04'
       *
      C                   ENDSR
       *
@@ -976,7 +986,7 @@
       ***                Z-ADD     ELM030503     WrkElem
       ***                EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V03R05M05'   SET_VSN
+     C                   EVAL      SET_VSN = 'V03R05M05'
       *
      C                   ENDSR
       *
@@ -990,7 +1000,7 @@
       ***                Z-ADD     ELM030503     WrkElem
       ***                EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V03R05M06'   SET_VSN
+     C                   EVAL      SET_VSN = 'V03R05M06'
       *
      C                   ENDSR
       *
@@ -1004,7 +1014,7 @@
       ***                Z-ADD     ELM030503     WrkElem
       ***                EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V03R05M07'   SET_VSN
+     C                   EVAL      SET_VSN = 'V03R05M07'
       *
      C                   ENDSR
       *
@@ -1018,7 +1028,7 @@
       ***                Z-ADD     ELM030503     WrkElem
       ***                EXSR      UpdPeekUsr
       *
-     C                   MOVEL (P) 'V03R05M08'   SET_VSN
+     C                   EVAL      SET_VSN = 'V03R05M08'
       *
      C                   ENDSR
       *
@@ -1030,12 +1040,12 @@
       *
      C     1             DO        WrkElem       X
       *
-     C                   MOVEL (P) WrkTab(X)     WrkTabDS
+     C                   EVAL      WrkTabDS = WrkTab(X)
       *
      C                   Eval      *IN11 = f_chainUsr(WrkTabDS.Section
      C                                                : WrkTabDS.Key: o_Data)
       *
-     C                   ADD       1             X
+     C                   EVAL      X = X + 1
       *
       *  Wenn der Datenbereich anders als erwartet
       *  belegt ist, ...
@@ -1044,7 +1054,7 @@
      C                   ITER
      C                   ELSE
       *  ... ansonsten die Änderung vollziehen
-     C                   MOVEL (P) WrkTab(X)     WrkTabDS
+     C                   EVAL      WrkTabDS = WrkTab(X)
      C                   IF        *IN11 = '1'
      C                   Callp     f_writeUsr(WrkTabDS.Section
      C                                        : WrkTabDS.Key: WrkTabDS.Data)

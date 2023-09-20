@@ -15,6 +15,14 @@
       *  Peek/400 - Sichern   Arbeitsumgebung                         *
       *                                                               *
       *===============================================================*
+      * >>PRE-COMPILER<<                                              *
+      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
+      *===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
       *
@@ -47,6 +55,7 @@
       *
       *---Variablendefinition------------------------------*
       /COPY QCOPYLE,D_VARDEF
+      /COPY QCOPYLE,FLDL0100
       *----------------------------------------------------*
       *
       *---------------------------------------------------*
@@ -262,9 +271,7 @@
       *===================================================================*
       *
      P p_main          B
-      *
-      *  definieren Procedure Interface ...
-     D p_main          PI
+     D                 PI
      D  i_file                             value  like(gi_file   )
      D  i_lib                              value  like(gi_lib    )
      D  i_mbr                              value  like(gi_mbr    )
@@ -322,14 +329,14 @@
      C                                       pFmt      )
       *
       *  Überschreiben Datei ...
-     C                   MOVEL (P) 'PEEKENV'     §File
-     C                   MOVEL (P) i_envFile     §ToFile
-     C                   MOVEL (P) i_envLib      §ToLib
-     C                   MOVEL (P) pEnvMbr       §Mbr
-     C                   MOVEL (P) '*ACTGRPDFN'  §OvrScope
-     C                   MOVEL (P) '*NO'         §Share
-     C                   MOVEL (P) '*NO'         §SeqOnly
-     C                   MOVEL (P) '*YES'        §Secure
+     C                   EVAL      §File = 'PEEKENV'
+     C                   EVAL      §ToFile = i_envFile
+     C                   EVAL      §ToLib = i_envLib
+     C                   EVAL      §Mbr = pEnvMbr
+     C                   EVAL      §OvrScope = '*ACTGRPDFN'
+     C                   EVAL      §Share = '*NO'
+     C                   EVAL      §SeqOnly = '*NO'
+     C                   EVAL      §Secure = '*YES'
       /COPY QCOPYLE,OVRDBF
       *
       *  Prüfen, ob gespeichert werden darf
@@ -434,22 +441,20 @@
      C                   Endif
       *
       *  Löschen Überschreibung ...
-     C                   MOVEL (P) 'PEEKENV'     §File
-     C                   MOVEL (P) '*ACTGRPDFN'  §Lvl
+     C                   EVAL      §File = 'PEEKENV'
+     C                   EVAL      §Lvl = '*ACTGRPDFN'
       /COPY QCOPYLE,DLTOVR
       *
      C                   Return
       *
-     P p_main          E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  p_clrEnv                                   (Body)     *
       *===================================================================*
       *
      P p_clrEnv        B
-      *
-      *  definieren Procedure Interface ...
-     D p_clrEnv        PI
+     D                 PI
      D  i_envFile                                 like(gi_envFile)
      D  i_envLib                                  like(gi_envLib )
      D  i_envMbr                                  like(gi_envMbr )
@@ -471,16 +476,14 @@
      C                                       o_msgID           :
      C                                       o_msgDta          )
       *
-     P p_clrEnv        E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  p_file                                     (Body)     *
       *===================================================================*
       *
      P p_file          B
-      *
-      *  definieren Procedure Interface ...
-     D p_file          PI
+     D                 PI
      D  i_file                                    like(gi_file   )
      D  i_lib                                     like(gi_lib    )
      D  i_fileX                                   like(gi_file   )
@@ -504,16 +507,14 @@
       *
      C                   Return
       *
-     P p_file          E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  p_lib                                      (Body)     *
       *===================================================================*
       *
      P p_lib           B
-      *
-      *  definieren Procedure Interface ...
-     D p_lib           PI
+     D                 PI
      D  i_file                                    like(gi_file   )
      D  i_lib                                     like(gi_lib    )
      D  i_libX                                    like(gi_lib    )
@@ -537,16 +538,14 @@
       *
      C                   Return
       *
-     P p_lib           E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  p_mbr                                      (Body)     *
       *===================================================================*
       *
      P p_mbr           B
-      *
-      *  definieren Procedure Interface ...
-     D p_mbr           PI
+     D                 PI
      D  i_file                                    like(gi_file   )
      D  i_lib                                     like(gi_lib    )
      D  i_mbr                                     like(gi_mbr    )
@@ -570,16 +569,14 @@
       *
      C                   Return
       *
-     P p_mbr           E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  p_rcdFmt                                   (Body)     *
       *===================================================================*
       *
      P p_rcdFmt        B
-      *
-      *  definieren Procedure Interface ...
-     D p_rcdFmt        PI
+     D                 PI
      D  i_file                                    like(gi_file   )
      D  i_lib                                     like(gi_lib    )
      D  i_rcdFmt                                  like(gi_rcdFmt )
@@ -603,16 +600,14 @@
       *
      C                   Return
       *
-     P p_rcdFmt        E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  p_rcdFmtID                                 (Body)     *
       *===================================================================*
       *
      P p_rcdFmtID      B
-      *
-      *  definieren Procedure Interface ...
-     D p_rcdFmtID      PI
+     D                 PI
      D  i_file                                    like(gi_file    )
      D  i_lib                                     like(gi_lib     )
      D  i_rcdFmtID                                like(gi_rcdFmtID)
@@ -636,7 +631,7 @@
       *
      C                   Return
       *
-     P p_rcdFmtID      E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  f_checkAutoSave                            (Body)     *
@@ -644,9 +639,6 @@
       *
      P f_checkAutoSave...
      P                 B
-      *
-      *  definieren Procedure Interface ...
-     D f_checkAutoSave...
      D                 PI                         like(r§bool    )
      D  i_file                                    like(gi_file   )
      D  i_lib                                     like(gi_lib    )
@@ -711,7 +703,6 @@
 
       /end-free
       *
-     P f_checkAutoSave...
      P                 E
       *
       *===================================================================*
@@ -719,9 +710,7 @@
       *===================================================================*
       *
      P p_accMode       B
-      *
-      *  definieren Procedure Interface ...
-     D p_accMode       PI
+     D                 PI
      D  i_file                                    like(gi_file   )
      D  i_lib                                     like(gi_lib    )
      D  i_accMode                                 like(gi_accMode)
@@ -745,16 +734,14 @@
       *
      C                   Return
       *
-     P p_accMode       E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  p_sqlSel                                   (Body)     *
       *===================================================================*
       *
      P p_sqlSel        B
-      *
-      *  definieren Procedure Interface ...
-     D p_sqlSel        PI
+     D                 PI
      D  i_file                                    like(gi_file   )
      D  i_lib                                     like(gi_lib    )
      D  i_sqlSel                                  like(gi_sqlSel )
@@ -796,16 +783,14 @@
       *
      C                   Return
       *
-     P p_sqlSel        E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  p_sqlOrd                                   (Body)     *
       *===================================================================*
       *
      P p_sqlOrd        B
-      *
-      *  definieren Procedure Interface ...
-     D p_sqlOrd        PI
+     D                 PI
      D  i_file                                    like(gi_file   )
      D  i_lib                                     like(gi_lib    )
      D  i_sqlOrd                                  like(gi_sqlOrd )
@@ -849,16 +834,14 @@
       *
      C                   Return
       *
-     P p_sqlOrd        E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  p_isKeyLower                               (Body)     *
       *===================================================================*
       *
      P p_isKeyLower    B
-      *
-      *  definieren Procedure Interface ...
-     D p_isKeyLower    PI
+     D                 PI
      D  i_file                                    like(gi_file       )
      D  i_lib                                     like(gi_lib        )
      D  i_isKeyLower                              like(gi_isKeyLower )
@@ -882,16 +865,14 @@
       *
      C                   Return
       *
-     P p_isKeyLower    E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  p_wrtPinR                                  (Body)     *
       *===================================================================*
       *
      P p_wrtPinR       B
-      *
-      *  definieren Procedure Interface ...
-     D p_wrtPinR       PI
+     D                 PI
      D  i_file                                    like(gi_file   )
      D  i_lib                                     like(gi_lib    )
      D  i_pinTabR                                 like(gi_pinTabR)
@@ -920,16 +901,14 @@
       *
      C                   Return
       *
-     P p_wrtPinR       E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  p_wrtPinC                                  (Body)     *
       *===================================================================*
       *
      P p_wrtPinC       B
-      *
-      *  definieren Procedure Interface ...
-     D p_wrtPinC       PI
+     D                 PI
      D  i_file                                    like(gi_file   )
      D  i_lib                                     like(gi_lib    )
      D  i_pinTabC                                 like(gi_pinTabC)
@@ -958,16 +937,14 @@
       *
      C                   Return
       *
-     P p_wrtPinC       E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  p_wrtLyt                                   (Body)     *
       *===================================================================*
       *
      P p_wrtLyt        B
-      *
-      *  definieren Procedure Interface ...
-     D p_wrtLyt        PI
+     D                 PI
      D  i_file                                    like(gi_file   )
      D  i_lib                                     like(gi_lib    )
       *
@@ -1011,5 +988,5 @@
       *
      C                   Return
       *
-     P p_wrtLyt        E
+     P                 E
       *

@@ -15,6 +15,14 @@
       *  Peek/400 - Generische Nachrichtenabfrage                     *
       *                                                               *
       *===============================================================*
+      * >>PRE-COMPILER<<                                              *
+      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
+      *===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
       *
@@ -28,6 +36,7 @@
       *
       *---Variablendefinition------------------------------*
       /COPY QCOPYLE,D_VARDEF
+      /COPY QCOPYLE,FLDL0100
       *----------------------------------------------------*
       *
       *---Nachrichten--------------------------------------*
@@ -313,7 +322,7 @@
       *  DSPATR(RI)
       *
       *  Fehler
-     C                   MOVEL (P) '0'           *IN99
+     C                   EVAL      *IN99 = '0'
       *
      C                   Endsr
       *

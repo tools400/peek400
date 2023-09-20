@@ -18,10 +18,10 @@
       *                                                               *
       * ============================================================= *
       * >>PRE-COMPILER<<                                              *
-      *   >>CRTCMD<<  CALL PGM(&LI/PEEK99) PARM(+                     *
-      *                        '&SF' '&SL' '&SM' '&LI' '*NO' +        *
-      *                        'PEEK' '&LI' '*NO') +                  *
-      *               /* OPTION(*EVENTF) */;                          *
+*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
       *   >>EXECUTE<<                                                 *
       * >>END-PRE-COMPILER<<                                          *
       *===============================================================*
@@ -142,7 +142,9 @@
       /COPY QCOPYLE,RCDL0200
      D FLDL0100        DS                  likeds(FLDL0100_t) inz
       /COPY QCOPYLE,FLDL0100
+     D MBRD0200        DS                  likeds(MBRD0200_t) inz
       /COPY QCOPYLE,MBRD0200
+     D FILD0100        DS                  likeds(FILD0100_t) inz
       /COPY QCOPYLE,FILD0100
       *----------------------------------------------------*
       *
@@ -3374,17 +3376,17 @@
      C                   Leavesr
      C                   Endif
       *
-     C                   If        ATFILA <> '*PHY'
+     C                   If        FILD0100.ATFILA <> '*PHY'
       *
      C                   Select
-     C                   When      ATNOFM = 1
+     C                   When      FILD0100.ATNOFM = 1
       *  Wenn es sich um eine "single-format logical file" handelt, ...
       *  ... dann prüfen, ob diese Datei über mehere Member geht.
       *      Sortierung nach SQL wird für "multi-member logical files"
       *      (noch) nicht unterstützt ...
-     C                   If        ATJOIN = 'N' and f_numBased(##File    :
-     C                                                         ##Library :
-     C                                                         ##Member  ) > 1
+     C                   If        FILD0100.ATJOIN = 'N' and
+     C                             f_numBased(##File: ##Library: ##Member) > 1
+     C
      C                   Eval      §MsgID = 'USR8235'
      C                   Clear                   USR8235
      C                   Eval      §MsgDta = USR8235
@@ -3392,7 +3394,7 @@
      C                   Leavesr
      C                   Endif
       *
-     C                   When      ATNOFM > 1
+     C                   When      FILD0100.ATNOFM > 1
       *  Wenn es sich um eine "multi-format logical file" handelt, ...
       *  ... dann fragen, welches physiche Datei göffnet werden soll:
      C                   Eval      yDsp80     = SET_Dsp80
@@ -7583,7 +7585,7 @@
      C                   CLEAR                   FILD0100
      C                   Endif
       *
-     C                   EVAL      $$NOMB = ATNOMB
+     C                   EVAL      $$NOMB = FILD0100.ATNOMB
       *
      C                   ENDSR
       *
@@ -7777,9 +7779,9 @@
      C                   call      PEEK13        P_Peek13
      C                   eval      MBRD0200 = YValue
       *
-     C                   if        M2BytAvail > 0
-     C                   if        M2NbrRcdOn <= 2147483647
-     C                   eval      $$Records = M2NbrRcdOn
+     C                   if        MBRD0200.M2BytAvail > 0
+     C                   if        MBRD0200.M2NbrRcdOn <= 2147483647
+     C                   eval      $$Records = MBRD0200.M2NbrRcdOn
      C                   eval      *IN79 = *ON
      C                   eval      $$LmtCnt = ''
      C                   else
@@ -7826,8 +7828,8 @@
      C                   EVAL      YMember = ##Member
      C                   CALL      PEEK13        P_Peek13
      C                   EVAL      MBRD0200 = YValue
-     C     M2BytAvail    IFNE      §ZEROS
-     C                   EVAL      ##MEMBER = M2Member
+     C                   IF        (MBRD0200.M2BytAvail <> 0)
+     C                   EVAL      ##MEMBER = MBRD0200.M2Member
      C                   EVAL      IsError = bFalse
      C                   ELSE
      C                   EVAL      IsError = bTrue

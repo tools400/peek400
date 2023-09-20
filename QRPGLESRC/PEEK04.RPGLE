@@ -15,6 +15,14 @@
       *  Abrufen der Dateiinformationen: hier prüfen auf              *
       *                                  Schlüsselinformationen       *
       *                                                               *
+      * ============================================================= *
+      * >>PRE-COMPILER<<                                              *
+*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
       *===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
@@ -24,6 +32,7 @@
       *
       *---Variablendefinition------------------------------*
       /COPY QCOPYLE,D_VARDEF
+      /COPY QCOPYLE,FLDL0100
       *----------------------------------------------------*
       *
       *---Copystrecken für Nachrichtenaufbau---------------*
@@ -87,28 +96,28 @@
       *---------------------------------------------------*
       *
       *  Abrufen der Dateiinformationen ...
-     C                   MOVEL (P) XFile         YFile
-     C                   MOVEL (P) XLib          YLib
-     C                   MOVEL (P) XRcdFormat    YRcdFormat
-     C                   MOVEL (P) '*CREATE'     YFunction
+     C                   EVAL      YFile = XFile
+     C                   EVAL      YLib = XLib
+     C                   EVAL      YRcdFormat = XRcdFormat
+     C                   EVAL      YFunction = '*CREATE'
      C                   CALL      PEEK41        P_Peek41
       *
      C     yNbrOfEnt     IFLE      *ZEROS
       *  ... schade, Aufruf ist fehlgeschlagen
      C                   ELSE
       *  Abrufen der Schlüsselfeldinformationen ...
-     C                   MOVEL (P) '*KEY'        YFunction
+     C                   EVAL      YFunction = '*KEY'
      C                   CALL      PEEK41        P_Peek41
      C                   Eval      nbrOfKey = yNbrOfEnt
       *
      C     nbrOfKey      IFLE      *ZEROS
-     C                   MOVEL (P) 'USR0006'     XMsgID
-     C                   MOVEL (P) XFile         USR00061
-     C                   MOVEL (P) XLib          USR00062
-     C                   MOVEL (P) USR0006       XMsgDta
+     C                   EVAL      XMsgID = 'USR0006'
+     C                   EVAL      USR00061 = XFile
+     C                   EVAL      USR00062 = XLib
+     C                   EVAL      XMsgDta = USR0006
      C                   ELSE
-     C                   MOVEL (P) *BLANKS       XMsgID
-     C                   MOVEL (P) *BLANKS       XMsgDta
+     C                   EVAL      XMsgID = *BLANKS
+     C                   EVAL      XMsgDta = *BLANKS
      C                   Endif
      C                   Endif
       *
@@ -117,7 +126,7 @@
       *
      C     ENDE          TAG
       *
-     C                   MOVEL (P) '1'           *INLR
+     C                   EVAL      *INLR = '1'
       *
       *====================================================*
       *  First  --  Initialize program                     *
@@ -125,14 +134,14 @@
       *
      C     First         BEGSR
       *
-     C                   Z-ADD     *ZEROS        NbrOfKey
+     C                   EVAL      NbrOfKey = *ZEROS
       *
       * - Meldung
       ***                Callp     p_sndStsMg('USR8137': XQFile)
       *
       * - Los gehts'
-     C                   MOVEL (P) *BLANKS       XMsgID
-     C                   MOVEL (P) *BLANKS       XMsgDta
+     C                   EVAL      XMsgID = *BLANKS
+     C                   EVAL      XMsgDta = *BLANKS
       *
      C                   ENDSR
       *

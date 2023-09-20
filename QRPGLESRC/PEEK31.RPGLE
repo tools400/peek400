@@ -15,6 +15,14 @@
       *                                                               *
       *  Ermitteln der Benutzersprache                                *
       *                                                               *
+      * ============================================================= *
+      * >>PRE-COMPILER<<                                              *
+*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
       *===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
@@ -25,7 +33,6 @@
       *
       *---Nachrichten--------------------------------------*
       /COPY QCOPYLE,API_ERROR
- CPY  ***/COPY QCOPYLE,MSG_D_MAPI
       *----------------------------------------------------*
       *
       *---Nachrichtenaufbau--------------------------------*
@@ -67,8 +74,8 @@
       *
       *----------------------------------------------------*
       *
-     C                   MOVEL (P) *BLANKS       XMsgID
-     C                   MOVEL (P) *BLANKS       XMsgDta
+     C                   EVAL      XMsgID = *BLANKS
+     C                   EVAL      XMsgDta = *BLANKS
       *
       *  Ermitteln der zu verwendenden Sprache ...
      C     XLanguage     IFEQ      '*DFT'
@@ -76,7 +83,7 @@
      C                   EXSR      GetUsrSetg
      C                   ELSE
       *  ... Benutzen der �bergebenen Sprache
-     C                   MOVEL (P) XLanguage     SET_Lang
+     C                   EVAL      SET_Lang = XLanguage
      C                   Endif
       *
      C                   IF        XMSGID <> ' '
@@ -101,7 +108,7 @@
      C                   LEAVE
      C                   ELSE
       *          ... Benutzersprache
-     C                   MOVEL (P) 'GER'         SET_Lang
+     C                   EVAL      SET_Lang = 'GER'
      C                   ITER
      C                   Endif
      C                   Endif
@@ -110,10 +117,10 @@
       *
      C     XMsgID        IFEQ      *BLANKS
      C                   EXSR      SetUsrSetg
-     C                   MOVEL (P) SET_Lang      XLanguage
+     C                   EVAL      XLanguage = SET_Lang
      C                   ELSE
       *            Fehler aufgetreten
-     C                   MOVEL (P) *BLANKS       XLanguage
+     C                   EVAL      XLanguage = *BLANKS
      C                   Endif
       *
      C     ENDE          TAG
@@ -139,10 +146,10 @@
      C     ChkMsgF       BEGSR
       *
      C     xPrefix       CAT       SET_Lang:0    別BJ
-     C                   MOVEL (P) 壯PgmLib      兵IB
-     C                   MOVEL (P) '*MSGF'       別BJTYPE
-     C                   MOVEL (P) '*NONE'       冶BR
-     C                   MOVEL (P) '*NONE'       你UT
+     C                   EVAL      兵IB = 壯PgmLib
+     C                   EVAL      別BJTYPE = '*MSGF'
+     C                   EVAL      冶BR = '*NONE'
+     C                   EVAL      你UT = '*NONE'
       /COPY QCOPYLE,CHKOBJ
       *
      C                   ENDSR

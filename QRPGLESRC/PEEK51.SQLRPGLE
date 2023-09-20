@@ -14,6 +14,14 @@
       *                                                               *
       *  SQL-Komponente                                               *
       *                                                               *
+      * ============================================================= *
+      * >>PRE-COMPILER<<                                              *
+*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
       *===============================================================*
      H NOMAIN
       /COPY QCOPYLE,H_SPEC
@@ -36,6 +44,7 @@
       /COPY QCOPYLE,D_CLIB
       /COPY QCOPYLE,D_VARDEF
       /COPY QCOPYLE,D_INFDS
+      /COPY QCOPYLE,FLDL0100
       *----------------------------------------------------*
       *
       *-------------------------------------------------------------------*
@@ -76,9 +85,6 @@
       *
      P SQL_prepareStatement...
      P                 B                   Export
-      *
-      *  definieren Procedure Interface ...
-     D SQL_prepareStatement...
      D                 PI                         like(r§bool    )
      D  i_check                            value  like(r§bool    )
      D  i_file                             value  like(r§file    )
@@ -201,7 +207,6 @@
       *
      C                   Return    f_prepStmt
       *
-     P SQL_prepareStatement...
      P                 E
       *
       *===================================================================*
@@ -210,9 +215,6 @@
       *
      P SQL_open...
      P                 B                   Export
-      *
-      *  definieren Procedure Interface ...
-     D SQL_open...
      D                 PI                         like(r§bool    )
      D  o_hFile                                   likeds(r§hFile )
      D  o_msgID                                   like(r§msgID   )
@@ -274,7 +276,6 @@
       *
      C                   Return    f_opnSql
       *
-     P SQL_open...
      P                 E
       *
       *===================================================================*
@@ -283,9 +284,6 @@
       *
      P SQL_nextRow...
      P                 B                   Export
-      *
-      *  definieren Procedure Interface ...
-     D SQL_nextRow...
      D                 PI                         like(r§bool    )
      D  o_buffer                                  like(r§rcdBuf  )
      D  o_nullMap                                 like(r§nullMap )
@@ -348,7 +346,6 @@
       *
      C                   Return    isEOF
       *
-     P SQL_nextRow...
      P                 E
       *
       *===================================================================*
@@ -357,9 +354,6 @@
       *
      P SQL_previousRow...
      P                 B                   Export
-      *
-      *  definieren Procedure Interface ...
-     D SQL_previousRow...
      D                 PI                         like(r§bool    )
      D  o_buffer                                  like(r§rcdBuf  )
      D  o_nullMap                                 like(r§nullMap )
@@ -422,7 +416,6 @@
       *
      C                   Return    isEOF
       *
-     P SQL_previousRow...
      P                 E
       *
       *===================================================================*
@@ -431,9 +424,6 @@
       *
      P SQL_gotoTop...
      P                 B                   Export
-      *
-      *  definieren Procedure Interface ...
-     D SQL_gotoTop...
      D                 PI                         like(r§bool   )
      D  o_msgID                                   like(r§msgID  )
      D  o_msgDta                                  like(r§msgDta )
@@ -461,7 +451,6 @@
       *
      C                   Return    f_topRow
       *
-     P SQL_gotoTop...
      P                 E
       *
       *===================================================================*
@@ -470,9 +459,6 @@
       *
      P SQL_gotoBottom...
      P                 B                   Export
-      *
-      *  definieren Procedure Interface ...
-     D SQL_gotoBottom...
      D                 PI                         like(r§bool   )
      D  o_msgID                                   like(r§msgID  )
      D  o_msgDta                                  like(r§msgDta )
@@ -500,7 +486,6 @@
       *
      C                   Return    f_botRow
       *
-     P SQL_gotoBottom...
      P                 E
       *
       *===================================================================*
@@ -509,9 +494,6 @@
       *
      P SQL_close...
      P                 B                   Export
-      *
-      *  definieren Procedure Interface ...
-     D SQL_close...
      D                 PI                         like(r§bool    )
      D  o_hFile                                   likeds(r§hFile )
      D  o_msgID                                   like(r§msgID   )
@@ -556,7 +538,6 @@
       *
      C                   Return    f_clsSql
       *
-     P SQL_close...
      P                 E
       *
       *===================================================================*
@@ -565,9 +546,6 @@
       *
      P SQL_count...
      P                 B                   Export
-      *
-      *  definieren Procedure Interface ...
-     D SQL_count...
      D                 PI            10I 0
       *
       *  definieren Funktionswert ...
@@ -614,7 +592,6 @@
       *
      C                   Return    f_count
       *
-     P SQL_count...
      P                 E
       *
       *===================================================================*
@@ -622,9 +599,7 @@
       *===================================================================*
       *
      P f_isSqlErr      B
-      *
-      *  definieren Procedure Interface ...
-     D f_isSqlErr      PI             1A
+     D                 PI             1A
      D  o_msgID                                   like(r§msgID  )
      D  o_msgDta                                  like(r§msgDta )
       *
@@ -646,16 +621,14 @@
       *
      C                   Return    f_isSqlErr
       *
-     P f_isSqlErr      E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  f_sqlMsgID                                 (Body)     *
       *===================================================================*
       *
      P f_sqlMsgID      B
-      *
-      *  definieren Procedure Interface ...
-     D f_sqlMsgID      PI             7A
+     D                 PI             7A
      D  i_sqlCod                     10I 0 const
       *
       *  definieren Funktionswert ...
@@ -686,16 +659,14 @@
       *
      C                   Return    f_sqlMsgID
       *
-     P f_sqlMsgID      E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  p_cvtSqlMg                                 (Body)     *
       *===================================================================*
       *
      P p_cvtSqlMg      B
-      *
-      *  definieren Procedure Interface ...
-     D p_cvtSqlMg      PI
+     D                 PI
      D  i_toMsgID                     7A   const
      D  io_msgID                                  like(r§msgID  )
      D  io_msgDta                                 like(r§msgDta )
@@ -721,7 +692,7 @@
       *
      C                   Return
       *
-     P p_cvtSqlMg      E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  f_getField                                 (Body)     *
@@ -744,16 +715,12 @@
       *
      P SQL_quote...
      P                 B                   export
-      *
-      *  definieren Procedure Interface ...
-     D SQL_quote...
      D                 PI           512A
      D  i_string                    512A   const
       * ------------------------------------------------------------------------
       *
      C                   Return    f_chgField(i_string: bFalse)
       *
-     P SQL_quote...
      P                 E
       *
       *===================================================================*
@@ -761,9 +728,7 @@
       *===================================================================*
       *
      P f_chgField      B
-      *
-      *  definieren Procedure Interface ...
-     D f_chgField      PI           512A
+     D                 PI           512A
      D  i_string                    512A   const
      D  i_rmvOrder                    1A   const
       *
@@ -891,5 +856,5 @@
       *
      C                   Return    f_chgField
       *
-     P f_chgField      E
+     P                 E
       *

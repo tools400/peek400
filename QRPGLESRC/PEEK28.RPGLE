@@ -15,11 +15,20 @@
       *  Ermitteln Systemwerte                                        *
       *                                                               *
       *===============================================================*
+      * >>PRE-COMPILER<<                                              *
+      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
+      *===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
       *
       *---Variablendefinition------------------------------*
       /COPY QCOPYLE,D_VARDEF
+      /COPY QCOPYLE,FLDL0100
       *----------------------------------------------------*
       *
       *---SDS-Datenstruktur--------------------------------*
@@ -84,7 +93,7 @@
      C                   Endif
       *
       * - Seriennummer
-     C                   MOVEL (P) XAttr         YSysValNme
+     C                   EVAL      YSysValNme = XAttr
       *
      C                   CALL      'QWCRSVAL'
      C                   PARM                    YRcvVar
@@ -96,9 +105,9 @@
      C     §ErrAvail     IFEQ      *ZEROS
      C                   EXSR      GetAttr
      C                   ELSE
-     C                   Z-ADD     *ZEROS        XAttrLen
-     C                   MOVEL (P) *BLANKS       XAttrTyp
-     C                   MOVEL (P) *BLANKS       XValue
+     C                   EVAL      XAttrLen = *ZEROS
+     C                   EVAL      XAttrTyp = *BLANKS
+     C                   EVAL      XValue = *BLANKS
      C                   Endif
       *
       *---------------------------------------------------*
@@ -114,14 +123,16 @@
       *
      C     GetAttr       BEGSR
       *
-     C     RcvOffset     ADD       1             X
-     C                   SUBST (P) YRcvVar:X     YSystemVal
+     C                   EVAL      X = RcvOffset + 1
+     C**                 SUBST (P) YRcvVar:X     YSystemVal
+     C                   EVAL      YSystemVal = %subst(YRcvVar: X)
       *
-     C                   Z-ADD     LenOfData     XAttrLen
-     C                   MOVEL (P) TypeOfData    XAttrTyp
+     C                   EVAL      XAttrLen = LenOfData
+     C                   EVAL      XAttrTyp = TypeOfData
       *
-     C                   Z-ADD     1             X
-     C     XAttrLen      SUBST (P) SysValData:X  XValue
+     C                   EVAL      X = 1
+     C**   XAttrLen      SUBST (P) SysValData:X  XValue
+     C                   EVAL      XValue = %subst(SysValData: X: XAttrLen)
       *
      C                   ENDSR
       *

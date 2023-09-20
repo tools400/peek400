@@ -27,6 +27,14 @@
       *                                                               *
       *  XValue  - Objektinformationen im Format MBRD0200             *
       *                                                               *
+      * ============================================================= *
+      * >>PRE-COMPILER<<                                              *
+*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
       *===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
@@ -47,10 +55,12 @@
      D XMbr            S             10A
      D XValue          S            512A
       *
+     D MBRD0200        DS                  likeds(MBRD0200_t) inz
       /COPY QCOPYLE,MBRD0200
       *
       *---Variablendefinition------------------------------*
       /COPY QCOPYLE,D_VARDEF
+      /COPY QCOPYLE,FLDL0100
       *----------------------------------------------------*
       *
       *---Versenden von Nachrichten------------------------*
@@ -77,8 +87,8 @@
       * - Meldung
      C                   Callp     p_sndStsMg('USR8109': xQFile + xMbr)
       *
-     C                   MOVEL (P) XQFile        FileName
-     C                   MOVEL (P) XMbr          Member
+     C                   EVAL      FileName = XQFile
+     C                   EVAL      Member = XMbr
       *
      C                   CALL      'QUSRMBRD'
      C                   PARM                    RcvVar
@@ -90,10 +100,10 @@
      C                   PARM                    §ErrorCode
       *
      C     §ErrAvail     IFEQ      *ZEROS
-     C                   MOVEL (P) RcvVar        XValue
+     C                   EVAL      XValue = RcvVar
      C                   ELSE
      C                   CLEAR                   MBRD0200
-     C                   MOVEL (P) MBRD0200      XValue
+     C                   EVAL      XValue = MBRD0200
      C                   Endif
       *
       *---------------------------------------------------*

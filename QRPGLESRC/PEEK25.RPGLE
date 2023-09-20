@@ -14,6 +14,14 @@
       *                                                               *
       *  Auswahl einer Farbe                                          *
       *                                                               *
+      * ============================================================= *
+      * >>PRE-COMPILER<<                                              *
+*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
       *===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
@@ -32,6 +40,7 @@
       *
       *---Variablendefinition------------------------------*
       /COPY QCOPYLE,D_VARDEF
+      /COPY QCOPYLE,FLDL0100
       *----------------------------------------------------*
       *
       *---Variablendefinition ShortCmd---------------------*
@@ -161,7 +170,7 @@
      C                   WRITE     PBBOT#6                                      BT-Tasten 4
      C                   OTHER
      C                   WRITE     PBBOT#1                                      BT-Tasten 1
-     C                   Z-ADD     1             SFBOT
+     C                   EVAL      SFBOT = 1
      C                   Endsl
       *
       *  Anzeigen Bildschirm
@@ -172,9 +181,9 @@
      C                   MVR                     §ScnCsrCol
       *
       *  Beibehalten der Cursorosition
-     C     §ScnCsrRow    SUB       ZEI           CsrRow
-     C     §ScnCsrCol    SUB       POS           CsrCol
-     C                   SUB       1             CsrCol
+     C                   EVAL      CsrRow = §ScnCsrRow - ZEI
+     C                   EVAL      CsrCol = §ScnCsrCol - POS
+     C                   EVAL      CsrCol = CsrCol - 1
       *
       *  Nachrichten löschen
      C                   Callp     p_rmvPgmMg(§§pgmName)
@@ -184,12 +193,12 @@
       *
       *  Mappen der gedrückten Taste
       *  in Programmbefehl
-     C                   MOVEL (P) §ScnAID       YScnAID
-     C                   MOVEL (P) §§PgmName     YPgm
+     C                   EVAL      YScnAID = §ScnAID
+     C                   EVAL      YPgm = §§PgmName
      C                   CALL      PEEK21        P_Peek21
      C     YMsgID        IFNE      *BLANKS
-     C                   MOVEL (P) YMsgID        §MsgID
-     C                   MOVEL (P) YMsgDta       §MsgDta
+     C                   EVAL      §MsgID = YMsgID
+     C                   EVAL      §MsgDta = YMsgDta
      C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
      C                   ITER
      C                   Endif
@@ -258,7 +267,7 @@
      C     BZOFF1        BEGSR
       *
       *  Fehler
-     C                   MOVEL (P) '0'           *IN99
+     C                   EVAL      *IN99 = '0'
       *
      C                   ENDSR
       *
@@ -282,9 +291,9 @@
      C     SCNFLD        IFNE      *BLANKS
      C                   EXSR      ExtrColor
      C                   ELSE
-     C                   MOVEL (P) '1'           *IN99
-     C                   MOVEL (P) 'USR8147'     §MsgID
-     C                   MOVEL (P) *BLANKS       §MsgDta
+     C                   EVAL      *IN99 = '1'
+     C                   EVAL      §MsgID = 'USR8147'
+     C                   EVAL      §MsgDta = *BLANKS
      C                   Endif
       *
      C     EPRF20        TAG
@@ -303,18 +312,18 @@
       *
      C                   Callp     p_rmvPgmMg(§§pgmName)
       *
-     C                   MOVEL (P) 'USR8100'     XMsgID
+     C                   EVAL      XMsgID = 'USR8100'
       *
      C                   SELECT
      C     §ScnAID       WHENEQ    §F3
-     C                   MOVEL (P) 'F3'          USR81001
+     C                   EVAL      USR81001 = 'F3'
      C     §ScnAID       WHENEQ    §F12
-     C                   MOVEL (P) 'F12'         USR81001
+     C                   EVAL      USR81001 = 'F12'
      C                   OTHER
-     C                   MOVEL (P) 'Fxx'         USR81001
+     C                   EVAL      USR81001 = 'Fxx'
      C                   Endsl
       *
-     C                   MOVEL (P) USR8100       XMsgDta
+     C                   EVAL      XMsgDta = USR8100
       *
      C                   ENDSR
       *
@@ -335,7 +344,7 @@
       *
      C     C_MoreKeys    BEGSR
       *
-     C                   ADD       1             SFBOT
+     C                   EVAL      SFBOT = SFBOT + 1
       *
      C                   ENDSR
       *
@@ -345,68 +354,68 @@
       *
      C     FILL##        BEGSR
       *
-     C                   MOVEL (P) §Green        $Green
-     C     ' ':Char      XLATE     $Green        $Green
-     C                   MOVEL (P) §Green_R      $Green_R
-     C     ' ':Char      XLATE     $Green_R      $Green_R
-     C                   MOVEL (P) §Green_U      $Green_U
-     C     ' ':Char      XLATE     $Green_U      $Green_U
-     C                   MOVEL (P) §Green_RU     $Green_RU
-     C     ' ':Char      XLATE     $Green_RU     $Green_RU
+     C                   EVAL      $Green = §Green
+     C                   EVAL      $Green = %xlate(' ': Char: $Green)
+     C                   EVAL      $Green_R = §Green_R
+     C                   EVAL      $Green_R = %xlate(' ': Char: $Green_R)
+     C                   EVAL      $Green_U = §Green_U
+     C                   EVAL      $Green_U = %xlate(' ': Char: $Green_U)
+     C                   EVAL      $Green_RU = §Green_RU
+     C                   EVAL      $Green_RU = %xlate(' ': Char: $Green_RU)
       *
-     C                   MOVEL (P) §White        $White
-     C     ' ':Char      XLATE     $White        $White
-     C                   MOVEL (P) §White_R      $White_R
-     C     ' ':Char      XLATE     $White_R      $White_R
-     C                   MOVEL (P) §White_U      $White_U
-     C     ' ':Char      XLATE     $White_U      $White_U
+     C                   EVAL      $White = §White
+     C                   EVAL      $White = %xlate(' ': Char: $White)
+     C                   EVAL      $White_R = §White_R
+     C                   EVAL      $White_R = %xlate(' ': Char: $White_R)
+     C                   EVAL      $White_U = §White_U
+     C                   EVAL      $White_U = %xlate(' ': Char: $White_U)
       *
-     C                   MOVEL (P) §Red          $Red
-     C     ' ':Char      XLATE     $Red          $Red
-     C                   MOVEL (P) §Red_R        $Red_R
-     C     ' ':Char      XLATE     $Red_R        $Red_R
-     C                   MOVEL (P) §Red_U        $Red_U
-     C     ' ':Char      XLATE     $Red_U        $Red_U
-     C                   MOVEL (P) §Red_RU       $Red_RU
-     C     ' ':Char      XLATE     $Red_RU       $Red_RU
-     C                   MOVEL (P) §Red_B        $Red_B
-     C     ' ':Char      XLATE     $Red_B        $Red_B
-     C                   MOVEL (P) §Red_RB       $Red_RB
-     C     ' ':Char      XLATE     $Red_RB       $Red_RB
-     C                   MOVEL (P) §Red_UB       $Red_UB
-     C     ' ':Char      XLATE     $Red_UB       $Red_UB
+     C                   EVAL      $Red = §Red
+     C                   EVAL      $Red = %xlate(' ': Char: $Red)
+     C                   EVAL      $Red_R = §Red_R
+     C                   EVAL      $Red_R = %xlate(' ': Char: $Red_R)
+     C                   EVAL      $Red_U = §Red_U
+     C                   EVAL      $Red_U = %xlate(' ': Char: $Red_U)
+     C                   EVAL      $Red_RU = §Red_RU
+     C                   EVAL      $Red_RU = %xlate(' ': Char: $Red_RU)
+     C                   EVAL      $Red_B = §Red_B
+     C                   EVAL      $Red_B = %xlate(' ': Char: $Red_B)
+     C                   EVAL      $Red_RB = §Red_RB
+     C                   EVAL      $Red_RB = %xlate(' ': Char: $Red_RB)
+     C                   EVAL      $Red_UB = §Red_UB
+     C                   EVAL      $Red_UB = %xlate(' ': Char: $Red_UB)
       *
-     C                   MOVEL (P) §Turkis       $Turkis
-     C     ' ':Char      XLATE     $Turkis       $Turkis
-     C                   MOVEL (P) §Turkis_R     $Turkis_R
-     C     ' ':Char      XLATE     $Turkis_R     $Turkis_R
-     C                   MOVEL (P) §Turkis_U     $Turkis_U
-     C     ' ':Char      XLATE     $Turkis_U     $Turkis_U
-     C                   MOVEL (P) §Turkis_RU    $Turkis_RU
-     C     ' ':Char      XLATE     $Turkis_RU    $Turkis_RU
+     C                   EVAL      $Turkis = §Turkis
+     C                   EVAL      $Turkis = %xlate(' ': Char: $Turkis)
+     C                   EVAL      $Turkis_R = §Turkis_R
+     C                   EVAL      $Turkis_R = %xlate(' ': Char: $Turkis_R)
+     C                   EVAL      $Turkis_U = §Turkis_U
+     C                   EVAL      $Turkis_U = %xlate(' ': Char: $Turkis_U)
+     C                   EVAL      $Turkis_RU = §Turkis_RU
+     C                   EVAL      $Turkis_RU = %xlate(' ': Char: $Turkis_RU)
       *
-     C                   MOVEL (P) §Yellow       $Yellow
-     C     ' ':Char      XLATE     $Yellow       $Yellow
-     C                   MOVEL (P) §Yellow_R     $Yellow_R
-     C     ' ':Char      XLATE     $Yellow_R     $Yellow_R
-     C                   MOVEL (P) §Yellow_U     $Yellow_U
-     C     ' ':Char      XLATE     $Yellow_U     $Yellow_U
+     C                   EVAL      $Yellow = §Yellow
+     C                   EVAL      $Yellow = %xlate(' ': Char: $Yellow)
+     C                   EVAL      $Yellow_R = §Yellow_R
+     C                   EVAL      $Yellow_R = %xlate(' ': Char: $Yellow_R)
+     C                   EVAL      $Yellow_U = §Yellow_U
+     C                   EVAL      $Yellow_U = %xlate(' ': Char: $Yellow_U)
       *
-     C                   MOVEL (P) §Pink         $Pink
-     C     ' ':Char      XLATE     $Pink         $Pink
-     C                   MOVEL (P) §Pink_R       $Pink_R
-     C     ' ':Char      XLATE     $Pink_R       $Pink_R
-     C                   MOVEL (P) §Pink_U       $Pink_U
-     C     ' ':Char      XLATE     $Pink_U       $Pink_U
-     C                   MOVEL (P) §Pink_RU      $Pink_RU
-     C     ' ':Char      XLATE     $Pink_RU      $Pink_RU
+     C                   EVAL      $Pink = §Pink
+     C                   EVAL      $Pink = %xlate(' ': Char: $Pink)
+     C                   EVAL      $Pink_R = §Pink_R
+     C                   EVAL      $Pink_R = %xlate(' ': Char: $Pink_R)
+     C                   EVAL      $Pink_U = §Pink_U
+     C                   EVAL      $Pink_U = %xlate(' ': Char: $Pink_U)
+     C                   EVAL      $Pink_RU = §Pink_RU
+     C                   EVAL      $Pink_RU = %xlate(' ': Char: $Pink_RU)
       *
-     C                   MOVEL (P) §Blue         $Blue
-     C     ' ':Char      XLATE     $Blue         $Blue
-     C                   MOVEL (P) §Blue_R       $Blue_R
-     C     ' ':Char      XLATE     $Blue_R       $Blue_R
-     C                   MOVEL (P) §Blue_U       $Blue_U
-     C     ' ':Char      XLATE     $Blue_U       $Blue_U
+     C                   EVAL      $Blue = §Blue
+     C                   EVAL      $Blue = %xlate(' ': Char: $Blue)
+     C                   EVAL      $Blue_R = §Blue_R
+     C                   EVAL      $Blue_R = %xlate(' ': Char: $Blue_R)
+     C                   EVAL      $Blue_U = §Blue_U
+     C                   EVAL      $Blue_U = %xlate(' ': Char: $Blue_U)
       *
      C                   ENDSR
       *
@@ -416,78 +425,78 @@
       *
      C     PosCsr        BEGSR
       *
-     C                   MOVEA     '0000000000'  *IN(10)                       - Green
-     C                   MOVEA     '0000000000'  *IN(20)                       - White
-     C                   MOVEA     '0000000000'  *IN(30)                       - Red
-     C                   MOVEA     '0000000000'  *IN(40)                       - Türkis
-     C                   MOVEA     '0000000000'  *IN(50)                       - Yellow
-     C                   MOVEA     '0000000000'  *IN(60)                       - Pink
-     C                   MOVEA     '0000000000'  *IN(70)                       - Blue
+     C                   EVAL      %subarr(*in: 10: 10) = '0'                   - Green
+     C                   EVAL      %subarr(*in: 20: 10) = '0'                   - White
+     C                   EVAL      %subarr(*in: 30: 10) = '0'                   - Red
+     C                   EVAL      %subarr(*in: 40: 10) = '0'                   - Türkis
+     C                   EVAL      %subarr(*in: 50: 10) = '0'                   - Yellow
+     C                   EVAL      %subarr(*in: 60: 10) = '0'                   - Pink
+     C                   EVAL      %subarr(*in: 70: 10) = '0'                   - Blue
       *
       * Green
      C                   SELECT
      C     XColorAttr    WHENEQ    §Green
-     C                   MOVEL (P) '1'           *IN10
+     C                   EVAL      *IN10 = '1'
      C     XColorAttr    WHENEQ    §Green_R
-     C                   MOVEL (P) '1'           *IN11
+     C                   EVAL      *IN11 = '1'
      C     XColorAttr    WHENEQ    §Green_U
-     C                   MOVEL (P) '1'           *IN12
+     C                   EVAL      *IN12 = '1'
      C     XColorAttr    WHENEQ    §Green_RU
-     C                   MOVEL (P) '1'           *IN13
+     C                   EVAL      *IN13 = '1'
       * White
      C     XColorAttr    WHENEQ    §White
-     C                   MOVEL (P) '1'           *IN20
+     C                   EVAL      *IN20 = '1'
      C     XColorAttr    WHENEQ    §White_R
-     C                   MOVEL (P) '1'           *IN21
+     C                   EVAL      *IN21 = '1'
      C     XColorAttr    WHENEQ    §White_U
-     C                   MOVEL (P) '1'           *IN22
+     C                   EVAL      *IN22 = '1'
       * Red
      C     XColorAttr    WHENEQ    §Red
-     C                   MOVEL (P) '1'           *IN30
+     C                   EVAL      *IN30 = '1'
      C     XColorAttr    WHENEQ    §Red_R
-     C                   MOVEL (P) '1'           *IN31
+     C                   EVAL      *IN31 = '1'
      C     XColorAttr    WHENEQ    §Red_U
-     C                   MOVEL (P) '1'           *IN32
+     C                   EVAL      *IN32 = '1'
      C     XColorAttr    WHENEQ    §Red_RU
-     C                   MOVEL (P) '1'           *IN33
+     C                   EVAL      *IN33 = '1'
      C     XColorAttr    WHENEQ    §Red_B
-     C                   MOVEL (P) '1'           *IN34
+     C                   EVAL      *IN34 = '1'
      C     XColorAttr    WHENEQ    §Red_RB
-     C                   MOVEL (P) '1'           *IN35
+     C                   EVAL      *IN35 = '1'
      C     XColorAttr    WHENEQ    §Red_UB
-     C                   MOVEL (P) '1'           *IN36
+     C                   EVAL      *IN36 = '1'
       * Türkis
      C     XColorAttr    WHENEQ    §Turkis
-     C                   MOVEL (P) '1'           *IN40
+     C                   EVAL      *IN40 = '1'
      C     XColorAttr    WHENEQ    §Turkis_R
-     C                   MOVEL (P) '1'           *IN41
+     C                   EVAL      *IN41 = '1'
      C     XColorAttr    WHENEQ    §Turkis_U
-     C                   MOVEL (P) '1'           *IN42
+     C                   EVAL      *IN42 = '1'
      C     XColorAttr    WHENEQ    §Turkis_RU
-     C                   MOVEL (P) '1'           *IN43
+     C                   EVAL      *IN43 = '1'
       * Yellow
      C     XColorAttr    WHENEQ    §Yellow
-     C                   MOVEL (P) '1'           *IN50
+     C                   EVAL      *IN50 = '1'
      C     XColorAttr    WHENEQ    §Yellow_R
-     C                   MOVEL (P) '1'           *IN51
+     C                   EVAL      *IN51 = '1'
      C     XColorAttr    WHENEQ    §Yellow_U
-     C                   MOVEL (P) '1'           *IN52
+     C                   EVAL      *IN52 = '1'
       * Pink
      C     XColorAttr    WHENEQ    §Pink
-     C                   MOVEL (P) '1'           *IN60
+     C                   EVAL      *IN60 = '1'
      C     XColorAttr    WHENEQ    §Pink_R
-     C                   MOVEL (P) '1'           *IN61
+     C                   EVAL      *IN61 = '1'
      C     XColorAttr    WHENEQ    §Pink_U
-     C                   MOVEL (P) '1'           *IN62
+     C                   EVAL      *IN62 = '1'
      C     XColorAttr    WHENEQ    §Pink_RU
-     C                   MOVEL (P) '1'           *IN63
+     C                   EVAL      *IN63 = '1'
       * Blue
      C     XColorAttr    WHENEQ    §Blue
-     C                   MOVEL (P) '1'           *IN70
+     C                   EVAL      *IN70 = '1'
      C     XColorAttr    WHENEQ    §Blue_R
-     C                   MOVEL (P) '1'           *IN71
+     C                   EVAL      *IN71 = '1'
      C     XColorAttr    WHENEQ    §Blue_U
-     C                   MOVEL (P) '1'           *IN72
+     C                   EVAL      *IN72 = '1'
       *
      C                   OTHER
      C                   EXSR      *PSSR
@@ -503,14 +512,14 @@
       *
      C     XDsp80        IFEQ      '0'
       *   132-Zeichen Anzeige
-     C                   MOVEL (P) '0'           *IN88
-     C                   Z-ADD     8             ZEI
-     C                   Z-ADD     41            POS
+     C                   EVAL      *IN88 = '0'
+     C                   EVAL      ZEI = 8
+     C                   EVAL      POS = 41
      C                   ELSE
       *    80-Zeichen Anzeige
-     C                   MOVEL (P) '1'           *IN88
-     C                   Z-ADD     6             ZEI
-     C                   Z-ADD     22            POS
+     C                   EVAL      *IN88 = '1'
+     C                   EVAL      ZEI = 6
+     C                   EVAL      POS = 22
      C                   Endif
       *
      C                   ENDSR
@@ -524,70 +533,70 @@
      C                   SELECT
       *  Green
      C     ScnFld        WHENEQ    '$GREEN'
-     C                   MOVEL (P) $GREEN        Wrk_Field
+     C                   EVAL      Wrk_Field = $GREEN
      C     ScnFld        WHENEQ    '$GREEN_R'
-     C                   MOVEL (P) $GREEN_R      Wrk_Field
+     C                   EVAL      Wrk_Field = $GREEN_R
      C     ScnFld        WHENEQ    '$GREEN_U'
-     C                   MOVEL (P) $GREEN_U      Wrk_Field
+     C                   EVAL      Wrk_Field = $GREEN_U
      C     ScnFld        WHENEQ    '$GREEN_RU'
-     C                   MOVEL (P) $GREEN_RU     Wrk_Field
+     C                   EVAL      Wrk_Field = $GREEN_RU
       *  White
      C     ScnFld        WHENEQ    '$WHITE'
-     C                   MOVEL (P) $WHITE        Wrk_Field
+     C                   EVAL      Wrk_Field = $WHITE
      C     ScnFld        WHENEQ    '$WHITE_R'
-     C                   MOVEL (P) $WHITE_R      Wrk_Field
+     C                   EVAL      Wrk_Field = $WHITE_R
      C     ScnFld        WHENEQ    '$WHITE_U'
-     C                   MOVEL (P) $WHITE_U      Wrk_Field
+     C                   EVAL      Wrk_Field = $WHITE_U
       *  Red
      C     ScnFld        WHENEQ    '$RED'
-     C                   MOVEL (P) $RED          Wrk_Field
+     C                   EVAL      Wrk_Field = $RED
      C     ScnFld        WHENEQ    '$RED_R'
-     C                   MOVEL (P) $RED_R        Wrk_Field
+     C                   EVAL      Wrk_Field = $RED_R
      C     ScnFld        WHENEQ    '$RED_U'
-     C                   MOVEL (P) $RED_U        Wrk_Field
+     C                   EVAL      Wrk_Field = $RED_U
      C     ScnFld        WHENEQ    '$RED_RU'
-     C                   MOVEL (P) $RED_RU       Wrk_Field
+     C                   EVAL      Wrk_Field = $RED_RU
      C     ScnFld        WHENEQ    '$RED_B'
-     C                   MOVEL (P) $RED_B        Wrk_Field
+     C                   EVAL      Wrk_Field = $RED_B
      C     ScnFld        WHENEQ    '$RED_RB'
-     C                   MOVEL (P) $RED_RB       Wrk_Field
+     C                   EVAL      Wrk_Field = $RED_RB
      C     ScnFld        WHENEQ    '$RED_UB'
-     C                   MOVEL (P) $RED_UB       Wrk_Field
+     C                   EVAL      Wrk_Field = $RED_UB
       *  Turquoise
      C     ScnFld        WHENEQ    '$TURKIS'
-     C                   MOVEL (P) $TURKIS       Wrk_Field
+     C                   EVAL      Wrk_Field = $TURKIS
      C     ScnFld        WHENEQ    '$TURKIS_R'
-     C                   MOVEL (P) $TURKIS_R     Wrk_Field
+     C                   EVAL      Wrk_Field = $TURKIS_R
      C     ScnFld        WHENEQ    '$TURKIS_U'
-     C                   MOVEL (P) $TURKIS_U     Wrk_Field
+     C                   EVAL      Wrk_Field = $TURKIS_U
      C     ScnFld        WHENEQ    '$TURKIS_RU'
-     C                   MOVEL (P) $TURKIS_RU    Wrk_Field
+     C                   EVAL      Wrk_Field = $TURKIS_RU
       *  Yellow
      C     ScnFld        WHENEQ    '$YELLOW'
-     C                   MOVEL (P) $YELLOW       Wrk_Field
+     C                   EVAL      Wrk_Field = $YELLOW
      C     ScnFld        WHENEQ    '$YELLOW_R'
-     C                   MOVEL (P) $YELLOW_R     Wrk_Field
+     C                   EVAL      Wrk_Field = $YELLOW_R
      C     ScnFld        WHENEQ    '$YELLOW_U'
-     C                   MOVEL (P) $YELLOW_U     Wrk_Field
+     C                   EVAL      Wrk_Field = $YELLOW_U
       *  Pink
      C     ScnFld        WHENEQ    '$PINK'
-     C                   MOVEL (P) $PINK         Wrk_Field
+     C                   EVAL      Wrk_Field = $PINK
      C     ScnFld        WHENEQ    '$PINK_R'
-     C                   MOVEL (P) $PINK_R       Wrk_Field
+     C                   EVAL      Wrk_Field = $PINK_R
      C     ScnFld        WHENEQ    '$PINK_U'
-     C                   MOVEL (P) $PINK_U       Wrk_Field
+     C                   EVAL      Wrk_Field = $PINK_U
      C     ScnFld        WHENEQ    '$PINK_RU'
-     C                   MOVEL (P) $PINK_RU      Wrk_Field
+     C                   EVAL      Wrk_Field = $PINK_RU
       *  Blue
      C     ScnFld        WHENEQ    '$BLUE'
-     C                   MOVEL (P) $BLUE         Wrk_Field
+     C                   EVAL      Wrk_Field = $BLUE
      C     ScnFld        WHENEQ    '$BLUE_R'
-     C                   MOVEL (P) $BLUE_R       Wrk_Field
+     C                   EVAL      Wrk_Field = $BLUE_R
      C     ScnFld        WHENEQ    '$BLUE_U'
-     C                   MOVEL (P) $BLUE_U       Wrk_Field
+     C                   EVAL      Wrk_Field = $BLUE_U
       *
      C                   OTHER
-     C                   MOVEL (P) *BLANKS       Wrk_Field
+     C                   EVAL      Wrk_Field = *BLANKS
      C                   Endsl
       *
      C     Wrk_Field     IFNE      *BLANKS
@@ -614,15 +623,15 @@
      C                   EXSR      FILL##
      C                   EXSR      PosCsr
       *
-     C                   MOVEL (P) *BLANKS       XMsgID
-     C                   MOVEL (P) *BLANKS       XMsgDta
+     C                   EVAL      XMsgID = *BLANKS
+     C                   EVAL      XMsgDta = *BLANKS
       *
       *  Löschen der Cursorosition
-     C                   Z-ADD     *ZEROS        CsrRow
-     C                   Z-ADD     *ZEROS        CsrCol
+     C                   EVAL      CsrRow = *ZEROS
+     C                   EVAL      CsrCol = *ZEROS
       *
       * - Einstellen Darstellung der Funktionstasten
-     C                   Z-ADD     1             SfBot
+     C                   EVAL      SfBot = 1
       *
       * - Einstellen der Bildschirmauflösung 80/132-Zeichen
      C                   EXSR      SetScreen
@@ -642,10 +651,9 @@
       *
      C                   Eval      yPgm    = §§PgmName
      C                   Eval      yKey    = '*ALL'
-      ***                Eval      yPosF24 = NbrFKeys
      C                   Eval      yPosF24 = *ZEROS
      C                   Call      PEEK23        P_Peek23
-     C                   Movea (P) yFKeys        ScrnFKeys
+     C                   Eval      ScrnFKeys = %subarr(YFKeys: 1)
       *
      C                   Endsr
       *

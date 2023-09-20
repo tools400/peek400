@@ -40,6 +40,14 @@
       *  XMsgID    - MsgID                                            *
       *  XMsgDta   - Msg data                                         *
       *                                                               *
+      * ============================================================= *
+      * >>PRE-COMPILER<<                                              *
+*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
       *===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
@@ -49,7 +57,7 @@
       *----------------------------------------------------*
      D  XData          S            512A
      D  XFormat        S             10A
-     D  XSrcVar        S                   like(r§rcdBuf  )                                  R
+     D  XSrcVar        S                   like(r§rcdBuf  )
      D  XQcmdexc       S              1A
      D  XCvtCcsid      S              1A
      D  XString        S                   like(r§rcdBuf  )
@@ -316,11 +324,11 @@
       *
      C                   SELECT
      C                   WHEN      (SrcVarCls = 'B')
-     C                   MOVEL (P) '*BINARY'     SrcVarCls
+     C                   EVAL      SrcVarCls = '*BINARY'
      C                   WHEN      (SrcVarCls = 'P')
-     C                   MOVEL (P) '*PACKED'     SrcVarCls
+     C                   EVAL      SrcVarCls = '*PACKED'
      C                   WHEN      (SrcVarCls = 'S')
-     C                   MOVEL (P) '*ZONED'      SrcVarCls
+     C                   EVAL      SrcVarCls = '*ZONED'
      C                   Endsl
       *
      C                   IF        (EditWord <> '')

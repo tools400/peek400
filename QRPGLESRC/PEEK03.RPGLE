@@ -14,6 +14,14 @@
       *                                                               *
       *  Aktualisieren der Feldliste mit Schlüsselinformationen       *
       *                                                               *
+      * ============================================================= *
+      * >>PRE-COMPILER<<                                              *
+      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
       *===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
@@ -117,16 +125,16 @@
      C     ENDE          TAG
       *
      C     nbrOfKey      IFLE      *ZEROS
-     C                   MOVEL (P) 'USR0006'     XMsgID
-     C                   MOVEL (P) XFile         USR00061
-     C                   MOVEL (P) XLib          USR00062
-     C                   MOVEL (P) USR0006       XMsgDta
+     C                   EVAL      XMsgID = 'USR0006'
+     C                   EVAL      USR00061 = XFile
+     C                   EVAL      USR00062 = XLib
+     C                   EVAL      XMsgDta = USR0006
      C                   ELSE
-     C                   MOVEL (P) *BLANKS       XMsgID
-     C                   MOVEL (P) *BLANKS       XMsgDta
+     C                   EVAL      XMsgID = *BLANKS
+     C                   EVAL      XMsgDta = *BLANKS
      C                   Endif
       *
-     C                   MOVEL (P) '1'           *INLR
+     C                   EVAL      *INLR = '1'
       *
       *====================================================*
       *  sqlSeq     SQL-Auswahl                            *
@@ -143,7 +151,8 @@
       *
      C                   Eval      tempStr = %trim(%subst(xSqlOrder: x: y-x))
       *  Ende des Feldes ...
-     C     '"'           SCAN      tempStr:2     z
+     C**   '"'           SCAN      tempStr:2     z
+     C                   Eval      z = %scan('"': tempStr: 2)
      C                   Eval      APKEYF  = %trim(%subst(tempStr: 2: z-2))
       *
       *  Alles hinter dem Feld ...
@@ -183,11 +192,13 @@
      C                   Eval      y = 0
      C                   Else
       *
-     C     ','           SCAN      xSqlOrder:x   y
+     C**   ','           SCAN      xSqlOrder:x   y
+     C                   Eval      y = %scan(',': xSqlOrder: x)
       *
      C                   IF        (y = 0) and
      C                             (%subst(xSqlOrder: x) <> ' ')
-     C     ' '           CHECKR    xSqlOrder     y
+     C**   ' '           CHECKR    xSqlOrder     y
+     C                   Eval      y = %checkr(' ': xSqlOrder)
      C                   Eval      y = y + 1
      C                   Endif
       *
@@ -202,23 +213,23 @@
      C     otherSeq      BEGSR
       *
       *  Abrufen der Dateiinformationen ...
-     C                   MOVEL (P) XFile         YFile
-     C                   MOVEL (P) XLib          YLib
-     C                   MOVEL (P) XRcdFormat    YRcdFormat
-     C                   MOVEL (P) '*CREATE'     YFunction
+     C                   EVAL      YFile = XFile
+     C                   EVAL      YLib = XLib
+     C                   EVAL      YRcdFormat = XRcdFormat
+     C                   EVAL      YFunction = '*CREATE'
      C                   CALL      PEEK41        P_Peek41
      C     YNbrOfEnt     IFLE      *ZEROS
       *  ... schade, Aufruf ist fehlgeschlagen
      C                   ELSE
       *  Einlesen der Schlüsselinformationen ...
-     C                   MOVEL (P) '*KEY'        YFunction
+     C                   EVAL      YFunction = '*KEY'
      C                   CALL      PEEK41        P_Peek41
      C                   EVAL      nbrOfKey = yNbrOfEnt
       *
      C     1             DO        nbrOfKey
-     C                   MOVEL (P) '*READKEY'    YFunction
+     C                   EVAL      YFunction = '*READKEY'
      C                   CALL      PEEK41        P_Peek41
-     C                   MOVEL (P) YData         KEYL0100
+     C                   EVAL      KEYL0100 = YData
       *
      C                   EXSR      ADDKEYINF
      C                   Enddo
@@ -233,7 +244,7 @@
       *
      C     AddKeyInf     BEGSR
       *
-     C                   MOVEL (P) APKEYF        F_Field
+     C                   EVAL      F_Field = APKEYF
      C     F_Key         CHAIN     FPEEKFLD                           11
      C     *IN11         IFEQ      '0'
      C                   EVAL      F_Desc = APKSEQ
@@ -258,8 +269,8 @@
      C                   Callp     p_sndStsMg('USR8137': XQFile)
       *
       * - Los gehts'
-     C                   MOVEL (P) *BLANKS       XMsgID
-     C                   MOVEL (P) *BLANKS       XMsgDta
+     C                   EVAL      XMsgID = *BLANKS
+     C                   EVAL      XMsgDta = *BLANKS
       *
      C                   ENDSR
       *

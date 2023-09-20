@@ -16,6 +16,14 @@
       *  Peek/400 - Abfrage "Programm erstellen"                      *
       *                                                               *
       *===============================================================*
+      * >>PRE-COMPILER<<                                              *
+      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
+      *===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
       *
@@ -29,6 +37,7 @@
       *
       *---Variablendefinition------------------------------*
       /COPY QCOPYLE,D_VARDEF
+      /COPY QCOPYLE,FLDL0100
       *----------------------------------------------------*
       *
       *---Variablendefinition ShortCmd---------------------*
@@ -147,7 +156,7 @@
       *
      C                   IF        xUnload = bTrue
      C                   CLOSE     PEEK52FM
-     C                   MOVEL(P)  *ON           *INLR
+     C                   EVAL      *INLR = *ON
      C                   GOTO      ENDE
      C                   ENDIF
       *
@@ -162,7 +171,7 @@
      C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
       *
       *  Nachrichten anzeigen
-     C                   MOVE      '0'           *IN89
+     C                   EVAL      *IN89 = '0'
      C                   WRITE     MSGCTL
       *
       *  Anzeigen der Befehlstasten
@@ -180,12 +189,12 @@
       *
       *  Mappen der gedrückten Taste
       *  in Programmbefehl
-     C                   MOVEL (P) §ScnAID       YScnAID
-     C                   MOVEL (P) §§PgmName     YPgm
+     C                   EVAL      YScnAID = §ScnAID
+     C                   EVAL      YPgm = §§PgmName
      C                   CALL      PEEK21        P_Peek21
      C     YMsgID        IFNE      *BLANKS
-     C                   MOVEL (P) YMsgID        §MsgID
-     C                   MOVEL (P) YMsgDta       §MsgDta
+     C                   EVAL      §MsgID = YMsgID
+     C                   EVAL      §MsgDta = YMsgDta
      C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
      C                   ITER
      C                   Endif
@@ -215,8 +224,8 @@
      C     YPgmCmd       WHENEQ    '*ENTER'
      C                   EXSR      C_Enter
      C     *IN99         IFEQ      '0'
-     C                   MOVEL (P) 'USR8112'     XMsgID
-     C                   MOVEL (P) *BLANKS       XMsgDta
+     C                   EVAL      XMsgID = 'USR8112'
+     C                   EVAL      XMsgDta = *BLANKS
       *
      C                   WRITE     MSGCTL2
      C                   EVAL      doGenerate = bTrue
@@ -248,63 +257,51 @@
       *
      C     dspCmdKeys    BEGSR
       *
-     C                   Eval      *IN40 = *OFF
+     C                   if        (doGenerate)
+     C                   eval      SFBOT = 1
+     C                   endif
       *
      C                   SELECT
      C                   When      (SFBOT = 2) and
      C                             (yNbrOfKeys > NbrFKeys * (SFBOT - 1))
-     C                   If        (not doGenerate)
      C                   WRITE     PBBOT#2                                      BT-Tasten 2
-     C                   Else
-     C                   WRITE     PBBOT2#2                                     BT-Tasten 2
-     C                   Endif
      C                   When      (SFBOT = 3) and
      C                             (yNbrOfKeys > NbrFKeys * (SFBOT - 1))
-     C  N40              WRITE     PBBOT#3                                      BT-Tasten 3
-     C   40              WRITE     PBBOT2#3                                     BT-Tasten 3
+     C                   WRITE     PBBOT#3                                      BT-Tasten 3
      C                   When      (SFBOT = 4) and
      C                             (yNbrOfKeys > NbrFKeys * (SFBOT - 1))
-     C  N40              WRITE     PBBOT#4                                      BT-Tasten 4
-     C   40              WRITE     PBBOT2#4                                     BT-Tasten 4
+     C                   WRITE     PBBOT#4                                      BT-Tasten 4
      C                   When      (SFBOT = 5) and
      C                             (yNbrOfKeys > NbrFKeys * (SFBOT - 1))
-     C  N40              WRITE     PBBOT#5                                      BT-Tasten 5
-     C   40              WRITE     PBBOT2#5                                     BT-Tasten 5
+     C                   WRITE     PBBOT#5                                      BT-Tasten 5
      C                   When      (SFBOT = 6) and
      C                             (yNbrOfKeys > NbrFKeys * (SFBOT - 1))
-     C  N40              WRITE     PBBOT#6                                      BT-Tasten 6
-     C   40              WRITE     PBBOT2#6                                     BT-Tasten 6
+     C                   WRITE     PBBOT#6                                      BT-Tasten 6
      C                   When      (SFBOT = 7) and
      C                             (yNbrOfKeys > NbrFKeys * (SFBOT - 1))
-     C  N40              WRITE     PBBOT#7                                      BT-Tasten 7
-     C   40              WRITE     PBBOT2#7                                     BT-Tasten 7
+     C                   WRITE     PBBOT#7                                      BT-Tasten 7
      C                   When      (SFBOT = 8) and
      C                             (yNbrOfKeys > NbrFKeys * (SFBOT - 1))
-     C  N40              WRITE     PBBOT#8                                      BT-Tasten 8
-     C   40              WRITE     PBBOT2#8                                     BT-Tasten 8
+     C                   WRITE     PBBOT#8                                      BT-Tasten 8
      C                   When      (SFBOT = 9) and
      C                             (yNbrOfKeys > NbrFKeys * (SFBOT - 1))
-     C  N40              WRITE     PBBOT#9                                      BT-Tasten 4
-     C   40              WRITE     PBBOT2#9                                     BT-Tasten 9
+     C                   WRITE     PBBOT#9                                      BT-Tasten 4
      C                   When      (SFBOT = 10) and
      C                             (yNbrOfKeys > NbrFKeys * (SFBOT - 1))
-     C  N40              WRITE     PBBOT#10                                     BT-Tasten 10
-     C   40              WRITE     PBBOT2#10                                    BT-Tasten 10
+     C                   WRITE     PBBOT#10                                     BT-Tasten 10
      C                   When      (SFBOT = 11) and
      C                             (yNbrOfKeys > NbrFKeys * (SFBOT - 1))
-     C  N40              WRITE     PBBOT#11                                     BT-Tasten 11
-     C   40              WRITE     PBBOT2#11                                    BT-Tasten 11
+     C                   WRITE     PBBOT#11                                     BT-Tasten 11
      C                   When      (SFBOT = 12) and
      C                             (yNbrOfKeys > NbrFKeys * (SFBOT - 1))
-     C  N40              WRITE     PBBOT#12                                     BT-Tasten 12
-     C   40              WRITE     PBBOT2#12                                    BT-Tasten 12
+     C                   WRITE     PBBOT#12                                     BT-Tasten 12
      C                   OTHER
      C                   If        (not doGenerate)
      C                   WRITE     PBBOT#1                                      BT-Tasten 1
      C                   Else
      C                   WRITE     PBBOT2#1                                     BT-Tasten 1
      C                   Endif
-     C                   Z-ADD     1             SFBOT
+     C                   EVAL      SFBOT = 1
      C                   Endsl
       *
      C                   ENDSR
@@ -320,11 +317,11 @@
      C     E_Enter       TAG
       *
      C     *IN99         IFEQ      '0'
-     C                   MOVEL (P) ##ALWLC       XAlwLc
-     C                   MOVEL (P) ##CASE        xCase
-     C                   MOVEL (P) ##RCDLCK      xRcdLock
-     C                   MOVEL (P) ##NULLDFT     xNullDft
-     C                   MOVEL (P) ##KEEPCRS     xKeepCrs
+     C                   EVAL      XAlwLc = ##ALWLC
+     C                   EVAL      xCase = ##CASE
+     C                   EVAL      xRcdLock = ##RCDLCK
+     C                   EVAL      xNullDft = ##NULLDFT
+     C                   EVAL      xKeepCrs = ##KEEPCRS
      C                   IF        ##SAVE = bTrue
      C                   EXSR      SavUsrSetg
      C                   Endif
@@ -369,19 +366,19 @@
       *
      C     ##ALWLC       IFNE      bTrue
      C     ##ALWLC       ANDNE     bFalse
-     C                   MOVEL (P) '1'           *IN99
+     C                   EVAL      *IN99 = '1'
      C                   CLEAR                   USR8219
-     C                   MOVEL (P) ##ALWLC       USR82191
-     C                   MOVEL (P) 'USR8219'     §MsgID
-     C                   MOVEL (P) USR8219       §MsgDta
+     C                   EVAL      USR82191 = ##ALWLC
+     C                   EVAL      §MsgID = 'USR8219'
+     C                   EVAL      §MsgDta = USR8219
      C                   GOTO      EPRF22
      C                   Endif
       *
      C     EPRF22        TAG
       *
      C     *IN99         IFEQ      '1'
-     C                   MOVEL (P) '1'           *IN22
-     C                   MOVEL (P) '1'           *IN32
+     C                   EVAL      *IN22 = '1'
+     C                   EVAL      *IN32 = '1'
      C                   Endif
       *
      C                   ENDSR
@@ -394,19 +391,19 @@
       *
      C     ##CASE        IFNE      bTrue
      C     ##CASE        ANDNE     bFalse
-     C                   MOVEL (P) '1'           *IN99
+     C                   EVAL      *IN99 = '1'
      C                   CLEAR                   USR8219
-     C                   MOVEL (P) ##CASE        USR82191
-     C                   MOVEL (P) 'USR8219'     §MsgID
-     C                   MOVEL (P) USR8219       §MsgDta
+     C                   EVAL      USR82191 = ##CASE
+     C                   EVAL      §MsgID = 'USR8219'
+     C                   EVAL      §MsgDta = USR8219
      C                   GOTO      EPRF20
      C                   Endif
       *
      C     EPRF20        TAG
       *
      C     *IN99         IFEQ      '1'
-     C                   MOVEL (P) '1'           *IN20
-     C                   MOVEL (P) '1'           *IN30
+     C                   EVAL      *IN20 = '1'
+     C                   EVAL      *IN30 = '1'
      C                   Endif
       *
      C                   ENDSR
@@ -419,19 +416,19 @@
       *
      C     ##RCDLCK      IFNE      bTrue
      C     ##RCDLCK      ANDNE     bFalse
-     C                   MOVEL (P) '1'           *IN99
+     C                   EVAL      *IN99 = '1'
      C                   CLEAR                   USR8219
-     C                   MOVEL (P) ##RCDLCK      USR82191
-     C                   MOVEL (P) 'USR8219'     §MsgID
-     C                   MOVEL (P) USR8219       §MsgDta
+     C                   EVAL      USR82191 = ##RCDLCK
+     C                   EVAL      §MsgID = 'USR8219'
+     C                   EVAL      §MsgDta = USR8219
      C                   GOTO      EPRF23
      C                   Endif
       *
      C     EPRF23        TAG
       *
      C     *IN99         IFEQ      '1'
-     C                   MOVEL (P) '1'           *IN23
-     C                   MOVEL (P) '1'           *IN33
+     C                   EVAL      *IN23 = '1'
+     C                   EVAL      *IN33 = '1'
      C                   Endif
       *
      C                   ENDSR
@@ -444,20 +441,20 @@
       *
      C                   IF        (##ALWLC = bFalse) and
      C                             (##CASE  = bTrue )
-     C                   MOVEL (P) '1'           *IN99
+     C                   EVAL      *IN99 = '1'
      C                   CLEAR                   USR8216
-     C                   MOVEL (P) 'USR8216'     §MsgID
-     C                   MOVEL (P) USR8216       §MsgDta
+     C                   EVAL      §MsgID = 'USR8216'
+     C                   EVAL      §MsgDta = USR8216
      C                   GOTO      EPRF24
      C                   Endif
       *
      C     EPRF24        TAG
       *
      C     *IN99         IFEQ      '1'
-     C                   MOVEL (P) '1'           *IN20
-     C                   MOVEL (P) '1'           *IN30
-     C                   MOVEL (P) '1'           *IN22
-     C                   MOVEL (P) '1'           *IN32
+     C                   EVAL      *IN20 = '1'
+     C                   EVAL      *IN30 = '1'
+     C                   EVAL      *IN22 = '1'
+     C                   EVAL      *IN32 = '1'
      C                   Endif
       *
      C                   ENDSR
@@ -470,19 +467,19 @@
       *
      C     ##NULLDFT     IFNE      bTrue
      C     ##NULLDFT     ANDNE     bFalse
-     C                   MOVEL (P) '1'           *IN99
+     C                   EVAL      *IN99 = '1'
      C                   CLEAR                   USR8219
-     C                   MOVEL (P) ##NULLDFT     USR82191
-     C                   MOVEL (P) 'USR8219'     §MsgID
-     C                   MOVEL (P) USR8219       §MsgDta
+     C                   EVAL      USR82191 = ##NULLDFT
+     C                   EVAL      §MsgID = 'USR8219'
+     C                   EVAL      §MsgDta = USR8219
      C                   GOTO      EPRF25
      C                   Endif
       *
      C     EPRF25        TAG
       *
      C     *IN99         IFEQ      '1'
-     C                   MOVEL (P) '1'           *IN25
-     C                   MOVEL (P) '1'           *IN35
+     C                   EVAL      *IN25 = '1'
+     C                   EVAL      *IN35 = '1'
      C                   Endif
       *
      C                   ENDSR
@@ -495,19 +492,19 @@
       *
      C     ##KEEPCRS     IFNE      bTrue
      C     ##KEEPCRS     ANDNE     bFalse
-     C                   MOVEL (P) '1'           *IN99
+     C                   EVAL      *IN99 = '1'
      C                   CLEAR                   USR8219
-     C                   MOVEL (P) ##KEEPCRS     USR82191
-     C                   MOVEL (P) 'USR8219'     §MsgID
-     C                   MOVEL (P) USR8219       §MsgDta
+     C                   EVAL      USR82191 = ##KEEPCRS
+     C                   EVAL      §MsgID = 'USR8219'
+     C                   EVAL      §MsgDta = USR8219
      C                   GOTO      EPRF26
      C                   Endif
       *
      C     EPRF26        TAG
       *
      C     *IN99         IFEQ      '1'
-     C                   MOVEL (P) '1'           *IN26
-     C                   MOVEL (P) '1'           *IN36
+     C                   EVAL      *IN26 = '1'
+     C                   EVAL      *IN36 = '1'
      C                   Endif
       *
      C                   ENDSR
@@ -520,19 +517,19 @@
       *
      C     ##SAVE        IFNE      bTrue
      C     ##SAVE        ANDNE     bFalse
-     C                   MOVEL (P) '1'           *IN99
+     C                   EVAL      *IN99 = '1'
      C                   CLEAR                   USR8219
-     C                   MOVEL (P) ##SAVE        USR82191
-     C                   MOVEL (P) 'USR8219'     §MsgID
-     C                   MOVEL (P) USR8219       §MsgDta
+     C                   EVAL      USR82191 = ##SAVE
+     C                   EVAL      §MsgID = 'USR8219'
+     C                   EVAL      §MsgDta = USR8219
      C                   GOTO      EPRF21
      C                   Endif
       *
      C     EPRF21        TAG
       *
      C     *IN99         IFEQ      '1'
-     C                   MOVEL (P) '1'           *IN21
-     C                   MOVEL (P) '1'           *IN31
+     C                   EVAL      *IN21 = '1'
+     C                   EVAL      *IN31 = '1'
      C                   Endif
       *
      C                   ENDSR
@@ -544,23 +541,23 @@
      C     BZOFF1        BEGSR
       *
       *  DSPATR(PC)
-     C                   MOVEL (P) '0'           *IN20                         ##CASE
-     C                   MOVEL (P) '0'           *IN21                         ##SAVE
-     C                   MOVEL (P) '0'           *IN22                         ##ALWLC
-     C                   MOVEL (P) '0'           *IN23                         ##RCDLCK
-     C                   MOVEL (P) '0'           *IN25                         ##NULLDFT
-     C                   MOVEL (P) '0'           *IN26                         ##KEEPCRS
+     C                   EVAL      *IN20 = '0'                                  ##CASE
+     C                   EVAL      *IN21 = '0'                                  ##SAVE
+     C                   EVAL      *IN22 = '0'                                  ##ALWLC
+     C                   EVAL      *IN23 = '0'                                  ##RCDLCK
+     C                   EVAL      *IN25 = '0'                                  ##NULLDFT
+     C                   EVAL      *IN26 = '0'                                  ##KEEPCRS
       *
       *  DSPATR(RI)
-     C                   MOVEL (P) '0'           *IN30                         ##CASE
-     C                   MOVEL (P) '0'           *IN31                         ##SAVE
-     C                   MOVEL (P) '0'           *IN32                         ##ALWLC
-     C                   MOVEL (P) '0'           *IN33                         ##RCDLCK
-     C                   MOVEL (P) '0'           *IN35                         ##NULLDFT
-     C                   MOVEL (P) '0'           *IN36                         ##KEEPCRS
+     C                   EVAL      *IN30 = '0'                                  ##CASE
+     C                   EVAL      *IN31 = '0'                                  ##SAVE
+     C                   EVAL      *IN32 = '0'                                  ##ALWLC
+     C                   EVAL      *IN33 = '0'                                  ##RCDLCK
+     C                   EVAL      *IN35 = '0'                                  ##NULLDFT
+     C                   EVAL      *IN36 = '0'                                  ##KEEPCRS
       *
       *  Fehler
-     C                   MOVEL (P) '0'           *IN99
+     C                   EVAL      *IN99 = '0'
       *
      C                   ENDSR
       *
@@ -572,18 +569,18 @@
       *
      C                   Callp     p_rmvPgmMg(§§pgmName)
       *
-     C                   MOVEL (P) 'USR8100'     XMsgID
+     C                   EVAL      XMsgID = 'USR8100'
       *
      C                   SELECT
      C     §ScnAID       WHENEQ    §F3
-     C                   MOVEL (P) 'F3'          USR81001
+     C                   EVAL      USR81001 = 'F3'
      C     §ScnAID       WHENEQ    §F12
-     C                   MOVEL (P) 'F12'         USR81001
+     C                   EVAL      USR81001 = 'F12'
      C                   OTHER
-     C                   MOVEL (P) 'Fxx'         USR81001
+     C                   EVAL      USR81001 = 'Fxx'
      C                   Endsl
       *
-     C                   MOVEL (P) USR8100       XMsgDta
+     C                   EVAL      XMsgDta = USR8100
       *
      C                   ENDSR
       *
@@ -604,7 +601,7 @@
       *
      C     C_MoreKeys    BEGSR
       *
-     C                   ADD       1             SFBOT
+     C                   EVAL      SFBOT = SFBOT + 1
       *
      C                   ENDSR
       *
@@ -631,16 +628,16 @@
       *
      C     XDsp80        IFEQ      '0'
       *   132-Zeichen Anzeige
-     C                   MOVEL (P) '0'           *IN88
-     C                   Z-ADD     6             ZEI
-     C                   ADD       1             ZEI
-     C                   Z-ADD     40            POS
+     C                   EVAL      *IN88 = '0'
+     C                   EVAL      ZEI = 6
+     C                   EVAL      ZEI = 1
+     C                   EVAL      POS = 40
      C                   ELSE
       *    80-Zeichen Anzeige
-     C                   MOVEL (P) '1'           *IN88
-     C                   Z-ADD     4             ZEI
-     C                   ADD       3             ZEI
-     C                   Z-ADD     7             POS
+     C                   EVAL      *IN88 = '1'
+     C                   EVAL      ZEI = 4
+     C                   EVAL      ZEI = 3
+     C                   EVAL      POS = 7
      C                   Endif
       *
      C                   ENDSR
@@ -663,11 +660,11 @@
      C     SavUsrSetg    BEGSR
       *
       *  *CRTPGM
-     C                   MOVEL (P) ##CASE        SET_CASE
-     C                   MOVEL (P) ##RCDLCK      SET_RCD_LOCK
-     C                   MOVEL (P) ##ALWLC       SET_ALWLC
-     C                   MOVEL (P) ##NULLDFT     SET_NULL_DFT
-     C                   MOVEL (P) ##KEEPCRS     SET_KEEP_CRS
+     C                   EVAL      SET_CASE = ##CASE
+     C                   EVAL      SET_RCD_LOCK = ##RCDLCK
+     C                   EVAL      SET_ALWLC = ##ALWLC
+     C                   EVAL      SET_NULL_DFT = ##NULLDFT
+     C                   EVAL      SET_KEEP_CRS = ##KEEPCRS
      C                   Callp     p_updUsrSg('*CRTPGM': SET0012)
       *
      C                   ENDSR
@@ -691,19 +688,14 @@
       * - Programm initialisieren
      C                   Callp     p_rmvPgmMg(§§pgmName)
       *
-     C                   MOVEL (P) *BLANKS       XMsgID
-     C                   MOVEL (P) *BLANKS       XMsgDta
+     C                   EVAL      XMsgID = *BLANKS
+     C                   EVAL      XMsgDta = *BLANKS
       *
       * - Darstellung der Befehlstasten
-     C                   Z-ADD     1             SfBot
+     C                   EVAL      SfBot = 1
       *
       * - Einstellen der Bildschirmauflösung 80/132-Zeichen
      C                   EXSR      SetScreen
-      *
-      * - Copyright
-      ***                MOVEL (P) 'USR9999'     §MsgID
-      ***                MOVEL (P) XCopyRight    §MsgDta
-      ***                Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
       *
      C                   ENDSR
       *
@@ -720,10 +712,9 @@
       *
      C                   Eval      yPgm    = §§PgmName
      C                   Eval      yKey    = '*ALL'
-      ***                Eval      yPosF24 = NbrFKeys
      C                   Eval      yPosF24 = *ZEROS
      C                   Call      PEEK23        P_Peek23
-     C                   Movea (P) yFKeys        ScrnFKeys
+     C                   Eval      ScrnFKeys = %subarr(yFKeys: 1)
       *
      C                   Endsr
       *
@@ -736,8 +727,4 @@
      C                   DUMP
       *
      C                   ENDSR     '*CANCL'
-      *
-      *---Nachrichten--------------------------------------*
- CPY  ***/COPY QCOPYLE,MSG_C_MAPI
-      *----------------------------------------------------*
       *

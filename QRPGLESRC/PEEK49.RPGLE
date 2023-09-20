@@ -15,6 +15,14 @@
       *  "About" Dialog                                               *
       *                                                               *
       *===============================================================*
+      * >>PRE-COMPILER<<                                              *
+      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
+      *===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
       *
@@ -28,6 +36,7 @@
       *
       *---Variablendefinition------------------------------*
       /COPY QCOPYLE,D_VARDEF
+      /COPY QCOPYLE,FLDL0100
       *----------------------------------------------------*
       *
       *---Variablendefinition ShortCmd---------------------*
@@ -136,7 +145,7 @@
      C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
       *
       *  Nachrichten anzeigen
-     C                   MOVE      '0'           *IN89
+     C                   EVAL      *IN89 = '0'
      C                   WRITE     MSGCTL
       *
       *  Anzeigen der Befehlstasten
@@ -176,7 +185,7 @@
      C                   WRITE     PBBOT#12                                     BT-Tasten 4
      C                   OTHER
      C                   WRITE     PBBOT#1                                      BT-Tasten 1
-     C                   Z-ADD     1             SFBOT
+     C                   EVAL      SFBOT = 1
      C                   Endsl
       *
       *  Anzeigen Bildschirm
@@ -190,12 +199,12 @@
       *
       *  Mappen der gedrückten Taste
       *  in Programmbefehl
-     C                   MOVEL (P) §ScnAID       YScnAID
-     C                   MOVEL (P) §§PgmName     YPgm
+     C                   EVAL      YScnAID = §ScnAID
+     C                   EVAL      YPgm = §§PgmName
      C                   CALL      PEEK21        P_Peek21
      C     YMsgID        IFNE      *BLANKS
-     C                   MOVEL (P) YMsgID        §MsgID
-     C                   MOVEL (P) YMsgDta       §MsgDta
+     C                   EVAL      §MsgID = YMsgID
+     C                   EVAL      §MsgDta = YMsgDta
      C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
      C                   ITER
      C                   Endif
@@ -225,8 +234,8 @@
      C     YPgmCmd       WHENEQ    '*ENTER'
      C                   EXSR      C_Enter
      C     *IN99         IFEQ      '0'
-     C                   MOVEL (P) 'USR8112'     XMsgID
-     C                   MOVEL (P) *BLANKS       XMsgDta
+     C                   EVAL      XMsgID = 'USR8112'
+     C                   EVAL      XMsgDta = *BLANKS
      C                   LEAVE
      C                   Endif
       *
@@ -268,7 +277,7 @@
       *  DSPATR(RI)
       *
       *  Fehler
-     C                   MOVEL (P) '0'           *IN99
+     C                   EVAL      *IN99 = '0'
       *
      C                   ENDSR
       *
@@ -280,18 +289,18 @@
       *
      C                   Callp     p_rmvPgmMg(§§pgmName)
       *
-     C                   MOVEL (P) 'USR8100'     XMsgID
+     C                   EVAL      XMsgID = 'USR8100'
       *
      C                   SELECT
      C     §ScnAID       WHENEQ    §F3
-     C                   MOVEL (P) 'F3'          USR81001
+     C                   EVAL      USR81001 = 'F3'
      C     §ScnAID       WHENEQ    §F12
-     C                   MOVEL (P) 'F12'         USR81001
+     C                   EVAL      USR81001 = 'F12'
      C                   OTHER
-     C                   MOVEL (P) 'Fxx'         USR81001
+     C                   EVAL      USR81001 = 'Fxx'
      C                   Endsl
       *
-     C                   MOVEL (P) USR8100       XMsgDta
+     C                   EVAL      XMsgDta = USR8100
       *
      C                   ENDSR
       *
@@ -312,7 +321,7 @@
       *
      C     C_MoreKeys    BEGSR
       *
-     C                   ADD       1             SFBOT
+     C                   EVAL      SFBOT = SFBOT + 1
       *
      C                   ENDSR
       *
@@ -322,12 +331,12 @@
       *
      C     FILL##        BEGSR
       *
-     C                   MOVEL (P) XCopyRight    $$CpyRight
-     C                   SUBST (P) XRelease:8    $$Release
+     C                   EVAL      $$CpyRight = XCopyRight
       *
-     C     2             SUBST (P) XVersion:2    R$Vers
-     C     2             SUBST (P) XVersion:5    R$Modf
-     C     2             SUBST (P) XVersion:8    R$Rels
+     C                   EVAL      $$Release = %subst(XRelease: 8)
+     C                   EVAL      R$Vers = %subst(XVersion: 2: 2)
+     C                   EVAL      R$Modf = %subst(XVersion: 5: 2)
+     C                   EVAL      R$Rels = %subst(XVersion: 8: 2)
       *
      C                   IF        %subst(R$Vers: 1: 1) = '0'
      C                   EVAL      %subst(R$Vers: 1: 1) = ' '
@@ -356,16 +365,16 @@
       *
      C     XDsp80        IFEQ      '0'
       *   132-Zeichen Anzeige
-     C                   MOVEL (P) '0'           *IN88
-     C                   Z-ADD     6             ZEI
-     C                   ADD       1             ZEI
-     C                   Z-ADD     26            POS
+     C                   EVAL      *IN88 = '0'
+     C                   EVAL      ZEI = 6
+     C                   EVAL      ZEI = ZEI + 1
+     C                   EVAL      POS = 26
      C                   ELSE
       *    80-Zeichen Anzeige
-     C                   MOVEL (P) '1'           *IN88
-     C                   Z-ADD     4             ZEI
-     C                   ADD       3             ZEI
-     C                   Z-ADD     7             POS
+     C                   EVAL      *IN88 = '1'
+     C                   EVAL      ZEI = 4
+     C                   EVAL      ZEI = ZEI + 3
+     C                   EVAL      POS = 7
      C                   Endif
       *
      C                   ENDSR
@@ -386,19 +395,14 @@
       * - Programm initialisieren
      C                   Callp     p_rmvPgmMg(§§pgmName)
       *
-     C                   MOVEL (P) *BLANKS       XMsgID
-     C                   MOVEL (P) *BLANKS       XMsgDta
+     C                   EVAL      XMsgID = *BLANKS
+     C                   EVAL      XMsgDta = *BLANKS
       *
       * - Darstellung der Befehlstasten
-     C                   Z-ADD     1             SfBot
+     C                   EVAL      SfBot = 1
       *
       * - Einstellen der Bildschirmauflösung 80/132-Zeichen
      C                   EXSR      SetScreen
-      *
-      * - Copyright
-      ***                MOVEL (P) 'USR9999'     §MsgID
-      ***                MOVEL (P) XCopyRight    §MsgDta
-      ***                Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
       *
      C                   ENDSR
       *
@@ -415,10 +419,9 @@
       *
      C                   Eval      yPgm    = §§PgmName
      C                   Eval      yKey    = '*ALL'
-      ***                Eval      yPosF24 = NbrFKeys
      C                   Eval      yPosF24 = *ZEROS
      C                   Call      PEEK23        P_Peek23
-     C                   Movea (P) yFKeys        ScrnFKeys
+     C                   Eval      ScrnFKeys = %subarr(yFKeys: 1)
       *
      C                   Endsr
       *

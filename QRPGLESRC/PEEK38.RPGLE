@@ -14,12 +14,21 @@
       *                                                               *
       *  Peek/400 - Erstellen SQL ORDER BY                            *
       *                                                               *
+      * ============================================================= *
+      * >>PRE-COMPILER<<                                              *
+*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
       *===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
       *
       *---Variablendefinition------------------------------*
       /COPY QCOPYLE,D_VARDEF
+      /COPY QCOPYLE,FLDL0100
       *----------------------------------------------------*
       *
       *---SDS-Datenstruktur--------------------------------*
@@ -79,23 +88,23 @@
       *---------------------------------------------------*
       *
       *  Einlesen der Dateiinformationen ...
-     C                   MOVEL (P) XFile         YFileDS
-     C                   MOVEL (P) XLib          YLibDS
-     C                   MOVEL (P) '*FIRST'      YRcdFormat
-     C                   MOVEL (P) '*CREATE'     YFunction
+     C                   EVAL      YFileDS = XFile
+     C                   EVAL      YLibDS = XLib
+     C                   EVAL      YRcdFormat = '*FIRST'
+     C                   EVAL      YFunction = '*CREATE'
      C                   CALL      PEEK41        P_Peek41
       *
       *  Einlesen der Schlüsselinformationen ...
-     C                   MOVEL (P) '*KEY'        YFunction
+     C                   EVAL      YFunction = '*KEY'
      C                   CALL      PEEK41        P_Peek41
-     C                   Z-ADD     YNbrOfEnt     NbrOfKey
+     C                   EVAL      NbrOfKey = YNbrOfEnt
       *
      C                   Eval      tempField = ' '
       *
      C     1             Do        NbrOfKey
-     C                   MOVEL (P) '*READKEY'    YFunction
+     C                   EVAL      YFunction = '*READKEY'
      C                   CALL      PEEK41        P_Peek41
-     C                   MOVEL (P) YData         KEYL0100
+     C                   EVAL      KEYL0100 = YData
       *
      C                   If        tempField = *BLANKS
      C                   Eval      tempField = %trim(tempField) +

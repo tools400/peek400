@@ -15,12 +15,21 @@
       *                                                               *
       *  Einlesen der F-Tastenbelegung                                *
       *                                                               *
+      * ============================================================= *
+      * >>PRE-COMPILER<<                                              *
+*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
       *===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
       *
       *---Variablendefinition------------------------------*
       /COPY QCOPYLE,D_VARDEF
+      /COPY QCOPYLE,FLDL0100
       *----------------------------------------------------*
       *
       *---Nachrichten--------------------------------------*
@@ -78,8 +87,8 @@
       *
       *----------------------------------------------------*
       *
-     C                   MOVEA (P) *BLANKS       XFKeys
-     C                   Z-ADD     *ZEROS        XNbrOfKeys
+     C                   EVAL      XFKeys(*) = *BLANKS
+     C                   EVAL      XNbrOfKeys = *ZEROS
       *
      C                   EXSR      GetKeyMap
       *
@@ -91,10 +100,10 @@
       *
      C     GetKeyMap     BEGSR
       *
-     C                   Z-ADD     1             X
-     C                   MOVEL (P) *BLANKS       R_MsgID
-     C                   MOVEL (P) *BLANKS       R_Key
-     C                   Z-ADD     XPosF24       R_PosF24
+     C                   EVAL      X = 1
+     C                   EVAL      R_MsgID = *BLANKS
+     C                   EVAL      R_Key = *BLANKS
+     C                   EVAL      R_PosF24 = XPosF24
       *
       *  Hilfetaste
      C                   If        (xKey =  '*HELP')  or
@@ -129,13 +138,13 @@
      C     XNbrOfKeys    DIV       XPosF24       Y
      C     Y             MULT      XPosF24       X
      C     XNbrOfKeys    IFNE      X
-     C                   ADD       1             Y
+     C                   EVAL      Y = Y + 1
      C                   Endif
      C                   MULT      XPosF24       Y
       *
      C     XPosF24       DO        Y             X
-     C                   MOVEL (P) R_MsgID       wrk_MsgID                                   R
-     C                   MOVEL (P) R_Key         Wrk_Key
+     C                   EVAL      wrk_MsgID = R_MsgID                                   R
+     C                   EVAL      Wrk_Key = R_Key
      C                   EXSR      FillField
      C                   Enddo     XPosF24
       *
@@ -164,27 +173,27 @@
      C                   Iter
      C                   Endif
       *
-     C                   MOVEL (P) *BLANKS       wrk_MsgID
-     C                   MOVEL (P) *BLANKS       wrk_MsgTxt
+     C                   EVAL      wrk_MsgID = *BLANKS
+     C                   EVAL      wrk_MsgTxt = *BLANKS
       *
       /COPY QCOPYLE,MAPPCMDMSG
       *
      C     Data          IFEQ      '*MOREKEYS'
-     C                   MOVEL (P) wrk_MsgID     R_MsgID
-     C                   MOVEL (P) Wrk_Key       R_Key
+     C                   EVAL      R_MsgID = wrk_MsgID
+     C                   EVAL      R_Key = Wrk_Key
      C                   ELSE
       *
      C                   EXSR      FillField
-     C                   ADD       1             X
-     C                   ADD       1             XNbrOfKeys
+     C                   EVAL      X = X + 1
+     C                   EVAL      XNbrOfKeys = XNbrOfKeys + 1
      C                   Endif
       *
       *  *MOREKEYS
      C     X             IFEQ      R_PosF24
       *  ... Platz reservieren
-     C                   ADD       1             X
-     C                   ADD       1             XNbrOfKeys
-     C                   ADD       XPosF24       R_PosF24
+     C                   EVAL      X = X + 1
+     C                   EVAL      XNbrOfKeys = XNbrOfKeys + 1
+     C                   EVAL      R_PosF24 = R_PosF24 + XPosF24
      C                   Endif
       *
      C     X             IFGT      32
@@ -203,9 +212,9 @@
       *
      C     wrk_MsgID     IFEQ      *BLANKS
       *   Fehler ...
-     C                   MOVEL (P) *ALL'?'       wrk_MsgTxt
+     C                   EVAL      wrk_MsgTxt = *ALL'?'
      C                   ELSE
-     C     'KEY'         CAT   (P) wrk_MsgID:0   wrk_MsgID
+     C                   Eval      wrk_MsgID = 'KEY' + %trim(wrk_MsgID)
      C                   Eval      wrk_MsgTxt = f_msgText(wrk_MsgID: ' ')
      C                   Endif
       *
@@ -214,16 +223,16 @@
      C                   Eval      XFKeys(X) = 'F1'
      C                   Other
      C     Wrk_Key       IFGE      '*F10'
-     C                   SUBST (P) Wrk_Key:2     XFKeys(X)
+     C                   EVAL      XFKeys(X) = %subst(Wrk_Key: 2)
      C                   ELSE
-     C     1             SUBST (P) Wrk_Key:2     A1
-     C                   SUBST (P) Wrk_Key:4     XFKeys(X)
-     C     A1            CAT   (P) XFKeys(X)     XFKeys(X)
+     C                   EVAL      A1 = %subst(Wrk_Key: 2: 1)
+     C                   EVAL      XFKeys(X) = %subst(Wrk_Key: 4)
+     C                   EVAL      XFKeys(X) = %trimr(A1) + XFKeys(X)
      C                   Endif
      C                   Endsl
       *
-     C                   CAT       '=':0         XFKeys(X)
-     C                   CAT       wrk_MsgTxt:0  XFKeys(X)
+     C                   EVAL      XFKeys(X) =
+     C                               %trimr(XFKeys(X)) + '=' + %trim(wrk_MsgTxt)
       *
      C                   ENDSR
       *

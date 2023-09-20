@@ -14,6 +14,14 @@
       *                                                               *
       *  Konvertieren Datenformat für Kurzbefehl                      *
       *                                                               *
+      * ============================================================= *
+      * >>PRE-COMPILER<<                                              *
+*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
       *===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
@@ -153,8 +161,6 @@
       *========================================================================*
      P main...
      P                 B
-      *
-     D main...
      D                 PI
      D  io_Buffer                                 like(XBuffer      )
      D  io_Length                                 like(XLength      )
@@ -180,8 +186,6 @@
          return;
 
       /END-FREE
-      *
-     P main...
      P                 E
       *
       *========================================================================*
@@ -189,8 +193,6 @@
       *========================================================================*
      P convertFromNumeric...
      P                 B
-      *
-     D convertFromNumeric...
      D                 PI
      D  io_Buffer                                 like(XBuffer      )
      D  io_Length                                 like(XLength      )
@@ -213,8 +215,6 @@
          return;
 
       /END-FREE
-      *
-     P convertFromNumeric...
      P                 E
       *
       *========================================================================*
@@ -222,8 +222,6 @@
       *========================================================================*
      P convertFromString...
      P                 B
-      *
-     D convertFromString...
      D                 PI
      D  io_Buffer                                 like(XBuffer      )
      D  io_Length                                 like(XLength      )
@@ -246,8 +244,6 @@
          return;
 
       /END-FREE
-      *
-     P convertFromString...
      P                 E
       *
       *========================================================================*
@@ -255,8 +251,6 @@
       *========================================================================*
      P convertToNumeric...
      P                 B
-      *
-     D convertToNumeric...
      D                 PI
      D  io_Buffer                                 like(XBuffer      )
      D  io_Length                                 like(XLength      )
@@ -347,8 +341,6 @@
          return;
 
       /END-FREE
-      *
-     P convertToNumeric...
      P                 E
       *
       *========================================================================*
@@ -356,8 +348,6 @@
       *========================================================================*
      P convertToString...
      P                 B
-      *
-     D convertToString...
      D                 PI
      D  io_Buffer                                 like(XBuffer      )
      D  io_Length                                 like(XLength      )
@@ -372,13 +362,9 @@
          io_Buffer = %subst(io_Buffer: 1: i_OutFormat.F1FLEN);
          io_Length = i_OutFormat.F1FLEN;
 
-         // io_Buffer = cQUOTE + %subst(io_Buffer: 1: io_Length) + cQUOTE;
-         // io_Length = io_Length + %len(cQUOTE) * 2;
-
          return;
 
       /END-FREE
       *
-     P convertToString...
      P                 E
       *

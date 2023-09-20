@@ -16,6 +16,14 @@
       *                                                               *
       *  Erfassen der Suchkriterien                                   *
       *                                                               *
+      * ============================================================= *
+      * >>PRE-COMPILER<<                                              *
+*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
       *===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
@@ -250,7 +258,7 @@
      C                   WRITE     PBBOT#6                                      BT-Tasten 4
      C                   OTHER
      C                   WRITE     PBBOT#1                                      BT-Tasten 1
-     C                   Z-ADD     1             SFBOT
+     C                   EVAL      SFBOT = 1
      C                   Endsl
       *
       *  Anzeigen Bildschirm
@@ -264,12 +272,12 @@
       *
       *  Mappen der gedrückten Taste
       *  in Programmbefehl
-     C                   MOVEL (P) §ScnAID       YScnAID
-     C                   MOVEL (P) §§PgmName     YPgm
+     C                   EVAL      YScnAID = §ScnAID
+     C                   EVAL      YPgm = §§PgmName
      C                   CALL      PEEK21        P_Peek21
      C     YMsgID        IFNE      *BLANKS
-     C                   MOVEL (P) YMsgID        §MsgID
-     C                   MOVEL (P) YMsgDta       §MsgDta
+     C                   EVAL      §MsgID = YMsgID
+     C                   EVAL      §MsgDta = YMsgDta
      C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
      C                   ITER
      C                   Endif
@@ -304,8 +312,8 @@
      C     YPgmCmd       WHENEQ    '*ENTER'
      C                   EXSR      C_Enter
      C     *IN99         IFEQ      '0'
-     C                   MOVEL (P) 'USR8112'     XMsgID
-     C                   MOVEL (P) *BLANKS       XMsgDta
+     C                   EVAL      XMsgID = 'USR8112'
+     C                   EVAL      XMsgDta = *BLANKS
      C                   LEAVE
      C                   Endif
       *
@@ -335,17 +343,17 @@
      C     C_Enter       BEGSR
       *
      C     §MsgID        IFNE      *BLANKS
-     C                   MOVEL (P) '1'           *IN99
+     C                   EVAL      *IN99 = '1'
      C                   ELSE
       *
-     C                   MOVEL (P) ##FIELD       R_FIELD
+     C                   EVAL      R_FIELD = ##FIELD
       *
       *  Prompt?
       *  ... ##Field
      C                   IF        %trim(##Field ) = SET_PRMT
      C                   EXSR      C_Prompt
      C     §MsgID        IFNE      *BLANKS
-     C                   MOVEL (P) '1'           *IN99
+     C                   EVAL      *IN99 = '1'
      C                   GOTO      E_Enter
      C                   ELSE
       *  ...?
@@ -355,11 +363,11 @@
      C                   EXSR      PRFB1
       *
      C     ##FIELD       IFNE      R_FIELD
-     C                   MOVEL (P) bTrue         MustWait
+     C                   EVAL      MustWait = bTrue
      C                   Endif
       *
      C     MustWait      IFEQ      bTrue
-     C                   MOVEL (P) '1'           *IN99
+     C                   EVAL      *IN99 = '1'
      C                   ELSE
       *  Wert belassen ...
      C                   Endif
@@ -368,27 +376,27 @@
      C     E_Enter       TAG
       *
      C     *IN99         IFEQ      '0'
-     C                   MOVEL (P) ##FIELD       XField
-     C                   MOVEL (P) ##OP          XOperation
-     C                   MOVEL (P) R_Arg30       XArgument
-     C                   MOVEL (P) ##Sign        XSign
-     C                   Z-ADD     ##NBRS        XSrchNbrs
+     C                   EVAL      XField = ##FIELD
+     C                   EVAL      XOperation = ##OP
+     C                   EVAL      XArgument = R_Arg30
+     C                   EVAL      XSign = ##Sign
+     C                   EVAL      XSrchNbrs = ##NBRS
       *
      C                   SELECT
      C     ##TYPE        WHENEQ    'U'
-     C                   MOVEL (P) '*UNDERLINE'  XSrchType
+     C                   EVAL      XSrchType = '*UNDERLINE'
      C     ##TYPE        WHENEQ    'R'
-     C                   MOVEL (P) '*REVERSE'    XSrchType
+     C                   EVAL      XSrchType = '*REVERSE'
      C     ##TYPE        WHENEQ    'P'
-     C                   MOVEL (P) '*PINROW'     XSrchType
+     C                   EVAL      XSrchType = '*PINROW'
      C                   OTHER
-     C                   MOVEL (P) '*NORMAL'     XSrchType
+     C                   EVAL      XSrchType = '*NORMAL'
      C                   Endsl
       *
-     C                   MOVEL (P) ##CASE        XSrchCase
+     C                   EVAL      XSrchCase = ##CASE
       *
-     C                   MOVEL (P) 'USR8112'     XMsgID
-     C                   MOVEL (P) *BLANKS       XMsgDta
+     C                   EVAL      XMsgID = 'USR8112'
+     C                   EVAL      XMsgDta = *BLANKS
      C                   Endif
       *
      C                   ENDSR
@@ -400,23 +408,23 @@
      C     BZOFF1        BEGSR
       *
       *  DSPATR(PC)
-     C                   MOVEL (P) '0'           *IN20                         ##FIELD
-     C                   MOVEL (P) '0'           *IN21                         ##OP
-     C                   MOVEL (P) '0'           *IN22                         ##ARG
-     C                   MOVEL (P) '0'           *IN23                         ##NBRS
-     C                   MOVEL (P) '0'           *IN24                         ##TYPE
-     C                   MOVEL (P) '0'           *IN25                         ##CASE
+     C                   EVAL      *IN20 = '0'                                  ##FIELD
+     C                   EVAL      *IN21 = '0'                                  ##OP
+     C                   EVAL      *IN22 = '0'                                  ##ARG
+     C                   EVAL      *IN23 = '0'                                  ##NBRS
+     C                   EVAL      *IN24 = '0'                                  ##TYPE
+     C                   EVAL      *IN25 = '0'                                  ##CASE
       *
       *  DSPATR(RI)
-     C                   MOVEL (P) '0'           *IN30                         ##FIELD
-     C                   MOVEL (P) '0'           *IN31                         ##OP
-     C                   MOVEL (P) '0'           *IN32                         ##ARG
-     C                   MOVEL (P) '0'           *IN33                         ##NBRS
-     C                   MOVEL (P) '0'           *IN34                         ##TYPE
-     C                   MOVEL (P) '0'           *IN35                         ##CASE
+     C                   EVAL      *IN30 = '0'                                  ##FIELD
+     C                   EVAL      *IN31 = '0'                                  ##OP
+     C                   EVAL      *IN32 = '0'                                  ##ARG
+     C                   EVAL      *IN33 = '0'                                  ##NBRS
+     C                   EVAL      *IN34 = '0'                                  ##TYPE
+     C                   EVAL      *IN35 = '0'                                  ##CASE
       *
       *  Fehler
-     C                   MOVEL (P) '0'           *IN99
+     C                   EVAL      *IN99 = '0'
       *
      C                   ENDSR
       *
@@ -426,24 +434,24 @@
       *
      C     PRFB1         BEGSR
       *
-     C                   MOVEL (P) bFalse        MustWait
+     C                   EVAL      MustWait = bFalse
       *
-     C                   EXSR      PRF20                                       Field
+     C                   EXSR      PRF20                                        Field
      C     *IN99         CABEQ     '1'           EPRFB1
       *
-     C                   EXSR      PRF21                                       Operation
+     C                   EXSR      PRF21                                        Operation
      C     *IN99         CABEQ     '1'           EPRFB1
       *
-     C                   EXSR      PRF22                                       Argument
+     C                   EXSR      PRF22                                        Argument
      C     *IN99         CABEQ     '1'           EPRFB1
       *
-     C                   EXSR      PRF23                                       Search Nbrs
+     C                   EXSR      PRF23                                        Search Nbrs
      C     *IN99         CABEQ     '1'           EPRFB1
       *
-     C                   EXSR      PRF24                                       Search Type
+     C                   EXSR      PRF24                                        Search Type
      C     *IN99         CABEQ     '1'           EPRFB1
       *
-     C                   EXSR      PRF25                                       Case-Sens.
+     C                   EXSR      PRF25                                        Case-Sens.
      C     *IN99         CABEQ     '1'           EPRFB1
       *
      C     EPRFB1        ENDSR
@@ -458,18 +466,18 @@
       *        suchen im ganzen Datensatz
      C                   ELSE
       *
-     C                   MOVEL (P) ##FIELD       F_FIELD
+     C                   EVAL      F_FIELD = ##FIELD
      C     F_KEY         CHAIN     FPEEKFLD                           11
      C     *IN11         IFEQ      '1'
       *  Fehlermeldung ...
-     C                   MOVEL (P) '1'           *IN99
+     C                   EVAL      *IN99 = '1'
      C                   CLEAR                   USR8136
-     C                   MOVEL (P) 'USR8136'     §MsgID
-     C                   MOVEL (P) ##Field       USR81361                       Feldname
-     C                   MOVEL (P) USR8136       §MsgDta
+     C                   EVAL      §MsgID = 'USR8136'
+     C                   EVAL      USR81361 = ##Field                           Feldname
+     C                   EVAL      §MsgDta = USR8136
      C                   GOTO      EPRF20
      C                   ELSE
-     C                   MOVEL (P) F_FFD         FLDL0100
+     C                   EVAL      FLDL0100 = F_FFD
      C                   Endif
       *
       ***                EXSR      ChkNumeric
@@ -482,7 +490,7 @@
      C                             FLDL0100.F1DTyp <> 'T' and                   Time
      C                             FLDL0100.F1DTyp <> 'L' and                   Date
      C                             FLDL0100.F1DTyp <> 'F'                       Float
-     C                   MOVEL (P) '1'           *IN99
+     C                   EVAL      *IN99 = '1'
      C                   CLEAR                   USR8129
      C                   EVAL      §MsgID = 'USR8129'
      C                   EVAL      USR81291 = ##Field                           Feldname
@@ -496,8 +504,8 @@
      C     EPRF20        TAG
       *
      C     *IN99         IFEQ      '1'
-     C                   MOVEL (P) '1'           *IN20
-     C                   MOVEL (P) '1'           *IN30
+     C                   EVAL      *IN20 = '1'
+     C                   EVAL      *IN30 = '1'
      C                   Endif
       *
      C                   ENDSR
@@ -516,11 +524,11 @@
      C     ##OP          ANDNE     'GE'
      C     ##OP          ANDNE     'LIKE'
      C     ##OP          ANDNE     'NLIKE'
-     C                   MOVEL (P) '1'           *IN99
+     C                   EVAL      *IN99 = '1'
      C                   CLEAR                   USR8124
-     C                   MOVEL (P) 'USR8124'     §MsgID
-     C                   MOVEL (P) ##OP          USR81241                       Operation
-     C                   MOVEL (P) USR8124       §MsgDta
+     C                   EVAL      §MsgID = 'USR8124'
+     C                   EVAL      USR81241 = ##OP                              Operation
+     C                   EVAL      §MsgDta = USR8124
      C                   GOTO      EPRF21
      C                   Endif
       *
@@ -533,7 +541,7 @@
      C                   IF        FLDL0100.F1DTyp <> 'A' and                   alpha-num
      C                             FLDL0100.F1DTyp <> 'L' and                   Date
      C                             FLDL0100.F1DTyp <> 'T'                       Time
-     C                   MOVEL (P) '1'           *IN99
+     C                   EVAL      *IN99 = '1'
      C                   CLEAR                   USR8135
      C                   EVAL      §MsgID = 'USR8135'
      C                   EVAL      USR81351 = ##OP                              Operand
@@ -547,20 +555,20 @@
      C     ##FIELD       IFEQ      '*RECORD'
      C     ##OP          ANDNE     'LIKE'
      C     ##OP          ANDNE     'NLIKE'
-     C                   MOVEL (P) '1'           *IN99
+     C                   EVAL      *IN99 = '1'
      C                   CLEAR                   USR8134
-     C                   MOVEL (P) 'USR8134'     §MsgID
-     C                   MOVEL (P) ##OP          USR81341                       Operation
-     C                   MOVEL (P) ##FIELD       USR81342                       Feld
-     C                   MOVEL (P) USR8134       §MsgDta
+     C                   EVAL      §MsgID = 'USR8134'
+     C                   EVAL      USR81341 = ##OP                              Operation
+     C                   EVAL      USR81342 = ##FIELD                           Feld
+     C                   EVAL      §MsgDta = USR8134
      C                   GOTO      EPRF21
      C                   Endif
       *
      C     EPRF21        TAG
       *
      C     *IN99         IFEQ      '1'
-     C                   MOVEL (P) '1'           *IN21
-     C                   MOVEL (P) '1'           *IN31
+     C                   EVAL      *IN21 = '1'
+     C                   EVAL      *IN31 = '1'
      C                   Endif
       *
      C                   ENDSR
@@ -571,32 +579,33 @@
       *
      C     PRF22         BEGSR
       *
-     C                   MOVEL (P) *BLANKS       R_Sign
-     C                   MOVEL (P) *BLANKS       ##Sign
+     C                   EVAL      R_Sign = *BLANKS
+     C                   EVAL      ##Sign = *BLANKS
       *
      C     ##ARG         IFEQ      *BLANKS
-     C                   MOVEL (P) '1'           *IN99
-     C                   MOVEL (P) 'USR8140'     §MsgID
-     C                   MOVEL (P) USR8140       §MsgDta
+     C                   EVAL      *IN99 = '1'
+     C                   EVAL      §MsgID = 'USR8140'
+     C                   EVAL      §MsgDta = USR8140
      C                   GOTO      EPRF22
      C                   Endif
       *
       *  Umsetzen in internes Arbeitsfeld ...
-     C     cLOWER:cUPPER XLATE (P) ##Arg         R_Arg30
+     C**   cLOWER:cUPPER XLATE (P) ##Arg         R_Arg30
+     C                   EVAL      R_Arg30 = %xlate(cLOWER: cUPPER: ##Arg)
       *
      C                   SELECT
       *  Umsetzen des Sonderwertes "*BLANKS" ...
      C     R_Arg30       WHENEQ    '*BLANKS'
      C     R_Arg30       OREQ      '*BLANK'
-     C                   MOVEL (P) *BLANKS       R_Arg30
+     C                   EVAL      R_Arg30 = *BLANKS
       *
       *  Umsetzen des Sonderwertes "*ZEROS" ...
      C     R_Arg30       WHENEQ    '*ZEROS'
      C     R_Arg30       OREQ      '*ZERO'
-     C                   MOVEL (P) *ZEROS        R_Arg30
+     C                   EVAL      R_Arg30 = *ZEROS
      C                   OTHER
       *  ... aktuellen Wert belassen
-     C                   MOVEL (P) ##Arg         R_Arg30
+     C                   EVAL      R_Arg30 = ##Arg
      C                   ENDSL
       *
       *  Verarbeiten numerischer Werte ...
@@ -609,7 +618,7 @@
       *
       *  ... umsetzen *BLANKS in '+' Zeichen
      C     ##Sign        IFEQ      *BLANKS
-     C                   MOVEL (P) SET_SignP     ##Sign
+     C                   EVAL      ##Sign = SET_SignP
      C                   ELSE
       *      ... Vorzeichen stehen lassen
      C                   Endif
@@ -619,9 +628,9 @@
      C                   IF        FLDL0100.F1DTyp = 'F'                        Float
      C                   IF        f_vldFLoat(R_Arg30) = bFalse
      C                   EVAL      *IN99 = '1'
-     C                   MOVEL (P) 'USR8192'     §MsgID
-     C                   MOVEL (P) ##Field       USR81921
-     C                   MOVEL (P) USR8192       §MsgDta
+     C                   EVAL      §MsgID = 'USR8192'
+     C                   EVAL      USR81921 = ##Field
+     C                   EVAL      §MsgDta = USR8192
      C                   ENDIF
      C                   ELSE
      C                   EXSR      SrchPoint
@@ -636,12 +645,12 @@
       *  ... falsches Vorzeichen
      C     ##Sign        IFNE      SET_SignM
      C     ##Sign        ANDNE     SET_SignP
-     C                   MOVEL (P) '1'           *IN99
+     C                   EVAL      *IN99 = '1'
      C                   CLEAR                   USR8141
-     C                   MOVEL (P) 'USR8141'     §MsgID
-     C                   MOVEL (P) SET_SignP     USR81411
-     C                   MOVEL (P) SET_SignM     USR81412
-     C                   MOVEL (P) USR8141       §MsgDta
+     C                   EVAL      §MsgID = 'USR8141'
+     C                   EVAL      USR81411 = SET_SignP
+     C                   EVAL      USR81412 = SET_SignM
+     C                   EVAL      §MsgDta = USR8141
      C                   GOTO      EPRF22
      C                   ELSE
       *  ... richtiges Vorzeichen
@@ -650,14 +659,14 @@
      C                   ELSE
       *  Alpha-numerische Werte ...
       *  ... Vorzeichen
-     C                   MOVEL (P) *BLANKS       ##Sign
+     C                   EVAL      ##Sign = *BLANKS
      C                   Endif
       *
      C     EPRF22        TAG
       *
      C     *IN99         IFEQ      '1'
-     C                   MOVEL (P) '1'           *IN22
-     C                   MOVEL (P) '1'           *IN32
+     C                   EVAL      *IN22 = '1'
+     C                   EVAL      *IN32 = '1'
      C                   Endif
       *
      C                   ENDSR
@@ -674,17 +683,19 @@
       *   Wenn nicht gefunden, dann ist nichts zu tun ...
      C                   ELSE
       *   ansonsten das Zeichen extrahieren.
-     C     1             SUBST (P) R_Arg30:X     R_Sign
+     C**   1             SUBST (P) R_Arg30:X     R_Sign
+     C                   EVAL      R_Sign = %subst(R_Arg30: X: 1)
       *   Wenn das extrahierte Zeichen dem '+' oder '-'
       *   Zeichen entspricht, dann die Umsetzung vornehmen ...
      C     R_Sign        IFEQ      SET_SignM
      C     R_Sign        OREQ      SET_SignP
-     C                   MOVEL (P) R_Sign        ##Sign
-     C                   ADD       1             X
+     C                   EVAL      ##Sign = R_Sign
+     C                   EVAL      X = X + 1
      C     X             IFLE      30
-     C                   SUBST (P) R_Arg30:X     R_Arg30
+     C**                 SUBST (P) R_Arg30:X     R_Arg30
+     C                   EVAL      R_Arg30 = %subst(R_Arg30: x)
      C                   ELSE
-     C                   MOVEL (P) *BLANKS       R_Arg30
+     C                   EVAL      R_Arg30 = *BLANKS
      C                   Endif
      C                   ELSE
       *   ... ansonsten ist nix zu tun.
@@ -700,22 +711,25 @@
      C     SignRight     BEGSR
       *
       *   Suchen letztes Zeichen <> *BLANKS ...
-     C     ' '           CHECKR    R_Arg30       X
+     C**   ' '           CHECKR    R_Arg30       X
+     C                   EVAL      x = %checkr(' ': R_Arg30)
      C     X             IFEQ      *ZEROS
       *   Wenn nicht gefunden, dann ist nichts zu tun ...
      C                   ELSE
       *   ansonsten das Zeichen extrahieren.
-     C     1             SUBST (P) R_Arg30:X     R_Sign
+     C**   1             SUBST (P) R_Arg30:X     R_Sign
+     C                   EVAL      R_Sign = %subst(R_Arg30: X: 1)
       *   Wenn das extrahierte Zeichen dem '+' oder '-'
       *   Zeichen entspricht, dann die Umsetzung vornehmen ...
      C     R_Sign        IFEQ      SET_SignM
      C     R_Sign        OREQ      SET_SignP
-     C                   MOVEL (P) R_Sign        ##Sign
-     C                   SUB       1             X
+     C                   EVAL      ##Sign = R_Sign
+     C                   EVAL      X = X - 1
      C     X             IFGT      *ZEROS
-     C     X             SUBST (P) R_Arg30:1     R_Arg30
+     C**   X             SUBST (P) R_Arg30:1     R_Arg30
+     C                   EVAL      R_Arg30 = %subst(R_Arg30: 1: X)
      C                   ELSE
-     C                   MOVEL (P) *BLANKS       R_Arg30
+     C                   EVAL      R_Arg30 = *BLANKS
      C                   Endif
      C                   ELSE
       *   ... ansonsten ist nix zu tun.
@@ -738,29 +752,32 @@
      C     SET_Point     SCAN      R_Arg30       X
      C     X             IFEQ      *ZEROS
       *   Wenn nicht gefunden, dann Länge +1 ...
-     C     ' '           CHECKR    R_Arg30       X
-     C                   ADD       1             X
+     C**   ' '           CHECKR    R_Arg30       X
+     C                   EVAL      x = %checkr(' ': R_Arg30)
+     C                   EVAL      X = X + 1
      C                   Endif
       *
       *   ansonsten Vorkommastellen ...
-     C                   SUB       1             X
+     C                   EVAL      X = X - 1
      C     X             IFGT      *ZEROS
-     C     X             SUBST (P) R_Arg30:1     R_VorK
+     C**   X             SUBST (P) R_Arg30:1     R_VorK
+     C                   EVAL      R_VorK = %subst(R_Arg30: 1: X)
      C                   ELSE
-     C                   MOVEL (P) *BLANKS       R_VorK
+     C                   EVAL      R_VorK = *BLANKS
      C                   Endif
       *   ... und Nachkommastellen extrahieren
-     C                   ADD       2             X
+     C                   EVAL      X = X + 2
      C     X             IFLE      30
-     C                   SUBST (P) R_Arg30:X     R_NachK
+     C**                 SUBST (P) R_Arg30:X     R_NachK
+     C                   EVAL      R_NachK = %subst(R_Arg30: X)
      C                   ELSE
-     C                   MOVEL (P) *BLANKS       R_NachK
+     C                   EVAL      R_NachK = *BLANKS
      C                   Endif
       *
       *   Anzahl der Nachkommastellen auffüllen ...
      C                   IF        FLDL0100.F1DECP <= 0
       *   ... keine vorhanden
-     C                   MOVEL (P) *BLANKS       R_NachK
+     C                   EVAL      R_NachK = *BLANKS
      C                   ELSE
       *   ... auffüllen
      C                   DO        *HIVAL
@@ -790,17 +807,17 @@
      C     PRF23         BEGSR
       *
      C     ##NBRS        IFEQ      *ZEROS
-     C                   MOVEL (P) '1'           *IN99
-     C                   MOVEL (P) 'USR8125'     §MsgID
-     C                   MOVEL (P) *BLANKS       §MsgDta
+     C                   EVAL      *IN99 = '1'
+     C                   EVAL      §MsgID = 'USR8125'
+     C                   EVAL      §MsgDta = *BLANKS
      C                   GOTO      EPRF23
      C                   Endif
       *
      C     EPRF23        TAG
       *
      C     *IN99         IFEQ      '1'
-     C                   MOVEL (P) '1'           *IN23
-     C                   MOVEL (P) '1'           *IN33
+     C                   EVAL      *IN23 = '1'
+     C                   EVAL      *IN33 = '1'
      C                   Endif
       *
      C                   ENDSR
@@ -815,19 +832,19 @@
      C     ##TYPE        ANDNE     'R'
      C     ##TYPE        ANDNE     'U'
      C     ##TYPE        ANDNE     'P'
-     C                   MOVEL (P) '1'           *IN99
+     C                   EVAL      *IN99 = '1'
      C                   CLEAR                   USR8126
-     C                   MOVEL (P) 'USR8126'     §MsgID
-     C                   MOVEL (P) ##TYPE        USR81261
-     C                   MOVEL (P) USR8126       §MsgDta
+     C                   EVAL      §MsgID = 'USR8126'
+     C                   EVAL      USR81261 = ##TYPE
+     C                   EVAL      §MsgDta = USR8126
      C                   GOTO      EPRF24
      C                   Endif
       *
      C     EPRF24        TAG
       *
      C     *IN99         IFEQ      '1'
-     C                   MOVEL (P) '1'           *IN24
-     C                   MOVEL (P) '1'           *IN34
+     C                   EVAL      *IN24 = '1'
+     C                   EVAL      *IN34 = '1'
      C                   Endif
       *
      C                   ENDSR
@@ -840,17 +857,17 @@
       *
      C     ##CASE        IFNE      bTrue
      C     ##CASE        ANDNE     bFalse
-     C                   MOVEL (P) '1'           *IN99
-     C                   MOVEL (P) 'USR8133'     §MsgID
-     C                   MOVEL (P) *BLANKS       §MsgDta
+     C                   EVAL      *IN99 = '1'
+     C                   EVAL      §MsgID = 'USR8133'
+     C                   EVAL      §MsgDta = *BLANKS
      C                   GOTO      EPRF25
      C                   Endif
       *
      C     EPRF25        TAG
       *
      C     *IN99         IFEQ      '1'
-     C                   MOVEL (P) '1'           *IN25
-     C                   MOVEL (P) '1'           *IN35
+     C                   EVAL      *IN25 = '1'
+     C                   EVAL      *IN35 = '1'
      C                   Endif
       *
      C                   ENDSR
@@ -863,18 +880,18 @@
       *
      C                   Callp     p_rmvPgmMg(§§pgmName)
       *
-     C                   MOVEL (P) 'USR8100'     XMsgID
+     C                   EVAL      XMsgID = 'USR8100'
       *
      C                   SELECT
      C     §ScnAID       WHENEQ    §F3
-     C                   MOVEL (P) 'F3'          USR81001
+     C                   EVAL      USR81001 = 'F3'
      C     §ScnAID       WHENEQ    §F12
-     C                   MOVEL (P) 'F12'         USR81001
+     C                   EVAL      USR81001 = 'F12'
      C                   OTHER
-     C                   MOVEL (P) 'Fxx'         USR81001
+     C                   EVAL      USR81001 = 'Fxx'
      C                   Endsl
       *
-     C                   MOVEL (P) USR8100       XMsgDta
+     C                   EVAL      XMsgDta = USR8100
       *
      C                   ENDSR
       *
@@ -889,8 +906,8 @@
      C     ##Field       OREQ      SET_PRMT
      C                   EXSR      Pmt_Field
      C                   OTHER
-     C                   MOVEL (P) 'USR8179'     §MsgID
-     C                   MOVEL (P) *BLANKS       §MsgDta
+     C                   EVAL      §MsgID = 'USR8179'
+     C                   EVAL      §MsgDta = *BLANKS
      C                   Endsl
       *
      C                   ENDSR
@@ -901,15 +918,15 @@
       *
      C     Pmt_Field     BEGSR
       *
-     C                   MOVEL (P) xDsp80        YDsp80
-     C                   MOVEL (P) xCopyRight    YCopyRight
+     C                   EVAL      YDsp80 = xDsp80
+     C                   EVAL      YCopyRight = xCopyRight
      C                   CALL      PEEK37        P_Peek37
       *
      C     yMsgID        IFEQ      *BLANKS
-     C                   MOVEL (P) yField        ##Field
+     C                   EVAL      ##Field = yField
      C                   ELSE
-     C                   MOVEL (P) yMsgID        §MsgID
-     C                   MOVEL (P) yMsgDta       §MsgDta
+     C                   EVAL      §MsgID = yMsgID
+     C                   EVAL      §MsgDta = yMsgDta
      C                   Endif
       *
      C                   ENDSR
@@ -930,7 +947,7 @@
       *
      C     C_MoreKeys    BEGSR
       *
-     C                   ADD       1             SFBOT
+     C                   EVAL      SFBOT = SFBOT + 1
       *
      C                   ENDSR
       *
@@ -946,8 +963,8 @@
       *  ... dann die Bildschirmfelder neu
       *      initialisieren.
      C                   EXSR      InitField
-     C                   MOVEL (P) XQFile        R_QFile
-     C                   MOVEL (P) XMember       R_Member
+     C                   EVAL      R_QFile = XQFile
+     C                   EVAL      R_Member = XMember
      C                   ELSE
       *  ... sonst die Bildschirmfelder belassen
      C                   Endif
@@ -956,7 +973,7 @@
      C     *IN11         IFEQ      '1'
      C                   CLEAR                   FLDL0100
      C                   ELSE
-     C                   MOVEL (P) F_FFD         FLDL0100
+     C                   EVAL      FLDL0100 = F_FFD
      C                   Endif
       *
       *  Auf numerische Daten prüfen ...
@@ -964,7 +981,7 @@
       *
       *  Defaultoperationscode einsetzen ...
      C     ##OP          IFEQ      *BLANKS
-     C                   MOVEL (P) 'EQ'          ##OP
+     C                   EVAL      ##OP = 'EQ'
      C                   ELSE
       *  Operationscode stehenlasen
      C                   Endif
@@ -972,15 +989,15 @@
       *  Sonderwerte einsetzen ...
      C                   SELECT
      C     ##ARG         WHENEQ    *BLANKS
-     C                   MOVEL (P) '*BLANKS'     ##ARG
+     C                   EVAL      ##ARG = '*BLANKS'
      C     ##ARG         WHENEQ    *ZEROS
-     C                   MOVEL (P) '*ZEROS'      ##ARG
+     C                   EVAL      ##ARG = '*ZEROS'
      C                   OTHER
       *  ... Umsetzung nicht erforderlich
      C                   Endsl
       *
      C     ##Nbrs        IFEQ      *ZEROS
-     C                   Z-ADD     SET_SNbrs     ##Nbrs
+     C                   EVAL      ##Nbrs = SET_SNbrs
      C                   ELSE
       *  Wert stehenlassen ...
      C                   Endif
@@ -993,14 +1010,14 @@
       *
      C     InitField     BEGSR
       *
-     C                   MOVEL (P) *BLANKS       ##Field
-     C                   MOVEL (P) *BLANKS       ##OP
-     C                   MOVEL (P) *BLANKS       ##Arg
-     C                   MOVEL (P) *BLANKS       ##Sign
-     C                   MOVEL (P) SET_WLDCD     $$WLDCD
-     C                   Z-ADD     *ZEROS        ##Nbrs
-     C                   MOVEL (P) 'N'           ##Type
-     C                   MOVEL (P) bFalse        ##Case
+     C                   EVAL      ##Field = *BLANKS
+     C                   EVAL      ##OP = *BLANKS
+     C                   EVAL      ##Arg = *BLANKS
+     C                   EVAL      ##Sign = *BLANKS
+     C                   EVAL      $$WLDCD = SET_WLDCD
+     C                   EVAL      ##Nbrs = *ZEROS
+     C                   EVAL      ##Type = 'N'
+     C                   EVAL      ##Case = bFalse
       *
      C                   ENDSR
       *
@@ -1012,23 +1029,23 @@
       *
      C     XDsp80        IFEQ      '0'
       *   132-Zeichen Anzeige
-     C                   MOVEL (P) '0'           *IN88
-     C                   Z-ADD     6             ZEI
-     C                   ADD       1             ZEI
-     C                   Z-ADD     26            POS
+     C                   EVAL      *IN88 = '0'
+     C                   EVAL      ZEI = 6
+     C                   EVAL      ZEI = ZEI + 1
+     C                   EVAL      POS = 26
      C                   ELSE
       *    80-Zeichen Anzeige
-     C                   MOVEL (P) '1'           *IN88
-     C                   Z-ADD     4             ZEI
-     C                   ADD       3             ZEI
-     C                   Z-ADD     7             POS
+     C                   EVAL      *IN88 = '1'
+     C                   EVAL      ZEI = 4
+     C                   EVAL      ZEI = ZEI + 3
+     C                   EVAL      POS = 7
      C                   Endif
       *
       *  Prompt-Felder anzeigen ...
      C     SET_DspPmt    IFEQ      bTrue
-     C                   MOVEL (P) '1'           *IN71
+     C                   EVAL      *IN71 = '1'
      C                   ELSE
-     C                   MOVEL (P) '0'           *IN71
+     C                   EVAL      *IN71 = '0'
      C                   Endif
       *
      C                   ENDSR
@@ -1062,16 +1079,17 @@
       *
      C     '0'           CHECK     R_Arg30       X                              Zoned
      C     X             IFGT      *ZEROS                                       Binary
-     C                   SUBST (P) R_Arg30:X     R_Arg30
+     C**                 SUBST (P) R_Arg30:X     R_Arg30
+     C                   EVAL      R_Arg30 = %subst(R_Arg30: X)
      C                   ELSE
       *     Nur führende Nullen vorhanden
-     C                   MOVEL (P) *BLANKS       R_Arg30
+     C                   EVAL      R_Arg30 = *BLANKS
      C                   Endif
       *
       *     Argument bestand nur aus führenden Nullen
       *     oder nur aus *BLANKS ...
      C     R_Arg30       IFEQ      *BLANKS
-     C                   MOVEL (P) '0'           R_Arg30
+     C                   EVAL      R_Arg30 = '0'
      C                   ELSE
       *         keine Korrektur der Aufbereitung
       *         erforderlich
@@ -1093,9 +1111,9 @@
       *
      C     §Numeric      CHECK     R_Arg30                                99
      C     *IN99         IFEQ      '1'                                          = Fehler
-     C                   MOVEL (P) 'USR8138'     §MsgID
-     C                   MOVEL (P) ##Field       USR81381
-     C                   MOVEL (P) USR8138       §MsgDta
+     C                   EVAL      §MsgID = 'USR8138'
+     C                   EVAL      USR81381 = ##Field
+     C                   EVAL      §MsgDta = USR8138
      C                   Endif
       *
      C                   Endif
@@ -1112,7 +1130,8 @@
       *    keine Aufbereitung für nicht-numerische Daten
      C                   ELSE
       *
-     C     ' '           CHECKR    R_Arg30       X                              Zoned
+     C**   ' '           CHECKR    R_Arg30       X                              Zoned
+     C                   EVAL      X = %checkr(' ': R_Arg30)
      C     30            SUB       X             X
      C     X             IFGT      *ZEROS                                       Binary
      C     ' '           CAT   (P) R_Arg30:X     R_Arg30
@@ -1120,7 +1139,8 @@
       *     ... ist bereits rechtbündig
      C                   Endif
       *
-     C     ' ':'0'       XLATE (P) R_Arg30       R_Arg30
+     C**   ' ':'0'       XLATE (P) R_Arg30       R_Arg30
+     C                   EVAL      R_Arg30 = %xlate(' ': '0': R_Arg30)
       *
      C                   Endif
       *
@@ -1145,18 +1165,18 @@
       * - Programm initialisieren
      C                   Callp     p_rmvPgmMg(§§pgmName)
       *
-     C                   MOVEL (P) *BLANKS       XMsgID
-     C                   MOVEL (P) *BLANKS       XMsgDta
+     C                   EVAL      XMsgID = *BLANKS
+     C                   EVAL      XMsgDta = *BLANKS
       *
       * - Darstellung der Befehlstasten
-     C                   Z-ADD     1             SfBot
+     C                   EVAL      SfBot = 1
       *
       * - Einstellen der Bildschirmauflösung 80/132-Zeichen
      C                   EXSR      SetScreen
       *
       * - Copyright
-     C                   MOVEL (P) 'USR9999'     §MsgID
-     C                   MOVEL (P) XCopyRight    §MsgDta
+     C                   EVAL      §MsgID = 'USR9999'
+     C                   EVAL      §MsgDta = XCopyRight
      C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
       *
      C                   ENDSR

@@ -14,6 +14,14 @@
       *                                                               *
       *  Drucken Datensatz                                            *
       *                                                               *
+      * ============================================================= *
+      * >>PRE-COMPILER<<                                              *
+*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
       *===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
@@ -254,7 +262,7 @@
      C                   Endif
       *
       *  Feldattribute
-     C                   MOVEL (P) F_FFD         FLDL0100
+     C                   EVAL      FLDL0100 = F_FFD
       *
       *  nicht erlaubte Feldtypen
      C                   If        f_isNotAlw(FLDL0100) = bTrue
@@ -265,8 +273,8 @@
      C                   Clear                   ITEM
      C                   Eval      $$FNME = FLDL0100.F1FNme
       *
-     C                   Z-ADD     1             x
-     C                   Z-ADD     1             y
+     C                   EVAL      x = 1
+     C                   EVAL      y = 1
      C                   Exsr      PBFill
       *
      C                   Dow       x <= YStrLen or y <= textLen
@@ -328,15 +336,15 @@
      C                   ELSE
       *
       *  ... aufbereiten des Feldinhaltes
-     C                   MOVEL (P) FLDL0100      YData
-     C                   MOVEL (P) 'FLDL0100'    YFormat
-     C                   MOVEL (P) IO_Buff       YSrcVar
-     C                   MOVEL (P) bFalse        YPgmCall
-     C                   MOVEL (P) bTrue         YCvtCcsid
+     C                   EVAL      YData = FLDL0100
+     C                   EVAL      YFormat = 'FLDL0100'
+     C                   EVAL      YSrcVar = IO_Buff
+     C                   EVAL      YPgmCall = bFalse
+     C                   EVAL      YCvtCcsid = bTrue
      C                   CALL      PEEK06        P_Peek06               99
       *
       *  ... Konvertieren nicht darstellbarer Zeichen
-     C                   Z-ADD     *ZEROS        yCcsid
+     C                   EVAL      yCcsid = *ZEROS
      C                   CALL      PEEK32        P_Peek32               99
      C     *IN99         IFEQ      '0'
       *
@@ -412,9 +420,9 @@
      C                                              : bFalse
      C                                              : IO_Buff
      C                                              : IO_NullMap) = bFalse
-     C                   MOVEL (P) bFalse        IsRecord
+     C                   EVAL      IsRecord = bFalse
      C                   ELSE
-     C                   MOVEL (P) bTrue         IsRecord
+     C                   EVAL      IsRecord = bTrue
      C                   ENDIF
       *
      C                   ENDSR
@@ -447,8 +455,8 @@
      C                                      : 'rr,arrseq=Y,nullcap=Y,riofb=Y')
       *
       * - Programm initialisieren
-     C                   MOVEL (P) *BLANKS       XMsgID
-     C                   MOVEL (P) *BLANKS       XMsgDta
+     C                   EVAL      XMsgID = *BLANKS
+     C                   EVAL      XMsgDta = *BLANKS
       *
       * - Einlesen Objektbeschreibung
      C                   EXSR      GetObjText

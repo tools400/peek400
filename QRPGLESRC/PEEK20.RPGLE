@@ -19,6 +19,14 @@
       *                                                               *
       *  Erstellen internen Aufsetzschlüssel                          *
       *                                                               *
+      * ============================================================= *
+      * >>PRE-COMPILER<<                                              *
+*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
       *===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
@@ -159,31 +167,31 @@
       *
      C                   EXSR      FIRST
       *
-     C                   MOVEL (P) *BLANKS       XIO_Buffer
+     C                   EVAL      XIO_Buffer = *BLANKS
      C                   MOVEA (P) *BLANKS       XIO_BuffTb
-     C                   Z-ADD     1             BP
-     C                   Z-ADD     1             KP
+     C                   EVAL      BP = 1
+     C                   EVAL      KP = 1
       *
      C                   SELECT
      C     XKeyVal       WHENEQ    '*PHIVAL'
-     C                   MOVEL (P) '*HIVAL'      Wrk_KeyVal
+     C                   EVAL      Wrk_KeyVal = '*HIVAL'
      C                   EXSR      BuildPseud
       *
      C     XKeyVal       WHENEQ    '*PLOVAL'
-     C                   MOVEL (P) '*LOVAL'      Wrk_KeyVal
+     C                   EVAL      Wrk_KeyVal = '*LOVAL'
      C                   EXSR      BuildPseud
       *
      C     XKeyVal       WHENEQ    '*HIVAL'
-     C                   MOVEL (P) '*HIVAL'      Wrk_KeyVal
+     C                   EVAL      Wrk_KeyVal = '*HIVAL'
      C                   EXSR      BuildKey
       *
      C     XKeyVal       WHENEQ    '*LOVAL'
-     C                   MOVEL (P) '*LOVAL'      Wrk_KeyVal
+     C                   EVAL      Wrk_KeyVal = '*LOVAL'
      C                   EXSR      BuildKey
       *
      C                   OTHER
      C                   EVAL      inpKeyLen = %len(%trimR(XKeyVal))
-     C                   MOVEL (P) XKeyVal       Wrk_KeyVal
+     C                   EVAL      Wrk_KeyVal = XKeyVal
      C                   EXSR      BuildKey
       *
      C                   ENDSL
@@ -200,7 +208,7 @@
       *
      C     BuildKey      BEGSR
       *
-     C                   Z-ADD     1             F2KSeq
+     C                   EVAL      F2KSeq = 1
      C     F2KEY_L2      SETLL     FPEEKFLDL2
       *
      C                   DO        *HIVAL
@@ -215,7 +223,7 @@
      C                   ENDIF
       *
      C                   IF        (inpKeyLen > 0 and KP > inpKeyLen)
-     C                   MOVEL (P) '*LOVAL'      Wrk_KeyVal
+     C                   EVAL      Wrk_KeyVal = '*LOVAL'
      C                   EVAL      inpKeyLen = -1
      C                   ENDIF
       *
@@ -229,7 +237,7 @@
       *
      C     BuildPseud    BEGSR
       *
-     C                   Z-ADD     *ZEROS        F2FldSeq
+     C                   EVAL      F2FldSeq = *ZEROS
      C     F1KEY_L0      SETLL     FPEEKFLDL0
       *
      C                   DO        *HIVAL
@@ -252,17 +260,17 @@
       *
      C     Intern        BEGSR
       *
-     C                   MOVEL (P) F2FFD         FLDL0100
+     C                   EVAL      FLDL0100 = F2FFD
       *
-     C                   MOVEL (P) F2FFD         YData
-     C                   MOVEL (P) F2Format      YFormat
+     C                   EVAL      YData = F2FFD
+     C                   EVAL      YFormat = F2Format
       *
      C     Wrk_KeyVal    IFEQ      '*LOVAL'
      C     Wrk_KeyVal    OREQ      '*HIVAL'
-     C                   MOVEL (P) Wrk_KeyVal    YTgtValue
+     C                   EVAL      YTgtValue = Wrk_KeyVal
      C                   CLEAR                   YBuffer
      C                   ELSE
-     C                   MOVEL (P) '*CURRENT'    YTgtValue
+     C                   EVAL      YTgtValue = '*CURRENT'
       *
      C                   select
      C                   when      FLDL0100.F1DTyp = 'S' or                     Zoned
@@ -287,14 +295,14 @@
       *      grundsätzlich, ob mit oder ohne Vorzeichen
       *      Vorzeichen wird in PEEK18 ausgewertet
      C                   If        (f_isNumFld(FLDL0100) = bTrue)
-     C                   ADD       1             Y
+     C                   EVAL      Y = Y + 1
      C                   Endif
       *
-     C     KP            ADD       Y             X
-     C                   SUB       1             X
+     C                   EVAL      X = KP + Y
+     C                   EVAL      X = X - 1
      C                   IF        f_isVarLen(FLDL0100) = bTrue
-     C                   ADD       2             X
-     C                   SUB       2             Y
+     C                   EVAL      X = X + 2
+     C                   EVAL      Y = Y - 2
      C                   ENDIF
       *
      C     X             IFLE      §keyBufLen
@@ -349,21 +357,21 @@
       *          und vervollständigt
      C                   Endsl
       *
-     C                   MOVEL (P) '*INTERN'     YTgtFormat
+     C                   EVAL      YTgtFormat = '*INTERN'
      C                   CALL      PEEK18        P_Peek18
      C     YMsgID        IFNE      *BLANKS
-     C                   MOVEL (P) YMsgID        XMsgID
-     C                   MOVEL (P) YMsgDta       XMsgDta
+     C                   EVAL      XMsgID = YMsgID
+     C                   EVAL      XMsgDta = YMsgDta
      C                   GOTO      ENDE
      C                   Endif
       *
      C                   IF        f_isVarLen(FLDL0100) = bTrue
-     C                   ADD       2             YOutBuffLn
+     C                   EVAL      YOutBuffLn = YOutBuffLn + 2
      C                   ENDIF
       *
      C     1             DO        YOutBuffLn    Y
      C     1             SUBST (P) YOutBuffer:Y  XIO_BuffTb(BP)
-     C                   ADD       1             BP
+     C                   EVAL      BP = BP + 1
      C     BP            IFGT      §rcdBufLen
      C                   LEAVE
      C                   Endif
@@ -392,13 +400,13 @@
      C                   ENDIF
      C                   Endif
      C                   If        f_isVarLen(FLDL0100) = bTrue
-     C                   SUB       2             KP
+     C                   EVAL      KP = KP - 2
      C                   Endif
      C                   Endif
       *
       *  Delimeter ...
      C     SET_Dlmtr     IFNE      *BLANKS
-     C                   ADD       1             KP
+     C                   EVAL      KP = KP + 1
      C                   ELSE
       *          keine Korrektur erforderlich
      C                   Endif
@@ -443,8 +451,8 @@
       * - Programm initialisieren
       ***                Callp     p_rmvPgmMg(§§pgmName)
       *
-     C                   MOVEL (P) *BLANKS       XMsgID
-     C                   MOVEL (P) *BLANKS       XMsgDta
+     C                   EVAL      XMsgID = *BLANKS
+     C                   EVAL      XMsgDta = *BLANKS
       *
      C                   ENDSR
       *
@@ -472,6 +480,4 @@
      C                   DUMP
       *
      C                   ENDSR     '*CANCL'
-      *
- CPY  ***/COPY QCOPYLE,ChkNumeric
       *

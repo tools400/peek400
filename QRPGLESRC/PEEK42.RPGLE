@@ -26,9 +26,10 @@
       *                                                               *
       * ============================================================= *
       * >>PRE-COMPILER<<                                              *
-      *   >>CRTCMD<<  CALL PGM(&LI/PEEK99) PARM(+                     *
-      *                        '&SF' '&SL' '&SM' '&LI' '*NO' +        *
-      *                        'PEEK' '&LI' '*NO');                   *
+*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
       *   >>EXECUTE<<                                                 *
       * >>END-PRE-COMPILER<<                                          *
       *===============================================================*
@@ -439,9 +440,9 @@
      C                                              : bFalse
      C                                              : IO_Buff
      C                                              : IO_NullMap) = bFalse
-     C                   MOVEL (P) bFalse        isRecord
+     C                   EVAL      isRecord = bFalse
      C                   ELSE
-     C                   MOVEL (P) bTrue         isRecord
+     C                   EVAL      isRecord = bTrue
      C                   Endif
       *
      C                   ENDSR
@@ -455,10 +456,10 @@
       * - Programm initialisieren
       ***                Callp     p_rmvPgmMg(§§pgmName)
       *
-     C                   MOVEL (P) *BLANKS       XMsgID
-     C                   MOVEL (P) *BLANKS       XMsgDta
+     C                   EVAL      XMsgID = *BLANKS
+     C                   EVAL      XMsgDta = *BLANKS
       *
-     C                   MOVEL (P) XShortCmd     ShortCmd
+     C                   EVAL      ShortCmd = XShortCmd
       *
      C                   ENDSR
       *
@@ -468,7 +469,7 @@
       *
      C     *INZSR        BEGSR
       *
-     C                   MOVEL (P) bFalse        IsInit
+     C                   EVAL      IsInit = bFalse
       *
      C                   Eval      PEEK06 = f_pgmCallN('PEEK06')
      C                   Eval      PEEK66 = f_pgmCallN('PEEK66')

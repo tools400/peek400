@@ -14,6 +14,14 @@
       *                                                               *
       *  Lizenzprüfung                                                *
       *                                                               *
+      * ============================================================= *
+      * >>PRE-COMPILER<<                                              *
+*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
       *===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
@@ -24,6 +32,7 @@
       *
       *---Variablendefinition------------------------------*
       /COPY QCOPYLE,D_VARDEF
+      /COPY QCOPYLE,FLDL0100
       *----------------------------------------------------*
       *
       *---INFOSTRUKTUR FÜR AID-BYTE -----------------------*
@@ -204,11 +213,11 @@
       *             worden ist, dann bFalse zurückliefern,
       *             damit kein weiterer Test möglich ist.
      C                   OPEN      PEEK30FM
-     C                   ADD       4             ZEI
-     C                   ADD       4             POS
+     C                   EVAL      ZEI = ZEI + 4
+     C                   EVAL      POS = POS + 4
      C                   EXFMT     BILD03
      C                   CLOSE     PEEK30FM
-     C                   Z-ADD     bFalseExt     XFlag
+     C                   EVAL      XFlag = bFalseExt
      C                   ELSE
       *         ... neue LizenzNr. wurde eingetragen
       *             Rückkehrcode in XFLag ist OK
@@ -219,7 +228,7 @@
      C                   Endif
      C                   ELSE
       *     Lizenznummer ist OK ...
-     C                   Z-ADD     bTrueExt      XFlag
+     C                   EVAL      XFlag = bTrueExt
      C                   Endif
       *
       *----------------------------------------------------*
@@ -240,7 +249,7 @@
      C                   OPEN      PEEK30FM
       *
       *  Löschen Lizenznummer
-     C                   MOVEL (P) *BLANKS       ##LicData
+     C                   EVAL      ##LicData = *BLANKS
       *
      C                   DO        *HIVAL
       *
@@ -265,18 +274,18 @@
       *  F9  - Ende
      C     §ScnAID       WHENEQ    §F9
      C                   EXSR      C_EndPgm
-     C                   Z-ADD     bShareExt     XFlag
-     C                   MOVEL (P) 'USR9997'     XMsgID
-     C                   MOVEL (P) §Yellow_R     USR99971
-     C                   MOVEL (P) §White        USR99972
-     C                   MOVEL (P) USR9997       XMsgDta
+     C                   EVAL      XFlag = bShareExt
+     C                   EVAL      XMsgID = 'USR9997'
+     C                   EVAL      USR99971 = §Yellow_R
+     C                   EVAL      USR99972 = §White
+     C                   EVAL      XMsgDta = USR9997
      C                   LEAVE
       *
       *  Datenfreigabe
      C     §ScnAID       WHENEQ    §ENTER
      C                   EXSR      C_Enter
      C     *IN99         IFEQ      '0'
-     C                   Z-ADD     bTrueExt      XFlag
+     C                   EVAL      XFlag = bTrueExt
      C                   LEAVE
      C                   Endif
       *
@@ -314,12 +323,12 @@
      C     *IN99         IFEQ      '0'
      C                   EXSR      WrtLicData
      C     IsWriteOK     IFEQ      bFalse
-     C                   MOVEL (P) '1'           *IN99
-     C                   MOVEL (P) 'USR8159'     §MsgID
-     C                   MOVEL (P) *BLANKS       §MsgDta
+     C                   EVAL      *IN99 = '1'
+     C                   EVAL      §MsgID = 'USR8159'
+     C                   EVAL      §MsgDta = *BLANKS
      C                   ELSE
-     C                   ADD       4             ZEI
-     C                   ADD       4             POS
+     C                   EVAL      ZEI = ZEI + 4
+     C                   EVAL      POS = POS + 4
      C                   EXFMT     BILD02
      C                   Endif
      C                   Endif
@@ -333,13 +342,13 @@
      C     BZOFF1        BEGSR
       *
       *  DSPATR(PC)
-     C                   MOVEL (P) '0'           *IN20                         ##LicNbr
+     C                   EVAL      *IN20 = '0'                                  ##LicNbr
       *
       *  DSPATR(RI)
-     C                   MOVEL (P) '0'           *IN30                         ##LicNbr
+     C                   EVAL      *IN30 = '0'                                  ##LicNbr
       *
       *  Fehler
-     C                   MOVEL (P) '0'           *IN99
+     C                   EVAL      *IN99 = '0'
       *
      C                   ENDSR
       *
@@ -349,7 +358,7 @@
       *
      C     PRFB1         BEGSR
       *
-     C                   EXSR      PRF20                                       ##LicData
+     C                   EXSR      PRF20                                        ##LicData
      C     *IN99         CABEQ     '1'           EPRFB1
       *
      C     EPRFB1        ENDSR
@@ -362,33 +371,33 @@
       *
      C     ##LicData     IFEQ      *BLANKS
      C                   CLEAR                   USR8158
-     C                   MOVEL (P) '1'           *IN99
-     C                   MOVEL (P) 'USR8158'     §MsgID
-     C                   MOVEL (P) ##LicData     USR81581                       Liz.Nr.
-     C                   MOVEL (P) USR8158       §MsgDta
+     C                   EVAL      *IN99 = '1'
+     C                   EVAL      §MsgID = 'USR8158'
+     C                   EVAL      USR81581 = ##LicData                         Liz.Nr.
+     C                   EVAL      §MsgDta = USR8158
      C                   GOTO      EPRF20
      C                   Endif
       *
-     C                   MOVEL (P) ##LicData     R_SrlData
+     C                   EVAL      R_SrlData = ##LicData
      C                   EXSR      SplittLic
-     C                   MOVEL (P) R_SrlNbr      YSrlNbrExt
-     C                   MOVEL (P) R_SrlDate     YDateExt
+     C                   EVAL      YSrlNbrExt = R_SrlNbr
+     C                   EVAL      YDateExt = R_SrlDate
       *
      C                   EXSR      CompLicNbr
      C     IsCompOK      IFEQ      bFalse
      C                   CLEAR                   USR8158
-     C                   MOVEL (P) '1'           *IN99
-     C                   MOVEL (P) 'USR8158'     §MsgID
-     C                   MOVEL (P) ##LicData     USR81581                       Liz.Nr.
-     C                   MOVEL (P) USR8158       §MsgDta
+     C                   EVAL      *IN99 = '1'
+     C                   EVAL      §MsgID = 'USR8158'
+     C                   EVAL      USR81581 = ##LicData                         Liz.Nr.
+     C                   EVAL      §MsgDta = USR8158
      C                   GOTO      EPRF20
      C                   Endif
       *
      C     EPRF20        TAG
       *
      C     *IN99         IFEQ      '1'
-     C                   MOVEL (P) '1'           *IN20
-     C                   MOVEL (P) '1'           *IN30
+     C                   EVAL      *IN20 = '1'
+     C                   EVAL      *IN30 = '1'
      C                   Endif
       *
      C                   ENDSR
@@ -400,7 +409,7 @@
       *
      C     Fill##        BEGSR
       *
-     C                   MOVEL (P) bTrue         IsCompOK
+     C                   EVAL      IsCompOK = bTrue
      C                   LEAVESR
       *
       *------------------------------------------*
@@ -436,8 +445,8 @@
       *      ( = YSrlNbrInt)                     *
       *      für normale Lizenznummer            *
       *------------------------------------------*
-     C                   MOVEL (P) bFalse        IsCompOK
-     C                   MOVEL (P) bTrue         IsDateErr
+     C                   EVAL      IsCompOK = bFalse
+     C                   EVAL      IsDateErr = bTrue
       *
      C                   EXSR      ClcIntNbr
      C                   EXSR      CompLicNb2
@@ -448,8 +457,8 @@
       *      für Firmenlizenznummer              *
       *------------------------------------------*
      C     IsCompOK      IFEQ      bFalse
-     C                   MOVEL (P) bFalse        IsCompOK
-     C                   MOVEL (P) bTrue         IsDateErr
+     C                   EVAL      IsCompOK = bFalse
+     C                   EVAL      IsDateErr = bTrue
       *
      C                   EXSR      ClcIntNbrF
      C                   EXSR      CompLicNb2
@@ -466,44 +475,44 @@
      C     CompLicNb2    BEGSR
       *
       * -  interne Nummer umsetzen in Dezimalwert
-     C                   MOVEL (P) YSrlNbrInt    R_Hex
+     C                   EVAL      R_Hex = YSrlNbrInt
      C                   EXSR      HexToDec
-     C                   Z-ADD     R_Dec         ZWInt
+     C                   EVAL      ZWInt = R_Dec
       *
       * -  externe Nummer umsetzen in Dezimalwert
-     C                   MOVEL (P) YSrlNbrExt    R_Hex
+     C                   EVAL      R_Hex = YSrlNbrExt
      C                   EXSR      HexToDec
-     C                   Z-ADD     R_Dec         ZWExt
+     C                   EVAL      ZWExt = R_Dec
       *
       * -  externes Datum umsetzen in Dezimalwert
-     C                   MOVEL (P) YDateExt      R_Hex
+     C                   EVAL      R_Hex = YDateExt
      C                   EXSR      HexToDec
      C                   Z-SUB     R_Dec         DeadDate
-     C                   ADD       99999999      DeadDate
+     C                   EVAL      DeadDate = DeadDate + 99999999
       *
       * -  Angleichen externe Nummer
-     C                   SUB       R_Dec         ZWExt
-     C                   ADD       99999999      ZWExt
+     C                   EVAL      ZWExt = ZWExt - R_Dec
+     C                   EVAL      ZWExt = ZWExt + 99999999
       *
       *------------------------------------------*
       *  ... vergleichen interne & externe       *
       *      Seriennummer                        *
       *------------------------------------------*
      C                   TIME                    CurrDatTim
-     C                   Z-ADD     CurrDayFw     CurrDayRv
-     C                   Z-ADD     CurrMonFw     CurrMonRv
-     C                   Z-ADD     CurrYearFw    CurrYearRv
+     C                   EVAL      CurrDayRv = CurrDayFw
+     C                   EVAL      CurrMonRv = CurrMonFw
+     C                   EVAL      CurrYearRv = CurrYearFw
       *
      C     ZWExt         IFNE      ZWInt
-     C                   MOVEL (P) bFalse        IsCompOK
-     C                   MOVEL (P) bFalse        IsDateErr
+     C                   EVAL      IsCompOK = bFalse
+     C                   EVAL      IsDateErr = bFalse
      C                   ELSE
      C     DeadDate      IFLT      CurrDateRv
-     C                   MOVEL (P) bFalse        IsCompOK
-     C                   MOVEL (P) bTrue         IsDateErr
+     C                   EVAL      IsCompOK = bFalse
+     C                   EVAL      IsDateErr = bTrue
      C                   ELSE
-     C                   MOVEL (P) bTrue         IsCompOK
-     C                   MOVEL (P) bFalse        IsDateErr
+     C                   EVAL      IsCompOK = bTrue
+     C                   EVAL      IsDateErr = bFalse
      C                   Endif
      C                   Endif
       *
@@ -515,7 +524,7 @@
       *
      C     ChkUsrSpc     BEGSR
       *
-     C                   MOVEL(P)  'CHKOBJ'      §QCmd
+     C                   EVAL      §QCmd = 'CHKOBJ'
      C                   CAT       'OBJ(':1      §QCmd
      C                   CAT       USLIB:0       §QCmd
      C                   CAT       '/':0         §QCmd
@@ -537,7 +546,7 @@
       *
      C     CrtUsrSpc     BEGSR
       *
-     C                   MOVEL (P) §Text         USDESC
+     C                   EVAL      USDESC = §Text
       *
      C                   CALL      'QUSCRTUS'
      C                   PARM                    USFNME
@@ -555,20 +564,20 @@
       *
      C     RtvUsrSpc     BEGSR
       *
-     C                   Z-ADD     64            USVLEN
-     C                   Z-ADD     1             USSPOS
+     C                   EVAL      USVLEN = 64
+     C                   EVAL      USSPOS = 1
      C                   CALL      'QUSRTVUS'
      C                   PARM                    USFNME
      C                   PARM                    USSPOS
      C                   PARM                    USVLEN
      C                   PARM                    USDATA
       *
-     C                   MOVEL (P) USDATA        YDtaAra
+     C                   EVAL      YDtaAra = USDATA
       *
-     C                   MOVEL (P) YDtaAra       R_SrlData
+     C                   EVAL      R_SrlData = YDtaAra
      C                   EXSR      SplittLic
-     C                   MOVEL (P) R_SrlNbr      YSrlNbrExt
-     C                   MOVEL (P) R_SrlDate     YDateExt
+     C                   EVAL      YSrlNbrExt = R_SrlNbr
+     C                   EVAL      YDateExt = R_SrlDate
       *
      C                   ENDSR
       *
@@ -580,22 +589,24 @@
       *
      C     '-'           SCAN      R_SrlData     X
      C     X             IFGT      *ZEROS
-     C                   SUB       1             X
+     C                   EVAL      X = X - 1
      C     X             IFGT      *ZEROS
-     C     X             SUBST (P) R_SrlData:1   R_SrlNbr
+     C**   X             SUBST (P) R_SrlData:1   R_SrlNbr
+     C                   EVAL      R_SrlNbr = %subst(R_SrlData: 1: x)
      C                   ELSE
-     C                   MOVEL (P) *BLANKS       R_SrlNbr
+     C                   EVAL      R_SrlNbr = *BLANKS
      C                   Endif
       *
-     C                   ADD       2             X
+     C                   EVAL      X = X + 2
      C     X             IFLE      64
-     C                   SUBST (P) R_SrlData:X   R_SrlDate
+     C**                 SUBST (P) R_SrlData:X   R_SrlDate
+     C                   EVAL      R_SrlDate = %subst(R_SrlData: x)
      C                   ELSE
-     C                   MOVEL (P) *BLANKS       R_SrlDate
+     C                   EVAL      R_SrlDate = *BLANKS
      C                   Endif
      C                   ELSE
-     C                   MOVEL (P) *BLANKS       R_SrlNbr
-     C                   MOVEL (P) *BLANKS       R_SrlDate
+     C                   EVAL      R_SrlNbr = *BLANKS
+     C                   EVAL      R_SrlDate = *BLANKS
      C                   Endif
       *
      C                   ENDSR
@@ -607,37 +618,39 @@
      C     ClCIntNbr     BEGSR
       *
       * -  Netzwerkattribute
-     C                   MOVEL (P) 'SYSNAME'     YAttr
-     C                   MOVEL (P) bFalse        YNoMsg
+     C                   EVAL      YAttr = 'SYSNAME'
+     C                   EVAL      YNoMsg = bFalse
      C                   CALL      PEEK07        P_Peek07
      C     YAttrLen      IFGT      *ZEROS
-     C     YAttrLen      SUBST     YValue:1      YSysName
+     C**   YAttrLen      SUBST     YValue:1      YSysName
+     C                   EVAL      YSysName = %subst(YValue: 1: YAttrLen)
      C                   ELSE
-     C                   MOVEL (P) *BLANKS       YSysName
+     C                   EVAL      YSysName = *BLANKS
      C                   Endif
       *
       * -  Version
-     C                   MOVEL (P) '010000'      YSysVers
+     C                   EVAL      YSysVers = '010000'
       *
       * -  Seriennummer
-     C                   MOVEL (P) 'QSRLNBR'     YAttr
-     C                   MOVEL (P) bFalse        YNoMsg
+     C                   EVAL      YAttr = 'QSRLNBR'
+     C                   EVAL      YNoMsg = bFalse
      C                   CALL      PEEK28        P_Peek28
      C     YAttrLen      IFGT      *ZEROS
-     C     YAttrLen      SUBST     YValue:1      YSysSrlNbr
+     C**   YAttrLen      SUBST     YValue:1      YSysSrlNbr
+     C                   EVAL      YSysSrlNbr = %subst(YValue: 1: YAttrLen)
      C                   ELSE
-     C                   MOVEL (P) *BLANKS       YSysSrlNbr
+     C                   EVAL      YSysSrlNbr = *BLANKS
      C                   Endif
       *
       * -  Datum
-     C                   Z-ADD     *ZEROS        YSysDate
+     C                   EVAL      YSysDate = *ZEROS
       *
      C                   CALL      PEEK29        P_Peek29
       *
-     C                   MOVEL (P) YSrlData      R_SrlData
+     C                   EVAL      R_SrlData = YSrlData
      C                   EXSR      SplittLic
-     C                   MOVEL (P) R_SrlNbr      YSrlNbrInt
-     C                   MOVEL (P) R_SrlDate     YDateInt
+     C                   EVAL      YSrlNbrInt = R_SrlNbr
+     C                   EVAL      YDateInt = R_SrlDate
       *
      C                   ENDSR
       *
@@ -649,23 +662,23 @@
      C     ClCIntNbrF    BEGSR
       *
       * -  Netzwerkattribute
-     C                   MOVEL (P) '*COMPANY'    YSysName
+     C                   EVAL      YSysName = '*COMPANY'
       *
       * -  Version
-     C                   MOVEL (P) '999999'      YSysVers
+     C                   EVAL      YSysVers = '999999'
       *
       * -  Seriennummer
-     C                   MOVEL (P) '*LICENSE'    YSysSrlNbr
+     C                   EVAL      YSysSrlNbr = '*LICENSE'
       *
       * -  Datum
-     C                   Z-ADD     *ZEROS        YSysDate
+     C                   EVAL      YSysDate = *ZEROS
       *
      C                   CALL      PEEK29        P_Peek29
       *
-     C                   MOVEL (P) YSrlData      R_SrlData
+     C                   EVAL      R_SrlData = YSrlData
      C                   EXSR      SplittLic
-     C                   MOVEL (P) R_SrlNbr      YSrlNbrInt
-     C                   MOVEL (P) R_SrlDate     YDateInt
+     C                   EVAL      YSrlNbrInt = R_SrlNbr
+     C                   EVAL      YDateInt = R_SrlDate
       *
      C                   ENDSR
       *
@@ -675,9 +688,9 @@
       *
      C     WrtLicData    BEGSR
       *
-     C                   Z-ADD     1             USSPOS
-     C                   Z-ADD     64            USVLEN
-     C                   MOVEL (P) ##LicData     USDATA
+     C                   EVAL      USSPOS = 1
+     C                   EVAL      USVLEN = 64
+     C                   EVAL      USDATA = ##LicData
       *
      C                   CALL      'QUSCHGUS'
      C                   PARM                    USFNME
@@ -688,9 +701,9 @@
      C                   PARM                    §ErrorCode
       *
      C     §ErrAvail     IFEQ      *ZEROS
-     C                   MOVEL (P) bTrue         IsWriteOK
+     C                   EVAL      IsWriteOK = bTrue
      C                   ELSE
-     C                   MOVEL (P) bFalse        IsWriteOK
+     C                   EVAL      IsWriteOK = bFalse
      C                   Endif
       *
      C                   ENDSR
@@ -701,36 +714,39 @@
       *
      C     HexToDec      BEGSR
       *
-     C                   Z-ADD     *ZEROS        R_Dec
+     C                   EVAL      R_Dec = *ZEROS
      C     ' '           CHECKR    R_Hex         X
       *
      C     1             DO        X             Y
-     C     1             SUBST (P) R_Hex:Y       A1
+     C**   1             SUBST (P) R_Hex:Y       A1
+     C                   EVAL      A1 = %subst(R_Hex: Y: 1)
      C     A1            IFEQ      *BLANKS
      C                   LEAVE
      C                   Endif
       *
-     C                   Z-ADD     1             ZW1
-     C     A1            LOOKUP    Hex(ZW1)                               11
-     C     *IN11         IFEQ      '0'
+     C                   EVAL      ZW1 = 1
+     C**   A1            LOOKUP    Hex(ZW1)                               11
+     C**   *IN11         IFEQ      '0'
+     C                   EVAL      ZW1 = %lookup(A1: Hex)
+     C                   IF        (ZW1 = 0)
       *      ... Umsetzung in Dezimalwert nicht gelungen
      C                   ITER
      C                   Endif
       *
-     C                   SUB       1             ZW1
+     C                   EVAL      ZW1 = ZW1 - 1
       *
-     C     X             SUB       Y             Exp
+     C                   EVAL      Exp = X - Y
      C     Exp           IFGT      *ZEROS
       *      ... Exponenten größer 0
      C     Exp           DOUEQ     *ZEROS
      C                   MULT      16            ZW1
-     C                   SUB       1             Exp
+     C                   EVAL      Exp = Exp - 1
      C                   Enddo
       *
-     C                   ADD       ZW1           R_Dec
+     C                   EVAL      R_Dec = R_Dec + ZW1
      C                   ELSE
       *      ... Exponent = 0
-     C                   ADD       ZW1           R_Dec
+     C                   EVAL      R_Dec = R_Dec + ZW1
      C                   Endif
       *
      C                   Enddo
@@ -745,14 +761,14 @@
       *
      C     XDsp80        IFEQ      '0'
       *   132-Zeichen Anzeige
-     C                   MOVEL (P) '0'           *IN88
-     C                   Z-ADD     2             ZEI
-     C                   Z-ADD     26            POS
+     C                   EVAL      *IN88 = '0'
+     C                   EVAL      ZEI = 2
+     C                   EVAL      POS = 26
      C                   ELSE
       *    80-Zeichen Anzeige
-     C                   MOVEL (P) '1'           *IN88
-     C                   Z-ADD     1             ZEI
-     C                   Z-ADD     4             POS
+     C                   EVAL      *IN88 = '1'
+     C                   EVAL      ZEI = 1
+     C                   EVAL      POS = 4
      C                   Endif
       *
      C                   ENDSR
@@ -767,9 +783,9 @@
      C                   Callp     p_rmvPgmMg(§§pgmName)
       *
       * - Rückgabewerte
-     C                   Z-ADD     bFalseExt     XFlag
-     C                   MOVEL (P) *BLANKS       XMsgID
-     C                   MOVEL (P) *BLANKS       XMsgDta
+     C                   EVAL      XFlag = bFalseExt
+     C                   EVAL      XMsgID = *BLANKS
+     C                   EVAL      XMsgDta = *BLANKS
       *
       * - Einlesen und prüfen der Lizenzdaten
      C                   EXSR      FILL##
@@ -778,8 +794,8 @@
      C                   EXSR      SetScreen
       *
       * - Copyright
-     C                   MOVEL (P) 'USR9999'     §MsgID
-     C                   MOVEL (P) XCopyRight    §MsgDta
+     C                   EVAL      §MsgID = 'USR9999'
+     C                   EVAL      §MsgDta = XCopyRight
      C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
       *
      C                   ENDSR
@@ -799,22 +815,22 @@
      C                   Eval      USNAME = 'PEEKSRL'
      C                   Eval      USLIB  = f_getPrdLb
       *
-     C                   MOVEL (P) '0'           Hex(1)
-     C                   MOVEL (P) '1'           Hex(2)
-     C                   MOVEL (P) '2'           Hex(3)
-     C                   MOVEL (P) '3'           Hex(4)
-     C                   MOVEL (P) '4'           Hex(5)
-     C                   MOVEL (P) '5'           Hex(6)
-     C                   MOVEL (P) '6'           Hex(7)
-     C                   MOVEL (P) '7'           Hex(8)
-     C                   MOVEL (P) '8'           Hex(9)
-     C                   MOVEL (P) '9'           Hex(10)
-     C                   MOVEL (P) 'A'           Hex(11)
-     C                   MOVEL (P) 'B'           Hex(12)
-     C                   MOVEL (P) 'C'           Hex(13)
-     C                   MOVEL (P) 'D'           Hex(14)
-     C                   MOVEL (P) 'E'           Hex(15)
-     C                   MOVEL (P) 'F'           Hex(16)
+     C                   EVAL      Hex(1) = '0'
+     C                   EVAL      Hex(2) = '1'
+     C                   EVAL      Hex(3) = '2'
+     C                   EVAL      Hex(4) = '3'
+     C                   EVAL      Hex(5) = '4'
+     C                   EVAL      Hex(6) = '5'
+     C                   EVAL      Hex(7) = '6'
+     C                   EVAL      Hex(8) = '7'
+     C                   EVAL      Hex(9) = '8'
+     C                   EVAL      Hex(10) = '9'
+     C                   EVAL      Hex(11) = 'A'
+     C                   EVAL      Hex(12) = 'B'
+     C                   EVAL      Hex(13) = 'C'
+     C                   EVAL      Hex(14) = 'D'
+     C                   EVAL      Hex(15) = 'E'
+     C                   EVAL      Hex(16) = 'F'
       *
      C                   ENDSR
       *
@@ -824,7 +840,7 @@
       *
      C     *PSSR         BEGSR
       *
-     C                   Z-ADD     bFalseExt     XFlag
+     C                   EVAL      XFlag = bFalseExt
      C                   CLOSE     PEEK30FM                             99
      C                   GOTO      ENDE
       *

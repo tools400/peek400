@@ -15,6 +15,14 @@
       *  Peek/400 - Ändern Satzformat PEEKUSR                         *
       *                                                               *
       *===============================================================*
+      * >>PRE-COMPILER<<                                              *
+      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
+      *===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
       *
@@ -35,6 +43,7 @@
       *---Variablendefinition------------------------------*
       /COPY QCOPYLE,D_VARDEF
       /COPY QCOPYLE,D_INFDS
+      /COPY QCOPYLE,FLDL0100
       *----------------------------------------------------*
       *
      D long_t          S             10I 0                    based(pDummy)
@@ -179,17 +188,6 @@
       *
      C                   Exsr      First
       *
-    R ***                MOVEL (P) 'PEEKUSR'     §File
-    R ***                MOVEL (P) xFile         §ToFile
-    R ***                MOVEL (P) xLib          §ToLib
-    R ***                MOVEL (P) '*FIRST'      §Mbr
-    R ***                MOVEL (P) '*CALLLVL'    §OvrScope
-    R ***                MOVEL (P) '*NO'         §Share
-    R ***                MOVEL (P) '*NO'         §SeqOnly
-    R ***                MOVEL (P) '*YES'        §Secure
-    R ***                MOVEL (P) '*NO'         §LvlChk
- CPYR *COPY QCOPYLE,OVRDBF
-      *
      C                   Eval      g_oldFile = %trim(xLib ) + '/' +
      C                                         %trim(xFile)
       *
@@ -199,27 +197,12 @@
      C                   Eval      rcdLen1 = File_01_DS.RcdLen
      C                   Close     OLDFILE
       *
-    R ***                MOVEL (P) 'PEEKUSR'     §File
-    R ***                MOVEL (P) 'PEEKUSR'     §ToFile
-    R ***                MOVEL (P) §§PgmLib      §ToLib
-    R ***                MOVEL (P) '*FIRST'      §Mbr
-    R ***                MOVEL (P) '*CALLLVL'    §OvrScope
-    R ***                MOVEL (P) '*NO'         §Share
-    R ***                MOVEL (P) '*NO'         §SeqOnly
-    R ***                MOVEL (P) '*YES'        §Secure
-    R ***                MOVEL (P) '*NO'         §LvlChk
- CPYR *COPY QCOPYLE,OVRDBF
-      *
      C                   Eval      g_peekusr = %trim(f_getPrdLb()) + '/' +
      C                                         'PEEKUSR'
       *
      C                   Open      PEEKUSR
      C                   Eval      rcdLen2 = File_02_DS.RcdLen
      C                   Close     PEEKUSR
-      *
-    R ***                MOVEL (P) 'PEEKUSR'     §File
-    R ***                MOVEL (P) '*'           §Lvl
- CPYR *COPY QCOPYLE,DLTOVR
       *
      C                   If        rcdLen1 <> rcdLen2
       *

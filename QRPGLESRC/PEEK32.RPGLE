@@ -15,6 +15,14 @@
       *                                                               *
       *  Konvertieren nicht darstellbarer Zeichen                     *
       *                                                               *
+      * ============================================================= *
+      * >>PRE-COMPILER<<                                              *
+*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
       *===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
@@ -25,7 +33,6 @@
       *
       *---Nachrichten--------------------------------------*
       /COPY QCOPYLE,API_ERROR
- CPY  ***/COPY QCOPYLE,MSG_D_MAPI
       *----------------------------------------------------*
       *
       *---Nachrichtenaufbau--------------------------------*
@@ -70,8 +77,8 @@
       *
       *----------------------------------------------------*
       *
-     C                   MOVEL (P) *BLANKS       XMsgID
-     C                   MOVEL (P) *BLANKS       XMsgDta
+     C                   EVAL      XMsgID = *BLANKS
+     C                   EVAL      XMsgDta = *BLANKS
       *
       *    Zeichen mit einer DOUBLE BYTE CCSID, wie 1200 oder 13488
       *    können zur Zeit nicht geprüft werden.
@@ -83,10 +90,10 @@
       *
      C     XTab(X)       IFLT      x'40'
      C     XTab(X)       OREQ      x'FF'
-     C                   MOVEL (P) SET_CVTC      XTab(X)
-     C                   MOVEL (P) 'USR8163'     XMsgID
-     C                   MOVEL (P) SET_CVTC      USR81631
-     C                   MOVEL (P) USR8163       XMsgDta
+     C                   EVAL      XTab(X) = SET_CVTC
+     C                   EVAL      XMsgID = 'USR8163'
+     C                   EVAL      USR81631 = SET_CVTC
+     C                   EVAL      XMsgDta = USR8163
      C                   ELSE
       *           Zeichen beibehalten
      C                   Endif

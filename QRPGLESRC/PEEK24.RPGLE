@@ -14,6 +14,14 @@
       *                                                               *
       *  Änderung der Farbeinstellung                                 *
       *                                                               *
+      * ============================================================= *
+      * >>PRE-COMPILER<<                                              *
+*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
       *===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
@@ -37,6 +45,7 @@
       *
       *---Variablendefinition------------------------------*
       /COPY QCOPYLE,D_VARDEF
+      /COPY QCOPYLE,FLDL0100
       *----------------------------------------------------*
       *
       *---Variablendefinition ShortCmd---------------------*
@@ -182,7 +191,7 @@
      C                   WRITE     PBBOT#6                                      BT-Tasten 4
      C                   OTHER
      C                   WRITE     PBBOT#1                                      BT-Tasten 1
-     C                   Z-ADD     1             SFBOT
+     C                   EVAL      SFBOT = 1
      C                   Endsl
       *
       *  Anzeigen Bildschirm
@@ -205,12 +214,12 @@
       *
       *  Mappen der gedrückten Taste
       *  in Programmbefehl
-     C                   MOVEL (P) §ScnAID       YScnAID
-     C                   MOVEL (P) §§PgmName     YPgm
+     C                   EVAL      YScnAID = §ScnAID
+     C                   EVAL      YPgm = §§PgmName
      C                   CALL      PEEK21        P_Peek21
      C     YMsgID        IFNE      *BLANKS
-     C                   MOVEL (P) YMsgID        §MsgID
-     C                   MOVEL (P) YMsgDta       §MsgDta
+     C                   EVAL      §MsgID = YMsgID
+     C                   EVAL      §MsgDta = YMsgDta
      C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
      C                   ITER
      C                   Endif
@@ -286,7 +295,7 @@
      C     BZOFF1        BEGSR
       *
       *  Fehler
-     C                   MOVEL (P) '0'           *IN99
+     C                   EVAL      *IN99 = '0'
       *
      C                   ENDSR
       *
@@ -311,29 +320,29 @@
       *
      C                   SELECT
      C     Wrk_Field     WHENEQ    'KEYCOL'                                     Überschrift
-     C                   MOVEL (P) SET_KeyCol    Wrk_Color
+     C                   EVAL      Wrk_Color = SET_KeyCol
      C     Wrk_Field     WHENEQ    'HEDCOL'                                     Überschrift
-     C                   MOVEL (P) SET_HedCol    Wrk_Color
+     C                   EVAL      Wrk_Color = SET_HedCol
      C     Wrk_Field     WHENEQ    'PINCOL'                                     Pined-Daten
-     C                   MOVEL (P) SET_PinCol    Wrk_Color
+     C                   EVAL      Wrk_Color = SET_PinCol
      C     Wrk_Field     WHENEQ    'CLMCOL'                                     SpaltenMark
-     C                   MOVEL (P) SET_ClmCol    Wrk_Color
+     C                   EVAL      Wrk_Color = SET_ClmCol
      C     Wrk_Field     WHENEQ    'STDCOL'                                     Standard
-     C                   MOVEL (P) SET_StdCol    Wrk_Color
+     C                   EVAL      Wrk_Color = SET_StdCol
      C     Wrk_Field     WHENEQ    'NMLCOL'                                     Normale Suche
-     C                   MOVEL (P) SET_NmlCol    Wrk_Color
+     C                   EVAL      Wrk_Color = SET_NmlCol
      C     Wrk_Field     WHENEQ    'UNDCOL'                                     Unterstrichen
-     C                   MOVEL (P) SET_UndCol    Wrk_Color
+     C                   EVAL      Wrk_Color = SET_UndCol
      C     Wrk_Field     WHENEQ    'REVCOL'                                     Reverse Suche
-     C                   MOVEL (P) SET_RevCol    Wrk_Color
+     C                   EVAL      Wrk_Color = SET_RevCol
      C     Wrk_Field     WHENEQ    'TBLCOL'                                     Tabellierpap.
-     C                   MOVEL (P) SET_TblCol    Wrk_Color
+     C                   EVAL      Wrk_Color = SET_TblCol
      C     Wrk_Field     WHENEQ    'EXCCOL'                                     Exception
-     C                   MOVEL (P) SET_ExcCol    Wrk_Color
+     C                   EVAL      Wrk_Color = SET_ExcCol
      C                   OTHER
-     C                   MOVEL (P) '1'           *IN99
-     C                   MOVEL (P) 'USR8146'     §MsgID
-     C                   MOVEL (P) *BLANKS       §MsgDta
+     C                   EVAL      *IN99 = '1'
+     C                   EVAL      §MsgID = 'USR8146'
+     C                   EVAL      §MsgDta = *BLANKS
      C                   Endsl
       *
      C     EPRF20        TAG
@@ -352,8 +361,8 @@
       *
      C                   EXSR      SetUsrSetg
       *
-     C                   MOVEL (P) 'USR8112'     XMsgID
-     C                   MOVEL (P) *BLANKS       XMsgDta
+     C                   EVAL      XMsgID = 'USR8112'
+     C                   EVAL      XMsgDta = *BLANKS
       *
      C                   ENDSR
       *
@@ -365,18 +374,18 @@
       *
      C                   Callp     p_rmvPgmMg(§§pgmName)
       *
-     C                   MOVEL (P) 'USR8100'     XMsgID
+     C                   EVAL      XMsgID = 'USR8100'
       *
      C                   SELECT
      C     §ScnAID       WHENEQ    §F3
-     C                   MOVEL (P) 'F3'          USR81001
+     C                   EVAL      USR81001 = 'F3'
      C     §ScnAID       WHENEQ    §F12
-     C                   MOVEL (P) 'F12'         USR81001
+     C                   EVAL      USR81001 = 'F12'
      C                   OTHER
-     C                   MOVEL (P) 'Fxx'         USR81001
+     C                   EVAL      USR81001 = 'Fxx'
      C                   Endsl
       *
-     C                   MOVEL (P) USR8100       XMsgDta
+     C                   EVAL      XMsgDta = USR8100
       *
      C                   ENDSR
       *
@@ -396,7 +405,7 @@
       *
      C     C_MoreKeys    BEGSR
       *
-     C                   ADD       1             SFBOT
+     C                   EVAL      SFBOT = SFBOT + 1
       *
      C                   ENDSR
       *
@@ -407,87 +416,105 @@
      C     FILL##        BEGSR
       *
       *  SET_KeyCol
-     C                   MOVEL (P) SET_KeyCol    $$KEYCOL
-     C                   CAT       'KeyField':0  $$KEYCOL
+     C                   EVAL      $$KEYCOL = SET_KeyCol
+     C**                 CAT       'KeyField':0  $$KEYCOL
+     C                   EVAL      $$KEYCOL = %trimr($$KEYCOL) + 'KeyField'
       *
       *  SET_HedCol
-     C                   MOVEL (P) SET_HedCol    $$HEDCOL
-     C                   CAT       'Headline':0  $$HEDCOL
+     C                   EVAL      $$HEDCOL = SET_HedCol
+     C**                 CAT       'Headline':0  $$HEDCOL
+     C                   EVAL      $$HEDCOL = %trimr($$HEDCOL) + 'Headline'
       *
       *  SET_PinCol
-     C                   MOVEL (P) SET_PinCol    $$PINCOL1
-     C                   MOVEL (P) $$PINCOL1     $$PINCOL2
-     C                   CAT       'Pin-Record':0$$PINCOL1
+     C                   EVAL      $$PINCOL1 = SET_PinCol
+     C                   EVAL      $$PINCOL2 = $$PINCOL1
+     C**                 CAT       'Pin-Record':0$$PINCOL1
+     C                   EVAL      $$PINCOL1 = %trimr($$PINCOL1) + 'Pin-Record'
       *
-     C     ' ':'x'       XLATE     $$PINCOL2     $$PINCOL2
-     C                   MOVEL (P) $$PINCOL2     $$PINCOL3
-     C                   MOVEL (P) $$PINCOL2     $$PINCOL4
+     C**   ' ':'x'       XLATE     $$PINCOL2     $$PINCOL2
+     C                   EVAL      $$PINCOL2 = %xlate(' ': 'x': $$PINCOL2)
+     C                   EVAL      $$PINCOL3 = $$PINCOL2
+     C                   EVAL      $$PINCOL4 = $$PINCOL2
       *
       *  SET_StdCol
-     C                   MOVEL (P) SET_StdCol    $$STDCOL1
-     C                   MOVEL (P) $$STDCOL1     $$STDCOL2
-     C                   CAT       'Std.Color':0 $$STDCOL1
+     C                   EVAL      $$STDCOL1 = SET_StdCol
+     C                   EVAL      $$STDCOL2 = $$STDCOL1
+     C**                 CAT       'Std.Color':0 $$STDCOL1
+     C                   EVAL      $$STDCOL1 = %trimr($$STDCOL1) + 'Std.Color'
       *
-     C     ' ':'x'       XLATE     $$STDCOL2     $$STDCOL2
-     C                   MOVEL (P) $$STDCOL2     $$STDCOL3
-     C                   MOVEL (P) $$STDCOL2     $$STDCOL4
-     C                   MOVEL (P) $$STDCOL2     $$STDCOL5
-     C                   MOVEL (P) $$STDCOL2     $$STDCOL6
+     C**   ' ':'x'       XLATE     $$STDCOL2     $$STDCOL2
+     C                   EVAL      $$STDCOL2 = %xlate(' ': 'x': $$STDCOL2)
+     C                   EVAL      $$STDCOL3 = $$STDCOL2
+     C                   EVAL      $$STDCOL4 = $$STDCOL2
+     C                   EVAL      $$STDCOL5 = $$STDCOL2
+     C                   EVAL      $$STDCOL6 = $$STDCOL2
       *
       *  SET_ClmCol
-     C                   MOVEL (P) SET_ClmCol    $$CLMCOL1
-     C                   MOVEL (P) $$CLMCOL1     $$CLMCOL2
-     C                   CAT       'Mark Clm':0  $$CLMCOL1
+     C                   EVAL      $$CLMCOL1 = SET_ClmCol
+     C                   EVAL      $$CLMCOL2 = $$CLMCOL1
+     C**                 CAT       'Mark Clm':0  $$CLMCOL1
+     C                   EVAL      $$CLMCOL1 = %trimr($$CLMCOL1) + 'Mark Clm'
       *
-     C     ' ':'x'       XLATE     $$CLMCOL2     $$CLMCOL2
-     C                   MOVEL (P) $$CLMCOL2     $$CLMCOL3
-     C                   MOVEL (P) $$CLMCOL2     $$CLMCOL4
-     C                   MOVEL (P) $$CLMCOL2     $$CLMCOL5
-     C                   MOVEL (P) $$CLMCOL2     $$CLMCOL6
-     C                   MOVEL (P) $$CLMCOL2     $$CLMCOL7
+     C**   ' ':'x'       XLATE     $$CLMCOL2     $$CLMCOL2
+     C                   EVAL      $$CLMCOL2 = %xlate(' ': 'x': $$CLMCOL2)
+     C                   EVAL      $$CLMCOL3 = $$CLMCOL2
+     C                   EVAL      $$CLMCOL4 = $$CLMCOL2
+     C                   EVAL      $$CLMCOL5 = $$CLMCOL2
+     C                   EVAL      $$CLMCOL6 = $$CLMCOL2
+     C                   EVAL      $$CLMCOL7 = $$CLMCOL2
       *
       *  SET_NmlCol
-     C                   MOVEL (P) SET_NmlCol    $$NmlCOL1
-     C                   MOVEL (P) $$NmlCOL1     $$NmlCOL2
-     C                   CAT       'Search':0    $$NmlCOL1
+     C                   EVAL      $$NmlCOL1 = SET_NmlCol
+     C                   EVAL      $$NmlCOL2 = $$NmlCOL1
+     C**                 CAT       'Search':0    $$NmlCOL1
+     C                   EVAL      $$NmlCOL1 = %trimr($$NmlCOL1) + 'Search'
       *
-     C     ' ':'x'       XLATE     $$NmlCOL2     $$NmlCOL2
-     C                   MOVEL (P) $$NmlCOL2     $$NMLCOL3
-     C                   MOVEL (P) $$NmlCOL2     $$NmlCOL4
+     C**   ' ':'x'       XLATE     $$NmlCOL2     $$NmlCOL2
+     C                   EVAL      $$NmlCOL2 = %xlate(' ': 'x': $$NmlCOL2)
+     C                   EVAL      $$NMLCOL3 = $$NmlCOL2
+     C                   EVAL      $$NmlCOL4 = $$NmlCOL2
       *
       *  SET_UndCol
-     C                   MOVEL (P) SET_UndCol    $$UNDCOL1
-     C                   MOVEL (P) $$UNDCOL1     $$UNDCOL2
-     C                   CAT       'Search-Und':0$$UNDCOL1
+     C                   EVAL      $$UNDCOL1 = SET_UndCol
+     C                   EVAL      $$UNDCOL2 = $$UNDCOL1
+     C**                 CAT       'Search-Und':0$$UNDCOL1
+     C                   EVAL      $$UNDCOL1 = %trimr($$UNDCOL1) + 'Search-Und'
       *
-     C     ' ':'x'       XLATE     $$UNDCOL2     $$UNDCOL2
-     C                   MOVEL (P) $$UNDCOL2     $$UNDCOL3
-     C                   MOVEL (P) $$UNDCOL2     $$UNDCOL4
+     C**   ' ':'x'       XLATE     $$UNDCOL2     $$UNDCOL2
+     C                   EVAL      $$UNDCOL2 = %xlate(' ': 'x': $$UNDCOL2)
+     C                   EVAL      $$UNDCOL3 = $$UNDCOL2
+     C                   EVAL      $$UNDCOL4 = $$UNDCOL2
       *
       *  SET_RevCol
-     C                   MOVEL (P) SET_RevCol    $$REVCOL1
-     C                   MOVEL (P) $$REVCOL1     $$REVCOL2
-     C                   CAT       'Search-Rev':0$$REVCOL1
+     C                   EVAL      $$REVCOL1 = SET_RevCol
+     C                   EVAL      $$REVCOL2 = $$REVCOL1
+     C**                 CAT       'Search-Rev':0$$REVCOL1
+     C                   EVAL      $$REVCOL1 = %trimr($$REVCOL1) + 'Search-Rev'
       *
-     C     ' ':'x'       XLATE     $$REVCOL2     $$REVCOL2
-     C                   MOVEL (P) $$REVCOL2     $$REVCOL3
-     C                   MOVEL (P) $$REVCOL2     $$REVCOL4
+     C**   ' ':'x'       XLATE     $$REVCOL2     $$REVCOL2
+     C                   EVAL      $$REVCOL2 = %xlate(' ': 'x': $$REVCOL2)
+     C                   EVAL      $$REVCOL3 = $$REVCOL2
+     C                   EVAL      $$REVCOL4 = $$REVCOL2
       *
       *  SET_TblCol
-     C                   MOVEL (P) SET_TblCol    $$TBLCOL1
-     C                   MOVEL (P) $$TBLCOL1     $$TBLCOL2
-     C                   CAT       'Tabulated':0 $$TBLCOL1
+     C                   EVAL      $$TBLCOL1 = SET_TblCol
+     C                   EVAL      $$TBLCOL2 = $$TBLCOL1
+     C**                 CAT       'Tabulated':0 $$TBLCOL1
+     C                   EVAL      $$TBLCOL1 = %trimr($$TBLCOL1) + 'Tabulated'
       *
-     C     ' ':'x'       XLATE     $$TBLCOL2     $$TBLCOL2
-     C                   MOVEL (P) $$TBLCOL2     $$TBLCOL3
-     C                   MOVEL (P) $$TBLCOL2     $$TBLCOL4
+     C**   ' ':'x'       XLATE     $$TBLCOL2     $$TBLCOL2
+     C                   EVAL      $$TBLCOL2 = %xlate(' ': 'x': $$TBLCOL2)
+     C                   EVAL      $$TBLCOL3 = $$TBLCOL2
+     C                   EVAL      $$TBLCOL4 = $$TBLCOL2
       *
       *  SET_ExcCol
-     C                   MOVEL (P) SET_ExcCol    $$EXCCOL1
-     C                   MOVEL (P) $$EXCCOL1     $$EXCCOL2
-     C                   CAT       'Exception':0 $$EXCCOL1
+     C                   EVAL      $$EXCCOL1 = SET_ExcCol
+     C                   EVAL      $$EXCCOL2 = $$EXCCOL1
+     C**                 CAT       'Exception':0 $$EXCCOL1
+     C                   EVAL      $$EXCCOL1 = %trimr($$EXCCOL1) + 'Exception'
       *
-     C     ' ':'x'       XLATE     $$EXCCOL2     $$EXCCOL2
+     C**   ' ':'x'       XLATE     $$EXCCOL2     $$EXCCOL2
+     C                   EVAL      $$EXCCOL2 = %xlate(' ': 'x': $$EXCCOL2)
       *
      C                   ENDSR
       *
@@ -499,14 +526,14 @@
       *
      C     XDsp80        IFEQ      '0'
       *   132-Zeichen Anzeige
-     C                   MOVEL (P) '0'           *IN88
-     C                   Z-ADD     6             ZEI
-     C                   Z-ADD     26            POS
+     C                   EVAL      *IN88 = '0'
+     C                   EVAL      ZEI = 6
+     C                   EVAL      POS = 26
      C                   ELSE
       *    80-Zeichen Anzeige
-     C                   MOVEL (P) '1'           *IN88
-     C                   Z-ADD     4             ZEI
-     C                   Z-ADD     7             POS
+     C                   EVAL      *IN88 = '1'
+     C                   EVAL      ZEI = 4
+     C                   EVAL      POS = 7
      C                   Endif
       *
      C                   ENDSR
@@ -517,7 +544,7 @@
       *
      C     GetUsrSetg    BEGSR
       *
-     C                   MOVEL (P) XSet0001      SET0001
+     C                   EVAL      SET0001 = XSet0001
       *
      C                   ENDSR
       *
@@ -527,7 +554,7 @@
       *
      C     SetUsrSetg    BEGSR
       *
-     C                   MOVEL (P) SET0001       XSet0001
+     C                   EVAL      XSet0001 = SET0001
       *
      C                   ENDSR
       *
@@ -537,8 +564,8 @@
       *
      C     GetColor      BEGSR
       *
-     C                   MOVEL (P) XDsp80        YDsp80
-     C                   MOVEL (P) Wrk_Color     YColorAttr
+     C                   EVAL      YDsp80 = XDsp80
+     C                   EVAL      YColorAttr = Wrk_Color
      C                   CALL      PEEK25        P_Peek25               99
       *
      C     *IN99         IFEQ      '1'
@@ -547,29 +574,29 @@
       *
      C                   SELECT
      C     Wrk_Field     WHENEQ    'KEYCOL'                                     Überschrift
-     C                   MOVEL (P) YColorAttr    SET_KeyCol
+     C                   EVAL      SET_KeyCol = YColorAttr
      C     Wrk_Field     WHENEQ    'HEDCOL'                                     Überschrift
-     C                   MOVEL (P) YColorAttr    SET_HedCol
+     C                   EVAL      SET_HedCol = YColorAttr
      C     Wrk_Field     WHENEQ    'PINCOL'                                     Pined-Daten
-     C                   MOVEL (P) YColorAttr    SET_PinCol
+     C                   EVAL      SET_PinCol = YColorAttr
      C     Wrk_Field     WHENEQ    'CLMCOL'                                     Spaltenmark.
-     C                   MOVEL (P) YcolorAttr    SET_ClmCol
+     C                   EVAL      SET_ClmCol = YcolorAttr
      C     Wrk_Field     WHENEQ    'STDCOL'                                     Standard
-     C                   MOVEL (P) YColorAttr    SET_StdCol
+     C                   EVAL      SET_StdCol = YColorAttr
      C     Wrk_Field     WHENEQ    'NMLCOL'                                     Normale Suche
-     C                   MOVEL (P) YColorAttr    SET_NmlCol
+     C                   EVAL      SET_NmlCol = YColorAttr
      C     Wrk_Field     WHENEQ    'UNDCOL'                                     Unterstrichen
-     C                   MOVEL (P) YColorAttr    SET_UndCol
+     C                   EVAL      SET_UndCol = YColorAttr
      C     Wrk_Field     WHENEQ    'REVCOL'                                     Reverse Suche
-     C                   MOVEL (P) YColorAttr    SET_RevCol
+     C                   EVAL      SET_RevCol = YColorAttr
      C     Wrk_Field     WHENEQ    'TBLCOL'                                     Tabellierpap.
-     C                   MOVEL (P) YColorAttr    SET_TblCol
+     C                   EVAL      SET_TblCol = YColorAttr
      C     Wrk_Field     WHENEQ    'EXCCOL'                                     Exception
-     C                   MOVEL (P) YColorAttr    SET_ExcCol
+     C                   EVAL      SET_ExcCol = YColorAttr
      C                   OTHER
-     C                   MOVEL (P) '1'           *IN99
-     C                   MOVEL (P) 'USR8146'     §MsgID
-     C                   MOVEL (P) *BLANKS       §MsgDta
+     C                   EVAL      *IN99 = '1'
+     C                   EVAL      §MsgID = 'USR8146'
+     C                   EVAL      §MsgDta = *BLANKS
      C                   Endsl
       *
      C                   EXSR      Fill##
@@ -595,22 +622,22 @@
       * - Bildschirmfelder füllen
      C                   EXSR      FILL##
       *
-     C                   MOVEL (P) *BLANKS       XMsgID
-     C                   MOVEL (P) *BLANKS       XMsgDta
+     C                   EVAL      XMsgID = *BLANKS
+     C                   EVAL      XMsgDta = *BLANKS
       *
       *  Löschen der Cursorosition
-     C                   Z-ADD     *ZEROS        CsrRow
-     C                   Z-ADD     *ZEROS        CsrCol
+     C                   EVAL      CsrRow = *ZEROS
+     C                   EVAL      CsrCol = *ZEROS
       *
       * - Einstellen Darstellung der Funktionstasten
-     C                   Z-ADD     1             SfBot
+     C                   EVAL      SfBot = 1
       *
       * - Einstellen der Bildschirmauflösung 80/132-Zeichen
      C                   EXSR      SetScreen
       *
       * - Copyright
-     C                   MOVEL (P) 'USR9999'     §MsgID
-     C                   MOVEL (P) XCopyRight    §MsgDta
+     C                   EVAL      §MsgID = 'USR9999'
+     C                   EVAL      §MsgDta = XCopyRight
      C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
       *
      C                   ENDSR
@@ -629,10 +656,9 @@
       *
      C                   Eval      yPgm     = §§PgmName
      C                   Eval      yKey     = '*ALL'
-      ***                Eval      yPosF24  = §NbrFKeys
      C                   Eval      yPosF24  = *ZEROS
      C                   Call      PEEK23        P_Peek23
-     C                   Movea (P) YFKeys        ScrnFKeys
+     C                   Eval      ScrnFKeys = %subarr(YFKeys: 1)
       *
      C                   Endsr
       *
@@ -645,8 +671,4 @@
      C                   DUMP
       *
      C                   ENDSR     '*CANCL'
-      *
-      *---Nachrichten--------------------------------------*
- CPY  ***/COPY QCOPYLE,MSG_C_MAPI
-      *----------------------------------------------------*
       *

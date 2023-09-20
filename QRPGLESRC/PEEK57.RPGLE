@@ -15,6 +15,14 @@
       *  Peek/400 - Löschen   "Arbeitsumgebung"                       *
       *                                                               *
       *===============================================================*
+      * >>PRE-COMPILER<<                                              *
+      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
+      *===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
       *
@@ -28,6 +36,7 @@
       *
       *---Variablendefinition------------------------------*
       /COPY QCOPYLE,D_VARDEF
+      /COPY QCOPYLE,FLDL0100
       *----------------------------------------------------*
       *
       *---Variablendefinition ShortCmd---------------------*
@@ -187,24 +196,24 @@
      C                   WRITE     PBBOT#12                                     BT-Tasten 12
      C                   OTHER
      C                   WRITE     PBBOT#1                                      BT-Tasten 1
-     C                   Z-ADD     1             SFBOT
+     C                   EVAL      SFBOT = 1
      C                   Endsl
       *
       *  Anzeigen Bildschirm
      C                   EXFMT     BILD01
-     C                   MOVEL (P) '0'           *IN70
+     C                   EVAL      *IN70 = '0'
       *
       *  Nachrichten löschen
      C                   Callp     p_rmvPgmMg(§§pgmName)
       *
       *  Mappen der gedrückten Taste
       *  in Programmbefehl
-     C                   MOVEL (P) §ScnAID       YScnAID
-     C                   MOVEL (P) §§PgmName     YPgm
+     C                   EVAL      YScnAID = §ScnAID
+     C                   EVAL      YPgm = §§PgmName
      C                   CALL      PEEK21        P_Peek21
      C     YMsgID        IFNE      *BLANKS
-     C                   MOVEL (P) YMsgID        §MsgID
-     C                   MOVEL (P) YMsgDta       §MsgDta
+     C                   EVAL      §MsgID = YMsgID
+     C                   EVAL      §MsgDta = YMsgDta
      C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
      C                   ITER
      C                   Endif
@@ -264,9 +273,9 @@
       *
      C                   Callp     p_rmvPgmMg(§§pgmName)
       *
-     C                   MOVEL (P) 'USR8100'     XMsgID
-     C                   MOVEL (P) YPgmCmd       USR81001
-     C                   MOVEL (P) USR8100       XMsgDta
+     C                   EVAL      XMsgID = 'USR8100'
+     C                   EVAL      USR81001 = YPgmCmd
+     C                   EVAL      XMsgDta = USR8100
       *
      C                   ENDSR
       *
@@ -286,7 +295,7 @@
       *
      C     C_MoreKeys    BEGSR
       *
-     C                   ADD       1             SFBOT
+     C                   EVAL      SFBOT = SFBOT + 1
       *
      C                   ENDSR
       *
@@ -331,14 +340,14 @@
       *
      C     XDsp80        IFEQ      '0'
       *   132-Zeichen Anzeige
-     C                   MOVEL (P) '0'           *IN88
-     C                   Z-ADD     6             ZEI
-     C                   Z-ADD     40            POS
+     C                   EVAL      *IN88 = '0'
+     C                   EVAL      ZEI = 6
+     C                   EVAL      POS = 40
      C                   ELSE
       *    80-Zeichen Anzeige
-     C                   MOVEL (P) '1'           *IN88
-     C                   Z-ADD     6             ZEI
-     C                   Z-ADD     19            POS
+     C                   EVAL      *IN88 = '1'
+     C                   EVAL      ZEI = 6
+     C                   EVAL      POS = 19
      C                   Endif
       *
      C                   ENDSR
@@ -356,22 +365,17 @@
      C                   Callp     p_rmvPgmMg(§§pgmName)
       *
       * - Rückkehrcode
-     C                   MOVEL (P) *BLANKS       XMsgID
-     C                   MOVEL (P) *BLANKS       XMsgDta
+     C                   EVAL      XMsgID = *BLANKS
+     C                   EVAL      XMsgDta = *BLANKS
       *
       * - Darstellung der Befehlstasten
-     C                   Z-ADD     1             SfBot
+     C                   EVAL      SfBot = 1
       *
       * - Einstellen der Bildschirmauflösung 80/132-Zeichen
      C                   EXSR      SetScreen
       *
       * - Bildschirm füllen
      C                   EXSR      C_Refresh
-      *
-      * - Copyright
-      ***                MOVEL (P) 'USR9999'     §MsgID
-      ***                MOVEL (P) XCopyRight    §MsgDta
-      ***                Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
       *
      C                   ENDSR
       *
@@ -388,10 +392,9 @@
       *
      C                   Eval      yPgm    = §§PgmName
      C                   Eval      yKey    = '*ALL'
-      ***                Eval      yPosF24 = NbrFKeys
      C                   Eval      yPosF24 = *ZEROS
      C                   Call      PEEK23        P_Peek23
-     C                   Movea (P) yFKeys        ScrnFKeys
+     C                   Eval      ScrnFKeys = %subarr(yFKeys: 1)
       *
      C                   Endsr
       *

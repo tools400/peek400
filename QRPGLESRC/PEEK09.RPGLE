@@ -26,6 +26,14 @@
       *                                                               *
       *  XValue  - Objektinformationen im Format OBJD0400             *
       *                                                               *
+      * ============================================================= *
+      * >>PRE-COMPILER<<                                              *
+*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
       *===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
@@ -50,6 +58,7 @@
       *
       *---Variablendefinition------------------------------*
       /COPY QCOPYLE,D_VARDEF
+      /COPY QCOPYLE,FLDL0100
       *----------------------------------------------------*
       *
       *---Versenden von Nachrichten------------------------*
@@ -77,7 +86,7 @@
       * - Meldung
      C                   Callp     p_sndStsMg('USR8107': XObjName)
       *
-     C                   MOVEL (P) XObjName      ObjName
+     C                   EVAL      ObjName = XObjName
       *
      C                   CALL      'QUSROBJD'
      C                   PARM                    RcvVar
@@ -88,14 +97,14 @@
      C                   PARM                    §ErrorCode
       *
      C     §ErrAvail     IFEQ      *ZEROS
-     C                   MOVEL (P) RcvVar        XValue
-     C                   MOVEL (P) *BLANKS       XMsgID
-     C                   MOVEL (P) *BLANKS       XMsgDta
+     C                   EVAL      XValue = RcvVar
+     C                   EVAL      XMsgID = *BLANKS
+     C                   EVAL      XMsgDta = *BLANKS
      C                   ELSE
      C                   CLEAR                   OBJD0400
-     C                   MOVEL (P) OBJD0400      XValue
-     C                   MOVEL (P) §ErrID        XMsgID
-     C                   MOVEL (P) §ErrDta       XMsgDta
+     C                   EVAL      XValue = OBJD0400
+     C                   EVAL      XMsgID = §ErrID
+     C                   EVAL      XMsgDta = §ErrDta
      C                   Endif
       *
       *---------------------------------------------------*

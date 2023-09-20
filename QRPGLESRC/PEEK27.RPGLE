@@ -15,12 +15,21 @@
       *                                                               *
       *  Einlesen der Einzelauswahlen                                 *
       *                                                               *
+      * ============================================================= *
+      * >>PRE-COMPILER<<                                              *
+*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
       *===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
       *
       *---Variablendefinition------------------------------*
       /COPY QCOPYLE,D_VARDEF
+      /COPY QCOPYLE,FLDL0100
       *----------------------------------------------------*
       *
       *---Nachrichten--------------------------------------*
@@ -40,6 +49,7 @@
      D XNbrOfKeys      S                   like(r§int4    )
      D XExclKeys       S                   like(r§pgmCmd  ) DIM(25)
       *
+     D i               S                   like(r§int4    ) inz
      D X               S                   like(r§int4    ) inz
      D Y               S                   like(r§int4    ) inz
      D Z               S                   like(r§int4    ) inz
@@ -70,12 +80,12 @@
       *
       *----------------------------------------------------*
       *
-     C                   MOVEA (P) *BLANKS       XFKeys
-     C                   Z-ADD     *ZEROS        XNbrOfKeys
+     C                   EVAL      XFKeys(*) = *BLANKS
+     C                   EVAL      XNbrOfKeys = *ZEROS
       *
      C                   EXSR      GetKeyMap
       *
-     C                   MOVEL (P) '1'           *INLR
+     C                   EVAL      *INLR = '1'
       *
       *============================================================*
       *    GetKeyMap     Einlesen der F-Tastenbelegung             *
@@ -83,13 +93,13 @@
       *
      C     GetKeyMap     BEGSR
       *
-     C                   Z-ADD     1             X
-     C                   Z-ADD     1             XNbrOfKeys
+     C                   EVAL      X = 1
+     C                   EVAL      XNbrOfKeys = 1
       *
       *  Numerische-Auswahlen ...
-     C     '*'           CAT   (P) XPgm:0        Wrk_Sectn
-     C                   MOVEL (P) *BLANKS       Wrk_Key
-     C                   MOVEL     '0'           Wrk_Key
+     C                   EVAL      Wrk_Sectn = '*' + %trim(XPgm)
+     C                   EVAL      Wrk_Key = *BLANKS
+     C                   EVAL      Wrk_Key = '0' + Wrk_Key
      C                   Callp     p_setllUsr(Wrk_Sectn: Wrk_Key)
       *
      C                   DO        *HIVAL
@@ -100,8 +110,8 @@
       *  Überprüfen Auschlüsse
      C                   IF        %PARMS >= 4
      C                   EVAL      pgmCmd = data
-     C     pgmCmd        LOOKUP    XExclKeys                              01
-     C                   IF        *IN01 = '1'
+     C                   EVAL      i = %lookup(pgmCmd: XExclKeys)
+     C                   IF        i > 0
      C                   ITER
      C                   ENDIF
      C                   ENDIF
@@ -115,9 +125,9 @@
      C                   Enddo
       *
       *  String-Auswahlen ...
-     C     '*'           CAT   (P) XPgm:0        Wrk_Sectn
-     C                   MOVEL (P) *ALLx'FF'     Wrk_Key
-     C                   MOVEL     '*'           Wrk_Key
+     C                   EVAL      Wrk_Sectn = '*' + %trim(XPgm)
+     C                   EVAL      Wrk_Key = *ALLx'FF'
+     C                   EVAL      Wrk_Key = '*' + Wrk_Key
      C                   Callp     p_setllUsr(Wrk_Sectn: Wrk_Key)
       *
      C                   DO        *HIVAL
@@ -146,43 +156,44 @@
       *
      C     BuildStr      BEGSR
       *
-     C                   MOVEL (P) *BLANKS       wrk_MsgID
-     C                   MOVEL (P) *BLANKS       wrk_MsgTxt
+     C                   EVAL      wrk_MsgID = *BLANKS
+     C                   EVAL      wrk_MsgTxt = *BLANKS
       *
       /COPY QCOPYLE,MAPPCMDMSG
       *
      C     wrk_MsgID     IFNE      *BLANKS
-     C     'KEY'         CAT   (P) wrk_MsgID:0   wrk_MsgID
+     C                   Eval      wrk_MsgID = 'KEY' + %trim(wrk_MsgID)
      C                   Eval      wrk_MsgTxt = f_msgText(wrk_MsgID: ' ')
      C                   Endif
       *
       *  Stringlänge
-     C     ' '           CHECKR    wrk_MsgTxt    Z
+     C                   EVAL      Z = %checkr(' ': wrk_MsgTxt)
       *  Für Auswahl und "="-Zeichen
-     C                   ADD       3             Z
+     C                   EVAL      Z = Z + 3
       *  Für Trennleerraum ...
      C     XFKeys(X)     IFNE      *BLANKS
-     C                   ADD       2             Z
+     C                   EVAL      Z = Z + 2
      C                   Endif
       *
       *  Freie Länge
-     C     ' '           CHECKR    XFKeys(X)     Y
-     C     63            SUB       Y             Y
+     C                   EVAL      Y = %checkr(' ': XFKeys(X))
+     C                   EVAL      Y = 63 - Y
      C     Y             IFLT      Z
-     C                   ADD       1             X
-     C                   ADD       1             XNbrOfKeys
+     C                   EVAL      X = X + 1
+     C                   EVAL      XNbrOfKeys = XNbrOfKeys + 1
      C                   Endif
       *
      C     X             IFGT      32
       *               Nix tun, Tabelle ist voll
      C                   ELSE
      C     XFKeys(X)     IFEQ      *BLANKS
-     C                   MOVEL (P) Wrk_Key       XFKeys(X)
+     C                   EVAL      XFKeys(X) = %trimr(Wrk_Key)
      C                   ELSE
-     C                   CAT       Wrk_Key:2     XFKeys(X)
+     C                   Eval      XFKeys(X) =
+     C                               %trimr(XFKeys(X)) + '  ' + %trimr(Wrk_Key)
      C                   Endif
-     C                   CAT       '=':0         XFKeys(X)
-     C                   CAT       wrk_MsgTxt:0  XFKeys(X)
+     C                   Eval      XFKeys(X) =
+     C                               %trimr(XFKeys(X)) + '=' + %trim(wrk_MsgTxt)
      C                   Endif
       *
      C                   ENDSR

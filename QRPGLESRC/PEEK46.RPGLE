@@ -52,6 +52,14 @@
       *                                                               *
       *      PEEK46 - Funktion (*DELETE) delete list (user space)     *
       *                                                               *
+      * ============================================================= *
+      * >>PRE-COMPILER<<                                              *
+*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
       *===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
@@ -158,7 +166,7 @@
       *
      C     Create        BEGSR
       *
-     C                   Z-ADD     *ZEROS        XANZ
+     C                   EVAL      XANZ = *ZEROS
       *
      C                   EXSR      CHKOBJ
       *
@@ -193,10 +201,10 @@
      C                   PARM                    §ErrorCode
       *
      C     §ErrAvail     IFNE      *ZEROS
-     C                   Z-ADD     *ZEROS        NumLstEnt
+     C                   EVAL      NumLstEnt = *ZEROS
      C                   Endif
       *
-     C                   Z-ADD     NumLstEnt     XANZ
+     C                   EVAL      XANZ = NumLstEnt
       *
      C                   ENDSR
       *
@@ -210,14 +218,10 @@
       *
      C     *IN99         IFEQ      '0'
       *
-     C                   MOVEL(P)  'DLTUSR'      YCMD
-     C                   CAT       'SPC':0       YCMD
-     C                   CAT       'USR':1       YCMD
-     C                   CAT       'SPC(':0      YCMD
-     C                   CAT       SpcLib:0      YCMD
-     C                   CAT       '/':0         YCMD
-     C                   CAT       SpcName:0     YCMD
-     C                   CAT       ')':0         YCMD
+     C                   EVAL      YCMD = 'DLTUSRSPC USRSPC(' +
+     C                                      %trim(SpcLib) + '/' +
+     C                                      %trim(SpcName) +
+     C                                    ')'
       *
      C                   CALL      'QCMDEXC'
      C                   PARM                    yCmd
@@ -243,11 +247,11 @@
       *
      C                   EVAL      ListPtr = %ADDR(Data(OffsetLst+1))
       *
-     C                   MOVEL(P)  ListData      XLIST
-     C                   ADD       EntrySize     OffsetLst
-     C                   SUB       1             NumLstEnt
+     C                   EVAL      XLIST = ListData
+     C                   EVAL      OffsetLst = OffsetLst + EntrySize
+     C                   EVAL      NumLstEnt = NumLstEnt - 1
       *
-     C                   Z-ADD     NumLstEnt     XANZ
+     C                   EVAL      XANZ = NumLstEnt
      C                   Endif
      C                   ELSE
       *   Ungültiger Wert in NumLstEnt
@@ -266,18 +270,18 @@
       *
      C                   EVAL      SpcStrPos = OffsetLst+1
       *
-     C                   Z-ADD     EntrySize     SpcRtvLen
+     C                   EVAL      SpcRtvLen = EntrySize
      C                   CALL      'QUSRTVUS'
      C                   PARM                    SpaceName
      C                   PARM                    SpcStrPos
      C                   PARM                    SpcRtvLen
      C                   PARM                    RtvData
       *
-     C                   MOVEL(P)  RtvData       XLIST
-     C                   ADD       EntrySize     OffsetLst
-     C                   SUB       1             NumLstEnt
+     C                   EVAL      XLIST = RtvData
+     C                   EVAL      OffsetLst = OffsetLst + EntrySize
+     C                   EVAL      NumLstEnt = NumLstEnt - 1
       *
-     C                   Z-ADD     NumLstEnt     XANZ
+     C                   EVAL      XANZ = NumLstEnt
       *
      C                   ELSE
       *   Ungültiger Wert in NumLstEnt
@@ -292,17 +296,10 @@
       *
      C     CHKOBJ        BEGSR
       *
-     C                   MOVEL(P)  'CHKOBJ'      YCMD
-     C                   CAT       'OBJ(':1      YCMD
-     C                   CAT       SpcLib:0      YCMD
-     C                   CAT       '/':0         YCMD
-     C                   CAT       SpcName:0     YCMD
-     C                   CAT       ')':0         YCMD
-     C                   CAT       'OBJ':1       YCMD
-     C                   CAT       'TYPE(':0     YCMD
-     C                   CAT       '*USR':0      YCMD
-     C                   CAT       'SPC':0       YCMD
-     C                   CAT       ')':0         YCMD
+     C                   EVAL      YCMD = 'CHKOBJ OBJ(' +
+     C                                      %trim(SpcLib) + '/' +
+     C                                      %trim(SpcName) +
+     C                                    ') OBJTYPE(*USRSPC)'
       *
      C                   CALL      'QCMDEXC'                            99
      C                   PARM                    yCmd
@@ -316,10 +313,10 @@
       *
      C     *INZSR        BEGSR
       *
-     C                   MOVEL(P)  'QTEMP'       SpcLib
-     C                   MOVEL(P)  '§PEEK§'      SpcName
+     C                   EVAL      SpcLib = 'QTEMP'
+     C                   EVAL      SpcName = '§PEEK§'
       *
-     C     DataLen       SUB       LstDataLen    maxData
+     C                   EVAL      maxData = DataLen - LstDataLen
       *
      C                   ENDSR
       *
@@ -331,7 +328,7 @@
       *
      C                   DUMP
       *
-     C                   Z-ADD     *ZEROS        XANZ
+     C                   EVAL      XANZ = *ZEROS
      C                   GOTO      ENDE
       *
      C                   ENDSR     '*CANCL'

@@ -15,6 +15,14 @@
       *  Peek/400 - Erweiterte PIN-Funktion                           *
       *                                                               *
       *===============================================================*
+      * >>PRE-COMPILER<<                                              *
+      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
+      *===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
       *
@@ -209,7 +217,7 @@
       *
       *  Prüfen Positionierung der Subfile
      C     SFSANR        IFLE      *ZEROS
-     C                   Z-ADD     1             SFSANR
+     C                   EVAL      SFSANR = 1
      C                   Endif
       *
       *  Nachrichten senden
@@ -218,9 +226,9 @@
       *  Warnung, bei mehr als 12 Spalten
      C                   If        (NbrPinCol > %elem(XPinTabC))
      C                   CLEAR                   USR8205
-     C                   MOVEL (P) 'USR8205'     §MsgID
+     C                   EVAL      §MsgID = 'USR8205'
      C                   Eval      USR82051 = %elem(XPinTabC)
-     C                   MOVEL (P) USR8205       §MsgDta
+     C                   EVAL      §MsgDta = USR8205
      C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
      C                   Endif
       *
@@ -257,29 +265,29 @@
      C                   WRITE     PBBOT#6                                      BT-Tasten 4
      C                   OTHER
      C                   WRITE     PBBOT#1                                      BT-Tasten 1
-     C                   Z-ADD     1             SFBOT
+     C                   EVAL      SFBOT = 1
      C                   Endsl
       *
       *  Anzeige der Subfile
      C                   EXFMT     PBCTL
-     C                   MOVEL (P) '0'           *IN70
+     C                   EVAL      *IN70 = '0'
       *
       *  Nachrichten löschen
      C                   Callp     p_rmvPgmMg(§§pgmName)
       *
       *  Aktuelle Satz-Nr.
      C     SFLCSR        IFGT      *ZEROS
-     C                   Z-ADD     SFLCSR        SFSANR
+     C                   EVAL      SFSANR = SFLCSR
      C                   Endif
       *
       *  Mappen der gedrückten Taste
       *  in Programmbefehl
-     C                   MOVEL (P) §ScnAID       YScnAID
-     C                   MOVEL (P) §§PgmName     YPgm
+     C                   EVAL      YScnAID = §ScnAID
+     C                   EVAL      YPgm = §§PgmName
      C                   CALL      PEEK21        P_Peek21
      C     YMsgID        IFNE      *BLANKS
-     C                   MOVEL (P) YMsgID        §MsgID
-     C                   MOVEL (P) YMsgDta       §MsgDta
+     C                   EVAL      §MsgID = YMsgID
+     C                   EVAL      §MsgDta = YMsgDta
      C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
      C                   ITER
      C                   Endif
@@ -380,20 +388,20 @@
      C     C_Search      BEGSR
       *
      C     ##Field       IFNE      *BLANKS
-     C                   MOVEL (P) ##Field       LstField
-     C                   MOVEL (P) *BLANKS       ##Field
+     C                   EVAL      LstField = ##Field
+     C                   EVAL      ##Field = *BLANKS
      C                   Endif
       *
      C     LstField      IFEQ      *BLANKS
-     C                   MOVEL (P) '1'           *IN70
+     C                   EVAL      *IN70 = '1'
      C                   CLEAR                   USR8209
-     C                   MOVEL (P) 'USR8209'     §MsgID
-     C                   MOVEL (P) USR8209       §MsgDta
+     C                   EVAL      §MsgID = 'USR8209'
+     C                   EVAL      §MsgDta = USR8209
      C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
      C                   ELSE
      C                   EXSR      PosToField
      C     IsNewPos      IFEQ      bTrue
-     C                   Z-ADD     Wrk_SFSANR    SFSANR
+     C                   EVAL      SFSANR = Wrk_SFSANR
      C                   Endif
      C                   Endif
       *
@@ -414,24 +422,24 @@
      C                   Endif
       *
      C     LstField      IFEQ      *BLANKS
-     C                   MOVEL (P) bFalse        IsNewPos
+     C                   EVAL      IsNewPos = bFalse
      C                   Eval      LstNbrRcd = 0
      C                   ELSE
       *
      C                   EXSR      SrchField
      C     IsFound       IFEQ      bFalse
-     C                   MOVEL (P) bFalse        IsNewPos
+     C                   EVAL      IsNewPos = bFalse
      C                   CLEAR                   USR8136
-     C                   MOVEL (P) 'USR8136'     §MsgID
-     C                   MOVEL (P) LstField      USR81361                       Feldname
-     C                   MOVEL (P) USR8136       §MsgDta
+     C                   EVAL      §MsgID = 'USR8136'
+     C                   EVAL      USR81361 = LstField                          Feldname
+     C                   EVAL      §MsgDta = USR8136
      C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
      C                   ELSE
-     C                   MOVEL (P) bTrue         IsNewPos
+     C                   EVAL      IsNewPos = bTrue
      C                   Endif
      C                   Endif
       *
-     C                   MOVEL (P) LstField      R_Field
+     C                   EVAL      R_Field = LstField
  E01  ***                ENDIF
       *
      C                   ENDSR
@@ -443,23 +451,23 @@
      C     SrchField     BEGSR
       *
      C     *IN80         IFEQ      '0'
-     C                   MOVEL (P) bFalse        IsFound
+     C                   EVAL      IsFound = bFalse
      C                   ELSE
       *
-     C                   MOVEL (P) bFalse        IsFound
+     C                   EVAL      IsFound = bFalse
      C                   Eval      LstNbrRcd = LstNbrRcd + 1
       *
      C     LstNbrRcd     DO        SflNbrRcd     SflRec
      C     SflRec        CHAIN     PBSFL                              1111
      C     *IN11         IFEQ      '1'
-     C                   MOVEL (P) bFalse        IsFound
+     C                   EVAL      IsFound = bFalse
      C                   LEAVE
      C                   Endif
       *
      C                   IF        LstField =
      C                             %subst($$FNME: 1:(f_scan(' ':
      C                                                      LstFIELD) - 1))
-     C                   MOVEL (P) bTrue         IsFound
+     C                   EVAL      IsFound = bTrue
      C                   LEAVE
      C                   ELSE
      C     SFPAU         IFNE      *BLANKS
@@ -478,10 +486,10 @@
      C                   Enddo
       *
      C     IsFound       IFEQ      bTrue
-     C                   Z-ADD     SflRec        Wrk_SFSANR
+     C                   EVAL      Wrk_SFSANR = SflRec
      C                   Eval      LstNbrRcd = SflRec
      C                   ELSE
-     C                   Z-ADD     *ZEROS        Wrk_SFSANR
+     C                   EVAL      Wrk_SFSANR = *ZEROS
      C                   Eval      LstNbrRcd = 0
      C                   Endif
       *
@@ -507,7 +515,7 @@
       *
      C     VReadC        BEGSR
       *
-     C                   MOVEL (P) bFalse        IsSflError
+     C                   EVAL      IsSflError = bFalse
       *
      C     *IN80         IFEQ      '0'
       *   keine Einträge in Subfile vorhanden ...
@@ -525,52 +533,49 @@
       *
       *  Cursorpositionierung ...
      C     IsSflError    IFEQ      bFalse
-     C                   Z-ADD     SflRec        SflCsr
+     C                   EVAL      SflCsr = SflRec
      C                   ELSE
       *  Subfile nicht neu positionieren
      C                   Endif
       *
       *  Linksbündig setzen ...
-     C     ' '           CHECK     SFPAU         X
-     C     X             IFGE      1
-     C                   SUBST (P) SFPAU:X       SFPAU
-     C                   Endif
+     C                   EVAL      SFPAU = %triml(SFPAU)
       *
       *  Zuordnung AUSWAHL => Befehl ...
-     C     '#'           CAT   (P) SFPAU:0       YScnAID
-     C                   MOVEL (P) §§PgmName     YPgm
+     C                   EVAL      YScnAID = '#' + SFPAU
+     C                   EVAL      YPgm = §§PgmName
      C                   CALL      PEEK21        P_Peek21
      C     YMsgID        IFNE      *BLANKS
       *  Fehlermeldung ...
-     C                   MOVEL (P) 'USR8110'     §MsgID
-     C                   MOVEL (P) SFPAU         §MsgDta
+     C                   EVAL      §MsgID = 'USR8110'
+     C                   EVAL      §MsgDta = SFPAU
      C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
      C                   EXSR      VSfpauErr
       *  Setzen Bezugszahlen ...
      C                   EXSR      PBSetBZ
      C                   UPDATE    PBSfl
-     C                   MOVEL (P) bTrue         IsSflError
+     C                   EVAL      IsSflError = bTrue
      C                   ITER
      C                   Endif
       *
       *----------------------------*
       *  Ausführen SFL-Befehl ...  *
       *----------------------------*
-     C                   MOVEL (P) YPgmCmd       Sfl_Cmd
+     C                   EVAL      Sfl_Cmd = YPgmCmd
       *
      C                   SELECT
      C     Sfl_Cmd       WHENEQ    '*NONE'
      C                   OTHER
       *  Unbekannter Programmbefehl
-     C                   MOVEL (P) 'USR8110'     §MsgID
-     C                   MOVEL (P) YPgmCmd       USR81101
-     C                   MOVEL (P) USR8110       §MsgDta
+     C                   EVAL      §MsgID = 'USR8110'
+     C                   EVAL      USR81101 = YPgmCmd
+     C                   EVAL      §MsgDta = USR8110
      C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
      C                   EXSR      VSfpauErr
       *  Setzen Bezugszahlen ...
      C                   EXSR      PBSetBZ
      C                   UPDATE    PBSfl
-     C                   MOVEL (P) bTrue         IsSflError
+     C                   EVAL      IsSflError = bTrue
      C                   ITER
      C                   Endsl
       *
@@ -598,9 +603,9 @@
       *
      C                   Callp     p_rmvPgmMg(§§pgmName)
       *
-     C                   MOVEL (P) 'USR8100'     XMsgID
-     C                   MOVEL (P) YPgmCmd       USR81001
-     C                   MOVEL (P) USR8100       XMsgDta
+     C                   EVAL      XMsgID = 'USR8100'
+     C                   EVAL      USR81001 = YPgmCmd
+     C                   EVAL      XMsgDta = USR8100
       *
      C                   ENDSR
       *
@@ -613,7 +618,7 @@
      C                   Clear                   XPinTabC
      C                   Eval      X = 0
       *
-     C                   Z-ADD     *ZEROS        W_Key
+     C                   EVAL      W_Key = *ZEROS
      C     W0Key         Setll     FPEEKWRK
       *
      C                   DO        *HIVAL
@@ -622,7 +627,7 @@
      C                   LEAVE
      C                   Endif
       *
-     C                   MOVEL (P) W_Data        WRK0002
+     C                   EVAL      WRK0002 = W_Data
       *
      C                   If        (x < %elem(XPinTabC)) and
      C                             (Wrk_Seq <> 0)
@@ -633,8 +638,8 @@
       *
      C                   Callp     p_rmvPgmMg(§§pgmName)
       *
-     C                   MOVEL (P) 'USR8112'     XMsgID
-     C                   MOVEL (P) *BLANKS       XMsgDta
+     C                   EVAL      XMsgID = 'USR8112'
+     C                   EVAL      XMsgDta = *BLANKS
       *
      C                   ENDSR
       *
@@ -645,7 +650,7 @@
      C     C_Refresh     BEGSR
       *
       * - Subfile neu aufbauen
-     C                   Z-ADD     *ZEROS        W_Key
+     C                   EVAL      W_Key = *ZEROS
      C                   EXSR      PBInit
      C                   EXSR      PBSetLL
      C                   EXSR      PBReadUp
@@ -660,7 +665,7 @@
       *
      C     C_Top         BEGSR
       *
-     C                   Z-ADD     1             SFSANR
+     C                   EVAL      SFSANR = 1
       *
      C                   ENDSR
       *
@@ -670,7 +675,7 @@
       *
      C     C_Bot         BEGSR
       *
-     C                   Z-ADD     SflNbrRcd     SFSANR
+     C                   EVAL      SFSANR = SflNbrRcd
       *
      C                   ENDSR
       *
@@ -681,7 +686,7 @@
       *
      C     C_ClrAll      BEGSR
       *
-     C                   Z-ADD     *ZEROS        W_Key
+     C                   EVAL      W_Key = *ZEROS
      C     W0Key         Setll     FPEEKWRK
       *
      C                   DO        *HIVAL
@@ -690,13 +695,13 @@
      C                   LEAVE
      C                   Endif
       *
-     C                   MOVEL (P) W_Data        WRK0002
+     C                   EVAL      WRK0002 = W_Data
       *
      C                   Eval      ##Seq = 0
      C                   Exsr      FillRecord
      C                   Exsr      FillKey
       *
-     C                   MOVEL (P) WRK0002       W_Data
+     C                   EVAL      W_Data = WRK0002
      C                   Update    FPEEKWRK
      C                   Enddo
       *
@@ -710,7 +715,7 @@
       *
      C     C_MoreKeys    BEGSR
       *
-     C                   ADD       1             SFBOT
+     C                   EVAL      SFBOT = SFBOT + 1
       *
      C                   ENDSR
       *
@@ -730,7 +735,7 @@
      C                   Eval      NbrPinCol = NbrPinCol - 1
      C                   Endif
       *
-     C                   Z-ADD     ##Seq         WRK_Seq
+     C                   EVAL      WRK_Seq = ##Seq
       *
      C                   ENDSR
       *
@@ -741,9 +746,9 @@
      C     FillKey       BEGSR
       *
      C                   If        WRK_Seq = 0
-     C                   Z-ADD     *HIVAL        W_Key
+     C                   EVAL      W_Key = *HIVAL
      C                   Else
-     C                   Z-ADD     WRK_Seq       W_Key
+     C                   EVAL      W_Key = WRK_Seq
      C                   Endif
       *
      C                   ENDSR
@@ -756,9 +761,9 @@
      C     SflBzoff      BEGSR
       *
       *  DSPATR(PC)
-     C                   MOVEA     '0000000000'  *IN(20)                        20-29
+     C                   EVAL      %subarr(*in: 20: 10) = '0'
       *  DSPATR(RI)
-     C                   MOVEA     '0000000000'  *IN(30)                        30-39
+     C                   EVAL      %subarr(*in: 30: 10) = '0'
       *
      C                   ENDSR
       *
@@ -772,10 +777,10 @@
      C     *IN11         IFEQ      '1'
       *  Weiß noch nicht, was zu tun ist ...
      C                   ELSE
-     C                   MOVEL (P) W_Data        WRK0002
+     C                   EVAL      WRK0002 = W_Data
      C                   EXSR      FillRecord
      C                   EXSR      FillKey
-     C                   MOVEL (P) WRK0002       W_Data
+     C                   EVAL      W_Data = WRK0002
      C                   UPDATE    PEEKWRK_      DS_PEEKWRK
      C                   Endif
       *
@@ -787,9 +792,9 @@
       *
      C     VSfpauClr     BEGSR
       *
-     C                   MOVEL (P) *BLANKS       SFPAU
-     C                   MOVEL (P) '0'           *IN85                          DSPATR(RI)
-     C                   MOVEL (P) '0'           *IN84                          SFLNXTCHG
+     C                   EVAL      SFPAU = *BLANKS
+     C                   EVAL      *IN85 = '0'                                  DSPATR(RI)
+     C                   EVAL      *IN84 = '0'                                  SFLNXTCHG
       *
      C                   ENDSR
       *
@@ -799,7 +804,7 @@
       *
      C     VSfpauErr     BEGSR
       *
-     C                   MOVEL (P) '1'           *IN85                          DSPATR(RI)
+     C                   EVAL      *IN85 = '1'                                  DSPATR(RI)
      C                   EXSR      VSfpauChg
       *
      C                   ENDSR
@@ -811,7 +816,7 @@
       *
      C     VSfpauChg     BEGSR
       *
-     C                   MOVEL (P) '1'           *IN84                          SFLNXTCHG
+     C                   EVAL      *IN84 = '1'                                  SFLNXTCHG
       *
      C                   ENDSR
       *
@@ -822,19 +827,19 @@
       *
      C     PBINIT        BEGSR
       *
-     C                   MOVEL (P) '0'           *IN89
+     C                   EVAL      *IN89 = '0'
      C                   WRITE     MSGCTL
       *
-     C                   MOVEL (P) '0'           *IN80                          SFLDSP
-     C                   MOVEL (P) '1'           *IN81                          SFLDSPCTL
-     C                   MOVEL (P) '1'           *IN82                          SFLCLR
-     C                   MOVEL (P) '1'           *IN83                          SFLEND
+     C                   EVAL      *IN80 = '0'                                  SFLDSP
+     C                   EVAL      *IN81 = '1'                                  SFLDSPCTL
+     C                   EVAL      *IN82 = '1'                                  SFLCLR
+     C                   EVAL      *IN83 = '1'                                  SFLEND
      C                   WRITE     PBCTL
       *
-     C                   MOVEL (P) '0'           *IN82                          SFLCLR
+     C                   EVAL      *IN82 = '0'                                  SFLCLR
       *
-     C                   Z-ADD     *ZEROS        SFLREC
-     C                   Z-ADD     *ZEROS        SflNbrRcd
+     C                   EVAL      SFLREC = *ZEROS
+     C                   EVAL      SflNbrRcd = *ZEROS
       *
      C                   ENDSR
       *
@@ -852,11 +857,11 @@
       *
      C                   EXSR      PBFill
       *
-     C                   ADD       1             SflRec
+     C                   EVAL      SflRec = SflRec + 1
       *  Setzen Bezugszahlen ...
      C                   EXSR      PBSetBZ
      C                   WRITE     PBSfl
-     C                   Z-ADD     SflRec        SflNbrRcd
+     C                   EVAL      SflNbrRcd = SflRec
       *
      C     SFLRec        IFGE      SflPage
      C                   LEAVE
@@ -880,24 +885,24 @@
       *
      C     WRK_RcdNbr    CHAIN (N) FPEEKFLD                           11
       *
-     C                   MOVEL (P) F_FFD         FLDL0100
+     C                   EVAL      FLDL0100 = F_FFD
       *
       *  ... Folgenummer
-     C                   Z-ADD     Wrk_Seq       ##Seq
+     C                   EVAL      ##Seq = Wrk_Seq
       *  ... Feldname
-     C                   MOVEL (P) Wrk_FNme      $$FNme
+     C                   EVAL      $$FNme = Wrk_FNme
       *  ... Feldbezeichnung
-     C                   MOVEL (P) Wrk_FTxt      $$FTxt
+     C                   EVAL      $$FTxt = Wrk_FTxt
       *  ... Keyfeldnummer
      C     F_KSeq        IFNE      *ZEROS
      C                   MOVE  (P) F_KSeq        $$KSeq
      C                   MOVEL     'K'           $$KSeq
      C                   ELSE
-     C                   MOVEL (P) *BLANKS       $$KSeq
+     C                   EVAL      $$KSeq = *BLANKS
      C                   Endif
       *
       *  ... anzeigen Subfile
-     C                   MOVEL (P) '1'           *IN80                          SFLDSP
+     C                   EVAL      *IN80 = '1'                                  SFLDSP
       *
       *  ... Löschen Subfileauswahl
      C                   EXSR      VSfpauClr
@@ -930,18 +935,18 @@
       *
      C     XDsp80        IFEQ      '0'
       *   132-Zeichen Anzeige
-     C                   MOVEL (P) '0'           *IN88
-     C                   Z-ADD     2             ZEI
-     C                   Z-ADD     2             POS
+     C                   EVAL      *IN88 = '0'
+     C                   EVAL      ZEI = 2
+     C                   EVAL      POS = 2
      C                   ELSE
       *    80-Zeichen Anzeige
-     C                   MOVEL (P) '1'           *IN88
-     C                   Z-ADD     2             ZEI
-     C                   Z-ADD     2             POS
+     C                   EVAL      *IN88 = '1'
+     C                   EVAL      ZEI = 2
+     C                   EVAL      POS = 2
      C                   Endif
       *
-     C                   Z-ADD     *HIVAL        SflPage
-     C                   Z-ADD     4             SflPageDDS
+     C                   EVAL      SflPage = *HIVAL
+     C                   EVAL      SflPageDDS = 4
       *
      C                   ENDSR
       *
@@ -951,9 +956,9 @@
       *
      C     ClrPeekWrk    BEGSR
       *
-     C                   MOVEL (P) 'PEEKWRK'     §File
-     C                   MOVEL (P) 'QTEMP'       §Lib
-     C                   MOVEL (P) '*FIRST'      §Mbr
+     C                   EVAL      §File = 'PEEKWRK'
+     C                   EVAL      §Lib = 'QTEMP'
+     C                   EVAL      §Mbr = '*FIRST'
       /COPY QCOPYLE,CLRPFM
       *
      C                   ENDSR
@@ -966,7 +971,7 @@
       *
      C                   Eval      NbrPinCol = 0
       *
-     C                   Z-ADD     *ZEROS        F_Seq
+     C                   EVAL      F_Seq = *ZEROS
      C     F1Key         SETLL     FPEEKFLDL1
       *
      C                   DO        *HIVAL
@@ -978,7 +983,7 @@
      C                   CLEAR                   WRK0002
      C                   CLEAR                   DS_PEEKWRK
       *
-     C                   MOVEL (P) F_FFD         FLDL0100
+     C                   EVAL      FLDL0100 = F_FFD
       *
       *  ... Folgenummer
      C                   Eval      x = %lookup(FLDL0100.F1FNME: XPinTabC: 1)
@@ -1030,30 +1035,30 @@
       * - Programm initialisieren
      C                   Callp     p_rmvPgmMg(§§pgmName)
       *
-     C                   MOVEL (P) *BLANKS       ##Field
+     C                   EVAL      ##Field = *BLANKS
       *
       * - Rückkehrcode
-     C                   MOVEL (P) *BLANKS       XMsgID
-     C                   MOVEL (P) *BLANKS       XMsgDta
+     C                   EVAL      XMsgID = *BLANKS
+     C                   EVAL      XMsgDta = *BLANKS
       *
       * - Darstellung der Subfile
-     C                   MOVEL (P) '1'           SflMde
+     C                   EVAL      SflMde = '1'
       *
       * - Darstellung der Befehlstasten
-     C                   Z-ADD     1             SfBot
+     C                   EVAL      SfBot = 1
       *
       * - Einstellen der Bildschirmauflösung 80/132-Zeichen
      C                   EXSR      SetScreen
       *
       * - Anzuzeigender Subfilesatz
-     C                   Z-ADD     1             SFSANR
+     C                   EVAL      SFSANR = 1
       *
       * - Subfile füllen
      C                   EXSR      C_Refresh
       *
       * - Copyright
-     C                   MOVEL (P) 'USR9999'     §MsgID
-     C                   MOVEL (P) XCopyRight    §MsgDta
+     C                   EVAL      §MsgID = 'USR9999'
+     C                   EVAL      §MsgDta = XCopyRight
      C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
       *
      C                   ENDSR
@@ -1073,7 +1078,7 @@
      C                   Eval      yKey    = '*ALL'
      C                   Eval      yPosF24 = NbrFKeys
      C                   Call      PEEK23        P_Peek23
-     C                   Movea (P) yFKeys        ScrnFKeys
+     C                   Eval      ScrnFKeys = %subarr(YFKeys: 1)
       *
      C                   Endsr
       *

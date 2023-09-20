@@ -15,12 +15,12 @@
       *                                                               *
       *  Peek/400 - SQL-Select/Order by                               *
       *                                                               *
-      * ============================================================= *
+      *===============================================================*
       * >>PRE-COMPILER<<                                              *
-      *   >>CRTCMD<<  CALL PGM(&LI/PEEK99) PARM(+                     *
-      *                        '&SF' '&SL' '&SM' '&LI' '*NO' +        *
-      *                        'PEEK' '&LI' '*NO') +                  *
-      *               /* OPTION(*EVENTF) */;                          *
+      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
       *   >>EXECUTE<<                                                 *
       * >>END-PRE-COMPILER<<                                          *
       *===============================================================*
@@ -37,6 +37,7 @@
       *
       *---Variablendefinition------------------------------*
       /COPY QCOPYLE,D_VARDEF
+      /COPY QCOPYLE,FLDL0100
       *----------------------------------------------------*
       *
       *---Variablendefinition ShortCmd---------------------*
@@ -299,7 +300,7 @@
      C                   WRITE     PBBOT#8                                      BT-Tasten 4
      C                   OTHER
      C                   WRITE     PBBOT#1                                      BT-Tasten 1
-     C                   Z-ADD     1             SFBOT
+     C                   EVAL      SFBOT = 1
      C                   Endsl
       *
       *  Anzeigen Bildschirm
@@ -320,12 +321,12 @@
       *
       *  Mappen der gedrückten Taste
       *  in Programmbefehl
-     C                   MOVEL (P) §ScnAID       YScnAID
-     C                   MOVEL (P) §§PgmName     YPgm
+     C                   EVAL      YScnAID = §ScnAID
+     C                   EVAL      YPgm = §§PgmName
      C                   CALL      PEEK21        P_Peek21
      C     YMsgID        IFNE      *BLANKS
-     C                   MOVEL (P) YMsgID        §MsgID
-     C                   MOVEL (P) YMsgDta       §MsgDta
+     C                   EVAL      §MsgID = YMsgID
+     C                   EVAL      §MsgDta = YMsgDta
      C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
      C                   ITER
      C                   Endif
@@ -375,8 +376,8 @@
      C     YPgmCmd       WHENEQ    '*ENTER'
      C                   EXSR      C_Enter
      C     *IN99         IFEQ      '0'
-     C                   MOVEL (P) 'USR8112'     xMsgID
-     C                   MOVEL (P) *BLANKS       xMsgDta
+     C                   EVAL      xMsgID = 'USR8112'
+     C                   EVAL      xMsgDta = *BLANKS
      C                   LEAVE
      C                   Endif
       *
@@ -443,7 +444,7 @@
       *  DSPATR(RI)
       *
       *  Fehler
-     C                   MOVEL (P) '0'           *IN99
+     C                   EVAL      *IN99 = '0'
       *
      C                   ENDSR
       *
@@ -455,18 +456,18 @@
       *
      C                   Callp     p_rmvPgmMg(§§pgmName)
       *
-     C                   MOVEL (P) 'USR8100'     xMsgID
+     C                   EVAL      xMsgID = 'USR8100'
       *
      C                   SELECT
      C     §ScnAID       WHENEQ    §F3
-     C                   MOVEL (P) 'F3'          USR81001
+     C                   EVAL      USR81001 = 'F3'
      C     §ScnAID       WHENEQ    §F12
-     C                   MOVEL (P) 'F12'         USR81001
+     C                   EVAL      USR81001 = 'F12'
      C                   OTHER
-     C                   MOVEL (P) 'Fxx'         USR81001
+     C                   EVAL      USR81001 = 'Fxx'
      C                   Endsl
       *
-     C                   MOVEL (P) USR8100       xMsgDta
+     C                   EVAL      xMsgDta = USR8100
       *
      C                   ENDSR
       *
@@ -480,8 +481,8 @@
      C     tempScnFld    WHENEQ    '##WHERE'
      C     ##WHERE       OREQ      SET_PRMT
      C                   IF        *IN71 = *ON
-     C                   MOVEL (P) 'USR8195'     §MsgID
-     C                   MOVEL (P) *BLANKS       §MsgDta
+     C                   EVAL      §MsgID = 'USR8195'
+     C                   EVAL      §MsgDta = *BLANKS
      C                   ELSE
      C                   EXSR      Pmt_Field
      C                   ENDIF
@@ -489,15 +490,15 @@
      C     tempScnFld    WHENEQ    '##ORDER'
      C     ##ORDER       OREQ      SET_PRMT
      C                   IF        *IN72 = *ON
-     C                   MOVEL (P) 'USR8195'     §MsgID
-     C                   MOVEL (P) *BLANKS       §MsgDta
+     C                   EVAL      §MsgID = 'USR8195'
+     C                   EVAL      §MsgDta = *BLANKS
      C                   ELSE
      C                   EXSR      Pmt_Field
      C                   ENDIF
       *
      C                   OTHER
-     C                   MOVEL (P) 'USR8179'     §MsgID
-     C                   MOVEL (P) *BLANKS       §MsgDta
+     C                   EVAL      §MsgID = 'USR8179'
+     C                   EVAL      §MsgDta = *BLANKS
      C                   Endsl
       *
      C                   ENDSR
@@ -508,18 +509,17 @@
       *
      C     Pmt_Field     BEGSR
       *
-     C                   MOVEL (P) xDsp80        YDsp80
-     C                   MOVEL (P) xCopyRight    YCopyRight
+     C                   EVAL      YDsp80 = xDsp80
+     C                   EVAL      YCopyRight = xCopyRight
      C                   CALL      PEEK37        P_Peek37
       *
      C     yMsgID        IFEQ      *BLANKS
       *
-     C     ' '           Checkr    yField        tempLen
+     C**   ' '           Checkr    yField        tempLen
+     C                   Eval      tempLen = %checkr(' ': yField)
       *
      C                   Select
      C     tempScnFld    WHENEQ    '##WHERE'
-      **                 Eval      %subst(##WHERE: tempFldPos: tempLen)
-      ***                           = yField
      C                   Eval      ##WHERE = %replace(%trimR(yField) + ' '
      C                                                : ##WHERE
      C                                                : tempFldPos
@@ -531,8 +531,6 @@
      C                   Eval      tempFldBy  = 42
       *
      C     tempScnFld    WHENEQ    '##ORDER'
-      ***                Eval      %subst(##ORDER : tempFldPos: tempLen)
-      ***                           = yField
      C                   Eval      ##ORDER  = %replace(%trimR(yField) + ' '
      C                                                 : ##ORDER
      C                                                 : tempFldPos
@@ -568,8 +566,8 @@
      C                   Eval      CSRCOL = tempCsrCol - 1
       *
      C                   ELSE
-     C                   MOVEL (P) yMsgID        §MsgID
-     C                   MOVEL (P) yMsgDta       §MsgDta
+     C                   EVAL      §MsgID = yMsgID
+     C                   EVAL      §MsgDta = yMsgDta
      C                   Endif
       *
      C                   ENDSR
@@ -594,14 +592,14 @@
      C                   SELECT
      C     tempScnFld    WHENEQ    '##ORDER'
      C                   IF        *IN72 = *ON
-     C                   MOVEL (P) 'USR8195'     §MsgID
-     C                   MOVEL (P) *BLANKS       §MsgDta
+     C                   EVAL      §MsgID = 'USR8195'
+     C                   EVAL      §MsgDta = *BLANKS
      C                   ELSE
      C                   EXSR      Slc_Key
      C                   ENDIF
      C                   OTHER
-     C                   MOVEL (P) 'USR8211'     §MsgID
-     C                   MOVEL (P) *BLANKS       §MsgDta
+     C                   EVAL      §MsgID = 'USR8211'
+     C                   EVAL      §MsgDta = *BLANKS
      C                   Endsl
       *
      C                   ENDSR
@@ -612,20 +610,20 @@
       *
      C     Slc_Key       BEGSR
       *
-     C                   MOVEL (P) xDsp80        YDsp80
-     C                   MOVEL (P) xCopyRight    YCopyRight
-     C                   MOVEL (P) xFile         YFile
-     C                   MOVEL (P) xLibrary      YLibrary
-     C                   MOVEL (P) xMember       YMember
-     C                   MOVEL (P) xFormat       YFmtName
-     C                   MOVEL (P) bTrue         YBasePhyF
+     C                   EVAL      YDsp80 = xDsp80
+     C                   EVAL      YCopyRight = xCopyRight
+     C                   EVAL      YFile = xFile
+     C                   EVAL      YLibrary = xLibrary
+     C                   EVAL      YMember = xMember
+     C                   EVAL      YFmtName = xFormat
+     C                   EVAL      YBasePhyF = bTrue
      C                   CALL      PEEK40        P_Peek40
      C     YRetFile      IFEQ      *BLANKS
      C     *IN99         OREQ      '1'
       *  ... keine Auswahl getroffen
      C                   ELSE
-     C                   MOVEL (P) YRetFile      YFile
-     C                   MOVEL (P) YRetLib       YLibrary
+     C                   EVAL      YFile = YRetFile
+     C                   EVAL      YLibrary = YRetLib
      C                   EXSR      Ins_Field
      C                   Endif
       *
@@ -640,16 +638,16 @@
      C                   SELECT
      C     tempScnFld    WHENEQ    '##ORDER'
      C                   IF        *IN72 = *ON
-     C                   MOVEL (P) 'USR8195'     §MsgID
-     C                   MOVEL (P) *BLANKS       §MsgDta
+     C                   EVAL      §MsgID = 'USR8195'
+     C                   EVAL      §MsgDta = *BLANKS
      C                   ELSE
-     C                   MOVEL (P) xFile         YFile
-     C                   MOVEL (P) xLibrary      YLibrary
+     C                   EVAL      YFile = xFile
+     C                   EVAL      YLibrary = xLibrary
      C                   EXSR      Ins_Field
      C                   ENDIF
      C                   OTHER
-     C                   MOVEL (P) 'USR8211'     §MsgID
-     C                   MOVEL (P) *BLANKS       §MsgDta
+     C                   EVAL      §MsgID = 'USR8211'
+     C                   EVAL      §MsgDta = *BLANKS
      C                   Endsl
       *
      C                   ENDSR
@@ -660,11 +658,12 @@
       *
      C     Ins_Field     BEGSR
       *
-     C                   MOVEL (P) *BLANKS       YSqlOrder
+     C                   EVAL      YSqlOrder = *BLANKS
      C                   CALL      PEEK38        P_Peek38
       *
      C                   Eval      tempField = YSqlOrder
-     C     ' '           Checkr    tempField     tempLen
+     C**   ' '           Checkr    tempField     tempLen
+     C                   Eval      tempLen = %checkr(' ': tempField)
       *
      C                   Select
      C     tempScnFld    WHENEQ    '##WHERE'
@@ -683,7 +682,7 @@
       *
      C     C_MoreKeys    BEGSR
       *
-     C                   ADD       1             SFBOT
+     C                   EVAL      SFBOT = SFBOT + 1
       *
      C                   ENDSR
       *
@@ -702,8 +701,8 @@
      C                                     ')'                   +
      C                                     ' ...'
       *
-     C                   MOVEL (P) xSqlWhere     ##WHERE
-     C                   MOVEL (P) xSqlOrder     ##ORDER
+     C                   EVAL      ##WHERE = xSqlWhere
+     C                   EVAL      ##ORDER = xSqlOrder
       *
      C                   If        (xAccess = §KeySeq) and
      C                             (##ORDER  = ' '    )
@@ -721,9 +720,9 @@
      C     KeepCsrPos    BEGSR
       *
       *  Beibehalten der Cursorosition
-     C     §ScnCsrRow    SUB       Zei           CsrRow
-     C     §ScnCsrCol    SUB       Pos           CsrCol
-     C                   SUB       1             CsrCol
+     C                   EVAL      CsrRow = §ScnCsrRow - Zei
+     C                   EVAL      CsrCol = §ScnCsrCol - Pos
+     C                   EVAL      CsrCol = CsrCol - 1
       *
      C                   ENDSR
       *
@@ -734,8 +733,8 @@
      C     DltCsrPos     BEGSR
       *
       *  Löschen der Cursorosition
-     C                   Z-ADD     *ZEROS        CsrRow
-     C                   Z-ADD     *ZEROS        CsrCol
+     C                   EVAL      CsrRow = *ZEROS
+     C                   EVAL      CsrCol = *ZEROS
       *
      C                   ENDSR
       *
@@ -758,14 +757,14 @@
       *
      C     xDsp80        IFEQ      '0'
       *   132-Zeichen Anzeige
-     C                   MOVEL (P) '0'           *IN88
-     C                   Z-ADD     2             ZEI
-     C                   Z-ADD     16            POS
+     C                   EVAL      *IN88 = '0'
+     C                   EVAL      ZEI = 2
+     C                   EVAL      POS = 16
      C                   ELSE
       *    80-Zeichen Anzeige
-     C                   MOVEL (P) '1'           *IN88
-     C                   Z-ADD     2             ZEI
-     C                   Z-ADD     5             POS
+     C                   EVAL      *IN88 = '1'
+     C                   EVAL      ZEI = 2
+     C                   EVAL      POS = 5
      C                   Endif
       *
      C                   ENDSR
@@ -811,11 +810,11 @@
      C                   Callp     p_rmvPgmMg(§§pgmName)
      C                   EXSR      DltCsrPos
       *
-     C                   MOVEL (P) *BLANKS       xMsgID
-     C                   MOVEL (P) *BLANKS       xMsgDta
+     C                   EVAL      xMsgID = *BLANKS
+     C                   EVAL      xMsgDta = *BLANKS
       *
       * - Darstellung der Befehlstasten
-     C                   Z-ADD     1             SfBot
+     C                   EVAL      SfBot = 1
       *
       * - Einstellen der Bildschirmauflösung 80/132-Zeichen
      C                   EXSR      SetScreen
@@ -846,7 +845,7 @@
      C                   Eval      yKey    = '*ALL'
      C                   Eval      yPosF24 = NbrFKeys
      C                   Call      PEEK23        P_Peek23
-     C                   Movea (P) YFKeys        ScrnFKeys
+     C                   Eval      ScrnFKeys = %subarr(YFKeys: 1)
       *
      C                   Endsr
       *
@@ -859,8 +858,4 @@
      C                   DUMP
       *
      C                   ENDSR     '*CANCL'
-      *
-      *---Nachrichten--------------------------------------*
- CPY  ***/COPY QCOPYLE,MSG_C_MAPI
-      *----------------------------------------------------*
       *

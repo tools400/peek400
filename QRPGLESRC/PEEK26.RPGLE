@@ -14,6 +14,14 @@
       *                                                               *
       *  Abfragen Zielangaben für kopieren nach externer Datei        *
       *                                                               *
+      * ============================================================= *
+      * >>PRE-COMPILER<<                                              *
+*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
       *===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
@@ -32,6 +40,7 @@
       *
       *---Variablendefinition------------------------------*
       /COPY QCOPYLE,D_VARDEF
+      /COPY QCOPYLE,FLDL0100
       *----------------------------------------------------*
       *
       *---Variablendefinition ShortCmd---------------------*
@@ -162,7 +171,7 @@
      C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
       *
       *  Nachrichten anzeigen
-     C                   MOVE      '0'           *IN89
+     C                   EVAL      *IN89 = '0'
      C                   WRITE     MSGCTL
       *
       *  Anzeigen der Befehlstasten
@@ -184,7 +193,7 @@
      C                   WRITE     PBBOT#6                                      BT-Tasten 4
      C                   OTHER
      C                   WRITE     PBBOT#1                                      BT-Tasten 1
-     C                   Z-ADD     1             SFBOT
+     C                   EVAL      SFBOT = 1
      C                   Endsl
       *
       *  Anzeigen Bildschirm
@@ -202,12 +211,12 @@
       *
       *  Mappen der gedrückten Taste
       *  in Programmbefehl
-     C                   MOVEL (P) §ScnAID       YScnAID
-     C                   MOVEL (P) §§PgmName     YPgm
+     C                   EVAL      YScnAID = §ScnAID
+     C                   EVAL      YPgm = §§PgmName
      C                   CALL      PEEK21        P_Peek21
      C     YMsgID        IFNE      *BLANKS
-     C                   MOVEL (P) YMsgID        §MsgID
-     C                   MOVEL (P) YMsgDta       §MsgDta
+     C                   EVAL      §MsgID = YMsgID
+     C                   EVAL      §MsgDta = YMsgDta
      C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
      C                   ITER
      C                   Endif
@@ -268,13 +277,13 @@
      C                   EXSR      PRFB1
       *
      C     *IN99         IFEQ      '0'
-     C                   MOVEL (P) ##File        XFile
-     C                   MOVEL (P) ##Library     XLibrary
-     C                   MOVEL (P) ##Member      XMember
-     C                   MOVEL (P) ##MbrOpt      XMbrOpt
-     C                   MOVEL (P) ##CrtFile     XCrtFile
-     C                   MOVEL (P) 'USR8112'     XMsgID
-     C                   MOVEL (P) *BLANKS       XMsgDta
+     C                   EVAL      XFile = ##File
+     C                   EVAL      XLibrary = ##Library
+     C                   EVAL      XMember = ##Member
+     C                   EVAL      XMbrOpt = ##MbrOpt
+     C                   EVAL      XCrtFile = ##CrtFile
+     C                   EVAL      XMsgID = 'USR8112'
+     C                   EVAL      XMsgDta = *BLANKS
      C                   Endif
       *
      C                   ENDSR
@@ -286,21 +295,21 @@
      C     BZOFF1        BEGSR
       *
       *  DSPATR(PC)
-     C                   MOVEL (P) '0'           *IN20                         ##File
-     C                   MOVEL (P) '0'           *IN21                         ##Library
-     C                   MOVEL (P) '0'           *IN22                         ##Member
-     C                   MOVEL (P) '0'           *IN23                         ##MbrOpt
-     C                   MOVEL (P) '0'           *IN24                         ##CrtFile
+     C                   EVAL      *IN20 = '0'                                  ##File
+     C                   EVAL      *IN21 = '0'                                  ##Library
+     C                   EVAL      *IN22 = '0'                                  ##Member
+     C                   EVAL      *IN23 = '0'                                  ##MbrOpt
+     C                   EVAL      *IN24 = '0'                                  ##CrtFile
       *
       *  DSPATR(RI)
-     C                   MOVEL (P) '0'           *IN30                         ##File
-     C                   MOVEL (P) '0'           *IN31                         ##Library
-     C                   MOVEL (P) '0'           *IN32                         ##Member
-     C                   MOVEL (P) '0'           *IN33                         ##MbrOpt
-     C                   MOVEL (P) '0'           *IN34                         ##CrtFile
+     C                   EVAL      *IN30 = '0'                                  ##File
+     C                   EVAL      *IN31 = '0'                                  ##Library
+     C                   EVAL      *IN32 = '0'                                  ##Member
+     C                   EVAL      *IN33 = '0'                                  ##MbrOpt
+     C                   EVAL      *IN34 = '0'                                  ##CrtFile
       *
       *  Fehler
-     C                   MOVEL (P) '0'           *IN99
+     C                   EVAL      *IN99 = '0'
       *
      C                   ENDSR
       *
@@ -334,18 +343,18 @@
      C     PRF20         BEGSR
       *
      C     ##File        IFEQ      *BLANKS
-     C                   MOVEL (P) '1'           *IN99
-     C                   MOVEL (P) 'USR8151'     §MsgID
-     C                   MOVEL (P) ##File        USR81511
-     C                   MOVEL (P) USR8151       §MsgDta
+     C                   EVAL      *IN99 = '1'
+     C                   EVAL      §MsgID = 'USR8151'
+     C                   EVAL      USR81511 = ##File
+     C                   EVAL      §MsgDta = USR8151
      C                   GOTO      EPRF20
      C                   Endif
       *
      C     EPRF20        TAG
       *
      C     *IN99         IFEQ      '1'
-     C                   MOVEL (P) '1'           *IN20
-     C                   MOVEL (P) '1'           *IN30
+     C                   EVAL      *IN20 = '1'
+     C                   EVAL      *IN30 = '1'
      C                   Endif
       *
      C                   ENDSR
@@ -357,10 +366,10 @@
      C     PRF21         BEGSR
       *
      C     ##Library     IFEQ      *BLANKS
-     C                   MOVEL (P) '1'           *IN99
-     C                   MOVEL (P) 'USR8152'     §MsgID
-     C                   MOVEL (P) ##Library     USR81521
-     C                   MOVEL (P) USR8152       §MsgDta
+     C                   EVAL      *IN99 = '1'
+     C                   EVAL      §MsgID = 'USR8152'
+     C                   EVAL      USR81521 = ##Library
+     C                   EVAL      §MsgDta = USR8152
      C                   GOTO      EPRF21
      C                   Endif
       *
@@ -371,10 +380,10 @@
       *  ... gültig
      C                   ELSE
       *  ... ungültig
-     C                   MOVEL (P) '1'           *IN99
-     C                   MOVEL (P) 'USR8152'     §MsgID
-     C                   MOVEL (P) ##Library     USR81521
-     C                   MOVEL (P) USR8152       §MsgDta
+     C                   EVAL      *IN99 = '1'
+     C                   EVAL      §MsgID = 'USR8152'
+     C                   EVAL      USR81521 = ##Library
+     C                   EVAL      §MsgDta = USR8152
      C                   GOTO      EPRF21
      C                   Endif
      C                   ELSE
@@ -384,8 +393,8 @@
      C     EPRF21        TAG
       *
      C     *IN99         IFEQ      '1'
-     C                   MOVEL (P) '1'           *IN21
-     C                   MOVEL (P) '1'           *IN31
+     C                   EVAL      *IN21 = '1'
+     C                   EVAL      *IN31 = '1'
      C                   Endif
       *
      C                   ENDSR
@@ -397,10 +406,10 @@
      C     PRF22         BEGSR
       *
      C     ##Member      IFEQ      *BLANKS
-     C                   MOVEL (P) '1'           *IN99
-     C                   MOVEL (P) 'USR8153'     §MsgID
-     C                   MOVEL (P) ##Member      USR81531
-     C                   MOVEL (P) USR8153       §MsgDta
+     C                   EVAL      *IN99 = '1'
+     C                   EVAL      §MsgID = 'USR8153'
+     C                   EVAL      USR81531 = ##Member
+     C                   EVAL      §MsgDta = USR8153
      C                   GOTO      EPRF22
      C                   Endif
       *
@@ -411,10 +420,10 @@
       *  ... gültig
      C                   ELSE
       *  ... ungültig
-     C                   MOVEL (P) '1'           *IN99
-     C                   MOVEL (P) 'USR8153'     §MsgID
-     C                   MOVEL (P) ##member      USR81531
-     C                   MOVEL (P) USR8153       §MsgDta
+     C                   EVAL      *IN99 = '1'
+     C                   EVAL      §MsgID = 'USR8153'
+     C                   EVAL      USR81531 = ##member
+     C                   EVAL      §MsgDta = USR8153
      C                   GOTO      EPRF22
      C                   Endif
      C                   ELSE
@@ -424,8 +433,8 @@
      C     EPRF22        TAG
       *
      C     *IN99         IFEQ      '1'
-     C                   MOVEL (P) '1'           *IN22
-     C                   MOVEL (P) '1'           *IN32
+     C                   EVAL      *IN22 = '1'
+     C                   EVAL      *IN32 = '1'
      C                   Endif
       *
      C                   ENDSR
@@ -439,18 +448,18 @@
      C     ##MbrOpt      IFNE      '*ADD'
      C     ##MbrOpt      ANDNE     '*REPLACE'
      C     ##MbrOpt      ANDNE     '*UPDADD'
-     C                   MOVEL (P) '1'           *IN99
-     C                   MOVEL (P) 'USR8154'     §MsgID
-     C                   MOVEL (P) ##MbrOpt      USR81541
-     C                   MOVEL (P) USR8154       §MsgDta
+     C                   EVAL      *IN99 = '1'
+     C                   EVAL      §MsgID = 'USR8154'
+     C                   EVAL      USR81541 = ##MbrOpt
+     C                   EVAL      §MsgDta = USR8154
      C                   GOTO      EPRF23
      C                   Endif
       *
      C     EPRF23        TAG
       *
      C     *IN99         IFEQ      '1'
-     C                   MOVEL (P) '1'           *IN23
-     C                   MOVEL (P) '1'           *IN33
+     C                   EVAL      *IN23 = '1'
+     C                   EVAL      *IN33 = '1'
      C                   Endif
       *
      C                   ENDSR
@@ -463,18 +472,18 @@
       *
      C     ##CrtFile     IFNE      '*YES'
      C     ##CrtFile     ANDNE     '*NO'
-     C                   MOVEL (P) '1'           *IN99
-     C                   MOVEL (P) 'USR8155'     §MsgID
-     C                   MOVEL (P) ##CrtFile     USR81551
-     C                   MOVEL (P) USR8155       §MsgDta
+     C                   EVAL      *IN99 = '1'
+     C                   EVAL      §MsgID = 'USR8155'
+     C                   EVAL      USR81551 = ##CrtFile
+     C                   EVAL      §MsgDta = USR8155
      C                   GOTO      EPRF24
      C                   Endif
       *
      C     EPRF24        TAG
       *
      C     *IN99         IFEQ      '1'
-     C                   MOVEL (P) '1'           *IN24
-     C                   MOVEL (P) '1'           *IN34
+     C                   EVAL      *IN24 = '1'
+     C                   EVAL      *IN34 = '1'
      C                   Endif
       *
      C                   ENDSR
@@ -487,18 +496,18 @@
       *
      C                   Callp     p_rmvPgmMg(§§pgmName)
       *
-     C                   MOVEL (P) 'USR8100'     XMsgID
+     C                   EVAL      XMsgID = 'USR8100'
       *
      C                   SELECT
      C     §ScnAID       WHENEQ    §F3
-     C                   MOVEL (P) 'F3'          USR81001
+     C                   EVAL      USR81001 = 'F3'
      C     §ScnAID       WHENEQ    §F12
-     C                   MOVEL (P) 'F12'         USR81001
+     C                   EVAL      USR81001 = 'F12'
      C                   OTHER
-     C                   MOVEL (P) 'Fxx'         USR81001
+     C                   EVAL      USR81001 = 'Fxx'
      C                   Endsl
       *
-     C                   MOVEL (P) USR8100       XMsgDta
+     C                   EVAL      XMsgDta = USR8100
       *
      C                   ENDSR
       *
@@ -518,7 +527,7 @@
       *
      C     C_MoreKeys    BEGSR
       *
-     C                   ADD       1             SFBOT
+     C                   EVAL      SFBOT = SFBOT + 1
       *
      C                   ENDSR
       *
@@ -529,19 +538,19 @@
      C     FILL##        BEGSR
       *
      C     ##Library     IFEQ      *BLANKS
-     C                   MOVEL (P) '*LIBL'       ##Library
+     C                   EVAL      ##Library = '*LIBL'
      C                   Endif
       *
      C     ##Member      IFEQ      *BLANKS
-     C                   MOVEL (P) '*FIRST'      ##Member
+     C                   EVAL      ##Member = '*FIRST'
      C                   Endif
       *
      C     ##MbrOpt      IFEQ      *BLANKS
-     C                   MOVEL (P) '*ADD'        ##MbrOpt
+     C                   EVAL      ##MbrOpt = '*ADD'
      C                   Endif
       *
      C     ##CrtFile     IFEQ      *BLANKS
-     C                   MOVEL (P) '*NO'         ##CrtFile
+     C                   EVAL      ##CrtFile = '*NO'
      C                   Endif
       *
      C                   ENDSR
@@ -554,14 +563,14 @@
       *
      C     XDsp80        IFEQ      '0'
       *   132-Zeichen Anzeige
-     C                   MOVEL (P) '0'           *IN88
-     C                   Z-ADD     8             ZEI
-     C                   Z-ADD     26            POS
+     C                   EVAL      *IN88 = '0'
+     C                   EVAL      ZEI = 8
+     C                   EVAL      POS = 26
      C                   ELSE
       *    80-Zeichen Anzeige
-     C                   MOVEL (P) '1'           *IN88
-     C                   Z-ADD     6             ZEI
-     C                   Z-ADD     7             POS
+     C                   EVAL      *IN88 = '1'
+     C                   EVAL      ZEI = 6
+     C                   EVAL      POS = 7
      C                   Endif
       *
      C                   ENDSR
@@ -576,19 +585,19 @@
      C     XSrcFile      IFNE      R_SrcFile
      C     XSrcLib       ORNE      R_SrcLib
      C     XSrcMbr       ORNE      R_SrcMbr
-     C                   MOVEL (P) *BLANKS       ##File
-     C                   MOVEL (P) *BLANKS       ##Library
-     C                   MOVEL (P) XSrcMbr       ##Member
-     C                   MOVEL (P) XSrcFile      R_SrcFile
-     C                   MOVEL (P) XSrcLib       R_SrcLib
-     C                   MOVEL (P) XSrcMbr       R_SrcMbr
+     C                   EVAL      ##File = *BLANKS
+     C                   EVAL      ##Library = *BLANKS
+     C                   EVAL      ##Member = XSrcMbr
+     C                   EVAL      R_SrcFile = XSrcFile
+     C                   EVAL      R_SrcLib = XSrcLib
+     C                   EVAL      R_SrcMbr = XSrcMbr
      C                   ELSE
       * - Quelldatei hat nicht gewechselt ...
       *              alte Werte stehenlassen
      C                   Endif
       *
-     C                   MOVEL (P) *BLANKS       ##MbrOpt
-     C                   MOVEL (P) *BLANKS       ##CrtFile
+     C                   EVAL      ##MbrOpt = *BLANKS
+     C                   EVAL      ##CrtFile = *BLANKS
       *
       * - Öffnen der Dateien
      C                   OPEN      PEEK26FM
@@ -596,18 +605,18 @@
       * - Programm initialisieren
      C                   Callp     p_rmvPgmMg(§§pgmName)
       *
-     C                   MOVEL (P) *BLANKS       XMsgID
-     C                   MOVEL (P) *BLANKS       XMsgDta
+     C                   EVAL      XMsgID = *BLANKS
+     C                   EVAL      XMsgDta = *BLANKS
       *
       * - Bildschirmfelder füllen
      C                   EXSR      FILL##
       *
       *  Löschen der Cursorosition
-     C                   Z-ADD     *ZEROS        CsrRow
-     C                   Z-ADD     *ZEROS        CsrCol
+     C                   EVAL      CsrRow = *ZEROS
+     C                   EVAL      CsrCol = *ZEROS
       *
       * - Einstellen Darstellung der Funktionstasten
-     C                   Z-ADD     1             SfBot
+     C                   EVAL      SfBot = 1
       *
       * - Einstellen der Bildschirmauflösung 80/132-Zeichen
      C                   EXSR      SetScreen
@@ -627,10 +636,9 @@
       *
      C                   Eval      yPgm    = §§PgmName
      C                   Eval      yKey    = '*ALL'
-      ***                Eval      yPosF24 = NbrFKeys
      C                   Eval      yPosF24 = *ZEROS
      C                   Call      PEEK23        P_Peek23
-     C                   Movea (P) yFKeys        ScrnFKeys
+     C                   Eval      ScrnFKeys = %subarr(YFKeys: 1)
       *
      C                   Endsr
       *
@@ -643,8 +651,4 @@
      C                   DUMP
       *
      C                   ENDSR     '*CANCL'
-      *
-      *---Nachrichten--------------------------------------*
- CPY  ***/COPY QCOPYLE,MSG_C_MAPI
-      *----------------------------------------------------*
       *

@@ -16,6 +16,14 @@
       *  Erstellen einer Satzformatbeschreibung in der Datei PEEKFLD  *
       *                                                               *
       *===============================================================*
+      * >>PRE-COMPILER<<                                              *
+      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
+      *===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
       *
@@ -58,10 +66,13 @@
       /COPY QCOPYLE,ERR_D_SDS
       *----------------------------------------------------*
       *
+     D XQFILE          DS                  likeds(r§qObj)
+      *
      D seqNbr          S                   LIKE(F_Seq) INZ(0)
       *
      D X               S                   like(r§int4    ) inz
      D Y               S                   like(r§int4    ) inz
+     D NOF             S                   like(r§int4    ) inz
       *
      D PEEK02          S                   like(r§pgmCallN) inz
       *
@@ -89,7 +100,7 @@
       ********************************************************************
       *
      C     *ENTRY        PLIST
-     C                   PARM                    XQFILE           20
+     C                   PARM                    XQFILE
      C                   PARM                    XFMT
      C                   PARM                    XRCDFMTID
       *
@@ -101,11 +112,11 @@
       *---------------------------------------------------*
       *
       *  create list of database relation
-     C                   MOVEL(P)  XQFILE        YQFILE
-     C                   MOVEL(P)  XFMT          YFMT
-     C                   MOVEL(P)  '*CREATE'     YFUNK
-     C                   Z-ADD     *ZEROS        YANZ
-     C                   MOVEL(P)  *BLANKS       YLIST
+     C                   EVAL      YQFILE = XQFILE
+     C                   EVAL      YFMT = XFMT
+     C                   EVAL      YFUNK = '*CREATE'
+     C                   EVAL      YANZ = *ZEROS
+     C                   EVAL      YLIST = *BLANKS
      C                   CALL      PEEK02
      C                   PARM                    yQFile
      C                   PARM                    yFmt
@@ -114,17 +125,17 @@
      C                   PARM                    yList
      C                   PARM                    yRcdFmtID
       *
-     C                   MOVEL(P)  yRcdFmtID     xRcdFmtID
+     C                   EVAL      xRcdFmtID = yRcdFmtID
       *
-     C                   Z-ADD     YANZ          NOF              15 0
+     C                   EVAL      NOF = YANZ
       *
-     C                   Z-ADD     *ZEROS        seqNbr
-     C                   Z-ADD     *ZEROS        FldCnt
-     C                   MOVEL (P) bFalse        IsFld512
+     C                   EVAL      seqNbr = *ZEROS
+     C                   EVAL      FldCnt = *ZEROS
+     C                   EVAL      IsFld512 = bFalse
       *  read each entry
      C     1             DO        NOF
       *
-     C                   MOVEL(P)  '*READ'       YFUNK
+     C                   EVAL      YFUNK = '*READ'
      C                   CALL      PEEK02
      C                   PARM                    YQFILE
      C                   PARM                    YFMT
@@ -134,7 +145,7 @@
       *
      C                   CLEAR                   FPEEKFLD
       *
-     C                   MOVEL (P) YLIST         FLDL0100
+     C                   EVAL      FLDL0100 = YLIST
       *
      C                   EVAL      F_FORMAT = 'FLDL0100'
      C                   EVAL      F_FIELD = FLDL0100.F1FNME
@@ -150,22 +161,22 @@
      C                   Eval      F_UnKnown = f_isNotAlw(FLDL0100)
      C                   If        F_UnKnown = bTrue
      C                   Eval      F_Hidden = bTrue
-     C                   MOVEL (P) bFalse        F_IsTransc
+     C                   EVAL      F_IsTransc = bFalse
      C                   Else
      C                   Eval      F_Hidden = bFalse
      C                   If        f_hasCcsid(FLDL0100) = bTrue
      C                   Callp     Transcoder_toJobCcsid(FLDL0100.F1FDCC)
      C                   Callp     Transcoder_toFieldCcsid(FLDL0100.F1FDCC)
-     C                   MOVEL (P) bTrue         F_IsTransc
+     C                   EVAL      F_IsTransc = bTrue
      C                   Else
-     C                   MOVEL (P) bFalse        F_IsTransc
+     C                   EVAL      F_IsTransc = bFalse
      C                   Endif
      C                   Endif
       *
      C                   EXSR      CvtEDTCDE
       *
       *  Interner PEEK/400-Feldname
-     C                   ADD       1             FldCnt
+     C                   EVAL      FldCnt = FldCnt + 1
      C                   IF        FldCnt = 0
      C                   LEAVE
      C                   Endif
@@ -182,7 +193,7 @@
       *  UCS-2 Feld
      C                   Eval      FLDL0100.F1UCS2 = (FLDL0100.F1DTYP = 'G')
       *
-     C                   MOVEL (P) FLDL0100      F_FFD
+     C                   EVAL      F_FFD = FLDL0100
       *
      C                   WRITE     FPEEKFLD
       *
@@ -204,22 +215,22 @@
      C     ENDE          TAG
       *
      C     NOF           IFEQ      *ZEROS
-     C                   MOVEL (P) 'USR0001'     XMsgID
-     C     10            SUBST (P) XQFile:1      USR00011
-     C     10            SUBST (P) XQFile:11     USR00012
-     C                   MOVEL (P) XFMT          USR00013
-     C                   MOVEL (P) USR0001       XMsgDta
+     C                   EVAL      XMsgID = 'USR0001'
+     C                   EVAL      USR00011 = XQFILE.NAME
+     C                   EVAL      USR00012 = XQFILE.LIB
+     C                   EVAL      USR00013 = XFMT
+     C                   EVAL      XMsgDta = USR0001
      C                   ELSE
      C     IsFld512      IFEQ      bTrue
-     C                   MOVEL (P) 'USR8123'     XMsgID
-     C                   MOVEL (P) *BLANKS       XMsgDta
+     C                   EVAL      XMsgID = 'USR8123'
+     C                   EVAL      XMsgDta = *BLANKS
      C                   ELSE
-     C                   MOVEL (P) *BLANKS       XMsgID
-     C                   MOVEL (P) *BLANKS       XMsgDta
+     C                   EVAL      XMsgID = *BLANKS
+     C                   EVAL      XMsgDta = *BLANKS
      C                   Endif
      C                   Endif
       *
-     C                   MOVEL (P) '1'           *INLR
+     C                   EVAL      *INLR = '1'
       *
       *============================================================*
       *    CvtEDTCDE     Konvertieren des EDTCDE's in einen        *
@@ -244,17 +255,17 @@
      C                   WHEN      SET_DspSgn = '1'
      C                   SELECT
      C     F_EdtCde      WHENEQ    '1'
-     C                   MOVEL (P) 'J'           F_EdtCde
+     C                   EVAL      F_EdtCde = 'J'
      C     F_EdtCde      WHENEQ    '2'
-     C                   MOVEL (P) 'K'           F_EdtCde
+     C                   EVAL      F_EdtCde = 'K'
      C     F_EdtCde      WHENEQ    '3'
-     C                   MOVEL (P) 'L'           F_EdtCde
+     C                   EVAL      F_EdtCde = 'L'
      C     F_EdtCde      WHENEQ    '4'
-     C                   MOVEL (P) 'M'           F_EdtCde
+     C                   EVAL      F_EdtCde = 'M'
      C     F_EdtCde      WHENEQ    'Z'
-     C                   MOVEL (P) 'L'           F_EdtCde
+     C                   EVAL      F_EdtCde = 'L'
      C     F_EdtCde      WHENEQ    'X'
-     C                   MOVEL (P) 'L'           F_EdtCde
+     C                   EVAL      F_EdtCde = 'L'
      C                   OTHER
       *  Keine Umsetzung des EDTCDE's
      C                   ENDSL
@@ -263,36 +274,36 @@
      C                   WHEN      SET_DspSgn = '2'
      C                   SELECT
      C     F_EdtCde      WHENEQ    '1'
-     C                   MOVEL (P) 'J'           F_EdtCde
+     C                   EVAL      F_EdtCde = 'J'
      C     F_EdtCde      WHENEQ    '2'
-     C                   MOVEL (P) 'J'           F_EdtCde
+     C                   EVAL      F_EdtCde = 'J'
      C     F_EdtCde      WHENEQ    '3'
-     C                   MOVEL (P) 'L'           F_EdtCde
+     C                   EVAL      F_EdtCde = 'L'
      C     F_EdtCde      WHENEQ    '4'
-     C                   MOVEL (P) 'L'           F_EdtCde
+     C                   EVAL      F_EdtCde = 'L'
       *
      C     F_EdtCde      WHENEQ    'B'
-     C                   MOVEL (P) 'A'           F_EdtCde
+     C                   EVAL      F_EdtCde = 'A'
      C     F_EdtCde      WHENEQ    'D'
-     C                   MOVEL (P) 'C'           F_EdtCde
+     C                   EVAL      F_EdtCde = 'C'
       *
      C     F_EdtCde      WHENEQ    'K'
-     C                   MOVEL (P) 'J'           F_EdtCde
+     C                   EVAL      F_EdtCde = 'J'
      C     F_EdtCde      WHENEQ    'M'
-     C                   MOVEL (P) 'L'           F_EdtCde
+     C                   EVAL      F_EdtCde = 'L'
       *
      C     F_EdtCde      WHENEQ    'O'
-     C                   MOVEL (P) 'N'           F_EdtCde
+     C                   EVAL      F_EdtCde = 'N'
      C     F_EdtCde      WHENEQ    'Q'
-     C                   MOVEL (P) 'P'           F_EdtCde
+     C                   EVAL      F_EdtCde = 'P'
       *
      C     F_EdtCde      WHENEQ    'Z'
-     C                   MOVEL (P) 'L'           F_EdtCde
+     C                   EVAL      F_EdtCde = 'L'
      C     F_EdtCde      WHENEQ    'X'
-     C                   MOVEL (P) 'L'           F_EdtCde
+     C                   EVAL      F_EdtCde = 'L'
       *
      C     F_EdtCde      WHENEQ    ' '
-     C                   MOVEL (P) SET_editCode  F_EdtCde
+     C                   EVAL      F_EdtCde = SET_editCode
      C                   ENDSL
       *
      C                   ENDSL
@@ -322,10 +333,10 @@
      C                   EXSR      GetUsrSetg
       *
       * - Los gehts'
-     C                   MOVEL (P) *BLANKS       XMsgID
-     C                   MOVEL (P) *BLANKS       XMsgDta
+     C                   EVAL      XMsgID = *BLANKS
+     C                   EVAL      XMsgDta = *BLANKS
       *
-     C                   MOVEL (P) *BLANKS       XRcdFmtID
+     C                   EVAL      XRcdFmtID = *BLANKS
       *
      C     1             SETLL     FPEEKFLD
       *
@@ -338,7 +349,7 @@
      C                   DELETE    FPEEKFLD
      C                   Enddo
       *
-     C                   Z-ADD     *ZEROS        NOF
+     C                   EVAL      NOF = *ZEROS
       *
      C                   ENDSR
       *

@@ -14,6 +14,14 @@
       *                                                               *
       *  Prüfen Datensatz PEEKWRK für WRK0001 auf Plausibilität       *
       *                                                               *
+      * ============================================================= *
+      * >>PRE-COMPILER<<                                              *
+*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
       *===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
@@ -109,7 +117,7 @@
       *
      C     PrfB1         BEGSR
       *
-     C                   MOVEL (P) bFalse        IsError
+     C                   EVAL      IsError = bFalse
       *
      C                   EXSR      Prf20                                        = SEQ
      C     IsError       CABEQ     bTrue         EPrfB1
@@ -139,7 +147,7 @@
       *
      C     Prf20         BEGSR
       *
-     C                   Z-ADD     WRK_Seq       W_Key
+     C                   EVAL      W_Key = WRK_Seq
      C     W0Key         CHAIN     FPEEKWRK                           11
      C     *IN11         IFEQ      '1'
       *  Hurra, eindeutige Numnmer ...
@@ -148,9 +156,9 @@
       *  ... auch gut, weil derselbe Datensatz
      C                   ELSE
       *  ... Fehler, doppelter Sortierfolgen-Nr.
-     C                   MOVEL (P) bTrue         IsError
-     C                   MOVEL (P) 'USR8167'     XMsgID
-     C                   MOVEL (P) USR8167       XMsgDta
+     C                   EVAL      IsError = bTrue
+     C                   EVAL      XMsgID = 'USR8167'
+     C                   EVAL      XMsgDta = USR8167
      C                   GOTO      EPrf20
      C                   Endif
      C                   Endif
@@ -158,7 +166,7 @@
      C     EPrf20        TAG
       *
      C     IsError       IFEQ      bTrue
-     C                   MOVEL (P) 'SEQ'         XFldName
+     C                   EVAL      XFldName = 'SEQ'
      C                   Endif
       *
      C                   ENDSR
@@ -175,17 +183,17 @@
      C     WRK_Hidden    WHENEQ    bFalse
       *  ist zulässig
      C                   OTHER
-     C                   MOVEL (P) bTrue         IsError
-     C                   MOVEL (P) 'USR8168'     XMsgID
-     C                   MOVEL (P) WRK_Hidden    USR81681
-     C                   MOVEL (P) USR8168       XMsgDta
+     C                   EVAL      IsError = bTrue
+     C                   EVAL      XMsgID = 'USR8168'
+     C                   EVAL      USR81681 = WRK_Hidden
+     C                   EVAL      XMsgDta = USR8168
      C                   GOTO      EPrf21
      C                   Endsl
       *
      C     EPrf21        TAG
       *
      C     IsError       IFEQ      bTrue
-     C                   MOVEL (P) 'HIDDEN'      XFldName
+     C                   EVAL      XFldName = 'HIDDEN'
      C                   Endif
       *
      C                   ENDSR
@@ -200,7 +208,7 @@
      C     EPrf22        TAG
       *
      C     IsError       IFEQ      bTrue
-     C                   MOVEL (P) 'COLOR'       XFldName
+     C                   EVAL      XFldName = 'COLOR'
      C                   Endif
       *
      C                   ENDSR
@@ -217,17 +225,17 @@
      C     WRK_MrkCol    WHENEQ    bFalse
       *  ist zulässig
      C                   OTHER
-     C                   MOVEL (P) bTrue         IsError
-     C                   MOVEL (P) 'USR8169'     XMsgID
-     C                   MOVEL (P) WRK_MrkCol    USR81691
-     C                   MOVEL (P) USR8169       XMsgDta
+     C                   EVAL      IsError = bTrue
+     C                   EVAL      XMsgID = 'USR8169'
+     C                   EVAL      USR81691 = WRK_MrkCol
+     C                   EVAL      XMsgDta = USR8169
      C                   GOTO      EPrf23
      C                   Endsl
       *
      C     EPrf23        TAG
       *
      C     IsError       IFEQ      bTrue
-     C                   MOVEL (P) 'MARKCOL'     XFldName
+     C                   EVAL      XFldName = 'MARKCOL'
      C                   Endif
       *
      C                   ENDSR
@@ -241,17 +249,17 @@
      C     WRK_MaxSiz    IFGT      *ZEROS
       *  ist zulässig
      C                   ELSE
-     C                   MOVEL (P) bTrue         IsError
-     C                   MOVEL (P) 'USR8170'     XMsgID
-     C                   MOVEL (P) WRK_MaxSiz    USR81701
-     C                   MOVEL (P) USR8170       XMsgDta
+     C                   EVAL      IsError = bTrue
+     C                   EVAL      XMsgID = 'USR8170'
+     C                   EVAL      USR81701 = WRK_MaxSiz
+     C                   EVAL      XMsgDta = USR8170
      C                   GOTO      EPrf24
      C                   Endif
       *
      C     EPrf24        TAG
       *
      C     IsError       IFEQ      bTrue
-     C                   MOVEL (P) 'MAXSIZE'     XFldName
+     C                   EVAL      XFldName = 'MAXSIZE'
      C                   Endif
       *
      C                   ENDSR
@@ -266,7 +274,7 @@
      C     EPrf25        TAG
       *
      C     IsError       IFEQ      bTrue
-     C                   MOVEL (P) 'EDTCDE'      XFldName
+     C                   EVAL      XFldName = 'EDTCDE'
      C                   Endif
       *
      C                   ENDSR
@@ -279,12 +287,12 @@
       *
      C                   OPEN      PEEKWRK
       *
-     C                   MOVEL (P) XBuffer       WRK0001
+     C                   EVAL      WRK0001 = XBuffer
       *
       * - Rückkehrcode
-     C                   MOVEL (P) *BLANKS       XFldName
-     C                   MOVEL (P) *BLANKS       XMsgID
-     C                   MOVEL (P) *BLANKS       XMsgDta
+     C                   EVAL      XFldName = *BLANKS
+     C                   EVAL      XMsgID = *BLANKS
+     C                   EVAL      XMsgDta = *BLANKS
       *
      C                   ENDSR
       *

@@ -50,6 +50,9 @@
      D r§scnAid        S             10A   based(ptrDummy)
      D r§sqlStmt       S           2000A   based(ptrDummy)
      D r§user          S             10A   based(ptrDummy)
+     D r§qObj          DS                  based(ptrDummy)
+     D  name                         10A
+     D  lib                          10A
       *
       *  Verwaltung gepinnter Datensätze
      D pinTabR_t       ds                  qualified based(pDummy)

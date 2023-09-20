@@ -14,6 +14,14 @@
       *                                                               *
       *  Berechnen der Lizenznummer                                   *
       *                                                               *
+      * ============================================================= *
+      * >>PRE-COMPILER<<                                              *
+*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
       *===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
@@ -81,59 +89,63 @@
       *----------------------------------------------------*
       *
       * -  Systemname des AS/400 Systems
-     C                   MOVEL (P) XSysName      SysName
+     C                   EVAL      SysName = XSysName
       *
       * -  PEEK-Versionsnummer
-     C                   MOVEL (P) XSysVers      SysVers
+     C                   EVAL      SysVers = XSysVers
       *
       * -  Seriennummer des AS/400 Systems
-     C                   MOVEL (P) XSysSrlNbr    SysSrlNbr
+     C                   EVAL      SysSrlNbr = XSysSrlNbr
       *
       * -  Gültig bis Datum (PEEK)
-     C                   Z-ADD     XSysDate      SysDate
+     C                   EVAL      SysDate = XSysDate
       *
       *  - Berechnung der Prüfsumme
-     C                   Z-ADD     *ZEROS        Summe
+     C                   EVAL      Summe = *ZEROS
       *
      C     1             DO        50            X
-     C     1             SUBST     SysInpNbr:X   A1
+     C**   1             SUBST     SysInpNbr:X   A1
+     C                   EVAL      A1 = %subst(SysInpNbr: X: 1)
      C     A1            IFEQ      x'00'
      C                   LEAVE
      C                   Endif
       *
-     C                   Z-ADD     1             Y
-     C     A1            LOOKUP    Value(Y)                               99
-     C     *IN99         IFEQ      '1'
+     C                   EVAL      Y = 1
+     C**   A1            LOOKUP    Value(Y)                               99
+     C**   *IN99         IFEQ      '1'
+     C                   EVAL      Y = %lookup(A1: Y)
       *    ... gefunden
-     C                   ADD       Y             Summe
+     C                   EVAL      Summe = Summe + Y
      C                   ELSE
       *    ... nicht gefunden
       *        (kann eigentlich nicht sein)
-     C                   ADD       *ZEROS        Summe
      C                   Endif
       *
      C     X             MULT      256           Z
-     C                   ADD       Z             Summe
+     C                   EVAL      Summe = Summe + Z
      C                   Enddo
       *
       *  - Datum als Komplement
-     C                   SUB       SysDate       Summe
-     C                   ADD       99999999      Summe
+     C                   EVAL      Summe = Summe - SysDate
+     C                   EVAL      Summe = Summe + 99999999
       *
       *  - Prüfsumme in HEX-Wert umsetzen
-     C                   Z-ADD     Summe         R_Dec
+     C                   EVAL      R_Dec = Summe
      C                   EXSR      DecToHex
-     C                   MOVEL (P) R_Hex         IntSrlNbr
+     C                   EVAL      IntSrlNbr = R_Hex
       *
-     C                   CAT       '-':0         IntSrlNbr
+     C**                 CAT       '-':0         IntSrlNbr
+     C                   EVAL      IntSrlNbr = %trimr(IntSrlNbr) + '-'
       *
       *  - Originaldatum anfügen, als Komplement gespeichert!
-     C                   Z-SUB     SysDate       R_Dec
-     C                   ADD       99999999      R_Dec
+     C**                 Z-SUB     SysDate       R_Dec
+     C                   EVAL      R_Dec = 0 - SysDate
+     C                   EVAL      R_Dec = R_Dec + 99999999
      C                   EXSR      DecToHex
-     C                   CAT       R_Hex:0       IntSrlNbr
+     C**                 CAT       R_Hex:0       IntSrlNbr
+     C                   EVAL      IntSrlNbr = %trimr(IntSrlNbr) + R_Hex
       *
-     C                   MOVEL (P) IntSrlNbr     XSerialNbr
+     C                   EVAL      XSerialNbr = IntSrlNbr
       *
      C     ENDE          TAG
       *
@@ -145,19 +157,20 @@
       *
      C     DecToHex      BEGSR
       *
-     C                   MOVEL (P) *BLANKS       R_Hex
-     C                   Z-ADD     R_Dec         Rest
+     C                   EVAL      R_Hex = *BLANKS
+     C                   EVAL      Rest = R_Dec
       *
      C     R_Dec         DOUEQ     *ZEROS
       *
      C     R_Dec         DIV       16            ZW1
      C     ZW1           MULT      16            ZW2
-     C     R_Dec         SUB       ZW2           Rest
+     C                   EVAL      Rest = R_Dec - ZW2
       *
-     C                   ADD       1             Rest
-     C     Hex(Rest)     CAT   (P) R_Hex:0       R_Hex
+     C                   EVAL      Rest = Rest + 1
+     C**   Hex(Rest)     CAT   (P) R_Hex:0       R_Hex
+     C                   EVAL      R_Hex = %trimr(Hex(Rest)) + R_Hex
       *
-     C                   Z-ADD     ZW1           R_Dec
+     C                   EVAL      R_Dec = ZW1
      C                   Enddo
       *
      C                   ENDSR
@@ -168,62 +181,62 @@
       *
      C     *INZSR        BEGSR
       *
-     C                   MOVEL (P) 'A'           Value(193)
-     C                   MOVEL (P) 'B'           Value(194)
-     C                   MOVEL (P) 'C'           Value(195)
-     C                   MOVEL (P) 'D'           Value(196)
-     C                   MOVEL (P) 'E'           Value(197)
-     C                   MOVEL (P) 'F'           Value(198)
-     C                   MOVEL (P) 'G'           Value(199)
-     C                   MOVEL (P) 'H'           Value(200)
-     C                   MOVEL (P) 'I'           Value(201)
+     C                   EVAL      Value(193) = 'A'
+     C                   EVAL      Value(194) = 'B'
+     C                   EVAL      Value(195) = 'C'
+     C                   EVAL      Value(196) = 'D'
+     C                   EVAL      Value(197) = 'E'
+     C                   EVAL      Value(198) = 'F'
+     C                   EVAL      Value(199) = 'G'
+     C                   EVAL      Value(200) = 'H'
+     C                   EVAL      Value(201) = 'I'
       *
-     C                   MOVEL (P) 'J'           Value(209)
-     C                   MOVEL (P) 'K'           Value(210)
-     C                   MOVEL (P) 'L'           Value(211)
-     C                   MOVEL (P) 'M'           Value(212)
-     C                   MOVEL (P) 'N'           Value(213)
-     C                   MOVEL (P) 'O'           Value(214)
-     C                   MOVEL (P) 'P'           Value(215)
-     C                   MOVEL (P) 'Q'           Value(216)
-     C                   MOVEL (P) 'R'           Value(217)
+     C                   EVAL      Value(209) = 'J'
+     C                   EVAL      Value(210) = 'K'
+     C                   EVAL      Value(211) = 'L'
+     C                   EVAL      Value(212) = 'M'
+     C                   EVAL      Value(213) = 'N'
+     C                   EVAL      Value(214) = 'O'
+     C                   EVAL      Value(215) = 'P'
+     C                   EVAL      Value(216) = 'Q'
+     C                   EVAL      Value(217) = 'R'
       *
-     C                   MOVEL (P) 'S'           Value(226)
-     C                   MOVEL (P) 'T'           Value(227)
-     C                   MOVEL (P) 'U'           Value(228)
-     C                   MOVEL (P) 'V'           Value(229)
-     C                   MOVEL (P) 'W'           Value(230)
-     C                   MOVEL (P) 'X'           Value(231)
-     C                   MOVEL (P) 'Y'           Value(232)
-     C                   MOVEL (P) 'Z'           Value(233)
+     C                   EVAL      Value(226) = 'S'
+     C                   EVAL      Value(227) = 'T'
+     C                   EVAL      Value(228) = 'U'
+     C                   EVAL      Value(229) = 'V'
+     C                   EVAL      Value(230) = 'W'
+     C                   EVAL      Value(231) = 'X'
+     C                   EVAL      Value(232) = 'Y'
+     C                   EVAL      Value(233) = 'Z'
       *
-     C                   MOVEL (P) '0'           Value(240)
-     C                   MOVEL (P) '1'           Value(241)
-     C                   MOVEL (P) '2'           Value(242)
-     C                   MOVEL (P) '3'           Value(243)
-     C                   MOVEL (P) '4'           Value(244)
-     C                   MOVEL (P) '5'           Value(245)
-     C                   MOVEL (P) '6'           Value(246)
-     C                   MOVEL (P) '7'           Value(247)
-     C                   MOVEL (P) '8'           Value(248)
-     C                   MOVEL (P) '9'           Value(249)
+     C                   EVAL      Value(240) = '0'
+     C                   EVAL      Value(241) = '1'
+     C                   EVAL      Value(242) = '2'
+     C                   EVAL      Value(243) = '3'
+     C                   EVAL      Value(244) = '4'
+     C                   EVAL      Value(245) = '5'
+     C                   EVAL      Value(246) = '6'
+     C                   EVAL      Value(247) = '7'
+     C                   EVAL      Value(248) = '8'
+     C                   EVAL      Value(249) = '9'
       *
-     C                   MOVEL (P) '0'           Hex(1)
-     C                   MOVEL (P) '1'           Hex(2)
-     C                   MOVEL (P) '2'           Hex(3)
-     C                   MOVEL (P) '3'           Hex(4)
-     C                   MOVEL (P) '4'           Hex(5)
-     C                   MOVEL (P) '5'           Hex(6)
-     C                   MOVEL (P) '6'           Hex(7)
-     C                   MOVEL (P) '7'           Hex(8)
-     C                   MOVEL (P) '8'           Hex(9)
-     C                   MOVEL (P) '9'           Hex(10)
-     C                   MOVEL (P) 'A'           Hex(11)
-     C                   MOVEL (P) 'B'           Hex(12)
-     C                   MOVEL (P) 'C'           Hex(13)
-     C                   MOVEL (P) 'D'           Hex(14)
-     C                   MOVEL (P) 'E'           Hex(15)
-     C                   MOVEL (P) 'F'           Hex(16)
+     C                   EVAL      Hex(1) = '0'
+     C                   EVAL      Hex(2) = '1'
+     C                   EVAL      Hex(3) = '2'
+     C                   EVAL      Hex(4) = '3'
+     C                   EVAL      Hex(5) = '4'
+     C                   EVAL      Hex(6) = '5'
+     C                   EVAL      Hex(7) = '6'
+     C                   EVAL      Hex(8) = '7'
+     C                   EVAL      Hex(9) = '8'
+     C                   EVAL      Hex(10) = '9'
+     C                   EVAL      Hex(11) = 'A'
+     C                   EVAL      Hex(12) = 'B'
+     C                   EVAL      Hex(13) = 'C'
+     C                   EVAL      Hex(14) = 'D'
+     C                   EVAL      Hex(15) = 'E'
+     C                   EVAL      Hex(16) = 'F'
       *
      C                   ENDSR
       *

@@ -16,6 +16,14 @@
       *  Peek/400 - Zugriff auf Benutzerdaten                         *
       *                                                               *
       *===============================================================*
+      * >>PRE-COMPILER<<                                              *
+      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
+      *===============================================================*
      H NOMAIN
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
@@ -70,6 +78,7 @@
       *---Variablendefinition------------------------------*
       /COPY QCOPYLE,D_VARDEF
       /COPY QCOPYLE,D_INFDS
+      /COPY QCOPYLE,FLDL0100
       *----------------------------------------------------*
       *
       *---Farbattribute------------------------------------*
@@ -144,9 +153,7 @@
       *===================================================================*
       *
      P p_crtUsrSg      B                   Export
-      *
-      *  definieren Procedure Interface ...
-     D p_crtUsrSg      PI
+     D                 PI
      D  i_prodLib                          const  like(r§lib     )
      D  i_user                             const  like(r§user    )
      D  o_msgID                                   like(r§msgID   )
@@ -183,16 +190,14 @@
       *
      C                   Return
       *
-     P p_crtUsrSg      E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  f_getUsrSg                                 (Body)     *
       *===================================================================*
       *
      P f_getUsrSg      B                   Export
-      *
-      *  definieren Procedure Interface ...
-     D f_getUsrSg      PI                         like(R§SET0000 )
+     D                 PI                         like(R§SET0000 )
      D  i_key                              const  like(R§KEY     )
      D  o_msgID                       7A   options(*NOPASS)
      D  o_msgDta                    512A   options(*NOPASS)
@@ -216,9 +221,9 @@
      C                   Callp     p_opnFile(o2_msgID: o3_msgDta)
      C                   If        o2_msgID = ' '
       *
-     C                   Movel (P) g_user        S_User
-     C                   Movel (P) '*PGM'        S_Section
-     C                   Movel (P) i_key         S_Key
+     C                   EVAL      S_User = g_user
+     C                   EVAL      S_Section = '*PGM'
+     C                   EVAL      S_Key = i_key
      C     U_Key3        Chain     FPEEKUSR                           11
      C                   If        *IN11 = *OFF
      C                   Eval      SET0000 = f_initUsrS(i_key)
@@ -248,16 +253,14 @@
       /COPY QCOPYLE,CHKUSRSETG
       *----------------------------------------------------*
       *
-     P f_getUsrSg      E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  p_updUsrSg                                 (Body)     *
       *===================================================================*
       *
      P p_updUsrSg      B                   Export
-      *
-      *  definieren Procedure Interface ...
-     D p_updUsrSg      PI
+     D                 PI
      D  i_key                              const  like(R§KEY     )
      D  i_data                             const  like(R§SET0000 )
       *
@@ -269,9 +272,9 @@
       *
      C                   Callp     p_opnFile(msgID: msgDta)
       *
-     C                   Movel (P) g_user        S_User
-     C                   Movel (P) '*PGM'        S_Section
-     C                   Movel (P) i_key         S_Key
+     C                   EVAL      S_User = g_user
+     C                   EVAL      S_Section = '*PGM'
+     C                   EVAL      S_Key = i_key
      C     U_Key3        Chain     FPEEKUSR                           11
      C                   If        *IN11 = *OFF
      C                   Eval      S_Data = i_data
@@ -280,16 +283,14 @@
       *
      C                   Return
       *
-     P p_updUsrSg      E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  f_chainUsr                                 (Body)     *
       *===================================================================*
       *
      P f_chainUsr      B                   Export
-      *
-      *  definieren Procedure Interface ...
-     D f_chainUsr      PI                         like(R§BOOL    )
+     D                 PI                         like(R§BOOL    )
      D  i_section                          const  like(R§SECTION )
      D  i_key                              const  like(R§KEY     )
      D  o_data                                    like(R§SET0000 )
@@ -307,9 +308,9 @@
       *
      C                   Callp     p_opnFile(msgID: msgDta)
      C                   If        msgID = ' '
-     C                   Movel (P) g_user        S_User
-     C                   Movel (P) i_section     S_Section
-     C                   Movel (P) i_key         S_Key
+     C                   EVAL      S_User = g_user
+     C                   EVAL      S_Section = i_section
+     C                   EVAL      S_Key = i_key
      C     U_Key3        Chain (N) FPEEKUSR                           11
      C                   IF        *IN11 = *OFF
      C                   Eval      f_chainUsr = '0'
@@ -324,16 +325,14 @@
       *
      C                   Return    f_chainUsr
       *
-     P f_chainUsr      E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  f_updatUsr                                 (Body)     *
       *===================================================================*
       *
      P f_updatUsr      B                   Export
-      *
-      *  definieren Procedure Interface ...
-     D f_updatUsr      PI                         like(R§BOOL    )
+     D                 PI                         like(R§BOOL    )
      D  i_section                          const  like(R§SECTION )
      D  i_key                              const  like(R§KEY     )
      D  i_data                             const  like(R§SET0000 )
@@ -351,9 +350,9 @@
      C                   Callp     p_opnFile(msgID: msgDta)
       *
      C                   If        msgID = ' '
-     C                   Movel (P) g_user        S_User
-     C                   Movel (P) i_section     S_Section
-     C                   Movel (P) i_key         S_Key
+     C                   EVAL      S_User = g_user
+     C                   EVAL      S_Section = i_section
+     C                   EVAL      S_Key = i_key
      C     U_Key3        Chain     FPEEKUSR                           11
      C                   If        *IN11 = *OFF
      C                   Eval      S_Data = i_data
@@ -372,16 +371,14 @@
       *
      C                   Return    f_updatUsr
       *
-     P f_updatUsr      E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  f_deletUsr                                 (Body)     *
       *===================================================================*
       *
      P f_deletUsr      B                   Export
-      *
-      *  definieren Procedure Interface ...
-     D f_deletUsr      PI                         like(R§BOOL    )
+     D                 PI                         like(R§BOOL    )
      D  i_section                          const  like(R§SECTION )
      D  i_key                              const  like(R§KEY     )
       *
@@ -397,9 +394,9 @@
      C                   Callp     p_opnFile(msgID: msgDta)
       *
      C                   If        msgID = ' '
-     C                   Movel (P) g_user        S_User
-     C                   Movel (P) i_section     S_Section
-     C                   Movel (P) i_key         S_Key
+     C                   EVAL      S_User = g_user
+     C                   EVAL      S_Section = i_section
+     C                   EVAL      S_Key = i_key
      C     U_Key3        Chain     FPEEKUSR                           11
      C                   IF        *IN11 = *OFF
      C                   Delete    FPEEKUSR                             11
@@ -417,16 +414,14 @@
       *
      C                   Return    f_deletUsr
       *
-     P f_deletUsr      E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  f_writeUsr                                 (Body)     *
       *===================================================================*
       *
      P f_writeUsr      B                   Export
-      *
-      *  definieren Procedure Interface ...
-     D f_writeUsr      PI                         like(R§BOOL    )
+     D                 PI                         like(R§BOOL    )
      D  i_section                          const  like(R§SECTION )
      D  i_key                              const  like(R§KEY     )
      D  i_data                                    like(R§SET0000 )
@@ -443,10 +438,10 @@
      C                   Callp     p_opnFile(msgID: msgDta)
       *
      C                   If        msgID = ' '
-     C                   Movel (P) g_user        S_User
-     C                   Movel (P) i_section     S_Section
-     C                   Movel (P) i_key         S_Key
-     C                   Movel (P) i_data        S_Data
+     C                   EVAL      S_User = g_user
+     C                   EVAL      S_Section = i_section
+     C                   EVAL      S_Key = i_key
+     C                   EVAL      S_Data = i_data
      C                   Write     FPEEKUSR                             11
      C                   If        *IN11 = *ON
      C                   Eval      f_writeUsr = bFalse
@@ -459,16 +454,14 @@
       *
      C                   Return    f_writeUsr
       *
-     P f_writeUsr      E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  p_setllUsr                                 (Body)     *
       *===================================================================*
       *
      P p_setllUsr      B                   Export
-      *
-      *  definieren Procedure Interface ...
-     D p_setllUsr      PI
+     D                 PI
      D  i_section                          const  like(R§SECTION )
      D  i_key                              const  like(R§KEY     )
      D                                     options(*NOPASS)
@@ -481,14 +474,14 @@
       *
      C                   Callp     p_opnFile(msgID: msgDta)
      C                   If        msgID = ' '
-     C                   Movel (P) g_user        S_User
+     C                   EVAL      S_User = g_user
       *
      C                   If        %parms >= 2
-     C                   Movel (P) i_section     S_Section
-     C                   Movel (P) i_key         S_Key
+     C                   EVAL      S_Section = i_section
+     C                   EVAL      S_Key = i_key
      C     U_Key3        Setll     FPEEKUSR
      C                   Else
-     C                   Movel (P) i_section     S_Section
+     C                   EVAL      S_Section = i_section
      C     U_Key2        Setll     FPEEKUSR
      C                   Endif
       *
@@ -496,16 +489,14 @@
       *
      C                   Return
       *
-     P p_setllUsr      E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  p_setgtUsr                                 (Body)     *
       *===================================================================*
       *
      P p_setgtUsr      B                   Export
-      *
-      *  definieren Procedure Interface ...
-     D p_setgtUsr      PI
+     D                 PI
      D  i_section                          const  like(R§SECTION )
      D  i_key                              const  like(R§KEY     )
      D                                     options(*NOPASS)
@@ -518,14 +509,14 @@
       *
      C                   Callp     p_opnFile(msgID: msgDta)
      C                   If        msgID = ' '
-     C                   Movel (P) g_user        S_User
+     C                   EVAL      S_User = g_user
       *
      C                   If        %parms >= 2
-     C                   Movel (P) i_section     S_Section
-     C                   Movel (P) i_key         S_Key
+     C                   EVAL      S_Section = i_section
+     C                   EVAL      S_Key = i_key
      C     U_Key3        Setgt     FPEEKUSR
      C                   Else
-     C                   Movel (P) i_section     S_Section
+     C                   EVAL      S_Section = i_section
      C     U_Key2        Setgt     FPEEKUSR
      C                   Endif
       *
@@ -533,16 +524,14 @@
       *
      C                   Return
       *
-     P p_setgtUsr      E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  f_readeUsr                                 (Body)     *
       *===================================================================*
       *
      P f_readeUsr      B                   Export
-      *
-      *  definieren Procedure Interface ...
-     D f_readeUsr      PI                         like(R§BOOL    )
+     D                 PI                         like(R§BOOL    )
      D  i_section                          const  like(R§SECTION )
      D  o_key                                     like(R§KEY     )
      D                                            options(*NOPASS)
@@ -570,8 +559,8 @@
       *
      C                   Callp     p_opnFile(msgID: msgDta)
      C                   If        msgID = ' '
-     C                   Movel (P) g_user        S_User
-     C                   Movel (P) i_section     S_Section
+     C                   EVAL      S_User = g_user
+     C                   EVAL      S_Section = i_section
      C     U_Key2        Reade (N) FPEEKUSR                               11
      C                   IF        *IN11 = *OFF
      C                   Eval      f_readeUsr = '0'
@@ -596,16 +585,14 @@
       *
      C                   Return    f_readeUsr
       *
-     P f_readeUsr      E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  p_setllDft                                 (Body)     *
       *===================================================================*
       *
      P p_setllDft      B                   Export
-      *
-      *  definieren Procedure Interface ...
-     D p_setllDft      PI
+     D                 PI
      D  i_section                          const  like(R§SECTION )
      D  i_key                              const  like(R§KEY     )
      D                                     options(*NOPASS)
@@ -619,9 +606,9 @@
      C                   Callp     p_opnDft(msgID: msgDta)
      C                   If        msgID = ' '
       *
-     C                   Movel (P) '*NONE'       D_User
-     C                   Movel (P) i_section     D_Section
-     C                   Movel (P) i_key         D_Key
+     C                   EVAL      D_User = '*NONE'
+     C                   EVAL      D_Section = i_section
+     C                   EVAL      D_Key = i_key
      C                   If        %parms >= 2
      C     D_Key3        Setll     FDEFAULT
      C                   Else
@@ -632,16 +619,14 @@
       *
      C                   Return
       *
-     P p_setllDft      E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  f_readeDft                                 (Body)     *
       *===================================================================*
       *
      P f_readeDft      B                   Export
-      *
-      *  definieren Procedure Interface ...
-     D f_readeDft      PI                         like(R§BOOL    )
+     D                 PI                         like(R§BOOL    )
      D  i_section                          const  like(R§SECTION )
      D  o_key                                     like(R§KEY     )
      D                                            options(*NOPASS)
@@ -670,8 +655,8 @@
      C                   Callp     p_opnDft(msgID: msgDta)
      C                   If        msgID = ' '
       *
-     C                   Movel (P) '*NONE'       D_User
-     C                   Movel (P) i_section     D_Section
+     C                   EVAL      D_User = '*NONE'
+     C                   EVAL      D_Section = i_section
      C     D_Key2        Reade (N) FDEFAULT                               11
      C                   IF        *IN11 = *OFF
      C                   Eval      f_readeDft = '0'
@@ -696,16 +681,14 @@
       *
      C                   Return    f_readeDft
       *
-     P f_readeDft      E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  p_setUsr                                   (Body)     *
       *===================================================================*
       *
      P p_setUsr        B                   Export
-      *
-      *  definieren Procedure Interface ...
-     D p_setUsr        PI
+     D                 PI
      D  i_user                             const  like(R§USER    )
      D  i_file                             const  like(R§FILE    )
      D  i_lib                              const  like(R§LIB     )
@@ -717,16 +700,14 @@
       *
      C                   Return
       *
-     P p_setUsr        E
+     P                 E
       *
       *===================================================================*
       *  Prozedur:  f_getUsr                                   (Body)     *
       *===================================================================*
       *
      P f_getUsr        B                   Export
-      *
-      *  definieren Procedure Interface ...
-     D f_getUsr        PI                         like(R§USER    )
+     D                 PI                         like(R§USER    )
      D  o_file                                    like(R§FILE    )
      D  o_lib                                     like(R§LIB     )
       * ------------------------------------------------------------------------
@@ -736,16 +717,14 @@
       *
      C                   Return    g_user
       *
-     P f_getUsr        E
-    R *
-    R *===================================================================*
-    R *  Prozedur:  f_initUsrS                                 (Body)     *
-    R *===================================================================*
-    R *
-     P f_initUsrS      B
+     P                 E
       *
-      *  definieren Procedure Interface ...
-     D f_initUsrS      PI                         like(R§SET0000 )
+      *===================================================================*
+      *  Prozedur:  f_initUsrS                                 (Body)     *
+      *===================================================================*
+      *
+     P f_initUsrS      B
+     D                 PI                         like(R§SET0000 )
      D  i_key                              const  like(R§KEY     )
       *
       *  definieren Funktionswert ...
@@ -813,16 +792,14 @@
       *
      C                   Return    f_initUsrS
       *
-     P f_initUsrS      E
-    R *
-    R *===================================================================*
-    R *  Prozedur:  p_opnFile                                  (Body)     *
-    R *===================================================================*
-    R *
-     P p_opnFile       B
+     P                 E
       *
-      *  definieren Procedure Interface ...
-     D p_opnFile       PI
+      *===================================================================*
+      *  Prozedur:  p_opnFile                                  (Body)     *
+      *===================================================================*
+      *
+     P p_opnFile       B
+     D                 PI
      D  o_msgID                       7A
      D  o_msgDta                    512A
       * ------------------------------------------------------------------------
@@ -856,16 +833,14 @@
       *
      C                   Return
       *
-     P p_opnFile       E
-    R *
-    R *===================================================================*
-    R *  Prozedur:  p_opnDft                                   (Body)     *
-    R *===================================================================*
-    R *
-     P p_opnDft        B
+     P                 E
       *
-      *  definieren Procedure Interface ...
-     D p_opnDft        PI
+      *===================================================================*
+      *  Prozedur:  p_opnDft                                   (Body)     *
+      *===================================================================*
+      *
+     P p_opnDft        B
+     D                 PI
      D  o_msgID                       7A
      D  o_msgDta                    512A
       * ------------------------------------------------------------------------
@@ -892,16 +867,14 @@
       *
      C                   Return
       *
-     P p_opnDft        E
-    R *
-    R *===================================================================*
-    R *  Prozedur:  p_initSrvPgm                               (Body)     *
-    R *===================================================================*
-    R *
-     P p_initSrvPgm    B
+     P                 E
       *
-      *  definieren Procedure Interface ...
-     D p_initSrvPgm    PI
+      *===================================================================*
+      *  Prozedur:  p_initSrvPgm                               (Body)     *
+      *===================================================================*
+      *
+     P p_initSrvPgm    B
+     D                 PI
       * ------------------------------------------------------------------------
       *
      C                   If        g_isInit = bFalse
@@ -917,5 +890,5 @@
       *
      C                   Return
       *
-     P p_initSrvPgm    E
+     P                 E
       *
