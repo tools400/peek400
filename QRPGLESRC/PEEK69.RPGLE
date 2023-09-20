@@ -403,10 +403,6 @@
       *
      C     PosToMbr      BEGSR
       *
- B01  ***  ##File        IFEQ      R_File
-      ***                MOVEL (P) bFalse        IsNewPos
- X01  ***                ELSE
-      *
      C     LstFile       IFNE      R_File
      C                   Eval      LstNbrRcd = 0
      C                   Endif
@@ -430,7 +426,6 @@
      C                   Endif
       *
      C                   EVAL      R_File = LstFile
- E01  ***                ENDIF
       *
      C                   ENDSR
       *

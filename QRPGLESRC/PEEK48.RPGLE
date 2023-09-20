@@ -819,11 +819,6 @@
       * - Einstellen der Bildschirmauflösung 80/132-Zeichen
      C                   EXSR      SetScreen
       *
-      * - Copyright
-      ***                MOVEL (P) 'USR9999'     §MsgID
-      ***                MOVEL (P) xCopyRight    §MsgDta
-      ***                Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
-      *
      C                   ENDSR
       *
       *============================================================*

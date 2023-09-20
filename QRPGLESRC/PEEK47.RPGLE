@@ -387,10 +387,6 @@
       *
      C     PosToMbr      BEGSR
       *
- B01  ***  ##Mbr         IFEQ      R_Mbr
-      ***                MOVEL (P) bFalse        IsNewPos
- X01  ***                ELSE
-      *
      C     LstMbr        IFNE      R_Mbr
      C                   Eval      LstNbrRcd = 0
      C                   Endif
@@ -414,7 +410,6 @@
      C                   Endif
       *
      C                   EVAL      R_Mbr = LstMbr
- E01  ***                ENDIF
       *
      C                   ENDSR
       *

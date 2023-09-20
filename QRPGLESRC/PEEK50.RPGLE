@@ -413,10 +413,6 @@
       *
      C     PosToField    BEGSR
       *
- B01  ***  ##Field       IFEQ      R_Field
-      ***                MOVEL (P) bFalse        IsNewPos
- X01  ***                ELSE
-      *
      C     LstField      IFNE      R_Field
      C                   Eval      LstNbrRcd = 0
      C                   Endif
@@ -440,7 +436,6 @@
      C                   Endif
       *
      C                   EVAL      R_Field = LstField
- E01  ***                ENDIF
       *
      C                   ENDSR
       *
