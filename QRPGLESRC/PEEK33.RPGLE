@@ -124,9 +124,6 @@
      D TB030401        S            100A   DIM(  4) CTDATA PERRCD(1)
      D ELM030401       C                   CONST(%ELEM(TB030401))
       *
-     D TB030402        S            100A   DIM(  4) CTDATA PERRCD(1)
-     D ELM030402       C                   CONST(%ELEM(TB030402))
-      *
      D TB030500        S            100A   DIM(  4) CTDATA PERRCD(1)
      D ELM030500       C                   CONST(%ELEM(TB030500))
       *
