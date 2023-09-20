@@ -52,7 +52,7 @@
       *                                                               *
       * ============================================================= *
       * >>PRE-COMPILER<<                                              *
-*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
       *                           OBJLIB(&LI) DEVLIB(&LI) +           *
       *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
       *                           INSTALL(*NO);                       *
