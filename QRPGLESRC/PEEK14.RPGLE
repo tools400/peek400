@@ -923,9 +923,9 @@
       *
       *      ... Markieren Schlüsselfelder
      C                   If        (F_KSeq <> 0)
-     C                   MOVE      ' >'          $$TEXT
+     C                   EVAL      %subst($$TEXT: %len($$TEXT) - 1: 2) = ' >'
      C                   Else
-     C                   MOVE      ' :'          $$TEXT
+     C                   EVAL      %subst($$TEXT: %len($$TEXT) - 1: 2) = ' :'
      C                   Endif
       *
       *  ... NULL erlaubt?
