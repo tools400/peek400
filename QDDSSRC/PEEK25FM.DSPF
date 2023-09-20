@@ -16,6 +16,14 @@
       *  Peek/400 - Auswahl einer Farbe                               *
       *                                                               *
       *===============================================================*
+      * >>PRE-COMPILER<<                                              *
+      *   >>CRTCMD<< &LI/CMPPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
+      *===============================================================*
       *
       *%%EC
      A                                      DSPSIZ(24 80 *DS3                  -
@@ -60,13 +68,13 @@
      A            CSRCOL         3S 0H
      A            SCNREC        10A  H
      A            SCNFLD        10A  H
- ADD A            TXT0044       20A  O  1 14MSGID(TXT 0044 PEEKGER )
+     A            TXT0044       20A  O  1 14MSGID(TXT 0044 PEEKGER )
      A                                      COLOR(WHT)
      A                                  2  1'                                  -
      A                                                '
      A                                      DSPATR(UL)
      A                                      COLOR(BLU)
- ADD A            TXT0045        9A  O  4  3MSGID(TXT 0045 PEEKGER )
+     A            TXT0045        9A  O  4  3MSGID(TXT 0045 PEEKGER )
      A                                      COLOR(WHT)
      A            FLD001         1A  B  4 13DSPATR(ND)
      A            $GREEN         3A  O  4 15
@@ -77,7 +85,7 @@
      A  12                                  DSPATR(PC)
      A            $GREEN_RU      3A  O  4 27
      A  13                                  DSPATR(PC)
- ADD A            TXT0046        9A  O  5  3MSGID(TXT 0046 PEEKGER )
+     A            TXT0046        9A  O  5  3MSGID(TXT 0046 PEEKGER )
      A                                      COLOR(WHT)
      A            FLD002         1A  B  5 13DSPATR(ND)
      A            $WHITE         3A  O  5 15
@@ -86,7 +94,7 @@
      A  21                                  DSPATR(PC)
      A            $WHITE_U       3A  O  5 23
      A  22                                  DSPATR(PC)
- ADD A            TXT0047        9A  O  6  3MSGID(TXT 0047 PEEKGER )
+     A            TXT0047        9A  O  6  3MSGID(TXT 0047 PEEKGER )
      A                                      COLOR(WHT)
      A            FLD003         1A  B  6 13DSPATR(ND)
      A            $RED           3A  O  6 15
@@ -103,7 +111,7 @@
      A  35                                  DSPATR(PC)
      A            $RED_UB        3A  O  6 39
      A  36                                  DSPATR(PC)
- ADD A            TXT0048        9A  O  7  3MSGID(TXT 0048 PEEKGER )
+     A            TXT0048        9A  O  7  3MSGID(TXT 0048 PEEKGER )
      A                                      COLOR(WHT)
      A            FLD004         1A  B  7 13DSPATR(ND)
      A            $TURKIS        3A  O  7 15
@@ -114,7 +122,7 @@
      A  42                                  DSPATR(PC)
      A            $TURKIS_RU     3A  O  7 27
      A  43                                  DSPATR(PC)
- ADD A            TXT0049        9A  O  8  3MSGID(TXT 0049 PEEKGER )
+     A            TXT0049        9A  O  8  3MSGID(TXT 0049 PEEKGER )
      A                                      COLOR(WHT)
      A            FLD005         1A  B  8 13DSPATR(ND)
      A            $YELLOW        3A  O  8 15
@@ -123,7 +131,7 @@
      A  51                                  DSPATR(PC)
      A            $YELLOW_U      3A  O  8 23
      A  52                                  DSPATR(PC)
- ADD A            TXT0050        9A  O  9  3MSGID(TXT 0050 PEEKGER )
+     A            TXT0050        9A  O  9  3MSGID(TXT 0050 PEEKGER )
      A                                      COLOR(WHT)
      A            FLD006         1A  B  9 13DSPATR(ND)
      A            $PINK          3A  O  9 15
@@ -134,7 +142,7 @@
      A  62                                  DSPATR(PC)
      A            $PINK_RU       3A  O  9 27
      A  63                                  DSPATR(PC)
- ADD A            TXT0051        9A  O 10  3MSGID(TXT 0051 PEEKGER )
+     A            TXT0051        9A  O 10  3MSGID(TXT 0051 PEEKGER )
      A                                      COLOR(WHT)
      A            FLD007         1A  B 10 13DSPATR(ND)
      A            $BLUE          3A  O 10 15
@@ -149,116 +157,116 @@
      A                                      COLOR(BLU)
       *
       *----------------------------------------------------*
- ADD A          R PBBOT#1
+     A          R PBBOT#1
       *%%TS  SD  19971016  120515  RADDATZ     REL-V3R6M0  5716-PW1
- ADD A  *DS3                                WINDOW(MSGCTL)
- ADD A  *DS4                                WINDOW(MSGCTL)
- ADD A N88                                  DSPMOD(*DS4)
- ADD A                                      OVERLAY
- ADD A            $$FKEY01      18A  O 13  2
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY02      18A  O 13 22
- ADD A                                      COLOR(BLU)
+     A  *DS3                                WINDOW(MSGCTL)
+     A  *DS4                                WINDOW(MSGCTL)
+     A N88                                  DSPMOD(*DS4)
+     A                                      OVERLAY
+     A            $$FKEY01      18A  O 13  2
+     A                                      COLOR(BLU)
+     A            $$FKEY02      18A  O 13 22
+     A                                      COLOR(BLU)
       *
       *----------------------------------------------------*
- ADD A          R PBBOT#2
+     A          R PBBOT#2
       *%%TS  SD  19971016  120515  RADDATZ     REL-V3R6M0  5716-PW1
- ADD A  *DS3                                WINDOW(MSGCTL)
- ADD A  *DS4                                WINDOW(MSGCTL)
- ADD A N88                                  DSPMOD(*DS4)
- ADD A                                      OVERLAY
- ADD A            $$FKEY03      18A  O 13  2
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY04      18A  O 13 22
- ADD A                                      COLOR(BLU)
+     A  *DS3                                WINDOW(MSGCTL)
+     A  *DS4                                WINDOW(MSGCTL)
+     A N88                                  DSPMOD(*DS4)
+     A                                      OVERLAY
+     A            $$FKEY03      18A  O 13  2
+     A                                      COLOR(BLU)
+     A            $$FKEY04      18A  O 13 22
+     A                                      COLOR(BLU)
       *
       *----------------------------------------------------*
- ADD A          R PBBOT#3
+     A          R PBBOT#3
       *%%TS  SD  19971016  120515  RADDATZ     REL-V3R6M0  5716-PW1
- ADD A  *DS3                                WINDOW(MSGCTL)
- ADD A  *DS4                                WINDOW(MSGCTL)
- ADD A N88                                  DSPMOD(*DS4)
- ADD A                                      OVERLAY
- ADD A            $$FKEY05      18A  O 13  2
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY06      18A  O 13 22
- ADD A                                      COLOR(BLU)
+     A  *DS3                                WINDOW(MSGCTL)
+     A  *DS4                                WINDOW(MSGCTL)
+     A N88                                  DSPMOD(*DS4)
+     A                                      OVERLAY
+     A            $$FKEY05      18A  O 13  2
+     A                                      COLOR(BLU)
+     A            $$FKEY06      18A  O 13 22
+     A                                      COLOR(BLU)
       *
       *----------------------------------------------------*
- ADD A          R PBBOT#4
+     A          R PBBOT#4
       *%%TS  SD  19971016  120515  RADDATZ     REL-V3R6M0  5716-PW1
- ADD A  *DS3                                WINDOW(MSGCTL)
- ADD A  *DS4                                WINDOW(MSGCTL)
- ADD A N88                                  DSPMOD(*DS4)
- ADD A                                      OVERLAY
- ADD A            $$FKEY07      18A  O 13  2
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY08      18A  O 13 22
- ADD A                                      COLOR(BLU)
+     A  *DS3                                WINDOW(MSGCTL)
+     A  *DS4                                WINDOW(MSGCTL)
+     A N88                                  DSPMOD(*DS4)
+     A                                      OVERLAY
+     A            $$FKEY07      18A  O 13  2
+     A                                      COLOR(BLU)
+     A            $$FKEY08      18A  O 13 22
+     A                                      COLOR(BLU)
       *
       *----------------------------------------------------*
- ADD A          R PBBOT#5
+     A          R PBBOT#5
       *%%TS  SD  19971016  120515  RADDATZ     REL-V3R6M0  5716-PW1
- ADD A  *DS3                                WINDOW(MSGCTL)
- ADD A  *DS4                                WINDOW(MSGCTL)
- ADD A N88                                  DSPMOD(*DS4)
- ADD A                                      OVERLAY
- ADD A            $$FKEY09      18A  O 13  2
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY10      18A  O 13 22
- ADD A                                      COLOR(BLU)
+     A  *DS3                                WINDOW(MSGCTL)
+     A  *DS4                                WINDOW(MSGCTL)
+     A N88                                  DSPMOD(*DS4)
+     A                                      OVERLAY
+     A            $$FKEY09      18A  O 13  2
+     A                                      COLOR(BLU)
+     A            $$FKEY10      18A  O 13 22
+     A                                      COLOR(BLU)
       *
       *----------------------------------------------------*
- ADD A          R PBBOT#6
+     A          R PBBOT#6
       *%%TS  SD  19971016  120515  RADDATZ     REL-V3R6M0  5716-PW1
- ADD A  *DS3                                WINDOW(MSGCTL)
- ADD A  *DS4                                WINDOW(MSGCTL)
- ADD A N88                                  DSPMOD(*DS4)
- ADD A                                      OVERLAY
- ADD A            $$FKEY11      18A  O 13  2
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY12      18A  O 13 22
- ADD A                                      COLOR(BLU)
+     A  *DS3                                WINDOW(MSGCTL)
+     A  *DS4                                WINDOW(MSGCTL)
+     A N88                                  DSPMOD(*DS4)
+     A                                      OVERLAY
+     A            $$FKEY11      18A  O 13  2
+     A                                      COLOR(BLU)
+     A            $$FKEY12      18A  O 13 22
+     A                                      COLOR(BLU)
       *
       *----------------------------------------------------*
- ADD A          R MSGSFL                    SFL
+     A          R MSGSFL                    SFL
       *%%TS  SD  19971017  155045  RADDATZ     REL-V3R6M0  5716-PW1
- ADD A  *DS3                                SFLMSGRCD(14)
- ADD A  *DS4                                SFLMSGRCD(14)
- ADD A            §MSGKY                    SFLMSGKEY
- ADD A            §PGMQ                     SFLPGMQ(10)
+     A  *DS3                                SFLMSGRCD(14)
+     A  *DS4                                SFLMSGRCD(14)
+     A            §MSGKY                    SFLMSGKEY
+     A            §PGMQ                     SFLPGMQ(10)
       *
       *----------------------------------------------------*
- ADD A          R MSGCTL                    SFLCTL(MSGSFL)
+     A          R MSGCTL                    SFLCTL(MSGSFL)
       *%%TS  SD  19971031  111919  RADDATZ     REL-V3R6M0  5716-PW1
- ADD A                                      KEEP
- ADD A                                      LOCK
- ADD A N88                                  DSPMOD(*DS4)
- ADD A                                      SFLDSP
- ADD A                                      SFLDSPCTL
- ADD A                                      SFLINZ
- ADD A N89                                  SFLEND
- ADD A  *DS3                                SFLSIZ(0050)
- ADD A  *DS4                                SFLSIZ(0050)
- ADD A  *DS3                                SFLPAG(0001)
- ADD A  *DS4                                SFLPAG(0001)
- ADD A  *DS3                                WINDOW(&ZEI &POS 14 44 *NOMSGLIN)
- ADD A  *DS4                                WINDOW(&ZEI &POS 14 44 *NOMSGLIN)
- ADD A            §PGMQ                     SFLPGMQ(10)
- ADD A            ZEI            3S 0P
- ADD A            POS            3S 0P
+     A                                      KEEP
+     A                                      LOCK
+     A N88                                  DSPMOD(*DS4)
+     A                                      SFLDSP
+     A                                      SFLDSPCTL
+     A                                      SFLINZ
+     A N89                                  SFLEND
+     A  *DS3                                SFLSIZ(0050)
+     A  *DS4                                SFLSIZ(0050)
+     A  *DS3                                SFLPAG(0001)
+     A  *DS4                                SFLPAG(0001)
+     A  *DS3                                WINDOW(&ZEI &POS 14 44 *NOMSGLIN)
+     A  *DS4                                WINDOW(&ZEI &POS 14 44 *NOMSGLIN)
+     A            §PGMQ                     SFLPGMQ(10)
+     A            ZEI            3S 0P
+     A            POS            3S 0P
       *
       *----------------------------------------------------*
       *  RMVWDW ZUM LÖSCHEN DES WINDOWS
       *
- ADD A          R RMVWDW                    CLRL(*NO) OVERLAY FRCDTA
- ADD A N88                                  DSPMOD(*DS4)
+     A          R RMVWDW                    CLRL(*NO) OVERLAY FRCDTA
+     A N88                                  DSPMOD(*DS4)
       *
       *  DER DUMMY SATZ MUSS VORHANDEN SEIN,
       *  AUCH WENN KEIN ZUGRIFF AUF IHN ERFOLGT !!
       *
       *----------------------------------------------------*
- ADD A          R DUMMY                     ASSUME
+     A          R DUMMY                     ASSUME
       *%%TS  SD  19931014  095141  LASCHE      REL-V2R2M0  5738-PW1
- ADD A N88                                  DSPMOD(*DS4)
- ADD A                                 11  1' '
+     A N88                                  DSPMOD(*DS4)
+     A                                 11  1' '

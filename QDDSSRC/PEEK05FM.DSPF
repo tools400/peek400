@@ -40,13 +40,21 @@
       *  87 - DSPATR(PC) FÜR AUFSETZKEY                               *
       *  88 - 80/132-ZEICHEN ANZEIGE                                  *
       *  89 - SFLEND, MSGCTL                                          *
-      *                                                               *   RADDAT
+      *                                                               *
       *  96 - Feld für Eingabe sperren  VDSP;VDEL                     *
       *  98 - Feld für Eingabe sperren  VCHG                          *
-      *                                                               *   RADDAT
-      *  91 - Vorwärts blättern                                       *   RADDAT
-      *  92 - Rückwärts blättern                                      *   RADDAT
       *                                                               *
+      *  91 - Vorwärts blättern                                       *
+      *  92 - Rückwärts blättern                                      *
+      *                                                               *
+      *===============================================================*
+      * >>PRE-COMPILER<<                                              *
+      *   >>CRTCMD<< &LI/CMPPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
       *===============================================================*
       *
       *%%EC
@@ -58,119 +66,119 @@
      A                                      HELP(01)
       *
       *----------------------------------------------------*
- ADD A          R SPLASH01
+     A          R SPLASH01
       *%%TS  SD  19971113  132119  RADDATZ     REL-V3R6M0  5716-PW1
- ADD A                                      OVERLAY
- ADD A  *DS4                                WINDOW(5 49 11 30)
- ADD A  *DS3                                WINDOW(5 25 11 30)
- ADD A  88                                  DSPMOD(*DS3)
- ADD A                                      WDWBORDER((*COLOR YLW) (*DSPATR RI)-
- ADD A                                       (*CHAR '        '))
- ADD A                                  2  2'      '
- ADD A                                      DSPATR(RI)
- ADD A                                      COLOR(GRN)
- ADD A                                  2  9'      '
- ADD A                                      DSPATR(RI)
- ADD A                                      COLOR(GRN)
- ADD A                                  2 16'      '
- ADD A                                      DSPATR(RI)
- ADD A                                      COLOR(GRN)
- ADD A                                  2 23'  '
- ADD A                                      DSPATR(RI)
- ADD A                                      COLOR(GRN)
- ADD A                                  2 28'  '
- ADD A                                      DSPATR(RI)
- ADD A                                      COLOR(GRN)
- ADD A                                  3  2'  '
- ADD A                                      DSPATR(RI)
- ADD A                                      COLOR(GRN)
- ADD A                                  3  6'  '
- ADD A                                      DSPATR(RI)
- ADD A                                      COLOR(GRN)
- ADD A                                  3  9'  '
- ADD A                                      DSPATR(RI)
- ADD A                                      COLOR(GRN)
- ADD A                                  3 16'  '
- ADD A                                      DSPATR(RI)
- ADD A                                      COLOR(GRN)
- ADD A                                  3 23'  '
- ADD A                                      DSPATR(RI)
- ADD A                                      COLOR(GRN)
- ADD A                                  3 27'  '
- ADD A                                      DSPATR(RI)
- ADD A                                      COLOR(GRN)
- ADD A                                  4  2'      '
- ADD A                                      DSPATR(RI)
- ADD A                                      COLOR(GRN)
- ADD A                                  4  9'      '
- ADD A                                      DSPATR(RI)
- ADD A                                      COLOR(GRN)
- ADD A                                  4 16'      '
- ADD A                                      DSPATR(RI)
- ADD A                                      COLOR(GRN)
- ADD A                                  4 23'     '
- ADD A                                      DSPATR(RI)
- ADD A                                      COLOR(GRN)
- ADD A                                  5  2'  '
- ADD A                                      DSPATR(RI)
- ADD A                                      COLOR(GRN)
- ADD A                                  5  9'  '
- ADD A                                      DSPATR(RI)
- ADD A                                      COLOR(GRN)
- ADD A                                  5 16'  '
- ADD A                                      DSPATR(RI)
- ADD A                                      COLOR(GRN)
- ADD A                                  5 23'  '
- ADD A                                      DSPATR(RI)
- ADD A                                      COLOR(GRN)
- ADD A                                  5 27'  '
- ADD A                                      DSPATR(RI)
- ADD A                                      COLOR(GRN)
- ADD A                                  6  2'  '
- ADD A                                      DSPATR(RI)
- ADD A                                      COLOR(GRN)
- ADD A                                  6  9'      '
- ADD A                                      DSPATR(RI)
- ADD A                                      COLOR(GRN)
- ADD A                                  6 16'      '
- ADD A                                      DSPATR(RI)
- ADD A                                      COLOR(GRN)
- ADD A                                  6 23'  '
- ADD A                                      DSPATR(RI)
- ADD A                                      COLOR(GRN)
- ADD A                                  6 28'  '
- ADD A                                      DSPATR(RI)
- ADD A                                      COLOR(GRN)
- ADD A                                  8  2'         '
- ADD A                                      DSPATR(RI)
- ADD A                                      COLOR(RED)
- ADD A                                  8 12'Peek/400'
- ADD A                                      COLOR(WHT)
- ADD A                                  8 21'         '
- ADD A                                      DSPATR(RI)
- ADD A                                      COLOR(RED)
- ADD A            TXT0073       18A  O  9  7MSGID(TXT 0073 PEEKGER)
- ADD A                                      COLOR(WHT)
- ADD A            TXT0074       18A  O 10  7MSGID(TXT 0074 PEEKGER)
- ADD A                                      COLOR(WHT)
+     A                                      OVERLAY
+     A  *DS4                                WINDOW(5 49 11 30)
+     A  *DS3                                WINDOW(5 25 11 30)
+     A  88                                  DSPMOD(*DS3)
+     A                                      WDWBORDER((*COLOR YLW) (*DSPATR RI)-
+     A                                       (*CHAR '        '))
+     A                                  2  2'      '
+     A                                      DSPATR(RI)
+     A                                      COLOR(GRN)
+     A                                  2  9'      '
+     A                                      DSPATR(RI)
+     A                                      COLOR(GRN)
+     A                                  2 16'      '
+     A                                      DSPATR(RI)
+     A                                      COLOR(GRN)
+     A                                  2 23'  '
+     A                                      DSPATR(RI)
+     A                                      COLOR(GRN)
+     A                                  2 28'  '
+     A                                      DSPATR(RI)
+     A                                      COLOR(GRN)
+     A                                  3  2'  '
+     A                                      DSPATR(RI)
+     A                                      COLOR(GRN)
+     A                                  3  6'  '
+     A                                      DSPATR(RI)
+     A                                      COLOR(GRN)
+     A                                  3  9'  '
+     A                                      DSPATR(RI)
+     A                                      COLOR(GRN)
+     A                                  3 16'  '
+     A                                      DSPATR(RI)
+     A                                      COLOR(GRN)
+     A                                  3 23'  '
+     A                                      DSPATR(RI)
+     A                                      COLOR(GRN)
+     A                                  3 27'  '
+     A                                      DSPATR(RI)
+     A                                      COLOR(GRN)
+     A                                  4  2'      '
+     A                                      DSPATR(RI)
+     A                                      COLOR(GRN)
+     A                                  4  9'      '
+     A                                      DSPATR(RI)
+     A                                      COLOR(GRN)
+     A                                  4 16'      '
+     A                                      DSPATR(RI)
+     A                                      COLOR(GRN)
+     A                                  4 23'     '
+     A                                      DSPATR(RI)
+     A                                      COLOR(GRN)
+     A                                  5  2'  '
+     A                                      DSPATR(RI)
+     A                                      COLOR(GRN)
+     A                                  5  9'  '
+     A                                      DSPATR(RI)
+     A                                      COLOR(GRN)
+     A                                  5 16'  '
+     A                                      DSPATR(RI)
+     A                                      COLOR(GRN)
+     A                                  5 23'  '
+     A                                      DSPATR(RI)
+     A                                      COLOR(GRN)
+     A                                  5 27'  '
+     A                                      DSPATR(RI)
+     A                                      COLOR(GRN)
+     A                                  6  2'  '
+     A                                      DSPATR(RI)
+     A                                      COLOR(GRN)
+     A                                  6  9'      '
+     A                                      DSPATR(RI)
+     A                                      COLOR(GRN)
+     A                                  6 16'      '
+     A                                      DSPATR(RI)
+     A                                      COLOR(GRN)
+     A                                  6 23'  '
+     A                                      DSPATR(RI)
+     A                                      COLOR(GRN)
+     A                                  6 28'  '
+     A                                      DSPATR(RI)
+     A                                      COLOR(GRN)
+     A                                  8  2'         '
+     A                                      DSPATR(RI)
+     A                                      COLOR(RED)
+     A                                  8 12'Peek/400'
+     A                                      COLOR(WHT)
+     A                                  8 21'         '
+     A                                      DSPATR(RI)
+     A                                      COLOR(RED)
+     A            TXT0073       18A  O  9  7MSGID(TXT 0073 PEEKGER)
+     A                                      COLOR(WHT)
+     A            TXT0074       18A  O 10  7MSGID(TXT 0074 PEEKGER)
+     A                                      COLOR(WHT)
       *
       *----------------------------------------------------*
- ADD A          R PBSFL132                  SFL
+     A          R PBSFL132                  SFL
       *%%TS  SD  19971125  171431  RADDATZ     REL-V3R6M0  5716-PW1
- ADD A  84                                  SFLNXTCHG
- RAD A            H_FILE        10A  H
- RAD A            H_LIB         10A  H
- RAD A            H_MBR         10A  H
- RAD A            H_RCDFMT      10A  H
+     A  84                                  SFLNXTCHG
+     A            H_FILE        10A  H
+     A            H_LIB         10A  H
+     A            H_MBR         10A  H
+     A            H_RCDFMT      10A  H
      A            H_MBRNBR      10Y 0H
- ADD A            SFPAU          2A  B  8  2
- ADD A  76                                  DSPATR(PR)
- ADD A N76                                  DSPATR(UL)
- ADD A  85                                  DSPATR(RI)
- RAD A  71                                  COLOR(YLW)
- ADD A            RECORDNBR     10Y 0O  8  5COLOR(WHT)
- ADD A                                      EDTCDE(Z)
- ADD A            DATA132      116   O  8 16
+     A            SFPAU          2A  B  8  2
+     A  76                                  DSPATR(PR)
+     A N76                                  DSPATR(UL)
+     A  85                                  DSPATR(RI)
+     A  71                                  COLOR(YLW)
+     A            RECORDNBR     10Y 0O  8  5COLOR(WHT)
+     A                                      EDTCDE(Z)
+     A            DATA132      116   O  8 16
       *----------------------------------------------------*
      A          R PBCTL132                  SFLCTL(PBSFL132)
       *%%TS  SD  20130917  124759  RADDATZ     REL-V6R1M0  5761-WDS
@@ -295,22 +303,22 @@
      A            $$HEAD132    116A  O  6 16
       *
       *----------------------------------------------------*
- ADD A          R PBSFL080                  SFL
+     A          R PBSFL080                  SFL
       *%%TS  SD  19971002  092514  RADDATZ     REL-V3R6M0  5716-PW1
- ADD A  84                                  SFLNXTCHG
- RAD A            H_FILE        10A  H
- RAD A            H_LIB         10A  H
- RAD A            H_MBR         10A  H
- RAD A            H_RCDFMT      10A  H
+     A  84                                  SFLNXTCHG
+     A            H_FILE        10A  H
+     A            H_LIB         10A  H
+     A            H_MBR         10A  H
+     A            H_RCDFMT      10A  H
      A            H_MBRNBR      10Y 0H
- ADD A            SFPAU          2A  B  7  2
- ADD A  76                                  DSPATR(PR)
- ADD A N76                                  DSPATR(UL)
- ADD A  85                                  DSPATR(RI)
- RAD A  71                                  COLOR(YLW)
- ADD A            RECORDNBR     10Y 0O  7  5COLOR(WHT)
- ADD A                                      EDTCDE(Z)
- ADD A            DATA080       64A  O  7 16
+     A            SFPAU          2A  B  7  2
+     A  76                                  DSPATR(PR)
+     A N76                                  DSPATR(UL)
+     A  85                                  DSPATR(RI)
+     A  71                                  COLOR(YLW)
+     A            RECORDNBR     10Y 0O  7  5COLOR(WHT)
+     A                                      EDTCDE(Z)
+     A            DATA080       64A  O  7 16
       *----------------------------------------------------*
      A          R PBCTL080                  SFLCTL(PBSFL080)
       *%%TS  SD  20130917  124759  RADDATZ     REL-V6R1M0  5761-WDS
@@ -431,26 +439,26 @@
       *
       *----------------------------------------------------*
       *
- ADD A          R PBBOT132#1
+     A          R PBBOT132#1
       *%%TS  SD  19971016  120515  RADDATZ     REL-V3R6M0  5716-PW1
- ADD A                                      DSPMOD(*DS4)
- ADD A                                      OVERLAY
- ADD A            $$FKEY01      18A  O 25  2
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY02      18A  O 25 22
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY03      18A  O 25 42
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY04      18A  O 25 62
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY05      18A  O 26  2
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY06      18A  O 26 22
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY07      18A  O 26 42
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY08      18A  O 26 62
- ADD A                                      COLOR(BLU)
+     A                                      DSPMOD(*DS4)
+     A                                      OVERLAY
+     A            $$FKEY01      18A  O 25  2
+     A                                      COLOR(BLU)
+     A            $$FKEY02      18A  O 25 22
+     A                                      COLOR(BLU)
+     A            $$FKEY03      18A  O 25 42
+     A                                      COLOR(BLU)
+     A            $$FKEY04      18A  O 25 62
+     A                                      COLOR(BLU)
+     A            $$FKEY05      18A  O 26  2
+     A                                      COLOR(BLU)
+     A            $$FKEY06      18A  O 26 22
+     A                                      COLOR(BLU)
+     A            $$FKEY07      18A  O 26 42
+     A                                      COLOR(BLU)
+     A            $$FKEY08      18A  O 26 62
+     A                                      COLOR(BLU)
       *
       *----------------------------------------------------*
       *
@@ -458,21 +466,21 @@
       *%%TS  SD  19971021  144723  RADDATZ     REL-V3R6M0  5716-PW1
      A                                      DSPMOD(*DS4)
      A                                      OVERLAY
- ADD A            $$FKEY09      18A  O 25  2
+     A            $$FKEY09      18A  O 25  2
      A                                      COLOR(BLU)
- ADD A            $$FKEY10      18A  O 25 22
+     A            $$FKEY10      18A  O 25 22
      A                                      COLOR(BLU)
- ADD A            $$FKEY11      18A  O 25 42
+     A            $$FKEY11      18A  O 25 42
      A                                      COLOR(BLU)
- ADD A            $$FKEY12      18A  O 25 62
+     A            $$FKEY12      18A  O 25 62
      A                                      COLOR(BLU)
- ADD A            $$FKEY13      18A  O 26  2
+     A            $$FKEY13      18A  O 26  2
      A                                      COLOR(BLU)
- ADD A            $$FKEY14      18A  O 26 22
+     A            $$FKEY14      18A  O 26 22
      A                                      COLOR(BLU)
- ADD A            $$FKEY15      18A  O 26 42
+     A            $$FKEY15      18A  O 26 42
      A                                      COLOR(BLU)
- ADD A            $$FKEY16      18A  O 26 62
+     A            $$FKEY16      18A  O 26 62
      A                                      COLOR(BLU)
       *
       *----------------------------------------------------*
@@ -480,160 +488,160 @@
       *%%TS  SD  19971021  144723  RADDATZ     REL-V3R6M0  5716-PW1
      A                                      DSPMOD(*DS4)
      A                                      OVERLAY
- ADD A            $$FKEY17      18A  O 25  2
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY18      18A  O 25 22
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY19      18A  O 25 42
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY20      18A  O 25 62
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY21      18A  O 26  2
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY22      18A  O 26 22
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY23      18A  O 26 42
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY24      18A  O 26 62
- ADD A                                      COLOR(BLU)
+     A            $$FKEY17      18A  O 25  2
+     A                                      COLOR(BLU)
+     A            $$FKEY18      18A  O 25 22
+     A                                      COLOR(BLU)
+     A            $$FKEY19      18A  O 25 42
+     A                                      COLOR(BLU)
+     A            $$FKEY20      18A  O 25 62
+     A                                      COLOR(BLU)
+     A            $$FKEY21      18A  O 26  2
+     A                                      COLOR(BLU)
+     A            $$FKEY22      18A  O 26 22
+     A                                      COLOR(BLU)
+     A            $$FKEY23      18A  O 26 42
+     A                                      COLOR(BLU)
+     A            $$FKEY24      18A  O 26 62
+     A                                      COLOR(BLU)
       *
       *----------------------------------------------------*
- ADD A          R PBBOT132#4
+     A          R PBBOT132#4
       *%%TS  SD  19971021  144723  RADDATZ     REL-V3R6M0  5716-PW1
- ADD A                                      DSPMOD(*DS4)
- ADD A                                      OVERLAY
- ADD A            $$FKEY25      18A  O 25  2
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY26      18A  O 25 22
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY27      18A  O 25 42
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY28      18A  O 25 62
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY29      18A  O 26  2
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY30      18A  O 26 22
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY31      18A  O 26 42
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY32      18A  O 26 62
- ADD A                                      COLOR(BLU)
+     A                                      DSPMOD(*DS4)
+     A                                      OVERLAY
+     A            $$FKEY25      18A  O 25  2
+     A                                      COLOR(BLU)
+     A            $$FKEY26      18A  O 25 22
+     A                                      COLOR(BLU)
+     A            $$FKEY27      18A  O 25 42
+     A                                      COLOR(BLU)
+     A            $$FKEY28      18A  O 25 62
+     A                                      COLOR(BLU)
+     A            $$FKEY29      18A  O 26  2
+     A                                      COLOR(BLU)
+     A            $$FKEY30      18A  O 26 22
+     A                                      COLOR(BLU)
+     A            $$FKEY31      18A  O 26 42
+     A                                      COLOR(BLU)
+     A            $$FKEY32      18A  O 26 62
+     A                                      COLOR(BLU)
       *
       *----------------------------------------------------*
- ADD A          R PBBOT080#1
+     A          R PBBOT080#1
       *%%TS  SD  19971007  123356  RADDATZ     REL-V3R6M0  5716-PW1
- ADD A                                      DSPMOD(*DS3)
- ADD A                                      OVERLAY
- ADD A            $$FKEY01      18A  O 22  2
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY02      18A  O 22 22
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY03      18A  O 22 42
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY04      18A  O 22 62
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY05      18A  O 23  2
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY06      18A  O 23 22
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY07      18A  O 23 42
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY08      18A  O 23 62
- ADD A                                      COLOR(BLU)
+     A                                      DSPMOD(*DS3)
+     A                                      OVERLAY
+     A            $$FKEY01      18A  O 22  2
+     A                                      COLOR(BLU)
+     A            $$FKEY02      18A  O 22 22
+     A                                      COLOR(BLU)
+     A            $$FKEY03      18A  O 22 42
+     A                                      COLOR(BLU)
+     A            $$FKEY04      18A  O 22 62
+     A                                      COLOR(BLU)
+     A            $$FKEY05      18A  O 23  2
+     A                                      COLOR(BLU)
+     A            $$FKEY06      18A  O 23 22
+     A                                      COLOR(BLU)
+     A            $$FKEY07      18A  O 23 42
+     A                                      COLOR(BLU)
+     A            $$FKEY08      18A  O 23 62
+     A                                      COLOR(BLU)
       *----------------------------------------------------*
       *
      A          R PBBOT080#2
       *%%TS  SD  19971021  144723  RADDATZ     REL-V3R6M0  5716-PW1
      A                                      DSPMOD(*DS3)
      A                                      OVERLAY
- ADD A            $$FKEY09      18A  O 22  2
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY10      18A  O 22 22
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY11      18A  O 22 42
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY12      18A  O 22 62
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY13      18A  O 23  2
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY14      18A  O 23 22
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY15      18A  O 23 42
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY16      18A  O 23 62
- ADD A                                      COLOR(BLU)
+     A            $$FKEY09      18A  O 22  2
+     A                                      COLOR(BLU)
+     A            $$FKEY10      18A  O 22 22
+     A                                      COLOR(BLU)
+     A            $$FKEY11      18A  O 22 42
+     A                                      COLOR(BLU)
+     A            $$FKEY12      18A  O 22 62
+     A                                      COLOR(BLU)
+     A            $$FKEY13      18A  O 23  2
+     A                                      COLOR(BLU)
+     A            $$FKEY14      18A  O 23 22
+     A                                      COLOR(BLU)
+     A            $$FKEY15      18A  O 23 42
+     A                                      COLOR(BLU)
+     A            $$FKEY16      18A  O 23 62
+     A                                      COLOR(BLU)
       *
       *----------------------------------------------------*
      A          R PBBOT080#3
       *%%TS  SD  19971021  144723  RADDATZ     REL-V3R6M0  5716-PW1
      A                                      DSPMOD(*DS3)
      A                                      OVERLAY
- ADD A            $$FKEY17      18A  O 22  2
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY18      18A  O 22 22
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY19      18A  O 22 42
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY20      18A  O 22 62
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY21      18A  O 23  2
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY22      18A  O 23 22
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY23      18A  O 23 42
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY24      18A  O 23 62
- ADD A                                      COLOR(BLU)
+     A            $$FKEY17      18A  O 22  2
+     A                                      COLOR(BLU)
+     A            $$FKEY18      18A  O 22 22
+     A                                      COLOR(BLU)
+     A            $$FKEY19      18A  O 22 42
+     A                                      COLOR(BLU)
+     A            $$FKEY20      18A  O 22 62
+     A                                      COLOR(BLU)
+     A            $$FKEY21      18A  O 23  2
+     A                                      COLOR(BLU)
+     A            $$FKEY22      18A  O 23 22
+     A                                      COLOR(BLU)
+     A            $$FKEY23      18A  O 23 42
+     A                                      COLOR(BLU)
+     A            $$FKEY24      18A  O 23 62
+     A                                      COLOR(BLU)
       *
       *----------------------------------------------------*
- ADD A          R PBBOT080#4
+     A          R PBBOT080#4
       *%%TS  SD  19971021  144723  RADDATZ     REL-V3R6M0  5716-PW1
- ADD A                                      DSPMOD(*DS3)
- ADD A                                      OVERLAY
- ADD A            $$FKEY25      18A  O 22  2
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY26      18A  O 22 22
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY27      18A  O 22 42
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY28      18A  O 22 62
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY29      18A  O 23  2
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY30      18A  O 23 22
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY31      18A  O 23 42
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY32      18A  O 23 62
- ADD A                                      COLOR(BLU)
+     A                                      DSPMOD(*DS3)
+     A                                      OVERLAY
+     A            $$FKEY25      18A  O 22  2
+     A                                      COLOR(BLU)
+     A            $$FKEY26      18A  O 22 22
+     A                                      COLOR(BLU)
+     A            $$FKEY27      18A  O 22 42
+     A                                      COLOR(BLU)
+     A            $$FKEY28      18A  O 22 62
+     A                                      COLOR(BLU)
+     A            $$FKEY29      18A  O 23  2
+     A                                      COLOR(BLU)
+     A            $$FKEY30      18A  O 23 22
+     A                                      COLOR(BLU)
+     A            $$FKEY31      18A  O 23 42
+     A                                      COLOR(BLU)
+     A            $$FKEY32      18A  O 23 62
+     A                                      COLOR(BLU)
       *
       *----------------------------------------------------*
- ASC A          R PBLEER
+     A          R PBLEER
       *%%TS  SD  19970908  104536  LASCHE      REL-V3R6M0  5716-PW1
- ADD A  88                                  DSPMOD(*DS3)
- ASC A                                      OVERLAY
- ADD A            TXT0025       30A  O 13 27MSGID(TXT 0025 PEEKGER )
- ADD A                                      COLOR(WHT)
+     A  88                                  DSPMOD(*DS3)
+     A                                      OVERLAY
+     A            TXT0025       30A  O 13 27MSGID(TXT 0025 PEEKGER )
+     A                                      COLOR(WHT)
       *
       *----------------------------------------------------*
- ADD A          R MSGSFL                    SFL
+     A          R MSGSFL                    SFL
       *%%TS  SD  19970929  143815  RADDATZ     REL-V3R6M0  5716-PW1
- ADD A  *DS4                                SFLMSGRCD(27)
- ADD A  *DS3                                SFLMSGRCD(24)
- ADD A            §MSGKY                    SFLMSGKEY
- ADD A            §PGMQ                     SFLPGMQ(10)
+     A  *DS4                                SFLMSGRCD(27)
+     A  *DS3                                SFLMSGRCD(24)
+     A            §MSGKY                    SFLMSGKEY
+     A            §PGMQ                     SFLPGMQ(10)
       *
       *----------------------------------------------------*
- ADD A          R MSGCTL                    SFLCTL(MSGSFL)
+     A          R MSGCTL                    SFLCTL(MSGSFL)
       *%%TS  SD  19970929  143815  RADDATZ     REL-V3R6M0  5716-PW1
- ADD A                                      LOCK
- ADD A  88                                  DSPMOD(*DS3)
- ADD A                                      SFLDSP
- ADD A                                      SFLDSPCTL
- ADD A                                      SFLINZ
- ADD A N89                                  SFLEND
- ADD A  *DS4                                SFLSIZ(0050)
- ADD A  *DS3                                SFLSIZ(0050)
- ADD A  *DS4                                SFLPAG(0001)
- ADD A  *DS3                                SFLPAG(0001)
- ADD A            §PGMQ                     SFLPGMQ(10)
+     A                                      LOCK
+     A  88                                  DSPMOD(*DS3)
+     A                                      SFLDSP
+     A                                      SFLDSPCTL
+     A                                      SFLINZ
+     A N89                                  SFLEND
+     A  *DS4                                SFLSIZ(0050)
+     A  *DS3                                SFLSIZ(0050)
+     A  *DS4                                SFLPAG(0001)
+     A  *DS3                                SFLPAG(0001)
+     A            §PGMQ                     SFLPGMQ(10)

@@ -1,4 +1,4 @@
- RAD  *%%TS  SD  20070501  124016  RADDATZ     REL-V5R4M0  5722-WDS
+      *%%TS  SD  20070501  124016  RADDATZ     REL-V5R4M0  5722-WDS
       *===============================================================*
       *                                                               *
       *  (C) Thomas Raddatz                                           *
@@ -16,242 +16,250 @@
       *  Peek/400 - Abfrage "Programm erstellen"                      *
       *                                                               *
       *===============================================================*
+      * >>PRE-COMPILER<<                                              *
+      *   >>CRTCMD<< &LI/CMPPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
+      *===============================================================*
       *
- RAD  *%%EC
- RAD A                                      DSPSIZ(24 80 *DS3                  -
- RAD A                                             27 132 *DS4)
- RAD A                                      PRINT
- RAD A                                      ALTHELP(CA01)
- RAD A                                      HELP(01)
-      *
-      *----------------------------------------------------*
- RAD A          R BILD01
- RAD  *%%TS  SD  20070501  124016  RADDATZ     REL-V5R4M0  5722-WDS
- RAD A  *DS3                                WINDOW(MSGCTL)
- RAD A  *DS4                                WINDOW(MSGCTL)
- RAD A                                      CHANGE(93)
- RAD A                                      CF01
- RAD A                                      CF02
- RAD A                                      CF03
- RAD A                                      CF04
- RAD A                                      CF05
- RAD A                                      CF06
- RAD A                                      CF07
- RAD A                                      CF08
- RAD A                                      CF09
- RAD A                                      CF10
- RAD A                                      CF11
- RAD A                                      CF12
- RAD A                                      CF13
- RAD A                                      CF14
- RAD A                                      CF15
- RAD A                                      CF16
- RAD A                                      CF17
- RAD A                                      CF18
- RAD A                                      CF19
- RAD A                                      CF20
- RAD A                                      CF21
- RAD A                                      CF22
- RAD A                                      CF23
- RAD A                                      CF24
- RAD A N88                                  DSPMOD(*DS4)
- RAD A                                      OVERLAY
- RAD A            TXT0111       22A  O  1 13MSGID(TXT 0111 PEEKGER)
- RAD A                                      COLOR(WHT)
- RAD A                                  2  1'                                  -
- RAD A                                                  '
- RAD A                                      DSPATR(UL)
- RAD A                                      COLOR(BLU)
- RAD  *
- RAD A            TXT0112       24A  O  4  3MSGID(TXT 0112 PEEKGER)
- RAD A                                      COLOR(WHT)
- RAD A            ##ALWLC        1A  B  4 28
- RAD A  22                                  DSPATR(PC)
- RAD A  32                                  DSPATR(RI)
- RAD A            TXT0042A      14A  O  4 31MSGID(TXT 0042 PEEKGER)
- RAD A                                      COLOR(WHT)
- RAD  *
- RAD A            TXT0113       24A  O  5  3MSGID(TXT 0113 PEEKGER)
- RAD A                                      COLOR(WHT)
- RAD A            ##CASE         1A  B  5 28
- RAD A  20                                  DSPATR(PC)
- RAD A  30                                  DSPATR(RI)
- RAD A            TXT0042B      14A  O  5 31MSGID(TXT 0042 PEEKGER)
- RAD A                                      COLOR(WHT)
- RAD  *
- RAD A            TXT0131       24A  O  6  3MSGID(TXT 0131 PEEKGER)
- RAD A                                      COLOR(WHT)
- RAD A            ##RCDLCK       1A  B  6 28
- RAD A  23                                  DSPATR(PC)
- RAD A  33                                  DSPATR(RI)
- RAD A            TXT0042C      14A  O  6 31MSGID(TXT 0042 PEEKGER)
- RAD A                                      COLOR(WHT)
- RAD  *
- RAD A            TXT0144       24A  O  7  3MSGID(TXT 0144 PEEKGER)
- RAD A                                      COLOR(WHT)
- RAD A            ##NULLDFT      1A  B  7 28
- RAD A  25                                  DSPATR(PC)
- RAD A  35                                  DSPATR(RI)
- RAD A            TXT0042D      14A  O  7 31MSGID(TXT 0042 PEEKGER)
- RAD A                                      COLOR(WHT)
- RAD  *
- RAD A            TXT0145       24A  O  8  3MSGID(TXT 0145 PEEKGER)
- RAD A                                      COLOR(WHT)
- RAD A            ##KEEPCRS      1A  B  8 28
- RAD A  26                                  DSPATR(PC)
- RAD A  36                                  DSPATR(RI)
- RAD A            TXT0042E      14A  O  8 31MSGID(TXT 0042 PEEKGER)
- RAD A                                      COLOR(WHT)
- RAD  *
- RAD A            TXT0114       24A  O 10  3MSGID(TXT 0114 PEEKGER)
- RAD A                                      COLOR(WHT)
- RAD A            ##SAVE         1A  B 10 28
- RAD A  21                                  DSPATR(PC)
- RAD A  31                                  DSPATR(RI)
- RAD A            TXT0042F      14A  O 10 31MSGID(TXT 0042 PEEKGER)
- RAD A                                      COLOR(WHT)
- RAD A                                 11  1'                                  -
- RAD A                                                  '
- RAD A                                      DSPATR(UL)
- RAD A                                      COLOR(BLU)
+      *%%EC
+     A                                      DSPSIZ(24 80 *DS3                  -
+     A                                             27 132 *DS4)
+     A                                      PRINT
+     A                                      ALTHELP(CA01)
+     A                                      HELP(01)
       *
       *----------------------------------------------------*
- ADD A          R PBBOT#1
+     A          R BILD01
+      *%%TS  SD  20070501  124016  RADDATZ     REL-V5R4M0  5722-WDS
+     A  *DS3                                WINDOW(MSGCTL)
+     A  *DS4                                WINDOW(MSGCTL)
+     A                                      CHANGE(93)
+     A                                      CF01
+     A                                      CF02
+     A                                      CF03
+     A                                      CF04
+     A                                      CF05
+     A                                      CF06
+     A                                      CF07
+     A                                      CF08
+     A                                      CF09
+     A                                      CF10
+     A                                      CF11
+     A                                      CF12
+     A                                      CF13
+     A                                      CF14
+     A                                      CF15
+     A                                      CF16
+     A                                      CF17
+     A                                      CF18
+     A                                      CF19
+     A                                      CF20
+     A                                      CF21
+     A                                      CF22
+     A                                      CF23
+     A                                      CF24
+     A N88                                  DSPMOD(*DS4)
+     A                                      OVERLAY
+     A            TXT0111       22A  O  1 13MSGID(TXT 0111 PEEKGER)
+     A                                      COLOR(WHT)
+     A                                  2  1'                                  -
+     A                                                  '
+     A                                      DSPATR(UL)
+     A                                      COLOR(BLU)
+      *
+     A            TXT0112       24A  O  4  3MSGID(TXT 0112 PEEKGER)
+     A                                      COLOR(WHT)
+     A            ##ALWLC        1A  B  4 28
+     A  22                                  DSPATR(PC)
+     A  32                                  DSPATR(RI)
+     A            TXT0042A      14A  O  4 31MSGID(TXT 0042 PEEKGER)
+     A                                      COLOR(WHT)
+      *
+     A            TXT0113       24A  O  5  3MSGID(TXT 0113 PEEKGER)
+     A                                      COLOR(WHT)
+     A            ##CASE         1A  B  5 28
+     A  20                                  DSPATR(PC)
+     A  30                                  DSPATR(RI)
+     A            TXT0042B      14A  O  5 31MSGID(TXT 0042 PEEKGER)
+     A                                      COLOR(WHT)
+      *
+     A            TXT0131       24A  O  6  3MSGID(TXT 0131 PEEKGER)
+     A                                      COLOR(WHT)
+     A            ##RCDLCK       1A  B  6 28
+     A  23                                  DSPATR(PC)
+     A  33                                  DSPATR(RI)
+     A            TXT0042C      14A  O  6 31MSGID(TXT 0042 PEEKGER)
+     A                                      COLOR(WHT)
+      *
+     A            TXT0144       24A  O  7  3MSGID(TXT 0144 PEEKGER)
+     A                                      COLOR(WHT)
+     A            ##NULLDFT      1A  B  7 28
+     A  25                                  DSPATR(PC)
+     A  35                                  DSPATR(RI)
+     A            TXT0042D      14A  O  7 31MSGID(TXT 0042 PEEKGER)
+     A                                      COLOR(WHT)
+      *
+     A            TXT0145       24A  O  8  3MSGID(TXT 0145 PEEKGER)
+     A                                      COLOR(WHT)
+     A            ##KEEPCRS      1A  B  8 28
+     A  26                                  DSPATR(PC)
+     A  36                                  DSPATR(RI)
+     A            TXT0042E      14A  O  8 31MSGID(TXT 0042 PEEKGER)
+     A                                      COLOR(WHT)
+      *
+     A            TXT0114       24A  O 10  3MSGID(TXT 0114 PEEKGER)
+     A                                      COLOR(WHT)
+     A            ##SAVE         1A  B 10 28
+     A  21                                  DSPATR(PC)
+     A  31                                  DSPATR(RI)
+     A            TXT0042F      14A  O 10 31MSGID(TXT 0042 PEEKGER)
+     A                                      COLOR(WHT)
+     A                                 11  1'                                  -
+     A                                                  '
+     A                                      DSPATR(UL)
+     A                                      COLOR(BLU)
+      *
+      *----------------------------------------------------*
+     A          R PBBOT#1
       *%%TS  SD  19971016  120515  RADDATZ     REL-V3R6M0  5716-PW1
- ADD A  *DS3                                WINDOW(MSGCTL)
- ADD A  *DS4                                WINDOW(MSGCTL)
- ADD A N88                                  DSPMOD(*DS4)
- ADD A                                      OVERLAY
- RAD A            $$FKEY01      18A  O 12  2
- ADD A                                      COLOR(BLU)
- RAD A            $$FKEY02      18A  O 12 22
- ADD A                                      COLOR(BLU)
+     A  *DS3                                WINDOW(MSGCTL)
+     A  *DS4                                WINDOW(MSGCTL)
+     A N88                                  DSPMOD(*DS4)
+     A                                      OVERLAY
+     A            $$FKEY01      18A  O 12  2
+     A                                      COLOR(BLU)
+     A            $$FKEY02      18A  O 12 22
+     A                                      COLOR(BLU)
       *
       *----------------------------------------------------*
- ADD A          R PBBOT#2
+     A          R PBBOT#2
       *%%TS  SD  19971016  120515  RADDATZ     REL-V3R6M0  5716-PW1
- ADD A  *DS3                                WINDOW(MSGCTL)
- ADD A  *DS4                                WINDOW(MSGCTL)
- ADD A N88                                  DSPMOD(*DS4)
- ADD A                                      OVERLAY
- RAD A            $$FKEY03      18A  O 12  2
- ADD A                                      COLOR(BLU)
- RAD A            $$FKEY04      18A  O 12 22
- ADD A                                      COLOR(BLU)
+     A  *DS3                                WINDOW(MSGCTL)
+     A  *DS4                                WINDOW(MSGCTL)
+     A N88                                  DSPMOD(*DS4)
+     A                                      OVERLAY
+     A            $$FKEY03      18A  O 12  2
+     A                                      COLOR(BLU)
+     A            $$FKEY04      18A  O 12 22
+     A                                      COLOR(BLU)
       *
       *----------------------------------------------------*
- ADD A          R PBBOT#3
+     A          R PBBOT#3
       *%%TS  SD  19971016  120515  RADDATZ     REL-V3R6M0  5716-PW1
- ADD A  *DS3                                WINDOW(MSGCTL)
- ADD A  *DS4                                WINDOW(MSGCTL)
- ADD A N88                                  DSPMOD(*DS4)
- ADD A                                      OVERLAY
- RAD A            $$FKEY05      18A  O 12  2
- ADD A                                      COLOR(BLU)
- RAD A            $$FKEY06      18A  O 12 22
- ADD A                                      COLOR(BLU)
+     A  *DS3                                WINDOW(MSGCTL)
+     A  *DS4                                WINDOW(MSGCTL)
+     A N88                                  DSPMOD(*DS4)
+     A                                      OVERLAY
+     A            $$FKEY05      18A  O 12  2
+     A                                      COLOR(BLU)
+     A            $$FKEY06      18A  O 12 22
+     A                                      COLOR(BLU)
       *
       *----------------------------------------------------*
- ADD A          R PBBOT#4
+     A          R PBBOT#4
       *%%TS  SD  19971016  120515  RADDATZ     REL-V3R6M0  5716-PW1
- ADD A  *DS3                                WINDOW(MSGCTL)
- ADD A  *DS4                                WINDOW(MSGCTL)
- ADD A N88                                  DSPMOD(*DS4)
- ADD A                                      OVERLAY
- RAD A            $$FKEY07      18A  O 12  2
- ADD A                                      COLOR(BLU)
- RAD A            $$FKEY08      18A  O 12 22
- ADD A                                      COLOR(BLU)
+     A  *DS3                                WINDOW(MSGCTL)
+     A  *DS4                                WINDOW(MSGCTL)
+     A N88                                  DSPMOD(*DS4)
+     A                                      OVERLAY
+     A            $$FKEY07      18A  O 12  2
+     A                                      COLOR(BLU)
+     A            $$FKEY08      18A  O 12 22
+     A                                      COLOR(BLU)
       *
       *----------------------------------------------------*
- ADD A          R PBBOT#5
+     A          R PBBOT#5
       *%%TS  SD  19971016  120515  RADDATZ     REL-V3R6M0  5716-PW1
- ADD A  *DS3                                WINDOW(MSGCTL)
- ADD A  *DS4                                WINDOW(MSGCTL)
- ADD A N88                                  DSPMOD(*DS4)
- ADD A                                      OVERLAY
- RAD A            $$FKEY09      18A  O 12  2
- ADD A                                      COLOR(BLU)
- RAD A            $$FKEY10      18A  O 12 22
- ADD A                                      COLOR(BLU)
+     A  *DS3                                WINDOW(MSGCTL)
+     A  *DS4                                WINDOW(MSGCTL)
+     A N88                                  DSPMOD(*DS4)
+     A                                      OVERLAY
+     A            $$FKEY09      18A  O 12  2
+     A                                      COLOR(BLU)
+     A            $$FKEY10      18A  O 12 22
+     A                                      COLOR(BLU)
       *
       *----------------------------------------------------*
- ADD A          R PBBOT#6
+     A          R PBBOT#6
       *%%TS  SD  19971016  120515  RADDATZ     REL-V3R6M0  5716-PW1
- ADD A  *DS3                                WINDOW(MSGCTL)
- ADD A  *DS4                                WINDOW(MSGCTL)
- ADD A N88                                  DSPMOD(*DS4)
- ADD A                                      OVERLAY
- RAD A            $$FKEY11      18A  O 12  2
- ADD A                                      COLOR(BLU)
- RAD A            $$FKEY12      18A  O 12 22
- ADD A                                      COLOR(BLU)
+     A  *DS3                                WINDOW(MSGCTL)
+     A  *DS4                                WINDOW(MSGCTL)
+     A N88                                  DSPMOD(*DS4)
+     A                                      OVERLAY
+     A            $$FKEY11      18A  O 12  2
+     A                                      COLOR(BLU)
+     A            $$FKEY12      18A  O 12 22
+     A                                      COLOR(BLU)
       *
       *----------------------------------------------------*
- ADD A          R PBBOT#7
+     A          R PBBOT#7
       *%%TS  SD  19980212  152449  RADDATZ     REL-V3R7M0  5716-PW1
- ADD A  *DS3                                WINDOW(MSGCTL)
- ADD A  *DS4                                WINDOW(MSGCTL)
- ADD A N88                                  DSPMOD(*DS4)
- ADD A                                      OVERLAY
- RAD A            $$FKEY13      18A  O 12  1COLOR(BLU)
- RAD A            $$FKEY14      18A  O 12 21COLOR(BLU)
+     A  *DS3                                WINDOW(MSGCTL)
+     A  *DS4                                WINDOW(MSGCTL)
+     A N88                                  DSPMOD(*DS4)
+     A                                      OVERLAY
+     A            $$FKEY13      18A  O 12  1COLOR(BLU)
+     A            $$FKEY14      18A  O 12 21COLOR(BLU)
       *
       *----------------------------------------------------*
- ADD A          R PBBOT#8
+     A          R PBBOT#8
       *%%TS  SD  19980212  152449  RADDATZ     REL-V3R7M0  5716-PW1
- ADD A  *DS3                                WINDOW(MSGCTL)
- ADD A  *DS4                                WINDOW(MSGCTL)
- ADD A N88                                  DSPMOD(*DS4)
- ADD A                                      OVERLAY
- RAD A            $$FKEY15      18A  O 12  1COLOR(BLU)
- RAD A            $$FKEY16      18A  O 12 21COLOR(BLU)
+     A  *DS3                                WINDOW(MSGCTL)
+     A  *DS4                                WINDOW(MSGCTL)
+     A N88                                  DSPMOD(*DS4)
+     A                                      OVERLAY
+     A            $$FKEY15      18A  O 12  1COLOR(BLU)
+     A            $$FKEY16      18A  O 12 21COLOR(BLU)
       *
       *----------------------------------------------------*
- ADD A          R PBBOT#9
+     A          R PBBOT#9
       *%%TS  SD  19980212  152449  RADDATZ     REL-V3R7M0  5716-PW1
- ADD A  *DS3                                WINDOW(MSGCTL)
- ADD A  *DS4                                WINDOW(MSGCTL)
- ADD A N88                                  DSPMOD(*DS4)
- ADD A                                      OVERLAY
- RAD A            $$FKEY17      18A  O 12  1COLOR(BLU)
- RAD A            $$FKEY18      18A  O 12 21COLOR(BLU)
+     A  *DS3                                WINDOW(MSGCTL)
+     A  *DS4                                WINDOW(MSGCTL)
+     A N88                                  DSPMOD(*DS4)
+     A                                      OVERLAY
+     A            $$FKEY17      18A  O 12  1COLOR(BLU)
+     A            $$FKEY18      18A  O 12 21COLOR(BLU)
       *
       *----------------------------------------------------*
- ADD A          R PBBOT#10
+     A          R PBBOT#10
       *%%TS  SD  19980212  152449  RADDATZ     REL-V3R7M0  5716-PW1
- ADD A  *DS3                                WINDOW(MSGCTL)
- ADD A  *DS4                                WINDOW(MSGCTL)
- ADD A N88                                  DSPMOD(*DS4)
- ADD A                                      OVERLAY
- RAD A            $$FKEY19      18A  O 12  1COLOR(BLU)
- RAD A            $$FKEY20      18A  O 12 21COLOR(BLU)
+     A  *DS3                                WINDOW(MSGCTL)
+     A  *DS4                                WINDOW(MSGCTL)
+     A N88                                  DSPMOD(*DS4)
+     A                                      OVERLAY
+     A            $$FKEY19      18A  O 12  1COLOR(BLU)
+     A            $$FKEY20      18A  O 12 21COLOR(BLU)
       *
       *----------------------------------------------------*
- ADD A          R PBBOT#11
+     A          R PBBOT#11
       *%%TS  SD  19980212  152449  RADDATZ     REL-V3R7M0  5716-PW1
- ADD A  *DS3                                WINDOW(MSGCTL)
- ADD A  *DS4                                WINDOW(MSGCTL)
- ADD A N88                                  DSPMOD(*DS4)
- ADD A                                      OVERLAY
- RAD A            $$FKEY21      18A  O 12  1COLOR(BLU)
- RAD A            $$FKEY22      18A  O 12 21COLOR(BLU)
+     A  *DS3                                WINDOW(MSGCTL)
+     A  *DS4                                WINDOW(MSGCTL)
+     A N88                                  DSPMOD(*DS4)
+     A                                      OVERLAY
+     A            $$FKEY21      18A  O 12  1COLOR(BLU)
+     A            $$FKEY22      18A  O 12 21COLOR(BLU)
       *
       *----------------------------------------------------*
- ADD A          R PBBOT#12
+     A          R PBBOT#12
       *%%TS  SD  19980216  152449  RADDATZ     REL-V3R7M0  5716-PW1
- ADD A  *DS3                                WINDOW(MSGCTL)
- ADD A  *DS4                                WINDOW(MSGCTL)
- ADD A N88                                  DSPMOD(*DS4)
- ADD A                                      OVERLAY
- RAD A            $$FKEY23      18A  O 12  1COLOR(BLU)
- RAD A            $$FKEY24      18A  O 12 21COLOR(BLU)
+     A  *DS3                                WINDOW(MSGCTL)
+     A  *DS4                                WINDOW(MSGCTL)
+     A N88                                  DSPMOD(*DS4)
+     A                                      OVERLAY
+     A            $$FKEY23      18A  O 12  1COLOR(BLU)
+     A            $$FKEY24      18A  O 12 21COLOR(BLU)
       *
       *----------------------------------------------------*
      A          R MSGSFL                    SFL
       *%%TS  SD  19990120  082705  FENTRAD     REL-V4R2M0  5769-PW1
- RAD A  *DS3                                SFLMSGRCD(13)
- RAD A  *DS4                                SFLMSGRCD(13)
+     A  *DS3                                SFLMSGRCD(13)
+     A  *DS4                                SFLMSGRCD(13)
      A            §MSGKY                    SFLMSGKEY
      A            §PGMQ                     SFLPGMQ(10)
       *
@@ -268,113 +276,113 @@
      A  *DS3                                SFLSIZ(0002)
      A  *DS4                                SFLSIZ(0002)
      A  *DS3                                SFLPAG(0001)
- RAD A  *DS4                                SFLPAG(0001)
- RAD A  *DS3                                WINDOW(&ZEI &POS 13 46 *NOMSGLIN)
- RAD A  *DS4                                WINDOW(&ZEI &POS 13 46 *NOMSGLIN)
+     A  *DS4                                SFLPAG(0001)
+     A  *DS3                                WINDOW(&ZEI &POS 13 46 *NOMSGLIN)
+     A  *DS4                                WINDOW(&ZEI &POS 13 46 *NOMSGLIN)
      A            §PGMQ                     SFLPGMQ(10)
      A            ZEI            3S 0P
      A            POS            3S 0P
- RAD  *
- RAD  *----------------------------------------------------*
- RAD A          R MSGCTL2
- RAD  *%%TS  SD  19990318  170432  FENTRAD     REL-V4R2M0  5769-PW1
- RAD A                                      KEEP
- RAD A                                      LOCK
- RAD A N88                                  DSPMOD(*DS4)
- RAD A  *DS3                                WINDOW(&ZEI &POS 13 46 *MSGLIN  )
- RAD A  *DS4                                WINDOW(&ZEI &POS 13 46 *MSGLIN  )
- RAD A            ZEI            3S 0P
- RAD A            POS            3S 0P
- RAD  *
- RAD  *----------------------------------------------------*
- RAD A          R BILD02
- RAD  *%%TS  SD  19990318  170432  FENTRAD     REL-V4R2M0  5769-PW1
- RAD A  *DS3                                WINDOW(MSGCTL2)
- RAD A  *DS4                                WINDOW(MSGCTL2)
- RAD A N88                                  DSPMOD(*DS4)
- RAD A                                      OVERLAY
- RAD A            TXT0111       22A  O  1 13MSGID(TXT 0111 PEEKGER)
- RAD A                                      COLOR(WHT)
- RAD A                                  2  1'                                  -
- RAD A                                                  '
- RAD A                                      DSPATR(UL)
- RAD A                                      COLOR(BLU)
- RAD  *
- RAD A            TXT0112       24A  O  4  3MSGID(TXT 0112 PEEKGER)
- RAD A                                      COLOR(WHT)
- RAD A            ##ALWLC        1A  O  4 28
- RAD A  22                                  DSPATR(PC)
- RAD A  32                                  DSPATR(RI)
- RAD A            TXT0042A      14A  O  4 31MSGID(TXT 0042 PEEKGER)
- RAD A                                      COLOR(WHT)
- RAD  *
- RAD A            TXT0113       24A  O  5  3MSGID(TXT 0113 PEEKGER)
- RAD A                                      COLOR(WHT)
- RAD A            ##CASE         1A  O  5 28
- RAD A  20                                  DSPATR(PC)
- RAD A  30                                  DSPATR(RI)
- RAD A            TXT0042B      14A  O  5 31MSGID(TXT 0042 PEEKGER)
- RAD A                                      COLOR(WHT)
- RAD  *
- RAD A            TXT0131       24A  O  6  3MSGID(TXT 0131 PEEKGER)
- RAD A                                      COLOR(WHT)
- RAD A            ##RCDLCK       1A  O  6 28
- RAD A  23                                  DSPATR(PC)
- RAD A  33                                  DSPATR(RI)
- RAD A            TXT0042C      14A  O  6 31MSGID(TXT 0042 PEEKGER)
- RAD A                                      COLOR(WHT)
- RAD  *
- RAD A            TXT0144       24A  O  7  3MSGID(TXT 0144 PEEKGER)
- RAD A                                      COLOR(WHT)
- RAD A            ##NULLDFT      1A  O  7 28
- RAD A  25                                  DSPATR(PC)
- RAD A  35                                  DSPATR(RI)
- RAD A            TXT0042D      14A  O  7 31MSGID(TXT 0042 PEEKGER)
- RAD A                                      COLOR(WHT)
- RAD  *
- RAD A            TXT0145       24A  O  8  3MSGID(TXT 0145 PEEKGER)
- RAD A                                      COLOR(WHT)
- RAD A            ##KEEPCRS      1A  O  8 28
- RAD A  26                                  DSPATR(PC)
- RAD A  36                                  DSPATR(RI)
- RAD A            TXT0042E      14A  O  8 31MSGID(TXT 0042 PEEKGER)
- RAD A                                      COLOR(WHT)
- RAD  *
- RAD A            TXT0114       24A  O 10  3MSGID(TXT 0114 PEEKGER)
- RAD A                                      COLOR(WHT)
- RAD A            ##SAVE         1A  O 10 28
- RAD A  21                                  DSPATR(PC)
- RAD A  31                                  DSPATR(RI)
- RAD A            TXT0042F      14A  O 10 31MSGID(TXT 0042 PEEKGER)
- RAD A                                      COLOR(WHT)
- RAD A                                 11  1'                                  -
- RAD A                                                  '
- RAD A                                      DSPATR(UL)
- RAD A                                      COLOR(BLU)
- RAD  *
- RAD  *----------------------------------------------------*
- RAD A          R PBBOT2#1
- RAD  *%%TS  SD  19971016  120515  RADDATZ     REL-V3R6M0  5716-PW1
- RAD A  *DS3                                WINDOW(MSGCTL2)
- RAD A  *DS4                                WINDOW(MSGCTL2)
- RAD A N88                                  DSPMOD(*DS4)
- RAD A                                      OVERLAY
- RAD A            $$FKEY01      18A  O 12  2
- RAD A                                      COLOR(BLU)
- RAD A            $$FKEY02      18A  O 12 22
- RAD A                                      COLOR(BLU)
+      *
+      *----------------------------------------------------*
+     A          R MSGCTL2
+      *%%TS  SD  19990318  170432  FENTRAD     REL-V4R2M0  5769-PW1
+     A                                      KEEP
+     A                                      LOCK
+     A N88                                  DSPMOD(*DS4)
+     A  *DS3                                WINDOW(&ZEI &POS 13 46 *MSGLIN  )
+     A  *DS4                                WINDOW(&ZEI &POS 13 46 *MSGLIN  )
+     A            ZEI            3S 0P
+     A            POS            3S 0P
+      *
+      *----------------------------------------------------*
+     A          R BILD02
+      *%%TS  SD  19990318  170432  FENTRAD     REL-V4R2M0  5769-PW1
+     A  *DS3                                WINDOW(MSGCTL2)
+     A  *DS4                                WINDOW(MSGCTL2)
+     A N88                                  DSPMOD(*DS4)
+     A                                      OVERLAY
+     A            TXT0111       22A  O  1 13MSGID(TXT 0111 PEEKGER)
+     A                                      COLOR(WHT)
+     A                                  2  1'                                  -
+     A                                                  '
+     A                                      DSPATR(UL)
+     A                                      COLOR(BLU)
+      *
+     A            TXT0112       24A  O  4  3MSGID(TXT 0112 PEEKGER)
+     A                                      COLOR(WHT)
+     A            ##ALWLC        1A  O  4 28
+     A  22                                  DSPATR(PC)
+     A  32                                  DSPATR(RI)
+     A            TXT0042A      14A  O  4 31MSGID(TXT 0042 PEEKGER)
+     A                                      COLOR(WHT)
+      *
+     A            TXT0113       24A  O  5  3MSGID(TXT 0113 PEEKGER)
+     A                                      COLOR(WHT)
+     A            ##CASE         1A  O  5 28
+     A  20                                  DSPATR(PC)
+     A  30                                  DSPATR(RI)
+     A            TXT0042B      14A  O  5 31MSGID(TXT 0042 PEEKGER)
+     A                                      COLOR(WHT)
+      *
+     A            TXT0131       24A  O  6  3MSGID(TXT 0131 PEEKGER)
+     A                                      COLOR(WHT)
+     A            ##RCDLCK       1A  O  6 28
+     A  23                                  DSPATR(PC)
+     A  33                                  DSPATR(RI)
+     A            TXT0042C      14A  O  6 31MSGID(TXT 0042 PEEKGER)
+     A                                      COLOR(WHT)
+      *
+     A            TXT0144       24A  O  7  3MSGID(TXT 0144 PEEKGER)
+     A                                      COLOR(WHT)
+     A            ##NULLDFT      1A  O  7 28
+     A  25                                  DSPATR(PC)
+     A  35                                  DSPATR(RI)
+     A            TXT0042D      14A  O  7 31MSGID(TXT 0042 PEEKGER)
+     A                                      COLOR(WHT)
+      *
+     A            TXT0145       24A  O  8  3MSGID(TXT 0145 PEEKGER)
+     A                                      COLOR(WHT)
+     A            ##KEEPCRS      1A  O  8 28
+     A  26                                  DSPATR(PC)
+     A  36                                  DSPATR(RI)
+     A            TXT0042E      14A  O  8 31MSGID(TXT 0042 PEEKGER)
+     A                                      COLOR(WHT)
+      *
+     A            TXT0114       24A  O 10  3MSGID(TXT 0114 PEEKGER)
+     A                                      COLOR(WHT)
+     A            ##SAVE         1A  O 10 28
+     A  21                                  DSPATR(PC)
+     A  31                                  DSPATR(RI)
+     A            TXT0042F      14A  O 10 31MSGID(TXT 0042 PEEKGER)
+     A                                      COLOR(WHT)
+     A                                 11  1'                                  -
+     A                                                  '
+     A                                      DSPATR(UL)
+     A                                      COLOR(BLU)
+      *
+      *----------------------------------------------------*
+     A          R PBBOT2#1
+      *%%TS  SD  19971016  120515  RADDATZ     REL-V3R6M0  5716-PW1
+     A  *DS3                                WINDOW(MSGCTL2)
+     A  *DS4                                WINDOW(MSGCTL2)
+     A N88                                  DSPMOD(*DS4)
+     A                                      OVERLAY
+     A            $$FKEY01      18A  O 12  2
+     A                                      COLOR(BLU)
+     A            $$FKEY02      18A  O 12 22
+     A                                      COLOR(BLU)
       *
       *----------------------------------------------------*
       *  RMVWDW ZUM LÖSCHEN DES WINDOWS
       *
- ADD A          R RMVWDW                    CLRL(*NO) OVERLAY FRCDTA
- ADD A N88                                  DSPMOD(*DS4)
+     A          R RMVWDW                    CLRL(*NO) OVERLAY FRCDTA
+     A N88                                  DSPMOD(*DS4)
       *
       *  DER DUMMY SATZ MUSS VORHANDEN SEIN,
       *  AUCH WENN KEIN ZUGRIFF AUF IHN ERFOLGT !!
       *
       *----------------------------------------------------*
- ADD A          R DUMMY                     ASSUME
+     A          R DUMMY                     ASSUME
       *%%TS  SD  19931014  095141  LASCHE      REL-V2R2M0  5738-PW1
- ADD A N88                                  DSPMOD(*DS4)
- ADD A                                 11  1' '
+     A N88                                  DSPMOD(*DS4)
+     A                                 11  1' '

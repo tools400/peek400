@@ -16,6 +16,14 @@
       *  Peek/400 - Änderung der Farbeinstellung                      *
       *                                                               *
       *===============================================================*
+      * >>PRE-COMPILER<<                                              *
+      *   >>CRTCMD<< &LI/CMPPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
+      *===============================================================*
       *
       *%%EC
      A                                      DSPSIZ(24 80 *DS3                  -
@@ -130,76 +138,76 @@
      A                                      COLOR(BLU)
       *
       *----------------------------------------------------*
- ADD A          R PBBOT#1
+     A          R PBBOT#1
       *%%TS  SD  19971016  120515  RADDATZ     REL-V3R6M0  5716-PW1
- ADD A  *DS3                                WINDOW(MSGCTL)
- ADD A  *DS4                                WINDOW(MSGCTL)
- ADD A N88                                  DSPMOD(*DS4)
- ADD A                                      OVERLAY
- ADD A            $$FKEY01      18A  O 14  1
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY02      18A  O 14 21
- ADD A                                      COLOR(BLU)
+     A  *DS3                                WINDOW(MSGCTL)
+     A  *DS4                                WINDOW(MSGCTL)
+     A N88                                  DSPMOD(*DS4)
+     A                                      OVERLAY
+     A            $$FKEY01      18A  O 14  1
+     A                                      COLOR(BLU)
+     A            $$FKEY02      18A  O 14 21
+     A                                      COLOR(BLU)
       *
       *----------------------------------------------------*
- ADD A          R PBBOT#2
+     A          R PBBOT#2
       *%%TS  SD  19971016  120515  RADDATZ     REL-V3R6M0  5716-PW1
- ADD A  *DS3                                WINDOW(MSGCTL)
- ADD A  *DS4                                WINDOW(MSGCTL)
- ADD A N88                                  DSPMOD(*DS4)
- ADD A                                      OVERLAY
- ADD A            $$FKEY03      18A  O 14  2
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY04      18A  O 14 22
- ADD A                                      COLOR(BLU)
+     A  *DS3                                WINDOW(MSGCTL)
+     A  *DS4                                WINDOW(MSGCTL)
+     A N88                                  DSPMOD(*DS4)
+     A                                      OVERLAY
+     A            $$FKEY03      18A  O 14  2
+     A                                      COLOR(BLU)
+     A            $$FKEY04      18A  O 14 22
+     A                                      COLOR(BLU)
       *
       *----------------------------------------------------*
- ADD A          R PBBOT#3
+     A          R PBBOT#3
       *%%TS  SD  19971016  120515  RADDATZ     REL-V3R6M0  5716-PW1
- ADD A  *DS3                                WINDOW(MSGCTL)
- ADD A  *DS4                                WINDOW(MSGCTL)
- ADD A N88                                  DSPMOD(*DS4)
- ADD A                                      OVERLAY
- ADD A            $$FKEY05      18A  O 14  2
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY06      18A  O 14 22
- ADD A                                      COLOR(BLU)
+     A  *DS3                                WINDOW(MSGCTL)
+     A  *DS4                                WINDOW(MSGCTL)
+     A N88                                  DSPMOD(*DS4)
+     A                                      OVERLAY
+     A            $$FKEY05      18A  O 14  2
+     A                                      COLOR(BLU)
+     A            $$FKEY06      18A  O 14 22
+     A                                      COLOR(BLU)
       *
       *----------------------------------------------------*
- ADD A          R PBBOT#4
+     A          R PBBOT#4
       *%%TS  SD  19971016  120515  RADDATZ     REL-V3R6M0  5716-PW1
- ADD A  *DS3                                WINDOW(MSGCTL)
- ADD A  *DS4                                WINDOW(MSGCTL)
- ADD A N88                                  DSPMOD(*DS4)
- ADD A                                      OVERLAY
- ADD A            $$FKEY07      18A  O 14  2
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY08      18A  O 14 22
- ADD A                                      COLOR(BLU)
+     A  *DS3                                WINDOW(MSGCTL)
+     A  *DS4                                WINDOW(MSGCTL)
+     A N88                                  DSPMOD(*DS4)
+     A                                      OVERLAY
+     A            $$FKEY07      18A  O 14  2
+     A                                      COLOR(BLU)
+     A            $$FKEY08      18A  O 14 22
+     A                                      COLOR(BLU)
       *
       *----------------------------------------------------*
- ADD A          R PBBOT#5
+     A          R PBBOT#5
       *%%TS  SD  19971016  120515  RADDATZ     REL-V3R6M0  5716-PW1
- ADD A  *DS3                                WINDOW(MSGCTL)
- ADD A  *DS4                                WINDOW(MSGCTL)
- ADD A N88                                  DSPMOD(*DS4)
- ADD A                                      OVERLAY
- ADD A            $$FKEY09      18A  O 14  2
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY10      18A  O 14 22
- ADD A                                      COLOR(BLU)
+     A  *DS3                                WINDOW(MSGCTL)
+     A  *DS4                                WINDOW(MSGCTL)
+     A N88                                  DSPMOD(*DS4)
+     A                                      OVERLAY
+     A            $$FKEY09      18A  O 14  2
+     A                                      COLOR(BLU)
+     A            $$FKEY10      18A  O 14 22
+     A                                      COLOR(BLU)
       *
       *----------------------------------------------------*
- ADD A          R PBBOT#6
+     A          R PBBOT#6
       *%%TS  SD  19971016  120515  RADDATZ     REL-V3R6M0  5716-PW1
- ADD A  *DS3                                WINDOW(MSGCTL)
- ADD A  *DS4                                WINDOW(MSGCTL)
- ADD A N88                                  DSPMOD(*DS4)
- ADD A                                      OVERLAY
- ADD A            $$FKEY11      18A  O 14  2
- ADD A                                      COLOR(BLU)
- ADD A            $$FKEY12      18A  O 14 22
- ADD A                                      COLOR(BLU)
+     A  *DS3                                WINDOW(MSGCTL)
+     A  *DS4                                WINDOW(MSGCTL)
+     A N88                                  DSPMOD(*DS4)
+     A                                      OVERLAY
+     A            $$FKEY11      18A  O 14  2
+     A                                      COLOR(BLU)
+     A            $$FKEY12      18A  O 14 22
+     A                                      COLOR(BLU)
       *
       *----------------------------------------------------*
      A          R MSGSFL                    SFL
@@ -232,14 +240,14 @@
       *----------------------------------------------------*
       *  RMVWDW ZUM LÖSCHEN DES WINDOWS
       *
- ADD A          R RMVWDW                    CLRL(*NO) OVERLAY FRCDTA
- ADD A N88                                  DSPMOD(*DS4)
+     A          R RMVWDW                    CLRL(*NO) OVERLAY FRCDTA
+     A N88                                  DSPMOD(*DS4)
       *
       *  DER DUMMY SATZ MUSS VORHANDEN SEIN,
       *  AUCH WENN KEIN ZUGRIFF AUF IHN ERFOLGT !!
       *
       *----------------------------------------------------*
- ADD A          R DUMMY                     ASSUME
+     A          R DUMMY                     ASSUME
       *%%TS  SD  19931014  095141  LASCHE      REL-V2R2M0  5738-PW1
- ADD A N88                                  DSPMOD(*DS4)
- ADD A                                 11  1' '
+     A N88                                  DSPMOD(*DS4)
+     A                                 11  1' '

@@ -1,6 +1,6 @@
       /*===============================================================*/
       /* >>PRE-COMPILER<<                                              */
-      /*   >>CRTCMD<<  CALL PGM(&LI/PEEK99) PARM(+                     */
+      /*   >>CRTCMD<<  CALL PGM(&LI/CRTPEEKOBJ) PARM(+                 */
       /*                        '&SF' '&SL' '&SM' '&LI' '*NO' +        */
       /*                        'PEEK' '&LI' '*NO');                   */
       /*   >>EXECUTE<<                                                 */

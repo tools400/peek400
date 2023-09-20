@@ -1,81 +1,89 @@
- RAD  *===============================================================*
- RAD  *                                                               *
- RAD  *  (C) Thomas Raddatz                                           *
- RAD  *                                                               *
- RAD  *  Bereich  : PEEK Version 3.1.0                                *
- RAD  *  Programm : PEEK655P                                          *
- RAD  *  Typ      : PRTF                                              *
- RAD  *                                                               *
- RAD  *  erstellt : 29.07.2008  Raddatz                               *
- RAD  *                                                               *
- RAD  *===============================================================*
- RAD  *                                                               *
- RAD  *  Kurzdokumentation :                                          *
- RAD  *                                                               *
- RAD  *  Peek/400 - Drucken Datensatz                                 *
- RAD  *                                                               *
- RAD  *===============================================================*
- RAD  *   >>PRE-COMPILER<<                                            *
- RAD  *                                                               *
- RAD  *     >>CRTCMD<<  CRTPRTF       FILE(&LI/&OB) +                 *
- RAD  *                               SRCFILE(&SL/&SF)  +             *
- RAD  *                               SRCMBR(&SM);                    *
- RAD  *                                                               *
- RAD  *     >>COMPILE<<                                               *
- RAD  *       >>PARM<< PAGESIZE(93 100);                              *
- RAD  *       >>PARM<< LPI(8);                                        *
- RAD  *       >>PARM<< CPI(12);                                       *
- RAD  *       >>PARM<< OVRFLW(88);                                    *
- RAD  *     >>END-COMPILE<<                                           *
- RAD  *                                                               *
- RAD  *     >>EXECUTE<<                                               *
- RAD  *                                                               *
- RAD  *   >>END-PRE-COMPILER<<                                        *
- RAD  *===============================================================*
- RAD  *
- RAD  *----------------------------------------------------*
- RAD A          R NEWPAGE
- RAD A                                      SKIPB(003)
- RAD  *
- RAD  *----------------------------------------------------*
- RAD A          R HEAD1
- RAD A                                      SPACEA(001)
- RAD A            TXT0132        6A  O     7
- RAD A            $$FILE        10A  O    14
- RAD A            TXT0133       11A       27
- RAD A            $$LIB         10A  O    39
- RAD A            TXT0134        4A       52
- RAD A            $$RRN         10A  O    57
- RAD A            TXT0135        6A       87
- RAD A                                    94
- RAD A                                      PAGNBR
- RAD A                                      EDTCDE(Z)
- RAD  *
- RAD  *----------------------------------------------------*
- RAD A          R HEAD2
- RAD A                                      SPACEA(002)
- RAD A            TXT0139        5A  O     7
- RAD A            $$DESC        50A  O    14
- RAD  *
- RAD  *----------------------------------------------------*
- RAD A          R HEAD3
- RAD A                                      SPACEA(001)
- RAD A            TXT0136       10A        7
- RAD A            TXT0137       25A       19
- RAD A            TXT0138       28A       50
- RAD A                                    79DATE(*JOB *YY)
- RAD A                                      EDTCDE(Y)
- RAD A                                    90TIME
- RAD  *
- RAD  *----------------------------------------------------*
- RAD A          R ITEM
- RAD A                                      SPACEB(001)
- RAD A            $$FNME        10A  O     7
- RAD A            $$TEXT        25A  O    19
- RAD A            $$DATA        48A  O    50
- RAD  *
- RAD  *----------------------------------------------------*
- RAD A          R ERROR
- RAD A                                      SPACEB(002)
- RAD A            $$ERROR       91A  O     7
- RAD  *
+      *===============================================================*
+      *                                                               *
+      *  (C) Thomas Raddatz                                           *
+      *                                                               *
+      *  Bereich  : PEEK Version 3.1.0                                *
+      *  Programm : PEEK655P                                          *
+      *  Typ      : PRTF                                              *
+      *                                                               *
+      *  erstellt : 29.07.2008  Raddatz                               *
+      *                                                               *
+      *===============================================================*
+      *                                                               *
+      *  Kurzdokumentation :                                          *
+      *                                                               *
+      *  Peek/400 - Drucken Datensatz                                 *
+      *                                                               *
+      *===============================================================*
+      *   >>PRE-COMPILER<<                                            *
+      *                                                               *
+      *     >>CRTCMD<<  CRTPRTF       FILE(&LI/&OB) +                 *
+      *                               SRCFILE(&SL/&SF)  +             *
+      *                               SRCMBR(&SM);                    *
+      *                                                               *
+      *     >>COMPILE<<                                               *
+      *       >>PARM<< PAGESIZE(93 100);                              *
+      *       >>PARM<< LPI(8);                                        *
+      *       >>PARM<< CPI(12);                                       *
+      *       >>PARM<< OVRFLW(88);                                    *
+      *     >>END-COMPILE<<                                           *
+      *                                                               *
+      *     >>EXECUTE<<                                               *
+      *                                                               *
+      *   >>END-PRE-COMPILER<<                                        *
+      *===============================================================*
+      * >>PRE-COMPILER<<                                              *
+      *   >>CRTCMD<< &LI/CMPPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
+      *===============================================================*
+      *
+      *----------------------------------------------------*
+     A          R NEWPAGE
+     A                                      SKIPB(003)
+      *
+      *----------------------------------------------------*
+     A          R HEAD1
+     A                                      SPACEA(001)
+     A            TXT0132        6A  O     7
+     A            $$FILE        10A  O    14
+     A            TXT0133       11A       27
+     A            $$LIB         10A  O    39
+     A            TXT0134        4A       52
+     A            $$RRN         10A  O    57
+     A            TXT0135        6A       87
+     A                                    94
+     A                                      PAGNBR
+     A                                      EDTCDE(Z)
+      *
+      *----------------------------------------------------*
+     A          R HEAD2
+     A                                      SPACEA(002)
+     A            TXT0139        5A  O     7
+     A            $$DESC        50A  O    14
+      *
+      *----------------------------------------------------*
+     A          R HEAD3
+     A                                      SPACEA(001)
+     A            TXT0136       10A        7
+     A            TXT0137       25A       19
+     A            TXT0138       28A       50
+     A                                    79DATE(*JOB *YY)
+     A                                      EDTCDE(Y)
+     A                                    90TIME
+      *
+      *----------------------------------------------------*
+     A          R ITEM
+     A                                      SPACEB(001)
+     A            $$FNME        10A  O     7
+     A            $$TEXT        25A  O    19
+     A            $$DATA        48A  O    50
+      *
+      *----------------------------------------------------*
+     A          R ERROR
+     A                                      SPACEB(002)
+     A            $$ERROR       91A  O     7
+      *
