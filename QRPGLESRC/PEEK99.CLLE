@@ -17,15 +17,15 @@
      /*                                                              */
      /* ============================================================ */
      /* >>PRE-COMPILER<<                                             */
-     /*   >>CRTCMD<<  CALL PGM(&LI/PEEK99) PARM(+                    */
-     /*                        '&SF' '&SL' '&SM' '&LI' '*NO' +       */
-     /*                        'PEEK' '&LI' '*NO');                  */
+     /*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +   */
+     /*                           OBJLIB(&LI) DEVLIB(&LI) +          */
+     /*                           SBMJOB(*NO) BNDDIR(PEEK) +         */
+     /*                           INSTALL(*NO);                      */
      /*   >>EXECUTE<<                                                */
      /* >>END-PRE-COMPILER<<                                         */
      /* ============================================================ */
 
-          PGM        PARM(&FILE       +
-                          &LIB        +
+          PGM        PARM(&QSRCFILE   +
                           &MBR        +
                           &OBJLIB     +
                           &SBMJOB     +
@@ -34,8 +34,9 @@
                           &IS_INSTALL +
                           )
 
-          DCL        VAR(&FILE      ) TYPE(*CHAR)  LEN( 10)
-          DCL        VAR(&LIB       ) TYPE(*CHAR)  LEN( 10)
+          DCL        VAR(&QSRCFILE  ) TYPE(*CHAR)  LEN( 20)
+          DCL        VAR(&FILE      ) TYPE(*CHAR)  LEN( 10) STG(*DEFINED) DEFVAR(&QSRCFILE  1)
+          DCL        VAR(&LIB       ) TYPE(*CHAR)  LEN( 10) STG(*DEFINED) DEFVAR(&QSRCFILE 11)
           DCL        VAR(&MBR       ) TYPE(*CHAR)  LEN( 10)
           DCL        VAR(&OBJLIB    ) TYPE(*CHAR)  LEN( 10)
           DCL        VAR(&SBMJOB    ) TYPE(*CHAR)  LEN( 10)
@@ -200,12 +201,12 @@ ADDBNDDIRE:
 /* Spez. OVR's für   */
 /* PEEK15/PEEK16     */
 /* ----------------- */
-               OVRDBF     FILE(QCOPYLE1) TOFILE(&LIB/QPEEKGEN)
-               OVRDBF     FILE(QCOPYLE2) TOFILE(&LIB/QPEEKGEN)
-               OVRDBF     FILE(QCOPYLE3) TOFILE(&LIB/QPEEKGEN)
-               OVRDBF     FILE(QCOPYLE4) TOFILE(&LIB/QPEEKGEN)
-               OVRDBF     FILE(QCOPYLE5) TOFILE(&LIB/QPEEKGEN)
-               OVRDBF     FILE(QCOPYLE6) TOFILE(&LIB/QPEEKGEN)
+               OVRDBF     FILE(QCOPYLE1) TOFILE(&LIB/QPEEKGEN) OVRSCOPE(*JOB)
+               OVRDBF     FILE(QCOPYLE2) TOFILE(&LIB/QPEEKGEN) OVRSCOPE(*JOB)
+               OVRDBF     FILE(QCOPYLE3) TOFILE(&LIB/QPEEKGEN) OVRSCOPE(*JOB)
+               OVRDBF     FILE(QCOPYLE4) TOFILE(&LIB/QPEEKGEN) OVRSCOPE(*JOB)
+               OVRDBF     FILE(QCOPYLE5) TOFILE(&LIB/QPEEKGEN) OVRSCOPE(*JOB)
+               OVRDBF     FILE(QCOPYLE6) TOFILE(&LIB/QPEEKGEN) OVRSCOPE(*JOB)
 
 /* ----------------- */
 /* commands          */
@@ -804,7 +805,7 @@ ENDE:
                 CHGVAR     VAR(&IS_REMOVED) VALUE(&FALSE)
              ENDDO
 
-             DLTOVR     FILE(*ALL)
+             DLTOVR     FILE(*ALL) LVL(*JOB)
              MONMSG     MSGID(CPF0000)
 
              RCLRSC     LVL(*)
