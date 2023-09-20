@@ -16,7 +16,7 @@
       *                                                               *
       * ============================================================= *
       * >>PRE-COMPILER<<                                              *
-*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
       *                           OBJLIB(&LI) DEVLIB(&LI) +           *
       *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
       *                           INSTALL(*NO);                       *
@@ -37,6 +37,7 @@
       *----------------------------------------------------*
       *  F E L D - D E F I N I T I O N E N                 *
       *----------------------------------------------------*
+      *
       *---Fehler-DS----------------------------------------*
       /COPY QCOPYLE,API_ERROR
       *----------------------------------------------------*
@@ -111,9 +112,8 @@
      C                   Endif
       *
      C                   EVAL      Y = 1
-     C**   A1            LOOKUP    Value(Y)                               99
-     C**   *IN99         IFEQ      '1'
-     C                   EVAL      Y = %lookup(A1: Y)
+     C                   EVAL      Y = %lookup(A1: Value)
+     C                   IF        (Y > 0)
       *    ... gefunden
      C                   EVAL      Summe = Summe + Y
      C                   ELSE
