@@ -8,37 +8,50 @@
       *  Erstellt : 30.12.1997   Raddatz                              *
       *                                                               *
       *===============================================================*
+      * >>PRE-COMPILER<<                                              *
+      *   >>CRTCMD<<  CRTPF FILE(&LI/&OB) +                           *
+      *                 SRCFILE(&SL/&SF) SRCMBR(&SM);                 *
+      *   >>IMPORTANT<<                                               *
+      *     >>PARM<<  OPTION(*EVENTF);                                *
+      *   >>END-IMPORTANT<<                                           *
+      *   >>CMD<<     DLTF FILE(&LI/&OB);                             *
+      *   >>MONMSG<<                                                  *
+      *     >>MSGID<<   CPF2105; // Object not found                  *
+      *   >>END-MONMSG<<                                              *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
+      *===============================================================*
       *
- ADD A          R FPEEKWRK                  TEXT('PEEK - Work')
+     A          R FPEEKWRK                  TEXT('PEEK - Work')
       *
- ADD A            KEY            5P 0
- ADD A                                      TEXT('Schlüsselfeld         -
- ADD A                                                                  ')
- ADD A                                      COLHDG('Schlüsselfeld       ' -
- ADD A                                             'numerisch           ' -
- ADD A                                             '                    ')
+     A            KEY            5P 0
+     A                                      TEXT('Schlüsselfeld         -
+     A                                                                  ')
+     A                                      COLHDG('Schlüsselfeld       ' -
+     A                                             'numerisch           ' -
+     A                                             '                    ')
       *
- ADD A            KEY2          20A
- ADD A                                      TEXT('Schlüsselfeld 2       -
- ADD A                                                                  ')
- ADD A                                      COLHDG('Schlüsselfeld 2     ' -
- ADD A                                             'alphanumerisch      ' -
- ADD A                                             '                    ')
+     A            KEY2          20A
+     A                                      TEXT('Schlüsselfeld 2       -
+     A                                                                  ')
+     A                                      COLHDG('Schlüsselfeld 2     ' -
+     A                                             'alphanumerisch      ' -
+     A                                             '                    ')
       *
- ADD A            FORMAT        10A
- ADD A                                      TEXT('Verwendetes Datenforma-
- ADD A                                      t                           ')
- ADD A                                      COLHDG('verwendetes         ' -
- ADD A                                             'Datenformat         ' -
- ADD A                                             '                    ')
+     A            FORMAT        10A
+     A                                      TEXT('Verwendetes Datenforma-
+     A                                      t                           ')
+     A                                      COLHDG('verwendetes         ' -
+     A                                             'Datenformat         ' -
+     A                                             '                    ')
       *
- ADD A            DATA         512A
- ADD A                                      TEXT('Datenbereich          -
- ADD A                                                                  ')
- ADD A                                      COLHDG('Datenbereich        ' -
- ADD A                                             '                    ' -
- ADD A                                             '                    ')
+     A            DATA         512A
+     A                                      TEXT('Datenbereich          -
+     A                                                                  ')
+     A                                      COLHDG('Datenbereich        ' -
+     A                                             '                    ' -
+     A                                             '                    ')
       *
- ADD A          K KEY
- ADD A          K KEY2
+     A          K KEY
+     A          K KEY2
       *

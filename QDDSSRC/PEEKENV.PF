@@ -8,56 +8,69 @@
       *  Erstellt : 04.05.1999   Raddatz                              *
       *                                                               *
       *===============================================================*
+      * >>PRE-COMPILER<<                                              *
+      *   >>CRTCMD<<  CRTPF FILE(&LI/&OB) +                           *
+      *                 SRCFILE(&SL/&SF) SRCMBR(&SM);                 *
+      *   >>IMPORTANT<<                                               *
+      *     >>PARM<<  OPTION(*EVENTF);                                *
+      *   >>END-IMPORTANT<<                                           *
+      *   >>CMD<<     DLTF FILE(&LI/&OB);                             *
+      *   >>MONMSG<<                                                  *
+      *     >>MSGID<<   CPF2105; // Object not found                  *
+      *   >>END-MONMSG<<                                              *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
+      *===============================================================*
       *
- ADD A                                      UNIQUE
+     A                                      UNIQUE
       *
- ADD A          R FPEEKENV                  TEXT('PEEK - Work place')
+     A          R FPEEKENV                  TEXT('PEEK - Work place')
       *
- ADD A            USER          10A
- ADD A                                      TEXT('Benutzer              -
- ADD A                                                                  ')
- ADD A                                      COLHDG('Benutzer            ' -
- ADD A                                             '                    ' -
- ADD A                                             '                    ')
+     A            USER          10A
+     A                                      TEXT('Benutzer              -
+     A                                                                  ')
+     A                                      COLHDG('Benutzer            ' -
+     A                                             '                    ' -
+     A                                             '                    ')
       *
- ADD A            SECTION       10A
- ADD A                                      TEXT('Bereich               -
- ADD A                                                                  ')
- ADD A                                      COLHDG('Bereich             ' -
- ADD A                                             '                    ' -
- ADD A                                             '                    ')
+     A            SECTION       10A
+     A                                      TEXT('Bereich               -
+     A                                                                  ')
+     A                                      COLHDG('Bereich             ' -
+     A                                             '                    ' -
+     A                                             '                    ')
       *
- ADD A            FILE          10A
- ADD A                                      TEXT('Datei                 -
- ADD A                                                                  ')
- ADD A                                      COLHDG('Datei               ' -
- ADD A                                             '                    ' -
- ADD A                                             '                    ')
+     A            FILE          10A
+     A                                      TEXT('Datei                 -
+     A                                                                  ')
+     A                                      COLHDG('Datei               ' -
+     A                                             '                    ' -
+     A                                             '                    ')
       *
- ADD A            LIB           10A
- ADD A                                      TEXT('Bibliothek            -
- ADD A                                                                  ')
- ADD A                                      COLHDG('Bibliothek          ' -
- ADD A                                             '                    ' -
- ADD A                                             '                    ')
+     A            LIB           10A
+     A                                      TEXT('Bibliothek            -
+     A                                                                  ')
+     A                                      COLHDG('Bibliothek          ' -
+     A                                             '                    ' -
+     A                                             '                    ')
       *
- ADD A            KEY           10A
- ADD A                                      TEXT('Schlüssel             -
- ADD A                                                                  ')
- ADD A                                      COLHDG('Schlüssel           ' -
- ADD A                                             '                    ' -
- ADD A                                             '                    ')
+     A            KEY           10A
+     A                                      TEXT('Schlüssel             -
+     A                                                                  ')
+     A                                      COLHDG('Schlüssel           ' -
+     A                                             '                    ' -
+     A                                             '                    ')
       *
- ADD A            DATA          64A
- ADD A                                      TEXT('Datenbereich          -
- ADD A                                                                  ')
- ADD A                                      COLHDG('Datenbereich        ' -
- ADD A                                             '                    ' -
- ADD A                                             '                    ')
+     A            DATA          64A
+     A                                      TEXT('Datenbereich          -
+     A                                                                  ')
+     A                                      COLHDG('Datenbereich        ' -
+     A                                             '                    ' -
+     A                                             '                    ')
       *
- ADD A          K USER
- ADD A          K SECTION
- ADD A          K FILE
- ADD A          K LIB
- ADD A          K KEY
+     A          K USER
+     A          K SECTION
+     A          K FILE
+     A          K LIB
+     A          K KEY
       *

@@ -8,106 +8,131 @@
       *  Erstellt : 26.09.1997   Raddatz                              *
       *                                                               *
       *===============================================================*
+      * >>PRE-COMPILER<<                                              *
+      *   >>CRTCMD<<  CRTPF FILE(&LI/&OB) +                           *
+      *                 SRCFILE(&SL/&SF) SRCMBR(&SM);                 *
+      *   >>IMPORTANT<<                                               *
+      *     >>PARM<<  OPTION(*EVENTF);                                *
+      *   >>END-IMPORTANT<<                                           *
+      *   >>CMD<<     DLTF FILE(&LI/PEEKFLDL0);                       *
+      *   >>MONMSG<<                                                  *
+      *     >>MSGID<<   CPF2105; // Object not found                  *
+      *   >>END-MONMSG<<                                              *
+      *   >>CMD<<     DLTF FILE(&LI/PEEKFLDL1);                       *
+      *   >>MONMSG<<                                                  *
+      *     >>MSGID<<   CPF2105; // Object not found                  *
+      *   >>END-MONMSG<<                                              *
+      *   >>CMD<<     DLTF FILE(&LI/PEEKFLDL2);                       *
+      *   >>MONMSG<<                                                  *
+      *     >>MSGID<<   CPF2105; // Object not found                  *
+      *   >>END-MONMSG<<                                              *
+      *   >>CMD<<     DLTF FILE(&LI/&OB);                             *
+      *   >>MONMSG<<                                                  *
+      *     >>MSGID<<   CPF2105; // Object not found                  *
+      *   >>END-MONMSG<<                                              *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
+      *===============================================================*
       *
- ADD A          R FPEEKFLD                  TEXT('PEEK - FFD')
+     A          R FPEEKFLD                  TEXT('PEEK - FFD')
       *
      A            FORMAT        10A
- ADD A                                      TEXT('Formatname            -
- ADD A                                                                  ')
- ADD A                                      COLHDG('Formatname          ' -
- ADD A                                             '                    ' -
- ADD A                                             '                    ')
+     A                                      TEXT('Formatname            -
+     A                                                                  ')
+     A                                      COLHDG('Formatname          ' -
+     A                                             '                    ' -
+     A                                             '                    ')
       *
- ADD A            FIELD         10A
- ADD A                                      TEXT('Feldname              -
- ADD A                                                                  ')
- ADD A                                      COLHDG('Feldname            ' -
- ADD A                                             '                    ' -
- ADD A                                             '                    ')
+     A            FIELD         10A
+     A                                      TEXT('Feldname              -
+     A                                                                  ')
+     A                                      COLHDG('Feldname            ' -
+     A                                             '                    ' -
+     A                                             '                    ')
       *
- ADD A            FLDSEQ         5S 0
- ADD A                                      TEXT('Feldfolge             -
- ADD A                                                                  ')
- ADD A                                      COLHDG('Feldfolge           ' -
- ADD A                                             '                    ' -
- ADD A                                             '                    ')
+     A            FLDSEQ         5S 0
+     A                                      TEXT('Feldfolge             -
+     A                                                                  ')
+     A                                      COLHDG('Feldfolge           ' -
+     A                                             '                    ' -
+     A                                             '                    ')
       *
- ADD A            SEQ            5S 0
- ADD A                                      TEXT('Sortierfolge          -
- ADD A                                                                  ')
- ADD A                                      COLHDG('Sortierfolge        ' -
- ADD A                                             '                    ' -
- ADD A                                             '                    ')
+     A            SEQ            5S 0
+     A                                      TEXT('Sortierfolge          -
+     A                                                                  ')
+     A                                      COLHDG('Sortierfolge        ' -
+     A                                             '                    ' -
+     A                                             '                    ')
       *
- ADD A            KSEQ           5S 0
- ADD A                                      TEXT('Sortierfolge der Schlü-
- ADD A                                      sselfelder                  ')
- ADD A                                      COLHDG('Sortierfolge        ' -
- ADD A                                             'Schlüsselfelder     ' -
- ADD A                                             '                    ')
+     A            KSEQ           5S 0
+     A                                      TEXT('Sortierfolge der Schlü-
+     A                                      sselfelder                  ')
+     A                                      COLHDG('Sortierfolge        ' -
+     A                                             'Schlüsselfelder     ' -
+     A                                             '                    ')
       *
- ADD A            DESC           1A
- ADD A                                      TEXT('absteigende Sortierfol-
- ADD A                                      ge                          ')
- ADD A                                      COLHDG('DESCEND             ' -
- ADD A                                             'Schlüsselfolge      ' -
- ADD A                                             '                    ')
+     A            DESC           1A
+     A                                      TEXT('absteigende Sortierfol-
+     A                                      ge                          ')
+     A                                      COLHDG('DESCEND             ' -
+     A                                             'Schlüsselfolge      ' -
+     A                                             '                    ')
       *
- ADD A            HIDDEN         1A
- ADD A                                      TEXT('Feld nicht anzeigen   -
- ADD A                                                                  ')
- ADD A                                      COLHDG('Feld nicht          ' -
- ADD A                                             'anzeigen            ' -
- ADD A                                             '                    ')
+     A            HIDDEN         1A
+     A                                      TEXT('Feld nicht anzeigen   -
+     A                                                                  ')
+     A                                      COLHDG('Feld nicht          ' -
+     A                                             'anzeigen            ' -
+     A                                             '                    ')
       *
- ADD A            COLOR          1A
- ADD A                                      TEXT('Farbattribut          -
- ADD A                                                                  ')
- ADD A                                      COLHDG('Farbattribut        ' -
- ADD A                                             '                    ' -
- ADD A                                             '                    ')
+     A            COLOR          1A
+     A                                      TEXT('Farbattribut          -
+     A                                                                  ')
+     A                                      COLHDG('Farbattribut        ' -
+     A                                             '                    ' -
+     A                                             '                    ')
       *
- ADD A            MARKCOL        1A
- ADD A                                      TEXT('Spaltenmarkierung     -
- ADD A                                                                  ')
- ADD A                                      COLHDG('Spaltenmarkierung   ' -
- ADD A                                             '                    ' -
- ADD A                                             '                    ')
+     A            MARKCOL        1A
+     A                                      TEXT('Spaltenmarkierung     -
+     A                                                                  ')
+     A                                      COLHDG('Spaltenmarkierung   ' -
+     A                                             '                    ' -
+     A                                             '                    ')
       *
- ADD A            MAXSIZE        5P 0
- ADD A                                      TEXT('Max. Feldgröße in der -
- ADD A                                      Datensatzliste              ')
- ADD A                                      COLHDG('Max. Feldgröße in   ' -
- ADD A                                             'Datensatzliste      ' -
- ADD A                                             '                    ')
+     A            MAXSIZE        5P 0
+     A                                      TEXT('Max. Feldgröße in der -
+     A                                      Datensatzliste              ')
+     A                                      COLHDG('Max. Feldgröße in   ' -
+     A                                             'Datensatzliste      ' -
+     A                                             '                    ')
       *
- ADD A            EDTCDE         1A
- ADD A                                      TEXT('abw. EDIT-Code        -
- ADD A                                                                  ')
- ADD A                                      COLHDG('abw.                ' -
- ADD A                                             'EDTIT-Code          ' -
- ADD A                                             '                    ')
+     A            EDTCDE         1A
+     A                                      TEXT('abw. EDIT-Code        -
+     A                                                                  ')
+     A                                      COLHDG('abw.                ' -
+     A                                             'EDTIT-Code          ' -
+     A                                             '                    ')
       *
- ADD A            UNKNOWN        1A
- ADD A                                      TEXT('Unbekannter Feldtyp   -
- ADD A                                                                  ')
- ADD A                                      COLHDG('Unbekannter         ' -
- ADD A                                             'Feldtyp             ' -
- ADD A                                             '                    ')
- RAD  *
- RAD A            ISTRANSC       1A
- RAD A                                      TEXT('Hat einen Transcoder  -
- RAD A                                                                  ')
- RAD A                                      COLHDG('Hat einen           ' -
- RAD A                                             'Transcoder          ' -
- RAD A                                             '                    ')
+     A            UNKNOWN        1A
+     A                                      TEXT('Unbekannter Feldtyp   -
+     A                                                                  ')
+     A                                      COLHDG('Unbekannter         ' -
+     A                                             'Feldtyp             ' -
+     A                                             '                    ')
+      *
+     A            ISTRANSC       1A
+     A                                      TEXT('Hat einen Transcoder  -
+     A                                                                  ')
+     A                                      COLHDG('Hat einen           ' -
+     A                                             'Transcoder          ' -
+     A                                             '                    ')
       *
      A            FFD          640A
- ADD A                                      TEXT('Feldbeschreibung      -
- ADD A                                                                  ')
- ADD A                                      COLHDG('Feldbeschreibung    ' -
- ADD A                                             '                    ' -
- ADD A                                             '                    ')
+     A                                      TEXT('Feldbeschreibung      -
+     A                                                                  ')
+     A                                      COLHDG('Feldbeschreibung    ' -
+     A                                             '                    ' -
+     A                                             '                    ')
       *
- ADD A          K FIELD
+     A          K FIELD
       *

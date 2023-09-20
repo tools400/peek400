@@ -8,36 +8,49 @@
       *  Erstellt : 02.10.1997   Raddatz                              *
       *                                                               *
       *===============================================================*
+      * >>PRE-COMPILER<<                                              *
+      *   >>CRTCMD<<  CRTPF FILE(&LI/&OB) +                           *
+      *                 SRCFILE(&SL/&SF) SRCMBR(&SM);                 *
+      *   >>IMPORTANT<<                                               *
+      *     >>PARM<<  OPTION(*EVENTF);                                *
+      *   >>END-IMPORTANT<<                                           *
+      *   >>CMD<<     DLTF FILE(&LI/&OB);                             *
+      *   >>MONMSG<<                                                  *
+      *     >>MSGID<<   CPF2105; // Object not found                  *
+      *   >>END-MONMSG<<                                              *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
+      *===============================================================*
       *
- ADD A          R FPEEKFMT                  TEXT('PEEK - Formats')
+     A          R FPEEKFMT                  TEXT('PEEK - Formats')
       *
      A            FORMAT        10A
- ADD A                                      TEXT('Formatname            -
- ADD A                                                                  ')
- ADD A                                      COLHDG('Formatname          ' -
- ADD A                                             '                    ' -
- ADD A                                             '                    ')
+     A                                      TEXT('Formatname            -
+     A                                                                  ')
+     A                                      COLHDG('Formatname          ' -
+     A                                             '                    ' -
+     A                                             '                    ')
       *
- ADD A            SORTSEQ        5S 0
- ADD A                                      TEXT('Sortierfolge          -
- ADD A                                                                  ')
- ADD A                                      COLHDG('Sortierfolge        ' -
- ADD A                                             '                    ' -
- ADD A                                             '                    ')
- RAD  *
- RAD A            FMTNBR         5S 0
- RAD A                                      TEXT('Formatnummer          -
- RAD A                                                                  ')
- RAD A                                      COLHDG('Formatnummer        ' -
- RAD A                                             '                    ' -
- RAD A                                             '                    ')
+     A            SORTSEQ        5S 0
+     A                                      TEXT('Sortierfolge          -
+     A                                                                  ')
+     A                                      COLHDG('Sortierfolge        ' -
+     A                                             '                    ' -
+     A                                             '                    ')
       *
- ADD A            FMT          512A
- ADD A                                      TEXT('Beschreibung Satzforma-
- ADD A                                      t                           ')
- ADD A                                      COLHDG('Beschreibung        ' -
- ADD A                                             'Satzformat          ' -
- ADD A                                             '                    ')
+     A            FMTNBR         5S 0
+     A                                      TEXT('Formatnummer          -
+     A                                                                  ')
+     A                                      COLHDG('Formatnummer        ' -
+     A                                             '                    ' -
+     A                                             '                    ')
       *
- ADD A          K SORTSEQ
+     A            FMT          512A
+     A                                      TEXT('Beschreibung Satzforma-
+     A                                      t                           ')
+     A                                      COLHDG('Beschreibung        ' -
+     A                                             'Satzformat          ' -
+     A                                             '                    ')
+      *
+     A          K SORTSEQ
       *
