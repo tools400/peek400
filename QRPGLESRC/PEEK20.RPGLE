@@ -85,7 +85,8 @@
      D XMsgID          S              7A
      D XMsgDta         S            512A
       *
-     D XIO_BuffTb      S              1A   DIM(§rcdBufLen) inz
+     D yIO_Buff        DS
+     D yIO_BuffTb                     1A   DIM(§rcdBufLen) inz
       *
      D YData           S            512A   INZ(*BLANKS)
      D YFormat         S             10A   INZ(*BLANKS)
@@ -168,7 +169,8 @@
      C                   EXSR      FIRST
       *
      C                   EVAL      XIO_Buffer = ''
-     C                   Eval      XIO_BuffTb(*) = ''
+      *
+     C                   Eval      yIO_BuffTb(*) = ''
      C                   EVAL      BP = 1
      C                   EVAL      KP = 1
       *
@@ -196,7 +198,7 @@
       *
      C                   ENDSL
       *
-     C                   MOVEA (P) XIO_BuffTb    XIO_Buffer
+     C                   EVAL      XIO_Buffer = yIO_Buff
       *
      C     ENDE          TAG
       *
@@ -370,7 +372,7 @@
      C                   ENDIF
       *
      C     1             DO        YOutBuffLn    Y
-     C     1             SUBST (P) YOutBuffer:Y  XIO_BuffTb(BP)
+     C     1             SUBST (P) YOutBuffer:Y  yIO_BuffTb(BP)
      C                   EVAL      BP = BP + 1
      C     BP            IFGT      §rcdBufLen
      C                   LEAVE
