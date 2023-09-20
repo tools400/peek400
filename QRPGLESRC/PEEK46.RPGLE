@@ -52,9 +52,9 @@
       *                                                               *
       *      PEEK46 - Funktion (*DELETE) delete list (user space)     *
       *                                                               *
-      * ============================================================= *
+      *===============================================================*
       * >>PRE-COMPILER<<                                              *
-*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
       *                           OBJLIB(&LI) DEVLIB(&LI) +           *
       *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
       *                           INSTALL(*NO);                       *
@@ -187,10 +187,10 @@
      C                   PARM                    SpacePtr
       *
       *  get file format description
-     C                   MOVEL     'MBRL0200'    MBFMT                          format
-     C                   MOVEL     XQFILE        MBFNME                         qualf.file
-     C                   MOVEL     XMBR          MBMBR                          member name
-     C                   MOVEL     '0'           MBOVRR                         override
+     C                   EVAL      MBFMT = 'MBRL0200'                           format
+     C                   EVAL      MBFNME = XQFILE                              qualf.file
+     C                   EVAL      MBMBR = XMBR                                 member name
+     C                   EVAL      MBOVRR = '0'                                 override
       *
      C                   CALL      'QUSLMBR'
      C                   PARM                    SpaceName
@@ -237,7 +237,7 @@
       *
      C     Read          BEGSR
       *
-     C                   MOVE      *BLANKS       XLIST
+     C                   EVAL      XLIST = *BLANKS
       *
      C     NumLstEnt     IFGT      *ZEROS
      C     OffsetLst     IFGE      maxData

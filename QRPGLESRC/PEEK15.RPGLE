@@ -17,7 +17,7 @@
       *                                                               *
       * ============================================================= *
       * >>PRE-COMPILER<<                                              *
-*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
       *                           OBJLIB(&LI) DEVLIB(&LI) +           *
       *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
       *                           INSTALL(*NO);                       *
@@ -1243,7 +1243,6 @@
      C                               '''' + %trimr(FLDL0100.F1FNME) + ''''
      C                   Callp     p_wrtCopy1(ds_eval)
       *
-      *  Movel (P) FLD0000001    yOutBuffer
      C                   Eval      closeChar1 = ''
       *
      C                   Reset                   ds_eval

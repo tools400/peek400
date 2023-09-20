@@ -19,9 +19,9 @@
       *                                                               *
       *  Erstellen internen Aufsetzschlüssel                          *
       *                                                               *
-      * ============================================================= *
+      *===============================================================*
       * >>PRE-COMPILER<<                                              *
-*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
       *                           OBJLIB(&LI) DEVLIB(&LI) +           *
       *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
       *                           INSTALL(*NO);                       *
@@ -167,8 +167,8 @@
       *
      C                   EXSR      FIRST
       *
-     C                   EVAL      XIO_Buffer = *BLANKS
-     C                   MOVEA (P) *BLANKS       XIO_BuffTb
+     C                   EVAL      XIO_Buffer = ''
+     C                   Eval      XIO_BuffTb(*) = ''
      C                   EVAL      BP = 1
      C                   EVAL      KP = 1
       *

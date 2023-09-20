@@ -274,10 +274,10 @@
      C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
       *
       *  Modus: DROP/FOLD
-     C                   MOVE      SFLMDE        *IN86
+     C                   EVAL      *IN86 = SFLMDE
       *
       *  Nachrichten anzeigen
-     C                   MOVE      '0'           *IN89
+     C                   EVAL      *IN89 = '0'
      C                   WRITE     MSGCTL
       *
       *  "Keine Sätze ..."
@@ -1459,7 +1459,7 @@
      C                   Eval      YExclKeys(1) = '*SLCLAYOUT'
      C                   Other
       *           keine Ausschlüsse
-     C                   Movea     *BLANKS       YExclKeys
+     C                   Eval      YExclKeys(*) = ''
      C                   Endsl
       *
      C                   Eval      yPgm    = §§PgmName

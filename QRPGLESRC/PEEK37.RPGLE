@@ -14,9 +14,9 @@
       *                                                               *
       *  Peek/400 - Feldauswahl                                       *
       *                                                               *
-      * ============================================================= *
+      *===============================================================*
       * >>PRE-COMPILER<<                                              *
-*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
       *                           OBJLIB(&LI) DEVLIB(&LI) +           *
       *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
       *                           INSTALL(*NO);                       *
@@ -193,10 +193,10 @@
      C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
       *
       *  Modus: DROP/FOLD
-     C                   MOVE      SFLMDE        *IN86
+     C                   EVAL      *IN86 = SFLMDE
       *
       *  Nachrichten anzeigen
-     C                   MOVE      '0'           *IN89
+     C                   EVAL      *IN89 = '0'
      C                   WRITE     MSGCTL
       *
       *  "Keine Sätze ..."

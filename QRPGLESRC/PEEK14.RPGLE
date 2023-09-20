@@ -17,7 +17,7 @@
       *                                                               *
       * ============================================================= *
       * >>PRE-COMPILER<<                                              *
-*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
       *                           OBJLIB(&LI) DEVLIB(&LI) +           *
       *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
       *                           INSTALL(*NO);                       *
@@ -330,10 +330,10 @@
      C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
       *
       *  Modus: DROP/FOLD
-     C                   MOVE      SFLMDE        *IN86
+     C                   EVAL      *IN86 = SFLMDE
       *
       *  Nachrichten anzeigen
-     C                   MOVE      '0'           *IN89
+     C                   EVAL      *IN89 = '0'
      C                   WRITE     MSGCTL
       *
       *  "Keine Sätze ..."
@@ -839,7 +839,7 @@
       *
      C                   EVAL      SFLRec = SFLRec + 1
      C     SFLRec        IFGT      9999
-     C                   MOVEL     '1'           *IN83
+     C                   EVAL      *IN83 = '1'
      C                   LEAVE
      C                   Endif
       *
@@ -888,7 +888,7 @@
      C                   Clear                   PBSFL
      C                   EVAL      SFLRec = SFLRec + 1
      C     SFLRec        IFGT      9999
-     C                   MOVEL     '1'           *IN83
+     C                   EVAL      *IN83 = '1'
      C                   LEAVE
      C                   Endif
       *
@@ -1019,7 +1019,7 @@
      C                   EVAL      SflPage = *HIVAL
      C                   EVAL      SflPageDDS = 15
       *
-     C                   MOVEA     '0000000000'  *IN(70)
+     C                   EVAL      %subarr(*in: 70: 10) = '0'
       *
      C                   SELECT
      C     XFunction     WHENEQ    '*DELETE'
@@ -1127,7 +1127,7 @@
      C                   Eval      yKey    = '*ALL'
      C                   Eval      yPosF24 = §NbrFKeys
      C                   Call      PEEK23        P_Peek23
-     C                   Movea (P) yFKeys        scrnFKeys
+     C                   Eval      scrnFKeys = %subarr(yFKeys: 1)
       *
      C                   Endsr
       *

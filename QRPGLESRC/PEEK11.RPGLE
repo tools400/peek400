@@ -52,7 +52,7 @@
       *                                                               *
       * ============================================================= *
       * >>PRE-COMPILER<<                                              *
-*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
       *                           OBJLIB(&LI) DEVLIB(&LI) +           *
       *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
       *                           INSTALL(*NO);                       *
@@ -172,9 +172,9 @@
      C                   Endif
       *
       *  get available record formats
-     C                   MOVEL     'RCDL0200'    DRFMT                          format
-     C                   MOVEL     XQFILE        DRFNME                         qualf.file
-     C                   MOVEL     '0'           DROVRR                         override
+     C                   EVAL      DRFMT = 'RCDL0200'                           format
+     C                   EVAL      DRFNME = XQFILE                              qualf.file
+     C                   EVAL      DROVRR = '0'                                 override
       *
      C                   CALL      'QUSLRCD'
      C                   PARM                    SpaceName
@@ -225,7 +225,7 @@
       *
      C     Read          BEGSR
       *
-     C                   MOVE      *BLANKS       XLIST
+     C                   EVAL      XLIST = *BLANKS
       *
      C     NumLstEnt     IFGT      *ZEROS
      C     OffsetLst     IFGE      maxData

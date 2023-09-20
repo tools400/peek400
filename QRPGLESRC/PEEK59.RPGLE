@@ -446,8 +446,8 @@
       *
       *  Funktionstasten ...
      C                   Eval      nbrOfKeys = 0
-     C                   Movea     *blanks       yFKeys
-     C                   Movea     *blanks       $$FKEY
+     C                   Eval      yFKeys(*) = ''
+     C                   Eval      $$FKEY(*) = ''
       *  ... YES
      C                   If        f_scan('Y': xKeys) <> 0
      C                   Eval      nbrOfKeys = nbrOfKeys + 1

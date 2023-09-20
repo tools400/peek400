@@ -1102,7 +1102,7 @@
       ***                Eval      yPosF24 = §NbrFKeys
      C                   Eval      yPosF24 = 0
      C                   Call      PEEK23        P_Peek23
-     C                   Movea (P) YFKeys        ScrnFKeys
+     C                   Eval      ScrnFKeys = %subarr(YFKeys: 1)
       *
      C                   Endsr
       *

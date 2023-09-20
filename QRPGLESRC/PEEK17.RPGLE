@@ -18,7 +18,7 @@
       *                                                               *
       * ============================================================= *
       * >>PRE-COMPILER<<                                              *
-*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
       *                           OBJLIB(&LI) DEVLIB(&LI) +           *
       *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
       *                           INSTALL(*NO);                       *
@@ -236,7 +236,7 @@
      C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
       *
       *  Nachrichten anzeigen
-     C                   MOVE      '0'           *IN89
+     C                   EVAL      *IN89 = '0'
      C                   WRITE     MSGCTL
       *
       *  Anzeigen der Befehlstasten
@@ -1195,10 +1195,9 @@
       *
      C                   Eval      yPgm    = §§PgmName
      C                   Eval      yKey    = '*ALL'
-      ***                Eval      yPosF24 = §NbrFKeys
      C                   Eval      yPosF24 = *ZEROS
      C                   Call      PEEK23        P_Peek23
-     C                   Movea (P) YFKeys        ScrnFKeys
+     C                   Eval      ScrnFKeys = %subarr(YFKeys: 1)
       *
      C                   Endsr
       *

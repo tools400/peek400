@@ -272,7 +272,7 @@
      C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
       *
       *  Nachrichten anzeigen
-     C                   MOVE      '0'           *IN89
+     C                   EVAL      *IN89 = '0'
      C                   WRITE     MSGCTL
       *
       *  Anzeigen der Befehlstasten
