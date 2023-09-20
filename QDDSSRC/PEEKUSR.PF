@@ -8,40 +8,49 @@
       *  Erstellt : 16.10.1997   Raddatz                              *
       *                                                               *
       *===============================================================*
+      * >>PRE-COMPILER<<                                              *
+      *   >>CRTCMD<<  CRTPF FILE(&LI/&OB) +                           *
+      *                 SRCFILE(&SL/&SF) SRCMBR(&SM);                 *
+      *   >>IMPORTANT<<                                               *
+      *     >>PARM<<  OPTION(*EVENTF);                                *
+      *   >>END-IMPORTANT<<                                           *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
+      *===============================================================*
       *
- ADD A                                      UNIQUE
+     A                                      UNIQUE
       *
- ADD A          R FPEEKUSR                  TEXT('PEEK - User Settings')
+     A          R FPEEKUSR                  TEXT('PEEK - User Settings')
       *
- ADD A            USER          10A
- ADD A                                      TEXT('Benutzer              -
- ADD A                                                                  ')
- ADD A                                      COLHDG('Benutzer            ' -
- ADD A                                             '                    ' -
- ADD A                                             '                    ')
+     A            USER          10A
+     A                                      TEXT('Benutzer              -
+     A                                                                  ')
+     A                                      COLHDG('Benutzer            ' -
+     A                                             '                    ' -
+     A                                             '                    ')
       *
- ADD A            SECTION       10A
- ADD A                                      TEXT('Bereich               -
- ADD A                                                                  ')
- ADD A                                      COLHDG('Bereich             ' -
- ADD A                                             '                    ' -
- ADD A                                             '                    ')
+     A            SECTION       10A
+     A                                      TEXT('Bereich               -
+     A                                                                  ')
+     A                                      COLHDG('Bereich             ' -
+     A                                             '                    ' -
+     A                                             '                    ')
       *
- ADD A            KEY           10A
- ADD A                                      TEXT('Schlüssel             -
- ADD A                                                                  ')
- ADD A                                      COLHDG('Schlüssel           ' -
- ADD A                                             '                    ' -
- ADD A                                             '                    ')
+     A            KEY           10A
+     A                                      TEXT('Schlüssel             -
+     A                                                                  ')
+     A                                      COLHDG('Schlüssel           ' -
+     A                                             '                    ' -
+     A                                             '                    ')
       *
- ADD A            DATA         256A
- ADD A                                      TEXT('Datenbereich          -
- ADD A                                                                  ')
- ADD A                                      COLHDG('Datenbereich        ' -
- ADD A                                             '                    ' -
- ADD A                                             '                    ')
+     A            DATA         256A
+     A                                      TEXT('Datenbereich          -
+     A                                                                  ')
+     A                                      COLHDG('Datenbereich        ' -
+     A                                             '                    ' -
+     A                                             '                    ')
       *
- ADD A          K USER
- ADD A          K SECTION
- ADD A          K KEY
+     A          K USER
+     A          K SECTION
+     A          K KEY
       *

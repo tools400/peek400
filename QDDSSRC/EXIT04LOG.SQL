@@ -1,3 +1,12 @@
+ /*===============================================================*
+  * >>PRE-COMPILER<<                                              *
+  *   >>CRTCMD<<  CRTPF SRCFILE(&SL/&SF) SRCMBR(&SM);             *
+  *   >>IMPORTANT<<                                               *
+  *     >>PARM<<  COMMIT(*NONE);                                  *
+  *   >>END-IMPORTANT<<                                           *
+  *   >>EXECUTE<<                                                 *
+  * >>END-PRE-COMPILER<<                                          *
+  *===============================================================*/
 
 CREATE TABLE EXIT04LOG (
    "FILE" CHAR(10) CCSID 273 NOT NULL DEFAULT '' ,

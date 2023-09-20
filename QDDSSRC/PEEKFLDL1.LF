@@ -8,9 +8,22 @@
       *  Erstellt : 26.09.1997   Raddatz                              *
       *                                                               *
       *===============================================================*
+      * >>PRE-COMPILER<<                                              *
+      *   >>CRTCMD<<  CRTLF FILE(&LI/&OB) +                           *
+      *                 SRCFILE(&SL/&SF) SRCMBR(&SM);                 *
+      *   >>IMPORTANT<<                                               *
+      *     >>PARM<<  OPTION(*EVENTF);                                *
+      *   >>END-IMPORTANT<<                                           *
+      *   >>CMD<<     DLTF FILE(&LI/&OB);                             *
+      *   >>MONMSG<<                                                  *
+      *     >>MSGID<<   CPF2105; // Object not found                  *
+      *   >>END-MONMSG<<                                              *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
+      *===============================================================*
       *
- ADD A          R FPEEKFLD                  TEXT('PEEK - FFD')
- ADD A                                      PFILE(PEEKFLD)
+     A          R FPEEKFLD                  TEXT('PEEK - FFD')
+     A                                      PFILE(PEEKFLD)
       ***
- ADD A          K SEQ
+     A          K SEQ
       *
