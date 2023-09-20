@@ -1065,10 +1065,9 @@
      C                   eval      $$IBuf = FLDL0100.F1IBuf
       *  ... Keyfeldnummer
      C     F_KSeq        IFNE      *ZEROS
-     C                   MOVE  (P) F_KSeq        $$KSeq
-     C                   MOVEL     'K'           $$KSeq
+     C                   EVAL      $$KSeq = 'K'+%editc(%dec(F_KSeq: 3: 0): 'X')
      C                   ELSE
-     C                   EVAL      $$KSeq = *BLANKS
+     C                   EVAL      $$KSeq = ''
      C                   Endif
       *  ... Sichtbar
      C                   SELECT
