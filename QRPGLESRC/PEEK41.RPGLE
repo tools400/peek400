@@ -366,9 +366,9 @@
      C**                 TESTB     '4'           OneByte                  99
      C**   *IN99         IFEQ      '1'
      C                   IF        (%bitand(QdbfhflgH: x'08') = x'08')
-      *                  MOVEL (P) '*SRC'        ATDTAT
+      *                  EVAL      ATDTAT = '*SRC'
      C                   ELSE
-      *                  MOVEL (P) '*DTA'        ATDTAT
+      *                  EVAL      ATDTAT = '*DTA'
      C                   Endif
       *
       *  Dateiwartezeit - Qdbfwtfi
@@ -719,9 +719,9 @@
      C**                 TESTB     '7'           OneByte                  99
      C**   *IN99         IFEQ      '1'
      C                   IF        (%bitand(Qdbfksq: x'01') = x'01')
-      ***                MOVEL (P) 'E'     z.Z. kein Feld vorhanden             external
+      ***                EVAL      'E'     z.Z. kein Feld vorhanden             external
      C                   ELSE
-      ***                MOVEL (P) 'I'     z.Z. kein Feld vorhanden             internal
+      ***                EVAL      'I'     z.Z. kein Feld vorhanden             internal
      C                   Endif
       *
      C                   EVAL      XDATA = KEYL0100
