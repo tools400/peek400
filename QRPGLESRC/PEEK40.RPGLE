@@ -1005,8 +1005,8 @@
      C                   EVAL      Buffer = §White
      C                   Endsl
       *
-     C                   MOVEA     SOFLD         BufferTb(10)
-     C                   MOVEA     SOCOMP        BufferTb(21)
+     C                   Eval      %subst(Buffer: 10: %len(SOFLD)) = SOFLD
+     C                   Eval      %subst(Buffer: 21: %len(SOCOMP)) = SOCOMP
      C                   Eval      Buffer =
      C                               %trimr(Buffer) + ' ' + SOVALU + §Green
      C                   EVAL      $$FTXT = Buffer
