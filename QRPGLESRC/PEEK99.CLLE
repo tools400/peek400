@@ -94,8 +94,7 @@
              IF         COND(&SBMJOB  *EQ '*YES') THEN(DO)
                 CHGVAR     VAR(&SBMJOB) VALUE('*NO')
                 SBMJOB     CMD(CALL PGM(&DEVLIB/PEEK99) +
-                                                PARM(&FILE       +
-                                                     &LIB        +
+                                                PARM(&QSRCFILE   +
                                                      &MBR        +
                                                      &OBJLIB     +
                                                      &SBMJOB     +
@@ -584,8 +583,8 @@ CRT_MOD:
              ENDDO
 
              IF         COND(&MBR *EQ 'PEEK63') THEN(DO)
-                CALL       PGM(&DEVLIB/PEEK99) PARM(&FILE +
-                                            &LIB       +
+                CALL       PGM(&DEVLIB/PEEK99) PARM( +
+                                            &QSRCFILE  +
                                             'PEEK63C'  +
                                             &OBJLIB    +
                                             &SBMJOB    +
@@ -595,16 +594,16 @@ CRT_MOD:
              ENDDO
 
              IF         COND(&MBR *EQ 'PEEKCLONE') THEN(DO)
-                CALL       PGM(&DEVLIB/PEEK99) PARM(&FILE +
-                                            &LIB         +
+                CALL       PGM(&DEVLIB/PEEK99) PARM( +
+                                            &QSRCFILE    +
                                             'PEEKCLONE1' +
                                             &OBJLIB      +
                                             &SBMJOB      +
                                             &BNDDIRE     +
                                             &DEVLIB      +
                                             &IS_INSTALL  )
-                CALL       PGM(&DEVLIB/PEEK99) PARM(&FILE +
-                                            &LIB         +
+                CALL       PGM(&DEVLIB/PEEK99) PARM( +
+                                            &QSRCFILE    +
                                             'PEEKCLONE2' +
                                             &OBJLIB      +
                                             &SBMJOB      +
@@ -614,16 +613,16 @@ CRT_MOD:
              ENDDO
 
              IF         COND(&MBR *EQ 'PEEKUPDATE') THEN(DO)
-                CALL       PGM(&DEVLIB/PEEK99) PARM(&FILE +
-                                            &LIB         +
+                CALL       PGM(&DEVLIB/PEEK99) PARM( +
+                                            &QSRCFILE    +
                                             'PEEKUPD1'   +
                                             &OBJLIB      +
                                             &SBMJOB      +
                                             &BNDDIRE     +
                                             &DEVLIB      +
                                             &IS_INSTALL  )
-                CALL       PGM(&DEVLIB/PEEK99) PARM(&FILE +
-                                            &LIB         +
+                CALL       PGM(&DEVLIB/PEEK99) PARM( +
+                                            &QSRCFILE    +
                                             'PEEKUPD2'   +
                                             &OBJLIB      +
                                             &SBMJOB      +
