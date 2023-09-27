@@ -29,6 +29,8 @@
      D r§mbr           S             10A   template
      D r§mbrNbr        S             10I 0 template
      D r§rcdFmt        S             10A   template
+     D r§text          S             50a   template
+     D r§colHeading    S            128A   varying template
       *
      D r§rcdFmtInf     DS                  qualified template
      D  name                               like(r§rcdFmt)

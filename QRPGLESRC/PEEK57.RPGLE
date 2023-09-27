@@ -99,7 +99,7 @@
      D  i_envFile                          const like(r§file)
      D  i_envLib                           const like(r§lib)
      D  i_envMbr                           const like(r§mbr)
-     D  i_envText                    50A   const
+     D  i_envText                          const like(r§text)
      D  o_msgID                                  like(r§msgID)
      D  o_msgDta                                 like(r§msgDta)
       *

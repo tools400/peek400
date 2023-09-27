@@ -1275,12 +1275,12 @@
       *===================================================================*
       *
      P f_headline      B                   Export
-     D                 PI            50A
-     D  i_headTyp                    10A   const
+     D                 PI                  like(r§colHeading)
+     D  i_headTyp                          const  like(r§type)
      D  i_FLDL0100                         const  likeds(fldl0100_t)
       *
       *  Funktionswert
-     D heading         S             50A   inz
+     D heading         S                   r§colHeading
       * ------------------------------------------------------------------------
       *
       *  Überschrift ...

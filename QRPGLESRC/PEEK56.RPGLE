@@ -184,7 +184,7 @@
      D  i_rcdFmtID                         const like(r§fmtId)
      D  o_qFile                                  likeds(r§qObj)
      D  o_mbr                                    like(r§mbr)
-     D  o_text                       50A
+     D  o_text                                   like(r§text)
      D  o_option                                 like(r§option)
      D  o_msgID                                  like(r§msgID)
      D  o_msgDta                                 like(r§msgDta)

@@ -377,7 +377,7 @@
      D YAccMode        S              1A   inz
      D YisKeyLower     S                   like(r§bool    )  inz
      D YOption         S                   like(r§option  )  inz
-     D YText           S             50A   inz
+     D YText           S                   like(r§text)
      D ySflOpt         S              2A
      D YString         S                   like(r§rcdBuf  )
      D                                     inz
@@ -697,7 +697,7 @@
      D rcdNbr$                       10A   OVERLAY(rcdNbr#: 1)
       *
      D exitMsg         S            512A   varying inz
-     D colHeading      S            128A   varying inz
+     D colHeading      S                   like(r§colHeading)
       *
       *  Feldinhalte vor der Bildschirmausgabe
      D B4              DS                  qualified
