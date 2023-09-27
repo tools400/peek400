@@ -6,6 +6,6 @@
       /endif
      D  i_qFile                            const likeds(r§qObj)
      D  i_function                         const like(r§function)
-     D  o_anz                                    like(r§int4)
-     D  o_objl0200                               likeds(rcdl0200_t)
+     D  o_numE                                   like(r§int4)
+     D  o_rcdl0200                               likeds(rcdl0200_t)
       *

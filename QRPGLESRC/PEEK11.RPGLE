@@ -114,7 +114,7 @@
      D PEEK11          PI
      D  i_qFile                            const likeds(r§qObj)
      D  i_function                         const like(r§function)
-     D  o_anz                                    like(r§int4)
+     D  o_numE                                   like(r§int4)
      D  o_rcdl0200                               likeds(rcdl0200_t)
       *
       *---------------------------------------------------*
@@ -132,7 +132,7 @@
       *
      C                   on-error
      C                   dump
-     C                   eval      o_anz = 0
+     C                   eval      o_numE = 0
      C                   endmon
       *
      C                   RETURN
@@ -143,7 +143,7 @@
       *
      C     Create        BEGSR
       *
-     C                   EVAL      o_anz = *ZEROS
+     C                   EVAL      o_numE = *ZEROS
       *
       *  create user space
      C                   IF        (not f_exist(
@@ -164,7 +164,7 @@
      C                   Endif
       *
      C                   EVAL      maxListE = NumLstEnt
-     C                   EVAL      o_anz = NumLstEnt
+     C                   EVAL      o_numE = NumLstEnt
       *
      C                   ENDSR
       *
@@ -209,7 +209,7 @@
      C                   EVAL      OffsetLst = OffsetLst + EntrySize
      C                   EVAL      NumLstEnt = NumLstEnt - 1
       *
-     C                   EVAL      o_anz = NumLstEnt
+     C                   EVAL      o_numE = NumLstEnt
       *
      C                   ENDSR
       *
@@ -219,7 +219,7 @@
       *
      C     setError      BEGSR
       *
-     C                   EVAL      o_anz = 0
+     C                   EVAL      o_numE = 0
       *
      C                   ENDSR
       *
