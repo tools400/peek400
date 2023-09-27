@@ -38,6 +38,8 @@
      D r§msgDta        S            512A   template
      D r§msgID         S              7A   template
      D r§msgType       S             10A   template
+      *
+     D r§function      S             10A   template
      D r§option        S             10A   template
      D r§mode          S             10A   template
       *

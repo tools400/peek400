@@ -61,12 +61,14 @@
       *   >>EXECUTE<<                                                 *
       * >>END-PRE-COMPILER<<                                          *
       *===============================================================*
+     H main(PEEK70)
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
       *
       *---Variablendefinition------------------------------*
       /COPY QCOPYLE,D_VARDEF
       /COPY QCOPYLE,OBJL0200
+      /COPY QCOPYLE,GENHEADER
       /COPY QCOPYLE,FLDL0100
       *----------------------------------------------------*
       *
@@ -81,24 +83,16 @@
      D  errCode        DS                  likeds(errCode_t) inz
       *
       *  Organisation of generic header
-     D GenHeader       DS                  BASED(pSpcPtr)
-     D  Data                          1A   DIM(32767)
-     D  OffsetHdr            117    120I 0
-     D  OffsetLst            125    128I 0
-     D  maxListE             133    136I 0
-     D  NumLstEnt            133    136I 0
-     D  EntrySize            137    140I 0
-     D  DataLen        C                   CONST(32767)
+     D GenHeader       DS                  likeds(genHeader_t) based(pSpcPtr)
       *
-      *  Pointer for UserSpace-ListData
-     D  ListPtr        S               *
+      *  User space data
+     D usrSpcData      S          32767A   based(pSpcPtr)
       *
-      *  Organisation of list data
-     D List            DS                  BASED(ListPtr)
-     D  ListData               1    512A
-     D  LstDataLen     C                   CONST(512)
-      *
-     D  maxData        S                   like(r§int4    ) inz
+      *  List data
+     D currListE       S                   like(r§int4)
+     D offsetListE     S                   like(r§int4)
+     D pListE          S               *
+     D listE           DS                  likeds(objl0200_t) based(pListE)
       *
       /COPY QCOPYLE,QUSCRTUS
       /COPY QCOPYLE,QUSPTRUS
@@ -113,12 +107,16 @@
       *           Main  Control block                                    *
       ********************************************************************
       *
-     D PEEK70          PI
+     P PEEK70          B
+     D                 PI
      D  i_qFile                            const likeds(r§qObj)
      D  i_function                         const like(r§function)
      D  o_numE                                   like(r§int4)
      D  o_objl0200                               likeds(objl0200_t)
       *---------------------------------------------------*
+      *
+     C                   EVAL      qUsrSpc.lib = 'QTEMP'
+     C                   EVAL      qUsrSpc.name = '§PEEK§'
       *
      C                   monitor
       *
@@ -135,8 +133,6 @@
      C                   dump
      C                   eval      o_numE = 0
      C                   endmon
-      *
-     C                   RETURN
       *
       *====================================================*
       *  Create --  create user space and get database rel.*
@@ -161,11 +157,12 @@
      C                                     : i_qFile: '*FILE': errCode)
       *
      C                   If        (errCode.bytAvl > 0)
-     C                   EVAL      NumLstEnt = 0
+     C                   Eval      o_numE = 0
+     C                   Eval      currListE = -1
+     C                   Else
+     C                   Eval      o_numE = GenHeader.NumLstEnt
+     C                   Eval      currListE = 0
      C                   Endif
-      *
-     C                   EVAL      maxListE = NumLstEnt
-     C                   EVAL      o_numE = NumLstEnt
       *
      C                   ENDSR
       *
@@ -194,23 +191,29 @@
       *
      C                   Clear                   o_objl0200
       *
-     C                   IF        (NumLstEnt <= 0)
+     C                   IF        (currListE < 0 or
+     C                              currListE >= GenHeader.NumLstEnt)
      C                   Exsr      setError
      C                   Leavesr
      C                   ENDIF
       *
-     C                   IF        (OffsetLst >= maxData)
+     C                   Eval      currListE = currListE + 1
+      *
+     C                   Eval      offsetListE =
+     C                               GenHeader.OffsetLst +
+     C                               ((currListE - 1) * GenHeader.EntrySize)
+      *
+     C                   IF        (offsetListE >
+     C                                %size(usrSpcData) - GenHeader.EntrySize)
      C                   Exsr      setError
      C                   Leavesr
      C                   ENDIF
       *
-     C                   EVAL      ListPtr = %ADDR(Data(OffsetLst+1))
+     C                   EVAL      pListE = pSpcPtr + offsetListE
       *
-     C                   EVAL      o_objl0200 = ListData
-     C                   EVAL      OffsetLst = OffsetLst + EntrySize
-     C                   EVAL      NumLstEnt = NumLstEnt - 1
+     C                   EVAL      o_objl0200 = listE
       *
-     C                   EVAL      o_numE = NumLstEnt
+     C                   EVAL      o_numE = GenHeader.NumLstEnt - currListE
       *
      C                   ENDSR
       *
@@ -224,16 +227,5 @@
       *
      C                   ENDSR
       *
-      *====================================================*
-      *  *INZSR --  Initialize program                     *
-      *====================================================*
-      *
-     C     *INZSR        BEGSR
-      *
-     C                   EVAL      qUsrSpc.lib = 'QTEMP'
-     C                   EVAL      qUsrSpc.name = '§PEEK§'
-      *
-     C                   EVAL      maxData = DataLen - LstDataLen
-      *
-     C                   ENDSR
+     P                 E
       *

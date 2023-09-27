@@ -6,7 +6,7 @@
       /endif
      D  i_qFile                            const like(r§qObj)
      D  i_mbr                              const like(r§mbr)
-     D  i_funk                             const like(r§option)
-     D  o_anz                                    like(r§int4)
-     D  o_list                                   likeds(DBRL0200_t)
+     D  i_function                         const like(r§function)
+     D  o_numE                                   like(r§int4)
+     D  o_dbrl0200                               likeds(dbrl0200_t)
       *
