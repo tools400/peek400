@@ -105,7 +105,7 @@
       *
      D PEEK59          PI
      D  i_dsp80                            const like(r§dsp80)
-     D  i_option                           const like(r§option)
+     D  i_type                             const like(r§type)
      D  i_msgID                            const like(r§msgID)
      D  i_msgDta                           const like(r§msgDta)
      D  i_keys                        3A   const
@@ -373,9 +373,9 @@
       *
       *  Überschrift ...
      C                   Select
-     C                   When      i_option = '*INFO'
+     C                   When      i_type = '*INFO'
      C                   Eval      $$headLine = f_msgText('MBX0001': ' ')
-     C                   When      i_option = '*QUESTION'
+     C                   When      i_type = '*QUESTION'
      C                   Eval      $$headLine = f_msgText('MBX0002': ' ')
      C                   Other
      C                   Eval      $$headLine = ' '

@@ -5,7 +5,7 @@
      D PEEK59          PR                  extpgm(PEEK59_NAME)
       /endif
      D  i_dsp80                            const like(r§dsp80)
-     D  i_option                           const like(r§option)
+     D  i_type                             const like(r§type)
      D  i_msgID                            const like(r§msgID)
      D  i_msgDta                           const like(r§msgDta)
      D  i_keys                        3A   const
