@@ -6,7 +6,7 @@
       /endif
      D  i_qFile                            const likeds(r§qObj)
      D  i_rcdFmt                           const like(r§fmt)
-     D  i_function                         const like(r§option)
-     D  o_nbrOfEntry                             like(r§int4)
+     D  i_function                         const like(r§function)
+     D  o_nbrOfEnt                               like(r§int4)
      D  o_data                      512A
       *

@@ -25,7 +25,7 @@
       *                                                               *
       *  XRcdFormat  - Record format name                             *
       *                                                               *
-      *  XOption       - control of module function                   *
+      *  XFunction     - control of module function                   *
       *     *CREATE    - retrieve file description         CREATE     *
       *     *BASED-ON  - retrieve based on phys. file      BASED_ON   *
       *     *KEY       - initiate key sequence to reutrn   KEY        *
@@ -181,26 +181,26 @@
      D PEEK41          PI
      D  i_qFile                            const likeds(r§qObj)
      D  i_rcdFmt                           const like(r§fmt)
-     D  i_option                           const like(r§option)
+     D  i_function                         const like(r§function)
      D  o_nbrOfEnt                               like(r§int4)
      D  o_data                      512A
       *
       *---------------------------------------------------*
       *
      C                   SELECT
-     C     i_option      WHENEQ    '*CREATE'
+     C     i_function    WHENEQ    '*CREATE'
      C                   EXSR      Create
-     C     i_option      WHENEQ    '*BASED-ON'
+     C     i_function    WHENEQ    '*BASED-ON'
      C                   EXSR      Based_On
-     C     i_option      WHENEQ    '*KEY'
+     C     i_function    WHENEQ    '*KEY'
      C                   EXSR      Key
-     C     i_option      WHENEQ    '*READKEY'
+     C     i_function    WHENEQ    '*READKEY'
      C                   EXSR      ReadKey
-     C     i_option      WHENEQ    '*READTEXT'
+     C     i_function    WHENEQ    '*READTEXT'
      C                   EXSR      ReadText
-     C     i_option      WHENEQ    '*SELECT'
+     C     i_function    WHENEQ    '*SELECT'
      C                   EXSR      Select
-     C     i_option      WHENEQ    '*READSEL'
+     C     i_function    WHENEQ    '*READSEL'
      C                   EXSR      ReadSelect
      C                   Endsl
       *
