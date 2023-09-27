@@ -136,8 +136,6 @@
       *=====================================================================*
      P Transcoder_toJobCcsid...
      P                 B                   export
-      *
-     D Transcoder_toJobCcsid...
      D                 PI                         like(hTranscoder_t )
      D  i_fromCcsid                  10U 0 const
       *
@@ -154,8 +152,6 @@
          return hTranscoder;
 
       /END-FREE
-      *
-     P Transcoder_toJobCcsid...
      P                 E
       *
       *=====================================================================*
@@ -164,8 +160,6 @@
       *=====================================================================*
      P Transcoder_toFieldCcsid...
      P                 B                   export
-      *
-     D Transcoder_toFieldCcsid...
      D                 PI                         like(hTranscoder_t )
      D  i_toCcsid                    10U 0 const
       *
@@ -182,8 +176,6 @@
          return hTranscoder;
 
       /END-FREE
-      *
-     P Transcoder_toFieldCcsid...
      P                 E
       *
       *=====================================================================*
@@ -191,8 +183,6 @@
       *=====================================================================*
      P Transcoder_new...
      P                 B                   export
-      *
-     D Transcoder_new...
      D                 PI                         like(hTranscoder_t )
      D  i_toCcsid                    10U 0 const
      D  i_fromCcsid                  10U 0 const
@@ -250,8 +240,6 @@
          return hTranscoder;
 
       /END-FREE
-      *
-     P Transcoder_new...
      P                 E
       *
       *=====================================================================*
@@ -270,8 +258,6 @@
       *=====================================================================*
      P Transcoder_xlateRaw...
      P                 B                   export
-      *
-     D Transcoder_xlateRaw...
      D                 PI            10I 0 opdesc
      D  i_hTranscoder                      const  like(hTranscoder_t )
      D  i_pInBuf                       *   value
@@ -310,8 +296,6 @@
          return rc;
 
       /END-FREE
-      *
-     P Transcoder_xlateRaw...
      P                 E
       *
       *=====================================================================*
@@ -330,8 +314,6 @@
       *=====================================================================*
      P Transcoder_xlateBuffer...
      P                 B                   export
-      *
-     D Transcoder_xlateBuffer...
      D                 PI            10I 0 opdesc
      D  i_hTranscoder                      const  like(hTranscoder_t )
      D  i_pInBuf                       *   value
@@ -385,8 +367,6 @@
          return rc;
 
       /END-FREE
-      *
-     P Transcoder_xlateBuffer...
      P                 E
       *
       *=====================================================================*
@@ -403,8 +383,6 @@
       *=====================================================================*
      P Transcoder_xlateString...
      P                 B                   export
-      *
-     D Transcoder_xlateString...
      D                 PI         32767A   opdesc varying
      D  i_hTranscoder                      const  like(hTranscoder_t )
      D  i_string                  32767A   const  varying options(*varsize)
@@ -451,8 +429,6 @@
          return rtn.string;
 
       /END-FREE
-      *
-     P Transcoder_xlateString...
      P                 E
       *
       *=====================================================================*
@@ -466,8 +442,6 @@
       *=====================================================================*
      P Transcoder_getFromCcsid...
      P                 B                   export
-      *
-     D Transcoder_getFromCcsid...
      D                 PI            10I 0
      D  i_hTranscoder                      const  like(hTranscoder_t )
       *
@@ -480,8 +454,6 @@
          return transcoder.fromCcsid;
 
       /END-FREE
-      *
-     P Transcoder_getFromCcsid...
      P                 E
       *
       *=====================================================================*
@@ -495,8 +467,6 @@
       *=====================================================================*
      P Transcoder_getToCcsid...
      P                 B                   export
-      *
-     D Transcoder_getToCcsid...
      D                 PI            10I 0
      D  i_hTranscoder                      const  like(hTranscoder_t )
       *
@@ -509,8 +479,6 @@
          return transcoder.toCcsid;
 
       /END-FREE
-      *
-     P Transcoder_getToCcsid...
      P                 E
       *
       *=====================================================================*
@@ -518,8 +486,6 @@
       *=====================================================================*
      P Transcoder_delete...
      P                 B                   export
-      *
-     D Transcoder_delete...
      D                 PI
      D  io_hTranscoder...
      D                                            like(hTranscoder_t )
@@ -540,8 +506,6 @@
          return;
 
       /END-FREE
-      *
-     P Transcoder_delete...
      P                 E
       *
       *=====================================================================*
@@ -549,8 +513,6 @@
       *=====================================================================*
      P Transcoder_isNull...
      P                 B                   export
-      *
-     D Transcoder_isNull...
      D                 PI              N
      D  i_hTranscoder                      const  like(hTranscoder_t )
       * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -563,8 +525,6 @@
          endif;
 
       /END-FREE
-      *
-     P Transcoder_isNull...
      P                 E
       *
       *=====================================================================*
@@ -572,8 +532,6 @@
       *=====================================================================*
      P Transcoder_null...
      P                 B                   export
-      *
-     D Transcoder_null...
      D                 PI                         like(hTranscoder_t )
       * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       /FREE
@@ -581,19 +539,15 @@
          return *NULL;
 
       /END-FREE
-      *
-     P Transcoder_null...
      P                 E
       *
       *=====================================================================*
-    R *  *** private ***
+      *  *** private ***
       *  Performs charcater translation. Returns the length of the
       *  transcoded buffer.
       *=====================================================================*
      P performTranslation...
      P                 B
-      *
-     D performTranslation...
      D                 PI            10U 0
      D  i_hTranscoder                      const  like(hTranscoder_t )
      D  i_pInBuf                       *   value
@@ -679,19 +633,15 @@
          return length;
 
       /END-FREE
-      *
-     P performTranslation...
      P                 E
       *
       *=====================================================================*
-    R *  *** private ***
+      *  *** private ***
       *  Returns a transcoder that matches the specified "from CCSID"
       *  from the list of created transcoders.
       *=====================================================================*
      P findTranscoder...
      P                 B
-      *
-     D findTranscoder...
      D                 PI                         like(hTranscoder_t )
      D  i_toCcsid                    10U 0 const
      D  i_fromCcsid                  10U 0 const
@@ -710,19 +660,15 @@
          return Transcoder_null();
 
       /END-FREE
-      *
-     P findTranscoder...
      P                 E
       *
       *=====================================================================*
-    R *  *** private ***
+      *  *** private ***
       *  Produces a transcoder to transcode character data from
       *  and to given CCSIDs.
       *=====================================================================*
      P createTranscoder...
      P                 B
-      *
-     D createTranscoder...
      D                 PI                         like(hTranscoder_t )
      D  i_toCcsid                    10U 0 const
      D  i_fromCcsid                  10U 0 const
@@ -746,12 +692,10 @@
          return g_transcoders.item(g_transcoders.numE).hTranscoder;
 
       /END-FREE
-      *
-     P createTranscoder...
      P                 E
       *
       *=====================================================================*
-    R *  *** private ***
+      *  *** private ***
       *  Returns the CCSID of the current job.
       *=====================================================================*
      P getJobCcsid...
@@ -779,13 +723,11 @@
      P                 E
       *
       *=====================================================================*
-    R *  *** private ***
+      *  *** private ***
       *  Kills utility with an ESCAPE message.
       *=====================================================================*
      P kill...
      P                 B
-      *
-     D kill...
      D                 PI
      D  i_text                      128A   const  varying
       * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -793,7 +735,5 @@
 
 
       /END-FREE
-      *
-     P kill...
      P                 E
       *
