@@ -498,7 +498,7 @@
      D SflRec080       S                   inz(0) like(SflPage)
      D SflRec132       S                   inz(0) like(SflPage)
      D SflNbrRcd       S                   inz(0) like(SflPage)
-     D SflDataLen      S                   like(r告nt4    ) inz
+     D SflMaxRowLen    S                   like(r告nt4    ) inz
      D SflDataLenFree  S                   like(r告nt4    ) inz
      D SfTop           S                   like(r告nt4    ) inz
      D SfBot           S                   like(r告nt4    ) inz
@@ -574,47 +574,46 @@
       *
      D EXIT01          S                   like(r吠gmCallN) inz
       *
-     D DataDS          DS
-     D  Data                          1A   DIM(256) inz
-     D  DataElems                   256A   OVERLAY(DataDS)
-     D DataMax         C                   CONST(132)
-     D DataStr         S                   like(r告nt4    ) inz
-     D DataEnd         S                   like(r告nt4    ) inz
-     D DataLen         S                   like(r告nt4    ) inz
-     D ColrOfs         S                   like(r告nt4    ) inz
-     D Col_Field       S             10A   DIM(60)  inz
-     D Col_ScnStr      S                   like(r告nt4    ) dim(60)
-     D Col_ScnEnd      S                   like(r告nt4    ) dim(60)
-     D Col_Error       S                   like(r呆ool    ) dim(60) inz(bFalse)
-     D CP              S                   like(r告nt4    ) inz
-      *##StrPage       S                   like(r告nt4    ) inz
-     D FldStrPos       S                   like(r告nt4    ) inz
+     D sflRow          DS                  qualified
+     D  chars                         1A   dim(256) inz
       *
-     D HeadLen         S                   like(r告nt4    ) inz
-     D FieldLen        S                   like(r告nt4    ) inz
-     D MaxColLen       S                   like(r告nt4    ) inz
-     D ColumnLen       S                   like(r告nt4    ) inz
+     D SFL_ROW_SIZE    C                   %elem(sflRow.chars)
       *
-     D PinXC           S                   like(r告nt4    ) inz
-     D MaxPinCol       C                   CONST(12)
-     D PinTabC         S             10A   inz             DIM(12)
-     D NbrPinCol       S                   inz(卵EROS )    like(SflPage)
+     D sflRowDataStr   S                   like(r告nt4)
+     D sflRowDataEnd   S                   like(r告nt4)
+     D sflRowDataLen   S                   like(r告nt4)
       *
-     D PinXR           S                   like(r告nt4    ) inz
-     D MaxPinRcd       C                   CONST(12)
-     D PinTabR         S                   like(r吠IntAbr)
-     D                                     inz             DIM(12)
-     D PIN#DS          DS                  likeds(pinTabR_t)
-     D*PIN#STR         S                   like(PIN#DS) BASED(pPIN#STR)
-     D*pPIN#STR        S               *   inz(%addr(PIN#DS))
-      ***                                  prefix(PIN#)
-     D NbrPinRcd       S                   inz(卵EROS) like(SflPage  )
+     D ColrOfs         S                   like(r告nt4)
+     D Col_Field       S             10A   dim(60)
+     D Col_ScnStr      S                   like(r告nt4) dim(60)
+     D Col_ScnEnd      S                   like(r告nt4) dim(60)
+     D Col_Error       S                   like(r呆ool) dim(60) inz(bFalse)
+     D CP              S                   like(r告nt4)
+     D FldStrPos       S                   like(r告nt4)
+      *
+     D HeadLen         S                   like(r告nt4)
+     D FieldLen        S                   like(r告nt4)
+     D MaxColLen       S                   like(r告nt4)
+     D ColumnLen       S                   like(r告nt4)
+      *
+     D PinCol_X        S                   like(r告nt4)
+     D MAX_PIN_COL     C                   %elem(PinTabCol)
+     D PinTabCol       S                   like(r呂ieldNme) dim(12)
+     D NbrPinCol       S                   like(r告nt4)
+      *
+     D PinRcd_X        S                   like(r告nt4)
+     D MAX_PIN_RCD     C                   %elem(PinTabRcd)
+     D PinTabRcd       S                   like(r吠IntAbr) dim(12)
+     D NbrPinRcd       S                   like(r告nt4)
+      *
+     D PinTabRcdE      DS                  likeds(pinTabR_t)
       *
       *  Arbeitsfelder
-     D X               S                   like(r告nt4    ) inz
-     D Y               S                   like(r告nt4    ) inz
-     D Z               S                   like(r告nt4    ) inz
+     D X               S                   like(r告nt4)
+     D Y               S                   like(r告nt4)
+     D Z               S                   like(r告nt4)
      D A1              S              1A   inz
+      *
       *  Arbeitsfeld f�r Sortierfolge: Satzfolge/Schl�sselfolge
       *  .. aktuelle Sortierung
      D AccessMode      S              1A   inz(刪rnSeq)
@@ -2731,7 +2730,7 @@
      C                   ELSE
       *
      C                   monitor
-     C                   callp     PEEK50(SET_Dsp80: 低opyRight: PinTabC
+     C                   callp     PEEK50(SET_Dsp80: 低opyRight: PinTabCol
      C                                    : YMsgID: YMsgDta)
      C                   eval      *in99 = bFalse
      C                   on-error
@@ -2743,9 +2742,9 @@
       *
      C                   EXSR      ClrPinCol
       *
-     C     1             Do        MaxPinCol     Y
-     C                   If        PinTabC(Y) <> ' '
-     C                   EVAL      Wrk#Field = PinTabC(Y)
+     C     1             Do        MAX_PIN_COL   Y
+     C                   If        PinTabCol(Y) <> ' '
+     C                   EVAL      Wrk#Field = PinTabCol(Y)
      C                   EXSR      PinCol
      C                   Endif
      C                   Enddo
@@ -3577,8 +3576,8 @@
      C                                    : $$RCDFMTID
      C                                    : YEnvFile: YEnvLib: YEnvMbr
      C                                    : YOption
-     C                                    : PinTabR: NbrPinRcd
-     C                                    : PinTabC: NbrPinCol
+     C                                    : PinTabRcd: NbrPinRcd
+     C                                    : PinTabCol: NbrPinCol
      C                                    : rtn.file: rtn.library: rtn.member
      C                                    : rtn.format
      C                                    : rtn.accessMode: rtn.sqlWhere
@@ -3612,8 +3611,8 @@
      C                                    : $$RCDFMTID
      C                                    : YEnvFile: YEnvLib: YEnvMbr
      C                                    : YOption
-     C                                    : PinTabR: NbrPinRcd
-     C                                    : PinTabC: NbrPinCol
+     C                                    : PinTabRcd: NbrPinRcd
+     C                                    : PinTabCol: NbrPinCol
      C                                    : rtn.file: rtn.library: rtn.member
      C                                    : rtn.format
      C                                    : rtn.accessMode: rtn.sqlWhere
@@ -3622,7 +3621,7 @@
      C                                    :YMsgID: YMsgDta)
      C                   Endif
       *
-     C                   Eval      PinTabR    = YPinTabR
+     C                   Eval      PinTabRcd    = YPinTabR
      C                   Eval      NbrPinRcd  = YNbrPinR
      C                   Eval      NbrPinCol  = YNbrPinC
       *
@@ -3643,8 +3642,8 @@
      C                                    : $$RcdFmtID
      C                                    : YEnvFile: YEnvLib: YEnvMbr
      C                                    : YIsAutoSave
-     C                                    : PinTabR: NbrPinRcd
-     C                                    : PinTabC: NbrPinCol
+     C                                    : PinTabRcd: NbrPinRcd
+     C                                    : PinTabCol: NbrPinCol
      C                                    : accessMode: sqlWhere
      C                                    : sqlOrder: isKeyLower
      C                                    : YMsgID: YMsgDta)
@@ -3731,7 +3730,7 @@
      C     ClrPinRow     BEGSR
       *
      C     IsPinToClr    IFEQ      bTrue
-     C                   EVAL      NbrPinRcd = 卵EROS
+     C                   EVAL      NbrPinRcd = 0
      C                   EXSR      clrPinTabR
      C                   EVAL      IsSflDirty = bTrue
      C                   ELSE
@@ -3747,8 +3746,8 @@
      C     ClrPinCol     BEGSR
       *
      C     IsPinToClr    IFEQ      bTrue
-     C                   EVAL      NbrPinCol = 卵EROS
-     C                   CLEAR                   PinTabC
+     C                   EVAL      NbrPinCol = 0
+     C                   CLEAR                   PinTabCol
      C                   EVAL      IsSflDirty = bTrue
      C                   ELSE
       *    ... wird nicht gel飉cht
@@ -3850,17 +3849,17 @@
      C                   EXSR      ChkPinRcd
      C     IsPinned      IFEQ      bFalse
       *  Datensatz ist noch nicht gepinned ...
-     C                   CLEAR                   PIN#DS
-     C                   EVAL      x = %lookup(PIN#DS: PinTabR: x)
+     C                   CLEAR                   PinTabRcdE
+     C                   EVAL      x = %lookup(PinTabRcdE: PinTabRcd: x)
      C                   IF        (x > 0)
       *  ... Datensatz pinnen
-     C                   EVAL      PIN#DS.RCDNBR = Wrk#RcdNbr
-     C                   EVAL      PIN#DS.FILE = H_FILE
-     C                   EVAL      PIN#DS.LIB = H_LIB
-     C                   EVAL      PIN#DS.MBR = H_MBR
-     C                   EVAL      PIN#DS.RCDFMT = H_RCDFMT
-     C                   EVAL      PIN#DS.MBRNBR = H_MBRNBR
-     C                   EVAL      PinTabR(X) = PIN#DS
+     C                   EVAL      PinTabRcdE.RCDNBR = Wrk#RcdNbr
+     C                   EVAL      PinTabRcdE.FILE = H_FILE
+     C                   EVAL      PinTabRcdE.LIB = H_LIB
+     C                   EVAL      PinTabRcdE.MBR = H_MBR
+     C                   EVAL      PinTabRcdE.RCDFMT = H_RCDFMT
+     C                   EVAL      PinTabRcdE.MBRNBR = H_MBRNBR
+     C                   EVAL      PinTabRcd(X) = PinTabRcdE
       *
      C                   EVAL      NbrPinRcd = X
      C                   EVAL      IsSflDirty = bTrue
@@ -3895,10 +3894,10 @@
       *  Datensatz ist noch nicht gepinned ...
      C                   EVAL      X = 1
      C                   EVAL      Pin#Field = ''
-     C                   EVAL      x = %lookup(Pin#Field: PinTabC: x)
+     C                   EVAL      x = %lookup(Pin#Field: PinTabCol: x)
      C                   IF        (x > 0)
       *  ... Datensatz pinnen
-     C                   EVAL      PinTabC(X) = Wrk#Field
+     C                   EVAL      PinTabCol(X) = Wrk#Field
      C                   EVAL      NbrPinCol = X
      C                   EVAL      IsSflDirty = bTrue
      C                   EVAL      IsPinOK = bTrue
@@ -5014,33 +5013,33 @@
      C                   EVAL      IsPinModeC = bTrue
       *
       *  Eintragen der gepinnten Spalten ...
-     C     1             DO        NbrPinCol     PinXC
-     C     DataStr       IFGT      DataMax
-     C     DataStr       ORGT      SflDataLen
+     C     1             DO        NbrPinCol     PinCol_X
+     C                   IF        (sflRowDataStr > SFL_ROW_SIZE or
+     C                              sflRowDataStr > SflMaxRowLen)
      C                   LEAVE
      C                   Endif
       *
-     C     DataStr       IFGT      SflPinRnge
+     C                   IF        (sflRowDataStr > SflPinRnge)
       *       Benutzer benachrichtigen
      C                   EVAL      冶sgID = 'USR8148'
-     C                   EVAL      冶sgDta = PinTabC(PinXC)
+     C                   EVAL      冶sgDta = PinTabCol(PinCol_X)
      C                   Callp     p_sndPgmMg(吮sgID: 吮sgDta: 壯pgmName)
       *       Eintrag austragen
      C                   EXSR      RmvPinCol
      C     IsPinRmv      IFEQ      bTrue
-     C                   EVAL      PinXC = PinXC - 1
+     C                   EVAL      PinCol_X = PinCol_X - 1
      C                   Endif
      C                   ITER
      C                   Endif
       *
       *  ... einlesen der Felddaten
-     C                   EVAL      F_Field = PinTabC(PinXC)
+     C                   EVAL      F_Field = PinTabCol(PinCol_X)
      C     F_Key         CHAIN (N) FPEEKFLD                           11
      C     *IN11         IFEQ      '1'
       *           Eintrag austragen
      C                   EXSR      RmvPinCol
      C     IsPinRmv      IFEQ      bTrue
-     C                   EVAL      PinXC = PinXC - 1
+     C                   EVAL      PinCol_X = PinCol_X - 1
      C                   Endif
      C                   ITER
      C                   Endif
@@ -5073,21 +5072,21 @@
       *      Nix tun, keine Datei vorhanden
      C                   ELSE
       *
-     C     1             DO        MaxPinRcd     PinXR
-     C                   EVAL      PIN#DS = PinTabR(PinXR)
-     C                   IF        PIN#DS.RCDNBR = 卵EROS
+     C     1             DO        MAX_PIN_RCD   PinRcd_X
+     C                   EVAL      PinTabRcdE = PinTabRcd(PinRcd_X)
+     C                   IF        PinTabRcdE.RCDNBR = 卵EROS
      C                   LEAVE
      C                   Endif
       *
-     C                   IF        f_chain04(PIN#DS.RCDNBR :
-     C                                       PIN#DS.FILE   :
-     C                                       PIN#DS.LIB    :
-     C                                       PIN#DS.MBR    :
-     C                                       PIN#DS.RCDFMT ) = '1'
+     C                   IF        f_chain04(PinTabRcdE.RCDNBR :
+     C                                       PinTabRcdE.FILE   :
+     C                                       PinTabRcdE.LIB    :
+     C                                       PinTabRcdE.MBR    :
+     C                                       PinTabRcdE.RCDFMT ) = '1'
       *           Eintrag austragen
      C                   EXSR      RmvPinRcd
      C                   IF        IsPinRmv = bTrue
-     C                   EVAL      PinXR = PinXR - 1
+     C                   EVAL      PinRcd_X = PinRcd_X - 1
      C                   Endif
      C                   ITER
      C                   Endif
@@ -5116,15 +5115,16 @@
       *
      C     ChkPinRcd     BEGSR
       *
-     C                   EVAL      PinXR = 1
-     C                   EVAL      PIN#DS.RCDNBR = Wrk#RcdNbr
-     C                   EVAL      PIN#DS.FILE = H_FILE
-     C                   EVAL      PIN#DS.LIB = H_LIB
-     C                   EVAL      PIN#DS.MBR = H_MBR
-     C                   EVAL      PIN#DS.RCDFMT = H_RCDFMT
-     C                   EVAL      PIN#DS.MBRNBR = H_MBRNBR
-     C                   EVAL      pinXR = %lookup(PIN#DS: PinTabR: PinXR)
-     C                   IF        (PinXR > 0)
+     C                   EVAL      PinRcd_X = 1
+     C                   EVAL      PinTabRcdE.RCDNBR = Wrk#RcdNbr
+     C                   EVAL      PinTabRcdE.FILE = H_FILE
+     C                   EVAL      PinTabRcdE.LIB = H_LIB
+     C                   EVAL      PinTabRcdE.MBR = H_MBR
+     C                   EVAL      PinTabRcdE.RCDFMT = H_RCDFMT
+     C                   EVAL      PinTabRcdE.MBRNBR = H_MBRNBR
+     C                   EVAL      PinRcd_X = %lookup(
+     C                                       PinTabRcdE: PinTabRcd: PinRcd_X)
+     C                   IF        (PinRcd_X > 0)
      C                   EVAL      IsPinned = bTrue
      C                   ELSE
      C                   EVAL      IsPinned = bFalse
@@ -5138,9 +5138,10 @@
       *
      C     ChkPinCol     BEGSR
       *
-     C                   EVAL      PinXC = 1
-     C                   EVAL      PinXC = %lookup(Pin#Field: PinTabC: PinXC)
-     C                   IF        (PinXC > 0)
+     C                   EVAL      PinCol_X = 1
+     C                   EVAL      PinCol_X = %lookup(
+     C                                       Pin#Field: PinTabCol: PinCol_X)
+     C                   IF        (PinCol_X > 0)
      C                   EVAL      IsPinned = bTrue
      C                   ELSE
      C                   EVAL      IsPinned = bFalse
@@ -5157,14 +5158,14 @@
      C                   EVAL      IsPinRmv = bFalse
       *
       *  Remove pinned record from table
-     C     PinXR         DO        MaxPinRcd     Y
+     C     PinRcd_X      DO        MAX_PIN_RCD   Y
      C                   EVAL      Z = Y + 1
-     C                   CLEAR                   PIN#DS
-     C     Z             IFLE      MaxPinRcd
-     C                   EVAL      PinTabR(Y) = PinTabR(Z)
-     C                   EVAL      PinTabR(Z) = PIN#DS
+     C                   CLEAR                   PinTabRcdE
+     C     Z             IFLE      MAX_PIN_RCD
+     C                   EVAL      PinTabRcd(Y) = PinTabRcd(Z)
+     C                   EVAL      PinTabRcd(Z) = PinTabRcdE
      C                   ELSE
-     C                   EVAL      PinTabR(Y) = PIN#DS
+     C                   EVAL      PinTabRcd(Y) = PinTabRcdE
      C                   Endif
      C                   EVAL      IsSflDirty = bTrue
      C                   EVAL      IsPinRmv = bTrue
@@ -5173,12 +5174,12 @@
       *  Detrmine number of pinned records
       *  (find first free record)
      C                   EVAL      X = 1
-     C                   CLEAR                   PIN#DS
-     C                   EVAL      x = %lookup(PIN#DS: PinTabR: x)
+     C                   CLEAR                   PinTabRcdE
+     C                   EVAL      x = %lookup(PinTabRcdE: PinTabRcd: x)
      C                   IF        (x > 0)
      C                   EVAL      NbrPinRcd = X - 1
      C                   ELSE
-     C                   EVAL      NbrPinRcd = MaxPinRcd
+     C                   EVAL      NbrPinRcd = MAX_PIN_RCD
      C                   Endif
       *
      C                   ENDSR
@@ -5191,13 +5192,13 @@
       *
      C                   EVAL      IsPinRmv = bFalse
       *
-     C     PinXC         DO        MaxPinCol     Y
+     C     PinCol_X      DO        MAX_PIN_COL   Y
      C                   EVAL      Z = Y + 1
-     C     Z             IFLE      MaxPinCol
-     C                   EVAL      PinTabC(Y) = PinTabC(Z)
-     C                   EVAL      PinTabC(Z) = *BLANKS
+     C     Z             IFLE      MAX_PIN_COL
+     C                   EVAL      PinTabCol(Y) = PinTabCol(Z)
+     C                   EVAL      PinTabCol(Z) = *BLANKS
      C                   ELSE
-     C                   EVAL      PinTabC(Y) = *BLANKS
+     C                   EVAL      PinTabCol(Y) = *BLANKS
      C                   Endif
      C                   EVAL      IsSflDirty = bTrue
      C                   EVAL      IsPinRmv = bTrue
@@ -5205,11 +5206,11 @@
       *
      C                   EVAL      X = 1
      C                   EVAL      Pin#Field = *BLANKS
-     C                   EVAL      x = %lookup(Pin#Field: PinTabC: x)
+     C                   EVAL      x = %lookup(Pin#Field: PinTabCol: x)
      C                   IF        (x > 0)
      C                   EVAL      NbrPinCol = X - 1
      C                   ELSE
-     C                   EVAL      NbrPinCol = MaxPinCol
+     C                   EVAL      NbrPinCol = MAX_PIN_COL
      C                   Endif
       *
      C                   ENDSR
@@ -5267,8 +5268,8 @@
       *
       *  鈁ertragen der 鈁erschriftenzeile
       *  in Bildschirmfeld ...
-     C                   Eval      $$Head132 = DataElems
-     C                   Eval      $$Head080 = DataElems
+     C                   Eval      $$Head132 = sflRow
+     C                   Eval      $$Head080 = sflRow
      C                   Endif
       *
      C                   ENDSR
@@ -5341,8 +5342,8 @@
       *
       *  鈁ertragen der Datenzeile in
       *  Bildschirmfeld ...
-     C                   Eval      Data132 = DataElems
-     C                   Eval      Data080 = DataElems
+     C                   Eval      Data132 = sflRow
+     C                   Eval      Data080 = sflRow
       *
       *  ... anzeigen der Subfile
      C                   EVAL      *IN80 = '1'
@@ -5362,8 +5363,8 @@
      C     PBFill_R      BEGSR
       *
       *  L飉chen Datentabelle ...
-     C                   CLEAR                   Data
-     C                   EVAL      DataStr = 1
+     C                   CLEAR                   sflRow
+     C                   EVAL      sflRowDataStr = 1
       *
       *  Eintragen gepinnter Spalten ...
      C                   EXSR      PBPinCol
@@ -5372,8 +5373,8 @@
      C                   EVAL      F_Seq = Wrk#SeqNbr
      C     F1KEY_L1      SETLL     FPEEKFLDL1
       *
-     C     DataStr       DOWLE     DataMax
-     C     DataStr       ANDLE     SflDataLen
+     C                   DOW       (sflRowDataStr <= SFL_ROW_SIZE and
+     C                              sflRowDataStr <= SflMaxRowLen)
      C                   READ      FPEEKFLDL1                             11
      C     *IN11         IFEQ      '1'
      C                   LEAVE
@@ -5404,8 +5405,8 @@
      C     PBFill_L      BEGSR
       *
       *  L飉chen Datentabelle ...
-     C                   CLEAR                   Data
-     C                   EVAL      DataStr = 1
+     C                   CLEAR                   sflRow
+     C                   EVAL      sflRowDataStr = 1
       *
       *  Eintragen gepinnter Spalten ...
      C                   EXSR      PBPinCol
@@ -5414,8 +5415,8 @@
      C                   EVAL      F_Seq = Wrk#SeqNbr
      C     F1KEY_L1      SETGT     FPEEKFLDL1
       *
-     C     DataStr       DOWLE     DataMax
-     C     DataStr       ANDLE     SflDataLen
+     C                   DOW       (sflRowDataStr <= SFL_ROW_SIZE and
+     C                              sflRowDataStr <= SflMaxRowLen)
      C                   READP     FPEEKFLDL1                             11
      C     *IN11         IFEQ      '1'
      C                   LEAVE
@@ -5458,9 +5459,9 @@
      C                   EVAL      IsColExc = bFalse
       *
       *  merken Position f�r Farbattribut
-     C     DataStr       IFLE      DataMax
-     C                   EVAL      ColrOfs = DataStr
-     C                   EVAL      DataStr = DataStr + 1
+     C                   IF        (sflRowDataStr <= SFL_ROW_SIZE)
+     C                   EVAL      ColrOfs = sflRowDataStr
+     C                   EVAL      sflRowDataStr = sflRowDataStr + 1
      C                   ELSE
      C                   EVAL      ColrOfs = 卵EROS
      C                   Endif
@@ -5644,7 +5645,8 @@
      C                   Endif
       *
       *  ... Berechnen der Startposition im Puffer
-     C                   Eval      SflDataLenFree = SflDataLen - DataStr + 1
+     C                   Eval      SflDataLenFree =
+     C                               SflMaxRowLen - sflRowDataStr + 1
       *
      C                   IF        (##WndNbr = F_Seq)
       *
@@ -5667,30 +5669,31 @@
       *
       *  ... Berechnen der zu extrahierenden L鄚ge
      C                   EVAL      BuffIdx = FldStrPos
-     C                   EVAL      DataEnd = DataStr + ColumnLen
-     C                   EVAL      DataEnd = DataEnd - FldStrPos
+     C                   EVAL      sflRowDataEnd = sflRowDataStr + ColumnLen
+     C                   EVAL      sflRowDataEnd = sflRowDataEnd - FldStrPos
       *
-     C                   IF        DataEnd > DataMax
-     C                   EVAL      DataEnd = DataMax
+     C                   IF        sflRowDataEnd > SFL_ROW_SIZE
+     C                   EVAL      sflRowDataEnd = SFL_ROW_SIZE
      C                   Endif
       *
-     C                   Eval      DataLen = DataEnd - DataStr + 1
+     C                   Eval      sflRowDataLen =
+     C                               sflRowDataEnd - sflRowDataStr + 1
       *
       *  ... �bertragen aufbereitetes Feld in Subfile
-     C                   Eval      %subst(DataDS: DataStr) =
-     C                             %subst(YHexString: BuffIdx: DataLen)
+     C                   Eval      %subst(sflRow: sflRowDataStr) =
+     C                             %subst(YHexString: BuffIdx: sflRowDataLen)
       *
       *  ... pflegen der Tabelle mit den Werten der
       *      Spaltenaufteilung ...
-     C     DataEnd       IFGE      DataStr
+     C     sflRowDataEnd IFGE      sflRowDataStr
       *      ... pflegen der Feldpositionstabelle
      C     SflMode       IFEQ      '*HEADLINE'
      C                   EVAL      CP = CP + 1
      C                   EVAL      Col_Field(CP) = FLDL0100.F1FNme
-     C                   EVAL      Col_ScnStr(CP) = DataStr
-     C                   EVAL      Col_ScnEnd(CP) = DataEnd
+     C                   EVAL      Col_ScnStr(CP) = sflRowDataStr
+     C                   EVAL      Col_ScnEnd(CP) = sflRowDataEnd
       *          ... ist das Feld komplett sichtbar?
-     C                   IF        (Col_ScnEnd(CP) <= SflDataLen)
+     C                   IF        (Col_ScnEnd(CP) <= SflMaxRowLen)
       *              ... ja, kein Fehler
      C                   EVAL      Col_Error(CP) = bFalse
      C                   ELSE
@@ -5699,17 +5702,17 @@
      C                   Endif
      C                   Endif
       *
-     C                   EVAL      DataStr = DataEnd + 1
+     C                   EVAL      sflRowDataStr = sflRowDataEnd + 1
       *
       *      ... L飉chen von "�berstehendem" Datenm�ll
-     C     ColumnLen     IFEQ      MaxColLen
-     C     DataStr       ANDLE     DataMax
-     C                   EVAL      Data(DataStr) = ''
+     C                   IF        (ColumnLen = MaxColLen and
+     C                              sflRowDataStr <= SFL_ROW_SIZE)
+     C                   EVAL      sflRow.chars(sflRowDataStr) = ''
      C                   Endif
       *
       *      ... umschalten auf "normale" Farbdarstellung
-     C     DataStr       IFLE      DataMax
-     C                   EVAL      Wrk#Ofs = DataStr
+     C                   IF        (sflRowDataStr <= SFL_ROW_SIZE)
+     C                   EVAL      Wrk#Ofs = sflRowDataStr
      C                   EXSR      PBStdCol
      C                   Endif
       *
@@ -5720,9 +5723,9 @@
      C     SflMode       IFEQ      '*HEADLINE'
      C                   IF        (F_KSEQ = 0) or
      C                             (AccessMode = 刪rnSeq)
-     C                   EVAL      Data(ColrOfs) = SET_HedCol
+     C                   EVAL      sflRow.chars(ColrOfs) = SET_HedCol
      C                   ELSE
-     C                   EVAL      Data(ColrOfs) = SET_KeyCol
+     C                   EVAL      sflRow.chars(ColrOfs) = SET_KeyCol
      C                   Endif
      C                   ELSE
      C                   EXSR      PBColor
@@ -5741,9 +5744,9 @@
      C     PBStdCol      BEGSR
       *
      C     IsTblCol      IFEQ      bFalse
-     C                   EVAL      Data(Wrk#Ofs) = SET_StdCol
+     C                   EVAL      sflRow.chars(Wrk#Ofs) = SET_StdCol
      C                   ELSE
-     C                   EVAL      Data(Wrk#Ofs) = SET_TblCol
+     C                   EVAL      sflRow.chars(Wrk#Ofs) = SET_TblCol
      C                   Endif
       *
      C                   ENDSR
@@ -5848,7 +5851,7 @@
      C                   ELSE
       *
      C                   IF        IsColExc = bTrue
-     C                   EVAL      Data(ColrOfs) = SET_ExcCol
+     C                   EVAL      sflRow.chars(ColrOfs) = SET_ExcCol
      C                   ELSE
       *
       *---------------------------------------*
@@ -5876,12 +5879,12 @@
       *---------------------------------------*
       *  Spaltenmarkierung ...
      C     F_MarkCol     IFEQ      bTrue
-     C                   EVAL      Data(ColrOfs) = F_Color
+     C                   EVAL      sflRow.chars(ColrOfs) = F_Color
      C                   ELSE
       *  Keine Spaltenmarkierung ...
      C     IsPinned      IFEQ      bTrue
       *      ... pinned Datensatz
-     C                   EVAL      Data(ColrOfs) = SET_PinCol
+     C                   EVAL      sflRow.chars(ColrOfs) = SET_PinCol
      C                   ELSE
       *      ... normaler Datensatz
      C                   EVAL      Wrk#Ofs = ColrOfs
@@ -5897,19 +5900,19 @@
       *      ... Suchfunktionen: *REVERSE
      C     SrchType      WHENEQ    '*REVERSE'
      C     IsFound       IFEQ      bTrue
-     C                   EVAL      Data(ColrOfs) = SET_RevCol
+     C                   EVAL      sflRow.chars(ColrOfs) = SET_RevCol
      C                   Endif
       *
       *      ... Suchfunktionen: *UNDERLINE
      C     SrchType      WHENEQ    '*UNDERLINE'
      C     IsFound       IFEQ      bTrue
-     C                   EVAL      Data(ColrOfs) = SET_UndCol
+     C                   EVAL      sflRow.chars(ColrOfs) = SET_UndCol
      C                   Endif
       *
       *      ... Suchfunktionen: *NORMAL
      C     SrchType      WHENEQ    '*NORMAL'
      C     SrchFndRcd    IFEQ      RECORDNBR
-     C                   EVAL      Data(ColrOfs) = SET_NmlCol
+     C                   EVAL      sflRow.chars(ColrOfs) = SET_NmlCol
      C                   Endif
       *
      C                   OTHER
@@ -7913,7 +7916,7 @@
       *    80-Zeichen Anzeige
      C                   EVAL      *IN88 = '1'
      C                   EVAL      SflPage = 14
-     C                   EVAL      SflDataLen = 64
+     C                   EVAL      SflMaxRowLen = 64
      C                   EVAL      SflHeadLRw = 6
      C                   EVAL      SflFirstRw = 7
      C                   EVAL      SflLastRw = 20
@@ -7922,7 +7925,7 @@
       *   132-Zeichen Anzeige
      C                   EVAL      *IN88 = '0'
      C                   EVAL      SflPage = 16
-     C                   EVAL      SflDataLen = 116
+     C                   EVAL      SflMaxRowLen = 116
      C                   EVAL      SflHeadLRw = 6
      C                   EVAL      SflFirstRw = 8
      C                   EVAL      SflLastRw = 23
@@ -7930,7 +7933,7 @@
      C                   Endif
       *
       *  Bereich f�r gepinnte Spalten
-     C     SflDataLen    DIV       3             SflPinRnge
+     C     SflMaxRowLen  DIV       3             SflPinRnge
      C                   MULT      2             SflPinRnge
       *
       *  Prompt-Felder anzeigen ...
@@ -8066,10 +8069,10 @@
       *
      C     clrPinTabR    BEGSR
       *
-     C                   CLEAR                   PIN#DS
-     C     1             DO        MaxPinRcd     PinXR
-     C                   EVAL      PinTabR(PinXR) = PIN#DS
-     C                   EVAL      yPinTabR(PinXR) = PinTabR(PinXR)
+     C                   CLEAR                   PinTabRcdE
+     C     1             DO        MAX_PIN_RCD   PinRcd_X
+     C                   EVAL      PinTabRcd(PinRcd_X) = PinTabRcdE
+     C                   EVAL      yPinTabR(PinRcd_X) = PinTabRcd(PinRcd_X)
      C                   ENDDO
       *
      C                   ENDSR
