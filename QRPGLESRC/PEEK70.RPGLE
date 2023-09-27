@@ -85,6 +85,7 @@
      D  Data                          1A   DIM(32767)
      D  OffsetHdr            117    120I 0
      D  OffsetLst            125    128I 0
+     D  maxListE             133    136I 0
      D  NumLstEnt            133    136I 0
      D  EntrySize            137    140I 0
      D  DataLen        C                   CONST(32767)
@@ -97,11 +98,6 @@
      D  LstDataLen     C                   CONST(512)
       *
      D  maxData        S                   like(r§int4    ) inz
-      *
-      *  declarations for QUSRTVUS
-     D  RtvData        S            512A
-     D  SpcStrPos      S             10I 0
-     D  SpcRtvLen      S             10I 0
       *
       /COPY QCOPYLE,QUSCRTUS
       /COPY QCOPYLE,QUSPTRUS
@@ -121,22 +117,23 @@
      D  i_funk                             const like(r§option)
      D  o_anz                                    like(r§int4)
      D  o_objl0200                               likeds(objl0200_t)
-      *
       *---------------------------------------------------*
       *
+     C                   monitor
+      *
      C                   SELECT
-     C     i_funk        WHENEQ    '*CREATE'
+     C                   WHEN      (i_funk = '*CREATE')
      C                   EXSR      Create
-     C     i_funk        WHENEQ    '*DELETE'
+     C                   WHEN      (i_funk = '*DELETE')
      C                   EXSR      Delete
-     C     i_funk        WHENEQ    '*READ'
+     C                   WHEN      (i_funk = '*READ')
      C                   EXSR      Read
      C                   Endsl
       *
-      *---------------------------------------------------*
-      *  Ende Programm
-      *
-     C     ENDE          TAG
+     C                   on-error
+     C                   dump
+     C                   eval      o_anz = 0
+     C                   endmon
       *
      C                   RETURN
       *
@@ -166,6 +163,7 @@
      C                   EVAL      NumLstEnt = 0
      C                   Endif
       *
+     C                   EVAL      maxListE = NumLstEnt
      C                   EVAL      o_anz = NumLstEnt
       *
      C                   ENDSR
@@ -195,11 +193,15 @@
       *
      C                   EVAL      o_objl0200 = *BLANKS
       *
-     C     NumLstEnt     IFGT      *ZEROS
-     C     OffsetLst     IFGE      maxData
-      *   Ungültiger Wert in OffsetLst
-     C                   EXSR      CallUsAPI
-     C                   ELSE
+     C                   IF        (NumLstEnt <= 0)
+     C                   Exsr      setError
+     C                   Leavesr
+     C                   ENDIF
+      *
+     C                   IF        (OffsetLst >= maxData)
+     C                   Exsr      setError
+     C                   Leavesr
+     C                   ENDIF
       *
      C                   EVAL      ListPtr = %ADDR(Data(OffsetLst+1))
       *
@@ -208,41 +210,16 @@
      C                   EVAL      NumLstEnt = NumLstEnt - 1
       *
      C                   EVAL      o_anz = NumLstEnt
-     C                   Endif
-     C                   ELSE
-      *   Ungültiger Wert in NumLstEnt
-     C                   EXSR      *PSSR
-     C                   Endif
       *
      C                   ENDSR
       *
       *====================================================*
-      *  CallUsAPI  Abrufen Werte aus UserSpace mittels API*
+      *  Set error condition                               *
       *====================================================*
       *
-     C     CallUsAPI     BEGSR
+     C     setError      BEGSR
       *
-     C     NumLstEnt     IFGT      *ZEROS
-      *
-     C                   EVAL      SpcStrPos = OffsetLst+1
-      *
-     C                   EVAL      SpcRtvLen = EntrySize
-     C                   CALL      'QUSRTVUS'
-     C                   PARM                    qUsrSpc
-     C                   PARM                    SpcStrPos
-     C                   PARM                    SpcRtvLen
-     C                   PARM                    RtvData
-      *
-     C                   EVAL      o_objl0200 = RtvData
-     C                   EVAL      OffsetLst = OffsetLst + EntrySize
-     C                   EVAL      NumLstEnt = NumLstEnt - 1
-      *
-     C                   EVAL      o_anz = NumLstEnt
-      *
-     C                   ELSE
-      *   Ungültiger Wert in NumLstEnt
-     C                   EXSR      *PSSR
-     C                   Endif
+     C                   EVAL      o_anz = 0
       *
      C                   ENDSR
       *
@@ -258,17 +235,4 @@
      C                   EVAL      maxData = DataLen - LstDataLen
       *
      C                   ENDSR
-      *
-      *====================================================*
-      *  *PSSR  --  Program error handler                  *
-      *====================================================*
-      *
-     C     *PSSR         BEGSR
-      *
-     C                   DUMP
-      *
-     C                   EVAL      o_anz = *ZEROS
-     C                   GOTO      ENDE
-      *
-     C                   ENDSR     '*CANCL'
       *
