@@ -111,6 +111,10 @@
       /COPY QCOPYLE,D_VARDEF
       *----------------------------------------------------*
       *
+      /define internal_prototype
+      /COPY QCOPYLE,PPEEK05
+      /undefine internal_prototype
+      *
       *---INFOSTRUKTUR FÜR AID-BYTE -----------------------*
       /COPY QCOPYLE,DS_WORKSTN
       *----------------------------------------------------*
@@ -252,26 +256,26 @@
       *  F E L D - D E F I N I T I O N E N                 *
       *----------------------------------------------------*
       *
-     D XQFile          DS
-     D  XFile                        10A
-     D  XLibrary                     10A
-     D XMember         S             10A
-     D XAccess         S              1A
-     D XProdlib        S             10A
-     D XChgLib         S              1A
-     D XChgFile        S              1A
-     D XChgMbr         S              1A
-     D XUpdModKey      S              1A
-     D XChgSqlW        S              1A
-     D XChgSqlO        S              1A
-     D XQEnvFile       DS
-     D  XEnvFile                     10A
-     D  XEnvLib                      10A
-     D XEnvMbr         S             10A
-     D XEnvSave        S              1A
-     D XEnvLayout      S              1A
-     D XSqlWhere       S            512A   varying
-     D XSqlOrder       S            512A   varying
+     D*XQFile          DS
+     D* XFile                        10A
+     D* XLibrary                     10A
+     D*XMember         S             10A
+     D*XAccess         S              1A
+     D*XProdlib        S             10A
+     D*XChgLib         S              1A
+     D*XChgFile        S              1A
+     D*XChgMbr         S              1A
+     D*XUpdModKey      S              1A
+     D*XChgSqlW        S              1A
+     D*XChgSqlO        S              1A
+     D*XQEnvFile       DS
+     D* XEnvFile                     10A
+     D* XEnvLib                      10A
+     D*XEnvMbr         S             10A
+     D*XEnvSave        S              1A
+     D*XEnvLayout      S              1A
+     D*XSqlWhere       S            512A   varying
+     D*XSqlOrder       S            512A   varying
       *
      D rtn             DS                  qualified
      D  file                               like(##File)
@@ -299,7 +303,6 @@
      D YCopyRight      S                   like(r§copyRght) inz(§CopyRight)
       *
      D YFmtNbr         S              5I 0 inz
-     D YRcdFormat      S             10A   inz
       *
      D YHeaderTyp      S             10A   inz
      D YRcdNbr         S                   inz(§ZEROS ) like(r§rcdNbr)
@@ -317,7 +320,6 @@
      D YRetFile        S             10A   inz
      D YRetLib         S             10A   inz
       *
-     D YPgm            S             10A   inz
      D YRtnCode        S              1A   inz
       *
      D YField          S                   like(SrchField) inz
@@ -377,11 +379,6 @@
      D YisKeyLower     S                   like(r§bool    )  inz
      D YOption         S                   like(r§option  )  inz
      D YText           S             50A   inz
-     D YEnvText        S             50A                     inz
-     D yType           S             10A
-     D yInpMsgID       S                   like(r§msgId   )
-     D yInpMsgDta      S                   like(r§msgDta  )
-     D yKeys           S              3A
      D ySflOpt         S              2A
      D YString         S                   like(r§rcdBuf  )
      D                                     inz
@@ -714,34 +711,23 @@
       ********************************************************************
       *
       *---ENTRY-LISTE--------------------------------------*
-     C     *ENTRY        PLIST
-     C                   PARM                    XQFile
-     C                   PARM                    XMember
-     C                   PARM                    XAccess
-     C                   PARM                    XProdlib
-     C                   PARM                    XChgLib
-     C                   PARM                    XChgFile
-     C                   PARM                    XChgMbr
-     C                   PARM                    XUpdModKey
-     C                   PARM                    XChgSqlW
-     C                   PARM                    XChgSqlO
-     C                   PARM                    XQEnvFile
-     C                   PARM                    XEnvMbr
-     C                   PARM                    XEnvSave
-     C                   PARM                    XEnvLayout
-     C                   PARM                    XSqlWhere
-     C                   PARM                    XSqlOrder
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK59
-     C     P_Peek59      Plist
-     C                   Parm                    yDsp80
-     C                   Parm                    yType
-     C                   Parm                    yInpMsgID
-     C                   Parm                    yInpMsgDta
-     C                   Parm                    yKeys
-     C                   Parm                    yMsgID
-     C                   Parm                    yMsgDta
+     D PEEK05          PI
+     D  io_qFile                                 likeds(r§qObj)
+     D  i_member                           const like(r§mbr)
+     D  i_access                           const like(r§accessMode)
+     D  i_prodlib                          const like(r§lib)
+     D  i_chgLib                           const like(r§bool)
+     D  i_chgFile                          const like(r§bool)
+     D  i_chgMbr                           const like(r§bool)
+     D  i_updModKey                        const like(r§bool)
+     D  i_chgSqlW                          const like(r§bool)
+     D  i_chgSqlO                          const like(r§bool)
+     D  i_qEnvFile                         const likeds(r§qObj)
+     D  i_envMbr                           const like(r§mbr)
+     D  i_envSave                          const like(r§bool)
+     D  i_envLayout                        const like(r§bool)
+     D  i_sqlWhere                         const like(r§sqlWhere)
+     D  i_sqlOrder                         const like(r§sqlOrder)
       *
       *----------------------------------------------------*
       *  Parameterliste für PEEKPGM
@@ -1132,7 +1118,7 @@
       *
       *  Wechsel der Datei ...
       ***                If        AccessMode = §SqlSeq
-     C                   Eval      NewAccMode = XAccess
+     C                   Eval      NewAccMode = i_access
       ***                Else
       ***                Eval      NewAccMode = AccessMode
       ***                Endif
@@ -1424,7 +1410,7 @@
      C     C_EndPgm      BEGSR
       *
       * - Speichern der Arbeitsumgebung
-     C     XEnvSave      IFEQ      bTrue
+     C     i_envSave     IFEQ      bTrue
      C                   EVAL      YIsAutoSave = bTrue
      C                   EXSR      SaveEnv
      C                   ENDIF
@@ -2626,7 +2612,7 @@
      C                   Eval      ##file    = yRetFile
      C                   Eval      ##Library = yRetLib
       *
-     C                   Eval      NewAccMode = xAccess
+     C                   Eval      NewAccMode = i_access
      C                   Exsr      ChangeFile
       *
      C                   If        IsFileChg = bTrue
@@ -7514,14 +7500,14 @@
       *
       *  ... Verknüpfen *SECATRDFT mit Eingabeparametern ...
       *      ... ##Library
-     C                   If        xChgLib = '*'
+     C                   If        i_chgLib = '*'
      C                   If        SET_ChgLib = '1'
      C                   Eval      auth.chgLib = bTrue
      C                   Else
      C                   Eval      auth.chgLib = bFalse
      C                   Endif
      C                   Else
-     C                   If        xChgLib = '1'
+     C                   If        i_chgLib = '1'
      C                   Eval      auth.chgLib = bTrue
      C                   Else
      C                   Eval      auth.chgLib = bFalse
@@ -7529,14 +7515,14 @@
      C                   Endif
       *
       *      ... ##File
-     C                   If        xChgFile = '*'
+     C                   If        i_chgFile = '*'
      C                   If        SET_ChgFil  = '1'
      C                   Eval      auth.chgFile = bTrue
      C                   Else
      C                   Eval      auth.chgFile = bFalse
      C                   Endif
      C                   Else
-     C                   If        xChgFile = '1'
+     C                   If        i_chgFile = '1'
      C                   Eval      auth.chgFile = bTrue
      C                   Else
      C                   Eval      auth.chgFile = bFalse
@@ -7544,14 +7530,14 @@
      C                   Endif
       *
       *      ... ##Member
-     C                   If        xChgMbr = '*'
+     C                   If        i_chgMbr = '*'
      C                   If        SET_ChgMbr = '1'
      C                   Eval      auth.chgMbr = bTrue
      C                   Else
      C                   Eval      auth.chgMbr = bFalse
      C                   Endif
      C                   Else
-     C                   If        xChgMbr = '1'
+     C                   If        i_chgMbr = '1'
      C                   Eval      auth.chgMbr = bTrue
      C                   Else
      C                   Eval      auth.chgMbr = bFalse
@@ -7559,15 +7545,15 @@
      C                   Endif
       *
       *      ... updMod
-     C                   If        (xUpdModKey = §upd_dft  )
+     C                   If        (i_updModKey = §upd_dft  )
      C                   If        SET_UpdMod = '1'
      C                   Eval      auth.updMod    = bTrue
      C                   Else
      C                   Eval      auth.updMod    = bFalse
      C                   Endif
      C                   Else
-     C                   If        (xUpdModKey = §upd_yes  )  or
-     C                             (xUpdModKey = §upd_noKey)
+     C                   If        (i_updModKey = §upd_yes  )  or
+     C                             (i_updModKey = §upd_noKey)
      C                   Eval      auth.updMod    = bTrue
      C                   Else
      C                   Eval      auth.updMod    = bFalse
@@ -7575,24 +7561,24 @@
      C                   Endif
       *
       *      ... keyUpd
-     C                   If        (xUpdModKey = §upd_dft  )  or
-     C                             (xUpdModKey = §upd_yes  )
+     C                   If        (i_updModKey = §upd_dft  )  or
+     C                             (i_updModKey = §upd_yes  )
      C                   Eval      auth.updKey    = bTrue
      C                   Else
      C                   Eval      auth.updKey    = bFalse
      C                   Endif
       *
       *      ... chgSqlW
-     C                   If        (xChgSqlW = §upd_dft  )  or
-     C                             (xChgSqlW = §upd_yes  )
+     C                   If        (i_chgSqlW = §upd_dft  )  or
+     C                             (i_chgSqlW = §upd_yes  )
      C                   Eval      auth.chgSqlW = bTrue
      C                   Else
      C                   Eval      auth.chgSqlW = bFalse
      C                   Endif
       *
       *      ... chgSqlO
-     C                   If        (xChgSqlO = §upd_dft  )  or
-     C                             (xChgSqlO = §upd_yes  )
+     C                   If        (i_chgSqlO = §upd_dft  )  or
+     C                             (i_chgSqlO = §upd_yes  )
      C                   Eval      auth.chgSqlO = bTrue
      C                   Else
      C                   Eval      auth.chgSqlO = bFalse
@@ -8101,15 +8087,16 @@
      C                   EXSR      GetUsrSetg
       *
       * - Prüfen auf generischen Dateinamen
-     C                   IF        %len(%trimR(XFile)) > 0 and
-     C                             %subst(XFile: %len(%trimR(XFile)): 1) = '*'
+     C                   IF        %len(%trimR(io_qFile.name)) > 0 and
+     C                             %subst(io_qFile.name
+     C                                    : %len(%trimR(io_qFile.lib)): 1) = '*'
      C                   IF        *IN75 = *OFF
-     C                   EVAL      ##File = XFile
-     C                   EVAL      ##Library = XLibrary
+     C                   EVAL      ##File = io_qFile.name
+     C                   EVAL      ##Library = io_qFile.lib
      C                   EXSR      Pmt_File
      C                   IF        §MsgID = *BLANKS
-     C                   EVAL      XFile = ##File
-     C                   EVAL      XLibrary = ##Library
+     C                   EVAL      io_qFile.name = ##File
+     C                   EVAL      io_qFile.lib = ##Library
      C                   ENDIF
      C                   EVAL      ##File = *BLANKS
      C                   EVAL      ##Library = *BLANKS
@@ -8122,9 +8109,9 @@
      C                   OPEN      PEEK05FM
       *
       * - Initialisieren Bildschirm
-     C                   EVAL      ##File = XFile
-     C                   EVAL      ##Library = XLibrary
-     C                   EVAL      ##Member = XMember
+     C                   EVAL      ##File = io_qFile.name
+     C                   EVAL      ##Library = io_qFile.lib
+     C                   EVAL      ##Member = i_member
      C                   EXSR      GetObjAttr
       *
      C                   EXSR      ChkPrvFile
@@ -8183,30 +8170,30 @@
       *
       * - Öffnen der Datei
      C                   If        isOpen = bFalse
-     C                   EVAL      AccessMode = XAccess
+     C                   EVAL      AccessMode = i_access
      C                   If        AccessMode = §SqlSeq
-     C                   Eval      SqlWhere  = XSqlWhere
-     C                   Eval      SqlOrder  = XSqlOrder
+     C                   Eval      SqlWhere  = i_sqlWhere
+     C                   Eval      SqlOrder  = i_sqlOrder
      C                   Endif
      C                   EXSR      OpenFile
      C                   Endif
       *
       * - laden Arbeitsumgebung / öffnen Datei
-     C                   If        XEnvFile = '*NONE'
+     C                   If        i_qEnvFile.name = '*NONE'
      C                   Eval      YEnvFile = SET_ENVFIL
      C                   Eval      YEnvLib  = SET_ENVLIB
      C                   Eval      YEnvMbr  = '*FILE'
      C                   Else
-     C                   If        XEnvFile = '*ENVFILE'
+     C                   If        i_qEnvFile.name = '*ENVFILE'
      C                   Eval      YEnvFile = SET_ENVFIL
      C                   Eval      YEnvLib  = SET_ENVLIB
      C                   Eval      YEnvMbr  = '*FILE'
      C                   Else
-     C                   Eval      YEnvFile = XEnvFile
-     C                   Eval      YEnvLib  = XEnvLib
-     C                   Eval      YEnvMbr  = XEnvMbr
+     C                   Eval      YEnvFile = i_qEnvFile.name
+     C                   Eval      YEnvLib  = i_qEnvFile.lib
+     C                   Eval      YEnvMbr  = i_envMbr
      C                   Endif
-     C                   If        XEnvLayout = bTrue
+     C                   If        i_envLayout = bTrue
      C                   Eval      yOption = '*SLCLAYOUT'
      C                   Else
      C                   Eval      yOption = '*SLCENV'
