@@ -92,6 +92,7 @@
       *
       *  Pointer for UserSpace-ListData
      D  ListPtr        S               *
+      *
       *  Organisation of list data
      D List            DS                  BASED(ListPtr)
      D  ListData               1    512A
@@ -114,25 +115,25 @@
       *
      D PEEK70          PI
      D  i_qFile                            const likeds(r§qObj)
-     D  i_funk                             const like(r§option)
-     D  o_anz                                    like(r§int4)
+     D  i_function                         const like(r§function)
+     D  o_numE                                   like(r§int4)
      D  o_objl0200                               likeds(objl0200_t)
       *---------------------------------------------------*
       *
      C                   monitor
       *
      C                   SELECT
-     C                   WHEN      (i_funk = '*CREATE')
+     C                   WHEN      (i_function = '*CREATE')
      C                   EXSR      Create
-     C                   WHEN      (i_funk = '*DELETE')
+     C                   WHEN      (i_function = '*DELETE')
      C                   EXSR      Delete
-     C                   WHEN      (i_funk = '*READ')
+     C                   WHEN      (i_function = '*READ')
      C                   EXSR      Read
      C                   Endsl
       *
      C                   on-error
      C                   dump
-     C                   eval      o_anz = 0
+     C                   eval      o_numE = 0
      C                   endmon
       *
      C                   RETURN
@@ -143,7 +144,7 @@
       *
      C     Create        BEGSR
       *
-     C                   EVAL      o_anz = *ZEROS
+     C                   EVAL      o_numE = *ZEROS
       *
       *  create user space
      C                   IF        (not f_exist(
@@ -152,7 +153,7 @@
      C                                      : '*ALL': 'Peek/400 - Work Area')
      C                   Endif
       *
-      *  Ausrichten des UserSpace-Pointers
+      *  get user space pointer
      C                   Callp     QUSPTRUS(qUsrSpc: pSpcPtr)
       *
       *  get file format description
@@ -164,7 +165,7 @@
      C                   Endif
       *
      C                   EVAL      maxListE = NumLstEnt
-     C                   EVAL      o_anz = NumLstEnt
+     C                   EVAL      o_numE = NumLstEnt
       *
      C                   ENDSR
       *
@@ -191,7 +192,7 @@
       *
      C     Read          BEGSR
       *
-     C                   EVAL      o_objl0200 = *BLANKS
+     C                   Clear                   o_objl0200
       *
      C                   IF        (NumLstEnt <= 0)
      C                   Exsr      setError
@@ -209,7 +210,7 @@
      C                   EVAL      OffsetLst = OffsetLst + EntrySize
      C                   EVAL      NumLstEnt = NumLstEnt - 1
       *
-     C                   EVAL      o_anz = NumLstEnt
+     C                   EVAL      o_numE = NumLstEnt
       *
      C                   ENDSR
       *
@@ -219,7 +220,7 @@
       *
      C     setError      BEGSR
       *
-     C                   EVAL      o_anz = 0
+     C                   EVAL      o_numE = 0
       *
      C                   ENDSR
       *
