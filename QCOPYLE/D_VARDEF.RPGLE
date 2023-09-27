@@ -6,64 +6,66 @@
       *
       *  Referenzfelder:
      D r§choice        S             75A   template
-     D r§headerType    S             10A   based(ptrDummy)
-     D r§attr          S             10A   based(ptrDummy)
-     D r§attrType      S              1A   based(ptrDummy)
-     D r§attrValue     S            512A   based(ptrDummy)
-     D r§accMode       S              1A   based(ptrDummy)
-     D r§bool          S              1A   based(ptrDummy)
-     D r§cmdBuffer     S          32702A   based(pDummy  )
-     D r§copyRght      S                   like(r§msgDta  )
-     D                                     based(ptrDummy)
-     D r§dsp80         S                   like(r§bool    )
-     D                                     based(ptrDummy)
-     D r§fieldNme      S             10A   based(ptrDummy)
-     D r§file          S             10A   based(ptrDummy)
-     D r§fKeyDsp       S             18A   based(ptrDummy)
-     D r§fmt           S             10A   based(ptrDummy)
-     D r§fmtId         S             13A   based(ptrDummy)
-     D r§headTyp       S             10A   based(ptrDummy)
-     D r§hexBuf        S          65532A   based(ptrDummy)
+     D r§headerType    S             10A   template
+     D r§attr          S             10A   template
+     D r§attrType      S              1A   template
+     D r§attrValue     S            512A   template
+     D r§accMode       S              1A   template
+     D r§bool          S              1A   template
+     D r§cmdBuffer     S          32702A   template
+     D r§copyRght      S                   like(r§msgDta) template
+     D r§dsp80         S                   like(r§bool) template
+     D r§fieldNme      S             10A   template
+     D r§file          S             10A   template
+     D r§fKeyDsp       S             18A   template
+     D r§fmt           S             10A   template
+     D r§fmtId         S             13A   template
+     D r§headTyp       S             10A   template
+     D r§hexBuf        S          65532A   template
      D §hexBufLen      C                   const(65532)
-     D r§keyBuf        S           2000A   based(ptrDummy)
+     D r§keyBuf        S           2000A   template
      D §keyBufLen      C                   const(2000)
-     D r§lib           S             10A   based(ptrDummy)
-     D r§mbr           S             10A   based(ptrDummy)
-     D r§mbrNbr        S             10I 0 based(ptrDummy)
-     D r§rcdFmt        S             10A   based(ptrDummy)
-     D r§rcdFmtInf     DS                  qualified based(ptrDummy)
+     D r§lib           S             10A   template
+     D r§mbr           S             10A   template
+     D r§mbrNbr        S             10I 0 template
+     D r§rcdFmt        S             10A   template
+      *
+     D r§rcdFmtInf     DS                  qualified template
      D  name                               like(r§rcdFmt)
      D  id                                 like(r§fmtid)
-     D r§mod           S             10A   based(ptrDummy)
-     D r§msgDta        S            512A   based(ptrDummy)
-     D r§msgID         S              7A   based(ptrDummy)
-     D r§msgType       S             10A   based(ptrDummy)
-     D r§option        S             10A   based(ptrDummy)
-     D r§mode          S             10A   based(ptrDummy)
-     D r§pinTabR       DS                  likeds(pinTabR_t)
-     D                                     based(ptrDummy)
-     D r§pgm           S             10A   based(ptrDummy)
-     D r§pgmCallN      S             21A   based(ptrDummy)
-     D r§pgmCmd        S             10A   based(ptrDummy)
-     D r§pgmCmdDt      S            256A   based(ptrDummy)
-     D r§proc          S            256A   based(ptrDummy)
-     D r§rcdBuf        S          32766A   based(ptrDummy)
-     D r§rcdBufUcs2    S          16383C   based(ptrDummy)
+      *
+     D r§mod           S             10A   template
+     D r§msgDta        S            512A   template
+     D r§msgID         S              7A   template
+     D r§msgType       S             10A   template
+     D r§option        S             10A   template
+     D r§mode          S             10A   template
+      *
+     D r§pinTabR       DS                  likeds(pinTabR_t) template
+      *
+     D r§pgm           S             10A   template
+     D r§pgmCallN      S             21A   template
+     D r§pgmCmd        S             10A   template
+     D r§pgmCmdDt      S            256A   template
+     D r§proc          S            256A   template
+     D r§rcdBuf        S          32766A   template
+     D r§rcdBufUcs2    S          16383C   template
+      *
      D rcdBuffer_t     DS                  qualified template
      D  sbcs                      32766A
-     D  ucs2                      16383C
-     D                                     overlay(sbcs)
+     D  ucs2                      16383C   overlay(sbcs)
+      *
      D §rcdBufLen      C                   const(32766)
-     D r§rcdNbr        S             10I 0 based(ptrDummy)
+     D r§rcdNbr        S             10I 0 template
      D r§nullMap       S              1S 0 dim(§nullMapSize)
      D §nullMapSize    C                   const(8000)
-     D r§scnAid        S             10A   based(ptrDummy)
+     D r§scnAid        S             10A   template
      D r§sqlOrder      S            512A   template
      D r§sqlWhere      S            512A   template
-     D r§sqlStmt       S           2000A   based(ptrDummy)
-     D r§user          S             10A   based(ptrDummy)
+     D r§sqlStmt       S           2000A   template
+     D r§user          S             10A   template
       *
-     D r§qObj          DS                  template
+     D r§qObj          DS                  qualified template
      D  name                         10A
      D  lib                          10A
       *
@@ -76,12 +78,12 @@
       *
       *  Feldinhalt für Text-/Hex-Editor
      D r§fldInhalt     DS                  qualified template
-     D  sbcs                               like(r§rcdBuf    )
+     D  sbcs                               like(r§rcdBuf)
      D  ucs2                               like(r§rcdBufUcs2)
      D                                     overlay(sbcs)
       *
       *  Verwaltung gepinnter Datensätze
-     D pinTabR_t       ds                  qualified based(pDummy)
+     D pinTabR_t       ds                  qualified template
      D  rcdNbr                       10i 0
      D  file                         10a
      D  lib                          10a
@@ -90,12 +92,12 @@
      D  mbrNbr                       10I 0
       *
       *  Integer & Binärwerte:
-     D r§int2          S              5I 0 based(ptrDummy)
-     D r§int4          S             10I 0 based(ptrDummy)
-     D r§uint4         S             10U 0 based(ptrDummy)
+     D r§int2          S              5I 0 template
+     D r§int4          S             10I 0 template
+     D r§uint4         S             10U 0 template
       *
       *  Feedback Code:
-     D r§fc            S             12A   based(ptrDummy)
+     D r§fc            S             12A   template
       *
       *  Lower/Upper case:
      D cLOWER          C                   'abcdefghijklmnopqrstuvwxyzäöüß'
