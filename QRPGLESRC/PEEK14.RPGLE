@@ -197,8 +197,8 @@
      D  i_lib                              const like(r§lib)
      D  i_mbr                              const like(r§mbr)
      D  i_rcdFmt                           const like(r§fmt)
-     D  i_function                         const like(r§option)
-     D  i_commitLVL                    N   const
+     D  i_function                         const like(r§function)
+     D  i_commitLVL                        const like(r§bool)
      D  io_screenNbr                             like(r§int4)
      D  o_msgID                                  like(r§msgId)
      D  o_msgDta                                 like(r§msgDta)
