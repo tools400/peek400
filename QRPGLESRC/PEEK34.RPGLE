@@ -124,23 +124,16 @@
       /COPY QCOPYLE,WRK0001
       *----------------------------------------------------*
       *
-     D yPgm            S             10A   inz
-     D yKey            S             10A   inz
-     D yPosF24         S                   like(r§int4    ) inz
      D yFKeys          S             18A   DIM(32)       INZ(*BLANKS)
      D yNbrOfKeys      S                   like(r§int4    ) inz
      D yMsgID          S              7A   INZ(*BLANKS)
      D yMsgDta         S            512A   INZ(*BLANKS)
       *
-     D YScnAID         S             10A   INZ(*BLANKS)
      D YPgmCmd         S             10A   INZ(*BLANKS)
      D YCmdDta         S                   LIKE(r§pgmCmdDt) INZ(*BLANKS)
       *
-     D YRcdNbr         S                   INZ(*ZEROS)  LIKE(R§RcdNbr)
-     D YBuffer         S           1024A   INZ(*BLANKS)
      D YField          S             10A   INZ(*BLANKS)
       *
-     D YDsp80          S              1A   INZ(*BLANKS)
      D YColorAttr      S              1A   INZ(*BLANKS)
       *
      D SflPage         S                   like(r§int4    ) inz
@@ -171,7 +164,6 @@
      D LstNbrRcd       S                   INZ(0) LIKE(SflPage)
       *
      D Wrk_SFSANR      S                   INZ(*ZEROS ) LIKE(SFSANR )
-     D X               S                   like(r§int4    ) inz
       *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
@@ -182,7 +174,7 @@
      D PEEK34          PI
      D  i_dsp80                            const like(r§dsp80)
      D  i_copyright                        const like(r§copyRght)
-     D  i_option                           const like(r§option)
+     D  i_function                         const like(r§option)
      D  o_msgID                                  like(r§msgID)
      D  o_msgDta                                 like(r§msgDta)
       *
@@ -1244,7 +1236,7 @@
       *
       * - Batchverarbeitung
      C                   SELECT
-     C     i_option      WHENEQ    '*FLOATKEYS'
+     C     i_function    WHENEQ    '*FLOATKEYS'
      C                   EXSR      C_FloatKey
      C                   EXSR      C_SaveExit
      C                   EVAL      IsBatch = bTrue
