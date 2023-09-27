@@ -44,6 +44,10 @@
       /COPY QCOPYLE,D_VARDEF
       *----------------------------------------------------*
       *
+      /define internal_prototype
+      /COPY QCOPYLE,PPEEK40
+      /undefine internal_prototype
+      *
       *---Variablendefinition ShortCmd---------------------*
       /COPY QCOPYLE,ShortCmd_D
       *----------------------------------------------------*
@@ -74,6 +78,12 @@
       /COPY QCOPYLE,SELL0100
       *----------------------------------------------------*
       *
+      /COPY QCOPYLE,PPEEK21
+      /COPY QCOPYLE,PPEEK23
+      /COPY QCOPYLE,PPEEK27
+      /COPY QCOPYLE,PPEEK39
+      /COPY QCOPYLE,PPEEK41
+      *
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
       *
@@ -85,21 +95,6 @@
       /COPY QCOPYLE,SCRNFKEYS
       *----------------------------------------------------*
       *
-     D XDsp80          S              1A
-     D XCopyRight      S            512A
-     D XFile           S             10A
-     D XLib            S             10A
-     D XMbr            S             10A
-     D XFmtName        S             10A
-     D XBasePhyF       S              1A
-     D XRetFile        S             10A
-     D XRetLib         S             10A
-     D XMsgID          S              7A
-     D XMsgDta         S            512A
-      *
-     D yPgm            S             10A   inz
-     D yKey            S             10A   inz
-     D yPosF24         S                   like(r§int4    ) inz
      D yFKeys          S             18A   DIM(32)       INZ(*BLANKS)
      D yNbrOfKeys      S                   like(r§int4    ) inz
      D yMsgID          S              7A   INZ(*BLANKS)
@@ -108,27 +103,21 @@
      D YChoice         S             75A   DIM(32)
      D YNbrOfCh        S                   like(r§int4    ) inz
       *
-     D YScnAID         S             10A   INZ(*BLANKS)
      D YPgmCmd         S             10A   INZ(*BLANKS)
      D YCmdDta         S                   LIKE(r§pgmCmdDt) INZ(*BLANKS)
       *
-     D                 DS
-     D YQFile                        20A   INZ(*BLANKS)
-     D  YFile                        10A   OVERLAY(YQFile: 1)
-     D  YLib                         10A   OVERLAY(YQFile:11)
+     D YQFile          DS                  likeds(r§qObj) inz
      D YMbr            S             10A   INZ(*BLANKS)
-     D YRcdFormat      S             10A   INZ(*BLANKS)
-     D YFunction       S             10A   INZ(*BLANKS)
-     D YNbrOfEnt       S                   like(r§int4    ) inz
      D YData           S            512A   INZ(*BLANKS)
       *
      D IsNewPos        S              1A   INZ(bFalse)
      D IsFound         S              1A   INZ(bFalse)
      D IsSflError      S              1A   INZ(bFalse)
       *
-     D NbrOfRel        S                   like(r§int4    ) inz
-     D NbrOfKey        S                   like(r§int4    ) inz
-     D NbrOfSel        S                   like(r§int4    ) inz
+     D rc              S                   like(r§int4    ) inz
+     D numRel          S                   like(r§int4    ) inz
+     D numKey          S                   like(r§int4    ) inz
+     D numSel          S                   like(r§int4    ) inz
       *
      D SflPage         S                   like(r§int4    ) inz
      D SfTop           S                   like(r§int4    ) inz
@@ -142,11 +131,11 @@
      D §UNIQUE         C                   CONST('*UNIQUE')
      D §CONSTR         C                   CONST('*CST')
       *
-     D PEEK21          S                   like(r§pgmCallN) inz
-     D PEEK23          S                   like(r§pgmCallN) inz
-     D PEEK27          S                   like(r§pgmCallN) inz
-     D PEEK39          S                   like(r§pgmCallN) inz
-     D PEEK41          S                   like(r§pgmCallN) inz
+     D PEEK21_NAME     S                   like(r§pgmCallN) inz
+     D PEEK23_NAME     S                   like(r§pgmCallN) inz
+     D PEEK27_NAME     S                   like(r§pgmCallN) inz
+     D PEEK39_NAME     S                   like(r§pgmCallN) inz
+     D PEEK41_NAME     S                   like(r§pgmCallN) inz
       *
      D R_File          S                   INZ(*BLANKS) LIKE(##File )
      D LstFile         S                   INZ(*BLANKS) LIKE(##File )
@@ -155,20 +144,19 @@
       *
      D Wrk_SFSANR      S                   INZ(*ZEROS ) LIKE(SFSANR )
       *
-     D X               S                   like(r§int4    ) inz
-      *
-     D                 DS
-     D  BufferTb               1   2000A   INZ(*BLANKS)  DIM(2000)
-     D  Buffer                 1   2000A
+     D Buffer          S           2000A
       *
      D strPos          S                   LIKE(r§uint4 ) inz
       *
-     D PFile           S                   INZ(*BLANKS)  LIKE(XFile)
-     D PLib            S                   INZ(*BLANKS)  LIKE(XLib )
-     D PMbr            S                   INZ(*BLANKS)  LIKE(XMbr )
-     D PFmtName        S                   INZ(*BLANKS)  LIKE(XFmtName)
+     D PFile           S                   INZ(*BLANKS)  LIKE(i_file)
+     D PLib            S                   INZ(*BLANKS)  LIKE(i_lib )
+     D PMbr            S                   INZ(*BLANKS)  LIKE(i_mbr )
+     D PFmtName        S                   INZ(*BLANKS)  LIKE(i_rcdFmt)
       *
      D FILD0100        DS                  likeds(FILD0100_t) inz
+     D KEYL0100        DS                  likeds(KEYL0100_t) inz
+     D DBRL0200        DS                  likeds(DBRL0200_t) inz
+     D SELL0100        DS                  likeds(SELL0100_t) inz
       *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
@@ -176,69 +164,23 @@
       *
       *---ENTRY-LISTE--------------------------------------*
       *
-     C     *ENTRY        PLIST
-     C                   PARM                    XDsp80
-     C                   PARM                    XCopyRight
-     C                   PARM                    XFile
-     C                   PARM                    XLib
-     C                   PARM                    XMbr
-     C                   PARM                    XFmtName
-     C                   PARM                    XBasePhyF
-     C                   PARM                    XRetFile
-     C                   PARM                    XRetLib
-     C                   PARM                    XMsgID
-     C                   PARM                    XMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK23
-     C     P_Peek23      PLIST
-     C                   PARM                    yPgm
-     C                   PARM                    yKey
-     C                   PARM                    yPosF24
-     C                   PARM                    yFKeys
-     C                   PARM                    yNbrOfKeys
-     C                   PARM                    yMsgID
-     C                   PARM                    yMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK21
-     C     P_Peek21      PLIST
-     C                   PARM                    YScnAID
-     C                   PARM                    YPgm
-     C                   PARM                    YPgmCmd
-     C                   PARM                    YCmdDta
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK27
-     C     P_Peek27      PLIST
-     C                   PARM                    YPgm
-     C                   PARM                    YChoice
-     C                   PARM                    YNbrOfCh
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK39
-     C     P_Peek39      PLIST
-     C                   PARM                    YQFile
-     C                   PARM                    YMbr
-     C                   PARM                    YFunction
-     C                   PARM                    YNbrOfEnt
-     C                   PARM                    YData
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK41
-     C     P_Peek41      PLIST
-     C                   PARM                    YQFile
-     C                   PARM                    YRcdFormat
-     C                   PARM                    YFunction
-     C                   PARM                    YNbrOfEnt
-     C                   PARM                    YData
+     D PEEK40          PI
+     D  i_dsp80                            const like(r§dsp80)
+     D  i_copyright                        const like(r§copyRght)
+     D  i_file                             const like(r§file)
+     D  i_lib                              const like(r§lib)
+     D  i_mbr                              const like(r§mbr)
+     D  i_rcdFmt                           const like(r§fmt)
+     D  i_basePhyF                         const like(r§bool)
+     D  o_file                                   like(r§file)
+     D  o_lib                                    like(r§lib)
+     D  o_msgID                                  like(r§msgID)
+     D  o_msgDta                                 like(r§msgDta)
       *
       *---------------------------------------------------*
       *
      C                   EXSR      FIRST
-     C     XMsgID        IFNE      *BLANKS
+     C     o_msgID       IFNE      *BLANKS
      C                   GOTO      ENDE
      C                   Endif
       *
@@ -330,9 +272,8 @@
       *
       *  Mappen der gedrückten Taste
       *  in Programmbefehl
-     C                   EVAL      YScnAID = §ScnAID
-     C                   EVAL      YPgm = §§PgmName
-     C                   CALL      PEEK21        P_Peek21
+     C                   CALLP     PEEK21(§ScnAID: §§PgmName
+     C                                    : YPgmCmd: YCmdDta: YMsgID: YMsgDta)
      C     YMsgID        IFNE      *BLANKS
      C                   EVAL      §MsgID = YMsgID
      C                   EVAL      §MsgDta = YMsgDta
@@ -383,7 +324,7 @@
       *  Datenfreigabe
      C     YPgmCmd       WHENEQ    '*ENTER'
      C                   EXSR      C_Enter
-     C     XRetFile      IFEQ      *BLANKS
+     C     o_file        IFEQ      *BLANKS
       *  ... keine Auswahl getroffen, weiter machen
      C                   ELSE
      C                   LEAVE
@@ -588,9 +529,8 @@
      C                   EVAL      SFPAU = %triml(SFPAU)
       *
       *  Zuordnung AUSWAHL => Befehl ...
-     C                   EVAL      YScnAID = '#' + SFPAU
-     C                   EVAL      YPgm = §§PgmName
-     C                   CALL      PEEK21        P_Peek21
+     C                   CALLP     PEEK21('#' + SFPAU: §§PgmName
+     C                                    : YPgmCmd: YCmdDta: YMsgID: YMsgDta)
      C     YMsgID        IFNE      *BLANKS
       *  Fehlermeldung ...
      C                   EVAL      §MsgID = 'USR8110'
@@ -644,9 +584,9 @@
       *
      C                   Callp     p_rmvPgmMg(§§pgmName)
       *
-     C                   EVAL      XMsgID = 'USR8100'
+     C                   EVAL      o_msgID = 'USR8100'
      C                   EVAL      USR81001 = YPgmCmd
-     C                   EVAL      XMsgDta = USR8100
+     C                   EVAL      o_msgDta = USR8100
       *
      C                   ENDSR
       *
@@ -712,8 +652,8 @@
       *
      C     VPos          BEGSR
       *
-     C                   EVAL      XRetFile = H$File
-     C                   EVAL      XRetLib = H$Lib
+     C                   EVAL      o_file = H$File
+     C                   EVAL      o_lib = H$Lib
       *
      C                   ENDSR
       *
@@ -791,19 +731,16 @@
       *
      C     PBReadUP      BEGSR
       *
-     C     1             DO        NbrOfRel
+     C     1             DO        numRel
       *
-     C                   EVAL      YFunction = '*READ'
-     C                   CALL      PEEK39        P_Peek39
+     C                   CALLP     PEEK39(YQFile: YMbr
+     C                                    : '*READ': rc: DBRL0200)
       *
-      *  Daten in lesbare Struktur umsetzen ...
-     C                   EVAL      DBRL0200 = YData
-      *
-     C     B2DepFile     IFEQ      '*NONE'
+     C                   IF        (DBRL0200.B2DepFile = '*NONE')
      C                   ITER
      C                   Endif
       *
-     C     B2DepType     IFNE      'D'
+     C                   IF        (DBRL0200.B2DepType <> 'D')
      C                   ITER
      C                   Endif
       *
@@ -812,8 +749,8 @@
       *  Bei erstem Datensatz, ...
      C     *IN80         IFEQ      '0'
       *  ... die physische Datei anzeigen
-     C                   EVAL      H$File = B2FNmeUsed
-     C                   EVAL      H$Lib = B2LNmeUsed
+     C                   EVAL      H$File = DBRL0200.B2FNmeUsed
+     C                   EVAL      H$Lib = DBRL0200.B2LNmeUsed
       ***                EXSR      StatMsg
      C                   EXSR      PBFill
      C                   EXSR      PBFillKey
@@ -821,8 +758,8 @@
      C                   Endif
       *
       *  Anzeigen der logischen Sichten
-     C                   EVAL      H$File = B2DepFile
-     C                   EVAL      H$Lib = B2DepLib
+     C                   EVAL      H$File = DBRL0200.B2DepFile
+     C                   EVAL      H$Lib = DBRL0200.B2DepLib
       ***                EXSR      StatMsg
      C                   EXSR      PBFill
      C                   EXSR      PBFillKey
@@ -833,9 +770,9 @@
      C     *IN80         IFEQ      '0'
       *  ... die physische Datei anzeigen
      C                   Clear                   DBRL0200
-     C                   EVAL      H$File = xFile
-     C                   EVAL      H$Lib = xLib
-     C                   EVAL      B2LNmeUsed = xLib
+     C                   EVAL      H$File = i_file
+     C                   EVAL      H$Lib = i_lib
+     C                   EVAL      DBRL0200.B2LNmeUsed = i_lib
       ***                EXSR      StatMsg
      C                   EXSR      PBFill
      C                   EXSR      PBFillKey
@@ -891,22 +828,21 @@
      C                   EVAL      *IN71 = '0'
       *
       *  Abhängigkeit prüfen ...
-     C     B2LNmeUsed    IFEQ      H$Lib
-     C     *IN80         OREQ      '0'
+     C                   IF        (DBRL0200.B2LNmeUsed = H$Lib or
+     C                              *IN80 = '0')
      C                   EVAL      *IN20 = '0'
      C                   ELSE
      C                   EVAL      *IN20 = '1'
      C                   Endif
       *
       *  Einlesen der Dateiinformationen ...
-     C                   EVAL      YFile = H$File
-     C                   EVAL      YLib = H$Lib
-     C                   EVAL      YRcdFormat = '*FIRST'
-     C                   EVAL      YFunction = '*CREATE'
-     C                   CALL      PEEK41        P_Peek41
+     C                   EVAL      yQFile.name = H$File
+     C                   EVAL      yQFile.lib = H$Lib
+     C                   CALLP     PEEK41(YQFile
+     C                                    : '*FIRST': '*CREATE': rc: YData)
       *  ... Bezeichnung
-     C                   EVAL      YFunction = '*READTEXT'
-     C                   CALL      PEEK41        P_Peek41
+     C                   CALLP     PEEK41(YQFile
+     C                                    : '*FIRST': '*READTEXT': rc: YData)
      C                   EVAL      $$FTXT = YData
       *
       *  Schreiben der Subfile ...
@@ -924,33 +860,32 @@
      C                   EVAL      *IN71 = '1'
       *
       *  Einlesen der Schlüsselinformationen ...
-     C                   EVAL      YFunction = '*KEY'
-     C                   CALL      PEEK41        P_Peek41
-     C                   EVAL      NbrOfKey = YNbrOfEnt
+     C                   CALLP     PEEK41(YQFile
+     C                                    : '*FIRST': '*KEY': numKey: YData)
       *
      C                   EVAL      Buffer = *BLANKS
       *
-     C     1             DO        NbrOfKey
-     C                   EVAL      YFunction = '*READKEY'
-     C                   CALL      PEEK41        P_Peek41
+     C     1             DO        numKey
+     C                   CALLP     PEEK41(YQFile
+     C                                    : '*FIRST': '*READKEY': rc: YData)
      C                   EVAL      KEYL0100 = YData
       *
-     C     APKSEQ        IFEQ      'D'
+     C                   IF        (KEYL0100.APKSEQ = 'D')
      C                   EVAL      Buffer = %trimr(Buffer) + §White
      C                   ELSE
      C                   Eval      Buffer = %trimr(Buffer) + §Green
      C                   Endif
       *
-     C                   Eval      Buffer = %trimr(Buffer) + APKEYF
+     C                   Eval      Buffer = %trimr(Buffer) + KEYL0100.APKEYF
      C                   Enddo
       *
-     C     NbrOfKey      IFGE      1
-     C     APUNIQ        ANDEQ     'Y'
+     C                   IF        (numKey >= 1 and
+     C                              KEYL0100.APUNIQ = 'Y')
      C                   Eval      Buffer = %trimr(Buffer) + §White + §UNIQUE
      C                   Endif
       *
      C                   SELECT
-     C     B2DepType     WHENEQ    'C'
+     C                   WHEN      (DBRL0200.B2DepType = 'C')
      C                   Eval      Buffer = %trimr(Buffer) + §White + §CONSTR
      C                   OTHER
      C                   Endsl
@@ -982,33 +917,34 @@
      C                   EVAL      *IN71 = '1'
       *
       *  Einlesen der Select/Omit Informationen ...
-     C                   EVAL      YFunction = '*SELECT'
-     C                   CALL      PEEK41        P_Peek41
-     C                   EVAL      NbrOfSel = YNbrOfEnt
+     C                   CALLP     PEEK41(YQFile
+     C                                    : '*FIRST': '*SELECT': numSel: YData)
       *
-     C     1             DO        NbrOfSel
-     C                   EVAL      YFunction = '*READSEL'
-     C                   CALL      PEEK41        P_Peek41
+     C     1             DO        numSel
+     C                   CALLP     PEEK41(YQFile
+     C                                    : '*FIRST': '*READSEL': rc: YData)
      C                   EVAL      SELL0100 = YData
       *
       *  Wenn das Ende der Liste rreicht ist, ...
-     C     SOCOMP        IFEQ      'AL'
+     C                   if        (SELL0100.SOCOMP = 'AL')
       *  ... dann den Eintrag überlesen
      C                   ELSE
       *  ... ansonsten den Eintrag aufbereiten und anzeigen
      C                   SELECT
-     C     SORULE        WHENEQ    'S'
+     C                   WHEN      (SELL0100.SORULE = 'S')
      C                   Eval      Buffer = §White + '*SELECT'
-     C     SORULE        WHENEQ    'O'
+     C                   WHEN      (SELL0100.SORULE = 'O')
      C                   Eval      Buffer = §White + '*OMIT'
      C                   OTHER
      C                   EVAL      Buffer = §White
      C                   Endsl
       *
-     C                   Eval      %subst(Buffer: 10: %len(SOFLD)) = SOFLD
-     C                   Eval      %subst(Buffer: 21: %len(SOCOMP)) = SOCOMP
-     C                   Eval      Buffer =
-     C                               %trimr(Buffer) + ' ' + SOVALU + §Green
+     C                   Eval      %subst(Buffer: 10: %len(SELL0100.SOFLD)) =
+     C                               SELL0100.SOFLD
+     C                   Eval      %subst(Buffer: 21: %len(SELL0100.SOCOMP)) =
+     C                               SELL0100.SOCOMP
+     C                   Eval      Buffer = %trimr(Buffer) + ' ' +
+     C                                      SELL0100.SOVALU + §Green
      C                   EVAL      $$FTXT = Buffer
       *  Schreiben der Subfile ...
      C                   EXSR      PbWrite
@@ -1051,8 +987,8 @@
      C                   WRITE     PBSfl
      C                   EVAL      SflNbrRcd = SflRec
       *
-     C     H$File        IFEQ      XFile
-     C     H$Lib         ANDEQ     XLib
+     C     H$File        IFEQ      i_file
+     C     H$Lib         ANDEQ     i_lib
      C     *IN71         ANDEQ     '0'
      C                   EVAL      SFSANR = SflRec
      C                   Endif
@@ -1065,13 +1001,12 @@
       *
      C     PBSetLL       BEGSR
       *
-     C                   EVAL      YFile = PFile
-     C                   EVAL      YLib = PLib
+     C                   EVAL      yQFile.name = PFile
+     C                   EVAL      yQFile.lib = PLib
      C                   EVAL      YMbr = PMbr
-     C                   EVAL      YFunction = '*CREATE'
-     C                   CALL      PEEK39        P_Peek39
       *
-     C                   EVAL      NbrOfRel = YNbrOfEnt
+     C                   CALLP     PEEK39(YQFile: YMbr
+     C                                    : '*CREATE': numRel: DBRL0200)
       *
      C                   ENDSR
       *
@@ -1081,7 +1016,7 @@
       *
      C     SetScreen     BEGSR
       *
-     C     XDsp80        IFEQ      '0'
+     C     i_dsp80       IFEQ      '0'
       *   132-Zeichen Anzeige
      C                   EVAL      *IN88 = '0'
      C                   EVAL      ZEI = 2
@@ -1114,45 +1049,44 @@
      C                   EVAL      R_File = ##File
       *
       * - Rückkehrcode
-     C                   EVAL      XRetFile = *BLANKS
-     C                   EVAL      XRetLib = *BLANKS
-     C                   EVAL      XMsgID = *BLANKS
-     C                   EVAL      XMsgDta = *BLANKS
+     C                   EVAL      o_file = *BLANKS
+     C                   EVAL      o_lib = *BLANKS
+     C                   EVAL      o_msgID = *BLANKS
+     C                   EVAL      o_msgDta = *BLANKS
       *
       * - Dateityp feststellen
-     C                   EVAL      PFile = XFile
-     C                   EVAL      PLib = XLib
-     C                   EVAL      PMbr = XMbr
-     C                   EVAL      PFmtName = XFmtName
+     C                   EVAL      PFile = i_file
+     C                   EVAL      PLib = i_lib
+     C                   EVAL      PMbr = i_mbr
+     C                   EVAL      PFmtName = i_rcdFmt
       *
       *   ... Einlesen der Dateiinformationen
-     C                   EVAL      YFile = PFile
-     C                   EVAL      YLib = PLib
-     C                   EVAL      YRcdFormat = PFmtName
-     C                   EVAL      YFunction = '*CREATE'
-     C                   CALL      PEEK41        P_Peek41
+     C                   EVAL      yQFile.name = PFile
+     C                   EVAL      yQFile.lib = PLib
+     C                   CALLP     PEEK41(YQFile
+     C                                    : PFmtName: '*CREATE': rc: YData)
       *
-     C     YNbrOfEnt     IFEQ      *ZEROS
+     C     rc            IFEQ      *ZEROS
       *       ... Fehler
-     C                   EVAL      XMsgID = 'USR0008'
+     C                   EVAL      o_msgID = 'USR0008'
      C                   CLEAR                   USR0008
-     C                   EVAL      USR00081 = YFile
-     C                   EVAL      USR00082 = YLib
-     C                   EVAL      XMsgDta = USR0008
+     C                   EVAL      USR00081 = yQFile.name
+     C                   EVAL      USR00082 = yQFile.lib
+     C                   EVAL      o_msgDta = USR0008
      C                   ELSE
       *       ... kein Fehler
      C                   EVAL      FILD0100 = YData
      C                   IF        FILD0100.ATFILA = '*LGL'
       *           ... logical file
-     C                   EVAL      YFunction = '*BASED-ON'
-     C                   CALL      PEEK41        P_Peek41
-     C     YNbrOfEnt     IFEQ      *ZEROS
+     C                   CALLP     PEEK41(YQFile
+     C                                    : PFmtName: '*BASED-ON': rc: YData)
+     C     rc            IFEQ      *ZEROS
       *               ... Fehler
-     C                   EVAL      USR00081 = YFile
-     C                   EVAL      USR00082 = YLib
-     C                   EVAL      XMsgDta = USR0008
+     C                   EVAL      USR00081 = yQFile.name
+     C                   EVAL      USR00082 = yQFile.lib
+     C                   EVAL      o_msgDta = USR0008
      C                   ELSE
-     C     XBasePhyF     IFEQ      bTrue
+     C     i_basePhyF    IFEQ      bTrue
       *                   ... based-on
      C                   EVAL      PFile = %subst(YData: 1: 10)
      C                   EVAL      PLib  = %subst(YData: 11: 10)
@@ -1166,7 +1100,7 @@
      C                   Endif
      C                   Endif
       *
-     C     XMsgID        IFNE      *BLANKS
+     C     o_msgID       IFNE      *BLANKS
       *   ... Fehler
      C                   ELSE
       *
@@ -1188,7 +1122,7 @@
       *
       * - Copyright
      C                   EVAL      §MsgID = 'USR9999'
-     C                   EVAL      §MsgDta = XCopyRight
+     C                   EVAL      §MsgDta = i_copyright
      C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
      C                   Endif
       *
@@ -1202,20 +1136,17 @@
       *
      C                   Eval      §PgmQ = '*'
       *
-     C                   Eval      PEEK21 = f_pgmCallN('PEEK21')
-     C                   Eval      PEEK23 = f_pgmCallN('PEEK23')
-     C                   Eval      PEEK27 = f_pgmCallN('PEEK27')
-     C                   Eval      PEEK39 = f_pgmCallN('PEEK39')
-     C                   Eval      PEEK41 = f_pgmCallN('PEEK41')
+     C                   Eval      PEEK21_NAME = f_pgmCallN('PEEK21')
+     C                   Eval      PEEK23_NAME = f_pgmCallN('PEEK23')
+     C                   Eval      PEEK27_NAME = f_pgmCallN('PEEK27')
+     C                   Eval      PEEK39_NAME = f_pgmCallN('PEEK39')
+     C                   Eval      PEEK41_NAME = f_pgmCallN('PEEK41')
       *
-     C                   Eval      yPgm    = §§PgmName
-     C                   Eval      yKey    = '*ALL'
-     C                   Eval      yPosF24 = *ZEROS
-     C                   Call      PEEK23        P_Peek23
+     C                   Callp     PEEK23(§§PgmName: '*ALL': 0
+     C                                    : yFKeys: yNbrOfKeys)
      C                   Eval      ScrnFKeys = %subarr(YFKeys: 1)
       *
-     C                   Eval      yPgm    = §§PgmName
-     C                   Call      PEEK27        P_Peek27
+     C                   Callp     PEEK27(§§PgmName: YChoice: YNbrOfCh)
       *
      C                   Endsr
       *

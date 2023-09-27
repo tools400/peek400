@@ -36,6 +36,10 @@
       /COPY QCOPYLE,FLDL0100
       *----------------------------------------------------*
       *
+      /define internal_prototype
+      /COPY QCOPYLE,PPEEK21
+      /undefine internal_prototype
+      *
       *---Variablendefinition ShortCmd---------------------*
       /COPY QCOPYLE,ShortCmd_D
       *----------------------------------------------------*
@@ -55,15 +59,6 @@
       *----------------------------------------------------*
       *  F E L D - D E F I N I T I O N E N                 *
       *----------------------------------------------------*
-      *
-     D XScnAID         DS            10
-     D XScnAID_1               1      1A
-     D XPgm            S             10A
-     D XPgmCmd         S             10A
-     D XCmdDta         S                   LIKE(r§pgmCmdDt)
-     D XMsgID          S              7A
-     D XMsgDta         S            512A
-     D XExclKeys       S                   like(r§pgmCmd  ) DIM(25)
       *
      D Wrk_EOF         S              1A   INZ(bFalse)
       *
@@ -114,14 +109,15 @@
       *
       *---ENTRY-LISTE--------------------------------------*
       *
-     C     *ENTRY        PLIST
-     C                   PARM                    XScnAID
-     C                   PARM                    XPgm
-     C                   PARM                    XPgmCmd
-     C                   PARM                    XCmdDta
-     C                   PARM                    XMsgID
-     C                   PARM                    XMsgDta
-     C                   PARM                    XExclKeys
+     D PEEK21          PI
+     D  i_scnAID                           const like(r§scnAid)
+     D  i_pgm                              const like(r§pgm)
+     D  o_pgmCmd                                 like(r§pgmCmd)
+     D  o_cmdDta                                 like(r§pgmCmdDt)
+     D  o_msgID                                  like(r§msgID)
+     D  o_msgDta                                 like(r§msgDta)
+     D  i_exclKeys                         const like(r§pgmCmd) dim(25)
+     D                                           options(*nopass)
       *
       *---------------------------------------------------*
       *
@@ -129,7 +125,7 @@
       *
      C                   EVAL      Wrk_Key = *BLANKS
       *
-     C     XScnAID_1     IFEQ      '#'
+     C                   if        (%subst(i_scnAID: 1: 1) = '#')
      C                   EXSR      MapSflOpt
      C                   ELSE
      C                   EXSR      MapCmdKey
@@ -146,10 +142,10 @@
      C     MapSflOpt     BEGSR
       *
      C**                 SUBST (P) XscnAID:2     Wrk_Key
-     C                   EVAL      Wrk_Key = %subst(XscnAID: 2)
+     C                   EVAL      Wrk_Key = %subst(i_scnAID: 2)
       *
       *   Übersetzen key code vor dem Mapping:
-     C                   CALLP     callExit05(xPgm: '*OPTION': Wrk_Key)
+     C                   CALLP     callExit05(i_pgm: '*OPTION': Wrk_Key)
       *
      C                   EXSR      MapUsrInp
       *
@@ -163,103 +159,103 @@
       *
      C                   SELECT
       *  F1
-     C     XScnAID       WHENEQ    §F1
+     C     i_scnAID      WHENEQ    §F1
      C                   EVAL      Wrk_Key = '*F01'
       *  F2
-     C     XScnAID       WHENEQ    §F2
+     C     i_scnAID      WHENEQ    §F2
      C                   EVAL      Wrk_Key = '*F02'
       *  F3
-     C     XScnAID       WHENEQ    §F3
+     C     i_scnAID      WHENEQ    §F3
      C                   EVAL      Wrk_Key = '*F03'
       *  F4
-     C     XScnAID       WHENEQ    §F4
+     C     i_scnAID      WHENEQ    §F4
      C                   EVAL      Wrk_Key = '*F04'
       *  F5
-     C     XScnAID       WHENEQ    §F5
+     C     i_scnAID      WHENEQ    §F5
      C                   EVAL      Wrk_Key = '*F05'
       *  F6
-     C     XScnAID       WHENEQ    §F6
+     C     i_scnAID      WHENEQ    §F6
      C                   EVAL      Wrk_Key = '*F06'
       *  F7
-     C     XScnAID       WHENEQ    §F7
+     C     i_scnAID      WHENEQ    §F7
      C                   EVAL      Wrk_Key = '*F07'
       *  F8
-     C     XScnAID       WHENEQ    §F8
+     C     i_scnAID      WHENEQ    §F8
      C                   EVAL      Wrk_Key = '*F08'
       *  F9
-     C     XScnAID       WHENEQ    §F9
+     C     i_scnAID      WHENEQ    §F9
      C                   EVAL      Wrk_Key = '*F09'
       *  F10
-     C     XScnAID       WHENEQ    §F10
+     C     i_scnAID      WHENEQ    §F10
      C                   EVAL      Wrk_Key = '*F10'
       *  F11
-     C     XScnAID       WHENEQ    §F11
+     C     i_scnAID      WHENEQ    §F11
      C                   EVAL      Wrk_Key = '*F11'
       *  F12
-     C     XScnAID       WHENEQ    §F12
+     C     i_scnAID      WHENEQ    §F12
      C                   EVAL      Wrk_Key = '*F12'
       *  F13
-     C     XScnAID       WHENEQ    §F13
+     C     i_scnAID      WHENEQ    §F13
      C                   EVAL      Wrk_Key = '*F13'
       *  F14
-     C     XScnAID       WHENEQ    §F14
+     C     i_scnAID      WHENEQ    §F14
      C                   EVAL      Wrk_Key = '*F14'
       *  F15
-     C     XScnAID       WHENEQ    §F15
+     C     i_scnAID      WHENEQ    §F15
      C                   EVAL      Wrk_Key = '*F15'
       *  F16
-     C     XScnAID       WHENEQ    §F16
+     C     i_scnAID      WHENEQ    §F16
      C                   EVAL      Wrk_Key = '*F16'
       *  F17
-     C     XScnAID       WHENEQ    §F17
+     C     i_scnAID      WHENEQ    §F17
      C                   EVAL      Wrk_Key = '*F17'
       *  F18
-     C     XScnAID       WHENEQ    §F18
+     C     i_scnAID      WHENEQ    §F18
      C                   EVAL      Wrk_Key = '*F18'
       *  F19
-     C     XScnAID       WHENEQ    §F19
+     C     i_scnAID      WHENEQ    §F19
      C                   EVAL      Wrk_Key = '*F19'
       *  F20
-     C     XScnAID       WHENEQ    §F20
+     C     i_scnAID      WHENEQ    §F20
      C                   EVAL      Wrk_Key = '*F20'
       *  F21
-     C     XScnAID       WHENEQ    §F21
+     C     i_scnAID      WHENEQ    §F21
      C                   EVAL      Wrk_Key = '*F21'
       *  F22
-     C     XScnAID       WHENEQ    §F22
+     C     i_scnAID      WHENEQ    §F22
      C                   EVAL      Wrk_Key = '*F22'
       *  F23
-     C     XScnAID       WHENEQ    §F23
+     C     i_scnAID      WHENEQ    §F23
      C                   EVAL      Wrk_Key = '*F23'
       *  F24
-     C     XScnAID       WHENEQ    §F24
+     C     i_scnAID      WHENEQ    §F24
      C                   EVAL      Wrk_Key = '*F24'
       *  Clear
-     C     XScnAID       WHENEQ    §Clear
+     C     i_scnAID      WHENEQ    §Clear
      C                   EVAL      Wrk_Key = '*CLEAR'
       *  Delete
-     C     XScnAID       WHENEQ    §Delete
+     C     i_scnAID      WHENEQ    §Delete
      C                   EVAL      Wrk_Key = '*DELETE'
       *  Datenfreigabe
-     C     XScnAID       WHENEQ    §ENTER
+     C     i_scnAID      WHENEQ    §ENTER
      C                   EVAL      Wrk_Key = '*ENTER'
       *  Hilfe
-     C     XScnAID       WHENEQ    §Help
+     C     i_scnAID      WHENEQ    §Help
      C                   EVAL      Wrk_Key = '*HELP'
       *  Page down
-     C     XScnAID       WHENEQ    §PageDown
+     C     i_scnAID      WHENEQ    §PageDown
      C                   EVAL      Wrk_Key = '*PAGEDOWN'
       *  Page up
-     C     XScnAID       WHENEQ    §PageUp
+     C     i_scnAID      WHENEQ    §PageUp
      C                   EVAL      Wrk_Key = '*PAGEUP'
       *  Print screen
-     C     XScnAID       WHENEQ    §PrintScn
+     C     i_scnAID      WHENEQ    §PrintScn
      C                   EVAL      Wrk_Key = '*PRINT'
       *  Reset
-     C     XScnAID       WHENEQ    §Reset
+     C     i_scnAID      WHENEQ    §Reset
      C                   EVAL      Wrk_Key = '*RESET'
       *  Light pen
-     C     XScnAID       WHENEQ    §LightPen
+     C     i_scnAID      WHENEQ    §LightPen
      C                   EVAL      Wrk_Key = '*LIGHTPEN'
       *
      C                   OTHER
@@ -267,7 +263,7 @@
       *  muß unbekannte HEX-Wert einer
       *  unbekannten Taste sein.
      C                   EVAL      Wrk_Key = *BLANKS
-     C                   Callp     p_keyToMsg(xScnAID: xMsgID: xMsgDta)
+     C                   Callp     p_keyToMsg(i_scnAID: o_msgID: o_msgDta)
      C                   Endsl
       *
      C                   IF        Wrk_Key = ''
@@ -275,7 +271,7 @@
      C                   ENDIF
       *
       *   Übersetzen key code vor dem Mapping:
-     C                   CALLP     callExit05(xPgm: '*CMDKEY': Wrk_Key)
+     C                   CALLP     callExit05(i_pgm: '*CMDKEY': Wrk_Key)
       *
      C                   EXSR      MapUsrInp
       *
@@ -288,7 +284,7 @@
      C     MapUsrInp     BEGSR
       *
       *   Übersetzen ...
-     C                   EVAL      Wrk_Sectn = '*' + %trim(XPgm)
+     C                   EVAL      Wrk_Sectn = '*' + %trim(i_pgm)
      C                   IF        f_chainUsr(Wrk_Sectn :
      C                                        Wrk_Key   :
      C                                        Wrk_Data  ) = '0'   and
@@ -296,40 +292,40 @@
      C                                        Wrk_ExclK )= '0'
       *
       *   Übersetzen key code nach dem Mapping:
-     C                   CALLP     callExit05(xPgm: '*EVENT': Wrk_Data)
+     C                   CALLP     callExit05(i_pgm: '*EVENT': Wrk_Data)
       *
-     C                   EVAL      XPgmCmd = Wrk_Data
-     C                   EVAL      XCmdDta = *BLANKS
-     C                   EVAL      XMsgID = *BLANKS
-     C                   EVAL      XMsgDta = *BLANKS
+     C                   EVAL      o_pgmCmd = Wrk_Data
+     C                   EVAL      o_cmdDta = *BLANKS
+     C                   EVAL      o_msgID = *BLANKS
+     C                   EVAL      o_msgDta = *BLANKS
      C                   ELSE
       *
       *   Übersetzen key code nach dem Mapping:
-     C                   CALLP     callExit05(xPgm: '*USROPT': Wrk_Key)
+     C                   CALLP     callExit05(i_pgm: '*USROPT': Wrk_Key)
       *
       *   Prüfen auf Kurzbefehl ...
      C                   EVAL      Wrk_Sectn = '*CMD'
      C                   IF        f_chainUsr(Wrk_Sectn: Wrk_Key: Wrk_Data)='0'
-     C                   EVAL      XPgmCmd = '*CMD'
-     C                   EVAL      XCmdDta = Wrk_Data
-     C                   EVAL      XMsgID = *BLANKS
-     C                   EVAL      XMsgDta = *BLANKS
+     C                   EVAL      o_pgmCmd = '*CMD'
+     C                   EVAL      o_cmdDta = Wrk_Data
+     C                   EVAL      o_msgID = *BLANKS
+     C                   EVAL      o_msgDta = *BLANKS
      C                   ELSE
       *
      C                   EXSR      ChkEntry
       *  Wenn Tasten definiert sind,
       *  Dann Fehlermeldung ausgeben ...
      C     Wrk_EOF       IFEQ      bFalse
-     C                   EVAL      XPgmCmd = *BLANKS
-     C                   EVAL      XCmdDta = *BLANKS
-     C                   EVAL      XMsgID = 'USR8143'
+     C                   EVAL      o_pgmCmd = *BLANKS
+     C                   EVAL      o_cmdDta = *BLANKS
+     C                   EVAL      o_msgID = 'USR8143'
      C                   EVAL      USR81431 = Wrk_Key
-     C                   EVAL      XMsgDta = USR8143
+     C                   EVAL      o_msgDta = USR8143
      C                   ELSE
-     C                   EVAL      XPgmCmd = '*EXIT'
-     C                   EVAL      XCmdDta = *BLANKS
-     C                   EVAL      XMsgID = *BLANKS
-     C                   EVAL      XMsgDta = *BLANKS
+     C                   EVAL      o_pgmCmd = '*EXIT'
+     C                   EVAL      o_cmdDta = *BLANKS
+     C                   EVAL      o_msgID = *BLANKS
+     C                   EVAL      o_msgDta = *BLANKS
      C                   Endif
      C                   Endif
      C                   Endif
@@ -343,7 +339,7 @@
      C     ChkEntry      BEGSR
       *
       *   Prüfen ...
-     C                   EVAL      Wrk_Sectn = '*' + %trim(XPgm)
+     C                   EVAL      Wrk_Sectn = '*' + %trim(i_pgm)
      C                   Callp     p_setllUsr(Wrk_Sectn: '*F01')
      C                   IF        f_readeUsr(Wrk_Sectn: Tmp_Key) = '1'
      C                   EVAL      Wrk_EOF = bTrue
@@ -367,12 +363,12 @@
       * - Programm initialisieren
       ***                Callp     p_rmvPgmMg(§§pgmName)
       *
-     C                   EVAL      XMsgID = *BLANKS
-     C                   EVAL      XMsgDta = *BLANKS
+     C                   EVAL      o_msgID = *BLANKS
+     C                   EVAL      o_msgDta = *BLANKS
       *   Prüfen auf Ausschlüsse ...
       *   Prüfen auf Ausschlüsse ...
-     C                   IF        %parms >= 7
-     C                   EVAL      Wrk_ExclK = %subarr(XExclKeys: 1)
+     C                   IF        %parms() >= %parmnum(i_exclKeys)
+     C                   EVAL      Wrk_ExclK = %subarr(i_exclKeys: 1)
      C                   ELSE
      C                   EVAL      Wrk_ExclK(*) = ''
      C                   ENDIF

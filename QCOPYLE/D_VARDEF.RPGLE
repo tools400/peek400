@@ -5,6 +5,11 @@
       *===============================================================*
       *
       *  Referenzfelder:
+     D r§choice        S             75A   template
+     D r§headerType    S             10A   based(ptrDummy)
+     D r§attr          S             10A   based(ptrDummy)
+     D r§attrType      S              1A   based(ptrDummy)
+     D r§attrValue     S            512A   based(ptrDummy)
      D r§accMode       S              1A   based(ptrDummy)
      D r§bool          S              1A   based(ptrDummy)
      D r§cmdBuffer     S          32702A   based(pDummy  )
@@ -34,6 +39,7 @@
      D r§msgID         S              7A   based(ptrDummy)
      D r§msgType       S             10A   based(ptrDummy)
      D r§option        S             10A   based(ptrDummy)
+     D r§mode          S             10A   based(ptrDummy)
      D r§pinTabR       DS                  likeds(pinTabR_t)
      D                                     based(ptrDummy)
      D r§pgm           S             10A   based(ptrDummy)
@@ -43,16 +49,36 @@
      D r§proc          S            256A   based(ptrDummy)
      D r§rcdBuf        S          32766A   based(ptrDummy)
      D r§rcdBufUcs2    S          16383C   based(ptrDummy)
+     D rcdBuffer_t     DS                  qualified template
+     D  sbcs                      32766A
+     D  ucs2                      16383C
+     D                                     overlay(sbcs)
      D §rcdBufLen      C                   const(32766)
      D r§rcdNbr        S             10I 0 based(ptrDummy)
      D r§nullMap       S              1S 0 dim(§nullMapSize)
      D §nullMapSize    C                   const(8000)
      D r§scnAid        S             10A   based(ptrDummy)
+     D r§sqlOrder      S            512A   template
+     D r§sqlWhere      S            512A   template
      D r§sqlStmt       S           2000A   based(ptrDummy)
      D r§user          S             10A   based(ptrDummy)
-     D r§qObj          DS                  based(ptrDummy)
+      *
+     D r§qObj          DS                  template
      D  name                         10A
      D  lib                          10A
+      *
+     D errCode_t       DS                  qualified template
+     D  bytPrv                       10I 0
+     D  bytAvl                       10I 0
+     D  excID                         7A
+     D  errRes_01                     1A
+     D  excDta                      256A
+      *
+      *  Feldinhalt für Text-/Hex-Editor
+     D r§fldInhalt     DS                  qualified template
+     D  sbcs                               like(r§rcdBuf    )
+     D  ucs2                               like(r§rcdBufUcs2)
+     D                                     overlay(sbcs)
       *
       *  Verwaltung gepinnter Datensätze
      D pinTabR_t       ds                  qualified based(pDummy)
@@ -79,7 +105,9 @@
      D §LowRcdNbr      C                   CONST(1)
      D §HghRcdNbr      C                   CONST(2147483647)
       *
-      *  Accessmode:
+      *  Access mode:
+     D r§accessMode    S              1A   template
+      *
      D §RrnSeq         C                   CONST('0')
      D §KeySeq         C                   CONST('1')
      D §SqlSeq         C                   CONST('2')

@@ -18,6 +18,14 @@
      /*  Initialisierungsprogramm für Programm PEEK05                */
      /*                                                              */
      /* ============================================================ */
+     /* >>PRE-COMPILER<<                                             */
+     /*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +   */
+     /*                           OBJLIB(&LI) DEVLIB(&LI) +          */
+     /*                           SBMJOB(*NO) BNDDIR(PEEK) +         */
+     /*                           INSTALL(*NO);                      */
+     /*   >>EXECUTE<<                                                */
+     /* >>END-PRE-COMPILER<<                                         */
+     /* ============================================================ */
 
           PGM        PARM(&QFILE     +
                           &MEMBER    +

@@ -51,6 +51,10 @@
       /COPY QCOPYLE,D_INFDS
       *----------------------------------------------------*
       *
+      /define internal_prototype
+      /COPY QCOPYLE,PPEEK65
+      /undefine internal_prototype
+      *
       *---Nachrichten--------------------------------------*
       /COPY QCOPYLE,API_ERROR
       /COPY QCOPYLE,MSG_D_MAPI
@@ -64,6 +68,7 @@
       *----------------------------------------------------*
       *
       *---API-Formate--------------------------------------*
+     D OBJD0400        DS                  likeds(OBJD0400_t) inz
       /COPY QCOPYLE,OBJD0400
      D FLDL0100        DS                  likeds(FLDL0100_t) inz
       /COPY QCOPYLE,FLDL0100
@@ -83,53 +88,35 @@
       /COPY QCOPYLE,SCRNFKEYS
       *----------------------------------------------------*
       *
-      *  *ENTRY Liste
-     D XRcdNbr         S                   LIKE(R§RcdNbr)
-     D XFile           S             10A
-     D XLibrary        S             10A
-     D XMember         S             10A
-     D XRcdFormat      S             10A
-     D XMsgID          S                   like(r§msgID   )
-     D XMsgDta         S                   like(r§msgDta  )
+     D YString         S                   like(r§rcdBuf  )
+     D YStrLen         S                   like(r§int4    )
+     D YMsgID          S              7A
+     D YMsgDta         S            512A
       *
-      *  Parameterfelder Peek06/Peek32
-     D YData           S            512A                    inz(*BLANKS)
-     D YFormat         S             10A
-     D YSrcVar         S                   like(r§rcdBuf  ) inz(*BLANKS)
-     D YPgmCall        S              1A                    inz(bFalse )
-     D YCvtCcsid       S              1A                    inz(bTrue  )
-     D YString         S                   like(r§rcdBuf  ) inz(*BLANKS)
-     D YStrLen         S                   like(r§int4    ) inz
-     D YCcsid          S                   like(r§int4    ) inz
-     D YMsgID          S              7A                    inz(*BLANKS)
-     D YMsgDta         S            512A                    inz(*BLANKS)
-      *
-      *  Peek09
-     D YQFile          DS
-     D  YFile                        10A   INZ(*BLANKS)
-     D  YLibrary                     10A   INZ(*BLANKS)
-     D YValue          S            512A   INZ(*BLANKS)
-      *YMsgID          S              7A   INZ(*BLANKS)
-      *YMsgDta         S            512A   INZ(*BLANKS)
+     D YQFile          DS                  likeds(r§qObj) inz
       *
       *  Arbeitsfelder
-     D IsRecord        S                   like(r§bool    ) inz(bFalse)
-     D IsCvtChar       S                   like(r§bool    ) inz(bFalse)
-     D IsPrinted       S                   like(r§bool    ) inz(bFalse)
+     D IsRecord        S                   like(r§bool) inz(bFalse)
+     D IsCvtChar       S                   like(r§bool) inz(bFalse)
+     D IsPrinted       S                   like(r§bool) inz(bFalse)
       *
-     D x               S                   like(r§int4    ) inz
-     D y               S                   like(r§int4    ) inz
-     D textLen         S                   like(r§int4    ) inz
+     D x               S                   like(r§int4)
+     D y               S                   like(r§int4)
+     D textLen         S                   like(r§int4)
       *
-     D R$TEXT          S                   like(FLDL0100_t.F1FTxt) inz
+     D R$TEXT          S                   like(FLDL0100_t.F1FTxt)
       *
       *  Qualifizierte Programmnamen
-     D PEEK06          S                   like(r§pgmCallN) inz
-     D PEEK09          S                   like(r§pgmCallN) inz
-     D PEEK32          S                   like(r§pgmCallN) inz
+     D PEEK06_NAME     S                   like(r§pgmCallN)
+     D PEEK09_NAME     S                   like(r§pgmCallN)
+     D PEEK32_NAME     S                   like(r§pgmCallN)
       *
       *  Konstanten
      D cQUOTE          C                   ''''
+      *
+      /COPY QCOPYLE,PPEEK06
+      /COPY QCOPYLE,PPEEK09
+      /COPY QCOPYLE,PPEEK32
       *
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
@@ -141,44 +128,14 @@
       *
       *---ENTRY-LISTE--------------------------------------*
       *
-     C     *ENTRY        PLIST
-     C                   PARM                    XRcdNbr
-     C                   PARM                    XFile
-     C                   PARM                    XLibrary
-     C                   PARM                    XMember
-     C                   PARM                    XRcdFormat
-     C                   PARM                    XMsgID
-     C                   PARM                    XMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK06
-     C     P_Peek06      PLIST
-     C                   PARM                    YData
-     C                   PARM                    YFormat
-     C                   PARM                    YSrcVar
-     C                   PARM                    YPgmCall
-     C                   PARM                    YCvtCcsid
-     C                   PARM                    YString
-     C                   PARM                    YStrLen
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK09
-     C     P_Peek09      PLIST
-     C                   PARM                    YQFile
-     C                   PARM                    YValue
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK32
-     C     P_Peek32      PLIST
-     C                   PARM                    yString
-     C                   PARM                    yStrLen
-     C                   PARM                    yCcsid
-     C                   PARM                    yMsgID
-     C                   PARM                    yMsgDta
+     D PEEK65          PI
+     D  i_rcdNbr                           const like(r§rcdNbr)
+     D  i_file                             const like(r§file)
+     D  i_library                          const like(r§lib)
+     D  i_member                           const like(r§mbr)
+     D  i_rcdFormat                        const like(r§rcdFmt)
+     D  o_msgID                                  like(r§msgID)
+     D  o_msgDta                                 like(r§msgDta)
       *
       *----------------------------------------------------*
       *  Schlüsselliste für PEEKFLDL0
@@ -201,8 +158,8 @@
      C                   ENDIF
       *
      C                   IF        IsPrinted = bTrue
-     C                   EVAL      XMsgID  = 'USR8226'
-     C                   EVAL      XMsgDta = ''
+     C                   EVAL      o_msgID  = 'USR8226'
+     C                   EVAL      o_msgDta = ''
      C                   ENDIF
       *
       *  Ende der Hauptschleife
@@ -228,10 +185,10 @@
      C                   EVAL      *IN60 = bTrue
       *
       *  Kopfinformationen
-     C                   Eval      $$FILE = XFile
-     C                   Eval      $$LIB  = XLibrary
-     C                   Eval      $$RRN  = %editc(XRcdNbr: 'X')
-     C                   Eval      $$DESC = O4Text
+     C                   Eval      $$FILE = i_file
+     C                   Eval      $$LIB  = i_library
+     C                   Eval      $$RRN  = %editc(i_rcdNbr: 'X')
+     C                   Eval      $$DESC = OBJD0400.O4Text
       *
       *  Konvertieren nicht darstellbarer Zeichen
      C                   EVAL      IsCvtChar = bFalse
@@ -311,7 +268,6 @@
       *============================================================*
       *
      C     PBFill        BEGSR
-      *
       *      ... überschreiben EDTCDE
      C                   if        (F_EDTCDE <> '')
      C                   eval      FLDL0100.F1EDTC = F_EDTCDE
@@ -335,17 +291,22 @@
      C                   EVAL      YStrLen = %len(%trimR(YString))
      C                   ELSE
       *
+     C                   monitor
+      *
       *  ... aufbereiten des Feldinhaltes
-     C                   EVAL      YData = FLDL0100
-     C                   EVAL      YFormat = 'FLDL0100'
-     C                   EVAL      YSrcVar = IO_Buff
-     C                   EVAL      YPgmCall = bFalse
-     C                   EVAL      YCvtCcsid = bTrue
-     C                   CALL      PEEK06        P_Peek06               99
+     C                   CALLP     PEEK06(FLDL0100: 'FLDL0100': IO_Buff
+     C                                    : bFalse: bTrue: YString: YStrLen
+     C                                    : YMsgID: YMsgDta)
       *
       *  ... Konvertieren nicht darstellbarer Zeichen
-     C                   EVAL      yCcsid = *ZEROS
-     C                   CALL      PEEK32        P_Peek32               99
+     C                   CALLP     PEEK32(yString: yStrLen: 0
+     C                                    : YMsgID: YMsgDta)
+      *
+     C                   eval      *in99 = bFalse
+     C                   on-error
+     C                   eval      *in99 = bTrue
+     C                   endmon
+      *
      C     *IN99         IFEQ      '0'
       *
      C                   IF        f_isCharFld(FLDL0100) = bTrue and
@@ -398,13 +359,17 @@
       *
      C     GetObjText    BEGSR
       *
-     C                   Eval      YFile    = XFile
-     C                   Eval      YLibrary = XLibrary
-     C                   Call      PEEK09        P_Peek09               99
+     C                   Eval      YQFile.name = i_file
+     C                   Eval      YQFile.lib = i_library
+     C                   Callp     PEEK09(YQFile: OBJD0400: YMsgID: YMsgDta)
+     C                   monitor
+     C                   eval      *in99 = bFalse
+     C                   on-error
+     C                   eval      *in99 = bTrue
+     C                   endmon
+      *
      C                   If        *IN99 = '1'
      C                   Clear                   OBJD0400
-     C                   Else
-     C                   Eval      OBJD0400 = YValue
      C                   Endif
       *
      C                   Endsr
@@ -416,7 +381,7 @@
      C     ReadRcd       BEGSR
       *
      C                   IF        CIO_chainWithRRN(hFile04
-     C                                              : XRcdNbr
+     C                                              : i_rcdNbr
      C                                              : bFalse
      C                                              : IO_Buff
      C                                              : IO_NullMap) = bFalse
@@ -439,24 +404,24 @@
      C                                        TOFILE(' +
      C                                           %trimR(§§PgmLib) + '/PEEK65P) +
      C                                        SPLFNAME(' +
-     C                                           %trim(XFILE) + ') +
+     C                                           %trim(i_file) + ') +
      C                                        USRDTA(''' +
-     C                                           %editc(XRcdNbr: 'X') + ''') +
+     C                                           %editc(i_rcdNbr: 'X') + ''') +
      C                                        OVRSCOPE(*CALLLVL)'
       /COPY QCOPYLE,QCMDEXC
       *
      C                   OPEN      PEEK65P
      C                   OPEN      PEEKFLDL0
      C                   CALLP     CIO_open(hFile04
-     C                                      : xFile
-     C                                      : xLibrary
-     C                                      : xMember
-     C                                      : xRcdFormat
+     C                                      : i_file
+     C                                      : i_library
+     C                                      : i_member
+     C                                      : i_rcdFormat
      C                                      : 'rr,arrseq=Y,nullcap=Y,riofb=Y')
       *
       * - Programm initialisieren
-     C                   EVAL      XMsgID = *BLANKS
-     C                   EVAL      XMsgDta = *BLANKS
+     C                   EVAL      o_msgID = *BLANKS
+     C                   EVAL      o_msgDta = *BLANKS
       *
       * - Einlesen Objektbeschreibung
      C                   EXSR      GetObjText
@@ -472,9 +437,9 @@
       *
      C     *INZSR        Begsr
       *
-     C                   Eval      PEEK06 = f_pgmCallN('PEEK06')
-     C                   Eval      PEEK09 = f_pgmCallN('PEEK09')
-     C                   Eval      PEEK32 = f_pgmCallN('PEEK32')
+     C                   Eval      PEEK06_NAME = f_pgmCallN('PEEK06')
+     C                   Eval      PEEK09_NAME = f_pgmCallN('PEEK09')
+     C                   Eval      PEEK32_NAME = f_pgmCallN('PEEK32')
       *
      C                   Eval      TXT0132 = f_msgText('TXT0132': '')           Datei:
      C                   Eval      TXT0133 = f_msgText('TXT0133': '')           Bibliothek:

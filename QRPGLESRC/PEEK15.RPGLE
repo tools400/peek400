@@ -266,15 +266,6 @@
       *
       /COPY QCOPYLE,ERR_D_SDS
       *
-      *===============================================================*
-      *  *ENTRY
-     D xQFile          S             20A
-     D xScnNbrs        S              2P 0
-     D xAlwLC          S              1A
-     D xStage          S             10I 0
-     D xNumPasses      S             10I 0
-      *===============================================================*
-      *
      D DotLine         S             40A   inz(*ALL'.')
       *
      D #SRCSEQ         S                   like(SRCSEQ) inz
@@ -344,6 +335,10 @@
       /COPY QCOPYLE,D_VARDEF
       *----------------------------------------------------*
       *
+      /define internal_prototype
+      /COPY QCOPYLE,PPEEK15
+      /undefine internal_prototype
+      *
       *---Farbattribute------------------------------------*
       /COPY QCOPYLE,D_COLORATR
       *----------------------------------------------------*
@@ -365,12 +360,12 @@
       *  Steuerleiste
       *====================================================*
       *
-     C     *entry        Plist
-     C                   Parm                    xQFile
-     C                   Parm                    xScnNbrs
-     C                   Parm                    xAlwLC
-     C                   Parm                    xStage
-     C                   Parm                    xNumPasses
+     D PEEK15          PI
+     D  i_qFile                            const likeds(rßqObj)
+     D  io_scnNbrs                    2P 0
+     D  i_alwLC                            const like(rßbool)
+     D  io_stage                                 like(rßint4)
+     D  i_numPasses                        const like(rßint4)
       *
      C                   Open      QCOPYLE1
      C                   Open      QCOPYLE2
@@ -396,15 +391,15 @@
      C                   Eval      #SRCSEQ = 0
      C                   Eval      newScn  = bTrue
       *
-     C                   If        xAlwLC = bFalse
+     C                   If        i_alwLC = bFalse
       *  "Vorspann" nur kopieren, bei XAlwLC = FALSE
      C                   Exsr      copyHead
      C                   Else
       *  "Vorspann" nicht kopieren, da schon kopiert
      C                   Endif
       *
-     C                   Eval      refFile = %subst(xQFile:  1: 10)
-     C                   Eval      refLib  = %subst(xQFile: 11: 10)
+     C                   Eval      refFile = %subst(i_qFile:  1: 10)
+     C                   Eval      refLib  = %subst(i_qFile: 11: 10)
       *
      C                   Eval      fieldCount = 0
       *
@@ -430,8 +425,8 @@
      C                   Exsr      WrtField
      C                   Enddo
       *
-     C                   Eval      xStage = xStage + 1
-     C                   Callp     p_showProgressMeter(xStage)
+     C                   Eval      io_stage = io_stage + 1
+     C                   Callp     p_showProgressMeter(io_stage)
       *
       *-------------------------------------------*
       *  Abschlieﬂen Copy-Book 1:                 *
@@ -543,8 +538,8 @@
      C                   Callp     p_wrtCopy1(ds_eval)
      C                   Enddo
       *
-     C                   Eval      xStage = xStage + 1
-     C                   Callp     p_showProgressMeter(xStage)
+     C                   Eval      io_stage = io_stage + 1
+     C                   Callp     p_showProgressMeter(io_stage)
       *
       *  Remark
      C                   Reset                   ds_remark
@@ -565,7 +560,7 @@
      C                   Close     QPEEKGEN
      C                   Close     PEEKFLD
       *
-     C                   Eval      xScnNbrs = scn#
+     C                   Eval      io_scnNbrs = scn#
       *
      C                   Eval      *inlr = *on
       *
@@ -1067,7 +1062,7 @@
       *  bei Alpha-Feldern ...
      C                   If        (FLDL0100.F1DTYP = 'A' or
      C                              FLDL0100.F1DTYP = 'G') and
-     C                             (xAlwLC =  bTrue) and
+     C                             (i_alwLC =  bTrue) and
      C                             (FLDL0100.F1USE <> 'I')
      C                   Reset                   ds_dspAtr
      C                   Eval      $dspA_atr = 'CHECK(LC) '
@@ -1164,9 +1159,9 @@
      C                   Reset                   ds_rcdFmt
       *
      C                   Select
-     C                   When      xAlwLC = bFalse
+     C                   When      i_alwLC = bFalse
      C                   Eval      $rcdFm_nme = 'UC' + scn#a
-     C                   When      xAlwLC = bTrue
+     C                   When      i_alwLC = bTrue
      C                   Eval      $rcdFm_nme = 'LC' + scn#a
      C                   Other
      C                   Exsr      *PSSR
@@ -1368,6 +1363,21 @@
      C                   Reset                   ds_eval
      C                   Eval      $eval_fct2 = 'KEY' + a#FdCount + ' = keyChar'
      C                   Callp     p_wrtCopy1(ds_eval)
+      *
+      *  If        (isVisible = bFalse)
+     C                   Reset                   ds_if
+     C                   Eval      $if_fct2 = '(isVisible = bFalse)'
+     C                   Callp     p_wrtCopy1(ds_if)
+      *
+      *  Eval      MSG00001 = '0076'
+     C                   Reset                   ds_eval
+     C                   Eval      $eval_fct2 = 'MSG' + a#FdCount
+     C                                                + ' = ''0076'''
+     C                   Callp     p_wrtCopy1(ds_eval)
+      *
+      *  Endif
+     C                   Reset                   ds_endif
+     C                   Callp     p_wrtCopy1(ds_endif)
       *
       *  Else
      C                   Reset                   ds_else
@@ -1958,7 +1968,7 @@
      D p_wrtCopy1      PI
      D  i_srcDta                           const like(SRCDTA)
       *
-     C                   If        xAlwLC = bFalse
+     C                   If        i_alwLC = bFalse
       *  Nur einmal ausgeben, bei XAlwLC = FALSE
      C                   Eval      SRCSEQ = 0
      C                   Eval      SRCDAT = 0
@@ -1980,7 +1990,7 @@
      D p_wrtCopy2      PI
      D  i_srcDta                           const like(SRCDTA)
       *
-     C                   If        xAlwLC = bFalse
+     C                   If        i_alwLC = bFalse
       *  Nur einmal ausgeben, bei XAlwLC = FALSE
      C                   Eval      SRCSEQ = 0
      C                   Eval      SRCDAT = 0
@@ -2003,7 +2013,7 @@
      D p_wrtCopy3      PI
      D  i_srcDta                           const like(SRCDTA)
       *
-     C                   If        xAlwLC = bFalse
+     C                   If        i_alwLC = bFalse
       *  Nur einmal ausgeben, bei XAlwLC = FALSE
      C                   Eval      SRCSEQ = 0
      C                   Eval      SRCDAT = 0
@@ -2026,7 +2036,7 @@
      D p_wrtCopy4      PI
      D  i_srcDta                           const like(SRCDTA)
       *
-     C                   If        xAlwLC = bFalse
+     C                   If        i_alwLC = bFalse
       *  Nur einmal ausgeben, bei XAlwLC = FALSE
      C                   Eval      SRCSEQ = 0
      C                   Eval      SRCDAT = 0
@@ -2049,7 +2059,7 @@
      D p_wrtCopy5      PI
      D  i_srcDta                           const like(SRCDTA)
       *
-     C                   If        xAlwLC = bFalse
+     C                   If        i_alwLC = bFalse
       *  Nur einmal ausgeben, bei XAlwLC = FALSE
      C                   Eval      SRCSEQ = 0
      C                   Eval      SRCDAT = 0
@@ -2072,7 +2082,7 @@
      D p_wrtCopy6      PI
      D  i_srcDta                           const like(SRCDTA)
       *
-     C                   If        xAlwLC = bFalse
+     C                   If        i_alwLC = bFalse
       *  Nur einmal ausgeben, bei XAlwLC = FALSE
      C                   Eval      SRCSEQ = 0
      C                   Eval      SRCDAT = 0

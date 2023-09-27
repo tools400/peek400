@@ -1,0 +1,26 @@
+
+      /if defined(internal_prototype)
+     D PEEK54          PR                  extpgm('PEEK54')
+      /else
+     D PEEK54          PR                  extpgm(PEEK54_NAME)
+      /endif
+     D  gi_file                            const like(r§file)
+     D  gi_lib                             const like(r§lib)
+     D  gi_mbr                             const like(r§mbr)
+     D  gi_rcdFmt                          const like(r§fmt)
+     D  gi_rcdFmtID                        const like(r§fmtId)
+     D  gi_envFile                         const like(r§file)
+     D  gi_envLib                          const like(r§lib)
+     D  gi_envMbr                          const like(r§mbr)
+     D  gi_isAutoSave                      const like(r§bool)
+     D  gi_pinTabR                         const like(r§pintabr) dim(12)
+     D  gi_nbrPinR                         const like(r§int4)
+     D  gi_pinTabC                         const like(r§fieldNme) dim(12)
+     D  gi_nbrPinC                         const like(r§int4)
+     D  gi_AccMode                         const like(r§accessMode)
+     D  gi_SqlSel                          const like(r§sqlWhere)
+     D  gi_SqlOrd                          const like(r§sqlOrder)
+     D  gi_isKeyLower                      const like(r§bool)
+     D  go_msgID                                 like(r§msgID)
+     D  go_msgDta                                like(r§msgDta)
+      *

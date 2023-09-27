@@ -31,32 +31,17 @@
       /COPY QCOPYLE,FLDL0100
       *----------------------------------------------------*
       *
-      *---SDS-Datenstruktur--------------------------------*
-      /COPY QCOPYLE,ERR_D_SDS
-      *----------------------------------------------------*
+      /define internal_prototype
+      /COPY QCOPYLE,PPEEK28
+      /undefine internal_prototype
       *
-      *----------------------------------------------------*
-      *  F E L D - D E F I N I T I O N E N                 *
-      *----------------------------------------------------*
-      *---Fehler-DS----------------------------------------*
+      /COPY QCOPYLE,QWCRSVAL
       /COPY QCOPYLE,API_ERROR
- CPY  ***/COPY QCOPYLE,MSG_D_MAPI
-      *----------------------------------------------------*
-      *
-     D XAttr           S             10A
-     D XNoMsg          S              1A
-     D XAttrLen        S                   like(r§int4    )
-     D XAttrTyp        S              1A
-     D XValue          S            512A
       *
      D YRcvVar         DS           128    INZ
      D   RcvNbrRet             1      4I 0
      D   RcvOffset             5      8I 0
      D   RcvData               9    128A
-      *
-     D YRcvVarLen      S                   INZ(128)       LIKE(R§INT4)
-     D YNbrOfSysV      S                   INZ(1)         LIKE(R§INT4)
-     D YSysValNme      S             10A   INZ('QSRLNBR')
       *
      D YSystemVal      DS           128    INZ
      D   SystemVal             1     10A
@@ -74,40 +59,31 @@
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
       *
-     C     *ENTRY        PLIST
-      *  Input
-     C                   PARM                    XAttr
-     C                   PARM                    XNoMsg
-      *  Output
-     C                   PARM                    XAttrLen
-     C                   PARM                    XAttrTyp
-     C                   PARM                    XValue
+     D PEEK28          PI
+     D  i_attr                             const like(r§attr)
+     D  i_noMsg                            const like(r§bool)
+     D  o_attrLen                                like(r§int4)
+     D  o_attrType                               like(r§attrType)
+     D  o_attrValue                              like(r§attrValue)
       *
       *---------------------------------------------------*
       *
       * - Meldung
-     C     XNoMsg        IFEQ      bTrue
+     C     i_noMsg       IFEQ      bTrue
      C                   Callp     p_sndStsMg('USR8157': ' ')
      C                   ELSE
       *        keine Statusmeldung ausgeben
      C                   Endif
       *
-      * - Seriennummer
-     C                   EVAL      YSysValNme = XAttr
-      *
-     C                   CALL      'QWCRSVAL'
-     C                   PARM                    YRcvVar
-     C                   PARM                    YRcvVarLen
-     C                   PARM                    YNbrOfSysV
-     C                   PARM                    YSysValNme
-     C                   PARM                    §ErrorCode
+     C                   CALLP     QWCRSVAL(YRcvVar: %size(YRcvVar): 1
+     C                                      : i_attr: §ErrorCode)
       *
      C     §ErrAvail     IFEQ      *ZEROS
      C                   EXSR      GetAttr
      C                   ELSE
-     C                   EVAL      XAttrLen = *ZEROS
-     C                   EVAL      XAttrTyp = *BLANKS
-     C                   EVAL      XValue = *BLANKS
+     C                   EVAL      o_attrLen = 0
+     C                   EVAL      o_attrType = ''
+     C                   EVAL      o_attrValue = ''
      C                   Endif
       *
       *---------------------------------------------------*
@@ -124,23 +100,14 @@
      C     GetAttr       BEGSR
       *
      C                   EVAL      X = RcvOffset + 1
-     C**                 SUBST (P) YRcvVar:X     YSystemVal
      C                   EVAL      YSystemVal = %subst(YRcvVar: X)
       *
-     C                   EVAL      XAttrLen = LenOfData
-     C                   EVAL      XAttrTyp = TypeOfData
+     C                   EVAL      o_attrLen = LenOfData
+     C                   EVAL      o_attrType = TypeOfData
       *
      C                   EVAL      X = 1
-     C**   XAttrLen      SUBST (P) SysValData:X  XValue
-     C                   EVAL      XValue = %subst(SysValData: X: XAttrLen)
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    *INZSR        Initialisierung                           *
-      *============================================================*
-      *
-     C     *INZSR        BEGSR
+     C                   EVAL      o_attrValue =
+     C                               %subst(SysValData: X: o_attrLen)
       *
      C                   ENDSR
       *
@@ -153,8 +120,4 @@
      C                   DUMP
       *
      C                   ENDSR     '*CANCL'
-      *
-      *---Versenden von Nachrichten------------------------*
- CPY  ***/COPY QCOPYLE,MSG_C_MAPI
-      *----------------------------------------------------*
       *

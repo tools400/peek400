@@ -45,6 +45,10 @@
       /COPY QCOPYLE,D_VARDEF
       *----------------------------------------------------*
       *
+      /define internal_prototype
+      /COPY QCOPYLE,PPEEK17
+      /undefine internal_prototype
+      *
       *---Variablendefinition ShortCmd---------------------*
       /COPY QCOPYLE,ShortCmd_D
       *----------------------------------------------------*
@@ -100,22 +104,6 @@
       *  F E L D - D E F I N I T I O N E N                 *
       *----------------------------------------------------*
       *
-     D XDsp80          S              1A
-     D XCopyRight      S            512A
-     D XQFile          DS
-     D  XFile                        10A
-     D  XLibrary                     10A
-     D XMember         S             10A
-     D XField          S             10A
-     D XOperation      S             10A
-     D XArgument       S             30A
-     D XSign           S              1A
-     D XSrchNbrs       S             10P 0
-     D XSrchType       S             10A
-     D XSrchCase       S              1A
-     D XMsgID          S              7A
-     D XMsgDta         S            512A
-      *
      D yPgm            S             10A   inz
      D yKey            S             10A   inz
      D yPosF24         S                   like(r§int4    ) inz
@@ -124,7 +112,6 @@
      D yMsgID          S              7A   INZ(*BLANKS)
      D yMsgDta         S            512A   INZ(*BLANKS)
       *
-     D YScnAID         S             10A   INZ(*BLANKS)
      D YPgmCmd         S             10A   INZ(*BLANKS)
      D YCmdDta         S                   LIKE(r§pgmCmdDt) INZ(*BLANKS)
       *
@@ -144,25 +131,24 @@
      D MustWait        S              1A   INZ(bFalse)
       *** IsNumeric       S              1A   INZ(bFalse)
       *
-     D §Lower          C                   CONST('abcdefghijklmnopqrstuvwxyz')
-     D §Upper          C                   CONST('ABCDEFGHIJKLMNOPQRSTUVWXYZ')
-      *
      D X               S                   like(r§int4    ) inz
-     D Y               S                   like(r§int4    ) inz
       *
      D R_Sign          S                   INZ(*BLANKS)   LIKE(##Sign )
      D R_Arg30         S                   INZ(*BLANKS)   LIKE(##Arg  )
-     D R_QFile         S                   INZ(*BLANKS)   LIKE(XQFile )
-     D R_Member        S                   INZ(*BLANKS)   LIKE(XMember)
+     D R_QFile         S                   INZ(*BLANKS)   LIKE(i_qFile )
+     D R_Member        S                   INZ(*BLANKS)   LIKE(i_member)
      D R_VorK          S                   INZ(*BLANKS)   LIKE(##Arg  )
      D R_NachK         S                   INZ(*BLANKS)   LIKE(##Arg  )
      D R_A1            S              1A   INZ(*BLANKS)
-     D R_A30           S                   INZ(*BLANKS)   LIKE(##Arg  )
      D R_Field         S                   INZ(*BLANKS)   LIKE(##Field)
       *
-     D PEEK21          S                   like(r§pgmCallN) inz
-     D PEEK23          S                   like(r§pgmCallN) inz
-     D PEEK37          S                   like(r§pgmCallN) inz
+     D PEEK21_NAME     S                   like(r§pgmCallN) inz
+     D PEEK23_NAME     S                   like(r§pgmCallN) inz
+     D PEEK37_NAME     S                   like(r§pgmCallN) inz
+      *
+      /COPY QCOPYLE,PPEEK21
+      /COPY QCOPYLE,PPEEK23
+      /COPY QCOPYLE,PPEEK37
       *
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
@@ -173,50 +159,20 @@
       *
       *---ENTRY-LISTE--------------------------------------*
       *
-     C     *ENTRY        PLIST
-     C                   PARM                    XDsp80
-     C                   PARM                    XCopyRight
-     C                   PARM                    XQFile
-     C                   PARM                    XMember
-     C                   PARM                    XField
-     C                   PARM                    XOperation
-     C                   PARM                    XArgument
-     C                   PARM                    XSign
-     C                   PARM                    XSrchNbrs
-     C                   PARM                    XSrchType
-     C                   PARM                    XSrchCase
-     C                   PARM                    XMsgID
-     C                   PARM                    XMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK23
-     C     P_Peek23      PLIST
-     C                   PARM                    yPgm
-     C                   PARM                    yKey
-     C                   PARM                    yPosF24
-     C                   PARM                    yFKeys
-     C                   PARM                    yNbrOfKeys
-     C                   PARM                    yMsgID
-     C                   PARM                    yMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK21
-     C     P_Peek21      PLIST
-     C                   PARM                    YScnAID
-     C                   PARM                    YPgm
-     C                   PARM                    YPgmCmd
-     C                   PARM                    YCmdDta
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK37
-     C     P_Peek37      PLIST
-     C                   PARM                    YDsp80
-     C                   PARM                    YCopyRight
-     C                   PARM                    YField
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
+     D PEEK17          PI
+     D  i_dsp80                            const like(r§bool)
+     D  i_copyright                        const like(r§copyRght)
+     D  i_qFile                            const like(r§qObj)
+     D  i_member                           const like(r§mbr)
+     D  o_field                      10A
+     D  o_operation                  10A
+     D  o_argument                   63A
+     D  o_sign                        1A
+     D  o_srchNbrs                   10P 0
+     D  o_srchType                   10A
+     D  o_srchCase                    1A
+     D  o_sgID                                   like(r§msgId)
+     D  o_msgDta                                 like(r§msgDta)
       *
       *----------------------------------------------------*
       *  Schlüsselliste für PEEKFLD
@@ -272,9 +228,8 @@
       *
       *  Mappen der gedrückten Taste
       *  in Programmbefehl
-     C                   EVAL      YScnAID = §ScnAID
-     C                   EVAL      YPgm = §§PgmName
-     C                   CALL      PEEK21        P_Peek21
+     C                   CALLP     PEEK21(§ScnAID: §§PgmName
+     C                                    : YPgmCmd: YCmdDta: YMsgID: YMsgDta)
      C     YMsgID        IFNE      *BLANKS
      C                   EVAL      §MsgID = YMsgID
      C                   EVAL      §MsgDta = YMsgDta
@@ -312,8 +267,8 @@
      C     YPgmCmd       WHENEQ    '*ENTER'
      C                   EXSR      C_Enter
      C     *IN99         IFEQ      '0'
-     C                   EVAL      XMsgID = 'USR8112'
-     C                   EVAL      XMsgDta = *BLANKS
+     C                   EVAL      o_sgID = 'USR8112'
+     C                   EVAL      o_msgDta = *BLANKS
      C                   LEAVE
      C                   Endif
       *
@@ -376,27 +331,27 @@
      C     E_Enter       TAG
       *
      C     *IN99         IFEQ      '0'
-     C                   EVAL      XField = ##FIELD
-     C                   EVAL      XOperation = ##OP
-     C                   EVAL      XArgument = R_Arg30
-     C                   EVAL      XSign = ##Sign
-     C                   EVAL      XSrchNbrs = ##NBRS
+     C                   EVAL      o_field = ##FIELD
+     C                   EVAL      o_operation = ##OP
+     C                   EVAL      o_argument = R_Arg30
+     C                   EVAL      o_sign = ##Sign
+     C                   EVAL      o_srchNbrs = ##NBRS
       *
      C                   SELECT
      C     ##TYPE        WHENEQ    'U'
-     C                   EVAL      XSrchType = '*UNDERLINE'
+     C                   EVAL      o_srchType = '*UNDERLINE'
      C     ##TYPE        WHENEQ    'R'
-     C                   EVAL      XSrchType = '*REVERSE'
+     C                   EVAL      o_srchType = '*REVERSE'
      C     ##TYPE        WHENEQ    'P'
-     C                   EVAL      XSrchType = '*PINROW'
+     C                   EVAL      o_srchType = '*PINROW'
      C                   OTHER
-     C                   EVAL      XSrchType = '*NORMAL'
+     C                   EVAL      o_srchType = '*NORMAL'
      C                   Endsl
       *
-     C                   EVAL      XSrchCase = ##CASE
+     C                   EVAL      o_srchCase = ##CASE
       *
-     C                   EVAL      XMsgID = 'USR8112'
-     C                   EVAL      XMsgDta = *BLANKS
+     C                   EVAL      o_sgID = 'USR8112'
+     C                   EVAL      o_msgDta = *BLANKS
      C                   Endif
       *
      C                   ENDSR
@@ -880,7 +835,7 @@
       *
      C                   Callp     p_rmvPgmMg(§§pgmName)
       *
-     C                   EVAL      XMsgID = 'USR8100'
+     C                   EVAL      o_sgID = 'USR8100'
       *
      C                   SELECT
      C     §ScnAID       WHENEQ    §F3
@@ -891,7 +846,7 @@
      C                   EVAL      USR81001 = 'Fxx'
      C                   Endsl
       *
-     C                   EVAL      XMsgDta = USR8100
+     C                   EVAL      o_msgDta = USR8100
       *
      C                   ENDSR
       *
@@ -918,9 +873,8 @@
       *
      C     Pmt_Field     BEGSR
       *
-     C                   EVAL      YDsp80 = xDsp80
-     C                   EVAL      YCopyRight = xCopyRight
-     C                   CALL      PEEK37        P_Peek37
+     C                   CALLP     PEEK37(i_dsp80: i_copyright: YField
+     C                                    : yMsgID: yMsgDta)
       *
      C     yMsgID        IFEQ      *BLANKS
      C                   EVAL      ##Field = yField
@@ -958,13 +912,13 @@
      C     FILL##        BEGSR
       *
       *  Wenn die Datei oder das Member gewechselt hat,
-     C     XQFile        IFNE      R_QFile
-     C     XMember       ORNE      R_Member
+     C     i_qFile       IFNE      R_QFile
+     C     i_member      ORNE      R_Member
       *  ... dann die Bildschirmfelder neu
       *      initialisieren.
      C                   EXSR      InitField
-     C                   EVAL      R_QFile = XQFile
-     C                   EVAL      R_Member = XMember
+     C                   EVAL      R_QFile = i_qFile
+     C                   EVAL      R_Member = i_member
      C                   ELSE
       *  ... sonst die Bildschirmfelder belassen
      C                   Endif
@@ -1027,7 +981,7 @@
       *
      C     SetScreen     BEGSR
       *
-     C     XDsp80        IFEQ      '0'
+     C     i_dsp80       IFEQ      '0'
       *   132-Zeichen Anzeige
      C                   EVAL      *IN88 = '0'
      C                   EVAL      ZEI = 6
@@ -1165,8 +1119,8 @@
       * - Programm initialisieren
      C                   Callp     p_rmvPgmMg(§§pgmName)
       *
-     C                   EVAL      XMsgID = *BLANKS
-     C                   EVAL      XMsgDta = *BLANKS
+     C                   EVAL      o_sgID = *BLANKS
+     C                   EVAL      o_msgDta = *BLANKS
       *
       * - Darstellung der Befehlstasten
      C                   EVAL      SfBot = 1
@@ -1176,7 +1130,7 @@
       *
       * - Copyright
      C                   EVAL      §MsgID = 'USR9999'
-     C                   EVAL      §MsgDta = XCopyRight
+     C                   EVAL      §MsgDta = i_copyright
      C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
       *
      C                   ENDSR
@@ -1189,14 +1143,12 @@
       *
      C                   Eval      §PgmQ = '*'
       *
-     C                   Eval      PEEK21 = f_pgmCallN('PEEK21')
-     C                   Eval      PEEK23 = f_pgmCallN('PEEK23')
-     C                   Eval      PEEK37 = f_pgmCallN('PEEK37')
+     C                   Eval      PEEK21_NAME = f_pgmCallN('PEEK21')
+     C                   Eval      PEEK23_NAME = f_pgmCallN('PEEK23')
+     C                   Eval      PEEK37_NAME = f_pgmCallN('PEEK37')
       *
-     C                   Eval      yPgm    = §§PgmName
-     C                   Eval      yKey    = '*ALL'
-     C                   Eval      yPosF24 = *ZEROS
-     C                   Call      PEEK23        P_Peek23
+     C                   Callp     PEEK23(§§PgmName: '*ALL': 0
+     C                                    : yFKeys: yNbrOfKeys)
      C                   Eval      ScrnFKeys = %subarr(YFKeys: 1)
       *
      C                   Endsr

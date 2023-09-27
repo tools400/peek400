@@ -44,6 +44,10 @@
       /COPY QCOPYLE,D_INFDS
       *----------------------------------------------------*
       *
+      /define internal_prototype
+      /COPY QCOPYLE,PPEEK64
+      /undefine internal_prototype
+      *
       *---Nachrichten--------------------------------------*
       /COPY QCOPYLE,MSG_D_MAPI
       *----------------------------------------------------*
@@ -67,70 +71,46 @@
       /COPY QCOPYLE,FLDL0100
       *----------------------------------------------------*
       *
-      *----------------------------------------------------*
-      *  I N F D S - D E F I N I T I O N E N               *
-      *----------------------------------------------------*
-      *
      D peek_01_DS      DS                  likeds(r§infds)
       *
-      *----------------------------------------------------*
-      *  F E L D - D E F I N I T I O N E N                 *
-      *----------------------------------------------------*
+     D*                DS                  based(pXFldInhalt)
+     D*xFldInhaltSbcs                      like(r§rcdBuf)
+     D*xFldInhaltUcs2                      like(r§rcdBufUcs2)
+     D*                                    overlay(xFldInhaltSbcs)
       *
-     D xDsp80          S                   like(r§dsp80   )
-     D xHeadTyp        S                   like(r§headTyp )
-     D xCopyRght       S                   like(r§copyRght)
-     D xFldName        S                   like(r§fieldNme)
-     D xFldInhalt      S                   like(r§rcdBuf  )
-     D                 DS                  based(pXFldInhalt)
-     D xFldInhaltSbcs                      like(r§rcdBuf    )
-     D xFldInhaltUcs2                      like(r§rcdBufUcs2)
-     D                                     overlay(xFldInhaltSbcs)
-     D xLength         S                   like(r§int4    )
-     D xProtect        S                   like(r§bool    )
-     D xIsUcs2         S                   like(r§int4    )
-     D xMsgID          S                   like(r§msgID   )
-     D xMsgDta         S                   like(r§msgDta  )
+     D yPgmCmd         S                   like(r§pgmCmd)
+     D yCmdDta         S                   like(r§pgmCmdDt)
+     D yMsgID          S                   like(r§msgID)
+     D yMsgDta         S                   like(r§msgDta)
       *
-      *  Peek21
-     D yScnAID         S                   like(r§scnAid  ) inz
-     D yPgm            S                   like(r§pgm     ) inz
-     D yKey            S             10A   inz
-     D yPgmCmd         S                   like(r§pgmCmd  ) inz
-     D yCmdDta         S                   like(r§pgmCmdDt) inz
-     D yMsgID          S                   like(r§msgID   ) inz
-     D yMsgDta         S                   like(r§msgDta  ) inz
-      *
-      *  Peek23:
-      *yPgm            S                   like(r§pgm     ) inz
-     D yPosF24         S                   like(r§int4    ) inz
-     D yFKeys          S                   like(r§fKeyDsp ) inz
-     D                                     dim(32)
-     D yNbrOfKeys      S                   like(r§int4    ) inz
+     D yFKeys          S                   like(r§fKeyDsp) dim(32)
+     D yNbrOfKeys      S                   like(r§int4) inz
       *
       *---Definition der F-Tastenbildschirmfelder----------*
       /COPY QCOPYLE,SCRNFKEYS
       *----------------------------------------------------*
       *
-     D sfBot           S                   like(r§int4    ) inz
+     D sfBot           S                   like(r§int4)
      D §nbrFKeys       C                   const(3)
       *
-     D PEEK21          S                   like(r§pgmCallN) inz
-     D PEEK23          S                   like(r§pgmCallN) inz
+     D PEEK21_NAME     S                   like(r§pgmCallN)
+     D PEEK23_NAME     S                   like(r§pgmCallN)
       *
       * Arbeitsfelder
-     D isPgmError      S                   like(r§bool    ) inz(bFalse)
-     D isDataChg       S                   like(r§bool    ) inz(bFalse)
+     D isPgmError      S                   like(r§bool) inz(bFalse)
+     D isDataChg       S                   like(r§bool) inz(bFalse)
      D                 DS
      D pFldInhaltSbcs                      like(r§rcdBuf    ) inz
      D pFldInhaltUcs2                      like(r§rcdBufUcs2) inz
      D                                     overlay(pFldInhaltSbcs)
-
-     D pLength         S                   like(r§int4        ) INZ
-     D len             S                   LIKE(r§int4        ) INZ
+     D pLength         S                   like(r§int4)
+     D len             S                   like(r§int4)
      D isFieldTooLarge...
      D                 S               N
      D maxFieldLength  S             10I 0
+      *
+      /COPY QCOPYLE,PPEEK21
+      /COPY QCOPYLE,PPEEK23
       *
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
@@ -146,38 +126,17 @@
       *
       *---ENTRY-LISTE--------------------------------------*
       *
-     C     *entry        Plist
-     C                   Parm                    xDsp80
-     C                   Parm                    xHeadTyp
-     C                   Parm                    xCopyRght
-     C                   Parm                    xFldName
-     C                   Parm                    xFldInhalt
-     C                   Parm                    xLength
-     C                   Parm                    xProtect
-     C                   Parm                    xIsUcs2
-     C                   Parm                    xMsgID
-     C                   Parm                    xMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK23
-     C     P_Peek23      Plist
-     C                   Parm                    yPgm
-     C                   Parm                    yKey
-     C                   Parm                    yPosF24
-     C                   Parm                    yFKeys
-     C                   Parm                    yNbrOfKeys
-     C                   Parm                    yMsgID
-     C                   Parm                    yMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK21
-     C     P_Peek21      Plist
-     C                   Parm                    yScnAID
-     C                   Parm                    yPgm
-     C                   Parm                    yPgmCmd
-     C                   Parm                    yCmdDta
-     C                   Parm                    yMsgID
-     C                   PARM                    yMsgDta
+     D PEEK64          PI
+     D  i_dsp80                            const like(r§dsp80)
+     D  i_headType                         const like(r§headTyp)
+     D  i_copyright                        const like(r§copyRght)
+     D  i_fldName                          const like(r§fieldNme)
+     D  io_fldInhalt                             likeds(r§fldInhalt)
+     D  io_length                                like(r§int4)
+     D  i_protect                          const like(r§bool)
+     D  i_isUcs2                           const like(r§int4)
+     D  o_msgID                                  like(r§msgID)
+     D  o_msgDta                                 like(r§msgDta)
       *
       *----------------------------------------------------*
       *  Schlüsselliste für PEEKFLD
@@ -248,9 +207,8 @@
       *
       *  Mappen der gedrückten Taste
       *  in Programmbefehl
-     C                   Eval      yScnAID = §ScnAID
-     C                   Eval      yPgm    = §§PgmName
-     C                   Call      PEEK21        P_Peek21
+     C                   CALLP     PEEK21(§ScnAID: §§PgmName
+     C                                    : YPgmCmd: YCmdDta: YMsgID: YMsgDta)
      C                   If        YMsgID <> ' '
      C                   Eval      §msgID  = yMsgID
      C                   Eval      §msgDta = yMsgDta
@@ -283,16 +241,16 @@
      C                   When      YPgmCmd = '*ENTER' or YPgmCmd = '*OK'
      C                   Exsr      c_enter
      C                   If        isPgmError = bFalse
-     C                   Eval      xMsgID  = 'USR8112'
-     C                   Eval      xMsgDta = ' '
+     C                   Eval      o_msgID  = 'USR8112'
+     C                   Eval      o_msgDta = ' '
       *
-     C                   if        (xIsUcs2 = 0)
-     C                   Eval      xFldInhaltSbcs = pFldInhaltSbcs
+     C                   if        (i_isUcs2 = 0)
+     C                   Eval      io_fldInhalt.sbcs = pFldInhaltSbcs
      C                   else
-     C                   Eval      xFldInhaltUcs2 = pFldInhaltUcs2
+     C                   Eval      io_fldInhalt.ucs2 = pFldInhaltUcs2
      C                   endif
       *
-     C                   Eval      xLength = pLength
+     C                   Eval      io_length = pLength
      C                   Leave
      C                   Endif
       *
@@ -341,10 +299,10 @@
      C                   If        isDataChg = bTrue
       *
       *  ... einsetzen in Zwischenfeld für Rückgabewert
-     C                   If        (xIsUcs2 = 0)
+     C                   If        (i_isUcs2 = 0)
       *
      C                   If        (isFieldTooLarge)
-     C                   Eval      pLength = xLength
+     C                   Eval      pLength = io_length
      C                   Else
      C                   Eval      pLength = %len(%trimR(#STRING))
      C                   Endif
@@ -355,7 +313,7 @@
      C                   Else
       *
      C                   If        (isFieldTooLarge)
-     C                   Eval      pLength = xLength
+     C                   Eval      pLength = io_length
      C                   Else
      C                   Eval      pLength = %len(%trimR(#UCS2STR))
      C                   Endif
@@ -410,7 +368,7 @@
       *
      C     prf20         Begsr
       *
-     C                   If        (xIsUcs2 = 0)
+     C                   If        (i_isUcs2 = 0)
      C                   Eval      len = %len(%trimr(#String))
      C                   Else
      C                   Eval      len = %len(%trimr(#UCS2STR))
@@ -441,7 +399,7 @@
       *
      C                   Callp     p_rmvPgmMg(§§pgmName)
       *
-     C                   EVAL      XMsgID = 'USR8100'
+     C                   EVAL      o_msgID = 'USR8100'
       *
      C                   SELECT
      C     §ScnAID       WHENEQ    §F3
@@ -452,7 +410,7 @@
      C                   EVAL      USR81001 = 'Fxx'
      C                   Endsl
       *
-     C                   EVAL      XMsgDta = USR8100
+     C                   EVAL      o_msgDta = USR8100
       *
      C                   Endsr
       *
@@ -462,13 +420,7 @@
       *
      C     c_refresh     BEGSR
       *
-     C                   if        (xIsUcs2 = 0)
-     C                   Eval      pFldInhaltSbcs = xFldInhaltSbcs
-     C                   else
-     C                   Eval      pFldInhaltUcs2 = xFldInhaltUcs2
-     C                   endif
-      *
-     C                   Eval      pLength = xLength
+     C                   Exsr      GetParameters
       *
      C                   EXSR      bzoff1
      C                   EXSR      fill##
@@ -492,7 +444,7 @@
      C     fill##        Begsr
       *
       *  anzeigen Feldinhalt
-     C                   If        (xIsUcs2 = 0)
+     C                   If        (i_isUcs2 = 0)
       *
      C                   Eval      #STRING = pFldInhaltSbcs
      C                   Eval      *IN71 = '0'
@@ -530,7 +482,7 @@
       *
      C     fillPgmFlds   Begsr
       *
-     C                   If        (xIsUcs2 = 0)
+     C                   If        (i_isUcs2 = 0)
       *
       *    Nothing to do here
       *
@@ -563,7 +515,7 @@
       *
      C     SetScreen     Begsr
       *
-     C                   If        XDsp80 = *off
+     C                   If        i_dsp80 = *off
       *   132-Zeichen Anzeige
      C                   Eval      *in88 = *off
      C                   Eval      zei = 4
@@ -578,26 +530,24 @@
      C                   Endsr
       *
       *============================================================*
-      *    GetParameters Laden der *ENTRY Parameterwerte           *
+      *    GetParameters Laden der Programmparameter               *
       *============================================================*
       *
      C     GetParameters begsr
       *
-     C                   eval      pXFldInhalt = %addr(xFldInhalt)
-      *
-     C                   if        (xIsUcs2 = 0)
+     C                   if        (i_isUcs2 = 0)
      C                   clear                   pFldInhaltSbcs
-     C                   eval      %subst(pFldInhaltSbcs: 1: xLength) =
-     C                                    xFldInhaltSbcs
+     C                   Eval      %subst(pFldInhaltSbcs: 1: io_length) =
+     C                                    io_fldInhalt.sbcs
      C                   eval      maxFieldLength = %len(#STRING)
      C                   else
      C                   clear                   pFldInhaltUcs2
-     C                   eval      %subst(pFldInhaltUcs2: 1: xLength) =
-     C                                    xFldInhaltUcs2
+     C                   Eval      %subst(pFldInhaltUcs2: 1: io_length) =
+     C                                    io_fldInhalt.ucs2
      C                   eval      maxFieldLength = %len(#UCS2STR)
      C                   endif
       *
-     C                   eval      pLength = xLength
+     C                   eval      pLength = io_length
       *
      C                   endsr
       *
@@ -616,14 +566,14 @@
      C                   Callp     p_rmvPgmMg(§§pgmName)
       *
       *  ermitteln der Feldeigenschaften
-     C                   Eval      F_FIELD = xFldName
+     C                   Eval      F_FIELD = i_fldName
      C     F_KEY         Chain     FPEEKFLD                           11
      C                   If        *in11 <> bFound
      C                   Eval      isPgmError = bTrue
      C                   Clear                   FLDL0100
      C                   Clear                   USR8136
      C                   Eval      §msgID     = 'USR8136'
-     C                   Eval      USR81361   = xFldName
+     C                   Eval      USR81361   = i_fldName
      C                   Eval      §MsgDta    = USR8136
      C                   Else
      C                   Eval      isPgmError = bFalse
@@ -634,18 +584,18 @@
      C                   leavesr
      C                   endif
       *
-      * - Übernehmen der *ENTRY Parameter
+      * - Übernehmen der Programmparameter
      C                   exsr      GetParameters
       *
-     C                   eval      xMsgID  = ' '
-     C                   eval      xMsgDta = ' '
+     C                   eval      o_msgID  = ' '
+     C                   eval      o_msgDta = ' '
       *
      C                   if        (pLength > maxFieldLength)
      C                   eval      isFieldTooLarge = bTrue
      C                   eval      *in70 = bTrue
      C                   else
      C                   eval      isFieldTooLarge = bFalse
-     C                   eval      *in70 = xProtect
+     C                   eval      *in70 = i_protect
      C                   endif
       *
       * - Feld zu groß Hinweis ausgeben
@@ -667,7 +617,7 @@
       *
       * - Copyright
      C                   Eval      §msgID  = 'USR9999'
-     C                   Eval      §msgDta = xCopyRght
+     C                   Eval      §msgDta = i_copyright
      C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
       *
      C                   Endsr
@@ -680,13 +630,11 @@
       *
      C                   Eval      §PgmQ = '*'
       *
-     C                   Eval      PEEK21 = f_pgmCallN('PEEK21')
-     C                   Eval      PEEK23 = f_pgmCallN('PEEK23')
+     C                   Eval      PEEK21_NAME = f_pgmCallN('PEEK21')
+     C                   Eval      PEEK23_NAME = f_pgmCallN('PEEK23')
       *
-     C                   Eval      yPgm    = §§PgmName
-     C                   Eval      yKey    = '*ALL'
-     C                   Eval      yPosF24 = 0
-     C                   Call      PEEK23        P_Peek23
+     C                   Callp     PEEK23(§§PgmName: '*ALL': 0
+     C                                    : yFKeys: yNbrOfKeys)
      C                   Eval      ScrnFKeys = %subarr(YFKeys: 1)
       *
      C                   Endsr

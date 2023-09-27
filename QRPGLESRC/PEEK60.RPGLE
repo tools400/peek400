@@ -26,13 +26,13 @@
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
       *
-      *----------------------------------------------------*
-      *  F E L D - D E F I N I T I O N E N                 *
+      *---Variablendefinition------------------------------*
+      /COPY QCOPYLE,D_VARDEF
       *----------------------------------------------------*
       *
-      *  *ENTRY
-     D xAlwLC          S               N
-     D xNumPasses      S             10I 0
+      /define internal_prototype
+      /COPY QCOPYLE,PPEEK60
+      /undefine internal_prototype
       *
      D cNumPasses_PEEK08...
      D                 C                   const(4)
@@ -49,27 +49,27 @@
       *
       *---ENTRY-LISTE--------------------------------------*
       *
-     C     *entry        Plist
-     C                   Parm                    xAlwLC
-     C                   Parm                    xNumPasses
+     D PEEK60          PI
+     D  i_alwLC                            const like(r§bool)
+     D  o_numPasses                              like(r§int4)
       *
       *---------------------------------------------------*
       *
      C                   Exsr      First
       *
       *  Steuerung: Generieren Display File und RPG Programm
-     C                   Eval      xNumPasses = cNumPasses_PEEK08
+     C                   Eval      o_numPasses = cNumPasses_PEEK08
       *
       *  1. Aufruf PEEK15 (generieren Display File)
-     C                   Eval      xNumPasses = xNumPasses + cNumPasses_PEEK15
+     C                   Eval      o_numPasses = o_numPasses + cNumPasses_PEEK15
       *
       *  2. Aufruf PEEK15 (generieren Display File, lower cases)
-     C                   If        xAlwLC
-     C                   Eval      xNumPasses = xNumPasses + cNumPasses_PEEK15
+     C                   If        (i_alwLC = bTrue)
+     C                   Eval      o_numPasses = o_numPasses + cNumPasses_PEEK15
      C                   Endif
       *
       *  3. Aufruf PEEK16 (generieren RPG Programm)
-     C                   Eval      xNumPasses = xNumPasses + cNumPasses_PEEK16
+     C                   Eval      o_numPasses = o_numPasses + cNumPasses_PEEK16
       *
       *  Programm verlassen
      C     ende          Tag

@@ -67,26 +67,25 @@
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
       *
-     D xQFile          S             20A
-     D xRFmt           S             10A
-     D xOption         S             10A
-     D xAnz            S                   like(r§int4    )
-     D xRcdFmtID       S                   like(r§fmtId   )
-     D xListE          S            512A
-      *
       *---Variablendefinition------------------------------*
       /COPY QCOPYLE,D_VARDEF
+      /COPY QCOPYLE,FLDL0100
+      /COPY QCOPYLE,QUSLFLD
+      /COPY QCOPYLE,GENHEADER
       *----------------------------------------------------*
+      *
+      /define internal_prototype
+      /COPY QCOPYLE,PPEEK02
+      /undefine internal_prototype
       *
       *----------------------------------------------------*
       *  API - DATENSTRUKTUREN                             *
       *----------------------------------------------------*
       *
       *  declarations for QUSCRTUS
+     D  qUsrSpc        DS                  likeds(r§qObj)
+      *
      D                 DS
-     D  SpaceName              1     20
-     D   SpcName               1     10    INZ
-     D   SpcLib               11     20    INZ
      D  SpaceAttr             21     30    INZ
      D  SpaceSize             31     34I 0 INZ
      D  SpaceInit             35     35    INZ
@@ -97,56 +96,21 @@
      D  SpacePtr       S               *
       *
       *  Organisation of generic header
-     D GenHeader       DS                  BASED(SpacePtr)  QUALIFIED
-     D  sizeHeader            65     68I 0
-     D  release_Level         69     72A
-     D  format                72     80A
-     D  api_used              81     90A
-     D  crtDateTime           91    103A
-     D  infStatus            104    104A
-     D  sizeUsed             105    108I 0
-     D  OffsetInp            109    112I 0
-     D  sizeInz              113    116I 0
-     D  OffsetHdr            117    120I 0
-     D  sizeHdr              121    124I 0
-     D  OffsetLst            125    128I 0
-     D  sizeLst              129    132I 0
-     D  NumLstEnt            133    136I 0
-     D  EntrySize            137    140I 0
-     D  DataLen        C                   CONST(32767)
+     D GenHeader       DS                  likeds(genHeader_t)
+     D                                     based(SpacePtr)
       *
-      *  Input parameter section of List Fields (QUSLFLD) API
-     D inputParm       DS                  qualified based(pInputParm)
-     D  usrSpcName             1     10A
-     D  usrSpcLib             11     20A
-     D  format                21     28A
-     D  file                  29     38A
-     D  lib                   39     48A
-     D  rcdFmt                49     58A
-     D  override              59     59A
+     D inputParm       DS                  likeds(QUSLFLD_inpParm_t)
+     D                                     based(pInputParm)
       *
       *  Header section of List Fields (QUSLFLD) API
-     D header          DS                  qualified based(pHeader)
-     D  fileUsed               1     10A
-     D  libUsed               11     20A
-     D  type                  21     30A
-     D  rcdFmt                31     40A
-     D  rcdLen                41     44I 0
-     D  rcdFmtID              45     57A
-     D  rcdTextDesc           58    107A
-     D  reserved_1           108    108A
-     D  rcdTextCcsid         109    112I 0
-     D  varLenFldInd         113    113A
-     D  grphFldInd           114    114A
-     D  datTimFldInd         115    115A
-     D  nullFldInd           116    116A
+     D header          DS                  likeds(QUSLFLD_header_t)
+     D                                     based(pHeader)
       *
       *  Pointer for UserSpace-ListData
      D  ListPtr        S               *
       *  Organisation of list data
      D List            DS                  BASED(ListPtr)
      D  ListData               1    512A
-     D  LstDataLen     C                   CONST(512)
       *
       *  declarations for QUSLFLD
      D                 DS
@@ -168,24 +132,22 @@
       *           Main  Control block                                    *
       ********************************************************************
       *
-     C     *ENTRY        PLIST
-      *  Input
-     C                   PARM                    xQFile
-     C                   PARM                    xRFmt
-     C                   PARM                    xOption
-      *  Output
-     C                   PARM                    xAnz
-     C                   PARM                    xListE
-     C                   PARM                    xRcdFmtId
+     D PEEK02          PI
+     D  i_qFile                            const likeds(r§qObj)
+     D  i_rcdFmt                           const like(r§fmt)
+     D  i_option                           const like(r§option)
+     D  o_count                                  like(r§int4)
+     D  o_listE                                  likeds(FLDL0100_t)
+     D  o_rcdFmtId                               like(r§fmtId)
       *
       *---------------------------------------------------*
       *
      C                   SELECT
-     C     xOption       WHENEQ    '*CREATE'
+     C     i_option      WHENEQ    '*CREATE'
      C                   EXSR      Create
-     C     xOption       WHENEQ    '*DELETE'
+     C     i_option      WHENEQ    '*DELETE'
      C                   EXSR      Delete
-     C     xOption       WHENEQ    '*READ'
+     C     i_option      WHENEQ    '*READ'
      C                   EXSR      Read
      C                   Endsl
       *
@@ -202,14 +164,14 @@
       *
      C     Create        BEGSR
       *
-     C                   EVAL      xAnz = *ZEROS
+     C                   EVAL      o_count = *ZEROS
       *
      C                   EXSR      CHKOBJ
       *
       *  create user space
      C                   IF        (%error())
      C                   CALL      'QUSCRTUS'
-     C                   PARM                    SpaceName
+     C                   PARM                    qUsrSpc
      C                   PARM      'TEMP'        SpaceAttr
      C                   PARM      32767         SpaceSize
      C                   PARM      ' '           SpaceInit
@@ -219,22 +181,12 @@
       *
       *  Ausrichten des UserSpace-Pointers
      C                   CALL      'QUSPTRUS'
-     C                   PARM                    SpaceName
+     C                   PARM                    qUsrSpc
      C                   PARM                    SpacePtr
       *
       *  get file format description
-     C                   EVAL      DRFMT = 'FLDL0100'                           format
-     C                   EVAL      DRFNME = xQFile                              qualf.file
-     C                   EVAL      DRRCDF = xRFmt                               record form.
-     C                   EVAL      DROVRR = '0'                                 override
-      *
-     C                   CALL      'QUSLFLD'
-     C                   PARM                    SpaceName
-     C                   PARM                    DRFMT
-     C                   PARM                    DRFNME
-     C                   PARM                    DRRCDF
-     C                   PARM                    DROVRR
-     C                   PARM                    §ErrorCode
+     C                   CALLP     QUSLFLD(qUsrSpc: 'FLDL0100': i_qFile
+     C                                     : i_rcdFmt: '0': §ErrorCode)
       *
      C     §ErrAvail     IFNE      *ZEROS
      C                   EVAL      GenHeader.numLstEnt = 0
@@ -243,8 +195,8 @@
      C                   EVAL      pInputParm = SpacePtr + GenHeader.OffsetInp
      C                   EVAL      pHeader = SpacePtr + GenHeader.OffsetHdr
       *
-     C                   EVAL      xAnz = GenHeader.NumLstEnt
-     C                   EVAL      xRcdFmtID = Header.rcdFmtID
+     C                   EVAL      o_count = GenHeader.NumLstEnt
+     C                   EVAL      o_rcdFmtId = Header.rcdFmtID
       *
      C                   ENDSR
       *
@@ -259,8 +211,8 @@
      C                   IF        (not %error())
       *
      C                   EVAL      YCMD = 'DLTUSRSPC USRSPC(' +
-     C                                      %trim(SpcLib) + '/' +
-     C                                      %trim(SpcName) +
+     C                                      %trim(qUsrSpc.lib) + '/' +
+     C                                      %trim(qUsrSpc.name) +
      C                                    ')'
       *
      C                   CALL      'QCMDEXC'
@@ -277,17 +229,17 @@
       *
      C     Read          BEGSR
       *
-     C                   EVAL      xListE = *BLANKS
+     C                   EVAL      o_listE = *BLANKS
       *
      C                   IF        GenHeader.numLstEnt > *ZEROS
       *
      C                   EVAL      ListPtr = SpacePtr + GenHeader.OffsetLst
       *
-     C                   EVAL      xListE = ListData
+     C                   EVAL      o_listE = ListData
      C                   EVAL      GenHeader.OffsetLst += GenHeader.EntrySize
      C                   EVAL      GenHeader.NumLstEnt -= 1
       *
-     C                   EVAL      xAnz = GenHeader.NumLstEnt
+     C                   EVAL      o_count = GenHeader.NumLstEnt
      C                   ELSE
       *   Ungültiger Wert in NumLstEnt
      C                   EXSR      *PSSR
@@ -302,8 +254,8 @@
      C     CHKOBJ        BEGSR
       *
      C                   EVAL      YCMD = 'CHKOBJ OBJ(' +
-     C                                      %trim(SpcLib) + '/' +
-     C                                      %trim(SpcName) +
+     C                                      %trim(qUsrSpc.lib) + '/' +
+     C                                      %trim(qUsrSpc.name) +
      C                                    ') OBJTYPE(*USRSPC)'
       *
      C                   CALL(E)   'QCMDEXC'
@@ -318,8 +270,8 @@
       *
      C     *INZSR        BEGSR
       *
-     C                   EVAL      SpcLib = 'QTEMP'
-     C                   EVAL      SpcName = '§PEEK§'
+     C                   EVAL      qUsrSpc.lib = 'QTEMP'
+     C                   EVAL      qUsrSpc.name = '§PEEK§'
       *
      C                   ENDSR
       *
@@ -331,7 +283,7 @@
       *
      C                   DUMP
       *
-     C                   EVAL      xAnz = *ZEROS
+     C                   EVAL      o_count = *ZEROS
      C                   GOTO      ENDE
       *
      C                   ENDSR     '*CANCL'

@@ -108,11 +108,9 @@
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
       *
-     D PEEK22          S                   like(r§pgmCallN) inz
+     D PEEK22_NAME     S                   like(r§pgmCallN) inz
       *
-      *  Peek22
-     D YMode           S             10A
-     D YSection        S             10A
+      /COPY QCOPYLE,PPEEK22
       *
       *---SDS-Datenstruktur--------------------------------*
       /COPY QCOPYLE,ERR_D_SDS
@@ -139,14 +137,6 @@
      C     D_KEY2        KLIST
      C                   KFLD                    D_User
      C                   KFLD                    D_Section
-      *----------------------------------------------------*
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK22
-     C     P_Peek22      PLIST
-     C                   PARM                    YMode
-     C                   PARM                    YSection
-      *----------------------------------------------------*
       *
       *===================================================================*
       *  Prozedur:  p_crtUsrSg                                 (Body)     *
@@ -657,7 +647,7 @@
       *
      C                   EVAL      D_User = '*NONE'
      C                   EVAL      D_Section = i_section
-     C     D_Key2        Reade (N) FDEFAULT                               11
+     C     D_Key2        Reade     FDEFAULT                               11
      C                   IF        *IN11 = *OFF
      C                   Eval      f_readeDft = '0'
      C                   Else
@@ -817,9 +807,7 @@
      C                   Else
       *
      C                   If        f_chainUsr('*PGM': '*VERSION': set0000) = '1'
-     C                   Eval      YMode    = '*REPLACE'
-     C                   Eval      YSection = '*ALL'
-     C                   Call      PEEK22        P_Peek22
+     C                   Callp     PEEK22('*REPLACE': '*ALL')
      C                   Endif
       *
      C                   Eval      o_msgID  = ' '
@@ -883,7 +871,7 @@
      C                   Callp     p_setUsr(§§User: §§User: f_getPrdLb())
      C                   Endif
       *
-     C                   Eval      PEEK22 = f_pgmCallN('PEEK22')
+     C                   Eval      PEEK22_NAME = f_pgmCallN('PEEK22')
       *
      C                   Eval      g_isInit = bTrue
      C                   Endif

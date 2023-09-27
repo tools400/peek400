@@ -34,19 +34,15 @@
       /COPY QCOPYLE,D_VARDEF
       *----------------------------------------------------*
       *
+      /define internal_prototype
+      /COPY QCOPYLE,PPEEK36
+      /undefine internal_prototype
+      *
       *---Nachrichtenaufbau--------------------------------*
       /COPY QCOPYLE,USR8171
       *----------------------------------------------------*
       *
-     D XBuffer         S            128A
-     D XType           S              1A
-     D XDatTimFmt      S                   like(FLDL0100_t.F1DTFM)
-     D XSeparator      S                   like(FLDL0100_t.F1DTSP)
-     D XMsgID          S              7A
-     D XMsgDta         S            512A
-      *
       *---API-Formate--------------------------------------*
-     D FLDL0100        DS                  likeds(FLDL0100_t) inz
       /COPY QCOPYLE,FLDL0100
       *----------------------------------------------------*
       *
@@ -58,49 +54,49 @@
      D R_TimeStmp      S               Z                         INZ(*LOVAL )
      D R_FldLen        S                   like(r§int4    ) inz
      D R_Pos           S                   like(r§int4    ) inz
-     D R_Buffer        S                         LIKE(XBuffer)   INZ(*ZEROS )
-     D R_BuffLen       C                         CONST(%SIZE(XBuffer))
+     D R_Buffer        S                         LIKE(i_buffer)   INZ(*ZEROS )
+     D R_BuffLen       C                         CONST(%SIZE(i_buffer))
       *
-     C     *ENTRY        PLIST
-     C                   PARM                    XBuffer
-     C                   PARM                    XType
-     C                   PARM                    XDatTimFmt
-     C                   PARM                    XSeparator
-     C                   PARM                    XMsgID
-     C                   PARM                    XMsgDta
+     D PEEK36          PI
+     D  i_buffer                    128A   const
+     D  i_type                        1A   const
+     D  i_datTimFmt                        const like(FLDL0100_t.F1DTFM)
+     D  i_separator                        const like(FLDL0100_t.F1DTSP)
+     D  o_msgID                                  like(r§msgID)
+     D  o_msgDta                                 like(r§msgDta)
       *
      C                   EXSR      First
       *
       *  Prüfen Format für ...
      C                   SELECT
       *  ... Datum
-     C     XType         WHENEQ    'L'                                         = Date
+     C     i_type        WHENEQ    'L'                                         = Date
      C                   SELECT
       *      ... *EUR
-     C     XDatTimFmt    WHENEQ    '*EUR'
-     C                   EVAL      R_DateEUR = %date(XBuffer: *EUR)
+     C     i_datTimFmt   WHENEQ    '*EUR'
+     C                   EVAL      R_DateEUR = %date(i_buffer: *EUR)
       *      ... *ISO
      C                   OTHER
-     C                   EVAL      R_DateISO = %date(XBuffer: *ISO)
+     C                   EVAL      R_DateISO = %date(i_buffer: *ISO)
      C                   ENDSL
      C                   EVAL      R_FldLen = 10
       *  ... Zeit
-     C     XType         WHENEQ    'T'                                         = Time
+     C     i_type        WHENEQ    'T'                                         = Time
      C                   SELECT
       *      ... *HMS
-     C     XDatTimFmt    WHENEQ    '*HMS'
-     C                   EVAL      R_TimeHMS = %time(XBuffer: *HMS)
+     C     i_datTimFmt   WHENEQ    '*HMS'
+     C                   EVAL      R_TimeHMS = %time(i_buffer: *HMS)
       *      ... *EUR
-     C     XDatTimFmt    WHENEQ    '*EUR'
-     C                   EVAL      R_TimeEUR = %time(XBuffer: *EUR)
+     C     i_datTimFmt   WHENEQ    '*EUR'
+     C                   EVAL      R_TimeEUR = %time(i_buffer: *EUR)
       *      ... *ISO
      C                   OTHER
-     C                   EVAL      R_TimeISO = %time(XBuffer: *ISO)
+     C                   EVAL      R_TimeISO = %time(i_buffer: *ISO)
      C                   ENDSL
      C                   EVAL      R_FldLen = 8
       *  ... Zeitstempel
-     C     XType         WHENEQ    'Z'                                         = Timestamp
-     C                   EVAL      R_TimeStmp = %timestamp(XBuffer)
+     C     i_type        WHENEQ    'Z'                                         = Timestamp
+     C                   EVAL      R_TimeStmp = %timestamp(i_buffer)
      C                   EVAL      R_FldLen = 26
      C                   OTHER
      C                   EXSR      *PSSR
@@ -109,7 +105,7 @@
      C                   EVAL      R_Pos = R_FldLen + 1
      C     R_Pos         IFLE      R_BuffLen
      C**                 SUBST (P) XBuffer:R_Pos R_Buffer
-     C                   EVAL      R_Buffer = %subst(XBuffer: R_Pos)
+     C                   EVAL      R_Buffer = %subst(i_buffer: R_Pos)
      C                   ELSE
      C                   EVAL      R_Buffer = *BLANKS
      C                   Endif
@@ -130,8 +126,8 @@
       *
      C     First         BEGSR
       *
-     C                   EVAL      XMsgID = *BLANKS
-     C                   EVAL      XMsgDta = *BLANKS
+     C                   EVAL      o_msgID = *BLANKS
+     C                   EVAL      o_msgDta = *BLANKS
       *
      C                   ENDSR
       *
@@ -141,9 +137,9 @@
       *
      C     *PSSR         BEGSR
       *
-     C                   EVAL      XMsgID = 'USR8171'
-     C                   EVAL      USR81711 = XBuffer
-     C                   EVAL      XMsgDta = USR8171
+     C                   EVAL      o_msgID = 'USR8171'
+     C                   EVAL      USR81711 = i_buffer
+     C                   EVAL      o_msgDta = USR8171
      C                   GOTO      ENDE
       *
      C                   ENDSR     '*CANCL'

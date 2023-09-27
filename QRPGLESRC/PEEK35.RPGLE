@@ -43,6 +43,10 @@
       /COPY QCOPYLE,D_INFDS
       *----------------------------------------------------*
       *
+      /define internal_prototype
+      /COPY QCOPYLE,PPEEK35
+      /undefine internal_prototype
+      *
       *---Nachrichtenaufbau--------------------------------*
       /COPY QCOPYLE,USR8167
       /COPY QCOPYLE,USR8168
@@ -62,12 +66,6 @@
       *  F E L D - D E F I N I T I O N E N                 *
       *----------------------------------------------------*
       *
-     D XRcdNbr         S                   LIKE(R§RcdNbr)
-     D XBuffer         S           1024A
-     D XFldName        S             10A
-     D XMsgID          S              7A
-     D XMsgDta         S            512A
-      *
      D IsError         S              1A   INZ(bFalse)
       *
       *---Arbeitsdatenbereich für PEEKWRK------------------*
@@ -80,12 +78,12 @@
       *
       *---ENTRY-LISTE--------------------------------------*
       *
-     C     *ENTRY        PLIST
-     C                   PARM                    XRcdNbr
-     C                   PARM                    XBuffer
-     C                   PARM                    XFldName
-     C                   PARM                    XMsgID
-     C                   PARM                    XMsgDta
+     D PEEK35          PI
+     D  i_rcdNbr                           const like(r§rcdNbr)
+     D  i_buffer                   1024A   const
+     D  o_fldName                                like(r§fieldNme)
+     D  o_msgID                                  like(r§msgID)
+     D  o_msgDta                                 like(r§msgDta)
       *
       *----------------------------------------------------*
       *  Schlüsselliste für PEEKWRK
@@ -152,13 +150,13 @@
      C     *IN11         IFEQ      '1'
       *  Hurra, eindeutige Numnmer ...
      C                   ELSE
-     C                   IF        Work_00_DS.RcdNbr = XRcdNbr
+     C                   IF        Work_00_DS.RcdNbr = i_rcdNbr
       *  ... auch gut, weil derselbe Datensatz
      C                   ELSE
       *  ... Fehler, doppelter Sortierfolgen-Nr.
      C                   EVAL      IsError = bTrue
-     C                   EVAL      XMsgID = 'USR8167'
-     C                   EVAL      XMsgDta = USR8167
+     C                   EVAL      o_msgID = 'USR8167'
+     C                   EVAL      o_msgDta = USR8167
      C                   GOTO      EPrf20
      C                   Endif
      C                   Endif
@@ -166,7 +164,7 @@
      C     EPrf20        TAG
       *
      C     IsError       IFEQ      bTrue
-     C                   EVAL      XFldName = 'SEQ'
+     C                   EVAL      o_fldName = 'SEQ'
      C                   Endif
       *
      C                   ENDSR
@@ -184,16 +182,16 @@
       *  ist zulässig
      C                   OTHER
      C                   EVAL      IsError = bTrue
-     C                   EVAL      XMsgID = 'USR8168'
+     C                   EVAL      o_msgID = 'USR8168'
      C                   EVAL      USR81681 = WRK_Hidden
-     C                   EVAL      XMsgDta = USR8168
+     C                   EVAL      o_msgDta = USR8168
      C                   GOTO      EPrf21
      C                   Endsl
       *
      C     EPrf21        TAG
       *
      C     IsError       IFEQ      bTrue
-     C                   EVAL      XFldName = 'HIDDEN'
+     C                   EVAL      o_fldName = 'HIDDEN'
      C                   Endif
       *
      C                   ENDSR
@@ -208,7 +206,7 @@
      C     EPrf22        TAG
       *
      C     IsError       IFEQ      bTrue
-     C                   EVAL      XFldName = 'COLOR'
+     C                   EVAL      o_fldName = 'COLOR'
      C                   Endif
       *
      C                   ENDSR
@@ -226,16 +224,16 @@
       *  ist zulässig
      C                   OTHER
      C                   EVAL      IsError = bTrue
-     C                   EVAL      XMsgID = 'USR8169'
+     C                   EVAL      o_msgID = 'USR8169'
      C                   EVAL      USR81691 = WRK_MrkCol
-     C                   EVAL      XMsgDta = USR8169
+     C                   EVAL      o_msgDta = USR8169
      C                   GOTO      EPrf23
      C                   Endsl
       *
      C     EPrf23        TAG
       *
      C     IsError       IFEQ      bTrue
-     C                   EVAL      XFldName = 'MARKCOL'
+     C                   EVAL      o_fldName = 'MARKCOL'
      C                   Endif
       *
      C                   ENDSR
@@ -250,16 +248,16 @@
       *  ist zulässig
      C                   ELSE
      C                   EVAL      IsError = bTrue
-     C                   EVAL      XMsgID = 'USR8170'
+     C                   EVAL      o_msgID = 'USR8170'
      C                   EVAL      USR81701 = WRK_MaxSiz
-     C                   EVAL      XMsgDta = USR8170
+     C                   EVAL      o_msgDta = USR8170
      C                   GOTO      EPrf24
      C                   Endif
       *
      C     EPrf24        TAG
       *
      C     IsError       IFEQ      bTrue
-     C                   EVAL      XFldName = 'MAXSIZE'
+     C                   EVAL      o_fldName = 'MAXSIZE'
      C                   Endif
       *
      C                   ENDSR
@@ -274,7 +272,7 @@
      C     EPrf25        TAG
       *
      C     IsError       IFEQ      bTrue
-     C                   EVAL      XFldName = 'EDTCDE'
+     C                   EVAL      o_fldName = 'EDTCDE'
      C                   Endif
       *
      C                   ENDSR
@@ -287,20 +285,12 @@
       *
      C                   OPEN      PEEKWRK
       *
-     C                   EVAL      WRK0001 = XBuffer
+     C                   EVAL      WRK0001 = i_buffer
       *
       * - Rückkehrcode
-     C                   EVAL      XFldName = *BLANKS
-     C                   EVAL      XMsgID = *BLANKS
-     C                   EVAL      XMsgDta = *BLANKS
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    *INZSR        Programminitialisierung                   *
-      *============================================================*
-      *
-     C     *INZSR        BEGSR
+     C                   EVAL      o_fldName = *BLANKS
+     C                   EVAL      o_msgID = *BLANKS
+     C                   EVAL      o_msgDta = *BLANKS
       *
      C                   ENDSR
       *

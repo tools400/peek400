@@ -64,34 +64,24 @@
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
       *
-     D xQFile          S             20A
-     D xFunk           S             10A
-     D xAnz            S                   like(r§int4    )
-     D xList           S            512A
-      *
       *---Variablendefinition------------------------------*
       /COPY QCOPYLE,D_VARDEF
+      /COPY QCOPYLE,OBJL0200
+      /COPY QCOPYLE,FLDL0100
       *----------------------------------------------------*
       *
-      *----------------------------------------------------*
-      *  API - DATENSTRUKTUREN                             *
-      *----------------------------------------------------*
+      /define internal_prototype
+      /COPY QCOPYLE,PPEEK70
+      /undefine internal_prototype
       *
-      *  declarations for QUSCRTUS
-     D                 DS
-     D  SpaceName              1     20
-     D   SpcName               1     10    INZ
-     D   SpcLib               11     20    INZ
-     D  SpaceAttr             21     30    INZ
-     D  SpaceSize             31     34I 0 INZ
-     D  SpaceInit             35     35    INZ
-     D  SpaceAut              36     45    INZ
-     D  SpaceDesc             46     95    INZ
+      /COPY QCOPYLE,QUSLOBJ
       *
-      *  Pointer for UserSpace
-     D  SpacePtr       S               *
+     D  qUsrSpc        DS                  likeds(r§qObj) inz
+     D  pSpcPtr        S               *
+     D  errCode        DS                  likeds(errCode_t) inz
+      *
       *  Organisation of generic header
-     D GenHeader       DS                  BASED(SpacePtr)
+     D GenHeader       DS                  BASED(pSpcPtr)
      D  Data                          1A   DIM(32767)
      D  OffsetHdr            117    120I 0
      D  OffsetLst            125    128I 0
@@ -113,40 +103,33 @@
      D  SpcStrPos      S             10I 0
      D  SpcRtvLen      S             10I 0
       *
-      *  declarations for QUSLOBJ
-     D                 DS
-     D  MBFNME                 1     20
-     D   MBFILE                1     10
-     D   MBLIB                11     20
-     D  MBFMT                 21     28
-     D  MBTYPE                31     40
+      /COPY QCOPYLE,QUSCRTUS
+      /COPY QCOPYLE,QUSPTRUS
       *
-      *  API error reporting
-      /COPY QCOPYLE,API_ERROR
+      /COPY QCOPYLE,F_PEEK53
+      /COPY QCOPYLE,F_PEEK58
       *
-     D yCmd            S            256A   inz
-     D yCmdL           S             15P 5 inz
+     D msgId           S                   like(r§msgId)
+     D msgDta          S                   like(r§msgDta)
       *
       ********************************************************************
       *           Main  Control block                                    *
       ********************************************************************
       *
-     C     *ENTRY        PLIST
-      *  Input
-     C                   PARM                    xQFile
-     C                   PARM                    xFunk
-      *  Output
-     C                   PARM                    xAnz
-     C                   PARM                    xList
+     D PEEK70          PI
+     D  i_qFile                            const likeds(r§qObj)
+     D  i_funk                             const like(r§option)
+     D  o_anz                                    like(r§int4)
+     D  o_objl0200                               likeds(objl0200_t)
       *
       *---------------------------------------------------*
       *
      C                   SELECT
-     C     XFUNK         WHENEQ    '*CREATE'
+     C     i_funk        WHENEQ    '*CREATE'
      C                   EXSR      Create
-     C     XFUNK         WHENEQ    '*DELETE'
+     C     i_funk        WHENEQ    '*DELETE'
      C                   EXSR      Delete
-     C     XFUNK         WHENEQ    '*READ'
+     C     i_funk        WHENEQ    '*READ'
      C                   EXSR      Read
      C                   Endsl
       *
@@ -163,43 +146,27 @@
       *
      C     Create        BEGSR
       *
-     C                   EVAL      XANZ = *ZEROS
-      *
-     C                   EXSR      CHKOBJ
+     C                   EVAL      o_anz = *ZEROS
       *
       *  create user space
-     C     *IN99         IFEQ      '1'
-     C                   CALL      'QUSCRTUS'
-     C                   PARM                    SpaceName
-     C                   PARM      'TEMP'        SpaceAttr
-     C                   PARM      32767         SpaceSize
-     C                   PARM      ' '           SpaceInit
-     C                   PARM      '*ALL'        SpaceAut
-     C                   PARM      ' '           SpaceDesc
+     C                   IF        (not f_exist(
+     C                                qUsrSpc.name: qUsrSpc.lib: '*USRSPC'))
+     C                   Callp     QUSCRTUS(qUsrSpc: 'TEMP': 32767: x'00'
+     C                                      : '*ALL': 'Peek/400 - Work Area')
      C                   Endif
       *
       *  Ausrichten des UserSpace-Pointers
-     C                   CALL      'QUSPTRUS'
-     C                   PARM                    SpaceName
-     C                   PARM                    SpacePtr
+     C                   Callp     QUSPTRUS(qUsrSpc: pSpcPtr)
       *
       *  get file format description
-     C                   EVAL      MBFMT = 'OBJL0200'                           format
-     C                   EVAL      MBFNME = XQFILE                              qualf.file
-     C                   EVAL      MBTYPE = '*FILE'                             obj types
+     C                   Callp     QUSLOBJ(qUsrSpc: 'OBJL0200'
+     C                                     : i_qFile: '*FILE': errCode)
       *
-     C                   CALL      'QUSLOBJ'
-     C                   PARM                    SpaceName
-     C                   PARM                    MBFMT
-     C                   PARM                    MBFNME
-     C                   PARM                    MBTYPE
-     C                   PARM                    §ErrorCode
-      *
-     C     §ErrAvail     IFNE      *ZEROS
-     C                   EVAL      NumLstEnt = *ZEROS
+     C                   If        (errCode.bytAvl > 0)
+     C                   EVAL      NumLstEnt = 0
      C                   Endif
       *
-     C                   EVAL      XANZ = NumLstEnt
+     C                   EVAL      o_anz = NumLstEnt
       *
      C                   ENDSR
       *
@@ -209,19 +176,13 @@
       *
      C     Delete        BEGSR
       *
-     C                   EXSR      CHKOBJ
-      *
-     C     *IN99         IFEQ      '0'
-      *
-     C                   EVAL      YCMD = 'DLTUSRSPC USRSPC(' +
-     C                                      %trim(SpcLib) + '/' +
-     C                                      %trim(SpcLib) +
-     C                                    ')'
-      *
-     C                   CALL      'QCMDEXC'
-     C                   PARM                    yCmd
-     C                   PARM      256           yCmdL
-      *
+     C                   IF        (f_exist(
+     C                                qUsrSpc.name: qUsrSpc.lib: '*USRSPC'))
+     C
+     C                   Callp     f_execute('DLTUSRSPC USRSPC(' +
+     C                                         %trim(qUsrSpc.lib) + '/' +
+     C                                         %trim(qUsrSpc.name) +
+     C                                       ')': msgId: msgDta)
      C                   Endif
       *
      C                   ENDSR
@@ -232,7 +193,7 @@
       *
      C     Read          BEGSR
       *
-     C                   EVAL      XLIST = *BLANKS
+     C                   EVAL      o_objl0200 = *BLANKS
       *
      C     NumLstEnt     IFGT      *ZEROS
      C     OffsetLst     IFGE      maxData
@@ -242,11 +203,11 @@
       *
      C                   EVAL      ListPtr = %ADDR(Data(OffsetLst+1))
       *
-     C                   EVAL      XLIST = ListData
+     C                   EVAL      o_objl0200 = ListData
      C                   EVAL      OffsetLst = OffsetLst + EntrySize
      C                   EVAL      NumLstEnt = NumLstEnt - 1
       *
-     C                   EVAL      XANZ = NumLstEnt
+     C                   EVAL      o_anz = NumLstEnt
      C                   Endif
      C                   ELSE
       *   Ungültiger Wert in NumLstEnt
@@ -267,16 +228,16 @@
       *
      C                   EVAL      SpcRtvLen = EntrySize
      C                   CALL      'QUSRTVUS'
-     C                   PARM                    SpaceName
+     C                   PARM                    qUsrSpc
      C                   PARM                    SpcStrPos
      C                   PARM                    SpcRtvLen
      C                   PARM                    RtvData
       *
-     C                   EVAL      XLIST = RtvData
+     C                   EVAL      o_objl0200 = RtvData
      C                   EVAL      OffsetLst = OffsetLst + EntrySize
      C                   EVAL      NumLstEnt = NumLstEnt - 1
       *
-     C                   EVAL      XANZ = NumLstEnt
+     C                   EVAL      o_anz = NumLstEnt
       *
      C                   ELSE
       *   Ungültiger Wert in NumLstEnt
@@ -286,30 +247,13 @@
      C                   ENDSR
       *
       *====================================================*
-      *  CHKOBJ --  check existance of user space          *
-      *====================================================*
-      *
-     C     CHKOBJ        BEGSR
-      *
-     C                   EVAL      YCMD = 'CHKOBJ OBJ(' +
-     C                                      %trim(SpcLib) + '/' +
-     C                                      %trim(SpcName) +
-     C                                    ') OBJTYPE(*USRSPC)'
-      *
-     C                   CALL      'QCMDEXC'                            99
-     C                   PARM                    yCmd
-     C                   PARM      256           yCmdL
-      *
-     C                   ENDSR
-      *
-      *====================================================*
       *  *INZSR --  Initialize program                     *
       *====================================================*
       *
      C     *INZSR        BEGSR
       *
-     C                   EVAL      SpcLib = 'QTEMP'
-     C                   EVAL      SpcName = '§PEEK§'
+     C                   EVAL      qUsrSpc.lib = 'QTEMP'
+     C                   EVAL      qUsrSpc.name = '§PEEK§'
       *
      C                   EVAL      maxData = DataLen - LstDataLen
       *
@@ -323,7 +267,7 @@
       *
      C                   DUMP
       *
-     C                   EVAL      XANZ = *ZEROS
+     C                   EVAL      o_anz = *ZEROS
      C                   GOTO      ENDE
       *
      C                   ENDSR     '*CANCL'

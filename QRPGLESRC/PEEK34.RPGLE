@@ -60,6 +60,10 @@
       /COPY QCOPYLE,D_INFDS
       *----------------------------------------------------*
       *
+      /define internal_prototype
+      /COPY QCOPYLE,PPEEK34
+      /undefine internal_prototype
+      *
       *---Variablendefinition ShortCmd---------------------*
       /COPY QCOPYLE,ShortCmd_D
       *----------------------------------------------------*
@@ -88,6 +92,11 @@
       /COPY QCOPYLE,D_COLORATR
       *----------------------------------------------------*
       *
+      /COPY QCOPYLE,PPEEK21
+      /COPY QCOPYLE,PPEEK23
+      /COPY QCOPYLE,PPEEK25
+      /COPY QCOPYLE,PPEEK35
+      *
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
       *
@@ -114,12 +123,6 @@
       *---Arbeitsdatenbereich für PEEKWRK------------------*
       /COPY QCOPYLE,WRK0001
       *----------------------------------------------------*
-      *
-     D XDsp80          S              1A
-     D XCopyRight      S            512A
-     D XFunction       S             10A
-     D XMsgID          S              7A
-     D XMsgDta         S            512A
       *
      D yPgm            S             10A   inz
      D yKey            S             10A   inz
@@ -157,10 +160,10 @@
       *IsEditcode      S              1A   INZ(bFalse)
      D IsBatch         S              1A   INZ(bFalse)
       *
-     D PEEK21          S                   like(r§pgmCallN) inz
-     D PEEK23          S                   like(r§pgmCallN) inz
-     D PEEK25          S                   like(r§pgmCallN) inz
-     D PEEK35          S                   like(r§pgmCallN) inz
+     D PEEK21_NAME     S                   like(r§pgmCallN) inz
+     D PEEK23_NAME     S                   like(r§pgmCallN) inz
+     D PEEK25_NAME     S                   like(r§pgmCallN) inz
+     D PEEK35_NAME     S                   like(r§pgmCallN) inz
       *
      D R_Field         S                   INZ(*BLANKS) LIKE(##Field)
      D R_Seq           S                   INZ(*ZEROS ) LIKE(F_Seq  )
@@ -176,50 +179,12 @@
       *
       *---ENTRY-LISTE--------------------------------------*
       *
-     C     *ENTRY        PLIST
-     C                   PARM                    XDsp80
-     C                   PARM                    XCopyRight
-     C                   PARM                    XFunction
-     C                   PARM                    XMsgID
-     C                   PARM                    XMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK23
-     C     P_Peek23      PLIST
-     C                   PARM                    yPgm
-     C                   PARM                    yKey
-     C                   PARM                    yPosF24
-     C                   PARM                    yFKeys
-     C                   PARM                    yNbrOfKeys
-     C                   PARM                    yMsgID
-     C                   PARM                    yMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK21
-     C     P_Peek21      PLIST
-     C                   PARM                    YScnAID
-     C                   PARM                    YPgm
-     C                   PARM                    YPgmCmd
-     C                   PARM                    YCmdDta
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK25
-     C     P_Peek25      PLIST
-     C                   PARM                    YDsp80
-     C                   PARM                    YColorAttr
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK35
-     C     P_Peek35      PLIST
-     C                   PARM                    YRcdNbr
-     C                   PARM                    YBuffer
-     C                   PARM                    YField
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
+     D PEEK34          PI
+     D  i_dsp80                            const like(r§dsp80)
+     D  i_copyright                        const like(r§copyRght)
+     D  i_option                           const like(r§option)
+     D  o_msgID                                  like(r§msgID)
+     D  o_msgDta                                 like(r§msgDta)
       *
       *----------------------------------------------------*
       *  Schlüsselliste für PEEKWRK
@@ -296,9 +261,8 @@
       *
       *  Mappen der gedrückten Taste
       *  in Programmbefehl
-     C                   EVAL      YScnAID = §ScnAID
-     C                   EVAL      YPgm = §§PgmName
-     C                   CALL      PEEK21        P_Peek21
+     C                   CALLP     PEEK21(§ScnAID: §§PgmName
+     C                                    : YPgmCmd: YCmdDta: YMsgID: YMsgDta)
      C     YMsgID        IFNE      *BLANKS
      C                   EVAL      §MsgID = YMsgID
      C                   EVAL      §MsgDta = YMsgDta
@@ -562,9 +526,8 @@
      C                   EVAL      SFPAU = %triml(SFPAU)
       *
       *  Zuordnung AUSWAHL => Befehl ...
-     C                   EVAL      YScnAID = '#' + SFPAU
-     C                   EVAL      YPgm = §§PgmName
-     C                   CALL      PEEK21        P_Peek21
+     C                   CALLP     PEEK21('#' + SFPAU: §§PgmName
+     C                                    : YPgmCmd: YCmdDta: YMsgID: YMsgDta)
      C     YMsgID        IFNE      *BLANKS
       *  Fehlermeldung ...
      C                   EVAL      §MsgID = 'USR8110'
@@ -606,9 +569,13 @@
      C                   EXSR      GetColor
      C                   EXSR      FillRecord
       *  Prüfen, Datensatz ...
-     C                   EVAL      YRcdNbr = RecordNbr
-     C                   EVAL      YBuffer = WRK0001
-     C                   CALL      PEEK35        P_Peek35               99
+     C                   monitor
+     C                   callp     PEEK35(RecordNbr: WRK0001: yField
+     C                                    : YMsgID: YMsgDta)
+     C                   eval      *in99 = bFalse
+     C                   on-error
+     C                   eval      *in99 = bTrue
+     C                   endmon
       *  ... Fehler beim Programmaufruf
      C     *IN99         IFEQ      '1'
      C                   EXSR      VSfpauErr
@@ -647,9 +614,14 @@
       *
      C     ##Color       IFNE      *BLANKS
       *
-     C                   EVAL      YDsp80 = XDsp80
      C                   EVAL      YColorAttr = $$Color
-     C                   CALL      PEEK25        P_Peek25               99
+      *
+     C                   monitor
+     C                   callp     PEEK25(i_dsp80: YColorAttr: yMsgID: yMsgDta)
+     C                   eval      *in99 = bFalse
+     C                   on-error
+     C                   eval      *in99 = bTrue
+     C                   endmon
       *
      C     *IN99         IFEQ      '1'
       *             Fehler aufgetreten
@@ -673,9 +645,9 @@
       *
      C                   Callp     p_rmvPgmMg(§§pgmName)
       *
-     C                   EVAL      XMsgID = 'USR8100'
+     C                   EVAL      o_msgID = 'USR8100'
      C                   EVAL      USR81001 = YPgmCmd
-     C                   EVAL      XMsgDta = USR8100
+     C                   EVAL      o_msgDta = USR8100
       *
      C                   ENDSR
       *
@@ -714,8 +686,8 @@
       *
      C                   Callp     p_rmvPgmMg(§§pgmName)
       *
-     C                   EVAL      XMsgID = 'USR8112'
-     C                   EVAL      XMsgDta = *BLANKS
+     C                   EVAL      o_msgID = 'USR8112'
+     C                   EVAL      o_msgDta = *BLANKS
       *
      C                   ENDSR
       *
@@ -1175,7 +1147,7 @@
       *
      C     SetScreen     BEGSR
       *
-     C     XDsp80        IFEQ      '0'
+     C     i_dsp80       IFEQ      '0'
       *   132-Zeichen Anzeige
      C                   EVAL      *IN88 = '0'
      C                   EVAL      ZEI = 2
@@ -1267,12 +1239,12 @@
      C                   EVAL      ##Field = *BLANKS
       *
       * - Rückkehrcode
-     C                   EVAL      XMsgID = *BLANKS
-     C                   EVAL      XMsgDta = *BLANKS
+     C                   EVAL      o_msgID = *BLANKS
+     C                   EVAL      o_msgDta = *BLANKS
       *
       * - Batchverarbeitung
      C                   SELECT
-     C     XFunction     WHENEQ    '*FLOATKEYS'
+     C     i_option      WHENEQ    '*FLOATKEYS'
      C                   EXSR      C_FloatKey
      C                   EXSR      C_SaveExit
      C                   EVAL      IsBatch = bTrue
@@ -1299,7 +1271,7 @@
       *
       * - Copyright
      C                   EVAL      §MsgID = 'USR9999'
-     C                   EVAL      §MsgDta = XCopyRight
+     C                   EVAL      §MsgDta = i_copyright
      C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
       *
      C                   ENDSR
@@ -1312,15 +1284,13 @@
       *
      C                   Eval      §PgmQ = '*'
       *
-     C                   Eval      PEEK21 = f_pgmCallN('PEEK21')
-     C                   Eval      PEEK23 = f_pgmCallN('PEEK23')
-     C                   Eval      PEEK25 = f_pgmCallN('PEEK25')
-     C                   Eval      PEEK35 = f_pgmCallN('PEEK35')
+     C                   Eval      PEEK21_NAME = f_pgmCallN('PEEK21')
+     C                   Eval      PEEK23_NAME = f_pgmCallN('PEEK23')
+     C                   Eval      PEEK25_NAME = f_pgmCallN('PEEK25')
+     C                   Eval      PEEK35_NAME = f_pgmCallN('PEEK35')
       *
-     C                   Eval      yPgm    = §§PgmName
-     C                   Eval      yKey    = '*ALL'
-     C                   Eval      yPosF24 = NbrFKeys
-     C                   Call      PEEK23        P_Peek23
+     C                   Callp     PEEK23(§§PgmName: '*ALL': NbrFKeys
+     C                                    : yFKeys: yNbrOfKeys)
      C                   Eval      ScrnFKeys = %subarr(YFKeys: 1)
       *
      C                   Endsr

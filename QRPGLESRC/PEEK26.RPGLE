@@ -43,6 +43,10 @@
       /COPY QCOPYLE,FLDL0100
       *----------------------------------------------------*
       *
+      /define internal_prototype
+      /COPY QCOPYLE,PPEEK26
+      /undefine internal_prototype
+      *
       *---Variablendefinition ShortCmd---------------------*
       /COPY QCOPYLE,ShortCmd_D
       *----------------------------------------------------*
@@ -73,28 +77,11 @@
       *  F E L D - D E F I N I T I O N E N                 *
       *----------------------------------------------------*
       *
-     D XDsp80          S              1A
-     D XQSrcFile       DS
-     D  XSrcFile                     10A
-     D  XSrcLib                      10A
-     D XSrcMbr         S             10A
-     D XFile           S             10A
-     D XLibrary        S             10A
-     D XMember         S             10A
-     D XMbrOpt         S             10A
-     D XCrtFile        S             10A
-     D XMsgID          S              7A
-     D XMsgDta         S            512A
-      *
-     D YPgm            S             10A                 inz
-     D YKey            S             10A                 inz
-     D YPosF24         S                   like(r§int4    ) inz
      D YFKeys          S             18A   DIM(32)       INZ(*BLANKS)
      D YNbrOfKeys      S                   like(r§int4    ) inz
      D YMsgID          S              7A                 INZ(*BLANKS)
      D YMsgDta         S            512A                 INZ(*BLANKS)
       *
-     D YScnAID         S             10A   INZ(*BLANKS)
      D YPgmCmd         S             10A   INZ(*BLANKS)
      D YCmdDta         S                   LIKE(r§pgmCmdDt) INZ(*BLANKS)
       *
@@ -105,16 +92,17 @@
      D SfBot           S                   like(r§int4    ) inz
      D NbrFKeys        C                   CONST(2)
       *
-     D Wrk_Field       S             10A
-      *
-     D PEEK21          S                   like(r§pgmCallN) inz
-     D PEEK23          S                   like(r§pgmCallN) inz
+     D PEEK21_NAME     S                   like(r§pgmCallN) inz
+     D PEEK23_NAME     S                   like(r§pgmCallN) inz
       *
      D A1              S              1A   INZ(*BLANKS)
       *
-     D R_SrcFile       S                   LIKE(XSrcFile)  INZ(*BLANKS)
-     D R_SrcLib        S                   LIKE(XSrcLib )  INZ(*BLANKS)
-     D R_SrcMbr        S                   LIKE(XSrcMbr )  INZ(*BLANKS)
+     D R_SrcFile       S                   LIKE(i_qSrcFile.name) inz
+     D R_SrcLib        S                   LIKE(i_qSrcFile.lib) inz
+     D R_SrcMbr        S                   LIKE(i_srcMbr) inz
+      *
+      /COPY QCOPYLE,PPEEK21
+      /COPY QCOPYLE,PPEEK23
       *
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
@@ -125,38 +113,17 @@
       *
       *---ENTRY-LISTE--------------------------------------*
       *
-     C     *ENTRY        PLIST
-     C                   PARM                    XDsp80
-     C                   PARM                    XQSrcFile
-     C                   PARM                    XSrcMbr
-     C                   PARM                    XFile
-     C                   PARM                    XLibrary
-     C                   PARM                    XMember
-     C                   PARM                    XMbrOpt
-     C                   PARM                    XCrtFile
-     C                   PARM                    XMsgID
-     C                   PARM                    XMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK23
-     C     P_Peek23      PLIST
-     C                   PARM                    yPgm
-     C                   PARM                    yKey
-     C                   PARM                    yPosF24
-     C                   PARM                    yFKeys
-     C                   PARM                    yNbrOfKeys
-     C                   PARM                    yMsgID
-     C                   PARM                    yMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK21
-     C     P_Peek21      PLIST
-     C                   PARM                    YScnAID
-     C                   PARM                    YPgm
-     C                   PARM                    YPgmCmd
-     C                   PARM                    YCmdDta
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
+     D PEEK26          PI
+     D  i_dsp80                            const like(r§dsp80)
+     D  i_qSrcFile                         const likeds(r§qObj)
+     D  i_srcMbr                           const like(r§mbr)
+     D  o_toFile                                 like(r§file)
+     D  o_toLib                                  like(r§lib)
+     D  o_toMbr                                  like(r§mbr)
+     D  o_mbrOpt                     10A
+     D  o_crtFile                    10A
+     D  o_msgID                                  like(r§msgID)
+     D  o_msgDta                                 like(r§msgDta)
       *
       *---------------------------------------------------*
       *
@@ -211,9 +178,8 @@
       *
       *  Mappen der gedrückten Taste
       *  in Programmbefehl
-     C                   EVAL      YScnAID = §ScnAID
-     C                   EVAL      YPgm = §§PgmName
-     C                   CALL      PEEK21        P_Peek21
+     C                   CALLP     PEEK21(§ScnAID: §§PgmName
+     C                                    : YPgmCmd: YCmdDta: YMsgID: YMsgDta)
      C     YMsgID        IFNE      *BLANKS
      C                   EVAL      §MsgID = YMsgID
      C                   EVAL      §MsgDta = YMsgDta
@@ -277,13 +243,13 @@
      C                   EXSR      PRFB1
       *
      C     *IN99         IFEQ      '0'
-     C                   EVAL      XFile = ##File
-     C                   EVAL      XLibrary = ##Library
-     C                   EVAL      XMember = ##Member
-     C                   EVAL      XMbrOpt = ##MbrOpt
-     C                   EVAL      XCrtFile = ##CrtFile
-     C                   EVAL      XMsgID = 'USR8112'
-     C                   EVAL      XMsgDta = *BLANKS
+     C                   EVAL      o_toFile = ##File
+     C                   EVAL      o_toLib = ##Library
+     C                   EVAL      o_toMbr = ##Member
+     C                   EVAL      o_mbrOpt = ##MbrOpt
+     C                   EVAL      o_crtFile = ##CrtFile
+     C                   EVAL      o_msgID = 'USR8112'
+     C                   EVAL      o_msgDta = *BLANKS
      C                   Endif
       *
      C                   ENDSR
@@ -496,7 +462,7 @@
       *
      C                   Callp     p_rmvPgmMg(§§pgmName)
       *
-     C                   EVAL      XMsgID = 'USR8100'
+     C                   EVAL      o_msgID = 'USR8100'
       *
      C                   SELECT
      C     §ScnAID       WHENEQ    §F3
@@ -507,7 +473,7 @@
      C                   EVAL      USR81001 = 'Fxx'
      C                   Endsl
       *
-     C                   EVAL      XMsgDta = USR8100
+     C                   EVAL      o_msgDta = USR8100
       *
      C                   ENDSR
       *
@@ -561,7 +527,7 @@
       *
      C     SetScreen     BEGSR
       *
-     C     XDsp80        IFEQ      '0'
+     C     i_dsp80       IFEQ      '0'
       *   132-Zeichen Anzeige
      C                   EVAL      *IN88 = '0'
      C                   EVAL      ZEI = 8
@@ -582,15 +548,15 @@
      C     First         BEGSR
       *
       * - Quelldatei hat gewechselt ...
-     C     XSrcFile      IFNE      R_SrcFile
-     C     XSrcLib       ORNE      R_SrcLib
-     C     XSrcMbr       ORNE      R_SrcMbr
+     C                   IF        (i_qSrcFile.name <> R_SrcFile or
+     C                              i_qSrcFile.lib <> R_SrcLib or
+     C                              i_srcMbr <> R_SrcMbr)
      C                   EVAL      ##File = *BLANKS
      C                   EVAL      ##Library = *BLANKS
-     C                   EVAL      ##Member = XSrcMbr
-     C                   EVAL      R_SrcFile = XSrcFile
-     C                   EVAL      R_SrcLib = XSrcLib
-     C                   EVAL      R_SrcMbr = XSrcMbr
+     C                   EVAL      ##Member = i_srcMbr
+     C                   EVAL      R_SrcFile = i_qSrcFile.name
+     C                   EVAL      R_SrcLib = i_qSrcFile.lib
+     C                   EVAL      R_SrcMbr = i_srcMbr
      C                   ELSE
       * - Quelldatei hat nicht gewechselt ...
       *              alte Werte stehenlassen
@@ -605,8 +571,8 @@
       * - Programm initialisieren
      C                   Callp     p_rmvPgmMg(§§pgmName)
       *
-     C                   EVAL      XMsgID = *BLANKS
-     C                   EVAL      XMsgDta = *BLANKS
+     C                   EVAL      o_msgID = *BLANKS
+     C                   EVAL      o_msgDta = *BLANKS
       *
       * - Bildschirmfelder füllen
      C                   EXSR      FILL##
@@ -631,13 +597,11 @@
       *
      C                   Eval      §PgmQ = '*'
       *
-     C                   Eval      PEEK21 = f_pgmCallN('PEEK21')
-     C                   Eval      PEEK23 = f_pgmCallN('PEEK23')
+     C                   Eval      PEEK21_NAME = f_pgmCallN('PEEK21')
+     C                   Eval      PEEK23_NAME = f_pgmCallN('PEEK23')
       *
-     C                   Eval      yPgm    = §§PgmName
-     C                   Eval      yKey    = '*ALL'
-     C                   Eval      yPosF24 = *ZEROS
-     C                   Call      PEEK23        P_Peek23
+     C                   Callp     PEEK23(§§PgmName: '*ALL': 0
+     C                                    : yFKeys: yNbrOfKeys)
      C                   Eval      ScrnFKeys = %subarr(YFKeys: 1)
       *
      C                   Endsr

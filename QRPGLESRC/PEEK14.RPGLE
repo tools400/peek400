@@ -63,6 +63,10 @@
       /COPY QCOPYLE,D_VARDEF
       *----------------------------------------------------*
       *
+      /define internal_prototype
+      /COPY QCOPYLE,PPEEK14
+      /undefine internal_prototype
+      *
       *---Variablendefinition ShortCmd---------------------*
       /COPY QCOPYLE,ShortCmd_D
       *----------------------------------------------------*
@@ -115,44 +119,17 @@
       /COPY QCOPYLE,SCRNFKEYS
       *----------------------------------------------------*
       *
-     D XDsp80          S              1A
-     D XHeaderTyp      S             10A
-     D XCopyRight      S            512A
-     D XRcdNbr         S                   LIKE(R§RcdNbr)
-     D XFile           S             10A
-     D XLibrary        S             10A
-     D XMember         S             10A
-     D XRcdFormat      S             10A
-     D XFunction       S             10A
-     D XCommitLVL      S              1A
-     D XScreenNbr      S                   like(r§int4    )
-     D XMsgID          S                   like(r§msgID   )
-     D XMsgDta         S                   like(r§msgDta  )
+     D yFKeys          S             18A   dim(32)
+     D yNbrOfKeys      S                   like(r§int4)
+     D yMsgID          S              7A
+     D yMsgDta         S            512A
       *
-     D YData           S            512A   INZ(*BLANKS)
-     D YFormat         S             10A
-     D YSrcVar         S                   LIKE(r§rcdBuf)
-     D                                     INZ(*BLANKS)
-     D YPgmCall        S              1A   INZ(bFalse )
-     D YCvtCcsid       S              1A   INZ(bTrue  )
+     D YPgmCmd         S             10A
+     D YCmdDta         S                   like(r§pgmCmdDt)
+      *
      D YString         S                   LIKE(r§rcdBuf)
-     D                                     INZ(*BLANKS)
-     D YStrLen         S                   like(r§int4    ) inz
-     D YCcsid          S                   like(r§int4    ) inz
-     D YMsgID          S              7A   INZ(*BLANKS)
-     D YMsgDta         S            512A   INZ(*BLANKS)
+     D YStrLen         S                   like(r§int4)
       *
-     D yPgm            S             10A   inz
-     D yKey            S             10A   inz
-     D yPosF24         S                   like(r§int4    ) inz
-     D yFKeys          S             18A   DIM(32)       INZ(*BLANKS)
-     D yNbrOfKeys      S                   like(r§int4    ) inz
-      *
-     D YScnAID         S             10A   INZ(*BLANKS)
-     D YPgmCmd         S             10A   INZ(*BLANKS)
-     D YCmdDta         S                   LIKE(r§pgmCmdDt) INZ(*BLANKS)
-      *
-      *Peek45/Peek64
      D YDsp80          S              1A   INZ(*BLANKS)
      D YHeaderTyp      S             10A   INZ(*BLANKS)
      D YCopyRight      S            512A   INZ(*BLANKS)
@@ -162,17 +139,6 @@
      D yLength         S                   like(r§int4    ) inz
      D yProtect        S                   like(r§bool    ) inz(bTrue)
      D yIsUcs2         S                   like(r§int4    ) inz
-      *YMsgID          S              7A   INZ(*BLANKS)
-      *YMsgDta         S            512A   INZ(*BLANKS)
-      *
-      *Peek65
-     D YRcdNbr         S                   like(R§RcdNbr)
-     D YFile           S                   like(R§FILE  )
-     D YLibrary        S                   like(R§LIB   )
-     D YMember         S                   like(R§MBR   )
-     D YRcdFormat      S             10A
-      *YMsgID          S                   like(r§msgID   )
-      *YMsgDta         S                   like(r§msgDta  )
       *
      D SflPage         S                   like(r§int4    ) inz
      D SflPageDDS      S                   like(SflPage   ) inz
@@ -185,17 +151,13 @@
      D IsRecord        S                   like(r§bool    ) inz(bFalse)
      D IsCvtChar       S                   like(r§bool    ) inz(bFalse)
       *
-     D BuffStart       S                   like(r§int4    ) inz
-     D BuffEnd         S                   like(r§int4    ) inz
-     D BuffPos         S                   like(r§int4    ) inz
-      *
-     D PEEK06          S                   like(r§pgmCallN) inz
-     D PEEK21          S                   like(r§pgmCallN) inz
-     D PEEK23          S                   like(r§pgmCallN) inz
-     D PEEK32          S                   like(r§pgmCallN) inz
-     D PEEK45          S                   like(r§pgmCallN) inz
-     D PEEK64          S                   like(r§pgmCallN) inz
-     D PEEK65          S                   like(r§pgmCallN) inz
+     D PEEK06_NAME     S                   like(r§pgmCallN) inz
+     D PEEK21_NAME     S                   like(r§pgmCallN) inz
+     D PEEK23_NAME     S                   like(r§pgmCallN) inz
+     D PEEK32_NAME     S                   like(r§pgmCallN) inz
+     D PEEK45_NAME     S                   like(r§pgmCallN) inz
+     D PEEK64_NAME     S                   like(r§pgmCallN) inz
+     D PEEK65_NAME     S                   like(r§pgmCallN) inz
       *
      D DotLine         S             40A   INZ(*ALL'.')
       *
@@ -208,6 +170,14 @@
       *
      D Editor          S             10A   inz
       *
+      /COPY QCOPYLE,PPEEK06
+      /COPY QCOPYLE,PPEEK21
+      /COPY QCOPYLE,PPEEK23
+      /COPY QCOPYLE,PPEEK32
+      /COPY QCOPYLE,PPEEK45
+      /COPY QCOPYLE,PPEEK64
+      /COPY QCOPYLE,PPEEK65
+      *
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
       /COPY QCOPYLE,F_PEEK63
@@ -218,88 +188,20 @@
       *
       *---ENTRY-LISTE--------------------------------------*
       *
-     C     *ENTRY        PLIST
-     C                   PARM                    XDsp80
-     C                   PARM                    XHeaderTyp
-     C                   PARM                    XCopyRight
-     C                   PARM                    XRcdNbr
-     C                   PARM                    XFile
-     C                   PARM                    XLibrary
-     C                   PARM                    XMember
-     C                   PARM                    XRcdFormat
-     C                   PARM                    XFunction
-     C                   PARM                    XCommitLVL
-     C                   PARM                    XScreenNbr
-     C                   PARM                    XMsgID
-     C                   PARM                    XMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK06
-     C     P_Peek06      PLIST
-     C                   PARM                    YData
-     C                   PARM                    YFormat
-     C                   PARM                    YSrcVar
-     C                   PARM                    YPgmCall
-     C                   PARM                    YCvtCcsid
-     C                   PARM                    YString
-     C                   PARM                    YStrLen
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK23
-     C     P_Peek23      PLIST
-     C                   PARM                    yPgm
-     C                   PARM                    yKey
-     C                   PARM                    yPosF24
-     C                   PARM                    yFKeys
-     C                   PARM                    yNbrOfKeys
-     C                   PARM                    yMsgID
-     C                   PARM                    yMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK21
-     C     P_Peek21      PLIST
-     C                   PARM                    YScnAID
-     C                   PARM                    YPgm
-     C                   PARM                    YPgmCmd
-     C                   PARM                    YCmdDta
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK32
-     C     P_Peek32      PLIST
-     C                   PARM                    yString
-     C                   PARM                    yStrLen
-     C                   PARM                    yCcsid
-     C                   PARM                    yMsgID
-     C                   PARM                    yMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK45
-     C     P_Peek45      PLIST
-     C                   PARM                    YDsp80
-     C                   PARM                    YHeaderTyp
-     C                   PARM                    YCopyRight
-     C                   PARM                    YFldName
-     C                   PARM                    YFldInhalt
-     C                   PARM                    YLength
-     C                   PARM                    yProtect
-     C                   PARM                    yIsUcs2
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK65
-     C     P_Peek65      PLIST
-     C                   PARM                    YRcdNbr
-     C                   PARM                    YFile
-     C                   PARM                    YLibrary
-     C                   PARM                    YMember
-     C                   PARM                    YRcdFormat
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
+     D PEEK14          PI
+     D  i_dsp80                            const like(r§dsp80)
+     D  io_headerType                            like(r§headerType)
+     D  i_copyright                        const like(r§copyRght)
+     D  i_rcdNbr                           const like(r§rcdNbr)
+     D  i_file                             const like(r§file)
+     D  i_lib                              const like(r§lib)
+     D  i_mbr                              const like(r§mbr)
+     D  i_rcdFmt                           const like(r§fmt)
+     D  i_function                         const like(r§option)
+     D  i_commitLVL                    N   const
+     D  io_screenNbr                             like(r§int4)
+     D  o_msgID                                  like(r§msgId)
+     D  o_msgDta                                 like(r§msgDta)
       *
       *----------------------------------------------------*
       *  Schlüsselliste für PEEKFLDL0
@@ -375,11 +277,11 @@
      C                   EVAL      CsrCol = *ZEROS
       *
       *  Seitennummer  berechnen
-     C     SFLCSR        DIV       SflPageDDS    XScreenNbr
-     C                   IF        SFLCSR = (SflPageDDS * XScreenNbr)
+     C     SFLCSR        DIV       SflPageDDS    io_screenNbr
+     C                   IF        SFLCSR = (SflPageDDS * io_screenNbr)
       *       keine Korrektur erforderlich
      C                   ELSE
-     C                   EVAL      XScreenNbr = XScreenNbr + 1
+     C                   EVAL      io_screenNbr = io_screenNbr + 1
      C                   Endif
       *
       *  Nachrichten löschen
@@ -390,9 +292,8 @@
       *
       *  Mappen der gedrückten Taste
       *  in Programmbefehl
-     C                   EVAL      YScnAID = §ScnAID
-     C                   EVAL      YPgm = §§PgmName
-     C                   CALL      PEEK21        P_Peek21
+     C                   CALLP     PEEK21(§ScnAID: §§PgmName
+     C                                    : YPgmCmd: YCmdDta: YMsgID: YMsgDta)
      C     YMsgID        IFNE      *BLANKS
      C                   EVAL      §MsgID = YMsgID
      C                   EVAL      §MsgDta = YMsgDta
@@ -494,8 +395,8 @@
       *
      C     C_Enter       BEGSR
       *
-     C                   EVAL      XMsgID = 'USR8112'
-     C                   EVAL      XMsgDta = *BLANKS
+     C                   EVAL      o_msgID = 'USR8112'
+     C                   EVAL      o_msgDta = *BLANKS
       *
      C                   ENDSR
       *
@@ -545,9 +446,9 @@
      C                   LEAVESR
      C                   ENDIF
       *
-     C                   EVAL      YDsp80 = XDsp80
-     C                   EVAL      YHeaderTyp = XHeaderTyp
-     C                   EVAL      YCopyRight = XCopyRight
+     C                   EVAL      YDsp80 = i_dsp80
+     C                   EVAL      YHeaderTyp = io_headerType
+     C                   EVAL      YCopyRight = i_copyright
      C                   EVAL      YFldName = R$FNME
      C                   EVAL      yProtect = bTrue
      C                   EVAL      YMsgID = *BLANKS
@@ -625,9 +526,9 @@
      C                   LEAVESR
      C                   ENDIF
       *
-     C                   EVAL      YDsp80 = XDsp80
-     C                   EVAL      YHeaderTyp = XHeaderTyp
-     C                   EVAL      YCopyRight = XCopyRight
+     C                   EVAL      YDsp80 = i_dsp80
+     C                   EVAL      YHeaderTyp = io_headerType
+     C                   EVAL      YCopyRight = i_copyright
      C                   EVAL      YFldName = R$FNME
      C                   EVAL      yProtect = bTrue
      C                   EVAL      YMsgID = *BLANKS
@@ -662,9 +563,15 @@
      C                   Endif
       *
      C                   If        Editor = '*HEX'
-     C                   CALL      PEEK45        P_Peek45
+     C                   CALLP     PEEK45(i_dsp80: io_headerType: i_copyright
+     C                                    : R$FNME: yFldInhalt: yLength
+     C                                    : bTrue: yIsUcs2
+     C                                    : YMsgID: YMsgDta)
      C                   Else
-     C                   CALL      PEEK64        P_Peek45
+     C                   CALLP     PEEK64(i_dsp80: io_headerType: i_copyright
+     C                                    : R$FNME: yFldInhalt: yLength
+     C                                    : bTrue: yIsUcs2
+     C                                    : YMsgID: YMsgDta)
      C                   Endif
      C                   Endif
       *
@@ -678,9 +585,9 @@
       *
      C                   Callp     p_rmvPgmMg(§§pgmName)
       *
-     C                   EVAL      XMsgID = 'USR8100'
+     C                   EVAL      o_msgID = 'USR8100'
      C                   EVAL      USR81001 = YPgmCmd
-     C                   EVAL      XMsgDta = USR8100
+     C                   EVAL      o_msgDta = USR8100
       *
      C                   ENDSR
       *
@@ -703,7 +610,8 @@
       *
      C     C_ChgHead     BEGSR
       *
-     C                   Eval      XHeaderTyp = f_nextHeaderType(XHeaderTyp)
+     C                   Eval      io_headerType =
+     C                               f_nextHeaderType(io_headerType)
       *
      C                   EXSR      C_Refresh
       *
@@ -735,14 +643,14 @@
       *
      C     C_Print       BEGSR
       *
-     C                   EVAL      YRcdNbr = XRcdNbr
-     C                   EVAL      YFile = XFile
-     C                   EVAL      YLibrary = XLibrary
-     C                   EVAL      YMember = XMember
-     C                   EVAL      YRcdFormat = XRcdFormat
-     C                   EVAL      YMsgID = *BLANKS
-     C                   EVAL      YMsgDta = *BLANKS
-     C                   CALL      PEEK65        P_Peek65               99
+     C                   monitor
+     C                   callp     PEEK65(i_rcdNbr
+     C                                    : i_file: i_lib: i_mbr: i_rcdFmt
+     C                                    : YMsgID: YMsgDta)
+     C                   eval      *in99 = bFalse
+     C                   on-error
+     C                   eval      *in99 = bTrue
+     C                   endmon
       *
      C                   IF        YMsgID <> ''
      C                   EVAL      §MsgID  = YMsgID
@@ -759,8 +667,8 @@
       *
      C     C_AllRcds     BEGSR
       *
-     C                   EVAL      XMsgID = 'USR8111'
-     C                   EVAL      XMsgDta = *BLANKS
+     C                   EVAL      o_msgID = 'USR8111'
+     C                   EVAL      o_msgDta = *BLANKS
       *
      C                   ENDSR
       *
@@ -869,7 +777,7 @@
      C                   EVAL      SflLastRcd = SflRec
      C                   EVAL      *IN60 = '1'                                  DSPATR(ND)
       *
-     C                   If        SFLREC = XScreenNbr * SflPageDDS +
+     C                   If        SFLREC = io_screenNbr * SflPageDDS +
      C                                           1 - SflPageDDS
      C                   Eval      SFSANR = SFLREC
      C                   Endif
@@ -918,8 +826,8 @@
       *
       *      ... eintragen Überschrift
      C                   Eval      $$TEXT =
-     C                                %trimR(f_headline(XHeaderTyp: FLDL0100)) +
-     C                                ' ' + DotLine
+     C                               %trimR(f_headline(
+     C                                 io_headerType: FLDL0100)) + ' ' + DotLine
       *
       *      ... Markieren Schlüsselfelder
      C                   If        (F_KSeq <> 0)
@@ -935,17 +843,20 @@
      C                   EVAL      YStrLen = %len(%trimR(YString))
      C                   ELSE
       *
+     C                   monitor
       *  ... aufbereiten des Feldinhaltes
-     C                   EVAL      YData = FLDL0100
-     C                   EVAL      YFormat = 'FLDL0100'
-     C                   EVAL      YSrcVar = IO_Buff
-     C                   EVAL      YPgmCall = bFalse
-     C                   EVAL      YCvtCcsid = bTrue
-     C                   CALL      PEEK06        P_Peek06               99
+     C                   CALLP     PEEK06(FLDL0100: 'FLDL0100': IO_Buff
+     C                                    : bFalse: bTrue
+     C                                    : YString: YStrLen: YMsgID: YMsgDta)
       *
       *  ... Konvertieren nicht darstellbarer Zeichen
-     C                   EVAL      yCcsid = *ZEROS
-     C                   CALL      PEEK32        P_Peek32               99
+     C                   CALLP     PEEK32(YString: yStrLen: 0
+     C                                    : yMsgID: yMsgDta)
+     C                   eval      *in99 = bFalse
+     C                   on-error
+     C                   eval      *in99 = bTrue
+     C                   endmon
+      *
      C     *IN99         IFEQ      '0'
      C     IsCvtChar     IFEQ      bFalse
      C     YMsgID        IFNE      *BLANKS
@@ -1004,7 +915,7 @@
       *
      C     SetScreen     BEGSR
       *
-     C     XDsp80        IFEQ      '0'
+     C     i_dsp80       IFEQ      '0'
       *   132-Zeichen Anzeige
      C                   EVAL      *IN88 = '0'
      C                   EVAL      ZEI = 1
@@ -1022,11 +933,11 @@
      C                   EVAL      %subarr(*in: 70: 10) = '0'
       *
      C                   SELECT
-     C     XFunction     WHENEQ    '*DELETE'
+     C     i_function    WHENEQ    '*DELETE'
      C                   EVAL      *IN70 = '1'
-     C     XFunction     WHENEQ    '*DISPLAY'
+     C     i_function    WHENEQ    '*DISPLAY'
      C                   EVAL      *IN75 = '1'
-     C     XFunction     WHENEQ    '*COPYEXT'
+     C     i_function    WHENEQ    '*COPYEXT'
      C                   EVAL      *IN79 = '1'
      C                   OTHER
       *              ????????????
@@ -1041,7 +952,7 @@
      C     ReadRcd       BEGSR
       *
      C                   IF        CIO_chainWithRRN(hFile04
-     C                                              : XRcdNbr
+     C                                              : i_rcdNbr
      C                                              : bFalse
      C                                              : IO_Buff
      C                                              : IO_NullMap) = bFalse
@@ -1063,10 +974,10 @@
      C                   OPEN      PEEKFLD
      C                   OPEN      PEEKFLDL0
      C                   CALLP     CIO_open(hFile04
-     C                                      : xFile
-     C                                      : xLibrary
-     C                                      : xMember
-     C                                      : xRcdFormat
+     C                                      : i_file
+     C                                      : i_lib
+     C                                      : i_mbr
+     C                                      : i_rcdFmt
      C                                      : 'rr, arrseq=Y, commit=N, +
      C                                         nullcap=Y, riofb=Y, secure=N, +
      C                                         ccsid=65535')
@@ -1076,11 +987,11 @@
       * - Programm initialisieren
      C                   Callp     p_rmvPgmMg(§§pgmName)
       *
-     C                   EVAL      XMsgID = *BLANKS
-     C                   EVAL      XMsgDta = *BLANKS
+     C                   EVAL      o_msgID = *BLANKS
+     C                   EVAL      o_msgDta = *BLANKS
       *
       * - Kopffelder
-     C                   EVAL      $$RCDN = XRcdNbr
+     C                   EVAL      $$RCDN = i_rcdNbr
       *
       * - Darstellung der Subfile
      C                   EVAL      SflMde = '1'
@@ -1102,7 +1013,7 @@
       *
       * - Copyright
      C                   EVAL      §MsgID = 'USR9999'
-     C                   EVAL      §MsgDta = XCopyRight
+     C                   EVAL      §MsgDta = i_copyright
      C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
       *
      C                   ENDSR
@@ -1115,18 +1026,16 @@
       *
      C                   Eval      §PgmQ = '*'
       *
-     C                   Eval      PEEK06 = f_pgmCallN('PEEK06')
-     C                   Eval      PEEK21 = f_pgmCallN('PEEK21')
-     C                   Eval      PEEK23 = f_pgmCallN('PEEK23')
-     C                   Eval      PEEK32 = f_pgmCallN('PEEK32')
-     C                   Eval      PEEK45 = f_pgmCallN('PEEK45')
-     C                   Eval      PEEK64 = f_pgmCallN('PEEK64')
-     C                   Eval      PEEK65 = f_pgmCallN('PEEK65')
+     C                   Eval      PEEK06_NAME = f_pgmCallN('PEEK06')
+     C                   Eval      PEEK21_NAME = f_pgmCallN('PEEK21')
+     C                   Eval      PEEK23_NAME = f_pgmCallN('PEEK23')
+     C                   Eval      PEEK32_NAME = f_pgmCallN('PEEK32')
+     C                   Eval      PEEK45_NAME = f_pgmCallN('PEEK45')
+     C                   Eval      PEEK64_NAME = f_pgmCallN('PEEK64')
+     C                   Eval      PEEK65_NAME = f_pgmCallN('PEEK65')
       *
-     C                   Eval      yPgm    = §§PgmName
-     C                   Eval      yKey    = '*ALL'
-     C                   Eval      yPosF24 = §NbrFKeys
-     C                   Call      PEEK23        P_Peek23
+     C                   Callp     PEEK23(§§PgmName: '*ALL': §NbrFKeys
+     C                                    : yFKeys: yNbrOfKeys)
      C                   Eval      scrnFKeys = %subarr(yFKeys: 1)
       *
      C                   Endsr

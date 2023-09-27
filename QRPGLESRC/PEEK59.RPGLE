@@ -39,6 +39,10 @@
       /COPY QCOPYLE,FLDL0100
       *----------------------------------------------------*
       *
+      /define internal_prototype
+      /COPY QCOPYLE,PPEEK59
+      /undefine internal_prototype
+      *
       *---Nachrichten--------------------------------------*
       /COPY QCOPYLE,MSG_D_MAPI
       *----------------------------------------------------*
@@ -52,22 +56,7 @@
       /COPY QCOPYLE,ERR_D_SDS
       *----------------------------------------------------*
       *
-      *----------------------------------------------------*
-      *  F E L D - D E F I N I T I O N E N                 *
-      *----------------------------------------------------*
-      *
-      *  *ENTRY
-     D xDsp80          S                   like(r§dsp80   )
-     D xType           S             10A
-     D xInpMsgID       S                   like(r§msgID   )
-     D xInpMsgDta      S                   like(r§msgDta  )
-     D xKeys           S              3A
-     D xMsgID          S                   like(r§msgID   )
-     D xMsgDta         S                   like(r§msgDta  )
-      *
       *  Peek21
-     D yScnAID         S                   like(r§scnAid  ) inz
-     D yPgm            S                   like(r§pgm     ) inz
      D yPgmCmd         S                   like(r§pgmCmd  ) inz
      D yCmdDta         S                   like(r§pgmCmdDt) inz
      D yMsgID          S                   like(r§msgID   ) inz
@@ -76,7 +65,6 @@
       *  Peek23:
       *yPgm            S                   like(r§pgm     ) inz
      D yKey            S             10A   inz
-     D yPosF24         S                   like(r§int4    ) inz
      D yFKeys          S                   like(r§fKeyDsp ) inz
      D                                     dim(32)
      D yNbrOfKeys      S                   like(r§int4    ) inz
@@ -91,8 +79,8 @@
      D strPos          S                   like(r§uint4   ) inz
      D nbrOfKeys       S                   like(r§int4    ) inz
       *
-     D PEEK21          S                   like(r§pgmCallN) inz
-     D PEEK23          S                   like(r§pgmCallN) inz
+     D PEEK21_NAME     S                   like(r§pgmCallN) inz
+     D PEEK23_NAME     S                   like(r§pgmCallN) inz
       *
      D x               S                   like(r§int4    ) inz
      D tmpFkey         S                   like($$FKEY01  ) inz
@@ -103,10 +91,26 @@
      D atoi            PR            10I 0        extproc('atoi')
      D  i_string                       *   value
       *
+      /COPY QCOPYLE,PPEEK21
+      /COPY QCOPYLE,PPEEK23
+      *
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
       *
      D $$FKEY          S                   like($$FKEY01  ) DIM(24) inz
+      *
+      ********************************************************************
+      *                 S T E U E R  -  R O U T I N E                    *
+      ********************************************************************
+      *
+     D PEEK59          PI
+     D  i_dsp80                            const like(r§dsp80)
+     D  i_option                           const like(r§option)
+     D  i_msgID                            const like(r§msgID)
+     D  i_msgDta                           const like(r§msgDta)
+     D  i_keys                        3A   const
+     D  o_msgID                                  like(r§msgID)
+     D  o_msgDta                                 like(r§msgDta)
       *
      IPBBOT#1
      I              $$FKEY01                    $$FKEY( 1)
@@ -144,42 +148,6 @@
      IPBBOT#12
      I              $$FKEY23                    $$FKEY(23)
      I              $$FKEY24                    $$FKEY(24)
-      *
-      ********************************************************************
-      *                 S T E U E R  -  R O U T I N E                    *
-      ********************************************************************
-      *
-      *---ENTRY-LISTE--------------------------------------*
-      *
-     C     *entry        Plist
-     C                   Parm                    xDsp80
-     C                   Parm                    xType
-     C                   Parm                    xInpMsgID
-     C                   Parm                    xInpMsgDta
-     C                   Parm                    xKeys
-     C                   Parm                    xMsgID
-     C                   Parm                    xMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK21
-     C     P_Peek21      Plist
-     C                   Parm                    yScnAID
-     C                   Parm                    yPgm
-     C                   Parm                    yPgmCmd
-     C                   Parm                    yCmdDta
-     C                   Parm                    yMsgID
-     C                   Parm                    yMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK23
-     C     P_Peek23      Plist
-     C                   Parm                    yPgm
-     C                   Parm                    yKey
-     C                   Parm                    yPosF24
-     C                   Parm                    yFKeys
-     C                   Parm                    yNbrOfKeys
-     C                   Parm                    yMsgID
-     C                   Parm                    yMsgDta
       *
       *---------------------------------------------------*
       *
@@ -248,9 +216,8 @@
       *
       *  Mappen der gedrückten Taste
       *  in Programmbefehl
-     C                   Eval      yScnAID = §ScnAID
-     C                   Eval      yPgm    = §§PgmName
-     C                   Call      PEEK21        P_Peek21
+     C                   CALLP     PEEK21(§ScnAID: §§PgmName
+     C                                    : YPgmCmd: YCmdDta: YMsgID: YMsgDta)
      C                   If        yMsgID <> ' '
      C                   Eval      §MsgID  = yMsgID
      C                   Eval      §MsgDta = yMsgDta
@@ -266,19 +233,19 @@
      C                   Iter
       *  F9  - Yes
      C                   When      (yPgmCmd = '*YES'   )  and
-     C                             (f_scan('Y': xKeys  ) <> 0)
+     C                             (f_scan('Y': i_keys  ) <> 0)
      C                   Exsr      c_yes
      C                   Leave
       *
       *  F21 - No
      C                   When      (yPgmCmd = '*NO'    ) and
-     C                             (f_scan('N': xKeys  ) <> 0)
+     C                             (f_scan('N': i_keys  ) <> 0)
      C                   Exsr      c_no
      C                   Leave
       *
       *  F12 - Cancel
      C                   When      (yPgmCmd = '*CANCEL') and
-     C                             (f_scan('C': xKeys  ) <> 0)
+     C                             (f_scan('C': i_keys  ) <> 0)
      C                   Exsr      c_cancel
      C                   Leave
       *
@@ -289,7 +256,7 @@
       *
       *  Datenfreigabe = OK
      C                   When      (yPgmCmd = '*ENTER' ) and
-     C                             (f_scan('E': xKeys  ) <> 0)
+     C                             (f_scan('E': i_keys  ) <> 0)
      C                   Exsr      c_enter
      C                   Leave
       *
@@ -334,8 +301,8 @@
       *
      C                   Clear                   USR8190
      C                   Eval      USR81901 = yPgmCmd
-     C                   Eval      xMsgID  = 'USR8190'
-     C                   Eval      xMsgDta = USR8190
+     C                   Eval      o_msgID  = 'USR8190'
+     C                   Eval      o_msgDta = USR8190
       *
      C                   Endsr
       *
@@ -347,8 +314,8 @@
       *
      C                   Clear                   USR8190
      C                   Eval      USR81901 = yPgmCmd
-     C                   Eval      xMsgID  = 'USR8190'
-     C                   Eval      xMsgDta = USR8190
+     C                   Eval      o_msgID  = 'USR8190'
+     C                   Eval      o_msgDta = USR8190
       *
      C                   Endsr
       *
@@ -360,8 +327,8 @@
       *
      C                   Clear                   USR8190
      C                   Eval      USR81901 = yPgmCmd
-     C                   Eval      xMsgID  = 'USR8190'
-     C                   Eval      xMsgDta = USR8190
+     C                   Eval      o_msgID  = 'USR8190'
+     C                   Eval      o_msgDta = USR8190
       *
      C                   Endsr
       *
@@ -373,8 +340,8 @@
       *
      C                   Clear                   USR8190
      C                   Eval      USR81901 = yPgmCmd
-     C                   Eval      xMsgID  = 'USR8190'
-     C                   Eval      xMsgDta = USR8190
+     C                   Eval      o_msgID  = 'USR8190'
+     C                   Eval      o_msgDta = USR8190
       *
      C                   Endsr
       *
@@ -406,9 +373,9 @@
       *
       *  Überschrift ...
      C                   Select
-     C                   When      xType = '*INFO'
+     C                   When      i_option = '*INFO'
      C                   Eval      $$headLine = f_msgText('MBX0001': ' ')
-     C                   When      xType = '*QUESTION'
+     C                   When      i_option = '*QUESTION'
      C                   Eval      $$headLine = f_msgText('MBX0002': ' ')
      C                   Other
      C                   Eval      $$headLine = ' '
@@ -417,7 +384,7 @@
      C                   Callp     p_center($$headLine)
       *
       *  Nachrichtentext ...
-     C                   Eval      msgText = f_msgText(xInpMsgID: xInpMsgDta)
+     C                   Eval      msgText = f_msgText(i_msgID: i_msgDta)
       *
       *  ... Zeile 1
      C                   Eval      strPos = 1
@@ -449,28 +416,28 @@
      C                   Eval      yFKeys(*) = ''
      C                   Eval      $$FKEY(*) = ''
       *  ... YES
-     C                   If        f_scan('Y': xKeys) <> 0
+     C                   If        f_scan('Y': i_keys) <> 0
      C                   Eval      nbrOfKeys = nbrOfKeys + 1
      C                   Eval      yKey = '*YES'
      C                   Exsr      getKey
      C                   Eval      $$FKEY(nbrOfKeys) = yFKeys(1)
      C                   Endif
       *  ... NO
-     C                   If        f_scan('N': xKeys) <> 0
+     C                   If        f_scan('N': i_keys) <> 0
      C                   Eval      nbrOfKeys = nbrOfKeys + 1
      C                   Eval      yKey = '*NO'
      C                   Exsr      getKey
      C                   Eval      $$FKEY(nbrOfKeys) = yFKeys(1)
      C                   Endif
       *  ... OK
-     C                   If        f_scan('E': xKeys) <> 0
+     C                   If        f_scan('E': i_keys) <> 0
      C                   Eval      nbrOfKeys = nbrOfKeys + 1
      C                   Eval      yKey = '*OK'
      C                   Exsr      getKey
      C                   Eval      $$FKEY(nbrOfKeys) = yFKeys(1)
      C                   Endif
       *  ... CANCEL
-     C                   If        f_scan('C': xKeys) <> 0
+     C                   If        f_scan('C': i_keys) <> 0
      C                   Eval      nbrOfKeys = nbrOfKeys + 1
      C                   Eval      yKey = '*CANCEL'
      C                   Exsr      getKey
@@ -506,9 +473,8 @@
       *
      C     getKey        Begsr
       *
-     C                   Eval      yPgm      = §§PgmName
-     C                   Eval      yPosF24   = 0
-     C                   Call      PEEK23        P_Peek23
+     C                   Callp     PEEK23(§§PgmName: '*ALL': 0
+     C                                    : yFKeys: yNbrOfKeys)
       *
      C                   ENDSR
       *
@@ -518,7 +484,7 @@
       *
      C     setScreen     Begsr
       *
-     C                   If        XDsp80 = *off
+     C                   If        i_dsp80 = *off
       *   132-Zeichen Anzeige
      C                   Eval      *in88 = *off
      C                   Eval      zei = 6 + 1
@@ -544,8 +510,8 @@
       * - Programm initialisieren
      C                   Callp     p_rmvPgmMg(§§pgmName)
       *
-     C                   Eval      xMsgID  = ' '
-     C                   Eval      xMsgDta = ' '
+     C                   Eval      o_msgID  = ' '
+     C                   Eval      o_msgDta = ' '
       *
       * - Füllen der Bildschirmfelder
      C                   Exsr      bzoff1
@@ -567,8 +533,8 @@
       *
      C                   Eval      §PgmQ = '*'
       *
-     C                   Eval      PEEK21 = f_pgmCallN('PEEK21')
-     C                   Eval      PEEK23 = f_pgmCallN('PEEK23')
+     C                   Eval      PEEK21_NAME = f_pgmCallN('PEEK21')
+     C                   Eval      PEEK23_NAME = f_pgmCallN('PEEK23')
       *
      C                   Endsr
       *

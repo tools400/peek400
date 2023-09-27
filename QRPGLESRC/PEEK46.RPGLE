@@ -64,15 +64,14 @@
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
       *
-     D xQFile          S             20A
-     D xMbr            S             10A
-     D xFunk           S             10A
-     D xAnz            S                   like(r§int4    )
-     D xList           S            512A
-      *
       *---Variablendefinition------------------------------*
       /COPY QCOPYLE,D_VARDEF
+      /COPY QCOPYLE,MBRL0200
       *----------------------------------------------------*
+      *
+      /define internal_prototype
+      /COPY QCOPYLE,PPEEK46
+      /undefine internal_prototype
       *
       *----------------------------------------------------*
       *  API - DATENSTRUKTUREN                             *
@@ -133,23 +132,21 @@
       *           Main  Control block                                    *
       ********************************************************************
       *
-     C     *ENTRY        PLIST
-      *  Input
-     C                   PARM                    xQFile
-     C                   PARM                    xMbr
-     C                   PARM                    xFunk
-      *  Output
-     C                   PARM                    xAnz
-     C                   PARM                    xList
+     D PEEK46          PI
+     D  i_qFile                            const likeds(r§qObj)
+     D  i_mbr                              const like(r§mbr)
+     D  i_funk                             const like(r§option)
+     D  o_anz                                    like(r§int4)
+     D  o_mbrl0200                               likeds(MBRL0200_t)
       *
       *---------------------------------------------------*
       *
      C                   SELECT
-     C     XFUNK         WHENEQ    '*CREATE'
+     C     i_funk        WHENEQ    '*CREATE'
      C                   EXSR      Create
-     C     XFUNK         WHENEQ    '*DELETE'
+     C     i_funk        WHENEQ    '*DELETE'
      C                   EXSR      Delete
-     C     XFUNK         WHENEQ    '*READ'
+     C     i_funk        WHENEQ    '*READ'
      C                   EXSR      Read
      C                   Endsl
       *
@@ -166,7 +163,7 @@
       *
      C     Create        BEGSR
       *
-     C                   EVAL      XANZ = *ZEROS
+     C                   EVAL      o_anz = *ZEROS
       *
      C                   EXSR      CHKOBJ
       *
@@ -188,8 +185,8 @@
       *
       *  get file format description
      C                   EVAL      MBFMT = 'MBRL0200'                           format
-     C                   EVAL      MBFNME = XQFILE                              qualf.file
-     C                   EVAL      MBMBR = XMBR                                 member name
+     C                   EVAL      MBFNME = i_qFile                             qualf.file
+     C                   EVAL      MBMBR = i_mbr                                member name
      C                   EVAL      MBOVRR = '0'                                 override
       *
      C                   CALL      'QUSLMBR'
@@ -204,7 +201,7 @@
      C                   EVAL      NumLstEnt = *ZEROS
      C                   Endif
       *
-     C                   EVAL      XANZ = NumLstEnt
+     C                   EVAL      o_anz = NumLstEnt
       *
      C                   ENDSR
       *
@@ -237,7 +234,7 @@
       *
      C     Read          BEGSR
       *
-     C                   EVAL      XLIST = *BLANKS
+     C                   CLEAR                   o_mbrl0200
       *
      C     NumLstEnt     IFGT      *ZEROS
      C     OffsetLst     IFGE      maxData
@@ -247,11 +244,11 @@
       *
      C                   EVAL      ListPtr = %ADDR(Data(OffsetLst+1))
       *
-     C                   EVAL      XLIST = ListData
+     C                   EVAL      o_mbrl0200 = ListData
      C                   EVAL      OffsetLst = OffsetLst + EntrySize
      C                   EVAL      NumLstEnt = NumLstEnt - 1
       *
-     C                   EVAL      XANZ = NumLstEnt
+     C                   EVAL      o_anz = NumLstEnt
      C                   Endif
      C                   ELSE
       *   Ungültiger Wert in NumLstEnt
@@ -277,11 +274,11 @@
      C                   PARM                    SpcRtvLen
      C                   PARM                    RtvData
       *
-     C                   EVAL      XLIST = RtvData
+     C                   EVAL      o_mbrl0200 = RtvData
      C                   EVAL      OffsetLst = OffsetLst + EntrySize
      C                   EVAL      NumLstEnt = NumLstEnt - 1
       *
-     C                   EVAL      XANZ = NumLstEnt
+     C                   EVAL      o_anz = NumLstEnt
       *
      C                   ELSE
       *   Ungültiger Wert in NumLstEnt
@@ -328,7 +325,7 @@
       *
      C                   DUMP
       *
-     C                   EVAL      XANZ = *ZEROS
+     C                   EVAL      o_anz = *ZEROS
      C                   GOTO      ENDE
       *
      C                   ENDSR     '*CANCL'

@@ -32,6 +32,10 @@
       /COPY QCOPYLE,FLDL0100
       *----------------------------------------------------*
       *
+      /define internal_prototype
+      /COPY QCOPYLE,PPEEK27
+      /undefine internal_prototype
+      *
       *---Nachrichten--------------------------------------*
       /COPY QCOPYLE,MSG_D_MAPI
       *----------------------------------------------------*
@@ -43,11 +47,6 @@
       *----------------------------------------------------*
       *  F E L D - D E F I N I T I O N E N                 *
       *----------------------------------------------------*
-      *
-     D XPgm            S             10A
-     D XFKeys          S             75A   DIM(32)
-     D XNbrOfKeys      S                   like(r§int4    )
-     D XExclKeys       S                   like(r§pgmCmd  ) DIM(25)
       *
      D i               S                   like(r§int4    ) inz
      D X               S                   like(r§int4    ) inz
@@ -72,16 +71,17 @@
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
       *
-     C     *ENTRY        PLIST
-     C                   PARM                    XPgm
-     C                   PARM                    XFKeys
-     C                   PARM                    XNbrOfKeys
-     C                   PARM                    XExclKeys                      Optional Parm
+     D PEEK27          PI
+     D  i_pgm                              const like(r§pgm)
+     D  o_choices                                like(r§choice) dim(32)
+     D  o_numChoices                             like(r§int4)
+     D  o_exclKeys                         const like(r§pgmCmd) dim(25)
+     D                                           options(*nopass)
       *
       *----------------------------------------------------*
       *
-     C                   EVAL      XFKeys(*) = *BLANKS
-     C                   EVAL      XNbrOfKeys = *ZEROS
+     C                   EVAL      o_choices(*) = *BLANKS
+     C                   EVAL      o_numChoices = *ZEROS
       *
      C                   EXSR      GetKeyMap
       *
@@ -94,10 +94,10 @@
      C     GetKeyMap     BEGSR
       *
      C                   EVAL      X = 1
-     C                   EVAL      XNbrOfKeys = 1
+     C                   EVAL      o_numChoices = 1
       *
       *  Numerische-Auswahlen ...
-     C                   EVAL      Wrk_Sectn = '*' + %trim(XPgm)
+     C                   EVAL      Wrk_Sectn = '*' + %trim(i_pgm)
      C                   EVAL      Wrk_Key = *BLANKS
      C                   EVAL      Wrk_Key = '0' + Wrk_Key
      C                   Callp     p_setllUsr(Wrk_Sectn: Wrk_Key)
@@ -108,9 +108,9 @@
      C                   Endif
       *
       *  Überprüfen Auschlüsse
-     C                   IF        %PARMS >= 4
+     C                   IF        %parms() >= %parmnum(o_exclKeys)
      C                   EVAL      pgmCmd = data
-     C                   EVAL      i = %lookup(pgmCmd: XExclKeys)
+     C                   EVAL      i = %lookup(pgmCmd: o_exclKeys)
      C                   IF        i > 0
      C                   ITER
      C                   ENDIF
@@ -125,7 +125,7 @@
      C                   Enddo
       *
       *  String-Auswahlen ...
-     C                   EVAL      Wrk_Sectn = '*' + %trim(XPgm)
+     C                   EVAL      Wrk_Sectn = '*' + %trim(i_pgm)
      C                   EVAL      Wrk_Key = *ALLx'FF'
      C                   EVAL      Wrk_Key = '*' + Wrk_Key
      C                   Callp     p_setllUsr(Wrk_Sectn: Wrk_Key)
@@ -171,38 +171,30 @@
       *  Für Auswahl und "="-Zeichen
      C                   EVAL      Z = Z + 3
       *  Für Trennleerraum ...
-     C     XFKeys(X)     IFNE      *BLANKS
+     C     o_choices(X)  IFNE      *BLANKS
      C                   EVAL      Z = Z + 2
      C                   Endif
       *
       *  Freie Länge
-     C                   EVAL      Y = %checkr(' ': XFKeys(X))
+     C                   EVAL      Y = %checkr(' ': o_choices(X))
      C                   EVAL      Y = 63 - Y
      C     Y             IFLT      Z
      C                   EVAL      X = X + 1
-     C                   EVAL      XNbrOfKeys = XNbrOfKeys + 1
+     C                   EVAL      o_numChoices = o_numChoices + 1
      C                   Endif
       *
      C     X             IFGT      32
       *               Nix tun, Tabelle ist voll
      C                   ELSE
-     C     XFKeys(X)     IFEQ      *BLANKS
-     C                   EVAL      XFKeys(X) = %trimr(Wrk_Key)
+     C     o_choices(X)  IFEQ      *BLANKS
+     C                   EVAL      o_choices(X) = %trimr(Wrk_Key)
      C                   ELSE
-     C                   Eval      XFKeys(X) =
-     C                               %trimr(XFKeys(X)) + '  ' + %trimr(Wrk_Key)
+     C                   Eval      o_choices(X) = %trimr(o_choices(X)) +
+     C                                         '  ' + %trimr(Wrk_Key)
      C                   Endif
-     C                   Eval      XFKeys(X) =
-     C                               %trimr(XFKeys(X)) + '=' + %trim(wrk_MsgTxt)
+     C                   Eval      o_choices(X) = %trimr(o_choices(X)) +
+     C                                         '=' + %trim(wrk_MsgTxt)
      C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    *INZSR        Programminitialisierung                   *
-      *============================================================*
-      *
-     C     *INZSR        BEGSR
       *
      C                   ENDSR
       *

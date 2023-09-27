@@ -1,10 +1,10 @@
-?     *                                                                                       RADDAT
-CPY  /COPY QCOPYLE,D_VARDEF                     ?                                            RADDAT
-?     *
-     D ShortCmd        DS                                                                     RADDAT
-     D  SC_Action                    10A                     INZ(*BLANKS)                     RADDAT
-     D  SC_Cmd                             LIKE(r§pgmCmdDt ) INZ(*BLANKS)                     RADDAT
-     D   SC_File                           LIKE(r§file     ) OVERLAY(SC_Cmd: 1)               RADDAT
-     D   SC_Lib                            LIKE(r§lib      ) OVERLAY(SC_Cmd:11)               RADDAT
-     D   SC_Mbr                            LIKE(r§mbr      ) OVERLAY(SC_Cmd:21)               RADDAT
-?     *                                                                                       RADDAT
+      *
+      /COPY QCOPYLE,D_VARDEF                     ?
+      *
+     D ShortCmd_t      DS                  qualified template
+     D  SC_Action                    10A                     INZ(*BLANKS)
+     D  SC_Cmd                             LIKE(r§pgmCmdDt ) INZ(*BLANKS)
+     D   SC_File                           LIKE(r§file     ) OVERLAY(SC_Cmd: 1)
+     D   SC_Lib                            LIKE(r§lib      ) OVERLAY(SC_Cmd:11)
+     D   SC_Mbr                            LIKE(r§mbr      ) OVERLAY(SC_Cmd:21)
+      *

@@ -40,6 +40,10 @@
       /COPY QCOPYLE,FLDL0100
       *----------------------------------------------------*
       *
+      /define internal_prototype
+      /COPY QCOPYLE,PPEEK52
+      /undefine internal_prototype
+      *
       *---Variablendefinition ShortCmd---------------------*
       /COPY QCOPYLE,ShortCmd_D
       *----------------------------------------------------*
@@ -67,33 +71,12 @@
       *  F E L D - D E F I N I T I O N E N                 *
       *----------------------------------------------------*
       *
-     D XDsp80          S              1A
-     D XCopyRight      S            512A
-     D XAlwLc          S              1A
-     D XCase           S              1A
-     D XRcdLock        S              1A
-     D XNullDft        S              1A
-     D XKeepCrs        S              1A
-     D XMsgID          S              7A
-     D XMsgDta         S            512A
-     D XUnload         S              1A
-      *
-      *  Peek23:
-     D yPgm            S             10A   inz
-     D yKey            S             10A   inz
-     D yPosF24         S                   like(r§int4    ) inz
-     D yFKeys          S             18A   DIM(32)       INZ(*BLANKS)
-     D yNbrOfKeys      S                   like(r§int4    ) inz
-     D yMsgID          S              7A   INZ(*BLANKS)
-     D yMsgDta         S            512A   INZ(*BLANKS)
-      *
-      *  Peek21:
-     D YScnAID         S             10A   INZ(*BLANKS)
-      *YPgm            S             10A   INZ(*BLANKS)
-     D YPgmCmd         S             10A   INZ(*BLANKS)
-     D YCmdDta         S                   LIKE(r§pgmCmdDt) INZ(*BLANKS)
-      *YMsgID          S              7A   INZ(*BLANKS)
-      *YMsgDta         S            512A   INZ(*BLANKS)
+     D yFKeys          S             18A   dim(32) inz
+     D yNbrOfKeys      S                   like(r§int4 ) inz
+     D yMsgID          S              7A   inz
+     D yMsgDta         S            512A   inz
+     D YPgmCmd         S             10A   inz
+     D YCmdDta         S                   like(r§pgmCmdDt) inz
       *
       *---Definition der F-Tastenbildschirmfelder----------*
       /COPY QCOPYLE,SCRNFKEYS
@@ -102,13 +85,13 @@
      D SfBot           S                   like(r§int4    ) inz
      D NbrFKeys        C                   CONST(2)
       *
-     D PEEK21          S                   like(r§pgmCallN) inz
-     D PEEK23          S                   like(r§pgmCallN) inz
-      *
-     D X               S                   like(r§int4    ) inz
-     D Y               S                   like(r§int4    ) inz
+     D PEEK21_NAME     S                   like(r§pgmCallN) inz
+     D PEEK23_NAME     S                   like(r§pgmCallN) inz
       *
      D doGenerate      S               N   inz(bFalse)
+      *
+      /COPY QCOPYLE,PPEEK21
+      /COPY QCOPYLE,PPEEK23
       *
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
@@ -117,44 +100,21 @@
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
       *
-      *---ENTRY-LISTE--------------------------------------*
-      *
-     C     *ENTRY        PLIST
-     C                   PARM                    XDsp80
-     C                   PARM                    XCopyRight
-     C                   PARM                    XAlwLc
-     C                   PARM                    XCase
-     C                   PARM                    XRcdLock
-     C                   PARM                    XNullDft
-     C                   PARM                    XKeepCrs
-     C                   PARM                    XMsgID
-     C                   PARM                    XMsgDta
-     C                   PARM                    XUnload
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK23
-     C     P_Peek23      PLIST
-     C                   PARM                    yPgm
-     C                   PARM                    yKey
-     C                   PARM                    yPosF24
-     C                   PARM                    yFKeys
-     C                   PARM                    yNbrOfKeys
-     C                   PARM                    yMsgID
-     C                   PARM                    yMsgDta
-      *
-      *---------------------------------------------------*
-      *  Parameterliste für PEEK21
-     C     P_Peek21      PLIST
-     C                   PARM                    YScnAID
-     C                   PARM                    YPgm
-     C                   PARM                    YPgmCmd
-     C                   PARM                    YCmdDta
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
+     D PEEK52          PI
+     D  i_dsp80                            const like(r§dsp80)
+     D  i_copyright                        const like(r§copyRght)
+     D  o_alwLc                                  like(r§bool)
+     D  o_case                                   like(r§bool)
+     D  o_cdLock                                 like(r§bool)
+     D  o_nullDft                                like(r§bool)
+     D  o_keepCrs                                like(r§bool)
+     D  o_msgID                                  like(r§msgID)
+     D  o_msgDta                                 like(r§msgDta)
+     D  i_isUnload                         const like(r§msgID)
       *
       *---------------------------------------------------*
       *
-     C                   IF        xUnload = bTrue
+     C                   IF        i_isUnload = bTrue
      C                   CLOSE     PEEK52FM
      C                   EVAL      *INLR = *ON
      C                   GOTO      ENDE
@@ -189,9 +149,8 @@
       *
       *  Mappen der gedrückten Taste
       *  in Programmbefehl
-     C                   EVAL      YScnAID = §ScnAID
-     C                   EVAL      YPgm = §§PgmName
-     C                   CALL      PEEK21        P_Peek21
+     C                   CALLP     PEEK21(§ScnAID: §§PgmName
+     C                                    : YPgmCmd: YCmdDta: YMsgID: YMsgDta)
      C     YMsgID        IFNE      *BLANKS
      C                   EVAL      §MsgID = YMsgID
      C                   EVAL      §MsgDta = YMsgDta
@@ -224,8 +183,8 @@
      C     YPgmCmd       WHENEQ    '*ENTER'
      C                   EXSR      C_Enter
      C     *IN99         IFEQ      '0'
-     C                   EVAL      XMsgID = 'USR8112'
-     C                   EVAL      XMsgDta = *BLANKS
+     C                   EVAL      o_msgID = 'USR8112'
+     C                   EVAL      o_msgDta = *BLANKS
       *
      C                   WRITE     MSGCTL2
      C                   EVAL      doGenerate = bTrue
@@ -317,11 +276,11 @@
      C     E_Enter       TAG
       *
      C     *IN99         IFEQ      '0'
-     C                   EVAL      XAlwLc = ##ALWLC
-     C                   EVAL      xCase = ##CASE
-     C                   EVAL      xRcdLock = ##RCDLCK
-     C                   EVAL      xNullDft = ##NULLDFT
-     C                   EVAL      xKeepCrs = ##KEEPCRS
+     C                   EVAL      o_alwLc = ##ALWLC
+     C                   EVAL      o_case = ##CASE
+     C                   EVAL      o_cdLock = ##RCDLCK
+     C                   EVAL      o_nullDft = ##NULLDFT
+     C                   EVAL      o_keepCrs = ##KEEPCRS
      C                   IF        ##SAVE = bTrue
      C                   EXSR      SavUsrSetg
      C                   Endif
@@ -569,7 +528,7 @@
       *
      C                   Callp     p_rmvPgmMg(§§pgmName)
       *
-     C                   EVAL      XMsgID = 'USR8100'
+     C                   EVAL      o_msgID = 'USR8100'
       *
      C                   SELECT
      C     §ScnAID       WHENEQ    §F3
@@ -580,7 +539,7 @@
      C                   EVAL      USR81001 = 'Fxx'
      C                   Endsl
       *
-     C                   EVAL      XMsgDta = USR8100
+     C                   EVAL      o_msgDta = USR8100
       *
      C                   ENDSR
       *
@@ -626,7 +585,7 @@
       *
      C     SetScreen     BEGSR
       *
-     C     XDsp80        IFEQ      '0'
+     C     i_dsp80       IFEQ      '0'
       *   132-Zeichen Anzeige
      C                   EVAL      *IN88 = '0'
      C                   EVAL      ZEI = 6
@@ -688,8 +647,8 @@
       * - Programm initialisieren
      C                   Callp     p_rmvPgmMg(§§pgmName)
       *
-     C                   EVAL      XMsgID = *BLANKS
-     C                   EVAL      XMsgDta = *BLANKS
+     C                   EVAL      o_msgID = *BLANKS
+     C                   EVAL      o_msgDta = *BLANKS
       *
       * - Darstellung der Befehlstasten
      C                   EVAL      SfBot = 1
@@ -707,13 +666,11 @@
       *
      C                   Eval      §PgmQ = '*'
       *
-     C                   Eval      PEEK21 = f_pgmCallN('PEEK21')
-     C                   Eval      PEEK23 = f_pgmCallN('PEEK23')
+     C                   Eval      PEEK21_NAME = f_pgmCallN('PEEK21')
+     C                   Eval      PEEK23_NAME = f_pgmCallN('PEEK23')
       *
-     C                   Eval      yPgm    = §§PgmName
-     C                   Eval      yKey    = '*ALL'
-     C                   Eval      yPosF24 = *ZEROS
-     C                   Call      PEEK23        P_Peek23
+     C                   Callp     PEEK23(§§PgmName: '*ALL': 0
+     C                                    : yFKeys: yNbrOfKeys)
      C                   Eval      ScrnFKeys = %subarr(yFKeys: 1)
       *
      C                   Endsr

@@ -43,27 +43,22 @@
       *----------------------------------------------------*
       *
       *  declarations for QUSROBJD
-     D RcvVar          S            512A   INZ
-     D RcvvarLen       S                   INZ(512)         LIKE(R§INT4)
-     D FormatName      S              8A   INZ('OBJD0400')
-     D ObjName         S             20A   INZ
-     D ObjType         S             10A   INZ('*FILE')
-      *
-     D XObjName        S             20A
-     D XValue          S            512A
-     D XMsgID          S              7A
-     D XMsgDta         S            512A
+     D OBJD0400        DS                  likeds(OBJD0400_t)
       *
       /COPY QCOPYLE,OBJD0400
       *
       *---Variablendefinition------------------------------*
       /COPY QCOPYLE,D_VARDEF
       /COPY QCOPYLE,FLDL0100
+      /COPY QCOPYLE,QUSROBJD
       *----------------------------------------------------*
+      *
+      /define internal_prototype
+      /COPY QCOPYLE,PPEEK09
+      /undefine internal_prototype
       *
       *---Versenden von Nachrichten------------------------*
       /COPY QCOPYLE,API_ERROR
- CPY  ***/COPY QCOPYLE,MSG_D_MAPI
       *----------------------------------------------------*
       *
       /COPY QCOPYLE,F_PEEK53
@@ -73,38 +68,30 @@
       *           Main  Control block                                    *
       ********************************************************************
       *
-     C     *ENTRY        PLIST
-      *  Input
-     C                   PARM                    XObjName
-      *  Output
-     C                   PARM                    XValue
-     C                   PARM                    XMsgID
-     C                   PARM                    XMsgDta
+     D PEEK09          PI
+     D  i_qFile                            const likeds(r§qObj)
+     D  o_data                                   likeds(OBJD0400_t)
+     D  o_msgID                                  like(r§msgID)
+     D  o_msgDta                                 like(r§msgDta)
       *
       *---------------------------------------------------*
       *
-      * - Meldung
-     C                   Callp     p_sndStsMg('USR8107': XObjName)
+     C                   Callp     p_sndStsMg('USR8107': i_qFile)
       *
-     C                   EVAL      ObjName = XObjName
-      *
-     C                   CALL      'QUSROBJD'
-     C                   PARM                    RcvVar
-     C                   PARM                    RcvVarLen
-     C                   PARM                    FormatName
-     C                   PARM                    ObjName
-     C                   PARM                    ObjType
-     C                   PARM                    §ErrorCode
+     C                   CALLP     QUSROBJD(OBJD0400: %size(OBJD0400)
+     C                                      : 'OBJD0400'
+     C                                      : i_qFile: '*FILE'
+     C                                      : §ErrorCode)
       *
      C     §ErrAvail     IFEQ      *ZEROS
-     C                   EVAL      XValue = RcvVar
-     C                   EVAL      XMsgID = *BLANKS
-     C                   EVAL      XMsgDta = *BLANKS
+     C                   EVAL      o_data = OBJD0400
+     C                   EVAL      o_msgID = *BLANKS
+     C                   EVAL      o_msgDta = *BLANKS
      C                   ELSE
      C                   CLEAR                   OBJD0400
-     C                   EVAL      XValue = OBJD0400
-     C                   EVAL      XMsgID = §ErrID
-     C                   EVAL      XMsgDta = §ErrDta
+     C                   EVAL      o_data = OBJD0400
+     C                   EVAL      o_msgID = §ErrID
+     C                   EVAL      o_msgDta = §ErrDta
      C                   Endif
       *
       *---------------------------------------------------*
@@ -113,14 +100,6 @@
      C     ENDE          TAG
       *
      C                   RETURN
-      *
-      *====================================================*
-      *  *INZSR --  Initialize program                     *
-      *====================================================*
-      *
-     C     *INZSR        BEGSR
-      *
-     C                   ENDSR
       *
       *====================================================*
       *  *PSSR  --  Program error handler                  *
@@ -133,8 +112,4 @@
      C                   GOTO      ENDE
       *
      C                   ENDSR     '*CANCL'
-      *
-      *---Versenden von Nachrichten------------------------*
- CPY  ***/COPY QCOPYLE,MSG_C_MAPI
-      *----------------------------------------------------*
       *

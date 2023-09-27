@@ -48,6 +48,10 @@
       /COPY QCOPYLE,D_VARDEF
       *----------------------------------------------------*
       *
+      /define internal_prototype
+      /COPY QCOPYLE,PPEEK18
+      /undefine internal_prototype
+      *
       *---Benutzervoreinstellungen-------------------------*
       /COPY QCOPYLE,SET0003
       *----------------------------------------------------*
@@ -68,18 +72,6 @@
       *----------------------------------------------------*
       *  F E L D - D E F I N I T I O N E N                 *
       *----------------------------------------------------*
-      *
-     D XData           S            512A
-     D XFormat         S             10A
-     D XBuffer         S                   like(r§rcdBuf  )
-     D XTgtFormat      S             10A
-     D XTgtValue       S             10A
-     D XOutBuffer      S                   like(r§rcdBuf  )
-     D XOutBuffTb      S              1A   based(ptrXBuffTb)
-     D                                     dim(§rcdBufLen)
-     D XOutBuffLn      S                   like(r§int4    )
-     D XMsgID          S              7A
-     D XMsgDta         S            512A
       *
      D YBuffer         S            128A
      D YType           S              1A
@@ -138,7 +130,7 @@
      D SET§SignP       S                         LIKE(SET_SignP) INZ('+')
      D SET§SignM       S                         LIKE(SET_SignM) INZ('-')
       *
-     D R_TgtValue      S                         LIKE(XTgtValue) INZ(*BLANKS)
+     D R_TgtValue      S                         LIKE(i_tgtValue) INZ(*BLANKS)
      D R_DateISO       S               D         DATFMT(*ISO)    INZ(*LOVAL )
      D R_TimeISO       S               T         TIMFMT(*ISO)    INZ(*LOVAL )
      D R_TimeStmp      S               Z                         INZ(*LOVAL )
@@ -149,7 +141,9 @@
      D strPos          S                   like(r§int4    )
      D                                     inz
       *
-     D PEEK36          S                   like(r§pgmCallN) inz
+     D PEEK36_NAME     S                   like(r§pgmCallN) inz
+      *
+      /COPY QCOPYLE,PPEEK36
       *
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
@@ -171,26 +165,16 @@
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
       *
-     C     *ENTRY        PLIST
-     C                   PARM                    XData
-     C                   PARM                    XFormat
-     C                   PARM                    XBuffer
-     C                   PARM                    XTgtFormat
-     C                   PARM                    XTgtValue
-     C                   PARM                    XOutBuffer
-     C                   PARM                    XOutBuffLn
-     C                   PARM                    XMsgID
-     C                   PARM                    XMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK36
-     C     P_Peek36      PLIST
-     C                   PARM                    YBuffer
-     C                   PARM                    YType
-     C                   PARM                    YDatTimFmt
-     C                   PARM                    YSeparator
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
+     D PEEK18          PI
+     D  i_fldl0100                         const likeds(FLDL0100_t)
+     D  i_rcdFmt                           const like(r§fmt)
+     D  i_buffer                                 like(r§rcdBuf)
+     D  i_tgtFormat                  10A   const
+     D  i_tgtValue                   10A   const
+     D  o_buffer                                 like(r§rcdBuf)
+     D  o_buffLen                                like (r§int4)
+     D  o_msgID                                  like(r§msgID)
+     D  o_msgDta                                 like(r§msgDta)
       *
       *----------------------------------------------------*
       *  Schlüsselliste für PEEKFLD
@@ -201,19 +185,19 @@
       *
      C                   EXSR      FIRST
       *
-     C                   Eval      FLDL0100 = XData
+     C                   Eval      FLDL0100 = i_fldl0100
       *
-     C                   Eval      XOutBuffer = *BLANKS
-     C                   Eval      XOutBuffLn = *ZEROS
+     C                   Eval      o_buffer = *BLANKS
+     C                   Eval      o_buffLen = *ZEROS
       *
      C                   SELECT
-     C     XTgtFormat    WHENEQ    '*EXTERN'
+     C     i_tgtFormat   WHENEQ    '*EXTERN'
      C                   EXSR      ToExtern
-     C     XTgtFormat    WHENEQ    '*INTERN'
+     C     i_tgtFormat   WHENEQ    '*INTERN'
      C                   EXSR      ToIntern
-     C     XTgtFormat    WHENEQ    '*ZONED'
+     C     i_tgtFormat   WHENEQ    '*ZONED'
      C                   EXSR      ToZoned
-     C     XTgtFormat    WHENEQ    '*FLOAT'
+     C     i_tgtFormat   WHENEQ    '*FLOAT'
      C                   EXSR      ToFloat
      C                   OTHER
      C                   Endsl
@@ -259,20 +243,20 @@
       *  Ascending key ...
      C     F_Desc        IFEQ      'A'
       *  ... Keine Umsetzung erforderlich
-     C                   Eval      R_TgtValue = XTgtValue
+     C                   Eval      R_TgtValue = i_tgtValue
      C                   ELSE
       *  Descending key ...
-     C     XTgtValue     IFEQ      '*HIVAL'
-     C     XTgtValue     OREQ      '*LOVAL'
+     C     i_tgtValue    IFEQ      '*HIVAL'
+     C     i_tgtValue    OREQ      '*LOVAL'
       *  ... *HIVAL ==> *LOVAL und umgekehrt
-     C     XTgtValue     IFEQ      '*HIVAL'
+     C     i_tgtValue    IFEQ      '*HIVAL'
      C                   Eval      R_TgtValue = '*LOVAL'
      C                   ELSE
      C                   Eval      R_TgtValue = '*HIVAL'
      C                   Endif
      C                   ELSE
       *  ... Keine Umsetzung erforderlich
-     C                   Eval      R_TgtValue = XTgtValue
+     C                   Eval      R_TgtValue = i_tgtValue
      C                   Endif
      C                   Endif
       *
@@ -353,16 +337,17 @@
      C                   Eval      strPos = 1
      C                   Endif
       *
-     C                   Eval      xOutBuffer =
-     C                               %subst(xBuffer: strPos: f_buffLn(FLDL0100))
+     C                   Eval      o_buffer =
+     C                               %subst(i_buffer
+     C                                      : strPos: f_buffLn(FLDL0100))
       *
-     C                   Eval      xOutBuffLn = f_buffLn(FLDL0100)
+     C                   Eval      o_buffLen = f_buffLn(FLDL0100)
       *
      C                   If        f_hasCcsid(FLDL0100) = bTrue
     R ***                          AND f_mustCvtCcsid() = bTrue
-     C                   Eval      xOutBuffLn =
+     C                   Eval      o_buffLen =
      C                             cvtToJobCcsid(
-     C                               xOutBuffer: xOutBuffLn: FLDL0100.F1FDCC)
+     C                               o_buffer: o_buffLen: FLDL0100.F1FDCC)
      C                   Endif
       *
      C                   EXSR      AddDlmtr
@@ -381,16 +366,17 @@
      C                   Eval      strPos = 1
      C                   Endif
       *
-     C                   Eval      xOutBuffer =
-     C                               %subst(xBuffer: strPos: f_buffLn(FLDL0100))
+     C                   Eval      o_buffer =
+     C                               %subst(i_buffer
+     C                                      : strPos: f_buffLn(FLDL0100))
       *
-     C                   Eval      xOutBuffLn = f_buffLn(FLDL0100)
+     C                   Eval      o_buffLen = f_buffLn(FLDL0100)
       *
      C                   If        f_hasCcsid(FLDL0100) = bTrue
     R ***                          AND f_mustCvtCcsid() = bTrue
-     C                   Eval      xOutBuffLn =
+     C                   Eval      o_buffLen =
      C                             cvtToJobCcsid(
-     C                               xOutBuffer: xOutBuffLn: FLDL0100.F1FDCC)
+     C                               o_buffer: o_buffLen: FLDL0100.F1FDCC)
      C                   Endif
       *
      C                   EXSR      AddDlmtr
@@ -445,25 +431,25 @@
       *
      C     F_to_Ext      BEGSR
       *
-     C                   Eval      pFloat = %addr(xBuffer)
+     C                   Eval      pFloat = %addr(i_buffer)
       *
      C                   IF        f_buffLn(FLDL0100) = 4
      C                   Eval      Float = FLoat4
      C                   EXSR      ChgSignFloat
      C                   Eval      Float4 = FLoat
-     C                   Eval      XOutBuffer = %editflt(Float4)
-     C                   Eval      XOutBuffLn = 14
+     C                   Eval      o_buffer = %editflt(Float4)
+     C                   Eval      o_buffLen = 14
      C                   ELSE
      C                   Eval      Float = FLoat8
      C                   EXSR      ChgSignFloat
      C                   Eval      Float8 = FLoat
-     C                   Eval      XOutBuffer = %editflt(Float8)
-     C                   Eval      XOutBuffLn = 23
+     C                   Eval      o_buffer = %editflt(Float8)
+     C                   Eval      o_buffLen = 23
      C                   ENDIF
       *
       *  Entfernen führendes Vorzeichen
-     C                   Eval      XOutBuffer = %subst(XOutBuffer: 2)
-     C                   Eval      XOutBuffLn = XOutBuffLn - 1
+     C                   Eval      o_buffer = %subst(o_buffer: 2)
+     C                   Eval      o_buffLen = o_buffLen - 1
       *
      C                   EXSR      AddSign
      C                   EXSR      AddDlmtr
@@ -522,8 +508,8 @@
       *
      C                   Eval      x = f_len(zoned_A) - FLDL0100.F1Digt + 1
       *
-     C                   Eval      xOutBuffLn = FLDL0100.F1DIGT
-     C                   Eval      %subst(xOutBuffer: 1: xOutBuffLn) =
+     C                   Eval      o_buffLen = FLDL0100.F1DIGT
+     C                   Eval      %subst(o_buffer: 1: o_buffLen) =
      C                                %subst(zoned_a: x)
       *
      C                   Endsr
@@ -545,7 +531,7 @@
       *
      C     ExtrFloat     Begsr
       *
-     C                   Eval      pFloat = %addr(xBuffer)
+     C                   Eval      pFloat = %addr(i_buffer)
       *
      C                   IF        f_buffLn(FLDL0100) = 4
      C                   Eval      Float = FLoat4
@@ -553,8 +539,8 @@
      C                   Eval      Float = FLoat8
      C                   ENDIF
       *
-     C                   Eval      XOutBuffer = %editflt(Float)
-     C                   Eval      XOutBuffLn = 23
+     C                   Eval      o_buffer = %editflt(Float)
+     C                   Eval      o_buffLen = 23
       *
      C                   Endsr
       *
@@ -615,18 +601,18 @@
      C                   ELSE
      C     IsMinus       IFEQ      bTrue
      C     SET§SignM     IFEQ      *BLANKS
-     C                   Eval      XOutBuffer = ' ' + XOutBuffer
+     C                   Eval      o_buffer = %trimr(o_buffer) + ' '
      C                   ELSE
-     C                   Eval      XOutBuffer = SET§SignM + XOutBuffer
+     C                   Eval      o_buffer = %trimr(o_buffer) + SET§SignM
      C                   Endif
-     C                   Eval      XOutBuffLn = XOutBuffLn + 1
+     C                   Eval      o_buffLen = o_buffLen + 1
      C                   ELSE
      C     SET§SignP     IFEQ      *BLANKS
-     C                   Eval      XOutBuffer = ' ' + XOutBuffer
+     C                   Eval      o_buffer = %trimr(o_buffer) + ' '
      C                   ELSE
-     C                   Eval      XOutBuffer = SET§SignP + XOutBuffer
+     C                   Eval      o_buffer = %trimr(o_buffer) + SET§SignP
      C                   Endif
-     C                   Eval      XOutBuffLn = XOutBuffLn + 1
+     C                   Eval      o_buffLen = o_buffLen + 1
      C                   Endif
      C                   Endif
       *
@@ -641,10 +627,10 @@
      C     SET_Dlmtr     IFEQ      *BLANKS
       *          ohne Delimeter ausgeben
      C                   ELSE
-     C     XOutBuffLn    IFLT      §rcdBufLen
-     C                   Eval      XOutBuffLn = XOutBuffLn + 1
-     C                   Eval      BL = XOutBuffLn
-     C                   Eval      XOutBuffTb(BL) = SET_Dlmtr
+     C     o_buffLen     IFLT      §rcdBufLen
+     C                   Eval      o_buffLen = o_buffLen + 1
+     C                   Eval      %subst(
+     C                               o_buffer: o_buffLen: 1) = SET_Dlmtr
      C                   ELSE
       *    Pufferbereich zu klein ...
      C                   Endif
@@ -664,39 +650,39 @@
      C                   Eval      strPos = 1
      C                   Endif
       *
-     C                   Eval      XOutBuffLn = f_buffLn(FLDL0100)
+     C                   Eval      o_buffLen = f_buffLn(FLDL0100)
       *
      C                   SELECT
       *  kleinester Wert ...
      C     R_TgtValue    WHENEQ    '*LOVAL'
-     C                   Eval      %subst(xOutBuffer: strPos: XOutBuffLn)
+     C                   Eval      %subst(o_buffer: strPos: o_buffLen)
      C                                = *allx'00'
       *  größter Wert ...
      C     R_TgtValue    WHENEQ    '*HIVAL'
-     C                   Eval      %subst(xOutBuffer: strPos: XOutBuffLn)
+     C                   Eval      %subst(o_buffer: strPos: o_buffLen)
      C                                = *allx'FF'
       *  aktueller Wert ...
      C     R_TgtValue    WHENEQ    '*CURRENT'
      C                   If        f_hasCcsid(FLDL0100) = bTrue
     R ***                          AND f_mustCvtCcsid() = bTrue
      C                   If        FLDL0100.F1NDBC > 0
-     C                   Eval      xOutBuffLn = FLDL0100.F1NDBC
+     C                   Eval      o_buffLen = FLDL0100.F1NDBC
      C                   Endif
-     C                   Eval      XOutBuffLn =
+     C                   Eval      o_buffLen =
      C                               cvtToFileCcsid(
-     C                                 xBuffer: xOutBuffLn: FLDL0100.F1FDCC)
+     C                                 i_buffer: o_buffLen: FLDL0100.F1FDCC)
      C                   Endif
-     C                   Eval      %subst(xOutBuffer: strPos: XOutBuffLn)
-     C                                = %subst(xBuffer: 1: XOutBuffLn)
+     C                   Eval      %subst(o_buffer: strPos: o_buffLen)
+     C                                = %subst(i_buffer: 1: o_buffLen)
      C                   Other
      C                   Endsl
       *
       *  einfügen Längenangabe bei Feldern variabler Länge                                   R
      C                   If        f_isVarLen(FLDL0100) = bTrue
-     C                   Callp     p_decToBin(xOutBuffer  :
+     C                   Callp     p_decToBin(o_buffer  :
      C                                        1           :
      C                                        2           :
-     C                                        XOutBuffLn  )
+     C                                        o_buffLen  )
      C                   Endif
       *
      C                   Endsr
@@ -713,39 +699,39 @@
      C                   Eval      strPos = 1
      C                   Endif
       *
-     C                   Eval      XOutBuffLn = f_buffLn(FLDL0100)
+     C                   Eval      o_buffLen = f_buffLn(FLDL0100)
       *
      C                   SELECT
       *  kleinester Wert ...
      C     R_TgtValue    WHENEQ    '*LOVAL'
-     C                   Eval      %subst(xOutBuffer: strPos: XOutBuffLn)
+     C                   Eval      %subst(o_buffer: strPos: o_buffLen)
      C                                = *allx'00'
       *  größter Wert ...
      C     R_TgtValue    WHENEQ    '*HIVAL'
-     C                   Eval      %subst(xOutBuffer: strPos: XOutBuffLn)
+     C                   Eval      %subst(o_buffer: strPos: o_buffLen)
      C                                = *allx'FF'
       *  aktueller Wert ...
      C     R_TgtValue    WHENEQ    '*CURRENT'
      C                   If        f_hasCcsid(FLDL0100) = bTrue
     R ***                          AND f_mustCvtCcsid() = bTrue
      C                   If        FLDL0100.F1NDBC > 0
-     C                   Eval      xOutBuffLn = FLDL0100.F1NDBC
+     C                   Eval      o_buffLen = FLDL0100.F1NDBC
      C                   Endif
-     C                   Eval      XOutBuffLn =
+     C                   Eval      o_buffLen =
      C                               cvtToFileCcsid(
-     C                                 xBuffer: xOutBuffLn: FLDL0100.F1FDCC)
+     C                                 i_buffer: o_buffLen: FLDL0100.F1FDCC)
      C                   Endif
-     C                   Eval      %subst(xOutBuffer: strPos: XOutBuffLn)
-     C                                = %subst(xBuffer: 1: XOutBuffLn)
+     C                   Eval      %subst(o_buffer: strPos: o_buffLen)
+     C                                = %subst(i_buffer: 1: o_buffLen)
      C                   Other
      C                   Endsl
       *
       *  einfügen Längenangabe bei Feldern variabler Länge
      C                   If        f_isVarLen(FLDL0100) = bTrue
-     C                   Callp     p_decToBin(xOutBuffer  :
+     C                   Callp     p_decToBin(o_buffer  :
      C                                        1           :
      C                                        2           :
-     C                                        XOutBuffLn  )
+     C                                        o_buffLen  )
      C                   Endif
       *
      C                   Endsr
@@ -763,9 +749,9 @@
      C                   Eval      Zoned = Zoned
       *
       *  extrahieren gezonten Wert ...
-     C                   Eval      xOutBuffLn = f_buffLn(FLDL0100)
-     C                   Eval      x = f_len(zoned_A) - xOutBuffLn + 1
-     C                   Eval      xOutBuffer = %subst(Zoned_A: x: xOutBuffLn)
+     C                   Eval      o_buffLen = f_buffLn(FLDL0100)
+     C                   Eval      x = f_len(zoned_A) - o_buffLen + 1
+     C                   Eval      o_buffer = %subst(Zoned_A: x: o_buffLen)
       *
      C                   ENDSR
       *
@@ -809,8 +795,8 @@
      C                   Endsl
       *
       *  extrahieren Binärwert ...
-     C                   Eval      xOutBuffLn = f_buffLn(FLDL0100)
-     C                   Eval      xOutBuffer = %subst(binary1_A: 1: xOutBuffLn)
+     C                   Eval      o_buffLen = f_buffLn(FLDL0100)
+     C                   Eval      o_buffer = %subst(binary1_A: 1: o_buffLen)
       *
      C                   Endsr
       *
@@ -833,8 +819,8 @@
      C                   Endsl
       *
       *  extrahieren Binärwert ...
-     C                   Eval      xOutBuffLn = f_buffLn(FLDL0100)
-     C                   Eval      xOutBuffer = %subst(binary2_A: 1: xOutBuffLn)
+     C                   Eval      o_buffLen = f_buffLn(FLDL0100)
+     C                   Eval      o_buffer = %subst(binary2_A: 1: o_buffLen)
       *
      C                   Endsr
       *
@@ -857,8 +843,8 @@
      C                   Endsl
       *
       *  extrahieren Binärwert ...
-     C                   Eval      xOutBuffLn = f_buffLn(FLDL0100)
-     C                   Eval      xOutBuffer = %subst(binary4_A: 1: xOutBuffLn)
+     C                   Eval      o_buffLen = f_buffLn(FLDL0100)
+     C                   Eval      o_buffer = %subst(binary4_A: 1: o_buffLen)
       *
      C                   Endsr
       *
@@ -881,8 +867,8 @@
      C                   Endsl
       *
       *  extrahieren Binärwert ...
-     C                   Eval      xOutBuffLn = f_buffLn(FLDL0100)
-     C                   Eval      xOutBuffer = %subst(binary8_A: 1: xOutBuffLn)
+     C                   Eval      o_buffLen = f_buffLn(FLDL0100)
+     C                   Eval      o_buffer = %subst(binary8_A: 1: o_buffLen)
       *
      C                   Endsr
       *
@@ -901,8 +887,8 @@
       *  extrahieren Binärwert ...
      C                   Eval      x = f_len(packed_a) - f_buffln(FLDL0100) + 1
       *
-     C                   Eval      xOutBuffLn = f_buffLn(FLDL0100)
-     C                   Eval      xOutBuffer = %subst(packed_a: x: xOutBuffLn)
+     C                   Eval      o_buffLen = f_buffLn(FLDL0100)
+     C                   Eval      o_buffer = %subst(packed_a: x: o_buffLen)
       *
      C                   ENDSR
       *
@@ -914,8 +900,8 @@
       *
      C                   EXSR      CvtToFloat
       *
-     C                   Eval      xOutBuffLn = f_buffLn(FLDL0100)
-     C                   Eval      xOutBuffer = dsFloat
+     C                   Eval      o_buffLen = f_buffLn(FLDL0100)
+     C                   Eval      o_buffer = dsFloat
       *
      C                   ENDSR
       *
@@ -936,12 +922,12 @@
      C                   EXSR      dateToBuffer
       *  aktueller Wert ...
      C     R_TgtValue    WHENEQ    '*CURRENT'
-     C                   Eval      XOutBuffer = XBuffer
+     C                   Eval      o_buffer = i_buffer
      C                   OTHER
      C                   Endsl
       *
-     C                   Eval      xOutBuffLn = f_buffLn(FLDL0100)
-     C                   Eval      xOutBuffer = %subst(xOutBuffer:1:xOutBuffLn)
+     C                   Eval      o_buffLen = f_buffLn(FLDL0100)
+     C                   Eval      o_buffer = %subst(o_buffer:1:o_buffLen)
       *
       *  Wert überprüfen über PEEK36 ...
      C                   EXSR      ChkValue
@@ -969,10 +955,10 @@
       *
      C                   IF        (FLDL0100.F1DTSP <> ' '    ) and
      C                             (FLDL0100.F1DTSP <> R_DftSp)
-     C                   Eval      XOutBuffer =
+     C                   Eval      o_buffer =
      C                               %xlate(R_DftSp: FLDL0100.F1DTSP: R_DateBuf)
      C                   ELSE
-     C                   Eval      XOutBuffer = R_DateBuf
+     C                   Eval      o_buffer = R_DateBuf
      C                   ENDIF
       *
      C                   ENDSR
@@ -994,12 +980,12 @@
      C                   EXSR      timeToBuffer
       *  aktueller Wert ...
      C     R_TgtValue    WHENEQ    '*CURRENT'
-     C                   Eval      XOutBuffer = XBuffer
+     C                   Eval      o_buffer = i_buffer
      C                   OTHER
      C                   Endsl
       *
-     C                   Eval      xOutBuffLn = f_buffLn(FLDL0100)
-     C                   Eval      xOutBuffer = %subst(xOutBuffer:1:xOutBuffLn)
+     C                   Eval      o_buffLen = f_buffLn(FLDL0100)
+     C                   Eval      o_buffer = %subst(o_buffer:1:o_buffLen)
       *
       *  Wert überprüfen über PEEK36 ...
      C                   EXSR      ChkValue
@@ -1031,10 +1017,10 @@
       *
      C                   IF        (FLDL0100.F1DTSP <> ' '    ) and
      C                             (FLDL0100.F1DTSP <> R_DftSp)
-     C                   Eval      XOutBuffer =
+     C                   Eval      o_buffer =
      C                               %xlate(R_DftSp: FLDL0100.F1DTSP: R_TimeBuf)
      C                   ELSE
-     C                   Eval      XOutBuffer = R_TimeBuf
+     C                   Eval      o_buffer = R_TimeBuf
      C                   ENDIF
       *
      C                   ENDSR
@@ -1049,19 +1035,19 @@
       *  kleinester Wert ...
      C     R_TgtValue    WHENEQ    '*LOVAL'
      C                   Eval      R_TimeStmp = *LOVAL
-     C                   Eval      XOutBuffer = %char(R_TimeStmp: *ISO)
+     C                   Eval      o_buffer = %char(R_TimeStmp: *ISO)
       *  größter Wert ...
      C     R_TgtValue    WHENEQ    '*HIVAL'
      C                   Eval      R_TimeStmp = *HIVAL
-     C                   Eval      XOutBuffer = %char(R_TimeStmp: *ISO)
+     C                   Eval      o_buffer = %char(R_TimeStmp: *ISO)
       *  aktueller Wert ...
      C     R_TgtValue    WHENEQ    '*CURRENT'
-     C                   Eval      XOutBuffer = XBuffer
+     C                   Eval      o_buffer = i_buffer
      C                   OTHER
      C                   Endsl
       *
-     C                   Eval      xOutBuffLn = f_buffLn(FLDL0100)
-     C                   Eval      xOutBuffer = %subst(xOutBuffer:1:xOutBuffLn)
+     C                   Eval      o_buffLen = f_buffLn(FLDL0100)
+     C                   Eval      o_buffer = %subst(o_buffer:1:o_buffLen)
       *
       *  Wert überprüfen über PEEK36 ...
      C                   EXSR      ChkValue
@@ -1075,16 +1061,16 @@
       *
      C     ChkValue      BEGSR
       *
-     C                   eval      YBuffer = XOutBuffer
-     C                   eval      YType = FLDL0100.F1DTyp
-     C                   eval      YDatTimFmt = FLDL0100.F1DTFM
-     C                   eval      YSeparator = FLDL0100.F1DTSP
-     C                   CALL      PEEK36        P_Peek36
+     C                   CALLP     PEEK36(o_buffer
+     C                                    : FLDL0100.F1DTyp
+     C                                    : FLDL0100.F1DTFM
+     C                                    : FLDL0100.F1DTSP
+     C                                    : YMsgID: YMsgDta)
      C     YMsgID        IFEQ      *BLANKS
       *   Alles in Ordnung ...
      C                   ELSE
-     C                   Eval      XMsgID = YMsgID
-     C                   Eval      XMsgDta = YMsgDta
+     C                   Eval      o_msgID = YMsgID
+     C                   Eval      o_msgDta = YMsgDta
      C                   GOTO      ENDE
      C                   Endif
       *
@@ -1116,7 +1102,7 @@
       *      ... Vorzeichen extrahieren
      C                   Eval      x = FLDL0100.F1Digt + 1
      C     X             IFLE      §rcdBufLen
-     C                   Eval      A1 = %subst(XBuffer: X: 1)
+     C                   Eval      A1 = %subst(i_buffer: X: 1)
      C                   ELSE
      C                   Eval      A1 = *BLANKS
      C                   Endif
@@ -1131,15 +1117,14 @@
       *  ... Wert
      C                   Eval      x = f_len(zoned_A) - FLDL0100.F1Digt + 1
      C                   Eval      %subst(Zoned_A: x) =
-     C                                %subst(XBuffer: 1: FLDL0100.F1Digt)
-     C     ' ':'0'       XLATE     Zoned_A       Zoned_A
+     C                                %subst(i_buffer: 1: FLDL0100.F1Digt)
+     C                   EVAL      Zoned_A = %xlate(' ':'0' : Zoned_A)
       *
       *  ... gültige numerische Daten prüfen
-     C     §Numeric      CHECK     Zoned_A                                99
-     C     *IN99         IFEQ      '1'                                          = Fehler
-     C                   Eval      XMsgID = 'USR8138'
+     C                   IF        (%check(§Numeric: Zoned_A) > 0)              = Fehler
+     C                   Eval      o_msgID = 'USR8138'
      C                   Eval      USR81381 = FLDL0100.F1FNme
-     C                   Eval      XMsgDta = USR8138
+     C                   Eval      o_msgDta = USR8138
      C                   GOTO      ENDE
      C                   ELSE
       *               Alles klar
@@ -1195,7 +1180,7 @@
       *            mit Vorzeichen
       *      ... Vorzeichen extrahieren
      C     X             IFLE      §rcdBufLen
-     C                   Eval      A1 = %subst(XBuffer: X: 1)
+     C                   Eval      A1 = %subst(i_buffer: X: 1)
      C                   ELSE
      C                   Eval      A1 = *BLANKS
      C                   Endif
@@ -1208,17 +1193,17 @@
      C                   Endif
       *
       *  ... gültige numerische Daten prüfen
-     C                   IF        f_vldFloat(%subst(xBuffer: 1: x-1)) = bFalse
-     C                   Eval      XMsgID = 'USR8138'
+     C                   IF        f_vldFloat(%subst(i_buffer: 1: x-1)) = bFalse
+     C                   Eval      o_msgID = 'USR8138'
      C                   Eval      USR81381 = FLDL0100.F1FNme
-     C                   Eval      XMsgDta = USR8138
+     C                   Eval      o_msgDta = USR8138
      C                   GOTO      ENDE
      C                   ELSE
       *               Alles klar
      C                   Endif
       *
       *  ... Wert
-     C                   Eval      Float = %float(%subst(xBuffer: 1: x-1))
+     C                   Eval      Float = %float(%subst(i_buffer: 1: x-1))
       *
       *  ... negativer Wert
      C     IsMinus       IFEQ      bTrue
@@ -1249,7 +1234,7 @@
      C                   Eval      x = f_len(zoned_A) - f_buffLn(FLDL0100) + 1
       *
      C                   Eval      %subst(zoned_a: x) =
-     C                                %subst(xBuffer: 1: f_buffLn(FLDL0100))
+     C                                %subst(i_buffer: 1: f_buffLn(FLDL0100))
       *
      C                   Eval      Zoned = Zoned
       *
@@ -1285,7 +1270,7 @@
      C                   Eval      binary1 = 0
       *
      C                   Eval      binary1_A =
-     C                                %subst(xBuffer: 1: f_buffLn(FLDL0100))
+     C                                %subst(i_buffer: 1: f_buffLn(FLDL0100))
       *
      C                   Eval      zoned = binary1
       *
@@ -1300,7 +1285,7 @@
      C                   Eval      binary2 = 0
       *
      C                   Eval      binary2_A =
-     C                                %subst(xBuffer: 1: f_buffLn(FLDL0100))
+     C                                %subst(i_buffer: 1: f_buffLn(FLDL0100))
       *
      C                   Eval      zoned = binary2
       *
@@ -1315,7 +1300,7 @@
      C                   Eval      binary4 = 0
       *
      C                   Eval      binary4_A =
-     C                                %subst(xBuffer: 1: f_buffLn(FLDL0100))
+     C                                %subst(i_buffer: 1: f_buffLn(FLDL0100))
       *
      C                   Eval      zoned = binary4
       *
@@ -1330,7 +1315,7 @@
      C                   Eval      binary8 = 0
       *
      C                   Eval      binary8_A =
-     C                                %subst(xBuffer: 1: f_buffLn(FLDL0100))
+     C                                %subst(i_buffer: 1: f_buffLn(FLDL0100))
       *
      C                   Eval      zoned = binary8
       *
@@ -1347,7 +1332,7 @@
      C                   Eval      x = f_len(packed_a) - f_buffLn(FLDL0100) + 1
       *
      C                   Eval      %subst(packed_a: x) =
-     C                                %subst(xBuffer: 1: f_buffLn(FLDL0100))
+     C                                %subst(i_buffer: 1: f_buffLn(FLDL0100))
       *
      C                   Eval      zoned = packed
       *
@@ -1400,10 +1385,8 @@
       * - Programm initialisieren
       ***                Callp     p_rmvPgmMg(§§pgmName)
       *
-     C                   Eval      XMsgID = *BLANKS
-     C                   Eval      XMsgDta = *BLANKS
-      *
-     C                   Eval      ptrXBuffTb = %addr(xOutBuffer)
+     C                   Eval      o_msgID = *BLANKS
+     C                   Eval      o_msgDta = *BLANKS
       *
      C                   ENDSR
       *
@@ -1413,7 +1396,7 @@
       *
      C     *INZSR        BEGSR
       *
-     C                   Eval      PEEK36 = f_pgmCallN('PEEK36')
+     C                   Eval      PEEK36_NAME = f_pgmCallN('PEEK36')
       *
      C                   OPEN      PEEKFLD
       *

@@ -53,19 +53,6 @@
       /COPY QCOPYLE,COPYRIGHT
       *
       *----------------------------------------------------*
-      *  *ENTRY-List                                       *
-      *----------------------------------------------------*
-     D  XData          S            512A
-     D  XFormat        S             10A
-     D  XSrcVar        S                   like(r§rcdBuf  )
-     D  XQcmdexc       S              1A
-     D  XCvtCcsid      S              1A
-     D  XString        S                   like(r§rcdBuf  )
-     D  XStrLen        S                   like(r§int4    )
-     D  XMsgID         S                   like(r§msgID   )
-     D  XMsgDta        S                   like(r§msgDta  )
-      *
-      *----------------------------------------------------*
       *  API - DATENSTRUKTUREN                             *
       *----------------------------------------------------*
       *
@@ -92,7 +79,7 @@
       *  declarations for Edit: QECEDT
      D  CvtVar         S            256A   INZ(*BLANKS)
      D  CvtVarLen      S                   INZ(256)     LIKE(R§INT4)
-     D  SrcVar         S                   INZ(*BLANKS) LIKE(XSrcVar)
+     D  SrcVar         S                   INZ(*BLANKS) LIKE(i_srcVar)
      D  SrcVarCls      S             10A   INZ(*BLANKS)
      D  Float4         S              4F   BASED(pFloat)
      D  Float8         S              8F   BASED(pFloat)
@@ -131,6 +118,10 @@
       /COPY QCOPYLE,D_VARDEF
       *----------------------------------------------------*
       *
+      /define internal_prototype
+      /COPY QCOPYLE,PPEEK06
+      /undefine internal_prototype
+      *
       *  API error reporting
       /COPY QCOPYLE,API_ERROR
       *
@@ -148,34 +139,32 @@
       *           Main  Control block                                    *
       ********************************************************************
       *
-     C     *ENTRY        PLIST
-      *  Input
-     C                   PARM                    XData
-     C                   PARM                    XFormat
-     C                   PARM                    XSrcVar
-     C                   PARM                    XQcmdexc
-     C                   PARM                    XCvtCcsid
-      *  Output
-     C                   PARM                    XString
-     C                   PARM                    XStrLen
-     C                   PARM                    XMsgID
-     C                   PARM                    XMsgDta
+     D PEEK06          PI
+     D  i_fldl0100                         const likeds(FLDL0100_t)
+     D  i_rcdFmt                           const like(r§fmt)
+     D  i_srcVar                           const like(r§rcdBuf)
+     D  i_qcmdexc                     1A   const
+     D  i_cvtCcsid                    1A   const
+     D  o_string                                 like(r§rcdBuf)
+     D  o_strLen                                 like(r§int4)
+     D  o_msgID                                  like(r§msgID)
+     D  o_msgDta                                 like(r§msgDta)
       *
       *---------------------------------------------------*
       *
-     C                   EVAL      XString = ''
-     C                   EVAL      XStrLen = 0
+     C                   EVAL      o_string = ''
+     C                   EVAL      o_strLen = 0
       *
      C                   MONITOR
       *
      C                   SELECT
-     C                   WHEN      (XFormat = 'FLDL0100')
+     C                   WHEN      (i_rcdFmt = 'FLDL0100')
      C                   EXSR      W_FLDL0100
      C                   Endsl
       *
      C                   ON-ERROR
-     C                   EVAL      XString = ''
-     C                   EVAL      XStrLen = 0
+     C                   EVAL      o_string = ''
+     C                   EVAL      o_strLen = 0
      C                   ENDMON
       *
      C                   RETURN
@@ -186,11 +175,11 @@
       *
      C     W_FLDL0100    BEGSR
       *
-     C                   EVAL      FLDL0100 = XData
+     C                   EVAL      FLDL0100 = i_fldl0100
       *
       *  Erzwingen Edit Code, wenn die Aufbereitung für eine über
       *  QCMDEXC auszuführende Befehlszeile erfolgt.
-     C                   IF        (XQcmdexc = bTrue) and
+     C                   IF        (i_qcmdexc = bTrue) and
      C                             (f_isNumFld(FLDL0100) = bTrue) and
      C                             (f_isFloatFld(FLDL0100) = bFalse)
      C                   EVAL      FLDL0100.F1EDTC = 'P'
@@ -230,72 +219,71 @@
       *
      C                   SELECT
      C                   WHEN      (SrcVarCls = 'F')
-     C                   Eval      len = f_rtvFld(srcVar: xSrcVar: FLDL0100)
+     C                   Eval      len = f_rtvFld(srcVar: i_srcVar: FLDL0100)
      C                   Eval      pFLoat = %addr(srcVar)
       *         Float 4
      C                   If        (len = 4)
      C                   Select
      C                   When      (Float4Buf = SPCVAL_NAN_4)
-     C                   Eval      xString = SPCVAL_NAN
+     C                   Eval      o_string = SPCVAL_NAN
      C                   When      (Float4Buf = SPCVAL_INF_4)
-     C                   Eval      xString = SPCVAL_INF
+     C                   Eval      o_string = SPCVAL_INF
      C                   Other
      C                   Eval      MaxFloat4 = *HIVAL
      C                   If        (%abs(Float4) <= MaxFloat4)
      C                   Eval      MaxFloat4 = Float4
-     C                   Eval      xString = %editc(MaxFloat4: 'P')
+     C                   Eval      o_string = %editc(MaxFloat4: 'P')
      C                   Else
-     C                   Eval      xString = %editflt(Float4)
+     C                   Eval      o_string = %editflt(Float4)
      C                   Endif
      C                   Endsl
-     C                   Eval      xStrLen = 14
+     C                   Eval      o_strLen = 14
      C                   Else
       *         Float 8
      C                   Select
      C                   When      (Float8Buf = SPCVAL_NAN_8)
-     C                   Eval      xString = SPCVAL_NAN
+     C                   Eval      o_string = SPCVAL_NAN
      C                   When      (Float8Buf = SPCVAL_INF_8)
-     C                   Eval      xString = SPCVAL_INF
+     C                   Eval      o_string = SPCVAL_INF
      C                   Other
      C                   Eval      MaxFloat8 = *HIVAL
      C                   If        (%abs(Float8) <= MaxFloat8)
      C                   Eval      MaxFloat8 = Float8
-     C                   Eval      xString = %editc(MaxFloat8: 'P')
+     C                   Eval      o_string = %editc(MaxFloat8: 'P')
      C                   Else
-     C                   Eval      xString = %editflt(Float8)
+     C                   Eval      o_string = %editflt(Float8)
      C                   Endif
      C                   Endsl
-     C                   Eval      xStrLen = 23
+     C                   Eval      o_strLen = 23
      C                   Endif
       *
      C                   WHEN      (SrcVarCls = 'A' or SrcVarCls = 'G')
      C                   Eval      TempStrLen =
-     C                                f_rtvFld(xString: xSrcVar: FLDL0100)
+     C                                f_rtvFld(o_string: i_srcVar: FLDL0100)
       *  Do not convert if we prepare the *HEADLINE (see: PEEK05, yCvtCcsid)
      C                   If        f_hasCcsid(FLDL0100) = bTrue AND
-     C                             XCvtCcsid = bTrue
-    R ***                          AND f_mustCvtCcsid() = bTrue
+     C                             i_cvtCcsid = bTrue
      C                   Eval      hTranscoder =
      C                               Transcoder_toJobCcsid(FLDL0100.F1FDCC)
-     C                   Eval      xStrLen =
+     C                   Eval      o_strLen =
      C                                Transcoder_xlateBuffer(hTranscoder
-     C                                                       : %addr(xString)
+     C                                                       : %addr(o_string)
      C                                                       : TempStrLen
-     C                                                       : %size(xString))
-     C                   If        (TempStrLen > xStrLen)
-     C                   Eval      %subst(xString
-     C                                    : xStrLen+1: TempStrLen-xStrLen) = ''
+     C                                                       : %size(o_string))
+     C                   If        (TempStrLen > o_strLen)
+     C                   Eval      %subst(o_string: o_strLen+1
+     C                                    : TempStrLen - o_strLen) = ''
      C                   Endif
      C                   Else
      C                   If        (FLDL0100.F1NDBC > 0)
-     C                   Eval      xStrLen = FLDL0100.F1NDBC
+     C                   Eval      o_strLen = FLDL0100.F1NDBC
      C                   Else
-     C                   Eval      xStrLen = TempStrLen
+     C                   Eval      o_strLen = TempStrLen
      C                   Endif
      C                   Endif
       *
      C                   WHEN      (SrcVarCls = 'B')
-     C                   Callp     f_rtvFld(srcVar: xSrcVar: FLDL0100)
+     C                   Callp     f_rtvFld(srcVar: i_srcVar: FLDL0100)
      C                   Callp       cpynv(f_NUM_Descr(T_Zoned: precision: 0)
      C                                     : %addr(zonedBuffer)
      C                                     : f_NUM_Descr(T_Signed: BinLength: 0)
@@ -304,14 +292,14 @@
      C                   EVAL      SrcVarCls = 'S'
      C                   EXSR      Convert
      C                   WHEN      (SrcVarCls = 'P')
-     C                   Callp     f_rtvFld(srcVar: xSrcVar: FLDL0100)
+     C                   Callp     f_rtvFld(srcVar: i_srcVar: FLDL0100)
      C                   EXSR      Convert
      C                   WHEN      (SrcVarCls = 'S')
-     C                   Callp     f_rtvFld(srcVar: xSrcVar: FLDL0100)
+     C                   Callp     f_rtvFld(srcVar: i_srcVar: FLDL0100)
      C                   EXSR      Convert
      C                   OTHER
-     C                   Eval      xStrLen =
-     C                                f_rtvFld(xString: xSrcVar: FLDL0100)
+     C                   Eval      o_strLen =
+     C                                f_rtvFld(o_string: i_srcVar: FLDL0100)
      C                   Endsl
       *
      C                   Endsr
@@ -353,12 +341,12 @@
      C                   PARM                    §ErrorCode
       *
      C                   IF        §ERRAVAIL = 0
-     C                   EVAL      XString = %subst(CvtVar: 1: CvtVarLen)
+     C                   EVAL      o_string = %subst(CvtVar: 1: CvtVarLen)
      C                   ELSE
-     C                   EVAL      XString = %subst(HEX_NULL: 1: CvtVarLen)
+     C                   EVAL      o_string = %subst(HEX_NULL: 1: CvtVarLen)
      C                   ENDIF
       *
-     C                   EVAL      XStrLen = CvtVarLen
+     C                   EVAL      o_strLen = CvtVarLen
       *
      C                   ENDSR
       *

@@ -36,6 +36,12 @@
       /COPY QCOPYLE,D_VARDEF
       *----------------------------------------------------*
       *
+      /define internal_prototype
+      /COPY QCOPYLE,PPEEK01
+      /undefine internal_prototype
+      *
+      /COPY QCOPYLE,PPEEK02
+      *
       *---FLDL0100-----------------------------------------*
       *  list API format FLDL0100
       *  (data structure can be used within the calling program
@@ -54,7 +60,6 @@
       *----------------------------------------------------*
       *
       *---Versenden von Nachrichten------------------------*
- CPY  ***/COPY QCOPYLE,API_ERROR
       /COPY QCOPYLE,MSG_D_MAPI
       *----------------------------------------------------*
       *
@@ -66,15 +71,12 @@
       /COPY QCOPYLE,ERR_D_SDS
       *----------------------------------------------------*
       *
-     D XQFILE          DS                  likeds(r§qObj)
-      *
      D seqNbr          S                   LIKE(F_Seq) INZ(0)
       *
-     D X               S                   like(r§int4    ) inz
-     D Y               S                   like(r§int4    ) inz
      D NOF             S                   like(r§int4    ) inz
+     D rc              S                   like(r§int4    ) inz
       *
-     D PEEK02          S                   like(r§pgmCallN) inz
+     D PEEK02_NAME     S                   like(r§pgmCallN) inz
       *
      D IsFld512        S              1A   INZ(bFalse)
       *
@@ -84,50 +86,24 @@
       /COPY QCOPYLE,F_PEEK58
       /COPY QCOPYLE,F_PEEK71
       *
-     D xFmt            S                   like(r§fmt)
-     D xRcdFmtID       S                   like(r§fmtId)
-      *
-      * Peek02
-     D yQFile          S             20A   inz
-     D yFmt            S             10A   inz
-     D yFunk           S             10A   inz
-     D yAnz            S                   like(r§int4    ) inz
-     D yList           S            512A   inz
-     D yRcdFmtID       S                   like(r§fmtId) inz
-      *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
       *
-     C     *ENTRY        PLIST
-     C                   PARM                    XQFILE
-     C                   PARM                    XFMT
-     C                   PARM                    XRCDFMTID
-      *
-     C                   PARM                    XMsgID            7
-     C                   PARM                    XMsgDta         512
+     D PEEK01          PI
+     D  i_qFile                            const likeds(r§qObj)
+     D  i_rcdFmt                           const like(r§fmt)
+     D  o_rcdFmtID                               like(r§fmtId)
+     D  o_msgID                                  like(r§msgID)
+     D  o_msgDta                                 like(r§msgDta)
       *
       *---------------------------------------------------*
      C                   EXSR      First
       *---------------------------------------------------*
       *
       *  create list of database relation
-     C                   EVAL      YQFILE = XQFILE
-     C                   EVAL      YFMT = XFMT
-     C                   EVAL      YFUNK = '*CREATE'
-     C                   EVAL      YANZ = *ZEROS
-     C                   EVAL      YLIST = *BLANKS
-     C                   CALL      PEEK02
-     C                   PARM                    yQFile
-     C                   PARM                    yFmt
-     C                   PARM                    yFunk
-     C                   PARM                    yAnz
-     C                   PARM                    yList
-     C                   PARM                    yRcdFmtID
-      *
-     C                   EVAL      xRcdFmtID = yRcdFmtID
-      *
-     C                   EVAL      NOF = YANZ
+     C                   CALLP     PEEK02(i_qFile: i_rcdFmt: '*CREATE': NOF
+     C                                    : FLDL0100: o_rcdFmtID)
       *
      C                   EVAL      seqNbr = *ZEROS
      C                   EVAL      FldCnt = *ZEROS
@@ -135,17 +111,10 @@
       *  read each entry
      C     1             DO        NOF
       *
-     C                   EVAL      YFUNK = '*READ'
-     C                   CALL      PEEK02
-     C                   PARM                    YQFILE
-     C                   PARM                    YFMT
-     C                   PARM                    YFUNK
-     C                   PARM                    YANZ
-     C                   PARM                    YLIST
+     C                   CALLP     PEEK02(i_qFile: i_rcdFmt: '*READ': rc
+     C                                    : FLDL0100: o_rcdFmtID)
       *
      C                   CLEAR                   FPEEKFLD
-      *
-     C                   EVAL      FLDL0100 = YLIST
       *
      C                   EVAL      F_FORMAT = 'FLDL0100'
      C                   EVAL      F_FIELD = FLDL0100.F1FNME
@@ -215,18 +184,18 @@
      C     ENDE          TAG
       *
      C     NOF           IFEQ      *ZEROS
-     C                   EVAL      XMsgID = 'USR0001'
-     C                   EVAL      USR00011 = XQFILE.NAME
-     C                   EVAL      USR00012 = XQFILE.LIB
-     C                   EVAL      USR00013 = XFMT
-     C                   EVAL      XMsgDta = USR0001
+     C                   EVAL      o_msgID = 'USR0001'
+     C                   EVAL      USR00011 = i_qFile.NAME
+     C                   EVAL      USR00012 = i_qFile.LIB
+     C                   EVAL      USR00013 = i_rcdFmt
+     C                   EVAL      o_msgDta = USR0001
      C                   ELSE
      C     IsFld512      IFEQ      bTrue
-     C                   EVAL      XMsgID = 'USR8123'
-     C                   EVAL      XMsgDta = *BLANKS
+     C                   EVAL      o_msgID = 'USR8123'
+     C                   EVAL      o_msgDta = *BLANKS
      C                   ELSE
-     C                   EVAL      XMsgID = *BLANKS
-     C                   EVAL      XMsgDta = *BLANKS
+     C                   EVAL      o_msgID = *BLANKS
+     C                   EVAL      o_msgDta = *BLANKS
      C                   Endif
      C                   Endif
       *
@@ -327,16 +296,16 @@
      C     First         BEGSR
       *
       * - Meldung
-     C                   Callp     p_sndStsMg('USR8104': XQFile)
+     C                   Callp     p_sndStsMg('USR8104': i_qFile)
       *
       * - Benutzervoreinstellungen
      C                   EXSR      GetUsrSetg
       *
       * - Los gehts'
-     C                   EVAL      XMsgID = *BLANKS
-     C                   EVAL      XMsgDta = *BLANKS
+     C                   EVAL      o_msgID = *BLANKS
+     C                   EVAL      o_msgDta = *BLANKS
       *
-     C                   EVAL      XRcdFmtID = *BLANKS
+     C                   EVAL      o_rcdFmtID = *BLANKS
       *
      C     1             SETLL     FPEEKFLD
       *
@@ -359,7 +328,7 @@
       *
      C     *INZSR        BEGSR
       *
-     C                   Eval      PEEK02 = f_pgmCallN('PEEK02')
+     C                   Eval      PEEK02_NAME = f_pgmCallN('PEEK02')
       *
      C                   OPEN      PEEKFLD
       *
@@ -376,8 +345,4 @@
      C                   RETURN
       *
      C                   ENDSR     '*CANCL'
-      *
-      *---Versenden von Nachrichten------------------------*
- CPY  ***/COPY QCOPYLE,MSG_C_MAPI
-      *----------------------------------------------------*
       *

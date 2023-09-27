@@ -1,4 +1,5 @@
       *===============================================================*
+      *===============================================================*
       *                                                               *
       *  (c) Thomas Raddatz                                           *
       *                                                               *
@@ -63,6 +64,48 @@
       *---Variablendefinition ShortCmd---------------------*
       /COPY QCOPYLE,ShortCmd_D
       *----------------------------------------------------*
+      *
+      /COPY QCOPYLE,PPEEK01
+      /COPY QCOPYLE,PPEEK03
+      /COPY QCOPYLE,PPEEK04
+      /COPY QCOPYLE,PPEEK06
+      /COPY QCOPYLE,PPEEK07
+      /COPY QCOPYLE,PPEEK08
+      /COPY QCOPYLE,PPEEK09
+      /COPY QCOPYLE,PPEEK10
+      /COPY QCOPYLE,PPEEK12
+      /COPY QCOPYLE,PPEEK13
+      /COPY QCOPYLE,PPEEK14
+      /COPY QCOPYLE,PPEEK17
+      /COPY QCOPYLE,PPEEK18
+      /COPY QCOPYLE,PPEEK19
+      /COPY QCOPYLE,PPEEK20
+      /COPY QCOPYLE,PPEEK21
+      /COPY QCOPYLE,PPEEK23
+      /COPY QCOPYLE,PPEEK24
+      /COPY QCOPYLE,PPEEK26
+      /COPY QCOPYLE,PPEEK27
+      /COPY QCOPYLE,PPEEK30
+      /COPY QCOPYLE,PPEEK32
+      /COPY QCOPYLE,PPEEK33
+      /COPY QCOPYLE,PPEEK34
+      /COPY QCOPYLE,PPEEK37
+      /COPY QCOPYLE,PPEEK38
+      /COPY QCOPYLE,PPEEK40
+      /COPY QCOPYLE,PPEEK41
+      /COPY QCOPYLE,PPEEK42
+      /COPY QCOPYLE,PPEEK47
+      /COPY QCOPYLE,PPEEK48
+      /COPY QCOPYLE,PPEEK49
+      /COPY QCOPYLE,PPEEK50
+      /COPY QCOPYLE,PPEEK52
+      /COPY QCOPYLE,PPEEK54
+      /COPY QCOPYLE,PPEEK55
+      /COPY QCOPYLE,PPEEK56
+      /COPY QCOPYLE,PPEEK57
+      /COPY QCOPYLE,PPEEK59
+      /COPY QCOPYLE,PPEEK65
+      /COPY QCOPYLE,PPEEK68
       *
       *---Variablendefinition------------------------------*
       /COPY QCOPYLE,D_VARDEF
@@ -138,7 +181,9 @@
       *----------------------------------------------------*
       *
       *---API-Formate--------------------------------------*
+     D OBJD0400        DS                  likeds(OBJD0400_t) inz
       /COPY QCOPYLE,OBJD0400
+     D RCDL0200        DS                  likeds(RCDL0200_t) inz
       /COPY QCOPYLE,RCDL0200
      D FLDL0100        DS                  likeds(FLDL0100_t) inz
       /COPY QCOPYLE,FLDL0100
@@ -228,28 +273,32 @@
      D XSqlWhere       S            512A   varying
      D XSqlOrder       S            512A   varying
       *
-     D YQFile          DS
-     D  YFile                              like(r§file  ) inz
-     D  YLibrary                           like(r§lib   ) inz
+     D rtn             DS                  qualified
+     D  file                               like(##File)
+     D  library                            like(##Library)
+     D  member                             like(##Member)
+     D  format                             like(##Format)
+     D  accessMode                         like(accessMode)
+     D  sqlWhere                           like(sqlWhere)
+     D  sqlOrder                           like(sqlOrder)
+      *
+     D YQFile          DS                  inz
+     D  YFile                              like(r§file)
+     D  YLibrary                           like(r§lib)
      D YFormat         S                   like(R§RCDFMT) inz
      D YMsgID          S              7A   inz
      D YMsgDta         S            512A   inz
       *
      D YMember         S                   like(r§mbr   ) inz
       *
-     D YAttr           S             10A   inz
-     D YNoMsg          S              1A   inz(bFalse )
      D YAttrLen        S                   like(r§int4    ) inz
      D YAttrTyp        S              1A   inz
      D YValue          S            512A   inz
       *
      D YDsp80          S                   like(SET_Dsp80) inz
-     D YCopyRight      S            512A   inz(§CopyRight)
+     D YCopyRight      S                   like(r§copyRght) inz(§CopyRight)
       *
-     D YFmtName        S             10A   inz
-     D YFmtDta         S            512A   inz
      D YFmtNbr         S              5I 0 inz
-     D YFmtMode        S             10A   inz
      D YRcdFormat      S             10A   inz
       *
      D YHeaderTyp      S             10A   inz
@@ -262,21 +311,13 @@
      D YCsrRow         S                   like(r§int4    ) inz
      D YCsrCol         S                   like(r§int4    ) inz
       *
-     D YSrcVar         S                   like(r§rcdBuf  )
-     D                                     inz
-     D YPgmCall        S              1A   inz(bFalse )
      D YCvtCcsid       S              1A   inz(bTrue  )
      D YData           S            512A   inz
       *
-      *YFmtName        S             10A   inz
-     D YBasePhyF       S              1A   inz(bTrue  )
      D YRetFile        S             10A   inz
      D YRetLib         S             10A   inz
       *
      D YPgm            S             10A   inz
-     D YFmtID          S             13A   inz
-      *YFmtName        S             10A   inz
-     D YProdLib        S             10A   inz
      D YRtnCode        S              1A   inz
       *
      D YField          S                   like(SrchField) inz
@@ -294,194 +335,57 @@
      D yOutBuffer                          like(r§rcdBuf  )
      D                                     overlay(yHexString:1)
      D YOutBuffLn      S                   like(r§int4    ) inz
-     D YCcsid          S                   like(r§int4    ) inz
-     D YTgtFormat      S             10A   inz
      D YTgtValue       S             10A   inz
       *
      D YKeyVal         S                   like(r§keyBuf  ) inz
       *
-     D YScnAID         S             10A   inz
      D YPgmCmd         S             10A   inz
      D YCmdDta         S                   like(r§pgmCmdDt) inz
       *
-     D yKey            S             10A   inz
-     D yPosF24         S                   like(r§int4    ) inz
      D yFKeys          S             18A   dim(32)       inz
      D yNbrOfKeys      S                   like(r§int4    ) inz
       *
-     D YChoice         S             75A   dim(32)
+     D YChoice         S                   like(r§choice  ) dim(32) inz
      D YNbrOfCh        S                   like(r§int4    ) inz
-      *
-     D YSet0001        S                   like(SET0001) inz
       *
      D YMbrOpt         S             10A   inz
      D YCrtFile        S             10A   inz
       *
      D YFlag           S                   inz(*ZEROS)  like(r§int4)
       *
-     D YVersion        S              9A   inz
-      *
-     D YDataLen        S                   like(r§int4    ) inz
      D BuffIdx         S                   like(r§int4    ) inz
-     D YDataTyp        S              1A   inz
-     D YRetData        S                   inz          like(YData)
-     D YPromptFor      S             10A   inz
       *
-      *  Peek38
-      *YFile                         10A   inz
-      *YLibrary                      10A   inz
-      *YSqlOrder       S            512A   inz
-      *
-      *  Peek42
-      *YFile           S                   like(r§file  )
-      *YLibrary        S                   like(r§lib   )
-      *YMember         S                   like(r§mbr   )
-      *YRcdFormat      S                   like(r§rcdfmt)
-     D YShortCmd       S                   like(ShortCmd)
-     D                                     inz
-     D YExecCmd        S          32702A   inz
-      *
+     D shortCmd        DS                  likeds(ShortCmd_t) inz
+     D YExecCmd        S                   like(r§cmdBuffer) inz
      D YNbrOfEnt       S                   like(r§int4    ) inz
-      *
-      *  Peek48
-      *YDsp80          S                   like(SET_Dsp80) inz
-      *YCopyRight      S            512A   inz(§CopyRight)
      D YSqlWhere       S            512A   inz
      D YSqlOrder       S            512A   inz
-      *YQFile          DS
-      * YFile                              like(r§file  ) inz
-      * YLibrary                           like(r§lib   ) inz
-      *YMember         S                   like(r§mbr   ) inz
-      *YFormat         S                   like(r§rcdfmt) inz
      D YAccess         S              1A   inz
-      *YMsgID          S              7A   inz
-      *YMsgDta         S            512A   inz
-      *
-      *  Peek49
-      *YDsp80          S              1A   inz
-      *YCopyRight      S            512A   inz
-     D YRelease        S             17A   inz
-      *YVersion        S              9A   inz
-      *YMsgID          S              7A   inz
-      *YMsgDta         S            512A   inz
-      *
-      *  Peek50
-      *YDsp80          S              1A   inz
-      *YCopyRight      S            512A   inz
-     D yPinTabC        S             10A   dim(12) inz
-      *YMsgID          S              7A   inz
-      *YMsgDta         S            512A   inz
-      *
-      *  Peek52
-      *YDsp80          S              1A   inz
-      *YCopyRight      S            512A   inz
      D yAlwLc          S              1A   inz
      D yCase           S              1A   inz
      D yRcdLock        S              1A   inz
      D yNullDft        S              1A   inz
      D yKeepCrs        S              1A   inz
-      *YMsgID          S              7A   inz
-      *YMsgDta         S            512A   inz
-     D YUnload         S              1A   inz(bTrue  )
-      *
-      *  Peek54
-      *YFile           S                   like(r§file    )  inz
-      *YLibrary        S                   like(r§lib     )  inz
-      *YMember         S                   like(r§mbr     )  inz
-     D YRcdFmt         S                   like(r§rcdfmt  )  inz
-     D YRcdFmtID       S                   like(r§fmtid   )  inz
      D YEnvFile        S                   like(r§file    )  inz
      D YEnvLib         S                   like(r§lib     )  inz
      D YEnvMbr         S                   like(r§mbr     )  inz
      D YIsAutoSave     S                   like(r§bool    )  inz(bFalse)
      D YPinTabR        S                   like(r§pIntAbr )  inz dim(12)
      D YnbrPinR        S                   like(r§int4    )  inz
-      *YPinTabC        S             10A                     inz dim(12)
      D YnbrPinC        S                   like(r§int4    )  inz
      D YAccMode        S              1A   inz
-      *YSqlWhere       S            512A   inz
-      *YSqlOrder       S            512A   inz
      D YisKeyLower     S                   like(r§bool    )  inz
-      *YMsgID          S                   like(r§msgId   )  inz
-      *YMsgDta         S                   like(r§msgDta  )  inz
-      *
-      *  Peek55
-      *YFile           S                   like(r§file    )  inz
-      *YLibrary        S                   like(r§lib     )  inz
-      *YMember         S                   like(r§mbr     )  inz
-      *YRcdFmt         S                   like(r§rcdfmt  )  inz
-      *YEnvFile        S                   like(r§file    )  inz
-      *YEnvLib         S                   like(r§lib     )  inz
-      *YEnvMbr         S                   like(r§mbr     )  inz
      D YOption         S                   like(r§option  )  inz
-      *YPinTabR        S                   like(r§pIntAbr )  inz DIM(12)
-      *YnbrPinR        S                   like(r§int4    )  inz
-      *YPinTabC        S             10A                     inz DIM(12)
-      *YnbrPinC        S                   like(r§int4    )  inz
-      *YQFile          DS
-      * YFile                        10A   inz
-      * YLibrary                     10A   inz
-     D YOutMbr         S                   like(r§mbr     )  inz
-     D YOutRcdFmt      S                   like(r§rcdfmt  )  inz
-      *YAccMode        S              1A   inz
-      *YSqlWhere       S            512A   inz
-      *YSqlOrder       S            512A   inz
-      *YisKeyLower     S                   like(r§bool    )  inz
-      *YMsgID          S                   like(r§msgId   )  inz
-      *YMsgDta         S                   like(r§msgDta  )  inz
-      *
-      *  Peek56
-      *YDsp80          S                   like(SET_Dsp80) inz
-      *YCopyRight      S            512A   inz(§CopyRight)
-     D YMode           S             10A   inz
-      *YQFile          DS
-      * YFile                        10A   like(r§file    )  inz
-      * YLibrary                     10A   like(r§lib     )  inz
-      *YMember         S             10A   like(r§mbr     )  inz
-     D YText           S             10A   inz
-      *YOption         S                   like(r§option  )  inz
-      *YMsgID          S                   like(r§msgId   )  inz
-      *YMsgDta         S                   like(r§msgDta  )  inz
-      *
-      *  Peek57
-      *YDsp80          S                   like(SET_Dsp80)   inz
-      *YCopyRight      S            512A   inz(§CopyRight)
-      *YEnvFile        S                   like(r§file    )  inz
-      *YEnvLib         S                   like(r§lib     )  inz
-      *YEnvMbr         S                   like(r§mbr     )  inz
+     D YText           S             50A   inz
      D YEnvText        S             50A                     inz
-      *YMsgID          S                   like(r§msgId   )  inz
-      *YMsgDta         S                   like(r§msgDta  )  inz
-      *
-      *  Peek59
-      *yDsp80          S                   like(r§dsp80   )
      D yType           S             10A
      D yInpMsgID       S                   like(r§msgId   )
      D yInpMsgDta      S                   like(r§msgDta  )
      D yKeys           S              3A
-      *yMsgID          S                   like(r§msgId   )
-      *yMsgDta         S                   like(r§msgDta  )
-      *
-      *  Peek68
-      *yDsp80          S                   like(r§dsp80   )
-      *yPgm            S                   like(r§pgm     )
-      *yCopyRight      S                   like(r§copyRght)
      D ySflOpt         S              2A
-      *yMsgID          S                   like(r§msgId   )
-      *yMsgDta         S                   like(r§msgDta  )
-      *
-      *  p_hexToChr
      D YString         S                   like(r§rcdBuf  )
      D                                     inz
      D YStringLen      S                   like(r§int4    ) inz
-      *YHexString      S                   like(r§hexBuf  ) inz
-      *
-      *  EXIT01
-      *YQFile          DS
-      * YFile                              like(r§file    ) inz
-      * YLibrary                           like(r§lib     ) inz
-      *YMember         S                   like(r§mbr     ) inz
-      *YAccess         S              1A   inz
      D YchgLib         S              1A   inz
      D YchgFile        S              1A   inz
      D YchgMbr         S              1A   inz
@@ -490,17 +394,9 @@
      D YchgSqlW        S              1A   inz
      D YchgSqlO        S              1A   inz
      D YaccAut         S              1A   inz
-      *YMsgID          S              7A   inz
-      *YMsgDta         S            512A   inz
-      *
-      *  EXIT04
-      *yFile           S                   like(r§file    ) inz
-      *yLibrary        S                   like(r§lib     ) inz
-      *yMember         S                   like(r§mbr     ) inz
      D yEvent          S             10A   inz
      D yUser           S             10A   inz
      D yTimestamp      S               Z   inz
-      *yRcdNbr         S                   like(r§rcdNbr) inz
      D ySize           S             10I 0 inz
      D yBImage         S               *   inz
      D yAImage         S               *   inz
@@ -632,48 +528,47 @@
       *
      D R#Size          S                   like(r§int4    ) inz
       *
-     D PEEK01          S                   like(r§pgmCallN) inz
-     D PEEK03          S                   like(r§pgmCallN) inz
-     D PEEK04          S                   like(r§pgmCallN) inz
-     D PEEK06          S                   like(r§pgmCallN) inz
-     D PEEK07          S                   like(r§pgmCallN) inz
-     D PEEK08          S                   like(r§pgmCallN) inz
-     D PEEK09          S                   like(r§pgmCallN) inz
-     D PEEK10          S                   like(r§pgmCallN) inz
-     D PEEK12          S                   like(r§pgmCallN) inz
-     D PEEK13          S                   like(r§pgmCallN) inz
-     D PEEK14          S                   like(r§pgmCallN) inz
-     D PEEK17          S                   like(r§pgmCallN) inz
-     D PEEK18          S                   like(r§pgmCallN) inz
-     D PEEK19          S                   like(r§pgmCallN) inz
-     D PEEK20          S                   like(r§pgmCallN) inz
-     D PEEK21          S                   like(r§pgmCallN) inz
-     D PEEK23          S                   like(r§pgmCallN) inz
-     D PEEK24          S                   like(r§pgmCallN) inz
-     D PEEK26          S                   like(r§pgmCallN) inz
-     D PEEK27          S                   like(r§pgmCallN) inz
-     D PEEK30          S                   like(r§pgmCallN) inz
-     D PEEK32          S                   like(r§pgmCallN) inz
-     D PEEK33          S                   like(r§pgmCallN) inz
-     D PEEK34          S                   like(r§pgmCallN) inz
-     D PEEK37          S                   like(r§pgmCallN) inz
-     D PEEK38          S                   like(r§pgmCallN) inz
-     D PEEK40          S                   like(r§pgmCallN) inz
-     D PEEK41          S                   like(r§pgmCallN) inz
-     D PEEK42          S                   like(r§pgmCallN) inz
-     D PEEK43          S                   like(r§pgmCallN) inz
-     D PEEK47          S                   like(r§pgmCallN) inz
-     D PEEK48          S                   like(r§pgmCallN) inz
-     D PEEK49          S                   like(r§pgmCallN) inz
-     D PEEK50          S                   like(r§pgmCallN) inz
-     D PEEK52          S                   like(r§pgmCallN) inz
-     D PEEK54          S                   like(r§pgmCallN) inz
-     D PEEK55          S                   like(r§pgmCallN) inz
-     D PEEK56          S                   like(r§pgmCallN) inz
-     D PEEK57          S                   like(r§pgmCallN) inz
-     D PEEK59          S                   like(r§pgmCallN) inz
-     D PEEK65          S                   like(r§pgmCallN) inz
-     D PEEK68          S                   like(r§pgmCallN) inz
+     D PEEK01_NAME     S                   like(r§pgmCallN) inz
+     D PEEK03_NAME     S                   like(r§pgmCallN) inz
+     D PEEK04_NAME     S                   like(r§pgmCallN) inz
+     D PEEK06_NAME     S                   like(r§pgmCallN) inz
+     D PEEK07_NAME     S                   like(r§pgmCallN) inz
+     D PEEK08_NAME     S                   like(r§pgmCallN) inz
+     D PEEK09_NAME     S                   like(r§pgmCallN) inz
+     D PEEK10_NAME     S                   like(r§pgmCallN) inz
+     D PEEK12_NAME     S                   like(r§pgmCallN) inz
+     D PEEK13_NAME     S                   like(r§pgmCallN) inz
+     D PEEK14_NAME     S                   like(r§pgmCallN) inz
+     D PEEK17_NAME     S                   like(r§pgmCallN) inz
+     D PEEK18_NAME     S                   like(r§pgmCallN) inz
+     D PEEK19_NAME     S                   like(r§pgmCallN) inz
+     D PEEK20_NAME     S                   like(r§pgmCallN) inz
+     D PEEK21_NAME     S                   like(r§pgmCallN) inz
+     D PEEK23_NAME     S                   like(r§pgmCallN) inz
+     D PEEK24_NAME     S                   like(r§pgmCallN) inz
+     D PEEK26_NAME     S                   like(r§pgmCallN) inz
+     D PEEK27_NAME     S                   like(r§pgmCallN) inz
+     D PEEK30_NAME     S                   like(r§pgmCallN) inz
+     D PEEK32_NAME     S                   like(r§pgmCallN) inz
+     D PEEK33_NAME     S                   like(r§pgmCallN) inz
+     D PEEK34_NAME     S                   like(r§pgmCallN) inz
+     D PEEK37_NAME     S                   like(r§pgmCallN) inz
+     D PEEK38_NAME     S                   like(r§pgmCallN) inz
+     D PEEK40_NAME     S                   like(r§pgmCallN) inz
+     D PEEK41_NAME     S                   like(r§pgmCallN) inz
+     D PEEK42_NAME     S                   like(r§pgmCallN) inz
+     D PEEK47_NAME     S                   like(r§pgmCallN) inz
+     D PEEK48_NAME     S                   like(r§pgmCallN) inz
+     D PEEK49_NAME     S                   like(r§pgmCallN) inz
+     D PEEK50_NAME     S                   like(r§pgmCallN) inz
+     D PEEK52_NAME     S                   like(r§pgmCallN) inz
+     D PEEK54_NAME     S                   like(r§pgmCallN) inz
+     D PEEK55_NAME     S                   like(r§pgmCallN) inz
+     D PEEK56_NAME     S                   like(r§pgmCallN) inz
+     D PEEK57_NAME     S                   like(r§pgmCallN) inz
+     D PEEK59_NAME     S                   like(r§pgmCallN) inz
+     D PEEK65_NAME     S                   like(r§pgmCallN) inz
+     D PEEK68_NAME     S                   like(r§pgmCallN) inz
      D PEEK69          S                   like(r§pgmCallN) inz
       *
      D PEEKPGM         S                   like(r§pgm     ) inz
@@ -718,27 +613,14 @@
       ***                                  prefix(PIN#)
      D NbrPinRcd       S                   inz(§ZEROS) like(SflPage  )
       *
-     D Lo              C                   CONST('abcdefghijklmnopqrs-
-     D                                     tuvwxyzäöüß')
-     D Up              C                   CONST('ABCDEFGHIJKLMNOPQRS-
-     D                                     TUVWXYZÄÖÜß')
-      *
       *  Arbeitsfelder
      D X               S                   like(r§int4    ) inz
      D Y               S                   like(r§int4    ) inz
      D Z               S                   like(r§int4    ) inz
      D A1              S              1A   inz
-     D TMP#STR         S             50A   inz
       *  Arbeitsfeld für Sortierfolge: Satzfolge/Schlüsselfolge
       *  .. aktuelle Sortierung
      D AccessMode      S              1A   inz(§RrnSeq)
-      *  .. Datei nach OpenFile
-     D LastFile        S                   like(r§file    )
-     D                                     inz
-     D LastLib         S                   like(r§lib     )
-     D                                     inz
-     D LastMbr         S                   like(r§mbr     )
-     D                                     inz
       *  .. neue Sortierung für ChangeFile
      D NewAccMode      S              1A   inz(§RrnSeq)
       *  .. Sortierung vor SQl-Mode
@@ -779,7 +661,6 @@
      D                 C                   %len(SrchArgVal)
      D cSRCHARG_DECPOS...
      D                 C                   %decpos(SrchArgVal)
-     D SrchLike        S                   like(SrchArg)  inz
      D SrchLikeTp      S                   like(r§int4    ) inz
      D SrchLikeLn      S                   like(r§int4    ) inz
      D SrchNbrs        S             10P 0 inz(§ZEROS )
@@ -852,454 +733,6 @@
      C                   PARM                    XSqlOrder
       *
       *----------------------------------------------------*
-      *  Parameterliste für PEEK01
-     C     P_Peek01      PLIST
-     C                   PARM                    YQFile
-     C                   PARM                    YRcdFormat
-     C                   PARM                    YRcdFmtID
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK03
-     C     P_Peek03      PLIST
-     C                   PARM                    YQFile
-     C                   PARM                    YRcdFormat
-     C                   PARM                    YAccess
-     C                   PARM                    YSqlOrder
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK04
-     C     P_Peek04      PLIST
-     C                   PARM                    YQFile
-     C                   PARM                    YRcdFormat
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK06
-     C     P_Peek06      PLIST
-     C                   PARM                    YData
-     C                   PARM                    YFormat
-     C                   PARM                    YSrcVar
-     C                   PARM                    YPgmCall
-     C                   PARM                    YCvtCcsid
-     C                   PARM                    YOutBuffer
-     C                   PARM                    YOutBuffLn
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK07
-     C     P_Peek07      PLIST
-     C                   PARM                    YAttr
-     C                   PARM                    YNoMsg
-     C                   PARM                    YAttrLen
-     C                   PARM                    YAttrTyp
-     C                   PARM                    YValue
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK08
-     C     P_Peek08      PLIST
-     C                   PARM                    YQFile
-     C                   PARM                    YPgm
-     C                   PARM                    YFmtName
-     C                   PARM                    YFmtID
-     C                   PARM                    YAlwLc
-     C                   PARM                    YCase
-     C                   PARM                    YRcdLock
-     C                   PARM                    YNullDft
-     C                   PARM                    YKeepCrs
-     C                   PARM                    YProdLib
-     C                   PARM                    YRtnCode
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK09
-     C     P_Peek09      PLIST
-     C                   PARM                    YQFile
-     C                   PARM                    YValue
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK10
-     C     P_Peek10      PLIST
-     C                   PARM                    YQFile
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK12
-     C     P_Peek12      PLIST
-     C                   PARM                    YDsp80
-     C                   PARM                    YCopyRight
-     C                   PARM                    YFmtName
-     C                   PARM                    YFmtDta
-     C                   PARM                    YFmtNbr
-     C                   PARM                    YFmtMode
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK13
-     C     P_Peek13      PLIST
-     C                   PARM                    YQFile
-     C                   PARM                    YMember
-     C                   PARM                    YValue
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK14
-     C     P_Peek14      PLIST
-     C                   PARM                    YDsp80
-     C                   PARM                    YHeaderTyp
-     C                   PARM                    YCopyRight
-     C                   PARM                    YRcdNbr
-     C                   PARM                    YFile
-     C                   PARM                    YLibrary
-     C                   PARM                    YMember
-     C                   PARM                    YRcdFormat
-     C                   PARM                    YFunction
-     C                   PARM                    YCommitLVL
-     C                   PARM                    YScreenNbr
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK17
-     C     P_Peek17      PLIST
-     C                   PARM                    YDsp80
-     C                   PARM                    YCopyRight
-     C                   PARM                    YQFile
-     C                   PARM                    YMember
-     C                   PARM                    YField
-     C                   PARM                    YOperation
-     C                   PARM                    YArgument
-     C                   PARM                    YSign
-     C                   PARM                    YSrchNbrs
-     C                   PARM                    YSrchType
-     C                   PARM                    YSrchCase
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK18
-     C     P_Peek18      PLIST
-     C                   PARM                    YData
-     C                   PARM                    YFormat
-     C                   PARM                    YBuffer
-     C                   PARM                    YTgtFormat
-     C                   PARM                    YTgtValue
-     C                   PARM                    YOutBuffer
-     C                   PARM                    YOutBuffLn
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK19
-     C     P_Peek19      PLIST
-     C                   PARM                    YBuffer
-     C                   PARM                    YKeyVal
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK20
-     C     P_Peek20      PLIST
-     C                   PARM                    YKeyVal
-     C                   PARM                    YBuffer
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK21
-     C     P_Peek21      PLIST
-     C                   PARM                    YScnAID
-     C                   PARM                    YPgm
-     C                   PARM                    YPgmCmd
-     C                   PARM                    YCmdDta
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK23
-     C     P_Peek23      PLIST
-     C                   PARM                    yPgm
-     C                   PARM                    yKey
-     C                   PARM                    yPosF24
-     C                   PARM                    yFKeys
-     C                   PARM                    yNbrOfKeys
-     C                   PARM                    yMsgID
-     C                   PARM                    yMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK24
-     C     P_Peek24      PLIST
-     C                   PARM                    YDsp80
-     C                   PARM                    YCopyRight
-     C                   PARM                    YSet0001
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK26
-     C     P_Peek26      PLIST
-     C                   PARM                    YDsp80
-     C                   PARM                    YQFile
-     C                   PARM                    YMember
-     C                   PARM                    YFile
-     C                   PARM                    YLibrary
-     C                   PARM                    YMember
-     C                   PARM                    YMbrOpt
-     C                   PARM                    YCrtFile
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK27
-     C     P_Peek27      PLIST
-     C                   PARM                    YPgm
-     C                   PARM                    YChoice
-     C                   PARM                    YNbrOfCh
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK30
-     C     P_Peek30      PLIST
-     C                   PARM                    YDsp80
-     C                   PARM                    YCopyRight
-     C                   PARM                    YFlag
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK32
-     C     P_Peek32      PLIST
-     C                   PARM                    YOutBuffer
-     C                   PARM                    YOutBuffLn
-     C                   PARM                    YCcsid
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK33
-     C     P_Peek33      PLIST
-     C                   PARM                    YVersion
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK34
-     C     P_Peek34      PLIST
-     C                   PARM                    YDsp80
-     C                   PARM                    YCopyRight
-     C                   PARM                    YFunction
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK37
-     C     P_Peek37      PLIST
-     C                   PARM                    YDsp80
-     C                   PARM                    YCopyRight
-     C                   PARM                    YField
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK38
-     C     P_Peek38      PLIST
-     C                   PARM                    YFile
-     C                   PARM                    YLibrary
-     C                   PARM                    YsqlOrder
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK40
-     C     P_Peek40      PLIST
-     C                   PARM                    YDsp80
-     C                   PARM                    YCopyRight
-     C                   PARM                    YFile
-     C                   PARM                    YLibrary
-     C                   PARM                    YMember
-     C                   PARM                    YFmtName
-     C                   PARM                    YBasePhyF
-     C                   PARM                    YRetFile
-     C                   PARM                    YRetLib
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK41
-     C     P_Peek41      PLIST
-     C                   PARM                    YQFile
-     C                   PARM                    YRcdFormat
-     C                   PARM                    YFunction
-     C                   PARM                    YNbrOfEnt
-     C                   PARM                    YData
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK42
-     C     P_Peek42      PLIST
-     C                   PARM                    YFile
-     C                   PARM                    YLibrary
-     C                   PARM                    YMember
-     C                   PARM                    YRcdFormat
-     C                   PARM                    YShortCmd
-     C                   PARM                    YRcdNbr
-     C                   PARM                    YExecCmd
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK43
-     C     P_Peek43      PLIST
-     C                   PARM                    YKeyVal
-     C                   PARM                    YHeaderTyp
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK47
-     C     P_Peek47      PLIST
-     C                   PARM                    YDsp80
-     C                   PARM                    YCopyRight
-     C                   PARM                    YQFile
-     C                   PARM                    YMember
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK48
-     C     P_Peek48      PLIST
-     C                   PARM                    YDsp80
-     C                   PARM                    YCopyRight
-     C                   PARM                    YFile
-     C                   PARM                    YLibrary
-     C                   PARM                    YMember
-     C                   PARM                    YFormat
-     C                   PARM                    YAccess
-     C                   PARM                    YSqlWhere
-     C                   PARM                    YSqlOrder
-     C                   PARM                    YChgSqlW
-     C                   PARM                    YChgSqlO
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK49
-     C     P_Peek49      PLIST
-     C                   PARM                    YDsp80
-     C                   PARM                    YCopyRight
-     C                   PARM                    YRelease
-     C                   PARM                    YVersion
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK50
-     C     P_Peek50      PLIST
-     C                   PARM                    YDsp80
-     C                   PARM                    YCopyRight
-     C                   PARM                    YPinTabC
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK52
-     C     P_Peek52      PLIST
-     C                   PARM                    YDsp80
-     C                   PARM                    YCopyRight
-     C                   PARM                    YAlwLc
-     C                   PARM                    YCase
-     C                   PARM                    YRcdLock
-     C                   PARM                    YNullDft
-     C                   PARM                    YKeepCrs
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-     C                   PARM                    YUnload
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK54 - Sichern Arbeitsumgebung
-     C     P_Peek54      PLIST
-     C                   PARM                    YFile
-     C                   PARM                    YLibrary
-     C                   PARM                    YMember
-     C                   PARM                    YRcdFmt
-     C                   PARM                    YRcdFmtID
-     C                   PARM                    YEnvFile
-     C                   PARM                    YEnvLib
-     C                   PARM                    YEnvMbr
-     C                   PARM                    YIsAutoSave
-     C                   PARM                    YPinTabR
-     C                   PARM                    YNbrPinR
-     C                   PARM                    YPinTabC
-     C                   PARM                    YNbrPinC
-     C                   PARM                    YAccMode
-     C                   PARM                    YSqlWhere
-     C                   PARM                    YSqlOrder
-     C                   PARM                    YisKeyLower
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK55 - Laden Arbeitsumgebung
-     C     P_Peek55      PLIST
-     C                   PARM                    YFile
-     C                   PARM                    YLibrary
-     C                   PARM                    YMember
-     C                   PARM                    YRcdFmt
-     C                   PARM                    YRcdFmtID
-     C                   PARM                    YEnvFile
-     C                   PARM                    YEnvLib
-     C                   PARM                    YEnvMbr
-     C                   PARM                    YOption
-     C                   PARM                    YPinTabR
-     C                   PARM                    YNbrPinR
-     C                   PARM                    YPinTabC
-     C                   PARM                    YNbrPinC
-     C                   PARM                    YFile
-     C                   PARM                    YLibrary
-     C                   PARM                    YOutMbr
-     C                   PARM                    YOutRcdFmt
-     C                   PARM                    YAccMode
-     C                   PARM                    YSqlWhere
-     C                   PARM                    YSqlOrder
-     C                   PARM                    YisKeyLower
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK56 - Auswählen Arbeitsumgebung
-     C     P_Peek56      PLIST
-      *  Input parameters
-     C                   PARM                    YDsp80
-     C                   PARM                    YCopyRight
-     C                   PARM                    YMode
-     C                   PARM                    YEnvFile
-     C                   PARM                    YEnvLib
-     C                   PARM                    YEnvMbr
-     C                   PARM                    YRcdFmtID
-      *  Output parameters
-     C                   PARM                    YQFile                         yFile/yLib
-     C                   PARM                    YMember
-     C                   PARM                    YText
-     C                   PARM                    YOption
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK57 - Löschen Arbeitsumgebung
-     C     P_Peek57      PLIST
-     C                   PARM                    YDsp80
-     C                   PARM                    YCopyRight
-     C                   PARM                    YEnvFile
-     C                   PARM                    YEnvLib
-     C                   PARM                    YEnvMbr
-     C                   PARM                    YEnvText
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *----------------------------------------------------*
       *  Parameterliste für PEEK59
      C     P_Peek59      Plist
      C                   Parm                    yDsp80
@@ -1309,17 +742,6 @@
      C                   Parm                    yKeys
      C                   Parm                    yMsgID
      C                   Parm                    yMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK65
-     C     P_Peek65      PLIST
-     C                   PARM                    YRcdNbr
-     C                   PARM                    YFile
-     C                   PARM                    YLibrary
-     C                   PARM                    YMember
-     C                   PARM                    YRcdFormat
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
       *
       *----------------------------------------------------*
       *  Parameterliste für PEEKPGM
@@ -1371,16 +793,6 @@
      C                   Parm                    ySize
      C                   Parm                    yBImage
      C                   Parm                    yAImage
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK68
-     C     P_Peek68      PLIST
-     C                   PARM                    yDsp80
-     C                   PARM                    yPgm
-     C                   PARM                    yCopyRight
-     C                   PARM                    ySflOpt
-     C                   PARM                    yMsgID
-     C                   PARM                    yMsgDta
       *
       *----------------------------------------------------*
       *  Parameterliste für PEEK69
@@ -1554,9 +966,8 @@
       *
       *  Mappen der gedrückten Taste
       *  in Programmbefehl
-     C                   EVAL      YScnAID = §ScnAID
-     C                   EVAL      YPgm = §§PgmName
-     C                   CALL      PEEK21        P_Peek21
+     C                   CALLP     PEEK21(§ScnAID: §§PgmName
+     C                                    : YPgmCmd: YCmdDta: YMsgID: YMsgDta)
      C     YMsgID        IFNE      *BLANKS
      C                   EVAL      §MsgID = YMsgID
      C                   EVAL      §MsgDta = YMsgDta
@@ -1808,9 +1219,8 @@
      C                   ENDIF
       *
       *  Zuordnung AUSWAHL => Befehl ...
-     C     '#'           CAT   (P) SFPAU:0       YScnAID
-     C                   EVAL      YPgm = §§PgmName
-     C                   CALL      PEEK21        P_Peek21
+     C                   CALLP     PEEK21('#' + SFPAU: §§PgmName
+     C                                    : YPgmCmd: YCmdDta: YMsgID: YMsgDta)
      C     YMsgID        IFNE      *BLANKS
       *  Fehlermeldung ...
      C                   EVAL      §MsgID = 'USR8110'
@@ -2107,9 +1517,8 @@
       *
      C     Pmt_Field     BEGSR
       *
-     C                   EVAL      YDsp80 = SET_Dsp80
-     C                   EVAL      YCopyRight = §CopyRight
-     C                   CALL      PEEK37        P_Peek37
+     C                   CALLP     PEEK37(SET_Dsp80: §CopyRight: YField
+     C                                    : YMsgID: YMsgDta)
       *
      C     yMsgID        IFEQ      *BLANKS
      C                   EVAL      ##Field = yField
@@ -2183,8 +1592,6 @@
      C                   ELSE
       *  ... sonst
       *      aufrufen "Auswahl Teildatei"
-     C                   EVAL      YDsp80 = SET_Dsp80
-     C                   EVAL      YCopyRight = §CopyRight
      C                   EVAL      YFile = ##File
       *
      C     ##Library     IFEQ      *BLANKS
@@ -2193,7 +1600,8 @@
      C                   EVAL      yLibrary = ##Library
      C                   Endif
       *
-     C                   CALL      PEEK47        P_Peek47
+     C                   CALLP     PEEK47(SET_Dsp80: §CopyRight
+     C                                    : YQFile: YMember: YMsgID: YMsgDta)
       *
      C     yMsgID        IFEQ      *BLANKS
      C                   EVAL      ##Member = yMember
@@ -2213,17 +1621,14 @@
       *
      C     Pmt_Fmt       Begsr
       *
-     C                   EVAL      YDsp80 = SET_Dsp80
-     C                   EVAL      YCopyRight = §CopyRight
-     C                   EVAL      YFmtName = ##FORMAT
-     C                   EVAL      YFmtMode = §INTER
-     C                   CALL      PEEK12        P_Peek12
+     C                   CALLP     PEEK12(SET_Dsp80: §CopyRight: ##FORMAT
+     C                                    : §INTER
+     C                                    : RCDL0200: YFmtNbr: yMsgID: yMsgDta)
       *
      C     yMsgID        IFEQ      *BLANKS
-     C                   EVAL      RCDL0200 = YFmtDta
      C                   EVAL      ##FMTNBR = YFmtNbr
-     C                   EVAL      ##Format = R2FmtName
-     C                   EVAL      $$Length = R2RcdLen
+     C                   EVAL      ##Format = RCDL0200.R2FmtName
+     C                   EVAL      $$Length = RCDL0200.R2RcdLen
      C                   EVAL      *IN93 = '1'
      C                   ELSE
      C                   EVAL      §MsgID = yMsgID
@@ -2238,14 +1643,8 @@
       *
      C     Pmt_Sfpau     Begsr
       *
-     C                   EVAL      yDsp80 = SET_Dsp80
-     C                   EVAL      yPgm = §§pgmName
-     C                   EVAL      yCopyRight = §CopyRight
-     C                   EVAL      ySflOpt = *BLANKS
-     C                   EVAL      yMsgID = *BLANKS
-     C                   EVAL      yMsgDta = *BLANKS
-      *
-     C                   Call      PEEK68        P_Peek68
+     C                   Callp     PEEK68(SET_Dsp80: §§pgmName: §CopyRight
+     C                                    : ySflOpt: yMsgID: yMsgDta)
       *
       *  Einlesen Subfiledatensatz
      C                   EVAL      SflRec132 = SflCsr
@@ -2529,16 +1928,18 @@
       *
      C     C_UserSetg    BEGSR
       *
-     C                   EVAL      YDsp80 = SET_Dsp80
-     C                   EVAL      YCopyRight = §CopyRight
-     C                   EVAL      YSet0001 = SET0001
-     C                   CALL      PEEK24        P_Peek24               99
+     C                   monitor
+     C                   callp     PEEK24(SET_Dsp80: §CopyRight: SET0001
+     C                                    : YMsgID: YMsgDta)
+     C                   eval      *in99 = bFalse
+     C                   on-error
+     C                   eval      *in99 = bTrue
+     C                   endmon
       *
      C     *IN99         IFEQ      '1'
       *            Fehler aufgetreten
      C                   ELSE
      C     YMsgID        IFEQ      'USR8112'
-     C                   EVAL      SET0001 = YSet0001
      C                   Callp     p_updUsrSg('*DSPATTR' : SET0001)
      C                   EXSR      C_Refresh
      C                   ELSE
@@ -2596,10 +1997,13 @@
       *
      C     C_Layout      BEGSR
       *
-     C                   EVAL      YDsp80 = SET_Dsp80
-     C                   EVAL      YCopyRight = §CopyRight
-     C                   EVAL      YFunction = '*DISPLAY'
-     C                   CALL      PEEK34        P_Peek34               99
+     C                   monitor
+     C                   callp     PEEK34(SET_Dsp80: §CopyRight: '*DISPLAY'
+     C                                    : YMsgID: YMsgDta)
+     C                   eval      *in99 = bFalse
+     C                   on-error
+     C                   eval      *in99 = bTrue
+     C                   endmon
       *
      C     YMsgID        IFEQ      'USR8112'
       *  Beenden und Speichern ...
@@ -2624,12 +2028,16 @@
       *
      C                   SELECT
      C     SrchMode      WHENEQ    '*NEW'
-     C                   EVAL      YDsp80 = SET_Dsp80
-     C                   EVAL      YCopyRight = §CopyRight
-     C                   EVAL      YFile = ##File
-     C                   EVAL      YLibrary = ##Library
-     C                   EVAL      YMember = ##Member
-     C                   CALL      PEEK17        P_Peek17               99
+     C                   Monitor
+     C                   CALLP     PEEK17(SET_Dsp80: §CopyRight
+     C                                    : YQFile: ##Member
+     C                                    : YField: YOperation: YArgument
+     C                                    : YSign: YSrchNbrs: YSrchType
+     C                                    : YSrchCase: YMsgID: YMsgDta)
+     C                   Eval      *in99 = bFalse
+     C                   On-Error
+     C                   Eval      *in99 = bTrue
+     C                   Endmon
       *
      C     *IN99         IFEQ      '0'
      C     YMsgID        IFEQ      'USR8112'
@@ -3070,17 +2478,13 @@
      C                   EXSR      MsgNoFile
      C                   ELSE
       *
-     C                   EVAL      YDsp80 = SET_Dsp80
-     C                   EVAL      YCopyRight = §CopyRight
-     C                   EVAL      YCase = *BLANKS
-     C                   EVAL      YRcdLock = *BLANKS
-     C                   EVAL      YNullDft = *BLANKS
-     C                   EVAL      YKeepCrs = *BLANKS
-     C                   EVAL      YUnload = bFalse
-     C                   CALL      PEEK52        P_Peek52
+     C                   CALLP     PEEK52(SET_Dsp80: §CopyRight
+     C                                    : YAlwLc: YCase: YRcdLock: YNullDft
+     C                                    : YKeepCrs: YMsgID: YMsgDta: bFalse)
       *
      C     yMsgID        IFEQ      'USR8112'
       *
+     C                   Monitor
       *  Rekursiver CALL auf sich selbst (= PEEK05),
       *  um die alte Referenz auf das Update-Programm zu löschen
      C                   Eval      PgmToCall = f_pgmCallN(§§pgmName)
@@ -3093,24 +2497,20 @@
      C                   EXSR      GetPgmName
       *
       *  Generierung
-     C                   EVAL      YFile = ##File
-     C                   EVAL      YLibrary = ##Library
-     C                   EVAL      YPgm = PeekPgm
-     C                   EVAL      YFmtName = R2FmtName
-     C                   EVAL      YFmtID = R2FmtID
-     C                   EVAL      YProdLib = §§PgmLib
-     C                   CALL      PEEK08        P_Peek08               99
+     C                   CALLP     PEEK08(YQFile: PeekPgm: RCDL0200.R2FmtName
+     C                                    : RCDL0200.R2FmtID
+     C                                    : YAlwLc: YCase: YRcdLock: YNullDft
+     C                                    : YKeepCrs: §§PgmLib: YRtnCode)
       *
+     C                   Eval      *in99 = bFalse
+     C                   On-Error
+     C                   Eval      *in99 = bTrue
+     C                   Endmon
      C                   Endif
       *
-     C                   EVAL      YDsp80 = SET_Dsp80
-     C                   EVAL      YCopyRight = §CopyRight
-     C                   EVAL      YCase = *BLANKS
-     C                   EVAL      YRcdLock = *BLANKS
-     C                   EVAL      YNullDft = *BLANKS
-     C                   EVAL      YKeepCrs = *BLANKS
-     C                   EVAL      YUnload = bTrue
-     C                   CALL      PEEK52        P_Peek52
+     C                   CALLP     PEEK52(SET_Dsp80: §CopyRight
+     C                                    : YAlwLc: YCase: YRcdLock: YNullDft
+     C                                    : YKeepCrs: YMsgID: YMsgDta: bTrue)
      C                   Endif
       *
      C                   ENDSR
@@ -3121,9 +2521,14 @@
       *
      C     C_Register    BEGSR
       *
-     C                   EVAL      YDsp80 = SET_Dsp80
-     C                   EVAL      YCopyRight = §CopyRight
-     C                   CALL      PEEK30        P_Peek30               99
+     C                   monitor
+     C                   callp     PEEK30(SET_Dsp80: YCopyRight
+     C                                    : YFlag: YMsgID: YMsgDta)
+     C                   eval      *in99 = bFalse
+     C                   on-error
+     C                   eval      *in99 = bTrue
+     C                   endmon
+      *
      C     *IN99         IFEQ      '1'
       *  Fehler beim Programmaufruf ...
      C                   Callp     p_movPgmMg(§§pgmName)
@@ -3202,18 +2607,16 @@
      C                   Exsr      MsgNoFile
      C                   Else
       *
-     C                   Eval      YDsp80     = SET_Dsp80
-     C                   Eval      YCopyRight = §CopyRight
-     C                   Eval      YFile      = ##File
-     C                   Eval      YLibrary   = ##Library
-     C                   Eval      YMember    = ##Member
-     C                   Eval      YFmtName   = ##Format
-     C                   Eval      YBasePhyF  = bTrue
-     C                   Eval      YRetFile   = ' '
-     C                   Eval      YRetLib    = ' '
-     C                   Eval      YMsgID     = ' '
-     C                   Eval      YMsgDta    = ' '
-     C                   Call      PEEK40        P_Peek40               99
+     C                   monitor
+     C                   callp     PEEK40(SET_Dsp80: §CopyRight
+     C                                    : ##File: ##Library: ##Member
+     C                                    : ##Format: bTrue
+     C                                    : YRetFile: YRetLib
+     C                                    : YMsgID: YMsgDta)
+     C                   eval      *in99 = bTrue
+     C                   on-error
+     C                   eval      *in99 = bTrue
+     C                   endmon
       *
      C                   If        (yRetFile = ' ')  or
      C                             (*in99    = *on)
@@ -3341,18 +2744,22 @@
      C                   EXSR      MsgNoFile
      C                   ELSE
       *
-     C                   EVAL      YDsp80 = SET_Dsp80
-     C                   EVAL      YCopyRight = §CopyRight
-     C                   EVAL      yPinTabC = %subarr(PinTabC: 1)
-     C                   CALL      PEEK50        P_Peek50               99
+     C                   monitor
+     C                   callp     PEEK50(SET_Dsp80: §CopyRight: PinTabC
+     C                                    : YMsgID: YMsgDta)
+     C                   eval      *in99 = bFalse
+     C                   on-error
+     C                   eval      *in99 = bTrue
+     C                   endmon
+      *
      C     *IN99         IFEQ      '0'
      C     YMsgID        IFEQ      'USR8112'
       *
      C                   EXSR      ClrPinCol
       *
      C     1             Do        MaxPinCol     Y
-     C                   If        yPinTabC(Y) <> ' '
-     C                   EVAL      Wrk#Field = yPinTabC(Y)
+     C                   If        PinTabC(Y) <> ' '
+     C                   EVAL      Wrk#Field = PinTabC(Y)
      C                   EXSR      PinCol
      C                   Endif
      C                   Enddo
@@ -3397,12 +2804,9 @@
      C                   When      FILD0100.ATNOFM > 1
       *  Wenn es sich um eine "multi-format logical file" handelt, ...
       *  ... dann fragen, welches physiche Datei göffnet werden soll:
-     C                   Eval      yDsp80     = SET_Dsp80
-     C                   Eval      yType      = '*QUESTION'
-     C                   Eval      yInpMsgID  = 'USR8212'
-     C                   Eval      yInpMsgDta = ' '
-     C                   Eval      yKeys      = 'YN'
-     C                   Call      PEEK59        P_Peek59
+     C                   CALLP     PEEK59(SET_Dsp80: '*QUESTION'
+     C                                    : 'USR8212': '': 'YN'
+     C                                    : yMsgID: yMsgDta)
      C                   Eval      USR8190 = yMsgDta
      C                   If        USR81901 = '*YES'
      C                   Callp     f_basedPF(##FILE     :
@@ -3423,18 +2827,17 @@
      C                   Endif
       *
       * Let the user enter the SQL WHERE and ORDER BY clauses:
-     C                   Eval      YDsp80     = SET_Dsp80
-     C                   Eval      YCopyRight = §CopyRight
-     C                   Eval      YFile      = ##File
-     C                   Eval      YLibrary   = ##LIBRARY
-     C                   Eval      YMember    = ##MEMBER
-     C                   Eval      YFormat    = ##FORMAT
-     C                   Eval      YAccess    = AccessMode
-     C                   Eval      YsqlWhere  = sqlWhere
-     C                   Eval      YsqlOrder  = sqlOrder
-     C                   Eval      YChgSqlW   = auth.chgSqlW
-     C                   Eval      YChgSqlO   = auth.chgSqlO
-     C                   Call      PEEK48        P_Peek48               99
+     C                   monitor
+     C                   callp     PEEK48(SET_Dsp80: §CopyRight
+     C                                    : ##File: ##LIBRARY: ##MEMBER
+     C                                    : ##FORMAT
+     C                                    : AccessMode: sqlWhere: sqlOrder
+     C                                    : auth.chgSqlW: auth.chgSqlO
+     C                                    : YMsgID: YMsgDta)
+     C                   eval      *in99 = bTrue
+     C                   on-error
+     C                   eval      *in99 = bTrue
+     C                   endmon
       *
      C                   If        *in99 <> *off
      C                   Leavesr
@@ -3655,17 +3058,15 @@
       *
      C     SflCsr        IFGT      §ZEROS
       *
-     C                   Eval      YDsp80 = SET_Dsp80
-     C                   Eval      YHeaderTyp = SET_HedTyp
-     C                   Eval      YCopyRight = §CopyRight
-     C                   Eval      YRcdNbr = Wrk#RcdNbr
-     C                   Eval      YFile = H_FILE
-     C                   Eval      YLibrary = H_LIB
-     C                   Eval      YMember = H_MBR
-     C                   Eval      YRcdFormat = H_RCDFMT
-     C                   Eval      YFunction = '*DISPLAY'
-     C                   Eval      YCommitLVL = CommitLVL
-     C                   CALL      PEEK14        P_Peek14               99
+     C                   monitor
+     C                   CALLP     PEEK14(SET_Dsp80: SET_HedTyp: §CopyRight
+     C                                    : Wrk#RcdNbr: H_FILE: H_LIB: H_MBR
+     C                                    : H_RCDFMT: '*DISPLAY': CommitLVL
+     C                                    : YScreenNbr: YMsgID: YMsgDta)
+     C                   eval      *in99 = bFalse
+     C                   on-error
+     C                   eval      *in99 = bTrue
+     C                   endmon
       *
      C                   EXSR      ChkHeadChg
       *
@@ -3691,14 +3092,13 @@
       *
      C     SflCsr        IFGT      §ZEROS
       *
-     C                   EVAL      YRcdNbr = Wrk#RcdNbr
-     C                   EVAL      YFile = H_FILE
-     C                   EVAL      YLibrary = H_LIB
-     C                   EVAL      YMember = H_MBR
-     C                   EVAL      YRcdFormat = *BLANKS
-     C                   EVAL      YMsgID = *BLANKS
-     C                   EVAL      YMsgDta = *BLANKS
-     C                   CALL      PEEK65        P_Peek65               99
+     C                   monitor
+     C                   callp     PEEK65(Wrk#RcdNbr: H_FILE: H_LIB: H_MBR: ''
+     C                                    : YMsgID: YMsgDta)
+     C                   eval      *in99 = bFalse
+     C                   on-error
+     C                   eval      *in99 = bTrue
+     C                   endmon
       *
      C                   IF        YMsgID <> ''
      C                   EVAL      §MsgID  = YMsgID
@@ -3988,15 +3388,12 @@
       *
      C     SflCsr        IFGT      §ZEROS
       *
-     C                   EVAL      YFile = H_FILE
-     C                   EVAL      YLibrary = H_LIB
-     C                   EVAL      YMember = H_MBR
-     C                   EVAL      YRcdFormat = H_RCDFMT
-     C                   EVAL      SC_Action = '*CMD'
-     C                   EVAL      SC_Cmd = YCmdDta
-     C                   EVAL      YShortCmd = ShortCmd
-     C                   EVAL      YRcdNbr = Wrk#RcdNbr
-     C                   CALL      PEEK42        P_Peek42               99
+     C                   CLEAR                   shortCmd
+     C                   EVAL      shortCmd.SC_Action = '*CMD'
+     C                   EVAL      shortCmd.SC_Cmd = YCmdDta
+     C                   CALLP     PEEK42(H_FILE: H_LIB: H_MBR: H_RCDFMT
+     C                                    : ShortCmd: Wrk#RcdNbr: YExecCmd
+     C                                    : YMsgID: YMsgDta)
       *
      C                   Select
      C     *IN99         WhenEq    '1'
@@ -4025,11 +3422,9 @@
       *
      C     S_About       BEGSR
       *
-     C                   EVAL      YDsp80 = SET_Dsp80
-     C                   EVAL      YCopyRight = §CopyRight
-     C                   EVAL      YRelease = §Release
-     C                   EVAL      YVersion = §Version
-     C                   CALL      PEEK49        P_Peek49
+     C                   CALLP     PEEK49(SET_Dsp80: §CopyRight
+     C                                    : §Release: §Version
+     C                                    : YMsgID: YMsgDta)
       *
      C                   ENDSR
       *
@@ -4117,11 +3512,11 @@
      C                   EXSR      MsgNoFile
      C                   ELSE
       *
-     C                   Eval      YDsp80     = SET_Dsp80
-     C                   Eval      YCopyRight = §CopyRight
-     C                   Eval      YMode      = '*SAVE'                         Einblenden
-     C                   Eval      yRcdFmtID  = $$RCDFMTID
-     C                   CALL      PEEK56        P_Peek56
+     C                   CALLP     PEEK56(SET_Dsp80: §CopyRight: '*SAVE'
+     C                                    : YEnvFile: YEnvLib: YEnvMbr
+     C                                    : $$RCDFMTID
+     C                                    : YQFile: YMember: YText: YOption
+     C                                    : YMsgID: YMsgDta)
       *
      C                   If        YMsgID <> ' '
      C                   Eval      §MsgID  = yMsgID
@@ -4158,11 +3553,11 @@
      C                   EXSR      MsgNoFile
      C                   ELSE
       *
-     C                   Eval      YDsp80     = SET_Dsp80
-     C                   Eval      YCopyRight = §CopyRight
-     C                   Eval      YMode      = '*LOAD'                         Ausblenden
-     C                   Eval      yRcdFmtID  = $$RCDFMTID
-     C                   CALL      PEEK56        P_Peek56
+     C                   CALLP     PEEK56(SET_Dsp80: §CopyRight: '*LOAD'
+     C                                    : YEnvFile: YEnvLib: YEnvMbr
+     C                                    : $$RCDFMTID
+     C                                    : YQFile: YMember: YText: YOption
+     C                                    : YMsgID: YMsgDta)
       *
      C                   If        YMsgID <> ' '
      C                   Eval      §MsgID  = yMsgID
@@ -4192,12 +3587,18 @@
      C                   leavesr
      C                   endif
       *
-     C                   Eval      YFile     = ##File
-     C                   Eval      YLibrary  = ##Library
-     C                   Eval      YMember   = ##Member
-     C                   Eval      YRcdFmt   = ##Format
-     C                   Eval      YRcdFmtID = $$RCDFMTID
-     C                   CALL      PEEK55        P_Peek55
+     C                   CALLP     PEEK55(##File: ##Library: ##Member: ##Format
+     C                                    : $$RCDFMTID
+     C                                    : YEnvFile: YEnvLib: YEnvMbr
+     C                                    : YOption
+     C                                    : PinTabR: NbrPinRcd
+     C                                    : PinTabC: NbrPinCol
+     C                                    : rtn.file: rtn.library: rtn.member
+     C                                    : rtn.format
+     C                                    : rtn.accessMode: rtn.sqlWhere
+     C                                    : rtn.sqlOrder
+     C                                    : isKeyLower
+     C                                    :YMsgID: YMsgDta)
       *
      C                   If        yMsgID <> ' '
      C                   Eval      §msgID  = yMsgID
@@ -4205,33 +3606,38 @@
      C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
      C                   Else
       *
-     C                   If        (##FILE     <> yFile     ) or
-     C                             (##LIBRARY  <> yLibrary  ) or
-     C                             (##MEMBER   <> yOutMbr   ) or
-     C                             (##FORMAT   <> yOutRcdFmt) or
-     C                             (yAccMode   <> accessMode) or
-     C                             (ySqlWhere  <> sqlWhere  ) or
-     C                             (ySqlOrder  <> sqlOrder  )
+     C                   If        (##FILE     <> rtn.file or
+     C                              ##LIBRARY  <> rtn.library or
+     C                              ##MEMBER   <> rtn.member or
+     C                              ##FORMAT   <> rtn.format or
+     C                              yAccMode   <> rtn.accessMode or
+     C                              ySqlWhere  <> rtn.sqlWhere or
+     C                              ySqlOrder  <> rtn.sqlOrder)
      C                   Exsr      closeFile
-     C                   Eval      ##FILE     = yFile
-     C                   Eval      ##LIBRARY  = yLibrary
-     C                   Eval      ##MEMBER   = yOutMbr
-     C                   Eval      ##FORMAT   = yOutRcdFmt
-     C                   Eval      accessMode = yAccMode
-     C                   Eval      sqlWhere   = YSqlWhere
-     C                   Eval      sqlOrder   = YSqlOrder
+     C                   Eval      ##FILE     = rtn.file
+     C                   Eval      ##LIBRARY  = rtn.library
+     C                   Eval      ##MEMBER   = rtn.member
+     C                   Eval      ##FORMAT   = rtn.format
+     C                   Eval      accessMode = rtn.accessMode
+     C                   Eval      sqlWhere   = rtn.sqlWhere
+     C                   Eval      sqlOrder   = rtn.sqlOrder
      C                   Exsr      openFile
-     C                   Eval      YFile     = ##File
-     C                   Eval      YLibrary  = ##Library
-     C                   Eval      YMember   = ##Member
-     C                   Eval      YRcdFmt   = ##Format
-     C                   Eval      YRcdFmtID = $$RCDFMTID
-     C                   CALL      PEEK55        P_Peek55
+     C                   CALLP     PEEK55(##File: ##Library: ##Member: ##Format
+     C                                    : $$RCDFMTID
+     C                                    : YEnvFile: YEnvLib: YEnvMbr
+     C                                    : YOption
+     C                                    : PinTabR: NbrPinRcd
+     C                                    : PinTabC: NbrPinCol
+     C                                    : rtn.file: rtn.library: rtn.member
+     C                                    : rtn.format
+     C                                    : rtn.accessMode: rtn.sqlWhere
+     C                                    : rtn.SqlOrder
+     C                                    : isKeyLower
+     C                                    :YMsgID: YMsgDta)
      C                   Endif
       *
      C                   Eval      PinTabR    = YPinTabR
      C                   Eval      NbrPinRcd  = YNbrPinR
-     C                   Eval      PinTabC    = YPinTabC
      C                   Eval      NbrPinCol  = YNbrPinC
       *
      C                   Eval      isKeyLower = YisKeyLower
@@ -4247,20 +3653,15 @@
       *
      C     SaveEnv       BEGSR
       *
-     C                   Eval      YFile      = ##File
-     C                   Eval      YLibrary   = ##Library
-     C                   Eval      YMember    = ##Member
-     C                   Eval      YRcdFmt    = ##Format
-     C                   Eval      YRcdFmtID  = $$RcdFmtID
-     C                   Eval      YPinTabR   = PinTabR
-     C                   Eval      YNbrPinR   = NbrPinRcd
-     C                   Eval      YPinTabC   = PinTabC
-     C                   Eval      YNbrPinC   = NbrPinCol
-     C                   Eval      YAccMode   = accessMode
-     C                   Eval      YSqlWhere  = sqlWhere
-     C                   Eval      YSqlOrder  = sqlOrder
-     C                   Eval      YisKeyLower= isKeyLower
-     C                   CALL      PEEK54        P_Peek54
+     C                   CALLP     PEEK54(##File: ##Library: ##Member: ##Format
+     C                                    : $$RcdFmtID
+     C                                    : YEnvFile: YEnvLib: YEnvMbr
+     C                                    : YIsAutoSave
+     C                                    : PinTabR: NbrPinRcd
+     C                                    : PinTabC: NbrPinCol
+     C                                    : accessMode: sqlWhere
+     C                                    : sqlOrder: isKeyLower
+     C                                    : YMsgID: YMsgDta)
       *
      C                   ENDSR
       *
@@ -4277,11 +3678,11 @@
       *
      C                   DO        *HIVAL
       *
-     C                   Eval      YDsp80     = SET_Dsp80
-     C                   Eval      YCopyRight = §CopyRight
-     C                   Eval      YMode      = '*DELETE'                       Ausblenden
-     C                   Eval      yRcdFmtID  = ''
-     C                   CALL      PEEK56        P_Peek56
+     C                   CALLP     PEEK56(SET_Dsp80: §CopyRight: '*DELETE'
+     C                                    : YEnvFile: YEnvLib: YEnvMbr
+     C                                    : ''
+     C                                    : YQFile: YMember: YText: YOption
+     C                                    : YMsgID: YMsgDta)
       *
      C                   If        YMsgID <> ' '
      C                   Eval      §MsgID  = yMsgID
@@ -4290,13 +3691,9 @@
      C                   LEAVE
      C                   Else
       *
-     C                   Eval      YDsp80     = SET_Dsp80
-     C                   Eval      YCopyRight = §CopyRight
-     C                   Eval      YEnvFile = yFile
-     C                   Eval      YEnvLib  = yLibrary
-     C                   Eval      YEnvMbr  = yMember
-     C                   Eval      YEnvText = yText
-     C                   CALL      PEEK57        P_Peek57
+     C                   CALLP     PEEK57(SET_Dsp80: §CopyRight
+     C                                    : yFile: yLibrary: yMember: yText
+     C                                    : YMsgID: YMsgDta)
       *
      C                   If        yMsgID <> ' '
      C                   If        yMsgDta = '*CANCEL'
@@ -4384,11 +3781,14 @@
      C                   EVAL      YMsgDta = *BLANKS
      C                   ELSE
       *
-     C                   EVAL      YDsp80 = SET_Dsp80
-     C                   EVAL      YFile = H_FILE
-     C                   EVAL      YLibrary = H_LIB
-     C                   EVAL      YMember = H_MBR
-     C                   CALL      PEEK26        P_Peek26               99
+     C                   monitor
+     C                   CALLP     PEEK26(SET_Dsp80: YQFile: H_MBR
+     C                                    : YFile: YLibrary: YMember
+     C                                    : YMbrOpt: YCrtFile: YMsgID: YMsgDta)
+     C                   eval      *in99 = bFalse
+     C                   on-error
+     C                   eval      *in99 = bTrue
+     C                   endmon
       *
      C     *IN99         IFEQ      '1'
      C                   EVAL      IsError = bTrue
@@ -4414,17 +3814,15 @@
       *
      C     PBQueryUsr    BEGSR
       *
-     C                   Eval      YDsp80 = SET_Dsp80
-     C                   Eval      YHeaderTyp = SET_HedTyp
-     C                   Eval      YCopyRight = §CopyRight
-     C                   Eval      YRcdNbr = Wrk#RcdNbr
-     C                   Eval      YFile = H_FILE
-     C                   Eval      YLibrary = H_LIB
-     C                   Eval      YMember = H_MBR
-     C                   Eval      YFormat = H_RCDFMT
-     C                   Eval      YFunction = YPgmCmd
-     C                   Eval      YCommitLVL = CommitLVL
-     C                   CALL      PEEK14        P_Peek14               99
+     C                   monitor
+     C                   CALLP     PEEK14(SET_Dsp80: SET_HedTyp: §CopyRight
+     C                                    : Wrk#RcdNbr: H_FILE: H_LIB: H_MBR
+     C                                    : H_RCDFMT: YPgmCmd: CommitLVL
+     C                                    : YScreenNbr: YMsgID: YMsgDta)
+     C                   eval      *in99 = bFalse
+     C                   on-error
+     C                   eval      *in99 = bTrue
+     C                   endmon
       *
      C                   EXSR      ChkHeadChg
       *
@@ -5017,8 +4415,6 @@
      C     SrchGetCmp    BEGSR
       *
      C                   IF        srchIsNum = bTrue
-     C                   Eval      yData      = FLDL0100
-     C                   Eval      yFormat    = 'FLDL0100'
      C                   Callp                  f_rtvFld(yBuffer  :
      C                                                   IO_Buff  :
      C                                                   FLDL0100 :
@@ -5027,13 +4423,17 @@
      C                   Eval      yTgtValue  = ' '
       *
      C                   IF        SrchArgIsFloat = bTrue
-     C                   Eval      yTgtFormat = '*FLOAT'
-     C                   CALL      PEEK18        P_Peek18
+     C                   CALLP     PEEK18(FLDL0100: 'FLDL0100': YBuffer:
+     C                                    '*FLOAT': '': YOutBuffer: YOutBuffLn
+     C                                    : YMsgID: YMsgDta)
+      *
      C                   EVAL      SrchCmpFloat = %float(yOutBuffer)
      C                   EVAL      SrchCmpVal   = 0
      C                   ELSE
-     C                   Eval      yTgtFormat = '*ZONED'
-     C                   CALL      PEEK18        P_Peek18
+     C                   CALLP     PEEK18(FLDL0100: 'FLDL0100': YBuffer:
+     C                                    '*ZONED': '': YOutBuffer: YOutBuffLn
+     C                                    : YMsgID: YMsgDta)
+      *
      C                   Eval      SrchCmpStr =
      C                               %subst(YOutBuffer
      C                                      : YOutBuffLn - %len(SrchCmpStr) + 1
@@ -5434,12 +4834,14 @@
       *
      C     InitSCmd      BEGSR
       *
-     C                   EVAL      SC_Action = '*INIT'
-     C                   EVAL      SC_File = ##File
-     C                   EVAL      SC_Lib = ##Library
-     C                   EVAL      SC_Mbr = ##Member
-     C                   EVAL      YShortCmd = ShortCmd
-     C                   CALL      PEEK42        P_Peek42
+     C                   CLEAR                   shortCmd
+     C                   EVAL      ShortCmd.SC_Action = '*INIT'
+     C                   EVAL      ShortCmd.SC_File = ##File
+     C                   EVAL      ShortCmd.SC_Lib = ##Library
+     C                   EVAL      ShortCmd.SC_Mbr = ##Member
+     C                   CALLP     PEEK42(H_FILE: H_LIB: H_MBR: H_RCDFMT
+     C                                    : ShortCmd: Wrk#RcdNbr: YExecCmd
+     C                                    : YMsgID: YMsgDta)
       *
      C                   ENDSR
       *
@@ -5868,11 +5270,9 @@
      C                   EXSR      clrFldArray
       *
       *  Aufbereiten Pseudo-Datensatz
-     C                   EVAL      YKeyVal = '*PHIVAL'
-     C                   CALL      PEEK20        P_Peek20
+     C                   CALLP     PEEK20('*PHIVAL': IO_Buff: YMsgID: YMsgDta)
       *
      C     YMsgID        IFEQ      *BLANKS
-     C                   EVAL      IO_Buff = YBuffer
       *
       *  Füllen der Überschriftenzeile ...
      C                   EVAL      SflMode = '*HEADLINE'
@@ -5902,11 +5302,9 @@
      C                   exsr      clrFldArray
       *
       *  Aufbereiten Pseudo-Datensatz
-     C                   EVAL      YKeyVal = '*PHIVAL'
-     C                   CALL      PEEK20        P_Peek20
+     C                   CALLP     PEEK20('*PHIVAL': IO_Buff: YMsgID: YMsgDta)
       *
      C     YMsgID        IFEQ      *BLANKS
-     C                   EVAL      IO_Buff = YBuffer
       *
       *  Füllen der Überschriftenzeile ...
      C                   EVAL      SflMode = '*HEADLINE'
@@ -6090,15 +5488,15 @@
       *  ... Original EDITCODE verwenden
      C                   Endif
       *
+     C                   Monitor
       *  umsetzen Datensatzpuffer in Bildschirmdarstellung ...
      C     SET_DspMde    IFEQ      '*DSPNRM'
       *  ... für Normale Anzeige
      C                   IF        IO_NullMap(FLDL0100.F1SEQ) = 1
-     C                   EVAL      YData = FLDL0100
-     C                   EVAL      YFormat = 'FLDL0100'
-     C                   EVAL      YSrcVar = *ALLx'00'
-     C                   EVAL      YPgmCall = bFalse
-     C                   CALL      PEEK06        P_Peek06               99
+     C                   CALLP     PEEK06(FLDL0100: 'FLDL0100': *ALLx'00'
+     C                                    : bFalse: YCvtCcsid
+     C                                    : YOutBuffer: yOutBuffLn
+     C                                    : yMsgId: yMsgDta)
      C                   IF        f_isNumFld(FLDL0100) = bTrue
      C                   IF        YOutBuffLn > 1
      C                   EVAL      %subst(yOutBuffer: 1: YOutBuffLn - 1) = ''
@@ -6110,11 +5508,10 @@
      C                   EVAL      yOutBuffer = §HEX_CHAR
      C                   ENDIF
      C                   ELSE
-     C                   EVAL      YData = FLDL0100
-     C                   EVAL      YFormat = 'FLDL0100'
-     C                   EVAL      YSrcVar = IO_Buff
-     C                   EVAL      YPgmCall = bFalse
-     C                   CALL      PEEK06        P_Peek06               99
+     C                   CALLP     PEEK06(FLDL0100: 'FLDL0100': IO_Buff
+     C                                    : bFalse: YCvtCcsid
+     C                                    : YOutBuffer: yOutBuffLn
+     C                                    : yMsgId: yMsgDta)
      C                   ENDIF
       *
      C                   ELSE
@@ -6134,6 +5531,10 @@
       *
      C                   Eval      YOutBuffLn = yStringLen * 2
      C                   Endif
+     C                   Eval      *in99 = bFalse
+     C                   On-Error
+     C                   Eval      *in99 = bTrue
+     C                   Endmon
       *
       *  Fehler bei der Aufbereitung ...
      C     *IN99         IFEQ      '1'
@@ -6159,8 +5560,14 @@
       *      Aufbereitung der Überschriftenzeile
      C                   ELSE
       *  ... sonst konvertieren
-     C                   EVAL      yCcsid = *ZEROS
-     C                   CALL      PEEK32        P_Peek32               99
+     C                   monitor
+     C                   callp     PEEK32(YOutBuffer: YOutBuffLn: 0
+     C                                    : YMsgID: YMsgDta)
+     C                   eval      *in99 = bFalse
+     C                   on-error
+     C                   eval      *in99 = bTrue
+     C                   endmon
+      *
      C     *IN99         IFEQ      '0'
      C     IsCvtChar     IFEQ      bFalse
      C     YMsgID        IFNE      *BLANKS
@@ -6386,15 +5793,20 @@
       *
      C     PBBuildKey    BEGSR
       *
-     C                   EVAL      YBuffer = IO_Buff
-     C                   CALL      PEEK19        P_Peek19
-     C                   EVAL      ##Key = YKeyVal
+     C                   monitor
+     C                   CALLP     PEEK19(IO_Buff: YKeyVal: YMsgID: YMsgDta)
       *
       *  ... Konvertieren nicht darstellbarer Zeichen
-     C                   EVAL      YOutBuffer = ##Key
+     C                   EVAL      YOutBuffer = YKeyVal
      C                   EVAL      YOutBuffLn = 132
-     C                   EVAL      YCcsid = *ZEROS
-     C                   CALL      PEEK32        P_Peek32               99
+      *
+     C                   callp     PEEK32(YOutBuffer: YOutBuffLn: 0
+     C                                    : YMsgID: YMsgDta)
+     C                   eval      *in99 = bFalse
+     C                   on-error
+     C                   eval      *in99 = bTrue
+     C                   endmon
+      *
      C                   EVAL      ##Key = YOutBuffer
       *
      C                   ENDSR
@@ -6430,9 +5842,9 @@
       *
      C     PBIntKey      BEGSR
       *
-     C                   EVAL      YKeyVal = Wrk#KeyVal
-     C                   CALL      PEEK20        P_Peek20
-     C                   EVAL      Wrk#KeyVal = YBuffer
+     C                   CALLP     PEEK20(Wrk#KeyVal: yBuffer
+     C                                    : YMsgID: YMsgDta)
+     C                   EVAL      Wrk#KeyVal = yBuffer
       *
      C                   ENDSR
       *
@@ -6911,11 +6323,7 @@
       *  Ermitteln Sortierung bei Zugriff über SQL ...
      C     AccessMode    IFEQ      §SqlSeq
      C     SqlOrder      IFEQ      '*KEY'
-     C                   EVAL      YFile = ##File
-     C                   EVAL      YLibrary = ##Library
-     C                   EVAL      YsqlOrder = *BLANKS
-     C                   CALL      PEEK38        P_Peek38
-     C                   EVAL      sqlOrder = YsqlOrder
+     C                   CALLP     PEEK38(##File: ##Library: sqlOrder)
      C                   ELSE
      C                   EVAL      sqlOrder = SQL_quote(f_ucase(sqlOrder))
      C                   ENDIF
@@ -7470,11 +6878,9 @@
       *
      C     GetPgmName    BEGSR
       *
-     C                   EVAL      PEEKPGM = 'P'
-     C     2             SUBST (P) R2FmtID:1     TMP#STR
-     C                   CAT       TMP#STR:0     PEEKPGM
-     C     7             SUBST (P) R2FmtID:7     TMP#STR
-     C                   CAT       TMP#STR:0     PEEKPGM
+     C                   EVAL      PEEKPGM = 'P' +
+     C                                         %subst(RCDL0200.R2FmtID: 1: 2) +
+     C                                         %subst(RCDL0200.R2FmtID: 7: 7)
       *
      C                   ENDSR
       *
@@ -7484,11 +6890,9 @@
       *
      C     GetDspName    BEGSR
       *
-     C                   EVAL      PEEKDSPF = 'F'
-     C     2             SUBST (P) R2FmtID:1     TMP#STR
-     C                   CAT       TMP#STR:0     PEEKDSPF
-     C     7             SUBST (P) R2FmtID:7     TMP#STR
-     C                   CAT       TMP#STR:0     PEEKDSPF
+     C                   EVAL      PEEKDSPF = 'F' +
+     C                                         %subst(RCDL0200.R2FmtID: 1: 2) +
+     C                                         %subst(RCDL0200.R2FmtID: 7: 7)
       *
      C                   ENDSR
       *
@@ -7556,10 +6960,7 @@
       *
      C     GetNbrKeyF    BEGSR
       *
-     C                   EVAL      YFile = ##File
-     C                   EVAL      YLibrary = ##Library
-     C                   EVAL      YRcdFormat = ##Format
-     C                   CALL      PEEK04        P_Peek04
+     C                   CALLP     PEEK04(YQFile: ##Format: YMsgId: YMsgDta)
      C     YMsgID        IFEQ      'USR0006'
      C                   EVAL      IsKeyAvail = bFalse
      C                   ELSE
@@ -7574,11 +6975,8 @@
       *
      C     GetNbrMbr     BEGSR
       *
-     C                   EVAL      YFile = ##File
-     C                   EVAL      YLibrary = ##Library
-     C                   EVAL      YRcdFormat = ##Format
-     C                   EVAL      YFunction = '*CREATE'
-     C                   CALL      PEEK41        P_Peek41
+     C                   CALLP     PEEK41(YQFile: ##FORMAT
+     C                                    : '*CREATE': YNbrOfEnt: YData)
      C     YNbrOfEnt     IFGT      *ZEROS
      C                   EVAL      FILD0100 = yData
      C                   ELSE
@@ -7597,7 +6995,7 @@
       *
      C                   EVAL      YFile = ##File
      C                   EVAL      YLibrary = ##Library
-     C                   CALL      PEEK10        P_Peek10
+     C                   CALLP     PEEK10(YQFile: YMsgId: YMsgDta)
       *
      C                   ENDSR
       *
@@ -7609,16 +7007,14 @@
       *
      C                   EVAL      YFile = ##File
      C                   EVAL      YLibrary = ##Library
-     C                   EVAL      YRcdFormat = ##FORMAT
-     C                   CALL      PEEK01        P_Peek01
+     C                   CALLP     PEEK01(YQFile: ##FORMAT: $$RCDFMTID
+     C                                    : YMsgId: YMsgDta)
       *
      C     YMsgID        IFEQ      'USR8123'
      C                   EVAL      IsFld512 = bTrue
      C                   ELSE
      C                   EVAL      IsFld512 = bFalse
      C                   Endif
-      *
-     C                   EVAL      $$RCDFMTID = yRcdFmtID
       *
      C                   OPEN      PeekFld
      C                   OPEN      PeekFldL1
@@ -7631,12 +7027,8 @@
       *
      C     GetKeyList    BEGSR
       *
-     C                   EVAL      YFile = ##File
-     C                   EVAL      YLibrary = ##Library
-     C                   EVAL      YRcdFormat = ##Format
-     C                   EVAL      YAccess = AccessMode
-     C                   EVAL      YsqlOrder = sqlOrder
-     C                   CALL      PEEK03        P_Peek03
+     C                   CALLP     PEEK03(YQFile: ##Format: AccessMode: sqlOrder
+     C                                    : YMsgId: YMsgDta)
       *
      C                   ENDSR
       *
@@ -7646,17 +7038,14 @@
       *
      C     GetRcdFrmt    BEGSR
       *
-     C                   EVAL      YDsp80 = SET_Dsp80
-     C                   EVAL      YCopyRight = §CopyRight
-     C                   EVAL      YFmtName = ##FORMAT
-     C                   EVAL      YFmtMode = §BATCH
-     C                   CALL      PEEK12        P_Peek12
+     C                   CALLP     PEEK12(SET_Dsp80: §CopyRight: ##FORMAT
+     C                                    : §BATCH
+     C                                    : RCDL0200: YFmtNbr: yMsgID: yMsgDta)
       *
      C     YMsgID        IFNE      'USR8100'
-     C                   EVAL      RCDL0200 = YFmtDta
      C                   EVAL      ##FMTNBR = YFmtNbr
-     C                   EVAL      ##Format = R2FmtName
-     C                   EVAL      $$Length = R2RcdLen
+     C                   EVAL      ##Format = RCDL0200.R2FmtName
+     C                   EVAL      $$Length = RCDL0200.R2RcdLen
      C                   ELSE
       *         Abbruch über F3/F12
      C                   Endif
@@ -7670,14 +7059,19 @@
       *
      C     GetObjAttr    BEGSR
       *
+     C                   Monitor
      C                   EVAL      YFile = ##File
      C                   EVAL      YLibrary = ##Library
-     C                   CALL      PEEK09        P_Peek09               99
+     C                   CALLP     PEEK09(YQFile: OBJD0400: YMsgId: YMsgDta)
+     C                   EVAL      *in99 = bFalse
+     C                   On-Error
+     C                   EVAL      *in99 = bTrue
+     C                   Endmon
+      *
      C     *IN99         IFEQ      '1'
      C                   EVAL      IsError = bTrue
      C                   ELSE
      C                   EVAL      IsError = bFalse
-     C                   EVAL      OBJD0400 = YValue
      C     YMsgID        IFNE      *BLANKS
      C                   EVAL      IsError = bTrue
       *  Objekt nicht gefunden ...
@@ -7702,15 +7096,15 @@
       *
      C                   EVAL      IsError = bFalse
       *  Übertragen der Objektbezeichnung
-     C                   EVAL      ##File = O4ObjName
-     C                   EVAL      ##Library = O4RetLib
+     C                   EVAL      ##File = OBJD0400.O4ObjName
+     C                   EVAL      ##Library = OBJD0400.O4RetLib
       *
       *  Übertragen der Objektbeschreibung
-     C                   EVAL      $$Text40 = O4Text
-     C                   EVAL      $$Text50 = O4Text
+     C                   EVAL      $$Text40 = OBJD0400.O4Text
+     C                   EVAL      $$Text50 = OBJD0400.O4Text
       *
       *  Wenn die Objektgröße kleiner als 999 ist,
-     C     O4ObjSize     IFLE      999
+     C                   IF        (OBJD0400.O4ObjSize <= 999)
       *  ... dann in der Einheit "Byte" anzeigen ...
      C                   EVAL      R#Size = §ZEROS
      C                   EVAL      $$UNIT = 'Byt'
@@ -7720,14 +7114,15 @@
       *      gefunden werden konnte.
      C                   EVAL      R#Size = §ZEROS
       *
-     C     O4ObjSize     DOWGT     999
-     C                   DIV   (H) 1024          O4ObjSize
+     C                   DOW       (OBJD0400.O4ObjSize > 999)
+     C                   EVAL      OBJD0400.O4ObjSize =
+     C                               %dech(OBJD0400.O4ObjSize / 1024: 10: 0)
      C                   EVAL      R#Size = R#Size + 1
      C                   Enddo
       *
       *  Multiplikator aus der Objektbeschreibung
       *  berücksichtigen und ...
-     C     O4ObjSizeM    IFEQ      1024
+     C                   IF        (OBJD0400.O4ObjSizeM = 1024)
      C                   EVAL      R#Size = R#Size + 1
      C                   ELSE
       *       keine Korrektur erforderlich
@@ -7747,7 +7142,7 @@
      C                   Endif
       *
       *  ... sowie Restgröße zur Anzeige bringen
-     C                   EVAL      $$SIZE = O4ObjSize
+     C                   EVAL      $$SIZE = OBJD0400.O4ObjSize
      C                   Endif
      C                   Endif
       *
@@ -7775,9 +7170,7 @@
       *
      C                   eval      YFile = ##File
      C                   eval      YLibrary = ##Library
-     C                   eval      YMember = ##Member
-     C                   call      PEEK13        P_Peek13
-     C                   eval      MBRD0200 = YValue
+     C                   callp     PEEK13(YQFile: ##Member: MBRD0200)
       *
      C                   if        MBRD0200.M2BytAvail > 0
      C                   if        MBRD0200.M2NbrRcdOn <= 2147483647
@@ -7825,9 +7218,7 @@
       *
      C                   EVAL      YFile = ##File
      C                   EVAL      YLibrary = ##Library
-     C                   EVAL      YMember = ##Member
-     C                   CALL      PEEK13        P_Peek13
-     C                   EVAL      MBRD0200 = YValue
+     C                   callp     PEEK13(YQFile: ##Member: MBRD0200)
      C                   IF        (MBRD0200.M2BytAvail <> 0)
      C                   EVAL      ##MEMBER = MBRD0200.M2Member
      C                   EVAL      IsError = bFalse
@@ -8401,10 +7792,13 @@
      C                             ((AccessMode = §KeySeq)  or
      C                              (AccessMode = §SqlSeq))
       *
-     C                   EVAL      YDsp80 = SET_Dsp80
-     C                   EVAL      YCopyRight = §CopyRight
-     C                   EVAL      YFunction = '*FLOATKEYS'
-     C                   CALL      PEEK34        P_Peek34               99
+     C                   monitor
+     C                   callp     PEEK34(SET_Dsp80: §CopyRight: '*FLOATKEYS'
+     C                                    : YMsgID: YMsgDta)
+     C                   eval      *in99 = bFalse
+     C                   on-error
+     C                   eval      *in99 = bTrue
+     C                   endmon
       *
      C                   ELSE
       *    Es werden keine Schlüselfeldinformationen benötigt
@@ -8605,8 +7999,7 @@
      C     ChkVersion    BEGSR
       *
      C     SET_VSN       IFNE      §Version
-     C                   EVAL      YVersion = §Version
-     C                   CALL      PEEK33        P_Peek33
+     C                   CALLP     PEEK33(§Version: YMsgID: YMsgDta)
      C                   ELSE
       *  Kein Abgleich erforderlich ...
      C                   Endif
@@ -8646,7 +8039,7 @@
       *
      C     s_EXIT01      BEGSR
       *
-     C                   Eval      YFile    = ##File                            Input
+     C                   Eval      YFile = ##File                               Input
      C                   Eval      YLibrary = ##Library                         Input
      C                   Eval      YMember  = ##Member                          Input
      C                   Eval      Yaccess  = accessMode                        Input
@@ -8780,11 +8173,10 @@
      C                   EVAL      SFBot = 1
       *
       * -  Netzwerkattribute
-     C                   EVAL      YAttr = 'SYSNAME'
-     C                   EVAL      YNoMsg = bFalse
-     C                   CALL      PEEK07        P_Peek07
+     C                   CALLP     PEEK07('SYSNAME': bFalse
+     C                                    : YAttrLen: YAttrTyp: YValue)
      C     YAttrLen      IFGT      §ZEROS
-     C     YAttrLen      SUBST     YValue:1      $$System
+     C                   EVAL      $$System = %subst(YValue: 1: YAttrLen)
      C                   ELSE
      C                   EVAL      $$System = *BLANKS
      C                   Endif
@@ -8860,48 +8252,47 @@
       *
      C                   Eval      §PgmQ = '*'
       *
-     C                   Eval      PEEK01 = f_pgmCallN('PEEK01')
-     C                   Eval      PEEK03 = f_pgmCallN('PEEK03')
-     C                   Eval      PEEK04 = f_pgmCallN('PEEK04')
-     C                   Eval      PEEK06 = f_pgmCallN('PEEK06')
-     C                   Eval      PEEK07 = f_pgmCallN('PEEK07')
-     C                   Eval      PEEK08 = f_pgmCallN('PEEK08')
-     C                   Eval      PEEK09 = f_pgmCallN('PEEK09')
-     C                   Eval      PEEK10 = f_pgmCallN('PEEK10')
-     C                   Eval      PEEK12 = f_pgmCallN('PEEK12')
-     C                   Eval      PEEK13 = f_pgmCallN('PEEK13')
-     C                   Eval      PEEK14 = f_pgmCallN('PEEK14')
-     C                   Eval      PEEK17 = f_pgmCallN('PEEK17')
-     C                   Eval      PEEK18 = f_pgmCallN('PEEK18')
-     C                   Eval      PEEK19 = f_pgmCallN('PEEK19')
-     C                   Eval      PEEK20 = f_pgmCallN('PEEK20')
-     C                   Eval      PEEK21 = f_pgmCallN('PEEK21')
-     C                   Eval      PEEK23 = f_pgmCallN('PEEK23')
-     C                   Eval      PEEK24 = f_pgmCallN('PEEK24')
-     C                   Eval      PEEK26 = f_pgmCallN('PEEK26')
-     C                   Eval      PEEK27 = f_pgmCallN('PEEK27')
-     C                   Eval      PEEK30 = f_pgmCallN('PEEK30')
-     C                   Eval      PEEK32 = f_pgmCallN('PEEK32')
-     C                   Eval      PEEK33 = f_pgmCallN('PEEK33')
-     C                   Eval      PEEK34 = f_pgmCallN('PEEK34')
-     C                   Eval      PEEK37 = f_pgmCallN('PEEK37')
-     C                   Eval      PEEK38 = f_pgmCallN('PEEK38')
-     C                   Eval      PEEK40 = f_pgmCallN('PEEK40')
-     C                   Eval      PEEK41 = f_pgmCallN('PEEK41')
-     C                   Eval      PEEK42 = f_pgmCallN('PEEK42')
-     C                   Eval      PEEK43 = f_pgmCallN('PEEK43')
-     C                   Eval      PEEK47 = f_pgmCallN('PEEK47')
-     C                   Eval      PEEK48 = f_pgmCallN('PEEK48')
-     C                   Eval      PEEK49 = f_pgmCallN('PEEK49')
-     C                   Eval      PEEK50 = f_pgmCallN('PEEK50')
-     C                   Eval      PEEK52 = f_pgmCallN('PEEK52')
-     C                   Eval      PEEK54 = f_pgmCallN('PEEK54')
-     C                   Eval      PEEK55 = f_pgmCallN('PEEK55')
-     C                   Eval      PEEK56 = f_pgmCallN('PEEK56')
-     C                   Eval      PEEK57 = f_pgmCallN('PEEK57')
-     C                   Eval      PEEK59 = f_pgmCallN('PEEK59')
-     C                   Eval      PEEK65 = f_pgmCallN('PEEK65')
-     C                   Eval      PEEK68 = f_pgmCallN('PEEK68')
+     C                   Eval      PEEK01_NAME = f_pgmCallN('PEEK01')
+     C                   Eval      PEEK03_NAME = f_pgmCallN('PEEK03')
+     C                   Eval      PEEK04_NAME = f_pgmCallN('PEEK04')
+     C                   Eval      PEEK06_NAME = f_pgmCallN('PEEK06')
+     C                   Eval      PEEK07_NAME = f_pgmCallN('PEEK07')
+     C                   Eval      PEEK08_NAME = f_pgmCallN('PEEK08')
+     C                   Eval      PEEK09_NAME = f_pgmCallN('PEEK09')
+     C                   Eval      PEEK10_NAME = f_pgmCallN('PEEK10')
+     C                   Eval      PEEK12_NAME = f_pgmCallN('PEEK12')
+     C                   Eval      PEEK13_NAME = f_pgmCallN('PEEK13')
+     C                   Eval      PEEK14_NAME = f_pgmCallN('PEEK14')
+     C                   Eval      PEEK17_NAME = f_pgmCallN('PEEK17')
+     C                   Eval      PEEK18_NAME = f_pgmCallN('PEEK18')
+     C                   Eval      PEEK19_NAME = f_pgmCallN('PEEK19')
+     C                   Eval      PEEK20_NAME = f_pgmCallN('PEEK20')
+     C                   Eval      PEEK21_NAME = f_pgmCallN('PEEK21')
+     C                   Eval      PEEK23_NAME = f_pgmCallN('PEEK23')
+     C                   Eval      PEEK24_NAME = f_pgmCallN('PEEK24')
+     C                   Eval      PEEK26_NAME = f_pgmCallN('PEEK26')
+     C                   Eval      PEEK27_NAME = f_pgmCallN('PEEK27')
+     C                   Eval      PEEK30_NAME = f_pgmCallN('PEEK30')
+     C                   Eval      PEEK32_NAME = f_pgmCallN('PEEK32')
+     C                   Eval      PEEK33_NAME = f_pgmCallN('PEEK33')
+     C                   Eval      PEEK34_NAME = f_pgmCallN('PEEK34')
+     C                   Eval      PEEK37_NAME = f_pgmCallN('PEEK37')
+     C                   Eval      PEEK38_NAME = f_pgmCallN('PEEK38')
+     C                   Eval      PEEK40_NAME = f_pgmCallN('PEEK40')
+     C                   Eval      PEEK41_NAME = f_pgmCallN('PEEK41')
+     C                   Eval      PEEK42_NAME = f_pgmCallN('PEEK42')
+     C                   Eval      PEEK47_NAME = f_pgmCallN('PEEK47')
+     C                   Eval      PEEK48_NAME = f_pgmCallN('PEEK48')
+     C                   Eval      PEEK49_NAME = f_pgmCallN('PEEK49')
+     C                   Eval      PEEK50_NAME = f_pgmCallN('PEEK50')
+     C                   Eval      PEEK52_NAME = f_pgmCallN('PEEK52')
+     C                   Eval      PEEK54_NAME = f_pgmCallN('PEEK54')
+     C                   Eval      PEEK55_NAME = f_pgmCallN('PEEK55')
+     C                   Eval      PEEK56_NAME = f_pgmCallN('PEEK56')
+     C                   Eval      PEEK57_NAME = f_pgmCallN('PEEK57')
+     C                   Eval      PEEK59_NAME = f_pgmCallN('PEEK59')
+     C                   Eval      PEEK65_NAME = f_pgmCallN('PEEK65')
+     C                   Eval      PEEK68_NAME = f_pgmCallN('PEEK68')
      C                   Eval      PEEK69 = f_pgmCallN('PEEK69')
      C                   Eval      EXIT01 = f_pgmCallN('EXIT01')
       *
@@ -8911,14 +8302,11 @@
       * - Versionsabgleich durchführen
      C                   EXSR      ChkVersion
       *
-     C                   Eval      yPgm    = §§PgmName
-     C                   Eval      yKey    = '*ALL'
-     C                   Eval      yPosF24 = 8
-     C                   Call      PEEK23        P_Peek23
+     C                   Callp     PEEK23(§§PgmName: '*ALL': 8
+     C                                    : yFKeys: yNbrOfKeys)
      C                   Eval      ScrnFKeys = %subarr(YFKeys: 1)
       *
-     C                   Eval      yPgm = §§PgmName
-     C                   Call      PEEK27        P_Peek27
+     C                   Callp     PEEK27(§§PgmName: YChoice: YNbrOfCh)
       *
      C                   Endsr
       *

@@ -48,6 +48,10 @@
       /COPY QCOPYLE,FLDL0100
       *----------------------------------------------------*
       *
+      /define internal_prototype
+      /COPY QCOPYLE,PPEEK24
+      /undefine internal_prototype
+      *
       *---Variablendefinition ShortCmd---------------------*
       /COPY QCOPYLE,ShortCmd_D
       *----------------------------------------------------*
@@ -73,24 +77,12 @@
       *  F E L D - D E F I N I T I O N E N                 *
       *----------------------------------------------------*
       *
-     D XDsp80          S              1A
-     D XCopyRight      S            512A
-     D XSet0001        S                   LIKE(SET0001)
-     D XMsgID          S              7A
-     D XMsgDta         S            512A
-      *
-     D YDsp80          S              1A   INZ(*BLANKS)
-     D YColorAttr      S              1A   INZ(*BLANKS)
      D YMsgID          S              7A   INZ(*BLANKS)
      D YMsgDta         S            512A   INZ(*BLANKS)
       *
-     D yPgm            S             10A   inz
-     D yKey            S             10A   inz
-     D yPosF24         S                   like(r§int4    ) inz
      D yFKeys          S             18A   DIM(32)       INZ(*BLANKS)
      D yNbrOfKeys      S                   like(r§int4    ) inz
       *
-     D YScnAID         S             10A   INZ(*BLANKS)
      D YPgmCmd         S             10A   INZ(*BLANKS)
      D YCmdDta         S                   LIKE(r§pgmCmdDt) INZ(*BLANKS)
       *
@@ -101,15 +93,16 @@
      D SfBot           S                   like(r§int4    ) inz
      D §NbrFKeys       C                   CONST(2)
       *
-     D X               S                   like(r§int4    ) inz
-     D Y               S                   like(r§int4    ) inz
-      *
      D Wrk_Field       S             10A   INZ(*BLANKS)
-     D Wrk_Color       S             10A   INZ(*BLANKS)
+     D Wrk_Color       S              1A   INZ(*BLANKS)
       *
-     D PEEK21          S                   like(r§pgmCallN) inz
-     D PEEK23          S                   like(r§pgmCallN) inz
-     D PEEK25          S                   like(r§pgmCallN) inz
+     D PEEK21_NAME     S                   like(r§pgmCallN) inz
+     D PEEK23_NAME     S                   like(r§pgmCallN) inz
+     D PEEK25_NAME     S                   like(r§pgmCallN) inz
+      *
+      /COPY QCOPYLE,PPEEK21
+      /COPY QCOPYLE,PPEEK23
+      /COPY QCOPYLE,PPEEK25
       *
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
@@ -120,41 +113,12 @@
       *
       *---ENTRY-LISTE--------------------------------------*
       *
-     C     *ENTRY        PLIST
-     C                   PARM                    XDsp80
-     C                   PARM                    XCopyRight
-     C                   PARM                    XSet0001
-     C                   PARM                    XMsgID
-     C                   PARM                    XMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK23
-     C     P_Peek23      PLIST
-     C                   PARM                    yPgm
-     C                   PARM                    yKey
-     C                   PARM                    yPosF24
-     C                   PARM                    yFKeys
-     C                   PARM                    yNbrOfKeys
-     C                   PARM                    yMsgID
-     C                   PARM                    yMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK21
-     C     P_Peek21      PLIST
-     C                   PARM                    YScnAID
-     C                   PARM                    YPgm
-     C                   PARM                    YPgmCmd
-     C                   PARM                    YCmdDta
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK25
-     C     P_Peek25      PLIST
-     C                   PARM                    YDsp80
-     C                   PARM                    YColorAttr
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
+     D PEEK24          PI
+     D  i_dsp80                            const like(r§dsp80)
+     D  i_copyright                        const like(r§copyRght)
+     D  o_set0001                                likeds(SET0001)
+     D  o_msgID                                  like(r§msgID)
+     D  o_msgDta                                 like(r§msgDta)
       *
       *---------------------------------------------------*
       *
@@ -214,9 +178,8 @@
       *
       *  Mappen der gedrückten Taste
       *  in Programmbefehl
-     C                   EVAL      YScnAID = §ScnAID
-     C                   EVAL      YPgm = §§PgmName
-     C                   CALL      PEEK21        P_Peek21
+     C                   CALLP     PEEK21(§ScnAID: §§PgmName
+     C                                    : YPgmCmd: YCmdDta: YMsgID: YMsgDta)
      C     YMsgID        IFNE      *BLANKS
      C                   EVAL      §MsgID = YMsgID
      C                   EVAL      §MsgDta = YMsgDta
@@ -361,8 +324,8 @@
       *
      C                   EXSR      SetUsrSetg
       *
-     C                   EVAL      XMsgID = 'USR8112'
-     C                   EVAL      XMsgDta = *BLANKS
+     C                   EVAL      o_msgID = 'USR8112'
+     C                   EVAL      o_msgDta = *BLANKS
       *
      C                   ENDSR
       *
@@ -374,7 +337,7 @@
       *
      C                   Callp     p_rmvPgmMg(§§pgmName)
       *
-     C                   EVAL      XMsgID = 'USR8100'
+     C                   EVAL      o_msgID = 'USR8100'
       *
      C                   SELECT
      C     §ScnAID       WHENEQ    §F3
@@ -385,7 +348,7 @@
      C                   EVAL      USR81001 = 'Fxx'
      C                   Endsl
       *
-     C                   EVAL      XMsgDta = USR8100
+     C                   EVAL      o_msgDta = USR8100
       *
      C                   ENDSR
       *
@@ -524,7 +487,7 @@
       *
      C     SetScreen     BEGSR
       *
-     C     XDsp80        IFEQ      '0'
+     C     i_dsp80       IFEQ      '0'
       *   132-Zeichen Anzeige
      C                   EVAL      *IN88 = '0'
      C                   EVAL      ZEI = 6
@@ -544,7 +507,7 @@
       *
      C     GetUsrSetg    BEGSR
       *
-     C                   EVAL      SET0001 = XSet0001
+     C                   EVAL      SET0001 = o_set0001
       *
      C                   ENDSR
       *
@@ -554,7 +517,7 @@
       *
      C     SetUsrSetg    BEGSR
       *
-     C                   EVAL      XSet0001 = SET0001
+     C                   EVAL      o_set0001 = SET0001
       *
      C                   ENDSR
       *
@@ -564,9 +527,12 @@
       *
      C     GetColor      BEGSR
       *
-     C                   EVAL      YDsp80 = XDsp80
-     C                   EVAL      YColorAttr = Wrk_Color
-     C                   CALL      PEEK25        P_Peek25               99
+     C                   monitor
+     C                   callp     PEEK25(i_dsp80: Wrk_Color: YMsgID: YMsgDta)
+     C                   eval      *in99 = bFalse
+     C                   on-error
+     C                   eval      *in99 = bTrue
+     C                   endmon
       *
      C     *IN99         IFEQ      '1'
       *             Fehler aufgetreten
@@ -574,25 +540,25 @@
       *
      C                   SELECT
      C     Wrk_Field     WHENEQ    'KEYCOL'                                     Überschrift
-     C                   EVAL      SET_KeyCol = YColorAttr
+     C                   EVAL      SET_KeyCol = Wrk_Color
      C     Wrk_Field     WHENEQ    'HEDCOL'                                     Überschrift
-     C                   EVAL      SET_HedCol = YColorAttr
+     C                   EVAL      SET_HedCol = Wrk_Color
      C     Wrk_Field     WHENEQ    'PINCOL'                                     Pined-Daten
-     C                   EVAL      SET_PinCol = YColorAttr
+     C                   EVAL      SET_PinCol = Wrk_Color
      C     Wrk_Field     WHENEQ    'CLMCOL'                                     Spaltenmark.
-     C                   EVAL      SET_ClmCol = YcolorAttr
+     C                   EVAL      SET_ClmCol = Wrk_Color
      C     Wrk_Field     WHENEQ    'STDCOL'                                     Standard
-     C                   EVAL      SET_StdCol = YColorAttr
+     C                   EVAL      SET_StdCol = Wrk_Color
      C     Wrk_Field     WHENEQ    'NMLCOL'                                     Normale Suche
-     C                   EVAL      SET_NmlCol = YColorAttr
+     C                   EVAL      SET_NmlCol = Wrk_Color
      C     Wrk_Field     WHENEQ    'UNDCOL'                                     Unterstrichen
-     C                   EVAL      SET_UndCol = YColorAttr
+     C                   EVAL      SET_UndCol = Wrk_Color
      C     Wrk_Field     WHENEQ    'REVCOL'                                     Reverse Suche
-     C                   EVAL      SET_RevCol = YColorAttr
+     C                   EVAL      SET_RevCol = Wrk_Color
      C     Wrk_Field     WHENEQ    'TBLCOL'                                     Tabellierpap.
-     C                   EVAL      SET_TblCol = YColorAttr
+     C                   EVAL      SET_TblCol = Wrk_Color
      C     Wrk_Field     WHENEQ    'EXCCOL'                                     Exception
-     C                   EVAL      SET_ExcCol = YColorAttr
+     C                   EVAL      SET_ExcCol = Wrk_Color
      C                   OTHER
      C                   EVAL      *IN99 = '1'
      C                   EVAL      §MsgID = 'USR8146'
@@ -622,8 +588,8 @@
       * - Bildschirmfelder füllen
      C                   EXSR      FILL##
       *
-     C                   EVAL      XMsgID = *BLANKS
-     C                   EVAL      XMsgDta = *BLANKS
+     C                   EVAL      o_msgID = *BLANKS
+     C                   EVAL      o_msgDta = *BLANKS
       *
       *  Löschen der Cursorosition
      C                   EVAL      CsrRow = *ZEROS
@@ -637,7 +603,7 @@
       *
       * - Copyright
      C                   EVAL      §MsgID = 'USR9999'
-     C                   EVAL      §MsgDta = XCopyRight
+     C                   EVAL      §MsgDta = i_copyright
      C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
       *
      C                   ENDSR
@@ -650,14 +616,12 @@
       *
      C                   Eval      §PgmQ = '*'
       *
-     C                   Eval      PEEK21 = f_pgmCallN('PEEK21')
-     C                   Eval      PEEK23 = f_pgmCallN('PEEK23')
-     C                   Eval      PEEK25 = f_pgmCallN('PEEK25')
+     C                   Eval      PEEK21_NAME = f_pgmCallN('PEEK21')
+     C                   Eval      PEEK23_NAME = f_pgmCallN('PEEK23')
+     C                   Eval      PEEK25_NAME = f_pgmCallN('PEEK25')
       *
-     C                   Eval      yPgm     = §§PgmName
-     C                   Eval      yKey     = '*ALL'
-     C                   Eval      yPosF24  = *ZEROS
-     C                   Call      PEEK23        P_Peek23
+     C                   Callp     PEEK23(§§PgmName: '*ALL': 0
+     C                                    : yFKeys: yNbrOfKeys)
      C                   Eval      ScrnFKeys = %subarr(YFKeys: 1)
       *
      C                   Endsr

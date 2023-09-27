@@ -39,6 +39,10 @@
       /COPY QCOPYLE,FLDL0100
       *----------------------------------------------------*
       *
+      /define internal_prototype
+      /COPY QCOPYLE,PPEEK57
+      /undefine internal_prototype
+      *
       *---Variablendefinition ShortCmd---------------------*
       /COPY QCOPYLE,ShortCmd_D
       *----------------------------------------------------*
@@ -57,54 +61,31 @@
       /COPY QCOPYLE,ERR_D_SDS
       *----------------------------------------------------*
       *
+      /COPY QCOPYLE,PPEEK21
+      /COPY QCOPYLE,PPEEK23
+      *
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
-      *
-      *----------------------------------------------------*
-      *  I N F D S - D E F I N I T I O N E N               *
-      *----------------------------------------------------*
-      *
-      *----------------------------------------------------*
-      *  F E L D - D E F I N I T I O N E N                 *
-      *----------------------------------------------------*
       *
       *---Definition der F-Tastenbildschirmfelder----------*
       /COPY QCOPYLE,SCRNFKEYS
       *----------------------------------------------------*
       *
-     D xDsp80          S              1A
-     D xCopyRight      S            512A
-     D xEnvFile        S             10A
-     D xEnvLib         S             10A
-     D xEnvMbr         S             10A
-     D xEnvText        S             50A
-     D xMsgID          S              7A
-     D xMsgDta         S            512A
-      *
       *  Peek21:
-     D YScnAID         S             10A   INZ(*BLANKS)
-      *YPgm            S             10A   INZ(*BLANKS)
      D YPgmCmd         S             10A   INZ(*BLANKS)
      D YCmdDta         S                   LIKE(r§pgmCmdDt) INZ(*BLANKS)
      D YMsgID          S              7A   INZ(*BLANKS)
      D YMsgDta         S            512A   INZ(*BLANKS)
       *
       *  Peek23:
-     D yPgm            S             10A   inz
-     D yKey            S             10A   inz
-     D yPosF24         S                   like(r§int4    ) inz
      D yFKeys          S             18A   DIM(32)       INZ(*BLANKS)
      D yNbrOfKeys      S                   like(r§int4    ) inz
-      *yMsgID          S              7A   INZ(*BLANKS)
-      *yMsgDta         S            512A   INZ(*BLANKS)
-      *
-     D x               S                   like(r§int4    ) inz
       *
      D SfBot           S                   like(r§int4    ) inz
      D NbrFKeys        C                   CONST(2)
       *
-     D PEEK21          S                   like(r§pgmCallN) inz
-     D PEEK23          S                   like(r§pgmCallN) inz
+     D PEEK21_NAME     S                   like(r§pgmCallN) inz
+     D PEEK23_NAME     S                   like(r§pgmCallN) inz
       *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
@@ -112,36 +93,15 @@
       *
       *---ENTRY-LISTE--------------------------------------*
       *
-     C     *ENTRY        PLIST
-     C                   PARM                    xDsp80
-     C                   PARM                    xCopyRight
-     C                   PARM                    xEnvFile
-     C                   PARM                    xEnvLib
-     C                   PARM                    xEnvMbr
-     C                   PARM                    xEnvText
-     C                   PARM                    xMsgID
-     C                   PARM                    xMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK21
-     C     P_PEEK21      PLIST
-     C                   PARM                    YScnAID
-     C                   PARM                    YPgm
-     C                   PARM                    YPgmCmd
-     C                   PARM                    YCmdDta
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK23
-     C     P_PEEK23      PLIST
-     C                   PARM                    yPgm
-     C                   PARM                    yKey
-     C                   PARM                    yPosF24
-     C                   PARM                    yFKeys
-     C                   PARM                    yNbrOfKeys
-     C                   PARM                    yMsgID
-     C                   PARM                    yMsgDta
+     D PEEK57          PI
+     D  i_dsp80                            const like(r§dsp80)
+     D  i_copyright                        const like(r§copyRght)
+     D  i_envFile                          const like(r§file)
+     D  i_envLib                           const like(r§lib)
+     D  i_envMbr                           const like(r§mbr)
+     D  i_envText                    50A   const
+     D  o_msgID                                  like(r§msgID)
+     D  o_msgDta                                 like(r§msgDta)
       *
       *---------------------------------------------------*
       *
@@ -208,9 +168,8 @@
       *
       *  Mappen der gedrückten Taste
       *  in Programmbefehl
-     C                   EVAL      YScnAID = §ScnAID
-     C                   EVAL      YPgm = §§PgmName
-     C                   CALL      PEEK21        P_Peek21
+     C                   CALLP     PEEK21(§ScnAID: §§PgmName
+     C                                    : YPgmCmd: YCmdDta: YMsgID: YMsgDta)
      C     YMsgID        IFNE      *BLANKS
      C                   EVAL      §MsgID = YMsgID
      C                   EVAL      §MsgDta = YMsgDta
@@ -273,9 +232,9 @@
       *
      C                   Callp     p_rmvPgmMg(§§pgmName)
       *
-     C                   EVAL      XMsgID = 'USR8100'
+     C                   EVAL      o_msgID = 'USR8100'
      C                   EVAL      USR81001 = YPgmCmd
-     C                   EVAL      XMsgDta = USR8100
+     C                   EVAL      o_msgDta = USR8100
       *
      C                   ENDSR
       *
@@ -307,12 +266,12 @@
       *
      C                   Callp     f_execute('RMVM'          +
      C                                       ' FILE('        +
-     C                                       %trim(xEnvLib ) +
+     C                                       %trim(i_envLib ) +
      C                                       '/'             +
-     C                                       %trim(xEnvFile) +
+     C                                       %trim(i_envFile) +
      C                                       ')'             +
      C                                       ' MBR('         +
-     C                                       %trim(xEnvMbr ) +
+     C                                       %trim(i_envMbr ) +
      C                                       ')'             :
      C                                       §msgID          :
      C                                       §msgDta         )
@@ -325,10 +284,10 @@
       *
      C     FILL##        BEGSR
       *
-     C                   Eval      ##File  = xEnvFile
-     C                   Eval      ##Lib   = xEnvLib
-     C                   Eval      ##Mbr   = xEnvMbr
-     C                   Eval      ##Text  = xEnvText
+     C                   Eval      ##File  = i_envFile
+     C                   Eval      ##Lib   = i_envLib
+     C                   Eval      ##Mbr   = i_envMbr
+     C                   Eval      ##Text  = i_envText
       *
      C                   ENDSR
       *
@@ -338,7 +297,7 @@
       *
      C     SetScreen     BEGSR
       *
-     C     XDsp80        IFEQ      '0'
+     C     i_dsp80       IFEQ      '0'
       *   132-Zeichen Anzeige
      C                   EVAL      *IN88 = '0'
      C                   EVAL      ZEI = 6
@@ -365,8 +324,8 @@
      C                   Callp     p_rmvPgmMg(§§pgmName)
       *
       * - Rückkehrcode
-     C                   EVAL      XMsgID = *BLANKS
-     C                   EVAL      XMsgDta = *BLANKS
+     C                   EVAL      o_msgID = *BLANKS
+     C                   EVAL      o_msgDta = *BLANKS
       *
       * - Darstellung der Befehlstasten
      C                   EVAL      SfBot = 1
@@ -387,13 +346,11 @@
       *
      C                   Eval      §PgmQ = '*'
       *
-     C                   Eval      PEEK21 = f_pgmCallN('PEEK21')
-     C                   Eval      PEEK23 = f_pgmCallN('PEEK23')
+     C                   Eval      PEEK21_NAME = f_pgmCallN('PEEK21')
+     C                   Eval      PEEK23_NAME = f_pgmCallN('PEEK23')
       *
-     C                   Eval      yPgm    = §§PgmName
-     C                   Eval      yKey    = '*ALL'
-     C                   Eval      yPosF24 = *ZEROS
-     C                   Call      PEEK23        P_Peek23
+     C                   Callp     PEEK23(§§PgmName: '*ALL': 0
+     C                                    : yFKeys: yNbrOfKeys)
      C                   Eval      ScrnFKeys = %subarr(yFKeys: 1)
       *
      C                   Endsr

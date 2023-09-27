@@ -893,3 +893,7 @@
   *  PEEK05
        - Problem korrigiert, dass die Suche nach nummerischen Feldwerten nicht
          mehr funktioniert hat.
+  *  PEEK15
+       - Update Programmgenerator geändert, so dass bei ungültigen Zeichen in
+         einem Datenfeld der Hinweis 'Unzulässige Zeichen' auf dem Bildschirm
+         angezeigt wird.

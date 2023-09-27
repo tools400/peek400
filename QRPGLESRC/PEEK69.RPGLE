@@ -40,6 +40,10 @@
       /COPY QCOPYLE,FLDL0100
       *----------------------------------------------------*
       *
+      /define internal_prototype
+      /COPY QCOPYLE,PPEEK69
+      /undefine internal_prototype
+      *
       *---Variablendefinition ShortCmd---------------------*
       /COPY QCOPYLE,ShortCmd_D
       *----------------------------------------------------*
@@ -71,6 +75,11 @@
      D  i_hLowLvlEnv                 10I 0 const  options(*omit)
      D  io_errCode                32767A          options(*omit: *varsize)
       *
+      /COPY QCOPYLE,PPEEK21
+      /COPY QCOPYLE,PPEEK23
+      /COPY QCOPYLE,PPEEK27
+      /COPY QCOPYLE,PPEEK70
+      *
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
       *
@@ -86,32 +95,19 @@
       /COPY QCOPYLE,SCRNFKEYS
       *----------------------------------------------------*
       *
-     D XDsp80          S              1A
-     D XCopyRight      S            512A
-     D XQFile          S             20A
-     D XMsgID          S              7A
-     D XMsgDta         S            512A
+     D yFKeys          S             18A   dim(32)
+     D yNbrOfKeys      S                   like(r§int4)
+     D yMsgID          S              7A
+     D yMsgDta         S            512A
       *
-     D yPgm            S             10A   inz
-     D yKey            S             10A   inz
-     D yPosF24         S                   like(r§int4    ) inz
-     D yFKeys          S             18A   DIM(32)       INZ(*BLANKS)
-     D yNbrOfKeys      S                   like(r§int4    ) inz
-     D yMsgID          S              7A   INZ(*BLANKS)
-     D yMsgDta         S            512A   INZ(*BLANKS)
+     D YPgmCmd         S             10A
+     D YCmdDta         S                   like(r§pgmCmdDt)
       *
-     D YScnAID         S             10A   INZ(*BLANKS)
-     D YPgmCmd         S             10A   INZ(*BLANKS)
-     D YCmdDta         S                   LIKE(r§pgmCmdDt) INZ(*BLANKS)
+     D YChoice         S             75A   dim(32)
+     D YNbrOfCh        S                   like(r§int4)
       *
-     D YChoice         S             75A   DIM(32)
-     D YNbrOfCh        S                   like(r§int4    ) inz
-      *
-     D YQFile          DS                  qualified
-     D  name                         10A
-     D  lib                          10A
-      *
-     D rtnFile         DS                  LIKEDS(YQFile  ) inz
+     D YQFile          DS                  likeds(r§qObj) inz
+     D rtnFile         DS                  likeds(r§qObj) inz
       *
      D IsNewPos        S              1A   INZ(bFalse)
      D IsFound         S              1A   INZ(bFalse)
@@ -126,24 +122,22 @@
      D Sfl_Cmd         S             10A   INZ(*BLANKS)
      D NbrFKeys        C                   CONST(3)
       *
-     D PEEK21          S                   like(r§pgmCallN) inz
-     D PEEK23          S                   like(r§pgmCallN) inz
-     D PEEK27          S                   like(r§pgmCallN) inz
-     D PEEK70          S                   like(r§pgmCallN) inz
+     D PEEK21_NAME     S                   like(r§pgmCallN) inz
+     D PEEK23_NAME     S                   like(r§pgmCallN) inz
+     D PEEK27_NAME     S                   like(r§pgmCallN) inz
+     D PEEK70_NAME     S                   like(r§pgmCallN) inz
       *
      D R_File          S                   INZ(*BLANKS) LIKE(##File )
      D LstFile         S                   INZ(*BLANKS) LIKE(##File )
      D LstNbrRcd       S                   INZ(0) LIKE(SflPage)
       *
-     D Wrk_SFSANR      S                   INZ(*ZEROS ) LIKE(SFSANR )
+     D Wrk_SFSANR      S                   like(SFSANR)
       *
-     D X               S                   like(r§int4    ) inz
-     D YAnzahl         S                   like(r§int4    ) inz
+     D numFiles        S                   like(r§int4)
+     D objl0200        DS                  likeds(objl0200_t) inz
       *
-     D dspModeRaw      S              1A                        inz
-     D errCode         DS                  qualified            inz
-     D  bytPrv                       10I 0
-     D  bytAvl                       10I 0
+     D dspModeRaw      S              1A
+     D errCode         DS                  likeds(errCode_t) inz
       *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
@@ -151,49 +145,12 @@
       *
       *---ENTRY-LISTE--------------------------------------*
       *
-     C     *ENTRY        PLIST
-     C                   PARM                    XDsp80
-     C                   PARM                    XCopyRight
-     C                   PARM                    XQFile
-     C                   PARM                    XMsgID
-     C                   PARM                    XMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK23
-     C     P_PEEK23      PLIST
-     C                   PARM                    yPgm
-     C                   PARM                    yKey
-     C                   PARM                    yPosF24
-     C                   PARM                    yFKeys
-     C                   PARM                    yNbrOfKeys
-     C                   PARM                    yMsgID
-     C                   PARM                    yMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK21
-     C     P_PEEK21      PLIST
-     C                   PARM                    YScnAID
-     C                   PARM                    YPgm
-     C                   PARM                    YPgmCmd
-     C                   PARM                    YCmdDta
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK27
-     C     P_Peek27      PLIST
-     C                   PARM                    YPgm
-     C                   PARM                    YChoice
-     C                   PARM                    YNbrOfCh
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK70
-     C     P_PEEK70      PLIST
-     C                   PARM                    YQFile           20
-     C                   PARM                    YFunk            10
-      *
-     C                   PARM                    YAnzahl
-     C                   PARM                    YList           512
+     D PEEK69          PI
+     D  i_dsp80                            const like(r§dsp80)
+     D  i_copyright                        const like(r§copyRght)
+     D  o_qFile                                  like(r§qObj)
+     D  o_msgID                                  like(r§msgID)
+     D  o_msgDta                                 like(r§msgDta)
       *
       *---------------------------------------------------*
       *
@@ -275,9 +232,8 @@
       *
       *  Mappen der gedrückten Taste
       *  in Programmbefehl
-     C                   EVAL      YScnAID = §ScnAID
-     C                   EVAL      YPgm = §§PgmName
-     C                   CALL      PEEK21        P_Peek21
+     C                   CALLP     PEEK21(§ScnAID: §§PgmName
+     C                                    : YPgmCmd: YCmdDta: YMsgID: YMsgDta)
      C     YMsgID        IFNE      *BLANKS
      C                   EVAL      §MsgID = YMsgID
      C                   EVAL      §MsgDta = YMsgDta
@@ -331,7 +287,7 @@
      C     rtnFile.name  IFEQ      *BLANKS
       *  ... keine Auswahl getroffen, weiter machen
      C                   ELSE
-     C                   EVAL      XQFile = rtnFile
+     C                   EVAL      o_qFile = rtnFile
      C                   LEAVE
      C                   Endif
       *  Page up
@@ -523,9 +479,8 @@
      C                   EVAL      SFPAU = %triml(SFPAU)
       *
       *  Zuordnung AUSWAHL => Befehl ...
-     C                   EVAL      YScnAID = '#' + SFPAU
-     C                   EVAL      YPgm = §§PgmName
-     C                   CALL      PEEK21        P_Peek21
+     C                   CALLP     PEEK21('#' + SFPAU: §§PgmName
+     C                                    : YPgmCmd: YCmdDta: YMsgID: YMsgDta)
      C     YMsgID        IFNE      *BLANKS
       *  Fehlermeldung ...
      C                   EVAL      §MsgID = 'USR8110'
@@ -574,9 +529,9 @@
       *
      C                   Callp     p_rmvPgmMg(§§pgmName)
       *
-     C                   EVAL      XMsgID = 'USR8100'
+     C                   EVAL      o_msgID = 'USR8100'
      C                   EVAL      USR81001 = YPgmCmd
-     C                   EVAL      XMsgDta = USR8100
+     C                   EVAL      o_msgDta = USR8100
       *
      C                   ENDSR
       *
@@ -688,7 +643,7 @@
       *
      C     PBInitKey     BEGSR
       *
-     C                   EVAL      YQFile = XQFILE
+     C                   EVAL      YQFile = o_qFile
       *
      C                   IF        YQFile.name = ''
      C                   EVAL      YQFile.name = '*ALL'
@@ -698,8 +653,7 @@
      C                   EVAL      YQFile.lib = '*LIBL'
      C                   ENDIF
       *
-     C                   EVAL      YFunk = '*CREATE'
-     C                   CALL      PEEK70        P_PEEK70
+     C                   CALLP     PEEK70(yQFile: '*CREATE': numFiles: OBJL0200)
       *
      C                   ENDSR
       *
@@ -732,11 +686,10 @@
       *
      C     PBReadUP      BEGSR
       *
-     C                   DOW       YAnzahl > 0
-     C                   EVAL      YFunk = '*READ'
-     C                   CALL      PEEK70        P_PEEK70
-     C                   EVAL      OBJL0200 = YList
-     C                   IF        not (O2XATR = 'PF' or O2XATR = 'LF')
+     C                   DOW       numFiles > 0
+     C                   CALLP     PEEK70(yQFile: '*READ': numFiles: OBJL0200)
+     C                   IF        not (objl0200.O2XATR = 'PF' or
+     C                                  objl0200.O2XATR = 'LF')
      C                   ITER
      C                   ENDIF
       *
@@ -761,11 +714,11 @@
      C     PBFill        BEGSR
       *
       *  ... File name
-     C                   EVAL      $$FNme = O2ONme
+     C                   EVAL      $$FNme = objl0200.O2ONme
       *  ... Library name
-     C                   EVAL      $$LNme = O2LNme
+     C                   EVAL      $$LNme = objl0200.O2LNme
       *  ... Text description
-     C                   EVAL      $$FTxt = O2Text
+     C                   EVAL      $$FTxt = objl0200.O2Text
       *
       *  ... anzeigen Subfile
      C                   EVAL      *IN80 = '1'                                  SFLDSP
@@ -826,8 +779,8 @@
       *
       * - Rückkehrcode
      C                   CLEAR                   rtnFile
-     C                   EVAL      XMsgID = *BLANKS
-     C                   EVAL      XMsgDta = *BLANKS
+     C                   EVAL      o_msgID = *BLANKS
+     C                   EVAL      o_msgDta = *BLANKS
       *
       * - Darstellung der Subfile
      C                   EVAL      SflMde = '1'
@@ -847,7 +800,7 @@
       *
       * - Copyright
      C                   EVAL      §MsgID = 'USR9999'
-     C                   EVAL      §MsgDta = XCopyRight
+     C                   EVAL      §MsgDta = i_copyright
      C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
       *
      C                   ENDSR
@@ -860,19 +813,16 @@
       *
      C                   Eval      §PgmQ = '*'
       *
-     C                   Eval      PEEK21 = f_pgmCallN('PEEK21')
-     C                   Eval      PEEK23 = f_pgmCallN('PEEK23')
-     C                   Eval      PEEK27 = f_pgmCallN('PEEK27')
-     C                   Eval      PEEK70 = f_pgmCallN('PEEK70')
+     C                   Eval      PEEK21_NAME = f_pgmCallN('PEEK21')
+     C                   Eval      PEEK23_NAME = f_pgmCallN('PEEK23')
+     C                   Eval      PEEK27_NAME = f_pgmCallN('PEEK27')
+     C                   Eval      PEEK70_NAME = f_pgmCallN('PEEK70')
       *
-     C                   Eval      yPgm    = §§PgmName
-     C                   Eval      yKey    = '*ALL'
-     C                   Eval      yPosF24 = NbrFKeys
-     C                   Call      PEEK23        P_Peek23
+     C                   Callp     PEEK23(§§PgmName: '*ALL': NbrFKeys
+     C                                    : yFKeys: yNbrOfKeys)
      C                   Eval      ScrnFKeys = %subarr(YFKeys: 1)
       *
-     C                   Eval      yPgm    = §§PgmName
-     C                   Call      PEEK27        P_Peek27
+     C                   Callp     PEEK27(§§PgmName: YChoice: YNbrOfCh)
       *
      C                   Endsr
       *

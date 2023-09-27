@@ -192,20 +192,6 @@
      D  $exsr_spc              6      6    inz('C')
      D  $exsr_opC             26     35    inz('Exsr')
      D  $exsr_fct2            36     49    inz
-      *===============================================================*
-      *  *ENTRY
-     D xProdLib        S             10A
-     D xFileName       S             10A
-     D xFormtName      S             10A
-     D xScnNbrs        S              2P 0
-     D xAlwLC          S              1A
-     D xCase           S              1A
-     D xRcdLock        S              1A
-     D xNullDft        S              1A
-     D xKeepCrs        S              1A
-     D xStage          S             10I 0
-     D xNumPasses      S             10I 0
-      *===============================================================*
       *
      D #SRCSEQ         S                   like(SRCSEQ)
      D #Increment      C                   const(0,01)
@@ -233,6 +219,10 @@
       /COPY QCOPYLE,D_VARDEF
       *----------------------------------------------------*
       *
+      /define internal_prototype
+      /COPY QCOPYLE,PPEEK16
+      /undefine internal_prototype
+      *
       *---Farbattribute------------------------------------*
       /COPY QCOPYLE,D_COLORATR
       *----------------------------------------------------*
@@ -256,18 +246,18 @@
       /COPY QCOPYLE,F_PEEK58
       /COPY QCOPYLE,F_PEEK61
       *
-     C     *ENTRY        Plist
-     C                   Parm                    xProdLib
-     C                   Parm                    xFileName
-     C                   Parm                    xFormtName
-     C                   Parm                    xScnNbrs
-     C                   Parm                    xAlwLC
-     C                   Parm                    xCase
-     C                   Parm                    xRcdLock
-     C                   Parm                    xNullDft
-     C                   Parm                    xKeepCrs
-     C                   Parm                    xStage
-     C                   Parm                    xNumPasses
+     D PEEK16          PI
+     D  i_prodLib                          const like(r§lib)
+     D  i_fileName                         const likeds(r§qObj)
+     D  i_rcdFmt                           const like(r§rcdFmt)
+     D  i_scnNbrs                     2P 0 const
+     D  i_alwLC                            const like(r§bool)
+     D  i_case                             const like(r§bool)
+     D  i_rcdLock                          const like(r§bool)
+     D  i_nullDft                          const like(r§bool)
+     D  i_keepCrs                          const like(r§bool)
+     D  io_stage                                 like(r§int4)
+     D  i_numPasses                        const like(r§int4)
       *
      C                   Open      QPEEKGEN
      C                   Open      PEEKSRC
@@ -287,7 +277,7 @@
       *  File 1
      C                   When      cmd = 'FMT1'
      C                   Eval      ds_fmtNme = SRCDTA
-     C                   Eval      $fmtNm_xNm = xFormtName
+     C                   Eval      $fmtNm_xNm = i_rcdFmt
      C                   Callp     p_wrtOut(ds_fmtNme)
       *
       *  Felddefinitionen
@@ -432,7 +422,7 @@
      C     SUB001        Begsr
       *
      C                   Eval      ds_more    = SRCDTA
-     C                   Eval      $more_scnN = xScnNbrs
+     C                   Eval      $more_scnN = i_scnNbrs
      C                   Callp     p_wrtOut(ds_more)
       *
      C                   Endsr
@@ -445,7 +435,7 @@
       *
      C                   Eval      ds_lcas = SRCDTA
       *
-     C                   If        xCase = bTrue
+     C                   If        i_case = bTrue
      C                   Eval      $lcas_inz = 'bTrue'
      C                   Else
      C                   Eval      $lcas_inz = 'bFalse'
@@ -461,7 +451,7 @@
       *
      C     SUB003        Begsr
       *
-     C     1             Do        xScnNbrs      scnNbr
+     C     1             Do        i_scnNbrs     scnNbr
       *
       *  When      scnNbr = 001
      C                   Reset                   ds_page
@@ -469,7 +459,7 @@
      C                   Callp     p_wrtOut(ds_page)
       *
       *  Exfmt     LC001
-     C                   If        xAlwLc = bTrue
+     C                   If        i_alwLC = bTrue
      C                   Reset                   ds_exfmt
      C                   Eval      $exfmt_neg = ' '
      C                   Eval      $exfmt_sc  = 'LC'
@@ -526,8 +516,8 @@
       *
      C                   Close     PEEKFLD
       *
-     C                   Eval      xStage = xStage + 1
-     C                   Callp     p_showProgressMeter(xStage)
+     C                   Eval      io_stage = io_stage + 1
+     C                   Callp     p_showProgressMeter(io_stage)
       *
      C                   Endsr
       *
@@ -597,8 +587,8 @@
       *
      C                   Close     PEEKFLD
       *
-     C                   Eval      xStage = xStage + 1
-     C                   Callp     p_showProgressMeter(xStage)
+     C                   Eval      io_stage = io_stage + 1
+     C                   Callp     p_showProgressMeter(io_stage)
       *
      C                   Endsr
       *
@@ -631,7 +621,7 @@
       *
      C     SUB007        Begsr
       *
-     C     1             Do        xScnNbrs      scnNbr
+     C     1             Do        i_scnNbrs     scnNbr
       *
      C                   Reset                   ds_chkCh
      C                   Eval      $chkCh_F2b = scnNbr
@@ -690,8 +680,8 @@
       *
      C                   Close     PEEKFLD
       *
-     C                   Eval      xStage = xStage + 1
-     C                   Callp     p_showProgressMeter(xStage)
+     C                   Eval      io_stage = io_stage + 1
+     C                   Callp     p_showProgressMeter(io_stage)
       *
      C                   Endsr
       *
@@ -716,13 +706,13 @@
       *
      C                   Enddo
       *
-     C                   Eval      xStage = xStage + 1
-     C                   Callp     p_showProgressMeter(xStage)
+     C                   Eval      io_stage = io_stage + 1
+     C                   Callp     p_showProgressMeter(io_stage)
       *
      C                   Close     PEEKFLD
       *
-     C                   Eval      xStage = xStage + 1
-     C                   Callp     p_showProgressMeter(xStage)
+     C                   Eval      io_stage = io_stage + 1
+     C                   Callp     p_showProgressMeter(io_stage)
       *
      C                   Endsr
       *
@@ -814,8 +804,8 @@
       *
      C                   Close     PEEKFLD
       *
-     C                   Eval      xStage = xStage + 1
-     C                   Callp     p_showProgressMeter(xStage)
+     C                   Eval      io_stage = io_stage + 1
+     C                   Callp     p_showProgressMeter(io_stage)
       *
      C                   Endsr
       *
@@ -827,7 +817,7 @@
       *
      C                   Eval      ds_alwl = SRCDTA
       *
-     C                   If        XAlwLC = bTrue
+     C                   If        i_alwLC = bTrue
      C                   Eval      $alwl_inz = 'bTrue'
      C                   Else
      C                   Eval      $alwl_inz = 'bFalse'
@@ -843,7 +833,7 @@
       *
      C     SUB013        Begsr
       *
-     C                   If        xAlwLc = bTrue
+     C                   If        i_alwLC = bTrue
      C                   Reset                   ds_exfmt
      C                   Eval      $exfmt_neg = ' '
      C                   Eval      $exfmt_sc  = 'LC'
@@ -888,7 +878,7 @@
       *
      C     SUB015        Begsr
       *
-     C     1             Do        xScnNbrs      scnNbr
+     C     1             Do        i_scnNbrs     scnNbr
       *
       *  When      scnNbr = 001
      C                   Reset                   ds_page
@@ -981,7 +971,7 @@
       *
      C                   Eval      ds_rcdLock = SRCDTA
       *
-     C                   If        xRcdLock = bTrue
+     C                   If        i_rcdLock = bTrue
      C                   Eval      $rcdLock_inz = 'bTrue'
      C                   Else
      C                   Eval      $rcdLock_inz = 'bFalse'
@@ -1259,7 +1249,7 @@
       *
      C     SUB022        Begsr
       *
-     C                   If        (xNullDft = bFalse)
+     C                   If        (i_nullDft = bFalse)
      C                   Eval      nullDft = '*ON'
      C                   Else
      C                   Eval      nullDft = '*OFF'
@@ -1306,7 +1296,7 @@
       *
      C                   Eval      ds_keepCrs = SRCDTA
       *
-     C                   If        xKeepCrs = bTrue
+     C                   If        i_keepCrs = bTrue
      C                   Eval      $keepCrs_inz = '''1'''
      C                   Else
      C                   Eval      $keepCrs_inz = '''0'''
@@ -1337,7 +1327,7 @@
      C     SUB025        Begsr
       *
      C                   Eval      SRCDTA = %scanrpl('LIBRARY_NAME'
-     C                                               : %trim(xProdLib)
+     C                                               : %trim(i_prodLib)
      C                                               :SRCDTA)
       *
      C                   Endsr

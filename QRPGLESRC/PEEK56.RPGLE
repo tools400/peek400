@@ -48,6 +48,10 @@
       /COPY QCOPYLE,FLDL0100
       *----------------------------------------------------*
       *
+      /define internal_prototype
+      /COPY QCOPYLE,PPEEK56
+      /undefine internal_prototype
+      *
       *---Variablendefinition ShortCmd---------------------*
       /COPY QCOPYLE,ShortCmd_D
       *----------------------------------------------------*
@@ -90,27 +94,6 @@
       /COPY QCOPYLE,SCRNFKEYS
       *----------------------------------------------------*
       *
-     D XDsp80          S              1A
-     D XCopyRight      S            512A
-     D XMode           S             10A
-      *
-     D XEnvFile        S                   LIKE(R§FILE    )
-     D XEnvLib         S                   LIKE(R§LIB     )
-     D XEnvMbr         S                   LIKE(R§MBR     )
-     D XRcdFmtID       S                   LIKE(R§FMTID   )
-      *
-     D XQFile          DS
-     D  XFile                        10A
-     D  XLib                         10A
-     D XMbr            S             10A
-     D xText           S             50A
-     D xOption         S                   like(r§option  )
-     D XMsgID          S              7A
-     D XMsgDta         S            512A
-      *
-     D yPgm            S             10A   inz
-     D yKey            S             10A   inz
-     D yPosF24         S                   like(r§int4    ) inz
      D yFKeys          S             18A   DIM(32)       INZ(*BLANKS)
      D yNbrOfKeys      S                   like(r§int4    ) inz
      D yExclKeys       S                   LIKE(r§pgmCmd  ) DIM(25)
@@ -121,12 +104,8 @@
      D YQFile          DS
      D  YFile                        10A   INZ
      D  YLib                         10A   INZ
-     D YMbr            S             10A   INZ
-     D YFunk           S             10A   INZ
-     D YAnzahl         S                   like(r§int4    ) inz
-     D YList           S            512A   INZ
+     D numMbr          S                   like(r§int4    ) inz
       *
-     D YScnAID         S             10A   INZ(*BLANKS)
      D YPgmCmd         S             10A   INZ(*BLANKS)
      D YCmdDta         S                   LIKE(r§pgmCmdDt) INZ(*BLANKS)
       *
@@ -149,10 +128,10 @@
      D Ctl_Cmd         S             10A   INZ(*BLANKS)
      D NbrFKeys        C                   CONST(3)
       *
-     D PEEK21          S                   like(r§pgmCallN) inz
-     D PEEK23          S                   like(r§pgmCallN) inz
-     D PEEK27          S                   like(r§pgmCallN) inz
-     D PEEK46          S                   like(r§pgmCallN) inz
+     D PEEK21_NAME     S                   like(r§pgmCallN) inz
+     D PEEK23_NAME     S                   like(r§pgmCallN) inz
+     D PEEK27_NAME     S                   like(r§pgmCallN) inz
+     D PEEK46_NAME     S                   like(r§pgmCallN) inz
       *
      D R_Mbr           S                   INZ(*BLANKS) LIKE(##Mbr  )
      D LstMbr          S                   INZ(*BLANKS) LIKE(##Mbr  )
@@ -160,27 +139,31 @@
       *
      D Wrk_SFSANR      S                   INZ(*ZEROS ) LIKE(SFSANR )
       *
-     D X               S                   like(r§int4    ) inz
-      *
-     D LastFile        S                   Like(##File    )                                  R
+     D LastFile        S                   Like(##File    )
      D                                     Inz
-     D LastLib         S                   Like(##Lib     )                                  R
+     D LastLib         S                   Like(##Lib     )
      D                                     Inz
      D isPrdLib        S                   like(r§bool    )
      D                                     inz(bFalse)
       *
      D rcdFmtID        S                   like(r§fmtid)
+     D MBRL0200        DS                  likeds(MBRL0200_t) inz
       *
       *---Benutzervoreinstellungen-------------------------*
       /COPY QCOPYLE,SET0015
       *----------------------------------------------------*
       *
+      /COPY QCOPYLE,PPEEK21
+      /COPY QCOPYLE,PPEEK23
+      /COPY QCOPYLE,PPEEK27
+      /COPY QCOPYLE,PPEEK46
+      *
       /COPY QCOPYLE,F_PEEK53
       *
-     D f_isVldOpt      PR                         like(r§bool    )
-     D  i_option                                  like(SFPAU     )
-     D  o_msgID                                   like(r§msgID   )
-     D  o_msgDta                                  like(r§msgDta  )
+     D f_isVldOpt      PR                         like(r§bool)
+     D  i_option                                  like(SFPAU)
+     D  o_msgID                                   like(r§msgID)
+     D  o_msgDta                                  like(r§msgDta)
       *
      D f_loadRcdFmtID...
      D                 PR                  like(r§fmtid)
@@ -191,70 +174,20 @@
       *
       *---ENTRY-LISTE--------------------------------------*
       *
-     C     *ENTRY        PLIST
-      *  Input parameters
-     C                   PARM                    XDsp80
-     C                   PARM                    XCopyRight
-     C                   PARM                    XMode
-     C                   PARM                    XEnvFile
-     C                   PARM                    XEnvLib
-     C                   PARM                    XEnvMbr
-     C                   PARM                    XRcdFmtID
-      *  Output parameters
-     C                   PARM                    XQFile                         xFile/xLib
-     C                   PARM                    XMbr
-     C                   PARM                    XText
-     C                   PARM                    XOption
-     C                   PARM                    XMsgID
-     C                   PARM                    XMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK23
-     C     P_PEEK23      PLIST
-     C                   PARM                    yPgm
-     C                   PARM                    yKey
-     C                   PARM                    yPosF24
-     C                   PARM                    yFKeys
-     C                   PARM                    yNbrOfKeys
-     C                   PARM                    yMsgID
-     C                   PARM                    yMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK21
-     C     P_PEEK21a     PLIST
-     C                   PARM                    YScnAID
-     C                   PARM                    YPgm
-     C                   PARM                    YPgmCmd
-     C                   PARM                    YCmdDta
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-     C     P_PEEK21b     PLIST
-     C                   PARM                    YScnAID
-     C                   PARM                    YPgm
-     C                   PARM                    YPgmCmd
-     C                   PARM                    YCmdDta
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-     C                   PARM                    YExclKeys
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK27
-     C     P_Peek27      PLIST
-     C                   PARM                    YPgm
-     C                   PARM                    YChoice
-     C                   PARM                    YNbrOfCh
-     C                   PARM                    YExclKeys
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK46
-     C     P_PEEK46      PLIST
-     C                   PARM                    YQFile
-     C                   PARM                    YMbr
-     C                   PARM                    YFunk
-      *
-     C                   PARM                    YAnzahl
-     C                   PARM                    YList
+     D PEEK56          PI
+     D  i_dsp80                            const like(r§dsp80)
+     D  i_copyright                        const like(r§copyRght)
+     D  i_mode                             const like(r§mode)
+     D  i_envFile                          const like(r§file)
+     D  i_envLib                           const like(r§lib)
+     D  i_envMbr                           const like(r§mbr)
+     D  i_rcdFmtID                         const like(r§fmtId)
+     D  o_qFile                                  likeds(r§qObj)
+     D  o_mbr                                    like(r§mbr)
+     D  o_text                       50A
+     D  o_option                                 like(r§option)
+     D  o_msgID                                  like(r§msgID)
+     D  o_msgDta                                 like(r§msgDta)
       *
       *---------------------------------------------------*
       *
@@ -339,9 +272,8 @@
       *
       *  Mappen der gedrückten Taste
       *  in Programmbefehl
-     C                   EVAL      YScnAID = §ScnAID
-     C                   EVAL      YPgm = §§PgmName
-     C                   CALL      PEEK21        P_Peek21a
+     C                   CALLP     PEEK21(§ScnAID: §§PgmName
+     C                                    : YPgmCmd: YCmdDta: YMsgID: YMsgDta)
      C     YMsgID        IFNE      *BLANKS
      C                   EVAL      §MsgID = YMsgID
      C                   EVAL      §MsgDta = YMsgDta
@@ -395,7 +327,7 @@
      C     isCtlError    IFEQ      bFalse
      C                   EXSR      SetUsrSetg
      C                   ENDIF
-     C     XMbr          IFEQ      *BLANKS
+     C     o_mbr         IFEQ      *BLANKS
      C     isCtlError    OREQ      bTrue
      C     isSflError    OREQ      bTrue
       *  ... keine Auswahl getroffen, weiter machen
@@ -447,11 +379,11 @@
      C                   If        ##MNME <> ' '
       *      ... dann
       *          füllen der Rückgabeparameter
-     C                   Eval      xFile   = ##File
-     C                   Eval      xLib    = ##Lib
-     C                   Eval      xMbr    = ##MNME
-     C                   Eval      xText   = ##MTXT
-     C                   Eval      xOption = Ctl_Cmd
+     C                   Eval      o_qFile.name = ##File
+     C                   Eval      o_qFile.lib = ##Lib
+     C                   Eval      o_mbr    = ##MNME
+     C                   Eval      o_text   = ##MTXT
+     C                   Eval      o_option = Ctl_Cmd
      C                   Else
       *      ... sonst
       *          prüfen der Subfile
@@ -582,7 +514,7 @@
      C                   EVAL      Wrk_SFSANR = SflRec
      C                   Eval      LstNbrRcd = SflRec
      C                   ELSE
-     C                   EVAL      Wrk_SFSANR = *ZEROS
+     C                   EVAL      Wrk_SFSANR = 0
      C                   Eval      LstNbrRcd = 0
      C                   Endif
       *
@@ -596,9 +528,9 @@
       *
      C     SrchInit      BEGSR
       *
-     C                   Eval      LstMbr    = ' '
+     C                   Eval      LstMbr = ''
      C                   Eval      LstNbrRcd = 0
-     C                   Eval      R_Mbr     = LstMbr
+     C                   Eval      R_Mbr = LstMbr
       *
      C                   ENDSR
       *
@@ -607,10 +539,6 @@
       *============================================================*
       *
      C     VCtl          BEGSR
-      *
-     C                   Eval      ##File = %trim(##File)
-     C                   Eval      ##Lib  = %trim(##Lib )
-     C                   Eval      ##Mbr  = %trim(##Mbr )
       *
       * - Funktion nicht freigeschaltet
      C                   If        (##File = ' ') or
@@ -672,9 +600,7 @@
      C     Prf40         BEGSR
       *
       *  gültiger Name ?
-     C                   If        f_vldName(##File         :
-     C                                       §msgID         :
-     C                                       §msgDta        ) = bTrue
+     C                   If        f_vldName(##File: §msgID: §msgDta) = bTrue
      C                   Eval      isCtlError = bFalse
      C                   Else
      C                   Eval      isCtlError = bTrue
@@ -731,9 +657,7 @@
      C     Prf41         BEGSR
       *
       *  gültiger Name ?
-     C                   If        f_vldName(##Lib          :
-     C                                       §msgID         :
-     C                                       §msgDta        ) = bTrue
+     C                   If        f_vldName(##Lib: §msgID: §msgDta) = bTrue
      C                   Eval      isCtlError = bFalse
      C                   Else
      C                   Eval      isCtlError = bTrue
@@ -786,9 +710,8 @@
      C     Prf20         BEGSR
       *
       *  Zuordnung AUSWAHL => Befehl ...
-     C                   Eval      isCtlError = f_isVldOpt(##CTLAU:
-     C                                                     §msgID :
-     C                                                     §msgDta)
+     C                   Eval      isCtlError =
+     C                               f_isVldOpt(##CTLAU: §msgID : §msgDta)
      C                   If        isCtlError = bTrue
      C                   Eval      Ctl_cmd = ' '
      C                   Goto      ePrf20
@@ -823,9 +746,7 @@
      C     Prf21         BEGSR
       *
       *  gültiger Name ?
-     C                   If        f_vldName(##MNME         :
-     C                                       §msgID         :
-     C                                       §msgDta        ) = bTrue
+     C                   If        f_vldName(##MNME: §msgID: §msgDta) = bTrue
      C                   Eval      isCtlError = bFalse
      C                   Else
      C                   Eval      isCtlError = bTrue
@@ -866,67 +787,67 @@
       *
      C     ChkFile       BEGSR
       *
-     C                   If        (xFile = ' ') and
-     C                             (xLib  = ' ') and
-     C                             (xMbr  = ' ')
+     C                   If        (o_qFile.name = ' ') and
+     C                             (o_qFile.lib  = ' ') and
+     C                             (o_mbr  = ' ')
      C                   Goto      endChkFile
      C                   Endif
       *
       *  Prüfen Datei
       *  ------------
-     C                   Callp     f_execute('CHKOBJ'      +
-     C                                       ' OBJ('       +
-     C                                       %trim(xLib )  +
-     C                                       '/'           +
-     C                                       %trim(xFile ) +
-     C                                       ')'           +
-     C                                       ' OBJTYPE('   +
-     C                                       '*FILE'       +
-     C                                       ')'           +
-     C                                       ' MBR('       +
-     C                                        '*NONE'      +
-     C                                       ')'           +
-     C                                       ' AUT('       +
-     C                                       '*NONE'       +
-     C                                       ')'           :
-     C                                       §msgID        :
-     C                                       §msgDta       )
+     C                   Callp     f_execute('CHKOBJ'           +
+     C                                       ' OBJ('            +
+     C                                       %trim(o_qFile.lib ) +
+     C                                       '/'                +
+     C                                       %trim(o_qFile.name) +
+     C                                       ')'                +
+     C                                       ' OBJTYPE('        +
+     C                                       '*FILE'            +
+     C                                       ')'                +
+     C                                       ' MBR('            +
+     C                                        '*NONE'           +
+     C                                       ')'                +
+     C                                       ' AUT('            +
+     C                                       '*NONE'            +
+     C                                       ')'                :
+     C                                       §msgID             :
+     C                                       §msgDta            )
       *
       *  Wenn die Datei nicht gefunden werden konnte, ...
      C                   If        §msgID = 'CPF9801'
       *  ... dann
       *      anlegen Datei
-     C                   Callp     f_execute('CRTDUPOBJ'     +
-     C                                       ' OBJ('         +
-     C                                        'PEEKENV'      +
-     C                                       ')'             +
-     C                                       ' FROMLIB('     +
-     C                                       %trim(§§PgmLib) +
-     C                                       ')'             +
-     C                                       ' OBJTYPE('     +
-     C                                       '*FILE'         +
-     C                                       ')'             +
-     C                                       ' TOLIB('       +
-     C                                       %trim(xLib )    +
-     C                                       ')'             +
-     C                                       ' NEWOBJ('      +
-     C                                       %trim(xFile)    +
-     C                                       ')'             :
-     C                                       §msgID          :
-     C                                       §msgDta         )
+     C                   Callp     f_execute('CRTDUPOBJ'        +
+     C                                       ' OBJ('            +
+     C                                        'PEEKENV'         +
+     C                                       ')'                +
+     C                                       ' FROMLIB('        +
+     C                                       %trim(§§PgmLib)    +
+     C                                       ')'                +
+     C                                       ' OBJTYPE('        +
+     C                                       '*FILE'            +
+     C                                       ')'                +
+     C                                       ' TOLIB('          +
+     C                                       %trim(o_qFile.lib ) +
+     C                                       ')'                +
+     C                                       ' NEWOBJ('         +
+     C                                       %trim(o_qFile.name) +
+     C                                       ')'                :
+     C                                       §msgID             :
+     C                                       §msgDta            )
       *
      C                   If        §msgID = ' '
-     C                   Callp     f_execute('RMVM'          +
-     C                                       ' FILE('        +
-     C                                       %trim(xLib )    +
-     C                                       '/'             +
-     C                                       %trim(xFile)    +
-     C                                       ')'             +
-     C                                       ' MBR('         +
-     C                                        '*ALL'         +
-     C                                       ')'             :
-     C                                       §msgID          :
-     C                                       §msgDta         )
+     C                   Callp     f_execute('RMVM'             +
+     C                                       ' FILE('           +
+     C                                       %trim(o_qFile.lib ) +
+     C                                       '/'                +
+     C                                       %trim(o_qFile.name) +
+     C                                       ')'                +
+     C                                       ' MBR('            +
+     C                                        '*ALL'            +
+     C                                       ')'                :
+     C                                       §msgID             :
+     C                                       §msgDta            )
       *
      C                   Eval      §msgID  = ' '
      C                   Eval      §msgDta = ' '
@@ -939,39 +860,39 @@
       *
       *  Prüfen Teildatei
       *  ----------------
-     C                   Callp     f_execute('CHKOBJ'      +
-     C                                       ' OBJ('       +
-     C                                       %trim(xLib )  +
-     C                                       '/'           +
-     C                                       %trim(xFile ) +
-     C                                       ')'           +
-     C                                       ' OBJTYPE('   +
-     C                                       '*FILE'       +
-     C                                       ')'           +
-     C                                       ' MBR('       +
-     C                                       %trim(xMbr  ) +
-     C                                       ')'           +
-     C                                       ' AUT('       +
-     C                                       '*NONE'       +
-     C                                       ')'           :
-     C                                       §msgID        :
-     C                                       §msgDta       )
+     C                   Callp     f_execute('CHKOBJ'           +
+     C                                       ' OBJ('            +
+     C                                       %trim(o_qFile.lib ) +
+     C                                       '/'                +
+     C                                       %trim(o_qFile.name) +
+     C                                       ')'                +
+     C                                       ' OBJTYPE('        +
+     C                                       '*FILE'            +
+     C                                       ')'                +
+     C                                       ' MBR('            +
+     C                                       %trim(o_mbr  )      +
+     C                                       ')'                +
+     C                                       ' AUT('            +
+     C                                       '*NONE'            +
+     C                                       ')'                :
+     C                                       §msgID             :
+     C                                       §msgDta            )
       *
       *  Wenn die Teildatei nicht gefunden werden konnte, ...
      C                   If        §msgID = 'CPF9815'
       *  ... dann
       *      anlegen Teildatei
-     C                   Callp     f_execute('ADDPFM'        +
-     C                                       ' FILE('        +
-     C                                       %trim(xLib )    +
-     C                                       '/'             +
-     C                                       %trim(xFile)    +
-     C                                       ')'             +
-     C                                       ' MBR('         +
-     C                                       %trim(xMbr )    +
-     C                                       ')'             :
-     C                                       §msgID          :
-     C                                       §msgDta         )
+     C                   Callp     f_execute('ADDPFM'           +
+     C                                       ' FILE('           +
+     C                                       %trim(o_qFile.lib ) +
+     C                                       '/'                +
+     C                                       %trim(o_qFile.name) +
+     C                                       ')'                +
+     C                                       ' MBR('            +
+     C                                       %trim(o_mbr )       +
+     C                                       ')'                :
+     C                                       §msgID             :
+     C                                       §msgDta            )
      C                   Endif
       *
      C                   If        §msgID <> ' '
@@ -980,21 +901,21 @@
       *
       *  Ändern Teildateitext
       *  --------------------
-     C                   If        xText <> ' '
-     C                   Callp     f_execute('CHGPFM'        +
-     C                                       ' FILE('        +
-     C                                       %trim(xLib )    +
-     C                                       '/'             +
-     C                                       %trim(xFile)    +
-     C                                       ')'             +
-     C                                       ' MBR('         +
-     C                                       %trim(xMbr )    +
-     C                                       ')'             +
-     C                                       ' TEXT('''      +
-     C                                       %trim(xText)    +
-     C                                       ''')'           :
-     C                                       §msgID          :
-     C                                       §msgDta         )
+     C                   If        o_text <> ' '
+     C                   Callp     f_execute('CHGPFM'           +
+     C                                       ' FILE('           +
+     C                                       %trim(o_qFile.lib ) +
+     C                                       '/'                +
+     C                                       %trim(o_qFile.name) +
+     C                                       ')'                +
+     C                                       ' MBR('            +
+     C                                       %trim(o_mbr )       +
+     C                                       ')'                +
+     C                                       ' TEXT('''         +
+     C                                       %trim(o_text)       +
+     C                                       ''')'              :
+     C                                       §msgID             :
+     C                                       §msgDta            )
       *
      C                   If        §msgID <> ' '
      C                   Goto      endChkFile
@@ -1097,9 +1018,9 @@
       *
      C                   Callp     p_rmvPgmMg(§§pgmName)
       *
-     C                   EVAL      XMsgID = 'USR8100'
+     C                   EVAL      o_msgID = 'USR8100'
      C                   EVAL      USR81001 = YPgmCmd
-     C                   EVAL      XMsgDta = USR8100
+     C                   EVAL      o_msgDta = USR8100
       *
      C                   ENDSR
       *
@@ -1170,9 +1091,9 @@
       *
      C     VPos          BEGSR
       *
-     C                   If        xMode = '*LOAD' and Sfl_Cmd = '*SLCLAYOUT'
+     C                   If        i_mode = '*LOAD' and Sfl_Cmd = '*SLCLAYOUT'
      C                   Eval      rcdFmtID = f_loadRcdFmtID()
-     C                   If        rcdFmtID <> '' and xRcdFmtID <> rcdFmtID
+     C                   If        rcdFmtID <> '' and i_rcdFmtID <> rcdFmtID
      C                   Eval      isSflError = bTrue
      C                   Clear                   USR8233
      C                   Eval      §msgid = 'USR8233'
@@ -1181,11 +1102,11 @@
      C                   Endif
      C                   Endif
       *
-     C                   Eval      xFile   = ##File
-     C                   Eval      xLib    = ##Lib
-     C                   Eval      xMbr    = $$MNME
-     C                   Eval      xText   = $$MTXT
-     C                   Eval      xOption = Sfl_Cmd
+     C                   Eval      o_qFile.name = ##File
+     C                   Eval      o_qFile.lib = ##Lib
+     C                   Eval      o_mbr = $$MNME
+     C                   Eval      o_text = $$MTXT
+     C                   Eval      o_option = Sfl_Cmd
       *
      C                   ENDSR
       *
@@ -1261,9 +1182,8 @@
       *
      C                   EVAL      YFile = ##File
      C                   EVAL      YLib = ##Lib
-     C                   EVAL      YMbr = '*ALL'
-     C                   EVAL      YFunk = '*CREATE'
-     C                   CALL      PEEK46        P_PEEK46
+     C                   CALLP     PEEK46(YQFile: '*ALL':  '*CREATE'
+     C                                    : numMbr: MBRL0200)
       *
      C                   Eval      SET_ENVFIL = ##File
      C                   Eval      SET_ENVLIB = ##Lib
@@ -1306,9 +1226,9 @@
       *
      C     PBReadUP      BEGSR
       *
-     C     YAnzahl       DOWGT     *ZEROS
-     C                   EVAL      YFunk = '*READ'
-     C                   CALL      PEEK46        P_PEEK46
+     C     numMbr        DOWGT     *ZEROS
+     C                   CALLP     PEEK46(YQFile: '*ALL':  '*READ'
+     C                                    : numMbr: MBRL0200)
       *
      C                   EXSR      PBFill
       *
@@ -1330,11 +1250,10 @@
       *
      C     PBFill        BEGSR
       *
-     C                   EVAL      MBRL0200 = YList
       *  ... Membername
-     C                   EVAL      $$MNme = M2MNme
+     C                   EVAL      $$MNme = MBRL0200.M2MNme
       *  ... Memberbezeichnung
-     C                   EVAL      $$MTxt = M2MTxt
+     C                   EVAL      $$MTxt = MBRL0200.M2MTxt
       *
       *  ... anzeigen Subfile
      C                   EVAL      *IN80 = '1'                                  SFLDSP
@@ -1370,7 +1289,7 @@
       *
      C     SetScreen     BEGSR
       *
-     C     XDsp80        IFEQ      '0'
+     C     i_dsp80       IFEQ      '0'
       *   132-Zeichen Anzeige
      C                   EVAL      *IN88 = '0'
      C                   EVAL      ZEI = 2
@@ -1418,11 +1337,11 @@
       *
      C     clrFileP      BEGSR
       *
-     C                   EVAL      XFile = *BLANKS
-     C                   EVAL      XLib = *BLANKS
-     C                   EVAL      XMbr = *BLANKS
-     C                   EVAL      xText = *BLANKS
-     C                   EVAL      xOption = *BLANKS
+     C                   EVAL      o_qFile.name = ''
+     C                   EVAL      o_qFile.lib = ''
+     C                   EVAL      o_mbr = ''
+     C                   EVAL      o_text = ''
+     C                   EVAL      o_option = ''
       *
      C                   ENDSR
       *
@@ -1448,17 +1367,16 @@
       *
       * - Einlesen Subfileauswahlen
      C                   Select
-     C                   When      xMode = '*SAVE'
+     C                   When      i_mode = '*SAVE'
      C                   Eval      YExclKeys(1) = '*SLCLAYOUT'
-     C                   When      xMode = '*DELETE'
+     C                   When      i_mode = '*DELETE'
      C                   Eval      YExclKeys(1) = '*SLCLAYOUT'
      C                   Other
       *           keine Ausschlüsse
      C                   Eval      YExclKeys(*) = ''
      C                   Endsl
       *
-     C                   Eval      yPgm    = §§PgmName
-     C                   Call      PEEK27        P_Peek27
+     C                   Callp     PEEK27(§§PgmName: YChoice: YNbrOfCh)
       *
       * - Öffnen Bildschirmdatei
      C                   If        §open = '0'
@@ -1471,21 +1389,21 @@
      C                   EXSR      GetUsrSetg
       *
      C                   Select
-     C                   When      xEnvFile = '*NONE'
+     C                   When      i_envFile = '*NONE'
      C                   Eval      ##File = ' '
      C                   Other
-     C                   Eval      ##File = xEnvFile
+     C                   Eval      ##File = i_envFile
      C                   Endsl
       *
      C                   Select
-     C                   When      xEnvLib = '*NONE'
+     C                   When      i_envLib = '*NONE'
      C                   Eval      ##Lib    = ' '
      C                   Eval      isPrdLib = bFalse
-     C                   When      xEnvLib = '*PRDLIB'
+     C                   When      i_envLib = '*PRDLIB'
      C                   Eval      ##Lib    = §§PgmLib
      C                   Eval      isPrdLib = bTrue
      C                   Other
-     C                   Eval      ##Lib    = xEnvLib
+     C                   Eval      ##Lib    = i_envLib
      C                   Eval      isPrdLib = bFalse
      C                   Endsl
       *
@@ -1496,15 +1414,15 @@
      C                   Eval      *IN71 = *OFF
      C                   Endif
       *
-     C                   If        xMode = '*SAVE'
+     C                   If        i_mode = '*SAVE'
      C                   Eval      *IN72 = '0'                                  Einblenden
      C                   Else
      C                   Eval      *IN72 = '1'                                  Ausblenden
      C                   Endif
       *
       * - Rückkehrcode
-     C                   EVAL      XMsgID = *BLANKS
-     C                   EVAL      XMsgDta = *BLANKS
+     C                   EVAL      o_msgID = *BLANKS
+     C                   EVAL      o_msgDta = *BLANKS
      C                   Exsr      clrFileP
       *
       * - Darstellung der Subfile
@@ -1525,7 +1443,7 @@
       *
       * - Copyright
      C                   EVAL      §MsgID = 'USR9999'
-     C                   EVAL      §MsgDta = XCopyRight
+     C                   EVAL      §MsgDta = i_copyright
      C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
       *
      C                   ENDSR
@@ -1538,15 +1456,13 @@
       *
      C                   Eval      §PgmQ = '*'
       *
-     C                   Eval      PEEK21 = f_pgmCallN('PEEK21')
-     C                   Eval      PEEK23 = f_pgmCallN('PEEK23')
-     C                   Eval      PEEK27 = f_pgmCallN('PEEK27')
-     C                   Eval      PEEK46 = f_pgmCallN('PEEK46')
+     C                   Eval      PEEK21_NAME = f_pgmCallN('PEEK21')
+     C                   Eval      PEEK23_NAME = f_pgmCallN('PEEK23')
+     C                   Eval      PEEK27_NAME = f_pgmCallN('PEEK27')
+     C                   Eval      PEEK46_NAME = f_pgmCallN('PEEK46')
       *
-     C                   Eval      yPgm    = §§PgmName
-     C                   Eval      yKey    = '*ALL'
-     C                   Eval      yPosF24 = NbrFKeys
-     C                   Call      PEEK23        P_Peek23
+     C                   Callp     PEEK23(§§PgmName: '*ALL': NbrFKeys
+     C                                    : yFKeys: yNbrOfKeys)
      C                   Eval      ScrnFKeys = %subarr(YFKeys: 1)
       *
      C                   Endsr
@@ -1580,9 +1496,8 @@
      D                                     inz(bFalse)
       *---------------------------------------------------*
       *
-     C     '#'           CAT   (P) i_option:0    yScnAid
-     C                   EVAL      yPgm = §§PgmName
-     C                   CALL      PEEK21        P_Peek21b
+     C                   CALLP     PEEK21('#' + i_option: §§PgmName
+     C                                    : YPgmCmd: YCmdDta: YMsgID: YMsgDta)
      C                   If        yMsgID <> ' '
       *  Fehlermeldung ...
      C                   Clear                   USR8110
@@ -1614,8 +1529,8 @@
      C                   Kfld                    en_SECTION
       *---------------------------------------------------*
       *
-     C                   Eval      g_envFile = %trim(xEnvLib) + '/' +
-     C                                         %trim(xEnvFile)
+     C                   Eval      g_envFile = %trim(i_envLib) + '/' +
+     C                                         %trim(i_envFile)
      C                   Eval      g_envMbr = $$MNme
      C                   Open(E)   PEEKENV
      C                   If        %error()

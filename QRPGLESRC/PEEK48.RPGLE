@@ -40,6 +40,10 @@
       /COPY QCOPYLE,FLDL0100
       *----------------------------------------------------*
       *
+      /define internal_prototype
+      /COPY QCOPYLE,PPEEK48
+      /undefine internal_prototype
+      *
       *---Variablendefinition ShortCmd---------------------*
       /COPY QCOPYLE,ShortCmd_D
       *----------------------------------------------------*
@@ -56,7 +60,6 @@
       *
       *---Nachrichtenaufbau--------------------------------*
       /COPY QCOPYLE,USR8100
- CPY  */COPY QCOPYLE,USR8136
       *----------------------------------------------------*
       *
       *---SDS-Datenstruktur--------------------------------*
@@ -71,72 +74,20 @@
       *  F E L D - D E F I N I T I O N E N                 *
       *----------------------------------------------------*
       *
-     D xDsp80          S              1A
-     D xCopyRight      S            512A
-     D xFile           S             10A
-     D xLibrary        S             10A
-     D xMember         S             10A
-     D xFormat         S             10A
-     D xAccess         S              1A
-     D xSqlWhere       S            512A
-     D xSqlOrder       S            512A
-     D xChgSqlW        S              1A
-     D xChgSqlO        S              1A
-     D xMsgID          S              7A
-     D xMsgDta         S            512A
-      *
-      *  Peek23:
-     D yPgm            S             10A   inz
-     D yKey            S             10A   inz
-     D yPosF24         S                   like(r§int4    ) inz
-     D yFKeys          S             18A   DIM(32)       INZ(*BLANKS)
-     D yNbrOfKeys      S                   like(r§int4    ) inz
+     D yFKeys          S             18A   DIM(32) inz
+     D yNbrOfKeys      S                   like(r§int4) inz
      D yMsgID          S              7A   INZ(*BLANKS)
      D yMsgDta         S            512A   INZ(*BLANKS)
       *
-      *  Peek21:
-     D YScnAID         S             10A   INZ(*BLANKS)
-      *YPgm            S             10A   INZ(*BLANKS)
      D YPgmCmd         S             10A   INZ(*BLANKS)
-     D YCmdDta         S                   LIKE(r§pgmCmdDt) INZ(*BLANKS)
-      *YMsgID          S              7A   INZ(*BLANKS)
-      *YMsgDta         S            512A   INZ(*BLANKS)
+     D YCmdDta         S                   LIKE(r§pgmCmdDt) inz
       *
-      *  Peek37:
-     D YDsp80          S              1A   INZ(*BLANKS)
-     D YCopyRight      S            512A   INZ(*BLANKS)
      D YField          S             10A   INZ(*BLANKS)
-      *YMsgID          S              7A   INZ(*BLANKS)
-      *YMsgDta         S            512A   INZ(*BLANKS)
       *
-      *  Peek38:
-     D                 DS
-      *YFile                         10A   INZ(*BLANKS)
-      *YLibrary                      10A   INZ(*BLANKS)
      D YSqlOrder       S            512A   INZ(*BLANKS)
       *
-      *  Peek40:
-      *YDsp80          S              1A   INZ(*BLANKS)
-      *YCopyRight      S            512A   INZ(*BLANKS)
-     D YFile           S             10A   INZ(*BLANKS)
-     D YLibrary        S             10A   INZ(*BLANKS)
-     D YMember         S             10A   INZ(*BLANKS)
-     D YFmtName        S             10A   inz(*BLANKS)
-     D YBasePhyF       S              1A   INZ(bTrue  )
      D YRetFile        S             10A   INZ(*BLANKS)
      D YRetLib         S             10A   INZ(*BLANKS)
-      *YMsgID          S              7A   INZ(*BLANKS)
-      *YMsgDta         S            512A   INZ(*BLANKS)
-      *
-      *  Peek41:
-     D                 DS
-     D YQFile                        20A   INZ(*BLANKS)
-     D  YFileDS                      10A   OVERLAY(YQFile: 1)
-     D  YLibDS                       10A   OVERLAY(YQFile:11)
-     D YRcdFormat      S             10A   INZ(*BLANKS)
-     D YFunction       S             10A   INZ(*BLANKS)
-     D YNbrOfEnt       S                   like(r§int4    ) inz
-     D YData           S            512A   INZ(*BLANKS)
       *
       *---Definition der F-Tastenbildschirmfelder----------*
       /COPY QCOPYLE,SCRNFKEYS
@@ -145,15 +96,11 @@
      D SfBot           S                   like(r§int4    ) inz
      D NbrFKeys        C                   CONST(3)
       *
-     D PEEK21          S                   like(r§pgmCallN) inz
-     D PEEK23          S                   like(r§pgmCallN) inz
-     D PEEK37          S                   like(r§pgmCallN) inz
-     D PEEK38          S                   like(r§pgmCallN) inz
-     D PEEK40          S                   like(r§pgmCallN) inz
-     D PEEK41          S                   like(r§pgmCallN) inz
-      *
-     D X               S                   like(r§int4    ) inz
-     D Y               S                   like(r§int4    ) inz
+     D PEEK21_NAME     S                   like(r§pgmCallN) inz
+     D PEEK23_NAME     S                   like(r§pgmCallN) inz
+     D PEEK37_NAME     S                   like(r§pgmCallN) inz
+     D PEEK38_NAME     S                   like(r§pgmCallN) inz
+     D PEEK40_NAME     S                   like(r§pgmCallN) inz
       *
      D tempScnFld      S                   Like(scnFld  ) inz
      D tempFldPos      S                   Like(FldPos  ) inz
@@ -164,14 +111,18 @@
      D tempFldLen      S                   like(r§int4    ) inz
      D tempFldBy       S                   like(r§int4    ) inz
       *
-     D NbrOfKey        S                   like(r§int4    ) inz
-      *
      D pFile           DS                  qualified
-     D  name                               like(xFile)
-     D  library                            like(xLibrary)
-     D  member                             like(xMember)
-     D  format                             like(xFormat)
-
+     D  name                               like(io_file)
+     D  library                            like(io_library)
+     D  member                             like(io_member)
+     D  format                             like(io_rcdFmt)
+      *
+      /COPY QCOPYLE,PPEEK21
+      /COPY QCOPYLE,PPEEK23
+      /COPY QCOPYLE,PPEEK37
+      /COPY QCOPYLE,PPEEK38
+      /COPY QCOPYLE,PPEEK40
+      *
       /COPY QCOPYLE,F_PEEK51
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
@@ -183,81 +134,20 @@
       *
       *---ENTRY-LISTE--------------------------------------*
       *
-     C     *ENTRY        PLIST
-     C                   PARM                    xDsp80
-     C                   PARM                    xCopyRight
-     C                   PARM                    xFile
-     C                   PARM                    xLibrary
-     C                   PARM                    xMember
-     C                   PARM                    xFormat
-     C                   PARM                    xAccess
-     C                   PARM                    xSqlWhere
-     C                   PARM                    xSqlOrder
-     C                   PARM                    xChgSqlW
-     C                   PARM                    xChgSqlO
-     C                   PARM                    xMsgID
-     C                   PARM                    xMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK23
-     C     P_Peek23      PLIST
-     C                   PARM                    yPgm
-     C                   PARM                    yKey
-     C                   PARM                    yPosF24
-     C                   PARM                    yFKeys
-     C                   PARM                    yNbrOfKeys
-     C                   PARM                    yMsgID
-     C                   PARM                    yMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK21
-     C     P_Peek21      PLIST
-     C                   PARM                    YScnAID
-     C                   PARM                    YPgm
-     C                   PARM                    YPgmCmd
-     C                   PARM                    YCmdDta
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK37
-     C     P_Peek37      PLIST
-     C                   PARM                    YDsp80
-     C                   PARM                    YCopyRight
-     C                   PARM                    YField
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK38
-     C     P_Peek38      PLIST
-     C                   PARM                    YFile
-     C                   PARM                    YLibrary
-     C                   PARM                    YSqlOrder
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK40
-     C     P_Peek40      PLIST
-     C                   PARM                    YDsp80
-     C                   PARM                    YCopyRight
-     C                   PARM                    YFile
-     C                   PARM                    YLibrary
-     C                   PARM                    YMember
-     C                   PARM                    YFmtName
-     C                   PARM                    YBasePhyF
-     C                   PARM                    YRetFile
-     C                   PARM                    YRetLib
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK41
-     C     P_Peek41      PLIST
-     C                   PARM                    YQFile
-     C                   PARM                    YRcdFormat
-     C                   PARM                    YFunction
-     C                   PARM                    YNbrOfEnt
-     C                   PARM                    YData
+     D PEEK48          PI
+     D  i_dsp80                            const like(r§dsp80)
+     D  i_copyright                        const like(r§copyRght)
+     D  io_file                                  like(r§file)
+     D  io_library                               like(r§lib)
+     D  io_member                                like(r§mbr)
+     D  io_rcdFmt                                like(r§fmt)
+     D  i_accessMode                       const like(r§accessMode)
+     D  io_sqlWhere                              like(r§sqlWhere)
+     D  io_sqlOrder                              like(r§sqlOrder)
+     D  i_enableWhere                      const like(r§bool)
+     D  i_enableOrder                      const like(r§bool)
+     D  o_msgID                                  like(r§msgID)
+     D  o_msgDta                                 like(r§msgDta)
       *
       *---------------------------------------------------*
       *
@@ -321,9 +211,8 @@
       *
       *  Mappen der gedrückten Taste
       *  in Programmbefehl
-     C                   EVAL      YScnAID = §ScnAID
-     C                   EVAL      YPgm = §§PgmName
-     C                   CALL      PEEK21        P_Peek21
+     C                   CALLP     PEEK21(§ScnAID: §§PgmName
+     C                                    : YPgmCmd: YCmdDta: YMsgID: YMsgDta)
      C     YMsgID        IFNE      *BLANKS
      C                   EVAL      §MsgID = YMsgID
      C                   EVAL      §MsgDta = YMsgDta
@@ -376,8 +265,8 @@
      C     YPgmCmd       WHENEQ    '*ENTER'
      C                   EXSR      C_Enter
      C     *IN99         IFEQ      '0'
-     C                   EVAL      xMsgID = 'USR8112'
-     C                   EVAL      xMsgDta = *BLANKS
+     C                   EVAL      o_msgID = 'USR8112'
+     C                   EVAL      o_msgDta = *BLANKS
      C                   LEAVE
      C                   Endif
       *
@@ -420,12 +309,12 @@
      C                                        §MsgID        :
      C                                        §MsgDta       )
      C                             = bTrue
-     C                   Eval      xFile      = pFile.name
-     C                   Eval      xLibrary   = pFile.library
-     C                   Eval      xMember    = pFile.member
-     C                   Eval      xFormat    = pFile.format
-     C                   Eval      xSqlWhere  = ##WHERE
-     C                   Eval      xSqlOrder  = ##ORDER
+     C                   Eval      io_file      = pFile.name
+     C                   Eval      io_library   = pFile.library
+     C                   Eval      io_member    = pFile.member
+     C                   Eval      io_rcdFmt    = pFile.format
+     C                   Eval      io_sqlWhere  = ##WHERE
+     C                   Eval      io_sqlOrder  = ##ORDER
      C                   Eval      *IN99 = '0'
      C                   Else
      C                   Eval      *IN99 = '1'
@@ -456,7 +345,7 @@
       *
      C                   Callp     p_rmvPgmMg(§§pgmName)
       *
-     C                   EVAL      xMsgID = 'USR8100'
+     C                   EVAL      o_msgID = 'USR8100'
       *
      C                   SELECT
      C     §ScnAID       WHENEQ    §F3
@@ -467,7 +356,7 @@
      C                   EVAL      USR81001 = 'Fxx'
      C                   Endsl
       *
-     C                   EVAL      xMsgDta = USR8100
+     C                   EVAL      o_msgDta = USR8100
       *
      C                   ENDSR
       *
@@ -509,9 +398,8 @@
       *
      C     Pmt_Field     BEGSR
       *
-     C                   EVAL      YDsp80 = xDsp80
-     C                   EVAL      YCopyRight = xCopyRight
-     C                   CALL      PEEK37        P_Peek37
+     C                   CALLP     PEEK37(i_dsp80: i_copyright: YField
+     C                                    :  yMsgID: yMsgDta)
       *
      C     yMsgID        IFEQ      *BLANKS
       *
@@ -610,20 +498,17 @@
       *
      C     Slc_Key       BEGSR
       *
-     C                   EVAL      YDsp80 = xDsp80
-     C                   EVAL      YCopyRight = xCopyRight
-     C                   EVAL      YFile = xFile
-     C                   EVAL      YLibrary = xLibrary
-     C                   EVAL      YMember = xMember
-     C                   EVAL      YFmtName = xFormat
-     C                   EVAL      YBasePhyF = bTrue
-     C                   CALL      PEEK40        P_Peek40
+     C                   CALLP     PEEK40(i_dsp80: i_copyright
+     C                                    : io_file: io_library: io_member
+     C                                    : io_rcdFmt: bTrue
+     C                                    : YRetFile: YRetLib
+     C                                    : yMsgID: yMsgDta)
      C     YRetFile      IFEQ      *BLANKS
      C     *IN99         OREQ      '1'
       *  ... keine Auswahl getroffen
      C                   ELSE
-     C                   EVAL      YFile = YRetFile
-     C                   EVAL      YLibrary = YRetLib
+     C                   EVAL      io_file = YRetFile
+     C                   EVAL      io_library = YRetLib
      C                   EXSR      Ins_Field
      C                   Endif
       *
@@ -641,8 +526,6 @@
      C                   EVAL      §MsgID = 'USR8195'
      C                   EVAL      §MsgDta = *BLANKS
      C                   ELSE
-     C                   EVAL      YFile = xFile
-     C                   EVAL      YLibrary = xLibrary
      C                   EXSR      Ins_Field
      C                   ENDIF
      C                   OTHER
@@ -658,8 +541,8 @@
       *
      C     Ins_Field     BEGSR
       *
-     C                   EVAL      YSqlOrder = *BLANKS
-     C                   CALL      PEEK38        P_Peek38
+     C                   EVAL      YSqlOrder = ''
+     C                   CALLP     PEEK38(io_file: io_library: YSqlOrder)
       *
      C                   Eval      tempField = YSqlOrder
      C**   ' '           Checkr    tempField     tempLen
@@ -701,10 +584,10 @@
      C                                     ')'                   +
      C                                     ' ...'
       *
-     C                   EVAL      ##WHERE = xSqlWhere
-     C                   EVAL      ##ORDER = xSqlOrder
+     C                   EVAL      ##WHERE = io_sqlWhere
+     C                   EVAL      ##ORDER = io_sqlOrder
       *
-     C                   If        (xAccess = §KeySeq) and
+     C                   If        (i_accessMode = §KeySeq) and
      C                             (##ORDER  = ' '    )
      C                   Eval      tempScnFld = '##ORDER'
      C                   Eval      tempFldPos = 1
@@ -755,7 +638,7 @@
       *
      C     SetScreen     BEGSR
       *
-     C     xDsp80        IFEQ      '0'
+     C     i_dsp80       IFEQ      '0'
       *   132-Zeichen Anzeige
      C                   EVAL      *IN88 = '0'
      C                   EVAL      ZEI = 2
@@ -776,10 +659,10 @@
      C     First         BEGSR
       *
       * - Ermitteln physische Datei
-     C                   Callp     f_basedPF(xFile    :
-     C                                       xLibrary :
-     C                                       xMember  :
-     C                                       xFormat  :
+     C                   Callp     f_basedPF(io_file    :
+     C                                       io_library :
+     C                                       io_member  :
+     C                                       io_rcdFmt  :
      C                                       1        :
      C                                       pFile.name    :
      C                                       pFile.library :
@@ -794,13 +677,13 @@
      C                   EXSR      FILL##
       *
       * - Setzen Ändern erlaubt für: WHERE und ORDER BY
-     C                   If        xChgSqlW = bTrue
+     C                   If        i_enableWhere = bTrue
      C                   Eval      *IN71 = *OFF
      C                   Else
      C                   Eval      *IN71 = *ON
      C                   Endif
       *
-     C                   If        xChgSqlO = bTrue
+     C                   If        i_enableOrder = bTrue
      C                   Eval      *IN72 = *OFF
      C                   Else
      C                   Eval      *IN72 = *ON
@@ -810,8 +693,8 @@
      C                   Callp     p_rmvPgmMg(§§pgmName)
      C                   EXSR      DltCsrPos
       *
-     C                   EVAL      xMsgID = *BLANKS
-     C                   EVAL      xMsgDta = *BLANKS
+     C                   EVAL      o_msgID = *BLANKS
+     C                   EVAL      o_msgDta = *BLANKS
       *
       * - Darstellung der Befehlstasten
      C                   EVAL      SfBot = 1
@@ -829,17 +712,14 @@
       *
      C                   Eval      §PgmQ = '*'
       *
-     C                   Eval      PEEK21 = f_pgmCallN('PEEK21')
-     C                   Eval      PEEK23 = f_pgmCallN('PEEK23')
-     C                   Eval      PEEK37 = f_pgmCallN('PEEK37')
-     C                   Eval      PEEK38 = f_pgmCallN('PEEK38')
-     C                   Eval      PEEK40 = f_pgmCallN('PEEK40')
-     C                   Eval      PEEK41 = f_pgmCallN('PEEK41')
+     C                   Eval      PEEK21_NAME = f_pgmCallN('PEEK21')
+     C                   Eval      PEEK23_NAME = f_pgmCallN('PEEK23')
+     C                   Eval      PEEK37_NAME = f_pgmCallN('PEEK37')
+     C                   Eval      PEEK38_NAME = f_pgmCallN('PEEK38')
+     C                   Eval      PEEK40_NAME = f_pgmCallN('PEEK40')
       *
-     C                   Eval      yPgm    = §§PgmName
-     C                   Eval      yKey    = '*ALL'
-     C                   Eval      yPosF24 = NbrFKeys
-     C                   Call      PEEK23        P_Peek23
+     C                   Callp     PEEK23(§§PgmName: '*ALL': NbrFKeys
+     C                                    : yFKeys: yNbrOfKeys)
      C                   Eval      ScrnFKeys = %subarr(YFKeys: 1)
       *
      C                   Endsr

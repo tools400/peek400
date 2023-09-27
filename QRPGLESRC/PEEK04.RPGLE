@@ -35,37 +35,27 @@
       /COPY QCOPYLE,FLDL0100
       *----------------------------------------------------*
       *
+      /define internal_prototype
+      /COPY QCOPYLE,PPEEK04
+      /undefine internal_prototype
+      *
+      /COPY QCOPYLE,PPEEK41
+      *
       *---Copystrecken für Nachrichtenaufbau---------------*
       /COPY QCOPYLE,USR0006
       *----------------------------------------------------*
       *
       *---Versenden von Nachrichten------------------------*
       /COPY QCOPYLE,API_ERROR
- CPY  ***/COPY QCOPYLE,MSG_D_MAPI
       *----------------------------------------------------*
       *
       *---SDS-Datenstruktur--------------------------------*
       /COPY QCOPYLE,ERR_D_SDS
       *----------------------------------------------------*
       *
-     D XQFile          DS
-     D  XFile                        10A
-     D  XLib                         10A
-     D XRcdFormat      S             10A
-     D XMsgID          S              7A
-     D XMsgDta         S            512A
+     D PEEK41_NAME     S                   like(r§pgmCallN) inz
       *
-     D                 DS
-     D YQFile                        20A   INZ(*BLANKS)
-     D  YFile                        10A   OVERLAY(YQFile: 1)
-     D  YLib                         10A   OVERLAY(YQFile:11)
-     D YRcdFormat      S             10A   INZ(*BLANKS)
-     D YFunction       S             10A   INZ(*BLANKS)
-     D YNbrOfEnt       S                   like(r§int4    ) inz
-     D YData           S            512A   INZ(*BLANKS)
-      *
-     D PEEK41          S                   like(r§pgmCallN) inz
-      *
+     D data            S            512A   inz
      D nbrOfKey        S                   like(r§int4    ) inz
       *
       /COPY QCOPYLE,F_PEEK53
@@ -75,49 +65,35 @@
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
       *
-     C     *ENTRY        PLIST
-     C                   PARM                    XQFILE
-     C                   PARM                    XRcdFormat
-      *
-     C                   PARM                    XMsgID
-     C                   PARM                    XMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK41
-     C     P_Peek41      PLIST
-     C                   PARM                    YQFile
-     C                   PARM                    YRcdFormat
-     C                   PARM                    YFunction
-     C                   PARM                    YNbrOfEnt
-     C                   PARM                    YData
+     D PEEK04          PI
+     D  i_qFile                            const likeds(r§qObj)
+     D  i_rcdFmt                           const like(r§fmt)
+     D  o_msgID                                  like(r§msgId)
+     D  o_msgDta                                 like(r§msgDta)
       *
       *---------------------------------------------------*
      C                   EXSR      First
       *---------------------------------------------------*
       *
       *  Abrufen der Dateiinformationen ...
-     C                   EVAL      YFile = XFile
-     C                   EVAL      YLib = XLib
-     C                   EVAL      YRcdFormat = XRcdFormat
-     C                   EVAL      YFunction = '*CREATE'
-     C                   CALL      PEEK41        P_Peek41
+     C                   CALLP     PEEK41(i_qFile: i_rcdFmt: '*CREATE'
+     C                                    : nbrOfKey: data)
       *
-     C     yNbrOfEnt     IFLE      *ZEROS
+     C                   IF        (nbrOfKey <= 0)
       *  ... schade, Aufruf ist fehlgeschlagen
      C                   ELSE
       *  Abrufen der Schlüsselfeldinformationen ...
-     C                   EVAL      YFunction = '*KEY'
-     C                   CALL      PEEK41        P_Peek41
-     C                   Eval      nbrOfKey = yNbrOfEnt
+     C                   CALLP     PEEK41(i_qFile: i_rcdFmt: '*KEY'
+     C                                    : nbrOfKey: data)
       *
      C     nbrOfKey      IFLE      *ZEROS
-     C                   EVAL      XMsgID = 'USR0006'
-     C                   EVAL      USR00061 = XFile
-     C                   EVAL      USR00062 = XLib
-     C                   EVAL      XMsgDta = USR0006
+     C                   EVAL      o_msgID = 'USR0006'
+     C                   EVAL      USR00061 = i_qFile.name
+     C                   EVAL      USR00062 = i_qFile.lib
+     C                   EVAL      o_msgDta = USR0006
      C                   ELSE
-     C                   EVAL      XMsgID = *BLANKS
-     C                   EVAL      XMsgDta = *BLANKS
+     C                   EVAL      o_msgID = *BLANKS
+     C                   EVAL      o_msgDta = *BLANKS
      C                   Endif
      C                   Endif
       *
@@ -140,8 +116,8 @@
       ***                Callp     p_sndStsMg('USR8137': XQFile)
       *
       * - Los gehts'
-     C                   EVAL      XMsgID = *BLANKS
-     C                   EVAL      XMsgDta = *BLANKS
+     C                   EVAL      o_msgID = *BLANKS
+     C                   EVAL      o_msgDta = *BLANKS
       *
      C                   ENDSR
       *
@@ -151,7 +127,7 @@
       *
      C     *INZSR        BEGSR
       *
-     C                   Eval      PEEK41 = f_pgmCallN('PEEK41')
+     C                   Eval      PEEK41_NAME = f_pgmCallN('PEEK41')
       *
      C                   ENDSR
       *
@@ -166,8 +142,4 @@
      C                   RETURN
       *
      C                   ENDSR     '*CANCL'
-      *
-      *---Versenden von Nachrichten------------------------*
- CPY  ***/COPY QCOPYLE,MSG_C_MAPI
-      *----------------------------------------------------*
       *

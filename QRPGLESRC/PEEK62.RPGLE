@@ -46,6 +46,10 @@
       /COPY QCOPYLE,FLDL0100
       *----------------------------------------------------*
       *
+      /define internal_prototype
+      /COPY QCOPYLE,PPEEK62
+      /undefine internal_prototype
+      *
      D long_t          S             10I 0                    based(pDummy)
      D short_t         S              5I 0                    based(pDummy)
       *
@@ -146,14 +150,6 @@
      D                                     like(SQLRETURN_t )
      D  i_henv                             value  like(SQLHENV_t   )
       *
-      *----------------------------------------------------*
-      *  F E L D - D E F I N I T I O N E N                 *
-      *----------------------------------------------------*
-      *
-      *  *ENTRY
-     D xFile           S                   like(r§file    )
-     D xLib            S                   like(r§lib     )
-      *
       *---SDS-Datenstruktur--------------------------------*
       /COPY QCOPYLE,ERR_D_SDS
       *----------------------------------------------------*
@@ -181,15 +177,15 @@
       *
       *---ENTRY-LISTE--------------------------------------*
       *
-     C     *entry        Plist
-     C                   Parm                    xFile
-     C                   Parm                    xLib
+     D PEEK62          PI
+     D  i_file                             const like(r§file)
+     D  i_lib                              const like(r§lib)
       *---------------------------------------------------*
       *
      C                   Exsr      First
       *
-     C                   Eval      g_oldFile = %trim(xLib ) + '/' +
-     C                                         %trim(xFile)
+     C                   Eval      g_oldFile = %trim(i_lib ) + '/' +
+     C                                         %trim(i_file)
       *
      C                   Open      OLDFILE
      C                   Callp     p_rmvPgmMg(§§PgmName)
@@ -250,11 +246,12 @@
      C                   Endif
       *
       *  Execute SQL Statement
-     C                   Eval      sqlStr  = 'ALTER TABLE '             +
-     C                                        %trim(xLib) + '.' + %trim(xFile) +
-     C                                       ' ALTER COLUMN DATA +
-     C                                          SET DATA TYPE CHARACTER (256) +
-     C                                          NOT NULL WITH DEFAULT'
+     C                   Eval      sqlStr =
+     C                               'ALTER TABLE '             +
+     C                                 %trim(i_lib) + '.' + %trim(i_file) +
+     C                               ' ALTER COLUMN DATA +
+     C                                 SET DATA TYPE CHARACTER (256) +
+     C                                     NOT NULL WITH DEFAULT'
       *
      C                   Eval      retCode = SQLExecDirect(hstmt    :
      C                                                     sqlStr   :

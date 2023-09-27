@@ -89,24 +89,17 @@
      D   DtaLen               13     16I 0 INZ
      D   Dta                  17    272A   INZ
       *
-     D RcvVarLen       S                   INZ(264) LIKE(R§INT4)
-     D NbrOfAttr       S                   INZ(1)   LIKE(R§INT4)
-     D AttrName        S             10A   INZ
-      *
       *---Variablendefinition------------------------------*
       /COPY QCOPYLE,D_VARDEF
       /COPY QCOPYLE,FLDL0100
       *----------------------------------------------------*
       *
-      *---Versenden von Nachrichten------------------------*
-      /COPY QCOPYLE,API_ERROR
-      *----------------------------------------------------*
+      /define internal_prototype
+      /COPY QCOPYLE,PPEEK07
+      /undefine internal_prototype
       *
-     D XAttr           S             10A
-     D XNoMsg          S                   like(r§bool    )
-     D XAttrLen        S                   like(r§int4    )
-     D XAttrTyp        S              1A
-     D XValue          S            512A
+      /COPY QCOPYLE,QWCRNETA
+      /COPY QCOPYLE,API_ERROR
       *
      D X               S                   like(r§int4    ) inz
       *
@@ -117,39 +110,31 @@
       *           Main  Control block                                    *
       ********************************************************************
       *
-     C     *ENTRY        PLIST
-      *  Input
-     C                   PARM                    XAttr
-     C                   PARM                    XNoMsg
-      *  Output
-     C                   PARM                    XAttrLen
-     C                   PARM                    XAttrTyp
-     C                   PARM                    XValue
+     D PEEK07          PI
+     D  i_attr                             const like(r§attr)
+     D  i_noMsg                            const like(r§bool)
+     D  o_attrLen                                like(r§int4)
+     D  o_attrTyp                                like(r§attrType)
+     D  o_alue                                   like(r§attrValue)
       *
       *---------------------------------------------------*
       *
       * - Meldung
-     C                   IF        (XNoMsg = bTrue)
+     C                   IF        (i_noMsg = bTrue)
      C                   Callp     p_sndStsMg('USR8106': ' ')
      C                   ELSE
       *        keine Statusmeldung ausgeben
      C                   Endif
       *
-     C                   EVAL      AttrName = XAttr
-      *
-     C                   CALL      'QWCRNETA'
-     C                   PARM                    RcvVar
-     C                   PARM                    RcvVarLen
-     C                   PARM                    NbrOfAttr
-     C                   PARM                    AttrName
-     C                   PARM                    §ErrorCode
+     C                   CALLP     QWCRNETA(RcvVar: %size(RcvVar)
+     C                                      : 1: i_attr: §ErrorCode)
       *
      C                   IF        (§ErrAvail = 0)
      C                   EXSR      GetAttr
      C                   ELSE
-     C                   EVAL      XAttrLen = 0
-     C                   EVAL      XAttrTyp = ''
-     C                   EVAL      XValue = ''
+     C                   EVAL      o_attrLen = 0
+     C                   EVAL      o_attrTyp = ''
+     C                   EVAL      o_alue = ''
      C                   Endif
       *
       *---------------------------------------------------*
@@ -169,13 +154,13 @@
       *
      C                   IF        (X >= 1 and x <= 256)
      C                   EVAL      NetAttr = %subst(RcvVar: x)
-     C                   EVAL      XValue = NetAttr.Dta
-     C                   EVAL      XAttrLen = NetAttr.DtaLen
-     C                   EVAL      XAttrTyp = NetAttr.DtaType
+     C                   EVAL      o_alue = NetAttr.Dta
+     C                   EVAL      o_attrLen = NetAttr.DtaLen
+     C                   EVAL      o_attrTyp = NetAttr.DtaType
      C                   ELSE
-     C                   EVAL      XAttrLen = 0
-     C                   EVAL      XAttrTyp = ''
-     C                   EVAL      XValue = ''
+     C                   EVAL      o_attrLen = 0
+     C                   EVAL      o_attrTyp = ''
+     C                   EVAL      o_alue = ''
      C                   Endif
       *
      C                   ENDSR

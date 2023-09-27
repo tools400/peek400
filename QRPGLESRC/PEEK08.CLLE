@@ -16,6 +16,14 @@
      /*  Generieren RPG-Programm                                     */
      /*                                                              */
      /* ============================================================ */
+     /* >>PRE-COMPILER<<                                             */
+     /*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +   */
+     /*                           OBJLIB(&LI) DEVLIB(&LI) +          */
+     /*                           SBMJOB(*NO) BNDDIR(PEEK) +         */
+     /*                           INSTALL(*NO);                      */
+     /*   >>EXECUTE<<                                                */
+     /* >>END-PRE-COMPILER<<                                         */
+     /* ============================================================ */
 
           PGM        PARM(&QFILE      +
                           &PGM        +
@@ -58,12 +66,12 @@
 
           DCL        VAR(&NUMVAL    ) TYPE(*DEC )  LEN(10 0)
           DCL        VAR(&STAGE     ) TYPE(*CHAR)  LEN( 4)
-          DCL        VAR(&NUMSTAGES ) TYPE(*CHAR)  LEN( 4)
+          DCL        VAR(&NUMSTAGES ) TYPE(*INT )  LEN( 4)
 
           DCL        VAR(&STSMSG    ) TYPE(*CHAR)  LEN( 7)
 
           DCL        VAR(&PGRMTR_TXT) TYPE(*CHAR)  LEN(20)
-          DCL        VAR(&PGRMTR_MAX) TYPE(*CHAR)  LEN( 4)
+          DCL        VAR(&PGRMTR_MAX) TYPE(*int )  LEN( 4)
           DCL        VAR(&PGRMTR_BLU) TYPE(*CHAR)  LEN( 1)
           DCL        VAR(&PGRMTR_SEC) TYPE(*CHAR)  LEN( 4)
           DCL        VAR(&PGRMTR_JOB) TYPE(*CHAR)  LEN(10)
@@ -385,7 +393,7 @@
  /*  RPG-PROGRAMM      */
              CALL       PGM(&PRODLIB/PEEK16) PARM(       +
                                              &PRODLIB    +
-                                             &FILE       +
+                                             &QFILE      +
                                              &FORMATNAME +
                                              &SCNNBRS    +
                                              &ALWLC      +

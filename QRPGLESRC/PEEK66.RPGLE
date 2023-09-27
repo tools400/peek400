@@ -32,6 +32,10 @@
       /COPY QCOPYLE,FLDL0100
       /COPY QCOPYLE,D_MI
       *
+      /define internal_prototype
+      /COPY QCOPYLE,PPEEK66
+      /undefine internal_prototype
+      *
      D numeric_t       S             31P10 based(pDummy)
      D cDATA_TYPE      C                   'P'
      D cDIGITS         C                   %len(numeric_t)
@@ -50,10 +54,6 @@
       /COPY QCOPYLE,ERR_D_SDS
       *----------------------------------------------------*
       *
-      *---API-Formate--------------------------------------*
-      /COPY QCOPYLE,OBJD0400
-      *----------------------------------------------------*
-      *
       *----------------------------------------------------*
       *  Externe Prototypen                                *
       *----------------------------------------------------*
@@ -65,83 +65,75 @@
       *----------------------------------------------------*
      D main...
      D                 PR                  extproc('main')
-     D  io_Buffer                                 like(XBuffer      )
-     D  io_Length                                 like(XLength      )
-     D  i_InFormat                         const  likeds(XInFormat  )
-     D  i_OutFormat                        const  likeds(XOutFormat )
-     D  o_MsgID                                   like(XMsgID       )
-     D  o_MsgDta                                  like(XMsgDta      )
+     D  io_Buffer                                 like(gio_buffer)
+     D  io_Length                                 like(gio_length)
+     D  i_InFormat                         const  likeds(gi_inFormat)
+     D  i_OutFormat                        const  likeds(gi_outFormat)
+     D  o_MsgID                                   like(go_msgID)
+     D  o_MsgDta                                  like(go_msgDta)
       *
       *  Convert from numeric value.
      D convertFromNumeric...
      D                 PR                  extproc('convertFromNumeric')
-     D  io_Buffer                                 like(XBuffer      )
-     D  io_Length                                 like(XLength      )
-     D  i_OutFormat                        const  likeds(XOutFormat )
-     D  o_MsgID                                   like(XMsgID       )
-     D  o_MsgDta                                  like(XMsgDta      )
+     D  io_Buffer                                 like(gio_buffer)
+     D  io_Length                                 like(gio_length)
+     D  i_OutFormat                        const  likeds(gi_outFormat)
+     D  o_MsgID                                   like(go_msgID)
+     D  o_MsgDta                                  like(go_msgDta)
       *
       *  Convert from string value.
      D convertFromString...
      D                 PR                  extproc('convertFromString')
-     D  io_Buffer                                 like(XBuffer      )
-     D  io_Length                                 like(XLength      )
-     D  i_OutFormat                        const  likeds(XOutFormat )
-     D  o_MsgID                                   like(XMsgID       )
-     D  o_MsgDta                                  like(XMsgDta      )
+     D  io_Buffer                                 like(gio_buffer)
+     D  io_Length                                 like(gio_length)
+     D  i_OutFormat                        const  likeds(gi_outFormat )
+     D  o_MsgID                                   like(go_msgID)
+     D  o_MsgDta                                  like(go_msgDta)
       *
       *  Convert to numeric value.
      D convertToNumeric...
      D                 PR                  extproc('convertToNumeric')
-     D  io_Buffer                                 like(XBuffer      )
-     D  io_Length                                 like(XLength      )
-     D  i_OutFormat                        const  likeds(XOutFormat )
-     D  o_MsgID                                   like(XMsgID       )
-     D  o_MsgDta                                  like(XMsgDta      )
+     D  io_Buffer                                 like(gio_buffer)
+     D  io_Length                                 like(gio_length)
+     D  i_OutFormat                        const  likeds(gi_outFormat )
+     D  o_MsgID                                   like(go_msgID)
+     D  o_MsgDta                                  like(go_msgDta)
       *
       *  Convert to string value.
      D convertToString...
      D                 PR                  extproc('convertToString')
-     D  io_Buffer                                 like(XBuffer      )
-     D  io_Length                                 like(XLength      )
-     D  i_OutFormat                        const  likeds(XOutFormat )
-     D  o_MsgID                                   like(XMsgID       )
-     D  o_MsgDta                                  like(XMsgDta      )
+     D  io_Buffer                                 like(gio_buffer)
+     D  io_Length                                 like(gio_length)
+     D  i_OutFormat                        const  likeds(gi_outFormat)
+     D  o_MsgID                                   like(go_msgID)
+     D  o_MsgDta                                  like(go_msgDta)
       *
       *----------------------------------------------------*
       *  F E L D - D E F I N I T I O N E N                 *
       *----------------------------------------------------*
-      *
-      *  *ENTRY Liste
-     D XBuffer         S                   like(r§cmdBuffer )
-     D XLength         S                   like(R§INT4      )
-     D XInFormat       DS                  likeds(FLDL0100_t)
-     D XOutFormat      DS                  likeds(FLDL0100_t)
-     D XMsgID          S                   like(r§msgID     )
-     D XMsgDta         S                   like(r§msgDta    )
       *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
       *
       * ENTRY-LISTE
-     C     *ENTRY        PLIST
-     C                   PARM                    XBuffer
-     C                   PARM                    XLength
-     C                   PARM                    XInFormat
-     C                   PARM                    XOutFormat
-     C                   PARM                    XMsgID
-     C                   PARM                    XMsgDta
+     D PEEK66          PI
+     D  gio_buffer                               like(r§cmdBuffer)
+     D  gio_length                               like(r§int4)
+     D  gi_inFormat                        const likeds(FLDL0100_t)
+     D  gi_outFormat                       const likeds(FLDL0100_t)
+     D  go_msgID                                 like(r§msgID)
+     D  go_msgDta                                like(r§msgDta)
       *
       * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       /FREE
 
-         main(XBuffer
-              : XLength
-              : XInFormat
-              : XOutFormat
-              : XMsgID
-              : XMsgDta);
+         main(gio_buffer
+              : gio_length
+              : gi_inFormat
+              : gi_outFormat
+              : go_msgID
+              : go_msgDta);
 
          return;
 
@@ -162,12 +154,12 @@
      P main...
      P                 B
      D                 PI
-     D  io_Buffer                                 like(XBuffer      )
-     D  io_Length                                 like(XLength      )
-     D  i_InFormat                         const  likeds(XInFormat  )
-     D  i_OutFormat                        const  likeds(XOutFormat )
-     D  o_MsgID                                   like(XMsgID       )
-     D  o_MsgDta                                  like(XMsgDta      )
+     D  io_Buffer                                 like(gio_buffer)
+     D  io_Length                                 like(gio_length)
+     D  i_InFormat                         const  likeds(gi_inFormat)
+     D  i_OutFormat                        const  likeds(gi_outFormat)
+     D  o_MsgID                                   like(go_msgID)
+     D  o_MsgDta                                  like(go_msgDta)
       *
       * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       /FREE
@@ -194,11 +186,11 @@
      P convertFromNumeric...
      P                 B
      D                 PI
-     D  io_Buffer                                 like(XBuffer      )
-     D  io_Length                                 like(XLength      )
-     D  i_OutFormat                        const  likeds(XOutFormat )
-     D  o_MsgID                                   like(XMsgID       )
-     D  o_MsgDta                                  like(XMsgDta      )
+     D  io_Buffer                                 like(gio_buffer)
+     D  io_Length                                 like(gio_length)
+     D  i_OutFormat                        const  likeds(gi_outFormat)
+     D  o_MsgID                                   like(go_msgID)
+     D  o_MsgDta                                  like(go_msgDta)
       *
       *  Arbeitsfelder
       * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -223,11 +215,11 @@
      P convertFromString...
      P                 B
      D                 PI
-     D  io_Buffer                                 like(XBuffer      )
-     D  io_Length                                 like(XLength      )
-     D  i_OutFormat                        const  likeds(XOutFormat )
-     D  o_MsgID                                   like(XMsgID       )
-     D  o_MsgDta                                  like(XMsgDta      )
+     D  io_Buffer                                 like(gio_buffer)
+     D  io_Length                                 like(gio_length)
+     D  i_OutFormat                        const  likeds(gi_outFormat)
+     D  o_MsgID                                   like(go_msgID)
+     D  o_MsgDta                                  like(go_msgDta)
       *
       *  Arbeitsfelder
       * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -252,18 +244,18 @@
      P convertToNumeric...
      P                 B
      D                 PI
-     D  io_Buffer                                 like(XBuffer      )
-     D  io_Length                                 like(XLength      )
-     D  i_OutFormat                        const  likeds(XOutFormat )
-     D  o_MsgID                                   like(XMsgID       )
-     D  o_MsgDta                                  like(XMsgDta      )
+     D  io_Buffer                                 like(gio_buffer)
+     D  io_Length                                 like(gio_length)
+     D  i_OutFormat                        const  likeds(gi_outFormat)
+     D  o_MsgID                                   like(go_msgID)
+     D  o_MsgDta                                  like(go_msgDta)
       *
       *  Arbeitsfelder
-     D isOneByteInt    S                   like(r§bool    )
+     D isOneByteInt    S                   like(r§bool)
      D oneByteIntAdjust...
      D                 S             10I 0
-     D inNumeric       S                   like(numeric_t )
-     D tmpBuffer       S                   like(io_Buffer )
+     D inNumeric       S                   like(numeric_t)
+     D tmpBuffer       S                   like(io_Buffer)
      D digits          S             10I 0
       *
       *  Nachrichten
@@ -349,11 +341,11 @@
      P convertToString...
      P                 B
      D                 PI
-     D  io_Buffer                                 like(XBuffer      )
-     D  io_Length                                 like(XLength      )
-     D  i_OutFormat                        const  likeds(XOutFormat )
-     D  o_MsgID                                   like(XMsgID       )
-     D  o_MsgDta                                  like(XMsgDta      )
+     D  io_Buffer                                 like(gio_buffer)
+     D  io_Length                                 like(gio_length)
+     D  i_OutFormat                        const  likeds(gi_outFormat)
+     D  o_MsgID                                   like(go_msgID)
+     D  o_MsgDta                                  like(go_msgDta)
       *
       *  Arbeitsfelder
       * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

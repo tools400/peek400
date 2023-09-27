@@ -31,6 +31,10 @@
       /COPY QCOPYLE,D_VARDEF
       *----------------------------------------------------*
       *
+      /define internal_prototype
+      /COPY QCOPYLE,PPEEK22
+      /undefine internal_prototype
+      *
       *---SDS-Datenstruktur--------------------------------*
       /COPY QCOPYLE,ERR_D_SDS
       *----------------------------------------------------*
@@ -38,9 +42,6 @@
       *----------------------------------------------------*
       *  F E L D - D E F I N I T I O N E N                 *
       *----------------------------------------------------*
-      *
-     D XMode           S             10A
-     D XSection        S             10A
       *
      D Wrk_Sectn       S                   LIKE(R§SECTION )
      D                                     INZ
@@ -55,14 +56,14 @@
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
       *
-     C     *ENTRY        PLIST
-     C                   PARM                    XMode
-     C                   PARM                    XSection
+     D PEEK22          PI
+     D  i_mode                       10A   const
+     D  i_section                    10A   const
       *
       *---------------------------------------------------*
       *
       *  Kopieren für alle Programme ...
-     C     XSection      IFEQ      '*ALL'
+     C     i_section     IFEQ      '*ALL'
       *
      C                   EVAL      Wrk_Sectn = '*PEEK05'
      C                   EXSR      DelRecords
@@ -171,7 +172,7 @@
      C                   ELSE
       *
       *  Kopieren für ein Programm
-     C                   EVAL      Wrk_Sectn = XSection
+     C                   EVAL      Wrk_Sectn = i_section
      C                   EXSR      DelRecords
      C                   EXSR      AddRecords
       *
@@ -187,8 +188,8 @@
       *
      C     DelRecords    BEGSR
       *
-     C     XMode         IFEQ      '*REPLACE'
-     C     XMode         OREQ      '*DELETE'
+     C     i_mode        IFEQ      '*REPLACE'
+     C     i_mode        OREQ      '*DELETE'
       *
      C                   Callp     p_setllUsr(Wrk_Sectn: '*F01')
       *
@@ -210,8 +211,8 @@
       *
      C     Addrecords    BEGSR
       *
-     C     XMode         IFEQ      '*ADD'
-     C     XMode         OREQ      '*REPLACE'
+     C     i_mode        IFEQ      '*ADD'
+     C     i_mode        OREQ      '*REPLACE'
       *
      C                   Callp     p_setllDft(Wrk_Sectn)
       *

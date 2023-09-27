@@ -31,32 +31,14 @@
      FPEEKFLD   IF   E           K DISK    usropn
      F                                     prefix(p_)
       *
-     D gi_file         S                   like(r§file    )
-     D gi_lib          S                   like(r§lib     )
-     D gi_mbr          S                   like(r§lib     )
-     D gi_rcdFmt       S                   like(r§fmt     )
-     D gi_rcdFmtID     S                   like(r§fmtid   )
-     D gi_envFile      S                   like(r§file    )
-     D gi_envLib       S                   like(r§lib     )
-     D gi_envMbr       S                   like(r§mbr     )
-     D gi_isAutoSave   S                   like(r§bool    )
-     D gi_pinTabR      S                   like(r§pintabr )
-     D                                     dim(12)
-     D gi_NbrPinR      S                   like(r§int4  )
-     D gi_pinTabC      S             10A
-     D                                     dim(12)
-     D gi_NbrPinC      S                   like(r§int4  )
-     D gi_AccMode      S              1A
-     D gi_SqlSel       S            512A
-     D gi_SqlOrd       S            512A
-     D gi_isKeyLower   S                   like(r§bool    )
-     D go_msgID        S                   like(r§msgID   )
-     D go_msgDta       S                   like(r§msgDta  )
-      *
       *---Variablendefinition------------------------------*
       /COPY QCOPYLE,D_VARDEF
       /COPY QCOPYLE,FLDL0100
       *----------------------------------------------------*
+      *
+      /define internal_prototype
+      /COPY QCOPYLE,PPEEK54
+      /undefine internal_prototype
       *
       *---------------------------------------------------*
      D p_main          PR
@@ -69,11 +51,9 @@
      D  i_envLib                           value  like(gi_envLib )
      D  i_envMbr                           value  like(gi_envMbr )
      D  i_isAutoSave                       value  like(gi_isAutoSave)
-     D  i_pinTabR                          value  like(gi_pinTabR)
-     D                                            dim(12)
+     D  i_pinTabR                          value  like(gi_pinTabR) dim(12)
      D  i_nbrPinR                          value  like(gi_nbrPinR)
-     D  i_pinTabC                          value  like(gi_pinTabC)
-     D                                            dim(12)
+     D  i_pinTabC                          value  like(gi_pinTabC) dim(12)
      D  i_nbrPinC                          value  like(gi_nbrPinC)
      D  i_AccMode                          value  like(gi_AccMode)
      D  i_SqlSel                           value  like(gi_SqlSel )
@@ -158,20 +138,6 @@
      D  i_lib                                     like(gi_lib    )
       *---------------------------------------------------*
       *
-      *----------------------------------------------------*
-     D PEEK41          S                   like(r§pgmCallN) inz
-      *
-      *----------------------------------------------------*
-      *  Peek41:
-     D                 DS
-     D YQFile                        20A   INZ(*BLANKS)
-     D  YFile                        10A   OVERLAY(YQFile: 1)
-     D  YLib                         10A   OVERLAY(YQFile:11)
-     D YRcdFmt         S             10A   INZ(*BLANKS)
-     D YFunction       S             10A   INZ(*BLANKS)
-     D YNbrOfEnt       S                   like(r§int4    ) inz
-     D YData           S            512A   INZ(*BLANKS)
-      *
       *---SDS-Datenstruktur--------------------------------*
       /COPY QCOPYLE,ERR_D_SDS
       *----------------------------------------------------*
@@ -186,37 +152,26 @@
       *           Programmsteuerung                                      *
       ********************************************************************
       *
-     C     *ENTRY        PLIST
-      *  Input
-     C                   PARM                    gi_file
-     C                   PARM                    gi_lib
-     C                   PARM                    gi_mbr
-     C                   PARM                    gi_rcdFmt
-     C                   PARM                    gi_rcdFmtID
-     C                   PARM                    gi_envFile
-     C                   PARM                    gi_envLib
-     C                   PARM                    gi_envMbr
-     C                   PARM                    gi_isAutoSave
-     C                   PARM                    gi_pinTabR
-     C                   PARM                    gi_nbrPinR
-     C                   PARM                    gi_pinTabC
-     C                   PARM                    gi_nbrPinC
-     C                   PARM                    gi_AccMode
-     C                   PARM                    gi_SqlSel
-     C                   PARM                    gi_SqlOrd
-     C                   PARM                    gi_isKeyLower
-      *  Output
-     C                   PARM                    go_msgID
-     C                   PARM                    go_msgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK41
-     C     P_Peek41      PLIST
-     C                   PARM                    yQFile
-     C                   PARM                    yRcdFmt
-     C                   PARM                    yFunction
-     C                   PARM                    yNbrOfEnt
-     C                   PARM                    yData
+     D PEEK54          PI
+     D  gi_file                            const like(r§file)
+     D  gi_lib                             const like(r§lib)
+     D  gi_mbr                             const like(r§mbr)
+     D  gi_rcdFmt                          const like(r§fmt)
+     D  gi_rcdFmtID                        const like(r§fmtId)
+     D  gi_envFile                         const like(r§file)
+     D  gi_envLib                          const like(r§lib)
+     D  gi_envMbr                          const like(r§mbr)
+     D  gi_isAutoSave                      const like(r§bool)
+     D  gi_pinTabR                         const like(r§pintabr) dim(12)
+     D  gi_nbrPinR                         const like(r§int4)
+     D  gi_pinTabC                         const like(r§fieldNme) dim(12)
+     D  gi_nbrPinC                         const like(r§int4)
+     D  gi_AccMode                         const like(r§accessMode)
+     D  gi_SqlSel                          const like(r§sqlWhere)
+     D  gi_SqlOrd                          const like(r§sqlOrder)
+     D  gi_isKeyLower                      const like(r§bool)
+     D  go_msgID                                 like(r§msgID)
+     D  go_msgDta                                like(r§msgDta)
       *
       *----------------------------------------------------*
       *  Schlüssel PEEKFLD
@@ -245,16 +200,6 @@
      C                                    go_msgDta  )
       *
      C                   Return
-      *
-      *----------------------------------------------------*
-      *  *INZSR --  Programminitialisierung                *
-      *----------------------------------------------------*
-      *
-     C     *INZSR        BEGSR
-      *
-     C                   Eval      PEEK41 = f_pgmCallN('PEEK41')
-      *
-     C                   ENDSR
       *
       *----------------------------------------------------*
       *  *PSSR  --  Program error handler                  *

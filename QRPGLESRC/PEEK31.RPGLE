@@ -31,6 +31,10 @@
       /COPY QCOPYLE,D_VARDEF
       *----------------------------------------------------*
       *
+      /define internal_prototype
+      /COPY QCOPYLE,PPEEK31
+      /undefine internal_prototype
+      *
       *---Nachrichten--------------------------------------*
       /COPY QCOPYLE,API_ERROR
       *----------------------------------------------------*
@@ -47,46 +51,33 @@
       /COPY QCOPYLE,ERR_D_SDS
       *----------------------------------------------------*
       *
-      *----------------------------------------------------*
-      *  F E L D - D E F I N I T I O N E N                 *
-      *----------------------------------------------------*
-      *
-     D XLanguage       S             10A
-     D XPrefix         S             10A
-     D XMsgID          S              7A
-     D XMsgDta         S            512A
-      *
-      *  Arbeitsfelder
-     D X               S                   like(r告nt4    ) inz
-     D Y               S                   like(r告nt4    ) inz
-      *
       /COPY QCOPYLE,F_PEEK53
       *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
       *
-     C     *ENTRY        PLIST
-     C                   PARM                    XLanguage
-     C                   PARM                    XPrefix
-     C                   PARM                    XMsgID
-     C                   PARM                    XMsgDta
+     D PEEK31          PI
+     D  io_language                  10A
+     D  i_prefix                     10A   const
+     D  o_msgID                                  like(r吮sgID)
+     D  o_msgDta                                 like(r吮sgDta)
       *
       *----------------------------------------------------*
       *
-     C                   EVAL      XMsgID = *BLANKS
-     C                   EVAL      XMsgDta = *BLANKS
+     C                   EVAL      o_msgID = *BLANKS
+     C                   EVAL      o_msgDta = *BLANKS
       *
       *  Ermitteln der zu verwendenden Sprache ...
-     C     XLanguage     IFEQ      '*DFT'
+     C     io_language   IFEQ      '*DFT'
       *  ... Standardsprache
      C                   EXSR      GetUsrSetg
      C                   ELSE
       *  ... Benutzen der �bergebenen Sprache
-     C                   EVAL      SET_Lang = XLanguage
+     C                   EVAL      SET_Lang = io_language
      C                   Endif
       *
-     C                   IF        XMSGID <> ' '
+     C                   IF        o_msgID <> ' '
      C                   GOTO      ENDE
      C                   Endif
       *
@@ -101,9 +92,9 @@
       *      ... Fehler aufgetreten
      C     SET_Lang      IFEQ      'GER'
       *          ... Standardsprache
-     C                   Eval      XMsgID  = 'CPF9897'
-     C                   Eval      XMsgDta = 'Sprachendefinition ''' +
-     C                                       %trim(XLanguage)      +
+     C                   Eval      o_msgID  = 'CPF9897'
+     C                   Eval      o_msgDta = 'Sprachendefinition ''' +
+     C                                       %trim(io_language) +
      C                                       ''' nicht gefunden.'
      C                   LEAVE
      C                   ELSE
@@ -115,12 +106,12 @@
       *
      C                   Enddo
       *
-     C     XMsgID        IFEQ      *BLANKS
+     C     o_msgID       IFEQ      *BLANKS
      C                   EXSR      SetUsrSetg
-     C                   EVAL      XLanguage = SET_Lang
+     C                   EVAL      io_language = SET_Lang
      C                   ELSE
       *            Fehler aufgetreten
-     C                   EVAL      XLanguage = *BLANKS
+     C                   EVAL      io_language = *BLANKS
      C                   Endif
       *
      C     ENDE          TAG
@@ -134,8 +125,8 @@
      C     GetUsrSetg    BEGSR
       *
      C                   Eval      SET0004 = f_getUsrSg('*LANGUAGE':
-     C                                                  XMsgID     :
-     C                                                  XMsgDta    )
+     C                                                  o_msgID     :
+     C                                                  o_msgDta    )
       *
      C                   ENDSR
       *
@@ -145,7 +136,7 @@
       *
      C     ChkMsgF       BEGSR
       *
-     C     xPrefix       CAT       SET_Lang:0    別BJ
+     C                   EVAL      別BJ = %trimr(i_prefix) + SET_Lang
      C                   EVAL      兵IB = 壯PgmLib
      C                   EVAL      別BJTYPE = '*MSGF'
      C                   EVAL      冶BR = '*NONE'

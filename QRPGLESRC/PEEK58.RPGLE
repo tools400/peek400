@@ -28,24 +28,12 @@
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
       *
-     D errCode_t       DS                  qualified           based(pDummy)
-     D  bytPrv                       10I 0
-     D  bytAvl                       10I 0
-     D  excID                         7A
-     D  errRes_01                     1A
-     D  excDta                      256A
-      *
-     D qObj_t          DS                  qualified           based(pDummy)
-     D  name                         10A
-     D  lib                          10A
-      *
       *---Variablendefinition------------------------------*
       /COPY QCOPYLE,D_VARDEF
-     D FILD0100        DS                  likeds(FILD0100_t) inz
       /COPY QCOPYLE,FILD0100
-     D MBRD0100        DS                  likeds(MBRD0100_t) inz
       /COPY QCOPYLE,FLDL0100
       /COPY QCOPYLE,MBRD0100
+      /COPY QCOPYLE,BSPF0100
       /COPY QCOPYLE,D_CLib
       /COPY QCOPYLE,F_PEEK53
       *----------------------------------------------------*
@@ -65,7 +53,9 @@
       /COPY QCOPYLE,QUSRJOBI                      Retrieve Job Information (QUSRJOBI) API
       *----------------------------------------------------*
       *
-      *---Interne Prototypen-------------------------------*
+      /COPY QCOPYLE,PPEEK41
+      *
+     D PEEK41_NAME     S                   like(r§pgmCallN)
       *
       *  Performs word wrapping on a given string without respect to
       *  end-of-paragraph markers.
@@ -85,38 +75,21 @@
       /COPY QCOPYLE,ERR_D_SDS
       *----------------------------------------------------*
       *
-     D g_prdLib        S                   like(r§lib     )
+     D g_prdLib        S                   like(r§lib)
      D                                     inz
       *
      D g_jobCcsid      S             10U 0 inz(0)
-      *
-     D YQFile          DS
-     D  YFile                        10A   INZ(*BLANKS)
-     D  YLib                         10A   INZ(*BLANKS)
-     D YRcdFormat      S             10A   INZ(*BLANKS)
-     D YFunction       S             10A   INZ(*BLANKS)
-     D YNbrOfEnt       S                   like(r§int4    ) inz
-     D YData           S            512A   INZ(*BLANKS)
-      *
-      *  Parameterliste für PEEK41
-     C     P_Peek41      PLIST
-     C                   PARM                    YQFile
-     C                   PARM                    YRcdFormat
-     C                   PARM                    YFunction
-     C                   PARM                    YNbrOfEnt
-     C                   PARM                    YData
       *
       *===================================================================*
       *  Funktion:  f_dsplyLn                                  (Body)     *
       *===================================================================*
       *
      P f_dsplyLn       B                   Export
-     D                 PI                         like(r§int4      )
+     D                 PI                         like(r§int4)
      D  i_FLDL0100                         const  likeds(fldl0100_t)
       *
       *  Funktionswert
-     D fldLen          S                   like(r§int4    )
-     D                                     inz
+     D fldLen          S                   like(r§int4)
       * ------------------------------------------------------------------------
       *
      C                   If        (i_FLDL0100.F1DTYP = 'G' and
@@ -797,20 +770,18 @@
       *  Definieren Funktionswert ...
      D isBasedOnPF     S                   like(r§bool    ) inz(bFalse)
       *
-      *  Arbeitsfelder
-      /COPY QCOPYLE,FILD0100
-      *
      D tFile           S                   like(i_file)
      D tLib            S                   like(i_lib)
      D tMbr            S                   like(i_mbr)
      D tRcdFmt         S                   like(i_rcdFmt)
+     D FILD0100        DS                  likeds(FILD0100_t) inz
       *
-     D isError         S                   like(r§bool    ) inz(bFalse)
-      *
-     D PEEK41          S                   like(r§pgmCallN) inz
+     D yQFile          DS                  likeds(r§qObj) inz
+     D yNbrOfEnt       s                   like(r§int4)
+     D yData           s            512A
       *------------------------------------------------------------*
       *
-     C                   Eval      PEEK41 = f_pgmCallN('PEEK41')
+     C                   Eval      PEEK41_NAME = f_pgmCallN('PEEK41')
       *
      C                   Eval      o_pFile  = '*ERROR'
      C                   Eval      o_pLib   = '*ERROR'
@@ -818,11 +789,10 @@
      C                   Eval      o_pRcdFmt = '*ERROR'
       *
       *  Einlesen der Dateiinformationen ...
-     C                   Eval      YFile      = i_file
-     C                   Eval      YLib       = i_lib
-     C                   Eval      YRcdFormat = i_rcdFmt
-     C                   Eval      YFunction  = '*CREATE'
-     C                   Call      PEEK41        P_Peek41
+     C                   Eval      yQFile.name = i_file
+     C                   Eval      yQFile.lib = i_lib
+     C                   Callp     PEEK41(yQFile: i_rcdFmt
+     C                                    : '*CREATE': yNbrOfEnt: YData)
       *
      C                   If        yNbrOfEnt = 0
      C                   Return    bFalse
@@ -931,13 +901,10 @@
      D dealloc         PR              *          extproc('free')
      D  memPtr                         *   value
       *
-     D memmove         PR              *          extproc('memmove')
-     D  destPtr                        *   value
-     D  srcPtr                         *   value
-     D  size                         10U 0 value
-      *
       *  Arbeitsfelder
-     D errCode         DS                  likeds(errCode_t ) inz
+     D errCode         DS                  likeds(errCode_t) inz
+      *
+     D BSPF0100        DS                  likeds(BSPF0100_t) inz
       *
      D pMBRD0300       S               *   inz static
      D MBRD0300        DS                  based(pMBRD0300)
@@ -982,13 +949,14 @@
      D  Reserved_2           105    112A
       *
      D offset          S             10I 0 inz
+     D fild0100        ds                  likeds(fild0100_t) inz
       *
-      /COPY QCOPYLE,FILD0100
-      /COPY QCOPYLE,BSPF0100
-     D PEEK41          S                   like(r§pgmCallN) inz
+     D qFile           DS                  likeds(r§qObj) inz
+     D yNbrOfEnt       s                   like(r§int4)
+     D yData           s            512A
       *------------------------------------------------------------*
       *
-     C                   Eval      PEEK41 = f_pgmCallN('PEEK41')
+     C                   Eval      PEEK41_NAME = f_pgmCallN('PEEK41')
       *
      C                   Eval      o_pFile = ' '
      C                   Eval      o_pLib  = ' '
@@ -1085,19 +1053,18 @@
      C                   If        (o_rcdFmt = '*FIRST')
       *
       *  Einlesen der Dateiinformationen ...
-     C                   Eval      YFile      = o_pFile
-     C                   Eval      YLib       = o_pLib
-     C                   Eval      YRcdFormat = o_rcdFmt
-     C                   Eval      YFunction  = '*CREATE'
-     C                   Call      PEEK41        P_Peek41
+     C                   Eval      qFile.name = o_pFile
+     C                   Eval      qFile.lib = o_pLib
+     C                   Callp     PEEK41(qFile: o_rcdFmt
+     C                                    : '*CREATE': yNbrOfEnt: YData)
      C                   Eval      FILD0100 = yData
       *
-     C                   Eval      YFunction  = '*BASED-ON'
-     C                   Call      PEEK41        P_Peek41
+     C                   Callp     PEEK41(qFile: o_rcdFmt
+     C                                    : '*BASED-ON': yNbrOfEnt: YData)
      C                   Eval      BSPF0100 = YData
       *
      C                   If        (YNbrOfEnt = 1)
-     C                   Eval      o_rcdFmt = BFRCDFMT
+     C                   Eval      o_rcdFmt = BSPF0100.BFRCDFMT
      C                   Endif
       *
      C                   Endif
@@ -2876,7 +2843,7 @@
       *
      D mbrd0100        DS                  likeds(MBRD0100_t) inz
       *
-     D qObj            DS                  likeds(qObj_t) inz
+     D qObj            DS                  likeds(r§qObj) inz
      D errCode         DS                  likeds(errCode_t ) inz
       *
       *  Prototypen
@@ -3533,7 +3500,7 @@
       *  Funktionswert
      D rcdFmtInf       DS                  likeds(r§rcdFmtInf)
       *
-     D qFile           DS                  likeds(qObj_t)
+     D qFile           DS                  likeds(r§qObj)
      D qFileRtn        DS                  likeds(qFile)
      D Qdb_Qddfmt      DS                  likeds(Qdb_Qddfmt_t)
      D                                     based(pQdb_Qddfmt)

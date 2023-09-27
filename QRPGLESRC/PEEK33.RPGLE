@@ -30,6 +30,10 @@
       /COPY QCOPYLE,D_VARDEF
       *----------------------------------------------------*
       *
+      /define internal_prototype
+      /COPY QCOPYLE,PPEEK33
+      /undefine internal_prototype
+      *
       *---Nachrichten--------------------------------------*
       /COPY QCOPYLE,API_ERROR
       ***/COPY QCOPYLE,MSG_D_MAPI
@@ -65,13 +69,8 @@
       *  F E L D - D E F I N I T I O N E N                 *
       *----------------------------------------------------*
       *
-     D XVersion        S              9A
-     D XMsgID          S              7A
-     D XMsgDta         S            512A
-      *
       *  Arbeitsfelder
      D X               S                   like(r§int4    ) inz
-     D Y               S                   like(r§int4    ) inz
       *
      D WrkTabDS        DS                  QUALIFIED
      D  Remark                        5A   INZ(*BLANKS)
@@ -85,7 +84,7 @@
      D WrkTab          S            100A   DIM(100) INZ(*BLANKS)
      D WrkElem         S                   like(r§int4    ) inz
       *
-     D TB010100        S            100A   DIM( 59) CTDATA PERRCD(1)
+     D TB010100        S            100A   DIM( 58) CTDATA PERRCD(1)
      D ELM010100       C                   CONST(%ELEM(TB010100))
       *
      D TB010200        S            100A   DIM( 36) CTDATA PERRCD(1)
@@ -133,21 +132,21 @@
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
       *
-     C     *ENTRY        PLIST
-     C                   PARM                    XVersion
-     C                   PARM                    XMsgID
-     C                   PARM                    XMsgDta
+     D PEEK33          PI
+     D  i_version                     9A   const
+     D  o_msgID                                  like(r§msgID)
+     D  o_msgDta                                 like(r§msgDta)
       *
       *----------------------------------------------------*
       *
-     C                   EVAL      XMsgID = *BLANKS
-     C                   EVAL      XMsgDta = *BLANKS
+     C                   EVAL      o_msgID = *BLANKS
+     C                   EVAL      o_msgDta = *BLANKS
       *
       *  Ermitteln der abgespeicherten Versions-Nr. ...
      C                   EXSR      GetUsrSetg
       *
       *  Vergleichen mit jetziger Versions-Nr. ...
-     C     SET_VSN       IFNE      XVersion
+     C     SET_VSN       IFNE      i_version
       *  ... und bei Abweichungen den
       *      Aktualisierungsvorgang starten
      C                   EXSR      VPos
@@ -166,7 +165,7 @@
       *
       *  Schleife solabge durchlaufen, bis das
       *  der jetzige Versionsstand erreicht worden ist.
-     C     SET_VSN       DOWLE     XVersion
+     C     SET_VSN       DOWLE     i_version
       *
       *  ... aktualiseren der früheren Versionsstände
      C                   SELECT

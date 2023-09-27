@@ -47,6 +47,10 @@
       /COPY QCOPYLE,D_VARDEF
       *----------------------------------------------------*
       *
+      /define internal_prototype
+      /COPY QCOPYLE,PPEEK20
+      /undefine internal_prototype
+      *
       *---Benutzervoreinstellungen-------------------------*
       /COPY QCOPYLE,SET0003
       *----------------------------------------------------*
@@ -80,25 +84,15 @@
       *  F E L D - D E F I N I T I O N E N                 *
       *----------------------------------------------------*
       *
-     D XKeyVal         S                   like(r§keyBuf  )
-     D XIO_Buffer      S                   like(r§rcdBuf  )
-     D XMsgID          S              7A
-     D XMsgDta         S            512A
-      *
      D yIO_Buff        DS
      D yIO_BuffTb                     1A   DIM(§rcdBufLen) inz
       *
-     D YData           S            512A   INZ(*BLANKS)
-     D YFormat         S             10A   INZ(*BLANKS)
      D YBuffer         S                   like(r§rcdBuf  ) inz
-     D YTgtFormat      S             10A   INZ(*BLANKS)
      D YTgtValue       S             10A   INZ(*BLANKS)
      D YOutBuffer      S                   like(r§rcdBuf  ) inz
      D YOutBuffLn      S                   like(r§int4    ) inz
      D YMsgID          S              7A   INZ(*BLANKS)
      D YMsgDta         S            512A   INZ(*BLANKS)
-      *
-      *** IsNumeric       S              1A   INZ(bFalse)
       *
      D X               S                   like(r§int4    ) inz
      D Y               S                   like(r§int4    ) inz
@@ -106,13 +100,10 @@
       *
      D BP              S                   like(r§int4    ) inz
      D KP              S                   like(r§int4    ) inz
-     D LEN2            DS                  qualified
-     D  INTEGER                1      2I 0 inz
-     D  ALPHA                  1      2A
       *
-     D PEEK18          S                   like(r§pgmCallN) inz
+     D PEEK18_NAME     S                   like(r§pgmCallN) inz
       *
-     D Wrk_KeyVal      S                   LIKE(XKeyVal) INZ(*BLANKS)
+     D Wrk_KeyVal      S                   LIKE(i_keyVal) INZ(*BLANKS)
       *
      D DftVal          S             30A   INZ(*BLANKS)
      D DftValLen       S                   like(r§int4    ) inz
@@ -126,6 +117,7 @@
      D §Date_D         C                   CONST('9999-12-31')
      D §Tstmp_D        C                   CONST('9999-12-31-23.59.59.999999')
       *
+      /COPY QCOPYLE,PPEEK18
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
       *
@@ -133,26 +125,11 @@
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
       *
-      *---ENTRY-LISTE--------------------------------------*
-      *
-     C     *ENTRY        PLIST
-     C                   PARM                    XKeyVal
-     C                   PARM                    XIO_Buffer
-     C                   PARM                    XMsgID
-     C                   PARM                    XMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK18
-     C     P_Peek18      PLIST
-     C                   PARM                    YData
-     C                   PARM                    YFormat
-     C                   PARM                    YBuffer
-     C                   PARM                    YTgtFormat
-     C                   PARM                    YTgtValue
-     C                   PARM                    YOutBuffer
-     C                   PARM                    YOutBuffLn
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
+     D PEEK20          PI
+     D  i_keyVal                           const like(r§keyBuf)
+     D  o_rcdBuffer                              like(r§rcdBuf)
+     D  o_msgID                                  like(r§msgID)
+     D  o_msgDta                                 like(r§msgDta)
       *
       *----------------------------------------------------*
       *  Schlüsselliste für PEEKFLDL2
@@ -168,37 +145,37 @@
       *
      C                   EXSR      FIRST
       *
-     C                   EVAL      XIO_Buffer = ''
+     C                   EVAL      o_rcdBuffer = ''
       *
      C                   Eval      yIO_BuffTb(*) = ''
      C                   EVAL      BP = 1
      C                   EVAL      KP = 1
       *
      C                   SELECT
-     C     XKeyVal       WHENEQ    '*PHIVAL'
+     C     i_keyVal      WHENEQ    '*PHIVAL'
      C                   EVAL      Wrk_KeyVal = '*HIVAL'
      C                   EXSR      BuildPseud
       *
-     C     XKeyVal       WHENEQ    '*PLOVAL'
+     C     i_keyVal      WHENEQ    '*PLOVAL'
      C                   EVAL      Wrk_KeyVal = '*LOVAL'
      C                   EXSR      BuildPseud
       *
-     C     XKeyVal       WHENEQ    '*HIVAL'
+     C     i_keyVal      WHENEQ    '*HIVAL'
      C                   EVAL      Wrk_KeyVal = '*HIVAL'
      C                   EXSR      BuildKey
       *
-     C     XKeyVal       WHENEQ    '*LOVAL'
+     C     i_keyVal      WHENEQ    '*LOVAL'
      C                   EVAL      Wrk_KeyVal = '*LOVAL'
      C                   EXSR      BuildKey
       *
      C                   OTHER
-     C                   EVAL      inpKeyLen = %len(%trimR(XKeyVal))
-     C                   EVAL      Wrk_KeyVal = XKeyVal
+     C                   EVAL      inpKeyLen = %len(%trimR(i_keyVal))
+     C                   EVAL      Wrk_KeyVal = i_keyVal
      C                   EXSR      BuildKey
       *
      C                   ENDSL
       *
-     C                   EVAL      XIO_Buffer = yIO_Buff
+     C                   EVAL      o_rcdBuffer = yIO_Buff
       *
      C     ENDE          TAG
       *
@@ -263,9 +240,6 @@
      C     Intern        BEGSR
       *
      C                   EVAL      FLDL0100 = F2FFD
-      *
-     C                   EVAL      YData = F2FFD
-     C                   EVAL      YFormat = F2Format
       *
      C     Wrk_KeyVal    IFEQ      '*LOVAL'
      C     Wrk_KeyVal    OREQ      '*HIVAL'
@@ -359,11 +333,13 @@
       *          und vervollständigt
      C                   Endsl
       *
-     C                   EVAL      YTgtFormat = '*INTERN'
-     C                   CALL      PEEK18        P_Peek18
+     C                   CALLP     PEEK18(FLDL0100: F2Format: YBuffer
+     C                                    : '*INTERN': YTgtValue
+     C                                    : YOutBuffer: YOutBuffLn
+     C                                    : YMsgID: YMsgDta)
      C     YMsgID        IFNE      *BLANKS
-     C                   EVAL      XMsgID = YMsgID
-     C                   EVAL      XMsgDta = YMsgDta
+     C                   EVAL      o_msgID = YMsgID
+     C                   EVAL      o_msgDta = YMsgDta
      C                   GOTO      ENDE
      C                   Endif
       *
@@ -453,8 +429,8 @@
       * - Programm initialisieren
       ***                Callp     p_rmvPgmMg(§§pgmName)
       *
-     C                   EVAL      XMsgID = *BLANKS
-     C                   EVAL      XMsgDta = *BLANKS
+     C                   EVAL      o_msgID = *BLANKS
+     C                   EVAL      o_msgDta = *BLANKS
       *
      C                   ENDSR
       *
@@ -464,7 +440,7 @@
       *
      C     *INZSR        BEGSR
       *
-     C                   Eval      PEEK18 = f_pgmCallN('PEEK18')
+     C                   Eval      PEEK18_NAME = f_pgmCallN('PEEK18')
       *
      C                   OPEN      PEEKFLDL0
      C                   OPEN      PEEKFLDL2

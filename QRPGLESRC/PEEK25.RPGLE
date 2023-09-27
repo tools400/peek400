@@ -43,6 +43,10 @@
       /COPY QCOPYLE,FLDL0100
       *----------------------------------------------------*
       *
+      /define internal_prototype
+      /COPY QCOPYLE,PPEEK25
+      /undefine internal_prototype
+      *
       *---Variablendefinition ShortCmd---------------------*
       /COPY QCOPYLE,ShortCmd_D
       *----------------------------------------------------*
@@ -68,11 +72,6 @@
       *  F E L D - D E F I N I T I O N E N                 *
       *----------------------------------------------------*
       *
-     D XDsp80          S              1A
-     D XColorAttr      S              1A
-     D XMsgID          S              7A
-     D XMsgDta         S            512A
-      *
      D yPgm            S             10A                 inz
      D yKey            S             10A                 inz
      D yPosF24         S                   like(r§int4    ) inz
@@ -96,8 +95,11 @@
       *
      D Char            C                   CONST('x')
       *
-     D PEEK21          S                   like(r§pgmCallN) inz
-     D PEEK23          S                   like(r§pgmCallN) inz
+     D PEEK21_NAME     S                   like(r§pgmCallN) inz
+     D PEEK23_NAME     S                   like(r§pgmCallN) inz
+      *
+      /COPY QCOPYLE,PPEEK21
+      /COPY QCOPYLE,PPEEK23
       *
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
@@ -108,32 +110,11 @@
       *
       *---ENTRY-LISTE--------------------------------------*
       *
-     C     *ENTRY        PLIST
-     C                   PARM                    XDsp80
-     C                   PARM                    XColorAttr
-     C                   PARM                    XMsgID
-     C                   PARM                    XMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK23
-     C     P_Peek23      PLIST
-     C                   PARM                    yPgm
-     C                   PARM                    yKey
-     C                   PARM                    yPosF24
-     C                   PARM                    yFKeys
-     C                   PARM                    yNbrOfKeys
-     C                   PARM                    yMsgID
-     C                   PARM                    yMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK21
-     C     P_Peek21      PLIST
-     C                   PARM                    YScnAID
-     C                   PARM                    YPgm
-     C                   PARM                    YPgmCmd
-     C                   PARM                    YCmdDta
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
+     D PEEK25          PI
+     D  i_dsp80                            const like(r§dsp80)
+     D  o_colorAttr                   1A
+     D  o_msgID                                  like(r§msgID)
+     D  o_msgDta                                 like(r§msgDta)
       *
       *---------------------------------------------------*
       *
@@ -193,9 +174,8 @@
       *
       *  Mappen der gedrückten Taste
       *  in Programmbefehl
-     C                   EVAL      YScnAID = §ScnAID
-     C                   EVAL      YPgm = §§PgmName
-     C                   CALL      PEEK21        P_Peek21
+     C                   CALLP     PEEK21(§ScnAID: §§PgmName
+     C                                    : YPgmCmd: YCmdDta: YMsgID: YMsgDta)
      C     YMsgID        IFNE      *BLANKS
      C                   EVAL      §MsgID = YMsgID
      C                   EVAL      §MsgDta = YMsgDta
@@ -312,7 +292,7 @@
       *
      C                   Callp     p_rmvPgmMg(§§pgmName)
       *
-     C                   EVAL      XMsgID = 'USR8100'
+     C                   EVAL      o_msgID = 'USR8100'
       *
      C                   SELECT
      C     §ScnAID       WHENEQ    §F3
@@ -323,7 +303,7 @@
      C                   EVAL      USR81001 = 'Fxx'
      C                   Endsl
       *
-     C                   EVAL      XMsgDta = USR8100
+     C                   EVAL      o_msgDta = USR8100
       *
      C                   ENDSR
       *
@@ -435,67 +415,67 @@
       *
       * Green
      C                   SELECT
-     C     XColorAttr    WHENEQ    §Green
+     C     o_colorAttr   WHENEQ    §Green
      C                   EVAL      *IN10 = '1'
-     C     XColorAttr    WHENEQ    §Green_R
+     C     o_colorAttr   WHENEQ    §Green_R
      C                   EVAL      *IN11 = '1'
-     C     XColorAttr    WHENEQ    §Green_U
+     C     o_colorAttr   WHENEQ    §Green_U
      C                   EVAL      *IN12 = '1'
-     C     XColorAttr    WHENEQ    §Green_RU
+     C     o_colorAttr   WHENEQ    §Green_RU
      C                   EVAL      *IN13 = '1'
       * White
-     C     XColorAttr    WHENEQ    §White
+     C     o_colorAttr   WHENEQ    §White
      C                   EVAL      *IN20 = '1'
-     C     XColorAttr    WHENEQ    §White_R
+     C     o_colorAttr   WHENEQ    §White_R
      C                   EVAL      *IN21 = '1'
-     C     XColorAttr    WHENEQ    §White_U
+     C     o_colorAttr   WHENEQ    §White_U
      C                   EVAL      *IN22 = '1'
       * Red
-     C     XColorAttr    WHENEQ    §Red
+     C     o_colorAttr   WHENEQ    §Red
      C                   EVAL      *IN30 = '1'
-     C     XColorAttr    WHENEQ    §Red_R
+     C     o_colorAttr   WHENEQ    §Red_R
      C                   EVAL      *IN31 = '1'
-     C     XColorAttr    WHENEQ    §Red_U
+     C     o_colorAttr   WHENEQ    §Red_U
      C                   EVAL      *IN32 = '1'
-     C     XColorAttr    WHENEQ    §Red_RU
+     C     o_colorAttr   WHENEQ    §Red_RU
      C                   EVAL      *IN33 = '1'
-     C     XColorAttr    WHENEQ    §Red_B
+     C     o_colorAttr   WHENEQ    §Red_B
      C                   EVAL      *IN34 = '1'
-     C     XColorAttr    WHENEQ    §Red_RB
+     C     o_colorAttr   WHENEQ    §Red_RB
      C                   EVAL      *IN35 = '1'
-     C     XColorAttr    WHENEQ    §Red_UB
+     C     o_colorAttr   WHENEQ    §Red_UB
      C                   EVAL      *IN36 = '1'
       * Türkis
-     C     XColorAttr    WHENEQ    §Turkis
+     C     o_colorAttr   WHENEQ    §Turkis
      C                   EVAL      *IN40 = '1'
-     C     XColorAttr    WHENEQ    §Turkis_R
+     C     o_colorAttr   WHENEQ    §Turkis_R
      C                   EVAL      *IN41 = '1'
-     C     XColorAttr    WHENEQ    §Turkis_U
+     C     o_colorAttr   WHENEQ    §Turkis_U
      C                   EVAL      *IN42 = '1'
-     C     XColorAttr    WHENEQ    §Turkis_RU
+     C     o_colorAttr   WHENEQ    §Turkis_RU
      C                   EVAL      *IN43 = '1'
       * Yellow
-     C     XColorAttr    WHENEQ    §Yellow
+     C     o_colorAttr   WHENEQ    §Yellow
      C                   EVAL      *IN50 = '1'
-     C     XColorAttr    WHENEQ    §Yellow_R
+     C     o_colorAttr   WHENEQ    §Yellow_R
      C                   EVAL      *IN51 = '1'
-     C     XColorAttr    WHENEQ    §Yellow_U
+     C     o_colorAttr   WHENEQ    §Yellow_U
      C                   EVAL      *IN52 = '1'
       * Pink
-     C     XColorAttr    WHENEQ    §Pink
+     C     o_colorAttr   WHENEQ    §Pink
      C                   EVAL      *IN60 = '1'
-     C     XColorAttr    WHENEQ    §Pink_R
+     C     o_colorAttr   WHENEQ    §Pink_R
      C                   EVAL      *IN61 = '1'
-     C     XColorAttr    WHENEQ    §Pink_U
+     C     o_colorAttr   WHENEQ    §Pink_U
      C                   EVAL      *IN62 = '1'
-     C     XColorAttr    WHENEQ    §Pink_RU
+     C     o_colorAttr   WHENEQ    §Pink_RU
      C                   EVAL      *IN63 = '1'
       * Blue
-     C     XColorAttr    WHENEQ    §Blue
+     C     o_colorAttr   WHENEQ    §Blue
      C                   EVAL      *IN70 = '1'
-     C     XColorAttr    WHENEQ    §Blue_R
+     C     o_colorAttr   WHENEQ    §Blue_R
      C                   EVAL      *IN71 = '1'
-     C     XColorAttr    WHENEQ    §Blue_U
+     C     o_colorAttr   WHENEQ    §Blue_U
      C                   EVAL      *IN72 = '1'
       *
      C                   OTHER
@@ -510,7 +490,7 @@
       *
      C     SetScreen     BEGSR
       *
-     C     XDsp80        IFEQ      '0'
+     C     i_dsp80       IFEQ      '0'
       *   132-Zeichen Anzeige
      C                   EVAL      *IN88 = '0'
      C                   EVAL      ZEI = 8
@@ -600,7 +580,7 @@
      C                   Endsl
       *
      C     Wrk_Field     IFNE      *BLANKS
-     C     1             SUBST (P) Wrk_Field:1   XColorAttr
+     C     1             SUBST (P) Wrk_Field:1   o_colorAttr
      C                   ELSE
       *                ????????
      C                   Endif
@@ -623,8 +603,8 @@
      C                   EXSR      FILL##
      C                   EXSR      PosCsr
       *
-     C                   EVAL      XMsgID = *BLANKS
-     C                   EVAL      XMsgDta = *BLANKS
+     C                   EVAL      o_msgID = *BLANKS
+     C                   EVAL      o_msgDta = *BLANKS
       *
       *  Löschen der Cursorosition
      C                   EVAL      CsrRow = *ZEROS
@@ -646,13 +626,11 @@
       *
      C                   Eval      §PgmQ = '*'
       *
-     C                   Eval      PEEK21 = f_pgmCallN('PEEK21')
-     C                   Eval      PEEK23 = f_pgmCallN('PEEK23')
+     C                   Eval      PEEK21_NAME = f_pgmCallN('PEEK21')
+     C                   Eval      PEEK23_NAME = f_pgmCallN('PEEK23')
       *
-     C                   Eval      yPgm    = §§PgmName
-     C                   Eval      yKey    = '*ALL'
-     C                   Eval      yPosF24 = *ZEROS
-     C                   Call      PEEK23        P_Peek23
+     C                   Callp     PEEK23(§§PgmName: '*ALL': 0
+     C                                    : yFKeys: yNbrOfKeys)
      C                   Eval      ScrnFKeys = %subarr(YFKeys: 1)
       *
      C                   Endsr

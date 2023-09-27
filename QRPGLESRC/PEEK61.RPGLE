@@ -85,8 +85,6 @@
       *
      P p_inzProgressMeter...
      P                 B                   export
-      *
-     D p_inzProgressMeter...
      D                 PI
      D  i_text                       20A   const
      D  i_maxValue                   10I 0 const
@@ -205,7 +203,6 @@
       *
      C                   Return
       *
-     P p_inzProgressMeter...
      P                 E
       *
       *===============================================================*
@@ -214,8 +211,6 @@
       *
      P p_showProgressMeter...
      P                 B                   export
-      *
-     D p_showProgressMeter...
      D                 PI
      D  i_currValue                  10I 0 const
       *
@@ -342,7 +337,6 @@
       *
      C                   Return
       *
-     P p_showProgressMeter...
      P                 E
       *
       *===============================================================*
@@ -351,8 +345,6 @@
       *
      P lf_getNumDspCol...
      P                 B
-      *
-     D lf_getNumDspCol...
      D                 PI            10U 0
       *
       *  Definieren Funktionswert
@@ -371,7 +363,6 @@
       *
      C                   Return    numDspCol
       *
-     P lf_getNumDspCol...
      P                 E
       *
       *===============================================================*
@@ -380,8 +371,6 @@
       *
      P lf_getScreenMode...
      P                 B
-      *
-     D lf_getScreenMode...
      D                 PI            10A
       *
       *  Definieren Funktionswert
@@ -412,6 +401,5 @@
       *
      C                   Return    screenMode
       *
-     P lf_getScreenMode...
      P                 E
       *

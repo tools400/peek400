@@ -35,6 +35,10 @@
       /COPY QCOPYLE,FLDL0100
       *----------------------------------------------------*
       *
+      /define internal_prototype
+      /COPY QCOPYLE,PPEEK30
+      /undefine internal_prototype
+      *
       *---INFOSTRUKTUR FÜR AID-BYTE -----------------------*
       /COPY QCOPYLE,DS_WORKSTN
       *----------------------------------------------------*
@@ -61,18 +65,10 @@
       /COPY QCOPYLE,USR9997
       *----------------------------------------------------*
       *
-     D XDsp80          S              1A
-     D XCopyRight      S            512A
-     D XFlag           S                   LIKE(R§INT4)
-     D XMsgID          S              7A
-     D XMsgDta         S            512A
-      *
      D YDtaAra         DS            64
      D YSrlNbrExt      S                   LIKE(R_SrlNbr ) INZ(*BLANKS)
      D YDateExt        S                   LIKE(R_SrlDate) INZ(*BLANKS)
       *
-     D YAttr           S             10A   INZ(*BLANKS)
-     D YNoMsg          S              1A   INZ(bFalse )
      D YAttrLen        S                   like(r§int4    ) inz
      D YAttrTyp        S              1A   INZ(*BLANKS)
      D YValue          S            512A   INZ(*BLANKS)
@@ -80,8 +76,6 @@
      D YSysName        S              8A   INZ(*BLANKS)
      D YSysVers        S              6A   INZ(*BLANKS)
      D YSysSrlNbr      S              8A   INZ(*BLANKS)
-     D YSysDate        S                   INZ(*ZEROS )    LIKE(R§INT4)
-     D YSrlData        S             20A   INZ(*BLANKS)
      D YSrlNbrInt      S                   LIKE(R_SrlNbr ) INZ(*BLANKS)
      D YDateInt        S                   LIKE(R_SrlDate) INZ(*BLANKS)
       *
@@ -94,7 +88,6 @@
      D R_Hex           S                   LIKE(R_SrlNbr ) INZ(*BLANKS)
      D Hex             S              1A   DIM(16)
      D ZW1             S             30P 0 INZ(*ZEROS )
-     D ZW2             S             30P 0 INZ(*ZEROS )
      D Exp             S                   like(r§int4    ) inz
      D A1              S              1A   INZ(*BLANKS)
      D X               S                   like(r§int4    ) inz
@@ -103,7 +96,6 @@
       *  DeadDate
      D ZWInt           S             30P 0 INZ(*ZEROS )
      D ZWExt           S             30P 0 INZ(*ZEROS )
-     D ZWDate          S              8P 0 INZ(*ZEROS )
      D DeadDate        S              8P 0 INZ(*ZEROS )
       *
       *  Aktuelle Datum und Uhrzeit
@@ -150,12 +142,16 @@
      D  USFORCE        S              1A   INZ('0'    )
       *
       *  Programme
-     D PEEK07          S                   like(r§pgmCallN) inz
-     D PEEK28          S                   like(r§pgmCallN) inz
-     D PEEK29          S                   like(r§pgmCallN) inz
+     D PEEK07_NAME     S                   like(r§pgmCallN) inz
+     D PEEK28_NAME     S                   like(r§pgmCallN) inz
+     D PEEK29_NAME     S                   like(r§pgmCallN) inz
       *
      D §Text           C                   CONST('Peek/400-
      D                                      - Lizenzdaten')
+      *
+      /COPY QCOPYLE,PPEEK07
+      /COPY QCOPYLE,PPEEK28
+      /COPY QCOPYLE,PPEEK29
       *
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
@@ -164,39 +160,12 @@
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
       *
-     C     *ENTRY        PLIST
-     C                   PARM                    XDsp80
-     C                   PARM                    XCopyRight
-     C                   PARM                    XFlag
-     C                   PARM                    XMsgID
-     C                   PARM                    XMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK07
-     C     P_Peek07      PLIST
-     C                   PARM                    YAttr
-     C                   PARM                    YNoMsg
-     C                   PARM                    YAttrLen
-     C                   PARM                    YAttrTyp
-     C                   PARM                    YValue
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK28
-     C     P_Peek28      PLIST
-     C                   PARM                    YAttr
-     C                   PARM                    YNoMsg
-     C                   PARM                    YAttrLen
-     C                   PARM                    YAttrTyp
-     C                   PARM                    YValue
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK29
-     C     P_Peek29      PLIST
-     C                   PARM                    YSysName
-     C                   PARM                    YSysVers
-     C                   PARM                    YSysSrlNbr
-     C                   PARM                    YSysDate
-     C                   PARM                    YSrlData
+     D PEEK30          PI
+     D  i_dsp80                            const like(r§dsp80)
+     D  i_copyright                        const like(r§copyRght)
+     D  o_flag                                   like(r§int4)
+     D  o_msgID                                  like(r§msgID)
+     D  o_msgDta                                 like(r§msgDta)
       *
       ******************************************************
       *
@@ -208,7 +177,7 @@
       *     ... Datum abgelaufen
       *         ... Abfragen einer neuen LizenzNr.
      C                   EXSR      GetLicInf
-     C     XFLag         IFNE      bTrueExt
+     C     o_flag        IFNE      bTrueExt
       *         ... wenn keine neue LizenzNr eingetragen
       *             worden ist, dann bFalse zurückliefern,
       *             damit kein weiterer Test möglich ist.
@@ -217,7 +186,7 @@
      C                   EVAL      POS = POS + 4
      C                   EXFMT     BILD03
      C                   CLOSE     PEEK30FM
-     C                   EVAL      XFlag = bFalseExt
+     C                   EVAL      o_flag = bFalseExt
      C                   ELSE
       *         ... neue LizenzNr. wurde eingetragen
       *             Rückkehrcode in XFLag ist OK
@@ -228,7 +197,7 @@
      C                   Endif
      C                   ELSE
       *     Lizenznummer ist OK ...
-     C                   EVAL      XFlag = bTrueExt
+     C                   EVAL      o_flag = bTrueExt
      C                   Endif
       *
       *----------------------------------------------------*
@@ -274,18 +243,18 @@
       *  F9  - Ende
      C     §ScnAID       WHENEQ    §F9
      C                   EXSR      C_EndPgm
-     C                   EVAL      XFlag = bShareExt
-     C                   EVAL      XMsgID = 'USR9997'
+     C                   EVAL      o_flag = bShareExt
+     C                   EVAL      o_msgID = 'USR9997'
      C                   EVAL      USR99971 = §Yellow_R
      C                   EVAL      USR99972 = §White
-     C                   EVAL      XMsgDta = USR9997
+     C                   EVAL      o_msgDta = USR9997
      C                   LEAVE
       *
       *  Datenfreigabe
      C     §ScnAID       WHENEQ    §ENTER
      C                   EXSR      C_Enter
      C     *IN99         IFEQ      '0'
-     C                   EVAL      XFlag = bTrueExt
+     C                   EVAL      o_flag = bTrueExt
      C                   LEAVE
      C                   Endif
       *
@@ -591,7 +560,6 @@
      C     X             IFGT      *ZEROS
      C                   EVAL      X = X - 1
      C     X             IFGT      *ZEROS
-     C**   X             SUBST (P) R_SrlData:1   R_SrlNbr
      C                   EVAL      R_SrlNbr = %subst(R_SrlData: 1: x)
      C                   ELSE
      C                   EVAL      R_SrlNbr = *BLANKS
@@ -599,7 +567,6 @@
       *
      C                   EVAL      X = X + 2
      C     X             IFLE      64
-     C**                 SUBST (P) R_SrlData:X   R_SrlDate
      C                   EVAL      R_SrlDate = %subst(R_SrlData: x)
      C                   ELSE
      C                   EVAL      R_SrlDate = *BLANKS
@@ -618,11 +585,9 @@
      C     ClCIntNbr     BEGSR
       *
       * -  Netzwerkattribute
-     C                   EVAL      YAttr = 'SYSNAME'
-     C                   EVAL      YNoMsg = bFalse
-     C                   CALL      PEEK07        P_Peek07
+     C                   CALLP     PEEK07('SYSNAME': bFalse
+     C                                    : YAttrLen: YAttrTyp: YValue)
      C     YAttrLen      IFGT      *ZEROS
-     C**   YAttrLen      SUBST     YValue:1      YSysName
      C                   EVAL      YSysName = %subst(YValue: 1: YAttrLen)
      C                   ELSE
      C                   EVAL      YSysName = *BLANKS
@@ -632,22 +597,17 @@
      C                   EVAL      YSysVers = '010000'
       *
       * -  Seriennummer
-     C                   EVAL      YAttr = 'QSRLNBR'
-     C                   EVAL      YNoMsg = bFalse
-     C                   CALL      PEEK28        P_Peek28
+     C                   CALLP     PEEK28('QSRLNBR': bFalse
+     C                                    : YAttrLen: YAttrTyp: YValue)
      C     YAttrLen      IFGT      *ZEROS
-     C**   YAttrLen      SUBST     YValue:1      YSysSrlNbr
      C                   EVAL      YSysSrlNbr = %subst(YValue: 1: YAttrLen)
      C                   ELSE
      C                   EVAL      YSysSrlNbr = *BLANKS
      C                   Endif
       *
-      * -  Datum
-     C                   EVAL      YSysDate = *ZEROS
+     C                   CALLP     PEEK29(YSysName: '010000'
+     C                                    : YSysSrlNbr: 0: R_SrlData)
       *
-     C                   CALL      PEEK29        P_Peek29
-      *
-     C                   EVAL      R_SrlData = YSrlData
      C                   EXSR      SplittLic
      C                   EVAL      YSrlNbrInt = R_SrlNbr
      C                   EVAL      YDateInt = R_SrlDate
@@ -661,21 +621,9 @@
       *
      C     ClCIntNbrF    BEGSR
       *
-      * -  Netzwerkattribute
-     C                   EVAL      YSysName = '*COMPANY'
+     C                   CALLP     PEEK29('*COMPANY': '999999'
+     C                                    : '*LICENSE': 0: R_SrlData)
       *
-      * -  Version
-     C                   EVAL      YSysVers = '999999'
-      *
-      * -  Seriennummer
-     C                   EVAL      YSysSrlNbr = '*LICENSE'
-      *
-      * -  Datum
-     C                   EVAL      YSysDate = *ZEROS
-      *
-     C                   CALL      PEEK29        P_Peek29
-      *
-     C                   EVAL      R_SrlData = YSrlData
      C                   EXSR      SplittLic
      C                   EVAL      YSrlNbrInt = R_SrlNbr
      C                   EVAL      YDateInt = R_SrlDate
@@ -718,15 +666,12 @@
      C     ' '           CHECKR    R_Hex         X
       *
      C     1             DO        X             Y
-     C**   1             SUBST (P) R_Hex:Y       A1
      C                   EVAL      A1 = %subst(R_Hex: Y: 1)
      C     A1            IFEQ      *BLANKS
      C                   LEAVE
      C                   Endif
       *
      C                   EVAL      ZW1 = 1
-     C**   A1            LOOKUP    Hex(ZW1)                               11
-     C**   *IN11         IFEQ      '0'
      C                   EVAL      ZW1 = %lookup(A1: Hex)
      C                   IF        (ZW1 = 0)
       *      ... Umsetzung in Dezimalwert nicht gelungen
@@ -759,7 +704,7 @@
       *
      C     SetScreen     BEGSR
       *
-     C     XDsp80        IFEQ      '0'
+     C     i_dsp80       IFEQ      '0'
       *   132-Zeichen Anzeige
      C                   EVAL      *IN88 = '0'
      C                   EVAL      ZEI = 2
@@ -783,9 +728,9 @@
      C                   Callp     p_rmvPgmMg(§§pgmName)
       *
       * - Rückgabewerte
-     C                   EVAL      XFlag = bFalseExt
-     C                   EVAL      XMsgID = *BLANKS
-     C                   EVAL      XMsgDta = *BLANKS
+     C                   EVAL      o_flag = bFalseExt
+     C                   EVAL      o_msgID = *BLANKS
+     C                   EVAL      o_msgDta = *BLANKS
       *
       * - Einlesen und prüfen der Lizenzdaten
      C                   EXSR      FILL##
@@ -795,7 +740,7 @@
       *
       * - Copyright
      C                   EVAL      §MsgID = 'USR9999'
-     C                   EVAL      §MsgDta = XCopyRight
+     C                   EVAL      §MsgDta = i_copyright
      C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
       *
      C                   ENDSR
@@ -808,9 +753,9 @@
       *
      C                   Eval      §PgmQ = '*'
       *
-     C                   Eval      PEEK07 = f_pgmCallN('PEEK07')
-     C                   Eval      PEEK28 = f_pgmCallN('PEEK28')
-     C                   Eval      PEEK29 = f_pgmCallN('PEEK29')
+     C                   Eval      PEEK07_NAME = f_pgmCallN('PEEK07')
+     C                   Eval      PEEK28_NAME = f_pgmCallN('PEEK28')
+     C                   Eval      PEEK29_NAME = f_pgmCallN('PEEK29')
       *
      C                   Eval      USNAME = 'PEEKSRL'
      C                   Eval      USLIB  = f_getPrdLb
@@ -840,7 +785,7 @@
       *
      C     *PSSR         BEGSR
       *
-     C                   EVAL      XFlag = bFalseExt
+     C                   EVAL      o_flag = bFalseExt
      C                   CLOSE     PEEK30FM                             99
      C                   GOTO      ENDE
       *

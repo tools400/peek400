@@ -35,12 +35,19 @@
       *  list API format RCDL0200
       *  (data structure can be used within the calling program
       *  to splitt XLIST into its units.
+     D RCDL0200        DS                  likeds(RCDL0200_t) inz
       /COPY QCOPYLE,RCDL0200
       *
       *---Variablendefinition------------------------------*
       /COPY QCOPYLE,D_VARDEF
       /COPY QCOPYLE,FLDL0100
       *----------------------------------------------------*
+      *
+      /define internal_prototype
+      /COPY QCOPYLE,PPEEK10
+      /undefine internal_prototype
+      *
+      /COPY QCOPYLE,PPEEK11
       *
       *---Copystrecken f�r Nachrichtenaufbau---------------*
       /COPY QCOPYLE,USR0002
@@ -49,28 +56,20 @@
       *
       *---Versenden von Nachrichten------------------------*
       /COPY QCOPYLE,API_ERROR
- CPY  ***/COPY QCOPYLE,MSG_D_MAPI
       *----------------------------------------------------*
       *
       *---SDS-Datenstruktur--------------------------------*
       /COPY QCOPYLE,ERR_D_SDS
       *----------------------------------------------------*
       *
-     D XQFILE          DS                  likeds(r吼Obj)
-      *
      D sortSeq         S                   LIKE(F_SortSeq) INZ(0)
       *
-     D PEEK11          S                   like(r吠gmCallN) inz
-      *
-      * Peek11:
-     D yQFile          S             20A   inz
-     D yFunk           S             10A   inz
-     D yAnz            S                   like(r告nt4    ) inz
-     D yList           S            512A   inz
+     D PEEK11_NAME     S                   like(r吠gmCallN) inz
       *
       * Arbeitsfelder
      D nbrOfFmt        S                   like(r告nt4    ) inz
      D fmtCnt          S                   like(r告nt4    ) inz
+     D rc              S                   like(r告nt4    ) inz
       *
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
@@ -79,44 +78,29 @@
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
       *
-     C     *ENTRY        PLIST
-     C                   PARM                    XQFILE
-      *
-     C                   PARM                    XMsgID            7
-     C                   PARM                    XMsgDta         512
+     D PEEK10          PI
+     D  i_qFile                            const likeds(r吼Obj)
+     D  o_msgID                                  like(r吮sgID)
+     D  o_msgDta                                 like(r吮sgDta)
       *
       *---------------------------------------------------*
      C                   EXSR      First
       *---------------------------------------------------*
       *
       *  create list of record formats
-     C                   EVAL      YQFILE = XQFILE
-     C                   EVAL      YFUNK = '*CREATE'
-     C                   EVAL      YANZ = *ZEROS
-     C                   EVAL      YLIST = *BLANKS
-     C                   CALL      PEEK11
-     C                   PARM                    yQFile
-     C                   PARM                    yFunk
-     C                   PARM                    yAnz
-     C                   PARM                    yList
-      *
-     C                   EVAL      nbrOfFmt = YANZ
+     C                   CALLP     PEEK11(i_qFile:
+     C                                    '*CREATE': nbrOfFmt: RCDL0200)
       *
      C                   EVAL      sortSeq = *ZEROS
       *  read each entry
      C     1             DO        nbrOfFmt      fmtCnt
       *
-     C                   EVAL      YFUNK = '*READ'
-     C                   CALL      PEEK11
-     C                   PARM                    YQFILE
-     C                   PARM                    YFUNK
-     C                   PARM                    YANZ
-     C                   PARM                    YLIST
+     C                   CALLP     PEEK11(i_qFile: '*READ': rc: RCDL0200)
       *
      C                   CLEAR                   FPEEKFMT
       *
      C                   EVAL      F_FORMAT = 'RCDL0200'
-     C                   EVAL      F_FMT = YLIST
+     C                   EVAL      F_FMT = RCDL0200
      C                   EVAL      sortSeq = sortSeq + 10
      C                   EVAL      F_SortSeq = sortSeq
      C                   EVAL      F_FmtNbr = fmtCnt
@@ -138,13 +122,13 @@
      C     ENDE          TAG
       *
      C     nbrOfFmt      IFEQ      *ZEROS
-     C                   EVAL      XMsgID = 'USR0002'
-     C                   EVAL      USR00021 = XQFILE.NAME
-     C                   EVAL      USR00022 = XQFILE.LIB
-     C                   EVAL      XMsgDta = USR0002
+     C                   EVAL      o_msgID = 'USR0002'
+     C                   EVAL      USR00021 = i_qFile.NAME
+     C                   EVAL      USR00022 = i_qFile.LIB
+     C                   EVAL      o_msgDta = USR0002
      C                   ELSE
-     C                   EVAL      XMsgID = *BLANKS
-     C                   EVAL      XMsgDta = *BLANKS
+     C                   EVAL      o_msgID = *BLANKS
+     C                   EVAL      o_msgDta = *BLANKS
      C                   Endif
       *
      C                   EVAL      *INLR = '1'
@@ -156,11 +140,11 @@
      C     First         BEGSR
       *
       * - Meldung
-     C                   Callp     p_sndStsMg('USR8105': xQFile)
+     C                   Callp     p_sndStsMg('USR8105': i_qFile)
       *
       * - Los gehts'
-     C                   EVAL      XMsgID = *BLANKS
-     C                   EVAL      XMsgDta = *BLANKS
+     C                   EVAL      o_msgID = *BLANKS
+     C                   EVAL      o_msgDta = *BLANKS
       *
      C     1             SETLL     FPEEKFMT
       *
@@ -183,7 +167,7 @@
       *
      C     *INZSR        BEGSR
       *
-     C                   Eval      PEEK11 = f_pgmCallN('PEEK11')
+     C                   Eval      PEEK11_NAME = f_pgmCallN('PEEK11')
       *
      C                   OPEN      PEEKFMT
       *
@@ -200,8 +184,4 @@
      C                   RETURN
       *
      C                   ENDSR     '*CANCL'
-      *
-      *---Versenden von Nachrichten------------------------*
- CPY  ***/COPY QCOPYLE,MSG_C_MAPI
-      *----------------------------------------------------*
       *

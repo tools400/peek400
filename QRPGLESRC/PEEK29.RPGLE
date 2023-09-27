@@ -3,7 +3,7 @@
       *  (c) Thomas Raddatz                                           *
       *                                                               *
       *  Bereich  : PEEK, Version 1.4.0                               *
-      *  Programm : PEEK28                                            *
+      *  Programm : PEEK29                                            *
       *  Typ      : RPG                                               *
       *                                                               *
       *  erstellt : 03.11.97  Raddatz                                 *
@@ -30,34 +30,24 @@
       /COPY QCOPYLE,D_VARDEF
       *----------------------------------------------------*
       *
+      /define internal_prototype
+      /COPY QCOPYLE,PPEEK29
+      /undefine internal_prototype
+      *
       *---SDS-Datenstruktur--------------------------------*
       /COPY QCOPYLE,ERR_D_SDS
       *----------------------------------------------------*
       *
-      *----------------------------------------------------*
-      *  F E L D - D E F I N I T I O N E N                 *
-      *----------------------------------------------------*
-      *
-      *---Fehler-DS----------------------------------------*
       /COPY QCOPYLE,API_ERROR
-      *----------------------------------------------------*
-      *
-     D XSysName        S              8A
-     D XSysVers        S              6A
-     D XSysSrlNbr      S              8A
-     D XSysDate        S                   LIKE(R§INT4)
-     D XSerialNbr      S             20A
       *
      D Value           S              1A   DIM(256)
      D Hex             S              1A   DIM(16)
       *
-     D SysInpNbr       DS
+     D SysInpNbr       DS                  qualified
      D  SysName                       8A   INZ(*BLANKS)
      D  SysVers                       6A   INZ(*BLANKS)
      D  SysSrlNbr                     8A   INZ(*BLANKS)
      D  SysEON                        1A   INZ(x'00'  )
-      *
-     D SysDate         S              8S 0 INZ(*ZEROS )
       *
      D X               S                   like(r§int4    ) inz
      D Y               S                   like(r§int4    ) inz
@@ -78,28 +68,23 @@
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
       *
-     C     *ENTRY        PLIST
-      *  Input
-     C                   PARM                    XSysName
-     C                   PARM                    XSysVers
-     C                   PARM                    XSysSrlNbr
-     C                   PARM                    XSysDate
-      *  Output
-     C                   PARM                    XSerialNbr
+     D PEEK29          PI
+     D  i_sysName                     8A   const
+     D  i_sysVersion                  6A   const
+     D  i_sysSrlNbr                   8A   const
+     D  i_sysDate                    10I 0 const
+     D  o_serialNbr                  20A
       *
       *----------------------------------------------------*
       *
       * -  Systemname des AS/400 Systems
-     C                   EVAL      SysName = XSysName
+     C                   EVAL      SysInpNbr.SysName = i_sysName
       *
       * -  PEEK-Versionsnummer
-     C                   EVAL      SysVers = XSysVers
+     C                   EVAL      SysInpNbr.SysVers = i_sysVersion
       *
       * -  Seriennummer des AS/400 Systems
-     C                   EVAL      SysSrlNbr = XSysSrlNbr
-      *
-      * -  Gültig bis Datum (PEEK)
-     C                   EVAL      SysDate = XSysDate
+     C                   EVAL      SysInpNbr.SysSrlNbr = i_sysSrlNbr
       *
       *  - Berechnung der Prüfsumme
      C                   EVAL      Summe = *ZEROS
@@ -126,7 +111,7 @@
      C                   Enddo
       *
       *  - Datum als Komplement
-     C                   EVAL      Summe = Summe - SysDate
+     C                   EVAL      Summe = Summe - i_sysDate
      C                   EVAL      Summe = Summe + 99999999
       *
       *  - Prüfsumme in HEX-Wert umsetzen
@@ -139,13 +124,13 @@
       *
       *  - Originaldatum anfügen, als Komplement gespeichert!
      C**                 Z-SUB     SysDate       R_Dec
-     C                   EVAL      R_Dec = 0 - SysDate
+     C                   EVAL      R_Dec = 0 - i_sysDate
      C                   EVAL      R_Dec = R_Dec + 99999999
      C                   EXSR      DecToHex
      C**                 CAT       R_Hex:0       IntSrlNbr
      C                   EVAL      IntSrlNbr = %trimr(IntSrlNbr) + R_Hex
       *
-     C                   EVAL      XSerialNbr = IntSrlNbr
+     C                   EVAL      o_serialNbr = IntSrlNbr
       *
      C     ENDE          TAG
       *

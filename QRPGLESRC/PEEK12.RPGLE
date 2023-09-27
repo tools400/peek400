@@ -45,6 +45,10 @@
       /COPY QCOPYLE,FLDL0100
       *----------------------------------------------------*
       *
+      /define internal_prototype
+      /COPY QCOPYLE,PPEEK12
+      /undefine internal_prototype
+      *
       *---Variablendefinition ShortCmd---------------------*
       /COPY QCOPYLE,ShortCmd_D
       *----------------------------------------------------*
@@ -63,6 +67,7 @@
       *----------------------------------------------------*
       *
       *---API-Formate--------------------------------------*
+     D RCDL0200        DS                  likeds(RCDL0200_t) inz
       /COPY QCOPYLE,RCDL0200
       *----------------------------------------------------*
       *
@@ -85,15 +90,6 @@
       /COPY QCOPYLE,SCRNFKEYS
       *----------------------------------------------------*
       *
-     D XDsp80          S              1A
-     D XCopyRight      S            512A
-     D XFmtName        S             10A
-     D XFmtData        S            512A
-     D XFmtNbr         S              5I 0
-     D XFmtMode        S             10A
-     D XMsgID          S              7A
-     D XMsgDta         S            512A
-      *
      D SfBot           S                   like(r§int4    ) inz
       *
      D LastRcdNbr      S                   like(R§RcdNbr  ) inz
@@ -102,26 +98,21 @@
      D SflLastRcd      S                   like(SflPage   ) inz
      D §NbrFKeys       C                   const(3)
       *
-     D PEEK21          S                   like(r§pgmCallN) inz
-     D PEEK23          S                   like(r§pgmCallN) inz
+     D PEEK21_NAME     S                   like(r§pgmCallN) inz
+     D PEEK23_NAME     S                   like(r§pgmCallN) inz
       *
       *  PEEK21
-     D YScnAID         S             10A   INZ(*BLANKS)
-     D yPgm            S             10A   inz
      D YPgmCmd         S             10A   INZ(*BLANKS)
      D YCmdDta         S                   LIKE(r§pgmCmdDt) INZ(*BLANKS)
      D YMsgID          S              7A   INZ(*BLANKS)
      D YMsgDta         S            512A   INZ(*BLANKS)
       *
       *  PEEK23
-      *yPgm            S             10A   inz
-     D yKey            S             10A   inz
-     D yPosF24         S                   like(r§int4    ) inz
      D yFKeys          S             18A   DIM(32)       INZ(*BLANKS)
      D yNbrOfKeys      S                   like(r§int4    ) inz
-      *YMsgID          S              7A   INZ(*BLANKS)
-      *YMsgDta         S            512A   INZ(*BLANKS)
       *
+      /COPY QCOPYLE,PPEEK21
+      /COPY QCOPYLE,PPEEK23
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
       *
@@ -131,36 +122,15 @@
       *
       *---ENTRY-LISTE--------------------------------------*
       *
-     C     *ENTRY        PLIST
-     C                   PARM                    XDsp80
-     C                   PARM                    XCopyRight
-     C                   PARM                    XFmtName
-     C                   PARM                    XFmtData
-     C                   PARM                    XFmtNbr
-     C                   PARM                    XFmtMode
-     C                   PARM                    XMsgID
-     C                   PARM                    XMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK21
-     C     P_Peek21      PLIST
-     C                   PARM                    YScnAID
-     C                   PARM                    YPgm
-     C                   PARM                    YPgmCmd
-     C                   PARM                    YCmdDta
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK23
-     C     P_Peek23      PLIST
-     C                   PARM                    yPgm
-     C                   PARM                    yKey
-     C                   PARM                    yPosF24
-     C                   PARM                    yFKeys
-     C                   PARM                    yNbrOfKeys
-     C                   PARM                    yMsgID
-     C                   PARM                    yMsgDta
+     D PEEK12          PI
+     D  i_dsp80                            const like(r§dsp80)
+     D  i_copyright                        const like (r§copyRght)
+     D  i_fmtName                          const like(r§fmt)
+     D  i_fmtMode                    10A   const
+     D  o_rcdl0200                               likeds(RCDL0200_t)
+     D  o_fmtNbr                      5I 0
+     D  o_msgId                                  like(r§msgId)
+     D  o_msgDta                                 like(r§msgDta)
       *
       *---------------------------------------------------*
       *
@@ -227,9 +197,8 @@
       *
       *  Mappen der gedrückten Taste
       *  in Programmbefehl
-     C                   EVAL      YScnAID = §ScnAID
-     C                   EVAL      YPgm = §§PgmName
-     C                   CALL      PEEK21        P_Peek21
+     C                   CALLP     PEEK21(§ScnAID: §§PgmName
+     C                                    : YPgmCmd: YCmdDta: YMsgID: YMsgDta)
      C     YMsgID        IFNE      *BLANKS
      C                   EVAL      §MsgID = YMsgID
      C                   EVAL      §MsgDta = YMsgDta
@@ -296,13 +265,13 @@
      C                   LEAVE
      C                   Endif
       *
-     C                   EVAL      XFmtData = $$RCDL0200
-     C                   EVAL      XFmtNbr = FMTNBR
+     C                   EVAL      o_rcdl0200 = $$RCDL0200
+     C                   EVAL      o_fmtNbr = FMTNBR
      C                   Enddo
       *
      C                   Endif                                                  *IN80
       *
-     C     XFmtData      IFNE      *BLANKS
+     C     o_rcdl0200    IFNE      *BLANKS
      C                   GOTO      Ende
      C                   Endif
       *
@@ -318,7 +287,7 @@
       *
      C                   Callp     p_rmvPgmMg(§§pgmName)
       *
-     C                   EVAL      XMsgID = 'USR8100'
+     C                   EVAL      o_msgId = 'USR8100'
       *
      C                   SELECT
      C     §ScnAID       WHENEQ    §F3
@@ -329,10 +298,10 @@
      C                   EVAL      USR81001 = 'Fxx'
      C                   Endsl
       *
-     C                   EVAL      XMsgDta = USR8100
+     C                   EVAL      o_msgDta = USR8100
       *
-     C                   EVAL      XFmtData = *BLANKS
-     C                   EVAL      XFmtNbr = *ZEROS
+     C                   EVAL      o_rcdl0200 = *BLANKS
+     C                   EVAL      o_fmtNbr = *ZEROS
       *
      C                   ENDSR
       *
@@ -459,8 +428,8 @@
      C                   EVAL      SFPAU = *BLANKS
      C                   EVAL      RCDL0200 = F_Fmt
      C                   EVAL      $$RCDL0200 = F_Fmt
-     C                   EVAL      $$Format = R2FmtName
-     C                   EVAL      $$Text = R2Text
+     C                   EVAL      $$Format = RCDL0200.R2FmtName
+     C                   EVAL      $$Text = RCDL0200.R2Text
      C                   EVAL      RecordNbr = P1RcdNbr
      C                   EVAL      FMTNBR = F_FmtNbr
       *
@@ -485,7 +454,7 @@
       *
      C     SetScreen     BEGSR
       *
-     C     XDsp80        IFEQ      '0'
+     C     i_dsp80       IFEQ      '0'
       *   132-Zeichen Anzeige
      C                   EVAL      *IN88 = '0'
      C                   EVAL      ZEI = 4
@@ -511,18 +480,18 @@
      C                   OPEN      PEEKFMT
       *
       * - Prüfen auf Satzformat
-     C                   IF        (XFmtMode   = §BATCH) and
-     C                             ((P1NbrOfRcd = 1) or (XFmtName <> ''))
+     C                   IF        (i_fmtMode   = §BATCH) and
+     C                             ((P1NbrOfRcd = 1) or (i_fmtName <> ''))
      C     1             SETLL     FPEEKFMT
      C                   DOU       %EOF(PEEKFMT)
      C                   READ      FPEEKFMT                               11
      C     *IN11         IFEQ      '0'
 
      C                   EVAL      RCDL0200 = F_Fmt
-     C                   IF        (R2FmtName = XFmtName) or
-     C                             ((P1NbrOfRcd = 1) and (XFmtName = ''))
-     C                   EVAL      XFmtData = F_Fmt
-     C                   EVAL      XFmtNbr = F_FmtNbr
+     C                   IF        (RCDL0200.R2FmtName = i_fmtName) or
+     C                             ((P1NbrOfRcd = 1) and (i_fmtName = ''))
+     C                   EVAL      o_rcdl0200 = F_Fmt
+     C                   EVAL      o_fmtNbr = F_FmtNbr
      C                   GOTO      Ende
      C                   ENDIF
      C                   ENDIF
@@ -532,10 +501,10 @@
       * - Programm initialisieren
      C                   Callp     p_rmvPgmMg(§§pgmName)
       *
-     C                   EVAL      XFmtData = *BLANKS
-     C                   EVAL      XFmtNbr = *ZEROS
-     C                   EVAL      XMsgID = *BLANKS
-     C                   EVAL      XMsgDta = *BLANKS
+     C                   EVAL      o_rcdl0200 = *BLANKS
+     C                   EVAL      o_fmtNbr = *ZEROS
+     C                   EVAL      o_msgId = *BLANKS
+     C                   EVAL      o_msgDta = *BLANKS
       *
       * - Darstellung der Subfile
      C                   EVAL      SflMde = '1'
@@ -554,7 +523,7 @@
       *
       * - Copyright
      C                   EVAL      §MsgID = 'USR9999'
-     C                   EVAL      §MsgDta = XCopyRight
+     C                   EVAL      §MsgDta = i_copyright
      C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
       *
      C                   ENDSR
@@ -567,13 +536,11 @@
       *
      C                   Eval      §PgmQ = '*'
       *
-     C                   Eval      PEEK21 = f_pgmCallN('PEEK21')
-     C                   Eval      PEEK23 = f_pgmCallN('PEEK23')
+     C                   Eval      PEEK21_NAME = f_pgmCallN('PEEK21')
+     C                   Eval      PEEK23_NAME = f_pgmCallN('PEEK23')
       *
-     C                   Eval      yPgm    = §§PgmName
-     C                   Eval      yKey    = '*ALL'
-     C                   Eval      yPosF24 = §NbrFKeys
-     C                   Call      PEEK23        P_Peek23
+     C                   Callp     PEEK23(§§PgmName: '*ALL': §NbrFKeys
+     C                                    : yFKeys: yNbrOfKeys)
      C                   Eval      scrnFKeys = %subarr(yFKeys: 1)
       *
      C                   OPEN      PEEK12FM

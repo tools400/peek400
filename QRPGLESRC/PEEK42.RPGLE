@@ -50,6 +50,10 @@
       /COPY QCOPYLE,D_VARDEF
       *----------------------------------------------------*
       *
+      /define internal_prototype
+      /COPY QCOPYLE,PPEEK42
+      /undefine internal_prototype
+      *
       *---ShortCmd-----------------------------------------*
       /COPY QCOPYLE,ShortCmd_d
       *----------------------------------------------------*
@@ -65,6 +69,9 @@
       *----------------------------------------------------*
       *  Externe Prototypen                                *
       *----------------------------------------------------*
+      /COPY QCOPYLE,PPEEK06
+      /COPY QCOPYLE,PPEEK66
+      *
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
       /COPY QCOPYLE,F_PEEK63
@@ -94,23 +101,13 @@
       *  F E L D - D E F I N I T I O N E N                 *
       *----------------------------------------------------*
       *
-     D XFile           S                   LIKE(R§FILE  )
-     D XLibrary        S                   LIKE(R§LIB   )
-     D XMember         S                   LIKE(R§MBR   )
-     D XRcdFormat      S                   LIKE(R§FMT   )
-     D XShortCmd       S                   LIKE(ShortCmd)
-     D XRcdNbr         S                   LIKE(R§RcdNbr)
-     D XExecCmd        S          32702A
-     D XMsgID          S                   LIKE(r§msgID )
-     D XMsgDta         S                   LIKE(r§msgDta)
-      *
      D isInit          S                   like(r§bool    ) inz(bFalse)
      D isRecord        S                   like(r§bool    ) inz(bFalse)
       *
-     D R_File          S                   LIKE(SC_File   ) INZ(*BLANKS)
-     D R_Lib           S                   LIKE(SC_Lib    ) INZ(*BLANKS)
-     D R_Mbr           S                   LIKE(SC_Mbr    ) INZ(*BLANKS)
-     D R_ShortCmd      S                   LIKE(XExecCmd  ) INZ(*BLANKS)
+     D R_File          S                   LIKE(ShortCmd_t.SC_File) inz
+     D R_Lib           S                   LIKE(ShortCmd_t.SC_Lib) inz
+     D R_Mbr           S                   LIKE(ShortCmd_t.SC_Mbr) inz
+     D R_ShortCmd      S                   LIKE(o_execCmd  ) INZ(*BLANKS)
      D R_Cmd1          S          32702A   varying          INZ(*BLANKS)
      D R_Cmd2          S          32702A   varying          INZ(*BLANKS)
      D R_MaxLen        C                   CONST(256)
@@ -120,31 +117,19 @@
      D I               S                   like(r§int4    ) inz
      D fldName         S             10A   varying          inz(*BLANKS)
      D isOutFormat     S                   like(r§bool    ) inz(bFalse)
+     D ShortCmd        DS                  likeds(ShortCmd_t) inz
      D FLDL0100        DS                  likeds(FLDL0100_t) inz
      D FLDL0100_OUT    DS                  likeds(FLDL0100_t) inz
       /COPY QCOPYLE,FLDL0100
       *
-     D PEEK06          S                   like(r§pgmCallN) inz
-     D PEEK66          S                   like(r§pgmCallN) inz
+     D PEEK06_NAME     S                   like(r§pgmCallN) inz
+     D PEEK66_NAME     S                   like(r§pgmCallN) inz
       *
       *  Parameterliste PEEK06
-     D YData           S            512A                    INZ(*BLANKS)
-     D YFormat         S             10A                    INZ(*BLANKS)
-     D YBuffer         S                   LIKE(R§RCDBUF  )
-     D YQcmdexc        S              1A                    INZ(bFalse )
-     D YCvtCcsid       S              1A                    INZ(bTrue  )
      D yOutBuffer      S                   LIKE(R§RCDBUF  )
      D YOutBuffLn      S                   like(R§INT4    ) INZ
      D YMsgID          S                   like(r§msgID   ) INZ(*BLANKS)
      D YMsgDta         S                   like(r§msgDta  ) INZ(*BLANKS)
-      *
-      *  Parameterliste PEEK66
-      *yOutBuffer      S                   LIKE(R§RCDBUF    )
-      *YOutBuffLn      S                   like(R§INT4      ) INZ
-     D YInFormat       DS                  likeds(FLDL0100_t) INZ
-     D YOutFormat      DS                  likeds(FLDL0100_t) INZ
-      *YMsgID          S                   like(r§msgID     ) INZ(*BLANKS)
-      *YMsgDta         S                   like(r§msgDta    ) INZ(*BLANKS)
       *
      D cNAME_PREFIX    C                   const('%')
      D cFORMAT_START   C                   const('(')
@@ -161,39 +146,16 @@
       *
       *---ENTRY-LISTE--------------------------------------*
       *
-     C     *ENTRY        PLIST
-     C                   PARM                    XFile
-     C                   PARM                    XLibrary
-     C                   PARM                    XMember
-     C                   PARM                    XRcdFormat
-     C                   PARM                    XShortCmd
-     C                   PARM                    XRcdNbr
-     C                   PARM                    XExecCmd
-     C                   PARM                    XMsgID
-     C                   PARM                    XMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK06
-     C     P_Peek06      PLIST
-     C                   PARM                    YData
-     C                   PARM                    YFormat
-     C                   PARM                    YBuffer
-     C                   PARM                    YQcmdexc
-     C                   PARM                    YCvtCcsid
-     C                   PARM                    YOutBuffer
-     C                   PARM                    YOutBuffLn
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *---------------------------------------------------*
-      *  Parameterliste für PEEK66
-     C     P_Peek66      PLIST
-     C                   PARM                    yOutBuffer
-     C                   PARM                    YOutBuffLn
-     C                   PARM                    YInFormat
-     C                   PARM                    YOutFormat
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
+     D PEEK42          PI
+     D  i_file                             const like(r§file)
+     D  i_library                          const like(r§lib)
+     D  i_member                           const like(r§mbr)
+     D  i_rcdFormat                        const like(r§fmt)
+     D  i_shortCmd                         const like(ShortCmd_t)
+     D  i_rcdNbr                           const like(r§rcdNbr)
+     D  o_execCmd                                like(r§cmdBuffer)
+     D  o_msgID                                  like(r§msgID)
+     D  o_msgDta                                 like(r§msgDta)
       *
       *---------------------------------------------------*
       *
@@ -201,13 +163,13 @@
       *
      C                   SELECT
       * Initialisierung
-     C     SC_Action     WHENEQ    '*INIT'
-     C                   EVAL      R_File = SC_File
-     C                   EVAL      R_Lib = SC_Lib
-     C                   EVAL      R_Mbr = SC_Mbr
+     C                   when      (ShortCmd.SC_Action = '*INIT')
+     C                   EVAL      R_File = ShortCmd.SC_File
+     C                   EVAL      R_Lib = ShortCmd.SC_Lib
+     C                   EVAL      R_Mbr = ShortCmd.SC_Mbr
      C                   EVAL      IsInit = bTrue
       * Befehl
-     C     SC_Action     WHENEQ    '*CMD'
+     C                   when      (ShortCmd.SC_Action = '*CMD')
      C                   EXSR      BuildCmd
       *  Unbekannte Aktion
      C                   OTHER
@@ -224,7 +186,7 @@
       *
      C     BuildCmd      BEGSR
       *
-     C                   EVAL      R_ShortCmd = SC_Cmd
+     C                   EVAL      R_ShortCmd = ShortCmd.SC_Cmd
       *
      C     IsInit        IFEQ      bFalse
       *  keine Initialisierung
@@ -236,7 +198,7 @@
      C                   EXSR      Rpl_FldName
      C                   Endif
       *
-     C                   EVAL      XExecCmd = R_ShortCmd
+     C                   EVAL      o_execCmd = R_ShortCmd
       *
      C                   ENDSR
       *
@@ -283,7 +245,7 @@
      C     Rpl_Rrn       BEGSR
       *
      C                   EVAL      R_Var   = '&R'
-     C                   EVAL      R_Value = %trimr(%editc(XRcdNbr: 'X'))
+     C                   EVAL      R_Value = %trimr(%editc(i_rcdNbr: 'X'))
      C                   EXSR      Rpl_Var
       *
      C                   ENDSR
@@ -295,9 +257,9 @@
      C     Rpl_FldName   BEGSR
       *
      C                   IF        CIO_open(hFile00                                       RADD
-     C                                      : XFile
-     C                                      : XLibrary
-     C                                      : XMember
+     C                                      : i_file
+     C                                      : i_library
+     C                                      : i_member
      C                                      : ''
      C                                      : 'rr, arrseq=Y, commit=N, +
      C                                         nullcap=Y, riofb=Y, +
@@ -323,12 +285,15 @@
      C                   IF        (fldName <> '') and
      C                             (lf_loadFldAtr(fldName: FLDL0100) = bTrue)
       *
-     C                   EVAL      YData = FLDL0100
-     C                   EVAL      YFormat = 'FLDL0100'
-     C                   EVAL      YBuffer = IO_Buff
-     C                   EVAL      YQcmdexc = bTrue
-     C                   EVAL      YCvtCcsid = bTrue
-     C                   CALL      PEEK06        P_Peek06               99
+     C                   monitor
+     C                   CALLP     PEEK06(FLDL0100: 'FLDL0100': IO_Buff
+     C                                    : bTrue: bTrue
+     C                                    : yOutBuffer: YOutBuffLn
+     C                                    : YMsgID: YMsgDta)
+     C                   eval      *in99 = bFalse
+     C                   on-error
+     C                   eval      *in99 = bTrue
+     C                   endmon
       *
      C                   EVAL      isOutFormat = lf_rtvFldFormat(
      C                                              R_ShortCmd
@@ -338,8 +303,8 @@
      C                                              : yMsgDta)
       *
      C                   IF        (YMsgID <> '')
-     C                   EVAL      XMsgID  = YMsgID
-     C                   EVAL      XMsgDta = YMsgDta
+     C                   EVAL      o_msgID  = YMsgID
+     C                   EVAL      o_msgDta = YMsgDta
      C                   GOTO      ERpl_FldName
      C                   ENDIF
       *
@@ -350,15 +315,19 @@
      C                                                     1          :
      C                                                     YOutBuffLn ))
      C                   ELSE
-     C                   EVAL      YInFormat = FLDL0100
-     C                   EVAL      YOutFormat = FLDL0100_OUT
-     C                   EVAL      YMsgID = ''
-     C                   EVAL      YMsgDta = ''
-     C                   CALL      PEEK66        P_Peek66               99
+      *
+     C                   monitor
+     C                   callp     PEEK66(yOutBuffer: YOutBuffLn
+     C                                    : FLDL0100: FLDL0100_OUT
+     C                                    : YMsgID: YMsgDta)
+     C                   eval      *in99 = bFalse
+     C                   on-error
+     C                   eval      *in99 = bTrue
+     C                   endmon
       *
      C                   IF        (YMsgID <> '')
-     C                   EVAL      XMsgID  = YMsgID
-     C                   EVAL      XMsgDta = YMsgDta
+     C                   EVAL      o_msgID  = YMsgID
+     C                   EVAL      o_msgDta = YMsgDta
      C                   GOTO      ERpl_FldName
      C                   ENDIF
       *
@@ -436,7 +405,7 @@
      C     ReadRcd       BEGSR
       *
      C                   IF        CIO_chainWithRRN(hFile00
-     C                                              : XRcdNbr
+     C                                              : i_rcdNbr
      C                                              : bFalse
      C                                              : IO_Buff
      C                                              : IO_NullMap) = bFalse
@@ -456,10 +425,10 @@
       * - Programm initialisieren
       ***                Callp     p_rmvPgmMg(§§pgmName)
       *
-     C                   EVAL      XMsgID = *BLANKS
-     C                   EVAL      XMsgDta = *BLANKS
+     C                   EVAL      o_msgID = *BLANKS
+     C                   EVAL      o_msgDta = *BLANKS
       *
-     C                   EVAL      ShortCmd = XShortCmd
+     C                   EVAL      ShortCmd = i_shortCmd
       *
      C                   ENDSR
       *
@@ -471,8 +440,8 @@
       *
      C                   EVAL      IsInit = bFalse
       *
-     C                   Eval      PEEK06 = f_pgmCallN('PEEK06')
-     C                   Eval      PEEK66 = f_pgmCallN('PEEK66')
+     C                   Eval      PEEK06_NAME = f_pgmCallN('PEEK06')
+     C                   Eval      PEEK66_NAME = f_pgmCallN('PEEK66')
       *
      C                   ENDSR
       *

@@ -30,7 +30,7 @@
      F                                     INFSR(*PSSR)
      F                                     PREFIX(F_)
       *===============================================================*
-     D PEEK41          S                   like(r§pgmCallN) inz
+     D PEEK41_NAME     S                   like(r§pgmCallN) inz
       *
       *  list API format KEYL0100
       /COPY QCOPYLE,KEYL0100
@@ -43,12 +43,17 @@
       /COPY QCOPYLE,D_VARDEF
       *----------------------------------------------------*
       *
+      /COPY QCOPYLE,PPEEK41
+      *
+      /define internal_prototype
+      /COPY QCOPYLE,PPEEK03
+      /undefine internal_prototype
+      *
       *---Copystrecken für Nachrichtenaufbau---------------*
       /COPY QCOPYLE,USR0006
       *----------------------------------------------------*
       *
       *---Versenden von Nachrichten------------------------*
- CPY  ***/COPY QCOPYLE,API_ERROR
       /COPY QCOPYLE,MSG_D_MAPI
       *----------------------------------------------------*
       *
@@ -56,30 +61,16 @@
       /COPY QCOPYLE,ERR_D_SDS
       *----------------------------------------------------*
       *
-     D XQFile          DS
-     D  XFile                        10A
-     D  XLib                         10A
-     D XRcdFormat      S             10A
-     D Xaccess         S              1A
-     D XsqlOrder       S            512A
-     D XMsgID          S              7A
-     D XMsgDta         S            512A
-      *
-     D                 DS
-     D YQFile                        20A   INZ(*BLANKS)
-     D  YFile                        10A   OVERLAY(YQFile: 1)
-     D  YLib                         10A   OVERLAY(YQFile:11)
-     D YRcdFormat      S             10A   INZ(*BLANKS)
-     D YFunction       S             10A   INZ(*BLANKS)
-     D YNbrOfEnt       S                   like(r§int4    ) inz
-     D YData           S            512A   INZ(*BLANKS)
-      *
+     D rtnCode         S                   like(r§int4    ) inz
      D nbrOfKey        S                   like(r§int4    ) inz
       *
      D x               S                   like(r§int4    ) inz
      D y               S                   like(r§int4    ) inz
      D z               S                   like(r§int4    ) inz
-     D tempStr         S                   like(xSqlOrder ) inz
+     D tempStr         S                   like(i_sqlOrder ) inz
+     D keyl0100        DS                  likeds(KEYL0100_t)
+     D                                     based(pKEYL0100)
+     D data            S            512A   inz
       *
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
@@ -88,24 +79,15 @@
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
       *
-     C     *ENTRY        PLIST
-     C                   PARM                    XQFILE
-     C                   PARM                    XRcdFormat
-     C                   PARM                    Xaccess
-     C                   PARM                    XsqlOrder
-      *
-     C                   PARM                    XMsgID
-     C                   PARM                    XMsgDta
+     D PEEK03          PI
+     D  i_qFile                            const likeds(r§qObj)
+     D  i_rcdFmt                           const like(r§fmt)
+     D  i_access                      1A   const
+     D  i_sqlOrder                  512A   const
+     D  o_msgID                                  like(r§msgID)
+     D  o_msgDta                                 like(r§msgDta)
       *
       *----------------------------------------------------*
-      *  Parameterliste für PEEK41
-     C     P_Peek41      PLIST
-     C                   PARM                    YQFile
-     C                   PARM                    YRcdFormat
-     C                   PARM                    YFunction
-     C                   PARM                    YNbrOfEnt
-     C                   PARM                    YData
-      *
      C     F_Key         KLIST
      C                   KFLD                    F_Field
       *
@@ -113,7 +95,7 @@
      C                   EXSR      First
       *---------------------------------------------------*
       *
-     C                   IF        xAccess = §sqlSeq
+     C                   IF        i_access = §sqlSeq
      C                   EXSR      sqlSeq
      C                   ELSE
      C                   EXSR      otherSeq
@@ -125,13 +107,13 @@
      C     ENDE          TAG
       *
      C     nbrOfKey      IFLE      *ZEROS
-     C                   EVAL      XMsgID = 'USR0006'
-     C                   EVAL      USR00061 = XFile
-     C                   EVAL      USR00062 = XLib
-     C                   EVAL      XMsgDta = USR0006
+     C                   EVAL      o_msgID = 'USR0006'
+     C                   EVAL      USR00061 = i_qFile.name
+     C                   EVAL      USR00062 = i_qFile.lib
+     C                   EVAL      o_msgDta = USR0006
      C                   ELSE
-     C                   EVAL      XMsgID = *BLANKS
-     C                   EVAL      XMsgDta = *BLANKS
+     C                   EVAL      o_msgID = *BLANKS
+     C                   EVAL      o_msgDta = *BLANKS
      C                   Endif
       *
      C                   EVAL      *INLR = '1'
@@ -142,36 +124,36 @@
       *
      C     sqlSeq        BEGSR
       *
-     C                   Eval      APKEYN = 0
+     C                   Eval      KEYL0100.APKEYN = 0
       *
      C                   Eval      x = 1
      C                   Exsr      getNextFld
       *
      C                   DoW       y > 1
       *
-     C                   Eval      tempStr = %trim(%subst(xSqlOrder: x: y-x))
+     C                   Eval      tempStr = %trim(%subst(i_sqlOrder: x: y-x))
       *  Ende des Feldes ...
-     C**   '"'           SCAN      tempStr:2     z
      C                   Eval      z = %scan('"': tempStr: 2)
-     C                   Eval      APKEYF  = %trim(%subst(tempStr: 2: z-2))
+     C                   Eval      keyl0100.APKEYF =
+     C                               %trim(%subst(tempStr: 2: z-2))
       *
       *  Alles hinter dem Feld ...
      C                   Eval      tempStr = %trim(%subst(tempStr: z+1))
       *
      C                   Select
      C                   When      tempStr = 'ASC'
-     C                   Eval      APKSEQ  = 'A'
-     C                   Eval      APKEYN  = APKEYN + 1
+     C                   Eval      keyl0100.APKSEQ  = 'A'
+     C                   Eval      keyl0100.APKEYN  = keyl0100.APKEYN + 1
      C                   Exsr      AddKeyInf
       *
      C                   When      tempStr = 'DESC'
-     C                   Eval      APKSEQ  = 'D'
-     C                   Eval      APKEYN  = APKEYN + 1
+     C                   Eval      keyl0100.APKSEQ  = 'D'
+     C                   Eval      keyl0100.APKEYN  = keyl0100.APKEYN + 1
      C                   Exsr      AddKeyInf
       *
      C                   When      tempStr = ' '
-     C                   Eval      APKSEQ  = 'A'
-     C                   Eval      APKEYN  = APKEYN + 1
+     C                   Eval      keyl0100.APKSEQ  = 'A'
+     C                   Eval      keyl0100.APKEYN  = keyl0100.APKEYN + 1
      C                   Exsr      AddKeyInf
      C                   Other
      C                   Endsl
@@ -192,13 +174,11 @@
      C                   Eval      y = 0
      C                   Else
       *
-     C**   ','           SCAN      xSqlOrder:x   y
-     C                   Eval      y = %scan(',': xSqlOrder: x)
+     C                   Eval      y = %scan(',': i_sqlOrder: x)
       *
      C                   IF        (y = 0) and
-     C                             (%subst(xSqlOrder: x) <> ' ')
-     C**   ' '           CHECKR    xSqlOrder     y
-     C                   Eval      y = %checkr(' ': xSqlOrder)
+     C                             (%subst(i_sqlOrder: x) <> ' ')
+     C                   Eval      y = %checkr(' ': i_sqlOrder)
      C                   Eval      y = y + 1
      C                   Endif
       *
@@ -212,25 +192,21 @@
       *
      C     otherSeq      BEGSR
       *
+     C                   Eval      pKEYL0100 = %addr(data)
+      *
       *  Abrufen der Dateiinformationen ...
-     C                   EVAL      YFile = XFile
-     C                   EVAL      YLib = XLib
-     C                   EVAL      YRcdFormat = XRcdFormat
-     C                   EVAL      YFunction = '*CREATE'
-     C                   CALL      PEEK41        P_Peek41
-     C     YNbrOfEnt     IFLE      *ZEROS
+     C                   CALLP     PEEK41(i_qFile: i_rcdFmt
+     C                                    : '*CREATE': rtnCode: data)
+     C                   IF        (rtnCode <= 0)
       *  ... schade, Aufruf ist fehlgeschlagen
      C                   ELSE
       *  Einlesen der Schlüsselinformationen ...
-     C                   EVAL      YFunction = '*KEY'
-     C                   CALL      PEEK41        P_Peek41
-     C                   EVAL      nbrOfKey = yNbrOfEnt
+     C                   CALLP     PEEK41(i_qFile: i_rcdFmt
+     C                                    : '*KEY': nbrOfKey: data)
       *
      C     1             DO        nbrOfKey
-     C                   EVAL      YFunction = '*READKEY'
-     C                   CALL      PEEK41        P_Peek41
-     C                   EVAL      KEYL0100 = YData
-      *
+     C                   CALLP     PEEK41(i_qFile: i_rcdFmt
+     C                                    : '*READKEY': rtnCode: data)
      C                   EXSR      ADDKEYINF
      C                   Enddo
       *
@@ -244,11 +220,11 @@
       *
      C     AddKeyInf     BEGSR
       *
-     C                   EVAL      F_Field = APKEYF
+     C                   EVAL      F_Field = KEYL0100.APKEYF
      C     F_Key         CHAIN     FPEEKFLD                           11
      C     *IN11         IFEQ      '0'
-     C                   EVAL      F_Desc = APKSEQ
-     C                   EVAL      F_KSeq = APKEYN
+     C                   EVAL      F_Desc = KEYL0100.APKSEQ
+     C                   EVAL      F_KSeq = KEYL0100.APKEYN
      C                   EVAL      FLDL0100 = F_FFD
      C                   EVAL      FLDL0100.F1KEYF = '1'
      C                   EVAL      F_FFD = FLDL0100
@@ -266,11 +242,11 @@
      C                   Z-ADD     *ZEROS        nbrOfKey
       *
       * - Meldung
-     C                   Callp     p_sndStsMg('USR8137': XQFile)
+     C                   Callp     p_sndStsMg('USR8137': i_qFile)
       *
       * - Los gehts'
-     C                   EVAL      XMsgID = *BLANKS
-     C                   EVAL      XMsgDta = *BLANKS
+     C                   EVAL      o_msgID = *BLANKS
+     C                   EVAL      o_msgDta = *BLANKS
       *
      C                   ENDSR
       *
@@ -280,7 +256,7 @@
       *
      C     *INZSR        BEGSR
       *
-     C                   Eval      PEEK41 = f_pgmCallN('PEEK41')
+     C                   Eval      PEEK41_NAME = f_pgmCallN('PEEK41')
       *
      C                   OPEN      PEEKFLD
       *
@@ -297,8 +273,4 @@
      C                   RETURN
       *
      C                   ENDSR     '*CANCL'
-      *
-      *---Versenden von Nachrichten------------------------*
- CPY  ***/COPY QCOPYLE,MSG_C_MAPI
-      *----------------------------------------------------*
       *
