@@ -42,6 +42,7 @@
      D r§function      S             10A   template
      D r§option        S             10A   template
      D r§mode          S             10A   template
+     D r§type          S             10A   template
       *
      D r§pinTabR       DS                  likeds(pinTabR_t) template
       *
