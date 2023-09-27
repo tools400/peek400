@@ -65,7 +65,7 @@
       /COPY QCOPYLE,USR9997
       *----------------------------------------------------*
       *
-     D YDtaAra         DS            64
+     D UsrSpcDta       S             64    based(pSpcPtr)
      D YSrlNbrExt      S                   LIKE(R_SrlNbr ) INZ(*BLANKS)
      D YDateExt        S                   LIKE(R_SrlDate) INZ(*BLANKS)
       *
@@ -122,24 +122,7 @@
      D IsWriteOK       S              1A   INZ(bFalse )
       *
       *  declarations for QUSCRTUS
-     D                 DS
-     D  USFNME                 1     20
-     D  USNAME                 1     10    INZ
-     D  USLIB                 11     20    INZ
-     D  USATTR                21     30    INZ
-     D  USSIZE                31     34I 0 INZ
-     D  USINIT                35     35    INZ
-     D  USAUTH                36     45    INZ
-     D  USDESC                46     95    INZ
-      *
-      *  declarations for QUSRTVUS
-     D                 DS
-     D  USVLEN                 1      4I 0 INZ
-     D  USSPOS                 5      8I 0 INZ
-      *
-      *  declarations for QUSCHGUS
-     D  USDATA         S             64A   INZ(*BLANKS)
-     D  USFORCE        S              1A   INZ('0'    )
+     D qUsrSpc         ds                  likeds(r吼Obj) inz
       *
       *  Programme
      D PEEK07_NAME     S                   like(r吠gmCallN) inz
@@ -148,6 +131,9 @@
       *
      D 劫ext           C                   CONST('Peek/400-
      D                                      - Lizenzdaten')
+      *
+      /COPY QCOPYLE,QUSCRTUS
+      /COPY QCOPYLE,QUSPTRUS
       *
       /COPY QCOPYLE,PPEEK07
       /COPY QCOPYLE,PPEEK28
@@ -384,9 +370,8 @@
       *------------------------------------------*
       *  ... Existenzpr�fung  UserSpace          *
       *------------------------------------------*
-     C                   EXSR      ChkUsrSpc
-      *      ... anlegen, wenn nicht vorhanden
-     C     利CmdError    IFEQ      '1'
+     C                   IF        (not f_exist(
+     C                                qUsrSpc.name: qUsrSpc.lib: '*USRSPC'))
      C                   EXSR      CrtUsrSpc
      C                   Endif
       *
@@ -488,42 +473,13 @@
      C                   ENDSR
       *
       *============================================================*
-      *    ChkUsrSpc     Pr�fen, ob UserSpace vorhanden ist        *
-      *============================================================*
-      *
-     C     ChkUsrSpc     BEGSR
-      *
-     C                   EVAL      利Cmd = 'CHKOBJ'
-     C                   CAT       'OBJ(':1      利Cmd
-     C                   CAT       USLIB:0       利Cmd
-     C                   CAT       '/':0         利Cmd
-     C                   CAT       USNAME:0      利Cmd
-     C                   CAT       ')':0         利Cmd
-     C                   CAT       'OBJ':1       利Cmd
-     C                   CAT       'TYPE(':0     利Cmd
-     C                   CAT       '*USR':0      利Cmd
-     C                   CAT       'SPC':0       利Cmd
-     C                   CAT       ')':0         利Cmd
-      *
-      /COPY QCOPYLE,QCMDEXC
-      *
-     C                   ENDSR
-      *
-      *============================================================*
       *    CrtUsrSpc     Anlegen UserSpace                         *
       *============================================================*
       *
      C     CrtUsrSpc     BEGSR
       *
-     C                   EVAL      USDESC = 劫ext
-      *
-     C                   CALL      'QUSCRTUS'
-     C                   PARM                    USFNME
-     C                   PARM      'USRSPC'      USATTR
-     C                   PARM      64            USSIZE
-     C                   PARM      ' '           USINIT
-     C                   PARM      '*ALL'        USAUTH
-     C                   PARM                    USDESC
+     C                   CALLP     QUSCRTUS(qUsrSpc: 'USRSPC': 64: x'00': '*ALL'
+     C                                      : 'Peek/400 Lizenzdaten')
       *
      C                   ENDSR
       *
@@ -533,17 +489,9 @@
       *
      C     RtvUsrSpc     BEGSR
       *
-     C                   EVAL      USVLEN = 64
-     C                   EVAL      USSPOS = 1
-     C                   CALL      'QUSRTVUS'
-     C                   PARM                    USFNME
-     C                   PARM                    USSPOS
-     C                   PARM                    USVLEN
-     C                   PARM                    USDATA
+     C                   Callp     QUSPTRUS(qUsrSpc: pSpcPtr)
       *
-     C                   EVAL      YDtaAra = USDATA
-      *
-     C                   EVAL      R_SrlData = YDtaAra
+     C                   EVAL      R_SrlData = UsrSpcDta
      C                   EXSR      SplittLic
      C                   EVAL      YSrlNbrExt = R_SrlNbr
      C                   EVAL      YDateExt = R_SrlDate
@@ -636,23 +584,7 @@
       *
      C     WrtLicData    BEGSR
       *
-     C                   EVAL      USSPOS = 1
-     C                   EVAL      USVLEN = 64
-     C                   EVAL      USDATA = ##LicData
-      *
-     C                   CALL      'QUSCHGUS'
-     C                   PARM                    USFNME
-     C                   PARM                    USSPOS
-     C                   PARM                    USVLEN
-     C                   PARM                    USDATA
-     C                   PARM                    USFORCE
-     C                   PARM                    余rrorCode
-      *
-     C     余rrAvail     IFEQ      *ZEROS
-     C                   EVAL      IsWriteOK = bTrue
-     C                   ELSE
-     C                   EVAL      IsWriteOK = bFalse
-     C                   Endif
+     C                   Eval      UsrSpcDta = ##LicData
       *
      C                   ENDSR
       *
@@ -757,8 +689,8 @@
      C                   Eval      PEEK28_NAME = f_pgmCallN('PEEK28')
      C                   Eval      PEEK29_NAME = f_pgmCallN('PEEK29')
       *
-     C                   Eval      USNAME = 'PEEKSRL'
-     C                   Eval      USLIB  = f_getPrdLb
+     C                   Eval      qUsrSpc.name = 'PEEKSRL'
+     C                   Eval      qUsrSpc.lib  = f_getPrdLb()
       *
      C                   EVAL      Hex(1) = '0'
      C                   EVAL      Hex(2) = '1'
