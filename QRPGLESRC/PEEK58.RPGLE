@@ -1280,7 +1280,7 @@
      D  i_FLDL0100                         const  likeds(fldl0100_t)
       *
       *  Funktionswert
-     D heading         S                   r§colHeading
+     D heading         S                   like(r§colHeading)
       * ------------------------------------------------------------------------
       *
       *  Überschrift ...
