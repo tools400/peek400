@@ -105,6 +105,7 @@
       /COPY QCOPYLE,PPEEK59
       /COPY QCOPYLE,PPEEK65
       /COPY QCOPYLE,PPEEK68
+      /COPY QCOPYLE,PPEEK69
       *
       *---Variablendefinition------------------------------*
       /COPY QCOPYLE,D_VARDEF
@@ -565,7 +566,7 @@
      D PEEK59_NAME     S                   like(r§pgmCallN) inz
      D PEEK65_NAME     S                   like(r§pgmCallN) inz
      D PEEK68_NAME     S                   like(r§pgmCallN) inz
-     D PEEK69          S                   like(r§pgmCallN) inz
+     D PEEK69_NAME     S                   like(r§pgmCallN) inz
       *
      D PEEKPGM         S                   like(r§pgm     ) inz
      D PEEKDSPF        S                   like(r§file    ) inz
@@ -777,15 +778,6 @@
      C                   Parm                    ySize
      C                   Parm                    yBImage
      C                   Parm                    yAImage
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK69
-     C     P_Peek69      PLIST
-     C                   PARM                    YDsp80
-     C                   PARM                    YCopyRight
-     C                   PARM                    YQFile
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
       *
       *----------------------------------------------------*
       *  Schlüsselliste für PEEKFLDL1
@@ -1529,10 +1521,6 @@
      C                   ELSE
       *  ... sonst
       *      aufrufen "Auswahl Datei"
-     C                   EVAL      YDsp80 = SET_Dsp80
-     C                   EVAL      YCopyRight = §CopyRight
-     C                   EVAL      YFile = *BLANKS
-      *
      C     ##File        IFEQ      *BLANKS
      C     ##File        OREQ      SET_PRMT
      C                   EVAL      yFile = '*ALL'
@@ -1546,7 +1534,8 @@
      C                   EVAL      yLibrary = ##Library
      C                   Endif
       *
-     C                   CALL      PEEK69        P_Peek69
+     C                   CALLP     PEEK69(SET_Dsp80: §CopyRight: YQFile
+     C                                    : YMsgID: YMsgDta)
       *
      C     yMsgID        IFEQ      *BLANKS
      C                   EVAL      ##File = yFile
@@ -8282,7 +8271,7 @@
      C                   Eval      PEEK59_NAME = f_pgmCallN('PEEK59')
      C                   Eval      PEEK65_NAME = f_pgmCallN('PEEK65')
      C                   Eval      PEEK68_NAME = f_pgmCallN('PEEK68')
-     C                   Eval      PEEK69 = f_pgmCallN('PEEK69')
+     C                   Eval      PEEK69_NAME = f_pgmCallN('PEEK69')
      C                   Eval      EXIT01 = f_pgmCallN('EXIT01')
       *
       * - PinTabR clearen
