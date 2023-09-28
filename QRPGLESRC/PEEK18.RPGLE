@@ -41,7 +41,6 @@
       /COPY QCOPYLE,COPYRIGHT
       *
      FPEEKFLD   IF   E           K DISK    USROPN
-     F                                     INFSR(*PSSR)
      F                                     PREFIX(F_)
       *
       *---Variablendefinition------------------------------*
@@ -161,6 +160,10 @@
      D  i_length                     10i 0 value
      D  i_ccsid                      10i 0 value
       *
+      /COPY QCOPYLE,CEECNDHDLR
+      *
+     D isInzSr         S                   like(r§bool) inz(bFalse)
+      *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
@@ -182,6 +185,12 @@
      C                   KFLD                    F_Field
       *
       *---------------------------------------------------*
+      *
+      *  Register error handler
+     C                   callp     CEEHDLR(%paddr('errorHandler')
+     C                                     : *null: *omit)
+      *
+     C                   EXSR      InzSr
       *
      C                   EXSR      FIRST
       *
@@ -771,7 +780,8 @@
      C                   WHEN      f_buffln(FLDL0100) = 8
      C                   EXSR      B_to_Int8
      C                   OTHER
-     C                   EXSR      *PSSR
+     C                   CALLP     p_kill('Illegal buffer length: ' +
+     C                                    %char(f_buffln(FLDL0100)))
      C                   ENDSL
       *
      C                   ENDSR
@@ -1256,7 +1266,8 @@
      C                   WHEN      f_buffln(FLDL0100) = 8
      C                   EXSR      GetBinary8
      C                   OTHER
-     C                   EXSR      *PSSR
+     C                   CALLP     p_kill('Illegal buffer length: ' +
+     C                                    %char(f_buffln(FLDL0100)))
      C                   ENDSL
       *
      C                   ENDSR
@@ -1390,11 +1401,17 @@
       *
      C                   ENDSR
       *
-      *============================================================*
-      *    *INZSR        Programminitialisierung                   *
-      *============================================================*
+      *====================================================*
+      *  InzSr --  Initialize program                      *
+      *====================================================*
       *
-     C     *INZSR        BEGSR
+     C     InzSr         Begsr
+      *
+     C                   If        (isInzSr = bTrue)
+     C                   Leavesr
+     C                   Endif
+      *
+     C                   Eval      isInzSr = bTrue
       *
      C                   Eval      PEEK36_NAME = f_pgmCallN('PEEK36')
       *
@@ -1403,16 +1420,6 @@
      C                   EXSR      GetUsrSetg
       *
      C                   ENDSR
-      *
-      *============================================================*
-      *    *PSSR         Fehlerbehandlung                          *
-      *============================================================*
-      *
-     C     *PSSR         BEGSR
-      *
-     C                   DUMP
-      *
-     C                   ENDSR     '*CANCL'
       *
       *============================================================*
       *    Converts a given buffer intot he Job ccsid.             *
@@ -1468,5 +1475,23 @@
       *
      C                   Return    tLength
       *
+     P                 e
+      *
+      *============================================================*
+      *  Program error handler                                     *
+      *============================================================*
+      *
+     P errorHandler    b
+     D                 pi
+     D i_condToken                         value likeds(cee_fc_t)
+     D i_pCommArea                   10i 0 value
+     D o_action                      10i 0
+     D o_newCondToken                            likeds(cee_fc_t)
+      /free
+
+         dump;
+         o_action = CEE_PERCOLATE;
+
+      /end-free
      P                 e
       *

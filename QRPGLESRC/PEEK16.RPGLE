@@ -31,31 +31,24 @@
       *
      FQCOPYLE1  IF   E             DISK    usropn
      F                                     rename(QPEEKGEN :FCOPY1 )
-     F                                     infsr(*PSSR)
       *
      FQCOPYLE2  IF   E             DISK    usropn
      F                                     rename(QPEEKGEN :FCOPY2 )
-     F                                     infsr(*PSSR)
       *
      FQCOPYLE3  IF   E             DISK    usropn
      F                                     rename(QPEEKGEN :FCOPY3 )
-     F                                     infsr(*PSSR)
       *
      FQCOPYLE4  IF   E             DISK    usropn
      F                                     rename(QPEEKGEN :FCOPY4 )
-     F                                     infsr(*PSSR)
       *
      FQCOPYLE5  IF   E             DISK    usropn
      F                                     rename(QPEEKGEN :FCOPY5 )
-     F                                     infsr(*PSSR)
       *
      FQCOPYLE6  IF   E             DISK    usropn
      F                                     rename(QPEEKGEN :FCOPY6 )
-     F                                     infsr(*PSSR)
       *
      FPEEKSRC   IF   E             DISK    usropn
      F                                     rename(PEEKSRC:FINPUT)
-     F                                     infsr(*PSSR)
       *
      FPEEKFLD   IF   E             DISK    usropn
       *
@@ -246,6 +239,8 @@
       /COPY QCOPYLE,F_PEEK58
       /COPY QCOPYLE,F_PEEK61
       *
+      /COPY QCOPYLE,CEECNDHDLR
+      *
      D PEEK16          PI
      D  i_prodLib                          const like(r§lib)
      D  i_fileName                         const likeds(r§qObj)
@@ -259,6 +254,9 @@
      D  io_stage                                 like(r§int4)
      D  i_numPasses                        const like(r§int4)
       *
+      *  Register error handler
+     C                   callp     CEEHDLR(%paddr('errorHandler')
+     C                                     : *null: *omit)
      C                   Open      QPEEKGEN
      C                   Open      PEEKSRC
       *
@@ -404,16 +402,6 @@
      C                   Close     PEEKSRC
       *
      C                   Eval      *inlr = *on
-      *
-      *============================================================*
-      *    *PSSR         Fehlerbehandlung                          *
-      *============================================================*
-      *
-     C     *pssr         Begsr
-      *
-     C                   Dump
-      *
-     C                   Endsr     '*CANCL'
       *
       *============================================================*
       *    SUB001        Umschalten: Weitere ... / Ende            *
@@ -1336,8 +1324,7 @@
       *    wrtOut        Ausgeben Quellenzeile                     *
       *============================================================*
      P p_wrtOut        B
-      *
-     D p_wrtOut        PI
+     D                 PI
      D  i_srcDta                           const like(SRCDTA)
       *
      C                   Eval      #SRCSEQ = #SRCSEQ + #Increment
@@ -1348,14 +1335,13 @@
       *
      C                   Return
       *
-     P p_wrtOut        E
+     P                 E
       *
       *============================================================*
       *    readFld       Lesen nächstes Feld aus PEEKFLD           *
       *============================================================*
      P f_readFld       B
-      *
-     D f_readFld       PI                        like(r§bool    )
+     D                 PI                        like(r§bool    )
       *------------------------------------------------------------
       *
      C                   DoU       *in20 = bEOF
@@ -1371,5 +1357,23 @@
       *
      C                   Return    *in20
       *
-     P f_readFld       E
+     P                 E
+      *
+      *============================================================*
+      *  Program error handler                                     *
+      *============================================================*
+      *
+     P errorHandler    b                   
+     D                 pi
+     D i_condToken                         value likeds(cee_fc_t)
+     D i_pCommArea                   10i 0 value
+     D o_action                      10i 0
+     D o_newCondToken                            likeds(cee_fc_t)
+      /free
+
+         dump;
+         o_action = CEE_PERCOLATE;
+
+      /end-free
+     P                 e
       *

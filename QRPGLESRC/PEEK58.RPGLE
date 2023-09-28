@@ -380,7 +380,8 @@
      C                                    *OMIT)
       *
      C                   If        (i_startpos + i_length - 1) > parmLen
-     C                   Exsr      *pssr
+     C                   Callp     p_kill('Start position and length outside +
+     C                                    range.')
      C                   Else
      C                   Select
      C                   When      i_length = 2
@@ -392,14 +393,12 @@
      C                                             i_startPos :
      C                                             i_length   )
      C                   Other
-     C                   Exsr      *pssr
+     C                   Callp     p_kill('Incorrect length: ' +
+     C                                    %char(i_length))
      C                   Endsl
      C                   Endif
       *
      C                   Return    intValue
-      *
-     C     *pssr         Begsr
-     C                   Endsr
       *
      P                 E
       *
@@ -578,92 +577,90 @@
      D dummy           S              8F   inz
      D hasExponent     S                   like(r§bool) inz(bFalse)
      D cDIGITS         C                   '0123456789'
-      *
-      *  Nachrichten
-      *COPY QCOPYLE,USR8192
       *-------------------------------------------------------------------*
       /FREE
 
-       if (%len(i_buffer) = 0);
-         return bFalse;
-       endif;
+       monitor;
 
-       i = %check(' ': i_buffer);
-
-       // Prüfen auf führendes Vorzeichen
-       c = %subst(i_buffer: i: 1);
-       if (c = '+' or c = '-');   // Überspringen Vorzeichen
-         i = i + 1;
-       endif;
-
-       // Prüfen auf nummerische Ziffern vor dem Komma
-       dow (i <= %len(i_buffer));
-         c = %subst(i_buffer: i: 1);
-         if (c <> ' ');
-           if (c = ',' or c = '.');
-             i = i + 1;   // Überspringen Komma
-             leave;
-           endif;
-           if (%check(cDIGITS: c) <> 0);
-             return bFalse;
-           endif;
-         endif;
-         i = i + 1;
-       enddo;
-
-       // Prüfen auf nummerische Ziffern hinter dem Komma
-       dow (i <= %len(i_buffer));
-         c = %subst(i_buffer: i: 1);
-         if (c <> ' ');
-           if (c = 'e' or c = 'E');
-             leave;
-           endif;
-           if (%check(cDIGITS: c) <> 0);
-             return bFalse;
-           endif;
-         endif;
-         i = i + 1;
-       enddo;
-
-       if (c = 'e' or c = 'E');
-         // Prüfen auf Vorzeichen des Exponenten
-         i = i + 1;
-         if (i > %len(i_buffer));
-           return bFalse;
-         endif;
-         c = %subst(i_buffer: i: 1);
-         if (c <> '+' and c <> '-' and c <> ' ');
+         if (%len(i_buffer) = 0);
            return bFalse;
          endif;
 
-         i = i + 1;
-         hasExponent = bFalse;
+         i = %check(' ': i_buffer);
 
-         // Prüfen auf nummerische Ziffern des Exponenten
+         // Prüfen auf führendes Vorzeichen
+         c = %subst(i_buffer: i: 1);
+         if (c = '+' or c = '-');   // Überspringen Vorzeichen
+           i = i + 1;
+         endif;
+
+         // Prüfen auf nummerische Ziffern vor dem Komma
          dow (i <= %len(i_buffer));
            c = %subst(i_buffer: i: 1);
            if (c <> ' ');
+             if (c = ',' or c = '.');
+               i = i + 1;   // Überspringen Komma
+               leave;
+             endif;
              if (%check(cDIGITS: c) <> 0);
                return bFalse;
              endif;
-             hasExponent = bTrue;
            endif;
            i = i + 1;
          enddo;
 
-         if (hasExponent <> bTrue);
-           return bFalse;
+         // Prüfen auf nummerische Ziffern hinter dem Komma
+         dow (i <= %len(i_buffer));
+           c = %subst(i_buffer: i: 1);
+           if (c <> ' ');
+             if (c = 'e' or c = 'E');
+               leave;
+             endif;
+             if (%check(cDIGITS: c) <> 0);
+               return bFalse;
+             endif;
+           endif;
+           i = i + 1;
+         enddo;
+
+         if (c = 'e' or c = 'E');
+           // Prüfen auf Vorzeichen des Exponenten
+           i = i + 1;
+           if (i > %len(i_buffer));
+             return bFalse;
+           endif;
+           c = %subst(i_buffer: i: 1);
+           if (c <> '+' and c <> '-' and c <> ' ');
+             return bFalse;
+           endif;
+
+           i = i + 1;
+           hasExponent = bFalse;
+
+           // Prüfen auf nummerische Ziffern des Exponenten
+           dow (i <= %len(i_buffer));
+             c = %subst(i_buffer: i: 1);
+             if (c <> ' ');
+               if (%check(cDIGITS: c) <> 0);
+                 return bFalse;
+               endif;
+               hasExponent = bTrue;
+             endif;
+             i = i + 1;
+           enddo;
+
+           if (hasExponent <> bTrue);
+             return bFalse;
+           endif;
          endif;
-       endif;
 
-       dummy = %float(i_buffer);
+         dummy = %float(i_buffer);
 
-       return bTrue;
-
-       begsr *PSSR;
+         return bTrue;
+       on-error;
          p_rmvPgmMg('*');
          return bFalse;
-       endsr;
+       endmon;
 
       /END-FREE
       *
@@ -1809,7 +1806,8 @@
      C                                    *OMIT)
       *
      C                   If        (i_startpos + i_length - 1) > parmLen
-     C                   Exsr      *pssr
+     C                   Callp     p_kill('Start position and length outside +
+     C                                    range.')
      C                   Else
      C                   Eval      intValue = i_value
      C                   Select
@@ -1822,14 +1820,12 @@
      C                                    i_startPos :
      C                                    i_length   ) = alpha4
      C                   Other
-     C                   Exsr      *pssr
+     C                   Callp     p_kill('Incorrect length: ' +
+     C                                    %char(i_length))
      C                   Endsl
      C                   Endif
       *
      C                   Return
-      *
-     C     *pssr         Begsr
-     C                   Endsr
       *
      P                 E
       *
@@ -3563,5 +3559,54 @@
        return spaces;
 
       /END-FREE
+     P                 E
+      *
+      *===================================================================*
+      *  Funktion:  Kills the program, sending an *ESCAPE message.        *
+      *===================================================================*
+     P p_kill...
+     P                 B                   export
+     D                 PI
+     D  i_text                      128A   value  varying
+      *
+      *  Local fields
+     D msgKey          S              4A   inz
+      *
+      *  Qualified message file name
+     D qMsgF           DS                  qualified inz
+     D  name                         10A
+     D  lib                          10A
+      *
+      *  API error code
+     D errCode         DS                  qualified inz
+     D  bytPrv                       10I 0
+     D  bytAvl                       10I 0
+     D  excID                         7A
+     D  reserved                      1A
+     D  excDta                      256A
+      *
+      *  Send Program Message (QMHSNDPM) API
+     D QMHSNDPM        PR                         extpgm('QMHSNDPM')
+     D   i_msgID                      7A   const
+     D   i_qMsgF                     20A   const
+     D   i_msgData                32767A   const  options(*varsize )
+     D   i_length                    10I 0 const
+     D   i_msgType                   10A   const
+     D   i_callStkE               32767A   const  options(*varsize )
+     D   i_callStkC                  10I 0 const
+     D   o_msgKey                     4A
+     D   io_ErrCode               32767A          options(*varsize )
+      * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+      /free
+         clear qMsgF;
+         qMsgF.name = 'QCPFMSG';
+         qMsgF.lib  = '*LIBL';
+         clear errCode;
+         errCode.bytPrv = %size(errCode);
+         QMHSNDPM('CPF9897': qMsgF: i_text: %len(i_text): '*ESCAPE'
+                  : '*PGMBDY': 1: msgKey: errCode);
+         return;
+      /end-free
+      *
      P                 E
       *

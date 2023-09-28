@@ -28,12 +28,10 @@
       *
      FPEEK64FM  CF   E             workstn usropn
      F                                     infds(§Workstn)
-     F                                     infsr(*pssr)
       * Feldliste
      FPEEKFLD   IF   E           K disk    usropn
      F                                     prefix(F_)
      F                                     infds(Peek_01_DS)
-     F                                     infsr(*pssr)
       *
       *---INFOSTRUKTUR FÜR AID-BYTE -----------------------*
       /COPY QCOPYLE,DS_WORKSTN
@@ -120,11 +118,13 @@
      D  #UCS2STR               1   2048C
      D  #UCS2                  1   2048C   CCSID(13488) DIM(16)
       *
+      /COPY QCOPYLE,CEECNDHDLR
+      *
+     D isInzSr         S                   like(r§bool) inz(bFalse)
+      *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
-      *
-      *---ENTRY-LISTE--------------------------------------*
       *
      D PEEK64          PI
      D  i_dsp80                            const like(r§dsp80)
@@ -144,6 +144,12 @@
      C                   Kfld                    F_Field
       *
       *---------------------------------------------------*
+      *
+      *  Register error handler
+     C                   callp     CEEHDLR(%paddr('errorHandler')
+     C                                     : *null: *omit)
+      *
+     C                   EXSR      InzSr
       *
      C                   Exsr      First
      C                   If        (isPgmError = bTrue)
@@ -622,11 +628,17 @@
       *
      C                   Endsr
       *
-      *============================================================*
-      *    *inzsr        Programminitialisierung                   *
-      *============================================================*
+      *====================================================*
+      *  InzSr --  Initialize program                      *
+      *====================================================*
       *
-     C     *inzsr        Begsr
+     C     InzSr         Begsr
+      *
+     C                   If        (isInzSr = bTrue)
+     C                   Leavesr
+     C                   Endif
+      *
+     C                   Eval      isInzSr = bTrue
       *
      C                   Eval      §PgmQ = '*'
       *
@@ -640,12 +652,20 @@
      C                   Endsr
       *
       *============================================================*
-      *    *pssr         Fehlerbehandlung                          *
+      *  Program error handler                                     *
       *============================================================*
       *
-     C     *pssr         Begsr
-      *
-     C                   Dump
-      *
-     C                   Endsr     '*CANCL'
+     P errorHandler    b
+     D                 pi
+     D i_condToken                         value likeds(cee_fc_t)
+     D i_pCommArea                   10i 0 value
+     D o_action                      10i 0
+     D o_newCondToken                            likeds(cee_fc_t)
+      /free
+
+         dump;
+         o_action = CEE_PERCOLATE;
+
+      /end-free
+     P                 e
       *

@@ -108,9 +108,7 @@
      D  o_MsgID                                   like(go_msgID)
      D  o_MsgDta                                  like(go_msgDta)
       *
-      *----------------------------------------------------*
-      *  F E L D - D E F I N I T I O N E N                 *
-      *----------------------------------------------------*
+      /COPY QCOPYLE,CEECNDHDLR
       *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
@@ -128,6 +126,9 @@
       * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       /FREE
 
+         //  Register error handler
+         CEEHDLR(%paddr('errorHandler'): *null: *omit);
+
          main(gio_buffer
               : gio_length
               : gi_inFormat
@@ -136,15 +137,6 @@
               : go_msgDta);
 
          return;
-
-         // -----------------------------------------------
-         //    Global error handler
-         // -----------------------------------------------
-         begsr *PSSR;
-
-            dump;
-
-         endsr;
 
       /END-FREE
       *
@@ -359,4 +351,22 @@
       /END-FREE
       *
      P                 E
+      *
+      *============================================================*
+      *  Program error handler                                     *
+      *============================================================*
+      *
+     P errorHandler    b
+     D                 pi
+     D i_condToken                         value likeds(cee_fc_t)
+     D i_pCommArea                   10i 0 value
+     D o_action                      10i 0
+     D o_newCondToken                            likeds(cee_fc_t)
+      /free
+
+         dump;
+         o_action = CEE_PERCOLATE;
+
+      /end-free
+     P                 e
       *

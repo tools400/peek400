@@ -44,10 +44,6 @@
       /COPY QCOPYLE,KEYL0100
       *----------------------------------------------------*
       *
-      *----------------------------------------------------*
-      *  F E L D - D E F I N I T I O N E N                 *
-      *----------------------------------------------------*
-      *
       *  Peek41:
      D YQFile          DS                  likeds(r§qObj)
      D YData           S            512A   INZ(*BLANKS)
@@ -63,6 +59,10 @@
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
       *
+      /COPY QCOPYLE,CEECNDHDLR
+      *
+     D isInzSr         S                   like(r§bool) inz(bFalse)
+      *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
@@ -73,6 +73,12 @@
      D  o_sqlOrder                               like(r§sqlOrder)
       *
       *---------------------------------------------------*
+      *
+      *  Register error handler
+     C                   callp     CEEHDLR(%paddr('errorHandler')
+     C                                     : *null: *omit)
+      *
+     C                   EXSR      InzSr
       *
       *  Einlesen der Dateiinformationen ...
      C                   EVAL      YQFile.name = i_file
@@ -116,23 +122,37 @@
       *
      C                   Return
       *
-      *============================================================*
-      *    *INZSR        Programminitialisierung                   *
-      *============================================================*
+      *====================================================*
+      *  InzSr --  Initialize program                      *
+      *====================================================*
       *
-     C     *INZSR        Begsr
+     C     InzSr         Begsr
+      *
+     C                   If        (isInzSr = bTrue)
+     C                   Leavesr
+     C                   Endif
+      *
+     C                   Eval      isInzSr = bTrue
       *
      C                   Eval      PEEK41_NAME = f_pgmCallN('PEEK41')
       *
      C                   Endsr
       *
       *============================================================*
-      *    *PSSR         Fehlerbehandlung                          *
+      *  Program error handler                                     *
       *============================================================*
       *
-     C     *PSSR         BEGSR
-      *
-     C                   DUMP
-      *
-     C                   ENDSR     '*CANCL'
+     P errorHandler    b
+     D                 pi
+     D i_condToken                         value likeds(cee_fc_t)
+     D i_pCommArea                   10i 0 value
+     D o_action                      10i 0
+     D o_newCondToken                            likeds(cee_fc_t)
+      /free
+
+         dump;
+         o_action = CEE_PERCOLATE;
+
+      /end-free
+     P                 e
       *

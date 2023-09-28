@@ -57,7 +57,7 @@
                           TEXT('Peek/400 - Generierungsangaben')
 
              CHGDTAARA  DTAARA(&DEVLIB/PEEKPGM *ALL) VALUE( +
-                          '*ALL      VnRnMn                                  '   *CAT +
+                          '*LIST     VnRnMn                                  '   *CAT +
                           '                                                  '   *CAT +
                           'DEBUG(*YES) DECEDIT(''0,'') DATEDIT(*DMY.)          ' *CAT +
                           'DATFMT(*ISO) TIMFMT(*ISO)                         '   *CAT +

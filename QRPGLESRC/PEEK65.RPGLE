@@ -28,11 +28,9 @@
       *
      FPEEK65P   O    E             PRINTER USROPN
      F                                     OFLIND(*IN60)
-     F                                     INFSR(*PSSR)
       * Feldliste
      FPEEKFLDL0 IF   E           K DISK    USROPN
      F                                     RENAME(FPEEKFLD:FPEEKFLDL0)
-     F                                     INFSR(*PSSR)
      F                                     INFDS(Peek_00_DS)
      F                                     PREFIX(F_)
       *
@@ -122,11 +120,13 @@
       /COPY QCOPYLE,F_PEEK58
       /COPY QCOPYLE,F_PEEK63
       *
+      /COPY QCOPYLE,CEECNDHDLR
+      *
+     D isInzSr         S                   like(r§bool) inz(bFalse)
+      *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
-      *
-      *---ENTRY-LISTE--------------------------------------*
       *
      D PEEK65          PI
      D  i_rcdNbr                           const like(r§rcdNbr)
@@ -143,6 +143,12 @@
      C                   KFLD                    F_FLDSEQ
       *
       *---------------------------------------------------*
+      *
+      *  Register error handler
+     C                   callp     CEEHDLR(%paddr('errorHandler')
+     C                                     : *null: *omit)
+      *
+     C                   EXSR      InzSr
       *
      C                   EXSR      FIRST
       *
@@ -431,11 +437,17 @@
       *
      C                   ENDSR
       *
-      *============================================================*
-      *    *INZSR        Programminitialisierung                   *
-      *============================================================*
+      *====================================================*
+      *  InzSr --  Initialize program                      *
+      *====================================================*
       *
-     C     *INZSR        Begsr
+     C     InzSr         Begsr
+      *
+     C                   If        (isInzSr = bTrue)
+     C                   Leavesr
+     C                   Endif
+      *
+     C                   Eval      isInzSr = bTrue
       *
      C                   Eval      PEEK06_NAME = f_pgmCallN('PEEK06')
      C                   Eval      PEEK09_NAME = f_pgmCallN('PEEK09')
@@ -453,12 +465,20 @@
      C                   Endsr
       *
       *============================================================*
-      *    *PSSR         Fehlerbehandlung                          *
+      *  Program error handler                                     *
       *============================================================*
       *
-     C     *PSSR         BEGSR
-      *
-     C                   DUMP
-      *
-     C                   ENDSR     '*CANCL'
+     P errorHandler    b
+     D                 pi
+     D i_condToken                         value likeds(cee_fc_t)
+     D i_pCommArea                   10i 0 value
+     D o_action                      10i 0
+     D o_newCondToken                            likeds(cee_fc_t)
+      /free
+
+         dump;
+         o_action = CEE_PERCOLATE;
+
+      /end-free
+     P                 e
       *

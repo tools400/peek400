@@ -27,7 +27,6 @@
       /COPY QCOPYLE,COPYRIGHT
       *
      FPEEKFLD   UF   E           K DISK    USROPN
-     F                                     INFSR(*PSSR)
      F                                     PREFIX(F_)
       *===============================================================*
      D PEEK41_NAME     S                   like(r§pgmCallN) inz
@@ -70,10 +69,16 @@
      D tempStr         S                   like(i_sqlOrder ) inz
      D keyl0100        DS                  likeds(KEYL0100_t)
      D                                     based(pKEYL0100)
+     D keyl0100_sql    DS                  likeds(KEYL0100_t) inz
      D data            S            512A   inz
+     D numKeyFld       S                   like(r§int4)
       *
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
+      *
+      /COPY QCOPYLE,CEECNDHDLR
+      *
+     D isInzSr         S                   like(r§bool) inz(bFalse)
       *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
@@ -92,6 +97,13 @@
      C                   KFLD                    F_Field
       *
       *---------------------------------------------------*
+      *
+      *  Register error handler
+     C                   callp     CEEHDLR(%paddr('errorHandler')
+     C                                     : *null: *omit)
+      *
+     C                   EXSR      InzSr
+      *
      C                   EXSR      First
       *---------------------------------------------------*
       *
@@ -124,7 +136,9 @@
       *
      C     sqlSeq        BEGSR
       *
-     C                   Eval      KEYL0100.APKEYN = 0
+     C                   Eval      pKEYL0100 = %addr(keyl0100_sql)
+      *
+     C                   Eval      numKeyFld = 0
       *
      C                   Eval      x = 1
      C                   Exsr      getNextFld
@@ -140,23 +154,17 @@
       *  Alles hinter dem Feld ...
      C                   Eval      tempStr = %trim(%subst(tempStr: z+1))
       *
-     C                   Select
-     C                   When      tempStr = 'ASC'
-     C                   Eval      keyl0100.APKSEQ  = 'A'
-     C                   Eval      keyl0100.APKEYN  = keyl0100.APKEYN + 1
-     C                   Exsr      AddKeyInf
-      *
-     C                   When      tempStr = 'DESC'
+     C                   If        (tempStr = 'DESC')
      C                   Eval      keyl0100.APKSEQ  = 'D'
-     C                   Eval      keyl0100.APKEYN  = keyl0100.APKEYN + 1
+     C                   Eval      numKeyFld = numKeyFld + 1
+     C                   Eval      keyl0100.APKEYN = numKeyFld
      C                   Exsr      AddKeyInf
-      *
-     C                   When      tempStr = ' '
+     C                   Else
      C                   Eval      keyl0100.APKSEQ  = 'A'
-     C                   Eval      keyl0100.APKEYN  = keyl0100.APKEYN + 1
+     C                   Eval      numKeyFld = numKeyFld + 1
+     C                   Eval      keyl0100.APKEYN = numKeyFld
      C                   Exsr      AddKeyInf
-     C                   Other
-     C                   Endsl
+     C                   Endif
       *
      C                   Eval      x = y + 1
      C                   Exsr      getNextFld
@@ -251,10 +259,16 @@
      C                   ENDSR
       *
       *====================================================*
-      *  *INZSR --  Initialize program                     *
+      *  InzSr --  Initialize program                      *
       *====================================================*
       *
-     C     *INZSR        BEGSR
+     C     InzSr         BEGSR
+      *
+     C                   IF        (isInzSr = bTrue)
+     C                   Leavesr
+     C                   ENDIF
+      *
+     C                   Eval      isInzSr = bTrue
       *
      C                   Eval      PEEK41_NAME = f_pgmCallN('PEEK41')
       *
@@ -262,15 +276,21 @@
       *
      C                   ENDSR
       *
-      *====================================================*
-      *  *PSSR  --  Program error handler                  *
-      *====================================================*
+      *============================================================*
+      *  Program error handler                                     *
+      *============================================================*
       *
-     C     *PSSR         BEGSR
-      *
-     C                   DUMP
-      *
-     C                   RETURN
-      *
-     C                   ENDSR     '*CANCL'
+     P errorHandler    b
+     D                 pi
+     D i_condToken                         value likeds(cee_fc_t)
+     D i_pCommArea                   10i 0 value
+     D o_action                      10i 0
+     D o_newCondToken                            likeds(cee_fc_t)
+      /free
+
+         dump;
+         o_action = CEE_PERCOLATE;
+
+      /end-free
+     P                 e
       *

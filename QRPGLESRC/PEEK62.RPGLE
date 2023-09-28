@@ -171,18 +171,20 @@
       *
       /COPY QCOPYLE,USR9995
       *
+      /COPY QCOPYLE,CEECNDHDLR
+      *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
-      *
-      *---ENTRY-LISTE--------------------------------------*
       *
      D PEEK62          PI
      D  i_file                             const like(r§file)
      D  i_lib                              const like(r§lib)
       *---------------------------------------------------*
       *
-     C                   Exsr      First
+      *  Register error handler
+     C                   callp     CEEHDLR(%paddr('errorHandler')
+     C                                     : *null: *omit)
       *
      C                   Eval      g_oldFile = %trim(i_lib ) + '/' +
      C                                         %trim(i_file)
@@ -291,28 +293,20 @@
      C                   Return
       *
       *============================================================*
-      *    First         Initialisierung                           *
+      *  Program error handler                                     *
       *============================================================*
       *
-     C     First         Begsr
-      *
-     C                   Endsr
-      *
-      *============================================================*
-      *    *INZSR        Programminitialisierung                   *
-      *============================================================*
-      *
-     C     *inzsr        Begsr
-      *
-     C                   Endsr
-      *
-      *============================================================*
-      *    *PSSR         Fehlerbehandlung                          *
-      *============================================================*
-      *
-     C     *pssr         Begsr
-      *
-     C                   Dump
-      *
-     C                   Endsr     '*CANCL'
+     P errorHandler    b                   
+     D                 pi
+     D i_condToken                         value likeds(cee_fc_t)
+     D i_pCommArea                   10i 0 value
+     D o_action                      10i 0
+     D o_newCondToken                            likeds(cee_fc_t)
+      /free
+
+         dump;
+         o_action = CEE_PERCOLATE;
+
+      /end-free
+     P                 e
       *

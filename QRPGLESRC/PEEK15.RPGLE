@@ -50,7 +50,6 @@
       *
      FPEEKSRC   IF   E             DISK    usropn
      F                                     rename(PEEKSRC:FINPUT)
-     F                                     infsr(*PSSR)
      FPEEKFLD   IF   E             DISK    usropn
       *
       *===============================================================*
@@ -356,6 +355,10 @@
       /COPY QCOPYLE,F_PEEK58
       /COPY QCOPYLE,F_PEEK61
       *
+      /COPY QCOPYLE,CEECNDHDLR
+      *
+     D isInzSr         S                   like(r§bool) inz(bFalse)
+      *
       *====================================================*
       *  Steuerleiste
       *====================================================*
@@ -366,6 +369,14 @@
      D  i_alwLC                            const like(r§bool)
      D  io_stage                                 like(r§int4)
      D  i_numPasses                        const like(r§int4)
+      *
+      *----------------------------------------------------*
+
+      *  Register error handler
+     C                   callp     CEEHDLR(%paddr('errorHandler')
+     C                                     : *null: *omit)
+      *
+     C                   Exsr      InzSr
       *
      C                   Open      QCOPYLE1
      C                   Open      QCOPYLE2
@@ -1158,14 +1169,11 @@
       *  Einen neuen Record im DspF anfangen ...
      C                   Reset                   ds_rcdFmt
       *
-     C                   Select
-     C                   When      i_alwLC = bFalse
+     C                   If        (i_alwLC = bFalse)
      C                   Eval      $rcdFm_nme = 'UC' + scn#a
-     C                   When      i_alwLC = bTrue
+     C                   Else
      C                   Eval      $rcdFm_nme = 'LC' + scn#a
-     C                   Other
-     C                   Exsr      *PSSR
-     C                   Endsl
+     C                   Endif
       *
      C                   Callp     p_wrtDspF(ds_rcdFmt)
       *
@@ -1921,32 +1929,45 @@
       *
      C                   Endsr
       *
-      *============================================================*
-      *    *pssr         Fehlerbehandlung                          *
-      *============================================================*
+      *====================================================*
+      *  InzSr --  Initialize program                      *
+      *====================================================*
       *
-     C     *pssr         Begsr
+     C     InzSr         Begsr
       *
-     C                   Dump
+     C                   If        (isInzSr = bTrue)
+     C                   Leavesr
+     C                   Endif
       *
-     C                   Endsr     '*CANCL'
-      *
-      *============================================================*
-      *    *INZSR        Programminitialisierung                   *
-      *============================================================*
-      *
-     C     *inzsr        Begsr
+     C                   Eval      isInzSr = bTrue
       *
      C                   Eval      EXIT03 = f_pgmCallN('EXIT03')
       *
      C                   Endsr
       *
       *============================================================*
+      *  Program error handler                                     *
+      *============================================================*
+      *
+     P errorHandler    b
+     D                 pi
+     D i_condToken                         value likeds(cee_fc_t)
+     D i_pCommArea                   10i 0 value
+     D o_action                      10i 0
+     D o_newCondToken                            likeds(cee_fc_t)
+      /free
+
+         dump;
+         o_action = CEE_PERCOLATE;
+
+      /end-free
+     P                 e
+      *
+      *============================================================*
       *    wrtDspF       Ausgeben Copy-Book 1    'Cxxxxxxxxx'      *
       *============================================================*
      P p_wrtDspF       B
-      *
-     D p_wrtDspF       PI
+     D                 PI
      D  i_srcDta                           const like(SRCDTA)
       *
      C                   Eval      #SRCSEQ = #SRCSEQ + #Increment
@@ -1958,14 +1979,13 @@
       *
      C                   Return
       *
-     P p_wrtDspF       E
+     P                 E
       *
       *============================================================*
       *    wrtCopy1      Ausgeben Copy-Book 1    'Axxxxxxxxx'      *
       *============================================================*
      P p_wrtCopy1      B
-      *
-     D p_wrtCopy1      PI
+     D                 PI
      D  i_srcDta                           const like(SRCDTA)
       *
      C                   If        i_alwLC = bFalse
@@ -1980,14 +2000,13 @@
       *
      C                   Return
       *
-     P p_wrtCopy1      E
+     P                 E
       *
       *============================================================*
       *    wrtCopy2      Ausgeben Copy-Book 2    'Bxxxxxxxxx'      *
       *============================================================*
      P p_wrtCopy2      B
-      *
-     D p_wrtCopy2      PI
+     D                 PI
      D  i_srcDta                           const like(SRCDTA)
       *
      C                   If        i_alwLC = bFalse
@@ -2002,15 +2021,14 @@
       *
      C                   Return
       *
-     P p_wrtCopy2      E
+     P                 E
       *
       *============================================================*
       *    wrtCopy3      Ausgeben Copy-Book 3    'Cxxxxxxxxx'      *
       *                  Felddefinitionen                          *
       *============================================================*
      P p_wrtCopy3      B
-      *
-     D p_wrtCopy3      PI
+     D                 PI
      D  i_srcDta                           const like(SRCDTA)
       *
      C                   If        i_alwLC = bFalse
@@ -2025,15 +2043,14 @@
       *
      C                   Return
       *
-     P p_wrtCopy3      E
+     P                 E
       *
       *============================================================*
       *    wrtCopy4      Ausgeben Copy-Book 4    'Dxxxxxxxxx'      *
       *                  Konstanten für "Feld zu lang"             *
       *============================================================*
      P p_wrtCopy4      B
-      *
-     D p_wrtCopy4      PI
+     D                 PI
      D  i_srcDta                           const like(SRCDTA)
       *
      C                   If        i_alwLC = bFalse
@@ -2048,15 +2065,14 @@
       *
      C                   Return
       *
-     P p_wrtCopy4      E
+     P                 E
       *
       *============================================================*
       *    wrtCopy5      Ausgeben Copy-Book 5    'Exxxxxxxxx'      *
       *                  Umsetzen NULL-Indicator                   *
       *============================================================*
      P p_wrtCopy5      B
-      *
-     D p_wrtCopy5      PI
+     D                 PI
      D  i_srcDta                           const like(SRCDTA)
       *
      C                   If        i_alwLC = bFalse
@@ -2071,15 +2087,14 @@
       *
      C                   Return
       *
-     P p_wrtCopy5      E
+     P                 E
       *
       *============================================================*
       *    wrtCopy6      Ausgeben Copy-Book 6    'Gxxxxxxxxx'      *
       *                  Aufrufen Text-Editor                      *
       *============================================================*
      P p_wrtCopy6      B
-      *
-     D p_wrtCopy6      PI
+     D                 PI
      D  i_srcDta                           const like(SRCDTA)
       *
      C                   If        i_alwLC = bFalse
@@ -2094,14 +2109,13 @@
       *
      C                   Return
       *
-     P p_wrtCopy6      E
+     P                 E
       *
       *============================================================*
       *    readFld       Lesen nächstes Feld aus PEEKFLD           *
       *============================================================*
      P f_readFld       B
-      *
-     D f_readFld       PI                        like(r§bool    )
+     D                 PI                        like(r§bool    )
       *------------------------------------------------------------
       *
      C                   DoU       *in20 = bEOF
@@ -2117,5 +2131,5 @@
       *
      C                   Return    *in20
       *
-     P f_readFld       E
+     P                 E
       *

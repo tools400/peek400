@@ -88,6 +88,8 @@
         EXPORT SYMBOL(f_mustCvtCcsid)
         EXPORT SYMBOL(f_space)
 
+        EXPORT SYMBOL(p_kill)
+
       ENDPGMEXP
 
       STRPGMEXP PGMLVL(*PRV    )

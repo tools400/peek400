@@ -140,11 +140,13 @@
       * Für Einzelsatzzugriff
      D hFile00         DS                   likeds(r§hFile  )
       *
+      /COPY QCOPYLE,CEECNDHDLR
+      *
+     D isInzSr         S                   like(r§bool) inz(bFalse)
+      *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
-      *
-      *---ENTRY-LISTE--------------------------------------*
       *
      D PEEK42          PI
      D  i_file                             const like(r§file)
@@ -158,6 +160,12 @@
      D  o_msgDta                                 like(r§msgDta)
       *
       *---------------------------------------------------*
+      *
+      *  Register error handler
+     C                   callp     CEEHDLR(%paddr('errorHandler')
+     C                                     : *null: *omit)
+      *
+     C                   EXSR      InzSr
       *
      C                   EXSR      FIRST
       *
@@ -173,7 +181,8 @@
      C                   EXSR      BuildCmd
       *  Unbekannte Aktion
      C                   OTHER
-     C                   EXSR      *PSSR
+     C                   Callp     p_kill('Unknown short command action: ' +
+     C                                    ShortCmd.SC_Action)
      C                   Endsl
       *
      C     ENDE          TAG
@@ -432,11 +441,17 @@
       *
      C                   ENDSR
       *
-      *============================================================*
-      *    *INZSR        Programminitialisierung                   *
-      *============================================================*
+      *====================================================*
+      *  InzSr --  Initialize program                      *
+      *====================================================*
       *
-     C     *INZSR        BEGSR
+     C     InzSr         Begsr
+      *
+     C                   If        (isInzSr = bTrue)
+     C                   Leavesr
+     C                   Endif
+      *
+     C                   Eval      isInzSr = bTrue
       *
      C                   EVAL      IsInit = bFalse
       *
@@ -446,14 +461,22 @@
      C                   ENDSR
       *
       *============================================================*
-      *    *PSSR         Fehlerbehandlung                          *
+      *  Program error handler                                     *
       *============================================================*
       *
-     C     *PSSR         BEGSR
-      *
-     C                   DUMP
-      *
-     C                   ENDSR     '*CANCL'
+     P errorHandler    b
+     D                 pi
+     D i_condToken                         value likeds(cee_fc_t)
+     D i_pCommArea                   10i 0 value
+     D o_action                      10i 0
+     D o_newCondToken                            likeds(cee_fc_t)
+      /free
+
+         dump;
+         o_action = CEE_PERCOLATE;
+
+      /end-free
+     P                 e
       *
       *============================================================*
       *    Ermitteln Feldname aus Kurzbefehl                       *

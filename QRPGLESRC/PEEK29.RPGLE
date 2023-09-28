@@ -64,6 +64,10 @@
       *
      D IntSrlNbr       S             20A
       *
+      /COPY QCOPYLE,CEECNDHDLR
+      *
+     D isInzSr         S                   like(r§bool) inz(bFalse)
+      *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
@@ -76,6 +80,12 @@
      D  o_serialNbr                  20A
       *
       *----------------------------------------------------*
+      *
+      *  Register error handler
+     C                   callp     CEEHDLR(%paddr('errorHandler')
+     C                                     : *null: *omit)
+      *
+     C                   EXSR      InzSr
       *
       * -  Systemname des AS/400 Systems
      C                   EVAL      SysInpNbr.SysName = i_sysName
@@ -160,11 +170,17 @@
       *
      C                   ENDSR
       *
-      *============================================================*
-      *    *INZSR        Initialisierung                           *
-      *============================================================*
+      *====================================================*
+      *  InzSr --  Initialize program                      *
+      *====================================================*
       *
-     C     *INZSR        BEGSR
+     C     InzSr         Begsr
+      *
+     C                   If        (isInzSr = bTrue)
+     C                   Leavesr
+     C                   Endif
+      *
+     C                   Eval      isInzSr = bTrue
       *
      C                   EVAL      Value(193) = 'A'
      C                   EVAL      Value(194) = 'B'
@@ -226,10 +242,20 @@
      C                   ENDSR
       *
       *============================================================*
-      *    *PSSR         Fehlerbehandlung                          *
+      *  Program error handler                                     *
       *============================================================*
       *
-     C     *PSSR         BEGSR
-      *
-     C                   ENDSR     '*CANCL'
+     P errorHandler    b
+     D                 pi
+     D i_condToken                         value likeds(cee_fc_t)
+     D i_pCommArea                   10i 0 value
+     D o_action                      10i 0
+     D o_newCondToken                            likeds(cee_fc_t)
+      /free
+
+         dump;
+         o_action = CEE_PERCOLATE;
+
+      /end-free
+     P                 e
       *

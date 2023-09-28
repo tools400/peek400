@@ -51,18 +51,16 @@
       /COPY QCOPYLE,ERR_D_SDS
       *----------------------------------------------------*
       *
-      *----------------------------------------------------*
-      *  F E L D - D E F I N I T I O N E N                 *
-      *----------------------------------------------------*
-      *
       *  Arbeitsfelder
      D X               S                   like(r§int4    ) inz
      D pBuffer         S               *   inz
      D char            S              1A   based(pChar)
-     D char_ucs2       S              1C   based(pChar_ucs2)
-     D char_utf16      S              1C   ccsid(1200)
       *
       /COPY QCOPYLE,F_PEEK53
+      *
+      /COPY QCOPYLE,CEECNDHDLR
+      *
+     D isInzSr         S                   like(r§bool) inz(bFalse)
       *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
@@ -76,6 +74,12 @@
      D  o_msgDta                                 like(r§msgDta)
       *
       *----------------------------------------------------*
+      *
+      *  Register error handler
+     C                   callp     CEEHDLR(%paddr('errorHandler')
+     C                                     : *null: *omit)
+      *
+     C                   EXSR      InzSr
       *
      C                   EVAL      o_msgID = *BLANKS
      C                   EVAL      o_msgDta = *BLANKS
@@ -133,23 +137,37 @@
       *
      C                   ENDSR
       *
-      *============================================================*
-      *    *INZSR        Programminitialisierung                   *
-      *============================================================*
+      *====================================================*
+      *  InzSr --  Initialize program                      *
+      *====================================================*
       *
-     C     *INZSR        BEGSR
+     C     InzSr         Begsr
+      *
+     C                   If        (isInzSr = bTrue)
+     C                   Leavesr
+     C                   Endif
+      *
+     C                   Eval      isInzSr = bTrue
       *
      C                   EXSR      GetUsrSetg
       *
      C                   ENDSR
       *
       *============================================================*
-      *    *PSSR         Fehlerbehandlung                          *
+      *  Program error handler                                     *
       *============================================================*
       *
-     C     *PSSR         BEGSR
-      *
-     C                   DUMP
-      *
-     C                   ENDSR     '*CANCL'
+     P errorHandler    b
+     D                 pi
+     D i_condToken                         value likeds(cee_fc_t)
+     D i_pCommArea                   10i 0 value
+     D o_action                      10i 0
+     D o_newCondToken                            likeds(cee_fc_t)
+      /free
+
+         dump;
+         o_action = CEE_PERCOLATE;
+
+      /end-free
+     P                 e
       *

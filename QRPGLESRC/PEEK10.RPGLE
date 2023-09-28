@@ -28,7 +28,6 @@
       /COPY QCOPYLE,COPYRIGHT
       *
      FPEEKFMT   UF A E             DISK    USROPN
-     F                                     INFSR(*PSSR)
      F                                     PREFIX(F_)
       *===============================================================*
       *
@@ -74,6 +73,10 @@
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
       *
+      /COPY QCOPYLE,CEECNDHDLR
+      *
+     D isInzSr         S                   like(r§bool) inz(bFalse)
+      *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
@@ -84,8 +87,14 @@
      D  o_msgDta                                 like(r§msgDta)
       *
       *---------------------------------------------------*
+      *
+      *  Register error handler
+     C                   callp     CEEHDLR(%paddr('errorHandler')
+     C                                     : *null: *omit)
+      *
+     C                   EXSR      InzSr
+      *
      C                   EXSR      First
-      *---------------------------------------------------*
       *
       *  create list of record formats
      C                   CALLP     PEEK11(i_qFile:
@@ -162,10 +171,16 @@
      C                   ENDSR
       *
       *====================================================*
-      *  *INZSR --  Initialize program                     *
+      *  InzSr --  Initialize program                      *
       *====================================================*
       *
-     C     *INZSR        BEGSR
+     C     InzSr         BEGSR
+      *
+     C                   IF        (isInzSr = bTrue)
+     C                   Leavesr
+     C                   ENDIF
+      *
+     C                   Eval      isInzSr = bTrue
       *
      C                   Eval      PEEK11_NAME = f_pgmCallN('PEEK11')
       *
@@ -173,15 +188,21 @@
       *
      C                   ENDSR
       *
-      *====================================================*
-      *  *PSSR  --  Program error handler                  *
-      *====================================================*
+      *============================================================*
+      *  Program error handler                                     *
+      *============================================================*
       *
-     C     *PSSR         BEGSR
-      *
-     C                   DUMP
-      *
-     C                   RETURN
-      *
-     C                   ENDSR     '*CANCL'
+     P errorHandler    b
+     D                 pi
+     D i_condToken                         value likeds(cee_fc_t)
+     D i_pCommArea                   10i 0 value
+     D o_action                      10i 0
+     D o_newCondToken                            likeds(cee_fc_t)
+      /free
+
+         dump;
+         o_action = CEE_PERCOLATE;
+
+      /end-free
+     P                 e
       *

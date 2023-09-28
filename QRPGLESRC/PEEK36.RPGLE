@@ -57,6 +57,15 @@
      D R_Buffer        S                         LIKE(i_buffer)   INZ(*ZEROS )
      D R_BuffLen       C                         CONST(%SIZE(i_buffer))
       *
+      /COPY QCOPYLE,F_PEEK53
+      /COPY QCOPYLE,F_PEEK58
+      *
+      /COPY QCOPYLE,CEECNDHDLR
+      *
+      ********************************************************************
+      *                 S T E U E R  -  R O U T I N E                    *
+      ********************************************************************
+      *
      D PEEK36          PI
      D  i_buffer                    128A   const
      D  i_type                        1A   const
@@ -65,6 +74,9 @@
      D  o_msgID                                  like(r§msgID)
      D  o_msgDta                                 like(r§msgDta)
       *
+      *  Register error handler
+     C                   callp     CEEHDLR(%paddr('errorHandler')
+     C                                     : *null: *omit)
      C                   EXSR      First
       *
       *  Prüfen Format für ...
@@ -99,7 +111,8 @@
      C                   EVAL      R_TimeStmp = %timestamp(i_buffer)
      C                   EVAL      R_FldLen = 26
      C                   OTHER
-     C                   EXSR      *PSSR
+     C                   CALLP     p_kill('Incorrect time format: ' +
+     C                                    i_datTimFmt)
      C                   Endsl
       *
      C                   EVAL      R_Pos = R_FldLen + 1
@@ -113,7 +126,8 @@
      C     R_Buffer      IFEQ      *BLANKS
       *  ... Alles in Ordnung
      C                   ELSE
-     C                   EXSR      *PSSR
+     C                   CALLP     p_kill('Incorrect timestamp format: ' +
+     C                                    i_datTimFmt)
      C                   Endif
       *
      C     ENDE          TAG
@@ -132,15 +146,20 @@
      C                   ENDSR
       *
       *============================================================*
-      *    *PSSR         Fehlerbehandlung                          *
+      *  Program error handler                                     *
       *============================================================*
       *
-     C     *PSSR         BEGSR
-      *
-     C                   EVAL      o_msgID = 'USR8171'
-     C                   EVAL      USR81711 = i_buffer
-     C                   EVAL      o_msgDta = USR8171
-     C                   GOTO      ENDE
-      *
-     C                   ENDSR     '*CANCL'
+     P errorHandler    b                   
+     D                 pi
+     D i_condToken                         value likeds(cee_fc_t)
+     D i_pCommArea                   10i 0 value
+     D o_action                      10i 0
+     D o_newCondToken                            likeds(cee_fc_t)
+      /free
+
+         dump;
+         o_action = CEE_PERCOLATE;
+
+      /end-free
+     P                 e
       *

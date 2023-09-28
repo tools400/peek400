@@ -407,3 +407,6 @@
      D  InLen                        10I 0
      D  fc                           12A   OPTIONS(*OMIT)
       *-------------------------------------------------------------------*
+     D p_kill          PR
+     D  i_text                      128A   value  varying
+      *

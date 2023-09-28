@@ -214,15 +214,6 @@
      D  i_mbr                              value  like(r§mbr     )
      D  i_rcdFmt                     10A   value
       *
-     D p_pssr          PR
-      *
-     D p_regPssr       PR                  extproc('CEERTX')
-     D  i_procPtr                      *   const  procptr
-     D  i_token                        *   const
-     D                                     options(*OMIT)
-     D  i_fc                                      like(r§fc      )
-     D                                     options(*OMIT)
-      *
       /COPY QCOPYLE,F_PEEK51
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
@@ -251,31 +242,6 @@
      D P0Library              93    102A
      D P0Member              129    138A
      D P0RcdNbr              397    400I 0
-      *
-      *----------------------------------------------------*
-      *  F E L D - D E F I N I T I O N E N                 *
-      *----------------------------------------------------*
-      *
-     D*XQFile          DS
-     D* XFile                        10A
-     D* XLibrary                     10A
-     D*XMember         S             10A
-     D*XAccess         S              1A
-     D*XProdlib        S             10A
-     D*XChgLib         S              1A
-     D*XChgFile        S              1A
-     D*XChgMbr         S              1A
-     D*XUpdModKey      S              1A
-     D*XChgSqlW        S              1A
-     D*XChgSqlO        S              1A
-     D*XQEnvFile       DS
-     D* XEnvFile                     10A
-     D* XEnvLib                      10A
-     D*XEnvMbr         S             10A
-     D*XEnvSave        S              1A
-     D*XEnvLayout      S              1A
-     D*XSqlWhere       S            512A   varying
-     D*XSqlOrder       S            512A   varying
       *
      D rtn             DS                  qualified
      D  file                               like(##File)
@@ -360,8 +326,8 @@
      D shortCmd        DS                  likeds(ShortCmd_t) inz
      D YExecCmd        S                   like(r§cmdBuffer) inz
      D YNbrOfEnt       S                   like(r§int4    ) inz
-     D YSqlWhere       S            512A   inz
-     D YSqlOrder       S            512A   inz
+     D YSqlWhere       S                   like(r§sqlWhere) inz
+     D YSqlOrder       S                   like(r§sqlOrder) inz
      D YAccess         S              1A   inz
      D yAlwLc          S              1A   inz
      D yCase           S              1A   inz
@@ -375,7 +341,6 @@
      D YPinTabR        S                   like(r§pIntAbr )  inz dim(12)
      D YnbrPinR        S                   like(r§int4    )  inz
      D YnbrPinC        S                   like(r§int4    )  inz
-     D YAccMode        S              1A   inz
      D YisKeyLower     S                   like(r§bool    )  inz
      D YOption         S                   like(r§option  )  inz
      D YText           S                   like(r§text)
@@ -705,11 +670,14 @@
      D  WndNbr                             like(##WndNbr )
      D  StrPage                            like(##StrPage)
       *
+      /COPY QCOPYLE,CEECNDHDLR
+      *
+     D isInzSr         S                   like(r§bool) inz(bFalse)
+
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
       *
-      *---ENTRY-LISTE--------------------------------------*
      D PEEK05          PI
      D  io_qFile                                 likeds(r§qObj)
      D  i_member                           const like(r§mbr)
@@ -790,6 +758,12 @@
      C                   KFLD                    F_Field
       *
       *---------------------------------------------------*
+      *
+      *  Register error handler
+     C                   callp     CEEHDLR(%paddr('errorHandler')
+     C                                     : *null: *omit)
+      *
+     C                   EXSR      InzSr
       *
      C                   EXSR      FIRST
       *
@@ -2801,13 +2775,19 @@
       *
       * Let the user enter the SQL WHERE and ORDER BY clauses:
      C                   monitor
+     C                   eval      YFile = ##FILE
+     C                   eval      YLibrary = ##LIBRARY
+     C                   eval      YMember = ##MEMBER
+     C                   eval      YFormat = ##FORMAT
+     C                   eval      YSqlWhere = sqlWhere
+     C                   eval      YSqlOrder = sqlOrder
      C                   callp     PEEK48(SET_Dsp80: §CopyRight
-     C                                    : ##File: ##LIBRARY: ##MEMBER
-     C                                    : ##FORMAT
-     C                                    : AccessMode: sqlWhere: sqlOrder
+     C                                    : yFile: YLibrary: YMember
+     C                                    : YFormat
+     C                                    : AccessMode: ySqlWhere: ySqlOrder
      C                                    : auth.chgSqlW: auth.chgSqlO
      C                                    : YMsgID: YMsgDta)
-     C                   eval      *in99 = bTrue
+     C                   eval      *in99 = bFalse
      C                   on-error
      C                   eval      *in99 = bTrue
      C                   endmon
@@ -2829,14 +2809,14 @@
      C                   Eval      ##MEMBER = yMember
      C                   Eval      ##FORMAT = yFormat
       *
-     C                   If        (ySqlWhere  <> ' ') or
-     C                             (ySqlOrder  <> ' ')
+     C                   If        (YSqlWhere  <> ' ') or
+     C                             (YSqlOrder  <> ' ')
      C                   IF        accessMode <> §sqlSeq
      C                   Eval      oldAccMode = accessMode
      C                   Endif
      C                   Eval      accessMode = §sqlSeq
-     C                   Eval      sqlWhere   = ySqlWhere
-     C                   Eval      sqlOrder   = ySqlOrder
+     C                   Eval      sqlWhere   = YSqlWhere
+     C                   Eval      sqlOrder   = YSqlOrder
      C                   Else
      C                   Eval      accessMode = oldAccMode
      C                   Eval      sqlWhere   = ' '
@@ -3583,9 +3563,9 @@
      C                              ##LIBRARY  <> rtn.library or
      C                              ##MEMBER   <> rtn.member or
      C                              ##FORMAT   <> rtn.format or
-     C                              yAccMode   <> rtn.accessMode or
-     C                              ySqlWhere  <> rtn.sqlWhere or
-     C                              ySqlOrder  <> rtn.sqlOrder)
+     C                              accessMode <> rtn.accessMode or
+     C                              sqlWhere   <> rtn.sqlWhere or
+     C                              sqlOrder   <> rtn.sqlOrder)
      C                   Exsr      closeFile
      C                   Eval      ##FILE     = rtn.file
      C                   Eval      ##LIBRARY  = rtn.library
@@ -8221,12 +8201,16 @@
      C                   ENDSR
       *
       *============================================================*
-      *    *INZSR        Programminitialisierung                   *
+      *    InzSr        Programminitialisierung                    *
       *============================================================*
       *
-     C     *INZSR        BEGSR
+     C     InzSr         BEGSR
       *
-     C                   Callp     p_regPssr(%paddr('P_PSSR'): *omit: *omit)
+     C                   IF        (isInzSr = bTrue)
+     C                   Leavesr
+     C                   ENDIF
+      *
+     C                   Eval      isInzSr = bTrue
       *
      C                   Eval      §PgmQ = '*'
       *
@@ -8293,8 +8277,7 @@
       *============================================================*
       *
      P f_int           B
-      *
-     D f_int           PI            20S 0
+     D                 PI            20S 0
      D  inpValue                     25S 5 VALUE
       *
      D integerVal      S             20S 0
@@ -8303,15 +8286,14 @@
       *
      C                   Return    integerVal
       *
-     P f_int           E
+     P                 E
       *
       *============================================================*
       *    f_chain00                                               *
       *============================================================*
       *
      P f_chain00       B
-      *
-     D f_chain00       PI             1A
+     D                 PI             1A
      D  i_rrn                              value  like(r§rcdNbr  )
      D  i_file                             value  like(r§file    )
      D  i_lib                              value  like(r§lib     )
@@ -8373,15 +8355,14 @@
       *
      C                   Return    *IN11
       *
-     P f_chain00       E
+     P                 E
       *
       *============================================================*
       *    f_chain04                                               *
       *============================================================*
       *
      P f_chain04       B
-      *
-     D f_chain04       PI             1A
+     D                 PI             1A
      D  i_rrn                              value  like(r§rcdNbr  )
      D  i_file                             value  like(r§file    )
      D  i_lib                              value  like(r§lib     )
@@ -8421,19 +8402,23 @@
       *
      C                   Return    *IN11
       *
-     P f_chain04       E
+     P                 E
       *
       *============================================================*
-      *    p_pssr        Error handler                             *
+      *  Program error handler                                     *
       *============================================================*
       *
-     P p_pssr          B                   export
-      *
-     D p_pssr          PI
-      *
-     C                   DUMP
-      *
-     C                   Return
-      *
-     P p_pssr          E
+     P errorHandler    b
+     D                 pi
+     D i_condToken                         value likeds(cee_fc_t)
+     D i_pCommArea                   10i 0 value
+     D o_action                      10i 0
+     D o_newCondToken                            likeds(cee_fc_t)
+      /free
+
+         dump;
+         o_action = CEE_PERCOLATE;
+
+      /end-free
+     P                 e
       *

@@ -29,26 +29,21 @@
      FPEEK50FM  CF   E             WORKSTN USROPN
      F                                     INFDS(§Workstn)
      F                                     SFILE(PBSFL:SFLREC)
-     F                                     INFSR(*PSSR)
       * Feldliste nach Sequenzfolge
      FPEEKFLDL1 IF   E           K DISK    USROPN
-     F                                     INFSR(*PSSR)
      F                                     INFDS(Peek_01_DS)
      F                                     RENAME(FPEEKFLD:FPEEKFLDL1)
      F                                     PREFIX(F_)
       * Feldliste nach Eingangsfolge
      FPEEKFLD   IF   E             DISK    USROPN
-     F                                     INFSR(*PSSR)
      F                                     INFDS(Peek_00_DS)
      F                                     PREFIX(F_)
       * Arbeitsdatei nach Anzeigefolge
      FPEEKWRK   UF   E           K DISK    USROPN
-     F                                     INFSR(*PSSR)
      F                                     INFDS(Work_00_DS)
      F                                     PREFIX(W_)
       * Arbeitsdatei nach Eingangsfolge
      FPEEKWRK_  UF A F 1024        DISK    USROPN
-     F                                     INFSR(*PSSR)
      F                                     INFDS(Work_01_DS)
       *
       *---INFOSTRUKTUR FÜR AID-BYTE -----------------------*
@@ -157,11 +152,13 @@
      D X               S                   like(r§int4    ) inz
      D NbrPinCol       S                   like(r§int4    ) inz
       *
+      /COPY QCOPYLE,CEECNDHDLR
+      *
+     D isInzSr         S                   like(r§bool) inz(bFalse)
+      *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
-      *
-      *---ENTRY-LISTE--------------------------------------*
       *
      D PEEK50          PI
      D  i_dsp80                            const like(r§dsp80)
@@ -181,6 +178,12 @@
      C                   KFLD                    W_Key
       *
       *---------------------------------------------------*
+      *
+      *  Register error handler
+     C                   callp     CEEHDLR(%paddr('errorHandler')
+     C                                     : *null: *omit)
+      *
+     C                   EXSR      InzSr
       *
      C                   EXSR      FIRST
       *
@@ -1029,11 +1032,17 @@
       *
      C                   ENDSR
       *
-      *============================================================*
-      *    *INZSR        Programminitialisierung                   *
-      *============================================================*
+      *====================================================*
+      *  InzSr --  Initialize program                      *
+      *====================================================*
       *
-     C     *INZSR        Begsr
+     C     InzSr         Begsr
+      *
+     C                   If        (isInzSr = bTrue)
+     C                   Leavesr
+     C                   Endif
+      *
+     C                   Eval      isInzSr = bTrue
       *
      C                   Eval      §PgmQ = '*'
       *
@@ -1047,12 +1056,20 @@
      C                   Endsr
       *
       *============================================================*
-      *    *PSSR         Fehlerbehandlung                          *
+      *  Program error handler                                     *
       *============================================================*
       *
-     C     *PSSR         BEGSR
-      *
-     C                   DUMP
-      *
-     C                   ENDSR     '*CANCL'
+     P errorHandler    b
+     D                 pi
+     D i_condToken                         value likeds(cee_fc_t)
+     D i_pCommArea                   10i 0 value
+     D o_action                      10i 0
+     D o_newCondToken                            likeds(cee_fc_t)
+      /free
+
+         dump;
+         o_action = CEE_PERCOLATE;
+
+      /end-free
+     P                 e
       *

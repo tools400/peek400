@@ -103,11 +103,13 @@
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
       *
+      /COPY QCOPYLE,CEECNDHDLR
+      *
+     D isInzSr         S                   like(r§bool) inz(bFalse)
+      *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
-      *
-      *---ENTRY-LISTE--------------------------------------*
       *
      D PEEK21          PI
      D  i_scnAID                           const like(r§scnAid)
@@ -120,6 +122,12 @@
      D                                           options(*nopass)
       *
       *---------------------------------------------------*
+      *
+      *  Register error handler
+     C                   callp     CEEHDLR(%paddr('errorHandler')
+     C                                     : *null: *omit)
+      *
+     C                   EXSR      InzSr
       *
      C                   EXSR      FIRST
       *
@@ -375,11 +383,17 @@
       *
      C                   ENDSR
       *
-      *============================================================*
-      *    *INZSR        Programminitialisierung                   *
-      *============================================================*
+      *====================================================*
+      *  InzSr --  Initialize program                      *
+      *====================================================*
       *
-     C     *INZSR        BEGSR
+     C     InzSr         Begsr
+      *
+     C                   If        (isInzSr = bTrue)
+     C                   Leavesr
+     C                   Endif
+      *
+     C                   Eval      isInzSr = bTrue
       *
      C                   Eval      EXIT05 = f_pgmCallN('EXIT05')
       *
@@ -398,16 +412,6 @@
      C                                f_getUsr(g_exit05.file: g_exit05.lib)
       *
      C                   ENDSR
-      *
-      *============================================================*
-      *    *PSSR         Fehlerbehandlung                          *
-      *============================================================*
-      *
-     C     *PSSR         BEGSR
-      *
-     C                   DUMP
-      *
-     C                   ENDSR     '*CANCL'
       *
       *============================================================*
       *    Aufrufen EXIT05                                         *
@@ -432,5 +436,23 @@
 
       /end-free
       *
+     P                 e
+      *
+      *============================================================*
+      *  Program error handler                                     *
+      *============================================================*
+      *
+     P errorHandler    b
+     D                 pi
+     D i_condToken                         value likeds(cee_fc_t)
+     D i_pCommArea                   10i 0 value
+     D o_action                      10i 0
+     D o_newCondToken                            likeds(cee_fc_t)
+      /free
+
+         dump;
+         o_action = CEE_PERCOLATE;
+
+      /end-free
      P                 e
       *

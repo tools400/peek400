@@ -135,6 +135,8 @@
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
       *
+      /COPY QCOPYLE,CEECNDHDLR
+      *
       ********************************************************************
       *           Programmsteuerung                                      *
       ********************************************************************
@@ -185,6 +187,10 @@
      C     p_key1        Klist
      C                   Kfld                    p_field
       *
+      *  Register error handler
+     C                   callp     CEEHDLR(%paddr('errorHandler')
+     C                                     : *null: *omit)
+      *
      C                   Callp     p_main(gi_file       :
      C                                    gi_lib        :
      C                                    gi_mbr        :
@@ -210,16 +216,6 @@
      C                                    go_msgDta     )
       *
      C                   Return
-      *
-      *----------------------------------------------------*
-      *  *PSSR  --  Program error handler                  *
-      *----------------------------------------------------*
-      *
-     C     *PSSR         BEGSR
-      *
-     C                   DUMP
-      *
-     C                   ENDSR     '*CANCL'
       *
       *===================================================================*
       *  Prozedur:  p_crtUsrSg                                 (Body)     *
@@ -912,4 +908,22 @@
      C                   Return
       *
      P                 E
+      *
+      *============================================================*
+      *  Program error handler                                     *
+      *============================================================*
+      *
+     P errorHandler    b                   
+     D                 pi
+     D i_condToken                         value likeds(cee_fc_t)
+     D i_pCommArea                   10i 0 value
+     D o_action                      10i 0
+     D o_newCondToken                            likeds(cee_fc_t)
+      /free
+
+         dump;
+         o_action = CEE_PERCOLATE;
+
+      /end-free
+     P                 e
       *

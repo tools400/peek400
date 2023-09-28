@@ -168,6 +168,7 @@ ADDBNDDIRE:
              ENDDO
 
              IF         COND(&DBGVIEW *NE '*ALL'  +
+                        *AND &DBGVIEW *NE '*LIST' +
                         *AND &DBGVIEW *NE '*NONE') THEN(DO)
                 SNDPGMMSG  MSGID(CPF9898) MSGF(QCPFMSG) +
                            MSGDTA('DBGVIEW ''' *TCAT &DBGVIEW *TCAT +

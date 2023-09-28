@@ -73,6 +73,7 @@
       *
       *---Variablendefinition------------------------------*
       /COPY QCOPYLE,D_VARDEF
+      /COPY QCOPYLE,FLDL0100
       /COPY QCOPYLE,QDBRTVFD
       /COPY QCOPYLE,KEYL0100
       /COPY QCOPYLE,FILD0100
@@ -174,6 +175,11 @@
      D  V_MON                 11     12  0
      D  V_TAG                 13     14  0
       *
+      /COPY QCOPYLE,F_PEEK53
+      /COPY QCOPYLE,F_PEEK58
+      *
+      /COPY QCOPYLE,CEECNDHDLR
+      *
       ********************************************************************
       *           Main  Control block                                    *
       ********************************************************************
@@ -186,6 +192,10 @@
      D  o_data                      512A
       *
       *---------------------------------------------------*
+      *
+      *  Register error handler
+     C                   callp     CEEHDLR(%paddr('errorHandler')
+     C                                     : *null: *omit)
       *
      C                   SELECT
      C     i_function    WHENEQ    '*CREATE'
@@ -418,7 +428,8 @@
      C                   If        %check('0123456789': %trim(i_rcdFmt)) = 0
      C***                Eval      mbrNbr = %dec(%trim(XRcdFormat): 10: 0)
      C***                EXSR      FindMbr
-     C                   EXSR      *PSSR
+     C                   Callp     p_kill('Incorrect record format name: ' +
+     C                                    i_rcdFmt)
      C                   Else
      C                   EXSR      FindRcdFmt
      C                   Endif
@@ -872,24 +883,21 @@
       *
      C                   ENDSR
       *
-      *====================================================*
-      *  *INZSR --  Initialisierung                        *
-      *====================================================*
+      *============================================================*
+      *  Program error handler                                     *
+      *============================================================*
       *
-     C     *INZSR        BEGSR
-      *
-     C                   ENDSR
-      *
-      *====================================================*
-      *  *PSSR  --  Program error handler                  *
-      *====================================================*
-      *
-     C     *PSSR         BEGSR
-      *
-     C                   DUMP
-      *
-     C                   EVAL      o_nbrOfEnt = *ZEROS
-     C                   GOTO      ENDE
-      *
-     C                   ENDSR     '*CANCL'
+     P errorHandler    b
+     D                 pi
+     D i_condToken                         value likeds(cee_fc_t)
+     D i_pCommArea                   10i 0 value
+     D o_action                      10i 0
+     D o_newCondToken                            likeds(cee_fc_t)
+      /free
+
+         dump;
+         o_action = CEE_PERCOLATE;
+
+      /end-free
+     P                 e
       *

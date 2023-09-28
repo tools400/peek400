@@ -28,12 +28,12 @@
       /COPY QCOPYLE,COPYRIGHT
       *
      FPEEKFLD   UF A E             DISK    USROPN
-     F                                     INFSR(*PSSR)
      F                                     PREFIX(F_)
       *===============================================================*
       *
       *---Variablendefinition------------------------------*
       /COPY QCOPYLE,D_VARDEF
+      /COPY QCOPYLE,CEECNDHDLR
       *----------------------------------------------------*
       *
       /define internal_prototype
@@ -86,6 +86,8 @@
       /COPY QCOPYLE,F_PEEK58
       /COPY QCOPYLE,F_PEEK71
       *
+     D isInzSr         S                   like(r§bool) inz(bFalse)
+      *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
@@ -96,10 +98,15 @@
      D  o_rcdFmtID                               like(r§fmtId)
      D  o_msgID                                  like(r§msgID)
      D  o_msgDta                                 like(r§msgDta)
+      *---------------------------------------------------*
       *
-      *---------------------------------------------------*
+      *  Register error handler
+     C                   callp     CEEHDLR(%paddr('errorHandler')
+     C                                     : *null: *omit)
+      *
+     C                   EXSR      InzSr
+      *
      C                   EXSR      First
-      *---------------------------------------------------*
       *
       *  create list of database relation
      C                   CALLP     PEEK02(i_qFile: i_rcdFmt: '*CREATE': NOF
@@ -323,26 +330,38 @@
      C                   ENDSR
       *
       *====================================================*
-      *  *INZSR --  Initialize program                     *
+      *  InzSr --  Initialize program                      *
       *====================================================*
       *
-     C     *INZSR        BEGSR
+     C     InzSr         Begsr
+      *
+     C                   If        (isInzSr = bTrue)
+     C                   Leavesr
+     C                   Endif
+      *
+     C                   Eval      isInzSr = bTrue
       *
      C                   Eval      PEEK02_NAME = f_pgmCallN('PEEK02')
       *
-     C                   OPEN      PEEKFLD
+     C                   Open      PEEKFLD
       *
-     C                   ENDSR
+     C                   Endsr
       *
-      *====================================================*
-      *  *PSSR  --  Program error handler                  *
-      *====================================================*
+      *============================================================*
+      *  Program error handler                                     *
+      *============================================================*
       *
-     C     *PSSR         BEGSR
-      *
-     C                   DUMP
-      *
-     C                   RETURN
-      *
-     C                   ENDSR     '*CANCL'
+     P errorHandler    b
+     D                 pi
+     D i_condToken                         value likeds(cee_fc_t)
+     D i_pCommArea                   10i 0 value
+     D o_action                      10i 0
+     D o_newCondToken                            likeds(cee_fc_t)
+      /free
+
+         dump;
+         o_action = CEE_PERCOLATE;
+
+      /end-free
+     P                 e
       *

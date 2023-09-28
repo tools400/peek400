@@ -128,6 +128,8 @@
       *
       /COPY QCOPYLE,F_PEEK53
       *
+      /COPY QCOPYLE,CEECNDHDLR
+      *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
@@ -138,6 +140,10 @@
      D  o_msgDta                                 like(r§msgDta)
       *
       *----------------------------------------------------*
+      *
+      *  Register error handler
+     C                   callp     CEEHDLR(%paddr('errorHandler')
+     C                                     : *null: *omit)
       *
      C                   EVAL      o_msgID = *BLANKS
      C                   EVAL      o_msgDta = *BLANKS
@@ -929,22 +935,22 @@
      C                   ENDSR
       *
       *============================================================*
-      *    *INZSR        Programminitialisierung                   *
+      *  Program error handler                                     *
       *============================================================*
       *
-     C     *INZSR        BEGSR
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    *PSSR         Fehlerbehandlung                          *
-      *============================================================*
-      *
-     C     *PSSR         BEGSR
-      *
-     C                   DUMP
-      *
-     C                   ENDSR     '*CANCL'
+     P errorHandler    b
+     D                 pi
+     D i_condToken                         value likeds(cee_fc_t)
+     D i_pCommArea                   10i 0 value
+     D o_action                      10i 0
+     D o_newCondToken                            likeds(cee_fc_t)
+      /free
+
+         dump;
+         o_action = CEE_PERCOLATE;
+
+      /end-free
+     P                 e
       *
 **   Section---Schlüssel-Datenbereich-------------------------- Version 1.1.0 -----------
 alt: *PEEK05   *F11
