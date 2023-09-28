@@ -62,8 +62,8 @@
      D RCD_BUFF_LEN    C                   const(32766)
       *
      D rcdNbr_t        S             10I 0 template
-     D nullMap_t       S              1S 0 dim(§nullMapSize)
-     D §nullMapSize    C                   const(8000)
+     D nullMap_t       S              1S 0 dim(NULL_MAP_SIZE)
+     D NULL_MAP_SIZE   C                   const(8000)
       *
      D scnAid_t        S             10A   template
      D sqlOrder_t      S            512A   template

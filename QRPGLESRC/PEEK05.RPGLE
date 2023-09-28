@@ -229,7 +229,7 @@
      D  IO_BuffFld                         like(rcdBuf_t)
       *
      D IO_NullMap      S                   like(nullMap_t)
-     D                                     dim(§nullMapSize)
+     D                                     dim(NULL_MAP_SIZE)
       *
      DPeek#L1          DS
      D P1File                 83     92A

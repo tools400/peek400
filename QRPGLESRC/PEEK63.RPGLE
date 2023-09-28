@@ -83,13 +83,13 @@
      D  i_RFILE                            const  likeds(RFILE_t )
      D  io_rcdBuffer                              like(rcdBuf_t)
      D  io_nullMap                                like(nullMap_t)
-     D                                            dim(§nullMapSize)
+     D                                            dim(NULL_MAP_SIZE)
       *
      D copyInNullMap...
      D                 PR
      D  i_RFILE                            const  likeds(RFILE_t )
      D  io_nullMap                                like(nullMap_t)
-     D                                            dim(§nullMapSize)
+     D                                            dim(NULL_MAP_SIZE)
       *
       *  Returns the value of the specified mode parameter.
      D getMode...
@@ -497,7 +497,7 @@
      D  i_doLock                           const  like(bool_t)
      D  io_rcdBuffer                              like(rcdBuf_t)
      D  io_nullMap                                like(nullMap_t)
-     D                                            dim(§nullMapSize)
+     D                                            dim(NULL_MAP_SIZE)
       *
      D options         S             10I 0 inz(DFT)
       *
@@ -550,7 +550,7 @@
      D  i_doLock                           const  like(bool_t)
      D  io_rcdBuffer                              like(rcdBuf_t)
      D  io_nullMap                                like(nullMap_t)
-     D                                            dim(§nullMapSize)
+     D                                            dim(NULL_MAP_SIZE)
       *
      D options         S             10I 0 inz(DFT)
      D key             S                   like(i_key      ) inz
@@ -841,7 +841,7 @@
      D  i_doLock                           const  like(bool_t)
      D  io_rcdBuffer                              like(rcdBuf_t)
      D  io_nullMap                                like(nullMap_t)
-     D                                            dim(§nullMapSize)
+     D                                            dim(NULL_MAP_SIZE)
       *
      D options         S             10I 0 inz(DFT)
      D function        S             32A   varying           inz
@@ -922,7 +922,7 @@
      D  i_doLock                           const  like(bool_t)
      D  io_rcdBuffer                              like(rcdBuf_t)
      D  io_nullMap                                like(nullMap_t)
-     D                                            dim(§nullMapSize)
+     D                                            dim(NULL_MAP_SIZE)
       *
      D options         S             10I 0 inz(DFT)
      D function        S             32A   varying           inz
@@ -1191,7 +1191,7 @@
      D  i_RFILE                            const  likeds(RFILE_t )
      D  io_rcdBuffer                              like(rcdBuf_t)
      D  io_nullMap                                like(nullMap_t)
-     D                                            dim(§nullMapSize)
+     D                                            dim(NULL_MAP_SIZE)
       *
      D X               S             10I 0 inz
       * ------------------------------------------------------------------------
@@ -1218,10 +1218,10 @@
      D                 PI
      D  i_RFILE                            const  likeds(RFILE_t )
      D  io_nullMap                                like(nullMap_t)
-     D                                            dim(§nullMapSize)
+     D                                            dim(NULL_MAP_SIZE)
       *
      D X               S             10I 0 inz
-     D inNullMap       S              1S 0 dim(§nullMapSize)
+     D inNullMap       S              1S 0 dim(NULL_MAP_SIZE)
      D                                     based(i_RFILE.pInNull)
       * ------------------------------------------------------------------------
       /FREE

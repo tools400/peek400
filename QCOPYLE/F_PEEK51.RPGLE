@@ -31,7 +31,7 @@
      D                                     extproc('SQL_nextRow')                             RADDAT
      D  o_buffer                                  like(rcdBuf_t)                            RADDAT
      D  o_nullMap                                 like(nullMap_t)                            RADDAT
-     D                                            dim(§nullMapSize)                           RADDAT
+     D                                            dim(NULL_MAP_SIZE)                           RADDAT
      D  o_hFile                                   likeds(hFile_t)                            RADDAT
      D  o_msgID                                   like(msgID_t)                            RADDAT
      D  o_msgDta                                  like(msgDta_t)                            RADDAT
@@ -42,7 +42,7 @@
      D                                     extproc('SQL_previousRow')                         RADDAT
      D  o_buffer                                  like(rcdBuf_t)                            RADDAT
      D  o_nullMap                                 like(nullMap_t)                            RADDAT
-     D                                            dim(§nullMapSize)                           RADDAT
+     D                                            dim(NULL_MAP_SIZE)                           RADDAT
      D  o_hFile                                   likeds(hFile_t)                            RADDAT
      D  o_msgID                                   like(msgID_t)                            RADDAT
      D  o_msgDta                                  like(msgDta_t)                            RADDAT

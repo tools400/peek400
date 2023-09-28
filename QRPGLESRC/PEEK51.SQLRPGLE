@@ -287,7 +287,7 @@
      D                 PI                         like(bool_t)
      D  o_buffer                                  like(rcdBuf_t)
      D  o_nullMap                                 like(nullMap_t)
-     D                                            dim(§nullMapSize)
+     D                                            dim(NULL_MAP_SIZE)
      D  o_hFile                                   likeds(hFile_t)
      D  o_msgID                                   like(msgID_t)
      D  o_msgDta                                  like(msgDta_t)
@@ -302,7 +302,7 @@
      D  IO_BuffFld                         like(rcdBuf_t)
       *
      D IO_NullMap      S                   like(nullMap_t)
-     D                                     dim(§nullMapSize)
+     D                                     dim(NULL_MAP_SIZE)
      D                                     based(ptrNullMap)
       * ------------------------------------------------------------------------
      C                   Eval      ptrBuffer = %addr(o_buffer )
@@ -357,7 +357,7 @@
      D                 PI                         like(bool_t)
      D  o_buffer                                  like(rcdBuf_t)
      D  o_nullMap                                 like(nullMap_t)
-     D                                            dim(§nullMapSize)
+     D                                            dim(NULL_MAP_SIZE)
      D  o_hFile                                   likeds(hFile_t)
      D  o_msgID                                   like(msgID_t)
      D  o_msgDta                                  like(msgDta_t)
@@ -372,7 +372,7 @@
      D  IO_BuffFld                         like(rcdBuf_t)
       *
      D IO_NullMap      S                   like(nullMap_t)
-     D                                     dim(§nullMapSize)
+     D                                     dim(NULL_MAP_SIZE)
      D                                     based(ptrNullMap)
       * ------------------------------------------------------------------------
      C                   Eval      ptrBuffer = %addr(o_buffer )

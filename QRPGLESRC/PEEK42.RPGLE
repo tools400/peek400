@@ -44,7 +44,7 @@
      D  IO_BuffFld                         like(rcdBuf_t)
       *
      D IO_NullMap      S                   like(nullMap_t)
-     D                                     dim(§nullMapSize)
+     D                                     dim(NULL_MAP_SIZE)
       *
       *---Variablendefinition------------------------------*
       /COPY QCOPYLE,D_VARDEF

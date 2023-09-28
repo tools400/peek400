@@ -141,7 +141,7 @@
      D  i_doLock                           const  like(bool_t)
      D  io_rcdBuffer                              like(rcdBuf_t)
      D  io_nullMap                                like(nullMap_t)
-     D                                            dim(§nullMapSize)
+     D                                            dim(NULL_MAP_SIZE)
       *
       *-------------------------------------------------------------------*
      D CIO_chainWithKey...
@@ -154,7 +154,7 @@
      D  i_doLock                           const  like(bool_t)
      D  io_rcdBuffer                              like(rcdBuf_t)
      D  io_nullMap                                like(nullMap_t)
-     D                                            dim(§nullMapSize)
+     D                                            dim(NULL_MAP_SIZE)
       *
       *-------------------------------------------------------------------*
      D CIO_setllWithRRN...
@@ -202,7 +202,7 @@
      D  i_doLock                           const  like(bool_t)
      D  io_rcdBuffer                              like(rcdBuf_t)
      D  io_nullMap                                like(nullMap_t)
-     D                                            dim(§nullMapSize)
+     D                                            dim(NULL_MAP_SIZE)
       *
       *-------------------------------------------------------------------*
      D CIO_readp...
@@ -214,7 +214,7 @@
      D  i_doLock                           const  like(bool_t)
      D  io_rcdBuffer                              like(rcdBuf_t)
      D  io_nullMap                                like(nullMap_t)
-     D                                            dim(§nullMapSize)
+     D                                            dim(NULL_MAP_SIZE)
       *
       *-------------------------------------------------------------------*
      D CIO_delete...
