@@ -164,7 +164,7 @@
      D  gi_envLib                          const like(r§lib)
      D  gi_envMbr                          const like(r§mbr)
      D  gi_isAutoSave                      const like(r§bool)
-     D  gi_pinTabR                         const like(r§pintabr) dim(12)
+     D  gi_pinTabR                         const like(pinTabR_t) dim(12)
      D  gi_nbrPinR                         const like(r§int4)
      D  gi_pinTabC                         const like(r§fieldNme) dim(12)
      D  gi_nbrPinC                         const like(r§int4)
@@ -935,7 +935,7 @@
       *  Program error handler                                     *
       *============================================================*
       *
-     P errorHandler    b                   
+     P errorHandler    b
      D                 pi
      D i_condToken                         value likeds(cee_fc_t)
      D i_pCommArea                   10i 0 value

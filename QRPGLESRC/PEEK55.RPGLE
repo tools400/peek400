@@ -151,7 +151,7 @@
      D  gi_envLib                          const like(r§lib)
      D  gi_envMbr                          const like(r§mbr)
      D  gi_option                          const like(r§option)
-     D  go_pinTabR                               like(r§pintabr) dim(12)
+     D  go_pinTabR                               like(pinTabR_t) dim(12)
      D  go_nbrPinR                               like(r§int4)
      D  go_pinTabC                               like(r§fieldNme) dim(12)
      D  go_nbrPinC                               like(r§int4)
@@ -913,7 +913,7 @@
       *  Program error handler                                     *
       *============================================================*
       *
-     P errorHandler    b                   
+     P errorHandler    b
      D                 pi
      D i_condToken                         value likeds(cee_fc_t)
      D i_pCommArea                   10i 0 value

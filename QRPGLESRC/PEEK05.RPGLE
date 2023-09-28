@@ -338,16 +338,16 @@
      D YEnvLib         S                   like(r吸ib     )  inz
      D YEnvMbr         S                   like(r吮br     )  inz
      D YIsAutoSave     S                   like(r呆ool    )  inz(bFalse)
-     D YPinTabR        S                   like(r吠IntAbr )  inz dim(12)
-     D YnbrPinR        S                   like(r告nt4    )  inz
-     D YnbrPinC        S                   like(r告nt4    )  inz
-     D YisKeyLower     S                   like(r呆ool    )  inz
-     D YOption         S                   like(r吶ption  )  inz
+     D YPinTabR        S                   like(pinTabR_t)  inz dim(12)
+     D YnbrPinR        S                   like(r告nt4)  inz
+     D YnbrPinC        S                   like(r告nt4)  inz
+     D YisKeyLower     S                   like(r呆ool)  inz
+     D YOption         S                   like(r吶ption)  inz
      D YText           S                   like(r含ext)
      D ySflOpt         S              2A
-     D YString         S                   like(r呀cdBuf  )
+     D YString         S                   like(r呀cdBuf)
      D                                     inz
-     D YStringLen      S                   like(r告nt4    ) inz
+     D YStringLen      S                   like(r告nt4) inz
      D YchgLib         S              1A   inz
      D YchgFile        S              1A   inz
      D YchgMbr         S              1A   inz
@@ -568,7 +568,7 @@
       *
      D PinRcd_X        S                   like(r告nt4)
      D MAX_PIN_RCD     C                   %elem(PinTabRcd)
-     D PinTabRcd       S                   like(r吠IntAbr) dim(12)
+     D PinTabRcd       S                   like(pinTabR_t) dim(12)
      D NbrPinRcd       S                   like(r告nt4)
       *
      D PinTabRcdE      DS                  likeds(pinTabR_t)

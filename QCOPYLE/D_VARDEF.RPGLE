@@ -46,8 +46,6 @@
      D r§mode          S             10A   template
      D r§type          S             10A   template
       *
-     D r§pinTabR       DS                  likeds(pinTabR_t) template
-      *
      D r§pgm           S             10A   template
      D r§pgmCallN      S             21A   template
      D r§pgmCmd        S             10A   template
