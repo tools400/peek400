@@ -176,65 +176,6 @@
      D  o_msgID                                  like(r§msgID)
      D  o_msgDta                                 like(r§msgDta)
       *
-     IBILD01
-     I              $OFS1                       $OfsVal( 1)
-     I              $OFS2                       $OfsVal( 2)
-     I              $OFS3                       $OfsVal( 3)
-     I              $OFS4                       $OfsVal( 4)
-     I              $OFS5                       $OfsVal( 5)
-     I              $OFS6                       $OfsVal( 6)
-     I              $OFS7                       $OfsVal( 7)
-     I              $OFS8                       $OfsVal( 8)
-      *
-     I              #HEX11                      #HexVal( 1)
-     I              #HEX12                      #HexVal( 2)
-     I              #HEX13                      #HexVal( 3)
-     I              #HEX14                      #HexVal( 4)
-      *
-     I              #HEX21                      #HexVal( 5)
-     I              #HEX22                      #HexVal( 6)
-     I              #HEX23                      #HexVal( 7)
-     I              #HEX24                      #HexVal( 8)
-      *
-     I              #HEX31                      #HexVal( 9)
-     I              #HEX32                      #HexVal(10)
-     I              #HEX33                      #HexVal(11)
-     I              #HEX34                      #HexVal(12)
-      *
-     I              #HEX41                      #HexVal(13)
-     I              #HEX42                      #HexVal(14)
-     I              #HEX43                      #HexVal(15)
-     I              #HEX44                      #HexVal(16)
-      *
-     I              #HEX51                      #HexVal(17)
-     I              #HEX52                      #HexVal(18)
-     I              #HEX53                      #HexVal(19)
-     I              #HEX54                      #HexVal(20)
-      *
-     I              #HEX61                      #HexVal(21)
-     I              #HEX62                      #HexVal(22)
-     I              #HEX63                      #HexVal(23)
-     I              #HEX64                      #HexVal(24)
-      *
-     I              #HEX71                      #HexVal(25)
-     I              #HEX72                      #HexVal(26)
-     I              #HEX73                      #HexVal(27)
-     I              #HEX74                      #HexVal(28)
-      *
-     I              #HEX81                      #HexVal(29)
-     I              #HEX82                      #HexVal(30)
-     I              #HEX83                      #HexVal(31)
-     I              #HEX84                      #HexVal(32)
-      *
-     I              $STR1                       $StrVal( 1)
-     I              $STR2                       $StrVal( 2)
-     I              $STR3                       $StrVal( 3)
-     I              $STR4                       $StrVal( 4)
-     I              $STR5                       $StrVal( 5)
-     I              $STR6                       $StrVal( 6)
-     I              $STR7                       $StrVal( 7)
-     I              $STR8                       $StrVal( 8)
-      *
       *----------------------------------------------------*
       *  Schlüsselliste für PEEKFLD
      C     F_KEY         Klist
@@ -299,7 +240,9 @@
      C                   Endfor
       *
       *  Anzeigen Bildschirm
+     C                   Exsr      ToScreen
      C                   Exfmt     BILD01
+     C                   Exsr      FromScreen
       *
       *  Daten geändert
      C                   Eval      isDataChg = *in93
@@ -1043,6 +986,138 @@
      C                   Eval      §msgID  = 'USR9999'
      C                   Eval      §msgDta = i_copyright
      C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+      *
+     C                   Endsr
+      *
+      *====================================================*
+      *  Copy program fields to screen.                    *
+      *====================================================*
+      *
+     C     ToScreen      Begsr
+      *
+     C                   Eval      $OFS1 = $OfsVal( 1)
+     C                   Eval      $OFS2 = $OfsVal( 2)
+     C                   Eval      $OFS3 = $OfsVal( 3)
+     C                   Eval      $OFS4 = $OfsVal( 4)
+     C                   Eval      $OFS5 = $OfsVal( 5)
+     C                   Eval      $OFS6 = $OfsVal( 6)
+     C                   Eval      $OFS7 = $OfsVal( 7)
+     C                   Eval      $OFS8 = $OfsVal( 8)
+      *
+     C                   Eval      #HEX11 = #HexVal( 1)
+     C                   Eval      #HEX12 = #HexVal( 2)
+     C                   Eval      #HEX13 = #HexVal( 3)
+     C                   Eval      #HEX14 = #HexVal( 4)
+      *
+     C                   Eval      #HEX21 = #HexVal( 5)
+     C                   Eval      #HEX22 = #HexVal( 6)
+     C                   Eval      #HEX23 = #HexVal( 7)
+     C                   Eval      #HEX24 = #HexVal( 8)
+      *
+     C                   Eval      #HEX31 = #HexVal( 9)
+     C                   Eval      #HEX32 = #HexVal(10)
+     C                   Eval      #HEX33 = #HexVal(11)
+     C                   Eval      #HEX34 = #HexVal(12)
+      *
+     C                   Eval      #HEX41 = #HexVal(13)
+     C                   Eval      #HEX42 = #HexVal(14)
+     C                   Eval      #HEX43 = #HexVal(15)
+     C                   Eval      #HEX44 = #HexVal(16)
+      *
+     C                   Eval      #HEX51 = #HexVal(17)
+     C                   Eval      #HEX52 = #HexVal(18)
+     C                   Eval      #HEX53 = #HexVal(19)
+     C                   Eval      #HEX54 = #HexVal(20)
+      *
+     C                   Eval      #HEX61 = #HexVal(21)
+     C                   Eval      #HEX62 = #HexVal(22)
+     C                   Eval      #HEX63 = #HexVal(23)
+     C                   Eval      #HEX64 = #HexVal(24)
+      *
+     C                   Eval      #HEX71 = #HexVal(25)
+     C                   Eval      #HEX72 = #HexVal(26)
+     C                   Eval      #HEX73 = #HexVal(27)
+     C                   Eval      #HEX74 = #HexVal(28)
+      *
+     C                   Eval      #HEX81 = #HexVal(29)
+     C                   Eval      #HEX82 = #HexVal(30)
+     C                   Eval      #HEX83 = #HexVal(31)
+     C                   Eval      #HEX84 = #HexVal(32)
+      *
+     C                   Eval      $STR1 = $StrVal( 1)
+     C                   Eval      $STR2 = $StrVal( 2)
+     C                   Eval      $STR3 = $StrVal( 3)
+     C                   Eval      $STR4 = $StrVal( 4)
+     C                   Eval      $STR5 = $StrVal( 5)
+     C                   Eval      $STR6 = $StrVal( 6)
+     C                   Eval      $STR7 = $StrVal( 7)
+     C                   Eval      $STR8 = $StrVal( 8)
+      *
+     C                   Endsr
+      *
+      *====================================================*
+      *  Copy screen to program fields.                    *
+      *====================================================*
+      *
+     C     FromScreen    Begsr
+      *
+     C                   Eval      $OfsVal( 1) = $OFS1
+     C                   Eval      $OfsVal( 2) = $OFS2
+     C                   Eval      $OfsVal( 3) = $OFS3
+     C                   Eval      $OfsVal( 4) = $OFS4
+     C                   Eval      $OfsVal( 5) = $OFS5
+     C                   Eval      $OfsVal( 6) = $OFS6
+     C                   Eval      $OfsVal( 7) = $OFS7
+     C                   Eval      $OfsVal( 8) = $OFS8
+      *
+     C                   Eval      #HexVal( 1) = #HEX11
+     C                   Eval      #HexVal( 2) = #HEX12
+     C                   Eval      #HexVal( 3) = #HEX13
+     C                   Eval      #HexVal( 4) = #HEX14
+      *
+     C                   Eval      #HexVal( 5) = #HEX21
+     C                   Eval      #HexVal( 6) = #HEX22
+     C                   Eval      #HexVal( 7) = #HEX23
+     C                   Eval      #HexVal( 8) = #HEX24
+      *
+     C                   Eval      #HexVal( 9) = #HEX31
+     C                   Eval      #HexVal(10) = #HEX32
+     C                   Eval      #HexVal(11) = #HEX33
+     C                   Eval      #HexVal(12) = #HEX34
+      *
+     C                   Eval      #HexVal(13) = #HEX41
+     C                   Eval      #HexVal(14) = #HEX42
+     C                   Eval      #HexVal(15) = #HEX43
+     C                   Eval      #HexVal(16) = #HEX44
+      *
+     C                   Eval      #HexVal(17) = #HEX51
+     C                   Eval      #HexVal(18) = #HEX52
+     C                   Eval      #HexVal(19) = #HEX53
+     C                   Eval      #HexVal(20) = #HEX54
+      *
+     C                   Eval      #HexVal(21) = #HEX61
+     C                   Eval      #HexVal(22) = #HEX62
+     C                   Eval      #HexVal(23) = #HEX63
+     C                   Eval      #HexVal(24) = #HEX64
+      *
+     C                   Eval      #HexVal(25) = #HEX71
+     C                   Eval      #HexVal(26) = #HEX72
+     C                   Eval      #HexVal(27) = #HEX73
+     C                   Eval      #HexVal(28) = #HEX74
+      *
+     C                   Eval      #HexVal(29) = #HEX81
+     C                   Eval      #HexVal(30) = #HEX82
+     C                   Eval      #HexVal(31) = #HEX83
+     C                   Eval      #HexVal(32) = #HEX84
+      *
+     C                   Eval      $StrVal( 1) = $STR1
+     C                   Eval      $StrVal( 2) = $STR2
+     C                   Eval      $StrVal( 3) = $STR3
+     C                   Eval      $StrVal( 4) = $STR4
+     C                   Eval      $StrVal( 5) = $STR5
+     C                   Eval      $StrVal( 6) = $STR6
+     C                   Eval      $StrVal( 7) = $STR7
+     C                   Eval      $StrVal( 8) = $STR8
       *
      C                   Endsr
       *

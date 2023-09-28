@@ -115,43 +115,6 @@
      D  o_msgID                                  like(r§msgID)
      D  o_msgDta                                 like(r§msgDta)
       *
-     IPBBOT#1
-     I              $$FKEY01                    $$FKEY( 1)
-     I              $$FKEY02                    $$FKEY( 2)
-     IPBBOT#2
-     I              $$FKEY03                    $$FKEY( 3)
-     I              $$FKEY04                    $$FKEY( 4)
-     IPBBOT#3
-     I              $$FKEY05                    $$FKEY( 5)
-     I              $$FKEY06                    $$FKEY( 6)
-     IPBBOT#4
-     I              $$FKEY07                    $$FKEY( 7)
-     I              $$FKEY08                    $$FKEY( 8)
-     IPBBOT#5
-     I              $$FKEY09                    $$FKEY( 9)
-     I              $$FKEY10                    $$FKEY(10)
-     IPBBOT#6
-     I              $$FKEY11                    $$FKEY(11)
-     I              $$FKEY12                    $$FKEY(12)
-     IPBBOT#7
-     I              $$FKEY13                    $$FKEY(13)
-     I              $$FKEY14                    $$FKEY(14)
-     IPBBOT#8
-     I              $$FKEY15                    $$FKEY(15)
-     I              $$FKEY16                    $$FKEY(16)
-     IPBBOT#9
-     I              $$FKEY17                    $$FKEY(17)
-     I              $$FKEY18                    $$FKEY(18)
-     IPBBOT#10
-     I              $$FKEY19                    $$FKEY(19)
-     I              $$FKEY20                    $$FKEY(20)
-     IPBBOT#11
-     I              $$FKEY21                    $$FKEY(21)
-     I              $$FKEY22                    $$FKEY(22)
-     IPBBOT#12
-     I              $$FKEY23                    $$FKEY(23)
-     I              $$FKEY24                    $$FKEY(24)
-      *
       *---------------------------------------------------*
       *
       *  Register error handler
@@ -169,6 +132,8 @@
       *
       *  Nachrichten senden
      C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+      *
+     C                   Exsr      toScreen
       *
       *  Nachrichten anzeigen
      C                   Eval      *in89 = *off
@@ -216,6 +181,8 @@
       *
       *  Anzeigen Bildschirm
      C                   Exfmt     BILD01
+      *
+     C                   Exsr      FromScreen
       *
       *  Nachrichten löschen
      C                   Callp     p_rmvPgmMg(§§pgmName)
@@ -482,7 +449,7 @@
       *
      C     getKey        Begsr
       *
-     C                   Callp     PEEK23(§§PgmName: '*ALL': 0
+     C                   Callp     PEEK23(§§PgmName: yKey: 0
      C                                    : yFKeys: yNbrOfKeys)
       *
      C                   ENDSR
@@ -504,6 +471,72 @@
      C                   Eval      zei = 4 + 3
      C                   Eval      pos = 7
      C                   Endif
+      *
+     C                   Endsr
+      *
+      *====================================================*
+      *  Copy program fields to screen.                    *
+      *====================================================*
+      *
+     C     ToScreen      Begsr
+      *
+     C                   Eval      $$FKEY01 = $$FKEY( 1)
+     C                   Eval      $$FKEY02 = $$FKEY( 2)
+     C                   Eval      $$FKEY03 = $$FKEY( 3)
+     C                   Eval      $$FKEY04 = $$FKEY( 4)
+     C                   Eval      $$FKEY05 = $$FKEY( 5)
+     C                   Eval      $$FKEY06 = $$FKEY( 6)
+     C                   Eval      $$FKEY07 = $$FKEY( 7)
+     C                   Eval      $$FKEY08 = $$FKEY( 8)
+     C                   Eval      $$FKEY09 = $$FKEY( 9)
+     C                   Eval      $$FKEY10 = $$FKEY(10)
+     C                   Eval      $$FKEY11 = $$FKEY(11)
+     C                   Eval      $$FKEY12 = $$FKEY(12)
+     C                   Eval      $$FKEY13 = $$FKEY(13)
+     C                   Eval      $$FKEY14 = $$FKEY(14)
+     C                   Eval      $$FKEY15 = $$FKEY(15)
+     C                   Eval      $$FKEY16 = $$FKEY(16)
+     C                   Eval      $$FKEY17 = $$FKEY(17)
+     C                   Eval      $$FKEY18 = $$FKEY(18)
+     C                   Eval      $$FKEY19 = $$FKEY(19)
+     C                   Eval      $$FKEY20 = $$FKEY(20)
+     C                   Eval      $$FKEY21 = $$FKEY(21)
+     C                   Eval      $$FKEY22 = $$FKEY(22)
+     C                   Eval      $$FKEY23 = $$FKEY(23)
+     C                   Eval      $$FKEY24 = $$FKEY(24)
+      *
+     C                   Endsr
+      *
+      *====================================================*
+      *  Copy screen to program fields.                    *
+      *====================================================*
+      *
+     C     FromScreen    Begsr
+      *
+     C                   Eval      $$FKEY( 1) = $$FKEY01
+     C                   Eval      $$FKEY( 2) = $$FKEY02
+     C                   Eval      $$FKEY( 3) = $$FKEY03
+     C                   Eval      $$FKEY( 4) = $$FKEY04
+     C                   Eval      $$FKEY( 5) = $$FKEY05
+     C                   Eval      $$FKEY( 6) = $$FKEY06
+     C                   Eval      $$FKEY( 7) = $$FKEY07
+     C                   Eval      $$FKEY( 8) = $$FKEY08
+     C                   Eval      $$FKEY( 9) = $$FKEY09
+     C                   Eval      $$FKEY(10) = $$FKEY10
+     C                   Eval      $$FKEY(11) = $$FKEY11
+     C                   Eval      $$FKEY(12) = $$FKEY12
+     C                   Eval      $$FKEY(13) = $$FKEY13
+     C                   Eval      $$FKEY(14) = $$FKEY14
+     C                   Eval      $$FKEY(15) = $$FKEY15
+     C                   Eval      $$FKEY(16) = $$FKEY16
+     C                   Eval      $$FKEY(17) = $$FKEY17
+     C                   Eval      $$FKEY(18) = $$FKEY18
+     C                   Eval      $$FKEY(19) = $$FKEY19
+     C                   Eval      $$FKEY(20) = $$FKEY20
+     C                   Eval      $$FKEY(21) = $$FKEY21
+     C                   Eval      $$FKEY(22) = $$FKEY22
+     C                   Eval      $$FKEY(23) = $$FKEY23
+     C                   Eval      $$FKEY(24) = $$FKEY24
       *
      C                   Endsr
       *
