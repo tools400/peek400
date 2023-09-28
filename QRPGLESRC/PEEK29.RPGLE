@@ -49,9 +49,9 @@
      D  SysSrlNbr                     8A   INZ(*BLANKS)
      D  SysEON                        1A   INZ(x'00'  )
       *
-     D X               S                   like(r§int4    ) inz
-     D Y               S                   like(r§int4    ) inz
-     D Z               S                   like(r§int4    ) inz
+     D X               S                   like(int4_t) inz
+     D Y               S                   like(int4_t) inz
+     D Z               S                   like(int4_t) inz
      D A1              S              1A   INZ(*BLANKS)
      D Summe           S             30P 0 INZ(*ZEROS )
      D Rest            S             30P 0 INZ(*ZEROS )
@@ -66,7 +66,7 @@
       *
       /COPY QCOPYLE,CEECNDHDLR
       *
-     D isInzSr         S                   like(r§bool) inz(bFalse)
+     D isInzSr         S                   like(bool_t) inz(bFalse)
       *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *

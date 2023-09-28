@@ -88,26 +88,26 @@
       /COPY QCOPYLE,SCRNFKEYS
       *----------------------------------------------------*
       *
-     D SfBot           S                   like(r§int4    ) inz
+     D SfBot           S                   like(int4_t) inz
       *
-     D LastRcdNbr      S                   like(R§RcdNbr  ) inz
-     D SflPage         S                   like(r§int4    ) inz
+     D LastRcdNbr      S                   like(RcdNbr_t) inz
+     D SflPage         S                   like(int4_t) inz
      D SflRec          S                   like(SflPage   ) inz
      D SflLastRcd      S                   like(SflPage   ) inz
      D §NbrFKeys       C                   const(3)
       *
-     D PEEK21_NAME     S                   like(r§pgmCallN) inz
-     D PEEK23_NAME     S                   like(r§pgmCallN) inz
+     D PEEK21_NAME     S                   like(pgmCallN_t) inz
+     D PEEK23_NAME     S                   like(pgmCallN_t) inz
       *
       *  PEEK21
      D YPgmCmd         S             10A   INZ(*BLANKS)
-     D YCmdDta         S                   LIKE(r§pgmCmdDt) INZ(*BLANKS)
+     D YCmdDta         S                   LIKE(pgmCmdDt_t) INZ(*BLANKS)
      D YMsgID          S              7A   INZ(*BLANKS)
      D YMsgDta         S            512A   INZ(*BLANKS)
       *
       *  PEEK23
      D yFKeys          S             18A   DIM(32)       INZ(*BLANKS)
-     D yNbrOfKeys      S                   like(r§int4    ) inz
+     D yNbrOfKeys      S                   like(int4_t) inz
       *
       /COPY QCOPYLE,PPEEK21
       /COPY QCOPYLE,PPEEK23
@@ -116,21 +116,21 @@
       *
       /COPY QCOPYLE,CEECNDHDLR
       *
-     D isInzSr         S                   like(r§bool) inz(bFalse)
+     D isInzSr         S                   like(bool_t) inz(bFalse)
       *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
       *
      D PEEK12          PI
-     D  i_dsp80                            const like(r§dsp80)
-     D  i_copyright                        const like (r§copyRght)
-     D  i_fmtName                          const like(r§fmt)
+     D  i_dsp80                            const like(dsp80_t)
+     D  i_copyright                        const like(copyRght_t)
+     D  i_fmtName                          const like(fmt_t)
      D  i_fmtMode                    10A   const
      D  o_rcdl0200                               likeds(RCDL0200_t)
      D  o_fmtNbr                      5I 0
-     D  o_msgId                                  like(r§msgId)
-     D  o_msgDta                                 like(r§msgDta)
+     D  o_msgId                                  like(msgId_t)
+     D  o_msgDta                                 like(msgDta_t)
       *
       *---------------------------------------------------*
       *
@@ -486,7 +486,7 @@
      C                   OPEN      PEEKFMT
       *
       * - Prüfen auf Satzformat
-     C                   IF        (i_fmtMode   = §BATCH) and
+     C                   IF        (i_fmtMode   = MODE_BATCH) and
      C                             ((P1NbrOfRcd = 1) or (i_fmtName <> ''))
      C     1             SETLL     FPEEKFMT
      C                   DOU       %EOF(PEEKFMT)

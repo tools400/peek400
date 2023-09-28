@@ -72,37 +72,37 @@
       *
       *  Peek21:
      D YPgmCmd         S             10A   INZ(*BLANKS)
-     D YCmdDta         S                   LIKE(r§pgmCmdDt) INZ(*BLANKS)
+     D YCmdDta         S                   LIKE(pgmCmdDt_t) INZ(*BLANKS)
      D YMsgID          S              7A   INZ(*BLANKS)
      D YMsgDta         S            512A   INZ(*BLANKS)
       *
       *  Peek23:
      D yFKeys          S             18A   DIM(32)       INZ(*BLANKS)
-     D yNbrOfKeys      S                   like(r§int4    ) inz
+     D yNbrOfKeys      S                   like(int4_t) inz
       *
-     D SfBot           S                   like(r§int4    ) inz
+     D SfBot           S                   like(int4_t) inz
      D NbrFKeys        C                   CONST(2)
       *
-     D PEEK21_NAME     S                   like(r§pgmCallN) inz
-     D PEEK23_NAME     S                   like(r§pgmCallN) inz
+     D PEEK21_NAME     S                   like(pgmCallN_t) inz
+     D PEEK23_NAME     S                   like(pgmCallN_t) inz
       *
       /COPY QCOPYLE,CEECNDHDLR
       *
-     D isInzSr         S                   like(r§bool) inz(bFalse)
+     D isInzSr         S                   like(bool_t) inz(bFalse)
       *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
       *
      D PEEK57          PI
-     D  i_dsp80                            const like(r§dsp80)
-     D  i_copyright                        const like(r§copyRght)
-     D  i_envFile                          const like(r§file)
-     D  i_envLib                           const like(r§lib)
-     D  i_envMbr                           const like(r§mbr)
-     D  i_envText                          const like(r§text)
-     D  o_msgID                                  like(r§msgID)
-     D  o_msgDta                                 like(r§msgDta)
+     D  i_dsp80                            const like(dsp80_t)
+     D  i_copyright                        const like(copyRght_t)
+     D  i_envFile                          const like(file_t)
+     D  i_envLib                           const like(lib_t)
+     D  i_envMbr                           const like(mbr_t)
+     D  i_envText                          const like(text_t)
+     D  o_msgID                                  like(msgID_t)
+     D  o_msgDta                                 like(msgDta_t)
       *
       *---------------------------------------------------*
       *

@@ -53,10 +53,10 @@
       /COPY QCOPYLE,ERR_D_SDS
       *----------------------------------------------------*
       *
-     D PEEK41_NAME     S                   like(r§pgmCallN) inz
+     D PEEK41_NAME     S                   like(pgmCallN_t) inz
       *
      D data            S            512A   inz
-     D nbrOfKey        S                   like(r§int4    ) inz
+     D nbrOfKey        S                   like(int4_t) inz
       *
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
@@ -68,10 +68,10 @@
       ********************************************************************
       *
      D PEEK04          PI
-     D  i_qFile                            const likeds(r§qObj)
-     D  i_rcdFmt                           const like(r§fmt)
-     D  o_msgID                                  like(r§msgId)
-     D  o_msgDta                                 like(r§msgDta)
+     D  i_qFile                            const likeds(qObj_t)
+     D  i_rcdFmt                           const like(fmt_t)
+     D  o_msgID                                  like(msgId_t)
+     D  o_msgDta                                 like(msgDta_t)
       *
       *---------------------------------------------------*
       *

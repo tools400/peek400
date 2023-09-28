@@ -73,10 +73,10 @@
       *
      D seqNbr          S                   LIKE(F_Seq) INZ(0)
       *
-     D NOF             S                   like(r§int4    ) inz
-     D rc              S                   like(r§int4    ) inz
+     D NOF             S                   like(int4_t) inz
+     D rc              S                   like(int4_t) inz
       *
-     D PEEK02_NAME     S                   like(r§pgmCallN) inz
+     D PEEK02_NAME     S                   like(pgmCallN_t) inz
       *
      D IsFld512        S              1A   INZ(bFalse)
       *
@@ -86,18 +86,18 @@
       /COPY QCOPYLE,F_PEEK58
       /COPY QCOPYLE,F_PEEK71
       *
-     D isInzSr         S                   like(r§bool) inz(bFalse)
+     D isInzSr         S                   like(bool_t) inz(bFalse)
       *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
       *
      D PEEK01          PI
-     D  i_qFile                            const likeds(r§qObj)
-     D  i_rcdFmt                           const like(r§fmt)
-     D  o_rcdFmtID                               like(r§fmtId)
-     D  o_msgID                                  like(r§msgID)
-     D  o_msgDta                                 like(r§msgDta)
+     D  i_qFile                            const likeds(qObj_t)
+     D  i_rcdFmt                           const like(fmt_t)
+     D  o_rcdFmtID                               like(fmtId_t)
+     D  o_msgID                                  like(msgID_t)
+     D  o_msgDta                                 like(msgDta_t)
       *---------------------------------------------------*
       *
       *  Register error handler

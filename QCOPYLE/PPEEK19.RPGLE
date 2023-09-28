@@ -4,8 +4,8 @@
       /else
      D PEEK19          PR                  extpgm(PEEK19_NAME)
       /endif
-     D  i_rcdBuffer                        const like(r§rcdBuf)
-     D  o_keyVal                                 like(r§keyBuf)
-     D  o_msgID                                  like(r§msgID)
-     D  o_msgDta                                 like(r§msgDta)
+     D  i_rcdBuffer                        const like(rcdBuf_t)
+     D  o_keyVal                                 like(keyBuf_t)
+     D  o_msgID                                  like(msgID_t)
+     D  o_msgDta                                 like(msgDta_t)
       *

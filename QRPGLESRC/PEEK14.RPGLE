@@ -39,7 +39,7 @@
      F                                     INFDS(Peek#  )
      F                                     PREFIX(F_)
       * Für Einzelsatzzugriff zum reinen Lesen von Datensätzen
-     D hFile04         DS                   likeds(r§hFile  )
+     D hFile04         DS                   likeds(hFile_t)
       *
       *---INFOSTRUKTUR FÜR AID-BYTE -----------------------*
       /COPY QCOPYLE,DS_WORKSTN
@@ -51,9 +51,9 @@
       *----------------------------------------------------*
       *
      D IO_Buff         DS
-     D  IO_BuffFld                         like(r§rcdBuf)
+     D  IO_BuffFld                         like(rcdBuf_t)
       *
-     D IO_NullMap      S                   like(r§nullMap)
+     D IO_NullMap      S                   like(nullMap_t)
      D                                     dim(§nullMapSize)
       *
       *---Variablendefinition------------------------------*
@@ -117,52 +117,52 @@
       *----------------------------------------------------*
       *
      D yFKeys          S             18A   dim(32)
-     D yNbrOfKeys      S                   like(r§int4)
+     D yNbrOfKeys      S                   like(int4_t)
      D yMsgID          S              7A
      D yMsgDta         S            512A
       *
      D YPgmCmd         S             10A
-     D YCmdDta         S                   like(r§pgmCmdDt)
+     D YCmdDta         S                   like(pgmCmdDt_t)
       *
-     D YString         S                   LIKE(r§rcdBuf)
-     D YStrLen         S                   like(r§int4)
+     D YString         S                   LIKE(rcdBuf_t)
+     D YStrLen         S                   like(int4_t)
       *
      D YDsp80          S              1A   INZ(*BLANKS)
      D YHeaderTyp      S             10A   INZ(*BLANKS)
      D YCopyRight      S            512A   INZ(*BLANKS)
-     D yFldName        S                   like(r§fieldNme) inz
-     D YFldInhalt      S                   LIKE(r§rcdBuf)
+     D yFldName        S                   like(fieldNme_t) inz
+     D YFldInhalt      S                   LIKE(rcdBuf_t)
      D                                     INZ(*BLANKS)
-     D yLength         S                   like(r§int4    ) inz
-     D yProtect        S                   like(r§bool    ) inz(bTrue)
-     D yIsUcs2         S                   like(r§int4    ) inz
+     D yLength         S                   like(int4_t) inz
+     D yProtect        S                   like(bool_t) inz(bTrue)
+     D yIsUcs2         S                   like(int4_t) inz
       *
-     D SflPage         S                   like(r§int4    ) inz
+     D SflPage         S                   like(int4_t) inz
      D SflPageDDS      S                   like(SflPage   ) inz
      D SflRec          S                   like(SflPage   ) inz
      D SflLastRcd      S                   like(SflPage   ) inz
      D §NbrFKeys       C                   CONST(3)
       *
-     D SfBot           S                   like(r§int4    ) inz
+     D SfBot           S                   like(int4_t) inz
       *
-     D IsRecord        S                   like(r§bool    ) inz(bFalse)
-     D IsCvtChar       S                   like(r§bool    ) inz(bFalse)
+     D IsRecord        S                   like(bool_t) inz(bFalse)
+     D IsCvtChar       S                   like(bool_t) inz(bFalse)
       *
-     D PEEK06_NAME     S                   like(r§pgmCallN) inz
-     D PEEK21_NAME     S                   like(r§pgmCallN) inz
-     D PEEK23_NAME     S                   like(r§pgmCallN) inz
-     D PEEK32_NAME     S                   like(r§pgmCallN) inz
-     D PEEK45_NAME     S                   like(r§pgmCallN) inz
-     D PEEK64_NAME     S                   like(r§pgmCallN) inz
-     D PEEK65_NAME     S                   like(r§pgmCallN) inz
+     D PEEK06_NAME     S                   like(pgmCallN_t) inz
+     D PEEK21_NAME     S                   like(pgmCallN_t) inz
+     D PEEK23_NAME     S                   like(pgmCallN_t) inz
+     D PEEK32_NAME     S                   like(pgmCallN_t) inz
+     D PEEK45_NAME     S                   like(pgmCallN_t) inz
+     D PEEK64_NAME     S                   like(pgmCallN_t) inz
+     D PEEK65_NAME     S                   like(pgmCallN_t) inz
       *
      D DotLine         S             40A   INZ(*ALL'.')
       *
-     D X               S                   like(r§int4    ) inz
+     D X               S                   like(int4_t) inz
       *
-     D TOTLIN          S                   like(r§int4    )
+     D TOTLIN          S                   like(int4_t)
      D                                     inz
-     D rowCnt          S                   like(r§int4    )
+     D rowCnt          S                   like(int4_t)
      D                                     inz
       *
      D Editor          S             10A   inz
@@ -181,26 +181,26 @@
       *
       /COPY QCOPYLE,CEECNDHDLR
       *
-     D isInzSr         S                   like(r§bool) inz(bFalse)
+     D isInzSr         S                   like(bool_t) inz(bFalse)
       *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
       *
      D PEEK14          PI
-     D  i_dsp80                            const like(r§dsp80)
-     D  io_headerType                            like(r§headerType)
-     D  i_copyright                        const like(r§copyRght)
-     D  i_rcdNbr                           const like(r§rcdNbr)
-     D  i_file                             const like(r§file)
-     D  i_lib                              const like(r§lib)
-     D  i_mbr                              const like(r§mbr)
-     D  i_rcdFmt                           const like(r§fmt)
-     D  i_function                         const like(r§function)
-     D  i_commitLVL                        const like(r§bool)
-     D  io_screenNbr                             like(r§int4)
-     D  o_msgID                                  like(r§msgId)
-     D  o_msgDta                                 like(r§msgDta)
+     D  i_dsp80                            const like(dsp80_t)
+     D  io_headerType                            like(headerType_t)
+     D  i_copyright                        const like(copyRght_t)
+     D  i_rcdNbr                           const like(rcdNbr_t)
+     D  i_file                             const like(file_t)
+     D  i_lib                              const like(lib_t)
+     D  i_mbr                              const like(mbr_t)
+     D  i_rcdFmt                           const like(fmt_t)
+     D  i_function                         const like(function_t)
+     D  i_commitLVL                        const like(bool_t)
+     D  io_screenNbr                             like(int4_t)
+     D  o_msgID                                  like(msgId_t)
+     D  o_msgDta                                 like(msgDta_t)
       *
       *----------------------------------------------------*
       *  Schlüsselliste für PEEKFLDL0
@@ -550,10 +550,10 @@
       *
      C     FromBuffer    BEGSR
       *
-     C                   IF        f_buffLn(FLDL0100) > §rcdBufLen
+     C                   IF        f_buffLn(FLDL0100) > RCD_BUFF_LEN
      C                   CLEAR                   USR8206
      C                   Eval      §MsgID   = 'USR8206'
-     C                   Eval      USR82061 = §rcdBufLen
+     C                   Eval      USR82061 = RCD_BUFF_LEN
      C                   Eval      §MsgDta  = USR8206
      C                   ELSE
      C                   Callp     f_rtvFld(yFldInhalt: IO_Buff:

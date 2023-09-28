@@ -62,8 +62,8 @@
      D PEEK31          PI
      D  io_language                  10A
      D  i_prefix                     10A   const
-     D  o_msgID                                  like(r§msgID)
-     D  o_msgDta                                 like(r§msgDta)
+     D  o_msgID                                  like(msgID_t)
+     D  o_msgDta                                 like(msgDta_t)
       *
       *----------------------------------------------------*
       *

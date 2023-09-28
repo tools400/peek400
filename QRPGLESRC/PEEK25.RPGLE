@@ -73,29 +73,29 @@
       *
      D yPgm            S             10A                 inz
      D yKey            S             10A                 inz
-     D yPosF24         S                   like(r§int4    ) inz
+     D yPosF24         S                   like(int4_t) inz
      D yFKeys          S             18A   DIM(32)       INZ(*BLANKS)
-     D yNbrOfKeys      S                   like(r§int4    ) inz
+     D yNbrOfKeys      S                   like(int4_t) inz
      D yMsgID          S              7A                 INZ(*BLANKS)
      D yMsgDta         S            512A                 INZ(*BLANKS)
       *
      D YScnAID         S             10A   INZ(*BLANKS)
      D YPgmCmd         S             10A   INZ(*BLANKS)
-     D YCmdDta         S                   LIKE(r§pgmCmdDt) INZ(*BLANKS)
+     D YCmdDta         S                   LIKE(pgmCmdDt_t) INZ(*BLANKS)
       *
       *---Definition der F-Tastenbildschirmfelder----------*
       /COPY QCOPYLE,SCRNFKEYS
       *----------------------------------------------------*
       *
-     D SfBot           S                   like(r§int4    ) inz
+     D SfBot           S                   like(int4_t) inz
      D NbrFKeys        C                   CONST(2)
       *
      D Wrk_Field       S             10A
       *
      D Char            C                   CONST('x')
       *
-     D PEEK21_NAME     S                   like(r§pgmCallN) inz
-     D PEEK23_NAME     S                   like(r§pgmCallN) inz
+     D PEEK21_NAME     S                   like(pgmCallN_t) inz
+     D PEEK23_NAME     S                   like(pgmCallN_t) inz
       *
       /COPY QCOPYLE,PPEEK21
       /COPY QCOPYLE,PPEEK23
@@ -105,17 +105,17 @@
       *
       /COPY QCOPYLE,CEECNDHDLR
       *
-     D isInzSr         S                   like(r§bool) inz(bFalse)
+     D isInzSr         S                   like(bool_t) inz(bFalse)
       *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
       *
      D PEEK25          PI
-     D  i_dsp80                            const like(r§dsp80)
+     D  i_dsp80                            const like(dsp80_t)
      D  o_colorAttr                   1A
-     D  o_msgID                                  like(r§msgID)
-     D  o_msgDta                                 like(r§msgDta)
+     D  o_msgID                                  like(msgID_t)
+     D  o_msgDta                                 like(msgDta_t)
       *
       *---------------------------------------------------*
       *

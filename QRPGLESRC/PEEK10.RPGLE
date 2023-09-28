@@ -63,28 +63,28 @@
       *
      D sortSeq         S                   LIKE(F_SortSeq) INZ(0)
       *
-     D PEEK11_NAME     S                   like(r§pgmCallN) inz
+     D PEEK11_NAME     S                   like(pgmCallN_t) inz
       *
       * Arbeitsfelder
-     D nbrOfFmt        S                   like(r§int4    ) inz
-     D fmtCnt          S                   like(r§int4    ) inz
-     D rc              S                   like(r§int4    ) inz
+     D nbrOfFmt        S                   like(int4_t) inz
+     D fmtCnt          S                   like(int4_t) inz
+     D rc              S                   like(int4_t) inz
       *
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
       *
       /COPY QCOPYLE,CEECNDHDLR
       *
-     D isInzSr         S                   like(r§bool) inz(bFalse)
+     D isInzSr         S                   like(bool_t) inz(bFalse)
       *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
       *
      D PEEK10          PI
-     D  i_qFile                            const likeds(r§qObj)
-     D  o_msgID                                  like(r§msgID)
-     D  o_msgDta                                 like(r§msgDta)
+     D  i_qFile                            const likeds(qObj_t)
+     D  o_msgID                                  like(msgID_t)
+     D  o_msgDta                                 like(msgDta_t)
       *
       *---------------------------------------------------*
       *

@@ -56,36 +56,35 @@
       *----------------------------------------------------*
       *
       *  Peek21
-     D yPgmCmd         S                   like(r§pgmCmd  ) inz
-     D yCmdDta         S                   like(r§pgmCmdDt) inz
-     D yMsgID          S                   like(r§msgID   ) inz
-     D yMsgDta         S                   like(r§msgDta  ) inz
+     D yPgmCmd         S                   like(pgmCmd_t) inz
+     D yCmdDta         S                   like(pgmCmdDt_t) inz
+     D yMsgID          S                   like(msgID_t) inz
+     D yMsgDta         S                   like(msgDta_t) inz
       *
       *  Peek23:
-      *yPgm            S                   like(r§pgm     ) inz
      D yKey            S             10A   inz
-     D yFKeys          S                   like(r§fKeyDsp ) inz
+     D yFKeys          S                   like(fKeyDsp_t) inz
      D                                     dim(32)
-     D yNbrOfKeys      S                   like(r§int4    ) inz
+     D yNbrOfKeys      S                   like(int4_t) inz
       *
       *---Definition der F-Tastenbildschirmfelder----------*
       /COPY QCOPYLE,SCRNFKEYS
       *----------------------------------------------------*
       *
-     D SfBot           S                   like(r§int4    ) inz
+     D SfBot           S                   like(int4_t) inz
      D NbrFKeys        C                   const(2)
      D msgText         S            200A   inz
-     D strPos          S                   like(r§uint4   ) inz
-     D nbrOfKeys       S                   like(r§int4    ) inz
+     D strPos          S                   like(uint4_t) inz
+     D nbrOfKeys       S                   like(int4_t) inz
       *
-     D PEEK21_NAME     S                   like(r§pgmCallN) inz
-     D PEEK23_NAME     S                   like(r§pgmCallN) inz
+     D PEEK21_NAME     S                   like(pgmCallN_t) inz
+     D PEEK23_NAME     S                   like(pgmCallN_t) inz
       *
-     D x               S                   like(r§int4    ) inz
+     D x               S                   like(int4_t) inz
      D tmpFkey         S                   like($$FKEY01  ) inz
-     D int1            S                   like(r§int4    ) inz
-     D int2            S                   like(r§int4    ) inz
-     D isChanged       S                   like(r§bool    ) inz
+     D int1            S                   like(int4_t) inz
+     D int2            S                   like(int4_t) inz
+     D isChanged       S                   like(bool_t) inz
       *
      D atoi            PR            10I 0        extproc('atoi')
      D  i_string                       *   value
@@ -100,20 +99,20 @@
       *
       /COPY QCOPYLE,CEECNDHDLR
       *
-     D isInzSr         S                   like(r§bool) inz(bFalse)
+     D isInzSr         S                   like(bool_t) inz(bFalse)
       *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
       *
      D PEEK59          PI
-     D  i_dsp80                            const like(r§dsp80)
-     D  i_type                             const like(r§type)
-     D  i_msgID                            const like(r§msgID)
-     D  i_msgDta                           const like(r§msgDta)
+     D  i_dsp80                            const like(dsp80_t)
+     D  i_type                             const like(type_t)
+     D  i_msgID                            const like(msgID_t)
+     D  i_msgDta                           const like(msgDta_t)
      D  i_keys                        3A   const
-     D  o_msgID                                  like(r§msgID)
-     D  o_msgDta                                 like(r§msgDta)
+     D  o_msgID                                  like(msgID_t)
+     D  o_msgDta                                 like(msgDta_t)
       *
       *---------------------------------------------------*
       *

@@ -41,9 +41,9 @@
      F                                     PREFIX(F_)
       *
      D IO_Buff         DS
-     D  IO_BuffFld                         like(r§rcdBuf)
+     D  IO_BuffFld                         like(rcdBuf_t)
       *
-     D IO_NullMap      S                   like(r§nullMap)
+     D IO_NullMap      S                   like(nullMap_t)
      D                                     dim(§nullMapSize)
       *
       *---Variablendefinition------------------------------*
@@ -82,15 +82,15 @@
      D lf_rtvFldName...
      D                 PR            10A   varying
      D  i_buffer                           const  like(R_ShortCmd  )
-     D  i_startPos                         const  like(R§INT4      )
+     D  i_startPos                         const  like(INT4_t)
       *
      D lf_rtvFldFormat...
-     D                 PR                         like(r§bool      )
+     D                 PR                         like(bool_t)
      D  io_buffer                                 like(R_ShortCmd  )
-     D  i_startPos                         const  like(R§INT4      )
+     D  i_startPos                         const  like(INT4_t)
      D  o_FLDL0100                                likeds(FLDL0100_t)
-     D  o_MsgID                                   like(r§msgID     )
-     D  o_msgDta                                  like(r§msgDta    )
+     D  o_MsgID                                   like(msgID_t)
+     D  o_msgDta                                  like(msgDta_t)
       *
      D lf_loadFldAtr...
      D                 PR             1A
@@ -101,8 +101,8 @@
       *  F E L D - D E F I N I T I O N E N                 *
       *----------------------------------------------------*
       *
-     D isInit          S                   like(r§bool    ) inz(bFalse)
-     D isRecord        S                   like(r§bool    ) inz(bFalse)
+     D isInit          S                   like(bool_t) inz(bFalse)
+     D isRecord        S                   like(bool_t) inz(bFalse)
       *
      D R_File          S                   LIKE(ShortCmd_t.SC_File) inz
      D R_Lib           S                   LIKE(ShortCmd_t.SC_Lib) inz
@@ -113,23 +113,23 @@
      D R_MaxLen        C                   CONST(256)
      D R_Var           S             10A   varying          inz(*BLANKS)
      D R_Value         S          32766A   varying          inz('')
-     D S               S                   like(r§int4    ) inz
-     D I               S                   like(r§int4    ) inz
+     D S               S                   like(int4_t) inz
+     D I               S                   like(int4_t) inz
      D fldName         S             10A   varying          inz(*BLANKS)
-     D isOutFormat     S                   like(r§bool    ) inz(bFalse)
+     D isOutFormat     S                   like(bool_t) inz(bFalse)
      D ShortCmd        DS                  likeds(ShortCmd_t) inz
      D FLDL0100        DS                  likeds(FLDL0100_t) inz
      D FLDL0100_OUT    DS                  likeds(FLDL0100_t) inz
       /COPY QCOPYLE,FLDL0100
       *
-     D PEEK06_NAME     S                   like(r§pgmCallN) inz
-     D PEEK66_NAME     S                   like(r§pgmCallN) inz
+     D PEEK06_NAME     S                   like(pgmCallN_t) inz
+     D PEEK66_NAME     S                   like(pgmCallN_t) inz
       *
       *  Parameterliste PEEK06
-     D yOutBuffer      S                   LIKE(R§RCDBUF  )
-     D YOutBuffLn      S                   like(R§INT4    ) INZ
-     D YMsgID          S                   like(r§msgID   ) INZ(*BLANKS)
-     D YMsgDta         S                   like(r§msgDta  ) INZ(*BLANKS)
+     D yOutBuffer      S                   LIKE(RCDBUF_t)
+     D YOutBuffLn      S                   like(INT4_t) INZ
+     D YMsgID          S                   like(msgID_t) INZ(*BLANKS)
+     D YMsgDta         S                   like(msgDta_t) INZ(*BLANKS)
       *
      D cNAME_PREFIX    C                   const('%')
      D cFORMAT_START   C                   const('(')
@@ -138,26 +138,26 @@
      D                 C                   const(',')
       *
       * Für Einzelsatzzugriff
-     D hFile00         DS                   likeds(r§hFile  )
+     D hFile00         DS                   likeds(hFile_t)
       *
       /COPY QCOPYLE,CEECNDHDLR
       *
-     D isInzSr         S                   like(r§bool) inz(bFalse)
+     D isInzSr         S                   like(bool_t) inz(bFalse)
       *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
       *
      D PEEK42          PI
-     D  i_file                             const like(r§file)
-     D  i_library                          const like(r§lib)
-     D  i_member                           const like(r§mbr)
-     D  i_rcdFormat                        const like(r§fmt)
+     D  i_file                             const like(file_t)
+     D  i_library                          const like(lib_t)
+     D  i_member                           const like(mbr_t)
+     D  i_rcdFormat                        const like(fmt_t)
      D  i_shortCmd                         const like(ShortCmd_t)
-     D  i_rcdNbr                           const like(r§rcdNbr)
-     D  o_execCmd                                like(r§cmdBuffer)
-     D  o_msgID                                  like(r§msgID)
-     D  o_msgDta                                 like(r§msgDta)
+     D  i_rcdNbr                           const like(rcdNbr_t)
+     D  o_execCmd                                like(cmdBuffer_t)
+     D  o_msgID                                  like(msgID_t)
+     D  o_msgDta                                 like(msgDta_t)
       *
       *---------------------------------------------------*
       *
@@ -485,13 +485,13 @@
      P                 B
      D                 PI            10A   varying
      D  i_buffer                           const  like(R_ShortCmd  )
-     D  i_startPos                         const  like(R§INT4      )
+     D  i_startPos                         const  like(INT4_t)
       *
       *  Funktionswert
      D fldName         S             10A                inz
       *
       *  Arbeitsfelder
-     D i               S                   like(R§INT4) inz
+     D i               S                   like(INT4_t) inz
       *
       *  Gültige Zeichen für Feldnamen
      D cCHARS          C                   const('_$#§-
@@ -519,17 +519,17 @@
       *============================================================*
      P lf_rtvFldFormat...
      P                 B
-     D                 PI                         like(r§bool      )
+     D                 PI                         like(bool_t)
      D  io_buffer                                 like(R_ShortCmd  )
-     D  i_startPos                         const  like(R§INT4      )
+     D  i_startPos                         const  like(INT4_t)
      D  o_FLDL0100                                likeds(FLDL0100_t)
-     D  o_MsgID                                   like(r§msgID     )
-     D  o_msgDta                                  like(r§msgDta    )
+     D  o_MsgID                                   like(msgID_t)
+     D  o_msgDta                                  like(msgDta_t)
       *
       *  Arbeitsfelder
-     D s               S                   like(r§int4 ) inz
-     D e               S                   like(r§int4 ) inz
-     D l               S                   like(r§int4 ) inz
+     D s               S                   like(int4_t) inz
+     D e               S                   like(int4_t) inz
+     D l               S                   like(int4_t) inz
      D strFormat       S            256A   inz
      D data            DS                  qualified inz
      D  type                          1A

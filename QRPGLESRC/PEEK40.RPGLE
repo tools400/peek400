@@ -95,17 +95,17 @@
       *----------------------------------------------------*
       *
      D yFKeys          S             18A   DIM(32)       INZ(*BLANKS)
-     D yNbrOfKeys      S                   like(r告nt4    ) inz
+     D yNbrOfKeys      S                   like(int4_t) inz
      D yMsgID          S              7A   INZ(*BLANKS)
      D yMsgDta         S            512A   INZ(*BLANKS)
       *
      D YChoice         S             75A   DIM(32)
-     D YNbrOfCh        S                   like(r告nt4    ) inz
+     D YNbrOfCh        S                   like(int4_t) inz
       *
      D YPgmCmd         S             10A   INZ(*BLANKS)
-     D YCmdDta         S                   LIKE(r吠gmCmdDt) INZ(*BLANKS)
+     D YCmdDta         S                   LIKE(pgmCmdDt_t) INZ(*BLANKS)
       *
-     D YQFile          DS                  likeds(r吼Obj) inz
+     D YQFile          DS                  likeds(qObj_t) inz
      D YMbr            S             10A   INZ(*BLANKS)
      D YData           S            512A   INZ(*BLANKS)
       *
@@ -113,39 +113,39 @@
      D IsFound         S              1A   INZ(bFalse)
      D IsSflError      S              1A   INZ(bFalse)
       *
-     D rc              S                   like(r告nt4    ) inz
-     D numRel          S                   like(r告nt4    ) inz
-     D numKey          S                   like(r告nt4    ) inz
-     D numSel          S                   like(r告nt4    ) inz
+     D rc              S                   like(int4_t) inz
+     D numRel          S                   like(int4_t) inz
+     D numKey          S                   like(int4_t) inz
+     D numSel          S                   like(int4_t) inz
       *
-     D SflPage         S                   like(r告nt4    ) inz
-     D SfTop           S                   like(r告nt4    ) inz
+     D SflPage         S                   like(int4_t) inz
+     D SfTop           S                   like(int4_t) inz
      D SflPageDDS      S                   INZ(0) LIKE(SflPage)
      D SflRec          S                   INZ(0) LIKE(SflPage)
      D SflNbrRcd       S                   INZ(0) LIKE(SflPage)
-     D SfBot           S                   like(r告nt4    ) inz
+     D SfBot           S                   like(int4_t) inz
      D NbrFKeys        C                   CONST(2)
      D Sfl_Cmd         S             10A   INZ(*BLANKS)
       *
      D 助NIQUE         C                   CONST('*UNIQUE')
      D 低ONSTR         C                   CONST('*CST')
       *
-     D PEEK21_NAME     S                   like(r吠gmCallN) inz
-     D PEEK23_NAME     S                   like(r吠gmCallN) inz
-     D PEEK27_NAME     S                   like(r吠gmCallN) inz
-     D PEEK39_NAME     S                   like(r吠gmCallN) inz
-     D PEEK41_NAME     S                   like(r吠gmCallN) inz
+     D PEEK21_NAME     S                   like(pgmCallN_t) inz
+     D PEEK23_NAME     S                   like(pgmCallN_t) inz
+     D PEEK27_NAME     S                   like(pgmCallN_t) inz
+     D PEEK39_NAME     S                   like(pgmCallN_t) inz
+     D PEEK41_NAME     S                   like(pgmCallN_t) inz
       *
      D R_File          S                   INZ(*BLANKS) LIKE(##File )
      D LstFile         S                   INZ(*BLANKS) LIKE(##File )
      D LstNbrRcd       S                   INZ(0) LIKE(SflPage)
-     D sPos            S                   like(r告nt4    ) inz
+     D sPos            S                   like(int4_t) inz
       *
      D Wrk_SFSANR      S                   INZ(*ZEROS ) LIKE(SFSANR )
       *
      D Buffer          S           2000A
       *
-     D strPos          S                   LIKE(r吟int4 ) inz
+     D strPos          S                   LIKE(uint4_t) inz
       *
      D PFile           S                   INZ(*BLANKS)  LIKE(i_file)
      D PLib            S                   INZ(*BLANKS)  LIKE(i_lib )
@@ -159,24 +159,24 @@
       *
       /COPY QCOPYLE,CEECNDHDLR
       *
-     D isInzSr         S                   like(r呆ool) inz(bFalse)
+     D isInzSr         S                   like(bool_t) inz(bFalse)
       *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
       *
      D PEEK40          PI
-     D  i_dsp80                            const like(r吳sp80)
-     D  i_copyright                        const like(r呃opyRght)
-     D  i_file                             const like(r呂ile)
-     D  i_lib                              const like(r吸ib)
-     D  i_mbr                              const like(r吮br)
-     D  i_rcdFmt                           const like(r呂mt)
-     D  i_basePhyF                         const like(r呆ool)
-     D  o_file                                   like(r呂ile)
-     D  o_lib                                    like(r吸ib)
-     D  o_msgID                                  like(r吮sgID)
-     D  o_msgDta                                 like(r吮sgDta)
+     D  i_dsp80                            const like(dsp80_t)
+     D  i_copyright                        const like(copyRght_t)
+     D  i_file                             const like(file_t)
+     D  i_lib                              const like(lib_t)
+     D  i_mbr                              const like(mbr_t)
+     D  i_rcdFmt                           const like(fmt_t)
+     D  i_basePhyF                         const like(bool_t)
+     D  o_file                                   like(file_t)
+     D  o_lib                                    like(lib_t)
+     D  o_msgID                                  like(msgID_t)
+     D  o_msgDta                                 like(msgDta_t)
       *
       *---------------------------------------------------*
       *

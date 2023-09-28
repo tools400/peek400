@@ -83,9 +83,9 @@
       *
      D IsMinus         S              1A         INZ(bFalse)
       *
-     D BL              S                   like(r§int4    ) inz
-     D X               S                   like(r§int4    ) inz
-     D Y               S                   like(r§int4    ) inz
+     D BL              S                   like(int4_t) inz
+     D X               S                   like(int4_t) inz
+     D Y               S                   like(int4_t) inz
      D A1              S              1A         INZ(*BLANKS)
       *
       * Maximale Feldlänge liegt bei 30 Stellen wegen Bildschirmgroesse.
@@ -137,10 +137,10 @@
      D R_TimeBuf       S              8A                         INZ
      D R_DateBuf       S             10A                         INZ
       *
-     D strPos          S                   like(r§int4    )
+     D strPos          S                   like(int4_t)
      D                                     inz
       *
-     D PEEK36_NAME     S                   like(r§pgmCallN) inz
+     D PEEK36_NAME     S                   like(pgmCallN_t) inz
       *
       /COPY QCOPYLE,PPEEK36
       *
@@ -150,19 +150,19 @@
       *
       *    Converts a given buffer into the Job ccsid.
      D cvtToJobCcsid   pr            10i 0 extproc('cvtToJobCcsid')
-     D  io_buffer                          like(r§rcdBuf)
+     D  io_buffer                          like(rcdBuf_t)
      D  i_length                     10i 0 value
      D  i_ccsid                      10i 0 value
       *
       *    Converts a given buffer into the File ccsid.
      D cvtToFileCcsid  pr            10i 0 extproc('cvtToFileCcsid')
-     D  io_buffer                          like(r§rcdBuf)
+     D  io_buffer                          like(rcdBuf_t)
      D  i_length                     10i 0 value
      D  i_ccsid                      10i 0 value
       *
       /COPY QCOPYLE,CEECNDHDLR
       *
-     D isInzSr         S                   like(r§bool) inz(bFalse)
+     D isInzSr         S                   like(bool_t) inz(bFalse)
       *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
@@ -170,14 +170,14 @@
       *
      D PEEK18          PI
      D  i_fldl0100                         const likeds(FLDL0100_t)
-     D  i_rcdFmt                           const like(r§fmt)
-     D  i_buffer                                 like(r§rcdBuf)
+     D  i_rcdFmt                           const like(fmt_t)
+     D  i_buffer                                 like(rcdBuf_t)
      D  i_tgtFormat                  10A   const
      D  i_tgtValue                   10A   const
-     D  o_buffer                                 like(r§rcdBuf)
-     D  o_buffLen                                like (r§int4)
-     D  o_msgID                                  like(r§msgID)
-     D  o_msgDta                                 like(r§msgDta)
+     D  o_buffer                                 like(rcdBuf_t)
+     D  o_buffLen                                like(int4_t)
+     D  o_msgID                                  like(msgID_t)
+     D  o_msgDta                                 like(msgDta_t)
       *
       *----------------------------------------------------*
       *  Schlüsselliste für PEEKFLD
@@ -636,7 +636,7 @@
      C     SET_Dlmtr     IFEQ      *BLANKS
       *          ohne Delimeter ausgeben
      C                   ELSE
-     C     o_buffLen     IFLT      §rcdBufLen
+     C     o_buffLen     IFLT      RCD_BUFF_LEN
      C                   Eval      o_buffLen = o_buffLen + 1
      C                   Eval      %subst(
      C                               o_buffer: o_buffLen: 1) = SET_Dlmtr
@@ -1111,7 +1111,7 @@
       *            mit Vorzeichen
       *      ... Vorzeichen extrahieren
      C                   Eval      x = FLDL0100.F1Digt + 1
-     C     X             IFLE      §rcdBufLen
+     C     X             IFLE      RCD_BUFF_LEN
      C                   Eval      A1 = %subst(i_buffer: X: 1)
      C                   ELSE
      C                   Eval      A1 = *BLANKS
@@ -1189,7 +1189,7 @@
      C                   ELSE
       *            mit Vorzeichen
       *      ... Vorzeichen extrahieren
-     C     X             IFLE      §rcdBufLen
+     C     X             IFLE      RCD_BUFF_LEN
      C                   Eval      A1 = %subst(i_buffer: X: 1)
      C                   ELSE
      C                   Eval      A1 = *BLANKS
@@ -1426,7 +1426,7 @@
       *============================================================*
      P cvtToJobCcsid   b
      D                 pi            10i 0
-     D  io_buffer                          like(r§rcdBuf)
+     D  io_buffer                          like(rcdBuf_t)
      D  i_length                     10i 0 value
      D  i_ccsid                      10i 0 value
       *
@@ -1453,7 +1453,7 @@
       *============================================================*
      P cvtToFileCcsid  b
      D                 pi            10i 0
-     D  io_buffer                          like(r§rcdBuf)
+     D  io_buffer                          like(rcdBuf_t)
      D  i_length                     10i 0 value
      D  i_ccsid                      10i 0 value
       *

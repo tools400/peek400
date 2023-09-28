@@ -35,7 +35,7 @@
       *  I N F D S - D E F I N I T I O N E N               *
       *----------------------------------------------------*
       *
-     DWork_00_DS       DS                  likeds(r§infds)
+     DWork_00_DS       DS                  likeds(infds_t)
       *
       *---Variablendefinition------------------------------*
       /COPY QCOPYLE,D_VARDEF
@@ -78,11 +78,11 @@
       ********************************************************************
       *
      D PEEK35          PI
-     D  i_rcdNbr                           const like(r§rcdNbr)
+     D  i_rcdNbr                           const like(rcdNbr_t)
      D  i_buffer                   1024A   const
-     D  o_fldName                                like(r§fieldNme)
-     D  o_msgID                                  like(r§msgID)
-     D  o_msgDta                                 like(r§msgDta)
+     D  o_fldName                                like(fieldNme_t)
+     D  o_msgID                                  like(msgID_t)
+     D  o_msgDta                                 like(msgDta_t)
       *
       *----------------------------------------------------*
       *  Schlüsselliste für PEEKWRK

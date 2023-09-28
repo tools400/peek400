@@ -55,7 +55,7 @@
       *
       /COPY QCOPYLE,PPEEK41
       *
-     D PEEK41_NAME     S                   like(r§pgmCallN)
+     D PEEK41_NAME     S                   like(pgmCallN_t)
       *
       *  Performs word wrapping on a given string without respect to
       *  end-of-paragraph markers.
@@ -75,7 +75,7 @@
       /COPY QCOPYLE,ERR_D_SDS
       *----------------------------------------------------*
       *
-     D g_prdLib        S                   like(r§lib)
+     D g_prdLib        S                   like(lib_t)
      D                                     inz
       *
      D g_jobCcsid      S             10U 0 inz(0)
@@ -85,11 +85,11 @@
       *===================================================================*
       *
      P f_dsplyLn       B                   Export
-     D                 PI                         like(r§int4)
+     D                 PI                         like(int4_t)
      D  i_FLDL0100                         const  likeds(fldl0100_t)
       *
       *  Funktionswert
-     D fldLen          S                   like(r§int4)
+     D fldLen          S                   like(int4_t)
       * ------------------------------------------------------------------------
       *
      C                   If        (i_FLDL0100.F1DTYP = 'G' and
@@ -113,16 +113,16 @@
       *===================================================================*
       *
      P f_buffLn        B                   Export
-     D                 PI                         like(r§int4      )
+     D                 PI                         like(int4_t)
      D  i_FLDL0100                         const  likeds(fldl0100_t)
-     D  i_withLen                          const  like(r§bool      )
+     D  i_withLen                          const  like(bool_t)
      D                                            options(*nopass)
       *
       *  Parameterpositionen optionaler Parameter
      D p_withLen       C                   const(2)
       *
       *  Funktionswert
-     D fldLen          S                   like(r§int4    )
+     D fldLen          S                   like(int4_t)
      D                                     inz
       *
       *  Arbeitsfelder
@@ -159,12 +159,12 @@
       *===================================================================*
       *
      P f_curFldLn      B                   Export
-     D                 PI                         like(r§int4      )
-     D  i_buffer                           const  like(r§rcdbuf    )
+     D                 PI                         like(int4_t)
+     D  i_buffer                           const  like(rcdbuf_t)
      D  i_FLDL0100                         const  likeds(fldl0100_t)
       *
       *  Funktionswert
-     D curFldLn        S                   like(r§int4    )
+     D curFldLn        S                   like(int4_t)
      D                                     inz
       * ------------------------------------------------------------------------
       *
@@ -189,19 +189,19 @@
       *===================================================================*
       *
      P f_rtvFld        B                   Export
-     D                 PI                  opdesc like(r§int4      )
-     D  o_buffer                                  like(r§rcdbuf    )
+     D                 PI                  opdesc like(int4_t)
+     D  o_buffer                                  like(rcdbuf_t)
      D                                            options(*varsize)
-     D  i_buffer                           const  like(r§rcdbuf    )
+     D  i_buffer                           const  like(rcdbuf_t)
      D  i_FLDL0100                         const  likeds(fldl0100_t)
-     D  i_withLen                          const  like(r§bool      )
+     D  i_withLen                          const  like(bool_t)
      D                                            options(*nopass)
       *
       *  Parameterpositionen optionaler Parameter
      D p_withLen       C                   const(4)
       *
       *  Funktionswert
-     D rtnLen          S                   like(r§int4    )
+     D rtnLen          S                   like(int4_t)
      D                                     inz
       *
       * Parameters passed to CEEDOD
@@ -254,10 +254,10 @@
       *
      P p_fldToBuf      B                   Export
      D                 PI
-     D  io_buffer                                 like(r§rcdbuf    )
-     D  i_fieldDta                                like(r§rcdbuf    )
+     D  io_buffer                                 like(rcdbuf_t)
+     D  i_fieldDta                                like(rcdbuf_t)
      D  i_FLDL0100                         const  likeds(fldl0100_t)
-     D  i_withLen                          const  like(r§bool      )
+     D  i_withLen                          const  like(bool_t)
      D                                            options(*nopass)
       *
       *  Parameterpositionen optionaler Parameter
@@ -267,13 +267,13 @@
      D  withLen        S                   like(i_withLen)
      D                                     inz
       *
-     D fieldDta        S                   like(r§rcdBuf     )
+     D fieldDta        S                   like(rcdBuf_t)
      D                                     based(pFieldDta)
-     D fieldDtaUcs2    S                   like(r§rcdBufUcs2 )
+     D fieldDtaUcs2    S                   like(rcdBufUcs2_t)
      D                                     based(pFieldDta)
       *
      D                 DS
-     D  buffLn                             like(r§int2       )
+     D  buffLn                             like(int2_t)
      D  buffLnA                       2A   overlay(buffLn:  1)
       * ------------------------------------------------------------------------
      C                   Eval      pFieldDta = %addr(i_fieldDta)
@@ -339,7 +339,7 @@
       *===================================================================*
       *
      P f_isVarLen      B                   Export
-     D                 PI                         like(r§bool      )
+     D                 PI                         like(bool_t)
      D  i_FLDL0100                         const  likeds(fldl0100_t)
       * ------------------------------------------------------------------------
       *
@@ -356,14 +356,14 @@
       *===================================================================*
       *
      P f_binToDec      B                   Export
-     D                 PI                  opdesc like(r§int4    )
+     D                 PI                  opdesc like(int4_t)
      D  i_string                  32767A   const options(*varsize)
-     D  i_startPos                         const  like(r§int4    )
-     D  i_length                           const  like(r§int4    )
+     D  i_startPos                         const  like(int4_t)
+     D  i_length                           const  like(int4_t)
       *
       * Funktionswert
      D                 DS
-     D intValue                            like(r§int4) inz
+     D intValue                            like(int4_t) inz
      D alpha2                         2A   overlay(intValue: 3)
      D alpha4                         2A   overlay(intValue: 1)
       *
@@ -407,7 +407,7 @@
       *===================================================================*
       *
      P f_len           B                   Export
-     D                 PI                  opdesc like(r§int4    )
+     D                 PI                  opdesc like(int4_t)
      D  i_string                  32767A   const options(*varsize)
       *
       * Parameters passed to CEEDOD
@@ -431,19 +431,19 @@
       *===================================================================*
       *
      P f_scan          B                   Export
-     D                 PI                  opdesc like(r§int4    )
+     D                 PI                  opdesc like(int4_t)
      D  SrchArg                     100A   CONST  OPTIONS(*VARSIZE)
      D  String                      100A   CONST
       *
-     D LenArg          S                   like(r§int4    ) inz
-     D PosFound        S                   like(r§int4    ) inz
+     D LenArg          S                   like(int4_t) inz
+     D PosFound        S                   like(int4_t) inz
       *
       * Parameters passed to CEEDOD
-     D DescType        S                   like(r§int4    ) inz
-     D DataType        S                   like(r§int4    ) inz
-     D DescInfo1       S                   like(r§int4    ) inz
-     D DescInfo2       S                   like(r§int4    ) inz
-     D pLen            S                   like(r§int4    ) inz
+     D DescType        S                   like(int4_t) inz
+     D DataType        S                   like(int4_t) inz
+     D DescInfo1       S                   like(int4_t) inz
+     D DescInfo2       S                   like(int4_t) inz
+     D pLen            S                   like(int4_t) inz
       *------------------------------------------------------------*
       *
      C                   CALLP     CEEDOD(1         : DescType : DataType :
@@ -461,23 +461,23 @@
       *===================================================================*
       *
      P f_vldName       B                   Export
-     D                 PI                         like(r§bool    )
+     D                 PI                         like(bool_t)
      D  i_name                       10A   const
-     D  o_msgID                                   like(r§msgID   )
-     D  o_msgDta                                  like(r§msgDta  )
+     D  o_msgID                                   like(msgID_t)
+     D  o_msgDta                                  like(msgDta_t)
       *
       *  Funktionswert
-     D isValid         S                   like(r§bool    )
+     D isValid         S                   like(bool_t)
      D                                     inz(bFalse)
       *
       *  Arbeitsfelder
-     D idx             S                   like(r§int4    )
+     D idx             S                   like(int4_t)
      D                                     inz
      D chr             S              1A
      D                                     inz
-     D strString       S                   like(r§bool    )
+     D strString       S                   like(bool_t)
      D                                     inz(bFalse)
-     D endString       S                   like(r§bool    )
+     D endString       S                   like(bool_t)
      D                                     inz(bFalse)
       *
      D vld1Chr         C                   const('§$#-
@@ -568,14 +568,14 @@
       *===================================================================*
       *
      P f_vldFloat      B                   Export
-     D                 PI                         like(r§bool    )
+     D                 PI                         like(bool_t)
      D  i_buffer                     64A   const  varying
       *
       *  Arbeitsfelder
      D i               S             10I 0 inz
      D c               S              1A   inz
      D dummy           S              8F   inz
-     D hasExponent     S                   like(r§bool) inz(bFalse)
+     D hasExponent     S                   like(bool_t) inz(bFalse)
      D cDIGITS         C                   '0123456789'
       *-------------------------------------------------------------------*
       /FREE
@@ -671,14 +671,14 @@
       *===================================================================*
       *
      P f_execute       B                   Export
-     D                 PI                  opdesc like(r§bool    )
+     D                 PI                  opdesc like(bool_t)
      D  i_cmd                     32702A   const
      D                                     options(*VARSIZE)
-     D  o_msgID                                   like(r§msgID   )
-     D  o_msgDta                                  like(r§msgDta  )
+     D  o_msgID                                   like(msgID_t)
+     D  o_msgDta                                  like(msgDta_t)
       *
       *  Definieren Funktionswert
-     D isOK            S                          like(r§bool    )
+     D isOK            S                          like(bool_t)
      D                                            inz(bFalse)
       *
       *  Definieren Parameter für p_getOpDesc
@@ -753,19 +753,19 @@
       *===================================================================*
       *
      P f_basedPF       B                   Export
-     D                 PI                         like(r§bool   )
-     D  i_file                             value  like(r§file   )
-     D  i_lib                              value  like(r§lib    )
-     D  i_mbr                              value  like(r§mbr    )
-     D  i_rcdFmt                           value  like(r§rcdFmt )
-     D  i_rcdMbrNbr                        value  like(r§mbrNbr )
-     D  o_pFile                                   like(r§file   )
-     D  o_pLib                                    like(r§lib    )
-     D  o_pMbr                                    like(r§mbr    )
-     D  o_pRcdFmt                                 like(r§rcdFmt )
+     D                 PI                         like(bool_t)
+     D  i_file                             value  like(file_t)
+     D  i_lib                              value  like(lib_t)
+     D  i_mbr                              value  like(mbr_t)
+     D  i_rcdFmt                           value  like(rcdFmt_t)
+     D  i_rcdMbrNbr                        value  like(mbrNbr_t)
+     D  o_pFile                                   like(file_t)
+     D  o_pLib                                    like(lib_t)
+     D  o_pMbr                                    like(mbr_t)
+     D  o_pRcdFmt                                 like(rcdFmt_t)
       *
       *  Definieren Funktionswert ...
-     D isBasedOnPF     S                   like(r§bool    ) inz(bFalse)
+     D isBasedOnPF     S                   like(bool_t) inz(bFalse)
       *
      D tFile           S                   like(i_file)
      D tLib            S                   like(i_lib)
@@ -773,8 +773,8 @@
      D tRcdFmt         S                   like(i_rcdFmt)
      D FILD0100        DS                  likeds(FILD0100_t) inz
       *
-     D yQFile          DS                  likeds(r§qObj) inz
-     D yNbrOfEnt       s                   like(r§int4)
+     D yQFile          DS                  likeds(qObj_t) inz
+     D yNbrOfEnt       s                   like(int4_t)
      D yData           s            512A
       *------------------------------------------------------------*
       *
@@ -861,19 +861,19 @@
       *===================================================================*
       *
      P f_basedMbr      B                   Export
-     D                 PI                         like(r§bool    )
-     D  i_file                             value  like(r§file    )
-     D  i_lib                              value  like(r§lib     )
-     D  i_mbr                              value  like(r§mbr     )
-     D  i_mbrNbr                           value  like(r§int4    )
-     D  i_rcdFmt                           value  like(r§rcdFmt  )
-     D  o_pFile                                   like(r§file    )
-     D  o_pLib                                    like(r§lib     )
-     D  o_pMbr                                    like(r§mbr     )
-     D  o_rcdFmt                                  like(r§rcdFmt  )
+     D                 PI                         like(bool_t)
+     D  i_file                             value  like(file_t)
+     D  i_lib                              value  like(lib_t)
+     D  i_mbr                              value  like(mbr_t)
+     D  i_mbrNbr                           value  like(int4_t)
+     D  i_rcdFmt                           value  like(rcdFmt_t)
+     D  o_pFile                                   like(file_t)
+     D  o_pLib                                    like(lib_t)
+     D  o_pMbr                                    like(mbr_t)
+     D  o_rcdFmt                                  like(rcdFmt_t)
       *
       *  Definieren Funktionswert ...
-     D isMbrFound      S                   like(r§bool    ) inz(bFalse)
+     D isMbrFound      S                   like(bool_t) inz(bFalse)
       *
       *  Retrieve Member Description (QUSRMBRD) API
      D QUSRMBRD        PR                         extpgm('QUSRMBRD')
@@ -948,8 +948,8 @@
      D offset          S             10I 0 inz
      D fild0100        ds                  likeds(fild0100_t) inz
       *
-     D qFile           DS                  likeds(r§qObj) inz
-     D yNbrOfEnt       s                   like(r§int4)
+     D qFile           DS                  likeds(qObj_t) inz
+     D yNbrOfEnt       s                   like(int4_t)
      D yData           s            512A
       *------------------------------------------------------------*
       *
@@ -1075,13 +1075,13 @@
       *===================================================================*
       *
      P f_numBased      B                   Export
-     D                 PI                         like(r§int4    )
-     D  i_file                             const  like(r§file    )
-     D  i_lib                              const  like(r§lib     )
-     D  i_mbr                              const  like(r§mbr     )
+     D                 PI                         like(int4_t)
+     D  i_file                             const  like(file_t)
+     D  i_lib                              const  like(lib_t)
+     D  i_mbr                              const  like(mbr_t)
       *
       *  Definieren Funktionswert ...
-     D f_numBased      S                   like(r§int4    )
+     D f_numBased      S                   like(int4_t)
      D                                     inz
       *
       *  Prototypen
@@ -1136,7 +1136,7 @@
       *
      P p_setPrdLb      B                   Export
      D                 PI
-     D  i_lib                              const  like(r§lib     )
+     D  i_lib                              const  like(lib_t)
       *------------------------------------------------------------*
       *
      C                   Eval      g_prdLib = i_lib
@@ -1150,7 +1150,7 @@
       *===================================================================*
       *
      P f_getPrdLb      B                   Export
-     D                 PI                         like(r§lib     )
+     D                 PI                         like(lib_t)
       *------------------------------------------------------------*
       *
      C                   Return    g_prdLib
@@ -1162,14 +1162,14 @@
       *===================================================================*
       *
      P f_cmdLine       B                   Export
-     D                 PI                         like(r§bool    )
+     D                 PI                         like(bool_t)
       *------------------------------------------------------------*
       *
       *  Definieren Funktionswert ...
-     D  f_cmdLine      S                   like(r§bool    )
+     D  f_cmdLine      S                   like(bool_t)
      D                                     inz
       *
-     D rcvVarLen       S                   like(R§INT4    )
+     D rcvVarLen       S                   like(INT4_t)
      D format          S              8A
      D usrPrf          S             10A
      D errCode         DS                  likeds(errCode_t ) inz
@@ -1272,12 +1272,12 @@
       *===================================================================*
       *
      P f_headline      B                   Export
-     D                 PI                  like(r§colHeading)
-     D  i_headTyp                          const  like(r§type)
+     D                 PI                  like(colHeading_t)
+     D  i_headTyp                          const  like(type_t)
      D  i_FLDL0100                         const  likeds(fldl0100_t)
       *
       *  Funktionswert
-     D heading         S                   like(r§colHeading)
+     D heading         S                   like(colHeading_t)
       * ------------------------------------------------------------------------
       *
       *  Überschrift ...
@@ -1306,11 +1306,11 @@
       *===================================================================*
       *
      P f_isNumFld      B                   Export
-     D                 PI                         like(r§bool      )
+     D                 PI                         like(bool_t)
      D  i_FLDL0100                         const  likeds(fldl0100_t)
       *
       *  Funktionswert
-     D isNumFld        S                   like(r§bool    )
+     D isNumFld        S                   like(bool_t)
      D                                     inz
       * ------------------------------------------------------------------------
       *
@@ -1332,11 +1332,11 @@
       *===================================================================*
       *
      P f_isFloatFld    B                   Export
-     D                 PI                         like(r§bool      )
+     D                 PI                         like(bool_t)
      D  i_FLDL0100                         const  likeds(fldl0100_t)
       *
       *  Funktionswert
-     D isFloat         S                   like(r§bool    )
+     D isFloat         S                   like(bool_t)
      D                                     inz
       * ------------------------------------------------------------------------
       *
@@ -1355,11 +1355,11 @@
       *===================================================================*
       *
      P f_isCharFld     B                   Export
-     D                 PI                         like(r§bool      )
+     D                 PI                         like(bool_t)
      D  i_FLDL0100                         const  likeds(fldl0100_t)
       *
       *  Funktionswert
-     D isCharFld       S                   like(r§bool    )
+     D isCharFld       S                   like(bool_t)
      D                                     inz
       * ------------------------------------------------------------------------
       *
@@ -1379,11 +1379,11 @@
       *===================================================================*
       *
      P f_hasCcsid      B                   Export
-     D                 PI                         like(r§bool      )
+     D                 PI                         like(bool_t)
      D  i_FLDL0100                         const  likeds(fldl0100_t)
       *
       *  Funktionswert
-     D hasCcsid        S                   like(r§bool    )
+     D hasCcsid        S                   like(bool_t)
      D                                     inz
       * ------------------------------------------------------------------------
       *
@@ -1403,7 +1403,7 @@
       *===================================================================*
       *
      P f_appMsgF       B                   Export
-     D                 PI                         like(r§file    )
+     D                 PI                         like(file_t)
       *------------------------------------------------------------*
       *
      C                   Return    'PEEKGER'
@@ -1415,7 +1415,7 @@
       *===================================================================*
       *
      P f_appMsgFL      B                   Export
-     D                 PI                         like(r§lib     )
+     D                 PI                         like(lib_t)
       *------------------------------------------------------------*
       *
      C                   Return    '*LIBL'
@@ -1428,20 +1428,20 @@
       *
      P p_rmvPgmMg      B                   Export
      D                 PI
-     D  i_pgmNme                           const  like(r§pgm     )
+     D  i_pgmNme                           const  like(pgm_t)
       *
       *  Parameter für QMHRMVPM API
-     D yStkE           S                   like(r§proc    )
+     D yStkE           S                   like(proc_t)
      D                                     inz
-     D yStkCnt         S                   like(r§int4    )
+     D yStkCnt         S                   like(int4_t)
      D                                     inz
      D yMsgKey         S              4A   inz
      D yMsgToRmv       S             10A   inz
      D yErrCode        DS                  likeds(errCode_t ) inz
      D yStkELen        S             10I 0 inz
      D yQStkE          DS
-     D  yStkEMod                           like(r§mod     )  inz
-     D  yStkEPgm                           like(r§pgm     )  inz
+     D  yStkEMod                           like(mod_t)  inz
+     D  yStkEPgm                           like(pgm_t)  inz
      D yRmvExcpt       S             10A   inz
       *------------------------------------------------------------*
       *
@@ -1484,39 +1484,39 @@
       *
      P p_sndPgmMg      B                   Export
      D                 PI
-     D  i_msgID                                   like(r§msgID   )
-     D  i_msgDta                                  like(r§msgDta  )
-     D  i_pgmNme                           const  like(r§pgm     )
-     D  i_msgType                          const  like(r§msgType )
+     D  i_msgID                                   like(msgID_t)
+     D  i_msgDta                                  like(msgDta_t)
+     D  i_pgmNme                           const  like(pgm_t)
+     D  i_msgType                          const  like(msgType_t)
      D                                            options(*nopass)
       *
       *  Parameterpositionen optionaler Parameter
      D p_msgType       C                   const(4)
       *
       *  Parameter für QMHSNDPM API
-     D yMsgID          S                   like(r§msgID   )
+     D yMsgID          S                   like(msgID_t)
      D                                     inz
      D yQMsgF          DS
-     D  yMsgF                              like(r§file    )  inz
-     D  yMsgFL                             like(r§lib     )  inz
-     D yMsgDta         S                   like(r§msgDta  )
+     D  yMsgF                              like(file_t)  inz
+     D  yMsgFL                             like(lib_t)  inz
+     D yMsgDta         S                   like(msgDta_t)
      D                                     inz
-     D yMsgDtaLen      S                   like(r§int4    )
+     D yMsgDtaLen      S                   like(int4_t)
      D                                     inz
      D yMsgType        S             10A
      D                                     inz
-     D yStkE           S                   like(r§proc    )
+     D yStkE           S                   like(proc_t)
      D                                     inz
-     D yStkCnt         S                   like(r§int4    )
+     D yStkCnt         S                   like(int4_t)
      D                                     inz
      D yMsgKey         S              4A   inz
      D yErrCode        DS                  likeds(errCode_t ) inz
      D yStkELen        S             10I 0 inz
      D yQStkE          DS
-     D  yStkEMod                           like(r§mod     )  inz
-     D  yStkEPgm                           like(r§pgm     )  inz
+     D  yStkEMod                           like(mod_t)  inz
+     D  yStkEPgm                           like(pgm_t)  inz
      D yRmvExcpt       S             10A   inz
-     D yMsgWait        S                   like(r§int4    )
+     D yMsgWait        S                   like(int4_t)
      D                                     inz
       *------------------------------------------------------------*
       *
@@ -1588,11 +1588,11 @@
       *===================================================================*
       *
      P f_canUseRefFld  B                   Export
-     D                 PI                         like(r§bool      )
+     D                 PI                         like(bool_t)
      D  i_FLDL0100                         const  likeds(fldl0100_t)
       *
       *  Funktionswert
-     D canUseRefFld    S                   like(r§bool    )
+     D canUseRefFld    S                   like(bool_t)
      D                                     inz
       * ------------------------------------------------------------------------
       *
@@ -1614,11 +1614,11 @@
       *===================================================================*
       *
      P f_canUseCntFld  B                   Export
-     D                 PI                         like(r§bool      )
+     D                 PI                         like(bool_t)
      D  i_FLDL0100                         const  likeds(fldl0100_t)
       *
       *  Funktionswert
-     D canUseCntFld    S                   like(r§bool    )
+     D canUseCntFld    S                   like(bool_t)
      D                                     inz
       * ------------------------------------------------------------------------
       *
@@ -1640,7 +1640,7 @@
       *===================================================================*
       *
      P f_mustCvtCcsid  B                   Export
-     D                 PI                         like(r§bool      )
+     D                 PI                         like(bool_t)
       *
      D jobi0400        DS                  likeds(jobi0400_t)
       * ------------------------------------------------------------------------
@@ -1665,11 +1665,11 @@
       *===================================================================*
       *
      P f_isToLong      B                   Export
-     D                 PI                         like(r§bool      )
+     D                 PI                         like(bool_t)
      D  i_FLDL0100                         const  likeds(fldl0100_t)
       *
       *  Funktionswert
-     D toLong          S                   like(r§bool    )
+     D toLong          S                   like(bool_t)
      D                                     inz
       * ------------------------------------------------------------------------
       *
@@ -1688,11 +1688,11 @@
       *===================================================================*
       *
      P f_isToLongMax   B                   Export
-     D                 PI                         like(r§bool      )
+     D                 PI                         like(bool_t)
      D  i_FLDL0100                         const  likeds(fldl0100_t)
       *
       *  Funktionswert
-     D toLong          S                   like(r§bool    )
+     D toLong          S                   like(bool_t)
      D                                     inz
       * ------------------------------------------------------------------------
       *
@@ -1711,7 +1711,7 @@
       *===================================================================*
       *
      P f_maxDspLn      B                   Export
-     D                 PI                         like(r§int4    )
+     D                 PI                         like(int4_t)
      D  i_FLDL0100                         const  likeds(fldl0100_t)
       *
      D maxLen          S             10I 0 inz
@@ -1731,7 +1731,7 @@
       *===================================================================*
       *
      P f_cntFldLn      B                   Export
-     D                 PI                         like(r§int4    )
+     D                 PI                         like(int4_t)
      D  i_FLDL0100                         const  likeds(fldl0100_t)
       *------------------------------------------------------------*
       *
@@ -1748,15 +1748,15 @@
       *===================================================================*
       *
      P f_nbrDspRw      B                   Export
-     D                 PI                         like(r§int4      )
+     D                 PI                         like(int4_t)
      D  i_FLDL0100                         const  likeds(fldl0100_t)
       *
       * Funktionswert
-     D nbrDspRow       S                   like(r§int4    )
+     D nbrDspRow       S                   like(int4_t)
      D                                     inz
       *
       * Arbeitsfelder
-     D dsplyLen        S                   like(r§int4    )
+     D dsplyLen        S                   like(int4_t)
       *------------------------------------------------------------*
       *
      C                   If        f_isToLong(i_FLDL0100) = bTrue
@@ -1783,9 +1783,9 @@
      P p_decToBin      B                   Export
      D                 PI                  opdesc
      D  io_string                 32767A          options(*varsize)
-     D  i_startPos                         const  like(r§int4    )
-     D  i_length                           const  like(r§int4    )
-     D  i_value                            const  like(r§int4    )
+     D  i_startPos                         const  like(int4_t)
+     D  i_length                           const  like(int4_t)
+     D  i_value                            const  like(int4_t)
       *
       * Parameters passed to CEEDOD
      D DescType        S             10I 0
@@ -1796,7 +1796,7 @@
       *
       * Arbeitsfelder
      D                 DS
-     D intValue                            like(r§int4) inz
+     D intValue                            like(int4_t) inz
      D alpha2                         2A   overlay(intValue: 3)
      D alpha4                         2A   overlay(intValue: 1)
       * ------------------------------------------------------------------------
@@ -1834,11 +1834,11 @@
       *===================================================================*
       *
      P f_isNotAlw      B                   Export
-     D                 PI                         like(r§bool      )
+     D                 PI                         like(bool_t)
      D  i_FLDL0100                         const  likeds(fldl0100_t)
       *
       * Funktionswert
-     D notAllowed      S                   like(r§bool    ) inz(bTrue)
+     D notAllowed      S                   like(bool_t) inz(bTrue)
       * ------------------------------------------------------------------------
       *
       *  Wenn es sich um einen der folgenden Feldtypen handelt, ...
@@ -1904,11 +1904,11 @@
       *===================================================================*
       *
      P f_isKeyFld      B                   Export
-     D                 PI                         like(r§bool      )
+     D                 PI                         like(bool_t)
      D  i_FLDL0100                         const  likeds(fldl0100_t)
       *
       * Funktionswert
-     D isKeyFld        S                   like(r§bool    ) inz(bFalse)
+     D isKeyFld        S                   like(bool_t) inz(bFalse)
       * ------------------------------------------------------------------------
       *
       *  Wenn es sich um ein Schlüsselfeld handelt, ...
@@ -1929,8 +1929,8 @@
       *===================================================================*
       *
      P f_pgmCallN      B                   Export
-     D                 PI                         like(r§pgmCallN)
-     D  i_pgmNme                           const  like(r§pgm     )
+     D                 PI                         like(pgmCallN_t)
+     D  i_pgmNme                           const  like(pgm_t)
       *------------------------------------------------------------*
       *
      C                   Return    %trimr(f_getPrdLb) + '/' + i_pgmNme
@@ -1943,24 +1943,24 @@
       *
      P p_sndStsMg      B                   Export
      D                 PI
-     D  i_msgID                            const like(r§msgID   )
-     D  i_msgDta                           const like(r§msgDta  )
+     D  i_msgID                            const like(msgID_t)
+     D  i_msgDta                           const like(msgDta_t)
       *
       *  Parameter für QMHSNDPM API
-     D yMsgID          S                   like(r§msgID   )
+     D yMsgID          S                   like(msgID_t)
      D                                     inz
      D yQMsgF          DS
-     D  yMsgF                              like(r§file    )  inz
-     D  yMsgFL                             like(r§lib     )  inz
-     D yMsgDta         S                   like(r§msgDta  )
+     D  yMsgF                              like(file_t)  inz
+     D  yMsgFL                             like(lib_t)  inz
+     D yMsgDta         S                   like(msgDta_t)
      D                                     inz
-     D yMsgDtaLen      S                   like(r§int4    )
+     D yMsgDtaLen      S                   like(int4_t)
      D                                     inz
      D yMsgType        S             10A
      D                                     inz
-     D yStkE           S                   like(r§proc    )
+     D yStkE           S                   like(proc_t)
      D                                     inz
-     D yStkCnt         S                   like(r§int4    )
+     D yStkCnt         S                   like(int4_t)
      D                                     inz
      D yMsgKey         S              4A   inz
      D yErrCode        DS                  likeds(errCode_t ) inz
@@ -2003,15 +2003,15 @@
       *
      P f_rtvMsgD       B                   Export
      D                 PI          2048A
-     D  i_msgID                            value  like(r§msgID   )
-     D  i_msgDta                           value  like(r§msgDta  )
-     D  i_rplcSubV                         const  like(r§bool    )
+     D  i_msgID                            value  like(msgID_t)
+     D  i_msgDta                           value  like(msgDta_t)
+     D  i_rplcSubV                         const  like(bool_t)
      D                                            options(*nopass)
-     D  i_rtnFmtCC                         const  like(r§bool    )
+     D  i_rtnFmtCC                         const  like(bool_t)
      D                                            options(*nopass)
-     D  i_msgF                             value  like(r§file    )
+     D  i_msgF                             value  like(file_t)
      D                                            options(*nopass)
-     D  i_msgFL                            value  like(r§lib     )
+     D  i_msgFL                            value  like(lib_t)
      D                                            options(*nopass)
       *
       *  Parameterpositionen optionaler Parameter
@@ -2027,8 +2027,8 @@
      D msgDLen         S             10I 0 inz
      D format          S              8A   inz
      D qMsgF           DS
-     D  msgF                               like(r§file    )  inz
-     D  msgFL                              like(r§lib     )  inz
+     D  msgF                               like(file_t)  inz
+     D  msgFL                              like(lib_t)  inz
      D msgDtaLn        S             10I 0 inz
      D rplcSubV        S             10A   inz
      D rtnFmtCC        S             10A   inz
@@ -2101,11 +2101,11 @@
       *
      P f_msgText       B                   Export
      D                 PI           512A
-     D  i_msgID                            value  like(r§msgID   )
-     D  i_msgDta                           value  like(r§msgDta  )
-     D  i_msgF                             value  like(r§file    )
+     D  i_msgID                            value  like(msgID_t)
+     D  i_msgDta                           value  like(msgDta_t)
+     D  i_msgF                             value  like(file_t)
      D                                            options(*nopass)
-     D  i_msgFL                            value  like(r§lib     )
+     D  i_msgFL                            value  like(lib_t)
      D                                            options(*nopass)
       *
       *  Parameterpositionen optionaler Parameter
@@ -2148,7 +2148,7 @@
       *
      P p_movPgmMg      B                   Export
      D                 PI
-     D  i_pgmNme                           const  like(r§pgm     )
+     D  i_pgmNme                           const  like(pgm_t)
       *
       *  Parameter für QMHMOVPM
      D msgKey          S              4A   inz
@@ -2157,17 +2157,17 @@
      D  toMove_2                     10A   inz('*DIAG')
      D  toMove_3                     10A   inz('*INFO')
      D  toMove_4                     10A   inz('*ESCAPE')
-     D nbrToMove       S                   like(r§int4    ) inz(4)
-     D toStkE          S                   like(r§proc    ) inz
-     D toStkCnt        S                   like(r§int4    ) inz(2)
+     D nbrToMove       S                   like(int4_t) inz(4)
+     D toStkE          S                   like(proc_t) inz
+     D toStkCnt        S                   like(int4_t) inz(2)
      D errCode         DS                  likeds(errCode_t ) inz
-     D toStkELn        S                   like(r§int4    ) inz
+     D toStkELn        S                   like(int4_t) inz
      D toQStkE         DS
-     D  toStkEMod                          like(r§mod     ) inz
-     D  toStkEPgm                          like(r§pgm     ) inz
+     D  toStkEMod                          like(mod_t) inz
+     D  toStkEPgm                          like(pgm_t) inz
      D toStkEDT        S             10A   inz('*CHAR')
      D frmStkE         S               *   inz(*null)
-     D frmStkECnt      S                   like(r§int4    ) inz(1)
+     D frmStkECnt      S                   like(int4_t) inz(1)
       *------------------------------------------------------------*
       *
      C                   Eval      toStkE    = i_pgmNme
@@ -2198,14 +2198,14 @@
       *
      P p_wrongKey      B                   Export
      D                 PI
-     D  i_scnAID                           const  like(r§scnAID  )
-     D  i_pgmNme                           const  like(r§pgm     )
+     D  i_scnAID                           const  like(scnAID_t)
+     D  i_pgmNme                           const  like(pgm_t)
       *
       *  Arbeitsfelder
      D                 DS
-     D msgID                               like(r§msgID   ) inz('AID')
+     D msgID                               like(msgID_t) inz('AID')
      D msgNbr                         4A   overlay(msgID: 4)
-     D msgDta          S                   like(r§msgDta  ) inz
+     D msgDta          S                   like(msgDta_t) inz
       *------------------------------------------------------------*
       *
      C                   Callp     p_keyToMsg(i_scnAID: msgID: msgDta)
@@ -2221,15 +2221,15 @@
       *
      P p_keyToMsg      B                   Export
      D                 PI
-     D  i_scnAID                           const  like(r§scnAID  )
-     D  o_msgID                                   like(r§msgID   )
-     D  o_msgDta                                  like(r§msgDta  )
+     D  i_scnAID                           const  like(scnAID_t)
+     D  o_msgID                                   like(msgID_t)
+     D  o_msgDta                                  like(msgDta_t)
       *
       *  Arbeitsfelder
      D                 DS
-     D msgID                               like(r§msgID   ) inz
+     D msgID                               like(msgID_t) inz
      D msgNbr                         4A   overlay(msgID: 4)
-     D msgDta          S                   like(r§msgDta  ) inz
+     D msgDta          S                   like(msgDta_t) inz
       *------------------------------------------------------------*
       *
      C                   Eval      msgID  = 'AID'
@@ -2316,21 +2316,21 @@
       *===================================================================*
       *
      P f_spltTxt       B                   Export
-     D                 PI                  opdesc like(r§int4    )
+     D                 PI                  opdesc like(int4_t)
      D  i_text                    32767A   const  options(*varsize)
-     D  i_strPos                           const  like(r§int4    )
-     D  i_len                              const  like(r§int4    )
+     D  i_strPos                           const  like(int4_t)
+     D  i_len                              const  like(int4_t)
      D  o_text                    32767A          options(*varsize)
       *
       *  Funktionswert
-     D rtnLen          S                   like(r§int4    ) inz
+     D rtnLen          S                   like(int4_t) inz
       *
       *  Arbeitsfelder
-     D pNewLine        S                   like(r§int4    ) inz
-     D iTxtLen         S                   like(r§int4    ) inz
-     D oTxtLen         S                   like(r§int4    ) inz
+     D pNewLine        S                   like(int4_t) inz
+     D iTxtLen         S                   like(int4_t) inz
+     D oTxtLen         S                   like(int4_t) inz
      D nextChar        S              1A   inz
-     D trimLen         S                   like(r§int4    ) inz
+     D trimLen         S                   like(int4_t) inz
       *
       * Parameters passed to CEEDOD
      D DescType        S             10I 0
@@ -2428,12 +2428,12 @@
      D  io_text                   32767A          options(*varsize)
       *
       *  Arbeitsfelder
-     D textLen         S                   like(r§int4    ) inz
-     D iPreSpc         S                   like(r§int4    ) inz
-     D iPostSpc        S                   like(r§int4    ) inz
-     D trimLen         S                   like(r§int4    ) inz
-     D oPreSpc         S                   like(r§int4    ) inz
-     D oPostSpc        S                   like(r§int4    ) inz
+     D textLen         S                   like(int4_t) inz
+     D iPreSpc         S                   like(int4_t) inz
+     D iPostSpc        S                   like(int4_t) inz
+     D trimLen         S                   like(int4_t) inz
+     D oPreSpc         S                   like(int4_t) inz
+     D oPostSpc        S                   like(int4_t) inz
       *
       * Parameters passed to CEEDOD
      D DescType        S             10I 0
@@ -2522,15 +2522,15 @@
       *===================================================================*
       *
      P f_isKeyExc      B                   Export
-     D                 PI                        like(r§bool    )
-     D  i_data                             value like(R§SET0000 )
-     D  i_exclKeys                         value like(r§pgmCmd  ) DIM(25)
+     D                 PI                        like(bool_t)
+     D  i_data                             value like(SET0000_t)
+     D  i_exclKeys                         value like(pgmCmd_t) DIM(25)
       *
       *  Funktionswert
-     D isExcluded      S                   like(r§bool    ) inz
+     D isExcluded      S                   like(bool_t) inz
       *
       *  Arbeitsfelder
-     D pgmCmd          S                   like(r§pgmCmd  ) inz
+     D pgmCmd          S                   like(pgmCmd_t) inz
      D in01            S                   like(*in01     ) inz
       *------------------------------------------------------------*
       *
@@ -2729,11 +2729,11 @@
       *
      P f_strerror...
      P                 B                   export
-     D                 PI                         like(r§msgDta )
+     D                 PI                         like(msgDta_t)
      D  i_errno                      10I 0 const
       *
       *  Funktionswert
-     D errText         S                   like(r§msgDta ) inz
+     D errText         S                   like(msgDta_t) inz
       *
      D pErrText        S               *   inz
       * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2839,7 +2839,7 @@
       *
      D mbrd0100        DS                  likeds(MBRD0100_t) inz
       *
-     D qObj            DS                  likeds(r§qObj) inz
+     D qObj            DS                  likeds(qObj_t) inz
      D errCode         DS                  likeds(errCode_t ) inz
       *
       *  Prototypen
@@ -3488,15 +3488,15 @@
       *
      P f_getRecordFormatInf...
      P                 B                   Export
-     D                 PI                  likeds(r§rcdFmtInf)
-     D  i_file                             value  like(r§file)
-     D  i_lib                              value  like(r§lib)
-     D  i_rcdFmt                           value  like(r§fmtID)
+     D                 PI                  likeds(rcdFmtInf_t)
+     D  i_file                             value  like(file_t)
+     D  i_lib                              value  like(lib_t)
+     D  i_rcdFmt                           value  like(fmtID_t)
       *
       *  Funktionswert
-     D rcdFmtInf       DS                  likeds(r§rcdFmtInf)
+     D rcdFmtInf       DS                  likeds(rcdFmtInf_t)
       *
-     D qFile           DS                  likeds(r§qObj)
+     D qFile           DS                  likeds(qObj_t)
      D qFileRtn        DS                  likeds(qFile)
      D Qdb_Qddfmt      DS                  likeds(Qdb_Qddfmt_t)
      D                                     based(pQdb_Qddfmt)

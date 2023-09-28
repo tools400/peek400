@@ -77,22 +77,22 @@
       *----------------------------------------------------*
       *
      D YFKeys          S             18A   DIM(32)       INZ(*BLANKS)
-     D YNbrOfKeys      S                   like(r§int4    ) inz
+     D YNbrOfKeys      S                   like(int4_t) inz
      D YMsgID          S              7A                 INZ(*BLANKS)
      D YMsgDta         S            512A                 INZ(*BLANKS)
       *
      D YPgmCmd         S             10A   INZ(*BLANKS)
-     D YCmdDta         S                   LIKE(r§pgmCmdDt) INZ(*BLANKS)
+     D YCmdDta         S                   LIKE(pgmCmdDt_t) INZ(*BLANKS)
       *
       *---Definition der F-Tastenbildschirmfelder----------*
       /COPY QCOPYLE,SCRNFKEYS
       *----------------------------------------------------*
       *
-     D SfBot           S                   like(r§int4    ) inz
+     D SfBot           S                   like(int4_t) inz
      D NbrFKeys        C                   CONST(2)
       *
-     D PEEK21_NAME     S                   like(r§pgmCallN) inz
-     D PEEK23_NAME     S                   like(r§pgmCallN) inz
+     D PEEK21_NAME     S                   like(pgmCallN_t) inz
+     D PEEK23_NAME     S                   like(pgmCallN_t) inz
       *
      D A1              S              1A   INZ(*BLANKS)
       *
@@ -108,23 +108,23 @@
       *
       /COPY QCOPYLE,CEECNDHDLR
       *
-     D isInzSr         S                   like(r§bool) inz(bFalse)
+     D isInzSr         S                   like(bool_t) inz(bFalse)
       *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
       *
      D PEEK26          PI
-     D  i_dsp80                            const like(r§dsp80)
-     D  i_qSrcFile                         const likeds(r§qObj)
-     D  i_srcMbr                           const like(r§mbr)
-     D  o_toFile                                 like(r§file)
-     D  o_toLib                                  like(r§lib)
-     D  o_toMbr                                  like(r§mbr)
+     D  i_dsp80                            const like(dsp80_t)
+     D  i_qSrcFile                         const likeds(qObj_t)
+     D  i_srcMbr                           const like(mbr_t)
+     D  o_toFile                                 like(file_t)
+     D  o_toLib                                  like(lib_t)
+     D  o_toMbr                                  like(mbr_t)
      D  o_mbrOpt                     10A
      D  o_crtFile                    10A
-     D  o_msgID                                  like(r§msgID)
-     D  o_msgDta                                 like(r§msgDta)
+     D  o_msgID                                  like(msgID_t)
+     D  o_msgDta                                 like(msgDta_t)
       *
       *---------------------------------------------------*
       *

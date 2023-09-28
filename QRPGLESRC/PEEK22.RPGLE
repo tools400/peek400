@@ -43,11 +43,11 @@
       *  F E L D - D E F I N I T I O N E N                 *
       *----------------------------------------------------*
       *
-     D Wrk_Sectn       S                   LIKE(R§SECTION )
+     D Wrk_Sectn       S                   LIKE(SECTION_t)
      D                                     INZ
-     D Wrk_Key         S                   LIKE(R§KEY     )
+     D Wrk_Key         S                   LIKE(KEY_t)
      D                                     INZ
-     D Wrk_Data        S                   LIKE(R§SET0000 )
+     D Wrk_Data        S                   LIKE(SET0000_t)
      D                                     INZ
       *
       /COPY QCOPYLE,F_PEEK53

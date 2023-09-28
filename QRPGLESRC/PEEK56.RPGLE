@@ -86,8 +86,8 @@
       *----------------------------------------------------*
       *
      D yFKeys          S             18A   DIM(32)       INZ(*BLANKS)
-     D yNbrOfKeys      S                   like(r§int4    ) inz
-     D yExclKeys       S                   LIKE(r§pgmCmd  ) DIM(25)
+     D yNbrOfKeys      S                   like(int4_t) inz
+     D yExclKeys       S                   LIKE(pgmCmd_t) DIM(25)
      D yMsgID          S              7A   INZ(*BLANKS)
      D yMsgDta         S            512A   INZ(*BLANKS)
       *
@@ -95,13 +95,13 @@
      D YQFile          DS
      D  YFile                        10A   INZ
      D  YLib                         10A   INZ
-     D numMbr          S                   like(r§int4    ) inz
+     D numMbr          S                   like(int4_t) inz
       *
      D YPgmCmd         S             10A   INZ(*BLANKS)
-     D YCmdDta         S                   LIKE(r§pgmCmdDt) INZ(*BLANKS)
+     D YCmdDta         S                   LIKE(pgmCmdDt_t) INZ(*BLANKS)
       *
      D YChoice         S             75A   DIM(32)
-     D YNbrOfCh        S                   like(r§int4    ) inz
+     D YNbrOfCh        S                   like(int4_t) inz
       *
      D IsNewPos        S              1A   INZ(bFalse)
      D IsFound         S              1A   INZ(bFalse)
@@ -109,20 +109,20 @@
      D IsCtlError      S              1A   INZ(bFalse)
      D IsDirty         S              1A   INZ(bFalse)
       *
-     D SfTop           S                   like(r§int4    ) inz
-     D SflPage         S                   like(r§int4    ) inz
+     D SfTop           S                   like(int4_t) inz
+     D SflPage         S                   like(int4_t) inz
      D SflPageDDS      S                   like(SflPage   ) inz
      D SflRec          S                   like(SflPage   ) inz
      D SflNbrRcd       S                   like(SflPage   ) inz
-     D SfBot           S                   like(r§int4    ) inz
+     D SfBot           S                   like(int4_t) inz
      D Sfl_Cmd         S             10A   INZ(*BLANKS)
      D Ctl_Cmd         S             10A   INZ(*BLANKS)
      D NbrFKeys        C                   CONST(3)
       *
-     D PEEK21_NAME     S                   like(r§pgmCallN) inz
-     D PEEK23_NAME     S                   like(r§pgmCallN) inz
-     D PEEK27_NAME     S                   like(r§pgmCallN) inz
-     D PEEK46_NAME     S                   like(r§pgmCallN) inz
+     D PEEK21_NAME     S                   like(pgmCallN_t) inz
+     D PEEK23_NAME     S                   like(pgmCallN_t) inz
+     D PEEK27_NAME     S                   like(pgmCallN_t) inz
+     D PEEK46_NAME     S                   like(pgmCallN_t) inz
       *
      D R_Mbr           S                   INZ(*BLANKS) LIKE(##Mbr  )
      D LstMbr          S                   INZ(*BLANKS) LIKE(##Mbr  )
@@ -134,10 +134,10 @@
      D                                     Inz
      D LastLib         S                   Like(##Lib     )
      D                                     Inz
-     D isPrdLib        S                   like(r§bool    )
+     D isPrdLib        S                   like(bool_t)
      D                                     inz(bFalse)
       *
-     D rcdFmtID        S                   like(r§fmtid)
+     D rcdFmtID        S                   like(fmtid_t)
      D MBRL0200        DS                  likeds(MBRL0200_t) inz
       *
       *---Benutzervoreinstellungen-------------------------*
@@ -151,36 +151,36 @@
       *
       /COPY QCOPYLE,F_PEEK53
       *
-     D f_isVldOpt      PR                         like(r§bool)
+     D f_isVldOpt      PR                         like(bool_t)
      D  i_option                                  like(SFPAU)
-     D  o_msgID                                   like(r§msgID)
-     D  o_msgDta                                  like(r§msgDta)
+     D  o_msgID                                   like(msgID_t)
+     D  o_msgDta                                  like(msgDta_t)
       *
      D f_loadRcdFmtID...
-     D                 PR                  like(r§fmtid)
+     D                 PR                  like(fmtid_t)
       *
       /COPY QCOPYLE,CEECNDHDLR
       *
-     D isInzSr         S                   like(r§bool) inz(bFalse)
+     D isInzSr         S                   like(bool_t) inz(bFalse)
       *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
       *
      D PEEK56          PI
-     D  i_dsp80                            const like(r§dsp80)
-     D  i_copyright                        const like(r§copyRght)
-     D  i_mode                             const like(r§mode)
-     D  i_envFile                          const like(r§file)
-     D  i_envLib                           const like(r§lib)
-     D  i_envMbr                           const like(r§mbr)
-     D  i_rcdFmtID                         const like(r§fmtId)
-     D  o_qFile                                  likeds(r§qObj)
-     D  o_mbr                                    like(r§mbr)
-     D  o_text                                   like(r§text)
-     D  o_option                                 like(r§option)
-     D  o_msgID                                  like(r§msgID)
-     D  o_msgDta                                 like(r§msgDta)
+     D  i_dsp80                            const like(dsp80_t)
+     D  i_copyright                        const like(copyRght_t)
+     D  i_mode                             const like(mode_t)
+     D  i_envFile                          const like(file_t)
+     D  i_envLib                           const like(lib_t)
+     D  i_envMbr                           const like(mbr_t)
+     D  i_rcdFmtID                         const like(fmtId_t)
+     D  o_qFile                                  likeds(qObj_t)
+     D  o_mbr                                    like(mbr_t)
+     D  o_text                                   like(text_t)
+     D  o_option                                 like(option_t)
+     D  o_msgID                                  like(msgID_t)
+     D  o_msgDta                                 like(msgDta_t)
       *
       *---------------------------------------------------*
       *
@@ -1477,13 +1477,13 @@
       *===================================================================*
       *
      P f_isVldOpt      B
-     D                 PI                         like(r§bool    )
+     D                 PI                         like(bool_t)
      D  i_option                                  like(SFPAU     )
-     D  o_msgID                                   like(r§msgID   )
-     D  o_msgDta                                  like(r§msgDta  )
+     D  o_msgID                                   like(msgID_t)
+     D  o_msgDta                                  like(msgDta_t)
       *
       *  Funktionswert ...
-     D isError         S                   like(r§bool    )
+     D isError         S                   like(bool_t)
      D                                     inz(bFalse)
       *---------------------------------------------------*
       *
@@ -1510,10 +1510,10 @@
       *  Prozedur:  f_loadRcdFmtID                             (Body)     *
       *===================================================================*
      P f_loadRcdFmtID  B
-     D                 PI                  like(r§fmtid)
+     D                 PI                  like(fmtid_t)
       *
       *  definieren Arbeitsfelder ...
-     D rcdFmtID        S                   like(r§fmtid)
+     D rcdFmtID        S                   like(fmtid_t)
       *
      C     en_key2       Klist
      C                   Kfld                    en_USER

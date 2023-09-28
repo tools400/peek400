@@ -34,8 +34,8 @@
      F                                     infds(File_02_DS)
      F                                     extfile(g_peekusr)
       *
-     DFile_01_DS       DS                  likeds(r§infds)
-     DFile_02_DS       DS                  likeds(r§infds)
+     DFile_01_DS       DS                  likeds(infds_t)
+     DFile_02_DS       DS                  likeds(infds_t)
       *
      D g_oldFile       S             21A   inz
      D g_peekusr       S             21A   inz
@@ -178,8 +178,8 @@
       ********************************************************************
       *
      D PEEK62          PI
-     D  i_file                             const like(r§file)
-     D  i_lib                              const like(r§lib)
+     D  i_file                             const like(file_t)
+     D  i_lib                              const like(lib_t)
       *---------------------------------------------------*
       *
       *  Register error handler

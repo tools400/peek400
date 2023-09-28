@@ -40,21 +40,21 @@
      F                                     INFDS(File_01_DS)
      F                                     EXTFILE(g_default)
       *
-     D File_00_DS      DS                  likeds(r§infds)
-     D File_01_DS      DS                  likeds(r§infds)
+     D File_00_DS      DS                  likeds(infds_t)
+     D File_01_DS      DS                  likeds(infds_t)
       *
      D g_peekusr       S             21A
      D g_default       S             21A
       *
       *-------------------------------------------------------------------*
-     D g_isInit        S                   like(r§bool) inz(bFalse)
-     D g_user          S                   like(r§user) inz
-     D g_file          S                   like(r§file) inz
-     D g_lib           S                   like(r§lib ) inz
+     D g_isInit        S                   like(bool_t) inz(bFalse)
+     D g_user          S                   like(user_t) inz
+     D g_file          S                   like(file_t) inz
+     D g_lib           S                   like(lib_t) inz
       *
       *-------------------------------------------------------------------*
-     D f_initUsrS      PR                         like(R§SET0000 )
-     D  i_key                              const  like(R§KEY     )
+     D f_initUsrS      PR                         like(SET0000_t)
+     D  i_key                              const  like(KEY_t)
       *
       *----------------------------------------------------*
      D p_opnFile       PR
@@ -108,7 +108,7 @@
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
       *
-     D PEEK22_NAME     S                   like(r§pgmCallN) inz
+     D PEEK22_NAME     S                   like(pgmCallN_t) inz
       *
       /COPY QCOPYLE,PPEEK22
       *
@@ -144,10 +144,10 @@
       *
      P p_crtUsrSg      B                   Export
      D                 PI
-     D  i_prodLib                          const  like(r§lib     )
-     D  i_user                             const  like(r§user    )
-     D  o_msgID                                   like(r§msgID   )
-     D  o_msgDta                                  like(r§msgDta  )
+     D  i_prodLib                          const  like(lib_t)
+     D  i_user                             const  like(user_t)
+     D  o_msgID                                   like(msgID_t)
+     D  o_msgDta                                  like(msgDta_t)
       *
       *  definieren Arbeitsfelder
      D  cmd            S            256A   inz
@@ -187,13 +187,13 @@
       *===================================================================*
       *
      P f_getUsrSg      B                   Export
-     D                 PI                         like(R§SET0000 )
-     D  i_key                              const  like(R§KEY     )
+     D                 PI                         like(SET0000_t)
+     D  i_key                              const  like(KEY_t)
      D  o_msgID                       7A   options(*NOPASS)
      D  o_msgDta                    512A   options(*NOPASS)
       *
       *  definieren Funktionswert ...
-     D f_getUsrSg      S                   like(R§SET0000 )
+     D f_getUsrSg      S                   like(SET0000_t)
      D                                     inz
       *
       *  Hilfsfelder für optionale Parameter ...
@@ -203,8 +203,8 @@
      D                                     inz
       *
       *  definieren Arbeitsfelder ...
-     D X               S                   like(r§int4    ) inz
-     D Y               S                   like(r§int4    ) inz
+     D X               S                   like(int4_t) inz
+     D Y               S                   like(int4_t) inz
       * ------------------------------------------------------------------------
      C                   Callp     p_initSrvPgm
       *
@@ -251,8 +251,8 @@
       *
      P p_updUsrSg      B                   Export
      D                 PI
-     D  i_key                              const  like(R§KEY     )
-     D  i_data                             const  like(R§SET0000 )
+     D  i_key                              const  like(KEY_t)
+     D  i_data                             const  like(SET0000_t)
       *
       *  definieren Arbeitsfelder
      D  msgID          S              7A   inz
@@ -280,13 +280,13 @@
       *===================================================================*
       *
      P f_chainUsr      B                   Export
-     D                 PI                         like(R§BOOL    )
-     D  i_section                          const  like(R§SECTION )
-     D  i_key                              const  like(R§KEY     )
-     D  o_data                                    like(R§SET0000 )
+     D                 PI                         like(BOOL_t)
+     D  i_section                          const  like(SECTION_t)
+     D  i_key                              const  like(KEY_t)
+     D  o_data                                    like(SET0000_t)
       *
       *  definieren Funktionswert ...
-     D f_chainUsr      S                   like(R§BOOL    )
+     D f_chainUsr      S                   like(BOOL_t)
      D                                     inz
       *  definieren Arbeitsfelder
      D  msgID          S              7A   inz
@@ -322,13 +322,13 @@
       *===================================================================*
       *
      P f_updatUsr      B                   Export
-     D                 PI                         like(R§BOOL    )
-     D  i_section                          const  like(R§SECTION )
-     D  i_key                              const  like(R§KEY     )
-     D  i_data                             const  like(R§SET0000 )
+     D                 PI                         like(BOOL_t)
+     D  i_section                          const  like(SECTION_t)
+     D  i_key                              const  like(KEY_t)
+     D  i_data                             const  like(SET0000_t)
       *
       *  definieren Funktionswert ...
-     D f_updatUsr      S                   like(R§BOOL    )
+     D f_updatUsr      S                   like(BOOL_t)
      D                                     inz
       *
       *  definieren Arbeitsfelder
@@ -368,12 +368,12 @@
       *===================================================================*
       *
      P f_deletUsr      B                   Export
-     D                 PI                         like(R§BOOL    )
-     D  i_section                          const  like(R§SECTION )
-     D  i_key                              const  like(R§KEY     )
+     D                 PI                         like(BOOL_t)
+     D  i_section                          const  like(SECTION_t)
+     D  i_key                              const  like(KEY_t)
       *
       *  definieren Funktionswert ...
-     D f_deletUsr      S                   like(R§BOOL    )
+     D f_deletUsr      S                   like(BOOL_t)
      D                                     inz
       *  definieren Arbeitsfelder
      D  msgID          S              7A   inz
@@ -411,13 +411,13 @@
       *===================================================================*
       *
      P f_writeUsr      B                   Export
-     D                 PI                         like(R§BOOL    )
-     D  i_section                          const  like(R§SECTION )
-     D  i_key                              const  like(R§KEY     )
-     D  i_data                                    like(R§SET0000 )
+     D                 PI                         like(BOOL_t)
+     D  i_section                          const  like(SECTION_t)
+     D  i_key                              const  like(KEY_t)
+     D  i_data                                    like(SET0000_t)
       *
       *  definieren Funktionswert ...
-     D f_writeUsr      S                   like(R§BOOL    )
+     D f_writeUsr      S                   like(BOOL_t)
      D                                     inz
       *  definieren Arbeitsfelder
      D  msgID          S              7A   inz
@@ -452,8 +452,8 @@
       *
      P p_setllUsr      B                   Export
      D                 PI
-     D  i_section                          const  like(R§SECTION )
-     D  i_key                              const  like(R§KEY     )
+     D  i_section                          const  like(SECTION_t)
+     D  i_key                              const  like(KEY_t)
      D                                     options(*NOPASS)
       *
       *  definieren Arbeitsfelder
@@ -487,8 +487,8 @@
       *
      P p_setgtUsr      B                   Export
      D                 PI
-     D  i_section                          const  like(R§SECTION )
-     D  i_key                              const  like(R§KEY     )
+     D  i_section                          const  like(SECTION_t)
+     D  i_key                              const  like(KEY_t)
      D                                     options(*NOPASS)
       *
       *  definieren Arbeitsfelder
@@ -521,21 +521,21 @@
       *===================================================================*
       *
      P f_readeUsr      B                   Export
-     D                 PI                         like(R§BOOL    )
-     D  i_section                          const  like(R§SECTION )
-     D  o_key                                     like(R§KEY     )
+     D                 PI                         like(BOOL_t)
+     D  i_section                          const  like(SECTION_t)
+     D  o_key                                     like(KEY_t)
      D                                            options(*NOPASS)
-     D  o_data                                    like(R§SET0000 )
+     D  o_data                                    like(SET0000_t)
      D                                            options(*NOPASS)
       *
       *  definieren Funktionswert ...
-     D f_readeUsr      S                   like(R§BOOL    )
+     D f_readeUsr      S                   like(BOOL_t)
      D                                     inz
       *
       *  definieren Hilfsfelder für optionale Parameter ...
-     D o2_key          S                   like(R§KEY     )
+     D o2_key          S                   like(KEY_t)
      D                                     inz
-     D o3_data         S                   like(R§SET0000 )
+     D o3_data         S                   like(SET0000_t)
      D                                     inz
       *
       *  definieren Arbeitsfelder
@@ -583,8 +583,8 @@
       *
      P p_setllDft      B                   Export
      D                 PI
-     D  i_section                          const  like(R§SECTION )
-     D  i_key                              const  like(R§KEY     )
+     D  i_section                          const  like(SECTION_t)
+     D  i_key                              const  like(KEY_t)
      D                                     options(*NOPASS)
       *
       *  definieren Arbeitsfelder
@@ -616,21 +616,21 @@
       *===================================================================*
       *
      P f_readeDft      B                   Export
-     D                 PI                         like(R§BOOL    )
-     D  i_section                          const  like(R§SECTION )
-     D  o_key                                     like(R§KEY     )
+     D                 PI                         like(BOOL_t)
+     D  i_section                          const  like(SECTION_t)
+     D  o_key                                     like(KEY_t)
      D                                            options(*NOPASS)
-     D  o_data                                    like(R§SET0000 )
+     D  o_data                                    like(SET0000_t)
      D                                            options(*NOPASS)
       *
       *  definieren Funktionswert ...
-     D f_readeDft      S                   like(R§BOOL    )
+     D f_readeDft      S                   like(BOOL_t)
      D                                     inz
       *
       *  definieren Hilfsfelder für optionale Parameter ...
-     D o2_key          S                   like(R§KEY     )
+     D o2_key          S                   like(KEY_t)
      D                                     inz
-     D o3_data         S                   like(R§SET0000 )
+     D o3_data         S                   like(SET0000_t)
      D                                     inz
       *
       *  definieren Arbeitsfelder
@@ -679,9 +679,9 @@
       *
      P p_setUsr        B                   Export
      D                 PI
-     D  i_user                             const  like(R§USER    )
-     D  i_file                             const  like(R§FILE    )
-     D  i_lib                              const  like(R§LIB     )
+     D  i_user                             const  like(USER_t)
+     D  i_file                             const  like(FILE_t)
+     D  i_lib                              const  like(LIB_t)
       * ------------------------------------------------------------------------
       *
      C                   Eval      g_user = i_user
@@ -697,9 +697,9 @@
       *===================================================================*
       *
      P f_getUsr        B                   Export
-     D                 PI                         like(R§USER    )
-     D  o_file                                    like(R§FILE    )
-     D  o_lib                                     like(R§LIB     )
+     D                 PI                         like(USER_t)
+     D  o_file                                    like(FILE_t)
+     D  o_lib                                     like(LIB_t)
       * ------------------------------------------------------------------------
       *
      C                   Eval      o_file = g_file
@@ -714,11 +714,11 @@
       *===================================================================*
       *
      P f_initUsrS      B
-     D                 PI                         like(R§SET0000 )
-     D  i_key                              const  like(R§KEY     )
+     D                 PI                         like(SET0000_t)
+     D  i_key                              const  like(KEY_t)
       *
       *  definieren Funktionswert ...
-     D f_initUsrS      S                   like(R§SET0000 )
+     D f_initUsrS      S                   like(SET0000_t)
      D                                     inz
       * ------------------------------------------------------------------------
       *

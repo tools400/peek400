@@ -194,7 +194,7 @@
      D A#FdCount                      5A   overlay(FieldCount:1)
       *
      D cmd             S              4A   inz
-     D scnNbr          S                   like(r§int4    ) inz
+     D scnNbr          S                   like(int4_t) inz
       *
      D §512            C                   const(': Unknown field type')
       *
@@ -229,7 +229,7 @@
      D p_wrtOut        PR
      D  i_srcDta                           const like(SRCDTA)
       *
-     D f_readFld       PR                        like(r§bool    )
+     D f_readFld       PR                        like(bool_t)
       *
       *====================================================*
       *  Steuerleiste
@@ -242,17 +242,17 @@
       /COPY QCOPYLE,CEECNDHDLR
       *
      D PEEK16          PI
-     D  i_prodLib                          const like(r§lib)
-     D  i_fileName                         const likeds(r§qObj)
-     D  i_rcdFmt                           const like(r§rcdFmt)
+     D  i_prodLib                          const like(lib_t)
+     D  i_fileName                         const likeds(qObj_t)
+     D  i_rcdFmt                           const like(rcdFmt_t)
      D  i_scnNbrs                     2P 0 const
-     D  i_alwLC                            const like(r§bool)
-     D  i_case                             const like(r§bool)
-     D  i_rcdLock                          const like(r§bool)
-     D  i_nullDft                          const like(r§bool)
-     D  i_keepCrs                          const like(r§bool)
-     D  io_stage                                 like(r§int4)
-     D  i_numPasses                        const like(r§int4)
+     D  i_alwLC                            const like(bool_t)
+     D  i_case                             const like(bool_t)
+     D  i_rcdLock                          const like(bool_t)
+     D  i_nullDft                          const like(bool_t)
+     D  i_keepCrs                          const like(bool_t)
+     D  io_stage                                 like(int4_t)
+     D  i_numPasses                        const like(int4_t)
       *
       *  Register error handler
      C                   callp     CEEHDLR(%paddr('errorHandler')
@@ -354,7 +354,7 @@
       *  Rename-Struktur
      C                   When      cmd = 'RNM1'
      C                   Eval      ds_bufLen = SRCDTA
-     C                   Eval      $bufLn_ln = §rcdBufLen
+     C                   Eval      $bufLn_ln = RCD_BUFF_LEN
      C                   Callp     p_wrtOut(ds_bufLen)
      C                   Exsr      SUB010
       *
@@ -1341,7 +1341,7 @@
       *    readFld       Lesen nächstes Feld aus PEEKFLD           *
       *============================================================*
      P f_readFld       B
-     D                 PI                        like(r§bool    )
+     D                 PI                        like(bool_t)
       *------------------------------------------------------------
       *
      C                   DoU       *in20 = bEOF
@@ -1363,7 +1363,7 @@
       *  Program error handler                                     *
       *============================================================*
       *
-     P errorHandler    b                   
+     P errorHandler    b
      D                 pi
      D i_condToken                         value likeds(cee_fc_t)
      D i_pCommArea                   10i 0 value

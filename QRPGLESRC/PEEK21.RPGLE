@@ -62,20 +62,20 @@
       *
      D Wrk_EOF         S              1A   INZ(bFalse)
       *
-     D Wrk_SECTN       S                   LIKE(R§SECTION )
+     D Wrk_SECTN       S                   LIKE(SECTION_t)
      D                                     INZ(*BLANKS)
-     D Wrk_Key         S                   LIKE(R§KEY     )
+     D Wrk_Key         S                   LIKE(KEY_t)
      D                                     INZ(*BLANKS)
-     D Tmp_Key         S                   LIKE(R§KEY     )
+     D Tmp_Key         S                   LIKE(KEY_t)
      D                                     INZ(*BLANKS)
-     D Wrk_Data        S                   LIKE(R§SET0000 )
+     D Wrk_Data        S                   LIKE(SET0000_t)
      D                                     INZ(*BLANKS)
-     D Wrk_Cmd         S                   LIKE(R§PGMCMD  )
+     D Wrk_Cmd         S                   LIKE(PGMCMD_t)
      D                                     INZ(*BLANKS)
-     D Wrk_ExclK       S                   like(r§pgmCmd  ) DIM(25)
+     D Wrk_ExclK       S                   like(pgmCmd_t) DIM(25)
       *
      D isExit05        S               N   inz(bFalse)
-     D EXIT05          S                   like(r§pgmCallN) inz
+     D EXIT05          S                   like(pgmCallN_t) inz
      D qPgm            DS                  qualified
      D  name                         10A
      D  lib                          10A
@@ -93,7 +93,7 @@
      D  file                         10A   inz
      D  lib                          10A   inz
       *
-     D p               S                   like(r§int4    ) inz
+     D p               S                   like(int4_t) inz
       *
      D callExit05      PR
      D  i_pgm                        10A   const
@@ -105,20 +105,20 @@
       *
       /COPY QCOPYLE,CEECNDHDLR
       *
-     D isInzSr         S                   like(r§bool) inz(bFalse)
+     D isInzSr         S                   like(bool_t) inz(bFalse)
       *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
       *
      D PEEK21          PI
-     D  i_scnAID                           const like(r§scnAid)
-     D  i_pgm                              const like(r§pgm)
-     D  o_pgmCmd                                 like(r§pgmCmd)
-     D  o_cmdDta                                 like(r§pgmCmdDt)
-     D  o_msgID                                  like(r§msgID)
-     D  o_msgDta                                 like(r§msgDta)
-     D  i_exclKeys                         const like(r§pgmCmd) dim(25)
+     D  i_scnAID                           const like(scnAid_t)
+     D  i_pgm                              const like(pgm_t)
+     D  o_pgmCmd                                 like(pgmCmd_t)
+     D  o_cmdDta                                 like(pgmCmdDt_t)
+     D  o_msgID                                  like(msgID_t)
+     D  o_msgDta                                 like(msgDta_t)
+     D  i_exclKeys                         const like(pgmCmd_t) dim(25)
      D                                           options(*nopass)
       *
       *---------------------------------------------------*

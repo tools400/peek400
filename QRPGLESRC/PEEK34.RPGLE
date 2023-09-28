@@ -102,10 +102,10 @@
      D DS_PEEKWRK    E DS          1024    EXTNAME(PEEKWRK) INZ
      D                                     PREFIX(W_)
       *
-     DWork_00_DS       DS                  likeds(r§infds)
-     DWork_01_DS       DS                  likeds(r§infds)
-     DPeek_00_DS       DS                  likeds(r§infds)
-     DPeek_01_DS       DS                  likeds(r§infds)
+     DWork_00_DS       DS                  likeds(infds_t)
+     DWork_01_DS       DS                  likeds(infds_t)
+     DPeek_00_DS       DS                  likeds(infds_t)
+     DPeek_01_DS       DS                  likeds(infds_t)
       *
       *----------------------------------------------------*
       *  F E L D - D E F I N I T I O N E N                 *
@@ -120,24 +120,24 @@
       *----------------------------------------------------*
       *
      D yFKeys          S             18A   DIM(32)       INZ(*BLANKS)
-     D yNbrOfKeys      S                   like(r§int4    ) inz
+     D yNbrOfKeys      S                   like(int4_t) inz
      D yMsgID          S              7A   INZ(*BLANKS)
      D yMsgDta         S            512A   INZ(*BLANKS)
       *
      D YPgmCmd         S             10A   INZ(*BLANKS)
-     D YCmdDta         S                   LIKE(r§pgmCmdDt) INZ(*BLANKS)
+     D YCmdDta         S                   LIKE(pgmCmdDt_t) INZ(*BLANKS)
       *
      D YField          S             10A   INZ(*BLANKS)
       *
      D YColorAttr      S              1A   INZ(*BLANKS)
       *
-     D SflPage         S                   like(r§int4    ) inz
+     D SflPage         S                   like(int4_t) inz
      D SflPageDDS      S                   like(SflPage   ) inz
      D SflRec          S                   like(SflPage   ) inz
      D SflNbrRcd       S                   like(SflPage   ) inz
      D NbrFKeys        C                   CONST(3)
       *
-     D SfBot           S                   like(r§int4    ) inz
+     D SfBot           S                   like(int4_t) inz
      D Sfl_Cmd         S             10A   INZ(*BLANKS)
       *
      D IsSflError      S              1A   INZ(bFalse)
@@ -148,10 +148,10 @@
       *IsEditcode      S              1A   INZ(bFalse)
      D IsBatch         S              1A   INZ(bFalse)
       *
-     D PEEK21_NAME     S                   like(r§pgmCallN) inz
-     D PEEK23_NAME     S                   like(r§pgmCallN) inz
-     D PEEK25_NAME     S                   like(r§pgmCallN) inz
-     D PEEK35_NAME     S                   like(r§pgmCallN) inz
+     D PEEK21_NAME     S                   like(pgmCallN_t) inz
+     D PEEK23_NAME     S                   like(pgmCallN_t) inz
+     D PEEK25_NAME     S                   like(pgmCallN_t) inz
+     D PEEK35_NAME     S                   like(pgmCallN_t) inz
       *
      D R_Field         S                   INZ(*BLANKS) LIKE(##Field)
      D R_Seq           S                   INZ(*ZEROS ) LIKE(F_Seq  )
@@ -162,18 +162,18 @@
       *
       /COPY QCOPYLE,CEECNDHDLR
       *
-     D isInzSr         S                   like(r§bool) inz(bFalse)
+     D isInzSr         S                   like(bool_t) inz(bFalse)
       *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
       *
      D PEEK34          PI
-     D  i_dsp80                            const like(r§dsp80)
-     D  i_copyright                        const like(r§copyRght)
-     D  i_function                         const like(r§option)
-     D  o_msgID                                  like(r§msgID)
-     D  o_msgDta                                 like(r§msgDta)
+     D  i_dsp80                            const like(dsp80_t)
+     D  i_copyright                        const like(copyRght_t)
+     D  i_function                         const like(option_t)
+     D  o_msgID                                  like(msgID_t)
+     D  o_msgDta                                 like(msgDta_t)
       *
       *----------------------------------------------------*
       *  Schlüsselliste für PEEKWRK
@@ -1165,9 +1165,9 @@
       *
      C     ClrPeekWrk    BEGSR
       *
-     C                   EVAL      §File = 'PEEKWRK'
-     C                   EVAL      §Lib = 'QTEMP'
-     C                   EVAL      §Mbr = '*FIRST'
+     C                   EVAL      §File = WORK_FILE_NAME
+     C                   EVAL      §Lib = WORK_FILE_LIBRARY
+     C                   EVAL      §Mbr = WORK_FILE_MEMBER
       /COPY QCOPYLE,CLRPFM
       *
      C                   ENDSR

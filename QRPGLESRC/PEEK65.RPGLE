@@ -35,13 +35,13 @@
      F                                     PREFIX(F_)
       *
       * Für Einzelsatzzugriff zum reinen Lesen von Datensätzen
-     D hFile04         DS                   likeds(r§hFile  )
+     D hFile04         DS                   likeds(hFile_t)
       *----------------------------------------------------*
       *
      D IO_Buff         DS
-     D  IO_BuffFld                         like(r§rcdBuf)
+     D  IO_BuffFld                         like(rcdBuf_t)
       *
-     D IO_NullMap      S                   like(r§nullMap)
+     D IO_NullMap      S                   like(nullMap_t)
      D                                     dim(§nullMapSize)
       *
       *---Variablendefinition------------------------------*
@@ -76,7 +76,7 @@
       *  I N F D S - D E F I N I T I O N E N               *
       *----------------------------------------------------*
       *
-     D Peek_00_DS      DS                  likeds(r§infds)
+     D Peek_00_DS      DS                  likeds(infds_t)
       *
       *----------------------------------------------------*
       *  F E L D - D E F I N I T I O N E N                 *
@@ -86,28 +86,28 @@
       /COPY QCOPYLE,SCRNFKEYS
       *----------------------------------------------------*
       *
-     D YString         S                   like(r§rcdBuf  )
-     D YStrLen         S                   like(r§int4    )
+     D YString         S                   like(rcdBuf_t)
+     D YStrLen         S                   like(int4_t)
      D YMsgID          S              7A
      D YMsgDta         S            512A
       *
-     D YQFile          DS                  likeds(r§qObj) inz
+     D YQFile          DS                  likeds(qObj_t) inz
       *
       *  Arbeitsfelder
-     D IsRecord        S                   like(r§bool) inz(bFalse)
-     D IsCvtChar       S                   like(r§bool) inz(bFalse)
-     D IsPrinted       S                   like(r§bool) inz(bFalse)
+     D IsRecord        S                   like(bool_t) inz(bFalse)
+     D IsCvtChar       S                   like(bool_t) inz(bFalse)
+     D IsPrinted       S                   like(bool_t) inz(bFalse)
       *
-     D x               S                   like(r§int4)
-     D y               S                   like(r§int4)
-     D textLen         S                   like(r§int4)
+     D x               S                   like(int4_t)
+     D y               S                   like(int4_t)
+     D textLen         S                   like(int4_t)
       *
      D R$TEXT          S                   like(FLDL0100_t.F1FTxt)
       *
       *  Qualifizierte Programmnamen
-     D PEEK06_NAME     S                   like(r§pgmCallN)
-     D PEEK09_NAME     S                   like(r§pgmCallN)
-     D PEEK32_NAME     S                   like(r§pgmCallN)
+     D PEEK06_NAME     S                   like(pgmCallN_t)
+     D PEEK09_NAME     S                   like(pgmCallN_t)
+     D PEEK32_NAME     S                   like(pgmCallN_t)
       *
       *  Konstanten
      D cQUOTE          C                   ''''
@@ -122,20 +122,20 @@
       *
       /COPY QCOPYLE,CEECNDHDLR
       *
-     D isInzSr         S                   like(r§bool) inz(bFalse)
+     D isInzSr         S                   like(bool_t) inz(bFalse)
       *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
       *
      D PEEK65          PI
-     D  i_rcdNbr                           const like(r§rcdNbr)
-     D  i_file                             const like(r§file)
-     D  i_library                          const like(r§lib)
-     D  i_member                           const like(r§mbr)
-     D  i_rcdFormat                        const like(r§rcdFmt)
-     D  o_msgID                                  like(r§msgID)
-     D  o_msgDta                                 like(r§msgDta)
+     D  i_rcdNbr                           const like(rcdNbr_t)
+     D  i_file                             const like(file_t)
+     D  i_library                          const like(lib_t)
+     D  i_member                           const like(mbr_t)
+     D  i_rcdFormat                        const like(rcdFmt_t)
+     D  o_msgID                                  like(msgID_t)
+     D  o_msgDta                                 like(msgDta_t)
       *
       *----------------------------------------------------*
       *  Schlüsselliste für PEEKFLDL0

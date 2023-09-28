@@ -58,27 +58,24 @@
       *
       *  declarations for Convert Edit Code: QECCVTEC
      D  EditMask       S            256A   INZ(*BLANKS)
-     D  EditMaskLn     S                   INZ(*ZEROS)  LIKE(R§INT4)
-     D  RcvVarLen      S                   INZ(*ZEROS)  LIKE(R§INT4)
+     D  EditMaskLn     S                   INZ(*ZEROS)  LIKE(INT4_t)
+     D  RcvVarLen      S                   INZ(*ZEROS)  LIKE(INT4_t)
      D  ZeroBalanc     S              1A   INZ(*BLANKS)
      D  EditCode       S              1A   INZ(*BLANKS)
      D  CurrInd        S              1A   INZ(*BLANKS)
-     D  Precision      S                   INZ(*ZEROS)  LIKE(R§INT4)
-     D  BinLength      S                   INZ(*ZEROS)  LIKE(R§INT4)
-     D  Decimal        S                   INZ(*ZEROS)  LIKE(R§INT4)
+     D  Precision      S                   INZ(*ZEROS)  LIKE(INT4_t)
+     D  BinLength      S                   INZ(*ZEROS)  LIKE(INT4_t)
+     D  Decimal        S                   INZ(*ZEROS)  LIKE(INT4_t)
       *
       *  additional
       *  declarations for Convert Edit Word: QECCVTEW
-      **EditMask       S            256A   INZ(*BLANKS)
-      **EditMaskLn     S                   INZ(*ZEROS)  LIKE(R§INT4)
-      **RcvVarLen      S                   INZ(*ZEROS)  LIKE(R§INT4)
      D  EditWord       S            256A   INZ(*BLANKS)
-     D  EditWordLn     S                   INZ(*ZEROS)  LIKE(R§INT4)
+     D  EditWordLn     S                   INZ(*ZEROS)  LIKE(INT4_t)
       *
       *  additional
       *  declarations for Edit: QECEDT
      D  CvtVar         S            256A   INZ(*BLANKS)
-     D  CvtVarLen      S                   INZ(256)     LIKE(R§INT4)
+     D  CvtVarLen      S                   INZ(256)     LIKE(INT4_t)
      D  SrcVar         S                   INZ(*BLANKS) LIKE(i_srcVar)
      D  SrcVarCls      S             10A   INZ(*BLANKS)
      D  Float4         S              4F   BASED(pFloat)
@@ -88,10 +85,6 @@
      D  MaxFloat4      S             12P 4 INZ(*HIVAL)
      D  MaxFloat8      S             21P 4 INZ(*HIVAL)
      D  len            S             10I 0 INZ
-      **Precision      S                   INZ(*ZEROS)  LIKE(R§INT4)
-      **EditMask       S            256A   INZ(*BLANKS)
-      **EditMaskLn     S                   INZ(*ZEROS)  LIKE(R§INT4)
-      **ZeroBalanc     S              1A   INZ(*BLANKS)
       *
      D  TempStrLen     S             10I 0 inz
       *
@@ -104,7 +97,7 @@
      D  zoned10                      10S 0 inz   overlay(zonedBuffer)
      D  zoned20                      20S 0 inz   overlay(zonedBuffer)
       *
-     D HEX_NULL        S                   like(r§rcdBuf) inz(*ALLx'00')
+     D HEX_NULL        S                   like(rcdBuf_t) inz(*ALLx'00')
       *
      D SPCVAL_NAN_4    C                   x'7FC00000'
      D SPCVAL_NAN_8    C                   x'7FF8000000000000'
@@ -141,14 +134,14 @@
       *
      D PEEK06          PI
      D  i_fldl0100                         const likeds(FLDL0100_t)
-     D  i_rcdFmt                           const like(r§fmt)
-     D  i_srcVar                           const like(r§rcdBuf)
+     D  i_rcdFmt                           const like(fmt_t)
+     D  i_srcVar                           const like(rcdBuf_t)
      D  i_qcmdexc                     1A   const
      D  i_cvtCcsid                    1A   const
-     D  o_string                                 like(r§rcdBuf)
-     D  o_strLen                                 like(r§int4)
-     D  o_msgID                                  like(r§msgID)
-     D  o_msgDta                                 like(r§msgDta)
+     D  o_string                                 like(rcdBuf_t)
+     D  o_strLen                                 like(int4_t)
+     D  o_msgID                                  like(msgID_t)
+     D  o_msgDta                                 like(msgDta_t)
       *
       *---------------------------------------------------*
       *

@@ -70,19 +70,19 @@
       *----------------------------------------------------*
       *
       *  Arbeitsfelder
-     D X               S                   like(r§int4    ) inz
+     D X               S                   like(int4_t) inz
       *
      D WrkTabDS        DS                  QUALIFIED
      D  Remark                        5A   INZ(*BLANKS)
      D  Section                      10A   INZ(*BLANKS)
      D  Key                          10A   INZ(*BLANKS)
-     D  Data                               LIKE(R§SET0000 ) INZ(*BLANKS)
+     D  Data                               LIKE(SET0000_t) INZ(*BLANKS)
       *
-     D o_Data          S                   LIKE(R§SET0000 )
+     D o_Data          S                   LIKE(SET0000_t)
      D                                     INZ
       *
      D WrkTab          S            100A   DIM(100) INZ(*BLANKS)
-     D WrkElem         S                   like(r§int4    ) inz
+     D WrkElem         S                   like(int4_t) inz
       *
      D TB010100        S            100A   DIM( 58) CTDATA PERRCD(1)
      D ELM010100       C                   CONST(%ELEM(TB010100))
@@ -136,8 +136,8 @@
       *
      D PEEK33          PI
      D  i_version                     9A   const
-     D  o_msgID                                  like(r§msgID)
-     D  o_msgDta                                 like(r§msgDta)
+     D  o_msgID                                  like(msgID_t)
+     D  o_msgDta                                 like(msgDta_t)
       *
       *----------------------------------------------------*
       *

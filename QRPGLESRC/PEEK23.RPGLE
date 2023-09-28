@@ -48,24 +48,24 @@
       *  F E L D - D E F I N I T I O N E N                 *
       *----------------------------------------------------*
       *
-     D X               S                   like(r§int4    ) inz
-     D Y               S                   like(r§int4    ) inz
+     D X               S                   like(int4_t) inz
+     D Y               S                   like(int4_t) inz
      D A1              S              1A            INZ(*BLANKS)
       *
      D R_MsgID         S              4A            INZ(*BLANKS)
-     D R_Key           S                            LIKE(R§KEY  )  INZ(*BLANKS)
+     D R_Key           S                            LIKE(KEY_t)  INZ(*BLANKS)
      D R_PosF24        S                            LIKE(i_posF24)  INZ(*ZEROS)
       *
-     D wrk_MsgID       S                   like(r§msgID   ) inz
-     D wrk_MsgTxt      S                   like(r§msgDta  ) inz
-     D Wrk_Key         S                   LIKE(R§KEY     )
+     D wrk_MsgID       S                   like(msgID_t) inz
+     D wrk_MsgTxt      S                   like(msgDta_t) inz
+     D Wrk_Key         S                   LIKE(KEY_t)
      D                                     INZ
-     D Wrk_Sectn       S                   LIKE(R§SECTION )
+     D Wrk_Sectn       S                   LIKE(SECTION_t)
      D                                     INZ
-     D data            S                   LIKE(R§SET0000 )
+     D data            S                   LIKE(SET0000_t)
      D                                     INZ
       *
-     D LastKey         S                   LIKE(R§KEY     )
+     D LastKey         S                   LIKE(KEY_t)
      D                                     INZ
       *
       /COPY QCOPYLE,F_PEEK53
@@ -78,11 +78,11 @@
       ********************************************************************
       *
      D PEEK23          PI
-     D  i_pgm                              const like(r§pgm)
+     D  i_pgm                              const like(pgm_t)
      D  i_key                        10A   const
-     D  i_posF24                           const like(r§int4)
-     D  o_FKeys                                  like(r§fKeyDsp) dim(32)
-     D  o_nbrOfKeys                              like(r§int4)
+     D  i_posF24                           const like(int4_t)
+     D  o_FKeys                                  like(fKeyDsp_t) dim(32)
+     D  o_nbrOfKeys                              like(int4_t)
       *
       *----------------------------------------------------*
       *

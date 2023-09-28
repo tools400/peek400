@@ -4,10 +4,10 @@
       /else
      D PEEK02          PR                  extpgm(PEEK02_NAME)
       /endif
-     D  i_qFile                            const likeds(r§qObj)
-     D  i_rcdFmt                           const like(r§fmt)
-     D  i_function                         const like(r§function)
-     D  o_numE                                   like(r§int4)
+     D  i_qFile                            const likeds(qObj_t)
+     D  i_rcdFmt                           const like(fmt_t)
+     D  i_function                         const like(function_t)
+     D  o_numE                                   like(int4_t)
      D  o_fldl0100                               likeds(FLDL0100_t)
-     D  o_rcdFmtId                               like(r§fmtId)
+     D  o_rcdFmtId                               like(fmtId_t)
       *

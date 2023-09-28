@@ -80,33 +80,33 @@
       *----------------------------------------------------*
       *
      D yFKeys          S             18A   DIM(32)       INZ(*BLANKS)
-     D yNbrOfKeys      S                   like(r告nt4    ) inz
+     D yNbrOfKeys      S                   like(int4_t) inz
      D yMsgID          S              7A   INZ(*BLANKS)
      D yMsgDta         S            512A   INZ(*BLANKS)
       *
      D YPgmCmd         S             10A   INZ(*BLANKS)
-     D YCmdDta         S                   LIKE(r吠gmCmdDt) INZ(*BLANKS)
+     D YCmdDta         S                   LIKE(pgmCmdDt_t) INZ(*BLANKS)
       *
      D YChoice         S             75A   DIM(32)
-     D YNbrOfCh        S                   like(r告nt4    ) inz
+     D YNbrOfCh        S                   like(int4_t) inz
       *
      D IsNewPos        S              1A   INZ(bFalse)
      D IsFound         S              1A   INZ(bFalse)
      D IsSflError      S              1A   INZ(bFalse)
       *
-     D SfTop           S                   like(r告nt4    ) inz
-     D SflPage         S                   like(r告nt4    ) inz
+     D SfTop           S                   like(int4_t) inz
+     D SflPage         S                   like(int4_t) inz
      D SflPageDDS      S                   like(SflPage   ) inz
      D SflRec          S                   like(SflPage   ) inz
      D SflNbrRcd       S                   like(SflPage   ) inz
-     D SfBot           S                   like(r告nt4    ) inz
+     D SfBot           S                   like(int4_t) inz
      D Sfl_Cmd         S             10A   INZ(*BLANKS)
      D NbrFKeys        C                   CONST(3)
       *
-     D PEEK21_NAME     S                   like(r吠gmCallN) inz
-     D PEEK23_NAME     S                   like(r吠gmCallN) inz
-     D PEEK27_NAME     S                   like(r吠gmCallN) inz
-     D PEEK46_NAME     S                   like(r吠gmCallN) inz
+     D PEEK21_NAME     S                   like(pgmCallN_t) inz
+     D PEEK23_NAME     S                   like(pgmCallN_t) inz
+     D PEEK27_NAME     S                   like(pgmCallN_t) inz
+     D PEEK46_NAME     S                   like(pgmCallN_t) inz
       *
      D R_Mbr           S                   INZ(*BLANKS) LIKE(##Mbr  )
      D LstMbr          S                   INZ(*BLANKS) LIKE(##Mbr  )
@@ -114,26 +114,26 @@
       *
      D Wrk_SFSANR      S                   INZ(*ZEROS ) LIKE(SFSANR )
       *
-     D rc              S                   like(r告nt4) inz
-     D numMbr          S                   like(r告nt4) inz
+     D rc              S                   like(int4_t) inz
+     D numMbr          S                   like(int4_t) inz
       *
      D MBRL0200        DS                  likeds(MBRL0200_t) inz
       *
       /COPY QCOPYLE,CEECNDHDLR
       *
-     D isInzSr         S                   like(r呆ool) inz(bFalse)
+     D isInzSr         S                   like(bool_t) inz(bFalse)
       *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
       *
      D PEEK47          PI
-     D  i_dsp80                            const like(r吳sp80)
-     D  i_copyright                        const like(r呃opyRght)
-     D  i_qFile                            const likeds(r吼Obj)
-     D  i_mbr                                    like(r吮br)
-     D  o_msgID                                  like(r吮sgID)
-     D  o_msgDta                                 like(r吮sgDta)
+     D  i_dsp80                            const like(dsp80_t)
+     D  i_copyright                        const like(copyRght_t)
+     D  i_qFile                            const likeds(qObj_t)
+     D  i_mbr                                    like(mbr_t)
+     D  o_msgID                                  like(msgID_t)
+     D  o_msgDta                                 like(msgDta_t)
       *
       *---------------------------------------------------*
       *

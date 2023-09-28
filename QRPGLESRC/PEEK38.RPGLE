@@ -45,13 +45,13 @@
       *----------------------------------------------------*
       *
       *  Peek41:
-     D YQFile          DS                  likeds(r§qObj)
+     D YQFile          DS                  likeds(qObj_t)
      D YData           S            512A   INZ(*BLANKS)
       *
-     D PEEK41_NAME     S                   like(r§pgmCallN) inz
+     D PEEK41_NAME     S                   like(pgmCallN_t) inz
       *
-     D rc              S                   like(r§int4    ) inz
-     D NbrOfKey        S                   like(r§int4    ) inz
+     D rc              S                   like(int4_t) inz
+     D NbrOfKey        S                   like(int4_t) inz
      D tempField       S                   Like(o_sqlOrder ) inz
       *
       /COPY QCOPYLE,PPEEK41
@@ -61,16 +61,16 @@
       *
       /COPY QCOPYLE,CEECNDHDLR
       *
-     D isInzSr         S                   like(r§bool) inz(bFalse)
+     D isInzSr         S                   like(bool_t) inz(bFalse)
       *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
       *
      D PEEK38          PI
-     D  i_file                             const like(r§file)
-     D  i_lib                              const like(r§lib)
-     D  o_sqlOrder                               like(r§sqlOrder)
+     D  i_file                             const like(file_t)
+     D  i_lib                              const like(lib_t)
+     D  o_sqlOrder                               like(sqlOrder_t)
       *
       *---------------------------------------------------*
       *

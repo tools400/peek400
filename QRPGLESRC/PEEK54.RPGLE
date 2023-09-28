@@ -95,7 +95,7 @@
      D  i_rcdFmtID                                like(gi_rcdFmtID)
       *---------------------------------------------------*
      D f_checkAutoSave...
-     D                 PR                         like(r§bool    )
+     D                 PR                         like(bool_t)
      D  i_file                                    like(gi_file   )
      D  i_lib                                     like(gi_lib    )
       *---------------------------------------------------*
@@ -155,25 +155,25 @@
       ********************************************************************
       *
      D PEEK54          PI
-     D  gi_file                            const like(r§file)
-     D  gi_lib                             const like(r§lib)
-     D  gi_mbr                             const like(r§mbr)
-     D  gi_rcdFmt                          const like(r§fmt)
-     D  gi_rcdFmtID                        const like(r§fmtId)
-     D  gi_envFile                         const like(r§file)
-     D  gi_envLib                          const like(r§lib)
-     D  gi_envMbr                          const like(r§mbr)
-     D  gi_isAutoSave                      const like(r§bool)
+     D  gi_file                            const like(file_t)
+     D  gi_lib                             const like(lib_t)
+     D  gi_mbr                             const like(mbr_t)
+     D  gi_rcdFmt                          const like(fmt_t)
+     D  gi_rcdFmtID                        const like(fmtId_t)
+     D  gi_envFile                         const like(file_t)
+     D  gi_envLib                          const like(lib_t)
+     D  gi_envMbr                          const like(mbr_t)
+     D  gi_isAutoSave                      const like(bool_t)
      D  gi_pinTabR                         const like(pinTabR_t) dim(12)
-     D  gi_nbrPinR                         const like(r§int4)
-     D  gi_pinTabC                         const like(r§fieldNme) dim(12)
-     D  gi_nbrPinC                         const like(r§int4)
-     D  gi_AccMode                         const like(r§accessMode)
-     D  gi_SqlSel                          const like(r§sqlWhere)
-     D  gi_SqlOrd                          const like(r§sqlOrder)
-     D  gi_isKeyLower                      const like(r§bool)
-     D  go_msgID                                 like(r§msgID)
-     D  go_msgDta                                like(r§msgDta)
+     D  gi_nbrPinR                         const like(int4_t)
+     D  gi_pinTabC                         const like(fieldNme_t) dim(12)
+     D  gi_nbrPinC                         const like(int4_t)
+     D  gi_AccMode                         const like(accessMode_t)
+     D  gi_SqlSel                          const like(sqlWhere_t)
+     D  gi_SqlOrd                          const like(sqlOrder_t)
+     D  gi_isKeyLower                      const like(bool_t)
+     D  go_msgID                                 like(msgID_t)
+     D  go_msgDta                                like(msgDta_t)
       *
       *----------------------------------------------------*
       *  Schlüssel PEEKFLD
@@ -236,17 +236,17 @@
      D  o_msgDta                                  like(go_msgDta )
       *
       *  Arbeitsfelder
-     D pFile           S                   like(r§file    )
+     D pFile           S                   like(file_t)
      D                                     inz
-     D pLib            S                   like(r§lib     )
+     D pLib            S                   like(lib_t)
      D                                     inz
-     D pMbr            S                   like(r§mbr     )
+     D pMbr            S                   like(mbr_t)
      D                                     inz
-     D pFmt            S                   like(r§fmt     )
+     D pFmt            S                   like(fmt_t)
      D                                     inz
      D pEnvMbr         S                   like(i_envMbr  )
      D                                     inz
-     D canSave         S                   like(r§bool    )
+     D canSave         S                   like(bool_t)
       *
       *  Nachrichten
       /COPY QCOPYLE,USR9992
@@ -580,7 +580,7 @@
       *
      P f_checkAutoSave...
      P                 B
-     D                 PI                         like(r§bool    )
+     D                 PI                         like(bool_t)
      D  i_file                                    like(gi_file   )
      D  i_lib                                     like(gi_lib    )
       *
@@ -692,11 +692,11 @@
      D idx                     1     10S 0 inz
      D chrIdx                  1     10A
       *
-     D strPos          S                   like(r§int4    )
+     D strPos          S                   like(int4_t)
      D                                     inz
-     D lenSql          S                   like(r§int4    )
+     D lenSql          S                   like(int4_t)
      D                                     inz
-     D lenData         S                   like(r§int4    )
+     D lenData         S                   like(int4_t)
      D                                     inz
       *---------------------------------------------------*
       *
@@ -741,11 +741,11 @@
      D idx                     1     10S 0 inz
      D chrIdx                  1     10A
       *
-     D strPos          S                   like(r§int4    )
+     D strPos          S                   like(int4_t)
      D                                     inz
-     D lenSql          S                   like(r§int4    )
+     D lenSql          S                   like(int4_t)
      D                                     inz
-     D lenData         S                   like(r§int4    )
+     D lenData         S                   like(int4_t)
      D                                     inz
       *---------------------------------------------------*
       *

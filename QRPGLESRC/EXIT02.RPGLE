@@ -49,11 +49,11 @@
       *
       *  *ENTRY-Liste
      D EXIT02          PR                         extpgm('EXIT02')
-     D  gio_user                                  like(r§user    )
-     D  gio_file                                  like(r§file    )
-     D  gio_lib                                   like(r§lib     )
-     D  go_msgID                                  like(r§msgID   )
-     D  go_msgDta                                 like(r§msgDta  )
+     D  gio_user                                  like(user_t)
+     D  gio_file                                  like(file_t)
+     D  gio_lib                                   like(lib_t)
+     D  go_msgID                                  like(msgID_t)
+     D  go_msgDta                                 like(msgDta_t)
       *
       *---Referenzfelder & Konstanten----------------------*
       /COPY QCOPYLE,D_VARDEF
@@ -73,8 +73,8 @@
      D f_rtvUsrPrfInf  PR           256A
      D  i_user                       10A   const
      D  i_format                      8A   const
-     D  o_msgID                                   like(r§msgID   )
-     D  o_msgDta                                  like(r§msgDta  )
+     D  o_msgID                                   like(msgID_t)
+     D  o_msgDta                                  like(msgDta_t)
       *
       *---------------------------------------------------------------*
       *  Programminformationsdatenstruktur                            *
@@ -154,11 +154,11 @@
       *===============================================================*
       *
      D EXIT02          PI
-     D  gio_user                                  like(r§user    )
-     D  gio_file                                  like(r§file    )
-     D  gio_lib                                   like(r§lib     )
-     D  go_msgID                                  like(r§msgID   )
-     D  go_msgDta                                 like(r§msgDta  )
+     D  gio_user                                  like(user_t)
+     D  gio_file                                  like(file_t)
+     D  gio_lib                                   like(lib_t)
+     D  go_msgID                                  like(msgID_t)
+     D  go_msgDta                                 like(msgDta_t)
       *
       *---------------------------------------------------------------*
       *
@@ -244,8 +244,8 @@
      D f_rtvUsrPrfInf  PI           256A
      D  i_user                       10A   const
      D  i_format                      8A   const
-     D  o_msgID                                   like(r§msgID   )
-     D  o_msgDta                                  like(r§msgDta  )
+     D  o_msgID                                   like(msgID_t)
+     D  o_msgDta                                  like(msgDta_t)
       *
      D rcvVar          DS           256    inz
      D  rcv_bytRet                   10I 0 inz

@@ -8,6 +8,6 @@
      D  i_type                        1A   const
      D  i_datTimFmt                        const like(FLDL0100_t.F1DTFM)
      D  i_separator                        const like(FLDL0100_t.F1DTSP)
-     D  o_msgID                                  like(r§msgID)
-     D  o_msgDta                                 like(r§msgDta)
+     D  o_msgID                                  like(msgID_t)
+     D  o_msgDta                                 like(msgDta_t)
       *

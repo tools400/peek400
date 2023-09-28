@@ -4,9 +4,9 @@
       /else
      D PEEK27          PR                  extpgm(PEEK27_NAME)
       /endif
-     D  i_pgm                              const like(r§pgm)
-     D  o_choices                                like(r§choice) dim(32)
-     D  o_numChoices                             like(r§int4)
-     D  o_exclKeys                         const like(r§pgmCmd) dim(25)
+     D  i_pgm                              const like(pgm_t)
+     D  o_choices                                like(choice_t) dim(32)
+     D  o_numChoices                             like(int4_t)
+     D  o_exclKeys                         const like(pgmCmd_t) dim(25)
      D                                           options(*nopass)
       *

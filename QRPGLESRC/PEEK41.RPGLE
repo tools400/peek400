@@ -96,7 +96,7 @@
       *
      D RcvVarLn        S             10I 0 INZ(32000)
       *
-     D RetQFile        DS                  likeds(r吼Obj)
+     D RetQFile        DS                  likeds(qObj_t)
       *
       *  declarations for File definition header  (Qdb_Qdbfh), 1.9.3.2
      D pFileDefHd      S               *
@@ -136,15 +136,15 @@
       *  API error reporting
       /COPY QCOPYLE,API_ERROR
       *
-     D Offset          S                   like(r告nt4    ) inz
-     D Counter         S                   like(r告nt4    ) inz
-     D mbrNbr          S                   like(r告nt4    ) inz
-     D NbrOfKeyFd      S                   like(r告nt4    ) inz
-     D PosOfKeyFd      S                   like(r告nt4    ) inz
-     D LenOfSlOm       S                   like(r告nt4    ) inz
-     D NbrOfSlOm       S                   like(r告nt4    ) inz
-     D PosOfSlOm       S                   like(r告nt4    ) inz
-     D XPos            S                   like(r告nt4    ) inz
+     D Offset          S                   like(int4_t) inz
+     D Counter         S                   like(int4_t) inz
+     D mbrNbr          S                   like(int4_t) inz
+     D NbrOfKeyFd      S                   like(int4_t) inz
+     D PosOfKeyFd      S                   like(int4_t) inz
+     D LenOfSlOm       S                   like(int4_t) inz
+     D NbrOfSlOm       S                   like(int4_t) inz
+     D PosOfSlOm       S                   like(int4_t) inz
+     D XPos            S                   like(int4_t) inz
      D R_VALU          S                   like(SELL0100_t.SOVALU) inz
       *
      D KEYL0100        DS                  likeds(KEYL0100_t) inz
@@ -153,8 +153,8 @@
      D BSPF0100        DS                  likeds(BSPF0100_t) inz
       *
       *  Boolean variables & constants
-     D isFound         S                   like(r呆ool    ) inz(bFalse)
-     D isJoinFile      S                   like(r呆ool    ) inz(bFalse)
+     D isFound         S                   like(bool_t) inz(bFalse)
+     D isJoinFile      S                   like(bool_t) inz(bFalse)
       *
       *----------------------------------------------------*
       *  Aktuelle Datum und Uhrzeit
@@ -185,10 +185,10 @@
       ********************************************************************
       *
      D PEEK41          PI
-     D  i_qFile                            const likeds(r吼Obj)
-     D  i_rcdFmt                           const like(r呂mt)
-     D  i_function                         const like(r呂unction)
-     D  o_nbrOfEnt                               like(r告nt4)
+     D  i_qFile                            const likeds(qObj_t)
+     D  i_rcdFmt                           const like(fmt_t)
+     D  i_function                         const like(function_t)
+     D  o_nbrOfEnt                               like(int4_t)
      D  o_data                      512A
       *
       *---------------------------------------------------*

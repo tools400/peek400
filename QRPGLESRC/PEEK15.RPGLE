@@ -74,7 +74,7 @@
      D p_wrtCopy6      PR
      D  i_srcDta                           const like(SRCDTA)
       *
-     D f_readFld       PR                        like(r呆ool    )
+     D f_readFld       PR                        like(bool_t)
       *
       *===============================================================*
       *
@@ -251,7 +251,7 @@
      D  $movel_r              50     63    inz
       *
      D isExit03        S               N   inz(bFalse)
-     D EXIT03          S                   like(r吠gmCallN) inz
+     D EXIT03          S                   like(pgmCallN_t) inz
      D qPgm            DS                  qualified
      D  name                         10A
      D  lib                          10A
@@ -275,11 +275,11 @@
      D 呀emLine        C                   const('==========================+
      D                                            ==========================*')
       *
-     D totLin          S                   like(r告nt4    ) inz
+     D totLin          S                   like(int4_t) inz
      D curLin          S              2S 0 inz
      D dspLen          S             10I 0 inz
       *
-     D totFields       S                   like(r告nt4    ) inz
+     D totFields       S                   like(int4_t) inz
      D curField        S              2S 0 inz
       *
      D                 DS
@@ -312,20 +312,20 @@
      D num#a                          2A   overlay(num#: 1)
       *
       *  Arbeitsfelder
-     D hasRefFld       S                   like(r呆ool    ) inz(bFalse)
-     D newScn          S                   like(r呆ool    ) inz(bTrue)
-     D x               S                   like(r告nt4    ) inz
-     D y               S                   like(r告nt4    ) inz
-     D z               S                   like(r告nt4    ) inz
-     D p               S                   like(r告nt4    ) inz
-     D numQuote        S                   like(r告nt4    ) inz
-     D baseFldName     S                   like(r呂ieldNme) inz
-     D fieldName       S                   like(r呂ieldNme) inz
+     D hasRefFld       S                   like(bool_t) inz(bFalse)
+     D newScn          S                   like(bool_t) inz(bTrue)
+     D x               S                   like(int4_t) inz
+     D y               S                   like(int4_t) inz
+     D z               S                   like(int4_t) inz
+     D p               S                   like(int4_t) inz
+     D numQuote        S                   like(int4_t) inz
+     D baseFldName     S                   like(fieldNme_t) inz
+     D fieldName       S                   like(fieldNme_t) inz
      D r$ftxt          S                   like(FLDL0100_t.F1FTXT) inz
-     D refFile         S                   like(r呂ile    ) inz
-     D refLib          S                   like(r吸ib     ) inz
-     D fldToLong       S                   like(r呆ool    ) inz
-     D fldToLongMax    S                   like(r呆ool    ) inz
+     D refFile         S                   like(file_t) inz
+     D refLib          S                   like(lib_t) inz
+     D fldToLong       S                   like(bool_t) inz
+     D fldToLongMax    S                   like(bool_t) inz
      D closeChar1      S              1A   varying inz
      D closeChar2      S              1A   varying inz
      D headerType      S             20A   varying inz
@@ -357,18 +357,18 @@
       *
       /COPY QCOPYLE,CEECNDHDLR
       *
-     D isInzSr         S                   like(r呆ool) inz(bFalse)
+     D isInzSr         S                   like(bool_t) inz(bFalse)
       *
       *====================================================*
       *  Steuerleiste
       *====================================================*
       *
      D PEEK15          PI
-     D  i_qFile                            const likeds(r吼Obj)
+     D  i_qFile                            const likeds(qObj_t)
      D  io_scnNbrs                    2P 0
-     D  i_alwLC                            const like(r呆ool)
-     D  io_stage                                 like(r告nt4)
-     D  i_numPasses                        const like(r告nt4)
+     D  i_alwLC                            const like(bool_t)
+     D  io_stage                                 like(int4_t)
+     D  i_numPasses                        const like(int4_t)
       *
       *----------------------------------------------------*
 
@@ -2115,7 +2115,7 @@
       *    readFld       Lesen n踄hstes Feld aus PEEKFLD           *
       *============================================================*
      P f_readFld       B
-     D                 PI                        like(r呆ool    )
+     D                 PI                        like(bool_t)
       *------------------------------------------------------------
       *
      C                   DoU       *in20 = bEOF

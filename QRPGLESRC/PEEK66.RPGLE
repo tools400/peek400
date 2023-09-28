@@ -116,12 +116,12 @@
       *
       * ENTRY-LISTE
      D PEEK66          PI
-     D  gio_buffer                               like(r§cmdBuffer)
-     D  gio_length                               like(r§int4)
+     D  gio_buffer                               like(cmdBuffer_t)
+     D  gio_length                               like(int4_t)
      D  gi_inFormat                        const likeds(FLDL0100_t)
      D  gi_outFormat                       const likeds(FLDL0100_t)
-     D  go_msgID                                 like(r§msgID)
-     D  go_msgDta                                like(r§msgDta)
+     D  go_msgID                                 like(msgID_t)
+     D  go_msgDta                                like(msgDta_t)
       *
       * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       /FREE
@@ -243,7 +243,7 @@
      D  o_MsgDta                                  like(go_msgDta)
       *
       *  Arbeitsfelder
-     D isOneByteInt    S                   like(r§bool)
+     D isOneByteInt    S                   like(bool_t)
      D oneByteIntAdjust...
      D                 S             10I 0
      D inNumeric       S                   like(numeric_t)

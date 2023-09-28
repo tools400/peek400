@@ -118,20 +118,20 @@
       *
       *  *ENTRY-Liste
      D gi_qFile        DS
-     D  gi_file                            like(r§file    )
-     D  gi_lib                             like(r§lib     )
-     D gi_mbr          S                   like(r§mbr     )
-     D gi_access       S                   like(r§accMode )
-     D gio_chgL        S                   like(r§bool    )
-     D gio_chgF        S                   like(r§bool    )
-     D gio_chgM        S                   like(r§bool    )
-     D gio_updMd       S                   like(r§bool    )
-     D gio_updKy       S                   like(r§bool    )
-     D gio_chgSqlW     S                   like(r§bool    )
-     D gio_chgSqlO     S                   like(r§bool    )
-     D gio_accAt       S                   like(r§bool    )
-     D go_msgID        S                   like(r§msgID   )
-     D go_msgDta       S                   like(r§msgDta  )
+     D  gi_file                            like(file_t)
+     D  gi_lib                             like(lib_t)
+     D gi_mbr          S                   like(mbr_t)
+     D gi_access       S                   like(accMode_t)
+     D gio_chgL        S                   like(bool_t)
+     D gio_chgF        S                   like(bool_t)
+     D gio_chgM        S                   like(bool_t)
+     D gio_updMd       S                   like(bool_t)
+     D gio_updKy       S                   like(bool_t)
+     D gio_chgSqlW     S                   like(bool_t)
+     D gio_chgSqlO     S                   like(bool_t)
+     D gio_accAt       S                   like(bool_t)
+     D go_msgID        S                   like(msgID_t)
+     D go_msgDta       S                   like(msgDta_t)
       *
       *---Referenzfelder & Konstanten----------------------*
       /COPY QCOPYLE,D_VARDEF
@@ -142,65 +142,65 @@
      D p_main          PR
       *---------------------------------------------------------------*
       *  get user authority
-     D f_usrAut        PR                         like(r§bool    )
-     D  o_usrChgL                                 like(r§bool    )
-     D  o_usrChgF                                 like(r§bool    )
-     D  o_usrChgM                                 like(r§bool    )
-     D  o_usrUpdMd                                like(r§bool    )
-     D  o_usrUpdKy                                like(r§bool    )
-     D  o_usrChgSqlW                              like(r§bool    )
-     D  o_usrChgSqlO                              like(r§bool    )
-     D  o_usrAccAt                                like(r§bool    )
-     D  i_user                             const  like(r§user    )
-     D  i_file                             const  like(r§file    )
-     D  i_lib                              const  like(r§lib     )
+     D f_usrAut        PR                         like(bool_t)
+     D  o_usrChgL                                 like(bool_t)
+     D  o_usrChgF                                 like(bool_t)
+     D  o_usrChgM                                 like(bool_t)
+     D  o_usrUpdMd                                like(bool_t)
+     D  o_usrUpdKy                                like(bool_t)
+     D  o_usrChgSqlW                              like(bool_t)
+     D  o_usrChgSqlO                              like(bool_t)
+     D  o_usrAccAt                                like(bool_t)
+     D  i_user                             const  like(user_t)
+     D  i_file                             const  like(file_t)
+     D  i_lib                              const  like(lib_t)
      D                                     options(*NOPASS)
       *---------------------------------------------------------------*
       *  get object authority
-     D f_objAut        PR                         like(r§bool    )
-     D  o_objChgL                                 like(r§bool    )
-     D  o_objChgF                                 like(r§bool    )
-     D  o_objChgM                                 like(r§bool    )
-     D  o_objUpdMd                                like(r§bool    )
-     D  o_objUpdKy                                like(r§bool    )
-     D  o_objChgSqlW                              like(r§bool    )
-     D  o_objChgSqlO                              like(r§bool    )
-     D  o_objAccAt                                like(r§bool    )
-     D  i_file                             const  like(r§file    )
-     D  i_lib                              const  like(r§lib     )
+     D f_objAut        PR                         like(bool_t)
+     D  o_objChgL                                 like(bool_t)
+     D  o_objChgF                                 like(bool_t)
+     D  o_objChgM                                 like(bool_t)
+     D  o_objUpdMd                                like(bool_t)
+     D  o_objUpdKy                                like(bool_t)
+     D  o_objChgSqlW                              like(bool_t)
+     D  o_objChgSqlO                              like(bool_t)
+     D  o_objAccAt                                like(bool_t)
+     D  i_file                             const  like(file_t)
+     D  i_lib                              const  like(lib_t)
      D                                     options(*NOPASS)
       *---------------------------------------------------------------*
       *  get *SECATR authority
-     D f_secAut        PR                         like(r§bool    )
-     D  o_secChgL                                 like(r§bool    )
-     D  o_secChgF                                 like(r§bool    )
-     D  o_secChgM                                 like(r§bool    )
-     D  o_secUpdMd                                like(r§bool    )
-     D  o_secUpdKy                                like(r§bool    )
-     D  o_secChgSqlW                              like(r§bool    )
-     D  o_secChgSqlO                              like(r§bool    )
-     D  o_secAccAt                                like(r§bool    )
-     D  i_user                             const  like(r§user    )
+     D f_secAut        PR                         like(bool_t)
+     D  o_secChgL                                 like(bool_t)
+     D  o_secChgF                                 like(bool_t)
+     D  o_secChgM                                 like(bool_t)
+     D  o_secUpdMd                                like(bool_t)
+     D  o_secUpdKy                                like(bool_t)
+     D  o_secChgSqlW                              like(bool_t)
+     D  o_secChgSqlO                              like(bool_t)
+     D  o_secAccAt                                like(bool_t)
+     D  i_user                             const  like(user_t)
      D                                     options(*NOPASS:
      D                                             *OMIT  )
-     D  i_lib                              const  like(r§lib     )
+     D  i_lib                              const  like(lib_t)
      D                                     options(*NOPASS)
       *---------------------------------------------------------------*
       *  merge authority
-     D f_mrgAut        PR                         like(r§bool    )
-     D  usrAut                             const  like(r§bool    )
-     D  objAut                             const  like(r§bool    )
-     D  secAut                             const  like(r§bool    )
-     D  dftAut                             const  like(r§bool    )
+     D f_mrgAut        PR                         like(bool_t)
+     D  usrAut                             const  like(bool_t)
+     D  objAut                             const  like(bool_t)
+     D  secAut                             const  like(bool_t)
+     D  dftAut                             const  like(bool_t)
       *---------------------------------------------------------------*
       *  open file
      D p_openFile      PR
       *---------------------------------------------------------------*
       *  test omitted parameter (CEETSTA)
      D p_testOmit      PR                  extproc('CEETSTA')
-     D   isPresent                                like(r§int4)
-     D   argNumber                         const  like(r§int4)
-     D   fc                                       like(r§fc  )
+     D   isPresent                                like(int4_t)
+     D   argNumber                         const  like(int4_t)
+     D   fc                                       like(fc_t)
      D                                     options(*OMIT)
       *---------------------------------------------------------------*
       *
@@ -321,76 +321,76 @@
       *
       *  lokale Arbeitsfelder
       *  ... ändern Bibliothek erlaubt
-     D usrChgL         S                   like(r§bool    )
+     D usrChgL         S                   like(bool_t)
      D                                     inz(bFalse)
-     D objChgL         S                   like(r§bool    )
+     D objChgL         S                   like(bool_t)
      D                                     inz(bFalse)
-     D secChgL         S                   like(r§bool    )
+     D secChgL         S                   like(bool_t)
      D                                     inz(bFalse)
-     D chgL            S                   like(r§bool    )
+     D chgL            S                   like(bool_t)
      D                                     inz(bFalse)
       *  ... ändern Datei erlaubt
-     D usrChgF         S                   like(r§bool    )
+     D usrChgF         S                   like(bool_t)
      D                                     inz(bFalse)
-     D objChgF         S                   like(r§bool    )
+     D objChgF         S                   like(bool_t)
      D                                     inz(bFalse)
-     D secChgF         S                   like(r§bool    )
+     D secChgF         S                   like(bool_t)
      D                                     inz(bFalse)
-     D chgF            S                   like(r§bool    )
+     D chgF            S                   like(bool_t)
      D                                     inz(bFalse)
       *  ... ändern Teildatei erlaubt
-     D usrChgM         S                   like(r§bool    )
+     D usrChgM         S                   like(bool_t)
      D                                     inz(bFalse)
-     D objChgM         S                   like(r§bool    )
+     D objChgM         S                   like(bool_t)
      D                                     inz(bFalse)
-     D secChgM         S                   like(r§bool    )
+     D secChgM         S                   like(bool_t)
      D                                     inz(bFalse)
-     D chgM            S                   like(r§bool    )
+     D chgM            S                   like(bool_t)
      D                                     inz(bFalse)
       *  ... Datensatzänderungen erlaubt
-     D usrUpdMd        S                   like(r§bool    )
+     D usrUpdMd        S                   like(bool_t)
      D                                     inz(bFalse)
-     D objUpdMd        S                   like(r§bool    )
+     D objUpdMd        S                   like(bool_t)
      D                                     inz(bFalse)
-     D secUpdMd        S                   like(r§bool    )
+     D secUpdMd        S                   like(bool_t)
      D                                     inz(bFalse)
-     D updMd           S                   like(r§bool    )
+     D updMd           S                   like(bool_t)
      D                                     inz(bFalse)
       *  ... Schlüsseländerung erlaubt
-     D usrUpdKy        S                   like(r§bool    )
+     D usrUpdKy        S                   like(bool_t)
      D                                     inz(bFalse)
-     D objUpdKy        S                   like(r§bool    )
+     D objUpdKy        S                   like(bool_t)
      D                                     inz(bFalse)
-     D secUpdKy        S                   like(r§bool    )
+     D secUpdKy        S                   like(bool_t)
      D                                     inz(bFalse)
-     D updKy           S                   like(r§bool    )
+     D updKy           S                   like(bool_t)
      D                                     inz(bFalse)
       *  ... ändern SQL WHERE erlaubt
-     D usrChgSqlW      S                   like(r§bool    )
+     D usrChgSqlW      S                   like(bool_t)
      D                                     inz(bFalse)
-     D objChgSqlW      S                   like(r§bool    )
+     D objChgSqlW      S                   like(bool_t)
      D                                     inz(bFalse)
-     D secChgSqlW      S                   like(r§bool    )
+     D secChgSqlW      S                   like(bool_t)
      D                                     inz(bFalse)
-     D chgSqlW         S                   like(r§bool    )
+     D chgSqlW         S                   like(bool_t)
      D                                     inz(bFalse)
       *  ... ändern SQL ORDERR BY erlaubt
-     D usrChgSqlO      S                   like(r§bool    )
+     D usrChgSqlO      S                   like(bool_t)
      D                                     inz(bFalse)
-     D objChgSqlO      S                   like(r§bool    )
+     D objChgSqlO      S                   like(bool_t)
      D                                     inz(bFalse)
-     D secChgSqlO      S                   like(r§bool    )
+     D secChgSqlO      S                   like(bool_t)
      D                                     inz(bFalse)
-     D chgSqlO         S                   like(r§bool    )
+     D chgSqlO         S                   like(bool_t)
      D                                     inz(bFalse)
       *  ... Zugriffsberechtigung
-     D usrAccAt        S                   like(r§bool    )
+     D usrAccAt        S                   like(bool_t)
      D                                     inz(bFalse)
-     D objAccAt        S                   like(r§bool    )
+     D objAccAt        S                   like(bool_t)
      D                                     inz(bFalse)
-     D secAccAt        S                   like(r§bool    )
+     D secAccAt        S                   like(bool_t)
      D                                     inz(bFalse)
-     D accAt           S                   like(r§bool    )
+     D accAt           S                   like(bool_t)
      D                                     inz(bFalse)
       *---------------------------------------------------------------*
       *
@@ -581,22 +581,22 @@
       *
      P f_usrAut        B
       *
-     D f_usrAut        PI                         like(r§bool    )
-     D  o_usrChgL                                 like(r§bool    )
-     D  o_usrChgF                                 like(r§bool    )
-     D  o_usrChgM                                 like(r§bool    )
-     D  o_usrUpdMd                                like(r§bool    )
-     D  o_usrUpdKy                                like(r§bool    )
-     D  o_usrChgSqlW                              like(r§bool    )
-     D  o_usrChgSqlO                              like(r§bool    )
-     D  o_usrAccAt                                like(r§bool    )
-     D  i_user                             const  like(r§user    )
-     D  i_file                             const  like(r§file    )
-     D  i_lib                              const  like(r§lib     )
+     D f_usrAut        PI                         like(bool_t)
+     D  o_usrChgL                                 like(bool_t)
+     D  o_usrChgF                                 like(bool_t)
+     D  o_usrChgM                                 like(bool_t)
+     D  o_usrUpdMd                                like(bool_t)
+     D  o_usrUpdKy                                like(bool_t)
+     D  o_usrChgSqlW                              like(bool_t)
+     D  o_usrChgSqlO                              like(bool_t)
+     D  o_usrAccAt                                like(bool_t)
+     D  i_user                             const  like(user_t)
+     D  i_file                             const  like(file_t)
+     D  i_lib                              const  like(lib_t)
      D                                     options(*NOPASS)
       *
       *  Funktionswert
-     D  isFound        S                   like(r§bool    )
+     D  isFound        S                   like(bool_t)
      D                                     inz(bFalse)
       *
       *  Hilfsfelder für optionale Parameter
@@ -656,21 +656,21 @@
       *
      P f_objAut        B
       *
-     D f_objAut        PI                         like(r§bool    )
-     D  o_objChgL                                 like(r§bool    )
-     D  o_objChgF                                 like(r§bool    )
-     D  o_objChgM                                 like(r§bool    )
-     D  o_objUpdMd                                like(r§bool    )
-     D  o_objUpdKy                                like(r§bool    )
-     D  o_objChgSqlW                              like(r§bool    )
-     D  o_objChgSqlO                              like(r§bool    )
-     D  o_objAccAt                                like(r§bool    )
-     D  i_file                             const  like(r§file    )
-     D  i_lib                              const  like(r§lib     )
+     D f_objAut        PI                         like(bool_t)
+     D  o_objChgL                                 like(bool_t)
+     D  o_objChgF                                 like(bool_t)
+     D  o_objChgM                                 like(bool_t)
+     D  o_objUpdMd                                like(bool_t)
+     D  o_objUpdKy                                like(bool_t)
+     D  o_objChgSqlW                              like(bool_t)
+     D  o_objChgSqlO                              like(bool_t)
+     D  o_objAccAt                                like(bool_t)
+     D  i_file                             const  like(file_t)
+     D  i_lib                              const  like(lib_t)
      D                                     options(*NOPASS)
       *
       *  Funktionswert
-     D  isFound        S                   like(r§bool    )
+     D  isFound        S                   like(bool_t)
      D                                     inz(bFalse)
       *
       *  Hilfsfelder für optionale Parameter
@@ -730,23 +730,23 @@
       *
      P f_secAut        B
       *
-     D f_secAut        PI                         like(r§bool    )
-     D  o_secChgL                                 like(r§bool    )
-     D  o_secChgF                                 like(r§bool    )
-     D  o_secChgM                                 like(r§bool    )
-     D  o_secUpdMd                                like(r§bool    )
-     D  o_secUpdKy                                like(r§bool    )
-     D  o_secChgSqlW                              like(r§bool    )
-     D  o_secChgSqlO                              like(r§bool    )
-     D  o_secAccAt                                like(r§bool    )
-     D  i_user                             const  like(r§user    )
+     D f_secAut        PI                         like(bool_t)
+     D  o_secChgL                                 like(bool_t)
+     D  o_secChgF                                 like(bool_t)
+     D  o_secChgM                                 like(bool_t)
+     D  o_secUpdMd                                like(bool_t)
+     D  o_secUpdKy                                like(bool_t)
+     D  o_secChgSqlW                              like(bool_t)
+     D  o_secChgSqlO                              like(bool_t)
+     D  o_secAccAt                                like(bool_t)
+     D  i_user                             const  like(user_t)
      D                                     options(*NOPASS:
      D                                             *OMIT  )
-     D  i_lib                              const  like(r§lib     )
+     D  i_lib                              const  like(lib_t)
      D                                     options(*NOPASS)
       *
       *  Funktionswert
-     D  isFound        S                   like(r§bool    )
+     D  isFound        S                   like(bool_t)
      D                                     inz(bFalse)
       *
       *  Hilfsfelder für optionale Parameter
@@ -754,7 +754,7 @@
      D                                     inz
      D  i7_lib         S                   like(i_lib     )
      D                                     inz
-     D  isPresent      S                   like(r§int4    )
+     D  isPresent      S                   like(int4_t)
      D                                     inz
       *
       *  Parameterpositionen
@@ -823,17 +823,17 @@
       *
      P f_mrgAut        B
       *
-     D f_mrgAut        PI                         like(r§bool    )
-     D  usrAut                             const  like(r§bool    )
-     D  objAut                             const  like(r§bool    )
-     D  secAut                             const  like(r§bool    )
-     D  dftAut                             const  like(r§bool    )
+     D f_mrgAut        PI                         like(bool_t)
+     D  usrAut                             const  like(bool_t)
+     D  objAut                             const  like(bool_t)
+     D  secAut                             const  like(bool_t)
+     D  dftAut                             const  like(bool_t)
       *
       *  Funktionswert
-     D aut             S                   like(r§bool    )
+     D aut             S                   like(bool_t)
       *
       *  Arbeitsfelder
-     D tmpAut          S                   like(r§bool    )
+     D tmpAut          S                   like(bool_t)
       *---------------------------------------------------------------*
       *
       *  Wenn die Benutzerberechtigung definiert worden ist, ...

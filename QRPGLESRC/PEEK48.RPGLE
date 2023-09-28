@@ -74,12 +74,12 @@
       *----------------------------------------------------*
       *
      D yFKeys          S             18A   DIM(32) inz
-     D yNbrOfKeys      S                   like(r§int4) inz
+     D yNbrOfKeys      S                   like(int4_t) inz
      D yMsgID          S              7A   INZ(*BLANKS)
      D yMsgDta         S            512A   INZ(*BLANKS)
       *
      D YPgmCmd         S             10A   INZ(*BLANKS)
-     D YCmdDta         S                   LIKE(r§pgmCmdDt) inz
+     D YCmdDta         S                   LIKE(pgmCmdDt_t) inz
       *
      D YField          S             10A   INZ(*BLANKS)
       *
@@ -92,23 +92,23 @@
       /COPY QCOPYLE,SCRNFKEYS
       *----------------------------------------------------*
       *
-     D SfBot           S                   like(r§int4    ) inz
+     D SfBot           S                   like(int4_t) inz
      D NbrFKeys        C                   CONST(3)
       *
-     D PEEK21_NAME     S                   like(r§pgmCallN) inz
-     D PEEK23_NAME     S                   like(r§pgmCallN) inz
-     D PEEK37_NAME     S                   like(r§pgmCallN) inz
-     D PEEK38_NAME     S                   like(r§pgmCallN) inz
-     D PEEK40_NAME     S                   like(r§pgmCallN) inz
+     D PEEK21_NAME     S                   like(pgmCallN_t) inz
+     D PEEK23_NAME     S                   like(pgmCallN_t) inz
+     D PEEK37_NAME     S                   like(pgmCallN_t) inz
+     D PEEK38_NAME     S                   like(pgmCallN_t) inz
+     D PEEK40_NAME     S                   like(pgmCallN_t) inz
       *
      D tempScnFld      S                   Like(scnFld  ) inz
      D tempFldPos      S                   Like(FldPos  ) inz
      D tempField       S                   Like(##WHERE ) inz
-     D tempLen         S                   like(r§int4    ) inz
-     D tempCsrRow      S                   like(r§int4    ) inz
-     D tempCsrCol      S                   like(r§int4    ) inz
-     D tempFldLen      S                   like(r§int4    ) inz
-     D tempFldBy       S                   like(r§int4    ) inz
+     D tempLen         S                   like(int4_t) inz
+     D tempCsrRow      S                   like(int4_t) inz
+     D tempCsrCol      S                   like(int4_t) inz
+     D tempFldLen      S                   like(int4_t) inz
+     D tempFldBy       S                   like(int4_t) inz
       *
      D pFile           DS                  qualified
      D  name                               like(io_file)
@@ -129,26 +129,26 @@
       *
       /COPY QCOPYLE,CEECNDHDLR
       *
-     D isInzSr         S                   like(r§bool) inz(bFalse)
+     D isInzSr         S                   like(bool_t) inz(bFalse)
       *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
       *
      D PEEK48          PI
-     D  i_dsp80                            const like(r§dsp80)
-     D  i_copyright                        const like(r§copyRght)
-     D  io_file                                  like(r§file)
-     D  io_library                               like(r§lib)
-     D  io_member                                like(r§mbr)
-     D  io_rcdFmt                                like(r§fmt)
-     D  i_accessMode                       const like(r§accessMode)
-     D  io_sqlWhere                              like(r§sqlWhere)
-     D  io_sqlOrder                              like(r§sqlOrder)
-     D  i_enableWhere                      const like(r§bool)
-     D  i_enableOrder                      const like(r§bool)
-     D  o_msgID                                  like(r§msgID)
-     D  o_msgDta                                 like(r§msgDta)
+     D  i_dsp80                            const like(dsp80_t)
+     D  i_copyright                        const like(copyRght_t)
+     D  io_file                                  like(file_t)
+     D  io_library                               like(lib_t)
+     D  io_member                                like(mbr_t)
+     D  io_rcdFmt                                like(fmt_t)
+     D  i_accessMode                       const like(accessMode_t)
+     D  io_sqlWhere                              like(sqlWhere_t)
+     D  io_sqlOrder                              like(sqlOrder_t)
+     D  i_enableWhere                      const like(bool_t)
+     D  i_enableOrder                      const like(bool_t)
+     D  o_msgID                                  like(msgID_t)
+     D  o_msgDta                                 like(msgDta_t)
       *
       *---------------------------------------------------*
       *
@@ -594,7 +594,7 @@
      C                   EVAL      ##WHERE = io_sqlWhere
      C                   EVAL      ##ORDER = io_sqlOrder
       *
-     C                   If        (i_accessMode = §KeySeq) and
+     C                   If        (i_accessMode = KEY_SEQ) and
      C                             (##ORDER  = ' '    )
      C                   Eval      tempScnFld = '##ORDER'
      C                   Eval      tempFldPos = 1

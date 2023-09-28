@@ -76,7 +76,7 @@
       *
       /COPY QCOPYLE,QUSLRCD
       *
-     D  qUsrSpc        DS                  likeds(r§qObj) inz
+     D  qUsrSpc        DS                  likeds(qObj_t) inz
      D  pSpcPtr        S               *
      D  errCode        DS                  likeds(errCode_t) inz
       *
@@ -87,8 +87,8 @@
      D usrSpcData      S          32767A   based(pSpcPtr)
       *
       *  List data
-     D currListE       S                   like(r§int4)
-     D offsetListE     S                   like(r§int4)
+     D currListE       S                   like(int4_t)
+     D offsetListE     S                   like(int4_t)
      D pListE          S               *
      D listE           DS                  likeds(rcdl0200_t) based(pListE)
       *
@@ -98,8 +98,8 @@
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
       *
-     D msgId           S                   like(r§msgId)
-     D msgDta          S                   like(r§msgDta)
+     D msgId           S                   like(msgId_t)
+     D msgDta          S                   like(msgDta_t)
       *
       ********************************************************************
       *           Main  Control block                                    *
@@ -107,15 +107,15 @@
       *
      P PEEK11          B
      D                 PI
-     D  i_qFile                            const likeds(r§qObj)
-     D  i_function                         const like(r§function)
-     D  o_numE                                   like(r§int4)
+     D  i_qFile                            const likeds(qObj_t)
+     D  i_function                         const like(function_t)
+     D  o_numE                                   like(int4_t)
      D  o_rcdl0200                               likeds(rcdl0200_t)
       *
       *---------------------------------------------------*
       *
-     C                   EVAL      qUsrSpc.lib = 'QTEMP'
-     C                   EVAL      qUsrSpc.name = '§PEEK§'
+     C                   EVAL      qUsrSpc.lib = USRSPC_LIBRARY
+     C                   EVAL      qUsrSpc.name = USRSPC_NAME
       *
      C                   monitor
       *

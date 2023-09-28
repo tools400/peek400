@@ -83,29 +83,29 @@
       *----------------------------------------------------*
       *
      D yIO_Buff        DS
-     D yIO_BuffTb                     1A   DIM(§rcdBufLen) inz
+     D yIO_BuffTb                     1A   DIM(RCD_BUFF_LEN) inz
       *
-     D YBuffer         S                   like(r§rcdBuf  ) inz
+     D YBuffer         S                   like(rcdBuf_t) inz
      D YTgtValue       S             10A   INZ(*BLANKS)
-     D YOutBuffer      S                   like(r§rcdBuf  ) inz
-     D YOutBuffLn      S                   like(r§int4    ) inz
+     D YOutBuffer      S                   like(rcdBuf_t) inz
+     D YOutBuffLn      S                   like(int4_t) inz
      D YMsgID          S              7A   INZ(*BLANKS)
      D YMsgDta         S            512A   INZ(*BLANKS)
       *
-     D X               S                   like(r§int4    ) inz
-     D Y               S                   like(r§int4    ) inz
+     D X               S                   like(int4_t) inz
+     D Y               S                   like(int4_t) inz
      D inpKeyLen       S             10I 0                  inz(-1)
       *
-     D BP              S                   like(r§int4    ) inz
-     D KP              S                   like(r§int4    ) inz
+     D BP              S                   like(int4_t) inz
+     D KP              S                   like(int4_t) inz
       *
-     D PEEK18_NAME     S                   like(r§pgmCallN) inz
+     D PEEK18_NAME     S                   like(pgmCallN_t) inz
       *
      D Wrk_KeyVal      S                   LIKE(i_keyVal) INZ(*BLANKS)
       *
      D DftVal          S             30A   INZ(*BLANKS)
-     D DftValLen       S                   like(r§int4    ) inz
-     D Idx             S                   like(r§int4    ) inz
+     D DftValLen       S                   like(int4_t) inz
+     D Idx             S                   like(int4_t) inz
       *
      D §Time_A         C                   CONST('00.00.00')
      D §Date_A         C                   CONST('0001-01-01')
@@ -121,17 +121,17 @@
       *
       /COPY QCOPYLE,CEECNDHDLR
       *
-     D isInzSr         S                   like(r§bool) inz(bFalse)
+     D isInzSr         S                   like(bool_t) inz(bFalse)
       *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
       *
      D PEEK20          PI
-     D  i_keyVal                           const like(r§keyBuf)
-     D  o_rcdBuffer                              like(r§rcdBuf)
-     D  o_msgID                                  like(r§msgID)
-     D  o_msgDta                                 like(r§msgDta)
+     D  i_keyVal                           const like(keyBuf_t)
+     D  o_rcdBuffer                              like(rcdBuf_t)
+     D  o_msgID                                  like(msgID_t)
+     D  o_msgDta                                 like(msgDta_t)
       *
       *----------------------------------------------------*
       *  Schlüsselliste für PEEKFLDL2
@@ -205,7 +205,7 @@
      C                   Endif
       *
      C                   EXSR      Intern
-     C     BP            IFGT      §rcdBufLen
+     C     BP            IFGT      RCD_BUFF_LEN
      C                   LEAVE
      C                   ENDIF
       *
@@ -234,7 +234,7 @@
      C                   Endif
       *
      C                   EXSR      Intern
-     C     BP            IFGT      §rcdBufLen
+     C     BP            IFGT      RCD_BUFF_LEN
      C                   LEAVE
      C                   Endif
      C                   Enddo
@@ -289,7 +289,7 @@
      C                   EVAL      Y = Y - 2
      C                   ENDIF
       *
-     C     X             IFLE      §keyBufLen
+     C     X             IFLE      KEY_BUFF_LEN
      C     Y             SUBST (P) Wrk_KeyVal:KP YBuffer
      C                   ELSE
      C                   SUBST (P) Wrk_KeyVal:KP YBuffer
@@ -358,12 +358,12 @@
      C     1             DO        YOutBuffLn    Y
      C     1             SUBST (P) YOutBuffer:Y  yIO_BuffTb(BP)
      C                   EVAL      BP = BP + 1
-     C     BP            IFGT      §rcdBufLen
+     C     BP            IFGT      RCD_BUFF_LEN
      C                   LEAVE
      C                   Endif
      C                   Enddo
       *
-     C     BP            IFGT      §rcdBufLen
+     C     BP            IFGT      RCD_BUFF_LEN
       *             Puffer zu Ende
      C                   ELSE
       *  Neue Startposition in Wrk_KeyVal

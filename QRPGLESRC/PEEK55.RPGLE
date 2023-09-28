@@ -54,7 +54,7 @@
      D  o_rcdFmt                                  like(go_rcdFmt)
       *---------------------------------------------------*
      D p_loadRcdFmtID  PR
-     D  o_rcdFmtID                                like(r§fmtID)
+     D  o_rcdFmtID                                like(fmtID_t)
       *---------------------------------------------------*
      D p_loadAccM      PR
      D  o_accMode                                 like(go_accMode)
@@ -142,29 +142,29 @@
       ********************************************************************
       *
      D PEEK55          PI
-     D  gi_file                            const like(r§file)
-     D  gi_lib                             const like(r§lib)
-     D  gi_mbr                             const like(r§mbr)
-     D  gi_rcdFmt                          const like(r§fmt)
-     D  gi_rcdFmtID                        const like(r§fmtId)
-     D  gi_envFile                         const like(r§file)
-     D  gi_envLib                          const like(r§lib)
-     D  gi_envMbr                          const like(r§mbr)
-     D  gi_option                          const like(r§option)
+     D  gi_file                            const like(file_t)
+     D  gi_lib                             const like(lib_t)
+     D  gi_mbr                             const like(mbr_t)
+     D  gi_rcdFmt                          const like(fmt_t)
+     D  gi_rcdFmtID                        const like(fmtId_t)
+     D  gi_envFile                         const like(file_t)
+     D  gi_envLib                          const like(lib_t)
+     D  gi_envMbr                          const like(mbr_t)
+     D  gi_option                          const like(option_t)
      D  go_pinTabR                               like(pinTabR_t) dim(12)
-     D  go_nbrPinR                               like(r§int4)
-     D  go_pinTabC                               like(r§fieldNme) dim(12)
-     D  go_nbrPinC                               like(r§int4)
-     D  go_File                                  like(r§file)
-     D  go_Lib                                   like(r§lib)
-     D  go_Mbr                                   like(r§mbr)
-     D  go_rcdFmt                                like(r§fmt)
-     D  go_AccMode                               like(r§accessMode)
-     D  go_SqlSel                                like(r§sqlWhere)
-     D  go_SqlOrd                                like(r§sqlOrder)
-     D  go_isKeyLower                            like(r§bool)
-     D  go_msgID                                 like(r§msgID)
-     D  go_msgDta                                like(r§msgDta)
+     D  go_nbrPinR                               like(int4_t)
+     D  go_pinTabC                               like(fieldNme_t) dim(12)
+     D  go_nbrPinC                               like(int4_t)
+     D  go_File                                  like(file_t)
+     D  go_Lib                                   like(lib_t)
+     D  go_Mbr                                   like(mbr_t)
+     D  go_rcdFmt                                like(fmt_t)
+     D  go_AccMode                               like(accessMode_t)
+     D  go_SqlSel                                like(sqlWhere_t)
+     D  go_SqlOrd                                like(sqlOrder_t)
+     D  go_isKeyLower                            like(bool_t)
+     D  go_msgID                                 like(msgID_t)
+     D  go_msgDta                                like(msgDta_t)
       *
       *----------------------------------------------------*
       *  Schlüssel PEEKENV
@@ -248,17 +248,17 @@
      D  o_msgDta                                  like(go_msgDta    )
       *
       *  Arbeitsfelder
-     D pFile           S                   like(r§file    )
+     D pFile           S                   like(file_t)
      D                                     inz
-     D pLib            S                   like(r§lib     )
+     D pLib            S                   like(lib_t)
      D                                     inz
-     D pMbr            S                   like(r§mbr     )
+     D pMbr            S                   like(mbr_t)
      D                                     inz
-     D pFmt            S                   like(r§rcdFmt  )
+     D pFmt            S                   like(rcdFmt_t)
      D                                     inz
      D pEnvMbr         S                   like(i_envMbr  )
      D                                     inz
-     D pRcdFmtID       S                   like(r§fmtID)
+     D pRcdFmtID       S                   like(fmtID_t)
       *
       /COPY QCOPYLE,USR8234
       *---------------------------------------------------*
@@ -561,7 +561,7 @@
       *
      P p_loadRcdFmtID  B
      D                 PI
-     D  o_rcdFmtID                                like(r§fmtID)
+     D  o_rcdFmtID                                like(fmtID_t)
       *
       *  definieren Arbeitsfelder ...
       *---------------------------------------------------*
@@ -594,7 +594,7 @@
      C                   Eval      en_section = '*ACCMODE'
      C     en_key2       Chain     FPEEKENV                           01
      C                   If        *IN01 = *ON
-     C                   Eval      o_accMode = §KeySeq
+     C                   Eval      o_accMode = KEY_SEQ
      C                   Else
      C                   Eval      o_accMode = en_data
      C                   Endif
@@ -614,11 +614,11 @@
      D  o_sqlSel                                  like(go_sqlSel )
       *
       *  definieren Arbeitsfelder ...
-     D strPos          S                   like(r§int4    )
+     D strPos          S                   like(int4_t)
      D                                     inz
-     D lenSql          S                   like(r§int4    )
+     D lenSql          S                   like(int4_t)
      D                                     inz
-     D lenData         S                   like(r§int4    )
+     D lenData         S                   like(int4_t)
      D                                     inz
       *---------------------------------------------------*
       *
@@ -670,11 +670,11 @@
      D  o_sqlOrd                                  like(go_sqlOrd )
       *
       *  definieren Arbeitsfelder ...
-     D strPos          S                   like(r§int4    )
+     D strPos          S                   like(int4_t)
      D                                     inz
-     D lenSql          S                   like(r§int4    )
+     D lenSql          S                   like(int4_t)
      D                                     inz
-     D lenData         S                   like(r§int4    )
+     D lenData         S                   like(int4_t)
      D                                     inz
       *---------------------------------------------------*
       *
@@ -741,7 +741,7 @@
      C                   Endif
       *
      C                   If        *IN01 = *ON
-     C                   Eval      o_isKeyLower = §KeyModeUpper
+     C                   Eval      o_isKeyLower = KEY_MODE_UPPER
      C                   Else
      C                   Eval      o_isKeyLower = en_data
      C                   Endif

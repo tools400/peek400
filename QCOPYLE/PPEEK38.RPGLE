@@ -4,7 +4,7 @@
       /else
      D PEEK38          PR                  extpgm(PEEK38_NAME)
       /endif
-     D  i_file                             const like(r§file)
-     D  i_lib                              const like(r§lib)
-     D  o_sqlOrder                               like(r§sqlOrder)
+     D  i_file                             const like(file_t)
+     D  i_lib                              const like(lib_t)
+     D  o_sqlOrder                               like(sqlOrder_t)
       *

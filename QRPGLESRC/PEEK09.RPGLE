@@ -71,10 +71,10 @@
       ********************************************************************
       *
      D PEEK09          PI
-     D  i_qFile                            const likeds(r§qObj)
+     D  i_qFile                            const likeds(qObj_t)
      D  o_data                                   likeds(OBJD0400_t)
-     D  o_msgID                                  like(r§msgID)
-     D  o_msgDta                                 like(r§msgDta)
+     D  o_msgID                                  like(msgID_t)
+     D  o_msgDta                                 like(msgDta_t)
       *
       *---------------------------------------------------*
       *

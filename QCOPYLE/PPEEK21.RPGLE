@@ -4,12 +4,12 @@
       /else
      D PEEK21          PR                  extpgm(PEEK21_NAME)
       /endif
-     D  i_scnAID                           const like(r§scnAid)
-     D  i_pgm                              const like(r§pgm)
-     D  o_pgmCmd                                 like(r§pgmCmd)
-     D  o_cmdDta                                 like(r§pgmCmdDt)
-     D  o_msgID                                  like(r§msgID)
-     D  o_msgDta                                 like(r§msgDta)
-     D  i_exclKeys                         const like(r§pgmCmd) dim(25)
+     D  i_scnAID                           const like(scnAid_t)
+     D  i_pgm                              const like(pgm_t)
+     D  o_pgmCmd                                 like(pgmCmd_t)
+     D  o_cmdDta                                 like(pgmCmdDt_t)
+     D  o_msgID                                  like(msgID_t)
+     D  o_msgDta                                 like(msgDta_t)
+     D  i_exclKeys                         const like(pgmCmd_t) dim(25)
      D                                           options(*nopass)
       *

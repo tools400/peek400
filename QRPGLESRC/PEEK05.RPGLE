@@ -46,19 +46,19 @@
      F                                     INFDS(Peek#00)
       *
       * Für Einzelsatzzugriff zum Löschen von Datensätzen
-     D hFile00         DS                   likeds(r§hFile  )
+     D hFile00         DS                   likeds(hFile_t)
       *
       * Für Sortierung nach relativer Satznummer
-     D hFile01         DS                   likeds(r§hFile  )
+     D hFile01         DS                   likeds(hFile_t)
       *
       * Für Sortierung nach Schlüsselfolge
-     D hFile02         DS                   likeds(r§hFile  )
+     D hFile02         DS                   likeds(hFile_t)
       *
       * Für SQL Zugriff
-     D hFile03         DS                   likeds(r§hFile  )
+     D hFile03         DS                   likeds(hFile_t)
       *
       * Für Einzelsatzzugriff zum reinen Lesen von Datensätzen
-     D hFile04         DS                   likeds(r§hFile  )
+     D hFile04         DS                   likeds(hFile_t)
       *
       *---Variablendefinition ShortCmd---------------------*
       /COPY QCOPYLE,ShortCmd_D
@@ -201,17 +201,17 @@
      D  inpValue                     25S 5 value
       *
      D f_chain00       PR             1A
-     D  i_rrn                              value  like(r§rcdNbr  )
-     D  i_file                             value  like(r§file    )
-     D  i_lib                              value  like(r§lib     )
-     D  i_mbr                              value  like(r§mbr     )
+     D  i_rrn                              value  like(rcdNbr_t)
+     D  i_file                             value  like(file_t)
+     D  i_lib                              value  like(lib_t)
+     D  i_mbr                              value  like(mbr_t)
      D  i_rcdFmt                     10A   value
       *
      D f_chain04       PR             1A
-     D  i_rrn                              value  like(r§rcdNbr  )
-     D  i_file                             value  like(r§file    )
-     D  i_lib                              value  like(r§lib     )
-     D  i_mbr                              value  like(r§mbr     )
+     D  i_rrn                              value  like(rcdNbr_t)
+     D  i_file                             value  like(file_t)
+     D  i_lib                              value  like(lib_t)
+     D  i_mbr                              value  like(mbr_t)
      D  i_rcdFmt                     10A   value
       *
       /COPY QCOPYLE,F_PEEK51
@@ -223,12 +223,12 @@
       *  I N F D S - D E F I N I T I O N E N               *
       *----------------------------------------------------*
       *
-     DFile#X           DS                  likeds(r§infds)
+     DFile#X           DS                  likeds(infds_t)
       *
      D IO_Buff         DS
-     D  IO_BuffFld                         like(r§rcdBuf)
+     D  IO_BuffFld                         like(rcdBuf_t)
       *
-     D IO_NullMap      S                   like(r§nullMap)
+     D IO_NullMap      S                   like(nullMap_t)
      D                                     dim(§nullMapSize)
       *
      DPeek#L1          DS
@@ -253,32 +253,32 @@
      D  sqlOrder                           like(sqlOrder)
       *
      D YQFile          DS                  inz
-     D  YFile                              like(r§file)
-     D  YLibrary                           like(r§lib)
-     D YFormat         S                   like(R§RCDFMT) inz
+     D  YFile                              like(file_t)
+     D  YLibrary                           like(lib_t)
+     D YFormat         S                   like(RCDFMT_t) inz
      D YMsgID          S              7A   inz
      D YMsgDta         S            512A   inz
       *
-     D YMember         S                   like(r§mbr   ) inz
+     D YMember         S                   like(mbr_t) inz
       *
-     D YAttrLen        S                   like(r§int4    ) inz
+     D YAttrLen        S                   like(int4_t) inz
      D YAttrTyp        S              1A   inz
      D YValue          S            512A   inz
       *
      D YDsp80          S                   like(SET_Dsp80) inz
-     D YCopyRight      S                   like(r§copyRght) inz(§CopyRight)
+     D YCopyRight      S                   like(copyRght_t) inz(§CopyRight)
       *
      D YFmtNbr         S              5I 0 inz
       *
      D YHeaderTyp      S             10A   inz
-     D YRcdNbr         S                   inz(§ZEROS ) like(r§rcdNbr)
+     D YRcdNbr         S                   inz(§ZEROS ) like(rcdNbr_t)
      D YFunction       S             10A   inz
      D YCommitLVL      S                   inz('0')     like(CommitLVL)
      D YIsUpdKey       S                   inz(bFalse)  like(isUpdKey )
-     D YScreenNbr      S                   like(r§int4    ) inz
-     D YIsLower        S                   inz(bFalse ) like(r§bool   )
-     D YCsrRow         S                   like(r§int4    ) inz
-     D YCsrCol         S                   like(r§int4    ) inz
+     D YScreenNbr      S                   like(int4_t) inz
+     D YIsLower        S                   inz(bFalse ) like(bool_t)
+     D YCsrRow         S                   like(int4_t) inz
+     D YCsrCol         S                   like(int4_t) inz
       *
      D YCvtCcsid       S              1A   inz(bTrue  )
      D YData           S            512A   inz
@@ -296,58 +296,58 @@
      D YSrchType       S                   like(SrchType ) inz
      D YSrchCase       S                   like(SrchCase ) inz(bFalse )
       *
-     D YBuffer         S                   like(r§rcdBuf  )
+     D YBuffer         S                   like(rcdBuf_t)
      D                                     inz
      D                 DS
-     D yHexString                          like(r§hexBuf  )
-     D yOutBuffer                          like(r§rcdBuf  )
+     D yHexString                          like(hexBuf_t)
+     D yOutBuffer                          like(rcdBuf_t)
      D                                     overlay(yHexString:1)
-     D YOutBuffLn      S                   like(r§int4    ) inz
+     D YOutBuffLn      S                   like(int4_t) inz
      D YTgtValue       S             10A   inz
       *
-     D YKeyVal         S                   like(r§keyBuf  ) inz
+     D YKeyVal         S                   like(keyBuf_t) inz
       *
      D YPgmCmd         S             10A   inz
-     D YCmdDta         S                   like(r§pgmCmdDt) inz
+     D YCmdDta         S                   like(pgmCmdDt_t) inz
       *
      D yFKeys          S             18A   dim(32)       inz
-     D yNbrOfKeys      S                   like(r§int4    ) inz
+     D yNbrOfKeys      S                   like(int4_t) inz
       *
-     D YChoice         S                   like(r§choice  ) dim(32) inz
-     D YNbrOfCh        S                   like(r§int4    ) inz
+     D YChoice         S                   like(choice_t) dim(32) inz
+     D YNbrOfCh        S                   like(int4_t) inz
       *
      D YMbrOpt         S             10A   inz
      D YCrtFile        S             10A   inz
       *
-     D YFlag           S                   inz(*ZEROS)  like(r§int4)
+     D YFlag           S                   inz(*ZEROS)  like(int4_t)
       *
-     D BuffIdx         S                   like(r§int4    ) inz
+     D BuffIdx         S                   like(int4_t) inz
       *
      D shortCmd        DS                  likeds(ShortCmd_t) inz
-     D YExecCmd        S                   like(r§cmdBuffer) inz
-     D YNbrOfEnt       S                   like(r§int4    ) inz
-     D YSqlWhere       S                   like(r§sqlWhere) inz
-     D YSqlOrder       S                   like(r§sqlOrder) inz
+     D YExecCmd        S                   like(cmdBuffer_t) inz
+     D YNbrOfEnt       S                   like(int4_t) inz
+     D YSqlWhere       S                   like(sqlWhere_t) inz
+     D YSqlOrder       S                   like(sqlOrder_t) inz
      D YAccess         S              1A   inz
      D yAlwLc          S              1A   inz
      D yCase           S              1A   inz
      D yRcdLock        S              1A   inz
      D yNullDft        S              1A   inz
      D yKeepCrs        S              1A   inz
-     D YEnvFile        S                   like(r§file    )  inz
-     D YEnvLib         S                   like(r§lib     )  inz
-     D YEnvMbr         S                   like(r§mbr     )  inz
-     D YIsAutoSave     S                   like(r§bool    )  inz(bFalse)
+     D YEnvFile        S                   like(file_t)  inz
+     D YEnvLib         S                   like(lib_t)  inz
+     D YEnvMbr         S                   like(mbr_t)  inz
+     D YIsAutoSave     S                   like(bool_t)  inz(bFalse)
      D YPinTabR        S                   like(pinTabR_t)  inz dim(12)
-     D YnbrPinR        S                   like(r§int4)  inz
-     D YnbrPinC        S                   like(r§int4)  inz
-     D YisKeyLower     S                   like(r§bool)  inz
-     D YOption         S                   like(r§option)  inz
-     D YText           S                   like(r§text)
+     D YnbrPinR        S                   like(int4_t)  inz
+     D YnbrPinC        S                   like(int4_t)  inz
+     D YisKeyLower     S                   like(bool_t)  inz
+     D YOption         S                   like(option_t)  inz
+     D YText           S                   like(text_t)
      D ySflOpt         S              2A
-     D YString         S                   like(r§rcdBuf)
+     D YString         S                   like(rcdBuf_t)
      D                                     inz
-     D YStringLen      S                   like(r§int4) inz
+     D YStringLen      S                   like(int4_t) inz
      D YchgLib         S              1A   inz
      D YchgFile        S              1A   inz
      D YchgMbr         S              1A   inz
@@ -410,8 +410,8 @@
      D IsTargetOK      S              1A   inz(bFalse)
      D IsSeqNbrOK      S              1A   inz(bFalse)
      D IsOpen          S              1A   inz(bFalse)
-     D IsUpdMod        S                   like(r§bool    )  inz(bFalse)
-     D IsUpdKey        S                   like(r§bool    )  inz(bFalse)
+     D IsUpdMod        S                   like(bool_t)  inz(bFalse)
+     D IsUpdKey        S                   like(bool_t)  inz(bFalse)
      D IsVisible       S              1A   inz(bFalse)
      D IsError         S              1A   inz(bFalse)
      D IsFileError     S              1A   inz(bFalse)
@@ -433,47 +433,47 @@
      D IsCvtChar       S              1A   inz(bFalse)
      D IsPinToClr      S              1A   inz(bTrue )
      D IsReadC         S              1A   inz(bFalse)
-      *** IsNumeric       S                   like(r§bool    )
+      *** IsNumeric       S                   like(bool_t)
       ***                                     inz(bFalse)
-     D IsColExc        S                   like(r§bool    )
+     D IsColExc        S                   like(bool_t)
      D                                     inz(bFalse)
      D isKeyLower      S              1A   inz(bFalse)
       *
      D CommitLVL       S              1A   inz('0')
       *
      D auth            DS                  qualified
-     D  chgLib                             like(r§bool    )
+     D  chgLib                             like(bool_t)
      D                                     inz(bFalse)
-     D  chgFile                            like(r§bool    )
+     D  chgFile                            like(bool_t)
      D                                     inz(bFalse)
-     D  chgMbr                             like(r§bool    )
+     D  chgMbr                             like(bool_t)
      D                                     inz(bFalse)
-     D  updMod                             like(r§bool    )
+     D  updMod                             like(bool_t)
      D                                     inz(bFalse)
-     D  updKey                             like(r§bool    )
+     D  updKey                             like(bool_t)
      D                                     inz(bFalse)
-     D  chgSqlW                            like(r§bool    )
+     D  chgSqlW                            like(bool_t)
      D                                     inz(bFalse)
-     D  chgSqlO                            like(r§bool    )
+     D  chgSqlO                            like(bool_t)
      D                                     inz(bFalse)
-     D  accAut                             like(r§bool    )
+     D  accAut                             like(bool_t)
      D                                     inz(bFalse)
       *
-     D SflPage         S                   like(r§int4    ) inz
+     D SflPage         S                   like(int4_t) inz
      D SflRec080       S                   inz(0) like(SflPage)
      D SflRec132       S                   inz(0) like(SflPage)
      D SflNbrRcd       S                   inz(0) like(SflPage)
-     D SflMaxRowLen    S                   like(r§int4    ) inz
-     D SflDataLenFree  S                   like(r§int4    ) inz
-     D SfTop           S                   like(r§int4    ) inz
-     D SfBot           S                   like(r§int4    ) inz
+     D SflMaxRowLen    S                   like(int4_t) inz
+     D SflDataLenFree  S                   like(int4_t) inz
+     D SfTop           S                   like(int4_t) inz
+     D SfBot           S                   like(int4_t) inz
      D Sfl_Cmd         S             10A   inz
      D SflHeadLRw      S                   inz(0) like(SflPage)
      D SflFirstRw      S                   inz(0) like(SflPage)
      D SflLastRw       S                   inz(0) like(SflPage)
-     D SflLeftOfs      S                   like(r§int4    ) inz
+     D SflLeftOfs      S                   like(int4_t) inz
      D SflMode         S             10A   inz
-     D SflPinRnge      S                   like(r§int4    ) inz
+     D SflPinRnge      S                   like(int4_t) inz
       *
      D §CopyRight      C                   CONST('1997-2023, -
      D                                      Thomas Raddatz - PEEK V3.5.8')
@@ -488,104 +488,104 @@
      D L#MinSeq        S                   like(F_SEQ   )  inz(§ZEROS )
      D L#WndNbr        S                   like(##WndNbr)  inz(§ZEROS )
       *
-     D R#Size          S                   like(r§int4    ) inz
+     D R#Size          S                   like(int4_t) inz
       *
-     D PEEK01_NAME     S                   like(r§pgmCallN) inz
-     D PEEK03_NAME     S                   like(r§pgmCallN) inz
-     D PEEK04_NAME     S                   like(r§pgmCallN) inz
-     D PEEK06_NAME     S                   like(r§pgmCallN) inz
-     D PEEK07_NAME     S                   like(r§pgmCallN) inz
-     D PEEK08_NAME     S                   like(r§pgmCallN) inz
-     D PEEK09_NAME     S                   like(r§pgmCallN) inz
-     D PEEK10_NAME     S                   like(r§pgmCallN) inz
-     D PEEK12_NAME     S                   like(r§pgmCallN) inz
-     D PEEK13_NAME     S                   like(r§pgmCallN) inz
-     D PEEK14_NAME     S                   like(r§pgmCallN) inz
-     D PEEK17_NAME     S                   like(r§pgmCallN) inz
-     D PEEK18_NAME     S                   like(r§pgmCallN) inz
-     D PEEK19_NAME     S                   like(r§pgmCallN) inz
-     D PEEK20_NAME     S                   like(r§pgmCallN) inz
-     D PEEK21_NAME     S                   like(r§pgmCallN) inz
-     D PEEK23_NAME     S                   like(r§pgmCallN) inz
-     D PEEK24_NAME     S                   like(r§pgmCallN) inz
-     D PEEK26_NAME     S                   like(r§pgmCallN) inz
-     D PEEK27_NAME     S                   like(r§pgmCallN) inz
-     D PEEK30_NAME     S                   like(r§pgmCallN) inz
-     D PEEK32_NAME     S                   like(r§pgmCallN) inz
-     D PEEK33_NAME     S                   like(r§pgmCallN) inz
-     D PEEK34_NAME     S                   like(r§pgmCallN) inz
-     D PEEK37_NAME     S                   like(r§pgmCallN) inz
-     D PEEK38_NAME     S                   like(r§pgmCallN) inz
-     D PEEK40_NAME     S                   like(r§pgmCallN) inz
-     D PEEK41_NAME     S                   like(r§pgmCallN) inz
-     D PEEK42_NAME     S                   like(r§pgmCallN) inz
-     D PEEK47_NAME     S                   like(r§pgmCallN) inz
-     D PEEK48_NAME     S                   like(r§pgmCallN) inz
-     D PEEK49_NAME     S                   like(r§pgmCallN) inz
-     D PEEK50_NAME     S                   like(r§pgmCallN) inz
-     D PEEK52_NAME     S                   like(r§pgmCallN) inz
-     D PEEK54_NAME     S                   like(r§pgmCallN) inz
-     D PEEK55_NAME     S                   like(r§pgmCallN) inz
-     D PEEK56_NAME     S                   like(r§pgmCallN) inz
-     D PEEK57_NAME     S                   like(r§pgmCallN) inz
-     D PEEK59_NAME     S                   like(r§pgmCallN) inz
-     D PEEK65_NAME     S                   like(r§pgmCallN) inz
-     D PEEK68_NAME     S                   like(r§pgmCallN) inz
-     D PEEK69_NAME     S                   like(r§pgmCallN) inz
+     D PEEK01_NAME     S                   like(pgmCallN_t) inz
+     D PEEK03_NAME     S                   like(pgmCallN_t) inz
+     D PEEK04_NAME     S                   like(pgmCallN_t) inz
+     D PEEK06_NAME     S                   like(pgmCallN_t) inz
+     D PEEK07_NAME     S                   like(pgmCallN_t) inz
+     D PEEK08_NAME     S                   like(pgmCallN_t) inz
+     D PEEK09_NAME     S                   like(pgmCallN_t) inz
+     D PEEK10_NAME     S                   like(pgmCallN_t) inz
+     D PEEK12_NAME     S                   like(pgmCallN_t) inz
+     D PEEK13_NAME     S                   like(pgmCallN_t) inz
+     D PEEK14_NAME     S                   like(pgmCallN_t) inz
+     D PEEK17_NAME     S                   like(pgmCallN_t) inz
+     D PEEK18_NAME     S                   like(pgmCallN_t) inz
+     D PEEK19_NAME     S                   like(pgmCallN_t) inz
+     D PEEK20_NAME     S                   like(pgmCallN_t) inz
+     D PEEK21_NAME     S                   like(pgmCallN_t) inz
+     D PEEK23_NAME     S                   like(pgmCallN_t) inz
+     D PEEK24_NAME     S                   like(pgmCallN_t) inz
+     D PEEK26_NAME     S                   like(pgmCallN_t) inz
+     D PEEK27_NAME     S                   like(pgmCallN_t) inz
+     D PEEK30_NAME     S                   like(pgmCallN_t) inz
+     D PEEK32_NAME     S                   like(pgmCallN_t) inz
+     D PEEK33_NAME     S                   like(pgmCallN_t) inz
+     D PEEK34_NAME     S                   like(pgmCallN_t) inz
+     D PEEK37_NAME     S                   like(pgmCallN_t) inz
+     D PEEK38_NAME     S                   like(pgmCallN_t) inz
+     D PEEK40_NAME     S                   like(pgmCallN_t) inz
+     D PEEK41_NAME     S                   like(pgmCallN_t) inz
+     D PEEK42_NAME     S                   like(pgmCallN_t) inz
+     D PEEK47_NAME     S                   like(pgmCallN_t) inz
+     D PEEK48_NAME     S                   like(pgmCallN_t) inz
+     D PEEK49_NAME     S                   like(pgmCallN_t) inz
+     D PEEK50_NAME     S                   like(pgmCallN_t) inz
+     D PEEK52_NAME     S                   like(pgmCallN_t) inz
+     D PEEK54_NAME     S                   like(pgmCallN_t) inz
+     D PEEK55_NAME     S                   like(pgmCallN_t) inz
+     D PEEK56_NAME     S                   like(pgmCallN_t) inz
+     D PEEK57_NAME     S                   like(pgmCallN_t) inz
+     D PEEK59_NAME     S                   like(pgmCallN_t) inz
+     D PEEK65_NAME     S                   like(pgmCallN_t) inz
+     D PEEK68_NAME     S                   like(pgmCallN_t) inz
+     D PEEK69_NAME     S                   like(pgmCallN_t) inz
       *
-     D PEEKPGM         S                   like(r§pgm     ) inz
-     D PEEKDSPF        S                   like(r§file    ) inz
-     D PgmToCall       S                   like(r§pgmCallN) inz
+     D PEEKPGM         S                   like(pgm_t) inz
+     D PEEKDSPF        S                   like(file_t) inz
+     D PgmToCall       S                   like(pgmCallN_t) inz
       *
-     D EXIT01          S                   like(r§pgmCallN) inz
+     D EXIT01          S                   like(pgmCallN_t) inz
       *
      D sflRow          DS                  qualified
      D  chars                         1A   dim(256) inz
       *
      D SFL_ROW_SIZE    C                   %elem(sflRow.chars)
       *
-     D sflRowDataStr   S                   like(r§int4)
-     D sflRowDataEnd   S                   like(r§int4)
-     D sflRowDataLen   S                   like(r§int4)
+     D sflRowDataStr   S                   like(int4_t)
+     D sflRowDataEnd   S                   like(int4_t)
+     D sflRowDataLen   S                   like(int4_t)
       *
-     D ColrOfs         S                   like(r§int4)
+     D ColrOfs         S                   like(int4_t)
      D Col_Field       S             10A   dim(60)
-     D Col_ScnStr      S                   like(r§int4) dim(60)
-     D Col_ScnEnd      S                   like(r§int4) dim(60)
-     D Col_Error       S                   like(r§bool) dim(60) inz(bFalse)
-     D CP              S                   like(r§int4)
-     D FldStrPos       S                   like(r§int4)
+     D Col_ScnStr      S                   like(int4_t) dim(60)
+     D Col_ScnEnd      S                   like(int4_t) dim(60)
+     D Col_Error       S                   like(bool_t) dim(60) inz(bFalse)
+     D CP              S                   like(int4_t)
+     D FldStrPos       S                   like(int4_t)
       *
-     D HeadLen         S                   like(r§int4)
-     D FieldLen        S                   like(r§int4)
-     D MaxColLen       S                   like(r§int4)
-     D ColumnLen       S                   like(r§int4)
+     D HeadLen         S                   like(int4_t)
+     D FieldLen        S                   like(int4_t)
+     D MaxColLen       S                   like(int4_t)
+     D ColumnLen       S                   like(int4_t)
       *
-     D PinCol_X        S                   like(r§int4)
+     D PinCol_X        S                   like(int4_t)
      D MAX_PIN_COL     C                   %elem(PinTabCol)
-     D PinTabCol       S                   like(r§fieldNme) dim(12)
-     D NbrPinCol       S                   like(r§int4)
+     D PinTabCol       S                   like(fieldNme_t) dim(12)
+     D NbrPinCol       S                   like(int4_t)
       *
-     D PinRcd_X        S                   like(r§int4)
+     D PinRcd_X        S                   like(int4_t)
      D MAX_PIN_RCD     C                   %elem(PinTabRcd)
      D PinTabRcd       S                   like(pinTabR_t) dim(12)
-     D NbrPinRcd       S                   like(r§int4)
+     D NbrPinRcd       S                   like(int4_t)
       *
      D PinTabRcdE      DS                  likeds(pinTabR_t)
       *
       *  Arbeitsfelder
-     D X               S                   like(r§int4)
-     D Y               S                   like(r§int4)
-     D Z               S                   like(r§int4)
+     D X               S                   like(int4_t)
+     D Y               S                   like(int4_t)
+     D Z               S                   like(int4_t)
      D A1              S              1A   inz
       *
       *  Arbeitsfeld für Sortierfolge: Satzfolge/Schlüsselfolge
       *  .. aktuelle Sortierung
-     D AccessMode      S              1A   inz(§RrnSeq)
+     D AccessMode      S              1A   inz(RRN_SEQ)
       *  .. neue Sortierung für ChangeFile
-     D NewAccMode      S              1A   inz(§RrnSeq)
+     D NewAccMode      S              1A   inz(RRN_SEQ)
       *  .. Sortierung vor SQl-Mode
-     D OldAccMode      S              1A   inz(§RrnSeq)
+     D OldAccMode      S              1A   inz(RRN_SEQ)
       *  Arbeitsfeld für Befehlsverarbeitung, Verhinderung von Rekursionen
      D R#PgmCmd        S                   like(YPgmCmd)  inz
       *  Arbeitsfeld für Eingabe Aufsetzkey
@@ -595,23 +595,23 @@
      D Pin#Field       S             10A   inz
       *  Datensatz-Nr für SETLL und SETGG zum füllen der Subfile
      D Wrk#ReadDn      S                   like(SflPage)    inz(§ZEROS)
-     D Wrk#RcdNbr      S                   like(r§rcdNbr)   inz(§ZEROS)
+     D Wrk#RcdNbr      S                   like(rcdNbr_t)   inz(§ZEROS)
      D                 DS
-     D Wrk#KeyVal                          like(r§keyBuf  ) inz
+     D Wrk#KeyVal                          like(keyBuf_t) inz
       *  ...
      D Wrk#Field       S                   inz            like(F_Field)
      D Wrk#SeqNbr      S                   inz(§ZEROS )   like(F_Seq)
      D Wrk#Recno       S                   inz(§ZEROS )   like(SflRec132)
      D Wrk#SFPAU       S                   inz            like(SFPAU)
       *  Umschalten der Sortierung
-     D Last#RcdNr      S                   like(r§rcdNbr)   inz(§ZEROS)
+     D Last#RcdNr      S                   like(rcdNbr_t)   inz(§ZEROS)
       *  Farbattribute einsetzen
-     D Wrk#Ofs         S                   like(r§int4    ) inz
+     D Wrk#Ofs         S                   like(int4_t) inz
       *  Felder mit mehr als 512 Zeichen im Datensatz
      D IsFld512        S              1A   inz(bFalse)
       *  Felder für Suchfunktion
      D SrchMode        S             10A   inz('*NEW')
-     D SrchFndRcd      S                   like(r§rcdNbr )  inz(§ZEROS )
+     D SrchFndRcd      S                   like(rcdNbr_t)  inz(§ZEROS )
      D SrchField       S             10A   inz
      D SrchOP          S             10A   inz
      D SrchArg         S             63A   inz
@@ -622,8 +622,8 @@
      D                 C                   %len(SrchArgVal)
      D cSRCHARG_DECPOS...
      D                 C                   %decpos(SrchArgVal)
-     D SrchLikeTp      S                   like(r§int4    ) inz
-     D SrchLikeLn      S                   like(r§int4    ) inz
+     D SrchLikeTp      S                   like(int4_t) inz
+     D SrchLikeLn      S                   like(int4_t) inz
      D SrchNbrs        S             10P 0 inz(§ZEROS )
      D SrchType        S             10A   inz
      D SrchCase        S              1A   inz(bFalse )
@@ -634,7 +634,7 @@
      D SRCH_CMP_VAL_DECPOS...
      D                 C                   %decpos(SrchCmpVal)
      D SrchCmpFloat    S              8F   inz(§ZEROS )
-     D SrchCmpRcd      S                   like(r§rcdBuf  )
+     D SrchCmpRcd      S                   like(rcdBuf_t)
      D                                     inz
      D SrchCount       S                   like(SrchNbrs) inz(§ZEROS)
      D SrchCount2      S                   like(SrchNbrs) inz(§ZEROS)
@@ -663,7 +663,7 @@
      D rcdNbr$                       10A   OVERLAY(rcdNbr#: 1)
       *
      D exitMsg         S            512A   varying inz
-     D colHeading      S                   like(r§colHeading)
+     D colHeading      S                   like(colHeading_t)
       *
       *  Feldinhalte vor der Bildschirmausgabe
      D B4              DS                  qualified
@@ -672,29 +672,29 @@
       *
       /COPY QCOPYLE,CEECNDHDLR
       *
-     D isInzSr         S                   like(r§bool) inz(bFalse)
+     D isInzSr         S                   like(bool_t) inz(bFalse)
 
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
       *
      D PEEK05          PI
-     D  io_qFile                                 likeds(r§qObj)
-     D  i_member                           const like(r§mbr)
-     D  i_access                           const like(r§accessMode)
-     D  i_prodlib                          const like(r§lib)
-     D  i_chgLib                           const like(r§bool)
-     D  i_chgFile                          const like(r§bool)
-     D  i_chgMbr                           const like(r§bool)
-     D  i_updModKey                        const like(r§bool)
-     D  i_chgSqlW                          const like(r§bool)
-     D  i_chgSqlO                          const like(r§bool)
-     D  i_qEnvFile                         const likeds(r§qObj)
-     D  i_envMbr                           const like(r§mbr)
-     D  i_envSave                          const like(r§bool)
-     D  i_envLayout                        const like(r§bool)
-     D  i_sqlWhere                         const like(r§sqlWhere)
-     D  i_sqlOrder                         const like(r§sqlOrder)
+     D  io_qFile                                 likeds(qObj_t)
+     D  i_member                           const like(mbr_t)
+     D  i_access                           const like(accessMode_t)
+     D  i_prodlib                          const like(lib_t)
+     D  i_chgLib                           const like(bool_t)
+     D  i_chgFile                          const like(bool_t)
+     D  i_chgMbr                           const like(bool_t)
+     D  i_updModKey                        const like(bool_t)
+     D  i_chgSqlW                          const like(bool_t)
+     D  i_chgSqlO                          const like(bool_t)
+     D  i_qEnvFile                         const likeds(qObj_t)
+     D  i_envMbr                           const like(mbr_t)
+     D  i_envSave                          const like(bool_t)
+     D  i_envLayout                        const like(bool_t)
+     D  i_sqlWhere                         const like(sqlWhere_t)
+     D  i_sqlOrder                         const like(sqlOrder_t)
       *
       *----------------------------------------------------*
       *  Parameterliste für PEEKPGM
@@ -784,7 +784,7 @@
      C                   Endif
       *
       *  Öffnen/Schützen "Aufsetzschlüssel/Satznummer"
-     C                   If        AccessMode = §SqlSeq
+     C                   If        AccessMode = SQL_SEQ
      C                   EVAL      *IN73 = '1'
      C                   Else
      C                   EVAL      *IN73 = '0'
@@ -1081,7 +1081,7 @@
      C                   ELSE
       *
       *  Wechsel der Datei ...
-      ***                If        AccessMode = §SqlSeq
+      ***                If        AccessMode = SQL_SEQ
      C                   Eval      NewAccMode = i_access
       ***                Else
       ***                Eval      NewAccMode = AccessMode
@@ -1569,7 +1569,7 @@
      C     Pmt_Fmt       Begsr
       *
      C                   CALLP     PEEK12(SET_Dsp80: §CopyRight: ##FORMAT
-     C                                    : §INTER
+     C                                    : MODE_INTER
      C                                    : RCDL0200: YFmtNbr: yMsgID: yMsgDta)
       *
      C     yMsgID        IFEQ      *BLANKS
@@ -2595,12 +2595,12 @@
       *      Nix tun, keine Datei vorhanden
      C                   EXSR      MsgNoFile
      C                   ELSE
-     C     AccessMode    IFEQ      §KeySeq
+     C     AccessMode    IFEQ      KEY_SEQ
       *    ... Sortierung stimmt bereits
      C                   ELSE
       *
       *  Umschalten der Sortierung
-     C                   Eval      NewAccMode = §KeySeq
+     C                   Eval      NewAccMode = KEY_SEQ
      C                   EXSR      ChangeSort
       *
      C                   Endif
@@ -2618,14 +2618,14 @@
       *      Nix tun, keine Datei vorhanden
      C                   EXSR      MsgNoFile
      C                   ELSE
-     C     AccessMode    IFEQ      §RrnSeq
+     C     AccessMode    IFEQ      RRN_SEQ
       *    ... Sortierung stimmt bereits
      C                   ELSE
       *
      C                   IF        f_numBased(##File    :
      C                                        ##Library :
      C                                        ##Member  ) = 1
-     C                   Eval      NewAccMode = §RrnSeq
+     C                   Eval      NewAccMode = RRN_SEQ
      C                   EXSR      ChangeSort
      C                   ELSE
      C                   CLEAR                   USR8217
@@ -2649,7 +2649,7 @@
       *      Nix tun, keine Datei vorhanden
      C                   EXSR      MsgNoFile
      C                   ELSE
-     C     AccessMode    IFEQ      §RrnSeq
+     C     AccessMode    IFEQ      RRN_SEQ
      C                   Exsr      C_SortBKey
      C                   ELSE
      C                   Exsr      C_SortBRrn
@@ -2811,10 +2811,10 @@
       *
      C                   If        (YSqlWhere  <> ' ') or
      C                             (YSqlOrder  <> ' ')
-     C                   IF        accessMode <> §sqlSeq
+     C                   IF        accessMode <> SQL_SEQ
      C                   Eval      oldAccMode = accessMode
      C                   Endif
-     C                   Eval      accessMode = §sqlSeq
+     C                   Eval      accessMode = SQL_SEQ
      C                   Eval      sqlWhere   = YSqlWhere
      C                   Eval      sqlOrder   = YSqlOrder
      C                   Else
@@ -3418,10 +3418,10 @@
       *    ... Anzeige stimmt bereits
      C                   ELSE
       *
-     C                   IF        File#X.RcdLen > §rcdBufLen
+     C                   IF        File#X.RcdLen > RCD_BUFF_LEN
      C                   CLEAR                   USR8206
      C                   Eval      §MsgID     = 'USR8206'
-     C                   Eval      USR82061   = §rcdBufLen
+     C                   Eval      USR82061   = RCD_BUFF_LEN
      C                   Eval      §MsgDta    = USR8206
      C                   ELSE
      C                   Eval      SET_DspMde = '*DSPHEX'
@@ -5690,7 +5690,7 @@
      C                   ELSE
      C     SflMode       IFEQ      '*HEADLINE'
      C                   IF        (F_KSEQ = 0) or
-     C                             (AccessMode = §RrnSeq)
+     C                             (AccessMode = RRN_SEQ)
      C                   EVAL      sflRow.chars(ColrOfs) = SET_HedCol
      C                   ELSE
      C                   EVAL      sflRow.chars(ColrOfs) = SET_KeyCol
@@ -5726,7 +5726,7 @@
       *
      C     PBGenKey      BEGSR
       *
-     C     AccessMode    IFEQ      §KeySeq
+     C     AccessMode    IFEQ      KEY_SEQ
      C                   EXSR      PBBuildKey
      C                   ELSE
      C                   EXSR      PBBuildRrn
@@ -5775,7 +5775,7 @@
       *
      C     PBGenIntKy    BEGSR
       *
-     C     AccessMode    IFEQ      §KeySeq
+     C     AccessMode    IFEQ      KEY_SEQ
      C                   EXSR      PBIntKey
      C                   ELSE
      C                   EXSR      PBIntRrn
@@ -5904,13 +5904,13 @@
      C                   ELSE
       *
      C                   Select
-     C     AccessMode    WhenEQ    §KeySeq
+     C     AccessMode    WhenEQ    KEY_SEQ
      C                   Callp     CIO_setllWithKey(hFile02: Wrk#KeyVal)
      C                   EXSR      F2toFx
-     C     AccessMode    WhenEQ    §RrnSeq
+     C     AccessMode    WhenEQ    RRN_SEQ
      C                   Callp     CIO_setllWithRRN(hFile01: Wrk#RcdNbr)
      C                   EXSR      F1toFx
-     C     AccessMode    WhenEQ    §SqlSeq
+     C     AccessMode    WhenEQ    SQL_SEQ
      C                   Other
      C                   Endsl
       *
@@ -5929,13 +5929,13 @@
      C                   ELSE
       *
      C                   Select
-     C     AccessMode    WhenEQ    §KeySeq
+     C     AccessMode    WhenEQ    KEY_SEQ
      C                   Callp     CIO_setgtWithKey(hFile02: Wrk#KeyVal)
      C                   EXSR      F2toFx
-     C     AccessMode    WhenEQ    §RrnSeq
+     C     AccessMode    WhenEQ    RRN_SEQ
      C                   Callp     CIO_setgtWithRRN(hFile01: Wrk#RcdNbr)
      C                   EXSR      F1toFx
-     C     AccessMode    WhenEQ    §SqlSeq
+     C     AccessMode    WhenEQ    SQL_SEQ
      C                   Other
      C                   Endsl
       *
@@ -5953,11 +5953,11 @@
       *      Nix tun, keine Datei vorhanden
      C                   ELSE
       *
-     C     AccessMode    IFEQ      §SqlSeq
+     C     AccessMode    IFEQ      SQL_SEQ
      C                   Callp     SQL_gotoTop(§MsgID: §MsgDta)
      C                   ELSE
      C                   EVAL      Wrk#KeyVal = '*LOVAL'
-     C                   EVAL      Wrk#RcdNbr = §LowRcdNbr
+     C                   EVAL      Wrk#RcdNbr = LOW_RCD_NBR
       *
      C                   EXSR      PBGenIntKy
      C                   EXSR      PBSetLL
@@ -5977,11 +5977,11 @@
       *      Nix tun, keine Datei vorhanden
      C                   ELSE
       *
-     C     AccessMode    IFEQ      §SqlSeq
+     C     AccessMode    IFEQ      SQL_SEQ
      C                   Callp     SQL_gotoBottom(§msgID: §msgDta)
      C                   ELSE
      C                   EVAL      Wrk#KeyVal = '*HIVAL'
-     C                   EVAL      Wrk#RcdNbr = §HghRcdNbr
+     C                   EVAL      Wrk#RcdNbr = HIGH_RCD_NBR
       *
      C                   EXSR      PBGenIntKy
      C                   EXSR      PBSetGT
@@ -6092,10 +6092,10 @@
      C                   Endif
       *
      C                   SELECT
-     C     ##RcdNbr      WHENLT    §LowRcdNbr
-     C                   EVAL      ##RcdNbr = §LowRcdNbr
-     C     ##RcdNbr      WHENGT    §HghRcdNbr
-     C                   EVAL      ##RcdNbr = §HghRcdNbr
+     C     ##RcdNbr      WHENLT    LOW_RCD_NBR
+     C                   EVAL      ##RcdNbr = LOW_RCD_NBR
+     C     ##RcdNbr      WHENGT    HIGH_RCD_NBR
+     C                   EVAL      ##RcdNbr = HIGH_RCD_NBR
      C                   OTHER
       *    Im gültigen Bereich ...
      C                   Endsl
@@ -6245,7 +6245,7 @@
      C                   Endif
       *
       *      ... prüfen auf phys. Datei bei Zugriff über SQL
-     C*** %SQL%          IF        (AccessMode = §SqlSeq and ATFILA <> '*PHY')
+     C*** %SQL%          IF        (AccessMode = SQL_SEQ and ATFILA <> '*PHY')
      C***                Exsr      MsgInvSqlFile
      C***                Leavesr
      C***                ENDIF
@@ -6270,15 +6270,15 @@
       *      ... wenn keine Schlüsselinformationen
       *          vorhanden sind, ...
      C     IsKeyAvail    IFEQ      bFalse
-     C     AccessMode    ANDEQ     §KeySeq
+     C     AccessMode    ANDEQ     KEY_SEQ
       *          ... dann über RRN zugreifen
-     C                   EVAL      AccessMode = §RrnSeq
+     C                   EVAL      AccessMode = RRN_SEQ
      C                   ELSE
       *          ... sonst Modus beibehalten
      C                   Endif
       *
       *  Ermitteln Sortierung bei Zugriff über SQL ...
-     C     AccessMode    IFEQ      §SqlSeq
+     C     AccessMode    IFEQ      SQL_SEQ
      C     SqlOrder      IFEQ      '*KEY'
      C                   CALLP     PEEK38(##File: ##Library: sqlOrder)
      C                   ELSE
@@ -6382,7 +6382,7 @@
       * -------------------------------------------------
       *
       *  Sortierung 2 nach Schlüsselfelder
-     C                   IF        (AccessMode = §KeySeq)
+     C                   IF        (AccessMode = KEY_SEQ)
      C                   If        CIO_open(hFile02
      C                                      : ##FILE
      C                                      : ##LIBRARY
@@ -6400,7 +6400,7 @@
      C                   Endif
       *
       *  Sortierung 1 nach Satzfolge
-     C                   IF        (AccessMode = §RrnSeq)
+     C                   IF        (AccessMode = RRN_SEQ)
      C                   If        CIO_open(hFile01
      C                                      : ##FILE
      C                                      : ##LIBRARY
@@ -6418,7 +6418,7 @@
      C                   Endif
       *
       *  Sortierung 3 nach Sql
-     C                   IF        (AccessMode = §SqlSeq)
+     C                   IF        (AccessMode = SQL_SEQ)
      C                   Clear                   USR0013
      C                   Callp     p_sndStsMg('USR0013': USR0013)
      C                   If        SQL_prepareStatement(
@@ -6460,12 +6460,12 @@
      C                   endif
       *
       *      ... aber Satzlänge größer 32766
-     C                   IF        File#X.RcdLen > §rcdBufLen
+     C                   IF        File#X.RcdLen > RCD_BUFF_LEN
      C                   EXSR      CloseFile
      C                   Callp     p_rmvPgmMg(§§pgmName)
      C                   CLEAR                   USR8207
      C                   Eval      §MsgID   = 'USR8207'
-     C                   Eval      USR82071 = §rcdBufLen
+     C                   Eval      USR82071 = RCD_BUFF_LEN
      C                   Eval      §MsgDta  = USR8207
      C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
      C                   ELSE
@@ -6499,7 +6499,7 @@
       *              ... Nachrichten entfernen
      C                   Callp     p_rmvPgmMg(§§pgmName)
       *              ... einblenden Aufsetzkey
-     C     AccessMode    IFEQ      §KeySeq
+     C     AccessMode    IFEQ      KEY_SEQ
      C                   EVAL      *IN70 = '1'
      C                   ELSE
      C                   EVAL      *IN70 = '0'
@@ -6508,11 +6508,11 @@
      C                   EXSR      C_PosCsr
       *
       *              ... Hexmode nicht bei Satzlänge größer 32766
-     C                   IF        (File#X.RcdLen > §rcdBufLen) and
+     C                   IF        (File#X.RcdLen > RCD_BUFF_LEN) and
      C                             (SET_DspMde = '*DSPHEX')
      C                   CLEAR                   USR8206
      C                   Eval      §MsgID    = 'USR8206'
-     C                   Eval      USR82061  = §rcdBufLen
+     C                   Eval      USR82061  = RCD_BUFF_LEN
      C                   Eval      §MsgDta   = USR8206
      C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
      C                   EXSR      S_DspNrm
@@ -6599,7 +6599,7 @@
      C                   DoU       (File#X.RcdFmt = ##Format) or (*in99 = *ON)
       *
      C                   Select
-     C     AccessMode    WhenEQ    §KeySeq
+     C     AccessMode    WhenEQ    KEY_SEQ
      C                   If        CIO_read(hFile02: bFalse
      C                                      : IO_Buff: IO_NullMap) = bEOF
      C                   Eval      *IN99 = *ON
@@ -6608,7 +6608,7 @@
      C                   Endif
      C                   EXSR      F2toFx
      C                   Eval      isFileError = CIO_isError(hFile02)
-     C     AccessMode    WhenEQ    §RrnSeq
+     C     AccessMode    WhenEQ    RRN_SEQ
      C                   If        CIO_read(hFile01: bFalse
      C                                      : IO_Buff: IO_NullMap) = bEOF
      C                   Eval      *IN99 = *ON
@@ -6617,7 +6617,7 @@
      C                   Endif
      C                   EXSR      F1toFx
      C                   Eval      isFileError = CIO_isError(hFile01)
-     C     AccessMode    WhenEQ    §SqlSeq
+     C     AccessMode    WhenEQ    SQL_SEQ
      C                   If        SQL_nextRow(IO_Buff: IO_NullMap: hFile03:
      C                                         §MsgID : §MsgDta)  = bEOF
      C                   Eval      *IN99 = *ON
@@ -6654,7 +6654,7 @@
      C                   DoU       (File#X.RcdFmt = ##Format) or (*in99 = *ON)
       *
      C                   Select
-     C     AccessMode    WhenEQ    §KeySeq
+     C     AccessMode    WhenEQ    KEY_SEQ
      C                   If        CIO_readp(hFile02: bFalse
      C                                       : IO_Buff: IO_NullMap) = bEOF
      C                   Eval      *IN99 = *ON
@@ -6662,7 +6662,7 @@
      C                   Eval      *IN99 = *OFF
      C                   Endif
      C                   EXSR      F2toFx
-     C     AccessMode    WhenEQ    §RrnSeq
+     C     AccessMode    WhenEQ    RRN_SEQ
      C                   If        CIO_readp(hFile01: bFalse
      C                                       : IO_Buff: IO_NullMap) = bEOF
      C                   Eval      *IN99 = *ON
@@ -6670,7 +6670,7 @@
      C                   Eval      *IN99 = *OFF
      C                   Endif
      C                   EXSR      F1toFx
-     C     AccessMode    WhenEQ    §SqlSeq
+     C     AccessMode    WhenEQ    SQL_SEQ
      C                   If        SQL_previousRow(IO_Buff: IO_NullMap: hFile03:
      C                                             §MsgID : §MsgDta) = bEOF
      C                   Eval      *IN99 = *ON
@@ -6996,7 +6996,7 @@
      C     GetRcdFrmt    BEGSR
       *
      C                   CALLP     PEEK12(SET_Dsp80: §CopyRight: ##FORMAT
-     C                                    : §BATCH
+     C                                    : MODE_BATCH
      C                                    : RCDL0200: YFmtNbr: yMsgID: yMsgDta)
       *
      C     YMsgID        IFNE      'USR8100'
@@ -7145,7 +7145,7 @@
      C                   eval      $$LmtCnt = '*ERROR'
      C                   endif
       *
-     C                   If        AccessMode = §SqlSeq
+     C                   If        AccessMode = SQL_SEQ
      C                   If        $$Records > SET_MAXRCDS
      C                   Eval      $$Records = 0
      C                   Eval      *IN79 = *OFF
@@ -7299,7 +7299,7 @@
      C                   ENDIF
       *
      C                   Select
-     C     AccessMode    WhenEQ    §KeySeq
+     C     AccessMode    WhenEQ    KEY_SEQ
       *  Sortierung 2 für Schlüsselfolge
      C                   IF        CIO_close(hFile02) = bTrue
      C                   EVAL      *IN99 = '0'
@@ -7307,7 +7307,7 @@
      C                   EVAL      *IN99 = '1'
      C                   ENDIF
      C                   EXSR      F2toFx
-     C     AccessMode    WhenEQ    §RrnSeq
+     C     AccessMode    WhenEQ    RRN_SEQ
       *  Sortierung 1 für Satzfolge
      C                   IF        CIO_close(hFile01) = bTrue
      C                   EVAL      *IN99 = '0'
@@ -7315,7 +7315,7 @@
      C                   EVAL      *IN99 = '1'
      C                   ENDIF
      C                   EXSR      F1toFx
-     C     AccessMode    WhenEQ    §SqlSeq
+     C     AccessMode    WhenEQ    SQL_SEQ
      C                   If        SQL_close(hFile03:§MsgID :§MsgDta)
      C                             = bTrue
      C                   Eval      *IN99 = *OFF
@@ -7516,15 +7516,15 @@
      C                   Endif
       *
       *      ... updMod
-     C                   If        (i_updModKey = §upd_dft  )
+     C                   If        (i_updModKey = UPD_M_DFT  )
      C                   If        SET_UpdMod = '1'
      C                   Eval      auth.updMod    = bTrue
      C                   Else
      C                   Eval      auth.updMod    = bFalse
      C                   Endif
      C                   Else
-     C                   If        (i_updModKey = §upd_yes  )  or
-     C                             (i_updModKey = §upd_noKey)
+     C                   If        (i_updModKey = UPD_M_YES  )  or
+     C                             (i_updModKey = UPD_M_NOKEY)
      C                   Eval      auth.updMod    = bTrue
      C                   Else
      C                   Eval      auth.updMod    = bFalse
@@ -7532,24 +7532,24 @@
      C                   Endif
       *
       *      ... keyUpd
-     C                   If        (i_updModKey = §upd_dft  )  or
-     C                             (i_updModKey = §upd_yes  )
+     C                   If        (i_updModKey = UPD_M_DFT  )  or
+     C                             (i_updModKey = UPD_M_YES  )
      C                   Eval      auth.updKey    = bTrue
      C                   Else
      C                   Eval      auth.updKey    = bFalse
      C                   Endif
       *
       *      ... chgSqlW
-     C                   If        (i_chgSqlW = §upd_dft  )  or
-     C                             (i_chgSqlW = §upd_yes  )
+     C                   If        (i_chgSqlW = UPD_M_DFT  )  or
+     C                             (i_chgSqlW = UPD_M_YES  )
      C                   Eval      auth.chgSqlW = bTrue
      C                   Else
      C                   Eval      auth.chgSqlW = bFalse
      C                   Endif
       *
       *      ... chgSqlO
-     C                   If        (i_chgSqlO = §upd_dft  )  or
-     C                             (i_chgSqlO = §upd_yes  )
+     C                   If        (i_chgSqlO = UPD_M_DFT  )  or
+     C                             (i_chgSqlO = UPD_M_YES  )
      C                   Eval      auth.chgSqlO = bTrue
      C                   Else
      C                   Eval      auth.chgSqlO = bFalse
@@ -7746,8 +7746,8 @@
      C     FloatKeys     BEGSR
       *
      C                   IF        (SET_FLOAT  = bTrue)     and
-     C                             ((AccessMode = §KeySeq)  or
-     C                              (AccessMode = §SqlSeq))
+     C                             ((AccessMode = KEY_SEQ)  or
+     C                              (AccessMode = SQL_SEQ))
       *
      C                   monitor
      C                   callp     PEEK34(SET_Dsp80: §CopyRight: '*FLOATKEYS'
@@ -8142,7 +8142,7 @@
       * - Öffnen der Datei
      C                   If        isOpen = bFalse
      C                   EVAL      AccessMode = i_access
-     C                   If        AccessMode = §SqlSeq
+     C                   If        AccessMode = SQL_SEQ
      C                   Eval      SqlWhere  = i_sqlWhere
      C                   Eval      SqlOrder  = i_sqlOrder
      C                   Endif
@@ -8294,10 +8294,10 @@
       *
      P f_chain00       B
      D                 PI             1A
-     D  i_rrn                              value  like(r§rcdNbr  )
-     D  i_file                             value  like(r§file    )
-     D  i_lib                              value  like(r§lib     )
-     D  i_mbr                              value  like(r§mbr     )
+     D  i_rrn                              value  like(rcdNbr_t)
+     D  i_file                             value  like(file_t)
+     D  i_lib                              value  like(lib_t)
+     D  i_mbr                              value  like(mbr_t)
      D  i_rcdFmt                     10A   value
       * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       *
@@ -8363,10 +8363,10 @@
       *
      P f_chain04       B
      D                 PI             1A
-     D  i_rrn                              value  like(r§rcdNbr  )
-     D  i_file                             value  like(r§file    )
-     D  i_lib                              value  like(r§lib     )
-     D  i_mbr                              value  like(r§mbr     )
+     D  i_rrn                              value  like(rcdNbr_t)
+     D  i_file                             value  like(file_t)
+     D  i_lib                              value  like(lib_t)
+     D  i_mbr                              value  like(mbr_t)
      D  i_rcdFmt                     10A   value
       * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       *

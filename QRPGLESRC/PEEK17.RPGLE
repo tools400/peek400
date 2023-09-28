@@ -104,14 +104,14 @@
       *
      D yPgm            S             10A   inz
      D yKey            S             10A   inz
-     D yPosF24         S                   like(r§int4    ) inz
+     D yPosF24         S                   like(int4_t) inz
      D yFKeys          S             18A   DIM(32)       INZ(*BLANKS)
-     D yNbrOfKeys      S                   like(r§int4    ) inz
+     D yNbrOfKeys      S                   like(int4_t) inz
      D yMsgID          S              7A   INZ(*BLANKS)
      D yMsgDta         S            512A   INZ(*BLANKS)
       *
      D YPgmCmd         S             10A   INZ(*BLANKS)
-     D YCmdDta         S                   LIKE(r§pgmCmdDt) INZ(*BLANKS)
+     D YCmdDta         S                   LIKE(pgmCmdDt_t) INZ(*BLANKS)
       *
      D YDsp80          S              1A   INZ(*BLANKS)
      D YCopyRight      S            512A   INZ(*BLANKS)
@@ -121,7 +121,7 @@
       /COPY QCOPYLE,SCRNFKEYS
       *----------------------------------------------------*
       *
-     D SfBot           S                   like(r§int4    ) inz
+     D SfBot           S                   like(int4_t) inz
      D §NbrFKeys       C                   CONST(2)
       *
      D §Numeric        C                   CONST('1234567890')
@@ -129,7 +129,7 @@
      D MustWait        S              1A   INZ(bFalse)
       *** IsNumeric       S              1A   INZ(bFalse)
       *
-     D X               S                   like(r§int4    ) inz
+     D X               S                   like(int4_t) inz
       *
      D R_Sign          S                   INZ(*BLANKS)   LIKE(##Sign )
      D R_Arg30         S                   INZ(*BLANKS)   LIKE(##Arg  )
@@ -140,9 +140,9 @@
      D R_A1            S              1A   INZ(*BLANKS)
      D R_Field         S                   INZ(*BLANKS)   LIKE(##Field)
       *
-     D PEEK21_NAME     S                   like(r§pgmCallN) inz
-     D PEEK23_NAME     S                   like(r§pgmCallN) inz
-     D PEEK37_NAME     S                   like(r§pgmCallN) inz
+     D PEEK21_NAME     S                   like(pgmCallN_t) inz
+     D PEEK23_NAME     S                   like(pgmCallN_t) inz
+     D PEEK37_NAME     S                   like(pgmCallN_t) inz
       *
       /COPY QCOPYLE,PPEEK21
       /COPY QCOPYLE,PPEEK23
@@ -153,17 +153,17 @@
       *
       /COPY QCOPYLE,CEECNDHDLR
       *
-     D isInzSr         S                   like(r§bool) inz(bFalse)
+     D isInzSr         S                   like(bool_t) inz(bFalse)
       *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
       *
      D PEEK17          PI
-     D  i_dsp80                            const like(r§bool)
-     D  i_copyright                        const like(r§copyRght)
-     D  i_qFile                            const like(r§qObj)
-     D  i_member                           const like(r§mbr)
+     D  i_dsp80                            const like(bool_t)
+     D  i_copyright                        const like(copyRght_t)
+     D  i_qFile                            const like(qObj_t)
+     D  i_member                           const like(mbr_t)
      D  o_field                      10A
      D  o_operation                  10A
      D  o_argument                   63A
@@ -171,8 +171,8 @@
      D  o_srchNbrs                   10P 0
      D  o_srchType                   10A
      D  o_srchCase                    1A
-     D  o_sgID                                   like(r§msgId)
-     D  o_msgDta                                 like(r§msgDta)
+     D  o_sgID                                   like(msgId_t)
+     D  o_msgDta                                 like(msgDta_t)
       *
       *----------------------------------------------------*
       *  Schlüsselliste für PEEKFLD

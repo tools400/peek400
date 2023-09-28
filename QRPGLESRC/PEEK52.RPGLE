@@ -71,21 +71,21 @@
       *----------------------------------------------------*
       *
      D yFKeys          S             18A   dim(32) inz
-     D yNbrOfKeys      S                   like(r§int4 ) inz
+     D yNbrOfKeys      S                   like(int4_t) inz
      D yMsgID          S              7A   inz
      D yMsgDta         S            512A   inz
      D YPgmCmd         S             10A   inz
-     D YCmdDta         S                   like(r§pgmCmdDt) inz
+     D YCmdDta         S                   like(pgmCmdDt_t) inz
       *
       *---Definition der F-Tastenbildschirmfelder----------*
       /COPY QCOPYLE,SCRNFKEYS
       *----------------------------------------------------*
       *
-     D SfBot           S                   like(r§int4    ) inz
+     D SfBot           S                   like(int4_t) inz
      D NbrFKeys        C                   CONST(2)
       *
-     D PEEK21_NAME     S                   like(r§pgmCallN) inz
-     D PEEK23_NAME     S                   like(r§pgmCallN) inz
+     D PEEK21_NAME     S                   like(pgmCallN_t) inz
+     D PEEK23_NAME     S                   like(pgmCallN_t) inz
       *
      D doGenerate      S               N   inz(bFalse)
       *
@@ -97,23 +97,23 @@
       *
       /COPY QCOPYLE,CEECNDHDLR
       *
-     D isInzSr         S                   like(r§bool) inz(bFalse)
+     D isInzSr         S                   like(bool_t) inz(bFalse)
       *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
       *
      D PEEK52          PI
-     D  i_dsp80                            const like(r§dsp80)
-     D  i_copyright                        const like(r§copyRght)
-     D  o_alwLc                                  like(r§bool)
-     D  o_case                                   like(r§bool)
-     D  o_cdLock                                 like(r§bool)
-     D  o_nullDft                                like(r§bool)
-     D  o_keepCrs                                like(r§bool)
-     D  o_msgID                                  like(r§msgID)
-     D  o_msgDta                                 like(r§msgDta)
-     D  i_isUnload                         const like(r§msgID)
+     D  i_dsp80                            const like(dsp80_t)
+     D  i_copyright                        const like(copyRght_t)
+     D  o_alwLc                                  like(bool_t)
+     D  o_case                                   like(bool_t)
+     D  o_cdLock                                 like(bool_t)
+     D  o_nullDft                                like(bool_t)
+     D  o_keepCrs                                like(bool_t)
+     D  o_msgID                                  like(msgID_t)
+     D  o_msgDta                                 like(msgDta_t)
+     D  i_isUnload                         const like(msgID_t)
       *
       *---------------------------------------------------*
       *

@@ -4,6 +4,6 @@
       /else
      D PEEK62          PR                  extpgm(PEEK62_NAME)
       /endif
-     D  i_file                             const like(r§file)
-     D  i_lib                              const like(r§lib)
+     D  i_file                             const like(file_t)
+     D  i_lib                              const like(lib_t)
       *

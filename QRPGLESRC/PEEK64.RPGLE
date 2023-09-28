@@ -69,40 +69,40 @@
       /COPY QCOPYLE,FLDL0100
       *----------------------------------------------------*
       *
-     D peek_01_DS      DS                  likeds(r§infds)
+     D peek_01_DS      DS                  likeds(infds_t)
       *
      D*                DS                  based(pXFldInhalt)
-     D*xFldInhaltSbcs                      like(r§rcdBuf)
-     D*xFldInhaltUcs2                      like(r§rcdBufUcs2)
+     D*xFldInhaltSbcs                      like(rcdBuf_t)
+     D*xFldInhaltUcs2                      like(rcdBufUcs2_t)
      D*                                    overlay(xFldInhaltSbcs)
       *
-     D yPgmCmd         S                   like(r§pgmCmd)
-     D yCmdDta         S                   like(r§pgmCmdDt)
-     D yMsgID          S                   like(r§msgID)
-     D yMsgDta         S                   like(r§msgDta)
+     D yPgmCmd         S                   like(pgmCmd_t)
+     D yCmdDta         S                   like(pgmCmdDt_t)
+     D yMsgID          S                   like(msgID_t)
+     D yMsgDta         S                   like(msgDta_t)
       *
-     D yFKeys          S                   like(r§fKeyDsp) dim(32)
-     D yNbrOfKeys      S                   like(r§int4) inz
+     D yFKeys          S                   like(fKeyDsp_t) dim(32)
+     D yNbrOfKeys      S                   like(int4_t) inz
       *
       *---Definition der F-Tastenbildschirmfelder----------*
       /COPY QCOPYLE,SCRNFKEYS
       *----------------------------------------------------*
       *
-     D sfBot           S                   like(r§int4)
+     D sfBot           S                   like(int4_t)
      D §nbrFKeys       C                   const(3)
       *
-     D PEEK21_NAME     S                   like(r§pgmCallN)
-     D PEEK23_NAME     S                   like(r§pgmCallN)
+     D PEEK21_NAME     S                   like(pgmCallN_t)
+     D PEEK23_NAME     S                   like(pgmCallN_t)
       *
       * Arbeitsfelder
-     D isPgmError      S                   like(r§bool) inz(bFalse)
-     D isDataChg       S                   like(r§bool) inz(bFalse)
+     D isPgmError      S                   like(bool_t) inz(bFalse)
+     D isDataChg       S                   like(bool_t) inz(bFalse)
      D                 DS
-     D pFldInhaltSbcs                      like(r§rcdBuf    ) inz
-     D pFldInhaltUcs2                      like(r§rcdBufUcs2) inz
+     D pFldInhaltSbcs                      like(rcdBuf_t) inz
+     D pFldInhaltUcs2                      like(rcdBufUcs2_t) inz
      D                                     overlay(pFldInhaltSbcs)
-     D pLength         S                   like(r§int4)
-     D len             S                   like(r§int4)
+     D pLength         S                   like(int4_t)
+     D len             S                   like(int4_t)
      D isFieldTooLarge...
      D                 S               N
      D maxFieldLength  S             10I 0
@@ -120,23 +120,23 @@
       *
       /COPY QCOPYLE,CEECNDHDLR
       *
-     D isInzSr         S                   like(r§bool) inz(bFalse)
+     D isInzSr         S                   like(bool_t) inz(bFalse)
       *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
       *
      D PEEK64          PI
-     D  i_dsp80                            const like(r§dsp80)
-     D  i_headType                         const like(r§headTyp)
-     D  i_copyright                        const like(r§copyRght)
-     D  i_fldName                          const like(r§fieldNme)
-     D  io_fldInhalt                             likeds(r§fldInhalt)
-     D  io_length                                like(r§int4)
-     D  i_protect                          const like(r§bool)
-     D  i_isUcs2                           const like(r§int4)
-     D  o_msgID                                  like(r§msgID)
-     D  o_msgDta                                 like(r§msgDta)
+     D  i_dsp80                            const like(dsp80_t)
+     D  i_headType                         const like(headTyp_t)
+     D  i_copyright                        const like(copyRght_t)
+     D  i_fldName                          const like(fieldNme_t)
+     D  io_fldInhalt                             likeds(fldInhalt_t)
+     D  io_length                                like(int4_t)
+     D  i_protect                          const like(bool_t)
+     D  i_isUcs2                           const like(int4_t)
+     D  o_msgID                                  like(msgID_t)
+     D  o_msgDta                                 like(msgDta_t)
       *
       *----------------------------------------------------*
       *  Schlüsselliste für PEEKFLD

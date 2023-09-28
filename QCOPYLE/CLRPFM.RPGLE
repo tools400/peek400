@@ -1,46 +1,46 @@
-?     *                                                                                       RADDAT
-     C                   MOVEL (P) §FILE         §FILE            10                          RADDAT
-     C                   MOVEL (P) §LIB          §LIB             10                          RADDAT
-     C                   MOVEL (P) §MBR          §MBR             10                          RADDAT
-?     *                                                                                       RADDAT
-     C                   MOVEL (P) §IN99         §IN99             1                          RADDAT
-?     *                                                                                       RADDAT
-     C                   MOVEL (P) §RETURN       §RETURN           1                          RADDAT
-     C                   MOVEL (P) §QCMD         §QCMD           256                          RADDAT
-     C                   Z-ADD     §QCMDL        §QCMDL           15 5                        RADDAT
-?     *                                                                                       RADDAT
-?     *  Löschen Teildatei ...                                                                RADDAT
-?     *     CLRPFM                                                                            RADDAT
-     C                   MOVEL (P) 'CLRPFM'      §QCMD                                        RADDAT
-?     *     Datei                                                                             RADDAT
-     C                   CAT       'FILE(':1     §QCMD                                        RADDAT
-?     *     - Bibliothek                                                                      RADDAT
- B01 C     §LIB          IFNE      *BLANKS                                                    RADDAT
-     C                   CAT       §LIB:0        §QCMD                                        RADDAT
- X01 C                   ELSE                                                                 RADDAT
-     C                   CAT       '*LIBL':0     §QCMD                                        RADDAT
- E01 C                   ENDIF                                                                RADDAT
-     C                   CAT       '/':0         §QCMD                                        RADDAT
-     C                   CAT       §FILE:0       §QCMD                                        RADDAT
-     C                   CAT       ')':0         §QCMD                                        RADDAT
-?     *     Member                                                                            RADDAT
-     C                   CAT       'MBR(':1      §QCMD                                        RADDAT
- B01 C     §MBR          IFNE      *BLANKS                                                    RADDAT
-     C                   CAT       §MBR:0        §QCMD                                        RADDAT
- X01 C                   ELSE                                                                 RADDAT
-     C                   CAT       '*NONE'       §QCMD                                        RADDAT
- E01 C                   ENDIF                                                                RADDAT
-     C                   CAT       ')':0         §QCMD                                        RADDAT
-?     *                                                                                       RADDAT
-?     *     Prüfung durchführen ...                                                           RADDAT
-     C                   MOVEL(P)  *IN99         §IN99                                        RADDAT
-?     *                                                                                       RADDAT
-     C                   Z-ADD     256           §QCMDL                                       RADDAT
-     C                   CALL      'QCMDEXC'                            99                    RADDAT
-     C                   PARM                    §QCMD                                        RADDAT
-     C                   PARM                    §QCMDL                                       RADDAT
-?     *                                                                                       RADDAT
-     C                   MOVEL(P)  *IN99         §RETURN                                      RADDAT
-?     *                                                                                       RADDAT
-     C                   MOVEL(P)  §IN99         *IN99                                        RADDAT
-?     *                                                                                       RADDAT
+      *
+     C                   MOVEL (P) §FILE         §FILE            10
+     C                   MOVEL (P) §LIB          §LIB             10
+     C                   MOVEL (P) §MBR          §MBR             10
+      *
+     C                   MOVEL (P) §IN99         §IN99             1
+      *
+     C                   MOVEL (P) §RETURN       §RETURN           1
+     C                   MOVEL (P) §QCMD         §QCMD           256
+     C                   Z-ADD     §QCMDL        §QCMDL           15 5
+      *
+      *  Löschen Teildatei ...
+      *     CLRPFM
+     C                   MOVEL (P) 'CLRPFM'      §QCMD
+      *     Datei
+     C                   CAT       'FILE(':1     §QCMD
+      *     - Bibliothek
+     C     §LIB          IFNE      *BLANKS
+     C                   CAT       §LIB:0        §QCMD
+     C                   ELSE
+     C                   CAT       '*LIBL':0     §QCMD
+     C                   ENDIF
+     C                   CAT       '/':0         §QCMD
+     C                   CAT       §FILE:0       §QCMD
+     C                   CAT       ')':0         §QCMD
+      *     Member
+     C                   CAT       'MBR(':1      §QCMD
+     C     §MBR          IFNE      *BLANKS
+     C                   CAT       §MBR:0        §QCMD
+     C                   ELSE
+     C                   CAT       '*NONE'       §QCMD
+     C                   ENDIF
+     C                   CAT       ')':0         §QCMD
+      *
+      *     Prüfung durchführen ...
+     C                   MOVEL(P)  *IN99         §IN99
+      *
+     C                   Z-ADD     256           §QCMDL
+     C                   CALL      'QCMDEXC'                            99
+     C                   PARM                    §QCMD
+     C                   PARM                    §QCMDL
+      *
+     C                   MOVEL(P)  *IN99         §RETURN
+      *
+     C                   MOVEL(P)  §IN99         *IN99
+      *

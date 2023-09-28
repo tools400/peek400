@@ -28,7 +28,7 @@
       /COPY QCOPYLE,COPYRIGHT
       *
       * Für Sortierung nach relativer Satznummer
-     D g_hFile03       DS                  likeds(r§hFile  ) inz
+     D g_hFile03       DS                  likeds(hFile_t) inz
       *
      D g_file          S             10A   inz
      D g_lib           S             10A   inz
@@ -49,8 +49,8 @@
       *
       *-------------------------------------------------------------------*
      D f_isSqlErr      PR             1A
-     D  o_msgID                                   like(r§msgID  )
-     D  o_msgDta                                  like(r§msgDta )
+     D  o_msgID                                   like(msgID_t)
+     D  o_msgDta                                  like(msgDta_t)
       *
       *-------------------------------------------------------------------*
      D f_sqlMsgID      PR             7A
@@ -59,8 +59,8 @@
       *-------------------------------------------------------------------*
      D p_cvtSqlMg      PR
      D  i_toMsgID                     7A   const
-     D  io_msgID                                  like(r§msgID  )
-     D  io_msgDta                                 like(r§msgDta )
+     D  io_msgID                                  like(msgID_t)
+     D  io_msgDta                                 like(msgDta_t)
       *
       *-------------------------------------------------------------------*
      D f_getField      PR           512A
@@ -85,31 +85,31 @@
       *
      P SQL_prepareStatement...
      P                 B                   Export
-     D                 PI                         like(r§bool    )
-     D  i_check                            value  like(r§bool    )
-     D  i_file                             value  like(r§file    )
-     D  i_lib                              value  like(r§lib     )
-     D  i_mbr                              value  like(r§mbr     )
-     D  i_fmt                              value  like(r§rcdFmt  )
+     D                 PI                         like(bool_t)
+     D  i_check                            value  like(bool_t)
+     D  i_file                             value  like(file_t)
+     D  i_lib                              value  like(lib_t)
+     D  i_mbr                              value  like(mbr_t)
+     D  i_fmt                              value  like(rcdFmt_t)
      D  i_sqlSelct                  512A   value
      D  i_sqlOrder                  512A   value
-     D  o_msgID                                   like(r§msgID   )
-     D  o_msgDta                                  like(r§msgDta  )
+     D  o_msgID                                   like(msgID_t)
+     D  o_msgDta                                  like(msgDta_t)
       *
       *  definieren Funktionswert ...
      D f_prepStmt      S              1A
       *
      D i               S             10I 0 inz                                  !
-     D sqlSelectStmt   S                   like(r§sqlStmt ) inz
-     D sqlCountStmt    S                   like(r§sqlStmt ) inz
+     D sqlSelectStmt   S                   like(sqlStmt_t) inz
+     D sqlCountStmt    S                   like(sqlStmt_t) inz
       *
      D §msgID          S              7A   inz
      D §msgDta         S            512A   inz
       *
-     D pFile           S                   like(r§file    ) inz
-     D pLib            S                   like(r§lib     ) inz
-     D pMbr            S                   like(r§mbr     ) inz
-     D pFmt            S                   like(r§rcdFmt  ) inz
+     D pFile           S                   like(file_t) inz
+     D pLib            S                   like(lib_t) inz
+     D pMbr            S                   like(mbr_t) inz
+     D pFmt            S                   like(rcdFmt_t) inz
       *
       * ------------------------------------------------------------------------
       *
@@ -215,13 +215,13 @@
       *
      P SQL_open...
      P                 B                   Export
-     D                 PI                         like(r§bool    )
-     D  o_hFile                                   likeds(r§hFile )
-     D  o_msgID                                   like(r§msgID   )
-     D  o_msgDta                                  like(r§msgDta  )
+     D                 PI                         like(bool_t)
+     D  o_hFile                                   likeds(hFile_t)
+     D  o_msgID                                   like(msgID_t)
+     D  o_msgDta                                  like(msgDta_t)
       *
       *  definieren Funktionswert ...
-     D f_opnSql        S                   like(r§bool  ) inz(bFalse)
+     D f_opnSql        S                   like(bool_t) inz(bFalse)
       * ------------------------------------------------------------------------
       *
       *  ovrDbf
@@ -284,24 +284,24 @@
       *
      P SQL_nextRow...
      P                 B                   Export
-     D                 PI                         like(r§bool    )
-     D  o_buffer                                  like(r§rcdBuf  )
-     D  o_nullMap                                 like(r§nullMap )
+     D                 PI                         like(bool_t)
+     D  o_buffer                                  like(rcdBuf_t)
+     D  o_nullMap                                 like(nullMap_t)
      D                                            dim(§nullMapSize)
-     D  o_hFile                                   likeds(r§hFile )
-     D  o_msgID                                   like(r§msgID   )
-     D  o_msgDta                                  like(r§msgDta  )
+     D  o_hFile                                   likeds(hFile_t)
+     D  o_msgID                                   like(msgID_t)
+     D  o_msgDta                                  like(msgDta_t)
       *
       *  definieren Funktionswert ...
-     D isEOF           S                   like(r§bool ) inz(bTrue)
+     D isEOF           S                   like(bool_t) inz(bTrue)
       *
       *  definieren lokale Variablen ...
      D recNbr          S             10I 0
       *
      D IO_Buff         DS                  based(ptrBuffer)
-     D  IO_BuffFld                         like(r§rcdBuf)
+     D  IO_BuffFld                         like(rcdBuf_t)
       *
-     D IO_NullMap      S                   like(r§nullMap)
+     D IO_NullMap      S                   like(nullMap_t)
      D                                     dim(§nullMapSize)
      D                                     based(ptrNullMap)
       * ------------------------------------------------------------------------
@@ -354,24 +354,24 @@
       *
      P SQL_previousRow...
      P                 B                   Export
-     D                 PI                         like(r§bool    )
-     D  o_buffer                                  like(r§rcdBuf  )
-     D  o_nullMap                                 like(r§nullMap )
+     D                 PI                         like(bool_t)
+     D  o_buffer                                  like(rcdBuf_t)
+     D  o_nullMap                                 like(nullMap_t)
      D                                            dim(§nullMapSize)
-     D  o_hFile                                   likeds(r§hFile )
-     D  o_msgID                                   like(r§msgID   )
-     D  o_msgDta                                  like(r§msgDta  )
+     D  o_hFile                                   likeds(hFile_t)
+     D  o_msgID                                   like(msgID_t)
+     D  o_msgDta                                  like(msgDta_t)
       *
       *  definieren Funktionswert ...
-     D isEOF           S                   like(r§bool ) inz(bTrue)
+     D isEOF           S                   like(bool_t) inz(bTrue)
       *
       *  definieren lokale Variablen ...
      D recNbr          S             10I 0
       *
      D IO_Buff         DS                  based(ptrBuffer)
-     D  IO_BuffFld                         like(r§rcdBuf)
+     D  IO_BuffFld                         like(rcdBuf_t)
       *
-     D IO_NullMap      S                   like(r§nullMap)
+     D IO_NullMap      S                   like(nullMap_t)
      D                                     dim(§nullMapSize)
      D                                     based(ptrNullMap)
       * ------------------------------------------------------------------------
@@ -424,12 +424,12 @@
       *
      P SQL_gotoTop...
      P                 B                   Export
-     D                 PI                         like(r§bool   )
-     D  o_msgID                                   like(r§msgID  )
-     D  o_msgDta                                  like(r§msgDta )
+     D                 PI                         like(bool_t)
+     D  o_msgID                                   like(msgID_t)
+     D  o_msgDta                                  like(msgDta_t)
       *
       *  definieren Funktionswert ...
-     D f_topRow        S                   like(r§bool ) inz(bFalse)
+     D f_topRow        S                   like(bool_t) inz(bFalse)
       *
       * ------------------------------------------------------------------------
       *
@@ -459,12 +459,12 @@
       *
      P SQL_gotoBottom...
      P                 B                   Export
-     D                 PI                         like(r§bool   )
-     D  o_msgID                                   like(r§msgID  )
-     D  o_msgDta                                  like(r§msgDta )
+     D                 PI                         like(bool_t)
+     D  o_msgID                                   like(msgID_t)
+     D  o_msgDta                                  like(msgDta_t)
       *
       *  definieren Funktionswert ...
-     D f_botRow        S                   like(r§bool ) inz(bFalse)
+     D f_botRow        S                   like(bool_t) inz(bFalse)
       *
       * ------------------------------------------------------------------------
       *
@@ -494,13 +494,13 @@
       *
      P SQL_close...
      P                 B                   Export
-     D                 PI                         like(r§bool    )
-     D  o_hFile                                   likeds(r§hFile )
-     D  o_msgID                                   like(r§msgID   )
-     D  o_msgDta                                  like(r§msgDta  )
+     D                 PI                         like(bool_t)
+     D  o_hFile                                   likeds(hFile_t)
+     D  o_msgID                                   like(msgID_t)
+     D  o_msgDta                                  like(msgDta_t)
       *
       *  definieren Funktionswert ...
-     D f_clsSql        S                   like(r§bool ) inz(bFalse)
+     D f_clsSql        S                   like(bool_t) inz(bFalse)
       *
       * ------------------------------------------------------------------------
       *
@@ -552,8 +552,8 @@
      D f_count         S             10I 0 inz
       *
       *  definieren Arbeitsfelder
-     D msgID           S                   like(r§msgID  ) inz
-     D msgDta          S                   like(r§msgDta ) inz
+     D msgID           S                   like(msgID_t) inz
+     D msgDta          S                   like(msgDta_t) inz
       * ------------------------------------------------------------------------
       *
       *  ovrDbf
@@ -600,8 +600,8 @@
       *
      P f_isSqlErr      B
      D                 PI             1A
-     D  o_msgID                                   like(r§msgID  )
-     D  o_msgDta                                  like(r§msgDta )
+     D  o_msgID                                   like(msgID_t)
+     D  o_msgDta                                  like(msgDta_t)
       *
       *  definieren Funktionswert ...
      D f_isSqlErr      S              1A
@@ -668,8 +668,8 @@
      P p_cvtSqlMg      B
      D                 PI
      D  i_toMsgID                     7A   const
-     D  io_msgID                                  like(r§msgID  )
-     D  io_msgDta                                 like(r§msgDta )
+     D  io_msgID                                  like(msgID_t)
+     D  io_msgDta                                 like(msgDta_t)
       *
       *---Nachrichten--------------------------------------*
       /COPY QCOPYLE,API_ERROR
@@ -735,9 +735,9 @@
       *  definieren Funktionswert ...
      D f_chgField      S            512A
       *
-     D x               S                   like(r§int4    ) inz
-     D y               S                   like(r§int4    ) inz
-     D lenStr          S                   like(r§int4    ) inz
+     D x               S                   like(int4_t) inz
+     D y               S                   like(int4_t) inz
+     D lenStr          S                   like(int4_t) inz
       *
      D isHyphen        S              1A   inz
      D isField         S              1A   inz

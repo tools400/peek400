@@ -48,20 +48,20 @@
       *  F E L D - D E F I N I T I O N E N                 *
       *----------------------------------------------------*
       *
-     D i               S                   like(r§int4    ) inz
-     D X               S                   like(r§int4    ) inz
-     D Y               S                   like(r§int4    ) inz
-     D Z               S                   like(r§int4    ) inz
+     D i               S                   like(int4_t) inz
+     D X               S                   like(int4_t) inz
+     D Y               S                   like(int4_t) inz
+     D Z               S                   like(int4_t) inz
       *
-     D wrk_MsgID       S                   like(r§msgID   ) inz
-     D wrk_MsgTxt      S                   like(r§msgDta  ) inz
-     D Wrk_Key         S                   LIKE(R§KEY     )
+     D wrk_MsgID       S                   like(msgID_t) inz
+     D wrk_MsgTxt      S                   like(msgDta_t) inz
+     D Wrk_Key         S                   LIKE(KEY_t)
      D                                     INZ
-     D Wrk_Sectn       S                   LIKE(R§SECTION )
+     D Wrk_Sectn       S                   LIKE(SECTION_t)
      D                                     INZ
-     D data            S                   LIKE(R§SET0000 )
+     D data            S                   LIKE(SET0000_t)
      D                                     INZ
-     D pgmCmd          S                   LIKE(R§PGMCMD  )
+     D pgmCmd          S                   LIKE(PGMCMD_t)
      D                                     INZ
       *
       /COPY QCOPYLE,F_PEEK53
@@ -74,10 +74,10 @@
       ********************************************************************
       *
      D PEEK27          PI
-     D  i_pgm                              const like(r§pgm)
-     D  o_choices                                like(r§choice) dim(32)
-     D  o_numChoices                             like(r§int4)
-     D  o_exclKeys                         const like(r§pgmCmd) dim(25)
+     D  i_pgm                              const like(pgm_t)
+     D  o_choices                                like(choice_t) dim(32)
+     D  o_numChoices                             like(int4_t)
+     D  o_exclKeys                         const like(pgmCmd_t) dim(25)
      D                                           options(*nopass)
       *
       *----------------------------------------------------*

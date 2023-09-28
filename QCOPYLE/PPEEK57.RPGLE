@@ -4,12 +4,12 @@
       /else
      D PEEK57          PR                  extpgm(PEEK57_NAME)
       /endif
-     D  i_dsp80                            const like(r§dsp80)
-     D  i_copyright                        const like(r§copyRght)
-     D  i_envFile                          const like(r§file)
-     D  i_envLib                           const like(r§lib)
-     D  i_envMbr                           const like(r§mbr)
-     D  i_envText                          const like(r§text)
-     D  o_msgID                                  like(r§msgID)
-     D  o_msgDta                                 like(r§msgDta)
+     D  i_dsp80                            const like(dsp80_t)
+     D  i_copyright                        const like(copyRght_t)
+     D  i_envFile                          const like(file_t)
+     D  i_envLib                           const like(lib_t)
+     D  i_envMbr                           const like(mbr_t)
+     D  i_envText                          const like(text_t)
+     D  o_msgID                                  like(msgID_t)
+     D  o_msgDta                                 like(msgDta_t)
       *

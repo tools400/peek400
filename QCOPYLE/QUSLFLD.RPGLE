@@ -14,16 +14,16 @@
       *  Input Parameter Section
      d QUSLFLD_inpParm_t...
      d                 ds                  qualified template
-     d  qUsrSpc                            likeds(r§qObj)
+     d  qUsrSpc                            likeds(qObj_t)
      d  format                        8a
-     d  qFile                              likeds(r§qObj)
+     d  qFile                              likeds(qObj_t)
      d  rcdFmt                       10a
      d  override                      1a
       *
       *  Header Section
      d QUSLFLD_header_t...
      d                 ds                  qualified template
-     d  qFileUsed                          likeds(r§qObj)
+     d  qFileUsed                          likeds(qObj_t)
      d  type                         10a
      d  rcdFmtUsed                   10a
      d  rcdLen                       10i 0

@@ -5,70 +5,73 @@
       *===============================================================*
       *
       *  Referenzfelder:
-     D r§choice        S             75A   template
-     D r§headerType    S             10A   template
-     D r§attr          S             10A   template
-     D r§attrType      S              1A   template
-     D r§attrValue     S            512A   template
-     D r§accMode       S              1A   template
-     D r§bool          S              1A   template
-     D r§cmdBuffer     S          32702A   template
-     D r§copyRght      S                   like(r§msgDta) template
-     D r§dsp80         S                   like(r§bool) template
-     D r§fieldNme      S             10A   template
-     D r§file          S             10A   template
-     D r§fKeyDsp       S             18A   template
-     D r§fmt           S             10A   template
-     D r§fmtId         S             13A   template
-     D r§headTyp       S             10A   template
-     D r§hexBuf        S          65532A   template
-     D §hexBufLen      C                   const(65532)
-     D r§keyBuf        S           2000A   template
-     D §keyBufLen      C                   const(2000)
-     D r§lib           S             10A   template
-     D r§mbr           S             10A   template
-     D r§mbrNbr        S             10I 0 template
-     D r§rcdFmt        S             10A   template
-     D r§text          S             50a   template
-     D r§colHeading    S            128A   varying template
+     D choice_t        S             75A   template
+     D headerType_t    S             10A   template
+     D attr_t          S             10A   template
+     D attrType_t      S              1A   template
+     D attrValue_t     S            512A   template
+     D accMode_t       S              1A   template
+     D bool_t          S              1A   template
+     D cmdBuffer_t     S          32702A   template
+     D copyRght_t      S                   like(msgDta_t) template
+     D dsp80_t         S                   like(bool_t) template
+     D fieldNme_t      S             10A   template
+     D file_t          S             10A   template
+     D fKeyDsp_t       S             18A   template
+     D fmt_t           S             10A   template
+     D fmtId_t         S             13A   template
+     D headTyp_t       S             10A   template
       *
-     D r§rcdFmtInf     DS                  qualified template
-     D  name                               like(r§rcdFmt)
-     D  id                                 like(r§fmtid)
+     D hexBuf_t        S          65532A   template
       *
-     D r§mod           S             10A   template
-     D r§msgDta        S            512A   template
-     D r§msgID         S              7A   template
-     D r§msgType       S             10A   template
+     D keyBuf_t        S           2000A   template
+     D KEY_BUFF_LEN    C                   const(2000)
       *
-     D r§function      S             10A   template
-     D r§option        S             10A   template
-     D r§mode          S             10A   template
-     D r§type          S             10A   template
+     D lib_t           S             10A   template
+     D mbr_t           S             10A   template
+     D mbrNbr_t        S             10I 0 template
+     D rcdFmt_t        S             10A   template
+     D text_t          S             50a   template
+     D colHeading_t    S            128A   varying template
       *
-     D r§pgm           S             10A   template
-     D r§pgmCallN      S             21A   template
-     D r§pgmCmd        S             10A   template
-     D r§pgmCmdDt      S            256A   template
-     D r§proc          S            256A   template
-     D r§rcdBuf        S          32766A   template
-     D r§rcdBufUcs2    S          16383C   template
+     D rcdFmtInf_t     DS                  qualified template
+     D  name                               like(rcdFmt_t)
+     D  id                                 like(fmtid_t)
+      *
+     D mod_t           S             10A   template
+     D msgDta_t        S            512A   template
+     D msgID_t         S              7A   template
+     D msgType_t       S             10A   template
+      *
+     D function_t      S             10A   template
+     D option_t        S             10A   template
+     D mode_t          S             10A   template
+     D type_t          S             10A   template
+      *
+     D pgm_t           S             10A   template
+     D pgmCallN_t      S             21A   template
+     D pgmCmd_t        S             10A   template
+     D pgmCmdDt_t      S            256A   template
+     D proc_t          S            256A   template
+     D rcdBuf_t        S          32766A   template
+     D rcdBufUcs2_t    S          16383C   template
       *
      D rcdBuffer_t     DS                  qualified template
      D  sbcs                      32766A
      D  ucs2                      16383C   overlay(sbcs)
+     D RCD_BUFF_LEN    C                   const(32766)
       *
-     D §rcdBufLen      C                   const(32766)
-     D r§rcdNbr        S             10I 0 template
-     D r§nullMap       S              1S 0 dim(§nullMapSize)
+     D rcdNbr_t        S             10I 0 template
+     D nullMap_t       S              1S 0 dim(§nullMapSize)
      D §nullMapSize    C                   const(8000)
-     D r§scnAid        S             10A   template
-     D r§sqlOrder      S            512A   template
-     D r§sqlWhere      S            512A   template
-     D r§sqlStmt       S           2000A   template
-     D r§user          S             10A   template
       *
-     D r§qObj          DS                  qualified template
+     D scnAid_t        S             10A   template
+     D sqlOrder_t      S            512A   template
+     D sqlWhere_t      S            512A   template
+     D sqlStmt_t       S           2000A   template
+     D user_t          S             10A   template
+      *
+     D qObj_t          DS                  qualified template
      D  name                         10A
      D  lib                          10A
       *
@@ -80,9 +83,9 @@
      D  excDta                      256A
       *
       *  Feldinhalt für Text-/Hex-Editor
-     D r§fldInhalt     DS                  qualified template
-     D  sbcs                               like(r§rcdBuf)
-     D  ucs2                               like(r§rcdBufUcs2)
+     D fldInhalt_t     DS                  qualified template
+     D  sbcs                               like(rcdBuf_t)
+     D  ucs2                               like(rcdBufUcs2_t)
      D                                     overlay(sbcs)
       *
       *  Verwaltung gepinnter Datensätze
@@ -95,37 +98,34 @@
      D  mbrNbr                       10I 0
       *
       *  Integer & Binärwerte:
-     D r§int2          S              5I 0 template
-     D r§int4          S             10I 0 template
-     D r§uint4         S             10U 0 template
-      *
-      *  Feedback Code:
-     D r§fc            S             12A   template
+     D int2_t          S              5I 0 template
+     D int4_t          S             10I 0 template
+     D uint4_t         S             10U 0 template
       *
       *  Lower/Upper case:
      D cLOWER          C                   'abcdefghijklmnopqrstuvwxyzäöüß'
      D cUPPER          C                   'ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜß'
       *
       *  Grenzen für relative Satznummer
-     D §LowRcdNbr      C                   CONST(1)
-     D §HghRcdNbr      C                   CONST(2147483647)
+     D LOW_RCD_NBR     C                   CONST(1)
+     D HIGH_RCD_NBR    C                   CONST(2147483647)
       *
       *  Access mode:
-     D r§accessMode    S              1A   template
+     D accessMode_t    S              1A   template
       *
-     D §RrnSeq         C                   CONST('0')
-     D §KeySeq         C                   CONST('1')
-     D §SqlSeq         C                   CONST('2')
+     D RRN_SEQ         C                   CONST('0')
+     D KEY_SEQ         C                   CONST('1')
+     D SQL_SEQ         C                   CONST('2')
       *
       *  Key-Input-Mode:
-     D §KeyModeLower   C                   CONST('1')
-     D §KeyModeUpper   C                   CONST('0')
+     D KEY_MODE_LOWER  C                   CONST('1')
+     D KEY_MODE_UPPER  C                   CONST('0')
       *
       *  Update-Mode:
-     D §upd_dft        C                   CONST('*')
-     D §upd_yes        C                   CONST('1')
-     D §upd_nokey      C                   CONST('2')
-     D §upd_no         C                   CONST('0')
+     D UPD_M_DFT       C                   CONST('*')
+     D UPD_M_YES       C                   CONST('1')
+     D UPD_M_NOKEY     C                   CONST('2')
+     D UPD_M_NO        C                   CONST('0')
       *
       *  Boolsche Werte:
      D bTrue           C                   CONST('1')
@@ -137,17 +137,27 @@
      D bFound          C                   CONST('0')
       *
       *  Zustellarten von Nachrichten:
-     D §TypInfo        C                   CONST('*INFO')
-     D §TypInq         C                   CONST('*INQ')
-     D §TypRqs         C                   CONST('*RQS')
-     D §TypComp        C                   CONST('*COMP')
-     D §TypDiag        C                   CONST('*DIAG')
-     D §TypNotify      C                   CONST('*NOTIFY')
-     D §TypEscape      C                   CONST('*ESCAPE')
-     D §TypStatus      C                   CONST('*STATUS')
+     D MSG_T_INFO      C                   CONST('*INFO')
+     D MSG_T_INQ       C                   CONST('*INQ')
+     D MSG_T_RQS       C                   CONST('*RQS')
+     D MSG_T_COMP      C                   CONST('*COMP')
+     D MSG_T_DIAG      C                   CONST('*DIAG')
+     D MSG_T_NOTIFY    C                   CONST('*NOTIFY')
+     D MSG_T_ESCAPE    C                   CONST('*ESCAPE')
+     D MSG_T_STATUS    C                   CONST('*STATUS')
       *
       *  Modus:
-     D §Batch          C                   CONST('*BATCH')
-     D §Inter          C                   CONST('*INTER')
+     D MODE_BATCH      C                   CONST('*BATCH')
+     D MODE_INTER      C                   CONST('*INTER')
+      *
+     D USRSPC_NAME     C                   '§PEEK§'
+     D USRSPC_LIBRARY  C                   'QTEMP'
+      *
+     D WORK_FILE_NAME...
+     D                 C                   'PEEKWRK'
+     D WORK_FILE_LIBRARY...
+     D                 C                   'QTEMP'
+     D WORK_FILE_MEMBER...
+     D                 C                   '*FIRST'
       *
       /ENDIF

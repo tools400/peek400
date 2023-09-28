@@ -50,8 +50,8 @@
       ********************************************************************
       *
      D PEEK60          PI
-     D  i_alwLC                            const like(r§bool)
-     D  o_numPasses                              like(r§int4)
+     D  i_alwLC                            const like(bool_t)
+     D  o_numPasses                              like(int4_t)
       *
       *---------------------------------------------------*
       *

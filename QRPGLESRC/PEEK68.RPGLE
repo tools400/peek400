@@ -75,41 +75,41 @@
       *----------------------------------------------------*
       *
      D yFKeys          S             18A   DIM(32)       INZ(*BLANKS)
-     D yNbrOfKeys      S                   like(r§int4    ) inz
+     D yNbrOfKeys      S                   like(int4_t) inz
      D yMsgID          S              7A   INZ(*BLANKS)
      D yMsgDta         S            512A   INZ(*BLANKS)
       *
      D YPgmCmd         S             10A   INZ(*BLANKS)
-     D YCmdDta         S                   LIKE(r§pgmCmdDt) INZ(*BLANKS)
+     D YCmdDta         S                   LIKE(pgmCmdDt_t) INZ(*BLANKS)
       *
      D YChoice         S             75A   DIM(32)
-     D YNbrOfCh        S                   like(r§int4    ) inz
+     D YNbrOfCh        S                   like(int4_t) inz
       *
      D IsSflError      S              1A   INZ(bFalse)
       *
-     D SfTop           S                   like(r§int4    ) inz
-     D SflPage         S                   like(r§int4    ) inz
+     D SfTop           S                   like(int4_t) inz
+     D SflPage         S                   like(int4_t) inz
      D SflPageDDS      S                   like(SflPage   ) inz
      D SflRec          S                   like(SflPage   ) inz
      D SflNbrRcd       S                   like(SflPage   ) inz
-     D SfBot           S                   like(r§int4    ) inz
+     D SfBot           S                   like(int4_t) inz
      D NbrFKeys        C                   CONST(2)
      D Sfl_Cmd         S             10A   INZ(*BLANKS)
       *
-     D PEEK21_NAME     S                   like(r§pgmCallN) inz
-     D PEEK23_NAME     S                   like(r§pgmCallN) inz
-     D PEEK27_NAME     S                   like(r§pgmCallN) inz
+     D PEEK21_NAME     S                   like(pgmCallN_t) inz
+     D PEEK23_NAME     S                   like(pgmCallN_t) inz
+     D PEEK27_NAME     S                   like(pgmCallN_t) inz
       *
-     D isEOF           S                   like(R§BOOL    ) inz(BFalse)
-     D key             S                   like(R§KEY     ) inz
-     D data            S                   like(R§SET0000 ) inz
+     D isEOF           S                   like(BOOL_t) inz(BFalse)
+     D key             S                   like(KEY_t) inz
+     D data            S                   like(SET0000_t) inz
       *
-     D wrk_MsgID       S                   like(r§msgID   ) inz
-     D wrk_MsgTxt      S                   like(r§msgDta  ) inz
+     D wrk_MsgID       S                   like(msgID_t) inz
+     D wrk_MsgTxt      S                   like(msgDta_t) inz
       *
      D usrKey          DS                  qualified inz
-     D  section                            like(R§SECTION )
-     D  key                                like(R§KEY     )
+     D  section                            like(SECTION_t)
+     D  key                                like(KEY_t)
       *
      D sflLine         DS                  qualified inz
      D  opt                    1      2
@@ -117,19 +117,19 @@
       *
       /COPY QCOPYLE,CEECNDHDLR
       *
-     D isInzSr         S                   like(r§bool) inz(bFalse)
+     D isInzSr         S                   like(bool_t) inz(bFalse)
       *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
       *
      D PEEK68          PI
-     D  i_dsp80                            const like(r§dsp80)
-     D  i_pgm                              const like(r§pgm)
-     D  i_copyright                        const like(r§copyRght)
+     D  i_dsp80                            const like(dsp80_t)
+     D  i_pgm                              const like(pgm_t)
+     D  i_copyright                        const like(copyRght_t)
      D  o_sflOpt                      2A
-     D  o_msgID                                  like(r§msgID)
-     D  o_msgDta                                 like(r§msgDta)
+     D  o_msgID                                  like(msgID_t)
+     D  o_msgDta                                 like(msgDta_t)
       *
       *---------------------------------------------------*
       *

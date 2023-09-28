@@ -52,8 +52,8 @@
      D R_TimeHMS       S               T         TIMFMT(*HMS)    INZ(*LOVAL )
      D R_TimeEUR       S               T         TIMFMT(*EUR)    INZ(*LOVAL )
      D R_TimeStmp      S               Z                         INZ(*LOVAL )
-     D R_FldLen        S                   like(r§int4    ) inz
-     D R_Pos           S                   like(r§int4    ) inz
+     D R_FldLen        S                   like(int4_t) inz
+     D R_Pos           S                   like(int4_t) inz
      D R_Buffer        S                         LIKE(i_buffer)   INZ(*ZEROS )
      D R_BuffLen       C                         CONST(%SIZE(i_buffer))
       *
@@ -71,8 +71,8 @@
      D  i_type                        1A   const
      D  i_datTimFmt                        const like(FLDL0100_t.F1DTFM)
      D  i_separator                        const like(FLDL0100_t.F1DTSP)
-     D  o_msgID                                  like(r§msgID)
-     D  o_msgDta                                 like(r§msgDta)
+     D  o_msgID                                  like(msgID_t)
+     D  o_msgDta                                 like(msgDta_t)
       *
       *  Register error handler
      C                   callp     CEEHDLR(%paddr('errorHandler')

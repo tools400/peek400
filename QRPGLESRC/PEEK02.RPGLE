@@ -80,7 +80,7 @@
       *
       /COPY QCOPYLE,QUSLFLD
       *
-     D  qUsrSpc        DS                  likeds(r§qObj) inz
+     D  qUsrSpc        DS                  likeds(qObj_t) inz
      D  pSpcPtr        S               *
      D  errCode        DS                  likeds(errCode_t) inz
       *
@@ -91,8 +91,8 @@
      D usrSpcData      S          32767A   based(pSpcPtr)
       *
       *  List data
-     D currListE       S                   like(r§int4)
-     D offsetListE     S                   like(r§int4)
+     D currListE       S                   like(int4_t)
+     D offsetListE     S                   like(int4_t)
      D pListE          S               *
      D listE           DS                  likeds(fldl0100_t) based(pListE)
       *
@@ -102,8 +102,8 @@
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
       *
-     D msgId           S                   like(r§msgId)
-     D msgDta          S                   like(r§msgDta)
+     D msgId           S                   like(msgId_t)
+     D msgDta          S                   like(msgDta_t)
       *
       ********************************************************************
       *           Main  Control block                                    *
@@ -111,17 +111,17 @@
       *
      P PEEK02          B
      D                 PI
-     D  i_qFile                            const likeds(r§qObj)
-     D  i_rcdFmt                           const like(r§fmt)
-     D  i_function                         const like(r§function)
-     D  o_numE                                   like(r§int4)
+     D  i_qFile                            const likeds(qObj_t)
+     D  i_rcdFmt                           const like(fmt_t)
+     D  i_function                         const like(function_t)
+     D  o_numE                                   like(int4_t)
      D  o_fldl0100                               likeds(FLDL0100_t)
-     D  o_rcdFmtId                               like(r§fmtId)
+     D  o_rcdFmtId                               like(fmtId_t)
       *
       *---------------------------------------------------*
       *
-     C                   EVAL      qUsrSpc.lib = 'QTEMP'
-     C                   EVAL      qUsrSpc.name = '§PEEK§'
+     C                   EVAL      qUsrSpc.lib = USRSPC_LIBRARY
+     C                   EVAL      qUsrSpc.name = USRSPC_NAME
       *
      C                   monitor
       *

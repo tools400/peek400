@@ -4,9 +4,9 @@
       /else
      D PEEK41          PR                  extpgm(PEEK41_NAME)
       /endif
-     D  i_qFile                            const likeds(r§qObj)
-     D  i_rcdFmt                           const like(r§fmt)
-     D  i_function                         const like(r§function)
-     D  o_nbrOfEnt                               like(r§int4)
+     D  i_qFile                            const likeds(qObj_t)
+     D  i_rcdFmt                           const like(fmt_t)
+     D  i_function                         const like(function_t)
+     D  o_nbrOfEnt                               like(int4_t)
      D  o_data                      512A
       *

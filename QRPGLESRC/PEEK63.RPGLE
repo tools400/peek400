@@ -76,19 +76,19 @@
       *
      D clearErrorMsg...
      D                 PR
-     D  io_hFile                                  likeds(r§hFile )
+     D  io_hFile                                  likeds(hFile_t)
       *
      D clearBufferAndNullMap...
      D                 PR
      D  i_RFILE                            const  likeds(RFILE_t )
-     D  io_rcdBuffer                              like(r§rcdBuf   )
-     D  io_nullMap                                like(r§nullMap  )
+     D  io_rcdBuffer                              like(rcdBuf_t)
+     D  io_nullMap                                like(nullMap_t)
      D                                            dim(§nullMapSize)
       *
      D copyInNullMap...
      D                 PR
      D  i_RFILE                            const  likeds(RFILE_t )
-     D  io_nullMap                                like(r§nullMap  )
+     D  io_nullMap                                like(nullMap_t)
      D                                            dim(§nullMapSize)
       *
       *  Returns the value of the specified mode parameter.
@@ -100,7 +100,7 @@
       *
      D setEOF...
      D                 PR
-     D  io_hFile                                  likeds(r§hFile )
+     D  io_hFile                                  likeds(hFile_t)
      D  i_operation                  10A   value
       *
       *===================================================================*
@@ -109,11 +109,11 @@
       *
      P CIO_open...
      P                 B                   Export
-     D                 PI                         like(r§bool    )
-     D  o_hFile                                   likeds(r§hFile )
-     D  i_file                             const  like(r§file    )
-     D  i_lib                              const  like(r§lib     )
-     D  i_mbr                              const  like(r§mbr     )
+     D                 PI                         like(bool_t)
+     D  o_hFile                                   likeds(hFile_t)
+     D  i_file                             const  like(file_t)
+     D  i_lib                              const  like(lib_t)
+     D  i_mbr                              const  like(mbr_t)
      D  i_rcdFormat                  10A   const
      D  i_mode                         *   const  options(*string)
       *
@@ -170,8 +170,8 @@
       *
      P CIO_isOpen...
      P                 B                   Export
-     D                 PI                         like(r§bool    )
-     D  i_hFile                            const  likeds(r§hFile )
+     D                 PI                         like(bool_t)
+     D  i_hFile                            const  likeds(hFile_t)
       * ------------------------------------------------------------------------
       /FREE
 
@@ -190,8 +190,8 @@
       *
      P CIO_getFile...
      P                 B                   Export
-     D                 PI                         like(r§file    )
-     D  i_hFile                            const  likeds(r§hFile )
+     D                 PI                         like(file_t)
+     D  i_hFile                            const  likeds(hFile_t)
       * ------------------------------------------------------------------------
       /FREE
 
@@ -211,8 +211,8 @@
       *
      P CIO_getLibrary...
      P                 B                   Export
-     D                 PI                         like(r§lib     )
-     D  i_hFile                            const  likeds(r§hFile )
+     D                 PI                         like(lib_t)
+     D  i_hFile                            const  likeds(hFile_t)
       * ------------------------------------------------------------------------
       /FREE
 
@@ -231,8 +231,8 @@
       *
      P CIO_getMember...
      P                 B                   Export
-     D                 PI                         like(r§lib     )
-     D  i_hFile                            const  likeds(r§hFile )
+     D                 PI                         like(lib_t)
+     D  i_hFile                            const  likeds(hFile_t)
       * ------------------------------------------------------------------------
       /FREE
 
@@ -253,7 +253,7 @@
      P CIO_getRecordFormat...
      P                 B                   Export
      D                 PI            10A
-     D  i_hFile                            const  likeds(r§hFile )
+     D  i_hFile                            const  likeds(hFile_t)
       * ------------------------------------------------------------------------
       /FREE
 
@@ -273,7 +273,7 @@
      P CIO_getRecordLength...
      P                 B                   Export
      D                 PI            10I 0
-     D  i_hFile                            const  likeds(r§hFile )
+     D  i_hFile                            const  likeds(hFile_t)
       *
      D RFILE           DS                  likeds(RFILE_t  )
      D                                     based(i_hFile.fd)
@@ -297,7 +297,7 @@
      P CIO_getRRN...
      P                 B                   Export
      D                 PI            10I 0
-     D  i_hFile                            const  likeds(r§hFile )
+     D  i_hFile                            const  likeds(hFile_t)
       *
      D RFILE           DS                  likeds(RFILE_t  )
      D                                     based(i_hFile.fd)
@@ -325,7 +325,7 @@
      P CIO_getMbrNbr...
      P                 B                   Export
      D                 PI            10I 0
-     D  i_hFile                            const  likeds(r§hFile )
+     D  i_hFile                            const  likeds(hFile_t)
       *
      D XXIOFB          DS                  likeds(XXIOFB_t )
      D                                     based(pXXIOFB)
@@ -353,11 +353,11 @@
       *
      P CIO_getInfDS...
      P                 B                   Export
-     D                 PI                         likeds(r§infds )
-     D  i_hFile                            const  likeds(r§hFile )
+     D                 PI                         likeds(infds_t)
+     D  i_hFile                            const  likeds(hFile_t)
       *
       *  Funktionswert
-     D infDS           DS                  likeds(r§infds ) inz
+     D infDS           DS                  likeds(infds_t) inz
       * ------------------------------------------------------------------------
       /FREE
 
@@ -382,8 +382,8 @@
       *
      P CIO_isError...
      P                 B                   Export
-     D                 PI                         like(r§bool    )
-     D  i_hFile                            const  likeds(r§hFile )
+     D                 PI                         like(bool_t)
+     D  i_hFile                            const  likeds(hFile_t)
       * ------------------------------------------------------------------------
       /FREE
 
@@ -403,9 +403,9 @@
      P CIO_setErrorMsg...
      P                 B                   Export
      D                 PI
-     D  io_hFile                                  likeds(r§hFile )
-     D  i_msgID                            const  like(r§msgID   )
-     D  i_msgDta                           const  like(r§msgDta  )
+     D  io_hFile                                  likeds(hFile_t)
+     D  i_msgID                            const  like(msgID_t)
+     D  i_msgDta                           const  like(msgDta_t)
       * ------------------------------------------------------------------------
       /FREE
 
@@ -425,9 +425,9 @@
      P CIO_getErrorMsg...
      P                 B                   Export
      D                 PI
-     D  i_hFile                            const  likeds(r§hFile )
-     D  o_msgID                                   like(r§msgID   )
-     D  o_msgDta                                  like(r§msgDta  )
+     D  i_hFile                            const  likeds(hFile_t)
+     D  o_msgID                                   like(msgID_t)
+     D  o_msgDta                                  like(msgDta_t)
       *
       /COPY QCOPYLE,USR0012                      ?
       * ------------------------------------------------------------------------
@@ -456,7 +456,7 @@
      P CIO_getError...
      P                 B                   Export
      D                 PI            10I 0
-     D  i_hFile                            const  likeds(r§hFile )
+     D  i_hFile                            const  likeds(hFile_t)
       * ------------------------------------------------------------------------
       /FREE
 
@@ -472,7 +472,7 @@
      P CIO_getErrorText...
      P                 B                   Export
      D                 PI           512A          varying
-     D  i_hFile                            const  likeds(r§hFile )
+     D  i_hFile                            const  likeds(hFile_t)
       * ------------------------------------------------------------------------
       /FREE
 
@@ -491,12 +491,12 @@
       *
      P CIO_chainWithRRN...
      P                 B                   Export
-     D                 PI                         like(r§bool     )
-     D  io_hFile                                  likeds(r§hFile  )
-     D  i_rrn                              const  like(r§rcdNbr   )
-     D  i_doLock                           const  like(r§bool     )
-     D  io_rcdBuffer                              like(r§rcdBuf   )
-     D  io_nullMap                                like(r§nullMap  )
+     D                 PI                         like(bool_t)
+     D  io_hFile                                  likeds(hFile_t)
+     D  i_rrn                              const  like(rcdNbr_t)
+     D  i_doLock                           const  like(bool_t)
+     D  io_rcdBuffer                              like(rcdBuf_t)
+     D  io_nullMap                                like(nullMap_t)
      D                                            dim(§nullMapSize)
       *
      D options         S             10I 0 inz(DFT)
@@ -544,12 +544,12 @@
       *
      P CIO_chainWithKey...
      P                 B                   Export
-     D                 PI                         like(r§bool     )
-     D  io_hFile                                  likeds(r§hFile  )
-     D  i_key                              const  like(r§keyBuf   )
-     D  i_doLock                           const  like(r§bool     )
-     D  io_rcdBuffer                              like(r§rcdBuf   )
-     D  io_nullMap                                like(r§nullMap  )
+     D                 PI                         like(bool_t)
+     D  io_hFile                                  likeds(hFile_t)
+     D  i_key                              const  like(keyBuf_t)
+     D  i_doLock                           const  like(bool_t)
+     D  io_rcdBuffer                              like(rcdBuf_t)
+     D  io_nullMap                                like(nullMap_t)
      D                                            dim(§nullMapSize)
       *
      D options         S             10I 0 inz(DFT)
@@ -602,9 +602,9 @@
       *
      P CIO_setllWithRRN...
      P                 B                   Export
-     D                 PI                         like(r§bool     )
-     D  io_hFile                                  likeds(r§hFile  )
-     D  i_rrn                              const  like(r§rcdNbr   )
+     D                 PI                         like(bool_t)
+     D  io_hFile                                  likeds(hFile_t)
+     D  i_rrn                              const  like(rcdNbr_t)
       *
      D errorNbr        S             10I 0 inz
      D options         S             10U 0 inz
@@ -673,9 +673,9 @@
       *
      P CIO_setllWithKey...
      P                 B                   Export
-     D                 PI                         like(r§bool     )
-     D  io_hFile                                  likeds(r§hFile  )
-     D  i_key                              const  like(r§keyBuf   )
+     D                 PI                         like(bool_t)
+     D  io_hFile                                  likeds(hFile_t)
+     D  i_key                              const  like(keyBuf_t)
       *
      D options         S             10U 0 inz
      D key             S                   like(i_key      ) inz
@@ -723,9 +723,9 @@
       *
      P CIO_setgtWithRRN...
      P                 B                   Export
-     D                 PI                         like(r§bool     )
-     D  io_hFile                                  likeds(r§hFile  )
-     D  i_rrn                              const  like(r§rcdNbr   )
+     D                 PI                         like(bool_t)
+     D  io_hFile                                  likeds(hFile_t)
+     D  i_rrn                              const  like(rcdNbr_t)
       *
      D options         S             10U 0 inz
       *
@@ -786,9 +786,9 @@
       *
      P CIO_setgtWithKey...
      P                 B                   Export
-     D                 PI                         like(r§bool     )
-     D  io_hFile                                  likeds(r§hFile  )
-     D  i_key                              const  like(r§keyBuf   )
+     D                 PI                         like(bool_t)
+     D  io_hFile                                  likeds(hFile_t)
+     D  i_key                              const  like(keyBuf_t)
       *
      D options         S             10U 0 inz
      D key             S                   like(i_key      ) inz
@@ -836,17 +836,17 @@
       *
      P CIO_read...
      P                 B                   Export
-     D                 PI                         like(r§bool     )
-     D  io_hFile                                  likeds(r§hFile  )
-     D  i_doLock                           const  like(r§bool     )
-     D  io_rcdBuffer                              like(r§rcdBuf   )
-     D  io_nullMap                                like(r§nullMap  )
+     D                 PI                         like(bool_t)
+     D  io_hFile                                  likeds(hFile_t)
+     D  i_doLock                           const  like(bool_t)
+     D  io_rcdBuffer                              like(rcdBuf_t)
+     D  io_nullMap                                like(nullMap_t)
      D                                            dim(§nullMapSize)
       *
      D options         S             10I 0 inz(DFT)
      D function        S             32A   varying           inz
-     D msgID           S                   like(r§msgID    ) inz
-     D msgDta          S                   like(r§msgDta   ) inz
+     D msgID           S                   like(msgID_t) inz
+     D msgDta          S                   like(msgDta_t) inz
       *
      D RFILE           DS                  likeds(RFILE_t  )
      D                                     based(io_hFile.fd)
@@ -891,7 +891,7 @@
             USR99943 = f_strerror(f_errno());
             msgID  = 'USR9994';
             msgDta = USR9994;
-            p_sndPgmMg(msgID: msgDta: '*': §TypDiag);
+            p_sndPgmMg(msgID: msgDta: '*': MSG_T_DIAG);
             return bTrue;   // Return "EOF" to caller
          endif;
 
@@ -917,17 +917,17 @@
       *
      P CIO_readp...
      P                 B                   Export
-     D                 PI                         like(r§bool     )
-     D  io_hFile                                  likeds(r§hFile  )
-     D  i_doLock                           const  like(r§bool     )
-     D  io_rcdBuffer                              like(r§rcdBuf   )
-     D  io_nullMap                                like(r§nullMap  )
+     D                 PI                         like(bool_t)
+     D  io_hFile                                  likeds(hFile_t)
+     D  i_doLock                           const  like(bool_t)
+     D  io_rcdBuffer                              like(rcdBuf_t)
+     D  io_nullMap                                like(nullMap_t)
      D                                            dim(§nullMapSize)
       *
      D options         S             10I 0 inz(DFT)
      D function        S             32A   varying           inz
-     D msgID           S                   like(r§msgID    ) inz
-     D msgDta          S                   like(r§msgDta   ) inz
+     D msgID           S                   like(msgID_t) inz
+     D msgDta          S                   like(msgDta_t) inz
       *
      D RFILE           DS                  likeds(RFILE_t  )
      D                                     based(io_hFile.fd)
@@ -972,7 +972,7 @@
             USR99943 = f_strerror(f_errno());
             msgID  = 'USR9994';
             msgDta = USR9994;
-            p_sndPgmMg(msgID: msgDta: '*': §TypDiag);
+            p_sndPgmMg(msgID: msgDta: '*': MSG_T_DIAG);
             return bTRUE;   // Return "EOF" to caller
          endif;
 
@@ -999,8 +999,8 @@
       *
      P CIO_delete...
      P                 B                   Export
-     D                 PI                         like(r§bool     )
-     D  io_hFile                                  likeds(r§hFile  )
+     D                 PI                         like(bool_t)
+     D  io_hFile                                  likeds(hFile_t)
       *
      D RFILE           DS                  likeds(RFILE_t  )
      D                                     based(io_hFile.fd)
@@ -1033,8 +1033,8 @@
       *
      P CIO_unlock...
      P                 B                   Export
-     D                 PI                         like(r§bool     )
-     D  io_hFile                                  likeds(r§hFile  )
+     D                 PI                         like(bool_t)
+     D  io_hFile                                  likeds(hFile_t)
       *
      D RFILE           DS                  likeds(RFILE_t  )
      D                                     based(io_hFile.fd)
@@ -1066,8 +1066,8 @@
       *
      P CIO_close...
      P                 B                   Export
-     D                 PI                         like(r§bool    )
-     D  io_hFile                                  likeds(r§hFile )
+     D                 PI                         like(bool_t)
+     D  io_hFile                                  likeds(hFile_t)
       * ------------------------------------------------------------------------
       /FREE
 
@@ -1097,7 +1097,7 @@
      P CIO_setEOF_read...
      P                 B                   Export
      D                 PI
-     D  io_hFile                                  likeds(r§hFile )
+     D  io_hFile                                  likeds(hFile_t)
       * ------------------------------------------------------------------------
       /FREE
 
@@ -1116,7 +1116,7 @@
      P CIO_setEOF_readp...
      P                 B                   Export
      D                 PI
-     D  io_hFile                                  likeds(r§hFile )
+     D  io_hFile                                  likeds(hFile_t)
       * ------------------------------------------------------------------------
       /FREE
 
@@ -1135,7 +1135,7 @@
      P setEOF...
      P                 B
      D                 PI
-     D  io_hFile                                  likeds(r§hFile )
+     D  io_hFile                                  likeds(hFile_t)
      D  i_operation                  10A   value
       *
      D RFILE           DS                  likeds(RFILE_t  )
@@ -1167,7 +1167,7 @@
      P clearErrorMsg...
      P                 B
      D                 PI
-     D  io_hFile                                  likeds(r§hFile )
+     D  io_hFile                                  likeds(hFile_t)
       * ------------------------------------------------------------------------
       /FREE
 
@@ -1189,8 +1189,8 @@
      P                 B
      D                 PI
      D  i_RFILE                            const  likeds(RFILE_t )
-     D  io_rcdBuffer                              like(r§rcdBuf   )
-     D  io_nullMap                                like(r§nullMap  )
+     D  io_rcdBuffer                              like(rcdBuf_t)
+     D  io_nullMap                                like(nullMap_t)
      D                                            dim(§nullMapSize)
       *
      D X               S             10I 0 inz
@@ -1217,7 +1217,7 @@
      P                 B
      D                 PI
      D  i_RFILE                            const  likeds(RFILE_t )
-     D  io_nullMap                                like(r§nullMap  )
+     D  io_nullMap                                like(nullMap_t)
      D                                            dim(§nullMapSize)
       *
      D X               S             10I 0 inz

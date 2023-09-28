@@ -62,16 +62,16 @@
       *  F E L D - D E F I N I T I O N E N                 *
       *----------------------------------------------------*
       *
-     D YBuffer         S                   like(r§rcdBuf  ) inz
-     D YOutBuffer      S                   like(r§rcdBuf  ) inz
-     D YOutBuffLn      S                   like(r§int4    ) inz
-     D YMsgID          S                   like(r§msgID   ) inz
-     D YMsgDta         S                   like(r§msgDta  ) inz
+     D YBuffer         S                   like(rcdBuf_t) inz
+     D YOutBuffer      S                   like(rcdBuf_t) inz
+     D YOutBuffLn      S                   like(int4_t) inz
+     D YMsgID          S                   like(msgID_t) inz
+     D YMsgDta         S                   like(msgDta_t) inz
       *
-     D X               S                   like(r§int4    ) inz
-     D Y               S                   like(r§int4    ) inz
+     D X               S                   like(int4_t) inz
+     D Y               S                   like(int4_t) inz
       *
-     D PEEK18_NAME     S                   like(r§pgmCallN) inz
+     D PEEK18_NAME     S                   like(pgmCallN_t) inz
       *
       /COPY QCOPYLE,PPEEK18
       /COPY QCOPYLE,F_PEEK53
@@ -79,7 +79,7 @@
       *
       /COPY QCOPYLE,CEECNDHDLR
       *
-     D isInzSr         S                   like(r§bool) inz(bFalse)
+     D isInzSr         S                   like(bool_t) inz(bFalse)
       *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
@@ -88,10 +88,10 @@
       *---ENTRY-LISTE--------------------------------------*
       *
      D PEEK19          PI
-     D  i_rcdBuffer                        const like(r§rcdBuf)
-     D  o_keyVal                                 like(r§keyBuf)
-     D  o_msgID                                  like(r§msgID)
-     D  o_msgDta                                 like(r§msgDta)
+     D  i_rcdBuffer                        const like(rcdBuf_t)
+     D  o_keyVal                                 like(keyBuf_t)
+     D  o_msgID                                  like(msgID_t)
+     D  o_msgDta                                 like(msgDta_t)
       *
       *----------------------------------------------------*
       *  Schlüsselliste für PEEKFLDL2
@@ -137,12 +137,12 @@
      C                   Eval      %subst(o_keyVal: x: 1) =
      C                                %subst(yOutBuffer: y: 1)
      C                   EVAL      X = X + 1
-     C     X             IFGT      §keyBufLen
+     C     X             IFGT      KEY_BUFF_LEN
      C                   LEAVE
      C                   Endif
      C                   Enddo
       *
-     C     X             IFGT      §keyBufLen
+     C     X             IFGT      KEY_BUFF_LEN
      C                   LEAVE
      C                   Endif
       *

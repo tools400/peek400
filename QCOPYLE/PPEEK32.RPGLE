@@ -5,8 +5,8 @@
      D PEEK32          PR                  extpgm(PEEK32_NAME)
       /endif
      D  io_buffer                                likeds(rcdBuffer_t)
-     D  i_buffLen                          const like(r§int4)
-     D  i_ccsid                            const like(r§int4)
-     D  o_msgID                                  like(r§msgID)
-     D  o_msgDta                                 like(r§msgDta)
+     D  i_buffLen                          const like(int4_t)
+     D  i_ccsid                            const like(int4_t)
+     D  o_msgID                                  like(msgID_t)
+     D  o_msgDta                                 like(msgDta_t)
       *

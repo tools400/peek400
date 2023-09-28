@@ -29,7 +29,7 @@
      FPEEKFLD   UF   E           K DISK    USROPN
      F                                     PREFIX(F_)
       *===============================================================*
-     D PEEK41_NAME     S                   like(r吠gmCallN) inz
+     D PEEK41_NAME     S                   like(pgmCallN_t) inz
       *
       *  list API format KEYL0100
       /COPY QCOPYLE,KEYL0100
@@ -60,37 +60,37 @@
       /COPY QCOPYLE,ERR_D_SDS
       *----------------------------------------------------*
       *
-     D rtnCode         S                   like(r告nt4    ) inz
-     D nbrOfKey        S                   like(r告nt4    ) inz
+     D rtnCode         S                   like(int4_t) inz
+     D nbrOfKey        S                   like(int4_t) inz
       *
-     D x               S                   like(r告nt4    ) inz
-     D y               S                   like(r告nt4    ) inz
-     D z               S                   like(r告nt4    ) inz
+     D x               S                   like(int4_t) inz
+     D y               S                   like(int4_t) inz
+     D z               S                   like(int4_t) inz
      D tempStr         S                   like(i_sqlOrder ) inz
      D keyl0100        DS                  likeds(KEYL0100_t)
      D                                     based(pKEYL0100)
      D keyl0100_sql    DS                  likeds(KEYL0100_t) inz
      D data            S            512A   inz
-     D numKeyFld       S                   like(r告nt4)
+     D numKeyFld       S                   like(int4_t)
       *
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
       *
       /COPY QCOPYLE,CEECNDHDLR
       *
-     D isInzSr         S                   like(r呆ool) inz(bFalse)
+     D isInzSr         S                   like(bool_t) inz(bFalse)
       *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
       *
      D PEEK03          PI
-     D  i_qFile                            const likeds(r吼Obj)
-     D  i_rcdFmt                           const like(r呂mt)
+     D  i_qFile                            const likeds(qObj_t)
+     D  i_rcdFmt                           const like(fmt_t)
      D  i_access                      1A   const
      D  i_sqlOrder                  512A   const
-     D  o_msgID                                  like(r吮sgID)
-     D  o_msgDta                                 like(r吮sgDta)
+     D  o_msgID                                  like(msgID_t)
+     D  o_msgDta                                 like(msgDta_t)
       *
       *----------------------------------------------------*
      C     F_Key         KLIST
@@ -107,7 +107,7 @@
      C                   EXSR      First
       *---------------------------------------------------*
       *
-     C                   IF        i_access = 吱qlSeq
+     C                   IF        i_access = SQL_SEQ
      C                   EXSR      sqlSeq
      C                   ELSE
      C                   EXSR      otherSeq

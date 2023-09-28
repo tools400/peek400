@@ -52,7 +52,7 @@
       *----------------------------------------------------*
       *
       *  Arbeitsfelder
-     D X               S                   like(r§int4    ) inz
+     D X               S                   like(int4_t) inz
      D pBuffer         S               *   inz
      D char            S              1A   based(pChar)
       *
@@ -60,7 +60,7 @@
       *
       /COPY QCOPYLE,CEECNDHDLR
       *
-     D isInzSr         S                   like(r§bool) inz(bFalse)
+     D isInzSr         S                   like(bool_t) inz(bFalse)
       *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
@@ -68,10 +68,10 @@
       *
      D PEEK32          PI
      D  io_buffer                                likeds(rcdBuffer_t)
-     D  i_buffLen                          const like(r§int4)
-     D  i_ccsid                            const like(r§int4)
-     D  o_msgID                                  like(r§msgID)
-     D  o_msgDta                                 like(r§msgDta)
+     D  i_buffLen                          const like(int4_t)
+     D  i_ccsid                            const like(int4_t)
+     D  o_msgID                                  like(msgID_t)
+     D  o_msgDta                                 like(msgDta_t)
       *
       *----------------------------------------------------*
       *

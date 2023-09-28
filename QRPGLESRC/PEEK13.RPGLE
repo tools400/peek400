@@ -61,8 +61,8 @@
       ********************************************************************
       *
      D PEEK13          PI
-     D  i_qFile                            const likeds(r§qObj)
-     D  i_mbr                              const like(r§mbr)
+     D  i_qFile                            const likeds(qObj_t)
+     D  i_mbr                              const like(mbr_t)
      D  o_mbrd0200                               likeds(MBRD0200_t)
       *
       *---------------------------------------------------*

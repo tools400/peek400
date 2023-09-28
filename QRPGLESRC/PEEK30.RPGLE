@@ -68,7 +68,7 @@
      D YSrlNbrExt      S                   LIKE(R_SrlNbr ) INZ(*BLANKS)
      D YDateExt        S                   LIKE(R_SrlDate) INZ(*BLANKS)
       *
-     D YAttrLen        S                   like(r§int4    ) inz
+     D YAttrLen        S                   like(int4_t) inz
      D YAttrTyp        S              1A   INZ(*BLANKS)
      D YValue          S            512A   INZ(*BLANKS)
       *
@@ -87,10 +87,10 @@
      D R_Hex           S                   LIKE(R_SrlNbr ) INZ(*BLANKS)
      D Hex             S              1A   DIM(16)
      D ZW1             S             30P 0 INZ(*ZEROS )
-     D Exp             S                   like(r§int4    ) inz
+     D Exp             S                   like(int4_t) inz
      D A1              S              1A   INZ(*BLANKS)
-     D X               S                   like(r§int4    ) inz
-     D Y               S                   like(r§int4    ) inz
+     D X               S                   like(int4_t) inz
+     D Y               S                   like(int4_t) inz
       *
       *  DeadDate
      D ZWInt           S             30P 0 INZ(*ZEROS )
@@ -121,12 +121,12 @@
      D IsWriteOK       S              1A   INZ(bFalse )
       *
       *  declarations for QUSCRTUS
-     D qUsrSpc         ds                  likeds(r§qObj) inz
+     D qUsrSpc         ds                  likeds(qObj_t) inz
       *
       *  Programme
-     D PEEK07_NAME     S                   like(r§pgmCallN) inz
-     D PEEK28_NAME     S                   like(r§pgmCallN) inz
-     D PEEK29_NAME     S                   like(r§pgmCallN) inz
+     D PEEK07_NAME     S                   like(pgmCallN_t) inz
+     D PEEK28_NAME     S                   like(pgmCallN_t) inz
+     D PEEK29_NAME     S                   like(pgmCallN_t) inz
       *
      D §Text           C                   CONST('Peek/400-
      D                                      - Lizenzdaten')
@@ -143,18 +143,18 @@
       *
       /COPY QCOPYLE,CEECNDHDLR
       *
-     D isInzSr         S                   like(r§bool) inz(bFalse)
+     D isInzSr         S                   like(bool_t) inz(bFalse)
       *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *
       ********************************************************************
       *
      D PEEK30          PI
-     D  i_dsp80                            const like(r§dsp80)
-     D  i_copyright                        const like(r§copyRght)
-     D  o_flag                                   like(r§int4)
-     D  o_msgID                                  like(r§msgID)
-     D  o_msgDta                                 like(r§msgDta)
+     D  i_dsp80                            const like(dsp80_t)
+     D  i_copyright                        const like(copyRght_t)
+     D  o_flag                                   like(int4_t)
+     D  o_msgID                                  like(msgID_t)
+     D  o_msgDta                                 like(msgDta_t)
       *
       *  Register error handler
      C                   callp     CEEHDLR(%paddr('errorHandler')
