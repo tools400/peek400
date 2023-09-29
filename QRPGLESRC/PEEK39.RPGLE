@@ -97,9 +97,6 @@
       *  Organisation of generic header
      D GenHeader       DS                  likeds(genHeader_t) based(pSpcPtr)
       *
-      *  User space data
-     D usrSpcData      S          32767A   based(pSpcPtr)
-      *
       *  List data
      D currListE       S                   like(int4_t)
      D offsetListE     S                   like(int4_t)
@@ -223,12 +220,6 @@
      C                   Eval      offsetListE =
      C                               GenHeader.OffsetLst +
      C                               ((currListE - 1) * GenHeader.EntrySize)
-      *
-     C                   IF        (offsetListE >
-     C                                %size(usrSpcData) - GenHeader.EntrySize)
-     C                   Exsr      setError
-     C                   Leavesr
-     C                   ENDIF
       *
      C                   EVAL      pListE = pSpcPtr + offsetListE
       *
