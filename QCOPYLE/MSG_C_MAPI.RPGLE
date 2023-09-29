@@ -1,35 +1,35 @@
-?     *
-?     *====================================================*
-?     *  MovPgmMsg  - Schieben aller Nachrichten           *                                  RADDAT
-?     *               zum aufrufenden Programm             *                                  RADDAT
-?     *====================================================*
-?     *
-     C     MovPgmMsg     BEGSR                                                                RADDAT
-?     *
- B01 C     §CallStack    IFLE      *ZEROS                                                     RADDAT
-     C                   Z-ADD     2             §CallStack                                   RADDAT
- X01 C                   ELSE                                                                 RADDAT
-?     *            Wert beibehalten                                                           RADDAT
- E01 C                   ENDIF                                                                RADDAT
-?     *                                                                                       RADDAT
+      *
+      *====================================================*
+      *  MovPgmMsg  - Schieben aller Nachrichten           *
+      *               zum aufrufenden Programm             *
+      *====================================================*
+      *
+     C     MovPgmMsg     BEGSR
+      *
+     C     §CallStack    IFLE      *ZEROS
+     C                   Z-ADD     2             §CallStack
+     C                   ELSE
+      *            Wert beibehalten
+     C                   ENDIF
+      *
      C                   MOVEL (P) *BLANKS       §MsgKey
-?     *
-     C                   CALL      'QMHMOVPM'                                                 RADDAT
-     C                   PARM                    §MsgKey                                      RADDAT
-     C                   PARM                    §TypToMove                                   RADDAT
-     C                   PARM                    §NbrToMove                                   RADDAT
-     C                   PARM                    §PgmQ                                        RADDAT
-     C                   PARM                    §CallStack                                   RADDAT
-     C                   PARM                    §ErrorCode                                   RADDAT
-?     *                                                                                       RADDAT
-     C                   MOVEL (P) *BLANKS       §MsgKey                                      RADDAT
-     C                   MOVEL (P) '*'           §PgmQ                                        RADDAT
-     C                   Z-ADD     0             §CallStack                                   RADDAT
-?     *                                                                                       RADDAT
-     C                   MOVEL (P) '*COMP'       §ToMove_1                                    RADDAT
-     C                   MOVEL (P) '*DIAG'       §ToMove_2                                    RADDAT
-     C                   MOVEL (P) '*INFO'       §ToMove_3                                    RADDAT
-     C                   MOVEL (P) '*ESCAPE'     §ToMove_4                                    RADDAT
-?     *
+      *
+     C                   CALL      'QMHMOVPM'
+     C                   PARM                    §MsgKey
+     C                   PARM                    §TypToMove
+     C                   PARM                    §NbrToMove
+     C                   PARM                    §PgmQ
+     C                   PARM                    §CallStack
+     C                   PARM                    §ErrorCode
+      *
+     C                   MOVEL (P) *BLANKS       §MsgKey
+     C                   MOVEL (P) '*'           §PgmQ
+     C                   Z-ADD     0             §CallStack
+      *
+     C                   MOVEL (P) '*COMP'       §ToMove_1
+     C                   MOVEL (P) '*DIAG'       §ToMove_2
+     C                   MOVEL (P) '*INFO'       §ToMove_3
+     C                   MOVEL (P) '*ESCAPE'     §ToMove_4
+      *
      C                   ENDSR
-?     *
+      *
