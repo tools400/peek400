@@ -153,9 +153,6 @@
      C                   EVAL      SFSANR = 1
      C                   Endif
       *
-      *  Nachrichten senden
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
-      *
       *  Modus: DROP/FOLD
      C                   EVAL      *IN86 = SFLMDE
       *
@@ -206,9 +203,7 @@
      C                   CALLP     PEEK21(workstn.aid: §§PgmName
      C                                    : YPgmCmd: YCmdDta: YMsgID: YMsgDta)
      C     YMsgID        IFNE      *BLANKS
-     C                   EVAL      §MsgID = YMsgID
-     C                   EVAL      §MsgDta = YMsgDta
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   Callp     p_sndPgmMg(YMsgID: YMsgDta: §§pgmName)
      C                   ITER
      C                   Endif
       *
@@ -528,9 +523,7 @@
      C                   EXSR      PBReadUp
       *
       * - Copyright
-     C                   EVAL      §MsgID = 'USR9999'
-     C                   EVAL      §MsgDta = i_copyright
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   Callp     p_sndPgmMg('USR9999': i_copyright: §§pgmName)
       *
      C                   ENDSR
       *

@@ -215,9 +215,6 @@
       *
      C                   DO        *HIVAL
       *
-      *  Nachrichten senden
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
-      *
       *  Nachrichten anzeigen
      C                   EVAL      *IN89 = '0'
      C                   WRITE     MSGCTL
@@ -286,8 +283,7 @@
      C                   EXSR      WrtLicData
      C     IsWriteOK     IFEQ      bFalse
      C                   EVAL      *IN99 = '1'
-     C                   EVAL      §MsgID = 'USR8159'
-     C                   EVAL      §MsgDta = *BLANKS
+     C                   Callp     p_sndPgmMg('USR8159': '': §§pgmName)
      C                   ELSE
      C                   EVAL      ZEI = ZEI + 4
      C                   EVAL      POS = POS + 4
@@ -334,9 +330,9 @@
      C     ##LicData     IFEQ      *BLANKS
      C                   CLEAR                   USR8158
      C                   EVAL      *IN99 = '1'
-     C                   EVAL      §MsgID = 'USR8158'
+     C                   CLEAR                   USR8158
      C                   EVAL      USR81581 = ##LicData                         Liz.Nr.
-     C                   EVAL      §MsgDta = USR8158
+     C                   Callp     p_sndPgmMg('USR8158': USR8158: §§pgmName)
      C                   GOTO      EPRF20
      C                   Endif
       *
@@ -349,9 +345,9 @@
      C     IsCompOK      IFEQ      bFalse
      C                   CLEAR                   USR8158
      C                   EVAL      *IN99 = '1'
-     C                   EVAL      §MsgID = 'USR8158'
+     C                   CLEAR                   USR8158
      C                   EVAL      USR81581 = ##LicData                         Liz.Nr.
-     C                   EVAL      §MsgDta = USR8158
+     C                   Callp     p_sndPgmMg('USR8158': USR8158: §§pgmName)
      C                   GOTO      EPRF20
      C                   Endif
       *
@@ -678,9 +674,7 @@
      C                   EXSR      SetScreen
       *
       * - Copyright
-     C                   EVAL      §MsgID = 'USR9999'
-     C                   EVAL      §MsgDta = i_copyright
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   Callp     p_sndPgmMg('USR9999': i_copyright: §§pgmName)
       *
      C                   ENDSR
       *

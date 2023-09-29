@@ -140,9 +140,6 @@
       *
      C                   DO        *HIVAL
       *
-      *  Nachrichten senden
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
-      *
       *  Nachrichten anzeigen
      C                   EVAL      *IN89 = '0'
      C                   WRITE     MSGCTL
@@ -189,9 +186,9 @@
      C                   CALLP     PEEK21(workstn.aid: §§PgmName
      C                                    : YPgmCmd: YCmdDta: YMsgID: YMsgDta)
      C     YMsgID        IFNE      *BLANKS
-     C                   EVAL      §MsgID = YMsgID
-     C                   EVAL      §MsgDta = YMsgDta
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   Callp     p_sndPgmMg(yMsgID: yMsgDta: §§pgmName)
+     C                   EVAL      YMsgID = ''
+     C                   EVAL      YMsgDta = ''
      C                   ITER
      C                   Endif
       *
@@ -318,9 +315,9 @@
       *
      C     ##File        IFEQ      *BLANKS
      C                   EVAL      *IN99 = '1'
-     C                   EVAL      §MsgID = 'USR8151'
+     C                   CLEAR                   USR81511
      C                   EVAL      USR81511 = ##File
-     C                   EVAL      §MsgDta = USR8151
+     C                   Callp     p_sndPgmMg('USR8151': USR8151: §§pgmName)
      C                   GOTO      EPRF20
      C                   Endif
       *
@@ -341,9 +338,9 @@
       *
      C     ##Library     IFEQ      *BLANKS
      C                   EVAL      *IN99 = '1'
-     C                   EVAL      §MsgID = 'USR8152'
+     C                   CLEAR                   USR81521
      C                   EVAL      USR81521 = ##Library
-     C                   EVAL      §MsgDta = USR8152
+     C                   Callp     p_sndPgmMg('USR8152': USR8152: §§pgmName)
      C                   GOTO      EPRF21
      C                   Endif
       *
@@ -355,9 +352,9 @@
      C                   ELSE
       *  ... ungültig
      C                   EVAL      *IN99 = '1'
-     C                   EVAL      §MsgID = 'USR8152'
+     C                   CLEAR                   USR8152
      C                   EVAL      USR81521 = ##Library
-     C                   EVAL      §MsgDta = USR8152
+     C                   Callp     p_sndPgmMg('USR8152': USR8152: §§pgmName)
      C                   GOTO      EPRF21
      C                   Endif
      C                   ELSE
@@ -381,9 +378,9 @@
       *
      C     ##Member      IFEQ      *BLANKS
      C                   EVAL      *IN99 = '1'
-     C                   EVAL      §MsgID = 'USR8153'
+     C                   CLEAR                   USR8153
      C                   EVAL      USR81531 = ##Member
-     C                   EVAL      §MsgDta = USR8153
+     C                   Callp     p_sndPgmMg('USR8153': USR8153: §§pgmName)
      C                   GOTO      EPRF22
      C                   Endif
       *
@@ -395,9 +392,9 @@
      C                   ELSE
       *  ... ungültig
      C                   EVAL      *IN99 = '1'
-     C                   EVAL      §MsgID = 'USR8153'
-     C                   EVAL      USR81531 = ##member
-     C                   EVAL      §MsgDta = USR8153
+     C                   CLEAR                   USR8153
+     C                   EVAL      USR81531 = ##Member
+     C                   Callp     p_sndPgmMg('USR8153': USR8153: §§pgmName)
      C                   GOTO      EPRF22
      C                   Endif
      C                   ELSE
@@ -423,9 +420,9 @@
      C     ##MbrOpt      ANDNE     '*REPLACE'
      C     ##MbrOpt      ANDNE     '*UPDADD'
      C                   EVAL      *IN99 = '1'
-     C                   EVAL      §MsgID = 'USR8154'
+     C                   CLEAR                   USR8154
      C                   EVAL      USR81541 = ##MbrOpt
-     C                   EVAL      §MsgDta = USR8154
+     C                   Callp     p_sndPgmMg('USR8154': USR8154: §§pgmName)
      C                   GOTO      EPRF23
      C                   Endif
       *
@@ -447,9 +444,9 @@
      C     ##CrtFile     IFNE      '*YES'
      C     ##CrtFile     ANDNE     '*NO'
      C                   EVAL      *IN99 = '1'
-     C                   EVAL      §MsgID = 'USR8155'
+     C                   CLEAR                   USR8155
      C                   EVAL      USR81551 = ##CrtFile
-     C                   EVAL      §MsgDta = USR8155
+     C                   Callp     p_sndPgmMg('USR8155': USR8155: §§pgmName)
      C                   GOTO      EPRF24
      C                   Endif
       *

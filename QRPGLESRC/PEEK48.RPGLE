@@ -165,9 +165,6 @@
       *
      C                   DO        *HIVAL
       *
-      *  Nachrichten senden
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
-      *
       *  Nachrichten anzeigen
      C                   EVAL      *IN89 = '0'
      C                   WRITE     MSGCTL
@@ -223,9 +220,9 @@
      C                   CALLP     PEEK21(workstn.aid: §§PgmName
      C                                    : YPgmCmd: YCmdDta: YMsgID: YMsgDta)
      C     YMsgID        IFNE      *BLANKS
-     C                   EVAL      §MsgID = YMsgID
-     C                   EVAL      §MsgDta = YMsgDta
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   Callp     p_sndPgmMg(yMsgID: yMsgDta: §§pgmName)
+     C                   EVAL      YMsgID = ''
+     C                   EVAL      YMsgDta = ''
      C                   ITER
      C                   Endif
       *
@@ -315,8 +312,8 @@
      C                                        pFile.format  :
      C                                        ##WHERE       :
      C                                        ##ORDER       :
-     C                                        §MsgID        :
-     C                                        §MsgDta       )
+     C                                        yMsgID        :
+     C                                        yMsgDta       )
      C                             = bTrue
      C                   Eval      io_file      = pFile.name
      C                   Eval      io_library   = pFile.library
@@ -325,6 +322,11 @@
      C                   Eval      io_sqlWhere  = ##WHERE
      C                   Eval      io_sqlOrder  = ##ORDER
      C                   Eval      *IN99 = '0'
+     C                   If        (yMsgId <> '')
+     C                   Callp     p_sndPgmMg(yMsgID: yMsgDta: §§pgmName)
+     C                   EVAL      YMsgID = ''
+     C                   EVAL      YMsgDta = ''
+     C                   Endif
      C                   Else
      C                   Eval      *IN99 = '1'
      C                   Endif
@@ -379,8 +381,7 @@
      C     tempScnFld    WHENEQ    '##WHERE'
      C     ##WHERE       OREQ      SET_PRMT
      C                   IF        *IN71 = *ON
-     C                   EVAL      §MsgID = 'USR8195'
-     C                   EVAL      §MsgDta = *BLANKS
+     C                   Callp     p_sndPgmMg('USR8195': '': §§pgmName)
      C                   ELSE
      C                   EXSR      Pmt_Field
      C                   ENDIF
@@ -388,15 +389,13 @@
      C     tempScnFld    WHENEQ    '##ORDER'
      C     ##ORDER       OREQ      SET_PRMT
      C                   IF        *IN72 = *ON
-     C                   EVAL      §MsgID = 'USR8195'
-     C                   EVAL      §MsgDta = *BLANKS
+     C                   Callp     p_sndPgmMg('USR8195': '': §§pgmName)
      C                   ELSE
      C                   EXSR      Pmt_Field
      C                   ENDIF
       *
      C                   OTHER
-     C                   EVAL      §MsgID = 'USR8179'
-     C                   EVAL      §MsgDta = *BLANKS
+     C                   Callp     p_sndPgmMg('USR8179': '': §§pgmName)
      C                   Endsl
       *
      C                   ENDSR
@@ -463,8 +462,9 @@
      C                   Eval      CSRCOL = tempCsrCol - 1
       *
      C                   ELSE
-     C                   EVAL      §MsgID = yMsgID
-     C                   EVAL      §MsgDta = yMsgDta
+     C                   Callp     p_sndPgmMg(yMsgID: yMsgDta: §§pgmName)
+     C                   EVAL      yMsgID = ''
+     C                   EVAL      yMsgDta = ''
      C                   Endif
       *
      C                   ENDSR
@@ -489,14 +489,12 @@
      C                   SELECT
      C     tempScnFld    WHENEQ    '##ORDER'
      C                   IF        *IN72 = *ON
-     C                   EVAL      §MsgID = 'USR8195'
-     C                   EVAL      §MsgDta = *BLANKS
+     C                   Callp     p_sndPgmMg('USR8195': '': §§pgmName)
      C                   ELSE
      C                   EXSR      Slc_Key
      C                   ENDIF
      C                   OTHER
-     C                   EVAL      §MsgID = 'USR8211'
-     C                   EVAL      §MsgDta = *BLANKS
+     C                   Callp     p_sndPgmMg('USR8211': '': §§pgmName)
      C                   Endsl
       *
      C                   ENDSR
@@ -532,14 +530,12 @@
      C                   SELECT
      C     tempScnFld    WHENEQ    '##ORDER'
      C                   IF        *IN72 = *ON
-     C                   EVAL      §MsgID = 'USR8195'
-     C                   EVAL      §MsgDta = *BLANKS
+     C                   Callp     p_sndPgmMg('USR8195': '': §§pgmName)
      C                   ELSE
      C                   EXSR      Ins_Field
      C                   ENDIF
      C                   OTHER
-     C                   EVAL      §MsgID = 'USR8211'
-     C                   EVAL      §MsgDta = *BLANKS
+     C                   Callp     p_sndPgmMg('USR8211': '': §§pgmName)
      C                   Endsl
       *
      C                   ENDSR

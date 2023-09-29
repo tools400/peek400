@@ -202,9 +202,6 @@
      C                   EVAL      SFSANR = 1
      C                   Endif
       *
-      *  Nachrichten senden
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
-      *
       *  Modus: DROP/FOLD
      C                   EVAL      *IN86 = SFLMDE
       *
@@ -274,9 +271,9 @@
      C                   CALLP     PEEK21(workstn.aid: §§PgmName
      C                                    : YPgmCmd: YCmdDta: YMsgID: YMsgDta)
      C     YMsgID        IFNE      *BLANKS
-     C                   EVAL      §MsgID = YMsgID
-     C                   EVAL      §MsgDta = YMsgDta
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   Callp     p_sndPgmMg(yMsgID: yMsgDta: §§pgmName)
+     C                   EVAL      YMsgID = ''
+     C                   EVAL      YMsgDta = ''
      C                   ITER
      C                   Endif
       *
@@ -426,9 +423,7 @@
      C     LstMbr        IFEQ      *BLANKS
      C                   EVAL      *IN70 = '1'
      C                   CLEAR                   USR8209
-     C                   EVAL      §MsgID = 'USR8209'
-     C                   EVAL      §MsgDta = USR8209
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   Callp     p_sndPgmMg('USR8209': USR8209: §§pgmName)
      C                   ELSE
      C                   EXSR      PosToMbr
      C     IsNewPos      IFEQ      bTrue
@@ -457,10 +452,8 @@
      C     IsFound       IFEQ      bFalse
      C                   EVAL      IsNewPos = bFalse
      C                   CLEAR                   USR8180
-     C                   EVAL      §MsgID = 'USR8180'
-     C                   EVAL      USR81801 = LstMbr                            MemberName
-     C                   EVAL      §MsgDta = USR8180
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   EVAL      USR81801 = LstMbr
+     C                   Callp     p_sndPgmMg('USR8180': USR8180: §§pgmName)
      C                   ELSE
      C                   EVAL      IsNewPos = bTrue
      C                   Endif
@@ -544,8 +537,7 @@
      C                             (##Lib  = ' ') or
      C                             (SET_ENVENA = bFalse)
      C                   Clear                   USR8184
-     C                   Eval      §msgID  = 'USR8184'
-     C                   Eval      §msgDta = USR8184
+     C                   Callp     p_sndPgmMg('USR8184': USR8184: §§pgmName)
      C                   Eval      isCtlError = bTrue
      C                   Exsr      posCsr
      C                   Goto      endVCtl
@@ -599,10 +591,15 @@
      C     Prf40         BEGSR
       *
       *  gültiger Name ?
-     C                   If        f_vldName(##File: §msgID: §msgDta) = bTrue
+     C                   If        f_vldName(##File: yMsgID: yMsgDta) = bTrue
      C                   Eval      isCtlError = bFalse
      C                   Else
      C                   Eval      isCtlError = bTrue
+     C                   If        (yMsgID <> '')
+     C                   Callp     p_sndPgmMg(yMsgID: yMsgDta: §§pgmName)
+     C                   Eval      yMsgID = ''
+     C                   Eval      yMsgDta = ''
+     C                   Endif
      C                   Goto      ePrf40
      C                   Endif
       *
@@ -623,11 +620,14 @@
      C                                       ' AUT('       +
      C                                       '*NONE'       +
      C                                       ')'           :
-     C                                       §msgID        :
-     C                                       §msgDta       )
+     C                                       yMsgID        :
+     C                                       yMsgDta       )
       *
-     C                   If        §msgID <> ' '
+     C                   If        (yMsgID <> '')
      C                   Eval      isCtlError = bTrue
+     C                   Callp     p_sndPgmMg(yMsgID: yMsgDta: §§pgmName)
+     C                   Eval      yMsgID = ''
+     C                   Eval      yMsgDta = ''
      C                   Goto      ePrf40
      C                   Else
      C                   Eval      isCtlError = bFalse
@@ -656,10 +656,16 @@
      C     Prf41         BEGSR
       *
       *  gültiger Name ?
-     C                   If        f_vldName(##Lib: §msgID: §msgDta) = bTrue
+     C                   If        f_vldName(##Lib: yMsgID: yMsgDta) = bTrue
      C                   Eval      isCtlError = bFalse
      C                   Else
      C                   Eval      isCtlError = bTrue
+     C                   If        (yMsgID <> '')
+     C                   Callp     p_sndPgmMg(yMsgID: yMsgDta: §§pgmName)
+     C                   Eval      yMsgID = ''
+     C                   Eval      yMsgDta = ''
+     C                   Endif
+     C                   Goto      ePrf41
      C                   Endif
       *
       *  Prüfen Bibliothek
@@ -677,11 +683,14 @@
      C                                       ' AUT('       +
      C                                       '*NONE'       +
      C                                       ')'           :
-     C                                       §msgID        :
-     C                                       §msgDta       )
+     C                                       yMsgID        :
+     C                                       yMsgDta       )
       *
-     C                   If        §msgID <> ' '
+     C                   If        (yMsgID <> '')
      C                   Eval      isCtlError = bTrue
+     C                   Callp     p_sndPgmMg(yMsgID: yMsgDta: §§pgmName)
+     C                   Eval      yMsgID = ''
+     C                   Eval      yMsgDta = ''
      C                   Goto      ePrf41
      C                   Else
      C                   Eval      isCtlError = bFalse
@@ -710,9 +719,14 @@
       *
       *  Zuordnung AUSWAHL => Befehl ...
      C                   Eval      isCtlError =
-     C                               f_isVldOpt(##CTLAU: §msgID : §msgDta)
+     C                               f_isVldOpt(##CTLAU: yMsgID: yMsgDta)
      C                   If        isCtlError = bTrue
      C                   Eval      Ctl_cmd = ' '
+     C                   If        (yMsgID <> '')
+     C                   Callp     p_sndPgmMg(yMsgID: yMsgDta: §§pgmName)
+     C                   Eval      yMsgID = ''
+     C                   Eval      yMsgDta = ''
+     C                   Endif
      C                   Goto      ePrf20
      C                   Endif
       *
@@ -723,8 +737,7 @@
      C                             (##CTLAU = ' ')
      C                   Clear                   USR8110
      C                   Eval      USR81101   = ##CTLAU
-     C                   Eval      §msgID     = 'USR8110'
-     C                   Eval      §msgDta    = USR8110
+     C                   Callp     p_sndPgmMg('USR8110': USR8110: §§pgmName)
      C                   Eval      isCtlError = bTrue
      C                   Goto      ePrf20
      C                   Endif
@@ -745,14 +758,20 @@
      C     Prf21         BEGSR
       *
       *  gültiger Name ?
-     C                   If        f_vldName(##MNME: §msgID: §msgDta) = bTrue
+     C                   If        f_vldName(##MNME: yMsgID: yMsgDta) = bTrue
      C                   Eval      isCtlError = bFalse
      C                   Else
      C                   Eval      isCtlError = bTrue
+     C                   If        (yMsgID <> '')
+     C                   Callp     p_sndPgmMg(yMsgID: yMsgDta: §§pgmName)
+     C                   Eval      yMsgID = ''
+     C                   Eval      yMsgDta = ''
+     C                   Endif
      C                   Endif
      C
       *
-     C                   If        §msgID = 'CPD0078'
+     C                   If        (yMsgID = 'CPD0078')
+     C                   Callp     p_sndPgmMg('CPD0078': yMsgDta: §§pgmName)
      C                   Eval      isCtlError = bTrue
      C                   Endif
       *
@@ -786,10 +805,11 @@
       *
      C     ChkFile       BEGSR
       *
-     C                   If        (o_qFile.name = ' ') and
-     C                             (o_qFile.lib  = ' ') and
-     C                             (o_mbr  = ' ')
-     C                   Goto      endChkFile
+     C                   If        (o_qFile.name = '') and
+     C                             (o_qFile.lib  = '') and
+     C                             (o_mbr  = '')
+     C                   Exsr      clrFileP
+     C                   Leavesr
      C                   Endif
       *
       *  Prüfen Datei
@@ -809,11 +829,11 @@
      C                                       ' AUT('            +
      C                                       '*NONE'            +
      C                                       ')'                :
-     C                                       §msgID             :
-     C                                       §msgDta            )
+     C                                       yMsgID             :
+     C                                       yMsgDta            )
       *
       *  Wenn die Datei nicht gefunden werden konnte, ...
-     C                   If        §msgID = 'CPF9801'
+     C                   If        (yMsgID = 'CPF9801')
       *  ... dann
       *      anlegen Datei
      C                   Callp     f_execute('CRTDUPOBJ'        +
@@ -832,10 +852,10 @@
      C                                       ' NEWOBJ('         +
      C                                       %trim(o_qFile.name) +
      C                                       ')'                :
-     C                                       §msgID             :
-     C                                       §msgDta            )
+     C                                       yMsgID             :
+     C                                       yMsgDta            )
       *
-     C                   If        §msgID = ' '
+     C                   If        (yMsgID = '')
      C                   Callp     f_execute('RMVM'             +
      C                                       ' FILE('           +
      C                                       %trim(o_qFile.lib ) +
@@ -845,16 +865,20 @@
      C                                       ' MBR('            +
      C                                        '*ALL'            +
      C                                       ')'                :
-     C                                       §msgID             :
-     C                                       §msgDta            )
+     C                                       yMsgID             :
+     C                                       yMsgDta            )
       *
-     C                   Eval      §msgID  = ' '
-     C                   Eval      §msgDta = ' '
+     C                   Eval      yMsgID  = ''
+     C                   Eval      yMsgDta = ''
      C                   Endif
      C                   Endif
       *
-     C                   If        §msgID <> ' '
-     C                   Goto      endChkFile
+     C                   If        (yMsgID <> '')
+     C                   Callp     p_sndPgmMg(yMsgID: yMsgDta: §§pgmName)
+     C                   Eval      yMsgID = ''
+     C                   Eval      yMsgDta = ''
+     C                   Exsr      clrFileP
+     C                   Leavesr
      C                   Endif
       *
       *  Prüfen Teildatei
@@ -874,11 +898,11 @@
      C                                       ' AUT('            +
      C                                       '*NONE'            +
      C                                       ')'                :
-     C                                       §msgID             :
-     C                                       §msgDta            )
+     C                                       yMsgID             :
+     C                                       yMsgDta            )
       *
       *  Wenn die Teildatei nicht gefunden werden konnte, ...
-     C                   If        §msgID = 'CPF9815'
+     C                   If        (yMsgID = 'CPF9815')
       *  ... dann
       *      anlegen Teildatei
      C                   Callp     f_execute('ADDPFM'           +
@@ -890,12 +914,16 @@
      C                                       ' MBR('            +
      C                                       %trim(o_mbr )       +
      C                                       ')'                :
-     C                                       §msgID             :
-     C                                       §msgDta            )
+     C                                       yMsgID             :
+     C                                       yMsgDta            )
      C                   Endif
       *
-     C                   If        §msgID <> ' '
-     C                   Goto      endChkFile
+     C                   If        (yMsgID <> '')
+     C                   Callp     p_sndPgmMg(yMsgID: yMsgDta: §§pgmName)
+     C                   Eval      yMsgID = ''
+     C                   Eval      yMsgDta = ''
+     C                   Exsr      clrFileP
+     C                   Leavesr
      C                   Endif
       *
       *  Ändern Teildateitext
@@ -913,18 +941,16 @@
      C                                       ' TEXT('''         +
      C                                       %trim(o_text)       +
      C                                       ''')'              :
-     C                                       §msgID             :
-     C                                       §msgDta            )
+     C                                       yMsgID             :
+     C                                       yMsgDta            )
       *
-     C                   If        §msgID <> ' '
-     C                   Goto      endChkFile
-     C                   Endif
-     C                   Endif
-      *
-     C     endChkFile    Tag
-      *
-     C                   If        §msgID <> ' '
+     C                   If        (yMsgID <> '')
+     C                   Callp     p_sndPgmMg(yMsgID: yMsgDta: §§pgmName)
+     C                   Eval      yMsgID = ''
+     C                   Eval      yMsgDta = ''
      C                   Exsr      clrFileP
+     C                   Leavesr
+     C                   Endif
      C                   Endif
       *
      C                   ENDSR
@@ -961,10 +987,12 @@
       *
       *  Zuordnung AUSWAHL => Befehl ...
      C                   Eval      isSflError = f_isVldOpt(SFPAU  :
-     C                                                     §msgID :
-     C                                                     §msgDta)
+     C                                                     yMsgID :
+     C                                                     yMsgDta)
      C                   IF        isSflError = bTrue
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   Callp     p_sndPgmMg(yMsgID: yMsgDta: §§pgmName)
+     C                   Eval      yMsgID = ''
+     C                   Eval      yMsgDta = ''
      C                   EXSR      VSfpauErr
      C                   UPDATE    PBSfl
      C                   ITER
@@ -983,24 +1011,14 @@
      C                   EXSR      VPOS
      C                   OTHER
       *  Unbekannter Programmbefehl
-     C                   EVAL      §MsgID = 'USR8110'
+     C                   CLEAR                   USR8110
      C                   EVAL      USR81101 = YPgmCmd
-     C                   EVAL      §MsgDta = USR8110
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   Callp     p_sndPgmMg('USR8110': USR8110: §§pgmName)
      C                   EXSR      VSfpauErr
      C                   UPDATE    PBSfl
      C                   EVAL      IsSflError = bTrue
      C                   ITER
      C                   Endsl
-
-     C                   IF        isSflError = bTrue
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
-     C                   EXSR      VSfpauErr
-     C                   UPDATE    PBSfl
-     C                   ITER
-     C                   Else
-     C                   LEAVE
-     C                   Endif
       *
      C                   UPDATE    PBSfl
      C                   Enddo
@@ -1095,8 +1113,7 @@
      C                   If        rcdFmtID <> '' and i_rcdFmtID <> rcdFmtID
      C                   Eval      isSflError = bTrue
      C                   Clear                   USR8233
-     C                   Eval      §msgid = 'USR8233'
-     C                   Eval      §msgDta = USR8233
+     C                   Callp     p_sndPgmMg('USR8233': USR8233: §§pgmName)
      C                   Leavesr
      C                   Endif
      C                   Endif
@@ -1189,9 +1206,7 @@
       *
      C                   Else
      C                   Clear                   USR8181
-     C                   Eval      §msgID  = 'USR8181'
-     C                   Eval      §msgDta = USR8181
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   Callp     p_sndPgmMg('USR8181': USR8181: §§pgmName)
      C                   Endif
       *
      C                   ENDSR
@@ -1441,9 +1456,7 @@
      C                   EXSR      C_Refresh
       *
       * - Copyright
-     C                   EVAL      §MsgID = 'USR9999'
-     C                   EVAL      §MsgDta = i_copyright
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   Callp     p_sndPgmMg('USR9999': i_copyright: §§pgmName)
       *
      C                   ENDSR
       *

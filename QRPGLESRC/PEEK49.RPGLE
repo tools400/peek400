@@ -122,9 +122,6 @@
       *
      C                   DO        *HIVAL
       *
-      *  Nachrichten senden
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
-      *
       *  Nachrichten anzeigen
      C                   EVAL      *IN89 = '0'
      C                   WRITE     MSGCTL
@@ -183,9 +180,9 @@
      C                   CALLP     PEEK21(workstn.aid: §§PgmName
      C                                    : YPgmCmd: YCmdDta: YMsgID: YMsgDta)
      C     YMsgID        IFNE      *BLANKS
-     C                   EVAL      §MsgID = YMsgID
-     C                   EVAL      §MsgDta = YMsgDta
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   Callp     p_sndPgmMg(yMsgID: yMsgDta: §§pgmName)
+     C                   EVAL      YMsgID = ''
+     C                   EVAL      YMsgDta = ''
      C                   ITER
      C                   Endif
       *

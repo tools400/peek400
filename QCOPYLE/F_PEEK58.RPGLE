@@ -162,8 +162,8 @@
       *
       *-------------------------------------------------------------------*
      D p_sndPgmMg      PR
-     D  i_msgID                                   like(msgID_t)
-     D  i_msgDta                                  like(msgDta_t)
+     D  i_msgID                            const  like(msgID_t)
+     D  i_msgDta                           const  like(msgDta_t)
      D  i_pgmNme                           const  like(pgm_t)
      D  i_msgType                          const  like(msgType_t)
      D                                            options(*nopass)

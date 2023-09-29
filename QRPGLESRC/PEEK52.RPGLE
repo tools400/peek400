@@ -136,9 +136,6 @@
       *
      C                   DO        *HIVAL
       *
-      *  Nachrichten senden
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
-      *
       *  Nachrichten anzeigen
      C                   EVAL      *IN89 = '0'
      C                   WRITE     MSGCTL
@@ -161,9 +158,9 @@
      C                   CALLP     PEEK21(workstn.aid: §§PgmName
      C                                    : YPgmCmd: YCmdDta: YMsgID: YMsgDta)
      C     YMsgID        IFNE      *BLANKS
-     C                   EVAL      §MsgID = YMsgID
-     C                   EVAL      §MsgDta = YMsgDta
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   Callp     p_sndPgmMg(yMsgID: yMsgDta: §§pgmName)
+     C                   EVAL      YMsgID = ''
+     C                   EVAL      YMsgDta = ''
      C                   ITER
      C                   Endif
       *
@@ -337,8 +334,7 @@
      C                   EVAL      *IN99 = '1'
      C                   CLEAR                   USR8219
      C                   EVAL      USR82191 = ##ALWLC
-     C                   EVAL      §MsgID = 'USR8219'
-     C                   EVAL      §MsgDta = USR8219
+     C                   Callp     p_sndPgmMg('USR8219': USR8219: §§pgmName)
      C                   GOTO      EPRF22
      C                   Endif
       *
@@ -362,8 +358,7 @@
      C                   EVAL      *IN99 = '1'
      C                   CLEAR                   USR8219
      C                   EVAL      USR82191 = ##CASE
-     C                   EVAL      §MsgID = 'USR8219'
-     C                   EVAL      §MsgDta = USR8219
+     C                   Callp     p_sndPgmMg('USR8219': USR8219: §§pgmName)
      C                   GOTO      EPRF20
      C                   Endif
       *
@@ -387,8 +382,7 @@
      C                   EVAL      *IN99 = '1'
      C                   CLEAR                   USR8219
      C                   EVAL      USR82191 = ##RCDLCK
-     C                   EVAL      §MsgID = 'USR8219'
-     C                   EVAL      §MsgDta = USR8219
+     C                   Callp     p_sndPgmMg('USR8219': USR8219: §§pgmName)
      C                   GOTO      EPRF23
      C                   Endif
       *
@@ -411,8 +405,7 @@
      C                             (##CASE  = bTrue )
      C                   EVAL      *IN99 = '1'
      C                   CLEAR                   USR8216
-     C                   EVAL      §MsgID = 'USR8216'
-     C                   EVAL      §MsgDta = USR8216
+     C                   Callp     p_sndPgmMg('USR8216': USR8216: §§pgmName)
      C                   GOTO      EPRF24
      C                   Endif
       *
@@ -438,8 +431,7 @@
      C                   EVAL      *IN99 = '1'
      C                   CLEAR                   USR8219
      C                   EVAL      USR82191 = ##NULLDFT
-     C                   EVAL      §MsgID = 'USR8219'
-     C                   EVAL      §MsgDta = USR8219
+     C                   Callp     p_sndPgmMg('USR8219': USR8219: §§pgmName)
      C                   GOTO      EPRF25
      C                   Endif
       *
@@ -463,8 +455,7 @@
      C                   EVAL      *IN99 = '1'
      C                   CLEAR                   USR8219
      C                   EVAL      USR82191 = ##KEEPCRS
-     C                   EVAL      §MsgID = 'USR8219'
-     C                   EVAL      §MsgDta = USR8219
+     C                   Callp     p_sndPgmMg('USR8219': USR8219: §§pgmName)
      C                   GOTO      EPRF26
      C                   Endif
       *
@@ -488,8 +479,7 @@
      C                   EVAL      *IN99 = '1'
      C                   CLEAR                   USR8219
      C                   EVAL      USR82191 = ##SAVE
-     C                   EVAL      §MsgID = 'USR8219'
-     C                   EVAL      §MsgDta = USR8219
+     C                   Callp     p_sndPgmMg('USR8219': USR8219: §§pgmName)
      C                   GOTO      EPRF21
      C                   Endif
       *

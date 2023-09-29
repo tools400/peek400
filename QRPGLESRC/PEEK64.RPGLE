@@ -161,9 +161,6 @@
       *
      C                   Do        *hival
       *
-      *  Nachrichten senden
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
-      *
       *  Nachrichten anzeigen
      C                   Eval      *in89 = *off
      C                   Write     MSGCTL
@@ -216,9 +213,9 @@
      C                   CALLP     PEEK21(workstn.aid: §§PgmName
      C                                    : YPgmCmd: YCmdDta: YMsgID: YMsgDta)
      C                   If        YMsgID <> ' '
-     C                   Eval      §msgID  = yMsgID
-     C                   Eval      §msgDta = yMsgDta
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   Callp     p_sndPgmMg(yMsgID: yMsgDta: §§pgmName)
+     C                   Eval      YMsgID = ''
+     C                   Eval      YMsgDta = ''
      C                   Iter
      C                   Endif
       *
@@ -382,9 +379,7 @@
       *
       *  Zeichenkette zu lang
      C                   If        len > f_dsplyLn(FLDL0100)
-     C                   Eval      §MsgID  = 'USR8176'
-     C                   Eval      §MsgDta = ' '
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   Callp     p_sndPgmMg('USR8176': '': §§pgmName)
      C                   Eval      isPgmError = bTrue
      C                   Endif
       *
@@ -578,9 +573,8 @@
      C                   Eval      isPgmError = bTrue
      C                   Clear                   FLDL0100
      C                   Clear                   USR8136
-     C                   Eval      §msgID     = 'USR8136'
      C                   Eval      USR81361   = i_fldName
-     C                   Eval      §MsgDta    = USR8136
+     C                   Callp     p_sndPgmMg('USR8136': USR8136: §§pgmName)
      C                   Else
      C                   Eval      isPgmError = bFalse
      C                   Eval      FLDL0100   = F_FFD
@@ -605,11 +599,10 @@
      C                   endif
       *
       * - Feld zu groß Hinweis ausgeben
-     C                   EVAL      §MsgID = 'USR8123'
+     C                   CLEAR                   USR8123
      C                   EVAL      USR81231 = §White_U
      C                   EVAL      USR81232 = §White
-     C                   EVAL      §MsgDta = USR8123
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   Callp     p_sndPgmMg('USR8123': USR8123: §§pgmName)
       *
       * - Füllen der Bildschirmfelder
      C                   Exsr      bzoff1
@@ -622,9 +615,7 @@
      C                   Exsr      setScreen
       *
       * - Copyright
-     C                   Eval      §msgID  = 'USR9999'
-     C                   Eval      §msgDta = i_copyright
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   Callp     p_sndPgmMg('USR9999': i_copyright: §§pgmName)
       *
      C                   Endsr
       *

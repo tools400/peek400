@@ -135,9 +135,6 @@
       *
      C                   DO        *HIVAL
       *
-      *  Nachrichten senden
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
-      *
       *  Nachrichten anzeigen
      C                   EVAL      *IN89 = '0'
      C                   WRITE     MSGCTL
@@ -189,9 +186,9 @@
      C                   CALLP     PEEK21(workstn.aid: §§PgmName
      C                                    : YPgmCmd: YCmdDta: YMsgID: YMsgDta)
      C     YMsgID        IFNE      *BLANKS
-     C                   EVAL      §MsgID = YMsgID
-     C                   EVAL      §MsgDta = YMsgDta
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   Callp     p_sndPgmMg(YMsgID: YMsgDta: §§pgmName)
+     C                   EVAL      YMsgID = ''
+     C                   EVAL      YMsgDta = ''
      C                   ITER
      C                   Endif
       *
@@ -312,8 +309,7 @@
      C                   EVAL      Wrk_Color = SET_ExcCol
      C                   OTHER
      C                   EVAL      *IN99 = '1'
-     C                   EVAL      §MsgID = 'USR8146'
-     C                   EVAL      §MsgDta = *BLANKS
+     C                   Callp     p_sndPgmMg('USR8146': '': §§pgmName)
      C                   Endsl
       *
      C     EPRF20        TAG
@@ -569,8 +565,7 @@
      C                   EVAL      SET_ExcCol = Wrk_Color
      C                   OTHER
      C                   EVAL      *IN99 = '1'
-     C                   EVAL      §MsgID = 'USR8146'
-     C                   EVAL      §MsgDta = *BLANKS
+     C                   Callp     p_sndPgmMg('USR8146': '': §§pgmName)
      C                   Endsl
       *
      C                   EXSR      Fill##
@@ -610,9 +605,7 @@
      C                   EXSR      SetScreen
       *
       * - Copyright
-     C                   EVAL      §MsgID = 'USR9999'
-     C                   EVAL      §MsgDta = i_copyright
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   Callp     p_sndPgmMg('USR9999': i_copyright: §§pgmName)
       *
      C                   ENDSR
       *

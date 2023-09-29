@@ -194,9 +194,6 @@
       *
      C                   DO        *HIVAL
       *
-      *  Nachrichten senden
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
-      *
       *  Nachrichten anzeigen
      C                   EVAL      *IN89 = '0'
      C                   WRITE     MSGCTL
@@ -237,9 +234,9 @@
      C                   CALLP     PEEK21(workstn.aid: §§PgmName
      C                                    : YPgmCmd: YCmdDta: YMsgID: YMsgDta)
      C     YMsgID        IFNE      *BLANKS
-     C                   EVAL      §MsgID = YMsgID
-     C                   EVAL      §MsgDta = YMsgDta
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   Callp     p_sndPgmMg(yMsgID: yMsgDta: §§pgmName)
+     C                   Eval      yMsgID = ''
+     C                   Eval      YMsgDta = ''
      C                   ITER
      C                   Endif
       *
@@ -303,18 +300,13 @@
       *
      C     C_Enter       BEGSR
       *
-     C     §MsgID        IFNE      *BLANKS
-     C                   EVAL      *IN99 = '1'
-     C                   ELSE
-      *
      C                   EVAL      R_FIELD = ##FIELD
       *
       *  Prompt?
       *  ... ##Field
      C                   IF        %trim(##Field ) = SET_PRMT
      C                   EXSR      C_Prompt
-     C     §MsgID        IFNE      *BLANKS
-     C                   EVAL      *IN99 = '1'
+     C                   IF        (*IN99 = bTrue)
      C                   GOTO      E_Enter
      C                   ELSE
       *  ...?
@@ -331,7 +323,6 @@
      C                   EVAL      *IN99 = '1'
      C                   ELSE
       *  Wert belassen ...
-     C                   Endif
      C                   Endif
       *
      C     E_Enter       TAG
@@ -433,15 +424,12 @@
       *  Fehlermeldung ...
      C                   EVAL      *IN99 = '1'
      C                   CLEAR                   USR8136
-     C                   EVAL      §MsgID = 'USR8136'
-     C                   EVAL      USR81361 = ##Field                           Feldname
-     C                   EVAL      §MsgDta = USR8136
+     C                   EVAL      USR81361 = ##Field
+     C                   Callp     p_sndPgmMg('USR8136': USR8136: §§pgmName)
      C                   GOTO      EPRF20
      C                   ELSE
      C                   EVAL      FLDL0100 = F_FFD
      C                   Endif
-      *
-      ***                EXSR      ChkNumeric
       *
      C                   IF        FLDL0100.F1DTyp <> 'A' and                   alpha-num
       ***                          FLDL0100.F1DTyp <> 'G' and                   graphic
@@ -453,10 +441,9 @@
      C                             FLDL0100.F1DTyp <> 'F'                       Float
      C                   EVAL      *IN99 = '1'
      C                   CLEAR                   USR8129
-     C                   EVAL      §MsgID = 'USR8129'
-     C                   EVAL      USR81291 = ##Field                           Feldname
-     C                   EVAL      USR81292 = FLDL0100.F1DTyp                   Datentyp
-     C                   EVAL      §MsgDta = USR8129
+     C                   EVAL      USR81291 = ##Field
+     C                   EVAL      USR81292 = FLDL0100.F1DTyp
+     C                   Callp     p_sndPgmMg('USR8129': USR8129: §§pgmName)
      C                   GOTO      EPRF20
      C                   Endif
       *
@@ -487,9 +474,8 @@
      C     ##OP          ANDNE     'NLIKE'
      C                   EVAL      *IN99 = '1'
      C                   CLEAR                   USR8124
-     C                   EVAL      §MsgID = 'USR8124'
-     C                   EVAL      USR81241 = ##OP                              Operation
-     C                   EVAL      §MsgDta = USR8124
+     C                   EVAL      USR81241 = ##OP
+     C                   Callp     p_sndPgmMg('USR8124': USR8124: §§pgmName)
      C                   GOTO      EPRF21
      C                   Endif
       *
@@ -504,10 +490,9 @@
      C                             FLDL0100.F1DTyp <> 'T'                       Time
      C                   EVAL      *IN99 = '1'
      C                   CLEAR                   USR8135
-     C                   EVAL      §MsgID = 'USR8135'
-     C                   EVAL      USR81351 = ##OP                              Operand
-     C                   EVAL      USR81352 = FLDL0100.F1DTyp                   Datentyp
-     C                   EVAL      §MsgDta = USR8135
+     C                   EVAL      USR81351 = ##OP
+     C                   EVAL      USR81352 = FLDL0100.F1DTyp
+     C                   Callp     p_sndPgmMg('USR8135': USR8135: §§pgmName)
      C                   GOTO      EPRF21
      C                   Endif
      C                   Endif
@@ -518,10 +503,9 @@
      C     ##OP          ANDNE     'NLIKE'
      C                   EVAL      *IN99 = '1'
      C                   CLEAR                   USR8134
-     C                   EVAL      §MsgID = 'USR8134'
      C                   EVAL      USR81341 = ##OP                              Operation
      C                   EVAL      USR81342 = ##FIELD                           Feld
-     C                   EVAL      §MsgDta = USR8134
+     C                   Callp     p_sndPgmMg('USR8134': USR8134: §§pgmName)
      C                   GOTO      EPRF21
      C                   Endif
       *
@@ -545,8 +529,7 @@
       *
      C     ##ARG         IFEQ      *BLANKS
      C                   EVAL      *IN99 = '1'
-     C                   EVAL      §MsgID = 'USR8140'
-     C                   EVAL      §MsgDta = USR8140
+     C                   Callp     p_sndPgmMg('USR8140': USR8140: §§pgmName)
      C                   GOTO      EPRF22
      C                   Endif
       *
@@ -589,9 +572,9 @@
      C                   IF        FLDL0100.F1DTyp = 'F'                        Float
      C                   IF        f_vldFLoat(R_Arg30) = bFalse
      C                   EVAL      *IN99 = '1'
-     C                   EVAL      §MsgID = 'USR8192'
+     C                   CLEAR                   USR81921
      C                   EVAL      USR81921 = ##Field
-     C                   EVAL      §MsgDta = USR8192
+     C                   Callp     p_sndPgmMg('USR8192': USR8192: §§pgmName)
      C                   ENDIF
      C                   ELSE
      C                   EXSR      SrchPoint
@@ -608,10 +591,9 @@
      C     ##Sign        ANDNE     SET_SignP
      C                   EVAL      *IN99 = '1'
      C                   CLEAR                   USR8141
-     C                   EVAL      §MsgID = 'USR8141'
      C                   EVAL      USR81411 = SET_SignP
      C                   EVAL      USR81412 = SET_SignM
-     C                   EVAL      §MsgDta = USR8141
+     C                   Callp     p_sndPgmMg('USR8141': USR8141: §§pgmName)
      C                   GOTO      EPRF22
      C                   ELSE
       *  ... richtiges Vorzeichen
@@ -769,8 +751,7 @@
       *
      C     ##NBRS        IFEQ      *ZEROS
      C                   EVAL      *IN99 = '1'
-     C                   EVAL      §MsgID = 'USR8125'
-     C                   EVAL      §MsgDta = *BLANKS
+     C                   Callp     p_sndPgmMg('USR8125': '': §§pgmName)
      C                   GOTO      EPRF23
      C                   Endif
       *
@@ -795,9 +776,8 @@
      C     ##TYPE        ANDNE     'P'
      C                   EVAL      *IN99 = '1'
      C                   CLEAR                   USR8126
-     C                   EVAL      §MsgID = 'USR8126'
      C                   EVAL      USR81261 = ##TYPE
-     C                   EVAL      §MsgDta = USR8126
+     C                   Callp     p_sndPgmMg('USR8126': USR8126: §§pgmName)
      C                   GOTO      EPRF24
      C                   Endif
       *
@@ -819,8 +799,7 @@
      C     ##CASE        IFNE      bTrue
      C     ##CASE        ANDNE     bFalse
      C                   EVAL      *IN99 = '1'
-     C                   EVAL      §MsgID = 'USR8133'
-     C                   EVAL      §MsgDta = *BLANKS
+     C                   Callp     p_sndPgmMg('USR8133': '': §§pgmName)
      C                   GOTO      EPRF25
      C                   Endif
       *
@@ -867,8 +846,8 @@
      C     ##Field       OREQ      SET_PRMT
      C                   EXSR      Pmt_Field
      C                   OTHER
-     C                   EVAL      §MsgID = 'USR8179'
-     C                   EVAL      §MsgDta = *BLANKS
+     C                   Callp     p_sndPgmMg('USR8179': '': §§pgmName)
+     C                   EVAL      *in99 = bTrue
      C                   Endsl
       *
      C                   ENDSR
@@ -885,8 +864,10 @@
      C     yMsgID        IFEQ      *BLANKS
      C                   EVAL      ##Field = yField
      C                   ELSE
-     C                   EVAL      §MsgID = yMsgID
-     C                   EVAL      §MsgDta = yMsgDta
+     C                   Callp     p_sndPgmMg(yMsgID: yMsgDta: §§pgmName)
+     C                   EVAL      yMsgID = ''
+     C                   EVAL      yMsgDta = ''
+     C                   EVAL      *in99 = bTrue
      C                   Endif
       *
      C                   ENDSR
@@ -1071,9 +1052,9 @@
       *
      C     §Numeric      CHECK     R_Arg30                                99
      C     *IN99         IFEQ      '1'                                          = Fehler
-     C                   EVAL      §MsgID = 'USR8138'
+     C                   CLEAR                   USR81381
      C                   EVAL      USR81381 = ##Field
-     C                   EVAL      §MsgDta = USR8138
+     C                   Callp     p_sndPgmMg('USR8138': USR8138: §§pgmName)
      C                   Endif
       *
      C                   Endif
@@ -1135,9 +1116,7 @@
      C                   EXSR      SetScreen
       *
       * - Copyright
-     C                   EVAL      §MsgID = 'USR9999'
-     C                   EVAL      §MsgDta = i_copyright
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   Callp     p_sndPgmMg('USR9999': i_copyright: §§pgmName)
       *
      C                   ENDSR
       *

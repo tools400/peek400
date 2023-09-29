@@ -72,19 +72,20 @@
       *
       *  Peek21:
      D YPgmCmd         S             10A   INZ(*BLANKS)
-     D YCmdDta         S                   LIKE(pgmCmdDt_t) INZ(*BLANKS)
+     D YCmdDta         S                   LIKE(pgmCmdDt_t)
      D YMsgID          S              7A   INZ(*BLANKS)
      D YMsgDta         S            512A   INZ(*BLANKS)
       *
       *  Peek23:
-     D yFKeys          S             18A   DIM(32)       INZ(*BLANKS)
-     D yNbrOfKeys      S                   like(int4_t) inz
+     D yFKeys          S             18A   DIM(32)
+     D yNbrOfKeys      S                   like(int4_t)
       *
-     D SfBot           S                   like(int4_t) inz
+     D SfBot           S                   like(int4_t)
      D NbrFKeys        C                   CONST(2)
+     D isPgmError      S                   like(bool_t) inz(bFalse)
       *
-     D PEEK21_NAME     S                   like(pgmCallN_t) inz
-     D PEEK23_NAME     S                   like(pgmCallN_t) inz
+     D PEEK21_NAME     S                   like(pgmCallN_t)
+     D PEEK23_NAME     S                   like(pgmCallN_t)
       *
       /COPY QCOPYLE,CEECNDHDLR
       *
@@ -118,9 +119,6 @@
       *  Schleife für Programmbearbeitung
       *
      C                   DO        *HIVAL
-      *
-      *  Nachrichten senden
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
       *
       *  Nachrichten anzeigen
      C                   EVAL      *IN89 = '0'
@@ -178,9 +176,9 @@
      C                   CALLP     PEEK21(workstn.aid: §§PgmName
      C                                    : YPgmCmd: YCmdDta: YMsgID: YMsgDta)
      C     YMsgID        IFNE      *BLANKS
-     C                   EVAL      §MsgID = YMsgID
-     C                   EVAL      §MsgDta = YMsgDta
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   Callp     p_sndPgmMg(yMsgID: yMsgDta: §§pgmName)
+     C                   EVAL      YMsgID = ''
+     C                   EVAL      YMsgDta = ''
      C                   ITER
      C                   Endif
       *
@@ -198,7 +196,7 @@
       *  F9  - Löschen Arbeitsumgebung
      C     YPgmCmd       WHENEQ    '*DELETEENV'
      C                   EXSR      C_delEnv
-     C                   IF        §msgID = ' '
+     C                   IF        (isPgmError = bTrue)
      C                   LEAVE
      C                   ELSE
      C                   ITER
@@ -280,8 +278,17 @@
      C                                       ' MBR('         +
      C                                       %trim(i_envMbr ) +
      C                                       ')'             :
-     C                                       §msgID          :
-     C                                       §msgDta         )
+     C                                       yMsgID          :
+     C                                       yMsgDta         )
+      *
+     C                   If        (yMsgId <> '')
+     C                   Callp     p_sndPgmMg(YMsgID: YMsgDta: §§pgmName)
+     C                   Eval      YMsgID = ''
+     C                   Eval      YMsgDta = ''
+     C                   Eval      isPgmError = bTrue
+     C                   Else
+     C                   Eval      isPgmError = bFalse
+     C                   Endif
       *
      C                   ENDSR
       *

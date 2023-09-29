@@ -205,9 +205,6 @@
      C                   EVAL      SFSANR = 1
      C                   Endif
       *
-      *  Nachrichten senden
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
-      *
       *  Modus: DROP/FOLD
      C                   EVAL      *IN86 = SFLMDE
       *
@@ -259,9 +256,9 @@
      C                   CALLP     PEEK21(workstn.aid: §§PgmName
      C                                    : YPgmCmd: YCmdDta: YMsgID: YMsgDta)
      C     YMsgID        IFNE      *BLANKS
-     C                   EVAL      §MsgID = YMsgID
-     C                   EVAL      §MsgDta = YMsgDta
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   Callp     p_sndPgmMg(yMsgID: yMsgDta: §§pgmName)
+     C                   EVAL      YMsgID = ''
+     C                   EVAL      YMsgDta = ''
      C                   ITER
      C                   Endif
       *
@@ -379,9 +376,7 @@
      C     LstField      IFEQ      *BLANKS
      C                   EVAL      *IN70 = '1'
      C                   CLEAR                   USR8209
-     C                   EVAL      §MsgID = 'USR8209'
-     C                   EVAL      §MsgDta = USR8209
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   Callp     p_sndPgmMg('USR8209': USR8209: §§pgmName)
      C                   ELSE
      C                   EXSR      PosToField
      C     IsNewPos      IFEQ      bTrue
@@ -410,10 +405,8 @@
      C     IsFound       IFEQ      bFalse
      C                   EVAL      IsNewPos = bFalse
      C                   CLEAR                   USR8136
-     C                   EVAL      §MsgID = 'USR8136'
-     C                   EVAL      USR81361 = LstField                          Feldname
-     C                   EVAL      §MsgDta = USR8136
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   EVAL      USR81361 = LstField
+     C                   Callp     p_sndPgmMg('USR8136': USR8136: §§pgmName)
      C                   ELSE
      C                   EVAL      IsNewPos = bTrue
      C                   Endif
@@ -525,9 +518,7 @@
      C                                    : YPgmCmd: YCmdDta: YMsgID: YMsgDta)
      C     YMsgID        IFNE      *BLANKS
       *  Fehlermeldung ...
-     C                   EVAL      §MsgID = 'USR8110'
-     C                   EVAL      §MsgDta = SFPAU
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   Callp     p_sndPgmMg('USR8110': SFPAU: §§pgmName)
      C                   EXSR      VSfpauErr
       *  Setzen Bezugszahlen ...
      C                   EXSR      PBSetBZ
@@ -545,10 +536,9 @@
      C     Sfl_Cmd       WHENEQ    '*NONE'
      C                   OTHER
       *  Unbekannter Programmbefehl
-     C                   EVAL      §MsgID = 'USR8110'
+     C                   CLEAR                   USR81101
      C                   EVAL      USR81101 = YPgmCmd
-     C                   EVAL      §MsgDta = USR8110
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   Callp     p_sndPgmMg('USR8110': USR8110: §§pgmName)
      C                   EXSR      VSfpauErr
       *  Setzen Bezugszahlen ...
      C                   EXSR      PBSetBZ
@@ -585,9 +575,9 @@
      C                   EXSR      VPosCsr
      C                   EXSR      VSfpauErr
      C                   EVAL      *IN85 = '0'                                  DSPATR(RI)
-     C                   EVAL      §MsgID = YMsgID
-     C                   EVAL      §MsgDta = YMsgDta
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   Callp     p_sndPgmMg(YMsgID: YMsgDta: §§pgmName)
+     C                   EVAL      YMsgID = ''
+     C                   EVAL      YMsgDta = ''
      C                   EVAL      IsSflError = bTrue
      C                   Endif
      C                   Endif
@@ -1265,9 +1255,7 @@
      C                   EXSR      C_Refresh
       *
       * - Copyright
-     C                   EVAL      §MsgID = 'USR9999'
-     C                   EVAL      §MsgDta = i_copyright
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   Callp     p_sndPgmMg('USR9999': i_copyright: §§pgmName)
       *
      C                   ENDSR
       *

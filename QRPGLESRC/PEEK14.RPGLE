@@ -233,9 +233,6 @@
      C                   EVAL      SFSANR = 1
      C                   Endif
       *
-      *  Nachrichten senden
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
-      *
       *  Modus: DROP/FOLD
      C                   EVAL      *IN86 = SFLMDE
       *
@@ -302,9 +299,9 @@
      C                   CALLP     PEEK21(workstn.aid: §§PgmName
      C                                    : YPgmCmd: YCmdDta: YMsgID: YMsgDta)
      C     YMsgID        IFNE      *BLANKS
-     C                   EVAL      §MsgID = YMsgID
-     C                   EVAL      §MsgDta = YMsgDta
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   Callp     p_sndPgmMg(YMsgID: YMsgDta: §§pgmName)
+     C                   Eval      YMsgId = ''
+     C                   Eval      YMsgDta = ''
      C                   ITER
      C                   Endif
       *
@@ -415,18 +412,14 @@
       *
       *  Error: No valid subfile record.
      C     SFLCSR        IFEQ      *ZEROS
-     C                   EVAL      §MsgID = 'USR8204'
-     C                   EVAL      §MsgDta = *BLANKS
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   Callp     p_sndPgmMg('USR8204': '': §§pgmName)
      C                   LEAVESR
      C                   ENDIF
       *
      C     SFLCSR        CHAIN     PBSFL                              01
      C     *IN01         IFEQ      '1'
       *  Error: Unable to find record.
-     C                   EVAL      §MsgID = 'USR8120'
-     C                   EVAL      §MsgDta = *BLANKS
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   Callp     p_sndPgmMg('USR8120': '': §§pgmName)
      C                   LEAVESR
      C                   ENDIF
       *
@@ -434,9 +427,7 @@
      C     F1KEY         CHAIN     FPEEKFLD                           11
      C     *IN11         IFEQ      '1'
       *  Error: Unable to find record.
-     C                   EVAL      §MsgID = 'USR8120'
-     C                   EVAL      §MsgDta = *BLANKS
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   Callp     p_sndPgmMg('USR8120': '': §§pgmName)
      C                   LEAVESR
      C                   ENDIF
       *
@@ -446,10 +437,8 @@
      C                   IF        FLDL0100.F1NALW = '1' and
      C                             IO_NullMap(FLDL0100.F1SEQ) = 1
      C                   CLEAR                   USR8220
-     C                   Eval      §MsgID   = 'USR8220'
      C                   Eval      USR82201 = FLDL0100.F1FNME
-     C                   Eval      §MsgDta  = USR8220
-     C                   CALLP     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   CALLP     p_sndPgmMg('USR8220': USR8220: §§pgmName)
      C                   LEAVESR
      C                   ENDIF
       *
@@ -474,18 +463,14 @@
       *
       *  Error: No valid subfile record.
      C     SFLCSR        IFEQ      *ZEROS
-     C                   EVAL      §MsgID = 'USR8204'
-     C                   EVAL      §MsgDta = *BLANKS
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   Callp     p_sndPgmMg('USR8204': '': §§pgmName)
      C                   LEAVESR
      C                   ENDIF
       *
      C     SFLCSR        CHAIN     PBSFL                              01
      C     *IN01         IFEQ      '1'
       *  Error: Unable to find record.
-     C                   EVAL      §MsgID = 'USR8120'
-     C                   EVAL      §MsgDta = *BLANKS
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   Callp     p_sndPgmMg('USR8120': '': §§pgmName)
      C                   LEAVESR
      C                   ENDIF
       *
@@ -493,9 +478,7 @@
      C     F1KEY         CHAIN     FPEEKFLD                           11
      C     *IN11         IFEQ      '1'
       *  Error: Unable to find record.
-     C                   EVAL      §MsgID = 'USR8120'
-     C                   EVAL      §MsgDta = *BLANKS
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   Callp     p_sndPgmMg('USR8120': '': §§pgmName)
      C                   LEAVESR
      C                   ENDIF
       *
@@ -505,20 +488,16 @@
      C                   IF        FLDL0100.F1DTYP <> 'A' and
      C                             FLDL0100.F1DTYP <> 'G'
      C                   CLEAR                   USR8221
-     C                   Eval      §MsgID   = 'USR8221'
      C                   Eval      USR82211 = FLDL0100.F1FNME
-     C                   Eval      §MsgDta  = USR8221
-     C                   CALLP     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   CALLP     p_sndPgmMg('USR8221': USR8221: §§pgmName)
      C                   LEAVESR
      C                   ENDIF
       *
       *  Error: Field &1 exceeds maximum length allowed for editor.
      C**                 IF        f_buffLn(FLDL0100) > 1024
      C**                 CLEAR                   USR8222
-     C**                 Eval      §MsgID   = 'USR8222'
      C**                 Eval      USR82221 = FLDL0100.F1FNME
-     C**                 Eval      §MsgDta  = USR8222
-     C**                 CALLP     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C**                 CALLP     p_sndPgmMg('USR8222': USR8222: §§pgmName)
      C**                 LEAVESR
      C**                 ENDIF
       *
@@ -526,10 +505,8 @@
      C                   IF        FLDL0100.F1NALW = '1' and
      C                             IO_NullMap(FLDL0100.F1SEQ) = 1
      C                   CLEAR                   USR8220
-     C                   Eval      §MsgID   = 'USR8220'
      C                   Eval      USR82201 = FLDL0100.F1FNME
-     C                   Eval      §MsgDta  = USR8220
-     C                   CALLP     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   CALLP     p_sndPgmMg('USR8220': USR8220: §§pgmName)
      C                   LEAVESR
      C                   ENDIF
       *
@@ -554,9 +531,8 @@
       *
      C                   IF        f_buffLn(FLDL0100) > RCD_BUFF_LEN
      C                   CLEAR                   USR8206
-     C                   Eval      §MsgID   = 'USR8206'
      C                   Eval      USR82061 = RCD_BUFF_LEN
-     C                   Eval      §MsgDta  = USR8206
+     C                   Callp     p_sndPgmMg('USR8206': USR8206: §§pgmName)
      C                   ELSE
      C                   Callp     f_rtvFld(yFldInhalt: IO_Buff:
      C                                      FLDL0100: bFalse)
@@ -660,8 +636,7 @@
      C                   endmon
       *
      C                   IF        YMsgID <> ''
-     C                   EVAL      §MsgID  = YMsgID
-     C                   EVAL      §MsgDta = YMsgDta
+     C                   Callp     p_sndPgmMg(YMsgID: YMsgDta: §§pgmName)
      C                   EVAL      YMsgID  = ''
      C                   EVAL      YMsgDta = ''
      C                   ENDIF
@@ -868,9 +843,7 @@
      C     IsCvtChar     IFEQ      bFalse
      C     YMsgID        IFNE      *BLANKS
      C                   EVAL      IsCvtChar = bTrue
-     C                   EVAL      §MsgID = YMsgID
-     C                   EVAL      §MsgDta = YMsgDta
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   Callp     p_sndPgmMg(YMsgID: YMsgDta: §§pgmName)
      C                   ELSE
       *         keine Nachricht anstehend
      C                   Endif
@@ -882,6 +855,8 @@
      C                   Endif
       *
       *  Ende: F1NALW
+     C                   EVAL      YMsgID  = ''
+     C                   EVAL      YMsgDta = ''
      C                   Endif
       *
       *  ... anzeigen Subfile
@@ -1019,9 +994,7 @@
      C                   EXSR      PBReadUp
       *
       * - Copyright
-     C                   EVAL      §MsgID = 'USR9999'
-     C                   EVAL      §MsgDta = i_copyright
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   Callp     p_sndPgmMg('USR9999': i_copyright: §§pgmName)
       *
      C                   ENDSR
       *

@@ -103,9 +103,6 @@
      D sqlSelectStmt   S                   like(sqlStmt_t) inz
      D sqlCountStmt    S                   like(sqlStmt_t) inz
       *
-     D §msgID          S              7A   inz
-     D §msgDta         S            512A   inz
-      *
      D pFile           S                   like(file_t) inz
      D pLib            S                   like(lib_t) inz
      D pMbr            S                   like(mbr_t) inz

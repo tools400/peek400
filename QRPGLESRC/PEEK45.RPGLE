@@ -193,9 +193,6 @@
       *
      C                   Do        *hival
       *
-      *  Nachrichten senden
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
-      *
       *  Nachrichten anzeigen
      C                   Eval      *in89 = *off
      C                   Write     MSGCTL
@@ -255,9 +252,9 @@
      C                   CALLP     PEEK21(workstn.aid: §§PgmName
      C                                    : YPgmCmd: YCmdDta: YMsgID: YMsgDta)
      C                   If        YMsgID <> ' '
-     C                   Eval      §msgID  = yMsgID
-     C                   Eval      §msgDta = yMsgDta
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   Callp     p_sndPgmMg(yMsgID: yMsgDta: §§pgmName)
+     C                   Eval      YMsgID = ''
+     C                   Eval      YMsgDta = ''
      C                   Iter
      C                   Endif
       *
@@ -515,9 +512,10 @@
      C     §HexChar      Check     #HexString    x                        98
      C                   If        (*in98  = *on       )  and
      C                             (x     <= %len(%trimr(#HexString)))
-     C                   Eval      yMsgID  = 'USR8174'
-     C                   Eval      yMsgDta = %subst(#HexString: x: 1)
-     C                   Exsr      setError
+     C                   Callp     p_sndPgmMg('USR8174'
+     C                                        : %subst(#HexString: x: 1)
+     C                                        : §§pgmName)
+     C                   Eval      isPgmError = bTrue
      C                   Goto      ePrf20
      C                   Endif
       *
@@ -530,9 +528,7 @@
      C                                                 f_buffLn(FLDL0100) * 2)
      C                   Eval      isDataChg = bTrue
      C                   Else
-     C                   Eval      §MsgID  = 'USR8176'
-     C                   Eval      §MsgDta = ' '
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   Callp     p_sndPgmMg('USR8176': '': §§pgmName)
      C                   Eval      warning_2 = bTrue
      C                   Eval      isPgmError = bTrue
      C                   Goto      ePrf20
@@ -545,9 +541,8 @@
      C                   Mvr                     x
       *
      C                   If        x <> 0
-     C                   Eval      yMsgID  = 'USR8175'
-     C                   Eval      yMsgDta = ' '
-     C                   Exsr      setError
+     C                   Callp     p_sndPgmMg('USR8175': '': §§pgmName)
+     C                   Eval      isPgmError = bTrue
      C                   Goto      ePrf20
      C                   Endif
       *
@@ -573,9 +568,7 @@
      C                   Eval      isDataChg = bTrue
      C                   Enddo
      C                   Else
-     C                   Eval      §MsgID  = 'USR8186'
-     C                   Eval      §MsgDta = ' '
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   Callp     p_sndPgmMg('USR8186': '': §§pgmName)
      C                   Eval      warning_1  = bTrue
      C                   Eval      isPgmError = bTrue
      C                   Goto      ePrf20
@@ -599,16 +592,14 @@
      C     prf21         Begsr
       *
      C                   If        #StartPos <= *ZEROS
-     C                   Eval      yMsgID  = 'USR8178'
-     C                   Eval      yMsgDta = ' '
-     C                   Exsr      setError
+     C                   Callp     p_sndPgmMg('USR8178': '': §§pgmName)
+     C                   Eval      isPgmError = bTrue
      C                   Goto      ePrf21
      C                   Endif
       *
      C                   If        #StartPos > $BufLaenge
-     C                   Eval      yMsgID  = 'USR8177'
-     C                   Eval      yMsgDta = ' '
-     C                   Exsr      setError
+     C                   Callp     p_sndPgmMg('USR8177': '': §§pgmName)
+     C                   Eval      isPgmError = bTrue
      C                   Goto      ePrf21
      C                   Endif
       *
@@ -617,24 +608,6 @@
      C                   If        isPgmError = bTrue
      C                   Eval      *in21 = *on
      C                   Eval      *in31 = *on
-     C                   Endif
-      *
-     C                   Endsr
-      *
-      *============================================================*
-      *    setError      Eintragen Programmfehler                  *
-      *============================================================*
-      *
-     C     setError      BEGSR
-      *
-     C                   If        isPgmError = bTrue
-      *
-      *       Alte Fehlermeldung beibehalten
-      *
-     C                   Else
-     C                   Eval      isPgmError = bTrue
-     C                   Eval      §msgID  = yMsgID
-     C                   Eval      §msgDta = yMsgDta
      C                   Endif
       *
      C                   Endsr
@@ -937,10 +910,8 @@
      C                   Eval      isPgmError = bTrue
      C                   Clear                   FLDL0100
      C                   Clear                   USR8136
-     C                   Eval      §msgID     = 'USR8136'
      C                   Eval      USR81361   = i_fldName
-     C                   Eval      §MsgDta    = USR8136
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   Callp     p_sndPgmMg('USR8136': USR8136: §§pgmName)
      C                   Else
      C                   Eval      isPgmError = bFalse
      C                   Eval      FLDL0100   = F_FFD
@@ -980,9 +951,7 @@
      C                   Exsr      setScreen
       *
       * - Copyright
-     C                   Eval      §msgID  = 'USR9999'
-     C                   Eval      §msgDta = i_copyright
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   Callp     p_sndPgmMg('USR9999': i_copyright: §§pgmName)
       *
      C                   Endsr
       *

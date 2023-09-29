@@ -56,35 +56,35 @@
       *----------------------------------------------------*
       *
       *  Peek21
-     D yPgmCmd         S                   like(pgmCmd_t) inz
-     D yCmdDta         S                   like(pgmCmdDt_t) inz
-     D yMsgID          S                   like(msgID_t) inz
-     D yMsgDta         S                   like(msgDta_t) inz
+     D yPgmCmd         S                   like(pgmCmd_t)
+     D yCmdDta         S                   like(pgmCmdDt_t)
+     D yMsgID          S                   like(msgID_t)
+     D yMsgDta         S                   like(msgDta_t)
       *
       *  Peek23:
-     D yKey            S             10A   inz
-     D yFKeys          S                   like(fKeyDsp_t) inz
-     D                                     dim(32)
-     D yNbrOfKeys      S                   like(int4_t) inz
+     D yKey            S             10A
+     D yFKeys          S                   like(fKeyDsp_t) dim(32)
+     D yNbrOfKeys      S                   like(int4_t)
       *
       *---Definition der F-Tastenbildschirmfelder----------*
       /COPY QCOPYLE,SCRNFKEYS
       *----------------------------------------------------*
       *
-     D SfBot           S                   like(int4_t) inz
+     D SfBot           S                   like(int4_t)
      D NbrFKeys        C                   const(2)
-     D msgText         S            200A   inz
-     D strPos          S                   like(uint4_t) inz
-     D nbrOfKeys       S                   like(int4_t) inz
+     D msgText         S            200A
+     D strPos          S                   like(uint4_t)
+     D nbrOfKeys       S                   like(int4_t)
       *
-     D PEEK21_NAME     S                   like(pgmCallN_t) inz
-     D PEEK23_NAME     S                   like(pgmCallN_t) inz
+     D PEEK21_NAME     S                   like(pgmCallN_t)
+     D PEEK23_NAME     S                   like(pgmCallN_t)
       *
      D x               S                   like(int4_t) inz
-     D tmpFkey         S                   like($$FKEY01  ) inz
-     D int1            S                   like(int4_t) inz
-     D int2            S                   like(int4_t) inz
-     D isChanged       S                   like(bool_t) inz
+     D tmpFkey         S                   like($$FKEY01)
+     D int1            S                   like(int4_t)
+     D int2            S                   like(int4_t)
+     D isChanged       S                   like(bool_t) inz(bFalse)
+      *
       *
      D atoi            PR            10I 0        extproc('atoi')
      D  i_string                       *   value
@@ -95,7 +95,7 @@
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
       *
-     D $$FKEY          S                   like($$FKEY01  ) DIM(24) inz
+     D $$FKEY          S                   like($$FKEY01) dim(24)
       *
       /COPY QCOPYLE,CEECNDHDLR
       *
@@ -128,9 +128,6 @@
       *  Schleife für Programmbearbeitung
       *
      C                   DO        *HIVAL
-      *
-      *  Nachrichten senden
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
       *
      C                   Exsr      toScreen
       *
@@ -194,9 +191,9 @@
      C                   CALLP     PEEK21(workstn.aid: §§PgmName
      C                                    : YPgmCmd: YCmdDta: YMsgID: YMsgDta)
      C                   If        yMsgID <> ' '
-     C                   Eval      §MsgID  = yMsgID
-     C                   Eval      §MsgDta = yMsgDta
-     C                   Callp     p_sndPgmMg(§msgID: §msgDta: §§pgmName)
+     C                   Callp     p_sndPgmMg(yMsgID: yMsgDta: §§pgmName)
+     C                   EVAL      YMsgID = ''
+     C                   EVAL      YMsgDta = ''
      C                   Iter
      C                   Endif
       *

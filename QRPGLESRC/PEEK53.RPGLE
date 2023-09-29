@@ -773,11 +773,9 @@
      C                   Eval      f_initUsrS = SET0016
       *  Fehler ...
      C                   Other
-     C                   Eval      §msgID  = 'USR9999'
-     C                   Eval      §msgDta = 'PEEK53, f_initUsrS, i_key: '
-     C                                       + i_key
-     C                   Callp     p_sndPgmMg(§msgID    : §msgDta  :
-     C                                        §§pgmName : '*ESCAPE')
+     C                   Callp     p_sndPgmMg('USR9999'
+     C                               : 'PEEK53, f_initUsrS, i_key: ' + i_key
+     C                               : '*' : '*ESCAPE')
      C                   Endsl
       *
      C                   Return    f_initUsrS
