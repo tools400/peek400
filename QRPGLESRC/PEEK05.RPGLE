@@ -886,8 +886,8 @@
      C                   Endif
       *
       *  Berechnen Zeile/Spalte
-     C     §ScnCsrPos    DIV       256           §ScnCsrRow
-     C                   MVR                     §ScnCsrCol
+     C                   Eval      cursorPosition.row = §ScnCsrPos / 256
+     C                   Eval      cursorPosition.column = %rem(§ScnCsrPos: 256)
       *
       *  Löschen der Cursorposition
      C                   EVAL      CsrRow = §ZEROS
@@ -4247,7 +4247,7 @@
       *  Cursor nicht im Subfilebereich ...   *
       *---------------------------------------*
      C                   EVAL      X = SflFirstRw + NbrPinRcd
-     C     §ScnCsrRow    IFLT      X
+     C                   If        (cursorPosition.row < X)
       *  ... oberhalb der Subfile
      C                   EXSR      PBReadDn
      C                   ELSE
@@ -6182,7 +6182,7 @@
       *
       *  Füllen der Subfile ...
      C     IsKeyChg      IFEQ      bFalse
-     C     §ScnCsrRow    IFGT      SflLastRw
+     C                   If        (cursorPosition.row > SflLastRw)
       *    ... unterhalb der Subfile
      C                   EXSR      C_Bot
      C                   ELSE
@@ -6868,11 +6868,11 @@
      C                   ELSE
       *
       *  Ermitteln Feldname aus Cursorposition ...
-      ***  §ScnCsrRow    IFGE      SflHeadlRw
-      ***  §ScnCsrCol    ANDGE     17
+      ***  cursorPosition.row    IFGE      SflHeadlRw
+      ***  cursorPosition.column    ANDGE     17
       *
      C     1             DO        CP            X
-     C                   EVAL      Y = §ScnCsrCol - SflLeftOfs
+     C                   EVAL      Y = cursorPosition.column - SflLeftOfs
      C     Y             IFGE      Col_ScnStr(X)
      C     Y             ANDLE     Col_ScnEnd(X)
      C                   EVAL      Wrk#Field = Col_Field(X)
@@ -7770,8 +7770,8 @@
      C     KeepCsrPos    BEGSR
       *
       *  Beibehalten der Cursorosition
-     C                   EVAL      CsrRow = §ScnCsrRow
-     C                   EVAL      CsrCol = §ScnCsrCol
+     C                   EVAL      CsrRow = cursorPosition.row
+     C                   EVAL      CsrCol = cursorPosition.column
       *
      C                   ENDSR
       *

@@ -168,13 +168,13 @@
      C                   EXFMT     BILD01
       *
       *  Berechnen Zeile/Spalte
-     C     §ScnCsrPos    DIV       256           §ScnCsrRow
-     C                   MVR                     §ScnCsrCol
+     C                   Eval      cursorPosition.row = §ScnCsrPos / 256
+     C                   Eval      cursorPosition.column = %rem(§ScnCsrPos: 256)
       *
       *  Beibehalten der Cursorosition
-     C     §ScnCsrRow    SUB       ZEI           CsrRow
-     C     §ScnCsrCol    SUB       POS           CsrCol
-     C                   SUB       1             CsrCol
+     C                   Eval      CsrRow = cursorPosition.row - ZEI
+     C                   Eval      CsrCol = cursorPosition.column - POS
+     C                   Eval      CsrCol = CsrCol - 1
       *
       *  Nachrichten löschen
      C                   Callp     p_rmvPgmMg(§§pgmName)

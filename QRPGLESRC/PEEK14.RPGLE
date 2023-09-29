@@ -274,8 +274,8 @@
      C                   EXFMT     PBCTL
       *
       * - Berechnen Zeile/Spalte
-     C     §ScnCsrPos    DIV       256           WScnCsrRow
-     C                   MVR                     WScnCsrCol
+     C                   Eval      cursorPosition.row = §ScnCsrPos / 256
+     C                   Eval      cursorPosition.column = %rem(§ScnCsrPos: 256)
       *
       * - Löschen der Cursorposition
      C                   EVAL      CsrRow = *ZEROS
