@@ -167,103 +167,103 @@
       *
      C                   SELECT
       *  F1
-     C     i_scnAID      WHENEQ    §F1
+     C     i_scnAID      WHENEQ    K_F1
      C                   EVAL      Wrk_Key = '*F01'
       *  F2
-     C     i_scnAID      WHENEQ    §F2
+     C     i_scnAID      WHENEQ    K_F2
      C                   EVAL      Wrk_Key = '*F02'
       *  F3
-     C     i_scnAID      WHENEQ    §F3
+     C     i_scnAID      WHENEQ    K_F3
      C                   EVAL      Wrk_Key = '*F03'
       *  F4
-     C     i_scnAID      WHENEQ    §F4
+     C     i_scnAID      WHENEQ    K_F4
      C                   EVAL      Wrk_Key = '*F04'
       *  F5
-     C     i_scnAID      WHENEQ    §F5
+     C     i_scnAID      WHENEQ    K_F5
      C                   EVAL      Wrk_Key = '*F05'
       *  F6
-     C     i_scnAID      WHENEQ    §F6
+     C     i_scnAID      WHENEQ    K_F6
      C                   EVAL      Wrk_Key = '*F06'
       *  F7
-     C     i_scnAID      WHENEQ    §F7
+     C     i_scnAID      WHENEQ    K_F7
      C                   EVAL      Wrk_Key = '*F07'
       *  F8
-     C     i_scnAID      WHENEQ    §F8
+     C     i_scnAID      WHENEQ    K_F8
      C                   EVAL      Wrk_Key = '*F08'
       *  F9
-     C     i_scnAID      WHENEQ    §F9
+     C     i_scnAID      WHENEQ    K_F9
      C                   EVAL      Wrk_Key = '*F09'
       *  F10
-     C     i_scnAID      WHENEQ    §F10
+     C     i_scnAID      WHENEQ    K_F10
      C                   EVAL      Wrk_Key = '*F10'
       *  F11
-     C     i_scnAID      WHENEQ    §F11
+     C     i_scnAID      WHENEQ    K_F11
      C                   EVAL      Wrk_Key = '*F11'
       *  F12
-     C     i_scnAID      WHENEQ    §F12
+     C     i_scnAID      WHENEQ    K_F12
      C                   EVAL      Wrk_Key = '*F12'
       *  F13
-     C     i_scnAID      WHENEQ    §F13
+     C     i_scnAID      WHENEQ    K_F13
      C                   EVAL      Wrk_Key = '*F13'
       *  F14
-     C     i_scnAID      WHENEQ    §F14
+     C     i_scnAID      WHENEQ    K_F14
      C                   EVAL      Wrk_Key = '*F14'
       *  F15
-     C     i_scnAID      WHENEQ    §F15
+     C     i_scnAID      WHENEQ    K_F15
      C                   EVAL      Wrk_Key = '*F15'
       *  F16
-     C     i_scnAID      WHENEQ    §F16
+     C     i_scnAID      WHENEQ    K_F16
      C                   EVAL      Wrk_Key = '*F16'
       *  F17
-     C     i_scnAID      WHENEQ    §F17
+     C     i_scnAID      WHENEQ    K_F17
      C                   EVAL      Wrk_Key = '*F17'
       *  F18
-     C     i_scnAID      WHENEQ    §F18
+     C     i_scnAID      WHENEQ    K_F18
      C                   EVAL      Wrk_Key = '*F18'
       *  F19
-     C     i_scnAID      WHENEQ    §F19
+     C     i_scnAID      WHENEQ    K_F19
      C                   EVAL      Wrk_Key = '*F19'
       *  F20
-     C     i_scnAID      WHENEQ    §F20
+     C     i_scnAID      WHENEQ    K_F20
      C                   EVAL      Wrk_Key = '*F20'
       *  F21
-     C     i_scnAID      WHENEQ    §F21
+     C     i_scnAID      WHENEQ    K_F21
      C                   EVAL      Wrk_Key = '*F21'
       *  F22
-     C     i_scnAID      WHENEQ    §F22
+     C     i_scnAID      WHENEQ    K_F22
      C                   EVAL      Wrk_Key = '*F22'
       *  F23
-     C     i_scnAID      WHENEQ    §F23
+     C     i_scnAID      WHENEQ    K_F23
      C                   EVAL      Wrk_Key = '*F23'
       *  F24
-     C     i_scnAID      WHENEQ    §F24
+     C     i_scnAID      WHENEQ    K_F24
      C                   EVAL      Wrk_Key = '*F24'
       *  Clear
-     C     i_scnAID      WHENEQ    §Clear
+     C     i_scnAID      WHENEQ    K_CLEAR
      C                   EVAL      Wrk_Key = '*CLEAR'
       *  Delete
-     C     i_scnAID      WHENEQ    §Delete
+     C     i_scnAID      WHENEQ    K_DELETE
      C                   EVAL      Wrk_Key = '*DELETE'
       *  Datenfreigabe
-     C     i_scnAID      WHENEQ    §ENTER
+     C     i_scnAID      WHENEQ    K_ENTER
      C                   EVAL      Wrk_Key = '*ENTER'
       *  Hilfe
-     C     i_scnAID      WHENEQ    §Help
+     C     i_scnAID      WHENEQ    K_HELP
      C                   EVAL      Wrk_Key = '*HELP'
       *  Page down
-     C     i_scnAID      WHENEQ    §PageDown
+     C     i_scnAID      WHENEQ    K_PAGE_DOWN
      C                   EVAL      Wrk_Key = '*PAGEDOWN'
       *  Page up
-     C     i_scnAID      WHENEQ    §PageUp
+     C     i_scnAID      WHENEQ    K_PAGE_UP
      C                   EVAL      Wrk_Key = '*PAGEUP'
       *  Print screen
-     C     i_scnAID      WHENEQ    §PrintScn
+     C     i_scnAID      WHENEQ    K_PRINT_SCREEN
      C                   EVAL      Wrk_Key = '*PRINT'
       *  Reset
-     C     i_scnAID      WHENEQ    §Reset
+     C     i_scnAID      WHENEQ    K_RESET
      C                   EVAL      Wrk_Key = '*RESET'
       *  Light pen
-     C     i_scnAID      WHENEQ    §LightPen
+     C     i_scnAID      WHENEQ    K_LIGHT_PEN
      C                   EVAL      Wrk_Key = '*LIGHTPEN'
       *
      C                   OTHER

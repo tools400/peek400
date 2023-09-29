@@ -27,7 +27,7 @@
       /COPY QCOPYLE,COPYRIGHT
       *
      FPEEK64FM  CF   E             workstn usropn
-     F                                     infds(§Workstn)
+     F                                     infds(workstn)
       * Feldliste
      FPEEKFLD   IF   E           K disk    usropn
      F                                     prefix(F_)
@@ -213,7 +213,7 @@
       *
       *  Mappen der gedrückten Taste
       *  in Programmbefehl
-     C                   CALLP     PEEK21(§ScnAID: §§PgmName
+     C                   CALLP     PEEK21(workstn.aid: §§PgmName
      C                                    : YPgmCmd: YCmdDta: YMsgID: YMsgDta)
      C                   If        YMsgID <> ' '
      C                   Eval      §msgID  = yMsgID
@@ -262,7 +262,7 @@
       *
      C                   Other
       *  Falsche Taste gedrückt
-     C                   Callp     p_wrongKey(§scnAID: §§pgmName)
+     C                   Callp     p_wrongKey(workstn.aid: §§pgmName)
      C                   Iter
      C                   Endsl
       *
@@ -408,9 +408,9 @@
      C                   EVAL      o_msgID = 'USR8100'
       *
      C                   SELECT
-     C     §ScnAID       WHENEQ    §F3
+     C     workstn.aid   WHENEQ    K_F3
      C                   EVAL      USR81001 = 'F3'
-     C     §ScnAID       WHENEQ    §F12
+     C     workstn.aid   WHENEQ    K_F12
      C                   EVAL      USR81001 = 'F12'
      C                   OTHER
      C                   EVAL      USR81001 = 'Fxx'

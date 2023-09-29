@@ -28,7 +28,7 @@
       /COPY QCOPYLE,COPYRIGHT
       *
      FPEEK14FM  CF   E             WORKSTN USROPN
-     F                                     INFDS(§Workstn)
+     F                                     INFDS(workstn)
      F                                     SFILE(PBSFL:SFLREC)
       * Feldliste
      FPEEKFLDL0 IF   E           K DISK    USROPN
@@ -274,8 +274,10 @@
      C                   EXFMT     PBCTL
       *
       * - Berechnen Zeile/Spalte
-     C                   Eval      cursorPosition.row = §ScnCsrPos / 256
-     C                   Eval      cursorPosition.column = %rem(§ScnCsrPos: 256)
+     C                   Eval      cursorPosition.row =
+     C                               workstn.csrPos / 256
+     C                   Eval      cursorPosition.column =
+     C                               %rem(workstn.csrPos: 256)
       *
       * - Löschen der Cursorposition
      C                   EVAL      CsrRow = *ZEROS
@@ -297,7 +299,7 @@
       *
       *  Mappen der gedrückten Taste
       *  in Programmbefehl
-     C                   CALLP     PEEK21(§ScnAID: §§PgmName
+     C                   CALLP     PEEK21(workstn.aid: §§PgmName
      C                                    : YPgmCmd: YCmdDta: YMsgID: YMsgDta)
      C     YMsgID        IFNE      *BLANKS
      C                   EVAL      §MsgID = YMsgID
@@ -375,7 +377,7 @@
       *
      C                   OTHER
       *  Falsche Taste gedrückt
-     C                   Callp     p_wrongKey(§scnAID: §§pgmName)
+     C                   Callp     p_wrongKey(workstn.aid: §§pgmName)
      C                   Iter
      C                   Endsl
       *

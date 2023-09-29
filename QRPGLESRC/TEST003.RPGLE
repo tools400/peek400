@@ -644,7 +644,7 @@
             exfmt SCREEN01;
 
             select;
-            when (workstn.AID = §Enter);
+            when (workstn.AID = K_ENTER);
                open MARKTSTAMM;
                read FMARKT;
                if (not %eof(MARKTSTAMM));
@@ -658,9 +658,9 @@
                   update FMARKT;
                endif;
                close MARKTSTAMM;
-            when (workstn.AID = §F3);
+            when (workstn.AID = K_F3);
                leave;
-            when (workstn.AID = §F12);
+            when (workstn.AID = K_F12);
                leave;
             endsl;
 

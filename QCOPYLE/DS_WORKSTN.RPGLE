@@ -4,54 +4,54 @@
      D  row                    1      4I 0
      D  column                 5      8I 0
       *
-     D §Workstn        DS
-     D  §Open                  9      9A
-     D  §ScnStatus            11     15S 0
-     D  §ScnNumRows          152    153I 0
-     D  §ScnOffset           241    242I 0
-     D  §ScnAID              369    369A
-     D  §ScnCsrPos           370    371I 0
+     D workstn         DS                  qualified
+     D  open                   9      9A
+     D  status                11     15S 0
+     D  numRows              152    153I 0
+     D  offset               241    242I 0
+     D  aid                  369    369A
+     D  csrPos               370    371I 0
       *
       *====================================================*
       *  AID-Byte                                          *
       *====================================================*
       *
-     D §F1             C                   CONST(X'31')
-     D §F2             C                   CONST(X'32')
-     D §F3             C                   CONST(X'33')
-     D §F4             C                   CONST(X'34')
-     D §F5             C                   CONST(X'35')
-     D §F6             C                   CONST(X'36')
-     D §F7             C                   CONST(X'37')
-     D §F8             C                   CONST(X'38')
-     D §F9             C                   CONST(X'39')
-     D §F10            C                   CONST(X'3A')
-     D §F11            C                   CONST(X'3B')
-     D §F12            C                   CONST(X'3C')
-     D §F13            C                   CONST(X'B1')
-     D §F14            C                   CONST(X'B2')
-     D §F15            C                   CONST(X'B3')
-     D §F16            C                   CONST(X'B4')
-     D §F17            C                   CONST(X'B5')
-     D §F18            C                   CONST(X'B6')
-     D §F19            C                   CONST(X'B7')
-     D §F20            C                   CONST(X'B8')
-     D §F21            C                   CONST(X'B9')
-     D §F22            C                   CONST(X'BA')
-     D §F23            C                   CONST(X'BB')
-     D §F24            C                   CONST(X'BC')
+     D K_F1            C                   X'31'
+     D K_F2            C                   X'32'
+     D K_F3            C                   X'33'
+     D K_F4            C                   X'34'
+     D K_F5            C                   X'35'
+     D K_F6            C                   X'36'
+     D K_F7            C                   X'37'
+     D K_F8            C                   X'38'
+     D K_F9            C                   X'39'
+     D K_F10           C                   X'3A'
+     D K_F11           C                   X'3B'
+     D K_F12           C                   X'3C'
+     D K_F13           C                   X'B1'
+     D K_F14           C                   X'B2'
+     D K_F15           C                   X'B3'
+     D K_F16           C                   X'B4'
+     D K_F17           C                   X'B5'
+     D K_F18           C                   X'B6'
+     D K_F19           C                   X'B7'
+     D K_F20           C                   X'B8'
+     D K_F21           C                   X'B9'
+     D K_F22           C                   X'BA'
+     D K_F23           C                   X'BB'
+     D K_F24           C                   X'BC'
       *
-     D §Clear          C                   CONST(X'BD')
-     D §Delete         C                   CONST(X'BD')
+     D K_CLEAR         C                   X'BD'
+     D K_DELETE        C                   X'BD'
       *
-     D §Enter          C                   CONST(X'F1')
-      *          Nicht definiert                   F2
-     D §Help           C                   CONST(X'F3')
-     D §PageDown       C                   CONST(X'F4')
-     D §PageUp         C                   CONST(X'F5')
-     D §PrintScn       C                   CONST(X'F6')
-      *          Nicht definiert                   F7
-     D §Reset          C                   CONST(X'F8')
+     D K_ENTER         C                   X'F1'
+      *          Nicht definiert             F2
+     D K_HELP          C                   X'F3'
+     D K_PAGE_DOWN     C                   X'F4'
+     D K_PAGE_UP       C                   X'F5'
+     D K_PRINT_SCREEN  C                   X'F6'
+      *          Nicht definiert             F7
+     D K_RESET         C                   X'F8'
       *
-     D §LightPen       C                   CONST(X'3F')
+     D K_LIGHT_PEN     C                   X'3F'
       *

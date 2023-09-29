@@ -27,7 +27,7 @@
       /COPY QCOPYLE,COPYRIGHT
       *
      FPEEK12FM  CF   E             WORKSTN USROPN
-     F                                     INFDS(§Workstn)
+     F                                     INFDS(workstn)
      F                                     SFILE(PBSFL:SFLREC)
       * Liste der Satzformate
      FPEEKFMT   IF   E             DISK    USROPN
@@ -203,7 +203,7 @@
       *
       *  Mappen der gedrückten Taste
       *  in Programmbefehl
-     C                   CALLP     PEEK21(§ScnAID: §§PgmName
+     C                   CALLP     PEEK21(workstn.aid: §§PgmName
      C                                    : YPgmCmd: YCmdDta: YMsgID: YMsgDta)
      C     YMsgID        IFNE      *BLANKS
      C                   EVAL      §MsgID = YMsgID
@@ -215,22 +215,22 @@
       *  Abfragen der Befehlstasten
      C                   SELECT
       *  F3  - Ende
-     C     §ScnAID       WHENEQ    §F3                                          ENDE
+     C     YPgmCmd       WHENEQ    '*EXIT'                                       ENDE
      C                   EXSR      C_EndPgm
      C                   LEAVE
       *
       *  F5  - Aktualisieren
-     C     §ScnAID       WHENEQ    §F5                                          AKTUALISIEREN
+     C     YPgmCmd       WHENEQ    '*REFRESH'                                    AKTUALISIEREN
      C                   EXSR      C_Refresh
      C                   ITER
       *
       *  F12 - Ende
-     C     §ScnAID       WHENEQ    §F12                                         ZURÜCK
+     C     YPgmCmd       WHENEQ    '*CANCEL'                                     ZURÜCK
      C                   EXSR      C_EndPgm
      C                   LEAVE
       *
       *  Datenfreigabe
-     C     §ScnAID       WHENEQ    §ENTER
+     C     YPgmCmd       WHENEQ    '*ENTER'
      C                   EXSR      C_Enter
       *
       *  F24 - Weitere Tasten
@@ -239,7 +239,7 @@
       *
      C                   OTHER
       *  Falsche Taste gedrückt
-     C                   Callp     p_wrongKey(§scnAID: §§pgmName)
+     C                   Callp     p_wrongKey(workstn.aid: §§pgmName)
      C                   ITER
      C                   Endsl
       *
@@ -296,9 +296,9 @@
      C                   EVAL      o_msgId = 'USR8100'
       *
      C                   SELECT
-     C     §ScnAID       WHENEQ    §F3
+     C     workstn.aid   WHENEQ    K_F3
      C                   EVAL      USR81001 = 'F3'
-     C     §ScnAID       WHENEQ    §F12
+     C     workstn.aid   WHENEQ    K_F12
      C                   EVAL      USR81001 = 'F12'
      C                   OTHER
      C                   EVAL      USR81001 = 'Fxx'

@@ -27,7 +27,7 @@
       /COPY QCOPYLE,COPYRIGHT
       *
      FPEEK59FM  CF   E             WORKSTN USROPN
-     F                                     INFDS(§Workstn)
+     F                                     INFDS(workstn)
       *
       *---INFOSTRUKTUR FÜR AID-BYTE -----------------------*
       /COPY QCOPYLE,DS_WORKSTN
@@ -191,7 +191,7 @@
       *
       *  Mappen der gedrückten Taste
       *  in Programmbefehl
-     C                   CALLP     PEEK21(§ScnAID: §§PgmName
+     C                   CALLP     PEEK21(workstn.aid: §§PgmName
      C                                    : YPgmCmd: YCmdDta: YMsgID: YMsgDta)
      C                   If        yMsgID <> ' '
      C                   Eval      §MsgID  = yMsgID
@@ -237,7 +237,7 @@
       *
      C                   Other
       *  Falsche Taste gedrückt
-     C                   Callp     p_wrongKey(§scnAID: §§pgmName)
+     C                   Callp     p_wrongKey(workstn.aid: §§pgmName)
      C                   Iter
      C                   Endsl
       *

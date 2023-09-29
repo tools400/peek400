@@ -27,7 +27,7 @@
       /COPY QCOPYLE,COPYRIGHT
       *
      FPEEK25FM  CF   E             WORKSTN USROPN
-     F                                     INFDS(§Workstn)
+     F                                     INFDS(workstn)
       *
       *---INFOSTRUKTUR FÜR AID-BYTE -----------------------*
       /COPY QCOPYLE,DS_WORKSTN
@@ -164,8 +164,10 @@
      C                   EXFMT     BILD01
       *
       *  Berechnen Zeile/Spalte
-     C                   Eval      cursorPosition.row = §ScnCsrPos / 256
-     C                   Eval      cursorPosition.column = %rem(§ScnCsrPos: 256)
+     C                   Eval      cursorPosition.row =
+     C                               workstn.csrPos / 256
+     C                   Eval      cursorPosition.column =
+     C                               %rem(workstn.csrPos: 256)
       *
       *  Beibehalten der Cursorosition
      C                   EVAL      CsrRow = cursorPosition.row - ZEI
@@ -180,7 +182,7 @@
       *
       *  Mappen der gedrückten Taste
       *  in Programmbefehl
-     C                   CALLP     PEEK21(§ScnAID: §§PgmName
+     C                   CALLP     PEEK21(workstn.aid: §§PgmName
      C                                    : YPgmCmd: YCmdDta: YMsgID: YMsgDta)
      C     YMsgID        IFNE      *BLANKS
      C                   EVAL      §MsgID = YMsgID
@@ -219,7 +221,7 @@
       *
      C                   OTHER
       *  Falsche Taste gedrückt
-     C                   Callp     p_wrongKey(§scnAID: §§pgmName)
+     C                   Callp     p_wrongKey(workstn.aid: §§pgmName)
      C                   Iter
      C                   Endsl
       *
@@ -301,9 +303,9 @@
      C                   EVAL      o_msgID = 'USR8100'
       *
      C                   SELECT
-     C     §ScnAID       WHENEQ    §F3
+     C     workstn.aid   WHENEQ    K_F3
      C                   EVAL      USR81001 = 'F3'
-     C     §ScnAID       WHENEQ    §F12
+     C     workstn.aid   WHENEQ    K_F12
      C                   EVAL      USR81001 = 'F12'
      C                   OTHER
      C                   EVAL      USR81001 = 'Fxx'

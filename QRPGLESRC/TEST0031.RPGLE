@@ -116,11 +116,11 @@
             exfmt WINDOW01;
 
             select;
-            when (workstn.AID = §Enter);
+            when (workstn.AID = K_ENTER);
                leave;
-            when (workstn.AID = §F3);
+            when (workstn.AID = K_F3);
                leave;
-            when (workstn.AID = §F12);
+            when (workstn.AID = K_F12);
                leave;
             endsl;
 

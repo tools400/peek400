@@ -27,7 +27,7 @@
       /COPY QCOPYLE,COPYRIGHT
       *
      FPEEK30FM  CF   E             WORKSTN USROPN
-     F                                     INFDS(§Workstn)
+     F                                     INFDS(workstn)
       *
       *---Variablendefinition------------------------------*
       /COPY QCOPYLE,D_VARDEF
@@ -234,7 +234,7 @@
       *  Abfragen der Befehlstasten
      C                   SELECT
       *  F9  - Ende
-     C     §ScnAID       WHENEQ    §F9
+     C     workstn.aid   WHENEQ    K_F9
      C                   EXSR      C_EndPgm
      C                   EVAL      o_flag = bShareExt
      C                   EVAL      o_msgID = 'USR9997'
@@ -244,7 +244,7 @@
      C                   LEAVE
       *
       *  Datenfreigabe
-     C     §ScnAID       WHENEQ    §ENTER
+     C     workstn.aid   WHENEQ    K_ENTER
      C                   EXSR      C_Enter
      C     *IN99         IFEQ      '0'
      C                   EVAL      o_flag = bTrueExt
@@ -253,7 +253,7 @@
       *
      C                   OTHER
       *  Falsche Taste gedrückt
-     C                   Callp     p_wrongKey(§scnAID: §§pgmName)
+     C                   Callp     p_wrongKey(workstn.aid: §§pgmName)
      C                   Iter
      C                   Endsl
       *

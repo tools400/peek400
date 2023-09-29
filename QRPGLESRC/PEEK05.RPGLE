@@ -30,7 +30,7 @@
       *
       * Bildschirm
      FPEEK05FM  CF   E             WORKSTN USROPN
-     F                                     INFDS(§Workstn)
+     F                                     INFDS(workstn)
      F                                     SFILE(PBSFL132:SFLREC132)
      F                                     SFILE(PBSFL080:SFLREC080)
       *--------------------------------------------------------------*
@@ -886,8 +886,10 @@
      C                   Endif
       *
       *  Berechnen Zeile/Spalte
-     C                   Eval      cursorPosition.row = §ScnCsrPos / 256
-     C                   Eval      cursorPosition.column = %rem(§ScnCsrPos: 256)
+     C                   Eval      cursorPosition.row =
+     C                               workstn.csrPos / 256
+     C                   Eval      cursorPosition.column =
+     C                               %rem(workstn.csrPos: 256)
       *
       *  Löschen der Cursorposition
      C                   EVAL      CsrRow = §ZEROS
@@ -916,7 +918,7 @@
       *
       *  Mappen der gedrückten Taste
       *  in Programmbefehl
-     C                   CALLP     PEEK21(§ScnAID: §§PgmName
+     C                   CALLP     PEEK21(workstn.aid: §§PgmName
      C                                    : YPgmCmd: YCmdDta: YMsgID: YMsgDta)
      C     YMsgID        IFNE      *BLANKS
      C                   EVAL      §MsgID = YMsgID
@@ -7873,7 +7875,7 @@
       *
       *    Wenn der Bildschirm keine 132-Zeichen
       *    darstellen kann, ...
-     C     §ScnNumRows   IFLT      27
+     C                   IF        (workstn.numRows < 27)
       *    ... dann auf 80-Zeichen umschalten.
      C                   EVAL      SET_Dsp80 = '1'
      C                   ELSE
