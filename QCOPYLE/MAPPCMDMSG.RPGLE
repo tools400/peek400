@@ -5,177 +5,177 @@
       *
      C                   SELECT
      C     Data          WHENEQ    '*ENTER'
-     C                   MOVEL (P) '0001'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0001'
      C     Data          WHENEQ    '*EXIT'
-     C                   MOVEL (P) '0002'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0002'
      C     Data          WHENEQ    '*REFRESH'
-     C                   MOVEL (P) '0003'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0003'
      C     Data          WHENEQ    '*ADD'
-     C                   MOVEL (P) '0004'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0004'
      C     Data          WHENEQ    '*HEADLINE'
-     C                   MOVEL (P) '0005'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0005'
      C     Data          WHENEQ    '*TGLMRKCOL'
-     C                   MOVEL (P) '0006'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0006'
      C     Data          WHENEQ    '*MOVETOP'
-     C                   MOVEL (P) '0007'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0007'
      C     Data          WHENEQ    '*POSCSR'
-     C                   MOVEL (P) '0008'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0008'
      C     Data          WHENEQ    '*SEARCH'
-     C                   MOVEL (P) '0009'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0009'
      C     Data          WHENEQ    '*TOP'
-     C                   MOVEL (P) '0010'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0010'
      C     Data          WHENEQ    '*BOT'
-     C                   MOVEL (P) '0011'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0011'
      C     Data          WHENEQ    '*LEFT'
-     C                   MOVEL (P) '0012'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0012'
      C     Data          WHENEQ    '*RIGHT'
-     C                   MOVEL (P) '0013'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0013'
      C     Data          WHENEQ    '*CMDLINE'
-     C                   MOVEL (P) '0014'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0014'
      C     Data          WHENEQ    '*132/80'
-     C                   MOVEL (P) '0015'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0015'
      C     Data          WHENEQ    '*MOREKEYS'
-     C                   MOVEL (P) '0016'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0016'
      C     Data          WHENEQ    '*PAGEDOWN'
-     C                   MOVEL (P) '0017'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0017'
      C     Data          WHENEQ    '*PAGEUP'
-     C                   MOVEL (P) '0018'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0018'
      C     Data          WHENEQ    '*PINROW'
-     C                   MOVEL (P) '0019'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0019'
      C     Data          WHENEQ    '*UNPINROW'
-     C                   MOVEL (P) '0020'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0020'
      C     Data          WHENEQ    '*CHANGE'
-     C                   MOVEL (P) '0021'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0021'
      C     Data          WHENEQ    '*COPY'
-     C                   MOVEL (P) '0022'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0022'
      C     Data          WHENEQ    '*DELETE'
-     C                   MOVEL (P) '0023'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0023'
      C     Data          WHENEQ    '*DISPLAY'
-     C                   MOVEL (P) '0024'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0024'
      C     Data          WHENEQ    '*USERSETG'
-     C                   MOVEL (P) '0025'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0025'
      C     Data          WHENEQ    '*CANCEL'
-     C                   MOVEL (P) '0026'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0026'
      C     Data          WHENEQ    '*SAVE_EXIT'
-     C                   MOVEL (P) '0027'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0027'
      C     Data          WHENEQ    '*PINCOL'
-     C                   MOVEL (P) '0028'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0028'
      C     Data          WHENEQ    '*UNPINCOL'
-     C                   MOVEL (P) '0029'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0029'
      C     Data          WHENEQ    '*TGLPINCOL'
-     C                   MOVEL (P) '0030'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0030'
      C     Data          WHENEQ    '*TBLPAPON'
-     C                   MOVEL (P) '0031'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0031'
      C     Data          WHENEQ    '*TBLPAPOFF'
-     C                   MOVEL (P) '0032'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0032'
      C     Data          WHENEQ    '*TGLTBLPAP'
-     C                   MOVEL (P) '0033'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0033'
      C     Data          WHENEQ    '*YESTOALL'
-     C                   MOVEL (P) '0034'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0034'
      C     Data          WHENEQ    '*MOREOPT'
-     C                   MOVEL (P) '0035'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0035'
      C     Data          WHENEQ    '*COPYEXT'
-     C                   MOVEL (P) '0036'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0036'
      C     Data          WHENEQ    '*MRKCOL'
-     C                   MOVEL (P) '0037'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0037'
      C     Data          WHENEQ    '*UNMRKCOL'
-     C                   MOVEL (P) '0038'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0038'
      C     Data          WHENEQ    '*LOWERCASE'
-     C                   MOVEL (P) '0039'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0039'
      C     Data          WHENEQ    '*UPPERCASE'
-     C                   MOVEL (P) '0040'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0040'
      C     Data          WHENEQ    '*TGLLUCASE'
-     C                   MOVEL (P) '0041'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0041'
      C     Data          WHENEQ    '*SPLASHON'
-     C                   MOVEL (P) '0042'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0042'
      C     Data          WHENEQ    '*SPLASHOFF'
-     C                   MOVEL (P) '0043'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0043'
      C     Data          WHENEQ    '*PAGELEFT'
-     C                   MOVEL (P) '0044'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0044'
      C     Data          WHENEQ    '*PAGERIGHT'
-     C                   MOVEL (P) '0045'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0045'
      C     Data          WHENEQ    '*REPEAT'
-     C                   MOVEL (P) '0046'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0046'
      C     Data          WHENEQ    '*REBUILD'
-     C                   MOVEL (P) '0047'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0047'
      C     Data          WHENEQ    '*CLRPINROW'
-     C                   MOVEL (P) '0048'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0048'
      C     Data          WHENEQ    '*CLRPINCOL'
-     C                   MOVEL (P) '0049'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0049'
      C     Data          WHENEQ    '*LAYOUT'
-     C                   MOVEL (P) '0050'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0050'
      C     Data          WHENEQ    '*FLOATKEYS'
-     C                   MOVEL (P) '0051'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0051'
      C     Data          WHENEQ    '*SELECT'
-     C                   MOVEL (P) '0052'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0052'
      C     Data          WHENEQ    '*NEXTMARK'
-     C                   MOVEL (P) '0053'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0053'
      C     Data          WHENEQ    '*PREVMARK'
-     C                   MOVEL (P) '0054'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0054'
      C     Data          WHENEQ    '*DSPDBR'
-     C                   MOVEL (P) '0055'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0055'
      C     Data          WHENEQ    '*PROMPT'
-     C                   MOVEL (P) '0056'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0056'
      C     Data          WHENEQ    '*KEY'
-     C                   MOVEL (P) '0057'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0057'
      C     Data          WHENEQ    '*RRN'
-     C                   MOVEL (P) '0058'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0058'
      C     Data          WHENEQ    '*TGLACCESS'
-     C                   MOVEL (P) '0059'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0059'
      C     Data          WHENEQ    '*HEXEDIT'
-     C                   MOVEL (P) '0060'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0060'
      C     Data          WHENEQ    '*ABOUT'
-     C                   MOVEL (P) '0061'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0061'
      C     Data          WHENEQ    '*PINCOLDLG'
-     C                   MOVEL (P) '0062'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0062'
      C     Data          WHENEQ    '*CLRALL'
-     C                   MOVEL (P) '0063'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0063'
      C     Data          WHENEQ    '*DSPNRM'
-     C                   MOVEL (P) '0064'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0064'
      C     Data          WHENEQ    '*DSPHEX'
-     C                   MOVEL (P) '0065'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0065'
      C     Data          WHENEQ    '*TGLDSP'
-     C                   MOVEL (P) '0066'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0066'
      C     Data          WHENEQ    '*SQL'
-     C                   MOVEL (P) '0067'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0067'
      C     Data          WHENEQ    '*INSKEYFLD'
-     C                   MOVEL (P) '0068'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0068'
      C     Data          WHENEQ    '*SAVEENV'
-     C                   MOVEL (P) '0069'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0069'
      C     Data          WHENEQ    '*LOADENV'
-     C                   MOVEL (P) '0070'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0070'
      C     Data          WHENEQ    '*DELETEENV'
-     C                   MOVEL (P) '0071'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0071'
      C     Data          WHENEQ    '*TGLSORT'
-     C                   MOVEL (P) '0072'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0072'
      C     Data          WHENEQ    '*YES'
-     C                   MOVEL (P) '0073'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0073'
      C     Data          WHENEQ    '*NO'
-     C                   MOVEL (P) '0074'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0074'
      C     Data          WHENEQ    '*OK'
-     C                   MOVEL (P) '0075'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0075'
      C     Data          WHENEQ    '*FIRSTPOS'
-     C                   MOVEL (P) '0076'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0076'
      C     Data          WHENEQ    '*LASTPOS'
-     C                   MOVEL (P) '0077'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0077'
      C     Data          WHENEQ    '*SLCENV'
-     C                   MOVEL (P) '0078'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0078'
      C     Data          WHENEQ    '*SLCLAYOUT'
-     C                   MOVEL (P) '0079'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0079'
      C     Data          WHENEQ    '*TGLNULL'
-     C                   MOVEL (P) '0080'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0080'
      C     Data          WHENEQ    '*TGLINPUT'
-     C                   MOVEL (P) '0081'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0081'
      C     Data          WHENEQ    '*STREDIT'
-     C                   MOVEL (P) '0082'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0082'
      C     Data          WHENEQ    '*TGLRCDLCK'
-     C                   MOVEL (P) '0083'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0083'
      C     Data          WHENEQ    '*TGLKEYLUC'
-     C                   MOVEL (P) '0084'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0084'
      C     Data          WHENEQ    '*PRINT'
-     C                   MOVEL (P) '0085'        wrk_MsgID
+     C                   EVAL      wrk_MsgID = '0085'
      C                   OTHER
-     C                   MOVEL (P) *BLANKS       wrk_MsgID
-     C                   MOVEL (P) Data          wrk_MsgTxt
+     C                   EVAL      wrk_MsgID = ''
+     C                   EVAL      wrk_MsgTxt = Data
      C                   ENDSL
       *
