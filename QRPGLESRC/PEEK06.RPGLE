@@ -115,15 +115,14 @@
       /COPY QCOPYLE,PPEEK06
       /undefine internal_prototype
       *
-      *  API error reporting
-      /COPY QCOPYLE,API_ERROR
-      *
       *  CPYNV API
       /COPY QCOPYLE,D_MI
       *
-      *  Format FLDL0100
-     D FLDL0100        DS                  likeds(FLDL0100_t) inz
       /COPY QCOPYLE,FLDL0100
+      *
+      /COPY QCOPYLE,QECEDT
+      /COPY QCOPYLE,QECCVTEW
+      /COPY QCOPYLE,QECCVTEC
       *
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
@@ -143,6 +142,8 @@
      D  o_msgID                                  like(msgID_t)
      D  o_msgDta                                 like(msgDta_t)
       *
+     D FLDL0100        DS                  likeds(FLDL0100_t) inz
+     D errCode         DS                  likeds(errCode_t) inz
       *---------------------------------------------------*
       *
      C                   EVAL      o_string = ''
@@ -320,20 +321,20 @@
       *
      C                   EVAL      CvtVarLen = RcvVarLen
       *
-     C                   RESET                   §ErrorCode
+     C                   CLEAR                   errCode
+     C                   EVAL      errCode.bytPrv = %size(errCode)
       *
-     C                   CALL      'QECEDT'
-     C                   PARM                    CvtVar
-     C                   PARM                    CvtVarLen
-     C                   PARM                    SrcVar
-     C                   PARM                    SrcVarCls
-     C                   PARM                    Precision
-     C                   PARM                    EditMask
-     C                   PARM                    EditMaskLn
-     C                   PARM                    ZeroBalanc
-     C                   PARM                    §ErrorCode
+     C                   CALLP     QECEDT(CvtVar
+     C                                    : CvtVarLen
+     C                                    : SrcVar
+     C                                    : SrcVarCls
+     C                                    : Precision
+     C                                    : EditMask
+     C                                    : EditMaskLn
+     C                                    : ZeroBalanc
+     C                                    : errCode)
       *
-     C                   IF        §ERRAVAIL = 0
+     C                   IF        (errCode.bytAvl = 0)
      C                   EVAL      o_string = %subst(CvtVar: 1: CvtVarLen)
      C                   ELSE
      C                   EVAL      o_string = %subst(HEX_NULL: 1: CvtVarLen)
@@ -349,16 +350,18 @@
       *
      C     CvtEdtWord    BEGSR
       *
+     C                   CLEAR                   errCode
+     C                   EVAL      errCode.bytPrv = %size(errCode)
+      *
      C                   CLEAR                   EditMask
      C                   CLEAR                   EditMaskLn
       *
-     C                   CALL      'QECCVTEW'
-     C                   PARM                    EditMask
-     C                   PARM                    EditMaskLn
-     C                   PARM                    RcvVarLen
-     C                   PARM                    EditWord
-     C                   PARM                    EditWordLn
-     C                   PARM                    §ErrorCode
+     C                   CALLP     QECCVTEW(EditMask
+     C                                      : EditMaskLn
+     C                                      : RcvVarLen
+     C                                      : EditWord
+     C                                      : EditWordLn
+     C                                      : errCode)
       *
      C                   ENDSR
       *
@@ -384,19 +387,21 @@
      C                   EVAL      EditCode = 'L'
      C                   Endsl
       *
+     C                   CLEAR                   errCode
+     C                   EVAL      errCode.bytPrv = %size(errCode)
+      *
      C                   CLEAR                   EditMask
      C                   CLEAR                   EditMaskLn
       *
-     C                   CALL      'QECCVTEC'
-     C                   PARM                    EditMask
-     C                   PARM                    EditMaskLn
-     C                   PARM                    RcvVarLen
-     C                   PARM                    ZeroBalanc
-     C                   PARM                    EditCode
-     C                   PARM                    CurrInd
-     C                   PARM                    Precision
-     C                   PARM                    Decimal
-     C                   PARM                    §ErrorCode
+     C                   CALLP     QECCVTEC(EditMask
+     C                                      : EditMaskLn
+     C                                      : RcvVarLen
+     C                                      : ZeroBalanc
+     C                                      : EditCode
+     C                                      : CurrInd
+     C                                      : Precision
+     C                                      : Decimal
+     C                                      : errCode)
       *
      C                   ENDSR
       *

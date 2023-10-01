@@ -50,11 +50,6 @@
       /COPY QCOPYLE,ShortCmd_D
       *----------------------------------------------------*
       *
-      *---Nachrichten--------------------------------------*
-      /COPY QCOPYLE,API_ERROR
-      /COPY QCOPYLE,MSG_D_MAPI
-      *----------------------------------------------------*
-      *
       *---Nachrichtenaufbau--------------------------------*
       /COPY QCOPYLE,USR8100
       *----------------------------------------------------*
@@ -71,15 +66,11 @@
       *  F E L D - D E F I N I T I O N E N                 *
       *----------------------------------------------------*
       *
-     D yPgm            S             10A                 inz
-     D yKey            S             10A                 inz
-     D yPosF24         S                   like(int4_t) inz
      D yFKeys          S             18A   DIM(32)       INZ(*BLANKS)
      D yNbrOfKeys      S                   like(int4_t) inz
      D yMsgID          S              7A                 INZ(*BLANKS)
      D yMsgDta         S            512A                 INZ(*BLANKS)
       *
-     D YScnAID         S             10A   INZ(*BLANKS)
      D YPgmCmd         S             10A   INZ(*BLANKS)
      D YCmdDta         S                   LIKE(pgmCmdDt_t) INZ(*BLANKS)
       *

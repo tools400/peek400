@@ -35,10 +35,6 @@
       /COPY QCOPYLE,PPEEK32
       /undefine internal_prototype
       *
-      *---Nachrichten--------------------------------------*
-      /COPY QCOPYLE,API_ERROR
-      *----------------------------------------------------*
-      *
       *---Nachrichtenaufbau--------------------------------*
       /COPY QCOPYLE,USR8163
       *----------------------------------------------------*

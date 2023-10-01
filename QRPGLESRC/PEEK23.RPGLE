@@ -36,10 +36,6 @@
       /COPY QCOPYLE,PPEEK23
       /undefine internal_prototype
       *
-      *---Nachrichten--------------------------------------*
-      /COPY QCOPYLE,MSG_D_MAPI
-      *----------------------------------------------------*
-      *
       *---SDS-Datenstruktur--------------------------------*
       /COPY QCOPYLE,ERR_D_SDS
       *----------------------------------------------------*

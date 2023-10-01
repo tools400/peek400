@@ -77,17 +77,17 @@
       *----------------------------------------------------*
       *
       *  declarations for QUSRTVUS
-     D RcvVar          DS
-     D   NbrRetAttr            1      4I 0 INZ
-     D   OffsToTble            5      8I 0 INZ
-     D   RcvVarDta             9    264A   INZ
+     D RcvVar          DS                  qualified
+     D   NbrRetAttr            1      4I 0 inz
+     D   OffsToTble            5      8I 0 inz
+     D   RcvVarDta             9    264A   inz
       *
-     D NetAttr         DS                  QUALIFIED
-     D   Nme                   1     10A   INZ
-     D   DtaType              11     11A   INZ
-     D   InfStat              12     12A   INZ
-     D   DtaLen               13     16I 0 INZ
-     D   Dta                  17    272A   INZ
+     D NetAttr         DS                  qualified
+     D   Nme                   1     10A   inz
+     D   DtaType              11     11A   inz
+     D   InfStat              12     12A   inz
+     D   DtaLen               13     16I 0 inz
+     D   Dta                  17    272A   inz
       *
       *---Variablendefinition------------------------------*
       /COPY QCOPYLE,D_VARDEF
@@ -99,9 +99,9 @@
       /undefine internal_prototype
       *
       /COPY QCOPYLE,QWCRNETA
-      /COPY QCOPYLE,API_ERROR
       *
-     D X               S                   like(int4_t) inz
+     D X               S                   like(int4_t)
+     D errCode         DS                  likeds(errCode_t) inz
       *
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
@@ -133,9 +133,9 @@
      C                   Endif
       *
      C                   CALLP     QWCRNETA(RcvVar: %size(RcvVar)
-     C                                      : 1: i_attr: §ErrorCode)
+     C                                      : 1: i_attr: errCode)
       *
-     C                   IF        (§ErrAvail = 0)
+     C                   IF        (errCode.bytAvl = 0)
      C                   EXSR      GetAttr
      C                   ELSE
      C                   EVAL      o_attrLen = 0
@@ -156,7 +156,7 @@
       *
      C     GetAttr       BEGSR
       *
-     C                   EVAL      x = OffsToTble + 1
+     C                   EVAL      x = RcvVar.OffsToTble + 1
       *
      C                   IF        (X >= 1 and x <= 256)
      C                   EVAL      NetAttr = %subst(RcvVar: x)
@@ -175,7 +175,7 @@
       *  Program error handler                                     *
       *============================================================*
       *
-     P errorHandler    b                   
+     P errorHandler    b
      D                 pi
      D i_condToken                         value likeds(cee_fc_t)
      D i_pCommArea                   10i 0 value

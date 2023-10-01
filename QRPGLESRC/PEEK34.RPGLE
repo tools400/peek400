@@ -63,15 +63,11 @@
       /COPY QCOPYLE,ShortCmd_D
       *----------------------------------------------------*
       *
-      *---Nachrichten--------------------------------------*
-      /COPY QCOPYLE,MSG_D_MAPI
-      *----------------------------------------------------*
-      *
       *---Nachrichtenaufbau--------------------------------*
       /COPY QCOPYLE,USR8100
       /COPY QCOPYLE,USR8110
-      /COPY QCOPYLE,USR8136                                               Feld nicht gefunden
-      /COPY QCOPYLE,USR8209                                               Feld nicht gefunden
+      /COPY QCOPYLE,USR8136
+      /COPY QCOPYLE,USR8209
       *----------------------------------------------------*
       *
       *---SDS-Datenstruktur--------------------------------*

@@ -47,10 +47,6 @@
       /COPY QCOPYLE,PPEEK45
       /undefine internal_prototype
       *
-      *---Nachrichten--------------------------------------*
-      /COPY QCOPYLE,MSG_D_MAPI
-      *----------------------------------------------------*
-      *
       *---Benutzervoreinstellungen-------------------------*
       /COPY QCOPYLE,SET0006
       *----------------------------------------------------*

@@ -68,13 +68,8 @@
       /COPY QCOPYLE,ShortCmd_D
       *----------------------------------------------------*
       *
-      *---Nachrichten--------------------------------------*
-      /COPY QCOPYLE,API_ERROR
-      /COPY QCOPYLE,MSG_D_MAPI
-      *----------------------------------------------------*
-      *
       *---Nachrichtenaufbau--------------------------------*
-      /COPY QCOPYLE,USR8100                                               Verarbeitung abgebr
+      /COPY QCOPYLE,USR8100
       /COPY QCOPYLE,USR8206
       /COPY QCOPYLE,USR8220
       /COPY QCOPYLE,USR8221

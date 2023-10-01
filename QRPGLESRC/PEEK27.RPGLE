@@ -36,10 +36,6 @@
       /COPY QCOPYLE,PPEEK27
       /undefine internal_prototype
       *
-      *---Nachrichten--------------------------------------*
-      /COPY QCOPYLE,MSG_D_MAPI
-      *----------------------------------------------------*
-      *
       *---SDS-Datenstruktur--------------------------------*
       /COPY QCOPYLE,ERR_D_SDS
       *----------------------------------------------------*
@@ -208,7 +204,7 @@
       *  Program error handler                                     *
       *============================================================*
       *
-     P errorHandler    b                   
+     P errorHandler    b
      D                 pi
      D i_condToken                         value likeds(cee_fc_t)
      D i_pCommArea                   10i 0 value

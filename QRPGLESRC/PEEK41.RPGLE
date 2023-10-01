@@ -98,6 +98,8 @@
       *
      D RetQFile        DS                  likeds(qObj_t)
       *
+     D errCode         DS                  likeds(errCode_t) inz
+      *
       *  declarations for File definition header  (Qdb_Qdbfh), 1.9.3.2
      D pFileDefHd      S               *
       *
@@ -132,9 +134,6 @@
       *
      D selParmAy       DS                  likeds(Qdb_Qdbfsp_t)
      D                                     based(pSelParmAy)
-      *
-      *  API error reporting
-      /COPY QCOPYLE,API_ERROR
       *
      D Offset          S                   like(int4_t) inz
      D Counter         S                   like(int4_t) inz
@@ -231,12 +230,15 @@
      C                   EXSR      GetTime
       *
       *  retrieve file description
+     C                   CLEAR                   errCode
+     C                   EVAL      errCode.bytPrv = %size(errCode)
+      *
      C                   CALLP     QDBRTVFD(RcvVar: RcvVarLn: RetQFile
      C                                      : 'FILD0100': i_qFile: ''
      C                                      : '0': '*LCL': '*EXT'
-     C                                      : §ErrorCode)
+     C                                      : errCode)
       *
-     C     §ErrAvail     IFNE      *ZEROS
+     C                   IF        (errCode.bytAvl > 0)
      C                   EVAL      o_nbrOfEnt = *ZEROS
      C                   ELSE
      C                   EVAL      o_nbrOfEnt = 1

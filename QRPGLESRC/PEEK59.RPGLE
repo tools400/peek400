@@ -42,10 +42,6 @@
       /COPY QCOPYLE,PPEEK59
       /undefine internal_prototype
       *
-      *---Nachrichten--------------------------------------*
-      /COPY QCOPYLE,MSG_D_MAPI
-      *----------------------------------------------------*
-      *
       *---Nachrichtenaufbau--------------------------------*
       /COPY QCOPYLE,USR8100
       /COPY QCOPYLE,USR8190

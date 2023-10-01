@@ -142,7 +142,6 @@
       /COPY QCOPYLE,ERR_D_SDS
       *----------------------------------------------------*
       *
-      /COPY QCOPYLE,API_ERROR
       /COPY QCOPYLE,FILD0100
       *
       /COPY QCOPYLE,F_PEEK53

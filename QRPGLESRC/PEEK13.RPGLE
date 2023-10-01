@@ -48,13 +48,12 @@
       /COPY QCOPYLE,PPEEK13
       /undefine internal_prototype
       *
-      /COPY QCOPYLE,API_ERROR
-      *
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
       *
       *
      D MBRD0200        DS                  likeds(MBRD0200_t) inz
+     D errCode         DS                  likeds(errCode_t) inz
       *
       ********************************************************************
       *           Main  Control block                                    *
@@ -70,11 +69,14 @@
       * - Meldung
      C                   Callp     p_sndStsMg('USR8109': i_qFile + i_mbr)
       *
+     C                   CLEAR                   errCode
+     C                   EVAL      errCode.bytPrv = %size(errCode)
+      *
      C                   CALLP     QUSRMBRD(MBRD0200: %size(MBRD0200)
      C                                      : 'MBRD0200'
-     C                                      : i_qFile: i_mbr: '0': §ErrorCode)
+     C                                      : i_qFile: i_mbr: '0': errCode)
       *
-     C                   IF        (§ErrAvail > 0)
+     C                   IF        (errCode.bytAvl > 0)
      C                   CLEAR                   o_MBRD0200
      C                   ELSE
      C                   EVAL      o_mbrd0200 = MBRD0200

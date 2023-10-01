@@ -129,7 +129,6 @@
       *----------------------------------------------------*
       *
       /COPY QCOPYLE,FILD0100
-      /COPY QCOPYLE,API_ERROR
       /COPY QCOPYLE,SET0015
       *
       /COPY QCOPYLE,F_PEEK53

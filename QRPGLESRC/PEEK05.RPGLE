@@ -140,11 +140,6 @@
       /COPY QCOPYLE,SET0016
       *----------------------------------------------------*
       *
-      *---Nachrichten--------------------------------------*
-      /COPY QCOPYLE,API_ERROR
-      /COPY QCOPYLE,MSG_D_MAPI
-      *----------------------------------------------------*
-      *
       *---Nachrichtenaufbau--------------------------------*
       /COPY QCOPYLE,USR0007
       /COPY QCOPYLE,USR0008
@@ -2923,7 +2918,6 @@
      C                   CLEAR                   USR0007
      C                   EVAL      USR00071 = ##FILE
      C                   EVAL      USR00072 = ##LIBRARY
-     C                   EVAL      §MsgDta = USR0007
      C                   Callp     p_sndPgmMg('USR0007': USR0007: §§pgmName)
      C                   ELSE
       *

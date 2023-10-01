@@ -38,11 +38,6 @@
       /COPY QCOPYLE,F_PEEK58
       /COPY QCOPYLE,F_PEEK63
       *
-      *---Nachrichten--------------------------------------*
-      /COPY QCOPYLE,API_ERROR
-      /COPY QCOPYLE,MSG_D_MAPI
-      *----------------------------------------------------*
-      *
       *---Nachrichtenaufbau--------------------------------*
       /COPY QCOPYLE,USR9994
       *----------------------------------------------------*

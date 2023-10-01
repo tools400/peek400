@@ -38,8 +38,6 @@
       /COPY QCOPYLE,ERR_D_SDS
       *----------------------------------------------------*
       *
-      /COPY QCOPYLE,API_ERROR
-      *
      D Value           S              1A   DIM(256)
      D Hex             S              1A   DIM(16)
       *

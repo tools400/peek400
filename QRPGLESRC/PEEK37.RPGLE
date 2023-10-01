@@ -49,11 +49,6 @@
       /COPY QCOPYLE,ShortCmd_D
       *----------------------------------------------------*
       *
-      *---Nachrichten--------------------------------------*
-      /COPY QCOPYLE,API_ERROR
-      /COPY QCOPYLE,MSG_D_MAPI
-      *----------------------------------------------------*
-      *
       *---Nachrichtenaufbau--------------------------------*
       /COPY QCOPYLE,USR8100
       /COPY QCOPYLE,USR8110
@@ -76,14 +71,6 @@
       *
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
-      *
-      *----------------------------------------------------*
-      *  I N F D S - D E F I N I T I O N E N               *
-      *----------------------------------------------------*
-      *
-      *----------------------------------------------------*
-      *  F E L D - D E F I N I T I O N E N                 *
-      *----------------------------------------------------*
       *
       *---Definition der F-Tastenbildschirmfelder----------*
       /COPY QCOPYLE,SCRNFKEYS

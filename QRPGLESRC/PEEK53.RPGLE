@@ -70,11 +70,6 @@
      D p_initSrvPgm    PR
       *----------------------------------------------------*
       *
-      *---Nachrichten--------------------------------------*
-      /COPY QCOPYLE,API_ERROR
-      /COPY QCOPYLE,MSG_D_MAPI
-      *----------------------------------------------------*
-      *
       *---Variablendefinition------------------------------*
       /COPY QCOPYLE,D_VARDEF
       /COPY QCOPYLE,D_INFDS

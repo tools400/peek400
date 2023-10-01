@@ -36,7 +36,6 @@
       /undefine internal_prototype
       *
       /COPY QCOPYLE,QWCRSVAL
-      /COPY QCOPYLE,API_ERROR
       *
      D YRcvVar         DS           128    INZ
      D   RcvNbrRet             1      4I 0
@@ -51,6 +50,7 @@
      D   SysValData           17    128A
       *
      D X               S                   like(int4_t) inz
+     D errCode         DS                  likeds(errCode_t) inz
       *
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
@@ -81,10 +81,13 @@
       *        keine Statusmeldung ausgeben
      C                   Endif
       *
-     C                   CALLP     QWCRSVAL(YRcvVar: %size(YRcvVar): 1
-     C                                      : i_attr: §ErrorCode)
+     C                   CLEAR                   errCode
+     C                   EVAL      errCode.bytPrv = %size(errCode)
       *
-     C     §ErrAvail     IFEQ      *ZEROS
+     C                   CALLP     QWCRSVAL(YRcvVar: %size(YRcvVar): 1
+     C                                      : i_attr: errCode)
+      *
+     C                   IF        (errCode.bytAvl = 0)
      C                   EXSR      GetAttr
      C                   ELSE
      C                   EVAL      o_attrLen = 0
@@ -121,7 +124,7 @@
       *  Program error handler                                     *
       *============================================================*
       *
-     P errorHandler    b                   
+     P errorHandler    b
      D                 pi
      D i_condToken                         value likeds(cee_fc_t)
      D i_pCommArea                   10i 0 value

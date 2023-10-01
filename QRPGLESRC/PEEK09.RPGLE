@@ -43,7 +43,8 @@
       *----------------------------------------------------*
       *
       *  declarations for QUSROBJD
-     D OBJD0400        DS                  likeds(OBJD0400_t)
+     D OBJD0400        DS                  likeds(OBJD0400_t) inz
+     D errCode         DS                  likeds(errCode_t) inz
       *
       /COPY QCOPYLE,OBJD0400
       *
@@ -56,10 +57,6 @@
       /define internal_prototype
       /COPY QCOPYLE,PPEEK09
       /undefine internal_prototype
-      *
-      *---Versenden von Nachrichten------------------------*
-      /COPY QCOPYLE,API_ERROR
-      *----------------------------------------------------*
       *
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
@@ -84,20 +81,23 @@
       *
      C                   Callp     p_sndStsMg('USR8107': i_qFile)
       *
+     C                   Clear                   errCode
+     C                   Eval      errCode.bytPrv = %size(errCode)
+      *
      C                   CALLP     QUSROBJD(OBJD0400: %size(OBJD0400)
      C                                      : 'OBJD0400'
      C                                      : i_qFile: '*FILE'
-     C                                      : §ErrorCode)
+     C                                      : errCode)
       *
-     C     §ErrAvail     IFEQ      *ZEROS
+     C                   IF        (errCode.bytAvl = 0)
      C                   EVAL      o_data = OBJD0400
      C                   EVAL      o_msgID = *BLANKS
      C                   EVAL      o_msgDta = *BLANKS
      C                   ELSE
      C                   CLEAR                   OBJD0400
      C                   EVAL      o_data = OBJD0400
-     C                   EVAL      o_msgID = §ErrID
-     C                   EVAL      o_msgDta = §ErrDta
+     C                   EVAL      o_msgID = errCode.excID
+     C                   EVAL      o_msgDta = errCode.excDta
      C                   Endif
       *
       *---------------------------------------------------*
@@ -111,7 +111,7 @@
       *  Program error handler                                     *
       *============================================================*
       *
-     P errorHandler    b                   
+     P errorHandler    b
      D                 pi
      D i_condToken                         value likeds(cee_fc_t)
      D i_pCommArea                   10i 0 value
