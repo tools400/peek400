@@ -34,6 +34,7 @@
       /COPY QCOPYLE,FLDL0100
       /COPY QCOPYLE,MBRD0100
       /COPY QCOPYLE,BSPF0100
+      /COPY QCOPYLE,OBJD0100
       /COPY QCOPYLE,D_CLib
       /COPY QCOPYLE,F_PEEK53
       *----------------------------------------------------*
@@ -49,8 +50,8 @@
       *---Externe Prototypen-------------------------------*
       /COPY QCOPYLE,D_MI
       *
-      /COPY QCOPYLE,QDBRTVFD                      Retrieve Database File Description (QDBRTVFD
-      /COPY QCOPYLE,QUSRJOBI                      Retrieve Job Information (QUSRJOBI) API
+      /COPY QCOPYLE,QDBRTVFD
+      /COPY QCOPYLE,QUSRJOBI
       *----------------------------------------------------*
       *
       /COPY QCOPYLE,PPEEK41
@@ -2824,21 +2825,8 @@
      D mbr             S                   like(i_mbr       ) inz
       *
       *  Local fields
-     D objd0100        DS                  qualified
-     D  bytRet                       10I 0 inz
-     D  bytAvl                       10I 0 inz
-     D  name                         10A   inz
-     D  lib                          10A   inz
-     D  type                         10A   inz
-     D  rtnLib                       10A   inz
-     D  auxStgP                      10I 0 inz
-     D  owner                        10A   inz
-     D  domain                        2A   inz
-     D  crtDatTim                    13A   inz
-     D  chgDatTim                    13A   inz
-      *
+     D objd0100        DS                  likeds(objd0100_t) inz
      D mbrd0100        DS                  likeds(MBRD0100_t) inz
-      *
      D qObj            DS                  likeds(qObj_t) inz
      D errCode         DS                  likeds(errCode_t ) inz
       *
