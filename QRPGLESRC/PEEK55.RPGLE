@@ -248,16 +248,13 @@
       *
       *  Arbeitsfelder
      D pFile           S                   like(file_t)
-     D                                     inz
      D pLib            S                   like(lib_t)
-     D                                     inz
      D pMbr            S                   like(mbr_t)
-     D                                     inz
      D pFmt            S                   like(rcdFmt_t)
-     D                                     inz
      D pEnvMbr         S                   like(i_envMbr  )
-     D                                     inz
      D pRcdFmtID       S                   like(fmtID_t)
+     D pMsgID          S                   like(msgID_t)
+     D pMsgDta         S                   like(msgDta_t)
       *
       /COPY QCOPYLE,USR8234
       *---------------------------------------------------*
@@ -322,15 +319,18 @@
      C                   Endif
       *
       *  Überschreiben Datei ...
-     C                   EVAL      §File = 'PEEKENV'
-     C                   EVAL      §ToFile = i_envFile
-     C                   EVAL      §ToLib = i_envLib
-     C                   EVAL      §Mbr = pEnvMbr
-     C                   EVAL      §OvrScope = '*ACTGRPDFN'
-     C                   EVAL      §Share = '*NO'
-     C                   EVAL      §SeqOnly = '*NO'
-     C                   EVAL      §Secure = '*YES'
-      /COPY QCOPYLE,OVRDBF
+     C                   Callp     f_execute('OVRDBF ' +
+     C                                         'FILE(PEEKENV) ' +
+     C                                         'TOFILE(' +
+     C                                           %trim(i_envLib) + '/' +
+     C                                           %trim(i_envFile) + ') ' +
+     C                                         'MBR(' + %trim(pEnvMbr) + ') ' +
+     C                                         'OVRSCOPE(*ACTGRPDFN) ' +
+     C                                         'SHARE(*NO) ' +
+     C                                         'SEQONLY(*NO) SECURE(*YES)'
+     C                                       : pMsgID: pMsgDta)
+     C                   EVAL      pMsgID = ''
+     C                   EVAL      pMsgDta = ''
       *
       *  Öffnen Datei ...
      C                   Open      PEEKENV
@@ -445,9 +445,12 @@
      C                   Close     PEEKENV
       *
       *  Löschen Überschreibung ...
-     C                   EVAL      §File = 'PEEKENV'
-     C                   EVAL      §Lvl = '*ACTGRPDFN'
-      /COPY QCOPYLE,DLTOVR
+     C                   Callp     f_execute('DLTOVR ' +
+     C                                         'FILE(PEEKENV) ' +
+     C                                         'LVL(*ACTGRPDFN) '
+     C                                       : pMsgID: pMsgDta)
+     C                   EVAL      pMsgID = ''
+     C                   EVAL      pMsgDta = ''
       *
       *---------------------------------------------------*
       *  Ende Programm

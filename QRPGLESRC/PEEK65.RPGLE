@@ -392,16 +392,19 @@
      C     First         BEGSR
       *
       * - Öffnen der Dateien
-     C                   Eval      §QCmd = 'OVRPRTF +
-     C                                        FILE(PEEK65P) +
-     C                                        TOFILE(' +
-     C                                           %trimR(§§PgmLib) + '/PEEK65P) +
-     C                                        SPLFNAME(' +
+     C                   Callp     f_execute('OVRPRTF +
+     C                                         FILE(PEEK65P) +
+     C                                         TOFILE(' +
+     C                                           %trimR(§§PgmLib) + '/' +
+     C                                           'PEEK65P) +
+     C                                         SPLFNAME(' +
      C                                           %trim(i_file) + ') +
-     C                                        USRDTA(''' +
+     C                                         USRDTA(''' +
      C                                           %editc(i_rcdNbr: 'X') + ''') +
-     C                                        OVRSCOPE(*CALLLVL)'
-      /COPY QCOPYLE,QCMDEXC
+     C                                         OVRSCOPE(*CALLLVL)'
+     C                                       : yMsgID: yMsgDta)
+     C                   EVAL      YMsgID = ''
+     C                   EVAL      YMsgDta = ''
       *
      C                   OPEN      PEEK65P
      C                   OPEN      PEEKFLDL0

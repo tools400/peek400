@@ -3292,8 +3292,12 @@
      C     YExecCmd      WhenEq    *BLANKS
       *           No command to excute
      C                   other
-     C                   EVAL      §QCmd = YExecCmd
-      /COPY QCOPYLE,QCMDEXC
+     C                   Callp     f_execute(YExecCmd: YMsgID: YMsgDta)
+     C                   If        (YMsgID <> '')
+     C                   Callp     p_sndPgmMg(YMsgID: YMsgDta: §§pgmName)
+     C                   Eval      YMsgID = ''
+     C                   Eval      YMsgDta = ''
+     C                   Endif
      C                   Endsl
       *
      C                   ELSE
@@ -3825,15 +3829,21 @@
      C                   EXSR      F0toFx
       *
      C     *IN99         IFEQ      '1'
-     C   55              ROLBK
-     C  N55              CALLP     CIO_unlock(hFile00)
+     C                   IF        (*in55 = bTrue)
+     C                   ROLBK
+     C                   ELSE
+     C                   CALLP     CIO_unlock(hFile00)
+     C                   ENDIF
      C                   EXSR      F0toFx
       *
      C                   EVAL      USR82001 = Wrk#RcdNbr
      C                   Callp     p_sndPgmMg('USR8200': USR8200: §§pgmName)
      C                   ELSE
-     C   55              COMMIT
-     C  N55              CALLP     CIO_unlock(hFile00)
+     C                   IF        (*in55 = bTrue)
+     C                   COMMIT
+     C                   ELSE
+     C                   CALLP     CIO_unlock(hFile00)
+     C                   ENDIF
      C                   EXSR      F0toFx
      C                   EXSR      CallExit04
       *
@@ -3880,61 +3890,59 @@
       *
      C                   EVAL      rcdNbr# = CIO_getRRN(hFile04)
       *
-     C                   EVAL      §QCmd = 'CPYF' +
-      *  FromFile
-     C                                     ' FROMFILE(' +
-     C                                     %trim(CIO_getLibrary(hFile04)) +
-     C                                     '/' +
-     C                                     %trim(CIO_getFile(hFile04)) +
-     C                                     ')' +
-      *  ToFile
-     C                                     ' TOFILE(' +
-     C                                     %trim(CopyLib) +
-     C                                     '/' +
-     C                                     %trim(CopyFile) +
-     C                                     ')' +
-      *  FromMbr
-     C                                     ' FROMMBR(' +
-     C                                     %trim(CIO_getMember(hFile04)) +
-     C                                     ')' +
-      *  ToMbr
-     C                                     ' TOMBR(' +
-     C                                     %trim(CopyToMbr) +
-     C                                     ')' +
-      *  MbrOpt
-     C                                     ' MBROPT(' +
-     C                                     %trim(CopyMbrOpt) +
-     C                                     ')' +
-      *  CrtFile
-     C                                     ' CRTFILE(' +
-     C                                     %trim(CopyCrtF) +
-     C                                     ')' +
-      *  FromRcd
-     C                                     ' FROMRCD(' +
-     C                                     rcdNbr$ +
-     C                                     ')' +
-      *  ToRcd
-     C                                     ' TORCD(' +
-     C                                     rcdNbr$ +
-     C                                     ')' +
-      *  FmtOpt
-     C                                     ' FMTOPT(' +
-     C                                     '*MAP *DROP' +
-     C                                     ')' +
-      *  Record Format
-     C                                     ' RCDFMT(' +
-     C                                     %trim(CIO_getRecordFormat(hFile04)) +
+     C                   Callp     f_execute(
+     C                                'CPYF ' +
+     C                                  'FROMFILE(' +
+     C                                    %trim(CIO_getLibrary(hFile04)) +
+     C                                  '/' +
+     C                                    %trim(CIO_getFile(hFile04)) +
+     C                                  ') ' +
+     C                                  'TOFILE(' +
+     C                                    %trim(CopyLib) +
+     C                                  '/' +
+     C                                    %trim(CopyFile) +
+     C                                  ') ' +
+     C                                  'FROMMBR(' +
+     C                                    %trim(CIO_getMember(hFile04)) +
+     C                                  ') ' +
+     C                                  'TOMBR(' +
+     C                                    %trim(CopyToMbr) +
+     C                                  ') ' +
+     C                                  'MBROPT(' +
+     C                                    %trim(CopyMbrOpt) +
+     C                                  ') ' +
+     C                                  'CRTFILE(' +
+     C                                    %trim(CopyCrtF) +
+     C                                  ') ' +
+     C                                  'FROMRCD(' +
+     C                                    rcdNbr$ +
+     C                                  ') ' +
+     C                                  'TORCD(' +
+     C                                    rcdNbr$ +
+     C                                  ') ' +
+     C                                  'FMTOPT(' +
+     C                                    '*MAP *DROP' +
+     C                                  ') ' +
+     C                                  'RCDFMT(' +
+     C                                    %trim(CIO_getRecordFormat(hFile04)) +
      C                                     ')'
-      /COPY QCOPYLE,QCMDEXC
+     C                                : YMsgID: YMsgDta)
       *
-     C     §QCmdError    IFEQ      '1'
-     C   55              ROLBK
+     C                   IF        (YMsgID <> '')
+     C                   Callp     p_sndPgmMg(YMsgID: YMsgDta: §§pgmName)
+     C                   EVAL      YMsgID = ''
+     C                   EVAL      YMsgDta = ''
+     C                   IF        (*in55 = bTrue)
+     C                   ROLBK
+     C                   ENDIF
      C                   EXSR      F0toFx
       *
      C                   EVAL      USR82021 = Wrk#RcdNbr
      C                   Callp     p_sndPgmMg('USR8202': USR8202: §§pgmName)
      C                   ELSE
-     C   55              COMMIT
+     C                   IF        (*in55 = bTrue)
+     C                   COMMIT
+     C                   ENDIF
      C                   EXSR      F0toFx
       *
      C                   EVAL      USR82031 = Wrk#RcdNbr
@@ -6233,13 +6241,18 @@
      C                   eval      isOpen = bFalse
      C                   else
       *
-     C                   Eval      §FILE   = ##FILE
-     C                   Eval      §TOFILE = ##FILE
-     C                   Eval      §TOLIB  = ##LIBRARY
-     C                   Eval      §MBR    = ##MEMBER
-     C                   Eval      §SHARE  = '*NO'
-     C                   Eval      §SECURE = '*YES'
-      /COPY QCOPYLE,OVRDBF
+     C                   Callp     f_execute('OVRDBF ' +
+     C                                         'FILE(' + %trim(##FILE) + ') ' +
+     C                                         'TOFILE(' +
+     C                                           %trim(##LIBRARY) + '/' +
+     C                                           %trim(##FILE) + ') ' +
+     C                                         'MBR(' + %trim(##MEMBER) + ') ' +
+     C                                         'OVRSCOPE(*ACTGRPDFN) ' +
+     C                                         'SHARE(*NO) ' +
+     C                                         'SEQONLY(*NO) SECURE(*YES)'
+     C                                       : yMsgID: yMsgDta)
+     C                   EVAL      YMsgID = ''
+     C                   EVAL      YMsgDta = ''
       *
       *      ... Änderungen erlaubt
      C                   IF        auth.updMod = bTrue
@@ -6372,7 +6385,12 @@
      C                   Endif
      C                   Endif
       *
-      /COPY QCOPYLE,DLTOVR
+     C                   Callp     f_execute('DLTOVR ' +
+     C                                         'FILE(' + %trim(##FILE) + ') ' +
+     C                                         'LVL(*ACTGRPDFN) '
+     C                                       : yMsgID: yMsgDta)
+     C                   EVAL      YMsgID = ''
+     C                   EVAL      YMsgDta = ''
       *
      C     *IN99         IFEQ      '1'
      C                   Leavesr
@@ -6466,11 +6484,11 @@
      C                   if        (IsOpen = bTrue)
      C                   if        (CommitLVL = '0')
       *                  ... ohne Commit
-     C                   EVAL      *IN55 = '0'
+     C                   EVAL      *IN55 = bFalse
      C                   Callp     p_sndPgmMg('USR0004': '': §§pgmName)
      C                   ELSE
       *                  ... mit Commit
-     C                   EVAL      *IN55 = '1'
+     C                   EVAL      *IN55 = bTrue
      C                   Callp     p_sndPgmMg('USR0003': '': §§pgmName)
      C                   Endif
       *
@@ -8208,13 +8226,18 @@
      C                   ENDIF
      C                   ENDIF
       *
-     C                   Eval      §FILE   = ##FILE
-     C                   Eval      §TOFILE = ##FILE
-     C                   Eval      §TOLIB  = ##LIBRARY
-     C                   Eval      §MBR    = ##MEMBER
-     C                   Eval      §SHARE  = '*NO'
-     C                   Eval      §SECURE = '*YES'
-      /COPY QCOPYLE,OVRDBF
+     C                   Callp     f_execute('OVRDBF ' +
+     C                                         'FILE(' + %trim(##FILE) + ') ' +
+     C                                         'TOFILE(' +
+     C                                           %trim(##LIBRARY) + '/' +
+     C                                           %trim(##FILE) + ') ' +
+     C                                         'MBR(' + %trim(##MEMBER) + ') ' +
+     C                                         'OVRSCOPE(*ACTGRPDFN) ' +
+     C                                         'SHARE(*NO) ' +
+     C                                         'SEQONLY(*NO) SECURE(*YES)'
+     C                                       : yMsgID: yMsgDta)
+     C                   EVAL      YMsgID = ''
+     C                   EVAL      YMsgDta = ''
       *
      C                   IF        CIO_isOpen(hFile00) = bFalse
      C                   IF        CommitLVL = '1'
@@ -8238,7 +8261,12 @@
      C                   Endif
      C                   Endif
       *
-      /COPY QCOPYLE,DLTOVR
+     C                   Callp     f_execute('DLTOVR ' +
+     C                                         'FILE(' + %trim(##FILE) + ') ' +
+     C                                         'LVL(*ACTGRPDFN) '
+     C                                       : yMsgID: yMsgDta)
+     C                   EVAL      YMsgID = ''
+     C                   EVAL      YMsgDta = ''
       *
      C                   IF        CIO_chainWithRRN(hFile00
      C                                              : i_rrn

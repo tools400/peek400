@@ -29,6 +29,7 @@
       *
       *---Variablendefinition------------------------------*
       /COPY QCOPYLE,D_VARDEF
+      /COPY QCOPYLE,FLDL0100
       *----------------------------------------------------*
       *
       /define internal_prototype
@@ -45,6 +46,7 @@
       *----------------------------------------------------*
       *
       /COPY QCOPYLE,F_PEEK53
+      /COPY QCOPYLE,F_PEEK58
       *
       /COPY QCOPYLE,CEECNDHDLR
       *
@@ -83,8 +85,8 @@
       *  ... Prüfen der Nachrichtendatei
      C     1             DO        2
       *
-     C                   EXSR      ChkMsgF
-     C     §RETURN       IFEQ      '0'
+     C                   IF        (f_exist(%trimr(i_prefix) + SET_Lang
+     C                              : §§PgmLib : '*MSGF'))
       *      ... kein Fehler
      C                   LEAVE
      C                   ELSE
@@ -126,21 +128,6 @@
      C                   Eval      SET0004 = f_getUsrSg('*LANGUAGE':
      C                                                  o_msgID     :
      C                                                  o_msgDta    )
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    ChkMsgF       Prüfen der Nachrichtendatei               *
-      *============================================================*
-      *
-     C     ChkMsgF       BEGSR
-      *
-     C                   EVAL      §OBJ = %trimr(i_prefix) + SET_Lang
-     C                   EVAL      §LIB = §§PgmLib
-     C                   EVAL      §OBJTYPE = '*MSGF'
-     C                   EVAL      §MBR = '*NONE'
-     C                   EVAL      §AUT = '*NONE'
-      /COPY QCOPYLE,CHKOBJ
       *
      C                   ENDSR
       *
