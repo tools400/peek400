@@ -70,7 +70,7 @@
       * ------------------------------------
       *  Imported prototypes
       * ------------------------------------
-      /COPY QCOPYLE,CLIB                           C-Runtime Library
+      /COPY QCOPYLE,D_CLIB                         C-Runtime Library
       /COPY QCOPYLE,F_PEEK53                       Zugriff auf Benutzerdaten
       /COPY QCOPYLE,F_PEEK58                       Allgemeine Routinen
       /COPY QCOPYLE,QUSRJOBI                       Retrieve Job Information (QUSRJOBI) API
