@@ -5500,7 +5500,6 @@
       *      ... für die Datenzeile
      C                   IF        (SflMode   <> '*HEADLINE') and
      C                             (ColumnLen <  Fieldlen   )
-      ***                EXSR      ChkNumeric
      C                   IF        f_isNumFld(FLDL0100) = bTrue
       *          ... numerische Werte
      C                   IF        (SET_EnExc = bTrue) and

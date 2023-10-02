@@ -912,9 +912,6 @@
      C                   EVAL      FLDL0100 = F_FFD
      C                   Endif
       *
-      *  Auf numerische Daten prüfen ...
-      ***                EXSR      ChkNumeric
-      *
       *  Defaultoperationscode einsetzen ...
      C     ##OP          IFEQ      *BLANKS
      C                   EVAL      ##OP = 'EQ'
