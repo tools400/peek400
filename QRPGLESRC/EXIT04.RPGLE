@@ -1,198 +1,193 @@
-      *===============================================================*
-      *                                                               *
-      *  (c) Thomas Raddatz                                           *
-      *                                                               *
-      *  Bereich  : PEEK, Version 3.4.4                               *
-      *  Programm : EXIT04                                            *
-      *  Typ      : RPGLE                                             *
-      *                                                               *
-      *  erstellt : 08.02.2013  Thomas Raddatz                        *
-      *                                                               *
-      *===============================================================*
-      *                                                               *
-      *  Kurzdokumentation :                                          *
-      *  ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯                                          *
-      *  EXIT-Programm zur Protokollierung von Datensatzänderungen.   *
-      *                                                               *
-      *  Parameterliste:                                              *
-      *  ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯                                              *
-      *     In :  gi_file      - Name of the file.                    *
-      *                                                               *
-      *     In :  gi_lib       - Name of the library that contains    *
-      *                          the file.                            *
-      *     In :  gi_mbr       - Name of the member that contains     *
-      *                          the record.                          *
-      *     In :  gi_event     - Event that triggered the exit the    *
-      *                          exit program:                        *
-      *                             *ADD, *CHANGE, *COPY or *DELETE   *
-      *     In :  gi_user      - Name of the user who chanegd         *
-      *                          the record.                          *
-      *     In :  gi_timestamp - Current timestamp.                   *
-      *                                                               *
-      *     In :  gi_rcdNbr    - Record number.                       *
-      *                                                               *
-      *     In :  gi_size      - Size of the before and after         *
-      *                          images.                              *
-      *     In :  gi_bImage    - Before-Image of the record.          *
-      *                                                               *
-      *     In :  gi_aImage    - After-Image of the record.           *
-      *                                                               *
-      *  Erstellen des Datei EXIT04 (Beispiel):                       *
-      *  ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯                       *
-      *  CREATE TABLE PEEK.EXIT04LOG (                                *
-      *     "FILE"      CHARACTER ( 10) NOT NULL WITH DEFAULT,        *
-      *     LIB         CHARACTER ( 10) NOT NULL WITH DEFAULT,        *
-      *     MBR         CHARACTER ( 10) NOT NULL WITH DEFAULT,        *
-      *     EVENT       CHARACTER ( 10) NOT NULL WITH DEFAULT,        *
-      *     "USER"      CHARACTER ( 10) NOT NULL WITH DEFAULT,        *
-      *     "TIMESTAMP" TIMESTAMP       NOT NULL WITH DEFAULT,        *
-      *     RCDNBR      INT             NOT NULL WITH DEFAULT,        *
-      *     SIZE        INT             NOT NULL WITH DEFAULT,        *
-      *     BIMAGE      CHARACTER (500) NOT NULL WITH DEFAULT,        *
-      *     AIMAGE      CHARACTER (500) NOT NULL WITH DEFAULT)        *
-      *                                                               *
-      *  Erstellen des Programms (CRTRPGMOD + CRTPGM)                 *
-      *  ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯                 *
-      *  CRTRPGMOD MODULE(PEEK/EXIT04) DBGVIEW(*ALL) TRUNCNBR(*NO)    *
-      *  SRCFILE(PEEK/QEXAMPLE) SRCMBR(EXIT04)                        *
-      *  REPLACE(*YES) LANGID(*JOBRUN) TGTRLS(V5R3M0)                 *
-      *                                                               *
-      *  CRTPGM PGM(PEEK/EXIT04) MODULE(PEEK/EXIT04*)                 *
-      *  REPLACE(*YES)                                                *
-      *  TGTRLS(V5R3M0) DETAIL(*BASIC) ACTGRP(PEEK)                   *
-      *  TEXT('Peek/400 - EXIT-Programm: Protokollierung         ')   *
-      *                                                               *
-      *  Erstellen des Programms (CRTBNDRPG):                         *
-      *  ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯                         *
-      *  CRTBNDRPG PGM(PEEK/EXIT04) DBGVIEW(*ALL) TRUNCNBR(*NO)       *
-      *  SRCFILE(PEEK/QEXAMPLE) SRCMBR(EXIT04)                        *
-      *  REPLACE(*YES) LANGID(*JOBRUN) TGTRLS(V5R3M0)                 *
-      *  TEXT('Peek/400 - EXIT-Programm: Protokollierung         ')   *
-      *                                                               *
-      * ============================================================= *
-      * >>PRE-COMPILER<<                                              *
-      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
-      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
-      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
-      *                           INSTALL(*NO);                       *
-      *   >>EXECUTE<<                                                 *
-      * >>END-PRE-COMPILER<<                                          *
-      *===============================================================*
-     H OPTION(*SRCSTMT : *NODEBUGIO)
-     H EXTBININT(*YES)
-     H DATFMT(*ISO) TIMFMT(*ISO)
+       //===============================================================*
+       //                                                               *
+       //  (c) Thomas Raddatz                                           *
+       //                                                               *
+       //  Bereich  : PEEK, Version 3.4.4                               *
+       //  Programm : EXIT04                                            *
+       //  Typ      : RPGLE                                             *
+       //                                                               *
+       //  erstellt : 08.02.2013  Thomas Raddatz                        *
+       //                                                               *
+       //===============================================================*
+       //                                                               *
+       //  Kurzdokumentation :                                          *
+       //  ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯                                          *
+       //  EXIT-Programm zur Protokollierung von Datensatzänderungen.   *
+       //                                                               *
+       //  Parameterliste:                                              *
+       //  ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯                                              *
+       //     In :  gi_file      - Name of the file.                    *
+       //                                                               *
+       //     In :  gi_lib       - Name of the library that contains    *
+       //                          the file.                            *
+       //     In :  gi_mbr       - Name of the member that contains     *
+       //                          the record.                          *
+       //     In :  gi_event     - Event that triggered the exit the    *
+       //                          exit program:                        *
+       //                             *ADD, *CHANGE, *COPY or *DELETE   *
+       //     In :  gi_user      - Name of the user who chanegd         *
+       //                          the record.                          *
+       //     In :  gi_timestamp - Current timestamp.                   *
+       //                                                               *
+       //     In :  gi_rcdNbr    - Record number.                       *
+       //                                                               *
+       //     In :  gi_size      - Size of the before and after         *
+       //                          images.                              *
+       //     In :  gi_bImage    - Before-Image of the record.          *
+       //                                                               *
+       //     In :  gi_aImage    - After-Image of the record.           *
+       //                                                               *
+       //  Erstellen des Datei EXIT04 (Beispiel):                       *
+       //  ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯                       *
+       //  CREATE TABLE PEEK.EXIT04LOG (                                *
+       //     "FILE"      CHARACTER ( 10) NOT NULL WITH DEFAULT,        *
+       //     LIB         CHARACTER ( 10) NOT NULL WITH DEFAULT,        *
+       //     MBR         CHARACTER ( 10) NOT NULL WITH DEFAULT,        *
+       //     EVENT       CHARACTER ( 10) NOT NULL WITH DEFAULT,        *
+       //     "USER"      CHARACTER ( 10) NOT NULL WITH DEFAULT,        *
+       //     "TIMESTAMP" TIMESTAMP       NOT NULL WITH DEFAULT,        *
+       //     RCDNBR      INT             NOT NULL WITH DEFAULT,        *
+       //     SIZE        INT             NOT NULL WITH DEFAULT,        *
+       //     BIMAGE      CHARACTER (500) NOT NULL WITH DEFAULT,        *
+       //     AIMAGE      CHARACTER (500) NOT NULL WITH DEFAULT)        *
+       //                                                               *
+       //  Erstellen des Programms (CRTRPGMOD + CRTPGM)                 *
+       //  ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯                 *
+       //  CRTRPGMOD MODULE(PEEK/EXIT04) DBGVIEW(*ALL) TRUNCNBR(*NO)    *
+       //  SRCFILE(PEEK/QEXAMPLE) SRCMBR(EXIT04)                        *
+       //  REPLACE(*YES) LANGID(*JOBRUN) TGTRLS(V5R3M0)                 *
+       //                                                               *
+       //  CRTPGM PGM(PEEK/EXIT04) MODULE(PEEK/EXIT04*)                 *
+       //  REPLACE(*YES)                                                *
+       //  TGTRLS(V5R3M0) DETAIL(*BASIC) ACTGRP(PEEK)                   *
+       //  TEXT('Peek/400 - EXIT-Programm: Protokollierung         ')   *
+       //                                                               *
+       //  Erstellen des Programms (CRTBNDRPG):                         *
+       //  ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯                         *
+       //  CRTBNDRPG PGM(PEEK/EXIT04) DBGVIEW(*ALL) TRUNCNBR(*NO)       *
+       //  SRCFILE(PEEK/QEXAMPLE) SRCMBR(EXIT04)                        *
+       //  REPLACE(*YES) LANGID(*JOBRUN) TGTRLS(V5R3M0)                 *
+       //  TEXT('Peek/400 - EXIT-Programm: Protokollierung         ')   *
+       //                                                               *
+       // ============================================================= *
+       // >>PRE-COMPILER<<                                              *
+       //   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+       //                           OBJLIB(&LI) DEVLIB(&LI) +           *
+       //                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+       //                           INSTALL(*NO);                       *
+       //   >>EXECUTE<<                                                 *
+       // >>END-PRE-COMPILER<<                                          *
+       //===============================================================*
+      /include QCOPYLE,H_SPEC
+      /include QCOPYLE,COPYRIGHT
+
       /if defined(*CRTBNDRPG)
-     H DFTACTGRP(*NO) ACTGRP(*CALLER)
+       ctl-opt dftactgrp(*no) actgrp(*caller);
       /endif
-      *===============================================================*
-     FEXIT04LOG UF A E           K DISK    usropn
-     F                                     rename(EXIT04LOG: FEXIT04LOG)
-     F                                     prefix(log_)
-      *
-      *  *ENTRY-Liste
-     D EXIT04          PR                         extpgm('EXIT04')
-     D  gi_file                      10A   const
-     D  gi_lib                       10A   const
-     D  gi_mbr                       10A   const
-     D  gi_event                     10A   const
-     D  gi_user                      10A   const
-     D  gi_timestamp                   Z   const
-     D  gi_rcdNbr                    10I 0 const
-     D  gi_size                      10I 0 const
-     D  gi_bImage                      *   const
-     D  gi_aImage                      *   const
-      *
-     D main            PR                         extproc('main')
-     D  i_file                             const  like(gi_file      )
-     D  i_lib                              const  like(gi_lib       )
-     D  i_mbr                              const  like(gi_mbr       )
-     D  i_event                            const  like(gi_event     )
-     D  i_user                             const  like(gi_user      )
-     D  i_timestamp                        const  like(gi_timestamp )
-     D  i_rcdNbr                           const  like(gi_rcdNbr    )
-     D  i_size                             const  like(gi_size      )
-     D  i_bImage                           const  like(gi_bImage    )
-     D  i_aImage                           const  like(gi_aImage    )
-      *
-      *===============================================================*
-      *    Programmeintrittspunkt                                     *
-      *===============================================================*
-     D EXIT04          PI
-     D  gi_file                      10A   const
-     D  gi_lib                       10A   const
-     D  gi_mbr                       10A   const
-     D  gi_event                     10A   const
-     D  gi_user                      10A   const
-     D  gi_timestamp                   Z   const
-     D  gi_rcdNbr                    10I 0 const
-     D  gi_size                      10I 0 const
-     D  gi_bImage                      *   const
-     D  gi_aImage                      *   const
-      *
-      *---------------------------------------------------------------*
-      /FREE
+       //===============================================================*
+       dcl-f exit04log usage(*update:*delete:*output)
+             keyed usropn rename(exit04log: fexit04log) prefix(log_);
 
-         main(gi_file: gi_lib: gi_mbr: gi_event: gi_user: gi_timestamp
-              : gi_rcdNbr: gi_size: gi_bImage: gi_aImage);
+       dcl-pr exit04        extpgm('EXIT04');
+         gi_file         char(10) const;
+         gi_lib          char(10) const;
+         gi_mbr          char(10) const;
+         gi_event        char(10) const;
+         gi_user         char(10) const;
+         gi_timestamp    timestamp const;
+         gi_rcdnbr       int(10) const;
+         gi_size         int(10) const;
+         gi_bimage       pointer const;
+         gi_aimage       pointer const;
+       end-pr;
 
-         return;
+       dcl-pr main        extproc('main');
+         i_file          const  like(gi_file      );
+         i_lib           const  like(gi_lib       );
+         i_mbr           const  like(gi_mbr       );
+         i_event         const  like(gi_event     );
+         i_user          const  like(gi_user      );
+         i_timestamp     const  like(gi_timestamp );
+         i_rcdnbr        const  like(gi_rcdnbr    );
+         i_size          const  like(gi_size      );
+         i_bimage        const  like(gi_bimage    );
+         i_aimage        const  like(gi_aimage    );
+       end-pr;
 
-      /END-FREE
-      *
-      *===============================================================*
-      *    Hauptprozedur (wegen lokaler Variablen)                    *
-      *===============================================================*
-     P main            B
-      *
-     D main            PI
-     D  i_file                             const  like(gi_file      )
-     D  i_lib                              const  like(gi_lib       )
-     D  i_mbr                              const  like(gi_mbr       )
-     D  i_event                            const  like(gi_event     )
-     D  i_user                             const  like(gi_user      )
-     D  i_timestamp                        const  like(gi_timestamp )
-     D  i_rcdNbr                           const  like(gi_rcdNbr    )
-     D  i_size                             const  like(gi_size      )
-     D  i_bImage                           const  like(gi_bImage    )
-     D  i_aImage                           const  like(gi_aImage    )
-      *
-     D bImage          s          32767a   based(i_bImage)
-     D aImage          s          32767a   based(i_aImage)
-      *---------------------------------------------------------------*
-      /FREE
+       //===============================================================*
+       //    Program Entry Point                                        *
+       //===============================================================*
+       dcl-pi exit04;
+         gi_file         char(10) const;
+         gi_lib          char(10) const;
+         gi_mbr          char(10) const;
+         gi_event        char(10) const;
+         gi_user         char(10) const;
+         gi_timestamp    timestamp const;
+         gi_rcdnbr       int(10) const;
+         gi_size         int(10) const;
+         gi_bimage       pointer const;
+         gi_aimage       pointer const;
+       end-pi;
 
-         open(E) EXIT04LOG;
-         if (%error());
-            return;
-         endif;
+       main(gi_file: gi_lib: gi_mbr: gi_event: gi_user: gi_timestamp
+            : gi_rcdnbr: gi_size: gi_bimage: gi_aimage);
 
-         monitor;
-            clear FEXIT04LOG;
-            LOG_FILE      = i_file;
-            LOG_LIB       = i_lib;
-            LOG_MBR       = i_mbr;
-            LOG_EVENT     = i_event;
-            LOG_USER      = i_user;
-            LOG_TIMESTAMP = i_timestamp;
-            LOG_RCDNBR    = i_rcdNbr;
-            LOG_SIZE      = i_size;
-            if (i_bImage <> *NULL); // *CHANGE, *COPY or *DELETE
-               LOG_BIMAGE = %subst(bImage: 1: i_size);
-            else;
-               LOG_BIMAGE = '*N';
-            endif;
-            if (i_aImage <> *NULL); // *ADD, *CHANGE, *COPY
-               LOG_AIMAGE = %subst(aImage: 1: i_size);
-            else;
-               LOG_AIMAGE = '*N';
-            endif;
-            write FEXIT04LOG;
-         on-error;
-         endmon;
+       return;
 
-         close EXIT04LOG;
+       //===============================================================*
+       //    Main Procedure (local fields)                              *
+       //===============================================================*
+       dcl-proc main;
 
-      /END-FREE
-      *
-     P main            E
-      *
+       dcl-pi main;
+         i_file          const  like(gi_file      );
+         i_lib           const  like(gi_lib       );
+         i_mbr           const  like(gi_mbr       );
+         i_event         const  like(gi_event     );
+         i_user          const  like(gi_user      );
+         i_timestamp     const  like(gi_timestamp );
+         i_rcdnbr        const  like(gi_rcdnbr    );
+         i_size          const  like(gi_size      );
+         i_bimage        const  like(gi_bimage    );
+         i_aimage        const  like(gi_aimage    );
+       end-pi;
+
+       dcl-s bimage          char(32767) based(i_bimage);
+       dcl-s aimage          char(32767) based(i_aimage);
+       //---------------------------------------------------------------*
+
+       open(e) exit04log;
+       if (%error());
+          return;
+       endif;
+
+       monitor;
+          clear fexit04log;
+          log_file      = i_file;
+          log_lib       = i_lib;
+          log_mbr       = i_mbr;
+          log_event     = i_event;
+          log_user      = i_user;
+          log_timestamp = i_timestamp;
+          log_rcdnbr    = i_rcdnbr;
+          log_size      = i_size;
+          if (i_bimage <> *null); // *CHANGE, *COPY or *DELETE
+             log_bimage = %subst(bimage: 1: i_size);
+          else;
+             log_bimage = '*N';
+          endif;
+          if (i_aimage <> *null); // *ADD, *CHANGE, *COPY
+             log_aimage = %subst(aimage: 1: i_size);
+          else;
+             log_aimage = '*N';
+          endif;
+          write fexit04log;
+       on-error;
+       endmon;
+
+       close exit04log;
+
+
+       end-proc main;
+
