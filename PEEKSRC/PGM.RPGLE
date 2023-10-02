@@ -15,17 +15,14 @@
       *====================================================*
      FDSPF      CF   E             WORKSTN usropn
      F                                     infds(workStn)
-     F                                     infsr(*pssr)
       *
      FFILE00    UF A E             DISK    usropn
       *  Eintragen Satzformatname
 FMT1-F                                     rename(X________X:FFILE00)
-     F                                     infsr(*pssr)
      F                                     infds(rcdFile00)
      F                                     commit(xCommitLVL)
       *
      FPEEKFLD   IF   E           K DISK    usropn
-     F                                     infsr(*pssr)
      F                                     prefix(F_)
       *
      D rcdFile00       DS                  qualified
@@ -37,46 +34,44 @@ FMT1-F                                     rename(X________X:FFILE00)
       *====================================================*
       *
       *  Referenzfelder:
-     D r_accMode       S              1A   based(ptrDummy)
-     D r_bool          S              1A   based(ptrDummy)
-     D r_copyRght      S                   like(r_msgDta  )
-     D                                     based(ptrDummy)
-     D r_dsp80         S                   like(r_bool    )
-     D                                     based(ptrDummy)
-     D r_type          S             10A   based(ptrDummy)
-     D r_keys          S              3A   based(ptrDummy)
-     D r_fieldNme      S             10A   based(ptrDummy)
-     D r_file          S             10A   based(ptrDummy)
-     D r_fKeyDsp       S             18A   based(ptrDummy)
-     D r_FLDL0100      S            532A   based(ptrDummy)
-     D r_headTyp       S             10A   based(ptrDummy)
-     D r_hexBuf        S          65532A   based(ptrDummy)
+     D r_accMode       S              1A   template
+     D r_bool          S              1A   template
+     D r_copyRght      S                   like(r_msgDta)
+     D                                     template
+     D r_dsp80         S                   like(r_bool)
+     D                                     template
+     D r_type          S             10A   template
+     D r_keys          S              3A   template
+     D r_fieldNme      S             10A   template
+     D r_file          S             10A   template
+     D r_fKeyDsp       S             18A   template
+     D r_FLDL0100      S            532A   template
+     D r_headTyp       S             10A   template
+     D r_hexBuf        S          65532A   template
      D cHexBufLen      C                   const(65532)
-     D r_keyBuf        S           2000A   based(ptrDummy)
+     D r_keyBuf        S           2000A   template
      D cKeyBufLen      C                   const(2000)
-     D r_lib           S             10A   based(ptrDummy)
-     D r_mbr           S             10A   based(ptrDummy)
-     D r_mod           S             10A   based(ptrDummy)
-     D r_msgDta        S            512A   based(ptrDummy)
-     D r_msgID         S              7A   based(ptrDummy)
-     D r_msgType       S             10A   based(ptrDummy)
-     D r_pgm           S             10A   based(ptrDummy)
-     D r_pgmCallN      S             21A   based(ptrDummy)
-     D r_pgmCmd        S             10A   based(ptrDummy)
-     D r_pgmCmdDt      S            256A   based(ptrDummy)
-     D r_proc          S            256A   based(ptrDummy)
-     D r_rcdBuf        S          32766A   based(ptrDummy)
+     D r_lib           S             10A   template
+     D r_mbr           S             10A   template
+     D r_mod           S             10A   template
+     D r_msgDta        S            512A   template
+     D r_msgID         S              7A   template
+     D r_msgType       S             10A   template
+     D r_pgm           S             10A   template
+     D r_pgmCallN      S             21A   template
+     D r_pgmCmd        S             10A   template
+     D r_pgmCmdDt      S            256A   template
+     D r_proc          S            256A   template
+     D r_rcdBuf        S          32766A   template
      D cRcdBufLen      C                   const(32766)
-     D r_rcdNbr        S             10I 0 based(ptrDummy)
-     D r_scnAid        S             10A   based(ptrDummy)
-     D r_sqlStmt       S           2000A   based(ptrDummy)
-     D r_user          S             10A   based(ptrDummy)
-      *
-      *  Integer & Binärwerte:
-     D r_int4          S             10I 0 based(ptrDummy)
-      *
-      *  Feedback Code:
-     D r_fc            S             12A   based(ptrDummy)
+     D r_rcdNbr        S             10I 0 template
+     D r_scnAid        S             10A   template
+     D r_sqlStmt       S           2000A   template
+     D r_user          S             10A   template
+     D r_clCmd         S          32702A   varying template
+     D r_int4          S             10I 0 template
+      *  CEE API Feedback Code:
+     D r_fc            S             12A   template
       *
       *  Accessmode:
      D cRrnSeq         C                   CONST('0')
@@ -103,21 +98,6 @@ FMT1-F                                     rename(X________X:FFILE00)
      D cEDITOR_HEX     C                   const('*HEX')
      D cEDITOR_STRING  C                   const('*STRING')
       *
-      *  OVRDBF/OVRDSPF:
-     D o_FILE          S             10A   inz
-     D o_IN99          S              1A   inz
-     D o_LVLCHK        S             10A   inz
-     D o_MBR           S             10A   inz
-     D o_OVRSCOPE      S             10A   inz
-     D o_QCMD          S            256A   inz
-     D o_RETURN        S              1A   inz
-     D o_SECURE        S             10A   inz
-     D o_SEQONLY       S             10A   inz
-     D o_SHARE         S             10A   inz
-     D o_TOFILE        S             10A   inz
-     D o_TOLIB         S             10A   inz
-     D o_QCMDL         S             15P 5 inz
-      *
       *  Übertragen VARGRAPHIC Felder
      D x               S             10I 0 inz
      D offs            S             10I 0 inz
@@ -131,6 +111,9 @@ COPY- /include LIBRARY_NAME/QCOPYLE,D_VARDEF
 COPY- /include LIBRARY_NAME/QCOPYLE,FLDL0100
 COPY- /include LIBRARY_NAME/QCOPYLE,F_PEEK53
 COPY- /include LIBRARY_NAME/QCOPYLE,F_PEEK58
+COPY- /include LIBRARY_NAME/QCOPYLE,QCMDEXC
+COPY- /include LIBRARY_NAME/QCOPYLE,CEECNDHDLR
+COPY- /include LIBRARY_NAME/QCOPYLE,QTNRCMTI
       *
       *====================================================*
       *  List API Format FLDL0100 mit eigenen zusätzlichen *
@@ -288,8 +271,6 @@ KEEP-D  keepCrsPos     C                   X__X
       *
      D ISOZ            C                   CONST('0001-01-01-00.00.00.000000')
       *
-     D RclRsc          C                   CONST('RCLRSC LVL(*) ')
-      *
      D xDsp80          S                   like(r_dsp80   )
      D xHeaderTyp      S                   like(r_headTyp )
      D xCopyRight      S                   like(r_copyRght)
@@ -370,9 +351,6 @@ ALWL-D isAlwLower      S                   like(r_bool    ) inz(X____X)
      D scnNbr          S                   like(r_int4    ) inz
      D nbrFKeys        C                   const(3)
       *
-     D pgmErrFlag      S                   like(r_bool    ) inz(bFalse)
-     D pgmRetMode      S              6A   INZ('*CANCL')
-      *
      D buffStart       S                   like(r_int4    ) inz
      D buffEnd         S                   like(r_int4    ) inz
      D buffPos         S                   like(r_int4    ) inz
@@ -381,8 +359,15 @@ ALWL-D isAlwLower      S                   like(r_bool    ) inz(X____X)
       *
      D keyChar         S              1A   inz
       *
+     D clCmd           S                   like(r_clCmd)
+      *
+     D cmti0100        DS                  likeds(cmti0100_t) inz
+     D errCode         DS                  likeds(errCode_t) inz
+      *
      D pgmMsgID        S                   like(r_msgID   ) inz
      D pgmMsgDta       S                   like(r_msgDta  ) inz
+      *
+     D isInzSr         S                   like(bool_t) inz(bFalse)
       *
       *  ... Feldefinitionen zur Bildschirmsteuerung
 DEF1- *
@@ -500,6 +485,11 @@ RNM2-IFFILE00
      C                   Kfld                    F_Field
       *
       *----------------------------------------------------*
+      *
+     C                   callp     CEEHDLR(%paddr('errorHandler')
+     C                                     : *null: *omit)
+      *
+     C                   Exsr      InzSr
       *
      C                   Eval      xMsgID  = ' '
      C                   Eval      xMsgDta = ' '
@@ -1118,16 +1108,22 @@ FSCN- *
       *
      C                   If        isError = bTrue
       *  Update/write fehlgeschlagen ...
-     C   95              Rolbk
-     C  N95              Unlock    File00
+     C                   If        (*in95)
+     C                   Rolbk
+     C                   Else
+     C                   Unlock    File00
+     C                   Endif
      C                   Exsr      ReadRecord
       ***                Exsr      DataToScn
       *  Setzen Fehler-Flag ...
      C                   Eval      isError = bTrue
      C                   Else
       *  Updatze/write OK ...
-     C   95              Commit
-     C  N95              Unlock    File00
+     C                   If        (*in95)
+     C                   Commit
+     C                   Else
+     C                   Unlock    File00
+     C                   Endif
       *  Löschen Fehler-Flag ...
      C                   Eval      isError = bFalse
      C                   Endif
@@ -1260,22 +1256,43 @@ FSCN- *
      C     openFiles     Begsr
       *
       *  Überschreiben DB-Datei:
-     C                   Eval      o_File     = 'FILE00'
-     C                   Eval      o_ToFile   = xFile
-     C                   Eval      o_ToLib    = xLibrary
-     C                   Eval      o_Mbr      = xMember
-     C                   Eval      o_OvrScope = '*CALLLVL'
-     C                   Eval      o_Share    = '*NO'
-     C                   Eval      o_SeqOnly  = '*NO'
-     C                   Eval      o_Secure   = '*YES'
-     C                   Exsr      OvrDbf
+     C                   Eval      clCmd = 'OVRDBF ' +
+     C                                       'FILE(FILE00) ' +
+     C                                       'TOFILE(' +
+     C                                         %trim(xLibrary) + '/' +
+     C                                         %trim(xFile) +
+     C                                       ') ' +
+     C                                       'MBR(' +
+     C                                         %trim(xMember) +
+     C                                       ') ' +
+     C                                       'OVRSCOPE(*CALLLVL) ' +
+     C                                       'SHARE(*NO) ' +
+     C                                       'SEQONLY(*NO) ' +
+     C                                       'SECURE(*YES)'
+     C                   Callp     QCMDEXC(clCmd: %len(clCmd))
       *
       *  Überschreiben Bildschirmdatei:
-     C                   Eval      o_File     = 'DSPF'
-     C                   Eval      o_ToFile   = 'F' + %subst(PsPgmName: 2)
-     C                   Eval      o_ToLib    = PsPgmLib
-     C                   Eval      o_OvrScope = '*CALLLVL'
-     C                   Exsr      OvrDspF
+     C                   Eval      clCmd = 'OVRDBF ' +
+     C                                       'FILE(DSPF) ' +
+     C                                       'TOFILE(' +
+     C                                         %trim(PsPgmLib) + '/' +
+     C                                         'F' + %subst(PsPgmName: 2) +
+     C                                       ') ' +
+     C                                       'OVRSCOPE(*CALLLVL) ' +
+     C                                       'SHARE(*NO) ' +
+     C                                       'SECURE(*YES)'
+     C                   Callp     QCMDEXC(clCmd: %len(clCmd))
+      *
+      *  Überschreiben PEEKFLD:
+     C                   Eval      clCmd = 'OVRDBF ' +
+     C                                       'FILE(PEEKFLD) ' +
+     C                                       'TOFILE(QTEMP/PEEKFLD) ' +
+     C                                       'MBR(*FIRST) ' +
+     C                                       'OVRSCOPE(*CALLLVL) ' +
+     C                                       'SHARE(*NO) ' +
+     C                                       'SEQONLY(*NO) ' +
+     C                                       'SECURE(*YES)'
+     C                   Callp     QCMDEXC(clCmd: %len(clCmd))
       *
       *  Datei öffnen ...
      C                   If        xCommitLVL = '0'
@@ -1331,7 +1348,9 @@ FSCN- *
       *
       *  Falls irgendetwas unerwartetes schief
       *  gelaufen sein sollte ...
-     C   95              Rolbk
+     C                   If        (*in95)
+     C                   Rolbk
+     C                   Endif
       *
      C                   Close     PEEKFLD
      C                   Close     FILE00
@@ -1339,11 +1358,8 @@ FSCN- *
       *
       *  Entfernen der Triggerprogramme aus dem
       *  Arbeitsspeicher ...
-     C                   Eval      cmd    = RclRsc
-     C                   Eval      cmdLen = 40
-     C                   Call      'QCMDEXC'
-     C                   Parm                    cmd              40
-     C                   Parm                    cmdLen           15 5
+     C                   Eval      clCmd = 'RCLRSC LVL(*)'
+     C                   Callp     QCMDEXC(clCmd: %len(clCmd))
       *
      C                   Endsr
       *
@@ -1380,27 +1396,16 @@ FSCN- *
      C                   Endsr
       *
       *============================================================*
-      *    *pssr         Fehlerbehandlung                          *
+      *  Programminitialisierung                                   *
       *============================================================*
       *
-     C     *pssr         Begsr
+     C     InzSr         Begsr
       *
-     C                   If        PgmErrFlag = bFalse
-     C                   Eval      pgmErrFlag = bTrue
-     C   95              Rolbk
-     C                   Dump
-     C                   Eval      pgmRetMode = '*CANCL'
-     C                   Endif
+     C                   IF        (isInzSr = bTrue)
+     C                   Leavesr
+     C                   ENDIF
       *
-     C                   Eval      *inlr = *on
-      *
-     C                   Endsr     pgmRetMode
-      *
-      *============================================================*
-      *    *inzsr        Initialisierung                           *
-      *============================================================*
-      *
-     C     *inzsr        Begsr
+     C                   Eval      isInzSr = bTrue
       *
      C                   Eval      PEEK21 = f_pgmCallN('PEEK21')
      C                   Eval      PEEK23 = f_pgmCallN('PEEK23')
@@ -1411,14 +1416,25 @@ FSCN- *
       *
      C                   Eval      pgmQ = '*'
       *
-     C                   Eval      pgmErrFlag = bFalse
-      *
       *  Einlesen der Tastenbelegung
      C                   Eval      yPgm    = 'PXXXXXXXX'
      C                   Eval      yKey    = '*ALL'
      C                   Eval      yPosF24 = 3
      C                   Call      PEEK23        P_Peek23
      C                   Movea (P) yFKeys        scrnFKeys
+      *
+      *  Starten Commit Control
+     C                   If        xCommitLVL <> '0'
+     C                   Clear                   errCode
+     C                   Callp     QTNRCMTI(cmti0100: %size(cmti0100)
+     C                                      : 'CMTI0100': errCode)
+     C                   If        (cmti0100.statusActGrp = 'N')
+     C                   Eval      clCmd = 'STRCMTCTL +
+     C                                       LCKLVL(*CHG) NFYOBJ(*NONE) +
+     C                                       CMTSCOPE(*ACTGRP)'
+     C                   Callp     QCMDEXC(clCmd: %len(clCmd))
+     C                   Endif
+     C                   Endif
       *
      C                   Endsr
       *
@@ -1537,123 +1553,6 @@ FSCN- *
      C                   Endsr
       *
       *====================================================*
-      *  OvrDbf     - Überschreiben DB-Datei               *
-      *====================================================*
-      *
-     C     OvrDbf        Begsr
-      *
-      *  Überschreiben mit neuer Datei ...
-      *     OVRDBF
-     C                   MOVEL(P)  'OVRDBF'      o_QCMD
-      *     File
-     C                   CAT       'FILE(':1     o_QCMD
-     C                   CAT       o_FILE:0      o_QCMD
-     C                   CAT       ')':0         o_QCMD
-      *     ToFile
-     C                   CAT       'TO':1        o_QCMD
-     C                   CAT       'FILE(':0     o_QCMD
-     C     o_TOLIB       IFNE      *BLANKS
-     C                   CAT       o_TOLIB:0     o_QCMD
-     C                   CAT       '/':0         o_QCMD
-     C                   ENDIF
-     C                   CAT       o_TOFILE:0    o_QCMD
-     C                   CAT       ')':0         o_QCMD
-      *     Mbr
-     C     o_MBR         IFNE      *BLANKS
-     C                   CAT       'MBR(':1      o_QCMD
-     C                   CAT       o_MBR:0       o_QCMD
-     C                   CAT       ')':0         o_QCMD
-     C                   ENDIF
-      *     OvrScope
-     C     o_OVRSCOPE    IFNE      *BLANKS
-     C                   CAT       'OVR':1       o_QCMD
-     C                   CAT       'SCOPE(':0    o_QCMD
-     C                   CAT       o_OVRSCOPE:0  o_QCMD
-     C                   CAT       ')':0         o_QCMD
-     C                   ENDIF
-      *     Share
-     C     o_SHARE       IFNE      *BLANKS
-     C                   CAT       'SHARE(':1    o_QCMD
-     C                   CAT       o_SHARE:0     o_QCMD
-     C                   CAT       ')':0         o_QCMD
-     C                   ENDIF
-      *     SeqOnly
-     C     o_SEQONLY     IFNE      *BLANKS
-     C                   CAT       'SEQ':1       o_QCMD
-     C                   CAT       'ONLY(':0     o_QCMD
-     C                   CAT       o_SEQONLY:0   o_QCMD
-     C                   CAT       ')':0         o_QCMD
-     C                   ENDIF
-      *     Secure
-     C     o_SECURE      IFNE      *BLANKS
-     C                   CAT       'SECURE(':1   o_QCMD
-     C                   CAT       o_SECURE:0    o_QCMD
-     C                   CAT       ')':0         o_QCMD
-     C                   ENDIF
-      *     Level Check
-     C     o_LVLCHK      IFNE      *BLANKS
-     C                   CAT       'LVLCHK(':1   o_QCMD
-     C                   CAT       o_LVLCHK:0    o_QCMD
-     C                   CAT       ')':0         o_QCMD
-     C                   ENDIF
-      *
-     C                   MOVEL(P)  *IN99         o_IN99
-      *
-     C                   Z-ADD     256           o_QCMDL
-     C                   CALL      'QCMDEXC'                            99
-     C                   PARM                    o_QCMD
-     C                   PARM                    o_QCMDL
-      *
-     C                   MOVEL(P)  *IN99         o_RETURN
-      *
-     C                   MOVEL(P)  o_IN99        *IN99
-      *
-     C                   Endsr
-      *
-      *====================================================*
-      *  OvrDspF    - Überschreiben Bildschirmdatei        *
-      *====================================================*
-      *
-     C     OvrDspF       Begsr
-      *
-      *  Überschreiben mit neuer Datei ...
-      *     OVRDSPF
-     C                   MOVEL(P)  'OVRDSPF'     o_QCMD
-      *     File
-     C                   CAT       'FILE(':1     o_QCMD
-     C                   CAT       o_FILE:0      o_QCMD
-     C                   CAT       ')':0         o_QCMD
-      *     ToFile
-     C                   CAT       'TO':1        o_QCMD
-     C                   CAT       'FILE(':0     o_QCMD
-     C     o_TOLIB       IFNE      *BLANKS
-     C                   CAT       o_TOLIB:0     o_QCMD
-     C                   CAT       '/':0         o_QCMD
-     C                   ENDIF
-     C                   CAT       o_TOFILE:0    o_QCMD
-     C                   CAT       ')':0         o_QCMD
-      *     OvrScope
-     C     o_OVRSCOPE    IFNE      *BLANKS
-     C                   CAT       'OVR':1       o_QCMD
-     C                   CAT       'SCOPE(':0    o_QCMD
-     C                   CAT       o_OVRSCOPE:0  o_QCMD
-     C                   CAT       ')':0         o_QCMD
-     C                   ENDIF
-      *
-     C                   MOVEL(P)  *IN99         o_IN99
-      *
-     C                   Z-ADD     256           o_QCMDL
-     C                   CALL      'QCMDEXC'                            99
-     C                   PARM                    o_QCMD
-     C                   PARM                    o_QCMDL
-      *
-     C                   MOVEL(P)  *IN99         o_RETURN
-      *
-     C                   MOVEL(P)  o_IN99        *IN99
-      *
-     C                   Endsr
-      *
-      *====================================================*
       *  Ab hier folgen die Unterroutinen für die          *
       *  Prüfung auf ungültige Feldinhalte                 *
       *====================================================*
@@ -1701,4 +1600,27 @@ TOS - *
       *  Screen --> File                                   *
       *====================================================*
 TOF - *
+      *
+      *============================================================*
+      *  Program error handler                                     *
+      *============================================================*
+      *
+     P errorHandler    b
+     D                 pi
+     D i_condToken                         value likeds(cee_fc_t)
+     D i_pCommArea                   10i 0 value
+     D o_action                      10i 0
+     D o_newCondToken                            likeds(cee_fc_t)
+      /free
+
+         if (*in95);
+           rolbk;
+         endif;
+
+         dump;
+
+         o_action = CEE_PERCOLATE;
+
+      /end-free
+     P                 e
       *

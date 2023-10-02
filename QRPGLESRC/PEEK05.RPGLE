@@ -7306,6 +7306,14 @@
       *             Weiss noch nicht!
      C                   Endif
       *
+      *  Entfernen Update Programm aus Arbeitsspeicher
+     C                   Callp     f_execute('RCLACTGRP +
+     C                                          ACTGRP(PEEKUPD) +
+     C                                          OPTION(*NORMAL)'
+     C                                       : YMsgID: YMsgDta)
+     C                   Eval      YMsgID = ''
+     C                   Eval      YMsgDta = ''
+      *
       *  Subfile initialisieren
      C                   EXSR      PBInit
       *

@@ -463,7 +463,7 @@
              CHGJOB     STSMSG(*NONE)
              CRTPGM     PGM(&PRODLIB/&PGM) +
                           MODULE(QTEMP/&PGM) +
-                          ACTGRP(*CALLER)   +
+                          ACTGRP(PEEKUPD) +
                           REPLACE(*YES) +
                           BNDSRVPGM(&PRODLIB/PEEK58) +
                           TGTRLS(*CURRENT)

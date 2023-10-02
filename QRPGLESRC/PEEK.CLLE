@@ -122,6 +122,9 @@
              RCLACTGRP  ACTGRP(PEEK) OPTION(*NORMAL)
              MONMSG     MSGID(CPF0000)
 
+             RCLACTGRP  ACTGRP(PEEKUPD) OPTION(*NORMAL)
+             MONMSG     MSGID(CPF0000)
+
              IF         COND(&ERROR) THEN(DO)
                 /* Sende letzte *ESCAPE nochmals   */
                 CALL       PGM(QMHRSNEM) PARM(&ERRMSGKEY &ERRCODE)

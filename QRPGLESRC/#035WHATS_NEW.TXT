@@ -897,3 +897,8 @@
        - Update Programmgenerator geändert, so dass bei ungültigen Zeichen in
          einem Datenfeld der Hinweis 'Unzulässige Zeichen' auf dem Bildschirm
          angezeigt wird.
+  *  Update Program
+         Das generierte Update Programm läuft jetzt in der Aktivierungsgruppe
+         PEEKUPD. Diese Aktivierungsgruppe wird beim Wchseln der Datei
+         geschlossen, um alle Trigggerprogramme zu entladen und alle offenen
+         Dateien der Triggerprogramme zu schließen.
