@@ -846,19 +846,31 @@
      C                   SELECT
      C     SFBOT         WHENEQ    2
      C     YNbrOfKeys    ANDGT     8
-     C  N88              WRITE     PBBOT132#2
-     C   88              WRITE     PBBOT080#2
+     C                   IF        (*in88 = bFalse)
+     C                   WRITE     PBBOT132#2
+     C                   Else
+     C                   WRITE     PBBOT080#2
+     C                   Endif
      C     SFBOT         WHENEQ    3
      C     YNbrOfKeys    ANDGT     16
-     C  N88              WRITE     PBBOT132#3
-     C   88              WRITE     PBBOT080#3
+     C                   IF        (*in88 = bFalse)
+     C                   WRITE     PBBOT132#3
+     C                   Else
+     C                   WRITE     PBBOT080#3
+     C                   Endif
      C     SFBOT         WHENEQ    4
      C     YNbrOfKeys    ANDGT     24
-     C  N88              WRITE     PBBOT132#4
-     C   88              WRITE     PBBOT080#4
+     C                   IF        (*in88 = bFalse)
+     C                   WRITE     PBBOT132#4
+     C                   Else
+     C                   WRITE     PBBOT080#4
+     C                   Endif
      C                   OTHER
-     C  N88              WRITE     PBBOT132#1
-     C   88              WRITE     PBBOT080#1
+     C                   IF        (*in88 = bFalse)
+     C                   WRITE     PBBOT132#1
+     C                   Else
+     C                   WRITE     PBBOT080#1
+     C                   Endif
      C                   EVAL      SFBOT = 1
      C                   Endsl
       *
@@ -867,8 +879,11 @@
      C                   EVAL      B4.StrPage = ##StrPage
       *
       *  Anzeige der Subfile
-     C  N88              EXFMT     PBCTL132
-     C   88              EXFMT     PBCTL080
+     C                   IF        (*in88 = bFalse)
+     C                   EXFMT     PBCTL132
+     C                   Else
+     C                   EXFMT     PBCTL080
+     C                   Endif
       *
       *  Übernehmen Schlüselfelder
      C                   If        isKeyLower = bFalse
@@ -1137,16 +1152,22 @@
       *  gebaut worden ist.
      C     IsPBINIT      DOWEQ     bFalse
       *
-     C  N88              READC     PBSFL132                               11
-     C   88              READC     PBSFL080                               11
+     C                   IF        (*in88 = bFalse)
+     C                   READC     PBSFL132                               11
+     C                   Else
+     C                   READC     PBSFL080                               11
+     C                   Endif
       *
      C     *IN11         IFEQ      '1'
      C                   LEAVE
      C                   Endif
       *
       *  Cursorpositionierung ...
-     C  N88              Z-ADD     SflRec132     SflCsr
-     C   88              Z-ADD     SflRec080     SflCsr
+     C                   IF        (*in88 = bFalse)
+     C                   Z-ADD     SflRec132     SflCsr
+     C                   Else
+     C                   Z-ADD     SflRec080     SflCsr
+     C                   Endif
       *
       *  Linksbündig setzen ...
      C                   Eval      SFPAU = %triml(SFPAU)
@@ -1270,8 +1291,11 @@
       *
      C     PBSflWrite    BEGSR
       *
-     C  N88              WRITE     PBSFL132
-     C   88              WRITE     PBSFL080
+     C                   IF        (*in88 = bFalse)
+     C                   WRITE     PBSFL132
+     C                   Else
+     C                   WRITE     PBSFL080
+     C                   Endif
       *
      C                   ENDSR
       *
@@ -1281,8 +1305,11 @@
       *
      C     PBSflUpdat    BEGSR
       *
-     C  N88              UPDATE    PBSFL132
-     C   88              UPDATE    PBSFL080
+     C                   IF        (*in88 = bFalse)
+     C                   UPDATE    PBSFL132
+     C                   Else
+     C                   UPDATE    PBSFL080
+     C                   Endif
       *
      C                   ENDSR
       *
@@ -1600,8 +1627,11 @@
      C                   EVAL      yMsgID = ''
      C                   EVAL      yMsgDta = ''
      C                   Else
-     C  N88              WRITE     PBCTL132
-     C   88              WRITE     PBCTL080
+     C                   IF        (*in88 = bFalse)
+     C                   WRITE     PBCTL132
+     C                   Else
+     C                   WRITE     PBCTL080
+     C                   Endif
      C                   Endif
       *
      C                   Endsr
@@ -4642,8 +4672,11 @@
      C                   EVAL      *IN81 = '1'
      C                   EVAL      *IN82 = '1'
      C                   EVAL      *IN83 = '1'
-     C  N88              WRITE     PBCTL132
-     C   88              WRITE     PBCTL080
+     C                   IF        (*in88 = bFalse)
+     C                   WRITE     PBCTL132
+     C                   Else
+     C                   WRITE     PBCTL080
+     C                   Endif
       *
      C                   EVAL      *IN82 = '0'
       *
@@ -4734,8 +4767,11 @@
      C                   EVAL      *IN83 = '0'
      C                   Endif
       *
-     C  N88              ADD       1             SFLRec132
-     C   88              ADD       1             SFLRec080
+     C                   IF        (*in88 = bFalse)
+     C                   ADD       1             SFLRec132
+     C                   Else
+     C                   ADD       1             SFLRec080
+     C                   Endif
       *
      C     SFLRec132     IFGT      9999
      C     SFLRec080     ORGT      9999
@@ -4754,13 +4790,19 @@
       *
      C                   EXSR      PBSflWrite
       *
-     C  N88              Z-ADD     SflRec132     SflNbrRcd
-     C   88              Z-ADD     SflRec080     SflNbrRcd
+     C                   IF        (*in88 = bFalse)
+     C                   Z-ADD     SflRec132     SflNbrRcd
+     C                   Else
+     C                   Z-ADD     SflRec080     SflNbrRcd
+     C                   Endif
       *
       *  Setzen Cursor auf gefundenen Datensatz
      C     SrchFndRcd    IFEQ      RECORDNBR
-     C  N88              Z-ADD     SflRec132     SFSANR
-     C   88              Z-ADD     SflRec080     SFSANR
+     C                   IF        (*in88 = bFalse)
+     C                   Z-ADD     SflRec132     SFSANR
+     C                   Else
+     C                   Z-ADD     SflRec080     SFSANR
+     C                   Endif
      C                   Endif
       *
       *  Aufbereiten Aufsetzkey bei 1. geschriebendem Datensatz
@@ -4979,8 +5021,11 @@
       *
      C                   EXSR      PBSflWrite
       *
-     C  N88              Z-ADD     SflRec132     SflNbrRcd
-     C   88              Z-ADD     SflRec080     SflNbrRcd
+     C                   IF        (*in88 = bFalse)
+     C                   Z-ADD     SflRec132     SflNbrRcd
+     C                   Else
+     C                   Z-ADD     SflRec080     SflNbrRcd
+     C                   Endif
       *
      C                   Enddo
       *
@@ -7559,8 +7604,11 @@
      C                   ELSE
      C     SFPAU         IFNE      *BLANKS
      C                   EVAL      Wrk#SFPAU = SFPAU
-     C  N88              Z-ADD     SflRec132     Wrk#Recno
-     C   88              Z-ADD     SflRec080     Wrk#Recno
+     C                   IF        (*in88 = bFalse)
+     C                   Z-ADD     SflRec132     Wrk#Recno
+     C                   Else
+     C                   Z-ADD     SflRec080     Wrk#Recno
+     C                   Endif
      C                   EVAL      IsError = bFalse
      C                   LEAVE
      C                   ELSE
