@@ -1,715 +1,715 @@
- DEF  /IF NOT DEFINED(CLIB)                                                                   RADDAT
- DEF  /DEFINE CLIB                                                                            RADDAT
-?     *                                                                                       RADDAT
-?     *  Basics C data types                                                                  RADDAT
-     D uLong_t         S             10U 0 based(pDummy)                                      RADDAT
-     D uInt_t          S             10U 0 based(pDummy)                                      RADDAT
-?     *                                                                                       RADDAT
-?     *  system -- Execute a Command                                                          RADDAT
-     D system          PR            10I 0 extproc('system')                                  RADDAT
-     D  i_clCommand                    *   value options(*string)                             RADDAT
-?     *                                                                                       RADDAT
-     D EXCP_MSGID      S              7A   import('_EXCP_MSGID')                              RADDAT
-?     *                                                                                       RADDAT
-?     *  time -- Determine Current Time                                                       RADDAT
-     D time...                                                                                RADDAT
-     D                 PR            10i 0 extproc('time')                                    RADDAT
-     D  timeptr                        *   value                                              RADDAT
-?     *                                                                                       RADDAT
-?     *  strftime -- Convert to Formatted Time                                                RADDAT
-     D strftime...                                                                            RADDAT
-     D                 PR            10i 0 extproc('strftime')                                RADDAT
-     D  dest                           *   value                                              RADDAT
-     D  maxsize                      10i 0 value                                              RADDAT
-     D  format                         *   value options(*string)                             RADDAT
-     D  timeptr                            const  likeds(tm_t)                                RADDAT
-?     *                                                                                       RADDAT
-     D tm_t            DS                  qualified  based(pDummy)                           RADDAT
-     D  tm_sec                       10I 0                                                    RADDAT
-     D  tm_min                       10I 0                                                    RADDAT
-     D  tm_hour                      10I 0                                                    RADDAT
-     D  tm_mday                      10I 0                                                    RADDAT
-     D  tm_mon                       10I 0                                                    RADDAT
-     D  tm_year                      10I 0                                                    RADDAT
-     D  tm_wday                      10I 0                                                    RADDAT
-     D  tm_yday                      10I 0                                                    RADDAT
-     D  tm_isdst                     10I 0                                                    RADDAT
-?     *                                                                                       RADDAT
-?     *  localtime() -- Correct Local Time, returns tm_t*                                     RADDAT
-     D localtime...                                                                           RADDAT
-     D                 PR              *   extproc('localtime')                               RADDAT
-     D  time                         10I 0 const                                              RADDAT
-?     *                                                                                       RADDAT
-?     *  localtime_r() -- Correct Local Time                                                  RADDAT
-     D localtime_r...                                                                         RADDAT
-     D                 PR              *   extproc('localtime_r')                             RADDAT
-     D  time                         10I 0 const                                              RADDAT
-     D  tm                                 const  likeds(tm_t)                                RADDAT
-?     *                                                                                       RADDAT
-?     *  strtok -- Tokenize String                                                            RADDAT
-     D strtok          PR              *          extproc('strtok')                           RADDAT
-     D  i_string                       *   value  options(*string)                            RADDAT
-     D  i_token                        *   value  options(*string)                            RADDAT
-?     *                                                                                       RADDAT
-?     *  atoi -- Convert Character String to Integer                                          RADDAT
-     D atoi            PR            10I 0        extproc('atoi')                             RADDAT
-     D  i_string                       *   value  options(*string)                            RADDAT
-?     *                                                                                       RADDAT
-?     *  memcpy -- Copy Bytes                                                                 RADDAT
-     D memcpy          PR              *          extproc('memcpy')                           RADDAT
-     D  i_pDest                        *   value                                              RADDAT
-     D  i_pSrc                         *   value                                              RADDAT
-     D  i_count                      10U 0 value                                              RADDAT
-?     *                                                                                       RADDAT
-?     *  memset -- Set Bytes to Value                                                         RADDAT
-     D memset          PR              *          extproc('memset')                           RADDAT
-     D  i_pDest                        *   value                                              RADDAT
-     D  i_char                       10I 0 value                                              RADDAT
-     D  i_count                      10U 0 value                                              RADDAT
-?     *                                                                                       RADDAT
-?     *  memmove -- Copy Bytes                                                                RADDAT
-?     *     memmove allows copying between objects that may overlap                           RADDAT
-?     *     as if src is first copied into a temporary array.                                 RADDAT
-     D memmove         PR              *          extproc('memmove')                          RADDAT
-     D  pMemDest                       *   value                                              RADDAT
-     D  pMemSrc                        *   value                                              RADDAT
-     D  memSize                            value like(size_t)                                 RADDAT
-?     *                                                                                       RADDAT
-?     *  memcmp -- Compare Buffers                                                            RADDAT
-     D memcmp          PR            10I 0        extproc('memcmp')                           RADDAT
-     D  pBuf1                          *   value                                              RADDAT
-     D  pBuf2                          *   value                                              RADDAT
-     D  count                              value like(size_t)                                 RADDAT
-?     *                                                                                       RADDAT
-?     *  memicmp -- Compare Bytes (ignore case)                                               RADDAT
-     D memicmp         PR            10I 0        extproc('__memicmp')                        RADDAT
-     D  pBuf1                          *   value                                              RADDAT
-     D  pBuf2                          *   value                                              RADDAT
-     D  count                        10U 0 value                                              RADDAT
-?     *                                                                                       RADDAT
-?     *  malloc -- Reserve Storage Block                                                      RADDAT
-     D malloc          PR              *          extproc('malloc')                           RADDAT
-     D  i_size                       10U 0 value                                              RADDAT
-?     *                                                                                       RADDAT
-?     *  realloc -- Change Reserved Storage Block Size                                        RADDAT
-     D realloc         PR              *          extproc('realloc')                          RADDAT
-     D  i_pMem                         *   value                                              RADDAT
-     D  i_size                       10U 0 value                                              RADDAT
-?     *                                                                                       RADDAT
-?     *  free -- Release Storage Blocks                                                       RADDAT
+      /IF NOT DEFINED(CLIB)
+      /DEFINE CLIB
+      *
+      *  Basics C data types
+     D uLong_t         S             10U 0 based(pDummy)
+     D uInt_t          S             10U 0 based(pDummy)
+      *
+      *  system -- Execute a Command
+     D system          PR            10I 0 extproc('system')
+     D  i_clCommand                    *   value options(*string)
+      *
+     D EXCP_MSGID      S              7A   import('_EXCP_MSGID')
+      *
+      *  time -- Determine Current Time
+     D time...
+     D                 PR            10i 0 extproc('time')
+     D  timeptr                        *   value
+      *
+      *  strftime -- Convert to Formatted Time
+     D strftime...
+     D                 PR            10i 0 extproc('strftime')
+     D  dest                           *   value
+     D  maxsize                      10i 0 value
+     D  format                         *   value options(*string)
+     D  timeptr                            const  likeds(tm_t)
+      *
+     D tm_t            DS                  qualified  based(pDummy)
+     D  tm_sec                       10I 0
+     D  tm_min                       10I 0
+     D  tm_hour                      10I 0
+     D  tm_mday                      10I 0
+     D  tm_mon                       10I 0
+     D  tm_year                      10I 0
+     D  tm_wday                      10I 0
+     D  tm_yday                      10I 0
+     D  tm_isdst                     10I 0
+      *
+      *  localtime() -- Correct Local Time, returns tm_t*
+     D localtime...
+     D                 PR              *   extproc('localtime')
+     D  time                         10I 0 const
+      *
+      *  localtime_r() -- Correct Local Time
+     D localtime_r...
+     D                 PR              *   extproc('localtime_r')
+     D  time                         10I 0 const
+     D  tm                                 const  likeds(tm_t)
+      *
+      *  strtok -- Tokenize String
+     D strtok          PR              *          extproc('strtok')
+     D  i_string                       *   value  options(*string)
+     D  i_token                        *   value  options(*string)
+      *
+      *  atoi -- Convert Character String to Integer
+     D atoi            PR            10I 0        extproc('atoi')
+     D  i_string                       *   value  options(*string)
+      *
+      *  memcpy -- Copy Bytes
+     D memcpy          PR              *          extproc('memcpy')
+     D  i_pDest                        *   value
+     D  i_pSrc                         *   value
+     D  i_count                      10U 0 value
+      *
+      *  memset -- Set Bytes to Value
+     D memset          PR              *          extproc('memset')
+     D  i_pDest                        *   value
+     D  i_char                       10I 0 value
+     D  i_count                      10U 0 value
+      *
+      *  memmove -- Copy Bytes
+      *     memmove allows copying between objects that may overlap
+      *     as if src is first copied into a temporary array.
+     D memmove         PR              *          extproc('memmove')
+     D  pMemDest                       *   value
+     D  pMemSrc                        *   value
+     D  memSize                            value like(size_t)
+      *
+      *  memcmp -- Compare Buffers
+     D memcmp          PR            10I 0        extproc('memcmp')
+     D  pBuf1                          *   value
+     D  pBuf2                          *   value
+     D  count                              value like(size_t)
+      *
+      *  memicmp -- Compare Bytes (ignore case)
+     D memicmp         PR            10I 0        extproc('__memicmp')
+     D  pBuf1                          *   value
+     D  pBuf2                          *   value
+     D  count                        10U 0 value
+      *
+      *  malloc -- Reserve Storage Block
+     D malloc          PR              *          extproc('malloc')
+     D  i_size                       10U 0 value
+      *
+      *  realloc -- Change Reserved Storage Block Size
+     D realloc         PR              *          extproc('realloc')
+     D  i_pMem                         *   value
+     D  i_size                       10U 0 value
+      *
+      *  free -- Release Storage Blocks
      D free            PR                         extproc('free')
-     D  i_pMem                         *   value                                              RADDAT
-?     *                                                                                       RADDAT
-?     *  srand -- Set Seed for rand Function   e.g.:   srand(getSeed(*null))                  RADDAT
-     D srand           PR                         extproc('srand')                            RADDAT
-     D  i_seed                       10U 0 value                                              RADDAT
-?     *                                                                                       RADDAT
-?     *  rand -- Generate Random Number                x = rand()                             RADDAT
-     D rand            PR            10I 0        extproc('rand')                             RADDAT
-?     *                                                                                       RADDAT
-     D RAND_MAX        C                   const(32767)                                       RADDAT
-?     *                                                                                       RADDAT
-?     *  getSeed -- Get Seed for srand function                                               RADDAT
-     D getSeed         PR            10I 0        extproc('time')                             RADDAT
-     D  i_timePtr                      *   value                                              RADDAT
-?     *                                                                                       RADDAT
-?     *  strlen -- Determine String Length                                                    RADDAT
-     D strlen...                                                                              RADDAT
-     D                 PR            10U 0 extproc('strlen')                                  RADDAT
-     D  i_string                       *   value                                              RADDAT
-?     *                                                                                       RADDAT
-?     *  tmpnam -- Produce Temporary File Name                                                RADDAT
-     D tmpnam          PR              *          extproc('tmpnam')                           RADDAT
-     D  pTmpNme                        *   value                                              RADDAT
-?     *                                                                                       RADDAT
-     D L_tmpnam        C                   const(39)                            ! <stdio.h>   RADDAT
-?     *                                                                                       RADDAT
-     D TMP_MAX         C                   const(32767)                         ! <stdio.h>   RADDAT
-?     *                                                                                       RADDAT
-?     *  qsort -- Sort Array                                                                  RADDAT
-     D qsort           PR              *                       extproc('qsort')               RADDAT
-     D  memPtr                         *   value                                              RADDAT
-     D  numElem                            value  like(size_t)                                RADDAT
-     D  width                              value  like(size_t)                                RADDAT
-     D  pSortFunc                      *   value  procptr                                     RADDAT
-?     *                                                                                       RADDAT
-?     *  bsearch -- Search Arrays                                                             RADDAT
-     D bsearch         PR              *          extproc('bsearch')                          RADDAT
-     D  keyPtr                         *   value                                              RADDAT
-     D  memPtr                         *   value                                              RADDAT
-     D  numElem                            value  like(size_t)                                RADDAT
-     D  width                              value  like(size_t)                                RADDAT
-     D  pSearchFnc                     *   value  procptr                                     RADDAT
-?     *                                                                                       RADDAT
-?     *  iconv_open()--Code Conversion Allocation API                                         RADDAT
-     D iconv_open...                                                                          RADDAT
-     D                 PR                  extproc('iconv_open')                              RADDAT
-     D                                     like(iconv_t   )                                   RADDAT
-     D  i_toCode                       *   value                                              RADDAT
-     D  i_fromCode                     *   value                                              RADDAT
-?     *                                                                                       RADDAT
-     D iconv_t         DS                  qualified   based(pDummy)   align                  RADDAT
-     D  return_value                 10I 0                                                    RADDAT
-     D  cd                           10I 0 dim(12)                                            RADDAT
-?     *                                                                                       RADDAT
-     D iconv_fromcode_t...                                                                    RADDAT
-     D                 DS                  qualified   based(pDummy)                          RADDAT
-     D  ibmccsid                      8A                                                      RADDAT
-     D  ccsid                         5A                                                      RADDAT
-     D  convAlt                       3A                                                      RADDAT
-     D  substAlt                      1A                                                      RADDAT
-     D  shiftStateAlt                 1A                                                      RADDAT
-     D  inpLengthOpt                  1A                                                      RADDAT
-     D  errOption                     1A                                                      RADDAT
-     D  reserved                     12A                                                      RADDAT
-?     *                                                                                       RADDAT
-     D iconv_tocode_t...                                                                      RADDAT
-     D                 DS                  qualified   based(pDummy)                          RADDAT
-     D  ibmccsid                      8A                                                      RADDAT
-     D  ccsid                         5A                                                      RADDAT
-     D  reserved                     19A                                                      RADDAT
-?     *                                                                                       RADDAT
-?     *  QtqIconvOpen()--Code Conversion Allocation API                                       RADDAT
-     D QtqIconv_open...                                                                       RADDAT
-     D                 PR                  extproc('QtqIconvOpen')                            RADDAT
-     D                                     likeds(iconv_t )                                   RADDAT
-     D  i_toCode                           const  likeds(QtqCode_t)                           RADDAT
-     D  i_fromCode                         const  likeds(QtqCode_t)                           RADDAT
-?     *                                                                                       RADDAT
-     D QtqCode_t...                                                                           RADDAT
-     D                 DS                  qualified   based(pDummy)                          RADDAT
-     D  ccsid                        10I 0                                                    RADDAT
-     D  conversionA                  10I 0                                                    RADDAT
-     D  substitutionA                10I 0                                                    RADDAT
-     D  shiftStateA                  10I 0                                                    RADDAT
-     D  inpLenOpt                    10I 0                                                    RADDAT
-     D  errOptMxdDta                 10I 0                                                    RADDAT
-     D  reserved                     12A                                                      RADDAT
-?     *                                                                                       RADDAT
-?     *  iconv()--Code Conversion API                                                         RADDAT
-     D iconv...                                                                               RADDAT
-     D                 PR            10U 0        extproc('iconv')                            RADDAT
-     D  i_cd                               value likeds(iconv_t  )                            RADDAT
-     D  i_pInBuf                       *                                                      RADDAT
-     D  i_inBytLeft                  10U 0                                                    RADDAT
-     D  i_pOutBuf                      *                                                      RADDAT
-     D  i_outBytLeft                 10U 0                                                    RADDAT
-?     *                                                                                       RADDAT
-     D cICONV_ERROR    C                   const(4294967295)                                  RADDAT
-?     *                                                                                       RADDAT
-?     *  iconv_close()--Code Conversion Deallocation API                                      RADDAT
-     D iconv_close...                                                                         RADDAT
-     D                 PR            10I 0        extproc('iconv_close')                      RADDAT
-     D  i_cd                               value likeds(iconv_t  )                            RADDAT
-?     *                                                                                       RADDAT
-?     *  0/-1 = stat()--Get File Information                include <sys/stat.h>              RADDAT
-     D stat...                                                                                RADDAT
-     D                 PR            10I 0        extproc('stat')               = int         RADDAT
-     D  i_pPath                        *   value options(*string)               = *path       RADDAT
-     D  i_pStat                        *   value                                = *buf        RADDAT
-?     *                                                                                       RADDAT
-     D st_stat_t       DS                  qualified   based(pDummy)   align                  RADDAT
-     D  mode                         10U 0                                      mode_t =uint  RADDAT
-     D  ino                          10U 0                                      ino_t  =uint  RADDAT
-     D  nlink                         5U 0                                      nlink_t=ushortRADDAT
-     D  reserved2                     2A                                                      RADDAT
-     D  uid                          10U 0                                      uid_t  =uint  RADDAT
-     D  gid                          10U 0                                      gid_t  =uint  RADDAT
-     D  size                         10I 0                                      off_t  =int   RADDAT
-     D  atime                        10I 0                                      time_t =long  RADDAT
-     D  mtime                        10I 0                                      time_t =long  RADDAT
-     D  ctime                        10I 0                                      time_t =long  RADDAT
-     D  dev                          10U 0                                      dev_t  =uint  RADDAT
-     D  blksize                      10U 0                                      size_t =uint  RADDAT
-     D  allocsize                    10U 0                                      ulong         RADDAT
-     D  objtype                      11A                                        qp0l_objtype_tRADDAT
-     D  reserved3                     1A                                                      RADDAT
-     D  codepage                      5U 0                                      ushort        RADDAT
-     D  ccsid                         5U 0                                      ushort        RADDAT
-     D  rdev                         10U 0                                      dev_t  =uint  RADDAT
-     D  nlink32                      10U 0                                      nlink32_t=ulngRADDAT
-     D  rdev64                       20U 0                                      dev64_t=ullng RADDAT
-     D  dev64                        20U 0                                      dev64_t=ullng RADDAT
-     D  reserved1                    36A                                                      RADDAT
-     D  ino_gen_id                   10U 0                                      uint          RADDAT
-?     *                                                                                       RADDAT
-?     *  Qp0lGetAttr()--Get Attributes                                                        RADDAT
-     D Qp0lGetAttr...                                                                         RADDAT
-     D                 PR            10I 0 extproc('Qp0lGetAttr')                             RADDAT
-     D  i_path                             const  likeds(Qlg_Path_Name_t)                     RADDAT
-     D  i_attrArray                        const  like(Qlg_attrArray_t  )                     RADDAT
-     D  i_pBuffer                      *   value                                              RADDAT
-     D  i_bytPrv                     10U 0 value                                              RADDAT
-     D  o_sizeNeeded                 10U 0                                                    RADDAT
-     D  o_bytRet                     10U 0                                                    RADDAT
-     D  i_followLnk                  10U 0 const                                              RADDAT
-?     *                                                                                       RADDAT
-     D Qlg_Path_Name_t...                                                                     RADDAT
-     D                 DS                  qualified align         based(pDummy)              RADDAT
-     D   CCSID                       10I 0                                                    RADDAT
-     D   Country_ID                   2A                                                      RADDAT
-     D   Language_ID                  3A                                                      RADDAT
-     D   Reserved                     3A                                                      RADDAT
-     D   Path_Type                   10U 0                                                    RADDAT
-     D   Path_Length                 10I 0                                                    RADDAT
-     D   Path_Name_Delimiter...                                                               RADDAT
-     D                                2A                                                      RADDAT
-     D   Reserved2                   10A                                                      RADDAT
-     D   Path_Name                  256A                                                      RADDAT
-?     *                                                                                       RADDAT
-     D QLG_PATH_JOB_CCSID...                                                                  RADDAT
-     D                 C                   const(0)                                           RADDAT
-     D QLG_PATH_JOB_COUNTRYID...                                                              RADDAT
-     D                 C                   const(X'0000')                                     RADDAT
-     D QLG_PATH_JOB_LANGUAGEID...                                                             RADDAT
-     D                 C                   const(X'000000')                                   RADDAT
-?     *                                                                                       RADDAT
-     D Qlg_attrArray_t...                                                                     RADDAT
-     D                 DS                  qualified               based(pDummy)              RADDAT
-     D  numE                         10I 0                                                    RADDAT
-     D  attr                         10I 0 dim(64)                                            RADDAT
-?     *                                                                                       RADDAT
-     D Qlg_rtnAttr_t...                                                                       RADDAT
-     D                 DS                  qualified               based(pDummy)              RADDAT
-     D  ofsNextAttr                  10I 0                                                    RADDAT
-     D  ID                           10I 0                                                    RADDAT
-     D  size                         10I 0                                                    RADDAT
-     D  reserved                      4A                                                      RADDAT
-?     *                                                                                       RADDAT
-     D QP0L_ATTR_OBJTYPE...                                                                   RADDAT
-     D                 C                   const(0)                             CHAR(10)      RADDAT
-     D QP0L_ATTR_DATA_SIZE...                                                                 RADDAT
-     D                 C                   const(1)                             UINT(4)       RADDAT
-     D QP0L_ATTR_ALLOC_SIZE...                                                                RADDAT
-     D                 C                   const(2)                             UINT(4)       RADDAT
-     D QP0L_ATTR_EXTENDED_ATTR_SIZE...                                                        RADDAT
-     D                 C                   const(3)                             UINT(4)       RADDAT
-     D QP0L_ATTR_CREATE_TIME...                                                               RADDAT
-     D                 C                   const(4)                             UINT(4)       RADDAT
-     D QP0L_ATTR_ACCESS_TIME...                                                               RADDAT
-     D                 C                   const(5)                             UINT(4)       RADDAT
-     D QP0L_ATTR_CHANGE_TIME...                                                               RADDAT
-     D                 C                   const(6)                             UINT(4)       RADDAT
-     D QP0L_ATTR_MODIFY_TIME...                                                               RADDAT
-     D                 C                   const(7)                             UINT(4)       RADDAT
-     D QP0L_ATTR_STG_FREE...                                                                  RADDAT
-     D                 C                   const(8)                             CHAR(1)       RADDAT
-     D QP0L_ATTR_CHECKED_OUT...                                                               RADDAT
-     D                 C                   const(9)                             chkOut Fmt    RADDAT
-     D QP0L_ATTR_LOCAL_REMOTE...                                                              RADDAT
-     D                 C                   const(10)                            CHAR(1)       RADDAT
-?     *                                                                                       RADDAT
-     D QP0L_DONOT_FOLLOW_SYMLNK...                                                            RADDAT
-     D                 C                   const(x'00')                                       RADDAT
-     D QP0L_FOLLOW_SYMLNK...                                                                  RADDAT
-     D                 C                   const(x'01')                                       RADDAT
-?     *                                                                                       RADDAT
-     D QP0L_NOT_CHECKED_OUT...                                                                RADDAT
-     D                 C                   const(x'00')                                       RADDAT
-     D QP0L_CHECKED_OUT...                                                                    RADDAT
-     D                 C                   const(x'01')                                       RADDAT
-?     *                                                                                       RADDAT
-     D QP0L_LOCAL_OBJ...                                                                      RADDAT
-     D                 C                   const(x'01')                                       RADDAT
-     D QP0L_REMOTE_OBJ...                                                                     RADDAT
-     D                 C                   const(x'02')                                       RADDAT
-?     *                                                                                       RADDAT
-?     *  QSYSINC/SYS.TYPES                                                                    RADDAT
-     D off_t           S             10I 0 based(pDummy)                                      RADDAT
-     D size_t          S             10U 0 based(pDummy)                                      RADDAT
-     D ssize_t         S             10I 0 based(pDummy)                                      RADDAT
-     D time_t          S             10I 0 based(pDummy)                                      RADDAT
-?     *                                                                                       RADDAT
-?     *  opendir()--Open Directory                          include <dirent.h>                RADDAT
-     D opendir...                                                                             RADDAT
-     D                 PR              *          extproc('opendir')            = *DIR        RADDAT
-     D  i_pDirName                     *   value options(*string)               = *dirname    RADDAT
-?     *                                                                                       RADDAT
-?     *  readdir()--Read Directory Entry                                                      RADDAT
-     D readdir...                                                                             RADDAT
-     D                 PR              *          extproc('readdir')            = *dirent     RADDAT
-     D  i_dirp                         *   value                                = *DIR        RADDAT
-?     *                                                                                       RADDAT
-     D dirent_t        DS                  qualified  based(pDummy)                           RADDAT
-     D   d_reserv1                   16A                                                      RADDAT
-     D   d_fileno_gen_id...                                                                   RADDAT
-     D                               10U 0                                                    RADDAT
-     D   d_fileno                    10U 0                                                    RADDAT
-     D   d_reclen                    10U 0                                                    RADDAT
-     D   d_reserv3                   10I 0                                                    RADDAT
-     D   d_reserv4                    8A                                                      RADDAT
-      /if not defined(*V5R2M0)                                                                RADDAT
-     D   d_nlsinfo                         like(qlg_nls_t)                                    RADDAT
-      /else                                                                                   RADDAT
-     D   d_nlsinfo                         likeds(qlg_nls_t)                                  RADDAT
-      /endif                                                                                  RADDAT
-     D   d_namelen                   10U 0                                                    RADDAT
-     D   d_name                     640A                                                      RADDAT
-?     *                                                                                       RADDAT
-     D qlg_nls_t       DS                  qualified  based(pDummy)    align                  RADDAT
-     D  ccsid                        10I 0                                                    RADDAT
-     D  country_id                    2A                                                      RADDAT
-     D  language_id                   3A                                                      RADDAT
-     D  nls_reserved                  3A                                                      RADDAT
-?     *                                                                                       RADDAT
-?     *  rewinddir()--Reset Directory Stream to Beginning                                     RADDAT
-     D rewinddir...                                                                           RADDAT
-     D                 PR                  extproc('rewinddir')                               RADDAT
-     D  i_dirp                         *   value                                = *DIR        RADDAT
-?     *                                                                                       RADDAT
-?     *  closedir()--Close Directory                                                          RADDAT
-     D closedir...                                                                            RADDAT
-     D                 PR            10I 0        extproc('closedir')           = rc          RADDAT
-     D  i_dirp                         *   value                                = *DIR        RADDAT
-?     *                                                                                       RADDAT
-?     *  fd/-1 = open()--Open File                          include <fcntl.h>                 RADDAT
-     D open...                                                                                RADDAT
-     D                 PR            10I 0        extproc('open')               = int         RADDAT
-     D  i_pPath                        *   value  options(*string)              = *path       RADDAT
-     D  i_opnFLag                    10I 0 value                                = int         RADDAT
-     D  i_mode                       10U 0 value                                = uint        RADDAT
-     D                                            options(*nopass)                            RADDAT
-     D  i_codePage                   10U 0 value                                = uint        RADDAT
-     D                                            options(*nopass)                            RADDAT
-?     *                                                                                       RADDAT
-?     *  <sys/stat.h>                                                                         RADDAT
-     D S_IRUSR         C                   const(         256)                  ! Read For OwnRADDAT
-     D S_IWUSR         C                   const(         128)                  ! Write For OwRADDAT
-     D S_IXUSR         C                   const(          64)                  ! Exc/Srch ForRADDAT
-     D S_IRWXU         C                   const(         448)                  ! Rd/Wrt/Exc ORADDAT
-?     *                                                                                       RADDAT
-     D S_IRGRP         C                   const(          32)                  ! Read For GroRADDAT
-     D S_IWGRP         C                   const(          16)                  ! Write For GrRADDAT
-     D S_IXGRP         C                   const(           8)                  ! Exc/Srch ForRADDAT
-     D S_IRWXG         C                   const(          56)                  ! Rd/Wrt/Exc GRADDAT
-?     *                                                                                       RADDAT
-     D S_IROTH         C                   const(           4)                  ! Read For OthRADDAT
-     D S_IWOTH         C                   const(           2)                  ! Write For OtRADDAT
-     D S_IXOTH         C                   const(           1)                  ! Exc/Srch ForRADDAT
-     D S_IRWXO         C                   const(           7)                  ! Rd/Wrt/Exc ORADDAT
-?     *                                                                                       RADDAT
-?     *  <h/fcntl.h>                                                                          RADDAT
-     D O_CREAT         C                   const( 8)                            ! Append Mode RADDAT
-     D O_EXCL          C                   const(16)                            ! Exclusive UsRADDAT
-     D O_TRUNC         C                   const(64)                            ! Truncate FlaRADDAT
-?     *                                                                                       RADDAT
-     D O_APPEND        C                   const(256)                           ! Append Mode RADDAT
-?     *                                                                                       RADDAT
-     D O_CODEPAGE      C                   const(  8388608)                     ! Codepage FlaRADDAT
-     D O_TEXTDATA      C                   const( 16777216)                     ! Text Data FlRADDAT
-     D O_INHERITMODE   C                   const(134217728)                     ! Inherit ModeRADDAT
-     D O_CCSID         C                   const(       32)                     ! CCSID       RADDAT
-?     *                                                                                       RADDAT
-     D O_SHARE_RDONLY  C                   const( 65536)                        ! Shared Read RADDAT
-     D O_SHARE_WRONLY  C                   const(131072)                        ! Shared WriteRADDAT
-     D O_SHARE_RDWR    C                   const(262144)                        ! Shared Rd/WrRADDAT
-     D O_SHARE_NONE    C                   const(524288)                        ! No Share    RADDAT
-?     *                                                                                       RADDAT
-     D O_RDONLY        C                   const(1)                             ! Read Only   RADDAT
-     D O_WRONLY        C                   const(2)                             ! Write Only  RADDAT
-     D O_RDWR          C                   const(4)                             ! Read/Write  RADDAT
-?     *                                                                                       RADDAT
-?     *  value/-1 = read()--Write from Descriptor           include <unistd.h>                RADDAT
-     D read...                                                                                RADDAT
-     D                 PR                  extproc('read')   like(ssize_t   )   = ssize_t     RADDAT
-     D  i_fd                         10I 0 value                                = int         RADDAT
-     D  i_pBuffer                      *   value                                = *buf        RADDAT
-     D  i_buflen                           value like(size_t    )               = size_t      RADDAT
-?     *                                                                                       RADDAT
-?     *  value/-1 = write()--Write to Descriptor            include <unistd.h>                RADDAT
-     D write...                                                                               RADDAT
-     D                 PR                  extproc('write')  like(ssize_t   )   = ssize_t     RADDAT
-     D  i_fd                         10I 0 value                                = int         RADDAT
-     D  i_pBuffer                      *   value                                = *buf        RADDAT
-     D  i_buflen                           value like(size_t    )               = size_t      RADDAT
-?     *                                                                                       RADDAT
-?     *  0/-1 = ftruncate()--Truncate File                  include <unistd.h>                RADDAT
-     D ftruncate...                                                                           RADDAT
-     D                 PR            10I 0 extproc('ftruncate')                 = int         RADDAT
-     D  i_fd                         10I 0 value                                = int         RADDAT
-     D  i_length                           value like(off_t     )               = off_t       RADDAT
-?     *                                                                                       RADDAT
-?     *  off_t = lseek()--Set File Read/Write Offset        include <unistd.h>                RADDAT
-     D lseek...                                                                               RADDAT
-     D                 PR                  extproc('lseek')  like(off_t     )   = off_t       RADDAT
-     D  i_fd                         10I 0 value                                = int         RADDAT
-     D  i_offset                           value like(off_t     )               = off_t       RADDAT
-     D  i_whence                     10I 0 value                                = int         RADDAT
-?     *                                                                                       RADDAT
-?     *  <h/unistd.h>                                                                         RADDAT
-     D SEEK_SET        C                   const(0)                             ! seek start  RADDAT
-     D SEEK_CUR        C                   const(1)                             ! seek curPos RADDAT
-     D SEEK_END        C                   const(2)                             ! seek end    RADDAT
-?     *                                                                                       RADDAT
-?     *  0/-1 = unlink()--Remove Link to File               include <unistd.h>                RADDAT
-     D unlink...                                                                              RADDAT
-     D                 PR            10I 0 extproc('unlink')                    = int         RADDAT
-     D  i_pPath                        *   value options(*string)               = *path       RADDAT
-?     *                                                                                       RADDAT
-?     *  0/-1 = Qp0lRenameKeep()--Rename File or Directory, Keep "new" If It Exists           RADDAT
-     D Qp0lRenameKeep...                                                                      RADDAT
-     D                 PR            10I 0 extproc('Qp0lRenameKeep')            = int         RADDAT
-     D  i_pOldPath                     *   value options(*string)               = *path       RADDAT
-     D  i_pNewPath                     *   value options(*string)               = *path       RADDAT
-?     *                                                                                       RADDAT
-?     *  0/-1 = close()--Close File or Socket Descriptor    include <unistd.h>                RADDAT
-     D close...                                                                               RADDAT
-     D                 PR            10I 0 extproc('close')                     = int         RADDAT
-     D  i_fd                         10I 0 value                                = int         RADDAT
-?     *                                                                                       RADDAT
-?     *  erno--Set Pointer to Runtime Error Code                                              RADDAT
-     D errno           PR              *                     extproc('__errno')               RADDAT
-?     *                                                                                       RADDAT
-?     *  strerror -- Set Pointer to Runtime Error Message                                     RADDAT
-     D strerror        PR              *                     extproc('strerror')              RADDAT
-     D  errno                        10I 0 value                                              RADDAT
-?     *                                                                                       RADDAT
-?     *  <sys/errno.h>                                                                        RADDAT
-     D EDOM_C          C                   const(3001)                          domain error iRADDAT
-     D ERANGE_C        C                   const(3002)                          range error inRADDAT
-     D ETRUNC_C        C                   const(3003)                          truncation on RADDAT
-     D ENOTOPEN_C      C                   const(3004)                          file has not bRADDAT
-     D ENOTREAD_C      C                   const(3005)                          file not openeRADDAT
-     D ERECIO_C        C                   const(3008)                          file opened foRADDAT
-     D ENOTWRITE_C     C                   const(3009)                          file not openeRADDAT
-     D ESTDIN_C        C                   const(3010)                          stdin cannot bRADDAT
-     D ESTDOUT_C       C                   const(3011)                          stdout cannot RADDAT
-     D ESTDERR_C       C                   const(3012)                          stderr cannot RADDAT
-     D EBADSEEK_C      C                   const(3013)                          bad offset to RADDAT
-     D EBADNAME_C      C                   const(3014)                          invalid file nRADDAT
-     D EBADMODE_C      C                   const(3015)                          invalid file mRADDAT
-     D EBADPOS_C       C                   const(3017)                          invalid positiRADDAT
-     D ENOPOS_C        C                   const(3018)                          no record at sRADDAT
-     D ENUMMBRS_C      C                   const(3019)                          no ftell if moRADDAT
-     D ENUMRECS_C      C                   const(3020)                          no ftell if toRADDAT
-     D EBADFUNC_C      C                   const(3022)                          invalid functiRADDAT
-     D ENOREC_C        C                   const(3026)                          record not fouRADDAT
-     D EBADDATA_C      C                   const(3028)                          message data iRADDAT
-     D EBADOPT_C       C                   const(3040)                          bad option on RADDAT
-     D ENOTUPD_C       C                   const(3041)                          file not openeRADDAT
-     D ENOTDLT_C       C                   const(3042)                          file not openeRADDAT
-     D EPAD_C          C                   const(3043)                          padding occurrRADDAT
-     D EBADKEYLN_C     C                   const(3044)                          bad key lengthRADDAT
-     D EPUTANDGET_C    C                   const(3080)                          illegal write RADDAT
-     D EGETANDPUT_C    C                   const(3081)                          illegal read aRADDAT
-     D EIOERROR_C      C                   const(3101)                          I/O exception RADDAT
-     D EIORECERR_C     C                   const(3102)                          I/O exception RADDAT
-?     *                                                                                       RADDAT
-?     *  The following values are defined by POSIX ISO/IEC 9945-1:1990.                       RADDAT
-     D EINVAL_C        C                   const(3021)                          invalid argumeRADDAT
-     D EIO_C           C                   const(3006)                          input/output eRADDAT
-     D ENODEV_C        C                   const(3007)                          no such deviceRADDAT
-     D EBUSY_C         C                   const(3029)                          resource busy RADDAT
-     D ENOENT_C        C                   const(3025)                          no such file oRADDAT
-     D EPERM_C         C                   const(3027)                          operation not RADDAT
-?     *                                                                                       RADDAT
-?     *  AS/400 specific error numbers                                                        RADDAT
-     D EACCES_C        C                   const(3401)                          Permission denRADDAT
-     D ENOTDIR_C       C                   const(3403)                          Not a directorRADDAT
-     D ENOSPC_C        C                   const(3404)                          No space availRADDAT
-     D EXDEV_C         C                   const(3405)                          Improper link.RADDAT
-     D EWOULDBLOCK_C   C                   const(3406)                          Operation woulRADDAT
-     D EAGAIN_C        C                   const(3406)                          Operation woulRADDAT
-     D EINTR_C         C                   const(3407)                          Interrupted fuRADDAT
-     D EFAULT_C        C                   const(3408)                          The address usRADDAT
-     D ETIME_C         C                   const(3409)                          Operation timeRADDAT
-     D ENXIO_C         C                   const(3415)                          No such deviceRADDAT
-     D ECLOSED_C       C                   const(3417)                          Socket closed RADDAT
-     D EADDRINUSE_C    C                   const(3420)                          Address alreadRADDAT
-     D EADDRNOTAVAIL_C...                                                                     RADDAT
-     D                 C                   const(3421)                          Address not avRADDAT
-     D EAFNOSUPPORT_C  C                   const(3422)                          The type of soRADDAT
-     D EALREADY_C      C                   const(3423)                          Operation alreRADDAT
-     D ECONNABORTED_C  C                   const(3424)                          Connection endRADDAT
-     D ECONNREFUSED_C  C                   const(3425)                          A remote host RADDAT
-     D ECONNRESET_C    C                   const(3426)                          A connection wRADDAT
-     D EDESTADDRREQ_C  C                   const(3427)                          Operation requRADDAT
-     D EHOSTDOWN_C     C                   const(3428)                          A remote host RADDAT
-     D EHOSTUNREACH_C  C                   const(3429)                          A route to theRADDAT
-     D EINPROGRESS_C   C                   const(3430)                          Operation in pRADDAT
-     D EISCONN_C       C                   const(3431)                          A connection hRADDAT
-     D EMSGSIZE_C      C                   const(3432)                          Message size oRADDAT
-     D ENETDOWN_C      C                   const(3433)                          The network isRADDAT
-     D ENETRESET_C     C                   const(3434)                          A socket is coRADDAT
-     D ENETUNREACH_C   C                   const(3435)                          Cannot reach tRADDAT
-     D ENOBUFS_C       C                   const(3436)                          There is not eRADDAT
-     D ENOPROTOOPT_C   C                   const(3437)                          The protocol dRADDAT
-     D ENOTCONN_C      C                   const(3438)                          Requested operRADDAT
-     D ENOTSOCK_C      C                   const(3439)                          The specified RADDAT
-     D ENOTSUP_C       C                   const(3440)                          Operation not RADDAT
-     D EOPNOTSUPP_C    C                   const(3440)                          Operation not RADDAT
-     D EPFNOSUPPORT_C  C                   const(3441)                          The socket proRADDAT
-     D EPROTONOSUPPORT_C...                                                                   RADDAT
-     D                 C                   const(3442)                          No protocol ofRADDAT
-     D EPROTOTYPE_C    C                   const(3443)                          The socket typRADDAT
-     D ERCVDERR_C      C                   const(3444)                          An error indicRADDAT
-     D ESHUTDOWN_C     C                   const(3445)                          Cannot send daRADDAT
-     D ESOCKTNOSUPPORT_C...                                                                   RADDAT
-     D                 C                   const(3446)                          The specified RADDAT
-     D ETIMEDOUT_C     C                   const(3447)                          A remote host RADDAT
-     D EUNATCH_C       C                   const(3448)                          The protocol rRADDAT
-     D EBADF_C         C                   const(3450)                          Descriptor notRADDAT
-     D EMFILE_C        C                   const(3452)                          Too many open RADDAT
-     D ENFILE_C        C                   const(3453)                          Too many open RADDAT
-     D EPIPE_C         C                   const(3455)                          Broken pipe.  RADDAT
-     D EEXIST_C        C                   const(3457)                          File exists.  RADDAT
-     D EDEADLK_C       C                   const(3459)                          Resource deadlRADDAT
-     D ENOMEM_C        C                   const(3460)                          Storage allocaRADDAT
-     D EOWNERTERM_C    C                   const(3462)                          The mutex no lRADDAT
-     D EDESTROYED_C    C                   const(3463)                          he synchronizaRADDAT
-     D ETERM_C         C                   const(3464)                          Operation termRADDAT
-     D EMLINK_C        C                   const(3468)                          Maximum link cRADDAT
-     D ESPIPE_C        C                   const(3469)                          Seek request nRADDAT
-     D ENOSYS_C        C                   const(3470)                          Function not iRADDAT
-     D EISDIR_C        C                   const(3471)                          Specified targRADDAT
-     D EROFS_C         C                   const(3472)                          Read-only fileRADDAT
-     D EUNKNOWN_C      C                   const(3474)                          Unknown systemRADDAT
-     D EITERBAD_C      C                   const(3475)                          Iterator is inRADDAT
-     D EDAMAGE_C       C                   const(3484)                          A damaged objeRADDAT
-     D ELOOP_C         C                   const(3485)                          A loop exists RADDAT
-     D ENAMETOOLONG_C  C                   const(3486)                          A path name isRADDAT
-     D ENOLCK_C        C                   const(3487)                          No locks availRADDAT
-     D ENOTEMPTY_C     C                   const(3488)                          Directory not RADDAT
-     D ENOSYSRSC_C     C                   const(3489)                          System resourcRADDAT
-     D ECONVERT_C      C                   const(3490)                          Conversion errRADDAT
-     D E2BIG_C         C                   const(3491)                          Argument list RADDAT
-     D EILSEQ_C        C                   const(3492)                          Conversion stoRADDAT
-     D ESOFTDAMAGE_C   C                   const(3497)                          Object has sofRADDAT
-     D ENOTENROLL_C    C                   const(3498)                          User not enrolRADDAT
-     D EOFFLINE_C      C                   const(3499)                          Object is suspRADDAT
-     D EROOBJ_C        C                   const(3500)                          Object is a reRADDAT
-     D ELOCKED_C       C                   const(3506)                          Area being reaRADDAT
-     D EFBIG_C         C                   const(3507)                          Object too larRADDAT
-     D EIDRM_C         C                   const(3509)                          The semaphore,RADDAT
-     D ENOMSG_C        C                   const(3510)                          The queue doesRADDAT
-     D EFILECVT_C      C                   const(3511)                          File ID converRADDAT
-     D EBADFID_C       C                   const(3512)                          A File ID coulRADDAT
-     D ESTALE_C        C                   const(3513)                          A File ID coulRADDAT
-     D ESRCH_C         C                   const(3515)                          No such procesRADDAT
-     D ENOTSIGINIT_C   C                   const(3516)                          Process not enRADDAT
-     D ECHILD_C        C                   const(3517)                          No child proceRADDAT
-     D ETOOMANYREFS_C  C                   const(3523)                          The operation RADDAT
-     D ENOTSAFE_C      C                   const(3524)                          Function not aRADDAT
-     D EOVERFLOW_C     C                   const(3525)                          Object is too RADDAT
-     D EJRNDAMAGE_C    C                   CONST(3526)                          Journal damageRADDAT
-     D EJRNINACTIVE_C  C                   CONST(3527)                          Journal inactiRADDAT
-     D EJRNRCVSPC_C    C                   CONST(3528)                          Journal space RADDAT
-     D EJRNRMT_C       C                   CONST(3529)                          Journal is remRADDAT
-     D ENEWJRNRCV_C    C                   CONST(3530)                          New journal reRADDAT
-     D ENEWJRN_C       C                   CONST(3531)                          New journal isRADDAT
-     D EJOURNALED_C    C                   CONST(3532)                          Object alreadyRADDAT
-     D EJRNENTTOOLONG_C...                                                                    RADDAT
-     D                 C                   CONST(3533)                          Entry too largRADDAT
-     D EDATALINK_C     C                   CONST(3534)                          Object is a DaRADDAT
-     D ENOTAVAIL_C     C                   CONST(3535)                          Independent ASRADDAT
-     D ENOTTY_C        C                   CONST(3536)                          Inappropriate RADDAT
-     D EFBIG2_C        C                   CONST(3540)                          Write or truncRADDAT
-     D ETXTBSY_C       C                   CONST(3543)                          Text file busyRADDAT
-     D EASPGRPNOTSET_C...                                                                     RADDAT
-     D                 C                   CONST(3544)                          ASP group not RADDAT
-     D ERESTART_C      C                   CONST(3545)                          System call caRADDAT
-     D ESCANFAILURE_C  C                   CONST(3546)                          Object marked RADDAT
-?     *                                                                                       RADDAT
-?     *  Unix return codes                                                                    RADDAT
-     D RC_OK           C                   const(0)                                           RADDAT
-     D RC_ERROR        C                   const(-1)                                          RADDAT
-?     *                                                                                       RADDAT
-?     *  Convert External Form to Numeric Value (CVTEFN)                                      RADDAT
-     D cvtefnd...                                                                             RADDAT
-     D                 PR             8F   extproc('cvtefnd')                                 RADDAT
-     D  i_source                       *   value                                              RADDAT
-     D  i_len                        10U 0 value                                              RADDAT
-     D  i_mask                         *   value                                              RADDAT
-?     *                                                                                       RADDAT
-?     *  Test Bit in String (TSTBTS)                                                          RADDAT
-     D tstbts...                                                                              RADDAT
-     D                 PR            10I 0 extproc('tstbts')                                  RADDAT
-     D  bit_string                     *   value                                              RADDAT
-     D  bit_offset                   10I 0 value                                              RADDAT
-?     *                                                                                       RADDAT
-?     *  getenv()--Get Value of Environment Variable                                          RADDAT
-     D getenv...                                                                              RADDAT
-     D                 PR              *   extproc('getenv')                                  RADDAT
-     D  name                           *   value  options(*string)                            RADDAT
-?     *                                                                                       RADDAT
-?     *  putenv()--Change or Add Environment Variable                                         RADDAT
-     D putenv...                                                                              RADDAT
-     D                 PR            10I 0 extproc('putenv')                                  RADDAT
-     D  string                         *   value  options(*string)                            RADDAT
-?     *                                                                                       RADDAT
-?     *  Qp0zDltEnv()--Delete an Environment Variable                                         RADDAT
-     D Qp0zDltEnv...                                                                          RADDAT
-     D                 PR            10I 0 extproc('Qp0zDltEnv')                              RADDAT
-     D  name                           *   value  options(*string)                            RADDAT
-?     *                                                                                       RADDAT
-?     *  Qp0zInitEnv()--Initialize Environment for Variables                                  RADDAT
-     D Qp0zInitEnv...                                                                         RADDAT
-     D                 PR            10I 0 extproc('Qp0zInitEnv')                             RADDAT
-?     *                                                                                       RADDAT
-     D ENVIRON         S               *   import('environ')                                  RADDAT
-?     *                                                                                       RADDAT
-?     *  Generate Universal Unique Identifier (GENUUID)                                       RADDAT
-     D genUUID...                                                                             RADDAT
-     D                 PR                  extproc('_GENUUID')                                RADDAT
-     D  uuid_template                  *   value                                              RADDAT
-?     *                                                                                       RADDAT
-     D uuid_template_t...                                                                     RADDAT
-     D                 DS                  qualified  based(pDummy)                           RADDAT
-     D  bytPrv                       10U 0                                                    RADDAT
-     D  bytAvl                       10U 0                                                    RADDAT
-     D  reserved                      8A                                                      RADDAT
-     D  uuid                         16A                                                      RADDAT
-?     *                                                                                       RADDAT
-?     *  Convert Hex to Character (CVTHC)                                                     RADDAT
-     D cvthc...                                                                               RADDAT
-     D                 PR                  extproc('cvthc')                                   RADDAT
-     D  pResult                        *   value                                              RADDAT
-     D  pSource                        *   value                                              RADDAT
-     D  sourceSize                   10I 0 value                                              RADDAT
-?     *                                                                                       RADDAT
-?     *  Convert Eight Bit Character to Hex Nibbles (CVTCH)                                   RADDAT
-     D cvtch...                                                                               RADDAT
-     D                 PR                  extproc('cvtch')                                   RADDAT
-     D  pResult                        *   value                                              RADDAT
-     D  pSource                        *   value                                              RADDAT
-     D  sourceLen                    10I 0 value                                              RADDAT
-?     *                                                                                       RADDAT
-?     *  Cipher (CIPHER)                                                                      RADDAT
-     D cipher...                                                                              RADDAT
-     D                 PR                  extproc('_CIPHER')                                 RADDAT
-     D                                 *   const                                              RADDAT
-     D                                 *   value                                              RADDAT
-     D                                 *   const                                              RADDAT
-?     *                                                                                       RADDAT
-     D cipherCtrls_t   DS                  qualified  based(pDummy)  align                    RADDAT
-     D  function               1      2A                                                      RADDAT
-     D  hashAlg                3      3A                                                      RADDAT
-     D  sequence               4      4A                                                      RADDAT
-     D  dataLength             5      8U 0                                                    RADDAT
-     D  output                 9      9A                                                      RADDAT
-     D  reserved_1            10     16A                                                      RADDAT
-     D  hashContext           17     32*                                                      RADDAT
-     D  HMACKey               33     48*                                                      RADDAT
-     D  HMACKeyLength         49     52U 0                                                    RADDAT
-     D  reserved_2            53     96A                                                      RADDAT
-?     *                                                                                       RADDAT
-     D cCIPHER_MD5...                                                                         RADDAT
-     D                 C                   const(x'00')                                       RADDAT
-     D cCIPHER_SHA1...                                                                        RADDAT
-     D                 C                   const(x'01')                                       RADDAT
-?     *                                                                                       RADDAT
-     D cCIPHER_ONLY...                                                                        RADDAT
-     D                 C                   const(x'00')                                       RADDAT
-     D cCIPHER_FIRST...                                                                       RADDAT
-     D                 C                   const(x'01')                                       RADDAT
-     D cCIPHER_MIDDLE...                                                                      RADDAT
-     D                 C                   const(x'02')                                       RADDAT
-     D cCIPHER_FINAL...                                                                       RADDAT
-     D                 C                   const(x'03')                                       RADDAT
-?     *                                                                                       RADDAT
-     D cCIPHER_HASH...                                                                        RADDAT
-     D                 C                   const(x'00')                                       RADDAT
-     D cCIPHER_HMAC...                                                                        RADDAT
-     D                 C                   const(x'01')                                       RADDAT
-?     *                                                                                       RADDAT
- DEF  /ENDIF                                                                                  RADDAT
+     D  i_pMem                         *   value
+      *
+      *  srand -- Set Seed for rand Function   e.g.:   srand(getSeed(*null))
+     D srand           PR                         extproc('srand')
+     D  i_seed                       10U 0 value
+      *
+      *  rand -- Generate Random Number                x = rand()
+     D rand            PR            10I 0        extproc('rand')
+      *
+     D RAND_MAX        C                   const(32767)
+      *
+      *  getSeed -- Get Seed for srand function
+     D getSeed         PR            10I 0        extproc('time')
+     D  i_timePtr                      *   value
+      *
+      *  strlen -- Determine String Length
+     D strlen...
+     D                 PR            10U 0 extproc('strlen')
+     D  i_string                       *   value
+      *
+      *  tmpnam -- Produce Temporary File Name
+     D tmpnam          PR              *          extproc('tmpnam')
+     D  pTmpNme                        *   value
+      *
+     D L_tmpnam        C                   const(39)                            ! <stdio.h>
+      *
+     D TMP_MAX         C                   const(32767)                         ! <stdio.h>
+      *
+      *  qsort -- Sort Array
+     D qsort           PR              *                       extproc('qsort')
+     D  memPtr                         *   value
+     D  numElem                            value  like(size_t)
+     D  width                              value  like(size_t)
+     D  pSortFunc                      *   value  procptr
+      *
+      *  bsearch -- Search Arrays
+     D bsearch         PR              *          extproc('bsearch')
+     D  keyPtr                         *   value
+     D  memPtr                         *   value
+     D  numElem                            value  like(size_t)
+     D  width                              value  like(size_t)
+     D  pSearchFnc                     *   value  procptr
+      *
+      *  iconv_open()--Code Conversion Allocation API
+     D iconv_open...
+     D                 PR                  extproc('iconv_open')
+     D                                     like(iconv_t   )
+     D  i_toCode                       *   value
+     D  i_fromCode                     *   value
+      *
+     D iconv_t         DS                  qualified   based(pDummy)   align
+     D  return_value                 10I 0
+     D  cd                           10I 0 dim(12)
+      *
+     D iconv_fromcode_t...
+     D                 DS                  qualified   based(pDummy)
+     D  ibmccsid                      8A
+     D  ccsid                         5A
+     D  convAlt                       3A
+     D  substAlt                      1A
+     D  shiftStateAlt                 1A
+     D  inpLengthOpt                  1A
+     D  errOption                     1A
+     D  reserved                     12A
+      *
+     D iconv_tocode_t...
+     D                 DS                  qualified   based(pDummy)
+     D  ibmccsid                      8A
+     D  ccsid                         5A
+     D  reserved                     19A
+      *
+      *  QtqIconvOpen()--Code Conversion Allocation API
+     D QtqIconv_open...
+     D                 PR                  extproc('QtqIconvOpen')
+     D                                     likeds(iconv_t )
+     D  i_toCode                           const  likeds(QtqCode_t)
+     D  i_fromCode                         const  likeds(QtqCode_t)
+      *
+     D QtqCode_t...
+     D                 DS                  qualified   based(pDummy)
+     D  ccsid                        10I 0
+     D  conversionA                  10I 0
+     D  substitutionA                10I 0
+     D  shiftStateA                  10I 0
+     D  inpLenOpt                    10I 0
+     D  errOptMxdDta                 10I 0
+     D  reserved                     12A
+      *
+      *  iconv()--Code Conversion API
+     D iconv...
+     D                 PR            10U 0        extproc('iconv')
+     D  i_cd                               value likeds(iconv_t  )
+     D  i_pInBuf                       *
+     D  i_inBytLeft                  10U 0
+     D  i_pOutBuf                      *
+     D  i_outBytLeft                 10U 0
+      *
+     D cICONV_ERROR    C                   const(4294967295)
+      *
+      *  iconv_close()--Code Conversion Deallocation API
+     D iconv_close...
+     D                 PR            10I 0        extproc('iconv_close')
+     D  i_cd                               value likeds(iconv_t  )
+      *
+      *  0/-1 = stat()--Get File Information                include <sys/stat.h>
+     D stat...
+     D                 PR            10I 0        extproc('stat')               = int
+     D  i_pPath                        *   value options(*string)               = *path
+     D  i_pStat                        *   value                                = *buf
+      *
+     D st_stat_t       DS                  qualified   based(pDummy)   align
+     D  mode                         10U 0                                      mode_t =uint
+     D  ino                          10U 0                                      ino_t  =uint
+     D  nlink                         5U 0                                      nlink_t=ushort
+     D  reserved2                     2A
+     D  uid                          10U 0                                      uid_t  =uint
+     D  gid                          10U 0                                      gid_t  =uint
+     D  size                         10I 0                                      off_t  =int
+     D  atime                        10I 0                                      time_t =long
+     D  mtime                        10I 0                                      time_t =long
+     D  ctime                        10I 0                                      time_t =long
+     D  dev                          10U 0                                      dev_t  =uint
+     D  blksize                      10U 0                                      size_t =uint
+     D  allocsize                    10U 0                                      ulong
+     D  objtype                      11A                                        qp0l_objtype_t
+     D  reserved3                     1A
+     D  codepage                      5U 0                                      ushort
+     D  ccsid                         5U 0                                      ushort
+     D  rdev                         10U 0                                      dev_t  =uint
+     D  nlink32                      10U 0                                      nlink32_t=ulng
+     D  rdev64                       20U 0                                      dev64_t=ullng
+     D  dev64                        20U 0                                      dev64_t=ullng
+     D  reserved1                    36A
+     D  ino_gen_id                   10U 0                                      uint
+      *
+      *  Qp0lGetAttr()--Get Attributes
+     D Qp0lGetAttr...
+     D                 PR            10I 0 extproc('Qp0lGetAttr')
+     D  i_path                             const  likeds(Qlg_Path_Name_t)
+     D  i_attrArray                        const  like(Qlg_attrArray_t  )
+     D  i_pBuffer                      *   value
+     D  i_bytPrv                     10U 0 value
+     D  o_sizeNeeded                 10U 0
+     D  o_bytRet                     10U 0
+     D  i_followLnk                  10U 0 const
+      *
+     D Qlg_Path_Name_t...
+     D                 DS                  qualified align         based(pDummy)
+     D   CCSID                       10I 0
+     D   Country_ID                   2A
+     D   Language_ID                  3A
+     D   Reserved                     3A
+     D   Path_Type                   10U 0
+     D   Path_Length                 10I 0
+     D   Path_Name_Delimiter...
+     D                                2A
+     D   Reserved2                   10A
+     D   Path_Name                  256A
+      *
+     D QLG_PATH_JOB_CCSID...
+     D                 C                   const(0)
+     D QLG_PATH_JOB_COUNTRYID...
+     D                 C                   const(X'0000')
+     D QLG_PATH_JOB_LANGUAGEID...
+     D                 C                   const(X'000000')
+      *
+     D Qlg_attrArray_t...
+     D                 DS                  qualified               based(pDummy)
+     D  numE                         10I 0
+     D  attr                         10I 0 dim(64)
+      *
+     D Qlg_rtnAttr_t...
+     D                 DS                  qualified               based(pDummy)
+     D  ofsNextAttr                  10I 0
+     D  ID                           10I 0
+     D  size                         10I 0
+     D  reserved                      4A
+      *
+     D QP0L_ATTR_OBJTYPE...
+     D                 C                   const(0)                             CHAR(10)
+     D QP0L_ATTR_DATA_SIZE...
+     D                 C                   const(1)                             UINT(4)
+     D QP0L_ATTR_ALLOC_SIZE...
+     D                 C                   const(2)                             UINT(4)
+     D QP0L_ATTR_EXTENDED_ATTR_SIZE...
+     D                 C                   const(3)                             UINT(4)
+     D QP0L_ATTR_CREATE_TIME...
+     D                 C                   const(4)                             UINT(4)
+     D QP0L_ATTR_ACCESS_TIME...
+     D                 C                   const(5)                             UINT(4)
+     D QP0L_ATTR_CHANGE_TIME...
+     D                 C                   const(6)                             UINT(4)
+     D QP0L_ATTR_MODIFY_TIME...
+     D                 C                   const(7)                             UINT(4)
+     D QP0L_ATTR_STG_FREE...
+     D                 C                   const(8)                             CHAR(1)
+     D QP0L_ATTR_CHECKED_OUT...
+     D                 C                   const(9)                             chkOut Fmt
+     D QP0L_ATTR_LOCAL_REMOTE...
+     D                 C                   const(10)                            CHAR(1)
+      *
+     D QP0L_DONOT_FOLLOW_SYMLNK...
+     D                 C                   const(x'00')
+     D QP0L_FOLLOW_SYMLNK...
+     D                 C                   const(x'01')
+      *
+     D QP0L_NOT_CHECKED_OUT...
+     D                 C                   const(x'00')
+     D QP0L_CHECKED_OUT...
+     D                 C                   const(x'01')
+      *
+     D QP0L_LOCAL_OBJ...
+     D                 C                   const(x'01')
+     D QP0L_REMOTE_OBJ...
+     D                 C                   const(x'02')
+      *
+      *  QSYSINC/SYS.TYPES
+     D off_t           S             10I 0 based(pDummy)
+     D size_t          S             10U 0 based(pDummy)
+     D ssize_t         S             10I 0 based(pDummy)
+     D time_t          S             10I 0 based(pDummy)
+      *
+      *  opendir()--Open Directory                          include <dirent.h>
+     D opendir...
+     D                 PR              *          extproc('opendir')            = *DIR
+     D  i_pDirName                     *   value options(*string)               = *dirname
+      *
+      *  readdir()--Read Directory Entry
+     D readdir...
+     D                 PR              *          extproc('readdir')            = *dirent
+     D  i_dirp                         *   value                                = *DIR
+      *
+     D dirent_t        DS                  qualified  based(pDummy)
+     D   d_reserv1                   16A
+     D   d_fileno_gen_id...
+     D                               10U 0
+     D   d_fileno                    10U 0
+     D   d_reclen                    10U 0
+     D   d_reserv3                   10I 0
+     D   d_reserv4                    8A
+      /if not defined(*V5R2M0)
+     D   d_nlsinfo                         like(qlg_nls_t)
+      /else
+     D   d_nlsinfo                         likeds(qlg_nls_t)
+      /endif
+     D   d_namelen                   10U 0
+     D   d_name                     640A
+      *
+     D qlg_nls_t       DS                  qualified  based(pDummy)    align
+     D  ccsid                        10I 0
+     D  country_id                    2A
+     D  language_id                   3A
+     D  nls_reserved                  3A
+      *
+      *  rewinddir()--Reset Directory Stream to Beginning
+     D rewinddir...
+     D                 PR                  extproc('rewinddir')
+     D  i_dirp                         *   value                                = *DIR
+      *
+      *  closedir()--Close Directory
+     D closedir...
+     D                 PR            10I 0        extproc('closedir')           = rc
+     D  i_dirp                         *   value                                = *DIR
+      *
+      *  fd/-1 = open()--Open File                          include <fcntl.h>
+     D open...
+     D                 PR            10I 0        extproc('open')               = int
+     D  i_pPath                        *   value  options(*string)              = *path
+     D  i_opnFLag                    10I 0 value                                = int
+     D  i_mode                       10U 0 value                                = uint
+     D                                            options(*nopass)
+     D  i_codePage                   10U 0 value                                = uint
+     D                                            options(*nopass)
+      *
+      *  <sys/stat.h>
+     D S_IRUSR         C                   const(         256)                  ! Read For Own
+     D S_IWUSR         C                   const(         128)                  ! Write For Ow
+     D S_IXUSR         C                   const(          64)                  ! Exc/Srch For
+     D S_IRWXU         C                   const(         448)                  ! Rd/Wrt/Exc O
+      *
+     D S_IRGRP         C                   const(          32)                  ! Read For Gro
+     D S_IWGRP         C                   const(          16)                  ! Write For Gr
+     D S_IXGRP         C                   const(           8)                  ! Exc/Srch For
+     D S_IRWXG         C                   const(          56)                  ! Rd/Wrt/Exc G
+      *
+     D S_IROTH         C                   const(           4)                  ! Read For Oth
+     D S_IWOTH         C                   const(           2)                  ! Write For Ot
+     D S_IXOTH         C                   const(           1)                  ! Exc/Srch For
+     D S_IRWXO         C                   const(           7)                  ! Rd/Wrt/Exc O
+      *
+      *  <h/fcntl.h>
+     D O_CREAT         C                   const( 8)                            ! Append Mode
+     D O_EXCL          C                   const(16)                            ! Exclusive Us
+     D O_TRUNC         C                   const(64)                            ! Truncate Fla
+      *
+     D O_APPEND        C                   const(256)                           ! Append Mode
+      *
+     D O_CODEPAGE      C                   const(  8388608)                     ! Codepage Fla
+     D O_TEXTDATA      C                   const( 16777216)                     ! Text Data Fl
+     D O_INHERITMODE   C                   const(134217728)                     ! Inherit Mode
+     D O_CCSID         C                   const(       32)                     ! CCSID
+      *
+     D O_SHARE_RDONLY  C                   const( 65536)                        ! Shared Read
+     D O_SHARE_WRONLY  C                   const(131072)                        ! Shared Write
+     D O_SHARE_RDWR    C                   const(262144)                        ! Shared Rd/Wr
+     D O_SHARE_NONE    C                   const(524288)                        ! No Share
+      *
+     D O_RDONLY        C                   const(1)                             ! Read Only
+     D O_WRONLY        C                   const(2)                             ! Write Only
+     D O_RDWR          C                   const(4)                             ! Read/Write
+      *
+      *  value/-1 = read()--Write from Descriptor           include <unistd.h>
+     D read...
+     D                 PR                  extproc('read')   like(ssize_t   )   = ssize_t
+     D  i_fd                         10I 0 value                                = int
+     D  i_pBuffer                      *   value                                = *buf
+     D  i_buflen                           value like(size_t    )               = size_t
+      *
+      *  value/-1 = write()--Write to Descriptor            include <unistd.h>
+     D write...
+     D                 PR                  extproc('write')  like(ssize_t   )   = ssize_t
+     D  i_fd                         10I 0 value                                = int
+     D  i_pBuffer                      *   value                                = *buf
+     D  i_buflen                           value like(size_t    )               = size_t
+      *
+      *  0/-1 = ftruncate()--Truncate File                  include <unistd.h>
+     D ftruncate...
+     D                 PR            10I 0 extproc('ftruncate')                 = int
+     D  i_fd                         10I 0 value                                = int
+     D  i_length                           value like(off_t     )               = off_t
+      *
+      *  off_t = lseek()--Set File Read/Write Offset        include <unistd.h>
+     D lseek...
+     D                 PR                  extproc('lseek')  like(off_t     )   = off_t
+     D  i_fd                         10I 0 value                                = int
+     D  i_offset                           value like(off_t     )               = off_t
+     D  i_whence                     10I 0 value                                = int
+      *
+      *  <h/unistd.h>
+     D SEEK_SET        C                   const(0)                             ! seek start
+     D SEEK_CUR        C                   const(1)                             ! seek curPos
+     D SEEK_END        C                   const(2)                             ! seek end
+      *
+      *  0/-1 = unlink()--Remove Link to File               include <unistd.h>
+     D unlink...
+     D                 PR            10I 0 extproc('unlink')                    = int
+     D  i_pPath                        *   value options(*string)               = *path
+      *
+      *  0/-1 = Qp0lRenameKeep()--Rename File or Directory, Keep "new" If It Exists
+     D Qp0lRenameKeep...
+     D                 PR            10I 0 extproc('Qp0lRenameKeep')            = int
+     D  i_pOldPath                     *   value options(*string)               = *path
+     D  i_pNewPath                     *   value options(*string)               = *path
+      *
+      *  0/-1 = close()--Close File or Socket Descriptor    include <unistd.h>
+     D close...
+     D                 PR            10I 0 extproc('close')                     = int
+     D  i_fd                         10I 0 value                                = int
+      *
+      *  erno--Set Pointer to Runtime Error Code
+     D errno           PR              *                     extproc('__errno')
+      *
+      *  strerror -- Set Pointer to Runtime Error Message
+     D strerror        PR              *                     extproc('strerror')
+     D  errno                        10I 0 value
+      *
+      *  <sys/errno.h>
+     D EDOM_C          C                   const(3001)                          domain error i
+     D ERANGE_C        C                   const(3002)                          range error in
+     D ETRUNC_C        C                   const(3003)                          truncation on
+     D ENOTOPEN_C      C                   const(3004)                          file has not b
+     D ENOTREAD_C      C                   const(3005)                          file not opene
+     D ERECIO_C        C                   const(3008)                          file opened fo
+     D ENOTWRITE_C     C                   const(3009)                          file not opene
+     D ESTDIN_C        C                   const(3010)                          stdin cannot b
+     D ESTDOUT_C       C                   const(3011)                          stdout cannot
+     D ESTDERR_C       C                   const(3012)                          stderr cannot
+     D EBADSEEK_C      C                   const(3013)                          bad offset to
+     D EBADNAME_C      C                   const(3014)                          invalid file n
+     D EBADMODE_C      C                   const(3015)                          invalid file m
+     D EBADPOS_C       C                   const(3017)                          invalid positi
+     D ENOPOS_C        C                   const(3018)                          no record at s
+     D ENUMMBRS_C      C                   const(3019)                          no ftell if mo
+     D ENUMRECS_C      C                   const(3020)                          no ftell if to
+     D EBADFUNC_C      C                   const(3022)                          invalid functi
+     D ENOREC_C        C                   const(3026)                          record not fou
+     D EBADDATA_C      C                   const(3028)                          message data i
+     D EBADOPT_C       C                   const(3040)                          bad option on
+     D ENOTUPD_C       C                   const(3041)                          file not opene
+     D ENOTDLT_C       C                   const(3042)                          file not opene
+     D EPAD_C          C                   const(3043)                          padding occurr
+     D EBADKEYLN_C     C                   const(3044)                          bad key length
+     D EPUTANDGET_C    C                   const(3080)                          illegal write
+     D EGETANDPUT_C    C                   const(3081)                          illegal read a
+     D EIOERROR_C      C                   const(3101)                          I/O exception
+     D EIORECERR_C     C                   const(3102)                          I/O exception
+      *
+      *  The following values are defined by POSIX ISO/IEC 9945-1:1990.
+     D EINVAL_C        C                   const(3021)                          invalid argume
+     D EIO_C           C                   const(3006)                          input/output e
+     D ENODEV_C        C                   const(3007)                          no such device
+     D EBUSY_C         C                   const(3029)                          resource busy
+     D ENOENT_C        C                   const(3025)                          no such file o
+     D EPERM_C         C                   const(3027)                          operation not
+      *
+      *  AS/400 specific error numbers
+     D EACCES_C        C                   const(3401)                          Permission den
+     D ENOTDIR_C       C                   const(3403)                          Not a director
+     D ENOSPC_C        C                   const(3404)                          No space avail
+     D EXDEV_C         C                   const(3405)                          Improper link.
+     D EWOULDBLOCK_C   C                   const(3406)                          Operation woul
+     D EAGAIN_C        C                   const(3406)                          Operation woul
+     D EINTR_C         C                   const(3407)                          Interrupted fu
+     D EFAULT_C        C                   const(3408)                          The address us
+     D ETIME_C         C                   const(3409)                          Operation time
+     D ENXIO_C         C                   const(3415)                          No such device
+     D ECLOSED_C       C                   const(3417)                          Socket closed
+     D EADDRINUSE_C    C                   const(3420)                          Address alread
+     D EADDRNOTAVAIL_C...
+     D                 C                   const(3421)                          Address not av
+     D EAFNOSUPPORT_C  C                   const(3422)                          The type of so
+     D EALREADY_C      C                   const(3423)                          Operation alre
+     D ECONNABORTED_C  C                   const(3424)                          Connection end
+     D ECONNREFUSED_C  C                   const(3425)                          A remote host
+     D ECONNRESET_C    C                   const(3426)                          A connection w
+     D EDESTADDRREQ_C  C                   const(3427)                          Operation requ
+     D EHOSTDOWN_C     C                   const(3428)                          A remote host
+     D EHOSTUNREACH_C  C                   const(3429)                          A route to the
+     D EINPROGRESS_C   C                   const(3430)                          Operation in p
+     D EISCONN_C       C                   const(3431)                          A connection h
+     D EMSGSIZE_C      C                   const(3432)                          Message size o
+     D ENETDOWN_C      C                   const(3433)                          The network is
+     D ENETRESET_C     C                   const(3434)                          A socket is co
+     D ENETUNREACH_C   C                   const(3435)                          Cannot reach t
+     D ENOBUFS_C       C                   const(3436)                          There is not e
+     D ENOPROTOOPT_C   C                   const(3437)                          The protocol d
+     D ENOTCONN_C      C                   const(3438)                          Requested oper
+     D ENOTSOCK_C      C                   const(3439)                          The specified
+     D ENOTSUP_C       C                   const(3440)                          Operation not
+     D EOPNOTSUPP_C    C                   const(3440)                          Operation not
+     D EPFNOSUPPORT_C  C                   const(3441)                          The socket pro
+     D EPROTONOSUPPORT_C...
+     D                 C                   const(3442)                          No protocol of
+     D EPROTOTYPE_C    C                   const(3443)                          The socket typ
+     D ERCVDERR_C      C                   const(3444)                          An error indic
+     D ESHUTDOWN_C     C                   const(3445)                          Cannot send da
+     D ESOCKTNOSUPPORT_C...
+     D                 C                   const(3446)                          The specified
+     D ETIMEDOUT_C     C                   const(3447)                          A remote host
+     D EUNATCH_C       C                   const(3448)                          The protocol r
+     D EBADF_C         C                   const(3450)                          Descriptor not
+     D EMFILE_C        C                   const(3452)                          Too many open
+     D ENFILE_C        C                   const(3453)                          Too many open
+     D EPIPE_C         C                   const(3455)                          Broken pipe.
+     D EEXIST_C        C                   const(3457)                          File exists.
+     D EDEADLK_C       C                   const(3459)                          Resource deadl
+     D ENOMEM_C        C                   const(3460)                          Storage alloca
+     D EOWNERTERM_C    C                   const(3462)                          The mutex no l
+     D EDESTROYED_C    C                   const(3463)                          he synchroniza
+     D ETERM_C         C                   const(3464)                          Operation term
+     D EMLINK_C        C                   const(3468)                          Maximum link c
+     D ESPIPE_C        C                   const(3469)                          Seek request n
+     D ENOSYS_C        C                   const(3470)                          Function not i
+     D EISDIR_C        C                   const(3471)                          Specified targ
+     D EROFS_C         C                   const(3472)                          Read-only file
+     D EUNKNOWN_C      C                   const(3474)                          Unknown system
+     D EITERBAD_C      C                   const(3475)                          Iterator is in
+     D EDAMAGE_C       C                   const(3484)                          A damaged obje
+     D ELOOP_C         C                   const(3485)                          A loop exists
+     D ENAMETOOLONG_C  C                   const(3486)                          A path name is
+     D ENOLCK_C        C                   const(3487)                          No locks avail
+     D ENOTEMPTY_C     C                   const(3488)                          Directory not
+     D ENOSYSRSC_C     C                   const(3489)                          System resourc
+     D ECONVERT_C      C                   const(3490)                          Conversion err
+     D E2BIG_C         C                   const(3491)                          Argument list
+     D EILSEQ_C        C                   const(3492)                          Conversion sto
+     D ESOFTDAMAGE_C   C                   const(3497)                          Object has sof
+     D ENOTENROLL_C    C                   const(3498)                          User not enrol
+     D EOFFLINE_C      C                   const(3499)                          Object is susp
+     D EROOBJ_C        C                   const(3500)                          Object is a re
+     D ELOCKED_C       C                   const(3506)                          Area being rea
+     D EFBIG_C         C                   const(3507)                          Object too lar
+     D EIDRM_C         C                   const(3509)                          The semaphore,
+     D ENOMSG_C        C                   const(3510)                          The queue does
+     D EFILECVT_C      C                   const(3511)                          File ID conver
+     D EBADFID_C       C                   const(3512)                          A File ID coul
+     D ESTALE_C        C                   const(3513)                          A File ID coul
+     D ESRCH_C         C                   const(3515)                          No such proces
+     D ENOTSIGINIT_C   C                   const(3516)                          Process not en
+     D ECHILD_C        C                   const(3517)                          No child proce
+     D ETOOMANYREFS_C  C                   const(3523)                          The operation
+     D ENOTSAFE_C      C                   const(3524)                          Function not a
+     D EOVERFLOW_C     C                   const(3525)                          Object is too
+     D EJRNDAMAGE_C    C                   CONST(3526)                          Journal damage
+     D EJRNINACTIVE_C  C                   CONST(3527)                          Journal inacti
+     D EJRNRCVSPC_C    C                   CONST(3528)                          Journal space
+     D EJRNRMT_C       C                   CONST(3529)                          Journal is rem
+     D ENEWJRNRCV_C    C                   CONST(3530)                          New journal re
+     D ENEWJRN_C       C                   CONST(3531)                          New journal is
+     D EJOURNALED_C    C                   CONST(3532)                          Object already
+     D EJRNENTTOOLONG_C...
+     D                 C                   CONST(3533)                          Entry too larg
+     D EDATALINK_C     C                   CONST(3534)                          Object is a Da
+     D ENOTAVAIL_C     C                   CONST(3535)                          Independent AS
+     D ENOTTY_C        C                   CONST(3536)                          Inappropriate
+     D EFBIG2_C        C                   CONST(3540)                          Write or trunc
+     D ETXTBSY_C       C                   CONST(3543)                          Text file busy
+     D EASPGRPNOTSET_C...
+     D                 C                   CONST(3544)                          ASP group not
+     D ERESTART_C      C                   CONST(3545)                          System call ca
+     D ESCANFAILURE_C  C                   CONST(3546)                          Object marked
+      *
+      *  Unix return codes
+     D RC_OK           C                   const(0)
+     D RC_ERROR        C                   const(-1)
+      *
+      *  Convert External Form to Numeric Value (CVTEFN)
+     D cvtefnd...
+     D                 PR             8F   extproc('cvtefnd')
+     D  i_source                       *   value
+     D  i_len                        10U 0 value
+     D  i_mask                         *   value
+      *
+      *  Test Bit in String (TSTBTS)
+     D tstbts...
+     D                 PR            10I 0 extproc('tstbts')
+     D  bit_string                     *   value
+     D  bit_offset                   10I 0 value
+      *
+      *  getenv()--Get Value of Environment Variable
+     D getenv...
+     D                 PR              *   extproc('getenv')
+     D  name                           *   value  options(*string)
+      *
+      *  putenv()--Change or Add Environment Variable
+     D putenv...
+     D                 PR            10I 0 extproc('putenv')
+     D  string                         *   value  options(*string)
+      *
+      *  Qp0zDltEnv()--Delete an Environment Variable
+     D Qp0zDltEnv...
+     D                 PR            10I 0 extproc('Qp0zDltEnv')
+     D  name                           *   value  options(*string)
+      *
+      *  Qp0zInitEnv()--Initialize Environment for Variables
+     D Qp0zInitEnv...
+     D                 PR            10I 0 extproc('Qp0zInitEnv')
+      *
+     D ENVIRON         S               *   import('environ')
+      *
+      *  Generate Universal Unique Identifier (GENUUID)
+     D genUUID...
+     D                 PR                  extproc('_GENUUID')
+     D  uuid_template                  *   value
+      *
+     D uuid_template_t...
+     D                 DS                  qualified  based(pDummy)
+     D  bytPrv                       10U 0
+     D  bytAvl                       10U 0
+     D  reserved                      8A
+     D  uuid                         16A
+      *
+      *  Convert Hex to Character (CVTHC)
+     D cvthc...
+     D                 PR                  extproc('cvthc')
+     D  pResult                        *   value
+     D  pSource                        *   value
+     D  sourceSize                   10I 0 value
+      *
+      *  Convert Eight Bit Character to Hex Nibbles (CVTCH)
+     D cvtch...
+     D                 PR                  extproc('cvtch')
+     D  pResult                        *   value
+     D  pSource                        *   value
+     D  sourceLen                    10I 0 value
+      *
+      *  Cipher (CIPHER)
+     D cipher...
+     D                 PR                  extproc('_CIPHER')
+     D                                 *   const
+     D                                 *   value
+     D                                 *   const
+      *
+     D cipherCtrls_t   DS                  qualified  based(pDummy)  align
+     D  function               1      2A
+     D  hashAlg                3      3A
+     D  sequence               4      4A
+     D  dataLength             5      8U 0
+     D  output                 9      9A
+     D  reserved_1            10     16A
+     D  hashContext           17     32*
+     D  HMACKey               33     48*
+     D  HMACKeyLength         49     52U 0
+     D  reserved_2            53     96A
+      *
+     D cCIPHER_MD5...
+     D                 C                   const(x'00')
+     D cCIPHER_SHA1...
+     D                 C                   const(x'01')
+      *
+     D cCIPHER_ONLY...
+     D                 C                   const(x'00')
+     D cCIPHER_FIRST...
+     D                 C                   const(x'01')
+     D cCIPHER_MIDDLE...
+     D                 C                   const(x'02')
+     D cCIPHER_FINAL...
+     D                 C                   const(x'03')
+      *
+     D cCIPHER_HASH...
+     D                 C                   const(x'00')
+     D cCIPHER_HMAC...
+     D                 C                   const(x'01')
+      *
+      /ENDIF

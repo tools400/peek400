@@ -1,13 +1,13 @@
-?     *---------------------------------------------------------------
-?     * Datenstruktur für Attribute der Suchfunktion
-?     * SET0002   *SEARCH
-?     *---------------------------------------------------------------
-?     *
+      *---------------------------------------------------------------
+      * Datenstruktur für Attribute der Suchfunktion
+      * SET0002   *SEARCH
+      *---------------------------------------------------------------
+      *
      D SET0002         DS           256
-?     *  Jokerzeichen
+      *  Jokerzeichen
      D  SET_WldCd                     1A   INZ('%')
-?     *  Max. Anzahl zu durchsuchender Datensätze
+      *  Max. Anzahl zu durchsuchender Datensätze
      D  SET_SNbrs                     5S 0 INZ(10000)
-?     *  Endemarkierung
+      *  Endemarkierung
      D  SET_0002                      1A   INZ(x'8B')
-?     *
+      *

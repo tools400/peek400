@@ -2,8 +2,8 @@
       *============================================================*
       *      Modul: Peek063                                        *
       *============================================================*
-      /INCLUDE QCOPYLE,D_VARDEF                  ?
-      /INCLUDE QCOPYLE,D_INFDS                   ?
+      /INCLUDE QCOPYLE,D_VARDEF
+      /INCLUDE QCOPYLE,D_INFDS
       *
      D hFile_t         DS                  qualified               based(pDummy)
      D  fd                             *

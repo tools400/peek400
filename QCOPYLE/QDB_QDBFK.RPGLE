@@ -1,21 +1,21 @@
-?     *===============================================================*                       RADDAT
-?     *                                                               *                       RADDAT
-?     *  Key Specification Array: Qdb_Qdbfk                           *                       RADDAT
-?     *                                                               *                       RADDAT
-?     *                                                               *                       RADDAT
-?     *===============================================================*                       RADDAT
-?     *                                                                                       RADDAT
-     D Qdb_Qdbfk       DS                                                                     RADDAT
-?     *                                                                                       RADDAT
-?     * Field name                                                                            RADDAT
-     D  Qdbfkfld               1     10A                                                      RADDAT
-?     *                                                                                       RADDAT
-?     * Reserved_59                                                                           RADDAT
-     D  Reserved59            11     13A                                                      RADDAT
-?     *                                                                                       RADDAT
-?     * Key statement seq. attribute flags                                                    RADDAT
-     D  Qdbfksq               14     14A                                                      RADDAT
-?     *                                                                                       RADDAT
-?     * Reserved_61                                                                           RADDAT
-     D  Reserved61            15     31A                                                      RADDAT
-?     *                                                                                       RADDAT
+      *===============================================================*
+      *                                                               *
+      *  Key Specification Array: Qdb_Qdbfk                           *
+      *                                                               *
+      *                                                               *
+      *===============================================================*
+      *
+     D Qdb_Qdbfk       DS
+      *
+      * Field name
+     D  Qdbfkfld               1     10A
+      *
+      * Reserved_59
+     D  Reserved59            11     13A
+      *
+      * Key statement seq. attribute flags
+     D  Qdbfksq               14     14A
+      *
+      * Reserved_61
+     D  Reserved61            15     31A
+      *

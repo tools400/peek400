@@ -1,5 +1,5 @@
       *
-      /COPY QCOPYLE,D_VARDEF                     ?
+      /COPY QCOPYLE,D_VARDEF
       *
      D ShortCmd_t      DS                  qualified template
      D  SC_Action                    10A                     INZ(*BLANKS)

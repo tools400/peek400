@@ -1,14 +1,14 @@
-?     **************************************************************************
-?     *                                                                        *
-?     * Definitions for DSM service program QSNAPI                             *
-?     *                                                                        *
-?     **************************************************************************
+      **************************************************************************
+      *                                                                        *
+      * Definitions for DSM service program QSNAPI                             *
+      *                                                                        *
+      **************************************************************************
 
-?     *
-?     * Constant definitions.
-?     *
+      *
+      * Constant definitions.
+      *
 
-?     * Constants for environment definition.
+      * Constants for environment definition.
      DQsnColorN        C                   '1'
      DQsnColorY        C                   '2'
      DQsnColorS        C                   '3'
@@ -294,18 +294,18 @@
      DQsnWrtTDta       C                   'QsnWrtTDta'
      DQsnWTD           C                   'QsnWTD'
 
-?     *
-?     * Structure definitions.
-?     *
+      *
+      * Structure definitions.
+      *
 
      DQsnEnvExtI       DS
-?     * Data structure for QsnCrtEnv API.
+      * Data structure for QsnCrtEnv API.
      D  QsnEEDta                     16*
      D  QsnEEChg                     16*   Procptr
      D  QsnEEDlt                     16*   Procptr
 
      DQsnEnvD          DS
-?     * Data structure for QsnCrtEnv and QsnChgEnv APIs
+      * Data structure for QsnCrtEnv and QsnChgEnv APIs
      D  QsnEnvColr                    1A
      D  QsnEnvCDRA                    1A
      D  QsnEnvCDR3                    1A
@@ -316,7 +316,7 @@
      D  QsnEnvDspF                   20A
 
      DQsnREnvD         DS
-?     * Data structure for QsnRtvEnvD API.
+      * Data structure for QsnRtvEnvD API.
      D  QsnRERet                     10I 0
      D  QsnREAvl                     10I 0
      D  QsnREColr                     1A
@@ -329,7 +329,7 @@
      D  QsnREDspF                    20A
 
      DQsnEnvWM         DS
-?     * Data structures for QsnSetEnvWinMod API.
+      * Data structures for QsnSetEnvWinMod API.
      D  QsnEWAtrC                     1A
      D  QsnEWULR                     10I 0
      D  QsnEWULC                     10I 0
@@ -337,7 +337,7 @@
      D  QsnEWNumC                    10I 0
 
      DQsnREnvWM        DS
-?     * Data structures for QsnRtvEnvWinMod API.
+      * Data structures for QsnRtvEnvWinMod API.
      D  QsnREWRet                    10I 0
      D  QsnREWAvl                    10I 0
      D  QsnREWMode                    1A
@@ -348,7 +348,7 @@
      D  QsnREWNumC                   10I 0
 
      DQsnQ5250         DS
-?     * Data structure for QsnQry5250 API.
+      * Data structure for QsnQry5250 API.
      D  QsnQ5Ret                     10I 0
      D  QsnQ5Avl                     10I 0
      D  QsnQ5Stat                     1A
@@ -375,10 +375,10 @@
      D  QsnQ5R4                       1A
      D  QsnQ5GrdBf                    1A
      D  QsnQ5R5                       9A
-?     *Note: this may be expanded in the future
+      *Note: this may be expanded in the future
 
      DQsnReadInf       DS
-?     * Data structure for QsnRtvReadInf API.
+      * Data structure for QsnRtvReadInf API.
      D  QsnRIRet                     10I 0
      D  QsnRIAvl                     10I 0
      D  QsnRIR1                       8A
@@ -394,7 +394,7 @@
      D  QsnRIR2                       7A
 
      DQsnFldInf        DS
-?     * Data structure for QsnRtvFldInf API.
+      * Data structure for QsnRtvFldInf API.
      D  QsnFIRet                     10I 0
      D  QsnFIAvl                     10I 0
      D  QsnFIType                     1A
@@ -405,7 +405,7 @@
      D  QsnFIDta                     16*
 
      DQsnWinExtI       DS
-?     * Data structure for QsnCrtWin API
+      * Data structure for QsnCrtWin API
      D  QsnWEDta                     16*
      D  QsnWEChg                     16*   Procptr
      D  QsnWEDlt                     16*   Procptr
@@ -414,7 +414,7 @@
      D  QsnWECur                     16*   Procptr
 
      DQsnWinD          DS
-?     * Data structures for QsnCrtWin and QsnChgWin APIs.
+      * Data structures for QsnCrtWin and QsnChgWin APIs.
      D  QsnWTopR                     10I 0
      D  QsnWLeftC                    10I 0
      D  QsnWNumR                     10I 0
@@ -458,7 +458,7 @@
      D  QsnWR4                       10I 0
 
      DQsnRWinD         DS
-?     * Data structure for QsnRtvWinD API.
+      * Data structure for QsnRtvWinD API.
      D  QsnRWRet                     10I 0
      D  QsnRWAvl                     10I 0
      D  QsnRWTopR                    10I 0
@@ -504,7 +504,7 @@
      D  QsnRWR4                      10I 0
 
      DQsnSsnExtI       DS
-?     * Data structure for QsnCrtSsn API
+      * Data structure for QsnCrtSsn API
      D  QsnSEDta                     16*
      D  QsnSEChg                     16*   Procptr
      D  QsnSEDlt                     16*   Procptr
@@ -513,7 +513,7 @@
      D  QsnSECur                     16*   Procptr
 
      DQsnSsnD          DS
-?     * Data structure for QsnCrtSsn and QsnChgSsn APIs
+      * Data structure for QsnCrtSsn and QsnChgSsn APIs
      D  QsnSActn                     16*   Procptr Dim(24)
      D  QsnSTRow                     10I 0
      D  QsnSLCol                     10I 0
@@ -545,7 +545,7 @@
      D  QsnSR4                       20A
 
      DQsnRSsnD         DS
-?     * Data structure for QsnRtvSsnD APIs
+      * Data structure for QsnRtvSsnD APIs
      D  QsnRSRet                     10I 0
      D  QsnRSAvl                     10I 0
      D  QsnRSR1                       8A
