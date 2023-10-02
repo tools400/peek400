@@ -26,6 +26,14 @@
      /*     *NONE      Programme ohne Debug View erstellen           */
      /*     *ALL       Programme mit allen Debug Views erstellen     */
      /* ============================================================ */
+     /* >>PRE-COMPILER<<                                             */
+     /*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +   */
+     /*                           OBJLIB(&LI) DEVLIB(&LI) +          */
+     /*                           SBMJOB(*NO) BNDDIR(PEEK) +         */
+     /*                           INSTALL(*NO);                      */
+     /*   >>EXECUTE<<                                                */
+     /* >>END-PRE-COMPILER<<                                         */
+     /* ============================================================ */
 
           PGM        PARM(&DevLib     +
                           &DbgViewX   +
@@ -201,42 +209,41 @@
              CRTSRCPF   FILE(&NEWLIB/QCOPYLE) RCDLEN(112) +
                           TEXT('Peek/400 - ILE Copy-Books')
              CPYF       FROMFILE(&DEVLIB/QCOPYLE) +
-                          TOFILE(&NEWLIB/QCOPYLE) FROMMBR(FLDL0100) +
-                          TOMBR(FLDL0100) MBROPT(*ADD) CRTFILE(*NO)
+                          TOFILE(&NEWLIB/QCOPYLE) FROMMBR(H_SPEC    ) +
+                          TOMBR(H_SPEC   ) MBROPT(*ADD) CRTFILE(*NO)
              CPYF       FROMFILE(&DEVLIB/QCOPYLE) +
-                          TOFILE(&NEWLIB/QCOPYLE) FROMMBR(D_VARDEF) +
-                          TOMBR(D_VARDEF) MBROPT(*ADD) CRTFILE(*NO)
+                          TOFILE(&NEWLIB/QCOPYLE) FROMMBR(COPYRIGHT ) +
+                          TOMBR(COPYRIGHT) MBROPT(*ADD) CRTFILE(*NO)
              CPYF       FROMFILE(&DEVLIB/QCOPYLE) +
-                          TOFILE(&NEWLIB/QCOPYLE) FROMMBR(F_PEEK58) +
-                          TOMBR(F_PEEK58) MBROPT(*ADD) CRTFILE(*NO)
+                          TOFILE(&NEWLIB/QCOPYLE) FROMMBR(D_VARDEF  ) +
+                          TOMBR(D_VARDEF ) MBROPT(*ADD) CRTFILE(*NO)
              CPYF       FROMFILE(&DEVLIB/QCOPYLE) +
-                          TOFILE(&NEWLIB/QCOPYLE) FROMMBR(F_PEEK61) +
-                          TOMBR(F_PEEK61) MBROPT(*ADD) CRTFILE(*NO)
-             CPYF       FROMFILE(&DEVLIB/QCOPYLE) +
-                          TOFILE(&NEWLIB/QCOPYLE) FROMMBR(F_PEEK63) +
-                          TOMBR(F_PEEK63) MBROPT(*ADD) CRTFILE(*NO)
-             CPYF       FROMFILE(&DEVLIB/QCOPYLE) +
-                          TOFILE(&NEWLIB/QCOPYLE) FROMMBR(F_PEEK71) +
-                          TOMBR(F_PEEK71) MBROPT(*ADD) CRTFILE(*NO)
-             CPYF       FROMFILE(&DEVLIB/QCOPYLE) +
-                          TOFILE(&NEWLIB/QCOPYLE) FROMMBR(OVRDBF  ) +
-                          TOMBR(OVRDBF  ) MBROPT(*ADD) CRTFILE(*NO)
-             CPYF       FROMFILE(&DEVLIB/QCOPYLE) +
-                          TOFILE(&NEWLIB/QCOPYLE) FROMMBR(DLTOVR  ) +
-                          TOMBR(DLTOVR  ) MBROPT(*ADD) CRTFILE(*NO)
-             CPYF       FROMFILE(&DEVLIB/QCOPYLE) +
-                          TOFILE(&NEWLIB/QCOPYLE) FROMMBR(OVRDSPF ) +
-                          TOMBR(OVRDSPF ) MBROPT(*ADD) CRTFILE(*NO)
-             CPYF       FROMFILE(&DEVLIB/QCOPYLE) +
-                          TOFILE(&NEWLIB/QCOPYLE) FROMMBR(H_SPEC  ) +
-                          TOMBR(OVRDSPF ) MBROPT(*ADD) CRTFILE(*NO)
-             CPYF       FROMFILE(&DEVLIB/QCOPYLE) +
-                          TOFILE(&NEWLIB/QCOPYLE) FROMMBR(COPYRIGHT) +
-                          TOMBR(OVRDSPF ) MBROPT(*ADD) CRTFILE(*NO)
-             CPYF       FROMFILE(&DEVLIB/QCOPYLE) +
-                          TOFILE(&NEWLIB/QCOPYLE) FROMMBR(D_VARDEF) +
-                          TOMBR(*FROMMBR) MBROPT(*ADD) +
-                          FMTOPT(*MAP)
+                          TOFILE(&NEWLIB/QCOPYLE) FROMMBR(USR1000   ) +
+                          TOMBR(USR1000  ) MBROPT(*ADD) CRTFILE(*NO)
+
+
+
+       /*    CPYF       FROMFILE(&DEVLIB/QCOPYLE) +                         */
+       /*                 TOFILE(&NEWLIB/QCOPYLE) FROMMBR(D_VARDEF  ) +     */
+       /*                 TOMBR(D_VARDEF) MBROPT(*ADD) CRTFILE(*NO)         */
+       /*    CPYF       FROMFILE(&DEVLIB/QCOPYLE) +                         */
+       /*                 TOFILE(&NEWLIB/QCOPYLE) FROMMBR(FLDL0100  ) +     */
+       /*                 TOMBR(FLDL0100) MBROPT(*ADD) CRTFILE(*NO)         */
+       /*    CPYF       FROMFILE(&DEVLIB/QCOPYLE) +                         */
+       /*                 TOFILE(&NEWLIB/QCOPYLE) FROMMBR(F_PEEK53  ) +     */
+       /*                 TOMBR(F_PEEK58) MBROPT(*ADD) CRTFILE(*NO)         */
+       /*    CPYF       FROMFILE(&DEVLIB/QCOPYLE) +                         */
+       /*                 TOFILE(&NEWLIB/QCOPYLE) FROMMBR(F_PEEK58  ) +     */
+       /*                 TOMBR(F_PEEK58) MBROPT(*ADD) CRTFILE(*NO)         */
+       /*    CPYF       FROMFILE(&DEVLIB/QCOPYLE) +                         */
+       /*                 TOFILE(&NEWLIB/QCOPYLE) FROMMBR(QCMDEXC   ) +     */
+       /*                 TOMBR(F_PEEK61) MBROPT(*ADD) CRTFILE(*NO)         */
+       /*    CPYF       FROMFILE(&DEVLIB/QCOPYLE) +                         */
+       /*                 TOFILE(&NEWLIB/QCOPYLE) FROMMBR(CEECNDHDLR) +     */
+       /*                 TOMBR(F_PEEK63) MBROPT(*ADD) CRTFILE(*NO)         */
+       /*    CPYF       FROMFILE(&DEVLIB/QCOPYLE) +                         */
+       /*                 TOFILE(&NEWLIB/QCOPYLE) FROMMBR(QTNRCMTI  ) +     */
+       /*                 TOMBR(F_PEEK71) MBROPT(*ADD) CRTFILE(*NO)         */
 
  /* -------------------------------------------------------------- */
  /* QCMDSRC    */
@@ -383,15 +390,9 @@
                                   (*AND LIB  *EQ '*ALLLIBrmv'))
 
  /* EXIT01     */
-             CALL       PGM(&DevLib/PEEK99) PARM('QEXAMPLE'  +
-                                                 &NEWLIB     +
-                                                 'EXIT01'    +
-                                                 &NEWLIB     +
-                                                 '*NO'       +
-                                                 'PEEK'      +
-                                                 &DEVLIB     +
-                                                 &TRUE       +
-                                                 )
+             CRTPEEKOBJ SRCFILE(&NEWLIB/QEXAMPLE) SRCMBR(EXIT01) +
+                          OBJLIB(&NEWLIB) DEVLIB(&DEVLIB) +
+                          SBMJOB(*NO) BNDDIR(PEEK) INSTALL(&TRUE)
 
  /* -------------------------------------------------------------- */
  /* PEEKENG    */
@@ -457,105 +458,45 @@
 
  /* -------------------------------------------------------------- */
  /* DDS + RPG  */
-             CALL       PGM(&DevLib/PEEK99) PARM('QRPGLESRC' +
-                                         &DEVLIB     +
-                                         'PEEK61'    +
-                                         &NEWLIB     +
-                                         '*NO'       +
-                                         'PEEK'      +
-                                         &DEVLIB     +
-                                         &TRUE       +
-                                        )
+             CRTPEEKOBJ SRCFILE(&DEVLIB/QRPGLESRC) SRCMBR(PEEK61) +
+                          OBJLIB(&NEWLIB) DEVLIB(&DEVLIB) +
+                          SBMJOB(*NO) BNDDIR(PEEK) INSTALL(&TRUE)
 
-             CALL       PGM(&DevLib/PEEK99) PARM('QRPGLESRC' +
-                                         &DEVLIB     +
-                                         'PEEK58'    +
-                                         &NEWLIB     +
-                                         '*NO'       +
-                                         'PEEK'      +
-                                         &DEVLIB     +
-                                         &TRUE       +
-                                        )
+             CRTPEEKOBJ SRCFILE(&DEVLIB/QRPGLESRC) SRCMBR(PEEK58) +
+                          OBJLIB(&NEWLIB) DEVLIB(&DEVLIB) +
+                          SBMJOB(*NO) BNDDIR(PEEK) INSTALL(&TRUE)
 
-             CALL       PGM(&DevLib/PEEK99) PARM('QRPGLESRC' +
-                                         &DEVLIB     +
-                                         'PEEK53'    +
-                                         &NEWLIB     +
-                                         '*NO'       +
-                                         'PEEK'      +
-                                         &DEVLIB     +
-                                         &TRUE       +
-                                        )
+             CRTPEEKOBJ SRCFILE(&DEVLIB/QRPGLESRC) SRCMBR(PEEK53) +
+                          OBJLIB(&NEWLIB) DEVLIB(&DEVLIB) +
+                          SBMJOB(*NO) BNDDIR(PEEK) INSTALL(&TRUE)
 
-             CALL       PGM(&DevLib/PEEK99) PARM('QRPGLESRC' +
-                                         &DEVLIB     +
-                                         'PEEK63'    +
-                                         &NEWLIB     +
-                                         '*NO'       +
-                                         'PEEK'      +
-                                         &DEVLIB     +
-                                         &TRUE       +
-                                        )
+             CRTPEEKOBJ SRCFILE(&DEVLIB/QRPGLESRC) SRCMBR(PEEK63) +
+                          OBJLIB(&NEWLIB) DEVLIB(&DEVLIB) +
+                          SBMJOB(*NO) BNDDIR(PEEK) INSTALL(&TRUE)
 
-             CALL       PGM(&DevLib/PEEK99) PARM('QRPGLESRC' +
-                                         &DEVLIB     +
-                                         'PEEK51'    +
-                                         &NEWLIB     +
-                                         '*NO'       +
-                                         'PEEK'      +
-                                         &DEVLIB     +
-                                         &TRUE       +
-                                        )
+             CRTPEEKOBJ SRCFILE(&DEVLIB/QRPGLESRC) SRCMBR(PEEK51) +
+                          OBJLIB(&NEWLIB) DEVLIB(&DEVLIB) +
+                          SBMJOB(*NO) BNDDIR(PEEK) INSTALL(&TRUE)
 
-             CALL       PGM(&DevLib/PEEK99) PARM('QRPGLESRC' +
-                                         &DEVLIB     +
-                                         'PEEK71'    +
-                                         &NEWLIB     +
-                                         '*NO'       +
-                                         'PEEK'      +
-                                         &DEVLIB     +
-                                         &TRUE       +
-                                        )
+             CRTPEEKOBJ SRCFILE(&DEVLIB/QRPGLESRC) SRCMBR(PEEK71) +
+                          OBJLIB(&NEWLIB) DEVLIB(&DEVLIB) +
+                          SBMJOB(*NO) BNDDIR(PEEK) INSTALL(&TRUE)
 
-             CALL       PGM(&DevLib/PEEK99) PARM('QRPGLESRC' +
-                                         &DEVLIB     +
-                                         'PEEKINIT3' +
-                                         &NEWLIB     +
-                                         '*NO'       +
-                                         'PEEK'      +
-                                         &DEVLIB     +
-                                         &TRUE       +
-                                        )
+             CRTPEEKOBJ SRCFILE(&DEVLIB/QRPGLESRC) SRCMBR(PEEKINIT3) +
+                          OBJLIB(&NEWLIB) DEVLIB(&DEVLIB) +
+                          SBMJOB(*NO) BNDDIR(PEEK) INSTALL(&TRUE)
 
-             CALL       PGM(&DevLib/PEEK99) PARM('QRPGLESRC' +
-                                         &DEVLIB     +
-                                         'PEEKINIT2' +
-                                         &NEWLIB     +
-                                         '*NO'       +
-                                         'PEEK'      +
-                                         &DEVLIB     +
-                                         &TRUE       +
-                                        )
+             CRTPEEKOBJ SRCFILE(&DEVLIB/QRPGLESRC) SRCMBR(PEEKINIT2) +
+                          OBJLIB(&NEWLIB) DEVLIB(&DEVLIB) +
+                          SBMJOB(*NO) BNDDIR(PEEK) INSTALL(&TRUE)
 
-             CALL       PGM(&DevLib/PEEK99) PARM('QRPGLESRC' +
-                                         &DEVLIB     +
-                                         'PEEKINIT1' +
-                                         &NEWLIB     +
-                                         '*NO'       +
-                                         'PEEK'      +
-                                         &DEVLIB     +
-                                         &TRUE       +
-                                        )
+             CRTPEEKOBJ SRCFILE(&DEVLIB/QRPGLESRC) SRCMBR(PEEKINIT1) +
+                          OBJLIB(&NEWLIB) DEVLIB(&DEVLIB) +
+                          SBMJOB(*NO) BNDDIR(PEEK) INSTALL(&TRUE)
 
-             CALL       PGM(&DevLib/PEEK99) PARM('QRPGLESRC' +
-                                         &DEVLIB     +
-                                         'PEEKINIT'  +
-                                         &NEWLIB     +
-                                         '*NO'       +
-                                         'PEEK'      +
-                                         &DEVLIB     +
-                                         &TRUE       +
-                                        )
+             CRTPEEKOBJ SRCFILE(&DEVLIB/QRPGLESRC) SRCMBR(PEEKINIT ) +
+                          OBJLIB(&NEWLIB) DEVLIB(&DEVLIB) +
+                          SBMJOB(*NO) BNDDIR(PEEK) INSTALL(&TRUE)
 
              DSPFD      FILE(&DEVLIB/QDDSSRC) TYPE(*MBRLIST) +
                           OUTPUT(*OUTFILE) OUTFILE(QTEMP/PEEKMBR) +
@@ -617,29 +558,17 @@ Loop:
                GOTO       CMDLBL(Loop)
              ENDDO                                                        /* E01 */
 
-             CALL       PGM(&DevLib/PEEK99) PARM(&MLFILE     +
-                                         &MLLIB      +
-                                         &MLNAME     +
-                                         &NEWLIB     +
-                                         '*YES'      +
-                                         'PEEK'      +
-                                         &DEVLIB     +
-                                         &TRUE       +
-                                        )
+             CRTPEEKOBJ SRCFILE(&MLLIB/&MLFILE) SRCMBR(&MLNAME) +
+                          OBJLIB(&NEWLIB) DEVLIB(&DEVLIB) +
+                          SBMJOB(*YES) BNDDIR(PEEK) INSTALL(&TRUE)
 
              GOTO       CMDLBL(Loop)
  EndLoop:
 
  /* PEEK00     */
-             CALL       PGM(&DevLib/PEEK99) PARM('QRPGLESRC' +
-                                         &DEVLIB     +
-                                         'PEEK00'    +
-                                         &NEWLIB     +
-                                         '*YES'      +
-                                         'PEEK'      +
-                                         &DEVLIB     +
-                                         &TRUE       +
-                                        )
+             CRTPEEKOBJ SRCFILE(&DEVLIB/QRPGLESRC) SRCMBR(PEEK00) +
+                          OBJLIB(&NEWLIB) DEVLIB(&DEVLIB) +
+                          SBMJOB(*YES) BNDDIR(PEEK) INSTALL(&TRUE)
 
  /* Initialisieren: GER   */
              SBMJOB     CMD(PEEKINIT LANGUAGE(GER)) +

@@ -43,9 +43,17 @@
       *  TEXT('Peek/400 - EXIT-Programm: Ermitteln Settings Datei')   *
       *  TGTRLS(V4R5M0) DETAIL(*BASIC) ACTGRP(PEEK)                   *
       *                                                               *
+      * ============================================================= *
+      * >>PRE-COMPILER<<                                              *
+      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
       *===============================================================*
-      /COPY QCOPYLE,H_SPEC
-      /COPY QCOPYLE,COPYRIGHT
+      /include QCOPYLE,H_SPEC
+      /include QCOPYLE,COPYRIGHT
       *
       *  *ENTRY-Liste
      D EXIT02          PR                         extpgm('EXIT02')
@@ -56,7 +64,7 @@
      D  go_msgDta                                 like(msgDta_t)
       *
       *---Referenzfelder & Konstanten----------------------*
-      /COPY QCOPYLE,D_VARDEF
+      /include QCOPYLE,D_VARDEF
       *----------------------------------------------------*
       *
       *---------------------------------------------------------------*

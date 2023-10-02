@@ -106,6 +106,9 @@
      D cLOWER          C                   'abcdefghijklmnopqrstuvwxyzäöüß'
      D cUPPER          C                   'ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜß'
       *
+      *  Feedback Code:
+     D fc_t            S             12A   template
+      *
       *  Grenzen für relative Satznummer
      D LOW_RCD_NBR     C                   CONST(1)
      D HIGH_RCD_NBR    C                   CONST(2147483647)

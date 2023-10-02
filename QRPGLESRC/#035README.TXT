@@ -8,11 +8,12 @@ objects and what the PEEK9* helper programs are used for.
 Compiling a Peek/400 Object
 ---------------------------
 
-Peek/400 objects are compiled by PEEK99. The easiest way to
-compile an object is to use a user defined option with the
+Peek/400 objects are compiled by command CRTPEEKOBJ. The easiest
+way to compile an object is to use a user defined option with the
 following command:
 
-  CALL PGM(PEEK99) PARM(&F &L &N &O &P 'PEEK' &L '0')
+  CRTPEEKOBJ SRCFILE(&L/&F) SRCMBR(&N) OBJLIB(&L) DEVLIB(&L)
+    SBMJOB(*NO) BNDDIR(PEEK) INSTALL(*NO)
 
 
 Creating a Peek/400 Distribution Library

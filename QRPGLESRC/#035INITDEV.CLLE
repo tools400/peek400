@@ -1,3 +1,26 @@
+     /* ============================================================ */
+     /*                                                              */
+     /*  (c) Thomas Raddatz                                          */
+     /*                                                              */
+     /*  Bereich  : PEEK                                             */
+     /*  Programm : #INITDEV                                         */
+     /*  Typ      : CLLE                                             */
+     /*                                                              */
+     /* ============================================================ */
+     /*                                                              */
+     /*  Dokumentation:                                              */
+     /*                                                              */
+     /*  Initialize Development Library                              */
+     /*                                                              */
+     /* ============================================================ */
+     /* >>PRE-COMPILER<<                                             */
+     /*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +   */
+     /*                           OBJLIB(&LI) DEVLIB(&LI) +          */
+     /*                           SBMJOB(*NO) BNDDIR(PEEK) +         */
+     /*                           INSTALL(*NO);                      */
+     /*   >>EXECUTE<<                                                */
+     /* >>END-PRE-COMPILER<<                                         */
+     /* ============================================================ */
              PGM        PARM(&DEVLIB)
 
              DCL        VAR(&DEVLIB)  TYPE(*CHAR) LEN(10)
@@ -794,15 +817,9 @@ CRTOBJ:
              /* ==================================================== */
              SUBR       SUBR(CMPOBJ)
 
-               CALL       PGM(&DEVLIB/PEEK99) PARM( +
-                            &SRCFILE  /* source file          */  +
-                            &DEVLIB   /* source library       */  +
-                            &SRCMBR   /* source member        */  +
-                            &DEVLIB   /* object library       */  +
-                            '*NO'     /* submit to batch      */  +
-                            'PEEK'    /* binding directory    */  +
-                            &DEVLIB   /* development library  */  +
-                            '*NO'     /* create dist. library */  )
+               CRTPEEKOBJ SRCFILE(&DEVLIB/&SRCFILE) SRCMBR(&SRCMBR) +
+                            OBJLIB(&DEVLIB) DEVLIB(&DEVLIB) +
+                            SBMJOB(*NO) BNDDIR(PEEK) INSTALL('*NO')
 
              ENDSUBR
 

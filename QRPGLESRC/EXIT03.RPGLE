@@ -46,9 +46,17 @@
       *  TEXT('Peek/400 - EXIT-Programm: Ermitteln EDIT CODE     ')   *
       *  TGTRLS(V5R2M0) DETAIL(*BASIC) ACTGRP(PEEK)                   *
       *                                                               *
+      * ============================================================= *
+      * >>PRE-COMPILER<<                                              *
+      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
       *===============================================================*
-      /COPY QCOPYLE,H_SPEC
-      /COPY QCOPYLE,COPYRIGHT
+      /include QCOPYLE,H_SPEC
+      /include QCOPYLE,COPYRIGHT
       *
       *  *ENTRY-Liste
      D EXIT03          PR                         extpgm('EXIT03')
