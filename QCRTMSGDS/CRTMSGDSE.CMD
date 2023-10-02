@@ -1,70 +1,70 @@
-/* =================================================================== */                 /* RADD */
-/*                                                                     */                 /* RADD */
-/*  Kurzdokumentation :                                                */                 /* RADD */
-/*                                                                     */                 /* RADD */
-/*  Bereich . . . : CRTMSGDS                                           */                 /* RADD */
-/*  Objekt  . . . : CRTMSGDS                                           */                 /* RADD */
-/*  Beschreibung  : Tool: CRTMSGDS   (Create Message DS  ) Eng         */                 /* RADD */
-/*  Author  . . . : Thomas Raddatz   <thomas.raddatz@tools400.de>      */                 /* RADD */
-/*  Datum . . . . : 01.06.2002                                         */                 /* RADD */
-/*                                                                     */                 /* RADD */
-/* =================================================================== */                 /* RADD */
-/*                                                                     */                 /* RADD */
-/*  This software is free software, you can redistribute it and/or     */                 /* RADD */
-/*  modify it under the terms of the GNU General Public License (GPL)  */                 /* RADD */
-/*  as published by the Free Software Foundation.                      */                 /* RADD */
-/*                                                                     */                 /* RADD */
-/*  See GNU General Public License for details.                        */                 /* RADD */
-/*          http://www.opensource.org                                  */                 /* RADD */
-/*          http://www.opensource.org/licenses/gpl-license.html        */                 /* RADD */
-/*                                                                     */                 /* RADD */
-/* =================================================================== */                 /* RADD */
-/*  History:                                                           */                 /* RADD */
-/*                                                                     */                 /* RADD */
-/*  Datum       Name          Änderung                                 */                 /* RADD */
-/*  ----------  ------------  ---------------------------------------  */                 /* RADD */
-/*                                                                     */                 /* RADD */
-/* =================================================================== */                 /* RADD */
-/* >>PRE-COMPILER<<                                                    */                 /* RADD */
-/*                                                                     */                 /* RADD */
-/*   >>CRTCMD<< CRTCMD       CMD(&LI/&OB) +                            */                 /* RADD */
-/*                           SRCFILE(&SL/&SF) +                        */                 /* RADD */
-/*                           SRCMBR(&SM);                              */                 /* RADD */
-/*                                                                     */                 /* RADD */
-/*   >>COMPILE<<                                                       */                 /* RADD */
-/*     >>PARM<< PGM(*LIBL/CRTMSGDSC);                                  */                 /* RADD */
-/*     >>PARM<< HLPPNLGRP(*LIBL/CRTMSGDSPE);                           */                 /* RADD */
-/*     >>PARM<< HLPID(CRTMSGDS);                                       */                 /* RADD */
-/*     >>PARM<< PRDLIB(&LI);                                           */                 /* RADD */
-/*   >>END-COMPILE<<                                                   */                 /* RADD */
-/*                                                                     */                 /* RADD */
-/*   >>EXECUTE<<                                                       */                 /* RADD */
-/*                                                                     */                 /* RADD */
-/* >>END-PRE-COMPILER<<                                                */                 /* RADD */
-/* =================================================================== */                 /* RADD */
+/* =================================================================== */
+/*                                                                     */
+/*  Kurzdokumentation :                                                */
+/*                                                                     */
+/*  Bereich . . . : CRTMSGDS                                           */
+/*  Objekt  . . . : CRTMSGDS                                           */
+/*  Beschreibung  : Tool: CRTMSGDS   (Create Message DS  ) Eng         */
+/*  Author  . . . : Thomas Raddatz   <thomas.raddatz@tools400.de>      */
+/*  Datum . . . . : 01.06.2002                                         */
+/*                                                                     */
+/* =================================================================== */
+/*                                                                     */
+/*  This software is free software, you can redistribute it and/or     */
+/*  modify it under the terms of the GNU General Public License (GPL)  */
+/*  as published by the Free Software Foundation.                      */
+/*                                                                     */
+/*  See GNU General Public License for details.                        */
+/*          http://www.opensource.org                                  */
+/*          http://www.opensource.org/licenses/gpl-license.html        */
+/*                                                                     */
+/* =================================================================== */
+/*  History:                                                           */
+/*                                                                     */
+/*  Datum       Name          Änderung                                 */
+/*  ----------  ------------  ---------------------------------------  */
+/*                                                                     */
+/* =================================================================== */
+/* >>PRE-COMPILER<<                                                    */
+/*                                                                     */
+/*   >>CRTCMD<< CRTCMD       CMD(&LI/&OB) +                            */
+/*                           SRCFILE(&SL/&SF) +                        */
+/*                           SRCMBR(&SM);                              */
+/*                                                                     */
+/*   >>COMPILE<<                                                       */
+/*     >>PARM<< PGM(*LIBL/CRTMSGDSC);                                  */
+/*     >>PARM<< HLPPNLGRP(*LIBL/CRTMSGDSPE);                           */
+/*     >>PARM<< HLPID(CRTMSGDS);                                       */
+/*     >>PARM<< PRDLIB(&LI);                                           */
+/*   >>END-COMPILE<<                                                   */
+/*                                                                     */
+/*   >>EXECUTE<<                                                       */
+/*                                                                     */
+/* >>END-PRE-COMPILER<<                                                */
+/* =================================================================== */
 
-             CMD        PROMPT('Create Message Data Structure')                           /* RADD */
+             CMD        PROMPT('Create Message Data Structure')
 
              PARM       KWD(RANGE)                                  +
                           TYPE(QMSGR)                               +
                           SNGVAL(                                   +
                             (*ALL ))                                +
-                          PROMPT('Range of message identifiers')                          /* RADD */
+                          PROMPT('Range of message identifiers')
 
              PARM       KWD(MSGF)                                   +
                           TYPE(QMSGF)                               +
                           CHOICE(*NONE)                             +
-                          PROMPT('Message file')                                          /* RADD */
+                          PROMPT('Message file')
 
              PARM       KWD(FILE)                                   +
                           TYPE(QCPYF)                               +
-                          PROMPT('File')                                                  /* RADD */
+                          PROMPT('File')
 
              PARM       KWD(MBR)                                    +
                           TYPE(*NAME)                               +
                           DFT(*GEN)                                 +
                           SPCVAL((*GEN))                            +
-                          PROMPT('Member')                                                /* RADD */
+                          PROMPT('Member')
 
              PARM       KWD(REPLACE)                                +
                           TYPE(*CHAR)                               +
@@ -74,7 +74,7 @@
                           SPCVAL((*NO     N)                        +
                                  (*YES    Y))                       +
                           MIN(0)                                    +
-                          PROMPT('Replace member')                                        /* RADD */
+                          PROMPT('Replace member')
 
              PARM       KWD(TYPE)                                   +
                           TYPE(*CHAR)                               +
@@ -90,7 +90,7 @@
                                  (*SCRIPT 2)                        +
                                             )                       +
                           MIN(0)                                    +
-                          PROMPT('Source type')                                       /* RADD */
+                          PROMPT('Source type')
 
              PARM       KWD(DEFINE)                                 +
                           TYPE(*CHAR)                               +
@@ -101,11 +101,11 @@
                                  (*NO     0))                       +
                           MIN(0)                                    +
                           PMTCTL(PMTCTL1)                           +
-                          PROMPT('Create DEFINE specifications')                          /* RADD */
-                                                                                          /* RADD */
+                          PROMPT('Create DEFINE specifications')
+
              PARM       KWD(MSGFLNG   ) TYPE(*CHAR)        +
                           LEN(10)                          +
-                          CONSTANT(CRTMSGDSE)                                             /* RADD */
+                          CONSTANT(CRTMSGDSE)
 
 QMSGF:       QUAL       TYPE(*NAME)                                 +
                           LEN(10)                                   +
@@ -117,19 +117,19 @@ QMSGF:       QUAL       TYPE(*NAME)                                 +
                           SPCVAL((*LIBL    )                        +
                                  (*CURLIB  ))                       +
                           EXPR(*YES)                                +
-                          PROMPT('Library')                                               /* RADD */
+                          PROMPT('Library')
 
 QCPYF:       QUAL       TYPE(*NAME)                                 +
                           LEN(10)                                   +
                           DFT(QCOPYLE)                              +
-                          EXPR(*YES)                                                      /* RADD */
+                          EXPR(*YES)
              QUAL       TYPE(*NAME)                                 +
                           LEN(10)                                   +
                           DFT(*LIBL)                                +
                           SPCVAL((*LIBL    )                        +
                                  (*CURLIB  ))                       +
                           EXPR(*YES)                                +
-                          PROMPT('Library')                                               /* RADD */
+                          PROMPT('Library')
 
 QMSGR:       ELEM       TYPE(*NAME)                                 +
                           LEN(7)                                    +
@@ -137,7 +137,7 @@ QMSGR:       ELEM       TYPE(*NAME)                                 +
                           SPCVAL((*FIRST   ))                       +
                           FULL(*YES)                                +
                           EXPR(*YES)                                +
-                          PROMPT('Lower value')                                           /* RADD */
+                          PROMPT('Lower value')
              ELEM       TYPE(*NAME)                                 +
                           LEN(7)                                    +
                           DFT(*ONLY)                                +
@@ -145,11 +145,11 @@ QMSGR:       ELEM       TYPE(*NAME)                                 +
                                  (*LAST    ))                       +
                           FULL(*YES)                                +
                           EXPR(*YES)                                +
-                          PROMPT('Upper value')                                           /* RADD */
+                          PROMPT('Upper value')
 
  /* Einblenden DEFINE         */
  PMTCTL1:    PMTCTL     CTL(TYPE)                                   +
                           COND((*EQ 4)                              +
                                (*EQ 5))                             +
-                          NBRTRUE(*EQ 1)                                                  /* RADD */
+                          NBRTRUE(*EQ 1)
 

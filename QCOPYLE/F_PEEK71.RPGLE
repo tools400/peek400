@@ -1,105 +1,105 @@
-      /IF NOT DEFINED(F_PEEK71)                                                               RADDAT
-      /DEFINE F_PEEK71                                                                        RADDAT
-      *                                                                                       RADDAT
-      *  Transcoder handle.                                                                   RADDAT
-     D hTranscoder_t   S               *                           based(pDummy)              RADDAT
-      *                                                                                       RADDAT
-      *  Returns a Transcoder to convert from a                                               RADDAT
-      *  given CCSID to the job CCSID.                                                        RADDAT
-     D Transcoder_toJobCcsid...                                                               RADDAT
-     D                 PR                         like(hTranscoder_t )                        RADDAT
-     D                                     extproc('PEEK71_+                                  RADDAT
-     D                                     Transcoder_toJobCcsid+                             RADDAT
-     D                                     ')                                                 RADDAT
-     D  i_fromCcsid                  10U 0 const                                              RADDAT
-      *                                                                                       RADDAT
-      *  Returns a Transcoder to convert from a                                               RADDAT
-      *  given CCSID to the CCSID of the file field.                                          RADDAT
-     D Transcoder_toFieldCcsid...                                                             RADDAT
-     D                 PR                         like(hTranscoder_t )                        RADDAT
-     D                                     extproc('PEEK71_+                                  RADDAT
-     D                                     Transcoder_toFieldCcsid+                           RADDAT
-     D                                     ')                                                 RADDAT
-     D  i_toCcsid                    10U 0 const                                              RADDAT
-      *                                                                                       RADDAT
-      *  Initializes character translation.                                                   RADDAT
-     D Transcoder_new...                                                                      RADDAT
-     D                 PR                         like(hTranscoder_t )                        RADDAT
-     D                                     extproc('PEEK71_+                                  RADDAT
-     D                                     Transcoder_new+                                    RADDAT
-     D                                     ')                                                 RADDAT
-     D  i_toCcsid                    10U 0 const                                              RADDAT
-     D  i_fromCcsid                  10U 0 const                                              RADDAT
-      *                                                                                       RADDAT
-      *  Translate a given buffer using dynamic memory allocation.                            RADDAT
-     D Transcoder_xlateRaw...                                                                 RADDAT
-     D                 PR            10I 0 opdesc                                             RADDAT
-     D                                     extproc('PEEK71_+                                  RADDAT
-     D                                     Transcoder_xlateRaw+                               RADDAT
-     D                                     ')                                                 RADDAT
-     D  i_hTranscoder                      const  like(hTranscoder_t )                        RADDAT
-     D  i_pInBuf                       *   value                                              RADDAT
-     D  i_size                       10I 0 const                                              RADDAT
-     D  o_pOutBuf                      *                                                      RADDAT
-      *                                                                                       RADDAT
-      *  Translate a given buffer.                                                            RADDAT
-     D Transcoder_xlateBuffer...                                                              RADDAT
-     D                 PR            10I 0 opdesc                                             RADDAT
-     D                                     extproc('PEEK71_+                                  RADDAT
-     D                                     Transcoder_xlateBuffer+                            RADDAT
-     D                                     ')                                                 RADDAT
-     D  i_hTranscoder                      const  like(hTranscoder_t )                        RADDAT
-     D  i_pInBuf                       *   value                                              RADDAT
-     D  i_size                       10I 0 const                                              RADDAT
-     D  i_maxSize                    10I 0 const  options(*nopass: *omit)                     RADDAT
-      *                                                                                       RADDAT
-      *  Translate a given varying string.                                                    RADDAT
-     D Transcoder_xlateString...                                                              RADDAT
-     D                 PR         32767A   opdesc varying                                     RADDAT
-     D                                     extproc('PEEK71_+                                  RADDAT
-     D                                     Transcoder_xlateString+                            RADDAT
-     D                                     ')                                                 RADDAT
-     D  i_hTranscoder                      const  like(hTranscoder_t )                        RADDAT
-     D  i_string                  32767A   const  varying options(*varsize)                   RADDAT
-      *                                                                                       RADDAT
-      *  Returns the "from CCSID".                                                            RADDAT
-     D Transcoder_getFromCcsid...                                                             RADDAT
-     D                 PR            10I 0                                                    RADDAT
-     D                                     extproc('PEEK71_+                                  RADDAT
-     D                                     Transcoder_getFromCcsid+                           RADDAT
-     D                                     ')                                                 RADDAT
-     D  i_hTranscoder                      const  like(hTranscoder_t )                        RADDAT
-      *                                                                                       RADDAT
-      *  Returns the "to CCSID".                                                              RADDAT
-     D Transcoder_getToCcsid...                                                             RARADDAT
-     D                 PR            10I 0                                                    RADDAT
-     D                                     extproc('PEEK71_+                                  RADDAT
-     D                                     Transcoder_getToCcsid+                             RADDAT
-     D                                     ')                                                 RADDAT
-     D  i_hTranscoder                      const  like(hTranscoder_t )                        RADDAT
-      *                                                                                       RADDAT
-      *  Terminates character translation.                                                    RADDAT
-     D Transcoder_delete...                                                                   RADDAT
-     D                 PR                                                                     RADDAT
-     D                                     extproc('PEEK71_+                                  RADDAT
-     D                                     Transcoder_delete+                                 RADDAT
-     D                                     ')                                                 RADDAT
-     D  io_hTranscoder...                                                                     RADDAT
-     D                                            like(hTranscoder_t )                        RADDAT
-      *                                                                                       RADDAT
-      *  Returns a Transcoder NULL-handle.                                                    RADDAT
-     D Transcoder_null...                                                                     RADDAT
-     D                 PR                         like(hTranscoder_t )                        RADDAT
-     D                                     extproc('PEEK71_+                                  RADDAT
-     D                                     Transcoder_null+                                   RADDAT
-     D                                     ')                                                 RADDAT
-      *                                                                                       RADDAT
-      *  Returns cTrue if a given Transcoder handle is NULL.                                  RADDAT
-     D Transcoder_isNull...                                                                   RADDAT
-     D                 PR              N                                                      RADDAT
-     D                                     extproc('PEEK71_+                                  RADDAT
-     D                                     Transcoder_isNull+                                 RADDAT
-     D                                     ')                                                 RADDAT
-     D  i_hTranscoder                      const  like(hTranscoder_t )                        RADDAT
-      *                                                                                       RADDAT
-      /ENDIF                                                                                  RADDAT
+      /IF NOT DEFINED(F_PEEK71)
+      /DEFINE F_PEEK71
+      *
+      *  Transcoder handle.
+     D hTranscoder_t   S               *                           based(pDummy)
+      *
+      *  Returns a Transcoder to convert from a
+      *  given CCSID to the job CCSID.
+     D Transcoder_toJobCcsid...
+     D                 PR                         like(hTranscoder_t )
+     D                                     extproc('PEEK71_+
+     D                                     Transcoder_toJobCcsid+
+     D                                     ')
+     D  i_fromCcsid                  10U 0 const
+      *
+      *  Returns a Transcoder to convert from a
+      *  given CCSID to the CCSID of the file field.
+     D Transcoder_toFieldCcsid...
+     D                 PR                         like(hTranscoder_t )
+     D                                     extproc('PEEK71_+
+     D                                     Transcoder_toFieldCcsid+
+     D                                     ')
+     D  i_toCcsid                    10U 0 const
+      *
+      *  Initializes character translation.
+     D Transcoder_new...
+     D                 PR                         like(hTranscoder_t )
+     D                                     extproc('PEEK71_+
+     D                                     Transcoder_new+
+     D                                     ')
+     D  i_toCcsid                    10U 0 const
+     D  i_fromCcsid                  10U 0 const
+      *
+      *  Translate a given buffer using dynamic memory allocation.
+     D Transcoder_xlateRaw...
+     D                 PR            10I 0 opdesc
+     D                                     extproc('PEEK71_+
+     D                                     Transcoder_xlateRaw+
+     D                                     ')
+     D  i_hTranscoder                      const  like(hTranscoder_t )
+     D  i_pInBuf                       *   value
+     D  i_size                       10I 0 const
+     D  o_pOutBuf                      *
+      *
+      *  Translate a given buffer.
+     D Transcoder_xlateBuffer...
+     D                 PR            10I 0 opdesc
+     D                                     extproc('PEEK71_+
+     D                                     Transcoder_xlateBuffer+
+     D                                     ')
+     D  i_hTranscoder                      const  like(hTranscoder_t )
+     D  i_pInBuf                       *   value
+     D  i_size                       10I 0 const
+     D  i_maxSize                    10I 0 const  options(*nopass: *omit)
+      *
+      *  Translate a given varying string.
+     D Transcoder_xlateString...
+     D                 PR         32767A   opdesc varying
+     D                                     extproc('PEEK71_+
+     D                                     Transcoder_xlateString+
+     D                                     ')
+     D  i_hTranscoder                      const  like(hTranscoder_t )
+     D  i_string                  32767A   const  varying options(*varsize)
+      *
+      *  Returns the "from CCSID".
+     D Transcoder_getFromCcsid...
+     D                 PR            10I 0
+     D                                     extproc('PEEK71_+
+     D                                     Transcoder_getFromCcsid+
+     D                                     ')
+     D  i_hTranscoder                      const  like(hTranscoder_t )
+      *
+      *  Returns the "to CCSID".
+     D Transcoder_getToCcsid...
+     D                 PR            10I 0
+     D                                     extproc('PEEK71_+
+     D                                     Transcoder_getToCcsid+
+     D                                     ')
+     D  i_hTranscoder                      const  like(hTranscoder_t )
+      *
+      *  Terminates character translation.
+     D Transcoder_delete...
+     D                 PR
+     D                                     extproc('PEEK71_+
+     D                                     Transcoder_delete+
+     D                                     ')
+     D  io_hTranscoder...
+     D                                            like(hTranscoder_t )
+      *
+      *  Returns a Transcoder NULL-handle.
+     D Transcoder_null...
+     D                 PR                         like(hTranscoder_t )
+     D                                     extproc('PEEK71_+
+     D                                     Transcoder_null+
+     D                                     ')
+      *
+      *  Returns cTrue if a given Transcoder handle is NULL.
+     D Transcoder_isNull...
+     D                 PR              N
+     D                                     extproc('PEEK71_+
+     D                                     Transcoder_isNull+
+     D                                     ')
+     D  i_hTranscoder                      const  like(hTranscoder_t )
+      *
+      /ENDIF

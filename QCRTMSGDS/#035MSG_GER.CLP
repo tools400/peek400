@@ -1,13 +1,13 @@
      /* ----------------------------------------------------------- */
      /*   Cmd-ADDMSGD für Message-ID :   USR0001                    */
-     /* &4-Teildatei &3 in Datei &2/&1 existiert bereits.           */                    /* RADD */
+     /* &4-Teildatei &3 in Datei &2/&1 existiert bereits.           */
      /* ----------------------------------------------------------- */
 
              PGM        PARM(&LI)
 
              DCL        VAR(&LI) TYPE(*CHAR) LEN(10)
 
-             RMVMSGD MSGID(USR0001) MSGF(&LI/CRTMSGDS )                                   /* RADD */
+             RMVMSGD MSGID(USR0001) MSGF(&LI/CRTMSGDS )
              MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 
              ADDMSGD +
@@ -25,14 +25,14 @@
                 ) +
                 ALROPT(*NO) +
                 CCSID( 65535) +
-                /*  -EOF-  */                                                             /* RADD */
+                /*  -EOF-  */
 
      /* ----------------------------------------------------------- */
      /*   Cmd-ADDMSGD für Message-ID :   USR0002                    */
-     /* &4-Teildatei &3 in Datei &2/&1 erstellt.                    */                    /* RADD */
+     /* &4-Teildatei &3 in Datei &2/&1 erstellt.                    */
      /* ----------------------------------------------------------- */
 
-             RMVMSGD MSGID(USR0002) MSGF(&LI/CRTMSGDS )                                   /* RADD */
+             RMVMSGD MSGID(USR0002) MSGF(&LI/CRTMSGDS )
              MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 
              ADDMSGD +
@@ -50,6 +50,6 @@
                 ) +
                 ALROPT(*NO) +
                 CCSID( 65535) +
-                /*  -EOF-  */                                                             /* RADD */
+                /*  -EOF-  */
 
              ENDPGM
