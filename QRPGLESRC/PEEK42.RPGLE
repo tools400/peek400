@@ -265,7 +265,7 @@
       *
      C     Rpl_FldName   BEGSR
       *
-     C                   IF        CIO_open(hFile00                                       RADD
+     C                   IF        CIO_open(hFile00
      C                                      : i_file
      C                                      : i_library
      C                                      : i_member
