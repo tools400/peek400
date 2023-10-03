@@ -58,13 +58,9 @@
       /include QCOPYLE,H_SPEC
       /include QCOPYLE,COPYRIGHT
 
-       dcl-pr exit03        extpgm('EXIT03');
-         gi_file         char(10) const;
-         gi_lib          char(10) const;
-         gi_user         char(10) const;
-         gi_field        char(10) const;
-         gio_edtcde      char(1);
-       end-pr;
+      /define internal_prototype
+      /include QCOPYLE,PEXIT03
+      /undefine internal_prototype
 
        dcl-pr main        extproc('main');
          i_file          const  like(gi_file   );

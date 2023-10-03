@@ -14,6 +14,8 @@
        //  ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯                                          *
        //  EXIT-Programm zur Protokollierung von Datensatzänderungen.   *
        //                                                               *
+       //  Das Exit-Programm ist optional.                              *
+       //                                                               *
        //  Parameterliste:                                              *
        //  ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯                                              *
        //     In :  gi_file      - Name of the file.                    *
@@ -84,22 +86,13 @@
       /if defined(*CRTBNDRPG)
        ctl-opt dftactgrp(*no) actgrp(*caller);
       /endif
-       //===============================================================*
+
        dcl-f exit04log usage(*update:*delete:*output)
              keyed usropn rename(exit04log: fexit04log) prefix(log_);
 
-       dcl-pr exit04        extpgm('EXIT04');
-         gi_file         char(10) const;
-         gi_lib          char(10) const;
-         gi_mbr          char(10) const;
-         gi_event        char(10) const;
-         gi_user         char(10) const;
-         gi_timestamp    timestamp const;
-         gi_rcdnbr       int(10) const;
-         gi_size         int(10) const;
-         gi_bimage       pointer const;
-         gi_aimage       pointer const;
-       end-pr;
+      /define internal_prototype
+      /include QCOPYLE,PEXIT04
+      /undefine internal_prototype
 
        dcl-pr main        extproc('main');
          i_file          const  like(gi_file      );

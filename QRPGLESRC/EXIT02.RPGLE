@@ -55,15 +55,11 @@
       /include QCOPYLE,H_SPEC
       /include QCOPYLE,COPYRIGHT
 
-       dcl-pr exit02        extpgm('EXIT02');
-         gio_user        like(user_t);
-         gio_file        like(file_t);
-         gio_lib         like(lib_t);
-         go_msgid        like(msgid_t);
-         go_msgdta       like(msgdta_t);
-       end-pr;
-
       /include QCOPYLE,D_VARDEF
+
+      /define internal_prototype
+      /include QCOPYLE,PEXIT02
+      /undefine internal_prototype
 
        //  main procedure
        dcl-pr p_main;

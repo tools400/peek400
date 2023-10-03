@@ -22,6 +22,9 @@
        //     - Ändern SQL ORDER BY erlaubt                             *
        //     - Zugriff auf Datei erlaubt                               *
        //                                                               *
+       //  Das Exit-Programm muss in der Peek/400 Produktbibliothek     *
+       //  vorhanden sein.                                              *
+       //                                                               *
        //  Parameterliste:                                              *
        //  ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯                                              *
        //     Inp:  gi_qFile    - qualifizierter Dateiname              *
@@ -111,36 +114,14 @@
       /include QCOPYLE,H_SPEC
       /include QCOPYLE,COPYRIGHT
 
-       dcl-f exit01pf keyed usropn prefix(ex_) infds(file_ex);
-
-       dcl-pr exit01        extpgm('EXIT01');
-         gi_qFile        const likeds(qObj_t);
-         gi_mbr          const like(mbr_t);
-         gi_access       const like(accmode_t);
-         gio_chgl              like(bool_t);
-         gio_chgf              like(bool_t);
-         gio_chgm              like(bool_t);
-         gio_updmd             like(bool_t);
-         gio_updky             like(bool_t);
-         gio_chgsqlw           like(bool_t);
-         gio_chgsqlo           like(bool_t);
-         gio_accat             like(bool_t);
-         go_msgid              like(msgid_t);
-         go_msgdta             like(msgdta_t);
-       end-pr;
-
-       dcl-ds file_ex;
-         ex_open         char(1) pos(9);
-         ex_status       zoned(5) pos(11);
-         ex_file         char(10) pos(83);
-         ex_lib          char(10);
-         ex_rcdlen       int(5) pos(125);
-         ex_mbr          char(10) pos(129);
-         ex_rcdnbr       int(10) pos(397);
-       end-ds;
+       dcl-f exit01pf keyed usropn prefix(ex_);
 
       /include QCOPYLE,D_VARDEF
       /include QCOPYLE,USR1000
+
+      /define internal_prototype
+      /include QCOPYLE,PEXIT01
+      /undefine internal_prototype
 
        //  main prozedure
        dcl-pr p_main;
@@ -775,7 +756,7 @@
        dcl-pi *n;
        end-pi;
 
-       if ex_open <> '1';
+       if (not %open(exit01pf));
           open exit01pf;
        endif;
 
