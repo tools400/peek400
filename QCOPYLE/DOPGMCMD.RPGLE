@@ -12,9 +12,10 @@
      C     YPgmCmd       WHENEQ    '*EXIT'
      C                   EXSR      C_EndPgm
      C     IsOpen        IFEQ      bFalse
-     C                   GOTO      ENDE
+      *              Programm beenden
      C                   ELSE
       *              Weiter machen
+     C                   EVAL      YPgmCmd = ''
      C                   ENDIF
       *
       *  F4  - Prompt
@@ -64,9 +65,10 @@
      C     YPgmCmd       WHENEQ    '*CANCEL'
      C                   EXSR      C_EndPgm
      C     IsOpen        IFEQ      bFalse
-     C                   GOTO      ENDE
+      *              Programm beenden
      C                   ELSE
       *              Weiter machen
+     C                   EVAL      YPgmCmd = ''
      C                   ENDIF
       *
       *  F13 - Wiederholen

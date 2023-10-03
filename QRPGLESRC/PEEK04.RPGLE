@@ -1,155 +1,139 @@
-      *===============================================================*
-      *                                                               *
-      *  (c) Thomas Raddatz                                           *
-      *                                                               *
-      *  Bereich  : PEEK, Version 1.4.0                               *
-      *  Programm : PEEK04                                            *
-      *  Typ      : RPG                                               *
-      *                                                               *
-      *  erstellt : 28.10.97  Raddatz                                 *
-      *                                                               *
-      *===============================================================*
-      *                                                               *
-      *  Dokumentation:                                               *
-      *                                                               *
-      *  Abrufen der Dateiinformationen: hier prüfen auf              *
-      *                                  Schlüsselinformationen       *
-      *                                                               *
-      * ============================================================= *
-      * >>PRE-COMPILER<<                                              *
-      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
-      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
-      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
-      *                           INSTALL(*NO);                       *
-      *   >>EXECUTE<<                                                 *
-      * >>END-PRE-COMPILER<<                                          *
-      *===============================================================*
+       //===============================================================*
+       //                                                               *
+       //  (c) Thomas Raddatz                                           *
+       //                                                               *
+       //  Bereich  : PEEK, Version 1.4.0                               *
+       //  Programm : PEEK04                                            *
+       //  Typ      : RPG                                               *
+       //                                                               *
+       //  erstellt : 28.10.97  Raddatz                                 *
+       //                                                               *
+       //===============================================================*
+       //                                                               *
+       //  Dokumentation:                                               *
+       //                                                               *
+       //  Abrufen der Dateiinformationen: hier prüfen auf              *
+       //                                  Schlüsselinformationen       *
+       //                                                               *
+       // ============================================================= *
+       // >>PRE-COMPILER<<                                              *
+       //   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+       //                           OBJLIB(&LI) DEVLIB(&LI) +           *
+       //                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+       //                           INSTALL(*NO);                       *
+       //   >>EXECUTE<<                                                 *
+       // >>END-PRE-COMPILER<<                                          *
+       //===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
-      *
-      *  list API format KEYL0100
-      /COPY QCOPYLE,KEYL0100
-      *
-      *---Variablendefinition------------------------------*
+
       /COPY QCOPYLE,D_VARDEF
       /COPY QCOPYLE,FLDL0100
-      *----------------------------------------------------*
-      *
+      /COPY QCOPYLE,KEYL0100
+      /COPY QCOPYLE,CEECNDHDLR
+      /COPY QCOPYLE,ERR_D_SDS
+
+      /COPY QCOPYLE,USR0006
+
       /define internal_prototype
       /COPY QCOPYLE,PPEEK04
       /undefine internal_prototype
-      *
+
       /COPY QCOPYLE,PPEEK41
-      *
-      *---Copystrecken für Nachrichtenaufbau---------------*
-      /COPY QCOPYLE,USR0006
-      *----------------------------------------------------*
-      *
-      *---SDS-Datenstruktur--------------------------------*
-      /COPY QCOPYLE,ERR_D_SDS
-      *----------------------------------------------------*
-      *
-     D PEEK41_NAME     S                   like(pgmCallN_t) inz
-      *
-     D data            S            512A   inz
-     D nbrOfKey        S                   like(int4_t) inz
-      *
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
-      *
-      /COPY QCOPYLE,CEECNDHDLR
-      *
-      ********************************************************************
-      *                 S T E U E R  -  R O U T I N E                    *
-      ********************************************************************
-      *
-     D PEEK04          PI
-     D  i_qFile                            const likeds(qObj_t)
-     D  i_rcdFmt                           const like(fmt_t)
-     D  o_msgID                                  like(msgId_t)
-     D  o_msgDta                                 like(msgDta_t)
-      *
-      *---------------------------------------------------*
-      *
-      *  Register error handler
-     C                   callp     CEEHDLR(%paddr('errorHandler')
-     C                                     : *null: *omit)
-      *
-     C                   EXSR      InzSr
-      *
-     C                   EXSR      First
-      *
-      *  Abrufen der Dateiinformationen ...
-     C                   CALLP     PEEK41(i_qFile: i_rcdFmt: '*CREATE'
-     C                                    : nbrOfKey: data)
-      *
-     C                   IF        (nbrOfKey <= 0)
-      *  ... schade, Aufruf ist fehlgeschlagen
-     C                   ELSE
-      *  Abrufen der Schlüsselfeldinformationen ...
-     C                   CALLP     PEEK41(i_qFile: i_rcdFmt: '*KEY'
-     C                                    : nbrOfKey: data)
-      *
-     C     nbrOfKey      IFLE      *ZEROS
-     C                   EVAL      o_msgID = 'USR0006'
-     C                   EVAL      USR00061 = i_qFile.name
-     C                   EVAL      USR00062 = i_qFile.lib
-     C                   EVAL      o_msgDta = USR0006
-     C                   ELSE
-     C                   EVAL      o_msgID = *BLANKS
-     C                   EVAL      o_msgDta = *BLANKS
-     C                   Endif
-     C                   Endif
-      *
-      *---------------------------------------------------*
-      *  Ende Programm
-      *
-     C     ENDE          TAG
-      *
-     C                   EVAL      *INLR = '1'
-      *
-      *====================================================*
-      *  First  --  Initialize program                     *
-      *====================================================*
-      *
-     C     First         BEGSR
-      *
-     C                   EVAL      NbrOfKey = *ZEROS
-      *
-      * - Meldung
-      ***                Callp     p_sndStsMg('USR8137': XQFile)
-      *
-      * - Los gehts'
-     C                   EVAL      o_msgID = *BLANKS
-     C                   EVAL      o_msgDta = *BLANKS
-      *
-     C                   ENDSR
-      *
-      *====================================================*
-      *  InzSr --  Initialize program                      *
-      *====================================================*
-      *
-     C     InzSr         BEGSR
-      *
-     C                   Eval      PEEK41_NAME = f_pgmCallN('PEEK41')
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *  Program error handler                                     *
-      *============================================================*
-      *
-     P errorHandler    b
-     D                 pi
-     D i_condToken                         value likeds(cee_fc_t)
-     D i_pCommArea                   10i 0 value
-     D o_action                      10i 0
-     D o_newCondToken                            likeds(cee_fc_t)
-      /free
 
-         dump;
-         o_action = CEE_PERCOLATE;
+       dcl-s peek41_name     like(pgmcalln_t) inz;
 
-      /end-free
-     P                 e
-      *
+       dcl-s data            char(512) inz;
+       dcl-s nbrofkey        like(int4_t) inz;
+
+       //*******************************************************************
+       //                 S T E U E R  -  R O U T I N E                    *
+       //*******************************************************************
+
+       dcl-pi peek04;
+         i_qfile         const likeds(qobj_t);
+       i_rcdfmt        const like(fmt_t);
+       o_msgid         like(msgid_t);
+       o_msgdta        like(msgdta_t);
+       end-pi;
+
+       //---------------------------------------------------*
+
+       //  Register error handler
+       ceehdlr(%paddr('errorHandler')
+              : *null: *omit);
+
+       exsr inzsr;
+
+       exsr first;
+
+       //  Abrufen der Dateiinformationen ...
+       peek41(i_qfile: i_rcdfmt: '*CREATE'
+             : nbrofkey: data);
+
+       if (nbrofkey <= 0);
+          //  ... schade, Aufruf ist fehlgeschlagen
+       else;
+          //  Abrufen der Schlüsselfeldinformationen ...
+          peek41(i_qfile: i_rcdfmt: '*KEY'
+                : nbrofkey: data);
+
+          if nbrofkey <= *zeros;
+             o_msgid = 'USR0006';
+             usr00061 = i_qfile.name;
+             usr00062 = i_qfile.lib;
+             o_msgdta = usr0006;
+          else;
+             o_msgid = *blanks;
+             o_msgdta = *blanks;
+          endif;
+       endif;
+
+       *inlr = '1';
+
+       //====================================================*
+       //  First  --  Initialize program                     *
+       //====================================================*
+
+       begsr first;
+
+          nbrofkey = *zeros;
+
+          // - Meldung
+          //**                Callp     p_sndStsMg('USR8137': XQFile)
+
+          // - Los gehts'
+          o_msgid = *blanks;
+          o_msgdta = *blanks;
+
+       endsr;
+
+       //====================================================*
+       //  InzSr --  Initialize program                      *
+       //====================================================*
+
+       begsr inzsr;
+
+          peek41_name = f_pgmcalln('PEEK41');
+
+       endsr;
+
+       //============================================================*
+       //  Program error handler                                     *
+       //============================================================*
+
+       dcl-proc errorhandler;
+       dcl-pi *N;
+         i_condtoken     value likeds(cee_fc_t);
+       i_pcommarea     int(10) value;
+       o_action        int(10);
+       o_newcondtoken  likeds(cee_fc_t);
+       end-pi;
+
+       dump;
+       o_action = cee_percolate;
+
+       end-proc;
+

@@ -1,69 +1,125 @@
-      *===============================================================*
-      *                                                               *
-      *  (c) Thomas Raddatz                                           *
-      *                                                               *
-      *  Bereich  : PEEK, Version 2.2.0                               *
-      *  Programm : PEEK05                                            *
-      *  Typ      : RPG                                               *
-      *                                                               *
-      *  erstellt : 29.09.97  Raddatz                                 *
-      *  geändert : 27.04.99  für Version 2.1.0                       *
-      *  geändert : 29.04.99  für Version 2.2.0                       *
-      *                                                               *
-      *===============================================================*
-      *                                                               *
-      *  Kurzdokumentation :                                          *
-      *                                                               *
-      *  Hauptprogramm für Auswahl aus Subfile                        *
-      *                                                               *
-      * ============================================================= *
-      * >>PRE-COMPILER<<                                              *
-      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
-      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
-      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
-      *                           INSTALL(*NO);                       *
-      *   >>EXECUTE<<                                                 *
-      * >>END-PRE-COMPILER<<                                          *
-      *===============================================================*
+       //===============================================================*
+       //                                                               *
+       //  (c) Thomas Raddatz                                           *
+       //                                                               *
+       //  Bereich  : PEEK, Version 2.2.0                               *
+       //  Programm : PEEK05                                            *
+       //  Typ      : RPG                                               *
+       //                                                               *
+       //  erstellt : 29.09.97  Raddatz                                 *
+       //  geändert : 27.04.99  für Version 2.1.0                       *
+       //  geändert : 29.04.99  für Version 2.2.0                       *
+       //                                                               *
+       //===============================================================*
+       //                                                               *
+       //  Kurzdokumentation :                                          *
+       //                                                               *
+       //  Hauptprogramm für Auswahl aus Subfile                        *
+       //                                                               *
+       // ============================================================= *
+       // >>PRE-COMPILER<<                                              *
+       //   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+       //                           OBJLIB(&LI) DEVLIB(&LI) +           *
+       //                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+       //                           INSTALL(*NO);                       *
+       //   >>EXECUTE<<                                                 *
+       // >>END-PRE-COMPILER<<                                          *
+       //===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
-      *
-      * Bildschirm
-     FPEEK05FM  CF   E             WORKSTN USROPN
-     F                                     INFDS(workstn)
-     F                                     SFILE(PBSFL132:SFLREC132)
-     F                                     SFILE(PBSFL080:SFLREC080)
-      *--------------------------------------------------------------*
-      *
-      * Aufbau des Satzformats
-     FPEEKFLDL1 IF   E           K DISK    USROPN
-     F                                     RENAME(FPEEKFLD:FPEEKFLDL1)
-     F                                     PREFIX(F_)
-     F                                     INFDS(Peek#L1)
-      *
-     FPEEKFLD   UF   E           K DISK    USROPN
-     F                                     PREFIX(F_)
-     F                                     INFDS(Peek#00)
-      *
-      * Für Einzelsatzzugriff zum Löschen von Datensätzen
-     D hFile00         DS                   likeds(hFile_t)
-      *
-      * Für Sortierung nach relativer Satznummer
-     D hFile01         DS                   likeds(hFile_t)
-      *
-      * Für Sortierung nach Schlüsselfolge
-     D hFile02         DS                   likeds(hFile_t)
-      *
-      * Für SQL Zugriff
-     D hFile03         DS                   likeds(hFile_t)
-      *
-      * Für Einzelsatzzugriff zum reinen Lesen von Datensätzen
-     D hFile04         DS                   likeds(hFile_t)
-      *
-      *---Variablendefinition ShortCmd---------------------*
+
+       // Bildschirm
+       dcl-f peek05fm workstn(*ext) usage(*input:*output)
+             usropn infds(workstn) sfile(pbsfl132:sflrec132)
+             sfile(pbsfl080:sflrec080);
+       //--------------------------------------------------------------*
+
+       // Aufbau des Satzformats
+       dcl-f peekfldl1 keyed usropn rename(fpeekfld:fpeekfldl1) prefix(f_)
+             infds(peek#l1);
+
+       dcl-f peekfld usage(*update:*delete) keyed usropn prefix(f_)
+             infds(peek#00);
+
+       // Für Einzelsatzzugriff zum Löschen von Datensätzen
+       dcl-ds hfile00  likeds(hfile_t);
+
+       // Für Sortierung nach relativer Satznummer
+       dcl-ds hfile01  likeds(hfile_t);
+
+       // Für Sortierung nach Schlüsselfolge
+       dcl-ds hfile02  likeds(hfile_t);
+
+       // Für SQL Zugriff
+       dcl-ds hfile03  likeds(hfile_t);
+
+       // Für Einzelsatzzugriff zum reinen Lesen von Datensätzen
+       dcl-ds hfile04  likeds(hfile_t);
+
+      /COPY QCOPYLE,D_VARDEF
       /COPY QCOPYLE,ShortCmd_D
-      *----------------------------------------------------*
-      *
+      /COPY QCOPYLE,DS_WORKSTN
+      /COPY QCOPYLE,D_COLORATR
+      /COPY QCOPYLE,ERR_D_SDS
+      /COPY QCOPYLE,OBJD0400
+      /COPY QCOPYLE,RCDL0200
+      /COPY QCOPYLE,FLDL0100
+      /COPY QCOPYLE,MBRD0200
+      /COPY QCOPYLE,FILD0100
+
+      /COPY QCOPYLE,SET0001
+      /COPY QCOPYLE,SET0002
+      /COPY QCOPYLE,SET0003
+      /COPY QCOPYLE,SET0005
+      /COPY QCOPYLE,SET0006
+      /COPY QCOPYLE,SET0007
+      /COPY QCOPYLE,SET0008
+      /COPY QCOPYLE,SET0009
+      /COPY QCOPYLE,SET0010
+      /COPY QCOPYLE,SET0011
+      /COPY QCOPYLE,SET0013
+      /COPY QCOPYLE,SET0014
+      /COPY QCOPYLE,SET0015
+      /COPY QCOPYLE,SET0016
+
+      /COPY QCOPYLE,USR0007
+      /COPY QCOPYLE,USR0008
+      /COPY QCOPYLE,USR0009
+      /COPY QCOPYLE,USR0010
+      /COPY QCOPYLE,USR0013
+      /COPY QCOPYLE,USR0014
+      /COPY QCOPYLE,USR8100
+      /COPY QCOPYLE,USR8108
+      /COPY QCOPYLE,USR8110
+      /COPY QCOPYLE,USR8123
+      /COPY QCOPYLE,USR8128
+      /COPY QCOPYLE,USR8144
+      /COPY QCOPYLE,USR8147
+      /COPY QCOPYLE,USR8148
+      /COPY QCOPYLE,USR8190
+      /COPY QCOPYLE,USR8196
+      /COPY QCOPYLE,USR8200
+      /COPY QCOPYLE,USR8201
+      /COPY QCOPYLE,USR8202
+      /COPY QCOPYLE,USR8203
+      /COPY QCOPYLE,USR8206
+      /COPY QCOPYLE,USR8207
+      /COPY QCOPYLE,USR8212
+      /COPY QCOPYLE,USR8217
+      /COPY QCOPYLE,USR8218
+      /COPY QCOPYLE,USR8223
+      /COPY QCOPYLE,USR8224
+      /COPY QCOPYLE,USR8235
+      /COPY QCOPYLE,USR9993
+      /COPY QCOPYLE,USR9996
+      /COPY QCOPYLE,USR9998
+      /COPY QCOPYLE,USR9999
+
+      /define internal_prototype
+      /COPY QCOPYLE,PPEEK05
+      /undefine internal_prototype
+
+      /COPY QCOPYLE,PUPDPGM
       /COPY QCOPYLE,PPEEK01
       /COPY QCOPYLE,PPEEK03
       /COPY QCOPYLE,PPEEK04
@@ -106,8301 +162,8232 @@
       /COPY QCOPYLE,PPEEK65
       /COPY QCOPYLE,PPEEK68
       /COPY QCOPYLE,PPEEK69
-      *
-      *---Variablendefinition------------------------------*
-      /COPY QCOPYLE,D_VARDEF
-      *----------------------------------------------------*
-      *
-      /define internal_prototype
-      /COPY QCOPYLE,PPEEK05
-      /undefine internal_prototype
-      *
-      *---INFOSTRUKTUR FÜR AID-BYTE -----------------------*
-      /COPY QCOPYLE,DS_WORKSTN
-      *----------------------------------------------------*
-      *
-      *---Farbattribute------------------------------------*
-      /COPY QCOPYLE,D_COLORATR
-      *----------------------------------------------------*
-      *
-      *---Benutzervoreinstellungen-------------------------*
-      /COPY QCOPYLE,SET0001
-      /COPY QCOPYLE,SET0002
-      /COPY QCOPYLE,SET0003
-      /COPY QCOPYLE,SET0005
-      /COPY QCOPYLE,SET0006
-      /COPY QCOPYLE,SET0007
-      /COPY QCOPYLE,SET0008
-      /COPY QCOPYLE,SET0009
-      /COPY QCOPYLE,SET0010
-      /COPY QCOPYLE,SET0011
-      /COPY QCOPYLE,SET0013
-      /COPY QCOPYLE,SET0014
-      /COPY QCOPYLE,SET0015
-      /COPY QCOPYLE,SET0016
-      *----------------------------------------------------*
-      *
-      *---Nachrichtenaufbau--------------------------------*
-      /COPY QCOPYLE,USR0007
-      /COPY QCOPYLE,USR0008
-      /COPY QCOPYLE,USR0009
-      /COPY QCOPYLE,USR0010
-      /COPY QCOPYLE,USR0013
-      /COPY QCOPYLE,USR0014
-      /COPY QCOPYLE,USR8100
-      /COPY QCOPYLE,USR8108
-      /COPY QCOPYLE,USR8110
-      /COPY QCOPYLE,USR8123
-      /COPY QCOPYLE,USR8128
-      /COPY QCOPYLE,USR8144
-      /COPY QCOPYLE,USR8147
-      /COPY QCOPYLE,USR8148
-      /COPY QCOPYLE,USR8190
-      /COPY QCOPYLE,USR8196
-      /COPY QCOPYLE,USR8200
-      /COPY QCOPYLE,USR8201
-      /COPY QCOPYLE,USR8202
-      /COPY QCOPYLE,USR8203
-      /COPY QCOPYLE,USR8206
-      /COPY QCOPYLE,USR8207
-      /COPY QCOPYLE,USR8212
-      /COPY QCOPYLE,USR8217
-      /COPY QCOPYLE,USR8218
-      /COPY QCOPYLE,USR8223
-      /COPY QCOPYLE,USR8224
-      /COPY QCOPYLE,USR8235
-      /COPY QCOPYLE,USR9993
-      /COPY QCOPYLE,USR9996
-      /COPY QCOPYLE,USR9998
-      /COPY QCOPYLE,USR9999
-      *----------------------------------------------------*
-      *
-      *---SDS-Datenstruktur--------------------------------*
-      /COPY QCOPYLE,ERR_D_SDS
-      *----------------------------------------------------*
-      *
-      *---API-Formate--------------------------------------*
-     D OBJD0400        DS                  likeds(OBJD0400_t) inz
-      /COPY QCOPYLE,OBJD0400
-     D RCDL0200        DS                  likeds(RCDL0200_t) inz
-      /COPY QCOPYLE,RCDL0200
-     D FLDL0100        DS                  likeds(FLDL0100_t) inz
-      /COPY QCOPYLE,FLDL0100
-     D MBRD0200        DS                  likeds(MBRD0200_t) inz
-      /COPY QCOPYLE,MBRD0200
-     D FILD0100        DS                  likeds(FILD0100_t) inz
-      /COPY QCOPYLE,FILD0100
-      *----------------------------------------------------*
-      *
-     D f_int           PR            20S 0
-     D  inpValue                     25S 5 value
-      *
-     D f_chain00       PR             1A
-     D  i_rrn                              value  like(rcdNbr_t)
-     D  i_file                             value  like(file_t)
-     D  i_lib                              value  like(lib_t)
-     D  i_mbr                              value  like(mbr_t)
-     D  i_rcdFmt                     10A   value
-      *
-     D f_chain04       PR             1A
-     D  i_rrn                              value  like(rcdNbr_t)
-     D  i_file                             value  like(file_t)
-     D  i_lib                              value  like(lib_t)
-     D  i_mbr                              value  like(mbr_t)
-     D  i_rcdFmt                     10A   value
-      *
       /COPY QCOPYLE,F_PEEK51
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
       /COPY QCOPYLE,F_PEEK63
-      *
-      *----------------------------------------------------*
-      *  I N F D S - D E F I N I T I O N E N               *
-      *----------------------------------------------------*
-      *
-     DFile#X           DS                  likeds(infds_t)
-      *
-     D IO_Buff         DS
-     D  IO_BuffFld                         like(rcdBuf_t)
-      *
-     D IO_NullMap      S                   like(nullMap_t)
-     D                                     dim(NULL_MAP_SIZE)
-      *
-     DPeek#L1          DS
-     D P1File                 83     92A
-     D P1Library              93    102A
-     D P1Member              129    138A
-     D P1RcdNbr              397    400I 0
-      *
-     DPeek#00          DS
-     D P0File                 83     92A
-     D P0Library              93    102A
-     D P0Member              129    138A
-     D P0RcdNbr              397    400I 0
-      *
-     D rtn             DS                  qualified
-     D  file                               like(##File)
-     D  library                            like(##Library)
-     D  member                             like(##Member)
-     D  format                             like(##Format)
-     D  accessMode                         like(accessMode)
-     D  sqlWhere                           like(sqlWhere)
-     D  sqlOrder                           like(sqlOrder)
-      *
-     D YQFile          DS                  inz
-     D  YFile                              like(file_t)
-     D  YLibrary                           like(lib_t)
-     D YFormat         S                   like(RCDFMT_t) inz
-     D YMsgID          S              7A   inz
-     D YMsgDta         S            512A   inz
-      *
-     D YMember         S                   like(mbr_t) inz
-      *
-     D YAttrLen        S                   like(int4_t) inz
-     D YAttrTyp        S              1A   inz
-     D YValue          S            512A   inz
-      *
-     D YDsp80          S                   like(SET_Dsp80) inz
-     D YCopyRight      S                   like(copyRght_t) inz(§CopyRight)
-      *
-     D YFmtNbr         S              5I 0 inz
-      *
-     D YHeaderTyp      S             10A   inz
-     D YRcdNbr         S                   inz(§ZEROS ) like(rcdNbr_t)
-     D YFunction       S             10A   inz
-     D YCommitLVL      S                   inz('0')     like(CommitLVL)
-     D YIsUpdKey       S                   inz(bFalse)  like(isUpdKey )
-     D YScreenNbr      S                   like(int4_t) inz
-     D YIsLower        S                   inz(bFalse ) like(bool_t)
-     D YCsrRow         S                   like(int4_t) inz
-     D YCsrCol         S                   like(int4_t) inz
-      *
-     D YCvtCcsid       S              1A   inz(bTrue  )
-     D YData           S            512A   inz
-      *
-     D YRetFile        S             10A   inz
-     D YRetLib         S             10A   inz
-      *
-     D YRtnCode        S              1A   inz
-      *
-     D YField          S                   like(SrchField) inz
-     D YOperation      S                   like(SrchOP   ) inz
-     D YArgument       S                   like(SrchArg  ) inz
-     D YSign           S                   like(SrchSign ) inz
-     D YSrchNbrs       S                   like(SrchNbrs ) inz(§ZEROS )
-     D YSrchType       S                   like(SrchType ) inz
-     D YSrchCase       S                   like(SrchCase ) inz(bFalse )
-      *
-     D YBuffer         S                   like(rcdBuf_t)
-     D                                     inz
-     D                 DS
-     D yHexString                          like(hexBuf_t)
-     D yOutBuffer                          like(rcdBuf_t)
-     D                                     overlay(yHexString:1)
-     D YOutBuffLn      S                   like(int4_t) inz
-     D YTgtValue       S             10A   inz
-      *
-     D YKeyVal         S                   like(keyBuf_t) inz
-      *
-     D YPgmCmd         S             10A   inz
-     D YCmdDta         S                   like(pgmCmdDt_t) inz
-      *
-     D yFKeys          S             18A   dim(32)       inz
-     D yNbrOfKeys      S                   like(int4_t) inz
-      *
-     D YChoice         S                   like(choice_t) dim(32) inz
-     D YNbrOfCh        S                   like(int4_t) inz
-      *
-     D YMbrOpt         S             10A   inz
-     D YCrtFile        S             10A   inz
-      *
-     D YFlag           S                   inz(*ZEROS)  like(int4_t)
-      *
-     D BuffIdx         S                   like(int4_t) inz
-      *
-     D shortCmd        DS                  likeds(ShortCmd_t) inz
-     D YExecCmd        S                   like(cmdBuffer_t) inz
-     D YNbrOfEnt       S                   like(int4_t) inz
-     D YSqlWhere       S                   like(sqlWhere_t) inz
-     D YSqlOrder       S                   like(sqlOrder_t) inz
-     D YAccess         S              1A   inz
-     D yAlwLc          S              1A   inz
-     D yCase           S              1A   inz
-     D yRcdLock        S              1A   inz
-     D yNullDft        S              1A   inz
-     D yKeepCrs        S              1A   inz
-     D YEnvFile        S                   like(file_t)  inz
-     D YEnvLib         S                   like(lib_t)  inz
-     D YEnvMbr         S                   like(mbr_t)  inz
-     D YIsAutoSave     S                   like(bool_t)  inz(bFalse)
-     D YPinTabR        S                   like(pinTabR_t)  inz dim(12)
-     D YnbrPinR        S                   like(int4_t)  inz
-     D YnbrPinC        S                   like(int4_t)  inz
-     D YisKeyLower     S                   like(bool_t)  inz
-     D YOption         S                   like(option_t)  inz
-     D YText           S                   like(text_t)
-     D ySflOpt         S              2A
-     D YString         S                   like(rcdBuf_t)
-     D                                     inz
-     D YStringLen      S                   like(int4_t) inz
-     D YchgLib         S              1A   inz
-     D YchgFile        S              1A   inz
-     D YchgMbr         S              1A   inz
-     D YupdMod         S              1A   inz
-     D YupdKey         S              1A   inz
-     D YchgSqlW        S              1A   inz
-     D YchgSqlO        S              1A   inz
-     D YaccAut         S              1A   inz
-     D yEvent          S             10A   inz
-     D yUser           S             10A   inz
-     D yTimestamp      S               Z   inz
-     D ySize           S             10I 0 inz
-     D yBImage         S               *   inz
-     D yAImage         S               *   inz
-      *
-     D                 DS
-     D ScrnFKeys                     18A   DIM(32)        inz
-     D  $$FKEY01               1     18A
-     D  $$FKEY02              19     36A
-     D  $$FKEY03              37     54A
-     D  $$FKEY04              55     72A
-     D  $$FKEY05              73     90A
-     D  $$FKEY06              91    108A
-     D  $$FKEY07             109    126A
-     D  $$FKEY08             127    144A
-     D  $$FKEY09             145    162A
-     D  $$FKEY10             163    180A
-     D  $$FKEY11             181    198A
-     D  $$FKEY12             199    216A
-     D  $$FKEY13             217    234A
-     D  $$FKEY14             235    252A
-     D  $$FKEY15             253    270A
-     D  $$FKEY16             271    288A
-     D  $$FKEY17             289    306A
-     D  $$FKEY18             307    324A
-     D  $$FKEY19             325    342A
-     D  $$FKEY20             343    360A
-     D  $$FKEY21             361    378A
-     D  $$FKEY22             379    396A
-     D  $$FKEY23             397    414A
-     D  $$FKEY24             415    432A
-     D  $$FKEY25             433    450A
-     D  $$FKEY26             451    468A
-     D  $$FKEY27             469    486A
-     D  $$FKEY28             487    504A
-     D  $$FKEY29             505    522A
-     D  $$FKEY30             523    540A
-     D  $$FKEY31             541    558A
-     D  $$FKEY32             559    576A
-      *
-     D §HEX_CHAR       C                   CONST('-')
-      *
-     D §ZEROS          C                   CONST(0)
-      *
-     D IsREADSFL       S              1A   inz(bFalse)
-     D IsPBINIT        S              1A   inz(bFalse)
-     D IsFirstSfl      S              1A   inz(bFalse)
-     D IsFileChg       S              1A   inz(bFalse)
-     D IsTblCol        S              1A   inz(bFalse)
-     D IsTargetOK      S              1A   inz(bFalse)
-     D IsSeqNbrOK      S              1A   inz(bFalse)
-     D IsOpen          S              1A   inz(bFalse)
-     D IsUpdMod        S                   like(bool_t)  inz(bFalse)
-     D IsUpdKey        S                   like(bool_t)  inz(bFalse)
-     D IsVisible       S              1A   inz(bFalse)
-     D IsError         S              1A   inz(bFalse)
-     D IsFileError     S              1A   inz(bFalse)
-     D IsKeyAvail      S              1A   inz(bFalse)
-     D IsKeyChg        S              1A   inz(bFalse)
-     D IsSflDirty      S              1A   inz(bFalse)
-     D IsTryed         S              1A   inz(bFalse)
-     D IsPinned        S              1A   inz(bFalse)
-     D IsPinModeR      S              1A   inz(bFalse)
-     D IsPinModeC      S              1A   inz(bFalse)
-     D IsPinOK         S              1A   inz(bFalse)
-     D IsPinRmv        S              1A   inz(bFalse)
-     D IsEOF           S              1A   inz(bFalse)
-     D QueryUser       S                   like(Sfl_Cmd   ) inz(*ALLX'00')
-     D IsFound         S              1A   inz(bFalse)
-     D IsCmdErr        S              1A   inz(bFalse)
-     D IsCancel        S              1A   inz(bFalse)
-     D R#IsCmdErr      S              1A   inz(bFalse)
-     D IsCvtChar       S              1A   inz(bFalse)
-     D IsPinToClr      S              1A   inz(bTrue )
-     D IsReadC         S              1A   inz(bFalse)
-      *** IsNumeric       S                   like(bool_t)
-      ***                                     inz(bFalse)
-     D IsColExc        S                   like(bool_t)
-     D                                     inz(bFalse)
-     D isKeyLower      S              1A   inz(bFalse)
-      *
-     D CommitLVL       S              1A   inz('0')
-      *
-     D auth            DS                  qualified
-     D  chgLib                             like(bool_t)
-     D                                     inz(bFalse)
-     D  chgFile                            like(bool_t)
-     D                                     inz(bFalse)
-     D  chgMbr                             like(bool_t)
-     D                                     inz(bFalse)
-     D  updMod                             like(bool_t)
-     D                                     inz(bFalse)
-     D  updKey                             like(bool_t)
-     D                                     inz(bFalse)
-     D  chgSqlW                            like(bool_t)
-     D                                     inz(bFalse)
-     D  chgSqlO                            like(bool_t)
-     D                                     inz(bFalse)
-     D  accAut                             like(bool_t)
-     D                                     inz(bFalse)
-      *
-     D SflPage         S                   like(int4_t) inz
-     D SflRec080       S                   inz(0) like(SflPage)
-     D SflRec132       S                   inz(0) like(SflPage)
-     D SflNbrRcd       S                   inz(0) like(SflPage)
-     D SflMaxRowLen    S                   like(int4_t) inz
-     D SflDataLenFree  S                   like(int4_t) inz
-     D SfTop           S                   like(int4_t) inz
-     D SfBot           S                   like(int4_t) inz
-     D Sfl_Cmd         S             10A   inz
-     D SflHeadLRw      S                   inz(0) like(SflPage)
-     D SflFirstRw      S                   inz(0) like(SflPage)
-     D SflLastRw       S                   inz(0) like(SflPage)
-     D SflLeftOfs      S                   like(int4_t) inz
-     D SflMode         S             10A   inz
-     D SflPinRnge      S                   like(int4_t) inz
-      *
-     D §CopyRight      C                   CONST('1997-2023, -
-     D                                      Thomas Raddatz - PEEK V3.5.8')
-     D §Release        C                   CONST('Stand: 16.09.2023')
-     D §Version        C                   CONST('V03R05M08')
-      *
-     D L#File          S                   like(##File)    inz
-     D L#Library       S                   like(##Library) inz
-     D L#Member        S                   like(##Member)  inz
-     D L#Format        S                   like(##Format)  inz
-     D L#MaxSeq        S                   like(F_SEQ   )  inz(§ZEROS )
-     D L#MinSeq        S                   like(F_SEQ   )  inz(§ZEROS )
-     D L#WndNbr        S                   like(##WndNbr)  inz(§ZEROS )
-      *
-     D R#Size          S                   like(int4_t) inz
-      *
-     D PEEK01_NAME     S                   like(pgmCallN_t) inz
-     D PEEK03_NAME     S                   like(pgmCallN_t) inz
-     D PEEK04_NAME     S                   like(pgmCallN_t) inz
-     D PEEK06_NAME     S                   like(pgmCallN_t) inz
-     D PEEK07_NAME     S                   like(pgmCallN_t) inz
-     D PEEK08_NAME     S                   like(pgmCallN_t) inz
-     D PEEK09_NAME     S                   like(pgmCallN_t) inz
-     D PEEK10_NAME     S                   like(pgmCallN_t) inz
-     D PEEK12_NAME     S                   like(pgmCallN_t) inz
-     D PEEK13_NAME     S                   like(pgmCallN_t) inz
-     D PEEK14_NAME     S                   like(pgmCallN_t) inz
-     D PEEK17_NAME     S                   like(pgmCallN_t) inz
-     D PEEK18_NAME     S                   like(pgmCallN_t) inz
-     D PEEK19_NAME     S                   like(pgmCallN_t) inz
-     D PEEK20_NAME     S                   like(pgmCallN_t) inz
-     D PEEK21_NAME     S                   like(pgmCallN_t) inz
-     D PEEK23_NAME     S                   like(pgmCallN_t) inz
-     D PEEK24_NAME     S                   like(pgmCallN_t) inz
-     D PEEK26_NAME     S                   like(pgmCallN_t) inz
-     D PEEK27_NAME     S                   like(pgmCallN_t) inz
-     D PEEK30_NAME     S                   like(pgmCallN_t) inz
-     D PEEK32_NAME     S                   like(pgmCallN_t) inz
-     D PEEK33_NAME     S                   like(pgmCallN_t) inz
-     D PEEK34_NAME     S                   like(pgmCallN_t) inz
-     D PEEK37_NAME     S                   like(pgmCallN_t) inz
-     D PEEK38_NAME     S                   like(pgmCallN_t) inz
-     D PEEK40_NAME     S                   like(pgmCallN_t) inz
-     D PEEK41_NAME     S                   like(pgmCallN_t) inz
-     D PEEK42_NAME     S                   like(pgmCallN_t) inz
-     D PEEK47_NAME     S                   like(pgmCallN_t) inz
-     D PEEK48_NAME     S                   like(pgmCallN_t) inz
-     D PEEK49_NAME     S                   like(pgmCallN_t) inz
-     D PEEK50_NAME     S                   like(pgmCallN_t) inz
-     D PEEK52_NAME     S                   like(pgmCallN_t) inz
-     D PEEK54_NAME     S                   like(pgmCallN_t) inz
-     D PEEK55_NAME     S                   like(pgmCallN_t) inz
-     D PEEK56_NAME     S                   like(pgmCallN_t) inz
-     D PEEK57_NAME     S                   like(pgmCallN_t) inz
-     D PEEK59_NAME     S                   like(pgmCallN_t) inz
-     D PEEK65_NAME     S                   like(pgmCallN_t) inz
-     D PEEK68_NAME     S                   like(pgmCallN_t) inz
-     D PEEK69_NAME     S                   like(pgmCallN_t) inz
-      *
-     D PEEKPGM         S                   like(pgm_t) inz
-     D PEEKDSPF        S                   like(file_t) inz
-     D PgmToCall       S                   like(pgmCallN_t) inz
-      *
-     D EXIT01          S                   like(pgmCallN_t) inz
-      *
-     D sflRow          DS                  qualified
-     D  chars                         1A   dim(256) inz
-      *
-     D SFL_ROW_SIZE    C                   %elem(sflRow.chars)
-      *
-     D sflRowDataStr   S                   like(int4_t)
-     D sflRowDataEnd   S                   like(int4_t)
-     D sflRowDataLen   S                   like(int4_t)
-      *
-     D ColrOfs         S                   like(int4_t)
-     D Col_Field       S             10A   dim(60)
-     D Col_ScnStr      S                   like(int4_t) dim(60)
-     D Col_ScnEnd      S                   like(int4_t) dim(60)
-     D Col_Error       S                   like(bool_t) dim(60) inz(bFalse)
-     D CP              S                   like(int4_t)
-     D FldStrPos       S                   like(int4_t)
-      *
-     D HeadLen         S                   like(int4_t)
-     D FieldLen        S                   like(int4_t)
-     D MaxColLen       S                   like(int4_t)
-     D ColumnLen       S                   like(int4_t)
-      *
-     D PinCol_X        S                   like(int4_t)
-     D MAX_PIN_COL     C                   %elem(PinTabCol)
-     D PinTabCol       S                   like(fieldNme_t) dim(12)
-     D NbrPinCol       S                   like(int4_t)
-      *
-     D PinRcd_X        S                   like(int4_t)
-     D MAX_PIN_RCD     C                   %elem(PinTabRcd)
-     D PinTabRcd       S                   like(pinTabR_t) dim(12)
-     D NbrPinRcd       S                   like(int4_t)
-      *
-     D PinTabRcdE      DS                  likeds(pinTabR_t)
-      *
-      *  Arbeitsfelder
-     D X               S                   like(int4_t)
-     D Y               S                   like(int4_t)
-     D Z               S                   like(int4_t)
-     D A1              S              1A   inz
-      *
-      *  Arbeitsfeld für Sortierfolge: Satzfolge/Schlüsselfolge
-      *  .. aktuelle Sortierung
-     D AccessMode      S              1A   inz(RRN_SEQ)
-      *  .. neue Sortierung für ChangeFile
-     D NewAccMode      S              1A   inz(RRN_SEQ)
-      *  .. Sortierung vor SQl-Mode
-     D OldAccMode      S              1A   inz(RRN_SEQ)
-      *  Arbeitsfeld für Befehlsverarbeitung, Verhinderung von Rekursionen
-     D R#PgmCmd        S                   like(YPgmCmd)  inz
-      *  Arbeitsfeld für Eingabe Aufsetzkey
-     D R#RcdNbr        S                   like(##RcdNbr)   inz(§ZEROS )
-     D R#KeyVal        S                   like(##Key   )   inz
-      *  Arbeitsfeld für PIN-Funktion
-     D Pin#Field       S             10A   inz
-      *  Datensatz-Nr für SETLL und SETGG zum füllen der Subfile
-     D Wrk#ReadDn      S                   like(SflPage)    inz(§ZEROS)
-     D Wrk#RcdNbr      S                   like(rcdNbr_t)   inz(§ZEROS)
-     D                 DS
-     D Wrk#KeyVal                          like(keyBuf_t) inz
-      *  ...
-     D Wrk#Field       S                   inz            like(F_Field)
-     D Wrk#SeqNbr      S                   inz(§ZEROS )   like(F_Seq)
-     D Wrk#Recno       S                   inz(§ZEROS )   like(SflRec132)
-     D Wrk#SFPAU       S                   inz            like(SFPAU)
-      *  Umschalten der Sortierung
-     D Last#RcdNr      S                   like(rcdNbr_t)   inz(§ZEROS)
-      *  Farbattribute einsetzen
-     D Wrk#Ofs         S                   like(int4_t) inz
-      *  Felder mit mehr als 512 Zeichen im Datensatz
-     D IsFld512        S              1A   inz(bFalse)
-      *  Felder für Suchfunktion
-     D SrchMode        S             10A   inz('*NEW')
-     D SrchFndRcd      S                   like(rcdNbr_t)  inz(§ZEROS )
-     D SrchField       S             10A   inz
-     D SrchOP          S             10A   inz
-     D SrchArg         S             63A   inz
-     D SrchSign        S              1A   inz
-     D SrchArgFloat    S              8F   inz
-     D SrchArgVal      S             63S 0 inz
-     D cSRCHARG_DIGITS...
-     D                 C                   %len(SrchArgVal)
-     D cSRCHARG_DECPOS...
-     D                 C                   %decpos(SrchArgVal)
-     D SrchLikeTp      S                   like(int4_t) inz
-     D SrchLikeLn      S                   like(int4_t) inz
-     D SrchNbrs        S             10P 0 inz(§ZEROS )
-     D SrchType        S             10A   inz
-     D SrchCase        S              1A   inz(bFalse )
-     D SrchCmpStr      S                   like(SrchArg)  inz
-     D SrchCmpVal      S                   like(SrchArgVal) inz(§ZEROS )
-     D SRCH_CMP_VAL_LENGTH...
-     D                 C                   %len(SrchCmpVal)
-     D SRCH_CMP_VAL_DECPOS...
-     D                 C                   %decpos(SrchCmpVal)
-     D SrchCmpFloat    S              8F   inz(§ZEROS )
-     D SrchCmpRcd      S                   like(rcdBuf_t)
-     D                                     inz
-     D SrchCount       S                   like(SrchNbrs) inz(§ZEROS)
-     D SrchCount2      S                   like(SrchNbrs) inz(§ZEROS)
-     D SrchDspMsg      S                   like(SrchNbrs) inz(§ZEROS)
-     D SrchIsNum       S              1A   inz(bFalse)
-     D SrchArgIsFloat  S              1A   inz(bFalse )
-      *  Felder für Kopierfunktion
-     D CopyFile        S             10A   inz
-     D CopyLib         S             10A   inz
-     D CopyToMbr       S             10A   inz
-     D CopyMbrOpt      S             10A   inz
-     D CopyCrtF        S             10A   inz
-      *  Überlagern von ##Key132uc mit ##Key80uc
-     D ##Key           S                   like(##Key132uc) inz
-     D                 DS
-     D ##Key132uc                   116A
-     D ##Key80uc                     67A   OVERLAY(##Key132uc:1)
-     D                 DS
-     D ##Key132lc                   116A
-     D ##Key80lc                     67A   OVERLAY(##Key132lc:1)
-      *
-     D SqlWhere                     512A   inz
-     D SqlOrder                     512A   inz
-     D                 DS
-     D rcdNbr#                       10S 0
-     D rcdNbr$                       10A   OVERLAY(rcdNbr#: 1)
-      *
-     D exitMsg         S            512A   varying inz
-     D colHeading      S                   like(colHeading_t)
-      *
-      *  Feldinhalte vor der Bildschirmausgabe
-     D B4              DS                  qualified
-     D  WndNbr                             like(##WndNbr )
-     D  StrPage                            like(##StrPage)
-      *
+
+      /COPY QCOPYLE,PEXIT01
+      /COPY QCOPYLE,PEXIT04
+
+       dcl-ds objd0400 likeds(objd0400_t) inz;
+       dcl-ds rcdl0200 likeds(rcdl0200_t) inz;
+       dcl-ds fldl0100 likeds(fldl0100_t) inz;
+       dcl-ds mbrd0200 likeds(mbrd0200_t) inz;
+       dcl-ds fild0100 likeds(fild0100_t) inz;
+
+       dcl-pr f_int           zoned(20);
+         inpvalue        zoned(25:5) value;
+       end-pr;
+
+       dcl-pr f_chain00       char(1);
+         i_rrn           value  like(rcdnbr_t);
+         i_file          value  like(file_t);
+         i_lib           value  like(lib_t);
+         i_mbr           value  like(mbr_t);
+         i_rcdfmt        char(10) value;
+       end-pr;
+
+       dcl-pr f_chain04       char(1);
+         i_rrn           value  like(rcdnbr_t);
+         i_file          value  like(file_t);
+         i_lib           value  like(lib_t);
+         i_mbr           value  like(mbr_t);
+         i_rcdfmt        char(10) value;
+       end-pr;
+
+       //----------------------------------------------------*
+       //  I N F D S - D E F I N I T I O N E N               *
+       //----------------------------------------------------*
+
+       dcl-ds file#x likeds(infds_t);
+
+       dcl-ds io_buff;
+         io_bufffld      like(rcdbuf_t);
+       end-ds;
+
+       dcl-s io_nullmap      like(nullmap_t) dim(null_map_size);
+
+       dcl-ds peek#l1;
+         p1file          char(10) pos(83);
+         p1library       char(10);
+         p1member        char(10) pos(129);
+         p1rcdnbr        int(10) pos(397);
+       end-ds;
+
+       dcl-ds peek#00;
+         p0file          char(10) pos(83);
+         p0library       char(10);
+         p0member        char(10) pos(129);
+         p0rcdnbr        int(10) pos(397);
+       end-ds;
+
+       dcl-ds rtn qualified;
+         file            like(##file);
+         library         like(##library);
+         member          like(##member);
+         format          like(##format);
+         accessmode      like(accessMode);
+         sqlwhere        like(sqlwhere);
+         sqlorder        like(sqlorder);
+       end-ds;
+
+       dcl-ds yQFile inz;
+         yFile           like(file_t);
+         yLibrary        like(lib_t);
+       end-ds;
+
+       dcl-s isLicenceError  like(bool_t) inz(bTrue);
+       dcl-s yformat         like(rcdfmt_t) inz;
+       dcl-s yMsgID          char(7) inz;
+       dcl-s yMsgDta         char(512) inz;
+
+       dcl-s yMember         like(mbr_t) inz;
+
+       dcl-s yattrlen        like(int4_t) inz;
+       dcl-s yattrtyp        char(1) inz;
+       dcl-s yvalue          char(512) inz;
+
+       dcl-s ydsp80          like(set_dsp80) inz;
+       dcl-s yCopyright      like(copyrght_t) inz(§copyright);
+
+       dcl-s yfmtnbr         int(5) inz;
+
+       dcl-s yHeaderType     char(10) inz;
+       dcl-s yRcdNbr         inz(§zeros ) like(rcdnbr_t);
+       dcl-s yFunction       char(10) inz;
+       dcl-s yCommitLvl      like(commitLvl) inz('0');
+       dcl-s yIsUpdKey       inz(bfalse)  like(isUpdKey );
+       dcl-s yScreenNbr      like(int4_t) inz;
+       dcl-s yIsLower        inz(bfalse ) like(bool_t);
+
+       dcl-ds yCursorPos qualified;
+         row    like(int4_t) inz;
+         column like(int4_t) inz;
+       end-ds;
+
+       dcl-s ycvtccsid       char(1) inz(btrue  );
+       dcl-s ydata           char(512) inz;
+
+       dcl-s yretfile        char(10) inz;
+       dcl-s yretlib         char(10) inz;
+
+       dcl-s yrtncode        char(1) inz;
+
+       dcl-s yfield          like(srchfield) inz;
+       dcl-s yoperation      like(srchop   ) inz;
+       dcl-s yargument       like(srcharg  ) inz;
+       dcl-s ysign           like(srchsign ) inz;
+       dcl-s ysrchnbrs       like(srchnbrs ) inz(§zeros );
+       dcl-s ysrchtype       like(srchtype ) inz;
+       dcl-s ysrchcase       like(srchcase ) inz(bfalse );
+
+       dcl-s ybuffer         like(rcdbuf_t) inz;
+       dcl-ds *N;
+         yhexstring      like(hexbuf_t);
+         youtbuffer      like(rcdbuf_t) overlay(yhexstring:1);
+       end-ds;
+
+       dcl-s youtbuffln      like(int4_t) inz;
+       dcl-s ytgtvalue       char(10) inz;
+
+       dcl-s ykeyval         like(keybuf_t) inz;
+
+       dcl-s ypgmcmd         char(10) inz;
+       dcl-s ycmddta         like(pgmcmddt_t) inz;
+
+       dcl-s yfkeys          char(18) dim(32)       inz;
+       dcl-s ynbrofkeys      like(int4_t) inz;
+
+       dcl-s ychoice         like(choice_t) dim(32) inz;
+       dcl-s ynbrofch        like(int4_t) inz;
+
+       dcl-s ymbropt         char(10) inz;
+       dcl-s ycrtfile        char(10) inz;
+
+       dcl-s yflag           inz(*zeros)  like(int4_t);
+
+       dcl-s buffidx         like(int4_t) inz;
+
+       dcl-ds shortcmd likeds(shortcmd_t) inz;
+       dcl-s yexeccmd        like(cmdbuffer_t) inz;
+       dcl-s ynbrofent       like(int4_t) inz;
+       dcl-s ysqlwhere       like(sqlwhere_t) inz;
+       dcl-s ysqlorder       like(sqlorder_t) inz;
+       dcl-s yalwlc          char(1) inz;
+       dcl-s ycase           char(1) inz;
+       dcl-s yrcdlock        char(1) inz;
+       dcl-s ynulldft        char(1) inz;
+       dcl-s ykeepcrs        char(1) inz;
+       dcl-s yenvfile        like(file_t)  inz;
+       dcl-s yenvlib         like(lib_t)  inz;
+       dcl-s yenvmbr         like(mbr_t)  inz;
+       dcl-s yisautosave     like(bool_t)  inz(bfalse);
+       dcl-s ypintabr        like(pintabr_t)  inz dim(12);
+       dcl-s ynbrpinr        like(int4_t)  inz;
+       dcl-s ynbrpinc        like(int4_t)  inz;
+       dcl-s yiskeylower     like(bool_t)  inz;
+       dcl-s yoption         like(option_t)  inz;
+       dcl-s ytext           like(text_t);
+       dcl-s ysflopt         char(2);
+       dcl-s ystring         like(rcdbuf_t) inz;
+       dcl-s ystringlen      like(int4_t) inz;
+
+       dcl-ds *N;
+         scrnfkeys       char(18) dim(32) inz;
+         $$fkey01        char(18) pos(1);
+         $$fkey02        char(18) pos(19);
+         $$fkey03        char(18) pos(37);
+         $$fkey04        char(18) pos(55);
+         $$fkey05        char(18) pos(73);
+         $$fkey06        char(18) pos(91);
+         $$fkey07        char(18) pos(109);
+         $$fkey08        char(18) pos(127);
+         $$fkey09        char(18) pos(145);
+         $$fkey10        char(18) pos(163);
+         $$fkey11        char(18) pos(181);
+         $$fkey12        char(18) pos(199);
+         $$fkey13        char(18) pos(217);
+         $$fkey14        char(18) pos(235);
+         $$fkey15        char(18) pos(253);
+         $$fkey16        char(18) pos(271);
+         $$fkey17        char(18) pos(289);
+         $$fkey18        char(18) pos(307);
+         $$fkey19        char(18) pos(325);
+         $$fkey20        char(18) pos(343);
+         $$fkey21        char(18) pos(361);
+         $$fkey22        char(18) pos(379);
+         $$fkey23        char(18) pos(397);
+         $$fkey24        char(18) pos(415);
+         $$fkey25        char(18) pos(433);
+         $$fkey26        char(18) pos(451);
+         $$fkey27        char(18) pos(469);
+         $$fkey28        char(18) pos(487);
+         $$fkey29        char(18) pos(505);
+         $$fkey30        char(18) pos(523);
+         $$fkey31        char(18) pos(541);
+         $$fkey32        char(18) pos(559);
+       end-ds;
+
+       dcl-c §hex_char const('-');
+
+       dcl-c §zeros const(0);
+
+       dcl-s isreadsfl       char(1) inz(bfalse);
+       dcl-s ispbinit        char(1) inz(bfalse);
+       dcl-s isfirstsfl      char(1) inz(bfalse);
+       dcl-s isfilechg       char(1) inz(bfalse);
+       dcl-s istblcol        char(1) inz(bfalse);
+       dcl-s istargetok      char(1) inz(bfalse);
+       dcl-s isseqnbrok      char(1) inz(bfalse);
+       dcl-s isopen          char(1) inz(bfalse);
+       dcl-s isupdmod        like(bool_t)  inz(bfalse);
+       dcl-s isUpdKey        like(bool_t)  inz(bfalse);
+       dcl-s isvisible       char(1) inz(bfalse);
+       dcl-s iserror         char(1) inz(bfalse);
+       dcl-s isfileerror     char(1) inz(bfalse);
+       dcl-s iskeyavail      char(1) inz(bfalse);
+       dcl-s iskeychg        char(1) inz(bfalse);
+       dcl-s isSflDirty      char(1) inz(bfalse);
+       dcl-s istryed         char(1) inz(bfalse);
+       dcl-s ispinned        char(1) inz(bfalse);
+       dcl-s ispinmoder      char(1) inz(bfalse);
+       dcl-s ispinmodec      char(1) inz(bfalse);
+       dcl-s ispinok         char(1) inz(bfalse);
+       dcl-s ispinrmv        char(1) inz(bfalse);
+       dcl-s iseof           char(1) inz(bfalse);
+       dcl-s queryuser       like(sfl_cmd   ) inz(*allx'00');
+       dcl-s isfound         char(1) inz(bfalse);
+       dcl-s isCmdErr        char(1) inz(bfalse);
+       dcl-s isCancel        char(1) inz(bfalse);
+       dcl-s r#iscmderr      char(1) inz(bfalse);
+       dcl-s iscvtchar       char(1) inz(bfalse);
+       dcl-s ispintoclr      char(1) inz(btrue );
+       dcl-s isreadc         char(1) inz(bfalse);
+       dcl-s iscolexc        like(bool_t) inz(bfalse);
+       dcl-s iskeylower      char(1) inz(bfalse);
+
+       dcl-s commitLvl       char(1) inz('0');
+
+       dcl-ds auth qualified;
+         isChgLibAlw         like(bool_t) inz(bfalse);
+         isChgFileAlw        like(bool_t) inz(bfalse);
+         isChgMbrAlw         like(bool_t) inz(bfalse);
+         isUpdAlw            like(bool_t) inz(bfalse);
+         isUpdKeyAlw         like(bool_t) inz(bfalse);
+         isChgSQLWhereAlw    like(bool_t) inz(bfalse);
+         isChgSQLOrderByAlw  like(bool_t) inz(bfalse);
+         isAccessAlw         like(bool_t) inz(bfalse);
+       end-ds;
+
+       dcl-s sflpage         like(int4_t) inz;
+       dcl-s sflrec080       inz(0) like(sflpage);
+       dcl-s sflrec132       inz(0) like(sflpage);
+       dcl-s sflnbrrcd       inz(0) like(sflpage);
+       dcl-s sflmaxrowlen    like(int4_t) inz;
+       dcl-s sfldatalenfree  like(int4_t) inz;
+       dcl-s sftop           like(int4_t) inz;
+       dcl-s sfbot           like(int4_t) inz;
+       dcl-s sfl_cmd         char(10) inz;
+       dcl-s sflheadlrw      inz(0) like(sflpage);
+       dcl-s sflfirstrw      inz(0) like(sflpage);
+       dcl-s sfllastrw       inz(0) like(sflpage);
+       dcl-s sflleftofs      like(int4_t) inz;
+       dcl-s sflmode         char(10) inz;
+       dcl-s sflpinrnge      like(int4_t) inz;
+
+       dcl-c §copyright const('1997-2023, -
+        Thomas Raddatz - PEEK V3.5.8');
+       dcl-c §release const('Stand: 16.09.2023');
+       dcl-c §version const('V03R05M08');
+
+       dcl-s l#file          like(##file)    inz;
+       dcl-s l#library       like(##library) inz;
+       dcl-s l#member        like(##member)  inz;
+       dcl-s l#format        like(##format)  inz;
+       dcl-s l#maxseq        like(f_seq   )  inz(§zeros );
+       dcl-s l#minseq        like(f_seq   )  inz(§zeros );
+       dcl-s l#wndnbr        like(##wndnbr)  inz(§zeros );
+
+       dcl-s r#size          like(int4_t) inz;
+
+       dcl-s UPDPGM_NAME     like(pgmcalln_t) inz;
+
+       dcl-s peek01_name     like(pgmcalln_t) inz;
+       dcl-s peek03_name     like(pgmcalln_t) inz;
+       dcl-s peek04_name     like(pgmcalln_t) inz;
+       dcl-s peek06_name     like(pgmcalln_t) inz;
+       dcl-s peek07_name     like(pgmcalln_t) inz;
+       dcl-s peek08_name     like(pgmcalln_t) inz;
+       dcl-s peek09_name     like(pgmcalln_t) inz;
+       dcl-s peek10_name     like(pgmcalln_t) inz;
+       dcl-s peek12_name     like(pgmcalln_t) inz;
+       dcl-s peek13_name     like(pgmcalln_t) inz;
+       dcl-s peek14_name     like(pgmcalln_t) inz;
+       dcl-s peek17_name     like(pgmcalln_t) inz;
+       dcl-s peek18_name     like(pgmcalln_t) inz;
+       dcl-s peek19_name     like(pgmcalln_t) inz;
+       dcl-s peek20_name     like(pgmcalln_t) inz;
+       dcl-s peek21_name     like(pgmcalln_t) inz;
+       dcl-s peek23_name     like(pgmcalln_t) inz;
+       dcl-s peek24_name     like(pgmcalln_t) inz;
+       dcl-s peek26_name     like(pgmcalln_t) inz;
+       dcl-s peek27_name     like(pgmcalln_t) inz;
+       dcl-s peek30_name     like(pgmcalln_t) inz;
+       dcl-s peek32_name     like(pgmcalln_t) inz;
+       dcl-s peek33_name     like(pgmcalln_t) inz;
+       dcl-s peek34_name     like(pgmcalln_t) inz;
+       dcl-s peek37_name     like(pgmcalln_t) inz;
+       dcl-s peek38_name     like(pgmcalln_t) inz;
+       dcl-s peek40_name     like(pgmcalln_t) inz;
+       dcl-s peek41_name     like(pgmcalln_t) inz;
+       dcl-s peek42_name     like(pgmcalln_t) inz;
+       dcl-s peek47_name     like(pgmcalln_t) inz;
+       dcl-s peek48_name     like(pgmcalln_t) inz;
+       dcl-s peek49_name     like(pgmcalln_t) inz;
+       dcl-s peek50_name     like(pgmcalln_t) inz;
+       dcl-s peek52_name     like(pgmcalln_t) inz;
+       dcl-s peek54_name     like(pgmcalln_t) inz;
+       dcl-s peek55_name     like(pgmcalln_t) inz;
+       dcl-s peek56_name     like(pgmcalln_t) inz;
+       dcl-s peek57_name     like(pgmcalln_t) inz;
+       dcl-s peek59_name     like(pgmcalln_t) inz;
+       dcl-s peek65_name     like(pgmcalln_t) inz;
+       dcl-s peek68_name     like(pgmcalln_t) inz;
+       dcl-s peek69_name     like(pgmcalln_t) inz;
+       dcl-s exit01_name     like(pgmcalln_t) inz;
+       dcl-s exit04_name     like(pgmcalln_t) inz;
+
+       dcl-s peekpgm         like(pgm_t) inz;
+       dcl-s peekdspf        like(file_t) inz;
+
+       dcl-ds sflrow qualified;
+         chars           char(1) dim(256) inz;
+       end-ds;
+
+       dcl-c sfl_row_size %elem(sflrow.chars);
+
+       dcl-s sflrowdatastr   like(int4_t);
+       dcl-s sflrowdataend   like(int4_t);
+       dcl-s sflrowdatalen   like(int4_t);
+
+       dcl-s colrofs         like(int4_t);
+       dcl-s col_field       char(10) dim(60);
+       dcl-s col_scnstr      like(int4_t) dim(60);
+       dcl-s col_scnend      like(int4_t) dim(60);
+       dcl-s col_error       like(bool_t) dim(60) inz(bfalse);
+       dcl-s cp              like(int4_t);
+       dcl-s fldstrpos       like(int4_t);
+
+       dcl-s headlen         like(int4_t);
+       dcl-s fieldlen        like(int4_t);
+       dcl-s maxcollen       like(int4_t);
+       dcl-s columnlen       like(int4_t);
+
+       dcl-s pincol_x        like(int4_t);
+       dcl-c max_pin_col %elem(pintabcol);
+       dcl-s pintabcol       like(fieldnme_t) dim(12);
+       dcl-s nbrpincol       like(int4_t);
+
+       dcl-s pinrcd_x        like(int4_t);
+       dcl-c max_pin_rcd %elem(pintabrcd);
+       dcl-s pintabrcd       like(pintabr_t) dim(12);
+       dcl-s nbrpinrcd       like(int4_t);
+
+       dcl-ds pintabrcde likeds(pintabr_t);
+
+       //  Arbeitsfelder
+       dcl-s x               like(int4_t);
+       dcl-s y               like(int4_t);
+       dcl-s z               like(int4_t);
+       dcl-s a1              char(1) inz;
+
+       //  Arbeitsfeld für Sortierfolge: Satzfolge/Schlüsselfolge
+       //  .. aktuelle Sortierung
+       dcl-s accessMode      char(1) inz(rrn_seq);
+       //  .. neue Sortierung für ChangeFile
+       dcl-s newaccmode      char(1) inz(rrn_seq);
+       //  .. Sortierung vor SQl-Mode
+       dcl-s oldaccmode      char(1) inz(rrn_seq);
+       //  Arbeitsfeld für Befehlsverarbeitung, Verhinderung von Rekursionen
+       dcl-s r#pgmcmd        like(ypgmcmd)  inz;
+       //  Arbeitsfeld für Eingabe Aufsetzkey
+       dcl-s r#rcdnbr        like(##rcdnbr)   inz(§zeros );
+       dcl-s r#keyval        like(##key   )   inz;
+       //  Arbeitsfeld für PIN-Funktion
+       dcl-s pin#field       char(10) inz;
+       //  Datensatz-Nr für SETLL und SETGG zum füllen der Subfile
+       dcl-s wrk#readdn      like(sflpage)    inz(§zeros);
+       dcl-s wrk#rcdnbr      like(rcdnbr_t)   inz(§zeros);
+       dcl-ds *N;
+         wrk#keyval      like(keybuf_t) inz;
+       end-ds;
+       //  ...
+       dcl-s wrk#field       inz            like(f_field);
+       dcl-s wrk#seqnbr      inz(§zeros )   like(f_seq);
+       dcl-s wrk#recno       inz(§zeros )   like(sflrec132);
+       dcl-s wrk#sfpau       inz            like(sfpau);
+       //  Umschalten der Sortierung
+       dcl-s last#rcdnr      like(rcdnbr_t)   inz(§zeros);
+       //  Farbattribute einsetzen
+       dcl-s wrk#ofs         like(int4_t) inz;
+       //  Felder mit mehr als 512 Zeichen im Datensatz
+       dcl-s isfld512        char(1) inz(bfalse);
+       //  Felder für Suchfunktion
+       dcl-s srchmode        char(10) inz('*NEW');
+       dcl-s srchfndrcd      like(rcdnbr_t)  inz(§zeros );
+       dcl-s srchfield       char(10) inz;
+       dcl-s srchop          char(10) inz;
+       dcl-s srcharg         char(63) inz;
+       dcl-s srchsign        char(1) inz;
+       dcl-s srchargfloat    float(8) inz;
+       dcl-s srchargval      zoned(63) inz;
+       dcl-c csrcharg_digits %len(srchargval);
+
+       dcl-c csrcharg_decpos %decpos(srchargval);
+
+       dcl-s srchliketp      like(int4_t) inz;
+       dcl-s srchlikeln      like(int4_t) inz;
+       dcl-s srchnbrs        packed(10) inz(§zeros );
+       dcl-s srchtype        char(10) inz;
+       dcl-s srchcase        char(1) inz(bfalse );
+       dcl-s srchcmpstr      like(srcharg)  inz;
+       dcl-s srchcmpval      like(srchargval) inz(§zeros );
+       dcl-c srch_cmp_val_length %len(srchcmpval);
+
+       dcl-c srch_cmp_val_decpos %decpos(srchcmpval);
+
+       dcl-s srchcmpfloat    float(8) inz(§zeros );
+       dcl-s srchcmprcd      like(rcdbuf_t) inz;
+       dcl-s srchcount       like(srchnbrs) inz(§zeros);
+       dcl-s srchcount2      like(srchnbrs) inz(§zeros);
+       dcl-s srchdspmsg      like(srchnbrs) inz(§zeros);
+       dcl-s srchisnum       char(1) inz(bfalse);
+       dcl-s srchargisfloat  char(1) inz(bfalse );
+       //  Felder für Kopierfunktion
+       dcl-s copyfile        char(10) inz;
+       dcl-s copylib         char(10) inz;
+       dcl-s copytombr       char(10) inz;
+       dcl-s copymbropt      char(10) inz;
+       dcl-s copycrtf        char(10) inz;
+       //  Überlagern von ##Key132uc mit ##Key80uc
+       dcl-s ##key           like(##key132uc) inz;
+       dcl-ds *N;
+         ##key132uc      char(116);
+         ##key80uc       char(67) overlay(##key132uc:1);
+       end-ds;
+       dcl-ds *N;
+         ##key132lc      char(116);
+         ##key80lc       char(67) overlay(##key132lc:1);
+
+         sqlwhere        char(512) inz;
+         sqlorder        char(512) inz;
+       end-ds;
+       dcl-ds *N;
+         rcdnbr#         zoned(10);
+         rcdnbr$         char(10) overlay(rcdnbr#: 1);
+       end-ds;
+
+       dcl-s exitmsg         varchar(512) inz;
+       dcl-s colheading      like(colheading_t);
+
+       //  Feldinhalte vor der Bildschirmausgabe
+       dcl-ds b4 qualified;
+         wndnbr          like(##wndnbr );
+         strpage         like(##strpage);
+       end-ds;
+
       /COPY QCOPYLE,CEECNDHDLR
-      *
-     D isInzSr         S                   like(bool_t) inz(bFalse)
 
-      ********************************************************************
-      *                 S T E U E R  -  R O U T I N E                    *
-      ********************************************************************
-      *
-     D PEEK05          PI
-     D  io_qFile                                 likeds(qObj_t)
-     D  i_member                           const like(mbr_t)
-     D  i_access                           const like(accessMode_t)
-     D  i_prodlib                          const like(lib_t)
-     D  i_chgLib                           const like(bool_t)
-     D  i_chgFile                          const like(bool_t)
-     D  i_chgMbr                           const like(bool_t)
-     D  i_updModKey                        const like(bool_t)
-     D  i_chgSqlW                          const like(bool_t)
-     D  i_chgSqlO                          const like(bool_t)
-     D  i_qEnvFile                         const likeds(qObj_t)
-     D  i_envMbr                           const like(mbr_t)
-     D  i_envSave                          const like(bool_t)
-     D  i_envLayout                        const like(bool_t)
-     D  i_sqlWhere                         const like(sqlWhere_t)
-     D  i_sqlOrder                         const like(sqlOrder_t)
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEKPGM
-     C     P_PeekPgm     PLIST
-     C                   PARM                    YDsp80
-     C                   PARM                    YHeaderTyp
-     C                   PARM                    YCopyRight
-     C                   PARM                    YRcdNbr
-     C                   PARM                    YFile
-     C                   PARM                    YLibrary
-     C                   PARM                    YMember
-     C                   PARM                    YFunction
-     C                   PARM                    YCommitLVL
-     C                   PARM                    YIsUpdKey
-     C                   PARM                    YScreenNbr
-     C                   PARM                    YIsLower
-     C                   PARM                    YCsrRow
-     C                   PARM                    YCsrCol
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für EXIT01
-     C     P#Exit01      PLIST
-     C                   PARM                    YQFile
-     C                   PARM                    YMember
-     C                   PARM                    YAccess
-     C                   PARM                    YchgLib
-     C                   PARM                    YchgFile
-     C                   PARM                    YchgMbr
-     C                   PARM                    YupdMod
-     C                   PARM                    YupdKey
-     C                   PARM                    YchgSqlW
-     C                   PARM                    YchgSqlO
-     C                   PARM                    YaccAut
-     C                   PARM                    YMsgID
-     C                   PARM                    YMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für EXIT04
-     C     P#Exit04      Plist
-     C                   Parm                    yFile
-     C                   Parm                    yLibrary
-     C                   Parm                    yMember
-     C                   Parm                    yEvent
-     C                   Parm                    yUser
-     C                   Parm                    yTimestamp
-     C                   Parm                    yRcdNbr
-     C                   Parm                    ySize
-     C                   Parm                    yBImage
-     C                   Parm                    yAImage
-      *
-      *----------------------------------------------------*
-      *  Schlüsselliste für PEEKFLDL1
-     C     F1KEY_L1      KLIST
-     C                   KFLD                    F_SEQ
-      *
-      *----------------------------------------------------*
-      *  Schlüsselliste für PEEKFLD
-     C     F_KEY         KLIST
-     C                   KFLD                    F_Field
-      *
-      *---------------------------------------------------*
-      *
-      *  Register error handler
-     C                   callp     CEEHDLR(%paddr('errorHandler')
-     C                                     : *null: *omit)
-      *
-     C                   EXSR      InzSr
-      *
-     C                   EXSR      FIRST
-      *
-      *---------------------------------------------------*
-      *  Schleife für Programmbearbeitung
-      *
-     C                   DO        *HIVAL
-      *
-      *  Ermitteln der Feldnummer des ersten
-      *  sichtbaren Feldes
-     C                   EXSR      GetFrstFld
-      *
-      *  Öffnen/Schützen "Feldseite"
-     C                   If        SET_FLDPGE = '1'
-     C                   EVAL      *IN72 = '0'
-     C                   Else
-     C                   EVAL      *IN72 = '1'
-     C                   Endif
-      *
-      *  Öffnen/Schützen "Aufsetzschlüssel/Satznummer"
-     C                   If        AccessMode = SQL_SEQ
-     C                   EVAL      *IN73 = '1'
-     C                   Else
-     C                   EVAL      *IN73 = '0'
-     C                   Endif
-      *
-      *  Öffnen/Schützen Dateiauswahlfelder ...
-      *  ... ##Library
-     C                   If        auth.chgLib = bTrue
-     C                   Eval      *IN74 = *OFF
-     C                   Else
-     C                   Eval      *IN74 = *ON
-     C                   Endif
-      *  ... ##File
-     C                   If        auth.chgFile = bTrue
-     C                   Eval      *IN75 = *OFF
-     C                   Else
-     C                   Eval      *IN75 = *ON
-     C                   Endif
-      *  ... ##Member
-     C                   If        auth.chgMbr = bTrue
-     C                   Eval      *IN77 = *OFF
-     C                   Else
-     C                   Eval      *IN77 = *ON
-     C                   Endif
-      *
-      *  Eingabe der Schlüselfelder in Gross- oder Kleinbuchstaben
-     C                   If        isKeyLower = bFalse
-     C                   Eval      *IN78 = *OFF
-     C                   Eval      ##Key132uc = ##Key
-     C                   Else
-     C                   Eval      *IN78 = *ON
-     C                   Eval      ##Key132lc = ##Key
-     C                   Endif
-      *
-      *  Prüfen Positionierung der Subfile
-     C     SFSANR        IFLE      §ZEROS
-     C                   EVAL      SFSANR = NbrPinRcd + 1
-     C                   Endif
-     C     SFSANR        IFGT      SflNbrRcd
-     C                   EVAL      SFSANR = SflNbrRcd
-     C                   Endif
-      *
-      *  Für Prüfung: Eingabe neuer Aufsetzkey
-     C                   EVAL      R#RcdNbr = ##RcdNbr
-     C                   EVAL      R#KeyVal = ##Key
-      *
-      *  Nachrichten anzeigen
-     C                   EVAL      *IN89 = '0'
-     C                   WRITE     MSGCTL
-      *
-      *  "Keine Sätze ..."
-     C     *IN80         IFEQ      '0'
-     C                   WRITE     PBLEER
-     C                   Endif
-      *
-      *  Anzeigen der Einzelauswahlen
-     C     SFTop         IFGT      32
-     C     SFTop         ORGT      YNbrOfCh
-     C                   EVAL      SFTop = 1
-     C                   Endif
-     C                   EVAL      $$CHOICE = YChoice(SFTop)
-      *
-      *  Anzeigen der Befehlstasten
-     C                   SELECT
-     C     SFBOT         WHENEQ    2
-     C     YNbrOfKeys    ANDGT     8
-     C                   IF        (*in88 = bFalse)
-     C                   WRITE     PBBOT132#2
-     C                   Else
-     C                   WRITE     PBBOT080#2
-     C                   Endif
-     C     SFBOT         WHENEQ    3
-     C     YNbrOfKeys    ANDGT     16
-     C                   IF        (*in88 = bFalse)
-     C                   WRITE     PBBOT132#3
-     C                   Else
-     C                   WRITE     PBBOT080#3
-     C                   Endif
-     C     SFBOT         WHENEQ    4
-     C     YNbrOfKeys    ANDGT     24
-     C                   IF        (*in88 = bFalse)
-     C                   WRITE     PBBOT132#4
-     C                   Else
-     C                   WRITE     PBBOT080#4
-     C                   Endif
-     C                   OTHER
-     C                   IF        (*in88 = bFalse)
-     C                   WRITE     PBBOT132#1
-     C                   Else
-     C                   WRITE     PBBOT080#1
-     C                   Endif
-     C                   EVAL      SFBOT = 1
-     C                   Endsl
-      *
-      *  Merken Startseite innerhalb des Feldes
-     C                   EVAL      B4.WndNbr = ##WndNbr
-     C                   EVAL      B4.StrPage = ##StrPage
-      *
-      *  Anzeige der Subfile
-     C                   IF        (*in88 = bFalse)
-     C                   EXFMT     PBCTL132
-     C                   Else
-     C                   EXFMT     PBCTL080
-     C                   Endif
-      *
-      *  Übernehmen Schlüselfelder
-     C                   If        isKeyLower = bFalse
-     C                   Eval      ##Key = ##Key132uc
-     C                   Else
-     C                   Eval      ##Key = ##Key132lc
-     C                   Endif
-      *
-      *  Berechnen Zeile/Spalte
-     C                   Eval      cursorPosition.row =
-     C                               workstn.csrPos / 256
-     C                   Eval      cursorPosition.column =
-     C                               %rem(workstn.csrPos: 256)
-      *
-      *  Löschen der Cursorposition
-     C                   EVAL      CsrRow = §ZEROS
-     C                   EVAL      CsrCol = §ZEROS
-      *
-      *  Merker für aktualisieren der Subfile
-     C                   EVAL      IsSflDirty = bFalse
-      *
-      *  Merker für abfragen der Zieldatei
-     C                   EVAL      IsTargetOK = bFalse
-      *
-      *  Nachrichten löschen
-     C                   Callp     p_rmvPgmMg(§§pgmName)
-      *
-      *  Cursor-Pos. löschen
-     C                   EVAL      *IN87 = '0'
-      *
-      *  Aktuelle Satz-Nr.
-     C                   EVAL      SFSANR = SFLCSR
-      *
-      *  Suchmodus
-     C     YPgmCmd       IFNE      '*SEARCH'
-     C                   EVAL      SrchMode = '*NEW'
-     C                   EVAL      SrchFndRcd = §ZEROS
-     C                   Endif
-      *
-      *  Mappen der gedrückten Taste
-      *  in Programmbefehl
-     C                   CALLP     PEEK21(workstn.aid: §§PgmName
-     C                                    : YPgmCmd: YCmdDta: YMsgID: YMsgDta)
-     C     YMsgID        IFNE      *BLANKS
-     C                   Callp     p_sndPgmMg(YMsgID: YMsgDta: §§pgmName)
-     C                   EVAL      YMsgID = ''
-     C                   EVAL      YMsgDta = ''
-     C                   ELSE
-      *  Abfragen der Programmbefehle
-     C                   EXSR      DoScrnCmd
-     C     IsCmdErr      IFEQ      bTrue
-     C                   Callp     p_sndPgmMg(YMsgID: YMsgDta: §§pgmName)
-     C                   EVAL      YMsgID = ''
-     C                   EVAL      YMsgDta = ''
-     C                   Endif
-     C                   Endif
-      *
-      *  ... Subfile aktualisieren
-     C     IsSflDirty    IFEQ      bTrue
-     C                   EXSR      PBRefresh
-     C                   Endif
-      *
-      *  ... Offene Datei aktualisieren
-     C                   EXSR      GetOpnFile
-      *
-     C                   Enddo
-      *
-      *  Ende der Hauptschleife
-      *---------------------------------------------------*
-      *
-      *  Programm verlassen
-     C     ENDE          TAG
-      *
-     C                   EVAL      *INLR = '1'
-      *
-      *============================================================*
-      *    DoScrnCmd     Ausführen Bildschirmbefehl                *
-      *============================================================*
-      *
-     C     DoScrnCmd     BEGSR
-      *
-      *  Sicherstellen, dass die Startseite innerhalb eines Feldes
-      *  immer gefüllt ist:
-      *
-      *  Verwenden der alten Werte bei F5
-     C     YPgmCmd       IFEQ      '*REFRESH'
-     C                   EVAL      ##WndNbr = B4.WndNbr
-     C                   EVAL      ##StrPage = B4.StrPage
-     C                   ELSE
-      *
-      *  Positionieren auf Feldanfang bei Wechsel des Startfeldes
-     C     ##WndNbr      IFNE      B4.WndNbr
-     C     ##StrPage     ANDEQ     B4.StrPage
-     C                   EVAL      ##StrPage = 1
-     C                   ENDIF
-      *
-     C                   ENDIF
-      *
-      *  Verwenden der alten Startposition von vor der Bildschirmausgabe
-     C     ##StrPage     IFEQ      *ZEROS
-     C                   EVAL      ##StrPage = B4.StrPage
-     C                   ENDIF
-      *
-      *  Sicherstellen, dass das Feld gefüllt ist
-     C     ##StrPage     IFEQ      *ZEROS
-     C                   EVAL      ##StrPage = 1
-     C                   ENDIF
-      *
-      *  Verarbeiten Bildschirmereignis
-     C                   EVAL      R#PgmCmd = YPgmCmd
-      *
+       dcl-s isinzsr         like(bool_t) inz(bfalse);
+
+       //*******************************************************************
+       //                 S T E U E R  -  R O U T I N E                    *
+       //*******************************************************************
+
+       dcl-pi peek05;
+         io_qfile        likeds(qobj_t);
+       i_member        const like(mbr_t);
+       i_access        const like(accessmode_t);
+       i_prodlib       const like(lib_t);
+       i_chglib        const like(bool_t);
+       i_chgfile       const like(bool_t);
+       i_chgmbr        const like(bool_t);
+       i_updmodkey     const like(bool_t);
+       i_chgsqlw       const like(bool_t);
+       i_chgsqlo       const like(bool_t);
+       i_qenvfile      const likeds(qobj_t);
+       i_envmbr        const like(mbr_t);
+       i_envsave       const like(bool_t);
+       i_envlayout     const like(bool_t);
+       i_sqlwhere      const like(sqlwhere_t);
+       i_sqlorder      const like(sqlorder_t);
+       end-pi;
+       //Prototype for 'QUSCMDLN'
+       dcl-pr quscmdln extpgm('QUSCMDLN');
+       end-pr;
+
+       dcl-s do_x10          packed(7);
+       dcl-s do_x11          packed(7);
+       dcl-s do_x12          packed(7);
+       dcl-s do_x13          packed(7);
+       dcl-s do_x14          packed(7);
+       dcl-s do_x2           packed(7);
+       dcl-s do_x3           packed(7);
+       dcl-s do_x4           packed(7);
+       dcl-s do_x5           packed(7);
+       dcl-s do_x6           packed(7);
+       dcl-s do_x7           packed(7);
+       dcl-s do_x8           packed(7);
+       dcl-s do_x9           packed(7);
+
+
+       //----------------------------------------------------*
+       //  Schlüsselliste für PEEKFLDL1
+     C     f1key_l1      klist
+     C                   kfld                    f_seq
+
+       //----------------------------------------------------*
+       //  Schlüsselliste für PEEKFLD
+     C     f_key         klist
+     C                   kfld                    f_field
+
+       //---------------------------------------------------*
+
+       //  Register error handler
+       ceehdlr(%paddr('errorHandler')
+              : *null: *omit);
+
+       exsr inzsr;
+
+       exsr first;
+
+       //---------------------------------------------------*
+       //  Schleife für Programmbearbeitung
+
+       dow ('1');
+
+          //  Ermitteln der Feldnummer des ersten
+          //  sichtbaren Feldes
+          exsr getfrstfld;
+
+          //  Öffnen/Schützen "Feldseite"
+          if set_fldpge = '1';
+             *in72 = '0';
+          else;
+             *in72 = '1';
+          endif;
+
+          //  Öffnen/Schützen "Aufsetzschlüssel/Satznummer"
+          if accessMode = sql_seq;
+             *in73 = '1';
+          else;
+             *in73 = '0';
+          endif;
+
+          //  Öffnen/Schützen Dateiauswahlfelder ...
+          //  ... ##Library
+          if auth.isChgLibAlw = btrue;
+             *in74 = *off;
+          else;
+             *in74 = *on;
+          endif;
+          //  ... ##File
+          if auth.isChgFileAlw = btrue;
+             *in75 = *off;
+          else;
+             *in75 = *on;
+          endif;
+          //  ... ##Member
+          if auth.isChgMbrAlw = btrue;
+             *in77 = *off;
+          else;
+             *in77 = *on;
+          endif;
+
+          //  Eingabe der Schlüselfelder in Gross- oder Kleinbuchstaben
+          if iskeylower = bfalse;
+             *in78 = *off;
+             ##key132uc = ##key;
+          else;
+             *in78 = *on;
+             ##key132lc = ##key;
+          endif;
+
+          //  Prüfen Positionierung der Subfile
+          if sfsanr <= §zeros;
+             sfsanr = nbrpinrcd + 1;
+          endif;
+          if sfsanr > sflnbrrcd;
+             sfsanr = sflnbrrcd;
+          endif;
+
+          //  Für Prüfung: Eingabe neuer Aufsetzkey
+          r#rcdnbr = ##rcdnbr;
+          r#keyval = ##key;
+
+          //  Nachrichten anzeigen
+          *in89 = '0';
+          write msgctl;
+
+          //  "Keine Sätze ..."
+          if *in80 = *off;
+             write pbleer;
+          endif;
+
+          //  Anzeigen der Einzelauswahlen
+          if sftop > 32
+             or sftop > ynbrofch;
+             sftop = 1;
+          endif;
+          $$choice = ychoice(sftop);
+
+          //  Anzeigen der Befehlstasten
+          select;
+          when sfbot = 2
+             and ynbrofkeys > 8;
+             if (*in88 = bfalse);
+                write pbbot132#2;
+             else;
+                write pbbot080#2;
+             endif;
+          when sfbot = 3
+             and ynbrofkeys > 16;
+             if (*in88 = bfalse);
+                write pbbot132#3;
+             else;
+                write pbbot080#3;
+             endif;
+          when sfbot = 4
+             and ynbrofkeys > 24;
+             if (*in88 = bfalse);
+                write pbbot132#4;
+             else;
+                write pbbot080#4;
+             endif;
+          other;
+             if (*in88 = bfalse);
+                write pbbot132#1;
+             else;
+                write pbbot080#1;
+             endif;
+             sfbot = 1;
+          endsl;
+
+          //  Merken Startseite innerhalb des Feldes
+          b4.wndnbr = ##wndnbr;
+          b4.strpage = ##strpage;
+
+          //  Anzeige der Subfile
+          if (*in88 = bfalse);
+             exfmt pbctl132;
+          else;
+             exfmt pbctl080;
+          endif;
+
+          //  Übernehmen Schlüselfelder
+          if iskeylower = bfalse;
+             ##key = ##key132uc;
+          else;
+             ##key = ##key132lc;
+          endif;
+
+          //  Berechnen Zeile/Spalte
+          cursorposition.row =
+           workstn.csrpos / 256;
+          cursorposition.column =
+           %rem(workstn.csrpos: 256);
+
+          //  Löschen der Cursorposition
+          csrrow = §zeros;
+          csrcol = §zeros;
+
+          //  Merker für aktualisieren der Subfile
+          isSflDirty = bfalse;
+
+          //  Merker für abfragen der Zieldatei
+          istargetok = bfalse;
+
+          //  Nachrichten löschen
+          p_rmvpgmmg(§§pgmname);
+
+          //  Cursor-Pos. löschen
+          *in87 = '0';
+
+          //  Aktuelle Satz-Nr.
+          sfsanr = sflcsr;
+
+          //  Suchmodus
+          if ypgmcmd <> '*SEARCH';
+             srchmode = '*NEW';
+             srchfndrcd = §zeros;
+          endif;
+
+          //  Mappen der gedrückten Taste
+          //  in Programmbefehl
+          peek21(workstn.aid: §§pgmname
+                : ypgmcmd: ycmddta: yMsgID: yMsgDta);
+          if yMsgID <> *blanks;
+             p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+             yMsgID = '';
+             yMsgDta = '';
+          else;
+             //  Abfragen der Programmbefehle
+             exsr doscrncmd;
+             if (YPgmCmd = '*EXIT' or YPgmCmd = '*CANCEL');
+                leave;
+             endif;
+             if isCmdErr = btrue;
+                p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                yMsgID = '';
+                yMsgDta = '';
+             endif;
+          endif;
+
+          //  ... Subfile aktualisieren
+          if isSflDirty = btrue;
+             exsr pbrefresh;
+          endif;
+
+          //  ... Offene Datei aktualisieren
+          exsr getopnfile;
+
+       enddo;
+
+       *inlr = '1';
+
+       //============================================================*
+       //    DoScrnCmd     Ausführen Bildschirmbefehl                *
+       //============================================================*
+
+       begsr doscrncmd;
+
+          //  Sicherstellen, dass die Startseite innerhalb eines Feldes
+          //  immer gefüllt ist:
+
+          //  Verwenden der alten Werte bei F5
+          if ypgmcmd = '*REFRESH';
+             ##wndnbr = b4.wndnbr;
+             ##strpage = b4.strpage;
+          else;
+
+             //  Positionieren auf Feldanfang bei Wechsel des Startfeldes
+             if ##wndnbr <> b4.wndnbr
+                and ##strpage = b4.strpage;
+                ##strpage = 1;
+             endif;
+
+          endif;
+
+          //  Verwenden der alten Startposition von vor der Bildschirmausgabe
+          if ##strpage = *zeros;
+             ##strpage = b4.strpage;
+          endif;
+
+          //  Sicherstellen, dass das Feld gefüllt ist
+          if ##strpage = *zeros;
+             ##strpage = 1;
+          endif;
+
+          //  Verarbeiten Bildschirmereignis
+          r#pgmcmd = ypgmcmd;
+
       /COPY QCOPYLE,DOPGMCMD
-      *
-     C                   EVAL      R#PgmCmd = *BLANKS
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    DoSflCmd      Ausführen Subfilebefehl                   *
-      *============================================================*
-      *
-     C     DoSflCmd      BEGSR
-      *
-     C     YPgmCmd       IFEQ      R#PgmCmd
-     C                   EVAL      IsCmdErr = bTrue
-     C                   CLEAR                   USR8144
-     C                   EVAL      USR81441 = YPgmCmd
-     C                   Callp     p_sndPgmMg('USR8144': USR8144: §§pgmName)
-     C                   ELSE
+
+          r#pgmcmd = *blanks;
+
+       endsr;
+
+       //============================================================*
+       //    DoSflCmd      Ausführen Subfilebefehl                   *
+       //============================================================*
+
+       begsr dosflcmd;
+
+          if ypgmcmd = r#pgmcmd;
+             isCmdErr = btrue;
+             clear usr8144;
+             usr81441 = ypgmcmd;
+             p_sndpgmmg('USR8144': usr8144: §§pgmname);
+          else;
       /COPY QCOPYLE,DOPGMCMD
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_Enter       "Datenfreigabetaste"                      *
-      *============================================================*
-      *
-     C     C_Enter       BEGSR
-      *
-      *  Löschen der Cursor-Position ...
-     C                   EXSR      DltCsrPos
-      *
-      *  Datei hat gewechselt ...
-     C                   IF        ((##File    <> L#File) and
-     C                              (not f_endsWith('*': %trim(##File))) and
-     C                              (%trim(##File  ) <> SET_PRMT)) or
-     C                             (##Library  <> L#Library      ) or
-     C                             ((##Member  <> L#Member) and
-     C                              (%trim(##Member) <> SET_PRMT)) or
-     C                             ((##Format  <> L#Format) and
-     C                              (%trim(##Format) <> SET_PRMT))
-     C                   EVAL      *IN93 = '1'
-     C                   ELSE
-      *
-      *  Abfragen Prompt?
-      *  ... ##File
-     C                   IF        %trim(##File) = SET_PRMT or
-     C                             f_endsWith('*': %trim(##File))
-     C                   EXSR      C_Prompt
-     C                   IF        (*in93 = '0')
-     C                   GOTO      E_Enter
-     C                   Endif
-     C                   Endif
-      *  ... ##Member
-     C                   IF        %trim(##Member) = SET_PRMT
-     C                   EXSR      C_Prompt
-     C                   IF        (*in93 = '0')
-     C                   GOTO      E_Enter
-     C                   Endif
-     C                   Endif
-      *  ... ##Format
-     C                   IF        %trim(##Format) = SET_PRMT
-     C                   EXSR      C_Prompt
-     C                   IF        (*in93 = '0')
-     C                   GOTO      E_Enter
-     C                   Endif
-     C                   Endif
-      *  ... ##Field
-     C                   IF        %trim(##Field ) = SET_PRMT
-     C                   EXSR      C_Prompt
-     C                   IF        (*in93 = '0')
-     C                   GOTO      E_Enter
-     C                   Endif
-     C                   Endif
-     C                   Endif
-      *
-     C     *IN93         IFEQ      '0'
-      *
-      *  Keine Eigaben ...
-      *  ... also abfragen der Subfileauswahlen
-     C     IsREADSFL     IFEQ      bTrue
-      *       verhindern einer Rekursion
-     C                   ELSE
-     C                   EXSR      C_ReadSfl
-     C                   Endif
-      *
-     C                   ELSE
-      *
-      *  Wechsel der Datei ...
-      ***                If        AccessMode = SQL_SEQ
-     C                   Eval      NewAccMode = i_access
-      ***                Else
-      ***                Eval      NewAccMode = AccessMode
-      ***                Endif
-      *
-     C                   EXSR      ChangeFile
-      *
-      *  Prüfen Seq-Bereich (##WndNbr) ...
-     C                   EXSR      ChkSeqRnge
-      *
-      *  Wechsel des Fenster (##Field) ...
-     C                   EXSR      ChangeWnd
-      *
-      *  Wechsel des Aufsetzkeys ...
-     C                   EXSR      ChangeKey
-      *
-      *  Füllen der Subfile ...
-     C     IsFileChg     IFEQ      bTrue
-     C                   EXSR      DltCsrPos
-     C                   EXSR      C_Top
-     C                   ELSE
-     C     IsKeyChg      IFEQ      bFalse
-     C                   EXSR      PBRefresh
-     C                   ELSE
-     C                   EXSR      DltCsrPos
-     C                   EXSR      KeyHasChg
-     C                   Endif
-     C                   Endif
-      *
-     C                   Endif
-      *
-     C     E_Enter       ENDSR
-      *
-      *============================================================*
-      *    C_ReadSfl     Lesen & Verarbeiten der Subfile-Auswahlen *
-      *============================================================*
-      *
-     C     C_ReadSfl     BEGSR
-      *
-      *  Merker für: Subfile gelöscht zurück setzen
-      *              abbrechen READC, wenn Subfileinhalt
-      *              gelöscht worden ist über PBINIT
-     C                   EVAL      IsPBINIT = bFalse
-      *  Merker für: Programmablauf innerhalb der READC-Schleife
-      *              verhindern einer Rekursion über
-      *              C_ENTER, C_PAGEUP, C_PAGEDOWN
-     C                   EVAL      IsREADSFL = bTrue
-      *
-     C                   EVAL      R#IsCmdErr = IsCmdErr
-      *
-      *  Mindestens 1 Eintrag verarbeitet ...
-     C                   EVAL      IsReadC = bFalse
-      *
-     C     *IN80         IFEQ      '0'
-      *           Keine Einträge vorhanden
-     C                   ELSE
-      *
-     C     QueryUser     DOUEQ     *ALLX'00'
-      *
-     C                   EVAL      QueryUser = *ALLX'00'
-      *
-      *  Lesen, solange bis keine zu verarbeitenden
-      *  Sätze mehr da sind, oder bis durch einen
-      *  Kurzbefehl (SFPAU) die Subfile neu auf-
-      *  gebaut worden ist.
-     C     IsPBINIT      DOWEQ     bFalse
-      *
-     C                   IF        (*in88 = bFalse)
-     C                   READC     PBSFL132                               11
-     C                   Else
-     C                   READC     PBSFL080                               11
-     C                   Endif
-      *
-     C     *IN11         IFEQ      '1'
-     C                   LEAVE
-     C                   Endif
-      *
-      *  Cursorpositionierung ...
-     C                   IF        (*in88 = bFalse)
-     C                   Z-ADD     SflRec132     SflCsr
-     C                   Else
-     C                   Z-ADD     SflRec080     SflCsr
-     C                   Endif
-      *
-      *  Linksbündig setzen ...
-     C                   Eval      SFPAU = %triml(SFPAU)
-      *
-      *  Prompt ...
-     C                   IF        %trim(SFPAU) = SET_PRMT
-     C                   EXSR      Pmt_Sfpau
-     C                   ENDIF
-      *
-      *  Zuordnung AUSWAHL => Befehl ...
-     C                   CALLP     PEEK21('#' + SFPAU: §§PgmName
-     C                                    : YPgmCmd: YCmdDta: YMsgID: YMsgDta)
-     C     YMsgID        IFNE      *BLANKS
-      *  Fehlermeldung ...
-     C                   Callp     p_sndPgmMg('USR8110': SFPAU: §§pgmName)
-      *
-     C                   EXSR      PBSflChain
-     C     *IN11         IFEQ      '0'
-     C                   EVAL      *IN84 = '1'
-     C                   EVAL      *IN85 = '1'
-     C                   EXSR      PBSflUpdat
-     C                   Endif
-     C                   ITER
-     C                   Endif
-      *
-      *----------------------------*
-      *  Ausführen SFL-Befehl ...  *
-      *----------------------------*
-      *
-     C                   EVAL      Sfl_Cmd = YPgmCmd
-      *
-      *  Vorrangig Blockverarbeitung (F22)
-      *  verarbeiten ...
-     C     QueryUser     IFNE      *ALLX'00'
-     C     Sfl_Cmd       ANDNE     QueryUser
-     C                   EXSR      PBSflChain
-     C     *IN11         IFEQ      '0'
-     C                   EVAL      *IN84 = '1'
-     C                   EXSR      PBSflUpdat
-     C                   Endif
-     C                   ITER
-     C                   Endif
-      *
-      *  Verarbeiten der Befehle ...
-     C                   EXSR      DoSflCmd
-     C     IsCmdErr      IFEQ      bTrue
-     C                   EXSR      PBSflChain
-     C     *IN11         IFEQ      '0'
-     C                   EVAL      *IN84 = '1'
-     C                   EVAL      *IN85 = '1'
-     C                   EXSR      PBSflUpdat
-     C                   Endif
-     C     IsCancel      IFEQ      bTrue
-     C                   LEAVE
-     C                   ELSE
-     C                   ITER
-     C                   Endif
-     C                   Endif
-      *
-      *  Mindestens ein Eintrag verarbeitet ...
-      *  (ignorieren leere Auswahlen)
-     C     YPgmCmd       IFNE      '*NONE'
-     C                   EVAL      IsReadC = bTrue
-     C                   ENDIF
-      *
-      *  Verarbeitung auswerten ...
-     C                   EXSR      PBSflChain
-     C     *IN11         IFEQ      '0'
-      *  ... Abbruch mit F3/F12
-     C     YMsgID        IFEQ      'USR8100'
-     C                   EVAL      *IN84 = '1'
-     C                   ELSE
-      *  ... Verarbeitung durchgeführt
-     C                   EVAL      *IN84 = '0'
-     C                   EVAL      *IN85 = '0'
-     C                   EVAL      SFPAU = *BLANKS
-     C                   Endif
-     C                   EXSR      PBSflUpdat
-     C     YMsgID        IFEQ      'USR8100'
-     C                   LEAVE
-     C                   Endif
-     C                   Endif
-      *
-     C                   Enddo
-      *
-     C                   Enddo
-      *
-     C                   Endif
-      *
-     C                   EVAL      IsCmdErr = R#IsCmdErr
-     C                   EVAL      IsREADSFL = bFalse
-      *
-     C     IsReadC       IFEQ      bTrue
-     C                   EXSR      GetObjAttr
-     C                   EXSR      GetMbrAttr
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PBSflChain    CHAIN auf PBSFL                           *
-      *============================================================*
-      *
-     C     PBSflChain    BEGSR
-      *
-     C  N88SflRec132     CHAIN     PBSFL132                           11
-     C   88SflRec080     CHAIN     PBSFL080                           11
-      *
-     C     *IN11         IFEQ      '0'
-      *  ... alles in Ordnung
-     C                   ELSE
-      *  ... letzte Nachricht löschen
-     C                   Callp     p_rmvPgmMg(§§pgmName)
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PBSflWrite    WRITE auf PBSFL                           *
-      *============================================================*
-      *
-     C     PBSflWrite    BEGSR
-      *
-     C                   IF        (*in88 = bFalse)
-     C                   WRITE     PBSFL132
-     C                   Else
-     C                   WRITE     PBSFL080
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PBSflUpdat    UPDATE auf PBSFL                          *
-      *============================================================*
-      *
-     C     PBSflUpdat    BEGSR
-      *
-     C                   IF        (*in88 = bFalse)
-     C                   UPDATE    PBSFL132
-     C                   Else
-     C                   UPDATE    PBSFL080
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_PageUp      PgUp - Vorwärts blättern                  *
-      *============================================================*
-      *
-     C     C_PageUp      BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   EXSR      MsgNoFile
-     C                   ELSE
-      *
-      *  Verarbeiten der Subfile-Auswahlen
-     C     IsREADSFL     IFEQ      bTrue
-      *       verhindern einer Rekursion
-     C                   ELSE
-     C                   EXSR      C_ReadSfl
-     C                   Endif
-      *
-      *  Blättern
-     C                   EXSR      PBInit
-     C                   EXSR      PBPinRcd
-     C                   EXSR      PBReadUP
-      *
-      *  Keine weiteren Einträge gefunden ...
-     C     *IN80         IFEQ      '0'
-      *  ... Ende der Liste anzeigen
-     C                   EXSR      C_Bot
-     C                   Endif
-      *
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_PageDown    PgDn - Rückwärts blättern                 *
-      *============================================================*
-      *
-     C     C_PageDown    BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   EXSR      MsgNoFile
-     C                   ELSE
-      *
-      *  Verarbeiten der Subfile-Auswahlen
-     C     IsREADSFL     IFEQ      bTrue
-      *       verhindern einer Rekursion
-     C                   ELSE
-     C                   EXSR      C_ReadSfl
-     C                   Endif
-      *
-      *  Blättern
-     C                   EVAL      SflCsr = NbrPinRcd + 1
-     C                   EXSR      PBReadCsr
-     C                   EXSR      PBReadDn
-      *
-     C                   EXSR      PBInit
-     C                   EXSR      PBPinRcd
-     C                   EXSR      PBReadUp
-      *
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_EndPgm      F3/F12 - Programm beenden                 *
-      *============================================================*
-      *
-     C     C_EndPgm      BEGSR
-      *
-      * - Speichern der Arbeitsumgebung
-     C     i_envSave     IFEQ      bTrue
-     C                   EVAL      YIsAutoSave = bTrue
-     C                   EXSR      SaveEnv
-     C                   ENDIF
-      *
-     C                   EXSR      CloseFile
-     C     IsOpen        IFEQ      bFalse
-      *
-      * - Benutzervoreinstellungen
-     C                   EXSR      SetUsrSetg
-      *
-      * - Endenachricht
-     C                   Callp     p_rmvPgmMg(§§pgmName)
-      *
-     C                   CLEAR                   USR8100
-     C                   EVAL      USR81001 = YPgmCmd
-     C                   Eval      exitMsg = f_msgText('USR8100': USR8100)
-      *
-     C                   Clear                   USR9999
-     C                   Eval      USR99991 = exitMsg
-     C                   Eval      USR99992 = ''
-     C                   Callp     p_sndPgmMg('USR9999': USR9999: §§pgmName)
-     C                   Callp     p_movPgmMg(§§pgmName)
-      *
-     C                   ELSE
-      *  Fehlermeldung ...
-     C                   Callp     p_sndPgmMg('USR8103': '': §§pgmName)
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_Prompt      F4  - Prompt                              *
-      *============================================================*
-      *
-     C     C_Prompt      BEGSR
-      *
-     C                   If        isOpen = bFalse
-      *
-     C                   Select
-     C                   When      ((ScnFld   = '##FILE'  ) or
-     C                              (##File   = SET_PRMT  ) or
-     C                              (f_endsWith('*': %trim(##File))))
-     C                   Exsr      Pmt_File
-     C                   When      ((ScnFld   = '##MEMBER') or
-     C                              (##Member = SET_PRMT  ))
-     C                   Exsr      Pmt_Mbr
-     C                   Other
-      *      Nix tun, keine Datei vorhanden
-     C                   Exsr      MsgNoFile
-     C                   Endsl
-      *
-     C                   Else
-      *
-     C                   Select
-     C                   When      ((ScnFld   = '##FIELD ') or
-     C                              (##Field  = SET_PRMT  ))
-     C                   Exsr      Pmt_Field
-     C                   When      ((ScnFld   = '##FILE'  ) or
-     C                              (##File   = SET_PRMT  ) or
-     C                              (f_endsWith('*': %trim(##File))))
-     C                   Exsr      Pmt_File
-     C                   When      ((ScnFld   = '##MEMBER') or
-     C                              (##Member = SET_PRMT  ))
-     C                   Exsr      Pmt_Mbr
-     C                   When      ((ScnFld   = '##FORMAT') or
-     C                              (##Format = SET_PRMT  ))
-     C                   Exsr      Pmt_Fmt
-     C                   When      ((ScnFld   = 'SFPAU'   ) or
-     C                              (SFPAU    = SET_PRMT  ))
-     C                   Exsr      Pmt_Sfpau
-     C                   Other
-     C                   Callp     p_sndPgmMg('USR8179': '': §§pgmName)
-     C                   Endsl
-      *
-     C                   Endif
-      *
-     C                   Exsr      KeepCsrPos
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    Pmt_Field     Prompt - Field                            *
-      *============================================================*
-      *
-     C     Pmt_Field     BEGSR
-      *
-     C                   CALLP     PEEK37(SET_Dsp80: §CopyRight: YField
-     C                                    : YMsgID: YMsgDta)
-      *
-     C     yMsgID        IFEQ      *BLANKS
-     C                   EVAL      ##Field = yField
-     C                   EVAL      *IN93 = '1'
-     C                   ELSE
-     C                   Callp     p_sndPgmMg(yMsgID: yMsgDta: §§pgmName)
-     C                   EVAL      yMsgID = ''
-     C                   EVAL      yMsgDta = ''
-     C                   EVAL      *IN93 = '0'
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    Pmt_File      Prompt - File                             *
-      *============================================================*
-      *
-     C     Pmt_File      BEGSR
-      *
-      *  Wenn das Feld gesperrt ist, ...
-     C     *IN75         IFEQ      *ON
-      *  ... dann
-      *      ausgeben Meldung
-     C                   Callp     p_sndPgmMg('USR8179': '': §§pgmName)
-     C                   ELSE
-      *  ... sonst
-      *      aufrufen "Auswahl Datei"
-     C     ##File        IFEQ      *BLANKS
-     C     ##File        OREQ      SET_PRMT
-     C                   EVAL      yFile = '*ALL'
-     C                   ELSE
-     C                   EVAL      yFile = ##File
-     C                   Endif
-      *
-     C     ##Library     IFEQ      *BLANKS
-     C                   EVAL      yLibrary = '*LIBL'
-     C                   ELSE
-     C                   EVAL      yLibrary = ##Library
-     C                   Endif
-      *
-     C                   CALLP     PEEK69(SET_Dsp80: §CopyRight: YQFile
-     C                                    : YMsgID: YMsgDta)
-      *
-     C     yMsgID        IFEQ      *BLANKS
-     C                   EVAL      ##File = yFile
-     C                   EVAL      ##Library = yLibrary
-     C                   EVAL      *IN93 = '1'
-     C                   ELSE
-     C                   Callp     p_sndPgmMg(yMsgID: yMsgDta: §§pgmName)
-     C                   EVAL      yMsgID = ''
-     C                   EVAL      yMsgDta = ''
-     C                   EVAL      *IN93 = '0'
-     C                   Endif
-      *
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    Pmt_Mbr       Prompt - Member                           *
-      *============================================================*
-      *
-     C     Pmt_Mbr       BEGSR
-      *
-      *  Wenn das Feld gesperrt ist, ...
-     C     *IN77         IFEQ      *ON
-      *  ... dann
-      *      ausgeben Meldung
-     C                   Callp     p_sndPgmMg('USR8179': '': §§pgmName)
-     C                   ELSE
-      *  ... sonst
-      *      aufrufen "Auswahl Teildatei"
-     C                   EVAL      YFile = ##File
-      *
-     C     ##Library     IFEQ      *BLANKS
-     C                   EVAL      yLibrary = '*LIBL'
-     C                   ELSE
-     C                   EVAL      yLibrary = ##Library
-     C                   Endif
-      *
-     C                   CALLP     PEEK47(SET_Dsp80: §CopyRight
-     C                                    : YQFile: YMember: YMsgID: YMsgDta)
-      *
-     C     yMsgID        IFEQ      *BLANKS
-     C                   EVAL      ##Member = yMember
-     C                   EVAL      *IN93 = '1'
-     C                   ELSE
-     C                   Callp     p_sndPgmMg(yMsgID: yMsgDta: §§pgmName)
-     C                   EVAL      yMsgID = ''
-     C                   EVAL      yMsgDta = ''
-     C                   EVAL      *IN93 = '0'
-     C                   Endif
-      *
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    Pmt_Fmt       Prompt - Format                           *
-      *============================================================*
-      *
-     C     Pmt_Fmt       Begsr
-      *
-     C                   CALLP     PEEK12(SET_Dsp80: §CopyRight: ##FORMAT
-     C                                    : MODE_INTER
-     C                                    : RCDL0200: YFmtNbr: yMsgID: yMsgDta)
-      *
-     C     yMsgID        IFEQ      *BLANKS
-     C                   EVAL      ##FMTNBR = YFmtNbr
-     C                   EVAL      ##Format = RCDL0200.R2FmtName
-     C                   EVAL      $$Length = RCDL0200.R2RcdLen
-     C                   EVAL      *IN93 = '1'
-     C                   ELSE
-     C                   Callp     p_sndPgmMg(yMsgID: yMsgDta: §§pgmName)
-     C                   EVAL      yMsgID = ''
-     C                   EVAL      yMsgDta = ''
-     C                   EVAL      *IN93 = '0'
-     C                   Endif
-      *
-     C                   Endsr
-      *
-      *============================================================*
-      *    Pmt_Sfpau     Prompt - Subfileauswahl                   *
-      *============================================================*
-      *
-     C     Pmt_Sfpau     Begsr
-      *
-     C                   Callp     PEEK68(SET_Dsp80: §§pgmName: §CopyRight
-     C                                    : ySflOpt: yMsgID: yMsgDta)
-      *
-      *  Einlesen Subfiledatensatz
-     C                   EVAL      SflRec132 = SflCsr
-     C                   EVAL      SflRec080 = SflCsr
-     C                   Exsr      PBSflChain
-      *
-      *  Abbruch mit F3/F12
-     C                   If        (YMsgID = 'USR8100')
-     C                   Eval      SFPAU = ''
-     C                   EVAL      *IN84 = '1'                                  SFLNXTCHG
-     C                   EVAL      *IN85 = '0'                                  SFPAU(RI)
-     C                   Else
-     C                   Eval      SFPAU = ySflOpt
-     C                   EVAL      *IN84 = '1'                                  SFLNXTCHG
-     C                   EVAL      *IN85 = '0'                                  SFPAU(RI)
-     C                   Endif
-      *
-      *  Aktualisieren Subfiledatensatz
-     C                   Exsr      PBSflUpdat
-      *
-     C                   If        (YMsgID = 'USR8100')
-     C                   Callp     p_sndPgmMg(yMsgID: yMsgDta: §§pgmName)
-     C                   EVAL      yMsgID = ''
-     C                   EVAL      yMsgDta = ''
-     C                   Else
-     C                   IF        (*in88 = bFalse)
-     C                   WRITE     PBCTL132
-     C                   Else
-     C                   WRITE     PBCTL080
-     C                   Endif
-     C                   Endif
-      *
-     C                   Endsr
-      *
-      *============================================================*
-      *    C_Refresh     F5  - Aktualisieren der Subfile           *
-      *============================================================*
-      *
-     C     C_Refresh     BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   EXSR      MsgNoFile
-     C                   ELSE
-      *
-      *      ... aktualisieren "offene Datei"
-     C                   EXSR      getOpnFile
-      *
-      *      ... aktualisieren Subfile
-     C                   EXSR      PBRefresh
-      *
-      *      ... abrufen der Objektattribute
-     C                   EXSR      GetObjAttr
-      *
-      *      ... abrufen der Anzahl Teildateien
-     C                   EXSR      GetNbrMbr
-      *
-      *      ... abrufen Objektattribute
-     C                   EXSR      GetObjAttr
-      *
-      *      ... abrufen der Teildateiattribute
-     C                   EXSR      GetMbrAttr
-     C                   Endif
-      *
-      *      ... positionieren Cursor
-     C     SflCsr        IFEQ      §ZEROS
-     C                   EXSR      C_PosCsr
-     C                   ENDIF
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_Add         F6  - Neuanlage eines Datensatz           *
-      *============================================================*
-      *
-     C     C_Add         BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   EXSR      MsgNoFile
-     C                   ELSE
-      *
-     C     IsUpdMod      IFEQ      bFalse
-      *      Neuanlage nicht möglich, da INPUT-Modus
-     C                   CLEAR                   USR0007
-     C                   EVAL      USR00071 = ##FILE
-     C                   EVAL      USR00072 = ##LIBRARY
-     C                   Callp     p_sndPgmMg('USR0007': USR0007: §§pgmName)
-     C                   ELSE
-      *
-     C                   EVAL      YFunction = '*ADD'
-     C                   EXSR      CallUpdPgm
-      *
-      *  Ermitteln Objektattribute
-     C                   EXSR      GetObjAttr
-      *
-      *  Ermitteln der Teildateiattribute (Anzahl Sätze)
-     C                   EXSR      GetMbrAttr
-      *
-     C                   Endif
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_ChgHead     F7  - Umschalten der Überschrift          *
-      *============================================================*
-      *
-     C     C_ChgHead     BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   EXSR      MsgNoFile
-     C                   ELSE
-      *
-     C                   EVAL      SET_HedTyp = f_nextHeaderType(SET_HedTyp)
-      *
-     C                   EVAL      IsSflDirty = bTrue
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_TgMrkCol    F8  - Spalte markieren ein/aus            *
-      *============================================================*
-      *
-     C     C_TgMrkCol    BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   EXSR      MsgNoFile
-     C                   ELSE
-      *
-     C                   EXSR      GetFldTMrk
-      *
-     C                   IF        (Wrk#Field <> '')
-     C                   EVAL      IsSflDirty = bTrue
-      *
-      *  Umschalten der Farbe im Datensatz ...
-     C                   EVAL      F_Field = Col_Field(X)
-     C     F_KEY         CHAIN (N) FPEEKFLD                           11
-     C     *IN11         IFEQ      '0'
-      *
-     C     F_MarkCol     IFEQ      bFalse
-     C                   EXSR      C_MrkCol
-     C                   ELSE
-     C                   EXSR      C_UnMrkCol
-     C                   Endif
-      *
-     C                   ELSE
-      *        Datensatz nicht gefunden
-     C                   Endif
-     C                   Endif
-      *
-      *  Beibehalten der Cursorposition ...
-     C                   EXSR      KeepCsrPos
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_MrkCol      F8  - Spalte markieren ein                *
-      *============================================================*
-      *
-     C     C_MrkCol      BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   EXSR      MsgNoFile
-     C                   ELSE
-      *
-     C                   EXSR      GetFldTMrk
-      *
-     C                   IF        (Wrk#Field <> '')
-     C                   EVAL      IsSflDirty = bTrue
-      *
-      *  Einschalten der Farbe im Datensatz ...
-     C                   EVAL      F_Field = Col_Field(X)
-     C     F_KEY         CHAIN     FPEEKFLD                           11
-     C     *IN11         IFEQ      '0'
-     C                   EVAL      F_MarkCol = bTrue
-     C                   UPDATE    FPEEKFLD
-     C                   ELSE
-      *        Datensatz nicht gefunden
-     C                   Endif
-     C                   Endif
-      *
-      *  Beibehalten der Cursorposition ...
-     C                   EXSR      KeepCsrPos
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_UnMrkCol    F8  - Spalte markieren aus                *
-      *============================================================*
-      *
-     C     C_UnMrkCol    BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   EXSR      MsgNoFile
-     C                   ELSE
-      *
-     C                   EXSR      GetFldTMrk
-      *
-     C                   IF        (Wrk#Field <> '')
-     C                   EVAL      IsSflDirty = bTrue
-      *
-      *  Ausschalten der Farbe im Datensatz ...
-     C                   EVAL      F_Field = Col_Field(X)
-     C     F_KEY         CHAIN     FPEEKFLD                           11
-     C     *IN11         IFEQ      '0'
-     C                   EVAL      F_MarkCol = bFalse
-     C                   UPDATE    FPEEKFLD
-     C                   ELSE
-      *        Datensatz nicht gefunden
-     C                   Endif
-     C                   Endif
-      *
-      *  Beibehalten der Cursorposition ...
-     C                   EXSR      KeepCsrPos
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_MoveTop     F9  - Selektieren Datensatz               *
-      *============================================================*
-      *
-     C     C_MoveTop     BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   EXSR      MsgNoFile
-     C                   ELSE
-      *
-     C                   EXSR      GetSflRcd
-      *
-     C     SflCsr        IFGT      §ZEROS
-      *
-     C                   EXSR      PBReadCsr
-     C                   EXSR      PBInit
-     C                   EXSR      PBPinRcd
-     C                   EXSR      PBReadUp
-     C                   EVAL      SFSANR = NbrPinRcd + 1
-      *
-     C                   ELSE
-      *  Fehlermeldung ...
-     C                   Callp     p_sndPgmMg('USR8102': '': §§pgmName)
-     C                   Endif
-      *
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_PosCsr      F10    - Cursor auf Keyeingabe pos.       *
-      *============================================================*
-      *
-     C     C_PosCsr      BEGSR
-      *
-     C                   EVAL      *IN87 = '1'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_UserSetg    F11    - Benutzervoreinstellugnen         *
-      *============================================================*
-      *
-     C     C_UserSetg    BEGSR
-      *
-     C                   monitor
-     C                   callp     PEEK24(SET_Dsp80: §CopyRight: SET0001
-     C                                    : YMsgID: YMsgDta)
-     C                   eval      *in99 = bFalse
-     C                   on-error
-     C                   eval      *in99 = bTrue
-     C                   endmon
-      *
-     C     *IN99         IFEQ      '1'
-      *            Fehler aufgetreten
-     C                   ELSE
-     C     YMsgID        IFEQ      'USR8112'
-     C                   Callp     p_updUsrSg('*DSPATTR' : SET0001)
-     C                   EXSR      C_Refresh
-     C                   ELSE
-      *            Verrabeitung durch Benutzer
-      *            abgebrochen
-     C                   Endif
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_Repeat      F13 - Wiederholen der Subfileauswahl      *
-      *============================================================*
-      *
-     C     C_Repeat      BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   EXSR      MsgNoFile
-     C                   ELSE
-      *
-      *  "Keine Sätze ..."
-     C     SflNbrRcd     IFEQ      §ZEROS
-      *  Keine Datensätze vorhanden.
-     C                   ELSE
-      *
-      *  Ermitteln der letzten Subfile-Auswahl ...
-     C                   EXSR      GetLastOpt
-     C     IsError       IFEQ      bTrue
-      *  Fehlermeldung ...
-     C                   Callp     p_sndPgmMg('USR8165': '': §§pgmName)
-     C                   ELSE
-      *
-      *  "Reaktivieren" der letzten Subfileauswahl ...
-     C                   EVAL      SflRec132 = Wrk#Recno
-     C                   EVAL      SflRec080 = Wrk#Recno
-     C                   EXSR      PBSflChain
-     C                   EVAL      *IN84 = '1'
-     C                   EXSR      PBSflUpdat
-      *  Verarbeitung ...
-     C                   EVAL      Wrk#Recno = Wrk#Recno + 1
-     C                   EXSR      RepeatOpt
-     C                   Endif
-      *
-     C                   Endif
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_Layout      F15    - Layout                           *
-      *============================================================*
-      *
-     C     C_Layout      BEGSR
-      *
-     C                   monitor
-     C                   callp     PEEK34(SET_Dsp80: §CopyRight: '*DISPLAY'
-     C                                    : YMsgID: YMsgDta)
-     C                   eval      *in99 = bFalse
-     C                   on-error
-     C                   eval      *in99 = bTrue
-     C                   endmon
-      *
-     C     YMsgID        IFEQ      'USR8112'
-      *  Beenden und Speichern ...
-      *  Merker für aktualisieren der Subfile
-     C                   EVAL      IsSflDirty = bTrue
-     C                   ELSE
-      *  Abbruch durch Benutzer ...
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_Search      F16    - Suchfunktion                     *
-      *============================================================*
-      *
-     C     C_Search      BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   EXSR      MsgNoFile
-     C                   ELSE
-      *
-     C                   SELECT
-     C     SrchMode      WHENEQ    '*NEW'
-     C                   Monitor
-     C                   CALLP     PEEK17(SET_Dsp80: §CopyRight
-     C                                    : YQFile: ##Member
-     C                                    : YField: YOperation: YArgument
-     C                                    : YSign: YSrchNbrs: YSrchType
-     C                                    : YSrchCase: YMsgID: YMsgDta)
-     C                   Eval      *in99 = bFalse
-     C                   On-Error
-     C                   Eval      *in99 = bTrue
-     C                   Endmon
-      *
-     C     *IN99         IFEQ      '0'
-     C     YMsgID        IFEQ      'USR8112'
-     C                   EXSR      SrchStart
-     C                   ELSE
-     C                   Callp     p_sndPgmMg(YMsgID: YMsgDta: §§pgmName)
-     C                   EVAL      YMsgID = ''
-     C                   EVAL      YMsgDta = ''
-     C                   Endif
-     C                   ELSE
-      *  Fehler beim Aufruf von PEEK17 ...
-     C                   Endif
-      *
-     C     SrchMode      WHENEQ    '*FOUND'
-     C                   EXSR      SrchCont
-      *
-     C     SrchMode      WHENEQ    '*MAXIMUM'
-     C                   EXSR      SrchContM
-      *
-     C     SrchMode      WHENEQ    '*EOF'
-     C                   EXSR      SrchEOF
-      *
-     C                   OTHER
-      *               ???????????
-     C                   Endsl
-      *
-      *  Gefunden?
-     C     SrchMode      IFEQ      '*FOUND'
-     C                   EVAL      SrchFndRcd = File#X.RcdNbr
-     C                   EXSR      PBReadP
-     C                   ELSE
-     C                   EXSR      PBReadDn
-     C                   Endif
-      *
-      *  Anzeigen der Subfile
-     C                   EXSR      PBInit
-     C                   EXSR      PBPinRcd
-     C                   EXSR      PBReadUp
-      *
-      *  Meldung
-     C                   SELECT
-     C     SrchMode      WHENEQ    '*FOUND'
-     C                   Callp     p_sndPgmMg('USR8130': '': §§pgmName)
-     C     SrchMode      WHENEQ    '*EOF'
-     C                   Callp     p_sndPgmMg('USR8131': '': §§pgmName)
-     C     SrchMode      WHENEQ    '*MAXIMUM'
-     C                   Callp     p_sndPgmMg('USR8132': '': §§pgmName)
-     C                   OTHER
-     C                   Endsl
-      *
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_Top         F17 - Anfang der Datei                    *
-      *============================================================*
-      *
-     C     C_Top         BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   EXSR      MsgNoFile
-     C                   ELSE
-      *
-     C                   EXSR      PBMoveTop
-     C                   EXSR      PBInit
-     C                   EXSR      PBPinRcd
-     C                   EXSR      PBReadUp
-      *
-     C                   EVAL      SFSANR = NbrPinRcd + 1
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_Bot         F18 - Ende der Datei                      *
-      *============================================================*
-      *
-     C     C_Bot         BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   EXSR      MsgNoFile
-     C                   ELSE
-      *
-     C                   EXSR      PBMoveBot
-     C                   EXSR      PBInit
-     C                   EXSR      PBPinRcd
-     C                   EXSR      PBReadDn
-     C                   EXSR      PBReadUp
-      *
-     C                   EVAL      SFSANR = SflNbrRcd
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_MoveL       F19 - Nach links verschieben              *
-      *============================================================*
-      *
-     C     C_MoveL       BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   EXSR      MsgNoFile
-     C                   ELSE
-      *
-     C     ##StrPage     IFGT      1
-     C     SET_SCROLL    IFEQ      '*BOTH'
-     C     SET_SCROLL    OREQ      '*LEFT'
-     C                   EVAL      ##StrPage = ##StrPage - 1
-     C                   ELSE
-     C                   EVAL      ##StrPage = 1
-     C                   EVAL      ##WndNbr = ##WndNbr - 1
-     C                   Endif
-     C                   ELSE
-     C                   EVAL      ##WndNbr = ##WndNbr - 1
-     C     SET_SCROLL    IFEQ      '*BOTH'
-     C     SET_SCROLL    OREQ      '*LEFT'
-     C                   EVAL      ##StrPage = *HIVAL
-     C                   ELSE
-     C                   EVAL      ##StrPage = 1
-     C                   Endif
-     C                   Endif
-      *
-     C                   EXSR      ChkSeqRnge
-      *
-     C                   EXSR      PBRefresh
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_MoveR       F20 - Nach rechts verschieben             *
-      *============================================================*
-      *
-     C     C_MoveR       BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   EXSR      MsgNoFile
-     C                   ELSE
-      *
-     C                   IF        (CP = 1) and
-     C                             (Col_Error(CP) = bTrue)
-     C                   IF        ((SET_SCROLL = '*BOTH') or
-     C                              (SET_SCROLL = '*RIGHT'))
-     C                   EVAL      ##StrPage = ##StrPage + 1
-     C                   ELSE
-     C                   EVAL      ##WndNbr = ##WndNbr + 1
-     C                   EVAL      ##StrPage = 1
-     C                   Endif
-     C                   ELSE
-     C                   EVAL      ##WndNbr = ##WndNbr + 1
-     C                   EVAL      ##StrPage = 1
-     C                   Endif
-      *
-     C                   EXSR      ChkSeqRnge
-     C                   EXSR      PBRefresh
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_PageL       F19 - Nach links verschieben,             *
-      *                  ganze Seite                               *
-      *============================================================*
-      *
-     C     C_PageL       BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   EXSR      MsgNoFile
-     C                   LEAVESR
-     C                   ENDIF
-      *
-      *  Prüfen "Seite innerhalb des Feldes"
-     C     ##StrPage     IFGT      1
-     C                   EVAL      ##StrPage = ##StrPage - 1
-     C                   ELSE
-      *
-      *  Bereits am Anfang
-     C     ##WndNbr      IFEQ      L#MinSeq
-     C     ##StrPage     ANDEQ     1
-     C                   ELSE
-      *
-      *  Ermitteln der Feldnummer des 1. angezeigten
-      *  Feldes ...
-     C                   EVAL      X = NbrPinCol + 1
-     C                   EVAL      Wrk#Field = Col_Field(X)
-     C                   EXSR      GetSeqNbr
-     C     IsSeqNbrOK    IFEQ      bFalse
-     C     L#MinSeq      ANDGT     *ZEROS
-     C                   EVAL      Wrk#SeqNbr = L#MinSeq
-     C                   EVAL      IsSeqNbrOK = bTrue
-     C                   ENDIF
-      *
-     C     IsSeqNbrOK    IFEQ      bTrue
-     C                   Exsr      GetPrvSeq
-     C                   EVAL      ##WndNbr = Wrk#SeqNbr
-     C     SET_SCROLL    IFEQ      '*BOTH'
-     C     SET_SCROLL    OREQ      '*LEFT'
-     C                   EVAL      ##StrPage = *HIVAL
-     C                   ELSE
-     C                   EVAL      ##StrPage = 1
-     C                   Endif
-     C                   ELSE
-     C                   EVAL      ##WndNbr = L#MinSeq
-     C                   EVAL      ##StrPage = 1
-     C                   Endif
-      *
-      *  Füllen einer Dummy-Zeile von rechts nach
-      *  links zur Ermittlung des 1. anzuzeigenden
-      *  Feldes ...
-     C     ##WndNbr      IFGT      L#MinSeq
-     C                   EXSR      PBFillLeft
-      *  ... kein Feld gefunden
-     C     CP            IFLE      §ZEROS
-     C                   EVAL      ##WndNbr = L#MinSeq
-     C                   EVAL      ##StrPage = 1
-     C                   ELSE
-      *  ... Felder gefunden
-     C     CP            IFEQ      1
-      *      ... aber nur 1 Feld
-     C                   EVAL      Wrk#Field = Col_Field(CP)
-     C                   ELSE
-      *      ... mehrere Felder
-     C     Col_Error(CP) IFEQ      bFalse
-      *          ... komplett sichtbar
-     C                   EVAL      Wrk#Field = Col_Field(CP)
-     C                   ELSE
-      *          ... nicht komplett sichtbar,
-      *              nächstes Feld als Startfeld nehmen
-     C                   EVAL      X = CP - 1
-     C                   EVAL      Wrk#Field = Col_Field(X)
-     C                   EVAL      ##StrPage = 1
-     C                   Endif
-      *      ... umrechnen in Feldnummer
-     C                   EXSR      GetSeqNbr
-     C     IsSeqNbrOK    IFEQ      bTrue
-     C                   EVAL      ##WndNbr = Wrk#SeqNbr
-     C                   ELSE
-     C                   EVAL      ##WndNbr = *LOVAL
-     C                   EVAL      ##StrPage = 1
-     C                   Endif
-     C                   Endif
-     C                   Endif
-     C                   Endif
-     C                   Endif
-     C                   Endif
-      *
-     C                   EXSR      ChkSeqRnge
-     C                   EXSR      PBRefresh
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_PageR       F20 - Nach rechts verschieben,            *
-      *                  ganze Seite                               *
-      *============================================================*
-      *
-     C     C_PageR       BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   EXSR      MsgNoFile
-     C                   ELSE
-      *
-     C                   EVAL      Wrk#Field = Col_Field(CP)
-     C                   EXSR      GetSeqNbr
-     C     IsSeqNbrOK    IFEQ      bTrue
-      *
-     C     Col_Error(CP) IFEQ      bTrue
-     C                   IF        CP - NbrPinCol = 1
-      *
-     C     SET_SCROLL    IFEQ      '*BOTH'
-     C     SET_SCROLL    OREQ      '*RIGHT'
-     C                   EVAL      ##WndNbr = Wrk#SeqNbr
-     C                   EVAL      ##StrPage = ##StrPage + 1
-     C                   ELSE
-     C                   EVAL      ##WndNbr = Wrk#SeqNbr + 1
-     C                   EVAL      ##StrPage = 1
-     C                   Endif
-      *
-     C                   ELSE
-     C                   EVAL      ##WndNbr = Wrk#SeqNbr
-     C                   EVAL      ##StrPage = 1
-     C                   Endif
-     C                   ELSE
-     C                   EVAL      ##WndNbr = Wrk#SeqNbr + 1
-     C                   EVAL      ##StrPage = 1
-     C                   Endif
-      *
-     C                   ELSE
-     C                   EVAL      ##WndNbr = *HIVAL
-     C                   EVAL      ##StrPage = 1
-     C                   Endif
-      *
-     C                   EXSR      ChkSeqRnge
-     C                   EXSR      PBRefresh
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_CmdLine     F21 - Befehlszeile                        *
-      *============================================================*
-      *
-     C     C_CmdLine     BEGSR
-      *
-     C                   IF        f_cmdLine = bTrue
-     C                   CALL      'QUSCMDLN'                           99
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_ChgScn      F22 - Umschalten der Bildschirmauflösung  *
-      *============================================================*
-      *
-     C     C_ChgScn      BEGSR
-      *
-     C                   EVAL      Wrk#ReadDn = SflPage
-     C                   EXSR      ChgScreen
-     C                   EVAL      Wrk#ReadDn = Wrk#ReadDn - SflPage
-      *
-     C                   EXSR      PBRefresh
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_MoreOpt     F23 - Weitere Auswahlen                   *
-      *============================================================*
-      *
-     C     C_MoreOpt     BEGSR
-      *
-     C                   EVAL      SFTop = SFTop + 1
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_MoreKeys    F24 - Weitere Tasten                      *
-      *============================================================*
-      *
-     C     C_MoreKeys    BEGSR
-      *
-     C                   EVAL      SFBOT = SFBOT + 1
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_NextMark    Fxx - Nächste Markierung ansteueren       *
-      *============================================================*
-      *
-     C     C_NextMark    BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   EXSR      MsgNoFile
-     C                   ELSE
-      *
-     C                   EXSR      GetFrstFld
-      *
-     C                   EVAL      Wrk#SeqNbr = ##WndNbr
-     C                   EXSR      GetNxtMark
-     C     Wrk#SeqNbr    IFGT      *ZEROS
-     C                   EVAL      ##WndNbr = Wrk#SeqNbr
-     C                   EVAL      ##StrPage = 1
-     C                   ELSE
-     C                   EVAL      Wrk#SeqNbr = *LOVAL
-     C                   EXSR      GetNxtMark
-     C     Wrk#SeqNbr    IFGT      *ZEROS
-     C                   EVAL      ##WndNbr = Wrk#SeqNbr
-     C                   EVAL      ##StrPage = 1
-     C                   ELSE
-      *    ... keine Markierung gefunden
-     C                   Endif
-     C                   Endif
-      *
-     C                   EXSR      ChkSeqRnge
-      *
-     C                   EXSR      PBRefresh
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_PrevMark    Fxx - Vorherige Markierung ansteueren     *
-      *============================================================*
-      *
-     C     C_PrevMark    BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   EXSR      MsgNoFile
-     C                   ELSE
-      *
-     C                   EXSR      GetFrstFld
-      *
-     C                   EVAL      Wrk#SeqNbr = ##WndNbr
-     C                   EXSR      GetPrvMark
-     C     Wrk#SeqNbr    IFGT      *ZEROS
-     C                   EVAL      ##WndNbr = Wrk#SeqNbr
-     C                   EVAL      ##StrPage = 1
-     C                   ELSE
-     C                   EVAL      Wrk#SeqNbr = *HIVAL
-     C                   EXSR      GetPrvMark
-     C     Wrk#SeqNbr    IFGT      *ZEROS
-     C                   EVAL      ##WndNbr = Wrk#SeqNbr
-     C                   EVAL      ##StrPage = 1
-     C                   ELSE
-      *    ... keine Markierung gefunden
-     C                   Endif
-     C                   Endif
-      *
-     C                   EXSR      ChkSeqRnge
-      *
-     C                   EXSR      PBRefresh
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_BuildPgm    Erstellen Update Programm                 *
-      *============================================================*
-      *
-     C     C_BuildPgm    BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   EXSR      MsgNoFile
-     C                   ELSE
-      *
-     C                   CALLP     PEEK52(SET_Dsp80: §CopyRight
-     C                                    : YAlwLc: YCase: YRcdLock: YNullDft
-     C                                    : YKeepCrs: YMsgID: YMsgDta: bFalse)
-      *
-     C     yMsgID        IFEQ      'USR8112'
-      *
-     C                   Monitor
-      *  Rekursiver CALL auf sich selbst (= PEEK05),
-      *  um die alte Referenz auf das Update-Programm zu löschen
-     C                   Eval      PgmToCall = f_pgmCallN(§§pgmName)
-     C                   CALL      PgmToCall     P_PeekPgm              99
-     C                   EVAL      *IN99 = '0'
-      *
-      *  Initialisierung
-     C                   Callp     p_rmvPgmMg(§§pgmName)
-      *
-     C                   EXSR      GetPgmName
-      *
-      *  Generierung
-     C                   CALLP     PEEK08(YQFile: PeekPgm: RCDL0200.R2FmtName
-     C                                    : RCDL0200.R2FmtID
-     C                                    : YAlwLc: YCase: YRcdLock: YNullDft
-     C                                    : YKeepCrs: §§PgmLib: YRtnCode)
-      *
-     C                   Eval      *in99 = bFalse
-     C                   On-Error
-     C                   Eval      *in99 = bTrue
-     C                   Endmon
-     C                   Endif
-      *
-     C                   CALLP     PEEK52(SET_Dsp80: §CopyRight
-     C                                    : YAlwLc: YCase: YRcdLock: YNullDft
-     C                                    : YKeepCrs: YMsgID: YMsgDta: bTrue)
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_Register    Prüfen der Registrierungsdaten            *
-      *============================================================*
-      *
-     C     C_Register    BEGSR
-      *
-     C                   monitor
-     C                   callp     PEEK30(SET_Dsp80: YCopyRight
-     C                                    : YFlag: YMsgID: YMsgDta)
-     C                   Callp     p_sndPgmMg(YMsgID: YMsgDta: §§pgmName)
-     C                   Eval      YMsgID = ''
-     C                   Eval      YMsgDta = ''
-     C                   eval      *in99 = bFalse
-     C                   on-error
-     C                   eval      *in99 = bTrue
-     C                   endmon
-      *
-     C     *IN99         IFEQ      '1'
-      *  Fehler beim Programmaufruf ...
-     C                   Callp     p_movPgmMg(§§pgmName)
-     C                   GOTO      ENDE
-     C                   ELSE
-     C     YFlag         IFNE      -55
-     C     YFlag         ANDNE     66
-     C     YFlag         ANDNE     243
-      *  Fehler im Wertebereich ...
-     C                   GOTO      ENDE
-     C                   ELSE
-      *  Datum ist abgelaufen ...
-     C     YFlag         IFEQ      -55
-     C                   GOTO      ENDE
-     C                   ELSE
-      *  Registrierung ist OK ...
-     C                   Endif
-     C                   Endif
-     C                   Endif
-      *
-      *  "Nachschießen" SPLASH-Screen
-     C     YFlag         IFEQ      243
-     C     SET_SPLA      ANDEQ     bFalse
-     C                   EXSR      S_SplashOn
-     C                   EXSR      ShowSplash
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_ClrPinRw    Löschen der Pin-Tabelle für Zeilen        *
-      *============================================================*
-      *
-     C     C_ClrPinRw    BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   EXSR      MsgNoFile
-     C                   ELSE
-      *
-     C                   EXSR      ClrPinRow
-      *
-      *  Merker für aktualisieren der Subfile
-     C                   EVAL      IsSflDirty = bTrue
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_ClrPinCl    Löschen der Pin-Tabelle für Spalten       *
-      *============================================================*
-      *
-     C     C_ClrPinCl    BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   EXSR      MsgNoFile
-     C                   ELSE
-      *
-     C                   EXSR      ClrPinCol
-      *
-      *  Merker für aktualisieren der Subfile
-     C                   EVAL      IsSflDirty = bTrue
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_DspDbr      Anzeigen der Datenbankrelationen          *
-      *============================================================*
-      *
-     C     C_DspDbr      Begsr
-      *
-     C                   If        isOpen = bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   Exsr      MsgNoFile
-     C                   Else
-      *
-     C                   monitor
-     C                   callp     PEEK40(SET_Dsp80: §CopyRight
-     C                                    : ##File: ##Library: ##Member
-     C                                    : ##Format: bTrue
-     C                                    : YRetFile: YRetLib
-     C                                    : YMsgID: YMsgDta)
-     C                   eval      *in99 = bTrue
-     C                   on-error
-     C                   eval      *in99 = bTrue
-     C                   endmon
-      *
-     C                   If        (yRetFile = ' ')  or
-     C                             (*in99    = *on)
-      *  ... keine Auswahl getroffen
-     C                   Else
-      *  ... prüfen auf neue Dateiauswahl
-     C                   Eval      ##file    = yRetFile
-     C                   Eval      ##Library = yRetLib
-      *
-     C                   Eval      NewAccMode = i_access
-     C                   Exsr      ChangeFile
-      *
-     C                   If        IsFileChg = bTrue
-     C                   Exsr      C_Top
-     C                   Else
-     C                   Endif
-     C                   Endif
-     C                   Endif
-      *
-     C                   Endsr
-      *
-      *============================================================*
-      *    C_SortBKey    Anzeigen der Sätze in Schlüsselfolge      *
-      *============================================================*
-      *
-     C     C_SortBKey    BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   EXSR      MsgNoFile
-     C                   ELSE
-     C     AccessMode    IFEQ      KEY_SEQ
-      *    ... Sortierung stimmt bereits
-     C                   ELSE
-      *
-      *  Umschalten der Sortierung
-     C                   Eval      NewAccMode = KEY_SEQ
-     C                   EXSR      ChangeSort
-      *
-     C                   Endif
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_SortBRrn    Anzeigen der Sätze in Satzfolge           *
-      *============================================================*
-      *
-     C     C_SortBRrn    BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   EXSR      MsgNoFile
-     C                   ELSE
-     C     AccessMode    IFEQ      RRN_SEQ
-      *    ... Sortierung stimmt bereits
-     C                   ELSE
-      *
-     C                   IF        f_numBased(##File    :
-     C                                        ##Library :
-     C                                        ##Member  ) = 1
-     C                   Eval      NewAccMode = RRN_SEQ
-     C                   EXSR      ChangeSort
-     C                   ELSE
-     C                   CLEAR                   USR8217
-     C                   Callp     p_sndPgmMg('USR8217': USR8217: §§pgmName)
-     C                   ENDIF
-      *
-     C                   Endif
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_SortTgl     Umschalten der Sortierfolge               *
-      *============================================================*
-      *
-     C     C_SortTgl     BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   EXSR      MsgNoFile
-     C                   ELSE
-     C     AccessMode    IFEQ      RRN_SEQ
-     C                   Exsr      C_SortBKey
-     C                   ELSE
-     C                   Exsr      C_SortBRrn
-     C                   Endif
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    S_TglKeyLC_UC Umschalten Eingabe der Schlüsselfelder    *
-      *============================================================*
-      *
-     C     S_TglKeyLC_UC BEGSR
-      *
-     C                   If        isKeyLower = bFalse
-     C                   Eval      isKeyLower = bTrue
-     C                   Clear                   USR8223
-     C                   Callp     p_sndPgmMg('USR8223': USR8223: §§pgmName)
-     C                   Else
-     C                   Eval      isKeyLower = bFalse
-     C                   Clear                   USR8224
-     C                   Callp     p_sndPgmMg('USR8224': USR8224: §§pgmName)
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_PinCDlg     Pin-Dialog                                *
-      *============================================================*
-      *
-     C     C_PinCDlg     BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   EXSR      MsgNoFile
-     C                   ELSE
-      *
-     C                   monitor
-     C                   callp     PEEK50(SET_Dsp80: §CopyRight: PinTabCol
-     C                                    : YMsgID: YMsgDta)
-     C                   eval      *in99 = bFalse
-     C                   on-error
-     C                   eval      *in99 = bTrue
-     C                   endmon
-      *
-     C     *IN99         IFEQ      '0'
-     C     YMsgID        IFEQ      'USR8112'
-      *
-     C                   EXSR      ClrPinCol
-      *
-     C     1             Do        MAX_PIN_COL   Y
-     C                   If        PinTabCol(Y) <> ' '
-     C                   EVAL      Wrk#Field = PinTabCol(Y)
-     C                   EXSR      PinCol
-     C                   Endif
-     C                   Enddo
-      *
-     C                   Endif
-     C                   Endif
-      *
-     C                   Endif
-      *
-     C                   Endsr
-      *
-      *============================================================*
-      *    C_Sql         SQL-Auswahl                               *
-      *============================================================*
-      *
-     C     C_Sql         Begsr
-      *
-     C                   If        isOpen = bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   Exsr      MsgNoFile
-     C                   Leavesr
-     C                   Endif
-      *
-     C                   If        FILD0100.ATFILA <> '*PHY'
-      *
-     C                   Select
-     C                   When      FILD0100.ATNOFM = 1
-      *  Wenn es sich um eine "single-format logical file" handelt, ...
-      *  ... dann prüfen, ob diese Datei über mehere Member geht.
-      *      Sortierung nach SQL wird für "multi-member logical files"
-      *      (noch) nicht unterstützt ...
-     C                   If        FILD0100.ATJOIN = 'N' and
-     C                             f_numBased(##File: ##Library: ##Member) > 1
-     C
-     C                   Clear                   USR8235
-     C                   Callp     p_sndPgmMg('USR8235': USR8235: §§pgmName)
-     C                   Leavesr
-     C                   Endif
-      *
-     C                   When      FILD0100.ATNOFM > 1
-      *  Wenn es sich um eine "multi-format logical file" handelt, ...
-      *  ... dann fragen, welches physiche Datei göffnet werden soll:
-     C                   CALLP     PEEK59(SET_Dsp80: '*QUESTION'
-     C                                    : 'USR8212': '': 'YN'
-     C                                    : yMsgID: yMsgDta)
-     C                   Eval      USR8190 = yMsgDta
-     C                   If        USR81901 = '*YES'
-     C                   Callp     f_basedPF(##FILE     :
-     C                                       ##LIBRARY  :
-     C                                       ##MEMBER   :
-     C                                       ##FORMAT   :
-     C                                       ##FMTNBR   :
-     C                                       ##FILE     :
-     C                                       ##LIBRARY  :
-     C                                       ##MEMBER   :
-     C                                       ##FORMAT   )
-     C                   Else
-     C                   Leavesr
-     C                   Endif
-      *
-     C                   Endsl
-      *
-     C                   Endif
-      *
-      * Let the user enter the SQL WHERE and ORDER BY clauses:
-     C                   monitor
-     C                   eval      YFile = ##FILE
-     C                   eval      YLibrary = ##LIBRARY
-     C                   eval      YMember = ##MEMBER
-     C                   eval      YFormat = ##FORMAT
-     C                   eval      YSqlWhere = sqlWhere
-     C                   eval      YSqlOrder = sqlOrder
-     C                   callp     PEEK48(SET_Dsp80: §CopyRight
-     C                                    : yFile: YLibrary: YMember
-     C                                    : YFormat
-     C                                    : AccessMode: ySqlWhere: ySqlOrder
-     C                                    : auth.chgSqlW: auth.chgSqlO
-     C                                    : YMsgID: YMsgDta)
-     C                   eval      *in99 = bFalse
-     C                   on-error
-     C                   eval      *in99 = bTrue
-     C                   endmon
-      *
-     C                   If        *in99 <> *off
-     C                   Leavesr
-     C                   Endif
-      *
-     C                   If        yMsgID <> 'USR8112'
-     C                   Leavesr
-     C                   Endif
-      *
-     C                   Eval      isPinToClr = bFalse
-      *
-     C                   Exsr      closeFile
-      *
-     C                   Eval      ##FILE = yFile
-     C                   Eval      ##LIBRARY = yLibrary
-     C                   Eval      ##MEMBER = yMember
-     C                   Eval      ##FORMAT = yFormat
-      *
-     C                   If        (YSqlWhere  <> ' ') or
-     C                             (YSqlOrder  <> ' ')
-     C                   IF        accessMode <> SQL_SEQ
-     C                   Eval      oldAccMode = accessMode
-     C                   Endif
-     C                   Eval      accessMode = SQL_SEQ
-     C                   Eval      sqlWhere   = YSqlWhere
-     C                   Eval      sqlOrder   = YSqlOrder
-     C                   Else
-     C                   Eval      accessMode = oldAccMode
-     C                   Eval      sqlWhere   = ' '
-     C                   Eval      sqlOrder   = ' '
-     C                   Endif
-      *
-     C                   Exsr      openFile
-      *
-     C                   Eval      isPinToClr = bTrue
-      *
-     C                   Endsr
-      *
-      *============================================================*
-      *    S_Change      02 - Ändern Einzelsatz                    *
-      *============================================================*
-      *
-     C     S_Change      BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   EXSR      MsgNoFile
-     C                   ELSE
-      *
-     C     IsUpdMod      IFEQ      bFalse
-      *      Ändern nicht möglich, da INPUT-Modus
-     C                   CLEAR                   USR0007
-     C                   EVAL      USR00071 = ##FILE
-     C                   EVAL      USR00072 = ##LIBRARY
-     C                   Callp     p_sndPgmMg('USR0007': USR0007: §§pgmName)
-     C                   ELSE
-      *
-     C                   EXSR      GetSflRcd
-      *
-     C     SflCsr        IFGT      §ZEROS
-     C                   EVAL      YFunction = '*CHANGE'
-     C                   EXSR      CallUpdPgm
-     C                   EXSR      ReloadUsrStg
-     C                   ELSE
-      *        kein Datensatz verfügbar
-     C                   Endif
-      *
-     C                   Endif
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    S_Copy        03 - Kopieren Einzelsatz                  *
-      *============================================================*
-      *
-     C     S_Copy        BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   EXSR      MsgNoFile
-     C                   ELSE
-      *
-     C     IsUpdMod      IFEQ      bFalse
-      *      Ändern nicht möglich, da INPUT-Modus
-     C                   CLEAR                   USR0007
-     C                   EVAL      USR00071 = ##FILE
-     C                   EVAL      USR00072 = ##LIBRARY
-     C                   Callp     p_sndPgmMg('USR0007': USR0007: §§pgmName)
-     C                   ELSE
-      *
-     C                   EXSR      GetSflRcd
-      *
-     C     SflCsr        IFGT      §ZEROS
-     C                   EVAL      YFunction = '*COPY'
-     C                   EXSR      CallUpdPgm
-     C                   ELSE
-      *        kein Datensatz verfügbar
-     C                   Endif
-      *
-     C                   Endif
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    S_CopyExt     09 - Kopieren Einzelsatz in externe Datei *
-      *============================================================*
-      *
-     C     S_CopyExt     BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   EXSR      MsgNoFile
-     C                   ELSE
-      *
-     C     auth.updMod   IFEQ      bFalse
-      *      Nachricht "Keine Berechtigung" ausgeben.
-     C                   ELSE
-      *
-     C                   EXSR      GetSflRcd
-      *
-     C     SflCsr        IFGT      §ZEROS
-      *
-     C     QueryUser     IFNE      YPgmCmd
-      *
-      *  Abfragen der Zielangaben ...
-     C                   EXSR      PBGetTargt
-      *
-      *  Verarbeitung OK ...
-     C                   IF        (IsTargetOK = bTrue)
-      *  Fragen Benutzer pro Datensatz ...
-     C                   EXSR      PBQueryUsr
-     C                   Endif
-      *
-     C                   ELSE
-      *  Kopieren ohne Sicherheitsabfrage ...
-     C                   EVAL      YMsgID = 'USR8112'
-     C                   EVAL      YMsgDta = *BLANKS
-     C                   Endif
-      *
-      *  Datensatz kopieren ...
-     C     YMsgID        IFEQ      'USR8112'
-     C                   EXSR      CopyExtRcd
-     C                   Endif
-      *
-     C                   ELSE
-      *        kein Datensatz verfügbar
-     C                   Endif
-      *
-     C                   Endif
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    S_Delete      04 - Löschen Einzelsatz                   *
-      *============================================================*
-      *
-     C     S_Delete      BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   EXSR      MsgNoFile
-     C                   ELSE
-      *
-     C     IsUpdMod      IFEQ      bFalse
-      *      Löschen nicht möglich, da INPUT-Modus
-     C                   CLEAR                   USR0007
-     C                   EVAL      USR00071 = ##FILE
-     C                   EVAL      USR00072 = ##LIBRARY
-     C                   Callp     p_sndPgmMg('USR0007': USR0007: §§pgmName)
-     C                   ELSE
-      *
-     C                   EXSR      GetSflRcd
-      *
-     C     SflCsr        IFGT      §ZEROS
-      *
-     C     QueryUser     IFNE      YPgmCmd
-      *
-      *  Fragen Benutzer ...
-     C                   EXSR      PBQueryUsr
-      *
-     C                   ELSE
-      *  Löschen ohne Sicherheitsabfrage ...
-     C                   EVAL      YMsgID = 'USR8112'
-     C                   EVAL      YMsgDta = *BLANKS
-     C                   Endif
-      *
-      *  Datensatz löschen ...
-     C     YMsgID        IFEQ      'USR8112'
-     C                   EXSR      DelRecord
-     C                   Endif
-      *
-     C                   ELSE
-      *        kein Datensatz verfügbar
-     C                   Endif
-     C                   Endif
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    S_Display     05 - Anzeigen Einzelsatz                  *
-      *============================================================*
-      *
-     C     S_Display     BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   EXSR      MsgNoFile
-     C                   ELSE
-      *
-     C                   EXSR      GetSflRcd
-      *
-     C     SflCsr        IFGT      §ZEROS
-      *
-     C                   monitor
-     C                   CALLP     PEEK14(SET_Dsp80: SET_HedTyp: §CopyRight
-     C                                    : Wrk#RcdNbr: H_FILE: H_LIB: H_MBR
-     C                                    : H_RCDFMT: '*DISPLAY': CommitLVL
-     C                                    : YScreenNbr: YMsgID: YMsgDta)
-     C                   eval      *in99 = bFalse
-     C                   on-error
-     C                   eval      *in99 = bTrue
-     C                   endmon
-      *
-     C                   EXSR      ChkHeadChg
-      *
-     C                   ELSE
-      *        kein Datensatz verfügbar
-     C                   Endif
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    S_Print       06 - Drucken Datensatz                    *
-      *============================================================*
-      *
-     C     S_Print       BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   EXSR      MsgNoFile
-     C                   ELSE
-      *
-     C                   EXSR      GetSflRcd
-      *
-     C     SflCsr        IFGT      §ZEROS
-      *
-     C                   monitor
-     C                   callp     PEEK65(Wrk#RcdNbr: H_FILE: H_LIB: H_MBR: ''
-     C                                    : YMsgID: YMsgDta)
-     C                   eval      *in99 = bFalse
-     C                   on-error
-     C                   eval      *in99 = bTrue
-     C                   endmon
-      *
-     C                   IF        YMsgID <> ''
-     C                   Callp     p_sndPgmMg(YMsgID: YMsgDta: §§pgmName)
-     C                   EVAL      YMsgID  = ''
-     C                   EVAL      YMsgDta = ''
-     C                   ENDIF
-      *
-     C                   EXSR      ChkHeadChg
-      *
-     C                   ELSE
-      *        kein Datensatz verfügbar
-     C                   Endif
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    S_PinRcd      P  - Pin Datensatz                        *
-      *============================================================*
-      *
-     C     S_PinRcd      BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-    R ***  F4Open        OREQ      '0'
-      *      Nix tun, keine Datei vorhanden
-     C                   EXSR      MsgNoFile
-     C                   ELSE
-      *
-     C                   IF        f_numBased(##FILE: ##LIBRARY: ##MEMBER) > 1
-     C                   CLEAR                   USR8218
-     C                   Callp     p_sndPgmMg('USR8218': USR8218: §§pgmName)
-     C                   Eval      IsCmdErr = bTrue
-     C                   Eval      IsCancel = bTrue
-     C                   ELSE
-      *
-     C                   EXSR      GetSflRcd
-      *
-     C     SflCsr        IFGT      §ZEROS
-      *
-     C                   IF        f_chain04(Wrk#RcdNbr:
-     C                                       H_FILE   :
-     C                                       H_LIB    :
-     C                                       H_MBR    :
-     C                                       H_RCDFMT ) = '0'
-     C                   EXSR      PinRecord
-      *
-     C                   ELSE
-      *  Datensatz nicht gefunden ...
-     C                   Callp     p_sndPgmMg('USR8118': '': §§pgmName)
-     C                   Endif
-      *
-     C                   ELSE
-      *        kein Datensatz verfügbar
-     C                   Endif
-     C                   Endif
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    S_UnPinRcd    UP - UnPin Datensatz                      *
-      *============================================================*
-      *
-     C     S_UnPinRcd    BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   EXSR      MsgNoFile
-     C                   ELSE
-      *
-     C                   EXSR      GetSflRcd
-      *
-     C     SflCsr        IFGT      §ZEROS
-      *
-     C                   EXSR      ChkPinRcd
-     C     IsPinned      IFEQ      bFalse
-      *  Datensatz ist nicht gepinned ...
-     C                   Callp     p_sndPgmMg('USR8121': '': §§pgmName)
-     C                   ELSE
-      *  Datensatz ist gepinned ...
-     C                   EXSR      RmvPinRcd
-     C                   Endif
-      *
-     C                   ELSE
-      *        kein Datensatz verfügbar
-     C                   Endif
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    S_TgTblPap    Toggeln Tabellierpapierfunktion           *
-      *============================================================*
-      *
-     C     S_TgTblPap    BEGSR
-      *
-     C     SET_TblMde    IFEQ      bTrue
-     C                   EXSR      S_TblPapOf
-     C                   ELSE
-     C                   EXSR      S_TblPapOn
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    S_TblPapOn    Einschalten Tabellierpapier               *
-      *============================================================*
-      *
-     C     S_TblPapOn    BEGSR
-      *
-     C     SET_TblMde    IFEQ      bTrue
-      *  Fehlermeldung ...
-     C                   Callp     p_sndPgmMg('USR8149': '': §§pgmName)
-     C                   ELSE
-     C                   EVAL      SET_TblMde = bTrue
-     C                   EVAL      IsSflDirty = bTrue
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    S_TblPapOf    Ausschalten Tabellierpapier               *
-      *============================================================*
-      *
-     C     S_TblPapOf    BEGSR
-      *
-     C     SET_TblMde    IFEQ      bFalse
-      *  Fehlermeldung ...
-     C                   Callp     p_sndPgmMg('USR8150': '': §§pgmName)
-     C                   ELSE
-     C                   EVAL      SET_TblMde = bFalse
-     C                   EVAL      IsSflDirty = bTrue
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    S_TgPinCol    PC - Pin Spalte                           *
-      *============================================================*
-      *
-     C     S_TgPinCol    BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   EXSR      MsgNoFile
-     C                   ELSE
-      *
-     C                   EXSR      GetFldTMrk
-      *
-     C                   IF        (Wrk#Field <> '')
-     C                   EVAL      Pin#Field = Wrk#Field
-     C                   EXSR      ChkPinCol
-     C     IsPinned      IFEQ      bFalse
-      *  Datensatz ist noch nicht gepinned ...
-      *  Spalte pinnen ...
-     C                   EXSR      PinCol
-     C                   ELSE
-     C                   EXSR      RmvPinCol
-     C                   Endif
-     C                   Endif
-     C                   Endif
-      *
-      *  Beibehalten der Cursorposition ...
-     C                   EXSR      KeepCsrPos
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    S_PinCol      PC - Pin Spalte                           *
-      *============================================================*
-      *
-     C     S_PinCol      BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   EXSR      MsgNoFile
-     C                   ELSE
-      *
-     C                   EXSR      GetFldTMrk
-      *
-     C                   IF        (Wrk#Field <> '')
-      *  Spalte pinnen ...
-     C                   EXSR      PinCol
-     C                   Endif
-     C                   Endif
-      *
-      *  Beibehalten der Cursorposition ...
-     C                   EXSR      KeepCsrPos
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    S_UnPinCol    UC - UnPin Spalte                         *
-      *============================================================*
-      *
-     C     S_UnPinCol    BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   EXSR      MsgNoFile
-     C                   ELSE
-      *
-     C                   EXSR      GetFldTMrk
-      *
-     C                   IF        (Wrk#Field <> '')
-     C                   EVAL      Pin#Field = Wrk#Field
-     C                   EXSR      ChkPinCol
-     C     IsPinned      IFEQ      bFalse
-      *  Spalte ist nicht gepinned ...
-     C                   CLEAR                   USR8147
-     C                   EVAL      USR81471 = Wrk#Field
-     C                   Callp     p_sndPgmMg('USR8147': USR8147: §§pgmName)
-     C                   ELSE
-      *  Spalte ist gepinned ...
-     C                   EXSR      RmvPinCol
-     C                   Endif
-     C                   Endif
-     C                   Endif
-      *
-      *  Beibehalten der Cursorposition ...
-     C                   EXSR      KeepCsrPos
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    S_SplashOn    Einschalten Splash-Screen                 *
-      *============================================================*
-      *
-     C     S_SplashOn    BEGSR
-      *
-     C                   EVAL      SET_Spla = bTrue
-      *
-     C                   Callp     p_sndPgmMg('USR8161': '': §§pgmName)
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    S_SplashOf    Ausschalten Splash-Screen                 *
-      *============================================================*
-      *
-     C     S_SplashOf    BEGSR
-      *
-     C                   EVAL      SET_Spla = bFalse
-      *
-     C                   Callp     p_sndPgmMg('USR8162': '': §§pgmName)
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    S_ShortCmd    Ausführen Kurzbefehl                      *
-      *============================================================*
-      *
-     C     S_ShortCmd    BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   EXSR      MsgNoFile
-     C                   ELSE
-      *
-     C                   EXSR      GetSflRcd
-      *
-     C     SflCsr        IFGT      §ZEROS
-      *
-     C                   CLEAR                   shortCmd
-     C                   EVAL      shortCmd.SC_Action = '*CMD'
-     C                   EVAL      shortCmd.SC_Cmd = YCmdDta
-      *
-     C                   monitor
-     C                   CALLP     PEEK42(H_FILE: H_LIB: H_MBR: H_RCDFMT
-     C                                    : ShortCmd: Wrk#RcdNbr: YExecCmd
-     C                                    : YMsgID: YMsgDta)
-     C                   eval      *in99 = bFalse
-     C                   on-error
-     C                   eval      *in99 = bTrue
-     C                   endmon
-      *
-     C                   Select
-     C     *IN99         WhenEq    '1'
-      *           Program error
-     C     YMsgID        WhenNe    *BLANKS
-     C                   Callp     p_sndPgmMg(YMsgID: YMsgDta: §§pgmName)
-     C                   EVAL      YMsgID = ''
-     C                   EVAL      YMsgDta = ''
-     C
-     C     YExecCmd      WhenEq    *BLANKS
-      *           No command to excute
-     C                   other
-     C                   Callp     f_execute(YExecCmd: YMsgID: YMsgDta)
-     C                   If        (YMsgID <> '')
-     C                   Callp     p_sndPgmMg(YMsgID: YMsgDta: §§pgmName)
-     C                   Eval      YMsgID = ''
-     C                   Eval      YMsgDta = ''
-     C                   Endif
-     C                   Endsl
-      *
-     C                   ELSE
-      *        kein Datensatz verfügbar
-     C                   Endif
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    S_About        A - Über Peek/400                        *
-      *============================================================*
-      *
-     C     S_About       BEGSR
-      *
-     C                   CALLP     PEEK49(SET_Dsp80: §CopyRight
-     C                                    : §Release: §Version
-     C                                    : YMsgID: YMsgDta)
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    S_DspNrm      Normale Anzeige                           *
-      *============================================================*
-      *
-     C     S_DspNrm      BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   EXSR      MsgNoFile
-     C                   ELSE
-     C     SET_DspMde    IFEQ      '*DSPNRM'
-      *    ... Anzeige stimmt bereits
-     C                   ELSE
-      *
-      *  Umschalten der Anzeige
-     C                   EVAL      SET_DspMde = '*DSPNRM'
-     C                   EVAL      IsSflDirty = bTrue
-      *
-     C                   Endif
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    S_DspHex      Hexadezimale Anzeige                      *
-      *============================================================*
-      *
-     C     S_DspHex      BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   EXSR      MsgNoFile
-     C                   ELSE
-     C     SET_DspMde    IFEQ      '*DSPHEX'
-      *    ... Anzeige stimmt bereits
-     C                   ELSE
-      *
-     C                   IF        File#X.RcdLen > RCD_BUFF_LEN
-     C                   CLEAR                   USR8206
-     C                   Eval      USR82061   = RCD_BUFF_LEN
-     C                   Callp     p_sndPgmMg('USR8206': USR8206: §§pgmName)
-     C                   ELSE
-     C                   Eval      SET_DspMde = '*DSPHEX'
-     C                   Eval      IsSflDirty = bTrue
-     C                   Endif
-      *
-     C                   Endif
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    S_DspTgl      Umschalten der Anzeige                    *
-      *============================================================*
-      *
-     C     S_DspTgl      BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   EXSR      MsgNoFile
-     C                   ELSE
-     C     Set_DspMde    IFEQ      '*DSPNRM'
-     C                   EXSR      S_DspHex
-     C                   ELSE
-     C                   EXSR      S_DspNrm
-     C                   Endif
-      *
-     C                   EVAL      IsSflDirty = bTrue
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    S_SaveEnv     Sichern Arbeitsumgebung                   *
-      *============================================================*
-      *
-     C     S_SaveEnv     BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   EXSR      MsgNoFile
-     C                   ELSE
-      *
-     C                   CALLP     PEEK56(SET_Dsp80: §CopyRight: '*SAVE'
-     C                                    : YEnvFile: YEnvLib: YEnvMbr
-     C                                    : $$RCDFMTID
-     C                                    : YQFile: YMember: YText: YOption
-     C                                    : YMsgID: YMsgDta)
-      *
-     C                   If        YMsgID <> ' '
-     C                   Callp     p_sndPgmMg(yMsgID: yMsgDta: §§pgmName)
-     C                   Eval      yMsgID = ''
-     C                   Eval      yMsgDta = ''
-     C                   Else
-      *
-     C                   Eval      YEnvFile = yFile
-     C                   Eval      YEnvLib  = yLibrary
-     C                   Eval      YEnvMbr  = yMember
-     C                   EVAL      YIsAutoSave = bFalse
-     C                   Exsr      SaveEnv
-      *
-     C                   If        YMsgID <> ' '
-     C                   Callp     p_sndPgmMg(yMsgID: yMsgDta: §§pgmName)
-     C                   Eval      yMsgID = ''
-     C                   Eval      yMsgDta = ''
-     C                   Endif
-      *
-     C                   Endif
-      *
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    S_LoadEnv     Laden Arbeitsumgebung                     *
-      *============================================================*
-      *
-     C     S_LoadEnv     BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   EXSR      MsgNoFile
-     C                   ELSE
-      *
-     C                   CALLP     PEEK56(SET_Dsp80: §CopyRight: '*LOAD'
-     C                                    : YEnvFile: YEnvLib: YEnvMbr
-     C                                    : $$RCDFMTID
-     C                                    : YQFile: YMember: YText: YOption
-     C                                    : YMsgID: YMsgDta)
-      *
-     C                   If        YMsgID <> ' '
-     C                   Callp     p_sndPgmMg(yMsgID: yMsgDta: §§pgmName)
-     C                   Eval      yMsgID = ''
-     C                   Eval      yMsgDta = ''
-     C                   Else
-      *
-     C                   Eval      YEnvFile = yFile
-     C                   Eval      YEnvLib  = yLibrary
-     C                   Eval      YEnvMbr  = yMember
-     C                   Exsr      LoadEnv
-     C                   EVAL      IsSflDirty = bTrue
-     C                   Endif
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    LoadEnv       Laden Arbeitsumgebung                     *
-      *============================================================*
-      *
-     C     LoadEnv       BEGSR
-      *
-     C                   Eval      IsPinToClr = bFalse
-      *
-     C                   if        (##Member = '*NONE')
-     C                   leavesr
-     C                   endif
-      *
-     C                   CALLP     PEEK55(##File: ##Library: ##Member: ##Format
-     C                                    : $$RCDFMTID
-     C                                    : YEnvFile: YEnvLib: YEnvMbr
-     C                                    : YOption
-     C                                    : PinTabRcd: NbrPinRcd
-     C                                    : PinTabCol: NbrPinCol
-     C                                    : rtn.file: rtn.library: rtn.member
-     C                                    : rtn.format
-     C                                    : rtn.accessMode: rtn.sqlWhere
-     C                                    : rtn.sqlOrder
-     C                                    : isKeyLower
-     C                                    :YMsgID: YMsgDta)
-      *
-     C                   If        yMsgID <> ' '
-     C                   Callp     p_sndPgmMg(yMsgID: yMsgDta: §§pgmName)
-     C                   Eval      yMsgID = ''
-     C                   Eval      yMsgDta = ''
-     C                   Else
-      *
-     C                   If        (##FILE     <> rtn.file or
-     C                              ##LIBRARY  <> rtn.library or
-     C                              ##MEMBER   <> rtn.member or
-     C                              ##FORMAT   <> rtn.format or
-     C                              accessMode <> rtn.accessMode or
-     C                              sqlWhere   <> rtn.sqlWhere or
-     C                              sqlOrder   <> rtn.sqlOrder)
-     C                   Exsr      closeFile
-     C                   Eval      ##FILE     = rtn.file
-     C                   Eval      ##LIBRARY  = rtn.library
-     C                   Eval      ##MEMBER   = rtn.member
-     C                   Eval      ##FORMAT   = rtn.format
-     C                   Eval      accessMode = rtn.accessMode
-     C                   Eval      sqlWhere   = rtn.sqlWhere
-     C                   Eval      sqlOrder   = rtn.sqlOrder
-     C                   Exsr      openFile
-     C                   CALLP     PEEK55(##File: ##Library: ##Member: ##Format
-     C                                    : $$RCDFMTID
-     C                                    : YEnvFile: YEnvLib: YEnvMbr
-     C                                    : YOption
-     C                                    : PinTabRcd: NbrPinRcd
-     C                                    : PinTabCol: NbrPinCol
-     C                                    : rtn.file: rtn.library: rtn.member
-     C                                    : rtn.format
-     C                                    : rtn.accessMode: rtn.sqlWhere
-     C                                    : rtn.SqlOrder
-     C                                    : isKeyLower
-     C                                    :YMsgID: YMsgDta)
-     C                   Endif
-      *
-     C                   Eval      PinTabRcd    = YPinTabR
-     C                   Eval      NbrPinRcd  = YNbrPinR
-     C                   Eval      NbrPinCol  = YNbrPinC
-      *
-     C                   Eval      isKeyLower = YisKeyLower
-     C                   Endif
-      *
-     C                   Eval      IsPinToClr = bTrue
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    SaveEnv       Speichern Arbeitsumgebung                 *
-      *============================================================*
-      *
-     C     SaveEnv       BEGSR
-      *
-     C                   CALLP     PEEK54(##File: ##Library: ##Member: ##Format
-     C                                    : $$RcdFmtID
-     C                                    : YEnvFile: YEnvLib: YEnvMbr
-     C                                    : YIsAutoSave
-     C                                    : PinTabRcd: NbrPinRcd
-     C                                    : PinTabCol: NbrPinCol
-     C                                    : accessMode: sqlWhere
-     C                                    : sqlOrder: isKeyLower
-     C                                    : YMsgID: YMsgDta)
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    S_DelEnv      Löschen Arbeitsumgebung                   *
-      *============================================================*
-      *
-     C     S_DelEnv      BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   EXSR      MsgNoFile
-     C                   ELSE
-      *
-     C                   DO        *HIVAL
-      *
-     C                   CALLP     PEEK56(SET_Dsp80: §CopyRight: '*DELETE'
-     C                                    : YEnvFile: YEnvLib: YEnvMbr
-     C                                    : ''
-     C                                    : YQFile: YMember: YText: YOption
-     C                                    : YMsgID: YMsgDta)
-      *
-     C                   If        YMsgID <> ' '
-     C                   Callp     p_sndPgmMg(yMsgID: yMsgDta: §§pgmName)
-     C                   Eval      yMsgID = ''
-     C                   Eval      yMsgDta = ''
-     C                   LEAVE
-     C                   Else
-      *
-     C                   CALLP     PEEK57(SET_Dsp80: §CopyRight
-     C                                    : yFile: yLibrary: yMember: yText
-     C                                    : YMsgID: YMsgDta)
-      *
-     C                   If        yMsgID <> ' '
-     C                   If        yMsgDta = '*CANCEL'
-     C                   ITER
-     C                   ELSE
-     C                   Callp     p_sndPgmMg(yMsgID: yMsgDta: §§pgmName)
-     C                   Eval      yMsgID = ''
-     C                   Eval      yMsgDta = ''
-     C                   LEAVE
-     C                   Endif
-     C                   Endif
-      *
-     C                   Endif
-      *
-     C                   Enddo
-      *
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    MsgNoFile     Nachricht: Keine Datei geöffnet           *
-      *============================================================*
-      *
-     C     MsgNoFile     BEGSR
-      *
-     C                   CLEAR                   USR9996
-     C                   Callp     p_sndPgmMg('USR9996': USR9996: §§pgmName)
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    MsgInvSqlFile Nachricht: Keine Datei geöffnet           *
-      *============================================================*
-      *
-     C     MsgInvSqlFile BEGSR
-      *
-     C                   CLEAR                   USR9993
-     C                   Callp     p_sndPgmMg('USR9993': USR9993: §§pgmName)
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    ClrPinRow     Löschen der Pin-Tabelle für Zeilen        *
-      *============================================================*
-      *
-     C     ClrPinRow     BEGSR
-      *
-     C     IsPinToClr    IFEQ      bTrue
-     C                   EVAL      NbrPinRcd = 0
-     C                   EXSR      clrPinTabR
-     C                   EVAL      IsSflDirty = bTrue
-     C                   ELSE
-      *    ... wird nicht gelöscht
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    ClrPinCol     Löschen der Pin-Tabelle für Spalten       *
-      *============================================================*
-      *
-     C     ClrPinCol     BEGSR
-      *
-     C     IsPinToClr    IFEQ      bTrue
-     C                   EVAL      NbrPinCol = 0
-     C                   CLEAR                   PinTabCol
-     C                   EVAL      IsSflDirty = bTrue
-     C                   ELSE
-      *    ... wird nicht gelöscht
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PBGetTargt    Abffragen der Zieldatei                   *
-      *============================================================*
-      *
-     C     PBGetTargt    BEGSR
-      *
-     C                   monitor
-     C                   CALLP     PEEK26(SET_Dsp80: YQFile: H_MBR
-     C                                    : YFile: YLibrary: YMember
-     C                                    : YMbrOpt: YCrtFile: YMsgID: YMsgDta)
-     C                   eval      *in99 = bFalse
-     C                   on-error
-     C                   eval      *in99 = bTrue
-     C                   endmon
-      *
-     C     *IN99         IFEQ      '1'
-     C                   EVAL      IsError = bTrue
-     C                   EVAL      IsTargetOK = bFalse
-     C                   ELSE
-     C                   EVAL      IsError = bFalse
-     C                   EVAL      IsTargetOK = bTrue
-      *
-     C                   EVAL      CopyFile = YFile
-     C                   EVAL      CopyLib = YLibrary
-     C                   EVAL      CopyToMbr = YMember
-     C                   EVAL      CopyMbrOpt = YMbrOpt
-     C                   EVAL      CopyCrtF = YCrtFile
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PBQueryUsr    Fragen Benutzer                           *
-      *============================================================*
-      *
-     C     PBQueryUsr    BEGSR
-      *
-     C                   monitor
-     C                   CALLP     PEEK14(SET_Dsp80: SET_HedTyp: §CopyRight
-     C                                    : Wrk#RcdNbr: H_FILE: H_LIB: H_MBR
-     C                                    : H_RCDFMT: YPgmCmd: CommitLVL
-     C                                    : YScreenNbr: YMsgID: YMsgDta)
-     C                   eval      *in99 = bFalse
-     C                   on-error
-     C                   eval      *in99 = bTrue
-     C                   endmon
-      *
-     C                   EXSR      ChkHeadChg
-      *
-     C     *IN99         IFEQ      '1'
-      *            Fehler beim Programmaufruf
-     C                   ELSE
-      *
-     C                   SELECT
-      *  Abbruch über F3/F12 ...
-     C     YMsgID        WHENEQ    'USR8100'
-      *  Alle Datensätze löschen ...
-     C     YMsgID        WHENEQ    'USR8111'
-     C                   EVAL      QueryUser = YPgmCmd
-     C                   Callp     p_sndPgmMg('USR8112': '': §§pgmName)
-      *  Einzelnen Datensatz löschen ...
-     C     YMsgID        WHENEQ    'USR8112'
-      *  Unerwartete Nachrichten-ID ...
-     C                   OTHER
-     C                   CLEAR                   USR9998
-     C                   EVAL      USR99981 = YMsgID
-     C                   EVAL      USR99982 = 'PEEK14'
-     C                   Callp     p_sndPgmMg('USR9998': USR9998: §§pgmName)
-     C                   Endsl
-      *
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PinRecord     Datensatz pinnen                          *
-      *============================================================*
-      *
-     C     PinRecord     BEGSR
-      *
-     C                   EVAL      IsPinOK = bFalse
-      *
-     C                   EXSR      ChkPinRcd
-     C     IsPinned      IFEQ      bFalse
-      *  Datensatz ist noch nicht gepinned ...
-     C                   CLEAR                   PinTabRcdE
-     C                   EVAL      x = %lookup(PinTabRcdE: PinTabRcd: x)
-     C                   IF        (x > 0)
-      *  ... Datensatz pinnen
-     C                   EVAL      PinTabRcdE.RCDNBR = Wrk#RcdNbr
-     C                   EVAL      PinTabRcdE.FILE = H_FILE
-     C                   EVAL      PinTabRcdE.LIB = H_LIB
-     C                   EVAL      PinTabRcdE.MBR = H_MBR
-     C                   EVAL      PinTabRcdE.RCDFMT = H_RCDFMT
-     C                   EVAL      PinTabRcdE.MBRNBR = H_MBRNBR
-     C                   EVAL      PinTabRcd(X) = PinTabRcdE
-      *
-     C                   EVAL      NbrPinRcd = X
-     C                   EVAL      IsSflDirty = bTrue
-     C                   EVAL      IsPinOK = bTrue
-     C                   ELSE
-      *  Kein Platz mehr vorhanden ...
-     C                   Callp     p_sndPgmMg('USR8118': '': §§pgmName)
-     C                   Endif
-      *
-     C                   ELSE
-      *  Datensatz ist schon gepinned
-     C                   Callp     p_sndPgmMg('USR8119': '': §§pgmName)
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PinCol        Spalte pinnen                             *
-      *============================================================*
-      *
-     C     PinCol        BEGSR
-      *
-     C                   EVAL      IsPinOK = bFalse
-      *
-     C                   EVAL      Pin#Field = Wrk#Field
-     C                   EXSR      ChkPinCol
-     C     IsPinned      IFEQ      bFalse
-      *  Datensatz ist noch nicht gepinned ...
-     C                   EVAL      X = 1
-     C                   EVAL      Pin#Field = ''
-     C                   EVAL      x = %lookup(Pin#Field: PinTabCol: x)
-     C                   IF        (x > 0)
-      *  ... Datensatz pinnen
-     C                   EVAL      PinTabCol(X) = Wrk#Field
-     C                   EVAL      NbrPinCol = X
-     C                   EVAL      IsSflDirty = bTrue
-     C                   EVAL      IsPinOK = bTrue
-     C                   ELSE
-      *  Kein Platz mehr vorhanden ...
-     C                   Callp     p_sndPgmMg('USR8118': '': §§pgmName)
-     C                   Endif
-      *
-     C                   ELSE
-      *  Datensatz ist schon gepinned
-     C                   Callp     p_sndPgmMg('USR8119': '': §§pgmName)
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    DelRecord     Löschen Datensatz                         *
-      *============================================================*
-      *
-     C     DelRecord     BEGSR
-      *
-     C                   EVAL      *IN11 = f_chain00(Wrk#RcdNbr:
-     C                                               H_FILE   :
-     C                                               H_LIB    :
-     C                                               H_MBR    :
-     C                                               '')
-     C     *IN11         IFEQ      '1'
-      *  Fehler bei Zugriff auf Datensatz ...
-     C                   EVAL      USR82001 = Wrk#RcdNbr
-     C                   Callp     p_sndPgmMg('USR8200': USR8200: §§pgmName)
-      *
-     C                   ELSE
-      *
-     C                   IF        CIO_delete(hFile00) = bTrue
-     C                   EVAL      *IN99 = '0'
-     C                   ELSE
-     C                   EVAL      *IN99 = '1'
-     C                   ENDIF
-     C                   EXSR      F0toFx
-      *
-     C     *IN99         IFEQ      '1'
-     C                   IF        (*in55 = bTrue)
-     C                   ROLBK
-     C                   ELSE
-     C                   CALLP     CIO_unlock(hFile00)
-     C                   ENDIF
-     C                   EXSR      F0toFx
-      *
-     C                   EVAL      USR82001 = Wrk#RcdNbr
-     C                   Callp     p_sndPgmMg('USR8200': USR8200: §§pgmName)
-     C                   ELSE
-     C                   IF        (*in55 = bTrue)
-     C                   COMMIT
-     C                   ELSE
-     C                   CALLP     CIO_unlock(hFile00)
-     C                   ENDIF
-     C                   EXSR      F0toFx
-     C                   EXSR      CallExit04
-      *
-     C                   EVAL      USR82011 = Wrk#RcdNbr
-     C                   Callp     p_sndPgmMg('USR8201': USR8201: §§pgmName)
-     C                   EVAL      IsSflDirty = bTrue
-     C                   Endif
-      *
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-     C     CallExit04    BEGSR
-      *
-     C                   If        f_exist('EXIT04': '*LIBL': '*PGM') = bTrue
-      *
-     C                   Eval      yFile      = File#X.File
-     C                   Eval      yLibrary   = File#X.Library
-     C                   Eval      yMember    = File#X.Member
-     C                   Eval      yEvent     = '*DELETE'
-     C                   Eval      yUser      = §§User
-     C                   Eval      yTimestamp = %timestamp()
-     C                   Eval      yRcdNbr    = Wrk#RcdNbr
-     C                   Eval      ySize      = File#X.RcdLen
-     C                   Eval      yBImage    = %addr(IO_Buff)
-     C                   Eval      yAImage    = *NULL
-      *
-     C                   Call      'EXIT04'      P#Exit04
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    CopyExtRcd    Kopieren Datensatz in externe Datei       *
-      *============================================================*
-      *
-     C     CopyExtRcd    BEGSR
-      *
-     C                   IF        f_chain04(Wrk#RcdNbr:
-     C                                       H_FILE   :
-     C                                       H_LIB    :
-     C                                       H_MBR    :
-     C                                       H_RCDFMT ) = '0'
-      *
-     C                   EVAL      rcdNbr# = CIO_getRRN(hFile04)
-      *
-     C                   Callp     f_execute(
-     C                                'CPYF ' +
-     C                                  'FROMFILE(' +
-     C                                    %trim(CIO_getLibrary(hFile04)) +
-     C                                  '/' +
-     C                                    %trim(CIO_getFile(hFile04)) +
-     C                                  ') ' +
-     C                                  'TOFILE(' +
-     C                                    %trim(CopyLib) +
-     C                                  '/' +
-     C                                    %trim(CopyFile) +
-     C                                  ') ' +
-     C                                  'FROMMBR(' +
-     C                                    %trim(CIO_getMember(hFile04)) +
-     C                                  ') ' +
-     C                                  'TOMBR(' +
-     C                                    %trim(CopyToMbr) +
-     C                                  ') ' +
-     C                                  'MBROPT(' +
-     C                                    %trim(CopyMbrOpt) +
-     C                                  ') ' +
-     C                                  'CRTFILE(' +
-     C                                    %trim(CopyCrtF) +
-     C                                  ') ' +
-     C                                  'FROMRCD(' +
-     C                                    rcdNbr$ +
-     C                                  ') ' +
-     C                                  'TORCD(' +
-     C                                    rcdNbr$ +
-     C                                  ') ' +
-     C                                  'FMTOPT(' +
-     C                                    '*MAP *DROP' +
-     C                                  ') ' +
-     C                                  'RCDFMT(' +
-     C                                    %trim(CIO_getRecordFormat(hFile04)) +
-     C                                     ')'
-     C                                : YMsgID: YMsgDta)
-      *
-     C                   IF        (YMsgID <> '')
-     C                   Callp     p_sndPgmMg(YMsgID: YMsgDta: §§pgmName)
-     C                   EVAL      YMsgID = ''
-     C                   EVAL      YMsgDta = ''
-     C                   IF        (*in55 = bTrue)
-     C                   ROLBK
-     C                   ENDIF
-     C                   EXSR      F0toFx
-      *
-     C                   EVAL      USR82021 = Wrk#RcdNbr
-     C                   Callp     p_sndPgmMg('USR8202': USR8202: §§pgmName)
-     C                   ELSE
-     C                   IF        (*in55 = bTrue)
-     C                   COMMIT
-     C                   ENDIF
-     C                   EXSR      F0toFx
-      *
-     C                   EVAL      USR82031 = Wrk#RcdNbr
-     C                   Callp     p_sndPgmMg('USR8203': USR8203: §§pgmName)
-     C                   Endif
-      *
-     C                   Endif
-      *
-      *  Alles weitere mit ...
-     C                   EVAL      CopyMbrOpt = '*ADD'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    ChkHeadChg    Prüfen, ob die Überschrift gewechselt hat *
-      *                  nach:  S_Delete und S_Display             *
-      *============================================================*
-      *
-     C     ChkHeadChg    BEGSR
-      *
-     C     *IN99         IFEQ      '1'
-      *            Fehler beim Programmaufruf
-     C                   ELSE
-     C     YMsgID        IFEQ      'USR8100'
-     C                   Callp     p_sndPgmMg(YMsgID: YMsgDta: §§pgmName)
-     C                   EVAL      YMsgID = ''
-     C                   EVAL      YMsgDta = ''
-     C                   ELSE
-     C                   EVAL      SET_HedTyp = YHeaderTyp
-     C                   EVAL      IsSflDirty = bTrue
-     C                   Endif
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    SrchStart     Aufsetzen mit neuer Suche                 *
-      *============================================================*
-      *
-     C     SrchStart     BEGSR
-      *
-      *  Übertragen der Übergabeparameter ...
-     C                   EVAL      SrchField = YField
-     C                   EVAL      SrchOP = YOperation
-     C                   EVAL      SrchArg = YArgument
-     C                   EVAL      SrchSign = YSign
-      *
-      *  ... Anpassungen für LIKE/NLIKE ...
-     C     SrchOP        IFEQ      'LIKE'
-     C     SrchOP        OREQ      'NLIKE'
-      *      ... führendes %-Zeichen
-     C     1             SUBST (P) SrchArg:1     A1
-     C     A1            IFEQ      SET_WLDCD
-     C                   SUBST (P) SrchArg:2     SrchArg
-     C                   EVAL      SrchLikeTp = 1
-     C                   ELSE
-     C                   EVAL      SrchArg = SrchArg
-     C                   EVAL      SrchLikeTp = §ZEROS
-     C                   Endif
-      *
-      *      ... nachgestelltes %-Zeichen
-     C                   EVAL      x = %checkr(' ': SrchArg)
-     C     X             IFGT      §ZEROS
-     C                   EVAL      A1 = %subst(SrchArg: x: 1)
-      *
-     C     A1            IFEQ      SET_WLDCD
-     C                   EVAL      X = X - 1
-     C     X             IFGT      §ZEROS
-     C                   EVAL      SrchArg = %subst(SrchArg: 1: x)
-     C                   ELSE
-     C                   EVAL      SrchArg = *BLANKS
-     C                   Endif
-     C                   EVAL      SrchLikeTp = SrchLikeTp + 2
-     C                   Endif
-      *
-     C                   Endif                                                 X
-      *
-      *      ... Länge von SrchArg
-     C                   EVAL      SrchLikeLn = %checkr(' ': SrchArg)
-     C                   ELSE
-      *  ... keine Anpassungen erforderlich
-     C                   EVAL      SrchLikeTp = §ZEROS
-     C                   EVAL      SrchLikeLn = §ZEROS
-     C                   Endif
-      *
-     C                   EVAL      SrchNbrs = YSrchNbrs
-     C                   EVAL      SrchType = YSrchType
-     C                   EVAL      SrchCase = YSrchCase
-      *
-      *  Ermitteln der Feldattribute
-     C                   EXSR      SrchFldAtr
-      *
-     C     SrchField     IFEQ      '*RECORD'
-     C                   EVAL      SrchIsNum = bFalse
-     C                   ELSE
-     C                   IF        f_isNumFld(FLDL0100) = bTrue
-     C                   EVAL      SrchIsNum = bTrue
-     C                   ELSE
-     C                   EVAL      SrchIsNum = bFalse
-     C                   Endif
-     C                   Endif
-      *
-      *  Nicht Case-Sensitive suchen ...
-     C     YSrchCase     IFEQ      bFalse
-     C     SrchIsNum     ANDEQ     bFalse
-     C     cLOWER:cUPPER XLATE (P) SrchArg       SrchArg
-     C                   ELSE
-      *      keine Konvertierung erforderlich
-     C                   Endif
-      *
-      *  Numerische Suche ...
-     C     SrchIsNum     IFEQ      bTrue
-     C                   IF        f_isFloatFld(FLDL0100) = bTrue
-     C                   EVAL      SrchArgFloat = %float(SrchArg)
-     C                   EVAL      SrchArgVal   = 0
-     C                   EVAL      SrchArgIsFloat = bTrue
-     C                   ELSE
-     C                   EVAL      SrchArgVal   = %dec(SrchArg
-     C                                                 : cSRCHARG_DIGITS
-     C                                                 : cSRCHARG_DECPOS)
-     C                   EVAL      SrchArgFloat = 0
-     C                   EVAL      SrchArgIsFloat = bFalse
-     C                   ENDIF
-     C     SrchSign      IFEQ      SET_SignM
-      *  ... negativen Wert erzeugen
-     C                   MULT      -1            SrchArgVal
-     C                   MULT      -1            SrchArgFloat
-     C                   ELSE
-      *  ... positiven Wert belassen
-     C                   Endif
-     C                   ELSE
-     C                   EVAL      SrchArgVal = §ZEROS
-     C                   EVAL      SrchArgFloat = §ZEROS
-     C                   Endif
-      *
-      *  Ermitteln des Startdatensatzes
-     C                   EXSR      SrchStrRcd
-      *
-      *  Suchen ...
-     C                   EXSR      SrchUp
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    SrchCont      Fortsetzen der Suche nach "gefunden"      *
-      *============================================================*
-      *
-     C     SrchCont      BEGSR
-      *
-      *  Ermitteln der Feldattribute
-     C                   EXSR      SrchFldAtr
-      *
-      *  Ermitteln des Startdatensatzes
-     C                   EXSR      SrchStrRcd
-      *
-      *  Suchen ...
-     C                   EXSR      SrchUp
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    SrchContM     Fortsetzen der Suche nach "MAXIMUM"       *
-      *============================================================*
-      *
-     C     SrchContM     BEGSR
-      *
-      *  Ermitteln der Feldattribute
-     C                   EXSR      SrchFldAtr
-      *
-      *  Suchen ...
-     C                   EXSR      SrchUp
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    SrchEOF       Fortsetzen der Suche nach Dateiende       *
-      *============================================================*
-      *
-     C     SrchEOF       BEGSR
-      *
-      *  Ermitteln der Feldattribute
-     C                   EXSR      SrchFldAtr
-      *
-      *  Ermitteln des Startdatensatzes
-     C                   EXSR      PBMoveTop
-      *
-      *  Suchen ...
-     C                   EXSR      SrchUp
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    SrchStrRcd    Positionieren auf Startdatensatz          *
-      *============================================================*
-      *
-     C     SrchStrRcd    BEGSR
-      *
-      *---------------------------------------*
-      *  Cursor im Subfilebereich ...
-      *---------------------------------------*
-     C     SflCsr        IFNE      §ZEROS
-     C     SflCsr        ANDGT     NbrPinRcd
-      *
-      *  ... übersetzen in Satznummer
-     C                   EXSR      PBCsrTRcd
-      *  ... Fortsetzen der Suche
-     C     Wrk#RcdNbr    IFEQ      SrchFndRcd
-     C                   EXSR      PBReadCsrA
-     C                   ELSE
-      *  ... oder neu anfangen
-     C                   EXSR      PBReadCsr
-     C                   Endif
-     C                   ELSE
-      *
-      *---------------------------------------*
-      *  Cursor nicht im Subfilebereich ...   *
-      *---------------------------------------*
-     C                   EVAL      X = SflFirstRw + NbrPinRcd
-     C                   If        (cursorPosition.row < X)
-      *  ... oberhalb der Subfile
-     C                   EXSR      PBReadDn
-     C                   ELSE
-      *  ... unterhalb der Subfile
-      *             einfach weitersuchen
-     C                   Endif
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    SrchFldAtr    Ermitteln der Feldattribute des           *
-      *                  Suchfeldes                                *
-      *============================================================*
-      *
-     C     SrchFldAtr    BEGSR
-      *
-     C                   EVAL      F_Field = SrchField
-     C     F_Key         CHAIN (N) FPEEKFLD                           11
-     C     *IN11         IFEQ      '1'
-     C                   CLEAR                   FLDL0100
-     C                   ELSE
-     C                   EVAL      FLDL0100 = F_FFD
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    SrchUp        Suchen ab einer gegebenen Satznummer      *
-      *============================================================*
-      *
-     C     SrchUp        BEGSR
-      *
-      *  Suche läuft ...
-     C                   Callp     p_sndStsMg('USR8127': ' ')
-      *
-     C                   EVAL      SrchCount = §ZEROS
-     C                   EVAL      SrchCount2 = §ZEROS
-      *
-     C                   DO        *HIVAL
-     C                   EXSR      PBRead
-     C     IsEOF         IFEQ      bTrue
-     C                   EVAL      SrchMode = '*EOF'
-     C                   LEAVE
-     C                   Endif
-      *
-     C                   EVAL      SrchCount = SrchCount + 1
-     C     SrchCount     IFGE      SrchNbrs
-     C                   EVAL      SrchMode = '*MAXIMUM'
-     C                   LEAVE
-     C                   Endif
-      *
-     C                   EXSR      SrchComp
-     C     IsFound       IFEQ      bTrue
-     C                   EVAL      SrchMode = '*FOUND'
-      *  ... suchen & pinnen
-     C     SrchType      IFEQ      '*PINROW'
-     C                   EVAL      Wrk#RcdNbr = File#X.RcdNbr
-     C                   EXSR      PinRecord
-     C     IsPinOK       IFEQ      bFalse
-     C                   LEAVE
-     C                   ELSE
-      *        weiter suchen und pinnen
-     C                   Endif
-     C                   ELSE
-      *  ... sonstige Suchfunktionen
-     C                   LEAVE
-     C                   Endif
-     C                   Endif
-      *
-     C                   EVAL      SrchCount2 = SrchCount2 + 1
-     C     SrchCount2    IFGE      SrchDspMsg
-     C                   EVAL      SrchCount2 = §ZEROS
-      *
-     C                   Clear                   USR8128
-     C                   Eval      USR81281 = SrchCount
-     C                   Eval      USR81282 = SrchNbrs
-     C                   Callp     p_sndStsMg('USR8128': USR8128)
-     C                   Endif
-      *
-     C                   Enddo
-      *
-      *  Statuszeile löschen ...
-     C                   Callp     p_sndStsMg('USR9999': ' ')
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    SrchComp      Vergleichen der Suchauswahl               *
-      *============================================================*
-      *
-     C     SrchComp      BEGSR
-      *
-     C                   EVAL      IsFound = bFalse
-      *
-      *  Im ganzen Datensatz suchen ...
-     C     SrchField     IFEQ      '*RECORD'
-     C                   EVAL      SrchCmpRcd = IO_Buff
-     C                   ELSE
-     C                   EXSR      SrchGetCmp
-     C                   Endif
-      *
-      *  Im ganzen Datensatz suchen ...
-     C     SrchField     IFEQ      '*RECORD'
-     C                   EXSR      SrchComp_R
-     C                   ELSE
-      *  Im Datenfeld suchen ...
-     C                   EXSR      SrchComp_F
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    SrchGetCmp    Dateninhalt aus Datensatz extrahieren     *
-      *                  für Vergleich der Suchfunktion            *
-      *============================================================*
-      *
-     C     SrchGetCmp    BEGSR
-      *
-     C                   IF        srchIsNum = bTrue
-     C                   Callp                  f_rtvFld(yBuffer  :
-     C                                                   IO_Buff  :
-     C                                                   FLDL0100 :
-     C                                                   bTrue    )
-      *
-     C                   Eval      yTgtValue  = ' '
-      *
-     C                   IF        SrchArgIsFloat = bTrue
-     C                   CALLP     PEEK18(FLDL0100: 'FLDL0100': YBuffer:
-     C                                    '*FLOAT': '': YOutBuffer: YOutBuffLn
-     C                                    : YMsgID: YMsgDta)
-      *
-     C                   EVAL      SrchCmpFloat = %float(yOutBuffer)
-     C                   EVAL      SrchCmpVal   = 0
-     C                   ELSE
-     C                   CALLP     PEEK18(FLDL0100: 'FLDL0100': YBuffer:
-     C                                    '*ZONED': '': YOutBuffer: YOutBuffLn
-     C                                    : YMsgID: YMsgDta)
-      *
-     C                   Eval      SrchCmpStr =
-     C                               %subst(YOutBuffer
-     C                                      : YOutBuffLn - %len(SrchCmpStr) + 1
-     C                                      : YOutBuffLn)
-     C                   EVAL      SrchCmpVal = %dec(SrchCmpStr
-     C                                               : SRCH_CMP_VAL_LENGTH
-     C                                               : SRCH_CMP_VAL_DECPOS)
-     C                   EVAL      SrchCmpFloat = 0
-     C                   ENDIF
-      *
-     C                   ELSE
-     C                   Callp                  f_rtvFld(SrchCmpStr:
-     C                                                   IO_Buff   :
-     C                                                   FLDL0100  )
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    SrchComp_R    Suchen im Datensatz                       *
-      *============================================================*
-      *
-     C     SrchComp_R    BEGSR
-      *
-      *  Nicht Case-Sensitive suchen ...
-     C     SrchCase      IFEQ      bFalse
-     C     cLOWER:cUPPER XLATE (P) SrchCmpRcd    SrchCmpRcd
-      *  Case-Sensitive suchen ...
-     C                   Endif
-      *
-     C                   EVAL      x = %checkr(' ': SrchArg)
-     C     X             IFNE      §ZEROS
-     C     SrchArg:X     SCAN      SrchCmpRcd:1  X
-     C                   ELSE
-     C     SrchArg       SCAN      SrchCmpRcd:1  X
-     C                   Endif
-      *
-      *  Gleich ...
-     C     SrchOP        IFEQ      'LIKE'
-      *  ... nicht gefunden
-     C     X             IFEQ      §ZEROS
-     C                   EVAL      IsFound = bFalse
-     C                   ELSE
-      *  ... gefunden
-     C                   EVAL      IsFound = bTrue
-     C                   Endif
-     C                   ELSE
-      *  UnGleich ...
-      *  ... nicht gefunden
-     C     X             IFEQ      §ZEROS
-     C                   EVAL      IsFound = bTrue
-     C                   ELSE
-      *  ... gefunden
-     C                   EVAL      IsFound = bFalse
-     C                   Endif
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    SrchComp_F    Suchen im Feld                            *
-      *============================================================*
-      *
-     C     SrchComp_F    BEGSR
-      *
-      *  Nicht Case-Sensitive suchen ...
-      *  (nur bei nicht numerischer Suche beachten)
-     C     SrchCase      IFEQ      bFalse
-     C     SrchIsNum     ANDEQ     bFalse
-     C     cLOWER:cUPPER XLATE (P) SrchCmpStr    SrchCmpStr
-      *  Case-Sensitive suchen ...
-     C                   Endif
-      *
-      *-----------------------*
-      *  Vergleichen ...      *
-      *-----------------------*
-     C                   SELECT
-      *  Gleich ...
-     C     SrchOP        WHENEQ    'EQ'
-     C     SrchIsNum     IFEQ      bFalse
-     C     SrchCmpStr    IFEQ      SrchArg
-     C                   EVAL      IsFound = bTrue
-     C                   Endif
-     C                   ELSE
-     C                   IF        (SrchArgIsFloat = bFalse and
-     C                              SrchCmpVal = SrchArgVal) or
-     C                             (SrchArgIsFloat = bTrue  and
-     C                              SrchCmpFloat = SrchArgFloat)
-     C                   EVAL      IsFound = bTrue
-     C                   Endif
-     C                   Endif
-      *  UnGleich ...
-     C     SrchOP        WHENEQ    'NE'
-     C     SrchIsNum     IFEQ      bFalse
-     C     SrchCmpStr    IFNE      SrchArg
-     C                   EVAL      IsFound = bTrue
-     C                   Endif
-     C                   ELSE
-     C                   IF        (SrchArgIsFloat = bFalse and
-     C                              SrchCmpVal <> SrchArgVal) or
-     C                             (SrchArgIsFloat = bTrue  and
-     C                              SrchCmpFloat <> SrchArgFloat)
-     C                   EVAL      IsFound = bTrue
-     C                   Endif
-     C                   Endif
-      *  Größer ...
-     C     SrchOP        WHENEQ    'GT'
-     C     SrchIsNum     IFEQ      bFalse
-     C     SrchCmpStr    IFGT      SrchArg
-     C                   EVAL      IsFound = bTrue
-     C                   Endif
-     C                   ELSE
-     C                   IF        (SrchArgIsFloat = bFalse and
-     C                              SrchCmpVal > SrchArgVal) or
-     C                             (SrchArgIsFloat = bTrue  and
-     C                              SrchCmpFloat > SrchArgFloat)
-     C                   EVAL      IsFound = bTrue
-     C                   Endif
-     C                   Endif
-      *  Kleiner ...
-     C     SrchOP        WHENEQ    'LT'
-     C     SrchIsNum     IFEQ      bFalse
-     C     SrchCmpStr    IFLT      SrchArg
-     C                   EVAL      IsFound = bTrue
-     C                   Endif
-     C                   ELSE
-     C                   IF        (SrchArgIsFloat = bFalse and
-     C                              SrchCmpVal < SrchArgVal) or
-     C                             (SrchArgIsFloat = bTrue  and
-     C                              SrchCmpFloat < SrchArgFloat)
-     C                   EVAL      IsFound = bTrue
-     C                   Endif
-     C                   Endif
-      *  Größer/Gleich ...
-     C     SrchOP        WHENEQ    'GE'
-     C     SrchIsNum     IFEQ      bFalse
-     C     SrchCmpStr    IFGE      SrchArg
-     C                   EVAL      IsFound = bTrue
-     C                   Endif
-     C                   ELSE
-     C                   IF        (SrchArgIsFloat = bFalse and
-     C                              SrchCmpVal >= SrchArgVal) or
-     C                             (SrchArgIsFloat = bTrue  and
-     C                              SrchCmpFloat >= SrchArgFloat)
-     C                   EVAL      IsFound = bTrue
-     C                   Endif
-     C                   Endif
-      *  Kleiner/Gleich ...
-     C     SrchOP        WHENEQ    'LE'
-     C     SrchIsNum     IFEQ      bFalse
-     C     SrchCmpStr    IFLE      SrchArg
-     C                   EVAL      IsFound = bTrue
-     C                   Endif
-     C                   ELSE
-     C                   IF        (SrchArgIsFloat = bFalse and
-     C                              SrchCmpVal <= SrchArgVal) or
-     C                             (SrchArgIsFloat = bTrue  and
-     C                              SrchCmpFloat <= SrchArgFloat)
-     C                   EVAL      IsFound = bTrue
-     C                   Endif
-     C                   Endif
-      *  Ähnlich ...
-     C     SrchOP        WHENEQ    'LIKE'
-     C     SrchOP        OREQ      'NLIKE'
-      *
-     C                   SELECT
-      *  ...   ('%ABCD')
-     C     SrchLikeTp    WHENEQ    1
-     C                   EVAL      x = %checkr(' ': SrchCmpStr)
-     C                   EVAL      X = X - SrchLikeLn
-     C                   EVAL      X = X + 1
-     C     X             IFGT      §ZEROS
-     C                   EVAL      SrchCmpStr= %subst(SrchCmpStr: x: SrchLikeLn)
-     C     SrchCmpStr    IFEQ      SrchArg
-     C                   EVAL      IsFound = bTrue
-     C                   Endif
-     C                   Endif
-      *
-      *  ...   ('ABCD%')
-     C     SrchLikeTp    WHENEQ    2
-     C                   EVAL      SrchCmpStr= %subst(SrchCmpStr: 1: SrchLikeLn)
-     C     SrchCmpStr    IFEQ      SrchArg
-     C                   EVAL      IsFound = bTrue
-     C                   Endif
-      *
-      *  ...   ('%ABCD%')
-     C                   OTHER
-     C                   EVAL      X = SrchLikeLn
-     C     SrchArg:X     SCAN      SrchCmpStr:1  X
-     C     X             IFGT      §ZEROS
-     C                   EVAL      IsFound = bTrue
-     C                   Endif
-      *
-     C                   Endsl
-      *
-      *  ... auswerten IsFound für LIKE/NLIKE
-     C     SrchOP        IFEQ      'LIKE'
-      *        ... IsFound ist bereits richtig gesetzt.
-     C                   ELSE
-      *        ... IsFound muß negiert werden ...
-     C     IsFound       IFEQ      bTrue
-     C                   EVAL      IsFound = bFalse
-     C                   ELSE
-     C                   EVAL      IsFound = bTrue
-     C                   Endif
-     C                   Endif
-      *
-     C                   OTHER
-     C                   Endsl
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    SrchInz       Initialisieren der Suchfunktion           *
-      *============================================================*
-      *
-     C     SrchInz       BEGSR
-      *
-     C                   EVAL      SrchMode = '*NEW'
-     C                   EVAL      SrchFndRcd = 0
-      *
-     C                   EVAL      SrchField = *BLANKS
-     C                   EVAL      SrchOP = *BLANKS
-     C                   EVAL      SrchArg = *BLANKS
-     C                   EVAL      SrchSign = *BLANKS
-     C                   EVAL      SrchNbrs = §ZEROS
-     C                   EVAL      SrchType = *BLANKS
-      *
-     C                   EVAL      SrchCmpStr = *BLANKS
-     C                   EVAL      SrchCount = §ZEROS
-      *
-     C                   EVAL      SrchCount = §ZEROS
-     C                   EVAL      SrchCount2 = §ZEROS
-     C                   EVAL      SrchDspMsg = 1000
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    CallUpdPgm    Aufrufen Updateprogramm für F6, 2, 3      *
-      *============================================================*
-      *
-     C     CallUpdPgm    BEGSR
-      *
-     C                   EVAL      IsTryed = bFalse
-      *
-     C     *IN99         DOUEQ     '0'
-      *
-     C                   EXSR      GetPgmName
-     C                   EXSR      GetDSpName
-      *
-     C                   Eval      pgmToCall = f_pgmCallN(peekPgm)
-      *
-     C                   EVAL      YDsp80 = SET_Dsp80
-     C                   EVAL      YHeaderTyp = SET_HedTyp
-     C                   EVAL      YCopyRight = §CopyRight
-      *
-     C                   IF        (YFunction = '*ADD')
-     C                   EVAL      YRcdNbr = *ZEROS
-     C                   ELSE
-     C                   EVAL      YRcdNbr = Wrk#RcdNbr
-     C                   ENDIF
-      *
-     C                   EVAL      YFile = File#X.File
-     C                   EVAL      YLibrary = File#X.Library
-     C                   EVAL      YMember = File#X.Member
-     C                   EVAL      YCommitLVL = CommitLVL
-     C                   EVAL      YIsUpdKey = isUpdKey
-     C                   CALL      pgmToCall     P_PeekPgm              99
-      *
-     C                   EXSR      ChkHeadChg
-      *
-      *  Wenn der Programmaufruf
-      *  fehlgeschlagen ist, ...                                      RADDAT
-     C     *IN99         IFEQ      '1'
-      *  ... und kein REBUILD stattgefunden hat, ...                  RADDAT
-     C     IsTryed       IFEQ      bFalse
-      *      ... dann versuchen, das Programm
-      *          neu zu serstellen
-     C                   EXSR      C_BuildPgm
-     C                   EVAL      IsTryed = bTrue
-     C     *IN99         IFEQ      '0'
-      *          Wenn das Programm neu erstellt
-      *          werden konnte, dann neuen Versuch
-      *          unternehmen ...
-     C                   EVAL      *IN99 = '1'
-     C                   ITER
-     C                   ELSE
-      *          ... ansonsten abbrechen
-     C                   Eval      IsCmdErr = bTrue
-     C                   Eval      IsCancel = bTrue
-     C                   LEAVE
-     C                   Endif
-     C                   ELSE
-      *  keine weiterer Versuch möglich ...
-     C                   LEAVE
-     C                   Endif
-     C                   ELSE
-      *  Der Programmaufruf hat funktioniert
-     C                   Endif
-      *
-     C                   Enddo
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    ReloadUsrStg  Aktualisieren Benutzereinstellungen       *
-      *============================================================*
-      *
-     C     ReloadUsrStg  BEGSR
-      *
-     C                   IF        yMsgID = 'USR8100'
-     C                   LEAVESR
-     C                   ENDIF
-      *
-     C                   IF        ##FORMAT <> 'FPEEKUSR'
-     C                   LEAVESR
-     C                   ENDIF
-      *
-     C                   IF        ##FILE <> §§User
-     C                   LEAVESR
-     C                   ENDIF
-      *
-      *  *SPLASH
-     C                   Eval      SET0005 = f_getUsrSg('*SPLASH'   )
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PBInit        Initialisieren der Subfile zur Anzeige    *
-      *                  der nächsten Seite                        *
-      *============================================================*
-      *
-     C     PBINIT        BEGSR
-      *
-      *  Merker für: Subfile gelöscht setzen
-     C                   EVAL      IsPBINIT = bTrue
-      *
-     C                   EVAL      *IN80 = '0'
-     C                   EVAL      *IN81 = '1'
-     C                   EVAL      *IN82 = '1'
-     C                   EVAL      *IN83 = '1'
-     C                   IF        (*in88 = bFalse)
-     C                   WRITE     PBCTL132
-     C                   Else
-     C                   WRITE     PBCTL080
-     C                   Endif
-      *
-     C                   EVAL      *IN82 = '0'
-      *
-     C                   EVAL      SFLREC132 = §ZEROS
-     C                   EVAL      SFLREC080 = §ZEROS
-      *
-     C                   EVAL      SflNbrRcd = §ZEROS
-      *
-     C                   EVAL      ##RcdNbr = §ZEROS
-     C                   EVAL      ##Key = *BLANKS
-      *
-     C                   EVAL      $$Head132 = SET_HedCol
-     C                   EVAL      $$Head080 = SET_HedCOL
-      *
-      *  Aufbereiten der Überschrift
-     C                   EXSR      PBHeadLine
-      *
-      *  Logischer Schalter für Tabellierung
-     C                   EVAL      IsTblCol = bFalse
-      *
-      *  Konvertieren nicht darstellbarer Zeichen
-     C                   EVAL      IsCvtChar = bFalse
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PBCsrTRcd     Übersetzen SflCsr ==> rel. Satznummer     *
-      *============================================================*
-      *
-     C     PBCsrTRcd     BEGSR
-      *
-     C     SflCsr        IFLE      §ZEROS
-     C                   EVAL      *IN11 = '1'
-     C                   ELSE
-     C     *IN88         IFEQ      '0'
-     C                   EVAL      SflRec132 = SflCsr
-     C     SflRec132     CHAIN     PBSFL132                           11
-     C                   ELSE
-     C                   EVAL      SflRec080 = SflCsr
-     C     SflRec080     CHAIN     PBSFL080                           11
-     C                   Endif
-     C                   Endif
-      *
-     C     *IN11         IFEQ      '1'
-     C                   EVAL      Wrk#RcdNbr = §ZEROS
-     C                   ELSE
-     C                   EVAL      Wrk#RcdNbr = RECORDNBR
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    InitSCmd      Initialisieren Kurzbefehl                 *
-      *============================================================*
-      *
-     C     InitSCmd      BEGSR
-      *
-     C                   CLEAR                   shortCmd
-     C                   EVAL      ShortCmd.SC_Action = '*INIT'
-     C                   EVAL      ShortCmd.SC_File = ##File
-     C                   EVAL      ShortCmd.SC_Lib = ##Library
-     C                   EVAL      ShortCmd.SC_Mbr = ##Member
-     C                   CALLP     PEEK42(H_FILE: H_LIB: H_MBR: H_RCDFMT
-     C                                    : ShortCmd: Wrk#RcdNbr: YExecCmd
-     C                                    : YMsgID: YMsgDta)
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PBReadUP      Vorwärts füllen der Subfile               *
-      *============================================================*
-      *
-     C     PBReadUP      BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   ELSE
-      *
-      *  Erster Datensatz in Subfile ...
-     C                   EVAL      IsFirstSfl = bTrue
-      *
-     C                   DO        *HIVAL
-     C                   EXSR      PBRead
-     C     IsEOF         IFEQ      bTrue
-     C                   EVAL      *IN83 = '1'
-     C                   LEAVE
-     C                   ELSE
-     C                   EVAL      *IN83 = '0'
-     C                   Endif
-      *
-     C                   IF        (*in88 = bFalse)
-     C                   ADD       1             SFLRec132
-     C                   Else
-     C                   ADD       1             SFLRec080
-     C                   Endif
-      *
-     C     SFLRec132     IFGT      9999
-     C     SFLRec080     ORGT      9999
-     C                   EVAL      *IN83 = '1'
-     C                   EXSR      PBReadP
-     C                   LEAVE
-     C                   Endif
-      *
-     C     SFLRec132     IFGT      SflPage
-     C     SFLRec080     ORGT      SflPage
-     C                   EXSR      PBReadP
-     C                   LEAVE
-     C                   Endif
-      *
-     C                   EXSR      PBFillRigh
-      *
-     C                   EXSR      PBSflWrite
-      *
-     C                   IF        (*in88 = bFalse)
-     C                   Z-ADD     SflRec132     SflNbrRcd
-     C                   Else
-     C                   Z-ADD     SflRec080     SflNbrRcd
-     C                   Endif
-      *
-      *  Setzen Cursor auf gefundenen Datensatz
-     C     SrchFndRcd    IFEQ      RECORDNBR
-     C                   IF        (*in88 = bFalse)
-     C                   Z-ADD     SflRec132     SFSANR
-     C                   Else
-     C                   Z-ADD     SflRec080     SFSANR
-     C                   Endif
-     C                   Endif
-      *
-      *  Aufbereiten Aufsetzkey bei 1. geschriebendem Datensatz
-     C     IsFirstSfl    IFEQ      bTrue
-     C                   EXSR      PBGenKey
-     C                   Endif
-      *
-      *  Tabellierpapierfarben umschalten ...
-     C     SET_TblMde    IFEQ      bFalse
-      *         Modus ist ausgeschaltet
-     C                   ELSE
-     C     IsTblCol      IFEQ      bFalse
-     C                   EVAL      IsTblCol = bTrue
-     C                   ELSE
-     C                   EVAL      IsTblCol = bFalse
-     C                   Endif
-     C                   Endif
-      *
-      *  ... 1. Datensatz ist fertig
-     C                   EVAL      IsFirstSfl = bFalse
-      *
-     C                   Enddo
-      *
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PBReadDn      1 Bildschirmseite rückwärts lesen         *
-      *============================================================*
-      *
-     C     PBReadDn      BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   ELSE
-      *
-     C                   EVAL      Wrk#ReadDn = Wrk#ReadDn + SflPage
-     C                   EVAL      Wrk#ReadDn = Wrk#ReadDn - NbrPinRcd
-      *
-     C     1             DO        Wrk#ReadDn
-     C                   EXSR      PBReadP
-     C     IsEOF         IFEQ      bTrue
-     C                   LEAVE
-     C                   Endif
-      *
-     C                   Enddo
-      *
-     C                   Endif
-      *
-     C                   EVAL      Wrk#ReadDn = §ZEROS
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PBReadCsr     Setzen Dateizeiger auf aktuelle           *
-      *                  Cursor-Position  (SflCsr)                 *
-      *============================================================*
-      *
-     C     PBReadCsr     BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   ELSE
-     C     SflCsr        IFEQ      §ZEROS
-      *      Nix tun, keine Datei vorhanden
-     C                   ELSE
-      *
-     C                   EVAL      Wrk#ReadDn = SflNbrRcd - SflCsr
-     C                   EVAL      Wrk#ReadDn = Wrk#ReadDn + 1
-     C                   EXSR      PBMoveCsrD
-      *
-     C                   Endif
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PBReadCsrA    Read to Cursor, after                     *
-      *                  Setzen Dateizeiger auf aktuelle           *
-      *                  Cursor-Position  +1  (SflCsr+1)           *
-      *============================================================*
-      *
-     C     PBReadCsrA    BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   EXSR      MsgNoFile
-     C                   ELSE
-     C     SflCsr        IFEQ      §ZEROS
-      *      Nix tun, keine Datei vorhanden
-     C                   ELSE
-      *
-     C                   EVAL      Wrk#ReadDn = SflNbrRcd - SflCsr
-     C                   EXSR      PBMoveCsrD
-      *
-     C                   Endif
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PBMoveCsrD    Verschieben Dateizeiger (Richtung BOF)    *
-      *============================================================*
-      *
-     C     PBMoveCsrD    BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   ELSE
-      *
-     C     1             DO        Wrk#ReadDn
-     C                   EXSR      PBReadP
-     C     IsEOF         IFEQ      bTrue
-     C                   LEAVE
-     C                   Endif
-      *
-     C                   Enddo
-      *
-     C                   Endif
-      *
-     C                   EVAL      Wrk#ReadDn = §ZEROS
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PBPinCol      Füllen Subfile mit pinned Spalten         *
-      *============================================================*
-      *
-     C     PBPinCol      BEGSR
-      *
-     C                   EVAL      IsPinModeC = bTrue
-      *
-      *  Eintragen der gepinnten Spalten ...
-     C     1             DO        NbrPinCol     PinCol_X
-     C                   IF        (sflRowDataStr > SFL_ROW_SIZE or
-     C                              sflRowDataStr > SflMaxRowLen)
-     C                   LEAVE
-     C                   Endif
-      *
-     C                   IF        (sflRowDataStr > SflPinRnge)
-      *       Benutzer benachrichtigen
-     C                   Callp     p_sndPgmMg('USR8148'
-     C                                        : PinTabCol(PinCol_X): §§pgmName)
-      *       Eintrag austragen
-     C                   EXSR      RmvPinCol
-     C     IsPinRmv      IFEQ      bTrue
-     C                   EVAL      PinCol_X = PinCol_X - 1
-     C                   Endif
-     C                   ITER
-     C                   Endif
-      *
-      *  ... einlesen der Felddaten
-     C                   EVAL      F_Field = PinTabCol(PinCol_X)
-     C     F_Key         CHAIN (N) FPEEKFLD                           11
-     C     *IN11         IFEQ      '1'
-      *           Eintrag austragen
-     C                   EXSR      RmvPinCol
-     C     IsPinRmv      IFEQ      bTrue
-     C                   EVAL      PinCol_X = PinCol_X - 1
-     C                   Endif
-     C                   ITER
-     C                   Endif
-      *
-      *  ... Feld nicht anzeigen
-     C     F_HIDDEN      IFEQ      bTrue
-     C                   ITER
-     C                   Endif
-      *
-     C                   EXSR      PBReadFld1
-     C     IsError       IFEQ      bTrue
-     C                   LEAVE
-     C                   Endif
-      *
-     C                   Enddo
-      *
-     C                   EVAL      IsPinModeC = bFalse
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PBPinRcd      Füllen Subfile mit pinned Datensätzen     *
-      *============================================================*
-      *
-     C     PBPinRcd      BEGSR
-      *
-     C                   EVAL      IsPinModeR = bTrue
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   ELSE
-      *
-     C     1             DO        MAX_PIN_RCD   PinRcd_X
-     C                   EVAL      PinTabRcdE = PinTabRcd(PinRcd_X)
-     C                   IF        PinTabRcdE.RCDNBR = §ZEROS
-     C                   LEAVE
-     C                   Endif
-      *
-     C                   IF        f_chain04(PinTabRcdE.RCDNBR :
-     C                                       PinTabRcdE.FILE   :
-     C                                       PinTabRcdE.LIB    :
-     C                                       PinTabRcdE.MBR    :
-     C                                       PinTabRcdE.RCDFMT ) = '1'
-      *           Eintrag austragen
-     C                   EXSR      RmvPinRcd
-     C                   IF        IsPinRmv = bTrue
-     C                   EVAL      PinRcd_X = PinRcd_X - 1
-     C                   Endif
-     C                   ITER
-     C                   Endif
-      *
-     C                   EXSR      PBFillRigh
-      *
-     C                   EVAL      SFLRec132 = SFLRec132 + 1
-     C                   EVAL      SFLRec080 = SFLRec080 + 1
-      *
-     C                   EXSR      PBSflWrite
-      *
-     C                   IF        (*in88 = bFalse)
-     C                   Z-ADD     SflRec132     SflNbrRcd
-     C                   Else
-     C                   Z-ADD     SflRec080     SflNbrRcd
-     C                   Endif
-      *
-     C                   Enddo
-      *
-     C                   Endif
-      *
-     C                   EVAL      IsPinModeR = bFalse
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    ChkPinRcd     Prüfen, ob Datensatz gepinned ist         *
-      *============================================================*
-      *
-     C     ChkPinRcd     BEGSR
-      *
-     C                   EVAL      PinRcd_X = 1
-     C                   EVAL      PinTabRcdE.RCDNBR = Wrk#RcdNbr
-     C                   EVAL      PinTabRcdE.FILE = H_FILE
-     C                   EVAL      PinTabRcdE.LIB = H_LIB
-     C                   EVAL      PinTabRcdE.MBR = H_MBR
-     C                   EVAL      PinTabRcdE.RCDFMT = H_RCDFMT
-     C                   EVAL      PinTabRcdE.MBRNBR = H_MBRNBR
-     C                   EVAL      PinRcd_X = %lookup(
-     C                                       PinTabRcdE: PinTabRcd: PinRcd_X)
-     C                   IF        (PinRcd_X > 0)
-     C                   EVAL      IsPinned = bTrue
-     C                   ELSE
-     C                   EVAL      IsPinned = bFalse
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    ChkPinCol     Prüfen, ob Spalte gepinned ist            *
-      *============================================================*
-      *
-     C     ChkPinCol     BEGSR
-      *
-     C                   EVAL      PinCol_X = 1
-     C                   EVAL      PinCol_X = %lookup(
-     C                                       Pin#Field: PinTabCol: PinCol_X)
-     C                   IF        (PinCol_X > 0)
-     C                   EVAL      IsPinned = bTrue
-     C                   ELSE
-     C                   EVAL      IsPinned = bFalse
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    RmvPinRcd     Austragen Datensatz aus PinTabR           *
-      *============================================================*
-      *
-     C     RmvPinRcd     BEGSR
-      *
-     C                   EVAL      IsPinRmv = bFalse
-      *
-      *  Remove pinned record from table
-     C     PinRcd_X      DO        MAX_PIN_RCD   Y
-     C                   EVAL      Z = Y + 1
-     C                   CLEAR                   PinTabRcdE
-     C     Z             IFLE      MAX_PIN_RCD
-     C                   EVAL      PinTabRcd(Y) = PinTabRcd(Z)
-     C                   EVAL      PinTabRcd(Z) = PinTabRcdE
-     C                   ELSE
-     C                   EVAL      PinTabRcd(Y) = PinTabRcdE
-     C                   Endif
-     C                   EVAL      IsSflDirty = bTrue
-     C                   EVAL      IsPinRmv = bTrue
-     C                   Enddo
-      *
-      *  Detrmine number of pinned records
-      *  (find first free record)
-     C                   EVAL      X = 1
-     C                   CLEAR                   PinTabRcdE
-     C                   EVAL      x = %lookup(PinTabRcdE: PinTabRcd: x)
-     C                   IF        (x > 0)
-     C                   EVAL      NbrPinRcd = X - 1
-     C                   ELSE
-     C                   EVAL      NbrPinRcd = MAX_PIN_RCD
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    RmvPinCol     Austragen Feld aus PinTabC                *
-      *============================================================*
-      *
-     C     RmvPinCol     BEGSR
-      *
-     C                   EVAL      IsPinRmv = bFalse
-      *
-     C     PinCol_X      DO        MAX_PIN_COL   Y
-     C                   EVAL      Z = Y + 1
-     C     Z             IFLE      MAX_PIN_COL
-     C                   EVAL      PinTabCol(Y) = PinTabCol(Z)
-     C                   EVAL      PinTabCol(Z) = *BLANKS
-     C                   ELSE
-     C                   EVAL      PinTabCol(Y) = *BLANKS
-     C                   Endif
-     C                   EVAL      IsSflDirty = bTrue
-     C                   EVAL      IsPinRmv = bTrue
-     C                   Enddo
-      *
-     C                   EVAL      X = 1
-     C                   EVAL      Pin#Field = *BLANKS
-     C                   EVAL      x = %lookup(Pin#Field: PinTabCol: x)
-     C                   IF        (x > 0)
-     C                   EVAL      NbrPinCol = X - 1
-     C                   ELSE
-     C                   EVAL      NbrPinCol = MAX_PIN_COL
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PBRefresh     Aktualisieren der Subfile                 *
-      *============================================================*
-      *
-     C     PBRefresh     BEGSR
-      *
-     C                   EVAL      Wrk#ReadDn = SflNbrRcd - SflPage
-     C                   EXSR      PBReadDn
-     C                   EXSR      PBInit
-     C                   EXSR      PBPinRcd
-     C                   EXSR      PBReadUp
-      *
-      *  Evtl. ist die Subfile doch nicht leer ...
-      *  (letzter Satz in der Liste wurde gelöscht oder
-      *   der Schlüssel wurde geändert)
-     C     *IN80         IFEQ      '0'
-     C                   EXSR      C_Bot
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PBHeadLine    Aufbereiten der Überschriftenzeile        *
-      *                  und füllen Tabelle mit anzuzeigenden      *
-      *                  Feldern                                   *
-      *============================================================*
-      *
-     C     PBHeadLine    BEGSR
-      *
-      *  Löschen der Überschrift
-     C                   EVAL      $$Head132 = *BLANKS
-     C                   EVAL      $$Head080 = *BLANKS
-      *
-     C                   if        not %open(PEEKFLDL1)
-      *  Keine Datei geöffnet
-     C                   leavesr
-     C                   endif
-      *
-      *  Löschen Tabelle mit Feldpositionen ...
-     C                   EXSR      clrFldArray
-      *
-      *  Aufbereiten Pseudo-Datensatz
-     C                   CALLP     PEEK20('*PHIVAL': IO_Buff: YMsgID: YMsgDta)
-      *
-     C     YMsgID        IFEQ      *BLANKS
-      *
-      *  Füllen der Überschriftenzeile ...
-     C                   EVAL      SflMode = '*HEADLINE'
-     C                   EVAL      Wrk#SeqNbr = ##WndNbr
-     C                   EXSR      PBFill_R
-      *
-      *  Übertragen der Überschriftenzeile
-      *  in Bildschirmfeld ...
-     C                   Eval      $$Head132 = sflRow
-     C                   Eval      $$Head080 = sflRow
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PBFillLeft    Füllen einer Datenzeile von rechts        *
-      *                  nach links.                               *
-      *============================================================*
-      *
-     C     PBFillLeft    BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *  Keine Datei geöffnet
-     C                   ELSE
-      *
-      *  Löschen Tabelle mit Feldpositionen ...
-     C                   exsr      clrFldArray
-      *
-      *  Aufbereiten Pseudo-Datensatz
-     C                   CALLP     PEEK20('*PHIVAL': IO_Buff: YMsgID: YMsgDta)
-      *
-     C     YMsgID        IFEQ      *BLANKS
-      *
-      *  Füllen der Überschriftenzeile ...
-     C                   EVAL      SflMode = '*HEADLINE'
-     C                   EVAL      Wrk#SeqNbr = ##WndNbr
-     C                   EXSR      PBFill_L
-     C                   Endif
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PBFillRigh    Füllen einer Datenzeile von rechts        *
-      *                  nach links.                               *
-      *============================================================*
-      *
-     C     PBFillRigh    BEGSR
-      *
-     C                   Callp     f_basedPF(File#X.File   :
-     C                                       File#X.Library:
-     C                                       File#X.Member :
-     C                                       File#X.RcdFmt :
-     C                                       File#X.MbrNbr :
-     C                                       H_FILE        :
-     C                                       H_LIB         :
-     C                                       H_MBR         :
-     C                                       H_RCDFMT      )
-      *
-     C                   EVAL      SFPAU = *BLANKS
-     C                   EVAL      H_MBRNBR = File#X.MbrNbr
-     C                   EVAL      RECORDNBR = File#X.RcdNbr
-      *
-      *  Prüfen auf Suchfunktion:
-      *  *NORMAL/*REVERSE
-     C                   EVAL      IsFound = bFalse
-      *
-     C     SrchField     IFNE      *BLANKS
-     C     SrchType      IFEQ      '*REVERSE'
-     C     SrchType      OREQ      '*UNDERLINE'
-     C                   EXSR      SrchFldAtr
-     C                   EXSR      SrchComp
-     C                   Endif
-     C                   Endif
-      *
-      *  Füllen der Datenzeile ...
-     C                   EVAL      SflMode = '*DATA'
-     C                   EVAL      Wrk#SeqNbr = ##WndNbr
-     C                   EXSR      PBFill_R
-      *
-      *  Übertragen der Datenzeile in
-      *  Bildschirmfeld ...
-     C                   Eval      Data132 = sflRow
-     C                   Eval      Data080 = sflRow
-      *
-      *  ... anzeigen der Subfile
-     C                   EVAL      *IN80 = '1'
-      *
-      *  ... Subfile-Satz nicht auswählen
-     C                   EVAL      *IN84 = '0'
-     C                   EVAL      *IN85 = '0'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PBFill_R      Lesen der anzuzeigenden Felder und        *
-      *                  aufbereiten der Überschrift oder der      *
-      *                  Datenzeile, von links nach rechts         *
-      *============================================================*
-      *
-     C     PBFill_R      BEGSR
-      *
-      *  Löschen Datentabelle ...
-     C                   CLEAR                   sflRow
-     C                   EVAL      sflRowDataStr = 1
-      *
-      *  Eintragen gepinnter Spalten ...
-     C                   EXSR      PBPinCol
-      *
-      *  Eintragen der Feldinhalte ...
-     C                   EVAL      F_Seq = Wrk#SeqNbr
-     C     F1KEY_L1      SETLL     FPEEKFLDL1
-      *
-     C                   DOW       (sflRowDataStr <= SFL_ROW_SIZE and
-     C                              sflRowDataStr <= SflMaxRowLen)
-     C                   READ      FPEEKFLDL1                             11
-     C     *IN11         IFEQ      '1'
-     C                   LEAVE
-     C                   Endif
-      *
-      *  ... Feld anzeigen?
-     C                   EVAL      Wrk#Field = F_Field
-     C                   EXSR      ChkVisible
-     C     IsVisible     IFEQ      bFalse
-     C                   ITER
-     C                   Endif
-      *
-     C                   EXSR      PBReadFld1
-     C     IsError       IFEQ      bTrue
-     C                   LEAVE
-     C                   Endif
-      *
-     C                   Enddo
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PBFill_L      Lesen der anzuzeigenden Felder und        *
-      *                  aufbereiten der Überschrift oder der      *
-      *                  Datenzeile, von rechts nach links         *
-      *============================================================*
-      *
-     C     PBFill_L      BEGSR
-      *
-      *  Löschen Datentabelle ...
-     C                   CLEAR                   sflRow
-     C                   EVAL      sflRowDataStr = 1
-      *
-      *  Eintragen gepinnter Spalten ...
-     C                   EXSR      PBPinCol
-      *
-      *  Eintragen der Feldinhalte ...
-     C                   EVAL      F_Seq = Wrk#SeqNbr
-     C     F1KEY_L1      SETGT     FPEEKFLDL1
-      *
-     C                   DOW       (sflRowDataStr <= SFL_ROW_SIZE and
-     C                              sflRowDataStr <= SflMaxRowLen)
-     C                   READP     FPEEKFLDL1                             11
-     C     *IN11         IFEQ      '1'
-     C                   LEAVE
-     C                   Endif
-      *
-      *  ... Feld anzeigen?
-     C                   EVAL      Wrk#Field = F_Field
-     C                   EXSR      ChkVisible
-     C     IsVisible     IFEQ      bFalse
-     C                   ITER
-     C                   Endif
-      *
-     C                   EXSR      PBReadFld1
-     C     IsError       IFEQ      bTrue
-     C                   LEAVE
-     C                   Endif
-      *
-     C     ##StrPage     IFGT      1
-     C                   LEAVE
-     C                   Endif
-      *
-     C                   Enddo
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PBReadFld1    Hilfsroutine für PBReadFld                *
-      *============================================================*
-      *
-     C     PBReadFld1    BEGSR
-      *
-      *  umsetzen der Daten in die Job CCSID
-     C                   IF        SflMode = '*HEADLINE'
-     C                   EVAL      YCvtCcsid = bFalse
-     C                   ELSE
-     C                   EVAL      YCvtCcsid = bTrue
-     C                   ENDIF
-      *
-      *  löschen Ausnahmebedingung für Spalte
-     C                   EVAL      IsColExc = bFalse
-      *
-      *  merken Position für Farbattribut
-     C                   IF        (sflRowDataStr <= SFL_ROW_SIZE)
-     C                   EVAL      ColrOfs = sflRowDataStr
-     C                   EVAL      sflRowDataStr = sflRowDataStr + 1
-     C                   ELSE
-     C                   EVAL      ColrOfs = §ZEROS
-     C                   Endif
-      *
-      *  aufbereiten des Feldinhaltes
-      *  für Anzeigeformat gemäß EDITCODE ...
-     C                   EVAL      FLDL0100 = F_FFD
-     C     F_EDTCDE      IFNE      *BLANKS
-     C                   EVAL      FLDL0100.F1EDTC = F_EDTCDE
-     C                   ELSE
-      *  ... Original EDITCODE verwenden
-     C                   Endif
-      *
-     C                   Monitor
-      *  umsetzen Datensatzpuffer in Bildschirmdarstellung ...
-     C     SET_DspMde    IFEQ      '*DSPNRM'
-      *  ... für Normale Anzeige
-     C                   IF        IO_NullMap(FLDL0100.F1SEQ) = 1
-     C                   CALLP     PEEK06(FLDL0100: 'FLDL0100': *ALLx'00'
-     C                                    : bFalse: YCvtCcsid
-     C                                    : YOutBuffer: yOutBuffLn
-     C                                    : yMsgId: yMsgDta)
-     C                   IF        f_isNumFld(FLDL0100) = bTrue
-     C                   IF        YOutBuffLn > 1
-     C                   EVAL      %subst(yOutBuffer: 1: YOutBuffLn - 1) = ''
-     C                   ENDIF
-     C                   EVAL      %subst(yOutBuffer
-     C                                    : YOutBuffLn
-     C                                    : %len(§HEX_CHAR)) = §HEX_CHAR
-     C                   ELSE
-     C                   EVAL      yOutBuffer = §HEX_CHAR
-     C                   ENDIF
-     C                   ELSE
-     C                   CALLP     PEEK06(FLDL0100: 'FLDL0100': IO_Buff
-     C                                    : bFalse: YCvtCcsid
-     C                                    : YOutBuffer: yOutBuffLn
-     C                                    : yMsgId: yMsgDta)
-     C                   ENDIF
-      *
-     C                   ELSE
-      *  ... für Hex-Anzeige
-     C                   IF        IO_NullMap(FLDL0100.F1SEQ) = 1
-     C                   EVAL      yHexString = §HEX_CHAR
-     C                   EVAL      YStringLen = f_buffLn(FLDL0100)
-     C                   ELSE
-     C                   Eval      YStringLen = f_rtvFld(yString  :
-     C                                                   IO_Buff  :
-     C                                                   FLDL0100 )
-     C                   eval      yHexString = ' '
-     C                   Callp     p_hexToChr(yHexString    :
-     C                                        yString       :
-     C                                        yStringLen * 2)
-     C                   Endif
-      *
-     C                   Eval      YOutBuffLn = yStringLen * 2
-     C                   Endif
-     C                   Eval      *in99 = bFalse
-     C                   On-Error
-     C                   Eval      *in99 = bTrue
-     C                   Endmon
-      *
-      *  Fehler bei der Aufbereitung ...
-     C     *IN99         IFEQ      '1'
-      *  ... ja
-     C                   EVAL      IsError = bTrue
-     C                   ELSE
-      *  ... nein
-     C                   EVAL      IsError = bFalse
-      *
-      *  ermitteln der Spaltenbreite
-      *  anhand der Überschrift und
-      *  der Feldlänge, sowie der
-      *  maximalen Spaltenbreite ...
-     C                   EVAL      FLDL0100 = F_FFD
-     C                   EVAL      ColumnLen = §ZEROS
-     C                   EVAL      FieldLen = YOutBuffLn
-     C                   EVAL      MaxColLen = F_MaxSize
-      *
-      *  Konvertierung nicht darstellbarer Zeichen ...
-     C     SflMode       IFEQ      '*HEADLINE'
-     C     SET_DspMde    OREQ      '*DSPHEX'
-      *  ... keine Konvertierung bei der
-      *      Aufbereitung der Überschriftenzeile
-     C                   ELSE
-      *  ... sonst konvertieren
-     C                   monitor
-     C                   callp     PEEK32(YOutBuffer: YOutBuffLn: 0
-     C                                    : YMsgID: YMsgDta)
-     C                   eval      *in99 = bFalse
-     C                   on-error
-     C                   eval      *in99 = bTrue
-     C                   endmon
-      *
-     C     *IN99         IFEQ      '0'
-     C     IsCvtChar     IFEQ      bFalse
-     C     YMsgID        IFNE      *BLANKS
-     C                   EVAL      IsCvtChar = bTrue
-     C                   Callp     p_sndPgmMg(YMsgID: YMsgDta: §§pgmName)
-     C                   EVAL      YMsgID = ''
-     C                   EVAL      YMsgDta = ''
-     C                   ELSE
-      *         keine Nachricht anstehend
-     C                   Endif
-     C                   ELSE
-      *         Nachricht bereits gesendet
-     C                   Endif
-     C                   ELSE
-      *         Fehler bei Programmaufruf
-     C                   Endif
-     C                   Endif
-      *
-      *  Bestimmen Länge der Überschrift
-      *  und aufbereiten Überschrift ...
-     C                   EVAL      colHeading = f_headline(SET_HedTyp: FLDL0100)
-     C                   EVAL      HeadLen = %checkr(' ': colHeading)
-      *
-     C                   If        (SflMode = '*HEADLINE')
-     C                   Eval      YHexString = colHeading
-     C                   Endif
-      *
-     C                   Eval      colHeading = ''
-      *
-      *  ... Bestimmen der Spaltenbreite
-     C     HeadLen       IFGT      FieldLen
-     C                   EVAL      ColumnLen = HeadLen
-     C                   ELSE
-     C                   EVAL      ColumnLen = FieldLen
-     C                   Endif
-      *
-     C     ColumnLen     IFGT      MaxColLen
-     C                   EVAL      ColumnLen = MaxColLen
-     C                   Endif
-      *
-      *  ... numerische Werte rechtsbündig setzen,
-      *      wenn Spaltenbereite kleiner als Feldlänge
-     C                   IF        (SflMode   = '*HEADLINE')
-      *
-      *      ... für die Überschrift
-     C                   IF        (ColumnLen < HeadLen ) or
-     C                             (ColumnLen < FieldLen)
-      *
-     C                   SELECT
-     C                   WHEN      (HeadLen + 3) <= ColumnLen
-     C                   EVAL      %subst(YHexString: HeadLen + 1: 3)
-     C                             = %subst('...': 1: 3)
-     C                   OTHER
-     C                   EVAL      %subst(YHexString: ColumnLen - 2 + 1: 2)
-     C                             = %subst('...': 1: 2)
-     C                   Endsl
-      *
-     C                   Endif
-      *
-     C                   ELSE
-      *
-      *      ... für die Datenzeile
-     C                   IF        (SflMode   <> '*HEADLINE') and
-     C                             (ColumnLen <  Fieldlen   )
-     C                   IF        f_isNumFld(FLDL0100) = bTrue
-      *          ... numerische Werte
-     C                   IF        (SET_EnExc = bTrue) and
-     C                             (%subst(YHexString          :
-     C                                     1                   :
-     C                                     FieldLen - ColumnLen) <> *BLANKS)
-     C                   EVAL      IsColExc = bTrue
-     C                   Endif
-     C                   Eval      YHexString = %subst(YHexString              :
-     C                                                 1 + FieldLen - ColumnLen:
-     C                                                 ColumnLen               )
-     C                   ELSE
-      *          ... alphanumerische Werte
-     C                   IF        (SET_EnExc = bTrue) and
-     C                             (%subst(YHexString              :
-     C                                     ColumnLen + 1           :
-     C                                     1 + FieldLen - ColumnLen) <> *BLANKS)
-     C                   EVAL      IsColExc = bTrue
-     C                   Endif
-     C                   Endif
-      *
-     C                   Endif
-     C                   Endif
-      *
-      *  ... Berechnen der Startposition im Puffer
-     C                   Eval      SflDataLenFree =
-     C                               SflMaxRowLen - sflRowDataStr + 1
-      *
-     C                   IF        (##WndNbr = F_Seq)
-      *
-     C                   IF        (##StrPage * SflDataLenFree) > Columnlen
-      *
-     C                   IF        (Columnlen / SflDataLenFree) =
-     C                             f_int(Columnlen / SflDataLenFree)
-     C                   Eval      ##StrPage = (Columnlen / SflDataLenFree)
-     C                   ELSE
-     C                   Eval      ##StrPage = (Columnlen / SflDataLenFree) + 1
-     C                   Endif
-      *
-     C                   Endif
-      *
-     C                   Eval      FldStrPos = (##StrPage -1) * SflDataLenFree
-     C                                         + 1
-     C                   Else
-     C                   Eval      FldStrPos = 1
-     C                   Endif
-      *
-      *  ... Berechnen der zu extrahierenden Länge
-     C                   EVAL      BuffIdx = FldStrPos
-     C                   EVAL      sflRowDataEnd = sflRowDataStr + ColumnLen
-     C                   EVAL      sflRowDataEnd = sflRowDataEnd - FldStrPos
-      *
-     C                   IF        sflRowDataEnd > SFL_ROW_SIZE
-     C                   EVAL      sflRowDataEnd = SFL_ROW_SIZE
-     C                   Endif
-      *
-     C                   Eval      sflRowDataLen =
-     C                               sflRowDataEnd - sflRowDataStr + 1
-      *
-      *  ... übertragen aufbereitetes Feld in Subfile
-     C                   Eval      %subst(sflRow: sflRowDataStr) =
-     C                             %subst(YHexString: BuffIdx: sflRowDataLen)
-      *
-      *  ... pflegen der Tabelle mit den Werten der
-      *      Spaltenaufteilung ...
-     C     sflRowDataEnd IFGE      sflRowDataStr
-      *      ... pflegen der Feldpositionstabelle
-     C     SflMode       IFEQ      '*HEADLINE'
-     C                   EVAL      CP = CP + 1
-     C                   EVAL      Col_Field(CP) = FLDL0100.F1FNme
-     C                   EVAL      Col_ScnStr(CP) = sflRowDataStr
-     C                   EVAL      Col_ScnEnd(CP) = sflRowDataEnd
-      *          ... ist das Feld komplett sichtbar?
-     C                   IF        (Col_ScnEnd(CP) <= SflMaxRowLen)
-      *              ... ja, kein Fehler
-     C                   EVAL      Col_Error(CP) = bFalse
-     C                   ELSE
-      *              ... nein, Fehler!
-     C                   EVAL      Col_Error(CP) = bTrue
-     C                   Endif
-     C                   Endif
-      *
-     C                   EVAL      sflRowDataStr = sflRowDataEnd + 1
-      *
-      *      ... Löschen von "überstehendem" Datenmüll
-     C                   IF        (ColumnLen = MaxColLen and
-     C                              sflRowDataStr <= SFL_ROW_SIZE)
-     C                   EVAL      sflRow.chars(sflRowDataStr) = ''
-     C                   Endif
-      *
-      *      ... umschalten auf "normale" Farbdarstellung
-     C                   IF        (sflRowDataStr <= SFL_ROW_SIZE)
-     C                   EVAL      Wrk#Ofs = sflRowDataStr
-     C                   EXSR      PBStdCol
-     C                   Endif
-      *
-      *      ... "nachziehen" der Spaltenfarbe
-     C     ColrOfs       IFLE      §ZEROS
-      *          ... Pech gehabt
-     C                   ELSE
-     C     SflMode       IFEQ      '*HEADLINE'
-     C                   IF        (F_KSEQ = 0) or
-     C                             (AccessMode = RRN_SEQ)
-     C                   EVAL      sflRow.chars(ColrOfs) = SET_HedCol
-     C                   ELSE
-     C                   EVAL      sflRow.chars(ColrOfs) = SET_KeyCol
-     C                   Endif
-     C                   ELSE
-     C                   EXSR      PBColor
-     C                   Endif
-     C                   Endif
-     C                   Endif
-      *
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PBStdCol      Setzen der "normalen" Datensatzfarbe      *
-      *============================================================*
-      *
-     C     PBStdCol      BEGSR
-      *
-     C     IsTblCol      IFEQ      bFalse
-     C                   EVAL      sflRow.chars(Wrk#Ofs) = SET_StdCol
-     C                   ELSE
-     C                   EVAL      sflRow.chars(Wrk#Ofs) = SET_TblCol
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PBGenKey      Generieren Aufsetzkey                     *
-      *                  für die Anzeige auf dem Bildschirm        *
-      *============================================================*
-      *
-     C     PBGenKey      BEGSR
-      *
-     C     AccessMode    IFEQ      KEY_SEQ
-     C                   EXSR      PBBuildKey
-     C                   ELSE
-     C                   EXSR      PBBuildRrn
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PBBuildRrn    Generieren Aufsetzkey: RRN                *
-      *============================================================*
-      *
-     C     PBBuildRrn    BEGSR
-      *
-     C                   EVAL      ##RcdNbr = RECORDNBR
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PBBuildKey    Generieren Aufsetzkey                     *
-      *============================================================*
-      *
-     C     PBBuildKey    BEGSR
-      *
-     C                   monitor
-     C                   CALLP     PEEK19(IO_Buff: YKeyVal: YMsgID: YMsgDta)
-      *
-      *  ... Konvertieren nicht darstellbarer Zeichen
-     C                   EVAL      YOutBuffer = YKeyVal
-     C                   EVAL      YOutBuffLn = 132
-      *
-     C                   callp     PEEK32(YOutBuffer: YOutBuffLn: 0
-     C                                    : YMsgID: YMsgDta)
-     C                   eval      *in99 = bFalse
-     C                   on-error
-     C                   eval      *in99 = bTrue
-     C                   endmon
-      *
-     C                   EVAL      ##Key = YOutBuffer
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PBGenIntKy    Generieren internen Aufsetzkey            *
-      *                  für einen Dateizugriff                    *
-      *============================================================*
-      *
-     C     PBGenIntKy    BEGSR
-      *
-     C     AccessMode    IFEQ      KEY_SEQ
-     C                   EXSR      PBIntKey
-     C                   ELSE
-     C                   EXSR      PBIntRrn
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PBIntRrn      Generieren interne Satznummer             *
-      *============================================================*
-      *
-     C     PBIntRrn      BEGSR
-      *
-     C                   EVAL      Wrk#RcdNbr = Wrk#RcdNbr
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PBIntKey      Generieren internen Aufsetzschlüssel      *
-      *============================================================*
-      *
-     C     PBIntKey      BEGSR
-      *
-     C                   CALLP     PEEK20(Wrk#KeyVal: yBuffer
-     C                                    : YMsgID: YMsgDta)
-     C                   EVAL      Wrk#KeyVal = yBuffer
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PBColor       Setzen der Spaltenfarbe                   *
-      *                  für Datenzeilen                           *
-      *                  a) für gepinnte Datensätze                *
-      *                  b) für normale Datensätze                 *
-      *============================================================*
-      *
-     C     PBColor       BEGSR
-      *
-     C                   IF        ColrOfs = §ZEROS
-      *                 Nix tun
-     C                   ELSE
-      *
-     C                   IF        IsColExc = bTrue
-     C                   EVAL      sflRow.chars(ColrOfs) = SET_ExcCol
-     C                   ELSE
-      *
-      *---------------------------------------*
-      *  Berücksichtigen des Aufrufs von:     *
-      *  a) anzeigen "normaler" Datensätze    *
-      *  b) anzeigen "gepinnter" Datensätze   *
-      *---------------------------------------*
-     C     IsPinModeR    IFEQ      bFalse
-     C     IsPinModeC    IFEQ      bFalse
-      *      ... nix ist gepinnt
-     C                   EVAL      IsPinned = bFalse
-     C                   ELSE
-      *      ... prüfen auf gepinnte Spalten
-     C                   EVAL      Pin#Field = FLDL0100.F1FNme
-     C                   EXSR      ChkPinCol
-     C                   Endif
-     C                   ELSE
-      *      ... prüfen auf gepinnte Zeilen (=Datensätze)
-     C                   EVAL      Wrk#RcdNbr = RECORDNBR
-     C                   EXSR      ChkPinRcd
-     C                   Endif
-      *
-      *---------------------------------------*
-      *  ... setzen der Datenfarbe            *
-      *---------------------------------------*
-      *  Spaltenmarkierung ...
-     C     F_MarkCol     IFEQ      bTrue
-     C                   EVAL      sflRow.chars(ColrOfs) = F_Color
-     C                   ELSE
-      *  Keine Spaltenmarkierung ...
-     C     IsPinned      IFEQ      bTrue
-      *      ... pinned Datensatz
-     C                   EVAL      sflRow.chars(ColrOfs) = SET_PinCol
-     C                   ELSE
-      *      ... normaler Datensatz
-     C                   EVAL      Wrk#Ofs = ColrOfs
-     C                   EXSR      PBStdCol
-     C                   Endif
-     C                   Endif
-      *
-      *---------------------------------------*
-      *  ... Datensatz gefunden               *
-      *---------------------------------------*
-     C     IsPinned      IFEQ      bFalse
-     C                   SELECT
-      *      ... Suchfunktionen: *REVERSE
-     C     SrchType      WHENEQ    '*REVERSE'
-     C     IsFound       IFEQ      bTrue
-     C                   EVAL      sflRow.chars(ColrOfs) = SET_RevCol
-     C                   Endif
-      *
-      *      ... Suchfunktionen: *UNDERLINE
-     C     SrchType      WHENEQ    '*UNDERLINE'
-     C     IsFound       IFEQ      bTrue
-     C                   EVAL      sflRow.chars(ColrOfs) = SET_UndCol
-     C                   Endif
-      *
-      *      ... Suchfunktionen: *NORMAL
-     C     SrchType      WHENEQ    '*NORMAL'
-     C     SrchFndRcd    IFEQ      RECORDNBR
-     C                   EVAL      sflRow.chars(ColrOfs) = SET_NmlCol
-     C                   Endif
-      *
-     C                   OTHER
-      *       Andere Suchtypen gibt's nicht
-     C                   Endsl
-     C                   Endif
-      *
-     C                   Endif
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PBSetLL       Setzen Dateizeiger RRN/KEY                *
-      *============================================================*
-      *
-     C     PBSetLL       BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   ELSE
-      *
-     C                   Select
-     C     AccessMode    WhenEQ    KEY_SEQ
-     C                   Callp     CIO_setllWithKey(hFile02: Wrk#KeyVal)
-     C                   EXSR      F2toFx
-     C     AccessMode    WhenEQ    RRN_SEQ
-     C                   Callp     CIO_setllWithRRN(hFile01: Wrk#RcdNbr)
-     C                   EXSR      F1toFx
-     C     AccessMode    WhenEQ    SQL_SEQ
-     C                   Other
-     C                   Endsl
-      *
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PBSetGT       Setzen Dateizeiger RRN/KEY                *
-      *============================================================*
-      *
-     C     PBSetGT       BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   ELSE
-      *
-     C                   Select
-     C     AccessMode    WhenEQ    KEY_SEQ
-     C                   Callp     CIO_setgtWithKey(hFile02: Wrk#KeyVal)
-     C                   EXSR      F2toFx
-     C     AccessMode    WhenEQ    RRN_SEQ
-     C                   Callp     CIO_setgtWithRRN(hFile01: Wrk#RcdNbr)
-     C                   EXSR      F1toFx
-     C     AccessMode    WhenEQ    SQL_SEQ
-     C                   Other
-     C                   Endsl
-      *
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PBMoveTop     Setzen Dateizeiger auf BOF                *
-      *============================================================*
-      *
-     C     PBMoveTop     BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   ELSE
-      *
-     C     AccessMode    IFEQ      SQL_SEQ
-     C                   Callp     SQL_gotoTop(YMsgID: YMsgDta)
-     C                   If        (YMsgID <> '')
-     C                   Callp     p_sndPgmMg(YMsgID: YMsgDta: §§PgmName)
-     C                   Eval      YMsgID = ''
-     C                   Eval      YMsgDta = ''
-     C                   Endif
-     C                   ELSE
-     C                   EVAL      Wrk#KeyVal = '*LOVAL'
-     C                   EVAL      Wrk#RcdNbr = LOW_RCD_NBR
-      *
-     C                   EXSR      PBGenIntKy
-     C                   EXSR      PBSetLL
-     C                   Endif
-      *
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PBMoveBot     Setzen Dateizeiger auf EOF                *
-      *============================================================*
-      *
-     C     PBMoveBot     BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   ELSE
-      *
-     C     AccessMode    IFEQ      SQL_SEQ
-     C                   Callp     SQL_gotoBottom(YMsgID: YMsgDta)
-     C                   If        (YMsgID <> '')
-     C                   Callp     p_sndPgmMg(YMsgID: YMsgDta: §§PgmName)
-     C                   Eval      YMsgID = ''
-     C                   Eval      YMsgDta = ''
-     C                   Endif
-     C                   ELSE
-     C                   EVAL      Wrk#KeyVal = '*HIVAL'
-     C                   EVAL      Wrk#RcdNbr = HIGH_RCD_NBR
-      *
-     C                   EXSR      PBGenIntKy
-     C                   EXSR      PBSetGT
-     C                   EXSR      PBReadP
-     C                   Endif
-      *
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    clrFldArray   Löschen Felder Array                      *
-      *============================================================*
-      *
-     C     clrFldArray   BEGSR
-      *
-     C                   EVAL      Col_Field(*) = ''
-     C                   EVAL      Col_ScnStr(*) = 0
-     C                   EVAL      Col_ScnEnd(*) = 0
-     C                   EVAL      Col_Error(*) = bFalse
-     C                   EVAL      CP = §ZEROS
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    ChangeFile    Prüfen, ob die Datei gewechselt hat       *
-      *============================================================*
-      *
-     C     ChangeFile    BEGSR
-      *
-     C                   EVAL      IsFileChg = bFalse
-      *
-     C     L#File        IFNE      ##File
-     C     L#Library     ORNE      ##Library
-     C     L#Member      ORNE      ##Member
-     C     L#Format      ORNE      ##Format
-      *
-     C                   EVAL      IsFileChg = bTrue
-      *  ... Änderungen prüfen
-     C     ##Member      IFEQ      L#Member
-     C                   EVAL      ##Member = *BLANKS
-     C                   Endif
-      *
-     C     ##Format      IFEQ      L#Format
-     C                   EVAL      ##Format = *BLANKS
-     C                   Endif
-      *
-     C                   EXSR      CloseFile
-      *
-     C     ##File        IFNE      *BLANKS
-     C                   Eval      AccessMode = NewAccMode
-     C                   EXSR      OpenFile
-     C                   Endif
-     C                   Endif
-      *
-     C                   EXSR      GetOpnFile
-     C                   EXSR      GetMaxSeq
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    ChangeWnd     Prüfen, ob Fenster gewechselt hat         *
-      *============================================================*
-      *
-     C     ChangeWnd     BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *      Nix tun, keine Datei vorhanden
-     C                   EXSR      MsgNoFile
-     C                   ELSE
-      *
-     C     ##Field       IFNE      *BLANKS
-     C                   EVAL      Wrk#Field = ##Field
-     C                   EXSR      GetSeqNbr
-     C     IsSeqNbrOK    IFEQ      bTrue
-     C                   EVAL      ##WndNbr = Wrk#SeqNbr
-     C                   EVAL      ##StrPage = 1
-     C                   ELSE
-      *  Fehlermeldung ...
-     C                   CLEAR                   USR8108
-     C                   EVAL      USR81081 = ##Field
-     C                   EVAL      USR81082 = ##File
-     C                   EVAL      USR81083 = ##Library
-     C                   Callp     p_sndPgmMg('USR8108': USR8108: §§pgmName)
-     C                   Endif
-      *
-     C                   EVAL      ##Field = *BLANKS
-     C                   Endif
-      *
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    ChangeKey     Prüfen, ob der Aufsetzkey gewechselt hat  *
-      *                  Auslösen über *IN93                       *
-      *============================================================*
-      *
-     C     ChangeKey     BEGSR
-      *
-     C     ##RcdNbr      IFNE      R#RcdNbr
-     C     ##Key         ORNE      R#KeyVal
-     C                   EVAL      IsKeyChg = bTrue
-     C                   ELSE
-     C                   EVAL      IsKeyChg = bFalse
-     C                   Endif
-      *
-     C                   SELECT
-     C     ##RcdNbr      WHENLT    LOW_RCD_NBR
-     C                   EVAL      ##RcdNbr = LOW_RCD_NBR
-     C     ##RcdNbr      WHENGT    HIGH_RCD_NBR
-     C                   EVAL      ##RcdNbr = HIGH_RCD_NBR
-     C                   OTHER
-      *    Im gültigen Bereich ...
-     C                   Endsl
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    ChangeSort    Wechseln der Sortierfolge                 *
-      *============================================================*
-      *
-     C     ChangeSort    BEGSR
-      *
-     C                   EVAL      L#File = *BLANKS
-     C                   EVAL      L#Library = *BLANKS
-     C                   EVAL      L#Member = *BLANKS
-     C                   EVAL      L#Format = *BLANKS
-      *
-      *  Merken der letzten Cursorposition
-     C                   SELECT
-      *    ... außerhalb der Subfile
-     C     SflCsr        WHENLE    *ZEROS
-      *        ... wird später anhand der
-      *            Cursorposition auf dem Bildschirm entschieden
-     C                   EVAL      SflCsr = *ZEROS
-      *
-      *    ... innerhalb der Subfile
-     C     SflCsr        WHENGT    NbrPinRcd
-      *        ... wird genau dort positioniert
-      *
-      *    ... innerhalb der gepinnten Datensätze
-     C                   OTHER
-      *        ... auf 1. angezeigten Datensatz positionieren
-     C                   EVAL      SflCsr = 1 + NbrPinRcd
-     C                   Endsl
-      *
-      *  Umsetzen Cursorposition in Satznummer
-     C                   EXSR      PBCsrTRcd
-     C     Wrk#RcdNbr    IFGT      *ZEROS
-    R ***  File#04.Open  ANDEQ     '1'
-     C                   EVAL      Last#RcdNr = Wrk#RcdNbr
-     C                   ELSE
-     C                   EVAL      Last#RcdNr = *ZEROS
-     C                   Endif
-      *
-      *  Wechsel der Datei ...
-     C                   EVAL      IsPinToClr = bFalse
-     C                   EXSR      ChangeFile
-     C                   EVAL      IsPinToClr = bTrue
-      *
-      *  Prüfen Seq-Bereich (##WndNbr) ...
-     C                   EXSR      ChkSeqRnge
-      *
-      *  Wechsel des Fenster (##Field) ...
-     C                   EXSR      ChangeWnd
-      *
-     C                   CLEAR                   ##RcdNbr
-     C                   CLEAR                   ##Key
-     C                   CLEAR                   R#RcdNbr
-     C                   CLEAR                   R#KeyVal
-      *
-     C                   EVAL      YMsgID = *BLANKS
-     C                   EVAL      YMsgDta = *BLANKS
-      *
-     C     Last#RcdNr    IFEQ      *ZEROS
-      *    Alter Datensatz ist nicht bekannt ...
-     C                   ELSE
-      *    ... Einlesen letzten Datensatz
-     C                   EVAL      RECORDNBR = Last#RcdNr
-      *
-     C                   IF        f_chain04(RECORDNBR:
-     C                                       H_FILE   :
-     C                                       H_LIB    :
-     C                                       H_MBR    :
-     C                                       H_RCDFMT ) = '1'
-      *    ... Zugriff fehlgeschlagen
-     C                   ELSE
-      *    ... Generieren Aufsetzkey
-     C                   EXSR      PBGenKey
-     C                   Endif
-     C                   Endif
-      *
-      *  Wechsel des Aufsetzkeys ...
-     C                   EXSR      ChangeKey
-      *
-      *  Füllen der Subfile ...
-     C     IsKeyChg      IFEQ      bFalse
-     C                   If        (cursorPosition.row > SflLastRw)
-      *    ... unterhalb der Subfile
-     C                   EXSR      C_Bot
-     C                   ELSE
-      *    ... oberhalb der Subfile,
-      *        bzw. kein Wechsel des Aufsetzkeys
-     C                   EXSR      C_Top
-     C                   Endif
-     C                   ELSE
-      *    ... neuer Aufsetzkey innerhalb der Subfile
-     C                   EXSR      KeyHasChg
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    OpenFile      Datei öffnen                              *
-      *============================================================*
-      *
-     C     OpenFile      BEGSR
-      *
-      *  Wenn eine Datei bereits geöffnet ist ...
-     C     IsOpen        IFEQ      bTrue
-      *  ... dann geöffnet lassen
-     C                   Leavesr
-     C                   ENDIF
-      *
-     C                   Eval      YCsrRow = 0
-     C                   Eval      YCsrCol = 0
-      *
-     C                   Exsr      ChkPrvFile
-      *
-      *  ... erst die Plausi prüfen, dann ...
-     C     ##Library     IFEQ      *BLANKS
-     C                   EVAL      ##Library = '*LIBL'
-     C                   Endif
-      *
-     C     ##Member      IFEQ      *BLANKS
-     C                   EVAL      ##Member = '*FIRST'
-     C                   Endif
-      *
-      *  ... Objektbeschreibung
-      *      ... abrufen der Objektattribute (auflösen *LIBL, *CURLIB)
-     C                   EXSR      GetObjAttr
-     C     IsError       IFEQ      bTrue
-      *  Fehler aufgetreten, Öffnen abbrechen.
-     C                   Exsr      MsgNoFile
-     C                   Leavesr
-     C                   Endif
-      *
-      *  ... Teildateien
-     C                   if        (##Member = '*NONE')
-     C                   eval      $$NOMB = 0
-     C                   else
-      *      ... abrufen der Anzahl Teildateien
-     C                   exsr      GetNbrMbr
-     C                   if        ($$NOMB = 0)
-      *  Keine Teildateien vorhanden.
-     C                   eval      ##Member = '*NONE'
-     C                   endif
-     C                   Endif
-      *
-      *      ... prüfen auf phys. Datei bei Zugriff über SQL
-     C*** %SQL%          IF        (AccessMode = SQL_SEQ and ATFILA <> '*PHY')
-     C***                Exsr      MsgInvSqlFile
-     C***                Leavesr
-     C***                ENDIF
-      *
-      *      ... prüfen Name der Teildatei
-     C                   EXSR      CheckMbrName
-     C     IsError       IFEQ      bTrue
-      *  Fehler aufgetreten, Öffnen abbrechen.
-     C                   Exsr      MsgNoFile
-     C                   Leavesr
-     C                   Endif
-      *
-      *  ... Satzformate
-      *      ... abrufen der Satzformate
-     C                   EXSR      GetFmtList
-      *      ... auswählen Satzformat
-     C                   EXSR      GetRcdFrmt
-      *
-      *  ... prüfen auf Schlüsselfelder
-      *      und initialisieren von PEEK41 (= Dateiinformationen)
-     C                   EXSR      GetNbrKeyF
-      *      ... wenn keine Schlüsselinformationen
-      *          vorhanden sind, ...
-     C     IsKeyAvail    IFEQ      bFalse
-     C     AccessMode    ANDEQ     KEY_SEQ
-      *          ... dann über RRN zugreifen
-     C                   EVAL      AccessMode = RRN_SEQ
-     C                   ELSE
-      *          ... sonst Modus beibehalten
-     C                   Endif
-      *
-      *  Ermitteln Sortierung bei Zugriff über SQL ...
-     C     AccessMode    IFEQ      SQL_SEQ
-     C     SqlOrder      IFEQ      '*KEY'
-     C                   CALLP     PEEK38(##File: ##Library: sqlOrder)
-     C                   ELSE
-     C                   EVAL      sqlOrder = SQL_quote(f_ucase(sqlOrder))
-     C                   ENDIF
-     C                   ENDIF
-      *
-      * -------------------------------------------------
-      *  Prüfen Zugriffsrechte
-      * -------------------------------------------------
-      *
-      *      ... prüfen Zugriffsrechte
-     C                   EXSR      s_EXIT01
-      *
-      *      ... Zugriff nicht erlaubt
-     C                   IF        auth.accAut <> bTrue
-     C                   EXSR      CloseFile
-     C                   Callp     p_rmvPgmMg(§§pgmName)
-     C                   Callp     p_sndPgmMg(YMsgID: YMsgDta: §§pgmName)
-     C                   EVAL      YMsgID = ''
-     C                   EVAL      YMsgDta = ''
-     C                   Leavesr
-     C                   ENDIF
-      *
-      * -------------------------------------------------
-      *  Datei öffnen für Einzelzugriff (Aktualisierung)
-      * -------------------------------------------------
-      *
-     C                   if        (##MEMBER = '*NONE')
-     C                   clear                   hFile00
-     C                   eval      File#X.Open =bFalse
-     C                   eval      File#X.File = ##File
-     C                   eval      File#X.Library = ##Library
-     C                   eval      File#X.RcdLen = 0
-     C                   eval      File#X.Member = ##Member
-     C                   eval      File#X.RcdFmt = ##Format
-     C                   eval      File#X.MbrNbr = 0
-     C                   eval      File#X.RcdNbr = 0
-     C                   eval      isOpen = bFalse
-     C                   else
-      *
-     C                   Callp     f_execute('OVRDBF ' +
-     C                                         'FILE(' + %trim(##FILE) + ') ' +
-     C                                         'TOFILE(' +
-     C                                           %trim(##LIBRARY) + '/' +
-     C                                           %trim(##FILE) + ') ' +
-     C                                         'MBR(' + %trim(##MEMBER) + ') ' +
-     C                                         'OVRSCOPE(*ACTGRPDFN) ' +
-     C                                         'SHARE(*NO) ' +
-     C                                         'SEQONLY(*NO) SECURE(*YES)'
-     C                                       : yMsgID: yMsgDta)
-     C                   EVAL      YMsgID = ''
-     C                   EVAL      YMsgDta = ''
-      *
-      *      ... Änderungen erlaubt
-     C                   IF        auth.updMod = bTrue
-     C                   EVAL      CommitLVL = '1'
-      *          ... mit Commit-Steuerung
-     C                   IF        CIO_open(hFile00
-     C                                      : ##File
-     C                                      : ##Library
-     C                                      : ##Member
-     C                                      : ##FORMAT
-     C                                      : 'rr+, arrseq=Y, commit=Y, +
-     C                                         nullcap=Y, riofb=Y, +
-     C                                         secure=N, ccsid=65535') = bTrue
-     C                   EXSR      F0toFx
-     C                   EVAL      IsUpdMod = bTrue
-     C                   ELSE
-      *          ... ohne Commit-Steuerung
-     C                   EVAL      CommitLVL = '0'
-     C                   IF        CIO_open(hFile00
-     C                                      : ##File
-     C                                      : ##Library
-     C                                      : ##Member
-     C                                      : ##FORMAT
-     C                                      : 'rr+ , arrseq=Y, commit=N +
-     C                                         nullcap=Y, riofb=Y, +
-     C                                         secure=N, ccsid=65535') = bTrue
-      *
-     C                   EXSR      F0toFx
-     C                   EVAL      IsUpdMod = bTrue
-     C                   ELSE
-      *              ... Datei für Einzelsatzzugriff konnte nicht geöffnet werden.
-      *                  evtl. handelt es sich um eine JOIN-Datei oder aber
-      *                  es könnte auch Referenzielle Integrität definiert sein und
-      *                  die läßt sich ohne Journalisierungn nicht anwenden!
-     C                   EVAL      IsUpdMod = bFalse
-     C                   EVAL      *IN99 = '0'
-     C                   Endif
-     C                   Endif
-     C                   ELSE
-      *      ... keine Änderungen erlaubt
-     C                   EVAL      IsUpdMod = bFalse
-     C                   EVAL      *IN99 = '0'
-     C                   Endif
-      *
-     C                   If        (isUpdMod = bTrue) and (auth.updKey = bTrue)
-     C                   Eval      isUpdKey = bTrue
-     C                   Else
-     C                   Eval      isUpdKey = bFalse
-     C                   Endif
-      *
-      * -------------------------------------------------
-      *  Datei öffnen für Sortierfolge
-      * -------------------------------------------------
-      *
-      *  Sortierung 2 nach Schlüsselfelder
-     C                   IF        (AccessMode = KEY_SEQ)
-     C                   If        CIO_open(hFile02
-     C                                      : ##FILE
-     C                                      : ##LIBRARY
-     C                                      : ##MEMBER
-     C                                      : ##FORMAT
-     C                                      : 'rr, arrseq=N, commit=N, +
-     C                                         nullcap=Y, riofb=Y, +
-     C                                         secure=N, ccsid=65535') = bTrue
-     C                   Eval      *IN99 = *OFF
-     C                   Else
-     C                   Eval      *IN99 = *ON
-     C                   Callp     CIO_getErrorMsg(hFile01: YMsgID: YMsgDta)
-     C                   Callp     p_sndPgmMg(YMsgID: YMsgDta: §§pgmName)
-     C                   Eval      YMsgID = ''
-     C                   Eval      YMsgDta = ''
-     C                   Endif
-     C                   EXSR      F2toFx
-     C                   Endif
-      *
-      *  Sortierung 1 nach Satzfolge
-     C                   IF        (AccessMode = RRN_SEQ)
-     C                   If        CIO_open(hFile01
-     C                                      : ##FILE
-     C                                      : ##LIBRARY
-     C                                      : ##MEMBER
-     C                                      : ##FORMAT
-     C                                      : 'rr, arrseq=Y, commit=N, +
-     C                                         nullcap=Y, riofb=Y, +
-     C                                         secure=N, ccsid=65535') = bTrue
-     C                   Eval      *IN99 = *OFF
-     C                   Else
-     C                   Eval      *IN99 = *ON
-     C                   Callp     CIO_getErrorMsg(hFile01: YMsgID: YMsgDta)
-     C                   Callp     p_sndPgmMg(YMsgID: YMsgDta: §§pgmName)
-     C                   Eval      YMsgID = ''
-     C                   Eval      YMsgDta = ''
-     C                   Endif
-     C                   EXSR      F1toFx
-     C                   Endif
-      *
-      *  Sortierung 3 nach Sql
-     C                   IF        (AccessMode = SQL_SEQ)
-     C                   Clear                   USR0013
-     C                   Callp     p_sndStsMg('USR0013': USR0013)
-     C                   If        SQL_prepareStatement(
-     C                                        '0'       :
-     C                                        ##FILE    :
-     C                                        ##LIBRARY :
-     C                                        ##MEMBER  :
-     C                                        ##FORMAT  :
-     C                                        sqlWhere  :
-     C                                        sqlOrder  :
-     C                                      YMsgID      :
-     C                                      YMsgDta     ) = bTrue
-     C                   If        SQL_open(hFile03     :
-     C                                      YMsgID      :
-     C                                      YMsgDta     ) = bTrue
-     C                   Eval      *IN99 = *OFF
-     C                   Eval      YMsgID = ''
-     C                   Eval      YMsgDta = ''
-     C                   Else
-     C                   Eval      *IN99 = *ON
-     C                   Callp     CIO_getErrorMsg(hFile01: YMsgID: YMsgDta)
-     C                   Callp     p_sndPgmMg(YMsgID: YMsgDta: §§pgmName)
-     C                   Eval      YMsgID = ''
-     C                   Eval      YMsgDta = ''
-     C                   Endif
-     C                   EXSR      F3toFx
-     C                   Else
-     C                   Eval      *IN99 = *ON
-     C                   Callp     p_sndPgmMg(YMsgID: YMsgDta: §§pgmName)
-     C                   Eval      YMsgID = ''
-     C                   Eval      YMsgDta = ''
-     C                   Endif
-     C                   Endif
-      *
-     C                   Callp     f_execute('DLTOVR ' +
-     C                                         'FILE(' + %trim(##FILE) + ') ' +
-     C                                         'LVL(*ACTGRPDFN) '
-     C                                       : yMsgID: yMsgDta)
-     C                   EVAL      YMsgID = ''
-     C                   EVAL      YMsgDta = ''
-      *
-     C     *IN99         IFEQ      '1'
-     C                   Leavesr
-     C                   ENDIF
-      *      Datei geöffnet ...
-      *      ... OPEN-Flag
-     C                   EVAL      IsOpen = bTrue
-      *
-     C                   endif
-      *
-      *      ... aber Satzlänge größer 32766
-     C                   IF        File#X.RcdLen > RCD_BUFF_LEN
-     C                   EXSR      CloseFile
-     C                   Callp     p_rmvPgmMg(§§pgmName)
-     C                   CLEAR                   USR8207
-     C                   Eval      USR82071 = RCD_BUFF_LEN
-     C                   Callp     p_sndPgmMg('USR8207': USR8207: §§pgmName)
-     C                   ELSE
-      *
-      *      ... löschen Pin-Funktion
-     C                   EXSR      ClrPinCol
-     C                   EXSR      ClrPinRow
-      *      ... auswerten Rückkehrcode
-     C     YMsgID        IFEQ      'USR8100'
-      *          ... Abbruch mit F3/F12
-     C                   EXSR      CloseFile
-     C                   ELSE
-      *          ... weiter
-      *              ... abrufen der Feldliste
-     C                   EXSR      GetFldList
-      *              ... abrufen der Schlüsselfelder
-     C                   EXSR      GetKeyList
-      *              ... Sortieren der Schlüsselfelder
-     C                   EXSR      FloatKeys
-      *              ... Fensterposition
-     C                   EVAL      ##WndNbr = §ZEROS
-     C                   EVAL      ##StrPage = §ZEROS
-      *              ... Suchmodus
-     C                   EXSR      SrchInz
-      *              ... Blätternfunktion Einzelsatz
-     C                   EVAL      YScreenNbr = §ZEROS
-      *              ... abrufen der Teildateiattribute
-     C                   EXSR      GetMbrAttr
-      *              ... initialisieren Kurzbefehl
-     C                   EXSR      InitSCmd
-      *              ... Nachrichten entfernen
-     C                   Callp     p_rmvPgmMg(§§pgmName)
-      *              ... einblenden Aufsetzkey
-     C     AccessMode    IFEQ      KEY_SEQ
-     C                   EVAL      *IN70 = '1'
-     C                   ELSE
-     C                   EVAL      *IN70 = '0'
-     C                   Endif
-      *              ... Cursor auf Keyeingabezeile setzen
-     C                   EXSR      C_PosCsr
-      *
-      *              ... Hexmode nicht bei Satzlänge größer 32766
-     C                   IF        (File#X.RcdLen > RCD_BUFF_LEN) and
-     C                             (SET_DspMde = '*DSPHEX')
-     C                   CLEAR                   USR8206
-     C                   Eval      USR82061  = RCD_BUFF_LEN
-     C                   Callp     p_sndPgmMg('USR8206': USR8206: §§pgmName)
-     C                   EXSR      S_DspNrm
-     C                   Endif
-      *
-      *              ... Felder größer 512 Zeichen
-     C     IsFld512      IFEQ      bTrue
-      *                  ... ohne Commit
-     C                   EVAL      USR81231 = §White_U
-     C                   EVAL      USR81232 = §White
-     C                   Callp     p_sndPgmMg('USR8123': USR8123: §§pgmName)
-     C                   Endif
-      *
-      *              ... Felder, welche nicht erlaubt sind
-     C                   EVAL      F_Field = *BLANKS
-     C     F_KEY         Setll     FPEEKFLD                           11
-     C                   DO        *HIVAL
-     C                   READ      FPEEKFLD                               11
-     C     *IN11         IFEQ      '1'
-     C                   LEAVE
-     C                   ENDIF
-     C                   IF        (f_isNotAlw(F_FFD) = bTrue)
-     C                   Callp     p_sndPgmMg('USR8196': F_Field: §§pgmName)
-     C                   ENDIF
-     C                   ENDDO
-      *
-      *              ... Prüfen der Registrierung
-     C                   EXSR      C_Register
-      *
-      *              ... Datei geöffnet ...
-     C                   if        (IsOpen = bTrue)
-     C                   if        (CommitLVL = '0')
-      *                  ... ohne Commit
-     C                   EVAL      *IN55 = bFalse
-     C                   Callp     p_sndPgmMg('USR0004': '': §§pgmName)
-     C                   ELSE
-      *                  ... mit Commit
-     C                   EVAL      *IN55 = bTrue
-     C                   Callp     p_sndPgmMg('USR0003': '': §§pgmName)
-     C                   Endif
-      *
-      *              ... Datei für ...
-     C                   if        (IsUpdMod = bFalse)
-      *                  ... Input geöffnet
-     C                   EVAL      USR00071 = ##FILE
-     C                   EVAL      USR00072 = ##LIBRARY
-     C                   Callp     p_sndPgmMg('USR0007': USR0007: §§pgmName)
-     C                   ELSE
-      *                  ... Update geöffnet
-     C                   Endif
-     C                   Endif
-     C                   Endif
-     C                   Endif
-      *
-     C                   Eval      IsSflDirty = bTrue
-      *
-     C                   Eval      YIsLower = '-'
-      *
-     C                   Eval      isKeyLower = bFalse
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PBRead        Lesen in Satz- oder Schlüsselfolge        *
-      *============================================================*
-      *
-     C     PBRead        BEGSR
-      *
-     C                   Eval      IsFileError = bFalse
-      *
-     C                   DoU       (File#X.RcdFmt = ##Format) or (*in99 = *ON)
-      *
-     C                   Select
-     C     AccessMode    WhenEQ    KEY_SEQ
-     C                   If        CIO_read(hFile02: bFalse
-     C                                      : IO_Buff: IO_NullMap) = bEOF
-     C                   Eval      *IN99 = *ON
-     C                   Else
-     C                   Eval      *IN99 = *OFF
-     C                   Endif
-     C                   EXSR      F2toFx
-     C                   Eval      isFileError = CIO_isError(hFile02)
-     C     AccessMode    WhenEQ    RRN_SEQ
-     C                   If        CIO_read(hFile01: bFalse
-     C                                      : IO_Buff: IO_NullMap) = bEOF
-     C                   Eval      *IN99 = *ON
-     C                   Else
-     C                   Eval      *IN99 = *OFF
-     C                   Endif
-     C                   EXSR      F1toFx
-     C                   Eval      isFileError = CIO_isError(hFile01)
-     C     AccessMode    WhenEQ    SQL_SEQ
-     C                   If        SQL_nextRow(IO_Buff: IO_NullMap: hFile03:
-     C                                         YMsgID : YMsgDta)  = bEOF
-     C                   Eval      *IN99 = *ON
-     C                   Callp     p_sndPgmMg(YMsgID: YMsgDta: §§pgmName)
-     C                   Eval      YMsgID = ''
-     C                   Eval      YMsgDta = ''
-     C                   Else
-     C                   Eval      *IN99 = *OFF
-     C                   Eval      YMsgID = ''
-     C                   Eval      YMsgDta = ''
-     C                   Endif
-     C                   EXSR      F3toFx
-     C                   Eval      isFileError = CIO_isError(hFile03)
-     C                   Other
-     C                   Endsl
-      *
-     C                   Enddo
-      *
-     C     IsFileError   IFEQ      bTrue
-     C                   EVAL      IsEOF = bTrue
-     C                   ELSE
-     C     *IN99         IFEQ      '1'
-     C                   EXSR      PBMoveBot
-     C                   EVAL      IsEOF = bTrue
-     C                   ELSE
-     C                   EVAL      IsEOF = bFalse
-     C                   Endif
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PBReadP       Rückwärts lesen in Satz- oder             *
-      *                  Schlüsselfolge                            *
-      *============================================================*
-      *
-     C     PBReadP       BEGSR
-      *
-     C                   DoU       (File#X.RcdFmt = ##Format) or (*in99 = *ON)
-      *
-     C                   Select
-     C     AccessMode    WhenEQ    KEY_SEQ
-     C                   If        CIO_readp(hFile02: bFalse
-     C                                       : IO_Buff: IO_NullMap) = bEOF
-     C                   Eval      *IN99 = *ON
-     C                   Else
-     C                   Eval      *IN99 = *OFF
-     C                   Endif
-     C                   EXSR      F2toFx
-     C     AccessMode    WhenEQ    RRN_SEQ
-     C                   If        CIO_readp(hFile01: bFalse
-     C                                       : IO_Buff: IO_NullMap) = bEOF
-     C                   Eval      *IN99 = *ON
-     C                   Else
-     C                   Eval      *IN99 = *OFF
-     C                   Endif
-     C                   EXSR      F1toFx
-     C     AccessMode    WhenEQ    SQL_SEQ
-     C                   If        SQL_previousRow(IO_Buff: IO_NullMap: hFile03:
-     C                                             YMsgID : YMsgDta) = bEOF
-     C                   Eval      *IN99 = *ON
-     C                   If        (YMsgID <> '')
-     C                   Callp     p_sndPgmMg(YMsgID: YMsgDta: §§pgmName)
-     C                   Eval      YMsgID = ''
-     C                   Eval      YMsgDta = ''
-     C                   Endif
-     C                   Else
-     C                   Eval      *IN99 = *OFF
-     C                   Eval      YMsgID = ''
-     C                   Eval      YMsgDta = ''
-     C                   Endif
-     C                   EXSR      F3toFx
-     C                   Eval      isFileError = CIO_isError(hFile03)
-     C                   Other
-     C                   Endsl
-      *
-     C                   Enddo
-      *
-     C     *IN99         IFEQ      '1'
-     C                   EXSR      PBMoveTop
-     C                   EVAL      IsEOF = bTrue
-     C                   ELSE
-     C                   EVAL      IsEOF = bFalse
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    F0toFx        Übertragen der Dateiinformationen         *
-      *                  (Status usw.) der Datei 00 in die         *
-      *                  "globalen Felder Fx                       *
-      *============================================================*
-      *
-     C     F0toFx        BEGSR
-      *
-     C                   EVAL      File#X = CIO_getInfDS(hFile00)
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    F1toFx        Übertragen der Dateiinformationen         *
-      *                  (Status usw.) der Datei 01 in die         *
-      *                  "globalen Felder Fx                       *
-      *============================================================*
-      *
-     C     F1toFx        BEGSR
-      *
-     C                   EVAL      File#X = CIO_getInfDS(hFile01)
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    F2toFx        Übertragen der Dateiinformationen         *
-      *                  (Status usw.) der Datei 02 in die         *
-      *                  "globalen Felder Fx                       *
-      *============================================================*
-      *
-     C     F2toFx        BEGSR
-      *
-     C                   EVAL      File#X = CIO_getInfDS(hFile02)
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    F3toFx        Übertragen der Dateiinformationen         *
-      *                  (Status usw.) der Datei 03 in die         *
-      *                  "globalen Felder Fx                       *
-      *============================================================*
-      *
-     C     F3toFx        BEGSR
-      *
-     C                   EVAL      File#X = CIO_getInfDS(hFile03)
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    RepeatOpt     Wiederholen der Subfileauswahl            *
-      *============================================================*
-      *
-     C     RepeatOpt     BEGSR
-      *
-      *  "Keine Sätze vorhanden"
-     C     *IN80         IFEQ      '0'
-      *  ... nix zu tun
-     C                   ELSE
-      *
-      *  Lese alle Sätze der Subfile ab Wrk#Recno ...
-     C     Wrk#Recno     DO        SflNbrRcd     X
-      *
-     C                   EVAL      SflRec132 = X
-     C                   EVAL      SflRec080 = X
-     C                   EXSR      PBSflChain
-      *
-      *  ... höre auf, bei Dateiende oder Fehler
-     C     *IN11         IFEQ      '1'
-     C                   LEAVE
-     C                   ELSE
-      *  ... Wenn SFPAU bereits gefüllt ist,
-      *      dann beende die Verarbeitung ...
-     C     SFPAU         IFNE      *BLANKS
-     C                   EVAL      *IN84 = '1'                                  SFLNXTCHG
-     C                   EXSR      PBSflUpdat
-     C                   LEAVE
-     C                   ELSE
-      *  ... ansonsten wiederhole die Auswahl
-     C                   EVAL      SFPAU = Wrk#SFPAU
-     C                   EVAL      *IN84 = '1'                                  SFLNXTCHG
-     C                   EXSR      PBSflUpdat
-     C                   Endif
-     C                   Endif
-      *
-     C                   Enddo
-      *
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    GetFrstFld    Ermitteln der Feldnummer des ersten       *
-      *                  sichtbaren Feldes                         *
-      *============================================================*
-      *
-     C     GetFrstFld    BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-     C                   EVAL      ##WndNbr = §ZEROS
-     C                   ELSE
-      *
-     C                   EVAL      ##WndNbr = §ZEROS
-      *
-     C     1             DO        CP            X
-      *
-     C                   EVAL      Wrk#Field = Col_Field(X)
-     C                   EXSR      ChkVisible
-     C     IsVisible     IFEQ      bFalse
-      *  ... nicht sichtbar
-     C                   ITER
-     C                   ELSE
-      *  ... sichtbar
-      *      ... ermitteln der Sequenznummer
-     C                   EVAL      F_Field = Col_Field(X)
-     C     F_KEY         CHAIN (N) FPEEKFLD                           11
-     C     *IN11         IFEQ      '0'
-      *          ... ermittelt
-     C                   EVAL      ##WndNbr = F_Seq
-     C                   LEAVE
-     C                   ELSE
-      *          ... kann eigentlich nicht sein
-     C                   ITER
-     C                   Endif
-     C                   Endif
-      *
-     C                   Enddo
-      *
-     C                   Endif
-      *
-      *  Merken letzte Feldposition
-     C                   EVAL      L#WndNbr = ##WndNbr
-      *
-     C                   EXSR      ChkSeqRnge
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    GetPgmName    Berechnen Programmname                    *
-      *============================================================*
-      *
-     C     GetPgmName    BEGSR
-      *
-     C                   EVAL      PEEKPGM = 'P' +
-     C                                         %subst(RCDL0200.R2FmtID: 1: 2) +
-     C                                         %subst(RCDL0200.R2FmtID: 7: 7)
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    GetDSpName    Berechnen Name Displayfile                *
-      *============================================================*
-      *
-     C     GetDspName    BEGSR
-      *
-     C                   EVAL      PEEKDSPF = 'F' +
-     C                                         %subst(RCDL0200.R2FmtID: 1: 2) +
-     C                                         %subst(RCDL0200.R2FmtID: 7: 7)
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    GetFldTMrk    Holen des zu markierenden Feldnamens      *
-      *============================================================*
-      *
-     C     GetFldTMrk    BEGSR
-      *
-     C                   EVAL      Wrk#Field = ''
-      *
-     C                   IF        (CP <= 0)
-      *  Funktion bei leerer Feldtabelle möglich ...
-     C                   Callp     p_sndPgmMg('USR8145': '': §§pgmName)
-     C                   ELSE
-      *
-     C     1             DO        CP            X
-     C                   EVAL      Y = cursorPosition.column - SflLeftOfs
-     C                   IF        (Y >= Col_ScnStr(X) and Y <= Col_ScnEnd(X))
-     C                   EVAL      Wrk#Field = Col_Field(X)
-     C                   LEAVE
-     C                   Endif
-     C                   Enddo
-      *
-     C                   IF        (Wrk#Field = '')
-     C                   Callp     p_sndPgmMg('USR8117': '': §§pgmName)
-     C                   Endif
-      *
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    GetSflRcd     Einlesen Subfilesatz an aktueller         *
-      *                  Cursorposition                            *
-      *============================================================*
-      *
-     C     GetSflRcd     BEGSR
-      *
-     C     SflCsr        IFGT      §ZEROS
-     C                   EXSR      PBCsrTRcd
-     C                   ELSE
-     C                   EVAL      SflCsr = §ZEROS
-     C                   Callp     p_sndPgmMg('USR8102': '': §§pgmName)
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    GetNbrKeyF    Ermitteln Anzahl Schlüsselfelder          *
-      *============================================================*
-      *
-     C     GetNbrKeyF    BEGSR
-      *
-     C                   CALLP     PEEK04(YQFile: ##Format: YMsgId: YMsgDta)
-     C     YMsgID        IFEQ      'USR0006'
-     C                   EVAL      IsKeyAvail = bFalse
-     C                   ELSE
-     C                   EVAL      IsKeyAvail = bTrue
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    GetNbrMbr     Ermitteln Anzahl Teildateien              *
-      *============================================================*
-      *
-     C     GetNbrMbr     BEGSR
-      *
-     C                   CALLP     PEEK41(YQFile: ##FORMAT
-     C                                    : '*CREATE': YNbrOfEnt: YData)
-     C     YNbrOfEnt     IFGT      *ZEROS
-     C                   EVAL      FILD0100 = yData
-     C                   ELSE
-     C                   CLEAR                   FILD0100
-     C                   Endif
-      *
-     C                   EVAL      $$NOMB = FILD0100.ATNOMB
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    GetFmtList    Abrufrufen der Satzformatliste            *
-      *============================================================*
-      *
-     C     GetFmtList    BEGSR
-      *
-     C                   EVAL      YFile = ##File
-     C                   EVAL      YLibrary = ##Library
-     C                   CALLP     PEEK10(YQFile: YMsgId: YMsgDta)
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    GetFldList    Abrufrufen der Feldliste                  *
-      *============================================================*
-      *
-     C     GetFldList    BEGSR
-      *
-     C                   EVAL      YFile = ##File
-     C                   EVAL      YLibrary = ##Library
-     C                   CALLP     PEEK01(YQFile: ##FORMAT: $$RCDFMTID
-     C                                    : YMsgId: YMsgDta)
-      *
-     C     YMsgID        IFEQ      'USR8123'
-     C                   EVAL      IsFld512 = bTrue
-     C                   ELSE
-     C                   EVAL      IsFld512 = bFalse
-     C                   Endif
-      *
-     C                   OPEN      PeekFld
-     C                   OPEN      PeekFldL1
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    GetKeyList    Abrufrufen der Schlüsselfelder            *
-      *============================================================*
-      *
-     C     GetKeyList    BEGSR
-      *
-     C                   CALLP     PEEK03(YQFile: ##Format: AccessMode: sqlOrder
-     C                                    : YMsgId: YMsgDta)
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    GetRcdFrmt    Auswählen des Satzformates                *
-      *============================================================*
-      *
-     C     GetRcdFrmt    BEGSR
-      *
-     C                   CALLP     PEEK12(SET_Dsp80: §CopyRight: ##FORMAT
-     C                                    : MODE_BATCH
-     C                                    : RCDL0200: YFmtNbr: yMsgID: yMsgDta)
-      *
-     C     YMsgID        IFNE      'USR8100'
-     C                   EVAL      ##FMTNBR = YFmtNbr
-     C                   EVAL      ##Format = RCDL0200.R2FmtName
-     C                   EVAL      $$Length = RCDL0200.R2RcdLen
-     C                   ELSE
-      *         Abbruch über F3/F12
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    GetObjAttr    Abrufrufen und anzeigen der               *
-      *                  Objektattribute                           *
-      *============================================================*
-      *
-     C     GetObjAttr    BEGSR
-      *
-     C                   Monitor
-     C                   EVAL      YFile = ##File
-     C                   EVAL      YLibrary = ##Library
-     C                   CALLP     PEEK09(YQFile: OBJD0400: YMsgId: YMsgDta)
-     C                   EVAL      *in99 = bFalse
-     C                   On-Error
-     C                   EVAL      *in99 = bTrue
-     C                   Endmon
-      *
-     C     *IN99         IFEQ      '1'
-     C                   EVAL      IsError = bTrue
-     C                   ELSE
-     C                   EVAL      IsError = bFalse
-     C     YMsgID        IFNE      *BLANKS
-     C                   EVAL      IsError = bTrue
-      *  Objekt nicht gefunden ...
-     C                   SELECT
-     C     YMsgID        WHENEQ    'CPF9812'
-     C                   EVAL      USR00081 = ##File
-     C                   EVAL      USR00082 = ##Library
-     C                   Callp     p_sndPgmMg('USR0008': USR0008: §§pgmName)
-     C     YMsgID        WHENEQ    'CPF9810'
-     C                   EVAL      USR00101 = ##Library
-     C                   Callp     p_sndPgmMg('USR0010': USR0010: §§pgmName)
-     C                   OTHER
-     C                   EVAL      USR00091 = ##File
-     C                   EVAL      USR00092 = ##Library
-     C                   Callp     p_sndPgmMg('USR0009': USR0009: §§pgmName)
-     C                   Endsl
-     C                   ELSE
-      *
-     C                   EVAL      IsError = bFalse
-      *  Übertragen der Objektbezeichnung
-     C                   EVAL      ##File = OBJD0400.O4ObjName
-     C                   EVAL      ##Library = OBJD0400.O4RetLib
-      *
-      *  Übertragen der Objektbeschreibung
-     C                   EVAL      $$Text40 = OBJD0400.O4Text
-     C                   EVAL      $$Text50 = OBJD0400.O4Text
-      *
-      *  Wenn die Objektgröße kleiner als 999 ist,
-     C                   IF        (OBJD0400.O4ObjSize <= 999)
-      *  ... dann in der Einheit "Byte" anzeigen ...
-     C                   EVAL      R#Size = §ZEROS
-     C                   EVAL      $$UNIT = 'Byt'
-     C                   ELSE
-      *  ... ansonsten solange durch 1024 teilen,
-      *      bis das die nächste passende Einheit
-      *      gefunden werden konnte.
-     C                   EVAL      R#Size = §ZEROS
-      *
-     C                   DOW       (OBJD0400.O4ObjSize > 999)
-     C                   EVAL      OBJD0400.O4ObjSize =
-     C                               %dech(OBJD0400.O4ObjSize / 1024: 10: 0)
-     C                   EVAL      R#Size = R#Size + 1
-     C                   Enddo
-      *
-      *  Multiplikator aus der Objektbeschreibung
-      *  berücksichtigen und ...
-     C                   IF        (OBJD0400.O4ObjSizeM = 1024)
-     C                   EVAL      R#Size = R#Size + 1
-     C                   ELSE
-      *       keine Korrektur erforderlich
-     C                   Endif
-      *
-      *  ... und passende Einheit wählen ...
-     C                   SELECT
-     C     R#Size        WHENEQ    1
-     C                   EVAL      $$UNIT = 'K'
-     C     R#Size        WHENEQ    2
-     C                   EVAL      $$UNIT = 'MByt'
-     C     R#Size        WHENEQ    3
-     C                   EVAL      $$UNIT = 'GByt'
-     C                   OTHER
-     C                   EVAL      $$UNIT = 'TByt'
-     C                   Endsl
-     C                   Endif
-      *
-      *  ... sowie Restgröße zur Anzeige bringen
-     C                   EVAL      $$SIZE = OBJD0400.O4ObjSize
-     C                   Endif
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    GetMbrAttr    Abrufen der Attribute der Teildatei       *
-      *============================================================*
-      *
-     C     GetMbrAttr    BEGSR
-      *
-      *  Beschreibung der Teildatei
-     C     IsOpen        IFEQ      bFalse
-     C                   EVAL      $$Records = §ZEROS
-     C                   LEAVESR
-     C                   ENDIF
-      *
-     C                   if        (##MEMBER = '*NONE')
-     C                   clear                   MBRD0200
-     C                   eval      $$Records = 0
-     C                   eval      $$LmtCnt = ''
-     C                   eval      $$Records = 0
-     C                   leavesr
-     C                   endif
-      *
-     C                   eval      YFile = ##File
-     C                   eval      YLibrary = ##Library
-     C                   callp     PEEK13(YQFile: ##Member: MBRD0200)
-      *
-     C                   if        MBRD0200.M2BytAvail > 0
-     C                   if        MBRD0200.M2NbrRcdOn <= 2147483647
-     C                   eval      $$Records = MBRD0200.M2NbrRcdOn
-     C                   eval      *IN79 = *ON
-     C                   eval      $$LmtCnt = ''
-     C                   else
-     C                   eval      $$Records = 0
-     C                   eval      *IN79 = *OFF
-     C                   eval      $$LmtCnt = '*OVERFLOW'
-     C                   endif
-     C                   else
-     C                   eval      $$Records = 0
-     C                   eval      *IN79 = *OFF
-     C                   eval      $$LmtCnt = '*ERROR'
-     C                   endif
-      *
-     C                   If        AccessMode = SQL_SEQ
-     C                   If        $$Records > SET_MAXRCDS
-     C                   Eval      $$Records = 0
-     C                   Eval      *IN79 = *OFF
-     C                   EVAL      $$LmtCnt = '*SQLLMTCNT'
-     C                   Else
-     C                   Clear                   USR0014
-     C                   Callp     p_sndStsMg('USR0014': USR0014)
-     C                   EVAL      $$Records = SQL_count()
-     C                   Eval      *IN79 = *ON
-     C                   EVAL      $$LmtCnt = *BLANKS
-     C                   Endif
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    CheckMbrName  Prüfen Name der Teildatei                 *
-      *============================================================*
-      *
-     C     CheckMbrName  BEGSR
-      *
-     C                   if        (##Member = '*NONE')
-     C                   clear                   MBRD0200
-     C                   eval      IsError = bFalse
-     C                   leavesr
-     C                   endif
-      *
-     C                   EVAL      YFile = ##File
-     C                   EVAL      YLibrary = ##Library
-     C                   callp     PEEK13(YQFile: ##Member: MBRD0200)
-     C                   IF        (MBRD0200.M2BytAvail <> 0)
-     C                   EVAL      ##MEMBER = MBRD0200.M2Member
-     C                   EVAL      IsError = bFalse
-     C                   ELSE
-     C                   EVAL      IsError = bTrue
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    GetMaxSeq     Ermitteln der Anzahl Felder               *
-      *============================================================*
-      *
-     C     GetMaxSeq     BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-     C                   EVAL      L#MaxSeq = §ZEROS
-     C                   EVAL      L#MinSeq = §ZEROS
-     C                   ELSE
-      *
-      *  Ermitteln Anzahl Felder ...
-     C                   EVAL      F_Seq = *HIVAL
-     C     F1KEY_L1      SETGT     FPEEKFLDL1
-      *
-     C                   DO        *HIVAL
-     C                   READP     FPEEKFLDL1                             11
-     C     *IN11         IFEQ      '1'
-     C                   EVAL      L#MaxSeq = §ZEROS
-     C                   LEAVE
-     C                   Endif
-      *
-      *  ... Prüfen, ob Feld angezeigt wird
-     C                   EVAL      Wrk#Field = F_Field
-     C                   EXSR      ChkVisible
-     C     IsVisible     IFEQ      bFalse
-     C                   ITER
-     C                   Endif
-      *
-     C                   EVAL      L#MaxSeq = F_Seq
-     C                   LEAVE
-     C                   Enddo
-      *
-      *  Ermitteln Erstes Feld ...
-     C                   EVAL      F_Seq = §ZEROS
-     C     F1KEY_L1      SETLL     FPEEKFLDL1
-      *
-     C                   DO        *HIVAL
-     C                   READ      FPEEKFLDL1                             11
-     C     *IN11         IFEQ      '1'
-     C                   EVAL      L#MinSeq = §ZEROS
-     C                   LEAVE
-     C                   Endif
-      *
-      *  ... Prüfen, ob Feld angezeigt wird
-     C                   EVAL      Wrk#Field = F_Field
-     C                   EXSR      ChkVisible
-     C     IsVisible     IFEQ      bFalse
-     C                   ITER
-     C                   Endif
-      *
-     C                   EVAL      L#MinSeq = F_Seq
-     C                   LEAVE
-     C                   Enddo
-      *
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    GetMaxSeq     Ermitteln vorhergehendes sichtabres Feld  *
-      *============================================================*
-      *
-     C     GetPrvSeq     BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-     C                   EVAL      Wrk#SeqNbr = -1
-     C                   LEAVESR
-     C                   ENDIF
-      *
-     C                   EVAL      F_Seq = Wrk#SeqNbr
-     C     F1KEY_L1      CHAIN     FPEEKFLDL1
-     C                   IF        NOT %FOUND()
-     C                   EVAL      Wrk#SeqNbr = L#MinSeq
-     C                   LEAVESR
-     C                   ENDIF
-      *
-     C                   DO        *HIVAL
-     C                   READP     FPEEKFLDL1
-     C                   IF        %EOF()
-     C                   EVAL      Wrk#SeqNbr = L#MinSeq
-     C                   LEAVE
-     C                   Endif
-      *
-      *  ... Prüfen, ob Feld angezeigt wird
-     C                   EVAL      Wrk#Field = F_Field
-     C                   EXSR      ChkVisible
-     C     IsVisible     IFEQ      bFalse
-     C                   ITER
-     C                   Endif
-      *
-     C                   EVAL      Wrk#SeqNbr = F_Seq
-     C                   LEAVE
-     C                   ENDDO
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    CloseFile     Datei schließen                           *
-      *============================================================*
-      *
-     C     CloseFile     BEGSR
-      *
-     C     IsOpen        IFEQ      bTrue
-      *
-     C                   Eval      YCsrRow = 0
-     C                   Eval      YCsrCol = 0
-      *
-      *  Datei 04 für Einzelsatzzugriff
-     C                   IF        CIO_isOpen(hFile04) = bTrue
-     C                   CALLP     CIO_close(hFile04)
-     C                   ENDIF
-      *
-     C                   Select
-     C     AccessMode    WhenEQ    KEY_SEQ
-      *  Sortierung 2 für Schlüsselfolge
-     C                   IF        CIO_close(hFile02) = bTrue
-     C                   EVAL      *IN99 = '0'
-     C                   ELSE
-     C                   EVAL      *IN99 = '1'
-     C                   ENDIF
-     C                   EXSR      F2toFx
-     C     AccessMode    WhenEQ    RRN_SEQ
-      *  Sortierung 1 für Satzfolge
-     C                   IF        CIO_close(hFile01) = bTrue
-     C                   EVAL      *IN99 = '0'
-     C                   ELSE
-     C                   EVAL      *IN99 = '1'
-     C                   ENDIF
-     C                   EXSR      F1toFx
-     C     AccessMode    WhenEQ    SQL_SEQ
-     C                   If        SQL_close(hFile03:YMsgID :YMsgDta)
-     C                             = bTrue
-     C                   Eval      *IN99 = *OFF
-     C                   Eval      YMsgID = ''
-     C                   Eval      YMsgDta = ''
-     C                   Else
-     C                   Eval      *IN99 = *ON
-     C                   If        (YMsgID <> '')
-     C                   Callp     p_sndPgmMg(YMsgID: YMsgDta: §§pgmName)
-     C                   Eval      YMsgID = ''
-     C                   Eval      YMsgDta = ''
-     C                   Endif
-     C                   Endif
-     C                   EXSR      F3toFx
-     C                   Other
-     C                   endsl
-      *
-     C                   else
-     C                   eval      *in99 = '0'
-     C                   endif
-      *
-      *  Sortierung 0 für Einzelzugriff
-     C                   IF        CIO_isOpen(hFile00) = bTrue
-     C                   IF        CIO_close(hFile00) = bTrue
-     C                   EVAL      *IN99 = '0'
-     C                   ELSE
-     C                   EVAL      *IN99 = '1'
-     C                   ENDIF
-     C                   EXSR      F0toFx
-     C                   ENDIF
-      *
-     C     *IN99         IFEQ      '0'
-     C                   EVAL      IsOpen = bFalse
-      *  Löschen Satzaufbau
-     C                   IF        %open(PEEKFLD)
-     C                   EVAL      F_Field = *BLANKS
-     C     F_KEY         Setll     FPEEKFLD                           11
-     C                   DO        *HIVAL
-     C                   READ      FPEEKFLD                               11
-     C     *IN11         IFEQ      '1'
-     C                   LEAVE
-     C                   ENDIF
-     C                   DELETE    FPEEKFLD
-     C                   ENDDO
-     C                   CLOSE     PeekFldL1
-     C                   CLOSE     PeekFld
-     C                   ENDIF
-      *      ... Satzformat
-     C                   EVAL      $$TEXT40 = *BLANKS
-     C                   EVAL      $$TEXT50 = *BLANKS
-     C                   EVAL      $$Length = §ZEROS
-     C                   EVAL      $$Records = §ZEROS
-     C                   EVAL      $$Size = §ZEROS
-     C                   EVAL      $$RCDFMTID = *BLANKS
-     C                   EVAL      $$Unit = *BLANKS
-     C                   EVAL      $$NoMb = §ZEROS
-     C                   EVAL      ##KEY = *BLANKS
-     C                   EVAL      ##RCDNBR = §ZEROS
-      *      ... Fensterposition
-     C                   EVAL      ##WndNbr = §ZEROS
-     C                   EVAL      ##StrPage = §ZEROS
-      *
-      *      ... SQL-Selektion
-     C                   Eval      SqlWhere  = ' '
-     C                   Eval      SqlOrder  = ' '
-      *
-     C                   ELSE
-      *             Weiss noch nicht!
-     C                   Endif
-      *
-      *  Entfernen Update Programm aus Arbeitsspeicher
-     C                   Callp     f_execute('RCLACTGRP +
-     C                                          ACTGRP(PEEKUPD) +
-     C                                          OPTION(*NORMAL)'
-     C                                       : YMsgID: YMsgDta)
-     C                   Eval      YMsgID = ''
-     C                   Eval      YMsgDta = ''
-      *
-      *  Subfile initialisieren
-     C                   EXSR      PBInit
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    GetOpnFile    Ermitteln der geöffneten Datei            *
-      *============================================================*
-      *
-     C     GetOpnFile    BEGSR
-      *
-     C     IsOpen        IFEQ      bTrue
-     C                   EVAL      ##File = File#X.File
-     C                   EVAL      ##Library = File#X.Library
-     C                   EVAL      ##Member = File#X.Member
-     C                   ELSE
-      ***                MOVEL (P) *BLANKS       ##File
-      ***                MOVEL (P) *BLANKS       ##Library
-      ***                MOVEL (P) *BLANKS       ##Member
-     C                   EVAL      $$Text40 = *BLANKS
-     C                   EVAL      $$Text50 = *BLANKS
-     C                   EVAL      $$Size = §ZEROS
-     C                   EVAL      $$RCDFMTID = *BLANKS
-     C                   EVAL      $$Unit = *BLANKS
-     C                   Endif
-      *
-     C                   EVAL      L#File = ##File
-     C                   EVAL      L#Library = ##Library
-     C                   EVAL      L#Member = ##Member
-     C                   EVAL      L#Format = ##Format
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    GetUsrSetg    Ermitteln der Benutzervoreinstellungen    *
-      *============================================================*
-      *
-     C     GetUsrSetg    BEGSR
-      *
-      *  *DSPATR
-     C                   Eval      SET0001 = f_getUsrSg('*DSPATTR'  )
-      *
-      *  *SEARCH
-     C                   Eval      SET0002 = f_getUsrSg('*SEARCH'   )
-      *
-      *  *ACCESSKEY
-     C                   Eval      SET0003 = f_getUsrSg('*ACCESSKEY')
-      *
-      *  *SPLASH
-     C                   Eval      SET0005 = f_getUsrSg('*SPLASH'   )
-      *
-      *  *CVTCHR
-     C                   Eval      SET0006 = f_getUsrSg('*CVTCHR'   )
-      *
-      *  *VERSION
-     C                   Eval      SET0007 = f_getUsrSg('*VERSION'  )
-      *
-      *  *PROMPT
-     C                   Eval      SET0008 = f_getUsrSg('*PROMPT'   )
-      *
-      *  *FLOATKEYS
-     C                   Eval      SET0009 = f_getUsrSg('*FLOATKEYS')
-      *
-      *  *SCROLL
-     C                   Eval      SET0010 = f_getUsrSg('*SCROLL'   )
-      *
-      *  *DFTDSPMDE
-     C                   Eval      SET0011 = f_getUsrSg('*DFTDSPMDE')
-      *
-     C     SET_DftMde    IFEQ      '*LAST'
-      *    ... Modus belassen
-     C                   ELSE
-     C                   EVAL      SET_DspMde = SET_DftMde
-     C                   Endif
-      *
-     C                   SELECT
-     C     SET_DspMde    WHENEQ    '*DSPNRM'
-     C                   EXSR      S_DspNrm
-     C     SET_DspMde    WHENEQ    '*DSPHEX'
-     C                   EXSR      S_DspHex
-     C                   OTHER
-     C                   EXSR      S_DspNrm
-     C                   Endsl
-      *
-      * - Löschen Programmnachricht "keine Datei geöffnet"
-     C                   Callp     p_rmvPgmMg(§§pgmName)
-      *
-      *  *SECATR ...
-     C                   Eval      SET0013 = f_getUsrSg('*SECATRDFT'   )
-      *
-      *  ... Verknüpfen *SECATRDFT mit Eingabeparametern ...
-      *      ... ##Library
-     C                   If        i_chgLib = '*'
-     C                   If        SET_ChgLib = '1'
-     C                   Eval      auth.chgLib = bTrue
-     C                   Else
-     C                   Eval      auth.chgLib = bFalse
-     C                   Endif
-     C                   Else
-     C                   If        i_chgLib = '1'
-     C                   Eval      auth.chgLib = bTrue
-     C                   Else
-     C                   Eval      auth.chgLib = bFalse
-     C                   Endif
-     C                   Endif
-      *
-      *      ... ##File
-     C                   If        i_chgFile = '*'
-     C                   If        SET_ChgFil  = '1'
-     C                   Eval      auth.chgFile = bTrue
-     C                   Else
-     C                   Eval      auth.chgFile = bFalse
-     C                   Endif
-     C                   Else
-     C                   If        i_chgFile = '1'
-     C                   Eval      auth.chgFile = bTrue
-     C                   Else
-     C                   Eval      auth.chgFile = bFalse
-     C                   Endif
-     C                   Endif
-      *
-      *      ... ##Member
-     C                   If        i_chgMbr = '*'
-     C                   If        SET_ChgMbr = '1'
-     C                   Eval      auth.chgMbr = bTrue
-     C                   Else
-     C                   Eval      auth.chgMbr = bFalse
-     C                   Endif
-     C                   Else
-     C                   If        i_chgMbr = '1'
-     C                   Eval      auth.chgMbr = bTrue
-     C                   Else
-     C                   Eval      auth.chgMbr = bFalse
-     C                   Endif
-     C                   Endif
-      *
-      *      ... updMod
-     C                   If        (i_updModKey = UPD_M_DFT  )
-     C                   If        SET_UpdMod = '1'
-     C                   Eval      auth.updMod    = bTrue
-     C                   Else
-     C                   Eval      auth.updMod    = bFalse
-     C                   Endif
-     C                   Else
-     C                   If        (i_updModKey = UPD_M_YES  )  or
-     C                             (i_updModKey = UPD_M_NOKEY)
-     C                   Eval      auth.updMod    = bTrue
-     C                   Else
-     C                   Eval      auth.updMod    = bFalse
-     C                   Endif
-     C                   Endif
-      *
-      *      ... keyUpd
-     C                   If        (i_updModKey = UPD_M_DFT  )  or
-     C                             (i_updModKey = UPD_M_YES  )
-     C                   Eval      auth.updKey    = bTrue
-     C                   Else
-     C                   Eval      auth.updKey    = bFalse
-     C                   Endif
-      *
-      *      ... chgSqlW
-     C                   If        (i_chgSqlW = UPD_M_DFT  )  or
-     C                             (i_chgSqlW = UPD_M_YES  )
-     C                   Eval      auth.chgSqlW = bTrue
-     C                   Else
-     C                   Eval      auth.chgSqlW = bFalse
-     C                   Endif
-      *
-      *      ... chgSqlO
-     C                   If        (i_chgSqlO = UPD_M_DFT  )  or
-     C                             (i_chgSqlO = UPD_M_YES  )
-     C                   Eval      auth.chgSqlO = bTrue
-     C                   Else
-     C                   Eval      auth.chgSqlO = bFalse
-     C                   Endif
-      *
-      *      ... accAut
-     C                   If        SET_AccAut = '1'
-     C                   Eval      auth.accAut    = bTrue
-     C                   Else
-     C                   Eval      auth.accAut    = bFalse
-     C                   Endif
-      *
-      *  *PRVFILE
-     C                   Eval      SET0014 = f_getUsrSg('*PRVFILE')
-      *
-      *  *ENVFILE
-     C                   Eval      SET0015 = f_getUsrSg('*ENVFILE')
-      *
-      *  *SQLLMTCNT
-     C                   Eval      SET0016 = f_getUsrSg('*SQLLMTCNT')
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    GetSeqNbr     Übersetzen Field Name in Sequence Nbr     *
-      *============================================================*
-      *
-     C     GetSeqNbr     BEGSR
-      *
-     C                   EVAL      F_Field = Wrk#Field
-     C     F_KEY         CHAIN (N) FPEEKFLD                           11
-     C     *IN11         IFEQ      '0'
-     C                   EVAL      IsSeqNbrOK = bTrue
-     C                   EVAL      Wrk#SeqNbr = F_Seq
-     C                   ELSE
-     C                   EVAL      IsSeqNbrOK = bFalse
-     C                   EVAL      Wrk#SeqNbr = §ZEROS
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    GetLastOpt    Ermitteln der letzten Subfileauswahl      *
-      *============================================================*
-      *
-     C     GetLastOpt    BEGSR
-      *
-      *  "Keine Sätze vorhanden"
-     C     *IN80         IFEQ      '0'
-     C                   EVAL      IsError = bTrue
-     C                   EVAL      Wrk#SFPAU = *BLANKS
-     C                   EVAL      Wrk#Recno = §ZEROS
-     C                   ELSE
-      *
-     C     1             DO        SflNbrRcd     X
-      *
-     C                   EVAL      Y = SflNbrRcd - X
-     C                   EVAL      Y = Y + 1
-      *
-     C     *IN88         IFEQ      '0'
-     C                   EVAL      SflRec132 = Y
-     C     SflRec132     CHAIN     PBSFL132                           11
-     C                   ELSE
-     C                   EVAL      SflRec080 = Y
-     C     SflRec080     CHAIN     PBSFL080                           11
-     C                   Endif
-      *
-     C     *IN11         IFEQ      '1'
-     C                   EVAL      IsError = bTrue
-     C                   EVAL      Wrk#SFPAU = *BLANKS
-     C                   EVAL      Wrk#Recno = §ZEROS
-     C                   LEAVE
-     C                   ELSE
-     C     SFPAU         IFNE      *BLANKS
-     C                   EVAL      Wrk#SFPAU = SFPAU
-     C                   IF        (*in88 = bFalse)
-     C                   Z-ADD     SflRec132     Wrk#Recno
-     C                   Else
-     C                   Z-ADD     SflRec080     Wrk#Recno
-     C                   Endif
-     C                   EVAL      IsError = bFalse
-     C                   LEAVE
-     C                   ELSE
-      *  Bitte weitersuchen ...
-     C                   Endif
-     C                   Endif
-      *
-     C                   Enddo
-      *
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    GetNxtMark    Ermtteln des nächsten markierten Feldes   *
-      *============================================================*
-      *
-     C     GetNxtMark    BEGSR
-      *
-      *  Suchen des nächsten markierten Feldes ...
-     C                   EVAL      F_Seq = Wrk#SeqNbr
-     C     F1KEY_L1      SETGT     FPEEKFLDL1
-      *
-     C                   DO        *HIVAL
-     C                   READ      FPEEKFLDL1                             11
-     C     *IN11         IFEQ      '1'
-     C                   EVAL      Wrk#SeqNbr = *ZEROS
-     C                   LEAVE
-     C                   Endif
-      *
-     C                   EXSR      ChkVisible
-     C     IsVisible     IFEQ      bFalse
-      *    ... Feld ist nicht sichtbar
-     C                   ELSE
-      *    ... Feld ist sichtbar
-     C     F_MarkCol     IFEQ      bTrue
-      *        ... und markiert
-     C                   EVAL      Wrk#SeqNbr = F_Seq
-     C                   LEAVE
-     C                   ELSE
-      *        ... leider nicht markiert
-     C                   Endif
-     C                   Endif
-      *
-     C                   Enddo
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    GetPrvMark    Ermtteln des vorherigen markierten Feldes *
-      *============================================================*
-      *
-     C     GetPrvMark    BEGSR
-      *
-      *  Suchen des nächsten markierten Feldes ...
-     C                   EVAL      F_Seq = Wrk#SeqNbr
-     C     F1KEY_L1      SETLL     FPEEKFLDL1
-      *
-     C                   DO        *HIVAL
-     C                   READP     FPEEKFLDL1                             11
-     C     *IN11         IFEQ      '1'
-     C                   EVAL      Wrk#SeqNbr = *ZEROS
-     C                   LEAVE
-     C                   Endif
-      *
-     C                   EXSR      ChkVisible
-     C     IsVisible     IFEQ      bFalse
-      *    ... Feld ist nicht sichtbar
-     C                   ELSE
-      *    ... Feld ist sichtbar
-     C     F_MarkCol     IFEQ      bTrue
-      *        ... und markiert
-     C                   EVAL      Wrk#SeqNbr = F_Seq
-     C                   LEAVE
-     C                   ELSE
-      *        ... leider nicht markiert
-     C                   Endif
-     C                   Endif
-      *
-     C                   Enddo
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    KeyHasChg     Aufsetzkey hat gewechselt                 *
-      *============================================================*
-      *
-     C     KeyHasChg     BEGSR
-      *
-     C                   EVAL      Wrk#KeyVal = ##Key
-     C                   EVAL      Wrk#RcdNbr = ##RcdNbr
-     C                   EXSR      PBGenIntKy
-     C     YMsgID        IFNE      *BLANKS
-     C                   Callp     p_sndPgmMg(YMsgID: YMsgDta: §§pgmName)
-     C                   Eval      YMsgID = ''
-     C                   Eval      YMsgDta = ''
-     C                   Callp     p_sndPgmMg('USR8139': '': §§pgmName)
-     C                   ELSE
-     C                   EXSR      PBSetLL
-     C                   EXSR      PBInit
-     C                   EXSR      PBPinRcd
-     C                   EXSR      PBReadUp
-      *  Aufsetzkey überschreitet Dateiende
-     C     *IN80         IFEQ      '0'
-     C                   EXSR      C_Bot
-     C                   Endif
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    FloatKeys     Keyfelder an den Anfang sortieren         *
-      *============================================================*
-      *
-     C     FloatKeys     BEGSR
-      *
-     C                   IF        (SET_FLOAT  = bTrue)     and
-     C                             ((AccessMode = KEY_SEQ)  or
-     C                              (AccessMode = SQL_SEQ))
-      *
-     C                   monitor
-     C                   callp     PEEK34(SET_Dsp80: §CopyRight: '*FLOATKEYS'
-     C                                    : YMsgID: YMsgDta)
-     C                   eval      *in99 = bFalse
-     C                   on-error
-     C                   eval      *in99 = bTrue
-     C                   endmon
-      *
-     C                   ELSE
-      *    Es werden keine Schlüselfeldinformationen benötigt
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    KeepCsrPos    Beibehalten der Cursorposition            *
-      *============================================================*
-      *
-     C     KeepCsrPos    BEGSR
-      *
-      *  Beibehalten der Cursorosition
-     C                   EVAL      CsrRow = cursorPosition.row
-     C                   EVAL      CsrCol = cursorPosition.column
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    DltCsrPos     Löschen der Cursorposition                *
-      *============================================================*
-      *
-     C     DltCsrPos     BEGSR
-      *
-      *  Löschen der Cursorosition
-     C                   EVAL      CsrRow = *ZEROS
-     C                   EVAL      CsrCol = *ZEROS
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    SetUsrSetg    Speichern der Benutzervoreinstellungen    *
-      *============================================================*
-      *
-     C     SetUsrSetg    BEGSR
-      *
-      *  Splash-Screen
-     C                   Callp     p_updUsrSg('*SPLASH' : SET0005)
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    ChkVisible    Prüfen, ob Feld angezeigt wird            *
-      *============================================================*
-      *
-     C     ChkVisible    BEGSR
-      *
-     C                   EVAL      IsVisible = bTrue
-      *
-     C     1             DO        1
-      *
-      *  ... Feld nicht anzeigen
-     C     F_HIDDEN      IFEQ      bTrue
-     C                   EVAL      IsVisible = bFalse
-     C                   LEAVE
-     C                   Endif
-      *
-      *  ... gepinnte Spalten überlesen
-     C                   EVAL      Pin#Field = Wrk#Field
-     C                   EXSR      ChkPinCol
-     C     IsPinned      IFEQ      bTrue
-     C                   EVAL      IsVisible = bFalse
-     C                   LEAVE
-     C                   Endif
-      *
-     C                   Enddo
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    ChkSeqRnge    Prüfen der Fensternummer                  *
-      *============================================================*
-      *
-     C     ChkSeqRnge    BEGSR
-      *
-     C     IsOpen        IFEQ      bFalse
-      *            keine Datei geöffnet
-     C                   ELSE
-      *
-     C     ##WndNbr      IFLT      L#MinSeq
-     C                   EVAL      ##WndNbr = L#MinSeq
-     C                   Callp     p_sndPgmMg('USR8115': '': §§pgmName)
-     C                   EVAL      ##StrPage = 1
-     C                   Endif
-      *
-     C     ##WndNbr      IFGT      L#MaxSeq
-     C                   EVAL      ##WndNbr = L#MaxSeq
-     C                   Callp     p_sndPgmMg('USR8116': '': §§pgmName)
-     C     SET_SCROLL    IFEQ      '*BOTH'
-     C     SET_SCROLL    OREQ      '*RIGHT'
-     C                   EVAL      ##StrPage = *HIVAL
-     C                   ELSE
-     C                   EVAL      ##StrPage = 1
-     C                   Endif
-     C                   Endif
-      *
-     C     ##StrPage     IFLT      1
-     C                   EVAL      ##StrPage = 1
-     C                   Endif
-      *
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    SetScreen     Einstellen 132/80-Zeichen Auflösung       *
-      *============================================================*
-      *
-     C     SetScreen     BEGSR
-      *
-      *    Wenn der Bildschirm keine 132-Zeichen
-      *    darstellen kann, ...
-     C                   IF        (workstn.numRows < 27)
-      *    ... dann auf 80-Zeichen umschalten.
-     C                   EVAL      SET_Dsp80 = '1'
-     C                   ELSE
-      *    ... sonst die Auflösung 80/132 beibehalten.
-     C                   Endif
-      *
-     C     SET_Dsp80     IFEQ      '1'
-      *    80-Zeichen Anzeige
-     C                   EVAL      *IN88 = '1'
-     C                   EVAL      SflPage = 14
-     C                   EVAL      SflMaxRowLen = 64
-     C                   EVAL      SflHeadLRw = 6
-     C                   EVAL      SflFirstRw = 7
-     C                   EVAL      SflLastRw = 20
-     C                   EVAL      SflLeftOfs = 15
-     C                   ELSE
-      *   132-Zeichen Anzeige
-     C                   EVAL      *IN88 = '0'
-     C                   EVAL      SflPage = 16
-     C                   EVAL      SflMaxRowLen = 116
-     C                   EVAL      SflHeadLRw = 6
-     C                   EVAL      SflFirstRw = 8
-     C                   EVAL      SflLastRw = 23
-     C                   EVAL      SflLeftOfs = 15
-     C                   Endif
-      *
-      *  Bereich für gepinnte Spalten
-     C     SflMaxRowLen  DIV       3             SflPinRnge
-     C                   MULT      2             SflPinRnge
-      *
-      *  Prompt-Felder anzeigen ...
-     C     SET_DspPmt    IFEQ      bTrue
-     C     *IN77         ANDEQ     *OFF
-     C                   EVAL      *IN71 = '1'
-     C                   ELSE
-     C                   EVAL      *IN71 = '0'
-     C                   Endif
-      *
-      *  Subfileauswahlfeld öffnen ...
-     C                   EVAL      *IN76 = '0'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    ChgScreen     Wechseln 132/80-Zeichen Auflösung         *
-      *============================================================*
-      *
-     C     ChgScreen     BEGSR
-      *
-     C     SET_Dsp80     IFEQ      '1'
-      *   132-Zeichen Anzeige
-     C                   EVAL      SET_Dsp80 = '0'
-     C                   ELSE
-      *    80-Zeichen Anzeige
-     C                   EVAL      SET_Dsp80 = '1'
-     C                   Endif
-      *
-     C                   EXSR      SetScreen
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    ShowSplash    Anzeigen SPLASH-Screen                    *
-      *============================================================*
-      *
-     C     ShowSplash    BEGSR
-      *
-     C     SET_SPLA      IFEQ      bFalse
-      *            kein Splash-Screen
-     C                   ELSE
-     C                   WRITE     SPLASH01
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    ChkVersion    Prüfen der Versionsnummer                 *
-      *============================================================*
-      *
-     C     ChkVersion    BEGSR
-      *
-     C     SET_VSN       IFNE      §Version
-     C                   CALLP     PEEK33(§Version: YMsgID: YMsgDta)
-     C                   ELSE
-      *  Kein Abgleich erforderlich ...
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    ChkPrvFile    Prüfen vorherige Datei                    *
-      *============================================================*
-      *
-     C     ChkPrvFile    Begsr
-      *
-      *  Datei ...
-     C                   If        ##File = '*PRV'
-     C                   If        SET_PrvFil  <> '*NONE'
-     C                   Eval      ##File = SET_PrvFil
-     C                   Endif
-      *  Bibliothek ...
-     C                   If        SET_PrvLib  <> '*NONE'
-     C                   Eval      ##Library = SET_PrvLib
-     C                   Else
-     C                   Eval      ##Library = ' '
-     C                   Endif
-      *  Teildatei ...
-     C                   If        SET_PrvMbr  <> '*NONE'
-     C                   Eval      ##Member = SET_PrvMbr
-     C                   Else
-     C                   Eval      ##Member = ' '
-     C                   Endif
-     C                   Endif
-      *
-     C                   Endsr
-      *
-      *============================================================*
-      *    s_EXIT01                                                *
-      *============================================================*
-      *
-     C     s_EXIT01      BEGSR
-      *
-     C                   Eval      YFile = ##File                               Input
-     C                   Eval      YLibrary = ##Library                         Input
-     C                   Eval      YMember  = ##Member                          Input
-     C                   Eval      Yaccess  = accessMode                        Input
-     C                   Eval      YchgLib  = auth.chgLib                       I/O
-     C                   Eval      YchgFile = auth.chgFile                      I/O
-     C                   Eval      YchgMbr  = auth.chgMbr                       I/O
-     C                   Eval      YupdMod  = auth.updMod                       I/O
-     C                   Eval      YupdKey  = auth.updKey                       I/O
-     C                   Eval      YchgSqlW = auth.chgSqlW                      I/O
-     C                   Eval      YchgSqlO = auth.chgSqlO                      I/O
-     C                   Eval      YaccAut  = auth.accAut                       I/O
-     C                   Eval      YmsgID   = ' '                               Output
-     C                   Eval      YmsgDta  = ' '                               Output
-      *
-     C                   Call      EXIT01        P#Exit01
-      *
-     C     YmsgID        IFNE      *BLANKS
-     C                   Callp     p_rmvPgmMg(§§pgmName)
-     C                   Callp     p_sndPgmMg(YMsgID: YMsgDta: §§pgmName)
-     C                   Eval      YMsgID = ''
-     C                   Eval      YMsgDta = ''
-     C                   Endif
-      *
-     C                   Eval      auth.chgLib  = YchgLib
-     C                   Eval      auth.chgFile = YchgFile
-     C                   Eval      auth.chgMbr  = YchgMbr
-     C                   Eval      auth.updMod  = YupdMod
-     C                   Eval      auth.updKey  = YupdKey
-     C                   Eval      auth.chgSqlW = YchgSqlW
-     C                   Eval      auth.chgSqlO = YchgSqlO
-     C                   Eval      auth.accAut  = YaccAut
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    clrPinTabR    Löschen PinTabR                           *
-      *============================================================*
-      *
-     C     clrPinTabR    BEGSR
-      *
-     C                   CLEAR                   PinTabRcdE
-     C     1             DO        MAX_PIN_RCD   PinRcd_X
-     C                   EVAL      PinTabRcd(PinRcd_X) = PinTabRcdE
-     C                   EVAL      yPinTabR(PinRcd_X) = PinTabRcd(PinRcd_X)
-     C                   ENDDO
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    First         Initialisierung                           *
-      *============================================================*
-      *
-     C     First         BEGSR
-      *
-      * - Programm initialisieren
-     C                   Callp     p_rmvPgmMg(§§pgmName)
-      *
-      * - Einlesen der Benutzervoreinstellungen
-     C                   EXSR      GetUsrSetg
-      *
-      * - Prüfen auf generischen Dateinamen
-     C                   IF        %len(%trimR(io_qFile.name)) > 0 and
-     C                             %subst(io_qFile.name
-     C                                    : %len(%trimR(io_qFile.lib)): 1) = '*'
-     C                   IF        *IN75 = *OFF
-     C                   EVAL      ##File = io_qFile.name
-     C                   EVAL      ##Library = io_qFile.lib
-     C                   EXSR      Pmt_File
-     C                   IF        (*IN93 = bTrue)
-     C                   EVAL      io_qFile.name = ##File
-     C                   EVAL      io_qFile.lib = ##Library
-     C                   ENDIF
-     C                   EVAL      ##File = *BLANKS
-     C                   EVAL      ##Library = *BLANKS
-     C                   ENDIF
-     C                   ENDIF
-      *
-      * - Öffnen Bildschirmdatei
-     C                   OPEN      PEEK05FM
-      *
-      * - Initialisieren Bildschirm
-     C                   EVAL      ##File = io_qFile.name
-     C                   EVAL      ##Library = io_qFile.lib
-     C                   EVAL      ##Member = i_member
-     C                   EXSR      GetObjAttr
-      *
-     C                   EXSR      ChkPrvFile
-     C                   EVAL      ##RcdNbr = §ZEROS
-     C                   EVAL      ##Key = *BLANKS
-     C                   EVAL      ##WndNbr = §ZEROS
-     C                   EVAL      ##StrPage = §ZEROS
-     C                   EVAL      ##Field = *BLANKS
-      *
-     C                   EXSR      clrFldArray
-      *
-     C                   EVAL      $$SYSTEM = *BLANKS
-     C                   EVAL      $$TEXT40 = *BLANKS
-     C                   EVAL      $$TEXT50 = *BLANKS
-     C                   EVAL      ##FORMAT = *BLANKS
-     C                   EVAL      $$Length = §ZEROS
-     C                   EVAL      $$Records = §ZEROS
-     C                   EVAL      $$SIZE = §ZEROS
-     C                   EVAL      $$RCDFMTID = *BLANKS
-     C                   EVAL      $$UNIT = *BLANKS
-      *
-     C                   EVAL      $$HEAD132 = *BLANKS
-     C                   EVAL      $$HEAD080 = *BLANKS
-      *
-      *  Last opened file
-     C                   EVAL      L#File = *BLANKS
-     C                   EVAL      L#Library = *BLANKS
-     C                   EVAL      L#Member = *BLANKS
-     C                   EVAL      L#Format = *BLANKS
-     C                   EVAL      L#MaxSeq = §ZEROS
-     C                   EVAL      L#MinSeq = §ZEROS
-     C                   EVAL      L#WndNbr = §ZEROS
-      *
-      *  SQL-Selektion
-     C                   Eval      SqlWhere  = ' '
-     C                   Eval      SqlOrder  = ' '
-      *
-      * - Einstellen der Bildschirmauflösung 80/132-Zeichen
-     C                   EXSR      SetScreen
-      *
-      * - SPLASH-Screen
-     C                   EXSR      ShowSplash
-      *
-      * -  Darstellung der Auswahlen/Funktionstasten
-     C                   EVAL      SFTop = 1
-     C                   EVAL      SFBot = 1
-      *
-      * -  Netzwerkattribute
-     C                   CALLP     PEEK07('SYSNAME': bFalse
-     C                                    : YAttrLen: YAttrTyp: YValue)
-     C     YAttrLen      IFGT      §ZEROS
-     C                   EVAL      $$System = %subst(YValue: 1: YAttrLen)
-     C                   ELSE
-     C                   EVAL      $$System = *BLANKS
-     C                   Endif
-      *
-      * - Öffnen der Datei
-     C                   If        isOpen = bFalse
-     C                   EVAL      AccessMode = i_access
-     C                   If        AccessMode = SQL_SEQ
-     C                   Eval      SqlWhere  = i_sqlWhere
-     C                   Eval      SqlOrder  = i_sqlOrder
-     C                   Endif
-     C                   EXSR      OpenFile
-     C                   Endif
-      *
-      * - laden Arbeitsumgebung / öffnen Datei
-     C                   If        i_qEnvFile.name = '*NONE'
-     C                   Eval      YEnvFile = SET_ENVFIL
-     C                   Eval      YEnvLib  = SET_ENVLIB
-     C                   Eval      YEnvMbr  = '*FILE'
-     C                   Else
-     C                   If        i_qEnvFile.name = '*ENVFILE'
-     C                   Eval      YEnvFile = SET_ENVFIL
-     C                   Eval      YEnvLib  = SET_ENVLIB
-     C                   Eval      YEnvMbr  = '*FILE'
-     C                   Else
-     C                   Eval      YEnvFile = i_qEnvFile.name
-     C                   Eval      YEnvLib  = i_qEnvFile.lib
-     C                   Eval      YEnvMbr  = i_envMbr
-     C                   Endif
-     C                   If        i_envLayout = bTrue
-     C                   Eval      yOption = '*SLCLAYOUT'
-     C                   Else
-     C                   Eval      yOption = '*SLCENV'
-     C                   Endif
-     C                   Exsr      LoadEnv
-     C                   Endif
-      *
-      * - Ermitteln der Attribute der geöffneten Datei
-     C                   EXSR      GetOpnFile
-     C                   EXSR      GetMaxSeq
-      *
-      *  Wenn eine Datei geöffnet werden konnte, ...
-     C                   If        isOpen = bTrue
-      *  ... dann
-      *      abspeichern *PRVFILE
-     C                   Eval      SET_prvFil  = ##File
-     C                   Eval      SET_prvLib  = ##Library
-     C                   Eval      SET_prvMbr  = ##Member
-     C                   Callp     p_updUsrSg('*PRVFILE' : SET0014)
-     C                   Endif
-      *
-      * - Subfile füllen
-     C                   EXSR      PBINIT
-     C                   EXSR      C_Top
-      *
-      * - Copyright
-     C                   CLEAR                   USR9999
-     C                   EVAL      USR99991 = §CopyRight
-     C                   EVAL      USR99992 = §Release
-     C                   Callp     p_sndPgmMg('USR9999': USR9999: §§pgmName)
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    InzSr        Programminitialisierung                    *
-      *============================================================*
-      *
-     C     InzSr         BEGSR
-      *
-     C                   IF        (isInzSr = bTrue)
-     C                   Leavesr
-     C                   ENDIF
-      *
-     C                   Eval      isInzSr = bTrue
-      *
-     C                   Eval      §PgmQ = '*'
-      *
-     C                   Eval      PEEK01_NAME = f_pgmCallN('PEEK01')
-     C                   Eval      PEEK03_NAME = f_pgmCallN('PEEK03')
-     C                   Eval      PEEK04_NAME = f_pgmCallN('PEEK04')
-     C                   Eval      PEEK06_NAME = f_pgmCallN('PEEK06')
-     C                   Eval      PEEK07_NAME = f_pgmCallN('PEEK07')
-     C                   Eval      PEEK08_NAME = f_pgmCallN('PEEK08')
-     C                   Eval      PEEK09_NAME = f_pgmCallN('PEEK09')
-     C                   Eval      PEEK10_NAME = f_pgmCallN('PEEK10')
-     C                   Eval      PEEK12_NAME = f_pgmCallN('PEEK12')
-     C                   Eval      PEEK13_NAME = f_pgmCallN('PEEK13')
-     C                   Eval      PEEK14_NAME = f_pgmCallN('PEEK14')
-     C                   Eval      PEEK17_NAME = f_pgmCallN('PEEK17')
-     C                   Eval      PEEK18_NAME = f_pgmCallN('PEEK18')
-     C                   Eval      PEEK19_NAME = f_pgmCallN('PEEK19')
-     C                   Eval      PEEK20_NAME = f_pgmCallN('PEEK20')
-     C                   Eval      PEEK21_NAME = f_pgmCallN('PEEK21')
-     C                   Eval      PEEK23_NAME = f_pgmCallN('PEEK23')
-     C                   Eval      PEEK24_NAME = f_pgmCallN('PEEK24')
-     C                   Eval      PEEK26_NAME = f_pgmCallN('PEEK26')
-     C                   Eval      PEEK27_NAME = f_pgmCallN('PEEK27')
-     C                   Eval      PEEK30_NAME = f_pgmCallN('PEEK30')
-     C                   Eval      PEEK32_NAME = f_pgmCallN('PEEK32')
-     C                   Eval      PEEK33_NAME = f_pgmCallN('PEEK33')
-     C                   Eval      PEEK34_NAME = f_pgmCallN('PEEK34')
-     C                   Eval      PEEK37_NAME = f_pgmCallN('PEEK37')
-     C                   Eval      PEEK38_NAME = f_pgmCallN('PEEK38')
-     C                   Eval      PEEK40_NAME = f_pgmCallN('PEEK40')
-     C                   Eval      PEEK41_NAME = f_pgmCallN('PEEK41')
-     C                   Eval      PEEK42_NAME = f_pgmCallN('PEEK42')
-     C                   Eval      PEEK47_NAME = f_pgmCallN('PEEK47')
-     C                   Eval      PEEK48_NAME = f_pgmCallN('PEEK48')
-     C                   Eval      PEEK49_NAME = f_pgmCallN('PEEK49')
-     C                   Eval      PEEK50_NAME = f_pgmCallN('PEEK50')
-     C                   Eval      PEEK52_NAME = f_pgmCallN('PEEK52')
-     C                   Eval      PEEK54_NAME = f_pgmCallN('PEEK54')
-     C                   Eval      PEEK55_NAME = f_pgmCallN('PEEK55')
-     C                   Eval      PEEK56_NAME = f_pgmCallN('PEEK56')
-     C                   Eval      PEEK57_NAME = f_pgmCallN('PEEK57')
-     C                   Eval      PEEK59_NAME = f_pgmCallN('PEEK59')
-     C                   Eval      PEEK65_NAME = f_pgmCallN('PEEK65')
-     C                   Eval      PEEK68_NAME = f_pgmCallN('PEEK68')
-     C                   Eval      PEEK69_NAME = f_pgmCallN('PEEK69')
-     C                   Eval      EXIT01 = f_pgmCallN('EXIT01')
-      *
-      * - PinTabR clearen
-     C                   EXSR      clrPinTabR
-      *
-      * - Versionsabgleich durchführen
-     C                   EXSR      ChkVersion
-      *
-     C                   Callp     PEEK23(§§PgmName: '*ALL': 8
-     C                                    : yFKeys: yNbrOfKeys)
-     C                   Eval      ScrnFKeys = %subarr(YFKeys: 1)
-      *
-     C                   Callp     PEEK27(§§PgmName: YChoice: YNbrOfCh)
-      *
-     C                   Endsr
-      *
-      *============================================================*
-      *    f_int         Integer Wert                              *
-      *============================================================*
-      *
-     P f_int           B
-     D                 PI            20S 0
-     D  inpValue                     25S 5 VALUE
-      *
-     D integerVal      S             20S 0
-      *
-     C                   EVAL      integerVal = inpValue
-      *
-     C                   Return    integerVal
-      *
-     P                 E
-      *
-      *============================================================*
-      *    f_chain00                                               *
-      *============================================================*
-      *
-     P f_chain00       B
-     D                 PI             1A
-     D  i_rrn                              value  like(rcdNbr_t)
-     D  i_file                             value  like(file_t)
-     D  i_lib                              value  like(lib_t)
-     D  i_mbr                              value  like(mbr_t)
-     D  i_rcdFmt                     10A   value
-      * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      *
-     C                   IF        (CIO_getFile(hFile00)    <> i_file ) or
-     C                             (CIO_getLibrary(hFile00) <> i_lib  ) or
-     C                             (CIO_getMember(hFile00)  <> i_mbr  )
-     C                   IF        CIO_isOpen(hFile00) = bTrue
-     C                   CALLP     CIO_close(hFile00)
-     C                   ENDIF
-     C                   ENDIF
-      *
-     C                   Callp     f_execute('OVRDBF ' +
-     C                                         'FILE(' + %trim(##FILE) + ') ' +
-     C                                         'TOFILE(' +
-     C                                           %trim(##LIBRARY) + '/' +
-     C                                           %trim(##FILE) + ') ' +
-     C                                         'MBR(' + %trim(##MEMBER) + ') ' +
-     C                                         'OVRSCOPE(*ACTGRPDFN) ' +
-     C                                         'SHARE(*NO) ' +
-     C                                         'SEQONLY(*NO) SECURE(*YES)'
-     C                                       : yMsgID: yMsgDta)
-     C                   EVAL      YMsgID = ''
-     C                   EVAL      YMsgDta = ''
-      *
-     C                   IF        CIO_isOpen(hFile00) = bFalse
-     C                   IF        CommitLVL = '1'
-     C                   CALLP     CIO_open(hFile00
-     C                                      : i_file
-     C                                      : i_lib
-     C                                      : i_mbr
-     C                                      : i_rcdFmt
-     C                                      : 'rr+ , arrseq=Y, commit=Y +
-     C                                         nullcap=Y, riofb=Y, +
-     C                                         secure=N, ccsid=65535')
-     C                   Else
-     C                   CALLP     CIO_open(hFile00
-     C                                      : i_file
-     C                                      : i_lib
-     C                                      : i_mbr
-     C                                      : i_rcdFmt
-     C                                      : 'rr+ , arrseq=Y, commit=N +
-     C                                         nullcap=Y, riofb=Y, +
-     C                                         secure=N, ccsid=65535')
-     C                   Endif
-     C                   Endif
-      *
-     C                   Callp     f_execute('DLTOVR ' +
-     C                                         'FILE(' + %trim(##FILE) + ') ' +
-     C                                         'LVL(*ACTGRPDFN) '
-     C                                       : yMsgID: yMsgDta)
-     C                   EVAL      YMsgID = ''
-     C                   EVAL      YMsgDta = ''
-      *
-     C                   IF        CIO_chainWithRRN(hFile00
-     C                                              : i_rrn
-     C                                              : bTrue
-     C                                              : IO_Buff
-     C                                              : IO_NullMap) = bFalse
-     C                   EVAL      *IN11 = '1'
-     C                   ELSE
-     C                   EVAL      *IN11 = '0'
-     C                   ENDIF
-      *
-     C                   EVAL      File#X = CIO_getInfDS(hFile00)
-      *
-     C                   Return    *IN11
-      *
-     P                 E
-      *
-      *============================================================*
-      *    f_chain04                                               *
-      *============================================================*
-      *
-     P f_chain04       B
-     D                 PI             1A
-     D  i_rrn                              value  like(rcdNbr_t)
-     D  i_file                             value  like(file_t)
-     D  i_lib                              value  like(lib_t)
-     D  i_mbr                              value  like(mbr_t)
-     D  i_rcdFmt                     10A   value
-      * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      *
-     C                   IF        (CIO_getFile(hFile04)    <> i_file ) or
-     C                             (CIO_getLibrary(hFile04) <> i_lib  ) or
-     C                             (CIO_getMember(hFile04)  <> i_mbr  )
-     C                   IF        CIO_isOpen(hFile04) = bTrue
-     C                   CALLP     CIO_close(hFile04)
-     C                   ENDIF
-     C                   ENDIF
-      *
-     C                   IF        CIO_isOpen(hFile04) = bFalse
-     C                   CALLP     CIO_open(hFile04
-     C                                      : i_file
-     C                                      : i_lib
-     C                                      : i_mbr
-     C                                      : i_rcdFmt
-     C                                      : 'rr , arrseq=Y, +
-     C                                         nullcap=Y, riofb=Y, ccsid=65535')
-     C                   Endif
-      *
-     C                   IF        CIO_chainWithRRN(hFile04
-     C                                              : i_rrn
-     C                                              : bFalse
-     C                                              : IO_Buff
-     C                                              : IO_NullMap) = bFalse
-     C                   EVAL      *IN11 = '1'
-     C                   ELSE
-     C                   EVAL      *IN11 = '0'
-     C                   ENDIF
-      *
-     C                   EVAL      File#X = CIO_getInfDS(hFile04)
-      *
-     C                   Return    *IN11
-      *
-     P                 E
-      *
-      *============================================================*
-      *  Program error handler                                     *
-      *============================================================*
-      *
-     P errorHandler    b
-     D                 pi
-     D i_condToken                         value likeds(cee_fc_t)
-     D i_pCommArea                   10i 0 value
-     D o_action                      10i 0
-     D o_newCondToken                            likeds(cee_fc_t)
-      /free
+          endif;
 
-         dump;
-         o_action = CEE_PERCOLATE;
+       endsr;
 
-      /end-free
-     P                 e
-      *
+       //============================================================*
+       //    C_Enter       "Datenfreigabetaste"                      *
+       //============================================================*
+
+       begsr c_enter;
+
+          //  Löschen der Cursor-Position ...
+          exsr dltcsrpos;
+
+          //  Datei hat gewechselt ...
+          if ((##file    <> l#file) and
+             (not f_endswith('*': %trim(##file))) and
+             (%trim(##file  ) <> set_prmt)) or
+             (##library  <> l#library      ) or
+             ((##member  <> l#member) and
+             (%trim(##member) <> set_prmt)) or
+             ((##format  <> l#format) and
+             (%trim(##format) <> set_prmt));
+             *in93 = '1';
+          else;
+
+             //  Abfragen Prompt?
+             //  ... ##File
+             if %trim(##file) = set_prmt or
+                f_endswith('*': %trim(##file));
+                exsr c_prompt;
+                if (*in93 = '0');
+                   leavesr;
+                endif;
+             endif;
+             //  ... ##Member
+             if %trim(##member) = set_prmt;
+                exsr c_prompt;
+                if (*in93 = '0');
+                   leavesr;
+                endif;
+             endif;
+             //  ... ##Format
+             if %trim(##format) = set_prmt;
+                exsr c_prompt;
+                if (*in93 = '0');
+                   leavesr;
+                endif;
+             endif;
+             //  ... ##Field
+             if %trim(##field ) = set_prmt;
+                exsr c_prompt;
+                if (*in93 = '0');
+                   leavesr;
+                endif;
+             endif;
+          endif;
+
+          if *in93 = *off;
+
+             //  Keine Eigaben ...
+             //  ... also abfragen der Subfileauswahlen
+             if isreadsfl = btrue;
+                //       verhindern einer Rekursion
+             else;
+                exsr c_readsfl;
+             endif;
+
+          else;
+
+             //  Wechsel der Datei ...
+             //**                If        AccessMode = SQL_SEQ
+             newaccmode = i_access;
+             //**                Else
+             //**                Eval      NewAccMode = AccessMode
+             //**                Endif
+
+             exsr changefile;
+
+             //  Prüfen Seq-Bereich (##WndNbr) ...
+             exsr chkseqrnge;
+
+             //  Wechsel des Fenster (##Field) ...
+             exsr changewnd;
+
+             //  Wechsel des Aufsetzkeys ...
+             exsr changekey;
+
+             //  Füllen der Subfile ...
+             if isfilechg = btrue;
+                exsr dltcsrpos;
+                exsr c_top;
+             else;
+                if iskeychg = bfalse;
+                   exsr pbrefresh;
+                else;
+                   exsr dltcsrpos;
+                   exsr keyhaschg;
+                endif;
+             endif;
+
+          endif;
+
+          endsr;
+
+       //============================================================*
+       //    C_ReadSfl     Lesen & Verarbeiten der Subfile-Auswahlen *
+       //============================================================*
+
+       begsr c_readsfl;
+
+          //  Merker für: Subfile gelöscht zurück setzen
+          //              abbrechen READC, wenn Subfileinhalt
+          //              gelöscht worden ist über PBINIT
+          ispbinit = bfalse;
+          //  Merker für: Programmablauf innerhalb der READC-Schleife
+          //              verhindern einer Rekursion über
+          //              C_ENTER, C_PAGEUP, C_PAGEDOWN
+          isreadsfl = btrue;
+
+          r#iscmderr = isCmdErr;
+
+          //  Mindestens 1 Eintrag verarbeitet ...
+          isreadc = bfalse;
+
+          if *in80 = *off;
+             //           Keine Einträge vorhanden
+          else;
+
+             dou queryuser = *allx'00';
+
+                queryuser = *allx'00';
+
+                //  Lesen, solange bis keine zu verarbeitenden
+                //  Sätze mehr da sind, oder bis durch einen
+                //  Kurzbefehl (SFPAU) die Subfile neu auf-
+                //  gebaut worden ist.
+                dow ispbinit = bfalse;
+
+                   if (*in88 = bfalse);
+                      readc pbsfl132;
+                      *in11 = %eof;
+                   else;
+                      readc pbsfl080;
+                      *in11 = %eof;
+                   endif;
+
+                   if *in11 = *on;
+                      leave;
+                   endif;
+
+                   //  Cursorpositionierung ...
+                   if (*in88 = bfalse);
+                      sflcsr = sflrec132;
+                   else;
+                      sflcsr = sflrec080;
+                   endif;
+
+                   //  Linksbündig setzen ...
+                   sfpau = %triml(sfpau);
+
+                   //  Prompt ...
+                   if %trim(sfpau) = set_prmt;
+                      exsr pmt_sfpau;
+                   endif;
+
+                   //  Zuordnung AUSWAHL => Befehl ...
+                   peek21('#' + sfpau: §§pgmname
+                         : ypgmcmd: ycmddta: yMsgID: yMsgDta);
+                   if yMsgID <> *blanks;
+                      //  Fehlermeldung ...
+                      p_sndpgmmg('USR8110': sfpau: §§pgmname);
+
+                      exsr pbsflchain;
+                      if *in11 = *off;
+                         *in84 = '1';
+                         *in85 = '1';
+                         exsr pbsflupdat;
+                      endif;
+                      iter;
+                   endif;
+
+                   //----------------------------*
+                   //  Ausführen SFL-Befehl ...  *
+                   //----------------------------*
+
+                   sfl_cmd = ypgmcmd;
+
+                   //  Vorrangig Blockverarbeitung (F22)
+                   //  verarbeiten ...
+                   if queryuser <> *allx'00'
+                      and sfl_cmd <> queryuser;
+                      exsr pbsflchain;
+                      if *in11 = *off;
+                         *in84 = '1';
+                         exsr pbsflupdat;
+                      endif;
+                      iter;
+                   endif;
+
+                   //  Verarbeiten der Befehle ...
+                   exsr dosflcmd;
+                   if isCmdErr = btrue;
+                      exsr pbsflchain;
+                      if *in11 = *off;
+                         *in84 = '1';
+                         *in85 = '1';
+                         exsr pbsflupdat;
+                      endif;
+                      if isCancel = btrue;
+                         leave;
+                      else;
+                         iter;
+                      endif;
+                   endif;
+
+                   //  Mindestens ein Eintrag verarbeitet ...
+                   //  (ignorieren leere Auswahlen)
+                   if ypgmcmd <> '*NONE';
+                      isreadc = btrue;
+                   endif;
+
+                   //  Verarbeitung auswerten ...
+                   exsr pbsflchain;
+                   if *in11 = *off;
+                      //  ... Abbruch mit F3/F12
+                      if yMsgID = 'USR8100';
+                         *in84 = '1';
+                      else;
+                         //  ... Verarbeitung durchgeführt
+                         *in84 = '0';
+                         *in85 = '0';
+                         sfpau = *blanks;
+                      endif;
+                      exsr pbsflupdat;
+                      if yMsgID = 'USR8100';
+                         leave;
+                      endif;
+                   endif;
+
+                enddo;
+
+             enddo;
+
+          endif;
+
+          isCmdErr = r#iscmderr;
+          isreadsfl = bfalse;
+
+          if isreadc = btrue;
+             exsr getobjattr;
+             exsr getmbrattr;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    PBSflChain    CHAIN auf PBSFL                           *
+       //============================================================*
+
+       begsr pbsflchain;
+
+          if *in88 = *off;
+             chain sflrec132 pbsfl132;
+             *in11 = not %found;
+          endif;
+          if *in88 = *on;
+             chain sflrec080 pbsfl080;
+             *in11 = not %found;
+          endif;
+
+          if *in11 = *off;
+             //  ... alles in Ordnung
+          else;
+             //  ... letzte Nachricht löschen
+             p_rmvpgmmg(§§pgmname);
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    PBSflWrite    WRITE auf PBSFL                           *
+       //============================================================*
+
+       begsr pbsflwrite;
+
+          if (*in88 = bfalse);
+             write pbsfl132;
+          else;
+             write pbsfl080;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    PBSflUpdat    UPDATE auf PBSFL                          *
+       //============================================================*
+
+       begsr pbsflupdat;
+
+          if (*in88 = bfalse);
+             update pbsfl132;
+          else;
+             update pbsfl080;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    C_PageUp      PgUp - Vorwärts blättern                  *
+       //============================================================*
+
+       begsr c_pageup;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+             exsr msgnofile;
+          else;
+
+             //  Verarbeiten der Subfile-Auswahlen
+             if isreadsfl = btrue;
+                //       verhindern einer Rekursion
+             else;
+                exsr c_readsfl;
+             endif;
+
+             //  Blättern
+             exsr pbinit;
+             exsr pbpinrcd;
+             exsr pbreadup;
+
+             //  Keine weiteren Einträge gefunden ...
+             if *in80 = *off;
+                //  ... Ende der Liste anzeigen
+                exsr c_bot;
+             endif;
+
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    C_PageDown    PgDn - Rückwärts blättern                 *
+       //============================================================*
+
+       begsr c_pagedown;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+             exsr msgnofile;
+          else;
+
+             //  Verarbeiten der Subfile-Auswahlen
+             if isreadsfl = btrue;
+                //       verhindern einer Rekursion
+             else;
+                exsr c_readsfl;
+             endif;
+
+             //  Blättern
+             sflcsr = nbrpinrcd + 1;
+             exsr pbreadcsr;
+             exsr pbreaddn;
+
+             exsr pbinit;
+             exsr pbpinrcd;
+             exsr pbreadup;
+
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    C_EndPgm      F3/F12 - Programm beenden                 *
+       //============================================================*
+
+       begsr c_endpgm;
+
+          // - Speichern der Arbeitsumgebung
+          if i_envsave = btrue;
+             yisautosave = btrue;
+             exsr saveenv;
+          endif;
+
+          exsr closefile;
+          if isopen = bfalse;
+
+             // - Benutzervoreinstellungen
+             exsr setusrsetg;
+
+             // - Endenachricht
+             p_rmvpgmmg(§§pgmname);
+
+             clear usr8100;
+             usr81001 = ypgmcmd;
+             exitmsg = f_msgtext('USR8100': usr8100);
+
+             clear usr9999;
+             usr99991 = exitmsg;
+             usr99992 = '';
+             p_sndpgmmg('USR9999': usr9999: §§pgmname);
+             p_movpgmmg(§§pgmname);
+
+          else;
+             //  Fehlermeldung ...
+             p_sndpgmmg('USR8103': '': §§pgmname);
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    C_Prompt      F4  - Prompt                              *
+       //============================================================*
+
+       begsr c_prompt;
+
+          if isopen = bfalse;
+
+             select;
+             when ((scnfld   = '##FILE'  ) or
+                (##file   = set_prmt  ) or
+                (f_endswith('*': %trim(##file))));
+                exsr pmt_file;
+             when ((scnfld   = '##MEMBER') or
+                (##member = set_prmt  ));
+                exsr pmt_mbr;
+             other;
+                //      Nix tun, keine Datei vorhanden
+                exsr msgnofile;
+             endsl;
+
+          else;
+
+             select;
+             when ((scnfld   = '##FIELD ') or
+                (##field  = set_prmt  ));
+                exsr pmt_field;
+             when ((scnfld   = '##FILE'  ) or
+                (##file   = set_prmt  ) or
+                (f_endswith('*': %trim(##file))));
+                exsr pmt_file;
+             when ((scnfld   = '##MEMBER') or
+                (##member = set_prmt  ));
+                exsr pmt_mbr;
+             when ((scnfld   = '##FORMAT') or
+                (##format = set_prmt  ));
+                exsr pmt_fmt;
+             when ((scnfld   = 'SFPAU'   ) or
+                (sfpau    = set_prmt  ));
+                exsr pmt_sfpau;
+             other;
+                p_sndpgmmg('USR8179': '': §§pgmname);
+             endsl;
+
+          endif;
+
+          exsr keepcsrpos;
+
+       endsr;
+
+       //============================================================*
+       //    Pmt_Field     Prompt - Field                            *
+       //============================================================*
+
+       begsr pmt_field;
+
+          peek37(set_dsp80: §copyright: yfield
+                : yMsgID: yMsgDta);
+
+          if yMsgID = *blanks;
+             ##field = yfield;
+             *in93 = '1';
+          else;
+             p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+             yMsgID = '';
+             yMsgDta = '';
+             *in93 = '0';
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    Pmt_File      Prompt - File                             *
+       //============================================================*
+
+       begsr pmt_file;
+
+          //  Wenn das Feld gesperrt ist, ...
+          if *in75 = *on;
+             //  ... dann
+             //      ausgeben Meldung
+             p_sndpgmmg('USR8179': '': §§pgmname);
+          else;
+             //  ... sonst
+             //      aufrufen "Auswahl Datei"
+             if ##file = *blanks
+                or ##file = set_prmt;
+                yFile = '*ALL';
+             else;
+                yFile = ##file;
+             endif;
+
+             if ##library = *blanks;
+                yLibrary = '*LIBL';
+             else;
+                yLibrary = ##library;
+             endif;
+
+             peek69(set_dsp80: §copyright: yQFile
+                   : yMsgID: yMsgDta);
+
+             if yMsgID = *blanks;
+                ##file = yFile;
+                ##library = yLibrary;
+                *in93 = '1';
+             else;
+                p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                yMsgID = '';
+                yMsgDta = '';
+                *in93 = '0';
+             endif;
+
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    Pmt_Mbr       Prompt - Member                           *
+       //============================================================*
+
+       begsr pmt_mbr;
+
+          //  Wenn das Feld gesperrt ist, ...
+          if *in77 = *on;
+             //  ... dann
+             //      ausgeben Meldung
+             p_sndpgmmg('USR8179': '': §§pgmname);
+          else;
+             //  ... sonst
+             //      aufrufen "Auswahl Teildatei"
+             yFile = ##file;
+
+             if ##library = *blanks;
+                yLibrary = '*LIBL';
+             else;
+                yLibrary = ##library;
+             endif;
+
+             peek47(set_dsp80: §copyright
+                   : yQFile: yMember: yMsgID: yMsgDta);
+
+             if yMsgID = *blanks;
+                ##member = yMember;
+                *in93 = '1';
+             else;
+                p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                yMsgID = '';
+                yMsgDta = '';
+                *in93 = '0';
+             endif;
+
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    Pmt_Fmt       Prompt - Format                           *
+       //============================================================*
+
+       begsr pmt_fmt;
+
+          peek12(set_dsp80: §copyright: ##format
+                : mode_inter
+                : rcdl0200: yfmtnbr: yMsgID: yMsgDta);
+
+          if yMsgID = *blanks;
+             ##fmtnbr = yfmtnbr;
+             ##format = rcdl0200.r2fmtname;
+             $$length = rcdl0200.r2rcdlen;
+             *in93 = '1';
+          else;
+             p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+             yMsgID = '';
+             yMsgDta = '';
+             *in93 = '0';
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    Pmt_Sfpau     Prompt - Subfileauswahl                   *
+       //============================================================*
+
+       begsr pmt_sfpau;
+
+          peek68(set_dsp80: §§pgmname: §copyright
+                : ysflopt: yMsgID: yMsgDta);
+
+          //  Einlesen Subfiledatensatz
+          sflrec132 = sflcsr;
+          sflrec080 = sflcsr;
+          exsr pbsflchain;
+
+          //  Abbruch mit F3/F12
+          if (yMsgID = 'USR8100');
+             sfpau = '';
+             *in84 = '1';                                                       // SFLNXTCHG
+             *in85 = '0';                                                       // SFPAU(RI)
+          else;
+             sfpau = ysflopt;
+             *in84 = '1';                                                       // SFLNXTCHG
+             *in85 = '0';                                                       // SFPAU(RI)
+          endif;
+
+          //  Aktualisieren Subfiledatensatz
+          exsr pbsflupdat;
+
+          if (yMsgID = 'USR8100');
+             p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+             yMsgID = '';
+             yMsgDta = '';
+          else;
+             if (*in88 = bfalse);
+                write pbctl132;
+             else;
+                write pbctl080;
+             endif;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    C_Refresh     F5  - Aktualisieren der Subfile           *
+       //============================================================*
+
+       begsr c_refresh;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+             exsr msgnofile;
+          else;
+
+             //      ... aktualisieren "offene Datei"
+             exsr getopnfile;
+
+             //      ... aktualisieren Subfile
+             exsr pbrefresh;
+
+             //      ... abrufen der Objektattribute
+             exsr getobjattr;
+
+             //      ... abrufen der Anzahl Teildateien
+             exsr getnbrmbr;
+
+             //      ... abrufen Objektattribute
+             exsr getobjattr;
+
+             //      ... abrufen der Teildateiattribute
+             exsr getmbrattr;
+          endif;
+
+          //      ... positionieren Cursor
+          if sflcsr = §zeros;
+             exsr c_poscsr;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    C_Add         F6  - Neuanlage eines Datensatz           *
+       //============================================================*
+
+       begsr c_add;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+             exsr msgnofile;
+          else;
+
+             if isupdmod = bfalse;
+                //      Neuanlage nicht möglich, da INPUT-Modus
+                clear usr0007;
+                usr00071 = ##file;
+                usr00072 = ##library;
+                p_sndpgmmg('USR0007': usr0007: §§pgmname);
+             else;
+
+                yFunction = '*ADD';
+                exsr callUpdPgm;
+
+                //  Ermitteln Objektattribute
+                exsr getobjattr;
+
+                //  Ermitteln der Teildateiattribute (Anzahl Sätze)
+                exsr getmbrattr;
+
+             endif;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    C_ChgHead     F7  - Umschalten der Überschrift          *
+       //============================================================*
+
+       begsr c_chghead;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+             exsr msgnofile;
+          else;
+
+             set_hedtyp = f_nextheadertype(set_hedtyp);
+
+             isSflDirty = btrue;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    C_TgMrkCol    F8  - Spalte markieren ein/aus            *
+       //============================================================*
+
+       begsr c_tgmrkcol;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+             exsr msgnofile;
+          else;
+
+             exsr getfldtmrk;
+
+             if (wrk#field <> '');
+                isSflDirty = btrue;
+
+                //  Umschalten der Farbe im Datensatz ...
+                f_field = col_field(x);
+                chain(n) f_key fpeekfld;
+                *in11 = not %found;
+                if *in11 = *off;
+
+                   if f_markcol = bfalse;
+                      exsr c_mrkcol;
+                   else;
+                      exsr c_unmrkcol;
+                   endif;
+
+                else;
+                   //        Datensatz nicht gefunden
+                endif;
+             endif;
+
+             //  Beibehalten der Cursorposition ...
+             exsr keepcsrpos;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    C_MrkCol      F8  - Spalte markieren ein                *
+       //============================================================*
+
+       begsr c_mrkcol;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+             exsr msgnofile;
+          else;
+
+             exsr getfldtmrk;
+
+             if (wrk#field <> '');
+                isSflDirty = btrue;
+
+                //  Einschalten der Farbe im Datensatz ...
+                f_field = col_field(x);
+                chain f_key fpeekfld;
+                *in11 = not %found;
+                if *in11 = *off;
+                   f_markcol = btrue;
+                   update fpeekfld;
+                else;
+                   //        Datensatz nicht gefunden
+                endif;
+             endif;
+
+             //  Beibehalten der Cursorposition ...
+             exsr keepcsrpos;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    C_UnMrkCol    F8  - Spalte markieren aus                *
+       //============================================================*
+
+       begsr c_unmrkcol;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+             exsr msgnofile;
+          else;
+
+             exsr getfldtmrk;
+
+             if (wrk#field <> '');
+                isSflDirty = btrue;
+
+                //  Ausschalten der Farbe im Datensatz ...
+                f_field = col_field(x);
+                chain f_key fpeekfld;
+                *in11 = not %found;
+                if *in11 = *off;
+                   f_markcol = bfalse;
+                   update fpeekfld;
+                else;
+                   //        Datensatz nicht gefunden
+                endif;
+             endif;
+
+             //  Beibehalten der Cursorposition ...
+             exsr keepcsrpos;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    C_MoveTop     F9  - Selektieren Datensatz               *
+       //============================================================*
+
+       begsr c_movetop;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+             exsr msgnofile;
+          else;
+
+             exsr getsflrcd;
+
+             if sflcsr > §zeros;
+
+                exsr pbreadcsr;
+                exsr pbinit;
+                exsr pbpinrcd;
+                exsr pbreadup;
+                sfsanr = nbrpinrcd + 1;
+
+             else;
+                //  Fehlermeldung ...
+                p_sndpgmmg('USR8102': '': §§pgmname);
+             endif;
+
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    C_PosCsr      F10    - Cursor auf Keyeingabe pos.       *
+       //============================================================*
+
+       begsr c_poscsr;
+
+          *in87 = '1';
+
+       endsr;
+
+       //============================================================*
+       //    C_UserSetg    F11    - Benutzervoreinstellugnen         *
+       //============================================================*
+
+       begsr c_usersetg;
+
+          monitor;
+             peek24(set_dsp80: §copyright: set0001
+                   : yMsgID: yMsgDta);
+             *in99 = bfalse;
+          on-error;
+             *in99 = btrue;
+          endmon;
+
+          if *in99 = *on;
+             //            Fehler aufgetreten
+          else;
+             if yMsgID = 'USR8112';
+                p_updusrsg('*DSPATTR' : set0001);
+                exsr c_refresh;
+             else;
+                //            Verrabeitung durch Benutzer
+                //            abgebrochen
+             endif;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    C_Repeat      F13 - Wiederholen der Subfileauswahl      *
+       //============================================================*
+
+       begsr c_repeat;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+             exsr msgnofile;
+          else;
+
+             //  "Keine Sätze ..."
+             if sflnbrrcd = §zeros;
+                //  Keine Datensätze vorhanden.
+             else;
+
+                //  Ermitteln der letzten Subfile-Auswahl ...
+                exsr getlastopt;
+                if iserror = btrue;
+                   //  Fehlermeldung ...
+                   p_sndpgmmg('USR8165': '': §§pgmname);
+                else;
+
+                   //  "Reaktivieren" der letzten Subfileauswahl ...
+                   sflrec132 = wrk#recno;
+                   sflrec080 = wrk#recno;
+                   exsr pbsflchain;
+                   *in84 = '1';
+                   exsr pbsflupdat;
+                   //  Verarbeitung ...
+                   wrk#recno = wrk#recno + 1;
+                   exsr repeatopt;
+                endif;
+
+             endif;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    C_Layout      F15    - Layout                           *
+       //============================================================*
+
+       begsr c_layout;
+
+          monitor;
+             peek34(set_dsp80: §copyright: '*DISPLAY'
+                   : yMsgID: yMsgDta);
+             *in99 = bfalse;
+          on-error;
+             *in99 = btrue;
+          endmon;
+
+          if yMsgID = 'USR8112';
+             //  Beenden und Speichern ...
+             //  Merker für aktualisieren der Subfile
+             isSflDirty = btrue;
+          else;
+             //  Abbruch durch Benutzer ...
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    C_Search      F16    - Suchfunktion                     *
+       //============================================================*
+
+       begsr c_search;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+             exsr msgnofile;
+          else;
+
+             select;
+             when srchmode = '*NEW';
+                monitor;
+                   peek17(set_dsp80: §copyright
+                         : yQFile: ##member
+                         : yfield: yoperation: yargument
+                         : ysign: ysrchnbrs: ysrchtype
+                         : ysrchcase: yMsgID: yMsgDta);
+                   *in99 = bfalse;
+                on-error;
+                   *in99 = btrue;
+                endmon;
+
+                if *in99 = *off;
+                   if yMsgID = 'USR8112';
+                      exsr srchstart;
+                   else;
+                      p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                      yMsgID = '';
+                      yMsgDta = '';
+                   endif;
+                else;
+                   //  Fehler beim Aufruf von PEEK17 ...
+                endif;
+
+             when srchmode = '*FOUND';
+                exsr srchcont;
+
+             when srchmode = '*MAXIMUM';
+                exsr srchcontm;
+
+             when srchmode = '*EOF';
+                exsr srcheof;
+
+             other;
+                //               ???????????
+             endsl;
+
+             //  Gefunden?
+             if srchmode = '*FOUND';
+                srchfndrcd = file#x.rcdnbr;
+                exsr pbreadp;
+             else;
+                exsr pbreaddn;
+             endif;
+
+             //  Anzeigen der Subfile
+             exsr pbinit;
+             exsr pbpinrcd;
+             exsr pbreadup;
+
+             //  Meldung
+             select;
+             when srchmode = '*FOUND';
+                p_sndpgmmg('USR8130': '': §§pgmname);
+             when srchmode = '*EOF';
+                p_sndpgmmg('USR8131': '': §§pgmname);
+             when srchmode = '*MAXIMUM';
+                p_sndpgmmg('USR8132': '': §§pgmname);
+             other;
+             endsl;
+
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    C_Top         F17 - Anfang der Datei                    *
+       //============================================================*
+
+       begsr c_top;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+             exsr msgnofile;
+          else;
+
+             exsr pbmovetop;
+             exsr pbinit;
+             exsr pbpinrcd;
+             exsr pbreadup;
+
+             sfsanr = nbrpinrcd + 1;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    C_Bot         F18 - Ende der Datei                      *
+       //============================================================*
+
+       begsr c_bot;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+             exsr msgnofile;
+          else;
+
+             exsr pbmovebot;
+             exsr pbinit;
+             exsr pbpinrcd;
+             exsr pbreaddn;
+             exsr pbreadup;
+
+             sfsanr = sflnbrrcd;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    C_MoveL       F19 - Nach links verschieben              *
+       //============================================================*
+
+       begsr c_movel;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+             exsr msgnofile;
+          else;
+
+             if ##strpage > 1;
+                if set_scroll = '*BOTH'
+                   or set_scroll = '*LEFT';
+                   ##strpage = ##strpage - 1;
+                else;
+                   ##strpage = 1;
+                   ##wndnbr = ##wndnbr - 1;
+                endif;
+             else;
+                ##wndnbr = ##wndnbr - 1;
+                if set_scroll = '*BOTH'
+                   or set_scroll = '*LEFT';
+                   ##strpage = *hival;
+                else;
+                   ##strpage = 1;
+                endif;
+             endif;
+
+             exsr chkseqrnge;
+
+             exsr pbrefresh;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    C_MoveR       F20 - Nach rechts verschieben             *
+       //============================================================*
+
+       begsr c_mover;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+             exsr msgnofile;
+          else;
+
+             if (cp = 1) and
+                (col_error(cp) = btrue);
+                if ((set_scroll = '*BOTH') or
+                   (set_scroll = '*RIGHT'));
+                   ##strpage = ##strpage + 1;
+                else;
+                   ##wndnbr = ##wndnbr + 1;
+                   ##strpage = 1;
+                endif;
+             else;
+                ##wndnbr = ##wndnbr + 1;
+                ##strpage = 1;
+             endif;
+
+             exsr chkseqrnge;
+             exsr pbrefresh;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    C_PageL       F19 - Nach links verschieben,             *
+       //                  ganze Seite                               *
+       //============================================================*
+
+       begsr c_pagel;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+             exsr msgnofile;
+             leavesr;
+          endif;
+
+          //  Prüfen "Seite innerhalb des Feldes"
+          if ##strpage > 1;
+             ##strpage = ##strpage - 1;
+          else;
+
+             //  Bereits am Anfang
+             if ##wndnbr = l#minseq
+                and ##strpage = 1;
+             else;
+
+                //  Ermitteln der Feldnummer des 1. angezeigten
+                //  Feldes ...
+                x = nbrpincol + 1;
+                wrk#field = col_field(x);
+                exsr getseqnbr;
+                if isseqnbrok = bfalse
+                   and l#minseq > *zeros;
+                   wrk#seqnbr = l#minseq;
+                   isseqnbrok = btrue;
+                endif;
+
+                if isseqnbrok = btrue;
+                   exsr getprvseq;
+                   ##wndnbr = wrk#seqnbr;
+                   if set_scroll = '*BOTH'
+                      or set_scroll = '*LEFT';
+                      ##strpage = *hival;
+                   else;
+                      ##strpage = 1;
+                   endif;
+                else;
+                   ##wndnbr = l#minseq;
+                   ##strpage = 1;
+                endif;
+
+                //  Füllen einer Dummy-Zeile von rechts nach
+                //  links zur Ermittlung des 1. anzuzeigenden
+                //  Feldes ...
+                if ##wndnbr > l#minseq;
+                   exsr pbfillleft;
+                   //  ... kein Feld gefunden
+                   if cp <= §zeros;
+                      ##wndnbr = l#minseq;
+                      ##strpage = 1;
+                   else;
+                      //  ... Felder gefunden
+                      if cp = 1;
+                         //      ... aber nur 1 Feld
+                         wrk#field = col_field(cp);
+                      else;
+                         //      ... mehrere Felder
+                         if col_error(cp) = bfalse;
+                            //          ... komplett sichtbar
+                            wrk#field = col_field(cp);
+                         else;
+                            //          ... nicht komplett sichtbar,
+                            //              nächstes Feld als Startfeld nehmen
+                            x = cp - 1;
+                            wrk#field = col_field(x);
+                            ##strpage = 1;
+                         endif;
+                         //      ... umrechnen in Feldnummer
+                         exsr getseqnbr;
+                         if isseqnbrok = btrue;
+                            ##wndnbr = wrk#seqnbr;
+                         else;
+                            ##wndnbr = *loval;
+                            ##strpage = 1;
+                         endif;
+                      endif;
+                   endif;
+                endif;
+             endif;
+          endif;
+
+          exsr chkseqrnge;
+          exsr pbrefresh;
+
+       endsr;
+
+       //============================================================*
+       //    C_PageR       F20 - Nach rechts verschieben,            *
+       //                  ganze Seite                               *
+       //============================================================*
+
+       begsr c_pager;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+             exsr msgnofile;
+          else;
+
+             wrk#field = col_field(cp);
+             exsr getseqnbr;
+             if isseqnbrok = btrue;
+
+                if col_error(cp) = btrue;
+                   if cp - nbrpincol = 1;
+
+                      if set_scroll = '*BOTH'
+                         or set_scroll = '*RIGHT';
+                         ##wndnbr = wrk#seqnbr;
+                         ##strpage = ##strpage + 1;
+                      else;
+                         ##wndnbr = wrk#seqnbr + 1;
+                         ##strpage = 1;
+                      endif;
+
+                   else;
+                      ##wndnbr = wrk#seqnbr;
+                      ##strpage = 1;
+                   endif;
+                else;
+                   ##wndnbr = wrk#seqnbr + 1;
+                   ##strpage = 1;
+                endif;
+
+             else;
+                ##wndnbr = *hival;
+                ##strpage = 1;
+             endif;
+
+             exsr chkseqrnge;
+             exsr pbrefresh;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    C_CmdLine     F21 - Befehlszeile                        *
+       //============================================================*
+
+       begsr c_cmdline;
+
+          if f_cmdline = btrue;
+             callp(e) quscmdln();
+             *in99 = %error;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    C_ChgScn      F22 - Umschalten der Bildschirmauflösung  *
+       //============================================================*
+
+       begsr c_chgscn;
+
+          wrk#readdn = sflpage;
+          exsr chgscreen;
+          wrk#readdn = wrk#readdn - sflpage;
+
+          exsr pbrefresh;
+
+       endsr;
+
+       //============================================================*
+       //    C_MoreOpt     F23 - Weitere Auswahlen                   *
+       //============================================================*
+
+       begsr c_moreopt;
+
+          sftop = sftop + 1;
+
+       endsr;
+
+       //============================================================*
+       //    C_MoreKeys    F24 - Weitere Tasten                      *
+       //============================================================*
+
+       begsr c_morekeys;
+
+          sfbot = sfbot + 1;
+
+       endsr;
+
+       //============================================================*
+       //    C_NextMark    Fxx - Nächste Markierung ansteueren       *
+       //============================================================*
+
+       begsr c_nextmark;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+             exsr msgnofile;
+          else;
+
+             exsr getfrstfld;
+
+             wrk#seqnbr = ##wndnbr;
+             exsr getnxtmark;
+             if wrk#seqnbr > *zeros;
+                ##wndnbr = wrk#seqnbr;
+                ##strpage = 1;
+             else;
+                wrk#seqnbr = *loval;
+                exsr getnxtmark;
+                if wrk#seqnbr > *zeros;
+                   ##wndnbr = wrk#seqnbr;
+                   ##strpage = 1;
+                else;
+                   //    ... keine Markierung gefunden
+                endif;
+             endif;
+
+             exsr chkseqrnge;
+
+             exsr pbrefresh;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    C_PrevMark    Fxx - Vorherige Markierung ansteueren     *
+       //============================================================*
+
+       begsr c_prevmark;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+             exsr msgnofile;
+          else;
+
+             exsr getfrstfld;
+
+             wrk#seqnbr = ##wndnbr;
+             exsr getprvmark;
+             if wrk#seqnbr > *zeros;
+                ##wndnbr = wrk#seqnbr;
+                ##strpage = 1;
+             else;
+                wrk#seqnbr = *hival;
+                exsr getprvmark;
+                if wrk#seqnbr > *zeros;
+                   ##wndnbr = wrk#seqnbr;
+                   ##strpage = 1;
+                else;
+                   //    ... keine Markierung gefunden
+                endif;
+             endif;
+
+             exsr chkseqrnge;
+
+             exsr pbrefresh;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    C_BuildPgm    Erstellen Update Programm                 *
+       //============================================================*
+
+       begsr c_buildpgm;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+             exsr msgnofile;
+          else;
+
+             peek52(set_dsp80: §copyright
+                   : yalwlc: ycase: yrcdlock: ynulldft
+                   : ykeepcrs: yMsgID: yMsgDta: bfalse);
+
+             if yMsgID = 'USR8112';
+
+                //  Rekursiver CALL auf sich selbst (= PEEK05),
+                //  um die alte Referenz auf das Update-Programm zu löschen
+                monitor;
+                   UPDPGM_NAME = f_pgmcalln(§§pgmname);
+                   UPDPGM(ydsp80
+                          : yHeaderType
+                          : yCopyright
+                          : yRcdNbr
+                          : yFile
+                          : yLibrary
+                          : yMember
+                          : yFunction
+                          : yCommitLvl
+                          : yIsUpdKey
+                          : yScreenNbr
+                          : yIsLower
+                          : yCursorPos.row
+                          : yCursorPos.column
+                          : yMsgID
+                          : yMsgDta);
+                on-error;
+                endmon;
+
+                monitor;
+                   //  Initialisierung
+                   p_rmvpgmmg(§§pgmname);
+
+                   exsr getpgmname;
+
+                   //  Generierung
+                   peek08(yQFile: peekpgm: rcdl0200.r2fmtname
+                         : rcdl0200.r2fmtid
+                         : yalwlc: ycase: yrcdlock: ynulldft
+                         : ykeepcrs: §§pgmlib: yrtncode);
+
+                   *in99 = bfalse;
+                on-error;
+                   *in99 = btrue;
+                endmon;
+             endif;
+
+             peek52(set_dsp80: §copyright
+                   : yalwlc: ycase: yrcdlock: ynulldft
+                   : ykeepcrs: yMsgID: yMsgDta: btrue);
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    C_Register    Prüfen der Registrierungsdaten            *
+       //============================================================*
+
+       begsr c_register;
+
+          monitor;
+             peek30(set_dsp80: yCopyright
+                   : yflag: yMsgID: yMsgDta);
+             p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+             yMsgID = '';
+             yMsgDta = '';
+             *in99 = bfalse;
+          on-error;
+             *in99 = btrue;
+          endmon;
+
+          if *in99 = *on;
+             //  Fehler beim Programmaufruf ...
+             p_movpgmmg(§§pgmname);
+             isLicenceError = bTrue;
+             leavesr;
+          else;
+             if yflag <> -55
+                and yflag <> 66
+                and yflag <> 243;
+                //  Fehler im Wertebereich ...
+                isLicenceError = bTrue;
+                leavesr;
+             else;
+                //  Datum ist abgelaufen ...
+                if yflag = -55;
+                   isLicenceError = bTrue;
+                   leavesr;
+                else;
+                   //  Registrierung ist OK ...
+                endif;
+             endif;
+          endif;
+
+          //  "Nachschießen" SPLASH-Screen
+          if yflag = 243
+             and set_spla = bfalse;
+             exsr s_splashon;
+             exsr showsplash;
+          endif;
+
+          isLicenceError = bFalse;
+
+       endsr;
+
+       //============================================================*
+       //    C_ClrPinRw    Löschen der Pin-Tabelle für Zeilen        *
+       //============================================================*
+
+       begsr c_clrpinrw;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+             exsr msgnofile;
+          else;
+
+             exsr clrpinrow;
+
+             //  Merker für aktualisieren der Subfile
+             isSflDirty = btrue;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    C_ClrPinCl    Löschen der Pin-Tabelle für Spalten       *
+       //============================================================*
+
+       begsr c_clrpincl;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+             exsr msgnofile;
+          else;
+
+             exsr clrpincol;
+
+             //  Merker für aktualisieren der Subfile
+             isSflDirty = btrue;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    C_DspDbr      Anzeigen der Datenbankrelationen          *
+       //============================================================*
+
+       begsr c_dspdbr;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+             exsr msgnofile;
+          else;
+
+             monitor;
+                peek40(set_dsp80: §copyright
+                      : ##file: ##library: ##member
+                      : ##format: btrue
+                      : yretfile: yretlib
+                      : yMsgID: yMsgDta);
+                *in99 = btrue;
+             on-error;
+                *in99 = btrue;
+             endmon;
+
+             if (yretfile = ' ')  or
+                (*in99    = *on);
+                //  ... keine Auswahl getroffen
+             else;
+                //  ... prüfen auf neue Dateiauswahl
+                ##file    = yretfile;
+                ##library = yretlib;
+
+                newaccmode = i_access;
+                exsr changefile;
+
+                if isfilechg = btrue;
+                   exsr c_top;
+                else;
+                endif;
+             endif;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    C_SortBKey    Anzeigen der Sätze in Schlüsselfolge      *
+       //============================================================*
+
+       begsr c_sortbkey;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+             exsr msgnofile;
+          else;
+             if accessMode = key_seq;
+                //    ... Sortierung stimmt bereits
+             else;
+
+                //  Umschalten der Sortierung
+                newaccmode = key_seq;
+                exsr changesort;
+
+             endif;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    C_SortBRrn    Anzeigen der Sätze in Satzfolge           *
+       //============================================================*
+
+       begsr c_sortbrrn;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+             exsr msgnofile;
+          else;
+             if accessMode = rrn_seq;
+                //    ... Sortierung stimmt bereits
+             else;
+
+                if f_numbased(##file    :
+                           ##library :
+                           ##member  ) = 1;
+                   newaccmode = rrn_seq;
+                   exsr changesort;
+                else;
+                   clear usr8217;
+                   p_sndpgmmg('USR8217': usr8217: §§pgmname);
+                endif;
+
+             endif;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    C_SortTgl     Umschalten der Sortierfolge               *
+       //============================================================*
+
+       begsr c_sorttgl;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+             exsr msgnofile;
+          else;
+             if accessMode = rrn_seq;
+                exsr c_sortbkey;
+             else;
+                exsr c_sortbrrn;
+             endif;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    S_TglKeyLC_UC Umschalten Eingabe der Schlüsselfelder    *
+       //============================================================*
+
+       begsr s_tglkeylc_uc;
+
+          if iskeylower = bfalse;
+             iskeylower = btrue;
+             clear usr8223;
+             p_sndpgmmg('USR8223': usr8223: §§pgmname);
+          else;
+             iskeylower = bfalse;
+             clear usr8224;
+             p_sndpgmmg('USR8224': usr8224: §§pgmname);
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    C_PinCDlg     Pin-Dialog                                *
+       //============================================================*
+
+       begsr c_pincdlg;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+             exsr msgnofile;
+          else;
+
+             monitor;
+                peek50(set_dsp80: §copyright: pintabcol
+                      : yMsgID: yMsgDta);
+                *in99 = bfalse;
+             on-error;
+                *in99 = btrue;
+             endmon;
+
+             if *in99 = *off;
+                if yMsgID = 'USR8112';
+
+                   exsr clrpincol;
+
+                   for y = 1 to max_pin_col;
+                      if pintabcol(y) <> ' ';
+                         wrk#field = pintabcol(y);
+                         exsr pincol;
+                      endif;
+                   endfor;
+
+                endif;
+             endif;
+
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    C_Sql         SQL-Auswahl                               *
+       //============================================================*
+
+       begsr c_sql;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+             exsr msgnofile;
+             leavesr;
+          endif;
+
+          if fild0100.atfila <> '*PHY';
+
+             select;
+             when fild0100.atnofm = 1;
+                //  Wenn es sich um eine "single-format logical file" handelt, ...
+                //  ... dann prüfen, ob diese Datei über mehere Member geht.
+                //      Sortierung nach SQL wird für "multi-member logical files"
+                //      (noch) nicht unterstützt ...
+                if fild0100.atjoin = 'N' and
+                   f_numbased(##file: ##library: ##member) > 1;
+
+                   clear usr8235;
+                   p_sndpgmmg('USR8235': usr8235: §§pgmname);
+                   leavesr;
+                endif;
+
+             when fild0100.atnofm > 1;
+                //  Wenn es sich um eine "multi-format logical file" handelt, ...
+                //  ... dann fragen, welches physiche Datei göffnet werden soll:
+                peek59(set_dsp80: '*QUESTION'
+                      : 'USR8212': '': 'YN'
+                      : yMsgID: yMsgDta);
+                usr8190 = yMsgDta;
+                if usr81901 = '*YES';
+                   f_basedpf(##file     :
+                            ##library  :
+                            ##member   :
+                            ##format   :
+                            ##fmtnbr   :
+                            ##file     :
+                            ##library  :
+                            ##member   :
+                            ##format   );
+                else;
+                   leavesr;
+                endif;
+
+             endsl;
+
+          endif;
+
+          // Let the user enter the SQL WHERE and ORDER BY clauses:
+          monitor;
+             yFile = ##file;
+             yLibrary = ##library;
+             yMember = ##member;
+             yformat = ##format;
+             ysqlwhere = sqlwhere;
+             ysqlorder = sqlorder;
+             peek48(set_dsp80: §copyright
+                   : yFile: yLibrary: yMember
+                   : yformat
+                   : accessMode: ysqlwhere: ysqlorder
+                   : auth.isChgSQLWhereAlw: auth.isChgSQLOrderByAlw
+                   : yMsgID: yMsgDta);
+             *in99 = bfalse;
+          on-error;
+             *in99 = btrue;
+          endmon;
+
+          if *in99 <> *off;
+             leavesr;
+          endif;
+
+          if yMsgID <> 'USR8112';
+             leavesr;
+          endif;
+
+          ispintoclr = bfalse;
+
+          exsr closefile;
+
+          ##file = yFile;
+          ##library = yLibrary;
+          ##member = yMember;
+          ##format = yformat;
+
+          if (ysqlwhere  <> ' ') or
+             (ysqlorder  <> ' ');
+             if accessMode <> sql_seq;
+                oldaccmode = accessMode;
+             endif;
+             accessMode = sql_seq;
+             sqlwhere   = ysqlwhere;
+             sqlorder   = ysqlorder;
+          else;
+             accessMode = oldaccmode;
+             sqlwhere   = ' ';
+             sqlorder   = ' ';
+          endif;
+
+          exsr openfile;
+
+          ispintoclr = btrue;
+
+       endsr;
+
+       //============================================================*
+       //    S_Change      02 - Ändern Einzelsatz                    *
+       //============================================================*
+
+       begsr s_change;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+             exsr msgnofile;
+          else;
+
+             if isupdmod = bfalse;
+                //      Ändern nicht möglich, da INPUT-Modus
+                clear usr0007;
+                usr00071 = ##file;
+                usr00072 = ##library;
+                p_sndpgmmg('USR0007': usr0007: §§pgmname);
+             else;
+
+                exsr getsflrcd;
+
+                if sflcsr > §zeros;
+                   yFunction = '*CHANGE';
+                   exsr callUpdPgm;
+                   exsr reloadusrstg;
+                else;
+                   //        kein Datensatz verfügbar
+                endif;
+
+             endif;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    S_Copy        03 - Kopieren Einzelsatz                  *
+       //============================================================*
+
+       begsr s_copy;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+             exsr msgnofile;
+          else;
+
+             if isupdmod = bfalse;
+                //      Ändern nicht möglich, da INPUT-Modus
+                clear usr0007;
+                usr00071 = ##file;
+                usr00072 = ##library;
+                p_sndpgmmg('USR0007': usr0007: §§pgmname);
+             else;
+
+                exsr getsflrcd;
+
+                if sflcsr > §zeros;
+                   yFunction = '*COPY';
+                   exsr callUpdPgm;
+                else;
+                   //        kein Datensatz verfügbar
+                endif;
+
+             endif;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    S_CopyExt     09 - Kopieren Einzelsatz in externe Datei *
+       //============================================================*
+
+       begsr s_copyext;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+             exsr msgnofile;
+          else;
+
+             if auth.isUpdAlw = bfalse;
+                //      Nachricht "Keine Berechtigung" ausgeben.
+             else;
+
+                exsr getsflrcd;
+
+                if sflcsr > §zeros;
+
+                   if queryuser <> ypgmcmd;
+
+                      //  Abfragen der Zielangaben ...
+                      exsr pbgettargt;
+
+                      //  Verarbeitung OK ...
+                      if (istargetok = btrue);
+                         //  Fragen Benutzer pro Datensatz ...
+                         exsr pbqueryusr;
+                      endif;
+
+                   else;
+                      //  Kopieren ohne Sicherheitsabfrage ...
+                      yMsgID = 'USR8112';
+                      yMsgDta = *blanks;
+                   endif;
+
+                   //  Datensatz kopieren ...
+                   if yMsgID = 'USR8112';
+                      exsr copyextrcd;
+                   endif;
+
+                else;
+                   //        kein Datensatz verfügbar
+                endif;
+
+             endif;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    S_Delete      04 - Löschen Einzelsatz                   *
+       //============================================================*
+
+       begsr s_delete;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+             exsr msgnofile;
+          else;
+
+             if isupdmod = bfalse;
+                //      Löschen nicht möglich, da INPUT-Modus
+                clear usr0007;
+                usr00071 = ##file;
+                usr00072 = ##library;
+                p_sndpgmmg('USR0007': usr0007: §§pgmname);
+             else;
+
+                exsr getsflrcd;
+
+                if sflcsr > §zeros;
+
+                   if queryuser <> ypgmcmd;
+
+                      //  Fragen Benutzer ...
+                      exsr pbqueryusr;
+
+                   else;
+                      //  Löschen ohne Sicherheitsabfrage ...
+                      yMsgID = 'USR8112';
+                      yMsgDta = *blanks;
+                   endif;
+
+                   //  Datensatz löschen ...
+                   if yMsgID = 'USR8112';
+                      exsr delrecord;
+                   endif;
+
+                else;
+                   //        kein Datensatz verfügbar
+                endif;
+             endif;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    S_Display     05 - Anzeigen Einzelsatz                  *
+       //============================================================*
+
+       begsr s_display;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+             exsr msgnofile;
+          else;
+
+             exsr getsflrcd;
+
+             if sflcsr > §zeros;
+
+                monitor;
+                   PEEK14(set_dsp80: set_hedtyp: §copyright
+                         : wrk#rcdnbr: h_file: h_lib: h_mbr
+                         : h_rcdfmt: '*DISPLAY': commitLvl
+                         : yScreenNbr: yMsgID: yMsgDta);
+                   *in99 = bfalse;
+                on-error;
+                   *in99 = btrue;
+                endmon;
+
+                exsr checkHeadlineChanged;
+
+             else;
+                //        kein Datensatz verfügbar
+             endif;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    S_Print       06 - Drucken Datensatz                    *
+       //============================================================*
+
+       begsr s_print;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+             exsr msgnofile;
+          else;
+
+             exsr getsflrcd;
+
+             if sflcsr > §zeros;
+
+                monitor;
+                   peek65(wrk#rcdnbr: h_file: h_lib: h_mbr: ''
+                         : yMsgID: yMsgDta);
+                   *in99 = bfalse;
+                on-error;
+                   *in99 = btrue;
+                endmon;
+
+                if yMsgID <> '';
+                   p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                   yMsgID  = '';
+                   yMsgDta = '';
+                endif;
+
+                exsr checkHeadlineChanged;
+
+             else;
+                //        kein Datensatz verfügbar
+             endif;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    S_PinRcd      P  - Pin Datensatz                        *
+       //============================================================*
+
+       begsr s_pinrcd;
+
+          if isopen = bfalse;
+    R        //**  F4Open        OREQ      '0'
+             //      Nix tun, keine Datei vorhanden
+             exsr msgnofile;
+          else;
+
+             if f_numbased(##file: ##library: ##member) > 1;
+                clear usr8218;
+                p_sndpgmmg('USR8218': usr8218: §§pgmname);
+                isCmdErr = btrue;
+                isCancel = btrue;
+             else;
+
+                exsr getsflrcd;
+
+                if sflcsr > §zeros;
+
+                   if f_chain04(wrk#rcdnbr:
+                             h_file   :
+                             h_lib    :
+                             h_mbr    :
+                             h_rcdfmt ) = '0';
+                      exsr pinrecord;
+
+                   else;
+                      //  Datensatz nicht gefunden ...
+                      p_sndpgmmg('USR8118': '': §§pgmname);
+                   endif;
+
+                else;
+                   //        kein Datensatz verfügbar
+                endif;
+             endif;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    S_UnPinRcd    UP - UnPin Datensatz                      *
+       //============================================================*
+
+       begsr s_unpinrcd;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+             exsr msgnofile;
+          else;
+
+             exsr getsflrcd;
+
+             if sflcsr > §zeros;
+
+                exsr chkpinrcd;
+                if ispinned = bfalse;
+                   //  Datensatz ist nicht gepinned ...
+                   p_sndpgmmg('USR8121': '': §§pgmname);
+                else;
+                   //  Datensatz ist gepinned ...
+                   exsr rmvpinrcd;
+                endif;
+
+             else;
+                //        kein Datensatz verfügbar
+             endif;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    S_TgTblPap    Toggeln Tabellierpapierfunktion           *
+       //============================================================*
+
+       begsr s_tgtblpap;
+
+          if set_tblmde = btrue;
+             exsr s_tblpapof;
+          else;
+             exsr s_tblpapon;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    S_TblPapOn    Einschalten Tabellierpapier               *
+       //============================================================*
+
+       begsr s_tblpapon;
+
+          if set_tblmde = btrue;
+             //  Fehlermeldung ...
+             p_sndpgmmg('USR8149': '': §§pgmname);
+          else;
+             set_tblmde = btrue;
+             isSflDirty = btrue;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    S_TblPapOf    Ausschalten Tabellierpapier               *
+       //============================================================*
+
+       begsr s_tblpapof;
+
+          if set_tblmde = bfalse;
+             //  Fehlermeldung ...
+             p_sndpgmmg('USR8150': '': §§pgmname);
+          else;
+             set_tblmde = bfalse;
+             isSflDirty = btrue;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    S_TgPinCol    PC - Pin Spalte                           *
+       //============================================================*
+
+       begsr s_tgpincol;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+             exsr msgnofile;
+          else;
+
+             exsr getfldtmrk;
+
+             if (wrk#field <> '');
+                pin#field = wrk#field;
+                exsr chkpincol;
+                if ispinned = bfalse;
+                   //  Datensatz ist noch nicht gepinned ...
+                   //  Spalte pinnen ...
+                   exsr pincol;
+                else;
+                   exsr rmvpincol;
+                endif;
+             endif;
+          endif;
+
+          //  Beibehalten der Cursorposition ...
+          exsr keepcsrpos;
+
+       endsr;
+
+       //============================================================*
+       //    S_PinCol      PC - Pin Spalte                           *
+       //============================================================*
+
+       begsr s_pincol;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+             exsr msgnofile;
+          else;
+
+             exsr getfldtmrk;
+
+             if (wrk#field <> '');
+                //  Spalte pinnen ...
+                exsr pincol;
+             endif;
+          endif;
+
+          //  Beibehalten der Cursorposition ...
+          exsr keepcsrpos;
+
+       endsr;
+
+       //============================================================*
+       //    S_UnPinCol    UC - UnPin Spalte                         *
+       //============================================================*
+
+       begsr s_unpincol;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+             exsr msgnofile;
+          else;
+
+             exsr getfldtmrk;
+
+             if (wrk#field <> '');
+                pin#field = wrk#field;
+                exsr chkpincol;
+                if ispinned = bfalse;
+                   //  Spalte ist nicht gepinned ...
+                   clear usr8147;
+                   usr81471 = wrk#field;
+                   p_sndpgmmg('USR8147': usr8147: §§pgmname);
+                else;
+                   //  Spalte ist gepinned ...
+                   exsr rmvpincol;
+                endif;
+             endif;
+          endif;
+
+          //  Beibehalten der Cursorposition ...
+          exsr keepcsrpos;
+
+       endsr;
+
+       //============================================================*
+       //    S_SplashOn    Einschalten Splash-Screen                 *
+       //============================================================*
+
+       begsr s_splashon;
+
+          set_spla = btrue;
+
+          p_sndpgmmg('USR8161': '': §§pgmname);
+
+       endsr;
+
+       //============================================================*
+       //    S_SplashOf    Ausschalten Splash-Screen                 *
+       //============================================================*
+
+       begsr s_splashof;
+
+          set_spla = bfalse;
+
+          p_sndpgmmg('USR8162': '': §§pgmname);
+
+       endsr;
+
+       //============================================================*
+       //    S_ShortCmd    Ausführen Kurzbefehl                      *
+       //============================================================*
+
+       begsr s_shortcmd;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+             exsr msgnofile;
+          else;
+
+             exsr getsflrcd;
+
+             if sflcsr > §zeros;
+
+                clear shortcmd;
+                shortcmd.sc_action = '*CMD';
+                shortcmd.sc_cmd = ycmddta;
+
+                monitor;
+                   peek42(h_file: h_lib: h_mbr: h_rcdfmt
+                         : shortcmd: wrk#rcdnbr: yexeccmd
+                         : yMsgID: yMsgDta);
+                   *in99 = bfalse;
+                on-error;
+                   *in99 = btrue;
+                endmon;
+
+                select;
+                when *in99 = *on;
+                   //           Program error
+                when yMsgID <> *blanks;
+                   p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                   yMsgID = '';
+                   yMsgDta = '';
+
+                when yexeccmd = *blanks;
+                   //           No command to excute
+                other;
+                   f_execute(yexeccmd: yMsgID: yMsgDta);
+                   if (yMsgID <> '');
+                      p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                      yMsgID = '';
+                      yMsgDta = '';
+                   endif;
+                endsl;
+
+             else;
+                //        kein Datensatz verfügbar
+             endif;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    S_About        A - Über Peek/400                        *
+       //============================================================*
+
+       begsr s_about;
+
+          peek49(set_dsp80: §copyright
+                : §release: §version
+                : yMsgID: yMsgDta);
+
+       endsr;
+
+       //============================================================*
+       //    S_DspNrm      Normale Anzeige                           *
+       //============================================================*
+
+       begsr s_dspnrm;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+             exsr msgnofile;
+          else;
+             if set_dspmde = '*DSPNRM';
+                //    ... Anzeige stimmt bereits
+             else;
+
+                //  Umschalten der Anzeige
+                set_dspmde = '*DSPNRM';
+                isSflDirty = btrue;
+
+             endif;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    S_DspHex      Hexadezimale Anzeige                      *
+       //============================================================*
+
+       begsr s_dsphex;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+             exsr msgnofile;
+          else;
+             if set_dspmde = '*DSPHEX';
+                //    ... Anzeige stimmt bereits
+             else;
+
+                if file#x.rcdlen > rcd_buff_len;
+                   clear usr8206;
+                   usr82061   = rcd_buff_len;
+                   p_sndpgmmg('USR8206': usr8206: §§pgmname);
+                else;
+                   set_dspmde = '*DSPHEX';
+                   isSflDirty = btrue;
+                endif;
+
+             endif;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    S_DspTgl      Umschalten der Anzeige                    *
+       //============================================================*
+
+       begsr s_dsptgl;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+             exsr msgnofile;
+          else;
+             if set_dspmde = '*DSPNRM';
+                exsr s_dsphex;
+             else;
+                exsr s_dspnrm;
+             endif;
+
+             isSflDirty = btrue;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    S_SaveEnv     Sichern Arbeitsumgebung                   *
+       //============================================================*
+
+       begsr s_saveenv;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+             exsr msgnofile;
+          else;
+
+             peek56(set_dsp80: §copyright: '*SAVE'
+                   : yenvfile: yenvlib: yenvmbr
+                   : $$rcdfmtid
+                   : yQFile: yMember: ytext: yoption
+                   : yMsgID: yMsgDta);
+
+             if yMsgID <> ' ';
+                p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                yMsgID = '';
+                yMsgDta = '';
+             else;
+
+                yenvfile = yFile;
+                yenvlib  = yLibrary;
+                yenvmbr  = yMember;
+                yisautosave = bfalse;
+                exsr saveenv;
+
+                if yMsgID <> ' ';
+                   p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                   yMsgID = '';
+                   yMsgDta = '';
+                endif;
+
+             endif;
+
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    S_LoadEnv     Laden Arbeitsumgebung                     *
+       //============================================================*
+
+       begsr s_loadenv;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+             exsr msgnofile;
+          else;
+
+             peek56(set_dsp80: §copyright: '*LOAD'
+                   : yenvfile: yenvlib: yenvmbr
+                   : $$rcdfmtid
+                   : yQFile: yMember: ytext: yoption
+                   : yMsgID: yMsgDta);
+
+             if yMsgID <> ' ';
+                p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                yMsgID = '';
+                yMsgDta = '';
+             else;
+
+                yenvfile = yFile;
+                yenvlib  = yLibrary;
+                yenvmbr  = yMember;
+                exsr loadenv;
+                isSflDirty = btrue;
+             endif;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    LoadEnv       Laden Arbeitsumgebung                     *
+       //============================================================*
+
+       begsr loadenv;
+
+          ispintoclr = bfalse;
+
+          if (##member = '*NONE');
+             leavesr;
+          endif;
+
+          peek55(##file: ##library: ##member: ##format
+                : $$rcdfmtid
+                : yenvfile: yenvlib: yenvmbr
+                : yoption
+                : pintabrcd: nbrpinrcd
+                : pintabcol: nbrpincol
+                : rtn.file: rtn.library: rtn.member
+                : rtn.format
+                : rtn.accessmode: rtn.sqlwhere
+                : rtn.sqlorder
+                : iskeylower
+                :yMsgID: yMsgDta);
+
+          if yMsgID <> ' ';
+             p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+             yMsgID = '';
+             yMsgDta = '';
+          else;
+
+             if (##file     <> rtn.file or
+                ##library  <> rtn.library or
+                ##member   <> rtn.member or
+                ##format   <> rtn.format or
+                accessMode <> rtn.accessmode or
+                sqlwhere   <> rtn.sqlwhere or
+                sqlorder   <> rtn.sqlorder);
+                exsr closefile;
+                ##file     = rtn.file;
+                ##library  = rtn.library;
+                ##member   = rtn.member;
+                ##format   = rtn.format;
+                accessMode = rtn.accessmode;
+                sqlwhere   = rtn.sqlwhere;
+                sqlorder   = rtn.sqlorder;
+                exsr openfile;
+                peek55(##file: ##library: ##member: ##format
+                      : $$rcdfmtid
+                      : yenvfile: yenvlib: yenvmbr
+                      : yoption
+                      : pintabrcd: nbrpinrcd
+                      : pintabcol: nbrpincol
+                      : rtn.file: rtn.library: rtn.member
+                      : rtn.format
+                      : rtn.accessmode: rtn.sqlwhere
+                      : rtn.sqlorder
+                      : iskeylower
+                      :yMsgID: yMsgDta);
+             endif;
+
+             pintabrcd    = ypintabr;
+             nbrpinrcd  = ynbrpinr;
+             nbrpincol  = ynbrpinc;
+
+             iskeylower = yiskeylower;
+          endif;
+
+          ispintoclr = btrue;
+
+       endsr;
+
+       //============================================================*
+       //    SaveEnv       Speichern Arbeitsumgebung                 *
+       //============================================================*
+
+       begsr saveenv;
+
+          peek54(##file: ##library: ##member: ##format
+                : $$rcdfmtid
+                : yenvfile: yenvlib: yenvmbr
+                : yisautosave
+                : pintabrcd: nbrpinrcd
+                : pintabcol: nbrpincol
+                : accessMode: sqlwhere
+                : sqlorder: iskeylower
+                : yMsgID: yMsgDta);
+
+       endsr;
+
+       //============================================================*
+       //    S_DelEnv      Löschen Arbeitsumgebung                   *
+       //============================================================*
+
+       begsr s_delenv;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+             exsr msgnofile;
+          else;
+
+             for do_x2 = 1 to *hival;
+
+                peek56(set_dsp80: §copyright: '*DELETE'
+                      : yenvfile: yenvlib: yenvmbr
+                      : ''
+                      : yQFile: yMember: ytext: yoption
+                      : yMsgID: yMsgDta);
+
+                if yMsgID <> ' ';
+                   p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                   yMsgID = '';
+                   yMsgDta = '';
+                   leave;
+                else;
+
+                   peek57(set_dsp80: §copyright
+                         : yFile: yLibrary: yMember: ytext
+                         : yMsgID: yMsgDta);
+
+                   if yMsgID <> ' ';
+                      if yMsgDta = '*CANCEL';
+                         iter;
+                      else;
+                         p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                         yMsgID = '';
+                         yMsgDta = '';
+                         leave;
+                      endif;
+                   endif;
+
+                endif;
+
+             endfor;
+
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    MsgNoFile     Nachricht: Keine Datei geöffnet           *
+       //============================================================*
+
+       begsr msgnofile;
+
+          clear usr9996;
+          p_sndpgmmg('USR9996': usr9996: §§pgmname);
+
+       endsr;
+
+       //============================================================*
+       //    MsgInvSqlFile Nachricht: Keine Datei geöffnet           *
+       //============================================================*
+
+       begsr msginvsqlfile;
+
+          clear usr9993;
+          p_sndpgmmg('USR9993': usr9993: §§pgmname);
+
+       endsr;
+
+       //============================================================*
+       //    ClrPinRow     Löschen der Pin-Tabelle für Zeilen        *
+       //============================================================*
+
+       begsr clrpinrow;
+
+          if ispintoclr = btrue;
+             nbrpinrcd = 0;
+             exsr clrpintabr;
+             isSflDirty = btrue;
+          else;
+             //    ... wird nicht gelöscht
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    ClrPinCol     Löschen der Pin-Tabelle für Spalten       *
+       //============================================================*
+
+       begsr clrpincol;
+
+          if ispintoclr = btrue;
+             nbrpincol = 0;
+             clear pintabcol;
+             isSflDirty = btrue;
+          else;
+             //    ... wird nicht gelöscht
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    PBGetTargt    Abffragen der Zieldatei                   *
+       //============================================================*
+
+       begsr pbgettargt;
+
+          monitor;
+             peek26(set_dsp80: yQFile: h_mbr
+                   : yFile: yLibrary: yMember
+                   : ymbropt: ycrtfile: yMsgID: yMsgDta);
+             *in99 = bfalse;
+          on-error;
+             *in99 = btrue;
+          endmon;
+
+          if *in99 = *on;
+             iserror = btrue;
+             istargetok = bfalse;
+          else;
+             iserror = bfalse;
+             istargetok = btrue;
+
+             copyfile = yFile;
+             copylib = yLibrary;
+             copytombr = yMember;
+             copymbropt = ymbropt;
+             copycrtf = ycrtfile;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    PBQueryUsr    Fragen Benutzer                           *
+       //============================================================*
+
+       begsr pbqueryusr;
+
+          monitor;
+             PEEK14(set_dsp80: set_hedtyp: §copyright
+                   : wrk#rcdnbr: h_file: h_lib: h_mbr
+                   : h_rcdfmt: ypgmcmd: commitLvl
+                   : yScreenNbr: yMsgID: yMsgDta);
+             *in99 = bfalse;
+          on-error;
+             *in99 = btrue;
+          endmon;
+
+          exsr checkHeadlineChanged;
+
+          if *in99 = *on;
+             //            Fehler beim Programmaufruf
+          else;
+
+             select;
+                //  Abbruch über F3/F12 ...
+             when yMsgID = 'USR8100';
+                //  Alle Datensätze löschen ...
+             when yMsgID = 'USR8111';
+                queryuser = ypgmcmd;
+                p_sndpgmmg('USR8112': '': §§pgmname);
+                //  Einzelnen Datensatz löschen ...
+             when yMsgID = 'USR8112';
+                //  Unerwartete Nachrichten-ID ...
+             other;
+                clear usr9998;
+                usr99981 = yMsgID;
+                usr99982 = 'PEEK14';
+                p_sndpgmmg('USR9998': usr9998: §§pgmname);
+             endsl;
+
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    PinRecord     Datensatz pinnen                          *
+       //============================================================*
+
+       begsr pinrecord;
+
+          ispinok = bfalse;
+
+          exsr chkpinrcd;
+          if ispinned = bfalse;
+             //  Datensatz ist noch nicht gepinned ...
+             clear pintabrcde;
+             x = %lookup(pintabrcde: pintabrcd: x);
+             if (x > 0);
+                //  ... Datensatz pinnen
+                pintabrcde.rcdnbr = wrk#rcdnbr;
+                pintabrcde.file = h_file;
+                pintabrcde.lib = h_lib;
+                pintabrcde.mbr = h_mbr;
+                pintabrcde.rcdfmt = h_rcdfmt;
+                pintabrcde.mbrnbr = h_mbrnbr;
+                pintabrcd(x) = pintabrcde;
+
+                nbrpinrcd = x;
+                isSflDirty = btrue;
+                ispinok = btrue;
+             else;
+                //  Kein Platz mehr vorhanden ...
+                p_sndpgmmg('USR8118': '': §§pgmname);
+             endif;
+
+          else;
+             //  Datensatz ist schon gepinned
+             p_sndpgmmg('USR8119': '': §§pgmname);
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    PinCol        Spalte pinnen                             *
+       //============================================================*
+
+       begsr pincol;
+
+          ispinok = bfalse;
+
+          pin#field = wrk#field;
+          exsr chkpincol;
+          if ispinned = bfalse;
+             //  Datensatz ist noch nicht gepinned ...
+             x = 1;
+             pin#field = '';
+             x = %lookup(pin#field: pintabcol: x);
+             if (x > 0);
+                //  ... Datensatz pinnen
+                pintabcol(x) = wrk#field;
+                nbrpincol = x;
+                isSflDirty = btrue;
+                ispinok = btrue;
+             else;
+                //  Kein Platz mehr vorhanden ...
+                p_sndpgmmg('USR8118': '': §§pgmname);
+             endif;
+
+          else;
+             //  Datensatz ist schon gepinned
+             p_sndpgmmg('USR8119': '': §§pgmname);
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    DelRecord     Löschen Datensatz                         *
+       //============================================================*
+
+       begsr delrecord;
+
+          *in11 = f_chain00(wrk#rcdnbr:
+                           h_file   :
+                           h_lib    :
+                           h_mbr    :
+                           '');
+          if *in11 = *on;
+             //  Fehler bei Zugriff auf Datensatz ...
+             usr82001 = wrk#rcdnbr;
+             p_sndpgmmg('USR8200': usr8200: §§pgmname);
+
+          else;
+
+             if cio_delete(hfile00) = btrue;
+                *in99 = '0';
+             else;
+                *in99 = '1';
+             endif;
+             exsr f0tofx;
+
+             if *in99 = *on;
+                if (*in55 = btrue);
+                   rolbk;
+                else;
+                   cio_unlock(hfile00);
+                endif;
+                exsr f0tofx;
+
+                usr82001 = wrk#rcdnbr;
+                p_sndpgmmg('USR8200': usr8200: §§pgmname);
+             else;
+                if (*in55 = btrue);
+                   commit;
+                else;
+                   cio_unlock(hfile00);
+                endif;
+                exsr f0tofx;
+                exsr callExit04;
+
+                usr82011 = wrk#rcdnbr;
+                p_sndpgmmg('USR8201': usr8201: §§pgmname);
+                isSflDirty = btrue;
+             endif;
+
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //  Call EXIT04. The exit program must not exist.             *
+       //  The exit program is optional.
+       //============================================================*
+
+       begsr callExit04;
+
+          if f_exist('EXIT04': '*LIBL': '*PGM') = btrue;
+             callp EXIT04(file#x.file: file#x.library: file#x.member
+                          : '*DELETE': §§user: %timestamp()
+                          : wrk#rcdnbr: file#x.rcdlen: %addr(io_buff): *null);
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    CopyExtRcd    Kopieren Datensatz in externe Datei       *
+       //============================================================*
+
+       begsr copyextrcd;
+
+          if f_chain04(wrk#rcdnbr:
+                    h_file   :
+                    h_lib    :
+                    h_mbr    :
+                    h_rcdfmt ) = '0';
+
+             rcdnbr# = cio_getrrn(hfile04);
+
+             f_execute(
+               'CPYF ' +
+                 'FROMFILE(' +
+                   %trim(cio_getlibrary(hfile04)) +
+                 '/' +
+                   %trim(cio_getfile(hfile04)) +
+                 ') ' +
+                 'TOFILE(' +
+                   %trim(copylib) +
+                 '/' +
+                   %trim(copyfile) +
+                 ') ' +
+                 'FROMMBR(' +
+                   %trim(cio_getmember(hfile04)) +
+                 ') ' +
+                 'TOMBR(' +
+                   %trim(copytombr) +
+                 ') ' +
+                 'MBROPT(' +
+                   %trim(copymbropt) +
+                 ') ' +
+                 'CRTFILE(' +
+                   %trim(copycrtf) +
+                 ') ' +
+                 'FROMRCD(' +
+                   rcdnbr$ +
+                 ') ' +
+                 'TORCD(' +
+                   rcdnbr$ +
+                 ') ' +
+                 'FMTOPT(' +
+                   '*MAP *DROP' +
+                 ') ' +
+                 'RCDFMT(' +
+                   %trim(cio_getrecordformat(hfile04)) +
+                    ')'
+               : yMsgID: yMsgDta);
+
+             if (yMsgID <> '');
+                p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                yMsgID = '';
+                yMsgDta = '';
+                if (*in55 = btrue);
+                   rolbk;
+                endif;
+                exsr f0tofx;
+
+                usr82021 = wrk#rcdnbr;
+                p_sndpgmmg('USR8202': usr8202: §§pgmname);
+             else;
+                if (*in55 = btrue);
+                   commit;
+                endif;
+                exsr f0tofx;
+
+                usr82031 = wrk#rcdnbr;
+                p_sndpgmmg('USR8203': usr8203: §§pgmname);
+             endif;
+
+          endif;
+
+          //  Alles weitere mit ...
+          copymbropt = '*ADD';
+
+       endsr;
+
+       //============================================================*
+       //    ChkHeadChg    Prüfen, ob die Überschrift gewechselt hat *
+       //                  nach:  S_Delete und S_Display             *
+       //============================================================*
+
+       begsr checkHeadlineChanged;
+
+          if *in99 = *on;
+             // Fehler beim Programmaufruf
+          else;
+             if (yMsgID = 'USR8100');
+                p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                yMsgID = '';
+                yMsgDta = '';
+             else;
+                set_hedtyp = yHeaderType;
+                isSflDirty = btrue;
+             endif;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    SrchStart     Aufsetzen mit neuer Suche                 *
+       //============================================================*
+
+       begsr srchstart;
+
+          //  Übertragen der Übergabeparameter ...
+          srchfield = yfield;
+          srchop = yoperation;
+          srcharg = %trimr(yargument);
+          srchsign = ysign;
+
+          //  ... Anpassungen für LIKE/NLIKE ...
+          if srchop = 'LIKE'
+             or srchop = 'NLIKE';
+             //      ... führendes %-Zeichen
+             a1 = %subst(srcharg:1:1);
+             if a1 = set_wldcd;
+                srcharg = %subst(srcharg:2);
+                srchliketp = 1;
+             else;
+                srcharg = srcharg;
+                srchliketp = §zeros;
+             endif;
+
+             //      ... nachgestelltes %-Zeichen
+             x = %checkr(' ': srcharg);
+             if x > §zeros;
+                a1 = %subst(srcharg: x: 1);
+
+                if a1 = set_wldcd;
+                   x = x - 1;
+                   if x > §zeros;
+                      srcharg = %subst(srcharg: 1: x);
+                   else;
+                      srcharg = *blanks;
+                   endif;
+                   srchliketp = srchliketp + 2;
+                endif;
+
+             endif;
+
+             //      ... Länge von SrchArg
+             srchlikeln = %checkr(' ': srcharg);
+          else;
+             //  ... keine Anpassungen erforderlich
+             srchliketp = §zeros;
+             srchlikeln = §zeros;
+          endif;
+
+          srchnbrs = ysrchnbrs;
+          srchtype = ysrchtype;
+          srchcase = ysrchcase;
+
+          //  Ermitteln der Feldattribute
+          exsr srchfldatr;
+
+          if srchfield = '*RECORD';
+             srchisnum = bfalse;
+          else;
+             if f_isnumfld(fldl0100) = btrue;
+                srchisnum = btrue;
+             else;
+                srchisnum = bfalse;
+             endif;
+          endif;
+
+          //  Nicht Case-Sensitive suchen ...
+          if ysrchcase = bfalse
+             and srchisnum = bfalse;
+             srcharg = %xlate(clower:cupper:srcharg);
+          else;
+             //      keine Konvertierung erforderlich
+          endif;
+
+          //  Numerische Suche ...
+          if srchisnum = btrue;
+             if f_isfloatfld(fldl0100) = btrue;
+                srchargfloat = %float(srcharg);
+                srchargval   = 0;
+                srchargisfloat = btrue;
+             else;
+                srchargval   = %dec(srcharg
+                                   : csrcharg_digits
+                                   : csrcharg_decpos);
+                srchargfloat = 0;
+                srchargisfloat = bfalse;
+             endif;
+             if srchsign = set_signm;
+                //  ... negativen Wert erzeugen
+                srchargval = srchargval * -1;
+                srchargfloat = srchargfloat * -1;
+             else;
+                //  ... positiven Wert belassen
+             endif;
+          else;
+             srchargval = §zeros;
+             srchargfloat = §zeros;
+          endif;
+
+          //  Ermitteln des Startdatensatzes
+          exsr srchstrrcd;
+
+          //  Suchen ...
+          exsr srchup;
+
+       endsr;
+
+       //============================================================*
+       //    SrchCont      Fortsetzen der Suche nach "gefunden"      *
+       //============================================================*
+
+       begsr srchcont;
+
+          //  Ermitteln der Feldattribute
+          exsr srchfldatr;
+
+          //  Ermitteln des Startdatensatzes
+          exsr srchstrrcd;
+
+          //  Suchen ...
+          exsr srchup;
+
+       endsr;
+
+       //============================================================*
+       //    SrchContM     Fortsetzen der Suche nach "MAXIMUM"       *
+       //============================================================*
+
+       begsr srchcontm;
+
+          //  Ermitteln der Feldattribute
+          exsr srchfldatr;
+
+          //  Suchen ...
+          exsr srchup;
+
+       endsr;
+
+       //============================================================*
+       //    SrchEOF       Fortsetzen der Suche nach Dateiende       *
+       //============================================================*
+
+       begsr srcheof;
+
+          //  Ermitteln der Feldattribute
+          exsr srchfldatr;
+
+          //  Ermitteln des Startdatensatzes
+          exsr pbmovetop;
+
+          //  Suchen ...
+          exsr srchup;
+
+       endsr;
+
+       //============================================================*
+       //    SrchStrRcd    Positionieren auf Startdatensatz          *
+       //============================================================*
+
+       begsr srchstrrcd;
+
+          //---------------------------------------*
+          //  Cursor im Subfilebereich ...
+          //---------------------------------------*
+          if sflcsr <> §zeros
+             and sflcsr > nbrpinrcd;
+
+             //  ... übersetzen in Satznummer
+             exsr pbcsrtrcd;
+             //  ... Fortsetzen der Suche
+             if wrk#rcdnbr = srchfndrcd;
+                exsr pbreadcsra;
+             else;
+                //  ... oder neu anfangen
+                exsr pbreadcsr;
+             endif;
+          else;
+
+             //---------------------------------------*
+             //  Cursor nicht im Subfilebereich ...   *
+             //---------------------------------------*
+             x = sflfirstrw + nbrpinrcd;
+             if (cursorposition.row < x);
+                //  ... oberhalb der Subfile
+                exsr pbreaddn;
+             else;
+                //  ... unterhalb der Subfile
+                //             einfach weitersuchen
+             endif;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    SrchFldAtr    Ermitteln der Feldattribute des           *
+       //                  Suchfeldes                                *
+       //============================================================*
+
+       begsr srchfldatr;
+
+          f_field = srchfield;
+          chain(n) f_key fpeekfld;
+          *in11 = not %found;
+          if *in11 = *on;
+             clear fldl0100;
+          else;
+             fldl0100 = f_ffd;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    SrchUp        Suchen ab einer gegebenen Satznummer      *
+       //============================================================*
+
+       begsr srchup;
+
+          //  Suche läuft ...
+          p_sndstsmg('USR8127': ' ');
+
+          srchcount = §zeros;
+          srchcount2 = §zeros;
+
+          for do_x3 = 1 to *hival;
+             exsr pbread;
+             if iseof = btrue;
+                srchmode = '*EOF';
+                leave;
+             endif;
+
+             srchcount = srchcount + 1;
+             if srchcount >= srchnbrs;
+                srchmode = '*MAXIMUM';
+                leave;
+             endif;
+
+             exsr srchcomp;
+             if isfound = btrue;
+                srchmode = '*FOUND';
+                //  ... suchen & pinnen
+                if srchtype = '*PINROW';
+                   wrk#rcdnbr = file#x.rcdnbr;
+                   exsr pinrecord;
+                   if ispinok = bfalse;
+                      leave;
+                   else;
+                      //        weiter suchen und pinnen
+                   endif;
+                else;
+                   //  ... sonstige Suchfunktionen
+                   leave;
+                endif;
+             endif;
+
+             srchcount2 = srchcount2 + 1;
+             if srchcount2 >= srchdspmsg;
+                srchcount2 = §zeros;
+
+                clear usr8128;
+                usr81281 = srchcount;
+                usr81282 = srchnbrs;
+                p_sndstsmg('USR8128': usr8128);
+             endif;
+
+          endfor;
+
+          //  Statuszeile löschen ...
+          p_sndstsmg('USR9999': ' ');
+
+       endsr;
+
+       //============================================================*
+       //    SrchComp      Vergleichen der Suchauswahl               *
+       //============================================================*
+
+       begsr srchcomp;
+
+          isfound = bfalse;
+
+          //  Im ganzen Datensatz suchen ...
+          if srchfield = '*RECORD';
+             srchcmprcd = io_buff;
+          else;
+             exsr srchgetcmp;
+          endif;
+
+          //  Im ganzen Datensatz suchen ...
+          if srchfield = '*RECORD';
+             exsr srchcomp_r;
+          else;
+             //  Im Datenfeld suchen ...
+             exsr srchcomp_f;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    SrchGetCmp    Dateninhalt aus Datensatz extrahieren     *
+       //                  für Vergleich der Suchfunktion            *
+       //============================================================*
+
+       begsr srchgetcmp;
+
+          if srchisnum = btrue;
+             f_rtvfld(ybuffer  :
+                     io_buff  :
+                     fldl0100 :
+                     btrue    );
+
+             ytgtvalue  = ' ';
+
+             if srchargisfloat = btrue;
+                peek18(fldl0100: 'FLDL0100': ybuffer:
+                      '*FLOAT': '': youtbuffer: youtbuffln
+                      : yMsgID: yMsgDta);
+
+                srchcmpfloat = %float(youtbuffer);
+                srchcmpval   = 0;
+             else;
+                peek18(fldl0100: 'FLDL0100': ybuffer:
+                      '*ZONED': '': youtbuffer: youtbuffln
+                      : yMsgID: yMsgDta);
+
+                srchcmpstr =
+                 %subst(youtbuffer
+                        : youtbuffln - %len(srchcmpstr) + 1
+                        : youtbuffln);
+                srchcmpval = %dec(srchcmpstr
+                                 : srch_cmp_val_length
+                                 : srch_cmp_val_decpos);
+                srchcmpfloat = 0;
+             endif;
+
+          else;
+             f_rtvfld(srchcmpstr:
+                     io_buff   :
+                     fldl0100  );
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    SrchComp_R    Suchen im Datensatz                       *
+       //============================================================*
+
+       begsr srchcomp_r;
+
+          //  Nicht Case-Sensitive suchen ...
+          if srchcase = bfalse;
+             srchcmprcd = %xlate(clower:cupper:
+             srchcmprcd);
+             //  Case-Sensitive suchen ...
+          endif;
+
+          x = %checkr(' ': srcharg);
+          if x <> §zeros;
+             x = %scan(%subst(srcharg: 1: x): SrchCmpRcd: 1);
+          else;
+             x = %scan(srcharg: SrchCmpRcd: 1);
+          endif;
+
+          //  Gleich ...
+          if srchop = 'LIKE';
+             //  ... nicht gefunden
+             if x = §zeros;
+                isfound = bfalse;
+             else;
+                //  ... gefunden
+                isfound = btrue;
+             endif;
+          else;
+             //  UnGleich ...
+             //  ... nicht gefunden
+             if x = §zeros;
+                isfound = btrue;
+             else;
+                //  ... gefunden
+                isfound = bfalse;
+             endif;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    SrchComp_F    Suchen im Feld                            *
+       //============================================================*
+
+       begsr srchcomp_f;
+
+          //  Nicht Case-Sensitive suchen ...
+          //  (nur bei nicht numerischer Suche beachten)
+          if srchcase = bfalse
+             and srchisnum = bfalse;
+             srchcmpstr = %xlate(clower:cupper:
+             srchcmpstr);
+             //  Case-Sensitive suchen ...
+          endif;
+
+          //-----------------------*
+          //  Vergleichen ...      *
+          //-----------------------*
+          select;
+             //  Gleich ...
+          when srchop = 'EQ';
+             if srchisnum = bfalse;
+                if srchcmpstr = srcharg;
+                   isfound = btrue;
+                endif;
+             else;
+                if (srchargisfloat = bfalse and
+                   srchcmpval = srchargval) or
+                   (srchargisfloat = btrue  and
+                   srchcmpfloat = srchargfloat);
+                   isfound = btrue;
+                endif;
+             endif;
+             //  UnGleich ...
+          when srchop = 'NE';
+             if srchisnum = bfalse;
+                if srchcmpstr <> srcharg;
+                   isfound = btrue;
+                endif;
+             else;
+                if (srchargisfloat = bfalse and
+                   srchcmpval <> srchargval) or
+                   (srchargisfloat = btrue  and
+                   srchcmpfloat <> srchargfloat);
+                   isfound = btrue;
+                endif;
+             endif;
+             //  Größer ...
+          when srchop = 'GT';
+             if srchisnum = bfalse;
+                if srchcmpstr > srcharg;
+                   isfound = btrue;
+                endif;
+             else;
+                if (srchargisfloat = bfalse and
+                   srchcmpval > srchargval) or
+                   (srchargisfloat = btrue  and
+                   srchcmpfloat > srchargfloat);
+                   isfound = btrue;
+                endif;
+             endif;
+             //  Kleiner ...
+          when srchop = 'LT';
+             if srchisnum = bfalse;
+                if srchcmpstr < srcharg;
+                   isfound = btrue;
+                endif;
+             else;
+                if (srchargisfloat = bfalse and
+                   srchcmpval < srchargval) or
+                   (srchargisfloat = btrue  and
+                   srchcmpfloat < srchargfloat);
+                   isfound = btrue;
+                endif;
+             endif;
+             //  Größer/Gleich ...
+          when srchop = 'GE';
+             if srchisnum = bfalse;
+                if srchcmpstr >= srcharg;
+                   isfound = btrue;
+                endif;
+             else;
+                if (srchargisfloat = bfalse and
+                   srchcmpval >= srchargval) or
+                   (srchargisfloat = btrue  and
+                   srchcmpfloat >= srchargfloat);
+                   isfound = btrue;
+                endif;
+             endif;
+             //  Kleiner/Gleich ...
+          when srchop = 'LE';
+             if srchisnum = bfalse;
+                if srchcmpstr <= srcharg;
+                   isfound = btrue;
+                endif;
+             else;
+                if (srchargisfloat = bfalse and
+                   srchcmpval <= srchargval) or
+                   (srchargisfloat = btrue  and
+                   srchcmpfloat <= srchargfloat);
+                   isfound = btrue;
+                endif;
+             endif;
+             //  Ähnlich ...
+          when srchop = 'LIKE'
+             or srchop = 'NLIKE';
+
+             select;
+                //  ...   ('%ABCD')
+             when srchliketp = 1;
+                x = %checkr(' ': srchcmpstr);
+                x = x - srchlikeln;
+                x = x + 1;
+                if x > §zeros;
+                   srchcmpstr= %subst(srchcmpstr: x: srchlikeln);
+                   if srchcmpstr = srcharg;
+                      isfound = btrue;
+                   endif;
+                endif;
+
+                //  ...   ('ABCD%')
+             when srchliketp = 2;
+                srchcmpstr= %subst(srchcmpstr: 1: srchlikeln);
+                if srchcmpstr = srcharg;
+                   isfound = btrue;
+                endif;
+
+                //  ...   ('%ABCD%')
+             other;
+                x = srchlikeln;
+                x = %scan(%subst(srcharg: 1: x): srchcmpstr: 1);
+                if x > §zeros;
+                   isfound = btrue;
+                endif;
+
+             endsl;
+
+             //  ... auswerten IsFound für LIKE/NLIKE
+             if srchop = 'LIKE';
+                //        ... IsFound ist bereits richtig gesetzt.
+             else;
+                //        ... IsFound muß negiert werden ...
+                if isfound = btrue;
+                   isfound = bfalse;
+                else;
+                   isfound = btrue;
+                endif;
+             endif;
+
+          other;
+          endsl;
+
+       endsr;
+
+       //============================================================*
+       //    SrchInz       Initialisieren der Suchfunktion           *
+       //============================================================*
+
+       begsr srchinz;
+
+          srchmode = '*NEW';
+          srchfndrcd = 0;
+
+          srchfield = *blanks;
+          srchop = *blanks;
+          srcharg = *blanks;
+          srchsign = *blanks;
+          srchnbrs = §zeros;
+          srchtype = *blanks;
+
+          srchcmpstr = *blanks;
+          srchcount = §zeros;
+
+          srchcount = §zeros;
+          srchcount2 = §zeros;
+          srchdspmsg = 1000;
+
+       endsr;
+
+       //============================================================*
+       //    CallUpdPgm    Aufrufen Updateprogramm für F6, 2, 3      *
+       //============================================================*
+
+       begsr callUpdPgm;
+
+          istryed = bfalse;
+
+          dou *in99 = *off;
+
+             exsr getpgmname;
+             exsr getdspname;
+
+             yHeaderType = set_hedtyp;
+
+             if (yFunction = '*ADD');
+                yRcdNbr = 0;
+             else;
+                yRcdNbr = wrk#rcdnbr;
+             endif;
+
+             monitor;
+               UPDPGM_NAME = f_pgmcalln(peekpgm);
+               UPDPGM(set_dsp80
+                      : yHeaderType
+                      : §copyright
+                      : yRcdNbr
+                      : file#x.file
+                      : file#x.library
+                      : file#x.member
+                      : yFunction
+                      : commitLvl
+                      : isUpdKey
+                      : yScreenNbr
+                      : yIsLower
+                      : yCursorPos.row
+                      : yCursorPos.column
+                      : yMsgID
+                      : yMsgDta);
+               *in99 = bFalse;
+             on-error;
+               *in99 = bTrue;
+             endmon;
+
+             exsr checkHeadlineChanged;
+
+             // Wenn der Programmaufruf
+             // fehlgeschlagen ist, ...
+             if *in99 = *on;
+                // ... und kein REBUILD stattgefunden hat, ...
+                if istryed = bfalse;
+                   // ... dann versuchen, das Programm neu zu serstellen
+                   exsr c_buildpgm;
+                   istryed = btrue;
+                   if *in99 = *off;
+                      // Wenn das Programm neu erstellt werden konnte,
+                      // dann einen neuen Versuch unternehmen ...
+                      *in99 = '1';
+                      iter;
+                   else;
+                      // ... ansonsten abbrechen
+                      isCmdErr = btrue;
+                      isCancel = btrue;
+                      leave;
+                   endif;
+                else;
+                   // kein weiterer Versuch möglich ...
+                   leave;
+                endif;
+             else;
+                // Der Programmaufruf hat funktioniert
+             endif;
+
+          enddo;
+
+       endsr;
+
+       //============================================================*
+       //    ReloadUsrStg  Aktualisieren Benutzereinstellungen       *
+       //============================================================*
+
+       begsr reloadusrstg;
+
+          if yMsgID = 'USR8100';
+             leavesr;
+          endif;
+
+          if ##format <> 'FPEEKUSR';
+             leavesr;
+          endif;
+
+          if ##file <> §§user;
+             leavesr;
+          endif;
+
+          //  *SPLASH
+          set0005 = f_getusrsg('*SPLASH'   );
+
+       endsr;
+
+       //============================================================*
+       //    PBInit        Initialisieren der Subfile zur Anzeige    *
+       //                  der nächsten Seite                        *
+       //============================================================*
+
+       begsr pbinit;
+
+          //  Merker für: Subfile gelöscht setzen
+          ispbinit = btrue;
+
+          *in80 = '0';
+          *in81 = '1';
+          *in82 = '1';
+          *in83 = '1';
+          if (*in88 = bfalse);
+             write pbctl132;
+          else;
+             write pbctl080;
+          endif;
+
+          *in82 = '0';
+
+          sflrec132 = §zeros;
+          sflrec080 = §zeros;
+
+          sflnbrrcd = §zeros;
+
+          ##rcdnbr = §zeros;
+          ##key = *blanks;
+
+          $$head132 = set_hedcol;
+          $$head080 = set_hedcol;
+
+          //  Aufbereiten der Überschrift
+          exsr pbheadline;
+
+          //  Logischer Schalter für Tabellierung
+          istblcol = bfalse;
+
+          //  Konvertieren nicht darstellbarer Zeichen
+          iscvtchar = bfalse;
+
+       endsr;
+
+       //============================================================*
+       //    PBCsrTRcd     Übersetzen SflCsr ==> rel. Satznummer     *
+       //============================================================*
+
+       begsr pbcsrtrcd;
+
+          if sflcsr <= §zeros;
+             *in11 = '1';
+          else;
+             if *in88 = *off;
+                sflrec132 = sflcsr;
+                chain sflrec132 pbsfl132;
+                *in11 = not %found;
+             else;
+                sflrec080 = sflcsr;
+                chain sflrec080 pbsfl080;
+                *in11 = not %found;
+             endif;
+          endif;
+
+          if *in11 = *on;
+             wrk#rcdnbr = §zeros;
+          else;
+             wrk#rcdnbr = recordnbr;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    InitSCmd      Initialisieren Kurzbefehl                 *
+       //============================================================*
+
+       begsr initscmd;
+
+          clear shortcmd;
+          shortcmd.sc_action = '*INIT';
+          shortcmd.sc_file = ##file;
+          shortcmd.sc_lib = ##library;
+          shortcmd.sc_mbr = ##member;
+          peek42(h_file: h_lib: h_mbr: h_rcdfmt
+                : shortcmd: wrk#rcdnbr: yexeccmd
+                : yMsgID: yMsgDta);
+
+       endsr;
+
+       //============================================================*
+       //    PBReadUP      Vorwärts füllen der Subfile               *
+       //============================================================*
+
+       begsr pbreadup;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+          else;
+
+             //  Erster Datensatz in Subfile ...
+             isfirstsfl = btrue;
+
+             for do_x4 = 1 to *hival;
+                exsr pbread;
+                if iseof = btrue;
+                   *in83 = '1';
+                   leave;
+                else;
+                   *in83 = '0';
+                endif;
+
+                if (*in88 = bfalse);
+     C                   add       1             sflrec132
+                else;
+     C                   add       1             sflrec080
+                endif;
+
+                if sflrec132 > 9999
+                   or sflrec080 > 9999;
+                   *in83 = '1';
+                   exsr pbreadp;
+                   leave;
+                endif;
+
+                if sflrec132 > sflpage
+                   or sflrec080 > sflpage;
+                   exsr pbreadp;
+                   leave;
+                endif;
+
+                exsr pbfillrigh;
+
+                exsr pbsflwrite;
+
+                if (*in88 = bfalse);
+     C                   z-add     sflrec132     sflnbrrcd
+                else;
+     C                   z-add     sflrec080     sflnbrrcd
+                endif;
+
+                //  Setzen Cursor auf gefundenen Datensatz
+                if srchfndrcd = recordnbr;
+                   if (*in88 = bfalse);
+     C                   z-add     sflrec132     sfsanr
+                   else;
+     C                   z-add     sflrec080     sfsanr
+                   endif;
+                endif;
+
+                //  Aufbereiten Aufsetzkey bei 1. geschriebendem Datensatz
+                if isfirstsfl = btrue;
+                   exsr pbgenkey;
+                endif;
+
+                //  Tabellierpapierfarben umschalten ...
+                if set_tblmde = bfalse;
+                   //         Modus ist ausgeschaltet
+                else;
+                   if istblcol = bfalse;
+                      istblcol = btrue;
+                   else;
+                      istblcol = bfalse;
+                   endif;
+                endif;
+
+                //  ... 1. Datensatz ist fertig
+                isfirstsfl = bfalse;
+
+             endfor;
+
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    PBReadDn      1 Bildschirmseite rückwärts lesen         *
+       //============================================================*
+
+       begsr pbreaddn;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+          else;
+
+             wrk#readdn = wrk#readdn + sflpage;
+             wrk#readdn = wrk#readdn - nbrpinrcd;
+
+             for do_x5 = 1 to wrk#readdn;
+                exsr pbreadp;
+                if iseof = btrue;
+                   leave;
+                endif;
+
+             endfor;
+
+          endif;
+
+          wrk#readdn = §zeros;
+
+       endsr;
+
+       //============================================================*
+       //    PBReadCsr     Setzen Dateizeiger auf aktuelle           *
+       //                  Cursor-Position  (SflCsr)                 *
+       //============================================================*
+
+       begsr pbreadcsr;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+          else;
+             if sflcsr = §zeros;
+                //      Nix tun, keine Datei vorhanden
+             else;
+
+                wrk#readdn = sflnbrrcd - sflcsr;
+                wrk#readdn = wrk#readdn + 1;
+                exsr pbmovecsrd;
+
+             endif;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    PBReadCsrA    Read to Cursor, after                     *
+       //                  Setzen Dateizeiger auf aktuelle           *
+       //                  Cursor-Position  +1  (SflCsr+1)           *
+       //============================================================*
+
+       begsr pbreadcsra;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+             exsr msgnofile;
+          else;
+             if sflcsr = §zeros;
+                //      Nix tun, keine Datei vorhanden
+             else;
+
+                wrk#readdn = sflnbrrcd - sflcsr;
+                exsr pbmovecsrd;
+
+             endif;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    PBMoveCsrD    Verschieben Dateizeiger (Richtung BOF)    *
+       //============================================================*
+
+       begsr pbmovecsrd;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+          else;
+
+             for do_x6 = 1 to wrk#readdn;
+                exsr pbreadp;
+                if iseof = btrue;
+                   leave;
+                endif;
+
+             endfor;
+
+          endif;
+
+          wrk#readdn = §zeros;
+
+       endsr;
+
+       //============================================================*
+       //    PBPinCol      Füllen Subfile mit pinned Spalten         *
+       //============================================================*
+
+       begsr pbpincol;
+
+          ispinmodec = btrue;
+
+          //  Eintragen der gepinnten Spalten ...
+          for pincol_x = 1 to nbrpincol;
+             if (sflrowdatastr > sfl_row_size or
+                sflrowdatastr > sflmaxrowlen);
+                leave;
+             endif;
+
+             if (sflrowdatastr > sflpinrnge);
+                //       Benutzer benachrichtigen
+                p_sndpgmmg('USR8148'
+                          : pintabcol(pincol_x): §§pgmname);
+                //       Eintrag austragen
+                exsr rmvpincol;
+                if ispinrmv = btrue;
+                   pincol_x = pincol_x - 1;
+                endif;
+                iter;
+             endif;
+
+             //  ... einlesen der Felddaten
+             f_field = pintabcol(pincol_x);
+             chain(n) f_key fpeekfld;
+             *in11 = not %found;
+             if *in11 = *on;
+                //           Eintrag austragen
+                exsr rmvpincol;
+                if ispinrmv = btrue;
+                   pincol_x = pincol_x - 1;
+                endif;
+                iter;
+             endif;
+
+             //  ... Feld nicht anzeigen
+             if f_hidden = btrue;
+                iter;
+             endif;
+
+             exsr pbreadfld1;
+             if iserror = btrue;
+                leave;
+             endif;
+
+          endfor;
+
+          ispinmodec = bfalse;
+
+       endsr;
+
+       //============================================================*
+       //    PBPinRcd      Füllen Subfile mit pinned Datensätzen     *
+       //============================================================*
+
+       begsr pbpinrcd;
+
+          ispinmoder = btrue;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+          else;
+
+             for pinrcd_x = 1 to max_pin_rcd;
+                pintabrcde = pintabrcd(pinrcd_x);
+                if pintabrcde.rcdnbr = §zeros;
+                   leave;
+                endif;
+
+                if f_chain04(pintabrcde.rcdnbr :
+                          pintabrcde.file   :
+                          pintabrcde.lib    :
+                          pintabrcde.mbr    :
+                          pintabrcde.rcdfmt ) = '1';
+                   //           Eintrag austragen
+                   exsr rmvpinrcd;
+                   if ispinrmv = btrue;
+                      pinrcd_x = pinrcd_x - 1;
+                   endif;
+                   iter;
+                endif;
+
+                exsr pbfillrigh;
+
+                sflrec132 = sflrec132 + 1;
+                sflrec080 = sflrec080 + 1;
+
+                exsr pbsflwrite;
+
+                if (*in88 = bfalse);
+     C                   z-add     sflrec132     sflnbrrcd
+                else;
+     C                   z-add     sflrec080     sflnbrrcd
+                endif;
+
+             endfor;
+
+          endif;
+
+          ispinmoder = bfalse;
+
+       endsr;
+
+       //============================================================*
+       //    ChkPinRcd     Prüfen, ob Datensatz gepinned ist         *
+       //============================================================*
+
+       begsr chkpinrcd;
+
+          pinrcd_x = 1;
+          pintabrcde.rcdnbr = wrk#rcdnbr;
+          pintabrcde.file = h_file;
+          pintabrcde.lib = h_lib;
+          pintabrcde.mbr = h_mbr;
+          pintabrcde.rcdfmt = h_rcdfmt;
+          pintabrcde.mbrnbr = h_mbrnbr;
+          pinrcd_x = %lookup(
+                   pintabrcde: pintabrcd: pinrcd_x);
+          if (pinrcd_x > 0);
+             ispinned = btrue;
+          else;
+             ispinned = bfalse;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    ChkPinCol     Prüfen, ob Spalte gepinned ist            *
+       //============================================================*
+
+       begsr chkpincol;
+
+          pincol_x = 1;
+          pincol_x = %lookup(
+                   pin#field: pintabcol: pincol_x);
+          if (pincol_x > 0);
+             ispinned = btrue;
+          else;
+             ispinned = bfalse;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    RmvPinRcd     Austragen Datensatz aus PinTabR           *
+       //============================================================*
+
+       begsr rmvpinrcd;
+
+          ispinrmv = bfalse;
+
+          //  Remove pinned record from table
+          for y = pinrcd_x to max_pin_rcd;
+             z = y + 1;
+             clear pintabrcde;
+             if z <= max_pin_rcd;
+                pintabrcd(y) = pintabrcd(z);
+                pintabrcd(z) = pintabrcde;
+             else;
+                pintabrcd(y) = pintabrcde;
+             endif;
+             isSflDirty = btrue;
+             ispinrmv = btrue;
+          endfor;
+
+          //  Detrmine number of pinned records
+          //  (find first free record)
+          x = 1;
+          clear pintabrcde;
+          x = %lookup(pintabrcde: pintabrcd: x);
+          if (x > 0);
+             nbrpinrcd = x - 1;
+          else;
+             nbrpinrcd = max_pin_rcd;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    RmvPinCol     Austragen Feld aus PinTabC                *
+       //============================================================*
+
+       begsr rmvpincol;
+
+          ispinrmv = bfalse;
+
+          for y = pincol_x to max_pin_col;
+             z = y + 1;
+             if z <= max_pin_col;
+                pintabcol(y) = pintabcol(z);
+                pintabcol(z) = *blanks;
+             else;
+                pintabcol(y) = *blanks;
+             endif;
+             isSflDirty = btrue;
+             ispinrmv = btrue;
+          endfor;
+
+          x = 1;
+          pin#field = *blanks;
+          x = %lookup(pin#field: pintabcol: x);
+          if (x > 0);
+             nbrpincol = x - 1;
+          else;
+             nbrpincol = max_pin_col;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    PBRefresh     Aktualisieren der Subfile                 *
+       //============================================================*
+
+       begsr pbrefresh;
+
+          wrk#readdn = sflnbrrcd - sflpage;
+          exsr pbreaddn;
+          exsr pbinit;
+          exsr pbpinrcd;
+          exsr pbreadup;
+
+          //  Evtl. ist die Subfile doch nicht leer ...
+          //  (letzter Satz in der Liste wurde gelöscht oder
+          //   der Schlüssel wurde geändert)
+          if *in80 = *off;
+             exsr c_bot;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    PBHeadLine    Aufbereiten der Überschriftenzeile        *
+       //                  und füllen Tabelle mit anzuzeigenden      *
+       //                  Feldern                                   *
+       //============================================================*
+
+       begsr pbheadline;
+
+          //  Löschen der Überschrift
+          $$head132 = *blanks;
+          $$head080 = *blanks;
+
+          if not %open(peekfldl1);
+             //  Keine Datei geöffnet
+             leavesr;
+          endif;
+
+          //  Löschen Tabelle mit Feldpositionen ...
+          exsr clrfldarray;
+
+          //  Aufbereiten Pseudo-Datensatz
+          peek20('*PHIVAL': io_buff: yMsgID: yMsgDta);
+
+          if yMsgID = *blanks;
+
+             //  Füllen der Überschriftenzeile ...
+             sflmode = '*HEADLINE';
+             wrk#seqnbr = ##wndnbr;
+             exsr pbfill_r;
+
+             //  Übertragen der Überschriftenzeile
+             //  in Bildschirmfeld ...
+             $$head132 = sflrow;
+             $$head080 = sflrow;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    PBFillLeft    Füllen einer Datenzeile von rechts        *
+       //                  nach links.                               *
+       //============================================================*
+
+       begsr pbfillleft;
+
+          if isopen = bfalse;
+             //  Keine Datei geöffnet
+          else;
+
+             //  Löschen Tabelle mit Feldpositionen ...
+             exsr clrfldarray;
+
+             //  Aufbereiten Pseudo-Datensatz
+             peek20('*PHIVAL': io_buff: yMsgID: yMsgDta);
+
+             if yMsgID = *blanks;
+
+                //  Füllen der Überschriftenzeile ...
+                sflmode = '*HEADLINE';
+                wrk#seqnbr = ##wndnbr;
+                exsr pbfill_l;
+             endif;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    PBFillRigh    Füllen einer Datenzeile von rechts        *
+       //                  nach links.                               *
+       //============================================================*
+
+       begsr pbfillrigh;
+
+          f_basedpf(file#x.file   :
+                   file#x.library:
+                   file#x.member :
+                   file#x.rcdfmt :
+                   file#x.mbrnbr :
+                   h_file        :
+                   h_lib         :
+                   h_mbr         :
+                   h_rcdfmt      );
+
+          sfpau = *blanks;
+          h_mbrnbr = file#x.mbrnbr;
+          recordnbr = file#x.rcdnbr;
+
+          //  Prüfen auf Suchfunktion:
+          //  *NORMAL/*REVERSE
+          isfound = bfalse;
+
+          if srchfield <> *blanks;
+             if srchtype = '*REVERSE'
+                or srchtype = '*UNDERLINE';
+                exsr srchfldatr;
+                exsr srchcomp;
+             endif;
+          endif;
+
+          //  Füllen der Datenzeile ...
+          sflmode = '*DATA';
+          wrk#seqnbr = ##wndnbr;
+          exsr pbfill_r;
+
+          //  Übertragen der Datenzeile in
+          //  Bildschirmfeld ...
+          data132 = sflrow;
+          data080 = sflrow;
+
+          //  ... anzeigen der Subfile
+          *in80 = '1';
+
+          //  ... Subfile-Satz nicht auswählen
+          *in84 = '0';
+          *in85 = '0';
+
+       endsr;
+
+       //============================================================*
+       //    PBFill_R      Lesen der anzuzeigenden Felder und        *
+       //                  aufbereiten der Überschrift oder der      *
+       //                  Datenzeile, von links nach rechts         *
+       //============================================================*
+
+       begsr pbfill_r;
+
+          //  Löschen Datentabelle ...
+          clear sflrow;
+          sflrowdatastr = 1;
+
+          //  Eintragen gepinnter Spalten ...
+          exsr pbpincol;
+
+          //  Eintragen der Feldinhalte ...
+          f_seq = wrk#seqnbr;
+          setll f1key_l1 fpeekfldl1;
+
+          dow (sflrowdatastr <= sfl_row_size and
+             sflrowdatastr <= sflmaxrowlen);
+             read fpeekfldl1;
+             *in11 = %eof;
+             if *in11 = *on;
+                leave;
+             endif;
+
+             //  ... Feld anzeigen?
+             wrk#field = f_field;
+             exsr chkvisible;
+             if isvisible = bfalse;
+                iter;
+             endif;
+
+             exsr pbreadfld1;
+             if iserror = btrue;
+                leave;
+             endif;
+
+          enddo;
+
+       endsr;
+
+       //============================================================*
+       //    PBFill_L      Lesen der anzuzeigenden Felder und        *
+       //                  aufbereiten der Überschrift oder der      *
+       //                  Datenzeile, von rechts nach links         *
+       //============================================================*
+
+       begsr pbfill_l;
+
+          //  Löschen Datentabelle ...
+          clear sflrow;
+          sflrowdatastr = 1;
+
+          //  Eintragen gepinnter Spalten ...
+          exsr pbpincol;
+
+          //  Eintragen der Feldinhalte ...
+          f_seq = wrk#seqnbr;
+          setgt f1key_l1 fpeekfldl1;
+
+          dow (sflrowdatastr <= sfl_row_size and
+             sflrowdatastr <= sflmaxrowlen);
+             readp fpeekfldl1;
+             *in11 = %eof;
+             if *in11 = *on;
+                leave;
+             endif;
+
+             //  ... Feld anzeigen?
+             wrk#field = f_field;
+             exsr chkvisible;
+             if isvisible = bfalse;
+                iter;
+             endif;
+
+             exsr pbreadfld1;
+             if iserror = btrue;
+                leave;
+             endif;
+
+             if ##strpage > 1;
+                leave;
+             endif;
+
+          enddo;
+
+       endsr;
+
+       //============================================================*
+       //    PBReadFld1    Hilfsroutine für PBReadFld                *
+       //============================================================*
+
+       begsr pbreadfld1;
+
+          //  umsetzen der Daten in die Job CCSID
+          if sflmode = '*HEADLINE';
+             ycvtccsid = bfalse;
+          else;
+             ycvtccsid = btrue;
+          endif;
+
+          //  löschen Ausnahmebedingung für Spalte
+          iscolexc = bfalse;
+
+          //  merken Position für Farbattribut
+          if (sflrowdatastr <= sfl_row_size);
+             colrofs = sflrowdatastr;
+             sflrowdatastr = sflrowdatastr + 1;
+          else;
+             colrofs = §zeros;
+          endif;
+
+          //  aufbereiten des Feldinhaltes
+          //  für Anzeigeformat gemäß EDITCODE ...
+          fldl0100 = f_ffd;
+          if f_edtcde <> *blanks;
+             fldl0100.f1edtc = f_edtcde;
+          else;
+             //  ... Original EDITCODE verwenden
+          endif;
+
+          monitor;
+             //  umsetzen Datensatzpuffer in Bildschirmdarstellung ...
+             if set_dspmde = '*DSPNRM';
+                //  ... für Normale Anzeige
+                if io_nullmap(fldl0100.f1seq) = 1;
+                   peek06(fldl0100: 'FLDL0100': *allx'00'
+                         : bfalse: ycvtccsid
+                         : youtbuffer: youtbuffln
+                         : yMsgID: yMsgDta);
+                   if f_isnumfld(fldl0100) = btrue;
+                      if youtbuffln > 1;
+                         %subst(youtbuffer: 1: youtbuffln - 1) = '';
+                      endif;
+                      %subst(youtbuffer
+                            : youtbuffln
+                            : %len(§hex_char)) = §hex_char;
+                   else;
+                      youtbuffer = §hex_char;
+                   endif;
+                else;
+                   peek06(fldl0100: 'FLDL0100': io_buff
+                         : bfalse: ycvtccsid
+                         : youtbuffer: youtbuffln
+                         : yMsgID: yMsgDta);
+                endif;
+
+             else;
+                //  ... für Hex-Anzeige
+                if io_nullmap(fldl0100.f1seq) = 1;
+                   yhexstring = §hex_char;
+                   ystringlen = f_buffln(fldl0100);
+                else;
+                   ystringlen = f_rtvfld(ystring  :
+                                        io_buff  :
+                                        fldl0100 );
+                   yhexstring = ' ';
+                   p_hextochr(yhexstring    :
+                             ystring       :
+                             ystringlen * 2);
+                endif;
+
+                youtbuffln = ystringlen * 2;
+             endif;
+             *in99 = bfalse;
+          on-error;
+             *in99 = btrue;
+          endmon;
+
+          //  Fehler bei der Aufbereitung ...
+          if *in99 = *on;
+             //  ... ja
+             iserror = btrue;
+          else;
+             //  ... nein
+             iserror = bfalse;
+
+             //  ermitteln der Spaltenbreite
+             //  anhand der Überschrift und
+             //  der Feldlänge, sowie der
+             //  maximalen Spaltenbreite ...
+             fldl0100 = f_ffd;
+             columnlen = §zeros;
+             fieldlen = youtbuffln;
+             maxcollen = f_maxsize;
+
+             //  Konvertierung nicht darstellbarer Zeichen ...
+             if sflmode = '*HEADLINE'
+                or set_dspmde = '*DSPHEX';
+                //  ... keine Konvertierung bei der
+                //      Aufbereitung der Überschriftenzeile
+             else;
+                //  ... sonst konvertieren
+                monitor;
+                   peek32(youtbuffer: youtbuffln: 0
+                         : yMsgID: yMsgDta);
+                   *in99 = bfalse;
+                on-error;
+                   *in99 = btrue;
+                endmon;
+
+                if *in99 = *off;
+                   if iscvtchar = bfalse;
+                      if yMsgID <> *blanks;
+                         iscvtchar = btrue;
+                         p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                         yMsgID = '';
+                         yMsgDta = '';
+                      else;
+                         //         keine Nachricht anstehend
+                      endif;
+                   else;
+                      //         Nachricht bereits gesendet
+                   endif;
+                else;
+                   //         Fehler bei Programmaufruf
+                endif;
+             endif;
+
+             //  Bestimmen Länge der Überschrift
+             //  und aufbereiten Überschrift ...
+             colheading = f_headline(set_hedtyp: fldl0100);
+             headlen = %checkr(' ': colheading);
+
+             if (sflmode = '*HEADLINE');
+                yhexstring = colheading;
+             endif;
+
+             colheading = '';
+
+             //  ... Bestimmen der Spaltenbreite
+             if headlen > fieldlen;
+                columnlen = headlen;
+             else;
+                columnlen = fieldlen;
+             endif;
+
+             if columnlen > maxcollen;
+                columnlen = maxcollen;
+             endif;
+
+             //  ... numerische Werte rechtsbündig setzen,
+             //      wenn Spaltenbereite kleiner als Feldlänge
+             if (sflmode   = '*HEADLINE');
+
+                //      ... für die Überschrift
+                if (columnlen < headlen ) or
+                   (columnlen < fieldlen);
+
+                   select;
+                   when (headlen + 3) <= columnlen;
+                      %subst(yhexstring: headlen + 1: 3)
+                      = %subst('...': 1: 3);
+                   other;
+                      %subst(yhexstring: columnlen - 2 + 1: 2)
+                      = %subst('...': 1: 2);
+                   endsl;
+
+                endif;
+
+             else;
+
+                //      ... für die Datenzeile
+                if (sflmode   <> '*HEADLINE') and
+                   (columnlen <  fieldlen   );
+                   if f_isnumfld(fldl0100) = btrue;
+                      //          ... numerische Werte
+                      if (set_enexc = btrue) and
+                         (%subst(yhexstring          :
+                              1                   :
+                              fieldlen - columnlen) <> *blanks);
+                         iscolexc = btrue;
+                      endif;
+                      yhexstring = %subst(yhexstring              :
+                                         1 + fieldlen - columnlen:
+                                         columnlen               );
+                   else;
+                      //          ... alphanumerische Werte
+                      if (set_enexc = btrue) and
+                         (%subst(yhexstring              :
+                              columnlen + 1           :
+                              1 + fieldlen - columnlen) <> *blanks);
+                         iscolexc = btrue;
+                      endif;
+                   endif;
+
+                endif;
+             endif;
+
+             //  ... Berechnen der Startposition im Puffer
+             sfldatalenfree =
+              sflmaxrowlen - sflrowdatastr + 1;
+
+             if (##wndnbr = f_seq);
+
+                if (##strpage * sfldatalenfree) > columnlen;
+
+                   if (columnlen / sfldatalenfree) =
+                      f_int(columnlen / sfldatalenfree);
+                      ##strpage = (columnlen / sfldatalenfree);
+                   else;
+                      ##strpage = (columnlen / sfldatalenfree) + 1;
+                   endif;
+
+                endif;
+
+                fldstrpos = (##strpage -1) * sfldatalenfree
+                           + 1;
+             else;
+                fldstrpos = 1;
+             endif;
+
+             //  ... Berechnen der zu extrahierenden Länge
+             buffidx = fldstrpos;
+             sflrowdataend = sflrowdatastr + columnlen;
+             sflrowdataend = sflrowdataend - fldstrpos;
+
+             if sflrowdataend > sfl_row_size;
+                sflrowdataend = sfl_row_size;
+             endif;
+
+             sflrowdatalen =
+              sflrowdataend - sflrowdatastr + 1;
+
+             //  ... übertragen aufbereitetes Feld in Subfile
+             %subst(sflrow: sflrowdatastr) =
+             %subst(yhexstring: buffidx: sflrowdatalen);
+
+             //  ... pflegen der Tabelle mit den Werten der
+             //      Spaltenaufteilung ...
+             if sflrowdataend >= sflrowdatastr;
+                //      ... pflegen der Feldpositionstabelle
+                if sflmode = '*HEADLINE';
+                   cp = cp + 1;
+                   col_field(cp) = fldl0100.f1fnme;
+                   col_scnstr(cp) = sflrowdatastr;
+                   col_scnend(cp) = sflrowdataend;
+                   //          ... ist das Feld komplett sichtbar?
+                   if (col_scnend(cp) <= sflmaxrowlen);
+                      //              ... ja, kein Fehler
+                      col_error(cp) = bfalse;
+                   else;
+                      //              ... nein, Fehler!
+                      col_error(cp) = btrue;
+                   endif;
+                endif;
+
+                sflrowdatastr = sflrowdataend + 1;
+
+                //      ... Löschen von "überstehendem" Datenmüll
+                if (columnlen = maxcollen and
+                   sflrowdatastr <= sfl_row_size);
+                   sflrow.chars(sflrowdatastr) = '';
+                endif;
+
+                //      ... umschalten auf "normale" Farbdarstellung
+                if (sflrowdatastr <= sfl_row_size);
+                   wrk#ofs = sflrowdatastr;
+                   exsr pbstdcol;
+                endif;
+
+                //      ... "nachziehen" der Spaltenfarbe
+                if colrofs <= §zeros;
+                   //          ... Pech gehabt
+                else;
+                   if sflmode = '*HEADLINE';
+                      if (f_kseq = 0) or
+                         (accessMode = rrn_seq);
+                         sflrow.chars(colrofs) = set_hedcol;
+                      else;
+                         sflrow.chars(colrofs) = set_keycol;
+                      endif;
+                   else;
+                      exsr pbcolor;
+                   endif;
+                endif;
+             endif;
+
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    PBStdCol      Setzen der "normalen" Datensatzfarbe      *
+       //============================================================*
+
+       begsr pbstdcol;
+
+          if istblcol = bfalse;
+             sflrow.chars(wrk#ofs) = set_stdcol;
+          else;
+             sflrow.chars(wrk#ofs) = set_tblcol;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    PBGenKey      Generieren Aufsetzkey                     *
+       //                  für die Anzeige auf dem Bildschirm        *
+       //============================================================*
+
+       begsr pbgenkey;
+
+          if accessMode = key_seq;
+             exsr pbbuildkey;
+          else;
+             exsr pbbuildrrn;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    PBBuildRrn    Generieren Aufsetzkey: RRN                *
+       //============================================================*
+
+       begsr pbbuildrrn;
+
+          ##rcdnbr = recordnbr;
+
+       endsr;
+
+       //============================================================*
+       //    PBBuildKey    Generieren Aufsetzkey                     *
+       //============================================================*
+
+       begsr pbbuildkey;
+
+          monitor;
+             peek19(io_buff: ykeyval: yMsgID: yMsgDta);
+
+             //  ... Konvertieren nicht darstellbarer Zeichen
+             youtbuffer = ykeyval;
+             youtbuffln = 132;
+
+             peek32(youtbuffer: youtbuffln: 0
+                   : yMsgID: yMsgDta);
+             *in99 = bfalse;
+          on-error;
+             *in99 = btrue;
+          endmon;
+
+          ##key = youtbuffer;
+
+       endsr;
+
+       //============================================================*
+       //    PBGenIntKy    Generieren internen Aufsetzkey            *
+       //                  für einen Dateizugriff                    *
+       //============================================================*
+
+       begsr pbgenintky;
+
+          if accessMode = key_seq;
+             exsr pbintkey;
+          else;
+             exsr pbintrrn;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    PBIntRrn      Generieren interne Satznummer             *
+       //============================================================*
+
+       begsr pbintrrn;
+
+          wrk#rcdnbr = wrk#rcdnbr;
+
+       endsr;
+
+       //============================================================*
+       //    PBIntKey      Generieren internen Aufsetzschlüssel      *
+       //============================================================*
+
+       begsr pbintkey;
+
+          peek20(wrk#keyval: ybuffer
+                : yMsgID: yMsgDta);
+          wrk#keyval = ybuffer;
+
+       endsr;
+
+       //============================================================*
+       //    PBColor       Setzen der Spaltenfarbe                   *
+       //                  für Datenzeilen                           *
+       //                  a) für gepinnte Datensätze                *
+       //                  b) für normale Datensätze                 *
+       //============================================================*
+
+       begsr pbcolor;
+
+          if colrofs = §zeros;
+             //                 Nix tun
+          else;
+
+             if iscolexc = btrue;
+                sflrow.chars(colrofs) = set_exccol;
+             else;
+
+                //---------------------------------------*
+                //  Berücksichtigen des Aufrufs von:     *
+                //  a) anzeigen "normaler" Datensätze    *
+                //  b) anzeigen "gepinnter" Datensätze   *
+                //---------------------------------------*
+                if ispinmoder = bfalse;
+                   if ispinmodec = bfalse;
+                      //      ... nix ist gepinnt
+                      ispinned = bfalse;
+                   else;
+                      //      ... prüfen auf gepinnte Spalten
+                      pin#field = fldl0100.f1fnme;
+                      exsr chkpincol;
+                   endif;
+                else;
+                   //      ... prüfen auf gepinnte Zeilen (=Datensätze)
+                   wrk#rcdnbr = recordnbr;
+                   exsr chkpinrcd;
+                endif;
+
+                //---------------------------------------*
+                //  ... setzen der Datenfarbe            *
+                //---------------------------------------*
+                //  Spaltenmarkierung ...
+                if f_markcol = btrue;
+                   sflrow.chars(colrofs) = f_color;
+                else;
+                   //  Keine Spaltenmarkierung ...
+                   if ispinned = btrue;
+                      //      ... pinned Datensatz
+                      sflrow.chars(colrofs) = set_pincol;
+                   else;
+                      //      ... normaler Datensatz
+                      wrk#ofs = colrofs;
+                      exsr pbstdcol;
+                   endif;
+                endif;
+
+                //---------------------------------------*
+                //  ... Datensatz gefunden               *
+                //---------------------------------------*
+                if ispinned = bfalse;
+                   select;
+                      //      ... Suchfunktionen: *REVERSE
+                   when srchtype = '*REVERSE';
+                      if isfound = btrue;
+                         sflrow.chars(colrofs) = set_revcol;
+                      endif;
+
+                      //      ... Suchfunktionen: *UNDERLINE
+                   when srchtype = '*UNDERLINE';
+                      if isfound = btrue;
+                         sflrow.chars(colrofs) = set_undcol;
+                      endif;
+
+                      //      ... Suchfunktionen: *NORMAL
+                   when srchtype = '*NORMAL';
+                      if srchfndrcd = recordnbr;
+                         sflrow.chars(colrofs) = set_nmlcol;
+                      endif;
+
+                   other;
+                      //       Andere Suchtypen gibt's nicht
+                   endsl;
+                endif;
+
+             endif;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    PBSetLL       Setzen Dateizeiger RRN/KEY                *
+       //============================================================*
+
+       begsr pbsetll;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+          else;
+
+             select;
+             when accessMode = key_seq;
+                cio_setllwithkey(hfile02: wrk#keyval);
+                exsr f2tofx;
+             when accessMode = rrn_seq;
+                cio_setllwithrrn(hfile01: wrk#rcdnbr);
+                exsr f1tofx;
+             when accessMode = sql_seq;
+             other;
+             endsl;
+
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    PBSetGT       Setzen Dateizeiger RRN/KEY                *
+       //============================================================*
+
+       begsr pbsetgt;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+          else;
+
+             select;
+             when accessMode = key_seq;
+                cio_setgtwithkey(hfile02: wrk#keyval);
+                exsr f2tofx;
+             when accessMode = rrn_seq;
+                cio_setgtwithrrn(hfile01: wrk#rcdnbr);
+                exsr f1tofx;
+             when accessMode = sql_seq;
+             other;
+             endsl;
+
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    PBMoveTop     Setzen Dateizeiger auf BOF                *
+       //============================================================*
+
+       begsr pbmovetop;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+          else;
+
+             if accessMode = sql_seq;
+                sql_gototop(yMsgID: yMsgDta);
+                if (yMsgID <> '');
+                   p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                   yMsgID = '';
+                   yMsgDta = '';
+                endif;
+             else;
+                wrk#keyval = '*LOVAL';
+                wrk#rcdnbr = low_rcd_nbr;
+
+                exsr pbgenintky;
+                exsr pbsetll;
+             endif;
+
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    PBMoveBot     Setzen Dateizeiger auf EOF                *
+       //============================================================*
+
+       begsr pbmovebot;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+          else;
+
+             if accessMode = sql_seq;
+                sql_gotobottom(yMsgID: yMsgDta);
+                if (yMsgID <> '');
+                   p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                   yMsgID = '';
+                   yMsgDta = '';
+                endif;
+             else;
+                wrk#keyval = '*HIVAL';
+                wrk#rcdnbr = high_rcd_nbr;
+
+                exsr pbgenintky;
+                exsr pbsetgt;
+                exsr pbreadp;
+             endif;
+
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    clrFldArray   Löschen Felder Array                      *
+       //============================================================*
+
+       begsr clrfldarray;
+
+          col_field(*) = '';
+          col_scnstr(*) = 0;
+          col_scnend(*) = 0;
+          col_error(*) = bfalse;
+          cp = §zeros;
+
+       endsr;
+
+       //============================================================*
+       //    ChangeFile    Prüfen, ob die Datei gewechselt hat       *
+       //============================================================*
+
+       begsr changefile;
+
+          isfilechg = bfalse;
+
+          if l#file <> ##file
+             or l#library <> ##library
+             or l#member <> ##member
+             or l#format <> ##format;
+
+             isfilechg = btrue;
+             //  ... Änderungen prüfen
+             if ##member = l#member;
+                ##member = *blanks;
+             endif;
+
+             if ##format = l#format;
+                ##format = *blanks;
+             endif;
+
+             exsr closefile;
+
+             if ##file <> *blanks;
+                accessMode = newaccmode;
+                exsr openfile;
+             endif;
+          endif;
+
+          exsr getopnfile;
+          exsr getmaxseq;
+
+       endsr;
+
+       //============================================================*
+       //    ChangeWnd     Prüfen, ob Fenster gewechselt hat         *
+       //============================================================*
+
+       begsr changewnd;
+
+          if isopen = bfalse;
+             //      Nix tun, keine Datei vorhanden
+             exsr msgnofile;
+          else;
+
+             if ##field <> *blanks;
+                wrk#field = ##field;
+                exsr getseqnbr;
+                if isseqnbrok = btrue;
+                   ##wndnbr = wrk#seqnbr;
+                   ##strpage = 1;
+                else;
+                   //  Fehlermeldung ...
+                   clear usr8108;
+                   usr81081 = ##field;
+                   usr81082 = ##file;
+                   usr81083 = ##library;
+                   p_sndpgmmg('USR8108': usr8108: §§pgmname);
+                endif;
+
+                ##field = *blanks;
+             endif;
+
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    ChangeKey     Prüfen, ob der Aufsetzkey gewechselt hat  *
+       //                  Auslösen über *IN93                       *
+       //============================================================*
+
+       begsr changekey;
+
+          if ##rcdnbr <> r#rcdnbr
+             or ##key <> r#keyval;
+             iskeychg = btrue;
+          else;
+             iskeychg = bfalse;
+          endif;
+
+          select;
+          when ##rcdnbr < low_rcd_nbr;
+             ##rcdnbr = low_rcd_nbr;
+          when ##rcdnbr > high_rcd_nbr;
+             ##rcdnbr = high_rcd_nbr;
+          other;
+             //    Im gültigen Bereich ...
+          endsl;
+
+       endsr;
+
+       //============================================================*
+       //    ChangeSort    Wechseln der Sortierfolge                 *
+       //============================================================*
+
+       begsr changesort;
+
+          l#file = *blanks;
+          l#library = *blanks;
+          l#member = *blanks;
+          l#format = *blanks;
+
+          //  Merken der letzten Cursorposition
+          select;
+             //    ... außerhalb der Subfile
+          when sflcsr <= *zeros;
+             //        ... wird später anhand der
+             //            Cursorposition auf dem Bildschirm entschieden
+             sflcsr = *zeros;
+
+             //    ... innerhalb der Subfile
+          when sflcsr > nbrpinrcd;
+             //        ... wird genau dort positioniert
+
+             //    ... innerhalb der gepinnten Datensätze
+          other;
+             //        ... auf 1. angezeigten Datensatz positionieren
+             sflcsr = 1 + nbrpinrcd;
+          endsl;
+
+          //  Umsetzen Cursorposition in Satznummer
+          exsr pbcsrtrcd;
+          if wrk#rcdnbr > *zeros;
+    R        //**  File#04.Open  ANDEQ     '1'
+             last#rcdnr = wrk#rcdnbr;
+          else;
+             last#rcdnr = *zeros;
+          endif;
+
+          //  Wechsel der Datei ...
+          ispintoclr = bfalse;
+          exsr changefile;
+          ispintoclr = btrue;
+
+          //  Prüfen Seq-Bereich (##WndNbr) ...
+          exsr chkseqrnge;
+
+          //  Wechsel des Fenster (##Field) ...
+          exsr changewnd;
+
+          clear ##rcdnbr;
+          clear ##key;
+          clear r#rcdnbr;
+          clear r#keyval;
+
+          yMsgID = *blanks;
+          yMsgDta = *blanks;
+
+          if last#rcdnr = *zeros;
+             //    Alter Datensatz ist nicht bekannt ...
+          else;
+             //    ... Einlesen letzten Datensatz
+             recordnbr = last#rcdnr;
+
+             if f_chain04(recordnbr:
+                       h_file   :
+                       h_lib    :
+                       h_mbr    :
+                       h_rcdfmt ) = '1';
+                //    ... Zugriff fehlgeschlagen
+             else;
+                //    ... Generieren Aufsetzkey
+                exsr pbgenkey;
+             endif;
+          endif;
+
+          //  Wechsel des Aufsetzkeys ...
+          exsr changekey;
+
+          //  Füllen der Subfile ...
+          if iskeychg = bfalse;
+             if (cursorposition.row > sfllastrw);
+                //    ... unterhalb der Subfile
+                exsr c_bot;
+             else;
+                //    ... oberhalb der Subfile,
+                //        bzw. kein Wechsel des Aufsetzkeys
+                exsr c_top;
+             endif;
+          else;
+             //    ... neuer Aufsetzkey innerhalb der Subfile
+             exsr keyhaschg;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    OpenFile      Datei öffnen                              *
+       //============================================================*
+
+       begsr openfile;
+
+          //  Wenn eine Datei bereits geöffnet ist ...
+          if isopen = btrue;
+             //  ... dann geöffnet lassen
+             leavesr;
+          endif;
+
+          yCursorPos.row = 0;
+          yCursorPos.column = 0;
+
+          exsr chkprvfile;
+
+          //  ... erst die Plausi prüfen, dann ...
+          if ##library = *blanks;
+             ##library = '*LIBL';
+          endif;
+
+          if ##member = *blanks;
+             ##member = '*FIRST';
+          endif;
+
+          //  ... Objektbeschreibung
+          //      ... abrufen der Objektattribute (auflösen *LIBL, *CURLIB)
+          exsr getobjattr;
+          if iserror = btrue;
+             //  Fehler aufgetreten, Öffnen abbrechen.
+             exsr msgnofile;
+             leavesr;
+          endif;
+
+          //  ... Teildateien
+          if (##member = '*NONE');
+             $$nomb = 0;
+          else;
+             //      ... abrufen der Anzahl Teildateien
+             exsr getnbrmbr;
+             if ($$nomb = 0);
+                //  Keine Teildateien vorhanden.
+                ##member = '*NONE';
+             endif;
+          endif;
+
+          //      ... prüfen auf phys. Datei bei Zugriff über SQL
+          //** %SQL%          IF        (AccessMode = SQL_SEQ and ATFILA <> '*PHY')
+          //**                Exsr      MsgInvSqlFile
+          //**                Leavesr
+          //**                ENDIF
+
+          //      ... prüfen Name der Teildatei
+          exsr checkmbrname;
+          if iserror = btrue;
+             //  Fehler aufgetreten, Öffnen abbrechen.
+             exsr msgnofile;
+             leavesr;
+          endif;
+
+          //  ... Satzformate
+          //      ... abrufen der Satzformate
+          exsr getfmtlist;
+          //      ... auswählen Satzformat
+          exsr getrcdfrmt;
+
+          //  ... prüfen auf Schlüsselfelder
+          //      und initialisieren von PEEK41 (= Dateiinformationen)
+          exsr getnbrkeyf;
+          //      ... wenn keine Schlüsselinformationen
+          //          vorhanden sind, ...
+          if iskeyavail = bfalse
+             and accessMode = key_seq;
+             //          ... dann über RRN zugreifen
+             accessMode = rrn_seq;
+          else;
+             //          ... sonst Modus beibehalten
+          endif;
+
+          //  Ermitteln Sortierung bei Zugriff über SQL ...
+          if accessMode = sql_seq;
+             if sqlorder = '*KEY';
+                peek38(##file: ##library: sqlorder);
+             else;
+                sqlorder = sql_quote(f_ucase(sqlorder));
+             endif;
+          endif;
+
+          // -------------------------------------------------
+          //  Prüfen Zugriffsrechte
+          // -------------------------------------------------
+
+          //      ... prüfen Zugriffsrechte
+          exsr s_exit01;
+
+          //      ... Zugriff nicht erlaubt
+          if (auth.isAccessAlw <> btrue);
+             exsr closefile;
+             p_rmvpgmmg(§§pgmname);
+             p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+             yMsgID = '';
+             yMsgDta = '';
+             leavesr;
+          endif;
+
+          // -------------------------------------------------
+          //  Datei öffnen für Einzelzugriff (Aktualisierung)
+          // -------------------------------------------------
+
+          if (##member = '*NONE');
+             clear hfile00;
+             file#x.open =bfalse;
+             file#x.file = ##file;
+             file#x.library = ##library;
+             file#x.rcdlen = 0;
+             file#x.member = ##member;
+             file#x.rcdfmt = ##format;
+             file#x.mbrnbr = 0;
+             file#x.rcdnbr = 0;
+             isopen = bfalse;
+          else;
+
+             f_execute('OVRDBF ' +
+                        'FILE(' + %trim(##file) + ') ' +
+                        'TOFILE(' +
+                          %trim(##library) + '/' +
+                          %trim(##file) + ') ' +
+                        'MBR(' + %trim(##member) + ') ' +
+                        'OVRSCOPE(*ACTGRPDFN) ' +
+                        'SHARE(*NO) ' +
+                        'SEQONLY(*NO) SECURE(*YES)'
+                      : yMsgID: yMsgDta);
+             yMsgID = '';
+             yMsgDta = '';
+
+             //      ... Änderungen erlaubt
+             if auth.isUpdAlw = btrue;
+                commitLvl = '1';
+                //          ... mit Commit-Steuerung
+                if cio_open(hfile00
+                         : ##file
+                         : ##library
+                         : ##member
+                         : ##format
+                         : 'rr+, arrseq=Y, commit=Y, +
+                            nullcap=Y, riofb=Y, +
+                            secure=N, ccsid=65535') = btrue;
+                   exsr f0tofx;
+                   isupdmod = btrue;
+                else;
+                   //          ... ohne Commit-Steuerung
+                   commitLvl = '0';
+                   if cio_open(hfile00
+                            : ##file
+                            : ##library
+                            : ##member
+                            : ##format
+                            : 'rr+ , arrseq=Y, commit=N +
+                               nullcap=Y, riofb=Y, +
+                               secure=N, ccsid=65535') = btrue;
+
+                      exsr f0tofx;
+                      isupdmod = btrue;
+                   else;
+                      //              ... Datei für Einzelsatzzugriff konnte nicht geöffnet werden.
+                      //                  evtl. handelt es sich um eine JOIN-Datei oder aber
+                      //                  es könnte auch Referenzielle Integrität definiert sein und
+                      //                  die läßt sich ohne Journalisierungn nicht anwenden!
+                      isupdmod = bfalse;
+                      *in99 = '0';
+                   endif;
+                endif;
+             else;
+                //      ... keine Änderungen erlaubt
+                isupdmod = bfalse;
+                *in99 = '0';
+             endif;
+
+             if (isupdmod = btrue) and (auth.isUpdKeyAlw = btrue);
+                isUpdKey = btrue;
+             else;
+                isUpdKey = bfalse;
+             endif;
+
+             // -------------------------------------------------
+             //  Datei öffnen für Sortierfolge
+             // -------------------------------------------------
+
+             //  Sortierung 2 nach Schlüsselfelder
+             if (accessMode = key_seq);
+                if cio_open(hfile02
+                         : ##file
+                         : ##library
+                         : ##member
+                         : ##format
+                         : 'rr, arrseq=N, commit=N, +
+                            nullcap=Y, riofb=Y, +
+                            secure=N, ccsid=65535') = btrue;
+                   *in99 = *off;
+                else;
+                   *in99 = *on;
+                   cio_geterrormsg(hfile01: yMsgID: yMsgDta);
+                   p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                   yMsgID = '';
+                   yMsgDta = '';
+                endif;
+                exsr f2tofx;
+             endif;
+
+             //  Sortierung 1 nach Satzfolge
+             if (accessMode = rrn_seq);
+                if cio_open(hfile01
+                         : ##file
+                         : ##library
+                         : ##member
+                         : ##format
+                         : 'rr, arrseq=Y, commit=N, +
+                            nullcap=Y, riofb=Y, +
+                            secure=N, ccsid=65535') = btrue;
+                   *in99 = *off;
+                else;
+                   *in99 = *on;
+                   cio_geterrormsg(hfile01: yMsgID: yMsgDta);
+                   p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                   yMsgID = '';
+                   yMsgDta = '';
+                endif;
+                exsr f1tofx;
+             endif;
+
+             //  Sortierung 3 nach Sql
+             if (accessMode = sql_seq);
+                clear usr0013;
+                p_sndstsmg('USR0013': usr0013);
+                if sql_preparestatement(
+                           '0'       :
+                           ##file    :
+                           ##library :
+                           ##member  :
+                           ##format  :
+                           sqlwhere  :
+                           sqlorder  :
+                         yMsgID      :
+                         yMsgDta     ) = btrue;
+                   if sql_open(hfile03     :
+                            yMsgID      :
+                            yMsgDta     ) = btrue;
+                      *in99 = *off;
+                      yMsgID = '';
+                      yMsgDta = '';
+                   else;
+                      *in99 = *on;
+                      cio_geterrormsg(hfile01: yMsgID: yMsgDta);
+                      p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                      yMsgID = '';
+                      yMsgDta = '';
+                   endif;
+                   exsr f3tofx;
+                else;
+                   *in99 = *on;
+                   p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                   yMsgID = '';
+                   yMsgDta = '';
+                endif;
+             endif;
+
+             f_execute('DLTOVR ' +
+                        'FILE(' + %trim(##file) + ') ' +
+                        'LVL(*ACTGRPDFN) '
+                      : yMsgID: yMsgDta);
+             yMsgID = '';
+             yMsgDta = '';
+
+             if *in99 = *on;
+                leavesr;
+             endif;
+             //      Datei geöffnet ...
+             //      ... OPEN-Flag
+             isopen = btrue;
+
+          endif;
+
+          //      ... aber Satzlänge größer 32766
+          if file#x.rcdlen > rcd_buff_len;
+             exsr closefile;
+             p_rmvpgmmg(§§pgmname);
+             clear usr8207;
+             usr82071 = rcd_buff_len;
+             p_sndpgmmg('USR8207': usr8207: §§pgmname);
+          else;
+
+             // ... löschen Pin-Funktion
+             exsr clrpincol;
+             exsr clrpinrow;
+             // ... auswerten Rückkehrcode
+             if yMsgID = 'USR8100';
+                // ... Abbruch mit F3/F12
+                exsr closefile;
+             else;
+                // ... weiter
+                // ... abrufen der Feldliste
+                exsr getfldlist;
+                // ... abrufen der Schlüsselfelder
+                exsr getkeylist;
+                // ... Sortieren der Schlüsselfelder
+                exsr floatkeys;
+                // ... Fensterposition
+                ##wndnbr = 0;
+                ##strpage = 0;
+                // ... Suchmodus
+                exsr srchinz;
+                // ... Blätternfunktion Einzelsatz
+                yScreenNbr = 0;
+                // ... abrufen der Teildateiattribute
+                exsr getmbrattr;
+                // ... initialisieren Kurzbefehl
+                exsr initscmd;
+                // ... Nachrichten entfernen
+                p_rmvpgmmg(§§pgmname);
+                // ... einblenden Aufsetzkey
+                if (accessMode = key_seq);
+                   *in70 = '1';
+                else;
+                   *in70 = '0';
+                endif;
+                // ... Cursor auf Keyeingabezeile setzen
+                exsr c_poscsr;
+
+                // ... Hexmode nicht bei Satzlänge größer 32766
+                if (file#x.rcdlen > rcd_buff_len) and
+                   (set_dspmde = '*DSPHEX');
+                   clear usr8206;
+                   usr82061  = rcd_buff_len;
+                   p_sndpgmmg('USR8206': usr8206: §§pgmname);
+                   exsr s_dspnrm;
+                endif;
+
+                // ... Felder größer 512 Zeichen
+                if isfld512 = btrue;
+                   // ... ohne Commit
+                   usr81231 = §white_u;
+                   usr81232 = §white;
+                   p_sndpgmmg('USR8123': usr8123: §§pgmname);
+                endif;
+
+                // ... Felder, welche nicht erlaubt sind
+                f_field = *blanks;
+                setll f_key fpeekfld;
+                *in11 = not %found;
+                for do_x7 = 1 to *hival;
+                   read fpeekfld;
+                   *in11 = %eof;
+                   if *in11 = *on;
+                      leave;
+                   endif;
+                   if (f_isnotalw(f_ffd) = btrue);
+                      p_sndpgmmg('USR8196': f_field: §§pgmname);
+                   endif;
+                endfor;
+
+                // ... Prüfen der Registrierung
+                exsr c_register;
+                if (isLicenceError = bTrue);
+                  exsr closeFile;
+                endif;
+
+                // ... Datei geöffnet ...
+                if (isopen = btrue);
+                   if (commitLvl = '0');
+                      // ... ohne Commit
+                      *in55 = bfalse;
+                      p_sndpgmmg('USR0004': '': §§pgmname);
+                   else;
+                      // ... mit Commit
+                      *in55 = btrue;
+                      p_sndpgmmg('USR0003': '': §§pgmname);
+                   endif;
+
+                   // ... Datei für ...
+                   if (isupdmod = bfalse);
+                      // ... Input geöffnet
+                      usr00071 = ##file;
+                      usr00072 = ##library;
+                      p_sndpgmmg('USR0007': usr0007: §§pgmname);
+                   else;
+                      // ... Update geöffnet
+                   endif;
+                endif;
+             endif;
+          endif;
+
+          isSflDirty = btrue;
+
+          yIsLower = '-';
+
+          iskeylower = bfalse;
+
+       endsr;
+
+       //============================================================*
+       //    PBRead        Lesen in Satz- oder Schlüsselfolge        *
+       //============================================================*
+
+       begsr pbread;
+
+          isfileerror = bfalse;
+
+          dou (file#x.rcdfmt = ##format) or (*in99 = *on);
+
+             select;
+             when accessMode = key_seq;
+                if cio_read(hfile02: bfalse
+                         : io_buff: io_nullmap) = beof;
+                   *in99 = *on;
+                else;
+                   *in99 = *off;
+                endif;
+                exsr f2tofx;
+                isfileerror = cio_iserror(hfile02);
+             when accessMode = rrn_seq;
+                if cio_read(hfile01: bfalse
+                         : io_buff: io_nullmap) = beof;
+                   *in99 = *on;
+                else;
+                   *in99 = *off;
+                endif;
+                exsr f1tofx;
+                isfileerror = cio_iserror(hfile01);
+             when accessMode = sql_seq;
+                if sql_nextrow(io_buff: io_nullmap: hfile03:
+                            yMsgID : yMsgDta)  = beof;
+                   *in99 = *on;
+                   p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                   yMsgID = '';
+                   yMsgDta = '';
+                else;
+                   *in99 = *off;
+                   yMsgID = '';
+                   yMsgDta = '';
+                endif;
+                exsr f3tofx;
+                isfileerror = cio_iserror(hfile03);
+             other;
+             endsl;
+
+          enddo;
+
+          if isfileerror = btrue;
+             iseof = btrue;
+          else;
+             if *in99 = *on;
+                exsr pbmovebot;
+                iseof = btrue;
+             else;
+                iseof = bfalse;
+             endif;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    PBReadP       Rückwärts lesen in Satz- oder             *
+       //                  Schlüsselfolge                            *
+       //============================================================*
+
+       begsr pbreadp;
+
+          dou (file#x.rcdfmt = ##format) or (*in99 = *on);
+
+             select;
+             when accessMode = key_seq;
+                if cio_readp(hfile02: bfalse
+                          : io_buff: io_nullmap) = beof;
+                   *in99 = *on;
+                else;
+                   *in99 = *off;
+                endif;
+                exsr f2tofx;
+             when accessMode = rrn_seq;
+                if cio_readp(hfile01: bfalse
+                          : io_buff: io_nullmap) = beof;
+                   *in99 = *on;
+                else;
+                   *in99 = *off;
+                endif;
+                exsr f1tofx;
+             when accessMode = sql_seq;
+                if sql_previousrow(io_buff: io_nullmap: hfile03:
+                                yMsgID : yMsgDta) = beof;
+                   *in99 = *on;
+                   if (yMsgID <> '');
+                      p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                      yMsgID = '';
+                      yMsgDta = '';
+                   endif;
+                else;
+                   *in99 = *off;
+                   yMsgID = '';
+                   yMsgDta = '';
+                endif;
+                exsr f3tofx;
+                isfileerror = cio_iserror(hfile03);
+             other;
+             endsl;
+
+          enddo;
+
+          if *in99 = *on;
+             exsr pbmovetop;
+             iseof = btrue;
+          else;
+             iseof = bfalse;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    F0toFx        Übertragen der Dateiinformationen         *
+       //                  (Status usw.) der Datei 00 in die         *
+       //                  "globalen Felder Fx                       *
+       //============================================================*
+
+       begsr f0tofx;
+
+          file#x = cio_getinfds(hfile00);
+
+       endsr;
+
+       //============================================================*
+       //    F1toFx        Übertragen der Dateiinformationen         *
+       //                  (Status usw.) der Datei 01 in die         *
+       //                  "globalen Felder Fx                       *
+       //============================================================*
+
+       begsr f1tofx;
+
+          file#x = cio_getinfds(hfile01);
+
+       endsr;
+
+       //============================================================*
+       //    F2toFx        Übertragen der Dateiinformationen         *
+       //                  (Status usw.) der Datei 02 in die         *
+       //                  "globalen Felder Fx                       *
+       //============================================================*
+
+       begsr f2tofx;
+
+          file#x = cio_getinfds(hfile02);
+
+       endsr;
+
+       //============================================================*
+       //    F3toFx        Übertragen der Dateiinformationen         *
+       //                  (Status usw.) der Datei 03 in die         *
+       //                  "globalen Felder Fx                       *
+       //============================================================*
+
+       begsr f3tofx;
+
+          file#x = cio_getinfds(hfile03);
+
+       endsr;
+
+       //============================================================*
+       //    RepeatOpt     Wiederholen der Subfileauswahl            *
+       //============================================================*
+
+       begsr repeatopt;
+
+          //  "Keine Sätze vorhanden"
+          if *in80 = *off;
+             //  ... nix zu tun
+          else;
+
+             //  Lese alle Sätze der Subfile ab Wrk#Recno ...
+             for x = wrk#recno to sflnbrrcd;
+
+                sflrec132 = x;
+                sflrec080 = x;
+                exsr pbsflchain;
+
+                //  ... höre auf, bei Dateiende oder Fehler
+                if *in11 = *on;
+                   leave;
+                else;
+                   //  ... Wenn SFPAU bereits gefüllt ist,
+                   //      dann beende die Verarbeitung ...
+                   if sfpau <> *blanks;
+                      *in84 = '1';                                              // SFLNXTCHG
+                      exsr pbsflupdat;
+                      leave;
+                   else;
+                      //  ... ansonsten wiederhole die Auswahl
+                      sfpau = wrk#sfpau;
+                      *in84 = '1';                                              // SFLNXTCHG
+                      exsr pbsflupdat;
+                   endif;
+                endif;
+
+             endfor;
+
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    GetFrstFld    Ermitteln der Feldnummer des ersten       *
+       //                  sichtbaren Feldes                         *
+       //============================================================*
+
+       begsr getfrstfld;
+
+          if isopen = bfalse;
+             ##wndnbr = §zeros;
+          else;
+
+             ##wndnbr = §zeros;
+
+             for x = 1 to cp;
+
+                wrk#field = col_field(x);
+                exsr chkvisible;
+                if isvisible = bfalse;
+                   //  ... nicht sichtbar
+                   iter;
+                else;
+                   //  ... sichtbar
+                   //      ... ermitteln der Sequenznummer
+                   f_field = col_field(x);
+                   chain(n) f_key fpeekfld;
+                   *in11 = not %found;
+                   if *in11 = *off;
+                      //          ... ermittelt
+                      ##wndnbr = f_seq;
+                      leave;
+                   else;
+                      //          ... kann eigentlich nicht sein
+                      iter;
+                   endif;
+                endif;
+
+             endfor;
+
+          endif;
+
+          //  Merken letzte Feldposition
+          l#wndnbr = ##wndnbr;
+
+          exsr chkseqrnge;
+
+       endsr;
+
+       //============================================================*
+       //    GetPgmName    Berechnen Programmname                    *
+       //============================================================*
+
+       begsr getpgmname;
+
+          peekpgm = 'P' +
+                     %subst(rcdl0200.r2fmtid: 1: 2) +
+                     %subst(rcdl0200.r2fmtid: 7: 7);
+
+       endsr;
+
+       //============================================================*
+       //    GetDSpName    Berechnen Name Displayfile                *
+       //============================================================*
+
+       begsr getdspname;
+
+          peekdspf = 'F' +
+                     %subst(rcdl0200.r2fmtid: 1: 2) +
+                     %subst(rcdl0200.r2fmtid: 7: 7);
+
+       endsr;
+
+       //============================================================*
+       //    GetFldTMrk    Holen des zu markierenden Feldnamens      *
+       //============================================================*
+
+       begsr getfldtmrk;
+
+          wrk#field = '';
+
+          if (cp <= 0);
+             //  Funktion bei leerer Feldtabelle möglich ...
+             p_sndpgmmg('USR8145': '': §§pgmname);
+          else;
+
+             for x = 1 to cp;
+                y = cursorposition.column - sflleftofs;
+                if (y >= col_scnstr(x) and y <= col_scnend(x));
+                   wrk#field = col_field(x);
+                   leave;
+                endif;
+             endfor;
+
+             if (wrk#field = '');
+                p_sndpgmmg('USR8117': '': §§pgmname);
+             endif;
+
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    GetSflRcd     Einlesen Subfilesatz an aktueller         *
+       //                  Cursorposition                            *
+       //============================================================*
+
+       begsr getsflrcd;
+
+          if sflcsr > §zeros;
+             exsr pbcsrtrcd;
+          else;
+             sflcsr = §zeros;
+             p_sndpgmmg('USR8102': '': §§pgmname);
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    GetNbrKeyF    Ermitteln Anzahl Schlüsselfelder          *
+       //============================================================*
+
+       begsr getnbrkeyf;
+
+          peek04(yQFile: ##format: yMsgID: yMsgDta);
+          if yMsgID = 'USR0006';
+             iskeyavail = bfalse;
+          else;
+             iskeyavail = btrue;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    GetNbrMbr     Ermitteln Anzahl Teildateien              *
+       //============================================================*
+
+       begsr getnbrmbr;
+
+          peek41(yQFile: ##format
+                : '*CREATE': ynbrofent: ydata);
+          if ynbrofent > *zeros;
+             fild0100 = ydata;
+          else;
+             clear fild0100;
+          endif;
+
+          $$nomb = fild0100.atnomb;
+
+       endsr;
+
+       //============================================================*
+       //    GetFmtList    Abrufrufen der Satzformatliste            *
+       //============================================================*
+
+       begsr getfmtlist;
+
+          yFile = ##file;
+          yLibrary = ##library;
+          peek10(yQFile: yMsgID: yMsgDta);
+
+       endsr;
+
+       //============================================================*
+       //    GetFldList    Abrufrufen der Feldliste                  *
+       //============================================================*
+
+       begsr getfldlist;
+
+          yFile = ##file;
+          yLibrary = ##library;
+          peek01(yQFile: ##format: $$rcdfmtid
+                : yMsgID: yMsgDta);
+
+          if yMsgID = 'USR8123';
+             isfld512 = btrue;
+          else;
+             isfld512 = bfalse;
+          endif;
+
+          open peekfld;
+          open peekfldl1;
+
+       endsr;
+
+       //============================================================*
+       //    GetKeyList    Abrufrufen der Schlüsselfelder            *
+       //============================================================*
+
+       begsr getkeylist;
+
+          peek03(yQFile: ##format: accessMode: sqlorder
+                : yMsgID: yMsgDta);
+
+       endsr;
+
+       //============================================================*
+       //    GetRcdFrmt    Auswählen des Satzformates                *
+       //============================================================*
+
+       begsr getrcdfrmt;
+
+          peek12(set_dsp80: §copyright: ##format
+                : mode_batch
+                : rcdl0200: yfmtnbr: yMsgID: yMsgDta);
+
+          if yMsgID <> 'USR8100';
+             ##fmtnbr = yfmtnbr;
+             ##format = rcdl0200.r2fmtname;
+             $$length = rcdl0200.r2rcdlen;
+          else;
+             //         Abbruch über F3/F12
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    GetObjAttr    Abrufrufen und anzeigen der               *
+       //                  Objektattribute                           *
+       //============================================================*
+
+       begsr getobjattr;
+
+          monitor;
+             yFile = ##file;
+             yLibrary = ##library;
+             peek09(yQFile: objd0400: yMsgID: yMsgDta);
+             *in99 = bfalse;
+          on-error;
+             *in99 = btrue;
+          endmon;
+
+          if *in99 = *on;
+             iserror = btrue;
+          else;
+             iserror = bfalse;
+             if yMsgID <> *blanks;
+                iserror = btrue;
+                //  Objekt nicht gefunden ...
+                select;
+                when yMsgID = 'CPF9812';
+                   usr00081 = ##file;
+                   usr00082 = ##library;
+                   p_sndpgmmg('USR0008': usr0008: §§pgmname);
+                when yMsgID = 'CPF9810';
+                   usr00101 = ##library;
+                   p_sndpgmmg('USR0010': usr0010: §§pgmname);
+                other;
+                   usr00091 = ##file;
+                   usr00092 = ##library;
+                   p_sndpgmmg('USR0009': usr0009: §§pgmname);
+                endsl;
+             else;
+
+                iserror = bfalse;
+                //  Übertragen der Objektbezeichnung
+                ##file = objd0400.o4objname;
+                ##library = objd0400.o4retlib;
+
+                //  Übertragen der Objektbeschreibung
+                $$text40 = objd0400.o4text;
+                $$text50 = objd0400.o4text;
+
+                //  Wenn die Objektgröße kleiner als 999 ist,
+                if (objd0400.o4objsize <= 999);
+                   //  ... dann in der Einheit "Byte" anzeigen ...
+                   r#size = §zeros;
+                   $$unit = 'Byt';
+                else;
+                   //  ... ansonsten solange durch 1024 teilen,
+                   //      bis das die nächste passende Einheit
+                   //      gefunden werden konnte.
+                   r#size = §zeros;
+
+                   dow (objd0400.o4objsize > 999);
+                      objd0400.o4objsize =
+                       %dech(objd0400.o4objsize / 1024: 10: 0);
+                      r#size = r#size + 1;
+                   enddo;
+
+                   //  Multiplikator aus der Objektbeschreibung
+                   //  berücksichtigen und ...
+                   if (objd0400.o4objsizem = 1024);
+                      r#size = r#size + 1;
+                   else;
+                      //       keine Korrektur erforderlich
+                   endif;
+
+                   //  ... und passende Einheit wählen ...
+                   select;
+                   when r#size = 1;
+                      $$unit = 'K';
+                   when r#size = 2;
+                      $$unit = 'MByt';
+                   when r#size = 3;
+                      $$unit = 'GByt';
+                   other;
+                      $$unit = 'TByt';
+                   endsl;
+                endif;
+
+                //  ... sowie Restgröße zur Anzeige bringen
+                $$size = objd0400.o4objsize;
+             endif;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    GetMbrAttr    Abrufen der Attribute der Teildatei       *
+       //============================================================*
+
+       begsr getmbrattr;
+
+          //  Beschreibung der Teildatei
+          if isopen = bfalse;
+             $$records = §zeros;
+             leavesr;
+          endif;
+
+          if (##member = '*NONE');
+             clear mbrd0200;
+             $$records = 0;
+             $$lmtcnt = '';
+             $$records = 0;
+             leavesr;
+          endif;
+
+          yFile = ##file;
+          yLibrary = ##library;
+          peek13(yQFile: ##member: mbrd0200);
+
+          if mbrd0200.m2bytavail > 0;
+             if mbrd0200.m2nbrrcdon <= 2147483647;
+                $$records = mbrd0200.m2nbrrcdon;
+                *in79 = *on;
+                $$lmtcnt = '';
+             else;
+                $$records = 0;
+                *in79 = *off;
+                $$lmtcnt = '*OVERFLOW';
+             endif;
+          else;
+             $$records = 0;
+             *in79 = *off;
+             $$lmtcnt = '*ERROR';
+          endif;
+
+          if accessMode = sql_seq;
+             if $$records > set_maxrcds;
+                $$records = 0;
+                *in79 = *off;
+                $$lmtcnt = '*SQLLMTCNT';
+             else;
+                clear usr0014;
+                p_sndstsmg('USR0014': usr0014);
+                $$records = sql_count();
+                *in79 = *on;
+                $$lmtcnt = *blanks;
+             endif;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    CheckMbrName  Prüfen Name der Teildatei                 *
+       //============================================================*
+
+       begsr checkmbrname;
+
+          if (##member = '*NONE');
+             clear mbrd0200;
+             iserror = bfalse;
+             leavesr;
+          endif;
+
+          yFile = ##file;
+          yLibrary = ##library;
+          peek13(yQFile: ##member: mbrd0200);
+          if (mbrd0200.m2bytavail <> 0);
+             ##member = mbrd0200.m2member;
+             iserror = bfalse;
+          else;
+             iserror = btrue;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    GetMaxSeq     Ermitteln der Anzahl Felder               *
+       //============================================================*
+
+       begsr getmaxseq;
+
+          if isopen = bfalse;
+             l#maxseq = §zeros;
+             l#minseq = §zeros;
+          else;
+
+             //  Ermitteln Anzahl Felder ...
+             f_seq = *hival;
+             setgt f1key_l1 fpeekfldl1;
+
+             for do_x8 = 1 to *hival;
+                readp fpeekfldl1;
+                *in11 = %eof;
+                if *in11 = *on;
+                   l#maxseq = §zeros;
+                   leave;
+                endif;
+
+                //  ... Prüfen, ob Feld angezeigt wird
+                wrk#field = f_field;
+                exsr chkvisible;
+                if isvisible = bfalse;
+                   iter;
+                endif;
+
+                l#maxseq = f_seq;
+                leave;
+             endfor;
+
+             //  Ermitteln Erstes Feld ...
+             f_seq = §zeros;
+             setll f1key_l1 fpeekfldl1;
+
+             for do_x9 = 1 to *hival;
+                read fpeekfldl1;
+                *in11 = %eof;
+                if *in11 = *on;
+                   l#minseq = §zeros;
+                   leave;
+                endif;
+
+                //  ... Prüfen, ob Feld angezeigt wird
+                wrk#field = f_field;
+                exsr chkvisible;
+                if isvisible = bfalse;
+                   iter;
+                endif;
+
+                l#minseq = f_seq;
+                leave;
+             endfor;
+
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    GetMaxSeq     Ermitteln vorhergehendes sichtabres Feld  *
+       //============================================================*
+
+       begsr getprvseq;
+
+          if isopen = bfalse;
+             wrk#seqnbr = -1;
+             leavesr;
+          endif;
+
+          f_seq = wrk#seqnbr;
+          chain f1key_l1 fpeekfldl1;
+          if not %found();
+             wrk#seqnbr = l#minseq;
+             leavesr;
+          endif;
+
+          for do_x10 = 1 to *hival;
+             readp fpeekfldl1;
+             if %eof();
+                wrk#seqnbr = l#minseq;
+                leave;
+             endif;
+
+             //  ... Prüfen, ob Feld angezeigt wird
+             wrk#field = f_field;
+             exsr chkvisible;
+             if isvisible = bfalse;
+                iter;
+             endif;
+
+             wrk#seqnbr = f_seq;
+             leave;
+          endfor;
+
+       endsr;
+
+       //============================================================*
+       //    CloseFile     Datei schließen                           *
+       //============================================================*
+
+       begsr closefile;
+
+          if isopen = btrue;
+
+             yCursorPos.row = 0;
+             yCursorPos.column = 0;
+
+             //  Datei 04 für Einzelsatzzugriff
+             if cio_isopen(hfile04) = btrue;
+                cio_close(hfile04);
+             endif;
+
+             select;
+             when accessMode = key_seq;
+                //  Sortierung 2 für Schlüsselfolge
+                if cio_close(hfile02) = btrue;
+                   *in99 = '0';
+                else;
+                   *in99 = '1';
+                endif;
+                exsr f2tofx;
+             when accessMode = rrn_seq;
+                //  Sortierung 1 für Satzfolge
+                if cio_close(hfile01) = btrue;
+                   *in99 = '0';
+                else;
+                   *in99 = '1';
+                endif;
+                exsr f1tofx;
+             when accessMode = sql_seq;
+                if sql_close(hfile03:yMsgID :yMsgDta)
+                   = btrue;
+                   *in99 = *off;
+                   yMsgID = '';
+                   yMsgDta = '';
+                else;
+                   *in99 = *on;
+                   if (yMsgID <> '');
+                      p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                      yMsgID = '';
+                      yMsgDta = '';
+                   endif;
+                endif;
+                exsr f3tofx;
+             other;
+             endsl;
+
+          else;
+             *in99 = '0';
+          endif;
+
+          //  Sortierung 0 für Einzelzugriff
+          if cio_isopen(hfile00) = btrue;
+             if cio_close(hfile00) = btrue;
+                *in99 = '0';
+             else;
+                *in99 = '1';
+             endif;
+             exsr f0tofx;
+          endif;
+
+          if *in99 = *off;
+             isopen = bfalse;
+             //  Löschen Satzaufbau
+             if %open(peekfld);
+                f_field = *blanks;
+                setll f_key fpeekfld;
+                *in11 = not %found;
+                for do_x11 = 1 to *hival;
+                   read fpeekfld;
+                   *in11 = %eof;
+                   if *in11 = *on;
+                      leave;
+                   endif;
+                   delete fpeekfld;
+                endfor;
+                close peekfldl1;
+                close peekfld;
+             endif;
+             //      ... Satzformat
+             $$text40 = *blanks;
+             $$text50 = *blanks;
+             $$length = §zeros;
+             $$records = §zeros;
+             $$size = §zeros;
+             $$rcdfmtid = *blanks;
+             $$unit = *blanks;
+             $$nomb = §zeros;
+             ##key = *blanks;
+             ##rcdnbr = §zeros;
+             //      ... Fensterposition
+             ##wndnbr = §zeros;
+             ##strpage = §zeros;
+
+             //      ... SQL-Selektion
+             sqlwhere  = ' ';
+             sqlorder  = ' ';
+
+          else;
+             //             Weiss noch nicht!
+          endif;
+
+          //  Entfernen Update Programm aus Arbeitsspeicher
+          f_execute('RCLACTGRP +
+                      ACTGRP(PEEKUPD) +
+                      OPTION(*NORMAL)'
+                   : yMsgID: yMsgDta);
+          yMsgID = '';
+          yMsgDta = '';
+
+          //  Subfile initialisieren
+          exsr pbinit;
+
+       endsr;
+
+       //============================================================*
+       //    GetOpnFile    Ermitteln der geöffneten Datei            *
+       //============================================================*
+
+       begsr getopnfile;
+
+          if isopen = btrue;
+             ##file = file#x.file;
+             ##library = file#x.library;
+             ##member = file#x.member;
+          else;
+             //**                MOVEL (P) *BLANKS       ##File
+             //**                MOVEL (P) *BLANKS       ##Library
+             //**                MOVEL (P) *BLANKS       ##Member
+             $$text40 = *blanks;
+             $$text50 = *blanks;
+             $$size = §zeros;
+             $$rcdfmtid = *blanks;
+             $$unit = *blanks;
+          endif;
+
+          l#file = ##file;
+          l#library = ##library;
+          l#member = ##member;
+          l#format = ##format;
+
+       endsr;
+
+       //============================================================*
+       //    GetUsrSetg    Ermitteln der Benutzervoreinstellungen    *
+       //============================================================*
+
+       begsr getusrsetg;
+
+          //  *DSPATR
+          set0001 = f_getusrsg('*DSPATTR'  );
+
+          //  *SEARCH
+          set0002 = f_getusrsg('*SEARCH'   );
+
+          //  *ACCESSKEY
+          set0003 = f_getusrsg('*ACCESSKEY');
+
+          //  *SPLASH
+          set0005 = f_getusrsg('*SPLASH'   );
+
+          //  *CVTCHR
+          set0006 = f_getusrsg('*CVTCHR'   );
+
+          //  *VERSION
+          set0007 = f_getusrsg('*VERSION'  );
+
+          //  *PROMPT
+          set0008 = f_getusrsg('*PROMPT'   );
+
+          //  *FLOATKEYS
+          set0009 = f_getusrsg('*FLOATKEYS');
+
+          //  *SCROLL
+          set0010 = f_getusrsg('*SCROLL'   );
+
+          //  *DFTDSPMDE
+          set0011 = f_getusrsg('*DFTDSPMDE');
+
+          if set_dftmde = '*LAST';
+             //    ... Modus belassen
+          else;
+             set_dspmde = set_dftmde;
+          endif;
+
+          select;
+          when set_dspmde = '*DSPNRM';
+             exsr s_dspnrm;
+          when set_dspmde = '*DSPHEX';
+             exsr s_dsphex;
+          other;
+             exsr s_dspnrm;
+          endsl;
+
+          // - Löschen Programmnachricht "keine Datei geöffnet"
+          p_rmvpgmmg(§§pgmname);
+
+          //  *SECATR ...
+          set0013 = f_getusrsg('*SECATRDFT'   );
+
+          //  ... Verknüpfen *SECATRDFT mit Eingabeparametern ...
+          //      ... ##Library
+          if i_chglib = '*';
+             if set_chglib = '1';
+                auth.isChgLibAlw = btrue;
+             else;
+                auth.isChgLibAlw = bfalse;
+             endif;
+          else;
+             if i_chglib = '1';
+                auth.isChgLibAlw = btrue;
+             else;
+                auth.isChgLibAlw = bfalse;
+             endif;
+          endif;
+
+          //      ... ##File
+          if i_chgfile = '*';
+             if set_chgfil  = '1';
+                auth.isChgFileAlw = btrue;
+             else;
+                auth.isChgFileAlw = bfalse;
+             endif;
+          else;
+             if i_chgfile = '1';
+                auth.isChgFileAlw = btrue;
+             else;
+                auth.isChgFileAlw = bfalse;
+             endif;
+          endif;
+
+          //      ... ##Member
+          if i_chgmbr = '*';
+             if set_chgmbr = '1';
+                auth.isChgMbrAlw = btrue;
+             else;
+                auth.isChgMbrAlw = bfalse;
+             endif;
+          else;
+             if i_chgmbr = '1';
+                auth.isChgMbrAlw = btrue;
+             else;
+                auth.isChgMbrAlw = bfalse;
+             endif;
+          endif;
+
+          //      ... updMod
+          if (i_updmodkey = upd_m_dft  );
+             if set_updmod = '1';
+                auth.isUpdAlw    = btrue;
+             else;
+                auth.isUpdAlw    = bfalse;
+             endif;
+          else;
+             if (i_updmodkey = upd_m_yes  )  or
+                (i_updmodkey = upd_m_nokey);
+                auth.isUpdAlw    = btrue;
+             else;
+                auth.isUpdAlw    = bfalse;
+             endif;
+          endif;
+
+          //      ... keyUpd
+          if (i_updmodkey = upd_m_dft  )  or
+             (i_updmodkey = upd_m_yes  );
+             auth.isUpdKeyAlw    = btrue;
+          else;
+             auth.isUpdKeyAlw    = bfalse;
+          endif;
+
+          //      ... chgSqlW
+          if (i_chgsqlw = upd_m_dft  )  or
+             (i_chgsqlw = upd_m_yes  );
+             auth.isChgSQLWhereAlw = btrue;
+          else;
+             auth.isChgSQLWhereAlw = bfalse;
+          endif;
+
+          //      ... chgSqlO
+          if (i_chgsqlo = upd_m_dft  )  or
+             (i_chgsqlo = upd_m_yes  );
+             auth.isChgSQLOrderByAlw = btrue;
+          else;
+             auth.isChgSQLOrderByAlw = bfalse;
+          endif;
+
+          //      ... accAut
+          if set_accaut = '1';
+             auth.isAccessAlw    = btrue;
+          else;
+             auth.isAccessAlw    = bfalse;
+          endif;
+
+          //  *PRVFILE
+          set0014 = f_getusrsg('*PRVFILE');
+
+          //  *ENVFILE
+          set0015 = f_getusrsg('*ENVFILE');
+
+          //  *SQLLMTCNT
+          set0016 = f_getusrsg('*SQLLMTCNT');
+
+       endsr;
+
+       //============================================================*
+       //    GetSeqNbr     Übersetzen Field Name in Sequence Nbr     *
+       //============================================================*
+
+       begsr getseqnbr;
+
+          f_field = wrk#field;
+          chain(n) f_key fpeekfld;
+          *in11 = not %found;
+          if *in11 = *off;
+             isseqnbrok = btrue;
+             wrk#seqnbr = f_seq;
+          else;
+             isseqnbrok = bfalse;
+             wrk#seqnbr = §zeros;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    GetLastOpt    Ermitteln der letzten Subfileauswahl      *
+       //============================================================*
+
+       begsr getlastopt;
+
+          //  "Keine Sätze vorhanden"
+          if *in80 = *off;
+             iserror = btrue;
+             wrk#sfpau = *blanks;
+             wrk#recno = §zeros;
+          else;
+
+             for x = 1 to sflnbrrcd;
+
+                y = sflnbrrcd - x;
+                y = y + 1;
+
+                if *in88 = *off;
+                   sflrec132 = y;
+                   chain sflrec132 pbsfl132;
+                   *in11 = not %found;
+                else;
+                   sflrec080 = y;
+                   chain sflrec080 pbsfl080;
+                   *in11 = not %found;
+                endif;
+
+                if *in11 = *on;
+                   iserror = btrue;
+                   wrk#sfpau = *blanks;
+                   wrk#recno = §zeros;
+                   leave;
+                else;
+                   if sfpau <> *blanks;
+                      wrk#sfpau = sfpau;
+                      if (*in88 = bfalse);
+     C                   z-add     sflrec132     wrk#recno
+                      else;
+     C                   z-add     sflrec080     wrk#recno
+                      endif;
+                      iserror = bfalse;
+                      leave;
+                   else;
+                      //  Bitte weitersuchen ...
+                   endif;
+                endif;
+
+             endfor;
+
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    GetNxtMark    Ermtteln des nächsten markierten Feldes   *
+       //============================================================*
+
+       begsr getnxtmark;
+
+          //  Suchen des nächsten markierten Feldes ...
+          f_seq = wrk#seqnbr;
+          setgt f1key_l1 fpeekfldl1;
+
+          for do_x12 = 1 to *hival;
+             read fpeekfldl1;
+             *in11 = %eof;
+             if *in11 = *on;
+                wrk#seqnbr = *zeros;
+                leave;
+             endif;
+
+             exsr chkvisible;
+             if isvisible = bfalse;
+                //    ... Feld ist nicht sichtbar
+             else;
+                //    ... Feld ist sichtbar
+                if f_markcol = btrue;
+                   //        ... und markiert
+                   wrk#seqnbr = f_seq;
+                   leave;
+                else;
+                   //        ... leider nicht markiert
+                endif;
+             endif;
+
+          endfor;
+
+       endsr;
+
+       //============================================================*
+       //    GetPrvMark    Ermtteln des vorherigen markierten Feldes *
+       //============================================================*
+
+       begsr getprvmark;
+
+          //  Suchen des nächsten markierten Feldes ...
+          f_seq = wrk#seqnbr;
+          setll f1key_l1 fpeekfldl1;
+
+          for do_x13 = 1 to *hival;
+             readp fpeekfldl1;
+             *in11 = %eof;
+             if *in11 = *on;
+                wrk#seqnbr = *zeros;
+                leave;
+             endif;
+
+             exsr chkvisible;
+             if isvisible = bfalse;
+                //    ... Feld ist nicht sichtbar
+             else;
+                //    ... Feld ist sichtbar
+                if f_markcol = btrue;
+                   //        ... und markiert
+                   wrk#seqnbr = f_seq;
+                   leave;
+                else;
+                   //        ... leider nicht markiert
+                endif;
+             endif;
+
+          endfor;
+
+       endsr;
+
+       //============================================================*
+       //    KeyHasChg     Aufsetzkey hat gewechselt                 *
+       //============================================================*
+
+       begsr keyhaschg;
+
+          wrk#keyval = ##key;
+          wrk#rcdnbr = ##rcdnbr;
+          exsr pbgenintky;
+          if yMsgID <> *blanks;
+             p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+             yMsgID = '';
+             yMsgDta = '';
+             p_sndpgmmg('USR8139': '': §§pgmname);
+          else;
+             exsr pbsetll;
+             exsr pbinit;
+             exsr pbpinrcd;
+             exsr pbreadup;
+             //  Aufsetzkey überschreitet Dateiende
+             if *in80 = *off;
+                exsr c_bot;
+             endif;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    FloatKeys     Keyfelder an den Anfang sortieren         *
+       //============================================================*
+
+       begsr floatkeys;
+
+          if (set_float  = btrue)     and
+             ((accessMode = key_seq)  or
+             (accessMode = sql_seq));
+
+             monitor;
+                peek34(set_dsp80: §copyright: '*FLOATKEYS'
+                      : yMsgID: yMsgDta);
+                *in99 = bfalse;
+             on-error;
+                *in99 = btrue;
+             endmon;
+
+          else;
+             //    Es werden keine Schlüselfeldinformationen benötigt
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    KeepCsrPos    Beibehalten der Cursorposition            *
+       //============================================================*
+
+       begsr keepcsrpos;
+
+          //  Beibehalten der Cursorosition
+          csrrow = cursorposition.row;
+          csrcol = cursorposition.column;
+
+       endsr;
+
+       //============================================================*
+       //    DltCsrPos     Löschen der Cursorposition                *
+       //============================================================*
+
+       begsr dltcsrpos;
+
+          //  Löschen der Cursorosition
+          csrrow = *zeros;
+          csrcol = *zeros;
+
+       endsr;
+
+       //============================================================*
+       //    SetUsrSetg    Speichern der Benutzervoreinstellungen    *
+       //============================================================*
+
+       begsr setusrsetg;
+
+          //  Splash-Screen
+          p_updusrsg('*SPLASH' : set0005);
+
+       endsr;
+
+       //============================================================*
+       //    ChkVisible    Prüfen, ob Feld angezeigt wird            *
+       //============================================================*
+
+       begsr chkvisible;
+
+          isvisible = btrue;
+
+          for do_x14 = 1 to 1;
+
+             //  ... Feld nicht anzeigen
+             if f_hidden = btrue;
+                isvisible = bfalse;
+                leave;
+             endif;
+
+             //  ... gepinnte Spalten überlesen
+             pin#field = wrk#field;
+             exsr chkpincol;
+             if ispinned = btrue;
+                isvisible = bfalse;
+                leave;
+             endif;
+
+          endfor;
+
+       endsr;
+
+       //============================================================*
+       //    ChkSeqRnge    Prüfen der Fensternummer                  *
+       //============================================================*
+
+       begsr chkseqrnge;
+
+          if isopen = bfalse;
+             //            keine Datei geöffnet
+          else;
+
+             if ##wndnbr < l#minseq;
+                ##wndnbr = l#minseq;
+                p_sndpgmmg('USR8115': '': §§pgmname);
+                ##strpage = 1;
+             endif;
+
+             if ##wndnbr > l#maxseq;
+                ##wndnbr = l#maxseq;
+                p_sndpgmmg('USR8116': '': §§pgmname);
+                if set_scroll = '*BOTH'
+                   or set_scroll = '*RIGHT';
+                   ##strpage = *hival;
+                else;
+                   ##strpage = 1;
+                endif;
+             endif;
+
+             if ##strpage < 1;
+                ##strpage = 1;
+             endif;
+
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    SetScreen     Einstellen 132/80-Zeichen Auflösung       *
+       //============================================================*
+
+       begsr setscreen;
+
+          //    Wenn der Bildschirm keine 132-Zeichen
+          //    darstellen kann, ...
+          if (workstn.numrows < 27);
+             //    ... dann auf 80-Zeichen umschalten.
+             set_dsp80 = '1';
+          else;
+             //    ... sonst die Auflösung 80/132 beibehalten.
+          endif;
+
+          if set_dsp80 = '1';
+             //    80-Zeichen Anzeige
+             *in88 = '1';
+             sflpage = 14;
+             sflmaxrowlen = 64;
+             sflheadlrw = 6;
+             sflfirstrw = 7;
+             sfllastrw = 20;
+             sflleftofs = 15;
+          else;
+             //   132-Zeichen Anzeige
+             *in88 = '0';
+             sflpage = 16;
+             sflmaxrowlen = 116;
+             sflheadlrw = 6;
+             sflfirstrw = 8;
+             sfllastrw = 23;
+             sflleftofs = 15;
+          endif;
+
+          //  Bereich für gepinnte Spalten
+     C     sflmaxrowlen  div       3             sflpinrnge
+     C                   mult      2             sflpinrnge
+
+       //  Prompt-Felder anzeigen ...
+          if set_dsppmt = btrue
+             and *in77 = *off;
+             *in71 = '1';
+          else;
+             *in71 = '0';
+          endif;
+
+          //  Subfileauswahlfeld öffnen ...
+          *in76 = '0';
+
+       endsr;
+
+       //============================================================*
+       //    ChgScreen     Wechseln 132/80-Zeichen Auflösung         *
+       //============================================================*
+
+       begsr chgscreen;
+
+          if set_dsp80 = '1';
+             //   132-Zeichen Anzeige
+             set_dsp80 = '0';
+          else;
+             //    80-Zeichen Anzeige
+             set_dsp80 = '1';
+          endif;
+
+          exsr setscreen;
+
+       endsr;
+
+       //============================================================*
+       //    ShowSplash    Anzeigen SPLASH-Screen                    *
+       //============================================================*
+
+       begsr showsplash;
+
+          if set_spla = bfalse;
+             //            kein Splash-Screen
+          else;
+             write splash01;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    ChkVersion    Prüfen der Versionsnummer                 *
+       //============================================================*
+
+       begsr chkversion;
+
+          if set_vsn <> §version;
+             peek33(§version: yMsgID: yMsgDta);
+          else;
+             //  Kein Abgleich erforderlich ...
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    ChkPrvFile    Prüfen vorherige Datei                    *
+       //============================================================*
+
+       begsr chkprvfile;
+
+          //  Datei ...
+          if ##file = '*PRV';
+             if set_prvfil  <> '*NONE';
+                ##file = set_prvfil;
+             endif;
+             //  Bibliothek ...
+             if set_prvlib  <> '*NONE';
+                ##library = set_prvlib;
+             else;
+                ##library = ' ';
+             endif;
+             //  Teildatei ...
+             if set_prvmbr  <> '*NONE';
+                ##member = set_prvmbr;
+             else;
+                ##member = ' ';
+             endif;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //  Call EXIT01. The exit program must exist.                 *
+       //============================================================*
+
+       begsr s_exit01;
+
+          clear yQFile;
+          yFile = ##file;
+          yLibrary = ##library;
+
+          callp EXIT01(yQFile: ##member: accessMode
+                       : auth.isChgLibAlw: auth.isChgFileAlw: auth.isChgMbrAlw
+                       : auth.isUpdAlw: auth.isUpdKeyAlw
+                       : auth.isChgSQLWhereAlw: auth.isChgSQLOrderByAlw
+                       : auth.isAccessAlw
+                       : yMsgID: yMsgDta);
+
+          if (yMsgID <> '');
+             p_rmvpgmmg(§§pgmname);
+             p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+             yMsgID = '';
+             yMsgDta = '';
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    clrPinTabR    Löschen PinTabR                           *
+       //============================================================*
+
+       begsr clrpintabr;
+
+          clear pintabrcde;
+          for pinrcd_x = 1 to max_pin_rcd;
+             pintabrcd(pinrcd_x) = pintabrcde;
+             ypintabr(pinrcd_x) = pintabrcd(pinrcd_x);
+          endfor;
+
+       endsr;
+
+       //============================================================*
+       //    First         Initialisierung                           *
+       //============================================================*
+
+       begsr first;
+
+          // - Programm initialisieren
+          p_rmvpgmmg(§§pgmname);
+
+          // - Einlesen der Benutzervoreinstellungen
+          exsr getusrsetg;
+
+          // - Prüfen auf generischen Dateinamen
+          if %len(%trimr(io_qfile.name)) > 0 and
+             %subst(io_qfile.name
+                 : %len(%trimr(io_qfile.lib)): 1) = '*';
+             if *in75 = *off;
+                ##file = io_qfile.name;
+                ##library = io_qfile.lib;
+                exsr pmt_file;
+                if (*in93 = btrue);
+                   io_qfile.name = ##file;
+                   io_qfile.lib = ##library;
+                endif;
+                ##file = *blanks;
+                ##library = *blanks;
+             endif;
+          endif;
+
+          // - Öffnen Bildschirmdatei
+          open peek05fm;
+
+          // - Initialisieren Bildschirm
+          ##file = io_qfile.name;
+          ##library = io_qfile.lib;
+          ##member = i_member;
+          exsr getobjattr;
+
+          exsr chkprvfile;
+          ##rcdnbr = §zeros;
+          ##key = *blanks;
+          ##wndnbr = §zeros;
+          ##strpage = §zeros;
+          ##field = *blanks;
+
+          exsr clrfldarray;
+
+          $$system = *blanks;
+          $$text40 = *blanks;
+          $$text50 = *blanks;
+          ##format = *blanks;
+          $$length = §zeros;
+          $$records = §zeros;
+          $$size = §zeros;
+          $$rcdfmtid = *blanks;
+          $$unit = *blanks;
+
+          $$head132 = *blanks;
+          $$head080 = *blanks;
+
+          //  Last opened file
+          l#file = *blanks;
+          l#library = *blanks;
+          l#member = *blanks;
+          l#format = *blanks;
+          l#maxseq = §zeros;
+          l#minseq = §zeros;
+          l#wndnbr = §zeros;
+
+          //  SQL-Selektion
+          sqlwhere  = ' ';
+          sqlorder  = ' ';
+
+          // - Einstellen der Bildschirmauflösung 80/132-Zeichen
+          exsr setscreen;
+
+          // - SPLASH-Screen
+          exsr showsplash;
+
+          // -  Darstellung der Auswahlen/Funktionstasten
+          sftop = 1;
+          sfbot = 1;
+
+          // -  Netzwerkattribute
+          peek07('SYSNAME': bfalse
+                : yattrlen: yattrtyp: yvalue);
+          if yattrlen > §zeros;
+             $$system = %subst(yvalue: 1: yattrlen);
+          else;
+             $$system = *blanks;
+          endif;
+
+          // - Öffnen der Datei
+          if isopen = bfalse;
+             accessMode = i_access;
+             if accessMode = sql_seq;
+                sqlwhere  = i_sqlwhere;
+                sqlorder  = i_sqlorder;
+             endif;
+             exsr openfile;
+          endif;
+
+          // - laden Arbeitsumgebung / öffnen Datei
+          if i_qenvfile.name = '*NONE';
+             yenvfile = set_envfil;
+             yenvlib  = set_envlib;
+             yenvmbr  = '*FILE';
+          else;
+             if i_qenvfile.name = '*ENVFILE';
+                yenvfile = set_envfil;
+                yenvlib  = set_envlib;
+                yenvmbr  = '*FILE';
+             else;
+                yenvfile = i_qenvfile.name;
+                yenvlib  = i_qenvfile.lib;
+                yenvmbr  = i_envmbr;
+             endif;
+             if i_envlayout = btrue;
+                yoption = '*SLCLAYOUT';
+             else;
+                yoption = '*SLCENV';
+             endif;
+             exsr loadenv;
+          endif;
+
+          // - Ermitteln der Attribute der geöffneten Datei
+          exsr getopnfile;
+          exsr getmaxseq;
+
+          //  Wenn eine Datei geöffnet werden konnte, ...
+          if isopen = btrue;
+             //  ... dann
+             //      abspeichern *PRVFILE
+             set_prvfil  = ##file;
+             set_prvlib  = ##library;
+             set_prvmbr  = ##member;
+             p_updusrsg('*PRVFILE' : set0014);
+          endif;
+
+          // - Subfile füllen
+          exsr pbinit;
+          exsr c_top;
+
+          // - Copyright
+          clear usr9999;
+          usr99991 = §copyright;
+          usr99992 = §release;
+          p_sndpgmmg('USR9999': usr9999: §§pgmname);
+
+       endsr;
+
+       //============================================================*
+       //    InzSr        Programminitialisierung                    *
+       //============================================================*
+
+       begsr inzsr;
+
+          if (isinzsr = btrue);
+             leavesr;
+          endif;
+
+          isinzsr = btrue;
+
+          §pgmq = '*';
+
+          peek01_name = f_pgmcalln('PEEK01');
+          peek03_name = f_pgmcalln('PEEK03');
+          peek04_name = f_pgmcalln('PEEK04');
+          peek06_name = f_pgmcalln('PEEK06');
+          peek07_name = f_pgmcalln('PEEK07');
+          peek08_name = f_pgmcalln('PEEK08');
+          peek09_name = f_pgmcalln('PEEK09');
+          peek10_name = f_pgmcalln('PEEK10');
+          peek12_name = f_pgmcalln('PEEK12');
+          peek13_name = f_pgmcalln('PEEK13');
+          peek14_name = f_pgmcalln('PEEK14');
+          peek17_name = f_pgmcalln('PEEK17');
+          peek18_name = f_pgmcalln('PEEK18');
+          peek19_name = f_pgmcalln('PEEK19');
+          peek20_name = f_pgmcalln('PEEK20');
+          peek21_name = f_pgmcalln('PEEK21');
+          peek23_name = f_pgmcalln('PEEK23');
+          peek24_name = f_pgmcalln('PEEK24');
+          peek26_name = f_pgmcalln('PEEK26');
+          peek27_name = f_pgmcalln('PEEK27');
+          peek30_name = f_pgmcalln('PEEK30');
+          peek32_name = f_pgmcalln('PEEK32');
+          peek33_name = f_pgmcalln('PEEK33');
+          peek34_name = f_pgmcalln('PEEK34');
+          peek37_name = f_pgmcalln('PEEK37');
+          peek38_name = f_pgmcalln('PEEK38');
+          peek40_name = f_pgmcalln('PEEK40');
+          peek41_name = f_pgmcalln('PEEK41');
+          peek42_name = f_pgmcalln('PEEK42');
+          peek47_name = f_pgmcalln('PEEK47');
+          peek48_name = f_pgmcalln('PEEK48');
+          peek49_name = f_pgmcalln('PEEK49');
+          peek50_name = f_pgmcalln('PEEK50');
+          peek52_name = f_pgmcalln('PEEK52');
+          peek54_name = f_pgmcalln('PEEK54');
+          peek55_name = f_pgmcalln('PEEK55');
+          peek56_name = f_pgmcalln('PEEK56');
+          peek57_name = f_pgmcalln('PEEK57');
+          peek59_name = f_pgmcalln('PEEK59');
+          peek65_name = f_pgmcalln('PEEK65');
+          peek68_name = f_pgmcalln('PEEK68');
+          peek69_name = f_pgmcalln('PEEK69');
+          exit01_name = f_pgmcalln('EXIT01');
+          exit04_name = f_pgmcalln('EXIT04': '*LIBL');
+
+          // - PinTabR clearen
+          exsr clrpintabr;
+
+          // - Versionsabgleich durchführen
+          exsr chkversion;
+
+          peek23(§§pgmname: '*ALL': 8
+                : yfkeys: ynbrofkeys);
+          scrnfkeys = %subarr(yfkeys: 1);
+
+          peek27(§§pgmname: ychoice: ynbrofch);
+
+       endsr;
+
+       //============================================================*
+       //    f_int         Integer Wert                              *
+       //============================================================*
+
+       dcl-proc f_int;
+       dcl-pi *N              zoned(20);
+         inpvalue        zoned(25:5) value;
+       end-pi;
+
+       dcl-s integerval      zoned(20);
+
+       integerval = inpvalue;
+
+       return integerval;
+
+       end-proc;
+
+       //============================================================*
+       //    f_chain00                                               *
+       //============================================================*
+
+       dcl-proc f_chain00;
+       dcl-pi *N              char(1);
+         i_rrn           value  like(rcdnbr_t);
+         i_file          value  like(file_t);
+         i_lib           value  like(lib_t);
+         i_mbr           value  like(mbr_t);
+         i_rcdfmt        char(10) value;
+       end-pi;
+       // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+       if (cio_getfile(hfile00)    <> i_file ) or
+          (cio_getlibrary(hfile00) <> i_lib  ) or
+          (cio_getmember(hfile00)  <> i_mbr  );
+          if cio_isopen(hfile00) = btrue;
+             cio_close(hfile00);
+          endif;
+       endif;
+
+       f_execute('OVRDBF ' +
+                  'FILE(' + %trim(##file) + ') ' +
+                  'TOFILE(' +
+                    %trim(##library) + '/' +
+                    %trim(##file) + ') ' +
+                  'MBR(' + %trim(##member) + ') ' +
+                  'OVRSCOPE(*ACTGRPDFN) ' +
+                  'SHARE(*NO) ' +
+                  'SEQONLY(*NO) SECURE(*YES)'
+                : yMsgID: yMsgDta);
+       yMsgID = '';
+       yMsgDta = '';
+
+       if cio_isopen(hfile00) = bfalse;
+          if commitLvl = '1';
+             cio_open(hfile00
+                     : i_file
+                     : i_lib
+                     : i_mbr
+                     : i_rcdfmt
+                     : 'rr+ , arrseq=Y, commit=Y +
+                        nullcap=Y, riofb=Y, +
+                        secure=N, ccsid=65535');
+          else;
+             cio_open(hfile00
+                     : i_file
+                     : i_lib
+                     : i_mbr
+                     : i_rcdfmt
+                     : 'rr+ , arrseq=Y, commit=N +
+                        nullcap=Y, riofb=Y, +
+                        secure=N, ccsid=65535');
+          endif;
+       endif;
+
+       f_execute('DLTOVR ' +
+                  'FILE(' + %trim(##file) + ') ' +
+                  'LVL(*ACTGRPDFN) '
+                : yMsgID: yMsgDta);
+       yMsgID = '';
+       yMsgDta = '';
+
+       if cio_chainwithrrn(hfile00
+                        : i_rrn
+                        : btrue
+                        : io_buff
+                        : io_nullmap) = bfalse;
+          *in11 = '1';
+       else;
+          *in11 = '0';
+       endif;
+
+       file#x = cio_getinfds(hfile00);
+
+       return *in11;
+
+       end-proc;
+
+       //============================================================*
+       //    f_chain04                                               *
+       //============================================================*
+
+       dcl-proc f_chain04;
+       dcl-pi *N              char(1);
+         i_rrn           value  like(rcdnbr_t);
+         i_file          value  like(file_t);
+         i_lib           value  like(lib_t);
+         i_mbr           value  like(mbr_t);
+         i_rcdfmt        char(10) value;
+       end-pi;
+       // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+       if (cio_getfile(hfile04)    <> i_file ) or
+          (cio_getlibrary(hfile04) <> i_lib  ) or
+          (cio_getmember(hfile04)  <> i_mbr  );
+          if cio_isopen(hfile04) = btrue;
+             cio_close(hfile04);
+          endif;
+       endif;
+
+       if cio_isopen(hfile04) = bfalse;
+          cio_open(hfile04
+                  : i_file
+                  : i_lib
+                  : i_mbr
+                  : i_rcdfmt
+                  : 'rr , arrseq=Y, +
+                     nullcap=Y, riofb=Y, ccsid=65535');
+       endif;
+
+       if cio_chainwithrrn(hfile04
+                        : i_rrn
+                        : bfalse
+                        : io_buff
+                        : io_nullmap) = bfalse;
+          *in11 = '1';
+       else;
+          *in11 = '0';
+       endif;
+
+       file#x = cio_getinfds(hfile04);
+
+       return *in11;
+
+       end-proc;
+
+       //============================================================*
+       //  Program error handler                                     *
+       //============================================================*
+
+       dcl-proc errorhandler;
+       dcl-pi *N;
+         i_condtoken     value likeds(cee_fc_t);
+       i_pcommarea     int(10) value;
+       o_action        int(10);
+       o_newcondtoken  likeds(cee_fc_t);
+       end-pi;
+
+       dump;
+       o_action = cee_percolate;
+
+       end-proc;
+

@@ -222,6 +222,7 @@
       *-------------------------------------------------------------------*
      D f_pgmCallN      PR                         like(pgmCallN_t)
      D  i_pgmNme                           const  like(pgm_t)
+     D  i_lib                              const  like(lib_t) options(*nopass)
       *
       *-------------------------------------------------------------------*
      D f_rtvMsgD       PR          2048A

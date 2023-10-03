@@ -612,17 +612,17 @@
       *  füllen Parameter für PEEK45
       *  Eval      yDsp80     = xDsp80
      C                   Reset                   ds_eval
-     C                   Eval      $eval_fct2 = 'yDsp80     = xDsp80'
+     C                   Eval      $eval_fct2 = 'yDsp80     = i_dsp80'
      C                   Callp     p_wrtCopy2(ds_eval)
       *
       *  Eval      yHeaderTyp = xHeaderTyp
      C                   Reset                   ds_eval
-     C                   Eval      $eval_fct2 = 'yHeaderTyp = xHeaderTyp'
+     C                   Eval      $eval_fct2 = 'yHeaderTyp = io_headerType'
      C                   Callp     p_wrtCopy2(ds_eval)
       *
       *  Eval      yCopyRight = xCopyRight
      C                   Reset                   ds_eval
-     C                   Eval      $eval_fct2 = 'yCopyRight = xCopyRight'
+     C                   Eval      $eval_fct2 = 'yCopyRight = i_copyright'
      C                   Callp     p_wrtCopy2(ds_eval)
       *
       *  Eval      yProtect   = '0'
@@ -675,17 +675,17 @@
       *  füllen Parameter für PEEK45
       *  Eval      yDsp80     = xDsp80
      C                   Reset                   ds_eval
-     C                   Eval      $eval_fct2 = 'yDsp80     = xDsp80'
+     C                   Eval      $eval_fct2 = 'yDsp80     = i_dsp80'
      C                   Callp     p_wrtCopy6(ds_eval)
       *
       *  Eval      yHeaderTyp = xHeaderTyp
      C                   Reset                   ds_eval
-     C                   Eval      $eval_fct2 = 'yHeaderTyp = xHeaderTyp'
+     C                   Eval      $eval_fct2 = 'yHeaderTyp = io_headerType'
      C                   Callp     p_wrtCopy6(ds_eval)
       *
       *  Eval      yCopyRight = xCopyRight
      C                   Reset                   ds_eval
-     C                   Eval      $eval_fct2 = 'yCopyRight = xCopyRight'
+     C                   Eval      $eval_fct2 = 'yCopyRight = i_copyright'
      C                   Callp     p_wrtCopy6(ds_eval)
       *
       *  Eval      yProtect   = '0'

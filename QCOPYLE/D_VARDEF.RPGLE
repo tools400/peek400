@@ -5,6 +5,7 @@
       *===============================================================*
       *
       *  Referenzfelder:
+     D commitLvl_t     S              1A   template
      D choice_t        S             75A   template
      D headerType_t    S             10A   template
      D attr_t          S             10A   template

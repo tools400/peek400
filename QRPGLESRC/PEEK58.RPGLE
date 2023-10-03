@@ -1932,9 +1932,14 @@
      P f_pgmCallN      B                   Export
      D                 PI                         like(pgmCallN_t)
      D  i_pgmNme                           const  like(pgm_t)
+     D  i_lib                              const  like(lib_t) options(*nopass)
       *------------------------------------------------------------*
       *
-     C                   Return    %trimr(f_getPrdLb) + '/' + i_pgmNme
+     C                   if        (%parms() >= %parmnum(i_lib))
+     C                   return    %trimr(i_lib) + '/' + i_pgmNme
+     C                   else
+     C                   return    %trimr(f_getPrdLb()) + '/' + i_pgmNme
+     C                   endif
       *
      P                 E
       *
