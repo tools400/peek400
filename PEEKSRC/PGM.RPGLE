@@ -20,7 +20,7 @@
       *  Eintragen Satzformatname
 FMT1-F                                     rename(X________X:FFILE00)
      F                                     infds(rcdFile00)
-     F                                     commit(xCommitLVL)
+     F                                     commit(commitLVL)
       *
      FPEEKFLD   IF   E           K DISK    usropn
      F                                     prefix(F_)
@@ -109,8 +109,16 @@ FMT1-F                                     rename(X________X:FFILE00)
       *====================================================*
 COPY- /include LIBRARY_NAME/QCOPYLE,D_VARDEF
 COPY- /include LIBRARY_NAME/QCOPYLE,FLDL0100
+      *
+COPY- /include LIBRARY_NAME/QCOPYLE,PPEEK21
+COPY- /include LIBRARY_NAME/QCOPYLE,PPEEK23
+COPY- /include LIBRARY_NAME/QCOPYLE,PPEEK32
+COPY- /include LIBRARY_NAME/QCOPYLE,PPEEK45
+COPY- /include LIBRARY_NAME/QCOPYLE,PPEEK59
+COPY- /include LIBRARY_NAME/QCOPYLE,PPEEK64
 COPY- /include LIBRARY_NAME/QCOPYLE,F_PEEK53
 COPY- /include LIBRARY_NAME/QCOPYLE,F_PEEK58
+COPY- /include LIBRARY_NAME/QCOPYLE,PEXIT04
 COPY- /include LIBRARY_NAME/QCOPYLE,QCMDEXC
 COPY- /include LIBRARY_NAME/QCOPYLE,CEECNDHDLR
 COPY- /include LIBRARY_NAME/QCOPYLE,QTNRCMTI
@@ -253,12 +261,13 @@ KEEP-D  keepCrsPos     C                   X__X
       *
       *============================================================*
       *
-     D PEEK21          S                   like(r_pgmCallN) inz
-     D PEEK23          S                   like(r_pgmCallN) inz
-     D PEEK32          S                   like(r_pgmCallN) inz
-     D PEEK45          S                   like(r_pgmCallN) inz
-     D PEEK59          S                   like(r_pgmCallN) inz
-     D PEEK64          S                   like(r_pgmCallN) inz
+     D PEEK21_NAME     S                   like(r_pgmCallN) inz
+     D PEEK23_NAME     S                   like(r_pgmCallN) inz
+     D PEEK32_NAME     S                   like(r_pgmCallN) inz
+     D PEEK45_NAME     S                   like(r_pgmCallN) inz
+     D PEEK59_NAME     S                   like(r_pgmCallN) inz
+     D PEEK64_NAME     S                   like(r_pgmCallN) inz
+     D EXIT04_NAME     S                   like(r_pgmCallN) inz
       *
      D ISOT            C                   CONST('00.00.00')
      D HMST            C                   CONST('00:00:00')
@@ -270,23 +279,6 @@ KEEP-D  keepCrsPos     C                   X__X
      D JISL            C                   CONST('0001-01-01')
       *
      D ISOZ            C                   CONST('0001-01-01-00.00.00.000000')
-      *
-     D xDsp80          S                   like(r_dsp80   )
-     D xHeaderTyp      S                   like(r_headTyp )
-     D xCopyRight      S                   like(r_copyRght)
-     D xRcdNbr         S                   like(r_rcdNbr  )
-     D XFile           S                   like(r_file    )
-     D XLibrary        S                   like(r_lib     )
-     D XMember         S                   like(r_mbr     )
-     D xFunction       S             10A
-     D xCommitLVL      S              1A
-     D xIsUpdKey       S                   like(r_bool    )
-     D xScreenNbr      S                   like(r_int4    )
-     D xIsLower        S                   like(r_bool    )
-     D xCsrRow         S                   like(r_int4    )
-     D xCsrCol         S                   like(r_int4    )
-     D xMsgID          S                   like(r_msgID   )
-     D xMsgDta         S                   like(r_msgDta  )
       *
      D yFile           S             10A   inz
      D yLib            S             10A   inz
@@ -387,97 +379,30 @@ RNM1-D RCD_DS        E DS                  extname(FILE00)
      D RCD_BUFFER      S                   like(RCD_DS   )
      D                                     based(pRCD_BUFFER)
       *
+      /define internal_prototype
+      /include QCOPYLE,PUPDPGM
+      /undefine internal_prototype
+      *
+     D UPDPGM          PI
+     D  i_dsp80                            const like(dsp80_t)
+     D  io_headerType                            like(headerType_t)
+     D  i_copyright                        const like(copyRght_t)
+     D  i_rcdNbr                           const like(rcdNbr_t)
+     D  i_file                             const like(file_t)
+     D  i_library                          const like(lib_t)
+     D  i_member                           const like(mbr_t)
+     D  i_function                         const like(function_t)
+     D  i_commitLVL                        const like(commitLvl_t)
+     D  i_isUpdKey                         const like(bool_t)
+     D  io_screenNbr                             like(int4_t)
+     D  io_isLower                               like(bool_t)
+     D  io_csrRow                                like(int4_t)
+     D  io_csrCol                                like(int4_t)
+     D  o_msgID                                  like(msgID_t)
+     D  o_msgDta                                 like(msgDta_t)
+      *
       *  ... umbenennen der externen Feldnamen
 RNM2-IFFILE00
-      *
-      *============================================================*
-      * Program Entry
-      *============================================================*
-      *
-     C     *entry        Plist
-     C                   Parm                    xDsp80
-     C                   Parm                    xHeaderTyp
-     C                   Parm                    xCopyRight
-     C                   Parm                    xRcdNbr
-     C                   PARM                    XFile
-     C                   PARM                    XLibrary
-     C                   PARM                    XMember
-     C                   Parm                    xFunction
-     C                   Parm                    xCommitLVL
-     C                   Parm                    xIsUpdKey
-     C                   Parm                    xScreenNbr
-     C                   Parm                    xIsLower
-     C                   Parm                    xCsrRow
-     C                   Parm                    xCsrCol
-     C                   Parm                    xMsgID
-     C                   Parm                    xMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK21
-     C     P_PEEK21      Plist
-     C                   Parm                    yScnAID
-     C                   Parm                    yPgm
-     C                   Parm                    yPgmCmd
-     C                   Parm                    yPgmCmdDt
-     C                   Parm                    yMsgID
-     C                   Parm                    yMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK23
-     C     P_PEEK23      Plist
-     C                   Parm                    yPgm
-     C                   Parm                    yKey
-     C                   Parm                    yPosF24
-     C                   Parm                    yFKeys
-     C                   Parm                    yNbrOfKeys
-     C                   Parm                    yMsgID
-     C                   Parm                    yMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK32
-     C     P_PEEK32      Plist
-     C                   Parm                    yOutBuffer
-     C                   Parm                    yOutBuffLn
-     C                   Parm                    yCcsid
-     C                   Parm                    yMsgID
-     C                   Parm                    yMsgDta
-      *
-      *----------------------------------------------------*
-      *  Parameterliste für PEEK59
-     C     P_PEEK59      Plist
-     C                   Parm                    yDsp80
-     C                   Parm                    yType
-     C                   Parm                    yInpMsgID
-     C                   Parm                    yInpMsgDta
-     C                   Parm                    yKeys
-     C                   Parm                    yMsgID
-     C                   Parm                    yMsgDta
-      *
-      *  Parameterliste für PEEK45/PEEK64
-     C     P_PEEK_EDIT   Plist
-     C                   Parm                    yDsp80
-     C                   Parm                    yHeaderTyp
-     C                   Parm                    yCopyRight
-     C                   Parm                    yFldName
-     C                   Parm                    yFldInhalt
-     C                   Parm                    yLength
-     C                   Parm                    yProtect
-     C                   Parm                    yIsUcs2
-     C                   Parm                    yMsgID
-     C                   Parm                    yMsgDta
-      *
-      *  Parameterliste für EXIT04
-     C     P_EXIT04      Plist
-     C                   Parm                    yFile
-     C                   Parm                    yLib
-     C                   Parm                    yMbr
-     C                   Parm                    yEvent
-     C                   Parm                    yUser
-     C                   Parm                    yTimestamp
-     C                   Parm                    yRcdNbr
-     C                   Parm                    ySize
-     C                   Parm                    yBImage
-     C                   Parm                    yAImage
       *
       *----------------------------------------------------*
       *  Schlüsselliste für PEEKFLD
@@ -491,12 +416,12 @@ RNM2-IFFILE00
       *
      C                   Exsr      InzSr
       *
-     C                   Eval      xMsgID  = ' '
-     C                   Eval      xMsgDta = ' '
+     C                   Eval      o_msgID  = ' '
+     C                   Eval      o_msgDta = ' '
       *
       * - Setzen Eingabe in Kleinbuchstaben
-     C                   If        xIsLower = bTrue or xIsLower = bFalse
-     C                   Eval      isLower = xIsLower
+     C                   If        io_isLower = bTrue or io_isLower = bFalse
+     C                   Eval      isLower = io_isLower
      C                   Endif
       *
       * - Darstellen der Befehlstasten
@@ -516,13 +441,13 @@ RNM2-IFFILE00
       *
       * - Anzeigen Copyright
      C                   Eval      pgmMsgID  = 'USR9999'
-     C                   Eval      pgmMsgDta = xCopyRight
+     C                   Eval      pgmMsgDta = i_copyright
      C                   Callp     p_sndPgmMg(pgmMsgID : pgmMsgDta : psPgmName)
       *
       * - Setzen der Cursorposition
      C                   If        (keepCrsPos)
-     C                   Eval      csrRow = xCsrRow
-     C                   Eval      csrCol = xCsrCol
+     C                   Eval      csrRow = io_csrRow
+     C                   Eval      csrCol = io_csrCol
      C                   Else
      C                   Eval      csrRow = 0
      C                   Eval      csrCol = 0
@@ -538,10 +463,10 @@ RNM2-IFFILE00
       *
       * - Feldbezeichnung
      C                   Select
-     C                   When      xHeaderTyp = '*FIELDNAME'
+     C                   When      io_headerType = '*FIELDNAME'
      C                   Eval      *in70 = *off
      C                   Eval      *in75 = *off
-     C                   When      xHeaderTyp = '*FIELDTYPE'
+     C                   When      io_headerType = '*FIELDTYPE'
      C                   Eval      *in70 = *off
      C                   Eval      *in75 = *on
      C                   Other
@@ -560,16 +485,16 @@ RNM2-IFFILE00
      C                   Eval      *in72 = *off
       *
       * - Freigeben Schlüsselfelder
-     C                   If        (xIsUpdKey = bTrue  )  or
-     C                             (xFunction = '*ADD' )  or
-     C                             (xFunction = '*COPY')
+     C                   If        (i_isUpdKey = bTrue  )  or
+     C                             (i_function = '*ADD' )  or
+     C                             (i_function = '*COPY')
      C                   Eval      *in73 = *on
      C                   Else
      C                   Eval      *in73 = *off
      C                   Endif
       *
       * - Anzeigen Sperrstatus des Datensatz
-     C                   If        xFunction = '*CHANGE'
+     C                   If        i_function = '*CHANGE'
      C                   Eval      *in74 = *on
      C                   If        isRcdLocked = bTrue
      C                   Eval      RLKMSGNBR = '0129'
@@ -661,7 +586,7 @@ SCN1- * - Blättern
      C                   Endsl
       *
       * - Zurückgeben aktuelle Bildschirmnummer
-     C                   Eval      xScreenNbr = scnNbr
+     C                   Eval      io_screenNbr = scnNbr
       *
       * - Löschen Programmnachrichten
      C                   Callp     p_rmvPgmMg(psPgmName)
@@ -675,14 +600,13 @@ SCN1- * - Blättern
      C                   Eval      csrCol = 0
       *
       * - Merken der Cursorposition beim Verlassen des Programs
-     C                   Eval      xCsrRow = wScnCsrRow - wndTopRow
-     C                   Eval      xCsrCol = wScnCsrCol - wndLeftCol - 1
+     C                   Eval      io_csrRow = wScnCsrRow - wndTopRow
+     C                   Eval      io_csrCol = wScnCsrCol - wndLeftCol - 1
       *
       * - Mappen der gedrückten Taste
       *   in Programmbefehl
-     C                   Eval      yScnAID = wScnAID
-     C                   Eval      yPgm    = 'PXXXXXXXX'
-     C                   Call      PEEK21        P_Peek21
+     C                   Callp     PEEK21(wScnAID: 'PXXXXXXXX'
+     C                                    : yPgmCmd: yPgmCmdDt: yMsgID: yMsgDta);
      C                   If        yMsgID <> ' '
      C                   Callp     p_sndPgmMg(yMsgID: yMsgDta: psPgmName)
      C                   Iter
@@ -776,7 +700,7 @@ LSCN-C                             (scnNbr < X_X)
      C                   Exsr      closeFiles
       *
       *   Merken Eingabe in Kleinbuchstaben
-     C                   Eval      xIsLower = isLower
+     C                   Eval      io_isLower = isLower
       *
      C                   Eval      *inlr = *on
       *
@@ -789,26 +713,26 @@ LSCN-C                             (scnNbr < X_X)
       *  Einlesen Datensatz für ...
      C                   Select
       *  ... update
-     C                   When      xFunction = '*CHANGE'
+     C                   When      i_function = '*CHANGE'
      C                   Eval      HDGMSGNBR = '0063'
      C                   If        isRcdLockDft = bTrue
-     C     xRcdNbr       Chain(E)  FFILE00
+     C     i_rcdNbr      Chain(E)  FFILE00
      C                   Eval      isRcdLocked = bTrue
      C                   Else
-     C     xRcdNbr       Chain(NE) FFILE00
+     C     i_rcdNbr      Chain(NE) FFILE00
      C                   Eval      isRcdLocked = bFalse
      C                   Endif
      C                   Eval      isFound = %found(FILE00)
      C                   Eval      isError = %error()
       *  ... copy
-     C                   When      xFunction = '*COPY'
+     C                   When      i_function = '*COPY'
      C                   Eval      HDGMSGNBR = '0064'
-     C     xRcdNbr       Chain(NE) FFILE00
+     C     i_rcdNbr      Chain(NE) FFILE00
      C                   Eval      isRcdLocked = bFalse
      C                   Eval      isFound = %found(FILE00)
      C                   Eval      isError = %error()
       *  ... add
-     C                   When      xFunction = '*ADD'
+     C                   When      i_function = '*ADD'
      C                   Eval      HDGMSGNBR = '0065'
      C                   Exsr      clearRecord
      C                   Eval      isRcdLocked = bTrue
@@ -818,7 +742,7 @@ LSCN-C                             (scnNbr < X_X)
      C                   Other
      C                   Eval      isRcdLocked = bFalse
      C                   Eval      pgmMsgID  = 'USR8113'
-     C                   Eval      pgmMsgDta = xFunction
+     C                   Eval      pgmMsgDta = i_function
      C                   Callp     p_sndPgmMg(pgmMsgID : pgmMsgDta : psPgmName)
      C                   Callp     p_movPgmMg(psPgmName)
      C                   Goto      Ende
@@ -864,10 +788,10 @@ CLR - *
      C     dataToScn     BEGSR
       *
       *  Anzeigen relative Satznummer
-     C                   Eval      xxRcdN = xRcdNbr
+     C                   Eval      xxRcdN = i_rcdNbr
       *
       *  Anzuzeigender Bildschirm
-     C                   Eval      scnNbr = xScreenNbr
+     C                   Eval      scnNbr = io_screenNbr
       *
       *  Übertragen Dateifelder
       *  in die Bildschirmfelder ...
@@ -889,8 +813,8 @@ ISO - *
      C                   Callp     p_rmvPgmMg(psPgmName)
       *
       * - Zurückgeben Abbruchmeldung
-     C                   Eval      xMsgID  = 'USR8100'
-     C                   Eval      xMsgDta = yPgmCmd
+     C                   Eval      o_msgID  = 'USR8100'
+     C                   Eval      o_msgDta = yPgmCmd
       *
      C                   Endsr
       *
@@ -965,7 +889,8 @@ ISO - *
       *
      C     c_chgHead     Begsr
       *
-     C                   Eval      xHeaderTyp = f_nextHeaderType(xHeaderTyp)
+     C                   Eval      io_headerType =
+     C                               f_nextHeaderType(io_headerType)
       *
       *  Beibehalten der Cursorposition ...
      C                   Exsr      keepCsrPos
@@ -978,7 +903,7 @@ ISO - *
       *
      C     c_tgRcdLock   Begsr
       *
-     C                   If        xFunction <> '*CHANGE'
+     C                   If        i_function <> '*CHANGE'
      C                   Eval      pgmMsgID  = 'USR8231'
      C                   Eval      pgmMsgDta = ''
      C                   Callp     p_sndPgmMg(pgmMsgID: pgmMsgDta: psPgmName)
@@ -994,14 +919,10 @@ ISO - *
      C                   If        b4Image <> RCD_DS
       *      ... freigeben Datensatz, bei unterschiedlichen Images
       *          und fragen Benutzer, wie es weiter gehen soll (dennoch aktualisieren?)
-     C                   Eval      yDsp80     = xDsp80
-     C                   Eval      yType      = '*QUESTION'
-     C                   Eval      yInpMsgID  = 'USR8232'
-     C                   Eval      yInpMsgDta = ''
-     C                   Eval      yKeys      = 'YC'
      C                   Eval      yMsgID     = ''
      C                   Eval      yMsgDta    = ''
-     C                   Call(E)   PEEK59        P_Peek59
+     C                   Callp(E)  PEEK59(i_dsp80: '*QUESTION': 'USR8232': ''
+     C                                    : 'YC': yMsgID: yMsgDta)
      C                   If        %error()
      C                   Eval      isError = bTrue
      C                   Leavesr
@@ -1037,7 +958,7 @@ ISO - *
      C     updateFile    Begsr
       *
       *  Sperren Datensatz, wenn nicht bereits geschehen ...
-     C                   If        (xFunction = '*CHANGE') and
+     C                   If        (i_function = '*CHANGE') and
      C                             (isRcdLocked = bFalse)
      C                   Exsr      lockRecord
      C                   If        (isFound = bFalse) or (isError = bTrue)
@@ -1048,14 +969,10 @@ ISO - *
       *      ... freigeben Datensatz, bei unterschiedlichen Images
       *          und fragen Benutzer, wie es weiter gehen soll (dennoch aktualisieren?)
      C                   Exsr      unlockRecord
-     C                   Eval      yDsp80     = xDsp80
-     C                   Eval      yType      = '*QUESTION'
-     C                   Eval      yInpMsgID  = 'USR8225'
-     C                   Eval      yInpMsgDta = ''
-     C                   Eval      yKeys      = 'YC'
      C                   Eval      yMsgID     = ''
      C                   Eval      yMsgDta    = ''
-     C                   Call(E)   PEEK59        P_Peek59
+     C                   Callp(E)  PEEK59(i_dsp80: '*QUESTION': 'USR8225': ''
+     C                                    : 'YC': yMsgID: yMsgDta)
      C                   If        %error()
      C                   Eval      isError = bTrue
      C                   Leavesr
@@ -1089,15 +1006,15 @@ FSCN- *
       *  Abschließen der Verarbeitung ...
      C                   Select
       *  ... für update
-     C                   When      xFunction = '*CHANGE'
+     C                   When      i_function = '*CHANGE'
      C                   Update(E) FFILE00
      C                   Eval      isError = %error()
       *  ... für copy
-     C                   When      xFunction = '*COPY'
+     C                   When      i_function = '*COPY'
      C                   Write(E)  FFILE00
      C                   Eval      isError = %error()
       *  ... für add
-     C                   When      xFunction = '*ADD '
+     C                   When      i_function = '*ADD '
      C                   Write(E)  FFILE00
      C                   Eval      isError = %error()
       *  ... FEHLER!!!
@@ -1128,23 +1045,19 @@ FSCN- *
      C                   Eval      isError = bFalse
      C                   Endif
       *
-     C                   If        isError = bFalse and
-     C                             f_exist('EXIT04': '*LIBL': '*PGM') = bTrue
-     C                   Eval      yFile      = xFile
-     C                   Eval      yLib       = xLibrary
-     C                   Eval      yMbr       = xMember
-     C                   Eval      yEvent     = xFunction
-     C                   Eval      yUser      = PsUser
-     C                   Eval      yTimestamp = %timestamp()
-     C                   Eval      yRcdNbr    = rcdFile00.number
-     C                   Eval      ySize      = rcdFile00.rcdLength
-     C                   If        xFunction = '*ADD '
-     C                   Eval      yBImage    = *NULL
+     C                   If        (isError = bFalse and
+     C                              f_exist('EXIT04': '*LIBL': '*PGM') = bTrue)
+     C                   If        (i_function = '*ADD')
+     C                   Eval      yBImage = *NULL
      C                   Else
-     C                   Eval      yBImage    = %addr(b4Image)
+     C                   Eval      yBImage = %addr(b4Image)
      C                   Endif
-     C                   Eval      yAImage    = %addr(RCD_DS)
-     C                   Call      'EXIT04'      P_EXIT04
+     C                   Eval      yAImage = %addr(RCD_DS)
+     C                   Callp     EXIT04(i_file: i_library: i_member
+     C                                    : i_function: PsUser: %timestamp()
+     C                                    : rcdFile00.number
+     C                                    : rcdFile00.rcdLength
+     C                                    : yBImage: yAImage)
      C                   Endif
       *
      C                   Endsr
@@ -1156,7 +1069,7 @@ FSCN- *
      C     lockRecord    Begsr
       *
       *  Lesen Datensatz mit Satzsperre für nachfolgenden UPDATE ...
-     C     xRcdNbr       Chain(E)  FFILE00
+     C     i_rcdNbr      Chain(E)  FFILE00
      C                   Eval      isFound = %found(FILE00)
      C                   Eval      isError = %error()
       *  ... Fehler aufgetreten
@@ -1221,7 +1134,8 @@ FSCN- *
      C                   Eval      yCcsid = 0
      C                   Endif
       *
-     C                   Call(E)   PEEK32        P_Peek32
+     C                   Callp(E)  PEEK32(yOutBuffer: yOutBuffLn: yCcsid
+     C                                    : yMsgID: yMsgDta)
      C                   If        %error()
      C                   Eval      yMsgID  = 'USR8163'
      C                   Eval      yMsgDta = ' '
@@ -1259,11 +1173,11 @@ FSCN- *
      C                   Eval      clCmd = 'OVRDBF ' +
      C                                       'FILE(FILE00) ' +
      C                                       'TOFILE(' +
-     C                                         %trim(xLibrary) + '/' +
-     C                                         %trim(xFile) +
+     C                                         %trim(i_library) + '/' +
+     C                                         %trim(i_file) +
      C                                       ') ' +
      C                                       'MBR(' +
-     C                                         %trim(xMember) +
+     C                                         %trim(i_member) +
      C                                       ') ' +
      C                                       'OVRSCOPE(*CALLLVL) ' +
      C                                       'SHARE(*NO) ' +
@@ -1295,13 +1209,15 @@ FSCN- *
      C                   Callp     QCMDEXC(clCmd: %len(clCmd))
       *
       *  Datei öffnen ...
-     C                   If        xCommitLVL = '0'
+     C                   If        i_commitLVL = '0'
       *  ... ohne Commit
      C                   Eval      *in95 = *off
      C                   Else
       *  ... mit Commit
      C                   Eval      *in95 = *on
      C                   Endif
+      *
+     C                   Eval      commitLvl = i_commitLVL
       *
      C                   Open(E)   FILE00
      C                   If        %error()
@@ -1381,7 +1297,7 @@ FSCN- *
       *
      C     setScreen     Begsr
       *
-     C                   If        xDsp80 = '0'
+     C                   If        i_dsp80 = '0'
       *   132-Zeichen Anzeige
      C                   Eval      *in88 = *off
      C                   Eval      wndTopRow  = 1
@@ -1407,32 +1323,34 @@ FSCN- *
       *
      C                   Eval      isInzSr = bTrue
       *
-     C                   Eval      PEEK21 = f_pgmCallN('PEEK21')
-     C                   Eval      PEEK23 = f_pgmCallN('PEEK23')
-     C                   Eval      PEEK32 = f_pgmCallN('PEEK32')
-     C                   Eval      PEEK45 = f_pgmCallN('PEEK45')
-     C                   Eval      PEEK59 = f_pgmCallN('PEEK59')
-     C                   Eval      PEEK64 = f_pgmCallN('PEEK64')
+     C                   Eval      PEEK21_NAME = f_pgmCallN('PEEK21')
+     C                   Eval      PEEK23_NAME = f_pgmCallN('PEEK23')
+     C                   Eval      PEEK32_NAME = f_pgmCallN('PEEK32')
+     C                   Eval      PEEK45_NAME = f_pgmCallN('PEEK45')
+     C                   Eval      PEEK59_NAME = f_pgmCallN('PEEK59')
+     C                   Eval      PEEK64_NAME = f_pgmCallN('PEEK64')
+     C                   Eval      EXIT04_NAME = f_pgmcalln('EXIT04': '*LIBL')
       *
      C                   Eval      pgmQ = '*'
       *
       *  Einlesen der Tastenbelegung
-     C                   Eval      yPgm    = 'PXXXXXXXX'
-     C                   Eval      yKey    = '*ALL'
-     C                   Eval      yPosF24 = 3
-     C                   Call      PEEK23        P_Peek23
-     C                   Movea (P) yFKeys        scrnFKeys
+     C                   Callp     PEEK23('PXXXXXXXX': '*ALL': 3
+     C                                    : yFKeys: yNbrOfKeys)
+     C                   Eval      scrnFKeys = %subarr(yFKeys: 1)
       *
       *  Starten Commit Control
-     C                   If        xCommitLVL <> '0'
+     C                   If        i_commitLVL <> '0'
      C                   Clear                   errCode
      C                   Callp     QTNRCMTI(cmti0100: %size(cmti0100)
      C                                      : 'CMTI0100': errCode)
-     C                   If        (cmti0100.statusActGrp = 'N')
+     C                   If        (cmti0100.statusActGrp <> 'A')
      C                   Eval      clCmd = 'STRCMTCTL +
      C                                       LCKLVL(*CHG) NFYOBJ(*NONE) +
      C                                       CMTSCOPE(*ACTGRP)'
      C                   Callp     QCMDEXC(clCmd: %len(clCmd))
+      *  Check status when debugging the program
+     C**                 Callp     QTNRCMTI(cmti0100: %size(cmti0100)
+     C**                                    : 'CMTI0100': errCode)
      C                   Endif
      C                   Endif
       *
@@ -1462,12 +1380,16 @@ FSCN- *
      C                                      FLDL0100: bFalse)
      C                   endif
       *
-     C**                   Eval      yLength = f_curFldLn(IO_Buff: FLDL0100)
-      *
      C                   If        Editor = cEDITOR_STRING
-     C                   Call      PEEK64        P_PEEK_EDIT
+     C                   Callp     PEEK64(i_dsp80: io_headerType: i_copyright
+     C                                    : yFldName: yFldInhalt: yLength
+     C                                    : yProtect: yIsUcs2
+     C                                    : yMsgID: yMsgDta)
      C                   Else
-     C                   Call      PEEK45        P_PEEK_EDIT
+     C                   Callp     PEEK45(i_dsp80: io_headerType: i_copyright
+     C                                    : yFldName: yFldInhalt: yLength
+     C                                    : yProtect: yIsUcs2
+     C                                    : yMsgID: yMsgDta)
      C                   Endif
       *
      C                   If        yMsgID = 'USR8112'                           = ENTER
