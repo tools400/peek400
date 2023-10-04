@@ -1,202 +1,177 @@
-      *===============================================================*
-      *                                                               *
-      *  (c) Thomas Raddatz                                           *
-      *                                                               *
-      *  Bereich  : PEEK, Version 1.4.0                               *
-      *  Programm : PEEK19                                            *
-      *  Typ      : RPG                                               *
-      *                                                               *
-      *  erstellt : 27.10.97  Raddatz                                 *
-      *                                                               *
-      *===============================================================*
-      *                                                               *
-      *  Kurzdokumentation :                                          *
-      *                                                               *
-      *  Erstellen externen Aufsetzschlüssel                          *
-      *                                                               *
-      * ============================================================= *
-      * >>PRE-COMPILER<<                                              *
-      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
-      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
-      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
-      *                           INSTALL(*NO);                       *
-      *   >>EXECUTE<<                                                 *
-      * >>END-PRE-COMPILER<<                                          *
-      *===============================================================*
+       //===============================================================*
+       //                                                               *
+       //  (c) Thomas Raddatz                                           *
+       //                                                               *
+       //  Bereich  : PEEK, Version 1.4.0                               *
+       //  Programm : PEEK19                                            *
+       //  Typ      : RPG                                               *
+       //                                                               *
+       //  erstellt : 27.10.97  Raddatz                                 *
+       //                                                               *
+       //===============================================================*
+       //                                                               *
+       //  Kurzdokumentation :                                          *
+       //                                                               *
+       //  Erstellen externen Aufsetzschlüssel                          *
+       //                                                               *
+       // ============================================================= *
+       // >>PRE-COMPILER<<                                              *
+       //   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+       //                           OBJLIB(&LI) DEVLIB(&LI) +           *
+       //                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+       //                           INSTALL(*NO);                       *
+       //   >>EXECUTE<<                                                 *
+       // >>END-PRE-COMPILER<<                                          *
+       //===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
-      *
-     FPEEKFLDL2 IF   E           K DISK    USROPN
-     F                                     RENAME(FPEEKFLD:FPEEKFLDL2)
-     F                                     PREFIX(F2)
-     F                                     INFDS(Peek_L2_DS)
-      *
-      *---API-Formate--------------------------------------*
-     D FLDL0100        DS                  likeds(FLDL0100_t) inz
-      /COPY QCOPYLE,FLDL0100
-      *----------------------------------------------------*
-      *
-      *---SDS-Datenstruktur--------------------------------*
-      /COPY QCOPYLE,ERR_D_SDS
-      *----------------------------------------------------*
-      *
-      *---Variablendefinition------------------------------*
+
+       dcl-f peekfldl2 keyed usropn rename(fpeekfld:fpeekfldl2) prefix(f2)
+             infds(peek_l2_ds);
+
       /COPY QCOPYLE,D_VARDEF
-      *----------------------------------------------------*
-      *
+      /COPY QCOPYLE,FLDL0100
+      /COPY QCOPYLE,ERR_D_SDS
+      /COPY QCOPYLE,CEECNDHDLR
+
       /define internal_prototype
       /COPY QCOPYLE,PPEEK19
       /undefine internal_prototype
-      *
-      *----------------------------------------------------*
-      *  I N F D S - D E F I N I T I O N E N               *
-      *----------------------------------------------------*
-      *
-     DPeek_L2_DS       DS
-     D P2File                 83     92A
-     D P2Library              93    102A
-     D P2Member              129    138A
-     D P2RcdNbr              397    400I 0
-      *
-      *----------------------------------------------------*
-      *  F E L D - D E F I N I T I O N E N                 *
-      *----------------------------------------------------*
-      *
-     D YBuffer         S                   like(rcdBuf_t) inz
-     D YOutBuffer      S                   like(rcdBuf_t) inz
-     D YOutBuffLn      S                   like(int4_t) inz
-     D YMsgID          S                   like(msgID_t) inz
-     D YMsgDta         S                   like(msgDta_t) inz
-      *
-     D X               S                   like(int4_t) inz
-     D Y               S                   like(int4_t) inz
-      *
-     D PEEK18_NAME     S                   like(pgmCallN_t) inz
-      *
+
       /COPY QCOPYLE,PPEEK18
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
-      *
-      /COPY QCOPYLE,CEECNDHDLR
-      *
-     D isInzSr         S                   like(bool_t) inz(bFalse)
-      *
-      ********************************************************************
-      *                 S T E U E R  -  R O U T I N E                    *
-      ********************************************************************
-      *
-      *---ENTRY-LISTE--------------------------------------*
-      *
-     D PEEK19          PI
-     D  i_rcdBuffer                        const like(rcdBuf_t)
-     D  o_keyVal                                 like(keyBuf_t)
-     D  o_msgID                                  like(msgID_t)
-     D  o_msgDta                                 like(msgDta_t)
-      *
-      *----------------------------------------------------*
-      *  Schlüsselliste für PEEKFLDL2
-     C     F2KEY_L2      KLIST
-     C                   KFLD                    F2KSEQ
-      *
-      *---------------------------------------------------*
-      *
-      *  Register error handler
-     C                   callp     CEEHDLR(%paddr('errorHandler')
-     C                                     : *null: *omit)
-      *
-     C                   EXSR      InzSr
-      *
-     C                   EXSR      FIRST
-      *
-     C                   EVAL      o_keyVal = *BLANKS
-     C                   EVAL      X = 1
-      *
-     C                   EVAL      F2KSeq = 1
-     C     F2KEY_L2      SETLL     FPEEKFLDL2
-      *
-     C                   DO        *HIVAL
-     C                   READ      FPEEKFLDL2                             11
-     C     *IN11         IFEQ      '1'
-     C                   LEAVE
-     C                   Endif
-      *
-     C                   EVAL      FLDL0100 = F2FFD
-      *
-     C                   Callp     f_rtvFld(yBuffer   :
-     C                                      i_rcdBuffer:
-     C                                      FLDL0100  :
-     C                                      bTrue     )
-      *
-     C                   CALLP     PEEK18(FLDL0100: F2Format: yBuffer
-     C                                    : '*EXTERN': '*CURRENT'
-     C                                    : YOutBuffer: YOutBuffLn
-     C                                    : YMsgID: YMsgDta)
-      *
-      *  Wert ...
-     C     1             DO        YOutBuffLn    Y
-     C                   Eval      %subst(o_keyVal: x: 1) =
-     C                                %subst(yOutBuffer: y: 1)
-     C                   EVAL      X = X + 1
-     C     X             IFGT      KEY_BUFF_LEN
-     C                   LEAVE
-     C                   Endif
-     C                   Enddo
-      *
-     C     X             IFGT      KEY_BUFF_LEN
-     C                   LEAVE
-     C                   Endif
-      *
-     C                   Enddo
-      *
-     C                   RETURN
-      *
-      *============================================================*
-      *    First         Initialisierung                           *
-      *============================================================*
-      *
-     C     First         BEGSR
-      *
-      * - Programm initialisieren
-      ***                Callp     p_rmvPgmMg(§§pgmName)
-      *
-     C                   EVAL      o_msgID = *BLANKS
-     C                   EVAL      o_msgDta = *BLANKS
-      *
-     C                   ENDSR
-      *
-      *====================================================*
-      *  InzSr --  Initialize program                      *
-      *====================================================*
-      *
-     C     InzSr         Begsr
-      *
-     C                   If        (isInzSr = bTrue)
-     C                   Leavesr
-     C                   Endif
-      *
-     C                   Eval      isInzSr = bTrue
-      *
-     C                   Eval      PEEK18_NAME = f_pgmCallN('PEEK18')
-      *
-     C                   OPEN      PEEKFLDL2
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *  Program error handler                                     *
-      *============================================================*
-      *
-     P errorHandler    b
-     D                 pi
-     D i_condToken                         value likeds(cee_fc_t)
-     D i_pCommArea                   10i 0 value
-     D o_action                      10i 0
-     D o_newCondToken                            likeds(cee_fc_t)
-      /free
 
-         dump;
-         o_action = CEE_PERCOLATE;
+       dcl-ds peek_l2_ds qualified;
+         p2file          char(10) pos(83);
+         p2library       char(10);
+         p2member        char(10) pos(129);
+         p2rcdnbr        int(10) pos(397);
+       end-ds;
 
-      /end-free
-     P                 e
-      *
+       dcl-s ybuffer     like(rcdbuf_t) inz;
+       dcl-s youtbuffer  like(rcdbuf_t) inz;
+       dcl-s youtbuffln  like(int4_t) inz;
+       dcl-s ymsgid      like(msgid_t) inz;
+       dcl-s ymsgdta     like(msgdta_t) inz;
+
+       dcl-s x           like(int4_t) inz;
+       dcl-s y           like(int4_t) inz;
+       dcl-ds fldl0100   likeds(fldl0100_t) inz;
+
+       dcl-s peek18_name like(pgmcalln_t) inz;
+
+       dcl-s isinzsr     like(bool_t) inz(bfalse);
+
+       //*******************************************************************
+       //                 S T E U E R  -  R O U T I N E                    *
+       //*******************************************************************
+
+       dcl-pi peek19;
+         i_rcdbuffer     const like(rcdbuf_t);
+         o_keyval        like(keybuf_t);
+         o_msgid         like(msgid_t);
+         o_msgdta        like(msgdta_t);
+       end-pi;
+
+       dcl-s do_x1           packed(7);
+
+       dcl-ds f2key_l2 likerec(fpeekfldl2: *key);
+
+       //  Register error handler
+       ceehdlr(%paddr('errorHandler')
+              : *null: *omit);
+
+       exsr inzsr;
+
+       exsr first;
+
+       o_keyval = *blanks;
+       x = 1;
+
+       clear f2key_l2;
+       f2key_l2.f2kseq = 1;
+       setll %kds(f2key_l2) fpeekfldl2;
+
+       for do_x1 = 1 to *hival;
+          read fpeekfldl2;
+          if (%eof());
+             leave;
+          endif;
+
+          fldl0100 = f2ffd;
+
+          f_rtvfld(ybuffer   :
+                  i_rcdbuffer:
+                  fldl0100  :
+                  btrue     );
+
+          peek18(fldl0100: f2format: ybuffer
+                : '*EXTERN': '*CURRENT'
+                : youtbuffer: youtbuffln
+                : ymsgid: ymsgdta);
+
+          //  Wert ...
+          for y = 1 to youtbuffln;
+             %subst(o_keyval: x: 1) =
+               %subst(youtbuffer: y: 1);
+             x = x + 1;
+             if (x > key_buff_len);
+                leave;
+             endif;
+          endfor;
+
+          if (x > key_buff_len);
+             leave;
+          endif;
+
+       endfor;
+
+       return;
+
+       //============================================================*
+       //    First         Initialisierung                           *
+       //============================================================*
+
+       begsr first;
+
+          o_msgid = *blanks;
+          o_msgdta = *blanks;
+
+       endsr;
+
+       //====================================================*
+       //  InzSr --  Initialize program                      *
+       //====================================================*
+
+       begsr inzsr;
+
+          if (isinzsr = btrue);
+             leavesr;
+          endif;
+
+          isinzsr = btrue;
+
+          peek18_name = f_pgmcalln('PEEK18');
+
+          open peekfldl2;
+
+       endsr;
+
+       //============================================================*
+       //  Program error handler                                     *
+       //============================================================*
+
+       dcl-proc errorhandler;
+       dcl-pi *N;
+         i_condtoken     value likeds(cee_fc_t);
+         i_pcommarea     int(10) value;
+         o_action        int(10);
+         o_newcondtoken  likeds(cee_fc_t);
+       end-pi;
+
+       dump;
+       o_action = cee_percolate;
+
+       end-proc;
+

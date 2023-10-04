@@ -101,11 +101,11 @@
       *
       *  F19 - nach rechts verschieben (eine Seite)
      C     YPgmCmd       WHENEQ    '*PAGELEFT'
-     C                   EXSR      C_PageL
+     C                   EXSR      C_PageLeft
       *
       *  F20 - nach links verschieben  (eine Seite)
      C     YPgmCmd       WHENEQ    '*PAGERIGHT'
-     C                   EXSR      C_PageR
+     C                   EXSR      C_PageRight
       *
       *  F21 - OS/400 Befehlzeile
      C     YPgmCmd       WHENEQ    '*CMDLINE'

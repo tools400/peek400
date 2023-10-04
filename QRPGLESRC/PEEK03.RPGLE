@@ -49,7 +49,7 @@
        dcl-ds fldl0100 likeds(fldl0100_t) inz;
 
        dcl-s rtncode         like(int4_t) inz;
-       dcl-s nbrofkey        like(int4_t) inz;
+       dcl-s nbrOfKey        like(int4_t) inz;
 
        dcl-s x               like(int4_t) inz;
        dcl-s y               like(int4_t) inz;
@@ -60,7 +60,7 @@
        dcl-s data            char(512) inz;
        dcl-s numkeyfld       like(int4_t);
 
-       dcl-s isinzsr         like(bool_t) inz(bfalse);
+       dcl-s isInzSr         like(bool_t) inz(bfalse);
 
        //*******************************************************************
        //                 S T E U E R  -  R O U T I N E                    *
@@ -68,23 +68,16 @@
 
        dcl-pi peek03;
          i_qfile         const likeds(qobj_t);
-       i_rcdfmt        const like(fmt_t);
-       i_access        char(1) const;
-       i_sqlorder      char(512) const;
-       o_msgid         like(msgid_t);
-       o_msgdta        like(msgdta_t);
+         i_rcdfmt        const like(fmt_t);
+         i_access        char(1) const;
+         i_sqlorder      char(512) const;
+         o_msgid         like(msgid_t);
+         o_msgdta        like(msgdta_t);
        end-pi;
-       // --------------------------------------------------------------------
-       // Stand Alone Fields - TOP
-       // --------------------------------------------------------------------
-       dcl-s do_x1           packed(7);
-       // --------------------------------------------------------------------
-       // Stand Alone Fields - BOTTOM
-       // --------------------------------------------------------------------
 
-       //----------------------------------------------------*
-     C     f_key         klist
-     C                   kfld                    f_field
+       dcl-s do_x1           packed(7);
+
+       dcl-ds f_key likerec(fpeekfld: *key);
 
        //---------------------------------------------------*
 
@@ -95,7 +88,6 @@
        exsr inzsr;
 
        exsr first;
-       //---------------------------------------------------*
 
        if i_access = sql_seq;
           exsr sqlseq;
@@ -103,7 +95,7 @@
           exsr otherseq;
        endif;
 
-       if nbrofkey <= *zeros;
+       if nbrOfKey <= *zeros;
           o_msgid = 'USR0006';
           usr00061 = i_qfile.name;
           usr00062 = i_qfile.lib;
@@ -195,9 +187,9 @@
           else;
              //  Einlesen der Schlüsselinformationen ...
              peek41(i_qfile: i_rcdfmt
-                   : '*KEY': nbrofkey: data);
+                   : '*KEY': nbrOfKey: data);
 
-             for do_x1 = 1 to nbrofkey;
+             for do_x1 = 1 to nbrOfKey;
                 peek41(i_qfile: i_rcdfmt
                       : '*READKEY': rtncode: data);
                 exsr addkeyinf;
@@ -213,10 +205,10 @@
 
        begsr addkeyinf;
 
-          f_field = keyl0100.apkeyf;
-          chain f_key fpeekfld;
-          *in11 = not %found;
-          if *in11 = *off;
+          clear f_key;
+          f_key.f_field = keyl0100.apkeyf;
+          chain %kds(f_key) fpeekfld;
+          if (%found());
              f_desc = keyl0100.apkseq;
              f_kseq = keyl0100.apkeyn;
              fldl0100 = f_ffd;
@@ -233,7 +225,7 @@
 
        begsr first;
 
-          nbrofkey = *zeros;
+          nbrOfKey = *zeros;
 
           // - Meldung
           p_sndstsmg('USR8137': i_qfile);
@@ -250,11 +242,11 @@
 
        begsr inzsr;
 
-          if (isinzsr = btrue);
+          if (isInzSr = btrue);
              leavesr;
           endif;
 
-          isinzsr = btrue;
+          isInzSr = btrue;
 
           peek41_name = f_pgmcalln('PEEK41');
 

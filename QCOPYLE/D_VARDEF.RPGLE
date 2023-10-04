@@ -110,6 +110,8 @@
       *  Feedback Code:
      D fc_t            S             12A   template
       *
+     D NUMERIC_DIGITS  C                   '1234567890'
+      *
       *  Grenzen für relative Satznummer
      D LOW_RCD_NBR     C                   CONST(1)
      D HIGH_RCD_NBR    C                   CONST(2147483647)

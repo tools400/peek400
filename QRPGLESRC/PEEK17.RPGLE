@@ -1,63 +1,53 @@
-      *===============================================================*
-      *                                                               *
-      *  (c) Thomas Raddatz                                           *
-      *                                                               *
-      *  Bereich  : PEEK, Version 2.2.0                               *
-      *  Programm : PEEK17                                            *
-      *  Typ      : RPG                                               *
-      *                                                               *
-      *  erstellt : 20.10.97  Raddatz                                 *
-      *  geändert : 27.04.99  für Version 2.1.0                       *
-      *  geändert : 29.07.99  für Version 2.2.0                       *
-      *                                                               *
-      *===============================================================*
-      *                                                               *
-      *  Kurzdokumentation :                                          *
-      *                                                               *
-      *  Erfassen der Suchkriterien                                   *
-      *                                                               *
-      * ============================================================= *
-      * >>PRE-COMPILER<<                                              *
-      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
-      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
-      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
-      *                           INSTALL(*NO);                       *
-      *   >>EXECUTE<<                                                 *
-      * >>END-PRE-COMPILER<<                                          *
-      *===============================================================*
+       //===============================================================*
+       //                                                               *
+       //  (c) Thomas Raddatz                                           *
+       //                                                               *
+       //  Bereich  : PEEK, Version 2.2.0                               *
+       //  Programm : PEEK17                                            *
+       //  Typ      : RPG                                               *
+       //                                                               *
+       //  erstellt : 20.10.97  Raddatz                                 *
+       //  geändert : 27.04.99  für Version 2.1.0                       *
+       //  geändert : 29.07.99  für Version 2.2.0                       *
+       //                                                               *
+       //===============================================================*
+       //                                                               *
+       //  Kurzdokumentation :                                          *
+       //                                                               *
+       //  Erfassen der Suchkriterien                                   *
+       //                                                               *
+       // ============================================================= *
+       // >>PRE-COMPILER<<                                              *
+       //   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+       //                           OBJLIB(&LI) DEVLIB(&LI) +           *
+       //                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+       //                           INSTALL(*NO);                       *
+       //   >>EXECUTE<<                                                 *
+       // >>END-PRE-COMPILER<<                                          *
+       //===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
-      *
-     FPEEK17FM  CF   E             WORKSTN USROPN
-     F                                     INFDS(workstn)
-      * Feldliste
-     FPEEKFLD   IF   E           K DISK    USROPN
-     F                                     INFDS(Peek_01_DS)
-     F                                     PREFIX(F_)
-      *
-      *---INFOSTRUKTUR FÜR AID-BYTE -----------------------*
-      /COPY QCOPYLE,DS_WORKSTN
-      *----------------------------------------------------*
-      *
-      *---Variablendefinition------------------------------*
+
+       dcl-f peek17fm workstn(*ext) usage(*input:*output)
+             usropn infds(workstn);
+       dcl-f peekfld keyed usropn infds(peek_01_ds) prefix(f_);
+
+
       /COPY QCOPYLE,D_VARDEF
-      *----------------------------------------------------*
-      *
+      /COPY QCOPYLE,DS_WORKSTN
+      /COPY QCOPYLE,ShortCmd_D
+      /COPY QCOPYLE,ERR_D_SDS
+      /COPY QCOPYLE,FLDL0100
+      /COPY QCOPYLE,SCRNFKEYS
+
       /define internal_prototype
       /COPY QCOPYLE,PPEEK17
       /undefine internal_prototype
-      *
-      *---Variablendefinition ShortCmd---------------------*
-      /COPY QCOPYLE,ShortCmd_D
-      *----------------------------------------------------*
-      *
-      *---Benutzervoreinstellungen-------------------------*
+
       /COPY QCOPYLE,SET0002
       /COPY QCOPYLE,SET0003
       /COPY QCOPYLE,SET0008
-      *----------------------------------------------------*
-      *
-      *---Nachrichtenaufbau--------------------------------*
+
       /COPY QCOPYLE,USR8100
       /COPY QCOPYLE,USR8108
       /COPY QCOPYLE,USR8124
@@ -71,1086 +61,1075 @@
       /COPY QCOPYLE,USR8141
       /COPY QCOPYLE,USR8142
       /COPY QCOPYLE,USR8192
-      *----------------------------------------------------*
-      *
-      *---SDS-Datenstruktur--------------------------------*
-      /COPY QCOPYLE,ERR_D_SDS
-      *----------------------------------------------------*
-      *
-      *---API-Formate--------------------------------------*
-     D FLDL0100        DS                  likeds(FLDL0100_t) inz
-      /COPY QCOPYLE,FLDL0100
-      *----------------------------------------------------*
-      *
-      *----------------------------------------------------*
-      *  I N F D S - D E F I N I T I O N E N               *
-      *----------------------------------------------------*
-      *
-     DPeek_01_DS       DS
-     D P1File                 83     92A
-     D P1Library              93    102A
-     D P1Member              129    138A
-     D P1NbrOfRcd            156    159I 0
-     D P1RcdNbr              397    400I 0
-      *
-      *----------------------------------------------------*
-      *  F E L D - D E F I N I T I O N E N                 *
-      *----------------------------------------------------*
-      *
-     D yPgm            S             10A   inz
-     D yKey            S             10A   inz
-     D yPosF24         S                   like(int4_t) inz
-     D yFKeys          S             18A   DIM(32)       INZ(*BLANKS)
-     D yNbrOfKeys      S                   like(int4_t) inz
-     D yMsgID          S              7A   INZ(*BLANKS)
-     D yMsgDta         S            512A   INZ(*BLANKS)
-      *
-     D YPgmCmd         S             10A   INZ(*BLANKS)
-     D YCmdDta         S                   LIKE(pgmCmdDt_t) INZ(*BLANKS)
-      *
-     D YDsp80          S              1A   INZ(*BLANKS)
-     D YCopyRight      S            512A   INZ(*BLANKS)
-     D YField          S             10A   INZ(*BLANKS)
-      *
-      *---Definition der F-Tastenbildschirmfelder----------*
-      /COPY QCOPYLE,SCRNFKEYS
-      *----------------------------------------------------*
-      *
-     D SfBot           S                   like(int4_t) inz
-     D §NbrFKeys       C                   CONST(2)
-      *
-     D §Numeric        C                   CONST('1234567890')
-      *
-     D MustWait        S              1A   INZ(bFalse)
-      *** IsNumeric       S              1A   INZ(bFalse)
-      *
-     D X               S                   like(int4_t) inz
-      *
-     D R_Sign          S                   INZ(*BLANKS)   LIKE(##Sign )
-     D R_Arg30         S                   INZ(*BLANKS)   LIKE(##Arg  )
-     D R_QFile         S                   INZ(*BLANKS)   LIKE(i_qFile )
-     D R_Member        S                   INZ(*BLANKS)   LIKE(i_member)
-     D R_VorK          S                   INZ(*BLANKS)   LIKE(##Arg  )
-     D R_NachK         S                   INZ(*BLANKS)   LIKE(##Arg  )
-     D R_A1            S              1A   INZ(*BLANKS)
-     D R_Field         S                   INZ(*BLANKS)   LIKE(##Field)
-      *
-     D PEEK21_NAME     S                   like(pgmCallN_t) inz
-     D PEEK23_NAME     S                   like(pgmCallN_t) inz
-     D PEEK37_NAME     S                   like(pgmCallN_t) inz
-      *
+
+       dcl-ds fldl0100 likeds(fldl0100_t) inz;
+
+       dcl-ds peek_01_ds;
+         p1file          char(10) pos(83);
+         p1library       char(10);
+         p1member        char(10) pos(129);
+         p1nbrofrcd      int(10) pos(156);
+         p1rcdnbr        int(10) pos(397);
+       end-ds;
+
+       dcl-s yfkeys          char(18) dim(32);
+       dcl-s ynbrofkeys      like(int4_t);
+       dcl-s ymsgid          char(7);
+       dcl-s ymsgdta         char(512);
+
+       dcl-s ypgmcmd         char(10);
+       dcl-s ycmddta         like(pgmcmddt_t);
+
+       dcl-s yfield          char(10);
+
+       dcl-s sfbot           like(int4_t);
+       dcl-c §nbrfkeys const(2);
+
+       dcl-s mustwait        char(1) inz(bFalse);
+
+       dcl-s x               like(int4_t) inz;
+
+       dcl-s r_sign          like(##sign);
+       dcl-s r_arg30         like(##arg);
+       dcl-s r_qfile         like(i_qfile);
+       dcl-s r_member        like(i_member);
+       dcl-s r_vork          like(##arg);
+       dcl-s r_nachk         like(##arg);
+       dcl-s r_a1            char(1);
+       dcl-s r_field         like(##field);
+
+       dcl-s peek21_name     like(pgmcalln_t) inz;
+       dcl-s peek23_name     like(pgmcalln_t) inz;
+       dcl-s peek37_name     like(pgmcalln_t) inz;
+
       /COPY QCOPYLE,PPEEK21
       /COPY QCOPYLE,PPEEK23
       /COPY QCOPYLE,PPEEK37
-      *
+
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
-      *
+
       /COPY QCOPYLE,CEECNDHDLR
-      *
-     D isInzSr         S                   like(bool_t) inz(bFalse)
-      *
-      ********************************************************************
-      *                 S T E U E R  -  R O U T I N E                    *
-      ********************************************************************
-      *
-     D PEEK17          PI
-     D  i_dsp80                            const like(bool_t)
-     D  i_copyright                        const like(copyRght_t)
-     D  i_qFile                            const like(qObj_t)
-     D  i_member                           const like(mbr_t)
-     D  o_field                      10A
-     D  o_operation                  10A
-     D  o_argument                   63A
-     D  o_sign                        1A
-     D  o_srchNbrs                   10P 0
-     D  o_srchType                   10A
-     D  o_srchCase                    1A
-     D  o_sgID                                   like(msgId_t)
-     D  o_msgDta                                 like(msgDta_t)
-      *
-      *----------------------------------------------------*
-      *  Schlüsselliste für PEEKFLD
-     C     F_KEY         KLIST
-     C                   KFLD                    F_Field
-      *
-      *---------------------------------------------------*
-      *
-      *  Register error handler
-     C                   callp     CEEHDLR(%paddr('errorHandler')
-     C                                     : *null: *omit)
-      *
-     C                   EXSR      InzSr
-      *
-     C                   EXSR      FIRST
-      *
-      *---------------------------------------------------*
-      *  Schleife für Programmbearbeitung
-      *
-     C                   DO        *HIVAL
-      *
-      *  Nachrichten anzeigen
-     C                   EVAL      *IN89 = '0'
-     C                   WRITE     MSGCTL
-      *
-      *  Anzeigen der Befehlstasten
-     C                   SELECT
-     C                   When      (SFBOT = 2) and
-     C                             (yNbrOfKeys > §NbrFKeys * (SFBOT - 1))
-     C                   WRITE     PBBOT#2                                      BT-Tasten 2
-     C                   When      (SFBOT = 3) and
-     C                             (yNbrOfKeys > §NbrFKeys * (SFBOT - 1))
-     C                   WRITE     PBBOT#3                                      BT-Tasten 3
-     C                   When      (SFBOT = 4) and
-     C                             (yNbrOfKeys > §NbrFKeys * (SFBOT - 1))
-     C                   WRITE     PBBOT#4                                      BT-Tasten 4
-     C                   When      (SFBOT = 5) and
-     C                             (yNbrOfKeys > §NbrFKeys * (SFBOT - 1))
-     C                   WRITE     PBBOT#5                                      BT-Tasten 4
-     C                   When      (SFBOT = 6) and
-     C                             (yNbrOfKeys > §NbrFKeys * (SFBOT - 1))
-     C                   WRITE     PBBOT#6                                      BT-Tasten 4
-     C                   OTHER
-     C                   WRITE     PBBOT#1                                      BT-Tasten 1
-     C                   EVAL      SFBOT = 1
-     C                   Endsl
-      *
-      *  Anzeigen Bildschirm
-     C                   EXFMT     BILD01
-      *
-      *  Nachrichten löschen
-     C                   Callp     p_rmvPgmMg(§§pgmName)
-      *
-      *  Bezugszahlen löschen
-     C                   EXSR      BZOFF1
-      *
-      *  Mappen der gedrückten Taste
-      *  in Programmbefehl
-     C                   CALLP     PEEK21(workstn.aid: §§PgmName
-     C                                    : YPgmCmd: YCmdDta: YMsgID: YMsgDta)
-     C     YMsgID        IFNE      *BLANKS
-     C                   Callp     p_sndPgmMg(yMsgID: yMsgDta: §§pgmName)
-     C                   Eval      yMsgID = ''
-     C                   Eval      YMsgDta = ''
-     C                   ITER
-     C                   Endif
-      *
-      *  Abfragen der Programmbefehle
-     C                   SELECT
-      *  F3  - Ende
-     C     YPgmCmd       WHENEQ    '*EXIT'                                      ENDE
-     C                   EXSR      C_EndPgm
-     C                   LEAVE
-      *
-      *  F4  - Prompt
-     C     YPgmCmd       WHENEQ    '*PROMPT'
-     C                   EXSR      C_Prompt
-     C                   ITER
-      *
-      *  F5  - Aktualisieren
-     C     YPgmCmd       WHENEQ    '*REFRESH'                                   AKTUALISIEREN
-     C                   EXSR      C_Refresh
-     C                   ITER
-      *
-      *  F12 - Ende
-     C     YPgmCmd       WHENEQ    '*CANCEL'                                    ZURÜCK
-     C                   EXSR      C_EndPgm
-     C                   LEAVE
-      *
-      *  F24 - Weitere Tasten
-     C     YPgmCmd       WHENEQ    '*MOREKEYS'
-     C                   EXSR      C_MoreKeys
-      *
-      *  Datenfreigabe
-     C     YPgmCmd       WHENEQ    '*ENTER'
-     C                   EXSR      C_Enter
-     C     *IN99         IFEQ      '0'
-     C                   EVAL      o_sgID = 'USR8112'
-     C                   EVAL      o_msgDta = *BLANKS
-     C                   LEAVE
-     C                   Endif
-      *
-     C                   OTHER
-      *  Falsche Taste gedrückt
-     C                   Callp     p_wrongKey(workstn.aid: §§pgmName)
-     C                   Iter
-     C                   Endsl
-      *
-     C                   Enddo                                                  *HIVAL
-      *
-      *  Ende der Hauptschleife
-      *---------------------------------------------------*
-      *
-      *  Programm verlassen
-     C     ENDE          TAG
-      *
-     C                   CLOSE     PEEKFLD
-     C                   CLOSE     PEEK17FM
-      *
-     C                   RETURN
-      *
-      *============================================================*
-      *    C_Enter       "Datenfreigabetaste"                      *
-      *============================================================*
-      *
-     C     C_Enter       BEGSR
-      *
-     C                   EVAL      R_FIELD = ##FIELD
-      *
-      *  Prompt?
-      *  ... ##Field
-     C                   IF        %trim(##Field ) = SET_PRMT
-     C                   EXSR      C_Prompt
-     C                   IF        (*IN99 = bTrue)
-     C                   GOTO      E_Enter
-     C                   ELSE
-      *  ...?
-     C                   Endif
-     C                   Endif
-      *
-     C                   EXSR      PRFB1
-      *
-     C     ##FIELD       IFNE      R_FIELD
-     C                   EVAL      MustWait = bTrue
-     C                   Endif
-      *
-     C     MustWait      IFEQ      bTrue
-     C                   EVAL      *IN99 = '1'
-     C                   ELSE
-      *  Wert belassen ...
-     C                   Endif
-      *
-     C     E_Enter       TAG
-      *
-     C     *IN99         IFEQ      '0'
-     C                   EVAL      o_field = ##FIELD
-     C                   EVAL      o_operation = ##OP
-     C                   EVAL      o_argument = R_Arg30
-     C                   EVAL      o_sign = ##Sign
-     C                   EVAL      o_srchNbrs = ##NBRS
-      *
-     C                   SELECT
-     C     ##TYPE        WHENEQ    'U'
-     C                   EVAL      o_srchType = '*UNDERLINE'
-     C     ##TYPE        WHENEQ    'R'
-     C                   EVAL      o_srchType = '*REVERSE'
-     C     ##TYPE        WHENEQ    'P'
-     C                   EVAL      o_srchType = '*PINROW'
-     C                   OTHER
-     C                   EVAL      o_srchType = '*NORMAL'
-     C                   Endsl
-      *
-     C                   EVAL      o_srchCase = ##CASE
-      *
-     C                   EVAL      o_sgID = 'USR8112'
-     C                   EVAL      o_msgDta = *BLANKS
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    BZOFF1        Ausschalten aller Fehlerbezugszahlen      *
-      *============================================================*
-      *
-     C     BZOFF1        BEGSR
-      *
-      *  DSPATR(PC)
-     C                   EVAL      *IN20 = '0'                                  ##FIELD
-     C                   EVAL      *IN21 = '0'                                  ##OP
-     C                   EVAL      *IN22 = '0'                                  ##ARG
-     C                   EVAL      *IN23 = '0'                                  ##NBRS
-     C                   EVAL      *IN24 = '0'                                  ##TYPE
-     C                   EVAL      *IN25 = '0'                                  ##CASE
-      *
-      *  DSPATR(RI)
-     C                   EVAL      *IN30 = '0'                                  ##FIELD
-     C                   EVAL      *IN31 = '0'                                  ##OP
-     C                   EVAL      *IN32 = '0'                                  ##ARG
-     C                   EVAL      *IN33 = '0'                                  ##NBRS
-     C                   EVAL      *IN34 = '0'                                  ##TYPE
-     C                   EVAL      *IN35 = '0'                                  ##CASE
-      *
-      *  Fehler
-     C                   EVAL      *IN99 = '0'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PRFB1         Prüfen der Eingaben                       *
-      *============================================================*
-      *
-     C     PRFB1         BEGSR
-      *
-     C                   EVAL      MustWait = bFalse
-      *
-     C                   EXSR      PRF20                                        Field
-     C     *IN99         CABEQ     '1'           EPRFB1
-      *
-     C                   EXSR      PRF21                                        Operation
-     C     *IN99         CABEQ     '1'           EPRFB1
-      *
-     C                   EXSR      PRF22                                        Argument
-     C     *IN99         CABEQ     '1'           EPRFB1
-      *
-     C                   EXSR      PRF23                                        Search Nbrs
-     C     *IN99         CABEQ     '1'           EPRFB1
-      *
-     C                   EXSR      PRF24                                        Search Type
-     C     *IN99         CABEQ     '1'           EPRFB1
-      *
-     C                   EXSR      PRF25                                        Case-Sens.
-     C     *IN99         CABEQ     '1'           EPRFB1
-      *
-     C     EPRFB1        ENDSR
-      *
-      *============================================================*
-      *    PRF20         Prüfen:  Feldname                         *
-      *============================================================*
-      *
-     C     PRF20         BEGSR
-      *
-     C     ##FIELD       IFEQ      '*RECORD'
-      *        suchen im ganzen Datensatz
-     C                   ELSE
-      *
-     C                   EVAL      F_FIELD = ##FIELD
-     C     F_KEY         CHAIN     FPEEKFLD                           11
-     C     *IN11         IFEQ      '1'
-      *  Fehlermeldung ...
-     C                   EVAL      *IN99 = '1'
-     C                   CLEAR                   USR8136
-     C                   EVAL      USR81361 = ##Field
-     C                   Callp     p_sndPgmMg('USR8136': USR8136: §§pgmName)
-     C                   GOTO      EPRF20
-     C                   ELSE
-     C                   EVAL      FLDL0100 = F_FFD
-     C                   Endif
-      *
-     C                   IF        FLDL0100.F1DTyp <> 'A' and                   alpha-num
-      ***                          FLDL0100.F1DTyp <> 'G' and                   graphic
-     C                             FLDL0100.F1DTyp <> 'S' and                   Zoned
-     C                             FLDL0100.F1DTyp <> 'B' and                   Binary
-     C                             FLDL0100.F1DTyp <> 'P' and                   Packed
-     C                             FLDL0100.F1DTyp <> 'T' and                   Time
-     C                             FLDL0100.F1DTyp <> 'L' and                   Date
-     C                             FLDL0100.F1DTyp <> 'F'                       Float
-     C                   EVAL      *IN99 = '1'
-     C                   CLEAR                   USR8129
-     C                   EVAL      USR81291 = ##Field
-     C                   EVAL      USR81292 = FLDL0100.F1DTyp
-     C                   Callp     p_sndPgmMg('USR8129': USR8129: §§pgmName)
-     C                   GOTO      EPRF20
-     C                   Endif
-      *
-     C                   Endif
-      *
-     C     EPRF20        TAG
-      *
-     C     *IN99         IFEQ      '1'
-     C                   EVAL      *IN20 = '1'
-     C                   EVAL      *IN30 = '1'
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PRF21         Prüfen:  Operation                        *
-      *============================================================*
-      *
-     C     PRF21         BEGSR
-      *
-     C     ##OP          IFNE      'EQ'
-     C     ##OP          ANDNE     'NE'
-     C     ##OP          ANDNE     'LT'
-     C     ##OP          ANDNE     'GT'
-     C     ##OP          ANDNE     'LE'
-     C     ##OP          ANDNE     'GE'
-     C     ##OP          ANDNE     'LIKE'
-     C     ##OP          ANDNE     'NLIKE'
-     C                   EVAL      *IN99 = '1'
-     C                   CLEAR                   USR8124
-     C                   EVAL      USR81241 = ##OP
-     C                   Callp     p_sndPgmMg('USR8124': USR8124: §§pgmName)
-     C                   GOTO      EPRF21
-     C                   Endif
-      *
-     C     ##FIELD       IFNE      '*RECORD'
-     C     ##OP          IFEQ      'LIKE'
-     C     ##OP          OREQ      'NLIKE'
-     C**   F1DTyp        IFNE      'A'                                          alpha-num
-     C**   F1DTyp        ANDNE     'L'                                          Date
-     C**   F1DTyp        ANDNE     'T'                                          Time
-     C                   IF        FLDL0100.F1DTyp <> 'A' and                   alpha-num
-     C                             FLDL0100.F1DTyp <> 'L' and                   Date
-     C                             FLDL0100.F1DTyp <> 'T'                       Time
-     C                   EVAL      *IN99 = '1'
-     C                   CLEAR                   USR8135
-     C                   EVAL      USR81351 = ##OP
-     C                   EVAL      USR81352 = FLDL0100.F1DTyp
-     C                   Callp     p_sndPgmMg('USR8135': USR8135: §§pgmName)
-     C                   GOTO      EPRF21
-     C                   Endif
-     C                   Endif
-     C                   Endif
-      *
-     C     ##FIELD       IFEQ      '*RECORD'
-     C     ##OP          ANDNE     'LIKE'
-     C     ##OP          ANDNE     'NLIKE'
-     C                   EVAL      *IN99 = '1'
-     C                   CLEAR                   USR8134
-     C                   EVAL      USR81341 = ##OP                              Operation
-     C                   EVAL      USR81342 = ##FIELD                           Feld
-     C                   Callp     p_sndPgmMg('USR8134': USR8134: §§pgmName)
-     C                   GOTO      EPRF21
-     C                   Endif
-      *
-     C     EPRF21        TAG
-      *
-     C     *IN99         IFEQ      '1'
-     C                   EVAL      *IN21 = '1'
-     C                   EVAL      *IN31 = '1'
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PRF22         Prüfen:  Argument                         *
-      *============================================================*
-      *
-     C     PRF22         BEGSR
-      *
-     C                   EVAL      R_Sign = *BLANKS
-     C                   EVAL      ##Sign = *BLANKS
-      *
-     C     ##ARG         IFEQ      *BLANKS
-     C                   EVAL      *IN99 = '1'
-     C                   Callp     p_sndPgmMg('USR8140': USR8140: §§pgmName)
-     C                   GOTO      EPRF22
-     C                   Endif
-      *
-      *  Umsetzen in internes Arbeitsfeld ...
-     C**   cLOWER:cUPPER XLATE (P) ##Arg         R_Arg30
-     C                   EVAL      R_Arg30 = %xlate(cLOWER: cUPPER: ##Arg)
-      *
-     C                   SELECT
-      *  Umsetzen des Sonderwertes "*BLANKS" ...
-     C     R_Arg30       WHENEQ    '*BLANKS'
-     C     R_Arg30       OREQ      '*BLANK'
-     C                   EVAL      R_Arg30 = *BLANKS
-      *
-      *  Umsetzen des Sonderwertes "*ZEROS" ...
-     C     R_Arg30       WHENEQ    '*ZEROS'
-     C     R_Arg30       OREQ      '*ZERO'
-     C                   EVAL      R_Arg30 = *ZEROS
-     C                   OTHER
-      *  ... aktuellen Wert belassen
-     C                   EVAL      R_Arg30 = ##Arg
-     C                   ENDSL
-      *
-      *  Verarbeiten numerischer Werte ...
-     C                   If        f_isNumFld(FLDL0100) = bTrue
-      *
-      *  ... Vorzeichen, links
-     C                   EXSR      SignLeft
-      *  ... Vorzeichen, rechts
-     C                   EXSR      SignRight
-      *
-      *  ... umsetzen *BLANKS in '+' Zeichen
-     C     ##Sign        IFEQ      *BLANKS
-     C                   EVAL      ##Sign = SET_SignP
-     C                   ELSE
-      *      ... Vorzeichen stehen lassen
-     C                   Endif
-      *
-      *  ... gültige Daten
-      *      ... Komma extrahieren
-     C                   IF        FLDL0100.F1DTyp = 'F'                        Float
-     C                   IF        f_vldFLoat(R_Arg30) = bFalse
-     C                   EVAL      *IN99 = '1'
-     C                   CLEAR                   USR81921
-     C                   EVAL      USR81921 = ##Field
-     C                   Callp     p_sndPgmMg('USR8192': USR8192: §§pgmName)
-     C                   ENDIF
-     C                   ELSE
-     C                   EXSR      SrchPoint
-     C                   EXSR      ExpandNum
-     C                   EXSR      ChkNumData
-     C                   ENDIF
-      *
-     C     *IN99         IFEQ      '1'
-     C                   GOTO      EPRF22
-     C                   Endif
-      *
-      *  ... falsches Vorzeichen
-     C     ##Sign        IFNE      SET_SignM
-     C     ##Sign        ANDNE     SET_SignP
-     C                   EVAL      *IN99 = '1'
-     C                   CLEAR                   USR8141
-     C                   EVAL      USR81411 = SET_SignP
-     C                   EVAL      USR81412 = SET_SignM
-     C                   Callp     p_sndPgmMg('USR8141': USR8141: §§pgmName)
-     C                   GOTO      EPRF22
-     C                   ELSE
-      *  ... richtiges Vorzeichen
-     C                   Endif
-      *
-     C                   ELSE
-      *  Alpha-numerische Werte ...
-      *  ... Vorzeichen
-     C                   EVAL      ##Sign = *BLANKS
-     C                   Endif
-      *
-     C     EPRF22        TAG
-      *
-     C     *IN99         IFEQ      '1'
-     C                   EVAL      *IN22 = '1'
-     C                   EVAL      *IN32 = '1'
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    SignLeft      Prüfen extrahieren Vorzeichen links       *
-      *============================================================*
-      *
-     C     SignLeft      BEGSR
-      *
-      *   Suchen erstes Zeichen <> *BLANKS ...
-     C     ' '           CHECK     R_Arg30       X
-     C     X             IFEQ      *ZEROS
-      *   Wenn nicht gefunden, dann ist nichts zu tun ...
-     C                   ELSE
-      *   ansonsten das Zeichen extrahieren.
-     C**   1             SUBST (P) R_Arg30:X     R_Sign
-     C                   EVAL      R_Sign = %subst(R_Arg30: X: 1)
-      *   Wenn das extrahierte Zeichen dem '+' oder '-'
-      *   Zeichen entspricht, dann die Umsetzung vornehmen ...
-     C     R_Sign        IFEQ      SET_SignM
-     C     R_Sign        OREQ      SET_SignP
-     C                   EVAL      ##Sign = R_Sign
-     C                   EVAL      X = X + 1
-     C     X             IFLE      30
-     C**                 SUBST (P) R_Arg30:X     R_Arg30
-     C                   EVAL      R_Arg30 = %subst(R_Arg30: x)
-     C                   ELSE
-     C                   EVAL      R_Arg30 = *BLANKS
-     C                   Endif
-     C                   ELSE
-      *   ... ansonsten ist nix zu tun.
-     C                   Endif
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    SignRight     Prüfen und umsetzen Vorzeichen rechts     *
-      *============================================================*
-      *
-     C     SignRight     BEGSR
-      *
-      *   Suchen letztes Zeichen <> *BLANKS ...
-     C**   ' '           CHECKR    R_Arg30       X
-     C                   EVAL      x = %checkr(' ': R_Arg30)
-     C     X             IFEQ      *ZEROS
-      *   Wenn nicht gefunden, dann ist nichts zu tun ...
-     C                   ELSE
-      *   ansonsten das Zeichen extrahieren.
-     C**   1             SUBST (P) R_Arg30:X     R_Sign
-     C                   EVAL      R_Sign = %subst(R_Arg30: X: 1)
-      *   Wenn das extrahierte Zeichen dem '+' oder '-'
-      *   Zeichen entspricht, dann die Umsetzung vornehmen ...
-     C     R_Sign        IFEQ      SET_SignM
-     C     R_Sign        OREQ      SET_SignP
-     C                   EVAL      ##Sign = R_Sign
-     C                   EVAL      X = X - 1
-     C     X             IFGT      *ZEROS
-     C**   X             SUBST (P) R_Arg30:1     R_Arg30
-     C                   EVAL      R_Arg30 = %subst(R_Arg30: 1: X)
-     C                   ELSE
-     C                   EVAL      R_Arg30 = *BLANKS
-     C                   Endif
-     C                   ELSE
-      *   ... ansonsten ist nix zu tun.
-     C                   Endif
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    SrchPoint     Prüfen und umsetzen Komma                 *
-      *============================================================*
-      *
-     C     SrchPoint     BEGSR
-      *
-     C                   If        f_isNumFld(FLDL0100) = bFalse
-      *    keine Aufbereitung für nicht-numerische Daten
-     C                   ELSE
-      *
-      *  Suchen nach Komma ...
-     C     SET_Point     SCAN      R_Arg30       X
-     C     X             IFEQ      *ZEROS
-      *   Wenn nicht gefunden, dann Länge +1 ...
-     C**   ' '           CHECKR    R_Arg30       X
-     C                   EVAL      x = %checkr(' ': R_Arg30)
-     C                   EVAL      X = X + 1
-     C                   Endif
-      *
-      *   ansonsten Vorkommastellen ...
-     C                   EVAL      X = X - 1
-     C     X             IFGT      *ZEROS
-     C**   X             SUBST (P) R_Arg30:1     R_VorK
-     C                   EVAL      R_VorK = %subst(R_Arg30: 1: X)
-     C                   ELSE
-     C                   EVAL      R_VorK = *BLANKS
-     C                   Endif
-      *   ... und Nachkommastellen extrahieren
-     C                   EVAL      X = X + 2
-     C     X             IFLE      30
-     C**                 SUBST (P) R_Arg30:X     R_NachK
-     C                   EVAL      R_NachK = %subst(R_Arg30: X)
-     C                   ELSE
-     C                   EVAL      R_NachK = *BLANKS
-     C                   Endif
-      *
-      *   Anzahl der Nachkommastellen auffüllen ...
-     C                   IF        FLDL0100.F1DECP <= 0
-      *   ... keine vorhanden
-     C                   EVAL      R_NachK = *BLANKS
-     C                   ELSE
-      *   ... auffüllen
-     C                   DO        *HIVAL
-     C**   1             SUBST     R_NachK:F1DECPR_A1
-     C                   EVAL      R_A1 = %subst(R_NachK: FLDL0100.F1DECP: 1)
-     C
-     C     R_A1          IFNE      *BLANKS
-     C**   F1DECP        SUBST (P) R_NachK       R_NachK
-     C                   EVAL      R_NachK = %subst(R_NachK: 1: FLDL0100.F1DECP)
-     C                   LEAVE
-     C                   Endif
-      *
-     C                   CAT       '0':0         R_NachK
-     C                   Enddo
-     C                   Endif
-      *
-      *   Ganzzahl zusammenbauen ...
-     C     R_VorK        CAT       R_NachK:0     R_Arg30
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PRF23         Prüfen:  Anzahl Datensätze                *
-      *============================================================*
-      *
-     C     PRF23         BEGSR
-      *
-     C     ##NBRS        IFEQ      *ZEROS
-     C                   EVAL      *IN99 = '1'
-     C                   Callp     p_sndPgmMg('USR8125': '': §§pgmName)
-     C                   GOTO      EPRF23
-     C                   Endif
-      *
-     C     EPRF23        TAG
-      *
-     C     *IN99         IFEQ      '1'
-     C                   EVAL      *IN23 = '1'
-     C                   EVAL      *IN33 = '1'
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PRF24         Prüfen:  Suchtyp                          *
-      *============================================================*
-      *
-     C     PRF24         BEGSR
-      *
-     C     ##TYPE        IFNE      'N'
-     C     ##TYPE        ANDNE     'R'
-     C     ##TYPE        ANDNE     'U'
-     C     ##TYPE        ANDNE     'P'
-     C                   EVAL      *IN99 = '1'
-     C                   CLEAR                   USR8126
-     C                   EVAL      USR81261 = ##TYPE
-     C                   Callp     p_sndPgmMg('USR8126': USR8126: §§pgmName)
-     C                   GOTO      EPRF24
-     C                   Endif
-      *
-     C     EPRF24        TAG
-      *
-     C     *IN99         IFEQ      '1'
-     C                   EVAL      *IN24 = '1'
-     C                   EVAL      *IN34 = '1'
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PRF25         Prüfen:  case-sensitive                   *
-      *============================================================*
-      *
-     C     PRF25         BEGSR
-      *
-     C     ##CASE        IFNE      bTrue
-     C     ##CASE        ANDNE     bFalse
-     C                   EVAL      *IN99 = '1'
-     C                   Callp     p_sndPgmMg('USR8133': '': §§pgmName)
-     C                   GOTO      EPRF25
-     C                   Endif
-      *
-     C     EPRF25        TAG
-      *
-     C     *IN99         IFEQ      '1'
-     C                   EVAL      *IN25 = '1'
-     C                   EVAL      *IN35 = '1'
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_EndPgm      F3/F12 - Programm beenden                 *
-      *============================================================*
-      *
-     C     C_EndPgm      BEGSR
-      *
-     C                   Callp     p_rmvPgmMg(§§pgmName)
-      *
-     C                   EVAL      o_sgID = 'USR8100'
-      *
-     C                   SELECT
-     C     workstn.aid   WHENEQ    K_F3
-     C                   EVAL      USR81001 = 'F3'
-     C     workstn.aid   WHENEQ    K_F12
-     C                   EVAL      USR81001 = 'F12'
-     C                   OTHER
-     C                   EVAL      USR81001 = 'Fxx'
-     C                   Endsl
-      *
-     C                   EVAL      o_msgDta = USR8100
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_Prompt      F4  - Prompt                              *
-      *============================================================*
-      *
-     C     C_Prompt      BEGSR
-      *
-     C                   SELECT
-     C     ScnFld        WHENEQ    '##FIELD'
-     C     ##Field       OREQ      SET_PRMT
-     C                   EXSR      Pmt_Field
-     C                   OTHER
-     C                   Callp     p_sndPgmMg('USR8179': '': §§pgmName)
-     C                   EVAL      *in99 = bTrue
-     C                   Endsl
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    Pmt_Field     Prompt - Field                            *
-      *============================================================*
-      *
-     C     Pmt_Field     BEGSR
-      *
-     C                   CALLP     PEEK37(i_dsp80: i_copyright: YField
-     C                                    : yMsgID: yMsgDta)
-      *
-     C     yMsgID        IFEQ      *BLANKS
-     C                   EVAL      ##Field = yField
-     C                   ELSE
-     C                   Callp     p_sndPgmMg(yMsgID: yMsgDta: §§pgmName)
-     C                   EVAL      yMsgID = ''
-     C                   EVAL      yMsgDta = ''
-     C                   EVAL      *in99 = bTrue
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_Refresh     F5  - Aktualisieren der Subfile           *
-      *============================================================*
-      *
-     C     C_Refresh     BEGSR
-      *
-     C                   EXSR      FILL##
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_MoreKeys    F24 - Weitere Tasten                      *
-      *============================================================*
-      *
-     C     C_MoreKeys    BEGSR
-      *
-     C                   EVAL      SFBOT = SFBOT + 1
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    FILL##        Füllen Bildschirm                         *
-      *============================================================*
-      *
-     C     FILL##        BEGSR
-      *
-      *  Wenn die Datei oder das Member gewechselt hat,
-     C     i_qFile       IFNE      R_QFile
-     C     i_member      ORNE      R_Member
-      *  ... dann die Bildschirmfelder neu
-      *      initialisieren.
-     C                   EXSR      InitField
-     C                   EVAL      R_QFile = i_qFile
-     C                   EVAL      R_Member = i_member
-     C                   ELSE
-      *  ... sonst die Bildschirmfelder belassen
-     C                   Endif
-      *
-     C     F_KEY         CHAIN     FPEEKFLD                           11
-     C     *IN11         IFEQ      '1'
-     C                   CLEAR                   FLDL0100
-     C                   ELSE
-     C                   EVAL      FLDL0100 = F_FFD
-     C                   Endif
-      *
-      *  Defaultoperationscode einsetzen ...
-     C     ##OP          IFEQ      *BLANKS
-     C                   EVAL      ##OP = 'EQ'
-     C                   ELSE
-      *  Operationscode stehenlasen
-     C                   Endif
-      *
-      *  Sonderwerte einsetzen ...
-     C                   SELECT
-     C     ##ARG         WHENEQ    *BLANKS
-     C                   EVAL      ##ARG = '*BLANKS'
-     C     ##ARG         WHENEQ    *ZEROS
-     C                   EVAL      ##ARG = '*ZEROS'
-     C                   OTHER
-      *  ... Umsetzung nicht erforderlich
-     C                   Endsl
-      *
-     C     ##Nbrs        IFEQ      *ZEROS
-     C                   EVAL      ##Nbrs = SET_SNbrs
-     C                   ELSE
-      *  Wert stehenlassen ...
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    InitField     Initialisieren der Bildschirmfelder       *
-      *============================================================*
-      *
-     C     InitField     BEGSR
-      *
-     C                   EVAL      ##Field = *BLANKS
-     C                   EVAL      ##OP = *BLANKS
-     C                   EVAL      ##Arg = *BLANKS
-     C                   EVAL      ##Sign = *BLANKS
-     C                   EVAL      $$WLDCD = SET_WLDCD
-     C                   EVAL      ##Nbrs = *ZEROS
-     C                   EVAL      ##Type = 'N'
-     C                   EVAL      ##Case = bFalse
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    SetScreen     Einstellen 132/80-Zeichen Auflösung       *
-      *============================================================*
-      *
-     C     SetScreen     BEGSR
-      *
-     C     i_dsp80       IFEQ      '0'
-      *   132-Zeichen Anzeige
-     C                   EVAL      *IN88 = '0'
-     C                   EVAL      ZEI = 6
-     C                   EVAL      ZEI = ZEI + 1
-     C                   EVAL      POS = 26
-     C                   ELSE
-      *    80-Zeichen Anzeige
-     C                   EVAL      *IN88 = '1'
-     C                   EVAL      ZEI = 4
-     C                   EVAL      ZEI = ZEI + 3
-     C                   EVAL      POS = 7
-     C                   Endif
-      *
-      *  Prompt-Felder anzeigen ...
-     C     SET_DspPmt    IFEQ      bTrue
-     C                   EVAL      *IN71 = '1'
-     C                   ELSE
-     C                   EVAL      *IN71 = '0'
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    GetUsrSetg    Ermitteln der Benutzervoreinstellungen    *
-      *============================================================*
-      *
-     C     GetUsrSetg    BEGSR
-      *
-      *  Attribute der Suchfunktion
-     C                   Eval      SET0002 = f_getUsrSg('*SEARCH'   )
-      *
-      *  Attribute der Schlüsselaufbeeitung
-     C                   Eval      SET0003 = f_getUsrSg('*ACCESSKEY')
-      *
-      *  *PROMPT
-     C                   Eval      SET0008 = f_getUsrSg('*PROMPT'   )
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    TrimNum       Nullenunterdrückung für numerische Daten  *
-      *============================================================*
-      *
-     C     TrimNum       BEGSR
-      *
-     C                   If        f_isNumFld(FLDL0100) = bFalse
-      *    keine Aufbereitung für nicht-numerische Daten
-     C                   ELSE
-      *
-     C     '0'           CHECK     R_Arg30       X                              Zoned
-     C     X             IFGT      *ZEROS                                       Binary
-     C**                 SUBST (P) R_Arg30:X     R_Arg30
-     C                   EVAL      R_Arg30 = %subst(R_Arg30: X)
-     C                   ELSE
-      *     Nur führende Nullen vorhanden
-     C                   EVAL      R_Arg30 = *BLANKS
-     C                   Endif
-      *
-      *     Argument bestand nur aus führenden Nullen
-      *     oder nur aus *BLANKS ...
-     C     R_Arg30       IFEQ      *BLANKS
-     C                   EVAL      R_Arg30 = '0'
-     C                   ELSE
-      *         keine Korrektur der Aufbereitung
-      *         erforderlich
-     C                   Endif
-      *
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    ChkNumData    auf gültige numerische Daten prüfen       *
-      *============================================================*
-      *
-     C     ChkNumData    BEGSR
-      *
-     C                   If        f_isNumFld(FLDL0100) = bFalse
-      *    keine Prüfung für nicht-numerische Daten
-     C                   ELSE
-      *
-     C     §Numeric      CHECK     R_Arg30                                99
-     C     *IN99         IFEQ      '1'                                          = Fehler
-     C                   CLEAR                   USR81381
-     C                   EVAL      USR81381 = ##Field
-     C                   Callp     p_sndPgmMg('USR8138': USR8138: §§pgmName)
-     C                   Endif
-      *
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    ExpandNum     numerische Daten rechtsbündig setzen      *
-      *============================================================*
-      *
-     C     ExpandNum     BEGSR
-      *
-     C                   If        f_isNumFld(FLDL0100) = bFalse
-      *    keine Aufbereitung für nicht-numerische Daten
-     C                   ELSE
-      *
-     C**   ' '           CHECKR    R_Arg30       X                              Zoned
-     C                   EVAL      X = %checkr(' ': R_Arg30)
-     C     30            SUB       X             X
-     C     X             IFGT      *ZEROS                                       Binary
-     C     ' '           CAT   (P) R_Arg30:X     R_Arg30
-     C                   ELSE
-      *     ... ist bereits rechtbündig
-     C                   Endif
-      *
-     C**   ' ':'0'       XLATE (P) R_Arg30       R_Arg30
-     C                   EVAL      R_Arg30 = %xlate(' ': '0': R_Arg30)
-      *
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    First         Initialisierung                           *
-      *============================================================*
-      *
-     C     First         BEGSR
-      *
-      * - Öffnen der Dateien
-     C                   OPEN      PEEKFLD
-     C                   OPEN      PEEK17FM
-      *
-      * - Benutzervoreinstellungen
-     C                   EXSR      GetUsrSetg
-      *
-      * - Füllen der Bildschirmfelder
-     C                   EXSR      FILL##
-      *
-      * - Programm initialisieren
-     C                   Callp     p_rmvPgmMg(§§pgmName)
-      *
-     C                   EVAL      o_sgID = *BLANKS
-     C                   EVAL      o_msgDta = *BLANKS
-      *
-      * - Darstellung der Befehlstasten
-     C                   EVAL      SfBot = 1
-      *
-      * - Einstellen der Bildschirmauflösung 80/132-Zeichen
-     C                   EXSR      SetScreen
-      *
-      * - Copyright
-     C                   Callp     p_sndPgmMg('USR9999': i_copyright: §§pgmName)
-      *
-     C                   ENDSR
-      *
-      *====================================================*
-      *  InzSr --  Initialize program                      *
-      *====================================================*
-      *
-     C     InzSr         Begsr
-      *
-     C                   If        (isInzSr = bTrue)
-     C                   Leavesr
-     C                   Endif
-      *
-     C                   Eval      isInzSr = bTrue
-      *
-     C                   Eval      §PgmQ = '*'
-      *
-     C                   Eval      PEEK21_NAME = f_pgmCallN('PEEK21')
-     C                   Eval      PEEK23_NAME = f_pgmCallN('PEEK23')
-     C                   Eval      PEEK37_NAME = f_pgmCallN('PEEK37')
-      *
-     C                   Callp     PEEK23(§§PgmName: '*ALL': 0
-     C                                    : yFKeys: yNbrOfKeys)
-     C                   Eval      ScrnFKeys = %subarr(YFKeys: 1)
-      *
-     C                   Endsr
-      *
-      *============================================================*
-      *  Program error handler                                     *
-      *============================================================*
-      *
-     P errorHandler    b
-     D                 pi
-     D i_condToken                         value likeds(cee_fc_t)
-     D i_pCommArea                   10i 0 value
-     D o_action                      10i 0
-     D o_newCondToken                            likeds(cee_fc_t)
-      /free
 
-         dump;
-         o_action = CEE_PERCOLATE;
+       dcl-s isInzSr         like(bool_t) inz(bFalse);
 
-      /end-free
-     P                 e
-      *
+       //*******************************************************************
+       //                 S T E U E R  -  R O U T I N E                    *
+       //*******************************************************************
+
+       dcl-pi peek17;
+         i_dsp80         const like(bool_t);
+         i_copyright     const like(copyrght_t);
+         i_qfile         const like(qobj_t);
+         i_member        const like(mbr_t);
+         o_field         char(10);
+         o_operation     char(10);
+         o_argument      char(63);
+         o_sign          char(1);
+         o_srchnbrs      packed(10);
+         o_srchtype      char(10);
+         o_srchcase      char(1);
+         o_sgid          like(msgid_t);
+         o_msgdta        like(msgdta_t);
+       end-pi;
+
+       dcl-s do_x2           packed(7);
+
+       dcl-ds f_key likerec(fpeekfld: *key);
+
+       //---------------------------------------------------*
+
+       //  Register error handler
+       ceehdlr(%paddr('errorHandler')
+              : *null: *omit);
+
+       exsr inzsr;
+
+       exsr first;
+
+       dow ('1');
+
+          //  Nachrichten anzeigen
+          *in89 = '0';
+          write msgctl;
+
+          //  Anzeigen der Befehlstasten
+          select;
+          when (sfbot = 2) and
+             (ynbrofkeys > §nbrfkeys * (sfbot - 1));
+             write pbbot#2;
+          when (sfbot = 3) and
+             (ynbrofkeys > §nbrfkeys * (sfbot - 1));
+             write pbbot#3;
+          when (sfbot = 4) and
+             (ynbrofkeys > §nbrfkeys * (sfbot - 1));
+             write pbbot#4;
+          when (sfbot = 5) and
+             (ynbrofkeys > §nbrfkeys * (sfbot - 1));
+             write pbbot#5;
+          when (sfbot = 6) and
+             (ynbrofkeys > §nbrfkeys * (sfbot - 1));
+             write pbbot#6;
+          other;
+             write pbbot#1;
+             sfbot = 1;
+          endsl;
+
+          //  Anzeigen Bildschirm
+          exfmt bild01;
+
+          //  Nachrichten löschen
+          p_rmvpgmmg(§§pgmname);
+
+          //  Bezugszahlen löschen
+          exsr bzoff1;
+
+          //  Mappen der gedrückten Taste
+          //  in Programmbefehl
+          peek21(workstn.aid: §§pgmname
+                : ypgmcmd: ycmddta: ymsgid: ymsgdta);
+          if ymsgid <> *blanks;
+             p_sndpgmmg(ymsgid: ymsgdta: §§pgmname);
+             ymsgid = '';
+             ymsgdta = '';
+             iter;
+          endif;
+
+          //  Abfragen der Programmbefehle
+          select;
+             //  F3  - Ende
+          when ypgmcmd = '*EXIT';
+             exsr c_endpgm;
+             leave;
+
+             //  F4  - Prompt
+          when ypgmcmd = '*PROMPT';
+             exsr c_prompt;
+             iter;
+
+             //  F5  - Aktualisieren
+          when ypgmcmd = '*REFRESH';
+             exsr c_refresh;
+             iter;
+
+             //  F12 - Ende
+          when ypgmcmd = '*CANCEL';
+             exsr c_endpgm;
+             leave;
+
+             //  F24 - Weitere Tasten
+          when ypgmcmd = '*MOREKEYS';
+             exsr c_morekeys;
+
+             //  Datenfreigabe
+          when ypgmcmd = '*ENTER';
+             exsr c_enter;
+             if *in99 = *off;
+                o_sgid = 'USR8112';
+                o_msgdta = *blanks;
+                leave;
+             endif;
+
+          other;
+             //  Falsche Taste gedrückt
+             p_wrongkey(workstn.aid: §§pgmname);
+             iter;
+          endsl;
+
+       enddo;
+
+       close peekfld;
+       close peek17fm;
+
+       return;
+
+       //============================================================*
+       //    C_Enter       "Datenfreigabetaste"                      *
+       //============================================================*
+
+       begsr c_enter;
+
+          dou ('1');
+
+             r_field = ##field;
+
+             //  Prompt?
+             //  ... ##Field
+             if %trim(##field ) = set_prmt;
+                exsr c_prompt;
+                if (*in99 = btrue);
+                   leave;
+                else;
+                   //  ...?
+                endif;
+             endif;
+
+             exsr prfb1;
+
+             if ##field <> r_field;
+                mustwait = btrue;
+             endif;
+
+             if mustwait = btrue;
+                *in99 = '1';
+             else;
+                //  Wert belassen ...
+             endif;
+
+          enddo;
+
+          if *in99 = *off;
+             o_field = ##field;
+             o_operation = ##op;
+             o_argument = r_arg30;
+             o_sign = ##sign;
+             o_srchnbrs = ##nbrs;
+
+             select;
+             when ##type = 'U';
+                o_srchtype = '*UNDERLINE';
+             when ##type = 'R';
+                o_srchtype = '*REVERSE';
+             when ##type = 'P';
+                o_srchtype = '*PINROW';
+             other;
+                o_srchtype = '*NORMAL';
+             endsl;
+
+             o_srchcase = ##case;
+
+             o_sgid = 'USR8112';
+             o_msgdta = *blanks;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    BZOFF1        Ausschalten aller Fehlerbezugszahlen      *
+       //============================================================*
+
+       begsr bzoff1;
+
+          //  DSPATR(PC)
+          *in20 = '0'; // ##FIELD
+          *in21 = '0'; // ##OP
+          *in22 = '0'; // ##ARG
+          *in23 = '0'; // ##NBRS
+          *in24 = '0'; // ##TYPE
+          *in25 = '0'; // ##CASE
+
+          //  DSPATR(RI)
+          *in30 = '0'; // ##FIELD
+          *in31 = '0'; // ##OP
+          *in32 = '0'; // ##ARG
+          *in33 = '0'; // ##NBRS
+          *in34 = '0'; // ##TYPE
+          *in35 = '0'; // ##CASE
+
+          //  Fehler
+          *in99 = '0';
+
+       endsr;
+
+       //============================================================*
+       //    PRFB1         Prüfen der Eingaben                       *
+       //============================================================*
+
+       begsr prfb1;
+
+          mustwait = bFalse;
+
+          exsr prf20; // Field
+          if (*in99 = bTrue);
+             leavesr;
+          endif;
+
+          exsr prf21; // Operation
+          if (*in99 = bTrue);
+             leavesr;
+          endif;
+
+          exsr prf22; // Argument
+          if (*in99 = bTrue);
+             leavesr;
+          endif;
+
+          exsr prf23; // Search Nbrs
+          if (*in99 = bTrue);
+             leavesr;
+          endif;
+
+          exsr prf24; // Search Type
+          if (*in99 = bTrue);
+             leavesr;
+          endif;
+
+          exsr prf25; // Case-Sens.
+          if (*in99 = bTrue);
+             leavesr;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    PRF20         Prüfen:  Feldname                         *
+       //============================================================*
+
+       begsr prf20;
+
+          dou ('1');
+
+             if ##field = '*RECORD';
+                //        suchen im ganzen Datensatz
+             else;
+
+                clear f_key;
+                f_key.f_field = ##field;
+                chain %kds(f_key) fpeekfld;
+                if (not %found());
+                   //  Fehlermeldung ...
+                   *in99 = '1';
+                   clear usr8136;
+                   usr81361 = ##field;
+                   p_sndpgmmg('USR8136': usr8136: §§pgmname);
+                   leave;
+                else;
+                   fldl0100 = f_ffd;
+                endif;
+
+                if fldl0100.f1dtyp <> 'A' and    // alpha-num
+                   // FLDL0100.F1DTyp <> 'G' and // graphic
+                   fldl0100.f1dtyp <> 'S' and    // Zoned
+                   fldl0100.f1dtyp <> 'B' and    // Binary
+                   fldl0100.f1dtyp <> 'P' and    // Packed
+                   fldl0100.f1dtyp <> 'T' and    // Time
+                   fldl0100.f1dtyp <> 'L' and    // Date
+                   fldl0100.f1dtyp <> 'F';       // Float
+                   *in99 = '1';
+                   clear usr8129;
+                   usr81291 = ##field;
+                   usr81292 = fldl0100.f1dtyp;
+                   p_sndpgmmg('USR8129': usr8129: §§pgmname);
+                   leave;
+                endif;
+
+             endif;
+
+          enddo;
+
+          if (*in99 = *on);
+             *in20 = '1';
+             *in30 = '1';
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    PRF21         Prüfen:  Operation                        *
+       //============================================================*
+
+       begsr prf21;
+
+          dou ('1');
+
+             if ##op <> 'EQ'
+                and ##op <> 'NE'
+                and ##op <> 'LT'
+                and ##op <> 'GT'
+                and ##op <> 'LE'
+                and ##op <> 'GE'
+                and ##op <> 'LIKE'
+                and ##op <> 'NLIKE';
+                *in99 = '1';
+                clear usr8124;
+                usr81241 = ##op;
+                p_sndpgmmg('USR8124': usr8124: §§pgmname);
+                leave;
+             endif;
+
+             if ##field <> '*RECORD';
+                if ##op = 'LIKE'
+                   or ##op = 'NLIKE';
+                   //*   F1DTyp        IFNE      'A'  // alpha-num
+                   //*   F1DTyp        ANDNE     'L'  // Date
+                   //*   F1DTyp        ANDNE     'T'  // Time
+                   if fldl0100.f1dtyp <> 'A' and      // alpha-num
+                      fldl0100.f1dtyp <> 'L' and      // Date
+                      fldl0100.f1dtyp <> 'T';         // Time
+                      *in99 = '1';
+                      clear usr8135;
+                      usr81351 = ##op;
+                      usr81352 = fldl0100.f1dtyp;
+                      p_sndpgmmg('USR8135': usr8135: §§pgmname);
+                      leave;
+                   endif;
+                endif;
+             endif;
+
+             if ##field = '*RECORD'
+                and ##op <> 'LIKE'
+                and ##op <> 'NLIKE';
+                *in99 = '1';
+                clear usr8134;
+                usr81341 = ##op;    // Operation
+                usr81342 = ##field; // Feld
+                p_sndpgmmg('USR8134': usr8134: §§pgmname);
+                leave;
+             endif;
+
+          enddo;
+
+          if *in99 = *on;
+             *in21 = '1';
+             *in31 = '1';
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    PRF22         Prüfen:  Argument                         *
+       //============================================================*
+
+       begsr prf22;
+
+          dou ('1');
+
+             r_sign = *blanks;
+             ##sign = *blanks;
+
+             if ##arg = *blanks;
+                *in99 = '1';
+                p_sndpgmmg('USR8140': usr8140: §§pgmname);
+                leave;
+             endif;
+
+             //  Umsetzen in internes Arbeitsfeld ...
+             //*   cLOWER:cUPPER XLATE (P) ##Arg         R_Arg30
+             r_arg30 = %xlate(clower: cupper: ##arg);
+
+             select;
+                //  Umsetzen des Sonderwertes "*BLANKS" ...
+             when r_arg30 = '*BLANKS'
+                or r_arg30 = '*BLANK';
+                r_arg30 = *blanks;
+
+                //  Umsetzen des Sonderwertes "*ZEROS" ...
+             when r_arg30 = '*ZEROS'
+                or r_arg30 = '*ZERO';
+                r_arg30 = *zeros;
+             other;
+                //  ... aktuellen Wert belassen
+                r_arg30 = ##arg;
+             endsl;
+
+             //  Verarbeiten numerischer Werte ...
+             if f_isnumfld(fldl0100) = btrue;
+
+                //  ... Vorzeichen, links
+                exsr signleft;
+                //  ... Vorzeichen, rechts
+                exsr signright;
+
+                //  ... umsetzen *BLANKS in '+' Zeichen
+                if ##sign = *blanks;
+                   ##sign = set_signp;
+                else;
+                   //      ... Vorzeichen stehen lassen
+                endif;
+
+                //  ... gültige Daten
+                //      ... Komma extrahieren
+                if fldl0100.f1dtyp = 'F'; // Float
+                   if f_vldfloat(r_arg30) = bFalse;
+                      *in99 = '1';
+                      clear usr81921;
+                      usr81921 = ##field;
+                      p_sndpgmmg('USR8192': usr8192: §§pgmname);
+                   endif;
+                else;
+                   exsr srchpoint;
+                   exsr expandnum;
+                   exsr chknumdata;
+                endif;
+
+                if *in99 = *on;
+                   leave;
+                endif;
+
+                //  ... falsches Vorzeichen
+                if ##sign <> set_signm
+                   and ##sign <> set_signp;
+                   *in99 = '1';
+                   clear usr8141;
+                   usr81411 = set_signp;
+                   usr81412 = set_signm;
+                   p_sndpgmmg('USR8141': usr8141: §§pgmname);
+                   leave;
+                else;
+                   //  ... richtiges Vorzeichen
+                endif;
+
+             else;
+                //  Alpha-numerische Werte ...
+                //  ... Vorzeichen
+                ##sign = *blanks;
+             endif;
+
+          enddo;
+
+          if *in99 = *on;
+             *in22 = '1';
+             *in32 = '1';
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    SignLeft      Prüfen extrahieren Vorzeichen links       *
+       //============================================================*
+
+       begsr signleft;
+
+          //   Suchen erstes Zeichen <> *BLANKS ...
+          x = %check(' ':r_arg30);
+          if x = *zeros;
+             //   Wenn nicht gefunden, dann ist nichts zu tun ...
+          else;
+             //   ansonsten das Zeichen extrahieren.
+             //*   1             SUBST (P) R_Arg30:X     R_Sign
+             r_sign = %subst(r_arg30: x: 1);
+             //   Wenn das extrahierte Zeichen dem '+' oder '-'
+             //   Zeichen entspricht, dann die Umsetzung vornehmen ...
+             if r_sign = set_signm
+                or r_sign = set_signp;
+                ##sign = r_sign;
+                x = x + 1;
+                if x <= 30;
+                   //*                 SUBST (P) R_Arg30:X     R_Arg30
+                   r_arg30 = %subst(r_arg30: x);
+                else;
+                   r_arg30 = *blanks;
+                endif;
+             else;
+                //   ... ansonsten ist nix zu tun.
+             endif;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    SignRight     Prüfen und umsetzen Vorzeichen rechts     *
+       //============================================================*
+
+       begsr signright;
+
+          //   Suchen letztes Zeichen <> *BLANKS ...
+          //*   ' '           CHECKR    R_Arg30       X
+          x = %checkr(' ': r_arg30);
+          if x = *zeros;
+             //   Wenn nicht gefunden, dann ist nichts zu tun ...
+          else;
+             //   ansonsten das Zeichen extrahieren.
+             //*   1             SUBST (P) R_Arg30:X     R_Sign
+             r_sign = %subst(r_arg30: x: 1);
+             //   Wenn das extrahierte Zeichen dem '+' oder '-'
+             //   Zeichen entspricht, dann die Umsetzung vornehmen ...
+             if r_sign = set_signm
+                or r_sign = set_signp;
+                ##sign = r_sign;
+                x = x - 1;
+                if x > *zeros;
+                   //*   X             SUBST (P) R_Arg30:1     R_Arg30
+                   r_arg30 = %subst(r_arg30: 1: x);
+                else;
+                   r_arg30 = *blanks;
+                endif;
+             else;
+                //   ... ansonsten ist nix zu tun.
+             endif;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    SrchPoint     Prüfen und umsetzen Komma                 *
+       //============================================================*
+
+       begsr srchpoint;
+
+          if f_isnumfld(fldl0100) = bFalse;
+             //    keine Aufbereitung für nicht-numerische Daten
+          else;
+
+             //  Suchen nach Komma ...
+             x = %scan(set_point: r_arg30);
+             if x = *zeros;
+                //   Wenn nicht gefunden, dann Länge +1 ...
+                //*   ' '           CHECKR    R_Arg30       X
+                x = %checkr(' ': r_arg30);
+                x = x + 1;
+             endif;
+
+             //   ansonsten Vorkommastellen ...
+             x = x - 1;
+             if x > *zeros;
+                //*   X             SUBST (P) R_Arg30:1     R_VorK
+                r_vork = %subst(r_arg30: 1: x);
+             else;
+                r_vork = *blanks;
+             endif;
+             //   ... und Nachkommastellen extrahieren
+             x = x + 2;
+             if x <= 30;
+                //*                 SUBST (P) R_Arg30:X     R_NachK
+                r_nachk = %subst(r_arg30: x);
+             else;
+                r_nachk = *blanks;
+             endif;
+
+             //   Anzahl der Nachkommastellen auffüllen ...
+             if fldl0100.f1decp <= 0;
+                //   ... keine vorhanden
+                r_nachk = *blanks;
+             else;
+                //   ... auffüllen
+                for do_x2 = 1 to *hival;
+                   //*   1             SUBST     R_NachK:F1DECPR_A1
+                   r_a1 = %subst(r_nachk: fldl0100.f1decp: 1);
+
+                   if r_a1 <> *blanks;
+                      //*   F1DECP        SUBST (P) R_NachK       R_NachK
+                      r_nachk = %subst(r_nachk: 1: fldl0100.f1decp);
+                      leave;
+                   endif;
+
+                   r_nachk = r_nachk + '0';
+                endfor;
+             endif;
+
+             //   Ganzzahl zusammenbauen ...
+             r_arg30 = %trimr(r_vork) + r_nachk;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    PRF23         Prüfen:  Anzahl Datensätze                *
+       //============================================================*
+
+       begsr prf23;
+
+          dou ('1');
+
+             if ##nbrs = *zeros;
+                *in99 = '1';
+                p_sndpgmmg('USR8125': '': §§pgmname);
+                leave;
+             endif;
+
+          enddo;
+
+          if *in99 = *on;
+             *in23 = '1';
+             *in33 = '1';
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    PRF24         Prüfen:  Suchtyp                          *
+       //============================================================*
+
+       begsr prf24;
+
+          dou ('1');
+
+             if ##type <> 'N'
+                and ##type <> 'R'
+                and ##type <> 'U'
+                and ##type <> 'P';
+                *in99 = '1';
+                clear usr8126;
+                usr81261 = ##type;
+                p_sndpgmmg('USR8126': usr8126: §§pgmname);
+                leave;
+             endif;
+
+          enddo;
+
+          if *in99 = *on;
+             *in24 = '1';
+             *in34 = '1';
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    PRF25         Prüfen:  case-sensitive                   *
+       //============================================================*
+
+       begsr prf25;
+
+          dou ('1');
+
+             if ##case <> btrue
+                and ##case <> bFalse;
+                *in99 = '1';
+                p_sndpgmmg('USR8133': '': §§pgmname);
+                leave;
+             endif;
+
+          enddo;
+
+          if *in99 = *on;
+             *in25 = '1';
+             *in35 = '1';
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    C_EndPgm      F3/F12 - Programm beenden                 *
+       //============================================================*
+
+       begsr c_endpgm;
+
+          p_rmvpgmmg(§§pgmname);
+
+          o_sgid = 'USR8100';
+
+          select;
+          when workstn.aid = k_f3;
+             usr81001 = 'F3';
+          when workstn.aid = k_f12;
+             usr81001 = 'F12';
+          other;
+             usr81001 = 'Fxx';
+          endsl;
+
+          o_msgdta = usr8100;
+
+       endsr;
+
+       //============================================================*
+       //    C_Prompt      F4  - Prompt                              *
+       //============================================================*
+
+       begsr c_prompt;
+
+          select;
+          when scnfld = '##FIELD'
+             or ##field = set_prmt;
+             exsr pmt_field;
+          other;
+             p_sndpgmmg('USR8179': '': §§pgmname);
+             *in99 = btrue;
+          endsl;
+
+       endsr;
+
+       //============================================================*
+       //    Pmt_Field     Prompt - Field                            *
+       //============================================================*
+
+       begsr pmt_field;
+
+          peek37(i_dsp80: i_copyright: yfield
+                : ymsgid: ymsgdta);
+
+          if ymsgid = *blanks;
+             ##field = yfield;
+          else;
+             p_sndpgmmg(ymsgid: ymsgdta: §§pgmname);
+             ymsgid = '';
+             ymsgdta = '';
+             *in99 = btrue;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    C_Refresh     F5  - Aktualisieren der Subfile           *
+       //============================================================*
+
+       begsr c_refresh;
+
+          exsr fill##;
+
+       endsr;
+
+       //============================================================*
+       //    C_MoreKeys    F24 - Weitere Tasten                      *
+       //============================================================*
+
+       begsr c_morekeys;
+
+          sfbot = sfbot + 1;
+
+       endsr;
+
+       //============================================================*
+       //    FILL##        Füllen Bildschirm                         *
+       //============================================================*
+
+       begsr fill##;
+
+          //  Wenn die Datei oder das Member gewechselt hat,
+          if i_qfile <> r_qfile
+             or i_member <> r_member;
+             //  ... dann die Bildschirmfelder neu
+             //      initialisieren.
+             exsr initfield;
+             r_qfile = i_qfile;
+             r_member = i_member;
+          else;
+             //  ... sonst die Bildschirmfelder belassen
+          endif;
+
+          clear f_key;
+          f_key.f_field = ##field;
+          chain %kds(f_key) fpeekfld;
+          if (not %found());
+             clear fldl0100;
+          else;
+             fldl0100 = f_ffd;
+          endif;
+
+          //  Defaultoperationscode einsetzen ...
+          if ##op = *blanks;
+             ##op = 'EQ';
+          else;
+             //  Operationscode stehenlasen
+          endif;
+
+          //  Sonderwerte einsetzen ...
+          select;
+          when ##arg = *blanks;
+             ##arg = '*BLANKS';
+          when ##arg = *zeros;
+             ##arg = '*ZEROS';
+          other;
+             // ... Umsetzung nicht erforderlich
+          endsl;
+
+          if (##nbrs = 0);
+             ##nbrs = set_snbrs;
+          else;
+             //  Wert stehenlassen ...
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    InitField     Initialisieren der Bildschirmfelder       *
+       //============================================================*
+
+       begsr initfield;
+
+          ##field = '';
+          ##op = '';
+          ##arg = '';
+          ##sign = '';
+          $$wldcd = set_wldcd;
+          ##nbrs = 0;
+          ##type = 'N';
+          ##case = bFalse;
+
+       endsr;
+
+       //============================================================*
+       //    SetScreen     Einstellen 132/80-Zeichen Auflösung       *
+       //============================================================*
+
+       begsr setscreen;
+
+          if i_dsp80 = '0';
+             //   132-Zeichen Anzeige
+             *in88 = '0';
+             zei = 6;
+             zei = zei + 1;
+             pos = 26;
+          else;
+             //    80-Zeichen Anzeige
+             *in88 = '1';
+             zei = 4;
+             zei = zei + 3;
+             pos = 7;
+          endif;
+
+          //  Prompt-Felder anzeigen ...
+          if set_dsppmt = btrue;
+             *in71 = '1';
+          else;
+             *in71 = '0';
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    GetUsrSetg    Ermitteln der Benutzervoreinstellungen    *
+       //============================================================*
+
+       begsr getusrsetg;
+
+          //  Attribute der Suchfunktion
+          set0002 = f_getusrsg('*SEARCH'   );
+
+          //  Attribute der Schlüsselaufbeeitung
+          set0003 = f_getusrsg('*ACCESSKEY');
+
+          //  *PROMPT
+          set0008 = f_getusrsg('*PROMPT'   );
+
+       endsr;
+
+       //============================================================*
+       //    TrimNum       Nullenunterdrückung für numerische Daten  *
+       //============================================================*
+
+       begsr trimnum;
+
+          if f_isnumfld(fldl0100) = bFalse;
+             //    keine Aufbereitung für nicht-numerische Daten
+          else;
+
+             x = %check('0':r_arg30);
+             if (x > 0);
+                r_arg30 = %subst(r_arg30: x);
+             else;
+                // Nur führende Nullen vorhanden
+                r_arg30 = *blanks;
+             endif;
+
+             // Argument bestand nur aus führenden Nullen
+             // oder nur aus *BLANKS ...
+             if r_arg30 = *blanks;
+                r_arg30 = '0';
+             else;
+                // keine Korrektur der Aufbereitung
+                // erforderlich
+             endif;
+
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    ChkNumData    auf gültige numerische Daten prüfen       *
+       //============================================================*
+
+       begsr chknumdata;
+
+          if f_isnumfld(fldl0100) = bFalse;
+             //    keine Prüfung für nicht-numerische Daten
+          else;
+
+             if (%check(NUMERIC_DIGITS: r_arg30) > 0);
+                *in99 = bTrue;
+                clear usr81381;
+                usr81381 = ##field;
+                p_sndpgmmg('USR8138': usr8138: §§pgmname);
+             endif;
+
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    ExpandNum     numerische Daten rechtsbündig setzen      *
+       //============================================================*
+
+       begsr expandnum;
+
+          if f_isnumfld(fldl0100) = bFalse;
+             //    keine Aufbereitung für nicht-numerische Daten
+          else;
+
+             x = %checkr(' ': r_arg30);
+             x = 30 - x;
+             if (x > 0);
+                r_arg30 = f_space(x) +  r_arg30;
+             else;
+                // ... ist bereits rechtbündig
+             endif;
+
+             r_arg30 = %xlate(' ': '0': r_arg30);
+
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    First         Initialisierung                           *
+       //============================================================*
+
+       begsr first;
+
+          // - Öffnen der Dateien
+          open peekfld;
+          open peek17fm;
+
+          // - Benutzervoreinstellungen
+          exsr getusrsetg;
+
+          // - Füllen der Bildschirmfelder
+          exsr fill##;
+
+          // - Programm initialisieren
+          p_rmvpgmmg(§§pgmname);
+
+          o_sgid = *blanks;
+          o_msgdta = *blanks;
+
+          // - Darstellung der Befehlstasten
+          sfbot = 1;
+
+          // - Einstellen der Bildschirmauflösung 80/132-Zeichen
+          exsr setscreen;
+
+          // - Copyright
+          p_sndpgmmg('USR9999': i_copyright: §§pgmname);
+
+       endsr;
+
+       //====================================================*
+       //  InzSr --  Initialize program                      *
+       //====================================================*
+
+       begsr inzsr;
+
+          if (isInzSr = btrue);
+             leavesr;
+          endif;
+
+          isInzSr = btrue;
+
+          §pgmq = '*';
+
+          peek21_name = f_pgmcalln('PEEK21');
+          peek23_name = f_pgmcalln('PEEK23');
+          peek37_name = f_pgmcalln('PEEK37');
+
+          peek23(§§pgmname: '*ALL': 0
+                : yfkeys: ynbrofkeys);
+          scrnfkeys = %subarr(yfkeys: 1);
+
+       endsr;
+
+       //============================================================*
+       //  Program error handler                                     *
+       //============================================================*
+
+       dcl-proc errorhandler;
+       dcl-pi *N;
+         i_condtoken     value likeds(cee_fc_t);
+         i_pcommarea     int(10) value;
+         o_action        int(10);
+         o_newcondtoken  likeds(cee_fc_t);
+       end-pi;
+
+       dump;
+       o_action = cee_percolate;
+
+       end-proc;
+

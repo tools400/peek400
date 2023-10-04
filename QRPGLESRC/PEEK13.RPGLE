@@ -1,86 +1,86 @@
-      *===============================================================*
-      *                                                               *
-      *  (c) Thomas Raddatz                                           *
-      *                                                               *
-      *  Bereich  : PEEK, Version 1.4.0                               *
-      *  Programm : PEEK13                                            *
-      *  Typ      : RPG                                               *
-      *                                                               *
-      *  erstellt : 07.10.96  RADDATZ                                 *
-      *                                                               *
-      *===============================================================*
-      *                                                               *
-      *  Dokumentation:                                               *
-      *                                                               *
-      *  Ermitteln der Teildateibeschreibung                          *
-      *                                                               *
-      *===============================================================*
-      *                                                               *
-      *  INPUT-Parameter:                                             *
-      *  ================                                             *
-      *                                                               *
-      *  XQFile  - Qualifizierter Dateiname                           *
-      *  XMbr    - Name der Teildatei                                 *
-      *                                                               *
-      *  OUTPUT-Parameter:                                            *
-      *  =================                                            *
-      *                                                               *
-      *  XValue  - Objektinformationen im Format MBRD0200             *
-      *                                                               *
-      * ============================================================= *
-      * >>PRE-COMPILER<<                                              *
-      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
-      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
-      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
-      *                           INSTALL(*NO);                       *
-      *   >>EXECUTE<<                                                 *
-      * >>END-PRE-COMPILER<<                                          *
-      *===============================================================*
+       //===============================================================*
+       //                                                               *
+       //  (c) Thomas Raddatz                                           *
+       //                                                               *
+       //  Bereich  : PEEK, Version 1.4.0                               *
+       //  Programm : PEEK13                                            *
+       //  Typ      : RPG                                               *
+       //                                                               *
+       //  erstellt : 07.10.96  RADDATZ                                 *
+       //                                                               *
+       //===============================================================*
+       //                                                               *
+       //  Dokumentation:                                               *
+       //                                                               *
+       //  Ermitteln der Teildateibeschreibung                          *
+       //                                                               *
+       //===============================================================*
+       //                                                               *
+       //  INPUT-Parameter:                                             *
+       //  ================                                             *
+       //                                                               *
+       //  XQFile  - Qualifizierter Dateiname                           *
+       //  XMbr    - Name der Teildatei                                 *
+       //                                                               *
+       //  OUTPUT-Parameter:                                            *
+       //  =================                                            *
+       //                                                               *
+       //  XValue  - Objektinformationen im Format MBRD0200             *
+       //                                                               *
+       // ============================================================= *
+       // >>PRE-COMPILER<<                                              *
+       //   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+       //                           OBJLIB(&LI) DEVLIB(&LI) +           *
+       //                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+       //                           INSTALL(*NO);                       *
+       //   >>EXECUTE<<                                                 *
+       // >>END-PRE-COMPILER<<                                          *
+       //===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
-      *
+
       /COPY QCOPYLE,D_VARDEF
       /COPY QCOPYLE,FLDL0100
       /COPY QCOPYLE,QUSRMBRD
       /COPY QCOPYLE,MBRD0200
-      *
+
       /define internal_prototype
       /COPY QCOPYLE,PPEEK13
       /undefine internal_prototype
-      *
+
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
-      *
-      *
-     D MBRD0200        DS                  likeds(MBRD0200_t) inz
-     D errCode         DS                  likeds(errCode_t) inz
-      *
-      ********************************************************************
-      *           Main  Control block                                    *
-      ********************************************************************
-      *
-     D PEEK13          PI
-     D  i_qFile                            const likeds(qObj_t)
-     D  i_mbr                              const like(mbr_t)
-     D  o_mbrd0200                               likeds(MBRD0200_t)
-      *
-      *---------------------------------------------------*
-      *
-      * - Meldung
-     C                   Callp     p_sndStsMg('USR8109': i_qFile + i_mbr)
-      *
-     C                   CLEAR                   errCode
-     C                   EVAL      errCode.bytPrv = %size(errCode)
-      *
-     C                   CALLP     QUSRMBRD(MBRD0200: %size(MBRD0200)
-     C                                      : 'MBRD0200'
-     C                                      : i_qFile: i_mbr: '0': errCode)
-      *
-     C                   IF        (errCode.bytAvl > 0)
-     C                   CLEAR                   o_MBRD0200
-     C                   ELSE
-     C                   EVAL      o_mbrd0200 = MBRD0200
-     C                   Endif
-      *
-     C                   RETURN
-      *
+
+       dcl-ds mbrd0200 likeds(mbrd0200_t) inz;
+       dcl-ds errcode likeds(errcode_t) inz;
+
+       //*******************************************************************
+       //           Main  Control block                                    *
+       //*******************************************************************
+
+       dcl-pi peek13;
+         i_qfile         const likeds(qobj_t);
+         i_mbr           const like(mbr_t);
+         o_mbrd0200      likeds(mbrd0200_t);
+       end-pi;
+
+       //---------------------------------------------------*
+
+       // - Meldung
+       p_sndstsmg('USR8109': i_qfile + i_mbr);
+
+       clear errcode;
+       errcode.bytprv = %size(errcode);
+
+       qusrmbrd(mbrd0200: %size(mbrd0200)
+               : 'MBRD0200'
+               : i_qfile: i_mbr: '0': errcode);
+
+       if (errcode.bytavl > 0);
+          clear o_mbrd0200;
+       else;
+          o_mbrd0200 = mbrd0200;
+       endif;
+
+       return;
+
