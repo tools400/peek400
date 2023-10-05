@@ -101,15 +101,6 @@
        o_msgid         like(msgid_t);
        o_msgdta        like(msgdta_t);
        end-pi;
-       // --------------------------------------------------------------------
-       // Stand Alone Fields - TOP
-       // --------------------------------------------------------------------
-       dcl-s do_x2           packed(7);
-       dcl-s do_x3           packed(7);
-       // --------------------------------------------------------------------
-       // Stand Alone Fields - BOTTOM
-       // --------------------------------------------------------------------
-
        //---------------------------------------------------*
 
        //  Register error handler
@@ -146,21 +137,21 @@
           select;
           when (sfbot = 2) and
              (ynbrofkeys > §nbrfkeys * (sfbot - 1));
-             write pbbot#2;                                                     // BT-Tasten 2
+             write pbbot#2;
           when (sfbot = 3) and
              (ynbrofkeys > §nbrfkeys * (sfbot - 1));
-             write pbbot#3;                                                     // BT-Tasten 3
+             write pbbot#3;
           when (sfbot = 4) and
              (ynbrofkeys > §nbrfkeys * (sfbot - 1));
-             write pbbot#4;                                                     // BT-Tasten 4
+             write pbbot#4;
           when (sfbot = 5) and
              (ynbrofkeys > §nbrfkeys * (sfbot - 1));
-             write pbbot#5;                                                     // BT-Tasten 4
+             write pbbot#5;
           when (sfbot = 6) and
              (ynbrofkeys > §nbrfkeys * (sfbot - 1));
-             write pbbot#6;                                                     // BT-Tasten 4
+             write pbbot#6;
           other;
-             write pbbot#1;                                                     // BT-Tasten 1
+             write pbbot#1;
              sfbot = 1;
           endsl;
 
@@ -306,13 +297,13 @@
           *in89 = '0';
           write msgctl;
 
-          *in80 = '0';                                                          // SFLDSP
-          *in81 = '1';                                                          // SFLDSPCTL
-          *in82 = '1';                                                          // SFLCLR
-          *in83 = '1';                                                          // SFLEND
+          *in80 = '0'; // SFLDSP
+          *in81 = '1'; // SFLDSPCTL
+          *in82 = '1'; // SFLCLR
+          *in83 = '1'; // SFLEND
           write pbctl;
 
-          *in82 = '0';                                                          // SFLCLR
+          *in82 = '0'; // SFLCLR
 
           sflrec = *zeros;
 
@@ -327,17 +318,16 @@
 
        begsr pbfirstrcd;
 
-          if *in80 = *off;
-             lastrcdnbr = *zeros;
+          if (*in80 = *off);
+             lastrcdnbr = 0;
           else;
 
              chain 1 pbsfl;
-             *in11 = not %found;
 
-             if *in11 = *off;
-                lastrcdnbr = recordnbr;
+             if (not %found());
+                lastrcdnbr = 0;
              else;
-                lastrcdnbr = *zeros;
+                lastrcdnbr = recordnbr;
              endif;
           endif;
 
@@ -454,9 +444,7 @@
              setll 1 fpeekfmt;
              dou %eof(peekfmt);
                 read fpeekfmt;
-                *in11 = %eof;
-                if *in11 = *off;
-
+                if (not %eof(peekfmt));
                    rcdl0200 = f_fmt;
                    if (rcdl0200.r2fmtname = i_fmtname) or
                       ((peek_01_ds.p1nbrofrcd = 1) and (i_fmtname = ''));
