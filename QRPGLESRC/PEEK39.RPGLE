@@ -1,280 +1,278 @@
-      *===============================================================*
-      *                                                               *
-      *  (c) Thomas Raddatz                                           *
-      *                                                               *
-      *  Bereich  : PEEK, Version 1.4.0                               *
-      *  Programm : PEEK39                                            *
-      *  Typ      : RPG                                               *
-      *                                                               *
-      *  erstellt : 20.03.98  RADDATZ                                 *
-      *                                                               *
-      *===============================================================*
-      *                                                               *
-      *  Dokumentation:                                               *
-      *                                                               *
-      *  Peek/400 - Ermitteln Datenbankrelationen                     *
-      *                                                               *
-      *===============================================================*
-      *                                                               *
-      *  INPUT-Parameter:                                             *
-      *  ================                                             *
-      *                                                               *
-      *  XQFILE  - Qualified file name                                *
-      *             1 - 10:  file                                     *
-      *            11 - 20:  library                                  *
-      *                                                               *
-      *  XFUNK   - control of modul function                          *
-      *     *CREATE  - create list of database relations   CREATE     *
-      *     *READ    - get next entry                      READ       *
-      *     *DELETE  - delete list                         DELETE     *
-      *                                                               *
-      *  OUTPUT-Parameter:                                            *
-      *  =================                                            *
-      *                                                               *
-      *  XANZ    - number of entry (depedencies)                      *
-      *            parameter is supported using XFUNK=1   (create)    *
-      *                                                               *
-      *  XLIST   - entry                                              *
-      *            parameter is supported using XFUNK=5   (read)      *
-      *            (must be splitted using a data structure)          *
-      *                                                               *
-      *===============================================================*
-      *                                                               *
-      *  Typical call sequence:                                       *
-      *                                                               *
-      *      PEEK39 - Funktion (1)       create list                  *
-      *                                                               *
-      *  1   DO  XANZ                                                 *
-      *      PEEK39 - Funktion (5)       read next entry              *
-      *      ENDDO                                                    *
-      *                                                               *
-      *      PEEK39 - Funktion (4)       delete list (user space)     *
-      *                                                               *
-      * ============================================================= *
-      * >>PRE-COMPILER<<                                              *
-      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
-      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
-      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
-      *                           INSTALL(*NO);                       *
-      *   >>EXECUTE<<                                                 *
-      * >>END-PRE-COMPILER<<                                          *
-      *===============================================================*
-     H main(PEEK39)
+       //===============================================================*
+       //                                                               *
+       //  (c) Thomas Raddatz                                           *
+       //                                                               *
+       //  Bereich  : PEEK, Version 1.4.0                               *
+       //  Programm : PEEK39                                            *
+       //  Typ      : RPG                                               *
+       //                                                               *
+       //  erstellt : 20.03.98  RADDATZ                                 *
+       //                                                               *
+       //===============================================================*
+       //                                                               *
+       //  Dokumentation:                                               *
+       //                                                               *
+       //  Peek/400 - Ermitteln Datenbankrelationen                     *
+       //                                                               *
+       //===============================================================*
+       //                                                               *
+       //  INPUT-Parameter:                                             *
+       //  ================                                             *
+       //                                                               *
+       //  XQFILE  - Qualified file name                                *
+       //             1 - 10:  file                                     *
+       //            11 - 20:  library                                  *
+       //                                                               *
+       //  XFUNK   - control of modul function                          *
+       //     *CREATE  - create list of database relations   CREATE     *
+       //     *READ    - get next entry                      READ       *
+       //     *DELETE  - delete list                         DELETE     *
+       //                                                               *
+       //  OUTPUT-Parameter:                                            *
+       //  =================                                            *
+       //                                                               *
+       //  XANZ    - number of entry (depedencies)                      *
+       //            parameter is supported using XFUNK=1   (create)    *
+       //                                                               *
+       //  XLIST   - entry                                              *
+       //            parameter is supported using XFUNK=5   (read)      *
+       //            (must be splitted using a data structure)          *
+       //                                                               *
+       //===============================================================*
+       //                                                               *
+       //  Typical call sequence:                                       *
+       //                                                               *
+       //      PEEK39 - Funktion (1)       create list                  *
+       //                                                               *
+       //  1   DO  XANZ                                                 *
+       //      PEEK39 - Funktion (5)       read next entry              *
+       //      ENDDO                                                    *
+       //                                                               *
+       //      PEEK39 - Funktion (4)       delete list (user space)     *
+       //                                                               *
+       // ============================================================= *
+       // >>PRE-COMPILER<<                                              *
+       //   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+       //                           OBJLIB(&LI) DEVLIB(&LI) +           *
+       //                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+       //                           INSTALL(*NO);                       *
+       //   >>EXECUTE<<                                                 *
+       // >>END-PRE-COMPILER<<                                          *
+       //===============================================================*
+       ctl-opt main(peek39);
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
-      *
-      *---Variablendefinition------------------------------*
+
       /COPY QCOPYLE,D_VARDEF
       /COPY QCOPYLE,DBRL0200
       /COPY QCOPYLE,GENHEADER
       /COPY QCOPYLE,FLDL0100
-      *----------------------------------------------------*
-      *
+      /COPY QCOPYLE,QDBLDBR
+      /COPY QCOPYLE,QUSCRTUS
+      /COPY QCOPYLE,QUSPTRUS
+
       /define internal_prototype
       /COPY QCOPYLE,PPEEK39
       /undefine internal_prototype
-      *
-      /COPY QCOPYLE,QDBLDBR
-      *
-     D size_t          S             10U 0 template
-      *
-      *  qsort -- Sort Array
-     D qsort           PR              *                       extproc('qsort')
-     D  memPtr                         *   value
-     D  numElem                            value  like(size_t)
-     D  width                              value  like(size_t)
-     D  pSortFunc                      *   value  procptr
-      *
-      *  Sort List Entries by Name                         *
-     D sortByName      PR            10I 0
-     D  i_pKey                         *   value
-     D  i_pElm                         *   value
-      *
-     D  qUsrSpc        DS                  likeds(qObj_t) inz
-     D  pSpcPtr        S               *
-     D  errCode        DS                  likeds(errCode_t) inz
-      *
-      *  Organisation of generic header
-     D GenHeader       DS                  likeds(genHeader_t) based(pSpcPtr)
-      *
-      *  List data
-     D currListE       S                   like(int4_t)
-     D offsetListE     S                   like(int4_t)
-     D pListE          S               *
-     D listE           DS                  likeds(dbrl0200_t) based(pListE)
-      *
-      /COPY QCOPYLE,QUSCRTUS
-      /COPY QCOPYLE,QUSPTRUS
-      *
+
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
-      *
-     D msgId           S                   like(msgId_t)
-     D msgDta          S                   like(msgDta_t)
-      *
-      ********************************************************************
-      *           Main  Control block                                    *
-      ********************************************************************
-      *
-     P PEEK39          B
-     D                 PI
-     D  i_qFile                            const like(qObj_t)
-     D  i_mbr                              const like(mbr_t)
-     D  i_function                         const like(function_t)
-     D  o_numE                                   like(int4_t)
-     D  o_dbrl0200                               likeds(dbrl0200_t)
-      *
-      *---------------------------------------------------*
-      *
-     C                   EVAL      qUsrSpc.lib = USRSPC_LIBRARY
-     C                   EVAL      qUsrSpc.name = USRSPC_NAME
-      *
-     C                   monitor
-      *
-     C                   SELECT
-     C                   WHEN      (i_function = '*CREATE')
-     C                   EXSR      Create
-     C                   WHEN      (i_function = '*DELETE')
-     C                   EXSR      Delete
-     C                   WHEN      (i_function = '*READ')
-     C                   EXSR      Read
-     C                   Endsl
-      *
-     C                   on-error
-     C                   dump
-     C                   eval      o_numE = 0
-     C                   endmon
-      *
-      *====================================================*
-      *  Create --  create user space and get database rel.*
-      *====================================================*
-      *
-     C     Create        BEGSR
-      *
-     C                   EVAL      o_numE = *ZEROS
-      *
-      *  create user space
-     C                   IF        (not f_exist(
-     C                                qUsrSpc.name: qUsrSpc.lib: '*USRSPC'))
-     C                   Callp     QUSCRTUS(qUsrSpc: 'TEMP': 32767: x'00'
-     C                                      : '*ALL': 'Peek/400 - Work Area')
-     C                   Endif
-      *
-      *  get user space pointer
-     C                   Callp     QUSPTRUS(qUsrSpc: pSpcPtr)
-      *
-      *  get database relations
-     C                   CALLP     QDBLDBR(qUsrSpc: 'DBRL0200'
-     C                                     : i_qFile: i_mbr: '': errCode)
-      *
-     C                   If        (errCode.bytAvl > 0)
-     C                   Eval      o_numE = 0
-     C                   Eval      currListE = -1
-     C                   Else
-      *
-      *  sort entries by name
-     C                   CALLP     qSort(pSpcPtr + GenHeader.OffsetLst
-     C                                   : GenHeader.NumLstEnt
-     C                                   : GenHeader.EntrySize
-     C                                   : %paddr(sortByName))
-      *
-     C                   Eval      o_numE = GenHeader.NumLstEnt
-     C                   Eval      currListE = 0
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *====================================================*
-      *  Delete --  Delete user space                      *
-      *====================================================*
-      *
-     C     Delete        BEGSR
-      *
-     C                   IF        (f_exist(
-     C                                qUsrSpc.name: qUsrSpc.lib: '*USRSPC'))
-     C
-     C                   Callp     f_execute('DLTUSRSPC USRSPC(' +
-     C                                         %trim(qUsrSpc.lib) + '/' +
-     C                                         %trim(qUsrSpc.name) +
-     C                                       ')': msgId: msgDta)
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *====================================================*
-      *  Read   --  Read next entry                        *
-      *====================================================*
-      *
-     C     Read          BEGSR
-      *
-     C                   Clear                   o_dbrl0200
-      *
-     C                   IF        (currListE < 0 or
-     C                              currListE >= GenHeader.NumLstEnt)
-     C                   Exsr      setError
-     C                   Leavesr
-     C                   ENDIF
-      *
-     C                   Eval      currListE = currListE + 1
-      *
-     C                   Eval      offsetListE =
-     C                               GenHeader.OffsetLst +
-     C                               ((currListE - 1) * GenHeader.EntrySize)
-      *
-     C                   EVAL      pListE = pSpcPtr + offsetListE
-      *
-     C                   EVAL      o_dbrl0200 = listE
-      *
-     C                   EVAL      o_numE = GenHeader.NumLstEnt - currListE
-      *
-     C                   ENDSR
-      *
-      *====================================================*
-      *  Set error condition                               *
-      *====================================================*
-      *
-     C     setError      BEGSR
-      *
-     C                   EVAL      o_numE = 0
-      *
-     C                   ENDSR
-      *
-     P                 E
-      *
-      *====================================================*
-      *  Sort List Entries by Name                         *
-      *====================================================*
-     P sortByName      B
-     D                 PI            10I 0
-     D  i_pKey                         *   value
-     D  i_pElm                         *   value
-      *
-     D key             DS                  qualified   based(i_pKey)
-     D  depFile               31     40A
-     D  depLib                41     50A
-     D  depMbr                51     60A
-      *
-     D elm             DS                  likeds(key) based(i_pElm)
-      * - - - - - - - - - - - - - - - - - - - - - - - - - -
-      /FREE
 
-         select;
-         when (key.depLib < elm.depLib);
-            return -1;
-         when (key.depLib > elm.depLib);
-            return 1;
-         other;
-            select;
-            when (key.depFile < elm.depFile);
-               return -1;
-            when (key.depFile > elm.depFile);
-               return 1;
-            other;
-               return 0;
-            endsl;
-         endsl;
+       dcl-s size_t          uns(10) template;
 
-      /END-FREE
-      *
-     P                 E
-      *
+       //  qsort -- Sort Array
+       dcl-pr qsort pointer extproc('qsort');
+         memptr          pointer value;
+         numelem         value  like(size_t);
+         width           value  like(size_t);
+         psortfunc       pointer(*proc) value;
+       end-pr;
+
+       //  Sort List Entries by Name                         *
+       dcl-pr sortbyname      int(10);
+         i_pkey          pointer value;
+         i_pelm          pointer value;
+       end-pr;
+
+       dcl-ds qusrspc likeds(qobj_t) inz;
+       dcl-s pspcptr         pointer;
+       dcl-ds errcode likeds(errcode_t) inz;
+
+       //  Organisation of generic header
+       dcl-ds genheader likeds(genheader_t) based(pspcptr);
+
+       //  List data
+       dcl-s currliste       like(int4_t);
+       dcl-s offsetliste     like(int4_t);
+       dcl-s pliste          pointer;
+       dcl-ds liste likeds(dbrl0200_t) based(pliste);
+
+       dcl-s msgid           like(msgid_t);
+       dcl-s msgdta          like(msgdta_t);
+
+       //*******************************************************************
+       //           Main  Control block                                    *
+       //*******************************************************************
+
+       dcl-proc peek39;
+       dcl-pi *N;
+         i_qfile         const like(qobj_t);
+         i_mbr           const like(mbr_t);
+         i_function      const like(function_t);
+         o_nume          like(int4_t);
+         o_dbrl0200      likeds(dbrl0200_t);
+       end-pi;
+
+       //---------------------------------------------------*
+
+       qusrspc.lib = usrspc_library;
+       qusrspc.name = usrspc_name;
+
+       monitor;
+
+          select;
+          when (i_function = '*CREATE');
+             exsr create;
+          when (i_function = '*DELETE');
+             exsr delete;
+          when (i_function = '*READ');
+             exsr read;
+          endsl;
+
+       on-error;
+          dump;
+          o_nume = 0;
+       endmon;
+
+       //====================================================*
+       //  Create --  create user space and get database rel.*
+       //====================================================*
+
+       begsr create;
+
+          o_nume = *zeros;
+
+          //  create user space
+          if (not f_exist(
+             qusrspc.name: qusrspc.lib: '*USRSPC'));
+             quscrtus(qusrspc: 'TEMP': 32767: x'00'
+                     : '*ALL': 'Peek/400 - Work Area');
+          endif;
+
+          //  get user space pointer
+          qusptrus(qusrspc: pspcptr);
+
+          //  get database relations
+          qdbldbr(qusrspc: 'DBRL0200'
+                 : i_qfile: i_mbr: '': errcode);
+
+          if (errcode.bytavl > 0);
+             o_nume = 0;
+             currliste = -1;
+          else;
+
+             //  sort entries by name
+             qsort(pspcptr + genheader.offsetlst
+                  : genheader.numlstent
+                  : genheader.entrysize
+                  : %paddr(sortbyname));
+
+             o_nume = genheader.numlstent;
+             currliste = 0;
+          endif;
+
+       endsr;
+
+       //====================================================*
+       //  Delete --  Delete user space                      *
+       //====================================================*
+
+       begsr delete;
+
+          if (f_exist(
+             qusrspc.name: qusrspc.lib: '*USRSPC'));
+
+             f_execute('DLTUSRSPC USRSPC(' +
+                        %trim(qusrspc.lib) + '/' +
+                        %trim(qusrspc.name) +
+                      ')': msgid: msgdta);
+          endif;
+
+       endsr;
+
+       //====================================================*
+       //  Read   --  Read next entry                        *
+       //====================================================*
+
+       begsr read;
+
+          clear o_dbrl0200;
+
+          if (currliste < 0 or
+             currliste >= genheader.numlstent);
+             exsr seterror;
+             leavesr;
+          endif;
+
+          currliste = currliste + 1;
+
+          offsetliste =
+           genheader.offsetlst +
+           ((currliste - 1) * genheader.entrysize);
+
+          pliste = pspcptr + offsetliste;
+
+          o_dbrl0200 = liste;
+
+          o_nume = genheader.numlstent - currliste;
+
+       endsr;
+
+       //====================================================*
+       //  Set error condition                               *
+       //====================================================*
+
+       begsr seterror;
+
+          o_nume = 0;
+
+       endsr;
+
+       end-proc;
+
+       //====================================================*
+       //  Sort List Entries by Name                         *
+       //====================================================*
+       dcl-proc sortbyname;
+       dcl-pi *N              int(10);
+         i_pkey          pointer value;
+         i_pelm          pointer value;
+       end-pi;
+
+       dcl-ds key qualified   based(i_pkey);
+         depfile         char(10) pos(31);
+         deplib          char(10);
+         depmbr          char(10);
+       end-ds;
+
+       dcl-ds elm likeds(key) based(i_pelm);
+       // - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+       select;
+       when (key.deplib < elm.deplib);
+          return -1;
+       when (key.deplib > elm.deplib);
+          return 1;
+       other;
+          select;
+          when (key.depfile < elm.depfile);
+             return -1;
+          when (key.depfile > elm.depfile);
+             return 1;
+          other;
+             return 0;
+          endsl;
+       endsl;
+
+       end-proc;
+

@@ -1,165 +1,153 @@
-      *===============================================================*
-      *                                                               *
-      *  (c) Thomas Raddatz                                           *
-      *                                                               *
-      *  Bereich  : PEEK, Version 1.4.0                               *
-      *  Programm : PEEK36                                            *
-      *  Typ      : RPG                                               *
-      *                                                               *
-      *  erstellt : 29.01.1998  Raddatz                               *
-      *                                                               *
-      *===============================================================*
-      *                                                               *
-      *  Kurzdokumentation :                                          *
-      *                                                               *
-      *  Peek/400 - Prüfen Datum-, Zeit, Zeitstempelfelder            *
-      *                                                               *
-      *  geändert : 01.04.04  für Version 2.2.2                       *
-      *                     added support for time format *HMS, *EUR  *
-      *                     added support for date format *EUR        *
-      *                                                               *
-      * ============================================================= *
-      * >>PRE-COMPILER<<                                              *
-      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
-      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
-      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
-      *                           INSTALL(*NO);                       *
-      *   >>EXECUTE<<                                                 *
-      * >>END-PRE-COMPILER<<                                          *
-      *===============================================================*
+       //===============================================================*
+       //                                                               *
+       //  (c) Thomas Raddatz                                           *
+       //                                                               *
+       //  Bereich  : PEEK, Version 1.4.0                               *
+       //  Programm : PEEK36                                            *
+       //  Typ      : RPG                                               *
+       //                                                               *
+       //  erstellt : 29.01.1998  Raddatz                               *
+       //                                                               *
+       //===============================================================*
+       //                                                               *
+       //  Kurzdokumentation :                                          *
+       //                                                               *
+       //  Peek/400 - Prüfen Datum-, Zeit, Zeitstempelfelder            *
+       //                                                               *
+       //  geändert : 01.04.04  für Version 2.2.2                       *
+       //                     added support for time format *HMS, *EUR  *
+       //                     added support for date format *EUR        *
+       //                                                               *
+       // ============================================================= *
+       // >>PRE-COMPILER<<                                              *
+       //   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+       //                           OBJLIB(&LI) DEVLIB(&LI) +           *
+       //                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+       //                           INSTALL(*NO);                       *
+       //   >>EXECUTE<<                                                 *
+       // >>END-PRE-COMPILER<<                                          *
+       //===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
-      *
-      *---Variablendefinition------------------------------*
+
       /COPY QCOPYLE,D_VARDEF
-      *----------------------------------------------------*
-      *
+      /COPY QCOPYLE,FLDL0100
+      /COPY QCOPYLE,CEECNDHDLR
+
+      /COPY QCOPYLE,USR8171
+
       /define internal_prototype
       /COPY QCOPYLE,PPEEK36
       /undefine internal_prototype
-      *
-      *---Nachrichtenaufbau--------------------------------*
-      /COPY QCOPYLE,USR8171
-      *----------------------------------------------------*
-      *
-      *---API-Formate--------------------------------------*
-      /COPY QCOPYLE,FLDL0100
-      *----------------------------------------------------*
-      *
-     D R_DateISO       S               D         DATFMT(*ISO)    INZ(*LOVAL )
-     D R_DateEUR       S               D         DATFMT(*EUR)    INZ(*LOVAL )
-     D R_TimeISO       S               T         TIMFMT(*ISO)    INZ(*LOVAL )
-     D R_TimeHMS       S               T         TIMFMT(*HMS)    INZ(*LOVAL )
-     D R_TimeEUR       S               T         TIMFMT(*EUR)    INZ(*LOVAL )
-     D R_TimeStmp      S               Z                         INZ(*LOVAL )
-     D R_FldLen        S                   like(int4_t) inz
-     D R_Pos           S                   like(int4_t) inz
-     D R_Buffer        S                         LIKE(i_buffer)   INZ(*ZEROS )
-     D R_BuffLen       C                         CONST(%SIZE(i_buffer))
-      *
+
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
-      *
-      /COPY QCOPYLE,CEECNDHDLR
-      *
-      ********************************************************************
-      *                 S T E U E R  -  R O U T I N E                    *
-      ********************************************************************
-      *
-     D PEEK36          PI
-     D  i_buffer                    128A   const
-     D  i_type                        1A   const
-     D  i_datTimFmt                        const like(FLDL0100_t.F1DTFM)
-     D  i_separator                        const like(FLDL0100_t.F1DTSP)
-     D  o_msgID                                  like(msgID_t)
-     D  o_msgDta                                 like(msgDta_t)
-      *
-      *  Register error handler
-     C                   callp     CEEHDLR(%paddr('errorHandler')
-     C                                     : *null: *omit)
-     C                   EXSR      First
-      *
-      *  Prüfen Format für ...
-     C                   SELECT
-      *  ... Datum
-     C     i_type        WHENEQ    'L'                                         = Date
-     C                   SELECT
-      *      ... *EUR
-     C     i_datTimFmt   WHENEQ    '*EUR'
-     C                   EVAL      R_DateEUR = %date(i_buffer: *EUR)
-      *      ... *ISO
-     C                   OTHER
-     C                   EVAL      R_DateISO = %date(i_buffer: *ISO)
-     C                   ENDSL
-     C                   EVAL      R_FldLen = 10
-      *  ... Zeit
-     C     i_type        WHENEQ    'T'                                         = Time
-     C                   SELECT
-      *      ... *HMS
-     C     i_datTimFmt   WHENEQ    '*HMS'
-     C                   EVAL      R_TimeHMS = %time(i_buffer: *HMS)
-      *      ... *EUR
-     C     i_datTimFmt   WHENEQ    '*EUR'
-     C                   EVAL      R_TimeEUR = %time(i_buffer: *EUR)
-      *      ... *ISO
-     C                   OTHER
-     C                   EVAL      R_TimeISO = %time(i_buffer: *ISO)
-     C                   ENDSL
-     C                   EVAL      R_FldLen = 8
-      *  ... Zeitstempel
-     C     i_type        WHENEQ    'Z'                                         = Timestamp
-     C                   EVAL      R_TimeStmp = %timestamp(i_buffer)
-     C                   EVAL      R_FldLen = 26
-     C                   OTHER
-     C                   CALLP     p_kill('Incorrect time format: ' +
-     C                                    i_datTimFmt)
-     C                   Endsl
-      *
-     C                   EVAL      R_Pos = R_FldLen + 1
-     C     R_Pos         IFLE      R_BuffLen
-     C**                 SUBST (P) XBuffer:R_Pos R_Buffer
-     C                   EVAL      R_Buffer = %subst(i_buffer: R_Pos)
-     C                   ELSE
-     C                   EVAL      R_Buffer = *BLANKS
-     C                   Endif
-      *
-     C     R_Buffer      IFEQ      *BLANKS
-      *  ... Alles in Ordnung
-     C                   ELSE
-     C                   CALLP     p_kill('Incorrect timestamp format: ' +
-     C                                    i_datTimFmt)
-     C                   Endif
-      *
-     C     ENDE          TAG
-      *
-     C                   RETURN
-      *
-      *============================================================*
-      *    First         Initialisierung                           *
-      *============================================================*
-      *
-     C     First         BEGSR
-      *
-     C                   EVAL      o_msgID = *BLANKS
-     C                   EVAL      o_msgDta = *BLANKS
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *  Program error handler                                     *
-      *============================================================*
-      *
-     P errorHandler    b                   
-     D                 pi
-     D i_condToken                         value likeds(cee_fc_t)
-     D i_pCommArea                   10i 0 value
-     D o_action                      10i 0
-     D o_newCondToken                            likeds(cee_fc_t)
-      /free
 
-         dump;
-         o_action = CEE_PERCOLATE;
+       dcl-s r_dateiso       date(*iso) inz(*loval );
+       dcl-s r_dateeur       date(*eur) inz(*loval );
+       dcl-s r_timeiso       time(*iso) inz(*loval );
+       dcl-s r_timehms       time(*hms) inz(*loval );
+       dcl-s r_timeeur       time(*eur) inz(*loval );
+       dcl-s r_timestmp      timestamp inz(*loval );
+       dcl-s r_fldlen        like(int4_t);
+       dcl-s r_pos           like(int4_t);
+       dcl-s r_buffer        like(i_buffer);
+       dcl-c r_bufflen       const(%size(i_buffer));
 
-      /end-free
-     P                 e
-      *
+       //*******************************************************************
+       //                 S T E U E R  -  R O U T I N E                    *
+       //*******************************************************************
+
+       dcl-pi peek36;
+         i_buffer        char(128) const;
+         i_type          char(1) const;
+         i_dattimfmt     const like(fldl0100_t.f1dtfm);
+         i_separator     const like(fldl0100_t.f1dtsp);
+         o_msgid         like(msgid_t);
+         o_msgdta        like(msgdta_t);
+       end-pi;
+
+       //  Register error handler
+       ceehdlr(%paddr('errorHandler')
+              : *null: *omit);
+       exsr first;
+
+       //  Prüfen Format für ...
+       select;
+          // ... Datum
+       when i_type = 'L';
+          select;
+             // ... *EUR
+          when i_dattimfmt = '*EUR';
+             r_dateeur = %date(i_buffer: *eur);
+             // ... *ISO
+          other;
+             r_dateiso = %date(i_buffer: *iso);
+          endsl;
+          r_fldlen = 10;
+          // ... Zeit
+       when i_type = 'T';
+          select;
+             // ... *HMS
+          when i_dattimfmt = '*HMS';
+             r_timehms = %time(i_buffer: *hms);
+             // ... *EUR
+          when i_dattimfmt = '*EUR';
+             r_timeeur = %time(i_buffer: *eur);
+             // ... *ISO
+          other;
+             r_timeiso = %time(i_buffer: *iso);
+          endsl;
+          r_fldlen = 8;
+          // ... Zeitstempel
+       when i_type = 'Z';
+          r_timestmp = %timestamp(i_buffer);
+          r_fldlen = 26;
+       other;
+          p_kill('Incorrect time format: ' +
+                i_dattimfmt);
+       endsl;
+
+       r_pos = r_fldlen + 1;
+       if r_pos <= r_bufflen;
+          r_buffer = %subst(i_buffer: r_pos);
+       else;
+          r_buffer = '';
+       endif;
+
+       if r_buffer = '';
+          // ... Alles in Ordnung
+       else;
+          p_kill('Incorrect timestamp format: ' + i_dattimfmt);
+       endif;
+
+       return;
+
+       //============================================================*
+       //    First         Initialisierung                           *
+       //============================================================*
+
+       begsr first;
+
+          o_msgid = '';
+          o_msgdta = '';
+
+       endsr;
+
+       //============================================================*
+       //  Program error handler                                     *
+       //============================================================*
+
+       dcl-proc errorhandler;
+       dcl-pi *N;
+         i_condtoken     value likeds(cee_fc_t);
+         i_pcommarea     int(10) value;
+         o_action        int(10);
+         o_newcondtoken  likeds(cee_fc_t);
+       end-pi;
+
+       dump;
+       o_action = cee_percolate;
+
+       end-proc;
+

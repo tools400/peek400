@@ -1,948 +1,933 @@
-      *===============================================================*
-      *                                                               *
-      *  (c) Thomas Raddatz                                           *
-      *                                                               *
-      *  Bereich  : PEEK, Version 2.2.0                               *
-      *  Programm : PEEK33                                            *
-      *  Typ      : RPG                                               *
-      *                                                               *
-      *  erstellt : 19.12.1997  Raddatz                               *
-      *                                                               *
-      *===============================================================*
-      *                                                               *
-      *  Kurzdokumentation :                                          *
-      *                                                               *
-      *  Aktualisierungen beim Versionswechsel                        *
-      *                                                               *
-      * ============================================================= *
-      * >>PRE-COMPILER<<                                              *
-      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
-      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
-      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
-      *                           INSTALL(*NO);                       *
-      *   >>EXECUTE<<                                                 *
-      * >>END-PRE-COMPILER<<                                          *
-      *===============================================================*
+       //===============================================================*
+       //                                                               *
+       //  (c) Thomas Raddatz                                           *
+       //                                                               *
+       //  Bereich  : PEEK, Version 2.2.0                               *
+       //  Programm : PEEK33                                            *
+       //  Typ      : RPG                                               *
+       //                                                               *
+       //  erstellt : 19.12.1997  Raddatz                               *
+       //                                                               *
+       //===============================================================*
+       //                                                               *
+       //  Kurzdokumentation :                                          *
+       //                                                               *
+       //  Aktualisierungen beim Versionswechsel                        *
+       //                                                               *
+       // ============================================================= *
+       // >>PRE-COMPILER<<                                              *
+       //   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+       //                           OBJLIB(&LI) DEVLIB(&LI) +           *
+       //                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+       //                           INSTALL(*NO);                       *
+       //   >>EXECUTE<<                                                 *
+       // >>END-PRE-COMPILER<<                                          *
+       //===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
-      *
-      *---Variablendefinition------------------------------*
+
       /COPY QCOPYLE,D_VARDEF
-      *----------------------------------------------------*
-      *
+      /COPY QCOPYLE,D_COLORATR
+      /COPY QCOPYLE,ERR_D_SDS
+      /COPY QCOPYLE,CEECNDHDLR
+
+      /COPY QCOPYLE,SET0001                    // Benutzervoreinstellungen
+      /COPY QCOPYLE,SET0007                    // Versionsnummer
+      /COPY QCOPYLE,SET0012                    // Generieren Programme *CRTPGM
+      /COPY QCOPYLE,SET0016                    // SQL: Limit zum Anzeigen der Anzahl Datensät
+
       /define internal_prototype
       /COPY QCOPYLE,PPEEK33
       /undefine internal_prototype
-      *
-      *---Farbattribute------------------------------------*
-      /COPY QCOPYLE,D_COLORATR
-      *----------------------------------------------------*
-      *
-      *---Benutzereinstellungen----------------------------*
-      /COPY QCOPYLE,SET0001                       Benutzervoreinstellungen
-      /COPY QCOPYLE,SET0012                       Generieren Programme *CRTPGM
-      *  Vor V3.0.0
-     D SET0012_ALT     DS                  qualified
-      *  Kleinbuchstaben erlaubt: 1=Ja; 0=Nein
-     D  SET_ALWLC                    10A   INZ('1')
-      *  Standardmäßig Klienbuchstaben: 1=Ja; 0=Nein
-     D  SET_CASE                     10A   INZ('0')
-      *  Endemarkierung
-     D  SET_0012                      1A   INZ(x'8B')
-      *
-      /COPY QCOPYLE,SET0016                       SQL: Limit zum Anzeigen der Anzahl Datensät
-      *
-      *---Benutzervoreinstellungen-------------------------*
-      /COPY QCOPYLE,SET0007
-      *----------------------------------------------------*
-      *
-      *---SDS-Datenstruktur--------------------------------*
-      /COPY QCOPYLE,ERR_D_SDS
-      *----------------------------------------------------*
-      *
-      *  Arbeitsfelder
-     D X               S                   like(int4_t) inz
-      *
-     D WrkTabDS        DS                  QUALIFIED
-     D  Remark                        5A   INZ(*BLANKS)
-     D  Section                      10A   INZ(*BLANKS)
-     D  Key                          10A   INZ(*BLANKS)
-     D  Data                               LIKE(SET0000_t) INZ(*BLANKS)
-      *
-     D o_Data          S                   LIKE(SET0000_t)
-     D                                     INZ
-      *
-     D WrkTab          S            100A   DIM(100) INZ(*BLANKS)
-     D WrkElem         S                   like(int4_t) inz
-      *
-     D TB010100        S            100A   DIM( 58) CTDATA PERRCD(1)
-     D ELM010100       C                   CONST(%ELEM(TB010100))
-      *
-     D TB010200        S            100A   DIM( 36) CTDATA PERRCD(1)
-     D ELM010200       C                   CONST(%ELEM(TB010200))
-      *
-     D TB010300        S            100A   DIM( 12) CTDATA PERRCD(1)
-     D ELM010300       C                   CONST(%ELEM(TB010300))
-      *
-     D TB010400        S            100A   DIM( 42) CTDATA PERRCD(1)
-     D ELM010400       C                   CONST(%ELEM(TB010400))
-      *
-     D TB010500        S            100A   DIM( 52) CTDATA PERRCD(1)
-     D ELM010500       C                   CONST(%ELEM(TB010500))
-      *
-     D TB020000        S            100A   DIM( 34) CTDATA PERRCD(1)
-     D ELM020000       C                   CONST(%ELEM(TB020000))
-      *
-     D TB020100        S            100A   DIM( 40) CTDATA PERRCD(1)
-     D ELM020100       C                   CONST(%ELEM(TB020100))
-      *
-     D TB020200        S            100A   DIM( 30) CTDATA PERRCD(1)
-     D ELM020200       C                   CONST(%ELEM(TB020200))
-      *
-     D TB030000        S            100A   DIM( 22) CTDATA PERRCD(1)
-     D ELM030000       C                   CONST(%ELEM(TB030000))
-      *
-     D TB030100        S            100A   DIM(  4) CTDATA PERRCD(1)
-     D ELM030100       C                   CONST(%ELEM(TB030100))
-      *
-     D TB030101        S            100A   DIM( 24) CTDATA PERRCD(1)
-     D ELM030101       C                   CONST(%ELEM(TB030101))
-      *
-     D TB030205        S            100A   DIM( 26) CTDATA PERRCD(1)
-     D ELM030205       C                   CONST(%ELEM(TB030205))
-      *
-     D TB030401        S            100A   DIM(  4) CTDATA PERRCD(1)
-     D ELM030401       C                   CONST(%ELEM(TB030401))
-      *
-     D TB030500        S            100A   DIM(  4) CTDATA PERRCD(1)
-     D ELM030500       C                   CONST(%ELEM(TB030500))
-      *
+
       /COPY QCOPYLE,F_PEEK53
-      *
-      /COPY QCOPYLE,CEECNDHDLR
-      *
-      ********************************************************************
-      *                 S T E U E R  -  R O U T I N E                    *
-      ********************************************************************
-      *
-     D PEEK33          PI
-     D  i_version                     9A   const
-     D  o_msgID                                  like(msgID_t)
-     D  o_msgDta                                 like(msgDta_t)
-      *
-      *----------------------------------------------------*
-      *
-      *  Register error handler
-     C                   callp     CEEHDLR(%paddr('errorHandler')
-     C                                     : *null: *omit)
-      *
-     C                   EVAL      o_msgID = *BLANKS
-     C                   EVAL      o_msgDta = *BLANKS
-      *
-      *  Ermitteln der abgespeicherten Versions-Nr. ...
-     C                   EXSR      GetUsrSetg
-      *
-      *  Vergleichen mit jetziger Versions-Nr. ...
-     C     SET_VSN       IFNE      i_version
-      *  ... und bei Abweichungen den
-      *      Aktualisierungsvorgang starten
-     C                   EXSR      VPos
-     C                   ELSE
-     C                   Endif
-      *
-     C     ENDE          TAG
-      *
-     C                   EVAL      *INLR = '1'
-      *
-      *============================================================*
-      *    VPos          Durchführen der Aktualisierungsarbeiten   *
-      *============================================================*
-      *
-     C     VPos          BEGSR
-      *
-      *  Schleife solabge durchlaufen, bis das
-      *  der jetzige Versionsstand erreicht worden ist.
-     C     SET_VSN       DOWLE     i_version
-      *
-      *  ... aktualiseren der früheren Versionsstände
-     C                   SELECT
-     C     SET_VSN       WHENLT    'V01R01M00'
-     C                   EXSR      V01R01M00
-     C     SET_VSN       WHENLT    'V01R02M00'
-     C                   EXSR      V01R02M00
-     C     SET_VSN       WHENLT    'V01R03M00'
-     C                   EXSR      V01R03M00
-     C     SET_VSN       WHENLT    'V01R04M00'
-     C                   EXSR      V01R04M00
-     C     SET_VSN       WHENLT    'V01R05M00'
-     C                   EXSR      V01R05M00
-     C     SET_VSN       WHENLT    'V01R05M01'
-     C                   EXSR      V01R05M01
-     C     SET_VSN       WHENLT    'V02R00M00'
-     C                   EXSR      V02R00M00
-     C     SET_VSN       WHENLT    'V02R01M00'
-     C                   EXSR      V02R01M00
-     C     SET_VSN       WHENLT    'V02R01M01'
-     C                   EXSR      V02R01M01
-     C     SET_VSN       WHENLT    'V02R02M00'
-     C                   EXSR      V02R02M00
-     C     SET_VSN       WHENLT    'V02R02M01'
-     C                   EXSR      V02R02M01
-     C     SET_VSN       WHENLT    'V02R02M02'
-     C                   EXSR      V02R02M02
-     C     SET_VSN       WHENLT    'V02R03M00'
-     C                   EXSR      V02R03M00
-     C     SET_VSN       WHENLT    'V02R03M01'
-     C                   EXSR      V02R03M01
-     C     SET_VSN       WHENLT    'V02R03M02'
-     C                   EXSR      V02R03M02
-     C     SET_VSN       WHENLT    'V02R04M00'
-     C                   EXSR      V02R04M00
-     C     SET_VSN       WHENLT    'V02R04M01'
-     C                   EXSR      V02R04M01
-     C     SET_VSN       WHENLT    'V02R04M02'
-     C                   EXSR      V02R04M02
-     C     SET_VSN       WHENLT    'V03R00M00'
-     C                   EXSR      V03R00M00
-     C     SET_VSN       WHENLT    'V03R01M00'
-     C                   EXSR      V03R01M00
-     C     SET_VSN       WHENLT    'V03R01M01'
-     C                   EXSR      V03R01M01
-     C     SET_VSN       WHENLT    'V03R01M02'
-     C                   EXSR      V03R01M02
-     C     SET_VSN       WHENLT    'V03R01M03'
-     C                   EXSR      V03R01M03
-     C     SET_VSN       WHENLT    'V03R01M04'
-     C                   EXSR      V03R01M04
-     C     SET_VSN       WHENLT    'V03R01M05'
-     C                   EXSR      V03R01M05
-     C     SET_VSN       WHENLT    'V03R01M06'
-     C                   EXSR      V03R01M06
-     C     SET_VSN       WHENLT    'V03R02M00'
-     C                   EXSR      V03R02M00
-     C     SET_VSN       WHENLT    'V03R02M01'
-     C                   EXSR      V03R02M01
-     C     SET_VSN       WHENLT    'V03R02M02'
-     C                   EXSR      V03R02M02
-     C     SET_VSN       WHENLT    'V03R02M03'
-     C                   EXSR      V03R02M03
-     C     SET_VSN       WHENLT    'V03R02M04'
-     C                   EXSR      V03R02M04
-     C     SET_VSN       WHENLT    'V03R02M05'
-     C                   EXSR      V03R02M05
-     C     SET_VSN       WHENLT    'V03R02M06'
-     C                   EXSR      V03R02M06
-     C     SET_VSN       WHENLT    'V03R03M00'
-     C                   EXSR      V03R03M00
-     C     SET_VSN       WHENLT    'V03R03M01'
-     C                   EXSR      V03R03M01
-     C     SET_VSN       WHENLT    'V03R03M02'
-     C                   EXSR      V03R03M02
-     C     SET_VSN       WHENLT    'V03R03M03'
-     C                   EXSR      V03R03M03
-     C     SET_VSN       WHENLT    'V03R04M00'
-     C                   EXSR      V03R04M00
-     C     SET_VSN       WHENLT    'V03R04M01'
-     C                   EXSR      V03R04M01
-     C     SET_VSN       WHENLT    'V03R04M02'
-     C                   EXSR      V03R04M02
-     C     SET_VSN       WHENLT    'V03R04M03'
-     C                   EXSR      V03R04M03
-     C     SET_VSN       WHENLT    'V03R05M00'
-     C                   EXSR      V03R05M00
-     C     SET_VSN       WHENLT    'V03R05M01'
-     C                   EXSR      V03R05M01
-     C     SET_VSN       WHENLT    'V03R05M02'
-     C                   EXSR      V03R05M02
-     C     SET_VSN       WHENLT    'V03R05M03'
-     C                   EXSR      V03R05M03
-     C     SET_VSN       WHENLT    'V03R05M04'
-     C                   EXSR      V03R05M04
-     C     SET_VSN       WHENLT    'V03R05M05'
-     C                   EXSR      V03R05M05
-     C     SET_VSN       WHENLT    'V03R05M06'
-     C                   EXSR      V03R05M06
-     C     SET_VSN       WHENLT    'V03R05M07'
-     C                   EXSR      V03R05M07
-     C     SET_VSN       WHENLT    'V03R05M08'
-     C                   EXSR      V03R05M08
-     C                   OTHER
-     C                   LEAVE
-     C                   Endsl
-      *
-      *  ... Abspeichern der neuen Versions-Nr.
-     C                   EXSR      SetUsrSetg
-     C                   Enddo
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V01R01M00     Aktualisierung auf Version 1.1.0          *
-      *============================================================*
-      *
-     C     V01R01M00     BEGSR
-      *
-     C                   EVAL      WrkTab = %subarr(TB010100: 1)
-     C                   EVAL      WrkElem = ELM010100
-     C                   EXSR      UpdPeekUsr
-      *
-     C                   EVAL      SET_VSN = 'V01R01M00'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V01R02M00     Aktualisierung auf Version 1.2.0          *
-      *============================================================*
-      *
-     C     V01R02M00     BEGSR
-      *
-     C                   EVAL      WrkTab = %subarr(TB010200: 1)
-     C                   EVAL      WrkElem = ELM010200
-     C                   EXSR      UpdPeekUsr
-      *
-     C                   EVAL      SET_VSN = 'V01R02M00'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V01R03M00     Aktualisierung auf Version 1.3.0          *
-      *============================================================*
-      *
-     C     V01R03M00     BEGSR
-      *
-     C                   EVAL      WrkTab = %subarr(TB010300: 1)
-     C                   EVAL      WrkElem = ELM010300
-     C                   EXSR      UpdPeekUsr
-      *
-     C                   EVAL      SET_VSN = 'V01R03M00'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V01R04M00     Aktualisierung auf Version 1.4.0          *
-      *============================================================*
-      *
-     C     V01R04M00     BEGSR
-      *
-     C                   EVAL      WrkTab = %subarr(TB010400: 1)
-     C                   EVAL      WrkElem = ELM010400
-     C                   EXSR      UpdPeekUsr
-      *
-     C                   EVAL      SET_VSN = 'V01R04M00'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V01R05M00     Aktualisierung auf Version 1.5.0          *
-      *============================================================*
-      *
-     C     V01R05M00     BEGSR
-      *
-     C                   EVAL      WrkTab = %subarr(TB010500: 1)
-     C                   EVAL      WrkElem = ELM010500
-     C                   EXSR      UpdPeekUsr
-      *
-     C                   EVAL      SET_VSN = 'V01R05M00'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V01R05M01     Aktualisierung auf Version 1.5.1          *
-      *============================================================*
-      *
-     C     V01R05M01     BEGSR
-      *
-     C                   EVAL      SET_VSN = 'V01R05M01'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V02R00M00     Aktualisierung auf Version 2.0.0          *
-      *============================================================*
-      *
-     C     V02R00M00     BEGSR
-      *
-     C                   EVAL      WrkTab = %subarr(TB020000: 1)
-     C                   EVAL      WrkElem = ELM020000
-     C                   EXSR      UpdPeekUsr
-      *
-     C                   EVAL      SET_VSN = 'V02R00M00'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V02R01M00     Aktualisierung auf Version 2.1.0          *
-      *============================================================*
-      *
-     C     V02R01M00     BEGSR
-      *
-     C                   EVAL      WrkTab = %subarr(TB020100: 1)
-     C                   EVAL      WrkElem = ELM020100
-     C                   EXSR      UpdPeekUsr
-      *
-     C                   EVAL      SET_VSN = 'V02R01M00'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V02R01M01     Aktualisierung auf V02R01M01              *
-      *============================================================*
-      *
-     C     V02R01M01     BEGSR
-      *
-     C                   EVAL      SET_VSN = 'V02R01M01'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V02R02M00     Aktualisierung auf Version 2.2.0          *
-      *============================================================*
-      *
-     C     V02R02M00     BEGSR
-      *
-     C                   EVAL      WrkTab = %subarr(TB020200: 1)
-     C                   EVAL      WrkElem = ELM020200
-     C                   EXSR      UpdPeekUsr
-      *
-     C                   EVAL      SET_VSN = 'V02R02M00'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V02R02M01     Aktualisierung auf Version 2.2.1          *
-      *============================================================*
-      *
-     C     V02R02M01     BEGSR
-      *
-     C                   EVAL      SET_VSN = 'V02R02M01'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V02R02M02     Aktualisierung auf Version 2.2.2          *
-      *============================================================*
-      *
-     C     V02R02M02     BEGSR
-      *
-     C                   EVAL      SET_VSN = 'V02R02M02'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V02R03M00     Aktualisierung auf Version 2.3.0          *
-      *============================================================*
-      *
-     C     V02R03M00     BEGSR
-      *
-     C                   EVAL      SET_VSN = 'V02R03M00'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V02R03M01     Aktualisierung auf Version 2.3.1          *
-      *============================================================*
-      *
-     C     V02R03M01     BEGSR
-      *
-     C                   EVAL      SET_VSN = 'V02R03M01'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V02R03M02     Aktualisierung auf Version 2.3.1          *
-      *============================================================*
-      *
-     C     V02R03M02     BEGSR
-      *
-     C                   EVAL      SET_VSN = 'V02R03M02'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V02R04M00     Aktualisierung auf Version 2.4.0          *
-      *============================================================*
-      *
-     C     V02R04M00     BEGSR
-      *
-     C                   EVAL      SET_VSN = 'V02R04M00'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V02R04M01     Aktualisierung auf Version 2.4.1          *
-      *============================================================*
-      *
-     C     V02R04M01     BEGSR
-      *
-     C                   EVAL      SET_VSN = 'V02R04M01'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V02R04M02     Aktualisierung auf Version 2.4.2          *
-      *============================================================*
-      *
-     C     V02R04M02     BEGSR
-      *
-     C                   EVAL      SET_VSN = 'V02R04M02'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V03R00M00     Aktualisierung auf Version 3.0.0          *
-      *============================================================*
-      *
-     C     V03R00M00     BEGSR
-      *
-     C                   EVAL      WrkTab = %subarr(TB030000: 1)
-     C                   EVAL      WrkElem = ELM030000
-     C                   EXSR      UpdPeekUsr
-      *
-     C                   EVAL      SET_VSN = 'V03R00M00'
-      *
-      *  Umsetzen Datenstruktur "Generieren Programme" (*CRTPGM, SET0012)
-     C                   Eval      SET0012_ALT = f_getUsrSg('*CRTPGM')
-      *
-     C                   If        (SET0012_ALT.SET_ALWLC = '0' or
-     C                              SET0012_ALT.SET_ALWLC = '1'   ) and
-     C                             (SET0012_ALT.SET_CASE  = '0' or
-     C                              SET0012_ALT.SET_CASE  = '1'   ) and
-     C                             (SET0012_ALT.SET_0012  = x'8B' )
-     C                   Reset                   SET0012
-     C                   Eval      SET_ALWLC = SET0012_ALT.SET_ALWLC
-     C                   Eval      SET_CASE  = SET0012_ALT.SET_CASE
-     C                   Eval      SET_0012  = SET0012_ALT.SET_0012
-     C                   Callp     p_updUsrSg('*CRTPGM': SET0012)
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V03R01M00     Aktualisierung auf Version 3.1.0          *
-      *============================================================*
-      *
-     C     V03R01M00     BEGSR
-      *
-     C                   EVAL      WrkTab = %subarr(TB030100: 1)
-     C                   EVAL      WrkElem = ELM030100
-     C                   EXSR      UpdPeekUsr
-      *
-     C                   EVAL      SET_VSN = 'V03R01M00'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V03R01M01     Aktualisierung auf Version 3.1.1          *
-      *============================================================*
-      *
-     C     V03R01M01     BEGSR
-      *
-     C                   EVAL      WrkTab = %subarr(TB030101: 1)
-     C                   EVAL      WrkElem = ELM030101
-     C                   EXSR      UpdPeekUsr
-      *
-     C                   EVAL      SET_VSN = 'V03R01M01'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V03R01M02     Aktualisierung auf Version 3.1.2          *
-      *============================================================*
-      *
-     C     V03R01M02     BEGSR
-      *
-     C                   EVAL      SET_VSN = 'V03R01M02'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V03R01M03     Aktualisierung auf Version 3.1.3          *
-      *============================================================*
-      *
-     C     V03R01M03     BEGSR
-      *
-     C                   EVAL      SET_VSN = 'V03R01M03'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V03R01M04     Aktualisierung auf Version 3.1.4          *
-      *============================================================*
-      *
-     C     V03R01M04     BEGSR
-      *
-     C                   EVAL      SET_VSN = 'V03R01M04'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V03R01M05     Aktualisierung auf Version 3.1.5          *
-      *============================================================*
-      *
-     C     V03R01M05     BEGSR
-      *
-     C                   EVAL      SET_VSN = 'V03R01M05'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V03R01M06     Aktualisierung auf Version 3.1.6          *
-      *============================================================*
-      *
-     C     V03R01M06     BEGSR
-      *
-     C                   EVAL      SET_VSN = 'V03R01M06'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V03R02M00     Aktualisierung auf Version 3.2.0          *
-      *============================================================*
-      *
-     C     V03R02M00     BEGSR
-      *
-     C                   EVAL      SET_VSN = 'V03R02M00'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V03R02M01     Aktualisierung auf Version 3.2.1          *
-      *============================================================*
-      *
-     C     V03R02M01     BEGSR
-      *
-     C                   EVAL      SET_VSN = 'V03R02M01'
-      *
-      *  Eintragen Art und Weise der Umsetzung von Edit Codes in der Subfile:
-     C                   Eval      SET0001 = f_getUsrSg('*DSPATTR')
-      *
-     C                   If        (SET_DspSgn <> '2')
-     C                   Eval      SET_DspSgn   = '2'
-     C                   Callp     p_updUsrSg('*DSPATTR': SET0001)
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V03R02M02     Aktualisierung auf Version 3.2.2          *
-      *============================================================*
-      *
-     C     V03R02M02     BEGSR
-      *
-     C                   EVAL      SET_VSN = 'V03R02M02'
-      *
-      *  Ändern Default Edit Code von 'J' auf 'L'
-     C                   Eval      SET0001 = f_getUsrSg('*DSPATTR')
-      *
-     C                   If        (SET_editCode = 'J')
-     C                   Eval      SET_editCode = 'L'
-     C                   Eval      SET_DspSgn   = '2'
-     C                   Callp     p_updUsrSg('*DSPATTR': SET0001)
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V03R02M03     Aktualisierung auf Version 3.2.3          *
-      *============================================================*
-      *
-     C     V03R02M03     BEGSR
-      *
-     C                   EVAL      SET_VSN = 'V03R02M03'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V03R02M04     Aktualisierung auf Version 3.2.4          *
-      *============================================================*
-      *
-     C     V03R02M04     BEGSR
-      *
-     C                   EVAL      SET_VSN = 'V03R02M04'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V03R02M05     Aktualisierung auf Version 3.2.5          *
-      *============================================================*
-      *
-     C     V03R02M05     BEGSR
-      *
-     C                   EVAL      WrkTab = %subarr(TB030205: 1)
-     C                   EVAL      WrkElem = ELM030205
-     C                   EXSR      UpdPeekUsr
-      *
-     C                   EVAL      SET_VSN = 'V03R02M05'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V03R02M06     Aktualisierung auf Version 3.2.6          *
-      *============================================================*
-      *
-     C     V03R02M06     BEGSR
-      *
-     C                   EVAL      SET_VSN = 'V03R02M06'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V03R03M00     Aktualisierung auf Version 3.3.0          *
-      *============================================================*
-      *
-     C     V03R03M00     BEGSR
-      *
-     C                   EVAL      SET_VSN = 'V03R03M00'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V03R03M01     Aktualisierung auf Version 3.3.1          *
-      *============================================================*
-      *
-     C     V03R03M01     BEGSR
-      *
-     C                   EVAL      SET_VSN = 'V03R03M01'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V03R03M02     Aktualisierung auf Version 3.3.2          *
-      *============================================================*
-      *
-     C     V03R03M02     BEGSR
-      *
-     C                   EVAL      SET_VSN = 'V03R03M02'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V03R03M03     Aktualisierung auf Version 3.3.3          *
-      *============================================================*
-      *
-     C     V03R03M03     BEGSR
-      *
-     C                   EVAL      SET_VSN = 'V03R03M03'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V03R04M00     Aktualisierung auf Version 3.4.0          *
-      *============================================================*
-      *
-     C     V03R04M00     BEGSR
-      *
-     C                   EVAL      SET_VSN = 'V03R04M00'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V03R04M01     Aktualisierung auf Version 3.4.1          *
-      *============================================================*
-      *
-     C     V03R04M01     BEGSR
-      *
-     C                   EVAL      WrkTab = %subarr(TB030401: 1)
-     C                   EVAL      WrkElem = ELM030401
-     C                   EXSR      UpdPeekUsr
-      *
-     C                   EVAL      SET_VSN = 'V03R04M01'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V03R04M02     Aktualisierung auf Version 3.4.2          *
-      *============================================================*
-      *
-     C     V03R04M02     BEGSR
-      *
-     C                   EVAL      SET_VSN = 'V03R04M02'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V03R04M03     Aktualisierung auf Version 3.4.3          *
-      *============================================================*
-      *
-     C     V03R04M03     BEGSR
-      *
-     C                   EVAL      SET_VSN = 'V03R04M03'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V03R05M00     Aktualisierung auf Version 3.5.0          *
-      *============================================================*
-      *
-     C     V03R05M00     BEGSR
-      *
-     C                   EVAL      WrkTab = %subarr(TB030500: 1)
-     C                   EVAL      WrkElem = ELM030500
-     C                   EXSR      UpdPeekUsr
-      *
-     C                   EVAL      SET_VSN = 'V03R05M00'
-      *
-      *  Anlegen Einstellung für max. Anzahl Sätze für SQL-COUNT()
-     C                   Eval      SET0016 = f_getUsrSg('*SQLLMTCNT')
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V03R05M01     Aktualisierung auf Version 3.5.1          *
-      *============================================================*
-      *
-     C     V03R05M01     BEGSR
-      *
-     C                   EVAL      SET_VSN = 'V03R05M01'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V03R05M02     Aktualisierung auf Version 3.5.2          *
-      *============================================================*
-      *
-     C     V03R05M02     BEGSR
-      *
-     C                   EVAL      SET_VSN = 'V03R05M02'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V03R05M03     Aktualisierung auf Version 3.5.3          *
-      *============================================================*
-      *
-     C     V03R05M03     BEGSR
-      *
-     C                   EVAL      SET_VSN = 'V03R05M03'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V03R05M04     Aktualisierung auf Version 3.5.4          *
-      *============================================================*
-      *
-     C     V03R05M04     BEGSR
-      *
-     C                   EVAL      SET_VSN = 'V03R05M04'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V03R05M05     Aktualisierung auf Version 3.5.5          *
-      *============================================================*
-      *
-     C     V03R05M05     BEGSR
-      *
-     C                   EVAL      SET_VSN = 'V03R05M05'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V03R05M06     Aktualisierung auf Version 3.5.6          *
-      *============================================================*
-      *
-     C     V03R05M06     BEGSR
-      *
-     C                   EVAL      SET_VSN = 'V03R05M06'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V03R05M07     Aktualisierung auf Version 3.5.7          *
-      *============================================================*
-      *
-     C     V03R05M07     BEGSR
-      *
-     C                   EVAL      SET_VSN = 'V03R05M07'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    V03R05M08     Aktualisierung auf Version 3.5.8          *
-      *============================================================*
-      *
-     C     V03R05M08     BEGSR
-      *
-     C                   EVAL      SET_VSN = 'V03R05M08'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    UpdPeekUsr    Aktualisieren der PEEKUSR-Datei           *
-      *============================================================*
-      *
-     C     UpdPeekUsr    BEGSR
-      *
-     C     1             DO        WrkElem       X
-      *
-     C                   EVAL      WrkTabDS = WrkTab(X)
-      *
-     C                   Eval      *IN11 = f_chainUsr(WrkTabDS.Section
-     C                                                : WrkTabDS.Key: o_Data)
-      *
-     C                   EVAL      X = X + 1
-      *
-      *  Wenn der Datenbereich anders als erwartet
-      *  belegt ist, ...
-     C     o_Data        IFNE      WrkTabDS.Data
-      *  ... dann keine Änderung durchführen
-     C                   ITER
-     C                   ELSE
-      *  ... ansonsten die Änderung vollziehen
-     C                   EVAL      WrkTabDS = WrkTab(X)
-     C                   IF        *IN11 = '1'
-     C                   Callp     f_writeUsr(WrkTabDS.Section
-     C                                        : WrkTabDS.Key: WrkTabDS.Data)
-     C                   ELSE
-     C                   Callp     f_updatUsr(WrkTabDS.Section
-     C                                        : WrkTabDS.Key: WrkTabDS.Data)
-     C                   Endif
-     C                   Endif
-      *
-     C                   Enddo
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    GetUsrSetg    Ermitteln der Versions-Nr.                *
-      *============================================================*
-      *
-     C     GetUsrSetg    BEGSR
-      *
-      *  *VERSION
-     C                   Eval      SET0007 = f_getUsrSg('*VERSION'  )
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    SetUsrSetg    Speichern der Versions-Nr.                *
-      *============================================================*
-      *
-     C     SetUsrSetg    BEGSR
-      *
-      *  *DSPATR
-     C                   Callp     p_updUsrSg('*VERSION': SET0007)
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *  Program error handler                                     *
-      *============================================================*
-      *
-     P errorHandler    b
-     D                 pi
-     D i_condToken                         value likeds(cee_fc_t)
-     D i_pCommArea                   10i 0 value
-     D o_action                      10i 0
-     D o_newCondToken                            likeds(cee_fc_t)
-      /free
 
-         dump;
-         o_action = CEE_PERCOLATE;
+       //  Vor V3.0.0
+       dcl-ds set0012_alt qualified;
+         //  Kleinbuchstaben erlaubt: 1=Ja; 0=Nein
+         set_alwlc       char(10) inz('1');
+         //  Standardmäßig Klienbuchstaben: 1=Ja; 0=Nein
+         set_case        char(10) inz('0');
+         //  Endemarkierung
+         set_0012        char(1) inz(x'8B');
+       end-ds;
 
-      /end-free
-     P                 e
-      *
+       dcl-s x               like(int4_t) inz;
+
+       dcl-ds wrktabds qualified;
+         remark          char(5) inz(*blanks);
+         section         char(10) inz(*blanks);
+         key             char(10) inz(*blanks);
+         data            like(set0000_t) inz(*blanks);
+       end-ds;
+
+       dcl-s o_data          like(set0000_t) inz;
+
+       dcl-s wrktab          char(100) dim(100) inz(*blanks);
+       dcl-s wrkelem         like(int4_t) inz;
+
+       dcl-s tb010100        char(100) dim( 58) ctdata perrcd(1);
+       dcl-c elm010100 const(%elem(tb010100));
+
+       dcl-s tb010200        char(100) dim( 36) ctdata perrcd(1);
+       dcl-c elm010200 const(%elem(tb010200));
+
+       dcl-s tb010300        char(100) dim( 12) ctdata perrcd(1);
+       dcl-c elm010300 const(%elem(tb010300));
+
+       dcl-s tb010400        char(100) dim( 42) ctdata perrcd(1);
+       dcl-c elm010400 const(%elem(tb010400));
+
+       dcl-s tb010500        char(100) dim( 52) ctdata perrcd(1);
+       dcl-c elm010500 const(%elem(tb010500));
+
+       dcl-s tb020000        char(100) dim( 34) ctdata perrcd(1);
+       dcl-c elm020000 const(%elem(tb020000));
+
+       dcl-s tb020100        char(100) dim( 40) ctdata perrcd(1);
+       dcl-c elm020100 const(%elem(tb020100));
+
+       dcl-s tb020200        char(100) dim( 30) ctdata perrcd(1);
+       dcl-c elm020200 const(%elem(tb020200));
+
+       dcl-s tb030000        char(100) dim( 22) ctdata perrcd(1);
+       dcl-c elm030000 const(%elem(tb030000));
+
+       dcl-s tb030100        char(100) dim(  4) ctdata perrcd(1);
+       dcl-c elm030100 const(%elem(tb030100));
+
+       dcl-s tb030101        char(100) dim( 24) ctdata perrcd(1);
+       dcl-c elm030101 const(%elem(tb030101));
+
+       dcl-s tb030205        char(100) dim( 26) ctdata perrcd(1);
+       dcl-c elm030205 const(%elem(tb030205));
+
+       dcl-s tb030401        char(100) dim(  4) ctdata perrcd(1);
+       dcl-c elm030401 const(%elem(tb030401));
+
+       dcl-s tb030500        char(100) dim(  4) ctdata perrcd(1);
+       dcl-c elm030500 const(%elem(tb030500));
+
+       //*******************************************************************
+       //                 S T E U E R  -  R O U T I N E                    *
+       //*******************************************************************
+
+       dcl-pi peek33;
+         i_version       char(9) const;
+         o_msgid         like(msgid_t);
+         o_msgdta        like(msgdta_t);
+       end-pi;
+
+       //----------------------------------------------------*
+
+       //  Register error handler
+       ceehdlr(%paddr('errorHandler')
+              : *null: *omit);
+
+       o_msgid = '';
+       o_msgdta = '';
+
+       //  Ermitteln der abgespeicherten Versions-Nr. ...
+       exsr getUsrSetg;
+
+       //  Vergleichen mit jetziger Versions-Nr. ...
+       if set_vsn <> i_version;
+          //  ... und bei Abweichungen den
+          //      Aktualisierungsvorgang starten
+          exsr vpos;
+       else;
+       endif;
+
+       *inlr = '1';
+
+       //============================================================*
+       //    VPos          Durchführen der Aktualisierungsarbeiten   *
+       //============================================================*
+
+       begsr vpos;
+
+          //  Schleife solabge durchlaufen, bis das
+          //  der jetzige Versionsstand erreicht worden ist.
+          dow set_vsn <= i_version;
+
+             //  ... aktualiseren der früheren Versionsstände
+             select;
+             when set_vsn < 'V01R01M00';
+                exsr v01r01m00;
+             when set_vsn < 'V01R02M00';
+                exsr v01r02m00;
+             when set_vsn < 'V01R03M00';
+                exsr v01r03m00;
+             when set_vsn < 'V01R04M00';
+                exsr v01r04m00;
+             when set_vsn < 'V01R05M00';
+                exsr v01r05m00;
+             when set_vsn < 'V01R05M01';
+                exsr v01r05m01;
+             when set_vsn < 'V02R00M00';
+                exsr v02r00m00;
+             when set_vsn < 'V02R01M00';
+                exsr v02r01m00;
+             when set_vsn < 'V02R01M01';
+                exsr v02r01m01;
+             when set_vsn < 'V02R02M00';
+                exsr v02r02m00;
+             when set_vsn < 'V02R02M01';
+                exsr v02r02m01;
+             when set_vsn < 'V02R02M02';
+                exsr v02r02m02;
+             when set_vsn < 'V02R03M00';
+                exsr v02r03m00;
+             when set_vsn < 'V02R03M01';
+                exsr v02r03m01;
+             when set_vsn < 'V02R03M02';
+                exsr v02r03m02;
+             when set_vsn < 'V02R04M00';
+                exsr v02r04m00;
+             when set_vsn < 'V02R04M01';
+                exsr v02r04m01;
+             when set_vsn < 'V02R04M02';
+                exsr v02r04m02;
+             when set_vsn < 'V03R00M00';
+                exsr v03r00m00;
+             when set_vsn < 'V03R01M00';
+                exsr v03r01m00;
+             when set_vsn < 'V03R01M01';
+                exsr v03r01m01;
+             when set_vsn < 'V03R01M02';
+                exsr v03r01m02;
+             when set_vsn < 'V03R01M03';
+                exsr v03r01m03;
+             when set_vsn < 'V03R01M04';
+                exsr v03r01m04;
+             when set_vsn < 'V03R01M05';
+                exsr v03r01m05;
+             when set_vsn < 'V03R01M06';
+                exsr v03r01m06;
+             when set_vsn < 'V03R02M00';
+                exsr v03r02m00;
+             when set_vsn < 'V03R02M01';
+                exsr v03r02m01;
+             when set_vsn < 'V03R02M02';
+                exsr v03r02m02;
+             when set_vsn < 'V03R02M03';
+                exsr v03r02m03;
+             when set_vsn < 'V03R02M04';
+                exsr v03r02m04;
+             when set_vsn < 'V03R02M05';
+                exsr v03r02m05;
+             when set_vsn < 'V03R02M06';
+                exsr v03r02m06;
+             when set_vsn < 'V03R03M00';
+                exsr v03r03m00;
+             when set_vsn < 'V03R03M01';
+                exsr v03r03m01;
+             when set_vsn < 'V03R03M02';
+                exsr v03r03m02;
+             when set_vsn < 'V03R03M03';
+                exsr v03r03m03;
+             when set_vsn < 'V03R04M00';
+                exsr v03r04m00;
+             when set_vsn < 'V03R04M01';
+                exsr v03r04m01;
+             when set_vsn < 'V03R04M02';
+                exsr v03r04m02;
+             when set_vsn < 'V03R04M03';
+                exsr v03r04m03;
+             when set_vsn < 'V03R05M00';
+                exsr v03r05m00;
+             when set_vsn < 'V03R05M01';
+                exsr v03r05m01;
+             when set_vsn < 'V03R05M02';
+                exsr v03r05m02;
+             when set_vsn < 'V03R05M03';
+                exsr v03r05m03;
+             when set_vsn < 'V03R05M04';
+                exsr v03r05m04;
+             when set_vsn < 'V03R05M05';
+                exsr v03r05m05;
+             when set_vsn < 'V03R05M06';
+                exsr v03r05m06;
+             when set_vsn < 'V03R05M07';
+                exsr v03r05m07;
+             when set_vsn < 'V03R05M08';
+                exsr v03r05m08;
+             other;
+                leave;
+             endsl;
+
+             //  ... Abspeichern der neuen Versions-Nr.
+             exsr setUsrSetg;
+          enddo;
+
+       endsr;
+
+       //============================================================*
+       //    V01R01M00     Aktualisierung auf Version 1.1.0          *
+       //============================================================*
+
+       begsr v01r01m00;
+
+          wrktab = %subarr(tb010100: 1);
+          wrkelem = elm010100;
+          exsr updpeekusr;
+
+          set_vsn = 'V01R01M00';
+
+       endsr;
+
+       //============================================================*
+       //    V01R02M00     Aktualisierung auf Version 1.2.0          *
+       //============================================================*
+
+       begsr v01r02m00;
+
+          wrktab = %subarr(tb010200: 1);
+          wrkelem = elm010200;
+          exsr updpeekusr;
+
+          set_vsn = 'V01R02M00';
+
+       endsr;
+
+       //============================================================*
+       //    V01R03M00     Aktualisierung auf Version 1.3.0          *
+       //============================================================*
+
+       begsr v01r03m00;
+
+          wrktab = %subarr(tb010300: 1);
+          wrkelem = elm010300;
+          exsr updpeekusr;
+
+          set_vsn = 'V01R03M00';
+
+       endsr;
+
+       //============================================================*
+       //    V01R04M00     Aktualisierung auf Version 1.4.0          *
+       //============================================================*
+
+       begsr v01r04m00;
+
+          wrktab = %subarr(tb010400: 1);
+          wrkelem = elm010400;
+          exsr updpeekusr;
+
+          set_vsn = 'V01R04M00';
+
+       endsr;
+
+       //============================================================*
+       //    V01R05M00     Aktualisierung auf Version 1.5.0          *
+       //============================================================*
+
+       begsr v01r05m00;
+
+          wrktab = %subarr(tb010500: 1);
+          wrkelem = elm010500;
+          exsr updpeekusr;
+
+          set_vsn = 'V01R05M00';
+
+       endsr;
+
+       //============================================================*
+       //    V01R05M01     Aktualisierung auf Version 1.5.1          *
+       //============================================================*
+
+       begsr v01r05m01;
+
+          set_vsn = 'V01R05M01';
+
+       endsr;
+
+       //============================================================*
+       //    V02R00M00     Aktualisierung auf Version 2.0.0          *
+       //============================================================*
+
+       begsr v02r00m00;
+
+          wrktab = %subarr(tb020000: 1);
+          wrkelem = elm020000;
+          exsr updpeekusr;
+
+          set_vsn = 'V02R00M00';
+
+       endsr;
+
+       //============================================================*
+       //    V02R01M00     Aktualisierung auf Version 2.1.0          *
+       //============================================================*
+
+       begsr v02r01m00;
+
+          wrktab = %subarr(tb020100: 1);
+          wrkelem = elm020100;
+          exsr updpeekusr;
+
+          set_vsn = 'V02R01M00';
+
+       endsr;
+
+       //============================================================*
+       //    V02R01M01     Aktualisierung auf V02R01M01              *
+       //============================================================*
+
+       begsr v02r01m01;
+
+          set_vsn = 'V02R01M01';
+
+       endsr;
+
+       //============================================================*
+       //    V02R02M00     Aktualisierung auf Version 2.2.0          *
+       //============================================================*
+
+       begsr v02r02m00;
+
+          wrktab = %subarr(tb020200: 1);
+          wrkelem = elm020200;
+          exsr updpeekusr;
+
+          set_vsn = 'V02R02M00';
+
+       endsr;
+
+       //============================================================*
+       //    V02R02M01     Aktualisierung auf Version 2.2.1          *
+       //============================================================*
+
+       begsr v02r02m01;
+
+          set_vsn = 'V02R02M01';
+
+       endsr;
+
+       //============================================================*
+       //    V02R02M02     Aktualisierung auf Version 2.2.2          *
+       //============================================================*
+
+       begsr v02r02m02;
+
+          set_vsn = 'V02R02M02';
+
+       endsr;
+
+       //============================================================*
+       //    V02R03M00     Aktualisierung auf Version 2.3.0          *
+       //============================================================*
+
+       begsr v02r03m00;
+
+          set_vsn = 'V02R03M00';
+
+       endsr;
+
+       //============================================================*
+       //    V02R03M01     Aktualisierung auf Version 2.3.1          *
+       //============================================================*
+
+       begsr v02r03m01;
+
+          set_vsn = 'V02R03M01';
+
+       endsr;
+
+       //============================================================*
+       //    V02R03M02     Aktualisierung auf Version 2.3.1          *
+       //============================================================*
+
+       begsr v02r03m02;
+
+          set_vsn = 'V02R03M02';
+
+       endsr;
+
+       //============================================================*
+       //    V02R04M00     Aktualisierung auf Version 2.4.0          *
+       //============================================================*
+
+       begsr v02r04m00;
+
+          set_vsn = 'V02R04M00';
+
+       endsr;
+
+       //============================================================*
+       //    V02R04M01     Aktualisierung auf Version 2.4.1          *
+       //============================================================*
+
+       begsr v02r04m01;
+
+          set_vsn = 'V02R04M01';
+
+       endsr;
+
+       //============================================================*
+       //    V02R04M02     Aktualisierung auf Version 2.4.2          *
+       //============================================================*
+
+       begsr v02r04m02;
+
+          set_vsn = 'V02R04M02';
+
+       endsr;
+
+       //============================================================*
+       //    V03R00M00     Aktualisierung auf Version 3.0.0          *
+       //============================================================*
+
+       begsr v03r00m00;
+
+          wrktab = %subarr(tb030000: 1);
+          wrkelem = elm030000;
+          exsr updpeekusr;
+
+          set_vsn = 'V03R00M00';
+
+          //  Umsetzen Datenstruktur "Generieren Programme" (*CRTPGM, SET0012)
+          set0012_alt = f_getusrsg('*CRTPGM');
+
+          if (set0012_alt.set_alwlc = '0' or
+             set0012_alt.set_alwlc = '1'   ) and
+             (set0012_alt.set_case  = '0' or
+             set0012_alt.set_case  = '1'   ) and
+             (set0012_alt.set_0012  = x'8B' );
+             reset set0012;
+             set_alwlc = set0012_alt.set_alwlc;
+             set_case  = set0012_alt.set_case;
+             set_0012  = set0012_alt.set_0012;
+             p_updusrsg('*CRTPGM': set0012);
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    V03R01M00     Aktualisierung auf Version 3.1.0          *
+       //============================================================*
+
+       begsr v03r01m00;
+
+          wrktab = %subarr(tb030100: 1);
+          wrkelem = elm030100;
+          exsr updpeekusr;
+
+          set_vsn = 'V03R01M00';
+
+       endsr;
+
+       //============================================================*
+       //    V03R01M01     Aktualisierung auf Version 3.1.1          *
+       //============================================================*
+
+       begsr v03r01m01;
+
+          wrktab = %subarr(tb030101: 1);
+          wrkelem = elm030101;
+          exsr updpeekusr;
+
+          set_vsn = 'V03R01M01';
+
+       endsr;
+
+       //============================================================*
+       //    V03R01M02     Aktualisierung auf Version 3.1.2          *
+       //============================================================*
+
+       begsr v03r01m02;
+
+          set_vsn = 'V03R01M02';
+
+       endsr;
+
+       //============================================================*
+       //    V03R01M03     Aktualisierung auf Version 3.1.3          *
+       //============================================================*
+
+       begsr v03r01m03;
+
+          set_vsn = 'V03R01M03';
+
+       endsr;
+
+       //============================================================*
+       //    V03R01M04     Aktualisierung auf Version 3.1.4          *
+       //============================================================*
+
+       begsr v03r01m04;
+
+          set_vsn = 'V03R01M04';
+
+       endsr;
+
+       //============================================================*
+       //    V03R01M05     Aktualisierung auf Version 3.1.5          *
+       //============================================================*
+
+       begsr v03r01m05;
+
+          set_vsn = 'V03R01M05';
+
+       endsr;
+
+       //============================================================*
+       //    V03R01M06     Aktualisierung auf Version 3.1.6          *
+       //============================================================*
+
+       begsr v03r01m06;
+
+          set_vsn = 'V03R01M06';
+
+       endsr;
+
+       //============================================================*
+       //    V03R02M00     Aktualisierung auf Version 3.2.0          *
+       //============================================================*
+
+       begsr v03r02m00;
+
+          set_vsn = 'V03R02M00';
+
+       endsr;
+
+       //============================================================*
+       //    V03R02M01     Aktualisierung auf Version 3.2.1          *
+       //============================================================*
+
+       begsr v03r02m01;
+
+          set_vsn = 'V03R02M01';
+
+          //  Eintragen Art und Weise der Umsetzung von Edit Codes in der Subfile:
+          set0001 = f_getusrsg('*DSPATTR');
+
+          if (set_dspsgn <> '2');
+             set_dspsgn   = '2';
+             p_updusrsg('*DSPATTR': set0001);
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    V03R02M02     Aktualisierung auf Version 3.2.2          *
+       //============================================================*
+
+       begsr v03r02m02;
+
+          set_vsn = 'V03R02M02';
+
+          //  Ändern Default Edit Code von 'J' auf 'L'
+          set0001 = f_getusrsg('*DSPATTR');
+
+          if (set_editcode = 'J');
+             set_editcode = 'L';
+             set_dspsgn   = '2';
+             p_updusrsg('*DSPATTR': set0001);
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    V03R02M03     Aktualisierung auf Version 3.2.3          *
+       //============================================================*
+
+       begsr v03r02m03;
+
+          set_vsn = 'V03R02M03';
+
+       endsr;
+
+       //============================================================*
+       //    V03R02M04     Aktualisierung auf Version 3.2.4          *
+       //============================================================*
+
+       begsr v03r02m04;
+
+          set_vsn = 'V03R02M04';
+
+       endsr;
+
+       //============================================================*
+       //    V03R02M05     Aktualisierung auf Version 3.2.5          *
+       //============================================================*
+
+       begsr v03r02m05;
+
+          wrktab = %subarr(tb030205: 1);
+          wrkelem = elm030205;
+          exsr updpeekusr;
+
+          set_vsn = 'V03R02M05';
+
+       endsr;
+
+       //============================================================*
+       //    V03R02M06     Aktualisierung auf Version 3.2.6          *
+       //============================================================*
+
+       begsr v03r02m06;
+
+          set_vsn = 'V03R02M06';
+
+       endsr;
+
+       //============================================================*
+       //    V03R03M00     Aktualisierung auf Version 3.3.0          *
+       //============================================================*
+
+       begsr v03r03m00;
+
+          set_vsn = 'V03R03M00';
+
+       endsr;
+
+       //============================================================*
+       //    V03R03M01     Aktualisierung auf Version 3.3.1          *
+       //============================================================*
+
+       begsr v03r03m01;
+
+          set_vsn = 'V03R03M01';
+
+       endsr;
+
+       //============================================================*
+       //    V03R03M02     Aktualisierung auf Version 3.3.2          *
+       //============================================================*
+
+       begsr v03r03m02;
+
+          set_vsn = 'V03R03M02';
+
+       endsr;
+
+       //============================================================*
+       //    V03R03M03     Aktualisierung auf Version 3.3.3          *
+       //============================================================*
+
+       begsr v03r03m03;
+
+          set_vsn = 'V03R03M03';
+
+       endsr;
+
+       //============================================================*
+       //    V03R04M00     Aktualisierung auf Version 3.4.0          *
+       //============================================================*
+
+       begsr v03r04m00;
+
+          set_vsn = 'V03R04M00';
+
+       endsr;
+
+       //============================================================*
+       //    V03R04M01     Aktualisierung auf Version 3.4.1          *
+       //============================================================*
+
+       begsr v03r04m01;
+
+          wrktab = %subarr(tb030401: 1);
+          wrkelem = elm030401;
+          exsr updpeekusr;
+
+          set_vsn = 'V03R04M01';
+
+       endsr;
+
+       //============================================================*
+       //    V03R04M02     Aktualisierung auf Version 3.4.2          *
+       //============================================================*
+
+       begsr v03r04m02;
+
+          set_vsn = 'V03R04M02';
+
+       endsr;
+
+       //============================================================*
+       //    V03R04M03     Aktualisierung auf Version 3.4.3          *
+       //============================================================*
+
+       begsr v03r04m03;
+
+          set_vsn = 'V03R04M03';
+
+       endsr;
+
+       //============================================================*
+       //    V03R05M00     Aktualisierung auf Version 3.5.0          *
+       //============================================================*
+
+       begsr v03r05m00;
+
+          wrktab = %subarr(tb030500: 1);
+          wrkelem = elm030500;
+          exsr updpeekusr;
+
+          set_vsn = 'V03R05M00';
+
+          //  Anlegen Einstellung für max. Anzahl Sätze für SQL-COUNT()
+          set0016 = f_getusrsg('*SQLLMTCNT');
+
+       endsr;
+
+       //============================================================*
+       //    V03R05M01     Aktualisierung auf Version 3.5.1          *
+       //============================================================*
+
+       begsr v03r05m01;
+
+          set_vsn = 'V03R05M01';
+
+       endsr;
+
+       //============================================================*
+       //    V03R05M02     Aktualisierung auf Version 3.5.2          *
+       //============================================================*
+
+       begsr v03r05m02;
+
+          set_vsn = 'V03R05M02';
+
+       endsr;
+
+       //============================================================*
+       //    V03R05M03     Aktualisierung auf Version 3.5.3          *
+       //============================================================*
+
+       begsr v03r05m03;
+
+          set_vsn = 'V03R05M03';
+
+       endsr;
+
+       //============================================================*
+       //    V03R05M04     Aktualisierung auf Version 3.5.4          *
+       //============================================================*
+
+       begsr v03r05m04;
+
+          set_vsn = 'V03R05M04';
+
+       endsr;
+
+       //============================================================*
+       //    V03R05M05     Aktualisierung auf Version 3.5.5          *
+       //============================================================*
+
+       begsr v03r05m05;
+
+          set_vsn = 'V03R05M05';
+
+       endsr;
+
+       //============================================================*
+       //    V03R05M06     Aktualisierung auf Version 3.5.6          *
+       //============================================================*
+
+       begsr v03r05m06;
+
+          set_vsn = 'V03R05M06';
+
+       endsr;
+
+       //============================================================*
+       //    V03R05M07     Aktualisierung auf Version 3.5.7          *
+       //============================================================*
+
+       begsr v03r05m07;
+
+          set_vsn = 'V03R05M07';
+
+       endsr;
+
+       //============================================================*
+       //    V03R05M08     Aktualisierung auf Version 3.5.8          *
+       //============================================================*
+
+       begsr v03r05m08;
+
+          set_vsn = 'V03R05M08';
+
+       endsr;
+
+       //============================================================*
+       //    UpdPeekUsr    Aktualisieren der PEEKUSR-Datei           *
+       //============================================================*
+
+       begsr updpeekusr;
+
+          for x = 1 to wrkelem;
+
+             wrktabds = wrktab(x);
+
+             *in11 = f_chainusr(wrktabds.section
+                               : wrktabds.key: o_data);
+
+             x = x + 1;
+
+             //  Wenn der Datenbereich anders als erwartet
+             //  belegt ist, ...
+             if o_data <> wrktabds.data;
+                //  ... dann keine Änderung durchführen
+                iter;
+             else;
+                //  ... ansonsten die Änderung vollziehen
+                wrktabds = wrktab(x);
+                if *in11 = '1';
+                   f_writeusr(wrktabds.section
+                             : wrktabds.key: wrktabds.data);
+                else;
+                   f_updatusr(wrktabds.section
+                             : wrktabds.key: wrktabds.data);
+                endif;
+             endif;
+
+          endfor;
+
+       endsr;
+
+       //============================================================*
+       //    GetUsrSetg    Ermitteln der Versions-Nr.                *
+       //============================================================*
+
+       begsr getUsrSetg;
+
+          //  *VERSION
+          set0007 = f_getusrsg('*VERSION'  );
+
+       endsr;
+
+       //============================================================*
+       //    SetUsrSetg    Speichern der Versions-Nr.                *
+       //============================================================*
+
+       begsr setUsrSetg;
+
+          //  *DSPATR
+          p_updusrsg('*VERSION': set0007);
+
+       endsr;
+
+       //============================================================*
+       //  Program error handler                                     *
+       //============================================================*
+
+       dcl-proc errorhandler;
+       dcl-pi *N;
+         i_condtoken     value likeds(cee_fc_t);
+       i_pcommarea     int(10) value;
+       o_action        int(10);
+       o_newcondtoken  likeds(cee_fc_t);
+       end-pi;
+
+       dump;
+       o_action = cee_percolate;
+
+       end-proc;
+
 **   Section---Schlüssel-Datenbereich-------------------------- Version 1.1.0 -----------
 alt: *PEEK05   *F11
 neu: *PEEK05   *F11      *LAYOUT
