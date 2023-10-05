@@ -1,656 +1,620 @@
-      *===============================================================*
-      *                                                               *
-      *  (c) Thomas Raddatz                                           *
-      *                                                               *
-      *  Bereich  : PEEK, Version 1.4.0                               *
-      *  Programm : PEEK25                                            *
-      *  Typ      : RPG                                               *
-      *                                                               *
-      *  erstellt : 31.10.97  Raddatz                                 *
-      *                                                               *
-      *===============================================================*
-      *                                                               *
-      *  Kurzdokumentation :                                          *
-      *                                                               *
-      *  Auswahl einer Farbe                                          *
-      *                                                               *
-      *===============================================================*
-      * >>PRE-COMPILER<<                                              *
-      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
-      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
-      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
-      *                           INSTALL(*NO);                       *
-      *   >>EXECUTE<<                                                 *
-      * >>END-PRE-COMPILER<<                                          *
-      *===============================================================*
+       //===============================================================*
+       //                                                               *
+       //  (c) Thomas Raddatz                                           *
+       //                                                               *
+       //  Bereich  : PEEK, Version 1.4.0                               *
+       //  Programm : PEEK25                                            *
+       //  Typ      : RPG                                               *
+       //                                                               *
+       //  erstellt : 31.10.97  Raddatz                                 *
+       //                                                               *
+       //===============================================================*
+       //                                                               *
+       //  Kurzdokumentation :                                          *
+       //                                                               *
+       //  Auswahl einer Farbe                                          *
+       //                                                               *
+       //===============================================================*
+       // >>PRE-COMPILER<<                                              *
+       //   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+       //                           OBJLIB(&LI) DEVLIB(&LI) +           *
+       //                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+       //                           INSTALL(*NO);                       *
+       //   >>EXECUTE<<                                                 *
+       // >>END-PRE-COMPILER<<                                          *
+       //===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
-      *
-     FPEEK25FM  CF   E             WORKSTN USROPN
-     F                                     INFDS(workstn)
-      *
-      *---INFOSTRUKTUR FÜR AID-BYTE -----------------------*
-      /COPY QCOPYLE,DS_WORKSTN
-      *----------------------------------------------------*
-      *
-      *---Farbattribute------------------------------------*
-      /COPY QCOPYLE,D_COLORATR
-      *----------------------------------------------------*
-      *
-      *---Variablendefinition------------------------------*
+
+       dcl-f peek25fm workstn(*ext) usage(*input:*output)
+             usropn infds(workstn);
+
       /COPY QCOPYLE,D_VARDEF
       /COPY QCOPYLE,FLDL0100
-      *----------------------------------------------------*
-      *
+      /COPY QCOPYLE,DS_WORKSTN
+      /COPY QCOPYLE,D_COLORATR
+      /COPY QCOPYLE,ShortCmd_D
+      /COPY QCOPYLE,ERR_D_SDS
+      /COPY QCOPYLE,SCRNFKEYS
+      /COPY QCOPYLE,CEECNDHDLR
+
       /define internal_prototype
       /COPY QCOPYLE,PPEEK25
       /undefine internal_prototype
-      *
-      *---Variablendefinition ShortCmd---------------------*
-      /COPY QCOPYLE,ShortCmd_D
-      *----------------------------------------------------*
-      *
-      *---Nachrichtenaufbau--------------------------------*
+
       /COPY QCOPYLE,USR8100
-      *----------------------------------------------------*
-      *
-      *---SDS-Datenstruktur--------------------------------*
-      /COPY QCOPYLE,ERR_D_SDS
-      *----------------------------------------------------*
-      *
-      *----------------------------------------------------*
-      *  I N F D S - D E F I N I T I O N E N               *
-      *----------------------------------------------------*
-      *
-      *----------------------------------------------------*
-      *  F E L D - D E F I N I T I O N E N                 *
-      *----------------------------------------------------*
-      *
-     D yFKeys          S             18A   DIM(32)       INZ(*BLANKS)
-     D yNbrOfKeys      S                   like(int4_t) inz
-     D yMsgID          S              7A                 INZ(*BLANKS)
-     D yMsgDta         S            512A                 INZ(*BLANKS)
-      *
-     D YPgmCmd         S             10A   INZ(*BLANKS)
-     D YCmdDta         S                   LIKE(pgmCmdDt_t) INZ(*BLANKS)
-      *
-      *---Definition der F-Tastenbildschirmfelder----------*
-      /COPY QCOPYLE,SCRNFKEYS
-      *----------------------------------------------------*
-      *
-     D SfBot           S                   like(int4_t) inz
-     D NbrFKeys        C                   CONST(2)
-      *
-     D Wrk_Field       S             10A
-      *
-     D Char            C                   CONST('x')
-      *
-     D PEEK21_NAME     S                   like(pgmCallN_t) inz
-     D PEEK23_NAME     S                   like(pgmCallN_t) inz
-      *
+
       /COPY QCOPYLE,PPEEK21
       /COPY QCOPYLE,PPEEK23
-      *
+
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
-      *
-      /COPY QCOPYLE,CEECNDHDLR
-      *
-     D isInzSr         S                   like(bool_t) inz(bFalse)
-      *
-      ********************************************************************
-      *                 S T E U E R  -  R O U T I N E                    *
-      ********************************************************************
-      *
-     D PEEK25          PI
-     D  i_dsp80                            const like(dsp80_t)
-     D  o_colorAttr                   1A
-     D  o_msgID                                  like(msgID_t)
-     D  o_msgDta                                 like(msgDta_t)
-      *
-      *---------------------------------------------------*
-      *
-      *  Register error handler
-     C                   callp     CEEHDLR(%paddr('errorHandler')
-     C                                     : *null: *omit)
-      *
-     C                   EXSR      InzSr
-      *
-     C                   EXSR      FIRST
-      *
-      *  Schleife für Programmbearbeitung
-      *
-     C                   DO        *HIVAL
-      *
-      *  Nachrichten anzeigen
-     C                   EVAL      *IN89 = '0'
-     C                   WRITE     MSGCTL
-      *
-      *  Anzeigen der Befehlstasten
-     C                   SELECT
-     C                   When      (SFBOT = 2) and
-     C                             (yNbrOfKeys > NbrFKeys * (SFBOT - 1))
-     C                   WRITE     PBBOT#2                                      BT-Tasten 2
-     C                   When      (SFBOT = 3) and
-     C                             (yNbrOfKeys > NbrFKeys * (SFBOT - 1))
-     C                   WRITE     PBBOT#3                                      BT-Tasten 3
-     C                   When      (SFBOT = 4) and
-     C                             (yNbrOfKeys > NbrFKeys * (SFBOT - 1))
-     C                   WRITE     PBBOT#4                                      BT-Tasten 4
-     C                   When      (SFBOT = 5) and
-     C                             (yNbrOfKeys > NbrFKeys * (SFBOT - 1))
-     C                   WRITE     PBBOT#5                                      BT-Tasten 4
-     C                   When      (SFBOT = 6) and
-     C                             (yNbrOfKeys > NbrFKeys * (SFBOT - 1))
-     C                   WRITE     PBBOT#6                                      BT-Tasten 4
-     C                   OTHER
-     C                   WRITE     PBBOT#1                                      BT-Tasten 1
-     C                   EVAL      SFBOT = 1
-     C                   Endsl
-      *
-      *  Anzeigen Bildschirm
-     C                   EXFMT     BILD01
-      *
-      *  Berechnen Zeile/Spalte
-     C                   Eval      cursorPosition.row =
-     C                               workstn.csrPos / 256
-     C                   Eval      cursorPosition.column =
-     C                               %rem(workstn.csrPos: 256)
-      *
-      *  Beibehalten der Cursorosition
-     C                   EVAL      CsrRow = cursorPosition.row - ZEI
-     C                   EVAL      CsrCol = cursorPosition.column - POS
-     C                   EVAL      CsrCol = CsrCol - 1
-      *
-      *  Nachrichten löschen
-     C                   Callp     p_rmvPgmMg(§§pgmName)
-      *
-      *  Bezugszahlen löschen
-     C                   EXSR      BZOFF1
-      *
-      *  Mappen der gedrückten Taste
-      *  in Programmbefehl
-     C                   CALLP     PEEK21(workstn.aid: §§PgmName
-     C                                    : YPgmCmd: YCmdDta: YMsgID: YMsgDta)
-     C     YMsgID        IFNE      *BLANKS
-     C                   Callp     p_sndPgmMg(yMsgID: yMsgDta: §§pgmName)
-     C                   EVAL      YMsgID = ''
-     C                   EVAL      YMsgDta = ''
-     C                   ITER
-     C                   Endif
-      *
-      *  Abfragen der Befehlstasten
-     C                   SELECT
-      *  F3  - Ende
-     C     YPgmCmd       WHENEQ    '*EXIT'                                      ENDE
-     C                   EXSR      C_EndPgm
-     C                   LEAVE
-      *
-      *  F5  - Aktualisieren
-     C     YPgmCmd       WHENEQ    '*REFRESH'                                   AKTUALISIEREN
-     C                   EXSR      C_Refresh
-     C                   ITER
-      *
-      *  F12 - Ende
-     C     YPgmCmd       WHENEQ    '*CANCEL'                                    ZURÜCK
-     C                   EXSR      C_EndPgm
-     C                   LEAVE
-      *
-      *  F24 - Weitere Tasten
-     C     YPgmCmd       WHENEQ    '*MOREKEYS'                                  ZURÜCK
-     C                   EXSR      C_MoreKeys
-      *
-      *  Datenfreigabe
-     C     YPgmCmd       WHENEQ    '*ENTER'
-     C                   EXSR      C_Enter
-     C     *IN99         IFEQ      '0'
-     C                   LEAVE
-     C                   Endif
-      *
-     C                   OTHER
-      *  Falsche Taste gedrückt
-     C                   Callp     p_wrongKey(workstn.aid: §§pgmName)
-     C                   Iter
-     C                   Endsl
-      *
-     C                   Enddo                                                  *HIVAL
-      *
-      *  Ende der Hauptschleife
-      *---------------------------------------------------*
-      *
-      *  Programm verlassen
-     C     ENDE          TAG
-      *
-      * - Schließen der Dateien
-     C                   CLOSE     PEEK25FM
-      *
-     C                   RETURN
-      *
-      *============================================================*
-      *    C_Enter       "Datenfreigabetaste"                      *
-      *============================================================*
-      *
-     C     C_Enter       BEGSR
-      *
-     C                   EXSR      PRFB1
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    BZOFF1        Ausschalten aller Fehlerbezugszahlen      *
-      *============================================================*
-      *
-     C     BZOFF1        BEGSR
-      *
-      *  Fehler
-     C                   EVAL      *IN99 = '0'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PRFB1         Prüfen der Eingaben                       *
-      *============================================================*
-      *
-     C     PRFB1         BEGSR
-      *
-     C                   EXSR      PRF20                                       Feldauswahl
-     C     *IN99         CABEQ     '1'           EPRFB1
-      *
-     C     EPRFB1        ENDSR
-      *
-      *============================================================*
-      *    PRF20         Prüfen:  Feldauswahl                      *
-      *============================================================*
-      *
-     C     PRF20         BEGSR
-      *
-     C     SCNFLD        IFNE      *BLANKS
-     C                   EXSR      ExtrColor
-     C                   ELSE
-     C                   EVAL      *IN99 = '1'
-     C                   Callp     p_sndPgmMg('USR8147': '': §§pgmName)
-     C                   Endif
-      *
-     C     EPRF20        TAG
-      *
-     C     *IN99         IFEQ      '1'
-      *               ??????????
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_EndPgm      F12    - Programm beenden                 *
-      *============================================================*
-      *
-     C     C_EndPgm      BEGSR
-      *
-     C                   Callp     p_rmvPgmMg(§§pgmName)
-      *
-     C                   EVAL      o_msgID = 'USR8100'
-      *
-     C                   SELECT
-     C     workstn.aid   WHENEQ    K_F3
-     C                   EVAL      USR81001 = 'F3'
-     C     workstn.aid   WHENEQ    K_F12
-     C                   EVAL      USR81001 = 'F12'
-     C                   OTHER
-     C                   EVAL      USR81001 = 'Fxx'
-     C                   Endsl
-      *
-     C                   EVAL      o_msgDta = USR8100
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_Refresh     F5  - Aktualisieren der Subfile           *
-      *============================================================*
-      *
-     C     C_Refresh     BEGSR
-      *
-     C                   EXSR      FILL##
-     C                   EXSR      PosCsr
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_MoreKeys    F24 - Weitere Tasten                      *
-      *============================================================*
-      *
-     C     C_MoreKeys    BEGSR
-      *
-     C                   EVAL      SFBOT = SFBOT + 1
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    FILL##        Füllen Bildschirm                         *
-      *============================================================*
-      *
-     C     FILL##        BEGSR
-      *
-     C                   EVAL      $Green = §Green
-     C                   EVAL      $Green = %xlate(' ': Char: $Green)
-     C                   EVAL      $Green_R = §Green_R
-     C                   EVAL      $Green_R = %xlate(' ': Char: $Green_R)
-     C                   EVAL      $Green_U = §Green_U
-     C                   EVAL      $Green_U = %xlate(' ': Char: $Green_U)
-     C                   EVAL      $Green_RU = §Green_RU
-     C                   EVAL      $Green_RU = %xlate(' ': Char: $Green_RU)
-      *
-     C                   EVAL      $White = §White
-     C                   EVAL      $White = %xlate(' ': Char: $White)
-     C                   EVAL      $White_R = §White_R
-     C                   EVAL      $White_R = %xlate(' ': Char: $White_R)
-     C                   EVAL      $White_U = §White_U
-     C                   EVAL      $White_U = %xlate(' ': Char: $White_U)
-      *
-     C                   EVAL      $Red = §Red
-     C                   EVAL      $Red = %xlate(' ': Char: $Red)
-     C                   EVAL      $Red_R = §Red_R
-     C                   EVAL      $Red_R = %xlate(' ': Char: $Red_R)
-     C                   EVAL      $Red_U = §Red_U
-     C                   EVAL      $Red_U = %xlate(' ': Char: $Red_U)
-     C                   EVAL      $Red_RU = §Red_RU
-     C                   EVAL      $Red_RU = %xlate(' ': Char: $Red_RU)
-     C                   EVAL      $Red_B = §Red_B
-     C                   EVAL      $Red_B = %xlate(' ': Char: $Red_B)
-     C                   EVAL      $Red_RB = §Red_RB
-     C                   EVAL      $Red_RB = %xlate(' ': Char: $Red_RB)
-     C                   EVAL      $Red_UB = §Red_UB
-     C                   EVAL      $Red_UB = %xlate(' ': Char: $Red_UB)
-      *
-     C                   EVAL      $Turkis = §Turkis
-     C                   EVAL      $Turkis = %xlate(' ': Char: $Turkis)
-     C                   EVAL      $Turkis_R = §Turkis_R
-     C                   EVAL      $Turkis_R = %xlate(' ': Char: $Turkis_R)
-     C                   EVAL      $Turkis_U = §Turkis_U
-     C                   EVAL      $Turkis_U = %xlate(' ': Char: $Turkis_U)
-     C                   EVAL      $Turkis_RU = §Turkis_RU
-     C                   EVAL      $Turkis_RU = %xlate(' ': Char: $Turkis_RU)
-      *
-     C                   EVAL      $Yellow = §Yellow
-     C                   EVAL      $Yellow = %xlate(' ': Char: $Yellow)
-     C                   EVAL      $Yellow_R = §Yellow_R
-     C                   EVAL      $Yellow_R = %xlate(' ': Char: $Yellow_R)
-     C                   EVAL      $Yellow_U = §Yellow_U
-     C                   EVAL      $Yellow_U = %xlate(' ': Char: $Yellow_U)
-      *
-     C                   EVAL      $Pink = §Pink
-     C                   EVAL      $Pink = %xlate(' ': Char: $Pink)
-     C                   EVAL      $Pink_R = §Pink_R
-     C                   EVAL      $Pink_R = %xlate(' ': Char: $Pink_R)
-     C                   EVAL      $Pink_U = §Pink_U
-     C                   EVAL      $Pink_U = %xlate(' ': Char: $Pink_U)
-     C                   EVAL      $Pink_RU = §Pink_RU
-     C                   EVAL      $Pink_RU = %xlate(' ': Char: $Pink_RU)
-      *
-     C                   EVAL      $Blue = §Blue
-     C                   EVAL      $Blue = %xlate(' ': Char: $Blue)
-     C                   EVAL      $Blue_R = §Blue_R
-     C                   EVAL      $Blue_R = %xlate(' ': Char: $Blue_R)
-     C                   EVAL      $Blue_U = §Blue_U
-     C                   EVAL      $Blue_U = %xlate(' ': Char: $Blue_U)
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PosCsr        Positionieren Cursor auf aktuelle Farbe   *
-      *============================================================*
-      *
-     C     PosCsr        BEGSR
-      *
-     C                   EVAL      %subarr(*in: 10: 10) = '0'                   - Green
-     C                   EVAL      %subarr(*in: 20: 10) = '0'                   - White
-     C                   EVAL      %subarr(*in: 30: 10) = '0'                   - Red
-     C                   EVAL      %subarr(*in: 40: 10) = '0'                   - Türkis
-     C                   EVAL      %subarr(*in: 50: 10) = '0'                   - Yellow
-     C                   EVAL      %subarr(*in: 60: 10) = '0'                   - Pink
-     C                   EVAL      %subarr(*in: 70: 10) = '0'                   - Blue
-      *
-      * Green
-     C                   SELECT
-     C     o_colorAttr   WHENEQ    §Green
-     C                   EVAL      *IN10 = '1'
-     C     o_colorAttr   WHENEQ    §Green_R
-     C                   EVAL      *IN11 = '1'
-     C     o_colorAttr   WHENEQ    §Green_U
-     C                   EVAL      *IN12 = '1'
-     C     o_colorAttr   WHENEQ    §Green_RU
-     C                   EVAL      *IN13 = '1'
-      * White
-     C     o_colorAttr   WHENEQ    §White
-     C                   EVAL      *IN20 = '1'
-     C     o_colorAttr   WHENEQ    §White_R
-     C                   EVAL      *IN21 = '1'
-     C     o_colorAttr   WHENEQ    §White_U
-     C                   EVAL      *IN22 = '1'
-      * Red
-     C     o_colorAttr   WHENEQ    §Red
-     C                   EVAL      *IN30 = '1'
-     C     o_colorAttr   WHENEQ    §Red_R
-     C                   EVAL      *IN31 = '1'
-     C     o_colorAttr   WHENEQ    §Red_U
-     C                   EVAL      *IN32 = '1'
-     C     o_colorAttr   WHENEQ    §Red_RU
-     C                   EVAL      *IN33 = '1'
-     C     o_colorAttr   WHENEQ    §Red_B
-     C                   EVAL      *IN34 = '1'
-     C     o_colorAttr   WHENEQ    §Red_RB
-     C                   EVAL      *IN35 = '1'
-     C     o_colorAttr   WHENEQ    §Red_UB
-     C                   EVAL      *IN36 = '1'
-      * Türkis
-     C     o_colorAttr   WHENEQ    §Turkis
-     C                   EVAL      *IN40 = '1'
-     C     o_colorAttr   WHENEQ    §Turkis_R
-     C                   EVAL      *IN41 = '1'
-     C     o_colorAttr   WHENEQ    §Turkis_U
-     C                   EVAL      *IN42 = '1'
-     C     o_colorAttr   WHENEQ    §Turkis_RU
-     C                   EVAL      *IN43 = '1'
-      * Yellow
-     C     o_colorAttr   WHENEQ    §Yellow
-     C                   EVAL      *IN50 = '1'
-     C     o_colorAttr   WHENEQ    §Yellow_R
-     C                   EVAL      *IN51 = '1'
-     C     o_colorAttr   WHENEQ    §Yellow_U
-     C                   EVAL      *IN52 = '1'
-      * Pink
-     C     o_colorAttr   WHENEQ    §Pink
-     C                   EVAL      *IN60 = '1'
-     C     o_colorAttr   WHENEQ    §Pink_R
-     C                   EVAL      *IN61 = '1'
-     C     o_colorAttr   WHENEQ    §Pink_U
-     C                   EVAL      *IN62 = '1'
-     C     o_colorAttr   WHENEQ    §Pink_RU
-     C                   EVAL      *IN63 = '1'
-      * Blue
-     C     o_colorAttr   WHENEQ    §Blue
-     C                   EVAL      *IN70 = '1'
-     C     o_colorAttr   WHENEQ    §Blue_R
-     C                   EVAL      *IN71 = '1'
-     C     o_colorAttr   WHENEQ    §Blue_U
-     C                   EVAL      *IN72 = '1'
-      *
-     C                   OTHER
-     C                   CALLP     p_kill('Illegal color attribute.')
-     C                   Endsl
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    SetScreen     Einstellen 132/80-Zeichen Auflösung       *
-      *============================================================*
-      *
-     C     SetScreen     BEGSR
-      *
-     C     i_dsp80       IFEQ      '0'
-      *   132-Zeichen Anzeige
-     C                   EVAL      *IN88 = '0'
-     C                   EVAL      ZEI = 8
-     C                   EVAL      POS = 41
-     C                   ELSE
-      *    80-Zeichen Anzeige
-     C                   EVAL      *IN88 = '1'
-     C                   EVAL      ZEI = 6
-     C                   EVAL      POS = 22
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    ExtrColor     Extrahieren Farbattribut                  *
-      *============================================================*
-      *
-     C     ExtrColor     BEGSR
-      *
-     C                   SELECT
-      *  Green
-     C     ScnFld        WHENEQ    '$GREEN'
-     C                   EVAL      Wrk_Field = $GREEN
-     C     ScnFld        WHENEQ    '$GREEN_R'
-     C                   EVAL      Wrk_Field = $GREEN_R
-     C     ScnFld        WHENEQ    '$GREEN_U'
-     C                   EVAL      Wrk_Field = $GREEN_U
-     C     ScnFld        WHENEQ    '$GREEN_RU'
-     C                   EVAL      Wrk_Field = $GREEN_RU
-      *  White
-     C     ScnFld        WHENEQ    '$WHITE'
-     C                   EVAL      Wrk_Field = $WHITE
-     C     ScnFld        WHENEQ    '$WHITE_R'
-     C                   EVAL      Wrk_Field = $WHITE_R
-     C     ScnFld        WHENEQ    '$WHITE_U'
-     C                   EVAL      Wrk_Field = $WHITE_U
-      *  Red
-     C     ScnFld        WHENEQ    '$RED'
-     C                   EVAL      Wrk_Field = $RED
-     C     ScnFld        WHENEQ    '$RED_R'
-     C                   EVAL      Wrk_Field = $RED_R
-     C     ScnFld        WHENEQ    '$RED_U'
-     C                   EVAL      Wrk_Field = $RED_U
-     C     ScnFld        WHENEQ    '$RED_RU'
-     C                   EVAL      Wrk_Field = $RED_RU
-     C     ScnFld        WHENEQ    '$RED_B'
-     C                   EVAL      Wrk_Field = $RED_B
-     C     ScnFld        WHENEQ    '$RED_RB'
-     C                   EVAL      Wrk_Field = $RED_RB
-     C     ScnFld        WHENEQ    '$RED_UB'
-     C                   EVAL      Wrk_Field = $RED_UB
-      *  Turquoise
-     C     ScnFld        WHENEQ    '$TURKIS'
-     C                   EVAL      Wrk_Field = $TURKIS
-     C     ScnFld        WHENEQ    '$TURKIS_R'
-     C                   EVAL      Wrk_Field = $TURKIS_R
-     C     ScnFld        WHENEQ    '$TURKIS_U'
-     C                   EVAL      Wrk_Field = $TURKIS_U
-     C     ScnFld        WHENEQ    '$TURKIS_RU'
-     C                   EVAL      Wrk_Field = $TURKIS_RU
-      *  Yellow
-     C     ScnFld        WHENEQ    '$YELLOW'
-     C                   EVAL      Wrk_Field = $YELLOW
-     C     ScnFld        WHENEQ    '$YELLOW_R'
-     C                   EVAL      Wrk_Field = $YELLOW_R
-     C     ScnFld        WHENEQ    '$YELLOW_U'
-     C                   EVAL      Wrk_Field = $YELLOW_U
-      *  Pink
-     C     ScnFld        WHENEQ    '$PINK'
-     C                   EVAL      Wrk_Field = $PINK
-     C     ScnFld        WHENEQ    '$PINK_R'
-     C                   EVAL      Wrk_Field = $PINK_R
-     C     ScnFld        WHENEQ    '$PINK_U'
-     C                   EVAL      Wrk_Field = $PINK_U
-     C     ScnFld        WHENEQ    '$PINK_RU'
-     C                   EVAL      Wrk_Field = $PINK_RU
-      *  Blue
-     C     ScnFld        WHENEQ    '$BLUE'
-     C                   EVAL      Wrk_Field = $BLUE
-     C     ScnFld        WHENEQ    '$BLUE_R'
-     C                   EVAL      Wrk_Field = $BLUE_R
-     C     ScnFld        WHENEQ    '$BLUE_U'
-     C                   EVAL      Wrk_Field = $BLUE_U
-      *
-     C                   OTHER
-     C                   EVAL      Wrk_Field = *BLANKS
-     C                   Endsl
-      *
-     C     Wrk_Field     IFNE      *BLANKS
-     C     1             SUBST (P) Wrk_Field:1   o_colorAttr
-     C                   ELSE
-      *                ????????
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    First         Initialisierung                           *
-      *============================================================*
-      *
-     C     First         BEGSR
-      *
-      * - Öffnen der Dateien
-     C                   OPEN      PEEK25FM
-      *
-      * - Programm initialisieren
-     C                   Callp     p_rmvPgmMg(§§pgmName)
-      *
-      * - Bildschirmfelder füllen
-     C                   EXSR      FILL##
-     C                   EXSR      PosCsr
-      *
-     C                   EVAL      o_msgID = *BLANKS
-     C                   EVAL      o_msgDta = *BLANKS
-      *
-      *  Löschen der Cursorosition
-     C                   EVAL      CsrRow = *ZEROS
-     C                   EVAL      CsrCol = *ZEROS
-      *
-      * - Einstellen Darstellung der Funktionstasten
-     C                   EVAL      SfBot = 1
-      *
-      * - Einstellen der Bildschirmauflösung 80/132-Zeichen
-     C                   EXSR      SetScreen
-      *
-     C                   ENDSR
-      *
-      *====================================================*
-      *  InzSr --  Initialize program                      *
-      *====================================================*
-      *
-     C     InzSr         Begsr
-      *
-     C                   If        (isInzSr = bTrue)
-     C                   Leavesr
-     C                   Endif
-      *
-     C                   Eval      isInzSr = bTrue
-      *
-     C                   Eval      §PgmQ = '*'
-      *
-     C                   Eval      PEEK21_NAME = f_pgmCallN('PEEK21')
-     C                   Eval      PEEK23_NAME = f_pgmCallN('PEEK23')
-      *
-     C                   Callp     PEEK23(§§PgmName: '*ALL': 0
-     C                                    : yFKeys: yNbrOfKeys)
-     C                   Eval      ScrnFKeys = %subarr(YFKeys: 1)
-      *
-     C                   Endsr
-      *
-      *============================================================*
-      *  Program error handler                                     *
-      *============================================================*
-      *
-     P errorHandler    b
-     D                 pi
-     D i_condToken                         value likeds(cee_fc_t)
-     D i_pCommArea                   10i 0 value
-     D o_action                      10i 0
-     D o_newCondToken                            likeds(cee_fc_t)
-      /free
 
-         dump;
-         o_action = CEE_PERCOLATE;
+       dcl-s yfkeys          char(18) dim(32);
+       dcl-s ynbrofkeys      like(int4_t);
+       dcl-s ymsgid          char(7);
+       dcl-s ymsgdta         char(512);
 
-      /end-free
-     P                 e
-      *
+       dcl-s ypgmcmd         char(10);
+       dcl-s ycmddta         like(pgmcmddt_t);
+
+       dcl-s sfbot           like(int4_t);
+       dcl-c nbrfkeys const(2);
+
+       dcl-s wrk_field       char(10);
+
+       dcl-c CHAR const('x');
+
+       dcl-s peek21_name     like(pgmcalln_t) inz;
+       dcl-s peek23_name     like(pgmcalln_t) inz;
+
+       dcl-s isInzSr         like(bool_t) inz(bFalse);
+
+       //*******************************************************************
+       //                 S T E U E R  -  R O U T I N E                    *
+       //*******************************************************************
+
+       dcl-pi peek25;
+         i_dsp80         const like(dsp80_t);
+         o_colorattr     char(1);
+         o_msgid         like(msgid_t);
+         o_msgdta        like(msgdta_t);
+       end-pi;
+       //---------------------------------------------------*
+
+       //  Register error handler
+       ceehdlr(%paddr('errorHandler')
+              : *null: *omit);
+
+       exsr inzsr;
+
+       exsr first;
+
+       //  Schleife für Programmbearbeitung
+
+       dow ('1');
+
+          //  Nachrichten anzeigen
+          *in89 = '0';
+          write msgctl;
+
+          //  Anzeigen der Befehlstasten
+          select;
+          when (sfbot = 2) and
+             (ynbrofkeys > nbrfkeys * (sfbot - 1));
+             write pbbot#2;
+          when (sfbot = 3) and
+             (ynbrofkeys > nbrfkeys * (sfbot - 1));
+             write pbbot#3;
+          when (sfbot = 4) and
+             (ynbrofkeys > nbrfkeys * (sfbot - 1));
+             write pbbot#4;
+          when (sfbot = 5) and
+             (ynbrofkeys > nbrfkeys * (sfbot - 1));
+             write pbbot#5;
+          when (sfbot = 6) and
+             (ynbrofkeys > nbrfkeys * (sfbot - 1));
+             write pbbot#6;
+          other;
+             write pbbot#1;
+             sfbot = 1;
+          endsl;
+
+          //  Anzeigen Bildschirm
+          exfmt bild01;
+
+          //  Berechnen Zeile/Spalte
+          cursorposition.row =
+           workstn.csrpos / 256;
+          cursorposition.column =
+           %rem(workstn.csrpos: 256);
+
+          //  Beibehalten der Cursorosition
+          csrrow = cursorposition.row - zei;
+          csrcol = cursorposition.column - pos;
+          csrcol = csrcol - 1;
+
+          //  Nachrichten löschen
+          p_rmvpgmmg(§§pgmname);
+
+          //  Bezugszahlen löschen
+          exsr bzoff1;
+
+          //  Mappen der gedrückten Taste
+          //  in Programmbefehl
+          peek21(workstn.aid: §§pgmname
+                : ypgmcmd: ycmddta: ymsgid: ymsgdta);
+          if ymsgid <> *blanks;
+             p_sndpgmmg(ymsgid: ymsgdta: §§pgmname);
+             ymsgid = '';
+             ymsgdta = '';
+             iter;
+          endif;
+
+          //  Abfragen der Befehlstasten
+          select;
+          when ypgmcmd = '*EXIT';
+             exsr c_endpgm;
+             leave;
+          when ypgmcmd = '*REFRESH';
+             exsr c_refresh;
+             iter;
+          when ypgmcmd = '*CANCEL';
+             exsr c_endpgm;
+             leave;
+          when ypgmcmd = '*MOREKEYS';
+             exsr c_morekeys;
+          when ypgmcmd = '*ENTER';
+             exsr c_enter;
+             if *in99 = *off;
+                leave;
+             endif;
+
+          other;
+             //  Falsche Taste gedrückt
+             p_wrongkey(workstn.aid: §§pgmname);
+             iter;
+          endsl;
+
+       enddo;
+
+       close peek25fm;
+
+       return;
+
+       //============================================================*
+       //    C_Enter       "Datenfreigabetaste"                      *
+       //============================================================*
+
+       begsr c_enter;
+
+          exsr prfb1;
+
+       endsr;
+
+       //============================================================*
+       //    BZOFF1        Ausschalten aller Fehlerbezugszahlen      *
+       //============================================================*
+
+       begsr bzoff1;
+
+          //  Fehler
+          *in99 = '0';
+
+       endsr;
+
+       //============================================================*
+       //    PRFB1         Prüfen der Eingaben                       *
+       //============================================================*
+
+       begsr prfb1;
+
+          dou ('1');
+
+             exsr prf20;
+             if (*in99 = bTrue);
+                leave;
+             endif;
+
+          enddo;
+
+          endsr;
+
+       //============================================================*
+       //    PRF20         Prüfen:  Feldauswahl                      *
+       //============================================================*
+
+       begsr prf20;
+
+          dou ('1');
+
+             if (scnfld <> '');
+                exsr extrcolor;
+             else;
+                *in99 = '1';
+                p_sndpgmmg('USR8147': '': §§pgmname);
+                leave;
+             endif;
+
+          enddo;
+
+          if *in99 = *on;
+             //               ??????????
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    C_EndPgm      F12    - Programm beenden                 *
+       //============================================================*
+
+       begsr c_endpgm;
+
+          p_rmvpgmmg(§§pgmname);
+
+          o_msgid = 'USR8100';
+
+          select;
+          when workstn.aid = k_f3;
+             usr81001 = 'F3';
+          when workstn.aid = k_f12;
+             usr81001 = 'F12';
+          other;
+             usr81001 = 'Fxx';
+          endsl;
+
+          o_msgdta = usr8100;
+
+       endsr;
+
+       //============================================================*
+       //    C_Refresh     F5  - Aktualisieren der Subfile           *
+       //============================================================*
+
+       begsr c_refresh;
+
+          exsr fill##;
+          exsr poscsr;
+
+       endsr;
+
+       //============================================================*
+       //    C_MoreKeys    F24 - Weitere Tasten                      *
+       //============================================================*
+
+       begsr c_morekeys;
+
+          sfbot = sfbot + 1;
+
+       endsr;
+
+       //============================================================*
+       //    FILL##        Füllen Bildschirm                         *
+       //============================================================*
+
+       begsr fill##;
+
+          $green = §green;
+          $green = %xlate(' ': CHAR: $green);
+          $green_r = §green_r;
+          $green_r = %xlate(' ': CHAR: $green_r);
+          $green_u = §green_u;
+          $green_u = %xlate(' ': CHAR: $green_u);
+          $green_ru = §green_ru;
+          $green_ru = %xlate(' ': CHAR: $green_ru);
+
+          $white = §white;
+          $white = %xlate(' ': CHAR: $white);
+          $white_r = §white_r;
+          $white_r = %xlate(' ': CHAR: $white_r);
+          $white_u = §white_u;
+          $white_u = %xlate(' ': CHAR: $white_u);
+
+          $red = §red;
+          $red = %xlate(' ': CHAR: $red);
+          $red_r = §red_r;
+          $red_r = %xlate(' ': CHAR: $red_r);
+          $red_u = §red_u;
+          $red_u = %xlate(' ': CHAR: $red_u);
+          $red_ru = §red_ru;
+          $red_ru = %xlate(' ': CHAR: $red_ru);
+          $red_b = §red_b;
+          $red_b = %xlate(' ': CHAR: $red_b);
+          $red_rb = §red_rb;
+          $red_rb = %xlate(' ': CHAR: $red_rb);
+          $red_ub = §red_ub;
+          $red_ub = %xlate(' ': CHAR: $red_ub);
+
+          $turkis = §turkis;
+          $turkis = %xlate(' ': CHAR: $turkis);
+          $turkis_r = §turkis_r;
+          $turkis_r = %xlate(' ': CHAR: $turkis_r);
+          $turkis_u = §turkis_u;
+          $turkis_u = %xlate(' ': CHAR: $turkis_u);
+          $turkis_ru = §turkis_ru;
+          $turkis_ru = %xlate(' ': CHAR: $turkis_ru);
+
+          $yellow = §yellow;
+          $yellow = %xlate(' ': CHAR: $yellow);
+          $yellow_r = §yellow_r;
+          $yellow_r = %xlate(' ': CHAR: $yellow_r);
+          $yellow_u = §yellow_u;
+          $yellow_u = %xlate(' ': CHAR: $yellow_u);
+
+          $pink = §pink;
+          $pink = %xlate(' ': CHAR: $pink);
+          $pink_r = §pink_r;
+          $pink_r = %xlate(' ': CHAR: $pink_r);
+          $pink_u = §pink_u;
+          $pink_u = %xlate(' ': CHAR: $pink_u);
+          $pink_ru = §pink_ru;
+          $pink_ru = %xlate(' ': CHAR: $pink_ru);
+
+          $blue = §blue;
+          $blue = %xlate(' ': CHAR: $blue);
+          $blue_r = §blue_r;
+          $blue_r = %xlate(' ': CHAR: $blue_r);
+          $blue_u = §blue_u;
+          $blue_u = %xlate(' ': CHAR: $blue_u);
+
+       endsr;
+
+       //============================================================*
+       //    PosCsr        Positionieren Cursor auf aktuelle Farbe   *
+       //============================================================*
+
+       begsr poscsr;
+
+          %subarr(*in: 10: 10) = '0'; // - Green
+          %subarr(*in: 20: 10) = '0'; // - White
+          %subarr(*in: 30: 10) = '0'; // - Red
+          %subarr(*in: 40: 10) = '0'; // - Türkis
+          %subarr(*in: 50: 10) = '0'; // - Yellow
+          %subarr(*in: 60: 10) = '0'; // - Pink
+          %subarr(*in: 70: 10) = '0'; // - Blue
+
+          // Green
+          select;
+          when o_colorattr = §green;
+             *in10 = '1';
+          when o_colorattr = §green_r;
+             *in11 = '1';
+          when o_colorattr = §green_u;
+             *in12 = '1';
+          when o_colorattr = §green_ru;
+             *in13 = '1';
+             // White
+          when o_colorattr = §white;
+             *in20 = '1';
+          when o_colorattr = §white_r;
+             *in21 = '1';
+          when o_colorattr = §white_u;
+             *in22 = '1';
+             // Red
+          when o_colorattr = §red;
+             *in30 = '1';
+          when o_colorattr = §red_r;
+             *in31 = '1';
+          when o_colorattr = §red_u;
+             *in32 = '1';
+          when o_colorattr = §red_ru;
+             *in33 = '1';
+          when o_colorattr = §red_b;
+             *in34 = '1';
+          when o_colorattr = §red_rb;
+             *in35 = '1';
+          when o_colorattr = §red_ub;
+             *in36 = '1';
+             // Türkis
+          when o_colorattr = §turkis;
+             *in40 = '1';
+          when o_colorattr = §turkis_r;
+             *in41 = '1';
+          when o_colorattr = §turkis_u;
+             *in42 = '1';
+          when o_colorattr = §turkis_ru;
+             *in43 = '1';
+             // Yellow
+          when o_colorattr = §yellow;
+             *in50 = '1';
+          when o_colorattr = §yellow_r;
+             *in51 = '1';
+          when o_colorattr = §yellow_u;
+             *in52 = '1';
+             // Pink
+          when o_colorattr = §pink;
+             *in60 = '1';
+          when o_colorattr = §pink_r;
+             *in61 = '1';
+          when o_colorattr = §pink_u;
+             *in62 = '1';
+          when o_colorattr = §pink_ru;
+             *in63 = '1';
+             // Blue
+          when o_colorattr = §blue;
+             *in70 = '1';
+          when o_colorattr = §blue_r;
+             *in71 = '1';
+          when o_colorattr = §blue_u;
+             *in72 = '1';
+
+          other;
+             p_kill('Illegal color attribute.');
+          endsl;
+
+       endsr;
+
+       //============================================================*
+       //    SetScreen     Einstellen 132/80-Zeichen Auflösung       *
+       //============================================================*
+
+       begsr setscreen;
+
+          if i_dsp80 = '0';
+             //   132-Zeichen Anzeige
+             *in88 = '0';
+             zei = 8;
+             pos = 41;
+          else;
+             //    80-Zeichen Anzeige
+             *in88 = '1';
+             zei = 6;
+             pos = 22;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    ExtrColor     Extrahieren Farbattribut                  *
+       //============================================================*
+
+       begsr extrcolor;
+
+          select;
+             //  Green
+          when scnfld = '$GREEN';
+             wrk_field = $green;
+          when scnfld = '$GREEN_R';
+             wrk_field = $green_r;
+          when scnfld = '$GREEN_U';
+             wrk_field = $green_u;
+          when scnfld = '$GREEN_RU';
+             wrk_field = $green_ru;
+             //  White
+          when scnfld = '$WHITE';
+             wrk_field = $white;
+          when scnfld = '$WHITE_R';
+             wrk_field = $white_r;
+          when scnfld = '$WHITE_U';
+             wrk_field = $white_u;
+             //  Red
+          when scnfld = '$RED';
+             wrk_field = $red;
+          when scnfld = '$RED_R';
+             wrk_field = $red_r;
+          when scnfld = '$RED_U';
+             wrk_field = $red_u;
+          when scnfld = '$RED_RU';
+             wrk_field = $red_ru;
+          when scnfld = '$RED_B';
+             wrk_field = $red_b;
+          when scnfld = '$RED_RB';
+             wrk_field = $red_rb;
+          when scnfld = '$RED_UB';
+             wrk_field = $red_ub;
+             //  Turquoise
+          when scnfld = '$TURKIS';
+             wrk_field = $turkis;
+          when scnfld = '$TURKIS_R';
+             wrk_field = $turkis_r;
+          when scnfld = '$TURKIS_U';
+             wrk_field = $turkis_u;
+          when scnfld = '$TURKIS_RU';
+             wrk_field = $turkis_ru;
+             //  Yellow
+          when scnfld = '$YELLOW';
+             wrk_field = $yellow;
+          when scnfld = '$YELLOW_R';
+             wrk_field = $yellow_r;
+          when scnfld = '$YELLOW_U';
+             wrk_field = $yellow_u;
+             //  Pink
+          when scnfld = '$PINK';
+             wrk_field = $pink;
+          when scnfld = '$PINK_R';
+             wrk_field = $pink_r;
+          when scnfld = '$PINK_U';
+             wrk_field = $pink_u;
+          when scnfld = '$PINK_RU';
+             wrk_field = $pink_ru;
+             //  Blue
+          when scnfld = '$BLUE';
+             wrk_field = $blue;
+          when scnfld = '$BLUE_R';
+             wrk_field = $blue_r;
+          when scnfld = '$BLUE_U';
+             wrk_field = $blue_u;
+
+          other;
+             wrk_field = *blanks;
+          endsl;
+
+          if wrk_field <> *blanks;
+             o_colorattr = %subst(wrk_field:1:1);
+          else;
+             //                ????????
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    First         Initialisierung                           *
+       //============================================================*
+
+       begsr first;
+
+          // - Öffnen der Dateien
+          open peek25fm;
+
+          // - Programm initialisieren
+          p_rmvpgmmg(§§pgmname);
+
+          // - Bildschirmfelder füllen
+          exsr fill##;
+          exsr poscsr;
+
+          o_msgid = *blanks;
+          o_msgdta = *blanks;
+
+          //  Löschen der Cursorosition
+          csrrow = *zeros;
+          csrcol = *zeros;
+
+          // - Einstellen Darstellung der Funktionstasten
+          sfbot = 1;
+
+          // - Einstellen der Bildschirmauflösung 80/132-Zeichen
+          exsr setscreen;
+
+       endsr;
+
+       //====================================================*
+       //  InzSr --  Initialize program                      *
+       //====================================================*
+
+       begsr inzsr;
+
+          if (isInzSr = bTrue);
+             leavesr;
+          endif;
+
+          isInzSr = bTrue;
+
+          §pgmq = '*';
+
+          peek21_name = f_pgmcalln('PEEK21');
+          peek23_name = f_pgmcalln('PEEK23');
+
+          peek23(§§pgmname: '*ALL': 0
+                : yfkeys: ynbrofkeys);
+          scrnfkeys = %subarr(yfkeys: 1);
+
+       endsr;
+
+       //============================================================*
+       //  Program error handler                                     *
+       //============================================================*
+
+       dcl-proc errorhandler;
+       dcl-pi *N;
+         i_condtoken     value likeds(cee_fc_t);
+         i_pcommarea     int(10) value;
+         o_action        int(10);
+         o_newcondtoken  likeds(cee_fc_t);
+       end-pi;
+
+       dump;
+       o_action = cee_percolate;
+
+       end-proc;
+

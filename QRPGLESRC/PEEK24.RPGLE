@@ -1,648 +1,613 @@
-      *===============================================================*
-      *                                                               *
-      *  (c) Thomas Raddatz                                           *
-      *                                                               *
-      *  Bereich  : PEEK, Version 1.4.0                               *
-      *  Programm : PEEK24                                            *
-      *  Typ      : RPG                                               *
-      *                                                               *
-      *  erstellt : 31.10.97  Raddatz                                 *
-      *                                                               *
-      *===============================================================*
-      *                                                               *
-      *  Kurzdokumentation :                                          *
-      *                                                               *
-      *  Änderung der Farbeinstellung                                 *
-      *                                                               *
-      *===============================================================*
-      * >>PRE-COMPILER<<                                              *
-      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
-      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
-      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
-      *                           INSTALL(*NO);                       *
-      *   >>EXECUTE<<                                                 *
-      * >>END-PRE-COMPILER<<                                          *
-      *===============================================================*
+       //===============================================================*
+       //                                                               *
+       //  (c) Thomas Raddatz                                           *
+       //                                                               *
+       //  Bereich  : PEEK, Version 1.4.0                               *
+       //  Programm : PEEK24                                            *
+       //  Typ      : RPG                                               *
+       //                                                               *
+       //  erstellt : 31.10.97  Raddatz                                 *
+       //                                                               *
+       //===============================================================*
+       //                                                               *
+       //  Kurzdokumentation :                                          *
+       //                                                               *
+       //  Änderung der Farbeinstellung                                 *
+       //                                                               *
+       //===============================================================*
+       // >>PRE-COMPILER<<                                              *
+       //   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+       //                           OBJLIB(&LI) DEVLIB(&LI) +           *
+       //                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+       //                           INSTALL(*NO);                       *
+       //   >>EXECUTE<<                                                 *
+       // >>END-PRE-COMPILER<<                                          *
+       //===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
-      *
-     FPEEK24FM  CF   E             WORKSTN USROPN
-     F                                     INFDS(workstn)
-      *
-      *---INFOSTRUKTUR FÜR AID-BYTE -----------------------*
-      /COPY QCOPYLE,DS_WORKSTN
-      *----------------------------------------------------*
-      *
-      *---Farbattribute------------------------------------*
-      /COPY QCOPYLE,D_COLORATR
-      *----------------------------------------------------*
-      *
-      *---Benutzervoreinstellungen-------------------------*
-      /COPY QCOPYLE,SET0000
-      /COPY QCOPYLE,SET0001
-      *----------------------------------------------------*
-      *
-      *---Variablendefinition------------------------------*
+
+       dcl-f peek24fm workstn(*ext) usage(*input:*output)
+             usropn infds(workstn);
+
       /COPY QCOPYLE,D_VARDEF
       /COPY QCOPYLE,FLDL0100
-      *----------------------------------------------------*
-      *
+      /COPY QCOPYLE,DS_WORKSTN
+      /COPY QCOPYLE,D_COLORATR
+      /COPY QCOPYLE,ShortCmd_D
+      /COPY QCOPYLE,ERR_D_SDS
+      /COPY QCOPYLE,SCRNFKEYS
+      /COPY QCOPYLE,CEECNDHDLR
+
+      /COPY QCOPYLE,SET0000
+      /COPY QCOPYLE,SET0001
+
       /define internal_prototype
       /COPY QCOPYLE,PPEEK24
       /undefine internal_prototype
-      *
-      *---Variablendefinition ShortCmd---------------------*
-      /COPY QCOPYLE,ShortCmd_D
-      *----------------------------------------------------*
-      *
-      *---Nachrichtenaufbau--------------------------------*
+
       /COPY QCOPYLE,USR8100
-      *----------------------------------------------------*
-      *
-      *---SDS-Datenstruktur--------------------------------*
-      /COPY QCOPYLE,ERR_D_SDS
-      *----------------------------------------------------*
-      *
-      *----------------------------------------------------*
-      *  I N F D S - D E F I N I T I O N E N               *
-      *----------------------------------------------------*
-      *
-      *----------------------------------------------------*
-      *  F E L D - D E F I N I T I O N E N                 *
-      *----------------------------------------------------*
-      *
-     D YMsgID          S              7A   INZ(*BLANKS)
-     D YMsgDta         S            512A   INZ(*BLANKS)
-      *
-     D yFKeys          S             18A   DIM(32)       INZ(*BLANKS)
-     D yNbrOfKeys      S                   like(int4_t) inz
-      *
-     D YPgmCmd         S             10A   INZ(*BLANKS)
-     D YCmdDta         S                   LIKE(pgmCmdDt_t) INZ(*BLANKS)
-      *
-      *---Definition der F-Tastenbildschirmfelder----------*
-      /COPY QCOPYLE,SCRNFKEYS
-      *----------------------------------------------------*
-      *
-     D SfBot           S                   like(int4_t) inz
-     D §NbrFKeys       C                   CONST(2)
-      *
-     D Wrk_Field       S             10A   INZ(*BLANKS)
-     D Wrk_Color       S              1A   INZ(*BLANKS)
-      *
-     D PEEK21_NAME     S                   like(pgmCallN_t) inz
-     D PEEK23_NAME     S                   like(pgmCallN_t) inz
-     D PEEK25_NAME     S                   like(pgmCallN_t) inz
-      *
+
       /COPY QCOPYLE,PPEEK21
       /COPY QCOPYLE,PPEEK23
       /COPY QCOPYLE,PPEEK25
-      *
+
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
-      *
-      /COPY QCOPYLE,CEECNDHDLR
-      *
-     D isInzSr         S                   like(bool_t) inz(bFalse)
-      *
-      ********************************************************************
-      *                 S T E U E R  -  R O U T I N E                    *
-      ********************************************************************
-      *
-     D PEEK24          PI
-     D  i_dsp80                            const like(dsp80_t)
-     D  i_copyright                        const like(copyRght_t)
-     D  o_set0001                                likeds(SET0001)
-     D  o_msgID                                  like(msgID_t)
-     D  o_msgDta                                 like(msgDta_t)
-      *
-      *---------------------------------------------------*
-      *
-      *  Register error handler
-     C                   callp     CEEHDLR(%paddr('errorHandler')
-     C                                     : *null: *omit)
-      *
-     C                   EXSR      InzSr
-      *
-     C                   EXSR      FIRST
-      *
-      *  Schleife für Programmbearbeitung
-      *
-     C                   DO        *HIVAL
-      *
-      *  Nachrichten anzeigen
-     C                   EVAL      *IN89 = '0'
-     C                   WRITE     MSGCTL
-      *
-      *  Anzeigen der Befehlstasten
-     C                   SELECT
-     C                   When      (SFBOT = 2) and
-     C                             (yNbrOfKeys > §NbrFKeys * (SFBOT - 1))
-     C                   WRITE     PBBOT#2                                      BT-Tasten 2
-     C                   When      (SFBOT = 3) and
-     C                             (yNbrOfKeys > §NbrFKeys * (SFBOT - 1))
-     C                   WRITE     PBBOT#3                                      BT-Tasten 3
-     C                   When      (SFBOT = 4) and
-     C                             (yNbrOfKeys > §NbrFKeys * (SFBOT - 1))
-     C                   WRITE     PBBOT#4                                      BT-Tasten 4
-     C                   When      (SFBOT = 5) and
-     C                             (yNbrOfKeys > §NbrFKeys * (SFBOT - 1))
-     C                   WRITE     PBBOT#5                                      BT-Tasten 4
-     C                   When      (SFBOT = 6) and
-     C                             (yNbrOfKeys > §NbrFKeys * (SFBOT - 1))
-     C                   WRITE     PBBOT#6                                      BT-Tasten 4
-     C                   OTHER
-     C                   WRITE     PBBOT#1                                      BT-Tasten 1
-     C                   EVAL      SFBOT = 1
-     C                   Endsl
-      *
-      *  Anzeigen Bildschirm
-     C                   EXFMT     BILD01
-      *
-      *  Berechnen Zeile/Spalte
-     C                   Eval      cursorPosition.row =
-     C                               workstn.csrPos / 256
-     C                   Eval      cursorPosition.column =
-     C                               %rem(workstn.csrPos: 256)
-      *
-      *  Beibehalten der Cursorosition
-     C                   Eval      CsrRow = cursorPosition.row - ZEI
-     C                   Eval      CsrCol = cursorPosition.column - POS
-     C                   Eval      CsrCol = CsrCol - 1
-      *
-      *  Nachrichten löschen
-     C                   Callp     p_rmvPgmMg(§§pgmName)
-      *
-      *  Bezugszahlen löschen
-     C                   EXSR      BZOFF1
-      *
-      *  Mappen der gedrückten Taste
-      *  in Programmbefehl
-     C                   CALLP     PEEK21(workstn.aid: §§PgmName
-     C                                    : YPgmCmd: YCmdDta: YMsgID: YMsgDta)
-     C     YMsgID        IFNE      *BLANKS
-     C                   Callp     p_sndPgmMg(YMsgID: YMsgDta: §§pgmName)
-     C                   EVAL      YMsgID = ''
-     C                   EVAL      YMsgDta = ''
-     C                   ITER
-     C                   Endif
-      *
-      *  Abfragen der Befehlstasten
-     C                   SELECT
-      *  F3  - Ende & Speichern
-     C     YPgmCmd       WHENEQ    '*SAVE_EXIT'                                 ENDE
-     C                   EXSR      C_Exit
-     C                   LEAVE
-      *
-      *  F3  - Ende
-     C     YPgmCmd       WHENEQ    '*EXIT'                                      ZURÜCK
-     C                   EXSR      C_EndPgm
-     C                   LEAVE
-      *
-      *  F5  - Aktualisieren
-     C     YPgmCmd       WHENEQ    '*REFRESH'                                   AKTUALISIEREN
-     C                   EXSR      C_Refresh
-     C                   ITER
-      *
-      *  F12 - Ende
-     C     YPgmCmd       WHENEQ    '*CANCEL'                                    ZURÜCK
-     C                   EXSR      C_EndPgm
-     C                   LEAVE
-      *
-      *  F24 - Weitere Tasten
-     C     YPgmCmd       WHENEQ    '*MOREKEYS'                                  ZURÜCK
-     C                   EXSR      C_MoreKeys
-      *
-      *  Datenfreigabe
-     C     YPgmCmd       WHENEQ    '*ENTER'
-     C                   EXSR      C_Enter
-      *
-     C                   OTHER
-      *  Falsche Taste gedrückt
-     C                   Callp     p_wrongKey(workstn.aid: §§pgmName)
-     C                   Iter
-     C                   Endsl
-      *
-     C                   Enddo                                                  *HIVAL
-      *
-      *  Ende der Hauptschleife
-      *---------------------------------------------------*
-      *
-      *  Programm verlassen
-     C     ENDE          TAG
-      *
-      * - Dateien schließen
-     C                   CLOSE     PEEK24FM
-      *
-     C                   RETURN
-      *
-      *============================================================*
-      *    C_Enter       "Datenfreigabetaste"                      *
-      *============================================================*
-      *
-     C     C_Enter       BEGSR
-      *
-     C                   EXSR      PRFB1
-     C     *IN99         IFEQ      '0'
-     C                   EXSR      GetColor
-     C                   ELSE
-      *          Fehlernachricht ausgeben
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    BZOFF1        Ausschalten aller Fehlerbezugszahlen      *
-      *============================================================*
-      *
-     C     BZOFF1        BEGSR
-      *
-      *  Fehler
-     C                   EVAL      *IN99 = '0'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PRFB1         Prüfen der Eingaben                       *
-      *============================================================*
-      *
-     C     PRFB1         BEGSR
-      *
-     C                   EXSR      PRF20                                       Feldauswahl
-     C     *IN99         CABEQ     '1'           EPRFB1
-      *
-     C     EPRFB1        ENDSR
-      *
-      *============================================================*
-      *    PRF20         Prüfen:  Feldauswahl                      *
-      *============================================================*
-      *
-     C     PRF20         BEGSR
-      *
-     C     6             SUBST (P) SCNFLD:3      Wrk_Field
-      *
-     C                   SELECT
-     C     Wrk_Field     WHENEQ    'KEYCOL'                                     Überschrift
-     C                   EVAL      Wrk_Color = SET_KeyCol
-     C     Wrk_Field     WHENEQ    'HEDCOL'                                     Überschrift
-     C                   EVAL      Wrk_Color = SET_HedCol
-     C     Wrk_Field     WHENEQ    'PINCOL'                                     Pined-Daten
-     C                   EVAL      Wrk_Color = SET_PinCol
-     C     Wrk_Field     WHENEQ    'CLMCOL'                                     SpaltenMark
-     C                   EVAL      Wrk_Color = SET_ClmCol
-     C     Wrk_Field     WHENEQ    'STDCOL'                                     Standard
-     C                   EVAL      Wrk_Color = SET_StdCol
-     C     Wrk_Field     WHENEQ    'NMLCOL'                                     Normale Suche
-     C                   EVAL      Wrk_Color = SET_NmlCol
-     C     Wrk_Field     WHENEQ    'UNDCOL'                                     Unterstrichen
-     C                   EVAL      Wrk_Color = SET_UndCol
-     C     Wrk_Field     WHENEQ    'REVCOL'                                     Reverse Suche
-     C                   EVAL      Wrk_Color = SET_RevCol
-     C     Wrk_Field     WHENEQ    'TBLCOL'                                     Tabellierpap.
-     C                   EVAL      Wrk_Color = SET_TblCol
-     C     Wrk_Field     WHENEQ    'EXCCOL'                                     Exception
-     C                   EVAL      Wrk_Color = SET_ExcCol
-     C                   OTHER
-     C                   EVAL      *IN99 = '1'
-     C                   Callp     p_sndPgmMg('USR8146': '': §§pgmName)
-     C                   Endsl
-      *
-     C     EPRF20        TAG
-      *
-     C     *IN99         IFEQ      '1'
-      *               ??????????
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_Exit        F3     - Speichern und beenden            *
-      *============================================================*
-      *
-     C     C_Exit        BEGSR
-      *
-     C                   EXSR      SetUsrSetg
-      *
-     C                   EVAL      o_msgID = 'USR8112'
-     C                   EVAL      o_msgDta = *BLANKS
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_EndPgm      F12    - Programm beenden                 *
-      *============================================================*
-      *
-     C     C_EndPgm      BEGSR
-      *
-     C                   Callp     p_rmvPgmMg(§§pgmName)
-      *
-     C                   EVAL      o_msgID = 'USR8100'
-      *
-     C                   SELECT
-     C     workstn.aid   WHENEQ    K_F3
-     C                   EVAL      USR81001 = 'F3'
-     C     workstn.aid   WHENEQ    K_F12
-     C                   EVAL      USR81001 = 'F12'
-     C                   OTHER
-     C                   EVAL      USR81001 = 'Fxx'
-     C                   Endsl
-      *
-     C                   EVAL      o_msgDta = USR8100
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_Refresh     F5  - Aktualisieren der Subfile           *
-      *============================================================*
-      *
-     C     C_Refresh     BEGSR
-      *
-     C                   EXSR      FILL##
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_MoreKeys    F24 - Weitere Tasten                      *
-      *============================================================*
-      *
-     C     C_MoreKeys    BEGSR
-      *
-     C                   EVAL      SFBOT = SFBOT + 1
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    FILL##        Füllen Bildschirm                         *
-      *============================================================*
-      *
-     C     FILL##        BEGSR
-      *
-      *  SET_KeyCol
-     C                   EVAL      $$KEYCOL = SET_KeyCol
-     C**                 CAT       'KeyField':0  $$KEYCOL
-     C                   EVAL      $$KEYCOL = %trimr($$KEYCOL) + 'KeyField'
-      *
-      *  SET_HedCol
-     C                   EVAL      $$HEDCOL = SET_HedCol
-     C**                 CAT       'Headline':0  $$HEDCOL
-     C                   EVAL      $$HEDCOL = %trimr($$HEDCOL) + 'Headline'
-      *
-      *  SET_PinCol
-     C                   EVAL      $$PINCOL1 = SET_PinCol
-     C                   EVAL      $$PINCOL2 = $$PINCOL1
-     C**                 CAT       'Pin-Record':0$$PINCOL1
-     C                   EVAL      $$PINCOL1 = %trimr($$PINCOL1) + 'Pin-Record'
-      *
-     C**   ' ':'x'       XLATE     $$PINCOL2     $$PINCOL2
-     C                   EVAL      $$PINCOL2 = %xlate(' ': 'x': $$PINCOL2)
-     C                   EVAL      $$PINCOL3 = $$PINCOL2
-     C                   EVAL      $$PINCOL4 = $$PINCOL2
-      *
-      *  SET_StdCol
-     C                   EVAL      $$STDCOL1 = SET_StdCol
-     C                   EVAL      $$STDCOL2 = $$STDCOL1
-     C**                 CAT       'Std.Color':0 $$STDCOL1
-     C                   EVAL      $$STDCOL1 = %trimr($$STDCOL1) + 'Std.Color'
-      *
-     C**   ' ':'x'       XLATE     $$STDCOL2     $$STDCOL2
-     C                   EVAL      $$STDCOL2 = %xlate(' ': 'x': $$STDCOL2)
-     C                   EVAL      $$STDCOL3 = $$STDCOL2
-     C                   EVAL      $$STDCOL4 = $$STDCOL2
-     C                   EVAL      $$STDCOL5 = $$STDCOL2
-     C                   EVAL      $$STDCOL6 = $$STDCOL2
-      *
-      *  SET_ClmCol
-     C                   EVAL      $$CLMCOL1 = SET_ClmCol
-     C                   EVAL      $$CLMCOL2 = $$CLMCOL1
-     C**                 CAT       'Mark Clm':0  $$CLMCOL1
-     C                   EVAL      $$CLMCOL1 = %trimr($$CLMCOL1) + 'Mark Clm'
-      *
-     C**   ' ':'x'       XLATE     $$CLMCOL2     $$CLMCOL2
-     C                   EVAL      $$CLMCOL2 = %xlate(' ': 'x': $$CLMCOL2)
-     C                   EVAL      $$CLMCOL3 = $$CLMCOL2
-     C                   EVAL      $$CLMCOL4 = $$CLMCOL2
-     C                   EVAL      $$CLMCOL5 = $$CLMCOL2
-     C                   EVAL      $$CLMCOL6 = $$CLMCOL2
-     C                   EVAL      $$CLMCOL7 = $$CLMCOL2
-      *
-      *  SET_NmlCol
-     C                   EVAL      $$NmlCOL1 = SET_NmlCol
-     C                   EVAL      $$NmlCOL2 = $$NmlCOL1
-     C**                 CAT       'Search':0    $$NmlCOL1
-     C                   EVAL      $$NmlCOL1 = %trimr($$NmlCOL1) + 'Search'
-      *
-     C**   ' ':'x'       XLATE     $$NmlCOL2     $$NmlCOL2
-     C                   EVAL      $$NmlCOL2 = %xlate(' ': 'x': $$NmlCOL2)
-     C                   EVAL      $$NMLCOL3 = $$NmlCOL2
-     C                   EVAL      $$NmlCOL4 = $$NmlCOL2
-      *
-      *  SET_UndCol
-     C                   EVAL      $$UNDCOL1 = SET_UndCol
-     C                   EVAL      $$UNDCOL2 = $$UNDCOL1
-     C**                 CAT       'Search-Und':0$$UNDCOL1
-     C                   EVAL      $$UNDCOL1 = %trimr($$UNDCOL1) + 'Search-Und'
-      *
-     C**   ' ':'x'       XLATE     $$UNDCOL2     $$UNDCOL2
-     C                   EVAL      $$UNDCOL2 = %xlate(' ': 'x': $$UNDCOL2)
-     C                   EVAL      $$UNDCOL3 = $$UNDCOL2
-     C                   EVAL      $$UNDCOL4 = $$UNDCOL2
-      *
-      *  SET_RevCol
-     C                   EVAL      $$REVCOL1 = SET_RevCol
-     C                   EVAL      $$REVCOL2 = $$REVCOL1
-     C**                 CAT       'Search-Rev':0$$REVCOL1
-     C                   EVAL      $$REVCOL1 = %trimr($$REVCOL1) + 'Search-Rev'
-      *
-     C**   ' ':'x'       XLATE     $$REVCOL2     $$REVCOL2
-     C                   EVAL      $$REVCOL2 = %xlate(' ': 'x': $$REVCOL2)
-     C                   EVAL      $$REVCOL3 = $$REVCOL2
-     C                   EVAL      $$REVCOL4 = $$REVCOL2
-      *
-      *  SET_TblCol
-     C                   EVAL      $$TBLCOL1 = SET_TblCol
-     C                   EVAL      $$TBLCOL2 = $$TBLCOL1
-     C**                 CAT       'Tabulated':0 $$TBLCOL1
-     C                   EVAL      $$TBLCOL1 = %trimr($$TBLCOL1) + 'Tabulated'
-      *
-     C**   ' ':'x'       XLATE     $$TBLCOL2     $$TBLCOL2
-     C                   EVAL      $$TBLCOL2 = %xlate(' ': 'x': $$TBLCOL2)
-     C                   EVAL      $$TBLCOL3 = $$TBLCOL2
-     C                   EVAL      $$TBLCOL4 = $$TBLCOL2
-      *
-      *  SET_ExcCol
-     C                   EVAL      $$EXCCOL1 = SET_ExcCol
-     C                   EVAL      $$EXCCOL2 = $$EXCCOL1
-     C**                 CAT       'Exception':0 $$EXCCOL1
-     C                   EVAL      $$EXCCOL1 = %trimr($$EXCCOL1) + 'Exception'
-      *
-     C**   ' ':'x'       XLATE     $$EXCCOL2     $$EXCCOL2
-     C                   EVAL      $$EXCCOL2 = %xlate(' ': 'x': $$EXCCOL2)
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    SetScreen     Einstellen 132/80-Zeichen Auflösung       *
-      *============================================================*
-      *
-     C     SetScreen     BEGSR
-      *
-     C     i_dsp80       IFEQ      '0'
-      *   132-Zeichen Anzeige
-     C                   EVAL      *IN88 = '0'
-     C                   EVAL      ZEI = 6
-     C                   EVAL      POS = 26
-     C                   ELSE
-      *    80-Zeichen Anzeige
-     C                   EVAL      *IN88 = '1'
-     C                   EVAL      ZEI = 4
-     C                   EVAL      POS = 7
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    GetUsrSetg    Ermitteln der Benutzervoreinstellungen    *
-      *============================================================*
-      *
-     C     GetUsrSetg    BEGSR
-      *
-     C                   EVAL      SET0001 = o_set0001
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    SetUsrSetg    Speichern der Benutzervoreinstellungen    *
-      *============================================================*
-      *
-     C     SetUsrSetg    BEGSR
-      *
-     C                   EVAL      o_set0001 = SET0001
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    GetColor      Auswählen neue Farbe                      *
-      *============================================================*
-      *
-     C     GetColor      BEGSR
-      *
-     C                   monitor
-     C                   callp     PEEK25(i_dsp80: Wrk_Color: YMsgID: YMsgDta)
-     C                   eval      *in99 = bFalse
-     C                   on-error
-     C                   eval      *in99 = bTrue
-     C                   endmon
-      *
-     C     *IN99         IFEQ      '1'
-      *             Fehler aufgetreten
-     C                   ELSE
-      *
-     C                   SELECT
-     C     Wrk_Field     WHENEQ    'KEYCOL'                                     Überschrift
-     C                   EVAL      SET_KeyCol = Wrk_Color
-     C     Wrk_Field     WHENEQ    'HEDCOL'                                     Überschrift
-     C                   EVAL      SET_HedCol = Wrk_Color
-     C     Wrk_Field     WHENEQ    'PINCOL'                                     Pined-Daten
-     C                   EVAL      SET_PinCol = Wrk_Color
-     C     Wrk_Field     WHENEQ    'CLMCOL'                                     Spaltenmark.
-     C                   EVAL      SET_ClmCol = Wrk_Color
-     C     Wrk_Field     WHENEQ    'STDCOL'                                     Standard
-     C                   EVAL      SET_StdCol = Wrk_Color
-     C     Wrk_Field     WHENEQ    'NMLCOL'                                     Normale Suche
-     C                   EVAL      SET_NmlCol = Wrk_Color
-     C     Wrk_Field     WHENEQ    'UNDCOL'                                     Unterstrichen
-     C                   EVAL      SET_UndCol = Wrk_Color
-     C     Wrk_Field     WHENEQ    'REVCOL'                                     Reverse Suche
-     C                   EVAL      SET_RevCol = Wrk_Color
-     C     Wrk_Field     WHENEQ    'TBLCOL'                                     Tabellierpap.
-     C                   EVAL      SET_TblCol = Wrk_Color
-     C     Wrk_Field     WHENEQ    'EXCCOL'                                     Exception
-     C                   EVAL      SET_ExcCol = Wrk_Color
-     C                   OTHER
-     C                   EVAL      *IN99 = '1'
-     C                   Callp     p_sndPgmMg('USR8146': '': §§pgmName)
-     C                   Endsl
-      *
-     C                   EXSR      Fill##
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    First         Initialisierung                           *
-      *============================================================*
-      *
-     C     First         BEGSR
-      *
-      * - Dateien öffnen
-     C                   OPEN      PEEK24FM
-      *
-      * - Programm initialisieren
-     C                   Callp     p_rmvPgmMg(§§pgmName)
-      *
-      * - Benutzervoreinstellungen
-     C                   EXSR      GetUsrSetg
-      *
-      * - Bildschirmfelder füllen
-     C                   EXSR      FILL##
-      *
-     C                   EVAL      o_msgID = *BLANKS
-     C                   EVAL      o_msgDta = *BLANKS
-      *
-      *  Löschen der Cursorosition
-     C                   EVAL      CsrRow = *ZEROS
-     C                   EVAL      CsrCol = *ZEROS
-      *
-      * - Einstellen Darstellung der Funktionstasten
-     C                   EVAL      SfBot = 1
-      *
-      * - Einstellen der Bildschirmauflösung 80/132-Zeichen
-     C                   EXSR      SetScreen
-      *
-      * - Copyright
-     C                   Callp     p_sndPgmMg('USR9999': i_copyright: §§pgmName)
-      *
-     C                   ENDSR
-      *
-      *====================================================*
-      *  InzSr --  Initialize program                      *
-      *====================================================*
-      *
-     C     InzSr         Begsr
-      *
-     C                   If        (isInzSr = bTrue)
-     C                   Leavesr
-     C                   Endif
-      *
-     C                   Eval      isInzSr = bTrue
-      *
-     C                   Eval      §PgmQ = '*'
-      *
-     C                   Eval      PEEK21_NAME = f_pgmCallN('PEEK21')
-     C                   Eval      PEEK23_NAME = f_pgmCallN('PEEK23')
-     C                   Eval      PEEK25_NAME = f_pgmCallN('PEEK25')
-      *
-     C                   Callp     PEEK23(§§PgmName: '*ALL': 0
-     C                                    : yFKeys: yNbrOfKeys)
-     C                   Eval      ScrnFKeys = %subarr(YFKeys: 1)
-      *
-     C                   Endsr
-      *
-      *============================================================*
-      *  Program error handler                                     *
-      *============================================================*
-      *
-     P errorHandler    b
-     D                 pi
-     D i_condToken                         value likeds(cee_fc_t)
-     D i_pCommArea                   10i 0 value
-     D o_action                      10i 0
-     D o_newCondToken                            likeds(cee_fc_t)
-      /free
 
-         dump;
-         o_action = CEE_PERCOLATE;
+       dcl-s ymsgid          char(7) inz(*blanks);
+       dcl-s ymsgdta         char(512) inz(*blanks);
 
-      /end-free
-     P                 e
-      *
+       dcl-s yfkeys          char(18) dim(32)       inz(*blanks);
+       dcl-s ynbrofkeys      like(int4_t) inz;
+
+       dcl-s ypgmcmd         char(10) inz(*blanks);
+       dcl-s ycmddta         like(pgmcmddt_t) inz(*blanks);
+
+       dcl-s sfbot           like(int4_t) inz;
+       dcl-c §nbrfkeys const(2);
+
+       dcl-s wrk_field       char(10) inz(*blanks);
+       dcl-s wrk_color       char(1) inz(*blanks);
+
+       dcl-s peek21_name     like(pgmcalln_t) inz;
+       dcl-s peek23_name     like(pgmcalln_t) inz;
+       dcl-s peek25_name     like(pgmcalln_t) inz;
+
+       dcl-s isInzSr         like(bool_t) inz(bfalse);
+
+       //*******************************************************************
+       //                 S T E U E R  -  R O U T I N E                    *
+       //*******************************************************************
+
+       dcl-pi peek24;
+         i_dsp80         const like(dsp80_t);
+         i_copyright     const like(copyrght_t);
+         o_set0001       likeds(set0001);
+         o_msgid         like(msgid_t);
+         o_msgdta        like(msgdta_t);
+       end-pi;
+       //---------------------------------------------------*
+
+       //  Register error handler
+       ceehdlr(%paddr('errorHandler')
+              : *null: *omit);
+
+       exsr inzsr;
+
+       exsr first;
+
+       //  Schleife für Programmbearbeitung
+
+       dow ('1');
+
+          //  Nachrichten anzeigen
+          *in89 = '0';
+          write msgctl;
+
+          //  Anzeigen der Befehlstasten
+          select;
+          when (sfbot = 2) and
+             (ynbrofkeys > §nbrfkeys * (sfbot - 1));
+             write pbbot#2;
+          when (sfbot = 3) and
+             (ynbrofkeys > §nbrfkeys * (sfbot - 1));
+             write pbbot#3;
+          when (sfbot = 4) and
+             (ynbrofkeys > §nbrfkeys * (sfbot - 1));
+             write pbbot#4;
+          when (sfbot = 5) and
+             (ynbrofkeys > §nbrfkeys * (sfbot - 1));
+             write pbbot#5;
+          when (sfbot = 6) and
+             (ynbrofkeys > §nbrfkeys * (sfbot - 1));
+             write pbbot#6;
+          other;
+             write pbbot#1;
+             sfbot = 1;
+          endsl;
+
+          //  Anzeigen Bildschirm
+          exfmt bild01;
+
+          //  Berechnen Zeile/Spalte
+          cursorposition.row =
+           workstn.csrpos / 256;
+          cursorposition.column =
+           %rem(workstn.csrpos: 256);
+
+          //  Beibehalten der Cursorosition
+          csrrow = cursorposition.row - zei;
+          csrcol = cursorposition.column - pos;
+          csrcol = csrcol - 1;
+
+          //  Nachrichten löschen
+          p_rmvpgmmg(§§pgmname);
+
+          //  Bezugszahlen löschen
+          exsr bzoff1;
+
+          //  Mappen der gedrückten Taste
+          //  in Programmbefehl
+          peek21(workstn.aid: §§pgmname
+                : ypgmcmd: ycmddta: ymsgid: ymsgdta);
+          if ymsgid <> *blanks;
+             p_sndpgmmg(ymsgid: ymsgdta: §§pgmname);
+             ymsgid = '';
+             ymsgdta = '';
+             iter;
+          endif;
+
+          //  Abfragen der Befehlstasten
+          select;
+          when ypgmcmd = '*SAVE_EXIT';
+             exsr c_exit;
+             leave;
+          when ypgmcmd = '*EXIT';
+             exsr c_endpgm;
+             leave;
+          when ypgmcmd = '*REFRESH';
+             exsr c_refresh;
+             iter;
+          when ypgmcmd = '*CANCEL';
+             exsr c_endpgm;
+             leave;
+          when ypgmcmd = '*MOREKEYS';
+             exsr c_morekeys;
+          when ypgmcmd = '*ENTER';
+             exsr c_enter;
+          other;
+             p_wrongkey(workstn.aid: §§pgmname);
+             iter;
+          endsl;
+
+       enddo;
+
+       //  Ende der Hauptschleife
+       //---------------------------------------------------*
+
+       //  Programm verlassen
+     C     ende          tag
+
+       // - Dateien schließen
+       close peek24fm;
+
+       return;
+
+       //============================================================*
+       //    C_Enter       "Datenfreigabetaste"                      *
+       //============================================================*
+
+       begsr c_enter;
+
+          exsr prfb1;
+          if *in99 = *off;
+             exsr getcolor;
+          else;
+             //          Fehlernachricht ausgeben
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    BZOFF1        Ausschalten aller Fehlerbezugszahlen      *
+       //============================================================*
+
+       begsr bzoff1;
+
+          //  Fehler
+          *in99 = '0';
+
+       endsr;
+
+       //============================================================*
+       //    PRFB1         Prüfen der Eingaben                       *
+       //============================================================*
+
+       begsr prfb1;
+
+          dou ('1');
+
+             exsr prf20;
+             if (*in99 = bTrue);
+                leave;
+             endif;
+
+             enddo;
+
+          endsr;
+
+       //============================================================*
+       //    PRF20         Prüfen:  Feldauswahl                      *
+       //============================================================*
+
+       begsr prf20;
+
+          dou ('1');
+
+             wrk_field = %subst(scnfld:3:6);
+
+             select;
+             when wrk_field = 'KEYCOL'; // Überschrift
+                wrk_color = set_keycol;
+             when wrk_field = 'HEDCOL'; // Überschrift
+                wrk_color = set_hedcol;
+             when wrk_field = 'PINCOL'; // Pined-Daten
+                wrk_color = set_pincol;
+             when wrk_field = 'CLMCOL'; // SpaltenMark
+                wrk_color = set_clmcol;
+             when wrk_field = 'STDCOL'; // Standard
+                wrk_color = set_stdcol;
+             when wrk_field = 'NMLCOL'; // Normale Suche
+                wrk_color = set_nmlcol;
+             when wrk_field = 'UNDCOL'; // Unterstrichen
+                wrk_color = set_undcol;
+             when wrk_field = 'REVCOL'; // Reverse Suche
+                wrk_color = set_revcol;
+             when wrk_field = 'TBLCOL'; // Tabellierpap.
+                wrk_color = set_tblcol;
+             when wrk_field = 'EXCCOL'; // Exception
+                wrk_color = set_exccol;
+             other;
+                *in99 = '1';
+                p_sndpgmmg('USR8146': '': §§pgmname);
+                leave;
+             endsl;
+
+          enddo;
+
+          if *in99 = *on;
+             //               ??????????
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    C_Exit        F3     - Speichern und beenden            *
+       //============================================================*
+
+       begsr c_exit;
+
+          exsr setusrsetg;
+
+          o_msgid = 'USR8112';
+          o_msgdta = *blanks;
+
+       endsr;
+
+       //============================================================*
+       //    C_EndPgm      F12    - Programm beenden                 *
+       //============================================================*
+
+       begsr c_endpgm;
+
+          p_rmvpgmmg(§§pgmname);
+
+          o_msgid = 'USR8100';
+
+          select;
+          when workstn.aid = k_f3;
+             usr81001 = 'F3';
+          when workstn.aid = k_f12;
+             usr81001 = 'F12';
+          other;
+             usr81001 = 'Fxx';
+          endsl;
+
+          o_msgdta = usr8100;
+
+       endsr;
+
+       //============================================================*
+       //    C_Refresh     F5  - Aktualisieren der Subfile           *
+       //============================================================*
+
+       begsr c_refresh;
+
+          exsr fill##;
+
+       endsr;
+
+       //============================================================*
+       //    C_MoreKeys    F24 - Weitere Tasten                      *
+       //============================================================*
+
+       begsr c_morekeys;
+
+          sfbot = sfbot + 1;
+
+       endsr;
+
+       //============================================================*
+       //    FILL##        Füllen Bildschirm                         *
+       //============================================================*
+
+       begsr fill##;
+
+          //  SET_KeyCol
+          $$keycol = set_keycol;
+          //*                 CAT       'KeyField':0  $$KEYCOL
+          $$keycol = %trimr($$keycol) + 'KeyField';
+
+          //  SET_HedCol
+          $$hedcol = set_hedcol;
+          //*                 CAT       'Headline':0  $$HEDCOL
+          $$hedcol = %trimr($$hedcol) + 'Headline';
+
+          //  SET_PinCol
+          $$pincol1 = set_pincol;
+          $$pincol2 = $$pincol1;
+          //*                 CAT       'Pin-Record':0$$PINCOL1
+          $$pincol1 = %trimr($$pincol1) + 'Pin-Record';
+
+          //*   ' ':'x'       XLATE     $$PINCOL2     $$PINCOL2
+          $$pincol2 = %xlate(' ': 'x': $$pincol2);
+          $$pincol3 = $$pincol2;
+          $$pincol4 = $$pincol2;
+
+          //  SET_StdCol
+          $$stdcol1 = set_stdcol;
+          $$stdcol2 = $$stdcol1;
+          //*                 CAT       'Std.Color':0 $$STDCOL1
+          $$stdcol1 = %trimr($$stdcol1) + 'Std.Color';
+
+          //*   ' ':'x'       XLATE     $$STDCOL2     $$STDCOL2
+          $$stdcol2 = %xlate(' ': 'x': $$stdcol2);
+          $$stdcol3 = $$stdcol2;
+          $$stdcol4 = $$stdcol2;
+          $$stdcol5 = $$stdcol2;
+          $$stdcol6 = $$stdcol2;
+
+          //  SET_ClmCol
+          $$clmcol1 = set_clmcol;
+          $$clmcol2 = $$clmcol1;
+          //*                 CAT       'Mark Clm':0  $$CLMCOL1
+          $$clmcol1 = %trimr($$clmcol1) + 'Mark Clm';
+
+          //*   ' ':'x'       XLATE     $$CLMCOL2     $$CLMCOL2
+          $$clmcol2 = %xlate(' ': 'x': $$clmcol2);
+          $$clmcol3 = $$clmcol2;
+          $$clmcol4 = $$clmcol2;
+          $$clmcol5 = $$clmcol2;
+          $$clmcol6 = $$clmcol2;
+          $$clmcol7 = $$clmcol2;
+
+          //  SET_NmlCol
+          $$nmlcol1 = set_nmlcol;
+          $$nmlcol2 = $$nmlcol1;
+          //*                 CAT       'Search':0    $$NmlCOL1
+          $$nmlcol1 = %trimr($$nmlcol1) + 'Search';
+
+          //*   ' ':'x'       XLATE     $$NmlCOL2     $$NmlCOL2
+          $$nmlcol2 = %xlate(' ': 'x': $$nmlcol2);
+          $$nmlcol3 = $$nmlcol2;
+          $$nmlcol4 = $$nmlcol2;
+
+          //  SET_UndCol
+          $$undcol1 = set_undcol;
+          $$undcol2 = $$undcol1;
+          //*                 CAT       'Search-Und':0$$UNDCOL1
+          $$undcol1 = %trimr($$undcol1) + 'Search-Und';
+
+          //*   ' ':'x'       XLATE     $$UNDCOL2     $$UNDCOL2
+          $$undcol2 = %xlate(' ': 'x': $$undcol2);
+          $$undcol3 = $$undcol2;
+          $$undcol4 = $$undcol2;
+
+          //  SET_RevCol
+          $$revcol1 = set_revcol;
+          $$revcol2 = $$revcol1;
+          //*                 CAT       'Search-Rev':0$$REVCOL1
+          $$revcol1 = %trimr($$revcol1) + 'Search-Rev';
+
+          //*   ' ':'x'       XLATE     $$REVCOL2     $$REVCOL2
+          $$revcol2 = %xlate(' ': 'x': $$revcol2);
+          $$revcol3 = $$revcol2;
+          $$revcol4 = $$revcol2;
+
+          //  SET_TblCol
+          $$tblcol1 = set_tblcol;
+          $$tblcol2 = $$tblcol1;
+          //*                 CAT       'Tabulated':0 $$TBLCOL1
+          $$tblcol1 = %trimr($$tblcol1) + 'Tabulated';
+
+          //*   ' ':'x'       XLATE     $$TBLCOL2     $$TBLCOL2
+          $$tblcol2 = %xlate(' ': 'x': $$tblcol2);
+          $$tblcol3 = $$tblcol2;
+          $$tblcol4 = $$tblcol2;
+
+          //  SET_ExcCol
+          $$exccol1 = set_exccol;
+          $$exccol2 = $$exccol1;
+          //*                 CAT       'Exception':0 $$EXCCOL1
+          $$exccol1 = %trimr($$exccol1) + 'Exception';
+
+          //*   ' ':'x'       XLATE     $$EXCCOL2     $$EXCCOL2
+          $$exccol2 = %xlate(' ': 'x': $$exccol2);
+
+       endsr;
+
+       //============================================================*
+       //    SetScreen     Einstellen 132/80-Zeichen Auflösung       *
+       //============================================================*
+
+       begsr setscreen;
+
+          if i_dsp80 = '0';
+             //   132-Zeichen Anzeige
+             *in88 = '0';
+             zei = 6;
+             pos = 26;
+          else;
+             //    80-Zeichen Anzeige
+             *in88 = '1';
+             zei = 4;
+             pos = 7;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    GetUsrSetg    Ermitteln der Benutzervoreinstellungen    *
+       //============================================================*
+
+       begsr getusrsetg;
+
+          set0001 = o_set0001;
+
+       endsr;
+
+       //============================================================*
+       //    SetUsrSetg    Speichern der Benutzervoreinstellungen    *
+       //============================================================*
+
+       begsr setusrsetg;
+
+          o_set0001 = set0001;
+
+       endsr;
+
+       //============================================================*
+       //    GetColor      Auswählen neue Farbe                      *
+       //============================================================*
+
+       begsr getcolor;
+
+          monitor;
+             peek25(i_dsp80: wrk_color: ymsgid: ymsgdta);
+             *in99 = bfalse;
+          on-error;
+             *in99 = btrue;
+          endmon;
+
+          if (*in99 = *on);
+             // Fehler aufgetreten
+          else;
+
+             select;
+             when wrk_field = 'KEYCOL'; // Überschrift
+                set_keycol = wrk_color;
+             when wrk_field = 'HEDCOL'; // Überschrift
+                set_hedcol = wrk_color;
+             when wrk_field = 'PINCOL'; // Pined-Daten
+                set_pincol = wrk_color;
+             when wrk_field = 'CLMCOL'; // Spaltenmark.
+                set_clmcol = wrk_color;
+             when wrk_field = 'STDCOL'; // Standard
+                set_stdcol = wrk_color;
+             when wrk_field = 'NMLCOL'; // Normale Suche
+                set_nmlcol = wrk_color;
+             when wrk_field = 'UNDCOL'; // Unterstrichen
+                set_undcol = wrk_color;
+             when wrk_field = 'REVCOL'; // Reverse Suche
+                set_revcol = wrk_color;
+             when wrk_field = 'TBLCOL'; // Tabellierpap.
+                set_tblcol = wrk_color;
+             when wrk_field = 'EXCCOL'; // Exception
+                set_exccol = wrk_color;
+             other;
+                *in99 = '1';
+                p_sndpgmmg('USR8146': '': §§pgmname);
+             endsl;
+
+             exsr fill##;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    First         Initialisierung                           *
+       //============================================================*
+
+       begsr first;
+
+          // - Dateien öffnen
+          open peek24fm;
+
+          // - Programm initialisieren
+          p_rmvpgmmg(§§pgmname);
+
+          // - Benutzervoreinstellungen
+          exsr getusrsetg;
+
+          // - Bildschirmfelder füllen
+          exsr fill##;
+
+          o_msgid = *blanks;
+          o_msgdta = *blanks;
+
+          //  Löschen der Cursorosition
+          csrrow = *zeros;
+          csrcol = *zeros;
+
+          // - Einstellen Darstellung der Funktionstasten
+          sfbot = 1;
+
+          // - Einstellen der Bildschirmauflösung 80/132-Zeichen
+          exsr setscreen;
+
+          // - Copyright
+          p_sndpgmmg('USR9999': i_copyright: §§pgmname);
+
+       endsr;
+
+       //====================================================*
+       //  InzSr --  Initialize program                      *
+       //====================================================*
+
+       begsr inzsr;
+
+          if (isInzSr = btrue);
+             leavesr;
+          endif;
+
+          isInzSr = btrue;
+
+          §pgmq = '*';
+
+          peek21_name = f_pgmcalln('PEEK21');
+          peek23_name = f_pgmcalln('PEEK23');
+          peek25_name = f_pgmcalln('PEEK25');
+
+          peek23(§§pgmname: '*ALL': 0
+                : yfkeys: ynbrofkeys);
+          scrnfkeys = %subarr(yfkeys: 1);
+
+       endsr;
+
+       //============================================================*
+       //  Program error handler                                     *
+       //============================================================*
+
+       dcl-proc errorhandler;
+       dcl-pi *N;
+         i_condtoken     value likeds(cee_fc_t);
+         i_pcommarea     int(10) value;
+         o_action        int(10);
+         o_newcondtoken  likeds(cee_fc_t);
+       end-pi;
+
+       dump;
+       o_action = cee_percolate;
+
+       end-proc;
+

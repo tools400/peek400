@@ -89,6 +89,7 @@
         EXPORT SYMBOL(f_space)
 
         EXPORT SYMBOL(p_kill)
+        EXPORT SYMBOL(f_mapCmdToMsg)
 
       ENDPGMEXP
 

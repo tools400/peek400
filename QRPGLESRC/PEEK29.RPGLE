@@ -1,259 +1,254 @@
-      *===============================================================*
-      *                                                               *
-      *  (c) Thomas Raddatz                                           *
-      *                                                               *
-      *  Bereich  : PEEK, Version 1.4.0                               *
-      *  Programm : PEEK29                                            *
-      *  Typ      : RPG                                               *
-      *                                                               *
-      *  erstellt : 03.11.97  Raddatz                                 *
-      *                                                               *
-      *===============================================================*
-      *                                                               *
-      *  Kurzdokumentation :                                          *
-      *                                                               *
-      *  Berechnen der Lizenznummer                                   *
-      *                                                               *
-      * ============================================================= *
-      * >>PRE-COMPILER<<                                              *
-      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
-      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
-      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
-      *                           INSTALL(*NO);                       *
-      *   >>EXECUTE<<                                                 *
-      * >>END-PRE-COMPILER<<                                          *
-      *===============================================================*
+       //===============================================================*
+       //                                                               *
+       //  (c) Thomas Raddatz                                           *
+       //                                                               *
+       //  Bereich  : PEEK, Version 1.4.0                               *
+       //  Programm : PEEK29                                            *
+       //  Typ      : RPG                                               *
+       //                                                               *
+       //  erstellt : 03.11.97  Raddatz                                 *
+       //                                                               *
+       //===============================================================*
+       //                                                               *
+       //  Kurzdokumentation :                                          *
+       //                                                               *
+       //  Berechnen der Lizenznummer                                   *
+       //                                                               *
+       // ============================================================= *
+       // >>PRE-COMPILER<<                                              *
+       //   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+       //                           OBJLIB(&LI) DEVLIB(&LI) +           *
+       //                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+       //                           INSTALL(*NO);                       *
+       //   >>EXECUTE<<                                                 *
+       // >>END-PRE-COMPILER<<                                          *
+       //===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
-      *
-      *---Variablendefinition------------------------------*
+
       /COPY QCOPYLE,D_VARDEF
-      *----------------------------------------------------*
-      *
+      /COPY QCOPYLE,ERR_D_SDS
+      /COPY QCOPYLE,CEECNDHDLR
+
       /define internal_prototype
       /COPY QCOPYLE,PPEEK29
       /undefine internal_prototype
-      *
-      *---SDS-Datenstruktur--------------------------------*
-      /COPY QCOPYLE,ERR_D_SDS
-      *----------------------------------------------------*
-      *
-     D Value           S              1A   DIM(256)
-     D Hex             S              1A   DIM(16)
-      *
-     D SysInpNbr       DS                  qualified
-     D  SysName                       8A   INZ(*BLANKS)
-     D  SysVers                       6A   INZ(*BLANKS)
-     D  SysSrlNbr                     8A   INZ(*BLANKS)
-     D  SysEON                        1A   INZ(x'00'  )
-      *
-     D X               S                   like(int4_t) inz
-     D Y               S                   like(int4_t) inz
-     D Z               S                   like(int4_t) inz
-     D A1              S              1A   INZ(*BLANKS)
-     D Summe           S             30P 0 INZ(*ZEROS )
-     D Rest            S             30P 0 INZ(*ZEROS )
-     D ZW1             S             30P 0 INZ(*ZEROS )
-     D ZW2             S             30P 0 INZ(*ZEROS )
-      *
-      *  Konvertierung HEX ==> DEC
-     D R_Dec           S             30P 0 INZ(*ZEROS )
-     D R_Hex           S             20A   INZ(*BLANKS)
-      *
-     D IntSrlNbr       S             20A
-      *
-      /COPY QCOPYLE,CEECNDHDLR
-      *
-     D isInzSr         S                   like(bool_t) inz(bFalse)
-      *
-      ********************************************************************
-      *                 S T E U E R  -  R O U T I N E                    *
-      ********************************************************************
-      *
-     D PEEK29          PI
-     D  i_sysName                     8A   const
-     D  i_sysVersion                  6A   const
-     D  i_sysSrlNbr                   8A   const
-     D  i_sysDate                    10I 0 const
-     D  o_serialNbr                  20A
-      *
-      *----------------------------------------------------*
-      *
-      *  Register error handler
-     C                   callp     CEEHDLR(%paddr('errorHandler')
-     C                                     : *null: *omit)
-      *
-     C                   EXSR      InzSr
-      *
-      * -  Systemname des AS/400 Systems
-     C                   EVAL      SysInpNbr.SysName = i_sysName
-      *
-      * -  PEEK-Versionsnummer
-     C                   EVAL      SysInpNbr.SysVers = i_sysVersion
-      *
-      * -  Seriennummer des AS/400 Systems
-     C                   EVAL      SysInpNbr.SysSrlNbr = i_sysSrlNbr
-      *
-      *  - Berechnung der Prüfsumme
-     C                   EVAL      Summe = *ZEROS
-      *
-     C     1             DO        50            X
-     C**   1             SUBST     SysInpNbr:X   A1
-     C                   EVAL      A1 = %subst(SysInpNbr: X: 1)
-     C     A1            IFEQ      x'00'
-     C                   LEAVE
-     C                   Endif
-      *
-     C                   EVAL      Y = 1
-     C                   EVAL      Y = %lookup(A1: Value)
-     C                   IF        (Y > 0)
-      *    ... gefunden
-     C                   EVAL      Summe = Summe + Y
-     C                   ELSE
-      *    ... nicht gefunden
-      *        (kann eigentlich nicht sein)
-     C                   Endif
-      *
-     C     X             MULT      256           Z
-     C                   EVAL      Summe = Summe + Z
-     C                   Enddo
-      *
-      *  - Datum als Komplement
-     C                   EVAL      Summe = Summe - i_sysDate
-     C                   EVAL      Summe = Summe + 99999999
-      *
-      *  - Prüfsumme in HEX-Wert umsetzen
-     C                   EVAL      R_Dec = Summe
-     C                   EXSR      DecToHex
-     C                   EVAL      IntSrlNbr = R_Hex
-      *
-     C**                 CAT       '-':0         IntSrlNbr
-     C                   EVAL      IntSrlNbr = %trimr(IntSrlNbr) + '-'
-      *
-      *  - Originaldatum anfügen, als Komplement gespeichert!
-     C**                 Z-SUB     SysDate       R_Dec
-     C                   EVAL      R_Dec = 0 - i_sysDate
-     C                   EVAL      R_Dec = R_Dec + 99999999
-     C                   EXSR      DecToHex
-     C**                 CAT       R_Hex:0       IntSrlNbr
-     C                   EVAL      IntSrlNbr = %trimr(IntSrlNbr) + R_Hex
-      *
-     C                   EVAL      o_serialNbr = IntSrlNbr
-      *
-     C     ENDE          TAG
-      *
-     C                   RETURN
-      *
-      *============================================================*
-      *    DecToHex      Konvertieren Decimal ==> Hex              *
-      *============================================================*
-      *
-     C     DecToHex      BEGSR
-      *
-     C                   EVAL      R_Hex = *BLANKS
-     C                   EVAL      Rest = R_Dec
-      *
-     C     R_Dec         DOUEQ     *ZEROS
-      *
-     C     R_Dec         DIV       16            ZW1
-     C     ZW1           MULT      16            ZW2
-     C                   EVAL      Rest = R_Dec - ZW2
-      *
-     C                   EVAL      Rest = Rest + 1
-     C**   Hex(Rest)     CAT   (P) R_Hex:0       R_Hex
-     C                   EVAL      R_Hex = %trimr(Hex(Rest)) + R_Hex
-      *
-     C                   EVAL      R_Dec = ZW1
-     C                   Enddo
-      *
-     C                   ENDSR
-      *
-      *====================================================*
-      *  InzSr --  Initialize program                      *
-      *====================================================*
-      *
-     C     InzSr         Begsr
-      *
-     C                   If        (isInzSr = bTrue)
-     C                   Leavesr
-     C                   Endif
-      *
-     C                   Eval      isInzSr = bTrue
-      *
-     C                   EVAL      Value(193) = 'A'
-     C                   EVAL      Value(194) = 'B'
-     C                   EVAL      Value(195) = 'C'
-     C                   EVAL      Value(196) = 'D'
-     C                   EVAL      Value(197) = 'E'
-     C                   EVAL      Value(198) = 'F'
-     C                   EVAL      Value(199) = 'G'
-     C                   EVAL      Value(200) = 'H'
-     C                   EVAL      Value(201) = 'I'
-      *
-     C                   EVAL      Value(209) = 'J'
-     C                   EVAL      Value(210) = 'K'
-     C                   EVAL      Value(211) = 'L'
-     C                   EVAL      Value(212) = 'M'
-     C                   EVAL      Value(213) = 'N'
-     C                   EVAL      Value(214) = 'O'
-     C                   EVAL      Value(215) = 'P'
-     C                   EVAL      Value(216) = 'Q'
-     C                   EVAL      Value(217) = 'R'
-      *
-     C                   EVAL      Value(226) = 'S'
-     C                   EVAL      Value(227) = 'T'
-     C                   EVAL      Value(228) = 'U'
-     C                   EVAL      Value(229) = 'V'
-     C                   EVAL      Value(230) = 'W'
-     C                   EVAL      Value(231) = 'X'
-     C                   EVAL      Value(232) = 'Y'
-     C                   EVAL      Value(233) = 'Z'
-      *
-     C                   EVAL      Value(240) = '0'
-     C                   EVAL      Value(241) = '1'
-     C                   EVAL      Value(242) = '2'
-     C                   EVAL      Value(243) = '3'
-     C                   EVAL      Value(244) = '4'
-     C                   EVAL      Value(245) = '5'
-     C                   EVAL      Value(246) = '6'
-     C                   EVAL      Value(247) = '7'
-     C                   EVAL      Value(248) = '8'
-     C                   EVAL      Value(249) = '9'
-      *
-     C                   EVAL      Hex(1) = '0'
-     C                   EVAL      Hex(2) = '1'
-     C                   EVAL      Hex(3) = '2'
-     C                   EVAL      Hex(4) = '3'
-     C                   EVAL      Hex(5) = '4'
-     C                   EVAL      Hex(6) = '5'
-     C                   EVAL      Hex(7) = '6'
-     C                   EVAL      Hex(8) = '7'
-     C                   EVAL      Hex(9) = '8'
-     C                   EVAL      Hex(10) = '9'
-     C                   EVAL      Hex(11) = 'A'
-     C                   EVAL      Hex(12) = 'B'
-     C                   EVAL      Hex(13) = 'C'
-     C                   EVAL      Hex(14) = 'D'
-     C                   EVAL      Hex(15) = 'E'
-     C                   EVAL      Hex(16) = 'F'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *  Program error handler                                     *
-      *============================================================*
-      *
-     P errorHandler    b
-     D                 pi
-     D i_condToken                         value likeds(cee_fc_t)
-     D i_pCommArea                   10i 0 value
-     D o_action                      10i 0
-     D o_newCondToken                            likeds(cee_fc_t)
-      /free
 
-         dump;
-         o_action = CEE_PERCOLATE;
+       dcl-s value           char(1) dim(256);
+       dcl-s hex             char(1) dim(16);
 
-      /end-free
-     P                 e
-      *
+       dcl-ds sysinpnbr qualified;
+         sysname         char(8) inz(*blanks);
+         sysvers         char(6) inz(*blanks);
+         syssrlnbr       char(8) inz(*blanks);
+         syseon          char(1) inz(x'00'  );
+       end-ds;
+
+       dcl-s x               like(int4_t) inz;
+       dcl-s y               like(int4_t) inz;
+       dcl-s z               like(int4_t) inz;
+       dcl-s a1              char(1) inz(*blanks);
+       dcl-s summe           packed(30) inz(*zeros );
+       dcl-s rest            packed(30) inz(*zeros );
+       dcl-s zw1             packed(30) inz(*zeros );
+       dcl-s zw2             packed(30) inz(*zeros );
+
+       //  Konvertierung HEX ==> DEC
+       dcl-s r_dec           packed(30) inz(*zeros );
+       dcl-s r_hex           char(20) inz(*blanks);
+
+       dcl-s intsrlnbr       char(20);
+
+       dcl-s isInzSr         like(bool_t) inz(bfalse);
+
+       //*******************************************************************
+       //                 S T E U E R  -  R O U T I N E                    *
+       //*******************************************************************
+
+       dcl-pi peek29;
+         i_sysname       char(8) const;
+         i_sysversion    char(6) const;
+         i_syssrlnbr     char(8) const;
+         i_sysdate       int(10) const;
+         o_serialnbr     char(20);
+       end-pi;
+
+       //----------------------------------------------------*
+
+       //  Register error handler
+       ceehdlr(%paddr('errorHandler')
+              : *null: *omit);
+
+       exsr inzsr;
+
+       // -  Systemname des AS/400 Systems
+       sysinpnbr.sysname = i_sysname;
+
+       // -  PEEK-Versionsnummer
+       sysinpnbr.sysvers = i_sysversion;
+
+       // -  Seriennummer des AS/400 Systems
+       sysinpnbr.syssrlnbr = i_syssrlnbr;
+
+       //  - Berechnung der Prüfsumme
+       summe = *zeros;
+
+       for x = 1 to 50;
+          //*   1             SUBST     SysInpNbr:X   A1
+          a1 = %subst(sysinpnbr: x: 1);
+          if a1 = x'00';
+             leave;
+          endif;
+
+          y = 1;
+          y = %lookup(a1: value);
+          if (y > 0);
+             //    ... gefunden
+             summe = summe + y;
+          else;
+             //    ... nicht gefunden
+             //        (kann eigentlich nicht sein)
+          endif;
+
+     C     x             mult      256           z
+          summe = summe + z;
+       endfor;
+
+       //  - Datum als Komplement
+       summe = summe - i_sysdate;
+       summe = summe + 99999999;
+
+       //  - Prüfsumme in HEX-Wert umsetzen
+       r_dec = summe;
+       exsr dectohex;
+       intsrlnbr = r_hex;
+
+       //*                 CAT       '-':0         IntSrlNbr
+       intsrlnbr = %trimr(intsrlnbr) + '-';
+
+       //  - Originaldatum anfügen, als Komplement gespeichert!
+       //*                 Z-SUB     SysDate       R_Dec
+       r_dec = 0 - i_sysdate;
+       r_dec = r_dec + 99999999;
+       exsr dectohex;
+       //*                 CAT       R_Hex:0       IntSrlNbr
+       intsrlnbr = %trimr(intsrlnbr) + r_hex;
+
+       o_serialnbr = intsrlnbr;
+
+     C     ende          tag
+
+       return;
+
+       //============================================================*
+       //    DecToHex      Konvertieren Decimal ==> Hex              *
+       //============================================================*
+
+       begsr dectohex;
+
+          r_hex = *blanks;
+          rest = r_dec;
+
+          dou r_dec = *zeros;
+
+     C     r_dec         div       16            zw1
+     C     zw1           mult      16            zw2
+             rest = r_dec - zw2;
+
+             rest = rest + 1;
+             //*   Hex(Rest)     CAT   (P) R_Hex:0       R_Hex
+             r_hex = %trimr(hex(rest)) + r_hex;
+
+             r_dec = zw1;
+          enddo;
+
+       endsr;
+
+       //====================================================*
+       //  InzSr --  Initialize program                      *
+       //====================================================*
+
+       begsr inzsr;
+
+          if (isInzSr = btrue);
+             leavesr;
+          endif;
+
+          isInzSr = btrue;
+
+          value(193) = 'A';
+          value(194) = 'B';
+          value(195) = 'C';
+          value(196) = 'D';
+          value(197) = 'E';
+          value(198) = 'F';
+          value(199) = 'G';
+          value(200) = 'H';
+          value(201) = 'I';
+
+          value(209) = 'J';
+          value(210) = 'K';
+          value(211) = 'L';
+          value(212) = 'M';
+          value(213) = 'N';
+          value(214) = 'O';
+          value(215) = 'P';
+          value(216) = 'Q';
+          value(217) = 'R';
+
+          value(226) = 'S';
+          value(227) = 'T';
+          value(228) = 'U';
+          value(229) = 'V';
+          value(230) = 'W';
+          value(231) = 'X';
+          value(232) = 'Y';
+          value(233) = 'Z';
+
+          value(240) = '0';
+          value(241) = '1';
+          value(242) = '2';
+          value(243) = '3';
+          value(244) = '4';
+          value(245) = '5';
+          value(246) = '6';
+          value(247) = '7';
+          value(248) = '8';
+          value(249) = '9';
+
+          hex(1) = '0';
+          hex(2) = '1';
+          hex(3) = '2';
+          hex(4) = '3';
+          hex(5) = '4';
+          hex(6) = '5';
+          hex(7) = '6';
+          hex(8) = '7';
+          hex(9) = '8';
+          hex(10) = '9';
+          hex(11) = 'A';
+          hex(12) = 'B';
+          hex(13) = 'C';
+          hex(14) = 'D';
+          hex(15) = 'E';
+          hex(16) = 'F';
+
+       endsr;
+
+       //============================================================*
+       //  Program error handler                                     *
+       //============================================================*
+
+       dcl-proc errorhandler;
+       dcl-pi *N;
+         i_condtoken     value likeds(cee_fc_t);
+       i_pcommarea     int(10) value;
+       o_action        int(10);
+       o_newcondtoken  likeds(cee_fc_t);
+       end-pi;
+
+       dump;
+       o_action = cee_percolate;
+
+       end-proc;
+

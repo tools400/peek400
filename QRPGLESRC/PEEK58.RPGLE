@@ -3528,10 +3528,10 @@
      P                 E
       *
       *===================================================================*
-      *  Funktion:  f_                                    (Body)     *
+      *  Funktion:  f_space                                    (Body)     *
       *===================================================================*
       *
-     P f_...
+     P f_space...
      P                 B                   Export
      D                 PI          4096A   varying
      D  i_length                     10I 0 value
@@ -3601,5 +3601,199 @@
          return;
       /end-free
       *
+     P                 E
+      *
+      *===================================================================*
+      *  Map command to message ID.                            (Body)     *
+      *===================================================================*
+      *
+     P f_mapCmdToMsg...
+     P                 B                   Export
+     D                 PI                  like(msgID_t)
+     D  i_command                   256A   const
+      *
+      *  Funktionswert
+     D msgID           S                   like(msgID_t)
+      * ------------------------------------------------------------------------
+      /FREE
+
+       select;
+       when i_command = '*ENTER';
+          msgID = '0001';
+       when i_command = '*EXIT';
+          msgID = '0002';
+       when i_command = '*REFRESH';
+          msgID = '0003';
+       when i_command = '*ADD';
+          msgID = '0004';
+       when i_command = '*HEADLINE';
+          msgID = '0005';
+       when i_command = '*TGLMRKCOL';
+          msgID = '0006';
+       when i_command = '*MOVETOP';
+          msgID = '0007';
+       when i_command = '*POSCSR';
+          msgID = '0008';
+       when i_command = '*SEARCH';
+          msgID = '0009';
+       when i_command = '*TOP';
+          msgID = '0010';
+       when i_command = '*BOT';
+          msgID = '0011';
+       when i_command = '*LEFT';
+          msgID = '0012';
+       when i_command = '*RIGHT';
+          msgID = '0013';
+       when i_command = '*CMDLINE';
+          msgID = '0014';
+       when i_command = '*132/80';
+          msgID = '0015';
+       when i_command = '*MOREKEYS';
+          msgID = '0016';
+       when i_command = '*PAGEDOWN';
+          msgID = '0017';
+       when i_command = '*PAGEUP';
+          msgID = '0018';
+       when i_command = '*PINROW';
+          msgID = '0019';
+       when i_command = '*UNPINROW';
+          msgID = '0020';
+       when i_command = '*CHANGE';
+          msgID = '0021';
+       when i_command = '*COPY';
+          msgID = '0022';
+       when i_command = '*DELETE';
+          msgID = '0023';
+       when i_command = '*DISPLAY';
+          msgID = '0024';
+       when i_command = '*USERSETG';
+          msgID = '0025';
+       when i_command = '*CANCEL';
+          msgID = '0026';
+       when i_command = '*SAVE_EXIT';
+          msgID = '0027';
+       when i_command = '*PINCOL';
+          msgID = '0028';
+       when i_command = '*UNPINCOL';
+          msgID = '0029';
+       when i_command = '*TGLPINCOL';
+          msgID = '0030';
+       when i_command = '*TBLPAPON';
+          msgID = '0031';
+       when i_command = '*TBLPAPOFF';
+          msgID = '0032';
+       when i_command = '*TGLTBLPAP';
+          msgID = '0033';
+       when i_command = '*YESTOALL';
+          msgID = '0034';
+       when i_command = '*MOREOPT';
+          msgID = '0035';
+       when i_command = '*COPYEXT';
+          msgID = '0036';
+       when i_command = '*MRKCOL';
+          msgID = '0037';
+       when i_command = '*UNMRKCOL';
+          msgID = '0038';
+       when i_command = '*LOWERCASE';
+          msgID = '0039';
+       when i_command = '*UPPERCASE';
+          msgID = '0040';
+       when i_command = '*TGLLUCASE';
+          msgID = '0041';
+       when i_command = '*SPLASHON';
+          msgID = '0042';
+       when i_command = '*SPLASHOFF';
+          msgID = '0043';
+       when i_command = '*PAGELEFT';
+          msgID = '0044';
+       when i_command = '*PAGERIGHT';
+          msgID = '0045';
+       when i_command = '*REPEAT';
+          msgID = '0046';
+       when i_command = '*REBUILD';
+          msgID = '0047';
+       when i_command = '*CLRPINROW';
+          msgID = '0048';
+       when i_command = '*CLRPINCOL';
+          msgID = '0049';
+       when i_command = '*LAYOUT';
+          msgID = '0050';
+       when i_command = '*FLOATKEYS';
+          msgID = '0051';
+       when i_command = '*SELECT';
+          msgID = '0052';
+       when i_command = '*NEXTMARK';
+          msgID = '0053';
+       when i_command = '*PREVMARK';
+          msgID = '0054';
+       when i_command = '*DSPDBR';
+          msgID = '0055';
+       when i_command = '*PROMPT';
+          msgID = '0056';
+       when i_command = '*KEY';
+          msgID = '0057';
+       when i_command = '*RRN';
+          msgID = '0058';
+       when i_command = '*TGLACCESS';
+          msgID = '0059';
+       when i_command = '*HEXEDIT';
+          msgID = '0060';
+       when i_command = '*ABOUT';
+          msgID = '0061';
+       when i_command = '*PINCOLDLG';
+          msgID = '0062';
+       when i_command = '*CLRALL';
+          msgID = '0063';
+       when i_command = '*DSPNRM';
+          msgID = '0064';
+       when i_command = '*DSPHEX';
+          msgID = '0065';
+       when i_command = '*TGLDSP';
+          msgID = '0066';
+       when i_command = '*SQL';
+          msgID = '0067';
+       when i_command = '*INSKEYFLD';
+          msgID = '0068';
+       when i_command = '*SAVEENV';
+          msgID = '0069';
+       when i_command = '*LOADENV';
+          msgID = '0070';
+       when i_command = '*DELETEENV';
+          msgID = '0071';
+       when i_command = '*TGLSORT';
+          msgID = '0072';
+       when i_command = '*YES';
+          msgID = '0073';
+       when i_command = '*NO';
+          msgID = '0074';
+       when i_command = '*OK';
+          msgID = '0075';
+       when i_command = '*FIRSTPOS';
+          msgID = '0076';
+       when i_command = '*LASTPOS';
+          msgID = '0077';
+       when i_command = '*SLCENV';
+          msgID = '0078';
+       when i_command = '*SLCLAYOUT';
+          msgID = '0079';
+       when i_command = '*TGLNULL';
+          msgID = '0080';
+       when i_command = '*TGLINPUT';
+          msgID = '0081';
+       when i_command = '*STREDIT';
+          msgID = '0082';
+       when i_command = '*TGLRCDLCK';
+          msgID = '0083';
+       when i_command = '*TGLKEYLUC';
+          msgID = '0084';
+       when i_command = '*PRINT';
+          msgID = '0085';
+       other;
+          msgID = '';
+       endsl;
+
+       return msgID;
+
+      /END-FREE
      P                 E
       *
