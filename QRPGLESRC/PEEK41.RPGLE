@@ -1,77 +1,76 @@
-      *===============================================================*
-      *                                                               *
-      *  (c) Thomas Raddatz                                           *
-      *                                                               *
-      *  Bereich  : PEEK, Version 1.4.0                               *
-      *  Programm : PEEK41                                            *
-      *  Typ      : RPG                                               *
-      *                                                               *
-      *  erstellt : 31.12.1997  Raddatz                               *
-      *                                                               *
-      *===============================================================*
-      *                                                               *
-      *  Dokumentation:                                               *
-      *                                                               *
-      *  Abrufen von Dateiinformationen einer Datei                   *
-      *                                                               *
-      *===============================================================*
-      *                                                               *
-      *  INPUT-Parameter:                                             *
-      *  ================                                             *
-      *                                                               *
-      *  XQFile      - Qualified file name                            *
-      *                  1 - 10:  file                                *
-      *                 11 - 20:  library                             *
-      *                                                               *
-      *  XRcdFormat  - Record format name                             *
-      *                                                               *
-      *  XFunction     - control of module function                   *
-      *     *CREATE    - retrieve file description         CREATE     *
-      *     *BASED-ON  - retrieve based on phys. file      BASED_ON   *
-      *     *KEY       - initiate key sequence to reutrn   KEY        *
-      *     *READKEY   - read next entry                   READKEY    *
-      *     *SELECT    - initiate s/o statement to return  SELECT     *
-      *     *READSEL   - read next entry                   READSELECT *
-      *     *READTEXT  - file description                  READTEXT   *
-      *                                                               *
-      *  OUTPUT-Parameter:                                            *
-      *  =================                                            *
-      *                                                               *
-      *  XNbrOfEnt   - number of entry (depedencies)                  *
-      *                *CREATE   - 1=OK                               *
-      *                            0=Fehler                           *
-      *                            o_data = FILD0100                  *
-      *                *BASED-ON - 1=OK                               *
-      *                            0=Fehler                           *
-      *                            o_data = BSPF0100                  *
-      *                *KEY      - x=Anzahl Schlüsselfelder           *
-      *                            o_data = ''                        *
-      *                *READKEY  - x=Nr. des Schlüsselfeldes          *
-      *                            o_data = KEYL0100                  *
-      *                *READTEXT - x=Länge der Textbescheibung        *
-      *                            o_data = description               *
-      *                *SELECT   - x=Anzahl SELECT Einträge           *
-      *                            o_data = ''                        *
-      *                *READSEL  - x=Anzahl SELECT Einträge           *
-      *                            o_data = SELL0100                  *
-      *                                                               *
-      *  XData       - entry                                          *
-      *                parameter is supported using XFunc=5  (read)   *
-      *                (must be splitted using a data structure)      *
-      *                                                               *
-      * ============================================================= *
-      * >>PRE-COMPILER<<                                              *
-      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
-      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
-      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
-      *                           INSTALL(*NO);                       *
-      *   >>EXECUTE<<                                                 *
-      * >>END-PRE-COMPILER<<                                          *
-      *===============================================================*
+       //===============================================================*
+       //                                                               *
+       //  (c) Thomas Raddatz                                           *
+       //                                                               *
+       //  Bereich  : PEEK, Version 1.4.0                               *
+       //  Programm : PEEK41                                            *
+       //  Typ      : RPG                                               *
+       //                                                               *
+       //  erstellt : 31.12.1997  Raddatz                               *
+       //                                                               *
+       //===============================================================*
+       //                                                               *
+       //  Dokumentation:                                               *
+       //                                                               *
+       //  Abrufen von Dateiinformationen einer Datei                   *
+       //                                                               *
+       //===============================================================*
+       //                                                               *
+       //  INPUT-Parameter:                                             *
+       //  ================                                             *
+       //                                                               *
+       //  XQFile      - Qualified file name                            *
+       //                  1 - 10:  file                                *
+       //                 11 - 20:  library                             *
+       //                                                               *
+       //  XRcdFormat  - Record format name                             *
+       //                                                               *
+       //  XFunction     - control of module function                   *
+       //     *CREATE    - retrieve file description         CREATE     *
+       //     *BASED-ON  - retrieve based on phys. file      BASED_ON   *
+       //     *KEY       - initiate key sequence to reutrn   KEY        *
+       //     *READKEY   - read next entry                   READKEY    *
+       //     *SELECT    - initiate s/o statement to return  SELECT     *
+       //     *READSEL   - read next entry                   READSELECT *
+       //     *READTEXT  - file description                  READTEXT   *
+       //                                                               *
+       //  OUTPUT-Parameter:                                            *
+       //  =================                                            *
+       //                                                               *
+       //  XNbrOfEnt   - number of entry (depedencies)                  *
+       //                *CREATE   - 1=OK                               *
+       //                            0=Fehler                           *
+       //                            o_data = FILD0100                  *
+       //                *BASED-ON - 1=OK                               *
+       //                            0=Fehler                           *
+       //                            o_data = BSPF0100                  *
+       //                *KEY      - x=Anzahl Schlüsselfelder           *
+       //                            o_data = ''                        *
+       //                *READKEY  - x=Nr. des Schlüsselfeldes          *
+       //                            o_data = KEYL0100                  *
+       //                *READTEXT - x=Länge der Textbescheibung        *
+       //                            o_data = description               *
+       //                *SELECT   - x=Anzahl SELECT Einträge           *
+       //                            o_data = ''                        *
+       //                *READSEL  - x=Anzahl SELECT Einträge           *
+       //                            o_data = SELL0100                  *
+       //                                                               *
+       //  XData       - entry                                          *
+       //                parameter is supported using XFunc=5  (read)   *
+       //                (must be splitted using a data structure)      *
+       //                                                               *
+       // ============================================================= *
+       // >>PRE-COMPILER<<                                              *
+       //   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+       //                           OBJLIB(&LI) DEVLIB(&LI) +           *
+       //                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+       //                           INSTALL(*NO);                       *
+       //   >>EXECUTE<<                                                 *
+       // >>END-PRE-COMPILER<<                                          *
+       //===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
-      *
-      *---Variablendefinition------------------------------*
+
       /COPY QCOPYLE,D_VARDEF
       /COPY QCOPYLE,FLDL0100
       /COPY QCOPYLE,QDBRTVFD
@@ -79,827 +78,778 @@
       /COPY QCOPYLE,FILD0100
       /COPY QCOPYLE,SELL0100
       /COPY QCOPYLE,BSPF0100
-      *----------------------------------------------------*
-      *
+      /COPY QCOPYLE,CEECNDHDLR
+
       /define internal_prototype
       /COPY QCOPYLE,PPEEK41
       /undefine internal_prototype
-      *
-      *----------------------------------------------------*
-      *  API - DATENSTRUKTUREN                             *
-      *----------------------------------------------------*
-      *
-      *  declarations for QDBRTVFD
-     D                 DS
-     D RcvVarTab                      1A   DIM(32000) INZ(*BLANKS)
-     D RcvVar                  1  32000A   INZ(*BLANKS)
-      *
-     D RcvVarLn        S             10I 0 INZ(32000)
-      *
-     D RetQFile        DS                  likeds(qObj_t)
-      *
-     D errCode         DS                  likeds(errCode_t) inz
-      *
-      *  declarations for File definition header  (Qdb_Qdbfh), 1.9.3.2
-     D pFileDefHd      S               *
-      *
-     D fileDefHd       DS                  likeds(Qdb_Qdbfh_t)
-     D                                     based(pFileDefHd)
-      *
-     D lglFileSpcAttr  DS                  likeds(Qdb_Qdbflogl_t)
-     D                                     based(pLglFileSpcAttr)
-      *
-      *  declarations for File Scope Array        (Qdb_Qdbfb), 1.9.3.20
-     D pFileScpAy      S               *
-     D §FileScpAy      C                   const(160)
-      *
-     D fileScope       DS                  likeds(Qdb_Qdbfb_t)
-     D                                     based(pFileScpAy)
-      *
-      *  declarations for Key Specification Array (Qdb_Qdbfk), 1.9.3.23
-     D pKeySpecAy      S               *
-     D §KeySpecAy      C                   const( 32)
-      *
-     D keySpecAy       DS                  likeds(Qdb_Qdbfk_t)
-     D                                     based(pKeySpecAy)
-      *
-      *  declarations for select/omit Specification Array (Qdb_Qdbfk), 1.9.3.21
-     D pSelSpecAy      S               *
-     D §SelSpecAy      C                   const( 32)
-      *
-     D selSpecAy       DS                  likeds(Qdb_Qdbfss_t)
-     D                                     based(pSelSpecAy)
-      *
-     D pSelParmAy      S               *
-      *
-     D selParmAy       DS                  likeds(Qdb_Qdbfsp_t)
-     D                                     based(pSelParmAy)
-      *
-     D Offset          S                   like(int4_t) inz
-     D Counter         S                   like(int4_t) inz
-     D mbrNbr          S                   like(int4_t) inz
-     D NbrOfKeyFd      S                   like(int4_t) inz
-     D PosOfKeyFd      S                   like(int4_t) inz
-     D LenOfSlOm       S                   like(int4_t) inz
-     D NbrOfSlOm       S                   like(int4_t) inz
-     D PosOfSlOm       S                   like(int4_t) inz
-     D XPos            S                   like(int4_t) inz
-     D R_VALU          S                   like(SELL0100_t.SOVALU) inz
-      *
-     D KEYL0100        DS                  likeds(KEYL0100_t) inz
-     D FILD0100        DS                  likeds(FILD0100_t) inz
-     D SELL0100        DS                  likeds(SELL0100_t) inz
-     D BSPF0100        DS                  likeds(BSPF0100_t) inz
-      *
-      *  Boolean variables & constants
-     D isFound         S                   like(bool_t) inz(bFalse)
-     D isJoinFile      S                   like(bool_t) inz(bFalse)
-      *
-      *----------------------------------------------------*
-      *  Aktuelle Datum und Uhrzeit
-     D A_TIME          DS                  qualified
-     D  time                   1     14  0
-     D  ATIM                   1      6  0
-     D  ADAT                   7     14  0
-     D  TAG                    7      8  0
-     D  MON                    9     10  0
-     D  JAHR                  11     14  0
-      *
-      *  ... und rückwärts
-     D V_TIME          DS
-     D  V_ATIM                 1      6  0
-     D  V_ADAT                 7     14  0
-     D  V_ADA6                 9     14  0
-     D  V_JAHR                 7     10  0
-     D  V_MON                 11     12  0
-     D  V_TAG                 13     14  0
-      *
+
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
-      *
-      /COPY QCOPYLE,CEECNDHDLR
-      *
-      ********************************************************************
-      *           Main  Control block                                    *
-      ********************************************************************
-      *
-     D PEEK41          PI
-     D  i_qFile                            const likeds(qObj_t)
-     D  i_rcdFmt                           const like(fmt_t)
-     D  i_function                         const like(function_t)
-     D  o_nbrOfEnt                               like(int4_t)
-     D  o_data                      512A
-      *
-      *---------------------------------------------------*
-      *
-      *  Register error handler
-     C                   callp     CEEHDLR(%paddr('errorHandler')
-     C                                     : *null: *omit)
-      *
-     C                   SELECT
-     C     i_function    WHENEQ    '*CREATE'
-     C                   EXSR      Create
-     C     i_function    WHENEQ    '*BASED-ON'
-     C                   EXSR      Based_On
-     C     i_function    WHENEQ    '*KEY'
-     C                   EXSR      Key
-     C     i_function    WHENEQ    '*READKEY'
-     C                   EXSR      ReadKey
-     C     i_function    WHENEQ    '*READTEXT'
-     C                   EXSR      ReadText
-     C     i_function    WHENEQ    '*SELECT'
-     C                   EXSR      Select
-     C     i_function    WHENEQ    '*READSEL'
-     C                   EXSR      ReadSelect
-     C                   Endsl
-      *
-      *---------------------------------------------------*
-      *  Ende Programm
-      *
-     C     ENDE          TAG
-      *
-     C                   RETURN
-      *
-      *====================================================*
-      *  Create --  create user space and get database rel.*
-      *====================================================*
-      *
-     C     Create        BEGSR
-      *
-      *  Akt. Datum & Zeit ermitteln
-     C                   EXSR      GetTime
-      *
-      *  retrieve file description
-     C                   CLEAR                   errCode
-     C                   EVAL      errCode.bytPrv = %size(errCode)
-      *
-     C                   CALLP     QDBRTVFD(RcvVar: RcvVarLn: RetQFile
-     C                                      : 'FILD0100': i_qFile: ''
-     C                                      : '0': '*LCL': '*EXT'
-     C                                      : errCode)
-      *
-     C                   IF        (errCode.bytAvl > 0)
-     C                   EVAL      o_nbrOfEnt = *ZEROS
-     C                   ELSE
-     C                   EVAL      o_nbrOfEnt = 1
-     C                   EVAL      pFileDefHd = %ADDR(RcvVarTab(1))
-     C                   Endif
-      *
-     C                   EXSR      API_Crt
-      *
-     C                   ENDSR
-      *
-      *====================================================*
-      *  API_Crt    Fill API-structure for CREATE          *
-      *====================================================*
-      *
-     C     API_Crt       BEGSR
-      *
-     C                   CLEAR                   FILD0100
-      *  Jahrhundert
-     C     V_JAHR        IFEQ      19
-     C                   EVAL      FILD0100.ATRCEN = '0'
-     C                   ELSE
-     C                   EVAL      FILD0100.ATRCEN = '1'
-     C                   Endif
-      *  Datum
-     C                   EVAL      FILD0100.ATRDAT = %char(V_ADA6)
-      *  Uhrzeit
-     C                   EVAL      FILD0100.ATRTIM = %char(V_ATIM)
-      *
-     C     o_nbrOfEnt    IFLE      *ZEROS
-      *  Fehler aufgetreten
-      *  Datei/Bibliothek
-     C                   EVAL      FILD0100.ATFILE = '*ERROR'
-     C                   EVAL      FILD0100.ATLIB = '*ERROR'
-     C                   ELSE
-      *  restliche Felder füllen
-      *  Datei/Bibliothek
-     C                   EVAL      FILD0100.ATFILE = RetQFile.name
-     C                   EVAL      FILD0100.ATLIB = RetQFile.lib
-      *  Bit 2   - Qdbfhfpl - Type of file
-      *                  D=Einheit, P=PF, L=LF, R=DDM PF, S=DDM LF
-     C**                 EVAL      *in98 = %bitand(QdbfhflgH: x'20') = x'20'
-     C**                 EVAL      OneByte = QdbfhflgH                          Key statement
-     C**                 BITOFF    '0134567'     OneByte
-     C**                 TESTB     '2'           OneByte                  99
-     C**   *IN99         IFEQ      '1'
-     C                   IF        (%bitand(fileDefHd.QdbfhflgH: x'20') = x'20')
-     C                   EVAL      FILD0100.ATFILA = '*LGL'                     logical
-     C                   EVAL      FILD0100.ATFTYP = 'L'
-     C                   ELSE
-     C                   EVAL      FILD0100.ATFILA = '*PHY'                     physical
-     C                   EVAL      FILD0100.ATFTYP = 'P'
-     C                   Endif
-      *
-      *  Bit 4   - Qdbfhfsu - file type (FILETYPE)
-     C**                 EVAL      *in98 = %bitand(QdbfhflgH: x'08') = x'08'
-     C**                 EVAL      OneByte = QdbfhflgH                          Key statement
-     C**                 BITOFF    '0123567'     OneByte
-     C**                 TESTB     '4'           OneByte                  99
-     C**   *IN99         IFEQ      '1'
-     C                   IF        (%bitand(fileDefHd.QdbfhflgH: x'08') = x'08')
-      *                  EVAL      ATDTAT = '*SRC'
-     C                   ELSE
-      *                  EVAL      ATDTAT = '*DTA'
-     C                   Endif
-      *
-      *  Dateiwartezeit - Qdbfwtfi
-     C                   EVAL      FILD0100.ATWAIT = fileDefHd.Qdbfwtfi
-      *
-      *  Satzwartezeit  - Qdbfbrwt
-     C                   EVAL      FILD0100.ATWATR = fileDefHd.Qdbfbrwt
-      *
-      *  Bit 0   - Qdbfhflc - level check
-     C**                 EVAL      *in98 = %bitand(QdbfhflgL: x'80') = x'80'
-     C**                 EVAL      OneByte = QdbfhflgL                          Level Check
-     C**                 BITOFF    '1234567'     OneByte
-     C**                 TESTB     '0'           OneByte                  99
-     C**   *IN99         IFEQ      '1'
-     C                   IF        (%bitand(fileDefHd.QdbfhflgL: x'80') = x'80')
-     C                   EVAL      FILD0100.ATLVLC = 'Y'
-     C                   ELSE
-     C                   EVAL      FILD0100.ATLVLC = 'N'
-     C                   Endif
-      *
-      *  Textbeschreibung
-     C                   EVAL      FILD0100.ATTXT = fileDefHd.Qdbfhtxt
-      *
-      *  Extern/Intern beschriebene Datei
-      *  Bit 7   - Qdbfpgmd - program described file indicator
-     C**                 EVAL      *in98 = %bitand(Qaaf2: x'0100') = x'0100'
-     C**                 EVAL      OneByte = Qaaf2                              Key statement
-     C**                 BITOFF    '0123456'     OneByte
-     C**                 TESTB     '7'           OneByte                  99
-     C**   *IN99         IFEQ      '1'
-     C                   IF        (%bitand(fileDefHd.Qaaf2: x'0100') = x'0100')
-     C                   EVAL      FILD0100.ATFLS = 'Y'                         program
-     C                   ELSE
-     C                   EVAL      FILD0100.ATFLS = 'N'                         extern
-     C                   Endif
-      *
-      *  Zugriffspfad
-     C                   SELECT
-     C                   WHEN      (fileDefHd.Qdbfpact = 'AR')
-     C                   EVAL      FILD0100.ATACCP = 'A'
-     C                   WHEN      (fileDefHd.Qdbfpact = 'KC' or
-     C                              fileDefHd.Qdbfpact = 'KF' or
-     C                              fileDefHd.Qdbfpact = 'KL' or
-     C                              fileDefHd.Qdbfpact = 'KN' or
-     C                              fileDefHd.Qdbfpact = 'KU')
-     C                   EVAL      FILD0100.ATACCP = 'K'
-     C                   OTHER
-     C                   EVAL      FILD0100.ATACCP = '?'
-     C                   Endsl
-      *
-      *  Select/Omit Angaben
-      *  Bit 1   - Qdbfkfso - select/omit
-     C**                 EVAL      *in98 = %bitand(QdbfhflgL: x'40') = x'40'
-     C**                 EVAL      OneByte = QdbfhflgL                          Key statement
-     C**                 BITOFF    '0234567'     OneByte
-     C**                 TESTB     '1'           OneByte                  99
-     C**   *IN99         IFEQ      '1'
-     C                   IF        (%bitand(fileDefHd.QdbfhflgL: x'40') = x'40')
-     C                   Eval      FILD0100.ATSELO = 'Y'
-     C                   ELSE
-     C                   Eval      FILD0100.ATSELO = 'N'
-     C                   Endif
-      *
-      *  Logical File Attributes
-     C                   If        (fileDefHd.Qdblfof > 0)
-     C                   Eval      pLglFileSpcAttr =
-     C                               pFileDefHd + fileDefHd.Qdblfof
-     C                   Eval      isJoinFile =
-     C                               %bitand(lglFileSpcAttr.Qlfa: x'20') = x'20'
-     C                   Else
-     C                   Eval      isJoinFile = bFalse
-     C                   Endif
-      *
-      *  Join logical file
-     C                   If        (isJoinFile = bTrue)
-     C                   Eval      FILD0100.ATJOIN = 'Y'
-     C                   Else
-     C                   Eval      FILD0100.ATJOIN = 'N'
-     C                   Endif
-      *
-      *  Anzahl Satzformate
-     C                   If        (FILD0100.ATJOIN = 'Y')
-     C                   Eval      FILD0100.ATNOFM = 1
-     C                   Else
-     C                   Eval      FILD0100.ATNOFM = fileDefHd.Qdbflbnum
-     C                   Endif
-      *
-      *  Anzahl Teildateien
-     C                   Eval      FILD0100.ATNOMB = fileDefHd.Qdbfhmnum
-      *
-      *  Auxiliary storage pool ID
-     C                   Eval      FILD0100.ATASP = fileDefHd.Qdbfasp
-      *
-      *  nicht unterstützt:
-     C                   Eval      FILD0100.ATMXDD = ''
-     C                   Eval      FILD0100.ATMXDC = ''
-     C                   Eval      FILD0100.ATMXDB = ''
-     C                   Eval      FILD0100.ATFATR = ''
-     C                   Eval      FILD0100.ATSYSN = ''
-     C                   Eval      FILD0100.ATSHAR = ''
-     C                   Eval      FILD0100.ATFCCN = ''
-     C                   Eval      FILD0100.ATFCDT = ''
-     C                   Eval      FILD0100.ATFCTM = ''
-     C                   Eval      FILD0100.ATICAP = ''
-     C                   Eval      FILD0100.ATAQDV = ''
-     C                   Eval      FILD0100.ATMXDV = 0
-     C                   Eval      FILD0100.ATSPOL = ''
-     C                   Eval      FILD0100.ATNODV = 0
-     C                   Eval      FILD0100.ATUBL  = 0
-     C                   Eval      FILD0100.ATIDTA = ''
-     C                   Eval      FILD0100.ATCSEQ = ''
-      *
-     C                   Endif
-      *
-     C                   Eval      o_data = FILD0100
-      *
-     C                   ENDSR
-      *
-      *====================================================*
-      *  Based_On-  set pointer to matching                *
-      *             file scope entry of based-on           *
-      *====================================================*
-      *
-     C     Based_On      BEGSR
-      *
-     C                   If        %check('0123456789': %trim(i_rcdFmt)) = 0
-     C***                Eval      mbrNbr = %dec(%trim(XRcdFormat): 10: 0)
-     C***                EXSR      FindMbr
-     C                   Callp     p_kill('Incorrect record format name: ' +
-     C                                    i_rcdFmt)
-     C                   Else
-     C                   EXSR      FindRcdFmt
-     C                   Endif
-      *
-     C     IsFound       IFEQ      bTrue
-      *  store number of key fields ...
-     C                   CLEAR                   BSPF0100
-     C                   EVAL      BSPF0100.BFFILE = fileScope.Qdbfbf
-     C                   EVAL      BSPF0100.BFLIB = fileScope.Qdbfbfl
-     C                   EVAL      BSPF0100.BFRCDFMT = fileScope.Qdbft
-     C                   EVAL      o_nbrOfEnt = 1
-     C                   EVAL      o_data = BSPF0100
-     C                   ELSE
-      *  no key fields found ...
-     C                   EVAL      o_nbrOfEnt = 0
-     C                   EVAL      o_data = ''
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *====================================================*
-      *  Key    --  set pointer to matching                *
-      *             file scope entry of key fields         *
-      *====================================================*
-      *
-     C     Key           BEGSR
-      *
-     C                   EXSR      FindRcdFmt
-     C     IsFound       IFEQ      bTrue
-      *  store number of key fields ...
-     C                   EVAL      NbrOfKeyFd = fileScope.Qdbfbgky
-     C                   EVAL      PosOfKeyFd = *ZEROS
-     C                   ELSE
-      *  no key fields found ...
-     C                   EVAL      NbrOfKeyFd = *ZEROS
-     C                   EVAL      PosOfKeyFd = *HIVAL
-     C                   Endif
-      *
-     C                   EVAL      o_nbrOfEnt = NbrOfKeyFd
-      *
-     C                   ENDSR
-      *
-      *====================================================*
-      *  ReadKey --  read key entry one by one             *
-      *====================================================*
-      *
-     C     ReadKey       BEGSR
-      *
-     C     PosOfKeyFd    IFLT      NbrOfKeyFd
-      *
-     C     PosOfKeyFd    MULT      §KeySpecAy    Offset
-     C                   EVAL      Offset = Offset + fileScope.Qdbfksof
-     C
-     C                   EVAL      pKeySpecAy = %ADDR(RcvVarTab(Offset + 1))
-      *
-     C                   CLEAR                   KEYL0100
-      *  Jahrhundert
-     C                   EVAL      KEYL0100.APRCEN = FILD0100.ATRCEN
-      *  Datum
-     C                   EVAL      KEYL0100.APRDAT = FILD0100.ATRDAT
-      *  Uhrzeit
-     C                   EVAL      KEYL0100.APRTIM = FILD0100.ATRTIM
-      *  Datei
-     C                   EVAL      KEYL0100.APFILE = FILD0100.ATFILE
-      *  Bibliothek
-     C                   EVAL      KEYL0100.APLIB = FILD0100.ATLIB
-      *  Anzahl Schlüsselfelder
-     C                   EVAL      KEYL0100.APNKYF = NbrOfKeyFd
-      *  Feldname
-     C                   EVAL      KEYL0100.APKEYF = keySpecAy.Qdbfkfld         Feldname
-      *  Schlüsselfeldnummer
-     C                   EVAL      KEYL0100.APKEYN = PosOfKeyFd + 1
-      *  Dateiart
-     C                   EVAL      KEYL0100.APFTYP = FILD0100.ATFTYP            file type
-      *------------------------------------------*
-      *  Dateiattribute:                         *
-      *------------------------------------------*
-      *  Zugriffspfadwartung
-     C                   EVAL      KEYL0100.APMANT = fileDefHd.Qdbfkfdm
-      *  Bit 0/1 - Reserved_1
-      *  Bit 2   - Qdbfhfpl - Type of file
-     C                   EVAL      KEYL0100.APFILA = FILD0100.ATFILA            physical
-      *  Bit 3   - Reserved_2
-      *  Bit 5   - Reserved_3
-      *  Bit 6   - Qdbfhfky - Access path
-     C**                 EVAL      *in98 = %bitand(QdbfhflgH: x'02') = x'02'
-     C**                 EVAL      OneByte = QdbfhflgH                          Key statement
-     C**                 BITOFF    '0123457'     OneByte
-     C**                 TESTB     '6'           OneByte                  99
-     C**   *IN99         IFEQ      '1'
-     C                   IF        (%bitand(fileDefHd.QdbfhflgH: x'02') = x'02')
-      *  ... keyed
-     C                   SELECT
-      *      ... arrival sequence
-     C                   WHEN      fileDefHd.Qdbfpact = 'AR'
-     C                   EVAL      KEYL0100.APUNIQ = '*BLANKS'                  no unique key
-     C                   EVAL      KEYL0100.APKEYO = '*BLANKS'                  no order
-      *      ... keyed, no unique, FCFO order
-     C                   WHEN      fileDefHd.Qdbfpact = 'KC'
-     C                   EVAL      KEYL0100.APUNIQ = 'N'                        no unique key
-     C                   EVAL      KEYL0100.APKEYO = 'C'                        FCFO oder
-      *      ... keyed, no unique, FIFO order
-     C                   WHEN      fileDefHd.Qdbfpact = 'KF'
-     C                   EVAL      KEYL0100.APUNIQ = 'N'                        no unique key
-     C                   EVAL      KEYL0100.APKEYO = 'F'                        FIFO order
-      *      ... keyed, no unique, LIFO order
-     C                   WHEN      fileDefHd.Qdbfpact = 'KL'
-     C                   EVAL      KEYL0100.APUNIQ = 'N'                        no unique key
-     C                   EVAL      KEYL0100.APKEYO = 'L'                        LIFO order
-      *      ... keyed, no unique, no order
-     C                   WHEN      fileDefHd.Qdbfpact = 'KN'
-     C                   EVAL      KEYL0100.APUNIQ = 'N'                        no unique key
-     C                   EVAL      KEYL0100.APKEYO = 'N'                        no order
-      *      ... keyed, unique, FIFO order - see DSPFD
-     C                   WHEN      fileDefHd.Qdbfpact = 'KU'
-     C                   EVAL      KEYL0100.APUNIQ = 'Y'                        no unique key
-     C                   EVAL      KEYL0100.APKEYO = 'N'                        FIFO order
-      *
-     C                   OTHER
-     C                   Endsl
-     C                   ELSE
-      *  ... arrival sequence
-     C                   EVAL      KEYL0100.APUNIQ = '*BLANKS'                  no unique key
-     C                   EVAL      KEYL0100.APKEYO = '*BLANKS'                  no access path
-     C                   Endif
-      *  Bit 7   - Reserved_4
-      *
-      *------------------------------------------*
-      *  Additional attribute flags              *
-      *------------------------------------------*
-      *  Bit 7   - Qdbfpkey - primary key
-     C**                 EVAL      *in98 = %bitand(Qaaf2H: x'01') = x'01'
-     C**                 EVAL      OneByte = Qaaf2H                             Key statement
-     C**                 BITOFF    '0123456'     OneByte
-     C**                 TESTB     '7'           OneByte                  99
-     C**   *IN99         IFEQ      '1'
-     C                   IF        (%bitand(fileDefHd.Qaaf2H: x'01') = x'01')
-     C                   EVAL      KEYL0100.APRIKY = 'P'                        primary key
-     C                   ELSE
-      *  Bit 0   - Qdbfpkey - primary key
-     C**                 EVAL      *in98 = %bitand(Qaaf2L: x'80') = x'80'
-     C**                 EVAL      OneByte = Qaaf2L                             Key statement
-     C**                 BITOFF    '1234567'     OneByte
-     C**                 TESTB     '0'           OneByte                  99
-     C**   *IN99         IFEQ      '1'
-     C                   IF        (%bitand(fileDefHd.Qaaf2L: x'80') = x'80')
-     C                   EVAL      KEYL0100.APRIKY = 'U'                        unique constr
-     C                   ELSE
-     C                   EVAL      KEYL0100.APRIKY = 'N'                        keine
-     C                   Endif
-     C                   Endif
-      *
-      *------------------------------------------*
-      *  Schlüsselfeldattribute:                 *
-      *------------------------------------------*
-      *  Bit 0   - Qdbfksad - Ascending/Descending indicator
-     C**                 EVAL      *in98 = %bitand(Qdbfksq: x'80') = x'80'
-     C**                 EVAL      OneByte = Qdbfksq                            Key statement
-     C**                 BITOFF    '1234567'     OneByte
-     C**                 TESTB     '0'           OneByte                  99
-     C**   *IN99         IFEQ      '1'
-     C                   IF        (%bitand(keySpecAy.Qdbfksq: x'80') = x'80')
-     C                   EVAL      KEYL0100.APKSEQ = 'D'                        Descending
-     C                   ELSE
-     C                   EVAL      KEYL0100.APKSEQ = 'A'                        Ascending
-     C                   Endif
-      *  Bit 1/2 - Qdbfksn  - Numeric key field seq. indicator
-     C**                 EVAL      OneByte = Qdbfksq                            Key statement
-     C**                 BITOFF    '034567'      OneByte
-      *
-     C                   SELECT
-     C**   OneByte       WHENEQ    x'00'
-     C                   WHEN      (keySpecAy.Qdbfksq = x'00')
-     C                   EVAL      KEYL0100.APKSIN = 'N'                        Unsigned
-     C**   OneByte       WHENEQ    x'20'
-     C                   WHEN      (keySpecAy.Qdbfksq = x'20')
-     C                   EVAL      KEYL0100.APKSIN = 'A'                        AbsVal
-     C**   OneByte       WHENEQ    x'40'
-     C                   WHEN      (keySpecAy.Qdbfksq = x'40')
-     C                   EVAL      KEYL0100.APKSIN = 'S'                        Signed
-     C                   OTHER
-     C                   EVAL      KEYL0100.APKSIN = '?'                        unknown
-     C                   Endsl
-      *  Bit 3   - Reserved_60
-      *  Bit 4   - Qdbfksac - Alternate collating seq. indicator
-     C**                 EVAL      *in98 = %bitand(Qdbfksq: x'08') = x'08'
-     C**                 EVAL      OneByte = Qdbfksq                            Key statement
-     C**                 BITOFF    '0123567'     OneByte
-     C**                 TESTB     '4'           OneByte                  99
-     C**   *IN99         IFEQ      '1'
-     C                   IF        (%bitand(keySpecAy.Qdbfksq: x'08') = x'08')
-     C                   EVAL      KEYL0100.APKASQ = 'Y'                        altern. seq.
-     C                   ELSE
-     C                   EVAL      KEYL0100.APKASQ = 'N'                        no alt. seq.
-     C                   Endif
-      *  Bit 5   - Qdbfkszf - Force zone  seq. indicator
-     C**                 EVAL      *in98 = %bitand(Qdbfksq: x'04') = x'04'
-     C**                 EVAL      OneByte = Qdbfksq                            Key statement
-     C**                 BITOFF    '0123467'     OneByte
-     C**                 TESTB     '5'           OneByte                  99
-     C**   *IN99         IFEQ      '1'
-     C                   IF        (%bitand(keySpecAy.Qdbfksq: x'04') = x'04')
-     C                   EVAL      KEYL0100.APKZD = 'Z'                         Zone
-     C                   ELSE
-      *  Bit 6   - Qdbfksdf - Force digit seq. indicator
-     C**                 EVAL      *in98 = %bitand(Qdbfksq: x'02') = x'02'
-     C**                 EVAL      OneByte = Qdbfksq                            Key statement
-     C**                 BITOFF    '0123457'     OneByte
-     C**                 TESTB     '6'           OneByte                  99
-     C**   *IN99         IFEQ      '1'
-     C                   IF        (%bitand(keySpecAy.Qdbfksq: x'02') = x'02')
-     C                   EVAL      KEYL0100.APKZD = 'D'                         Digit
-     C                   ELSE
-     C                   EVAL      KEYL0100.APKZD = 'N'                         None
-     C                   Endif
-     C                   Endif
-      *  Bit 7   - Qdbfkft  - external / internal name indicator
-     C**                 EVAL      *in98 = %bitand(Qdbfksq: x'01') = x'01'
-     C**                 EVAL      OneByte = Qdbfksq                            Key statement
-     C**                 BITOFF    '0123456'     OneByte
-     C**                 TESTB     '7'           OneByte                  99
-     C**   *IN99         IFEQ      '1'
-     C                   IF        (%bitand(keySpecAy.Qdbfksq: x'01') = x'01')
-      ***                EVAL      'E'     z.Z. kein Feld vorhanden             external
-     C                   ELSE
-      ***                EVAL      'I'     z.Z. kein Feld vorhanden             internal
-     C                   Endif
-      *
-     C                   EVAL      o_data = KEYL0100
-     C                   EVAL      o_nbrOfEnt = PosOfKeyFd + 1
-      *  pointer to next field
-     C                   EVAL      PosOfKeyFd = PosOfKeyFd + 1
-     C                   ELSE
-     C                   EVAL      o_nbrOfEnt = *ZEROS
-     C                   EVAL      o_data = *BLANKS
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *====================================================*
-      *  SELECT --  set pointer to matching                *
-      *             file scope entry of select & omit      *
-      *====================================================*
-      *
-     C     SELECT        BEGSR
-      *
-     C                   EXSR      FindRcdFmt
-     C     IsFound       IFEQ      bTrue
-      *  store number of select/omit statements ...
-     C                   EVAL      NbrOfSlOm = fileScope.Qdbfsoon
-     C                   EVAL      PosOfSlOm = *ZEROS
-     C                   ELSE
-      *  no select/omit statements found ...
-     C                   EVAL      NbrOfSlOm = *ZEROS
-     C                   EVAL      PosOfSlOm = *HIVAL
-     C                   Endif
-      *
-     C                   EVAL      o_nbrOfEnt = NbrOfSlOm
-      *
-     C                   ENDSR
-      *
-      *====================================================*
-      *  ReadSelect  read select/omit one by one           *
-      *====================================================*
-      *
-     C     ReadSelect    BEGSR
-      *
-     C     PosOfSlOm     IFLT      NbrOfSlOm
-      *
-      *  Set pointer to select/omit specification entry
-     C     PosOfSlOm     MULT      §SelSpecAy    Offset
-     C                   EVAL      Offset = Offset + fileScope.Qdbfsoof
-      *
-     C                   EVAL      pSelSpecAy = %ADDR(RcvVarTab(Offset + 1))
-      *
-     C                   CLEAR                   SELL0100
-      *  Jahrhundert
-     C                   EVAL      SELL0100.SORCEN = FILD0100.ATRCEN
-      *  Datum
-     C                   EVAL      SELL0100.SORDAT = FILD0100.ATRDAT
-      *  Uhrzeit
-     C                   EVAL      SELL0100.SORTIM = FILD0100.ATRTIM
-      *  Datei
-     C                   EVAL      SELL0100.SOFILE = FILD0100.ATFILE
-      *  Bibliothek
-     C                   EVAL      SELL0100.SOLIB = FILD0100.ATLIB
-      *  Dateiart
-     C                   EVAL      SELL0100.SOFTYP = FILD0100.ATFTYP
-      *  Dateiattribut
-     C                   EVAL      SELL0100.SOFILA = FILD0100.ATFILA
-      *  Reserviert
-     C                   EVAL      SELL0100.SOMXD = *BLANKS
-      *  Dateiattribut
-     C                   EVAL      SELL0100.SOFATR = FILD0100.ATFATR
-      *  Systemname
-     C                   EVAL      SELL0100.SOSYSN = FILD0100.ATSYSN
-      *  ASP Zusatzspeicher
-     C                   EVAL      SELL0100.SOASP = FILD0100.ATASP
-      *  Reserviert
-     C                   EVAL      SELL0100.SORES = *BLANKS
-      *  Anzahl SELECT/OMIT Regeln
-     C                   EVAL      SELL0100.SONRUL = NbrOfSlOm
-      *  Satzformat
-     C                   EVAL      SELL0100.SORFMT = fileScope.Qdbft
-      *  SELECT/OMIT Regel
-     C                   EVAL      SELL0100.SORULE = selSpecAy.Qdbfssso
-      *  Vergleichoperator, z.B.:  EQ,NE,AL
-     C                   EVAL      SELL0100.SOCOMP = selSpecAy.Qdbfssop
-      *
-      *  Wenn SELECT/OMIT-Parameter vorhanden sind, ...
-     C                   IF        (selSpecAy.Qdbfsoso <= 0)
-      *  ... es sind aber keine vorhanden
-     C                   ELSE
-      *  ... dann diese ermitteln und zurückliefern
-      *
-      *      ... Feldname
-     C                   EVAL      SELL0100.SOFLD = selSpecAy.Qdbfssfn
-      *      ... SELECT/OMIT Anzahl Vergleichswerte
-     C                   EVAL      SELL0100.SONVAL = selSpecAy.Qdbfsspnum
-      *
-      *      ... Zeiger auf den ersten Wert setzen ...
-     C                   EVAL      Offset = selSpecAy.Qdbfsoso
-     C                   EVAL      pSelParmAy = %ADDR(RcvVarTab(Offset + 1))
-      *
-      *      ...  ermitteln SELECT/OMIT Wert und Wertlänge
-     C                   DO        *HIVAL
-      *
-     C                   EVAL      LenOfSlOm = selParmAy.Qdbfspln - 20
-      *
-     C     LenOfSlOm     IFGE      1
-     C     LenOfSlOm     ANDLE     32
-     C                   EVAL      R_VALU =
-     C                               %subst(selParmAy.Qdbfspvl: 1: LenOfSlOm)
-     C                   ELSE
-     C                   EVAL      R_VALU = ''
-     C                   Endif
-      *
-      *      ... SELECT/OMIT Wert
-     C                   IF        (SELL0100.SOVALU = '')
-     C                   EVAL      SELL0100.SOVALU = R_VALU
-     C                   ELSE
-     C                   EVAL      SELL0100.SOVALU =
-     C                               %trimr(SELL0100.SOVALU) + ' ' + R_VALU
-     C                   Endif
-      *      ... SELECT/OMIT Wertlänge
-     C                   EVAL      SELL0100.SOVALL = LenOfSlOm
-      *
-      *      ... wenn weitere Werte vorhanden sind, ...
-     C                   IF        (selParmAy.Qdbfspno <> 0)
-      *          ... dann den Zeiger auf den nächsten Wert ausrichten
-     C                   EVAL      Offset = selParmAy.Qdbfspno
-     C                   EVAL      pSelParmAy = %ADDR(RcvVarTab(Offset + 1))
-     C                   ELSE
-      *          ... ansonsten die Verarbeitung beenden
-     C                   LEAVE
-     C                   Endif
-      *
-     C                   Enddo
-      *  DYNSLT
-     C                   EVAL      SELL0100.SODYNS = *BLANKS
-      *  JREF Field
-     C                   EVAL      SELL0100.SOFJVL = selSpecAy.Qdbfssfj
-      *  JREF Parameter
-     C                   EVAL      SELL0100.SOPJVL = *ZEROS
-     C                   Endif
-      *
-     C                   EVAL      o_data = SELL0100
-      *
-     C                   EVAL      o_nbrOfEnt = PosOfSlOm + 1
-      *  pointer to next field
-     C                   EVAL      PosOfSlOm = PosOfSlOm + 1
-     C                   ELSE
-     C                   EVAL      o_nbrOfEnt = *ZEROS
-     C                   EVAL      o_data = *BLANKS
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *====================================================*
-      *  ReadText--  read description of file              *
-      *====================================================*
-      *
-     C     ReadText      BEGSR
-      *
-      *  Textbeschreibung
-     C                   EVAL      o_data = FILD0100.ATTXT
-     C**   ' '           CHECKR    XData         XPos
-     C                   EVAL      XPos = %checkr(' ': o_data)
-     C                   EVAL      o_nbrOfEnt = XPos
-      *
-     C                   ENDSR
-      *
-      *====================================================*
-      *  FindRcdFmt  find matching record format           *
-      *====================================================*
-      *
-     C     FindRcdFmt    BEGSR
-      *
-     C                   EVAL      IsFound = bFalse
-     C                   EVAL      Offset = fileDefHd.Qdbfos
-     C                   EVAL      Counter = fileDefHd.Qdbflbnum
-      *
-     C                   DOW       Counter > 0
-     C                   EVAL      pFileScpAy = %ADDR(RcvVarTab(Offset + 1))
-      *
-     C                   IF        fileScope.Qdbft = i_rcdFmt or
-     C                             i_rcdFmt = '*FIRST'
-      *  Record format generic key field count ...
-     C                   EVAL      IsFound = bTrue
-     C                   LEAVE
-     C                   ELSE
-      *  No matching record format found ...
-     C                   EVAL      Offset = Offset + §FileScpAy
-     C                   EVAL      IsFound = bFalse
-     C                   Endif
-     C                   Eval      Counter = Counter - 1
-     C                   Enddo
-      *
-     C                   ENDSR
-      *
-      *====================================================*
-      *  FindMbr     find member by number                 *
-      *====================================================*
-      *
-     C     FindMbr       BEGSR
-      *
-     C                   If        mbrNbr < 1 or mbrNbr > fileDefhd.Qdbflbnum
-     C                   Eval      IsFound = bFalse
-     C                   Else
-     C                   Eval      Offset = fileDefHd.Qdbfos +
-     C                                      ((mbrNbr -1) * §FileScpAy)
-     C                   EVAL      pFileScpAy = %ADDR(RcvVarTab(Offset + 1))
-     C                   Eval      IsFound = bTrue
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *====================================================*
-      *  GetTime -- Aktuelle Uhrzeit und Datum ermitteln   *
-      *====================================================*
-      *
-     C     GetTime       BEGSR
-      *
-     C                   TIME                    A_TIME.time
-      *
-      *  Konv. nach Verarbeitungsdaten
-     C                   EVAL      V_ATIM = A_TIME.ATIM
-     C                   EVAL      V_TAG = A_TIME.TAG
-     C                   EVAL      V_MON = A_TIME.MON
-     C                   EVAL      V_JAHR= A_TIME.JAHR
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *  Program error handler                                     *
-      *============================================================*
-      *
-     P errorHandler    b
-     D                 pi
-     D i_condToken                         value likeds(cee_fc_t)
-     D i_pCommArea                   10i 0 value
-     D o_action                      10i 0
-     D o_newCondToken                            likeds(cee_fc_t)
-      /free
 
-         dump;
-         o_action = CEE_PERCOLATE;
+       //----------------------------------------------------*
+       //  API - DATENSTRUKTUREN                             *
+       //----------------------------------------------------*
 
-      /end-free
-     P                 e
-      *
+       //  declarations for QDBRTVFD
+       dcl-ds *N;
+         rcvVarTab      char(1) dim(32000);
+         rcvVar         char(32000) pos(1) inz;
+       end-ds;
+
+       dcl-s rcvVarLn   int(10) inz(32000);
+
+       dcl-ds retQfile  likeds(qobj_t);
+
+       dcl-ds errCode   likeds(errcode_t) inz;
+
+       //  declarations for File definition header  (Qdb_Qdbfh), 1.9.3.2
+       dcl-s pFiledefhd pointer;
+
+       dcl-ds filedefhd likeds(qdb_qdbfh_t) based(pFiledefhd);
+       dcl-ds lglfilespcattr likeds(qdb_qdbflogl_t) based(plglfilespcattr);
+
+       //  declarations for File Scope Array        (Qdb_Qdbfb), 1.9.3.20
+       dcl-s pFilescpay pointer;
+       dcl-c §filescpay const(160);
+       dcl-ds filescope likeds(qdb_qdbfb_t) based(pFilescpay);
+
+       //  declarations for Key Specification Array (Qdb_Qdbfk), 1.9.3.23
+       dcl-s pKeyspecay pointer;
+       dcl-c §keyspecay const(32);
+
+       dcl-ds keyspecay likeds(qdb_qdbfk_t) based(pKeyspecay);
+
+       //  declarations for select/omit Specification Array (Qdb_Qdbfk), 1.9.31
+       dcl-s pSelspecay pointer;
+       dcl-c §selspecay const(32);
+
+       dcl-ds selspecay likeds(qdb_qdbfss_t) based(pSelspecay);
+       dcl-s pSelparmay pointer;
+
+       dcl-ds selparmay likeds(qdb_qdbfsp_t) based(pSelparmay);
+
+       dcl-s offset     like(int4_t);
+       dcl-s counter    like(int4_t);
+       dcl-s mbrnbr     like(int4_t);
+       dcl-s nbrofkeyfd like(int4_t);
+       dcl-s posofkeyfd like(int4_t);
+       dcl-s lenofslom  like(int4_t);
+       dcl-s nbrofslom  like(int4_t);
+       dcl-s posofslom  like(int4_t);
+       dcl-s xpos       like(int4_t);
+       dcl-s r_valu     like(sell0100_t.sovalu);
+
+       dcl-ds keyl0100  likeds(keyl0100_t);
+       dcl-ds fild0100  likeds(fild0100_t);
+       dcl-ds sell0100  likeds(sell0100_t);
+       dcl-ds bspf0100  likeds(bspf0100_t);
+
+       //  Boolean variables & constants
+       dcl-s isfound    like(bool_t) inz(bFalse);
+       dcl-s isjoinfile like(bool_t) inz(bFalse);
+
+       dcl-ds now qualified;
+         dcl-ds date pos(1);
+           year    zoned(4);
+           century zoned(2) overlay(year);
+           month   zoned(2);
+           day     zoned(2);
+         end-ds;
+         dcl-ds time pos(9);
+           hour    zoned(2);
+           minute  zoned(2);
+           second  zoned(2);
+           mSecs   zoned(6);
+         end-ds;
+       end-ds;
+
+       //*******************************************************************
+       //           Main  Control block                                    *
+       //*******************************************************************
+
+       dcl-pi peek41;
+         i_qfile         const likeds(qobj_t);
+         i_rcdfmt        const like(fmt_t);
+         i_function      const like(function_t);
+         o_nbrofent      like(int4_t);
+         o_data          char(512);
+       end-pi;
+       //---------------------------------------------------*
+
+       //  Register error handler
+       ceehdlr(%paddr('errorHandler')
+              : *null: *omit);
+
+       select;
+       when i_function = '*CREATE';
+          exsr create;
+       when i_function = '*BASED-ON';
+          exsr based_on;
+       when i_function = '*KEY';
+          exsr key;
+       when i_function = '*READKEY';
+          exsr readkey;
+       when i_function = '*READTEXT';
+          exsr readtext;
+       when i_function = '*SELECT';
+          exsr select;
+       when i_function = '*READSEL';
+          exsr readselect;
+       endsl;
+
+       return;
+
+       //====================================================*
+       //  Create --  create user space and get database rel.*
+       //====================================================*
+
+       begsr create;
+
+          //  retrieve file description
+          clear errCode;
+          errCode.bytprv = %size(errCode);
+
+          qdbrtvfd(rcvVar: rcvVarLn: retQfile
+                  : 'FILD0100': i_qfile: ''
+                  : '0': '*LCL': '*EXT'
+                  : errCode);
+
+          if (errCode.bytavl > 0);
+             o_nbrofent = 0;
+          else;
+             o_nbrofent = 1;
+             pFiledefhd = %addr(rcvVarTab(1));
+          endif;
+
+          exsr api_crt;
+
+       endsr;
+
+       //====================================================*
+       //  API_Crt    Fill API-structure for CREATE          *
+       //====================================================*
+
+       begsr api_crt;
+
+          now = %char(%timestamp(): *iso0);
+
+          clear fild0100;
+          //  Jahrhundert
+          if (now.date.century = 19);
+             fild0100.atrcen = '0';
+          else;
+             fild0100.atrcen = '1';
+          endif;
+
+          //  Datum
+          fild0100.atrdat = %char(now.date);
+
+          //  Uhrzeit
+          fild0100.atrtim = %char(now.time);
+
+          if o_nbrofent <= *zeros;
+             //  Fehler aufgetreten
+             //  Datei/Bibliothek
+             fild0100.atfile = '*ERROR';
+             fild0100.atlib = '*ERROR';
+          else;
+             //  restliche Felder füllen
+             //  Datei/Bibliothek
+             fild0100.atfile = retQfile.name;
+             fild0100.atlib = retQfile.lib;
+             //  Bit 2   - Qdbfhfpl - Type of file
+             //                  D=Einheit, P=PF, L=LF, R=DDM PF, S=DDM LF
+             //*                 EVAL      *in98 = %bitand(QdbfhflgH: x'20') = x'20'
+            //*                 EVAL      OneByte = QdbfhflgH                          Key statement
+             //*                 BITOFF    '0134567'     OneByte
+             //*                 TESTB     '2'           OneByte                  99
+             //*   *IN99         IFEQ      '1'
+             if (%bitand(filedefhd.qdbfhflgh: x'20') = x'20');
+                fild0100.atfila = '*LGL';                                       // logical
+                fild0100.atftyp = 'L';
+             else;
+                fild0100.atfila = '*PHY';                                       // physical
+                fild0100.atftyp = 'P';
+             endif;
+
+             //  Bit 4   - Qdbfhfsu - file type (FILETYPE)
+             //*                 EVAL      *in98 = %bitand(QdbfhflgH: x'08') = x'08'
+            //*                 EVAL      OneByte = QdbfhflgH                          Key statement
+             //*                 BITOFF    '0123567'     OneByte
+             //*                 TESTB     '4'           OneByte                  99
+             //*   *IN99         IFEQ      '1'
+             if (%bitand(filedefhd.qdbfhflgh: x'08') = x'08');
+                //                  EVAL      ATDTAT = '*SRC'
+             else;
+                //                  EVAL      ATDTAT = '*DTA'
+             endif;
+
+             //  Dateiwartezeit - Qdbfwtfi
+             fild0100.atwait = filedefhd.qdbfwtfi;
+
+             //  Satzwartezeit  - Qdbfbrwt
+             fild0100.atwatr = filedefhd.qdbfbrwt;
+
+             //  Bit 0   - Qdbfhflc - level check
+             //*                 EVAL      *in98 = %bitand(QdbfhflgL: x'80') = x'80'
+             //*                 EVAL      OneByte = QdbfhflgL                          Level Check
+             //*                 BITOFF    '1234567'     OneByte
+             //*                 TESTB     '0'           OneByte                  99
+             //*   *IN99         IFEQ      '1'
+             if (%bitand(filedefhd.qdbfhflgl: x'80') = x'80');
+                fild0100.atlvlc = 'Y';
+             else;
+                fild0100.atlvlc = 'N';
+             endif;
+
+             //  Textbeschreibung
+             fild0100.attxt = filedefhd.qdbfhtxt;
+
+             //  Extern/Intern beschriebene Datei
+             //  Bit 7   - Qdbfpgmd - program described file indicator
+             //*                 EVAL      *in98 = %bitand(Qaaf2: x'0100') = x'0100'
+            //*                 EVAL      OneByte = Qaaf2                              Key statement
+             //*                 BITOFF    '0123456'     OneByte
+             //*                 TESTB     '7'           OneByte                  99
+             //*   *IN99         IFEQ      '1'
+             if (%bitand(filedefhd.qaaf2: x'0100') = x'0100');
+                fild0100.atfls = 'Y';                                           // program
+             else;
+                fild0100.atfls = 'N';                                           // extern
+             endif;
+
+             //  Zugriffspfad
+             select;
+             when (filedefhd.qdbfpact = 'AR');
+                fild0100.ataccp = 'A';
+             when (filedefhd.qdbfpact = 'KC' or
+                filedefhd.qdbfpact = 'KF' or
+                filedefhd.qdbfpact = 'KL' or
+                filedefhd.qdbfpact = 'KN' or
+                filedefhd.qdbfpact = 'KU');
+                fild0100.ataccp = 'K';
+             other;
+                fild0100.ataccp = '?';
+             endsl;
+
+             //  Select/Omit Angaben
+             //  Bit 1   - Qdbfkfso - select/omit
+             //*                 EVAL      *in98 = %bitand(QdbfhflgL: x'40') = x'40'
+            //*                 EVAL      OneByte = QdbfhflgL                          Key statement
+             //*                 BITOFF    '0234567'     OneByte
+             //*                 TESTB     '1'           OneByte                  99
+             //*   *IN99         IFEQ      '1'
+             if (%bitand(filedefhd.qdbfhflgl: x'40') = x'40');
+                fild0100.atselo = 'Y';
+             else;
+                fild0100.atselo = 'N';
+             endif;
+
+             //  Logical File Attributes
+             if (filedefhd.qdblfof > 0);
+                plglfilespcattr =
+                 pFiledefhd + filedefhd.qdblfof;
+                isjoinfile =
+                 %bitand(lglfilespcattr.qlfa: x'20') = x'20';
+             else;
+                isjoinfile = bFalse;
+             endif;
+
+             //  Join logical file
+             if (isjoinfile = btrue);
+                fild0100.atjoin = 'Y';
+             else;
+                fild0100.atjoin = 'N';
+             endif;
+
+             //  Anzahl Satzformate
+             if (fild0100.atjoin = 'Y');
+                fild0100.atnofm = 1;
+             else;
+                fild0100.atnofm = filedefhd.qdbflbnum;
+             endif;
+
+             //  Anzahl Teildateien
+             fild0100.atnomb = filedefhd.qdbfhmnum;
+
+             //  Auxiliary storage pool ID
+             fild0100.atasp = filedefhd.qdbfasp;
+
+             //  nicht unterstützt:
+             fild0100.atmxdd = '';
+             fild0100.atmxdc = '';
+             fild0100.atmxdb = '';
+             fild0100.atfatr = '';
+             fild0100.atsysn = '';
+             fild0100.atshar = '';
+             fild0100.atfccn = '';
+             fild0100.atfcdt = '';
+             fild0100.atfctm = '';
+             fild0100.aticap = '';
+             fild0100.ataqdv = '';
+             fild0100.atmxdv = 0;
+             fild0100.atspol = '';
+             fild0100.atnodv = 0;
+             fild0100.atubl  = 0;
+             fild0100.atidta = '';
+             fild0100.atcseq = '';
+
+          endif;
+
+          o_data = fild0100;
+
+       endsr;
+
+       //====================================================*
+       //  Based_On-  set pointer to matching                *
+       //             file scope entry of based-on           *
+       //====================================================*
+
+       begsr based_on;
+
+          if %check('0123456789': %trim(i_rcdfmt)) = 0;
+             //**                Eval      mbrNbr = %dec(%trim(XRcdFormat): 10: 0)
+             //**                EXSR      FindMbr
+             p_kill('Incorrect record format name: ' +
+                   i_rcdfmt);
+          else;
+             exsr findrcdfmt;
+          endif;
+
+          if isfound = btrue;
+             //  store number of key fields ...
+             clear bspf0100;
+             bspf0100.bffile = filescope.qdbfbf;
+             bspf0100.bflib = filescope.qdbfbfl;
+             bspf0100.bfrcdfmt = filescope.qdbft;
+             o_nbrofent = 1;
+             o_data = bspf0100;
+          else;
+             //  no key fields found ...
+             o_nbrofent = 0;
+             o_data = '';
+          endif;
+
+       endsr;
+
+       //====================================================*
+       //  Key    --  set pointer to matching                *
+       //             file scope entry of key fields         *
+       //====================================================*
+
+       begsr key;
+
+          exsr findrcdfmt;
+          if isfound = btrue;
+             //  store number of key fields ...
+             nbrofkeyfd = filescope.qdbfbgky;
+             posofkeyfd = *zeros;
+          else;
+             //  no key fields found ...
+             nbrofkeyfd = *zeros;
+             posofkeyfd = *hival;
+          endif;
+
+          o_nbrofent = nbrofkeyfd;
+
+       endsr;
+
+       //====================================================*
+       //  ReadKey --  read key entry one by one             *
+       //====================================================*
+
+       begsr readkey;
+
+          if posofkeyfd < nbrofkeyfd;
+
+     C     posofkeyfd    mult      §keyspecay    offset
+             offset = offset + filescope.qdbfksof;
+
+             pKeyspecay = %addr(rcvVarTab(offset + 1));
+
+             clear keyl0100;
+             //  Jahrhundert
+             keyl0100.aprcen = fild0100.atrcen;
+             //  Datum
+             keyl0100.aprdat = fild0100.atrdat;
+             //  Uhrzeit
+             keyl0100.aprtim = fild0100.atrtim;
+             //  Datei
+             keyl0100.apfile = fild0100.atfile;
+             //  Bibliothek
+             keyl0100.aplib = fild0100.atlib;
+             //  Anzahl Schlüsselfelder
+             keyl0100.apnkyf = nbrofkeyfd;
+             //  Feldname
+             keyl0100.apkeyf = keyspecay.qdbfkfld;                              // Feldname
+             //  Schlüsselfeldnummer
+             keyl0100.apkeyn = posofkeyfd + 1;
+             //  Dateiart
+             keyl0100.apftyp = fild0100.atftyp;                                 // file type
+             //------------------------------------------*
+             //  Dateiattribute:                         *
+             //------------------------------------------*
+             //  Zugriffspfadwartung
+             keyl0100.apmant = filedefhd.qdbfkfdm;
+             //  Bit 0/1 - Reserved_1
+             //  Bit 2   - Qdbfhfpl - Type of file
+             keyl0100.apfila = fild0100.atfila;                                 // physical
+             //  Bit 3   - Reserved_2
+             //  Bit 5   - Reserved_3
+             //  Bit 6   - Qdbfhfky - Access path
+             //*                 EVAL      *in98 = %bitand(QdbfhflgH: x'02') = x'02'
+            //*                 EVAL      OneByte = QdbfhflgH                          Key statement
+             //*                 BITOFF    '0123457'     OneByte
+             //*                 TESTB     '6'           OneByte                  99
+             //*   *IN99         IFEQ      '1'
+             if (%bitand(filedefhd.qdbfhflgh: x'02') = x'02');
+                //  ... keyed
+                select;
+                   //      ... arrival sequence
+                when filedefhd.qdbfpact = 'AR';
+                   keyl0100.apuniq = '*BLANKS';                                 // no unique key
+                   keyl0100.apkeyo = '*BLANKS';                                 // no order
+                   //      ... keyed, no unique, FCFO order
+                when filedefhd.qdbfpact = 'KC';
+                   keyl0100.apuniq = 'N';                                       // no unique key
+                   keyl0100.apkeyo = 'C';                                       // FCFO oder
+                   //      ... keyed, no unique, FIFO order
+                when filedefhd.qdbfpact = 'KF';
+                   keyl0100.apuniq = 'N';                                       // no unique key
+                   keyl0100.apkeyo = 'F';                                       // FIFO order
+                   //      ... keyed, no unique, LIFO order
+                when filedefhd.qdbfpact = 'KL';
+                   keyl0100.apuniq = 'N';                                       // no unique key
+                   keyl0100.apkeyo = 'L';                                       // LIFO order
+                   //      ... keyed, no unique, no order
+                when filedefhd.qdbfpact = 'KN';
+                   keyl0100.apuniq = 'N';                                       // no unique key
+                   keyl0100.apkeyo = 'N';                                       // no order
+                   //      ... keyed, unique, FIFO order - see DSPFD
+                when filedefhd.qdbfpact = 'KU';
+                   keyl0100.apuniq = 'Y';                                       // no unique key
+                   keyl0100.apkeyo = 'N';                                       // FIFO order
+
+                other;
+                endsl;
+             else;
+                //  ... arrival sequence
+                keyl0100.apuniq = '*BLANKS';                                    // no unique key
+                keyl0100.apkeyo = '*BLANKS';                                    // no access path
+             endif;
+             //  Bit 7   - Reserved_4
+
+             //------------------------------------------*
+             //  Additional attribute flags              *
+             //------------------------------------------*
+             //  Bit 7   - Qdbfpkey - primary key
+             //*                 EVAL      *in98 = %bitand(Qaaf2H: x'01') = x'01'
+            //*                 EVAL      OneByte = Qaaf2H                             Key statement
+             //*                 BITOFF    '0123456'     OneByte
+             //*                 TESTB     '7'           OneByte                  99
+             //*   *IN99         IFEQ      '1'
+             if (%bitand(filedefhd.qaaf2h: x'01') = x'01');
+                keyl0100.apriky = 'P';                                          // primary key
+             else;
+                //  Bit 0   - Qdbfpkey - primary key
+                //*                 EVAL      *in98 = %bitand(Qaaf2L: x'80') = x'80'
+            //*                 EVAL      OneByte = Qaaf2L                             Key statement
+                //*                 BITOFF    '1234567'     OneByte
+                //*                 TESTB     '0'           OneByte                  99
+                //*   *IN99         IFEQ      '1'
+                if (%bitand(filedefhd.qaaf2l: x'80') = x'80');
+                   keyl0100.apriky = 'U';                                       // unique constr
+                else;
+                   keyl0100.apriky = 'N';                                       // keine
+                endif;
+             endif;
+
+             //------------------------------------------*
+             //  Schlüsselfeldattribute:                 *
+             //------------------------------------------*
+             //  Bit 0   - Qdbfksad - Ascending/Descending indicator
+             //*                 EVAL      *in98 = %bitand(Qdbfksq: x'80') = x'80'
+            //*                 EVAL      OneByte = Qdbfksq                            Key statement
+             //*                 BITOFF    '1234567'     OneByte
+             //*                 TESTB     '0'           OneByte                  99
+             //*   *IN99         IFEQ      '1'
+             if (%bitand(keyspecay.qdbfksq: x'80') = x'80');
+                keyl0100.apkseq = 'D';                                          // Descending
+             else;
+                keyl0100.apkseq = 'A';                                          // Ascending
+             endif;
+             //  Bit 1/2 - Qdbfksn  - Numeric key field seq. indicator
+            //*                 EVAL      OneByte = Qdbfksq                            Key statement
+             //*                 BITOFF    '034567'      OneByte
+
+             select;
+                //*   OneByte       WHENEQ    x'00'
+             when (keyspecay.qdbfksq = x'00');
+                keyl0100.apksin = 'N';                                          // Unsigned
+                //*   OneByte       WHENEQ    x'20'
+             when (keyspecay.qdbfksq = x'20');
+                keyl0100.apksin = 'A';                                          // AbsVal
+                //*   OneByte       WHENEQ    x'40'
+             when (keyspecay.qdbfksq = x'40');
+                keyl0100.apksin = 'S';                                          // Signed
+             other;
+                keyl0100.apksin = '?';                                          // unknown
+             endsl;
+             //  Bit 3   - Reserved_60
+             //  Bit 4   - Qdbfksac - Alternate collating seq. indicator
+             //*                 EVAL      *in98 = %bitand(Qdbfksq: x'08') = x'08'
+            //*                 EVAL      OneByte = Qdbfksq                            Key statement
+             //*                 BITOFF    '0123567'     OneByte
+             //*                 TESTB     '4'           OneByte                  99
+             //*   *IN99         IFEQ      '1'
+             if (%bitand(keyspecay.qdbfksq: x'08') = x'08');
+                keyl0100.apkasq = 'Y';                                          // altern. seq.
+             else;
+                keyl0100.apkasq = 'N';                                          // no alt. seq.
+             endif;
+             //  Bit 5   - Qdbfkszf - Force zone  seq. indicator
+             //*                 EVAL      *in98 = %bitand(Qdbfksq: x'04') = x'04'
+            //*                 EVAL      OneByte = Qdbfksq                            Key statement
+             //*                 BITOFF    '0123467'     OneByte
+             //*                 TESTB     '5'           OneByte                  99
+             //*   *IN99         IFEQ      '1'
+             if (%bitand(keyspecay.qdbfksq: x'04') = x'04');
+                keyl0100.apkzd = 'Z';                                           // Zone
+             else;
+                //  Bit 6   - Qdbfksdf - Force digit seq. indicator
+                //*                 EVAL      *in98 = %bitand(Qdbfksq: x'02') = x'02'
+            //*                 EVAL      OneByte = Qdbfksq                            Key statement
+                //*                 BITOFF    '0123457'     OneByte
+                //*                 TESTB     '6'           OneByte                  99
+                //*   *IN99         IFEQ      '1'
+                if (%bitand(keyspecay.qdbfksq: x'02') = x'02');
+                   keyl0100.apkzd = 'D';                                        // Digit
+                else;
+                   keyl0100.apkzd = 'N';                                        // None
+                endif;
+             endif;
+             //  Bit 7   - Qdbfkft  - external / internal name indicator
+             //*                 EVAL      *in98 = %bitand(Qdbfksq: x'01') = x'01'
+            //*                 EVAL      OneByte = Qdbfksq                            Key statement
+             //*                 BITOFF    '0123456'     OneByte
+             //*                 TESTB     '7'           OneByte                  99
+             //*   *IN99         IFEQ      '1'
+             if (%bitand(keyspecay.qdbfksq: x'01') = x'01');
+                //**                EVAL      'E'     z.Z. kein Feld vorhanden             external
+             else;
+                //**                EVAL      'I'     z.Z. kein Feld vorhanden             internal
+             endif;
+
+             o_data = keyl0100;
+             o_nbrofent = posofkeyfd + 1;
+             //  pointer to next field
+             posofkeyfd = posofkeyfd + 1;
+          else;
+             o_nbrofent = *zeros;
+             o_data = *blanks;
+          endif;
+
+       endsr;
+
+       //====================================================*
+       //  SELECT --  set pointer to matching                *
+       //             file scope entry of select & omit      *
+       //====================================================*
+
+       begsr select;
+
+          exsr findrcdfmt;
+          if isfound = btrue;
+             //  store number of select/omit statements ...
+             nbrofslom = filescope.qdbfsoon;
+             posofslom = *zeros;
+          else;
+             //  no select/omit statements found ...
+             nbrofslom = *zeros;
+             posofslom = *hival;
+          endif;
+
+          o_nbrofent = nbrofslom;
+
+       endsr;
+
+       //====================================================*
+       //  ReadSelect  read select/omit one by one           *
+       //====================================================*
+
+       begsr readselect;
+
+          if posofslom < nbrofslom;
+
+             //  Set pointer to select/omit specification entry
+             offset = posofslom * §selspecay;
+             offset = offset + filescope.qdbfsoof;
+
+             pSelspecay = %addr(rcvVarTab(offset + 1));
+
+             clear sell0100;
+
+             sell0100.sorcen = fild0100.atrcen;    //  Jahrhundert
+             sell0100.sordat = fild0100.atrdat;    //  Datum
+             sell0100.sortim = fild0100.atrtim;    //  Uhrzeit
+             sell0100.sofile = fild0100.atfile;    //  Datei
+             sell0100.solib = fild0100.atlib;      //  Bibliothek
+             sell0100.softyp = fild0100.atftyp;    //  Dateiart
+             sell0100.sofila = fild0100.atfila;    //  Dateiattribut
+             sell0100.somxd = '';                  //  Reserviert
+             sell0100.sofatr = fild0100.atfatr;    //  Dateiattribut
+             sell0100.sosysn = fild0100.atsysn;    //  Systemname
+             sell0100.soasp = fild0100.atasp;      //  ASP Zusatzspeicher
+             sell0100.sores = '';                  //  Reserviert
+             sell0100.sonrul = nbrofslom;          //  Anzahl SELECT/OMIT Regeln
+             sell0100.sorfmt = filescope.qdbft;    //  Satzformat
+             sell0100.sorule = selspecay.qdbfssso; //  SELECT/OMIT Regel
+             sell0100.socomp = selspecay.qdbfssop; //  Vergleichoperator, z.B.:  EQ,NE,AL
+
+             //  Wenn SELECT/OMIT-Parameter vorhanden sind, ...
+             if (selspecay.qdbfsoso <= 0);
+                // ... es sind aber keine vorhanden
+             else;
+                // ... dann diese ermitteln und zurückliefern
+
+                // ... Feldname
+                sell0100.sofld = selspecay.qdbfssfn;
+                //      ... SELECT/OMIT Anzahl Vergleichswerte
+                sell0100.sonval = selspecay.qdbfsspnum;
+
+                // ... Zeiger auf den ersten Wert setzen ...
+                offset = selspecay.qdbfsoso;
+                pSelparmay = %addr(rcvVarTab(offset + 1));
+
+                // ...  ermitteln SELECT/OMIT Wert und Wertlänge
+                dow ('1');
+
+                   lenofslom = selparmay.qdbfspln - 20;
+
+                   if lenofslom >= 1
+                      and lenofslom <= 32;
+                      r_valu =
+                       %subst(selparmay.qdbfspvl: 1: lenofslom);
+                   else;
+                      r_valu = '';
+                   endif;
+
+                   // ... SELECT/OMIT Wert
+                   if (sell0100.sovalu = '');
+                      sell0100.sovalu = r_valu;
+                   else;
+                      sell0100.sovalu =
+                       %trimr(sell0100.sovalu) + ' ' + r_valu;
+                   endif;
+                   // ... SELECT/OMIT Wertlänge
+                   sell0100.sovall = lenofslom;
+
+                   // ... wenn weitere Werte vorhanden sind, ...
+                   if (selparmay.qdbfspno <> 0);
+                      //          ... dann den Zeiger auf den nächsten Wert ausrichten
+                      offset = selparmay.qdbfspno;
+                      pSelparmay = %addr(rcvVarTab(offset + 1));
+                   else;
+                      // ... ansonsten die Verarbeitung beenden
+                      leave;
+                   endif;
+
+                enddo;
+
+                //  DYNSLT
+                sell0100.sodyns = *blanks;
+                //  JREF Field
+                sell0100.sofjvl = selspecay.qdbfssfj;
+                //  JREF Parameter
+                sell0100.sopjvl = *zeros;
+             endif;
+
+             o_data = sell0100;
+
+             o_nbrofent = posofslom + 1;
+             //  pointer to next field
+             posofslom = posofslom + 1;
+          else;
+             o_nbrofent = *zeros;
+             o_data = *blanks;
+          endif;
+
+       endsr;
+
+       //====================================================*
+       //  ReadText--  read description of file              *
+       //====================================================*
+
+       begsr readtext;
+
+          //  Textbeschreibung
+          o_data = fild0100.attxt;
+          //*   ' '           CHECKR    XData         XPos
+          xpos = %checkr(' ': o_data);
+          o_nbrofent = xpos;
+
+       endsr;
+
+       //====================================================*
+       //  FindRcdFmt  find matching record format           *
+       //====================================================*
+
+       begsr findrcdfmt;
+
+          isfound = bFalse;
+          offset = filedefhd.qdbfos;
+          counter = filedefhd.qdbflbnum;
+
+          dow counter > 0;
+             pFilescpay = %addr(rcvVarTab(offset + 1));
+
+             if filescope.qdbft = i_rcdfmt or
+                i_rcdfmt = '*FIRST';
+                //  Record format generic key field count ...
+                isfound = btrue;
+                leave;
+             else;
+                //  No matching record format found ...
+                offset = offset + §filescpay;
+                isfound = bFalse;
+             endif;
+             counter = counter - 1;
+          enddo;
+
+       endsr;
+
+       //====================================================*
+       //  FindMbr     find member by number                 *
+       //====================================================*
+
+       begsr findmbr;
+
+          if mbrnbr < 1 or mbrnbr > filedefhd.qdbflbnum;
+             isfound = bFalse;
+          else;
+             offset = filedefhd.qdbfos +
+                     ((mbrnbr -1) * §filescpay);
+             pFilescpay = %addr(rcvVarTab(offset + 1));
+             isfound = btrue;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //  Program error handler                                     *
+       //============================================================*
+
+       dcl-proc errorhandler;
+       dcl-pi *N;
+         i_condtoken     value likeds(cee_fc_t);
+         i_pcommarea     int(10) value;
+         o_action        int(10);
+         o_newcondtoken  likeds(cee_fc_t);
+       end-pi;
+
+       dump;
+       o_action = cee_percolate;
+
+       end-proc;
+
