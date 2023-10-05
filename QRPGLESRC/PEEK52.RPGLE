@@ -88,6 +88,8 @@
       *
       /COPY QCOPYLE,CEECNDHDLR
       *
+     D set0012         ds                  likeds(set0012_t) inz
+      *
      D isInzSr         S                   like(bool_t) inz(bFalse)
       *
       ********************************************************************
@@ -560,11 +562,11 @@
       *
      C     FILL##        BEGSR
       *
-     C                   Eval      ##ALWLC   = SET_ALWLC
-     C                   Eval      ##CASE    = SET_CASE
-     C                   Eval      ##RCDLCK  = SET_RCD_LOCK
-     C                   Eval      ##NULLDFT = SET_NULL_DFT
-     C                   Eval      ##KEEPCRS = SET_KEEP_CRS
+     C                   Eval      ##ALWLC   = set0012.SET_ALWLC
+     C                   Eval      ##CASE    = set0012.SET_CASE
+     C                   Eval      ##RCDLCK  = set0012.SET_RCD_LOCK
+     C                   Eval      ##NULLDFT = set0012.SET_NULL_DFT
+     C                   Eval      ##KEEPCRS = set0012.SET_KEEP_CRS
      C                   Eval      ##SAVE    = bFalse
       *
      C                   ENDSR
@@ -609,11 +611,11 @@
      C     SavUsrSetg    BEGSR
       *
       *  *CRTPGM
-     C                   EVAL      SET_CASE = ##CASE
-     C                   EVAL      SET_RCD_LOCK = ##RCDLCK
-     C                   EVAL      SET_ALWLC = ##ALWLC
-     C                   EVAL      SET_NULL_DFT = ##NULLDFT
-     C                   EVAL      SET_KEEP_CRS = ##KEEPCRS
+     C                   EVAL      set0012.SET_CASE = ##CASE
+     C                   EVAL      set0012.SET_RCD_LOCK = ##RCDLCK
+     C                   EVAL      set0012.SET_ALWLC = ##ALWLC
+     C                   EVAL      set0012.SET_NULL_DFT = ##NULLDFT
+     C                   EVAL      set0012.SET_KEEP_CRS = ##KEEPCRS
      C                   Callp     p_updUsrSg('*CRTPGM': SET0012)
       *
      C                   ENDSR

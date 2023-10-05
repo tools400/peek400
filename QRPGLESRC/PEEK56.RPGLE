@@ -156,6 +156,8 @@
       *
       /COPY QCOPYLE,CEECNDHDLR
       *
+     D set0015         ds                  likeds(set0015_t) inz
+      *
      D isInzSr         S                   like(bool_t) inz(bFalse)
       *
       ********************************************************************
@@ -528,9 +530,9 @@
      C     VCtl          BEGSR
       *
       * - Funktion nicht freigeschaltet
-     C                   If        (##File = ' ') or
-     C                             (##Lib  = ' ') or
-     C                             (SET_ENVENA = bFalse)
+     C                   If        (##File = '' or
+     C                              ##Lib  = '' or
+     C                              set0015.SET_ENVENA = bFalse)
      C                   Clear                   USR8184
      C                   Callp     p_sndPgmMg('USR8184': USR8184: §§pgmName)
      C                   Eval      isCtlError = bTrue
@@ -1196,8 +1198,8 @@
      C                   CALLP     PEEK46(YQFile: '*ALL':  '*CREATE'
      C                                    : numMbr: MBRL0200)
       *
-     C                   Eval      SET_ENVFIL = ##File
-     C                   Eval      SET_ENVLIB = ##Lib
+     C                   Eval      set0015.SET_ENVFIL = ##File
+     C                   Eval      set0015.SET_ENVLIB = ##Lib
       *
      C                   Else
      C                   Clear                   USR8181
@@ -1334,7 +1336,7 @@
       *
       *  *ENVFILE
      C                   If        isPrdLib = bTrue
-     C                   Eval      SET_ENVLIB = '*PRDLIB'
+     C                   Eval      set0015.SET_ENVLIB = '*PRDLIB'
      C                   Endif
      C                   Callp     p_updUsrSg('*ENVFILE': SET0015)
       *
@@ -1416,8 +1418,8 @@
      C                   Eval      isPrdLib = bFalse
      C                   Endsl
       *
-     C                   If        (SET_ENVCHG =  bFalse )  or
-     C                             (SET_ENVENA =  bFalse )
+     C                   If        (set0015.SET_ENVCHG =  bFalse or
+     C                              set0015.SET_ENVENA =  bFalse )
      C                   Eval      *IN71 = *ON
      C                   Else
      C                   Eval      *IN71 = *OFF

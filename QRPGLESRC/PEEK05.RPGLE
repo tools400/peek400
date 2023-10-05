@@ -171,6 +171,19 @@
       /COPY QCOPYLE,PEXIT04
 
        dcl-ds set0001  likeds(set0001_t) inz;
+       dcl-ds set0002  likeds(set0002_t) inz;
+       dcl-ds set0003  likeds(set0003_t) inz;
+       dcl-ds set0005  likeds(set0005_t) inz;
+       dcl-ds set0006  likeds(set0006_t) inz;
+       dcl-ds set0007  likeds(set0007_t) inz;
+       dcl-ds set0008  likeds(set0008_t) inz;
+       dcl-ds set0009  likeds(set0009_t) inz;
+       dcl-ds set0010  likeds(set0010_t) inz;
+       dcl-ds set0011  likeds(set0011_t) inz;
+       dcl-ds set0013  likeds(set0013_t) inz;
+       dcl-ds set0014  likeds(set0014_t) inz;
+       dcl-ds set0015  likeds(set0015_t) inz;
+       dcl-ds set0016  likeds(set0016_t) inz;
 
        dcl-ds objd0400 likeds(objd0400_t) inz;
        dcl-ds rcdl0200 likeds(rcdl0200_t) inz;
@@ -700,7 +713,7 @@
           exsr getfrstfld;
 
           //  Öffnen/Schützen "Feldseite"
-          if set_fldpge = '1';
+          if (set0010.set_fldpge = '1');
              *in72 = '0';
           else;
              *in72 = '1';
@@ -955,18 +968,18 @@
           //  Datei hat gewechselt ...
           if ((##file    <> l#file) and
              (not f_endswith('*': %trim(##file))) and
-             (%trim(##file  ) <> set_prmt)) or
+             (%trim(##file  ) <> set0008.set_prmt)) or
              (##library  <> l#library      ) or
              ((##member  <> l#member) and
-             (%trim(##member) <> set_prmt)) or
+             (%trim(##member) <> set0008.set_prmt)) or
              ((##format  <> l#format) and
-             (%trim(##format) <> set_prmt));
+             (%trim(##format) <> set0008.set_prmt));
              *in93 = '1';
           else;
 
              //  Abfragen Prompt?
              //  ... ##File
-             if %trim(##file) = set_prmt or
+             if %trim(##file) = set0008.set_prmt or
                 f_endswith('*': %trim(##file));
                 exsr c_prompt;
                 if (*in93 = '0');
@@ -974,21 +987,21 @@
                 endif;
              endif;
              //  ... ##Member
-             if %trim(##member) = set_prmt;
+             if %trim(##member) = set0008.set_prmt;
                 exsr c_prompt;
                 if (*in93 = '0');
                    leavesr;
                 endif;
              endif;
              //  ... ##Format
-             if %trim(##format) = set_prmt;
+             if %trim(##format) = set0008.set_prmt;
                 exsr c_prompt;
                 if (*in93 = '0');
                    leavesr;
                 endif;
              endif;
              //  ... ##Field
-             if %trim(##field ) = set_prmt;
+             if %trim(##field ) = set0008.set_prmt;
                 exsr c_prompt;
                 if (*in93 = '0');
                    leavesr;
@@ -1098,7 +1111,7 @@
                    sfpau = %triml(sfpau);
 
                    //  Prompt ...
-                   if %trim(sfpau) = set_prmt;
+                   if %trim(sfpau) = set0008.set_prmt;
                       exsr pmt_sfpau;
                    endif;
 
@@ -1354,11 +1367,11 @@
 
              select;
              when ((scnfld   = '##FILE'  ) or
-                (##file   = set_prmt  ) or
+                (##file   = set0008.set_prmt  ) or
                 (f_endswith('*': %trim(##file))));
                 exsr pmt_file;
              when ((scnfld   = '##MEMBER') or
-                (##member = set_prmt  ));
+                (##member = set0008.set_prmt  ));
                 exsr pmt_mbr;
              other;
                 //      Nix tun, keine Datei vorhanden
@@ -1369,20 +1382,20 @@
 
              select;
              when ((scnfld   = '##FIELD ') or
-                (##field  = set_prmt  ));
+                (##field  = set0008.set_prmt  ));
                 exsr pmt_field;
              when ((scnfld   = '##FILE'  ) or
-                (##file   = set_prmt  ) or
+                (##file   = set0008.set_prmt  ) or
                 (f_endswith('*': %trim(##file))));
                 exsr pmt_file;
              when ((scnfld   = '##MEMBER') or
-                (##member = set_prmt  ));
+                (##member = set0008.set_prmt  ));
                 exsr pmt_mbr;
              when ((scnfld   = '##FORMAT') or
-                (##format = set_prmt  ));
+                (##format = set0008.set_prmt  ));
                 exsr pmt_fmt;
              when ((scnfld   = 'SFPAU'   ) or
-                (sfpau    = set_prmt  ));
+                (sfpau    = set0008.set_prmt  ));
                 exsr pmt_sfpau;
              other;
                 p_sndpgmmg('USR8179': '': §§pgmname);
@@ -1430,7 +1443,7 @@
              //  ... sonst
              //      aufrufen "Auswahl Datei"
              if ##file = *blanks
-                or ##file = set_prmt;
+                or ##file = set0008.set_prmt;
                 yFile = '*ALL';
              else;
                 yFile = ##file;
@@ -2021,8 +2034,8 @@
           else;
 
              if ##strpage > 1;
-                if set_scroll = '*BOTH'
-                   or set_scroll = '*LEFT';
+                if (set0010.set_scroll = '*BOTH'
+                    or set0010.set_scroll = '*LEFT');
                    ##strpage = ##strpage - 1;
                 else;
                    ##strpage = 1;
@@ -2030,8 +2043,8 @@
                 endif;
              else;
                 ##wndnbr = ##wndnbr - 1;
-                if set_scroll = '*BOTH'
-                   or set_scroll = '*LEFT';
+                if (set0010.set_scroll = '*BOTH'
+                    or set0010.set_scroll = '*LEFT');
                    ##strpage = *hival;
                 else;
                    ##strpage = 1;
@@ -2058,8 +2071,8 @@
 
              if (cp = 1) and
                 (col_error(cp) = bTrue);
-                if ((set_scroll = '*BOTH') or
-                   (set_scroll = '*RIGHT'));
+                if ((set0010.set_scroll = '*BOTH') or
+                   (set0010.set_scroll = '*RIGHT'));
                    ##strpage = ##strpage + 1;
                 else;
                    ##wndnbr = ##wndnbr + 1;
@@ -2113,8 +2126,8 @@
                 if isSeqNbrOK = bTrue;
                    exsr getprvseq;
                    ##wndnbr = wrk#seqnbr;
-                   if set_scroll = '*BOTH'
-                      or set_scroll = '*LEFT';
+                   if (set0010.set_scroll = '*BOTH'
+                      or set0010.set_scroll = '*LEFT');
                       ##strpage = *hival;
                    else;
                       ##strpage = 1;
@@ -2188,8 +2201,8 @@
                 if col_error(cp) = bTrue;
                    if cp - nbrPinCol = 1;
 
-                      if set_scroll = '*BOTH'
-                         or set_scroll = '*RIGHT';
+                      if (set0010.set_scroll = '*BOTH'
+                          or set0010.set_scroll = '*RIGHT');
                          ##wndnbr = wrk#seqnbr;
                          ##strpage = ##strpage + 1;
                       else;
@@ -2444,8 +2457,7 @@
           endif;
 
           //  "Nachschießen" SPLASH-Screen
-          if yflag = 243
-             and set_spla = bFalse;
+          if (yflag = 243 and set0005.set_spla = bFalse);
              exsr s_splashon;
              exsr showsplash;
           endif;
@@ -3217,7 +3229,7 @@
 
        begsr s_splashon;
 
-          set_spla = bTrue;
+          set0005.set_spla = bTrue;
 
           p_sndpgmmg('USR8161': '': §§pgmname);
 
@@ -3229,7 +3241,7 @@
 
        begsr s_splashof;
 
-          set_spla = bFalse;
+          set0005.set_spla = bFalse;
 
           p_sndpgmmg('USR8162': '': §§pgmname);
 
@@ -3964,7 +3976,7 @@
              or srchop = 'NLIKE';
              //      ... führendes %-Zeichen
              a1 = %subst(srcharg:1:1);
-             if a1 = set_wldcd;
+             if a1 = set0002.set_wldcd;
                 srcharg = %subst(srcharg:2);
                 srchliketp = 1;
              else;
@@ -3977,7 +3989,7 @@
              if x > §zeros;
                 a1 = %subst(srcharg: x: 1);
 
-                if a1 = set_wldcd;
+                if a1 = set0002.set_wldcd;
                    x = x - 1;
                    if x > §zeros;
                       srcharg = %subst(srcharg: 1: x);
@@ -4035,7 +4047,7 @@
                 srchargfloat = 0;
                 srchargisfloat = bFalse;
              endif;
-             if srchsign = set_signm;
+             if srchsign = set0003.set_signm;
                 //  ... negativen Wert erzeugen
                 srchargval = srchargval * -1;
                 srchargfloat = srchargfloat * -1;
@@ -7066,7 +7078,7 @@
           endif;
 
           if accessMode = sql_seq;
-             if $$records > set_maxrcds;
+             if ($$records > set0016.set_maxrcds);
                 $$records = 0;
                 *in79 = *off;
                 $$lmtcnt = '*SQLLMTCNT';
@@ -7387,10 +7399,10 @@
           //  *DFTDSPMDE
           set0011 = f_getusrsg('*DFTDSPMDE');
 
-          if set_dftmde = '*LAST';
+          if (set0011.set_dftmde = '*LAST');
              //    ... Modus belassen
           else;
-             set0001.set_dspmde = set_dftmde;
+             set0001.set_dspmde = set0011.set_dftmde;
           endif;
 
           select;
@@ -7411,7 +7423,7 @@
           //  ... Verknüpfen *SECATRDFT mit Eingabeparametern ...
           //      ... ##Library
           if i_chglib = '*';
-             if set_chglib = '1';
+             if (set0013.set_chglib = '1');
                 auth.isChgLibAlw = bTrue;
              else;
                 auth.isChgLibAlw = bFalse;
@@ -7426,7 +7438,7 @@
 
           //      ... ##File
           if i_chgfile = '*';
-             if set_chgfil  = '1';
+             if (set0013.set_chgfil  = '1');
                 auth.isChgFileAlw = bTrue;
              else;
                 auth.isChgFileAlw = bFalse;
@@ -7441,7 +7453,7 @@
 
           //      ... ##Member
           if i_chgmbr = '*';
-             if set_chgmbr = '1';
+             if (set0013.set_chgmbr = '1');
                 auth.isChgMbrAlw = bTrue;
              else;
                 auth.isChgMbrAlw = bFalse;
@@ -7455,50 +7467,50 @@
           endif;
 
           //      ... updMod
-          if (i_updmodkey = upd_m_dft  );
-             if set_updmod = '1';
-                auth.isUpdAlw    = bTrue;
+          if (i_updmodkey = upd_m_dft);
+             if (set0013.set_updmod = '1');
+                auth.isUpdAlw = bTrue;
              else;
-                auth.isUpdAlw    = bFalse;
+                auth.isUpdAlw = bFalse;
              endif;
           else;
-             if (i_updmodkey = upd_m_yes  )  or
-                (i_updmodkey = upd_m_nokey);
-                auth.isUpdAlw    = bTrue;
+             if (i_updmodkey = upd_m_yes or
+                 i_updmodkey = upd_m_nokey);
+                auth.isUpdAlw = bTrue;
              else;
-                auth.isUpdAlw    = bFalse;
+                auth.isUpdAlw = bFalse;
              endif;
           endif;
 
           //      ... keyUpd
-          if (i_updmodkey = upd_m_dft  )  or
-             (i_updmodkey = upd_m_yes  );
-             auth.isUpdKeyAlw    = bTrue;
+          if (i_updmodkey = upd_m_dft or
+              i_updmodkey = upd_m_yes);
+             auth.isUpdKeyAlw = bTrue;
           else;
-             auth.isUpdKeyAlw    = bFalse;
+             auth.isUpdKeyAlw = bFalse;
           endif;
 
           //      ... chgSqlW
-          if (i_chgsqlw = upd_m_dft  )  or
-             (i_chgsqlw = upd_m_yes  );
+          if (i_chgsqlw = upd_m_dft or
+              i_chgsqlw = upd_m_yes);
              auth.isChgSQLWhereAlw = bTrue;
           else;
              auth.isChgSQLWhereAlw = bFalse;
           endif;
 
           //      ... chgSqlO
-          if (i_chgsqlo = upd_m_dft  )  or
-             (i_chgsqlo = upd_m_yes  );
+          if (i_chgsqlo = upd_m_dft or
+              i_chgsqlo = upd_m_yes);
              auth.isChgSQLOrderByAlw = bTrue;
           else;
              auth.isChgSQLOrderByAlw = bFalse;
           endif;
 
           //      ... accAut
-          if set_accaut = '1';
-             auth.isAccessAlw    = bTrue;
+          if (set0013.set_accaut = '1');
+             auth.isAccessAlw = bTrue;
           else;
-             auth.isAccessAlw    = bFalse;
+             auth.isAccessAlw = bFalse;
           endif;
 
           //  *PRVFILE
@@ -7688,9 +7700,9 @@
 
        begsr floatkeys;
 
-          if (set_float  = bTrue)     and
-             ((accessMode = key_seq)  or
-             (accessMode = sql_seq));
+          if (set0009.set_float  = bTrue) and
+             ((accessMode = key_seq) or
+              (accessMode = sql_seq));
 
              monitor;
                 peek34(set0001.set_dsp80: §copyright: '*FLOATKEYS'
@@ -7788,8 +7800,8 @@
              if ##wndnbr > l#maxseq;
                 ##wndnbr = l#maxseq;
                 p_sndpgmmg('USR8116': '': §§pgmname);
-                if set_scroll = '*BOTH'
-                   or set_scroll = '*RIGHT';
+                if (set0010.set_scroll = '*BOTH'
+                    or set0010.set_scroll = '*RIGHT');
                    ##strpage = *hival;
                 else;
                    ##strpage = 1;
@@ -7844,8 +7856,8 @@
      C                   mult      2             sflpinrnge
 
        //  Prompt-Felder anzeigen ...
-          if set_dsppmt = bTrue
-             and *in77 = *off;
+          if (set0008.set_dsppmt = bTrue
+             and *in77 = *off);
              *in71 = '1';
           else;
              *in71 = '0';
@@ -7880,7 +7892,7 @@
 
        begsr showsplash;
 
-          if set_spla = bFalse;
+          if (set0005.set_spla = bFalse);
              //            kein Splash-Screen
           else;
              write splash01;
@@ -7894,7 +7906,7 @@
 
        begsr chkversion;
 
-          if set_vsn <> §version;
+          if (set0007.set_vsn <> §version);
              peek33(§version: yMsgID: yMsgDta);
           else;
              //  Kein Abgleich erforderlich ...
@@ -7910,18 +7922,18 @@
 
           //  Datei ...
           if ##file = '*PRV';
-             if set_prvfil  <> '*NONE';
-                ##file = set_prvfil;
+             if (set0014.set_prvfil  <> '*NONE');
+                ##file = set0014.set_prvfil;
              endif;
              //  Bibliothek ...
-             if set_prvlib  <> '*NONE';
-                ##library = set_prvlib;
+             if (set0014.set_prvlib  <> '*NONE');
+                ##library = set0014.set_prvlib;
              else;
                 ##library = ' ';
              endif;
              //  Teildatei ...
-             if set_prvmbr  <> '*NONE';
-                ##member = set_prvmbr;
+             if (set0014.set_prvmbr  <> '*NONE');
+                ##member = set0014.set_prvmbr;
              else;
                 ##member = ' ';
              endif;
@@ -8072,13 +8084,13 @@
 
           // - laden Arbeitsumgebung / öffnen Datei
           if i_qenvfile.name = '*NONE';
-             yenvfile = set_envfil;
-             yenvlib  = set_envlib;
+             yenvfile = set0015.set_envfil;
+             yenvlib  = set0015.set_envlib;
              yenvmbr  = '*FILE';
           else;
              if i_qenvfile.name = '*ENVFILE';
-                yenvfile = set_envfil;
-                yenvlib  = set_envlib;
+                yenvfile = set0015.set_envfil;
+                yenvlib  = set0015.set_envlib;
                 yenvmbr  = '*FILE';
              else;
                 yenvfile = i_qenvfile.name;
@@ -8101,9 +8113,9 @@
           if isopen = bTrue;
              //  ... dann
              //      abspeichern *PRVFILE
-             set_prvfil  = ##file;
-             set_prvlib  = ##library;
-             set_prvmbr  = ##member;
+             set0014.set_prvfil  = ##file;
+             set0014.set_prvlib  = ##library;
+             set0014.set_prvmbr  = ##member;
              p_updusrsg('*PRVFILE' : set0014);
           endif;
 

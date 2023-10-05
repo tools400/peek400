@@ -3,7 +3,7 @@
       * SET0007   *VERSION
       *---------------------------------------------------------------
       *
-     D SET0007         DS           256
+     D SET0007_t       DS           256    qualified template
       *  Versionsnummer ...
      D  SET_VSN                       9A   INZ('V00R00M00')
       *  ... Version

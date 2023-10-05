@@ -65,6 +65,8 @@
       /COPY QCOPYLE,FLDL0100
       *----------------------------------------------------*
       *
+       dcl-ds set0006  likeds(set0006_t) inz;
+      *
       *----------------------------------------------------*
       *  I N F D S - D E F I N I T I O N E N               *
       *----------------------------------------------------*
@@ -384,7 +386,7 @@
      C                   Else
      C                   Eval      pTmpHexBin = %subst(pFldInhaltSbcs:pStartPos)
      C                   For       x = 1 to %len($EXPSTRING)
-     C                   If        %subst($EXPSTRING: x: 1) <> SET_CVTC
+     C                   If        %subst($EXPSTRING: x: 1) <> set0006.SET_CVTC
      C                   Eval      %subst(pTmpHexBin: x: 1) =
      C                                   %subst($EXPSTRING: x: 1)
      C                   Endif

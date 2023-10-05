@@ -3,7 +3,7 @@
       * SET0013   *SECATRDFT
       *---------------------------------------------------------------
       *
-     D SET0013         DS           256
+     D SET0013_t       DS           256    qualified template
       *  Ändern Bibliothek erlaubt: 1=Ja; 0=Nein
      D  SET_CHGLIB                    1A   INZ('1')
       *  Ändern Datei erlaubt: 1=Ja; 0=Nein

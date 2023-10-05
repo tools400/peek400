@@ -15,6 +15,14 @@
       *  Initialisieren PEEKUSR.                                      *
       *                                                               *
       *===============================================================*
+      * >>PRE-COMPILER<<                                              *
+      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
+      *   >>EXECUTE<<                                                 *
+      * >>END-PRE-COMPILER<<                                          *
+      *===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
       *
@@ -26,6 +34,8 @@
       *
      D XLib            S             10A
      D XLang4          S              4A
+      *
+     D set0004         DS                  likeds(SET0004_t) inz
       *
       /COPY QCOPYLE,D_VARDEF
       /COPY QCOPYLE,SET0004                        Spracheinstellungen
@@ -58,7 +68,7 @@
          chain %kds(key) FPEEKUSR;
          if (%found(PEEKUSR));
             SET0004 = S_DATA;
-            SET_LANG = XLang4;
+            set0004.SET_LANG = XLang4;
             S_DATA = SET0004;
             update FPEEKUSR;
          endif;

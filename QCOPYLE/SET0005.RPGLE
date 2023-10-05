@@ -3,7 +3,7 @@
       * SET0005   *SPLASH
       *---------------------------------------------------------------
       *
-     D SET0005         DS           256
+     D SET0005_t       DS           256    qualified template
       *  Splash-Screen anzeigen: 1=Ja; 0=Nein
      D  SET_SPLA                      1A   INZ(bTrue)
       *  Endemarkierung

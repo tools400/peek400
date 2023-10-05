@@ -3,7 +3,7 @@
       * SET0009   *FLOATKEYS
       *---------------------------------------------------------------
       *
-     D SET0009         DS           256
+     D SET0009_t       DS           256    qualified template
       *  Schlüsselfelder an den Anfang sortieren
      D  SET_FLOAT                     1A   INZ(bTrue)
       *  Endemarkierung

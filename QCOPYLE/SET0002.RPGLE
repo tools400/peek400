@@ -3,7 +3,7 @@
       * SET0002   *SEARCH
       *---------------------------------------------------------------
       *
-     D SET0002         DS           256
+     D SET0002_t       DS           256    qualified template
       *  Jokerzeichen
      D  SET_WldCd                     1A   INZ('%')
       *  Max. Anzahl zu durchsuchender Datensätze

@@ -256,6 +256,8 @@
      D pMsgID          S                   like(msgID_t)
      D pMsgDta         S                   like(msgDta_t)
       *
+     D set0015         ds                  likeds(set0015_t) inz
+      *
       /COPY QCOPYLE,USR8234
       *---------------------------------------------------*
       *
@@ -269,8 +271,8 @@
       *  ... *ENVFILE
      C                   When      i_envFile = '*ENVFILE'
      C                   Eval      SET0015 = f_getUsrSg('*ENVFILE'  )
-     C                   Eval      i_envFile = SET_EnvFil
-     C                   Eval      i_envLib  = SET_EnvLib
+     C                   Eval      i_envFile = set0015.SET_EnvFil
+     C                   Eval      i_envLib  = set0015.SET_EnvLib
      C                   Other
       *  ... genau diese Datei
      C                   Endsl

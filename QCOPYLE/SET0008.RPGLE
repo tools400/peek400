@@ -3,7 +3,7 @@
       * SET0008   *PROMPT
       *---------------------------------------------------------------
       *
-     D SET0008         DS           256
+     D SET0008_t       DS           256    qualified template
       *  Zeichen für Promptfunktion
      D  SET_PRMT                      1A   INZ('?')
       *  F4-Felder farbig markieren

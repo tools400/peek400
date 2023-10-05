@@ -3,7 +3,7 @@
       * SET0010   *SCROLL
       *---------------------------------------------------------------
       *
-     D SET0010         DS           256
+     D SET0010_t       DS           256    qualified template
       *  Horizontaler Scrollmodus: *BOTH=beide Richtungen; *RIGHT=nur nach rechts
       *                            *LEFT=nur nach links;   *NONE =nicht scrollen
      D  SET_SCROLL                   10A   INZ('*BOTH')

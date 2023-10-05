@@ -3,7 +3,7 @@
       * SET0012   *CRTPGM
       *---------------------------------------------------------------
       *
-     D SET0012         DS           256
+     D SET0012_t       DS           256    qualified template
       *  Kleinbuchstaben erlaubt: 1=Ja; 0=Nein
      D  SET_ALWLC                     1A   INZ('1')
       *  Standardm‰ﬂig Klienbuchstaben: 1=Ja; 0=Nein

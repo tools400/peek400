@@ -119,6 +119,8 @@
       *
       /COPY QCOPYLE,CEECNDHDLR
       *
+     D set0008         ds                  likeds(set0008_t) inz
+      *
      D isInzSr         S                   like(bool_t) inz(bFalse)
       *
       ********************************************************************
@@ -368,16 +370,16 @@
      C     C_Prompt      BEGSR
       *
      C                   SELECT
-     C     tempScnFld    WHENEQ    '##WHERE'
-     C     ##WHERE       OREQ      SET_PRMT
+     C                   WHEN      (tempScnFld = '##WHERE' or
+     C                              ##WHERE = set0008.SET_PRMT)
      C                   IF        *IN71 = *ON
      C                   Callp     p_sndPgmMg('USR8195': '': §§pgmName)
      C                   ELSE
      C                   EXSR      Pmt_Field
      C                   ENDIF
       *
-     C     tempScnFld    WHENEQ    '##ORDER'
-     C     ##ORDER       OREQ      SET_PRMT
+     C                   WHEN      (tempScnFld = '##ORDER' or
+     C                              ##WHERE = set0008.SET_PRMT)
      C                   IF        *IN72 = *ON
      C                   Callp     p_sndPgmMg('USR8195': '': §§pgmName)
      C                   ELSE

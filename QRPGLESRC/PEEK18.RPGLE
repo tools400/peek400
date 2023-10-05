@@ -61,6 +61,8 @@
       /COPY QCOPYLE,F_PEEK58
       /COPY QCOPYLE,F_PEEK71
 
+       dcl-ds set0003  likeds(set0003_t) inz;
+
        dcl-ds fldl0100 likeds(fldl0100_t) inz;
 
        dcl-s ymsgid          char(7);
@@ -112,8 +114,8 @@
 
        dcl-s htranscoder     like(htranscoder_t ) inz;
 
-       dcl-s set§signp             like(set_signp) inz('+');
-       dcl-s set§signm             like(set_signm) inz('-');
+       dcl-s set§signp       like(set0003.set_signp) inz('+');
+       dcl-s set§signm       like(set0003.set_signm) inz('-');
 
        dcl-s r_tgtvalue      like(i_tgtvalue) inz(*blanks);
        dcl-s r_dateiso       date(*iso) inz(*loval );
@@ -532,7 +534,7 @@
 
        begsr chgSign;
 
-          if set_signx = bFalse;
+          if (set0003.set_signx = bFalse);
              // ohne Vorzeichen ausgeben
              isMinus = bFalse;
           else;
@@ -555,7 +557,7 @@
 
        begsr chgSignFloat;
 
-          if set_signx = bFalse;
+          if (set0003.set_signx = bFalse);
              // ohne Vorzeichen ausgeben
              isMinus = bFalse;
           else;
@@ -578,18 +580,18 @@
 
        begsr addSign;
 
-          if (set_signx = bFalse);
+          if (set0003.set_signx = bFalse);
              // ohne Vorzeichen ausgeben
           else;
              if (isMinus = bTrue);
-                if set§signm = *blanks;
+                if (set§signm = '');
                    o_buffer = %trimr(o_buffer) + ' ';
                 else;
                    o_buffer = %trimr(o_buffer) + set§signm;
                 endif;
                 o_bufflen = o_bufflen + 1;
              else;
-                if set§signp = *blanks;
+                if (set§signp = '');
                    o_buffer = %trimr(o_buffer) + ' ';
                 else;
                    o_buffer = %trimr(o_buffer) + set§signp;
@@ -606,13 +608,13 @@
 
        begsr addDelimiter;
 
-          if (set_dlmtr = '');
+          if (set0003.set_dlmtr = '');
              // ohne Delimeter ausgeben
           else;
              if o_bufflen < rcd_buff_len;
                 o_bufflen = o_bufflen + 1;
                 %subst(
-                 o_buffer: o_bufflen: 1) = set_dlmtr;
+                 o_buffer: o_bufflen: 1) = set0003.set_dlmtr;
              else;
                 // Pufferbereich zu klein ...
              endif;
@@ -1069,7 +1071,7 @@
           when r_tgtvalue = '*CURRENT';
 
              //  ... Vorzeichen
-             if (set_signx = bFalse);
+             if (set0003.set_signx = bFalse);
                 // ohne Vorzeichen
              else;
                 // mit Vorzeichen
@@ -1148,7 +1150,7 @@
              endif;
 
              //  ... Vorzeichen
-             if set_signx = bFalse;
+             if (set0003.set_signx = bFalse);
                 // ohne Vorzeichen
              else;
                 // mit Vorzeichen
@@ -1322,16 +1324,16 @@
           //  *ACCESSKEY
           set0003 = f_getusrsg('*ACCESSKEY');
 
-          if (set_signp = '');
+          if (set0003.set_signp = '');
              set§signp = '';
           else;
-             set§signp = set_signp;
+             set§signp = set0003.set_signp;
           endif;
 
-          if (set_signm = '');
+          if (set0003.set_signm = '');
              set§signm = '-';
           else;
-             set§signm = set_signm;
+             set§signm = set0003.set_signm;
           endif;
 
        endsr;

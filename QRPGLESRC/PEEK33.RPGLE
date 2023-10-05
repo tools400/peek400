@@ -42,6 +42,10 @@
 
       /COPY QCOPYLE,F_PEEK53
 
+       dcl-ds set0007  likeds(set0007_t) inz;
+       dcl-ds set0012  likeds(set0012_t) inz;
+       dcl-ds set0016  likeds(set0016_t) inz;
+
        //  Vor V3.0.0
        dcl-ds set0012_alt qualified;
          //  Kleinbuchstaben erlaubt: 1=Ja; 0=Nein
@@ -133,7 +137,7 @@
        exsr getUsrSetg;
 
        //  Vergleichen mit jetziger Versions-Nr. ...
-       if set_vsn <> i_version;
+       if (set0007.set_vsn <> i_version);
           //  ... und bei Abweichungen den
           //      Aktualisierungsvorgang starten
           exsr vpos;
@@ -150,109 +154,109 @@
 
           //  Schleife solabge durchlaufen, bis das
           //  der jetzige Versionsstand erreicht worden ist.
-          dow set_vsn <= i_version;
+          dow (set0007.set_vsn <= i_version);
 
              //  ... aktualiseren der früheren Versionsstände
              select;
-             when set_vsn < 'V01R01M00';
+             when set0007.set_vsn < 'V01R01M00';
                 exsr v01r01m00;
-             when set_vsn < 'V01R02M00';
+             when set0007.set_vsn < 'V01R02M00';
                 exsr v01r02m00;
-             when set_vsn < 'V01R03M00';
+             when set0007.set_vsn < 'V01R03M00';
                 exsr v01r03m00;
-             when set_vsn < 'V01R04M00';
+             when set0007.set_vsn < 'V01R04M00';
                 exsr v01r04m00;
-             when set_vsn < 'V01R05M00';
+             when set0007.set_vsn < 'V01R05M00';
                 exsr v01r05m00;
-             when set_vsn < 'V01R05M01';
+             when set0007.set_vsn < 'V01R05M01';
                 exsr v01r05m01;
-             when set_vsn < 'V02R00M00';
+             when set0007.set_vsn < 'V02R00M00';
                 exsr v02r00m00;
-             when set_vsn < 'V02R01M00';
+             when set0007.set_vsn < 'V02R01M00';
                 exsr v02r01m00;
-             when set_vsn < 'V02R01M01';
+             when set0007.set_vsn < 'V02R01M01';
                 exsr v02r01m01;
-             when set_vsn < 'V02R02M00';
+             when set0007.set_vsn < 'V02R02M00';
                 exsr v02r02m00;
-             when set_vsn < 'V02R02M01';
+             when set0007.set_vsn < 'V02R02M01';
                 exsr v02r02m01;
-             when set_vsn < 'V02R02M02';
+             when set0007.set_vsn < 'V02R02M02';
                 exsr v02r02m02;
-             when set_vsn < 'V02R03M00';
+             when set0007.set_vsn < 'V02R03M00';
                 exsr v02r03m00;
-             when set_vsn < 'V02R03M01';
+             when set0007.set_vsn < 'V02R03M01';
                 exsr v02r03m01;
-             when set_vsn < 'V02R03M02';
+             when set0007.set_vsn < 'V02R03M02';
                 exsr v02r03m02;
-             when set_vsn < 'V02R04M00';
+             when set0007.set_vsn < 'V02R04M00';
                 exsr v02r04m00;
-             when set_vsn < 'V02R04M01';
+             when set0007.set_vsn < 'V02R04M01';
                 exsr v02r04m01;
-             when set_vsn < 'V02R04M02';
+             when set0007.set_vsn < 'V02R04M02';
                 exsr v02r04m02;
-             when set_vsn < 'V03R00M00';
+             when set0007.set_vsn < 'V03R00M00';
                 exsr v03r00m00;
-             when set_vsn < 'V03R01M00';
+             when set0007.set_vsn < 'V03R01M00';
                 exsr v03r01m00;
-             when set_vsn < 'V03R01M01';
+             when set0007.set_vsn < 'V03R01M01';
                 exsr v03r01m01;
-             when set_vsn < 'V03R01M02';
+             when set0007.set_vsn < 'V03R01M02';
                 exsr v03r01m02;
-             when set_vsn < 'V03R01M03';
+             when set0007.set_vsn < 'V03R01M03';
                 exsr v03r01m03;
-             when set_vsn < 'V03R01M04';
+             when set0007.set_vsn < 'V03R01M04';
                 exsr v03r01m04;
-             when set_vsn < 'V03R01M05';
+             when set0007.set_vsn < 'V03R01M05';
                 exsr v03r01m05;
-             when set_vsn < 'V03R01M06';
+             when set0007.set_vsn < 'V03R01M06';
                 exsr v03r01m06;
-             when set_vsn < 'V03R02M00';
+             when set0007.set_vsn < 'V03R02M00';
                 exsr v03r02m00;
-             when set_vsn < 'V03R02M01';
+             when set0007.set_vsn < 'V03R02M01';
                 exsr v03r02m01;
-             when set_vsn < 'V03R02M02';
+             when set0007.set_vsn < 'V03R02M02';
                 exsr v03r02m02;
-             when set_vsn < 'V03R02M03';
+             when set0007.set_vsn < 'V03R02M03';
                 exsr v03r02m03;
-             when set_vsn < 'V03R02M04';
+             when set0007.set_vsn < 'V03R02M04';
                 exsr v03r02m04;
-             when set_vsn < 'V03R02M05';
+             when set0007.set_vsn < 'V03R02M05';
                 exsr v03r02m05;
-             when set_vsn < 'V03R02M06';
+             when set0007.set_vsn < 'V03R02M06';
                 exsr v03r02m06;
-             when set_vsn < 'V03R03M00';
+             when set0007.set_vsn < 'V03R03M00';
                 exsr v03r03m00;
-             when set_vsn < 'V03R03M01';
+             when set0007.set_vsn < 'V03R03M01';
                 exsr v03r03m01;
-             when set_vsn < 'V03R03M02';
+             when set0007.set_vsn < 'V03R03M02';
                 exsr v03r03m02;
-             when set_vsn < 'V03R03M03';
+             when set0007.set_vsn < 'V03R03M03';
                 exsr v03r03m03;
-             when set_vsn < 'V03R04M00';
+             when set0007.set_vsn < 'V03R04M00';
                 exsr v03r04m00;
-             when set_vsn < 'V03R04M01';
+             when set0007.set_vsn < 'V03R04M01';
                 exsr v03r04m01;
-             when set_vsn < 'V03R04M02';
+             when set0007.set_vsn < 'V03R04M02';
                 exsr v03r04m02;
-             when set_vsn < 'V03R04M03';
+             when set0007.set_vsn < 'V03R04M03';
                 exsr v03r04m03;
-             when set_vsn < 'V03R05M00';
+             when set0007.set_vsn < 'V03R05M00';
                 exsr v03r05m00;
-             when set_vsn < 'V03R05M01';
+             when set0007.set_vsn < 'V03R05M01';
                 exsr v03r05m01;
-             when set_vsn < 'V03R05M02';
+             when set0007.set_vsn < 'V03R05M02';
                 exsr v03r05m02;
-             when set_vsn < 'V03R05M03';
+             when set0007.set_vsn < 'V03R05M03';
                 exsr v03r05m03;
-             when set_vsn < 'V03R05M04';
+             when set0007.set_vsn < 'V03R05M04';
                 exsr v03r05m04;
-             when set_vsn < 'V03R05M05';
+             when set0007.set_vsn < 'V03R05M05';
                 exsr v03r05m05;
-             when set_vsn < 'V03R05M06';
+             when set0007.set_vsn < 'V03R05M06';
                 exsr v03r05m06;
-             when set_vsn < 'V03R05M07';
+             when set0007.set_vsn < 'V03R05M07';
                 exsr v03r05m07;
-             when set_vsn < 'V03R05M08';
+             when set0007.set_vsn < 'V03R05M08';
                 exsr v03r05m08;
              other;
                 leave;
@@ -274,7 +278,7 @@
           wrkelem = elm010100;
           exsr updpeekusr;
 
-          set_vsn = 'V01R01M00';
+          set0007.set_vsn = 'V01R01M00';
 
        endsr;
 
@@ -288,7 +292,7 @@
           wrkelem = elm010200;
           exsr updpeekusr;
 
-          set_vsn = 'V01R02M00';
+          set0007.set_vsn = 'V01R02M00';
 
        endsr;
 
@@ -302,7 +306,7 @@
           wrkelem = elm010300;
           exsr updpeekusr;
 
-          set_vsn = 'V01R03M00';
+          set0007.set_vsn = 'V01R03M00';
 
        endsr;
 
@@ -316,7 +320,7 @@
           wrkelem = elm010400;
           exsr updpeekusr;
 
-          set_vsn = 'V01R04M00';
+          set0007.set_vsn = 'V01R04M00';
 
        endsr;
 
@@ -330,7 +334,7 @@
           wrkelem = elm010500;
           exsr updpeekusr;
 
-          set_vsn = 'V01R05M00';
+          set0007.set_vsn = 'V01R05M00';
 
        endsr;
 
@@ -340,7 +344,7 @@
 
        begsr v01r05m01;
 
-          set_vsn = 'V01R05M01';
+          set0007.set_vsn = 'V01R05M01';
 
        endsr;
 
@@ -354,7 +358,7 @@
           wrkelem = elm020000;
           exsr updpeekusr;
 
-          set_vsn = 'V02R00M00';
+          set0007.set_vsn = 'V02R00M00';
 
        endsr;
 
@@ -368,7 +372,7 @@
           wrkelem = elm020100;
           exsr updpeekusr;
 
-          set_vsn = 'V02R01M00';
+          set0007.set_vsn = 'V02R01M00';
 
        endsr;
 
@@ -378,7 +382,7 @@
 
        begsr v02r01m01;
 
-          set_vsn = 'V02R01M01';
+          set0007.set_vsn = 'V02R01M01';
 
        endsr;
 
@@ -392,7 +396,7 @@
           wrkelem = elm020200;
           exsr updpeekusr;
 
-          set_vsn = 'V02R02M00';
+          set0007.set_vsn = 'V02R02M00';
 
        endsr;
 
@@ -402,7 +406,7 @@
 
        begsr v02r02m01;
 
-          set_vsn = 'V02R02M01';
+          set0007.set_vsn = 'V02R02M01';
 
        endsr;
 
@@ -412,7 +416,7 @@
 
        begsr v02r02m02;
 
-          set_vsn = 'V02R02M02';
+          set0007.set_vsn = 'V02R02M02';
 
        endsr;
 
@@ -422,7 +426,7 @@
 
        begsr v02r03m00;
 
-          set_vsn = 'V02R03M00';
+          set0007.set_vsn = 'V02R03M00';
 
        endsr;
 
@@ -432,7 +436,7 @@
 
        begsr v02r03m01;
 
-          set_vsn = 'V02R03M01';
+          set0007.set_vsn = 'V02R03M01';
 
        endsr;
 
@@ -442,7 +446,7 @@
 
        begsr v02r03m02;
 
-          set_vsn = 'V02R03M02';
+          set0007.set_vsn = 'V02R03M02';
 
        endsr;
 
@@ -452,7 +456,7 @@
 
        begsr v02r04m00;
 
-          set_vsn = 'V02R04M00';
+          set0007.set_vsn = 'V02R04M00';
 
        endsr;
 
@@ -462,7 +466,7 @@
 
        begsr v02r04m01;
 
-          set_vsn = 'V02R04M01';
+          set0007.set_vsn = 'V02R04M01';
 
        endsr;
 
@@ -472,7 +476,7 @@
 
        begsr v02r04m02;
 
-          set_vsn = 'V02R04M02';
+          set0007.set_vsn = 'V02R04M02';
 
        endsr;
 
@@ -486,7 +490,7 @@
           wrkelem = elm030000;
           exsr updpeekusr;
 
-          set_vsn = 'V03R00M00';
+          set0007.set_vsn = 'V03R00M00';
 
           //  Umsetzen Datenstruktur "Generieren Programme" (*CRTPGM, SET0012)
           set0012_alt = f_getusrsg('*CRTPGM');
@@ -497,9 +501,9 @@
              set0012_alt.set_case  = '1'   ) and
              (set0012_alt.set_0012  = x'8B' );
              reset set0012;
-             set_alwlc = set0012_alt.set_alwlc;
-             set_case  = set0012_alt.set_case;
-             set_0012  = set0012_alt.set_0012;
+             set0012.set_alwlc = set0012_alt.set_alwlc;
+             set0012.set_case  = set0012_alt.set_case;
+             set0012.set_0012  = set0012_alt.set_0012;
              p_updusrsg('*CRTPGM': set0012);
           endif;
 
@@ -515,7 +519,7 @@
           wrkelem = elm030100;
           exsr updpeekusr;
 
-          set_vsn = 'V03R01M00';
+          set0007.set_vsn = 'V03R01M00';
 
        endsr;
 
@@ -529,7 +533,7 @@
           wrkelem = elm030101;
           exsr updpeekusr;
 
-          set_vsn = 'V03R01M01';
+          set0007.set_vsn = 'V03R01M01';
 
        endsr;
 
@@ -539,7 +543,7 @@
 
        begsr v03r01m02;
 
-          set_vsn = 'V03R01M02';
+          set0007.set_vsn = 'V03R01M02';
 
        endsr;
 
@@ -549,7 +553,7 @@
 
        begsr v03r01m03;
 
-          set_vsn = 'V03R01M03';
+          set0007.set_vsn = 'V03R01M03';
 
        endsr;
 
@@ -559,7 +563,7 @@
 
        begsr v03r01m04;
 
-          set_vsn = 'V03R01M04';
+          set0007.set_vsn = 'V03R01M04';
 
        endsr;
 
@@ -569,7 +573,7 @@
 
        begsr v03r01m05;
 
-          set_vsn = 'V03R01M05';
+          set0007.set_vsn = 'V03R01M05';
 
        endsr;
 
@@ -579,7 +583,7 @@
 
        begsr v03r01m06;
 
-          set_vsn = 'V03R01M06';
+          set0007.set_vsn = 'V03R01M06';
 
        endsr;
 
@@ -589,7 +593,7 @@
 
        begsr v03r02m00;
 
-          set_vsn = 'V03R02M00';
+          set0007.set_vsn = 'V03R02M00';
 
        endsr;
 
@@ -599,7 +603,7 @@
 
        begsr v03r02m01;
 
-          set_vsn = 'V03R02M01';
+          set0007.set_vsn = 'V03R02M01';
 
           //  Eintragen Art und Weise der Umsetzung von Edit Codes in der Subfile:
           set0001 = f_getusrsg('*DSPATTR');
@@ -617,7 +621,7 @@
 
        begsr v03r02m02;
 
-          set_vsn = 'V03R02M02';
+          set0007.set_vsn = 'V03R02M02';
 
           //  Ändern Default Edit Code von 'J' auf 'L'
           set0001 = f_getusrsg('*DSPATTR');
@@ -636,7 +640,7 @@
 
        begsr v03r02m03;
 
-          set_vsn = 'V03R02M03';
+          set0007.set_vsn = 'V03R02M03';
 
        endsr;
 
@@ -646,7 +650,7 @@
 
        begsr v03r02m04;
 
-          set_vsn = 'V03R02M04';
+          set0007.set_vsn = 'V03R02M04';
 
        endsr;
 
@@ -660,7 +664,7 @@
           wrkelem = elm030205;
           exsr updpeekusr;
 
-          set_vsn = 'V03R02M05';
+          set0007.set_vsn = 'V03R02M05';
 
        endsr;
 
@@ -670,7 +674,7 @@
 
        begsr v03r02m06;
 
-          set_vsn = 'V03R02M06';
+          set0007.set_vsn = 'V03R02M06';
 
        endsr;
 
@@ -680,7 +684,7 @@
 
        begsr v03r03m00;
 
-          set_vsn = 'V03R03M00';
+          set0007.set_vsn = 'V03R03M00';
 
        endsr;
 
@@ -690,7 +694,7 @@
 
        begsr v03r03m01;
 
-          set_vsn = 'V03R03M01';
+          set0007.set_vsn = 'V03R03M01';
 
        endsr;
 
@@ -700,7 +704,7 @@
 
        begsr v03r03m02;
 
-          set_vsn = 'V03R03M02';
+          set0007.set_vsn = 'V03R03M02';
 
        endsr;
 
@@ -710,7 +714,7 @@
 
        begsr v03r03m03;
 
-          set_vsn = 'V03R03M03';
+          set0007.set_vsn = 'V03R03M03';
 
        endsr;
 
@@ -720,7 +724,7 @@
 
        begsr v03r04m00;
 
-          set_vsn = 'V03R04M00';
+          set0007.set_vsn = 'V03R04M00';
 
        endsr;
 
@@ -734,7 +738,7 @@
           wrkelem = elm030401;
           exsr updpeekusr;
 
-          set_vsn = 'V03R04M01';
+          set0007.set_vsn = 'V03R04M01';
 
        endsr;
 
@@ -744,7 +748,7 @@
 
        begsr v03r04m02;
 
-          set_vsn = 'V03R04M02';
+          set0007.set_vsn = 'V03R04M02';
 
        endsr;
 
@@ -754,7 +758,7 @@
 
        begsr v03r04m03;
 
-          set_vsn = 'V03R04M03';
+          set0007.set_vsn = 'V03R04M03';
 
        endsr;
 
@@ -768,7 +772,7 @@
           wrkelem = elm030500;
           exsr updpeekusr;
 
-          set_vsn = 'V03R05M00';
+          set0007.set_vsn = 'V03R05M00';
 
           //  Anlegen Einstellung für max. Anzahl Sätze für SQL-COUNT()
           set0016 = f_getusrsg('*SQLLMTCNT');
@@ -781,7 +785,7 @@
 
        begsr v03r05m01;
 
-          set_vsn = 'V03R05M01';
+          set0007.set_vsn = 'V03R05M01';
 
        endsr;
 
@@ -791,7 +795,7 @@
 
        begsr v03r05m02;
 
-          set_vsn = 'V03R05M02';
+          set0007.set_vsn = 'V03R05M02';
 
        endsr;
 
@@ -801,7 +805,7 @@
 
        begsr v03r05m03;
 
-          set_vsn = 'V03R05M03';
+          set0007.set_vsn = 'V03R05M03';
 
        endsr;
 
@@ -811,7 +815,7 @@
 
        begsr v03r05m04;
 
-          set_vsn = 'V03R05M04';
+          set0007.set_vsn = 'V03R05M04';
 
        endsr;
 
@@ -821,7 +825,7 @@
 
        begsr v03r05m05;
 
-          set_vsn = 'V03R05M05';
+          set0007.set_vsn = 'V03R05M05';
 
        endsr;
 
@@ -831,7 +835,7 @@
 
        begsr v03r05m06;
 
-          set_vsn = 'V03R05M06';
+          set0007.set_vsn = 'V03R05M06';
 
        endsr;
 
@@ -841,7 +845,7 @@
 
        begsr v03r05m07;
 
-          set_vsn = 'V03R05M07';
+          set0007.set_vsn = 'V03R05M07';
 
        endsr;
 
@@ -851,7 +855,7 @@
 
        begsr v03r05m08;
 
-          set_vsn = 'V03R05M08';
+          set0007.set_vsn = 'V03R05M08';
 
        endsr;
 

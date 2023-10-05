@@ -41,6 +41,8 @@
 
       /COPY QCOPYLE,F_PEEK53
 
+       dcl-ds set0006  likeds(set0006_t) inz;
+
        dcl-s x               like(int4_t);
        dcl-s pbuffer         pointer;
        dcl-s char            char(1) based(pChar);
@@ -100,9 +102,9 @@
           for x = 1 to i_bufflen;
              pChar = pbuffer + (x-1);
              if (char < x'40' or char = x'FF');
-                char = set_cvtc;
+                char = set0006.set_cvtc;
                 o_msgid = 'USR8163';
-                usr81631 = set_cvtc;
+                usr81631 = set0006.set_cvtc;
                 o_msgdta = usr8163;
              else;
                 // Zeichen beibehalten

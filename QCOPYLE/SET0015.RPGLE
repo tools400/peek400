@@ -3,7 +3,7 @@
       * SET0015   *ENVFILE
       *---------------------------------------------------------------
       *
-     D SET0015         DS           256
+     D SET0015_t       DS           256    qualified template
       *  Datei mit Arbeitsumgebungen ...
      D  SET_ENVFIL                   10A   INZ('PEEKENV')
       *  ... Bibliothek

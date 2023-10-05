@@ -744,7 +744,22 @@
      D f_initUsrS      S                   like(SET0000_t)
      D                                     inz
       *
-     D set0001         DS                  likeds(SET0001_t) inz
+     D set0001         DS                  likeds(SET0001_t) inz(*likeds)
+     D set0002         DS                  likeds(SET0002_t) inz(*likeds)
+     D set0003         DS                  likeds(SET0003_t) inz(*likeds)
+     D set0004         DS                  likeds(SET0004_t) inz(*likeds)
+     D set0005         DS                  likeds(SET0005_t) inz(*likeds)
+     D set0006         ds                  likeds(set0006_t) inz(*likeds)
+     D set0007         ds                  likeds(set0007_t) inz(*likeds)
+     D set0008         ds                  likeds(set0008_t) inz(*likeds)
+     D set0009         ds                  likeds(set0009_t) inz(*likeds)
+     D set0010         ds                  likeds(set0010_t) inz(*likeds)
+     D set0011         ds                  likeds(set0011_t) inz(*likeds)
+     D set0012         ds                  likeds(set0012_t) inz(*likeds)
+     D set0013         ds                  likeds(set0013_t) inz(*likeds)
+     D set0014         ds                  likeds(set0014_t) inz(*likeds)
+     D set0015         ds                  likeds(set0015_t) inz(*likeds)
+     D set0016         ds                  likeds(set0016_t) inz(*likeds)
       * ------------------------------------------------------------------------
       *
      C                   Select

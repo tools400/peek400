@@ -3,7 +3,7 @@
       * SET0006   *CVTCHR
       *---------------------------------------------------------------
       *
-     D SET0006         DS           256
+     D SET0006_t       DS           256    qualified template
       *  Ersetzungszeichen für nicht darstellbare Zeichen
      D  SET_CVTC                      1A   INZ('÷')
       *  Endemarkierung

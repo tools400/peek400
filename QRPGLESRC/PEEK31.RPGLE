@@ -52,7 +52,8 @@
          o_msgdta        like(msgdta_t);
        end-pi;
 
-       dcl-s do_x1           packed(7);
+       dcl-s do_x1     packed(7);
+       dcl-ds set0004  likeds(set0004_t) inz;
        //----------------------------------------------------*
 
        //  Register error handler
@@ -68,20 +69,20 @@
           set0004 = f_getusrsg('*LANGUAGE':  o_msgid: o_msgdta);
        else;
           //  ... Benutzen der übergebenen Sprache
-          set_lang = io_language;
+          set0004.set_lang = io_language;
        endif;
 
        if (o_msgid = '');
           //  ... Prüfen der Nachrichtendatei
           for do_x1 = 1 to 2;
 
-             if (f_exist(%trimr(i_prefix) + set_lang
+             if (f_exist(%trimr(i_prefix) + set0004.set_lang
                 : §§pgmlib : '*MSGF'));
                 //  ... kein Fehler
                 leave;
              else;
                 //  ... Fehler aufgetreten
-                if set_lang = 'GER';
+                if (set0004.set_lang = 'GER');
                    //  ... Standardsprache
                    o_msgid  = 'CPF9897';
                    o_msgdta = 'Sprachendefinition ''' +
@@ -90,7 +91,7 @@
                    leave;
                 else;
                    //  ... Benutzersprache
-                   set_lang = 'GER';
+                   set0004.set_lang = 'GER';
                    iter;
                 endif;
              endif;
@@ -100,7 +101,7 @@
 
        if (o_msgid = '');
           p_updusrsg('*LANGUAGE': set0004);
-          io_language = set_lang;
+          io_language = set0004.set_lang;
        else;
           io_language = '';
        endif;

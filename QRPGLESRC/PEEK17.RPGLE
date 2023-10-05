@@ -62,6 +62,10 @@
       /COPY QCOPYLE,USR8142
       /COPY QCOPYLE,USR8192
 
+       dcl-ds set0002  likeds(set0002_t) inz;
+       dcl-ds set0003  likeds(set0003_t) inz;
+       dcl-ds set0008  likeds(set0008_t) inz;
+
        dcl-ds fldl0100 likeds(fldl0100_t) inz;
 
        dcl-ds peek_01_ds;
@@ -255,9 +259,9 @@
 
              //  Prompt?
              //  ... ##Field
-             if %trim(##field ) = set_prmt;
+             if %trim(##field ) = set0008.set_prmt;
                 exsr c_prompt;
-                if (*in99 = btrue);
+                if (*in99 = bTrue);
                    leave;
                 else;
                    //  ...?
@@ -267,10 +271,10 @@
              exsr prfb1;
 
              if ##field <> r_field;
-                mustwait = btrue;
+                mustwait = bTrue;
              endif;
 
-             if mustwait = btrue;
+             if mustwait = bTrue;
                 *in99 = '1';
              else;
                 //  Wert belassen ...
@@ -523,7 +527,7 @@
              endsl;
 
              //  Verarbeiten numerischer Werte ...
-             if f_isnumfld(fldl0100) = btrue;
+             if f_isnumfld(fldl0100) = bTrue;
 
                 //  ... Vorzeichen, links
                 exsr signleft;
@@ -532,7 +536,7 @@
 
                 //  ... umsetzen *BLANKS in '+' Zeichen
                 if ##sign = *blanks;
-                   ##sign = set_signp;
+                   ##sign = set0003.set_signp;
                 else;
                    //      ... Vorzeichen stehen lassen
                 endif;
@@ -557,12 +561,12 @@
                 endif;
 
                 //  ... falsches Vorzeichen
-                if ##sign <> set_signm
-                   and ##sign <> set_signp;
+                if (##sign <> set0003.set_signm and
+                    ##sign <> set0003.set_signp);
                    *in99 = '1';
                    clear usr8141;
-                   usr81411 = set_signp;
-                   usr81412 = set_signm;
+                   usr81411 = set0003.set_signp;
+                   usr81412 = set0003.set_signm;
                    p_sndpgmmg('USR8141': usr8141: §§pgmname);
                    leave;
                 else;
@@ -600,8 +604,8 @@
              r_sign = %subst(r_arg30: x: 1);
              //   Wenn das extrahierte Zeichen dem '+' oder '-'
              //   Zeichen entspricht, dann die Umsetzung vornehmen ...
-             if r_sign = set_signm
-                or r_sign = set_signp;
+             if r_sign = set0003.set_signm
+                or r_sign = set0003.set_signp;
                 ##sign = r_sign;
                 x = x + 1;
                 if x <= 30;
@@ -634,8 +638,8 @@
              r_sign = %subst(r_arg30: x: 1);
              //   Wenn das extrahierte Zeichen dem '+' oder '-'
              //   Zeichen entspricht, dann die Umsetzung vornehmen ...
-             if r_sign = set_signm
-                or r_sign = set_signp;
+             if r_sign = set0003.set_signm
+                or r_sign = set0003.set_signp;
                 ##sign = r_sign;
                 x = x - 1;
                 if x > *zeros;
@@ -662,7 +666,7 @@
           else;
 
              //  Suchen nach Komma ...
-             x = %scan(set_point: r_arg30);
+             x = %scan(set0003.set_point: r_arg30);
              if x = *zeros;
                 //   Wenn nicht gefunden, dann Länge +1 ...
                 //*   ' '           CHECKR    R_Arg30       X
@@ -772,7 +776,7 @@
 
           dou ('1');
 
-             if ##case <> btrue
+             if ##case <> bTrue
                 and ##case <> bFalse;
                 *in99 = '1';
                 p_sndpgmmg('USR8133': '': §§pgmname);
@@ -819,11 +823,11 @@
 
           select;
           when scnfld = '##FIELD'
-             or ##field = set_prmt;
+             or ##field = set0008.set_prmt;
              exsr pmt_field;
           other;
              p_sndpgmmg('USR8179': '': §§pgmname);
-             *in99 = btrue;
+             *in99 = bTrue;
           endsl;
 
        endsr;
@@ -843,7 +847,7 @@
              p_sndpgmmg(ymsgid: ymsgdta: §§pgmname);
              ymsgid = '';
              ymsgdta = '';
-             *in99 = btrue;
+             *in99 = bTrue;
           endif;
 
        endsr;
@@ -913,7 +917,7 @@
           endsl;
 
           if (##nbrs = 0);
-             ##nbrs = set_snbrs;
+             ##nbrs = set0002.set_snbrs;
           else;
              //  Wert stehenlassen ...
           endif;
@@ -930,7 +934,7 @@
           ##op = '';
           ##arg = '';
           ##sign = '';
-          $$wldcd = set_wldcd;
+          $$wldcd = set0002.set_wldcd;
           ##nbrs = 0;
           ##type = 'N';
           ##case = bFalse;
@@ -958,7 +962,7 @@
           endif;
 
           //  Prompt-Felder anzeigen ...
-          if set_dsppmt = btrue;
+          if (set0008.set_dsppmt = bTrue);
              *in71 = '1';
           else;
              *in71 = '0';
@@ -1098,11 +1102,11 @@
 
        begsr inzsr;
 
-          if (isInzSr = btrue);
+          if (isInzSr = bTrue);
              leavesr;
           endif;
 
-          isInzSr = btrue;
+          isInzSr = bTrue;
 
           §pgmq = '*';
 

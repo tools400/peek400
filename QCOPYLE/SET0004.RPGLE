@@ -3,7 +3,7 @@
       * SET0004   *LANGUAGE
       *---------------------------------------------------------------
       *
-     D SET0004         DS           256
+     D SET0004_t       DS           256    qualified template
       *  Eingestellte Benutzersprache
      D  SET_Lang                      3A   INZ('GER')
       *  Endemarkierung

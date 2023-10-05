@@ -96,17 +96,19 @@
        dcl-s dftvallen       like(int4_t) inz;
        dcl-s idx             like(int4_t) inz;
 
-       dcl-c §time_a const('00.00.00');
-       dcl-c §date_a const('0001-01-01');
-       dcl-c §tstmp_a const('0001-01-01-00.00.00.000000');
+       dcl-c §time_a   '00.00.00';
+       dcl-c §date_a   '0001-01-01';
+       dcl-c §tstmp_a  '0001-01-01-00.00.00.000000';
 
-       dcl-c §time_d const('23.59.59');
-       dcl-c §date_d const('9999-12-31');
-       dcl-c §tstmp_d const('9999-12-31-23.59.59.999999');
+       dcl-c §time_d   '23.59.59';
+       dcl-c §date_d   '9999-12-31';
+       dcl-c §tstmp_d  '9999-12-31-23.59.59.999999';
 
        dcl-ds fldl0100 likeds(fldl0100_t) inz;
 
-       dcl-s isInzSr         like(bool_t) inz(bfalse);
+       dcl-ds set0003  likeds(set0003_t) inz;
+
+       dcl-s isInzSr   like(bool_t) inz(bFalse);
 
        //*******************************************************************
        //                 S T E U E R  -  R O U T I N E                    *
@@ -263,13 +265,13 @@
              //  ... Länge +1 wegen nachgestelltem Vorzeichen
              //      grundsätzlich, ob mit oder ohne Vorzeichen
              //      Vorzeichen wird in PEEK18 ausgewertet
-             if (f_isnumfld(fldl0100) = btrue);
+             if (f_isnumfld(fldl0100) = bTrue);
                 y = y + 1;
              endif;
 
              x = kp + y;
              x = x - 1;
-             if (f_isvarlen(fldl0100) = btrue);
+             if (f_isvarlen(fldl0100) = bTrue);
                 x = x + 2;
                 y = y - 2;
              endif;
@@ -331,7 +333,7 @@
              leavesr;
           endif;
 
-          if f_isvarlen(fldl0100) = btrue;
+          if f_isvarlen(fldl0100) = bTrue;
              youtbuffln = youtbuffln + 2;
           endif;
 
@@ -347,12 +349,12 @@
              // Puffer zu Ende
           else;
              //  Neue Startposition in Wrk_KeyVal
-             if (f_isnumfld(fldl0100) = btrue) and
-                (f_isfloatfld(fldl0100) = bfalse);
+             if (f_isnumfld(fldl0100) = bTrue) and
+                (f_isfloatfld(fldl0100) = bFalse);
                 // ... bei numerischen Werten
                 kp = kp + fldl0100.f1digt;
                 // ... wegen nachgestelltem Vorzeichen
-                if set_signx <> bfalse;                                         // = bTrue
+                if (set0003.set_signx <> bFalse);
                    kp = kp + 1;
                 else;
                    // keine Korrektur erforderlich
@@ -365,13 +367,13 @@
                    kp = kp + fldl0100.f1flen;
                 endif;
              endif;
-             if (f_isvarlen(fldl0100) = btrue);
+             if (f_isvarlen(fldl0100) = bTrue);
                 kp = kp - 2;
              endif;
           endif;
 
           // Delimeter ...
-          if (set_dlmtr <> '');
+          if (set0003.set_dlmtr <> '');
              kp = kp + 1;
           else;
              // keine Korrektur erforderlich
@@ -425,11 +427,11 @@
 
        begsr inzsr;
 
-          if (isInzSr = btrue);
+          if (isInzSr = bTrue);
              leavesr;
           endif;
 
-          isInzSr = btrue;
+          isInzSr = bTrue;
 
           peek18_name = f_pgmcalln('PEEK18');
 

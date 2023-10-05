@@ -3,7 +3,7 @@
       * SET0014   *PRVFILE
       *---------------------------------------------------------------
       *
-     D SET0014         DS           256
+     D SET0014_t       DS           256    qualified template
       *  Letzte geöffnete Datei ...
      D  SET_PRVFIL                   10A   INZ('*NONE')
       *  ... Bibliothek

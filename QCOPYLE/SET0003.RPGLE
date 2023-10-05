@@ -3,7 +3,7 @@
       * SET0003   *ACCESSKEY
       *---------------------------------------------------------------
       *
-     D SET0003         DS           256
+     D SET0003_t       DS           256    qualified template
       *  Minuszeichen
      D  SET_SignM                     1A   INZ('-')
       *  Pluszeichen
