@@ -534,7 +534,9 @@
 
        begsr c_refresh;
 
-          f_seq = *zeros;
+          clear f1key_l0;
+          f1key_l0.f_fldseq = 0;
+
           exsr pbinit;
           exsr pbsetll;
           exsr pbreadup;
@@ -825,8 +827,6 @@
 
        begsr pbsetll;
 
-          clear f1key_l0;
-          f1key_l0.f_fldseq = 0;
           setll %kds(f1key_l0) fpeekfldl0;
 
        endsr;
@@ -944,7 +944,9 @@
           exsr readrcd;
 
           // - Subfile füllen
-          f_seq = *zeros;
+          clear f1key_l0;
+          f1key_l0.f_fldseq = 0;
+
           exsr pbinit;
           exsr pbsetll;
           exsr pbreadup;
