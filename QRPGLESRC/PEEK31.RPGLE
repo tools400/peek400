@@ -32,7 +32,6 @@
       /COPY QCOPYLE,ERR_D_SDS
       /COPY QCOPYLE,CEECNDHDLR
 
-      /COPY QCOPYLE,SET0000
       /COPY QCOPYLE,SET0004
 
       /define internal_prototype

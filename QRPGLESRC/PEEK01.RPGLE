@@ -49,6 +49,7 @@
       /COPY QCOPYLE,F_PEEK58
       /COPY QCOPYLE,F_PEEK71
 
+       dcl-ds set0001  likeds(set0001_t) inz;
        dcl-ds fldl0100 likeds(fldl0100_t) inz;
 
        dcl-s seqnbr          like(f_seq) inz(0);
@@ -109,7 +110,7 @@
           f_fldseq = seqnbr;
           f_seq = seqnbr;
           f_kseq = 0;
-          f_color = set_clmcol;
+          f_color = set0001.set_clmcol;
           f_markcol = bfalse;
           f_maxsize = *hival;
           f_edtcde = fldl0100.f1edtc;
@@ -195,10 +196,10 @@
 
           select;
              //  Keine Umsetzung der EDTCDE's
-          when set_dspsgn = '0';
+          when set0001.set_dspsgn = '0';
 
              //  Mappen Edit Code
-          when set_dspsgn = '1';
+          when set0001.set_dspsgn = '1';
              select;
              when f_edtcde = '1';
                 f_edtcde = 'J';
@@ -217,7 +218,7 @@
              endsl;
 
              //  Mappen Edit Code - Keine Nullenunterdrückung
-          when set_dspsgn = '2';
+          when set0001.set_dspsgn = '2';
              select;
              when f_edtcde = '1';
                 f_edtcde = 'J';
@@ -249,7 +250,7 @@
                 f_edtcde = 'L';
 
              when f_edtcde = ' ';
-                f_edtcde = set_editcode;
+                f_edtcde = set0001.set_editcode;
              endsl;
 
           endsl;

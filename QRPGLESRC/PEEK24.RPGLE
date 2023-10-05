@@ -38,7 +38,6 @@
       /COPY QCOPYLE,SCRNFKEYS
       /COPY QCOPYLE,CEECNDHDLR
 
-      /COPY QCOPYLE,SET0000
       /COPY QCOPYLE,SET0001
 
       /define internal_prototype
@@ -68,6 +67,8 @@
 
        dcl-s wrk_field       char(10) inz(*blanks);
        dcl-s wrk_color       char(1) inz(*blanks);
+
+       dcl-ds set0001        likeds(set0001_t) inz;
 
        dcl-s peek21_name     like(pgmcalln_t) inz;
        dcl-s peek23_name     like(pgmcalln_t) inz;
@@ -248,25 +249,25 @@
 
              select;
              when wrk_field = 'KEYCOL'; // Überschrift
-                wrk_color = set_keycol;
+                wrk_color = set0001.set_keycol;
              when wrk_field = 'HEDCOL'; // Überschrift
-                wrk_color = set_hedcol;
+                wrk_color = set0001.set_hedcol;
              when wrk_field = 'PINCOL'; // Pined-Daten
-                wrk_color = set_pincol;
+                wrk_color = set0001.set_pincol;
              when wrk_field = 'CLMCOL'; // SpaltenMark
-                wrk_color = set_clmcol;
+                wrk_color = set0001.set_clmcol;
              when wrk_field = 'STDCOL'; // Standard
-                wrk_color = set_stdcol;
+                wrk_color = set0001.set_stdcol;
              when wrk_field = 'NMLCOL'; // Normale Suche
-                wrk_color = set_nmlcol;
+                wrk_color = set0001.set_nmlcol;
              when wrk_field = 'UNDCOL'; // Unterstrichen
-                wrk_color = set_undcol;
+                wrk_color = set0001.set_undcol;
              when wrk_field = 'REVCOL'; // Reverse Suche
-                wrk_color = set_revcol;
+                wrk_color = set0001.set_revcol;
              when wrk_field = 'TBLCOL'; // Tabellierpap.
-                wrk_color = set_tblcol;
+                wrk_color = set0001.set_tblcol;
              when wrk_field = 'EXCCOL'; // Exception
-                wrk_color = set_exccol;
+                wrk_color = set0001.set_exccol;
              other;
                 *in99 = '1';
                 p_sndpgmmg('USR8146': '': §§pgmname);
@@ -344,17 +345,17 @@
        begsr fill##;
 
           //  SET_KeyCol
-          $$keycol = set_keycol;
+          $$keycol = set0001.set_keycol;
           //*                 CAT       'KeyField':0  $$KEYCOL
           $$keycol = %trimr($$keycol) + 'KeyField';
 
           //  SET_HedCol
-          $$hedcol = set_hedcol;
+          $$hedcol = set0001.set_hedcol;
           //*                 CAT       'Headline':0  $$HEDCOL
           $$hedcol = %trimr($$hedcol) + 'Headline';
 
           //  SET_PinCol
-          $$pincol1 = set_pincol;
+          $$pincol1 = set0001.set_pincol;
           $$pincol2 = $$pincol1;
           //*                 CAT       'Pin-Record':0$$PINCOL1
           $$pincol1 = %trimr($$pincol1) + 'Pin-Record';
@@ -365,7 +366,7 @@
           $$pincol4 = $$pincol2;
 
           //  SET_StdCol
-          $$stdcol1 = set_stdcol;
+          $$stdcol1 = set0001.set_stdcol;
           $$stdcol2 = $$stdcol1;
           //*                 CAT       'Std.Color':0 $$STDCOL1
           $$stdcol1 = %trimr($$stdcol1) + 'Std.Color';
@@ -378,7 +379,7 @@
           $$stdcol6 = $$stdcol2;
 
           //  SET_ClmCol
-          $$clmcol1 = set_clmcol;
+          $$clmcol1 = set0001.set_clmcol;
           $$clmcol2 = $$clmcol1;
           //*                 CAT       'Mark Clm':0  $$CLMCOL1
           $$clmcol1 = %trimr($$clmcol1) + 'Mark Clm';
@@ -392,7 +393,7 @@
           $$clmcol7 = $$clmcol2;
 
           //  SET_NmlCol
-          $$nmlcol1 = set_nmlcol;
+          $$nmlcol1 = set0001.set_nmlcol;
           $$nmlcol2 = $$nmlcol1;
           //*                 CAT       'Search':0    $$NmlCOL1
           $$nmlcol1 = %trimr($$nmlcol1) + 'Search';
@@ -403,7 +404,7 @@
           $$nmlcol4 = $$nmlcol2;
 
           //  SET_UndCol
-          $$undcol1 = set_undcol;
+          $$undcol1 = set0001.set_undcol;
           $$undcol2 = $$undcol1;
           //*                 CAT       'Search-Und':0$$UNDCOL1
           $$undcol1 = %trimr($$undcol1) + 'Search-Und';
@@ -414,7 +415,7 @@
           $$undcol4 = $$undcol2;
 
           //  SET_RevCol
-          $$revcol1 = set_revcol;
+          $$revcol1 = set0001.set_revcol;
           $$revcol2 = $$revcol1;
           //*                 CAT       'Search-Rev':0$$REVCOL1
           $$revcol1 = %trimr($$revcol1) + 'Search-Rev';
@@ -425,7 +426,7 @@
           $$revcol4 = $$revcol2;
 
           //  SET_TblCol
-          $$tblcol1 = set_tblcol;
+          $$tblcol1 = set0001.set_tblcol;
           $$tblcol2 = $$tblcol1;
           //*                 CAT       'Tabulated':0 $$TBLCOL1
           $$tblcol1 = %trimr($$tblcol1) + 'Tabulated';
@@ -436,7 +437,7 @@
           $$tblcol4 = $$tblcol2;
 
           //  SET_ExcCol
-          $$exccol1 = set_exccol;
+          $$exccol1 = set0001.set_exccol;
           $$exccol2 = $$exccol1;
           //*                 CAT       'Exception':0 $$EXCCOL1
           $$exccol1 = %trimr($$exccol1) + 'Exception';
@@ -505,25 +506,25 @@
 
              select;
              when wrk_field = 'KEYCOL'; // Überschrift
-                set_keycol = wrk_color;
+                set0001.set_keycol = wrk_color;
              when wrk_field = 'HEDCOL'; // Überschrift
-                set_hedcol = wrk_color;
+                set0001.set_hedcol = wrk_color;
              when wrk_field = 'PINCOL'; // Pined-Daten
-                set_pincol = wrk_color;
+                set0001.set_pincol = wrk_color;
              when wrk_field = 'CLMCOL'; // Spaltenmark.
-                set_clmcol = wrk_color;
+                set0001.set_clmcol = wrk_color;
              when wrk_field = 'STDCOL'; // Standard
-                set_stdcol = wrk_color;
+                set0001.set_stdcol = wrk_color;
              when wrk_field = 'NMLCOL'; // Normale Suche
-                set_nmlcol = wrk_color;
+                set0001.set_nmlcol = wrk_color;
              when wrk_field = 'UNDCOL'; // Unterstrichen
-                set_undcol = wrk_color;
+                set0001.set_undcol = wrk_color;
              when wrk_field = 'REVCOL'; // Reverse Suche
-                set_revcol = wrk_color;
+                set0001.set_revcol = wrk_color;
              when wrk_field = 'TBLCOL'; // Tabellierpap.
-                set_tblcol = wrk_color;
+                set0001.set_tblcol = wrk_color;
              when wrk_field = 'EXCCOL'; // Exception
-                set_exccol = wrk_color;
+                set0001.set_exccol = wrk_color;
              other;
                 *in99 = '1';
                 p_sndpgmmg('USR8146': '': §§pgmname);

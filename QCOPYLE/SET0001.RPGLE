@@ -3,7 +3,7 @@
       * SET0001   *DSPATR
       *---------------------------------------------------------------
       *
-     D SET0001         DS           256
+     D SET0001_t       DS           256    qualified template
       *  Bildschirmauflösung: 0=132; 1=80Zeichen
      D  SET_DSP80                     1A   INZ('0'      )
       *  Farbe: Standarddarstellung

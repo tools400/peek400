@@ -61,6 +61,8 @@
          data            like(set0000_t) inz(*blanks);
        end-ds;
 
+       dcl-ds set0001        likeds(set0001_t) inz;
+
        dcl-s o_data          like(set0000_t) inz;
 
        dcl-s wrktab          char(100) dim(100) inz(*blanks);
@@ -602,8 +604,8 @@
           //  Eintragen Art und Weise der Umsetzung von Edit Codes in der Subfile:
           set0001 = f_getusrsg('*DSPATTR');
 
-          if (set_dspsgn <> '2');
-             set_dspsgn   = '2';
+          if (set0001.set_dspsgn <> '2');
+             set0001.set_dspsgn   = '2';
              p_updusrsg('*DSPATTR': set0001);
           endif;
 
@@ -620,9 +622,9 @@
           //  Ändern Default Edit Code von 'J' auf 'L'
           set0001 = f_getusrsg('*DSPATTR');
 
-          if (set_editcode = 'J');
-             set_editcode = 'L';
-             set_dspsgn   = '2';
+          if (set0001.set_editcode = 'J');
+             set0001.set_editcode = 'L';
+             set0001.set_dspsgn   = '2';
              p_updusrsg('*DSPATTR': set0001);
           endif;
 

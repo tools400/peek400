@@ -81,7 +81,6 @@
       *----------------------------------------------------*
       *
       *---Benutzervoreinstellungen-------------------------*
-      /COPY QCOPYLE,SET0000
       /COPY QCOPYLE,SET0001
       /COPY QCOPYLE,SET0002
       /COPY QCOPYLE,SET0003
@@ -192,14 +191,15 @@
      D                                     inz
       *
       *  Hilfsfelder für optionale Parameter ...
-     D o2_msgID        S                   like(o_msgID   )
+     D o2_msgID        S                   like(o_msgID)
      D                                     inz
-     D o3_msgDta       S                   like(o_msgDta  )
+     D o3_msgDta       S                   like(o_msgDta)
      D                                     inz
       *
       *  definieren Arbeitsfelder ...
-     D X               S                   like(int4_t) inz
-     D Y               S                   like(int4_t) inz
+     D X               S                   like(int4_t)
+     D Y               S                   like(int4_t)
+     D set0000         S                   like(set0000_t)
       * ------------------------------------------------------------------------
      C                   Callp     p_initSrvPgm
       *
@@ -234,9 +234,37 @@
       *
      C                   Return    f_getUsrSg
       *
-      *---Benutzervoreinstellungen-------------------------*
-      /COPY QCOPYLE,CHKUSRSETG
-      *----------------------------------------------------*
+      * ---------------------------------------------------------- *
+      *    ChkUsrSetg    Prüfen der Benutzervoreinstellungen       *
+      *                  auf Aktualität                            *
+      * ---------------------------------------------------------- *
+      *
+     C     ChkUsrSetg    BEGSR
+      *
+      *  Ende der alten Daten
+     C                   EVAL      x = %scan(x'8B': S_Data: 1)
+     C                   IF        (X = 0)
+     C                   EVAL      x = %checkr(' ': S_Data)
+     C                   ELSE
+     C                   EVAL      x = x - 1
+     C                   ENDIF
+      *
+      *  Ende der neuen Daten
+     C                   EVAL      y = %scan(x'8B': SET0000: 1) - 1
+      *
+      *  Aktualisieren, wenn die neuen Daten
+      *  länger als die "Altdaten" sind ...
+     C                   IF        (Y > X)
+      *  ... extrahieren alte Daten
+     C                   EVAL      S_Data = %subst(S_Data: 1: x)
+      *  ... extrahieren überhang der neuen Daten
+     C                   EVAL      x = x + 1
+     C                   EVAL      SET0000 = %subst(SET0000: x)
+      *  ... zusammenfügen alt + neu
+     C                   EVAL      %subst(S_Data: x) = SET0000
+     C                   ENDIF
+      *
+     C                   ENDSR
       *
      P                 E
       *
@@ -715,6 +743,8 @@
       *  definieren Funktionswert ...
      D f_initUsrS      S                   like(SET0000_t)
      D                                     inz
+      *
+     D set0001         DS                  likeds(SET0001_t) inz
       * ------------------------------------------------------------------------
       *
      C                   Select
@@ -785,6 +815,8 @@
      D                 PI
      D  o_msgID                       7A
      D  o_msgDta                    512A
+      *
+     D set0000         S                   like(set0000_t)
       * ------------------------------------------------------------------------
       *
       *  Öffnen Datei PEEKUSR ...

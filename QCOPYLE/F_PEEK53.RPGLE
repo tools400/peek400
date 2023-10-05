@@ -3,9 +3,9 @@
       *      Modul: Peek053                                        *
       *============================================================*
       *
-     D SECTION_t       S             10A   based(ptrDummy)
-     D KEY_t           S             10A   based(ptrDummy)
-     D SET0000_t       S            256A   based(ptrDummy)
+     D SECTION_t       S             10A   template
+     D KEY_t           S             10A   template
+     D SET0000_t       S            256A   template
       *
       *-------------------------------------------------------------------*
      D p_crtUsrSg      PR

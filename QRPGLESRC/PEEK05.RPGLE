@@ -170,6 +170,8 @@
       /COPY QCOPYLE,PEXIT01
       /COPY QCOPYLE,PEXIT04
 
+       dcl-ds set0001  likeds(set0001_t) inz;
+
        dcl-ds objd0400 likeds(objd0400_t) inz;
        dcl-ds rcdl0200 likeds(rcdl0200_t) inz;
        dcl-ds fldl0100 likeds(fldl0100_t) inz;
@@ -248,7 +250,7 @@
        dcl-s yattrtyp        char(1) inz;
        dcl-s yvalue          char(512) inz;
 
-       dcl-s ydsp80          like(set_dsp80) inz;
+       dcl-s ydsp80          like(set0001_t.set_dsp80) inz;
        dcl-s yCopyright      like(copyrght_t) inz(§copyright);
 
        dcl-s yfmtnbr         int(5) inz;
@@ -1398,7 +1400,7 @@
 
        begsr pmt_field;
 
-          peek37(set_dsp80: §copyright: yfield
+          peek37(set0001.set_dsp80: §copyright: yfield
                 : yMsgID: yMsgDta);
 
           if yMsgID = *blanks;
@@ -1440,7 +1442,7 @@
                 yLibrary = ##library;
              endif;
 
-             peek69(set_dsp80: §copyright: yQFile
+             peek69(set0001.set_dsp80: §copyright: yQFile
                    : yMsgID: yMsgDta);
 
              if yMsgID = *blanks;
@@ -1480,7 +1482,7 @@
                 yLibrary = ##library;
              endif;
 
-             peek47(set_dsp80: §copyright
+             peek47(set0001.set_dsp80: §copyright
                    : yQFile: yMember: yMsgID: yMsgDta);
 
              if yMsgID = *blanks;
@@ -1503,7 +1505,7 @@
 
        begsr pmt_fmt;
 
-          peek12(set_dsp80: §copyright: ##format
+          peek12(set0001.set_dsp80: §copyright: ##format
                 : mode_inter
                 : rcdl0200: yfmtnbr: yMsgID: yMsgDta);
 
@@ -1527,7 +1529,7 @@
 
        begsr pmt_sfpau;
 
-          peek68(set_dsp80: §§pgmname: §copyright
+          peek68(set0001.set_dsp80: §§pgmname: §copyright
                 : ysflopt: yMsgID: yMsgDta);
 
           //  Einlesen Subfiledatensatz
@@ -1644,7 +1646,7 @@
              exsr msgnofile;
           else;
 
-             set_hedtyp = f_nextheadertype(set_hedtyp);
+             set0001.set_hedtyp = f_nextheadertype(set0001.set_hedtyp);
 
              isSflDirty = bTrue;
           endif;
@@ -1803,7 +1805,7 @@
        begsr c_usersetg;
 
           monitor;
-             peek24(set_dsp80: §copyright: set0001
+             peek24(set0001.set_dsp80: §copyright: set0001
                    : yMsgID: yMsgDta);
              *in99 = bFalse;
           on-error;
@@ -1870,7 +1872,7 @@
        begsr c_layout;
 
           monitor;
-             peek34(set_dsp80: §copyright: '*DISPLAY'
+             peek34(set0001.set_dsp80: §copyright: '*DISPLAY'
                    : yMsgID: yMsgDta);
              *in99 = bFalse;
           on-error;
@@ -1901,7 +1903,7 @@
              select;
              when srchmode = '*NEW';
                 monitor;
-                   peek17(set_dsp80: §copyright
+                   peek17(set0001.set_dsp80: §copyright
                          : yQFile: ##member
                          : yfield: yoperation: yargument
                          : ysign: ysrchnbrs: ysrchtype
@@ -2345,7 +2347,7 @@
              exsr msgnofile;
           else;
 
-             peek52(set_dsp80: §copyright
+             peek52(set0001.set_dsp80: §copyright
                    : yalwlc: ycase: yrcdlock: ynulldft
                    : ykeepcrs: yMsgID: yMsgDta: bFalse);
 
@@ -2355,6 +2357,7 @@
                 //  um die alte Referenz auf das Update-Programm zu löschen
                 monitor;
                    UPDPGM_NAME = f_pgmcalln(§§pgmname);
+                   yHeaderType = set0001.SET_HedTyp;
                    UPDPGM(ydsp80
                           : yHeaderType
                           : yCopyright
@@ -2371,6 +2374,7 @@
                           : yCursorPos.column
                           : yMsgID
                           : yMsgDta);
+                   exsr checkHeadlineChanged;
                 on-error;
                 endmon;
 
@@ -2392,7 +2396,7 @@
                 endmon;
              endif;
 
-             peek52(set_dsp80: §copyright
+             peek52(set0001.set_dsp80: §copyright
                    : yalwlc: ycase: yrcdlock: ynulldft
                    : ykeepcrs: yMsgID: yMsgDta: bTrue);
           endif;
@@ -2406,7 +2410,7 @@
        begsr c_register;
 
           monitor;
-             peek30(set_dsp80: yCopyright
+             peek30(set0001.set_dsp80: yCopyright
                    : yflag: yMsgID: yMsgDta);
              p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
              yMsgID = '';
@@ -2500,7 +2504,7 @@
           else;
 
              monitor;
-                peek40(set_dsp80: §copyright
+                peek40(set0001.set_dsp80: §copyright
                       : ##file: ##library: ##member
                       : ##format: bTrue
                       : yretfile: yretlib
@@ -2631,7 +2635,7 @@
           else;
 
              monitor;
-                peek50(set_dsp80: §copyright: pinTabCol
+                peek50(set0001.set_dsp80: §copyright: pinTabCol
                       : yMsgID: yMsgDta);
                 *in99 = bFalse;
              on-error;
@@ -2688,7 +2692,7 @@
              when fild0100.atnofm > 1;
                 //  Wenn es sich um eine "multi-format logical file" handelt, ...
                 //  ... dann fragen, welches physiche Datei göffnet werden soll:
-                peek59(set_dsp80: '*QUESTION'
+                peek59(set0001.set_dsp80: '*QUESTION'
                       : 'USR8212': '': 'YN'
                       : yMsgID: yMsgDta);
                 usr8190 = yMsgDta;
@@ -2718,7 +2722,7 @@
              yformat = ##format;
              ysqlwhere = sqlwhere;
              ysqlorder = sqlorder;
-             peek48(set_dsp80: §copyright
+             peek48(set0001.set_dsp80: §copyright
                    : yFile: yLibrary: yMember
                    : yformat
                    : accessMode: ysqlwhere: ysqlorder
@@ -2946,16 +2950,15 @@
              if sflcsr > §zeros;
 
                 monitor;
-                   PEEK14(set_dsp80: set_hedtyp: §copyright
+                   PEEK14(set0001.set_dsp80: set0001.set_hedtyp: §copyright
                          : wrk#rcdnbr: h_file: h_lib: h_mbr
                          : h_rcdfmt: '*DISPLAY': commitLvl
                          : yScreenNbr: yMsgID: yMsgDta);
+                   exsr checkHeadlineChanged;
                    *in99 = bFalse;
                 on-error;
                    *in99 = bTrue;
                 endmon;
-
-                exsr checkHeadlineChanged;
 
              else;
                 //        kein Datensatz verfügbar
@@ -2992,8 +2995,6 @@
                    yMsgID  = '';
                    yMsgDta = '';
                 endif;
-
-                exsr checkHeadlineChanged;
 
              else;
                 //        kein Datensatz verfügbar
@@ -3082,7 +3083,7 @@
 
        begsr s_tgtblpap;
 
-          if set_tblmde = bTrue;
+          if (set0001.set_tblmde = bTrue);
              exsr s_tblpapof;
           else;
              exsr s_tblpapon;
@@ -3096,11 +3097,11 @@
 
        begsr s_tblpapon;
 
-          if set_tblmde = bTrue;
+          if (set0001.set_tblmde = bTrue);
              //  Fehlermeldung ...
              p_sndpgmmg('USR8149': '': §§pgmname);
           else;
-             set_tblmde = bTrue;
+             set0001.set_tblmde = bTrue;
              isSflDirty = bTrue;
           endif;
 
@@ -3112,11 +3113,11 @@
 
        begsr s_tblpapof;
 
-          if set_tblmde = bFalse;
+          if (set0001.set_tblmde = bFalse);
              //  Fehlermeldung ...
              p_sndpgmmg('USR8150': '': §§pgmname);
           else;
-             set_tblmde = bFalse;
+             set0001.set_tblmde = bFalse;
              isSflDirty = bTrue;
           endif;
 
@@ -3294,7 +3295,7 @@
 
        begsr s_about;
 
-          peek49(set_dsp80: §copyright
+          peek49(set0001.set_dsp80: §copyright
                 : §release: §version
                 : yMsgID: yMsgDta);
 
@@ -3310,12 +3311,12 @@
              //      Nix tun, keine Datei vorhanden
              exsr msgnofile;
           else;
-             if set_dspmde = '*DSPNRM';
+             if (set0001.set_dspmde = '*DSPNRM');
                 //    ... Anzeige stimmt bereits
              else;
 
                 //  Umschalten der Anzeige
-                set_dspmde = '*DSPNRM';
+                set0001.set_dspmde = '*DSPNRM';
                 isSflDirty = bTrue;
 
              endif;
@@ -3333,7 +3334,7 @@
              //      Nix tun, keine Datei vorhanden
              exsr msgnofile;
           else;
-             if set_dspmde = '*DSPHEX';
+             if (set0001.set_dspmde = '*DSPHEX');
                 //    ... Anzeige stimmt bereits
              else;
 
@@ -3342,7 +3343,7 @@
                    usr82061   = rcd_buff_len;
                    p_sndpgmmg('USR8206': usr8206: §§pgmname);
                 else;
-                   set_dspmde = '*DSPHEX';
+                   set0001.set_dspmde = '*DSPHEX';
                    isSflDirty = bTrue;
                 endif;
 
@@ -3361,7 +3362,7 @@
              //      Nix tun, keine Datei vorhanden
              exsr msgnofile;
           else;
-             if set_dspmde = '*DSPNRM';
+             if (set0001.set_dspmde = '*DSPNRM');
                 exsr s_dsphex;
              else;
                 exsr s_dspnrm;
@@ -3383,7 +3384,7 @@
              exsr msgnofile;
           else;
 
-             peek56(set_dsp80: §copyright: '*SAVE'
+             peek56(set0001.set_dsp80: §copyright: '*SAVE'
                    : yenvfile: yenvlib: yenvmbr
                    : $$rcdfmtid
                    : yQFile: yMember: ytext: yoption
@@ -3424,7 +3425,7 @@
              exsr msgnofile;
           else;
 
-             peek56(set_dsp80: §copyright: '*LOAD'
+             peek56(set0001.set_dsp80: §copyright: '*LOAD'
                    : yenvfile: yenvlib: yenvmbr
                    : $$rcdfmtid
                    : yQFile: yMember: ytext: yoption
@@ -3545,7 +3546,7 @@
 
              for do_x2 = 1 to *hival;
 
-                peek56(set_dsp80: §copyright: '*DELETE'
+                peek56(set0001.set_dsp80: §copyright: '*DELETE'
                       : yenvfile: yenvlib: yenvmbr
                       : ''
                       : yQFile: yMember: ytext: yoption
@@ -3558,7 +3559,7 @@
                    leave;
                 else;
 
-                   peek57(set_dsp80: §copyright
+                   peek57(set0001.set_dsp80: §copyright
                          : yFile: yLibrary: yMember: ytext
                          : yMsgID: yMsgDta);
 
@@ -3642,7 +3643,7 @@
        begsr pbgettargt;
 
           monitor;
-             peek26(set_dsp80: yQFile: h_mbr
+             peek26(set0001.set_dsp80: yQFile: h_mbr
                    : yFile: yLibrary: yMember
                    : ymbropt: ycrtfile: yMsgID: yMsgDta);
              *in99 = bFalse;
@@ -3673,16 +3674,16 @@
        begsr pbqueryusr;
 
           monitor;
-             PEEK14(set_dsp80: set_hedtyp: §copyright
+             yHeaderType = set0001.set_hedtyp;
+             PEEK14(set0001.set_dsp80: yHeaderType: §copyright
                    : wrk#rcdnbr: h_file: h_lib: h_mbr
                    : h_rcdfmt: ypgmcmd: commitLvl
                    : yScreenNbr: yMsgID: yMsgDta);
+             exsr checkHeadlineChanged;
              *in99 = bFalse;
           on-error;
              *in99 = bTrue;
           endmon;
-
-          exsr checkHeadlineChanged;
 
           if *in99 = *on;
              //            Fehler beim Programmaufruf
@@ -3939,7 +3940,7 @@
                 yMsgID = '';
                 yMsgDta = '';
              else;
-                set_hedtyp = yHeaderType;
+                set0001.set_hedtyp = yHeaderType;
                 isSflDirty = bTrue;
              endif;
           endif;
@@ -4522,7 +4523,6 @@
              exsr getpgmname;
              exsr getdspname;
 
-             yHeaderType = set_hedtyp;
 
              if (yFunction = '*ADD');
                 yRcdNbr = 0;
@@ -4532,7 +4532,8 @@
 
              monitor;
                UPDPGM_NAME = f_pgmcalln(peekpgm);
-               UPDPGM(set_dsp80
+               yHeaderType = set0001.set_hedtyp;
+               UPDPGM(set0001.set_dsp80
                       : yHeaderType
                       : §copyright
                       : yRcdNbr
@@ -4548,12 +4549,11 @@
                       : yCursorPos.column
                       : yMsgID
                       : yMsgDta);
+               exsr checkHeadlineChanged;
                *in99 = bFalse;
              on-error;
                *in99 = bTrue;
              endmon;
-
-             exsr checkHeadlineChanged;
 
              // Wenn der Programmaufruf
              // fehlgeschlagen ist, ...
@@ -4639,8 +4639,8 @@
           ##rcdnbr = §zeros;
           ##key = *blanks;
 
-          $$head132 = set_hedcol;
-          $$head080 = set_hedcol;
+          $$head132 = set0001.set_hedcol;
+          $$head080 = set0001.set_hedcol;
 
           //  Aufbereiten der Überschrift
           exsr pbheadline;
@@ -4762,7 +4762,7 @@
                 endif;
 
                 //  Tabellierpapierfarben umschalten ...
-                if set_tblmde = bFalse;
+                if (set0001.set_tblmde = bFalse);
                    //         Modus ist ausgeschaltet
                 else;
                    if istblcol = bFalse;
@@ -5355,7 +5355,7 @@
 
           monitor;
              //  umsetzen Datensatzpuffer in Bildschirmdarstellung ...
-             if set_dspmde = '*DSPNRM';
+             if (set0001.set_dspmde = '*DSPNRM');
                 //  ... für Normale Anzeige
                 if io_nullmap(fldl0100.f1seq) = 1;
                    peek06(fldl0100: 'FLDL0100': *allx'00'
@@ -5419,8 +5419,7 @@
              maxcollen = f_maxsize;
 
              //  Konvertierung nicht darstellbarer Zeichen ...
-             if sflmode = '*HEADLINE'
-                or set_dspmde = '*DSPHEX';
+             if (sflmode = '*HEADLINE' or set0001.set_dspmde = '*DSPHEX');
                 //  ... keine Konvertierung bei der
                 //      Aufbereitung der Überschriftenzeile
              else;
@@ -5453,7 +5452,7 @@
 
              //  Bestimmen Länge der Überschrift
              //  und aufbereiten Überschrift ...
-             colheading = f_headline(set_hedtyp: fldl0100);
+             colheading = f_headline(set0001.set_hedtyp: fldl0100);
              headlen = %checkr(' ': colheading);
 
              if (sflmode = '*HEADLINE');
@@ -5499,7 +5498,7 @@
                    (columnlen <  fieldlen   );
                    if f_isnumfld(fldl0100) = bTrue;
                       //          ... numerische Werte
-                      if (set_enexc = bTrue) and
+                      if (set0001.set_enexc = bTrue) and
                          (%subst(yhexstring          :
                               1                   :
                               fieldlen - columnlen) <> *blanks);
@@ -5510,7 +5509,7 @@
                                          columnlen               );
                    else;
                       //          ... alphanumerische Werte
-                      if (set_enexc = bTrue) and
+                      if (set0001.set_enexc = bTrue) and
                          (%subst(yhexstring              :
                               columnlen + 1           :
                               1 + fieldlen - columnlen) <> *blanks);
@@ -5600,9 +5599,9 @@
                    if sflmode = '*HEADLINE';
                       if (f_kseq = 0) or
                          (accessMode = rrn_seq);
-                         sflrow.chars(colrofs) = set_hedcol;
+                         sflrow.chars(colrofs) = set0001.set_hedcol;
                       else;
-                         sflrow.chars(colrofs) = set_keycol;
+                         sflrow.chars(colrofs) = set0001.set_keycol;
                       endif;
                    else;
                       exsr pbcolor;
@@ -5621,9 +5620,9 @@
        begsr pbstdcol;
 
           if istblcol = bFalse;
-             sflrow.chars(wrk#ofs) = set_stdcol;
+             sflrow.chars(wrk#ofs) = set0001.set_stdcol;
           else;
-             sflrow.chars(wrk#ofs) = set_tblcol;
+             sflrow.chars(wrk#ofs) = set0001.set_tblcol;
           endif;
 
        endsr;
@@ -5728,7 +5727,7 @@
           else;
 
              if iscolexc = bTrue;
-                sflrow.chars(colrofs) = set_exccol;
+                sflrow.chars(colrofs) = set0001.set_exccol;
              else;
 
                 //---------------------------------------*
@@ -5761,7 +5760,7 @@
                    //  Keine Spaltenmarkierung ...
                    if ispinned = bTrue;
                       //      ... pinned Datensatz
-                      sflrow.chars(colrofs) = set_pincol;
+                      sflrow.chars(colrofs) = set0001.set_pincol;
                    else;
                       //      ... normaler Datensatz
                       wrk#ofs = colrofs;
@@ -5777,19 +5776,19 @@
                       //      ... Suchfunktionen: *REVERSE
                    when srchtype = '*REVERSE';
                       if isfound = bTrue;
-                         sflrow.chars(colrofs) = set_revcol;
+                         sflrow.chars(colrofs) = set0001.set_revcol;
                       endif;
 
                       //      ... Suchfunktionen: *UNDERLINE
                    when srchtype = '*UNDERLINE';
                       if isfound = bTrue;
-                         sflrow.chars(colrofs) = set_undcol;
+                         sflrow.chars(colrofs) = set0001.set_undcol;
                       endif;
 
                       //      ... Suchfunktionen: *NORMAL
                    when srchtype = '*NORMAL';
                       if srchfndrcd = recordnbr;
-                         sflrow.chars(colrofs) = set_nmlcol;
+                         sflrow.chars(colrofs) = set0001.set_nmlcol;
                       endif;
 
                    other;
@@ -6444,8 +6443,8 @@
                 exsr c_poscsr;
 
                 // ... Hexmode nicht bei Satzlänge größer 32766
-                if (file#x.rcdlen > rcd_buff_len) and
-                   (set_dspmde = '*DSPHEX');
+                if (file#x.rcdlen > rcd_buff_len and
+                    set0001.set_dspmde = '*DSPHEX');
                    clear usr8206;
                    usr82061  = rcd_buff_len;
                    p_sndpgmmg('USR8206': usr8206: §§pgmname);
@@ -6920,7 +6919,7 @@
 
        begsr getrcdfrmt;
 
-          peek12(set_dsp80: §copyright: ##format
+          peek12(set0001.set_dsp80: §copyright: ##format
                 : mode_batch
                 : rcdl0200: yfmtnbr: yMsgID: yMsgDta);
 
@@ -7391,13 +7390,13 @@
           if set_dftmde = '*LAST';
              //    ... Modus belassen
           else;
-             set_dspmde = set_dftmde;
+             set0001.set_dspmde = set_dftmde;
           endif;
 
           select;
-          when set_dspmde = '*DSPNRM';
+          when (set0001.set_dspmde = '*DSPNRM');
              exsr s_dspnrm;
-          when set_dspmde = '*DSPHEX';
+          when (set0001.set_dspmde = '*DSPHEX');
              exsr s_dsphex;
           other;
              exsr s_dspnrm;
@@ -7694,7 +7693,7 @@
              (accessMode = sql_seq));
 
              monitor;
-                peek34(set_dsp80: §copyright: '*FLOATKEYS'
+                peek34(set0001.set_dsp80: §copyright: '*FLOATKEYS'
                       : yMsgID: yMsgDta);
                 *in99 = bFalse;
              on-error;
@@ -7815,12 +7814,12 @@
           //    darstellen kann, ...
           if (workstn.numrows < 27);
              //    ... dann auf 80-Zeichen umschalten.
-             set_dsp80 = '1';
+             set0001.set_dsp80 = '1';
           else;
              //    ... sonst die Auflösung 80/132 beibehalten.
           endif;
 
-          if set_dsp80 = '1';
+          if (set0001.set_dsp80 = '1');
              //    80-Zeichen Anzeige
              *in88 = '1';
              sflpage = 14;
@@ -7863,12 +7862,12 @@
 
        begsr chgscreen;
 
-          if set_dsp80 = '1';
+          if (set0001.set_dsp80 = '1');
              //   132-Zeichen Anzeige
-             set_dsp80 = '0';
+             set0001.set_dsp80 = '0';
           else;
              //    80-Zeichen Anzeige
-             set_dsp80 = '1';
+             set0001.set_dsp80 = '1';
           endif;
 
           exsr setscreen;
