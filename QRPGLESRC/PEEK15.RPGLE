@@ -640,19 +640,19 @@
           p_wrtcopy2(ds_remark);
 
           //  füllen Parameter für PEEK45
-          //  Eval      yDsp80     = xDsp80
+          //  Eval      yDsp80     = i_dsp80
           reset ds_eval;
-          $eval_fct2 = 'yDsp80     = xDsp80';
+          $eval_fct2 = 'yDsp80     = i_dsp80';
           p_wrtcopy2(ds_eval);
 
-          //  Eval      yHeaderTyp = xHeaderTyp
+          //  Eval      yHeaderTyp = io_headerType
           reset ds_eval;
-          $eval_fct2 = 'yHeaderTyp = xHeaderTyp';
+          $eval_fct2 = 'yHeaderTyp = io_headerType';
           p_wrtcopy2(ds_eval);
 
-          //  Eval      yCopyRight = xCopyRight
+          //  Eval      yCopyRight = i_copyright
           reset ds_eval;
-          $eval_fct2 = 'yCopyRight = xCopyRight';
+          $eval_fct2 = 'yCopyRight = i_copyright';
           p_wrtcopy2(ds_eval);
 
           //  Eval      yProtect   = '0'
@@ -703,19 +703,19 @@
           p_wrtcopy6(ds_remark);
 
           //  füllen Parameter für PEEK45
-          //  Eval      yDsp80     = xDsp80
+          //  Eval      yDsp80     = i_dsp80
           reset ds_eval;
-          $eval_fct2 = 'yDsp80     = xDsp80';
+          $eval_fct2 = 'yDsp80     = i_dsp80';
           p_wrtcopy6(ds_eval);
 
-          //  Eval      yHeaderTyp = xHeaderTyp
+          //  Eval      yHeaderTyp = io_headerType
           reset ds_eval;
-          $eval_fct2 = 'yHeaderTyp = xHeaderTyp';
+          $eval_fct2 = 'yHeaderTyp = io_headerType';
           p_wrtcopy6(ds_eval);
 
-          //  Eval      yCopyRight = xCopyRight
+          //  Eval      yCopyRight = i_copyright
           reset ds_eval;
-          $eval_fct2 = 'yCopyRight = xCopyRight';
+          $eval_fct2 = 'yCopyRight = i_copyright';
           p_wrtcopy6(ds_eval);
 
           //  Eval      yProtect   = '0'
