@@ -1,1052 +1,1011 @@
-      *===============================================================*
-      *                                                               *
-      *  (c) Thomas Raddatz                                           *
-      *                                                               *
-      *  Bereich  : PEEK, Version 1.5.0                               *
-      *  Programm : PEEK50                                            *
-      *  Typ      : RPG                                               *
-      *                                                               *
-      *  erstellt : 11.02.1999  Raddatz                               *
-      *                                                               *
-      *===============================================================*
-      *                                                               *
-      *  Kurzdokumentation :                                          *
-      *                                                               *
-      *  Peek/400 - Erweiterte PIN-Funktion                           *
-      *                                                               *
-      *===============================================================*
-      * >>PRE-COMPILER<<                                              *
-      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
-      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
-      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
-      *                           INSTALL(*NO);                       *
-      *   >>EXECUTE<<                                                 *
-      * >>END-PRE-COMPILER<<                                          *
-      *===============================================================*
+       //===============================================================*
+       //                                                               *
+       //  (c) Thomas Raddatz                                           *
+       //                                                               *
+       //  Bereich  : PEEK, Version 1.5.0                               *
+       //  Programm : PEEK50                                            *
+       //  Typ      : RPG                                               *
+       //                                                               *
+       //  erstellt : 11.02.1999  Raddatz                               *
+       //                                                               *
+       //===============================================================*
+       //                                                               *
+       //  Kurzdokumentation :                                          *
+       //                                                               *
+       //  Peek/400 - Erweiterte PIN-Funktion                           *
+       //                                                               *
+       //===============================================================*
+       // >>PRE-COMPILER<<                                              *
+       //   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+       //                           OBJLIB(&LI) DEVLIB(&LI) +           *
+       //                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+       //                           INSTALL(*NO);                       *
+       //   >>EXECUTE<<                                                 *
+       // >>END-PRE-COMPILER<<                                          *
+       //===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
-      *
-     FPEEK50FM  CF   E             WORKSTN USROPN
-     F                                     INFDS(workstn)
-     F                                     SFILE(PBSFL:SFLREC)
-      * Feldliste nach Sequenzfolge
-     FPEEKFLDL1 IF   E           K DISK    USROPN
-     F                                     INFDS(Peek_01_DS)
-     F                                     RENAME(FPEEKFLD:FPEEKFLDL1)
-     F                                     PREFIX(F_)
-      * Feldliste nach Eingangsfolge
-     FPEEKFLD   IF   E             DISK    USROPN
-     F                                     INFDS(Peek_00_DS)
-     F                                     PREFIX(F_)
-      * Arbeitsdatei nach Anzeigefolge
-     FPEEKWRK   UF   E           K DISK    USROPN
-     F                                     INFDS(Work_00_DS)
-     F                                     PREFIX(W_)
-      * Arbeitsdatei nach Eingangsfolge
-     FPEEKWRK_  UF A F 1024        DISK    USROPN
-     F                                     INFDS(Work_01_DS)
-      *
-      *---INFOSTRUKTUR FÜR AID-BYTE -----------------------*
-      /COPY QCOPYLE,DS_WORKSTN
-      *----------------------------------------------------*
-      *
-      *---Variablendefinition------------------------------*
+
+       dcl-f peek50fm workstn(*ext) usage(*input:*output)
+             usropn infds(workstn) sfile(pbsfl:sflrec);
+       // Feldliste nach Sequenzfolge
+       dcl-f peekfldl1 keyed usropn infds(peek_01_ds)
+             rename(fpeekfld:fpeekfldl1) prefix(f_);
+       // Feldliste nach Eingangsfolge
+       dcl-f peekfld usropn infds(peek_00_ds) prefix(f_);
+       // Arbeitsdatei nach Anzeigefolge
+       dcl-f peekwrk usage(*update:*delete) keyed usropn infds(work_00_ds)
+             prefix(w_);
+       // Arbeitsdatei nach Eingangsfolge
+       dcl-f peekwrk_ disk(1024) usage(*update:*delete:*output)
+             usropn infds(work_01_ds);
+
       /COPY QCOPYLE,D_VARDEF
       /COPY QCOPYLE,D_INFDS
-      *----------------------------------------------------*
-      *
-      /define internal_prototype
-      /COPY QCOPYLE,PPEEK50
-      /undefine internal_prototype
-      *
-      *---Variablendefinition ShortCmd---------------------*
+      /COPY QCOPYLE,DS_WORKSTN
       /COPY QCOPYLE,ShortCmd_D
-      *----------------------------------------------------*
-      *
-      *---Nachrichtenaufbau--------------------------------*
+      /COPY QCOPYLE,ERR_D_SDS
+      /COPY QCOPYLE,FLDL0100
+      /COPY QCOPYLE,D_COLORATR
+      /COPY QCOPYLE,SCRNFKEYS
+      /COPY QCOPYLE,WRK0002
+      /COPY QCOPYLE,CEECNDHDLR
+
       /COPY QCOPYLE,USR8100
       /COPY QCOPYLE,USR8110
       /COPY QCOPYLE,USR8136
       /COPY QCOPYLE,USR8205
       /COPY QCOPYLE,USR8209
-      *----------------------------------------------------*
-      *
-      *---SDS-Datenstruktur--------------------------------*
-      /COPY QCOPYLE,ERR_D_SDS
-      *----------------------------------------------------*
-      *
-      *---API-Formate--------------------------------------*
-     D FLDL0100        DS                  likeds(FLDL0100_t) inz
-      /COPY QCOPYLE,FLDL0100
-      *----------------------------------------------------*
-      *
-      *---Farbattribute------------------------------------*
-      /COPY QCOPYLE,D_COLORATR
-      *----------------------------------------------------*
-      *
+
+      /define internal_prototype
+      /COPY QCOPYLE,PPEEK50
+      /undefine internal_prototype
+
       /COPY QCOPYLE,PPEEK21
       /COPY QCOPYLE,PPEEK23
-      *
+
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
-      *
-     DPeek_00_DS       DS                  likeds(infds_t)
-     DPeek_01_DS       DS                  likeds(infds_t)
-      *
-     D DS_PEEKWRK    E DS          1024    EXTNAME(PEEKWRK) INZ
-     D                                     PREFIX(W_)
-      *
-     DWork_00_DS       DS                  likeds(infds_t)
-     DWork_01_DS       DS                  likeds(infds_t)
-      *
-      *----------------------------------------------------*
-      *  F E L D - D E F I N I T I O N E N                 *
-      *----------------------------------------------------*
-      *
-      *---Definition der F-Tastenbildschirmfelder----------*
-      /COPY QCOPYLE,SCRNFKEYS
-      *----------------------------------------------------*
-      *
-      *---Arbeitsdatenbereich für PEEKWRK------------------*
-      /COPY QCOPYLE,WRK0002
-      *----------------------------------------------------*
-      *
-     D yFKeys          S             18A   DIM(32)       INZ(*BLANKS)
-     D yNbrOfKeys      S                   like(int4_t) inz
-     D yMsgID          S              7A   INZ(*BLANKS)
-     D yMsgDta         S            512A   INZ(*BLANKS)
-      *
-     D YPgmCmd         S             10A   INZ(*BLANKS)
-     D YCmdDta         S                   LIKE(pgmCmdDt_t) INZ(*BLANKS)
-      *
-     D SflPage         S                   like(int4_t) inz
-     D SflPageDDS      S                   like(SflPage   ) inz
-     D SflRec          S                   like(SflPage   ) inz
-     D SflNbrRcd       S                   like(SflPage   ) inz
-      *
-     D SfBot           S                   like(int4_t) inz
-     D NbrFKeys        C                   CONST(3)
-     D Sfl_Cmd         S             10A   INZ(*BLANKS)
-      *
-     D IsSflError      S              1A   INZ(bFalse)
-     D IsNewPos        S              1A   INZ(bFalse)
-     D IsFound         S              1A   INZ(bFalse)
-      *
-     D PEEK21_NAME     S                   like(pgmCallN_t) inz
-     D PEEK23_NAME     S                   like(pgmCallN_t) inz
-      *
-     D R_Field         S                   INZ(*BLANKS) LIKE(##Field)
-     D LstField        S                   INZ(*BLANKS) LIKE(##Field)
-     D LstNbrRcd       S                   INZ(0) LIKE(SflPage)
-      *
-     D Wrk_SFSANR      S                   INZ(*ZEROS ) LIKE(SFSANR )
-     D X               S                   like(int4_t) inz
-     D NbrPinCol       S                   like(int4_t) inz
-      *
-      /COPY QCOPYLE,CEECNDHDLR
-      *
-     D isInzSr         S                   like(bool_t) inz(bFalse)
-      *
-      ********************************************************************
-      *                 S T E U E R  -  R O U T I N E                    *
-      ********************************************************************
-      *
-     D PEEK50          PI
-     D  i_dsp80                            const like(dsp80_t)
-     D  i_copyright                        const like(copyRght_t)
-     D  io_pinTabC                               like(fieldNme_t) dim(12)
-     D  o_msgID                                  like(msgID_t)
-     D  o_msgDta                                 like(msgDta_t)
-      *
-      *----------------------------------------------------*
-      *  Schlüsselliste für PEEKFLDL1
-     C     F1Key         KLIST
-     C                   KFLD                    F_Seq
-      *
-      *----------------------------------------------------*
-      *  Schlüsselliste für PEEKWRK
-     C     W0KEY         KLIST
-     C                   KFLD                    W_Key
-      *
-      *---------------------------------------------------*
-      *
-      *  Register error handler
-     C                   callp     CEEHDLR(%paddr('errorHandler')
-     C                                     : *null: *omit)
-      *
-     C                   EXSR      InzSr
-      *
-     C                   EXSR      FIRST
-      *
-      *---------------------------------------------------*
-      *  Schleife für Programmbearbeitung
-      *
-     C                   DO        *HIVAL
-      *
-      *  Prüfen Positionierung der Subfile
-     C     SFSANR        IFLE      *ZEROS
-     C                   EVAL      SFSANR = 1
-     C                   Endif
-      *
-      *  Warnung, bei mehr als 12 Spalten
-     C                   If        (NbrPinCol > %elem(io_pinTabC))
-     C                   CLEAR                   USR8205
-     C                   Eval      USR82051 = %elem(io_pinTabC)
-     C                   Callp     p_sndPgmMg('USR8205': USR8205: §§pgmName)
-     C                   Endif
-      *
-      *  Modus: DROP/FOLD
-     C                   EVAL      *IN86 = SFLMDE
-      *
-      *  Nachrichten anzeigen
-     C                   EVAL      *IN89 = '0'
-     C                   WRITE     MSGCTL
-      *
-      *  "Keine Sätze ..."
-     C     *IN80         IFEQ      '0'
-     C                   WRITE     PBLEER
-     C                   Endif
-      *
-      *  Anzeigen der Befehlstasten
-     C                   WRITE     PBBOT#0                                      Trennlinie
-      *
-     C                   SELECT
-     C                   When      (SFBOT = 2) and
-     C                             (yNbrOfKeys > NbrFKeys * (SFBOT - 1))
-     C                   WRITE     PBBOT#2                                      BT-Tasten 2
-     C                   When      (SFBOT = 3) and
-     C                             (yNbrOfKeys > NbrFKeys * (SFBOT - 1))
-     C                   WRITE     PBBOT#3                                      BT-Tasten 3
-     C                   When      (SFBOT = 4) and
-     C                             (yNbrOfKeys > NbrFKeys * (SFBOT - 1))
-     C                   WRITE     PBBOT#4                                      BT-Tasten 4
-     C                   When      (SFBOT = 5) and
-     C                             (yNbrOfKeys > NbrFKeys * (SFBOT - 1))
-     C                   WRITE     PBBOT#5                                      BT-Tasten 4
-     C                   When      (SFBOT = 6) and
-     C                             (yNbrOfKeys > NbrFKeys * (SFBOT - 1))
-     C                   WRITE     PBBOT#6                                      BT-Tasten 4
-     C                   OTHER
-     C                   WRITE     PBBOT#1                                      BT-Tasten 1
-     C                   EVAL      SFBOT = 1
-     C                   Endsl
-      *
-      *  Anzeige der Subfile
-     C                   EXFMT     PBCTL
-     C                   EVAL      *IN70 = '0'
-      *
-      *  Nachrichten löschen
-     C                   Callp     p_rmvPgmMg(§§pgmName)
-      *
-      *  Aktuelle Satz-Nr.
-     C     SFLCSR        IFGT      *ZEROS
-     C                   EVAL      SFSANR = SFLCSR
-     C                   Endif
-      *
-      *  Mappen der gedrückten Taste
-      *  in Programmbefehl
-     C                   CALLP     PEEK21(workstn.aid: §§PgmName
-     C                                    : YPgmCmd: YCmdDta: YMsgID: YMsgDta)
-     C     YMsgID        IFNE      *BLANKS
-     C                   Callp     p_sndPgmMg(yMsgID: yMsgDta: §§pgmName)
-     C                   EVAL      YMsgID = ''
-     C                   EVAL      YMsgDta = ''
-     C                   ITER
-     C                   Endif
-      *
-      *  Abfragen der Befehlstasten
-     C                   SELECT
-      *  F3  - Ende
-     C     YPgmCmd       WHENEQ    '*EXIT'
-     C                   EXSR      C_EndPgm
-     C                   LEAVE
-      *
-      *  F3  - Sichern & beenden
-     C     YPgmCmd       WHENEQ    '*SAVE_EXIT'
-     C                   EXSR      C_SaveExit
-     C                   LEAVE
-      *
-      *  F5  - Aktualisieren
-     C     YPgmCmd       WHENEQ    '*REFRESH'
-     C                   EXSR      C_Refresh
-     C                   ITER
-      *
-      *  F16 - Suchen
-     C     YPgmCmd       WHENEQ    '*SEARCH'
-     C                   EXSR      C_Search
-     C                   ITER
-      *
-      *   F17 - Anfang Datensatz
-     C     YPgmCmd       WHENEQ    '*TOP'
-     C                   EXSR      C_Top
-     C                   ITER
-      *   F18 - Ende Datensatz
-     C     YPgmCmd       WHENEQ    '*BOT'
-     C                   EXSR      C_Bot
-     C                   ITER
-      *
-      *  F22 - Alle Löschen
-     C     YPgmCmd       WHENEQ    '*CLRALL'
-     C                   EXSR      C_ClrAll
-     C                   ITER
-      *
-      *  F12 - Ende
-     C     YPgmCmd       WHENEQ    '*CANCEL'
-     C                   EXSR      C_EndPgm
-     C                   LEAVE
-      *
-      *  F24 - Weitere Tasten
-     C     YPgmCmd       WHENEQ    '*MOREKEYS'
-     C                   EXSR      C_MoreKeys
-      *
-      *  Datenfreigabe
-     C     YPgmCmd       WHENEQ    '*ENTER'
-     C                   EXSR      C_Enter
-      *  Page up
-     C     YPgmCmd       WHENEQ    '*PAGEUP'
-      *  Page down
-     C     YPgmCmd       WHENEQ    '*PAGEDOWN'
-      *
-     C                   OTHER
-      *  Falsche Taste gedrückt
-     C                   Callp     p_wrongKey(workstn.aid: §§pgmName)
-     C                   Iter
-     C                   Endsl
-      *
-     C                   Enddo                                                  *HIVAL
-      *
-      *  Ende der Hauptschleife
-      *---------------------------------------------------*
-      *
-      *  Programm verlassen
-     C     ENDE          TAG
-      *
-     C                   CLOSE     PEEK50FM
-     C                   CLOSE     PEEKFLD
-     C                   CLOSE     PEEKFLDL1
-     C                   CLOSE     PEEKWRK
-     C                   CLOSE     PEEKWRK_
-      *
-     C                   RETURN
-      *
-      *============================================================*
-      *    C_Enter       "Datenfreigabetaste"                      *
-      *============================================================*
-      *
-     C     C_Enter       BEGSR
-      *
-     C                   EXSR      VReadC
-      *
-     C     ##Field       IFNE      *BLANKS
-     C                   EXSR      C_Search
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_Search      F16 - Suchen                              *
-      *============================================================*
-      *
-     C     C_Search      BEGSR
-      *
-     C     ##Field       IFNE      *BLANKS
-     C                   EVAL      LstField = ##Field
-     C                   EVAL      ##Field = *BLANKS
-     C                   Endif
-      *
-     C     LstField      IFEQ      *BLANKS
-     C                   EVAL      *IN70 = '1'
-     C                   CLEAR                   USR8209
-     C                   Callp     p_sndPgmMg('USR8209': USR8209: §§pgmName)
-     C                   ELSE
-     C                   EXSR      PosToField
-     C     IsNewPos      IFEQ      bTrue
-     C                   EVAL      SFSANR = Wrk_SFSANR
-     C                   Endif
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PosToField    Subfile neu positionieren                 *
-      *============================================================*
-      *
-     C     PosToField    BEGSR
-      *
-     C     LstField      IFNE      R_Field
-     C                   Eval      LstNbrRcd = 0
-     C                   Endif
-      *
-     C     LstField      IFEQ      *BLANKS
-     C                   EVAL      IsNewPos = bFalse
-     C                   Eval      LstNbrRcd = 0
-     C                   ELSE
-      *
-     C                   EXSR      SrchField
-     C     IsFound       IFEQ      bFalse
-     C                   EVAL      IsNewPos = bFalse
-     C                   CLEAR                   USR8136
-     C                   EVAL      USR81361 = LstField
-     C                   Callp     p_sndPgmMg('USR8136': USR8136: §§pgmName)
-     C                   ELSE
-     C                   EVAL      IsNewPos = bTrue
-     C                   Endif
-     C                   Endif
-      *
-     C                   EVAL      R_Field = LstField
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    SrchField     Suchen Feld in Subfile                    *
-      *============================================================*
-      *
-     C     SrchField     BEGSR
-      *
-     C     *IN80         IFEQ      '0'
-     C                   EVAL      IsFound = bFalse
-     C                   ELSE
-      *
-     C                   EVAL      IsFound = bFalse
-     C                   Eval      LstNbrRcd = LstNbrRcd + 1
-      *
-     C     LstNbrRcd     DO        SflNbrRcd     SflRec
-     C     SflRec        CHAIN     PBSFL                              1111
-     C     *IN11         IFEQ      '1'
-     C                   EVAL      IsFound = bFalse
-     C                   LEAVE
-     C                   Endif
-      *
-     C                   IF        LstField =
-     C                             %subst($$FNME: 1:(f_scan(' ':
-     C                                                      LstFIELD) - 1))
-     C                   EVAL      IsFound = bTrue
-     C                   LEAVE
-     C                   ELSE
-     C     SFPAU         IFNE      *BLANKS
-      *  ... Satz geändert
-     C                   EXSR      VSfpauChg
-     C                   ELSE
-      *  ... Satz nicht geändert
-     C                   EXSR      VSfpauClr
-     C                   Endif
-      *  Setzen Bezugszahlen ...
-     C                   EXSR      PBSetBZ
-     C                   UPDATE    PBSFL
-     C                   ITER
-     C                   Endif
-      *
-     C                   Enddo
-      *
-     C     IsFound       IFEQ      bTrue
-     C                   EVAL      Wrk_SFSANR = SflRec
-     C                   Eval      LstNbrRcd = SflRec
-     C                   ELSE
-     C                   EVAL      Wrk_SFSANR = *ZEROS
-     C                   Eval      LstNbrRcd = 0
-     C                   Endif
-      *
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    SrchInit      Initialisieren Suchfunktion               *
-      *============================================================*
-      *
-     C     SrchInit      BEGSR
-      *
-     C                   Eval      LstField  = ' '
-     C                   Eval      LstNbrRcd = 0
-     C                   Eval      R_Field   = LstField
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    VReadC        Verarbeiten der Subfileauswahlen          *
-      *============================================================*
-      *
-     C     VReadC        BEGSR
-      *
-     C                   EVAL      IsSflError = bFalse
-      *
-     C     *IN80         IFEQ      '0'
-      *   keine Einträge in Subfile vorhanden ...
-     C                   ELSE
-      *
-     C     1             DO        SflNbrRcd
-     C                   READC     PBSFL                                  1111
-     C     *IN11         IFEQ      '1'
-     C                   LEAVE
-     C                   Endif
-      *
-     C     SflRec        CHAIN     PBSFL                              11
-      *
-     C                   EXSR      SflBzoff
-      *
-      *  Cursorpositionierung ...
-     C     IsSflError    IFEQ      bFalse
-     C                   EVAL      SflCsr = SflRec
-     C                   ELSE
-      *  Subfile nicht neu positionieren
-     C                   Endif
-      *
-      *  Linksbündig setzen ...
-     C                   EVAL      SFPAU = %triml(SFPAU)
-      *
-      *  Zuordnung AUSWAHL => Befehl ...
-     C                   CALLP     PEEK21('#' + SFPAU: §§PgmName
-     C                                    : YPgmCmd: YCmdDta: YMsgID: YMsgDta)
-     C     YMsgID        IFNE      *BLANKS
-      *  Fehlermeldung ...
-     C                   Callp     p_sndPgmMg('USR8110': SFPAU: §§pgmName)
-     C                   EXSR      VSfpauErr
-      *  Setzen Bezugszahlen ...
-     C                   EXSR      PBSetBZ
-     C                   UPDATE    PBSfl
-     C                   EVAL      IsSflError = bTrue
-     C                   ITER
-     C                   Endif
-      *
-      *----------------------------*
-      *  Ausführen SFL-Befehl ...  *
-      *----------------------------*
-     C                   EVAL      Sfl_Cmd = YPgmCmd
-      *
-     C                   SELECT
-     C     Sfl_Cmd       WHENEQ    '*NONE'
-     C                   OTHER
-      *  Unbekannter Programmbefehl
-     C                   CLEAR                   USR8110
-     C                   EVAL      USR81101 = YPgmCmd
-     C                   Callp     p_sndPgmMg('USR8110': USR8110: §§pgmName)
-     C                   EXSR      VSfpauErr
-      *  Setzen Bezugszahlen ...
-     C                   EXSR      PBSetBZ
-     C                   UPDATE    PBSfl
-     C                   EVAL      IsSflError = bTrue
-     C                   ITER
-     C                   Endsl
-      *
-      *----------------------------*
-      *  Verarbeiten               *
-      *  Datensatzänderungen       *
-      *----------------------------*
-     C                   EXSR      VPos
-     C                   EXSR      VSfpauClr
-      *
-      *  Setzen Bezugszahlen ...
-     C                   EXSR      PBSetBZ
-     C                   UPDATE    PBSfl
-     C                   Enddo
-      *
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_EndPgm      F3/F12 - Programm beenden                 *
-      *============================================================*
-      *
-     C     C_EndPgm      BEGSR
-      *
-     C                   Callp     p_rmvPgmMg(§§pgmName)
-      *
-     C                   EVAL      o_msgID = 'USR8100'
-     C                   EVAL      USR81001 = YPgmCmd
-     C                   EVAL      o_msgDta = USR8100
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_SaveExit    F3     - Sichern und beenden              *
-      *============================================================*
-      *
-     C     C_SaveExit    BEGSR
-      *
-     C                   Clear                   io_pinTabC
-     C                   Eval      X = 0
-      *
-     C                   EVAL      W_Key = *ZEROS
-     C     W0Key         Setll     FPEEKWRK
-      *
-     C                   DO        *HIVAL
-     C                   READ  (N) FPEEKWRK                               83
-     C     *IN83         IFEQ      '1'
-     C                   LEAVE
-     C                   Endif
-      *
-     C                   EVAL      WRK0002 = W_Data
-      *
-     C                   If        (x < %elem(io_pinTabC)) and
-     C                             (Wrk_Seq <> 0)
-     C                   Eval      X = X + 1
-     C                   Eval      io_pinTabC(x) = Wrk_FNme
-     C                   Endif
-     C                   Enddo
-      *
-     C                   Callp     p_rmvPgmMg(§§pgmName)
-      *
-     C                   EVAL      o_msgID = 'USR8112'
-     C                   EVAL      o_msgDta = *BLANKS
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_Refresh     F5  - Aktualisieren der Subfile           *
-      *============================================================*
-      *
-     C     C_Refresh     BEGSR
-      *
-      * - Subfile neu aufbauen
-     C                   EVAL      W_Key = *ZEROS
-     C                   EXSR      PBInit
-     C                   EXSR      PBSetLL
-     C                   EXSR      PBReadUp
-      *
-     C                   EXSR      SrchInit
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_Top         F17 - Anfang der Subfile                  *
-      *============================================================*
-      *
-     C     C_Top         BEGSR
-      *
-     C                   EVAL      SFSANR = 1
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_Bot         F18 - Ende der Subfile                    *
-      *============================================================*
-      *
-     C     C_Bot         BEGSR
-      *
-     C                   EVAL      SFSANR = SflNbrRcd
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_ClrAll      F22 - Löschen alle Einträge               *
-      *                        der Pintabelle                      *
-      *============================================================*
-      *
-     C     C_ClrAll      BEGSR
-      *
-     C                   EVAL      W_Key = *ZEROS
-     C     W0Key         Setll     FPEEKWRK
-      *
-     C                   DO        *HIVAL
-     C                   READ      FPEEKWRK                               83
-     C     *IN83         IFEQ      '1'
-     C                   LEAVE
-     C                   Endif
-      *
-     C                   EVAL      WRK0002 = W_Data
-      *
-     C                   Eval      ##Seq = 0
-     C                   Exsr      FillRecord
-     C                   Exsr      FillKey
-      *
-     C                   EVAL      W_Data = WRK0002
-     C                   Update    FPEEKWRK
-     C                   Enddo
-      *
-     C                   Exsr      C_Refresh
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    C_MoreKeys    F24 - Weitere Tasten                      *
-      *============================================================*
-      *
-     C     C_MoreKeys    BEGSR
-      *
-     C                   EVAL      SFBOT = SFBOT + 1
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    FillRecord    Füllen Datensatz in PEEKWRK               *
-      *============================================================*
-      *
-     C     FillRecord    BEGSR
-      *
-     C                   If        (##Seq   <> 0) and
-     C                             (WRK_Seq  = 0)
-     C                   Eval      NbrPinCol = NbrPinCol + 1
-     C                   Endif
-      *
-     C                   If        (##Seq    = 0) and
-     C                             (WRK_Seq <> 0)
-     C                   Eval      NbrPinCol = NbrPinCol - 1
-     C                   Endif
-      *
-     C                   EVAL      WRK_Seq = ##Seq
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    FillKey       Füllen Schlüsselfelder in PEEKWRK         *
-      *============================================================*
-      *
-     C     FillKey       BEGSR
-      *
-     C                   If        WRK_Seq = 0
-     C                   EVAL      W_Key = *HIVAL
-     C                   Else
-     C                   EVAL      W_Key = WRK_Seq
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    SflBzoff      Aussetzen aller Subfilebezugszahlen       *
-      *                  für die MArkierung von Eingabefehlern     *
-      *============================================================*
-      *
-     C     SflBzoff      BEGSR
-      *
-      *  DSPATR(PC)
-     C                   EVAL      %subarr(*in: 20: 10) = '0'
-      *  DSPATR(RI)
-     C                   EVAL      %subarr(*in: 30: 10) = '0'
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    VPos          Verarbeiten der Eingaben                  *
-      *============================================================*
-      *
-     C     VPos          BEGSR
-      *
-     C     RecordNbr     CHAIN     PEEKWRK_      DS_PEEKWRK           11
-     C     *IN11         IFEQ      '1'
-      *  Weiß noch nicht, was zu tun ist ...
-     C                   ELSE
-     C                   EVAL      WRK0002 = W_Data
-     C                   EXSR      FillRecord
-     C                   EXSR      FillKey
-     C                   EVAL      W_Data = WRK0002
-     C                   UPDATE    PEEKWRK_      DS_PEEKWRK
-     C                   Endif
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    VSfpauClr     Löschen Subfileauswahl                    *
-      *============================================================*
-      *
-     C     VSfpauClr     BEGSR
-      *
-     C                   EVAL      SFPAU = *BLANKS
-     C                   EVAL      *IN85 = '0'                                  DSPATR(RI)
-     C                   EVAL      *IN84 = '0'                                  SFLNXTCHG
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    VSfpauErr     Anzeigen fehlerhafter Subfileauswahl      *
-      *============================================================*
-      *
-     C     VSfpauErr     BEGSR
-      *
-     C                   EVAL      *IN85 = '1'                                  DSPATR(RI)
-     C                   EXSR      VSfpauChg
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    VSfpauChg     Datensatz in Subfile als geändert         *
-      *                  markieren                                 *
-      *============================================================*
-      *
-     C     VSfpauChg     BEGSR
-      *
-     C                   EVAL      *IN84 = '1'                                  SFLNXTCHG
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PBInit        Initialisieren der Subfile zur Anzeige    *
-      *                  der nächsten Seite                        *
-      *============================================================*
-      *
-     C     PBINIT        BEGSR
-      *
-     C                   EVAL      *IN89 = '0'
-     C                   WRITE     MSGCTL
-      *
-     C                   EVAL      *IN80 = '0'                                  SFLDSP
-     C                   EVAL      *IN81 = '1'                                  SFLDSPCTL
-     C                   EVAL      *IN82 = '1'                                  SFLCLR
-     C                   EVAL      *IN83 = '1'                                  SFLEND
-     C                   WRITE     PBCTL
-      *
-     C                   EVAL      *IN82 = '0'                                  SFLCLR
-      *
-     C                   EVAL      SFLREC = *ZEROS
-     C                   EVAL      SflNbrRcd = *ZEROS
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PBReadUP      Vorwärts füllen der Subfile               *
-      *============================================================*
-      *
-     C     PBReadUP      BEGSR
-      *
-     C                   DO        *HIVAL
-     C                   READ  (N) FPEEKWRK                               83
-     C     *IN83         IFEQ      '1'
-     C                   LEAVE
-     C                   Endif
-      *
-     C                   EXSR      PBFill
-      *
-     C                   EVAL      SflRec = SflRec + 1
-      *  Setzen Bezugszahlen ...
-     C                   EXSR      PBSetBZ
-     C                   WRITE     PBSfl
-     C                   EVAL      SflNbrRcd = SflRec
-      *
-     C     SFLRec        IFGE      SflPage
-     C                   LEAVE
-     C                   Endif
-      *
-     C                   Enddo
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PBFill        Füllen Subfilesatz                        *
-      *============================================================*
-      *
-     C     PBFill        BEGSR
-      *
-     C                   EXSR      SflBzoff
-      *
-     C                   EVAL      RecordNbr = Work_00_DS.RcdNbr
-      *
-     C                   EVAL      WRK0002 = W_Data
-      *
-     C     WRK_RcdNbr    CHAIN     FPEEKFLD                           11
-      *
-     C                   EVAL      FLDL0100 = F_FFD
-      *
-      *  ... Folgenummer
-     C                   EVAL      ##Seq = Wrk_Seq
-      *  ... Feldname
-     C                   EVAL      $$FNme = Wrk_FNme
-      *  ... Feldbezeichnung
-     C                   EVAL      $$FTxt = Wrk_FTxt
-      *  ... Keyfeldnummer
-     C     F_KSeq        IFNE      *ZEROS
-     C                   EVAL      $$KSeq = 'K'+%editc(%dec(F_KSeq: 3: 0): 'X')
-     C                   ELSE
-     C                   EVAL      $$KSeq = ''
-     C                   Endif
-      *
-      *  ... anzeigen Subfile
-     C                   EVAL      *IN80 = '1'                                  SFLDSP
-      *
-      *  ... Löschen Subfileauswahl
-     C                   EXSR      VSfpauClr
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PBSetLL       Setzen Dateizeiger                        *
-      *============================================================*
-      *
-     C     PBSetLL       BEGSR
-      *
-     C     W0Key         SETLL     FPEEKWRK
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    PBSetBZ       Setzen Bezugszahlen                       *
-      *============================================================*
-      *
-     C     PBSetBZ       BEGSR
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    SetScreen     Einstellen 132/80-Zeichen Auflösung       *
-      *============================================================*
-      *
-     C     SetScreen     BEGSR
-      *
-     C     i_dsp80       IFEQ      '0'
-      *   132-Zeichen Anzeige
-     C                   EVAL      *IN88 = '0'
-     C                   EVAL      ZEI = 2
-     C                   EVAL      POS = 2
-     C                   ELSE
-      *    80-Zeichen Anzeige
-     C                   EVAL      *IN88 = '1'
-     C                   EVAL      ZEI = 2
-     C                   EVAL      POS = 2
-     C                   Endif
-      *
-     C                   EVAL      SflPage = *HIVAL
-     C                   EVAL      SflPageDDS = 4
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    ClrPeekWrk    Löschen der Datei PEEKWRK                 *
-      *============================================================*
-      *
-     C     ClrPeekWrk    BEGSR
-      *
-     C                   EVAL      §File = WORK_FILE_NAME
-     C                   EVAL      §Lib = WORK_FILE_LIBRARY
-     C                   EVAL      §Mbr = WORK_FILE_MEMBER
+
+       dcl-ds fldl0100 likeds(fldl0100_t) inz;
+
+       dcl-ds peek_00_ds likeds(infds_t);
+       dcl-ds peek_01_ds likeds(infds_t);
+
+       dcl-ds ds_peekwrk extname('PEEKWRK') inz len(1024)
+              prefix(w_);
+       end-ds;
+
+       dcl-ds work_00_ds likeds(infds_t);
+       dcl-ds work_01_ds likeds(infds_t);
+
+       dcl-s yfkeys          char(18) dim(32);
+       dcl-s ynbrofkeys      like(int4_t);
+       dcl-s ymsgid          char(7);
+       dcl-s ymsgdta         char(512);
+
+       dcl-s ypgmcmd         char(10);
+       dcl-s ycmddta         like(pgmcmddt_t);
+
+       dcl-s sflpage         like(int4_t);
+       dcl-s sflpagedds      like(sflpage);
+       dcl-s sflrec          like(sflpage);
+       dcl-s sflnbrrcd       like(sflpage);
+
+       dcl-s sfbot           like(int4_t);
+       dcl-c nbrfkeys const(3);
+       dcl-s sfl_cmd         char(10);
+
+       dcl-s issflerror      char(1) inz(bFalse);
+       dcl-s isnewpos        char(1) inz(bFalse);
+       dcl-s isfound         char(1) inz(bFalse);
+
+       dcl-s peek21_name     like(pgmcalln_t);
+       dcl-s peek23_name     like(pgmcalln_t);
+
+       dcl-s r_field         like(##field);
+       dcl-s lstfield        like(##field);
+       dcl-s lstnbrrcd       like(sflpage);
+
+       dcl-s wrk_sfsanr      like(sfsanr );
+       dcl-s x               like(int4_t);
+       dcl-s nbrpincol       like(int4_t);
+
+       dcl-ds wrk0002 likeds(wrk0002_t) inz(*likeds);
+
+       dcl-s isInzSr         like(bool_t) inz(bFalse);
+
+       //*******************************************************************
+       //                 S T E U E R  -  R O U T I N E                    *
+       //*******************************************************************
+
+       dcl-pi peek50;
+         i_dsp80         const like(dsp80_t);
+         i_copyright     const like(copyrght_t);
+         io_pintabc      like(fieldnme_t) dim(12);
+         o_msgid         like(msgid_t);
+         o_msgdta        like(msgdta_t);
+       end-pi;
+
+       dcl-s do_x2           packed(7);
+
+       dcl-ds f1key likerec(fpeekfldl1: *key);
+       dcl-ds w0key likerec(fpeekwrk: *key);
+       //---------------------------------------------------*
+
+       //  Register error handler
+       ceehdlr(%paddr('errorHandler')
+              : *null: *omit);
+
+       exsr inzsr;
+
+       exsr first;
+
+       dow ('1');
+
+          //  Prüfen Positionierung der Subfile
+          if sfsanr <= *zeros;
+             sfsanr = 1;
+          endif;
+
+          //  Warnung, bei mehr als 12 Spalten
+          if (nbrpincol > %elem(io_pintabc));
+             clear usr8205;
+             usr82051 = %elem(io_pintabc);
+             p_sndpgmmg('USR8205': usr8205: §§pgmname);
+          endif;
+
+          //  Modus: DROP/FOLD
+          *in86 = sflmde;
+
+          //  Nachrichten anzeigen
+          *in89 = '0';
+          write msgctl;
+
+          //  "Keine Sätze ..."
+          if *in80 = *off;
+             write pbleer;
+          endif;
+
+          //  Anzeigen der Befehlstasten
+          write pbbot#0;
+
+          select;
+          when (sfbot = 2) and
+             (ynbrofkeys > nbrfkeys * (sfbot - 1));
+             write pbbot#2;
+          when (sfbot = 3) and
+             (ynbrofkeys > nbrfkeys * (sfbot - 1));
+             write pbbot#3;
+          when (sfbot = 4) and
+             (ynbrofkeys > nbrfkeys * (sfbot - 1));
+             write pbbot#4;
+          when (sfbot = 5) and
+             (ynbrofkeys > nbrfkeys * (sfbot - 1));
+             write pbbot#5;
+          when (sfbot = 6) and
+             (ynbrofkeys > nbrfkeys * (sfbot - 1));
+             write pbbot#6;
+          other;
+             write pbbot#1;
+             sfbot = 1;
+          endsl;
+
+          //  Anzeige der Subfile
+          exfmt pbctl;
+          *in70 = '0';
+
+          //  Nachrichten löschen
+          p_rmvpgmmg(§§pgmname);
+
+          //  Aktuelle Satz-Nr.
+          if sflcsr > *zeros;
+             sfsanr = sflcsr;
+          endif;
+
+          //  Mappen der gedrückten Taste
+          //  in Programmbefehl
+          peek21(workstn.aid: §§pgmname
+                : ypgmcmd: ycmddta: ymsgid: ymsgdta);
+          if ymsgid <> *blanks;
+             p_sndpgmmg(ymsgid: ymsgdta: §§pgmname);
+             ymsgid = '';
+             ymsgdta = '';
+             iter;
+          endif;
+
+          //  Abfragen der Befehlstasten
+          select;
+             //  F3  - Ende
+          when ypgmcmd = '*EXIT';
+             exsr c_endpgm;
+             leave;
+
+             //  F3  - Sichern & beenden
+          when ypgmcmd = '*SAVE_EXIT';
+             exsr c_saveexit;
+             leave;
+
+             //  F5  - Aktualisieren
+          when ypgmcmd = '*REFRESH';
+             exsr c_refresh;
+             iter;
+
+             //  F16 - Suchen
+          when ypgmcmd = '*SEARCH';
+             exsr c_search;
+             iter;
+
+             //   F17 - Anfang Datensatz
+          when ypgmcmd = '*TOP';
+             exsr c_top;
+             iter;
+             //   F18 - Ende Datensatz
+          when ypgmcmd = '*BOT';
+             exsr c_bot;
+             iter;
+
+             //  F22 - Alle Löschen
+          when ypgmcmd = '*CLRALL';
+             exsr c_clrall;
+             iter;
+
+             //  F12 - Ende
+          when ypgmcmd = '*CANCEL';
+             exsr c_endpgm;
+             leave;
+
+             //  F24 - Weitere Tasten
+          when ypgmcmd = '*MOREKEYS';
+             exsr c_morekeys;
+
+             //  Datenfreigabe
+          when ypgmcmd = '*ENTER';
+             exsr c_enter;
+             //  Page up
+          when ypgmcmd = '*PAGEUP';
+             //  Page down
+          when ypgmcmd = '*PAGEDOWN';
+
+          other;
+             //  Falsche Taste gedrückt
+             p_wrongkey(workstn.aid: §§pgmname);
+             iter;
+          endsl;
+
+       enddo;
+
+       close peek50fm;
+       close peekfld;
+       close peekfldl1;
+       close peekwrk;
+       close peekwrk_;
+
+       return;
+
+       //============================================================*
+       //    C_Enter       "Datenfreigabetaste"                      *
+       //============================================================*
+
+       begsr c_enter;
+
+          exsr vreadc;
+
+          if ##field <> *blanks;
+             exsr c_search;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    C_Search      F16 - Suchen                              *
+       //============================================================*
+
+       begsr c_search;
+
+          if ##field <> *blanks;
+             lstfield = ##field;
+             ##field = *blanks;
+          endif;
+
+          if lstfield = *blanks;
+             *in70 = '1';
+             clear usr8209;
+             p_sndpgmmg('USR8209': usr8209: §§pgmname);
+          else;
+             exsr postofield;
+             if isnewpos = btrue;
+                sfsanr = wrk_sfsanr;
+             endif;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    PosToField    Subfile neu positionieren                 *
+       //============================================================*
+
+       begsr postofield;
+
+          if lstfield <> r_field;
+             lstnbrrcd = 0;
+          endif;
+
+          if lstfield = *blanks;
+             isnewpos = bFalse;
+             lstnbrrcd = 0;
+          else;
+
+             exsr srchfield;
+             if isfound = bFalse;
+                isnewpos = bFalse;
+                clear usr8136;
+                usr81361 = lstfield;
+                p_sndpgmmg('USR8136': usr8136: §§pgmname);
+             else;
+                isnewpos = btrue;
+             endif;
+          endif;
+
+          r_field = lstfield;
+
+       endsr;
+
+       //============================================================*
+       //    SrchField     Suchen Feld in Subfile                    *
+       //============================================================*
+
+       begsr srchfield;
+
+          if *in80 = *off;
+             isfound = bFalse;
+          else;
+
+             isfound = bFalse;
+             lstnbrrcd = lstnbrrcd + 1;
+
+             for sflrec = lstnbrrcd to sflnbrrcd;
+                chain(e) sflrec pbsfl;
+                *in11 = %error or not %found;
+                if *in11 = *on;
+                   isfound = bFalse;
+                   leave;
+                endif;
+
+                if lstfield =
+                   %subst($$fnme: 1:(f_scan(' ':
+                                         lstfield) - 1));
+                   isfound = btrue;
+                   leave;
+                else;
+                   if sfpau <> *blanks;
+                      //  ... Satz geändert
+                      exsr vsfpauchg;
+                   else;
+                      //  ... Satz nicht geändert
+                      exsr vsfpauclr;
+                   endif;
+                   //  Setzen Bezugszahlen ...
+                   exsr pbsetbz;
+                   update pbsfl;
+                   iter;
+                endif;
+
+             endfor;
+
+             if isfound = btrue;
+                wrk_sfsanr = sflrec;
+                lstnbrrcd = sflrec;
+             else;
+                wrk_sfsanr = *zeros;
+                lstnbrrcd = 0;
+             endif;
+
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    SrchInit      Initialisieren Suchfunktion               *
+       //============================================================*
+
+       begsr srchinit;
+
+          lstfield  = ' ';
+          lstnbrrcd = 0;
+          r_field   = lstfield;
+
+       endsr;
+
+       //============================================================*
+       //    VReadC        Verarbeiten der Subfileauswahlen          *
+       //============================================================*
+
+       begsr vreadc;
+
+          issflerror = bFalse;
+
+          if *in80 = *off;
+             //   keine Einträge in Subfile vorhanden ...
+          else;
+
+             for do_x2 = 1 to sflnbrrcd;
+                readc pbsfl;
+                *in11 = %eof;
+                if *in11 = *on;
+                   leave;
+                endif;
+
+                chain sflrec pbsfl;
+                *in11 = not %found;
+
+                exsr sflbzoff;
+
+                //  Cursorpositionierung ...
+                if issflerror = bFalse;
+                   sflcsr = sflrec;
+                else;
+                   //  Subfile nicht neu positionieren
+                endif;
+
+                //  Linksbündig setzen ...
+                sfpau = %triml(sfpau);
+
+                //  Zuordnung AUSWAHL => Befehl ...
+                peek21('#' + sfpau: §§pgmname
+                      : ypgmcmd: ycmddta: ymsgid: ymsgdta);
+                if ymsgid <> *blanks;
+                   //  Fehlermeldung ...
+                   p_sndpgmmg('USR8110': sfpau: §§pgmname);
+                   exsr vsfpauerr;
+                   //  Setzen Bezugszahlen ...
+                   exsr pbsetbz;
+                   update pbsfl;
+                   issflerror = btrue;
+                   iter;
+                endif;
+
+                //----------------------------*
+                //  Ausführen SFL-Befehl ...  *
+                //----------------------------*
+                sfl_cmd = ypgmcmd;
+
+                select;
+                when sfl_cmd = '*NONE';
+                other;
+                   //  Unbekannter Programmbefehl
+                   clear usr8110;
+                   usr81101 = ypgmcmd;
+                   p_sndpgmmg('USR8110': usr8110: §§pgmname);
+                   exsr vsfpauerr;
+                   //  Setzen Bezugszahlen ...
+                   exsr pbsetbz;
+                   update pbsfl;
+                   issflerror = btrue;
+                   iter;
+                endsl;
+
+                //----------------------------*
+                //  Verarbeiten               *
+                //  Datensatzänderungen       *
+                //----------------------------*
+                exsr vpos;
+                exsr vsfpauclr;
+
+                //  Setzen Bezugszahlen ...
+                exsr pbsetbz;
+                update pbsfl;
+             endfor;
+
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    C_EndPgm      F3/F12 - Programm beenden                 *
+       //============================================================*
+
+       begsr c_endpgm;
+
+          p_rmvpgmmg(§§pgmname);
+
+          o_msgid = 'USR8100';
+          usr81001 = ypgmcmd;
+          o_msgdta = usr8100;
+
+       endsr;
+
+       //============================================================*
+       //    C_SaveExit    F3     - Sichern und beenden              *
+       //============================================================*
+
+       begsr c_saveexit;
+
+          clear io_pintabc;
+          x = 0;
+
+          clear w0key;
+          w0key.w_key = 0;
+          setll %kds(w0key) fpeekwrk;
+
+          dow ('1');
+             read(n) fpeekwrk;
+             if (%eof(peekwrk));
+                *in83 = *on;
+                leave;
+             endif;
+
+             wrk0002 = w_data;
+
+             if (x < %elem(io_pintabc) and wrk0002.wrk_seq <> 0);
+                x = x + 1;
+                io_pintabc(x) = wrk0002.wrk_fnme;
+             endif;
+          enddo;
+
+          p_rmvpgmmg(§§pgmname);
+
+          o_msgid = 'USR8112';
+          o_msgdta = *blanks;
+
+       endsr;
+
+       //============================================================*
+       //    C_Refresh     F5  - Aktualisieren der Subfile           *
+       //============================================================*
+
+       begsr c_refresh;
+
+          // - Subfile neu aufbauen
+          clear w0key;
+          w0key.w_key = 0;
+          exsr pbinit;
+          exsr pbsetll;
+          exsr pbreadup;
+
+          exsr srchinit;
+
+       endsr;
+
+       //============================================================*
+       //    C_Top         F17 - Anfang der Subfile                  *
+       //============================================================*
+
+       begsr c_top;
+
+          sfsanr = 1;
+
+       endsr;
+
+       //============================================================*
+       //    C_Bot         F18 - Ende der Subfile                    *
+       //============================================================*
+
+       begsr c_bot;
+
+          sfsanr = sflnbrrcd;
+
+       endsr;
+
+       //============================================================*
+       //    C_ClrAll      F22 - Löschen alle Einträge               *
+       //                        der Pintabelle                      *
+       //============================================================*
+
+       begsr c_clrall;
+
+          clear w0key;
+          w0key.w_key = 0;
+          setll %kds(w0key) fpeekwrk;
+
+          dow ('1');
+             read fpeekwrk;
+             if (%eof(peekwrk));
+                *in83 = *on;
+                leave;
+             endif;
+
+             wrk0002 = w_data;
+
+             ##seq = 0;
+             exsr fillrecord;
+             exsr fillkey;
+
+             w_data = wrk0002;
+             update fpeekwrk;
+          enddo;
+
+          exsr c_refresh;
+
+       endsr;
+
+       //============================================================*
+       //    C_MoreKeys    F24 - Weitere Tasten                      *
+       //============================================================*
+
+       begsr c_morekeys;
+
+          sfbot = sfbot + 1;
+
+       endsr;
+
+       //============================================================*
+       //    FillRecord    Füllen Datensatz in PEEKWRK               *
+       //============================================================*
+
+       begsr fillrecord;
+
+          if (##seq <> 0 and wrk0002.wrk_seq  = 0);
+             nbrpincol = nbrpincol + 1;
+          endif;
+
+          if (##seq = 0 and wrk0002.wrk_seq <> 0);
+             nbrpincol = nbrpincol - 1;
+          endif;
+
+          wrk0002.wrk_seq = ##seq;
+
+       endsr;
+
+       //============================================================*
+       //    FillKey       Füllen Schlüsselfelder in PEEKWRK         *
+       //============================================================*
+
+       begsr fillkey;
+
+          if (wrk0002.wrk_seq = 0);
+             w_key = *hival;
+          else;
+             w_key = wrk0002.wrk_seq;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    SflBzoff      Aussetzen aller Subfilebezugszahlen       *
+       //                  für die MArkierung von Eingabefehlern     *
+       //============================================================*
+
+       begsr sflbzoff;
+
+          //  DSPATR(PC)
+          %subarr(*in: 20: 10) = '0';
+          //  DSPATR(RI)
+          %subarr(*in: 30: 10) = '0';
+
+       endsr;
+
+       //============================================================*
+       //    VPos          Verarbeiten der Eingaben                  *
+       //============================================================*
+
+       begsr vpos;
+
+          chain recordnbr peekwrk_ ds_peekwrk;
+          *in11 = not %found;
+          if *in11 = *on;
+             //  Weiß noch nicht, was zu tun ist ...
+          else;
+             wrk0002 = w_data;
+             exsr fillrecord;
+             exsr fillkey;
+             w_data = wrk0002;
+             update peekwrk_ ds_peekwrk;
+          endif;
+
+       endsr;
+
+       //============================================================*
+       //    VSfpauClr     Löschen Subfileauswahl                    *
+       //============================================================*
+
+       begsr vsfpauclr;
+
+          sfpau = *blanks;
+          *in85 = '0'; // DSPATR(RI)
+          *in84 = '0'; // SFLNXTCHG
+
+       endsr;
+
+       //============================================================*
+       //    VSfpauErr     Anzeigen fehlerhafter Subfileauswahl      *
+       //============================================================*
+
+       begsr vsfpauerr;
+
+          *in85 = '1'; // DSPATR(RI)
+          exsr vsfpauchg;
+
+       endsr;
+
+       //============================================================*
+       //    VSfpauChg     Datensatz in Subfile als geändert         *
+       //                  markieren                                 *
+       //============================================================*
+
+       begsr vsfpauchg;
+
+          *in84 = '1'; // SFLNXTCHG
+
+       endsr;
+
+       //============================================================*
+       //    PBInit        Initialisieren der Subfile zur Anzeige    *
+       //                  der nächsten Seite                        *
+       //============================================================*
+
+       begsr pbinit;
+
+          *in89 = '0';
+          write msgctl;
+
+          *in80 = '0'; // SFLDSP
+          *in81 = '1'; // SFLDSPCTL
+          *in82 = '1'; // SFLCLR
+          *in83 = '1'; // SFLEND
+          write pbctl;
+
+          *in82 = '0'; // SFLCLR
+
+          sflrec = 0;
+          sflnbrrcd = 0;
+
+       endsr;
+
+       //============================================================*
+       //    PBReadUP      Vorwärts füllen der Subfile               *
+       //============================================================*
+
+       begsr pbreadup;
+
+          dow ('1');
+             read(n) fpeekwrk;
+             if (%eof(peekwrk));
+                *in83 = *on;
+                leave;
+             endif;
+
+             exsr pbfill;
+
+             sflrec = sflrec + 1;
+             //  Setzen Bezugszahlen ...
+             exsr pbsetbz;
+             write pbsfl;
+             sflnbrrcd = sflrec;
+
+             if sflrec >= sflpage;
+                leave;
+             endif;
+
+          enddo;
+
+       endsr;
+
+       //============================================================*
+       //    PBFill        Füllen Subfilesatz                        *
+       //============================================================*
+
+       begsr pbfill;
+
+          exsr sflbzoff;
+
+          recordnbr = work_00_ds.rcdnbr;
+
+          wrk0002 = w_data;
+
+          chain wrk0002.wrk_rcdnbr fpeekfld;
+          *in11 = not %found;
+
+          fldl0100 = f_ffd;
+
+          //  ... Folgenummer
+          ##seq = wrk0002.wrk_seq;
+          //  ... Feldname
+          $$fnme = wrk0002.wrk_fnme;
+          //  ... Feldbezeichnung
+          $$ftxt = wrk0002.wrk_ftxt;
+          //  ... Keyfeldnummer
+          if (f_kseq <> 0);
+             $$kseq = 'K'+%editc(%dec(f_kseq: 3: 0): 'X');
+          else;
+             $$kseq = '';
+          endif;
+
+          //  ... anzeigen Subfile
+          *in80 = '1'; // SFLDSP
+
+          //  ... Löschen Subfileauswahl
+          exsr vsfpauclr;
+
+       endsr;
+
+       //============================================================*
+       //    PBSetLL       Setzen Dateizeiger                        *
+       //============================================================*
+
+       begsr pbsetll;
+
+          setll %kds(w0key) fpeekwrk;
+
+       endsr;
+
+       //============================================================*
+       //    PBSetBZ       Setzen Bezugszahlen                       *
+       //============================================================*
+
+       begsr pbsetbz;
+
+       endsr;
+
+       //============================================================*
+       //    SetScreen     Einstellen 132/80-Zeichen Auflösung       *
+       //============================================================*
+
+       begsr setscreen;
+
+          if i_dsp80 = '0';
+             //   132-Zeichen Anzeige
+             *in88 = '0';
+             zei = 2;
+             pos = 2;
+          else;
+             //    80-Zeichen Anzeige
+             *in88 = '1';
+             zei = 2;
+             pos = 2;
+          endif;
+
+          sflpage = *hival;
+          sflpagedds = 4;
+
+       endsr;
+
+       //============================================================*
+       //    ClrPeekWrk    Löschen der Datei PEEKWRK                 *
+       //============================================================*
+
+       begsr clrpeekwrk;
+
+          §file = work_file_name;
+          §lib = work_file_library;
+          §mbr = work_file_member;
       /COPY QCOPYLE,CLRPFM
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    CopyToWork    Kopieren PEEKFLD nach PEEKWRK             *
-      *============================================================*
-      *
-     C     CopyToWork    BEGSR
-      *
-     C                   Eval      NbrPinCol = 0
-      *
-     C                   EVAL      F_Seq = *ZEROS
-     C     F1Key         SETLL     FPEEKFLDL1
-      *
-     C                   DO        *HIVAL
-     C                   READ      FPEEKFLDL1                             11
-     C     *IN11         IFEQ      '1'
-     C                   LEAVE
-     C                   Endif
-      *
-     C                   CLEAR                   WRK0002
-     C                   CLEAR                   DS_PEEKWRK
-      *
-     C                   EVAL      FLDL0100 = F_FFD
-      *
-      *  ... Folgenummer
-     C                   Eval      x = %lookup(FLDL0100.F1FNME: io_pinTabC: 1)
-     C**                 Eval      X = 1
-     C**   fieldName     LOOKUP    XPinTabC(X)                            99
-     C**   *IN99         IFEQ      '1'
-     C                   If        (x > 0)
-      *  ... gefunden
-     C                   Eval      ##Seq   = x * 10
-     C                   Eval      W_Key   = x * 10
-     C                   ELSE
-      *  ... nicht gefunden
-     C                   Eval      ##Seq   = 0
-     C                   Eval      W_Key   = *HIVAL
-     C                   Endif
-      *
-     C                   Exsr      FillRecord
-      *
-      *  ... sonstige Felder
-     C                   EVAL      WRK_RcdNbr = Peek_01_DS.RcdNbr
-     C                   EVAL      WRK_FNme = FLDL0100.F1FNme
-     C                   EVAL      WRK_FTxt = FLDL0100.F1FTxt
-      *
-     C                   EVAL      W_Format = 'WRK0002'
-     C                   EVAL      W_Data = WRK0002
-      *
-     C                   WRITE     PEEKWRK_      DS_PEEKWRK
-     C                   Enddo
-      *
-     C                   ENDSR
-      *
-      *============================================================*
-      *    First         Initialisierung                           *
-      *============================================================*
-      *
-     C     First         BEGSR
-      *
-      * - Öffnen der Dateien
-     C                   OPEN      PEEKFLD
-     C                   OPEN      PEEKFLDL1
-      *
-     C                   EXSR      ClrPeekWrk
-     C                   OPEN      PEEKWRK
-     C                   OPEN      PEEKWRK_
-     C                   EXSR      CopyToWork
-      *
-     C                   OPEN      PEEK50FM
-      *
-      * - Programm initialisieren
-     C                   Callp     p_rmvPgmMg(§§pgmName)
-      *
-     C                   EVAL      ##Field = *BLANKS
-      *
-      * - Rückkehrcode
-     C                   EVAL      o_msgID = *BLANKS
-     C                   EVAL      o_msgDta = *BLANKS
-      *
-      * - Darstellung der Subfile
-     C                   EVAL      SflMde = '1'
-      *
-      * - Darstellung der Befehlstasten
-     C                   EVAL      SfBot = 1
-      *
-      * - Einstellen der Bildschirmauflösung 80/132-Zeichen
-     C                   EXSR      SetScreen
-      *
-      * - Anzuzeigender Subfilesatz
-     C                   EVAL      SFSANR = 1
-      *
-      * - Subfile füllen
-     C                   EXSR      C_Refresh
-      *
-      * - Copyright
-     C                   Callp     p_sndPgmMg('USR9999': i_copyright: §§pgmName)
-      *
-     C                   ENDSR
-      *
-      *====================================================*
-      *  InzSr --  Initialize program                      *
-      *====================================================*
-      *
-     C     InzSr         Begsr
-      *
-     C                   If        (isInzSr = bTrue)
-     C                   Leavesr
-     C                   Endif
-      *
-     C                   Eval      isInzSr = bTrue
-      *
-     C                   Eval      §PgmQ = '*'
-      *
-     C                   Eval      PEEK21_NAME = f_pgmCallN('PEEK21')
-     C                   Eval      PEEK23_NAME = f_pgmCallN('PEEK23')
-      *
-     C                   Callp     PEEK23(§§PgmName: '*ALL': NbrFKeys
-     C                                    : yFKeys: yNbrOfKeys)
-     C                   Eval      ScrnFKeys = %subarr(YFKeys: 1)
-      *
-     C                   Endsr
-      *
-      *============================================================*
-      *  Program error handler                                     *
-      *============================================================*
-      *
-     P errorHandler    b
-     D                 pi
-     D i_condToken                         value likeds(cee_fc_t)
-     D i_pCommArea                   10i 0 value
-     D o_action                      10i 0
-     D o_newCondToken                            likeds(cee_fc_t)
-      /free
 
-         dump;
-         o_action = CEE_PERCOLATE;
+       endsr;
 
-      /end-free
-     P                 e
-      *
+       //============================================================*
+       //    CopyToWork    Kopieren PEEKFLD nach PEEKWRK             *
+       //============================================================*
+
+       begsr copytowork;
+
+          nbrpincol = 0;
+
+          clear f1key;
+          f1key.f_seq = 0;
+          setll %kds(f1key) fpeekfldl1;
+
+          dow ('1');
+             read fpeekfldl1;
+             if (%eof(peekfldl1));
+                leave;
+             endif;
+
+             clear wrk0002;
+             clear ds_peekwrk;
+
+             fldl0100 = f_ffd;
+
+             //  ... Folgenummer
+             x = %lookup(fldl0100.f1fnme: io_pintabc: 1);
+             if (x > 0);
+                //  ... gefunden
+                ##seq   = x * 10;
+                w_key   = x * 10;
+             else;
+                //  ... nicht gefunden
+                ##seq   = 0;
+                w_key   = *hival;
+             endif;
+
+             exsr fillrecord;
+
+             //  ... sonstige Felder
+             wrk0002.wrk_rcdnbr = peek_01_ds.rcdnbr;
+             wrk0002.wrk_fnme = fldl0100.f1fnme;
+             wrk0002.wrk_ftxt = fldl0100.f1ftxt;
+
+             w_format = 'WRK0002';
+             w_data = wrk0002;
+
+             write peekwrk_ ds_peekwrk;
+          enddo;
+
+       endsr;
+
+       //============================================================*
+       //    First         Initialisierung                           *
+       //============================================================*
+
+       begsr first;
+
+          // - Öffnen der Dateien
+          open peekfld;
+          open peekfldl1;
+
+          exsr clrpeekwrk;
+          open peekwrk;
+          open peekwrk_;
+          exsr copytowork;
+
+          open peek50fm;
+
+          // - Programm initialisieren
+          p_rmvpgmmg(§§pgmname);
+
+          ##field = *blanks;
+
+          // - Rückkehrcode
+          o_msgid = *blanks;
+          o_msgdta = *blanks;
+
+          // - Darstellung der Subfile
+          sflmde = '1';
+
+          // - Darstellung der Befehlstasten
+          sfbot = 1;
+
+          // - Einstellen der Bildschirmauflösung 80/132-Zeichen
+          exsr setscreen;
+
+          // - Anzuzeigender Subfilesatz
+          sfsanr = 1;
+
+          // - Subfile füllen
+          exsr c_refresh;
+
+          // - Copyright
+          p_sndpgmmg('USR9999': i_copyright: §§pgmname);
+
+       endsr;
+
+       //====================================================*
+       //  InzSr --  Initialize program                      *
+       //====================================================*
+
+       begsr inzsr;
+
+          if (isInzSr = btrue);
+             leavesr;
+          endif;
+
+          isInzSr = btrue;
+
+          §pgmq = '*';
+
+          peek21_name = f_pgmcalln('PEEK21');
+          peek23_name = f_pgmcalln('PEEK23');
+
+          peek23(§§pgmname: '*ALL': nbrfkeys
+                : yfkeys: ynbrofkeys);
+          scrnfkeys = %subarr(yfkeys: 1);
+
+       endsr;
+
+       //============================================================*
+       //  Program error handler                                     *
+       //============================================================*
+
+       dcl-proc errorhandler;
+       dcl-pi *N;
+         i_condtoken     value likeds(cee_fc_t);
+         i_pcommarea     int(10) value;
+         o_action        int(10);
+         o_newcondtoken  likeds(cee_fc_t);
+       end-pi;
+
+       dump;
+       o_action = cee_percolate;
+
+       end-proc;
+

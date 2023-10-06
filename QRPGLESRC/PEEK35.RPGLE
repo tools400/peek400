@@ -48,6 +48,8 @@
       /COPY QCOPYLE,PPEEK35
       /undefine internal_prototype
 
+       dcl-ds wrk0001  likeds(wrk0001_t) inz(*likeds);
+
        dcl-s isError         char(1) inz(bFalse);
 
        //*******************************************************************
@@ -125,7 +127,7 @@
           dou ('1');
 
              clear w0key;
-             w0key.w_key = wrk_seq;
+             w0key.w_key = wrk0001.wrk_seq;
              chain %kds(w0key) fpeekwrk;
              if (not %found(peekwrk));
                 //  Hurra, eindeutige Numnmer ...
@@ -158,14 +160,14 @@
           dou ('1');
 
              select;
-             when wrk_hidden = bTrue;
+             when (wrk0001.wrk_hidden = bTrue);
                 //  ist zulässig
-             when wrk_hidden = bFalse;
+             when (wrk0001.wrk_hidden = bFalse);
                 //  ist zulässig
              other;
                 isError = bTrue;
                 o_msgid = 'USR8168';
-                usr81681 = wrk_hidden;
+                usr81681 = wrk0001.wrk_hidden;
                 o_msgdta = usr8168;
                 leave;
              endsl;
@@ -199,14 +201,14 @@
           dou ('1');
 
              select;
-             when wrk_mrkcol = bTrue;
+             when (wrk0001.wrk_mrkcol = bTrue);
                 //  ist zulässig
-             when wrk_mrkcol = bFalse;
+             when (wrk0001.wrk_mrkcol = bFalse);
                 //  ist zulässig
              other;
                 isError = bTrue;
                 o_msgid = 'USR8169';
-                usr81691 = wrk_mrkcol;
+                usr81691 = wrk0001.wrk_mrkcol;
                 o_msgdta = usr8169;
                 leave;
              endsl;
@@ -227,12 +229,12 @@
 
           dou ('1');
 
-             if (wrk_maxsiz > 0);
+             if (wrk0001.wrk_maxsiz > 0);
                 //  ist zulässig
              else;
                 isError = bTrue;
                 o_msgid = 'USR8170';
-                usr81701 = wrk_maxsiz;
+                usr81701 = wrk0001.wrk_maxsiz;
                 o_msgdta = usr8170;
                 leave;
              endif;

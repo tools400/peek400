@@ -684,16 +684,13 @@
        //  Arbeitsfelder
        dcl-ds fldl0100 likeds(fldl0100_t) inz;
 
-       //----------------------------------------------------*
-       //  Schlüsselliste für PEEKFLD
-     C     f_key         klist
-     C                   kfld                    f_field
+       dcl-ds f_key likerec(fpeekfld: *key);
        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-       f_field = i_fldname;
-       chain f_key fpeekfld;
-       *in11 = not %found;
-       if *in11 = *off;
+       clear f_key;
+       f_key.f_field = i_fldname;
+       chain %kds(f_key) fpeekfld;
+       if (%found(peekfld));
           fldl0100 = f_ffd;
           isloaded = btrue;
        else;
@@ -703,7 +700,7 @@
 
        o_fldl0100 = fldl0100;
 
-       return               isloaded;
+       return isloaded;
 
        end-proc;
 

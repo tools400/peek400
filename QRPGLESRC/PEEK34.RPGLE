@@ -118,8 +118,9 @@
 
 
        dcl-ds fldl0100 likeds(fldl0100_t) inz;
+       dcl-ds wrk0001  likeds(wrk0001_t) inz(*likeds);
 
-       dcl-s isInzSr         like(bool_t) inz(bFalse);
+       dcl-s isInzSr like(bool_t) inz(bFalse);
 
        //*******************************************************************
        //                 S T E U E R  -  R O U T I N E                    *
@@ -474,7 +475,7 @@
                 sfl_cmd = ypgmcmd;
 
                 select;
-                when sfl_cmd = '*NONE';
+                when (sfl_cmd = '*NONE');
                 other;
                    //  Unbekannter Programmbefehl
                    clear usr81101;
@@ -599,14 +600,14 @@
 
              wrk0001 = w_data;
 
-             chain wrk_rcdnbr fpeekfld;
+             chain wrk0001.wrk_rcdnbr fpeekfld;
 
              f_seq = r_seq;
-             f_hidden = wrk_hidden;
-             f_color = wrk_color;
-             f_markcol = wrk_mrkcol;
-             f_maxsize = wrk_maxsiz;
-             f_edtcde = wrk_edtcde;
+             f_hidden = wrk0001.wrk_hidden;
+             f_color = wrk0001.wrk_color;
+             f_markcol = wrk0001.wrk_mrkcol;
+             f_maxsize = wrk0001.wrk_maxsiz;
+             f_edtcde = wrk0001.wrk_edtcde;
 
              update fpeekfld;
           enddo;
@@ -659,20 +660,20 @@
 
              wrk0001 = w_data;
 
-             if wrk_kseq = *zeros;
-                wrk_seq = wrk_seq * -1;
+             if (wrk0001.wrk_kseq = 0);
+                wrk0001.wrk_seq = wrk0001.wrk_seq * -1;
              else;
-                wrk_seq = *zeros;
+                wrk0001.wrk_seq = 0;
              endif;
 
-             w_key = wrk_seq;
+             w_key = wrk0001.wrk_seq;
              w_data = wrk0001;
              update fpeekwrk;
           enddo;
 
           //  Nun alle negative Folgenummern neu
           //  durchnummerieren ...
-          r_seq = *zeros;
+          r_seq = 0;
 
           clear w0key;
           w0key.w_key = *hival;
@@ -687,21 +688,21 @@
              wrk0001 = w_data;
 
              //  Schlüsselfelder? ...
-             if (wrk_kseq = 0);
+             if (wrk0001.wrk_kseq = 0);
                 //  ... nein, kein Schlüselfeld
                 r_seq = r_seq + 10;
-                wrk_seq = r_seq;
+                wrk0001.wrk_seq = r_seq;
              else;
                 //  ... ja, Schlüselfeld
-                wrk_seq = wrk_kseq * 10;
-                if (wrk_seq > r_seq);
-                   r_seq = wrk_seq;
+                wrk0001.wrk_seq = wrk0001.wrk_kseq * 10;
+                if (wrk0001.wrk_seq > r_seq);
+                   r_seq = wrk0001.wrk_seq;
                 else;
                    //    R_Seq stehenlassen ...
                 endif;
              endif;
 
-             w_key = wrk_seq;
+             w_key = wrk0001.wrk_seq;
              w_data = wrk0001;
              update fpeekwrk;
           enddo;
@@ -744,21 +745,21 @@
 
        begsr fillrecord;
 
-          wrk_seq = ##seq;
+          wrk0001.wrk_seq = ##seq;
 
           select;
-          when ##hidden = bTrue;
-             wrk_hidden = bFalse;
-          when ##hidden = bFalse;
-             wrk_hidden = bTrue;
+          when (##hidden = bTrue);
+             wrk0001.wrk_hidden = bFalse;
+          when (##hidden = bFalse);
+             wrk0001.wrk_hidden = bTrue;
           other;
-             wrk_hidden = ##hidden;
+             wrk0001.wrk_hidden = ##hidden;
           endsl;
 
-          wrk_color = $$color;
-          wrk_mrkcol = ##markcol;
-          wrk_maxsiz = ##maxsize;
-          wrk_edtcde = ##edtcde;
+          wrk0001.wrk_color = $$color;
+          wrk0001.wrk_mrkcol = ##markcol;
+          wrk0001.wrk_maxsiz = ##maxsize;
+          wrk0001.wrk_edtcde = ##edtcde;
 
        endsr;
 
@@ -784,22 +785,22 @@
        begsr vposcsr;
 
           select;
-          when yfield = 'SEQ';
+          when (yfield = 'SEQ');
              *in20 = '1';         // DSPATR(PC)
              *in30 = '1';         // DSPATR(RI)
-          when yfield = 'HIDDEN';
+          when (yfield = 'HIDDEN');
              *in21 = '1';         // DSPATR(PC)
              *in31 = '1';         // DSPATR(RI)
-          when yfield = 'COLOR';
+          when (yfield = 'COLOR');
              *in22 = '1';         // DSPATR(PC)
              *in32 = '1';         // DSPATR(RI)
-          when yfield = 'MARKCOL';
+          when (yfield = 'MARKCOL');
              *in23 = '1';         // DSPATR(PC)
              *in33 = '1';         // DSPATR(RI)
-          when yfield = 'MAXSIZE';
+          when (yfield = 'MAXSIZE');
              *in24 = '1';         // DSPATR(PC)
              *in34 = '1';         // DSPATR(RI)
-          when yfield = 'EDTCDE';
+          when (yfield = 'EDTCDE');
              *in25 = '1';         // DSPATR(PC)
              *in35 = '1';
           other;
@@ -820,7 +821,7 @@
           else;
              wrk0001 = w_data;
              exsr fillrecord;
-             w_key = wrk_seq;
+             w_key = wrk0001.wrk_seq;
              w_data = wrk0001;
              update peekwrk_ ds_peekwrk;
           endif;
@@ -833,7 +834,7 @@
 
        begsr vsfpauclr;
 
-          sfpau = *blanks;
+          sfpau = '';
           *in85 = '0'; // DSPATR(RI)
           *in84 = '0'; // SFLNXTCHG
 
@@ -879,8 +880,8 @@
 
           *in82 = '0'; // SFLCLR
 
-          sflrec = *zeros;
-          sflnbrrcd = *zeros;
+          sflrec = 0;
+          sflnbrrcd = 0;
 
        endsr;
 
@@ -925,12 +926,12 @@
 
           wrk0001 = w_data;
 
-          chain(n) wrk_rcdnbr fpeekfld;
+          chain(n) wrk0001.wrk_rcdnbr fpeekfld;
 
           fldl0100 = f_ffd;
 
           //  ... Anzeigereihenfolge
-          ##seq = wrk_seq;
+          ##seq = wrk0001.wrk_seq;
           //  ... Feldname
           $$fnme = fldl0100.f1fnme;
           //  ... Feldbezeichnung
@@ -975,22 +976,22 @@
           endif;
           //  ... Sichtbar
           select;
-          when wrk_hidden = bTrue;
+          when (wrk0001.wrk_hidden = bTrue);
              ##hidden = bFalse;
-          when wrk_hidden = bFalse;
+          when (wrk0001.wrk_hidden = bFalse);
              ##hidden = bTrue;
           other;
-             ##hidden = wrk_hidden;
+             ##hidden = wrk0001.wrk_hidden;
           endsl;
           //  ... Farbe
-          ##color = *blanks;
-          $$color = wrk_color;
+          ##color = '';
+          $$color = wrk0001.wrk_color;
           //  ... Farbmarkierung
-          ##markcol = wrk_mrkcol;
+          ##markcol = wrk0001.wrk_mrkcol;
           //  ... Max. Anzeigebreite (Größe)
-          ##maxsize = wrk_maxsiz;
+          ##maxsize = wrk0001.wrk_maxsiz;
           //  ... Editcode
-          ##edtcde = wrk_edtcde;
+          ##edtcde = wrk0001.wrk_edtcde;
           //  ... Original-Editcode
           if (fldl0100.f1edtc <> '');
              $$edtc = '(' + %trim(fldl0100.f1edtc) + ')';
@@ -1129,14 +1130,14 @@
 
              w_key = r_seq;
 
-             wrk_rcdnbr = peek_01_ds.rcdnbr;
-             wrk_seq = r_seq;
-             wrk_kseq = f_kseq;
-             wrk_hidden = f_hidden;
-             wrk_color = f_color;
-             wrk_mrkcol = f_markcol;
-             wrk_maxsiz = f_maxsize;
-             wrk_edtcde = f_edtcde;
+             wrk0001.wrk_rcdnbr = peek_01_ds.rcdnbr;
+             wrk0001.wrk_seq = r_seq;
+             wrk0001.wrk_kseq = f_kseq;
+             wrk0001.wrk_hidden = f_hidden;
+             wrk0001.wrk_color = f_color;
+             wrk0001.wrk_mrkcol = f_markcol;
+             wrk0001.wrk_maxsiz = f_maxsize;
+             wrk0001.wrk_edtcde = f_edtcde;
 
              w_format = 'WRK0001';
              w_data = wrk0001;
@@ -1164,15 +1165,15 @@
           // - Programm initialisieren
           p_rmvpgmmg(§§pgmname);
 
-          ##field = *blanks;
+          ##field = '';
 
           // - Rückkehrcode
-          o_msgid = *blanks;
-          o_msgdta = *blanks;
+          o_msgid = '';
+          o_msgdta = '';
 
           // - Batchverarbeitung
           select;
-          when i_function = '*FLOATKEYS';
+          when (i_function = '*FLOATKEYS');
              exsr c_floatkey;
              exsr c_saveexit;
              isBatch = bTrue;
