@@ -6327,7 +6327,7 @@
                    *in99 = *off;
                 else;
                    *in99 = *on;
-                   cio_geterrormsg(hfile01: yMsgID: yMsgDta);
+                   cio_geterrormsg(hfile02: yMsgID: yMsgDta);
                    p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
                    yMsgID = '';
                    yMsgDta = '';
@@ -6378,7 +6378,7 @@
                       yMsgDta = '';
                    else;
                       *in99 = *on;
-                      cio_geterrormsg(hfile01: yMsgID: yMsgDta);
+                      cio_geterrormsg(hfile03: yMsgID: yMsgDta);
                       p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
                       yMsgID = '';
                       yMsgDta = '';
