@@ -128,7 +128,7 @@
 
              clear w0key;
              w0key.w_key = wrk0001.wrk_seq;
-             chain %kds(w0key) fpeekwrk;
+             chain %kds(w0key: 1) fpeekwrk;
              if (not %found(peekwrk));
                 //  Hurra, eindeutige Numnmer ...
              else;

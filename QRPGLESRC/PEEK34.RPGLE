@@ -588,7 +588,7 @@
 
           clear w0key;
           w0key.w_key = 0;
-          setll %kds(w0key) fpeekwrk;
+          setll %kds(w0ke: 1) fpeekwrk;
 
           dow ('1');
              read(n) fpeekwrk;
@@ -650,7 +650,7 @@
           //  negativen Folgenummern versehen ...
           clear w0key;
           w0key.w_key = 0;
-          setll %kds(w0key) fpeekwrk;
+          setll %kds(w0key: 1) fpeekwrk;
 
           dow ('1');
              read fpeekwrk;
@@ -677,7 +677,7 @@
 
           clear w0key;
           w0key.w_key = *hival;
-          setgt %kds(w0key) fpeekwrk;
+          setgt %kds(w0key: 1) fpeekwrk;
 
           dow ('1');
              readp fpeekwrk;
@@ -1015,7 +1015,7 @@
 
        begsr pbsetll;
 
-          setll %kds(w0key) fpeekwrk;
+          setll %kds(w0key: 1) fpeekwrk;
 
        endsr;
 
@@ -1115,7 +1115,7 @@
 
           clear f1key;
           f1key.f_seq = 0;
-          setll %kds(f1key) fpeekfldl1;
+          setll %kds(f1key: 1) fpeekfldl1;
 
           dow ('1');
              read fpeekfldl1;

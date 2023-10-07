@@ -501,10 +501,11 @@
           i5_lib = '*ALLLIB';
        endif;
 
+       clear ex_key3;
        ex_key3.ex_user = i_user;
        ex_key3.ex_file = i_file;
        ex_key3.ex_lib  = i5_lib;
-       chain %kds(ex_key3) fexit01;
+       chain %kds(ex_key3: 3) fexit01;
        *in01 = not %found;
        if *in01 = *off;
           isfound     = btrue;
@@ -574,10 +575,11 @@
           i7_lib = '*ALLLIB';
        endif;
 
+       clear ex_key3;
        ex_key3.ex_user = '*OBJ';
        ex_key3.ex_file = i_file;
        ex_key3.ex_lib  = i7_lib;
-       chain %kds(ex_key3) fexit01;
+       chain %kds(ex_key3: 3) fexit01;
        *in01 = not %found;
        if *in01 = *off;
           isfound     = btrue;
@@ -661,10 +663,11 @@
           i7_lib = '*ALLLIB';
        endif;
 
+       clear ex_key3;
        ex_key3.ex_user = i6_user;
        ex_key3.ex_file = '*SECATR';
        ex_key3.ex_lib  = i7_lib;
-       chain %kds(ex_key3) fexit01;
+       chain %kds(ex_key3: 3) fexit01;
        *in01 = not %found;
        if *in01 = *off;
           isfound     = btrue;
