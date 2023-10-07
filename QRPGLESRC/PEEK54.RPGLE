@@ -179,8 +179,6 @@
          go_msgdta       like(msgdta_t);
        end-pi;
 
-       dcl-s do_x1           packed(7);
-
        dcl-ds p_key1 likerec(fpeekfld: *key);
        //----------------------------------------------------*
 

@@ -154,7 +154,6 @@
          o_msgdta        like(msgdta_t);
        end-pi;
 
-       dcl-s do_x1           packed(7);
        dcl-s do_x2           packed(7);
        //---------------------------------------------------*
 
