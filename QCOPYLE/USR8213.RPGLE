@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: USR8213
-
-      //  1=speichern; 0=nicht speichern
-
-     d USR8213         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: USR8213
+//  1=speichern; 0=nicht speichern
+dcl-ds USR8213 qualified;
       //  No replacement variables available!
-     d USR8213_SIZE    s             10I 0 inz(0)
-
+end-ds;

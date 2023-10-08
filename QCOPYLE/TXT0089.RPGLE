@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0089
-
-      //  Log. Sichten:
-
-     d TXT0089         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0089
+//  Log. Sichten:
+dcl-ds TXT0089 qualified;
       //  No replacement variables available!
-     d TXT0089_SIZE    s             10I 0 inz(0)
-
+end-ds;

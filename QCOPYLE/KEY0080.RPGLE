@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: KEY0080
-
-      //  Umsch. NULL-Ind.
-
-     d KEY0080         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: KEY0080
+//  Umsch. NULL-Ind.
+dcl-ds KEY0080 qualified;
       //  No replacement variables available!
-     d KEY0080_SIZE    s             10I 0 inz(0)
-
+end-ds;

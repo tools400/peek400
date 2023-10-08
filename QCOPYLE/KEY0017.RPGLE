@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: KEY0017
-
-      //  Bild runter
-
-     d KEY0017         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: KEY0017
+//  Bild runter
+dcl-ds KEY0017 qualified;
       //  No replacement variables available!
-     d KEY0017_SIZE    s             10I 0 inz(0)
-
+end-ds;

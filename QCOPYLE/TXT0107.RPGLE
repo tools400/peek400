@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0107
-
-      //   Folge  Feld        Bezeichnung                      Schl.F
-
-     d TXT0107         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0107
+//   Folge  Feld        Bezeichnung                      Schl.F
+dcl-ds TXT0107 qualified;
       //  No replacement variables available!
-     d TXT0107_SIZE    s             10I 0 inz(0)
-
+end-ds;

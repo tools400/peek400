@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0073
-
-      //   Der ultimative
-
-     d TXT0073         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0073
+//   Der ultimative
+dcl-ds TXT0073 qualified;
       //  No replacement variables available!
-     d TXT0073_SIZE    s             10I 0 inz(0)
-
+end-ds;

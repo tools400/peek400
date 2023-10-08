@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: KEY0056
-
-      //  Bedienerführung
-
-     d KEY0056         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: KEY0056
+//  Bedienerführung
+dcl-ds KEY0056 qualified;
       //  No replacement variables available!
-     d KEY0056_SIZE    s             10I 0 inz(0)
-
+end-ds;

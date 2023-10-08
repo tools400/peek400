@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: MBX0001
-
-      //  Information
-
-     d MBX0001         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: MBX0001
+//  Information
+dcl-ds MBX0001 qualified;
       //  No replacement variables available!
-     d MBX0001_SIZE    s             10I 0 inz(0)
-
+end-ds;

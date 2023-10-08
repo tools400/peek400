@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0124
-
-      //  Beschreibung:
-
-     d TXT0124         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0124
+//  Beschreibung:
+dcl-ds TXT0124 qualified;
       //  No replacement variables available!
-     d TXT0124_SIZE    s             10I 0 inz(0)
-
+end-ds;

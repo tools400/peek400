@@ -1,10 +1,8 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: USR0006
-
-      //  Keine Schlüsselinformationen in Datei &1 in Bibliothek &2.
-
-     d USR0006         ds
-     d  USR00061                     10A   inz(*BLANKS)
-     d  USR00062                     10A   inz(*BLANKS)
-     d USR0006_SIZE    s             10I 0 inz(20)
-
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: USR0006
+//  Keine Schlüsselinformationen in Datei &1 in Bibliothek &2.
+dcl-ds USR0006 qualified;
+  var1  char(10) inz;
+  var2  char(10) inz;
+end-ds;

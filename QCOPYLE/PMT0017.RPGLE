@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: PMT0017
-
-      //  Benutzerprofil
-
-     d PMT0017         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: PMT0017
+//  Benutzerprofil
+dcl-ds PMT0017 qualified;
       //  No replacement variables available!
-     d PMT0017_SIZE    s             10I 0 inz(0)
-
+end-ds;

@@ -121,8 +121,8 @@
 
        if nbroffmt = *zeros;
           o_msgid = 'USR0002';
-          usr00021 = i_qfile.name;
-          usr00022 = i_qfile.lib;
+          usr0002.var1 = i_qfile.name;
+          usr0002.var2 = i_qfile.lib;
           o_msgdta = usr0002;
        else;
           o_msgid = *blanks;

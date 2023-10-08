@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: KEY0009
-
-      //  Suchen
-
-     d KEY0009         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: KEY0009
+//  Suchen
+dcl-ds KEY0009 qualified;
       //  No replacement variables available!
-     d KEY0009_SIZE    s             10I 0 inz(0)
-
+end-ds;

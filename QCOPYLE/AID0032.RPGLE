@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: AID0032
-
-      //  Funktionstaste F2 nicht gültig.
-
-     d AID0032         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: AID0032
+//  Funktionstaste F2 nicht gültig.
+dcl-ds AID0032 qualified;
       //  No replacement variables available!
-     d AID0032_SIZE    s             10I 0 inz(0)
-
+end-ds;

@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0064
-
-      //  'ENTER' = Kopieren ...
-
-     d TXT0064         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0064
+//  'ENTER' = Kopieren ...
+dcl-ds TXT0064 qualified;
       //  No replacement variables available!
-     d TXT0064_SIZE    s             10I 0 inz(0)
-
+end-ds;

@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0052
-
-      //   - ext. Kopieren -
-
-     d TXT0052         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0052
+//   - ext. Kopieren -
+dcl-ds TXT0052 qualified;
       //  No replacement variables available!
-     d TXT0052_SIZE    s             10I 0 inz(0)
-
+end-ds;

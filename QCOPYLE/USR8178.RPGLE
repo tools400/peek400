@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: USR8178
-
-      //  Startposition darf nicht kleiner/gleich Null sein.
-
-     d USR8178         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: USR8178
+//  Startposition darf nicht kleiner/gleich Null sein.
+dcl-ds USR8178 qualified;
       //  No replacement variables available!
-     d USR8178_SIZE    s             10I 0 inz(0)
-
+end-ds;

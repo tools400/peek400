@@ -291,8 +291,8 @@
 
              if (##file = '');
                 *in99 = '1';
-                clear usr81511;
-                usr81511 = ##file;
+                clear usr8151.var1;
+                usr8151.var1 = ##file;
                 p_sndpgmmg('USR8151': usr8151: §§pgmname);
                 leave;
              endif;
@@ -316,8 +316,8 @@
 
              if (##library = '');
                 *in99 = '1';
-                clear usr81521;
-                usr81521 = ##library;
+                clear usr8152.var1;
+                usr8152.var1 = ##library;
                 p_sndpgmmg('USR8152': usr8152: §§pgmname);
                 leave;
              endif;
@@ -331,7 +331,7 @@
                    //  ... ungültig
                    *in99 = '1';
                    clear usr8152;
-                   usr81521 = ##library;
+                   usr8152.var1 = ##library;
                    p_sndpgmmg('USR8152': usr8152: §§pgmname);
                    leave;
                 endif;
@@ -359,7 +359,7 @@
           if (##member = '');
              *in99 = '1';
              clear usr8153;
-             usr81531 = ##member;
+             usr8153.var1 = ##member;
              p_sndpgmmg('USR8153': usr8153: §§pgmname);
              leave;
           endif;
@@ -373,7 +373,7 @@
                 //  ... ungültig
                 *in99 = '1';
                 clear usr8153;
-                usr81531 = ##member;
+                usr8153.var1 = ##member;
                 p_sndpgmmg('USR8153': usr8153: §§pgmname);
                 leave;
             endif;
@@ -403,7 +403,7 @@
                 and ##mbropt <> '*UPDADD');
                 *in99 = '1';
                 clear usr8154;
-                usr81541 = ##mbropt;
+                usr8154.var1 = ##mbropt;
                 p_sndpgmmg('USR8154': usr8154: §§pgmname);
                 leave;
              endif;
@@ -428,7 +428,7 @@
              if (##crtfile <> '*YES' and ##crtfile <> '*NO');
                 *in99 = '1';
                 clear usr8155;
-                usr81551 = ##crtfile;
+                usr8155.var1 = ##crtfile;
                 p_sndpgmmg('USR8155': usr8155: §§pgmname);
                 leave;
              endif;
@@ -454,11 +454,11 @@
 
           select;
           when workstn.aid = k_f3;
-             usr81001 = 'F3';
+             usr8100.var1 = 'F3';
           when workstn.aid = k_f12;
-             usr81001 = 'F12';
+             usr8100.var1 = 'F12';
           other;
-             usr81001 = 'Fxx';
+             usr8100.var1 = 'Fxx';
           endsl;
 
           o_msgdta = usr8100;

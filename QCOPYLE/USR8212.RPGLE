@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: USR8212
-
-      //  Die SQL-Auswahl kann nur auf physischen Dateien angewendet
-
-     d USR8212         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: USR8212
+//  Die SQL-Auswahl kann nur auf physischen Dateien angewendet
+dcl-ds USR8212 qualified;
       //  No replacement variables available!
-     d USR8212_SIZE    s             10I 0 inz(0)
-
+end-ds;

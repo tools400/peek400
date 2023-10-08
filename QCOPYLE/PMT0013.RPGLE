@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: PMT0013
-
-      //  SQL WHERE
-
-     d PMT0013         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: PMT0013
+//  SQL WHERE
+dcl-ds PMT0013 qualified;
       //  No replacement variables available!
-     d PMT0013_SIZE    s             10I 0 inz(0)
-
+end-ds;

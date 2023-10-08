@@ -661,8 +661,8 @@
        // ------------------------------------------------------------------------
 
        clear usr8210;
-       usr82101 = io_msgid;
-       usr82102 = f_msgtext(io_msgid : io_msgdta:
+       usr8210.var1 = io_msgid;
+       usr8210.var2 = f_msgtext(io_msgid : io_msgdta:
                              'QSQLMSG': 'QSYS'   );
 
        io_msgid = 'USR8210';

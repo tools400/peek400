@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: KEY0010
-
-      //  Anfang
-
-     d KEY0010         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: KEY0010
+//  Anfang
+dcl-ds KEY0010 qualified;
       //  No replacement variables available!
-     d KEY0010_SIZE    s             10I 0 inz(0)
-
+end-ds;

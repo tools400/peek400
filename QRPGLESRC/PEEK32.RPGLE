@@ -104,7 +104,7 @@
              if (char < x'40' or char = x'FF');
                 char = set0006.set_cvtc;
                 o_msgid = 'USR8163';
-                usr81631 = set0006.set_cvtc;
+                usr8163.var1 = set0006.set_cvtc;
                 o_msgdta = usr8163;
              else;
                 // Zeichen beibehalten

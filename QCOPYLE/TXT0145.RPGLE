@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0145
-
-      //  Cursorposition merken?
-
-     d TXT0145         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0145
+//  Cursorposition merken?
+dcl-ds TXT0145 qualified;
       //  No replacement variables available!
-     d TXT0145_SIZE    s             10I 0 inz(0)
-
+end-ds;

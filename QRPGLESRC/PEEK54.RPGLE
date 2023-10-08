@@ -289,10 +289,10 @@
           else;
              //     Fehler beim Öffnen aufgetreten
              clear usr9992;
-             usr99921 = 3;
-             usr99922 = i_file;
-             usr99923 = i_lib;
-             usr99924 = penvmbr;
+             usr9992.var1 = 3;
+             usr9992.var2 = i_file;
+             usr9992.var3 = i_lib;
+             usr9992.var4 = penvmbr;
              f_sndmsgtocmdline('USR9992': usr9992);
              cansave = bfalse;
           endif;
@@ -633,10 +633,10 @@
        chain %kds(en_key3) fpeekenv;
        if (not %found(peekenv));
           clear usr9992;
-          usr99921 = 1;
-          usr99922 = i_file;
-          usr99923 = '*N';
-          usr99924 = '*N';
+          usr9992.var1 = 1;
+          usr9992.var2 = i_file;
+          usr9992.var3 = '*N';
+          usr9992.var4 = '*N';
           f_sndmsgtocmdline('USR9992': usr9992);
           return bfalse;
        endif;
@@ -648,10 +648,10 @@
        chain %kds(en_key4) fpeekenv;
        if (not %found(peekenv));
           clear usr9992;
-          usr99921 = 2;
-          usr99922 = i_lib;
-          usr99923 = '*N';
-          usr99924 = '*N';
+          usr9992.var1 = 2;
+          usr9992.var2 = i_lib;
+          usr9992.var3 = '*N';
+          usr9992.var4 = '*N';
           f_sndmsgtocmdline('USR9992': usr9992);
           return bfalse;
        endif;

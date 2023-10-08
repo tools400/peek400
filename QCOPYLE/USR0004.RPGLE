@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: USR0004
-
-      //  Datei OHNE Commitment-Kontrolle geöffnet!
-
-     d USR0004         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: USR0004
+//  Datei OHNE Commitment-Kontrolle geöffnet!
+dcl-ds USR0004 qualified;
       //  No replacement variables available!
-     d USR0004_SIZE    s             10I 0 inz(0)
-
+end-ds;

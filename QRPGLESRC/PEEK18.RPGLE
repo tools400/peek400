@@ -1099,7 +1099,7 @@
              //  ... gültige numerische Daten prüfen
              if (%check(NUMERIC_DIGITS: zoned_a) > 0);
                 o_msgid = 'USR8138';
-                usr81381 = fldl0100.f1fnme;
+                usr8138.var1 = fldl0100.f1fnme;
                 o_msgdta = usr8138;
                 leavesr;
              else;
@@ -1171,7 +1171,7 @@
              //  ... gültige numerische Daten prüfen
              if (f_vldfloat(%subst(i_buffer: 1: x-1)) = bFalse);
                 o_msgid = 'USR8138';
-                usr81381 = fldl0100.f1fnme;
+                usr8138.var1 = fldl0100.f1fnme;
                 o_msgdta = usr8138;
                 leavesr;
              else;

@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: KEY0028
-
-      //  Pin-Spalte
-
-     d KEY0028         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: KEY0028
+//  Pin-Spalte
+dcl-ds KEY0028 qualified;
       //  No replacement variables available!
-     d KEY0028_SIZE    s             10I 0 inz(0)
-
+end-ds;

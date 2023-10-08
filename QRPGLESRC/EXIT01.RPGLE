@@ -448,9 +448,9 @@
        else;
           gio_accat = bfalse;
           clear usr1000;
-          usr10001  = gi_qFile.name;
-          usr10002  = gi_qFile.lib;
-          usr10003  = gi_mbr;
+          usr1000.var1  = gi_qFile.name;
+          usr1000.var2  = gi_qFile.lib;
+          usr1000.var3  = gi_mbr;
           go_msgid  = 'USR1000';
           go_msgdta = usr1000;
        endif;

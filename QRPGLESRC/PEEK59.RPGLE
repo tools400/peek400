@@ -246,7 +246,7 @@
        begsr c_yes;
 
           clear usr8190;
-          usr81901 = ypgmcmd;
+          usr8190.var1 = ypgmcmd;
           o_msgid  = 'USR8190';
           o_msgdta = usr8190;
 
@@ -259,7 +259,7 @@
        begsr c_no;
 
           clear usr8190;
-          usr81901 = ypgmcmd;
+          usr8190.var1 = ypgmcmd;
           o_msgid  = 'USR8190';
           o_msgdta = usr8190;
 
@@ -272,7 +272,7 @@
        begsr c_enter;
 
           clear usr8190;
-          usr81901 = ypgmcmd;
+          usr8190.var1 = ypgmcmd;
           o_msgid  = 'USR8190';
           o_msgdta = usr8190;
 
@@ -285,7 +285,7 @@
        begsr c_cancel;
 
           clear usr8190;
-          usr81901 = ypgmcmd;
+          usr8190.var1 = ypgmcmd;
           o_msgid  = 'USR8190';
           o_msgdta = usr8190;
 

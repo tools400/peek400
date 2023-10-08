@@ -386,8 +386,8 @@
           o_msgdta = i_hfile.msgdta;
        else;
           clear usr0012;
-          usr00121 = cio_geterrortext(i_hfile);
-          usr00122 = cio_geterror(i_hfile);
+          usr0012.var1 = cio_geterrortext(i_hfile);
+          usr0012.var2 = cio_geterror(i_hfile);
           o_msgid  = 'USR0012';
           o_msgdta = usr0012;
        endif;
@@ -790,9 +790,9 @@
 
        if (io_hfile.errno <> 0);
           clear usr9994;
-          usr99941 = f_errno();
-          usr99942 = function;
-          usr99943 = f_strerror(f_errno());
+          usr9994.var1 = f_errno();
+          usr9994.var2 = function;
+          usr9994.var3 = f_strerror(f_errno());
           msgid  = 'USR9994';
           msgdta = usr9994;
           p_sndpgmmg(msgid: msgdta: '*': msg_t_diag);
@@ -865,9 +865,9 @@
 
        if (io_hfile.errno <> 0);
           clear usr9994;
-          usr99941 = f_errno();
-          usr99942 = function;
-          usr99943 = f_strerror(f_errno());
+          usr9994.var1 = f_errno();
+          usr9994.var2 = function;
+          usr9994.var3 = f_strerror(f_errno());
           msgid  = 'USR9994';
           msgdta = usr9994;
           p_sndpgmmg(msgid: msgdta: '*': msg_t_diag);

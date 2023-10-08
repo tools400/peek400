@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: USR8112
-
-      //  Verarbeitung bestätigt.
-
-     d USR8112         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: USR8112
+//  Verarbeitung bestätigt.
+dcl-ds USR8112 qualified;
       //  No replacement variables available!
-     d USR8112_SIZE    s             10I 0 inz(0)
-
+end-ds;

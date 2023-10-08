@@ -1,10 +1,8 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: USR0009
-
-      //  Fehler beim Abrufen der Objektbeschreibung für Datei &2/&1.
-
-     d USR0009         ds
-     d  USR00091                     10A   inz(*BLANKS)
-     d  USR00092                     10A   inz(*BLANKS)
-     d USR0009_SIZE    s             10I 0 inz(20)
-
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: USR0009
+//  Fehler beim Abrufen der Objektbeschreibung für Datei &2/&1.
+dcl-ds USR0009 qualified;
+  var1  char(10) inz;
+  var2  char(10) inz;
+end-ds;

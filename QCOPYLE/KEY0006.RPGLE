@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: KEY0006
-
-      //  Spalte mark.+/-
-
-     d KEY0006         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: KEY0006
+//  Spalte mark.+/-
+dcl-ds KEY0006 qualified;
       //  No replacement variables available!
-     d KEY0006_SIZE    s             10I 0 inz(0)
-
+end-ds;

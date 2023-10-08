@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: KEY0034
-
-      //  Alle Datensätze
-
-     d KEY0034         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: KEY0034
+//  Alle Datensätze
+dcl-ds KEY0034 qualified;
       //  No replacement variables available!
-     d KEY0034_SIZE    s             10I 0 inz(0)
-
+end-ds;

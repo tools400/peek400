@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0135
-
-      //  Seite:
-
-     d TXT0135         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0135
+//  Seite:
+dcl-ds TXT0135 qualified;
       //  No replacement variables available!
-     d TXT0135_SIZE    s             10I 0 inz(0)
-
+end-ds;

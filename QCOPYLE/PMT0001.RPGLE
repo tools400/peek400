@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: PMT0001
-
-      //  Datei
-
-     d PMT0001         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: PMT0001
+//  Datei
+dcl-ds PMT0001 qualified;
       //  No replacement variables available!
-     d PMT0001_SIZE    s             10I 0 inz(0)
-
+end-ds;

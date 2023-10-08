@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0019
-
-      //      Feldname:
-
-     d TXT0019         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0019
+//      Feldname:
+dcl-ds TXT0019 qualified;
       //  No replacement variables available!
-     d TXT0019_SIZE    s             10I 0 inz(0)
-
+end-ds;

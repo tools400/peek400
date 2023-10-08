@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: KEY0011
-
-      //  Ende
-
-     d KEY0011         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: KEY0011
+//  Ende
+dcl-ds KEY0011 qualified;
       //  No replacement variables available!
-     d KEY0011_SIZE    s             10I 0 inz(0)
-
+end-ds;

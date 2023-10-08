@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: KEY0016
-
-      //  Weitere Tasten
-
-     d KEY0016         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: KEY0016
+//  Weitere Tasten
+dcl-ds KEY0016 qualified;
       //  No replacement variables available!
-     d KEY0016_SIZE    s             10I 0 inz(0)
-
+end-ds;

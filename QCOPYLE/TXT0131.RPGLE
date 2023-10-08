@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0131
-
-      //  Satz gesperrt lesen?
-
-     d TXT0131         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0131
+//  Satz gesperrt lesen?
+dcl-ds TXT0131 qualified;
       //  No replacement variables available!
-     d TXT0131_SIZE    s             10I 0 inz(0)
-
+end-ds;

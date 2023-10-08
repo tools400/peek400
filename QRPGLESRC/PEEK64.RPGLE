@@ -362,11 +362,11 @@
 
           select;
           when workstn.aid = k_f3;
-             usr81001 = 'F3';
+             usr8100.var1 = 'F3';
           when workstn.aid = k_f12;
-             usr81001 = 'F12';
+             usr8100.var1 = 'F12';
           other;
-             usr81001 = 'Fxx';
+             usr8100.var1 = 'Fxx';
           endsl;
 
           o_msgdta = usr8100;
@@ -532,7 +532,7 @@
              isPgmError = btrue;
              clear fldl0100;
              clear usr8136;
-             usr81361   = i_fldname;
+             usr8136.var1   = i_fldname;
              p_sndpgmmg('USR8136': usr8136: §§pgmname);
           else;
              isPgmError = bfalse;
@@ -559,8 +559,8 @@
 
           // - Feld zu groß Hinweis ausgeben
           clear usr8123;
-          usr81231 = §white_u;
-          usr81232 = §white;
+          usr8123.var1 = §white_u;
+          usr8123.var2 = §white;
           p_sndpgmmg('USR8123': usr8123: §§pgmname);
 
           // - Füllen der Bildschirmfelder

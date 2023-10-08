@@ -1,10 +1,8 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: USR8134
-
-      //  Operand &1 bei &2 nicht erlaubt.
-
-     d USR8134         ds
-     d  USR81341                     10A   inz(*BLANKS)
-     d  USR81342                     10A   inz(*BLANKS)
-     d USR8134_SIZE    s             10I 0 inz(20)
-
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: USR8134
+//  Operand &1 bei &2 nicht erlaubt.
+dcl-ds USR8134 qualified;
+  var1  char(10) inz;
+  var2  char(10) inz;
+end-ds;

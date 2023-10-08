@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0036
-
-      //  Wert (ohne Hochkomma)
-
-     d TXT0036         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0036
+//  Wert (ohne Hochkomma)
+dcl-ds TXT0036 qualified;
       //  No replacement variables available!
-     d TXT0036_SIZE    s             10I 0 inz(0)
-
+end-ds;

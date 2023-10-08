@@ -562,7 +562,7 @@
              data.length = %dec(%str(ptoken): 10: 0);
           on-error;
              clear usr8229;
-             usr82291 = %str(ptoken);
+             usr8229.var1 = %str(ptoken);
              o_msgid  = 'USR8229';
              o_msgdta = usr8229;
              return bfalse;
@@ -575,7 +575,7 @@
              data.decpos = %dec(%str(ptoken): 10: 0);
           on-error;
              clear usr8230;
-             usr82301 = %str(ptoken);
+             usr8230.var1 = %str(ptoken);
              o_msgid  = 'USR8230';
              o_msgdta = usr8230;
              return bfalse;
@@ -590,7 +590,7 @@
        fldl0100_tmp.f1dtyp = %xlate(clower: cupper: data.type);
        if (f_isnotalw(fldl0100_tmp) = btrue);
           clear usr8228;
-          usr82281 = data.type;
+          usr8228.var1 = data.type;
           o_msgid  = 'USR8228';
           o_msgdta = usr8228;
           return bfalse;
@@ -632,7 +632,7 @@
           when (fldl0100_tmp.f1dtyp = 'F');
              if (data.decpos <> 0);
                 clear usr8230;
-                usr82301 = %char(data.decpos);
+                usr8230.var1 = %char(data.decpos);
                 o_msgid  = 'USR8230';
                 o_msgdta = usr8230;
                 return bfalse;
@@ -648,7 +648,7 @@
                 fldl0100_tmp.f1decp = 15;
              other;
                 clear usr8229;
-                usr82291 = %char(data.length);
+                usr8229.var1 = %char(data.length);
                 o_msgid  = 'USR8229';
                 o_msgdta = usr8229;
                 return bfalse;

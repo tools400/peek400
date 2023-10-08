@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: KEY0005
-
-      //  Überschrift
-
-     d KEY0005         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: KEY0005
+//  Überschrift
+dcl-ds KEY0005 qualified;
       //  No replacement variables available!
-     d KEY0005_SIZE    s             10I 0 inz(0)
-
+end-ds;

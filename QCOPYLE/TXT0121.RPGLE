@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0121
-
-      //  Datei . . . :
-
-     d TXT0121         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0121
+//  Datei . . . :
+dcl-ds TXT0121 qualified;
       //  No replacement variables available!
-     d TXT0121_SIZE    s             10I 0 inz(0)
-
+end-ds;

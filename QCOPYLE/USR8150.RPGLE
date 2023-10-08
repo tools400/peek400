@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: USR8150
-
-      //  Tabellierpapier ist bereits ausgeschaltet.
-
-     d USR8150         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: USR8150
+//  Tabellierpapier ist bereits ausgeschaltet.
+dcl-ds USR8150 qualified;
       //  No replacement variables available!
-     d USR8150_SIZE    s             10I 0 inz(0)
-
+end-ds;

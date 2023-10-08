@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0004
-
-      //  Satzlänge :
-
-     d TXT0004         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0004
+//  Satzlänge :
+dcl-ds TXT0004 qualified;
       //  No replacement variables available!
-     d TXT0004_SIZE    s             10I 0 inz(0)
-
+end-ds;

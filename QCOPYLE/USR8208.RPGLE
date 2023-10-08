@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: USR8208
-
-      //  Nur INPUT-Felder können nicht geändert werden.
-
-     d USR8208         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: USR8208
+//  Nur INPUT-Felder können nicht geändert werden.
+dcl-ds USR8208 qualified;
       //  No replacement variables available!
-     d USR8208_SIZE    s             10I 0 inz(0)
-
+end-ds;

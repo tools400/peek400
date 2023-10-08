@@ -322,7 +322,7 @@
              if (##case <> bTrue and ##case <> bFalse);
                 *in99 = '1';
                 clear usr8219;
-                usr82191 = ##case;
+                usr8219.var1 = ##case;
                 p_sndpgmmg('USR8219': usr8219: §§pgmname);
                 leave;
              endif;
@@ -347,7 +347,7 @@
              if (##save <> bTrue and ##save <> bFalse);
                 *in99 = '1';
                 clear usr8219;
-                usr82191 = ##save;
+                usr8219.var1 = ##save;
                 p_sndpgmmg('USR8219': usr8219: §§pgmname);
                 leave;
              endif;
@@ -372,7 +372,7 @@
              if (##alwlc <> bTrue and ##alwlc <> bFalse);
                 *in99 = '1';
                 clear usr8219;
-                usr82191 = ##alwlc;
+                usr8219.var1 = ##alwlc;
                 p_sndpgmmg('USR8219': usr8219: §§pgmname);
                 leave;
              endif;
@@ -397,7 +397,7 @@
              if (##rcdlck <> bTrue and ##rcdlck <> bFalse);
                 *in99 = '1';
                 clear usr8219;
-                usr82191 = ##rcdlck;
+                usr8219.var1 = ##rcdlck;
                 p_sndpgmmg('USR8219': usr8219: §§pgmname);
                 leave;
              endif;
@@ -448,7 +448,7 @@
              if (##nulldft <> bTrue and ##nulldft <> bFalse);
                 *in99 = '1';
                 clear usr8219;
-                usr82191 = ##nulldft;
+                usr8219.var1 = ##nulldft;
                 p_sndpgmmg('USR8219': usr8219: §§pgmname);
                 leave;
              endif;
@@ -473,7 +473,7 @@
           if (##keepcrs <> bTrue and ##keepcrs <> bFalse);
              *in99 = '1';
              clear usr8219;
-             usr82191 = ##keepcrs;
+             usr8219.var1 = ##keepcrs;
              p_sndpgmmg('USR8219': usr8219: §§pgmname);
              leave;
           endif;
@@ -526,11 +526,11 @@
 
           select;
           when workstn.aid = k_f3;
-             usr81001 = 'F3';
+             usr8100.var1 = 'F3';
           when workstn.aid = k_f12;
-             usr81001 = 'F12';
+             usr8100.var1 = 'F12';
           other;
-             usr81001 = 'Fxx';
+             usr8100.var1 = 'Fxx';
           endsl;
 
           o_msgdta = usr8100;

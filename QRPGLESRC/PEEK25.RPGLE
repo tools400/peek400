@@ -254,11 +254,11 @@
 
           select;
           when workstn.aid = k_f3;
-             usr81001 = 'F3';
+             usr8100.var1 = 'F3';
           when workstn.aid = k_f12;
-             usr81001 = 'F12';
+             usr8100.var1 = 'F12';
           other;
-             usr81001 = 'Fxx';
+             usr8100.var1 = 'Fxx';
           endsl;
 
           o_msgdta = usr8100;

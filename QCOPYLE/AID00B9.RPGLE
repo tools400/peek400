@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: AID00B9
-
-      //  Funktionstaste F21 nicht gültig.
-
-     d AID00B9         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: AID00B9
+//  Funktionstaste F21 nicht gültig.
+dcl-ds AID00B9 qualified;
       //  No replacement variables available!
-     d AID00B9_SIZE    s             10I 0 inz(0)
-
+end-ds;

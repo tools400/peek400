@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0081
-
-      //  Farbe ..:
-
-     d TXT0081         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0081
+//  Farbe ..:
+dcl-ds TXT0081 qualified;
       //  No replacement variables available!
-     d TXT0081_SIZE    s             10I 0 inz(0)
-
+end-ds;

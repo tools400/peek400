@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: KEY0060
-
-      //  Hex-Edit
-
-     d KEY0060         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: KEY0060
+//  Hex-Edit
+dcl-ds KEY0060 qualified;
       //  No replacement variables available!
-     d KEY0060_SIZE    s             10I 0 inz(0)
-
+end-ds;

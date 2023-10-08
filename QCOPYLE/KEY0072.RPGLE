@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: KEY0072
-
-      //  Sortierfolge
-
-     d KEY0072         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: KEY0072
+//  Sortierfolge
+dcl-ds KEY0072 qualified;
       //  No replacement variables available!
-     d KEY0072_SIZE    s             10I 0 inz(0)
-
+end-ds;

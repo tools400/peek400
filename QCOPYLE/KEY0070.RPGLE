@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: KEY0070
-
-      //  Laden Arbeitsumgebung
-
-     d KEY0070         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: KEY0070
+//  Laden Arbeitsumgebung
+dcl-ds KEY0070 qualified;
       //  No replacement variables available!
-     d KEY0070_SIZE    s             10I 0 inz(0)
-
+end-ds;

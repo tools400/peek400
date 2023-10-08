@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: USR8226
-
-      //  Druckvorgang erfolgreich beendet.
-
-     d USR8226         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: USR8226
+//  Druckvorgang erfolgreich beendet.
+dcl-ds USR8226 qualified;
       //  No replacement variables available!
-     d USR8226_SIZE    s             10I 0 inz(0)
-
+end-ds;

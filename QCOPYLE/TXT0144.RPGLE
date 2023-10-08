@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0144
-
-      //  Init. NULL-Felder?
-
-     d TXT0144         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0144
+//  Init. NULL-Felder?
+dcl-ds TXT0144 qualified;
       //  No replacement variables available!
-     d TXT0144_SIZE    s             10I 0 inz(0)
-
+end-ds;

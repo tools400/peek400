@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: AID00B5
-
-      //  Funktionstaste F17 nicht gültig.
-
-     d AID00B5         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: AID00B5
+//  Funktionstaste F17 nicht gültig.
+dcl-ds AID00B5 qualified;
       //  No replacement variables available!
-     d AID00B5_SIZE    s             10I 0 inz(0)
-
+end-ds;

@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: USR8165
-
-      //  "WIEDERHOLEN" kann erst gedrückt werden, wenn auf dieser Se
-
-     d USR8165         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: USR8165
+//  "WIEDERHOLEN" kann erst gedrückt werden, wenn auf dieser Se
+dcl-ds USR8165 qualified;
       //  No replacement variables available!
-     d USR8165_SIZE    s             10I 0 inz(0)
-
+end-ds;

@@ -379,7 +379,7 @@
              if isfound = bfalse;
                 isnewpos = bfalse;
                 clear usr8136;
-                usr81361 = ##file;
+                usr8136.var1 = ##file;
                 p_sndpgmmg('USR8136': usr8136: §§pgmname);
              else;
                 isnewpos = btrue;
@@ -524,7 +524,7 @@
                 other;
                    //  Unbekannter Programmbefehl
                    clear usr8110;
-                   usr81101 = ypgmcmd;
+                   usr8110.var1 = ypgmcmd;
                    p_sndpgmmg('USR8110': usr8110: §§pgmname);
                    exsr vsfpauerr;
 
@@ -551,7 +551,7 @@
           p_rmvpgmmg(§§pgmname);
 
           o_msgid = 'USR8100';
-          usr81001 = ypgmcmd;
+          usr8100.var1 = ypgmcmd;
           o_msgdta = usr8100;
 
        endsr;
@@ -744,7 +744,7 @@
 
           //  Nachricht ausgeben ...
           clear usr8172;
-          usr81721 = %trimr(h$lib) + '/' + h$file;
+          usr8172.var1 = %trimr(h$lib) + '/' + h$file;
           p_sndstsmg('USR8172': usr8172);
 
        endsr;
@@ -1023,8 +1023,8 @@
              //       ... Fehler
              o_msgid = 'USR0008';
              clear usr0008;
-             usr00081 = yqfile.name;
-             usr00082 = yqfile.lib;
+             usr0008.var1 = yqfile.name;
+             usr0008.var2 = yqfile.lib;
              o_msgdta = usr0008;
           else;
              //       ... kein Fehler
@@ -1035,8 +1035,8 @@
                       : pfmtname: '*BASED-ON': rc: ydata);
                 if rc = *zeros;
                    //               ... Fehler
-                   usr00081 = yqfile.name;
-                   usr00082 = yqfile.lib;
+                   usr0008.var1 = yqfile.name;
+                   usr0008.var2 = yqfile.lib;
                    o_msgdta = usr0008;
                 else;
                    if i_basephyf = btrue;

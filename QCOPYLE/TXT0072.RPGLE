@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0072
-
-      //  Indiv. Spracherweiterungen
-
-     d TXT0072         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0072
+//  Indiv. Spracherweiterungen
+dcl-ds TXT0072 qualified;
       //  No replacement variables available!
-     d TXT0072_SIZE    s             10I 0 inz(0)
-
+end-ds;

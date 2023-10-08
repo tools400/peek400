@@ -1,4 +1,4 @@
-                                                                                                    
+
       /if defined(internal_prototype)
      D PEEK22          PR                  extpgm('PEEK22')
       /else

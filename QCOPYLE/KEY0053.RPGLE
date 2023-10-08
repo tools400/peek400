@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: KEY0053
-
-      //  Nächste Mark.
-
-     d KEY0053         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: KEY0053
+//  Nächste Mark.
+dcl-ds KEY0053 qualified;
       //  No replacement variables available!
-     d KEY0053_SIZE    s             10I 0 inz(0)
-
+end-ds;

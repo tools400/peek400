@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0083
-
-      //  Max.Breite:
-
-     d TXT0083         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0083
+//  Max.Breite:
+dcl-ds TXT0083 qualified;
       //  No replacement variables available!
-     d TXT0083_SIZE    s             10I 0 inz(0)
-
+end-ds;

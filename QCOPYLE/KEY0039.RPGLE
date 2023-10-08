@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: KEY0039
-
-      //  Kleinbuchstaben
-
-     d KEY0039         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: KEY0039
+//  Kleinbuchstaben
+dcl-ds KEY0039 qualified;
       //  No replacement variables available!
-     d KEY0039_SIZE    s             10I 0 inz(0)
-
+end-ds;

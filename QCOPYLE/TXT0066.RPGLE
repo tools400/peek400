@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0066
-
-      //  Weitere ...
-
-     d TXT0066         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0066
+//  Weitere ...
+dcl-ds TXT0066 qualified;
       //  No replacement variables available!
-     d TXT0066_SIZE    s             10I 0 inz(0)
-
+end-ds;

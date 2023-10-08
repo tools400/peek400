@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: PMT0015
-
-      //  Bibliothek
-
-     d PMT0015         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: PMT0015
+//  Bibliothek
+dcl-ds PMT0015 qualified;
       //  No replacement variables available!
-     d PMT0015_SIZE    s             10I 0 inz(0)
-
+end-ds;

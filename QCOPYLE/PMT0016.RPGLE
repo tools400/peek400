@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: PMT0016
-
-      //  Benutzereinstellungen
-
-     d PMT0016         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: PMT0016
+//  Benutzereinstellungen
+dcl-ds PMT0016 qualified;
       //  No replacement variables available!
-     d PMT0016_SIZE    s             10I 0 inz(0)
-
+end-ds;

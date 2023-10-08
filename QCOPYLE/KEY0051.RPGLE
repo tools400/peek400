@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: KEY0051
-
-      //  Key-Felder
-
-     d KEY0051         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: KEY0051
+//  Key-Felder
+dcl-ds KEY0051 qualified;
       //  No replacement variables available!
-     d KEY0051_SIZE    s             10I 0 inz(0)
-
+end-ds;

@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: USR8133
-
-      //  1=case-sensitive; 0=nicht case-sensitive
-
-     d USR8133         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: USR8133
+//  1=case-sensitive; 0=nicht case-sensitive
+dcl-ds USR8133 qualified;
       //  No replacement variables available!
-     d USR8133_SIZE    s             10I 0 inz(0)
-
+end-ds;

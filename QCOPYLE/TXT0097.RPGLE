@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0097
-
-      //   A   Teildatei   Bezeichnung
-
-     d TXT0097         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0097
+//   A   Teildatei   Bezeichnung
+dcl-ds TXT0097 qualified;
       //  No replacement variables available!
-     d TXT0097_SIZE    s             10I 0 inz(0)
-
+end-ds;

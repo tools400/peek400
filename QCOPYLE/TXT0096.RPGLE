@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0096
-
-      //  Pufferlänge:
-
-     d TXT0096         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0096
+//  Pufferlänge:
+dcl-ds TXT0096 qualified;
       //  No replacement variables available!
-     d TXT0096_SIZE    s             10I 0 inz(0)
-
+end-ds;

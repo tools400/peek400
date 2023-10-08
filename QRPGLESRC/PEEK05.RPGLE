@@ -930,7 +930,7 @@
           if ypgmcmd = r#pgmcmd;
              isCmdErr = bTrue;
              clear usr8144;
-             usr81441 = ypgmcmd;
+             usr8144.var1 = ypgmcmd;
              p_sndpgmmg('USR8144': usr8144: §§pgmname);
           else;
              exsr doCmd;
@@ -947,7 +947,7 @@
           if (ypgmcmd = r#pgmcmd);
              isCmdErr = bTrue;
              clear usr8144;
-             usr81441 = ypgmcmd;
+             usr8144.var1 = ypgmcmd;
              p_sndpgmmg('USR8144': usr8144: §§pgmname);
           else;
              exsr doCmd;
@@ -1115,7 +1115,7 @@
           other;
              //  Unbekannter Programmbefehl
              clear usr8110;
-             usr81101 = ypgmcmd;
+             usr8110.var1 = ypgmcmd;
              p_sndpgmmg('USR8110': usr8110: §§pgmname);
              iscmderr = btrue;
           endsl;
@@ -1507,12 +1507,12 @@
              p_rmvpgmmg(§§pgmname);
 
              clear usr8100;
-             usr81001 = ypgmcmd;
+             usr8100.var1 = ypgmcmd;
              exitmsg = f_msgtext('USR8100': usr8100);
 
              clear usr9999;
-             usr99991 = exitmsg;
-             usr99992 = '';
+             usr9999.var1 = exitmsg;
+             usr9999.var2 = '';
              p_sndpgmmg('USR9999': usr9999: §§pgmname);
              p_movpgmmg(§§pgmname);
 
@@ -1795,8 +1795,8 @@
              if isupdmod = bFalse;
                 //      Neuanlage nicht möglich, da INPUT-Modus
                 clear usr0007;
-                usr00071 = ##file;
-                usr00072 = ##library;
+                usr0007.var1 = ##file;
+                usr0007.var2 = ##library;
                 p_sndpgmmg('USR0007': usr0007: §§pgmname);
              else;
 
@@ -2874,7 +2874,7 @@
                       : 'USR8212': '': 'YN'
                       : yMsgID: yMsgDta);
                 usr8190 = yMsgDta;
-                if usr81901 = '*YES';
+                if usr8190.var1 = '*YES';
                    f_basedpf(##file     :
                             ##library  :
                             ##member   :
@@ -2962,8 +2962,8 @@
              if isupdmod = bFalse;
                 //      Ändern nicht möglich, da INPUT-Modus
                 clear usr0007;
-                usr00071 = ##file;
-                usr00072 = ##library;
+                usr0007.var1 = ##file;
+                usr0007.var2 = ##library;
                 p_sndpgmmg('USR0007': usr0007: §§pgmname);
              else;
 
@@ -2996,8 +2996,8 @@
              if isupdmod = bFalse;
                 //      Ändern nicht möglich, da INPUT-Modus
                 clear usr0007;
-                usr00071 = ##file;
-                usr00072 = ##library;
+                usr0007.var1 = ##file;
+                usr0007.var2 = ##library;
                 p_sndpgmmg('USR0007': usr0007: §§pgmname);
              else;
 
@@ -3079,8 +3079,8 @@
              if isupdmod = bFalse;
                 //      Löschen nicht möglich, da INPUT-Modus
                 clear usr0007;
-                usr00071 = ##file;
-                usr00072 = ##library;
+                usr0007.var1 = ##file;
+                usr0007.var2 = ##library;
                 p_sndpgmmg('USR0007': usr0007: §§pgmname);
              else;
 
@@ -3375,7 +3375,7 @@
                 if ispinned = bFalse;
                    //  Spalte ist nicht gepinned ...
                    clear usr8147;
-                   usr81471 = wrk#field;
+                   usr8147.var1 = wrk#field;
                    p_sndpgmmg('USR8147': usr8147: §§pgmname);
                 else;
                    //  Spalte ist gepinned ...
@@ -3518,7 +3518,7 @@
 
                 if file#x.rcdlen > rcd_buff_len;
                    clear usr8206;
-                   usr82061   = rcd_buff_len;
+                   usr8206.var1   = rcd_buff_len;
                    p_sndpgmmg('USR8206': usr8206: §§pgmname);
                 else;
                    set0001.set_dspmde = '*DSPHEX';
@@ -3879,8 +3879,8 @@
                 //  Unerwartete Nachrichten-ID ...
              other;
                 clear usr9998;
-                usr99981 = yMsgID;
-                usr99982 = 'PEEK14';
+                usr9998.var1 = yMsgID;
+                usr9998.var2 = 'PEEK14';
                 p_sndpgmmg('USR9998': usr9998: §§pgmname);
              endsl;
 
@@ -3968,7 +3968,7 @@
           if (f_chain00(wrk#rcdnbr: h_file: h_lib: h_mbr: '') = bTrue);
 
              //  Fehler bei Zugriff auf Datensatz ...
-             usr82001 = wrk#rcdnbr;
+             usr8200.var1 = wrk#rcdnbr;
              p_sndpgmmg('USR8200': usr8200: §§pgmname);
 
           else;
@@ -3988,7 +3988,7 @@
                 endif;
                 exsr f0tofx;
 
-                usr82001 = wrk#rcdnbr;
+                usr8200.var1 = wrk#rcdnbr;
                 p_sndpgmmg('USR8200': usr8200: §§pgmname);
              else;
                 if (*in55 = bTrue);
@@ -3999,7 +3999,7 @@
                 exsr f0tofx;
                 exsr callExit04;
 
-                usr82011 = wrk#rcdnbr;
+                usr8201.var1 = wrk#rcdnbr;
                 p_sndpgmmg('USR8201': usr8201: §§pgmname);
                 isSflDirty = bTrue;
              endif;
@@ -4084,7 +4084,7 @@
                 endif;
                 exsr f0tofx;
 
-                usr82021 = wrk#rcdnbr;
+                usr8202.var1 = wrk#rcdnbr;
                 p_sndpgmmg('USR8202': usr8202: §§pgmname);
              else;
                 if (*in55 = bTrue);
@@ -4092,7 +4092,7 @@
                 endif;
                 exsr f0tofx;
 
-                usr82031 = wrk#rcdnbr;
+                usr8203.var1 = wrk#rcdnbr;
                 p_sndpgmmg('USR8203': usr8203: §§pgmname);
              endif;
 
@@ -4385,8 +4385,8 @@
                 srchcount2 = §zeros;
 
                 clear usr8128;
-                usr81281 = srchcount;
-                usr81282 = srchnbrs;
+                usr8128.var1 = srchcount;
+                usr8128.var2 = srchnbrs;
                 p_sndstsmg('USR8128': usr8128);
              endif;
 
@@ -6158,9 +6158,9 @@
                 else;
                    //  Fehlermeldung ...
                    clear usr8108;
-                   usr81081 = ##field;
-                   usr81082 = ##file;
-                   usr81083 = ##library;
+                   usr8108.var1 = ##field;
+                   usr8108.var2 = ##file;
+                   usr8108.var3 = ##library;
                    p_sndpgmmg('USR8108': usr8108: §§pgmname);
                 endif;
 
@@ -6579,7 +6579,7 @@
              exsr closefile;
              p_rmvpgmmg(§§pgmname);
              clear usr8207;
-             usr82071 = rcd_buff_len;
+             usr8207.var1 = rcd_buff_len;
              p_sndpgmmg('USR8207': usr8207: §§pgmname);
           else;
 
@@ -6624,7 +6624,7 @@
                 if (file#x.rcdlen > rcd_buff_len and
                     set0001.set_dspmde = '*DSPHEX');
                    clear usr8206;
-                   usr82061  = rcd_buff_len;
+                   usr8206.var1  = rcd_buff_len;
                    p_sndpgmmg('USR8206': usr8206: §§pgmname);
                    exsr s_dspnrm;
                 endif;
@@ -6632,8 +6632,8 @@
                 // ... Felder größer 512 Zeichen
                 if isfld512 = bTrue;
                    // ... ohne Commit
-                   usr81231 = §white_u;
-                   usr81232 = §white;
+                   usr8123.var1 = §white_u;
+                   usr8123.var2 = §white;
                    p_sndpgmmg('USR8123': usr8123: §§pgmname);
                 endif;
 
@@ -6672,8 +6672,8 @@
                    // ... Datei für ...
                    if (isupdmod = bFalse);
                       // ... Input geöffnet
-                      usr00071 = ##file;
-                      usr00072 = ##library;
+                      usr0007.var1 = ##file;
+                      usr0007.var2 = ##library;
                       p_sndpgmmg('USR0007': usr0007: §§pgmname);
                    else;
                       // ... Update geöffnet
@@ -7136,15 +7136,15 @@
                 //  Objekt nicht gefunden ...
                 select;
                 when yMsgID = 'CPF9812';
-                   usr00081 = ##file;
-                   usr00082 = ##library;
+                   usr0008.var1 = ##file;
+                   usr0008.var2 = ##library;
                    p_sndpgmmg('USR0008': usr0008: §§pgmname);
                 when yMsgID = 'CPF9810';
-                   usr00101 = ##library;
+                   usr0010.var1 = ##library;
                    p_sndpgmmg('USR0010': usr0010: §§pgmname);
                 other;
-                   usr00091 = ##file;
-                   usr00092 = ##library;
+                   usr0009.var1 = ##file;
+                   usr0009.var2 = ##library;
                    p_sndpgmmg('USR0009': usr0009: §§pgmname);
                 endsl;
              else;
@@ -8291,8 +8291,8 @@
 
           // - Copyright
           clear usr9999;
-          usr99991 = §copyright;
-          usr99992 = §release;
+          usr9999.var1 = §copyright;
+          usr9999.var2 = §release;
           p_sndpgmmg('USR9999': usr9999: §§pgmname);
 
        endsr;

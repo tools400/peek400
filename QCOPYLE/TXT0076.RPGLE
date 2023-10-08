@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0076
-
-      //  Unzulässige Zeichen
-
-     d TXT0076         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0076
+//  Unzulässige Zeichen
+dcl-ds TXT0076 qualified;
       //  No replacement variables available!
-     d TXT0076_SIZE    s             10I 0 inz(0)
-
+end-ds;

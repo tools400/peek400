@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0015
-
-      //  Mbr:
-
-     d TXT0015         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0015
+//  Mbr:
+dcl-ds TXT0015 qualified;
       //  No replacement variables available!
-     d TXT0015_SIZE    s             10I 0 inz(0)
-
+end-ds;

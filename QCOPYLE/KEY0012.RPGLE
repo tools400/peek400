@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: KEY0012
-
-      //  Links
-
-     d KEY0012         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: KEY0012
+//  Links
+dcl-ds KEY0012 qualified;
       //  No replacement variables available!
-     d KEY0012_SIZE    s             10I 0 inz(0)
-
+end-ds;

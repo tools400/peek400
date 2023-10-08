@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: USR8132
-
-      //  Maximale Anzahl Datensätze durchsucht. 'SUCHEN'=Weitersuche
-
-     d USR8132         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: USR8132
+//  Maximale Anzahl Datensätze durchsucht. 'SUCHEN'=Weitersuche
+dcl-ds USR8132 qualified;
       //  No replacement variables available!
-     d USR8132_SIZE    s             10I 0 inz(0)
-
+end-ds;

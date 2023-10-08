@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0095
-
-      //  Startposition:
-
-     d TXT0095         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0095
+//  Startposition:
+dcl-ds TXT0095 qualified;
       //  No replacement variables available!
-     d TXT0095_SIZE    s             10I 0 inz(0)
-
+end-ds;

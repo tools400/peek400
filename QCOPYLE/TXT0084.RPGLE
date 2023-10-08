@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0084
-
-      //  Editcode:
-
-     d TXT0084         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0084
+//  Editcode:
+dcl-ds TXT0084 qualified;
       //  No replacement variables available!
-     d TXT0084_SIZE    s             10I 0 inz(0)
-
+end-ds;

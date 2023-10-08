@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: AID0037
-
-      //  Funktionstaste F7 nicht gültig.
-
-     d AID0037         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: AID0037
+//  Funktionstaste F7 nicht gültig.
+dcl-ds AID0037 qualified;
       //  No replacement variables available!
-     d AID0037_SIZE    s             10I 0 inz(0)
-
+end-ds;

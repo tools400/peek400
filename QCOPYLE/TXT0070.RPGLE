@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0070
-
-      //  Flexible Suchfunktionen
-
-     d TXT0070         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0070
+//  Flexible Suchfunktionen
+dcl-ds TXT0070 qualified;
       //  No replacement variables available!
-     d TXT0070_SIZE    s             10I 0 inz(0)
-
+end-ds;

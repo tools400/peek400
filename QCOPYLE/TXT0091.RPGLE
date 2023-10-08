@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0091
-
-      //  Feld ......:
-
-     d TXT0091         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0091
+//  Feld ......:
+dcl-ds TXT0091 qualified;
       //  No replacement variables available!
-     d TXT0091_SIZE    s             10I 0 inz(0)
-
+end-ds;

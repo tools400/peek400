@@ -319,9 +319,9 @@
              p_loadrcdfmtid(prcdfmtid);
              if prcdfmtid <> '' and prcdfmtid <> i_rcdfmtid;
                 clear usr8234;
-                usr82341 = i_envfile;
-                usr82342 = i_envlib;
-                usr82343 = i_envmbr;
+                usr8234.var1 = i_envfile;
+                usr8234.var2 = i_envlib;
+                usr8234.var3 = i_envmbr;
                 o_msgid  = 'USR8234';
                 o_msgdta = usr8234;
                 leave;

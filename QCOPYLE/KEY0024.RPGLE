@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: KEY0024
-
-      //  Anzeigen
-
-     d KEY0024         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: KEY0024
+//  Anzeigen
+dcl-ds KEY0024 qualified;
       //  No replacement variables available!
-     d KEY0024_SIZE    s             10I 0 inz(0)
-
+end-ds;

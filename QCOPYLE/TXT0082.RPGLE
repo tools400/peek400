@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0082
-
-      //  Markierung:
-
-     d TXT0082         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0082
+//  Markierung:
+dcl-ds TXT0082 qualified;
       //  No replacement variables available!
-     d TXT0082_SIZE    s             10I 0 inz(0)
-
+end-ds;

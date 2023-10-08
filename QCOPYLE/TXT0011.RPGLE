@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0011
-
-      //  Schlüssel  :
-
-     d TXT0011         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0011
+//  Schlüssel  :
+dcl-ds TXT0011 qualified;
       //  No replacement variables available!
-     d TXT0011_SIZE    s             10I 0 inz(0)
-
+end-ds;

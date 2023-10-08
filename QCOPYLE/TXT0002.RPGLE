@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0002
-
-      //  Bibliothek:
-
-     d TXT0002         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0002
+//  Bibliothek:
+dcl-ds TXT0002 qualified;
       //  No replacement variables available!
-     d TXT0002_SIZE    s             10I 0 inz(0)
-
+end-ds;

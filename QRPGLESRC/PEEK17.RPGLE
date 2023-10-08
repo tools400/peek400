@@ -390,7 +390,7 @@
                    //  Fehlermeldung ...
                    *in99 = '1';
                    clear usr8136;
-                   usr81361 = ##field;
+                   usr8136.var1 = ##field;
                    p_sndpgmmg('USR8136': usr8136: §§pgmname);
                    leave;
                 else;
@@ -407,8 +407,8 @@
                    fldl0100.f1dtyp <> 'F';       // Float
                    *in99 = '1';
                    clear usr8129;
-                   usr81291 = ##field;
-                   usr81292 = fldl0100.f1dtyp;
+                   usr8129.var1 = ##field;
+                   usr8129.var2 = fldl0100.f1dtyp;
                    p_sndpgmmg('USR8129': usr8129: §§pgmname);
                    leave;
                 endif;
@@ -442,7 +442,7 @@
                 and ##op <> 'NLIKE';
                 *in99 = '1';
                 clear usr8124;
-                usr81241 = ##op;
+                usr8124.var1 = ##op;
                 p_sndpgmmg('USR8124': usr8124: §§pgmname);
                 leave;
              endif;
@@ -458,8 +458,8 @@
                       fldl0100.f1dtyp <> 'T';         // Time
                       *in99 = '1';
                       clear usr8135;
-                      usr81351 = ##op;
-                      usr81352 = fldl0100.f1dtyp;
+                      usr8135.var1 = ##op;
+                      usr8135.var2 = fldl0100.f1dtyp;
                       p_sndpgmmg('USR8135': usr8135: §§pgmname);
                       leave;
                    endif;
@@ -471,8 +471,8 @@
                 and ##op <> 'NLIKE';
                 *in99 = '1';
                 clear usr8134;
-                usr81341 = ##op;    // Operation
-                usr81342 = ##field; // Feld
+                usr8134.var1 = ##op;    // Operation
+                usr8134.var2 = ##field; // Feld
                 p_sndpgmmg('USR8134': usr8134: §§pgmname);
                 leave;
              endif;
@@ -542,8 +542,8 @@
                 if fldl0100.f1dtyp = 'F'; // Float
                    if f_vldfloat(r_arg30) = bFalse;
                       *in99 = '1';
-                      clear usr81921;
-                      usr81921 = ##field;
+                      clear usr8192.var1;
+                      usr8192.var1 = ##field;
                       p_sndpgmmg('USR8192': usr8192: §§pgmname);
                    endif;
                 else;
@@ -561,8 +561,8 @@
                     ##sign <> set0003.set_signp);
                    *in99 = '1';
                    clear usr8141;
-                   usr81411 = set0003.set_signp;
-                   usr81412 = set0003.set_signm;
+                   usr8141.var1 = set0003.set_signp;
+                   usr8141.var2 = set0003.set_signm;
                    p_sndpgmmg('USR8141': usr8141: §§pgmname);
                    leave;
                 else;
@@ -750,7 +750,7 @@
                 and ##type <> 'P';
                 *in99 = '1';
                 clear usr8126;
-                usr81261 = ##type;
+                usr8126.var1 = ##type;
                 p_sndpgmmg('USR8126': usr8126: §§pgmname);
                 leave;
              endif;
@@ -800,11 +800,11 @@
 
           select;
           when workstn.aid = k_f3;
-             usr81001 = 'F3';
+             usr8100.var1 = 'F3';
           when workstn.aid = k_f12;
-             usr81001 = 'F12';
+             usr8100.var1 = 'F12';
           other;
-             usr81001 = 'Fxx';
+             usr8100.var1 = 'Fxx';
           endsl;
 
           o_msgdta = usr8100;
@@ -1026,8 +1026,8 @@
 
              if (%check(NUMERIC_DIGITS: r_arg30) > 0);
                 *in99 = bTrue;
-                clear usr81381;
-                usr81381 = ##field;
+                clear usr8138.var1;
+                usr8138.var1 = ##field;
                 p_sndpgmmg('USR8138': usr8138: §§pgmname);
              endif;
 

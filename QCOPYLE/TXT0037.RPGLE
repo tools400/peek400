@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0037
-
-      //  generische Suche)
-
-     d TXT0037         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0037
+//  generische Suche)
+dcl-ds TXT0037 qualified;
       //  No replacement variables available!
-     d TXT0037_SIZE    s             10I 0 inz(0)
-
+end-ds;

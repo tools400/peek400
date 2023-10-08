@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0102
-
-      //  Datum . . .
-
-     d TXT0102         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0102
+//  Datum . . .
+dcl-ds TXT0102 qualified;
       //  No replacement variables available!
-     d TXT0102_SIZE    s             10I 0 inz(0)
-
+end-ds;

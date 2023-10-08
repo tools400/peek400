@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0094
-
-      //  Hex .......:
-
-     d TXT0094         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0094
+//  Hex .......:
+dcl-ds TXT0094 qualified;
       //  No replacement variables available!
-     d TXT0094_SIZE    s             10I 0 inz(0)
-
+end-ds;

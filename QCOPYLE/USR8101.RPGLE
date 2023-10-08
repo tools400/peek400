@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: USR8101
-
-      //  Initialisierung läuft ...
-
-     d USR8101         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: USR8101
+//  Initialisierung läuft ...
+dcl-ds USR8101 qualified;
       //  No replacement variables available!
-     d USR8101_SIZE    s             10I 0 inz(0)
-
+end-ds;

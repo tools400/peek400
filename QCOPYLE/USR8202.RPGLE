@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: USR8202
-
-      //  Datensatz &1 konnte nicht kopiert werden.
-
-     d USR8202         ds
-     d  USR82021                     10P 0 inz(*ZEROS )
-     d USR8202_SIZE    s             10I 0 inz(6)
-
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: USR8202
+//  Datensatz &1 konnte nicht kopiert werden.
+dcl-ds USR8202 qualified;
+  var1  packed(10:0) inz;
+end-ds;

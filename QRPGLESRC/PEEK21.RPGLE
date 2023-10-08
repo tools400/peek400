@@ -270,7 +270,7 @@
                    o_pgmcmd = *blanks;
                    o_cmddta = *blanks;
                    o_msgid = 'USR8143';
-                   usr81431 = wrk_key;
+                   usr8143.var1 = wrk_key;
                    o_msgdta = usr8143;
                 else;
                    o_pgmcmd = '*EXIT';

@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: USR8204
-
-      //  Keine gültige Satzauswahl getroffen.
-
-     d USR8204         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: USR8204
+//  Keine gültige Satzauswahl getroffen.
+dcl-ds USR8204 qualified;
       //  No replacement variables available!
-     d USR8204_SIZE    s             10I 0 inz(0)
-
+end-ds;

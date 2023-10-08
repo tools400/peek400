@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0043
-
-      //  - Farbeinstellung -
-
-     d TXT0043         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0043
+//  - Farbeinstellung -
+dcl-ds TXT0043 qualified;
       //  No replacement variables available!
-     d TXT0043_SIZE    s             10I 0 inz(0)
-
+end-ds;

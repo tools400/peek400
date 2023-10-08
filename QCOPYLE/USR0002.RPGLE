@@ -1,10 +1,8 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: USR0002
-
-      //  Liste der Satzformate für Datei &2/&1 konnte nicht abgerufe
-
-     d USR0002         ds
-     d  USR00021                     10A   inz(*BLANKS)
-     d  USR00022                     10A   inz(*BLANKS)
-     d USR0002_SIZE    s             10I 0 inz(20)
-
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: USR0002
+//  Liste der Satzformate für Datei &2/&1 konnte nicht abgerufe
+dcl-ds USR0002 qualified;
+  var1  char(10) inz;
+  var2  char(10) inz;
+end-ds;

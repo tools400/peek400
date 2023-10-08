@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0045
-
-      //  Grün
-
-     d TXT0045         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0045
+//  Grün
+dcl-ds TXT0045 qualified;
       //  No replacement variables available!
-     d TXT0045_SIZE    s             10I 0 inz(0)
-
+end-ds;

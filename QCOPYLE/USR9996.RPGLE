@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: USR9996
-
-      //  Keine Datei geöffnet.
-
-     d USR9996         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: USR9996
+//  Keine Datei geöffnet.
+dcl-ds USR9996 qualified;
       //  No replacement variables available!
-     d USR9996_SIZE    s             10I 0 inz(0)
-
+end-ds;

@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: KEY0055
-
-      //  Relationen
-
-     d KEY0055         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: KEY0055
+//  Relationen
+dcl-ds KEY0055 qualified;
       //  No replacement variables available!
-     d KEY0055_SIZE    s             10I 0 inz(0)
-
+end-ds;

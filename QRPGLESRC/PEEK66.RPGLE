@@ -220,10 +220,10 @@
           innumeric = %dec(%subst(io_buffer: 1: io_length): cdigits: cdecpos);
        on-error;
           clear usr8227;
-          usr82271 = %subst(io_buffer: 1: io_length);
-          usr82272 = cdata_type;
-          usr82273 = cdigits;
-          usr82274 = cdecpos;
+          usr8227.var1 = %subst(io_buffer: 1: io_length);
+          usr8227.var2 = cdata_type;
+          usr8227.var3 = cdigits;
+          usr8227.var4 = cdecpos;
           o_msgid  = 'USR8227';
           o_msgdta = usr8227;
           return;

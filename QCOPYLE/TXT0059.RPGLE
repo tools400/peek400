@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0059
-
-      //   Lizenz-Nr:
-
-     d TXT0059         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0059
+//   Lizenz-Nr:
+dcl-ds TXT0059 qualified;
       //  No replacement variables available!
-     d TXT0059_SIZE    s             10I 0 inz(0)
-
+end-ds;

@@ -414,7 +414,7 @@
              if (isfound = bFalse);
                 isNewPos = bFalse;
                 clear usr8180;
-                usr81801 = lstmbr;
+                usr8180.var1 = lstmbr;
                 p_sndpgmmg('USR8180': usr8180: §§pgmname);
              else;
                 isNewPos = bTrue;
@@ -694,7 +694,7 @@
 
              if ((##mnme  <> '' or ##mtxt  <> '') and ##ctlau = ' ');
                 clear usr8110;
-                usr81101   = ##ctlau;
+                usr8110.var1   = ##ctlau;
                 p_sndpgmmg('USR8110': usr8110: §§pgmname);
                 isCtlError = bTrue;
                 leave;
@@ -966,7 +966,7 @@
                 other;
                    //  Unbekannter Programmbefehl
                    clear usr8110;
-                   usr81101 = ypgmcmd;
+                   usr8110.var1 = ypgmcmd;
                    p_sndpgmmg('USR8110': usr8110: §§pgmname);
                    exsr vsfpauerr;
                    update pbsfl;
@@ -990,7 +990,7 @@
           p_rmvpgmmg(§§pgmname);
 
           o_msgid = 'USR8100';
-          usr81001 = ypgmcmd;
+          usr8100.var1 = ypgmcmd;
           o_msgdta = usr8100;
 
        endsr;
@@ -1457,7 +1457,7 @@
        if (ymsgid <> ' ');
           //  Fehlermeldung ...
           clear usr8110;
-          usr81101 = i_option;
+          usr8110.var1 = i_option;
           o_msgid  = 'USR8110';
           o_msgdta = usr8110;
           iserror  = btrue;

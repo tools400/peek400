@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0014
-
-      //  Bib:
-
-     d TXT0014         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0014
+//  Bib:
+dcl-ds TXT0014 qualified;
       //  No replacement variables available!
-     d TXT0014_SIZE    s             10I 0 inz(0)
-
+end-ds;

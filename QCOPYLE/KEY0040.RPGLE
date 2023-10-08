@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: KEY0040
-
-      //  Groﬂbuchstaben
-
-     d KEY0040         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: KEY0040
+//  Groﬂbuchstaben
+dcl-ds KEY0040 qualified;
       //  No replacement variables available!
-     d KEY0040_SIZE    s             10I 0 inz(0)
-
+end-ds;

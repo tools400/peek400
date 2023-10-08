@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: KEY0015
-
-      //  80/132 Zeichen
-
-     d KEY0015         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: KEY0015
+//  80/132 Zeichen
+dcl-ds KEY0015 qualified;
       //  No replacement variables available!
-     d KEY0015_SIZE    s             10I 0 inz(0)
-
+end-ds;

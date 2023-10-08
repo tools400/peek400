@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0090
-
-      //  Hex-Eingabe
-
-     d TXT0090         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0090
+//  Hex-Eingabe
+dcl-ds TXT0090 qualified;
       //  No replacement variables available!
-     d TXT0090_SIZE    s             10I 0 inz(0)
-
+end-ds;

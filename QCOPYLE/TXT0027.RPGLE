@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0027
-
-      //  Datensatzanzeige ...
-
-     d TXT0027         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0027
+//  Datensatzanzeige ...
+dcl-ds TXT0027 qualified;
       //  No replacement variables available!
-     d TXT0027_SIZE    s             10I 0 inz(0)
-
+end-ds;

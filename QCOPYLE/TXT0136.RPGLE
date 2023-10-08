@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0136
-
-      //  Feldname
-
-     d TXT0136         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0136
+//  Feldname
+dcl-ds TXT0136 qualified;
       //  No replacement variables available!
-     d TXT0136_SIZE    s             10I 0 inz(0)
-
+end-ds;

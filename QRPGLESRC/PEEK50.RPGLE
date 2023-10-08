@@ -150,7 +150,7 @@
           //  Warnung, bei mehr als 12 Spalten
           if (nbrpincol > %elem(io_pintabc));
              clear usr8205;
-             usr82051 = %elem(io_pintabc);
+             usr8205.var1 = %elem(io_pintabc);
              p_sndpgmmg('USR8205': usr8205: §§pgmname);
           endif;
 
@@ -339,7 +339,7 @@
              if isfound = bFalse;
                 isnewpos = bFalse;
                 clear usr8136;
-                usr81361 = lstfield;
+                usr8136.var1 = lstfield;
                 p_sndpgmmg('USR8136': usr8136: §§pgmname);
              else;
                 isnewpos = btrue;
@@ -474,7 +474,7 @@
                 other;
                    //  Unbekannter Programmbefehl
                    clear usr8110;
-                   usr81101 = ypgmcmd;
+                   usr8110.var1 = ypgmcmd;
                    p_sndpgmmg('USR8110': usr8110: §§pgmname);
                    exsr vsfpauerr;
                    //  Setzen Bezugszahlen ...
@@ -509,7 +509,7 @@
           p_rmvpgmmg(§§pgmname);
 
           o_msgid = 'USR8100';
-          usr81001 = ypgmcmd;
+          usr8100.var1 = ypgmcmd;
           o_msgdta = usr8100;
 
        endsr;

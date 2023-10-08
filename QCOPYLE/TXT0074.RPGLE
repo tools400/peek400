@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0074
-
-      //  Datenbankbrowser
-
-     d TXT0074         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0074
+//  Datenbankbrowser
+dcl-ds TXT0074 qualified;
       //  No replacement variables available!
-     d TXT0074_SIZE    s             10I 0 inz(0)
-
+end-ds;

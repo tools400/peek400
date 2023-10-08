@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: KEY0046
-
-      //  Wiederholen
-
-     d KEY0046         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: KEY0046
+//  Wiederholen
+dcl-ds KEY0046 qualified;
       //  No replacement variables available!
-     d KEY0046_SIZE    s             10I 0 inz(0)
-
+end-ds;

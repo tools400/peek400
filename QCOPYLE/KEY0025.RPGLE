@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: KEY0025
-
-      //  Einstellungen
-
-     d KEY0025         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: KEY0025
+//  Einstellungen
+dcl-ds KEY0025 qualified;
       //  No replacement variables available!
-     d KEY0025_SIZE    s             10I 0 inz(0)
-
+end-ds;

@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: KEY0085
-
-      //  Drucken
-
-     d KEY0085         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: KEY0085
+//  Drucken
+dcl-ds KEY0085 qualified;
       //  No replacement variables available!
-     d KEY0085_SIZE    s             10I 0 inz(0)
-
+end-ds;

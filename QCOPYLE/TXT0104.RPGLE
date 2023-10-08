@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0104
-
-      //  E-mail  . .
-
-     d TXT0104         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0104
+//  E-mail  . .
+dcl-ds TXT0104 qualified;
       //  No replacement variables available!
-     d TXT0104_SIZE    s             10I 0 inz(0)
-
+end-ds;

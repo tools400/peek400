@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0100
-
-      //   Teild:
-
-     d TXT0100         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0100
+//   Teild:
+dcl-ds TXT0100 qualified;
       //  No replacement variables available!
-     d TXT0100_SIZE    s             10I 0 inz(0)
-
+end-ds;

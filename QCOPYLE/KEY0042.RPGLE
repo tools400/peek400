@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: KEY0042
-
-      //  Splash-Ein
-
-     d KEY0042         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: KEY0042
+//  Splash-Ein
+dcl-ds KEY0042 qualified;
       //  No replacement variables available!
-     d KEY0042_SIZE    s             10I 0 inz(0)
-
+end-ds;

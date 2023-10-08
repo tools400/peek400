@@ -1,10 +1,8 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: USR8141
-
-      //  Nur '&1' für positive und '&2' für negative Zahlen als Vorz
-
-     d USR8141         ds
-     d  USR81411                     10A   inz(*BLANKS)
-     d  USR81412                     10A   inz(*BLANKS)
-     d USR8141_SIZE    s             10I 0 inz(20)
-
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: USR8141
+//  Nur '&1' für positive und '&2' für negative Zahlen als Vorz
+dcl-ds USR8141 qualified;
+  var1  char(10) inz;
+  var2  char(10) inz;
+end-ds;

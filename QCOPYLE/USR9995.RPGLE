@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: USR9995
-
-      //  Struktur der Einstellungsdatei wird angepasst ...
-
-     d USR9995         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: USR9995
+//  Struktur der Einstellungsdatei wird angepasst ...
+dcl-ds USR9995 qualified;
       //  No replacement variables available!
-     d USR9995_SIZE    s             10I 0 inz(0)
-
+end-ds;

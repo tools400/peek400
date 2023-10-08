@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: KEY0074
-
-      //  Nein
-
-     d KEY0074         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: KEY0074
+//  Nein
+dcl-ds KEY0074 qualified;
       //  No replacement variables available!
-     d KEY0074_SIZE    s             10I 0 inz(0)
-
+end-ds;

@@ -34,10 +34,10 @@
       /COPY QCOPYLE,CEECNDHDLR
       /COPY QCOPYLE,FLDL0100
       /COPY QCOPYLE,D_COLORATR
-      /COPY QCOPYLE,USR0001
       /COPY QCOPYLE,SET0001
       /COPY QCOPYLE,ERR_D_SDS
 
+      /COPY QCOPYLE,USR0001
       /COPY QCOPYLE,USR8104
 
       /define internal_prototype
@@ -163,9 +163,9 @@
 
        if nof = *zeros;
           o_msgid = 'USR0001';
-          usr00011 = i_qfile.name;
-          usr00012 = i_qfile.lib;
-          usr00013 = i_rcdfmt;
+          USR0001.var1 = i_qfile.name;
+          USR0001.var2 = i_qfile.lib;
+          USR0001.var3 = i_rcdfmt;
           o_msgdta = usr0001;
        else;
           if isfld512 = btrue;

@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: KEY0063
-
-      //  Alles Löschen
-
-     d KEY0063         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: KEY0063
+//  Alles Löschen
+dcl-ds KEY0063 qualified;
       //  No replacement variables available!
-     d KEY0063_SIZE    s             10I 0 inz(0)
-
+end-ds;

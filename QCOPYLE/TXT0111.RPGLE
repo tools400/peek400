@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0111
-
-      //  - Programm erstellen -
-
-     d TXT0111         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0111
+//  - Programm erstellen -
+dcl-ds TXT0111 qualified;
       //  No replacement variables available!
-     d TXT0111_SIZE    s             10I 0 inz(0)
-
+end-ds;

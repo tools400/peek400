@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0108
-
-      //   - SQL  Auswahl -
-
-     d TXT0108         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0108
+//   - SQL  Auswahl -
+dcl-ds TXT0108 qualified;
       //  No replacement variables available!
-     d TXT0108_SIZE    s             10I 0 inz(0)
-
+end-ds;

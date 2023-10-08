@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0055
-
-      //  Teildatei .......:
-
-     d TXT0055         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0055
+//  Teildatei .......:
+dcl-ds TXT0055 qualified;
       //  No replacement variables available!
-     d TXT0055_SIZE    s             10I 0 inz(0)
-
+end-ds;

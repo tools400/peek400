@@ -332,7 +332,7 @@
                 other;
                    //  Unbekannter Programmbefehl
                    clear usr8110;
-                   usr81101 = ypgmcmd;
+                   usr8110.var1 = ypgmcmd;
                    p_sndpgmmg('USR8110': usr8110: §§pgmname);
                    exsr vsfpauerr;
                    update pbsfl;
@@ -356,7 +356,7 @@
           p_rmvpgmmg(§§pgmname);
 
           o_msgid = 'USR8100';
-          usr81001 = ypgmcmd;
+          usr8100.var1 = ypgmcmd;
           o_msgdta = usr8100;
 
        endsr;

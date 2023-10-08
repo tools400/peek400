@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: USR8225
-
-      //  Datensatz wurde zwischenzeitlich von einem anderem Job geän
-
-     d USR8225         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: USR8225
+//  Datensatz wurde zwischenzeitlich von einem anderem Job geän
+dcl-ds USR8225 qualified;
       //  No replacement variables available!
-     d USR8225_SIZE    s             10I 0 inz(0)
-
+end-ds;

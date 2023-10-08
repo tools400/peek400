@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0050
-
-      //  Rosa
-
-     d TXT0050         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0050
+//  Rosa
+dcl-ds TXT0050 qualified;
       //  No replacement variables available!
-     d TXT0050_SIZE    s             10I 0 inz(0)
-
+end-ds;

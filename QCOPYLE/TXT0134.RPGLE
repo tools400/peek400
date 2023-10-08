@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0134
-
-      //  RRN:
-
-     d TXT0134         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0134
+//  RRN:
+dcl-ds TXT0134 qualified;
       //  No replacement variables available!
-     d TXT0134_SIZE    s             10I 0 inz(0)
-
+end-ds;

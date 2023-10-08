@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: USR8173
-
-      //  Peek/400 kann nicht rekursiv aufgerufen werden.
-
-     d USR8173         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: USR8173
+//  Peek/400 kann nicht rekursiv aufgerufen werden.
+dcl-ds USR8173 qualified;
       //  No replacement variables available!
-     d USR8173_SIZE    s             10I 0 inz(0)
-
+end-ds;

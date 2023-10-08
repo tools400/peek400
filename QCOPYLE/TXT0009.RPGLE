@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0009
-
-      //  Dateigröße:
-
-     d TXT0009         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0009
+//  Dateigröße:
+dcl-ds TXT0009 qualified;
       //  No replacement variables available!
-     d TXT0009_SIZE    s             10I 0 inz(0)
-
+end-ds;

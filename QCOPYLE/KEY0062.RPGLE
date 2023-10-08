@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: KEY0062
-
-      //  Spalten pinnen
-
-     d KEY0062         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: KEY0062
+//  Spalten pinnen
+dcl-ds KEY0062 qualified;
       //  No replacement variables available!
-     d KEY0062_SIZE    s             10I 0 inz(0)
-
+end-ds;

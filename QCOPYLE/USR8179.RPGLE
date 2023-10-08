@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: USR8179
-
-      //  Keine Bedienerführung verfügbar.
-
-     d USR8179         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: USR8179
+//  Keine Bedienerführung verfügbar.
+dcl-ds USR8179 qualified;
       //  No replacement variables available!
-     d USR8179_SIZE    s             10I 0 inz(0)
-
+end-ds;

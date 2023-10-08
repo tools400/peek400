@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: USR8139
-
-      //  Positionierung fehlgeschlagen.
-
-     d USR8139         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: USR8139
+//  Positionierung fehlgeschlagen.
+dcl-ds USR8139 qualified;
       //  No replacement variables available!
-     d USR8139_SIZE    s             10I 0 inz(0)
-
+end-ds;

@@ -449,8 +449,8 @@
        dow f_readfld() <> beof;
 
           //**                Clear                   USR8188
-          //**                Eval      USR81881 = xStage
-          //**                Eval      USR81882 = FLDL0100.F1FNME
+          //**                Eval      USR8188.var1 = xStage
+          //**                Eval      USR8188.var2 = FLDL0100.F1FNME
           //**                Callp     p_sndStsMg('USR8188': USR8188)
 
           //  ... erhöhen lfd. Feldnummer
@@ -558,8 +558,8 @@
        dow f_readfld <> beof;
 
           //**                Clear                   USR8188
-          //**                Eval      USR81881 = xStage
-          //**                Eval      USR81882 = FLDL0100.F1FNME
+          //**                Eval      USR8188.var1 = xStage
+          //**                Eval      USR8188.var2 = FLDL0100.F1FNME
           //**                Callp     p_sndStsMg('USR8188': USR8188)
 
           //  ... erhöhen lfd. Feldnummer

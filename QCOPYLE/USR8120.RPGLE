@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: USR8120
-
-      //  Datensatz nicht gefunden.
-
-     d USR8120         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: USR8120
+//  Datensatz nicht gefunden.
+dcl-ds USR8120 qualified;
       //  No replacement variables available!
-     d USR8120_SIZE    s             10I 0 inz(0)
-
+end-ds;

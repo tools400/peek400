@@ -1,11 +1,9 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: USR8233
-
-      //  Fehler: Ungültiges Layout aufgrund abweichender Satzformat-
-
-     d USR8233         ds
-     d  USR82331                     10A   inz(*BLANKS)
-     d  USR82332                     10A   inz(*BLANKS)
-     d  USR82333                     10A   inz(*BLANKS)
-     d USR8233_SIZE    s             10I 0 inz(30)
-
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: USR8233
+//  Fehler: Ungültiges Layout aufgrund abweichender Satzformat-
+dcl-ds USR8233 qualified;
+  var1  char(10) inz;
+  var2  char(10) inz;
+  var3  char(10) inz;
+end-ds;

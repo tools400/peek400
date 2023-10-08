@@ -1,11 +1,9 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: USR9994
-
-      //  Unerwarteter Fehler &1 in C Funktion &2 aufgetreten.
-
-     d USR9994         ds
-     d  USR99941                      5P 0 inz(*ZEROS )
-     d  USR99942                     32A   inz(*BLANKS)
-     d  USR99943                    256A   inz(*BLANKS)
-     d USR9994_SIZE    s             10I 0 inz(291)
-
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: USR9994
+//  Unerwarteter Fehler &1 in C Funktion &2 aufgetreten.
+dcl-ds USR9994 qualified;
+  var1  packed(5:0) inz;
+  var2  char(32) inz;
+  var3  char(256) inz;
+end-ds;

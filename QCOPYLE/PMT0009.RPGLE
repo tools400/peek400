@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: PMT0009
-
-      //  Ändern SQL WHERE erlaubt
-
-     d PMT0009         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: PMT0009
+//  Ändern SQL WHERE erlaubt
+dcl-ds PMT0009 qualified;
       //  No replacement variables available!
-     d PMT0009_SIZE    s             10I 0 inz(0)
-
+end-ds;

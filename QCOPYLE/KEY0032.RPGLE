@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: KEY0032
-
-      //  Tab.Papier aus
-
-     d KEY0032         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: KEY0032
+//  Tab.Papier aus
+dcl-ds KEY0032 qualified;
       //  No replacement variables available!
-     d KEY0032_SIZE    s             10I 0 inz(0)
-
+end-ds;

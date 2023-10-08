@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0023
-
-      //  Schlüssel:
-
-     d TXT0023         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0023
+//  Schlüssel:
+dcl-ds TXT0023 qualified;
       //  No replacement variables available!
-     d TXT0023_SIZE    s             10I 0 inz(0)
-
+end-ds;

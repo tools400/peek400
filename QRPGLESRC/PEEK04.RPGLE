@@ -82,8 +82,8 @@
 
           if nbrofkey <= *zeros;
              o_msgid = 'USR0006';
-             usr00061 = i_qfile.name;
-             usr00062 = i_qfile.lib;
+             usr0006.var1 = i_qfile.name;
+             usr0006.var2 = i_qfile.lib;
              o_msgdta = usr0006;
           else;
              o_msgid = *blanks;

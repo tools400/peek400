@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: USR8220
-
-      //  Editor nicht zulässig. Feld &1 enthält NULL Wert.
-
-     d USR8220         ds
-     d  USR82201                     10A   inz(*BLANKS)
-     d USR8220_SIZE    s             10I 0 inz(10)
-
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: USR8220
+//  Editor nicht zulässig. Feld &1 enthält NULL Wert.
+dcl-ds USR8220 qualified;
+  var1  char(10) inz;
+end-ds;

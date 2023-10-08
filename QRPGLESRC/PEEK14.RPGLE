@@ -373,7 +373,7 @@
           if fldl0100.f1nalw = '1' and
              io_nullmap(fldl0100.f1seq) = 1;
              clear usr8220;
-             usr82201 = fldl0100.f1fnme;
+             usr8220.var1 = fldl0100.f1fnme;
              p_sndpgmmg('USR8220': usr8220: §§pgmname);
              leavesr;
           endif;
@@ -427,7 +427,7 @@
           if fldl0100.f1dtyp <> 'A' and
              fldl0100.f1dtyp <> 'G';
              clear usr8221;
-             usr82211 = fldl0100.f1fnme;
+             usr8221.var1 = fldl0100.f1fnme;
              p_sndpgmmg('USR8221': usr8221: §§pgmname);
              leavesr;
           endif;
@@ -435,7 +435,7 @@
           //  Error: Field &1 exceeds maximum length allowed for editor.
           //*                 IF        f_buffLn(FLDL0100) > 1024
           //*                 CLEAR                   USR8222
-          //*                 Eval      USR82221 = FLDL0100.F1FNME
+          //*                 Eval      USR8222.var1 = FLDL0100.F1FNME
           //*                 CALLP     p_sndPgmMg('USR8222': USR8222: §§pgmName)
           //*                 LEAVESR
           //*                 ENDIF
@@ -444,7 +444,7 @@
           if fldl0100.f1nalw = '1' and
              io_nullmap(fldl0100.f1seq) = 1;
              clear usr8220;
-             usr82201 = fldl0100.f1fnme;
+             usr8220.var1 = fldl0100.f1fnme;
              p_sndpgmmg('USR8220': usr8220: §§pgmname);
              leavesr;
           endif;
@@ -470,7 +470,7 @@
 
           if f_buffln(fldl0100) > rcd_buff_len;
              clear usr8206;
-             usr82061 = rcd_buff_len;
+             usr8206.var1 = rcd_buff_len;
              p_sndpgmmg('USR8206': usr8206: §§pgmname);
           else;
              f_rtvfld(yfldinhalt: io_buff:
@@ -508,7 +508,7 @@
           p_rmvpgmmg(§§pgmname);
 
           o_msgid = 'USR8100';
-          usr81001 = ypgmcmd;
+          usr8100.var1 = ypgmcmd;
           o_msgdta = usr8100;
 
        endsr;

@@ -167,7 +167,7 @@
              other;
                 isError = bTrue;
                 o_msgid = 'USR8168';
-                usr81681 = wrk0001.wrk_hidden;
+                usr8168.var1 = wrk0001.wrk_hidden;
                 o_msgdta = usr8168;
                 leave;
              endsl;
@@ -208,7 +208,7 @@
              other;
                 isError = bTrue;
                 o_msgid = 'USR8169';
-                usr81691 = wrk0001.wrk_mrkcol;
+                usr8169.var1 = wrk0001.wrk_mrkcol;
                 o_msgdta = usr8169;
                 leave;
              endsl;
@@ -234,7 +234,7 @@
              else;
                 isError = bTrue;
                 o_msgid = 'USR8170';
-                usr81701 = wrk0001.wrk_maxsiz;
+                usr8170.var1 = wrk0001.wrk_maxsiz;
                 o_msgdta = usr8170;
                 leave;
              endif;

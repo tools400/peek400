@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0113
-
-      //  Default Groﬂ-/Kleinb.?
-
-     d TXT0113         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0113
+//  Default Groﬂ-/Kleinb.?
+dcl-ds TXT0113 qualified;
       //  No replacement variables available!
-     d TXT0113_SIZE    s             10I 0 inz(0)
-
+end-ds;

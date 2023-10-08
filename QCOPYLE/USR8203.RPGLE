@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: USR8203
-
-      //  Datensatz &1 wurde kopiert.
-
-     d USR8203         ds
-     d  USR82031                     10P 0 inz(*ZEROS )
-     d USR8203_SIZE    s             10I 0 inz(6)
-
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: USR8203
+//  Datensatz &1 wurde kopiert.
+dcl-ds USR8203 qualified;
+  var1  packed(10:0) inz;
+end-ds;

@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0139
-
-      //  Text:
-
-     d TXT0139         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0139
+//  Text:
+dcl-ds TXT0139 qualified;
       //  No replacement variables available!
-     d TXT0139_SIZE    s             10I 0 inz(0)
-
+end-ds;

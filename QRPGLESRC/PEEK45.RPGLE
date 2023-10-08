@@ -583,11 +583,11 @@
 
           select;
           when workstn.aid = k_f3;
-             usr81001 = 'F3';
+             usr8100.var1 = 'F3';
           when workstn.aid = k_f12;
-             usr81001 = 'F12';
+             usr8100.var1 = 'F12';
           other;
-             usr81001 = 'Fxx';
+             usr8100.var1 = 'Fxx';
           endsl;
 
           o_msgdta = usr8100;
@@ -870,7 +870,7 @@
              isPgmError = bTrue;
              clear fldl0100;
              clear usr8136;
-             usr81361   = i_fldname;
+             usr8136.var1   = i_fldname;
              p_sndpgmmg('USR8136': usr8136: §§pgmname);
           else;
              isPgmError = bFalse;

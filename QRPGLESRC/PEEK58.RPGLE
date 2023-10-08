@@ -495,7 +495,7 @@
              startString = bTrue;
              if (%check(VALID_FIRST_CHAR: chr) > 0);
                 clear usr8182;
-                usr81821 = chr;
+                usr8182.var1 = chr;
                 o_msgid = 'USR8182';
                 o_msgdta = usr8182;
                 isValid = bFalse;
@@ -516,7 +516,7 @@
           if (startString =  bTrue and endString = bFalse);
              if (%check(VALID_CHAR: chr) > 0);
                 clear usr8182;
-                usr81821 = chr;
+                usr8182.var1 = chr;
                 o_msgid = 'USR8182';
                 o_msgdta = usr8182;
                 isValid = bFalse;
@@ -528,7 +528,7 @@
           if (startString =  bTrue and endString =  bTrue);
              if (chr <> '');
                 clear usr8182;
-                usr81821 = chr;
+                usr8182.var1 = chr;
                 o_msgid  = 'USR8182';
                 o_msgdta = usr8182;
                 isValid  = bFalse;
@@ -540,7 +540,7 @@
 
        if (startString = bFalse);
           clear usr8182;
-          usr81821 = chr;
+          usr8182.var1 = chr;
           o_msgid  = 'USR8182';
           o_msgdta = usr8182;
           isValid  = bFalse;

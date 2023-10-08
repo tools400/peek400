@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0075
-
-      //          * Highlights *
-
-     d TXT0075         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0075
+//          * Highlights *
+dcl-ds TXT0075 qualified;
       //  No replacement variables available!
-     d TXT0075_SIZE    s             10I 0 inz(0)
-
+end-ds;

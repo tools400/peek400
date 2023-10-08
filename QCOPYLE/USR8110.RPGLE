@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: USR8110
-
-      //  Auswahl '&1' nicht gültig.
-
-     d USR8110         ds
-     d  USR81101                     10A   inz(*BLANKS)
-     d USR8110_SIZE    s             10I 0 inz(10)
-
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: USR8110
+//  Auswahl '&1' nicht gültig.
+dcl-ds USR8110 qualified;
+  var1  char(10) inz;
+end-ds;

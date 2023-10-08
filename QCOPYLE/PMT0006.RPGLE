@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: PMT0006
-
-      //  Ändern Datei erlaubt
-
-     d PMT0006         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: PMT0006
+//  Ändern Datei erlaubt
+dcl-ds PMT0006 qualified;
       //  No replacement variables available!
-     d PMT0006_SIZE    s             10I 0 inz(0)
-
+end-ds;

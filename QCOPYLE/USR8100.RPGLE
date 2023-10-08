@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: USR8100
-
-      //  Verarbeitung mit &1 abgebrochen.
-
-     d USR8100         ds
-     d  USR81001                     10A   inz(*BLANKS)
-     d USR8100_SIZE    s             10I 0 inz(10)
-
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: USR8100
+//  Verarbeitung mit &1 abgebrochen.
+dcl-ds USR8100 qualified;
+  var1  char(10) inz;
+end-ds;

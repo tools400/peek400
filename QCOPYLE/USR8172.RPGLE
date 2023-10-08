@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: USR8172
-
-      //  Bearbeite: &1
-
-     d USR8172         ds
-     d  USR81721                     50A   inz(*BLANKS)
-     d USR8172_SIZE    s             10I 0 inz(50)
-
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: USR8172
+//  Bearbeite: &1
+dcl-ds USR8172 qualified;
+  var1  char(50) inz;
+end-ds;

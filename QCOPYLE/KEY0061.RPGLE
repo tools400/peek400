@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: KEY0061
-
-      //  Info
-
-     d KEY0061         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: KEY0061
+//  Info
+dcl-ds KEY0061 qualified;
       //  No replacement variables available!
-     d KEY0061_SIZE    s             10I 0 inz(0)
-
+end-ds;

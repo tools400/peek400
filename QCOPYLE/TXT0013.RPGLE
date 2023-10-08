@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0013
-
-      //  Datei:
-
-     d TXT0013         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0013
+//  Datei:
+dcl-ds TXT0013 qualified;
       //  No replacement variables available!
-     d TXT0013_SIZE    s             10I 0 inz(0)
-
+end-ds;

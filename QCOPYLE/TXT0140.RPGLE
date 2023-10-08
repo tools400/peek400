@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0140
-
-      //   A   Opt  Bezeichnung
-
-     d TXT0140         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0140
+//   A   Opt  Bezeichnung
+dcl-ds TXT0140 qualified;
       //  No replacement variables available!
-     d TXT0140_SIZE    s             10I 0 inz(0)
-
+end-ds;

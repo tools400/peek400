@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: PMT0101
-
-      //  Anzeigen Datenbankrelationen
-
-     d PMT0101         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: PMT0101
+//  Anzeigen Datenbankrelationen
+dcl-ds PMT0101 qualified;
       //  No replacement variables available!
-     d PMT0101_SIZE    s             10I 0 inz(0)
-
+end-ds;

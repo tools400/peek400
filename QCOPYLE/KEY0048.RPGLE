@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: KEY0048
-
-      //  UnPin Zeilen
-
-     d KEY0048         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: KEY0048
+//  UnPin Zeilen
+dcl-ds KEY0048 qualified;
       //  No replacement variables available!
-     d KEY0048_SIZE    s             10I 0 inz(0)
-
+end-ds;

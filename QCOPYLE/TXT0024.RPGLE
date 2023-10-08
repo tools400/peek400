@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0024
-
-      //  Auswahl:
-
-     d TXT0024         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0024
+//  Auswahl:
+dcl-ds TXT0024 qualified;
       //  No replacement variables available!
-     d TXT0024_SIZE    s             10I 0 inz(0)
-
+end-ds;

@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: KEY0036
-
-      //  ext. Kopieren
-
-     d KEY0036         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: KEY0036
+//  ext. Kopieren
+dcl-ds KEY0036 qualified;
       //  No replacement variables available!
-     d KEY0036_SIZE    s             10I 0 inz(0)
-
+end-ds;

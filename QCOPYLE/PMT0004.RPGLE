@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: PMT0004
-
-      //  Sprache
-
-     d PMT0004         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: PMT0004
+//  Sprache
+dcl-ds PMT0004 qualified;
       //  No replacement variables available!
-     d PMT0004_SIZE    s             10I 0 inz(0)
-
+end-ds;

@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: USR8156
-
-      //  Verarbeitung fehlerhaft beendet.
-
-     d USR8156         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: USR8156
+//  Verarbeitung fehlerhaft beendet.
+dcl-ds USR8156 qualified;
       //  No replacement variables available!
-     d USR8156_SIZE    s             10I 0 inz(0)
-
+end-ds;

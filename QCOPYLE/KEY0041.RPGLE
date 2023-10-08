@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: KEY0041
-
-      //  Klein/Groﬂb.+/-
-
-     d KEY0041         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: KEY0041
+//  Klein/Groﬂb.+/-
+dcl-ds KEY0041 qualified;
       //  No replacement variables available!
-     d KEY0041_SIZE    s             10I 0 inz(0)
-
+end-ds;

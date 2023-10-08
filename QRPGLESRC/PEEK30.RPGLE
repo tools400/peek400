@@ -207,8 +207,8 @@
                 exsr c_endpgm;
                 o_flag = bshareext;
                 o_msgid = 'USR9997';
-                usr99971 = §yellow_r;
-                usr99972 = §white;
+                usr9997.var1 = §yellow_r;
+                usr9997.var2 = §white;
                 o_msgdta = usr9997;
                 leave;
 
@@ -311,7 +311,7 @@
              clear usr8158;
              *in99 = '1';
              clear usr8158;
-             usr81581 = ##licdata;                                              // Liz.Nr.
+             usr8158.var1 = ##licdata;                                              // Liz.Nr.
              p_sndpgmmg('USR8158': usr8158: §§pgmname);
              leave;
           endif;
@@ -326,7 +326,7 @@
              clear usr8158;
              *in99 = '1';
              clear usr8158;
-             usr81581 = ##licdata;                                              // Liz.Nr.
+             usr8158.var1 = ##licdata;                                              // Liz.Nr.
              p_sndpgmmg('USR8158': usr8158: §§pgmname);
              leave;
           endif;

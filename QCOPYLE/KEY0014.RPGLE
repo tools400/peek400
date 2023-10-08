@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: KEY0014
-
-      //  Befehlszeile
-
-     d KEY0014         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: KEY0014
+//  Befehlszeile
+dcl-ds KEY0014 qualified;
       //  No replacement variables available!
-     d KEY0014_SIZE    s             10I 0 inz(0)
-
+end-ds;

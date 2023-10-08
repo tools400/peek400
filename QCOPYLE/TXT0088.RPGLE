@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0088
-
-      //  - Anz. Datenbankrelationen   -
-
-     d TXT0088         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0088
+//  - Anz. Datenbankrelationen   -
+dcl-ds TXT0088 qualified;
       //  No replacement variables available!
-     d TXT0088_SIZE    s             10I 0 inz(0)
-
+end-ds;

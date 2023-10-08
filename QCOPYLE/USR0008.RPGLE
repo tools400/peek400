@@ -1,10 +1,8 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: USR0008
-
-      //  Die Datei &2/&1 konnte nicht gefunden werden.
-
-     d USR0008         ds
-     d  USR00081                     10A   inz(*BLANKS)
-     d  USR00082                     10A   inz(*BLANKS)
-     d USR0008_SIZE    s             10I 0 inz(20)
-
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: USR0008
+//  Die Datei &2/&1 konnte nicht gefunden werden.
+dcl-ds USR0008 qualified;
+  var1  char(10) inz;
+  var2  char(10) inz;
+end-ds;

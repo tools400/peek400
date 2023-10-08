@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: TXT0125
-
-      //  Akt.Länge .:
-
-     d TXT0125         ds
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: TXT0125
+//  Akt.Länge .:
+dcl-ds TXT0125 qualified;
       //  No replacement variables available!
-     d TXT0125_SIZE    s             10I 0 inz(0)
-
+end-ds;

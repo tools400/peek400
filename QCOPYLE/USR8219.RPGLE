@@ -1,9 +1,7 @@
-      // ---------------------------------------------------------------
-      //  Data structure for message ID: USR8219
-
-      //  Wert '&1' für Auswahl Ja/Nein nicht zulässig.
-
-     d USR8219         ds
-     d  USR82191                      1A   inz(*BLANKS)
-     d USR8219_SIZE    s             10I 0 inz(1)
-
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: USR8219
+//  Wert '&1' für Auswahl Ja/Nein nicht zulässig.
+dcl-ds USR8219 qualified;
+  var1  char(1) inz;
+end-ds;
