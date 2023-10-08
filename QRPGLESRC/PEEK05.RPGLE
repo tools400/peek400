@@ -820,10 +820,8 @@
           endif;
 
           //  Berechnen Zeile/Spalte
-          cursorposition.row =
-           workstn.csrpos / 256;
-          cursorposition.column =
-           %rem(workstn.csrpos: 256);
+          cursorposition.row = workstn.csrpos / 256;
+          cursorposition.column = %rem(workstn.csrpos: 256);
 
           //  Löschen der Cursorposition
           csrrow = §zeros;
