@@ -1,14 +1,14 @@
       /if not defined(CEECNDHDLR)
       /define CEECNDHDLR
       *
-      *  CEEHDLR—Register user-written condition handler
+      *  CEEHDLRRegister user-written condition handler
      d ceehdlr         pr
      d  i_pHdlProc                     *   const procptr
      d  i_pToken                       *   const
      d  o_fc                                     likeds(cee_fc_t)
      d                                           options(*omit)
       *
-      *  CEEHDLU—Unregister user-written condition handler
+      *  CEEHDLUUnregister user-written condition handler
      d ceehdlu         pr
      d  i_pHdlProc                     *   const procptr
      d  o_fc                                     likeds(cee_fc_t)
