@@ -85,8 +85,8 @@
 
        dcl-s yfkeys          char(18) dim(32);
        dcl-s ynbrofkeys      like(int4_t);
-       dcl-s ymsgid          char(7);
-       dcl-s ymsgdta         char(512);
+       dcl-s yMsgID          char(7);
+       dcl-s yMsgDta         char(512);
 
        dcl-s ypgmcmd         char(10);
        dcl-s ycmddta         like(pgmcmddt_t);
@@ -209,11 +209,11 @@
              //  Mappen der gedrückten Taste
              //  in Programmbefehl
              peek21(workstn.aid: §§pgmname
-                   : ypgmcmd: ycmddta: ymsgid: ymsgdta);
-             if (ymsgid <> '');
-                p_sndpgmmg(ymsgid: ymsgdta: §§pgmname);
-                ymsgid = '';
-                ymsgdta = '';
+                   : ypgmcmd: ycmddta: yMsgID: yMsgDta);
+             if (yMsgID <> '');
+                p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                yMsgID = '';
+                yMsgDta = '';
                 iter;
              endif;
 
@@ -461,8 +461,8 @@
 
                 //  Zuordnung AUSWAHL => Befehl ...
                 peek21('#' + sfpau: §§pgmname
-                      : ypgmcmd: ycmddta: ymsgid: ymsgdta);
-                if ymsgid <> *blanks;
+                      : ypgmcmd: ycmddta: yMsgID: yMsgDta);
+                if yMsgID <> *blanks;
                    //  Fehlermeldung ...
                    p_sndpgmmg('USR8110': sfpau: §§pgmname);
                    exsr vsfpauerr;
@@ -502,7 +502,7 @@
                 //  Prüfen, Datensatz ...
                 monitor;
                    peek35(recordnbr: wrk0001: yfield
-                         : ymsgid: ymsgdta);
+                         : yMsgID: yMsgDta);
                    *in99 = bFalse;
                 on-error;
                    *in99 = bTrue;
@@ -512,7 +512,7 @@
                    exsr vsfpauerr;
                 else;
                    //  ... Programaufruf war OK
-                   if ymsgid = *blanks;
+                   if yMsgID = *blanks;
                       //      ... Prüfung ist OK
                       exsr vpos;
                       exsr vsfpauclr;
@@ -521,9 +521,9 @@
                       exsr vposcsr;
                       exsr vsfpauerr;
                       *in85 = '0'; // DSPATR(RI)
-                      p_sndpgmmg(ymsgid: ymsgdta: §§pgmname);
-                      ymsgid = '';
-                      ymsgdta = '';
+                      p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                      yMsgID = '';
+                      yMsgDta = '';
                       issflerror = bTrue;
                    endif;
                 endif;
@@ -548,7 +548,7 @@
              ycolorattr = $$color;
 
              monitor;
-                peek25(i_dsp80: ycolorattr: ymsgid: ymsgdta);
+                peek25(i_dsp80: ycolorattr: yMsgID: yMsgDta);
                 *in99 = bFalse;
              on-error;
                 *in99 = bTrue;
@@ -1102,10 +1102,13 @@
 
        begsr clrpeekwrk;
 
-          §file = work_file_name;
-          §lib = work_file_library;
-          §mbr = work_file_member;
-      /COPY QCOPYLE,CLRPFM
+          f_execute('CLRPFM FILE(' +
+                      %trimr(WORK_FILE_LIBRARY) + '/' +
+                      %trimr(WORK_FILE_NAME) +
+                    ') MBR(' + %trimr(WORK_FILE_MEMBER) + ')'
+                    :yMsgID: yMsgDta);
+          yMsgID = '';
+          yMsgDta = '';
 
        endsr;
 

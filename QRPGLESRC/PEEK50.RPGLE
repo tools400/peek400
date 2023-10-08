@@ -865,10 +865,13 @@
 
        begsr clrpeekwrk;
 
-          §file = work_file_name;
-          §lib = work_file_library;
-          §mbr = work_file_member;
-      /COPY QCOPYLE,CLRPFM
+          f_execute('CLRPFM FILE(' +
+                      %trimr(WORK_FILE_LIBRARY) + '/' +
+                      %trimr(WORK_FILE_NAME) +
+                    ') MBR(' + %trimr(WORK_FILE_MEMBER) + ')'
+                    :ymsgid: ymsgdta);
+          ymsgid = '';
+          ymsgdta = '';
 
        endsr;
 
