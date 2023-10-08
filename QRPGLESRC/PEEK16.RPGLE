@@ -185,7 +185,7 @@
        end-ds;
 
        dcl-ds ds_remark len(112);
-         $rem_atrb       char(1) inz(§white);
+         $rem_atrb       char(1) inz(COLOR_white);
          $rem_rem        char(1) inz('*') pos(7);
          $rem_txt        char(103) inz pos(10);
        end-ds;

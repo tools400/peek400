@@ -559,8 +559,8 @@
 
           // - Feld zu groß Hinweis ausgeben
           clear usr8123;
-          usr8123.var1 = §white_u;
-          usr8123.var2 = §white;
+          usr8123.var1 = COLOR_white_u;
+          usr8123.var2 = COLOR_white;
           p_sndpgmmg('USR8123': usr8123: §§pgmname);
 
           // - Füllen der Bildschirmfelder

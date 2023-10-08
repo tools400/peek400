@@ -207,8 +207,8 @@
                 exsr c_endpgm;
                 o_flag = bshareext;
                 o_msgid = 'USR9997';
-                usr9997.var1 = §yellow_r;
-                usr9997.var2 = §white;
+                usr9997.var1 = COLOR_yellow_r;
+                usr9997.var2 = COLOR_white;
                 o_msgdta = usr9997;
                 leave;
 

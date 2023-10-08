@@ -292,67 +292,67 @@
 
        begsr fill##;
 
-          $green = §green;
+          $green = COLOR_green;
           $green = %xlate(' ': CHAR: $green);
-          $green_r = §green_r;
+          $green_r = COLOR_green_r;
           $green_r = %xlate(' ': CHAR: $green_r);
-          $green_u = §green_u;
+          $green_u = COLOR_green_u;
           $green_u = %xlate(' ': CHAR: $green_u);
-          $green_ru = §green_ru;
+          $green_ru = COLOR_green_ru;
           $green_ru = %xlate(' ': CHAR: $green_ru);
 
-          $white = §white;
+          $white = COLOR_white;
           $white = %xlate(' ': CHAR: $white);
-          $white_r = §white_r;
+          $white_r = COLOR_white_r;
           $white_r = %xlate(' ': CHAR: $white_r);
-          $white_u = §white_u;
+          $white_u = COLOR_white_u;
           $white_u = %xlate(' ': CHAR: $white_u);
 
-          $red = §red;
+          $red = COLOR_red;
           $red = %xlate(' ': CHAR: $red);
-          $red_r = §red_r;
+          $red_r = COLOR_red_r;
           $red_r = %xlate(' ': CHAR: $red_r);
-          $red_u = §red_u;
+          $red_u = COLOR_red_u;
           $red_u = %xlate(' ': CHAR: $red_u);
-          $red_ru = §red_ru;
+          $red_ru = COLOR_red_ru;
           $red_ru = %xlate(' ': CHAR: $red_ru);
-          $red_b = §red_b;
+          $red_b = COLOR_red_b;
           $red_b = %xlate(' ': CHAR: $red_b);
-          $red_rb = §red_rb;
+          $red_rb = COLOR_red_rb;
           $red_rb = %xlate(' ': CHAR: $red_rb);
-          $red_ub = §red_ub;
+          $red_ub = COLOR_red_ub;
           $red_ub = %xlate(' ': CHAR: $red_ub);
 
-          $turkis = §turkis;
+          $turkis = COLOR_turkis;
           $turkis = %xlate(' ': CHAR: $turkis);
-          $turkis_r = §turkis_r;
+          $turkis_r = COLOR_turkis_r;
           $turkis_r = %xlate(' ': CHAR: $turkis_r);
-          $turkis_u = §turkis_u;
+          $turkis_u = COLOR_turkis_u;
           $turkis_u = %xlate(' ': CHAR: $turkis_u);
-          $turkis_ru = §turkis_ru;
+          $turkis_ru = COLOR_turkis_ru;
           $turkis_ru = %xlate(' ': CHAR: $turkis_ru);
 
-          $yellow = §yellow;
+          $yellow = COLOR_yellow;
           $yellow = %xlate(' ': CHAR: $yellow);
-          $yellow_r = §yellow_r;
+          $yellow_r = COLOR_yellow_r;
           $yellow_r = %xlate(' ': CHAR: $yellow_r);
-          $yellow_u = §yellow_u;
+          $yellow_u = COLOR_yellow_u;
           $yellow_u = %xlate(' ': CHAR: $yellow_u);
 
-          $pink = §pink;
+          $pink = COLOR_pink;
           $pink = %xlate(' ': CHAR: $pink);
-          $pink_r = §pink_r;
+          $pink_r = COLOR_pink_r;
           $pink_r = %xlate(' ': CHAR: $pink_r);
-          $pink_u = §pink_u;
+          $pink_u = COLOR_pink_u;
           $pink_u = %xlate(' ': CHAR: $pink_u);
-          $pink_ru = §pink_ru;
+          $pink_ru = COLOR_pink_ru;
           $pink_ru = %xlate(' ': CHAR: $pink_ru);
 
-          $blue = §blue;
+          $blue = COLOR_blue;
           $blue = %xlate(' ': CHAR: $blue);
-          $blue_r = §blue_r;
+          $blue_r = COLOR_blue_r;
           $blue_r = %xlate(' ': CHAR: $blue_r);
-          $blue_u = §blue_u;
+          $blue_u = COLOR_blue_u;
           $blue_u = %xlate(' ': CHAR: $blue_u);
 
        endsr;
@@ -373,67 +373,67 @@
 
           // Green
           select;
-          when o_colorattr = §green;
+          when o_colorattr = COLOR_green;
              *in10 = '1';
-          when o_colorattr = §green_r;
+          when o_colorattr = COLOR_green_r;
              *in11 = '1';
-          when o_colorattr = §green_u;
+          when o_colorattr = COLOR_green_u;
              *in12 = '1';
-          when o_colorattr = §green_ru;
+          when o_colorattr = COLOR_green_ru;
              *in13 = '1';
              // White
-          when o_colorattr = §white;
+          when o_colorattr = COLOR_white;
              *in20 = '1';
-          when o_colorattr = §white_r;
+          when o_colorattr = COLOR_white_r;
              *in21 = '1';
-          when o_colorattr = §white_u;
+          when o_colorattr = COLOR_white_u;
              *in22 = '1';
              // Red
-          when o_colorattr = §red;
+          when o_colorattr = COLOR_red;
              *in30 = '1';
-          when o_colorattr = §red_r;
+          when o_colorattr = COLOR_red_r;
              *in31 = '1';
-          when o_colorattr = §red_u;
+          when o_colorattr = COLOR_red_u;
              *in32 = '1';
-          when o_colorattr = §red_ru;
+          when o_colorattr = COLOR_red_ru;
              *in33 = '1';
-          when o_colorattr = §red_b;
+          when o_colorattr = COLOR_red_b;
              *in34 = '1';
-          when o_colorattr = §red_rb;
+          when o_colorattr = COLOR_red_rb;
              *in35 = '1';
-          when o_colorattr = §red_ub;
+          when o_colorattr = COLOR_red_ub;
              *in36 = '1';
              // Türkis
-          when o_colorattr = §turkis;
+          when o_colorattr = COLOR_turkis;
              *in40 = '1';
-          when o_colorattr = §turkis_r;
+          when o_colorattr = COLOR_turkis_r;
              *in41 = '1';
-          when o_colorattr = §turkis_u;
+          when o_colorattr = COLOR_turkis_u;
              *in42 = '1';
-          when o_colorattr = §turkis_ru;
+          when o_colorattr = COLOR_turkis_ru;
              *in43 = '1';
              // Yellow
-          when o_colorattr = §yellow;
+          when o_colorattr = COLOR_yellow;
              *in50 = '1';
-          when o_colorattr = §yellow_r;
+          when o_colorattr = COLOR_yellow_r;
              *in51 = '1';
-          when o_colorattr = §yellow_u;
+          when o_colorattr = COLOR_yellow_u;
              *in52 = '1';
              // Pink
-          when o_colorattr = §pink;
+          when o_colorattr = COLOR_pink;
              *in60 = '1';
-          when o_colorattr = §pink_r;
+          when o_colorattr = COLOR_pink_r;
              *in61 = '1';
-          when o_colorattr = §pink_u;
+          when o_colorattr = COLOR_pink_u;
              *in62 = '1';
-          when o_colorattr = §pink_ru;
+          when o_colorattr = COLOR_pink_ru;
              *in63 = '1';
              // Blue
-          when o_colorattr = §blue;
+          when o_colorattr = COLOR_blue;
              *in70 = '1';
-          when o_colorattr = §blue_r;
+          when o_colorattr = COLOR_blue_r;
              *in71 = '1';
-          when o_colorattr = §blue_u;
+          when o_colorattr = COLOR_blue_u;
              *in72 = '1';
 
           other;

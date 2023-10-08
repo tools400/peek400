@@ -824,9 +824,9 @@
              keyl0100 = ydata;
 
              if (keyl0100.apkseq = 'D');
-                buffer = %trimr(buffer) + §white;
+                buffer = %trimr(buffer) + COLOR_white;
              else;
-                buffer = %trimr(buffer) + §green;
+                buffer = %trimr(buffer) + COLOR_green;
              endif;
 
              buffer = %trimr(buffer) + keyl0100.apkeyf;
@@ -834,16 +834,16 @@
 
           if (numkey >= 1 and
              keyl0100.apuniq = 'Y');
-             buffer = %trimr(buffer) + §white + §unique;
+             buffer = %trimr(buffer) + COLOR_white + §unique;
           endif;
 
           select;
           when (dbrl0200.b2deptype = 'C');
-             buffer = %trimr(buffer) + §white + §constr;
+             buffer = %trimr(buffer) + COLOR_white + §constr;
           other;
           endsl;
 
-          buffer = %trimr(buffer) + §green;
+          buffer = %trimr(buffer) + COLOR_green;
 
           strpos = 1;
           dou strpos = 0;
@@ -885,11 +885,11 @@
                 //  ... ansonsten den Eintrag aufbereiten und anzeigen
                 select;
                 when (sell0100.sorule = 'S');
-                   buffer = §white + '*SELECT';
+                   buffer = COLOR_white + '*SELECT';
                 when (sell0100.sorule = 'O');
-                   buffer = §white + '*OMIT';
+                   buffer = COLOR_white + '*OMIT';
                 other;
-                   buffer = §white;
+                   buffer = COLOR_white;
                 endsl;
 
                 %subst(buffer: 10: %len(sell0100.sofld)) =
@@ -897,7 +897,7 @@
                 %subst(buffer: 21: %len(sell0100.socomp)) =
                  sell0100.socomp;
                 buffer = %trimr(buffer) + ' ' +
-                        sell0100.sovalu + §green;
+                        sell0100.sovalu + COLOR_green;
                 $$ftxt = buffer;
                 //  Schreiben der Subfile ...
                 exsr pbwrite;
