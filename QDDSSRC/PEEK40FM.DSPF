@@ -61,10 +61,10 @@
      A            RECORDNBR     10Y 0H
      A            ISDECIMAL      1A  H
      A            ISEDITCODE     1A  H
-     A            §IN20          1A  H
-     A            §IN71          1A  H
-     A            H$FILE        10A  H
-     A            H$LIB         10A  H
+     A            H_IN20         1A  H
+     A            H_IN71         1A  H
+     A            H_FILE        10A  H
+     A            H_LIB         10A  H
      A            SFPAU          1A  B  5  2
      A  85                                  DSPATR(RI)
      A  71                                  DSPATR(ND)

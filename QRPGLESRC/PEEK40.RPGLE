@@ -619,8 +619,8 @@
 
        begsr vpos;
 
-          o_file = h$file;
-          o_lib = h$lib;
+          o_file = h_file;
+          o_lib = h_lib;
 
        endsr;
 
@@ -706,8 +706,8 @@
              //  Bei erstem Datensatz, ...
              if *in80 = *off;
                 //  ... die physische Datei anzeigen
-                h$file = dbrl0200.b2fnmeused;
-                h$lib = dbrl0200.b2lnmeused;
+                h_file = dbrl0200.b2fnmeused;
+                h_lib = dbrl0200.b2lnmeused;
                 //**                EXSR      StatMsg
                 exsr pbfill;
                 exsr pbfillkey;
@@ -715,8 +715,8 @@
              endif;
 
              //  Anzeigen der logischen Sichten
-             h$file = dbrl0200.b2depfile;
-             h$lib = dbrl0200.b2deplib;
+             h_file = dbrl0200.b2depfile;
+             h_lib = dbrl0200.b2deplib;
              //**                EXSR      StatMsg
              exsr pbfill;
              exsr pbfillkey;
@@ -727,8 +727,8 @@
           if *in80 = *off;
              //  ... die physische Datei anzeigen
              clear dbrl0200;
-             h$file = i_file;
-             h$lib = i_lib;
+             h_file = i_file;
+             h_lib = i_lib;
              dbrl0200.b2lnmeused = i_lib;
              //**                EXSR      StatMsg
              exsr pbfill;
@@ -746,7 +746,7 @@
 
           //  Nachricht ausgeben ...
           clear usr8172;
-          usr8172.var1 = %trimr(h$lib) + '/' + h$file;
+          usr8172.var1 = %trimr(h_lib) + '/' + h_file;
           p_sndstsmg('USR8172': usr8172);
 
        endsr;
@@ -757,8 +757,8 @@
 
        begsr bztoscreen;
 
-          *in20 = 告n20;
-          *in71 = 告n71;
+          *in20 = h_in20;
+          *in71 = h_in71;
 
        endsr;
 
@@ -768,8 +768,8 @@
 
        begsr bztosubf;
 
-          告n20 = *in20;
-          告n71 = *in71;
+          h_in20 = *in20;
+          h_in71 = *in71;
 
        endsr;
 
@@ -783,7 +783,7 @@
           *in71 = '0';
 
           //  Abh鄚gigkeit pr�fen ...
-          if (dbrl0200.b2lnmeused = h$lib or
+          if (dbrl0200.b2lnmeused = h_lib or
              *in80 = '0');
              *in20 = '0';
           else;
@@ -791,8 +791,8 @@
           endif;
 
           //  Einlesen der Dateiinformationen ...
-          yqfile.name = h$file;
-          yqfile.lib = h$lib;
+          yqfile.name = h_file;
+          yqfile.lib = h_lib;
           peek41(yqfile
                 : '*FIRST': '*CREATE': rc: ydata);
           //  ... Bezeichnung
@@ -921,12 +921,12 @@
              $$lib = *blanks;
           else;
              //  Bei erstem Datensatz, ...
-             if *in80 = *off;
-                $$file = h$file;
-                $$lib = h$lib;
+             if (*in80 = *off);
+                $$file = h_file;
+                $$lib = h_lib;
              else;
-                $$file = ' ' + h$file;
-                $$lib = h$lib;
+                $$file = ' ' + h_file;
+                $$lib = h_lib;
              endif;
           endif;
 
@@ -942,9 +942,7 @@
           write pbsfl;
           sflnbrrcd = sflrec;
 
-          if h$file = i_file
-             and h$lib = i_lib
-             and *in71 = *off;
+          if (h_file = i_file and h_lib = i_lib and *in71 = *off);
              sfsanr = sflrec;
           endif;
 
