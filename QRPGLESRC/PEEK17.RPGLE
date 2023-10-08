@@ -33,11 +33,13 @@
 
        dcl-f peekfld keyed usropn infds(peek_01_ds) prefix(f_);
 
+       dcl-ds workstn likeds(workstn_t);
+
        dcl-ds peek_01_ds likeds(infds_t);
 
 
       /COPY QCOPYLE,D_VARDEF
-      /COPY QCOPYLE,DS_WORKSTN
+      /COPY QCOPYLE,D_WORKSTN
       /COPY QCOPYLE,ShortCmd_D
       /COPY QCOPYLE,ERR_D_SDS
       /COPY QCOPYLE,FLDL0100

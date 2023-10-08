@@ -33,6 +33,9 @@
              infds(peek#00) prefix(f_);
        dcl-f peekfld keyed usropn infds(peek#  ) prefix(f_);
 
+       dcl-ds workstn likeds(workstn_t);
+       dcl-ds cursorPosition likeds(cursorPosition_t) inz;
+
        dcl-ds peek#00 likeds(infds_t);
        dcl-ds peek# likeds(infds_t);
 
@@ -53,7 +56,7 @@
       /COPY QCOPYLE,FLDL0100
       /COPY QCOPYLE,SCRNFKEYS
       /COPY QCOPYLE,ShortCmd_D
-      /COPY QCOPYLE,DS_WORKSTN
+      /COPY QCOPYLE,D_WORKSTN
       /COPY QCOPYLE,ERR_D_SDS
       /COPY QCOPYLE,CEECNDHDLR
 

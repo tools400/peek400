@@ -32,12 +32,14 @@
        dcl-f peekenv keyed usropn extfile(g_envfile) extmbr(g_envmbr)
              prefix(en_);
 
+       dcl-ds workstn likeds(workstn_t);
+
        dcl-s g_envfile       char(21);
        dcl-s g_envmbr        char(10);
 
       /COPY QCOPYLE,D_VARDEF
       /COPY QCOPYLE,FLDL0100
-      /COPY QCOPYLE,DS_WORKSTN
+      /COPY QCOPYLE,D_WORKSTN
       /COPY QCOPYLE,ShortCmd_D
       /COPY QCOPYLE,ERR_D_SDS
       /COPY QCOPYLE,MBRL0200

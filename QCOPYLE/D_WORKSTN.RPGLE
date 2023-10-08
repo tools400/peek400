@@ -1,10 +1,11 @@
       *
       *  Work fields for calculating the cursor position
-     D cursorPosition  ds                  qualified
+     D cursorPosition_t...
+     D                 ds                  qualified template
      D  row                    1      4I 0
      D  column                 5      8I 0
       *
-     D workstn         DS                  qualified
+     D workstn_t       ds                  qualified template
      D  open                   9      9A
      D  status                11     15S 0
      D  numRows              152    153I 0

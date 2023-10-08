@@ -39,6 +39,9 @@
        dcl-f peekfld usage(*update:*delete) keyed usropn prefix(f_)
              infds(peek#00);
 
+       dcl-ds workstn likeds(workstn_t);
+       dcl-ds cursorPosition likeds(cursorPosition_t) inz;
+
        dcl-ds peek#l1 likeds(infds_t);
        dcl-ds peek#00 likeds(infds_t);
        dcl-ds file#x  likeds(infds_t);
@@ -60,7 +63,7 @@
 
       /COPY QCOPYLE,D_VARDEF
       /COPY QCOPYLE,ShortCmd_D
-      /COPY QCOPYLE,DS_WORKSTN
+      /COPY QCOPYLE,D_WORKSTN
       /COPY QCOPYLE,D_COLORATR
       /COPY QCOPYLE,ERR_D_SDS
       /COPY QCOPYLE,OBJD0400

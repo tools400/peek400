@@ -29,9 +29,11 @@
        dcl-f peek68fm workstn(*ext) usage(*input:*output)
              usropn infds(workstn) sfile(pbsfl:sflrec);
 
+       dcl-ds workstn likeds(workstn_t);
+
       /COPY QCOPYLE,D_VARDEF
       /COPY QCOPYLE,FLDL0100
-      /COPY QCOPYLE,DS_WORKSTN
+      /COPY QCOPYLE,D_WORKSTN
       /COPY QCOPYLE,ShortCmd_D
       /COPY QCOPYLE,ERR_D_SDS
       /COPY QCOPYLE,SCRNFKEYS

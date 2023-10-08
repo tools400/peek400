@@ -29,9 +29,12 @@
        dcl-f peek24fm workstn(*ext) usage(*input:*output)
              usropn infds(workstn);
 
+       dcl-ds workstn likeds(workstn_t);
+       dcl-ds cursorPosition likeds(cursorPosition_t) inz;
+
       /COPY QCOPYLE,D_VARDEF
       /COPY QCOPYLE,FLDL0100
-      /COPY QCOPYLE,DS_WORKSTN
+      /COPY QCOPYLE,D_WORKSTN
       /COPY QCOPYLE,D_COLORATR
       /COPY QCOPYLE,ShortCmd_D
       /COPY QCOPYLE,ERR_D_SDS

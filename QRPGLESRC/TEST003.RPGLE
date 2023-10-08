@@ -56,7 +56,7 @@
      D  AID                  369    369A
      D  csrPos               370    371I 0
       *
-      /COPY QCOPYLE,DS_WORKSTN
+      /COPY QCOPYLE,D_WORKSTN
       *
       * ------------------------------------
       *  Type definitions
