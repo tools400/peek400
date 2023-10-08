@@ -12,12 +12,12 @@
       *
       *  Return value
      d QWCRSVAL_rtnValue_t...
-     d                 ds          4096    qualified               based(pDummy)
+     d                 ds          4096    qualified template
      d  numSysValRtn                 10i 0
      d  ofsSysValTbl                 10i 0 dim(128)
       *
      d QWCRSVAL_sysValInfTbl_t...
-     d                 ds                  qualified   based(pSysValTbl)
+     d                 ds                  qualified based(pSysValTbl)
      d  sysVal                       10a
      d  type                          1a
      d  infStatus                     1a

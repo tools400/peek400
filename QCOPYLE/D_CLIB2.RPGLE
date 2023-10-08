@@ -2,7 +2,7 @@
  DEF  /DEFINE CLIB2
       *
       *  File open feedback data structure
-     D RFILE_t         DS                  based(pDummy)         qualified
+     D RFILE_t         DS                  qualified template
      D  res01                        16A
      D  pInBuf                         *
      D  pOutBuf                        *
@@ -25,7 +25,7 @@
      D  res06                         8A
       *
       *  Record IO feedback data structure
-     D RIOFB_t         DS                  based(pDummy)  align  qualified
+     D RIOFB_t         DS                  qualified align template
      D  pKey                           *
      D  pSysP                          *
      D  rrn                          10U 0
@@ -39,7 +39,7 @@
      D  res02                        20A
       *
       *  Record IO feedback data structure
-     D XXIOFB_t        DS                  based(pDummy)  qualified
+     D XXIOFB_t        DS                  qualified template
      D  file_dep_fb_offset...
      D                                5I 0
      D  write_count                  10I 0
@@ -64,7 +64,7 @@
      D  cur_blk_count                10I 0
      D  reserved4                     8A
       *
-     D XXIOFB_DB_T     DS                  based(pDummy)  qualified
+     D XXIOFB_DB_T     DS                  qualified template
      D  db_fdbk_size                 10I 0
      D  join_default_flags...
      D                                4A

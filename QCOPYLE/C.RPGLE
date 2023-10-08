@@ -5,7 +5,7 @@
       /INCLUDE QCOPYLE,D_VARDEF
       /INCLUDE QCOPYLE,D_INFDS
       *
-     D hFile_t         DS                  qualified               based(pDummy)
+     D hFile_t         DS                  qualified template
      D  fd                             *
      D  isOpen                             like(bool_t)
      D  name                               like(file_t)

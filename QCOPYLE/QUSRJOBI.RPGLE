@@ -4,7 +4,7 @@
       /IF NOT DEFINED(qJob_t    )
       /DEFINE qJob_t
       *   Qualified job name
-     D qJob_t          DS                  qualified           based(pDummy)
+     D qJob_t          DS                  qualified template
      D  name                         10A
      D  user                         10A
      D  nbr                           6A
@@ -22,7 +22,7 @@
      D  i_resPrfStat                  1A   const  options(*nopass)              OptGrp 2
       *
       *  This format returns basic performance information about a job.
-     D jobi0100_t      DS                  qualified           based(pDummy)
+     D jobi0100_t      DS                  qualified template
      D  bytRet                       10I 0
      D  bytAvl                       10I 0
      D  job                          10A
@@ -40,7 +40,7 @@
       *
       *  This format returns information equivalent to that found on the
       *  Work with Active Jobs (WRKACTJOB) command.
-     D jobi0200_t      DS                  qualified           based(pDummy)
+     D jobi0200_t      DS                  qualified template
      D  bytRet                       10I 0
      D  bytAvl                       10I 0
      D  job                          10A
@@ -80,7 +80,7 @@
       *
       *  This format returns job queue and output queue information for a job, as
       *  well as information about the submitter's job if the job is a submitted batch job.
-     D jobi0300_t      DS                  qualified           based(pDummy)
+     D jobi0300_t      DS                  qualified template
      D  bytRet                       10I 0
      D  bytAvl                       10I 0
      D  job                          10A
@@ -107,7 +107,7 @@
      D  jobDate                       7A
       *
       *  This format primarily returns job attribute types of information.
-     D jobi0400_t      DS                  qualified           based(pDummy)
+     D jobi0400_t      DS                  qualified template
      D  bytRet                       10I 0
      D  bytAvl                       10I 0
      D  job                          10A
@@ -173,7 +173,7 @@
       *
       *  This format returns information about active jobs only.
       *  It is intended to supplement the JOBI0400 format.
-     D jobi0600_t      DS                  qualified           based(pDummy)
+     D jobi0600_t      DS                  qualified template
      D  bytRet                       10I 0
      D  bytAvl                       10I 0
      D  job                          10A
@@ -202,7 +202,7 @@
      D  jobUsrIDStg                   1A
       *
       *  This format returns library list information for an active job.
-     D jobi0700_t      DS                  qualified           based(pDummy)
+     D jobi0700_t      DS                  qualified template
      D  bytRet                       10I 0
      D  bytAvl                       10I 0
      D  job                          10A

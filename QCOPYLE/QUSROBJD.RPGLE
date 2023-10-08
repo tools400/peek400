@@ -13,7 +13,7 @@
      d  i_auxStgCtrl              65535a   const  options(*nopass: *varsize)    | OptGrp 2
       *
       *  Auxiliary Storage Pool (ASP) Control Format
-     d auxStgCtrl_t    ds                  qualified               based(pDummy)
+     d auxStgCtrl_t    ds                  qualified template
      d  length                       10i 0
      d  device                       10a
      d  searchType                   10a

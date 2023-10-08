@@ -2,8 +2,8 @@
       /DEFINE CLIB
       *
       *  Basics C data types
-     D uLong_t         S             10U 0 based(pDummy)
-     D uInt_t          S             10U 0 based(pDummy)
+     D uLong_t         S             10U 0 template
+     D uInt_t          S             10U 0 template
       *
       *  system -- Execute a Command
      D system          PR            10I 0 extproc('system')
@@ -24,7 +24,7 @@
      D  format                         *   value options(*string)
      D  timeptr                            const  likeds(tm_t)
       *
-     D tm_t            DS                  qualified  based(pDummy)
+     D tm_t            DS                  qualified template
      D  tm_sec                       10I 0
      D  tm_min                       10I 0
      D  tm_hour                      10I 0
@@ -148,12 +148,12 @@
      D  i_toCode                       *   value
      D  i_fromCode                     *   value
       *
-     D iconv_t         DS                  qualified   based(pDummy)   align
+     D iconv_t         DS                  qualified align template
      D  return_value                 10I 0
      D  cd                           10I 0 dim(12)
       *
      D iconv_fromcode_t...
-     D                 DS                  qualified   based(pDummy)
+     D                 DS                  qualified template
      D  ibmccsid                      8A
      D  ccsid                         5A
      D  convAlt                       3A
@@ -164,7 +164,7 @@
      D  reserved                     12A
       *
      D iconv_tocode_t...
-     D                 DS                  qualified   based(pDummy)
+     D                 DS                  qualified template
      D  ibmccsid                      8A
      D  ccsid                         5A
      D  reserved                     19A
@@ -172,12 +172,12 @@
       *  QtqIconvOpen()--Code Conversion Allocation API
      D QtqIconv_open...
      D                 PR                  extproc('QtqIconvOpen')
-     D                                     likeds(iconv_t )
+     D                                     likeds(iconv_t)
      D  i_toCode                           const  likeds(QtqCode_t)
      D  i_fromCode                         const  likeds(QtqCode_t)
       *
      D QtqCode_t...
-     D                 DS                  qualified   based(pDummy)
+     D                 DS                  qualified template
      D  ccsid                        10I 0
      D  conversionA                  10I 0
      D  substitutionA                10I 0
@@ -208,7 +208,7 @@
      D  i_pPath                        *   value options(*string)               = *path
      D  i_pStat                        *   value                                = *buf
       *
-     D st_stat_t       DS                  qualified   based(pDummy)   align
+     D st_stat_t       DS                  qualified align template
      D  mode                         10U 0                                      mode_t =uint
      D  ino                          10U 0                                      ino_t  =uint
      D  nlink                         5U 0                                      nlink_t=ushort
@@ -245,7 +245,7 @@
      D  i_followLnk                  10U 0 const
       *
      D Qlg_Path_Name_t...
-     D                 DS                  qualified align         based(pDummy)
+     D                 DS                  qualified align template
      D   CCSID                       10I 0
      D   Country_ID                   2A
      D   Language_ID                  3A
@@ -265,12 +265,12 @@
      D                 C                   const(X'000000')
       *
      D Qlg_attrArray_t...
-     D                 DS                  qualified               based(pDummy)
+     D                 DS                  qualified template
      D  numE                         10I 0
      D  attr                         10I 0 dim(64)
       *
      D Qlg_rtnAttr_t...
-     D                 DS                  qualified               based(pDummy)
+     D                 DS                  qualified template
      D  ofsNextAttr                  10I 0
      D  ID                           10I 0
      D  size                         10I 0
@@ -315,10 +315,10 @@
      D                 C                   const(x'02')
       *
       *  QSYSINC/SYS.TYPES
-     D off_t           S             10I 0 based(pDummy)
-     D size_t          S             10U 0 based(pDummy)
-     D ssize_t         S             10I 0 based(pDummy)
-     D time_t          S             10I 0 based(pDummy)
+     D off_t           S             10I 0 template
+     D size_t          S             10U 0 template
+     D ssize_t         S             10I 0 template
+     D time_t          S             10I 0 template
       *
       *  opendir()--Open Directory                          include <dirent.h>
      D opendir...
@@ -330,7 +330,7 @@
      D                 PR              *          extproc('readdir')            = *dirent
      D  i_dirp                         *   value                                = *DIR
       *
-     D dirent_t        DS                  qualified  based(pDummy)
+     D dirent_t        DS                  qualified  template
      D   d_reserv1                   16A
      D   d_fileno_gen_id...
      D                               10U 0
@@ -346,7 +346,7 @@
      D   d_namelen                   10U 0
      D   d_name                     640A
       *
-     D qlg_nls_t       DS                  qualified  based(pDummy)    align
+     D qlg_nls_t       DS                  qualified align template
      D  ccsid                        10I 0
      D  country_id                    2A
      D  language_id                   3A
@@ -654,7 +654,7 @@
      D  uuid_template                  *   value
       *
      D uuid_template_t...
-     D                 DS                  qualified  based(pDummy)
+     D                 DS                  qualified  template
      D  bytPrv                       10U 0
      D  bytAvl                       10U 0
      D  reserved                      8A
@@ -681,7 +681,7 @@
      D                                 *   value
      D                                 *   const
       *
-     D cipherCtrls_t   DS                  qualified  based(pDummy)  align
+     D cipherCtrls_t   DS                  qualified align template
      D  function               1      2A
      D  hashAlg                3      3A
      D  sequence               4      4A

@@ -11,13 +11,13 @@
      d  io_errorCode              32767A          options(*varsize)
       *
      d QWCRNETA_returned...
-     d                 ds                  qualified               based(pDummy)
+     d                 ds                  qualified template
      d  numE                         10i 0
      d  offsAttr                     10i 0
       *  Network attribute information table   CHAR(*)
       *
      d QWCRNETA_attr...
-     d                 ds                  qualified               based(pDummy)
+     d                 ds                  qualified template
      d  name                         10a
      d  type                          1a
      d  status                        1a

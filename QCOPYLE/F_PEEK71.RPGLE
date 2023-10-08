@@ -2,7 +2,7 @@
       /DEFINE F_PEEK71
       *
       *  Transcoder handle.
-     D hTranscoder_t   S               *                           based(pDummy)
+     D hTranscoder_t   S               *   template
       *
       *  Returns a Transcoder to convert from a
       *  given CCSID to the job CCSID.

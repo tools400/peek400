@@ -40,7 +40,7 @@
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
 
-       dcl-s numeric_t       packed(31:10) based(pdummy);
+       dcl-s numeric_t packed(31:10) template;
        dcl-c cdata_type 'P';
        dcl-c cdigits %len(numeric_t);
        dcl-c cdecpos %decpos(numeric_t);

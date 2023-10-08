@@ -1,7 +1,6 @@
       *
       *  Templates  (micptcom.h)
-     D int             S             10I 0                   based(pDummy)
-     D NUM_Descr_T     S                   like(int       )  based(pDummy)
+     D NUM_Descr_T     S             10I 0 template
       *
       *  Constants  (micptcom.h)
      D T_Signed        C                   const(x'00')

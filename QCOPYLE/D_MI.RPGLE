@@ -1,7 +1,7 @@
       /IF NOT DEFINED(D_MI)
       /DEFINE D_MI
       *
-     D NUM_Descr_T     S             10I 0 based(pDummy)
+     D NUM_Descr_T     S             10I 0 template
       *
       *  Copy Numeric Value (CPYNV)
      D cpynv...

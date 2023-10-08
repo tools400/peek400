@@ -10,7 +10,7 @@
      D  io_errCode                65535A          options(*varsize)
       *
       *  This format returns commitment information.
-     D cmti0100_t      DS                  qualified           based(pDummy)
+     D cmti0100_t      DS                  qualified template
      D  bytRet                       10I 0
      D  bytAvl                       10I 0
      D  status                        1A
