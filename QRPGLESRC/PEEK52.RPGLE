@@ -37,7 +37,7 @@
       /COPY QCOPYLE,D_WORKSTN
       /COPY QCOPYLE,ShortCmd_D
       /COPY QCOPYLE,SET0012
-      /COPY QCOPYLE,ERR_D_SDS
+      /COPY QCOPYLE,SDS
       /COPY QCOPYLE,SCRNFKEYS
       /COPY QCOPYLE,CEECNDHDLR
 
@@ -125,17 +125,17 @@
           exfmt bild01;
 
           //  Nachrichten löschen
-          p_rmvpgmmg(§§pgmname);
+          p_rmvpgmmg(sds.pgmname);
 
           //  Bezugszahlen löschen
           exsr bzoff1;
 
           //  Mappen der gedrückten Taste
           //  in Programmbefehl
-          peek21(workstn.aid: §§pgmname
+          peek21(workstn.aid: sds.pgmname
                 : ypgmcmd: ycmddta: ymsgid: ymsgdta);
           if ymsgid <> *blanks;
-             p_sndpgmmg(ymsgid: ymsgdta: §§pgmname);
+             p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
              ymsgid = '';
              ymsgdta = '';
              iter;
@@ -179,7 +179,7 @@
 
           other;
              //  Falsche Taste gedrückt
-             p_wrongkey(workstn.aid: §§pgmname);
+             p_wrongkey(workstn.aid: sds.pgmname);
              iter;
           endsl;
 
@@ -325,7 +325,7 @@
                 *in99 = '1';
                 clear usr8219;
                 usr8219.var1 = ##case;
-                p_sndpgmmg('USR8219': usr8219: §§pgmname);
+                p_sndpgmmg('USR8219': usr8219: sds.pgmname);
                 leave;
              endif;
 
@@ -350,7 +350,7 @@
                 *in99 = '1';
                 clear usr8219;
                 usr8219.var1 = ##save;
-                p_sndpgmmg('USR8219': usr8219: §§pgmname);
+                p_sndpgmmg('USR8219': usr8219: sds.pgmname);
                 leave;
              endif;
 
@@ -375,7 +375,7 @@
                 *in99 = '1';
                 clear usr8219;
                 usr8219.var1 = ##alwlc;
-                p_sndpgmmg('USR8219': usr8219: §§pgmname);
+                p_sndpgmmg('USR8219': usr8219: sds.pgmname);
                 leave;
              endif;
 
@@ -400,7 +400,7 @@
                 *in99 = '1';
                 clear usr8219;
                 usr8219.var1 = ##rcdlck;
-                p_sndpgmmg('USR8219': usr8219: §§pgmname);
+                p_sndpgmmg('USR8219': usr8219: sds.pgmname);
                 leave;
              endif;
 
@@ -424,7 +424,7 @@
              if (##alwlc = bFalse and ##case  = bTrue);
                 *in99 = '1';
                 clear usr8216;
-                p_sndpgmmg('USR8216': usr8216: §§pgmname);
+                p_sndpgmmg('USR8216': usr8216: sds.pgmname);
                 leave;
              endif;
 
@@ -451,7 +451,7 @@
                 *in99 = '1';
                 clear usr8219;
                 usr8219.var1 = ##nulldft;
-                p_sndpgmmg('USR8219': usr8219: §§pgmname);
+                p_sndpgmmg('USR8219': usr8219: sds.pgmname);
                 leave;
              endif;
 
@@ -476,7 +476,7 @@
              *in99 = '1';
              clear usr8219;
              usr8219.var1 = ##keepcrs;
-             p_sndpgmmg('USR8219': usr8219: §§pgmname);
+             p_sndpgmmg('USR8219': usr8219: sds.pgmname);
              leave;
           endif;
 
@@ -522,7 +522,7 @@
 
        begsr c_endpgm;
 
-          p_rmvpgmmg(§§pgmname);
+          p_rmvpgmmg(sds.pgmname);
 
           o_msgid = 'USR8100';
 
@@ -641,7 +641,7 @@
           exsr fill##;
 
           // - Programm initialisieren
-          p_rmvpgmmg(§§pgmname);
+          p_rmvpgmmg(sds.pgmname);
 
           o_msgid = '';
           o_msgdta = '';
@@ -671,7 +671,7 @@
           peek21_name = f_pgmcalln('PEEK21');
           peek23_name = f_pgmcalln('PEEK23');
 
-          peek23(§§pgmname: '*ALL': 0
+          peek23(sds.pgmname: '*ALL': 0
                 : yfkeys: ynbrofkeys);
           scrnfkeys = %subarr(yfkeys: 1);
 

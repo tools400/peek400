@@ -37,7 +37,7 @@
 
       /COPY QCOPYLE,D_VARDEF
       /COPY QCOPYLE,D_INFDS
-      /COPY QCOPYLE,ERR_D_SDS
+      /COPY QCOPYLE,SDS
       /COPY QCOPYLE,OBJD0400
       /COPY QCOPYLE,FLDL0100
       /COPY QCOPYLE,SCRNFKEYS
@@ -367,7 +367,7 @@
           f_execute('OVRPRTF +
                      FILE(PEEK65P) +
                      TOFILE(' +
-                       %trimr(§§pgmlib) + '/PEEK65P) +
+                       %trimr(sds.pgmlib) + '/PEEK65P) +
                      SPLFNAME(' +
                        %trim(i_file) + ') +
                      USRDTA(''' +

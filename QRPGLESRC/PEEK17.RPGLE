@@ -41,7 +41,7 @@
       /COPY QCOPYLE,D_VARDEF
       /COPY QCOPYLE,D_WORKSTN
       /COPY QCOPYLE,ShortCmd_D
-      /COPY QCOPYLE,ERR_D_SDS
+      /COPY QCOPYLE,SDS
       /COPY QCOPYLE,FLDL0100
       /COPY QCOPYLE,SCRNFKEYS
       /COPY QCOPYLE,D_INFDS
@@ -181,17 +181,17 @@
           exfmt bild01;
 
           //  Nachrichten löschen
-          p_rmvpgmmg(§§pgmname);
+          p_rmvpgmmg(sds.pgmname);
 
           //  Bezugszahlen löschen
           exsr bzoff1;
 
           //  Mappen der gedrückten Taste
           //  in Programmbefehl
-          peek21(workstn.aid: §§pgmname
+          peek21(workstn.aid: sds.pgmname
                 : ypgmcmd: ycmddta: ymsgid: ymsgdta);
           if ymsgid <> *blanks;
-             p_sndpgmmg(ymsgid: ymsgdta: §§pgmname);
+             p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
              ymsgid = '';
              ymsgdta = '';
              iter;
@@ -234,7 +234,7 @@
 
           other;
              //  Falsche Taste gedrückt
-             p_wrongkey(workstn.aid: §§pgmname);
+             p_wrongkey(workstn.aid: sds.pgmname);
              iter;
           endsl;
 
@@ -393,7 +393,7 @@
                    *in99 = '1';
                    clear usr8136;
                    usr8136.var1 = ##field;
-                   p_sndpgmmg('USR8136': usr8136: §§pgmname);
+                   p_sndpgmmg('USR8136': usr8136: sds.pgmname);
                    leave;
                 else;
                    fldl0100 = f_ffd;
@@ -411,7 +411,7 @@
                    clear usr8129;
                    usr8129.var1 = ##field;
                    usr8129.var2 = fldl0100.f1dtyp;
-                   p_sndpgmmg('USR8129': usr8129: §§pgmname);
+                   p_sndpgmmg('USR8129': usr8129: sds.pgmname);
                    leave;
                 endif;
 
@@ -445,7 +445,7 @@
                 *in99 = '1';
                 clear usr8124;
                 usr8124.var1 = ##op;
-                p_sndpgmmg('USR8124': usr8124: §§pgmname);
+                p_sndpgmmg('USR8124': usr8124: sds.pgmname);
                 leave;
              endif;
 
@@ -462,7 +462,7 @@
                       clear usr8135;
                       usr8135.var1 = ##op;
                       usr8135.var2 = fldl0100.f1dtyp;
-                      p_sndpgmmg('USR8135': usr8135: §§pgmname);
+                      p_sndpgmmg('USR8135': usr8135: sds.pgmname);
                       leave;
                    endif;
                 endif;
@@ -475,7 +475,7 @@
                 clear usr8134;
                 usr8134.var1 = ##op;    // Operation
                 usr8134.var2 = ##field; // Feld
-                p_sndpgmmg('USR8134': usr8134: §§pgmname);
+                p_sndpgmmg('USR8134': usr8134: sds.pgmname);
                 leave;
              endif;
 
@@ -501,7 +501,7 @@
 
              if ##arg = *blanks;
                 *in99 = '1';
-                p_sndpgmmg('USR8140': usr8140: §§pgmname);
+                p_sndpgmmg('USR8140': usr8140: sds.pgmname);
                 leave;
              endif;
 
@@ -546,7 +546,7 @@
                       *in99 = '1';
                       clear usr8192.var1;
                       usr8192.var1 = ##field;
-                      p_sndpgmmg('USR8192': usr8192: §§pgmname);
+                      p_sndpgmmg('USR8192': usr8192: sds.pgmname);
                    endif;
                 else;
                    exsr srchpoint;
@@ -565,7 +565,7 @@
                    clear usr8141;
                    usr8141.var1 = set0003.set_signp;
                    usr8141.var2 = set0003.set_signm;
-                   p_sndpgmmg('USR8141': usr8141: §§pgmname);
+                   p_sndpgmmg('USR8141': usr8141: sds.pgmname);
                    leave;
                 else;
                    //  ... richtiges Vorzeichen
@@ -725,7 +725,7 @@
 
              if ##nbrs = *zeros;
                 *in99 = '1';
-                p_sndpgmmg('USR8125': '': §§pgmname);
+                p_sndpgmmg('USR8125': '': sds.pgmname);
                 leave;
              endif;
 
@@ -753,7 +753,7 @@
                 *in99 = '1';
                 clear usr8126;
                 usr8126.var1 = ##type;
-                p_sndpgmmg('USR8126': usr8126: §§pgmname);
+                p_sndpgmmg('USR8126': usr8126: sds.pgmname);
                 leave;
              endif;
 
@@ -777,7 +777,7 @@
              if ##case <> bTrue
                 and ##case <> bFalse;
                 *in99 = '1';
-                p_sndpgmmg('USR8133': '': §§pgmname);
+                p_sndpgmmg('USR8133': '': sds.pgmname);
                 leave;
              endif;
 
@@ -796,7 +796,7 @@
 
        begsr c_endpgm;
 
-          p_rmvpgmmg(§§pgmname);
+          p_rmvpgmmg(sds.pgmname);
 
           o_sgid = 'USR8100';
 
@@ -824,7 +824,7 @@
              or ##field = set0008.set_prmt;
              exsr pmt_field;
           other;
-             p_sndpgmmg('USR8179': '': §§pgmname);
+             p_sndpgmmg('USR8179': '': sds.pgmname);
              *in99 = bTrue;
           endsl;
 
@@ -842,7 +842,7 @@
           if ymsgid = *blanks;
              ##field = yfield;
           else;
-             p_sndpgmmg(ymsgid: ymsgdta: §§pgmname);
+             p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
              ymsgid = '';
              ymsgdta = '';
              *in99 = bTrue;
@@ -1030,7 +1030,7 @@
                 *in99 = bTrue;
                 clear usr8138.var1;
                 usr8138.var1 = ##field;
-                p_sndpgmmg('USR8138': usr8138: §§pgmname);
+                p_sndpgmmg('USR8138': usr8138: sds.pgmname);
              endif;
 
           endif;
@@ -1078,7 +1078,7 @@
           exsr fill##;
 
           // - Programm initialisieren
-          p_rmvpgmmg(§§pgmname);
+          p_rmvpgmmg(sds.pgmname);
 
           o_sgid = *blanks;
           o_msgdta = *blanks;
@@ -1090,7 +1090,7 @@
           exsr setscreen;
 
           // - Copyright
-          p_sndpgmmg('USR9999': i_copyright: §§pgmname);
+          p_sndpgmmg('USR9999': i_copyright: sds.pgmname);
 
        endsr;
 
@@ -1112,7 +1112,7 @@
           peek23_name = f_pgmcalln('PEEK23');
           peek37_name = f_pgmcalln('PEEK37');
 
-          peek23(§§pgmname: '*ALL': 0
+          peek23(sds.pgmname: '*ALL': 0
                 : yfkeys: ynbrofkeys);
           scrnfkeys = %subarr(yfkeys: 1);
 

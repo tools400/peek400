@@ -293,7 +293,7 @@
          gio_edtcde      char(1);
        end-pr;
 
-      /COPY QCOPYLE,ERR_D_SDS
+      /COPY QCOPYLE,SDS
 
        dcl-s dotline         char(40) inz(*all'.');
 
@@ -1062,7 +1062,7 @@
              if isexit03;
                 callp(e) cvteditcode(
                   reffile: reflib
-                  : §§user: fldl0100.f1fnme: fldl0100.f1edtc);
+                  : sds.user: fldl0100.f1fnme: fldl0100.f1edtc);
                 if (%error());
                    isexit03 = bfalse;
                 endif;

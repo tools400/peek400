@@ -42,7 +42,7 @@
       /COPY QCOPYLE,D_WORKSTN
       /COPY QCOPYLE,ShortCmd_D
       /COPY QCOPYLE,SCRNFKEYS
-      /COPY QCOPYLE,ERR_D_SDS
+      /COPY QCOPYLE,SDS
 
       /define internal_prototype
       /COPY QCOPYLE,PPEEK12
@@ -155,17 +155,17 @@
           exfmt pbctl;
 
           //  Nachrichten löschen
-          p_rmvpgmmg(§§pgmname);
+          p_rmvpgmmg(sds.pgmname);
 
           //  Aktuelle Satz-Nr.
           sfsanr = sflcsr;
 
           //  Mappen der gedrückten Taste
           //  in Programmbefehl
-          peek21(workstn.aid: §§pgmname
+          peek21(workstn.aid: sds.pgmname
                 : ypgmcmd: ycmddta: ymsgid: ymsgdta);
           if ymsgid <> *blanks;
-             p_sndpgmmg(ymsgid: ymsgdta: §§pgmname);
+             p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
              iter;
           endif;
 
@@ -196,7 +196,7 @@
 
           other;
              //  Falsche Taste gedrückt
-             p_wrongkey(workstn.aid: §§pgmname);
+             p_wrongkey(workstn.aid: sds.pgmname);
              iter;
           endsl;
 
@@ -240,7 +240,7 @@
 
           write rmvwdw;
 
-          p_rmvpgmmg(§§pgmname);
+          p_rmvpgmmg(sds.pgmname);
 
           o_msgid = 'USR8100';
 
@@ -454,7 +454,7 @@
           endif;
 
           // - Programm initialisieren
-          p_rmvpgmmg(§§pgmname);
+          p_rmvpgmmg(sds.pgmname);
 
           o_rcdl0200 = *blanks;
           o_fmtnbr = *zeros;
@@ -477,7 +477,7 @@
           exsr pbreadup;
 
           // - Copyright
-          p_sndpgmmg('USR9999': i_copyright: §§pgmname);
+          p_sndpgmmg('USR9999': i_copyright: sds.pgmname);
 
        endsr;
 
@@ -498,7 +498,7 @@
           peek21_name = f_pgmcalln('PEEK21');
           peek23_name = f_pgmcalln('PEEK23');
 
-          peek23(§§pgmname: '*ALL': §nbrfkeys
+          peek23(sds.pgmname: '*ALL': §nbrfkeys
                 : yfkeys: ynbrofkeys);
           scrnfkeys = %subarr(yfkeys: 1);
 

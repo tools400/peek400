@@ -33,7 +33,7 @@
       /COPY QCOPYLE,FLDL0100
       /COPY QCOPYLE,FILD0100
       /COPY QCOPYLE,ENV0001
-      /COPY QCOPYLE,ERR_D_SDS
+      /COPY QCOPYLE,SDS
       /COPY QCOPYLE,CEECNDHDLR
 
       /define internal_prototype

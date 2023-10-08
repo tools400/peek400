@@ -29,7 +29,7 @@
 
       /COPY QCOPYLE,D_VARDEF
       /COPY QCOPYLE,FLDL0100
-      /COPY QCOPYLE,ERR_D_SDS
+      /COPY QCOPYLE,SDS
       /COPY QCOPYLE,CEECNDHDLR
 
       /COPY QCOPYLE,SET0004
@@ -77,7 +77,7 @@
           for do_x1 = 1 to 2;
 
              if (f_exist(%trimr(i_prefix) + set0004.set_lang
-                : §§pgmlib : '*MSGF'));
+                : sds.pgmlib : '*MSGF'));
                 //  ... kein Fehler
                 leave;
              else;

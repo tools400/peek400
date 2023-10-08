@@ -27,7 +27,7 @@
       /COPY QCOPYLE,COPYRIGHT
 
       /COPY QCOPYLE,D_VARDEF
-      /COPY QCOPYLE,ERR_D_SDS
+      /COPY QCOPYLE,SDS
       /COPY QCOPYLE,CEECNDHDLR
 
       /define internal_prototype

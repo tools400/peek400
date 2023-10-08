@@ -67,7 +67,7 @@
       /COPY QCOPYLE,D_INFDS
       /COPY QCOPYLE,FLDL0100
       /COPY QCOPYLE,D_COLORATR
-      /COPY QCOPYLE,ERR_D_SDS
+      /COPY QCOPYLE,SDS
 
       /COPY QCOPYLE,SET0001
       /COPY QCOPYLE,SET0002
@@ -806,7 +806,7 @@
           open(e) peekusr;
           if (%error());
              o_msgid  = 'CPF9897';
-             o_msgdta = §§msgtext;
+             o_msgdta = sds.msgtext;
           else;
 
              if (f_chainusr('*PGM': '*VERSION': set0000) = '1');
@@ -843,7 +843,7 @@
           open(e) default;
           if (%error());
              o_msgid  = 'CPF9897';
-             o_msgdta = §§msgtext;
+             o_msgdta = sds.msgtext;
           else;
              o_msgid  = ' ';
              o_msgdta = ' ';
@@ -868,7 +868,7 @@
        if g_isinit = bFalse;
 
           if (g_user = '');
-             p_setusr(§§user: §§user: f_getprdlb());
+             p_setusr(sds.user: sds.user: f_getprdlb());
           endif;
 
           peek22_name = f_pgmcalln('PEEK22');

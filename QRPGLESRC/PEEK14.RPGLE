@@ -57,7 +57,7 @@
       /COPY QCOPYLE,SCRNFKEYS
       /COPY QCOPYLE,ShortCmd_D
       /COPY QCOPYLE,D_WORKSTN
-      /COPY QCOPYLE,ERR_D_SDS
+      /COPY QCOPYLE,SDS
       /COPY QCOPYLE,CEECNDHDLR
 
       /define internal_prototype
@@ -231,17 +231,17 @@
           endif;
 
           //  Nachrichten löschen
-          p_rmvpgmmg(§§pgmname);
+          p_rmvpgmmg(sds.pgmname);
 
           //  Aktuelle Satz-Nr.
           sfsanr = sflcsr;
 
           //  Mappen der gedrückten Taste
           //  in Programmbefehl
-          peek21(workstn.aid: §§pgmname
+          peek21(workstn.aid: sds.pgmname
                 : ypgmcmd: ycmddta: ymsgid: ymsgdta);
           if ymsgid <> *blanks;
-             p_sndpgmmg(ymsgid: ymsgdta: §§pgmname);
+             p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
              ymsgid = '';
              ymsgdta = '';
              iter;
@@ -316,7 +316,7 @@
 
           other;
              //  Falsche Taste gedrückt
-             p_wrongkey(workstn.aid: §§pgmname);
+             p_wrongkey(workstn.aid: sds.pgmname);
              iter;
           endsl;
 
@@ -348,7 +348,7 @@
 
           //  Error: No valid subfile record.
           if sflcsr = *zeros;
-             p_sndpgmmg('USR8204': '': §§pgmname);
+             p_sndpgmmg('USR8204': '': sds.pgmname);
              leavesr;
           endif;
 
@@ -356,7 +356,7 @@
           *in01 = not %found;
           if *in01 = *on;
              //  Error: Unable to find record.
-             p_sndpgmmg('USR8120': '': §§pgmname);
+             p_sndpgmmg('USR8120': '': sds.pgmname);
              leavesr;
           endif;
 
@@ -366,7 +366,7 @@
           *in11 = not %found;
           if *in11 = *on;
              //  Error: Unable to find record.
-             p_sndpgmmg('USR8120': '': §§pgmname);
+             p_sndpgmmg('USR8120': '': sds.pgmname);
              leavesr;
           endif;
 
@@ -377,7 +377,7 @@
              io_nullmap(fldl0100.f1seq) = 1;
              clear usr8220;
              usr8220.var1 = fldl0100.f1fnme;
-             p_sndpgmmg('USR8220': usr8220: §§pgmname);
+             p_sndpgmmg('USR8220': usr8220: sds.pgmname);
              leavesr;
           endif;
 
@@ -402,7 +402,7 @@
 
           //  Error: No valid subfile record.
           if sflcsr = *zeros;
-             p_sndpgmmg('USR8204': '': §§pgmname);
+             p_sndpgmmg('USR8204': '': sds.pgmname);
              leavesr;
           endif;
 
@@ -410,7 +410,7 @@
           *in01 = not %found;
           if *in01 = *on;
              //  Error: Unable to find record.
-             p_sndpgmmg('USR8120': '': §§pgmname);
+             p_sndpgmmg('USR8120': '': sds.pgmname);
              leavesr;
           endif;
 
@@ -420,7 +420,7 @@
           *in11 = not %found;
           if *in11 = *on;
              //  Error: Unable to find record.
-             p_sndpgmmg('USR8120': '': §§pgmname);
+             p_sndpgmmg('USR8120': '': sds.pgmname);
              leavesr;
           endif;
 
@@ -431,7 +431,7 @@
              fldl0100.f1dtyp <> 'G';
              clear usr8221;
              usr8221.var1 = fldl0100.f1fnme;
-             p_sndpgmmg('USR8221': usr8221: §§pgmname);
+             p_sndpgmmg('USR8221': usr8221: sds.pgmname);
              leavesr;
           endif;
 
@@ -439,7 +439,7 @@
           //*                 IF        f_buffLn(FLDL0100) > 1024
           //*                 CLEAR                   USR8222
           //*                 Eval      USR8222.var1 = FLDL0100.F1FNME
-          //*                 CALLP     p_sndPgmMg('USR8222': USR8222: §§pgmName)
+          //*                 CALLP     p_sndPgmMg('USR8222': USR8222: sds.pgmName)
           //*                 LEAVESR
           //*                 ENDIF
 
@@ -448,7 +448,7 @@
              io_nullmap(fldl0100.f1seq) = 1;
              clear usr8220;
              usr8220.var1 = fldl0100.f1fnme;
-             p_sndpgmmg('USR8220': usr8220: §§pgmname);
+             p_sndpgmmg('USR8220': usr8220: sds.pgmname);
              leavesr;
           endif;
 
@@ -474,7 +474,7 @@
           if f_buffln(fldl0100) > rcd_buff_len;
              clear usr8206;
              usr8206.var1 = rcd_buff_len;
-             p_sndpgmmg('USR8206': usr8206: §§pgmname);
+             p_sndpgmmg('USR8206': usr8206: sds.pgmname);
           else;
              f_rtvfld(yfldinhalt: io_buff:
                      fldl0100: bfalse);
@@ -508,7 +508,7 @@
 
        begsr c_endpgm;
 
-          p_rmvpgmmg(§§pgmname);
+          p_rmvpgmmg(sds.pgmname);
 
           o_msgid = 'USR8100';
           usr8100.var1 = ypgmcmd;
@@ -580,7 +580,7 @@
           endmon;
 
           if ymsgid <> '';
-             p_sndpgmmg(ymsgid: ymsgdta: §§pgmname);
+             p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
              ymsgid  = '';
              ymsgdta = '';
           endif;
@@ -788,7 +788,7 @@
                 if iscvtchar = bfalse;
                    if ymsgid <> *blanks;
                       iscvtchar = btrue;
-                      p_sndpgmmg(ymsgid: ymsgdta: §§pgmname);
+                      p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
                    else;
                       //         keine Nachricht anstehend
                    endif;
@@ -911,7 +911,7 @@
           //**                                   : 'rr,arrseq=Y,nullcap=Y,riofb=Y')
 
           // - Programm initialisieren
-          p_rmvpgmmg(§§pgmname);
+          p_rmvpgmmg(sds.pgmname);
 
           o_msgid = *blanks;
           o_msgdta = *blanks;
@@ -940,7 +940,7 @@
           exsr pbreadup;
 
           // - Copyright
-          p_sndpgmmg('USR9999': i_copyright: §§pgmname);
+          p_sndpgmmg('USR9999': i_copyright: sds.pgmname);
 
        endsr;
 
@@ -966,7 +966,7 @@
           peek64_name = f_pgmcalln('PEEK64');
           peek65_name = f_pgmcalln('PEEK65');
 
-          peek23(§§pgmname: '*ALL': §nbrfkeys
+          peek23(sds.pgmname: '*ALL': §nbrfkeys
                 : yfkeys: ynbrofkeys);
           scrnfkeys = %subarr(yfkeys: 1);
 

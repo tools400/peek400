@@ -34,7 +34,7 @@
       /COPY QCOPYLE,FILD0100
       /COPY QCOPYLE,SET0015
       /COPY QCOPYLE,ENV0001
-      /COPY QCOPYLE,ERR_D_SDS
+      /COPY QCOPYLE,SDS
       /COPY QCOPYLE,CEECNDHDLR
 
       /define internal_prototype
@@ -267,8 +267,8 @@
           //  Sonderwerte i_envLib ...
           select;
              //  ... *PRDLIB
-          when i_envlib  = '*PRDLIB';
-             i_envlib  = §§pgmlib;
+          when i_envlib = '*PRDLIB';
+             i_envlib = sds.pgmlib;
           other;
              //  ... genau diese Bibliothek
           endsl;

@@ -44,7 +44,7 @@
       /COPY QCOPYLE,D_INFDS
       /COPY QCOPYLE,FLDL0100
       /COPY QCOPYLE,CEECNDHDLR
-      /COPY QCOPYLE,ERR_D_SDS
+      /COPY QCOPYLE,SDS
 
       /define internal_prototype
       /COPY QCOPYLE,PPEEK20

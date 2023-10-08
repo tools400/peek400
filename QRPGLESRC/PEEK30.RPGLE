@@ -35,7 +35,7 @@
       /COPY QCOPYLE,FLDL0100
       /COPY QCOPYLE,D_WORKSTN
       /COPY QCOPYLE,D_COLORATR
-      /COPY QCOPYLE,ERR_D_SDS
+      /COPY QCOPYLE,SDS
       /COPY QCOPYLE,QUSCRTUS
       /COPY QCOPYLE,QUSPTRUS
       /COPY QCOPYLE,CEECNDHDLR
@@ -197,7 +197,7 @@
              exfmt bild01;
 
              //  Nachrichten löschen
-             p_rmvpgmmg(§§pgmname);
+             p_rmvpgmmg(sds.pgmname);
 
              //  Bezugszahlen löschen
              exsr bzoff1;
@@ -224,7 +224,7 @@
 
              other;
                 //  Falsche Taste gedrückt
-                p_wrongkey(workstn.aid: §§pgmname);
+                p_wrongkey(workstn.aid: sds.pgmname);
                 iter;
              endsl;
 
@@ -241,7 +241,7 @@
 
        begsr c_endpgm;
 
-          p_rmvpgmmg(§§pgmname);
+          p_rmvpgmmg(sds.pgmname);
 
        endsr;
 
@@ -257,7 +257,7 @@
              exsr wrtlicdata;
              if iswriteok = bFalse;
                 *in99 = '1';
-                p_sndpgmmg('USR8159': '': §§pgmname);
+                p_sndpgmmg('USR8159': '': sds.pgmname);
              else;
                 zei = zei + 4;
                 pos = pos + 4;
@@ -314,7 +314,7 @@
              *in99 = '1';
              clear usr8158;
              usr8158.var1 = ##licdata;                                              // Liz.Nr.
-             p_sndpgmmg('USR8158': usr8158: §§pgmname);
+             p_sndpgmmg('USR8158': usr8158: sds.pgmname);
              leave;
           endif;
 
@@ -329,7 +329,7 @@
              *in99 = '1';
              clear usr8158;
              usr8158.var1 = ##licdata;                                              // Liz.Nr.
-             p_sndpgmmg('USR8158': usr8158: §§pgmname);
+             p_sndpgmmg('USR8158': usr8158: sds.pgmname);
              leave;
           endif;
 
@@ -642,7 +642,7 @@
        begsr first;
 
           // - Programm initialisieren
-          p_rmvpgmmg(§§pgmname);
+          p_rmvpgmmg(sds.pgmname);
 
           // - Rückgabewerte
           o_flag = bfalseext;
@@ -656,7 +656,7 @@
           exsr setscreen;
 
           // - Copyright
-          p_sndpgmmg('USR9999': i_copyright: §§pgmname);
+          p_sndpgmmg('USR9999': i_copyright: sds.pgmname);
 
        endsr;
 

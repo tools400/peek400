@@ -37,7 +37,7 @@
       /COPY QCOPYLE,FLDL0100
       /COPY QCOPYLE,D_WORKSTN
       /COPY QCOPYLE,ShortCmd_D
-      /COPY QCOPYLE,ERR_D_SDS
+      /COPY QCOPYLE,SDS
       /COPY QCOPYLE,KEYL0100
       /COPY QCOPYLE,SCRNFKEYS
       /COPY QCOPYLE,CEECNDHDLR
@@ -187,7 +187,7 @@
           cursorposition.column = %rem(workstn.csrpos: 256);
 
           //  Nachrichten löschen
-          p_rmvpgmmg(§§pgmname);
+          p_rmvpgmmg(sds.pgmname);
 
           //  Merken Cursorposition
           exsr keepcsrpos;
@@ -197,10 +197,10 @@
 
           //  Mappen der gedrückten Taste
           //  in Programmbefehl
-          peek21(workstn.aid: §§pgmname
+          peek21(workstn.aid: sds.pgmname
                 : ypgmcmd: ycmddta: ymsgid: ymsgdta);
           if ymsgid <> *blanks;
-             p_sndpgmmg(ymsgid: ymsgdta: §§pgmname);
+             p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
              ymsgid = '';
              ymsgdta = '';
              iter;
@@ -258,7 +258,7 @@
 
           other;
              //  Falsche Taste gedrückt
-             p_wrongkey(workstn.aid: §§pgmname);
+             p_wrongkey(workstn.aid: sds.pgmname);
              iter;
           endsl;
 
@@ -303,7 +303,7 @@
              io_sqlorder  = ##order;
              *in99 = '0';
              if (ymsgid <> '');
-                p_sndpgmmg(ymsgid: ymsgdta: §§pgmname);
+                p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
                 ymsgid = '';
                 ymsgdta = '';
              endif;
@@ -334,7 +334,7 @@
 
        begsr c_endpgm;
 
-          p_rmvpgmmg(§§pgmname);
+          p_rmvpgmmg(sds.pgmname);
 
           o_msgid = 'USR8100';
 
@@ -360,20 +360,20 @@
           select;
           when (tempscnfld = '##WHERE' or ##where = set0008.set_prmt);
              if (*in71 = *on);
-                p_sndpgmmg('USR8195': '': §§pgmname);
+                p_sndpgmmg('USR8195': '': sds.pgmname);
              else;
                 exsr pmt_field;
              endif;
 
           when (tempscnfld = '##ORDER' or ##order = set0008.set_prmt);
              if (*in72 = *on);
-                p_sndpgmmg('USR8195': '': §§pgmname);
+                p_sndpgmmg('USR8195': '': sds.pgmname);
              else;
                 exsr pmt_field;
              endif;
 
           other;
-             p_sndpgmmg('USR8179': '': §§pgmname);
+             p_sndpgmmg('USR8179': '': sds.pgmname);
           endsl;
 
        endsr;
@@ -439,7 +439,7 @@
              csrcol = tempcsrcol - 1;
 
           else;
-             p_sndpgmmg(ymsgid: ymsgdta: §§pgmname);
+             p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
              ymsgid = '';
              ymsgdta = '';
           endif;
@@ -466,12 +466,12 @@
           select;
           when tempscnfld = '##ORDER';
              if *in72 = *on;
-                p_sndpgmmg('USR8195': '': §§pgmname);
+                p_sndpgmmg('USR8195': '': sds.pgmname);
              else;
                 exsr slc_key;
              endif;
           other;
-             p_sndpgmmg('USR8211': '': §§pgmname);
+             p_sndpgmmg('USR8211': '': sds.pgmname);
           endsl;
 
        endsr;
@@ -507,12 +507,12 @@
           select;
           when (tempscnfld = '##ORDER');
              if (*in72 = *on);
-                p_sndpgmmg('USR8195': '': §§pgmname);
+                p_sndpgmmg('USR8195': '': sds.pgmname);
              else;
                 exsr ins_field;
              endif;
           other;
-             p_sndpgmmg('USR8211': '': §§pgmname);
+             p_sndpgmmg('USR8211': '': sds.pgmname);
           endsl;
 
        endsr;
@@ -672,7 +672,7 @@
           endif;
 
           // - Programm initialisieren
-          p_rmvpgmmg(§§pgmname);
+          p_rmvpgmmg(sds.pgmname);
           exsr dltcsrpos;
 
           o_msgid = '';
@@ -706,7 +706,7 @@
           peek38_name = f_pgmcalln('PEEK38');
           peek40_name = f_pgmcalln('PEEK40');
 
-          peek23(§§pgmname: '*ALL': nbrfkeys
+          peek23(sds.pgmname: '*ALL': nbrfkeys
                 : yfkeys: ynbrofkeys);
           scrnfkeys = %subarr(yfkeys: 1);
 

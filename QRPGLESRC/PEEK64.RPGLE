@@ -39,7 +39,7 @@
       /COPY QCOPYLE,D_INFDS
       /COPY QCOPYLE,D_WORKSTN
       /COPY QCOPYLE,D_COLORATR
-      /COPY QCOPYLE,ERR_D_SDS
+      /COPY QCOPYLE,SDS
       /COPY QCOPYLE,FLDL0100
       /COPY QCOPYLE,SCRNFKEYS
       /COPY QCOPYLE,CEECNDHDLR
@@ -169,17 +169,17 @@
              isdatachg = *in93;
 
              //  Nachrichten löschen
-             p_rmvpgmmg(§§pgmname);
+             p_rmvpgmmg(sds.pgmname);
 
              //  Bezugszahlen löschen
              exsr bzoff1;
 
              //  Mappen der gedrückten Taste
              //  in Programmbefehl
-             peek21(workstn.aid: §§pgmname
+             peek21(workstn.aid: sds.pgmname
                    : ypgmcmd: ycmddta: ymsgid: ymsgdta);
              if ymsgid <> ' ';
-                p_sndpgmmg(ymsgid: ymsgdta: §§pgmname);
+                p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
                 ymsgid = '';
                 ymsgdta = '';
                 iter;
@@ -225,7 +225,7 @@
 
              other;
                 //  Falsche Taste gedrückt
-                p_wrongkey(workstn.aid: §§pgmname);
+                p_wrongkey(workstn.aid: sds.pgmname);
                 iter;
              endsl;
 
@@ -341,7 +341,7 @@
 
           //  Zeichenkette zu lang
           if (len > f_dsplyln(fldl0100));
-             p_sndpgmmg('USR8176': '': §§pgmname);
+             p_sndpgmmg('USR8176': '': sds.pgmname);
              isPgmError = btrue;
           endif;
 
@@ -358,7 +358,7 @@
 
        begsr c_endpgm;
 
-          p_rmvpgmmg(§§pgmname);
+          p_rmvpgmmg(sds.pgmname);
 
           o_msgid = 'USR8100';
 
@@ -524,7 +524,7 @@
           open peek64fm;
 
           // - Programm initialisieren
-          p_rmvpgmmg(§§pgmname);
+          p_rmvpgmmg(sds.pgmname);
 
           //  ermitteln der Feldeigenschaften
           clear f_key;
@@ -535,7 +535,7 @@
              clear fldl0100;
              clear usr8136;
              usr8136.var1   = i_fldname;
-             p_sndpgmmg('USR8136': usr8136: §§pgmname);
+             p_sndpgmmg('USR8136': usr8136: sds.pgmname);
           else;
              isPgmError = bfalse;
              fldl0100   = f_ffd;
@@ -563,7 +563,7 @@
           clear usr8123;
           usr8123.var1 = COLOR_white_u;
           usr8123.var2 = COLOR_white;
-          p_sndpgmmg('USR8123': usr8123: §§pgmname);
+          p_sndpgmmg('USR8123': usr8123: sds.pgmname);
 
           // - Füllen der Bildschirmfelder
           exsr bzoff1;
@@ -576,7 +576,7 @@
           exsr setscreen;
 
           // - Copyright
-          p_sndpgmmg('USR9999': i_copyright: §§pgmname);
+          p_sndpgmmg('USR9999': i_copyright: sds.pgmname);
 
        endsr;
 
@@ -597,7 +597,7 @@
           peek21_name = f_pgmcalln('PEEK21');
           peek23_name = f_pgmcalln('PEEK23');
 
-          peek23(§§pgmname: '*ALL': 0
+          peek23(sds.pgmname: '*ALL': 0
                 : yfkeys: ynbrofkeys);
           scrnfkeys = %subarr(yfkeys: 1);
 

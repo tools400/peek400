@@ -65,7 +65,7 @@
       /COPY QCOPYLE,ShortCmd_D
       /COPY QCOPYLE,D_WORKSTN
       /COPY QCOPYLE,D_COLORATR
-      /COPY QCOPYLE,ERR_D_SDS
+      /COPY QCOPYLE,SDS
       /COPY QCOPYLE,OBJD0400
       /COPY QCOPYLE,RCDL0200
       /COPY QCOPYLE,FLDL0100
@@ -837,7 +837,7 @@
           istargetok = bFalse;
 
           //  Nachrichten löschen
-          p_rmvpgmmg(§§pgmname);
+          p_rmvpgmmg(sds.pgmname);
 
           //  Cursor-Pos. löschen
           *in87 = '0';
@@ -853,10 +853,10 @@
 
           //  Mappen der gedrückten Taste
           //  in Programmbefehl
-          peek21(workstn.aid: §§pgmname
+          peek21(workstn.aid: sds.pgmname
                 : ypgmcmd: ycmddta: yMsgID: yMsgDta);
           if yMsgID <> *blanks;
-             p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+             p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
              yMsgID = '';
              yMsgDta = '';
           else;
@@ -866,7 +866,7 @@
                 leave;
              endif;
              if isCmdErr = bTrue;
-                p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
                 yMsgID = '';
                 yMsgDta = '';
              endif;
@@ -934,7 +934,7 @@
              isCmdErr = bTrue;
              clear usr8144;
              usr8144.var1 = ypgmcmd;
-             p_sndpgmmg('USR8144': usr8144: §§pgmname);
+             p_sndpgmmg('USR8144': usr8144: sds.pgmname);
           else;
              exsr doCmd;
           endif;
@@ -951,7 +951,7 @@
              isCmdErr = bTrue;
              clear usr8144;
              usr8144.var1 = ypgmcmd;
-             p_sndpgmmg('USR8144': usr8144: §§pgmname);
+             p_sndpgmmg('USR8144': usr8144: sds.pgmname);
           else;
              exsr doCmd;
           endif;
@@ -1119,7 +1119,7 @@
              //  Unbekannter Programmbefehl
              clear usr8110;
              usr8110.var1 = ypgmcmd;
-             p_sndpgmmg('USR8110': usr8110: §§pgmname);
+             p_sndpgmmg('USR8110': usr8110: sds.pgmname);
              iscmderr = btrue;
           endsl;
 
@@ -1285,11 +1285,11 @@
                    endif;
 
                    //  Zuordnung AUSWAHL => Befehl ...
-                   peek21('#' + sfpau: §§pgmname
+                   peek21('#' + sfpau: sds.pgmname
                          : ypgmcmd: ycmddta: yMsgID: yMsgDta);
                    if yMsgID <> *blanks;
                       //  Fehlermeldung ...
-                      p_sndpgmmg('USR8110': sfpau: §§pgmname);
+                      p_sndpgmmg('USR8110': sfpau: sds.pgmname);
 
                       exsr pbSflChain;
                       if (%found());
@@ -1391,7 +1391,7 @@
              //  ... alles in Ordnung
           else;
              //  ... letzte Nachricht löschen
-             p_rmvpgmmg(§§pgmname);
+             p_rmvpgmmg(sds.pgmname);
           endif;
 
        endsr;
@@ -1507,7 +1507,7 @@
              exsr setusrsetg;
 
              // - Endenachricht
-             p_rmvpgmmg(§§pgmname);
+             p_rmvpgmmg(sds.pgmname);
 
              clear usr8100;
              usr8100.var1 = ypgmcmd;
@@ -1516,12 +1516,12 @@
              clear usr9999;
              usr9999.var1 = exitmsg;
              usr9999.var2 = '';
-             p_sndpgmmg('USR9999': usr9999: §§pgmname);
-             p_movpgmmg(§§pgmname);
+             p_sndpgmmg('USR9999': usr9999: sds.pgmname);
+             p_movpgmmg(sds.pgmname);
 
           else;
              //  Fehlermeldung ...
-             p_sndpgmmg('USR8103': '': §§pgmname);
+             p_sndpgmmg('USR8103': '': sds.pgmname);
           endif;
 
        endsr;
@@ -1567,7 +1567,7 @@
                 (sfpau    = set0008.set_prmt  ));
                 exsr pmt_sfpau;
              other;
-                p_sndpgmmg('USR8179': '': §§pgmname);
+                p_sndpgmmg('USR8179': '': sds.pgmname);
              endsl;
 
           endif;
@@ -1589,7 +1589,7 @@
              ##field = yfield;
              *in93 = '1';
           else;
-             p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+             p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
              yMsgID = '';
              yMsgDta = '';
              *in93 = '0';
@@ -1607,7 +1607,7 @@
           if *in75 = *on;
              //  ... dann
              //      ausgeben Meldung
-             p_sndpgmmg('USR8179': '': §§pgmname);
+             p_sndpgmmg('USR8179': '': sds.pgmname);
           else;
              //  ... sonst
              //      aufrufen "Auswahl Datei"
@@ -1632,7 +1632,7 @@
                 ##library = yLibrary;
                 *in93 = '1';
              else;
-                p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
                 yMsgID = '';
                 yMsgDta = '';
                 *in93 = '0';
@@ -1652,7 +1652,7 @@
           if *in77 = *on;
              //  ... dann
              //      ausgeben Meldung
-             p_sndpgmmg('USR8179': '': §§pgmname);
+             p_sndpgmmg('USR8179': '': sds.pgmname);
           else;
              //  ... sonst
              //      aufrufen "Auswahl Teildatei"
@@ -1671,7 +1671,7 @@
                 ##member = yMember;
                 *in93 = '1';
              else;
-                p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
                 yMsgID = '';
                 yMsgDta = '';
                 *in93 = '0';
@@ -1697,7 +1697,7 @@
              $$length = rcdl0200.r2rcdlen;
              *in93 = '1';
           else;
-             p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+             p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
              yMsgID = '';
              yMsgDta = '';
              *in93 = '0';
@@ -1711,7 +1711,7 @@
 
        begsr pmt_sfpau;
 
-          peek68(set0001.set_dsp80: §§pgmname: §copyright
+          peek68(set0001.set_dsp80: sds.pgmname: §copyright
                 : ysflopt: yMsgID: yMsgDta);
 
           //  Einlesen Subfiledatensatz
@@ -1734,7 +1734,7 @@
           exsr pbSflUpdate;
 
           if (yMsgID = 'USR8100');
-             p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+             p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
              yMsgID = '';
              yMsgDta = '';
           else;
@@ -1800,7 +1800,7 @@
                 clear usr0007;
                 usr0007.var1 = ##file;
                 usr0007.var2 = ##library;
-                p_sndpgmmg('USR0007': usr0007: §§pgmname);
+                p_sndpgmmg('USR0007': usr0007: sds.pgmname);
              else;
 
                 yFunction = '*ADD';
@@ -1963,7 +1963,7 @@
 
              else;
                 //  Fehlermeldung ...
-                p_sndpgmmg('USR8102': '': §§pgmname);
+                p_sndpgmmg('USR8102': '': sds.pgmname);
              endif;
 
           endif;
@@ -2028,7 +2028,7 @@
                 exsr getlastopt;
                 if (isError = bTrue);
                    //  Fehlermeldung ...
-                   p_sndpgmmg('USR8165': '': §§pgmname);
+                   p_sndpgmmg('USR8165': '': sds.pgmname);
                 else;
 
                    //  "Reaktivieren" der letzten Subfileauswahl ...
@@ -2099,7 +2099,7 @@
                    if yMsgID = 'USR8112';
                       exsr srchstart;
                    else;
-                      p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                      p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
                       yMsgID = '';
                       yMsgDta = '';
                    endif;
@@ -2136,11 +2136,11 @@
              //  Meldung
              select;
              when srchmode = '*FOUND';
-                p_sndpgmmg('USR8130': '': §§pgmname);
+                p_sndpgmmg('USR8130': '': sds.pgmname);
              when srchmode = '*EOF';
-                p_sndpgmmg('USR8131': '': §§pgmname);
+                p_sndpgmmg('USR8131': '': sds.pgmname);
              when srchmode = '*MAXIMUM';
-                p_sndpgmmg('USR8132': '': §§pgmname);
+                p_sndpgmmg('USR8132': '': sds.pgmname);
              other;
              endsl;
 
@@ -2538,7 +2538,7 @@
                 //  Rekursiver CALL auf sich selbst (= PEEK05),
                 //  um die alte Referenz auf das Update-Programm zu löschen
                 monitor;
-                   UPDPGM_NAME = f_pgmcalln(§§pgmname);
+                   UPDPGM_NAME = f_pgmcalln(sds.pgmname);
                    yHeaderType = set0001.SET_HedTyp;
                    UPDPGM(ydsp80
                           : yHeaderType
@@ -2562,7 +2562,7 @@
 
                 monitor;
                    //  Initialisierung
-                   p_rmvpgmmg(§§pgmname);
+                   p_rmvpgmmg(sds.pgmname);
 
                    exsr getpgmname;
 
@@ -2570,7 +2570,7 @@
                    peek08(yQFile: peekpgm: rcdl0200.r2fmtname
                          : rcdl0200.r2fmtid
                          : yalwlc: ycase: yrcdlock: ynulldft
-                         : ykeepcrs: §§pgmlib: yrtncode);
+                         : ykeepcrs: sds.pgmlib: yrtncode);
 
                    *in99 = bFalse;
                 on-error;
@@ -2594,7 +2594,7 @@
           monitor;
              peek30(set0001.set_dsp80: yCopyright
                    : yflag: yMsgID: yMsgDta);
-             p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+             p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
              yMsgID = '';
              yMsgDta = '';
              *in99 = bFalse;
@@ -2604,7 +2604,7 @@
 
           if *in99 = *on;
              //  Fehler beim Programmaufruf ...
-             p_movpgmmg(§§pgmname);
+             p_movpgmmg(sds.pgmname);
              isLicenceError = bTrue;
              leavesr;
           else;
@@ -2759,7 +2759,7 @@
                    exsr changesort;
                 else;
                    clear usr8217;
-                   p_sndpgmmg('USR8217': usr8217: §§pgmname);
+                   p_sndpgmmg('USR8217': usr8217: sds.pgmname);
                 endif;
 
              endif;
@@ -2795,11 +2795,11 @@
           if iskeylower = bFalse;
              iskeylower = bTrue;
              clear usr8223;
-             p_sndpgmmg('USR8223': usr8223: §§pgmname);
+             p_sndpgmmg('USR8223': usr8223: sds.pgmname);
           else;
              iskeylower = bFalse;
              clear usr8224;
-             p_sndpgmmg('USR8224': usr8224: §§pgmname);
+             p_sndpgmmg('USR8224': usr8224: sds.pgmname);
           endif;
 
        endsr;
@@ -2866,7 +2866,7 @@
                    f_numbased(##file: ##library: ##member) > 1;
 
                    clear usr8235;
-                   p_sndpgmmg('USR8235': usr8235: §§pgmname);
+                   p_sndpgmmg('USR8235': usr8235: sds.pgmname);
                    leavesr;
                 endif;
 
@@ -2967,7 +2967,7 @@
                 clear usr0007;
                 usr0007.var1 = ##file;
                 usr0007.var2 = ##library;
-                p_sndpgmmg('USR0007': usr0007: §§pgmname);
+                p_sndpgmmg('USR0007': usr0007: sds.pgmname);
              else;
 
                 exsr getsflrcd;
@@ -3001,7 +3001,7 @@
                 clear usr0007;
                 usr0007.var1 = ##file;
                 usr0007.var2 = ##library;
-                p_sndpgmmg('USR0007': usr0007: §§pgmname);
+                p_sndpgmmg('USR0007': usr0007: sds.pgmname);
              else;
 
                 exsr getsflrcd;
@@ -3084,7 +3084,7 @@
                 clear usr0007;
                 usr0007.var1 = ##file;
                 usr0007.var2 = ##library;
-                p_sndpgmmg('USR0007': usr0007: §§pgmname);
+                p_sndpgmmg('USR0007': usr0007: sds.pgmname);
              else;
 
                 exsr getsflrcd;
@@ -3172,7 +3172,7 @@
                 endmon;
 
                 if yMsgID <> '';
-                   p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                   p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
                    yMsgID  = '';
                    yMsgDta = '';
                 endif;
@@ -3198,7 +3198,7 @@
 
              if f_numbased(##file: ##library: ##member) > 1;
                 clear usr8218;
-                p_sndpgmmg('USR8218': usr8218: §§pgmname);
+                p_sndpgmmg('USR8218': usr8218: sds.pgmname);
                 isCmdErr = bTrue;
                 isCancel = bTrue;
              else;
@@ -3216,7 +3216,7 @@
 
                    else;
                       //  Datensatz nicht gefunden ...
-                      p_sndpgmmg('USR8118': '': §§pgmname);
+                      p_sndpgmmg('USR8118': '': sds.pgmname);
                    endif;
 
                 else;
@@ -3245,7 +3245,7 @@
                 exsr chkpinrcd;
                 if ispinned = bFalse;
                    //  Datensatz ist nicht gepinned ...
-                   p_sndpgmmg('USR8121': '': §§pgmname);
+                   p_sndpgmmg('USR8121': '': sds.pgmname);
                 else;
                    //  Datensatz ist gepinned ...
                    exsr rmvpinrcd;
@@ -3280,7 +3280,7 @@
 
           if (set0001.set_tblmde = bTrue);
              //  Fehlermeldung ...
-             p_sndpgmmg('USR8149': '': §§pgmname);
+             p_sndpgmmg('USR8149': '': sds.pgmname);
           else;
              set0001.set_tblmde = bTrue;
              isSflDirty = bTrue;
@@ -3296,7 +3296,7 @@
 
           if (set0001.set_tblmde = bFalse);
              //  Fehlermeldung ...
-             p_sndpgmmg('USR8150': '': §§pgmname);
+             p_sndpgmmg('USR8150': '': sds.pgmname);
           else;
              set0001.set_tblmde = bFalse;
              isSflDirty = bTrue;
@@ -3379,7 +3379,7 @@
                    //  Spalte ist nicht gepinned ...
                    clear usr8147;
                    usr8147.var1 = wrk#field;
-                   p_sndpgmmg('USR8147': usr8147: §§pgmname);
+                   p_sndpgmmg('USR8147': usr8147: sds.pgmname);
                 else;
                    //  Spalte ist gepinned ...
                    exsr rmvPincolumn;
@@ -3400,7 +3400,7 @@
 
           set0005.set_spla = bTrue;
 
-          p_sndpgmmg('USR8161': '': §§pgmname);
+          p_sndpgmmg('USR8161': '': sds.pgmname);
 
        endsr;
 
@@ -3412,7 +3412,7 @@
 
           set0005.set_spla = bFalse;
 
-          p_sndpgmmg('USR8162': '': §§pgmname);
+          p_sndpgmmg('USR8162': '': sds.pgmname);
 
        endsr;
 
@@ -3448,7 +3448,7 @@
                 when *in99 = *on;
                    //           Program error
                 when yMsgID <> *blanks;
-                   p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                   p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
                    yMsgID = '';
                    yMsgDta = '';
 
@@ -3457,7 +3457,7 @@
                 other;
                    f_execute(yexeccmd: yMsgID: yMsgDta);
                    if (yMsgID <> '');
-                      p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                      p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
                       yMsgID = '';
                       yMsgDta = '';
                    endif;
@@ -3522,7 +3522,7 @@
                 if file#x.rcdlen > rcd_buff_len;
                    clear usr8206;
                    usr8206.var1   = rcd_buff_len;
-                   p_sndpgmmg('USR8206': usr8206: §§pgmname);
+                   p_sndpgmmg('USR8206': usr8206: sds.pgmname);
                 else;
                    set0001.set_dspmde = '*DSPHEX';
                    isSflDirty = bTrue;
@@ -3572,7 +3572,7 @@
                    : yMsgID: yMsgDta);
 
              if yMsgID <> ' ';
-                p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
                 yMsgID = '';
                 yMsgDta = '';
              else;
@@ -3584,7 +3584,7 @@
                 exsr saveenv;
 
                 if yMsgID <> ' ';
-                   p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                   p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
                    yMsgID = '';
                    yMsgDta = '';
                 endif;
@@ -3613,7 +3613,7 @@
                    : yMsgID: yMsgDta);
 
              if yMsgID <> ' ';
-                p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
                 yMsgID = '';
                 yMsgDta = '';
              else;
@@ -3654,7 +3654,7 @@
                 :yMsgID: yMsgDta);
 
           if yMsgID <> ' ';
-             p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+             p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
              yMsgID = '';
              yMsgDta = '';
           else;
@@ -3734,7 +3734,7 @@
                       : yMsgID: yMsgDta);
 
                 if yMsgID <> ' ';
-                   p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                   p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
                    yMsgID = '';
                    yMsgDta = '';
                    leave;
@@ -3748,7 +3748,7 @@
                       if yMsgDta = '*CANCEL';
                          iter;
                       else;
-                         p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                         p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
                          yMsgID = '';
                          yMsgDta = '';
                          leave;
@@ -3770,7 +3770,7 @@
        begsr msgnofile;
 
           clear usr9996;
-          p_sndpgmmg('USR9996': usr9996: §§pgmname);
+          p_sndpgmmg('USR9996': usr9996: sds.pgmname);
 
        endsr;
 
@@ -3781,7 +3781,7 @@
        begsr msginvsqlfile;
 
           clear usr9993;
-          p_sndpgmmg('USR9993': usr9993: §§pgmname);
+          p_sndpgmmg('USR9993': usr9993: sds.pgmname);
 
        endsr;
 
@@ -3876,7 +3876,7 @@
                 //  Alle Datensätze löschen ...
              when yMsgID = 'USR8111';
                 queryuser = ypgmcmd;
-                p_sndpgmmg('USR8112': '': §§pgmname);
+                p_sndpgmmg('USR8112': '': sds.pgmname);
                 //  Einzelnen Datensatz löschen ...
              when yMsgID = 'USR8112';
                 //  Unerwartete Nachrichten-ID ...
@@ -3884,7 +3884,7 @@
                 clear usr9998;
                 usr9998.var1 = yMsgID;
                 usr9998.var2 = 'PEEK14';
-                p_sndpgmmg('USR9998': usr9998: §§pgmname);
+                p_sndpgmmg('USR9998': usr9998: sds.pgmname);
              endsl;
 
           endif;
@@ -3919,12 +3919,12 @@
                 ispinok = bTrue;
              else;
                 //  Kein Platz mehr vorhanden ...
-                p_sndpgmmg('USR8118': '': §§pgmname);
+                p_sndpgmmg('USR8118': '': sds.pgmname);
              endif;
 
           else;
              //  Datensatz ist schon gepinned
-             p_sndpgmmg('USR8119': '': §§pgmname);
+             p_sndpgmmg('USR8119': '': sds.pgmname);
           endif;
 
        endsr;
@@ -3952,12 +3952,12 @@
                 ispinok = bTrue;
              else;
                 //  Kein Platz mehr vorhanden ...
-                p_sndpgmmg('USR8118': '': §§pgmname);
+                p_sndpgmmg('USR8118': '': sds.pgmname);
              endif;
 
           else;
              //  Datensatz ist schon gepinned
-             p_sndpgmmg('USR8119': '': §§pgmname);
+             p_sndpgmmg('USR8119': '': sds.pgmname);
           endif;
 
        endsr;
@@ -3972,7 +3972,7 @@
 
              //  Fehler bei Zugriff auf Datensatz ...
              usr8200.var1 = wrk#rcdnbr;
-             p_sndpgmmg('USR8200': usr8200: §§pgmname);
+             p_sndpgmmg('USR8200': usr8200: sds.pgmname);
 
           else;
 
@@ -3992,7 +3992,7 @@
                 exsr f0tofx;
 
                 usr8200.var1 = wrk#rcdnbr;
-                p_sndpgmmg('USR8200': usr8200: §§pgmname);
+                p_sndpgmmg('USR8200': usr8200: sds.pgmname);
              else;
                 if (*in55 = bTrue);
                    commit;
@@ -4003,7 +4003,7 @@
                 exsr callExit04;
 
                 usr8201.var1 = wrk#rcdnbr;
-                p_sndpgmmg('USR8201': usr8201: §§pgmname);
+                p_sndpgmmg('USR8201': usr8201: sds.pgmname);
                 isSflDirty = bTrue;
              endif;
 
@@ -4020,7 +4020,7 @@
 
           if f_exist('EXIT04': '*LIBL': '*PGM') = bTrue;
              callp EXIT04(file#x.file: file#x.library: file#x.member
-                          : '*DELETE': §§user: %timestamp()
+                          : '*DELETE': sds.user: %timestamp()
                           : wrk#rcdnbr: file#x.rcdlen: %addr(io_buff): *null);
           endif;
 
@@ -4079,7 +4079,7 @@
                : yMsgID: yMsgDta);
 
              if (yMsgID <> '');
-                p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
                 yMsgID = '';
                 yMsgDta = '';
                 if (*in55 = bTrue);
@@ -4088,7 +4088,7 @@
                 exsr f0tofx;
 
                 usr8202.var1 = wrk#rcdnbr;
-                p_sndpgmmg('USR8202': usr8202: §§pgmname);
+                p_sndpgmmg('USR8202': usr8202: sds.pgmname);
              else;
                 if (*in55 = bTrue);
                    commit;
@@ -4096,7 +4096,7 @@
                 exsr f0tofx;
 
                 usr8203.var1 = wrk#rcdnbr;
-                p_sndpgmmg('USR8203': usr8203: §§pgmname);
+                p_sndpgmmg('USR8203': usr8203: sds.pgmname);
              endif;
 
           endif;
@@ -4117,7 +4117,7 @@
              // Fehler beim Programmaufruf
           else;
              if (yMsgID = 'USR8100');
-                p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
                 yMsgID = '';
                 yMsgDta = '';
              else;
@@ -4781,7 +4781,7 @@
              leavesr;
           endif;
 
-          if ##file <> §§user;
+          if (##file <> sds.user);
              leavesr;
           endif;
 
@@ -5077,7 +5077,7 @@
 
              if (sflrowdatastr > sflpinrnge);
                 p_sndpgmmg('USR8148'
-                          : pinTabCol(pincol_x): §§pgmname);
+                          : pinTabCol(pincol_x): sds.pgmname);
                 exsr rmvPincolumn;
                 if ispinrmv = bTrue;
                    pincol_x = pincol_x - 1;
@@ -5617,7 +5617,7 @@
                    if iscvtchar = bFalse;
                       if yMsgID <> *blanks;
                          iscvtchar = bTrue;
-                         p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                         p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
                          yMsgID = '';
                          yMsgDta = '';
                       else;
@@ -6045,7 +6045,7 @@
              if accessMode = sql_seq;
                 sql_gototop(yMsgID: yMsgDta);
                 if (yMsgID <> '');
-                   p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                   p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
                    yMsgID = '';
                    yMsgDta = '';
                 endif;
@@ -6074,7 +6074,7 @@
              if accessMode = sql_seq;
                 sql_gotobottom(yMsgID: yMsgDta);
                 if (yMsgID <> '');
-                   p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                   p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
                    yMsgID = '';
                    yMsgDta = '';
                 endif;
@@ -6164,7 +6164,7 @@
                    usr8108.var1 = ##field;
                    usr8108.var2 = ##file;
                    usr8108.var3 = ##library;
-                   p_sndpgmmg('USR8108': usr8108: §§pgmname);
+                   p_sndpgmmg('USR8108': usr8108: sds.pgmname);
                 endif;
 
                 ##field = *blanks;
@@ -6393,8 +6393,8 @@
           //      ... Zugriff nicht erlaubt
           if (auth.isAccessAlw <> bTrue);
              exsr closefile;
-             p_rmvpgmmg(§§pgmname);
-             p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+             p_rmvpgmmg(sds.pgmname);
+             p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
              yMsgID = '';
              yMsgDta = '';
              leavesr;
@@ -6497,7 +6497,7 @@
                 else;
                    *in99 = *on;
                    cio_geterrormsg(hfile02: yMsgID: yMsgDta);
-                   p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                   p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
                    yMsgID = '';
                    yMsgDta = '';
                 endif;
@@ -6518,7 +6518,7 @@
                 else;
                    *in99 = *on;
                    cio_geterrormsg(hfile01: yMsgID: yMsgDta);
-                   p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                   p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
                    yMsgID = '';
                    yMsgDta = '';
                 endif;
@@ -6548,14 +6548,14 @@
                    else;
                       *in99 = *on;
                       cio_geterrormsg(hfile03: yMsgID: yMsgDta);
-                      p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                      p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
                       yMsgID = '';
                       yMsgDta = '';
                    endif;
                    exsr f3tofx;
                 else;
                    *in99 = *on;
-                   p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                   p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
                    yMsgID = '';
                    yMsgDta = '';
                 endif;
@@ -6580,10 +6580,10 @@
           //      ... aber Satzlänge größer 32766
           if file#x.rcdlen > rcd_buff_len;
              exsr closefile;
-             p_rmvpgmmg(§§pgmname);
+             p_rmvpgmmg(sds.pgmname);
              clear usr8207;
              usr8207.var1 = rcd_buff_len;
-             p_sndpgmmg('USR8207': usr8207: §§pgmname);
+             p_sndpgmmg('USR8207': usr8207: sds.pgmname);
           else;
 
              // ... löschen Pin-Funktion
@@ -6613,7 +6613,7 @@
                 // ... initialisieren Kurzbefehl
                 exsr initscmd;
                 // ... Nachrichten entfernen
-                p_rmvpgmmg(§§pgmname);
+                p_rmvpgmmg(sds.pgmname);
                 // ... einblenden Aufsetzkey
                 if (accessMode = key_seq);
                    *in70 = '1';
@@ -6628,7 +6628,7 @@
                     set0001.set_dspmde = '*DSPHEX');
                    clear usr8206;
                    usr8206.var1  = rcd_buff_len;
-                   p_sndpgmmg('USR8206': usr8206: §§pgmname);
+                   p_sndpgmmg('USR8206': usr8206: sds.pgmname);
                    exsr s_dspnrm;
                 endif;
 
@@ -6637,7 +6637,7 @@
                    // ... ohne Commit
                    usr8123.var1 = COLOR_white_u;
                    usr8123.var2 = COLOR_white;
-                   p_sndpgmmg('USR8123': usr8123: §§pgmname);
+                   p_sndpgmmg('USR8123': usr8123: sds.pgmname);
                 endif;
 
                 // ... Felder, welche nicht erlaubt sind
@@ -6650,7 +6650,7 @@
                       leave;
                    endif;
                    if (f_isnotalw(f_ffd) = bTrue);
-                      p_sndpgmmg('USR8196': f_field: §§pgmname);
+                      p_sndpgmmg('USR8196': f_field: sds.pgmname);
                    endif;
                 enddo;
 
@@ -6665,11 +6665,11 @@
                    if (commitLvl = '0');
                       // ... ohne Commit
                       *in55 = bFalse;
-                      p_sndpgmmg('USR0004': '': §§pgmname);
+                      p_sndpgmmg('USR0004': '': sds.pgmname);
                    else;
                       // ... mit Commit
                       *in55 = bTrue;
-                      p_sndpgmmg('USR0003': '': §§pgmname);
+                      p_sndpgmmg('USR0003': '': sds.pgmname);
                    endif;
 
                    // ... Datei für ...
@@ -6677,7 +6677,7 @@
                       // ... Input geöffnet
                       usr0007.var1 = ##file;
                       usr0007.var2 = ##library;
-                      p_sndpgmmg('USR0007': usr0007: §§pgmname);
+                      p_sndpgmmg('USR0007': usr0007: sds.pgmname);
                    else;
                       // ... Update geöffnet
                    endif;
@@ -6726,7 +6726,7 @@
                 if sql_nextrow(io_buff: io_nullmap: hfile03:
                             yMsgID : yMsgDta)  = beof;
                    *in99 = *on;
-                   p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                   p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
                    yMsgID = '';
                    yMsgDta = '';
                 else;
@@ -6785,7 +6785,7 @@
                                 yMsgID : yMsgDta) = beof;
                    *in99 = *on;
                    if (yMsgID <> '');
-                      p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                      p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
                       yMsgID = '';
                       yMsgDta = '';
                    endif;
@@ -6981,7 +6981,7 @@
 
           if (cp <= 0);
              //  Funktion bei leerer Feldtabelle möglich ...
-             p_sndpgmmg('USR8145': '': §§pgmname);
+             p_sndpgmmg('USR8145': '': sds.pgmname);
           else;
 
              for x = 1 to cp;
@@ -6993,7 +6993,7 @@
              endfor;
 
              if (wrk#field = '');
-                p_sndpgmmg('USR8117': '': §§pgmname);
+                p_sndpgmmg('USR8117': '': sds.pgmname);
              endif;
 
           endif;
@@ -7011,7 +7011,7 @@
              exsr pbCsrToRcd;
           else;
              sflcsr = §zeros;
-             p_sndpgmmg('USR8102': '': §§pgmname);
+             p_sndpgmmg('USR8102': '': sds.pgmname);
           endif;
 
        endsr;
@@ -7141,14 +7141,14 @@
                 when yMsgID = 'CPF9812';
                    usr0008.var1 = ##file;
                    usr0008.var2 = ##library;
-                   p_sndpgmmg('USR0008': usr0008: §§pgmname);
+                   p_sndpgmmg('USR0008': usr0008: sds.pgmname);
                 when yMsgID = 'CPF9810';
                    usr0010.var1 = ##library;
-                   p_sndpgmmg('USR0010': usr0010: §§pgmname);
+                   p_sndpgmmg('USR0010': usr0010: sds.pgmname);
                 other;
                    usr0009.var1 = ##file;
                    usr0009.var2 = ##library;
-                   p_sndpgmmg('USR0009': usr0009: §§pgmname);
+                   p_sndpgmmg('USR0009': usr0009: sds.pgmname);
                 endsl;
              else;
 
@@ -7428,7 +7428,7 @@
                 else;
                    *in99 = *on;
                    if (yMsgID <> '');
-                      p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+                      p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
                       yMsgID = '';
                       yMsgDta = '';
                    endif;
@@ -7584,7 +7584,7 @@
           endsl;
 
           // - Löschen Programmnachricht "keine Datei geöffnet"
-          p_rmvpgmmg(§§pgmname);
+          p_rmvpgmmg(sds.pgmname);
 
           //  *SECATR ...
           set0013 = f_getusrsg('*SECATRDFT'   );
@@ -7846,10 +7846,10 @@
           wrk#rcdnbr = ##rcdnbr;
           exsr pbgenintky;
           if yMsgID <> *blanks;
-             p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+             p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
              yMsgID = '';
              yMsgDta = '';
-             p_sndpgmmg('USR8139': '': §§pgmname);
+             p_sndpgmmg('USR8139': '': sds.pgmname);
           else;
              exsr pbsetll;
              exsr pbinit;
@@ -7962,13 +7962,13 @@
 
              if ##wndnbr < l#minseq;
                 ##wndnbr = l#minseq;
-                p_sndpgmmg('USR8115': '': §§pgmname);
+                p_sndpgmmg('USR8115': '': sds.pgmname);
                 ##strpage = 1;
              endif;
 
              if ##wndnbr > l#maxseq;
                 ##wndnbr = l#maxseq;
-                p_sndpgmmg('USR8116': '': §§pgmname);
+                p_sndpgmmg('USR8116': '': sds.pgmname);
                 if (set0010.set_scroll = '*BOTH'
                     or set0010.set_scroll = '*RIGHT');
                    ##strpage = *hival;
@@ -8128,8 +8128,8 @@
                        : yMsgID: yMsgDta);
 
           if (yMsgID <> '');
-             p_rmvpgmmg(§§pgmname);
-             p_sndpgmmg(yMsgID: yMsgDta: §§pgmname);
+             p_rmvpgmmg(sds.pgmname);
+             p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
              yMsgID = '';
              yMsgDta = '';
           endif;
@@ -8156,7 +8156,7 @@
        begsr first;
 
           // - Programm initialisieren
-          p_rmvpgmmg(§§pgmname);
+          p_rmvpgmmg(sds.pgmname);
 
           // - Einlesen der Benutzervoreinstellungen
           exsr getusrsetg;
@@ -8296,7 +8296,7 @@
           clear usr9999;
           usr9999.var1 = §copyright;
           usr9999.var2 = §release;
-          p_sndpgmmg('USR9999': usr9999: §§pgmname);
+          p_sndpgmmg('USR9999': usr9999: sds.pgmname);
 
        endsr;
 
@@ -8365,11 +8365,11 @@
           // - Versionsabgleich durchführen
           exsr chkversion;
 
-          peek23(§§pgmname: '*ALL': 8
+          peek23(sds.pgmname: '*ALL': 8
                 : yfkeys: ynbrofkeys);
           scrnfkeys = %subarr(yfkeys: 1);
 
-          peek27(§§pgmname: ychoice: ynbrofch);
+          peek27(sds.pgmname: ychoice: ynbrofch);
 
        endsr;
 

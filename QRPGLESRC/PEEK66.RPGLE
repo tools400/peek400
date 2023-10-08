@@ -30,7 +30,7 @@
       /COPY QCOPYLE,D_VARDEF
       /COPY QCOPYLE,FLDL0100
       /COPY QCOPYLE,D_MI
-      /COPY QCOPYLE,ERR_D_SDS
+      /COPY QCOPYLE,SDS
       /COPY QCOPYLE,CEECNDHDLR
 
       /define internal_prototype

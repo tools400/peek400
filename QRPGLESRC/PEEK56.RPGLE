@@ -41,7 +41,7 @@
       /COPY QCOPYLE,FLDL0100
       /COPY QCOPYLE,D_WORKSTN
       /COPY QCOPYLE,ShortCmd_D
-      /COPY QCOPYLE,ERR_D_SDS
+      /COPY QCOPYLE,SDS
       /COPY QCOPYLE,MBRL0200
       /COPY QCOPYLE,SCRNFKEYS
       /COPY QCOPYLE,CEECNDHDLR
@@ -227,7 +227,7 @@
           *in70 = '0';
 
           //  Nachrichten löschen
-          p_rmvpgmmg(§§pgmname);
+          p_rmvpgmmg(sds.pgmname);
 
           //  Bezugszahlen löschen
           exsr clrindctl;
@@ -239,10 +239,10 @@
 
           //  Mappen der gedrückten Taste
           //  in Programmbefehl
-          peek21(workstn.aid: §§pgmname
+          peek21(workstn.aid: sds.pgmname
                 : ypgmcmd: ycmddta: ymsgid: ymsgdta);
           if (ymsgid <> '');
-             p_sndpgmmg(ymsgid: ymsgdta: §§pgmname);
+             p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
              ymsgid = '';
              ymsgdta = '';
              iter;
@@ -308,7 +308,7 @@
 
           other;
              //  Falsche Taste gedrückt
-             p_wrongkey(workstn.aid: §§pgmname);
+             p_wrongkey(workstn.aid: sds.pgmname);
              iter;
           endsl;
 
@@ -387,7 +387,7 @@
           if (lstmbr = '');
              *in70 = '1';
              clear usr8209;
-             p_sndpgmmg('USR8209': usr8209: §§pgmname);
+             p_sndpgmmg('USR8209': usr8209: sds.pgmname);
           else;
              exsr postombr;
              if (isNewPos = bTrue);
@@ -417,7 +417,7 @@
                 isNewPos = bFalse;
                 clear usr8180;
                 usr8180.var1 = lstmbr;
-                p_sndpgmmg('USR8180': usr8180: §§pgmname);
+                p_sndpgmmg('USR8180': usr8180: sds.pgmname);
              else;
                 isNewPos = bTrue;
              endif;
@@ -497,7 +497,7 @@
           // - Funktion nicht freigeschaltet
           if (##file = '' or ##lib  = '' or set0015.set_envena = bFalse);
              clear usr8184;
-             p_sndpgmmg('USR8184': usr8184: §§pgmname);
+             p_sndpgmmg('USR8184': usr8184: sds.pgmname);
              isCtlError = bTrue;
              exsr poscsr;
              leavesr;
@@ -554,7 +554,7 @@
              else;
                 isCtlError = bTrue;
                 if (ymsgid <> '');
-                   p_sndpgmmg(ymsgid: ymsgdta: §§pgmname);
+                   p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
                    ymsgid = '';
                    ymsgdta = '';
                 endif;
@@ -583,7 +583,7 @@
 
              if (ymsgid <> '');
                 isCtlError = bTrue;
-                p_sndpgmmg(ymsgid: ymsgdta: §§pgmname);
+                p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
                 ymsgid = '';
                 ymsgdta = '';
                 leave;
@@ -621,7 +621,7 @@
              else;
                 isCtlError = bTrue;
                 if (ymsgid <> '');
-                   p_sndpgmmg(ymsgid: ymsgdta: §§pgmname);
+                   p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
                    ymsgid = '';
                    ymsgdta = '';
                 endif;
@@ -648,7 +648,7 @@
 
              if (ymsgid <> '');
                 isCtlError = bTrue;
-                p_sndpgmmg(ymsgid: ymsgdta: §§pgmname);
+                p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
                 ymsgid = '';
                 ymsgdta = '';
                 leave;
@@ -685,7 +685,7 @@
              if (isCtlError = bTrue);
                 ctl_cmd = ' ';
                 if (ymsgid <> '');
-                   p_sndpgmmg(ymsgid: ymsgdta: §§pgmname);
+                   p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
                    ymsgid = '';
                    ymsgdta = '';
                 endif;
@@ -697,7 +697,7 @@
              if ((##mnme  <> '' or ##mtxt  <> '') and ##ctlau = ' ');
                 clear usr8110;
                 usr8110.var1   = ##ctlau;
-                p_sndpgmmg('USR8110': usr8110: §§pgmname);
+                p_sndpgmmg('USR8110': usr8110: sds.pgmname);
                 isCtlError = bTrue;
                 leave;
              endif;
@@ -723,7 +723,7 @@
           else;
              isCtlError = bTrue;
              if (ymsgid <> '');
-                p_sndpgmmg(ymsgid: ymsgdta: §§pgmname);
+                p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
                 ymsgid = '';
                 ymsgdta = '';
              endif;
@@ -731,7 +731,7 @@
 
 
           if (ymsgid = 'CPD0078');
-             p_sndpgmmg('CPD0078': ymsgdta: §§pgmname);
+             p_sndpgmmg('CPD0078': ymsgdta: sds.pgmname);
              isCtlError = bTrue;
           endif;
 
@@ -795,7 +795,7 @@
                        'PEEKENV'         +
                       ')'                +
                       ' FROMLIB('        +
-                      %trim(§§pgmlib)    +
+                      %trim(sds.pgmlib) +
                       ')'                +
                       ' OBJTYPE('        +
                       '*FILE'            +
@@ -828,7 +828,7 @@
           endif;
 
           if (ymsgid <> '');
-             p_sndpgmmg(ymsgid: ymsgdta: §§pgmname);
+             p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
              ymsgid = '';
              ymsgdta = '';
              exsr clrfilep;
@@ -873,7 +873,7 @@
           endif;
 
           if (ymsgid <> '');
-             p_sndpgmmg(ymsgid: ymsgdta: §§pgmname);
+             p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
              ymsgid = '';
              ymsgdta = '';
              exsr clrfilep;
@@ -899,7 +899,7 @@
                       ymsgdta            );
 
              if (ymsgid <> '');
-                p_sndpgmmg(ymsgid: ymsgdta: §§pgmname);
+                p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
                 ymsgid = '';
                 ymsgdta = '';
                 exsr clrfilep;
@@ -946,7 +946,7 @@
                                        ymsgid :
                                        ymsgdta);
                 if (isSflError = bTrue);
-                   p_sndpgmmg(ymsgid: ymsgdta: §§pgmname);
+                   p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
                    ymsgid = '';
                    ymsgdta = '';
                    exsr vsfpauerr;
@@ -969,7 +969,7 @@
                    //  Unbekannter Programmbefehl
                    clear usr8110;
                    usr8110.var1 = ypgmcmd;
-                   p_sndpgmmg('USR8110': usr8110: §§pgmname);
+                   p_sndpgmmg('USR8110': usr8110: sds.pgmname);
                    exsr vsfpauerr;
                    update pbsfl;
                    isSflError = bTrue;
@@ -989,7 +989,7 @@
 
        begsr c_endpgm;
 
-          p_rmvpgmmg(§§pgmname);
+          p_rmvpgmmg(sds.pgmname);
 
           o_msgid = 'USR8100';
           usr8100.var1 = ypgmcmd;
@@ -1069,7 +1069,7 @@
              if (rcdfmtid <> '' and i_rcdfmtid <> rcdfmtid);
                 isSflError = bTrue;
                 clear usr8233;
-                p_sndpgmmg('USR8233': usr8233: §§pgmname);
+                p_sndpgmmg('USR8233': usr8233: sds.pgmname);
                 leavesr;
              endif;
           endif;
@@ -1161,7 +1161,7 @@
 
           else;
              clear usr8181;
-             p_sndpgmmg('USR8181': usr8181: §§pgmname);
+             p_sndpgmmg('USR8181': usr8181: sds.pgmname);
           endif;
 
        endsr;
@@ -1345,7 +1345,7 @@
              yexclkeys(*) = '';
           endsl;
 
-          peek27(§§pgmname: ychoice: ynbrofch);
+          peek27(sds.pgmname: ychoice: ynbrofch);
 
           // - Öffnen Bildschirmdatei
           if (workstn.open = '0');
@@ -1353,7 +1353,7 @@
           endif;
 
           // - Programm initialisieren
-          p_rmvpgmmg(§§pgmname);
+          p_rmvpgmmg(sds.pgmname);
 
           exsr getusrsetg;
 
@@ -1369,7 +1369,7 @@
              ##lib = '';
              isprdlib = bFalse;
           when i_envlib = '*PRDLIB';
-             ##lib = §§pgmlib;
+             ##lib = sds.pgmlib;
              isprdlib = bTrue;
           other;
              ##lib = i_envlib;
@@ -1410,7 +1410,7 @@
           exsr c_refresh;
 
           // - Copyright
-          p_sndpgmmg('USR9999': i_copyright: §§pgmname);
+          p_sndpgmmg('USR9999': i_copyright: sds.pgmname);
 
        endsr;
 
@@ -1433,7 +1433,7 @@
           peek27_name = f_pgmcalln('PEEK27');
           peek46_name = f_pgmcalln('PEEK46');
 
-          peek23(§§pgmname: '*ALL': nbrfkeys
+          peek23(sds.pgmname: '*ALL': nbrfkeys
                 : yfkeys: ynbrofkeys);
           scrnfkeys = %subarr(yfkeys: 1);
 
@@ -1454,7 +1454,7 @@
        dcl-s iserror         like(bool_t) inz(bfalse);
        //---------------------------------------------------*
 
-       peek21('#' + i_option: §§pgmname
+       peek21('#' + i_option: sds.pgmname
              : ypgmcmd: ycmddta: ymsgid: ymsgdta);
        if (ymsgid <> ' ');
           //  Fehlermeldung ...

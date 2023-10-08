@@ -49,7 +49,7 @@
       /COPY QCOPYLE,FLDL0100
       /COPY QCOPYLE,ShortCmd_d
       /COPY QCOPYLE,D_CLIB
-      /COPY QCOPYLE,ERR_D_SDS
+      /COPY QCOPYLE,SDS
       /COPY QCOPYLE,CEECNDHDLR
 
       /define internal_prototype
@@ -405,7 +405,7 @@
        begsr first;
 
           // - Programm initialisieren
-          //**                Callp     p_rmvPgmMg(§§pgmName)
+          //**                Callp     p_rmvPgmMg(sds.pgmName)
 
           o_msgid = *blanks;
           o_msgdta = *blanks;

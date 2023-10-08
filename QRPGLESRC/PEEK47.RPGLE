@@ -35,7 +35,7 @@
       /COPY QCOPYLE,FLDL0100
       /COPY QCOPYLE,D_WORKSTN
       /COPY QCOPYLE,ShortCmd_D
-      /COPY QCOPYLE,ERR_D_SDS
+      /COPY QCOPYLE,SDS
       /COPY QCOPYLE,MBRL0200
       /COPY QCOPYLE,SCRNFKEYS
       /COPY QCOPYLE,CEECNDHDLR
@@ -187,7 +187,7 @@
           *in70 = '0';
 
           //  Nachrichten löschen
-          p_rmvpgmmg(§§pgmname);
+          p_rmvpgmmg(sds.pgmname);
 
           //  Aktuelle Satz-Nr.
           if sflcsr > *zeros;
@@ -196,10 +196,10 @@
 
           //  Mappen der gedrückten Taste
           //  in Programmbefehl
-          peek21(workstn.aid: §§pgmname
+          peek21(workstn.aid: sds.pgmname
                 : ypgmcmd: ycmddta: ymsgid: ymsgdta);
           if ymsgid <> *blanks;
-             p_sndpgmmg(ymsgid: ymsgdta: §§pgmname);
+             p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
              ymsgid = '';
              ymsgdta = '';
              iter;
@@ -260,7 +260,7 @@
 
           other;
              //  Falsche Taste gedrückt
-             p_wrongkey(workstn.aid: §§pgmname);
+             p_wrongkey(workstn.aid: sds.pgmname);
              iter;
           endsl;
 
@@ -298,7 +298,7 @@
           if (lstmbr = '');
              *in70 = '1';
              clear usr8209;
-             p_sndpgmmg('USR8209': usr8209: §§pgmname);
+             p_sndpgmmg('USR8209': usr8209: sds.pgmname);
           else;
              exsr postombr;
              if isnewpos = bTrue;
@@ -328,7 +328,7 @@
                 isnewpos = bFalse;
                 clear usr8180;
                 usr8180.var1 = lstmbr;
-                p_sndpgmmg('USR8180': usr8180: §§pgmname);
+                p_sndpgmmg('USR8180': usr8180: sds.pgmname);
              else;
                 isnewpos = bTrue;
              endif;
@@ -435,11 +435,11 @@
                 sfpau = %triml(sfpau);
 
                 //  Zuordnung AUSWAHL => Befehl ...
-                peek21('#' + sfpau: §§pgmname
+                peek21('#' + sfpau: sds.pgmname
                       : ypgmcmd: ycmddta: ymsgid: ymsgdta);
                 if (ymsgid <> '');
                    //  Fehlermeldung ...
-                   p_sndpgmmg('USR8110': sfpau: §§pgmname);
+                   p_sndpgmmg('USR8110': sfpau: sds.pgmname);
                    exsr vsfpauerr;
                    update pbsfl;
                    isSflError = bTrue;
@@ -460,7 +460,7 @@
                    //  Unbekannter Programmbefehl
                    clear usr8110;
                    usr8110.var1 = ypgmcmd;
-                   p_sndpgmmg('USR8110': usr8110: §§pgmname);
+                   p_sndpgmmg('USR8110': usr8110: sds.pgmname);
                    exsr vsfpauerr;
                    update pbsfl;
                    isSflError = bTrue;
@@ -480,7 +480,7 @@
 
        begsr c_endpgm;
 
-          p_rmvpgmmg(§§pgmname);
+          p_rmvpgmmg(sds.pgmname);
 
           o_msgid = 'USR8100';
           usr8100.var1 = ypgmcmd;
@@ -708,7 +708,7 @@
           open peek47fm;
 
           // - Programm initialisieren
-          p_rmvpgmmg(§§pgmname);
+          p_rmvpgmmg(sds.pgmname);
 
           ##mbr = *blanks;
 
@@ -734,7 +734,7 @@
           exsr c_refresh;
 
           // - Copyright
-          p_sndpgmmg('USR9999': i_copyright: §§pgmname);
+          p_sndpgmmg('USR9999': i_copyright: sds.pgmname);
 
        endsr;
 
@@ -757,11 +757,11 @@
           peek27_name = f_pgmcalln('PEEK27');
           peek46_name = f_pgmcalln('PEEK46');
 
-          peek23(§§pgmname: '*ALL': nbrfkeys
+          peek23(sds.pgmname: '*ALL': nbrfkeys
                 : yfkeys: ynbrofkeys);
           scrnfkeys = %subarr(yfkeys: 1);
 
-          peek27(§§pgmname: ychoice: ynbrofch);
+          peek27(sds.pgmname: ychoice: ynbrofch);
 
        endsr;
 

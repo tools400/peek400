@@ -37,7 +37,7 @@
       /COPY QCOPYLE,D_WORKSTN
       /COPY QCOPYLE,D_COLORATR
       /COPY QCOPYLE,ShortCmd_D
-      /COPY QCOPYLE,ERR_D_SDS
+      /COPY QCOPYLE,SDS
       /COPY QCOPYLE,SCRNFKEYS
       /COPY QCOPYLE,CEECNDHDLR
 
@@ -143,17 +143,17 @@
           csrcol = csrcol - 1;
 
           //  Nachrichten löschen
-          p_rmvpgmmg(§§pgmname);
+          p_rmvpgmmg(sds.pgmname);
 
           //  Bezugszahlen löschen
           exsr bzoff1;
 
           //  Mappen der gedrückten Taste
           //  in Programmbefehl
-          peek21(workstn.aid: §§pgmname
+          peek21(workstn.aid: sds.pgmname
                 : ypgmcmd: ycmddta: ymsgid: ymsgdta);
           if ymsgid <> *blanks;
-             p_sndpgmmg(ymsgid: ymsgdta: §§pgmname);
+             p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
              ymsgid = '';
              ymsgdta = '';
              iter;
@@ -178,7 +178,7 @@
           when ypgmcmd = '*ENTER';
              exsr c_enter;
           other;
-             p_wrongkey(workstn.aid: §§pgmname);
+             p_wrongkey(workstn.aid: sds.pgmname);
              iter;
           endsl;
 
@@ -271,7 +271,7 @@
                 wrk_color = set0001.set_exccol;
              other;
                 *in99 = '1';
-                p_sndpgmmg('USR8146': '': §§pgmname);
+                p_sndpgmmg('USR8146': '': sds.pgmname);
                 leave;
              endsl;
 
@@ -302,7 +302,7 @@
 
        begsr c_endpgm;
 
-          p_rmvpgmmg(§§pgmname);
+          p_rmvpgmmg(sds.pgmname);
 
           o_msgid = 'USR8100';
 
@@ -528,7 +528,7 @@
                 set0001.set_exccol = wrk_color;
              other;
                 *in99 = '1';
-                p_sndpgmmg('USR8146': '': §§pgmname);
+                p_sndpgmmg('USR8146': '': sds.pgmname);
              endsl;
 
              exsr fill##;
@@ -546,7 +546,7 @@
           open peek24fm;
 
           // - Programm initialisieren
-          p_rmvpgmmg(§§pgmname);
+          p_rmvpgmmg(sds.pgmname);
 
           // - Benutzervoreinstellungen
           exsr getusrsetg;
@@ -568,7 +568,7 @@
           exsr setscreen;
 
           // - Copyright
-          p_sndpgmmg('USR9999': i_copyright: §§pgmname);
+          p_sndpgmmg('USR9999': i_copyright: sds.pgmname);
 
        endsr;
 
@@ -590,7 +590,7 @@
           peek23_name = f_pgmcalln('PEEK23');
           peek25_name = f_pgmcalln('PEEK25');
 
-          peek23(§§pgmname: '*ALL': 0
+          peek23(sds.pgmname: '*ALL': 0
                 : yfkeys: ynbrofkeys);
           scrnfkeys = %subarr(yfkeys: 1);
 

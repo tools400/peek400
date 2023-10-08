@@ -39,7 +39,7 @@
       /COPY QCOPYLE,D_VARDEF
       /COPY QCOPYLE,D_INFDS
       /COPY QCOPYLE,FLDL0100
-      /COPY QCOPYLE,ERR_D_SDS
+      /COPY QCOPYLE,SDS
       /COPY QCOPYLE,CEECNDHDLR
 
       /COPY QCOPYLE,USR9995
@@ -165,7 +165,7 @@
        g_oldfile = %trim(i_lib ) + '/' + %trim(i_file);
 
        open oldfile;
-       p_rmvpgmmg(§§pgmname);
+       p_rmvpgmmg(sds.pgmname);
 
        rcdLen1 = file_01_ds.rcdlen;
        close oldfile;

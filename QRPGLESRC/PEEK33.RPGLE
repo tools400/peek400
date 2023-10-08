@@ -28,7 +28,7 @@
 
       /COPY QCOPYLE,D_VARDEF
       /COPY QCOPYLE,D_COLORATR
-      /COPY QCOPYLE,ERR_D_SDS
+      /COPY QCOPYLE,SDS
       /COPY QCOPYLE,CEECNDHDLR
 
       /COPY QCOPYLE,SET0001                    // Benutzervoreinstellungen

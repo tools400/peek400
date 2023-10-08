@@ -50,7 +50,7 @@
       /COPY QCOPYLE,QMHRTVM
       /COPY QCOPYLE,QMHMOVPM
       /COPY QCOPYLE,QLGCNVCS
-      /COPY QCOPYLE,ERR_D_SDS
+      /COPY QCOPYLE,SDS
 
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
@@ -1084,7 +1084,7 @@
        reset errcode;
        errcode.bytprv = %size(errcode);
 
-       qsyrusri (usri0200: %size(usri0200): 'USRI0200': §§user: errcode);
+       qsyrusri (usri0200: %size(usri0200): 'USRI0200': sds.user: errcode);
 
        if (errcode.bytavl <> 0 or usri0200.lmtCap = '*YES');
           f_cmdline = bfalse;
