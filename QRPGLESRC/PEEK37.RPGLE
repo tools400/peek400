@@ -28,7 +28,6 @@
 
        dcl-f peek37fm workstn(*ext) usage(*input:*output)
              usropn infds(workstn) sfile(pbsfl:sflrec);
-       // Feldliste nach Feldnamen
        dcl-f peekfld usage(*update:*delete) keyed usropn prefix(f_);
 
       /COPY QCOPYLE,D_VARDEF

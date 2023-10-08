@@ -37,7 +37,11 @@
        dcl-f peekfldl0 keyed usropn rename(fpeekfld:fpeekfldl0) prefix(f2)
              infds(peek_l0_ds);
 
+       dcl-ds peek_l0_ds likeds(infds_t);
+       dcl-ds peek_l2_ds likeds(infds_t);
+
       /COPY QCOPYLE,D_VARDEF
+      /COPY QCOPYLE,D_INFDS
       /COPY QCOPYLE,FLDL0100
       /COPY QCOPYLE,CEECNDHDLR
       /COPY QCOPYLE,ERR_D_SDS
@@ -51,20 +55,6 @@
       /COPY QCOPYLE,PPEEK18
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
-
-       dcl-ds peek_l0_ds qualified;
-         p0file          char(10) pos(83);
-         p0library       char(10);
-         p0member        char(10) pos(129);
-         p0rcdnbr        int(10) pos(397);
-       end-ds;
-
-       dcl-ds peek_l2_ds qualified;
-         p2file          char(10) pos(83);
-         p2library       char(10);
-         p2member        char(10) pos(129);
-         p2rcdnbr        int(10) pos(397);
-       end-ds;
 
        //----------------------------------------------------*
        //  F E L D - D E F I N I T I O N E N                 *

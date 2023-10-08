@@ -28,14 +28,23 @@
 
        dcl-f peek34fm workstn(*ext) usage(*input:*output)
              usropn infds(workstn) sfile(pbsfl:sflrec);
+
        dcl-f peekwrk usage(*update:*delete) keyed usropn infds(work_00_ds)
              prefix(w_);
+
        dcl-f peekwrk_ disk(1024) usage(*update:*delete:*output)
              usropn infds(work_01_ds);
+
        dcl-f peekfldl1 usage(*input) keyed usropn infds(peek_01_ds)
              rename(fpeekfld:fpeekfldl1) prefix(f_);
+
        dcl-f peekfld usage(*update:*delete) usropn infds(peek_00_ds)
              prefix(f_);
+
+       dcl-ds work_00_ds likeds(infds_t);
+       dcl-ds work_01_ds likeds(infds_t);
+       dcl-ds peek_00_ds likeds(infds_t);
+       dcl-ds peek_01_ds likeds(infds_t);
 
       /COPY QCOPYLE,D_VARDEF
       /COPY QCOPYLE,D_INFDS
@@ -73,11 +82,6 @@
        dcl-ds ds_peekwrk extname('PEEKWRK') inz len(1024)
               prefix(w_);
        end-ds;
-
-       dcl-ds work_00_ds likeds(infds_t);
-       dcl-ds work_01_ds likeds(infds_t);
-       dcl-ds peek_00_ds likeds(infds_t);
-       dcl-ds peek_01_ds likeds(infds_t);
 
        dcl-s yfkeys          char(18) dim(32);
        dcl-s ynbrofkeys      like(int4_t);

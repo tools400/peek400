@@ -30,7 +30,10 @@
 
        dcl-f peek17fm workstn(*ext) usage(*input:*output)
              usropn infds(workstn);
+
        dcl-f peekfld keyed usropn infds(peek_01_ds) prefix(f_);
+
+       dcl-ds peek_01_ds likeds(infds_t);
 
 
       /COPY QCOPYLE,D_VARDEF
@@ -39,6 +42,7 @@
       /COPY QCOPYLE,ERR_D_SDS
       /COPY QCOPYLE,FLDL0100
       /COPY QCOPYLE,SCRNFKEYS
+      /COPY QCOPYLE,D_INFDS
 
       /define internal_prototype
       /COPY QCOPYLE,PPEEK17
@@ -67,14 +71,6 @@
        dcl-ds set0008  likeds(set0008_t) inz;
 
        dcl-ds fldl0100 likeds(fldl0100_t) inz;
-
-       dcl-ds peek_01_ds;
-         p1file          char(10) pos(83);
-         p1library       char(10);
-         p1member        char(10) pos(129);
-         p1nbrofrcd      int(10) pos(156);
-         p1rcdnbr        int(10) pos(397);
-       end-ds;
 
        dcl-s yfkeys          char(18) dim(32);
        dcl-s ynbrofkeys      like(int4_t);

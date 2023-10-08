@@ -28,17 +28,22 @@
 
        dcl-f peek50fm workstn(*ext) usage(*input:*output)
              usropn infds(workstn) sfile(pbsfl:sflrec);
-       // Feldliste nach Sequenzfolge
+
        dcl-f peekfldl1 keyed usropn infds(peek_01_ds)
              rename(fpeekfld:fpeekfldl1) prefix(f_);
-       // Feldliste nach Eingangsfolge
+
        dcl-f peekfld usropn infds(peek_00_ds) prefix(f_);
-       // Arbeitsdatei nach Anzeigefolge
+
        dcl-f peekwrk usage(*update:*delete) keyed usropn infds(work_00_ds)
              prefix(w_);
-       // Arbeitsdatei nach Eingangsfolge
+
        dcl-f peekwrk_ disk(1024) usage(*update:*delete:*output)
              usropn infds(work_01_ds);
+
+       dcl-ds peek_00_ds likeds(infds_t);
+       dcl-ds peek_01_ds likeds(infds_t);
+       dcl-ds work_00_ds likeds(infds_t);
+       dcl-ds work_01_ds likeds(infds_t);
 
       /COPY QCOPYLE,D_VARDEF
       /COPY QCOPYLE,D_INFDS
@@ -69,15 +74,9 @@
 
        dcl-ds fldl0100 likeds(fldl0100_t) inz;
 
-       dcl-ds peek_00_ds likeds(infds_t);
-       dcl-ds peek_01_ds likeds(infds_t);
-
        dcl-ds ds_peekwrk extname('PEEKWRK') inz len(1024)
               prefix(w_);
        end-ds;
-
-       dcl-ds work_00_ds likeds(infds_t);
-       dcl-ds work_01_ds likeds(infds_t);
 
        dcl-s yfkeys          char(18) dim(32);
        dcl-s ynbrofkeys      like(int4_t);

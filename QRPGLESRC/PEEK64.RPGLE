@@ -28,6 +28,7 @@
 
        dcl-f peek64fm workstn(*ext) usage(*input:*output)
              usropn infds(workstn);
+
        dcl-f peekfld keyed usropn prefix(f_) infds(peek_01_ds);
 
        dcl-ds peek_01_ds likeds(infds_t);

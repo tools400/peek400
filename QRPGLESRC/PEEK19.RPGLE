@@ -29,7 +29,10 @@
        dcl-f peekfldl2 keyed usropn rename(fpeekfld:fpeekfldl2) prefix(f2)
              infds(peek_l2_ds);
 
+       dcl-ds peek_l2_ds likeds(infds_t);
+
       /COPY QCOPYLE,D_VARDEF
+      /COPY QCOPYLE,D_INFDS
       /COPY QCOPYLE,FLDL0100
       /COPY QCOPYLE,ERR_D_SDS
       /COPY QCOPYLE,CEECNDHDLR
@@ -41,13 +44,6 @@
       /COPY QCOPYLE,PPEEK18
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
-
-       dcl-ds peek_l2_ds qualified;
-         p2file          char(10) pos(83);
-         p2library       char(10);
-         p2member        char(10) pos(129);
-         p2rcdnbr        int(10) pos(397);
-       end-ds;
 
        dcl-s ybuffer     like(rcdbuf_t) inz;
        dcl-s youtbuffer  like(rcdbuf_t) inz;

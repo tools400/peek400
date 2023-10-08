@@ -27,13 +27,13 @@
       /COPY QCOPYLE,COPYRIGHT
 
        dcl-f peek65p printer(*ext) usage(*output) usropn oflind(*in60);
+
        dcl-f peekfldl0 keyed usropn rename(fpeekfld:fpeekfldl0)
              infds(peek_00_ds) prefix(f_);
 
-       // Für Einzelsatzzugriff zum reinen Lesen von Datensätzen
-       dcl-ds hfile04  likeds(hfile_t);
-
        dcl-ds peek_00_ds likeds(infds_t);
+
+       dcl-ds hfile04 likeds(hfile_t);
 
       /COPY QCOPYLE,D_VARDEF
       /COPY QCOPYLE,D_INFDS

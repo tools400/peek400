@@ -32,14 +32,16 @@
        dcl-f peek05fm workstn(*ext) usage(*input:*output)
              usropn infds(workstn) sfile(pbsfl132:sflrec132)
              sfile(pbsfl080:sflrec080);
-       //--------------------------------------------------------------*
 
-       // Aufbau des Satzformats
        dcl-f peekfldl1 keyed usropn rename(fpeekfld:fpeekfldl1) prefix(f_)
              infds(peek#l1);
 
        dcl-f peekfld usage(*update:*delete) keyed usropn prefix(f_)
              infds(peek#00);
+
+       dcl-ds peek#l1 likeds(infds_t);
+       dcl-ds peek#00 likeds(infds_t);
+       dcl-ds file#x  likeds(infds_t);
 
        // Für Einzelsatzzugriff zum Löschen von Datensätzen
        dcl-ds hfile00  likeds(hfile_t);
@@ -215,27 +217,11 @@
        //  I N F D S - D E F I N I T I O N E N               *
        //----------------------------------------------------*
 
-       dcl-ds file#x likeds(infds_t);
-
        dcl-ds io_buff;
          io_bufffld      like(rcdbuf_t);
        end-ds;
 
        dcl-s io_nullmap      like(nullmap_t) dim(null_map_size);
-
-       dcl-ds peek#l1;
-         p1file          char(10) pos(83);
-         p1library       char(10);
-         p1member        char(10) pos(129);
-         p1rcdnbr        int(10) pos(397);
-       end-ds;
-
-       dcl-ds peek#00;
-         p0file          char(10) pos(83);
-         p0library       char(10);
-         p0member        char(10) pos(129);
-         p0rcdnbr        int(10) pos(397);
-       end-ds;
 
        dcl-ds rtn qualified;
          file            like(##file);

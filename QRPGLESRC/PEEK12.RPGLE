@@ -31,8 +31,10 @@
 
        dcl-f peekfmt usropn infds(peek_01_ds) prefix(f_);
 
+       dcl-ds peek_01_ds likeds(infds_t);
 
       /COPY QCOPYLE,D_VARDEF
+      /COPY QCOPYLE,D_INFDS
       /COPY QCOPYLE,FLDL0100
       /COPY QCOPYLE,RCDL0200
       /COPY QCOPYLE,DS_WORKSTN
@@ -47,14 +49,6 @@
       /COPY QCOPYLE,USR8100
 
        dcl-ds rcdl0200 likeds(rcdl0200_t) inz;
-
-       dcl-ds peek_01_ds qualified;
-         p1file          char(10) pos(83);
-         p1library       char(10);
-         p1member        char(10) pos(129);
-         p1nbrofrcd      int(10) pos(156);
-         p1rcdnbr        int(10) pos(397);
-       end-ds;
 
        dcl-s sfbot           like(int4_t) inz;
 
@@ -389,11 +383,11 @@
           $$rcdl0200 = f_fmt;
           $$format = rcdl0200.r2fmtname;
           $$text = rcdl0200.r2text;
-          recordnbr = peek_01_ds.p1rcdnbr;
+          recordnbr = peek_01_ds.rcdNbr;
           fmtnbr = f_fmtnbr;
 
           *in80 = '1'; // SFLDSP
-          lastrcdnbr = peek_01_ds.p1rcdnbr;
+          lastrcdnbr = peek_01_ds.rcdNbr;
 
        endsr;
 
@@ -440,14 +434,14 @@
 
           // - Prüfen auf Satzformat
           if (i_fmtmode   = mode_batch) and
-             ((peek_01_ds.p1nbrofrcd = 1) or (i_fmtname <> ''));
+             ((peek_01_ds.nbrOfRcd = 1) or (i_fmtname <> ''));
              setll 1 fpeekfmt;
              dou %eof(peekfmt);
                 read fpeekfmt;
                 if (not %eof(peekfmt));
                    rcdl0200 = f_fmt;
                    if (rcdl0200.r2fmtname = i_fmtname) or
-                      ((peek_01_ds.p1nbrofrcd = 1) and (i_fmtname = ''));
+                      ((peek_01_ds.nbrOfRcd = 1) and (i_fmtname = ''));
                       o_rcdl0200 = f_fmt;
                       o_fmtnbr = f_fmtnbr;
                       isExitPgm = bTrue;

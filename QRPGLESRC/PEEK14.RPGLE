@@ -32,8 +32,11 @@
        dcl-f peekfldl0 keyed usropn rename(fpeekfld:fpeekfldl0)
              infds(peek#00) prefix(f_);
        dcl-f peekfld keyed usropn infds(peek#  ) prefix(f_);
-       dcl-ds hfile04  likeds(hfile_t);
 
+       dcl-ds peek#00 likeds(infds_t);
+       dcl-ds peek# likeds(infds_t);
+
+       dcl-ds hfile04  likeds(hfile_t);
 
        dcl-ds cursorPos qualified;
          row    int(10) inz;
@@ -77,22 +80,6 @@
       /COPY QCOPYLE,F_PEEK63
 
        dcl-ds fldl0100 likeds(fldl0100_t) inz;
-
-       dcl-ds peek#00;
-         p0file          char(10) pos(83);
-         p0library       char(10);
-         p0member        char(10) pos(129);
-         p0nbrofrcd      int(10) pos(156);
-         p0rcdnbr        int(10) pos(397);
-       end-ds;
-
-       dcl-ds peek#;
-         p_file          char(10) pos(83);
-         p_library       char(10);
-         p_member        char(10) pos(129);
-         p_nbrofrcd      int(10) pos(156);
-         p_rcdnbr        int(10) pos(397);
-       end-ds;
 
        dcl-s yfkeys          char(18) dim(32);
        dcl-s ynbrofkeys      like(int4_t);
