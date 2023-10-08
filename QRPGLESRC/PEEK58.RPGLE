@@ -35,6 +35,7 @@
       /COPY QCOPYLE,MBRD0300
       /COPY QCOPYLE,BSPF0100
       /COPY QCOPYLE,OBJD0100
+      /COPY QCOPYLE,USRI0200
       /COPY QCOPYLE,D_CLib
       /COPY QCOPYLE,DS_WORKSTN
       /COPY QCOPYLE,D_MI
@@ -1074,27 +1075,18 @@
        //  Definieren Funktionswert ...
        dcl-s f_cmdline       like(bool_t) inz;
 
-       dcl-s rcvvarlen       like(int4_t);
-       dcl-s format          char(8);
-       dcl-s usrprf          char(10);
+       dcl-ds usri0200 likeds(usri0200_t) inz;
        dcl-ds errcode likeds(errcode_t ) inz;
-
-      /COPY QCOPYLE,USRI0200
        //------------------------------------------------------------*
 
-       rcvvarlen = §usri200;
-       format    = 'USRI0200';
-       usrprf    = §§user;
        clear usri0200;
 
        reset errcode;
        errcode.bytprv = %size(errcode);
 
-       qsyrusri ( usri0200 : rcvvarlen : format
-       : usrprf : errcode );
+       qsyrusri (usri0200: %size(usri0200): 'USRI0200': §§user: errcode);
 
-       if (errcode.bytavl <> 0)  or
-          (u2lmtcap  =  '*YES');
+       if (errcode.bytavl <> 0 or usri0200.lmtCap = '*YES');
           f_cmdline = bfalse;
        else;
           f_cmdline = btrue;
