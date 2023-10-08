@@ -218,12 +218,10 @@
        dcl-s cmd             char(4) inz;
        dcl-s scnnbr          like(int4_t) inz;
 
-       dcl-c §512 const(': Unknown field type');
+       dcl-c UNKNOWN_FIELD_TYPE const(': Unknown field type');
 
        dcl-s pos             int(10) inz;
-       dcl-s len             int(10) inz;
        dcl-s totlin          int(10) inz;
-       dcl-s curlin          zoned(2) inz;
 
        dcl-s totfields       int(10) inz;
        dcl-s curfield        zoned(2) inz;
@@ -510,7 +508,7 @@
 
              if f_isnotalw(fldl0100) = btrue;
                 reset ds_remark;
-                $rem_txt = fldl0100.f1vfld + §512;
+                $rem_txt = fldl0100.f1vfld + UNKNOWN_FIELD_TYPE;
                 p_wrtout(ds_remark);
                 iter;
              endif;
@@ -557,7 +555,7 @@
              if (f_isnotalw(fldl0100) = btrue);
 
                 reset ds_remark;
-                $rem_txt = fldl0100.f1vfld + §512;
+                $rem_txt = fldl0100.f1vfld + UNKNOWN_FIELD_TYPE;
                 p_wrtout(ds_remark);
 
                 iter;

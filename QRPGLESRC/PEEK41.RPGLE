@@ -111,19 +111,14 @@
 
        //  declarations for File Scope Array        (Qdb_Qdbfb), 1.9.3.20
        dcl-s pFilescpay pointer;
-       dcl-c §filescpay const(160);
        dcl-ds filescope likeds(qdb_qdbfb_t) based(pFilescpay);
 
        //  declarations for Key Specification Array (Qdb_Qdbfk), 1.9.3.23
        dcl-s pKeyspecay pointer;
-       dcl-c §keyspecay const(32);
-
        dcl-ds keyspecay likeds(qdb_qdbfk_t) based(pKeyspecay);
 
        //  declarations for select/omit Specification Array (Qdb_Qdbfk), 1.9.31
        dcl-s pSelspecay pointer;
-       dcl-c §selspecay const(32);
-
        dcl-ds selspecay likeds(qdb_qdbfss_t) based(pSelspecay);
        dcl-s pSelparmay pointer;
 
@@ -463,7 +458,7 @@
 
           if posofkeyfd < nbrofkeyfd;
 
-     C     posofkeyfd    mult      §keyspecay    offset
+             offset = posofkeyfd * %size(keyspecay);
              offset = offset + filescope.qdbfksof;
 
              pKeyspecay = %addr(rcvVarTab(offset + 1));
@@ -683,7 +678,7 @@
           if posofslom < nbrofslom;
 
              //  Set pointer to select/omit specification entry
-             offset = posofslom * §selspecay;
+             offset = posofslom * %size(selspecay);
              offset = offset + filescope.qdbfsoof;
 
              pSelspecay = %addr(rcvVarTab(offset + 1));
@@ -811,7 +806,7 @@
                 leave;
              else;
                 //  No matching record format found ...
-                offset = offset + §filescpay;
+                offset = offset + %size(filescope);
                 isfound = bFalse;
              endif;
              counter = counter - 1;
@@ -828,8 +823,7 @@
           if mbrnbr < 1 or mbrnbr > filedefhd.qdbflbnum;
              isfound = bFalse;
           else;
-             offset = filedefhd.qdbfos +
-                     ((mbrnbr -1) * §filescpay);
+             offset = filedefhd.qdbfos + ((mbrnbr -1) * %size(filescope));
              pFilescpay = %addr(rcvVarTab(offset + 1));
              isfound = btrue;
           endif;

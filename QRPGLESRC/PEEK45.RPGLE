@@ -71,7 +71,7 @@
        dcl-s ybufflen        like(int4_t) inz;
 
        dcl-s sfbot           like(int4_t) inz;
-       dcl-c §nbrfkeys const(3);
+       dcl-c NBR_F_KEYS const(3);
 
        dcl-s x               like(int4_t) inz;
        dcl-s i               like(int4_t) inz;
@@ -166,25 +166,25 @@
           //  Anzeigen der Befehlstasten
           select;
           when (sfbot = 2) and
-             (ynbrofkeys > §nbrfkeys * (sfbot - 1));
+             (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
              write pbbot#2;
           when (sfbot = 3) and
-             (ynbrofkeys > §nbrfkeys * (sfbot - 1));
+             (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
              write pbbot#3;
           when (sfbot = 4) and
-             (ynbrofkeys > §nbrfkeys * (sfbot - 1));
+             (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
              write pbbot#4;
           when (sfbot = 5) and
-             (ynbrofkeys > §nbrfkeys * (sfbot - 1));
+             (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
              write pbbot#5;
           when (sfbot = 6) and
-             (ynbrofkeys > §nbrfkeys * (sfbot - 1));
+             (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
              write pbbot#6;
           when (sfbot = 7) and
-             (ynbrofkeys > §nbrfkeys * (sfbot - 1));
+             (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
              write pbbot#7;
           when (sfbot = 8) and
-             (ynbrofkeys > §nbrfkeys * (sfbot - 1));
+             (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
              write pbbot#8;
           other;
              write pbbot#1;

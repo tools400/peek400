@@ -253,12 +253,12 @@
        dcl-s yvalue          char(512) inz;
 
        dcl-s ydsp80          like(set0001_t.set_dsp80) inz;
-       dcl-s yCopyright      like(copyrght_t) inz(§copyright);
+       dcl-s yCopyright      like(copyrght_t) inz(COPYRIGHT);
 
        dcl-s yfmtnbr         int(5) inz;
 
        dcl-s yHeaderType     char(10) inz;
-       dcl-s yRcdNbr         inz(§zeros ) like(rcdnbr_t);
+       dcl-s yRcdNbr         inz(0 ) like(rcdnbr_t);
        dcl-s yFunction       char(10) inz;
        dcl-s yCommitLvl      like(commitLvl) inz('0');
        dcl-s yIsUpdKey       inz(bFalse)  like(isUpdKey );
@@ -282,7 +282,7 @@
        dcl-s yoperation      like(srchop   ) inz;
        dcl-s yargument       like(srcharg  ) inz;
        dcl-s ysign           like(srchsign ) inz;
-       dcl-s ysrchnbrs       like(srchnbrs ) inz(§zeros );
+       dcl-s ysrchnbrs       like(srchnbrs ) inz(0 );
        dcl-s ysrchtype       like(srchtype ) inz;
        dcl-s ysrchcase       like(srchcase ) inz(bFalse );
 
@@ -370,9 +370,7 @@
          $$fkey32        char(18) pos(559);
        end-ds;
 
-       dcl-c §hex_char const('-');
-
-       dcl-c §zeros const(0);
+       dcl-c HEX_CHAR const('-');
 
        dcl-s isreadsfl       char(1) inz(bFalse);
        dcl-s ispbinit        char(1) inz(bFalse);
@@ -437,18 +435,18 @@
        dcl-s sflmode         char(10) inz;
        dcl-s sflpinrnge      like(int4_t) inz;
 
-       dcl-c §copyright const('1997-2023, -
+       dcl-c COPYRIGHT const('1997-2023, -
         Thomas Raddatz - PEEK V3.5.8');
-       dcl-c §release const('Stand: 16.09.2023');
-       dcl-c §version const('V03R05M08');
+       dcl-c RELEASE const('Stand: 16.09.2023');
+       dcl-c VERSION const('V03R05M08');
 
        dcl-s l#file          like(##file)    inz;
        dcl-s l#library       like(##library) inz;
        dcl-s l#member        like(##member)  inz;
        dcl-s l#format        like(##format)  inz;
-       dcl-s l#maxseq        like(f_seq   )  inz(§zeros );
-       dcl-s l#minseq        like(f_seq   )  inz(§zeros );
-       dcl-s l#wndnbr        like(##wndnbr)  inz(§zeros );
+       dcl-s l#maxseq        like(f_seq   )  inz(0 );
+       dcl-s l#minseq        like(f_seq   )  inz(0 );
+       dcl-s l#wndnbr        like(##wndnbr)  inz(0 );
 
        dcl-s r#size          like(int4_t) inz;
 
@@ -553,30 +551,30 @@
        //  Arbeitsfeld für Befehlsverarbeitung, Verhinderung von Rekursionen
        dcl-s r#pgmcmd        like(ypgmcmd)  inz;
        //  Arbeitsfeld für Eingabe Aufsetzkey
-       dcl-s r#rcdnbr        like(##rcdnbr)   inz(§zeros );
+       dcl-s r#rcdnbr        like(##rcdnbr)   inz(0 );
        dcl-s r#keyval        like(##key   )   inz;
        //  Arbeitsfeld für PIN-Funktion
        dcl-s pin#field       char(10) inz;
        //  Datensatz-Nr für SETLL und SETGG zum füllen der Subfile
-       dcl-s wrk#readdn      like(sflpage)    inz(§zeros);
-       dcl-s wrk#rcdnbr      like(rcdnbr_t)   inz(§zeros);
+       dcl-s wrk#readdn      like(sflpage)    inz(0);
+       dcl-s wrk#rcdnbr      like(rcdnbr_t)   inz(0);
        dcl-ds *N;
          wrk#keyval      like(keybuf_t) inz;
        end-ds;
        //  ...
        dcl-s wrk#field       inz            like(f_field);
-       dcl-s wrk#seqnbr      inz(§zeros )   like(f_seq);
-       dcl-s wrk#recno       inz(§zeros )   like(sflrec132);
+       dcl-s wrk#seqnbr      inz(0 )   like(f_seq);
+       dcl-s wrk#recno       inz(0 )   like(sflrec132);
        dcl-s wrk#sfpau       inz            like(sfpau);
        //  Umschalten der Sortierung
-       dcl-s last#rcdnr      like(rcdnbr_t)   inz(§zeros);
+       dcl-s last#rcdnr      like(rcdnbr_t)   inz(0);
        //  Farbattribute einsetzen
        dcl-s wrk#ofs         like(int4_t) inz;
        //  Felder mit mehr als 512 Zeichen im Datensatz
        dcl-s isfld512        char(1) inz(bFalse);
        //  Felder für Suchfunktion
        dcl-s srchmode        char(10) inz('*NEW');
-       dcl-s srchfndrcd      like(rcdnbr_t)  inz(§zeros );
+       dcl-s srchfndrcd      like(rcdnbr_t)  inz(0 );
        dcl-s srchfield       char(10) inz;
        dcl-s srchop          char(10) inz;
        dcl-s srcharg         char(63) inz;
@@ -589,20 +587,20 @@
 
        dcl-s srchliketp      like(int4_t) inz;
        dcl-s srchlikeln      like(int4_t) inz;
-       dcl-s srchnbrs        packed(10) inz(§zeros );
+       dcl-s srchnbrs        packed(10) inz(0 );
        dcl-s srchtype        char(10) inz;
        dcl-s srchcase        char(1) inz(bFalse );
        dcl-s srchcmpstr      like(srcharg)  inz;
-       dcl-s srchcmpval      like(srchargval) inz(§zeros );
+       dcl-s srchcmpval      like(srchargval) inz(0 );
        dcl-c srch_cmp_val_length %len(srchcmpval);
 
        dcl-c srch_cmp_val_decpos %decpos(srchcmpval);
 
-       dcl-s srchcmpfloat    float(8) inz(§zeros );
+       dcl-s srchcmpfloat    float(8) inz(0 );
        dcl-s srchcmprcd      like(rcdbuf_t) inz;
-       dcl-s srchcount       like(srchnbrs) inz(§zeros);
-       dcl-s srchcount2      like(srchnbrs) inz(§zeros);
-       dcl-s srchdspmsg      like(srchnbrs) inz(§zeros);
+       dcl-s srchcount       like(srchnbrs) inz(0);
+       dcl-s srchcount2      like(srchnbrs) inz(0);
+       dcl-s srchdspmsg      like(srchnbrs) inz(0);
        dcl-s srchisnum       char(1) inz(bFalse);
        dcl-s srchargisfloat  char(1) inz(bFalse );
        //  Felder für Kopierfunktion
@@ -745,7 +743,7 @@
           endif;
 
           //  Prüfen Positionierung der Subfile
-          if sfsanr <= §zeros;
+          if sfsanr <= 0;
              sfsanr = nbrPinRcd + 1;
           endif;
           if sfsanr > sflnbrrcd;
@@ -827,8 +825,8 @@
           cursorposition.column = %rem(workstn.csrpos: 256);
 
           //  Löschen der Cursorposition
-          csrrow = §zeros;
-          csrcol = §zeros;
+          csrrow = 0;
+          csrcol = 0;
 
           //  Merker für aktualisieren der Subfile
           isSflDirty = bFalse;
@@ -848,7 +846,7 @@
           //  Suchmodus
           if ypgmcmd <> '*SEARCH';
              srchmode = '*NEW';
-             srchfndrcd = §zeros;
+             srchfndrcd = 0;
           endif;
 
           //  Mappen der gedrückten Taste
@@ -1582,7 +1580,7 @@
 
        begsr pmt_field;
 
-          peek37(set0001.set_dsp80: §copyright: yfield
+          peek37(set0001.set_dsp80: COPYRIGHT: yfield
                 : yMsgID: yMsgDta);
 
           if yMsgID = *blanks;
@@ -1624,7 +1622,7 @@
                 yLibrary = ##library;
              endif;
 
-             peek69(set0001.set_dsp80: §copyright: yQFile
+             peek69(set0001.set_dsp80: COPYRIGHT: yQFile
                    : yMsgID: yMsgDta);
 
              if yMsgID = *blanks;
@@ -1664,7 +1662,7 @@
                 yLibrary = ##library;
              endif;
 
-             peek47(set0001.set_dsp80: §copyright
+             peek47(set0001.set_dsp80: COPYRIGHT
                    : yQFile: yMember: yMsgID: yMsgDta);
 
              if yMsgID = *blanks;
@@ -1687,7 +1685,7 @@
 
        begsr pmt_fmt;
 
-          peek12(set0001.set_dsp80: §copyright: ##format
+          peek12(set0001.set_dsp80: COPYRIGHT: ##format
                 : mode_inter
                 : rcdl0200: yfmtnbr: yMsgID: yMsgDta);
 
@@ -1711,7 +1709,7 @@
 
        begsr pmt_sfpau;
 
-          peek68(set0001.set_dsp80: sds.pgmname: §copyright
+          peek68(set0001.set_dsp80: sds.pgmname: COPYRIGHT
                 : ysflopt: yMsgID: yMsgDta);
 
           //  Einlesen Subfiledatensatz
@@ -1778,7 +1776,7 @@
           endif;
 
           //      ... positionieren Cursor
-          if sflcsr = §zeros;
+          if sflcsr = 0;
              exsr c_poscsr;
           endif;
 
@@ -1953,7 +1951,7 @@
 
              exsr getsflrcd;
 
-             if sflcsr > §zeros;
+             if sflcsr > 0;
 
                 exsr pbreadcsr;
                 exsr pbinit;
@@ -1987,7 +1985,7 @@
        begsr c_usersetg;
 
           monitor;
-             peek24(set0001.set_dsp80: §copyright: set0001
+             peek24(set0001.set_dsp80: COPYRIGHT: set0001
                    : yMsgID: yMsgDta);
              *in99 = bFalse;
           on-error;
@@ -2020,7 +2018,7 @@
           else;
 
              //  "Keine Sätze ..."
-             if sflnbrrcd = §zeros;
+             if sflnbrrcd = 0;
                 //  Keine Datensätze vorhanden.
              else;
 
@@ -2054,7 +2052,7 @@
        begsr c_layout;
 
           monitor;
-             peek34(set0001.set_dsp80: §copyright: '*DISPLAY'
+             peek34(set0001.set_dsp80: COPYRIGHT: '*DISPLAY'
                    : yMsgID: yMsgDta);
              *in99 = bFalse;
           on-error;
@@ -2085,7 +2083,7 @@
              select;
              when srchmode = '*NEW';
                 monitor;
-                   peek17(set0001.set_dsp80: §copyright
+                   peek17(set0001.set_dsp80: COPYRIGHT
                          : yQFile: ##member
                          : yfield: yoperation: yargument
                          : ysign: ysrchnbrs: ysrchtype
@@ -2312,7 +2310,7 @@
                 if ##wndnbr > l#minseq;
                    exsr pbfillleft;
                    //  ... kein Feld gefunden
-                   if cp <= §zeros;
+                   if cp <= 0;
                       ##wndnbr = l#minseq;
                       ##strpage = 1;
                    else;
@@ -2529,7 +2527,7 @@
              exsr msgnofile;
           else;
 
-             peek52(set0001.set_dsp80: §copyright
+             peek52(set0001.set_dsp80: COPYRIGHT
                    : yalwlc: ycase: yrcdlock: ynulldft
                    : ykeepcrs: yMsgID: yMsgDta: bFalse);
 
@@ -2578,7 +2576,7 @@
                 endmon;
              endif;
 
-             peek52(set0001.set_dsp80: §copyright
+             peek52(set0001.set_dsp80: COPYRIGHT
                    : yalwlc: ycase: yrcdlock: ynulldft
                    : ykeepcrs: yMsgID: yMsgDta: bTrue);
           endif;
@@ -2685,7 +2683,7 @@
           else;
 
              monitor;
-                peek40(set0001.set_dsp80: §copyright
+                peek40(set0001.set_dsp80: COPYRIGHT
                       : ##file: ##library: ##member
                       : ##format: bTrue
                       : yretfile: yretlib
@@ -2816,7 +2814,7 @@
           else;
 
              monitor;
-                peek50(set0001.set_dsp80: §copyright: pinTabCol
+                peek50(set0001.set_dsp80: COPYRIGHT: pinTabCol
                       : yMsgID: yMsgDta);
                 *in99 = bFalse;
              on-error;
@@ -2903,7 +2901,7 @@
              yformat = ##format;
              ysqlwhere = sqlwhere;
              ysqlorder = sqlorder;
-             peek48(set0001.set_dsp80: §copyright
+             peek48(set0001.set_dsp80: COPYRIGHT
                    : yFile: yLibrary: yMember
                    : yformat
                    : accessMode: ysqlwhere: ysqlorder
@@ -2972,7 +2970,7 @@
 
                 exsr getsflrcd;
 
-                if sflcsr > §zeros;
+                if sflcsr > 0;
                    yFunction = '*CHANGE';
                    exsr callUpdPgm;
                    exsr reloadusrstg;
@@ -3006,7 +3004,7 @@
 
                 exsr getsflrcd;
 
-                if sflcsr > §zeros;
+                if sflcsr > 0;
                    yFunction = '*COPY';
                    exsr callUpdPgm;
                 else;
@@ -3035,7 +3033,7 @@
 
                 exsr getsflrcd;
 
-                if sflcsr > §zeros;
+                if sflcsr > 0;
 
                    if queryuser <> ypgmcmd;
 
@@ -3089,7 +3087,7 @@
 
                 exsr getsflrcd;
 
-                if sflcsr > §zeros;
+                if sflcsr > 0;
 
                    if queryuser <> ypgmcmd;
 
@@ -3128,10 +3126,10 @@
 
              exsr getsflrcd;
 
-             if sflcsr > §zeros;
+             if sflcsr > 0;
 
                 monitor;
-                   PEEK14(set0001.set_dsp80: set0001.set_hedtyp: §copyright
+                   PEEK14(set0001.set_dsp80: set0001.set_hedtyp: COPYRIGHT
                          : wrk#rcdnbr: h_file: h_lib: h_mbr
                          : h_rcdfmt: '*DISPLAY': commitLvl
                          : yScreenNbr: yMsgID: yMsgDta);
@@ -3161,7 +3159,7 @@
 
              exsr getsflrcd;
 
-             if sflcsr > §zeros;
+             if sflcsr > 0;
 
                 monitor;
                    peek65(wrk#rcdnbr: h_file: h_lib: h_mbr: ''
@@ -3205,7 +3203,7 @@
 
                 exsr getsflrcd;
 
-                if sflcsr > §zeros;
+                if sflcsr > 0;
 
                    if f_chain04(wrk#rcdnbr:
                              h_file   :
@@ -3240,7 +3238,7 @@
 
              exsr getsflrcd;
 
-             if sflcsr > §zeros;
+             if sflcsr > 0;
 
                 exsr chkpinrcd;
                 if ispinned = bFalse;
@@ -3429,7 +3427,7 @@
 
              exsr getsflrcd;
 
-             if sflcsr > §zeros;
+             if sflcsr > 0;
 
                 clear shortcmd;
                 shortcmd.sc_action = '*CMD';
@@ -3476,8 +3474,8 @@
 
        begsr s_about;
 
-          peek49(set0001.set_dsp80: §copyright
-                : §release: §version
+          peek49(set0001.set_dsp80: COPYRIGHT
+                : RELEASE: VERSION
                 : yMsgID: yMsgDta);
 
        endsr;
@@ -3565,7 +3563,7 @@
              exsr msgnofile;
           else;
 
-             peek56(set0001.set_dsp80: §copyright: '*SAVE'
+             peek56(set0001.set_dsp80: COPYRIGHT: '*SAVE'
                    : yenvfile: yenvlib: yenvmbr
                    : $$rcdfmtid
                    : yQFile: yMember: ytext: yoption
@@ -3606,7 +3604,7 @@
              exsr msgnofile;
           else;
 
-             peek56(set0001.set_dsp80: §copyright: '*LOAD'
+             peek56(set0001.set_dsp80: COPYRIGHT: '*LOAD'
                    : yenvfile: yenvlib: yenvmbr
                    : $$rcdfmtid
                    : yQFile: yMember: ytext: yoption
@@ -3727,7 +3725,7 @@
 
              for do_x2 = 1 to *hival;
 
-                peek56(set0001.set_dsp80: §copyright: '*DELETE'
+                peek56(set0001.set_dsp80: COPYRIGHT: '*DELETE'
                       : yenvfile: yenvlib: yenvmbr
                       : ''
                       : yQFile: yMember: ytext: yoption
@@ -3740,7 +3738,7 @@
                    leave;
                 else;
 
-                   peek57(set0001.set_dsp80: §copyright
+                   peek57(set0001.set_dsp80: COPYRIGHT
                          : yFile: yLibrary: yMember: ytext
                          : yMsgID: yMsgDta);
 
@@ -3856,7 +3854,7 @@
 
           monitor;
              yHeaderType = set0001.set_hedtyp;
-             PEEK14(set0001.set_dsp80: yHeaderType: §copyright
+             PEEK14(set0001.set_dsp80: yHeaderType: COPYRIGHT
                    : wrk#rcdnbr: h_file: h_lib: h_mbr
                    : h_rcdfmt: ypgmcmd: commitLvl
                    : yScreenNbr: yMsgID: yMsgDta);
@@ -4150,17 +4148,17 @@
                 srchliketp = 1;
              else;
                 srcharg = srcharg;
-                srchliketp = §zeros;
+                srchliketp = 0;
              endif;
 
              //      ... nachgestelltes %-Zeichen
              x = %checkr(' ': srcharg);
-             if x > §zeros;
+             if x > 0;
                 a1 = %subst(srcharg: x: 1);
 
                 if a1 = set0002.set_wldcd;
                    x = x - 1;
-                   if x > §zeros;
+                   if x > 0;
                       srcharg = %subst(srcharg: 1: x);
                    else;
                       srcharg = *blanks;
@@ -4174,8 +4172,8 @@
              srchlikeln = %checkr(' ': srcharg);
           else;
              //  ... keine Anpassungen erforderlich
-             srchliketp = §zeros;
-             srchlikeln = §zeros;
+             srchliketp = 0;
+             srchlikeln = 0;
           endif;
 
           srchnbrs = ysrchnbrs;
@@ -4224,8 +4222,8 @@
                 //  ... positiven Wert belassen
              endif;
           else;
-             srchargval = §zeros;
-             srchargfloat = §zeros;
+             srchargval = 0;
+             srchargfloat = 0;
           endif;
 
           //  Ermitteln des Startdatensatzes
@@ -4293,7 +4291,7 @@
           //---------------------------------------*
           //  Cursor im Subfilebereich ...
           //---------------------------------------*
-          if sflcsr <> §zeros
+          if sflcsr <> 0
              and sflcsr > nbrPinRcd;
 
              //  ... übersetzen in Satznummer
@@ -4349,8 +4347,8 @@
           //  Suche läuft ...
           p_sndstsmg('USR8127': ' ');
 
-          srchcount = §zeros;
-          srchcount2 = §zeros;
+          srchcount = 0;
+          srchcount2 = 0;
 
           for do_x3 = 1 to *hival;
              exsr pbread;
@@ -4385,7 +4383,7 @@
 
              srchcount2 = srchcount2 + 1;
              if srchcount2 >= srchdspmsg;
-                srchcount2 = §zeros;
+                srchcount2 = 0;
 
                 clear usr8128;
                 usr8128.var1 = srchcount;
@@ -4484,7 +4482,7 @@
           endif;
 
           x = %checkr(' ': srcharg);
-          if x <> §zeros;
+          if x <> 0;
              x = %scan(%subst(srcharg: 1: x): SrchCmpRcd: 1);
           else;
              x = %scan(srcharg: SrchCmpRcd: 1);
@@ -4493,7 +4491,7 @@
           //  Gleich ...
           if srchop = 'LIKE';
              //  ... nicht gefunden
-             if x = §zeros;
+             if x = 0;
                 isfound = bFalse;
              else;
                 //  ... gefunden
@@ -4502,7 +4500,7 @@
           else;
              //  UnGleich ...
              //  ... nicht gefunden
-             if x = §zeros;
+             if x = 0;
                 isfound = bTrue;
              else;
                 //  ... gefunden
@@ -4625,7 +4623,7 @@
                 x = %checkr(' ': srchcmpstr);
                 x = x - srchlikeln;
                 x = x + 1;
-                if x > §zeros;
+                if x > 0;
                    srchcmpstr= %subst(srchcmpstr: x: srchlikeln);
                    if srchcmpstr = srcharg;
                       isfound = bTrue;
@@ -4643,7 +4641,7 @@
              other;
                 x = srchlikeln;
                 x = %scan(%subst(srcharg: 1: x): srchcmpstr: 1);
-                if x > §zeros;
+                if x > 0;
                    isfound = bTrue;
                 endif;
 
@@ -4679,14 +4677,14 @@
           srchop = *blanks;
           srcharg = *blanks;
           srchsign = *blanks;
-          srchnbrs = §zeros;
+          srchnbrs = 0;
           srchtype = *blanks;
 
           srchcmpstr = *blanks;
-          srchcount = §zeros;
+          srchcount = 0;
 
-          srchcount = §zeros;
-          srchcount2 = §zeros;
+          srchcount = 0;
+          srchcount2 = 0;
           srchdspmsg = 1000;
 
        endsr;
@@ -4716,7 +4714,7 @@
                yHeaderType = set0001.set_hedtyp;
                UPDPGM(set0001.set_dsp80
                       : yHeaderType
-                      : §copyright
+                      : COPYRIGHT
                       : yRcdNbr
                       : file#x.file
                       : file#x.library
@@ -4812,12 +4810,12 @@
 
           *in82 = '0';
 
-          sflrec132 = §zeros;
-          sflrec080 = §zeros;
+          sflrec132 = 0;
+          sflrec080 = 0;
 
-          sflnbrrcd = §zeros;
+          sflnbrrcd = 0;
 
-          ##rcdnbr = §zeros;
+          ##rcdnbr = 0;
           ##key = *blanks;
 
           $$head132 = set0001.set_hedcol;
@@ -4985,7 +4983,7 @@
 
           endif;
 
-          wrk#readdn = §zeros;
+          wrk#readdn = 0;
 
        endsr;
 
@@ -4999,7 +4997,7 @@
           if isopen = bFalse;
              //      Nix tun, keine Datei vorhanden
           else;
-             if sflcsr = §zeros;
+             if sflcsr = 0;
                 //      Nix tun, keine Datei vorhanden
              else;
 
@@ -5024,7 +5022,7 @@
              //      Nix tun, keine Datei vorhanden
              exsr msgnofile;
           else;
-             if sflcsr = §zeros;
+             if sflcsr = 0;
                 //      Nix tun, keine Datei vorhanden
              else;
 
@@ -5056,7 +5054,7 @@
 
           endif;
 
-          wrk#readdn = §zeros;
+          wrk#readdn = 0;
 
        endsr;
 
@@ -5128,7 +5126,7 @@
 
              for pinrcd_x = 1 to max_pin_rcd;
                 pinTabRcdE = pinTabRcd(pinrcd_x);
-                if pinTabRcdE.rcdnbr = §zeros;
+                if pinTabRcdE.rcdnbr = 0;
                    leave;
                 endif;
 
@@ -5522,7 +5520,7 @@
              colrofs = sflrowdatastr;
              sflrowdatastr = sflrowdatastr + 1;
           else;
-             colrofs = §zeros;
+             colrofs = 0;
           endif;
 
           //  aufbereiten des Feldinhaltes
@@ -5549,9 +5547,9 @@
                       endif;
                       %subst(youtbuffer
                             : youtbuffln
-                            : %len(§hex_char)) = §hex_char;
+                            : %len(HEX_CHAR)) = HEX_CHAR;
                    else;
-                      youtbuffer = §hex_char;
+                      youtbuffer = HEX_CHAR;
                    endif;
                 else;
                    peek06(fldl0100: 'FLDL0100': io_buff
@@ -5563,7 +5561,7 @@
              else;
                 //  ... für Hex-Anzeige
                 if io_nullmap(fldl0100.f1seq) = 1;
-                   yhexstring = §hex_char;
+                   yhexstring = HEX_CHAR;
                    ystringlen = f_buffln(fldl0100);
                 else;
                    ystringlen = f_rtvfld(ystring  :
@@ -5595,7 +5593,7 @@
              //  der Feldlänge, sowie der
              //  maximalen Spaltenbreite ...
              fldl0100 = f_ffd;
-             columnlen = §zeros;
+             columnlen = 0;
              fieldlen = youtbuffln;
              maxcollen = f_maxsize;
 
@@ -5774,7 +5772,7 @@
                 endif;
 
                 //      ... "nachziehen" der Spaltenfarbe
-                if colrofs <= §zeros;
+                if colrofs <= 0;
                    //          ... Pech gehabt
                 else;
                    if sflmode = '*HEADLINE';
@@ -5903,7 +5901,7 @@
 
        begsr pbcolor;
 
-          if colrofs = §zeros;
+          if colrofs = 0;
              //                 Nix tun
           else;
 
@@ -6101,7 +6099,7 @@
           col_scnstr(*) = 0;
           col_scnend(*) = 0;
           col_error(*) = bFalse;
-          cp = §zeros;
+          cp = 0;
 
        endsr;
 
@@ -6908,10 +6906,10 @@
        begsr getfrstfld;
 
           if isopen = bFalse;
-             ##wndnbr = §zeros;
+             ##wndnbr = 0;
           else;
 
-             ##wndnbr = §zeros;
+             ##wndnbr = 0;
 
              for x = 1 to cp;
 
@@ -7007,10 +7005,10 @@
 
        begsr getsflrcd;
 
-          if sflcsr > §zeros;
+          if sflcsr > 0;
              exsr pbCsrToRcd;
           else;
-             sflcsr = §zeros;
+             sflcsr = 0;
              p_sndpgmmg('USR8102': '': sds.pgmname);
           endif;
 
@@ -7100,7 +7098,7 @@
 
        begsr getrcdfrmt;
 
-          peek12(set0001.set_dsp80: §copyright: ##format
+          peek12(set0001.set_dsp80: COPYRIGHT: ##format
                 : mode_batch
                 : rcdl0200: yfmtnbr: yMsgID: yMsgDta);
 
@@ -7164,13 +7162,13 @@
                 //  Wenn die Objektgröße kleiner als 999 ist,
                 if (objd0400.o4objsize <= 999);
                    //  ... dann in der Einheit "Byte" anzeigen ...
-                   r#size = §zeros;
+                   r#size = 0;
                    $$unit = 'Byt';
                 else;
                    //  ... ansonsten solange durch 1024 teilen,
                    //      bis das die nächste passende Einheit
                    //      gefunden werden konnte.
-                   r#size = §zeros;
+                   r#size = 0;
 
                    dow (objd0400.o4objsize > 999);
                       objd0400.o4objsize =
@@ -7214,7 +7212,7 @@
 
           //  Beschreibung der Teildatei
           if isopen = bFalse;
-             $$records = §zeros;
+             $$records = 0;
              leavesr;
           endif;
 
@@ -7293,8 +7291,8 @@
        begsr getmaxseq;
 
           if isopen = bFalse;
-             l#maxseq = §zeros;
-             l#minseq = §zeros;
+             l#maxseq = 0;
+             l#minseq = 0;
           else;
 
              //  Ermitteln Anzahl Felder ...
@@ -7305,7 +7303,7 @@
              dow ('1');
                 readp fpeekfldl1;
                 if (%eof());
-                   l#maxseq = §zeros;
+                   l#maxseq = 0;
                    leave;
                 endif;
 
@@ -7322,13 +7320,13 @@
 
              //  Ermitteln Erstes Feld ...
              clear f1key_l1;
-             f1key_l1.f_seq = §zeros;
+             f1key_l1.f_seq = 0;
              setll %kds(f1key_l1) fpeekfldl1;
 
              dow ('1');
                 read fpeekfldl1;
                 if (%eof());
-                   l#minseq = §zeros;
+                   l#minseq = 0;
                    leave;
                 endif;
 
@@ -7471,17 +7469,17 @@
              //      ... Satzformat
              $$text40 = *blanks;
              $$text50 = *blanks;
-             $$length = §zeros;
-             $$records = §zeros;
-             $$size = §zeros;
+             $$length = 0;
+             $$records = 0;
+             $$size = 0;
              $$rcdfmtid = *blanks;
              $$unit = *blanks;
-             $$nomb = §zeros;
+             $$nomb = 0;
              ##key = *blanks;
-             ##rcdnbr = §zeros;
+             ##rcdnbr = 0;
              //      ... Fensterposition
-             ##wndnbr = §zeros;
-             ##strpage = §zeros;
+             ##wndnbr = 0;
+             ##strpage = 0;
 
              //      ... SQL-Selektion
              sqlwhere  = ' ';
@@ -7520,7 +7518,7 @@
              //**                MOVEL (P) *BLANKS       ##Member
              $$text40 = *blanks;
              $$text50 = *blanks;
-             $$size = §zeros;
+             $$size = 0;
              $$rcdfmtid = *blanks;
              $$unit = *blanks;
           endif;
@@ -7707,7 +7705,7 @@
              wrk#seqnbr = f_seq;
           else;
              isSeqNbrOK = bFalse;
-             wrk#seqnbr = §zeros;
+             wrk#seqnbr = 0;
           endif;
 
        endsr;
@@ -7722,7 +7720,7 @@
           if (*in80 = *off);
              isError = bTrue;
              wrk#sfpau = *blanks;
-             wrk#recno = §zeros;
+             wrk#recno = 0;
           else;
 
              for x = 1 to sflnbrrcd;
@@ -7874,7 +7872,7 @@
               (accessMode = sql_seq));
 
              monitor;
-                peek34(set0001.set_dsp80: §copyright: '*FLOATKEYS'
+                peek34(set0001.set_dsp80: COPYRIGHT: '*FLOATKEYS'
                       : yMsgID: yMsgDta);
                 *in99 = bFalse;
              on-error;
@@ -8075,8 +8073,8 @@
 
        begsr chkversion;
 
-          if (set0007.set_vsn <> §version);
-             peek33(§version: yMsgID: yMsgDta);
+          if (set0007.set_vsn <> VERSION);
+             peek33(VERSION: yMsgID: yMsgDta);
           else;
              //  Kein Abgleich erforderlich ...
           endif;
@@ -8188,10 +8186,10 @@
           exsr getobjattr;
 
           exsr chkprvfile;
-          ##rcdnbr = §zeros;
+          ##rcdnbr = 0;
           ##key = *blanks;
-          ##wndnbr = §zeros;
-          ##strpage = §zeros;
+          ##wndnbr = 0;
+          ##strpage = 0;
           ##field = *blanks;
 
           exsr clrfldarray;
@@ -8200,9 +8198,9 @@
           $$text40 = *blanks;
           $$text50 = *blanks;
           ##format = *blanks;
-          $$length = §zeros;
-          $$records = §zeros;
-          $$size = §zeros;
+          $$length = 0;
+          $$records = 0;
+          $$size = 0;
           $$rcdfmtid = *blanks;
           $$unit = *blanks;
 
@@ -8214,9 +8212,9 @@
           l#library = *blanks;
           l#member = *blanks;
           l#format = *blanks;
-          l#maxseq = §zeros;
-          l#minseq = §zeros;
-          l#wndnbr = §zeros;
+          l#maxseq = 0;
+          l#minseq = 0;
+          l#wndnbr = 0;
 
           //  SQL-Selektion
           sqlwhere  = ' ';
@@ -8235,7 +8233,7 @@
           // -  Netzwerkattribute
           peek07('SYSNAME': bFalse
                 : yattrlen: yattrtyp: yvalue);
-          if yattrlen > §zeros;
+          if yattrlen > 0;
              $$system = %subst(yvalue: 1: yattrlen);
           else;
              $$system = *blanks;
@@ -8294,8 +8292,8 @@
 
           // - Copyright
           clear usr9999;
-          usr9999.var1 = §copyright;
-          usr9999.var2 = §release;
+          usr9999.var1 = COPYRIGHT;
+          usr9999.var2 = RELEASE;
           p_sndpgmmg('USR9999': usr9999: sds.pgmname);
 
        endsr;

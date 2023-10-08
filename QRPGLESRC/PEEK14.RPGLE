@@ -108,7 +108,7 @@
        dcl-s sflpagedds      like(sflpage   ) inz;
        dcl-s sflrec          like(sflpage   ) inz;
        dcl-s sfllastrcd      like(sflpage   ) inz;
-       dcl-c §nbrfkeys const(3);
+       dcl-c NBR_F_KEYS const(3);
 
        dcl-s sfbot           like(int4_t) inz;
 
@@ -192,19 +192,19 @@
           //  Anzeigen der Befehlstasten
           select;
           when (sfbot = 2) and
-             (ynbrofkeys > §nbrfkeys * (sfbot - 1));
+             (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
              write pbbot#2;
           when (sfbot = 3) and
-             (ynbrofkeys > §nbrfkeys * (sfbot - 1));
+             (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
              write pbbot#3;
           when (sfbot = 4) and
-             (ynbrofkeys > §nbrfkeys * (sfbot - 1));
+             (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
              write pbbot#4;
           when (sfbot = 5) and
-             (ynbrofkeys > §nbrfkeys * (sfbot - 1));
+             (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
              write pbbot#5;
           when (sfbot = 6) and
-             (ynbrofkeys > §nbrfkeys * (sfbot - 1));
+             (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
              write pbbot#6;
           other;
              write pbbot#1;
@@ -966,7 +966,7 @@
           peek64_name = f_pgmcalln('PEEK64');
           peek65_name = f_pgmcalln('PEEK65');
 
-          peek23(sds.pgmname: '*ALL': §nbrfkeys
+          peek23(sds.pgmname: '*ALL': NBR_F_KEYS
                 : yfkeys: ynbrofkeys);
           scrnfkeys = %subarr(yfkeys: 1);
 

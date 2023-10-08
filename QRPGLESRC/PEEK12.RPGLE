@@ -58,7 +58,7 @@
        dcl-s sflpage         like(int4_t) inz;
        dcl-s sflrec          like(sflpage   ) inz;
        dcl-s sfllastrcd      like(sflpage   ) inz;
-       dcl-c §nbrfkeys const(3);
+       dcl-c NBR_F_KEYS const(3);
 
        dcl-s peek21_name     like(pgmcalln_t) inz;
        dcl-s peek23_name     like(pgmcalln_t) inz;
@@ -93,9 +93,9 @@
          i_fmtname       const like(fmt_t);
          i_fmtmode       char(10) const;
          o_rcdl0200      likeds(rcdl0200_t);
-       o_fmtnbr        int(5);
-       o_msgid         like(msgid_t);
-       o_msgdta        like(msgdta_t);
+         o_fmtnbr        int(5);
+         o_msgid         like(msgid_t);
+         o_msgdta        like(msgdta_t);
        end-pi;
        //---------------------------------------------------*
 
@@ -132,19 +132,19 @@
 
           select;
           when (sfbot = 2) and
-             (ynbrofkeys > §nbrfkeys * (sfbot - 1));
+             (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
              write pbbot#2;
           when (sfbot = 3) and
-             (ynbrofkeys > §nbrfkeys * (sfbot - 1));
+             (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
              write pbbot#3;
           when (sfbot = 4) and
-             (ynbrofkeys > §nbrfkeys * (sfbot - 1));
+             (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
              write pbbot#4;
           when (sfbot = 5) and
-             (ynbrofkeys > §nbrfkeys * (sfbot - 1));
+             (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
              write pbbot#5;
           when (sfbot = 6) and
-             (ynbrofkeys > §nbrfkeys * (sfbot - 1));
+             (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
              write pbbot#6;
           other;
              write pbbot#1;
@@ -498,7 +498,7 @@
           peek21_name = f_pgmcalln('PEEK21');
           peek23_name = f_pgmcalln('PEEK23');
 
-          peek23(sds.pgmname: '*ALL': §nbrfkeys
+          peek23(sds.pgmname: '*ALL': NBR_F_KEYS
                 : yfkeys: ynbrofkeys);
           scrnfkeys = %subarr(yfkeys: 1);
 

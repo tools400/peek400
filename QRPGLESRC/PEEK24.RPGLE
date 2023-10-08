@@ -66,7 +66,7 @@
        dcl-s ycmddta         like(pgmcmddt_t) inz(*blanks);
 
        dcl-s sfbot           like(int4_t) inz;
-       dcl-c §nbrfkeys const(2);
+       dcl-c NBR_F_KEYS const(2);
 
        dcl-s wrk_field       char(10) inz(*blanks);
        dcl-s wrk_color       char(1) inz(*blanks);
@@ -111,19 +111,19 @@
           //  Anzeigen der Befehlstasten
           select;
           when (sfbot = 2) and
-             (ynbrofkeys > §nbrfkeys * (sfbot - 1));
+             (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
              write pbbot#2;
           when (sfbot = 3) and
-             (ynbrofkeys > §nbrfkeys * (sfbot - 1));
+             (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
              write pbbot#3;
           when (sfbot = 4) and
-             (ynbrofkeys > §nbrfkeys * (sfbot - 1));
+             (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
              write pbbot#4;
           when (sfbot = 5) and
-             (ynbrofkeys > §nbrfkeys * (sfbot - 1));
+             (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
              write pbbot#5;
           when (sfbot = 6) and
-             (ynbrofkeys > §nbrfkeys * (sfbot - 1));
+             (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
              write pbbot#6;
           other;
              write pbbot#1;

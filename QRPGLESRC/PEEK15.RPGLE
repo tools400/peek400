@@ -302,7 +302,7 @@
 
        dcl-c max_rows 18;
 
-       dcl-c §remline '====================================================*';
+       dcl-c REM_LINE '====================================================*';
 
        dcl-s totlin          like(int4_t) inz;
        dcl-s curlin          zoned(2) inz;
@@ -525,7 +525,7 @@
 
        //  Remark
        reset ds_remark;
-       $rem_txt  = §remline;
+       $rem_txt  = REM_LINE;
        p_wrtcopy1(ds_remark);
 
        //  Remark
@@ -535,7 +535,7 @@
 
        //  Remark
        reset ds_remark;
-       $rem_txt  = §remline;
+       $rem_txt  = REM_LINE;
        p_wrtcopy1(ds_remark);
 
        //  Remark
@@ -1169,7 +1169,7 @@
 
           //           Remark
           reset ds_remark;
-          $rem_txt  = §remline;
+          $rem_txt  = REM_LINE;
           p_wrtcopy1(ds_remark);
 
           //           Remark
@@ -1180,7 +1180,7 @@
 
           //           Remark
           reset ds_remark;
-          $rem_txt  = §remline;
+          $rem_txt  = REM_LINE;
           p_wrtcopy1(ds_remark);
 
           //           Remark

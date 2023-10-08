@@ -98,8 +98,8 @@
        dcl-c nbrfkeys const(2);
        dcl-s sfl_cmd         char(10) inz(*blanks);
 
-       dcl-c §unique const('*UNIQUE');
-       dcl-c §constr const('*CST');
+       dcl-c UNIQUE const('*UNIQUE');
+       dcl-c CST    const('*CST');
 
        dcl-s peek21_name     like(pgmcalln_t) inz;
        dcl-s peek23_name     like(pgmcalln_t) inz;
@@ -836,12 +836,12 @@
 
           if (numkey >= 1 and
              keyl0100.apuniq = 'Y');
-             buffer = %trimr(buffer) + COLOR_white + §unique;
+             buffer = %trimr(buffer) + COLOR_white + UNIQUE;
           endif;
 
           select;
           when (dbrl0200.b2deptype = 'C');
-             buffer = %trimr(buffer) + COLOR_white + §constr;
+             buffer = %trimr(buffer) + COLOR_white + CST;
           other;
           endsl;
 

@@ -86,13 +86,13 @@
        dcl-s dftvallen       like(int4_t) inz;
        dcl-s idx             like(int4_t) inz;
 
-       dcl-c §time_a   '00.00.00';
-       dcl-c §date_a   '0001-01-01';
-       dcl-c §tstmp_a  '0001-01-01-00.00.00.000000';
+       dcl-c TIME_A   '00.00.00';
+       dcl-c DATE_A   '0001-01-01';
+       dcl-c TIMESTMP_A  '0001-01-01-00.00.00.000000';
 
-       dcl-c §time_d   '23.59.59';
-       dcl-c §date_d   '9999-12-31';
-       dcl-c §tstmp_d  '9999-12-31-23.59.59.999999';
+       dcl-c TIME_D   '23.59.59';
+       dcl-c DATE_D   '9999-12-31';
+       dcl-c TIMESTAMP_D  '9999-12-31-23.59.59.999999';
 
        dcl-ds fldl0100 likeds(fldl0100_t) inz;
 
@@ -280,31 +280,31 @@
              // ... Time
           when fldl0100.f1dtyp = 'T';
              if (f2desc = 'D');
-                dftval = §time_d;
-                dftvallen = f_len(§time_d);
+                dftval = TIME_D;
+                dftvallen = f_len(TIME_D);
              else;
-                dftval = §time_a;
-                dftvallen = f_len(§time_a);
+                dftval = TIME_A;
+                dftvallen = f_len(TIME_A);
              endif;
              exsr chkvalue;
              // ... Date
           when fldl0100.f1dtyp = 'L';
              if (f2desc = 'D');
-                dftval = §date_d;
-                dftvallen = f_len(§date_d);
+                dftval = DATE_D;
+                dftvallen = f_len(DATE_D);
              else;
-                dftval = §date_a;
-                dftvallen = f_len(§date_a);
+                dftval = DATE_A;
+                dftvallen = f_len(DATE_A);
              endif;
              exsr chkvalue;
              // ... Timestamp
           when fldl0100.f1dtyp = 'Z';
              if (f2desc = 'D');
-                dftval = §tstmp_d;
-                dftvallen = f_len(§tstmp_d);
+                dftval = TIMESTAMP_D;
+                dftvallen = f_len(TIMESTAMP_D);
              else;
-                dftval = §tstmp_a;
-                dftvallen = f_len(§tstmp_a);
+                dftval = TIMESTMP_A;
+                dftvallen = f_len(TIMESTMP_A);
              endif;
              exsr chkvalue;
              // ... alle anderen Datentypen

@@ -466,15 +466,13 @@
        dcl-s i               like(int4_t) inz;
 
        //  Gültige Zeichen für Feldnamen
-       dcl-c cchars const('_$#§-
-       ABCDEFGHIJKLMNOPQRSTUVWXYZ-
-       1234567890');
+       dcl-c VALID_CHARS const('_$#§ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890');
        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
        fldname = '';
 
        for i = i_startpos + 1 to %len(i_buffer);
-          if %scan(%subst(i_buffer: i: 1): cchars) = 0;
+          if %scan(%subst(i_buffer: i: 1): VALID_CHARS) = 0;
              leave;
           endif;
 

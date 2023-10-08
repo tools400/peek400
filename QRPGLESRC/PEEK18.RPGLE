@@ -114,8 +114,8 @@
 
        dcl-s htranscoder     like(htranscoder_t ) inz;
 
-       dcl-s set§signp       like(set0003.set_signp) inz('+');
-       dcl-s set§signm       like(set0003.set_signm) inz('-');
+       dcl-s SET_SIGN_PLUS   like(set0003.set_signp) inz('+');
+       dcl-s SET_SIGN_MINUS  like(set0003.set_signm) inz('-');
 
        dcl-s r_tgtvalue      like(i_tgtvalue) inz(*blanks);
        dcl-s r_dateiso       date(*iso) inz(*loval );
@@ -584,17 +584,17 @@
              // ohne Vorzeichen ausgeben
           else;
              if (isMinus = bTrue);
-                if (set§signm = '');
+                if (SET_SIGN_MINUS = '');
                    o_buffer = %trimr(o_buffer) + ' ';
                 else;
-                   o_buffer = %trimr(o_buffer) + set§signm;
+                   o_buffer = %trimr(o_buffer) + SET_SIGN_MINUS;
                 endif;
                 o_bufflen = o_bufflen + 1;
              else;
-                if (set§signp = '');
+                if (SET_SIGN_PLUS = '');
                    o_buffer = %trimr(o_buffer) + ' ';
                 else;
-                   o_buffer = %trimr(o_buffer) + set§signp;
+                   o_buffer = %trimr(o_buffer) + SET_SIGN_PLUS;
                 endif;
                 o_bufflen = o_bufflen + 1;
              endif;
@@ -1083,7 +1083,7 @@
                    a1 = *blanks;
                 endif;
                 // ... auf definiertes Minus-Zeichen prüfen
-                if (a1 = set§signm);
+                if (a1 = SET_SIGN_MINUS);
                    isMinus = bTrue;
                 else;
                    isMinus = bFalse;
@@ -1161,7 +1161,7 @@
                    a1 = *blanks;
                 endif;
                 // ... auf definiertes Minus-Zeichen prüfen
-                if (a1 = set§signm);
+                if (a1 = SET_SIGN_MINUS);
                    isMinus = bTrue;
                 else;
                    isMinus = bFalse;
@@ -1325,15 +1325,15 @@
           set0003 = f_getusrsg('*ACCESSKEY');
 
           if (set0003.set_signp = '');
-             set§signp = '';
+             SET_SIGN_PLUS = '';
           else;
-             set§signp = set0003.set_signp;
+             SET_SIGN_PLUS = set0003.set_signp;
           endif;
 
           if (set0003.set_signm = '');
-             set§signm = '-';
+             SET_SIGN_MINUS = '-';
           else;
-             set§signm = set0003.set_signm;
+             SET_SIGN_MINUS = set0003.set_signm;
           endif;
 
        endsr;
