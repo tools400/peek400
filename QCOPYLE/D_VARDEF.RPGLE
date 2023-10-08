@@ -139,9 +139,6 @@
      D bNotDef         C                   CONST('-')
      D bEOF            C                   CONST('1')
       *
-      *  Dateizugriffe:
-     D bFound          C                   CONST('0')
-      *
       *  Zustellarten von Nachrichten:
      D MSG_T_INFO      C                   CONST('*INFO')
      D MSG_T_INQ       C                   CONST('*INQ')

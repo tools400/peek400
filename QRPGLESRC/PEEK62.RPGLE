@@ -1,312 +1,271 @@
-      *===============================================================*
-      *                                                               *
-      *  (c) Thomas Raddatz                                           *
-      *                                                               *
-      *  Bereich  : PEEK, Version 2.3.3                               *
-      *  Programm : PEEK62                                            *
-      *  Typ      : RPG                                               *
-      *                                                               *
-      *  erstellt : 03.04.2006  Thomas Raddatz                        *
-      *                                                               *
-      *===============================================================*
-      *                                                               *
-      *  Kurzdokumentation :                                          *
-      *                                                               *
-      *  Peek/400 - Ändern Satzformat PEEKUSR                         *
-      *                                                               *
-      *===============================================================*
-      * >>PRE-COMPILER<<                                              *
-      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
-      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
-      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
-      *                           INSTALL(*NO);                       *
-      *   >>EXECUTE<<                                                 *
-      * >>END-PRE-COMPILER<<                                          *
-      *===============================================================*
+       //===============================================================*
+       //                                                               *
+       //  (c) Thomas Raddatz                                           *
+       //                                                               *
+       //  Bereich  : PEEK, Version 2.3.3                               *
+       //  Programm : PEEK62                                            *
+       //  Typ      : RPG                                               *
+       //                                                               *
+       //  erstellt : 03.04.2006  Thomas Raddatz                        *
+       //                                                               *
+       //===============================================================*
+       //                                                               *
+       //  Kurzdokumentation :                                          *
+       //                                                               *
+       //  Peek/400 - Ändern Satzformat PEEKUSR                         *
+       //                                                               *
+       //===============================================================*
+       // >>PRE-COMPILER<<                                              *
+       //   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+       //                           OBJLIB(&LI) DEVLIB(&LI) +           *
+       //                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+       //                           INSTALL(*NO);                       *
+       //   >>EXECUTE<<                                                 *
+       // >>END-PRE-COMPILER<<                                          *
+       //===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
-      *
-     FOLDFILE   IF   F32766        DISK    usropn
-     F                                     infds(File_01_DS)
-     F                                     extfile(g_oldFile)
-      *
-     FPEEKUSR   IF   E             DISK    usropn
-     F                                     infds(File_02_DS)
-     F                                     extfile(g_peekusr)
-      *
-     DFile_01_DS       DS                  likeds(infds_t)
-     DFile_02_DS       DS                  likeds(infds_t)
-      *
-     D g_oldFile       S             21A   inz
-     D g_peekusr       S             21A   inz
-      *
-      *---Variablendefinition------------------------------*
+
+       dcl-f oldfile disk(32766) usropn infds(file_01_ds) extfile(g_oldfile);
+
+       dcl-f peekusr usropn infds(file_02_ds) extfile(g_peekusr);
+
+       dcl-ds file_01_ds likeds(infds_t);
+       dcl-ds file_02_ds likeds(infds_t);
+
+       dcl-s g_oldfile char(21) inz;
+       dcl-s g_peekusr char(21) inz;
+
       /COPY QCOPYLE,D_VARDEF
       /COPY QCOPYLE,D_INFDS
       /COPY QCOPYLE,FLDL0100
-      *----------------------------------------------------*
-      *
+      /COPY QCOPYLE,ERR_D_SDS
+      /COPY QCOPYLE,CEECNDHDLR
+
+      /COPY QCOPYLE,USR9995
+
       /define internal_prototype
       /COPY QCOPYLE,PPEEK62
       /undefine internal_prototype
-      *
-     D long_t          S             10I 0                    based(pDummy)
-     D short_t         S              5I 0                    based(pDummy)
-      *
-     D HENV_t          S                   like(long_t      ) based(pDummy)
-     D HDBC_t          S                   like(long_t      ) based(pDummy)
-     D HSTMT_t         S                   like(long_t      ) based(pDummy)
-     D RETCODE_t       S                   like(SQLINTEGER_t) based(pDummy)
-     D PTR_t           S               *                    based(pDummy)
-      *
-     D SQLINTEGER_t    S                   like(long_t      ) based(pDummy)
-     D SQLSMALLINT_t   S                   like(short_t     ) based(pDummy)
-     D SQLHENV_t       S                   like(HENV_t      ) based(pDummy)
-     D SQLHDBC_t       S                   like(HDBC_t      ) based(pDummy)
-     D SQLHSTMT_t      S                   like(HSTMT_t     ) based(pDummy)
-     D SQLRETURN_t     S                   like(RETCODE_t   ) based(pDummy)
-     D SQLPOINTER_t    S                   like(PTR_t     ) based(pDummy)
-      *
-     D SQL_FALSE       C                   const(  0)
-     D SQL_TRUE        C                   const(  1)
-     D SQL_NTS         C                   const( -3)
-     D SQL_DROP        C                   const(  1)
-      *
-     D SQL_ATTR_COMMIT...
-     D                 C                   const(  0)
-     D SQL_COMMIT_NONE...
-     D                 C                   const(  1)
-      *
-      *  Allocate Environment Handle
-     D SQLAllocEnv...
-     D                 PR                         extproc('SQLAllocEnv')
-     D                                     like(SQLRETURN_t )
-     D  o_phenv                        *   value
-      *
-      *  Allocate Connection Handle
-     D SQLAllocConnect...
-     D                 PR                         extproc('SQLAllocConnect')
-     D                                     like(SQLRETURN_t )
-     D  i_henv                             value  like(SQLHENV_t   )
-     D  o_phdbc                        *   value
-      *
-      *  Connect to a Data Source
-     D SQLConnect...
-     D                 PR                         extproc('SQLConnect')
-     D                                     like(SQLRETURN_t )
-     D  i_hdbc                             value  like(SQLHDBC_t   )
-     D  i_szDSN                        *   value  options(*string)
-     D  i_cbDSN                            value  like(SQLSMALLINT_t)
-     D  i_szUID                        *   value  options(*string)
-     D  i_cbUID                            value  like(SQLSMALLINT_t)
-     D  i_szAuthStr                    *   value  options(*string)
-     D  i_cbAuthStr                        value  like(SQLSMALLINT_t)
-      *
-      *  Set Connection Option
-     D SQLSetConnectOption...
-     D                 PR                         extproc('SQLSetConnectOption')
-     D                                     like(SQLRETURN_t )
-     D  i_hdbc                             value  like(SQLHDBC_t    )
-     D  i_fOption                          value  like(SQLSMALLINT_t)
-     D  i_vParam                           value  like(SQLPOINTER_t )
-      *
-      *  Allocate a Statement Handle
-     D SQLAllocStmt...
-     D                 PR                         extproc('SQLAllocStmt')
-     D                                     like(SQLRETURN_t )
-     D  i_hdbc                             value  like(SQLHDBC_t   )
-     D  o_phstmt                       *   value
-      *
-      *  Execute a Statement Directly
-     D SQLExecDirect...
-     D                 PR                         extproc('SQLExecDirect')
-     D                                     like(SQLRETURN_t )
-     D  i_hstmt                            value  like(SQLHSTMT_t  )
-     D  i_szSqlStr                     *   value  options(*string)
-     D  i_cbSqlStr                         value  like(SQLINTEGER_t)
-      *
-      *  Free (or Reset) a Statement Handle
-     D SQLFreeStmt...
-     D                 PR                         extproc('SQLFreeStmt')
-     D                                     like(SQLRETURN_t )
-     D  i_hstmt                            value  like(SQLHSTMT_t   )
-     D  i_fOption                          value  like(SQLSMALLINT_t)
-      *
-      *  Disconnect from a Data Source
-     D SQLDisconnect...
-     D                 PR                         extproc('SQLDisconnect')
-     D                                     like(SQLRETURN_t )
-     D  i_hdbc                             value  like(SQLHDBC_t   )
-      *
-      *  Free Connection Handle
-     D SQLFreeConnect...
-     D                 PR                         extproc('SQLFreeConnect')
-     D                                     like(SQLRETURN_t )
-     D  i_hdbc                             value  like(SQLHDBC_t   )
-      *
-      *  Free Environment Handle
-     D SQLFreeEnv...
-     D                 PR                         extproc('SQLFreeEnv')
-     D                                     like(SQLRETURN_t )
-     D  i_henv                             value  like(SQLHENV_t   )
-      *
-      *---SDS-Datenstruktur--------------------------------*
-      /COPY QCOPYLE,ERR_D_SDS
-      *----------------------------------------------------*
-      *
-      *---Allg. Funktionen---------------------------------*
+
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
-      *----------------------------------------------------*
-      *
-     D rcdLen1         S             10U 0 inz
-     D rcdLen2         S             10U 0 inz
-      *
-     D cOptVal         S             10I 0                 inz
-     D retCode         S                   like(SQLRETURN_t) inz
-     D henv            S                   like(SQLHENV_t  ) inz
-     D hdbc            S                   like(SQLHDBC_t  ) inz
-     D hstmt           S                   like(SQLHSTMT_t ) inz
-     D sqlStr          S            512A                     inz
-      *
-      /COPY QCOPYLE,USR9995
-      *
-      /COPY QCOPYLE,CEECNDHDLR
-      *
-      ********************************************************************
-      *                 S T E U E R  -  R O U T I N E                    *
-      ********************************************************************
-      *
-     D PEEK62          PI
-     D  i_file                             const like(file_t)
-     D  i_lib                              const like(lib_t)
-      *---------------------------------------------------*
-      *
-      *  Register error handler
-     C                   callp     CEEHDLR(%paddr('errorHandler')
-     C                                     : *null: *omit)
-      *
-     C                   Eval      g_oldFile = %trim(i_lib ) + '/' +
-     C                                         %trim(i_file)
-      *
-     C                   Open      OLDFILE
-     C                   Callp     p_rmvPgmMg(§§PgmName)
-      *
-     C                   Eval      rcdLen1 = File_01_DS.RcdLen
-     C                   Close     OLDFILE
-      *
-     C                   Eval      g_peekusr = %trim(f_getPrdLb()) + '/' +
-     C                                         'PEEKUSR'
-      *
-     C                   Open      PEEKUSR
-     C                   Eval      rcdLen2 = File_02_DS.RcdLen
-     C                   Close     PEEKUSR
-      *
-     C                   If        rcdLen1 <> rcdLen2
-      *
-     C                   Clear                   USR9995
-      *
-     C                   Callp     p_sndStsMg('USR9995': USR9995)
-      *
-     C                   Dou       1=1
-      *  Allocate SQL Environment Handle and ...
-     C                   Eval      retCode = SQLAllocEnv(%addr(henv))
-     C                   If        retCode <> 0
-     C                   Leave
-     C                   Endif
-      *
-      *  Allocate SQL Connection Handle
-     C                   Eval      retCode = SQLAllocConnect(henv      :
-     C                                                     %addr(hdbc) )
-     C                   If        retCode <> 0
-     C                   Leave
-     C                   Endif
-      *
-      *  ... Set Connection Attribute
-     C                   Eval      cOptVal = SQL_COMMIT_NONE
-     C                   Eval      retCode = SQLSetConnectOption(hdbc          :
-     C                                                          SQL_ATTR_COMMIT:
-     C                                                          %addr(cOptVal) )
-      *
-      *  Connect to Server and ...
-     C                   Eval      retCode = SQLConnect(hdbc      :
-     C                                                  '*LOCAL'  :
-     C                                                  SQL_NTS   :
-     C                                                  *null     :
-     C                                                  SQL_NTS   :
-     C                                                  *null     :
-     C                                                  SQL_NTS   )
-     C                   If        retCode <> 0
-     C                   Leave
-     C                   Endif
-      *
-      *  Allocate Statement Handle
-     C                   Eval      retCode = SQLAllocStmt(hdbc       :
-     C                                                  %addr(hstmt) )
-     C                   If        retCode <> 0
-     C                   Leave
-     C                   Endif
-      *
-      *  Execute SQL Statement
-     C                   Eval      sqlStr =
-     C                               'ALTER TABLE '             +
-     C                                 %trim(i_lib) + '.' + %trim(i_file) +
-     C                               ' ALTER COLUMN DATA +
-     C                                 SET DATA TYPE CHARACTER (256) +
-     C                                     NOT NULL WITH DEFAULT'
-      *
-     C                   Eval      retCode = SQLExecDirect(hstmt    :
-     C                                                     sqlStr   :
-     C                                                     SQL_NTS  )
-     C                   If        retCode <> 0
-     C                   Leave
-     C                   Endif
-      *
-     C                   Enddo
-      *
-      *  Free Statement Handle
-     C                   If        hstmt <> 0
-     C                   Eval      retCode = SQLFreeStmt(hstmt    :
-     C                                                   SQL_DROP )
-     C                   Endif
-      *
-      *  Disconnect from Server
-     C                   If        hdbc <> 0
-     C                   Eval      retCode = SQLDisconnect(hdbc)
-     C                   Endif
-      *
-      *  Free Connection Handle
-     C                   If        hdbc <> 0
-     C                   Eval      retCode = SQLFreeConnect(hdbc)
-     C                   Endif
-      *
-      *  Free Environment Handle
-     C                   If        henv <> 0
-     C                   Eval      retCode = SQLFreeEnv(henv)
-     C                   Endif
-      *
-     C                   Endif
-      *
-      *  Programm verlassen
-     C     ende          Tag
-      *
-     C                   Return
-      *
-      *============================================================*
-      *  Program error handler                                     *
-      *============================================================*
-      *
-     P errorHandler    b                   
-     D                 pi
-     D i_condToken                         value likeds(cee_fc_t)
-     D i_pCommArea                   10i 0 value
-     D o_action                      10i 0
-     D o_newCondToken                            likeds(cee_fc_t)
-      /free
 
-         dump;
-         o_action = CEE_PERCOLATE;
+       dcl-s long_t          int(10) template;
+       dcl-s short_t         int(5) template;
 
-      /end-free
-     P                 e
-      *
+       dcl-s henv_t          like(long_t) template;
+       dcl-s hdbc_t          like(long_t) template;
+       dcl-s hstmt_t         like(long_t) template;
+       dcl-s retcode_t       like(sqlinteger_t) template;
+       dcl-s ptr_t           pointer template;
+
+       dcl-s sqlinteger_t    like(long_t) template;
+       dcl-s sqlsmallint_t   like(short_t) template;
+       dcl-s sqlhenv_t       like(henv_t) template;
+       dcl-s sqlhdbc_t       like(hdbc_t) template;
+       dcl-s sqlhstmt_t      like(hstmt_t) template;
+       dcl-s sqlreturn_t     like(retcode_t) template;
+       dcl-s sqlpointer_t    like(ptr_t) template;
+
+       dcl-c SQL_NTS  -3;
+       dcl-c SQL_DROP 1;
+
+       dcl-c sql_attr_commit 0;
+       dcl-c sql_commit_none 1;
+
+       //  Allocate Environment Handle
+       dcl-pr sqlallocenv extproc('SQLAllocEnv') like(sqlreturn_t  );
+         o_phenv         pointer value;
+       end-pr;
+
+       //  Allocate Connection Handle
+       dcl-pr sqlallocconnect extproc('SQLAllocConnect') like(sqlreturn_t);
+         i_henv          value  like(sqlhenv_t);
+         o_phdbc         pointer value;
+       end-pr;
+
+       //  Connect to a Data Source
+       dcl-pr sqlconnect extproc('SQLConnect') like(sqlreturn_t);
+         i_hdbc          value  like(sqlhdbc_t);
+         i_szdsn         pointer value  options(*string);
+         i_cbdsn         value  like(sqlsmallint_t);
+         i_szuid         pointer value  options(*string);
+         i_cbuid         value  like(sqlsmallint_t);
+         i_szauthstr     pointer value  options(*string);
+         i_cbauthstr     value  like(sqlsmallint_t);
+       end-pr;
+
+       //  Set Connection Option
+       dcl-pr sqlsetconnectoption
+                         extproc('SQLSetConnectOption') like(sqlreturn_t);
+         i_hdbc          value  like(sqlhdbc_t);
+         i_foption       value  like(sqlsmallint_t);
+         i_vparam        value  like(sqlpointer_t);
+       end-pr;
+
+       //  Allocate a Statement Handle
+       dcl-pr sqlallocstmt extproc('SQLAllocStmt') like(sqlreturn_t);
+         i_hdbc          value  like(sqlhdbc_t);
+         o_phstmt        pointer value;
+       end-pr;
+
+       //  Execute a Statement Directly
+       dcl-pr sqlexecdirect extproc('SQLExecDirect') like(sqlreturn_t);
+         i_hstmt         value  like(sqlhstmt_t);
+         i_szsqlstr      pointer value  options(*string);
+         i_cbsqlstr      value  like(sqlinteger_t);
+       end-pr;
+
+       //  Free (or Reset) a Statement Handle
+       dcl-pr sqlfreestmt extproc('SQLFreeStmt') like(sqlreturn_t);
+         i_hstmt         value  like(sqlhstmt_t);
+         i_foption       value  like(sqlsmallint_t);
+       end-pr;
+
+       //  Disconnect from a Data Source
+       dcl-pr sqldisconnect extproc('SQLDisconnect') like(sqlreturn_t);
+         i_hdbc          value  like(sqlhdbc_t);
+       end-pr;
+
+       //  Free Connection Handle
+       dcl-pr sqlfreeconnect extproc('SQLFreeConnect') like(sqlreturn_t );
+         i_hdbc          value  like(sqlhdbc_t);
+       end-pr;
+
+       //  Free Environment Handle
+       dcl-pr sqlfreeenv extproc('SQLFreeEnv') like(sqlreturn_t);
+         i_henv          value  like(sqlhenv_t);
+       end-pr;
+
+       dcl-s rcdLen1         uns(10) inz;
+       dcl-s rcdLen2         uns(10) inz;
+
+       dcl-s cOptVal         int(10) inz;
+       dcl-s retCode         like(sqlreturn_t) inz;
+       dcl-s hEnv            like(sqlhenv_t  ) inz;
+       dcl-s hDBc            like(sqlhdbc_t  ) inz;
+       dcl-s hStmt           like(sqlhstmt_t ) inz;
+       dcl-s sqlStr          char(512) inz;
+
+       //*******************************************************************
+       //                 S T E U E R  -  R O U T I N E                    *
+       //*******************************************************************
+
+       dcl-pi peek62;
+         i_file          const like(file_t);
+         i_lib           const like(lib_t);
+       end-pi;
+       //---------------------------------------------------*
+
+       //  Register error handler
+       ceehdlr(%paddr('errorHandler')
+              : *null: *omit);
+
+       g_oldfile = %trim(i_lib ) + '/' + %trim(i_file);
+
+       open oldfile;
+       p_rmvpgmmg(§§pgmname);
+
+       rcdLen1 = file_01_ds.rcdlen;
+       close oldfile;
+
+       g_peekusr = %trim(f_getprdlb()) + '/' + 'PEEKUSR';
+
+       open peekusr;
+       rcdLen2 = file_02_ds.rcdlen;
+       close peekusr;
+
+         if (rcdLen1 <> rcdLen2);
+
+          clear usr9995;
+
+          p_sndstsmg('USR9995': usr9995);
+
+          dou 1=1;
+             //  Allocate SQL Environment Handle and ...
+             retCode = sqlallocenv(%addr(hEnv));
+             if (retCode <> 0);
+                leave;
+             endif;
+
+             //  Allocate SQL Connection Handle
+             retCode = sqlallocconnect(hEnv: %addr(hDBc));
+             if (retCode <> 0);
+                leave;
+             endif;
+
+             //  ... Set Connection Attribute
+             cOptVal = sql_commit_none;
+             retCode = sqlsetconnectoption(hDBc
+                                           : sql_attr_commit: %addr(cOptVal));
+
+             //  Connect to Server and ...
+             retCode = sqlconnect(hDBc: '*LOCAL': SQL_NTS
+                                  : *null: SQL_NTS: *null: SQL_NTS);
+             if (retCode <> 0);
+                leave;
+             endif;
+
+             //  Allocate Statement Handle
+             retCode = sqlallocstmt(hDBc: %addr(hStmt));
+             if (retCode <> 0);
+                leave;
+             endif;
+
+             //  Execute SQL Statement
+             sqlStr =
+              'ALTER TABLE ' +
+                %trim(i_lib) + '.' + %trim(i_file) +
+              ' ALTER COLUMN DATA +
+                SET DATA TYPE CHARACTER (256) +
+                    NOT NULL WITH DEFAULT';
+
+             retCode = sqlexecdirect(hStmt: sqlStr: SQL_NTS);
+             if (retCode <> 0);
+                leave;
+             endif;
+
+          enddo;
+
+          //  Free Statement Handle
+          if (hStmt <> 0);
+             retCode = sqlfreestmt(hStmt: SQL_DROP);
+          endif;
+
+          //  Disconnect from Server
+          if (hDBc <> 0);
+             retCode = sqldisconnect(hDBc);
+          endif;
+
+          //  Free Connection Handle
+          if (hDBc <> 0);
+             retCode = sqlfreeconnect(hDBc);
+          endif;
+
+          //  Free Environment Handle
+          if (hEnv <> 0);
+             retCode = sqlfreeenv(hEnv);
+          endif;
+
+       endif;
+
+       return;
+
+       //============================================================*
+       //  Program error handler                                     *
+       //============================================================*
+
+       dcl-proc errorhandler;
+       dcl-pi *N;
+         i_condtoken     value likeds(cee_fc_t);
+         i_pcommarea     int(10) value;
+         o_action        int(10);
+         o_newcondtoken  likeds(cee_fc_t);
+       end-pi;
+
+       dump;
+       o_action = cee_percolate;
+
+       end-proc;
+

@@ -53,38 +53,38 @@
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
 
-       dcl-s yfkeys          char(18) dim(32)       inz(*blanks);
-       dcl-s ynbrofkeys      like(int4_t) inz;
-       dcl-s ymsgid          char(7) inz(*blanks);
-       dcl-s ymsgdta         char(512) inz(*blanks);
+       dcl-s yfkeys          char(18) dim(32);
+       dcl-s ynbrofkeys      like(int4_t);
+       dcl-s ymsgid          char(7);
+       dcl-s ymsgdta         char(512);
 
-       dcl-s ypgmcmd         char(10) inz(*blanks);
-       dcl-s ycmddta         like(pgmcmddt_t) inz(*blanks);
+       dcl-s ypgmcmd         char(10);
+       dcl-s ycmddta         like(pgmcmddt_t);
 
        dcl-s ychoice         char(75) dim(32);
-       dcl-s ynbrofch        like(int4_t) inz;
+       dcl-s ynbrofch        like(int4_t);
 
        dcl-s issflerror      char(1) inz(bfalse);
 
-       dcl-s sftop           like(int4_t) inz;
-       dcl-s sflpage         like(int4_t) inz;
-       dcl-s sflpagedds      like(sflpage   ) inz;
-       dcl-s sflrec          like(sflpage   ) inz;
-       dcl-s sflnbrrcd       like(sflpage   ) inz;
-       dcl-s sfbot           like(int4_t) inz;
+       dcl-s sftop           like(int4_t);
+       dcl-s sflpage         like(int4_t);
+       dcl-s sflpagedds      like(sflpage);
+       dcl-s sflrec          like(sflpage);
+       dcl-s sflnbrrcd       like(sflpage);
+       dcl-s sfbot           like(int4_t);
        dcl-c nbrfkeys const(2);
-       dcl-s sfl_cmd         char(10) inz(*blanks);
+       dcl-s sfl_cmd         char(10);
 
-       dcl-s peek21_name     like(pgmcalln_t) inz;
-       dcl-s peek23_name     like(pgmcalln_t) inz;
-       dcl-s peek27_name     like(pgmcalln_t) inz;
+       dcl-s peek21_name     like(pgmcalln_t);
+       dcl-s peek23_name     like(pgmcalln_t);
+       dcl-s peek27_name     like(pgmcalln_t);
 
        dcl-s iseof           like(bool_t) inz(bfalse);
-       dcl-s key             like(key_t) inz;
-       dcl-s data            like(set0000_t) inz;
+       dcl-s key             like(key_t);
+       dcl-s data            like(set0000_t);
 
-       dcl-s wrk_msgid       like(msgid_t) inz;
-       dcl-s wrk_msgtxt      like(msgdta_t) inz;
+       dcl-s wrk_msgid       like(msgid_t);
+       dcl-s wrk_msgtxt      like(msgdta_t);
 
        dcl-ds usrkey qualified inz;
          section         like(section_t);
@@ -580,7 +580,7 @@
 
        begsr pbfill;
 
-          wrk_msgid = f_mapCmdToMsg(data);
+          wrk_msgid = f_mapcmdtomsg(data);
           if wrk_msgid <> '';
              wrk_msgid  = 'KEY' + wrk_msgid;
              wrk_msgtxt = f_msgtext(wrk_msgid: ' ');
@@ -704,7 +704,7 @@
        //============================================================*
 
        dcl-proc errorhandler;
-       dcl-pi *N;
+       dcl-pi *n;
          i_condtoken     value likeds(cee_fc_t);
          i_pcommarea     int(10) value;
          o_action        int(10);

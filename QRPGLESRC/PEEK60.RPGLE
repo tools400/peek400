@@ -1,98 +1,87 @@
-      *===============================================================*
-      *                                                               *
-      *  (c) Thomas Raddatz                                           *
-      *                                                               *
-      *  Bereich  : PEEK, Version 2.3.2                               *
-      *  Programm : PEEK60                                            *
-      *  Typ      : RPG                                               *
-      *                                                               *
-      *  erstellt : 08.03.2006  Thomas Raddatz                        *
-      *                                                               *
-      *===============================================================*
-      *                                                               *
-      *  Kurzdokumentation :                                          *
-      *                                                               *
-      *  Peek/400 - Ermitteln Aufwand für Pgm-Generieren              *
-      *                                                               *
-      * ============================================================= *
-      * >>PRE-COMPILER<<                                              *
-      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
-      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
-      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
-      *                           INSTALL(*NO);                       *
-      *   >>EXECUTE<<                                                 *
-      * >>END-PRE-COMPILER<<                                          *
-      *===============================================================*
+       //===============================================================*
+       //                                                               *
+       //  (c) Thomas Raddatz                                           *
+       //                                                               *
+       //  Bereich  : PEEK, Version 2.3.2                               *
+       //  Programm : PEEK60                                            *
+       //  Typ      : RPG                                               *
+       //                                                               *
+       //  erstellt : 08.03.2006  Thomas Raddatz                        *
+       //                                                               *
+       //===============================================================*
+       //                                                               *
+       //  Kurzdokumentation :                                          *
+       //                                                               *
+       //  Peek/400 - Ermitteln Aufwand für Pgm-Generieren              *
+       //                                                               *
+       // ============================================================= *
+       // >>PRE-COMPILER<<                                              *
+       //   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+       //                           OBJLIB(&LI) DEVLIB(&LI) +           *
+       //                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+       //                           INSTALL(*NO);                       *
+       //   >>EXECUTE<<                                                 *
+       // >>END-PRE-COMPILER<<                                          *
+       //===============================================================*
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
-      *
-      *---Variablendefinition------------------------------*
+
       /COPY QCOPYLE,D_VARDEF
-      *----------------------------------------------------*
-      *
+      /COPY QCOPYLE,CEECNDHDLR
+
       /define internal_prototype
       /COPY QCOPYLE,PPEEK60
       /undefine internal_prototype
-      *
-     D cNumPasses_PEEK08...
-     D                 C                   const(4)
-      *
-     D cNumPasses_PEEK15...
-     D                 C                   const(2)
-      *
-     D cNumPasses_PEEK16...
-     D                 C                   const(7)
-      *
-      /COPY QCOPYLE,CEECNDHDLR
-      *
-      ********************************************************************
-      *                 S T E U E R  -  R O U T I N E                    *
-      ********************************************************************
-      *
-     D PEEK60          PI
-     D  i_alwLC                            const like(bool_t)
-     D  o_numPasses                              like(int4_t)
-      *
-      *---------------------------------------------------*
-      *
-      *  Register error handler
-     C                   callp     CEEHDLR(%paddr('errorHandler')
-     C                                     : *null: *omit)
-      *
-      *  Steuerung: Generieren Display File und RPG Programm
-     C                   Eval      o_numPasses = cNumPasses_PEEK08
-      *
-      *  1. Aufruf PEEK15 (generieren Display File)
-     C                   Eval      o_numPasses = o_numPasses + cNumPasses_PEEK15
-      *
-      *  2. Aufruf PEEK15 (generieren Display File, lower cases)
-     C                   If        (i_alwLC = bTrue)
-     C                   Eval      o_numPasses = o_numPasses + cNumPasses_PEEK15
-     C                   Endif
-      *
-      *  3. Aufruf PEEK16 (generieren RPG Programm)
-     C                   Eval      o_numPasses = o_numPasses + cNumPasses_PEEK16
-      *
-      *  Programm verlassen
-     C     ende          Tag
-      *
-     C                   Return
-      *
-      *============================================================*
-      *  Program error handler                                     *
-      *============================================================*
-      *
-     P errorHandler    b                   
-     D                 pi
-     D i_condToken                         value likeds(cee_fc_t)
-     D i_pCommArea                   10i 0 value
-     D o_action                      10i 0
-     D o_newCondToken                            likeds(cee_fc_t)
-      /free
 
-         dump;
-         o_action = CEE_PERCOLATE;
+       dcl-c cnumpasses_peek08 4;
+       dcl-c cnumpasses_peek15 2;
+       dcl-c cnumpasses_peek16 7;
 
-      /end-free
-     P                 e
-      *
+       //*******************************************************************
+       //                 S T E U E R  -  R O U T I N E                    *
+       //*******************************************************************
+
+       dcl-pi peek60;
+         i_alwlc         const like(bool_t);
+         o_numpasses     like(int4_t);
+       end-pi;
+
+       //---------------------------------------------------*
+
+       //  Register error handler
+       ceehdlr(%paddr('errorHandler')
+              : *null: *omit);
+
+       //  Steuerung: Generieren Display File und RPG Programm
+       o_numpasses = cnumpasses_peek08;
+
+       //  1. Aufruf PEEK15 (generieren Display File)
+       o_numpasses = o_numpasses + cnumpasses_peek15;
+
+       //  2. Aufruf PEEK15 (generieren Display File, lower cases)
+       if (i_alwlc = btrue);
+          o_numpasses = o_numpasses + cnumpasses_peek15;
+       endif;
+
+       //  3. Aufruf PEEK16 (generieren RPG Programm)
+       o_numpasses = o_numpasses + cnumpasses_peek16;
+
+       return;
+
+       //============================================================*
+       //  Program error handler                                     *
+       //============================================================*
+
+       dcl-proc errorhandler;
+       dcl-pi *N;
+         i_condtoken     value likeds(cee_fc_t);
+         i_pcommarea     int(10) value;
+         o_action        int(10);
+         o_newcondtoken  likeds(cee_fc_t);
+       end-pi;
+
+       dump;
+       o_action = cee_percolate;
+
+       end-proc;
+

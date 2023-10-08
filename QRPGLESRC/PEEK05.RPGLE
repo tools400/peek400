@@ -7061,7 +7061,7 @@
           yLibrary = ##library;
           peek13(yQFile: ##member: mbrd0200);
 
-          if mbrd0200.m2bytavail > 0;
+          if (mbrd0200.m2bytAvl > 0);
              if mbrd0200.m2nbrrcdon <= 2147483647;
                 $$records = mbrd0200.m2nbrrcdon;
                 *in79 = *on;
@@ -7108,7 +7108,7 @@
           yFile = ##file;
           yLibrary = ##library;
           peek13(yQFile: ##member: mbrd0200);
-          if (mbrd0200.m2bytavail <> 0);
+          if (mbrd0200.m2bytAvl <> 0);
              ##member = mbrd0200.m2member;
              isError = bFalse;
           else;

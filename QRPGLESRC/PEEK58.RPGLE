@@ -1,3799 +1,3527 @@
-      *===============================================================*
-      *                                                               *
-      *  (c) Thomas Raddatz                                           *
-      *                                                               *
-      *  Bereich  : PEEK, Version 2.2.0                               *
-      *  Programm : PEEK058                                           *
-      *  Typ      : RPGLE                                             *
-      *                                                               *
-      *  erstellt : 21.07.99  Raddatz                                 *
-      *  geändert :                                                   *
-      *                                                               *
-      *===============================================================*
-      *                                                               *
-      *  Kurzdokumentation :                                          *
-      *                                                               *
-      *  Peek/400 - Allgemeine Routinen                               *
-      *                                                               *
-      *===============================================================*
-      * >>PRE-COMPILER<<                                              *
-      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
-      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
-      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
-      *                           INSTALL(*NO);                       *
-      *   >>EXECUTE<<                                                 *
-      * >>END-PRE-COMPILER<<                                          *
-      *===============================================================*
-     H NOMAIN
+       //===============================================================*
+       //                                                               *
+       //  (c) Thomas Raddatz                                           *
+       //                                                               *
+       //  Bereich  : PEEK, Version 2.2.0                               *
+       //  Programm : PEEK058                                           *
+       //  Typ      : RPGLE                                             *
+       //                                                               *
+       //  erstellt : 21.07.99  Raddatz                                 *
+       //  geändert :                                                   *
+       //                                                               *
+       //===============================================================*
+       //                                                               *
+       //  Kurzdokumentation :                                          *
+       //                                                               *
+       //  Peek/400 - Allgemeine Routinen                               *
+       //                                                               *
+       //===============================================================*
+       // >>PRE-COMPILER<<                                              *
+       //   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+       //                           OBJLIB(&LI) DEVLIB(&LI) +           *
+       //                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+       //                           INSTALL(*NO);                       *
+       //   >>EXECUTE<<                                                 *
+       // >>END-PRE-COMPILER<<                                          *
+       //===============================================================*
+       ctl-opt nomain;
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
-      *
-      *---Variablendefinition------------------------------*
+
       /COPY QCOPYLE,D_VARDEF
       /COPY QCOPYLE,FILD0100
       /COPY QCOPYLE,FLDL0100
       /COPY QCOPYLE,MBRD0100
+      /COPY QCOPYLE,MBRD0300
       /COPY QCOPYLE,BSPF0100
       /COPY QCOPYLE,OBJD0100
       /COPY QCOPYLE,D_CLib
-      /COPY QCOPYLE,F_PEEK53
-      *----------------------------------------------------*
-
-      *---INFOSTRUKTUR FÜR AID-BYTE -----------------------*
       /COPY QCOPYLE,DS_WORKSTN
-      *----------------------------------------------------*
-      *
-      *---Eigener Prototyp---------------------------------*
-      /COPY QCOPYLE,F_PEEK58
-      *----------------------------------------------------*
-      *
-      *---Externe Prototypen-------------------------------*
       /COPY QCOPYLE,D_MI
-      *
       /COPY QCOPYLE,QDBRTVFD
       /COPY QCOPYLE,QUSRJOBI
-      *----------------------------------------------------*
-      *
-      /COPY QCOPYLE,PPEEK41
-      *
-     D PEEK41_NAME     S                   like(pgmCallN_t)
-      *
-      *  Performs word wrapping on a given string without respect to
-      *  end-of-paragraph markers.
-     D lf_wordWrap...
-     D                 PR          4096A          varying
-     D  i_string                   4096A   const  varying
-     D  i_width                      10U 0 const
-     D  io_startPos                  10U 0
-      *
-      *  Tests for one or more bits.
-     D f_isBitOn...
-     D                 PR              N
-     D  i_testBit                    10U 0 value
-     D  i_value                      10U 0 value
-      *
-      *---SDS-Datenstruktur--------------------------------*
+      /COPY QCOPYLE,QUSROBJD
+      /COPY QCOPYLE,QUSRMBRD
+      /COPY QCOPYLE,QCAPCMD
+      /COPY QCOPYLE,QSYRUSRI
+      /COPY QCOPYLE,QMHRMVPM
+      /COPY QCOPYLE,QMHSNDPM
+      /COPY QCOPYLE,QMHRTVM
+      /COPY QCOPYLE,QMHMOVPM
+      /COPY QCOPYLE,QLGCNVCS
       /COPY QCOPYLE,ERR_D_SDS
-      *----------------------------------------------------*
-      *
-     D g_prdLib        S                   like(lib_t)
-     D                                     inz
-      *
-     D g_jobCcsid      S             10U 0 inz(0)
-      *
-      *===================================================================*
-      *  Funktion:  f_dsplyLn                                  (Body)     *
-      *===================================================================*
-      *
-     P f_dsplyLn       B                   Export
-     D                 PI                         like(int4_t)
-     D  i_FLDL0100                         const  likeds(fldl0100_t)
-      *
-      *  Funktionswert
-     D fldLen          S                   like(int4_t)
-      * ------------------------------------------------------------------------
-      *
-     C                   If        (i_FLDL0100.F1DTYP = 'G' and
-     C                              i_FLDL0100.F1NDBC > 0)
-     C                   Return    i_FLDL0100.F1NDBC
-     C                   Endif
-      *
-     C                   Eval      fldLen = i_FLDL0100.F1FLEN
-      *
-     C                   If        i_FLDL0100.F1VFMI = '1'
-      *  Variable Feldlänge ...
-     C                   Eval      fldLen = fldLen - 2
-     C                   Endif
-      *
-     C                   Return    fldLen
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Funktion:  f_buffLn                                   (Body)     *
-      *===================================================================*
-      *
-     P f_buffLn        B                   Export
-     D                 PI                         like(int4_t)
-     D  i_FLDL0100                         const  likeds(fldl0100_t)
-     D  i_withLen                          const  like(bool_t)
-     D                                            options(*nopass)
-      *
-      *  Parameterpositionen optionaler Parameter
-     D p_withLen       C                   const(2)
-      *
-      *  Funktionswert
-     D fldLen          S                   like(int4_t)
-     D                                     inz
-      *
-      *  Arbeitsfelder
-     D withLen         S                   like(i_withLen)
-     D                                     inz
-      * ------------------------------------------------------------------------
-      *
-     C                   If        %parms >= p_withLen
-     C                   Eval      withLen  = i_withLen
-     C                   Else
-     C                   Eval      withLen  = bFalse
-     C                   Endif
-      *
-     C                   If        i_FLDL0100.F1VFMI = '1'
-      *  Variable Feldlänge ...
-     C                   If        withLen = bTrue
-      *  ... incl. Längenbyte
-     C                   Eval      fldLen = i_FLDL0100.F1FLEN
-     C                   Else
-      *  ... ohne Längenbyte
-     C                   Eval      fldLen = i_FLDL0100.F1FLEN - 2
-     C                   Endif
-     C                   Else
-      *  Felder fester Länge
-     C                   Eval      fldLen = i_FLDL0100.F1FLEN
-     C                   Endif
-      *
-     C                   Return    fldLen
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Funktion:  f_curFldLn                                 (Body)     *
-      *===================================================================*
-      *
-     P f_curFldLn      B                   Export
-     D                 PI                         like(int4_t)
-     D  i_buffer                           const  like(rcdbuf_t)
-     D  i_FLDL0100                         const  likeds(fldl0100_t)
-      *
-      *  Funktionswert
-     D curFldLn        S                   like(int4_t)
-     D                                     inz
-      * ------------------------------------------------------------------------
-      *
-     C                   If        i_FLDL0100.F1VFMI = '1'
-     C                   Eval      curFldLn = f_binToDec(i_buffer
-     C                                                   : i_FLDL0100.F1IBUF
-     C                                                   : 2)
-     C                   Else
-     C                   if        (i_FLDL0100.F1NDBC > 0)
-     C                   eval      curFldLn = i_FLDL0100.F1NDBC
-     C                   else
-     C                   Eval      curFldLn = i_FLDL0100.F1FLEN
-     C                   endif
-     C                   Endif
-      *
-     C                   Return    curFldLn
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Funktion:  f_rtvFld                                   (Body)     *
-      *===================================================================*
-      *
-     P f_rtvFld        B                   Export
-     D                 PI                  opdesc like(int4_t)
-     D  o_buffer                                  like(rcdbuf_t)
-     D                                            options(*varsize)
-     D  i_buffer                           const  like(rcdbuf_t)
-     D  i_FLDL0100                         const  likeds(fldl0100_t)
-     D  i_withLen                          const  like(bool_t)
-     D                                            options(*nopass)
-      *
-      *  Parameterpositionen optionaler Parameter
-     D p_withLen       C                   const(4)
-      *
-      *  Funktionswert
-     D rtnLen          S                   like(int4_t)
-     D                                     inz
-      *
-      * Parameters passed to CEEDOD
-     D DescType        S             10I 0
-     D DataType        S             10I 0
-     D DescInfo1       S             10I 0
-     D DescInfo2       S             10I 0
-     D parmLen         S             10I 0
-      *
-      *  Arbeitsfelder
-     D withLen         S                   like(i_withLen)
-     D                                     inz
-      * ------------------------------------------------------------------------
-      *
-     C                   CALLP     CEEDOD(1         : DescType : DataType :
-     C                                    DescInfo1 : DescInfo2: parmLen  :
-     C                                    *OMIT)
-      *
-     C                   If        %parms >= p_withLen
-     C                   Eval      withLen  = i_withLen
-     C                   Else
-     C                   Eval      withLen  = bFalse
-     C                   Endif
-      *
-     C                   Eval      rtnLen = f_buffLn(i_FLDL0100: withLen)
-     C                   If        rtnLen > parmLen
-     C                   Eval      rtnLen = parmLen
-     C                   Endif
-      *
-     C                   If        i_FLDL0100.F1VFMI = '1'
-     C                   If        withLen = bFalse
-     C                   Eval      %subst(o_buffer: 1: parmLen) =
-     C                             %subst(i_buffer: i_FLDL0100.F1IBUF+2: rtnLen)
-     C                   Else
-     C                   Eval      %subst(o_buffer: 1: parmLen) =
-     C                             %subst(i_buffer: i_FLDL0100.F1IBUF  : rtnLen)
-     C                   Endif
-     C                   Else
-     C                   Eval      %subst(o_buffer: 1: parmLen) =
-     C                             %subst(i_buffer: i_FLDL0100.F1IBUF  : rtnLen)
-     C                   Endif
-      *
-     C                   Return    rtnLen
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Prozedur:  p_fldToBuf                                 (Body)     *
-      *===================================================================*
-      *
-     P p_fldToBuf      B                   Export
-     D                 PI
-     D  io_buffer                                 like(rcdbuf_t)
-     D  i_fieldDta                                like(rcdbuf_t)
-     D  i_FLDL0100                         const  likeds(fldl0100_t)
-     D  i_withLen                          const  like(bool_t)
-     D                                            options(*nopass)
-      *
-      *  Parameterpositionen optionaler Parameter
-     D p_withLen       C                   const(4)
-      *
-      *  Arbeitsfelder
-     D  withLen        S                   like(i_withLen)
-     D                                     inz
-      *
-     D fieldDta        S                   like(rcdBuf_t)
-     D                                     based(pFieldDta)
-     D fieldDtaUcs2    S                   like(rcdBufUcs2_t)
-     D                                     based(pFieldDta)
-      *
-     D                 DS
-     D  buffLn                             like(int2_t)
-     D  buffLnA                       2A   overlay(buffLn:  1)
-      * ------------------------------------------------------------------------
-     C                   Eval      pFieldDta = %addr(i_fieldDta)
-      *
-     C                   If        %parms >= p_withLen
-     C                   Eval      withLen = i_withLen
-     C                   Else
-     C                   Eval      withLen = bFalse
-     C                   Endif
-      *
-     C                   If        i_FLDL0100.F1VFMI = '1'
-      *  Felder variabler Länge ...
-     C                   If        withLen = bFalse
-      *  ... ohne Längenangabe
-      *      (einfügen Längenangabe)
-     C
-     C                   If        (i_FLDL0100.F1DTYP = 'G')
-     C                   Eval      buffLn = %len(%trimr(
-     C                                           %subst(fieldDtaUcs2
-     C                                                  : 1
-     C                                                  : f_dsplyLn(i_FLDL0100))
-     C                                                  )) * 2
-     C                   Else
-     C                   Eval      buffLn = %len(%trimr(
-     C                                           fieldDta))
-     C                   Endif
-      *
-     C                   Eval      %subst(io_buffer  :
-     C                                    i_FLDL0100.F1IBuf+2 :
-     C                                    f_buffLn(i_FLDL0100: withLen))
-     C                                       = i_fieldDta
-      *
-     C                   If        (i_FLDL0100.F1DTYP = 'G' and
-     C                              i_FLDL0100.F1NDBC > 0)
-     C                   Eval      buffLn = buffLn / 2
-     C                   Endif
-      *
-     C                   Eval      %subst(io_buffer  :
-     C                                    i_FLDL0100.F1IBuf   :
-     C                                    2          )
-     C                                       = buffLnA
-     C                   Else
-      *  ... incl. Längenangabe
-     C                   Eval      %subst(io_buffer  :
-     C                                    i_FLDL0100.F1IBuf   :
-     C                                    f_buffLn(i_FLDL0100: withLen))
-     C                                       = i_fieldDta
-     C                   Endif
-     C                   Else
-      *  Felder fester Länge ...
-     C                   Eval      %subst(io_buffer  :
-     C                                    i_FLDL0100.F1IBuf   :
-     C                                    f_buffLn(i_FLDL0100))
-     C                                       = i_fieldDta
-     C                   Endif
-      *
-     C                   Return
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Funktion:  f_isVarLen                                 (Body)     *
-      *===================================================================*
-      *
-     P f_isVarLen      B                   Export
-     D                 PI                         like(bool_t)
-     D  i_FLDL0100                         const  likeds(fldl0100_t)
-      * ------------------------------------------------------------------------
-      *
-     C                   If        i_FLDL0100.F1VFMI = '1'
-     C                   Return    bTrue
-     C                   Else
-     C                   Return    bFalse
-     C                   Endif
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Funktion:  f_binToDec                                 (Body)     *
-      *===================================================================*
-      *
-     P f_binToDec      B                   Export
-     D                 PI                  opdesc like(int4_t)
-     D  i_string                  32767A   const options(*varsize)
-     D  i_startPos                         const  like(int4_t)
-     D  i_length                           const  like(int4_t)
-      *
-      * Funktionswert
-     D                 DS
-     D intValue                            like(int4_t) inz
-     D alpha2                         2A   overlay(intValue: 3)
-     D alpha4                         2A   overlay(intValue: 1)
-      *
-      * Parameters passed to CEEDOD
-     D DescType        S             10I 0
-     D DataType        S             10I 0
-     D DescInfo1       S             10I 0
-     D DescInfo2       S             10I 0
-     D parmLen         S             10I 0
-      * ------------------------------------------------------------------------
-      *
-     C                   CALLP     CEEDOD(1         : DescType : DataType :
-     C                                    DescInfo1 : DescInfo2: parmLen  :
-     C                                    *OMIT)
-      *
-     C                   If        (i_startpos + i_length - 1) > parmLen
-     C                   Callp     p_kill('Start position and length outside +
-     C                                    range.')
-     C                   Else
-     C                   Select
-     C                   When      i_length = 2
-     C                   Eval      alpha2 = %subst(i_string   :
-     C                                             i_startPos :
-     C                                             i_length   )
-     C                   When      i_length = 4
-     C                   Eval      alpha4 = %subst(i_string   :
-     C                                             i_startPos :
-     C                                             i_length   )
-     C                   Other
-     C                   Callp     p_kill('Incorrect length: ' +
-     C                                    %char(i_length))
-     C                   Endsl
-     C                   Endif
-      *
-     C                   Return    intValue
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Funktion:  f_len                                      (Body)     *
-      *===================================================================*
-      *
-     P f_len           B                   Export
-     D                 PI                  opdesc like(int4_t)
-     D  i_string                  32767A   const options(*varsize)
-      *
-      * Parameters passed to CEEDOD
-     D DescType        S             10I 0
-     D DataType        S             10I 0
-     D DescInfo1       S             10I 0
-     D DescInfo2       S             10I 0
-     D parmLen         S             10I 0
-      * ------------------------------------------------------------------------
-      *
-     C                   CALLP     CEEDOD(1         : DescType : DataType :
-     C                                    DescInfo1 : DescInfo2: parmLen  :
-     C                                    *OMIT)
-      *
-     C                   Return    parmLen
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Funktion:  f_scan                                     (Body)     *
-      *===================================================================*
-      *
-     P f_scan          B                   Export
-     D                 PI                  opdesc like(int4_t)
-     D  SrchArg                     100A   CONST  OPTIONS(*VARSIZE)
-     D  String                      100A   CONST
-      *
-     D LenArg          S                   like(int4_t) inz
-     D PosFound        S                   like(int4_t) inz
-      *
-      * Parameters passed to CEEDOD
-     D DescType        S                   like(int4_t) inz
-     D DataType        S                   like(int4_t) inz
-     D DescInfo1       S                   like(int4_t) inz
-     D DescInfo2       S                   like(int4_t) inz
-     D pLen            S                   like(int4_t) inz
-      *------------------------------------------------------------*
-      *
-     C                   CALLP     CEEDOD(1         : DescType : DataType :
-     C                                    DescInfo1 : DescInfo2: pLen     :
-     C                                    *OMIT)
-      *
-     C     SrchArg:pLen  Scan      String:1      PosFound
-      *
-     C                   Return    PosFound
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Funktion:  f_vldNme                                   (Body)     *
-      *===================================================================*
-      *
-     P f_vldName       B                   Export
-     D                 PI                         like(bool_t)
-     D  i_name                       10A   const
-     D  o_msgID                                   like(msgID_t)
-     D  o_msgDta                                  like(msgDta_t)
-      *
-      *  Funktionswert
-     D isValid         S                   like(bool_t)
-     D                                     inz(bFalse)
-      *
-      *  Arbeitsfelder
-     D idx             S                   like(int4_t)
-     D                                     inz
-     D chr             S              1A
-     D                                     inz
-     D strString       S                   like(bool_t)
-     D                                     inz(bFalse)
-     D endString       S                   like(bool_t)
-     D                                     inz(bFalse)
-      *
-     D vld1Chr         C                   const('§$#-
-     D                                     ABCDEFGHIJKLMNOPQRSTUVWXYZ')
-     D vldChr          C                   const('§$#-
-     D                                     ABCDEFGHIJKLMNOPQRSTUVWXYZ-
-     D                                     _.1234567890')
-      *
-      /COPY QCOPYLE,USR8182
-      *-------------------------------------------------------------------*
-      *
-     C                   Eval      isValid   = bTrue
-     C                   Eval      strString = bFalse
-     C                   Eval      endString = bFalse
-      *
-     C     1             Do        10            idx
-      *
-     C                   Eval      chr = %subst(i_name: idx: 1)
-      *
-      *  Prüfen Start des Strings und 1. Zeichen ...
-     C                   If        (strString =  bFalse)  and
-     C                             (endString =  bFalse)  and
-     C                             (chr       <> ' '   )
-     C                   Eval      strString = bTrue
-     C     vld1Chr       Check     chr                                    01
-     C                   If        *IN01 = *ON
-     C                   Clear                   USR8182
-     C                   Eval      USR81821 = chr
-     C                   Eval      o_msgID  = 'USR8182'
-     C                   Eval      o_msgDta = USR8182
-     C                   Eval      isValid  = bFalse
-     C                   Leave
-     C                   Endif
-     C                   Iter
-     C                   Endif
-      *
-      *  Prüfen Ende des Strings ...
-     C                   If        (strString =  bTrue )  and
-     C                             (endString =  bFalse)  and
-     C                             (chr       =  ' '   )
-     C                   Eval      endString = bTrue
-     C                   Iter
-     C                   Endif
-      *
-      *  Prüfen Zeichen des Strings ...
-     C                   If        (strString =  bTrue )  and
-     C                             (endString =  bFalse)
-     C     vldChr        Check     chr                                    01
-     C                   If        *IN01 = *ON
-     C                   Clear                   USR8182
-     C                   Eval      USR81821 = chr
-     C                   Eval      o_msgID  = 'USR8182'
-     C                   Eval      o_msgDta = USR8182
-     C                   Eval      isValid  = bFalse
-     C                   Leave
-     C                   Endif
-     C                   Endif
-      *
-      *  Prüfen Zeichen hinter dem Ende des Strings ...
-     C                   If        (strString =  bTrue )  and
-     C                             (endString =  bTrue )
-     C                   If        chr <> ' '
-     C                   Clear                   USR8182
-     C                   Eval      USR81821 = chr
-     C                   Eval      o_msgID  = 'USR8182'
-     C                   Eval      o_msgDta = USR8182
-     C                   Eval      isValid  = bFalse
-     C                   Leave
-     C                   Endif
-     C                   Endif
-      *
-     C                   Enddo
-      *
-     C                   If        (strString =  bFalse)
-     C                   Clear                   USR8182
-     C                   Eval      USR81821 = chr
-     C                   Eval      o_msgID  = 'USR8182'
-     C                   Eval      o_msgDta = USR8182
-     C                   Eval      isValid  = bFalse
-     C                   Endif
-      *
-     C                   Return    isValid
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Funktion:  f_vldFloat                                 (Body)     *
-      *===================================================================*
-      *
-     P f_vldFloat      B                   Export
-     D                 PI                         like(bool_t)
-     D  i_buffer                     64A   const  varying
-      *
-      *  Arbeitsfelder
-     D i               S             10I 0 inz
-     D c               S              1A   inz
-     D dummy           S              8F   inz
-     D hasExponent     S                   like(bool_t) inz(bFalse)
-     D cDIGITS         C                   '0123456789'
-      *-------------------------------------------------------------------*
-      /FREE
 
-       monitor;
+      /COPY QCOPYLE,F_PEEK53
+      /COPY QCOPYLE,F_PEEK58
+      /COPY QCOPYLE,PPEEK41
 
-         if (%len(i_buffer) = 0);
-           return bFalse;
-         endif;
+       dcl-s peek41_name     like(pgmcalln_t);
 
-         i = %check(' ': i_buffer);
+       //  Performs word wrapping on a given string without respect to
+       //  end-of-paragraph markers.
+       dcl-pr lf_wordwrap varchar(4096);
+         i_string        varchar(4096) const;
+         i_width         uns(10) const;
+         io_startpos     uns(10);
+       end-pr;
 
-         // Prüfen auf führendes Vorzeichen
-         c = %subst(i_buffer: i: 1);
-         if (c = '+' or c = '-');   // Überspringen Vorzeichen
-           i = i + 1;
-         endif;
+       //  Tests for one or more bits.
+       dcl-pr isBitOn ind;
+         i_testbit       uns(10) value;
+         i_value         uns(10) value;
+       end-pr;
 
-         // Prüfen auf nummerische Ziffern vor dem Komma
-         dow (i <= %len(i_buffer));
-           c = %subst(i_buffer: i: 1);
-           if (c <> ' ');
-             if (c = ',' or c = '.');
-               i = i + 1;   // Überspringen Komma
-               leave;
-             endif;
-             if (%check(cDIGITS: c) <> 0);
-               return bFalse;
-             endif;
-           endif;
-           i = i + 1;
-         enddo;
+       dcl-s g_prdlib        like(lib_t) inz;
 
-         // Prüfen auf nummerische Ziffern hinter dem Komma
-         dow (i <= %len(i_buffer));
-           c = %subst(i_buffer: i: 1);
-           if (c <> ' ');
-             if (c = 'e' or c = 'E');
-               leave;
-             endif;
-             if (%check(cDIGITS: c) <> 0);
-               return bFalse;
-             endif;
-           endif;
-           i = i + 1;
-         enddo;
+       dcl-s g_jobccsid      uns(10) inz(0);
 
-         if (c = 'e' or c = 'E');
-           // Prüfen auf Vorzeichen des Exponenten
-           i = i + 1;
-           if (i > %len(i_buffer));
-             return bFalse;
-           endif;
-           c = %subst(i_buffer: i: 1);
-           if (c <> '+' and c <> '-' and c <> ' ');
-             return bFalse;
-           endif;
+       dcl-s do_x1           packed(7);
 
-           i = i + 1;
-           hasExponent = bFalse;
+       //===================================================================*
+       //  Funktion:  f_dsplyLn                                  (Body)     *
+       //===================================================================*
 
-           // Prüfen auf nummerische Ziffern des Exponenten
-           dow (i <= %len(i_buffer));
-             c = %subst(i_buffer: i: 1);
-             if (c <> ' ');
-               if (%check(cDIGITS: c) <> 0);
-                 return bFalse;
-               endif;
-               hasExponent = bTrue;
-             endif;
-             i = i + 1;
-           enddo;
+       dcl-proc f_dsplyln export;
+       dcl-pi *N        like(int4_t);
+         i_fldl0100      const  likeds(fldl0100_t);
+       end-pi;
 
-           if (hasExponent <> bTrue);
-             return bFalse;
-           endif;
-         endif;
+       //  Funktionswert
+       dcl-s fldlen          like(int4_t);
+       // ------------------------------------------------------------------------
 
-         dummy = %float(i_buffer);
-
-         return bTrue;
-       on-error;
-         p_rmvPgmMg('*');
-         return bFalse;
-       endmon;
-
-      /END-FREE
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Funktion:  f_execute                                  (Body)     *
-      *===================================================================*
-      *
-     P f_execute       B                   Export
-     D                 PI                  opdesc like(bool_t)
-     D  i_cmd                     32702A   const
-     D                                     options(*VARSIZE)
-     D  o_msgID                                   like(msgID_t)
-     D  o_msgDta                                  like(msgDta_t)
-      *
-      *  Definieren Funktionswert
-     D isOK            S                          like(bool_t)
-     D                                            inz(bFalse)
-      *
-      *  Definieren Parameter für p_getOpDesc
-     D posNr           S             10I 0 INZ
-     D descType        S             10I 0 INZ
-     D datatype        S             10I 0 INZ
-     D descInf1        S             10I 0 INZ
-     D descInf2        S             10I 0 INZ
-     D dataLen         S             10I 0 INZ
-     D feedBack        S             12A   INZ
-      *
-      *  Definitionen für QCAPCMD
-     D cmdLen          S             10I 0 INZ
-     D optCtrl         DS
-     D  typ_CmdPrc             1      4I 0 INZ(0)                               like QCMDEXC
-     D  DBCS_Data              5      5A   INZ('0')                             ignore DBCS
-     D  prmt_Act               6      6A   INZ('0')                             never prompt
-     D  cmdStrSntx             7      7A   INZ('0')                             AS/400 Syntax
-     D  msgRtvKey              8     11A   INZ(*BLANKS)                         no retrieve ke
-     D  res_01                12     20A   INZ(*ALLx'00')
-     D optCtrlLen      S             10I 0 INZ
-     D optCtrlFmt      S              8A   INZ('CPOP0100')
-     D cmd             S                   LIKE(i_cmd)
-     D                                     INZ
-     D lenAvl          S             10I 0 INZ
-     D lenAvlRtn       S             10I 0 INZ
-     D errCode         DS                  LIKEDS(errCode_t ) inz
-      *-------------------------------------------------------------------
-      *
-     C                   Reset                   errCode
-     C                   Eval      errCode.bytPrv = %size(errCode)
-      *
-     C                   Callp     CEEDOD(1: descType: dataType:
-     C                                       descInf1: descInf2:
-     C                                       dataLen:  feedBack)
-      *
-     C                   Eval      cmd        = %subst(i_cmd: 1: dataLen)
-     C                   Eval      cmdLen     = %len(cmd)
-     C                   Eval      lenAvl     = %len(cmd)
-      *
-     C                   Eval      optCtrlLen = %len(OptCtrl)
-     C                   Reset                   errCode
-     C                   Eval      errCode.bytPrv = %size(errCode)
-      *
-     C                   CALL      'QCAPCMD'
-     C                   PARM                    cmd
-     C                   PARM                    cmdLen
-     C                   PARM                    optCtrl
-     C                   PARM                    optCtrlLen
-     C                   PARM                    optCtrlFmt
-     C                   PARM                    cmd
-     C                   PARM                    lenAvl
-     C                   PARM                    lenAvlRtn
-     C                   PARM                    errCode
-      *
-     C                   If        errCode.bytAvl <> 0
-     C                   Eval      o_msgID  = errCode.excID
-     C                   Eval      o_msgDta = errCode.excDta
-     C                   Eval      isOK     = bFalse
-     C                   Else
-     C                   Eval      o_msgID  = ' '
-     C                   Eval      o_msgDta = ' '
-     C                   Eval      isOK     = bTrue
-     C                   Endif
-      *
-     C                   Return    isOK
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Funktion:  f_basedPF                                  (Body)     *
-      *===================================================================*
-      *
-     P f_basedPF       B                   Export
-     D                 PI                         like(bool_t)
-     D  i_file                             value  like(file_t)
-     D  i_lib                              value  like(lib_t)
-     D  i_mbr                              value  like(mbr_t)
-     D  i_rcdFmt                           value  like(rcdFmt_t)
-     D  i_rcdMbrNbr                        value  like(mbrNbr_t)
-     D  o_pFile                                   like(file_t)
-     D  o_pLib                                    like(lib_t)
-     D  o_pMbr                                    like(mbr_t)
-     D  o_pRcdFmt                                 like(rcdFmt_t)
-      *
-      *  Definieren Funktionswert ...
-     D isBasedOnPF     S                   like(bool_t) inz(bFalse)
-      *
-     D tFile           S                   like(i_file)
-     D tLib            S                   like(i_lib)
-     D tMbr            S                   like(i_mbr)
-     D tRcdFmt         S                   like(i_rcdFmt)
-     D FILD0100        DS                  likeds(FILD0100_t) inz
-      *
-     D yQFile          DS                  likeds(qObj_t) inz
-     D yNbrOfEnt       s                   like(int4_t)
-     D yData           s            512A
-      *------------------------------------------------------------*
-      *
-     C                   Eval      PEEK41_NAME = f_pgmCallN('PEEK41')
-      *
-     C                   Eval      o_pFile  = '*ERROR'
-     C                   Eval      o_pLib   = '*ERROR'
-     C                   Eval      o_pMbr   = '*ERROR'
-     C                   Eval      o_pRcdFmt = '*ERROR'
-      *
-      *  Einlesen der Dateiinformationen ...
-     C                   Eval      yQFile.name = i_file
-     C                   Eval      yQFile.lib = i_lib
-     C                   Callp     PEEK41(yQFile: i_rcdFmt
-     C                                    : '*CREATE': yNbrOfEnt: YData)
-      *
-     C                   If        yNbrOfEnt = 0
-     C                   Return    bFalse
-     C                   Endif
-      *
-      *      prüfen auf logische Datei
-     C                   Eval      FILD0100 = yData
-      *
-     C                   If        FILD0100.ATFILA = '*LGL'
-      *      ... logical file
-     C                   Select
-     C                   When      FILD0100.ATNOMB > 1
-      *          ... multi-based-member logical file
-     C                   If        f_basedMbr(i_file: i_lib: i_mbr
-     C                                        : i_rcdMbrNbr: i_rcdFmt
-     C                                        : tFile: tLib: tMbr: tRcdFmt
-     C                                        ) = bFalse
-     C                   Return    bFalse
-     C                   Endif
-      *
-     C                   When      FILD0100.ATNOFM > 1
-      *          ... multi-format logical file
-     C                   If        f_basedMbr(i_file: i_lib: i_mbr
-     C                                        : i_rcdMbrNbr: i_rcdFmt
-     C                                        : tFile: tLib: tMbr: tRcdFmt
-     C                                        ) = bFalse
-     C                   Return    bFalse
-     C                   Endif
-      *
-     C                   Other
-      *          ... single-format logical file
-     C                   If        f_basedMbr(i_file: i_lib: i_mbr
-     C                                        : i_rcdMbrNbr: i_rcdFmt
-     C                                        : tFile: tLib: tMbr: tRcdFmt
-     C                                        ) = bFalse
-     C                   Return    bFalse
-     C                   Endif
-     C                   Endsl
-      *
-      *
-     C                   Eval      isBasedOnPF = bTrue
-     C                   Eval      o_pFile   = tFile
-     C                   Eval      o_pLib    = tLib
-     C                   Eval      o_pMbr    = tMbr
-     C                   Eval      o_pRcdFmt = tRcdFmt
-      *
-     C                   Else
-      *      ... physical file
-     C                   If        f_basedMbr(i_file: i_lib: i_mbr
-     C                                        : i_rcdMbrNbr: i_rcdFmt
-     C                                        : tFile: tLib: tMbr: tRcdFmt
-     C                                        ) = bFalse
-     C                   Return    bFalse
-     C                   Endif
-      *
-     C                   Eval      isBasedOnPF = bFalse
-     C                   Eval      o_pFile   = tFile
-     C                   Eval      o_pLib    = tLib
-     C                   Eval      o_pMbr    = tMbr
-     C                   Eval      o_pRcdFmt = tRcdFmt
-     C                   Endif
-      *
-     C                   Return    isBasedOnPF
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Funktion:  f_basedMbr                                 (Body)     *
-      *===================================================================*
-      *
-     P f_basedMbr      B                   Export
-     D                 PI                         like(bool_t)
-     D  i_file                             value  like(file_t)
-     D  i_lib                              value  like(lib_t)
-     D  i_mbr                              value  like(mbr_t)
-     D  i_mbrNbr                           value  like(int4_t)
-     D  i_rcdFmt                           value  like(rcdFmt_t)
-     D  o_pFile                                   like(file_t)
-     D  o_pLib                                    like(lib_t)
-     D  o_pMbr                                    like(mbr_t)
-     D  o_rcdFmt                                  like(rcdFmt_t)
-      *
-      *  Definieren Funktionswert ...
-     D isMbrFound      S                   like(bool_t) inz(bFalse)
-      *
-      *  Retrieve Member Description (QUSRMBRD) API
-     D QUSRMBRD        PR                         extpgm('QUSRMBRD')
-     D  rcvVar                    32767A          options(*varsize)
-     D  lenRcvVar                    10I 0 const
-     D  formatName                    8A   const
-     D  qFileName                    20A   const
-     D  mbr                          10A   const
-     D  ovrPrc                        1A   const
-     D  errCode                   32767A          options(*varsize: *nopass)
-     D  fndMbrPrc                     1A   const  options(          *nopass)
-      *
-     D mbrNbr          S                   like(i_mbrNbr)
-      *
-     D alloc           PR              *          extproc('malloc')
-     D  memSize                      10U 0 value
-      *
-     D realloc         PR              *          extproc('realloc')
-     D  memPtr                         *   value
-     D  memSize                      10U 0 value
-      *
-     D dealloc         PR              *          extproc('free')
-     D  memPtr                         *   value
-      *
-      *  Arbeitsfelder
-     D errCode         DS                  likeds(errCode_t) inz
-      *
-     D BSPF0100        DS                  likeds(BSPF0100_t) inz
-      *
-     D pMBRD0300       S               *   inz static
-     D MBRD0300        DS                  based(pMBRD0300)
-     D  m3bytPrv               1      4I 0
-     D  m3bytAvl               5      8I 0
-     D  m3FileName             9     18A
-     D  m3LibName             19     28A
-     D  m3MbrName             29     38A
-     D  m3FileAttr            39     48A
-     D  m3NbrMbr             157    160I 0
-     D  m3joinMbr            267    267A
-     D  m3AccPathMaint...
-     D                       268    268A
-     D  m3SQLFileType        269    278A
-     D  m3NumCstIdx          333    334I 0
-     D  m3OffsCstIdx         335    338I 0
-     D  reserved_3           339    384A
-      *
-     D basedOnE        DS           112    based(pBasedOnE)
-     D  bsdOnFile              1     10A
-     D  bsdOnLib              11     20A
-     D  bsdOnMbr              21     30A
-     D  fmtName               31     40A
-     D  LFRcdFmtNbr           41     44I 0
-     D  NbrRcds               45     48I 0
-     D  NbrDltRcds            49     52I 0
-     D  AccPathSize           53     56I 0
-     D  AccPathSizeM          57     60I 0
-     D  AccPathShared         61     61A
-     D  AccPathValid          62     62A
-     D  AccPathHeld           63     63A
-     D  AccPathOwnrFile...
-     D                        64     73A
-     D  AccPathOwnrLib...
-     D                        74     83A
-     D  AccPathOwnrMbr...
-     D                        84     93A
-     D  AccPathJrn            94     94A
-     D  Reserved_1            95     96A
-     D  NbrRcdsU              97    100I 0
-     D  NbrDltRcdsU          101    104I 0
-     D  Reserved_2           105    112A
-      *
-     D offset          S             10I 0 inz
-     D fild0100        ds                  likeds(fild0100_t) inz
-      *
-     D qFile           DS                  likeds(qObj_t) inz
-     D yNbrOfEnt       s                   like(int4_t)
-     D yData           s            512A
-      *------------------------------------------------------------*
-      *
-     C                   Eval      PEEK41_NAME = f_pgmCallN('PEEK41')
-      *
-     C                   Eval      o_pFile = ' '
-     C                   Eval      o_pLib  = ' '
-     C                   Eval      o_pMbr  = ' '
-      *
-      *  Ermitteln Speicherbedarf
-     C                   Reset                   errCode
-     C                   Eval      errCode.bytPrv = %size(errCode)
-      *
-     C                   Eval      pMBRD0300 = alloc(%size(MBRD0300))
-     C                   Callp     QUSRMBRD(MBRD0300       :
-     C                                      %size(MBRD0300):
-     C                                      'MBRD0300'     :
-     C                                      i_file + i_lib :
-     C                                      i_mbr          :
-     C                                      '0'            :
-     C                                      errCode        )
-     C                   If        errCode.bytAvl <> 0
-     C                   Eval      isMbrFound = bFalse
-     C                   Return    isMbrFound
-     C                   Endif
-      *
-      *  Zuordnen Speicher
-     C                   Eval      pMBRD0300 = realloc(pMBRD0300: m3BytAvl)
-      *
-      *  Abrufen Beschreibung der Teildatei
-     C                   Callp     QUSRMBRD(MBRD0300       :
-     C                                      m3BytAvl       :
-     C                                      'MBRD0300'     :
-     C                                      i_file + i_lib :
-     C                                      i_mbr          :
-     C                                      '0'            :
-     C                                      errCode        )
-     C                   If        errCode.bytAvl <> 0
-     C                   Eval      isMbrFound = bFalse
-     C                   Return    isMbrFound
-     C                   Endif
-      *
-     C                   Select
-      *  Wenn es sich um eine Join Datei oder SQL VIEW handelt, ...
-     C                   When      m3JoinMbr = '1' or
-     C                             m3SQLFileType = 'VIEW'
-      *  ... dann
-      *      zurückgeben der Eingangsmemberdaten, wegen Join Datei
-     C                   Eval      o_pFile   = i_file
-     C                   Eval      o_pLib    = i_lib
-     C                   Eval      o_pMbr    = i_mbr
-     C                   Eval      o_rcdFmt  = i_rcdFmt
-     C                   Eval      isMbrFound = bTrue
-      *
-      *  Wenn es keine basierenden physischen Member gibt, ...
-     C                   When      m3NbrMbr = 0
-      *  ... dann
-      *      zurückgeben der Eingangsmemberdaten
-     C                   Eval      o_pFile   = i_file
-     C                   Eval      o_pLib    = i_lib
-     C                   Eval      o_pMbr    = i_mbr
-     C                   Eval      o_rcdFmt  = i_rcdFmt
-     C                   Eval      isMbrFound = bTrue
-     C                   Other
-      *  ... sonst
-      *      zurückgeben des basierenden physischen Members
-     C                   If        (i_mbrNbr > 0)
-     C                   Eval      mbrNbr = i_mbrNbr
-     C                   Else
-     C                   If        (m3NbrMbr = 1)
-     C                   Eval      mbrNbr = 1
-     C                   Else
-     C                   Eval      mbrNbr = -1
-     C                   Endif
-     C                   Endif
-      *
-     C                   If        (mbrNbr > 0)
-     C                   Eval      offset = %size(MBRD0300) +
-     C                               (mbrNbr - 1) * %size(basedOnE)
-     C                   Eval      pBasedOnE  = f_addPtr(pMBRD0300: offset)
-     C                   Eval      o_pFile    = bsdOnFile
-     C                   Eval      o_pLib     = bsdOnLib
-     C                   Eval      o_pMbr     = bsdOnMbr
-     C                   Eval      o_rcdFmt   = '*FIRST'
-     C                   Eval      isMbrFound = bTrue
-     C                   Else
-     C                   Eval      o_pFile    = '*ERROR'
-     C                   Eval      o_pLib     = '*ERROR'
-     C                   Eval      o_pMbr     = '*ERROR'
-     C                   Eval      o_rcdFmt   = '*ERROR'
-     C                   Eval      isMbrFound = bFalse
-     C                   Endif
-     C                   Endsl
-      *
-      *  Freigeben Speicher ...
-     C                   Callp     dealloc(pMBRD0300)
-      *
-     C                   If        (o_rcdFmt = '*FIRST')
-      *
-      *  Einlesen der Dateiinformationen ...
-     C                   Eval      qFile.name = o_pFile
-     C                   Eval      qFile.lib = o_pLib
-     C                   Callp     PEEK41(qFile: o_rcdFmt
-     C                                    : '*CREATE': yNbrOfEnt: YData)
-     C                   Eval      FILD0100 = yData
-      *
-     C                   Callp     PEEK41(qFile: o_rcdFmt
-     C                                    : '*BASED-ON': yNbrOfEnt: YData)
-     C                   Eval      BSPF0100 = YData
-      *
-     C                   If        (YNbrOfEnt = 1)
-     C                   Eval      o_rcdFmt = BSPF0100.BFRCDFMT
-     C                   Endif
-      *
-     C                   Endif
-      *
-     C                   Return    isMbrFound
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Funktion:  f_numBased                                 (Body)     *
-      *===================================================================*
-      *
-     P f_numBased      B                   Export
-     D                 PI                         like(int4_t)
-     D  i_file                             const  like(file_t)
-     D  i_lib                              const  like(lib_t)
-     D  i_mbr                              const  like(mbr_t)
-      *
-      *  Definieren Funktionswert ...
-     D f_numBased      S                   like(int4_t)
-     D                                     inz
-      *
-      *  Prototypen
-     D QUSRMBRD        PR                         extpgm('QUSRMBRD')
-     D  rcvVar                    32767A          options(*varsize)
-     D  lenRcvVar                    10I 0 const
-     D  formatName                    8A   const
-     D  qFileName                    20A   const
-     D  mbr                          10A   const
-     D  ovrPrc                        1A   const
-     D  errCode                   32767A          options(*varsize: *nopass)
-     D  fndMbrPrc                     1A   const  options(          *nopass)
-      *
-      *  Arbeitsfelder
-     D errCode         DS                  likeds(errCode_t ) inz
-      *
-     D MBRD0300        DS                  inz
-     D  m3bytPrv               1      4I 0
-     D  m3bytAvl               5      8I 0
-     D  m3FileAttr            39     48A
-     D  m3NbrMbr             157    160I 0
-      *------------------------------------------------------------*
-      *
-      *  Ermitteln Anzahl basierender Teildateien
-     C                   Reset                   errCode
-     C                   Eval      errCode.bytPrv = %size(errCode)
-      *
-     C                   Callp     QUSRMBRD(MBRD0300       :
-     C                                      %size(MBRD0300):
-     C                                      'MBRD0300'     :
-     C                                      i_file + i_lib :
-     C                                      i_mbr          :
-     C                                      '0'            :
-     C                                      errCode        )
-     C                   If        errCode.bytAvl <> 0
-     C                   Eval      f_numBased = -1
-     C                   Else
-     C                   If        m3FileAttr = 'PF'
-     C                   Eval      f_numBased = 1
-     C                   Else
-     C                   Eval      f_numBased = m3NbrMbr
-     C                   Endif
-     C                   Endif
-      *
-     C                   Return    f_numBased
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Prozedur:  p_setPrdLb                                 (Body)     *
-      *===================================================================*
-      *
-     P p_setPrdLb      B                   Export
-     D                 PI
-     D  i_lib                              const  like(lib_t)
-      *------------------------------------------------------------*
-      *
-     C                   Eval      g_prdLib = i_lib
-      *
-     C                   Return
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Funktion:  f_getPrdLb                                 (Body)     *
-      *===================================================================*
-      *
-     P f_getPrdLb      B                   Export
-     D                 PI                         like(lib_t)
-      *------------------------------------------------------------*
-      *
-     C                   Return    g_prdLib
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Funktion:  f_cmdLine                                  (Body)     *
-      *===================================================================*
-      *
-     P f_cmdLine       B                   Export
-     D                 PI                         like(bool_t)
-      *------------------------------------------------------------*
-      *
-      *  Definieren Funktionswert ...
-     D  f_cmdLine      S                   like(bool_t)
-     D                                     inz
-      *
-     D rcvVarLen       S                   like(INT4_t)
-     D format          S              8A
-     D usrPrf          S             10A
-     D errCode         DS                  likeds(errCode_t ) inz
-      *
-      /COPY QCOPYLE,USRI0200
-      *------------------------------------------------------------*
-      *
-     C                   Eval      rcvVarLen = §usri200
-     C                   Eval      format    = 'USRI0200'
-     C                   Eval      usrPrf    = §§user
-     C                   Clear                   usri0200
-      *
-     C                   Reset                   errCode
-     C                   Eval      errCode.bytPrv = %size(errCode)
-      *
-     C                   Call      'QSYRUSRI'
-     C                   Parm                    usri0200
-     C                   Parm                    rcvVarLen
-     C                   Parm                    format
-     C                   Parm                    usrPrf
-     C                   Parm                    errCode
-      *
-     C                   If        (errCode.bytAvl <> 0)  or
-     C                             (u2lmtCap  =  '*YES')
-     C                   Eval      f_cmdLine = bFalse
-     C                   Else
-     C                   Eval      f_cmdLine = bTrue
-     C                   Endif
-      *
-     C                   Return    f_cmdLine
-      *
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Prozedur:  p_expStr                                   (Body)     *
-      *===================================================================*
-      *
-     P p_expStr        B                   Export
-     D                 PI                  opdesc
-     D  o_string                  32767A          options(*varsize)
-     D  i_string                  32767A   const  options(*varsize)
-     D  i_stepVal                    10I 0 const  options(*nopass)
-      *
-      *  Parameterpositionen optionaler Parameter
-     D p_stepVal       C                   const(3)
-      *
-      * Parameters passed to CEEDOD
-     D DescType        S             10I 0
-     D DataType        S             10I 0
-     D DescInfo1       S             10I 0
-     D DescInfo2       S             10I 0
-     D oStrLen         S             10I 0
-     D iStrLen         S             10I 0
-      *
-      *  Arbeitsfelder
-     D stepVal         S             10I 0 inz
-     D iIdx            S             10I 0 inz
-     D oIdx            S             10I 0 inz
-      * ------------------------------------------------------------------------
-      *
-     C                   CALLP     CEEDOD(1         : DescType : DataType :
-     C                                    DescInfo1 : DescInfo2: oStrLen  :
-     C                                    *OMIT)
-      *
-     C                   CALLP     CEEDOD(2         : DescType : DataType :
-     C                                    DescInfo1 : DescInfo2: iStrLen  :
-     C                                    *OMIT)
-      *
-     C                   If        %parms >= p_stepVal
-     C                   Eval      stepVal = i_stepVal
-     C                   Else
-     C                   Eval      stepVal = 1
-     C                   Endif
-      *
-     C                   Eval      iIdx = 1
-     C                   Eval      oIdx = 1
-      *
-     C                   Dow       (iIdx <= iStrLen) and
-     C                             (oIdx <= oStrLen)
-      *
-     C                   Eval      %subst(o_string: oIdx: 1) =
-     C                                %subst(i_string: iIdx: 1)
-      *
-     C                   Eval      iIdx = iIdx + 1
-     C                   Eval      oIdx = oIdx + 1
-      *
-     C     1             Do        stepVal
-     C                   Eval      %subst(o_string: oIdx: 1) = ' '
-     C                   Eval      oIdx = oIdx + 1
-     C                   Enddo
-     C                   Enddo
-      *
-     C                   Return
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Funktion:  f_headline                                 (Body)     *
-      *===================================================================*
-      *
-     P f_headline      B                   Export
-     D                 PI                  like(colHeading_t)
-     D  i_headTyp                          const  like(type_t)
-     D  i_FLDL0100                         const  likeds(fldl0100_t)
-      *
-      *  Funktionswert
-     D heading         S                   like(colHeading_t)
-      * ------------------------------------------------------------------------
-      *
-      *  Überschrift ...
-     C                   Select
-      *  ... Feldtext
-     C                   When      i_headTyp = '*FIELDTEXT'
-     C                   If        i_FLDL0100.F1FTXT = ' '
-     C                   Eval      heading = '?' + i_FLDL0100.F1FNME
-     C                   Else
-     C                   Eval      heading = i_FLDL0100.F1FTXT
-     C                   Endif
-      *  ... Feldtyp
-     C                   When      i_headTyp = '*FIELDTYPE'
-     C                   Eval      heading = f_fieldTypeAsString(i_FLDL0100)
-      *  ... Feldname
-     C                   Other
-     C                   Eval      heading = i_FLDL0100.F1FNME
-     C                   Endsl
-      *
-     C                   Return    heading
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Funktion:  f_isNumFld                                 (Body)     *
-      *===================================================================*
-      *
-     P f_isNumFld      B                   Export
-     D                 PI                         like(bool_t)
-     D  i_FLDL0100                         const  likeds(fldl0100_t)
-      *
-      *  Funktionswert
-     D isNumFld        S                   like(bool_t)
-     D                                     inz
-      * ------------------------------------------------------------------------
-      *
-     C                   If        (i_FLDL0100.F1DTYP = 'S') or                 Zoned
-     C                             (i_FLDL0100.F1DTYP = 'B') or                 Binary
-     C                             (i_FLDL0100.F1DTYP = 'P') or                 Packed
-     C                             (i_FLDL0100.F1DTYP = 'F')                    Float
-     C                   Eval      isNumFld = bTrue
-     C                   Else
-     C                   Eval      isNumFld = bFalse
-     C                   Endif
-      *
-     C                   Return    isNumFld
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Funktion:  f_isFloatFld                               (Body)     *
-      *===================================================================*
-      *
-     P f_isFloatFld    B                   Export
-     D                 PI                         like(bool_t)
-     D  i_FLDL0100                         const  likeds(fldl0100_t)
-      *
-      *  Funktionswert
-     D isFloat         S                   like(bool_t)
-     D                                     inz
-      * ------------------------------------------------------------------------
-      *
-     C                   If        (i_FLDL0100.F1DTYP = 'F')                    Float
-     C                   Eval      isFloat = bTrue
-     C                   Else
-     C                   Eval      isFloat = bFalse
-     C                   Endif
-      *
-     C                   Return    isFloat
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Funktion:  f_isCharFld                                (Body)     *
-      *===================================================================*
-      *
-     P f_isCharFld     B                   Export
-     D                 PI                         like(bool_t)
-     D  i_FLDL0100                         const  likeds(fldl0100_t)
-      *
-      *  Funktionswert
-     D isCharFld       S                   like(bool_t)
-     D                                     inz
-      * ------------------------------------------------------------------------
-      *
-     C                   If        (i_FLDL0100.F1DTYP = 'A' or                  Alpha
-     C                              i_FLDL0100.F1DTYP = 'G')                    Graphic
-     C                   Eval      isCharFld = bTrue
-     C                   Else
-     C                   Eval      isCharFld = bFalse
-     C                   Endif
-      *
-     C                   Return    isCharFld
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Funktion:  f_hasCcsid                                 (Body)     *
-      *===================================================================*
-      *
-     P f_hasCcsid      B                   Export
-     D                 PI                         like(bool_t)
-     D  i_FLDL0100                         const  likeds(fldl0100_t)
-      *
-      *  Funktionswert
-     D hasCcsid        S                   like(bool_t)
-     D                                     inz
-      * ------------------------------------------------------------------------
-      *
-     C                   If        (i_FLDL0100.F1FDCC > 0 and
-     C                              i_FLDL0100.F1FDCC <> 65535)
-     C                   Eval      hasCcsid = bTrue
-     C                   Else
-     C                   Eval      hasCcsid = bFalse
-     C                   Endif
-      *
-     C                   Return    hasCcsid
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Funktion:  f_appMsgF                                  (Body)     *
-      *===================================================================*
-      *
-     P f_appMsgF       B                   Export
-     D                 PI                         like(file_t)
-      *------------------------------------------------------------*
-      *
-     C                   Return    'PEEKGER'
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Funktion:  f_appMsgFL                                 (Body)     *
-      *===================================================================*
-      *
-     P f_appMsgFL      B                   Export
-     D                 PI                         like(lib_t)
-      *------------------------------------------------------------*
-      *
-     C                   Return    '*LIBL'
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Prozedur:  p_rmvPgmMg                                 (Body)     *
-      *===================================================================*
-      *
-     P p_rmvPgmMg      B                   Export
-     D                 PI
-     D  i_pgmNme                           const  like(pgm_t)
-      *
-      *  Parameter für QMHRMVPM API
-     D yStkE           S                   like(proc_t)
-     D                                     inz
-     D yStkCnt         S                   like(int4_t)
-     D                                     inz
-     D yMsgKey         S              4A   inz
-     D yMsgToRmv       S             10A   inz
-     D yErrCode        DS                  likeds(errCode_t ) inz
-     D yStkELen        S             10I 0 inz
-     D yQStkE          DS
-     D  yStkEMod                           like(mod_t)  inz
-     D  yStkEPgm                           like(pgm_t)  inz
-     D yRmvExcpt       S             10A   inz
-      *------------------------------------------------------------*
-      *
-     C                   IF        i_pgmNme = '*'
-     C                   EVAL      yStkE      = i_pgmNme
-     C                   EVAL      yStkCnt    = 1
-     C                   Eval      yStkEMod   = '*NONE'
-     C                   Eval      yStkEPgm   = '*NONE'
-     C                   ELSE
-     C                   EVAL      yStkE      = i_pgmNme
-     C                   EVAL      yStkCnt    = 0
-     C                   Eval      yStkEMod   = i_pgmNme
-     C                   Eval      yStkEPgm   = i_pgmNme
-     C                   ENDIF
-      *
-     C                   EVAL      yMsgKey      = ' '
-     C                   EVAL      yMsgToRmv    = '*ALL'
-     C                   Reset                   yErrCode
-     C                   Eval      yErrCode.bytPrv = %size(yErrCode)
-     C                   EVAL      yStkELen     = %size(yStkE)
-     C                   EVAL      yRmvExcpt    = '*NO'
-      *
-     C                   Call      'QMHRMVPM'
-     C                   Parm                    yStkE
-     C                   Parm                    yStkCnt
-     C                   Parm                    yMsgKey
-     C                   Parm                    yMsgToRmv
-     C                   Parm                    yErrCode
-     C                   Parm                    yStkELen
-     C                   Parm                    yQStkE
-     C                   Parm                    yRmvExcpt
-      *
-     C                   Return
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Prozedur:  p_sndPgmMg                                 (Body)     *
-      *===================================================================*
-      *
-     P p_sndPgmMg      B                   Export
-     D                 PI
-     D  i_msgID                            const  like(msgID_t)
-     D  i_msgDta                           const  like(msgDta_t)
-     D  i_pgmNme                           const  like(pgm_t)
-     D  i_msgType                          const  like(msgType_t)
-     D                                            options(*nopass)
-      *
-      *  Parameterpositionen optionaler Parameter
-     D p_msgType       C                   const(4)
-      *
-      *  Parameter für QMHSNDPM API
-     D yMsgID          S                   like(msgID_t)
-     D                                     inz
-     D yQMsgF          DS
-     D  yMsgF                              like(file_t)  inz
-     D  yMsgFL                             like(lib_t)  inz
-     D yMsgDta         S                   like(msgDta_t)
-     D                                     inz
-     D yMsgDtaLen      S                   like(int4_t)
-     D                                     inz
-     D yMsgType        S             10A
-     D                                     inz
-     D yStkE           S                   like(proc_t)
-     D                                     inz
-     D yStkCnt         S                   like(int4_t)
-     D                                     inz
-     D yMsgKey         S              4A   inz
-     D yErrCode        DS                  likeds(errCode_t ) inz
-     D yStkELen        S             10I 0 inz
-     D yQStkE          DS
-     D  yStkEMod                           like(mod_t)  inz
-     D  yStkEPgm                           like(pgm_t)  inz
-     D yRmvExcpt       S             10A   inz
-     D yMsgWait        S                   like(int4_t)
-     D                                     inz
-      *------------------------------------------------------------*
-      *
-     C                   If        i_msgID <> ' '
-      *
-     C                   EVAL      yMsgID       = i_msgID
-     C                   If        (%subst(i_msgID: 1: 3) = 'AID') or
-     C                             (%subst(i_msgID: 1: 3) = 'KEY') or
-     C                             (%subst(i_msgID: 1: 3) = 'MBX') or
-     C                             (%subst(i_msgID: 1: 3) = 'TXT') or
-     C                             (%subst(i_msgID: 1: 3) = 'USR')
-     C                   EVAL      yMsgF        = f_appMsgF
-     C                   EVAL      yMsgFL       = f_appMsgFL
-     C                   Else
-     C                   EVAL      yMsgF        = 'QCPFMSG'
-     C                   EVAL      yMsgFL       = '*LIBL'
-     C                   Endif
-     C                   EVAL      yMsgDta      = i_msgDta
-     C                   EVAL      yMsgDtaLen   = %size(yMsgDta)
-      *
-     C                   If        %parms >= p_msgType
-     C                   EVAL      yMsgType     = i_msgType
-     C                   Else
-     C                   EVAL      yMsgType     = '*INFO'
-     C                   Endif
-      *
-     C                   Select
-     C                   When      i_pgmNme = '*'
-     C                   Eval      yStkE        = i_pgmNme
-     C                   Eval      yStkCnt      = 1
-     C                   Other
-     C                   Eval      yStkE        = i_pgmNme
-     C                   Eval      yStkCnt      = 0
-     C                   Endsl
-      *
-     C                   EVAL      yMsgKey      = ' '
-     C                   Reset                   yErrCode
-     C                   Eval      yErrCode.bytPrv = %size(yErrCode)
-     C                   EVAL      yStkELen     = %size(yStkE)
-     C                   Eval      yStkEPgm   = i_pgmNme
-     C                   Eval      yStkEMod   = i_pgmNme
-     C                   EVAL      yMsgWait     = -1
-      *
-     C                   Call      'QMHSNDPM'
-     C                   Parm                    yMsgID
-     C                   Parm                    yQMsgF
-     C                   Parm                    yMsgDta
-     C                   Parm                    yMsgDtaLen
-     C                   Parm                    yMsgType
-     C                   Parm                    yStkE
-     C                   Parm                    yStkCnt
-     C                   Parm                    yMsgKey
-     C                   Parm                    yErrCode
-     C                   Parm                    yStkELen
-     C                   Parm                    yQStkE
-     C                   Parm                    yMsgWait
-      *
-     C                   Endif
-      *
-     C**                 Eval      i_msgID  = ' '
-     C**                 Eval      i_msgDta = ' '
-      *
-     C                   Return
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Funktion:  f_canUseRefFld                             (Body)     *
-      *===================================================================*
-      *
-     P f_canUseRefFld  B                   Export
-     D                 PI                         like(bool_t)
-     D  i_FLDL0100                         const  likeds(fldl0100_t)
-      *
-      *  Funktionswert
-     D canUseRefFld    S                   like(bool_t)
-     D                                     inz
-      * ------------------------------------------------------------------------
-      *
-     C                   If        (i_FLDL0100.F1DTYP = 'G' or
-     C                              (i_FLDL0100.F1DTYP = 'A' and
-     C                               (i_FLDL0100.F1FDCC = 1200 or
-     C                                i_FLDL0100.F1FDCC = 1208)))
-     C                   Eval      canUseRefFld = bFalse
-     C                   Else
-     C                   Eval      canUseRefFld = bTrue
-     C                   Endif
-      *
-     C                   Return    canUseRefFld
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Funktion:  f_canUseCntFld                             (Body)     *
-      *===================================================================*
-      *
-     P f_canUseCntFld  B                   Export
-     D                 PI                         like(bool_t)
-     D  i_FLDL0100                         const  likeds(fldl0100_t)
-      *
-      *  Funktionswert
-     D canUseCntFld    S                   like(bool_t)
-     D                                     inz
-      * ------------------------------------------------------------------------
-      *
-     C                   If        (i_FLDL0100.F1DTYP = 'G' or
-     C                              (i_FLDL0100.F1DTYP = 'A' and
-     C                               (i_FLDL0100.F1FDCC = 1200 or
-     C                                i_FLDL0100.F1FDCC = 1208)))
-     C                   Eval      canUseCntFld = bFalse
-     C                   Else
-     C                   Eval      canUseCntFld = bTrue
-     C                   Endif
-      *
-     C                   Return    canUseCntFld
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Funktion:  f_mustCvtCcsid                             (Body)     *
-      *===================================================================*
-      *
-     P f_mustCvtCcsid  B                   Export
-     D                 PI                         like(bool_t)
-      *
-     D jobi0400        DS                  likeds(jobi0400_t)
-      * ------------------------------------------------------------------------
-      /free
-
-       if (g_jobCcsid = 0);
-         QUSRJOBI(jobi0400: %size(jobi0400): 'JOBI0400': '*': '');
-         g_jobCcsid = jobi0400.ccsid;
+       if (i_fldl0100.f1dtyp = 'G' and
+          i_fldl0100.f1ndbc > 0);
+          return i_fldl0100.f1ndbc;
        endif;
 
-       if (g_jobCcsid = 65535); // Job CCSID = *HEX
-         return bTrue;
+       fldlen = i_fldl0100.f1flen;
+
+       if i_fldl0100.f1vfmi = '1';
+          //  Variable Feldlänge ...
+          fldlen = fldlen - 2;
        endif;
 
-       return bFalse;
+       return fldlen;
 
-      /end-free
-     P                 E
-      *
-      *===================================================================*
-      *  Funktion:  f_isToLong                                 (Body)     *
-      *===================================================================*
-      *
-     P f_isToLong      B                   Export
-     D                 PI                         like(bool_t)
-     D  i_FLDL0100                         const  likeds(fldl0100_t)
-      *
-      *  Funktionswert
-     D toLong          S                   like(bool_t)
-     D                                     inz
-      * ------------------------------------------------------------------------
-      *
-     C                   If        f_dsplyLn(i_FLDL0100)>f_maxDspLn(i_FLDL0100)
-     C                   Eval      toLong = bTrue
-     C                   Else
-     C                   Eval      toLong = bFalse
-     C                   Endif
-      *
-     C                   Return    toLong
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Funktion:  f_isToLongMax                              (Body)     *
-      *===================================================================*
-      *
-     P f_isToLongMax   B                   Export
-     D                 PI                         like(bool_t)
-     D  i_FLDL0100                         const  likeds(fldl0100_t)
-      *
-      *  Funktionswert
-     D toLong          S                   like(bool_t)
-     D                                     inz
-      * ------------------------------------------------------------------------
-      *
-     C                   If        f_buffLn(i_FLDL0100) > 1024
-     C                   Eval      toLong = bTrue
-     C                   Else
-     C                   Eval      toLong = bFalse
-     C                   Endif
-      *
-     C                   Return    toLong
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Funktion:  f_maxDspLn                                 (Body)     *
-      *===================================================================*
-      *
-     P f_maxDspLn      B                   Export
-     D                 PI                         like(int4_t)
-     D  i_FLDL0100                         const  likeds(fldl0100_t)
-      *
-     D maxLen          S             10I 0 inz
-      *------------------------------------------------------------*
-      *
-     C                   Eval      maxLen =  %int(f_cntFldLn(i_FLDL0100) * 15)
-     C                   If        maxLen > 512
-     C                   Eval      maxLen = 512
-     C                   Endif
-      *
-     C                   Return    maxLen
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Funktion:  f_cntFldLn                                 (Body)     *
-      *===================================================================*
-      *
-     P f_cntFldLn      B                   Export
-     D                 PI                         like(int4_t)
-     D  i_FLDL0100                         const  likeds(fldl0100_t)
-      *------------------------------------------------------------*
-      *
-     C                   If        (i_FLDL0100.F1DTYP = 'G')
-     C                   Return    34                                           TODO:18
-     C                   Else
-     C                   Return    35
-     C                   Endif
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Funktion:  f_nbrDspRw                                 (Body)     *
-      *===================================================================*
-      *
-     P f_nbrDspRw      B                   Export
-     D                 PI                         like(int4_t)
-     D  i_FLDL0100                         const  likeds(fldl0100_t)
-      *
-      * Funktionswert
-     D nbrDspRow       S                   like(int4_t)
-     D                                     inz
-      *
-      * Arbeitsfelder
-     D dsplyLen        S                   like(int4_t)
-      *------------------------------------------------------------*
-      *
-     C                   If        f_isToLong(i_FLDL0100) = bTrue
-     C                   Eval      dsplyLen = f_maxDspLn(i_FLDL0100)
-     C                   Else
-     C                   Eval      dsplyLen = f_dsplyLn(i_FLDL0100)
-     C                   Endif
-      *
-     C                   Eval      nbrDspRow = dsplyLen / f_cntFldLn(i_FLDL0100)
-      *
-     C                   If        dsplyLen <>
-     C                                (nbrDspRow * f_cntFldLn(i_FLDL0100))
-     C                   Eval      nbrDspRow = nbrDspRow + 1
-     C                   Endif
-      *
-     C                   Return    nbrDspRow
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Prozedur:  p_decToBin                                 (Body)     *
-      *===================================================================*
-      *
-     P p_decToBin      B                   Export
-     D                 PI                  opdesc
-     D  io_string                 32767A          options(*varsize)
-     D  i_startPos                         const  like(int4_t)
-     D  i_length                           const  like(int4_t)
-     D  i_value                            const  like(int4_t)
-      *
-      * Parameters passed to CEEDOD
-     D DescType        S             10I 0
-     D DataType        S             10I 0
-     D DescInfo1       S             10I 0
-     D DescInfo2       S             10I 0
-     D parmLen         S             10I 0
-      *
-      * Arbeitsfelder
-     D                 DS
-     D intValue                            like(int4_t) inz
-     D alpha2                         2A   overlay(intValue: 3)
-     D alpha4                         2A   overlay(intValue: 1)
-      * ------------------------------------------------------------------------
-      *
-     C                   CALLP     CEEDOD(1         : DescType : DataType :
-     C                                    DescInfo1 : DescInfo2: parmLen  :
-     C                                    *OMIT)
-      *
-     C                   If        (i_startpos + i_length - 1) > parmLen
-     C                   Callp     p_kill('Start position and length outside +
-     C                                    range.')
-     C                   Else
-     C                   Eval      intValue = i_value
-     C                   Select
-     C                   When      i_length = 2
-     C                   Eval      %subst(io_string  :
-     C                                    i_startPos :
-     C                                    i_length   ) = alpha2
-     C                   When      i_length = 4
-     C                   Eval      %subst(io_string  :
-     C                                    i_startPos :
-     C                                    i_length   ) = alpha4
-     C                   Other
-     C                   Callp     p_kill('Incorrect length: ' +
-     C                                    %char(i_length))
-     C                   Endsl
-     C                   Endif
-      *
-     C                   Return
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Funktion:  f_isNotAlw                                 (Body)     *
-      *===================================================================*
-      *
-     P f_isNotAlw      B                   Export
-     D                 PI                         like(bool_t)
-     D  i_FLDL0100                         const  likeds(fldl0100_t)
-      *
-      * Funktionswert
-     D notAllowed      S                   like(bool_t) inz(bTrue)
-      * ------------------------------------------------------------------------
-      *
-      *  Wenn es sich um einen der folgenden Feldtypen handelt, ...
-     C                   If        (i_FLDL0100.F1DTyp = 'A') or                 = Alpha
-     C                             (i_FLDL0100.F1DTyp = 'B') or                 = Binary
-     C                             (i_FLDL0100.F1DTyp = 'P') or                 = Packed
-     C                             (i_FLDL0100.F1DTyp = 'S') or                 = Zoned
-     C                             (i_FLDL0100.F1DTyp = 'L') or                 = Date
-     C                             (i_FLDL0100.F1DTyp = 'T') or                 = Time
-     C                             (i_FLDL0100.F1DTyp = 'Z') or                 = Timestamp
-    -C                             (i_FLDL0100.F1DTyp = 'J') or                 = DBCS-Only
-    -C                             (i_FLDL0100.F1DTyp = 'O') or                 = DBCS-Open
-    -C                             (i_FLDL0100.F1DTyp = 'E') or                 = DBCS-Either
-    -C                             (i_FLDL0100.F1DTyp = 'F') or                 = Float
-    -C                             (i_FLDL0100.F1DTyp = 'G')                    = Graphic
-      *  ... dann
-      *      prüfen, ob es sich um ein GRAPHIC Feld ohne CCSID handelt
-    -C                   If        (i_FLDL0100.F1DTyp = 'G' and
-     C                              f_hasCcsid(i_FLDL0100) = bFalse)
-     C                   Eval      notAllowed = bTrue
-     C                   Return    notAllowed
-     C                   Endif
-      *
-      *      prüfen, ob es sich um ein Packed oder Zoned Feld mit mehr als
-      *      30 Stellen handelt.
-     C                   If        (i_FLDL0100.F1DTyp = 'P' or
-     C                              i_FLDL0100.F1DTyp = 'S')
-     C                   If        (i_FLDL0100.F1DIGT > 30)
-     C                   Eval      notAllowed = bTrue
-     C                   Return    notAllowed
-     C                   Endif
-     C                   Endif
-      *
-      *      prüfen, ob es sich um ein Feld variabler Länge handelt.
-      *
-      *      Wenn es sich um ein Feld variabler Länge handelt, ...
-     C                   If        f_isVarLen(i_FLDL0100) = bTrue
-      *      ... dann
-      *          prüfen, ob es sich um alpha-numerisches Feld handelt.
-     C                   If        i_FLDL0100.F1DTyp = 'A' or                   = Alpha
-     C                             i_FLDL0100.F1DTyp = 'G'                      = Graphic
-     C                   Eval      notAllowed = bFalse
-     C                   Else
-     C                   Eval      notAllowed = bTrue
-     C                   Endif
-     C                   Else
-      *      ... sonst
-      *          ist alles klar.
-     C                   Eval      notAllowed = bFalse
-     C                   Endif
-     C                   Else
-      *  ... sonst
-      *      setzen Markierung für unbekannten Feldtyp
-     C                   Eval      notAllowed = bTrue
-     C                   Endif
-      *
-     C                   Return    notAllowed
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Funktion:  f_isKeyFld                                 (Body)     *
-      *===================================================================*
-      *
-     P f_isKeyFld      B                   Export
-     D                 PI                         like(bool_t)
-     D  i_FLDL0100                         const  likeds(fldl0100_t)
-      *
-      * Funktionswert
-     D isKeyFld        S                   like(bool_t) inz(bFalse)
-      * ------------------------------------------------------------------------
-      *
-      *  Wenn es sich um ein Schlüsselfeld handelt, ...
-     C                   If        (i_FLDL0100.F1KeyF = '1')
-      *  ... dann
-     C                   Eval      isKeyFld = bTrue
-     C                   Else
-      *  ... sonst
-     C                   Eval      isKeyFld = bFalse
-     C                   Endif
-      *
-     C                   Return    isKeyFld
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Prozedur:  f_pgmCallN                                 (Body)     *
-      *===================================================================*
-      *
-     P f_pgmCallN      B                   Export
-     D                 PI                         like(pgmCallN_t)
-     D  i_pgmNme                           const  like(pgm_t)
-     D  i_lib                              const  like(lib_t) options(*nopass)
-      *------------------------------------------------------------*
-      *
-     C                   if        (%parms() >= %parmnum(i_lib))
-     C                   return    %trimr(i_lib) + '/' + i_pgmNme
-     C                   else
-     C                   return    %trimr(f_getPrdLb()) + '/' + i_pgmNme
-     C                   endif
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Prozedur:  p_sndStsMg                                 (Body)     *
-      *===================================================================*
-      *
-     P p_sndStsMg      B                   Export
-     D                 PI
-     D  i_msgID                            const like(msgID_t)
-     D  i_msgDta                           const like(msgDta_t)
-      *
-      *  Parameter für QMHSNDPM API
-     D yMsgID          S                   like(msgID_t)
-     D                                     inz
-     D yQMsgF          DS
-     D  yMsgF                              like(file_t)  inz
-     D  yMsgFL                             like(lib_t)  inz
-     D yMsgDta         S                   like(msgDta_t)
-     D                                     inz
-     D yMsgDtaLen      S                   like(int4_t)
-     D                                     inz
-     D yMsgType        S             10A
-     D                                     inz
-     D yStkE           S                   like(proc_t)
-     D                                     inz
-     D yStkCnt         S                   like(int4_t)
-     D                                     inz
-     D yMsgKey         S              4A   inz
-     D yErrCode        DS                  likeds(errCode_t ) inz
-      *------------------------------------------------------------*
-      *
-     C                   If        i_msgID <> ' '
-      *
-     C                   EVAL      yMsgID       = i_msgID
-     C                   EVAL      yMsgF        = f_appMsgF
-     C                   EVAL      yMsgFL       = f_appMsgFL
-     C                   EVAL      yMsgDta      = i_msgDta
-     C                   EVAL      yMsgDtaLen   = %size(yMsgDta)
-     C                   EVAL      yMsgType     = '*STATUS'
-     C                   EVAL      yStkE        = '*EXT'
-     C                   EVAL      yStkCnt      = 0
-     C                   EVAL      yMsgKey      = ' '
-     C                   Reset                   yErrCode
-     C                   Eval      yErrCode.bytPrv = %size(yErrCode)
-      *
-     C                   Call      'QMHSNDPM'
-     C                   Parm                    yMsgID
-     C                   Parm                    yQMsgF
-     C                   Parm                    yMsgDta
-     C                   Parm                    yMsgDtaLen
-     C                   Parm                    yMsgType
-     C                   Parm                    yStkE
-     C                   Parm                    yStkCnt
-     C                   Parm                    yMsgKey
-     C                   Parm                    yErrCode
-      *
-     C                   Endif
-      *
-     C                   Return
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Prozedur:  f_rtvMsgD                                  (Body)     *
-      *===================================================================*
-      *
-     P f_rtvMsgD       B                   Export
-     D                 PI          2048A
-     D  i_msgID                            value  like(msgID_t)
-     D  i_msgDta                           value  like(msgDta_t)
-     D  i_rplcSubV                         const  like(bool_t)
-     D                                            options(*nopass)
-     D  i_rtnFmtCC                         const  like(bool_t)
-     D                                            options(*nopass)
-     D  i_msgF                             value  like(file_t)
-     D                                            options(*nopass)
-     D  i_msgFL                            value  like(lib_t)
-     D                                            options(*nopass)
-      *
-      *  Parameterpositionen optionaler Parameter
-     D p_rplcSubV      C                   const(3)
-     D p_rtnFmtCC      C                   const(4)
-     D p_msgF          C                   const(5)
-     D p_msgFL         C                   const(6)
-      *
-      *  Funktionswert
-      /COPY QCOPYLE,RTVM0100
-      *
-      *  Parameter für QMHSNDPM
-     D msgDLen         S             10I 0 inz
-     D format          S              8A   inz
-     D qMsgF           DS
-     D  msgF                               like(file_t)  inz
-     D  msgFL                              like(lib_t)  inz
-     D msgDtaLn        S             10I 0 inz
-     D rplcSubV        S             10A   inz
-     D rtnFmtCC        S             10A   inz
-     D errCode         DS                  likeds(errCode_t ) inz
-      *
-      *------------------------------------------------------------*
-      *
-     C                   Clear                   RTVM0100
-     C                   Eval      msgDLen  = %len(RTVM0100)
-     C                   Eval      format   = 'RTVM0100'
-      *
-     C                   If        %parms >= p_msgF
-     C                   Eval      msgF  = i_msgF
-     C                   Else
-     C                   Eval      msgF  = f_appMsgF
-     C                   Endif
-      *
-     C                   If        %parms >= p_msgFL
-     C                   Eval      msgFL = i_msgFL
-     C                   Else
-     C                   Eval      msgFL = f_appMsgFL
-     C                   Endif
-      *
-     C                   Eval      msgDtaLn = %len(i_msgDta)
-      *
-      *  Replace substitution variables
-     C                   If        %parms >= p_rplcSubV
-     C                   If        i_rplcSubV = bTrue
-     C                   Eval      rplcSubV = '*YES'
-     C                   Else
-     C                   Eval      rplcSubV = '*NO'
-     C                   Endif
-     C                   Else
-     C                   Eval      rplcSubV = '*NO'
-     C                   Endif
-      *
-      *  Return format control characters
-     C                   If        %parms >= p_rtnFmtCC
-     C                   If        i_rtnFmtCC = bTrue
-     C                   Eval      rtnFmtCC = '*YES'
-     C                   Else
-     C                   Eval      rtnFmtCC = '*NO'
-     C                   Endif
-     C                   Else
-     C                   Eval      rtnFmtCC = '*NO'
-     C                   Endif
-      *
-     C                   Reset                   errCode
-     C                   Eval      errCode.bytPrv = %size(errCode)
-      *
-     C                   Call      'QMHRTVM'
-     C                   Parm                    RTVM0100
-     C                   Parm                    msgDLen
-     C                   Parm                    format
-     C                   Parm                    i_msgID                        Msg ID
-     C                   Parm                    qMsgF                          Msg File
-     C                   Parm                    i_msgDta                       Msg Dta
-     C                   Parm                    msgDtaLn                       Msg Dta Len
-     C                   Parm                    rplcSubV                       Msg Repl Sub
-     C                   Parm                    rtnFmtCC                       Ret Form Cha
-     C                   Parm                    errCode
-      *
-     C                   Return    RTVM0100
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Prozedur:  f_msgText                                  (Body)     *
-      *===================================================================*
-      *
-     P f_msgText       B                   Export
-     D                 PI           512A
-     D  i_msgID                            value  like(msgID_t)
-     D  i_msgDta                           value  like(msgDta_t)
-     D  i_msgF                             value  like(file_t)
-     D                                            options(*nopass)
-     D  i_msgFL                            value  like(lib_t)
-     D                                            options(*nopass)
-      *
-      *  Parameterpositionen optionaler Parameter
-     D p_msgF          C                   const(3)
-     D p_msgFL         C                   const(4)
-      *
-      *  Funktionswert
-     D msgText         S            512A   inz
-      *
-      /COPY QCOPYLE,RTVM0100
-      *------------------------------------------------------------*
-      *
-     C                   Select
-     C                   When      %parms =  p_msgF
-     C                   Eval      RTVM0100 = f_rtvMsgD(i_msgID :i_msgDta:
-     C                                                  bTrue   :bFalse  :
-     C                                                  i_msgF           )
-     C                   When      %parms =  p_msgFL
-     C                   Eval      RTVM0100 = f_rtvMsgD(i_msgID :i_msgDta:
-     C                                                  bTrue   :bFalse  :
-     C                                                  i_msgF  :i_msgFL )
-     C                   Other
-     C                   Eval      RTVM0100 = f_rtvMsgD(i_msgID :i_msgDta:
-     C                                                  bTrue   :bFalse  )
-     C                   Endsl
-      *
-     C                   If        RT1_LnMgRt > 0
-     C                   Eval      msgText = %subst(RT1_Data: 1: RT1_LnMgRt)
-     C                   Else
-     C                   Eval      msgText = ' '
-     C                   Endif
-      *
-     C                   Return    msgText
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Prozedur:  p_movPgmMg                                 (Body)     *
-      *===================================================================*
-      *
-     P p_movPgmMg      B                   Export
-     D                 PI
-     D  i_pgmNme                           const  like(pgm_t)
-      *
-      *  Parameter für QMHMOVPM
-     D msgKey          S              4A   inz
-     D typToMove       DS
-     D  toMove_1                     10A   inz('*COMP')
-     D  toMove_2                     10A   inz('*DIAG')
-     D  toMove_3                     10A   inz('*INFO')
-     D  toMove_4                     10A   inz('*ESCAPE')
-     D nbrToMove       S                   like(int4_t) inz(4)
-     D toStkE          S                   like(proc_t) inz
-     D toStkCnt        S                   like(int4_t) inz(2)
-     D errCode         DS                  likeds(errCode_t ) inz
-     D toStkELn        S                   like(int4_t) inz
-     D toQStkE         DS
-     D  toStkEMod                          like(mod_t) inz
-     D  toStkEPgm                          like(pgm_t) inz
-     D toStkEDT        S             10A   inz('*CHAR')
-     D frmStkE         S               *   inz(*null)
-     D frmStkECnt      S                   like(int4_t) inz(1)
-      *------------------------------------------------------------*
-      *
-     C                   Eval      toStkE    = i_pgmNme
-     C                   Eval      toStkELn  = %len(toStkE)
-     C                   Eval      toStkEMod = i_pgmNme
-     C                   Eval      toStkEPgm = i_pgmNme
-      *
-     C                   Call      'QMHMOVPM'
-     C                   Parm                    msgKey
-     C                   Parm                    typToMove
-     C                   Parm                    nbrToMove
-     C                   Parm                    toStkE
-     C                   Parm                    toStkCnt
-     C                   Parm                    errCode
-     C                   Parm                    toStkELn                       ! optional 1
-     C                   Parm                    toQStkE                        !
-     C                   Parm                    toStkEDT                       ! optional 2
-     C                   Parm                    frmStkE                        !
-     C                   Parm                    frmStkECnt                     !
-      *
-     C                   Return
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Prozedur:  p_wrongKey                                 (Body)     *
-      *===================================================================*
-      *
-     P p_wrongKey      B                   Export
-     D                 PI
-     D  i_scnAID                           const  like(scnAID_t)
-     D  i_pgmNme                           const  like(pgm_t)
-      *
-      *  Arbeitsfelder
-     D                 DS
-     D msgID                               like(msgID_t) inz('AID')
-     D msgNbr                         4A   overlay(msgID: 4)
-     D msgDta          S                   like(msgDta_t) inz
-      *------------------------------------------------------------*
-      *
-     C                   Callp     p_keyToMsg(i_scnAID: msgID: msgDta)
-     C                   Callp     p_sndPgmMg(msgID: msgDta: i_pgmNme)
-      *
-     C                   Return
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Prozedur:  p_keyToMsg                                 (Body)     *
-      *===================================================================*
-      *
-     P p_keyToMsg      B                   Export
-     D                 PI
-     D  i_scnAID                           const  like(scnAID_t)
-     D  o_msgID                                   like(msgID_t)
-     D  o_msgDta                                  like(msgDta_t)
-      *
-      *  Arbeitsfelder
-     D                 DS
-     D msgID                               like(msgID_t) inz
-     D msgNbr                         4A   overlay(msgID: 4)
-     D msgDta          S                   like(msgDta_t) inz
-      *------------------------------------------------------------*
-      *
-     C                   Eval      msgID  = 'AID'
-     C                   Eval      msgDta = ' '
-      *
-     C                   Select
-     C                   When      i_scnAID = K_F1
-     C                   Eval      msgNbr   = '0031'
-     C                   When      i_scnAID = K_F2
-     C                   Eval      msgNbr   = '0032'
-     C                   When      i_scnAID = K_F3
-     C                   Eval      msgNbr   = '0033'
-     C                   When      i_scnAID = K_F4
-     C                   Eval      msgNbr   = '0034'
-     C                   When      i_scnAID = K_F5
-     C                   Eval      msgNbr   = '0035'
-     C                   When      i_scnAID = K_F6
-     C                   Eval      msgNbr   = '0036'
-     C                   When      i_scnAID = K_F7
-     C                   Eval      msgNbr   = '0037'
-     C                   When      i_scnAID = K_F8
-     C                   Eval      msgNbr   = '0038'
-     C                   When      i_scnAID = K_F9
-     C                   Eval      msgNbr   = '0039'
-     C                   When      i_scnAID = K_F10
-     C                   Eval      msgNbr   = '003A'
-     C                   When      i_scnAID = K_F11
-     C                   Eval      msgNbr   = '003B'
-     C                   When      i_scnAID = K_F12
-     C                   Eval      msgNbr   = '003C'
-     C                   When      i_scnAID = K_F13
-     C                   Eval      msgNbr   = '00B1'
-     C                   When      i_scnAID = K_F14
-     C                   Eval      msgNbr   = '00B2'
-     C                   When      i_scnAID = K_F15
-     C                   Eval      msgNbr   = '00B3'
-     C                   When      i_scnAID = K_F16
-     C                   Eval      msgNbr   = '00B4'
-     C                   When      i_scnAID = K_F17
-     C                   Eval      msgNbr   = '00B5'
-     C                   When      i_scnAID = K_F18
-     C                   Eval      msgNbr   = '00B6'
-     C                   When      i_scnAID = K_F19
-     C                   Eval      msgNbr   = '00B7'
-     C                   When      i_scnAID = K_F20
-     C                   Eval      msgNbr   = '00B8'
-     C                   When      i_scnAID = K_F21
-     C                   Eval      msgNbr   = '00B9'
-     C                   When      i_scnAID = K_F22
-     C                   Eval      msgNbr   = '00BA'
-     C                   When      i_scnAID = K_F23
-     C                   Eval      msgNbr   = '00BB'
-     C                   When      i_scnAID = K_F24
-     C                   Eval      msgNbr   = '00BC'
-     C                   When      i_scnAID = K_DELETE
-     C                   Eval      msgNbr   = '00BD'
-     C                   When      i_scnAID = K_ENTER
-     C                   Eval      msgNbr   = '00F1'
-     C                   When      i_scnAID = K_HELP
-     C                   Eval      msgNbr   = '00F3'
-     C                   When      i_scnAID = K_PAGE_DOWN
-     C                   Eval      msgNbr   = '00F4'
-     C                   When      i_scnAID = K_PAGE_UP
-     C                   Eval      msgNbr   = '00F5'
-     C                   When      i_scnAID = K_PRINT_SCREEN
-     C                   Eval      msgNbr   = '00F6'
-     C                   When      i_scnAID = K_RESET
-     C                   Eval      msgNbr   = '00F8'
-     C                   When      i_scnAID = K_LIGHT_PEN
-     C                   Eval      msgNbr   = '003F'
-     C                   Other
-     C                   Eval      msgNbr   = '0100'
-     C                   Endsl
-      *
-     C                   Eval      o_msgID  = msgID
-     C                   Eval      o_msgDta = msgDta
-      *
-     C                   Return
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Prozedur:  f_spltTxt                                  (Body)     *
-      *===================================================================*
-      *
-     P f_spltTxt       B                   Export
-     D                 PI                  opdesc like(int4_t)
-     D  i_text                    32767A   const  options(*varsize)
-     D  i_strPos                           const  like(int4_t)
-     D  i_len                              const  like(int4_t)
-     D  o_text                    32767A          options(*varsize)
-      *
-      *  Funktionswert
-     D rtnLen          S                   like(int4_t) inz
-      *
-      *  Arbeitsfelder
-     D pNewLine        S                   like(int4_t) inz
-     D iTxtLen         S                   like(int4_t) inz
-     D oTxtLen         S                   like(int4_t) inz
-     D nextChar        S              1A   inz
-     D trimLen         S                   like(int4_t) inz
-      *
-      * Parameters passed to CEEDOD
-     D DescType        S             10I 0
-     D DataType        S             10I 0
-     D DescInfo1       S             10I 0
-     D DescInfo2       S             10I 0
-     D parmLen         S             10I 0
-      *------------------------------------------------------------*
-      *
-     C                   Callp     CEEDOD(1         : DescType : DataType :
-     C                                    DescInfo1 : DescInfo2: iTxtLen  :
-     C                                    *OMIT)
-      *
-     C                   Callp     CEEDOD(4         : DescType : DataType :
-     C                                    DescInfo1 : DescInfo2: oTxtLen  :
-     C                                    *OMIT)
-      *
-      *  Wenn die Startposition außerhalb des gültigen
-      *  Bereichs liegt, ...
-     C                   If        i_strPos > iTxtLen
-      *  ... dann
-      *      einen Leerstring zurück geben
-     C                   Eval      %subst(o_Text: 1: otxtLen) = ' '
-     C                   Eval      rtnLen = 0
-     C                   Else
-      *  ... sonst
-      *      prüfen zu entnehmende Länge
-     C                   If        (i_strPos + i_len - 1) <= iTxtLen
-     C                   Eval      rtnLen = i_len
-     C                   Else
-     C                   Eval      rtnLen = iTxtLen - i_strPos + 1
-     C                   Endif
-      *
-     C                   If        rtnLen > oTxtLen
-     C                   Eval      rtnLen = oTxtLen
-     C                   Endif
-      *
-      *      Zeichenkette entnehmen
-     C                   Eval      %subst(o_Text: 1: otxtLen) =
-     C                                %subst(i_Text: i_strPos: rtnLen)
-      *
-      *      Auf Zeilenwechsel prüfen
-     C                   Eval      pNewLine =
-     C                                %scan('°': %subst(o_Text: 1: otxtLen))
-     C                   If        pNewLine > 0
-     C                   Eval      rtnLen = pNewLine
-     C                   Eval      %subst(o_Text
-     C                                    : rtnLen
-     C                                    : otxtLen - rtnLen + 1) = ''
-     C                   Endif
-      *
-      *      Bestimmen Länge ohne nachgestellte Leezeichen
-     C                   Eval      trimLen =
-     C                                %len(%trimr(%subst(o_Text: 1: rtnLen)))
-      *
-      *      Wenn keine nachgestellten Leezeichen
-      *      vorhanden sind, ...
-     C                   If        rtnLen = trimLen
-      *      ... dann
-      *          Folgezeichen im Eingabestring prüfen
-     C                   If        itxtLen > rtnLen
-     C                   Eval      nextChar = %subst(i_text: rtnLen + 1: 1)
-      *
-      *          Wenn das Folgezeichen <> ' ' ist, d.h.
-      *          wir befinden uns mitten in der Zeichenkette, ...
-     C                   If        (nextChar <> ' ') and (nextChar <> '°')
-      *          ... dann
-      *              rückwärts nach einer Lücke für
-      *              den Zeilenumbruch suchen
-     C                   Dow       trimLen > 0
-     C                   If        %subst(o_text: trimLen: 1) = ' '
-     C                   Eval      rtnLen = trimLen
-     C                   Eval      %subst(o_Text: 1: otxtLen) =
-     C                                %subst(o_Text: 1: rtnLen)
-     C                   Leave
-     C                   Endif
-     C                   Eval      trimLen = trimLen - 1
-     C                   Enddo
-      *
-     C                   Endif
-     C                   Endif
-     C                   Endif
-     C                   Endif
-      *
-     C                   Return    rtnLen
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Prozedur:  p_center                                   (Body)     *
-      *===================================================================*
-      *
-     P p_center        B                   Export
-     D                 PI                  opdesc
-     D  io_text                   32767A          options(*varsize)
-      *
-      *  Arbeitsfelder
-     D textLen         S                   like(int4_t) inz
-     D iPreSpc         S                   like(int4_t) inz
-     D iPostSpc        S                   like(int4_t) inz
-     D trimLen         S                   like(int4_t) inz
-     D oPreSpc         S                   like(int4_t) inz
-     D oPostSpc        S                   like(int4_t) inz
-      *
-      * Parameters passed to CEEDOD
-     D DescType        S             10I 0
-     D DataType        S             10I 0
-     D DescInfo1       S             10I 0
-     D DescInfo2       S             10I 0
-     D parmLen         S             10I 0
-      *------------------------------------------------------------*
-      *
-      *  Ermitteln Länge der Zeichenfolge
-     C                   Callp     CEEDOD(1         : DescType : DataType :
-     C                                    DescInfo1 : DescInfo2: textLen  :
-     C                                    *OMIT)
-      *
-      *  Ermitteln Anzahl führender und nachgestellter Leerzeichen
-      *  für Eingangszeichenfolge
-     C                   Eval      iPreSpc  = textLen -
-     C                                %len(%triml(%subst(io_text: 1: textLen)))
-      *
-     C                   Eval      iPostSpc = textLen -
-     C                                %len(%trimr(%subst(io_text: 1: textLen)))
-      *
-      *  Ermitteln Länge der Zeichenfolge ohne Leerzeichen
-     C                   Eval      trimLen  = textLen - iPreSpc - iPostSpc
-      *
-      *  Ermitteln Anzahl führender und nachgestellter Leerzeichen
-      *  für zentrierte Zeichenfolge
-     C                   Eval      oPreSpc  = textLen - trimLen
-     C                   Div       2             oPreSpc
-     C                   Eval      oPostSpc = textLen - trimLen - oPreSpc
-      *
-      *  Wenn Leerzeichen vorangestellt werden müssen, ...
-     C                   If        (oPreSpc >  0      )  and
-     C                             (oPreSpc <> iPreSpc)
-      *  ... dann
-      *      Zeichenkette verschieben
-     C                   Eval      %subst(io_text: oPreSpc + 1: trimLen) =
-     C                                %subst(io_text: iPreSpc + 1: trimLen)
-      *      Führende Leerzeichen löschen
-     C                   Eval      %subst(io_text: 1: oPreSpc) = ' '
-      *      Nachgestellte Leerzeichen löschen
-     C                   If        oPostSpc > 0
-     C                   Eval      %subst(io_text               :
-     C                                    textLen - oPostSpc + 1:
-     C                                    oPostSpc              ) = ' '
-     C                   Endif
-     C                   Endif
-      *
-     C                   Return
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Prozedur:  f_addPtr                                   (Body)     *
-      *===================================================================*
-      *
-     P f_addPtr        B                   Export
-     D                 PI              *
-     D  i_pointer                      *   value
-     D  i_offset                      5I 0 value
-      *
-      *  Arbeitsfelder
-     D ofsAry          S              1A   dim(32767) based(pOfsAry)
-      *------------------------------------------------------------*
-      *
-     C                   Dow       i_offset > 0
-      *
-     C                   Eval      pOfsAry = i_pointer
-      *
-     C                   If        i_offset <= %elem(ofsAry) - 1
-     C                   Eval      i_pointer = %addr(ofsAry(i_offset + 1))
-     C                   Eval      i_offset = 0
-     C                   Else
-     C                   Eval      i_pointer = %addr(ofsAry(%elem(ofsAry)))
-     C                   Eval      i_offset = i_offset - %elem(ofsAry) + 1
-     C                   Endif
-      *
-     C                   Enddo
-      *
-     C                   Return    i_pointer
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Prozedur:  f_isKeyExc                                 (Body)     *
-      *===================================================================*
-      *
-     P f_isKeyExc      B                   Export
-     D                 PI                        like(bool_t)
-     D  i_data                             value like(SET0000_t)
-     D  i_exclKeys                         value like(pgmCmd_t) DIM(25)
-      *
-      *  Funktionswert
-     D isExcluded      S                   like(bool_t) inz
-      *
-      *  Arbeitsfelder
-     D pgmCmd          S                   like(pgmCmd_t) inz
-     D in01            S                   like(*in01     ) inz
-      *------------------------------------------------------------*
-      *
-     C                   Eval      in01 = *in01
-      *
-     C                   Eval      pgmCmd = i_data
-     C     pgmCmd        Lookup    i_exclKeys                             01
-     C                   If        *in01 = '1'
-     C                   Eval      isExcluded = bTrue
-     C                   Else
-     C                   Eval      isExcluded = bFalse
-     C                   Endif
-      *
-     C                   Eval      *in01 = in01
-      *
-     C                   Return    isExcluded
-      *
-     P                 E
-      *
-      *===============================================================*
-      *  Prepare NUM_Descr - RPG-IV implementation of NUM_DESCR macro
-      *  V4R4 and above                Refer to: QSYSINC/MIH.MICPTCOM
-      *===============================================================*
-      * The following macro is used to prepare the numeric descriptor
-      * (_NUM_Descr_T), used in the cpynv and edit functions. Can also
-      * be used to set the type and length fields of _DPA_Template_T.
-      * The valid values for the parameters are:
-      *    type         length             fractional
-      *    -----------  -----------------  -------------------------
-      *    _T_Signed    2 or 4             0
-      *    _T_Float     4 or 8             0
-      *    _T_Zoned     1 <= length <= 31  0 <= fractional <= length
-      *    _T_Packed    1 <= length <= 31  0 <= fractional <= length
-      *    _T_Unsigned  2 or 4             0
-      *
-      *===============================================================*
-      *
-     P f_NUM_Descr...
-     P                 B                   export
-     D                 PI            10I 0
-     D  i_type                        3I 0 value
-     D  i_length                      3I 0 value
-     D  i_fraction                    3I 0 value
-      *
-     D                 DS
-     D NUM_Descr                     10I 0 inz
-     D  NUM_Descr_type...
-     D                                3I 0 overlay(NUM_Descr: 1)
-     D  NUM_Descr_fraction...
-     D                                3I 0 overlay(NUM_Descr: 2)
-     D  NUM_Descr_length...
-     D                                3I 0 overlay(NUM_Descr: 3)
-      *
-      * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      *
-     C                   Eval      NUM_Descr_type     = i_type
-     C                   Eval      NUM_Descr_fraction = i_fraction
-     C                   Eval      NUM_Descr_length   = i_length
-      *
-     C                   Return    NUM_Descr
-      *
-     P                 E
-      *
-      *========================================================================*
-      *  f_NUM_Descr2
-      *========================================================================*
-     P f_NUM_Descr2...
-     P                 B                          export
-     D                 PI            10I 0
-     D  i_type                        1A   value
-     D  i_length                      3I 0 value
-     D  i_fractional                  3I 0 value
-      *
-      *  Parameter positions
-      *
-      *  Return value
-     D                 DS
-     D NUM_Descr                     10I 0 inz
-     D  NUM_Descr_24                  3I 0 overlay(NUM_Descr: 1)
-     D  NUM_Descr_16                  3I 0 overlay(NUM_Descr: *NEXT)
-     D  NUM_Descr_8                   3I 0 overlay(NUM_Descr: *NEXT)
-     D  NUM_Descr_0                   3I 0 overlay(NUM_Descr: *NEXT)
-      *
-      *  Arbeitsfelder
-     D type            S              3I 0 inz
-      * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      /FREE
+       end-proc;
 
-       // Convert RPG type ...
-       select;
-       // ... zoned
-       when (i_type = 'S');
-         type = T_ZONED;
-       // ... packed
-       when (i_type = 'P');
-         type = T_PACKED;
-       // ... binary
-       when (i_type = 'B');
-         type = T_SIGNED;
-         i_length = f_rpgToIntLength(i_length);
-       // ... integer
-       when (i_type = 'I');
-         type = T_SIGNED;
-         i_length = f_rpgToIntLength(i_length);
-       // ... unsigned integer
-       when (i_type = 'U');
-         type = T_SIGNED;
-         i_length = f_rpgToIntLength(i_length);
-       // ... float
-       when (i_type = 'F');
-         type = T_FLOAT;
-       endsl;
+       //===================================================================*
+       //  Funktion:  f_buffLn                                   (Body)     *
+       //===================================================================*
 
-       NUM_Descr = f_NUM_Descr(type: i_length: i_fractional);
+       dcl-proc f_buffln export;
+       dcl-pi *N        like(int4_t);
+         i_fldl0100      const  likeds(fldl0100_t);
+       i_withlen       const  like(bool_t)
+            options(*nopass);
+       end-pi;
 
-       return NUM_Descr;
+       //  Parameterpositionen optionaler Parameter
+       dcl-c p_withlen const(2);
 
-      /END-FREE
-      *
-     P                 E
-      *
-      *========================================================================*
-      *  Converts a given RPG numeric field length to an integer length.
-      *========================================================================*
-     P f_rpgToIntLength...
-     P                 B                          export
-     D                 PI            10I 0
-     D  i_length                     10I 0 value
-      *
-      *  Return value
-     D intLength       S             10I 0 inz
-      * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      /FREE
+       //  Funktionswert
+       dcl-s fldlen          like(int4_t) inz;
 
-       select;
-       when (i_length <= 3);
-         intLength = 1;
-       when (i_length <= 5);
-         intLength = 2;
-       when (i_length <= 10);
-         intLength = 4;
-       when (i_length <= 20);
-         intLength = 8;
-       other;
-         intLength = -1;
-       endsl;
+       //  Arbeitsfelder
+       dcl-s withlen         like(i_withlen) inz;
+       // ------------------------------------------------------------------------
 
-       return intLength;
+       if %parms >= p_withlen;
+          withlen  = i_withlen;
+       else;
+          withlen  = bfalse;
+       endif;
 
-      /END-FREE
-      *
-     P                 E
-      *
-      *===============================================================*
-      *  Clears C error code.
-      *===============================================================*
-      *
-     P p_clrErrno...
-     P                 B                   export
-     D                 PI
-      *
-     D runTimeError    S             10I 0 based(pRunTimeError)
-      * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      /FREE
+       if i_fldl0100.f1vfmi = '1';
+          //  Variable Feldlänge ...
+          if withlen = btrue;
+             //  ... incl. Längenbyte
+             fldlen = i_fldl0100.f1flen;
+          else;
+             //  ... ohne Längenbyte
+             fldlen = i_fldl0100.f1flen - 2;
+          endif;
+       else;
+          //  Felder fester Länge
+          fldlen = i_fldl0100.f1flen;
+       endif;
 
-       pRunTimeError = errno();
-       runTimeError = 0;
+       return fldlen;
+
+       end-proc;
+
+       //===================================================================*
+       //  Funktion:  f_curFldLn                                 (Body)     *
+       //===================================================================*
+
+       dcl-proc f_curfldln export;
+       dcl-pi *N        like(int4_t);
+         i_buffer        const  like(rcdbuf_t);
+         i_fldl0100      const  likeds(fldl0100_t);
+       end-pi;
+
+       //  Funktionswert
+       dcl-s curfldln        like(int4_t) inz;
+       // ------------------------------------------------------------------------
+
+       if i_fldl0100.f1vfmi = '1';
+          curfldln = f_bintodec(i_buffer
+                               : i_fldl0100.f1ibuf
+                               : 2);
+       else;
+          if (i_fldl0100.f1ndbc > 0);
+             curfldln = i_fldl0100.f1ndbc;
+          else;
+             curfldln = i_fldl0100.f1flen;
+          endif;
+       endif;
+
+       return curfldln;
+
+       end-proc;
+
+       //===================================================================*
+       //  Funktion:  f_rtvFld                                   (Body)     *
+       //===================================================================*
+
+       dcl-proc f_rtvfld export;
+       dcl-pi *N opdesc like(int4_t);
+         o_buffer        like(rcdbuf_t)
+              options(*varsize);
+         i_buffer        const  like(rcdbuf_t);
+         i_fldl0100      const  likeds(fldl0100_t);
+       i_withlen       const  like(bool_t)
+            options(*nopass);
+       end-pi;
+
+       //  Parameterpositionen optionaler Parameter
+       dcl-c p_withlen const(4);
+
+       //  Funktionswert
+       dcl-s rtnlen          like(int4_t) inz;
+
+       // Parameters passed to CEEDOD
+       dcl-s desctype        int(10);
+       dcl-s datatype        int(10);
+       dcl-s descinfo1       int(10);
+       dcl-s descinfo2       int(10);
+       dcl-s parmlen         int(10);
+
+       //  Arbeitsfelder
+       dcl-s withlen         like(i_withlen) inz;
+       // ------------------------------------------------------------------------
+
+       ceedod(1         : desctype : datatype :
+             descinfo1 : descinfo2: parmlen  :
+             *omit);
+
+       if %parms >= p_withlen;
+          withlen  = i_withlen;
+       else;
+          withlen  = bfalse;
+       endif;
+
+       rtnlen = f_buffln(i_fldl0100: withlen);
+       if rtnlen > parmlen;
+          rtnlen = parmlen;
+       endif;
+
+       if i_fldl0100.f1vfmi = '1';
+          if withlen = bfalse;
+             %subst(o_buffer: 1: parmlen) =
+             %subst(i_buffer: i_fldl0100.f1ibuf+2: rtnlen);
+          else;
+             %subst(o_buffer: 1: parmlen) =
+             %subst(i_buffer: i_fldl0100.f1ibuf  : rtnlen);
+          endif;
+       else;
+          %subst(o_buffer: 1: parmlen) =
+          %subst(i_buffer: i_fldl0100.f1ibuf  : rtnlen);
+       endif;
+
+       return rtnlen;
+
+       end-proc;
+
+       //===================================================================*
+       //  Prozedur:  p_fldToBuf                                 (Body)     *
+       //===================================================================*
+
+       dcl-proc p_fldtobuf export;
+       dcl-pi *N;
+         io_buffer       like(rcdbuf_t);
+         i_fielddta      like(rcdbuf_t);
+         i_fldl0100      const  likeds(fldl0100_t);
+       i_withlen       const  like(bool_t)
+            options(*nopass);
+       end-pi;
+
+       //  Parameterpositionen optionaler Parameter
+       dcl-c p_withlen const(4);
+
+       //  Arbeitsfelder
+       dcl-s withlen         like(i_withlen) inz;
+
+       dcl-s fielddta        like(rcdbuf_t) based(pfielddta);
+       dcl-s fielddtaucs2    like(rcdbufucs2_t) based(pfielddta);
+
+       dcl-ds *N;
+         buffln          like(int2_t);
+         bufflna         char(2) overlay(buffln:  1);
+       end-ds;
+       // ------------------------------------------------------------------------
+       pfielddta = %addr(i_fielddta);
+
+       if %parms >= p_withlen;
+          withlen = i_withlen;
+       else;
+          withlen = bfalse;
+       endif;
+
+       if i_fldl0100.f1vfmi = '1';
+          //  Felder variabler Länge ...
+          if withlen = bfalse;
+             //  ... ohne Längenangabe
+             //      (einfügen Längenangabe)
+
+             if (i_fldl0100.f1dtyp = 'G');
+                buffln = %len(%trimr(
+                             %subst(fielddtaucs2
+                                    : 1
+                                    : f_dsplyln(i_fldl0100))
+                                    )) * 2;
+             else;
+                buffln = %len(%trimr(
+                             fielddta));
+             endif;
+
+             %subst(io_buffer  :
+                   i_fldl0100.f1ibuf+2 :
+                   f_buffln(i_fldl0100: withlen))
+                      = i_fielddta;
+
+             if (i_fldl0100.f1dtyp = 'G' and
+                i_fldl0100.f1ndbc > 0);
+                buffln = buffln / 2;
+             endif;
+
+             %subst(io_buffer  :
+                   i_fldl0100.f1ibuf   :
+                   2          )
+                      = bufflna;
+          else;
+             //  ... incl. Längenangabe
+             %subst(io_buffer  :
+                   i_fldl0100.f1ibuf   :
+                   f_buffln(i_fldl0100: withlen))
+                      = i_fielddta;
+          endif;
+       else;
+          //  Felder fester Länge ...
+          %subst(io_buffer  :
+                i_fldl0100.f1ibuf   :
+                f_buffln(i_fldl0100))
+                   = i_fielddta;
+       endif;
 
        return;
 
-      /END-FREE
-     P                 E
-      *
-      *===============================================================*
-      *  Returns C runtime error code.
-      *===============================================================*
-      *
-     P f_errno...
-     P                 B                   export
-     D                 PI            10I 0
-      *
-     D runTimeError    S             10I 0 based(pRunTimeError)
-      * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      /FREE
+       end-proc;
 
-       pRunTimeError = errno();
+       //===================================================================*
+       //  Funktion:  f_isVarLen                                 (Body)     *
+       //===================================================================*
 
-       return runTimeError;
+       dcl-proc f_isvarlen export;
+       dcl-pi *N        like(bool_t);
+         i_fldl0100      const  likeds(fldl0100_t);
+       end-pi;
+       // ------------------------------------------------------------------------
 
-      /END-FREE
-     P                 E
-      *
-      *===============================================================*
-      *  Returns the description of a given C runtime error code.
-      *===============================================================*
-      *
-     P f_strerror...
-     P                 B                   export
-     D                 PI                         like(msgDta_t)
-     D  i_errno                      10I 0 const
-      *
-      *  Funktionswert
-     D errText         S                   like(msgDta_t) inz
-      *
-     D pErrText        S               *   inz
-      * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      /FREE
-
-       pErrText = strerror(i_errno);
-       if   pErrText = *NULL;
-         errText = '';
+       if i_fldl0100.f1vfmi = '1';
+          return btrue;
        else;
-         errText = %str(pErrText);
+          return bfalse;
        endif;
 
-       return errText;
+       end-proc;
 
-      /END-FREE
-     P                 E
-      *
-      *===============================================================*
-      *  Returns the bit-wise ORing of the bits of all the arguments.
-      *===============================================================*
-      *
-     P f_bitor...
-     P                 B                   export
-     D                 PI            10U 0
-     D  i_arg1                       10U 0 value
-     D  i_arg2                       10U 0 value
-     D  i_arg3                       10U 0 value  options(*nopass)
-     D  i_arg4                       10U 0 value  options(*nopass)
-     D  i_arg5                       10U 0 value  options(*nopass)
-      *
-      *  Parameterpositionen optionaler Parameter
-     D p_arg3          C                   const(3)
-     D p_arg4          C                   const(4)
-     D p_arg5          C                   const(5)
-      *
-      *  Funktionswert
-     D result          S             10U 0 inz
-      *
-      *  OR String (ORSTR)
-     D ORSTR...
-     D                 PR                  extproc('_ORSTR')
-     D  i_pReceiver                    *   value
-     D  i_pFirstSrc                    *   value  options(*string)
-     D  i_pSecondSrc                   *   value  options(*string)
-     D  i_length                     10U 0 value
-      * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      /FREE
+       //===================================================================*
+       //  Funktion:  f_binToDec                                 (Body)     *
+       //===================================================================*
 
-       ORSTR(%addr(result): %addr(i_arg1): %addr(i_arg2): %size(result));
+       dcl-proc f_bintodec export;
+       dcl-pi *N opdesc like(int4_t);
+         i_string        char(32767) const options(*varsize);
+         i_startpos      const  like(int4_t);
+         i_length        const  like(int4_t);
+       end-pi;
+
+       // Funktionswert
+       dcl-ds *N;
+         intvalue        like(int4_t) inz;
+         alpha2          char(2) overlay(intvalue: 3);
+         alpha4          char(2) overlay(intvalue: 1);
+       end-ds;
+
+       // Parameters passed to CEEDOD
+       dcl-s desctype        int(10);
+       dcl-s datatype        int(10);
+       dcl-s descinfo1       int(10);
+       dcl-s descinfo2       int(10);
+       dcl-s parmlen         int(10);
+       // ------------------------------------------------------------------------
+
+       ceedod(1         : desctype : datatype :
+             descinfo1 : descinfo2: parmlen  :
+             *omit);
+
+       if (i_startpos + i_length - 1) > parmlen;
+          p_kill('Start position and length outside +
+                range.');
+       else;
+          select;
+          when i_length = 2;
+             alpha2 = %subst(i_string   :
+                            i_startpos :
+                            i_length   );
+          when i_length = 4;
+             alpha4 = %subst(i_string   :
+                            i_startpos :
+                            i_length   );
+          other;
+             p_kill('Incorrect length: ' +
+                   %char(i_length));
+          endsl;
+       endif;
+
+       return intvalue;
+
+       end-proc;
+
+       //===================================================================*
+       //  Funktion:  f_len                                      (Body)     *
+       //===================================================================*
+
+       dcl-proc f_len export;
+       dcl-pi *N opdesc like(int4_t);
+         i_string        char(32767) const options(*varsize);
+       end-pi;
+
+       // Parameters passed to CEEDOD
+       dcl-s desctype        int(10);
+       dcl-s datatype        int(10);
+       dcl-s descinfo1       int(10);
+       dcl-s descinfo2       int(10);
+       dcl-s parmlen         int(10);
+       // ------------------------------------------------------------------------
+
+       ceedod(1         : desctype : datatype :
+             descinfo1 : descinfo2: parmlen  :
+             *omit);
+
+       return parmlen;
+
+       end-proc;
+
+       //===================================================================*
+       //  Funktion:  f_scan                                     (Body)     *
+       //===================================================================*
+
+       dcl-proc f_scan export;
+       dcl-pi *N opdesc like(int4_t);
+         srcharg         char(100) const  options(*varsize);
+         string          char(100) const;
+       end-pi;
+
+       dcl-s posfound        like(int4_t) inz;
+
+       // Parameters passed to CEEDOD
+       dcl-s desctype        like(int4_t) inz;
+       dcl-s datatype        like(int4_t) inz;
+       dcl-s descinfo1       like(int4_t) inz;
+       dcl-s descinfo2       like(int4_t) inz;
+       dcl-s plen            like(int4_t) inz;
+       //------------------------------------------------------------*
+
+       ceedod(1         : desctype : datatype :
+             descinfo1 : descinfo2: plen     :
+             *omit);
+
+       posfound = %scan(%subst(srcharg: 1: plen): string);
+
+       return posfound;
+
+       end-proc;
+
+       //===================================================================*
+       //  Funktion:  f_vldNme                                   (Body)     *
+       //===================================================================*
+
+       dcl-proc f_vldname export;
+       dcl-pi *N        like(bool_t);
+         i_name          char(10) const;
+         o_msgid         like(msgid_t);
+         o_msgdta        like(msgdta_t);
+       end-pi;
+
+       //  Funktionswert
+       dcl-s isValid         like(bool_t) inz(bFalse);
+
+       //  Arbeitsfelder
+       dcl-s idx             like(int4_t) inz;
+       dcl-s chr             char(1) inz;
+       dcl-s startString       like(bool_t) inz(bFalse);
+       dcl-s endString       like(bool_t) inz(bFalse);
+
+       dcl-c VALID_FIRST_CHAR '§$#ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+       dcl-c VALID_CHAR '§$#ABCDEFGHIJKLMNOPQRSTUVWXYZ_.1234567890';
+
+      /COPY QCOPYLE,USR8182
+       //-------------------------------------------------------------------*
+
+       isValid = bTrue;
+       startString = bFalse;
+       endString = bFalse;
+
+       for idx = 1 to 10;
+
+          chr = %subst(i_name: idx: 1);
+
+          //  Prüfen Start des Strings und 1. Zeichen ...
+          if (startString =  bFalse and endString =  bFalse and chr <> '');
+             startString = bTrue;
+             if (%check(VALID_FIRST_CHAR: chr) > 0);
+                clear usr8182;
+                usr81821 = chr;
+                o_msgid = 'USR8182';
+                o_msgdta = usr8182;
+                isValid = bFalse;
+                leave;
+             endif;
+             iter;
+          endif;
+
+          //  Prüfen Ende des Strings ...
+          if (startString =  bTrue )  and
+             (endString =  bFalse)  and
+             (chr       =  ' '   );
+             endString = bTrue;
+             iter;
+          endif;
+
+          //  Prüfen Zeichen des Strings ...
+          if (startString =  bTrue and endString = bFalse);
+             if (%check(VALID_CHAR: chr) > 0);
+                clear usr8182;
+                usr81821 = chr;
+                o_msgid = 'USR8182';
+                o_msgdta = usr8182;
+                isValid = bFalse;
+                leave;
+             endif;
+          endif;
+
+          //  Prüfen Zeichen hinter dem Ende des Strings ...
+          if (startString =  bTrue and endString =  bTrue);
+             if (chr <> '');
+                clear usr8182;
+                usr81821 = chr;
+                o_msgid  = 'USR8182';
+                o_msgdta = usr8182;
+                isValid  = bFalse;
+                leave;
+             endif;
+          endif;
+
+       endfor;
+
+       if (startString = bFalse);
+          clear usr8182;
+          usr81821 = chr;
+          o_msgid  = 'USR8182';
+          o_msgdta = usr8182;
+          isValid  = bFalse;
+       endif;
+
+       return isValid;
+
+       end-proc;
+
+       //===================================================================*
+       //  Funktion:  f_vldFloat                                 (Body)     *
+       //===================================================================*
+
+       dcl-proc f_vldfloat export;
+       dcl-pi *N        like(bool_t);
+         i_buffer        varchar(64) const;
+       end-pi;
+
+       //  Arbeitsfelder
+       dcl-s i               int(10) inz;
+       dcl-s c               char(1) inz;
+       dcl-s dummy           float(8) inz;
+       dcl-s hasexponent     like(bool_t) inz(bfalse);
+       dcl-c cdigits '0123456789';
+       //-------------------------------------------------------------------*
+
+       monitor;
+
+          if (%len(i_buffer) = 0);
+             return bfalse;
+          endif;
+
+          i = %check(' ': i_buffer);
+
+          // Prüfen auf führendes Vorzeichen
+          c = %subst(i_buffer: i: 1);
+          if (c = '+' or c = '-');   // Überspringen Vorzeichen
+             i = i + 1;
+          endif;
+
+          // Prüfen auf nummerische Ziffern vor dem Komma
+          dow (i <= %len(i_buffer));
+             c = %subst(i_buffer: i: 1);
+             if (c <> ' ');
+                if (c = ',' or c = '.');
+                   i = i + 1;   // Überspringen Komma
+                   leave;
+                endif;
+                if (%check(cdigits: c) <> 0);
+                   return bfalse;
+                endif;
+             endif;
+             i = i + 1;
+          enddo;
+
+          // Prüfen auf nummerische Ziffern hinter dem Komma
+          dow (i <= %len(i_buffer));
+             c = %subst(i_buffer: i: 1);
+             if (c <> ' ');
+                if (c = 'e' or c = 'E');
+                   leave;
+                endif;
+                if (%check(cdigits: c) <> 0);
+                   return bfalse;
+                endif;
+             endif;
+             i = i + 1;
+          enddo;
+
+          if (c = 'e' or c = 'E');
+             // Prüfen auf Vorzeichen des Exponenten
+             i = i + 1;
+             if (i > %len(i_buffer));
+                return bfalse;
+             endif;
+             c = %subst(i_buffer: i: 1);
+             if (c <> '+' and c <> '-' and c <> ' ');
+                return bfalse;
+             endif;
+
+             i = i + 1;
+             hasexponent = bfalse;
+
+             // Prüfen auf nummerische Ziffern des Exponenten
+             dow (i <= %len(i_buffer));
+                c = %subst(i_buffer: i: 1);
+                if (c <> ' ');
+                   if (%check(cdigits: c) <> 0);
+                      return bfalse;
+                   endif;
+                   hasexponent = btrue;
+                endif;
+                i = i + 1;
+             enddo;
+
+             if (hasexponent <> btrue);
+                return bfalse;
+             endif;
+          endif;
+
+          dummy = %float(i_buffer);
+
+          return btrue;
+       on-error;
+          p_rmvpgmmg('*');
+          return bfalse;
+       endmon;
+
+
+       end-proc;
+
+       //===================================================================*
+       //  Funktion:  f_execute                                  (Body)     *
+       //===================================================================*
+
+       dcl-proc f_execute export;
+       dcl-pi *N opdesc like(bool_t);
+         i_cmd           char(32702) const options(*varsize);
+         o_msgid         like(msgid_t);
+         o_msgdta        like(msgdta_t);
+       end-pi;
+
+       //  Definieren Funktionswert
+       dcl-s isok            like(bool_t) inz(bfalse);
+
+       //  Definieren Parameter für p_getOpDesc
+       dcl-s desctype        int(10) inz;
+       dcl-s datatype        int(10) inz;
+       dcl-s descinf1        int(10) inz;
+       dcl-s descinf2        int(10) inz;
+       dcl-s datalen         int(10) inz;
+       dcl-s feedback        char(12) inz;
+
+       //  Definitionen für QCAPCMD
+       dcl-s cmdlen          int(10) inz;
+
+       dcl-ds optctrl;
+         typ_cmdprc      int(10) inz(0);                                        // like QCMDEXC
+         dbcs_data       char(1) inz('0');                                      // ignore DBCS
+         prmt_act        char(1) inz('0');                                      // never prompt
+         cmdstrsntx      char(1) inz('0');                                      // AS/400 Syntax
+         msgrtvkey       char(4) inz(*blanks);                                  // no retrieve ke
+         res_01          char(9) inz(*allx'00');
+       end-ds;
+
+       dcl-s optctrllen      int(10) inz;
+       dcl-s optctrlfmt      char(8) inz('CPOP0100');
+       dcl-s cmd             like(i_cmd) inz;
+       dcl-s lenavl          int(10) inz;
+       dcl-s lenavlrtn       int(10) inz;
+
+       dcl-ds errcode likeds(errcode_t ) inz;
+       //-------------------------------------------------------------------
+
+       reset errcode;
+       errcode.bytprv = %size(errcode);
+
+       ceedod(1: desctype: datatype:
+                descinf1: descinf2:
+                datalen:  feedback);
+
+       cmd        = %subst(i_cmd: 1: datalen);
+       cmdlen     = %len(cmd);
+       lenavl     = %len(cmd);
+
+       optctrllen = %len(optctrl);
+       reset errcode;
+       errcode.bytprv = %size(errcode);
+
+       qcapcmd ( cmd : cmdlen : optctrl :
+       optctrllen : optctrlfmt : cmd : lenavl :
+       lenavlrtn : errcode );
+
+       if errcode.bytavl <> 0;
+          o_msgid  = errcode.excid;
+          o_msgdta = errcode.excdta;
+          isok     = bfalse;
+       else;
+          o_msgid  = ' ';
+          o_msgdta = ' ';
+          isok     = btrue;
+       endif;
+
+       return isok;
+
+       end-proc;
+
+       //===================================================================*
+       //  Funktion:  f_basedPF                                  (Body)     *
+       //===================================================================*
+
+       dcl-proc f_basedpf export;
+       dcl-pi *N        like(bool_t);
+         i_file          value  like(file_t);
+         i_lib           value  like(lib_t);
+         i_mbr           value  like(mbr_t);
+         i_rcdfmt        value  like(rcdfmt_t);
+         i_rcdmbrnbr     value  like(mbrnbr_t);
+         o_pfile         like(file_t);
+         o_plib          like(lib_t);
+         o_pmbr          like(mbr_t);
+         o_prcdfmt       like(rcdfmt_t);
+       end-pi;
+
+       //  Definieren Funktionswert ...
+       dcl-s isbasedonpf     like(bool_t) inz(bfalse);
+
+       dcl-s tfile           like(i_file);
+       dcl-s tlib            like(i_lib);
+       dcl-s tmbr            like(i_mbr);
+       dcl-s trcdfmt         like(i_rcdfmt);
+       dcl-ds fild0100 likeds(fild0100_t) inz;
+
+       dcl-ds yqfile likeds(qobj_t) inz;
+       dcl-s ynbrofent       like(int4_t);
+       dcl-s ydata           char(512);
+       //------------------------------------------------------------*
+
+       peek41_name = f_pgmcalln('PEEK41');
+
+       o_pfile  = '*ERROR';
+       o_plib   = '*ERROR';
+       o_pmbr   = '*ERROR';
+       o_prcdfmt = '*ERROR';
+
+       //  Einlesen der Dateiinformationen ...
+       yqfile.name = i_file;
+       yqfile.lib = i_lib;
+       peek41(yqfile: i_rcdfmt
+             : '*CREATE': ynbrofent: ydata);
+
+       if ynbrofent = 0;
+          return bfalse;
+       endif;
+
+       //      prüfen auf logische Datei
+       fild0100 = ydata;
+
+       if fild0100.atfila = '*LGL';
+          //      ... logical file
+          select;
+          when fild0100.atnomb > 1;
+             //          ... multi-based-member logical file
+             if f_basedmbr(i_file: i_lib: i_mbr
+                        : i_rcdmbrnbr: i_rcdfmt
+                        : tfile: tlib: tmbr: trcdfmt
+                        ) = bfalse;
+                return bfalse;
+             endif;
+
+          when fild0100.atnofm > 1;
+             //          ... multi-format logical file
+             if f_basedmbr(i_file: i_lib: i_mbr
+                        : i_rcdmbrnbr: i_rcdfmt
+                        : tfile: tlib: tmbr: trcdfmt
+                        ) = bfalse;
+                return bfalse;
+             endif;
+
+          other;
+             //          ... single-format logical file
+             if f_basedmbr(i_file: i_lib: i_mbr
+                        : i_rcdmbrnbr: i_rcdfmt
+                        : tfile: tlib: tmbr: trcdfmt
+                        ) = bfalse;
+                return bfalse;
+             endif;
+          endsl;
+
+
+          isbasedonpf = btrue;
+          o_pfile   = tfile;
+          o_plib    = tlib;
+          o_pmbr    = tmbr;
+          o_prcdfmt = trcdfmt;
+
+       else;
+          //      ... physical file
+          if f_basedmbr(i_file: i_lib: i_mbr
+                     : i_rcdmbrnbr: i_rcdfmt
+                     : tfile: tlib: tmbr: trcdfmt
+                     ) = bfalse;
+             return bfalse;
+          endif;
+
+          isbasedonpf = bfalse;
+          o_pfile   = tfile;
+          o_plib    = tlib;
+          o_pmbr    = tmbr;
+          o_prcdfmt = trcdfmt;
+       endif;
+
+       return isbasedonpf;
+
+       end-proc;
+
+       //===================================================================*
+       //  Funktion:  f_basedMbr                                 (Body)     *
+       //===================================================================*
+
+       dcl-proc f_basedmbr export;
+       dcl-pi *N        like(bool_t);
+         i_file          value  like(file_t);
+         i_lib           value  like(lib_t);
+         i_mbr           value  like(mbr_t);
+         i_mbrnbr        value  like(int4_t);
+         i_rcdfmt        value  like(rcdfmt_t);
+         o_pFile         like(file_t);
+         o_pLib          like(lib_t);
+         o_pmbr          like(mbr_t);
+         o_rcdfmt        like(rcdfmt_t);
+       end-pi;
+
+       //  Definieren Funktionswert ...
+       dcl-s isMbrFound  like(bool_t) inz(bfalse);
+
+       dcl-s mbrNbr      like(i_mbrnbr);
+
+       //  Arbeitsfelder
+       dcl-ds qFile likeds(qObj_t) inz;
+       dcl-ds errcode likeds(errcode_t) inz;
+
+       dcl-ds bspf0100 likeds(bspf0100_t) inz;
+
+       dcl-s pMbrd0300 pointer inz static;
+       dcl-ds mbrd0300 likeds(mbrd0300_t) based(pMbrd0300);
+
+       dcl-ds basedOnE likeds(MBRD0300_basedOnE_t) based(pBasedOnE);
+
+       dcl-s offset          int(10) inz;
+       dcl-ds fild0100 likeds(fild0100_t) inz;
+
+       dcl-s nbrOfEnt       like(int4_t);
+       dcl-s ydata           char(512);
+       //------------------------------------------------------------*
+
+       peek41_name = f_pgmcalln('PEEK41');
+
+       o_pFile = ' ';
+       o_pLib  = ' ';
+       o_pmbr  = ' ';
+
+       //  Ermitteln Speicherbedarf
+       reset errcode;
+       errcode.bytprv = %size(errcode);
+
+       qFile.name = i_file;
+       qFile.lib = i_lib;
+       pMbrd0300 = malloc(%size(mbrd0300));
+       qusrmbrd(mbrd0300: %size(mbrd0300): 'MBRD0300'
+               : qFile: i_mbr: '0': errcode);
+       if errcode.bytavl <> 0;
+          isMbrFound = bfalse;
+          return isMbrFound;
+       endif;
+
+       //  Zuordnen Speicher
+       pMbrd0300 = realloc(pMbrd0300: mbrd0300.m3bytavl);
+
+       //  Abrufen Beschreibung der Teildatei
+       qusrmbrd(mbrd0300: mbrd0300.m3bytavl: 'MBRD0300'
+                : qFile: i_mbr: '0': errcode);
+       if errcode.bytavl <> 0;
+          isMbrFound = bfalse;
+          return isMbrFound;
+       endif;
+
+       select;
+          //  Wenn es sich um eine Join Datei oder SQL VIEW handelt, ...
+       when (mbrd0300.m3joinmbr = '1' or
+             mbrd0300.m3sqlfiletype = 'VIEW');
+          //  ... dann
+          //      zurückgeben der Eingangsmemberdaten, wegen Join Datei
+          o_pFile   = i_file;
+          o_pLib    = i_lib;
+          o_pmbr    = i_mbr;
+          o_rcdfmt  = i_rcdfmt;
+          isMbrFound = bTrue;
+
+          //  Wenn es keine basierenden physischen Member gibt, ...
+       when (mbrd0300.m3numBasedOnMbr = 0);
+          //  ... dann
+          //      zurückgeben der Eingangsmemberdaten
+          o_pFile   = i_file;
+          o_pLib    = i_lib;
+          o_pmbr    = i_mbr;
+          o_rcdfmt  = i_rcdfmt;
+          isMbrFound = bTrue;
+       other;
+          //  ... sonst
+          //      zurückgeben des basierenden physischen Members
+          if (i_mbrnbr > 0);
+             mbrNbr = i_mbrnbr;
+          else;
+             if (mbrd0300.m3numBasedOnMbr = 1);
+                mbrNbr = 1;
+             else;
+                mbrNbr = -1;
+             endif;
+          endif;
+
+          if (mbrNbr > 0);
+             offset = %size(mbrd0300) +
+              (mbrNbr - 1) * %size(basedOnE);
+             pBasedOnE  = f_addptr(pMbrd0300: offset);
+             o_pFile    = basedOnE.basedOnFile;
+             o_pLib     = basedOnE.basedOnLib;
+             o_pmbr     = basedOnE.basedOnMbr;
+             o_rcdfmt   = '*FIRST';
+             isMbrFound = bTrue;
+          else;
+             o_pFile    = '*ERROR';
+             o_pLib     = '*ERROR';
+             o_pmbr     = '*ERROR';
+             o_rcdfmt   = '*ERROR';
+             isMbrFound = bfalse;
+          endif;
+       endsl;
+
+       //  Freigeben Speicher ...
+       free(pMbrd0300);
+
+       if (o_rcdfmt = '*FIRST');
+
+          //  Einlesen der Dateiinformationen ...
+          qfile.name = o_pFile;
+          qfile.lib = o_pLib;
+          peek41(qfile: o_rcdfmt: '*CREATE': nbrOfEnt: ydata);
+          fild0100 = ydata;
+
+          peek41(qfile: o_rcdfmt: '*BASED-ON': nbrOfEnt: ydata);
+          bspf0100 = ydata;
+
+          if (nbrOfEnt = 1);
+             o_rcdfmt = bspf0100.bfrcdfmt;
+          endif;
+
+       endif;
+
+       return isMbrFound;
+
+       end-proc;
+
+       //===================================================================*
+       //  Funktion:  f_numBased                                 (Body)     *
+       //===================================================================*
+
+       dcl-proc f_numbased export;
+       dcl-pi *N        like(int4_t);
+         i_file          const  like(file_t);
+         i_lib           const  like(lib_t);
+         i_mbr           const  like(mbr_t);
+       end-pi;
+
+       //  Definieren Funktionswert ...
+       dcl-s f_numbased      like(int4_t) inz;
+
+       //  Arbeitsfelder
+       dcl-ds errcode likeds(errcode_t) inz;
+
+       dcl-ds mbrd0300 inz;
+         m3bytprv        int(10);
+         m3bytavl        int(10);
+         m3fileattr      char(10) pos(39);
+         m3nbrmbr        int(10) pos(157);
+       end-ds;
+       //------------------------------------------------------------*
+
+       //  Ermitteln Anzahl basierender Teildateien
+       reset errcode;
+       errcode.bytprv = %size(errcode);
+
+       qusrmbrd(mbrd0300       :
+               %size(mbrd0300):
+               'MBRD0300'     :
+               i_file + i_lib :
+               i_mbr          :
+               '0'            :
+               errcode        );
+       if errcode.bytavl <> 0;
+          f_numbased = -1;
+       else;
+          if m3fileattr = 'PF';
+             f_numbased = 1;
+          else;
+             f_numbased = m3nbrmbr;
+          endif;
+       endif;
+
+       return f_numbased;
+
+       end-proc;
+
+       //===================================================================*
+       //  Prozedur:  p_setPrdLb                                 (Body)     *
+       //===================================================================*
+
+       dcl-proc p_setprdlb export;
+       dcl-pi *N;
+         i_lib           const  like(lib_t);
+       end-pi;
+       //------------------------------------------------------------*
+
+       g_prdlib = i_lib;
+
+       return;
+
+       end-proc;
+
+       //===================================================================*
+       //  Funktion:  f_getPrdLb                                 (Body)     *
+       //===================================================================*
+
+       dcl-proc f_getprdlb export;
+       dcl-pi *N        like(lib_t);
+       end-pi;
+       //------------------------------------------------------------*
+
+       return g_prdlib;
+
+       end-proc;
+
+       //===================================================================*
+       //  Funktion:  f_cmdLine                                  (Body)     *
+       //===================================================================*
+
+       dcl-proc f_cmdline export;
+       dcl-pi *N        like(bool_t);
+       end-pi;
+       //------------------------------------------------------------*
+
+       //  Definieren Funktionswert ...
+       dcl-s f_cmdline       like(bool_t) inz;
+
+       dcl-s rcvvarlen       like(int4_t);
+       dcl-s format          char(8);
+       dcl-s usrprf          char(10);
+       dcl-ds errcode likeds(errcode_t ) inz;
+
+      /COPY QCOPYLE,USRI0200
+       //------------------------------------------------------------*
+
+       rcvvarlen = §usri200;
+       format    = 'USRI0200';
+       usrprf    = §§user;
+       clear usri0200;
+
+       reset errcode;
+       errcode.bytprv = %size(errcode);
+
+       qsyrusri ( usri0200 : rcvvarlen : format
+       : usrprf : errcode );
+
+       if (errcode.bytavl <> 0)  or
+          (u2lmtcap  =  '*YES');
+          f_cmdline = bfalse;
+       else;
+          f_cmdline = btrue;
+       endif;
+
+       return f_cmdline;
+
+
+       end-proc;
+
+       //===================================================================*
+       //  Prozedur:  p_expStr                                   (Body)     *
+       //===================================================================*
+
+       dcl-proc p_expstr export;
+       dcl-pi *N opdesc;
+         o_string        char(32767) options(*varsize);
+         i_string        char(32767) const  options(*varsize);
+         i_stepval       int(10) const  options(*nopass);
+       end-pi;
+
+       //  Parameterpositionen optionaler Parameter
+       dcl-c p_stepval const(3);
+
+       // Parameters passed to CEEDOD
+       dcl-s desctype        int(10);
+       dcl-s datatype        int(10);
+       dcl-s descinfo1       int(10);
+       dcl-s descinfo2       int(10);
+       dcl-s ostrlen         int(10);
+       dcl-s istrlen         int(10);
+
+       //  Arbeitsfelder
+       dcl-s stepval         int(10) inz;
+       dcl-s iidx            int(10) inz;
+       dcl-s oidx            int(10) inz;
+       // ------------------------------------------------------------------------
+
+       ceedod(1         : desctype : datatype :
+             descinfo1 : descinfo2: ostrlen  :
+             *omit);
+
+       ceedod(2         : desctype : datatype :
+             descinfo1 : descinfo2: istrlen  :
+             *omit);
+
+       if %parms >= p_stepval;
+          stepval = i_stepval;
+       else;
+          stepval = 1;
+       endif;
+
+       iidx = 1;
+       oidx = 1;
+
+       dow (iidx <= istrlen) and
+          (oidx <= ostrlen);
+
+          %subst(o_string: oidx: 1) =
+            %subst(i_string: iidx: 1);
+
+          iidx = iidx + 1;
+          oidx = oidx + 1;
+
+          for do_x1 = 1 to stepval;
+             %subst(o_string: oidx: 1) = ' ';
+             oidx = oidx + 1;
+          endfor;
+       enddo;
+
+       return;
+
+       end-proc;
+
+       //===================================================================*
+       //  Funktion:  f_headline                                 (Body)     *
+       //===================================================================*
+
+       dcl-proc f_headline export;
+       dcl-pi *N like(colheading_t);
+         i_headtyp       const  like(type_t);
+         i_fldl0100      const  likeds(fldl0100_t);
+       end-pi;
+
+       //  Funktionswert
+       dcl-s heading         like(colheading_t);
+       // ------------------------------------------------------------------------
+
+       //  Überschrift ...
+       select;
+          //  ... Feldtext
+       when i_headtyp = '*FIELDTEXT';
+          if i_fldl0100.f1ftxt = ' ';
+             heading = '?' + i_fldl0100.f1fnme;
+          else;
+             heading = i_fldl0100.f1ftxt;
+          endif;
+          //  ... Feldtyp
+       when i_headtyp = '*FIELDTYPE';
+          heading = f_fieldtypeasstring(i_fldl0100);
+          //  ... Feldname
+       other;
+          heading = i_fldl0100.f1fnme;
+       endsl;
+
+       return heading;
+
+       end-proc;
+
+       //===================================================================*
+       //  Funktion:  f_isNumFld                                 (Body)     *
+       //===================================================================*
+
+       dcl-proc f_isnumfld export;
+       dcl-pi *N        like(bool_t);
+         i_fldl0100      const  likeds(fldl0100_t);
+       end-pi;
+
+       //  Funktionswert
+       dcl-s isnumfld        like(bool_t) inz;
+       // ------------------------------------------------------------------------
+
+       if (i_fldl0100.f1dtyp = 'S') or                                          // Zoned
+          (i_fldl0100.f1dtyp = 'B') or                                          // Binary
+          (i_fldl0100.f1dtyp = 'P') or                                          // Packed
+          (i_fldl0100.f1dtyp = 'F');                                            // Float
+          isnumfld = btrue;
+       else;
+          isnumfld = bfalse;
+       endif;
+
+       return isnumfld;
+
+       end-proc;
+
+       //===================================================================*
+       //  Funktion:  f_isFloatFld                               (Body)     *
+       //===================================================================*
+
+       dcl-proc f_isfloatfld export;
+       dcl-pi *N        like(bool_t);
+         i_fldl0100      const  likeds(fldl0100_t);
+       end-pi;
+
+       //  Funktionswert
+       dcl-s isfloat         like(bool_t) inz;
+       // ------------------------------------------------------------------------
+
+       if (i_fldl0100.f1dtyp = 'F');                                            // Float
+          isfloat = btrue;
+       else;
+          isfloat = bfalse;
+       endif;
+
+       return isfloat;
+
+       end-proc;
+
+       //===================================================================*
+       //  Funktion:  f_isCharFld                                (Body)     *
+       //===================================================================*
+
+       dcl-proc f_ischarfld export;
+       dcl-pi *N        like(bool_t);
+         i_fldl0100      const  likeds(fldl0100_t);
+       end-pi;
+
+       //  Funktionswert
+       dcl-s ischarfld       like(bool_t) inz;
+       // ------------------------------------------------------------------------
+
+       if (i_fldl0100.f1dtyp = 'A' or                                           // Alpha
+          i_fldl0100.f1dtyp = 'G');                                             // Graphic
+          ischarfld = btrue;
+       else;
+          ischarfld = bfalse;
+       endif;
+
+       return ischarfld;
+
+       end-proc;
+
+       //===================================================================*
+       //  Funktion:  f_hasCcsid                                 (Body)     *
+       //===================================================================*
+
+       dcl-proc f_hasccsid export;
+       dcl-pi *N        like(bool_t);
+         i_fldl0100      const  likeds(fldl0100_t);
+       end-pi;
+
+       //  Funktionswert
+       dcl-s hasccsid        like(bool_t) inz;
+       // ------------------------------------------------------------------------
+
+       if (i_fldl0100.f1fdcc > 0 and
+          i_fldl0100.f1fdcc <> 65535);
+          hasccsid = btrue;
+       else;
+          hasccsid = bfalse;
+       endif;
+
+       return hasccsid;
+
+       end-proc;
+
+       //===================================================================*
+       //  Funktion:  f_appMsgF                                  (Body)     *
+       //===================================================================*
+
+       dcl-proc f_appmsgf export;
+       dcl-pi *N        like(file_t);
+       end-pi;
+       //------------------------------------------------------------*
+
+       return 'PEEKGER';
+
+       end-proc;
+
+       //===================================================================*
+       //  Funktion:  f_appMsgFL                                 (Body)     *
+       //===================================================================*
+
+       dcl-proc f_appmsgfl export;
+       dcl-pi *N        like(lib_t);
+       end-pi;
+       //------------------------------------------------------------*
+
+       return '*LIBL';
+
+       end-proc;
+
+       //===================================================================*
+       //  Prozedur:  p_rmvPgmMg                                 (Body)     *
+       //===================================================================*
+
+       dcl-proc p_rmvpgmmg export;
+       dcl-pi *N;
+         i_pgmnme        const  like(pgm_t);
+       end-pi;
+
+       //  Parameter für QMHRMVPM API
+       dcl-s ystke           like(proc_t) inz;
+       dcl-s ystkcnt         like(int4_t) inz;
+       dcl-s ymsgkey         char(4) inz;
+       dcl-s ymsgtormv       char(10) inz;
+       dcl-ds yerrcode likeds(errcode_t ) inz;
+       dcl-s ystkelen        int(10) inz;
+       dcl-ds yqstke;
+         ystkemod        like(mod_t)  inz;
+         ystkepgm        like(pgm_t)  inz;
+       end-ds;
+       dcl-s yrmvexcpt       char(10) inz;
+       //------------------------------------------------------------*
+
+       if i_pgmnme = '*';
+          ystke      = i_pgmnme;
+          ystkcnt    = 1;
+          ystkemod   = '*NONE';
+          ystkepgm   = '*NONE';
+       else;
+          ystke      = i_pgmnme;
+          ystkcnt    = 0;
+          ystkemod   = i_pgmnme;
+          ystkepgm   = i_pgmnme;
+       endif;
+
+       ymsgkey      = ' ';
+       ymsgtormv    = '*ALL';
+       reset yerrcode;
+       yerrcode.bytprv = %size(yerrcode);
+       ystkelen     = %size(ystke);
+       yrmvexcpt    = '*NO';
+
+       qmhrmvpm ( ystke : ystkcnt : ymsgkey :
+       ymsgtormv : yerrcode : ystkelen : yqstke
+       : yrmvexcpt );
+
+       return;
+
+       end-proc;
+
+       //===================================================================*
+       //  Prozedur:  p_sndPgmMg                                 (Body)     *
+       //===================================================================*
+
+       dcl-proc p_sndpgmmg export;
+       dcl-pi *N;
+         i_msgid         const  like(msgid_t);
+         i_msgDta        const  like(msgdta_t);
+         i_pgmName       const  like(pgm_t);
+         i_msgType       const  like(msgtype_t) options(*nopass);
+       end-pi;
+
+       dcl-ds qMsgF      likeds(qObj_t) inz;
+
+       dcl-s msgType     char(10) inz;
+       dcl-s stackE      like(proc_t) inz;
+       dcl-s stackCount  like(int4_t) inz;
+       dcl-s msgKey      char(4) inz;
+
+       dcl-ds qStackE qualified;
+         module     like(mod_t) inz;
+         pgm        like(pgm_t) inz;
+       end-ds;
+
+       dcl-ds errCode likeds(errcode_t) inz;
+       //------------------------------------------------------------*
+
+       if (i_msgid <> '');
+
+          if (%subst(i_msgid: 1: 3) = 'AID' or
+              %subst(i_msgid: 1: 3) = 'KEY' or
+              %subst(i_msgid: 1: 3) = 'MBX' or
+              %subst(i_msgid: 1: 3) = 'TXT' or
+              %subst(i_msgid: 1: 3) = 'USR');
+             qMsgF.name = f_appmsgf;
+             qMsgF.lib = f_appmsgfl;
+          else;
+             qMsgF.name = 'QCPFMSG';
+             qMsgF.lib = '*LIBL';
+          endif;
+
+          if (%parms() >= %parmnum(i_msgType));
+             msgType = i_msgType;
+          else;
+             msgType = '*INFO';
+          endif;
+
+          select;
+          when (i_pgmName = '*');
+             stackE = i_pgmName;
+             stackCount = 1;
+          other;
+             stackE = i_pgmName;
+             stackCount = 0;
+          endsl;
+
+          reset errCode;
+          errCode.bytprv = %size(errCode);
+
+          msgKey = '';
+          qStackE.pgm = i_pgmName;
+          qStackE.module = i_pgmName;
+
+          qmhsndpm(i_msgid: qMsgF
+                   : i_msgDta: %size(i_msgDta): msgType: stackE: stackCount
+                   : msgKey: errCode: %size(stackE): qStackE
+                   : -1);
+
+       endif;
+
+       end-proc;
+
+       //===================================================================*
+       //  Funktion:  f_canUseRefFld                             (Body)     *
+       //===================================================================*
+
+       dcl-proc f_canusereffld export;
+       dcl-pi *N        like(bool_t);
+         i_fldl0100      const  likeds(fldl0100_t);
+       end-pi;
+
+       //  Funktionswert
+       dcl-s canusereffld    like(bool_t) inz;
+       // ------------------------------------------------------------------------
+
+       if (i_fldl0100.f1dtyp = 'G' or
+          (i_fldl0100.f1dtyp = 'A' and
+          (i_fldl0100.f1fdcc = 1200 or
+          i_fldl0100.f1fdcc = 1208)));
+          canusereffld = bfalse;
+       else;
+          canusereffld = btrue;
+       endif;
+
+       return canusereffld;
+
+       end-proc;
+
+       //===================================================================*
+       //  Funktion:  f_canUseCntFld                             (Body)     *
+       //===================================================================*
+
+       dcl-proc f_canusecntfld export;
+       dcl-pi *N        like(bool_t);
+         i_fldl0100      const  likeds(fldl0100_t);
+       end-pi;
+
+       //  Funktionswert
+       dcl-s canusecntfld    like(bool_t) inz;
+       // ------------------------------------------------------------------------
+
+       if (i_fldl0100.f1dtyp = 'G' or
+          (i_fldl0100.f1dtyp = 'A' and
+          (i_fldl0100.f1fdcc = 1200 or
+          i_fldl0100.f1fdcc = 1208)));
+          canusecntfld = bfalse;
+       else;
+          canusecntfld = btrue;
+       endif;
+
+       return canusecntfld;
+
+       end-proc;
+
+       //===================================================================*
+       //  Funktion:  f_mustCvtCcsid                             (Body)     *
+       //===================================================================*
+
+       dcl-proc f_mustcvtccsid export;
+       dcl-pi *N        like(bool_t);
+       end-pi;
+
+       dcl-ds jobi0400 likeds(jobi0400_t);
+       // ----------------------------------------------------------------------
+
+       if (g_jobccsid = 0);
+          qusrjobi(jobi0400: %size(jobi0400): 'JOBI0400': '*': '');
+          g_jobccsid = jobi0400.ccsid;
+       endif;
+
+       if (g_jobccsid = 65535); // Job CCSID = *HEX
+          return btrue;
+       endif;
+
+       return bfalse;
+
+       end-proc;
+
+       //===================================================================*
+       //  Funktion:  f_isToLong                                 (Body)     *
+       //===================================================================*
+
+       dcl-proc f_istolong export;
+       dcl-pi *N        like(bool_t);
+         i_fldl0100      const  likeds(fldl0100_t);
+       end-pi;
+
+       //  Funktionswert
+       dcl-s tolong          like(bool_t) inz;
+       // ------------------------------------------------------------------------
+
+       if f_dsplyln(i_fldl0100)>f_maxdspln(i_fldl0100);
+          tolong = btrue;
+       else;
+          tolong = bfalse;
+       endif;
+
+       return tolong;
+
+       end-proc;
+
+       //===================================================================*
+       //  Funktion:  f_isToLongMax                              (Body)     *
+       //===================================================================*
+
+       dcl-proc f_istolongmax export;
+       dcl-pi *N        like(bool_t);
+         i_fldl0100      const  likeds(fldl0100_t);
+       end-pi;
+
+       //  Funktionswert
+       dcl-s tolong          like(bool_t) inz;
+       // ------------------------------------------------------------------------
+
+       if f_buffln(i_fldl0100) > 1024;
+          tolong = btrue;
+       else;
+          tolong = bfalse;
+       endif;
+
+       return tolong;
+
+       end-proc;
+
+       //===================================================================*
+       //  Funktion:  f_maxDspLn                                 (Body)     *
+       //===================================================================*
+
+       dcl-proc f_maxdspln export;
+       dcl-pi *N        like(int4_t);
+         i_fldl0100      const  likeds(fldl0100_t);
+       end-pi;
+
+       dcl-s maxlen          int(10) inz;
+       //------------------------------------------------------------*
+
+       maxlen =  %int(f_cntfldln(i_fldl0100) * 15);
+       if maxlen > 512;
+          maxlen = 512;
+       endif;
+
+       return maxlen;
+
+       end-proc;
+
+       //===================================================================*
+       //  Funktion:  f_cntFldLn                                 (Body)     *
+       //===================================================================*
+
+       dcl-proc f_cntfldln export;
+       dcl-pi *N        like(int4_t);
+         i_fldl0100      const  likeds(fldl0100_t);
+       end-pi;
+       //------------------------------------------------------------*
+
+       if (i_fldl0100.f1dtyp = 'G');
+          return 34;                                                            // TODO:18
+       else;
+          return 35;
+       endif;
+
+       end-proc;
+
+       //===================================================================*
+       //  Funktion:  f_nbrDspRw                                 (Body)     *
+       //===================================================================*
+
+       dcl-proc f_nbrdsprw export;
+       dcl-pi *N        like(int4_t);
+         i_fldl0100      const  likeds(fldl0100_t);
+       end-pi;
+
+       // Funktionswert
+       dcl-s nbrdsprow       like(int4_t) inz;
+
+       // Arbeitsfelder
+       dcl-s dsplylen        like(int4_t);
+       //------------------------------------------------------------*
+
+       if f_istolong(i_fldl0100) = btrue;
+          dsplylen = f_maxdspln(i_fldl0100);
+       else;
+          dsplylen = f_dsplyln(i_fldl0100);
+       endif;
+
+       nbrdsprow = dsplylen / f_cntfldln(i_fldl0100);
+
+       if dsplylen <>
+          (nbrdsprow * f_cntfldln(i_fldl0100));
+          nbrdsprow = nbrdsprow + 1;
+       endif;
+
+       return nbrdsprow;
+
+       end-proc;
+
+       //===================================================================*
+       //  Prozedur:  p_decToBin                                 (Body)     *
+       //===================================================================*
+
+       dcl-proc p_dectobin export;
+       dcl-pi *N opdesc;
+         io_string       char(32767) options(*varsize);
+         i_startpos      const  like(int4_t);
+         i_length        const  like(int4_t);
+         i_value         const  like(int4_t);
+       end-pi;
+
+       // Parameters passed to CEEDOD
+       dcl-s desctype        int(10);
+       dcl-s datatype        int(10);
+       dcl-s descinfo1       int(10);
+       dcl-s descinfo2       int(10);
+       dcl-s parmlen         int(10);
+
+       // Arbeitsfelder
+       dcl-ds *N;
+         intvalue        like(int4_t) inz;
+         alpha2          char(2) overlay(intvalue: 3);
+         alpha4          char(2) overlay(intvalue: 1);
+       end-ds;
+       // ------------------------------------------------------------------------
+
+       ceedod(1         : desctype : datatype :
+             descinfo1 : descinfo2: parmlen  :
+             *omit);
+
+       if (i_startpos + i_length - 1) > parmlen;
+          p_kill('Start position and length outside +
+                range.');
+       else;
+          intvalue = i_value;
+          select;
+          when i_length = 2;
+             %subst(io_string  :
+                   i_startpos :
+                   i_length   ) = alpha2;
+          when i_length = 4;
+             %subst(io_string  :
+                   i_startpos :
+                   i_length   ) = alpha4;
+          other;
+             p_kill('Incorrect length: ' +
+                   %char(i_length));
+          endsl;
+       endif;
+
+       return;
+
+       end-proc;
+
+       //===================================================================*
+       //  Funktion:  f_isNotAlw                                 (Body)     *
+       //===================================================================*
+
+       dcl-proc f_isnotalw export;
+       dcl-pi *N        like(bool_t);
+         i_fldl0100      const  likeds(fldl0100_t);
+       end-pi;
+
+       // Funktionswert
+       dcl-s notallowed      like(bool_t) inz(btrue);
+       // ------------------------------------------------------------------------
+
+       //  Wenn es sich um einen der folgenden Feldtypen handelt, ...
+       if (i_fldl0100.f1dtyp = 'A') or                                          // = Alpha
+          (i_fldl0100.f1dtyp = 'B') or                                          // = Binary
+          (i_fldl0100.f1dtyp = 'P') or                                          // = Packed
+          (i_fldl0100.f1dtyp = 'S') or                                          // = Zoned
+          (i_fldl0100.f1dtyp = 'L') or                                          // = Date
+          (i_fldl0100.f1dtyp = 'T') or                                          // = Time
+          (i_fldl0100.f1dtyp = 'Z') or                                          // = Timestamp
+    -     (i_fldl0100.f1dtyp = 'J') or                                          // = DBCS-Only
+    -     (i_fldl0100.f1dtyp = 'O') or                                          // = DBCS-Open
+    -     (i_fldl0100.f1dtyp = 'E') or                                          // = DBCS-Either
+    -     (i_fldl0100.f1dtyp = 'F') or                                          // = Float
+    -     (i_fldl0100.f1dtyp = 'G');                                            // = Graphic
+          //  ... dann
+          //      prüfen, ob es sich um ein GRAPHIC Feld ohne CCSID handelt
+    -     if (i_fldl0100.f1dtyp = 'G' and
+             f_hasccsid(i_fldl0100) = bfalse);
+             notallowed = btrue;
+             return notallowed;
+          endif;
+
+          //      prüfen, ob es sich um ein Packed oder Zoned Feld mit mehr als
+          //      30 Stellen handelt.
+          if (i_fldl0100.f1dtyp = 'P' or
+             i_fldl0100.f1dtyp = 'S');
+             if (i_fldl0100.f1digt > 30);
+                notallowed = btrue;
+                return notallowed;
+             endif;
+          endif;
+
+          //      prüfen, ob es sich um ein Feld variabler Länge handelt.
+
+          //      Wenn es sich um ein Feld variabler Länge handelt, ...
+          if f_isvarlen(i_fldl0100) = btrue;
+             //      ... dann
+             //          prüfen, ob es sich um alpha-numerisches Feld handelt.
+             if i_fldl0100.f1dtyp = 'A' or                                      // = Alpha
+                i_fldl0100.f1dtyp = 'G';                                        // = Graphic
+                notallowed = bfalse;
+             else;
+                notallowed = btrue;
+             endif;
+          else;
+             //      ... sonst
+             //          ist alles klar.
+             notallowed = bfalse;
+          endif;
+       else;
+          //  ... sonst
+          //      setzen Markierung für unbekannten Feldtyp
+          notallowed = btrue;
+       endif;
+
+       return notallowed;
+
+       end-proc;
+
+       //===================================================================*
+       //  Funktion:  f_isKeyFld                                 (Body)     *
+       //===================================================================*
+
+       dcl-proc f_iskeyfld export;
+       dcl-pi *N        like(bool_t);
+         i_fldl0100      const  likeds(fldl0100_t);
+       end-pi;
+
+       // Funktionswert
+       dcl-s iskeyfld        like(bool_t) inz(bfalse);
+       // ------------------------------------------------------------------------
+
+       //  Wenn es sich um ein Schlüsselfeld handelt, ...
+       if (i_fldl0100.f1keyf = '1');
+          //  ... dann
+          iskeyfld = btrue;
+       else;
+          //  ... sonst
+          iskeyfld = bfalse;
+       endif;
+
+       return iskeyfld;
+
+       end-proc;
+
+       //===================================================================*
+       //  Prozedur:  f_pgmCallN                                 (Body)     *
+       //===================================================================*
+
+       dcl-proc f_pgmcalln export;
+       dcl-pi *N        like(pgmcalln_t);
+         i_pgmnme        const  like(pgm_t);
+         i_lib           const  like(lib_t) options(*nopass);
+       end-pi;
+       //------------------------------------------------------------*
+
+       if (%parms() >= %parmnum(i_lib));
+          return %trimr(i_lib) + '/' + i_pgmnme;
+       else;
+          return %trimr(f_getprdlb()) + '/' + i_pgmnme;
+       endif;
+
+       end-proc;
+
+       //===================================================================*
+       //  Prozedur:  p_sndStsMg                                 (Body)     *
+       //===================================================================*
+
+       dcl-proc p_sndstsmg export;
+       dcl-pi *N;
+         i_msgid         const like(msgid_t);
+         i_msgdta        const like(msgdta_t);
+       end-pi;
+
+       dcl-s ymsgid          like(msgid_t) inz;
+
+       dcl-ds yqmsgf likeds(qObj_t) inz;
+
+       dcl-s msgKey         char(4) inz;
+
+       dcl-ds errCode likeds(errcode_t ) inz;
+       //------------------------------------------------------------*
+
+       if (i_msgid <> '');
+
+          yqmsgf.name = f_appmsgf();
+          yqmsgf.lib = f_appmsgfl();
+
+          msgKey = '';
+
+          reset errCode;
+          errCode.bytprv = %size(errCode);
+
+          qmhsndpm(i_msgid: yqmsgf
+                   : i_msgdta: %size(i_msgdta): '*STATUS' : '*EXT'
+                   : 0 : msgKey : errCode );
+
+       endif;
+
+       return;
+
+       end-proc;
+
+       //===================================================================*
+       //  Prozedur:  f_rtvMsgD                                  (Body)     *
+       //===================================================================*
+
+       dcl-proc f_rtvmsgd export;
+       dcl-pi *N              char(2048);
+         i_msgid         value  like(msgid_t);
+         i_msgdta        value  like(msgdta_t);
+         i_rplcsubv      const  like(bool_t)
+              options(*nopass);
+         i_rtnfmtcc      const  like(bool_t)
+              options(*nopass);
+         i_msgf          value  like(file_t)
+              options(*nopass);
+         i_msgfl         value  like(lib_t)
+              options(*nopass);
+       end-pi;
+
+       //  Parameterpositionen optionaler Parameter
+       dcl-c p_rplcsubv const(3);
+       dcl-c p_rtnfmtcc const(4);
+       dcl-c p_msgf const(5);
+       dcl-c p_msgfl const(6);
+
+       //  Funktionswert
+      /COPY QCOPYLE,RTVM0100
+
+       //  Parameter für QMHSNDPM
+       dcl-s msgdlen         int(10) inz;
+       dcl-s format          char(8) inz;
+       dcl-ds qmsgf;
+         msgf            like(file_t)  inz;
+         msgfl           like(lib_t)  inz;
+       end-ds;
+       dcl-s msgdtaln        int(10) inz;
+       dcl-s rplcsubv        char(10) inz;
+       dcl-s rtnfmtcc        char(10) inz;
+       dcl-ds errcode likeds(errcode_t ) inz;
+
+       //------------------------------------------------------------*
+
+       clear rtvm0100;
+       msgdlen  = %len(rtvm0100);
+       format   = 'RTVM0100';
+
+       if %parms >= p_msgf;
+          msgf  = i_msgf;
+       else;
+          msgf  = f_appmsgf;
+       endif;
+
+       if %parms >= p_msgfl;
+          msgfl = i_msgfl;
+       else;
+          msgfl = f_appmsgfl;
+       endif;
+
+       msgdtaln = %len(i_msgdta);
+
+       //  Replace substitution variables
+       if %parms >= p_rplcsubv;
+          if i_rplcsubv = btrue;
+             rplcsubv = '*YES';
+          else;
+             rplcsubv = '*NO';
+          endif;
+       else;
+          rplcsubv = '*NO';
+       endif;
+
+       //  Return format control characters
+       if %parms >= p_rtnfmtcc;
+          if i_rtnfmtcc = btrue;
+             rtnfmtcc = '*YES';
+          else;
+             rtnfmtcc = '*NO';
+          endif;
+       else;
+          rtnfmtcc = '*NO';
+       endif;
+
+       reset errcode;
+       errcode.bytprv = %size(errcode);
+
+       qmhrtvm ( rtvm0100 : msgdlen : format :
+       i_msgid : qmsgf : i_msgdta : msgdtaln :
+       rplcsubv : rtnfmtcc : errcode );
+
+       return rtvm0100;
+
+       end-proc;
+
+       //===================================================================*
+       //  Prozedur:  f_msgText                                  (Body)     *
+       //===================================================================*
+
+       dcl-proc f_msgtext export;
+       dcl-pi *N              char(512);
+         i_msgid         value  like(msgid_t);
+         i_msgdta        value  like(msgdta_t);
+         i_msgf          value  like(file_t)
+              options(*nopass);
+         i_msgfl         value  like(lib_t)
+              options(*nopass);
+       end-pi;
+
+       //  Parameterpositionen optionaler Parameter
+       dcl-c p_msgf const(3);
+       dcl-c p_msgfl const(4);
+
+       //  Funktionswert
+       dcl-s msgtext         char(512) inz;
+
+      /COPY QCOPYLE,RTVM0100
+       //------------------------------------------------------------*
+
+       select;
+       when %parms =  p_msgf;
+          rtvm0100 = f_rtvmsgd(i_msgid :i_msgdta:
+                              btrue   :bfalse  :
+                              i_msgf           );
+       when %parms =  p_msgfl;
+          rtvm0100 = f_rtvmsgd(i_msgid :i_msgdta:
+                              btrue   :bfalse  :
+                              i_msgf  :i_msgfl );
+       other;
+          rtvm0100 = f_rtvmsgd(i_msgid :i_msgdta:
+                              btrue   :bfalse  );
+       endsl;
+
+       if rt1_lnmgrt > 0;
+          msgtext = %subst(rt1_data: 1: rt1_lnmgrt);
+       else;
+          msgtext = ' ';
+       endif;
+
+       return msgtext;
+
+       end-proc;
+
+       //===================================================================*
+       //  Prozedur:  p_movPgmMg                                 (Body)     *
+       //===================================================================*
+
+       dcl-proc p_movpgmmg export;
+       dcl-pi *N;
+         i_pgmnme        const  like(pgm_t);
+       end-pi;
+
+       dcl-s msgKey      char(4) inz;
+       dcl-s typesToMove char(10) dim(4);
+
+       dcl-ds errCode likeds(errcode_t ) inz;
+
+       dcl-ds toQStackE qualified;
+         module       like(mod_t) inz;
+         pgm       like(pgm_t) inz;
+       end-ds;
+       //------------------------------------------------------------*
+
+       toQStackE.module = i_pgmnme;
+       toQStackE.pgm = i_pgmnme;
+
+       typesToMove(1) = '*COMP';
+       typesToMove(2) = '*DIAG';
+       typesToMove(3) = '*INFO';
+       typesToMove(4) = '*ESCAPE';
+
+       qmhmovpm(msgKey: typesToMove
+                : %elem(typesToMove) : i_pgmnme : 2 : errCode
+                : %len(%trimr(i_pgmnme)) : toQStackE : '*CHAR' : *null: 1);
+
+       return;
+
+       end-proc;
+
+       //===================================================================*
+       //  Prozedur:  p_wrongKey                                 (Body)     *
+       //===================================================================*
+
+       dcl-proc p_wrongkey export;
+       dcl-pi *N;
+         i_scnaid        const  like(scnaid_t);
+         i_pgmnme        const  like(pgm_t);
+       end-pi;
+
+       //  Arbeitsfelder
+       dcl-ds *N;
+         msgid           like(msgid_t) inz('AID');
+         msgnbr          char(4) overlay(msgid: 4);
+       end-ds;
+       dcl-s msgdta      like(msgdta_t) inz;
+       //------------------------------------------------------------*
+
+       p_keytomsg(i_scnaid: msgid: msgdta);
+       p_sndpgmmg(msgid: msgdta: i_pgmnme);
+
+       return;
+
+       end-proc;
+
+       //===================================================================*
+       //  Prozedur:  p_keyToMsg                                 (Body)     *
+       //===================================================================*
+
+       dcl-proc p_keytomsg export;
+       dcl-pi *N;
+         i_scnaid        const  like(scnaid_t);
+         o_msgid         like(msgid_t);
+         o_msgdta        like(msgdta_t);
+       end-pi;
+
+       //  Arbeitsfelder
+       dcl-ds *N;
+         msgid           like(msgid_t) inz;
+         msgnbr          char(4) overlay(msgid: 4);
+       end-ds;
+       dcl-s msgdta          like(msgdta_t) inz;
+       //------------------------------------------------------------*
+
+       msgid  = 'AID';
+       msgdta = ' ';
+
+       select;
+       when i_scnaid = k_f1;
+          msgnbr   = '0031';
+       when i_scnaid = k_f2;
+          msgnbr   = '0032';
+       when i_scnaid = k_f3;
+          msgnbr   = '0033';
+       when i_scnaid = k_f4;
+          msgnbr   = '0034';
+       when i_scnaid = k_f5;
+          msgnbr   = '0035';
+       when i_scnaid = k_f6;
+          msgnbr   = '0036';
+       when i_scnaid = k_f7;
+          msgnbr   = '0037';
+       when i_scnaid = k_f8;
+          msgnbr   = '0038';
+       when i_scnaid = k_f9;
+          msgnbr   = '0039';
+       when i_scnaid = k_f10;
+          msgnbr   = '003A';
+       when i_scnaid = k_f11;
+          msgnbr   = '003B';
+       when i_scnaid = k_f12;
+          msgnbr   = '003C';
+       when i_scnaid = k_f13;
+          msgnbr   = '00B1';
+       when i_scnaid = k_f14;
+          msgnbr   = '00B2';
+       when i_scnaid = k_f15;
+          msgnbr   = '00B3';
+       when i_scnaid = k_f16;
+          msgnbr   = '00B4';
+       when i_scnaid = k_f17;
+          msgnbr   = '00B5';
+       when i_scnaid = k_f18;
+          msgnbr   = '00B6';
+       when i_scnaid = k_f19;
+          msgnbr   = '00B7';
+       when i_scnaid = k_f20;
+          msgnbr   = '00B8';
+       when i_scnaid = k_f21;
+          msgnbr   = '00B9';
+       when i_scnaid = k_f22;
+          msgnbr   = '00BA';
+       when i_scnaid = k_f23;
+          msgnbr   = '00BB';
+       when i_scnaid = k_f24;
+          msgnbr   = '00BC';
+       when i_scnaid = k_delete;
+          msgnbr   = '00BD';
+       when i_scnaid = k_enter;
+          msgnbr   = '00F1';
+       when i_scnaid = k_help;
+          msgnbr   = '00F3';
+       when i_scnaid = k_page_down;
+          msgnbr   = '00F4';
+       when i_scnaid = k_page_up;
+          msgnbr   = '00F5';
+       when i_scnaid = k_print_screen;
+          msgnbr   = '00F6';
+       when i_scnaid = k_reset;
+          msgnbr   = '00F8';
+       when i_scnaid = k_light_pen;
+          msgnbr   = '003F';
+       other;
+          msgnbr   = '0100';
+       endsl;
+
+       o_msgid  = msgid;
+       o_msgdta = msgdta;
+
+       return;
+
+       end-proc;
+
+       //===================================================================*
+       //  Prozedur:  f_spltTxt                                  (Body)     *
+       //===================================================================*
+
+       dcl-proc f_splttxt export;
+       dcl-pi *N opdesc like(int4_t);
+         i_text          char(32767) const  options(*varsize);
+         i_strpos        const  like(int4_t);
+         i_len           const  like(int4_t);
+         o_text          char(32767) options(*varsize);
+       end-pi;
+
+       //  Funktionswert
+       dcl-s rtnlen          like(int4_t) inz;
+
+       //  Arbeitsfelder
+       dcl-s pnewline        like(int4_t) inz;
+       dcl-s itxtlen         like(int4_t) inz;
+       dcl-s otxtlen         like(int4_t) inz;
+       dcl-s nextchar        char(1) inz;
+       dcl-s trimlen         like(int4_t) inz;
+
+       // Parameters passed to CEEDOD
+       dcl-s desctype        int(10);
+       dcl-s datatype        int(10);
+       dcl-s descinfo1       int(10);
+       dcl-s descinfo2       int(10);
+       dcl-s parmlen         int(10);
+       //------------------------------------------------------------*
+
+       ceedod(1         : desctype : datatype :
+             descinfo1 : descinfo2: itxtlen  :
+             *omit);
+
+       ceedod(4         : desctype : datatype :
+             descinfo1 : descinfo2: otxtlen  :
+             *omit);
+
+       //  Wenn die Startposition außerhalb des gültigen
+       //  Bereichs liegt, ...
+       if i_strpos > itxtlen;
+          //  ... dann
+          //      einen Leerstring zurück geben
+          %subst(o_text: 1: otxtlen) = ' ';
+          rtnlen = 0;
+       else;
+          //  ... sonst
+          //      prüfen zu entnehmende Länge
+          if (i_strpos + i_len - 1) <= itxtlen;
+             rtnlen = i_len;
+          else;
+             rtnlen = itxtlen - i_strpos + 1;
+          endif;
+
+          if rtnlen > otxtlen;
+             rtnlen = otxtlen;
+          endif;
+
+          //      Zeichenkette entnehmen
+          %subst(o_text: 1: otxtlen) =
+            %subst(i_text: i_strpos: rtnlen);
+
+          //      Auf Zeilenwechsel prüfen
+          pnewline =
+            %scan('°': %subst(o_text: 1: otxtlen));
+          if pnewline > 0;
+             rtnlen = pnewline;
+             %subst(o_text
+                   : rtnlen
+                   : otxtlen - rtnlen + 1) = '';
+          endif;
+
+          //      Bestimmen Länge ohne nachgestellte Leezeichen
+          trimlen =
+            %len(%trimr(%subst(o_text: 1: rtnlen)));
+
+          //      Wenn keine nachgestellten Leezeichen
+          //      vorhanden sind, ...
+          if rtnlen = trimlen;
+             //      ... dann
+             //          Folgezeichen im Eingabestring prüfen
+             if itxtlen > rtnlen;
+                nextchar = %subst(i_text: rtnlen + 1: 1);
+
+                //          Wenn das Folgezeichen <> ' ' ist, d.h.
+                //          wir befinden uns mitten in der Zeichenkette, ...
+                if (nextchar <> ' ') and (nextchar <> '°');
+                   //          ... dann
+                   //              rückwärts nach einer Lücke für
+                   //              den Zeilenumbruch suchen
+                   dow trimlen > 0;
+                      if %subst(o_text: trimlen: 1) = ' ';
+                         rtnlen = trimlen;
+                         %subst(o_text: 1: otxtlen) =
+                           %subst(o_text: 1: rtnlen);
+                         leave;
+                      endif;
+                      trimlen = trimlen - 1;
+                   enddo;
+
+                endif;
+             endif;
+          endif;
+       endif;
+
+       return rtnlen;
+
+       end-proc;
+
+       //===================================================================*
+       //  Prozedur:  p_center                                   (Body)     *
+       //===================================================================*
+
+       dcl-proc p_center export;
+       dcl-pi *N opdesc;
+         io_text         char(32767) options(*varsize);
+       end-pi;
+
+       //  Arbeitsfelder
+       dcl-s textlen         like(int4_t) inz;
+       dcl-s iprespc         like(int4_t) inz;
+       dcl-s ipostspc        like(int4_t) inz;
+       dcl-s trimlen         like(int4_t) inz;
+       dcl-s oprespc         like(int4_t) inz;
+       dcl-s opostspc        like(int4_t) inz;
+
+       // Parameters passed to CEEDOD
+       dcl-s desctype        int(10);
+       dcl-s datatype        int(10);
+       dcl-s descinfo1       int(10);
+       dcl-s descinfo2       int(10);
+       dcl-s parmlen         int(10);
+       //------------------------------------------------------------*
+
+       //  Ermitteln Länge der Zeichenfolge
+       ceedod(1         : desctype : datatype :
+             descinfo1 : descinfo2: textlen  :
+             *omit);
+
+       //  Ermitteln Anzahl führender und nachgestellter Leerzeichen
+       //  für Eingangszeichenfolge
+       iprespc  = textlen -
+         %len(%triml(%subst(io_text: 1: textlen)));
+
+       ipostspc = textlen -
+         %len(%trimr(%subst(io_text: 1: textlen)));
+
+       //  Ermitteln Länge der Zeichenfolge ohne Leerzeichen
+       trimlen  = textlen - iprespc - ipostspc;
+
+       //  Ermitteln Anzahl führender und nachgestellter Leerzeichen
+       //  für zentrierte Zeichenfolge
+       oprespc  = textlen - trimlen;
+     C                   div       2             oprespc
+       opostspc = textlen - trimlen - oprespc;
+
+       //  Wenn Leerzeichen vorangestellt werden müssen, ...
+       if (oprespc >  0      )  and
+          (oprespc <> iprespc);
+          //  ... dann
+          //      Zeichenkette verschieben
+          %subst(io_text: oprespc + 1: trimlen) =
+            %subst(io_text: iprespc + 1: trimlen);
+          //      Führende Leerzeichen löschen
+          %subst(io_text: 1: oprespc) = ' ';
+          //      Nachgestellte Leerzeichen löschen
+          if opostspc > 0;
+             %subst(io_text               :
+                   textlen - opostspc + 1:
+                   opostspc              ) = ' ';
+          endif;
+       endif;
+
+       return;
+
+       end-proc;
+
+       //===================================================================*
+       //  Prozedur:  f_addPtr                                   (Body)     *
+       //===================================================================*
+
+       dcl-proc f_addptr export;
+       dcl-pi *N              pointer;
+         i_pointer       pointer value;
+         i_offset        int(5) value;
+       end-pi;
+
+       //  Arbeitsfelder
+       dcl-s ofsary          char(1) dim(32767) based(pofsary);
+       //------------------------------------------------------------*
+
+       dow i_offset > 0;
+
+          pofsary = i_pointer;
+
+          if i_offset <= %elem(ofsary) - 1;
+             i_pointer = %addr(ofsary(i_offset + 1));
+             i_offset = 0;
+          else;
+             i_pointer = %addr(ofsary(%elem(ofsary)));
+             i_offset = i_offset - %elem(ofsary) + 1;
+          endif;
+
+       enddo;
+
+       return i_pointer;
+
+       end-proc;
+
+       //===================================================================*
+       //  Prozedur:  f_isKeyExc                                 (Body)     *
+       //===================================================================*
+
+       dcl-proc f_iskeyexc export;
+       dcl-pi *N       like(bool_t);
+         i_data          value like(set0000_t);
+         i_exclkeys      value like(pgmcmd_t) dim(25);
+       end-pi;
+
+       //  Funktionswert
+       dcl-s isexcluded      like(bool_t) inz;
+
+       //  Arbeitsfelder
+       dcl-s pgmcmd          like(pgmcmd_t) inz;
+       dcl-s in01            like(*in01     ) inz;
+       //------------------------------------------------------------*
+
+       in01 = *in01;
+
+       pgmcmd = i_data;
+     C     pgmcmd        lookup    i_exclkeys                             01
+       if *in01 = '1';
+          isexcluded = btrue;
+       else;
+          isexcluded = bfalse;
+       endif;
+
+       *in01 = in01;
+
+       return isexcluded;
+
+       end-proc;
+
+       //===============================================================*
+       //  Prepare NUM_Descr - RPG-IV implementation of NUM_DESCR macro
+       //  V4R4 and above                Refer to: QSYSINC/MIH.MICPTCOM
+       //===============================================================*
+       // The following macro is used to prepare the numeric descriptor
+       // (_NUM_Descr_T), used in the cpynv and edit functions. Can also
+       // be used to set the type and length fields of _DPA_Template_T.
+       // The valid values for the parameters are:
+       //    type         length             fractional
+       //    -----------  -----------------  -------------------------
+       //    _T_Signed    2 or 4             0
+       //    _T_Float     4 or 8             0
+       //    _T_Zoned     1 <= length <= 31  0 <= fractional <= length
+       //    _T_Packed    1 <= length <= 31  0 <= fractional <= length
+       //    _T_Unsigned  2 or 4             0
+
+       //===============================================================*
+
+       dcl-proc f_num_descr export;
+       dcl-pi *N              int(10);
+         i_type          int(3) value;
+         i_length        int(3) value;
+         i_fraction      int(3) value;
+       end-pi;
+
+       dcl-ds *N;
+         num_descr       int(10) inz;
+         num_descr_type
+         int(3) overlay(num_descr: 1);
+         num_descr_fraction
+         int(3) overlay(num_descr: 2);
+         num_descr_length
+         int(3) overlay(num_descr: 3);
+       end-ds;
+
+       // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+       num_descr_type     = i_type;
+       num_descr_fraction = i_fraction;
+       num_descr_length   = i_length;
+
+       return num_descr;
+
+       end-proc;
+
+       //========================================================================*
+       //  f_NUM_Descr2
+       //========================================================================*
+       dcl-proc f_num_descr2 export;
+       dcl-pi *N              int(10);
+         i_type          char(1) value;
+         i_length        int(3) value;
+         i_fractional    int(3) value;
+       end-pi;
+
+       //  Parameter positions
+
+       //  Return value
+       dcl-ds *N;
+         num_descr       int(10) inz;
+         num_descr_24    int(3) overlay(num_descr: 1);
+         num_descr_16    int(3) overlay(num_descr: *next);
+         num_descr_8     int(3) overlay(num_descr: *next);
+         num_descr_0     int(3) overlay(num_descr: *next);
+       end-ds;
+
+       //  Arbeitsfelder
+       dcl-s type            int(3) inz;
+       // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+       // Convert RPG type ...
+       select;
+          // ... zoned
+       when (i_type = 'S');
+          type = t_zoned;
+          // ... packed
+       when (i_type = 'P');
+          type = t_packed;
+          // ... binary
+       when (i_type = 'B');
+          type = t_signed;
+          i_length = f_rpgtointlength(i_length);
+          // ... integer
+       when (i_type = 'I');
+          type = t_signed;
+          i_length = f_rpgtointlength(i_length);
+          // ... unsigned integer
+       when (i_type = 'U');
+          type = t_signed;
+          i_length = f_rpgtointlength(i_length);
+          // ... float
+       when (i_type = 'F');
+          type = t_float;
+       endsl;
+
+       num_descr = f_num_descr(type: i_length: i_fractional);
+
+       return num_descr;
+
+
+       end-proc;
+
+       //========================================================================*
+       //  Converts a given RPG numeric field length to an integer length.
+       //========================================================================*
+       dcl-proc f_rpgtointlength export;
+       dcl-pi *N              int(10);
+         i_length        int(10) value;
+       end-pi;
+
+       //  Return value
+       dcl-s intlength       int(10) inz;
+       // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+       select;
+       when (i_length <= 3);
+          intlength = 1;
+       when (i_length <= 5);
+          intlength = 2;
+       when (i_length <= 10);
+          intlength = 4;
+       when (i_length <= 20);
+          intlength = 8;
+       other;
+          intlength = -1;
+       endsl;
+
+       return intlength;
+
+
+       end-proc;
+
+       //===============================================================*
+       //  Clears C error code.
+       //===============================================================*
+
+       dcl-proc p_clrerrno export;
+       dcl-pi *N;
+       end-pi;
+
+       dcl-s runtimeerror    int(10) based(pruntimeerror);
+       // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+       pruntimeerror = errno();
+       runtimeerror = 0;
+
+       return;
+
+       end-proc;
+
+       //===============================================================*
+       //  Returns C runtime error code.
+       //===============================================================*
+
+       dcl-proc f_errno export;
+       dcl-pi *N              int(10);
+       end-pi;
+
+       dcl-s runtimeerror    int(10) based(pruntimeerror);
+       // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+       pruntimeerror = errno();
+
+       return runtimeerror;
+
+       end-proc;
+
+       //===============================================================*
+       //  Returns the description of a given C runtime error code.
+       //===============================================================*
+
+       dcl-proc f_strerror export;
+       dcl-pi *N        like(msgdta_t);
+         i_errno         int(10) const;
+       end-pi;
+
+       //  Funktionswert
+       dcl-s errtext         like(msgdta_t) inz;
+
+       dcl-s perrtext        pointer inz;
+       // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+       perrtext = strerror(i_errno);
+       if   perrtext = *null;
+          errtext = '';
+       else;
+          errtext = %str(perrtext);
+       endif;
+
+       return errtext;
+
+       end-proc;
+
+       //===============================================================*
+       //  Returns the bit-wise ORing of the bits of all the arguments.
+       //===============================================================*
+
+       dcl-proc f_bitor export;
+       dcl-pi *N              uns(10);
+         i_arg1          uns(10) value;
+         i_arg2          uns(10) value;
+         i_arg3          uns(10) value  options(*nopass);
+         i_arg4          uns(10) value  options(*nopass);
+         i_arg5          uns(10) value  options(*nopass);
+       end-pi;
+
+       //  Parameterpositionen optionaler Parameter
+       dcl-c p_arg3 const(3);
+       dcl-c p_arg4 const(4);
+       dcl-c p_arg5 const(5);
+
+       //  Funktionswert
+       dcl-s result          uns(10) inz;
+
+       //  OR String (ORSTR)
+       dcl-pr orstr extproc('_ORSTR');
+         i_preceiver     pointer value;
+         i_pfirstsrc     pointer value  options(*string);
+         i_psecondsrc    pointer value  options(*string);
+         i_length        uns(10) value;
+       end-pr;
+       // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+       orstr(%addr(result): %addr(i_arg1): %addr(i_arg2): %size(result));
 
        return result;
 
-      /END-FREE
-     P                 E
-      *
-      *=========================================================================
-      *  Checks object existance.
-      *=========================================================================
-      *  Parameters:
-      *   i_obj         - The object to check for existance.
-      *   i_lib         - The library that contains the object.
-      *                   Default:        *LIBL
-      *   i_type        - The type of the object.
-      *   i_mbr         - The member that is checked in case of that
-      *                   the object is a file.
-      *                   Default:        *NONE
-      *
-      *  Returns:
-      *   doesExists    - Returns bTrue when the object exists.
-      *=========================================================================
-     P f_exist...
-     P                 B                   export
-     D                 PI              N
-     D  i_obj                        10A   const
-     D  i_lib                        10A   const  options(*omit)
-     D  i_type                       10A   const
-     D  i_mbr                        10A   const  options(*nopass)
-      *
-      *  Return value
-     D doesExist       S               N   inz(bFalse)
-      *
-      *  Parameter positions
-     D p_lib           C                   const(2)
-     D p_mbr           C                   const(4)
-      *
-      *  Optional parameter fields
-     D lib             S                   like(i_lib       ) inz
-     D mbr             S                   like(i_mbr       ) inz
-      *
-      *  Local fields
-     D objd0100        DS                  likeds(objd0100_t) inz
-     D mbrd0100        DS                  likeds(MBRD0100_t) inz
-     D qObj            DS                  likeds(qObj_t) inz
-     D errCode         DS                  likeds(errCode_t ) inz
-      *
-      *  Prototypen
-     D QUSRMBRD        PR                         extpgm('QUSRMBRD')
-     D  i_rcvVar                  32767A          options(*varsize)
-     D  i_length                     10I 0 const
-     D  i_format                      8A   const
-     D  i_qFile                      20A   const
-     D  i_mbr                        10A   const
-     D  i_prcOverride                 1A   const
-     D  io_ErrCode                32767A          options(*nopass: *varsize)    | optGrp 1
-      *
-      *  Prototypen
-     D QUSROBJD        PR                         extpgm('QUSROBJD')
-     D  i_rcvVar                  32767A          options(*varsize)
-     D  i_length                     10I 0 const
-     D  i_format                      8A   const
-     D  i_qObj                       20A   const
-     D  i_objType                    10A   const
-     D  io_ErrCode                32767A          options(*nopass: *varsize)    | optGrp
-      * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      /FREE
+       end-proc;
+
+       //=========================================================================
+       //  Checks object existance.
+       //=========================================================================
+       //  Parameters:
+       //   i_obj         - The object to check for existance.
+       //   i_lib         - The library that contains the object.
+       //                   Default:        *LIBL
+       //   i_type        - The type of the object.
+       //   i_mbr         - The member that is checked in case of that
+       //                   the object is a file.
+       //                   Default:        *NONE
+
+       //  Returns:
+       //   doesExists    - Returns bTrue when the object exists.
+       //=========================================================================
+       dcl-proc f_exist export;
+       dcl-pi *N              ind;
+         i_obj           char(10) const;
+         i_lib           char(10) const  options(*omit);
+         i_type          char(10) const;
+         i_mbr           char(10) const  options(*nopass);
+       end-pi;
+
+       //  Return value
+       dcl-s doesexist       ind inz(bfalse);
+
+       //  Parameter positions
+       dcl-c p_lib const(2);
+       dcl-c p_mbr const(4);
+
+       //  Optional parameter fields
+       dcl-s lib             like(i_lib       ) inz;
+       dcl-s mbr             like(i_mbr       ) inz;
+
+       //  Local fields
+       dcl-ds objd0100 likeds(objd0100_t) inz;
+       dcl-ds mbrd0100 likeds(mbrd0100_t) inz;
+       dcl-ds qobj likeds(qobj_t) inz;
+       dcl-ds errcode likeds(errcode_t ) inz;
+       // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
        // Process optional parameter values ...
        // ... i_lib
-       if (%parms() >= p_lib and %addr(i_lib) <> *NULL);
-         lib = i_lib;
+       if (%parms() >= p_lib and %addr(i_lib) <> *null);
+          lib = i_lib;
        else;
-         lib = '*LIBL';
+          lib = '*LIBL';
        endif;
 
        // ... i_mbr
        if (%parms() >= p_mbr);
-         mbr = i_mbr;
+          mbr = i_mbr;
        else;
-         mbr = '*NONE';
+          mbr = '*NONE';
        endif;
 
        // Retrieve the object description
-       qObj.name = i_obj;
-       qObj.lib  = lib;
-       reset errCode;
-       errCode.bytPrv = %size(errCode);
-       QUSROBJD(objd0100: %size(objd0100): 'OBJD0100'
-       : qObj: i_type: errCode);
+       qobj.name = i_obj;
+       qobj.lib  = lib;
+       reset errcode;
+       errcode.bytprv = %size(errcode);
+       qusrobjd(objd0100: %size(objd0100): 'OBJD0100'
+       : qobj: i_type: errcode);
 
        // Retrieve member description if object is a file
        // and a member name was given
-       if (errCode.bytAvl = 0) and (mbr <> '*NONE');
-         reset errCode;
-         errCode.bytPrv = %size(errCode);
-         QUSRMBRD(mbrd0100: %size(mbrd0100): 'MBRD0100'
-         : qObj: mbr: '0': errCode);
+       if (errcode.bytavl = 0) and (mbr <> '*NONE');
+          reset errcode;
+          errcode.bytprv = %size(errcode);
+          qusrmbrd(mbrd0100: %size(mbrd0100): 'MBRD0100'
+          : qobj: mbr: '0': errcode);
        endif;
 
        // Set return value
-       if (errCode.bytAvl = 0);
-         doesExist = bTrue;
+       if (errcode.bytavl = 0);
+          doesexist = btrue;
        else;
-         doesExist = bFalse;
+          doesexist = bfalse;
        endif;
 
-       return doesExist;
+       return doesexist;
 
-      /END-FREE
-     P                 E
-      *
-      *=========================================================================
-      *  Performs word wrapping on a given string.
-      *  Returns the next line of i_string with each call to f_wordWrap().
-      *=========================================================================
-      *  Parameters:
-      *   i_string      - The string to be word wrapped.
-      *   i_width       - Line length.
-      *   io_startPos   - The position to start from.
-      *                   (Should not be changed between calls.)
-      *   i_option      - Options to set.
-      *                   Default:        cWORDWRAP_PARAGRAPH_NONE +
-      *                                   cWORDWRAP_PARAGRAPH_TRIMR
-      *                   cWORDWRAP_PARAGRAPH_NONE   Do not respect
-      *                                              end-of-paragraph markers.
-      *                   cWORDWRAP_PARAGRAPH_MSGD   Respect end-of-paragraph
-      *                                              markers of message descriptions:
-      *                                              &N, &B and &P.
-      *                   cWORDWRAP_PARAGRAPH_TEXT   Respect standard text
-      *                                              end-of-paragraph markers: \n
-      *                   cWORDWRAP_PARAGRAPH_TRIMR  Remove trailing blanks from
-      *                                              result string.
-      *
-      *  Returns:
-      *   text          - The next line of i_string.
-      *=========================================================================
-      *
-     P f_wordWrap...
-     P                 B                   export
-     D                 PI          4096A          varying
-     D  i_string                   4096A   const  varying
-     D  i_width                      10U 0 const
-     D  io_startPos                  10U 0
-     D  i_options                    10U 0 const  options(*nopass)
-      *
-      *  Return value
-     D text            S           4096A   inz    varying
-      *
-      *  Parameter positions
-     D p_options       C                   const(4)
-      *
-      *  Optional parameter fields
-     D options         S                   like(i_options) inz
-      *
-      *  Local fields
-     D theEOP          DS                  qualified
-     D  isFound                        N   inz(bFalse)
-     D  position                     10I 0
-     D  string                        2A   varying
-     D x               S             10I 0                     inz
-     D tmpEOP          S              2A   varying             inz
-     D numEOP          S             10I 0                     inz
-     D EOP             S                   like(tmpEOP) dim(3) inz
-     D ESC             S              1A
-     D startPos        S                   like(io_startPos  ) inz
-     D string          S                   like(i_string     ) inz
-      * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      /FREE
+       end-proc;
+
+       //=========================================================================
+       //  Performs word wrapping on a given string.
+       //  Returns the next line of i_string with each call to f_wordWrap().
+       //=========================================================================
+       //  Parameters:
+       //   i_string      - The string to be word wrapped.
+       //   i_width       - Line length.
+       //   io_startPos   - The position to start from.
+       //                   (Should not be changed between calls.)
+       //   i_option      - Options to set.
+       //                   Default:        cWORDWRAP_PARAGRAPH_NONE +
+       //                                   cWORDWRAP_PARAGRAPH_TRIMR
+       //                   cWORDWRAP_PARAGRAPH_NONE   Do not respect
+       //                                              end-of-paragraph markers.
+       //                   cWORDWRAP_PARAGRAPH_MSGD   Respect end-of-paragraph
+       //                                              markers of message descriptions:
+       //                                              &N, &B and &P.
+       //                   cWORDWRAP_PARAGRAPH_TEXT   Respect standard text
+       //                                              end-of-paragraph markers: \n
+       //                   cWORDWRAP_PARAGRAPH_TRIMR  Remove trailing blanks from
+       //                                              result string.
+
+       //  Returns:
+       //   text          - The next line of i_string.
+       //=========================================================================
+
+       dcl-proc f_wordwrap export;
+       dcl-pi *N              varchar(4096);
+         i_string        varchar(4096) const;
+         i_width         uns(10) const;
+         io_startpos     uns(10);
+         i_options       uns(10) const  options(*nopass);
+       end-pi;
+
+       //  Return value
+       dcl-s text            varchar(4096) inz;
+
+       //  Parameter positions
+       dcl-c p_options const(4);
+
+       //  Optional parameter fields
+       dcl-s options         like(i_options) inz;
+
+       //  Local fields
+       dcl-ds theeop qualified;
+         isfound         ind inz(bfalse);
+         position        int(10);
+         string          varchar(2);
+       end-ds;
+       dcl-s x               int(10) inz;
+       dcl-s tmpeop          varchar(2) inz;
+       dcl-s numeop          int(10) inz;
+       dcl-s eop             like(tmpeop) dim(3) inz;
+       dcl-s esc             char(1);
+       dcl-s startpos        like(io_startpos  ) inz;
+       dcl-s string          like(i_string     ) inz;
+       // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
        // Process optional parameter values ...
        // ... options
        if %parms >= p_options;
-         options = i_options;
+          options = i_options;
        else;
-         options = cWORDWRAP_PARAGRAPH_NONE +
-         cWORDWRAP_PARAGRAPH_TRIMR;
+          options = cwordwrap_paragraph_none +
+          cwordwrap_paragraph_trimr;
        endif;
 
        // TRIM trailing blanks
-       string = %trimR(i_string);
+       string = %trimr(i_string);
 
        // Determine how to treat end-of-paragraph markers:
        select;
-       // ... do not respect end-of-paragraph marker
-       when f_isBitOn(cWORDWRAP_PARAGRAPH_NONE: options);
-         clear EOP;
-         clear ESC;
-         numEOP = 0;
-       // ... respect end-of-paragraph marker of message descriptions: &N, &P, &B
-       when f_isBitOn(cWORDWRAP_PARAGRAPH_MSGD: options);
-         clear EOP;
-         EOP(1) = '&N';
-         EOP(2) = '&P';
-         EOP(3) = '&B';
-         ESC    = '&';
-         numEOP = 3;
-       // ... respect end-of-paragraph marker of text: \n
-       when f_isBitOn(cWORDWRAP_PARAGRAPH_TEXT: options);
-         clear EOP;
-         EOP(1) = '\N';
-         ESC    = '\';
-         numEOP = 1;
+          // ... do not respect end-of-paragraph marker
+       when isBitOn(cwordwrap_paragraph_none: options);
+          clear eop;
+          clear esc;
+          numeop = 0;
+          // ... respect end-of-paragraph marker of message descriptions: &N, &P, &B
+       when isBitOn(cwordwrap_paragraph_msgd: options);
+          clear eop;
+          eop(1) = '&N';
+          eop(2) = '&P';
+          eop(3) = '&B';
+          esc    = '&';
+          numeop = 3;
+          // ... respect end-of-paragraph marker of text: \n
+       when isBitOn(cwordwrap_paragraph_text: options);
+          clear eop;
+          eop(1) = '\N';
+          esc    = '\';
+          numeop = 1;
        endsl;
 
        // ---------------------------------------------------
        //  Perform word-wrap with no respect to
        //  end-of-paragraph markers.
        // ---------------------------------------------------
-       if numEOP = 0;
-         text = lf_wordWrap(string: i_width: io_startPos);
+       if numeop = 0;
+          text = lf_wordwrap(string: i_width: io_startpos);
        else;
-         // ---------------------------------------------------
-         //  Perform word-wrap with respect to
-         //  end-of-paragraph markers.
-         // ---------------------------------------------------
+          // ---------------------------------------------------
+          //  Perform word-wrap with respect to
+          //  end-of-paragraph markers.
+          // ---------------------------------------------------
 
-         // Find next end-of-paragraph marker
-         reset theEOP;
-         theEOP.isFound = bFalse;
-         theEOP.position = %scan(ESC: string: io_startPos);
-         dow not theEOP.isFound and theEOP.position > 0;
-           // If there is an escape character, ...
-           if %subst(string: theEOP.position: 1) = ESC;
-             // ... then check it against the list of EOP marker
-             for x = 1 to numEOP;
-               // If there is enough space for a EOP after the escape character
-               // and if it is a known EOP, ...
-               if theEOP.position <= %len(string) - %len(EOP(x)) + 1;
-                 tmpEOP = %subst(string: theEOP.position: %len(EOP(x)));
-                 if f_ucase(tmpEOP) = f_ucase(EOP(x));
-                   // ... then set flag "EOP found"
-                   theEOP.string  = EOP(x);
-                   theEOP.isFound = bTrue;
-                   leave;
-                 endif;
-               endif;
-             endfor;
-           endif;
-
-           if (not theEOP.isFound);
-             if (theEOP.position < %len(string));
-               theEOP.position = %scan(ESC: string: theEOP.position + 1);
-             else;
-               theEOP.position = 0;
+          // Find next end-of-paragraph marker
+          reset theeop;
+          theeop.isfound = bfalse;
+          theeop.position = %scan(esc: string: io_startpos);
+          dow not theeop.isfound and theeop.position > 0;
+             // If there is an escape character, ...
+             if %subst(string: theeop.position: 1) = esc;
+                // ... then check it against the list of EOP marker
+                for x = 1 to numeop;
+                   // If there is enough space for a EOP after the escape character
+                   // and if it is a known EOP, ...
+                   if theeop.position <= %len(string) - %len(eop(x)) + 1;
+                      tmpeop = %subst(string: theeop.position: %len(eop(x)));
+                      if f_ucase(tmpeop) = f_ucase(eop(x));
+                         // ... then set flag "EOP found"
+                         theeop.string  = eop(x);
+                         theeop.isfound = btrue;
+                         leave;
+                      endif;
+                   endif;
+                endfor;
              endif;
-           endif;
-         enddo;
 
-         // If no end-of-paragraph marker is found, ...
-         if not theEOP.isFound;
-           // ... then perform standard word wrap with no respect to EOP
-           text = lf_wordWrap(string: i_width: io_startPos);
-         else;
-           // ... else perform word wrap for text portion
-           //     before end-of-paragraph marker
-           if (theEOP.position - io_startPos) > 0;
-             string   = %subst(string: io_startPos:
-               theEOP.position - io_startPos);
-             startPos = 1;
-             text = lf_wordWrap(string: i_width: startPos);
-           else;
-             text = '';
-           endif;
+             if (not theeop.isfound);
+                if (theeop.position < %len(string));
+                   theeop.position = %scan(esc: string: theeop.position + 1);
+                else;
+                   theeop.position = 0;
+                endif;
+             endif;
+          enddo;
 
-           // If all we got is a EOP, ...
-           if (%len(text)    = %len(theEOP.string)   ) and
-           (f_ucase(text) = f_ucase(theEOP.string));
-             // ... then delete it
-             text = '';
-           endif;
-           // Set new start position. Skip EOP if EOP
-           // caused new line.
-           io_startPos = io_startPos + %len(text);
-           if theEOP.position = io_startPos;
-             io_startPos = io_startPos + %len(theEOP.string);
-           endif;
-           // Set start position to 0 if new start position
-           // exceeds maximum length of text.
-           if io_startPos > %len(i_string);
-             io_startPos = 0;
-           endif;
-         endif;
+          // If no end-of-paragraph marker is found, ...
+          if not theeop.isfound;
+             // ... then perform standard word wrap with no respect to EOP
+             text = lf_wordwrap(string: i_width: io_startpos);
+          else;
+             // ... else perform word wrap for text portion
+             //     before end-of-paragraph marker
+             if (theeop.position - io_startpos) > 0;
+                string   = %subst(string: io_startpos:
+                  theeop.position - io_startpos);
+                startpos = 1;
+                text = lf_wordwrap(string: i_width: startpos);
+             else;
+                text = '';
+             endif;
+
+             // If all we got is a EOP, ...
+             if (%len(text)    = %len(theeop.string)   ) and
+                (f_ucase(text) = f_ucase(theeop.string));
+                // ... then delete it
+                text = '';
+             endif;
+             // Set new start position. Skip EOP if EOP
+             // caused new line.
+             io_startpos = io_startpos + %len(text);
+             if theeop.position = io_startpos;
+                io_startpos = io_startpos + %len(theeop.string);
+             endif;
+             // Set start position to 0 if new start position
+             // exceeds maximum length of text.
+             if io_startpos > %len(i_string);
+                io_startpos = 0;
+             endif;
+          endif;
 
        endif;
 
        // If the user requested to remove BLANKS, ...
-       if f_isBitOn(cWORDWRAP_PARAGRAPH_TRIMR: options);
-         // ... then remove BLANKS.
-         text = %trimR(text);
+       if isBitOn(cwordwrap_paragraph_trimr: options);
+          // ... then remove BLANKS.
+          text = %trimr(text);
        endif;
 
        return   text;
 
-      /END-FREE
-     P                 E
-      *
-      *=========================================================================
-      *  Performs word wrapping on a given string without respect to
-      *  end-of-paragraph markers.
-      *=========================================================================
-      *
-     P lf_wordWrap...
-     P                 B
-     D                 PI          4096A          varying
-     D  i_string                   4096A   const  varying
-     D  i_width                      10U 0 const
-     D  io_startPos                  10U 0
-      *
-      *  Return value
-     D text            S           4096A   inz    varying
-      *
-      *  Local fields
-     D sPos            S             10I 0 inz
-     D ePos            S             10I 0 inz
-     D ePosConst       S             10I 0 inz
-     D length          S             10I 0 inz
-     D char            S              1A   inz
-     D x               S             10I 0 inz
-      *
-      *  Valid separater characters
-     D cDELIMITER      C                   const(' -/\.:')
-      * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      /FREE
+       end-proc;
+
+       //=========================================================================
+       //  Performs word wrapping on a given string without respect to
+       //  end-of-paragraph markers.
+       //=========================================================================
+
+       dcl-proc lf_wordwrap;
+       dcl-pi *N              varchar(4096);
+         i_string        varchar(4096) const;
+         i_width         uns(10) const;
+         io_startpos     uns(10);
+       end-pi;
+
+       //  Return value
+       dcl-s text            varchar(4096) inz;
+
+       //  Local fields
+       dcl-s spos            int(10) inz;
+       dcl-s epos            int(10) inz;
+       dcl-s eposconst       int(10) inz;
+       dcl-s length          int(10) inz;
+       dcl-s char            char(1) inz;
+       dcl-s x               int(10) inz;
+
+       //  Valid separater characters
+       dcl-c cdelimiter const(' -/\.:');
+       // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
        // Initialise helper fields
        text   = '';
-       sPos   = io_startPos;
-       ePos   = 0;
+       spos   = io_startpos;
+       epos   = 0;
        length = 0;
 
        // Set range
-       ePos      = sPos + i_width;
-       ePosConst = ePos;
+       epos      = spos + i_width;
+       eposconst = epos;
 
        // If the end position is out of range ...
-       if   ePos > %len(i_string);
-         // ... then
-         //     assume the last character to be the delimiter
-         ePos = %len(i_string);
+       if   epos > %len(i_string);
+          // ... then
+          //     assume the last character to be the delimiter
+          epos = %len(i_string);
        else;
-         // ... else
-         //     look backwards for a deliniter.
-         dow   ePos >= sPos;
-           char = %subst(i_string: ePos: 1);
-           // At position width + 1 ...
-           if   ePos = ePosConst;
-             // ... only BLANKS are allowed
-             x = %check(' ': char);
-           else;
-             // ... else every delimiter is allowed
-             x = %check(cDELIMITER: char);
-           endif;
-           // If there is a delimiter, ...
-           if (x = 0 or char < x'40');
-             // ... then stop searching
-             x = 0;
-             leave;
-           endif;
+          // ... else
+          //     look backwards for a deliniter.
+          dow   epos >= spos;
+             char = %subst(i_string: epos: 1);
+             // At position width + 1 ...
+             if   epos = eposconst;
+                // ... only BLANKS are allowed
+                x = %check(' ': char);
+             else;
+                // ... else every delimiter is allowed
+                x = %check(cdelimiter: char);
+             endif;
+             // If there is a delimiter, ...
+             if (x = 0 or char < x'40');
+                // ... then stop searching
+                x = 0;
+                leave;
+             endif;
 
-           ePos = ePos - 1;
-         enddo;
+             epos = epos - 1;
+          enddo;
        endif;
 
        // If there is no delimiter, ...
-       if   ePos < sPos;
-         // ... then assume the last character to be the delimiter.
-         ePos = sPos + i_width - 1;
+       if   epos < spos;
+          // ... then assume the last character to be the delimiter.
+          epos = spos + i_width - 1;
        endif;
 
        // Retrieve text (incl. delimiter) ...
-       length = ePos - sPos + 1;
-       text = %subst(i_string: sPos: length);
+       length = epos - spos + 1;
+       text = %subst(i_string: spos: length);
 
        // ... and set new start position.
-       sPos = sPos + length;
-       if sPos <= %len(i_string);
-         io_startPos = %check(' ': i_string: sPos);
+       spos = spos + length;
+       if spos <= %len(i_string);
+          io_startpos = %check(' ': i_string: spos);
        else;
-         io_startPos = 0;
+          io_startpos = 0;
        endif;
 
        return   text;
 
-      /END-FREE
-     P                 E
-      *
-      *=========================================================================
-      *  Tests for one or more bits.
-      *=========================================================================
-      *  Parameters:
-      *   i_testBit     - The bits that are tested.
-      *   i_value       - The numeric value that is tested for the bits.
-      *
-      *  Returns:
-      *   isOn          - Returns bTrue when the bits specified at i_testBit
-      *                   are set.
-      *=========================================================================
-      *
-     P f_isBitOn...
-     P                 B                   export
-     D                 PI              N
-     D  i_testBit                    10U 0 value
-     D  i_value                      10U 0 value
-      *
-      *  Return value
-     D isOn            S               N   inz(bTrue)
-      *
-      *  Helper fields
-     D x               S              3I 0 inz
-      * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      /FREE
+       end-proc;
 
-       isOn = bTrue;
+       //=========================================================================
+       //  Tests for one or more bits.
+       //=========================================================================
+       //  Parameters:
+       //   i_testBit     - The bits that are tested.
+       //   i_value       - The numeric value that is tested for the bits.
 
-       for   x = (%size(i_value) * 8) - 1 downTo 0 ;
-         if   tstbts(%addr(i_testBit): x) <> 0;
-           if   tstbts(%addr(i_value): x) = 0;
-             isOn = bFalse;
-             leave;
-           endif;
-         endif;
+       //  Returns:
+       //   isOn          - Returns bTrue when the bits specified at i_testBit
+       //                   are set.
+       //=========================================================================
+
+       dcl-proc isBitOn export;
+       dcl-pi *N ind;
+         i_testbit       uns(10) value;
+         i_value         uns(10) value;
+       end-pi;
+
+       //  Return value
+       dcl-s ison            ind inz(btrue);
+
+       //  Helper fields
+       dcl-s x               int(3) inz;
+       // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+       ison = btrue;
+
+       for   x = (%size(i_value) * 8) - 1 downto 0 ;
+          if   tstbts(%addr(i_testbit): x) <> 0;
+             if   tstbts(%addr(i_value): x) = 0;
+                ison = bfalse;
+                leave;
+             endif;
+          endif;
        endfor;
 
-       return   isOn;
+       if (%bitand(i_value: i_testbit) = i_testbit);
+          return bTrue;
+       else;
+          return bFalse;
+       endif;
 
-      /END-FREE
-     P                 E
-      *
-      *=========================================================================
-      *  Converts a given string to upper case.
-      *=========================================================================
-      *  Parameters:
-      *   i_string      - The string to convert to upper case.
-      *
-      *  Returns:
-      *   string        - The string converted to upper case.
-      *=========================================================================
-      *
-     P f_ucase...
-     P                 B                   export
-     D                 PI          4096A           varying
-     D  i_string                   4096A   const   varying
-      *
-      *  Return value
-     D string          S           4096A   varying   inz
-      *
-      *  Fields for QlgConvertCase API
-     D stringBuf       S           4096A             inz
-     D errCode         DS                  likeds(errCode_t ) inz
-      *
-     D reqCtrlBlk      DS                  qualified
-     D  type                         10I 0
-     D  CCSID                        10I 0
-     D  case                         10I 0
-     D  reserved                     10A
-      *
-      *  Convert Case (QLGCNVCS, QlgConvertCase) API
-     D QlgConvertCase  PR                         extproc('QlgConvertCase')
-     D  i_reqCtrlBlk              32767A   const  options(*varsize)
-     D  i_inData                  32767A   const  options(*varsize)
-     D  o_outData                 32767A          options(*varsize)
-     D  i_length                     10I 0 const
-     D  io_ErrCode                32767A          options(*nopass: *varsize)
-      *
-      *
-     D cCVTCASE_TYPE_ccsid...
-     D                 C                   const(1)
-     D cCVTCASE_TYPE_table...
-     D                 C                   const(2)
-     D cCVTCASE_TYPE_userDef...
-     D                 C                   const(3)
-     D cCVTCASE_toUpper...
-     D                 C                   const(0)
-     D cCVTCASE_toLower...
-     D                 C                   const(1)
-     D cCVTCASE_CCSID_Job...
-     D                 C                   const(0)
-      *
-     D reqCtrlBlk_t    DS                  qualified           based(pDummy)
-     D  type                         10I 0
-     D  CCSID                        10I 0
-     D  case                         10I 0
-     D  reserved                     10A
-      * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      /FREE
+       end-proc;
+
+       //=========================================================================
+       //  Converts a given string to upper case.
+       //=========================================================================
+       //  Parameters:
+       //   i_string      - The string to convert to upper case.
+
+       //  Returns:
+       //   string        - The string converted to upper case.
+       //=========================================================================
+
+       dcl-proc f_ucase export;
+       dcl-pi *N              varchar(4096);
+         i_string        varchar(4096) const;
+       end-pi;
+
+       //  Return value
+       dcl-s string          varchar(4096) inz;
+
+       //  Fields for QlgConvertCase API
+       dcl-s stringbuf       char(4096) inz;
+       dcl-ds errcode likeds(errcode_t ) inz;
+
+       dcl-ds reqctrlblk likeds(QLGCNVCS_reqCtrlBlk_t) inz;
+       // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
        if   i_string <> '';
-         reqCtrlBlk.type     = cCVTCASE_TYPE_ccsid;
-         reqCtrlBlk.CCSID    = cCVTCASE_CCSID_Job;
-         reqCtrlBlk.case     = cCVTCASE_toUpper;
-         reqCtrlBlk.reserved = *ALLx'00';
-         reset errCode;
-         QlgConvertCase(reqCtrlBlk:
-         i_string: stringBuf: %len(i_string): errCode);
-         string = %subst(stringBuf: 1: %len(i_string));
+          reqctrlblk.type = CVTCASE_TYPE_CCSID;
+          reqctrlblk.ccsid = CVTCASE_CCSID_Job;
+          reqctrlblk.case = CVTCASE_TO_UPPER;
+          reqctrlblk.reserved = *allx'00';
+
+          reset errcode;
+
+          qlgconvertcase(reqctrlblk
+                         : i_string: stringbuf: %len(i_string): errcode);
+          string = %subst(stringbuf: 1: %len(i_string));
        else;
-         string = i_string;
+          string = i_string;
        endif;
 
        return   string;
 
-      /END-FREE
-     P                 E
-      *
-      *=========================================================================
-      *  Tests if the specified string ends with the specified suffix.
-      *=========================================================================
-      *  Parameters:
-      *   i_suffix      - The suffix.
-      *   i_string      - The string that is tested.
-      *
-      *  Returns:
-      *   endsWith      - Returns TRUE if the string ends with the suffix,
-      *                   else FALSE.
-      *=========================================================================
-      *
-     P f_endsWith...
-     P                 B                   export
-     D                 PI              N
-     D  i_suffix                   4096A   const   varying
-     D  i_string                   4096A   const   varying
-      *
-      *  Return value
-     D endsWith        S               N   inz(bFalse)
-      *
-      *  Local fields
-      * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      /FREE
+       end-proc;
+
+       //=========================================================================
+       //  Tests if the specified string ends with the specified suffix.
+       //=========================================================================
+       //  Parameters:
+       //   i_suffix      - The suffix.
+       //   i_string      - The string that is tested.
+
+       //  Returns:
+       //   endsWith      - Returns TRUE if the string ends with the suffix,
+       //                   else FALSE.
+       //=========================================================================
+
+       dcl-proc f_endswith export;
+       dcl-pi *N              ind;
+         i_suffix        varchar(4096) const;
+         i_string        varchar(4096) const;
+       end-pi;
+
+       //  Return value
+       dcl-s endswith        ind inz(bfalse);
+
+       //  Local fields
+       // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
        if %len(i_string) = 0  or
-       %len(i_suffix) = 0  or
-       %len(i_string) < %len(i_suffix);
-         return endsWith;
+          %len(i_suffix) = 0  or
+          %len(i_string) < %len(i_suffix);
+          return endswith;
        endif;
 
        if %subst(i_string
-       : %len(i_string) - %len(i_suffix) + 1) = i_suffix;
-         endsWith = bTrue;
+          : %len(i_string) - %len(i_suffix) + 1) = i_suffix;
+          endswith = btrue;
        endif;
 
-       return   endsWith;
+       return   endswith;
 
-      /END-FREE
-      *
-     P                 E
-      *
-      *=========================================================================
-      *  Sends a message to the command line.
-      *=========================================================================
-      *  Parameters:
-      *   i_msg         - The message.
-      *
-      *  Returns:
-      *   void
-      *=========================================================================
-     P f_sndMsgToCmdLine...
-     P                 B                   export
-     D                 PI
-     D  i_msgID                       7A   const
-     D  i_msgDta                    512A   const
-      *
-      *  Local fields
-     D msgKey          S              4A                        inz
-      *
-     D qMsgF           DS                  qualified            inz
-     D  name                         10A
-     D  lib                          10A
-      *
-     D errCode         DS                  qualified            inz
-     D  bytPrv                       10I 0
-     D  bytAvl                       10I 0
-     D  excID                         7A
-     D  reserved                      1A
-     D  excDta                      256A
-      *
-      *  Send Program Message (QMHSNDPM) API
-     D QMHSNDPM        PR                         extpgm('QMHSNDPM')
-     D   i_msgID                      7A   const
-     D   i_qMsgF                     20A   const
-     D   i_msgData                32767A   const  options(*varsize )
-     D   i_length                    10I 0 const
-     D   i_msgType                   10A   const
-     D   i_callStkE               32767A   const  options(*varsize )
-     D   i_callStkC                  10I 0 const
-     D   o_msgKey                     4A
-     D   io_ErrCode               32767A          options(*varsize )
-     D   i_lenStkE                   10I 0 const  options(*nopass  )
-     D   i_callStkEQ                 20A   const  options(*nopass  )
-     D   i_wait                      10I 0 const  options(*nopass  )
-     D   i_callStkEDT                10A   const  options(*nopass  )
-     D   i_ccsid                     10I 0 const  options(*nopass  )
-      * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      /FREE
 
-       clear qMsgF;
-       qMsgF.name = f_appMsgF;
-       qMsgF.lib  = f_appMsgFL;
+       end-proc;
 
-       clear errCode;
-       errCode.bytPrv = %size(errCode);
+       //=========================================================================
+       //  Sends a message to the command line.
+       //=========================================================================
+       //  Parameters:
+       //   i_msg         - The message.
 
-       QMHSNDPM(i_msgID: qMsgF: i_msgDta: %size(i_msgDta): '*DIAG'
-       : 'PEEK': 2: msgKey: errCode);
+       //  Returns:
+       //   void
+       //=========================================================================
+       dcl-proc f_sndmsgtocmdline export;
+       dcl-pi *N;
+         i_msgid         char(7) const;
+         i_msgdta        char(512) const;
+       end-pi;
+
+       //  Local fields
+       dcl-s msgkey          char(4) inz;
+
+       dcl-ds qmsgf qualified            inz;
+         name            char(10);
+         lib             char(10);
+       end-ds;
+
+       dcl-ds errcode qualified            inz;
+         bytprv          int(10);
+         bytavl          int(10);
+         excid           char(7);
+         reserved        char(1);
+         excdta          char(256);
+       end-ds;
+       // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+       clear qmsgf;
+       qmsgf.name = f_appmsgf;
+       qmsgf.lib  = f_appmsgfl;
+
+       clear errcode;
+       errcode.bytprv = %size(errcode);
+
+       qmhsndpm(i_msgid: qmsgf: i_msgdta: %size(i_msgdta): '*DIAG'
+       : 'PEEK': 2: msgkey: errcode);
 
        return;
 
-      /END-FREE
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Funktion:  f_fieldTypeAsString                        (Body)     *
-      *===================================================================*
-      *
-     P f_fieldTypeAsString...
-     P                 B                   Export
-     D                 PI           128A          varying
-     D  i_FLDL0100                         const  likeds(fldl0100_t)
-      *
-      *  Funktionswert
-     D type            S            128A   varying inz
-      *
-      *  Arbeitsfelder
-     D length          S              5S 0 inz
-     D decPos          S              2S 0 inz
-     D lengthA         S             16A   varying inz
-     D decPosA         S             16A   varying inz
-      * ------------------------------------------------------------------------
-      /FREE
 
-       if (f_isNumFld(i_FLDL0100) = bTrue);
-         length = i_FLDL0100.F1DIGT;
-         decPos = i_FLDL0100.F1DECP;
-         lengthA = %editc(length: '3');
-         decPosA = %editc(decPos: '3');
+       end-proc;
+
+       //===================================================================*
+       //  Funktion:  f_fieldTypeAsString                        (Body)     *
+       //===================================================================*
+
+       dcl-proc f_fieldtypeasstring export;
+       dcl-pi *N              varchar(128);
+         i_fldl0100      const  likeds(fldl0100_t);
+       end-pi;
+
+       //  Funktionswert
+       dcl-s type            varchar(128) inz;
+
+       //  Arbeitsfelder
+       dcl-s length          zoned(5) inz;
+       dcl-s decpos          zoned(2) inz;
+       dcl-s lengtha         varchar(16) inz;
+       dcl-s decposa         varchar(16) inz;
+       // ------------------------------------------------------------------------
+
+       if (f_isnumfld(i_fldl0100) = btrue);
+          length = i_fldl0100.f1digt;
+          decpos = i_fldl0100.f1decp;
+          lengtha = %editc(length: '3');
+          decposa = %editc(decpos: '3');
        else;
-         length = i_FLDL0100.F1FLEN;
-         decPos = -1;
-         lengthA = %editc(length: '3');
-         decPosA = '  ';
+          length = i_fldl0100.f1flen;
+          decpos = -1;
+          lengtha = %editc(length: '3');
+          decposa = '  ';
        endif;
 
-       type = i_FLDL0100.F1FNME +
+       type = i_fldl0100.f1fnme +
        '  ' + x'41'      +
-       lengthA           +
-       i_FLDL0100.F1DTYP +
+       lengtha           +
+       i_fldl0100.f1dtyp +
        ' '               +
-       decPosA           +
+       decposa           +
        x'41';
 
        return type;
 
-      /END-FREE
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Funktion:  f_nextHeaderType                           (Body)     *
-      *===================================================================*
-      *
-     P f_nextHeaderType...
-     P                 B                   Export
-     D                 PI            10A
-     D  i_headerType                 10A   value
-      *
-      *  Funktionswert
-     D type            S             10A   inz
-      * ------------------------------------------------------------------------
-      /FREE
 
-       Select;
-       When (i_headerType = '*FIELDNAME');
-         type = '*FIELDTEXT';
-       When (i_headerType = '*FIELDTEXT');
-         type = '*FIELDTYPE';
-       Other;
-         type = '*FIELDNAME';
-       Endsl;
+       end-proc;
+
+       //===================================================================*
+       //  Funktion:  f_nextHeaderType                           (Body)     *
+       //===================================================================*
+
+       dcl-proc f_nextheadertype export;
+       dcl-pi *N              char(10);
+         i_headertype    char(10) value;
+       end-pi;
+
+       //  Funktionswert
+       dcl-s type            char(10) inz;
+       // ------------------------------------------------------------------------
+
+       select;
+       when (i_headertype = '*FIELDNAME');
+          type = '*FIELDTEXT';
+       when (i_headertype = '*FIELDTEXT');
+          type = '*FIELDTYPE';
+       other;
+          type = '*FIELDNAME';
+       endsl;
 
        return type;
 
-      /END-FREE
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Funktion:  f_getRecordFormatID                        (Body)     *
-      *===================================================================*
-      *
-     P f_getRecordFormatInf...
-     P                 B                   Export
-     D                 PI                  likeds(rcdFmtInf_t)
-     D  i_file                             value  like(file_t)
-     D  i_lib                              value  like(lib_t)
-     D  i_rcdFmt                           value  like(fmtID_t)
-      *
-      *  Funktionswert
-     D rcdFmtInf       DS                  likeds(rcdFmtInf_t)
-      *
-     D qFile           DS                  likeds(qObj_t)
-     D qFileRtn        DS                  likeds(qFile)
-     D Qdb_Qddfmt      DS                  likeds(Qdb_Qddfmt_t)
-     D                                     based(pQdb_Qddfmt)
-     D size            S             10I 0
-     D errCode         DS                  likeds(errCode_t) inz
-      * ------------------------------------------------------------------------
-      /FREE
 
-       clear rcdFmtInf;
+       end-proc;
 
-       qFile.name = i_file;
-       qFile.lib = i_lib;
+       //===================================================================*
+       //  Funktion:  f_getRecordFormatID                        (Body)     *
+       //===================================================================*
+
+       dcl-proc f_getrecordformatinf export;
+       dcl-pi *N likeds(rcdfmtinf_t);
+         i_file          value  like(file_t);
+         i_lib           value  like(lib_t);
+         i_rcdfmt        value  like(fmtid_t);
+       end-pi;
+
+       //  Funktionswert
+       dcl-ds rcdfmtinf likeds(rcdfmtinf_t);
+
+       dcl-ds qfile likeds(qobj_t);
+       dcl-ds qfilertn likeds(qfile);
+       dcl-ds qdb_qddfmt likeds(qdb_qddfmt_t)
+       based(pqdb_qddfmt);
+       dcl-s size            int(10);
+       dcl-ds errcode likeds(errcode_t) inz;
+       // ----------------------------------------------------------------------
+
+       clear rcdfmtinf;
+
+       qfile.name = i_file;
+       qfile.lib = i_lib;
 
        size = (8);
-       pQdb_Qddfmt = %alloc(size);
+       pqdb_qddfmt = %alloc(size);
 
        monitor;
-         QDBRTVFD(Qdb_Qddfmt: size: qFileRtn: 'FILD0200': qFile
-         :'*FIRST' :'0' :'*LCL' :'*EXT' : errCode);
+          qdbrtvfd(qdb_qddfmt: size: qfilertn: 'FILD0200': qfile
+          :'*FIRST' :'0' :'*LCL' :'*EXT' : errcode);
 
-         size = (Qdb_Qddfmt.bytAvl);
-         pQdb_Qddfmt = %realloc(pQdb_Qddfmt: size);
-         QDBRTVFD(Qdb_Qddfmt: size: qFileRtn: 'FILD0200': qFile
-         :'*FIRST' :'0' :'*LCL' :'*EXT' : errCode);
+          size = (qdb_qddfmt.bytavl);
+          pqdb_qddfmt = %realloc(pqdb_qddfmt: size);
+          qdbrtvfd(qdb_qddfmt: size: qfilertn: 'FILD0200': qfile
+          :'*FIRST' :'0' :'*LCL' :'*EXT' : errcode);
 
-         rcdFmtInf.name = Qdb_Qddfmt.Qddfname;
-         rcdFmtInf.ID = Qdb_Qddfmt.Qddfseq;
+          rcdfmtinf.name = qdb_qddfmt.qddfname;
+          rcdfmtinf.id = qdb_qddfmt.qddfseq;
        on-error;
        endmon;
 
-       dealloc(n) pQdb_Qddfmt;
+       dealloc(n) pqdb_qddfmt;
 
-       return rcdFmtInf;
+       return rcdfmtinf;
 
-      /END-FREE
-     P                 E
-      *
-      *===================================================================*
-      *  Funktion:  f_space                                    (Body)     *
-      *===================================================================*
-      *
-     P f_space...
-     P                 B                   Export
-     D                 PI          4096A   varying
-     D  i_length                     10I 0 value
-      *
-      *  Funktionswert
-     D spaces          S           4096A   varying
-      *
-     D x               S             10I 0
-      * ------------------------------------------------------------------------
-      /FREE
+       end-proc;
+
+       //===================================================================*
+       //  Funktion:  f_space                                    (Body)     *
+       //===================================================================*
+
+       dcl-proc f_space export;
+       dcl-pi *N              varchar(4096);
+         i_length        int(10) value;
+       end-pi;
+
+       //  Funktionswert
+       dcl-s spaces          varchar(4096);
+
+       dcl-s x               int(10);
+       // ------------------------------------------------------------------------
 
        x = i_length;
        dow x > 0;
-         spaces = spaces + ' ';
-         x = x - 1;
+          spaces = spaces + ' ';
+          x = x - 1;
        enddo;
 
        return spaces;
 
-      /END-FREE
-     P                 E
-      *
-      *===================================================================*
-      *  Funktion:  Kills the program, sending an *ESCAPE message.        *
-      *===================================================================*
-     P p_kill...
-     P                 B                   export
-     D                 PI
-     D  i_text                      128A   value  varying
-      *
-      *  Local fields
-     D msgKey          S              4A   inz
-      *
-      *  Qualified message file name
-     D qMsgF           DS                  qualified inz
-     D  name                         10A
-     D  lib                          10A
-      *
-      *  API error code
-     D errCode         DS                  qualified inz
-     D  bytPrv                       10I 0
-     D  bytAvl                       10I 0
-     D  excID                         7A
-     D  reserved                      1A
-     D  excDta                      256A
-      *
-      *  Send Program Message (QMHSNDPM) API
-     D QMHSNDPM        PR                         extpgm('QMHSNDPM')
-     D   i_msgID                      7A   const
-     D   i_qMsgF                     20A   const
-     D   i_msgData                32767A   const  options(*varsize )
-     D   i_length                    10I 0 const
-     D   i_msgType                   10A   const
-     D   i_callStkE               32767A   const  options(*varsize )
-     D   i_callStkC                  10I 0 const
-     D   o_msgKey                     4A
-     D   io_ErrCode               32767A          options(*varsize )
-      * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      /free
-         clear qMsgF;
-         qMsgF.name = 'QCPFMSG';
-         qMsgF.lib  = '*LIBL';
-         clear errCode;
-         errCode.bytPrv = %size(errCode);
-         QMHSNDPM('CPF9897': qMsgF: i_text: %len(i_text): '*ESCAPE'
-                  : '*PGMBDY': 1: msgKey: errCode);
-         return;
-      /end-free
-      *
-     P                 E
-      *
-      *===================================================================*
-      *  Map command to message ID.                            (Body)     *
-      *===================================================================*
-      *
-     P f_mapCmdToMsg...
-     P                 B                   Export
-     D                 PI                  like(msgID_t)
-     D  i_command                   256A   const
-      *
-      *  Funktionswert
-     D msgID           S                   like(msgID_t)
-      * ------------------------------------------------------------------------
-      /FREE
+       end-proc;
+
+       //===================================================================*
+       //  Funktion:  Kills the program, sending an *ESCAPE message.        *
+       //===================================================================*
+       dcl-proc p_kill export;
+       dcl-pi *N;
+         i_text          varchar(128) value;
+       end-pi;
+
+       //  Local fields
+       dcl-s msgKey          char(4) inz;
+
+       //  Qualified message file name
+       dcl-ds qMsgF likeds(qObj_t) inz;
+
+       //  API error code
+       dcl-ds errCode likeds(errCode_t) inz;
+       // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+       clear qMsgF;
+       qMsgF.name = 'QCPFMSG';
+       qMsgF.lib  = '*LIBL';
+
+       clear errCode;
+       errCode.bytprv = %size(errCode);
+
+       qmhsndpm('CPF9897': qMsgF: i_text: %len(i_text): '*ESCAPE'
+                : '*PGMBDY': 1: msgKey: errCode);
+       return;
+
+       end-proc;
+
+       //===================================================================*
+       //  Map command to message ID.                            (Body)     *
+       //===================================================================*
+
+       dcl-proc f_mapcmdtomsg export;
+       dcl-pi *N like(msgid_t);
+         i_command       char(256) const;
+       end-pi;
+
+       //  Funktionswert
+       dcl-s msgid           like(msgid_t);
+       // ------------------------------------------------------------------------
 
        select;
        when i_command = '*ENTER';
-          msgID = '0001';
+          msgid = '0001';
        when i_command = '*EXIT';
-          msgID = '0002';
+          msgid = '0002';
        when i_command = '*REFRESH';
-          msgID = '0003';
+          msgid = '0003';
        when i_command = '*ADD';
-          msgID = '0004';
+          msgid = '0004';
        when i_command = '*HEADLINE';
-          msgID = '0005';
+          msgid = '0005';
        when i_command = '*TGLMRKCOL';
-          msgID = '0006';
+          msgid = '0006';
        when i_command = '*MOVETOP';
-          msgID = '0007';
+          msgid = '0007';
        when i_command = '*POSCSR';
-          msgID = '0008';
+          msgid = '0008';
        when i_command = '*SEARCH';
-          msgID = '0009';
+          msgid = '0009';
        when i_command = '*TOP';
-          msgID = '0010';
+          msgid = '0010';
        when i_command = '*BOT';
-          msgID = '0011';
+          msgid = '0011';
        when i_command = '*LEFT';
-          msgID = '0012';
+          msgid = '0012';
        when i_command = '*RIGHT';
-          msgID = '0013';
+          msgid = '0013';
        when i_command = '*CMDLINE';
-          msgID = '0014';
+          msgid = '0014';
        when i_command = '*132/80';
-          msgID = '0015';
+          msgid = '0015';
        when i_command = '*MOREKEYS';
-          msgID = '0016';
+          msgid = '0016';
        when i_command = '*PAGEDOWN';
-          msgID = '0017';
+          msgid = '0017';
        when i_command = '*PAGEUP';
-          msgID = '0018';
+          msgid = '0018';
        when i_command = '*PINROW';
-          msgID = '0019';
+          msgid = '0019';
        when i_command = '*UNPINROW';
-          msgID = '0020';
+          msgid = '0020';
        when i_command = '*CHANGE';
-          msgID = '0021';
+          msgid = '0021';
        when i_command = '*COPY';
-          msgID = '0022';
+          msgid = '0022';
        when i_command = '*DELETE';
-          msgID = '0023';
+          msgid = '0023';
        when i_command = '*DISPLAY';
-          msgID = '0024';
+          msgid = '0024';
        when i_command = '*USERSETG';
-          msgID = '0025';
+          msgid = '0025';
        when i_command = '*CANCEL';
-          msgID = '0026';
+          msgid = '0026';
        when i_command = '*SAVE_EXIT';
-          msgID = '0027';
+          msgid = '0027';
        when i_command = '*PINCOL';
-          msgID = '0028';
+          msgid = '0028';
        when i_command = '*UNPINCOL';
-          msgID = '0029';
+          msgid = '0029';
        when i_command = '*TGLPINCOL';
-          msgID = '0030';
+          msgid = '0030';
        when i_command = '*TBLPAPON';
-          msgID = '0031';
+          msgid = '0031';
        when i_command = '*TBLPAPOFF';
-          msgID = '0032';
+          msgid = '0032';
        when i_command = '*TGLTBLPAP';
-          msgID = '0033';
+          msgid = '0033';
        when i_command = '*YESTOALL';
-          msgID = '0034';
+          msgid = '0034';
        when i_command = '*MOREOPT';
-          msgID = '0035';
+          msgid = '0035';
        when i_command = '*COPYEXT';
-          msgID = '0036';
+          msgid = '0036';
        when i_command = '*MRKCOL';
-          msgID = '0037';
+          msgid = '0037';
        when i_command = '*UNMRKCOL';
-          msgID = '0038';
+          msgid = '0038';
        when i_command = '*LOWERCASE';
-          msgID = '0039';
+          msgid = '0039';
        when i_command = '*UPPERCASE';
-          msgID = '0040';
+          msgid = '0040';
        when i_command = '*TGLLUCASE';
-          msgID = '0041';
+          msgid = '0041';
        when i_command = '*SPLASHON';
-          msgID = '0042';
+          msgid = '0042';
        when i_command = '*SPLASHOFF';
-          msgID = '0043';
+          msgid = '0043';
        when i_command = '*PAGELEFT';
-          msgID = '0044';
+          msgid = '0044';
        when i_command = '*PAGERIGHT';
-          msgID = '0045';
+          msgid = '0045';
        when i_command = '*REPEAT';
-          msgID = '0046';
+          msgid = '0046';
        when i_command = '*REBUILD';
-          msgID = '0047';
+          msgid = '0047';
        when i_command = '*CLRPINROW';
-          msgID = '0048';
+          msgid = '0048';
        when i_command = '*CLRPINCOL';
-          msgID = '0049';
+          msgid = '0049';
        when i_command = '*LAYOUT';
-          msgID = '0050';
+          msgid = '0050';
        when i_command = '*FLOATKEYS';
-          msgID = '0051';
+          msgid = '0051';
        when i_command = '*SELECT';
-          msgID = '0052';
+          msgid = '0052';
        when i_command = '*NEXTMARK';
-          msgID = '0053';
+          msgid = '0053';
        when i_command = '*PREVMARK';
-          msgID = '0054';
+          msgid = '0054';
        when i_command = '*DSPDBR';
-          msgID = '0055';
+          msgid = '0055';
        when i_command = '*PROMPT';
-          msgID = '0056';
+          msgid = '0056';
        when i_command = '*KEY';
-          msgID = '0057';
+          msgid = '0057';
        when i_command = '*RRN';
-          msgID = '0058';
+          msgid = '0058';
        when i_command = '*TGLACCESS';
-          msgID = '0059';
+          msgid = '0059';
        when i_command = '*HEXEDIT';
-          msgID = '0060';
+          msgid = '0060';
        when i_command = '*ABOUT';
-          msgID = '0061';
+          msgid = '0061';
        when i_command = '*PINCOLDLG';
-          msgID = '0062';
+          msgid = '0062';
        when i_command = '*CLRALL';
-          msgID = '0063';
+          msgid = '0063';
        when i_command = '*DSPNRM';
-          msgID = '0064';
+          msgid = '0064';
        when i_command = '*DSPHEX';
-          msgID = '0065';
+          msgid = '0065';
        when i_command = '*TGLDSP';
-          msgID = '0066';
+          msgid = '0066';
        when i_command = '*SQL';
-          msgID = '0067';
+          msgid = '0067';
        when i_command = '*INSKEYFLD';
-          msgID = '0068';
+          msgid = '0068';
        when i_command = '*SAVEENV';
-          msgID = '0069';
+          msgid = '0069';
        when i_command = '*LOADENV';
-          msgID = '0070';
+          msgid = '0070';
        when i_command = '*DELETEENV';
-          msgID = '0071';
+          msgid = '0071';
        when i_command = '*TGLSORT';
-          msgID = '0072';
+          msgid = '0072';
        when i_command = '*YES';
-          msgID = '0073';
+          msgid = '0073';
        when i_command = '*NO';
-          msgID = '0074';
+          msgid = '0074';
        when i_command = '*OK';
-          msgID = '0075';
+          msgid = '0075';
        when i_command = '*FIRSTPOS';
-          msgID = '0076';
+          msgid = '0076';
        when i_command = '*LASTPOS';
-          msgID = '0077';
+          msgid = '0077';
        when i_command = '*SLCENV';
-          msgID = '0078';
+          msgid = '0078';
        when i_command = '*SLCLAYOUT';
-          msgID = '0079';
+          msgid = '0079';
        when i_command = '*TGLNULL';
-          msgID = '0080';
+          msgid = '0080';
        when i_command = '*TGLINPUT';
-          msgID = '0081';
+          msgid = '0081';
        when i_command = '*STREDIT';
-          msgID = '0082';
+          msgid = '0082';
        when i_command = '*TGLRCDLCK';
-          msgID = '0083';
+          msgid = '0083';
        when i_command = '*TGLKEYLUC';
-          msgID = '0084';
+          msgid = '0084';
        when i_command = '*PRINT';
-          msgID = '0085';
+          msgid = '0085';
        other;
-          msgID = '';
+          msgid = '';
        endsl;
 
-       return msgID;
+       return msgid;
 
-      /END-FREE
-     P                 E
-      *
+       end-proc;
+

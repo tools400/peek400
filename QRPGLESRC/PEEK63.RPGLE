@@ -1,1271 +1,1132 @@
-      *===============================================================*
-      *                                                               *
-      *  (c) Thomas Raddatz                                           *
-      *                                                               *
-      *  Bereich  : PEEK, Version 3.0.0                               *
-      *  Programm : PEEK63                                            *
-      *  Typ      : RPGLE                                             *
-      *                                                               *
-      *  erstellt : 25.01.07  Raddatz                                 *
-      *  geändert :                                                   *
-      *                                                               *
-      *===============================================================*
-      *                                                               *
-      *  Kurzdokumentation :                                          *
-      *                                                               *
-      *  Peek/400 - Dateizugriffsroutinen                             *
-      *                                                               *
-      *===============================================================*
-      * >>PRE-COMPILER<<                                              *
-      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
-      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
-      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
-      *                           INSTALL(*NO);                       *
-      *   >>EXECUTE<<                                                 *
-      * >>END-PRE-COMPILER<<                                          *
-      *===============================================================*
-     H NOMAIN
+       //===============================================================*
+       //                                                               *
+       //  (c) Thomas Raddatz                                           *
+       //                                                               *
+       //  Bereich  : PEEK, Version 3.0.0                               *
+       //  Programm : PEEK63                                            *
+       //  Typ      : RPGLE                                             *
+       //                                                               *
+       //  erstellt : 25.01.07  Raddatz                                 *
+       //  geändert :                                                   *
+       //                                                               *
+       //===============================================================*
+       //                                                               *
+       //  Kurzdokumentation :                                          *
+       //                                                               *
+       //  Peek/400 - Dateizugriffsroutinen                             *
+       //                                                               *
+       //===============================================================*
+       // >>PRE-COMPILER<<                                              *
+       //   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+       //                           OBJLIB(&LI) DEVLIB(&LI) +           *
+       //                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+       //                           INSTALL(*NO);                       *
+       //   >>EXECUTE<<                                                 *
+       // >>END-PRE-COMPILER<<                                          *
+       //===============================================================*
+       ctl-opt nomain;
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
-      *
-      *---Variablendefinition------------------------------*
+
       /COPY QCOPYLE,FLDL0100
       /COPY QCOPYLE,D_CLib
       /COPY QCOPYLE,D_CLib2
-      *----------------------------------------------------*
-      *
+      /COPY QCOPYLE,USR9994
+      /COPY QCOPYLE,ERR_D_SDS
+
       /COPY QCOPYLE,F_PEEK53
       /COPY QCOPYLE,F_PEEK58
       /COPY QCOPYLE,F_PEEK63
-      *
-      *---Nachrichtenaufbau--------------------------------*
-      /COPY QCOPYLE,USR9994
-      *----------------------------------------------------*
-      *
-      *---Konstanten---------------------------------------*
-     D cOPER_OPEN      C                   const('*OPEN')
-     D cOPER_CHAIN_RRN...
-     D                 C                   const('*CHAIN_RRN')
-     D cOPER_CHAIN_KEY...
-     D                 C                   const('*CHAIN_KEY')
-     D cOPER_SETLL_RRN...
-     D                 C                   const('*SETLL_RRN')
-     D cOPER_SETLL_KEY...
-     D                 C                   const('*SETLL_KEY')
-     D cOPER_SETGT_RRN...
-     D                 C                   const('*SETGT_RRN')
-     D cOPER_SETGT_KEY...
-     D                 C                   const('*SETGT_KEY')
-     D cOPER_READ      C                   const('*READ')
-     D cOPER_READP     C                   const('*READP')
-     D cOPER_CLOSE     C                   const('*CLOSE')
-     D cOPER_DELETE    C                   const('*DELETE')
-     D cOPER_UNLOCK    C                   const('*UNLOCK')
-      *
-     D cERROR_RRN      C                   const(-1)
-      *----------------------------------------------------*
-      *
-      *---SDS-Datenstruktur--------------------------------*
-      /COPY QCOPYLE,ERR_D_SDS
-      *----------------------------------------------------*
-      *
-     D clearErrorMsg...
-     D                 PR
-     D  io_hFile                                  likeds(hFile_t)
-      *
-     D clearBufferAndNullMap...
-     D                 PR
-     D  i_RFILE                            const  likeds(RFILE_t )
-     D  io_rcdBuffer                              like(rcdBuf_t)
-     D  io_nullMap                                like(nullMap_t)
-     D                                            dim(NULL_MAP_SIZE)
-      *
-     D copyInNullMap...
-     D                 PR
-     D  i_RFILE                            const  likeds(RFILE_t )
-     D  io_nullMap                                like(nullMap_t)
-     D                                            dim(NULL_MAP_SIZE)
-      *
-      *  Returns the value of the specified mode parameter.
-     D getMode...
-     D                 PR            16A          varying
-     D  i_mode                      512A   value  varying
-     D  i_parm                       16A   value  varying
-     D  i_default                    16A   value  varying
-      *
-     D setEOF...
-     D                 PR
-     D  io_hFile                                  likeds(hFile_t)
-     D  i_operation                  10A   value
-      *
-      *===================================================================*
-      *  Opens a given file.                                   (Body)     *
-      *===================================================================*
-      *
-     P CIO_open...
-     P                 B                   Export
-     D                 PI                         like(bool_t)
-     D  o_hFile                                   likeds(hFile_t)
-     D  i_file                             const  like(file_t)
-     D  i_lib                              const  like(lib_t)
-     D  i_mbr                              const  like(mbr_t)
-     D  i_rcdFormat                  10A   const
-     D  i_mode                         *   const  options(*string)
-      *
-     D fd              S               *   inz
-      *
-     D RFILE           DS                  likeds(RFILE_t  )
-     D                                     based(fd)
-     D RIOFB           DS                  likeds(RIOFB_t  )
-     D                                     based(pRIOFB)
-      * ------------------------------------------------------------------------
-      /FREE
 
-         p_clrErrno();
+       dcl-c OPER_OPEN      const('*OPEN');
+       dcl-c OPER_CHAIN_RRN const('*CHAIN_RRN');
 
-         clear o_hFile;
+       dcl-c OPER_CHAIN_KEY const('*CHAIN_KEY');
 
-         monitor;
-            fd = Ropen(%trim(i_lib ) + '/' +
-                       %trim(i_file) + '(' +
-                       %trim(i_mbr) + ')'
-                       : i_mode);
-            if (fd <> *NULL and i_rcdFormat <> '' and i_rcdFormat <> '*FIRST');
-               Rformat(fd: %trim(i_rcdFormat));
-            endif;
-         on-error;
-            fd = *NULL;
-         endmon;
+       dcl-c OPER_SETLL_RRN const('*SETLL_RRN');
 
-         if fd = *NULL;
-            o_hFile.errno = f_errno();
-            return bFalse;
-         endif;
+       dcl-c OPER_SETLL_KEY const('*SETLL_KEY');
+       dcl-c OPER_SETGT_RRN const('*SETGT_RRN');
+       dcl-c OPER_SETGT_KEY const('*SETGT_KEY');
+       dcl-c OPER_READ      const('*READ');
+       dcl-c OPER_READP     const('*READP');
+       dcl-c OPER_CLOSE     const('*CLOSE');
+       dcl-c OPER_DELETE    const('*DELETE');
+       dcl-c OPER_UNLOCK    const('*UNLOCK');
 
-         o_hFile.fd        = fd;
-         o_hFile.isOpen    = bTrue;
-         o_hFile.name      = i_file;
-         o_hFile.lib       = i_lib;
-         o_hFile.mbr       = i_mbr;
-         o_hFile.rcdFormat = i_rcdFormat;
-         o_hFile.errno     = 0;
-         o_hFile.lastOper  = cOPER_OPEN;
-         o_hFile.arrseq    = getMode(%str(i_mode): 'arrseq': 'N');
-         o_hFile.msgID     = '';
-         o_hFile.msgDta    = '';
+       dcl-c ERROR_RRN      const(-1);
 
-         return bTrue;
+       dcl-pr clearerrormsg;
+         io_hfile        likeds(hfile_t);
+       end-pr;
 
-      /END-FREE
-     P                 E
-      *
-      *===================================================================*
-      *  Checks whether the file identified by i_hFile is open or not.
-      *===================================================================*
-      *
-     P CIO_isOpen...
-     P                 B                   Export
-     D                 PI                         like(bool_t)
-     D  i_hFile                            const  likeds(hFile_t)
-      * ------------------------------------------------------------------------
-      /FREE
+       dcl-pr clearbufferandnullmap;
+         i_rfile         const  likeds(rfile_t );
+         io_rcdbuffer    like(rcdbuf_t);
+         io_nullmap      like(nullmap_t)
+            dim(null_map_size);
+       end-pr;
 
-         if i_hFile.fd = *NULL;
-            return bFalse;
-         endif;
+       dcl-pr copyinnullmap;
+         i_rfile         const  likeds(rfile_t );
+         io_nullmap      like(nullmap_t) dim(null_map_size);
+       end-pr;
 
-         return i_hFile.isOpen;
+       //  Returns the value of the specified mode parameter.
+       dcl-pr getmode varchar(16);
+         i_mode          varchar(512) value;
+         i_parm          varchar(16) value;
+         i_default       varchar(16) value;
+       end-pr;
 
-      /END-FREE
-     P                 E
-      *
-      *===================================================================*
-      *  Returns the name of the file identified by i_hFile.
-      *===================================================================*
-      *
-     P CIO_getFile...
-     P                 B                   Export
-     D                 PI                         like(file_t)
-     D  i_hFile                            const  likeds(hFile_t)
-      * ------------------------------------------------------------------------
-      /FREE
+       dcl-pr seteof;
+         io_hfile        likeds(hfile_t);
+         i_operation     char(10) value;
+       end-pr;
 
-         if CIO_isOpen(i_hFile) = bFalse;
-            return '';
-         endif;
+       //===================================================================*
+       //  Opens a given file.                                   (Body)     *
+       //===================================================================*
 
-         return i_hFile.name;
+       dcl-proc cio_open export;
+       dcl-pi *N        like(bool_t);
+         o_hfile         likeds(hfile_t);
+         i_file          const  like(file_t);
+         i_lib           const  like(lib_t);
+         i_mbr           const  like(mbr_t);
+         i_rcdformat     char(10) const;
+         i_mode          pointer const  options(*string);
+       end-pi;
 
-      /END-FREE
-     P                 E
-      *
-      *===================================================================*
-      *  Returns the name of the library that contains the file
-      *  identified by i_hFile.
-      *===================================================================*
-      *
-     P CIO_getLibrary...
-     P                 B                   Export
-     D                 PI                         like(lib_t)
-     D  i_hFile                            const  likeds(hFile_t)
-      * ------------------------------------------------------------------------
-      /FREE
+       dcl-s fd pointer;
 
-         if CIO_isOpen(i_hFile) = bFalse;
-            return '';
-         endif;
+       dcl-ds rfile likeds(rfile_t) based(fd);
+       dcl-ds riofb likeds(riofb_t) based(priofb);
+       // ----------------------------------------------------------------------
 
-         return i_hFile.lib;
+       p_clrerrno();
 
-      /END-FREE
-     P                 E
-      *
-      *===================================================================*
-      *  Returns the name of the member of the file identified by i_hFile.
-      *===================================================================*
-      *
-     P CIO_getMember...
-     P                 B                   Export
-     D                 PI                         like(lib_t)
-     D  i_hFile                            const  likeds(hFile_t)
-      * ------------------------------------------------------------------------
-      /FREE
+       clear o_hfile;
 
-         if CIO_isOpen(i_hFile) = bFalse;
-            return '';
-         endif;
+       monitor;
+          fd = ropen(%trim(i_lib ) + '/' +
+                     %trim(i_file) + '(' +
+                     %trim(i_mbr) + ')'
+                     : i_mode);
+          if (fd <> *null and i_rcdformat <> '' and i_rcdformat <> '*FIRST');
+             rformat(fd: %trim(i_rcdformat));
+          endif;
+       on-error;
+          fd = *null;
+       endmon;
 
-         return i_hFile.mbr;
+       if fd = *null;
+          o_hfile.errno = f_errno();
+          return bfalse;
+       endif;
 
-      /END-FREE
-     P                 E
-      *
-      *===================================================================*
-      *  Returns the name of the record format of the file identified
-      *  by i_hFile.
-      *===================================================================*
-      *
-     P CIO_getRecordFormat...
-     P                 B                   Export
-     D                 PI            10A
-     D  i_hFile                            const  likeds(hFile_t)
-      * ------------------------------------------------------------------------
-      /FREE
+       o_hfile.fd        = fd;
+       o_hfile.isopen    = btrue;
+       o_hfile.name      = i_file;
+       o_hfile.lib       = i_lib;
+       o_hfile.mbr       = i_mbr;
+       o_hfile.rcdformat = i_rcdformat;
+       o_hfile.errno     = 0;
+       o_hfile.lastoper  = OPER_OPEN;
+       o_hfile.arrseq    = getmode(%str(i_mode): 'arrseq': 'N');
+       o_hfile.msgid     = '';
+       o_hfile.msgdta    = '';
 
-         if CIO_isOpen(i_hFile) = bFalse;
-            return '';
-         endif;
+       return btrue;
 
-         return i_hFile.rcdFormat;
+       end-proc;
 
-      /END-FREE
-     P                 E
-      *
-      *===================================================================*
-      *  Returns the record length of the file identified by i_hFile.
-      *===================================================================*
-      *
-     P CIO_getRecordLength...
-     P                 B                   Export
-     D                 PI            10I 0
-     D  i_hFile                            const  likeds(hFile_t)
-      *
-     D RFILE           DS                  likeds(RFILE_t  )
-     D                                     based(i_hFile.fd)
-      * ------------------------------------------------------------------------
-      /FREE
+       //===================================================================*
+       //  Checks whether the file identified by i_hFile is open or not.
+       //===================================================================*
 
-         if CIO_isOpen(i_hFile) = bFalse;
-            return -1;
-         endif;
+       dcl-proc cio_isopen export;
+       dcl-pi *N        like(bool_t);
+         i_hfile         const  likeds(hfile_t);
+       end-pi;
+       // ------------------------------------------------------------------------
 
-         return RFILE.bufLen;
+       if (i_hfile.fd = *null);
+          return bfalse;
+       endif;
 
-      /END-FREE
-     P                 E
-      *
-      *===================================================================*
-      *  Returns the record number of the current record of the file
-      *  identified by i_hFile.
-      *===================================================================*
-      *
-     P CIO_getRRN...
-     P                 B                   Export
-     D                 PI            10I 0
-     D  i_hFile                            const  likeds(hFile_t)
-      *
-     D RFILE           DS                  likeds(RFILE_t  )
-     D                                     based(i_hFile.fd)
-     D RIOFB           DS                  likeds(RIOFB_t  )
-     D                                     based(pRIOFB)
-      * ------------------------------------------------------------------------
-      /FREE
+       return i_hfile.isopen;
 
-         if CIO_isOpen(i_hFile) = bFalse;
-            return -1;
-         endif;
+       end-proc;
 
-         pRIOFB = %addr(RFILE.riofb);
+       //===================================================================*
+       //  Returns the name of the file identified by i_hFile.
+       //===================================================================*
 
-         return RIOFB.rrn;
+       dcl-proc cio_getfile export;
+       dcl-pi *N        like(file_t);
+         i_hfile         const  likeds(hfile_t);
+       end-pi;
+       // ------------------------------------------------------------------------
 
-      /END-FREE
-     P                 E
-      *
-      *===================================================================*
-      *  Returns the record number of the current record of the file
-      *  identified by i_hFile.
-      *===================================================================*
-      *
-     P CIO_getMbrNbr...
-     P                 B                   Export
-     D                 PI            10I 0
-     D  i_hFile                            const  likeds(hFile_t)
-      *
-     D XXIOFB          DS                  likeds(XXIOFB_t )
-     D                                     based(pXXIOFB)
-     D XXIOFB_DB       DS                  likeds(XXIOFB_DB_t)
-     D                                     based(pXXIOFB_DB)
-      * ------------------------------------------------------------------------
-      /FREE
+       if (cio_isopen(i_hfile) = bFalse);
+          return '';
+       endif;
 
-         if CIO_isOpen(i_hFile) = bFalse;
-            return -1;
-         endif;
+       return i_hfile.name;
 
-         pXXIOFB = Riofbk(i_hFile.fd);
-         pXXIOFB_DB = pXXIOFB + %size(XXIOFB);
+       end-proc;
 
-         return XXIOFB_DB.data_mbr_num;
+       //===================================================================*
+       //  Returns the name of the library that contains the file
+       //  identified by i_hFile.
+       //===================================================================*
 
-      /END-FREE
-     P                 E
-      *
-      *===================================================================*
-      *  Returns the file information data structure of the file
-      *  identified by i_hFile.
-      *===================================================================*
-      *
-     P CIO_getInfDS...
-     P                 B                   Export
-     D                 PI                         likeds(infds_t)
-     D  i_hFile                            const  likeds(hFile_t)
-      *
-      *  Funktionswert
-     D infDS           DS                  likeds(infds_t) inz
-      * ------------------------------------------------------------------------
-      /FREE
+       dcl-proc cio_getlibrary export;
+       dcl-pi *N        like(lib_t);
+         i_hfile         const  likeds(hfile_t);
+       end-pi;
+       // ------------------------------------------------------------------------
 
-         clear infDS;
-         infds.open    = CIO_isOpen(i_hFile);
-         infds.file    = CIO_getFile(i_hFile);
-         infds.library = CIO_getLibrary(i_hFile);
-         infds.rcdLen  = CIO_getRecordLength(i_hFile);
-         infds.member  = CIO_getMember(i_hFile);
-         infds.rcdFmt  = CIO_getRecordFormat(i_hFile);
-         infds.MbrNbr  = CIO_getMbrNbr(i_hFile);
-         infds.rcdNbr  = CIO_getRRN(i_hFile);
+       if (cio_isopen(i_hfile) = bFalse);
+          return '';
+       endif;
 
-         return infDS;
+       return i_hfile.lib;
 
-      /END-FREE
-     P                 E
-      *
-      *===================================================================*
-      *  Returns TRUE if the file is in error.
-      *===================================================================*
-      *
-     P CIO_isError...
-     P                 B                   Export
-     D                 PI                         like(bool_t)
-     D  i_hFile                            const  likeds(hFile_t)
-      * ------------------------------------------------------------------------
-      /FREE
+       end-proc;
 
-         if (i_hFile.errno <> 0 or i_hFile.msgID <> '');
-            return bTrue;
-         else;
-            return bFalse;
-         endif;
+       //===================================================================*
+       //  Returns the name of the member of the file identified by i_hFile.
+       //===================================================================*
 
-      /END-FREE
-     P                 E
-      *
-      *===================================================================*
-      *  Sets an error.
-      *===================================================================*
-      *
-     P CIO_setErrorMsg...
-     P                 B                   Export
-     D                 PI
-     D  io_hFile                                  likeds(hFile_t)
-     D  i_msgID                            const  like(msgID_t)
-     D  i_msgDta                           const  like(msgDta_t)
-      * ------------------------------------------------------------------------
-      /FREE
+       dcl-proc cio_getmember export;
+       dcl-pi *N        like(lib_t);
+         i_hfile         const  likeds(hfile_t);
+       end-pi;
+       // ------------------------------------------------------------------------
 
-         io_hFile.errno  = -1;
-         io_hFile.msgID  = i_msgID;
-         io_hFile.msgDta = i_msgDta;
+       if (cio_isopen(i_hfile) = bFalse);
+          return '';
+       endif;
 
-         return;
+       return i_hfile.mbr;
 
-      /END-FREE
-     P                 E
-      *
-      *===================================================================*
-      *  Gets the current error message.
-      *===================================================================*
-      *
-     P CIO_getErrorMsg...
-     P                 B                   Export
-     D                 PI
-     D  i_hFile                            const  likeds(hFile_t)
-     D  o_msgID                                   like(msgID_t)
-     D  o_msgDta                                  like(msgDta_t)
-      *
+       end-proc;
+
+       //===================================================================*
+       //  Returns the name of the record format of the file identified
+       //  by i_hFile.
+       //===================================================================*
+
+       dcl-proc cio_getrecordformat export;
+       dcl-pi *N              char(10);
+         i_hfile         const  likeds(hfile_t);
+       end-pi;
+       // ------------------------------------------------------------------------
+
+       if (cio_isopen(i_hfile) = bFalse);
+          return '';
+       endif;
+
+       return i_hfile.rcdformat;
+
+       end-proc;
+
+       //===================================================================*
+       //  Returns the record length of the file identified by i_hFile.
+       //===================================================================*
+
+       dcl-proc cio_getrecordlength export;
+       dcl-pi *N              int(10);
+         i_hfile         const  likeds(hfile_t);
+       end-pi;
+
+       dcl-ds rfile likeds(rfile_t  )
+       based(i_hfile.fd);
+       // ----------------------------------------------------------------------
+
+       if (cio_isopen(i_hfile) = bFalse);
+          return -1;
+       endif;
+
+       return rfile.buflen;
+
+       end-proc;
+
+       //===================================================================*
+       //  Returns the record number of the current record of the file
+       //  identified by i_hFile.
+       //===================================================================*
+
+       dcl-proc cio_getrrn export;
+       dcl-pi *N              int(10);
+         i_hfile         const  likeds(hfile_t);
+       end-pi;
+
+       dcl-ds rfile likeds(rfile_t) based(i_hfile.fd);
+       dcl-ds riofb likeds(riofb_t) based(priofb);
+       // ----------------------------------------------------------------------
+
+       if (cio_isopen(i_hfile) = bFalse);
+          return -1;
+       endif;
+
+       priofb = %addr(rfile.riofb);
+
+       return riofb.rrn;
+
+       end-proc;
+
+       //===================================================================*
+       //  Returns the record number of the current record of the file
+       //  identified by i_hFile.
+       //===================================================================*
+
+       dcl-proc cio_getmbrnbr export;
+       dcl-pi *N              int(10);
+         i_hfile         const  likeds(hfile_t);
+       end-pi;
+
+       dcl-ds xxiofb likeds(xxiofb_t) based(pxxiofb);
+       dcl-ds xxiofb_db likeds(xxiofb_db_t) based(pxxiofb_db);
+       // ----------------------------------------------------------------------
+
+       if (cio_isopen(i_hfile) = bFalse);
+          return -1;
+       endif;
+
+       pxxiofb = riofbk(i_hfile.fd);
+       pxxiofb_db = pxxiofb + %size(xxiofb);
+
+       return xxiofb_db.data_mbr_num;
+
+       end-proc;
+
+       //===================================================================*
+       //  Returns the file information data structure of the file
+       //  identified by i_hFile.
+       //===================================================================*
+
+       dcl-proc cio_getinfds export;
+       dcl-pi *N        likeds(infds_t);
+         i_hfile         const  likeds(hfile_t);
+       end-pi;
+
+       //  Funktionswert
+       dcl-ds infds likeds(infds_t) inz;
+       // ----------------------------------------------------------------------
+
+       clear infds;
+       infds.open    = cio_isopen(i_hfile);
+       infds.file    = cio_getfile(i_hfile);
+       infds.library = cio_getlibrary(i_hfile);
+       infds.rcdlen  = cio_getrecordlength(i_hfile);
+       infds.member  = cio_getmember(i_hfile);
+       infds.rcdfmt  = cio_getrecordformat(i_hfile);
+       infds.mbrnbr  = cio_getmbrnbr(i_hfile);
+       infds.rcdnbr  = cio_getrrn(i_hfile);
+
+       return infds;
+
+       end-proc;
+
+       //===================================================================*
+       //  Returns TRUE if the file is in error.
+       //===================================================================*
+
+       dcl-proc cio_iserror export;
+       dcl-pi *N        like(bool_t);
+         i_hfile         const  likeds(hfile_t);
+       end-pi;
+       // ------------------------------------------------------------------------
+
+       if (i_hfile.errno <> 0 or i_hfile.msgid <> '');
+          return btrue;
+       else;
+          return bfalse;
+       endif;
+
+       end-proc;
+
+       //===================================================================*
+       //  Sets an error.
+       //===================================================================*
+
+       dcl-proc cio_seterrormsg export;
+       dcl-pi *N;
+         io_hfile        likeds(hfile_t);
+         i_msgid         const  like(msgid_t);
+         i_msgdta        const  like(msgdta_t);
+       end-pi;
+       // ------------------------------------------------------------------------
+
+       io_hfile.errno  = -1;
+       io_hfile.msgid  = i_msgid;
+       io_hfile.msgdta = i_msgdta;
+
+       end-proc;
+
+       //===================================================================*
+       //  Gets the current error message.
+       //===================================================================*
+
+       dcl-proc cio_geterrormsg export;
+       dcl-pi *N;
+         i_hfile         const  likeds(hfile_t);
+         o_msgid         like(msgid_t);
+         o_msgdta        like(msgdta_t);
+       end-pi;
+
       /COPY QCOPYLE,USR0012                      ?
-      * ------------------------------------------------------------------------
-      /FREE
-
-         if (i_hFile.msgID <> '');
-            o_msgID  = i_hFile.msgID;
-            o_msgDta = i_hFile.msgDta;
-         else;
-            clear USR0012;
-            USR00121 = CIO_getErrorText(i_hFile);
-            USR00122 = CIO_getError(i_hFile);
-            o_msgID  = 'USR0012';
-            o_msgDta = USR0012;
-         endif;
-
-         return;
-
-      /END-FREE
-     P                 E
-      *
-      *===================================================================*
-      *  Returns the latest error number associated to file i_hFile.
-      *===================================================================*
-      *
-     P CIO_getError...
-     P                 B                   Export
-     D                 PI            10I 0
-     D  i_hFile                            const  likeds(hFile_t)
-      * ------------------------------------------------------------------------
-      /FREE
-
-         return i_hFile.errno;
-
-      /END-FREE
-     P                 E
-      *
-      *===================================================================*
-      *  Returns the latest error text associated to file i_hFile.
-      *===================================================================*
-      *
-     P CIO_getErrorText...
-     P                 B                   Export
-     D                 PI           512A          varying
-     D  i_hFile                            const  likeds(hFile_t)
-      * ------------------------------------------------------------------------
-      /FREE
-
-         if (i_hFile.msgID <> '');
-            return f_msgText(i_hFile.msgID: i_hFile.msgDta);
-         else;
-            return %trimR(f_strError(i_hFile.errno));
-         endif;
-
-      /END-FREE
-     P                 E
-      *
-      *===================================================================*
-      *  Reads the record identified by i_rrn from a given file.
-      *===================================================================*
-      *
-     P CIO_chainWithRRN...
-     P                 B                   Export
-     D                 PI                         like(bool_t)
-     D  io_hFile                                  likeds(hFile_t)
-     D  i_rrn                              const  like(rcdNbr_t)
-     D  i_doLock                           const  like(bool_t)
-     D  io_rcdBuffer                              like(rcdBuf_t)
-     D  io_nullMap                                like(nullMap_t)
-     D                                            dim(NULL_MAP_SIZE)
-      *
-     D options         S             10I 0 inz(DFT)
-      *
-     D RFILE           DS                  likeds(RFILE_t  )
-     D                                     based(io_hFile.fd)
-      *
-     D RIOFB           DS                  likeds(RIOFB_t  )
-     D                                     based(pRIOFB)
-      * ------------------------------------------------------------------------
-      /FREE
-
-         p_clrErrno();
-         clearErrorMsg(io_hFile);
-
-         clearBufferAndNullMap(RFILE: io_rcdBuffer: io_nullMap);
-
-         if i_doLock = bTrue;
-            options = DFT;
-         else;
-            options = NO_LOCK;
-         endif;
-
-         pRIOFB = Rreadd(io_hFile.fd
-                         : %addr(io_rcdBuffer): %size(io_rcdBuffer)
-                         : options: i_rrn);
-         if RIOFB.numByt <> RFILE.bufLen;
-            io_hFile.errno = f_errno();
-            return bFalse;
-         endif;
-
-         copyInNullMap(RFILE: io_nullMap);
-
-         io_hFile.lastOper = cOPER_CHAIN_RRN;
-         io_hFile.errno = 0;
-
-         return bTrue;
-
-      /END-FREE
-     P                 E
-      *
-      *===================================================================*
-      *  Reads the record identified by i_key from a given file.
-      *===================================================================*
-      *
-     P CIO_chainWithKey...
-     P                 B                   Export
-     D                 PI                         like(bool_t)
-     D  io_hFile                                  likeds(hFile_t)
-     D  i_key                              const  like(keyBuf_t)
-     D  i_doLock                           const  like(bool_t)
-     D  io_rcdBuffer                              like(rcdBuf_t)
-     D  io_nullMap                                like(nullMap_t)
-     D                                            dim(NULL_MAP_SIZE)
-      *
-     D options         S             10I 0 inz(DFT)
-     D key             S                   like(i_key      ) inz
-     D keyLen          S             10I 0                   inz
-      *
-     D RFILE           DS                  likeds(RFILE_t  )
-     D                                     based(io_hFile.fd)
-      *
-     D RIOFB           DS                  likeds(RIOFB_t  )
-     D                                     based(pRIOFB)
-      * ------------------------------------------------------------------------
-      /FREE
-
-         p_clrErrno();
-         clearErrorMsg(io_hFile);
-
-         clearBufferAndNullMap(RFILE: io_rcdBuffer: io_nullMap);
-
-         if i_doLock = bTrue;
-            options = f_bitor(DFT: KEY_EQ);
-         else;
-            options = f_bitor(NO_LOCK: KEY_EQ);
-         endif;
-
-         key    = i_key;
-         keyLen = %len(key);
-
-         pRIOFB = Rreadk(io_hFile.fd
-                         : %addr(io_rcdBuffer): %size(io_rcdBuffer)
-                         : options: %addr(key): keyLen);
-         if (RIOFB.numByt <> RFILE.bufLen) or (RIOFB.numByt = EOF);
-            io_hFile.errno = f_errno();
-            return bFalse;
-         endif;
-
-         copyInNullMap(RFILE: io_nullMap);
-
-         io_hFile.lastOper = cOPER_CHAIN_KEY;
-         io_hFile.errno = 0;
-
-         return bTrue;
-
-      /END-FREE
-     P                 E
-      *
-      *===================================================================*
-      *  Positions the file right before the record identifed by i_rrn.
-      *===================================================================*
-      *
-     P CIO_setllWithRRN...
-     P                 B                   Export
-     D                 PI                         like(bool_t)
-     D  io_hFile                                  likeds(hFile_t)
-     D  i_rrn                              const  like(rcdNbr_t)
-      *
-     D errorNbr        S             10I 0 inz
-     D options         S             10U 0 inz
-      *
-     D RFILE           DS                  likeds(RFILE_t  )
-     D                                     based(io_hFile.fd)
-      *
-     D RIOFB           DS                  likeds(RIOFB_t  )
-     D                                     based(pRIOFB)
-      * ------------------------------------------------------------------------
-      /FREE
-
-         clearErrorMsg(io_hFile);
-
-         //?Setzen Datenzeiger auf angegebene Satznummer
-         //?(auch auf gelöschte Datensatze)
-         options = f_bitor(RRN_EQ: NO_LOCK);
-
-         p_clrErrno();
-         pRIOFB = Rlocate(io_hFile.fd: *NULL: i_rrn: options);
-
-         select;
-         when RIOFB.numByt = 0;   //?Datensatz nicht vorhanden
-            p_clrErrno();
-            pRIOFB = Rreadn(io_hFile.fd : *NULL: 0: NO_LOCK);
-            errorNbr = f_errno();
-         when RIOFB.numByt = 1;   //?Datensatz vorhanden
-            p_clrErrno();
-            pRIOFB = Rreads(io_hFile.fd : *NULL: 0: NO_LOCK);
-            errorNbr = f_errno();
-            if RIOFB.numByt = 0 and errorNbr = EIORECERR_C;   //?wahrscheinlich ein
-                                                              //?gelöschter Datensatz
-               p_clrErrno();
-               pRIOFB = Rreadn(io_hFile.fd : *NULL: 0: NO_LOCK);
-            endif;
-         endsl;
-
-         //?Datensatz nicht vorhanden, also ans Ende der Datei positionieren
-         if RIOFB.numByt = 0;
-            options = f_bitor(END  : NO_LOCK);
-            p_clrErrno();
-            pRIOFB = Rlocate(io_hFile.fd: *NULL: i_rrn: options);
-         endif;
-
-         if RIOFB.numByt = EOF;
-            io_hFile.errno = f_errno();   //?"End of File" erreicht
-            return bFalse;
-         endif;
-
-         if RIOFB.numByt <> RFILE.bufLen;
-            io_hFile.errno = f_errno();
-            return bFalse;
-         endif;
-
-         io_hFile.lastOper = cOPER_SETLL_RRN;
-         io_hFile.errno = 0;
-
-         return bTrue;
-
-      /END-FREE
-     P                 E
-      *
-      *===================================================================*
-      *  Positions the file right before the record identifed by i_key.
-      *===================================================================*
-      *
-     P CIO_setllWithKey...
-     P                 B                   Export
-     D                 PI                         like(bool_t)
-     D  io_hFile                                  likeds(hFile_t)
-     D  i_key                              const  like(keyBuf_t)
-      *
-     D options         S             10U 0 inz
-     D key             S                   like(i_key      ) inz
-     D keyLen          S             10I 0                   inz
-      *
-     D RFILE           DS                  likeds(RFILE_t  )
-     D                                     based(io_hFile.fd)
-      *
-     D RIOFB           DS                  likeds(RIOFB_t  )
-     D                                     based(pRIOFB)
-      * ------------------------------------------------------------------------
-      /FREE
-
-         p_clrErrno();
-         clearErrorMsg(io_hFile);
-
-         //?Setzen Datenzeiger auf angegebenen Schlüssel
-         key    = i_key;
-         keyLen = %len(key);
-
-         options = f_bitor(KEY_GE: PRIOR: DATA_ONLY);
-
-         pRIOFB = Rlocate(io_hFile.fd: %addr(key): keyLen: options);
-         if (RIOFB.numByt = 0) or (RIOFB.numByt = EOF);
-            options = f_bitor(START: DATA_ONLY);
-            pRIOFB = Rlocate(io_hFile.fd: %addr(key): keyLen: options);
-         endif;
-
-         if (RIOFB.numByt = 0); //? or (RIOFB.numByt = EOF);
-            io_hFile.errno = f_errno();   //?Fehler bei _Rlocate() aufgetreten
-            return bFalse;
-         endif;
-
-         io_hFile.lastOper = cOPER_SETLL_KEY;
-         io_hFile.errno = 0;
-
-         return bTrue;
-
-      /END-FREE
-     P                 E
-      *
-      *===================================================================*
-      *  Positions the file right after the record identifed by i_rrn.
-      *===================================================================*
-      *
-     P CIO_setgtWithRRN...
-     P                 B                   Export
-     D                 PI                         like(bool_t)
-     D  io_hFile                                  likeds(hFile_t)
-     D  i_rrn                              const  like(rcdNbr_t)
-      *
-     D options         S             10U 0 inz
-      *
-     D RFILE           DS                  likeds(RFILE_t  )
-     D                                     based(io_hFile.fd)
-      *
-     D RIOFB           DS                  likeds(RIOFB_t  )
-     D                                     based(pRIOFB)
-      * ------------------------------------------------------------------------
-      /FREE
-
-         p_clrErrno();
-         clearErrorMsg(io_hFile);
-
-         //?Setzen Datenzeiger auf angegebene Satznummer
-         //?(auch auf gelöschte Datensatze)
-         options = f_bitor(RRN_EQ: NO_LOCK);
-
-         pRIOFB = Rlocate(io_hFile.fd: *NULL: i_rrn: options);
-         if RIOFB.numByt = 0;
-            options = f_bitor(END: NO_LOCK);
-            pRIOFB = Rlocate(io_hFile.fd: *NULL: i_rrn: options);
-         endif;
-
-         if RIOFB.numByt = 0;
-            io_hFile.errno = f_errno();   //?Fehler bei _Rlocate() aufgetreten
-            return bFalse;
-         endif;
-
-         if RIOFB.numByt = EOF;
-            io_hFile.errno = f_errno();   //?"End of File" erreicht
-            return bFalse;
-         endif;
-
-         //?Einlesen Datensatz
-         pRIOFB = Rreads(io_hFile.fd : *NULL: 0: NO_LOCK);
-         if RIOFB.numByt = 0 and f_errno() = EIORECERR_C;   //?wahrscheinlich ein
-                                                            //?gelöschter Datensatz
-            pRIOFB = Rreadn(io_hFile.fd : *NULL: 0: NO_LOCK);
-         endif;
-
-         if RIOFB.numByt <> RFILE.bufLen;
-            io_hFile.errno = f_errno();
-            return bFalse;
-         endif;
-
-         io_hFile.lastOper = cOPER_SETGT_RRN;
-         io_hFile.errno = 0;
-
-         return bTrue;
-
-      /END-FREE
-     P                 E
-      *
-      *===================================================================*
-      *  Positions the file right after the record identifed by i_key.
-      *===================================================================*
-      *
-     P CIO_setgtWithKey...
-     P                 B                   Export
-     D                 PI                         like(bool_t)
-     D  io_hFile                                  likeds(hFile_t)
-     D  i_key                              const  like(keyBuf_t)
-      *
-     D options         S             10U 0 inz
-     D key             S                   like(i_key      ) inz
-     D keyLen          S             10I 0                   inz
-      *
-     D RFILE           DS                  likeds(RFILE_t  )
-     D                                     based(io_hFile.fd)
-      *
-     D RIOFB           DS                  likeds(RIOFB_t  )
-     D                                     based(pRIOFB)
-      * ------------------------------------------------------------------------
-      /FREE
-
-         p_clrErrno();
-         clearErrorMsg(io_hFile);
-
-         //?Setzen Datenzeiger auf angegebenen Schlüssel
-         key    = i_key;
-         keyLen = %len(key);
-
-         options = f_bitor(KEY_GT: PRIOR: DATA_ONLY);
-
-         pRIOFB = Rlocate(io_hFile.fd: %addr(key): keyLen: options);
-         if (RIOFB.numByt = 0) or (RIOFB.numByt = EOF);
-            options = f_bitor(END: DATA_ONLY);
-            pRIOFB = Rlocate(io_hFile.fd: %addr(key): keyLen: options);
-         endif;
-
-         if (RIOFB.numByt = 0); //? or (RIOFB.numByt = EOF);
-            io_hFile.errno = f_errno();   //?Fehler bei _Rlocate() aufgetreten
-            return bFalse;
-         endif;
-
-         io_hFile.lastOper = cOPER_SETGT_KEY;
-         io_hFile.errno = 0;
-
-         return bTrue;
-
-      /END-FREE
-     P                 E
-      *
-      *===================================================================*
-      *  Returns the next record from the file.
-      *===================================================================*
-      *
-     P CIO_read...
-     P                 B                   Export
-     D                 PI                         like(bool_t)
-     D  io_hFile                                  likeds(hFile_t)
-     D  i_doLock                           const  like(bool_t)
-     D  io_rcdBuffer                              like(rcdBuf_t)
-     D  io_nullMap                                like(nullMap_t)
-     D                                            dim(NULL_MAP_SIZE)
-      *
-     D options         S             10I 0 inz(DFT)
-     D function        S             32A   varying           inz
-     D msgID           S                   like(msgID_t) inz
-     D msgDta          S                   like(msgDta_t) inz
-      *
-     D RFILE           DS                  likeds(RFILE_t  )
-     D                                     based(io_hFile.fd)
-      *
-     D RIOFB           DS                  likeds(RIOFB_t  )
-     D                                     based(pRIOFB)
-      * ------------------------------------------------------------------------
-      /FREE
-
-         p_clrErrno();
-         clearErrorMsg(io_hFile);
-
-         clearBufferAndNullMap(RFILE: io_rcdBuffer: io_nullMap);
-
-         if i_doLock = bTrue;
-            options = DFT;
-         else;
-            options = NO_LOCK;
-         endif;
-
-         if (io_hFile.lastOper = cOPER_SETLL_RRN) or
-            (io_hFile.lastOper = cOPER_SETGT_RRN);
-            //?(io_hFile.lastOper = cOPER_SETLL_KEY) or
-            //?(io_hFile.lastOper = cOPER_SETGT_KEY);
-            function = '_Rreads';
-            pRIOFB = Rreads(io_hFile.fd
-                            : %addr(io_rcdBuffer): %size(io_rcdBuffer)
-                            : options);
-         else;
-            function = '_Rreadn';
-            pRIOFB = Rreadn(io_hFile.fd
-                            : %addr(io_rcdBuffer): %size(io_rcdBuffer)
-                            : options);
-         endif;
-
-         io_hFile.errno = f_errno();
-
-         if (io_hFile.errno <> 0);
-            clear USR9994;
-            USR99941 = f_errno();
-            USR99942 = function;
-            USR99943 = f_strerror(f_errno());
-            msgID  = 'USR9994';
-            msgDta = USR9994;
-            p_sndPgmMg(msgID: msgDta: '*': MSG_T_DIAG);
-            return bTrue;   // Return "EOF" to caller
-         endif;
-
-         select;
-         when RIOFB.numByt = EOF;
-            io_hFile.lastOper = cOPER_READ;
-            io_hFile.errno = 0;
-            return bTrue;   // Return "EOF" to caller
-         endsl;
-
-         copyInNullMap(RFILE: io_nullMap);
-         io_hFile.lastOper = cOPER_READ;
-         io_hFile.errno = 0;
-
-         return bFalse;  // Return "found" to caller
-
-      /END-FREE
-     P                 E
-      *
-      *===================================================================*
-      *  Returns the previous record from the file.
-      *===================================================================*
-      *
-     P CIO_readp...
-     P                 B                   Export
-     D                 PI                         like(bool_t)
-     D  io_hFile                                  likeds(hFile_t)
-     D  i_doLock                           const  like(bool_t)
-     D  io_rcdBuffer                              like(rcdBuf_t)
-     D  io_nullMap                                like(nullMap_t)
-     D                                            dim(NULL_MAP_SIZE)
-      *
-     D options         S             10I 0 inz(DFT)
-     D function        S             32A   varying           inz
-     D msgID           S                   like(msgID_t) inz
-     D msgDta          S                   like(msgDta_t) inz
-      *
-     D RFILE           DS                  likeds(RFILE_t  )
-     D                                     based(io_hFile.fd)
-      *
-     D RIOFB           DS                  likeds(RIOFB_t  )
-     D                                     based(pRIOFB)
-      * ------------------------------------------------------------------------
-      /FREE
-
-         p_clrErrno();
-         clearErrorMsg(io_hFile);
-
-         clearBufferAndNullMap(RFILE: io_rcdBuffer: io_nullMap);
-
-         if i_doLock = bTrue;
-            options = DFT;
-         else;
-            options = NO_LOCK;
-         endif;
-
-         if (io_hFile.lastOper = cOPER_SETLL_RRN) or
-            (io_hFile.lastOper = cOPER_SETGT_RRN);
-            //?(io_hFile.lastOper = cOPER_SETLL_KEY) or
-            //?(io_hFile.lastOper = cOPER_SETGT_KEY);
-            function = '_Rreads';
-            pRIOFB = Rreads(io_hFile.fd
-                            : %addr(io_rcdBuffer): %size(io_rcdBuffer)
-                            : options);
-         else;
-            function = '_Rreadp';
-            pRIOFB = Rreadp(io_hFile.fd
-                            : %addr(io_rcdBuffer): %size(io_rcdBuffer)
-                            : options);
-         endif;
-
-         io_hFile.errno = f_errno();
-
-         if (io_hFile.errno <> 0);
-            clear USR9994;
-            USR99941 = f_errno();
-            USR99942 = function;
-            USR99943 = f_strerror(f_errno());
-            msgID  = 'USR9994';
-            msgDta = USR9994;
-            p_sndPgmMg(msgID: msgDta: '*': MSG_T_DIAG);
-            return bTRUE;   // Return "EOF" to caller
-         endif;
-
-
-         select;
-         when RIOFB.numByt = EOF;
-            io_hFile.lastOper = cOPER_READP;
-            io_hFile.errno = 0;
-            return bTrue;   // Return "EOF" to caller
-         endsl;
-
-         copyInNullMap(RFILE: io_nullMap);
-         io_hFile.lastOper = cOPER_READP;
-         io_hFile.errno = 0;
-
-         return bFalse;  // Return "found" to caller
-
-      /END-FREE
-     P                 E
-      *
-      *===================================================================*
-      *  Deletes the record that is currently locked for update.
-      *===================================================================*
-      *
-     P CIO_delete...
-     P                 B                   Export
-     D                 PI                         like(bool_t)
-     D  io_hFile                                  likeds(hFile_t)
-      *
-     D RFILE           DS                  likeds(RFILE_t  )
-     D                                     based(io_hFile.fd)
-      *
-     D RIOFB           DS                  likeds(RIOFB_t  )
-     D                                     based(pRIOFB)
-      * ------------------------------------------------------------------------
-      /FREE
-
-         p_clrErrno();
-         clearErrorMsg(io_hFile);
-
-         pRIOFB = Rdelete(io_hFile.fd);
-         if RIOFB.numByt = 0;
-            io_hFile.errno = f_errno();
-            return bFalse;
-         endif;
-
-         io_hFile.lastOper = cOPER_DELETE;
-         io_hFile.errno = 0;
-
-         return bTrue;
-
-      /END-FREE
-     P                 E
-      *
-      *===================================================================*
-      *  Releases the lock on the currently locked record.
-      *===================================================================*
-      *
-     P CIO_unlock...
-     P                 B                   Export
-     D                 PI                         like(bool_t)
-     D  io_hFile                                  likeds(hFile_t)
-      *
-     D RFILE           DS                  likeds(RFILE_t  )
-     D                                     based(io_hFile.fd)
-      *
-     D rc              S             10I 0 inz
-      * ------------------------------------------------------------------------
-      /FREE
-
-         p_clrErrno();
-         clearErrorMsg(io_hFile);
-
-         rc = Rrlslck(io_hFile.fd);
-         if (rc = 0);
-            io_hFile.errno = f_errno();
-            return bFalse;
-         endif;
-
-         io_hFile.lastOper = cOPER_UNLOCK;
-         io_hFile.errno = 0;
-
-         return bTrue;
-
-      /END-FREE
-     P                 E
-      *
-      *===================================================================*
-      *  Closes the file identifed by io_hFile.
-      *===================================================================*
-      *
-     P CIO_close...
-     P                 B                   Export
-     D                 PI                         like(bool_t)
-     D  io_hFile                                  likeds(hFile_t)
-      * ------------------------------------------------------------------------
-      /FREE
-
-         p_clrErrno();
-         clearErrorMsg(io_hFile);
-
-         if Rclose(io_hFile.fd) <> 0;
-            io_hFile.errno = f_errno();
-            return bFalse;
-         endif;
-
-         clear io_hFile;
-         io_hFile.isOpen = bFalse;
-         io_hFile.lastOper = cOPER_CLOSE;
-         io_hFile.errno = 0;
-
-         return bTrue;
-
-      /END-FREE
-     P                 E
-      *
-      *===================================================================*
-      *  Sets the EOF indicator for a READ operation.
-      *  === Used by SQL_nextRow() ===
-      *===================================================================*
-      *
-     P CIO_setEOF_read...
-     P                 B                   Export
-     D                 PI
-     D  io_hFile                                  likeds(hFile_t)
-      * ------------------------------------------------------------------------
-      /FREE
-
-         setEOF(io_hFile: cOPER_READ);
-
-         return;
-
-      /END-FREE
-     P                 E
-      *
-      *===================================================================*
-      *  Sets the EOF indicator for a READP operation.
-      *  === Used by SQL_previousRow() ===
-      *===================================================================*
-      *
-     P CIO_setEOF_readp...
-     P                 B                   Export
-     D                 PI
-     D  io_hFile                                  likeds(hFile_t)
-      * ------------------------------------------------------------------------
-      /FREE
-
-         setEOF(io_hFile: cOPER_READP);
-
-         return;
-
-      /END-FREE
-     P                 E
-      *
-      *===================================================================*
-      *  *** private ***
-      *  Sets the EOF indicator for a READ or READP operation.
-      *===================================================================*
-      *
-     P setEOF...
-     P                 B
-     D                 PI
-     D  io_hFile                                  likeds(hFile_t)
-     D  i_operation                  10A   value
-      *
-     D RFILE           DS                  likeds(RFILE_t  )
-     D                                     based(io_hFile.fd)
-      *
-     D RIOFB           DS                  likeds(RIOFB_t  )
-     D                                     based(pRIOFB)
-      * ------------------------------------------------------------------------
-      /FREE
-
-         pRIOFB = %addr(RFILE.RIOFB);
-
-         io_hFile.lastOper = i_operation;
-         io_hFile.errno = 0;
-
-         RIOFB.rrn    = 0;
-         RIOFB.numByt = EOF;
-
-         return;
-
-      /END-FREE
-     P                 E
-      *
-      *===================================================================*
-      *  *** private ***
-      *  Clears the error information.
-      *===================================================================*
-      *
-     P clearErrorMsg...
-     P                 B
-     D                 PI
-     D  io_hFile                                  likeds(hFile_t)
-      * ------------------------------------------------------------------------
-      /FREE
-
-         io_hFile.errno  = 0;
-         io_hFile.msgID  = '';
-         io_hFile.msgDta = '';
-
-         return;
-
-      /END-FREE
-     P                 E
-      *
-      *===================================================================*
-      *  *** private ***
-      *  Clears the file IO-buffer and NULL-map.
-      *===================================================================*
-      *
-     P clearBufferAndNullMap...
-     P                 B
-     D                 PI
-     D  i_RFILE                            const  likeds(RFILE_t )
-     D  io_rcdBuffer                              like(rcdBuf_t)
-     D  io_nullMap                                like(nullMap_t)
-     D                                            dim(NULL_MAP_SIZE)
-      *
-     D X               S             10I 0 inz
-      * ------------------------------------------------------------------------
-      /FREE
-
-         %subst(io_rcdBuffer: 1: i_RFILE.bufLen) = '';
-
-         for x = 1 to i_RFILE.nMapLen;
-            io_nullMap(x) = 0;   //?setzen auf "nicht NULL"
-         endfor;
-
-         return;
-
-      /END-FREE
-     P                 E
-      *
-      *===================================================================*
-      *  *** private ***
-      *  Copies the file IN-NULL-map.
-      *===================================================================*
-      *
-     P copyInNullMap...
-     P                 B
-     D                 PI
-     D  i_RFILE                            const  likeds(RFILE_t )
-     D  io_nullMap                                like(nullMap_t)
-     D                                            dim(NULL_MAP_SIZE)
-      *
-     D X               S             10I 0 inz
-     D inNullMap       S              1S 0 dim(NULL_MAP_SIZE)
-     D                                     based(i_RFILE.pInNull)
-      * ------------------------------------------------------------------------
-      /FREE
-
-         for x = 1 to i_RFILE.nMapLen;
-            io_nullMap(x) = inNullMap(x);
-         endfor;
-
-         return;
-
-      /END-FREE
-     P                 E
-      *
-      *===================================================================*
-      *  *** private ***
-      *  Returns the value of the specified mode parameter.
-      *===================================================================*
-      *
-     P getMode...
-     P                 B
-     D                 PI            16A          varying
-     D  i_mode                      512A   value  varying
-     D  i_parm                       16A   value  varying
-     D  i_default                    16A   value  varying
-      *
-      *  Local fields
-     D x               S             10I 0 inz
-     D y               S             10I 0 inz
-      * ------------------------------------------------------------------------
-      /FREE
-
-         i_mode    = %trim(i_mode   );
-         i_parm    = %trim(i_parm   );
-         i_default = %trim(i_default);
-
-         x = %scan(i_parm + '=': i_mode);
-         if x = 0;
-            return i_default;
-         endif;
-
-         x = x + %len(i_parm) + 1;
-
-         y = %scan(' ': i_mode: x);
-         if y = 0;
-            return %subst(i_mode: x);
-         endif;
-
-         return %subst(i_mode: x: y-1-x);
-
-      /END-FREE
-     P                 E
-      *
+       // ------------------------------------------------------------------------
+
+       if (i_hfile.msgid <> '');
+          o_msgid  = i_hfile.msgid;
+          o_msgdta = i_hfile.msgdta;
+       else;
+          clear usr0012;
+          usr00121 = cio_geterrortext(i_hfile);
+          usr00122 = cio_geterror(i_hfile);
+          o_msgid  = 'USR0012';
+          o_msgdta = usr0012;
+       endif;
+
+       end-proc;
+
+       //===================================================================*
+       //  Returns the latest error number associated to file i_hFile.
+       //===================================================================*
+
+       dcl-proc cio_geterror export;
+       dcl-pi *N              int(10);
+         i_hfile         const  likeds(hfile_t);
+       end-pi;
+       // ------------------------------------------------------------------------
+
+       return i_hfile.errno;
+
+       end-proc;
+
+       //===================================================================*
+       //  Returns the latest error text associated to file i_hFile.
+       //===================================================================*
+
+       dcl-proc cio_geterrortext export;
+       dcl-pi *N              varchar(512);
+         i_hfile         const  likeds(hfile_t);
+       end-pi;
+       // ------------------------------------------------------------------------
+
+       if (i_hfile.msgid <> '');
+          return f_msgtext(i_hfile.msgid: i_hfile.msgdta);
+       else;
+          return %trimr(f_strerror(i_hfile.errno));
+       endif;
+
+       end-proc;
+
+       //===================================================================*
+       //  Reads the record identified by i_rrn from a given file.
+       //===================================================================*
+
+       dcl-proc cio_chainwithrrn export;
+       dcl-pi *N        like(bool_t);
+         io_hfile        likeds(hfile_t);
+         i_rrn           const  like(rcdnbr_t);
+         i_dolock        const  like(bool_t);
+         io_rcdbuffer    like(rcdbuf_t);
+         io_nullmap      like(nullmap_t) dim(null_map_size);
+       end-pi;
+
+       dcl-s options         int(10) inz(dft);
+
+       dcl-ds rfile likeds(rfile_t) based(io_hfile.fd);
+       dcl-ds riofb likeds(riofb_t) based(priofb);
+       // ----------------------------------------------------------------------
+
+       p_clrerrno();
+       clearerrormsg(io_hfile);
+
+       clearbufferandnullmap(rfile: io_rcdbuffer: io_nullmap);
+
+       if (i_dolock = bTrue);
+          options = dft;
+       else;
+          options = no_lock;
+       endif;
+
+       priofb = rreadd(io_hfile.fd
+                       : %addr(io_rcdbuffer): %size(io_rcdbuffer)
+                       : options: i_rrn);
+       if (riofb.numbyt <> rfile.buflen);
+          io_hfile.errno = f_errno();
+          return bfalse;
+       endif;
+
+       copyinnullmap(rfile: io_nullmap);
+
+       io_hfile.lastoper = OPER_CHAIN_RRN;
+       io_hfile.errno = 0;
+
+       return btrue;
+
+       end-proc;
+
+       //===================================================================*
+       //  Reads the record identified by i_key from a given file.
+       //===================================================================*
+
+       dcl-proc cio_chainwithkey export;
+       dcl-pi *N        like(bool_t);
+         io_hfile        likeds(hfile_t);
+         i_key           const  like(keybuf_t);
+         i_dolock        const  like(bool_t);
+         io_rcdbuffer    like(rcdbuf_t);
+         io_nullmap      like(nullmap_t) dim(null_map_size);
+       end-pi;
+
+       dcl-s options         int(10) inz(dft);
+       dcl-s key             like(i_key      ) inz;
+       dcl-s keylen          int(10) inz;
+
+       dcl-ds rfile likeds(rfile_t) based(io_hfile.fd);
+       dcl-ds riofb likeds(riofb_t) based(priofb);
+       // ----------------------------------------------------------------------
+
+       p_clrerrno();
+       clearerrormsg(io_hfile);
+
+       clearbufferandnullmap(rfile: io_rcdbuffer: io_nullmap);
+
+       if (i_dolock = btrue);
+          options = f_bitor(dft: key_eq);
+       else;
+          options = f_bitor(no_lock: key_eq);
+       endif;
+
+       key = i_key;
+       keylen = %len(key);
+
+       priofb = rreadk(io_hfile.fd
+                       : %addr(io_rcdbuffer): %size(io_rcdbuffer)
+                       : options: %addr(key): keylen);
+       if (riofb.numbyt <> rfile.buflen) or (riofb.numbyt = eof);
+          io_hfile.errno = f_errno();
+          return bfalse;
+       endif;
+
+       copyinnullmap(rfile: io_nullmap);
+
+       io_hfile.lastoper = OPER_CHAIN_KEY;
+       io_hfile.errno = 0;
+
+       return btrue;
+
+       end-proc;
+
+       //===================================================================*
+       //  Positions the file right before the record identifed by i_rrn.
+       //===================================================================*
+
+       dcl-proc cio_setllwithrrn export;
+       dcl-pi *N        like(bool_t);
+         io_hfile        likeds(hfile_t);
+         i_rrn           const  like(rcdnbr_t);
+       end-pi;
+
+       dcl-s errornbr int(10) inz;
+       dcl-s options uns(10) inz;
+
+       dcl-ds rfile likeds(rfile_t) based(io_hfile.fd);
+       dcl-ds riofb likeds(riofb_t) based(priofb);
+       // ----------------------------------------------------------------------
+
+       clearerrormsg(io_hfile);
+
+       // Setzen Datenzeiger auf angegebene Satznummer
+       // (auch auf gelöschte Datensatze)
+       options = f_bitor(rrn_eq: no_lock);
+
+       p_clrerrno();
+       priofb = rlocate(io_hfile.fd: *null: i_rrn: options);
+
+       select;
+       when riofb.numbyt = 0;   // Datensatz nicht vorhanden
+          p_clrerrno();
+          priofb = rreadn(io_hfile.fd : *null: 0: no_lock);
+          errornbr = f_errno();
+       when riofb.numbyt = 1;   // Datensatz vorhanden
+          p_clrerrno();
+          priofb = rreads(io_hfile.fd : *null: 0: no_lock);
+          errornbr = f_errno();
+          if riofb.numbyt = 0 and errornbr = eiorecerr_c;   // wahrscheinlich ein
+             // gelöschter Datensatz
+             p_clrerrno();
+             priofb = rreadn(io_hfile.fd : *null: 0: no_lock);
+          endif;
+       endsl;
+
+       // Datensatz nicht vorhanden, also ans Ende der Datei positionieren
+       if (riofb.numbyt = 0);
+          options = f_bitor(end  : no_lock);
+          p_clrerrno();
+          priofb = rlocate(io_hfile.fd: *null: i_rrn: options);
+       endif;
+
+       if (riofb.numbyt = eof);
+          io_hfile.errno = f_errno();   // "End of File" erreicht
+          return bfalse;
+       endif;
+
+       if (riofb.numbyt <> rfile.buflen);
+          io_hfile.errno = f_errno();
+          return bfalse;
+       endif;
+
+       io_hfile.lastoper = OPER_SETLL_RRN;
+       io_hfile.errno = 0;
+
+       return btrue;
+
+       end-proc;
+
+       //===================================================================*
+       //  Positions the file right before the record identifed by i_key.
+       //===================================================================*
+
+       dcl-proc cio_setllwithkey export;
+       dcl-pi *N        like(bool_t);
+         io_hfile        likeds(hfile_t);
+         i_key           const  like(keybuf_t);
+       end-pi;
+
+       dcl-s options         uns(10) inz;
+       dcl-s key             like(i_key      ) inz;
+       dcl-s keylen          int(10) inz;
+
+       dcl-ds rfile likeds(rfile_t) based(io_hfile.fd);
+       dcl-ds riofb likeds(riofb_t) based(priofb);
+       // ----------------------------------------------------------------------
+
+       p_clrerrno();
+       clearerrormsg(io_hfile);
+
+       // Setzen Datenzeiger auf angegebenen Schlüssel
+       key = i_key;
+       keylen = %len(key);
+
+       options = f_bitor(key_ge: prior: data_only);
+
+       priofb = rlocate(io_hfile.fd: %addr(key): keylen: options);
+       if (riofb.numbyt = 0 or riofb.numbyt = eof);
+          options = f_bitor(start: data_only);
+          priofb = rlocate(io_hfile.fd: %addr(key): keylen: options);
+       endif;
+
+       if (riofb.numbyt = 0); // or (RIOFB.numByt = EOF);
+          io_hfile.errno = f_errno();   //Fehler bei _Rlocate() aufgetreten
+          return bfalse;
+       endif;
+
+       io_hfile.lastoper = OPER_SETLL_KEY;
+       io_hfile.errno = 0;
+
+       return btrue;
+
+       end-proc;
+
+       //===================================================================*
+       //  Positions the file right after the record identifed by i_rrn.
+       //===================================================================*
+
+       dcl-proc cio_setgtwithrrn export;
+       dcl-pi *N        like(bool_t);
+         io_hfile        likeds(hfile_t);
+         i_rrn           const  like(rcdnbr_t);
+       end-pi;
+
+       dcl-s options         uns(10) inz;
+
+       dcl-ds rfile likeds(rfile_t) based(io_hfile.fd);
+       dcl-ds riofb likeds(riofb_t) based(priofb);
+       // ----------------------------------------------------------------------
+
+       p_clrerrno();
+       clearerrormsg(io_hfile);
+
+       // Setzen Datenzeiger auf angegebene Satznummer
+       // (auch auf gelöschte Datensatze)
+       options = f_bitor(rrn_eq: no_lock);
+
+       priofb = rlocate(io_hfile.fd: *null: i_rrn: options);
+       if (riofb.numbyt = 0);
+          options = f_bitor(end: no_lock);
+          priofb = rlocate(io_hfile.fd: *null: i_rrn: options);
+       endif;
+
+       if (riofb.numbyt = 0);
+          io_hfile.errno = f_errno();   // Fehler bei _Rlocate() aufgetreten
+          return bfalse;
+       endif;
+
+       if (riofb.numbyt = eof);
+          io_hfile.errno = f_errno();   // "End of File" erreicht
+          return bfalse;
+       endif;
+
+       // Einlesen Datensatz
+       priofb = rreads(io_hfile.fd : *null: 0: no_lock);
+       if (riofb.numbyt = 0 and f_errno() = eiorecerr_c);   // wahrscheinlich ein
+          // gelöschter Datensatz
+          priofb = rreadn(io_hfile.fd : *null: 0: no_lock);
+       endif;
+
+       if (riofb.numbyt <> rfile.buflen);
+          io_hfile.errno = f_errno();
+          return bfalse;
+       endif;
+
+       io_hfile.lastoper = OPER_SETGT_RRN;
+       io_hfile.errno = 0;
+
+       return btrue;
+
+       end-proc;
+
+       //===================================================================*
+       //  Positions the file right after the record identifed by i_key.
+       //===================================================================*
+
+       dcl-proc cio_setgtwithkey export;
+       dcl-pi *N        like(bool_t);
+         io_hfile        likeds(hfile_t);
+         i_key           const  like(keybuf_t);
+       end-pi;
+
+       dcl-s options         uns(10) inz;
+       dcl-s key             like(i_key      ) inz;
+       dcl-s keylen          int(10) inz;
+
+       dcl-ds rfile likeds(rfile_t) based(io_hfile.fd);
+       dcl-ds riofb likeds(riofb_t) based(priofb);
+       // ----------------------------------------------------------------------
+
+       p_clrerrno();
+       clearerrormsg(io_hfile);
+
+       // Setzen Datenzeiger auf angegebenen Schlüssel
+       key = i_key;
+       keylen = %len(key);
+
+       options = f_bitor(key_gt: prior: data_only);
+
+       priofb = rlocate(io_hfile.fd: %addr(key): keylen: options);
+       if (riofb.numbyt = 0) or (riofb.numbyt = eof);
+          options = f_bitor(end: data_only);
+          priofb = rlocate(io_hfile.fd: %addr(key): keylen: options);
+       endif;
+
+       if (riofb.numbyt = 0); // or (RIOFB.numByt = EOF);
+          io_hfile.errno = f_errno();   // Fehler bei _Rlocate() aufgetreten
+          return bfalse;
+       endif;
+
+       io_hfile.lastoper = OPER_SETGT_KEY;
+       io_hfile.errno = 0;
+
+       return btrue;
+
+       end-proc;
+
+       //===================================================================*
+       //  Returns the next record from the file.
+       //===================================================================*
+
+       dcl-proc cio_read export;
+       dcl-pi *N        like(bool_t);
+         io_hfile        likeds(hfile_t);
+         i_dolock        const  like(bool_t);
+         io_rcdbuffer    like(rcdbuf_t);
+         io_nullmap      like(nullmap_t) dim(null_map_size);
+       end-pi;
+
+       dcl-s options     int(10) inz(dft);
+       dcl-s function    varchar(32) inz;
+       dcl-s msgid       like(msgid_t) inz;
+       dcl-s msgdta      like(msgdta_t) inz;
+
+       dcl-ds rfile likeds(rfile_t) based(io_hfile.fd);
+       dcl-ds riofb likeds(riofb_t) based(priofb);
+       // ----------------------------------------------------------------------
+
+       p_clrerrno();
+       clearerrormsg(io_hfile);
+
+       clearbufferandnullmap(rfile: io_rcdbuffer: io_nullmap);
+
+       if (i_dolock = bTrue);
+          options = dft;
+       else;
+          options = no_lock;
+       endif;
+
+       if (io_hfile.lastoper = OPER_SETLL_RRN) or
+          (io_hfile.lastoper = OPER_SETGT_RRN);
+          //?(io_hFile.lastOper = cOPER_SETLL_KEY) or
+          //?(io_hFile.lastOper = cOPER_SETGT_KEY);
+          function = '_Rreads';
+          priofb = rreads(io_hfile.fd
+                          : %addr(io_rcdbuffer): %size(io_rcdbuffer)
+                          : options);
+       else;
+          function = '_Rreadn';
+          priofb = rreadn(io_hfile.fd
+                          : %addr(io_rcdbuffer): %size(io_rcdbuffer)
+                          : options);
+       endif;
+
+       io_hfile.errno = f_errno();
+
+       if (io_hfile.errno <> 0);
+          clear usr9994;
+          usr99941 = f_errno();
+          usr99942 = function;
+          usr99943 = f_strerror(f_errno());
+          msgid  = 'USR9994';
+          msgdta = usr9994;
+          p_sndpgmmg(msgid: msgdta: '*': msg_t_diag);
+          return btrue;   // Return "EOF" to caller
+       endif;
+
+       select;
+       when riofb.numbyt = eof;
+          io_hfile.lastoper = OPER_READ;
+          io_hfile.errno = 0;
+          return btrue;   // Return "EOF" to caller
+       endsl;
+
+       copyinnullmap(rfile: io_nullmap);
+       io_hfile.lastoper = OPER_READ;
+       io_hfile.errno = 0;
+
+       return bfalse;  // Return "found" to caller
+
+       end-proc;
+
+       //===================================================================*
+       //  Returns the previous record from the file.
+       //===================================================================*
+
+       dcl-proc cio_readp export;
+       dcl-pi *N        like(bool_t);
+         io_hfile        likeds(hfile_t);
+         i_dolock        const  like(bool_t);
+         io_rcdbuffer    like(rcdbuf_t);
+         io_nullmap      like(nullmap_t) dim(null_map_size);
+       end-pi;
+
+       dcl-s options     int(10) inz(dft);
+       dcl-s function    varchar(32) inz;
+       dcl-s msgid       like(msgid_t) inz;
+       dcl-s msgdta      like(msgdta_t) inz;
+
+       dcl-ds rfile likeds(rfile_t) based(io_hfile.fd);
+       dcl-ds riofb likeds(riofb_t) based(priofb);
+       // ----------------------------------------------------------------------
+
+       p_clrerrno();
+       clearerrormsg(io_hfile);
+
+       clearbufferandnullmap(rfile: io_rcdbuffer: io_nullmap);
+
+       if i_dolock = btrue;
+          options = dft;
+       else;
+          options = no_lock;
+       endif;
+
+       if (io_hfile.lastoper = OPER_SETLL_RRN) or
+          (io_hfile.lastoper = OPER_SETGT_RRN);
+          //?(io_hFile.lastOper = cOPER_SETLL_KEY) or
+          //?(io_hFile.lastOper = cOPER_SETGT_KEY);
+          function = '_Rreads';
+          priofb = rreads(io_hfile.fd
+                          : %addr(io_rcdbuffer): %size(io_rcdbuffer)
+                          : options);
+       else;
+          function = '_Rreadp';
+          priofb = rreadp(io_hfile.fd
+                          : %addr(io_rcdbuffer): %size(io_rcdbuffer)
+                          : options);
+       endif;
+
+       io_hfile.errno = f_errno();
+
+       if (io_hfile.errno <> 0);
+          clear usr9994;
+          usr99941 = f_errno();
+          usr99942 = function;
+          usr99943 = f_strerror(f_errno());
+          msgid  = 'USR9994';
+          msgdta = usr9994;
+          p_sndpgmmg(msgid: msgdta: '*': msg_t_diag);
+          return btrue;   // Return "EOF" to caller
+       endif;
+
+
+       select;
+       when riofb.numbyt = eof;
+          io_hfile.lastoper = OPER_READP;
+          io_hfile.errno = 0;
+          return btrue;   // Return "EOF" to caller
+       endsl;
+
+       copyinnullmap(rfile: io_nullmap);
+       io_hfile.lastoper = OPER_READP;
+       io_hfile.errno = 0;
+
+       return bfalse;  // Return "found" to caller
+
+       end-proc;
+
+       //===================================================================*
+       //  Deletes the record that is currently locked for update.
+       //===================================================================*
+
+       dcl-proc cio_delete export;
+       dcl-pi *N        like(bool_t);
+         io_hfile        likeds(hfile_t);
+       end-pi;
+
+       dcl-ds rfile likeds(rfile_t) based(io_hfile.fd);
+       dcl-ds riofb likeds(riofb_t) based(priofb);
+       // ----------------------------------------------------------------------
+
+       p_clrerrno();
+       clearerrormsg(io_hfile);
+
+       priofb = rdelete(io_hfile.fd);
+       if (riofb.numbyt = 0);
+          io_hfile.errno = f_errno();
+          return bfalse;
+       endif;
+
+       io_hfile.lastoper = OPER_DELETE;
+       io_hfile.errno = 0;
+
+       return btrue;
+
+       end-proc;
+
+       //===================================================================*
+       //  Releases the lock on the currently locked record.
+       //===================================================================*
+
+       dcl-proc cio_unlock export;
+       dcl-pi *N        like(bool_t);
+         io_hfile        likeds(hfile_t);
+       end-pi;
+
+       dcl-s rc int(10);
+
+       dcl-ds rfile likeds(rfile_t) based(io_hfile.fd);
+       // ------------------------------------------------------------------------
+
+       p_clrerrno();
+       clearerrormsg(io_hfile);
+
+       rc = rrlslck(io_hfile.fd);
+       if (rc = 0);
+          io_hfile.errno = f_errno();
+          return bFalse;
+       endif;
+
+       io_hfile.lastoper = OPER_UNLOCK;
+       io_hfile.errno = 0;
+
+       return bTrue;
+
+       end-proc;
+
+       //===================================================================*
+       //  Closes the file identifed by io_hFile.
+       //===================================================================*
+
+       dcl-proc cio_close export;
+       dcl-pi *N        like(bool_t);
+         io_hfile        likeds(hfile_t);
+       end-pi;
+       // ------------------------------------------------------------------------
+
+       p_clrerrno();
+       clearerrormsg(io_hfile);
+
+       if (rclose(io_hfile.fd) <> 0);
+          io_hfile.errno = f_errno();
+          return bFalse;
+       endif;
+
+       clear io_hfile;
+       io_hfile.isopen = bfalse;
+       io_hfile.lastoper = OPER_CLOSE;
+       io_hfile.errno = 0;
+
+       return bTrue;
+
+       end-proc;
+
+       //===================================================================*
+       //  Sets the EOF indicator for a READ operation.
+       //  === Used by SQL_nextRow() ===
+       //===================================================================*
+
+       dcl-proc cio_seteof_read export;
+       dcl-pi *N;
+         io_hfile        likeds(hfile_t);
+       end-pi;
+       // ------------------------------------------------------------------------
+
+       seteof(io_hfile: OPER_READ);
+
+       end-proc;
+
+       //===================================================================*
+       //  Sets the EOF indicator for a READP operation.
+       //  === Used by SQL_previousRow() ===
+       //===================================================================*
+
+       dcl-proc cio_seteof_readp export;
+       dcl-pi *N;
+         io_hfile        likeds(hfile_t);
+       end-pi;
+       // ------------------------------------------------------------------------
+
+       seteof(io_hfile: OPER_READP);
+
+       end-proc;
+
+       //===================================================================*
+       //  *** private ***
+       //  Sets the EOF indicator for a READ or READP operation.
+       //===================================================================*
+
+       dcl-proc seteof;
+       dcl-pi *N;
+         io_hfile        likeds(hfile_t);
+         i_operation     char(10) value;
+       end-pi;
+
+       dcl-ds rfile likeds(rfile_t) based(io_hfile.fd);
+       dcl-ds riofb likeds(riofb_t) based(priofb);
+       // ----------------------------------------------------------------------
+
+       priofb = %addr(rfile.riofb);
+
+       io_hfile.lastoper = i_operation;
+       io_hfile.errno = 0;
+
+       riofb.rrn    = 0;
+       riofb.numbyt = eof;
+
+       end-proc;
+
+       //===================================================================*
+       //  *** private ***
+       //  Clears the error information.
+       //===================================================================*
+
+       dcl-proc clearerrormsg;
+       dcl-pi *N;
+         io_hfile        likeds(hfile_t);
+       end-pi;
+       // ------------------------------------------------------------------------
+
+       io_hfile.errno  = 0;
+       io_hfile.msgid  = '';
+       io_hfile.msgdta = '';
+
+       end-proc;
+
+       //===================================================================*
+       //  *** private ***
+       //  Clears the file IO-buffer and NULL-map.
+       //===================================================================*
+
+       dcl-proc clearbufferandnullmap;
+       dcl-pi *N;
+         i_rfile         const  likeds(rfile_t );
+       io_rcdbuffer    like(rcdbuf_t);
+       io_nullmap      like(nullmap_t)
+            dim(null_map_size);
+       end-pi;
+
+       dcl-s x int(10);
+       // ------------------------------------------------------------------------
+
+       %subst(io_rcdbuffer: 1: i_rfile.buflen) = '';
+
+       for x = 1 to i_rfile.nmaplen;
+          io_nullmap(x) = 0;   // setzen auf "nicht NULL"
+       endfor;
+
+       end-proc;
+
+       //===================================================================*
+       //  *** private ***
+       //  Copies the file IN-NULL-map.
+       //===================================================================*
+
+       dcl-proc copyinnullmap;
+       dcl-pi *N;
+         i_rfile         const  likeds(rfile_t );
+         io_nullmap      like(nullmap_t) dim(null_map_size);
+       end-pi;
+
+       dcl-s x int(10);
+       dcl-s innullmap zoned(1) dim(null_map_size) based(i_rfile.pinnull);
+       // ------------------------------------------------------------------------
+
+       for x = 1 to i_rfile.nmaplen;
+          io_nullmap(x) = innullmap(x);
+       endfor;
+
+       end-proc;
+
+       //===================================================================*
+       //  *** private ***
+       //  Returns the value of the specified mode parameter.
+       //===================================================================*
+
+       dcl-proc getmode;
+       dcl-pi *N              varchar(16);
+         i_mode          varchar(512) value;
+         i_parm          varchar(16) value;
+         i_default       varchar(16) value;
+       end-pi;
+
+       //  Local fields
+       dcl-s x int(10);
+       dcl-s y int(10);
+       // ------------------------------------------------------------------------
+
+       i_mode    = %trim(i_mode);
+       i_parm    = %trim(i_parm);
+       i_default = %trim(i_default);
+
+       x = %scan(i_parm + '=': i_mode);
+       if x = 0;
+          return i_default;
+       endif;
+
+       x = x + %len(i_parm) + 1;
+
+       y = %scan(' ': i_mode: x);
+       if (y = 0);
+          return %subst(i_mode: x);
+       endif;
+
+       return %subst(i_mode: x: y-1-x);
+
+       end-proc;
+

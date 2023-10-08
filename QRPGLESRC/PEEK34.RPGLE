@@ -588,7 +588,7 @@
 
           clear w0key;
           w0key.w_key = 0;
-          setll %kds(w0ke: 1) fpeekwrk;
+          setll %kds(w0key: 1) fpeekwrk;
 
           dow ('1');
              read(n) fpeekwrk;
