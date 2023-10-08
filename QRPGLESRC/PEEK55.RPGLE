@@ -31,9 +31,10 @@
 
       /COPY QCOPYLE,D_VARDEF
       /COPY QCOPYLE,FLDL0100
-      /COPY QCOPYLE,ERR_D_SDS
       /COPY QCOPYLE,FILD0100
       /COPY QCOPYLE,SET0015
+      /COPY QCOPYLE,ENV0001
+      /COPY QCOPYLE,ERR_D_SDS
       /COPY QCOPYLE,CEECNDHDLR
 
       /define internal_prototype
@@ -833,7 +834,7 @@
        end-pi;
 
        //  Arbeitsfelder ...
-      /COPY QCOPYLE,ENV0001
+       dcl-ds env0001 likeds(env0001_t) inz(*likeds);
        //---------------------------------------------------*
 
        open peekfld;
@@ -866,12 +867,12 @@
           chain %kds(p_key1) fpeekfld;
           if (not %found(peekfld));
              env0001 = en_data;
-             p_seq     = env_seq;
-             p_hidden  = env_hidden;
-             p_color   = env_color;
-             p_markcol = env_mark;
-             p_maxsize = env_size;
-             p_edtcde  = env_edtcde;
+             p_seq     = env0001.env_seq;
+             p_hidden  = env0001.env_hidden;
+             p_color   = env0001.env_color;
+             p_markcol = env0001.env_mark;
+             p_maxsize = env0001.env_size;
+             p_edtcde  = env0001.env_edtcde;
              update fpeekfld;
           endif;
 
