@@ -225,8 +225,8 @@
       *%%TS  SD  19990120  082705  FENTRAD     REL-V4R2M0  5769-PW1
      A  *DS3                                SFLMSGRCD(14)
      A  *DS4                                SFLMSGRCD(14)
-     A            §MSGKY                    SFLMSGKEY
-     A            §PGMQ                     SFLPGMQ(10)
+     A            MSGKY                     SFLMSGKEY
+     A            PGMQ                      SFLPGMQ(10)
       *
       *----------------------------------------------------*
      A          R MSGCTL                    SFLCTL(MSGSFL)
@@ -244,7 +244,7 @@
      A  *DS4                                SFLPAG(0001)
      A  *DS3                                WINDOW(&ZEI &POS 14 54 *NOMSGLIN)
      A  *DS4                                WINDOW(&ZEI &POS 14 54 *NOMSGLIN)
-     A            §PGMQ                     SFLPGMQ(10)
+     A            PGMQ                      SFLPGMQ(10)
      A            ZEI            3S 0P
      A            POS            3S 0P
       *

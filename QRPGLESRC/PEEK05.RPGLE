@@ -8312,7 +8312,7 @@
 
           isinzsr = bTrue;
 
-          §pgmq = '*';
+          PGMQ = '*';
 
           peek01_name = f_pgmcalln('PEEK01');
           peek03_name = f_pgmcalln('PEEK03');

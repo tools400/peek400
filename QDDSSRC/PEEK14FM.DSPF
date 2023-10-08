@@ -257,8 +257,8 @@
       *%%TS  SD  19971008  090717  RADDATZ     REL-V3R6M0  5716-PW1
      A  *DS3                                SFLMSGRCD(22)
      A  *DS4                                SFLMSGRCD(22)
-     A            §MSGKY                    SFLMSGKEY
-     A            §PGMQ                     SFLPGMQ(10)
+     A            MSGKY                     SFLMSGKEY
+     A            PGMQ                      SFLPGMQ(10)
       *
       *----------------------------------------------------*
      A          R MSGCTL                    SFLCTL(MSGSFL)
@@ -277,7 +277,7 @@
      A  *DS3                                WINDOW(&ZEI &POS 22 64 *NOMSGLIN)
      A  70                                  WDWBORDER((*COLOR RED))
      A N88                                  DSPMOD(*DS4)
-     A            §PGMQ                     SFLPGMQ(10)
+     A            PGMQ                      SFLPGMQ(10)
      A            ZEI            3S 0P
      A            POS            3S 0P
       *

@@ -672,7 +672,7 @@
 
           isInzSr = btrue;
 
-          §pgmq = '*';
+          PGMQ = '*';
 
           peek07_name = f_pgmcalln('PEEK07');
           peek28_name = f_pgmcalln('PEEK28');
