@@ -1,24 +1,26 @@
-      *
-      *  Templates  (micptcom.h)
-     D NUM_Descr_T     S             10I 0 template
-      *
-      *  Constants  (micptcom.h)
-     D T_Signed        C                   const(x'00')
-     D T_Float         C                   const(x'01')
-     D T_Zoned         C                   const(x'02')
-     D T_Packed        C                   const(x'03')
-     D T_Char          C                   const(x'04')
-     D T_OnlyNS        C                   const(x'06')
-     D T_OnlyN         C                   const(x'07')
-     D T_Either        C                   const(x'08')
-     D T_Open          C                   const(x'09')
-     D T_Unsigned      C                   const(x'0A')
-      *
-      *  Copy Numeric Value
-     D cpynv...
-     D                 PR              *   extproc('cpynv')
-     D  o_rcvr_descr                       value  like(NUM_Descr_T)
-     D  o_receiver                     *   value
-     D  i_src_descr                        value  like(NUM_Descr_T)
-     D  i_source                       *   value
-      *
+**FREE
+//
+//  Templates  (micptcom.h)
+dcl-s num_descr_t     int(10) template;
+//
+//  Constants  (micptcom.h)
+dcl-c t_signed const(x'00');
+dcl-c t_float const(x'01');
+dcl-c t_zoned const(x'02');
+dcl-c t_packed const(x'03');
+dcl-c t_char const(x'04');
+dcl-c t_onlyns const(x'06');
+dcl-c t_onlyn const(x'07');
+dcl-c t_either const(x'08');
+dcl-c t_open const(x'09');
+dcl-c t_unsigned const(x'0A');
+//
+//  Copy Numeric Value
+dcl-pr cpynv
+       pointer extproc('cpynv');
+  o_rcvr_descr    value  like(num_descr_t);
+  o_receiver      pointer value;
+  i_src_descr     value  like(num_descr_t);
+  i_source        pointer value;
+end-pr;
+//

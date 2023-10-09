@@ -1,34 +1,38 @@
-      /if not defined(QUSLMBR)
-      /define QUSLMBR
-      *
-      *  List Database File Members (QUSLMBR) API
-     d QUSLMBR...
-     d                 pr                         extpgm('QUSLMBR')
-     d  i_qUsrSpc                    20A   const
-     d  i_format                      8a   const
-     d  i_qFile                      20A   const
-     d  i_mbr                        10a   const
-     d  i_ovrPrc                      1a   const
-     d  io_errCode                65535a          options(*nopass: *varsize)
-      *
-      *  Input Parameter Section
-     d QUSLMBR_inpParm_t...
-     d                 ds                  qualified template
-     d  qUsrSpc                      20a
-     d  format                        8a
-     d  qFile                        20a
-     d  mbr                          10a
-     d  ovrOrc                        1a
-      *
-      *  Header Section
-     d QUSLMBR_header_t...
-     d                 ds                  qualified template
-     d  qFileUsed                    20a
-     d  fileAttr                     10a
-     d  text                         50A
-     d  numMbr                       10i 0
-     d  isSrcFile                      N
-     d  reserved_1                    3a
-     d  textCcsid                    10u 0
-      *
-      /endif
+**FREE
+/if not defined(QUSLMBR)
+/define QUSLMBR
+//
+//  List Database File Members (QUSLMBR) API
+dcl-pr quslmbr
+       extpgm('QUSLMBR');
+  i_qusrspc       char(20) const;
+  i_format        char(8) const;
+  i_qfile         char(20) const;
+  i_mbr           char(10) const;
+  i_ovrprc        char(1) const;
+  io_errcode      char(65535) options(*nopass: *varsize);
+end-pr;
+//
+//  Input Parameter Section
+dcl-ds quslmbr_inpparm_t
+       qualified template;
+  qusrspc         char(20);
+  format          char(8);
+  qfile           char(20);
+  mbr             char(10);
+  ovrorc          char(1);
+end-ds;
+//
+//  Header Section
+dcl-ds quslmbr_header_t
+       qualified template;
+  qfileused       char(20);
+  fileattr        char(10);
+  text            char(50);
+  nummbr          int(10);
+  issrcfile       ind;
+  reserved_1      char(3);
+  textccsid       uns(10);
+end-ds;
+//
+/endif

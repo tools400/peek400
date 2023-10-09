@@ -799,7 +799,7 @@
        // ------------------------------------------------------------------------
 
        //  Öffnen Datei PEEKUSR ...
-       if (file_00_ds.open <> '1');
+       if (file_00_ds.isOpen <> '1');
 
           g_peekusr = %trim(g_lib) + '/' + %trim(g_file);
 
@@ -836,7 +836,7 @@
        // ------------------------------------------------------------------------
 
        //  Öffnen Datei DEFAULT (PEEKUSR) ...
-       if (file_01_ds.open <> '1');
+       if (file_01_ds.isOpen <> '1');
 
           g_default = %trim(f_getprdlb()) + '/' + 'PEEKUSR';
 

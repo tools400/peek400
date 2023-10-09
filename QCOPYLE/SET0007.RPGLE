@@ -1,17 +1,19 @@
-      *---------------------------------------------------------------
-      * Datenstruktur für Versionsnummer
-      * SET0007   *VERSION
-      *---------------------------------------------------------------
-      *
-     D SET0007_t       DS           256    qualified template
-      *  Versionsnummer ...
-     D  SET_VSN                       9A   INZ('V00R00M00')
-      *  ... Version
-     D   SET_VSNV                     2A   OVERLAY(SET_VSN:2)
-      *  ... Release
-     D   SET_VSNR                     2A   OVERLAY(SET_VSN:5)
-      *  ... Modifikation
-     D   SET_VSNM                     2A   OVERLAY(SET_VSN:8)
-      *  Endemarkierung
-     D  SET_0007                      1A   INZ(x'8B')
-      *
+**FREE
+//---------------------------------------------------------------
+// Datenstruktur für Versionsnummer
+// SET0007   *VERSION
+//---------------------------------------------------------------
+//
+dcl-ds set0007_t len(256) qualified template;
+  //  Versionsnummer ...
+  set_vsn         char(9) inz('V00R00M00');
+  //  ... Version
+  set_vsnv        char(2) overlay(set_vsn:2);
+  //  ... Release
+  set_vsnr        char(2) overlay(set_vsn:5);
+  //  ... Modifikation
+  set_vsnm        char(2) overlay(set_vsn:8);
+  //  Endemarkierung
+  set_0007        char(1) inz(x'8B');
+end-ds;
+//

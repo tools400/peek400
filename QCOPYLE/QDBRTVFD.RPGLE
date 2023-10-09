@@ -1,173 +1,182 @@
-      /IF NOT DEFINED(QDBRTVFD)
-      /DEFINE QDBRTVFD
-      *
-      *  Retrieve Database File Description (QDBRTVFD) API
-     D QDBRTVFD...
-     D                 PR                  extpgm('QDBRTVFD')
-     D  o_rcvVar                  65535A         options(*varsize)
-     D  i_lenRcvVar                  10I 0 const
-     D  o_retFileName                20A
-     D  i_format                      8A   const
-     D  i_qFile                      20A   const
-     D  i_rcdFormat                  10A   const
-     D  i_override                    1A   const
-     D  i_system                     10A   const
-     D  i_formatType                 10A   const
-     D  io_errCode                65535A          options(*varsize )
-      *
-      *  File Definition Header (Qdb_Qdbfh)
-     D Qdb_Qdbfh_t     DS                  qualified template
-     D  Qdbfyret               1      4I 0
-     D  Qdbfyavl               5      8I 0
-     D  Qdbfhflg               9     10U 0
-     D   QdbfhflgH                    1A   OVERLAY(Qdbfhflg:1)
-     D   QdbfhflgL                    1A   OVERLAY(Qdbfhflg:2)
-     D  Reserved_7            11     14A
-     D  Qdbflbnum             15     16I 0
-     D  Qdbfknum              17     18I 0
-     D  Qdbfkmxl              19     20I 0
-     D  Qdbfkflg              21     21A
-     D  Qdbfkfdm              22     22A
-     D  Reserved_10           23     30A
-     D  Qdbfhaut              31     40A
-     D  Qdbfhupl              41     41A
-     D  Qdbfhmxm              42     43I 0
-     D  Qdbfwtfi              44     45I 0
-     D  Qdbfhfrt              46     47I 0
-     D  Qdbfhmnum             48     49I 0
-     D  Qdbfapsize            50     51I 0
-     D  Reserved_11           52     58A
-     D  Qdbfbrwt              59     60I 0
-     D  Qaaf                  61     61A
-     D  Qdbffmtnum            62     63I 0
-     D  Qdbfhfl2              64     65A
-     D  Qdbfvrm               66     67I 0
-     D  Qaaf2                 68     69A
-     D   Qaaf2H                       1A   overlay(Qaaf2: 1)
-     D   Qaaf2L                       1A   overlay(Qaaf2: 2)
-     D  Qdbfhcrt              70     82A
-     D  Reserved_18           83     84A
-     D  Qdbfhtxt              85    134A
-     D  Reserved_19          135    147A
-     D  Qdbfsrcf             148    157A
-     D  Qdbfsrcm             158    167A
-     D  Qdbfsrcl             168    177A
-     D  Qdbfkrcv             178    178A
-     D  Reserved_20          179    201A
-     D  Qdbftcid             202    203I 0
-     D  Qdbfasp              204    205I 0
-     D  Qdbfnbit             206    206A
-     D  Qdbfmxfnum           207    208I 0
-     D  Reserved_22          209    284A
-     D  Qdbfodic             285    288I 0
-     D  Reserved_23          289    302A
-     D  Qdbffigl             303    304I 0
-     D  Qdbfmxrl             305    306I 0
-     D  Reserved_24          307    314A
-     D  Qdbfgkct             315    316I 0
-     D  Qdbfos               317    320I 0
-     D  Reserved_25          321    328A
-     D  Qdbfocs              329    332I 0
-     D  Reserved_26          333    336A
-     D  Qdbfpact             337    338A
-     D  Qdbfhrls             339    344A
-     D  Reserved_27          345    364A
-     D  Qdbpfof              365    368I 0
-     D  Qdblfof              369    372I 0
-     D  Qdbfnlsb             373    373A
-     D  Qdbflang             374    376A
-     D  Qdbfcnty             377    378A
-     D  Qdbfjorn             379    382I 0
-     D  Qdbfevid             383    386I 0
-     D  Reserved_28          387    400A
-      *
-      *  Format Definition Header (Qdb_Qddfmt)
-     D Qdb_Qddfmt_t    DS                  qualified template
-     D  bytRet                 1      4I 0
-     D  bytAvl                 5      8I 0
-     D  Reserved_62            9     32A
-     D  Qddfmtf               33     33A
-     D  Qddfxlto              34     37I 0
-     D  Qddfrcao              38     41I 0
-     D  Qddfdico              42     45I 0
-     D  Qddfrcid              46     47I 0
-     D  Qddfsrcd              48     49I 0
-     D  Qddfrtcd              50     51I 0
-     D  Qddfrlcd              52     53I 0
-     D  Reserved_64           54     60A
-     D  Qddftflgs             61     61A
-     D  Qddflgs               62     62U 0
-     D  Reserved_67           63     66A
-     D  Qddfrlen              67     70I 0
-     D  Qddfname              71     80A
-     D  Qddfseq               81     93A
-     D  Qddftext              94    143A
-     D  Qddffldnum           144    145I 0
-     D  Qddf_Identity_Off...
-     D                       146    149I 0
-      * Qddffldx                    CHAR(*)   Start of field definition array (Qdb_Qddffld)
-      *
-      *  File Scope Array (Qdb_Qdbfb)
-     D Qdb_Qdbfb_t     DS                  qualified template
-     D  Reserved_48            1     48A
-     D  Qdbfbf                49     58A
-     D  Qdbfbfl               59     68A
-     D  Qdbft                 69     78A
-     D  Reserved_49           79    115A
-     D  Qdbfbgky             116    117I 0
-     D  Reserved_50          118    119A
-     D  Qdbfblky             120    121I 0
-     D  Reserved_51          122    123A
-     D  Qdbffogl             124    125I 0
-     D  Reserved_52          126    128A
-     D  Qdbfsoon             129    130I 0
-     D  Qdbfsoof             131    134I 0
-     D  Qdbfksof             135    138I 0
-     D  Qdbfkyct             139    140I 0
-     D  Qdbfgenf             141    142I 0
-     D  Qdbfodis             143    146I 0
-     D  Reserved_53          146    160A
-      *
-      *  Key Specification Array (Qdb_Qdbfk)
-     D Qdb_Qdbfk_t     DS                  qualified template
-     D  Qdbfkfld               1     10A
-     D  Reserved_59           11     13A
-     D  Qdbfksq               14     14A
-     D  Reserved_61           15     32A
-      *
-      *  Logical File Specific Attributes (Qdb_Qdbflogl)
-     D Qdb_Qdbflogl_t  DS                  qualified template
-     D  Qdbfoj                 1      4I 0
-     D  Qdbfscsn               5      6I 0
-     D  Qdbflxp                7     16A
-     D  Qdbflxl               17     26A
-     D  Qdbfovw               27     30I 0
-     D  Qlfa                  31     31A
-     D  Qdbfjtyp              32     32A
-     D  Qdbfsrcd              33     34I 0
-     D  Qdbfwchk              35     35A
-     D  Reserved_38           36     48A
-      *
-      *  Select/Omit Specification Array (Qdb_Qdbfss)
-     D Qdb_Qdbfss_t    DS                  qualified template
-     D  Reserved54             1      2A
-     D  Qdbfssso               3      3A
-     D  Qdbfssop               4      5A
-     D  Qdbfssfn               6     15A
-     D  Qdbfsspnum            16     17I 0
-     D  Qsosaf                18     19A
-     D  Qdbfssfj              19     20I 0
-     D  Reserved56            21     28A
-     D  Qdbfsoso              29     32I 0
-      *
-      *  Select/Omit Parameters (Qdb_Qdbfsp)
-     D Qdb_Qdbfsp_t    DS                  qualified template
-     D  Qdbfspno               1      4I 0
-     D  Qdbfspln               5      6I 0
-     D  Qdbfspin               7      7A
-     D  Qasopaf                8      8A
-     D  Qdbfsppj               9     10I 0
-     D  Reserved58            11     20A
-     D  Qdbfspvl              21     52A
-      *
-      /ENDIF
+**FREE
+/IF NOT DEFINED(QDBRTVFD)
+/DEFINE QDBRTVFD
+//
+//  Retrieve Database File Description (QDBRTVFD) API
+dcl-pr qdbrtvfd
+       extpgm('QDBRTVFD');
+  o_rcvvar        char(65535) options(*varsize);
+  i_lenrcvvar     int(10) const;
+  o_retfilename   char(20);
+  i_format        char(8) const;
+  i_qfile         char(20) const;
+  i_rcdformat     char(10) const;
+  i_override      char(1) const;
+  i_system        char(10) const;
+  i_formattype    char(10) const;
+  io_errcode      char(65535) options(*varsize );
+end-pr;
+//
+//  File Definition Header (Qdb_Qdbfh)
+dcl-ds qdb_qdbfh_t qualified template;
+  qdbfyret        int(10) pos(1);
+  qdbfyavl        int(10) pos(5);
+  qdbfhflg        uns(5) pos(9);
+  qdbfhflgh       char(1) overlay(qdbfhflg:1);
+  qdbfhflgl       char(1) overlay(qdbfhflg:2);
+  reserved_7      char(4) pos(11);
+  qdbflbnum       int(5) pos(15);
+  qdbfknum        int(5) pos(17);
+  qdbfkmxl        int(5) pos(19);
+  qdbfkflg        char(1) pos(21);
+  qdbfkfdm        char(1) pos(22);
+  reserved_10     char(8) pos(23);
+  qdbfhaut        char(10) pos(31);
+  qdbfhupl        char(1) pos(41);
+  qdbfhmxm        int(5) pos(42);
+  qdbfwtfi        int(5) pos(44);
+  qdbfhfrt        int(5) pos(46);
+  qdbfhmnum       int(5) pos(48);
+  qdbfapsize      int(5) pos(50);
+  reserved_11     char(7) pos(52);
+  qdbfbrwt        int(5) pos(59);
+  qaaf            char(1) pos(61);
+  qdbffmtnum      int(5) pos(62);
+  qdbfhfl2        char(2) pos(64);
+  qdbfvrm         int(5) pos(66);
+  qaaf2           char(2) pos(68);
+  qaaf2h          char(1) overlay(qaaf2: 1);
+  qaaf2l          char(1) overlay(qaaf2: 2);
+  qdbfhcrt        char(13) pos(70);
+  reserved_18     char(2) pos(83);
+  qdbfhtxt        char(50) pos(85);
+  reserved_19     char(13) pos(135);
+  qdbfsrcf        char(10) pos(148);
+  qdbfsrcm        char(10) pos(158);
+  qdbfsrcl        char(10) pos(168);
+  qdbfkrcv        char(1) pos(178);
+  reserved_20     char(23) pos(179);
+  qdbftcid        int(5) pos(202);
+  qdbfasp         int(5) pos(204);
+  qdbfnbit        char(1) pos(206);
+  qdbfmxfnum      int(5) pos(207);
+  reserved_22     char(76) pos(209);
+  qdbfodic        int(10) pos(285);
+  reserved_23     char(14) pos(289);
+  qdbffigl        int(5) pos(303);
+  qdbfmxrl        int(5) pos(305);
+  reserved_24     char(8) pos(307);
+  qdbfgkct        int(5) pos(315);
+  qdbfos          int(10) pos(317);
+  reserved_25     char(8) pos(321);
+  qdbfocs         int(10) pos(329);
+  reserved_26     char(4) pos(333);
+  qdbfpact        char(2) pos(337);
+  qdbfhrls        char(6) pos(339);
+  reserved_27     char(20) pos(345);
+  qdbpfof         int(10) pos(365);
+  qdblfof         int(10) pos(369);
+  qdbfnlsb        char(1) pos(373);
+  qdbflang        char(3) pos(374);
+  qdbfcnty        char(2) pos(377);
+  qdbfjorn        int(10) pos(379);
+  qdbfevid        int(10) pos(383);
+  reserved_28     char(14) pos(387);
+end-ds;
+//
+//  Format Definition Header (Qdb_Qddfmt)
+dcl-ds qdb_qddfmt_t qualified template;
+  bytret          int(10);
+  bytavl          int(10);
+  reserved_62     char(24);
+  qddfmtf         char(1);
+  qddfxlto        int(10);
+  qddfrcao        int(10);
+  qddfdico        int(10);
+  qddfrcid        int(5);
+  qddfsrcd        int(5);
+  qddfrtcd        int(5);
+  qddfrlcd        int(5);
+  reserved_64     char(7);
+  qddftflgs       char(1);
+  qddflgs         uns(3);
+  reserved_67     char(4);
+  qddfrlen        int(10);
+  qddfname        char(10);
+  qddfseq         char(13);
+  qddftext        char(50);
+  qddffldnum      int(5);
+  qddf_identity_off
+  int(10) pos(146);
+end-ds;
+// Qddffldx                    CHAR(*)   Start of field definition array (Qdb_Qddffld)
+//
+//  File Scope Array (Qdb_Qdbfb)
+dcl-ds qdb_qdbfb_t qualified template;
+  reserved_48     char(48);
+  qdbfbf          char(10);
+  qdbfbfl         char(10);
+  qdbft           char(10);
+  reserved_49     char(37);
+  qdbfbgky        int(5);
+  reserved_50     char(2);
+  qdbfblky        int(5);
+  reserved_51     char(2);
+  qdbffogl        int(5);
+  reserved_52     char(3);
+  qdbfsoon        int(5);
+  qdbfsoof        int(10);
+  qdbfksof        int(10);
+  qdbfkyct        int(5);
+  qdbfgenf        int(5);
+  qdbfodis        int(10);
+  reserved_53     char(15) pos(146);
+end-ds;
+//
+//  Key Specification Array (Qdb_Qdbfk)
+dcl-ds qdb_qdbfk_t qualified template;
+  qdbfkfld        char(10);
+  reserved_59     char(3);
+  qdbfksq         char(1);
+  reserved_61     char(18);
+end-ds;
+//
+//  Logical File Specific Attributes (Qdb_Qdbflogl)
+dcl-ds qdb_qdbflogl_t qualified template;
+  qdbfoj          int(10);
+  qdbfscsn        int(5);
+  qdbflxp         char(10);
+  qdbflxl         char(10);
+  qdbfovw         int(10);
+  qlfa            char(1);
+  qdbfjtyp        char(1);
+  qdbfsrcd        int(5);
+  qdbfwchk        char(1);
+  reserved_38     char(13);
+end-ds;
+//
+//  Select/Omit Specification Array (Qdb_Qdbfss)
+dcl-ds qdb_qdbfss_t qualified template;
+  reserved54      char(2);
+  qdbfssso        char(1);
+  qdbfssop        char(2);
+  qdbfssfn        char(10);
+  qdbfsspnum      int(5);
+  qsosaf          char(2);
+  qdbfssfj        int(5) pos(19);
+  reserved56      char(8);
+  qdbfsoso        int(10);
+end-ds;
+//
+//  Select/Omit Parameters (Qdb_Qdbfsp)
+dcl-ds qdb_qdbfsp_t qualified template;
+  qdbfspno        int(10);
+  qdbfspln        int(5);
+  qdbfspin        char(1);
+  qasopaf         char(1);
+  qdbfsppj        int(5);
+  reserved58      char(10);
+  qdbfspvl        char(32);
+end-ds;
+//
+/ENDIF

@@ -1,33 +1,36 @@
-      /if not defined(QLGCNVCS)
-      /define QLGCNVCS
-      *
-      *  Convert Case (QLGCNVCS, QlgConvertCase) API
-     d QlgConvertCase...
-     d                 pr                  extproc('QlgConvertCase')
-     d  i_reqCtrlBlk              32767A   const  options(*varsize)
-     d  i_inData                  32767A   const  options(*varsize)
-     d  o_outData                 32767A          options(*varsize)
-     d  i_length                     10i 0 const
-     d  io_ErrCode                32767A          options(*nopass: *varsize)
-      *
-     d QLGCNVCS_reqCtrlBlk_t...
-     d                 ds                  qualified
-     d  type                         10i 0
-     d  CCSID                        10i 0
-     d  case                         10i 0
-     d  reserved                     10a
-      *
-     d CVTCASE_TYPE_CCSID...
-     d                 c                   1
-     d CVTCASE_TYPE_TABLE...
-     d                 c                   2
-     d CVTCASE_TYPE_USER_DEF...
-     d                 c                   3
-     d CVTCASE_TO_UPPER...
-     d                 c                   0
-     d CVTCASE_TO_LOWER...
-     d                 c                   1
-     d CVTCASE_CCSID_Job...
-     d                 c                   0
-      *
-      /endif
+**FREE
+/if not defined(QLGCNVCS)
+/define QLGCNVCS
+//
+//  Convert Case (QLGCNVCS, QlgConvertCase) API
+dcl-pr qlgconvertcase
+       extproc('QlgConvertCase');
+  i_reqctrlblk    char(32767) const  options(*varsize);
+  i_indata        char(32767) const  options(*varsize);
+  o_outdata       char(32767) options(*varsize);
+  i_length        int(10) const;
+  io_errcode      char(32767) options(*nopass: *varsize);
+end-pr;
+//
+dcl-ds qlgcnvcs_reqctrlblk_t
+       qualified;
+  type            int(10);
+  ccsid           int(10);
+  case            int(10);
+  reserved        char(10);
+end-ds;
+//
+dcl-c cvtcase_type_ccsid
+      1;
+dcl-c cvtcase_type_table
+      2;
+dcl-c cvtcase_type_user_def
+      3;
+dcl-c cvtcase_to_upper
+      0;
+dcl-c cvtcase_to_lower
+      1;
+dcl-c cvtcase_ccsid_job
+      0;
+//
+/endif

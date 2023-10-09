@@ -1,21 +1,23 @@
-      /if not defined(QMHRTVM)
-      /define QMHRTVM
-      *
-      *  Retrieve Message (QMHRTVM) API
-     d QMHRTVM...
-     d                 pr                  extpgm('QMHRTVM')
-     d  o_msgInf                  65535a          options(*varsize)
-     d  i_msgInfLen                  10i 0 const
-     d  i_format                      8a   const
-     d  i_msgID                       7a   const
-     d  i_qMsgF                      20A   const
-     d  i_rplData                 65535a   const  options(*varsize )
-     d  i_rpldataLen                 10i 0 const
-     d  i_rplVars                    10a   const
-     d  i_rtnCtrlChrs                10a   const
-     d  io_ErrCode                65535a          options(*varsize )
-     d  i_rtvOpt                     10a   const  options(*nopass  )            | OptGrp 1
-     d  i_toCcsid                    10i 0 const  options(*nopass  )            |
-     d  i_ccsidRplDta                10i 0 const  options(*nopass  )            |
-      *
-      /endif
+**FREE
+/if not defined(QMHRTVM)
+/define QMHRTVM
+//
+//  Retrieve Message (QMHRTVM) API
+dcl-pr qmhrtvm
+       extpgm('QMHRTVM');
+  o_msginf        char(65535) options(*varsize);
+  i_msginflen     int(10) const;
+  i_format        char(8) const;
+  i_msgid         char(7) const;
+  i_qmsgf         char(20) const;
+  i_rpldata       char(65535) const  options(*varsize );
+  i_rpldatalen    int(10) const;
+  i_rplvars       char(10) const;
+  i_rtnctrlchrs   char(10) const;
+  io_errcode      char(65535) options(*varsize );
+  i_rtvopt        char(10) const  options(*nopass  );                    // | OptGrp 1
+  i_toccsid       int(10) const  options(*nopass  );                     // |
+  i_ccsidrpldta   int(10) const  options(*nopass  );                     // |
+end-pr;
+//
+/endif

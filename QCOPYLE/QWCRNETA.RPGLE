@@ -1,40 +1,44 @@
-      /if not defined(QWCRNETA)
-      /define QWCRNETA
-      *
-      *  Retrieve Network Attributes (QWCRNETA) API
-     d QWCRNETA...
-     d                 pr                  extpgm('QWCRNETA')
-     d  o_rcvVar                  32767A          options(*varsize)
-     d  i_lenRcv                     10i 0 const
-     d  i_numAttr                    10i 0 const
-     d  i_attrNames                  10a   const  dim(50) options(*varsize)
-     d  io_errorCode              32767A          options(*varsize)
-      *
-     d QWCRNETA_returned...
-     d                 ds                  qualified template
-     d  numE                         10i 0
-     d  offsAttr                     10i 0
-      *  Network attribute information table   CHAR(*)
-      *
-     d QWCRNETA_attr...
-     d                 ds                  qualified template
-     d  name                         10a
-     d  type                          1a
-     d  status                        1a
-     d  length                       10i 0
-     d  data_char                   256a
-     d  data_bin                     10i 0 overlay(data_char)
-      *
-     d QWCRNETA_STATUS_OK...
-     d                 c                       ' '
-     d QWCRNETA_STATUS_LOCKED...
-     d                 c                       'L'
-      *
-     d QWCRNETA_DATA_NONE...
-     d                 c                       ' '
-     d QWCRNETA_DATA_CHAR...
-     d                 c                       'C'
-     d QWCRNETA_DATA_BIN...
-     d                 c                       'B'
-      *
-      /endif
+**FREE
+/if not defined(QWCRNETA)
+/define QWCRNETA
+//
+//  Retrieve Network Attributes (QWCRNETA) API
+dcl-pr qwcrneta
+       extpgm('QWCRNETA');
+  o_rcvvar        char(32767) options(*varsize);
+  i_lenrcv        int(10) const;
+  i_numattr       int(10) const;
+  i_attrnames     char(10) const  dim(50) options(*varsize);
+  io_errorcode    char(32767) options(*varsize);
+end-pr;
+//
+dcl-ds qwcrneta_returned
+       qualified template;
+  nume            int(10);
+  offsattr        int(10);
+end-ds;
+//  Network attribute information table   CHAR(*)
+//
+dcl-ds qwcrneta_attr
+       qualified template;
+  name            char(10);
+  type            char(1);
+  status          char(1);
+  length          int(10);
+  data_char       char(256);
+  data_bin        int(10) overlay(data_char);
+end-ds;
+//
+dcl-c qwcrneta_status_ok
+      ' ';
+dcl-c qwcrneta_status_locked
+      'L';
+//
+dcl-c qwcrneta_data_none
+      ' ';
+dcl-c qwcrneta_data_char
+      'C';
+dcl-c qwcrneta_data_bin
+      'B';
+//
+/endif

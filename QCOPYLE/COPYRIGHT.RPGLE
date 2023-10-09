@@ -1,1 +1,2 @@
-     H COPYRIGHT('(c) 1997-2023 by Thomas Raddatz')
+**FREE
+ctl-opt copyright('(c) 1997-2023 by Thomas Raddatz');

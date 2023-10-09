@@ -1,17 +1,19 @@
-      *---------------------------------------------------------------
-      * Datenstruktur für Speichern der Arbeitsumgebung
-      * SET0015   *ENVFILE
-      *---------------------------------------------------------------
-      *
-     D SET0015_t       DS           256    qualified template
-      *  Datei mit Arbeitsumgebungen ...
-     D  SET_ENVFIL                   10A   INZ('PEEKENV')
-      *  ... Bibliothek
-     D  SET_ENVLIB                   10A   INZ('*PRDLIB')
-      *  Ändern Datei erlaubt: 1=Ja; 0=Nein
-     D  SET_ENVCHG                    1A   INZ('1')
-      *  Funktion aktiv: 1=Ja; 0=Nein
-     D  SET_ENVENA                    1A   INZ('1')
-      *  Endemarkierung
-     D  SET_0015                      1A   INZ(x'8B')
-      *
+**FREE
+//---------------------------------------------------------------
+// Datenstruktur für Speichern der Arbeitsumgebung
+// SET0015   *ENVFILE
+//---------------------------------------------------------------
+//
+dcl-ds set0015_t len(256) qualified template;
+  //  Datei mit Arbeitsumgebungen ...
+  set_envfil      char(10) inz('PEEKENV');
+  //  ... Bibliothek
+  set_envlib      char(10) inz('*PRDLIB');
+  //  Ändern Datei erlaubt: 1=Ja; 0=Nein
+  set_envchg      char(1) inz('1');
+  //  Funktion aktiv: 1=Ja; 0=Nein
+  set_envena      char(1) inz('1');
+  //  Endemarkierung
+  set_0015        char(1) inz(x'8B');
+end-ds;
+//

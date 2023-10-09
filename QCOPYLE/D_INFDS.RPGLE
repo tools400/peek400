@@ -1,21 +1,23 @@
-      /IF NOT DEFINED(D_INFDS)
-      /DEFINE D_INFDS
-      *
-     D infds_t         DS                  qualified template
-     D  open                   9      9A
-      * Status                11     15S 0
-     D  file                  83     92A
-     D  library               93    102A
-     D  rcdLen               125    126I 0
-     D  member               129    138A
-     D  nbrOfRcd             156    159I 0
-      * ommon I/O Feedback Area:             Offest = 241
-     D  rcdFmt               261    270A
-      * /O Feedback Area for Database Files: Offset = 367
-      * NbrOfKey             387    388I 0
-      * Res01                389    392A
-      * KeyLen               393    394I 0
-     D  mbrNbr               395    396I 0
-     D  rcdNbr               397    400I 0
-      *
-      /ENDIF
+**FREE
+/IF NOT DEFINED(D_INFDS)
+/DEFINE D_INFDS
+
+dcl-ds infds_t qualified template;
+  isOpen          char(1) pos(9);
+  // Status                11     15S 0
+  file            char(10) pos(83);
+  library         char(10);
+  rcdlen          int(5) pos(125);
+  member          char(10) pos(129);
+  nbrofrcd        int(10) pos(156);
+  // ommon I/O Feedback Area:             Offest = 241
+  rcdfmt          char(10) pos(261);
+  // /O Feedback Area for Database Files: Offset = 367
+  // NbrOfKey             387    388I 0
+  // Res01                389    392A
+  // KeyLen               393    394I 0
+  mbrnbr          int(5) pos(395);
+  rcdnbr          int(10);
+end-ds;
+
+/ENDIF

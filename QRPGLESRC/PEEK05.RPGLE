@@ -265,10 +265,7 @@
        dcl-s yScreenNbr      like(int4_t) inz;
        dcl-s yIsLower        inz(bFalse ) like(bool_t);
 
-       dcl-ds yCursorPos qualified;
-         row    like(int4_t) inz;
-         column like(int4_t) inz;
-       end-ds;
+       dcl-ds yCursorPosition likeds(cursorPosition_t) inz;
 
        dcl-s ycvtccsid       char(1) inz(bTrue  );
        dcl-s ydata           char(512) inz;
@@ -667,18 +664,12 @@
        end-pr;
 
        dcl-s do_x10          packed(7);
-       dcl-s do_x11          packed(7);
-       dcl-s do_x12          packed(7);
-       dcl-s do_x13          packed(7);
        dcl-s do_x14          packed(7);
        dcl-s do_x2           packed(7);
        dcl-s do_x3           packed(7);
        dcl-s do_x4           packed(7);
        dcl-s do_x5           packed(7);
        dcl-s do_x6           packed(7);
-       dcl-s do_x7           packed(7);
-       dcl-s do_x8           packed(7);
-       dcl-s do_x9           packed(7);
 
        dcl-ds f1key_l1 likerec(fpeekfldl1: *key);
        dcl-ds f_key    likerec(fpeekfld: *key);
@@ -917,7 +908,8 @@
 
           //  Verarbeiten Bildschirmereignis
           r#pgmcmd = ypgmcmd;
-          exsr doCmd;
+       //   exsr doPgmCmd;
+      /COPY QCOPYLE,DOPGMCMD
           r#pgmcmd = '';
 
        endsr;
@@ -934,192 +926,9 @@
              usr8144.var1 = ypgmcmd;
              p_sndpgmmg('USR8144': usr8144: sds.pgmname);
           else;
-             exsr doCmd;
+       //      exsr doPgmCmd;
+      /COPY QCOPYLE,DOPGMCMD
           endif;
-
-       endsr;
-
-       //============================================================*
-       //    DoPgmCmd      Ausführen Befehlstaste                    *
-       //============================================================*
-
-       begsr doPgmCmd;
-
-          if (ypgmcmd = r#pgmcmd);
-             isCmdErr = bTrue;
-             clear usr8144;
-             usr8144.var1 = ypgmcmd;
-             p_sndpgmmg('USR8144': usr8144: sds.pgmname);
-          else;
-             exsr doCmd;
-          endif;
-
-       endsr;
-
-       //============================================================*
-       //    DoCmd         Ausführen Befehl (Subfile oder F-Taste)   *
-       //============================================================*
-
-       begsr doCmd;
-
-          isCancel = bFalse;
-          isCmdErr = bFalse;
-
-          select;
-
-          when ypgmcmd = '*EXIT';      //  F3  - Programm beenden
-             exsr c_endpgm;
-             if isopen = bfalse;
-                // Programm beenden
-             else;
-                // Weiter machen
-                ypgmcmd = '';
-             endif;
-          when ypgmcmd = '*PROMPT';    //  F4  - Prompt
-             exsr c_prompt;
-             if (*in93 = btrue);
-                exsr c_enter;
-             endif;
-          when ypgmcmd = '*REFRESH';   //  F5  - Anzeige aktualisieren
-             exsr c_refresh;
-          when ypgmcmd = '*ADD';       //  F6  - Neuanlage Datensatz
-             exsr c_add;
-          when ypgmcmd = '*HEADLINE';  //  F7  - Umschalten der Überschrift
-             exsr c_chghead;
-          when ypgmcmd = '*MRKCOL';    //  F8  - Spalte markieren, ein
-             exsr c_mrkcol;
-          when ypgmcmd = '*UNMRKCOL';
-             exsr c_unmrkcol;
-          when ypgmcmd = '*TGLMRKCOL'; //      - Spalte markieren, ein/aus
-             exsr c_tgmrkcol;
-          when ypgmcmd = '*MOVETOP';   //  F9  - Positionieren auf Datensatz
-             exsr c_movetop;
-          when ypgmcmd = '*POSCSR';
-             exsr c_poscsr;
-          when ypgmcmd = '*USERSETG';  //  F11 - Benutzereinstellungen
-             exsr c_usersetg;
-          when ypgmcmd = '*CANCEL';    //  F12 - Programm beenden
-             exsr c_endpgm;
-             if isopen = bfalse;
-                // Programm beenden
-             else;
-                // Weiter machen
-                ypgmcmd = '';
-             endif;
-          when ypgmcmd = '*REPEAT';    //  F13 - Wiederholen
-             exsr c_repeat;
-          when ypgmcmd = '*LAYOUT';    //  F15 - Layout
-             exsr c_layout;
-          when ypgmcmd = '*SEARCH';    //  F16 - Suchen
-             exsr c_search;
-          when ypgmcmd = '*TOP';       //  F17 - Anfang der Datei
-             exsr c_top;
-          when ypgmcmd = '*BOT';       //  F18 - Ende der Datei
-             exsr c_bot;
-          when ypgmcmd = '*LEFT';      //  F19 - nach rechts verschieben (ein Feld)
-             exsr c_movel;
-          when ypgmcmd = '*RIGHT';     //  F20 - nach links verschieben  (ein Feld)
-             exsr c_mover;
-          when ypgmcmd = '*PAGELEFT';  //  F19 - nach rechts verschieben (eine Seite)
-             exsr c_pageleft;
-          when ypgmcmd = '*PAGERIGHT'; //  F20 - nach links verschieben  (eine Seite)
-             exsr c_pageright;
-          when ypgmcmd = '*CMDLINE';   //  F21 - OS/400 Befehlzeile
-             exsr c_cmdline;
-          when ypgmcmd = '*132/80';    //  F22 - Bildschirmauflösung 132/80
-             exsr c_chgscn;
-          when ypgmcmd = '*MOREOPT';   //  F23 - weitere Auswahlen
-             exsr c_moreopt;
-          when ypgmcmd = '*MOREKEYS';  //  F24 - weitere Tasten anzeigen
-             exsr c_morekeys;
-          when ypgmcmd = '*NEXTMARK';  //  Fxx - zum nächsten markierten Feld verschieben
-             exsr c_nextmark;
-          when ypgmcmd = '*PREVMARK';  //  Fxx - zum vorherigen markierten Feld verschieben
-             exsr c_prevmark;
-          when ypgmcmd = '*DSPDBR';    //  Fxx - anzeigen der Datenbankrelationen
-             exsr c_dspdbr;
-          when ypgmcmd = '*PINCOLDLG'; //  Fxx - Pin-Dialog
-             exsr c_pincdlg;
-          when ypgmcmd = '*PAGEUP';    //  vorwärts blättern
-             exsr c_pageup;
-          when ypgmcmd = '*PAGEDOWN';  //  rückwärts blättern
-             exsr c_pagedown;
-          when ypgmcmd = '*ENTER';     //  Datenfreigabe
-             exsr c_enter;
-          when ypgmcmd = '*REBUILD';   //  Programm neu erstellen
-             exsr c_buildpgm;
-          when ypgmcmd = '*CLRPINROW'; //  Löschen Pin-Tabelle für Zeilen
-             exsr c_clrpinrw;
-          when ypgmcmd = '*CLRPINCOL'; //  Löschen Pin-Tabelle für Spalten
-             exsr c_clrpincl;
-          when ypgmcmd = '*KEY';       //  Sortierung in Schlüsselfolge
-             exsr c_sortbkey;
-          when ypgmcmd = '*RRN';       //  Sortierung in Satzfolge
-             exsr c_sortbrrn;
-          when ypgmcmd = '*TGLACCESS'; //  Umschalten der Sortierung
-             exsr c_sorttgl;
-          when ypgmcmd = '*SQL';       //  SQL-Select ...
-             exsr c_sql;
-          when ypgmcmd = '*NONE';      //  Nix tun
-             // keinen Befehl ausführen
-          when ypgmcmd = '*CHANGE';    //  Ändern Datensatz ...
-             exsr s_change;
-          when ypgmcmd = '*COPY';      //  Kopieren Datensatz ...
-             exsr s_copy;
-          when ypgmcmd = '*DELETE';    //  Löschen Datensatz ...
-             exsr s_delete;
-          when ypgmcmd = '*DISPLAY';   //  Anzeigen Datensatz ...
-             exsr s_display;
-          when ypgmcmd = '*PRINT';     //  Drucken Datensatz ...
-             exsr s_print;
-          when ypgmcmd = '*PINROW';    //  Pin-Datensatz ...
-             exsr s_pinrcd;
-          when ypgmcmd = '*UNPINROW';  //  UnPin-Datensatz ...
-             exsr s_unpinrcd;
-          when ypgmcmd = '*PINCOL';    //  Pin-Spalte ...
-             exsr s_pincol;
-          when ypgmcmd = '*UNPINCOL';  //  UnPin-Spalte ...
-             exsr s_unpincol;
-          when ypgmcmd = '*TGLPINCOL'; //  UnPin-Spalte, umschalten ...
-             exsr s_tgpincol;
-          when ypgmcmd = '*TBLPAPON';  //  Tabellierpapier einschalten ...
-             exsr s_tblpapon;
-          when ypgmcmd = '*TBLPAPOFF'; //  Tabellierpapier ausschalten ...
-             exsr s_tblpapof;
-          when ypgmcmd = '*TGLTBLPAP'; //  Tabellierpapier umschalten ...
-             exsr s_tgtblpap;
-          when ypgmcmd = '*COPYEXT';   //  In extrene Datei kopieren ...
-             exsr s_copyext;
-          when ypgmcmd = '*SPLASHON';  //  Splash-Screen Einschalten ...
-             exsr s_splashon;
-          when ypgmcmd = '*SPLASHOFF'; //  Splash-Screen Ausschalten ...
-             exsr s_splashof;
-          when ypgmcmd = '*CMD';       //  Ausführen Kurzbefehl ...
-             exsr s_shortcmd;
-          when ypgmcmd = '*ABOUT';     //  Anzeigen "About" ...
-             exsr s_about;
-          when ypgmcmd = '*DSPHEX';    //  Hex-Anzeige ...
-             exsr s_dsphex;
-          when ypgmcmd = '*DSPNRM';    //  Normale-Anzeige ...
-             exsr s_dspnrm;
-          when ypgmcmd = '*TGLDSP';    //  Umschalten-Anzeige ...
-             exsr s_dsptgl;
-          when ypgmcmd = '*SAVEENV';   //  Sichern Arbeitsumgebung ...
-             exsr s_saveenv;
-          when ypgmcmd = '*LOADENV';   //  Laden Arbeitsumgebung ...
-             exsr s_loadenv;
-          when ypgmcmd = '*DELETEENV'; //  Löschen Arbeitsumgebung ...
-             exsr s_delenv;
-          when ypgmcmd = '*TGLKEYLUC'; //  Umschalten Eingabe der Schlüsselfelder ...
-             exsr s_tglkeylc_uc;
-             exsr c_poscsr;
-          other;
-             //  Unbekannter Programmbefehl
-             clear usr8110;
-             usr8110.var1 = ypgmcmd;
-             p_sndpgmmg('USR8110': usr8110: sds.pgmname);
-             iscmderr = btrue;
-          endsl;
 
        endsr;
 
@@ -2550,8 +2359,8 @@
                           : yIsUpdKey
                           : yScreenNbr
                           : yIsLower
-                          : yCursorPos.row
-                          : yCursorPos.column
+                          : yCursorPosition.row
+                          : yCursorPosition.column
                           : yMsgID
                           : yMsgDta);
                    exsr checkHeadlineChanged;
@@ -4724,8 +4533,8 @@
                       : isUpdKey
                       : yScreenNbr
                       : yIsLower
-                      : yCursorPos.row
-                      : yCursorPos.column
+                      : yCursorPosition.row
+                      : yCursorPosition.column
                       : yMsgID
                       : yMsgDta);
                exsr checkHeadlineChanged;
@@ -6304,8 +6113,8 @@
              leavesr;
           endif;
 
-          yCursorPos.row = 0;
-          yCursorPos.column = 0;
+          yCursorPosition.row = 0;
+          yCursorPosition.column = 0;
 
           exsr chkprvfile;
 
@@ -6404,7 +6213,7 @@
 
           if (##member = '*NONE');
              clear hfile00;
-             file#x.open =bFalse;
+             file#x.isOpen =bFalse;
              file#x.file = ##file;
              file#x.library = ##library;
              file#x.rcdlen = 0;
@@ -7392,8 +7201,8 @@
 
           if isopen = bTrue;
 
-             yCursorPos.row = 0;
-             yCursorPos.column = 0;
+             yCursorPosition.row = 0;
+             yCursorPosition.column = 0;
 
              //  Datei 04 für Einzelsatzzugriff
              if cio_isopen(hfile04) = bTrue;

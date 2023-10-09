@@ -1,39 +1,44 @@
-      /if not defined(CEECNDHDLR)
-      /define CEECNDHDLR
-      *
-      *  CEEHDLR-Register user-written condition handler
-     d ceehdlr         pr
-     d  i_pHdlProc                     *   const procptr
-     d  i_pToken                       *   const
-     d  o_fc                                     likeds(cee_fc_t)
-     d                                           options(*omit)
-      *
-      *  CEEHDLU-Unregister user-written condition handler
-     d ceehdlu         pr
-     d  i_pHdlProc                     *   const procptr
-     d  o_fc                                     likeds(cee_fc_t)
-     d                                           options(*omit)
-      *
-      *  Condition token, used as feedback code
-     d cee_fc_t        ds                  qualified template
-     d  Condition_ID...
-     d                         1      4A
-     d   MsgSev                1      2I 0
-     d   Msg_No                3      4U 0
-     d  Flags                  5      5A
-     d  Facility_ID...
-     d                         6      8A
-     d  I_S_Info               9     12A
-      *
-      *  Prototype for the condition handler.
-     D errorHandler    pr                  extproc('errorHandler')
-     D i_condition                         value likeds(cee_fc_t)
-     D i_tokenIn                     10i 0 value
-     D i_resultCode                  10i 0
-     D o_newCondition                            likeds(cee_fc_t)
-      *
-      * Action codes are:
-     D CEE_RESUME      C                   10
-     D CEE_PERCOLATE   C                   20
-      *
-      /endif
+**FREE
+/if not defined(CEECNDHDLR)
+/define CEECNDHDLR
+//
+//  CEEHDLR-Register user-written condition handler
+dcl-pr ceehdlr;
+  i_phdlproc      pointer(*proc) const;
+  i_ptoken        pointer const;
+  o_fc            likeds(cee_fc_t)
+options(*omit);
+end-pr;
+//
+//  CEEHDLU-Unregister user-written condition handler
+dcl-pr ceehdlu;
+  i_phdlproc      pointer(*proc) const;
+  o_fc            likeds(cee_fc_t)
+options(*omit);
+end-pr;
+//
+//  Condition token, used as feedback code
+dcl-ds cee_fc_t qualified template;
+  condition_id
+  char(4) pos(1);
+  msgsev          int(5) pos(1);
+  msg_no          uns(5) pos(3);
+  flags           char(1) pos(5);
+  facility_id
+  char(3) pos(6);
+  i_s_info        char(4) pos(9);
+end-ds;
+//
+//  Prototype for the condition handler.
+dcl-pr errorhandler extproc('errorHandler');
+  i_condition     value likeds(cee_fc_t);
+i_tokenin       int(10) value;
+i_resultcode    int(10);
+o_newcondition  likeds(cee_fc_t);
+end-pr;
+//
+// Action codes are:
+dcl-c cee_resume 10;
+dcl-c cee_percolate 20;
+//
+/endif

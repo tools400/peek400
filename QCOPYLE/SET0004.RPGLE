@@ -1,11 +1,13 @@
-      *---------------------------------------------------------------
-      * Datenstruktur für Spracheneinstellungen
-      * SET0004   *LANGUAGE
-      *---------------------------------------------------------------
-      *
-     D SET0004_t       DS           256    qualified template
-      *  Eingestellte Benutzersprache
-     D  SET_Lang                      3A   INZ('GER')
-      *  Endemarkierung
-     D  SET_0004                      1A   INZ(x'8B')
-      *
+**FREE
+//---------------------------------------------------------------
+// Datenstruktur für Spracheneinstellungen
+// SET0004   *LANGUAGE
+//---------------------------------------------------------------
+//
+dcl-ds set0004_t len(256) qualified template;
+  //  Eingestellte Benutzersprache
+  set_lang        char(3) inz('GER');
+  //  Endemarkierung
+  set_0004        char(1) inz(x'8B');
+end-ds;
+//

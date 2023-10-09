@@ -1,39 +1,43 @@
-      /if not defined(QUSLFLD)
-      /define QUSLFLD
-      *
-      *  List Fields (QUSLFLD) API
-     d QUSLFLD...
-     d                 pr                         extpgm('QUSLFLD')
-     d  i_qUsrSpc                    20A   const
-     d  i_format                      8a   const
-     d  i_qFile                      20A   const
-     d  i_rcdFmt                     10a   const
-     d  i_override                    1a   const
-     d  io_errCode                65535a          options(*nopass: *varsize)    | optGrp 1
-      *
-      *  Input Parameter Section
-     d QUSLFLD_inpParm_t...
-     d                 ds                  qualified template
-     d  qUsrSpc                            likeds(qObj_t)
-     d  format                        8a
-     d  qFile                              likeds(qObj_t)
-     d  rcdFmt                       10a
-     d  override                      1a
-      *
-      *  Header Section
-     d QUSLFLD_header_t...
-     d                 ds                  qualified template
-     d  qFileUsed                          likeds(qObj_t)
-     d  type                         10a
-     d  rcdFmtUsed                   10a
-     d  rcdLen                       10i 0
-     d  rcdFmtID                     13A
-     d  rcdText                      50A
-     d  reserved_1                    1a
-     d  rcdTextCcsid                 10i 0
-     d  varLenFldInd                  1a
-     d  graphicFldInd                 1a
-     d  datTimFldInd                  1a
-     d  nullFldInd                    1a
-      *
-      /endif
+**FREE
+/if not defined(QUSLFLD)
+/define QUSLFLD
+//
+//  List Fields (QUSLFLD) API
+dcl-pr quslfld
+       extpgm('QUSLFLD');
+  i_qusrspc       char(20) const;
+  i_format        char(8) const;
+  i_qfile         char(20) const;
+  i_rcdfmt        char(10) const;
+  i_override      char(1) const;
+  io_errcode      char(65535) options(*nopass: *varsize);                // | optGrp 1
+end-pr;
+//
+//  Input Parameter Section
+dcl-ds quslfld_inpparm_t
+       qualified template;
+  qusrspc         likeds(qobj_t);
+format          char(8);
+qfile           likeds(qobj_t);
+rcdfmt          char(10);
+override        char(1);
+end-ds;
+//
+//  Header Section
+dcl-ds quslfld_header_t
+       qualified template;
+  qfileused       likeds(qobj_t);
+type            char(10);
+rcdfmtused      char(10);
+rcdlen          int(10);
+rcdfmtid        char(13);
+rcdtext         char(50);
+reserved_1      char(1);
+rcdtextccsid    int(10);
+varlenfldind    char(1);
+graphicfldind   char(1);
+dattimfldind    char(1);
+nullfldind      char(1);
+end-ds;
+//
+/endif

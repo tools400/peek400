@@ -1,13 +1,15 @@
-      /if not defined(QCMDEXC)
-      /define QCMDEXC
-      *
-      *  ... Execute Command (QCMDEXC) API
-     d QCMDEXC...
-     d                 pr                  extpgm('QCMDEXC')
-     d  i_cmd                     32702A   const  options(*varsize)
-     d  i_length                     15P 5 const
-     d  i_IGCprcCtrl                  3a   const  options(*nopass)
-      *
-     d QCMDEXC_IGC     c                   'IGC'
-      *
-      /endif
+**FREE
+/if not defined(QCMDEXC)
+/define QCMDEXC
+//
+//  ... Execute Command (QCMDEXC) API
+dcl-pr qcmdexc
+       extpgm('QCMDEXC');
+  i_cmd           char(32702) const  options(*varsize);
+  i_length        packed(15:5) const;
+  i_igcprcctrl    char(3) const  options(*nopass);
+end-pr;
+//
+dcl-c qcmdexc_igc 'IGC';
+//
+/endif

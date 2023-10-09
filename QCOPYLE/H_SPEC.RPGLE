@@ -1,4 +1,5 @@
-     H DEBUG(*YES) DECEDIT('0,') DATEDIT(*DMY.)
-     H DATFMT(*ISO) TIMFMT(*ISO)
-     H EXTBININT(*YES) OPTION(*SRCSTMT : *NODEBUGIO)
-     H ALWNULL(*USRCTL)
+**FREE
+ctl-opt debug(*yes) decedit('0,') datedit(*dmy.);
+ctl-opt datfmt(*iso) timfmt(*iso);
+ctl-opt extbinint(*yes) option(*srcstmt : *nodebugio);
+ctl-opt alwnull(*usrctl);

@@ -1,22 +1,24 @@
-      /if not defined(QMHSNDPM)
-      /define QMHSNDPM
-      *
-      *  Send Program Message (QMHSNDPM) API
-     d QMHSNDPM...
-     d                 pr                  extpgm('QMHSNDPM')
-     d  i_msgID                       7a   const
-     d  i_qMsgF                      20A   const
-     d  i_msgData                 32767A   const  options(*varsize )
-     d  i_length                     10i 0 const
-     d  i_msgType                    10a   const
-     d  i_callStkE                  256a   const
-     d  i_callStkC                   10i 0 const
-     d  o_msgKey                      4a
-     d  io_ErrCode                32767A          options(*varsize )
-     d  i_lenStkE                    10i 0 const  options(*nopass  )            | optGrp 1
-     d  i_callStkEQ                  20A   const  options(*nopass  )            |
-     d  i_wait                       10i 0 const  options(*nopass  )            |
-     d  i_callStkEDT                 10a   const  options(*nopass  )            | optGrp 2
-     d  i_ccsid                      10i 0 const  options(*nopass  )            |
-      *
-      /endif
+**FREE
+/if not defined(QMHSNDPM)
+/define QMHSNDPM
+//
+//  Send Program Message (QMHSNDPM) API
+dcl-pr qmhsndpm
+       extpgm('QMHSNDPM');
+  i_msgid         char(7) const;
+  i_qmsgf         char(20) const;
+  i_msgdata       char(32767) const  options(*varsize );
+  i_length        int(10) const;
+  i_msgtype       char(10) const;
+  i_callstke      char(256) const;
+  i_callstkc      int(10) const;
+  o_msgkey        char(4);
+  io_errcode      char(32767) options(*varsize );
+  i_lenstke       int(10) const  options(*nopass  );                     // | optGrp 1
+  i_callstkeq     char(20) const  options(*nopass  );                    // |
+  i_wait          int(10) const  options(*nopass  );                     // |
+  i_callstkedt    char(10) const  options(*nopass  );                    // | optGrp 2
+  i_ccsid         int(10) const  options(*nopass  );                     // |
+end-pr;
+//
+/endif

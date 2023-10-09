@@ -1,51 +1,53 @@
-      *===============================================================*
-      *                                                               *
-      *  Additional information about FILD0100:                       *
-      *  My private API using DSPFD                                   *
-      *                                                               *
-      *===============================================================*
-      *
-      *  API format FILD0100
-     D FILD0100_t      DS           256    qualified template
-     D  ATRCEN                 1      1A
-     D  ATRDAT                 2      7A
-     D  ATRTIM                 8     13A
-     D  ATFILE                14     23A
-     D  ATLIB                 24     33A
-     D  ATFTYP                34     34A
-     D  ATFILA                35     38A
-     D  ATMXDD                39     39A                                        nicht unterst.
-     D  ATMXDC                40     40A                                        nicht unterst.
-     D  ATMXDB                41     41A                                        nicht unterst.
-     D  ATFATR                42     47A
-     D  ATSYSN                48     55A
-     D  ATASP                 56     57P 0
-     D  ATRES                 58     61A
-     D  ATDTAT                62     62A
-     D  ATWAIT                63     65P 0
-     D  ATWATR                66     68P 0
-     D  ATSHAR                69     69A
-     D  ATLVLC                70     70A
-     D  ATTXT                 71    120A
-     D  ATNOFM               121    123P 0
-     D  ATFCCN               124    124A
-     D  ATFCDT               125    130A
-     D  ATFCTM               131    136A
-     D  ATFLS                137    137A
-     D  ATICAP               138    138A
-     D  ATRES2               139    147A
-     D  ATAQDV               148    157A
-     D  ATMXDV               158    159P 0                                      nicht unterst.
-     D  ATSPOL               160    160A
-     D  ATNODV               161    162P 0
-     D  ATUBL                163    165P 0
-     D  ATIDTA               166    166A
-     D  ATRES3               167    175A
-     D  ATACCP               176    176A
-     D  ATSELO               177    177A
-     D  ATCSEQ               178    178A
-     D  ATNOMB               179    181P 0
-     D  ATJOIN               182    182A
-     D  ATSQLT               183    183A
-     D  ATRES4               184    191A
-      *
+**FREE
+//===============================================================*
+//                                                               *
+//  Additional information about FILD0100:                       *
+//  My private API using DSPFD                                   *
+//                                                               *
+//===============================================================*
+//
+//  API format FILD0100
+dcl-ds fild0100_t len(256) qualified template;
+  atrcen          char(1);
+  atrdat          char(6);
+  atrtim          char(6);
+  atfile          char(10);
+  atlib           char(10);
+  atftyp          char(1);
+  atfila          char(4);
+  atmxdd          char(1);                                               // nicht unterst.
+  atmxdc          char(1);                                               // nicht unterst.
+  atmxdb          char(1);                                               // nicht unterst.
+  atfatr          char(6);
+  atsysn          char(8);
+  atasp           packed(3);
+  atres           char(4);
+  atdtat          char(1);
+  atwait          packed(5);
+  atwatr          packed(5);
+  atshar          char(1);
+  atlvlc          char(1);
+  attxt           char(50);
+  atnofm          packed(5);
+  atfccn          char(1);
+  atfcdt          char(6);
+  atfctm          char(6);
+  atfls           char(1);
+  aticap          char(1);
+  atres2          char(9);
+  ataqdv          char(10);
+  atmxdv          packed(3);                                             // nicht unterst.
+  atspol          char(1);
+  atnodv          packed(3);
+  atubl           packed(5);
+  atidta          char(1);
+  atres3          char(9);
+  ataccp          char(1);
+  atselo          char(1);
+  atcseq          char(1);
+  atnomb          packed(5);
+  atjoin          char(1);
+  atsqlt          char(1);
+  atres4          char(8);
+end-ds;
+//

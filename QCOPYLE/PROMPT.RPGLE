@@ -1,51 +1,62 @@
-      *
-     C                   SELECT
-     C     ScnFld        WHENEQ    '##FIELD'
-     C                   MOVEL (P) ##FIELD       R#FIELD          10
-     C                   MOVEL (P) ##FIELD       YData
-     C                   MOVEL (P) *BLANKS       YDataTyp
-     C                   Z-ADD     10            YDataLen
-     C     ScnFld        WHENEQ    '##MEMBER'
-     C                   MOVEL (P) ##MEMBER      R#MEMBER         10
-     C                   MOVEL (P) ##MEMBER      YData
-     C                   MOVEL (P) *BLANKS       YDataTyp
-     C                   Z-ADD     10            YDataLen
-     C                   OTHER
-     C                   MOVEL (P) *BLANKS       YData
-     C                   MOVEL (P) *BLANKS       YDataTyp
-     C                   Z-ADD     *ZEROS        YDataLen
-     C                   ENDSL
-      *
-     C                   MOVEL (P) ScnFld        YPromptFor
-     C                   CALL      PEEK38        P_Peek38               99
-     C     *IN99         IFEQ      '1'
-      *  ... Fehler, also ungültige Rückgabedaten
-     C                   ELSE
-      *
-     C     YMsgID        IFNE      *BLANKS
-      *
-     C     yMsgID        IFEQ      '*NONE'
-     C                   MOVEL (P) *BLANKS       yMsgID
-     C                   MOVEL (P) *BLANKS       yMsgDta
-     C                   ENDIF
-      *
-     C                   SELECT
-     C     ScnFld        WHENEQ    '##FIELD'
-     C                   MOVEL (P) R#FIELD       ##Field
-     C     ScnFld        WHENEQ    '##MEMBER'
-     C                   MOVEL (P) R#MEMBER      ##MEMBER
-     C                   ENDSL
-      *
-     C                   ELSE
-      *
-     C                   SELECT
-     C     ScnFld        WHENEQ    '##FIELD'
-     C     YDataLen      SUBST (P) YRetData      ##Field          10
-     C     ScnFld        WHENEQ    '##MEMBER'
-     C     YDataLen      SUBST (P) YRetData      ##MEMBER         10
-     C                   ENDSL
-      *
-     C                   ENDIF
-      *
-     C                   ENDIF
-      *
+**FREE
+// --------------------------------------------------------------------
+// Stand Alone Fields - TOP
+// --------------------------------------------------------------------
+dcl-s ##field         char(10);
+dcl-s ##member        char(10);
+dcl-s r#field         char(10);
+dcl-s r#member        char(10);
+// --------------------------------------------------------------------
+// Stand Alone Fields - BOTTOM
+// --------------------------------------------------------------------
+//
+select;
+when scnfld = '##FIELD';
+     C                   movel(p)  ##field       r#field
+     C                   movel(p)  ##field       ydata
+   ydatatyp = *blanks;
+     C                   z-add     10            ydatalen
+when scnfld = '##MEMBER';
+     C                   movel(p)  ##member      r#member
+     C                   movel(p)  ##member      ydata
+   ydatatyp = *blanks;
+     C                   z-add     10            ydatalen
+other;
+   ydata = *blanks;
+   ydatatyp = *blanks;
+   ydatalen = *zeros;
+endsl;
+//
+     C                   movel(p)  scnfld        ypromptfor
+     C                   call      peek38        p_peek38               99
+if *in99 = *on;
+   //  ... Fehler, also ungültige Rückgabedaten
+else;
+   //
+   if ymsgid <> *blanks;
+      //
+      if ymsgid = '*NONE';
+         ymsgid = *blanks;
+         ymsgdta = *blanks;
+      endif;
+      //
+      select;
+      when scnfld = '##FIELD';
+     C                   movel(p)  r#field       ##field
+      when scnfld = '##MEMBER';
+     C                   movel(p)  r#member      ##member
+      endsl;
+      //
+   else;
+      //
+      select;
+      when scnfld = '##FIELD';
+         ##field = %subst(yretdata:1:ydatalen);
+      when scnfld = '##MEMBER';
+         ##member = %subst(yretdata:1:ydatalen);
+      endsl;
+      //
+   endif;
+   //
+endif;
+//

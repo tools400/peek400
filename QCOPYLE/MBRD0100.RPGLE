@@ -1,20 +1,22 @@
-      *===============================================================*
-      *                                                               *
-      *  Additional information about MBRD0100:                       *
-      *                                                               *
-      *                                                               *
-      *===============================================================*
-      *
-     D MBRD0100_t      DS                  qualified template
-     D  bytePrv                      10I 0
-     D  byteAvl                      10I 0
-     D  filNme                       10A
-     D  filLib                       10A
-     D  mbr                          10A
-     D  attr                         10A
-     D  srcTyp                       10A
-     D  crtDatTim                    13A
-     D  chgDatTim                    13A
-     D  text                         50A
-     D  isSrcFile                     1A
-      *
+**FREE
+//===============================================================*
+//                                                               *
+//  Additional information about MBRD0100:                       *
+//                                                               *
+//                                                               *
+//===============================================================*
+//
+dcl-ds mbrd0100_t qualified template;
+  byteprv         int(10);
+  byteavl         int(10);
+  filnme          char(10);
+  fillib          char(10);
+  mbr             char(10);
+  attr            char(10);
+  srctyp          char(10);
+  crtdattim       char(13);
+  chgdattim       char(13);
+  text            char(50);
+  issrcfile       char(1);
+end-ds;
+//

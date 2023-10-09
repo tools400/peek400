@@ -1,81 +1,82 @@
-      *===============================================================*
-      *                                                               *
-      *  Definition von Konstanten für                                *
-      *  Farbattribute.                                               *
-      *                                                               *
-      *===============================================================*
-      *
-      *------------------------------------------------------*
-      * Green
-     D COLOR_Green     C                   CONST(X'20')
-      * Green/Reverse
-     D COLOR_Green_R   C                   CONST(X'21')
-      * Green/Underscore
-     D COLOR_Green_U   C                   CONST(X'24')
-      * Green/Underscore/Reverse
-     D COLOR_Green_RU  C                   CONST(X'25')
-      *------------------------------------------------------*
-      * White
-     D COLOR_White     C                   CONST(X'22')
-      * White/Reverse
-     D COLOR_White_R   C                   CONST(X'23')
-      * White/Underscore
-     D COLOR_White_U   C                   CONST(X'26')
-      *------------------------------------------------------*
-      * Red
-     D COLOR_Red       C                   CONST(X'28')
-      * Red/Reverse
-     D COLOR_Red_R     C                   CONST(X'29')
-      * Red/Underscore
-     D COLOR_Red_U     C                   CONST(X'2C')
-      * Red/Underscore/Reverse
-     D COLOR_Red_RU    C                   CONST(X'2D')
-      * Red/Blink
-     D COLOR_Red_B     C                   CONST(X'2A')
-      * Red/Reverse/Blink
-     D COLOR_Red_RB    C                   CONST(X'2B')
-      * Red/Underscore/Blink
-     D COLOR_Red_UB    C                   CONST(X'2E')
-      *------------------------------------------------------*
-      * Turquoise/Column Separators
-     D COLOR_Turkis    C                   CONST(X'30')
-      * Turquoise/Column Separators/Reverse
-     D COLOR_Turkis_R  C                   CONST(X'31')
-      * Turquoise/Underscore
-     D COLOR_Turkis_U  C                   CONST(X'34')
-      * Turquoise/Underscore/Reverse
-     D COLOR_Turkis_RU...
-     D                 C                   CONST(X'35')
-      *------------------------------------------------------*
-      * Yellow/Column Separators
-     D COLOR_Yellow    C                   CONST(X'32')
-      * Yellow/Column Separators/Reverse
-     D COLOR_Yellow_R  C                   CONST(X'33')
-      * Yellow/Underscore
-     D COLOR_Yellow_U  C                   CONST(X'36')
-      *------------------------------------------------------*
-      * Pink
-     D COLOR_Pink      C                   CONST(X'38')
-      * Pink/Reverse
-     D COLOR_Pink_R    C                   CONST(X'39')
-      * Pink/Underscore
-     D COLOR_Pink_U    C                   CONST(X'3C')
-      * Pink/Underscore/Reverse
-     D COLOR_Pink_RU   C                   CONST(X'3D')
-      *------------------------------------------------------*
-      * Blue
-     D COLOR_Blue      C                   CONST(X'3A')
-      * Blue/Reverse
-     D COLOR_Blue_R    C                   CONST(X'3B')
-      * Blue/Underscore
-     D COLOR_Blue_U    C                   CONST(X'3E')
-      *------------------------------------------------------*
-      * Nondisplay
-     D COLOR_NoneDsp1  C                   CONST(X'27')
-      * Nondisplay
-     D COLOR_NoneDsp2  C                   CONST(X'2F')
-      * Nondisplay
-     D COLOR_NoneDsp3  C                   CONST(X'37')
-      * Nondisplay
-     D COLOR_NoneDsp4  C                   CONST(X'3F')
-      *
+**FREE
+//===============================================================*
+//                                                               *
+//  Definition von Konstanten für                                *
+//  Farbattribute.                                               *
+//                                                               *
+//===============================================================*
+//
+//------------------------------------------------------*
+// Green
+dcl-c color_green const(x'20');
+// Green/Reverse
+dcl-c color_green_r const(x'21');
+// Green/Underscore
+dcl-c color_green_u const(x'24');
+// Green/Underscore/Reverse
+dcl-c color_green_ru const(x'25');
+//------------------------------------------------------*
+// White
+dcl-c color_white const(x'22');
+// White/Reverse
+dcl-c color_white_r const(x'23');
+// White/Underscore
+dcl-c color_white_u const(x'26');
+//------------------------------------------------------*
+// Red
+dcl-c color_red const(x'28');
+// Red/Reverse
+dcl-c color_red_r const(x'29');
+// Red/Underscore
+dcl-c color_red_u const(x'2C');
+// Red/Underscore/Reverse
+dcl-c color_red_ru const(x'2D');
+// Red/Blink
+dcl-c color_red_b const(x'2A');
+// Red/Reverse/Blink
+dcl-c color_red_rb const(x'2B');
+// Red/Underscore/Blink
+dcl-c color_red_ub const(x'2E');
+//------------------------------------------------------*
+// Turquoise/Column Separators
+dcl-c color_turkis const(x'30');
+// Turquoise/Column Separators/Reverse
+dcl-c color_turkis_r const(x'31');
+// Turquoise/Underscore
+dcl-c color_turkis_u const(x'34');
+// Turquoise/Underscore/Reverse
+dcl-c color_turkis_ru
+      const(x'35');
+//------------------------------------------------------*
+// Yellow/Column Separators
+dcl-c color_yellow const(x'32');
+// Yellow/Column Separators/Reverse
+dcl-c color_yellow_r const(x'33');
+// Yellow/Underscore
+dcl-c color_yellow_u const(x'36');
+//------------------------------------------------------*
+// Pink
+dcl-c color_pink const(x'38');
+// Pink/Reverse
+dcl-c color_pink_r const(x'39');
+// Pink/Underscore
+dcl-c color_pink_u const(x'3C');
+// Pink/Underscore/Reverse
+dcl-c color_pink_ru const(x'3D');
+//------------------------------------------------------*
+// Blue
+dcl-c color_blue const(x'3A');
+// Blue/Reverse
+dcl-c color_blue_r const(x'3B');
+// Blue/Underscore
+dcl-c color_blue_u const(x'3E');
+//------------------------------------------------------*
+// Nondisplay
+dcl-c color_nonedsp1 const(x'27');
+// Nondisplay
+dcl-c color_nonedsp2 const(x'2F');
+// Nondisplay
+dcl-c color_nonedsp3 const(x'37');
+// Nondisplay
+dcl-c color_nonedsp4 const(x'3F');
+//

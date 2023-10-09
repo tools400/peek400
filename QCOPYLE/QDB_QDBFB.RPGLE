@@ -1,28 +1,30 @@
-      *===============================================================*
-      *                                                               *
-      *  File Scope Array: Qdb_Qdbfb                                  *
-      *                                                               *
-      *                                                               *
-      *===============================================================*
-      *
-     D Qdb_Qdbfb       DS
-      *
-      * Based on physical file/library
-     D  Qdbfbf                49     58A
-     D  Qdbfbfl               59     68A
-      *
-      * Record format name
-     D  Qdbft                 69     78A
-      *
-      * Bbr of select/omit statements
-     D  Qdbfsoon             129    130I 0
-      *
-      * Offset to the select/omit specification array
-     D  Qdbfsoof             131    134I 0
-      *
-      * Offset to the key specification array
-     D  Qdbfksof             135    138I 0
-      *
-      * Record format full  key field count
-     D  Qdbfksof             139    140I 0
-      *
+**FREE
+//===============================================================*
+//                                                               *
+//  File Scope Array: Qdb_Qdbfb                                  *
+//                                                               *
+//                                                               *
+//===============================================================*
+//
+dcl-ds qdb_qdbfb;
+  //
+  // Based on physical file/library
+  qdbfbf          char(10) pos(49);
+  qdbfbfl         char(10);
+  //
+  // Record format name
+  qdbft           char(10);
+  //
+  // Bbr of select/omit statements
+  qdbfsoon        int(5) pos(129);
+  //
+  // Offset to the select/omit specification array
+  qdbfsoof        int(10);
+  //
+  // Offset to the key specification array
+  qdbfksof        int(10);
+  //
+  // Record format full  key field count
+  qdbfksof        int(5);
+end-ds;
+//

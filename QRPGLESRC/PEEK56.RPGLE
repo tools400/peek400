@@ -314,7 +314,7 @@
 
        enddo;
 
-       if (workstn.open = '1');
+       if (workstn.isOpen = '1');
           close peek56fm;
        endif;
 
@@ -1348,7 +1348,7 @@
           peek27(sds.pgmname: ychoice: ynbrofch);
 
           // - Öffnen Bildschirmdatei
-          if (workstn.open = '0');
+          if (workstn.isOpen = '0');
              open peek56fm;
           endif;
 

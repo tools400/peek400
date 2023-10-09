@@ -1,9 +1,11 @@
-      *---------------------------------------------------------------
-      * Datenstruktur für Benutzervoreinstellungen:  WRK0002
-      *
-     D WRK0002_t       DS                  qualified template
-     D  WRK_RcdNbr                   10P 0 inz(0)
-     D  WRK_Seq                       5P 0 inz(0)
-     D  WRK_FNme                     10A   inz('')
-     D  WRK_FTxt                     50A   inz('')
-      *
+**FREE
+//---------------------------------------------------------------
+// Datenstruktur für Benutzervoreinstellungen:  WRK0002
+//
+dcl-ds wrk0002_t qualified template;
+  wrk_rcdnbr      packed(10) inz(0);
+  wrk_seq         packed(5) inz(0);
+  wrk_fnme        char(10) inz('');
+  wrk_ftxt        char(50) inz('');
+end-ds;
+//

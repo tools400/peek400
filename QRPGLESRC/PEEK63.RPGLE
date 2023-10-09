@@ -89,7 +89,7 @@
        //===================================================================*
 
        dcl-proc cio_open export;
-       dcl-pi *N        like(bool_t);
+       dcl-pi *N like(bool_t);
          o_hfile                likeds(hfile_t);
          i_file          const  like(file_t);
          i_lib           const  like(lib_t);
@@ -146,7 +146,7 @@
        //===================================================================*
 
        dcl-proc cio_isopen export;
-       dcl-pi *N        like(bool_t);
+       dcl-pi *N like(bool_t);
          i_hfile         const  likeds(hfile_t);
        end-pi;
        // ------------------------------------------------------------------------
@@ -164,7 +164,7 @@
        //===================================================================*
 
        dcl-proc cio_getfile export;
-       dcl-pi *N        like(file_t);
+       dcl-pi *N like(file_t);
          i_hfile         const  likeds(hfile_t);
        end-pi;
        // ------------------------------------------------------------------------
@@ -183,7 +183,7 @@
        //===================================================================*
 
        dcl-proc cio_getlibrary export;
-       dcl-pi *N        like(lib_t);
+       dcl-pi *N like(lib_t);
          i_hfile         const  likeds(hfile_t);
        end-pi;
        // ------------------------------------------------------------------------
@@ -201,7 +201,7 @@
        //===================================================================*
 
        dcl-proc cio_getmember export;
-       dcl-pi *N        like(lib_t);
+       dcl-pi *N like(lib_t);
          i_hfile         const  likeds(hfile_t);
        end-pi;
        // ------------------------------------------------------------------------
@@ -220,7 +220,7 @@
        //===================================================================*
 
        dcl-proc cio_getrecordformat export;
-       dcl-pi *N              char(10);
+       dcl-pi *N char(10);
          i_hfile         const  likeds(hfile_t);
        end-pi;
        // ------------------------------------------------------------------------
@@ -238,7 +238,7 @@
        //===================================================================*
 
        dcl-proc cio_getrecordlength export;
-       dcl-pi *N              int(10);
+       dcl-pi *N int(10);
          i_hfile         const  likeds(hfile_t);
        end-pi;
 
@@ -260,7 +260,7 @@
        //===================================================================*
 
        dcl-proc cio_getrrn export;
-       dcl-pi *N              int(10);
+       dcl-pi *N int(10);
          i_hfile         const  likeds(hfile_t);
        end-pi;
 
@@ -284,7 +284,7 @@
        //===================================================================*
 
        dcl-proc cio_getmbrnbr export;
-       dcl-pi *N              int(10);
+       dcl-pi *N int(10);
          i_hfile         const  likeds(hfile_t);
        end-pi;
 
@@ -309,7 +309,7 @@
        //===================================================================*
 
        dcl-proc cio_getinfds export;
-       dcl-pi *N        likeds(infds_t);
+       dcl-pi *N likeds(infds_t);
          i_hfile         const  likeds(hfile_t);
        end-pi;
 
@@ -318,7 +318,7 @@
        // ----------------------------------------------------------------------
 
        clear infds;
-       infds.open    = cio_isopen(i_hfile);
+       infds.isOpen  = cio_isopen(i_hfile);
        infds.file    = cio_getfile(i_hfile);
        infds.library = cio_getlibrary(i_hfile);
        infds.rcdlen  = cio_getrecordlength(i_hfile);
@@ -336,7 +336,7 @@
        //===================================================================*
 
        dcl-proc cio_iserror export;
-       dcl-pi *N        like(bool_t);
+       dcl-pi *N like(bool_t);
          i_hfile         const  likeds(hfile_t);
        end-pi;
        // ------------------------------------------------------------------------
@@ -399,7 +399,7 @@
        //===================================================================*
 
        dcl-proc cio_geterror export;
-       dcl-pi *N              int(10);
+       dcl-pi *N int(10);
          i_hfile         const  likeds(hfile_t);
        end-pi;
        // ------------------------------------------------------------------------
@@ -413,7 +413,7 @@
        //===================================================================*
 
        dcl-proc cio_geterrortext export;
-       dcl-pi *N              varchar(512);
+       dcl-pi *N varchar(512);
          i_hfile         const  likeds(hfile_t);
        end-pi;
        // ------------------------------------------------------------------------
@@ -431,7 +431,7 @@
        //===================================================================*
 
        dcl-proc cio_chainwithrrn export;
-       dcl-pi *N        like(bool_t);
+       dcl-pi *N like(bool_t);
          io_hfile        likeds(hfile_t);
          i_rrn           const  like(rcdnbr_t);
          i_dolock        const  like(bool_t);
@@ -478,7 +478,7 @@
        //===================================================================*
 
        dcl-proc cio_chainwithkey export;
-       dcl-pi *N        like(bool_t);
+       dcl-pi *N like(bool_t);
          io_hfile        likeds(hfile_t);
          i_key           const  like(keybuf_t);
          i_dolock        const  like(bool_t);
@@ -530,7 +530,7 @@
        //===================================================================*
 
        dcl-proc cio_setllwithrrn export;
-       dcl-pi *N        like(bool_t);
+       dcl-pi *N like(bool_t);
          io_hfile        likeds(hfile_t);
          i_rrn           const  like(rcdnbr_t);
        end-pi;
@@ -596,7 +596,7 @@
        //===================================================================*
 
        dcl-proc cio_setllwithkey export;
-       dcl-pi *N        like(bool_t);
+       dcl-pi *N like(bool_t);
          io_hfile        likeds(hfile_t);
          i_key           const  like(keybuf_t);
        end-pi;
@@ -641,7 +641,7 @@
        //===================================================================*
 
        dcl-proc cio_setgtwithrrn export;
-       dcl-pi *N        like(bool_t);
+       dcl-pi *N like(bool_t);
          io_hfile        likeds(hfile_t);
          i_rrn           const  like(rcdnbr_t);
        end-pi;
@@ -699,7 +699,7 @@
        //===================================================================*
 
        dcl-proc cio_setgtwithkey export;
-       dcl-pi *N        like(bool_t);
+       dcl-pi *N like(bool_t);
          io_hfile        likeds(hfile_t);
          i_key           const  like(keybuf_t);
        end-pi;
@@ -744,7 +744,7 @@
        //===================================================================*
 
        dcl-proc cio_read export;
-       dcl-pi *N        like(bool_t);
+       dcl-pi *N like(bool_t);
          io_hfile        likeds(hfile_t);
          i_dolock        const  like(bool_t);
          io_rcdbuffer    like(rcdbuf_t);
@@ -819,7 +819,7 @@
        //===================================================================*
 
        dcl-proc cio_readp export;
-       dcl-pi *N        like(bool_t);
+       dcl-pi *N like(bool_t);
          io_hfile        likeds(hfile_t);
          i_dolock        const  like(bool_t);
          io_rcdbuffer    like(rcdbuf_t);
@@ -895,7 +895,7 @@
        //===================================================================*
 
        dcl-proc cio_delete export;
-       dcl-pi *N        like(bool_t);
+       dcl-pi *N like(bool_t);
          io_hfile        likeds(hfile_t);
        end-pi;
 
@@ -924,7 +924,7 @@
        //===================================================================*
 
        dcl-proc cio_unlock export;
-       dcl-pi *N        like(bool_t);
+       dcl-pi *N like(bool_t);
          io_hfile        likeds(hfile_t);
        end-pi;
 
@@ -954,7 +954,7 @@
        //===================================================================*
 
        dcl-proc cio_close export;
-       dcl-pi *N        like(bool_t);
+       dcl-pi *N like(bool_t);
          io_hfile        likeds(hfile_t);
        end-pi;
        // ------------------------------------------------------------------------
@@ -1099,7 +1099,7 @@
        //===================================================================*
 
        dcl-proc getmode;
-       dcl-pi *N              varchar(16);
+       dcl-pi *N varchar(16);
          i_mode          varchar(512) value;
          i_parm          varchar(16) value;
          i_default       varchar(16) value;

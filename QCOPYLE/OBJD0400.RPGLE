@@ -1,33 +1,35 @@
-      *===============================================================*
-      *                                                               *
-      *  Additional information about OBJD0400:                       *
-      *                                                               *
-      *                                                               *
-      *===============================================================*
-      *
-      *  API format OBJD0400
-      *  (data structure can be used within the calling program
-      *  to splitt XValue into its units.)
-     D OBJD0400_t      DS                  qualified template
-     D  O4BytRet               1      4I 0
-     D  O4BytAvail             5      8I 0
-     D  O4ObjName              9     18A
-     D  O4ObjLib              19     28A
-     D  O4ObjType             29     38A
-     D  O4RetLib              39     48A
-     D  O4AuxStPol            49     52I 0
-     D  O4Owner               53     62A
-     D  O4Domain              63     64A
-     D  O4CrtDtTme            65     77A
-     D  O4ChgDtTme            78     90A
-     D  O4ExtAttr             91    100A
-     D  O4Text               101    150A
-     D  O4SrcFile            151    160A
-     D  O4SrcLib             161    170A
-     D  O4SrcMbr             171    180A
-      *   :
-     D                       181    472A
-      *   :
-     D  O4ObjSize            473    476I 0
-     D  O4ObjSizeM           477    480I 0
-      *
+**FREE
+//===============================================================*
+//                                                               *
+//  Additional information about OBJD0400:                       *
+//                                                               *
+//                                                               *
+//===============================================================*
+//
+//  API format OBJD0400
+//  (data structure can be used within the calling program
+//  to splitt XValue into its units.)
+dcl-ds objd0400_t qualified template;
+  o4bytret        int(10) pos(1);
+  o4bytavail      int(10) pos(5);
+  o4objname       char(10) pos(9);
+  o4objlib        char(10) pos(19);
+  o4objtype       char(10) pos(29);
+  o4retlib        char(10) pos(39);
+  o4auxstpol      int(10) pos(49);
+  o4owner         char(10) pos(53);
+  o4domain        char(2) pos(63);
+  o4crtdttme      char(13) pos(65);
+  o4chgdttme      char(13) pos(78);
+  o4extattr       char(10) pos(91);
+  o4text          char(50) pos(101);
+  o4srcfile       char(10) pos(151);
+  o4srclib        char(10) pos(161);
+  o4srcmbr        char(10) pos(171);
+  //   :
+  *N              char(292) pos(181);
+  //   :
+  o4objsize       int(10) pos(473);
+  o4objsizem      int(10) pos(477);
+end-ds;
+//

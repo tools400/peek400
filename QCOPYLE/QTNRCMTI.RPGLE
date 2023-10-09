@@ -1,33 +1,36 @@
-      /if not defined(QTNRCMTI)
-      /define QTNRCMTI
-      *
-      *  ... Retrieve Commitment Information (QTNRCMTI) API
-     d QTNRCMTI...
-     d                 pr                  extpgm('QTNRCMTI')
-     D  o_rcvVar                  65535A          options(*varsize)
-     D  i_rcvVarLen                  10I 0 const
-     D  i_format                      8A   const
-     D  io_errCode                65535A          options(*varsize)
-      *
-      *  This format returns commitment information.
-     D cmti0100_t      DS                  qualified template
-     D  bytRet                       10I 0
-     D  bytAvl                       10I 0
-     D  status                        1A
-     D  lockLevel                    10A
-     D  scope                         1A
-     D  statusActGrp                  1A
-     D  waitOutcome                   1A
-     D  problemAction                 1A
-     D  voteReadOnly                  1A
-     D  actionEndJob                  1A
-     D  dftJrnName                   10A
-     D  dftJrnLib                    10A
-     D  LUOW_id                      39A
-     D  lastAgentPermitted...
-     D                                1A
-     D  okToLeaveOut                  1A
-     D  acceptVoteReliable...
-     D                                1A
-      *
-      /endif
+**FREE
+/if not defined(QTNRCMTI)
+/define QTNRCMTI
+//
+//  ... Retrieve Commitment Information (QTNRCMTI) API
+dcl-pr qtnrcmti
+       extpgm('QTNRCMTI');
+  o_rcvvar        char(65535) options(*varsize);
+  i_rcvvarlen     int(10) const;
+  i_format        char(8) const;
+  io_errcode      char(65535) options(*varsize);
+end-pr;
+//
+//  This format returns commitment information.
+dcl-ds cmti0100_t qualified template;
+  bytret          int(10);
+  bytavl          int(10);
+  status          char(1);
+  locklevel       char(10);
+  scope           char(1);
+  statusactgrp    char(1);
+  waitoutcome     char(1);
+  problemaction   char(1);
+  votereadonly    char(1);
+  actionendjob    char(1);
+  dftjrnname      char(10);
+  dftjrnlib       char(10);
+  luow_id         char(39);
+  lastagentpermitted
+  char(1);
+  oktoleaveout    char(1);
+  acceptvotereliable
+  char(1);
+end-ds;
+//
+/endif

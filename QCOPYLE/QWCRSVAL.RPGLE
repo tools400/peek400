@@ -1,184 +1,215 @@
-      /if not defined(QWCRSVAL)
-      /define QWCRSVAL
-      *
-      *  Retrieve System Values (QWCRSVAL) API
-     d QWCRSVAL...
-     d                 pr                         extpgm('QWCRSVAL')
-     d  o_rcvVar                  65535a          options(*varsize)
-     d  i_lenRcvVar                  10i 0 const
-     d  i_numSysVal                  10i 0 const
-     d  i_arySysVal                  10a   const  options(*varsize) dim(128)
-     d  io_errCode                65535a          options(*varsize)
-      *
-      *  Return value
-     d QWCRSVAL_rtnValue_t...
-     d                 ds          4096    qualified template
-     d  numSysValRtn                 10i 0
-     d  ofsSysValTbl                 10i 0 dim(128)
-      *
-     d QWCRSVAL_sysValInfTbl_t...
-     d                 ds                  qualified based(pSysValTbl)
-     d  sysVal                       10a
-     d  type                          1a
-     d  infStatus                     1a
-     d  length                       10i 0
-     d  data                       4096A
-      *
-      * --------------------------------------------------
-      *  Pre-defined structures for complex system values
-      * --------------------------------------------------
-      *
-      *  QACGLVL:         Accounting level
-     d QWCRSVAL_acgLvl_t...
-     d                 ds                  qualified
-     d  option                       10a   dim(8)
-      *
-      *  QALWOBJRST:      Allow object restore options
-     d QWCRSVAL_alwObjRst_t...
-     d                 ds                  qualified
-     d  option                       10a   dim(15)
-      *
-      *  QALWUSRDMN:      Allow user domain
-     d QWCRSVAL_alwUsrDmn_t...
-     d                 ds                  qualified
-     d  lib                          10a   dim(50)
-      *
-      *  QATNPGM:        Attention program
-     d QWCRSVAL_atnPgm_t...
-     d                 ds                  qualified
-     d  name                         10a
-     d  lib                          10a
-      *
-      *  QAUDCTL:         Auditing control
-     d QWCRSVAL_audCtl_t...
-     d                 ds                  qualified
-     d  option                       10a   dim(5)
-      *
-      *  QAUDLVL:         Auditing level
-     d QWCRSVAL_audLvl_t...
-     d                 ds                  qualified
-     d  option                       10a   dim(16)
-      *
-      *  QAUDLVL2:        Auditing level extension
-     d QWCRSVAL_audLvl2_t...
-     d                 ds                  qualified
-     d  option                       10a   dim(99)
-      *
-      *  QBOOKPATH:      Book and bookshelf search path
-     d QWCRSVAL_bookPath_t...
-     d                 ds                  qualified
-     d  path                         63A   dim(5)
-      *
-      *  QCFGMSGQ:       Configuration message queue
-     d QWCRSVAL_cfgMsgQ_t...
-     d                 ds                  qualified
-     d  name                         10a
-     d  lib                          10a
-      *
-      *  QCHRID:         Character set and code page
-     d QWCRSVAL_chrID_t...
-     d                 ds                  qualified
-     d  ccsid                        10a
-     d  codePage                     10a
-      *
-      *  QCMNRCYLMT:     Communications recovery limit
-     d QWCRSVAL_cmnRcyLmt_t...
-     d                 ds                  qualified
-     d  count                        10a
-     d  interval                     10a
-      *
-      *  QCTLSBSD:       Controlling subsystem
-     d QWCRSVAL_ctlSbsD_t...
-     d                 ds                  qualified
-     d  name                         10a
-     d  lib                          10a
-      *
-      *  QDATETIME:      System date and time       (YYYYMMDDHHNNSSXXXXXX)
-     d QWCRSVAL_dateTime_t...
-     d                 ds                  qualified
-     d  date                          8a
-     d  time                          6a
-     d  mSecs                         6a
-      *
-      *  QIGCCDEFNT:     Double-byte coded font name
-     d QWCRSVAL_igcCdeFnt_t...
-     d                 ds                  qualified
-     d  name                         10a
-     d  lib                          10a
-      *
-      *  QINACTMSGQ:   Inactive message queue
-     d QWCRSVAL_inActMsgQ_t...
-     d                 ds                  qualified
-     d  name                         10a
-     d  lib                          10a
-      *
-      *  QIPLDATTIM:   Automatic IPL date and time  (value = CYYMMDDHHMMSS)
-     d QWCRSVAL_iplDatTim_t...
-     d                 ds                  qualified
-     d  spcVal                 1     10A
-     d  value                  1     13A
-      *
-      *  QPRBFTR:      Problem filter
-     d QWCRSVAL_prbFtr_t...
-     d                 ds                  qualified
-     d  name                         10a
-     d  lib                          10a
-      *
-      *  QPWDVLDPGM:   Password validation program
-     d QWCRSVAL_pwdVldPgm_t...
-     d                 ds                  qualified
-     d  name                         10a
-     d  lib                          10a
-      *
-      *  QRMTSIGN:     Remote sign-on
-     d QWCRSVAL_rmtSign_t...
-     d                 ds                  qualified
-     d  spcVal                       10a
-     d  pgm                          10a   overlay(spcVal)
-     d  lib                          10a
-      *
-      *  QSCANFS:      Scan file systems
-     d QWCRSVAL_scanFS_t...
-     d                 ds                  qualified
-     d  option                       10a   dim(20)
-      *
-      *  QSCANFSCTL:   Scan file systems control
-     d QWCRSVAL_scanFSCtl_t...
-     d                 ds                  qualified
-     d  option                       10a   dim(20)
-      *
-      *  QSETJOBATR:   Set job attributes from locale
-     d QWCRSVAL_setJobAtr_t...
-     d                 ds                  qualified
-     d  attr                         10a   dim(16)
-      *
-      *  QSRTSEQ:      Sort sequence table
-     d QWCRSVAL_srtSeq_t...
-     d                 ds                  qualified
-     d  name                         10a
-     d  lib                          10a
-      *
-      *  QSTRUPPGM:    Startup program name
-     d QWCRSVAL_strUpPgm_t...
-     d                 ds                  qualified
-     d  name                         10a
-     d  lib                          10a
-      *
-      *  QSYSLIBL:     System library list
-     d QWCRSVAL_sysLibl_t...
-     d                 ds                  qualified
-     d  lib                          10a   dim(15)
-      *
-      *  QUSRLIBL:     User library list
-     d QWCRSVAL_usrLibl_t...
-     d                 ds                  qualified
-     d  lib                          10a   dim(25)
-      *
-      *  QUTCOFFSET:   Coordinated universal time offset
-     d QWCRSVAL_utcOffset_t...
-     d                 ds                  qualified
-     d  timeZoneID                    1a
-     d  hours                         2a
-     d  minutes                       2a
-      *
-      /endif
+**FREE
+/if not defined(QWCRSVAL)
+/define QWCRSVAL
+//
+//  Retrieve System Values (QWCRSVAL) API
+dcl-pr qwcrsval
+       extpgm('QWCRSVAL');
+  o_rcvvar        char(65535) options(*varsize);
+  i_lenrcvvar     int(10) const;
+  i_numsysval     int(10) const;
+  i_arysysval     char(10) const  options(*varsize) dim(128);
+  io_errcode      char(65535) options(*varsize);
+end-pr;
+//
+//  Return value
+dcl-ds qwcrsval_rtnvalue_t
+       len(4096) qualified template;
+  numsysvalrtn    int(10);
+  ofssysvaltbl    int(10) dim(128);
+end-ds;
+//
+dcl-ds qwcrsval_sysvalinftbl_t
+       qualified based(psysvaltbl);
+  sysval          char(10);
+  type            char(1);
+  infstatus       char(1);
+  length          int(10);
+  data            char(4096);
+end-ds;
+//
+// --------------------------------------------------
+//  Pre-defined structures for complex system values
+// --------------------------------------------------
+//
+//  QACGLVL:         Accounting level
+dcl-ds qwcrsval_acglvl_t
+       qualified;
+  option          char(10) dim(8);
+end-ds;
+//
+//  QALWOBJRST:      Allow object restore options
+dcl-ds qwcrsval_alwobjrst_t
+       qualified;
+  option          char(10) dim(15);
+end-ds;
+//
+//  QALWUSRDMN:      Allow user domain
+dcl-ds qwcrsval_alwusrdmn_t
+       qualified;
+  lib             char(10) dim(50);
+end-ds;
+//
+//  QATNPGM:        Attention program
+dcl-ds qwcrsval_atnpgm_t
+       qualified;
+  name            char(10);
+  lib             char(10);
+end-ds;
+//
+//  QAUDCTL:         Auditing control
+dcl-ds qwcrsval_audctl_t
+       qualified;
+  option          char(10) dim(5);
+end-ds;
+//
+//  QAUDLVL:         Auditing level
+dcl-ds qwcrsval_audlvl_t
+       qualified;
+  option          char(10) dim(16);
+end-ds;
+//
+//  QAUDLVL2:        Auditing level extension
+dcl-ds qwcrsval_audlvl2_t
+       qualified;
+  option          char(10) dim(99);
+end-ds;
+//
+//  QBOOKPATH:      Book and bookshelf search path
+dcl-ds qwcrsval_bookpath_t
+       qualified;
+  path            char(63) dim(5);
+end-ds;
+//
+//  QCFGMSGQ:       Configuration message queue
+dcl-ds qwcrsval_cfgmsgq_t
+       qualified;
+  name            char(10);
+  lib             char(10);
+end-ds;
+//
+//  QCHRID:         Character set and code page
+dcl-ds qwcrsval_chrid_t
+       qualified;
+  ccsid           char(10);
+  codepage        char(10);
+end-ds;
+//
+//  QCMNRCYLMT:     Communications recovery limit
+dcl-ds qwcrsval_cmnrcylmt_t
+       qualified;
+  count           char(10);
+  interval        char(10);
+end-ds;
+//
+//  QCTLSBSD:       Controlling subsystem
+dcl-ds qwcrsval_ctlsbsd_t
+       qualified;
+  name            char(10);
+  lib             char(10);
+end-ds;
+//
+//  QDATETIME:      System date and time       (YYYYMMDDHHNNSSXXXXXX)
+dcl-ds qwcrsval_datetime_t
+       qualified;
+  date            char(8);
+  time            char(6);
+  msecs           char(6);
+end-ds;
+//
+//  QIGCCDEFNT:     Double-byte coded font name
+dcl-ds qwcrsval_igccdefnt_t
+       qualified;
+  name            char(10);
+  lib             char(10);
+end-ds;
+//
+//  QINACTMSGQ:   Inactive message queue
+dcl-ds qwcrsval_inactmsgq_t
+       qualified;
+  name            char(10);
+  lib             char(10);
+end-ds;
+//
+//  QIPLDATTIM:   Automatic IPL date and time  (value = CYYMMDDHHMMSS)
+dcl-ds qwcrsval_ipldattim_t
+       qualified;
+  value           char(13);
+  spcval          char(10) overlay(value);
+end-ds;
+//
+//  QPRBFTR:      Problem filter
+dcl-ds qwcrsval_prbftr_t
+       qualified;
+  name            char(10);
+  lib             char(10);
+end-ds;
+//
+//  QPWDVLDPGM:   Password validation program
+dcl-ds qwcrsval_pwdvldpgm_t
+       qualified;
+  name            char(10);
+  lib             char(10);
+end-ds;
+//
+//  QRMTSIGN:     Remote sign-on
+dcl-ds qwcrsval_rmtsign_t
+       qualified;
+  spcval          char(10);
+  pgm             char(10) overlay(spcval);
+  lib             char(10);
+end-ds;
+//
+//  QSCANFS:      Scan file systems
+dcl-ds qwcrsval_scanfs_t
+       qualified;
+  option          char(10) dim(20);
+end-ds;
+//
+//  QSCANFSCTL:   Scan file systems control
+dcl-ds qwcrsval_scanfsctl_t
+       qualified;
+  option          char(10) dim(20);
+end-ds;
+//
+//  QSETJOBATR:   Set job attributes from locale
+dcl-ds qwcrsval_setjobatr_t
+       qualified;
+  attr            char(10) dim(16);
+end-ds;
+//
+//  QSRTSEQ:      Sort sequence table
+dcl-ds qwcrsval_srtseq_t
+       qualified;
+  name            char(10);
+  lib             char(10);
+end-ds;
+//
+//  QSTRUPPGM:    Startup program name
+dcl-ds qwcrsval_struppgm_t
+       qualified;
+  name            char(10);
+  lib             char(10);
+end-ds;
+//
+//  QSYSLIBL:     System library list
+dcl-ds qwcrsval_syslibl_t
+       qualified;
+  lib             char(10) dim(15);
+end-ds;
+//
+//  QUSRLIBL:     User library list
+dcl-ds qwcrsval_usrlibl_t
+       qualified;
+  lib             char(10) dim(25);
+end-ds;
+//
+//  QUTCOFFSET:   Coordinated universal time offset
+dcl-ds qwcrsval_utcoffset_t
+       qualified;
+  timezoneid      char(1);
+  hours           char(2);
+  minutes         char(2);
+end-ds;
+//
+/endif

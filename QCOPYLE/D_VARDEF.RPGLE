@@ -1,183 +1,190 @@
-      /IF NOT DEFINED(D_VARDEF)
-      /DEFINE D_VARDEF
-      *===============================================================*
-      *    Deklaration von Variablengrundtypen & Konstanten           *
-      *===============================================================*
-      *
-      *  Referenzfelder:
-     D release_t       S             17A   template
-     D version_t       S              9A   template
-     D commitLvl_t     S              9A   template
-     D choice_t        S             75A   template
-     D headerType_t    S             10A   template
-     D attr_t          S             10A   template
-     D attrType_t      S              1A   template
-     D attrValue_t     S            512A   template
-     D dataType_t      S              1A   template
-     D accMode_t       S              1A   template
-     D bool_t          S              1A   template
-     D cmdBuffer_t     S          32702A   template
-     D copyRght_t      S                   like(msgDta_t) template
-     D dsp80_t         S                   like(bool_t) template
-     D fieldNme_t      S             10A   template
-     D file_t          S             10A   template
-     D fKeyDsp_t       S             18A   template
-     D fmt_t           S             10A   template
-     D fmtId_t         S             13A   template
-     D headTyp_t       S             10A   template
-      *
-     D hexBuf_t        S          65532A   template
-      *
-     D keyBuf_t        S           2000A   template
-     D KEY_BUFF_LEN    C                   const(2000)
-      *
-     D lib_t           S             10A   template
-     D mbr_t           S             10A   template
-     D mbrNbr_t        S             10I 0 template
-     D rcdFmt_t        S             10A   template
-     D text_t          S             50a   template
-     D colHeading_t    S            128A   varying template
-      *
-     D rcdFmtInf_t     DS                  qualified template
-     D  name                               like(rcdFmt_t)
-     D  id                                 like(fmtid_t)
-      *
-     D mod_t           S             10A   template
-     D msgDta_t        S            512A   template
-     D msgID_t         S              7A   template
-     D msgType_t       S             10A   template
-      *
-     D function_t      S             10A   template
-     D option_t        S             10A   template
-     D mode_t          S             10A   template
-     D type_t          S             10A   template
-     D operation_t     S             10A   template
-     D argument_t      S             63A   template
-     D sign_t          S              1A   template
-     D srchNbrs_t      S             10P 0 template
-     D format_t        S             10A   template
-     D color_t         S              1A   template
-     D language_t      S             10A   template
-     D prefix_t        S             10A   template
-     D buffer_t        S           1024A   template
-     D smallBuffer_t   S            128A   template
-     D keys_t          S              3A   template
-     D sfpau_t         S              2A   template
-      *
-     D pgm_t           S             10A   template
-     D pgmCallN_t      S             21A   template
-     D pgmCmd_t        S             10A   template
-     D pgmCmdDt_t      S            256A   template
-     D proc_t          S            256A   template
-     D rcdBuf_t        S          32766A   template
-     D rcdBufUcs2_t    S          16383C   template
-     D string_t        S          32767A   template
-      *
-     D rcdBuffer_t     DS                  qualified template
-     D  sbcs                      32766A
-     D  ucs2                      16383C   overlay(sbcs)
-     D RCD_BUFF_LEN    C                   const(32766)
-      *
-     D rcdNbr_t        S             10I 0 template
-     D nullMap_t       S              1S 0 dim(NULL_MAP_SIZE)
-     D NULL_MAP_SIZE   C                   const(8000)
-      *
-     D scnAid_t        S             10A   template
-     D sqlOrder_t      S            512A   template
-     D sqlWhere_t      S            512A   template
-     D sqlStmt_t       S           2000A   template
-     D user_t          S             10A   template
-      *
-     D qObj_t          DS                  qualified template
-     D  name                         10A
-     D  lib                          10A
-      *
-     D errCode_t       DS                  qualified template
-     D  bytPrv                       10I 0
-     D  bytAvl                       10I 0
-     D  excID                         7A
-     D  errRes_01                     1A
-     D  excDta                      256A
-      *
-      *  Feldinhalt für Text-/Hex-Editor
-     D fldInhalt_t     DS                  qualified template
-     D  sbcs                               like(rcdBuf_t)
-     D  ucs2                               like(rcdBufUcs2_t)
-     D                                     overlay(sbcs)
-      *
-      *  Verwaltung gepinnter Datensätze
-     D pinTabR_t       ds                  qualified template
-     D  rcdNbr                       10i 0
-     D  file                         10a
-     D  lib                          10a
-     D  mbr                          10a
-     D  rcdFmt                       10a
-     D  mbrNbr                       10I 0
-      *
-      *  Integer & Binärwerte:
-     D int1_t          S              3I 0 template
-     D int2_t          S              5I 0 template
-     D int4_t          S             10I 0 template
-     D uint4_t         S             10U 0 template
-      *
-      *  Lower/Upper case:
-     D cLOWER          C                   'abcdefghijklmnopqrstuvwxyzäöüß'
-     D cUPPER          C                   'ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜß'
-      *
-      *  Feedback Code:
-     D fc_t            S             12A   template
-      *
-     D NUMERIC_DIGITS  C                   '1234567890'
-      *
-      *  Grenzen für relative Satznummer
-     D LOW_RCD_NBR     C                   CONST(1)
-     D HIGH_RCD_NBR    C                   CONST(2147483647)
-      *
-      *  Access mode:
-     D accessMode_t    S              1A   template
-      *
-     D RRN_SEQ         C                   CONST('0')
-     D KEY_SEQ         C                   CONST('1')
-     D SQL_SEQ         C                   CONST('2')
-      *
-      *  Key-Input-Mode:
-     D KEY_MODE_LOWER  C                   CONST('1')
-     D KEY_MODE_UPPER  C                   CONST('0')
-      *
-      *  Update-Mode:
-     D UPD_M_DFT       C                   CONST('*')
-     D UPD_M_YES       C                   CONST('1')
-     D UPD_M_NOKEY     C                   CONST('2')
-     D UPD_M_NO        C                   CONST('0')
-      *
-      *  Boolsche Werte:
-     D bTrue           C                   CONST('1')
-     D bFalse          C                   CONST('0')
-     D bNotDef         C                   CONST('-')
-     D bEOF            C                   CONST('1')
-      *
-      *  Zustellarten von Nachrichten:
-     D MSG_T_INFO      C                   CONST('*INFO')
-     D MSG_T_INQ       C                   CONST('*INQ')
-     D MSG_T_RQS       C                   CONST('*RQS')
-     D MSG_T_COMP      C                   CONST('*COMP')
-     D MSG_T_DIAG      C                   CONST('*DIAG')
-     D MSG_T_NOTIFY    C                   CONST('*NOTIFY')
-     D MSG_T_ESCAPE    C                   CONST('*ESCAPE')
-     D MSG_T_STATUS    C                   CONST('*STATUS')
-      *
-      *  Modus:
-     D MODE_BATCH      C                   CONST('*BATCH')
-     D MODE_INTER      C                   CONST('*INTER')
-      *
-     D USRSPC_NAME     C                   '§PEEK§'
-     D USRSPC_LIBRARY  C                   'QTEMP'
-      *
-     D WORK_FILE_NAME...
-     D                 C                   'PEEKWRK'
-     D WORK_FILE_LIBRARY...
-     D                 C                   'QTEMP'
-     D WORK_FILE_MEMBER...
-     D                 C                   '*FIRST'
-      *
-      /ENDIF
+**FREE
+/IF NOT DEFINED(D_VARDEF)
+/DEFINE D_VARDEF
+//===============================================================*
+//    Deklaration von Variablengrundtypen & Konstanten           *
+//===============================================================*
+//
+//  Referenzfelder:
+dcl-s release_t       char(17) template;
+dcl-s version_t       char(9) template;
+dcl-s commitlvl_t     char(9) template;
+dcl-s choice_t        char(75) template;
+dcl-s headertype_t    char(10) template;
+dcl-s attr_t          char(10) template;
+dcl-s attrtype_t      char(1) template;
+dcl-s attrvalue_t     char(512) template;
+dcl-s datatype_t      char(1) template;
+dcl-s accmode_t       char(1) template;
+dcl-s bool_t          char(1) template;
+dcl-s cmdbuffer_t     char(32702) template;
+dcl-s copyrght_t      like(msgdta_t) template;
+dcl-s dsp80_t         like(bool_t) template;
+dcl-s fieldnme_t      char(10) template;
+dcl-s file_t          char(10) template;
+dcl-s fkeydsp_t       char(18) template;
+dcl-s fmt_t           char(10) template;
+dcl-s fmtid_t         char(13) template;
+dcl-s headtyp_t       char(10) template;
+//
+dcl-s hexbuf_t        char(65532) template;
+//
+dcl-s keybuf_t        char(2000) template;
+dcl-c key_buff_len const(2000);
+//
+dcl-s lib_t           char(10) template;
+dcl-s mbr_t           char(10) template;
+dcl-s mbrnbr_t        int(10) template;
+dcl-s rcdfmt_t        char(10) template;
+dcl-s text_t          char(50) template;
+dcl-s colheading_t    varchar(128) template;
+//
+dcl-ds rcdfmtinf_t qualified template;
+  name            like(rcdfmt_t);
+  id              like(fmtid_t);
+end-ds;
+//
+dcl-s mod_t           char(10) template;
+dcl-s msgdta_t        char(512) template;
+dcl-s msgid_t         char(7) template;
+dcl-s msgtype_t       char(10) template;
+//
+dcl-s function_t      char(10) template;
+dcl-s option_t        char(10) template;
+dcl-s mode_t          char(10) template;
+dcl-s type_t          char(10) template;
+dcl-s operation_t     char(10) template;
+dcl-s argument_t      char(63) template;
+dcl-s sign_t          char(1) template;
+dcl-s srchnbrs_t      packed(10) template;
+dcl-s format_t        char(10) template;
+dcl-s color_t         char(1) template;
+dcl-s language_t      char(10) template;
+dcl-s prefix_t        char(10) template;
+dcl-s buffer_t        char(1024) template;
+dcl-s smallbuffer_t   char(128) template;
+dcl-s keys_t          char(3) template;
+dcl-s sfpau_t         char(2) template;
+//
+dcl-s pgm_t           char(10) template;
+dcl-s pgmcalln_t      char(21) template;
+dcl-s pgmcmd_t        char(10) template;
+dcl-s pgmcmddt_t      char(256) template;
+dcl-s proc_t          char(256) template;
+dcl-s rcdbuf_t        char(32766) template;
+dcl-s rcdbufucs2_t    ucs2(16383) template;
+dcl-s string_t        char(32767) template;
+//
+dcl-ds rcdbuffer_t qualified template;
+  sbcs            char(32766);
+  ucs2            ucs2(16383) overlay(sbcs);
+end-ds;
+dcl-c rcd_buff_len const(32766);
+//
+dcl-s rcdnbr_t        int(10) template;
+dcl-s nullmap_t       zoned(1) dim(null_map_size);
+dcl-c null_map_size const(8000);
+//
+dcl-s scnaid_t        char(10) template;
+dcl-s sqlorder_t      char(512) template;
+dcl-s sqlwhere_t      char(512) template;
+dcl-s sqlstmt_t       char(2000) template;
+dcl-s user_t          char(10) template;
+//
+dcl-ds qobj_t qualified template;
+  name            char(10);
+  lib             char(10);
+end-ds;
+//
+dcl-ds errcode_t qualified template;
+  bytprv          int(10);
+  bytavl          int(10);
+  excid           char(7);
+  errres_01       char(1);
+  excdta          char(256);
+end-ds;
+//
+//  Feldinhalt für Text-/Hex-Editor
+dcl-ds fldinhalt_t qualified template;
+  sbcs            like(rcdbuf_t);
+  ucs2            like(rcdbufucs2_t)
+       overlay(sbcs);
+end-ds;
+//
+//  Verwaltung gepinnter Datensätze
+dcl-ds pintabr_t qualified template;
+  rcdnbr          int(10);
+  file            char(10);
+  lib             char(10);
+  mbr             char(10);
+  rcdfmt          char(10);
+  mbrnbr          int(10);
+end-ds;
+//
+//  Integer & Binärwerte:
+dcl-s int1_t          int(3) template;
+dcl-s int2_t          int(5) template;
+dcl-s int4_t          int(10) template;
+dcl-s uint4_t         uns(10) template;
+//
+//  Lower/Upper case:
+dcl-c clower 'abcdefghijklmnopqrstuvwxyzäöüß';
+dcl-c cupper 'ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜß';
+//
+//  Feedback Code:
+dcl-s fc_t            char(12) template;
+//
+dcl-c numeric_digits '1234567890';
+//
+//  Grenzen für relative Satznummer
+dcl-c low_rcd_nbr const(1);
+dcl-c high_rcd_nbr const(2147483647);
+//
+//  Access mode:
+dcl-s accessmode_t    char(1) template;
+//
+dcl-c rrn_seq const('0');
+dcl-c key_seq const('1');
+dcl-c sql_seq const('2');
+//
+//  Key-Input-Mode:
+dcl-c key_mode_lower const('1');
+dcl-c key_mode_upper const('0');
+//
+//  Update-Mode:
+dcl-c upd_m_dft const('*');
+dcl-c upd_m_yes const('1');
+dcl-c upd_m_nokey const('2');
+dcl-c upd_m_no const('0');
+//
+//  Boolsche Werte:
+dcl-c btrue const('1');
+dcl-c bfalse const('0');
+dcl-c bnotdef const('-');
+dcl-c beof const('1');
+//
+//  Zustellarten von Nachrichten:
+dcl-c msg_t_info const('*INFO');
+dcl-c msg_t_inq const('*INQ');
+dcl-c msg_t_rqs const('*RQS');
+dcl-c msg_t_comp const('*COMP');
+dcl-c msg_t_diag const('*DIAG');
+dcl-c msg_t_notify const('*NOTIFY');
+dcl-c msg_t_escape const('*ESCAPE');
+dcl-c msg_t_status const('*STATUS');
+//
+//  Modus:
+dcl-c mode_batch const('*BATCH');
+dcl-c mode_inter const('*INTER');
+//
+dcl-c usrspc_name '§PEEK§';
+dcl-c usrspc_library 'QTEMP';
+//
+dcl-c work_file_name
+      'PEEKWRK';
+dcl-c work_file_library
+      'QTEMP';
+dcl-c work_file_member
+      '*FIRST';
+//
+/ENDIF
