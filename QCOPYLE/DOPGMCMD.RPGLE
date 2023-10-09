@@ -1,3 +1,7 @@
+         // The following statements must be included as a /copy book
+         // to avoid infinite loops when executing commands from
+         // c_readsfl -> doSlfCmd.
+
           isCancel = bFalse;
           isCmdErr = bFalse;
 
