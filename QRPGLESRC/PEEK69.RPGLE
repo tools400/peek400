@@ -54,8 +54,8 @@
       /COPY QCOPYLE,PPEEK27
       /COPY QCOPYLE,PPEEK70
 
-      /COPY QCOPYLE,F_PEEK53
-      /COPY QCOPYLE,F_PEEK58
+      /COPY QCOPYLE,PPEEK53
+      /COPY QCOPYLE,PPEEK58
 
        //  Retrieve Display Mode       Return value: Display Mode
        dcl-pr qsnrtvmod char(1) extproc('QsnRtvMod');

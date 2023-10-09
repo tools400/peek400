@@ -38,8 +38,8 @@
       /COPY QCOPYLE,PPEEK31
       /undefine internal_prototype
 
-      /COPY QCOPYLE,F_PEEK53
-      /COPY QCOPYLE,F_PEEK58
+      /COPY QCOPYLE,PPEEK53
+      /COPY QCOPYLE,PPEEK58
 
        //*******************************************************************
        //                 S T E U E R  -  R O U T I N E                    *

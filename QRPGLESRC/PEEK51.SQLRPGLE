@@ -32,10 +32,10 @@
       /COPY QCOPYLE,D_INFDS
       /COPY QCOPYLE,FLDL0100
 
-      /COPY QCOPYLE,F_PEEK51
-      /COPY QCOPYLE,F_PEEK53
-      /COPY QCOPYLE,F_PEEK58
-      /COPY QCOPYLE,F_PEEK63
+      /COPY QCOPYLE,PPEEK51
+      /COPY QCOPYLE,PPEEK53
+      /COPY QCOPYLE,PPEEK58
+      /COPY QCOPYLE,PPEEK63
 
        dcl-pr f_isSqlErr      char(1);
          o_msgid         like(msgid_t);

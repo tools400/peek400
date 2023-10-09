@@ -37,7 +37,7 @@
       /COPY QCOPYLE,QUSRJOBI
       /COPY QCOPYLE,QMHSNDPM
 
-      /COPY QCOPYLE,F_PEEK61
+      /COPY QCOPYLE,PPEEK61
 
        //  Global fields
        dcl-s g_text          varchar(21);

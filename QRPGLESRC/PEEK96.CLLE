@@ -230,20 +230,20 @@
        /*                 TOFILE(&NEWLIB/QCOPYLE) FROMMBR(FLDL0100  ) +     */
        /*                 TOMBR(FLDL0100) MBROPT(*ADD) CRTFILE(*NO)         */
        /*    CPYF       FROMFILE(&DEVLIB/QCOPYLE) +                         */
-       /*                 TOFILE(&NEWLIB/QCOPYLE) FROMMBR(F_PEEK53  ) +     */
-       /*                 TOMBR(F_PEEK58) MBROPT(*ADD) CRTFILE(*NO)         */
+       /*                 TOFILE(&NEWLIB/QCOPYLE) FROMMBR(PPEEK53  ) +     */
+       /*                 TOMBR(PPEEK58) MBROPT(*ADD) CRTFILE(*NO)         */
        /*    CPYF       FROMFILE(&DEVLIB/QCOPYLE) +                         */
-       /*                 TOFILE(&NEWLIB/QCOPYLE) FROMMBR(F_PEEK58  ) +     */
-       /*                 TOMBR(F_PEEK58) MBROPT(*ADD) CRTFILE(*NO)         */
+       /*                 TOFILE(&NEWLIB/QCOPYLE) FROMMBR(PPEEK58  ) +     */
+       /*                 TOMBR(PPEEK58) MBROPT(*ADD) CRTFILE(*NO)         */
        /*    CPYF       FROMFILE(&DEVLIB/QCOPYLE) +                         */
        /*                 TOFILE(&NEWLIB/QCOPYLE) FROMMBR(QCMDEXC   ) +     */
-       /*                 TOMBR(F_PEEK61) MBROPT(*ADD) CRTFILE(*NO)         */
+       /*                 TOMBR(PPEEK61) MBROPT(*ADD) CRTFILE(*NO)         */
        /*    CPYF       FROMFILE(&DEVLIB/QCOPYLE) +                         */
        /*                 TOFILE(&NEWLIB/QCOPYLE) FROMMBR(CEECNDHDLR) +     */
-       /*                 TOMBR(F_PEEK63) MBROPT(*ADD) CRTFILE(*NO)         */
+       /*                 TOMBR(PPEEK63) MBROPT(*ADD) CRTFILE(*NO)         */
        /*    CPYF       FROMFILE(&DEVLIB/QCOPYLE) +                         */
        /*                 TOFILE(&NEWLIB/QCOPYLE) FROMMBR(QTNRCMTI  ) +     */
-       /*                 TOMBR(F_PEEK71) MBROPT(*ADD) CRTFILE(*NO)         */
+       /*                 TOMBR(PPEEK71) MBROPT(*ADD) CRTFILE(*NO)         */
 
  /* -------------------------------------------------------------- */
  /* QCMDSRC    */

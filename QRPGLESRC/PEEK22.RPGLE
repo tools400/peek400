@@ -35,7 +35,7 @@
       /COPY QCOPYLE,PPEEK22
       /undefine internal_prototype
 
-      /COPY QCOPYLE,F_PEEK53
+      /COPY QCOPYLE,PPEEK53
 
        dcl-s wrk_sectn       like(section_t) inz;
        dcl-s wrk_key         like(key_t) inz;

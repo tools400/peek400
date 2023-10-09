@@ -61,11 +61,11 @@
 
        dcl-s classname_t varchar(62) template;
 
-      /COPY QCOPYLE,F_PEEK71
+      /COPY QCOPYLE,PPEEK71
 
       /COPY QCOPYLE,D_CLIB                         C-Runtime Library
-      /COPY QCOPYLE,F_PEEK53                       Zugriff auf Benutzerdaten
-      /COPY QCOPYLE,F_PEEK58                       Allgemeine Routinen
+      /COPY QCOPYLE,PPEEK53                       Zugriff auf Benutzerdaten
+      /COPY QCOPYLE,PPEEK58                       Allgemeine Routinen
       /COPY QCOPYLE,QUSRJOBI                       Retrieve Job Information (QUSRJOBI) API
 
        // ------------------------------------

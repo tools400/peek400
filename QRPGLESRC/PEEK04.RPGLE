@@ -40,8 +40,8 @@
       /undefine internal_prototype
 
       /COPY QCOPYLE,PPEEK41
-      /COPY QCOPYLE,F_PEEK53
-      /COPY QCOPYLE,F_PEEK58
+      /COPY QCOPYLE,PPEEK53
+      /COPY QCOPYLE,PPEEK58
 
        dcl-s peek41_name     like(pgmcalln_t) inz;
 

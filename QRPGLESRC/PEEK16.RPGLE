@@ -249,9 +249,9 @@
        //  Steuerleiste
        //====================================================*
 
-      /COPY QCOPYLE,F_PEEK53
-      /COPY QCOPYLE,F_PEEK58
-      /COPY QCOPYLE,F_PEEK61
+      /COPY QCOPYLE,PPEEK53
+      /COPY QCOPYLE,PPEEK58
+      /COPY QCOPYLE,PPEEK61
 
       /COPY QCOPYLE,CEECNDHDLR
 

@@ -51,8 +51,8 @@
       /COPY QCOPYLE,PPEEK28
       /COPY QCOPYLE,PPEEK29
 
-      /COPY QCOPYLE,F_PEEK53
-      /COPY QCOPYLE,F_PEEK58
+      /COPY QCOPYLE,PPEEK53
+      /COPY QCOPYLE,PPEEK58
 
        dcl-s usrspcdta       char(64) based(pspcptr);
        dcl-s ysrlnbrext      like(r_srlnbr );

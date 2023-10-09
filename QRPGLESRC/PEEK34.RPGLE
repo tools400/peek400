@@ -74,8 +74,8 @@
       /COPY QCOPYLE,PPEEK25
       /COPY QCOPYLE,PPEEK35
 
-      /COPY QCOPYLE,F_PEEK53
-      /COPY QCOPYLE,F_PEEK58
+      /COPY QCOPYLE,PPEEK53
+      /COPY QCOPYLE,PPEEK58
 
        //----------------------------------------------------*
        //  I N F D S - D E F I N I T I O N E N               *

@@ -75,8 +75,8 @@
       /COPY QCOPYLE,PPEEK39
       /undefine internal_prototype
 
-      /COPY QCOPYLE,F_PEEK53
-      /COPY QCOPYLE,F_PEEK58
+      /COPY QCOPYLE,PPEEK53
+      /COPY QCOPYLE,PPEEK58
 
        dcl-s size_t          uns(10) template;
 

@@ -43,8 +43,8 @@
       /undefine internal_prototype
 
       /COPY QCOPYLE,PPEEK11
-      /COPY QCOPYLE,F_PEEK53
-      /COPY QCOPYLE,F_PEEK58
+      /COPY QCOPYLE,PPEEK53
+      /COPY QCOPYLE,PPEEK58
 
        dcl-ds rcdl0200 likeds(rcdl0200_t) inz;
 

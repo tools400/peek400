@@ -36,8 +36,8 @@
       /COPY QCOPYLE,PPEEK27
       /undefine internal_prototype
 
-      /COPY QCOPYLE,F_PEEK53
-      /COPY QCOPYLE,F_PEEK58
+      /COPY QCOPYLE,PPEEK53
+      /COPY QCOPYLE,PPEEK58
 
        dcl-s i               like(int4_t) inz;
        dcl-s x               like(int4_t) inz;

@@ -40,8 +40,8 @@
       /COPY QCOPYLE,PPEEK36
       /undefine internal_prototype
 
-      /COPY QCOPYLE,F_PEEK53
-      /COPY QCOPYLE,F_PEEK58
+      /COPY QCOPYLE,PPEEK53
+      /COPY QCOPYLE,PPEEK58
 
        dcl-s r_dateiso       date(*iso) inz(*loval );
        dcl-s r_dateeur       date(*eur) inz(*loval );

@@ -1,5 +1,5 @@
-      /IF NOT DEFINED(F_PEEK61)
-      /DEFINE F_PEEK61
+      /IF NOT DEFINED(PPEEK61)
+      /DEFINE PPEEK61
       *
       *  Initialize Progress Meter
      D p_inzProgressMeter...

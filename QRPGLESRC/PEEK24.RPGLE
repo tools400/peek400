@@ -53,8 +53,8 @@
       /COPY QCOPYLE,PPEEK23
       /COPY QCOPYLE,PPEEK25
 
-      /COPY QCOPYLE,F_PEEK53
-      /COPY QCOPYLE,F_PEEK58
+      /COPY QCOPYLE,PPEEK53
+      /COPY QCOPYLE,PPEEK58
 
        dcl-s ymsgid          char(7) inz(*blanks);
        dcl-s ymsgdta         char(512) inz(*blanks);

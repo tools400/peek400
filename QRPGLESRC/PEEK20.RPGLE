@@ -53,8 +53,8 @@
       /COPY QCOPYLE,SET0003
 
       /COPY QCOPYLE,PPEEK18
-      /COPY QCOPYLE,F_PEEK53
-      /COPY QCOPYLE,F_PEEK58
+      /COPY QCOPYLE,PPEEK53
+      /COPY QCOPYLE,PPEEK58
 
        //----------------------------------------------------*
        //  F E L D - D E F I N I T I O N E N                 *

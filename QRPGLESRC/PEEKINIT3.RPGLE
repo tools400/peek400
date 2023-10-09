@@ -39,7 +39,7 @@
       *
       /COPY QCOPYLE,D_VARDEF
       /COPY QCOPYLE,SET0004                        Spracheinstellungen
-      /COPY QCOPYLE,F_PEEK53
+      /COPY QCOPYLE,PPEEK53
       *
       ********************************************************************
       *                 S T E U E R  -  R O U T I N E                    *

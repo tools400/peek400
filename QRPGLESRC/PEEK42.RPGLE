@@ -59,9 +59,9 @@
       /COPY QCOPYLE,PPEEK06
       /COPY QCOPYLE,PPEEK66
 
-      /COPY QCOPYLE,F_PEEK53
-      /COPY QCOPYLE,F_PEEK58
-      /COPY QCOPYLE,F_PEEK63
+      /COPY QCOPYLE,PPEEK53
+      /COPY QCOPYLE,PPEEK58
+      /COPY QCOPYLE,PPEEK63
 
        dcl-pr lf_rtvfldname varchar(10);
          i_buffer        const  like(r_shortcmd  );

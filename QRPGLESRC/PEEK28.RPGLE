@@ -35,8 +35,8 @@
       /COPY QCOPYLE,PPEEK28
       /undefine internal_prototype
 
-      /COPY QCOPYLE,F_PEEK53
-      /COPY QCOPYLE,F_PEEK58
+      /COPY QCOPYLE,PPEEK53
+      /COPY QCOPYLE,PPEEK58
 
        dcl-ds yrcvvar len(128) inz;
          rcvnbrret       int(10);

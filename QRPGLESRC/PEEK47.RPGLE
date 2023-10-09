@@ -54,8 +54,8 @@
       /COPY QCOPYLE,PPEEK27
       /COPY QCOPYLE,PPEEK46
 
-      /COPY QCOPYLE,F_PEEK53
-      /COPY QCOPYLE,F_PEEK58
+      /COPY QCOPYLE,PPEEK53
+      /COPY QCOPYLE,PPEEK58
 
        dcl-s yfkeys          char(18) dim(32);
        dcl-s ynbrofkeys      like(int4_t);

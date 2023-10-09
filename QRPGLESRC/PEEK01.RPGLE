@@ -45,9 +45,9 @@
       /undefine internal_prototype
 
       /COPY QCOPYLE,PPEEK02
-      /COPY QCOPYLE,F_PEEK53
-      /COPY QCOPYLE,F_PEEK58
-      /COPY QCOPYLE,F_PEEK71
+      /COPY QCOPYLE,PPEEK53
+      /COPY QCOPYLE,PPEEK58
+      /COPY QCOPYLE,PPEEK71
 
        dcl-ds set0001  likeds(set0001_t) inz;
        dcl-ds fldl0100 likeds(fldl0100_t) inz;

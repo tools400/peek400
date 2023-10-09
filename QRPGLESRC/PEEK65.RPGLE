@@ -51,9 +51,9 @@
       /COPY QCOPYLE,PPEEK09
       /COPY QCOPYLE,PPEEK32
 
-      /COPY QCOPYLE,F_PEEK53
-      /COPY QCOPYLE,F_PEEK58
-      /COPY QCOPYLE,F_PEEK63
+      /COPY QCOPYLE,PPEEK53
+      /COPY QCOPYLE,PPEEK58
+      /COPY QCOPYLE,PPEEK63
 
        dcl-ds objd0400 likeds(objd0400_t) inz;
        dcl-ds fldl0100 likeds(fldl0100_t) inz;

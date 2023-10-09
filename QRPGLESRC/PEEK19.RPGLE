@@ -42,8 +42,8 @@
       /undefine internal_prototype
 
       /COPY QCOPYLE,PPEEK18
-      /COPY QCOPYLE,F_PEEK53
-      /COPY QCOPYLE,F_PEEK58
+      /COPY QCOPYLE,PPEEK53
+      /COPY QCOPYLE,PPEEK58
 
        dcl-s ybuffer     like(rcdbuf_t) inz;
        dcl-s youtbuffer  like(rcdbuf_t) inz;

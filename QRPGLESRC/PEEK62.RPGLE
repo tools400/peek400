@@ -48,8 +48,8 @@
       /COPY QCOPYLE,PPEEK62
       /undefine internal_prototype
 
-      /COPY QCOPYLE,F_PEEK53
-      /COPY QCOPYLE,F_PEEK58
+      /COPY QCOPYLE,PPEEK53
+      /COPY QCOPYLE,PPEEK58
 
        dcl-s long_t          int(10) template;
        dcl-s short_t         int(5) template;

@@ -40,8 +40,8 @@
       /COPY QCOPYLE,PPEEK54
       /undefine internal_prototype
 
-      /COPY QCOPYLE,F_PEEK53
-      /COPY QCOPYLE,F_PEEK58
+      /COPY QCOPYLE,PPEEK53
+      /COPY QCOPYLE,PPEEK58
 
        dcl-pr p_main;
          i_file          value  like(gi_file   );

@@ -79,8 +79,8 @@
       /COPY QCOPYLE,PPEEK02
       /undefine internal_prototype
 
-      /COPY QCOPYLE,F_PEEK53
-      /COPY QCOPYLE,F_PEEK58
+      /COPY QCOPYLE,PPEEK53
+      /COPY QCOPYLE,PPEEK58
 
        dcl-ds qusrspc likeds(qobj_t) inz;
        dcl-s pspcptr         pointer;

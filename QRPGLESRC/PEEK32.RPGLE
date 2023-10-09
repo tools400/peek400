@@ -39,7 +39,7 @@
       /COPY QCOPYLE,PPEEK32
       /undefine internal_prototype
 
-      /COPY QCOPYLE,F_PEEK53
+      /COPY QCOPYLE,PPEEK53
 
        dcl-ds set0006  likeds(set0006_t) inz;
 

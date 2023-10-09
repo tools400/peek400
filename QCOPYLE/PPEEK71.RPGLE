@@ -1,5 +1,5 @@
-      /IF NOT DEFINED(F_PEEK71)
-      /DEFINE F_PEEK71
+      /IF NOT DEFINED(PPEEK71)
+      /DEFINE PPEEK71
       *
       *  Transcoder handle.
      D hTranscoder_t   S               *   template

@@ -49,8 +49,8 @@
       /COPY QCOPYLE,PPEEK09
       /undefine internal_prototype
 
-      /COPY QCOPYLE,F_PEEK53
-      /COPY QCOPYLE,F_PEEK58
+      /COPY QCOPYLE,PPEEK53
+      /COPY QCOPYLE,PPEEK58
 
        dcl-ds objd0400 likeds(objd0400_t) inz;
        dcl-ds errcode likeds(errcode_t) inz;

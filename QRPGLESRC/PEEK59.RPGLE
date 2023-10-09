@@ -79,8 +79,8 @@
       /COPY QCOPYLE,PPEEK21
       /COPY QCOPYLE,PPEEK23
 
-      /COPY QCOPYLE,F_PEEK53
-      /COPY QCOPYLE,F_PEEK58
+      /COPY QCOPYLE,PPEEK53
+      /COPY QCOPYLE,PPEEK58
 
        dcl-s $$fkey          like($$fkey01) dim(24);
 
