@@ -32,45 +32,35 @@
              /* GOTO       CMDLBL(CRTOBJ) */
 
              /* ---------------------------------------------------- */
+             /*  Create XML installation utility.                    */
+             /* ---------------------------------------------------- */
+
+             CRTBNDRPG  PGM(QTEMP/A_XMLINST) SRCFILE(&DEVLIB/QXML) +
+                          SRCMBR(*PGM) DBGVIEW(*LIST)
+
+             /* ---------------------------------------------------- */
              /*  Create utility CRTMSGDS                             */
              /* ---------------------------------------------------- */
 
-             CRTMSGF    MSGF(&DEVLIB/CRTMSGDS) +
-                          TEXT('Create Message Data Structure Utility')
+             CALL       PGM(QTEMP/A_XMLINST) PARM('CRTMSGDS' 'QXML' &DEVLIB)
 
-             CRTCLPGM   PGM(QTEMP/#MSG_GER) +
-                          SRCFILE(&DEVLIB/QCRTMSGDS) SRCMBR(*PGM)
+             /* ---------------------------------------------------- */
+             /*  Create service program BASICS1                      */
+             /* ---------------------------------------------------- */
 
-             CALL       PGM(QTEMP/#MSG_GER) PARM(&DEVLIB)
+             CALL       PGM(QTEMP/A_XMLINST) PARM('BASICS1' 'QXML' &DEVLIB)
 
-             DLTPGM     PGM(QTEMP/#MSG_GER)
+             /* ---------------------------------------------------- */
+             /*  Create service program PRTLOG                       */
+             /* ---------------------------------------------------- */
 
-             CRTCMD     CMD(&DEVLIB/CRTMSGDS) PGM(&DEVLIB/CRTMSGDSC) +
-                          SRCFILE(&DEVLIB/QCRTMSGDS) SRCMBR(*CMD) +
-                          HLPPNLGRP(&DEVLIB/CRTMSGDSP) +
-                          HLPID(CRTMSGDS)
+             CALL       PGM(QTEMP/A_XMLINST) PARM('PRTLOG' 'QXML' &DEVLIB)
 
-             CRTPNLGRP  PNLGRP(&DEVLIB/CRTMSGDSP) +
-                          SRCFILE(&DEVLIB/QCRTMSGDS) SRCMBR(*PNLGRP)
+             /* ---------------------------------------------------- */
+             /*  Delete XML installation utility.                    */
+             /* ---------------------------------------------------- */
 
-             CRTCLMOD   MODULE(&DEVLIB/CRTMSGDSC) +
-                          SRCFILE(&DEVLIB/QCRTMSGDS) SRCMBR(*MODULE) +
-                          DBGVIEW(*LIST) TGTRLS(&TGTRLS)
-
-             CRTRPGMOD  MODULE(&DEVLIB/CRTMSGDSR1) +
-                          SRCFILE(&DEVLIB/QCRTMSGDS) SRCMBR(*MODULE) +
-                          TRUNCNBR(*NO) DBGVIEW(*LIST) TGTRLS(&TGTRLS)
-
-             CRTRPGMOD  MODULE(&DEVLIB/CRTMSGDSR2) +
-                          SRCFILE(&DEVLIB/QCRTMSGDS) SRCMBR(*MODULE) +
-                          TRUNCNBR(*NO) DBGVIEW(*LIST) TGTRLS(&TGTRLS)
-
-             CRTPGM     PGM(&DEVLIB/CRTMSGDSC) +
-                          MODULE(&DEVLIB/CRTMSGDSC +
-                                 &DEVLIB/CRTMSGDSR1 &DEVLIB/CRTMSGDSR2) +
-                          ACTGRP(*NEW) TGTRLS(&TGTRLS)
-
-             DLTMOD     MODULE(&DEVLIB/CRTMSGDS*)
+             DLTPGM     PGM(QTEMP/A_XMLINST)
 
              /* ---------------------------------------------------- */
              /*  Create compile data area                            */
@@ -213,31 +203,31 @@
                           TEXT('Peek/400 - Englische Übersetzung') CCSID(*HEX)
              CRTCLPGM   PGM(&DEVLIB/PEEKENG) +
                           SRCFILE(&DEVLIB/QMSG_ENG) SRCMBR(*PGM) TGTRLS(&TGTRLS)
-             CALL       PGM(&DEVLIB/PEEKENG) PARM(&DEVLIB)
+             CALL       PGM(&DEVLIB/PEEKENG) PARM(&DEVLIB 'PEEKENG')
 
              CRTMSGF    MSGF(&DEVLIB/PEEKFRA) +
                           TEXT('Peek/400 - Französische Übersetzung') CCSID(*HEX)
              CRTCLPGM   PGM(&DEVLIB/PEEKFRA) +
                           SRCFILE(&DEVLIB/QMSG_FRA) SRCMBR(*PGM) TGTRLS(&TGTRLS)
-             CALL       PGM(&DEVLIB/PEEKFRA) PARM(&DEVLIB)
+             CALL       PGM(&DEVLIB/PEEKFRA) PARM(&DEVLIB 'PEEKFRA')
 
              CRTMSGF    MSGF(&DEVLIB/PEEKGER) +
                           TEXT('Peek/400 - Deutsche Übersetzung') CCSID(*HEX)
              CRTCLPGM   PGM(&DEVLIB/PEEKGER) +
                           SRCFILE(&DEVLIB/QMSG_GER) SRCMBR(*PGM) TGTRLS(&TGTRLS)
-             CALL       PGM(&DEVLIB/PEEKGER) PARM(&DEVLIB)
+             CALL       PGM(&DEVLIB/PEEKGER) PARM(&DEVLIB 'PEEKGER')
 
              CRTMSGF    MSGF(&DEVLIB/PEEKITA) +
                           TEXT('Peek/400 - Italienische Übersetzung') CCSID(*HEX)
              CRTCLPGM   PGM(&DEVLIB/PEEKITA) +
                           SRCFILE(&DEVLIB/QMSG_ITA) SRCMBR(*PGM) TGTRLS(&TGTRLS)
-             CALL       PGM(&DEVLIB/PEEKITA) PARM(&DEVLIB)
+             CALL       PGM(&DEVLIB/PEEKITA) PARM(&DEVLIB 'PEEKITA')
 
              CRTMSGF    MSGF(&DEVLIB/PEEKSPA) +
                           TEXT('Peek/400 - Spanische Übersetzung') CCSID(*HEX)
              CRTCLPGM   PGM(&DEVLIB/PEEKSPA) +
                           SRCFILE(&DEVLIB/QMSG_SPA) SRCMBR(*PGM) TGTRLS(&TGTRLS)
-             CALL       PGM(&DEVLIB/PEEKSPA) PARM(&DEVLIB)
+             CALL       PGM(&DEVLIB/PEEKSPA) PARM(&DEVLIB 'PEEKSPA')
 
              /* ---------------------------------------------------- */
              /*  Create command: PEEK                                */
@@ -371,6 +361,9 @@ CRTOBJ:
              CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
              CHGVAR     VAR(&SRCMBR) VALUE('PEEK71') /* Character Translation Services */
              CALLSUBR   SUBR(CMPOBJ)
+
+             CRTCMD     CMD(&LI/CRTPEEKOBJ) SRCFILE(&SL/&SF) SRCMBR(&SM) +
+                          PGM(&LI/PEEK99)
 
              /* ---------------------------------------------------- */
              /*  Compile PEEK application display & printer files    */
