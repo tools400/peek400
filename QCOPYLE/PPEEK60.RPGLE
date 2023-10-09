@@ -1,9 +1,10 @@
+**FREE
 
-      /if defined(internal_prototype)
-     D PEEK60          PR                  extpgm('PEEK60')
-      /else
-     D PEEK60          PR                  extpgm(PEEK60_NAME)
-      /endif
-     D  i_alwLC                            const like(bool_t)
-     D  o_numPasses                              like(int4_t)
-      *
+/if defined(internal_prototype)
+dcl-pr peek60 extpgm('PEEK60');
+/else
+dcl-pr peek60 extpgm(peek60_name);
+/endif
+  i_alwlc                            const like(bool_t);
+  o_numpasses                              like(int4_t);
+end-pr;

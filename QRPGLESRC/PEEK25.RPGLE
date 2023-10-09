@@ -79,9 +79,9 @@
 
        dcl-pi peek25;
          i_dsp80         const like(dsp80_t);
-         o_colorattr     char(1);
-         o_msgid         like(msgid_t);
-         o_msgdta        like(msgdta_t);
+         o_colorattr           like(color_t);
+         o_msgid               like(msgid_t);
+         o_msgdta              like(msgdta_t);
        end-pi;
        //---------------------------------------------------*
 

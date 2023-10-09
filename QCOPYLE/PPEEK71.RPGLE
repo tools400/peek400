@@ -1,105 +1,116 @@
-      /IF NOT DEFINED(PPEEK71)
-      /DEFINE PPEEK71
-      *
-      *  Transcoder handle.
-     D hTranscoder_t   S               *   template
-      *
-      *  Returns a Transcoder to convert from a
-      *  given CCSID to the job CCSID.
-     D Transcoder_toJobCcsid...
-     D                 PR                         like(hTranscoder_t )
-     D                                     extproc('PEEK71_+
-     D                                     Transcoder_toJobCcsid+
-     D                                     ')
-     D  i_fromCcsid                  10U 0 const
-      *
-      *  Returns a Transcoder to convert from a
-      *  given CCSID to the CCSID of the file field.
-     D Transcoder_toFieldCcsid...
-     D                 PR                         like(hTranscoder_t )
-     D                                     extproc('PEEK71_+
-     D                                     Transcoder_toFieldCcsid+
-     D                                     ')
-     D  i_toCcsid                    10U 0 const
-      *
-      *  Initializes character translation.
-     D Transcoder_new...
-     D                 PR                         like(hTranscoder_t )
-     D                                     extproc('PEEK71_+
-     D                                     Transcoder_new+
-     D                                     ')
-     D  i_toCcsid                    10U 0 const
-     D  i_fromCcsid                  10U 0 const
-      *
-      *  Translate a given buffer using dynamic memory allocation.
-     D Transcoder_xlateRaw...
-     D                 PR            10I 0 opdesc
-     D                                     extproc('PEEK71_+
-     D                                     Transcoder_xlateRaw+
-     D                                     ')
-     D  i_hTranscoder                      const  like(hTranscoder_t )
-     D  i_pInBuf                       *   value
-     D  i_size                       10I 0 const
-     D  o_pOutBuf                      *
-      *
-      *  Translate a given buffer.
-     D Transcoder_xlateBuffer...
-     D                 PR            10I 0 opdesc
-     D                                     extproc('PEEK71_+
-     D                                     Transcoder_xlateBuffer+
-     D                                     ')
-     D  i_hTranscoder                      const  like(hTranscoder_t )
-     D  i_pInBuf                       *   value
-     D  i_size                       10I 0 const
-     D  i_maxSize                    10I 0 const  options(*nopass: *omit)
-      *
-      *  Translate a given varying string.
-     D Transcoder_xlateString...
-     D                 PR         32767A   opdesc varying
-     D                                     extproc('PEEK71_+
-     D                                     Transcoder_xlateString+
-     D                                     ')
-     D  i_hTranscoder                      const  like(hTranscoder_t )
-     D  i_string                  32767A   const  varying options(*varsize)
-      *
-      *  Returns the "from CCSID".
-     D Transcoder_getFromCcsid...
-     D                 PR            10I 0
-     D                                     extproc('PEEK71_+
-     D                                     Transcoder_getFromCcsid+
-     D                                     ')
-     D  i_hTranscoder                      const  like(hTranscoder_t )
-      *
-      *  Returns the "to CCSID".
-     D Transcoder_getToCcsid...
-     D                 PR            10I 0
-     D                                     extproc('PEEK71_+
-     D                                     Transcoder_getToCcsid+
-     D                                     ')
-     D  i_hTranscoder                      const  like(hTranscoder_t )
-      *
-      *  Terminates character translation.
-     D Transcoder_delete...
-     D                 PR
-     D                                     extproc('PEEK71_+
-     D                                     Transcoder_delete+
-     D                                     ')
-     D  io_hTranscoder...
-     D                                            like(hTranscoder_t )
-      *
-      *  Returns a Transcoder NULL-handle.
-     D Transcoder_null...
-     D                 PR                         like(hTranscoder_t )
-     D                                     extproc('PEEK71_+
-     D                                     Transcoder_null+
-     D                                     ')
-      *
-      *  Returns cTrue if a given Transcoder handle is NULL.
-     D Transcoder_isNull...
-     D                 PR              N
-     D                                     extproc('PEEK71_+
-     D                                     Transcoder_isNull+
-     D                                     ')
-     D  i_hTranscoder                      const  like(hTranscoder_t )
-      *
-      /ENDIF
+**FREE
+/IF NOT DEFINED(PPEEK71)
+/DEFINE PPEEK71
+
+//  Transcoder handle.
+dcl-s htranscoder_t   pointer template;
+
+//  Returns a Transcoder to convert from a
+//  given CCSID to the job CCSID.
+dcl-pr transcoder_tojobccsid
+       like(htranscoder_t )
+       extproc('PEEK71_+
+       Transcoder_toJobCcsid+
+       ');
+  i_fromccsid     uns(10) const;
+end-pr;
+
+//  Returns a Transcoder to convert from a
+//  given CCSID to the CCSID of the file field.
+dcl-pr transcoder_tofieldccsid
+       like(htranscoder_t )
+       extproc('PEEK71_+
+       Transcoder_toFieldCcsid+
+       ');
+  i_toccsid       uns(10) const;
+end-pr;
+
+//  Initializes character translation.
+dcl-pr transcoder_new
+       like(htranscoder_t )
+       extproc('PEEK71_+
+       Transcoder_new+
+       ');
+  i_toccsid       uns(10) const;
+  i_fromccsid     uns(10) const;
+end-pr;
+
+//  Translate a given buffer using dynamic memory allocation.
+dcl-pr transcoder_xlateraw
+       int(10) opdesc
+       extproc('PEEK71_+
+       Transcoder_xlateRaw+
+       ');
+  i_htranscoder   const  like(htranscoder_t );
+  i_pinbuf        pointer value;
+  i_size          int(10) const;
+  o_poutbuf       pointer;
+end-pr;
+
+//  Translate a given buffer.
+dcl-pr transcoder_xlatebuffer
+       int(10) opdesc
+       extproc('PEEK71_+
+       Transcoder_xlateBuffer+
+       ');
+  i_htranscoder   const  like(htranscoder_t );
+  i_pinbuf        pointer value;
+  i_size          int(10) const;
+  i_maxsize       int(10) const  options(*nopass: *omit);
+end-pr;
+
+//  Translate a given varying string.
+dcl-pr transcoder_xlatestring
+       varchar(32767) opdesc
+       extproc('PEEK71_+
+       Transcoder_xlateString+
+       ');
+  i_htranscoder   const  like(htranscoder_t );
+  i_string        varchar(32767) const   options(*varsize);
+end-pr;
+
+//  Returns the "from CCSID".
+dcl-pr transcoder_getfromccsid
+       int(10)
+       extproc('PEEK71_+
+       Transcoder_getFromCcsid+
+       ');
+  i_htranscoder   const  like(htranscoder_t );
+end-pr;
+
+//  Returns the "to CCSID".
+dcl-pr transcoder_gettoccsid
+       int(10)
+       extproc('PEEK71_+
+       Transcoder_getToCcsid+
+       ');
+  i_htranscoder   const  like(htranscoder_t );
+end-pr;
+
+//  Terminates character translation.
+dcl-pr transcoder_delete
+       extproc('PEEK71_+
+       Transcoder_delete+
+       ');
+  io_htranscoder
+       like(htranscoder_t );
+end-pr;
+
+//  Returns a Transcoder NULL-handle.
+dcl-pr transcoder_null
+       like(htranscoder_t )
+       extproc('PEEK71_+
+       Transcoder_null+
+       ');
+end-pr;
+
+//  Returns cTrue if a given Transcoder handle is NULL.
+dcl-pr transcoder_isnull
+       ind
+       extproc('PEEK71_+
+       Transcoder_isNull+
+       ');
+  i_htranscoder   const  like(htranscoder_t );
+end-pr;
+
+/ENDIF

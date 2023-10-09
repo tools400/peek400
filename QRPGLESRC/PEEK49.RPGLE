@@ -78,13 +78,11 @@
        dcl-pi peek49;
          i_dsp80         const like(dsp80_t);
          i_copyright     const like(copyrght_t);
-         i_release       char(17) const;
-         i_version       char(9) const;
-         o_msgid         like(msgid_t);
-         o_msgdta        like(msgdta_t);
+         i_release       const like(release_t);
+         i_version       const like(version_t);
+         o_msgid               like(msgid_t);
+         o_msgdta              like(msgdta_t);
        end-pi;
-
-       dcl-s do_x1           packed(7);
        //---------------------------------------------------*
 
        //  Register error handler

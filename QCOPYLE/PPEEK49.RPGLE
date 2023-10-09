@@ -1,13 +1,15 @@
+**FREE
 
-      /if defined(internal_prototype)
-     D PEEK49          PR                  extpgm('PEEK49')
-      /else
-     D PEEK49          PR                  extpgm(PEEK49_NAME)
-      /endif
-     D  i_dsp80                            const like(dsp80_t)
-     D  i_copyright                        const like(copyRght_t)
-     D  i_release                    17A   const
-     D  i_version                     9A   const
-     D  o_msgID                                  like(msgID_t)
-     D  o_msgDta                                 like(msgDta_t)
-      *
+/if defined(internal_prototype)
+dcl-pr peek49 extpgm('PEEK49');
+/else
+dcl-pr peek49 extpgm(peek49_name);
+/endif
+  i_dsp80                            const like(dsp80_t);
+  i_copyright                        const like(copyrght_t);
+  i_release                          const like(release_t);
+  i_version                          const like(version_t);
+  o_msgid                                  like(msgid_t);
+  o_msgdta                                 like(msgdta_t);
+end-pr;
+

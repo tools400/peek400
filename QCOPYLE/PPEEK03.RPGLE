@@ -1,13 +1,14 @@
-      *
-      /if defined(internal_prototype)
-     D PEEK03          PR                  extpgm('PEEK03')
-      /else
-     D PEEK03          PR                  extpgm(PEEK03_NAME)
-      /endif
-     D  i_qFile                            const likeds(qObj_t)
-     D  i_rcdFmt                           const like(fmt_t)
-     D  i_access                      1A   const
-     D  i_sqlOrder                  512A   const
-     D  o_msgID                                  like(msgID_t)
-     D  o_msgDta                                 like(msgDta_t)
-      *
+**FREE
+
+/if defined(internal_prototype)
+dcl-pr peek03 extpgm('PEEK03');
+/else
+dcl-pr peek03 extpgm(peek03_name);
+/endif
+  i_qfile                            const likeds(qobj_t);
+  i_rcdfmt                           const like(fmt_t);
+  i_access                           const like(accessMode_t);
+  i_sqlorder                         const like(sqlOrder_t);
+  o_msgid                                  like(msgid_t);
+  o_msgdta                                 like(msgdta_t);
+end-pr;

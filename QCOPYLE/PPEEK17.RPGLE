@@ -1,20 +1,21 @@
-      *
-      /if defined(internal_prototype)
-     D PEEK17          PR                  extpgm('PEEK17')
-      /else
-     D PEEK17          PR                  extpgm(PEEK17_NAME)
-      /endif
-     D  i_dsp80                            const like(bool_t)
-     D  i_copyright                        const like(copyRght_t)
-     D  i_qFile                            const like(qObj_t)
-     D  i_member                           const like(mbr_t)
-     D  o_field                      10A
-     D  o_operation                  10A
-     D  o_argument                   63A
-     D  o_sign                        1A
-     D  o_srchNbrs                   10P 0
-     D  o_srchType                   10A
-     D  o_srchCase                    1A
-     D  o_msgId                                  like(msgId_t)
-     D  o_msgDta                                 like(msgDta_t)
-      *
+**FREE
+
+/if defined(internal_prototype)
+dcl-pr peek17 extpgm('PEEK17');
+/else
+dcl-pr peek17 extpgm(peek17_name);
+/endif
+  i_dsp80                            const like(bool_t);
+  i_copyright                        const like(copyrght_t);
+  i_qfile                            const like(qobj_t);
+  i_member                           const like(mbr_t);
+  o_field                                  like(fieldNme_t);
+  o_operation                              like(operation_t);
+  o_argument                               like(argument_t);
+  o_sign                                   like(sign_t);
+  o_srchnbrs                               like(srchNbrs_t);
+  o_srchtype                               like(type_t);
+  o_srchcase                               like(bool_t);
+  o_msgid                                  like(msgid_t);
+  o_msgdta                                 like(msgdta_t);
+end-pr;

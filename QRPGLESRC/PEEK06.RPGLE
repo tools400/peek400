@@ -124,14 +124,14 @@
 
        dcl-pi peek06;
          i_fldl0100      const likeds(fldl0100_t);
-       i_rcdfmt        const like(fmt_t);
-       i_srcvar        const like(rcdbuf_t);
-       i_qcmdexc       char(1) const;
-       i_cvtccsid      char(1) const;
-       o_string        like(rcdbuf_t);
-       o_strlen        like(int4_t);
-       o_msgid         like(msgid_t);
-       o_msgdta        like(msgdta_t);
+         i_rcdfmt        const like(fmt_t);
+         i_srcvar        const like(rcdbuf_t);
+         i_qcmdexc       const like(bool_t);
+         i_cvtccsid      const like(bool_t);
+         o_string              like(rcdbuf_t);
+         o_strlen              like(int4_t);
+         o_msgid               like(msgid_t);
+         o_msgdta              like(msgdta_t);
        end-pi;
 
        dcl-ds fldl0100 likeds(fldl0100_t) inz;

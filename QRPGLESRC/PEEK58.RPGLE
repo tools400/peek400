@@ -354,7 +354,7 @@
 
        dcl-proc f_bintodec export;
        dcl-pi *N opdesc like(int4_t);
-         i_string        char(32767) const options(*varsize);
+         i_string        const  like(string_t) options(*varsize);
          i_startpos      const  like(int4_t);
          i_length        const  like(int4_t);
        end-pi;
@@ -407,7 +407,7 @@
 
        dcl-proc f_len export;
        dcl-pi *N opdesc like(int4_t);
-         i_string        char(32767) const options(*varsize);
+         i_string        const like(string_t) options(*varsize);
        end-pi;
 
        // Parameters passed to CEEDOD
@@ -462,9 +462,9 @@
 
        dcl-proc f_vldname export;
        dcl-pi *N        like(bool_t);
-         i_name          char(10) const;
-         o_msgid         like(msgid_t);
-         o_msgdta        like(msgdta_t);
+         i_name          const  like(fieldNme_t);
+         o_msgid                like(msgid_t);
+         o_msgdta               like(msgdta_t);
        end-pi;
 
        //  Funktionswert
@@ -658,9 +658,9 @@
 
        dcl-proc f_execute export;
        dcl-pi *N opdesc like(bool_t);
-         i_cmd           char(32702) const options(*varsize);
-         o_msgid         like(msgid_t);
-         o_msgdta        like(msgdta_t);
+         i_cmd           const like(cmdBuffer_t) options(*varsize);
+         o_msgid               like(msgid_t);
+         o_msgdta              like(msgdta_t);
        end-pi;
 
        //  Definieren Funktionswert
@@ -1103,9 +1103,9 @@
 
        dcl-proc p_expstr export;
        dcl-pi *N opdesc;
-         o_string        char(32767) options(*varsize);
-         i_string        char(32767) const  options(*varsize);
-         i_stepval       int(10) const  options(*nopass);
+         o_string               like(string_t) options(*varsize);
+         i_string        const  like(string_t) options(*varsize);
+         i_stepval       const  like(int4_t) options(*nopass);
        end-pi;
 
        //  Parameterpositionen optionaler Parameter
@@ -2150,10 +2150,10 @@
 
        dcl-proc f_splttxt export;
        dcl-pi *N opdesc like(int4_t);
-         i_text          char(32767) const  options(*varsize);
+         i_text          const  like(string_t) options(*varsize);
          i_strpos        const  like(int4_t);
          i_len           const  like(int4_t);
-         o_text          char(32767) options(*varsize);
+         o_text                 like(string_t) options(*varsize);
        end-pi;
 
        //  Funktionswert
@@ -2259,7 +2259,7 @@
 
        dcl-proc p_center export;
        dcl-pi *N opdesc;
-         io_text         char(32767) options(*varsize);
+         io_text                like(string_t) options(*varsize);
        end-pi;
 
        //  Arbeitsfelder
@@ -2326,9 +2326,9 @@
        //===================================================================*
 
        dcl-proc f_addptr export;
-       dcl-pi *N              pointer;
+       dcl-pi *N pointer;
          i_pointer       pointer value;
-         i_offset        int(5) value;
+         i_offset        int(5)  value;
        end-pi;
 
        //  Arbeitsfelder
@@ -2406,10 +2406,10 @@
        //===============================================================*
 
        dcl-proc f_num_descr export;
-       dcl-pi *N              int(10);
-         i_type          int(3) value;
-         i_length        int(3) value;
-         i_fraction      int(3) value;
+       dcl-pi *N like(int4_t);
+         i_type          value  like(int1_t);
+         i_length        value  like(int1_t);
+         i_fraction      value  like(int1_t);
        end-pi;
 
        dcl-ds *N;
@@ -2436,10 +2436,10 @@
        //  f_NUM_Descr2
        //========================================================================*
        dcl-proc f_num_descr2 export;
-       dcl-pi *N              int(10);
-         i_type          char(1) value;
-         i_length        int(3) value;
-         i_fractional    int(3) value;
+       dcl-pi *N like(int4_t);
+         i_type          value  like(dataType_t);
+         i_length        value  like(int1_t);
+         i_fractional    value  like(int1_t);
        end-pi;
 
        //  Parameter positions

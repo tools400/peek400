@@ -1,10 +1,11 @@
+**FREE
 
-      /if defined(internal_prototype)
-     D PEEK33          PR                  extpgm('PEEK33')
-      /else
-     D PEEK33          PR                  extpgm(PEEK33_NAME)
-      /endif
-     D  i_version                     9A   const
-     D  o_msgID                                  like(msgID_t)
-     D  o_msgDta                                 like(msgDta_t)
-      *
+/if defined(internal_prototype)
+dcl-pr peek33 extpgm('PEEK33');
+/else
+dcl-pr peek33 extpgm(peek33_name);
+/endif
+  i_version                          const like(version_t);
+  o_msgid                                  like(msgid_t);
+  o_msgdta                                 like(msgdta_t);
+end-pr;

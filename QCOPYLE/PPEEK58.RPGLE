@@ -1,416 +1,458 @@
-      *
-      *============================================================*
-      *      Modul: Peek058                                        *
-      *============================================================*
-      *
-      *  Konstants: f_wordWrap()
-     D cWORDWRAP_PARAGRAPH_NONE...
-     D                 C                   const(1)
-     D cWORDWRAP_PARAGRAPH_MSGD...
-     D                 C                   const(2)
-     D cWORDWRAP_PARAGRAPH_TEXT...
-     D                 C                   const(4)
-     D cWORDWRAP_PARAGRAPH_TRIMR...
-     D                 C                   const(8)
-      *
-      *-------------------------------------------------------------------*
-     D f_dsplyLn       PR                         like(int4_t)
-     D  i_FLDL0100                         const  likeds(fldl0100_t)
-      *
-      *-------------------------------------------------------------------*
-     D f_buffLn        PR                         like(int4_t)
-     D  i_FLDL0100                         const  likeds(fldl0100_t)
-     D  i_withLen                          const  like(bool_t)
-     D                                            options(*nopass)
-      *
-      *
-      *-------------------------------------------------------------------*
-     D f_curFldLn      PR                         like(int4_t)
-     D  i_buffer                           const  like(rcdBuf_t)
-     D  i_FLDL0100                         const  likeds(fldl0100_t)
-      *
-      *
-      *-------------------------------------------------------------------*
-     D f_rtvFld        PR                         opdesc like(int4_t)
-     D  o_buffer                                  like(rcdBuf_t)
-     D                                            options(*varsize)
-     D  i_buffer                           const  like(rcdBuf_t)
-     D  i_FLDL0100                         const  likeds(fldl0100_t)
-     D  i_withLenByte                      const  like(bool_t)
-     D                                            options(*nopass)
-      *
-      *-------------------------------------------------------------------*
-     D p_fldToBuf      PR
-     D  io_buffer                                 like(rcdbuf_t)
-     D  i_fieldData                               like(rcdbuf_t)
-     D  i_FLDL0100                         const  likeds(fldl0100_t)
-     D  i_withLenByte                      const  like(bool_t)
-     D                                            options(*nopass)
-      *
-      *-------------------------------------------------------------------*
-     D f_isVarLen      PR                         like(bool_t)
-     D  i_FLDL0100                         const  likeds(fldl0100_t)
-      *
-      *-------------------------------------------------------------------*
-     D f_binToDec      PR                  opdesc like(int4_t)
-     D  i_string                  32767A   const options(*varsize)
-     D  i_startPos                         const  like(int4_t)
-     D  i_length                           const  like(int4_t)
-      *
-      *-------------------------------------------------------------------*
-     D f_len           PR                  opdesc like(int4_t)
-     D  i_string                  32767A   const options(*varsize)
-      *
-      *-------------------------------------------------------------------*
-      *
-     D f_scan          PR                  opdesc like(int4_t)
-     D  SrchArg                     100A   CONST  OPTIONS(*VARSIZE)
-     D  String                      100A   CONST
-      *
-      *-------------------------------------------------------------------*
-     D f_vldName       PR                         like(bool_t)
-     D  i_name                       10A   const
-     D  o_msgID                                   like(msgID_t)
-     D  o_msgDta                                  like(msgDta_t)
-      *
-      *-------------------------------------------------------------------*
-     D f_vldFloat      PR                         like(bool_t)
-     D  i_buffer                     64A   const  varying
-      *
-      *-------------------------------------------------------------------*
-     D f_execute       PR                  opdesc like(bool_t)
-     D  i_cmd                     32702A   const
-     D                                     options(*VARSIZE)
-     D  o_msgID                                   like(msgID_t)
-     D  o_msgDta                                  like(msgDta_t)
-      *
-      *-------------------------------------------------------------------*
-     D f_basedPF       PR                         like(bool_t)
-     D  i_file                             value  like(file_t)
-     D  i_lib                              value  like(lib_t)
-     D  i_mbr                              value  like(mbr_t)
-     D  i_rcdFmt                           value  like(rcdFmt_t)
-     D  i_rcdMbrNbr                        value  like(mbrNbr_t)
-     D  o_pFile                                   like(file_t)
-     D  o_pLib                                    like(lib_t)
-     D  o_pMbr                                    like(mbr_t)
-     D  o_pRcdFmt                                 like(rcdFmt_t)
-      *
-     D f_basedMbr      PR                         like(bool_t)
-     D  i_file                             value  like(file_t)
-     D  i_lib                              value  like(lib_t)
-     D  i_mbr                              value  like(mbr_t)
-     D  i_mbrNbr                           value  like(int4_t)
-     D  i_rcdFmt                           value  like(rcdFmt_t)
-     D  o_pFile                                   like(file_t)
-     D  o_pLib                                    like(lib_t)
-     D  o_pMbr                                    like(mbr_t)
-     D  o_rcdFmt                                  like(rcdFmt_t)
-      *
-     D f_numBased      PR                         like(int4_t)
-     D  i_file                             const  like(file_t)
-     D  i_lib                              const  like(lib_t)
-     D  i_mbr                              const  like(mbr_t)
-      *
-      *-------------------------------------------------------------------*
-     D p_setPrdLb      PR
-     D  i_lib                              const  like(lib_t)
-      *
-      *-------------------------------------------------------------------*
-     D f_getPrdLb      PR                         like(lib_t)
-      *
-      *-------------------------------------------------------------------*
-     D f_cmdLine       PR                         like(bool_t)
-      *
-      *
-      *-------------------------------------------------------------------*
-     D p_expStr        PR                  opdesc
-     D  o_string                  32767A          options(*varsize)
-     D  i_string                  32767A   const  options(*varsize)
-     D  i_stepVal                    10I 0 const  options(*nopass)
-      *
-      *-------------------------------------------------------------------*
-     D f_headline      PR                  like(colHeading_t)
-     D  i_headTyp                          const  like(type_t)
-     D  i_FLDL0100                         const  likeds(fldl0100_t)
-      *
-      *-------------------------------------------------------------------*
-     D f_isNumFld      PR                         like(bool_t)
-     D  i_FLDL0100                         const  likeds(fldl0100_t)
-      *
-      *-------------------------------------------------------------------*
-     D f_isFloatFld    PR                         like(bool_t)
-     D  i_FLDL0100                         const  likeds(fldl0100_t)
-      *
-      *-------------------------------------------------------------------*
-     D f_isCharFld     PR                         like(bool_t)
-     D  i_FLDL0100                         const  likeds(fldl0100_t)
-      *
-      *-------------------------------------------------------------------*
-     D f_hasCcsid      PR                         like(bool_t)
-     D  i_FLDL0100                         const  likeds(fldl0100_t)
-      *
-      *-------------------------------------------------------------------*
-     D f_appMsgF       PR                         like(file_t)
-      *
-      *-------------------------------------------------------------------*
-     D f_appMsgFL      PR                         like(lib_t)
-      *
-      *-------------------------------------------------------------------*
-     D p_rmvPgmMg      PR
-     D  i_pgmNme                           const  like(pgm_t)
-      *
-      *-------------------------------------------------------------------*
-     D p_sndPgmMg      PR
-     D  i_msgID                            const  like(msgID_t)
-     D  i_msgDta                           const  like(msgDta_t)
-     D  i_pgmNme                           const  like(pgm_t)
-     D  i_msgType                          const  like(msgType_t)
-     D                                            options(*nopass)
-      *
-      *-------------------------------------------------------------------*
-     D f_canUseRefFld  PR                         like(bool_t)
-     D  i_FLDL0100                         const  likeds(fldl0100_t)
-      *
-      *-------------------------------------------------------------------*
-     D f_canUseCntFld  PR                         like(bool_t)
-     D  i_FLDL0100                         const  likeds(fldl0100_t)
-      *
-      *-------------------------------------------------------------------*
-     D f_mustCvtCcsid  PR                         like(bool_t)
-      *
-      *-------------------------------------------------------------------*
-     D f_isToLong      PR                         like(bool_t)
-     D  i_FLDL0100                         const  likeds(fldl0100_t)
-      *
-      *-------------------------------------------------------------------*
-     D f_isToLongMax   PR                         like(bool_t)
-     D  i_FLDL0100                         const  likeds(fldl0100_t)
-      *
-      *-------------------------------------------------------------------*
-     D f_maxDspLn      PR                         like(int4_t)
-     D  i_FLDL0100                         const  likeds(fldl0100_t)
-      *
-      *-------------------------------------------------------------------*
-     D f_cntFldLn      PR                         like(int4_t)
-     D  i_FLDL0100                         const  likeds(fldl0100_t)
-      *
-      *-------------------------------------------------------------------*
-     D f_nbrDspRw      PR                         like(int4_t)
-     D  i_FLDL0100                         const  likeds(fldl0100_t)
-      *
-      *-------------------------------------------------------------------*
-     D p_decToBin      PR                  opdesc
-     D  io_string                 32767A          options(*varsize)
-     D  i_startPos                         const  like(int4_t)
-     D  i_length                           const  like(int4_t)
-     D  i_value                            const  like(int4_t)
-      *
-      *-------------------------------------------------------------------*
-     D f_isNotAlw      PR                         like(bool_t)
-     D  i_FLDL0100                         const  likeds(fldl0100_t)
-      *
-      *-------------------------------------------------------------------*
-     D f_isKeyFld      PR                         like(bool_t)
-     D  i_FLDL0100                         const  likeds(fldl0100_t)
-      *
-      *-------------------------------------------------------------------*
-     D p_sndStsMg      PR
-     D  i_msgID                            const  like(msgID_t)
-     D  i_msgDta                           const  like(msgDta_t)
-      *
-      *-------------------------------------------------------------------*
-     D f_pgmCallN      PR                         like(pgmCallN_t)
-     D  i_pgmNme                           const  like(pgm_t)
-     D  i_lib                              const  like(lib_t) options(*nopass)
-      *
-      *-------------------------------------------------------------------*
-     D f_rtvMsgD       PR          2048A
-     D  i_msgID                            value  like(msgID_t)
-     D  i_msgDta                           value  like(msgDta_t)
-     D  i_rplcSubV                         const  like(bool_t)
-     D                                            options(*nopass)
-     D  i_rtnFmtCC                         const  like(bool_t)
-     D                                            options(*nopass)
-     D  i_msgF                             value  like(file_t)
-     D                                            options(*nopass)
-     D  i_msgFL                            value  like(lib_t)
-     D                                            options(*nopass)
-      *
-      *-------------------------------------------------------------------*
-     D f_msgText       PR           512A
-     D  i_msgID                            value  like(msgID_t)
-     D  i_msgDta                           value  like(msgDta_t)
-     D  i_msgF                             value  like(file_t)
-     D                                            options(*nopass)
-     D  i_msgFL                            value  like(lib_t)
-     D                                            options(*nopass)
-      *
-      *-------------------------------------------------------------------*
-     D p_movPgmMg      PR
-     D  i_pgmNme                           const  like(pgm_t)
-      *
-      *-------------------------------------------------------------------*
-     D p_wrongKey      PR
-     D  i_scnAID                           const  like(scnAID_t)
-     D  i_pgmNme                           const  like(pgm_t)
-      *
-      *-------------------------------------------------------------------*
-     D p_keyToMsg      PR
-     D  i_scnAID                           const  like(scnAID_t)
-     D  o_msgID                                   like(msgID_t)
-     D  o_msgDta                                  like(msgDta_t)
-      *
-      *-------------------------------------------------------------------*
-     D f_spltTxt       PR                  opdesc like(int4_t)
-     D  i_text                    32767A   const  options(*varsize)
-     D  i_strPos                           const  like(int4_t)
-     D  i_len                              const  like(int4_t)
-     D  o_text                    32767A          options(*varsize)
-      *
-      *-------------------------------------------------------------------*
-     D p_center        PR                  opdesc
-     D  i_text                    32767A          options(*varsize)
-      *
-      *===================================================================*
-     D  p_hexToChr     PR                  extproc('cvthc')
-     D   Char                     32767A   options(*varsize)
-     D   Hex                      32767A   options(*varsize)
-     D   lenHex                      10I 0 value
-      *
-      *-------------------------------------------------------------------*
-     D  p_chrToHex     PR                  extproc('cvtch')
-     D   Hex                      32767A   options(*varsize)
-     D   Char                     32767A   options(*varsize)
-     D   lenChar                     10I 0 value
-      *
-      *-------------------------------------------------------------------*
-     D f_addPtr        PR              *
-     D  i_pointer                      *   value
-     D  i_offset                      5I 0 value
-      *
-      *-------------------------------------------------------------------*
-     D f_isKeyExc      PR                        like(bool_t)
-     D  i_data                             value like(SET0000_t)
-     D  i_exclKeys                         value like(pgmCmd_t) DIM(25)
-      *
-      *-------------------------------------------------------------------*
-     D f_NUM_Descr...
-     D                 PR            10I 0
-     D  i_type                        3I 0 value
-     D  i_length                      3I 0 value
-     D  i_fraction                    3I 0 value
-      *
-      *-------------------------------------------------------------------*
-     D f_NUM_Descr2...
-     D                 PR            10I 0
-     D  i_type                        1A   value
-     D  i_length                      3I 0 value
-     D  i_fraction                    3I 0 value
-      *
-      *-------------------------------------------------------------------*
-     D p_clrErrno...
-     D                 PR
-      *
-      *-------------------------------------------------------------------*
-     D f_errno...
-     D                 PR            10I 0
-      *
-      *-------------------------------------------------------------------*
-     D f_strerror...
-     D                 PR                         like(msgDta_t)
-     D  i_errno                      10I 0 const
-      *
-      *-------------------------------------------------------------------*
-     D f_bitor...
-     D                 PR            10U 0
-     D  i_arg1                       10U 0 value
-     D  i_arg2                       10U 0 value
-     D  i_arg3                       10U 0 value  options(*nopass)
-     D  i_arg4                       10U 0 value  options(*nopass)
-     D  i_arg5                       10U 0 value  options(*nopass)
-      *
-      *-------------------------------------------------------------------*
-     D f_rpgToIntLength...
-     D                 PR            10I 0
-     D  i_length                     10I 0 value
-      *
-      *-------------------------------------------------------------------*
-     D f_exist...
-     D                 PR              N
-     D  i_obj                        10A   const
-     D  i_lib                        10A   const  options(*omit)
-     D  i_type                       10A   const
-     D  i_mbr                        10A   const  options(*nopass)
-      *
-      *-------------------------------------------------------------------*
-     D f_wordWrap...
-     D                 PR          4096A          varying
-     D  i_string                   4096A   const  varying
-     D  i_width                      10U 0 const
-     D  io_startPos                  10U 0
-     D  i_options                    10U 0 const  options(*nopass)
-      *
-      *-------------------------------------------------------------------*
-     D f_endsWith...
-     D                 PR              N
-     D  i_suffix                   4096A   const   varying
-     D  i_string                   4096A   const   varying
-      *
-      *-------------------------------------------------------------------*
-      *  Converts a given string to upper case.
-     D f_ucase...
-     D                 PR          4096A           varying
-     D  i_string                   4096A   const   varying
-      *
-      *-------------------------------------------------------------------*
-      *  Sends a message to the command line.
-     D f_sndMsgToCmdLine...
-     D                 PR
-     D  i_msgID                       7A   const
-     D  i_msgDta                    512A   const
-      *
-      *-------------------------------------------------------------------*
-      *  Returns the field type as a string.
-     D f_fieldTypeAsString...
-     D                 PR           128A          varying
-     D  i_FLDL0100                         const  likeds(fldl0100_t)
-      *
-      *-------------------------------------------------------------------*
-      *  Returns the next headline.
-     D f_nextHeaderType...
-     D                 PR            10A
-     D  i_headerType                 10A   value
-      *
-      *-------------------------------------------------------------------*
-      *  Returns the record format ID of a given file.
-     D f_getRecordFormatInf...
-     D                 PR                  likeds(rcdFmtInf_t)
-     D  i_file                             value  like(file_t)
-     D  i_library                          value  like(lib_t)
-     D  i_rcdFmt                           value  like(fmtID_t)
-      *
-      *-------------------------------------------------------------------*
-      *  Returns an empty string with a given length.
-     D f_space...
-     D                 PR          4096A   varying
-     D  i_length                     10I 0 value
-      *
-      *-----------------------------------------------------------------*
-      * Prototype for CEEDOD (Retrieve operational descriptor)
-      *-----------------------------------------------------------------*
-     D CEEDOD          PR
-     D  ParmNum                      10I 0 CONST
-     D  DescType                     10I 0
-     D  DataType                     10I 0
-     D  DescInfo1                    10I 0
-     D  DescInfo2                    10I 0
-     D  InLen                        10I 0
-     D  fc                           12A   OPTIONS(*OMIT)
-      *-------------------------------------------------------------------*
-     D p_kill          PR
-     D  i_text                      128A   value  varying
-      *-------------------------------------------------------------------*
-     D f_mapCmdToMsg   PR                  like(msgID_t)
-     D  i_command                   256A   const
-      *
+**FREE
+
+//============================================================*
+//      Modul: Peek058
+//============================================================*
+
+//  Konstants: f_wordWrap()
+dcl-c cwordwrap_paragraph_none   1;
+dcl-c cwordwrap_paragraph_msgd   2;
+dcl-c cwordwrap_paragraph_text   4;
+dcl-c cwordwrap_paragraph_trimr  8;
+
+//-------------------------------------------------------------------*
+dcl-pr f_dsplyln like(int4_t);
+  i_fldl0100      const  likeds(fldl0100_t);
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr f_buffln like(int4_t);
+  i_fldl0100      const  likeds(fldl0100_t);
+  i_withlen       const  like(bool_t) options(*nopass);
+end-pr;
+
+
+//-------------------------------------------------------------------*
+dcl-pr f_curfldln like(int4_t);
+  i_buffer        const  like(rcdbuf_t);
+  i_fldl0100      const  likeds(fldl0100_t);
+end-pr;
+
+
+//-------------------------------------------------------------------*
+dcl-pr f_rtvfld opdesc like(int4_t);
+  o_buffer               like(rcdbuf_t) options(*varsize);
+  i_buffer        const  like(rcdbuf_t);
+  i_fldl0100      const  likeds(fldl0100_t);
+  i_withlenbyte   const  like(bool_t) options(*nopass);
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr p_fldtobuf;
+  io_buffer              like(rcdbuf_t);
+  i_fielddata            like(rcdbuf_t);
+  i_fldl0100      const  likeds(fldl0100_t);
+  i_withlenbyte   const  like(bool_t) options(*nopass);
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr f_isvarlen like(bool_t);
+  i_fldl0100      const  likeds(fldl0100_t);
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr f_bintodec opdesc like(int4_t);
+  i_string        const  like(string_t) options(*varsize);
+  i_startpos      const  like(int4_t);
+  i_length        const  like(int4_t);
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr f_len opdesc like(int4_t);
+  i_string        const  like(string_t) options(*varsize);
+end-pr;
+
+//-------------------------------------------------------------------*
+
+dcl-pr f_scan opdesc like(int4_t);
+  srcharg         char(100) const  options(*varsize);
+  string          char(100) const;
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr f_vldname like(bool_t);
+  i_name          const  like(fieldNme_t);
+  o_msgid                like(msgid_t);
+  o_msgdta               like(msgdta_t);
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr f_vldfloat like(bool_t);
+  i_buffer        varchar(64) const;
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr f_execute opdesc like(bool_t);
+  i_cmd           const  like(cmdBuffer_t) options(*varsize);
+  o_msgid                like(msgid_t);
+  o_msgdta               like(msgdta_t);
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr f_basedpf like(bool_t);
+  i_file          value  like(file_t);
+  i_lib           value  like(lib_t);
+  i_mbr           value  like(mbr_t);
+  i_rcdfmt        value  like(rcdfmt_t);
+  i_rcdmbrnbr     value  like(mbrnbr_t);
+  o_pfile                like(file_t);
+  o_plib                 like(lib_t);
+  o_pmbr                 like(mbr_t);
+  o_prcdfmt              like(rcdfmt_t);
+end-pr;
+
+dcl-pr f_basedmbr like(bool_t);
+  i_file          value  like(file_t);
+  i_lib           value  like(lib_t);
+  i_mbr           value  like(mbr_t);
+  i_mbrnbr        value  like(int4_t);
+  i_rcdfmt        value  like(rcdfmt_t);
+  o_pfile                like(file_t);
+  o_plib                 like(lib_t);
+  o_pmbr                 like(mbr_t);
+  o_rcdfmt               like(rcdfmt_t);
+end-pr;
+
+dcl-pr f_numbased like(int4_t);
+  i_file          const  like(file_t);
+  i_lib           const  like(lib_t);
+  i_mbr           const  like(mbr_t);
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr p_setprdlb;
+  i_lib           const  like(lib_t);
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr f_getprdlb like(lib_t);
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr f_cmdline like(bool_t);
+end-pr;
+
+
+//-------------------------------------------------------------------*
+dcl-pr p_expstr opdesc;
+  o_string               like(string_t) options(*varsize);
+  i_string        const  like(string_t) options(*varsize);
+  i_stepval       const  like(int4_t) options(*nopass);
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr f_headline like(colheading_t);
+  i_headtyp       const  like(type_t);
+  i_fldl0100      const  likeds(fldl0100_t);
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr f_isnumfld like(bool_t);
+  i_fldl0100      const  likeds(fldl0100_t);
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr f_isfloatfld like(bool_t);
+  i_fldl0100      const  likeds(fldl0100_t);
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr f_ischarfld like(bool_t);
+  i_fldl0100      const  likeds(fldl0100_t);
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr f_hasccsid like(bool_t);
+  i_fldl0100      const  likeds(fldl0100_t);
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr f_appmsgf like(file_t);
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr f_appmsgfl like(lib_t);
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr p_rmvpgmmg;
+  i_pgmnme        const  like(pgm_t);
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr p_sndpgmmg;
+  i_msgid         const  like(msgid_t);
+  i_msgdta        const  like(msgdta_t);
+  i_pgmnme        const  like(pgm_t);
+  i_msgtype       const  like(msgtype_t)
+       options(*nopass);
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr f_canusereffld like(bool_t);
+  i_fldl0100      const  likeds(fldl0100_t);
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr f_canusecntfld like(bool_t);
+  i_fldl0100      const  likeds(fldl0100_t);
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr f_mustcvtccsid like(bool_t);
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr f_istolong like(bool_t);
+  i_fldl0100      const  likeds(fldl0100_t);
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr f_istolongmax like(bool_t);
+  i_fldl0100      const  likeds(fldl0100_t);
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr f_maxdspln like(int4_t);
+  i_fldl0100      const  likeds(fldl0100_t);
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr f_cntfldln like(int4_t);
+  i_fldl0100      const  likeds(fldl0100_t);
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr f_nbrdsprw like(int4_t);
+  i_fldl0100      const  likeds(fldl0100_t);
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr p_dectobin opdesc;
+  io_string       char(32767) options(*varsize);
+  i_startpos      const  like(int4_t);
+  i_length        const  like(int4_t);
+  i_value         const  like(int4_t);
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr f_isnotalw like(bool_t);
+  i_fldl0100      const  likeds(fldl0100_t);
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr f_iskeyfld like(bool_t);
+  i_fldl0100      const  likeds(fldl0100_t);
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr p_sndstsmg;
+  i_msgid         const  like(msgid_t);
+  i_msgdta        const  like(msgdta_t);
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr f_pgmcalln like(pgmcalln_t);
+  i_pgmnme        const  like(pgm_t);
+  i_lib           const  like(lib_t) options(*nopass);
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr f_rtvmsgd char(2048);
+  i_msgid         value  like(msgid_t);
+  i_msgdta        value  like(msgdta_t);
+  i_rplcsubv      const  like(bool_t) options(*nopass);
+  i_rtnfmtcc      const  like(bool_t) options(*nopass);
+  i_msgf          value  like(file_t) options(*nopass);
+  i_msgfl         value  like(lib_t) options(*nopass);
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr f_msgtext char(512);
+  i_msgid         value  like(msgid_t);
+  i_msgdta        value  like(msgdta_t);
+  i_msgf          value  like(file_t) options(*nopass);
+  i_msgfl         value  like(lib_t) options(*nopass);
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr p_movpgmmg;
+  i_pgmnme        const  like(pgm_t);
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr p_wrongkey;
+  i_scnaid        const  like(scnaid_t);
+  i_pgmnme        const  like(pgm_t);
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr p_keytomsg;
+  i_scnaid        const  like(scnaid_t);
+  o_msgid         like(msgid_t);
+  o_msgdta        like(msgdta_t);
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr f_splttxt opdesc like(int4_t);
+  i_text          const  like(string_t) options(*varsize);
+  i_strpos        const  like(int4_t);
+  i_len           const  like(int4_t);
+  o_text                 like(string_t) options(*varsize);
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr p_center opdesc;
+  io_text                like(string_t) options(*varsize);
+end-pr;
+
+//===================================================================*
+dcl-pr p_hextochr extproc('cvthc');
+  char                   like(string_t) options(*varsize);
+  hex                    like(string_t) options(*varsize);
+  lenhex          value  like(int4_t);
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr p_chrtohex extproc('cvtch');
+  hex                    like(string_t) options(*varsize);
+  char                   like(string_t) options(*varsize);
+  lenchar         value  like(int4_t);
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr f_addptr pointer;
+  i_pointer       pointer value;
+  i_offset        int(5)  value;
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr f_iskeyexc like(bool_t);
+  i_data          value like(set0000_t);
+  i_exclkeys      value like(pgmcmd_t) dim(25);
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr f_num_descr like(int4_t);
+  i_type          value  like(int1_t);
+  i_length        value  like(int1_t);
+  i_fraction      value  like(int1_t);
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr f_num_descr2 like(int4_t);
+  i_type          value  like(dataType_t);
+  i_length        value  like(int1_t);
+  i_fraction      value  like(int1_t);
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr p_clrerrno;
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr f_errno int(10);
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr f_strerror like(msgdta_t);
+  i_errno         int(10) const;
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr f_bitor uns(10);
+  i_arg1          uns(10) value;
+  i_arg2          uns(10) value;
+  i_arg3          uns(10) value  options(*nopass);
+  i_arg4          uns(10) value  options(*nopass);
+  i_arg5          uns(10) value  options(*nopass);
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr f_rpgtointlength
+       int(10);
+  i_length        int(10) value;
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr f_exist ind;
+  i_obj           char(10) const;
+  i_lib           char(10) const  options(*omit);
+  i_type          char(10) const;
+  i_mbr           char(10) const  options(*nopass);
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr f_wordwrap varchar(4096);
+  i_string        varchar(4096) const;
+  i_width         uns(10) const;
+  io_startpos     uns(10);
+  i_options       uns(10) const  options(*nopass);
+end-pr;
+
+//-------------------------------------------------------------------*
+dcl-pr f_endswith ind;
+  i_suffix        varchar(4096) const;
+  i_string        varchar(4096) const;
+end-pr;
+
+//-------------------------------------------------------------------*
+//  Converts a given string to upper case.
+dcl-pr f_ucase varchar(4096);
+  i_string        varchar(4096) const;
+end-pr;
+
+//-------------------------------------------------------------------*
+//  Sends a message to the command line.
+dcl-pr f_sndmsgtocmdline;
+  i_msgid         char(7) const;
+  i_msgdta        char(512) const;
+end-pr;
+
+//-------------------------------------------------------------------*
+//  Returns the field type as a string.
+dcl-pr f_fieldtypeasstring varchar(128);
+  i_fldl0100      const  likeds(fldl0100_t);
+end-pr;
+
+//-------------------------------------------------------------------*
+//  Returns the next headline.
+dcl-pr f_nextheadertype char(10);
+  i_headertype    char(10) value;
+end-pr;
+
+//-------------------------------------------------------------------*
+//  Returns the record format ID of a given file.
+dcl-pr f_getrecordformatinf likeds(rcdfmtinf_t);
+i_file          value  like(file_t);
+i_library       value  like(lib_t);
+i_rcdfmt        value  like(fmtid_t);
+end-pr;
+
+//-------------------------------------------------------------------*
+//  Returns an empty string with a given length.
+dcl-pr f_space varchar(4096);
+  i_length        int(10) value;
+end-pr;
+
+//-----------------------------------------------------------------*
+// Prototype for CEEDOD (Retrieve operational descriptor)
+//-----------------------------------------------------------------*
+dcl-pr ceedod;
+  parmnum         int(10) const;
+  desctype        int(10);
+  datatype        int(10);
+  descinfo1       int(10);
+  descinfo2       int(10);
+  inlen           int(10);
+  fc              char(12) options(*omit);
+end-pr;
+//-------------------------------------------------------------------*
+dcl-pr p_kill;
+  i_text          varchar(128) value;
+end-pr;
+//-------------------------------------------------------------------*
+dcl-pr f_mapcmdtomsg like(msgid_t);
+  i_command       char(256) const;
+end-pr;
+

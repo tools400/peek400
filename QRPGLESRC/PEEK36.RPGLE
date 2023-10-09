@@ -59,8 +59,8 @@
        //*******************************************************************
 
        dcl-pi peek36;
-         i_buffer        char(128) const;
-         i_type          char(1) const;
+         i_buffer        const like(smallBuffer_t);
+         i_type          const like(dataType_t);
          i_dattimfmt     const like(fldl0100_t.f1dtfm);
          i_separator     const like(fldl0100_t.f1dtsp);
          o_msgid         like(msgid_t);

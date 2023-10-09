@@ -108,12 +108,12 @@
          i_dsp80         const like(dsp80_t);
          i_pgm           const like(pgm_t);
          i_copyright     const like(copyrght_t);
-         o_sflopt        char(2);
-         o_msgid         like(msgid_t);
-         o_msgdta        like(msgdta_t);
+         o_sflopt              like(sfpau_t);
+         o_msgid               like(msgid_t);
+         o_msgdta              like(msgdta_t);
        end-pi;
 
-       dcl-s do_x2           packed(7);
+       dcl-s do_x2 packed(7);
        //---------------------------------------------------*
 
        //  Register error handler

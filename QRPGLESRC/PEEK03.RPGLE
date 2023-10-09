@@ -69,8 +69,8 @@
        dcl-pi peek03;
          i_qfile         const likeds(qobj_t);
          i_rcdfmt        const like(fmt_t);
-         i_access        char(1) const;
-         i_sqlorder      char(512) const;
+         i_access        const like(accessMode_t);
+         i_sqlorder      const like(sqlOrder_t);
          o_msgid         like(msgid_t);
          o_msgdta        like(msgdta_t);
        end-pi;

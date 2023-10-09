@@ -1,12 +1,14 @@
-      *
-      /if defined(internal_prototype)
-     D PEEK01          PR                  extpgm('PEEK01')
-      /else
-     D PEEK01          PR                  extpgm(PEEK01_NAME)
-      /endif
-     D  i_qFile                            const likeds(qObj_t)
-     D  i_rcdFmt                           const like(fmt_t)
-     D  o_rcdFmtID                               like(fmtId_t)
-     D  o_msgID                                  like(msgID_t)
-     D  o_msgDta                                 like(msgDta_t)
-      *
+**FREE
+
+/if defined(internal_prototype)
+dcl-pr peek01 extpgm('PEEK01');
+/else
+dcl-pr peek01 extpgm(peek01_name);
+/endif
+  i_qfile                            const likeds(qobj_t);
+  i_rcdfmt                           const like(fmt_t);
+  o_rcdfmtid                               like(fmtid_t);
+  o_msgid                                  like(msgid_t);
+  o_msgdta                                 like(msgdta_t);
+end-pr;
+

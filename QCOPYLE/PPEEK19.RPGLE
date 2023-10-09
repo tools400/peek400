@@ -1,11 +1,12 @@
-                                                                                     *
-      /if defined(internal_prototype)
-     D PEEK19          PR                  extpgm('PEEK19')
-      /else
-     D PEEK19          PR                  extpgm(PEEK19_NAME)
-      /endif
-     D  i_rcdBuffer                        const like(rcdBuf_t)
-     D  o_keyVal                                 like(keyBuf_t)
-     D  o_msgID                                  like(msgID_t)
-     D  o_msgDta                                 like(msgDta_t)
-      *
+**FREE
+
+/if defined(internal_prototype)
+dcl-pr peek19 extpgm('PEEK19');
+/else
+dcl-pr peek19 extpgm(peek19_name);
+/endif
+  i_rcdbuffer                        const like(rcdbuf_t);
+  o_keyval                                 like(keybuf_t);
+  o_msgid                                  like(msgid_t);
+  o_msgdta                                 like(msgdta_t);
+end-pr;

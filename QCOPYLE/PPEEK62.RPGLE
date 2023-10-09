@@ -1,9 +1,10 @@
+**FREE
 
-      /if defined(internal_prototype)
-     D PEEK62          PR                  extpgm('PEEK62')
-      /else
-     D PEEK62          PR                  extpgm(PEEK62_NAME)
-      /endif
-     D  i_file                             const like(file_t)
-     D  i_lib                              const like(lib_t)
-      *
+/if defined(internal_prototype)
+dcl-pr peek62 extpgm('PEEK62');
+/else
+dcl-pr peek62 extpgm(peek62_name);
+/endif
+  i_file                             const like(file_t);
+  i_lib                              const like(lib_t);
+end-pr;

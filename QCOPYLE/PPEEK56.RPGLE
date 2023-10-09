@@ -1,20 +1,21 @@
+**FREE
 
-      /if defined(internal_prototype)
-     D PEEK56          PR                  extpgm('PEEK56')
-      /else
-     D PEEK56          PR                  extpgm(PEEK56_NAME)
-      /endif
-     D  i_dsp80                            const like(dsp80_t)
-     D  i_copyright                        const like(copyRght_t)
-     D  i_mode                             const like(mode_t)
-     D  i_envFile                          const like(file_t)
-     D  i_envLib                           const like(lib_t)
-     D  i_envMbr                           const like(mbr_t)
-     D  i_rcdFmtID                         const like(fmtId_t)
-     D  o_qFile                                  likeds(qObj_t)
-     D  o_mbr                                    like(mbr_t)
-     D  o_text                                   like(text_t)
-     D  o_option                                 like(option_t)
-     D  o_msgID                                  like(msgID_t)
-     D  o_msgDta                                 like(msgDta_t)
-      *
+/if defined(internal_prototype)
+dcl-pr peek56 extpgm('PEEK56');
+/else
+dcl-pr peek56 extpgm(peek56_name);
+/endif
+  i_dsp80                            const like(dsp80_t);
+  i_copyright                        const like(copyrght_t);
+  i_mode                             const like(mode_t);
+  i_envfile                          const like(file_t);
+  i_envlib                           const like(lib_t);
+  i_envmbr                           const like(mbr_t);
+  i_rcdfmtid                         const like(fmtid_t);
+  o_qfile                                  likeds(qobj_t);
+  o_mbr                                    like(mbr_t);
+  o_text                                   like(text_t);
+  o_option                                 like(option_t);
+  o_msgid                                  like(msgid_t);
+  o_msgdta                                 like(msgdta_t);
+end-pr;

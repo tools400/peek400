@@ -58,10 +58,10 @@
 
        dcl-pi peek35;
          i_rcdnbr        const like(rcdnbr_t);
-         i_buffer        char(1024) const;
-         o_fldname       like(fieldnme_t);
-         o_msgid         like(msgid_t);
-         o_msgdta        like(msgdta_t);
+         i_buffer        const like(buffer_t);
+         o_fldname             like(fieldnme_t);
+         o_msgid               like(msgid_t);
+         o_msgdta              like(msgdta_t);
        end-pi;
 
        dcl-ds w0key likerec(fpeekwrk: *key);

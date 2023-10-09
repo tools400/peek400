@@ -28,7 +28,6 @@
       /COPY QCOPYLE,COPYRIGHT
 
        dcl-f peekfld usage(*update:*delete:*output) usropn prefix(f_);
-       //===============================================================*
 
       /COPY QCOPYLE,D_VARDEF
       /COPY QCOPYLE,CEECNDHDLR
@@ -71,10 +70,10 @@
 
        dcl-pi peek01;
          i_qfile         const likeds(qobj_t);
-       i_rcdfmt        const like(fmt_t);
-       o_rcdfmtid      like(fmtid_t);
-       o_msgid         like(msgid_t);
-       o_msgdta        like(msgdta_t);
+         i_rcdfmt        const like(fmt_t);
+         o_rcdfmtid      like(fmtid_t);
+         o_msgid         like(msgid_t);
+         o_msgdta        like(msgdta_t);
        end-pi;
 
        dcl-s do_x1           packed(7);

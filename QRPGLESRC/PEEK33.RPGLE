@@ -119,9 +119,9 @@
        //*******************************************************************
 
        dcl-pi peek33;
-         i_version       char(9) const;
-         o_msgid         like(msgid_t);
-         o_msgdta        like(msgdta_t);
+         i_version       const like(version_t);
+         o_msgid               like(msgid_t);
+         o_msgdta              like(msgdta_t);
        end-pi;
 
        //----------------------------------------------------*

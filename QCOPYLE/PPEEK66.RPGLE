@@ -1,13 +1,14 @@
+**FREE
 
-      /if defined(internal_prototype)
-     D PEEK66          PR                  extpgm('PEEK66')
-      /else
-     D PEEK66          PR                  extpgm(PEEK66_NAME)
-      /endif
-     D  io_buffer                                like(cmdBuffer_t)
-     D  io_length                                like(int4_t)
-     D  i_inFormat                         const likeds(FLDL0100_t)
-     D  i_outFormat                        const likeds(FLDL0100_t)
-     D  o_msgID                                  like(msgID_t)
-     D  o_msgDta                                 like(msgDta_t)
-      *
+/if defined(internal_prototype)
+dcl-pr peek66 extpgm('PEEK66');
+/else
+dcl-pr peek66 extpgm(peek66_name);
+/endif
+  io_buffer                                like(cmdbuffer_t);
+  io_length                                like(int4_t);
+  i_informat                         const likeds(fldl0100_t);
+  i_outformat                        const likeds(fldl0100_t);
+  o_msgid                                  like(msgid_t);
+  o_msgdta                                 like(msgdta_t);
+end-pr;

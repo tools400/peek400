@@ -1,16 +1,17 @@
+**FREE
 
-      /if defined(internal_prototype)
-     D PEEK42          PR                  extpgm('PEEK42')
-      /else
-     D PEEK42          PR                  extpgm(PEEK42_NAME)
-      /endif
-     D  i_file                             const like(file_t)
-     D  i_library                          const like(lib_t)
-     D  i_member                           const like(mbr_t)
-     D  i_rcdFormat                        const like(fmt_t)
-     D  i_shortCmd                         const like(ShortCmd_t)
-     D  i_rcdNbr                           const like(rcdNbr_t)
-     D  o_execCmd                                like(cmdBuffer_t)
-     D  o_msgID                                  like(msgID_t)
-     D  o_msgDta                                 like(msgDta_t)
-      *
+/if defined(internal_prototype)
+dcl-pr peek42 extpgm('PEEK42');
+/else
+dcl-pr peek42 extpgm(peek42_name);
+/endif
+  i_file                             const like(file_t);
+  i_library                          const like(lib_t);
+  i_member                           const like(mbr_t);
+  i_rcdformat                        const like(fmt_t);
+  i_shortcmd                         const like(shortcmd_t);
+  i_rcdnbr                           const like(rcdnbr_t);
+  o_execcmd                                like(cmdbuffer_t);
+  o_msgid                                  like(msgid_t);
+  o_msgdta                                 like(msgdta_t);
+end-pr;

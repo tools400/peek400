@@ -1,16 +1,17 @@
-                                                                                     *
-      /if defined(internal_prototype)
-     D PEEK18          PR                  extpgm('PEEK18')
-      /else
-     D PEEK18          PR                  extpgm(PEEK18_NAME)
-      /endif
-     D  i_fldl0100                         const likeds(FLDL0100_t)
-     D  i_rcdFmt                           const like(fmt_t)
-     D  i_buffer                                 like(rcdBuf_t)
-     D  i_tgtFormat                  10A   const
-     D  i_tgtValue                   10A   const
-     D  o_buffer                                 like(rcdBuf_t)
-     D  o_buffLen                                like(int4_t)
-     D  o_msgID                                  like(msgID_t)
-     D  o_msgDta                                 like(msgDta_t)
-      *
+**FREE
+
+/if defined(internal_prototype)
+dcl-pr peek18 extpgm('PEEK18');
+/else
+dcl-pr peek18 extpgm(peek18_name);
+/endif
+  i_fldl0100                         const likeds(fldl0100_t);
+  i_rcdfmt                           const like(fmt_t);
+  i_buffer                                 like(rcdbuf_t);
+  i_tgtformat                        const like(format_t);
+  i_tgtvalue                         const like(format_t);
+  o_buffer                                 like(rcdbuf_t);
+  o_bufflen                                like(int4_t);
+  o_msgid                                  like(msgid_t);
+  o_msgdta                                 like(msgdta_t);
+end-pr;

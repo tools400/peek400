@@ -391,7 +391,7 @@
 
        dcl-pi peek15;
          i_qfile         const likeds(qobj_t);
-         io_scnnbrs      packed(2);
+         io_scnnbrs            like(int2_t);
          i_alwlc         const like(bool_t);
          io_stage        like(int4_t);
          i_numpasses     const like(int4_t);

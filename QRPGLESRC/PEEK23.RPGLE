@@ -62,10 +62,10 @@
 
        dcl-pi peek23;
          i_pgm           const like(pgm_t);
-         i_key           char(10) const;
+         i_key           const like(key_t);
          i_posf24        const like(int4_t);
-         o_fkeys         like(fkeydsp_t) dim(32);
-         o_nbrofkeys     like(int4_t);
+         o_fkeys               like(fkeydsp_t) dim(32);
+         o_nbrofkeys           like(int4_t);
        end-pi;
 
        //  Register error handler

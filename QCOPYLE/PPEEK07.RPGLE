@@ -1,12 +1,13 @@
-      *
-      /if defined(internal_prototype)
-     D PEEK07          PR                  extpgm('PEEK07')
-      /else
-     D PEEK07          PR                  extpgm(PEEK07_NAME)
-      /endif
-     D  i_attr                             const like(attr_t)
-     D  i_noMsg                            const like(bool_t)
-     D  o_attrLen                                like(int4_t)
-     D  o_attrTyp                                like(attrType_t)
-     D  o_alue                                   like(attrValue_t)
-      *
+**FREE
+
+/if defined(internal_prototype)
+dcl-pr peek07 extpgm('PEEK07');
+/else
+dcl-pr peek07 extpgm(peek07_name);
+/endif
+  i_attr                             const like(attr_t);
+  i_nomsg                            const like(bool_t);
+  o_attrlen                                like(int4_t);
+  o_attrtyp                                like(attrtype_t);
+  o_alue                                   like(attrvalue_t);
+end-pr;

@@ -1,17 +1,18 @@
+**FREE
 
-      /if defined(internal_prototype)
-     D PEEK52          PR                  extpgm('PEEK52')
-      /else
-     D PEEK52          PR                  extpgm(PEEK52_NAME)
-      /endif
-     D  i_dsp80                            const like(dsp80_t)
-     D  i_copyright                        const like(copyRght_t)
-     D  o_alwLc                                  like(bool_t)
-     D  o_case                                   like(bool_t)
-     D  o_cdLock                                 like(bool_t)
-     D  o_nullDft                                like(bool_t)
-     D  o_keepCrs                                like(bool_t)
-     D  o_msgID                                  like(msgID_t)
-     D  o_msgDta                                 like(msgDta_t)
-     D  i_isUnload                         const like(msgID_t)
-      *
+/if defined(internal_prototype)
+dcl-pr peek52 extpgm('PEEK52');
+/else
+dcl-pr peek52 extpgm(peek52_name);
+/endif
+  i_dsp80                            const like(dsp80_t);
+  i_copyright                        const like(copyrght_t);
+  o_alwlc                                  like(bool_t);
+  o_case                                   like(bool_t);
+  o_cdlock                                 like(bool_t);
+  o_nulldft                                like(bool_t);
+  o_keepcrs                                like(bool_t);
+  o_msgid                                  like(msgid_t);
+  o_msgdta                                 like(msgdta_t);
+  i_isunload                         const like(msgid_t);
+end-pr;

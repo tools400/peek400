@@ -124,15 +124,15 @@
          i_copyright     const like(copyrght_t);
          i_qfile         const like(qobj_t);
          i_member        const like(mbr_t);
-         o_field         char(10);
-         o_operation     char(10);
-         o_argument      char(63);
-         o_sign          char(1);
-         o_srchnbrs      packed(10);
-         o_srchtype      char(10);
-         o_srchcase      char(1);
-         o_sgid          like(msgid_t);
-         o_msgdta        like(msgdta_t);
+         o_field               like(fieldNme_t);
+         o_operation           like(operation_t);
+         o_argument            like(argument_t);
+         o_sign                like(sign_t);
+         o_srchnbrs            like(srchNbrs_t);
+         o_srchtype            like(type_t);
+         o_srchcase            like(bool_t);
+         o_sgid                like(msgid_t);
+         o_msgdta              like(msgdta_t);
        end-pi;
 
        dcl-s do_x2           packed(7);

@@ -5,12 +5,15 @@
       *===============================================================*
       *
       *  Referenzfelder:
-     D commitLvl_t     S              1A   template
+     D release_t       S             17A   template
+     D version_t       S              9A   template
+     D commitLvl_t     S              9A   template
      D choice_t        S             75A   template
      D headerType_t    S             10A   template
      D attr_t          S             10A   template
      D attrType_t      S              1A   template
      D attrValue_t     S            512A   template
+     D dataType_t      S              1A   template
      D accMode_t       S              1A   template
      D bool_t          S              1A   template
      D cmdBuffer_t     S          32702A   template
@@ -48,6 +51,18 @@
      D option_t        S             10A   template
      D mode_t          S             10A   template
      D type_t          S             10A   template
+     D operation_t     S             10A   template
+     D argument_t      S             63A   template
+     D sign_t          S              1A   template
+     D srchNbrs_t      S             10P 0 template
+     D format_t        S             10A   template
+     D color_t         S              1A   template
+     D language_t      S             10A   template
+     D prefix_t        S             10A   template
+     D buffer_t        S           1024A   template
+     D smallBuffer_t   S            128A   template
+     D keys_t          S              3A   template
+     D sfpau_t         S              2A   template
       *
      D pgm_t           S             10A   template
      D pgmCallN_t      S             21A   template
@@ -56,6 +71,7 @@
      D proc_t          S            256A   template
      D rcdBuf_t        S          32766A   template
      D rcdBufUcs2_t    S          16383C   template
+     D string_t        S          32767A   template
       *
      D rcdBuffer_t     DS                  qualified template
      D  sbcs                      32766A
@@ -99,6 +115,7 @@
      D  mbrNbr                       10I 0
       *
       *  Integer & Binärwerte:
+     D int1_t          S              3I 0 template
      D int2_t          S              5I 0 template
      D int4_t          S             10I 0 template
      D uint4_t         S             10U 0 template

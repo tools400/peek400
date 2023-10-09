@@ -1,12 +1,13 @@
+**FREE
 
-      /if defined(internal_prototype)
-     D PEEK46          PR                  extpgm('PEEK46')
-      /else
-     D PEEK46          PR                  extpgm(PEEK46_NAME)
-      /endif
-     D  i_qFile                            const likeds(qObj_t)
-     D  i_mbr                              const like(mbr_t)
-     D  i_function                         const like(function_t)
-     D  o_numE                                   like(int4_t)
-     D  o_mbrl0200                               likeds(mbrl0200_t)
-      *
+/if defined(internal_prototype)
+dcl-pr peek46 extpgm('PEEK46');
+/else
+dcl-pr peek46 extpgm(peek46_name);
+/endif
+  i_qfile                            const likeds(qobj_t);
+  i_mbr                              const like(mbr_t);
+  i_function                         const like(function_t);
+  o_nume                                   like(int4_t);
+  o_mbrl0200                               likeds(mbrl0200_t);
+end-pr;

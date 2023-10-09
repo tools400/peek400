@@ -1,26 +1,27 @@
+**FREE
 
-      /if defined(internal_prototype)
-     D PEEK54          PR                  extpgm('PEEK54')
-      /else
-     D PEEK54          PR                  extpgm(PEEK54_NAME)
-      /endif
-     D  gi_file                            const like(file_t)
-     D  gi_lib                             const like(lib_t)
-     D  gi_mbr                             const like(mbr_t)
-     D  gi_rcdFmt                          const like(fmt_t)
-     D  gi_rcdFmtID                        const like(fmtId_t)
-     D  gi_envFile                         const like(file_t)
-     D  gi_envLib                          const like(lib_t)
-     D  gi_envMbr                          const like(mbr_t)
-     D  gi_isAutoSave                      const like(bool_t)
-     D  gi_pinTabR                         const like(pintabr_t) dim(12)
-     D  gi_nbrPinR                         const like(int4_t)
-     D  gi_pinTabC                         const like(fieldNme_t) dim(12)
-     D  gi_nbrPinC                         const like(int4_t)
-     D  gi_AccMode                         const like(accessMode_t)
-     D  gi_SqlSel                          const like(sqlWhere_t)
-     D  gi_SqlOrd                          const like(sqlOrder_t)
-     D  gi_isKeyLower                      const like(bool_t)
-     D  go_msgID                                 like(msgID_t)
-     D  go_msgDta                                like(msgDta_t)
-      *
+/if defined(internal_prototype)
+dcl-pr peek54 extpgm('PEEK54');
+/else
+dcl-pr peek54 extpgm(peek54_name);
+/endif
+  gi_file                            const like(file_t);
+  gi_lib                             const like(lib_t);
+  gi_mbr                             const like(mbr_t);
+  gi_rcdfmt                          const like(fmt_t);
+  gi_rcdfmtid                        const like(fmtid_t);
+  gi_envfile                         const like(file_t);
+  gi_envlib                          const like(lib_t);
+  gi_envmbr                          const like(mbr_t);
+  gi_isautosave                      const like(bool_t);
+  gi_pintabr                         const like(pintabr_t) dim(12);
+  gi_nbrpinr                         const like(int4_t);
+  gi_pintabc                         const like(fieldnme_t) dim(12);
+  gi_nbrpinc                         const like(int4_t);
+  gi_accmode                         const like(accessmode_t);
+  gi_sqlsel                          const like(sqlwhere_t);
+  gi_sqlord                          const like(sqlorder_t);
+  gi_iskeylower                      const like(bool_t);
+  go_msgid                                 like(msgid_t);
+  go_msgdta                                like(msgdta_t);
+end-pr;

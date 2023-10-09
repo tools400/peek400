@@ -91,11 +91,11 @@
          i_dsp80         const like(dsp80_t);
          i_copyright     const like(copyrght_t);
          i_fmtname       const like(fmt_t);
-         i_fmtmode       char(10) const;
-         o_rcdl0200      likeds(rcdl0200_t);
-         o_fmtnbr        int(5);
-         o_msgid         like(msgid_t);
-         o_msgdta        like(msgdta_t);
+         i_fmtmode       const like(mode_t);
+         o_rcdl0200            likeds(rcdl0200_t);
+         o_fmtnbr              like(int2_t);
+         o_msgid               like(msgid_t);
+         o_msgdta              like(msgdta_t);
        end-pi;
        //---------------------------------------------------*
 
@@ -435,7 +435,7 @@
           open peekfmt;
 
           // - Prüfen auf Satzformat
-          if (i_fmtmode   = mode_batch) and
+          if (i_fmtmode = mode_batch) and
              ((peek_01_ds.nbrOfRcd = 1) or (i_fmtname <> ''));
              setll 1 fpeekfmt;
              dou %eof(peekfmt);

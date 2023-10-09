@@ -1,12 +1,14 @@
+**FREE
 
-      /if defined(internal_prototype)
-     D PEEK23          PR                  extpgm('PEEK23')
-      /else
-     D PEEK23          PR                  extpgm(PEEK23_NAME)
-      /endif
-     D  i_pgm                              const like(pgm_t)
-     D  i_key                        10A   const
-     D  i_posF24                           const like(int4_t)
-     D  o_FKeys                                  like(fKeyDsp_t) dim(32)
-     D  o_nbrOfKeys                              like(int4_t)
-      *
+/if defined(internal_prototype)
+dcl-pr peek23 extpgm('PEEK23');
+/else
+dcl-pr peek23 extpgm(peek23_name);
+/endif
+  i_pgm                              const like(pgm_t);
+  i_key                              const like(key_t);
+  i_posf24                           const like(int4_t);
+  o_fkeys                                  like(fkeydsp_t) dim(32);
+  o_nbrofkeys                              like(int4_t);
+end-pr;
+

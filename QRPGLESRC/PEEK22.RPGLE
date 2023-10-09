@@ -46,8 +46,8 @@
        //*******************************************************************
 
        dcl-pi peek22;
-         i_mode          char(10) const;
-         i_section       char(10) const;
+         i_mode          const like(mode_t);
+         i_section       const like(section_t);
        end-pi;
 
        //---------------------------------------------------*

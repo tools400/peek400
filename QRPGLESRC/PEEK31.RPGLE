@@ -46,10 +46,10 @@
        //*******************************************************************
 
        dcl-pi peek31;
-         io_language     char(10);
-         i_prefix        char(10) const;
-         o_msgid         like(msgid_t);
-         o_msgdta        like(msgdta_t);
+         io_language           like(language_t);
+         i_prefix        const like(prefix_t);
+         o_msgid               like(msgid_t);
+         o_msgdta              like(msgdta_t);
        end-pi;
 
        dcl-s do_x1     packed(7);

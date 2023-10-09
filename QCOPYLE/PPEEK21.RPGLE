@@ -1,15 +1,16 @@
-                                                                                     *
-      /if defined(internal_prototype)
-     D PEEK21          PR                  extpgm('PEEK21')
-      /else
-     D PEEK21          PR                  extpgm(PEEK21_NAME)
-      /endif
-     D  i_scnAID                           const like(scnAid_t)
-     D  i_pgm                              const like(pgm_t)
-     D  o_pgmCmd                                 like(pgmCmd_t)
-     D  o_cmdDta                                 like(pgmCmdDt_t)
-     D  o_msgID                                  like(msgID_t)
-     D  o_msgDta                                 like(msgDta_t)
-     D  i_exclKeys                         const like(pgmCmd_t) dim(25)
-     D                                           options(*nopass)
-      *
+**FREE
+
+/if defined(internal_prototype)
+dcl-pr peek21 extpgm('PEEK21');
+/else
+dcl-pr peek21 extpgm(peek21_name);
+/endif
+  i_scnaid                           const like(scnaid_t);
+  i_pgm                              const like(pgm_t);
+  o_pgmcmd                                 like(pgmcmd_t);
+  o_cmddta                                 like(pgmcmddt_t);
+  o_msgid                                  like(msgid_t);
+  o_msgdta                                 like(msgdta_t);
+  i_exclkeys                         const like(pgmcmd_t) dim(25) options(*nopass);
+end-pr;
+

@@ -1,10 +1,11 @@
+**FREE
 
-      /if defined(internal_prototype)
-     D PEEK38          PR                  extpgm('PEEK38')
-      /else
-     D PEEK38          PR                  extpgm(PEEK38_NAME)
-      /endif
-     D  i_file                             const like(file_t)
-     D  i_lib                              const like(lib_t)
-     D  o_sqlOrder                               like(sqlOrder_t)
-      *
+/if defined(internal_prototype)
+dcl-pr peek38 extpgm('PEEK38');
+/else
+dcl-pr peek38 extpgm(peek38_name);
+/endif
+  i_file                             const like(file_t);
+  i_lib                              const like(lib_t);
+  o_sqlorder                               like(sqlorder_t);
+end-pr;

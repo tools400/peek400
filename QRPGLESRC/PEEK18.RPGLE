@@ -152,13 +152,13 @@
        dcl-pi peek18;
          i_fldl0100      const likeds(fldl0100_t);
          i_rcdfmt        const like(fmt_t);
-         i_buffer        like(rcdbuf_t);
-         i_tgtformat     char(10) const;
-         i_tgtvalue      char(10) const;
-         o_buffer        like(rcdbuf_t);
-         o_bufflen       like(int4_t);
-         o_msgid         like(msgid_t);
-         o_msgdta        like(msgdta_t);
+         i_buffer              like(rcdbuf_t);
+         i_tgtformat     const like(format_t);
+         i_tgtvalue      const like(format_t);
+         o_buffer              like(rcdbuf_t);
+         o_bufflen             like(int4_t);
+         o_msgid               like(msgid_t);
+         o_msgdta              like(msgdta_t);
        end-pi;
 
        dcl-ds f_key likerec(fpeekfld: *key);

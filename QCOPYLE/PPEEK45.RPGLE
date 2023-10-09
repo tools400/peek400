@@ -1,17 +1,18 @@
+**FREE
 
-      /if defined(internal_prototype)
-     D PEEK45          PR                  extpgm('PEEK45')
-      /else
-     D PEEK45          PR                  extpgm(PEEK45_NAME)
-      /endif
-     D  i_dsp80                            const like(dsp80_t)
-     D  i_headType                         const like(headTyp_t)
-     D  i_copyright                        const like(copyRght_t)
-     D  i_fldName                          const like(fieldNme_t)
-     D  io_fldInhalt                             likeds(fldInhalt_t)
-     D  io_length                                like(int4_t)
-     D  i_protect                          const like(bool_t)
-     D  i_isUcs2                           const like(int4_t)
-     D  o_msgID                                  like(msgID_t)
-     D  o_msgDta                                 like(msgDta_t)
-      *
+/if defined(internal_prototype)
+dcl-pr peek45 extpgm('PEEK45');
+/else
+dcl-pr peek45 extpgm(peek45_name);
+/endif
+  i_dsp80                            const like(dsp80_t);
+  i_headtype                         const like(headtyp_t);
+  i_copyright                        const like(copyrght_t);
+  i_fldname                          const like(fieldnme_t);
+  io_fldinhalt                             likeds(fldinhalt_t);
+  io_length                                like(int4_t);
+  i_protect                          const like(bool_t);
+  i_isucs2                           const like(int4_t);
+  o_msgid                                  like(msgid_t);
+  o_msgdta                                 like(msgdta_t);
+end-pr;

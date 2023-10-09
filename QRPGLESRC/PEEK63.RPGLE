@@ -90,11 +90,11 @@
 
        dcl-proc cio_open export;
        dcl-pi *N        like(bool_t);
-         o_hfile         likeds(hfile_t);
+         o_hfile                likeds(hfile_t);
          i_file          const  like(file_t);
          i_lib           const  like(lib_t);
          i_mbr           const  like(mbr_t);
-         i_rcdformat     char(10) const;
+         i_rcdformat     const  like(rcdFmt_t);
          i_mode          pointer const  options(*string);
        end-pi;
 
