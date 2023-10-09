@@ -145,18 +145,24 @@
        dcl-s isjoinfile like(bool_t) inz(bFalse);
 
        dcl-ds now qualified;
-         dcl-ds date pos(1);
-           year    zoned(4);
-           century zoned(2) overlay(year);
-           month   zoned(2);
-           day     zoned(2);
-         end-ds;
-         dcl-ds time pos(9);
-           hour    zoned(2);
-           minute  zoned(2);
-           second  zoned(2);
-           mSecs   zoned(6);
-         end-ds;
+         date     likeds(ts_date_t) pos(1);
+         date6    char(6) pos(3);
+         time     likeds(ts_time_t) pos(9);
+         time6    char(6) pos(9);
+       end-ds;
+
+       dcl-ds ts_date_t qualified template;
+         year    zoned(4);
+         century zoned(2) overlay(year);
+         month   zoned(2);
+         day     zoned(2);
+       end-ds;
+
+       dcl-ds ts_time_t qualified template;
+         hour    zoned(2);
+         minute  zoned(2);
+         second  zoned(2);
+         mSecs   zoned(6);
        end-ds;
 
        //*******************************************************************
@@ -238,10 +244,10 @@
           endif;
 
           //  Datum
-          fild0100.atrdat = %char(now.date);
+          fild0100.atrdat = now.date6;
 
           //  Uhrzeit
-          fild0100.atrtim = %char(now.time);
+          fild0100.atrtim = now.time6;
 
           if o_nbrofent <= *zeros;
              //  Fehler aufgetreten
