@@ -62,7 +62,7 @@ dcl-ds peek_l2_ds likeds(infds_t);
 //----------------------------------------------------*
 
   dcl-ds yio_buff;
-yio_bufftb      char(1) dim(rcd_buff_len) inz;
+yio_bufftb      char(1) dim(RCD_BUFF_LEN) inz;
 end-ds;
 
 dcl-s ybuffer         like(rcdbuf_t) inz;
@@ -179,7 +179,7 @@ return;
     leavesr;
     endif;
 
-      if (bp > rcd_buff_len);
+      if (bp > RCD_BUFF_LEN);
     leave;
     endif;
 
@@ -213,7 +213,7 @@ endsr;
     leavesr;
     endif;
 
-      if (bp > rcd_buff_len);
+      if (bp > RCD_BUFF_LEN);
     leave;
   endif;
 enddo;
@@ -267,7 +267,7 @@ endsr;
     y = y - 2;
     endif;
 
-      if (x <= key_buff_len);
+      if (x <= KEY_BUFF_LEN);
     ybuffer = %subst(wrk_keyval:kp:y);
       else;
     ybuffer = %subst(wrk_keyval:kp);
@@ -331,12 +331,12 @@ endsr;
     for y = 1 to youtbuffln;
     yio_bufftb(bp) = %subst(youtbuffer:y:1);
     bp = bp + 1;
-      if (bp > rcd_buff_len);
+      if (bp > RCD_BUFF_LEN);
     leave;
   endif;
   endfor;
 
-  if (bp > rcd_buff_len);
+  if (bp > RCD_BUFF_LEN);
   // Puffer zu Ende
     else;
     //  Neue Startposition in Wrk_KeyVal

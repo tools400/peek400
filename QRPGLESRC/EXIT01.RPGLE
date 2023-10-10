@@ -119,6 +119,7 @@
       /include QCOPYLE,D_VARDEF
       /include QCOPYLE,USR1000
       /include QCOPYLE,CEERTX
+      /include QCOPYLE,SDS
 
       /define internal_prototype
       /include QCOPYLE,PEXIT01
@@ -127,78 +128,6 @@
        //  main prozedure
        dcl-pr p_main;
        end-pr;
-
-       //  Programminformationsdatenstruktur
-       dcl-ds sds qualified psds;
-         // Programmname
-         pgmname         char(10);
-         // Programmfehlerstatus
-         pgmstat         zoned(5);
-         // vorheriger Programmfehlerstatus
-         prevstat        zoned(5);
-         // Letzte Anweisungsnummer
-         lastseq         char(8);
-         // Letzte Unterroutine
-         lastsubr        char(8);
-         // Anzahl übergebener Parameter
-         nbrparm         zoned(3);
-         // Fehler-Msg
-         msgid           char(7);
-         //  Fehler-Art
-         msgprfx         char(3) overlay(msgid);
-         //  Fehler-Nummer
-         msgnbr          char(4) overlay(msgid:4);
-         // MI-Instruktions-Nr.
-         mi_instr        char(4);
-         // Arbeitsbereich für Nachrichten
-         workarea        char(30);
-         // Programmbiblitohek
-         pgmlib          char(10);
-         // CPF-Fehlertext
-         msgtext         char(80);
-         // Kz der Ausnahmebedingung
-         aube            char(4);
-         // unbenutzt
-         unused_1        char(16);
-         // Datumsformat
-         datfmt          char(8);
-         // Ersten 2 stellen von *YEAR
-         year            zoned(2);
-         // Letzte Dateioperation: Dateiname
-         fileopr         char(8);
-         // Datei-Staus-Information
-         filestat        char(35);
-         // Jobname
-         job             char(10);
-         // Benutzer
-         user            char(10);
-         // Jobnummer
-         jobnbr          zoned(6);
-         // Jobdatum, Aufbau wie UDATE
-         jobd            zoned(6);
-         // Programm-Ausführungsdatum, Aufbau wie UDATE
-         jobdate         zoned(6);
-         // Job-Zeit (HHMMSS)
-         jobtime         zoned(6);
-         // Umwandlungsdatum
-         crtdate         char(6);
-         // Umwandlungszeit (HHMMSS)
-         crttime         char(6);
-         // Compiler Version
-         compver         char(4);
-         // Quellendatei
-         srcfile         char(10);
-         // Bibliothek mit Quellendatei
-         srclib          char(10);
-         // Quellenteildatei
-         srcmbr          char(10);
-         // Program containing procedure
-         pgmproc         char(10);
-         // Module containing procedure
-         modproc         char(10);
-         // unbenutzt
-         unused_2        char(76);
-       end-ds;
 
        //===============================================================*
        //    Program Entry Point                                        *
@@ -460,14 +389,14 @@
 
        dcl-proc f_usraut;
        dcl-pi *n like(bool_t);
-         o_usrchgl       like(bool_t);
-         o_usrchgf       like(bool_t);
-         o_usrchgm       like(bool_t);
-         o_usrupdmd      like(bool_t);
-         o_usrupdky      like(bool_t);
-         o_usrchgsqlw    like(bool_t);
-         o_usrchgsqlo    like(bool_t);
-         o_usraccat      like(bool_t);
+         o_usrchgl              char(1);
+         o_usrchgf              char(1);
+         o_usrchgm              char(1);
+         o_usrupdmd             char(1);
+         o_usrupdky             char(1);
+         o_usrchgsqlw           char(1);
+         o_usrchgsqlo           char(1);
+         o_usraccat             char(1);
          i_user          const  like(user_t);
          i_file          const  like(file_t);
          i_lib           const  like(lib_t) options(*nopass);
@@ -510,14 +439,14 @@
           o_usraccat  = ex_accaut;
        else;
           isfound     = bFalse;
-          o_usrchgl   = bnotdef;
-          o_usrchgf   = bnotdef;
-          o_usrchgm   = bnotdef;
-          o_usrupdmd  = bnotdef;
-          o_usrupdky  = bnotdef;
-          o_usrchgsqlw= bnotdef;
-          o_usrchgsqlo= bnotdef;
-          o_usraccat  = bnotdef;
+          o_usrchgl   = bNotDef;
+          o_usrchgf   = bNotDef;
+          o_usrchgm   = bNotDef;
+          o_usrupdmd  = bNotDef;
+          o_usrupdky  = bNotDef;
+          o_usrchgsqlw= bNotDef;
+          o_usrchgsqlo= bNotDef;
+          o_usraccat  = bNotDef;
        endif;
 
        return isfound;
@@ -532,14 +461,14 @@
        dcl-proc f_objaut;
 
        dcl-pi *n like(bool_t);
-         o_objchgl       like(bool_t);
-         o_objchgf       like(bool_t);
-         o_objchgm       like(bool_t);
-         o_objupdmd      like(bool_t);
-         o_objupdky      like(bool_t);
-         o_objchgsqlw    like(bool_t);
-         o_objchgsqlo    like(bool_t);
-         o_objaccat      like(bool_t);
+         o_objchgl             char(1);
+         o_objchgf             char(1);
+         o_objchgm             char(1);
+         o_objupdmd            char(1);
+         o_objupdky            char(1);
+         o_objchgsqlw          char(1);
+         o_objchgsqlo          char(1);
+         o_objaccat            char(1);
          i_file          const like(file_t);
          i_lib           const like(lib_t) options(*nopass);
        end-pi;
@@ -548,7 +477,7 @@
        dcl-s isfound         like(bool_t) inz(bFalse);
 
        //  Hilfsfelder für optionale Parameter
-       dcl-s i7_lib          like(i_lib     ) inz;
+       dcl-s i7_lib          like(i_lib);
 
        //  lokale Arbeitsfelder
        dcl-ds ex_key3 likerec(FEXIT01: *KEY);
@@ -581,14 +510,14 @@
           o_objaccat  = ex_accaut;
        else;
           isfound     = bFalse;
-          o_objchgl   = bnotdef;
-          o_objchgf   = bnotdef;
-          o_objchgm   = bnotdef;
-          o_objupdmd  = bnotdef;
-          o_objupdky  = bnotdef;
-          o_objchgsqlw= bnotdef;
-          o_objchgsqlo= bnotdef;
-          o_objaccat  = bnotdef;
+          o_objchgl   = bNotDef;
+          o_objchgf   = bNotDef;
+          o_objchgm   = bNotDef;
+          o_objupdmd  = bNotDef;
+          o_objupdky  = bNotDef;
+          o_objchgsqlw= bNotDef;
+          o_objchgsqlo= bNotDef;
+          o_objaccat  = bNotDef;
        endif;
 
        return isfound;
@@ -602,14 +531,14 @@
 
        dcl-proc f_secaut;
        dcl-pi *n like(bool_t);
-         o_secchgl       like(bool_t);
-         o_secchgf       like(bool_t);
-         o_secchgm       like(bool_t);
-         o_secupdmd      like(bool_t);
-         o_secupdky      like(bool_t);
-         o_secchgsqlw    like(bool_t);
-         o_secchgsqlo    like(bool_t);
-         o_secaccat      like(bool_t);
+         o_secchgl             char(1);
+         o_secchgf             char(1);
+         o_secchgm             char(1);
+         o_secupdmd            char(1);
+         o_secupdky            char(1);
+         o_secchgsqlw          char(1);
+         o_secchgsqlo          char(1);
+         o_secaccat            char(1);
          i_user          const like(user_t) options(*nopass:*omit);
          i_lib           const like(lib_t) options(*nopass);
        end-pi;
@@ -618,8 +547,8 @@
        dcl-s isfound         like(bool_t) inz(bFalse);
 
        //  Hilfsfelder für optionale Parameter
-       dcl-s i6_user         like(i_user    ) inz;
-       dcl-s i7_lib          like(i_lib     ) inz;
+       dcl-s i6_user         like(i_user);
+       dcl-s i7_lib          like(i_lib);
 
        //  lokale Arbeitsfelder
        dcl-ds ex_key3 likerec(FEXIT01: *KEY);
@@ -663,14 +592,14 @@
           o_secaccat  = ex_accaut;
        else;
           isfound     = bFalse;
-          o_secchgl   = bnotdef;
-          o_secchgf   = bnotdef;
-          o_secchgm   = bnotdef;
-          o_secupdmd  = bnotdef;
-          o_secupdky  = bnotdef;
-          o_secchgsqlw= bnotdef;
-          o_secchgsqlo= bnotdef;
-          o_secaccat  = bnotdef;
+          o_secchgl   = bNotDef;
+          o_secchgf   = bNotDef;
+          o_secchgm   = bNotDef;
+          o_secupdmd  = bNotDef;
+          o_secupdky  = bNotDef;
+          o_secchgsqlw= bNotDef;
+          o_secchgsqlo= bNotDef;
+          o_secaccat  = bNotDef;
        endif;
 
        return isfound;
@@ -698,21 +627,21 @@
        //---------------------------------------------------------------*
 
        //  Wenn die Benutzerberechtigung definiert worden ist, ...
-       if (usraut <> bnotdef);
+       if (usraut <> bNotDef);
           //  ... dann
           //      benutzen Benutzerberechtigung   (Priorität 1, 2)
           tmpaut = usraut;
        else;
           //  ... sonst
           //      Wenn die Objektberechtigung definiert worden ist, dann ...
-          if (objaut <> bnotdef);
+          if (objaut <> bNotDef);
              //      ... dann
              //          benutzen Objektberechtigung (Priorität 3, 4)
              tmpaut = objaut;
           else;
              //      ... sonst
              //          Wenn die *SECATR Werte definiert worden sind, dann ...
-             if (secaut <> bnotdef);
+             if (secaut <> bNotDef);
                 //          ... dann
                 //              benutzen *SECATR Werte (Priorität 5-8)
                 tmpaut = secaut;

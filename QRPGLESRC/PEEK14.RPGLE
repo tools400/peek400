@@ -51,7 +51,7 @@ dcl-ds io_buff;
   io_bufffld like(rcdbuf_t);
 end-ds;
 
-dcl-s io_nullmap like(nullmap_t) dim(null_map_size);
+dcl-s io_nullmap like(nullmap_t) dim(NULL_MAP_SIZE);
 
 /COPY QCOPYLE,D_VARDEF
 /COPY QCOPYLE,FLDL0100
@@ -472,9 +472,9 @@ endsr;
 
 begsr frombuffer;
 
-  if (f_buffln(fldl0100) > rcd_buff_len);
+  if (f_buffln(fldl0100) > RCD_BUFF_LEN);
     clear usr8206;
-    usr8206.var1 = rcd_buff_len;
+    usr8206.var1 = RCD_BUFF_LEN;
     p_sndpgmmg('USR8206': usr8206: sds.pgmname);
   else;
     f_rtvfld(yfldinhalt: io_buff:

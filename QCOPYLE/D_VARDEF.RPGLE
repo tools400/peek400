@@ -16,7 +16,7 @@ dcl-s attrtype_t      char(1) template;
 dcl-s attrvalue_t     char(512) template;
 dcl-s datatype_t      char(1) template;
 dcl-s accmode_t       char(1) template;
-dcl-s bool_t          char(1) template;
+dcl-s bool_t          ind template;
 dcl-s cmdbuffer_t     char(32702) template;
 dcl-s copyrght_t      like(msgdta_t) template;
 dcl-s dsp80_t         like(bool_t) template;
@@ -30,7 +30,7 @@ dcl-s headtyp_t       char(10) template;
 dcl-s hexbuf_t        char(65532) template;
 
 dcl-s keybuf_t        char(2000) template;
-dcl-c key_buff_len    const(2000);
+dcl-c KEY_BUFF_LEN    const(2000);
 
 dcl-s lib_t           char(10) template;
 dcl-s mbr_t           char(10) template;
@@ -80,16 +80,17 @@ dcl-ds rcdbuffer_t qualified template;
   sbcs            char(32766);
   ucs2            ucs2(16383) overlay(sbcs);
 end-ds;
-dcl-c rcd_buff_len const(32766);
+dcl-c RCD_BUFF_LEN const(32766);
 
 dcl-s rcdnbr_t        int(10) template;
-dcl-s nullmap_t       zoned(1) dim(null_map_size);
-dcl-c null_map_size   const(8000);
+dcl-s nullmap_t       zoned(1) dim(NULL_MAP_SIZE);
+dcl-c NULL_MAP_SIZE   const(8000);
 
 dcl-s scnaid_t        char(10) template;
-dcl-s sqlorder_t      char(512) template;
-dcl-s sqlwhere_t      char(512) template;
-dcl-s sqlstmt_t       char(2000) template;
+dcl-s sqlSelect_t     char(512) template;
+dcl-s sqlOrder_t      char(512) template;
+dcl-s sqlWhere_t      char(512) template;
+dcl-s sqlStmt_t       char(2000) template;
 dcl-s user_t          char(10) template;
 
 dcl-ds qobj_t qualified template;
@@ -108,18 +109,17 @@ end-ds;
 //  Feldinhalt für Text-/Hex-Editor
 dcl-ds fldinhalt_t qualified template;
   sbcs            like(rcdbuf_t);
-  ucs2            like(rcdbufucs2_t)
-       overlay(sbcs);
+  ucs2            like(rcdbufucs2_t) overlay(sbcs);
 end-ds;
 
 //  Verwaltung gepinnter Datensätze
 dcl-ds pintabr_t qualified template;
-  rcdnbr          int(10);
-  file            char(10);
-  lib             char(10);
-  mbr             char(10);
-  rcdfmt          char(10);
-  mbrnbr          int(10);
+  rcdnbr              int(10);
+  file                char(10);
+  lib                 char(10);
+  mbr                 char(10);
+  rcdfmt              char(10);
+  mbrnbr              int(10);
 end-ds;
 
 //  Integer & Binärwerte:
@@ -129,60 +129,57 @@ dcl-s int4_t          int(10) template;
 dcl-s uint4_t         uns(10) template;
 
 //  Lower/Upper case:
-dcl-c clower 'abcdefghijklmnopqrstuvwxyzäöüß';
-dcl-c cupper 'ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜß';
+dcl-c C_LOWER          'abcdefghijklmnopqrstuvwxyzäöüß';
+dcl-c C_UPPER          'ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜß';
 
-dcl-c numeric_digits '1234567890';
+dcl-c NUMERIC_DIGITS  '1234567890';
 
 //  Grenzen für relative Satznummer
-dcl-c low_rcd_nbr const(1);
-dcl-c high_rcd_nbr const(2147483647);
+dcl-c LOW_RCD_NBR     1;
+dcl-c HIGH_RCD_NBR    2147483647;
 
 //  Access mode:
 dcl-s accessmode_t    char(1) template;
 
-dcl-c rrn_seq const('0');
-dcl-c key_seq const('1');
-dcl-c sql_seq const('2');
+dcl-c RRN_SEQ         '0';
+dcl-c KEY_SEQ         '1';
+dcl-c SQL_SEQ         '2';
 
 //  Key-Input-Mode:
-dcl-c key_mode_lower const('1');
-dcl-c key_mode_upper const('0');
+dcl-c KEY_MODE_LOWER  '1';
+dcl-c KEY_MODE_UPPER  '0';
 
 //  Update-Mode:
-dcl-c upd_m_dft const('*');
-dcl-c upd_m_yes const('1');
-dcl-c upd_m_nokey const('2');
-dcl-c upd_m_no const('0');
+dcl-c UPD_M_DFT       '*';
+dcl-c UPD_M_YES       '1';
+dcl-c UPD_M_NOKEY     '2';
+dcl-c UPD_M_NO        '0';
 
 //  Boolsche Werte:
-dcl-c btrue const('1');
-dcl-c bfalse const('0');
-dcl-c bnotdef const('-');
-dcl-c beof const('1');
+dcl-c bTrue           *on;
+dcl-c bFalse          *off;
+dcl-c bNotDef         '-';
+dcl-c bEOF            *on;
 
 //  Zustellarten von Nachrichten:
-dcl-c msg_t_info const('*INFO');
-dcl-c msg_t_inq const('*INQ');
-dcl-c msg_t_rqs const('*RQS');
-dcl-c msg_t_comp const('*COMP');
-dcl-c msg_t_diag const('*DIAG');
-dcl-c msg_t_notify const('*NOTIFY');
-dcl-c msg_t_escape const('*ESCAPE');
-dcl-c msg_t_status const('*STATUS');
+dcl-c MSG_T_INFO      '*INFO';
+dcl-c MSG_T_INQ       '*INQ';
+dcl-c MSG_T_RQS       '*RQS';
+dcl-c MSG_T_COMP      '*COMP';
+dcl-c MSG_T_DIAG      '*DIAG';
+dcl-c MSG_T_NOTIFY    '*NOTIFY';
+dcl-c MSG_T_ESCAPE    '*ESCAPE';
+dcl-c MSG_T_STATUS    '*STATUS';
 
 //  Modus:
-dcl-c mode_batch const('*BATCH');
-dcl-c mode_inter const('*INTER');
+dcl-c MODE_BATCH      '*BATCH';
+dcl-c MODE_INTER      '*INTER';
 
-dcl-c usrspc_name '§PEEK§';
-dcl-c usrspc_library 'QTEMP';
+dcl-c USRSPC_NAME        '§PEEK§';
+dcl-c USRSPC_LIBRARY     'QTEMP';
 
-dcl-c work_file_name
-      'PEEKWRK';
-dcl-c work_file_library
-      'QTEMP';
-dcl-c work_file_member
-      '*FIRST';
+dcl-c WORK_FILE_NAME     'PEEKWRK';
+dcl-c WORK_FILE_LIBRARY  'QTEMP';
+dcl-c WORK_FILE_MEMBER   '*FIRST';
 
 /ENDIF

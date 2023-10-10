@@ -555,7 +555,7 @@ begsr fill##;
   ##where = io_sqlwhere;
   ##order = io_sqlorder;
 
-  if (i_accessmode = key_seq) and
+  if (i_accessmode = KEY_SEQ) and
      (##order  = ' '    );
     tempscnfld = '##ORDER';
     tempfldpos = 1;

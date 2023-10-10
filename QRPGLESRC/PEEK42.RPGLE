@@ -44,7 +44,7 @@ dcl-ds io_buff;
   io_bufffld      like(rcdbuf_t);
 end-ds;
 
-dcl-s io_nullmap      like(nullmap_t) dim(null_map_size);
+dcl-s io_nullmap      like(nullmap_t) dim(NULL_MAP_SIZE);
 
 /COPY QCOPYLE,D_VARDEF
 /COPY QCOPYLE,FLDL0100
@@ -586,7 +586,7 @@ dcl-proc lf_rtvfldformat;
     return bFalse;
   endif;
 
-  fldl0100_tmp.f1dtyp = %xlate(clower: cupper: data.type);
+  fldl0100_tmp.f1dtyp = %xlate(C_LOWER: C_UPPER: data.type);
   if (f_isnotalw(fldl0100_tmp) = bTrue);
     clear usr8228;
     usr8228.var1 = data.type;

@@ -565,7 +565,7 @@ dcl-proc p_loadaccm;
   en_key4.en_section = '*ACCMODE';
   chain %kds(en_key4: 2) fpeekenv;
   if (not %found(peekenv));
-    o_accmode = key_seq;
+    o_accmode = KEY_SEQ;
   else;
     o_accmode = en_data;
   endif;
@@ -711,7 +711,7 @@ dcl-proc p_loadiskeylower;
   endif;
 
   if (not %found(peekenv));
-    o_iskeylower = key_mode_upper;
+    o_iskeylower = KEY_MODE_UPPER;
   else;
     o_iskeylower = en_data;
   endif;

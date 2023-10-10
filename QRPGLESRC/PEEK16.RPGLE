@@ -270,14 +270,6 @@ dcl-pi peek16;
   i_numpasses     const like(int4_t);
 end-pi;
 
-dcl-s do_x1           packed(7);
-dcl-s do_x2           packed(7);
-dcl-s do_x3           packed(7);
-dcl-s do_x4           packed(7);
-dcl-s do_x5           packed(7);
-dcl-s do_x6           packed(7);
-dcl-s do_x7           packed(7);
-
 //  Register error handler
 ceehdlr(%paddr('errorHandler')
        : *null: *omit);
@@ -286,10 +278,9 @@ open peeksrc;
 
 #srcseq = 0;
 
-for do_x1 = 1 to *hival;
+dow ('1');
   read finput;
-  *in11 = %eof;
-  if (*in11 = beof);
+  if (%eof());
     leave;
   endif;
 
@@ -379,7 +370,7 @@ for do_x1 = 1 to *hival;
   //  Rename-Struktur
   when (cmd = 'RNM1');
     ds_buflen = srcdta;
-    $bufln_ln = rcd_buff_len;
+    $bufln_ln = RCD_BUFF_LEN;
     p_wrtout(ds_buflen);
     exsr sub010;
 
@@ -421,7 +412,7 @@ for do_x1 = 1 to *hival;
     p_wrtout(srcdta);
   endsl;
 
-endfor;
+enddo;
 
 close qpeekgen;
 close peeksrc;
@@ -503,7 +494,7 @@ begsr sub004;
 
   setll 1 fpeekfld;
 
-  dow f_readfld <> beof;
+  dow f_readfld <> bEOF;
 
     fieldcount = fieldcount + 1;
 
@@ -546,7 +537,7 @@ begsr sub005;
 
   setll 1 fpeekfld;
 
-  dow f_readfld <> beof;
+  dow f_readfld <> bEOF;
 
     //  Feldzähler ...
     fieldcount = fieldcount + 1;
@@ -615,15 +606,14 @@ begsr sub006;
 
   setll 1 fcopy1;
 
-  for do_x2 = 1 to *hival;
+  dow ('1');
     read fcopy1;
-    *in11 = %eof;
-    if (*in11 = beof);
+    if (%eof());
       leave;
     endif;
 
     p_wrtout(srcdta);
-  endfor;
+  enddo;
 
   close qcopyle1;
 
@@ -659,15 +649,14 @@ begsr sub008;
 
   setll 1 fcopy2;
 
-  for do_x3 = 1 to *hival;
+  dow ('1');
     read fcopy2;
-    *in11 = %eof;
-    if (*in11 = beof);
+    if (%eof());
       leave;
     endif;
 
     p_wrtout(srcdta);
-  endfor;
+  enddo;
 
   close qcopyle2;
 
@@ -683,7 +672,7 @@ begsr sub009;
 
   setll 1 fpeekfld;
 
-  dow f_readfld <> beof;
+  dow f_readfld <> bEOF;
 
     //  Rename
     reset ds_rnmbuf;
@@ -710,7 +699,7 @@ begsr sub010;
 
   setll 1 fpeekfld;
 
-  dow f_readfld <> beof;
+  dow f_readfld <> bEOF;
 
     //  Rename
     reset ds_rnmex;
@@ -743,7 +732,7 @@ begsr sub011;
 
   setll 1 fpeekfld;
 
-  dow f_readfld <> beof;
+  dow f_readfld <> bEOF;
 
     //  Feldzähler ...
     fieldcount = fieldcount + 1;
@@ -873,15 +862,14 @@ begsr sub014;
 
   setll 1 fcopy3;
 
-  for do_x4 = 1 to *hival;
+  dow ('1');
     read fcopy3;
-    *in11 = %eof;
-    if (*in11 = beof);
+    if (%eof());
       leave;
     endif;
 
     p_wrtout(srcdta);
-  endfor;
+  enddo;
 
   close qcopyle3;
 
@@ -919,15 +907,14 @@ begsr sub016;
 
   setll 1 fcopy4;
 
-  for do_x5 = 1 to *hival;
+  dow ('1');
     read fcopy4;
-    *in11 = %eof;
-    if (*in11 = beof);
+    if (%eof());
       leave;
     endif;
 
     p_wrtout(srcdta);
-  endfor;
+  enddo;
 
   close qcopyle4;
 
@@ -943,15 +930,14 @@ begsr sub017;
 
   setll 1 fcopy5;
 
-  for do_x6 = 1 to *hival;
+  dow ('1');
     read fcopy5;
-    *in11 = %eof;
-    if (*in11 = beof);
+    if (%eof());
       leave;
     endif;
 
     p_wrtout(srcdta);
-  endfor;
+  enddo;
 
   close qcopyle5;
 
@@ -967,15 +953,14 @@ begsr sub018;
 
   setll 1 fcopy6;
 
-  for do_x7 = 1 to *hival;
+  dow ('1');
     read fcopy6;
-    *in11 = %eof;
-    if (*in11 = beof);
+    if (%eof());
       leave;
     endif;
 
     p_wrtout(srcdta);
-  endfor;
+  enddo;
 
   close qcopyle6;
 
@@ -1011,7 +996,7 @@ begsr sub020;
 
   setll 1 fpeekfld;
 
-  dow f_readfld <> beof;
+  dow f_readfld <> bEOF;
 
     fieldcount = fieldcount + 1;
 
@@ -1200,7 +1185,7 @@ begsr sub021;
 
   setll 1 fpeekfld;
 
-  dow f_readfld <> beof;
+  dow f_readfld <> bEOF;
 
     fieldcount = fieldcount + 1;
 
@@ -1279,7 +1264,7 @@ begsr sub022;
 
   setll 1 fpeekfld;
 
-  dow f_readfld <> beof;
+  dow f_readfld <> bEOF;
 
     fieldcount = fieldcount + 1;
 
@@ -1370,25 +1355,20 @@ end-proc;
 
 //============================================================*
 //    readFld       Lesen nächstes Feld aus PEEKFLD           *
+// Returns bTrue on end-of-file, else bFalse.                 *
 //============================================================*
 dcl-proc f_readfld;
   dcl-pi *N       like(bool_t);
   end-pi;
   //------------------------------------------------------------
 
-  dou *in20 = beof;
-
-    read fpeekfld;
-    *in20 = %eof;
-
-    if (*in20 <> beof);
-      fldl0100 = ffd;
-      leave;
-    endif;
-
-  enddo;
-
-  return *in20;
+  read fpeekfld;
+  if (%eof());
+    return bTrue;
+  else;
+    fldl0100 = ffd;
+    return bFalse;
+  endif;
 
 end-proc;
 

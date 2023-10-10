@@ -64,12 +64,12 @@
          i_rfile         const  likeds(rfile_t );
          io_rcdbuffer    like(rcdbuf_t);
          io_nullmap      like(nullmap_t)
-            dim(null_map_size);
+            dim(NULL_MAP_SIZE);
        end-pr;
 
        dcl-pr copyinnullmap;
          i_rfile         const  likeds(rfile_t );
-         io_nullmap      like(nullmap_t) dim(null_map_size);
+         io_nullmap      like(nullmap_t) dim(NULL_MAP_SIZE);
        end-pr;
 
        //  Returns the value of the specified mode parameter.
@@ -436,7 +436,7 @@
          i_rrn           const  like(rcdnbr_t);
          i_dolock        const  like(bool_t);
          io_rcdbuffer    like(rcdbuf_t);
-         io_nullmap      like(nullmap_t) dim(null_map_size);
+         io_nullmap      like(nullmap_t) dim(NULL_MAP_SIZE);
        end-pi;
 
        dcl-s options         int(10) inz(dft);
@@ -483,7 +483,7 @@
          i_key           const  like(keybuf_t);
          i_dolock        const  like(bool_t);
          io_rcdbuffer    like(rcdbuf_t);
-         io_nullmap      like(nullmap_t) dim(null_map_size);
+         io_nullmap      like(nullmap_t) dim(NULL_MAP_SIZE);
        end-pi;
 
        dcl-s options         int(10) inz(dft);
@@ -748,7 +748,7 @@
          io_hfile        likeds(hfile_t);
          i_dolock        const  like(bool_t);
          io_rcdbuffer    like(rcdbuf_t);
-         io_nullmap      like(nullmap_t) dim(null_map_size);
+         io_nullmap      like(nullmap_t) dim(NULL_MAP_SIZE);
        end-pi;
 
        dcl-s options     int(10) inz(dft);
@@ -795,7 +795,7 @@
           usr9994.var3 = f_strerror(f_errno());
           msgid  = 'USR9994';
           msgdta = usr9994;
-          p_sndpgmmg(msgid: msgdta: '*': msg_t_diag);
+          p_sndpgmmg(msgid: msgdta: '*': MSG_T_DIAG);
           return bTrue;   // Return "EOF" to caller
        endif;
 
@@ -823,7 +823,7 @@
          io_hfile        likeds(hfile_t);
          i_dolock        const  like(bool_t);
          io_rcdbuffer    like(rcdbuf_t);
-         io_nullmap      like(nullmap_t) dim(null_map_size);
+         io_nullmap      like(nullmap_t) dim(NULL_MAP_SIZE);
        end-pi;
 
        dcl-s options     int(10) inz(dft);
@@ -870,7 +870,7 @@
           usr9994.var3 = f_strerror(f_errno());
           msgid  = 'USR9994';
           msgdta = usr9994;
-          p_sndpgmmg(msgid: msgdta: '*': msg_t_diag);
+          p_sndpgmmg(msgid: msgdta: '*': MSG_T_DIAG);
           return bTrue;   // Return "EOF" to caller
        endif;
 
@@ -1058,7 +1058,7 @@
          i_rfile         const  likeds(rfile_t );
        io_rcdbuffer    like(rcdbuf_t);
        io_nullmap      like(nullmap_t)
-            dim(null_map_size);
+            dim(NULL_MAP_SIZE);
        end-pi;
 
        dcl-s x int(10);
@@ -1080,11 +1080,11 @@
        dcl-proc copyinnullmap;
        dcl-pi *N;
          i_rfile         const  likeds(rfile_t );
-         io_nullmap      like(nullmap_t) dim(null_map_size);
+         io_nullmap      like(nullmap_t) dim(NULL_MAP_SIZE);
        end-pi;
 
        dcl-s x int(10);
-       dcl-s innullmap zoned(1) dim(null_map_size) based(i_rfile.pinnull);
+       dcl-s innullmap zoned(1) dim(NULL_MAP_SIZE) based(i_rfile.pinnull);
        // ------------------------------------------------------------------------
 
        for x = 1 to i_rfile.nmaplen;

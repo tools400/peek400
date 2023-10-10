@@ -155,7 +155,7 @@ i_rrn           const  like(rcdnbr_t);
 i_dolock        const  like(bool_t);
 io_rcdbuffer    like(rcdbuf_t);
 io_nullmap      like(nullmap_t)
-     dim(null_map_size);
+     dim(NULL_MAP_SIZE);
 end-pr;
 //
 //-------------------------------------------------------------------*
@@ -169,7 +169,7 @@ i_key           const  like(keybuf_t);
 i_dolock        const  like(bool_t);
 io_rcdbuffer    like(rcdbuf_t);
 io_nullmap      like(nullmap_t)
-     dim(null_map_size);
+     dim(NULL_MAP_SIZE);
 end-pr;
 //
 //-------------------------------------------------------------------*
@@ -222,7 +222,7 @@ dcl-pr cio_read
 i_dolock        const  like(bool_t);
 io_rcdbuffer    like(rcdbuf_t);
 io_nullmap      like(nullmap_t)
-     dim(null_map_size);
+     dim(NULL_MAP_SIZE);
 end-pr;
 //
 //-------------------------------------------------------------------*
@@ -235,7 +235,7 @@ dcl-pr cio_readp
 i_dolock        const  like(bool_t);
 io_rcdbuffer    like(rcdbuf_t);
 io_nullmap      like(nullmap_t)
-     dim(null_map_size);
+     dim(NULL_MAP_SIZE);
 end-pr;
 //
 //-------------------------------------------------------------------*

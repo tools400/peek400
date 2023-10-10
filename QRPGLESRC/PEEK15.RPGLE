@@ -398,8 +398,6 @@ dcl-pi peek15;
   i_numpasses     const like(int4_t);
 end-pi;
 
-dcl-s do_x1           packed(7);
-
 //----------------------------------------------------*
 
 //  Register error handler
@@ -440,14 +438,14 @@ else;
 endif;
 
 reffile = %subst(i_qfile:  1: 10);
-reflib  = %subst(i_qfile: 11: 10);
+reflib = %subst(i_qfile: 11: 10);
 
 fieldcount = 0;
 
 //  Abarbeiten der Feldliste ...
 setll 1 peekfld;
 
-dow f_readfld() <> beof;
+dow (f_readfld() <> bEOF);
 
   //**                Clear                   USR8188
   //**                Eval      USR8188.var1 = xStage
@@ -556,7 +554,7 @@ fieldcount = 0;
 //  Abarbeiten der Feldliste ...
 setll 1 peekfld;
 
-dow f_readfld <> beof;
+dow f_readfld <> bEOF;
 
   //**                Clear                   USR8188
   //**                Eval      USR8188.var1 = xStage
@@ -613,16 +611,15 @@ begsr copyhead;
 
   open peeksrc;
 
-  for do_x1 = 1 to *hival;
+  dow ('1');
     read finput;
-    *in11 = %eof;
-    if (*in11 = beof);
+    if (%eof());
       leave;
     endif;
 
     //  Nur kopieren ...
     p_wrtdspf(srcdta);
-  endfor;
+  enddo;
 
   close peeksrc;
 
@@ -2142,25 +2139,20 @@ end-proc;
 
 //============================================================*
 //    readFld       Lesen nächstes Feld aus PEEKFLD           *
+// Returns bTrue on end-of-file, else bFalse.                 *
 //============================================================*
 dcl-proc f_readfld;
   dcl-pi *N       like(bool_t);
   end-pi;
   //------------------------------------------------------------
 
-  dou *in20 = beof;
-
-    read fpeekfld;
-    *in20 = %eof;
-
-    if (*in20 <> beof);
-      fldl0100 = ffd;
-      leave;
-    endif;
-
-  enddo;
-
-  return *in20;
+  read fpeekfld;
+  if (%eof());
+    return bTrue;
+  else;
+    fldl0100 = ffd;
+    return bFalse;
+  endif;
 
 end-proc;
 

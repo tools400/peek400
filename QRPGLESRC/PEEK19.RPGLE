@@ -113,12 +113,12 @@ for do_x1 = 1 to *hival;
     %subst(o_keyval: x: 1) =
       %subst(youtbuffer: y: 1);
     x = x + 1;
-    if (x > key_buff_len);
+    if (x > KEY_BUFF_LEN);
       leave;
     endif;
   endfor;
 
-  if (x > key_buff_len);
+  if (x > KEY_BUFF_LEN);
     leave;
   endif;
 

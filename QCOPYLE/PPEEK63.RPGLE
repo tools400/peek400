@@ -110,7 +110,7 @@ dcl-pr cio_chainwithrrn like(bool_t) extproc('PEEK63_CIO_chainWithRRN');
   i_rrn           const  like(rcdnbr_t);
   i_dolock        const  like(bool_t);
   io_rcdbuffer           like(rcdbuf_t);
-  io_nullmap             like(nullmap_t) dim(null_map_size);
+  io_nullmap             like(nullmap_t) dim(NULL_MAP_SIZE);
 end-pr;
 
 //-------------------------------------------------------------------*
@@ -119,7 +119,7 @@ dcl-pr cio_chainwithkey like(bool_t) extproc('PEEK63_CIO_chainWithKey');
   i_key           const  like(keybuf_t);
   i_dolock        const  like(bool_t);
   io_rcdbuffer           like(rcdbuf_t);
-  io_nullmap             like(nullmap_t) dim(null_map_size);
+  io_nullmap             like(nullmap_t) dim(NULL_MAP_SIZE);
 end-pr;
 
 //-------------------------------------------------------------------*
@@ -151,7 +151,7 @@ dcl-pr cio_read like(bool_t) extproc('PEEK63_CIO_read');
   io_hfile               likeds(hfile_t);
   i_dolock        const  like(bool_t);
   io_rcdbuffer           like(rcdbuf_t);
-  io_nullmap             like(nullmap_t) dim(null_map_size);
+  io_nullmap             like(nullmap_t) dim(NULL_MAP_SIZE);
 end-pr;
 
 //-------------------------------------------------------------------*
@@ -159,7 +159,7 @@ dcl-pr cio_readp like(bool_t) extproc('PEEK63_CIO_readp');
   io_hfile               likeds(hfile_t);
   i_dolock        const  like(bool_t);
   io_rcdbuffer           like(rcdbuf_t);
-  io_nullmap             like(nullmap_t) dim(null_map_size);
+  io_nullmap             like(nullmap_t) dim(NULL_MAP_SIZE);
 end-pr;
 
 //-------------------------------------------------------------------*

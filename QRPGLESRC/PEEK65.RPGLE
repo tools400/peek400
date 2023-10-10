@@ -62,7 +62,7 @@
          io_bufffld      like(rcdbuf_t);
        end-ds;
 
-       dcl-s io_nullmap      like(nullmap_t) dim(null_map_size);
+       dcl-s io_nullmap      like(nullmap_t) dim(NULL_MAP_SIZE);
 
        dcl-s ystring         like(rcdbuf_t);
        dcl-s ystrlen         like(int4_t);

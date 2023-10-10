@@ -506,8 +506,7 @@
              endif;
 
              //  Umsetzen in internes Arbeitsfeld ...
-             //*   cLOWER:cUPPER XLATE (P) ##Arg         R_Arg30
-             r_arg30 = %xlate(clower: cupper: ##arg);
+             r_arg30 = %xlate(C_LOWER: C_UPPER: ##arg);
 
              select;
                 //  Umsetzen des Sonderwertes "*BLANKS" ...

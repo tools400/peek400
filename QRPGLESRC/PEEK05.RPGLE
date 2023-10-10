@@ -225,7 +225,7 @@ dcl-ds io_buff;
   io_bufffld      like(rcdbuf_t);
 end-ds;
 
-dcl-s io_nullmap      like(nullmap_t) dim(null_map_size);
+dcl-s io_nullmap      like(nullmap_t) dim(NULL_MAP_SIZE);
 
 dcl-ds rtn qualified;
   file            like(##file);
@@ -264,7 +264,7 @@ dcl-s yFunction       char(10) inz;
 dcl-s yCommitLvl      like(commitLvl) inz('0');
 dcl-s yIsUpdKey       inz(bFalse)  like(isUpdKey );
 dcl-s yScreenNbr      like(int4_t) inz;
-dcl-s yIsLower        inz(bFalse ) like(bool_t);
+dcl-s yIsLower        char(1) inz(bFalse);
 
 dcl-ds yCursorPosition likeds(cursorPosition_t) inz;
 
@@ -325,7 +325,7 @@ dcl-s yenvfile        like(file_t)  inz;
 dcl-s yenvlib         like(lib_t)  inz;
 dcl-s yenvmbr         like(mbr_t)  inz;
 dcl-s yisautosave     like(bool_t)  inz(bFalse);
-dcl-s yiskeylower     like(bool_t)  inz;
+dcl-s yIsKeyLower     like(bool_t)  inz;
 dcl-s yoption         like(option_t)  inz;
 dcl-s ytext           like(text_t);
 dcl-s ysflopt         char(2);
@@ -402,7 +402,7 @@ dcl-s iscvtchar       char(1) inz(bFalse);
 dcl-s ispintoclr      char(1) inz(bTrue );
 dcl-s isreadc         char(1) inz(bFalse);
 dcl-s iscolexc        like(bool_t) inz(bFalse);
-dcl-s iskeylower      char(1) inz(bFalse);
+dcl-s isKeyLower      char(1) inz(bFalse);
 
 dcl-s commitLvl       char(1) inz('0');
 
@@ -541,11 +541,11 @@ dcl-s a1              char(1) inz;
 
 //  Arbeitsfeld für Sortierfolge: Satzfolge/Schlüsselfolge
 //  .. aktuelle Sortierung
-dcl-s accessMode      char(1) inz(rrn_seq);
+dcl-s accessMode      char(1) inz(RRN_SEQ);
 //  .. neue Sortierung für ChangeFile
-dcl-s newaccmode      char(1) inz(rrn_seq);
+dcl-s newaccmode      char(1) inz(RRN_SEQ);
 //  .. Sortierung vor SQl-Mode
-dcl-s oldaccmode      char(1) inz(rrn_seq);
+dcl-s oldaccmode      char(1) inz(RRN_SEQ);
 //  Arbeitsfeld für Befehlsverarbeitung, Verhinderung von Rekursionen
 dcl-s r#pgmcmd        like(ypgmcmd)  inz;
 //  Arbeitsfeld für Eingabe Aufsetzkey
@@ -699,7 +699,7 @@ dow ('1');
   endif;
 
   //  Öffnen/Schützen "Aufsetzschlüssel/Satznummer"
-  if (accessMode = sql_seq);
+  if (accessMode = SQL_SEQ);
     *in73 = '1';
   else;
     *in73 = '0';
@@ -726,7 +726,7 @@ dow ('1');
   endif;
 
   //  Eingabe der Schlüselfelder in Gross- oder Kleinbuchstaben
-  if (iskeylower = bFalse);
+  if (isKeyLower = bFalse);
     *in78 = *off;
     ##key132uc = ##key;
   else;
@@ -803,7 +803,7 @@ dow ('1');
   endif;
 
   //  Übernehmen Schlüselfelder
-  if (iskeylower = bFalse);
+  if (isKeyLower = bFalse);
     ##key = ##key132uc;
   else;
     ##key = ##key132lc;
@@ -1491,7 +1491,7 @@ endsr;
 begsr pmt_fmt;
 
   peek12(set0001.set_dsp80: COPYRIGHT: ##format
-        : mode_inter
+        : MODE_INTER
         : rcdl0200: yfmtnbr: yMsgID: yMsgDta);
 
   if (yMsgID = *blanks);
@@ -2528,12 +2528,12 @@ begsr c_sortbkey;
     //      Nix tun, keine Datei vorhanden
     exsr msgnofile;
   else;
-    if (accessMode = key_seq);
+    if (accessMode = KEY_SEQ);
     //    ... Sortierung stimmt bereits
     else;
 
       //  Umschalten der Sortierung
-      newaccmode = key_seq;
+      newaccmode = KEY_SEQ;
       exsr changesort;
 
     endif;
@@ -2551,14 +2551,14 @@ begsr c_sortbrrn;
     //      Nix tun, keine Datei vorhanden
     exsr msgnofile;
   else;
-    if (accessMode = rrn_seq);
+    if (accessMode = RRN_SEQ);
     //    ... Sortierung stimmt bereits
     else;
 
       if f_numbased(##file    :
                  ##library :
                  ##member  ) = 1;
-        newaccmode = rrn_seq;
+        newaccmode = RRN_SEQ;
         exsr changesort;
       else;
         clear usr8217;
@@ -2580,7 +2580,7 @@ begsr c_sorttgl;
     //      Nix tun, keine Datei vorhanden
     exsr msgnofile;
   else;
-    if (accessMode = rrn_seq);
+    if (accessMode = RRN_SEQ);
       exsr c_sortbkey;
     else;
       exsr c_sortbrrn;
@@ -2595,12 +2595,12 @@ endsr;
 
 begsr s_tglkeylc_uc;
 
-  if (iskeylower = bFalse);
-    iskeylower = bTrue;
+  if (isKeyLower = bFalse);
+    isKeyLower = bTrue;
     clear usr8223;
     p_sndpgmmg('USR8223': usr8223: sds.pgmname);
   else;
-    iskeylower = bFalse;
+    isKeyLower = bFalse;
     clear usr8224;
     p_sndpgmmg('USR8224': usr8224: sds.pgmname);
   endif;
@@ -2736,10 +2736,10 @@ begsr c_sql;
 
   if (ysqlwhere  <> ' ') or
      (ysqlorder  <> ' ');
-    if (accessMode <> sql_seq);
+    if (accessMode <> SQL_SEQ);
       oldaccmode = accessMode;
     endif;
-    accessMode = sql_seq;
+    accessMode = SQL_SEQ;
     sqlwhere   = ysqlwhere;
     sqlorder   = ysqlorder;
   else;
@@ -3322,9 +3322,9 @@ begsr s_dsphex;
     //    ... Anzeige stimmt bereits
     else;
 
-      if (file#x.rcdlen > rcd_buff_len);
+      if (file#x.rcdlen > RCD_BUFF_LEN);
         clear usr8206;
-        usr8206.var1   = rcd_buff_len;
+        usr8206.var1   = RCD_BUFF_LEN;
         p_sndpgmmg('USR8206': usr8206: sds.pgmname);
       else;
         set0001.set_dspmde = '*DSPHEX';
@@ -3453,7 +3453,7 @@ begsr loadenv;
         : rtn.format
         : rtn.accessmode: rtn.sqlwhere
         : rtn.sqlorder
-        : iskeylower
+        : isKeyLower
         :yMsgID: yMsgDta);
 
   if (yMsgID <> ' ');
@@ -3488,11 +3488,11 @@ begsr loadenv;
             : rtn.format
             : rtn.accessmode: rtn.sqlwhere
             : rtn.sqlorder
-            : iskeylower
+            : isKeyLower
             :yMsgID: yMsgDta);
     endif;
 
-    iskeylower = yiskeylower;
+    isKeyLower = yIsKeyLower;
   endif;
 
   ispintoclr = bTrue;
@@ -3512,7 +3512,7 @@ begsr saveenv;
         : pinTabRcd: nbrPinRcd
         : pinTabCol: nbrPinCol
         : accessMode: sqlwhere
-        : sqlorder: iskeylower
+        : sqlorder: isKeyLower
         : yMsgID: yMsgDta);
 
 endsr;
@@ -3999,9 +3999,8 @@ begsr srchstart;
   endif;
 
   //  Nicht Case-Sensitive suchen ...
-  if ysrchcase = bFalse
-     and srchisnum = bFalse;
-    srcharg = %xlate(clower:cupper:srcharg);
+  if (ysrchcase = bFalse and srchisnum = bFalse);
+    srcharg = %xlate(C_LOWER: C_UPPER: srcharg);
   else;
   //      keine Konvertierung erforderlich
   endif;
@@ -4281,8 +4280,7 @@ begsr srchcomp_r;
 
   //  Nicht Case-Sensitive suchen ...
   if (srchcase = bFalse);
-    srchcmprcd = %xlate(clower:cupper:
-    srchcmprcd);
+    srchcmprcd = %xlate(C_LOWER: C_UPPER: srchcmprcd);
   //  Case-Sensitive suchen ...
   endif;
 
@@ -4323,10 +4321,8 @@ begsr srchcomp_f;
 
   //  Nicht Case-Sensitive suchen ...
   //  (nur bei nicht numerischer Suche beachten)
-  if srchcase = bFalse
-     and srchisnum = bFalse;
-    srchcmpstr = %xlate(clower:cupper:
-    srchcmpstr);
+  if (srchcase = bFalse and srchisnum = bFalse);
+    srchcmpstr = %xlate(C_LOWER: C_UPPER: srchcmpstr);
   //  Case-Sensitive suchen ...
   endif;
 
@@ -5582,7 +5578,7 @@ begsr pbreadfld1;
       else;
         if (sflmode = '*HEADLINE');
           if (f_kseq = 0) or
-             (accessMode = rrn_seq);
+             (accessMode = RRN_SEQ);
             sflrow.chars(colrofs) = set0001.set_hedcol;
           else;
             sflrow.chars(colrofs) = set0001.set_keycol;
@@ -5618,7 +5614,7 @@ endsr;
 
 begsr pbgenkey;
 
-  if (accessMode = key_seq);
+  if (accessMode = KEY_SEQ);
     exsr pbbuildkey;
   else;
     exsr pbbuildrrn;
@@ -5667,7 +5663,7 @@ endsr;
 
 begsr pbgenintky;
 
-  if (accessMode = key_seq);
+  if (accessMode = KEY_SEQ);
     exsr pbintkey;
   else;
     exsr pbintrrn;
@@ -5796,13 +5792,13 @@ begsr pbsetll;
   else;
 
     select;
-    when (accessMode = key_seq);
+    when (accessMode = KEY_SEQ);
       cio_setllwithkey(hfile02: wrk#keyval);
       exsr f2tofx;
-    when (accessMode = rrn_seq);
+    when (accessMode = RRN_SEQ);
       cio_setllwithrrn(hfile01: wrk#rcdnbr);
       exsr f1tofx;
-    when (accessMode = sql_seq);
+    when (accessMode = SQL_SEQ);
     other;
     endsl;
 
@@ -5821,13 +5817,13 @@ begsr pbsetgt;
   else;
 
     select;
-    when (accessMode = key_seq);
+    when (accessMode = KEY_SEQ);
       cio_setgtwithkey(hfile02: wrk#keyval);
       exsr f2tofx;
-    when (accessMode = rrn_seq);
+    when (accessMode = RRN_SEQ);
       cio_setgtwithrrn(hfile01: wrk#rcdnbr);
       exsr f1tofx;
-    when (accessMode = sql_seq);
+    when (accessMode = SQL_SEQ);
     other;
     endsl;
 
@@ -5845,7 +5841,7 @@ begsr pbmovetop;
   //      Nix tun, keine Datei vorhanden
   else;
 
-    if (accessMode = sql_seq);
+    if (accessMode = SQL_SEQ);
       sql_gototop(yMsgID: yMsgDta);
       if (yMsgID <> '');
         p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
@@ -5854,7 +5850,7 @@ begsr pbmovetop;
       endif;
     else;
       wrk#keyval = '*LOVAL';
-      wrk#rcdnbr = low_rcd_nbr;
+      wrk#rcdnbr = LOW_RCD_NBR;
 
       exsr pbgenintky;
       exsr pbsetll;
@@ -5874,7 +5870,7 @@ begsr pbmovebot;
   //      Nix tun, keine Datei vorhanden
   else;
 
-    if (accessMode = sql_seq);
+    if (accessMode = SQL_SEQ);
       sql_gotobottom(yMsgID: yMsgDta);
       if (yMsgID <> '');
         p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
@@ -5883,7 +5879,7 @@ begsr pbmovebot;
       endif;
     else;
       wrk#keyval = '*HIVAL';
-      wrk#rcdnbr = high_rcd_nbr;
+      wrk#rcdnbr = HIGH_RCD_NBR;
 
       exsr pbgenintky;
       exsr pbsetgt;
@@ -5992,10 +5988,10 @@ begsr changekey;
   endif;
 
   select;
-  when (##rcdnbr < low_rcd_nbr);
-    ##rcdnbr = low_rcd_nbr;
-  when (##rcdnbr > high_rcd_nbr);
-    ##rcdnbr = high_rcd_nbr;
+  when (##rcdnbr < LOW_RCD_NBR);
+    ##rcdnbr = LOW_RCD_NBR;
+  when (##rcdnbr > HIGH_RCD_NBR);
+    ##rcdnbr = HIGH_RCD_NBR;
   other;
   //    Im gültigen Bereich ...
   endsl;
@@ -6170,15 +6166,15 @@ begsr openfile;
   //      ... wenn keine Schlüsselinformationen
   //          vorhanden sind, ...
   if iskeyavail = bFalse
-     and accessMode = key_seq;
+     and accessMode = KEY_SEQ;
     //          ... dann über RRN zugreifen
-    accessMode = rrn_seq;
+    accessMode = RRN_SEQ;
   else;
   //          ... sonst Modus beibehalten
   endif;
 
   //  Ermitteln Sortierung bei Zugriff über SQL ...
-  if (accessMode = sql_seq);
+  if (accessMode = SQL_SEQ);
     if (sqlorder = '*KEY');
       peek38(##file: ##library: sqlorder);
     else;
@@ -6287,7 +6283,7 @@ begsr openfile;
     // -------------------------------------------------
 
     //  Sortierung 2 nach Schlüsselfelder
-    if (accessMode = key_seq);
+    if (accessMode = KEY_SEQ);
       if cio_open(hfile02
                : ##file
                : ##library
@@ -6308,7 +6304,7 @@ begsr openfile;
     endif;
 
     //  Sortierung 1 nach Satzfolge
-    if (accessMode = rrn_seq);
+    if (accessMode = RRN_SEQ);
       if cio_open(hfile01
                : ##file
                : ##library
@@ -6329,7 +6325,7 @@ begsr openfile;
     endif;
 
     //  Sortierung 3 nach Sql
-    if (accessMode = sql_seq);
+    if (accessMode = SQL_SEQ);
       clear usr0013;
       p_sndstsmg('USR0013': usr0013);
       if sql_preparestatement(
@@ -6381,11 +6377,11 @@ begsr openfile;
   endif;
 
   //      ... aber Satzlänge größer 32766
-  if (file#x.rcdlen > rcd_buff_len);
+  if (file#x.rcdlen > RCD_BUFF_LEN);
     exsr closefile;
     p_rmvpgmmg(sds.pgmname);
     clear usr8207;
-    usr8207.var1 = rcd_buff_len;
+    usr8207.var1 = RCD_BUFF_LEN;
     p_sndpgmmg('USR8207': usr8207: sds.pgmname);
   else;
 
@@ -6418,7 +6414,7 @@ begsr openfile;
       // ... Nachrichten entfernen
       p_rmvpgmmg(sds.pgmname);
       // ... einblenden Aufsetzkey
-      if (accessMode = key_seq);
+      if (accessMode = KEY_SEQ);
         *in70 = '1';
       else;
         *in70 = '0';
@@ -6427,10 +6423,10 @@ begsr openfile;
       exsr c_poscsr;
 
       // ... Hexmode nicht bei Satzlänge größer 32766
-      if (file#x.rcdlen > rcd_buff_len and
+      if (file#x.rcdlen > RCD_BUFF_LEN and
           set0001.set_dspmde = '*DSPHEX');
         clear usr8206;
-        usr8206.var1  = rcd_buff_len;
+        usr8206.var1  = RCD_BUFF_LEN;
         p_sndpgmmg('USR8206': usr8206: sds.pgmname);
         exsr s_dspnrm;
       endif;
@@ -6490,9 +6486,9 @@ begsr openfile;
 
   isSflDirty = bTrue;
 
-  yIsLower = '-';
+  yIsLower = bNotDef;
 
-  iskeylower = bFalse;
+  isKeyLower = bFalse;
 
 endsr;
 
@@ -6507,27 +6503,27 @@ begsr pbread;
   dou (file#x.rcdfmt = ##format) or (*in99 = *on);
 
     select;
-    when (accessMode = key_seq);
+    when (accessMode = KEY_SEQ);
       if cio_read(hfile02: bFalse
-               : io_buff: io_nullmap) = beof;
+               : io_buff: io_nullmap) = bEOF;
         *in99 = *on;
       else;
         *in99 = *off;
       endif;
       exsr f2tofx;
       isfileerror = cio_iserror(hfile02);
-    when (accessMode = rrn_seq);
+    when (accessMode = RRN_SEQ);
       if cio_read(hfile01: bFalse
-               : io_buff: io_nullmap) = beof;
+               : io_buff: io_nullmap) = bEOF;
         *in99 = *on;
       else;
         *in99 = *off;
       endif;
       exsr f1tofx;
       isfileerror = cio_iserror(hfile01);
-    when (accessMode = sql_seq);
+    when (accessMode = SQL_SEQ);
       if sql_nextrow(io_buff: io_nullmap: hfile03:
-                  yMsgID : yMsgDta)  = beof;
+                  yMsgID : yMsgDta)  = bEOF;
         *in99 = *on;
         p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
         yMsgID = '';
@@ -6567,25 +6563,25 @@ begsr pbreadp;
   dou (file#x.rcdfmt = ##format) or (*in99 = *on);
 
     select;
-    when (accessMode = key_seq);
+    when (accessMode = KEY_SEQ);
       if cio_readp(hfile02: bFalse
-                : io_buff: io_nullmap) = beof;
+                : io_buff: io_nullmap) = bEOF;
         *in99 = *on;
       else;
         *in99 = *off;
       endif;
       exsr f2tofx;
-    when (accessMode = rrn_seq);
+    when (accessMode = RRN_SEQ);
       if cio_readp(hfile01: bFalse
-                : io_buff: io_nullmap) = beof;
+                : io_buff: io_nullmap) = bEOF;
         *in99 = *on;
       else;
         *in99 = *off;
       endif;
       exsr f1tofx;
-    when (accessMode = sql_seq);
+    when (accessMode = SQL_SEQ);
       if sql_previousrow(io_buff: io_nullmap: hfile03:
-                      yMsgID : yMsgDta) = beof;
+                      yMsgID : yMsgDta) = bEOF;
         *in99 = *on;
         if (yMsgID <> '');
           p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
@@ -6904,7 +6900,7 @@ endsr;
 begsr getrcdfrmt;
 
   peek12(set0001.set_dsp80: COPYRIGHT: ##format
-        : mode_batch
+        : MODE_BATCH
         : rcdl0200: yfmtnbr: yMsgID: yMsgDta);
 
   if (yMsgID <> 'USR8100');
@@ -7049,7 +7045,7 @@ begsr getmbrattr;
     $$lmtcnt = '*ERROR';
   endif;
 
-  if (accessMode = sql_seq);
+  if (accessMode = SQL_SEQ);
     if ($$records > set0016.set_maxrcds);
       $$records = 0;
       *in79 = *off;
@@ -7206,7 +7202,7 @@ begsr closefile;
     endif;
 
     select;
-    when (accessMode = key_seq);
+    when (accessMode = KEY_SEQ);
       //  Sortierung 2 für Schlüsselfolge
       if (cio_close(hfile02) = bTrue);
         *in99 = '0';
@@ -7214,7 +7210,7 @@ begsr closefile;
         *in99 = '1';
       endif;
       exsr f2tofx;
-    when (accessMode = rrn_seq);
+    when (accessMode = RRN_SEQ);
       //  Sortierung 1 für Satzfolge
       if (cio_close(hfile01) = bTrue);
         *in99 = '0';
@@ -7222,7 +7218,7 @@ begsr closefile;
         *in99 = '1';
       endif;
       exsr f1tofx;
-    when (accessMode = sql_seq);
+    when (accessMode = SQL_SEQ);
       if sql_close(hfile03:yMsgID :yMsgDta)
          = bTrue;
         *in99 = *off;
@@ -7439,15 +7435,15 @@ begsr getusrsetg;
   endif;
 
   //      ... updMod
-  if (i_updmodkey = upd_m_dft);
+  if (i_updmodkey = UPD_M_DFT);
     if (set0013.set_updmod = '1');
       auth.isUpdAlw = bTrue;
     else;
       auth.isUpdAlw = bFalse;
     endif;
   else;
-    if (i_updmodkey = upd_m_yes or
-        i_updmodkey = upd_m_nokey);
+    if (i_updmodkey = UPD_M_YES or
+        i_updmodkey = UPD_M_NOKEY);
       auth.isUpdAlw = bTrue;
     else;
       auth.isUpdAlw = bFalse;
@@ -7455,24 +7451,24 @@ begsr getusrsetg;
   endif;
 
   //      ... keyUpd
-  if (i_updmodkey = upd_m_dft or
-      i_updmodkey = upd_m_yes);
+  if (i_updmodkey = UPD_M_DFT or
+      i_updmodkey = UPD_M_YES);
     auth.isUpdKeyAlw = bTrue;
   else;
     auth.isUpdKeyAlw = bFalse;
   endif;
 
   //      ... chgSqlW
-  if (i_chgsqlw = upd_m_dft or
-      i_chgsqlw = upd_m_yes);
+  if (i_chgsqlw = UPD_M_DFT or
+      i_chgsqlw = UPD_M_YES);
     auth.isChgSQLWhereAlw = bTrue;
   else;
     auth.isChgSQLWhereAlw = bFalse;
   endif;
 
   //      ... chgSqlO
-  if (i_chgsqlo = upd_m_dft or
-      i_chgsqlo = upd_m_yes);
+  if (i_chgsqlo = UPD_M_DFT or
+      i_chgsqlo = UPD_M_YES);
     auth.isChgSQLOrderByAlw = bTrue;
   else;
     auth.isChgSQLOrderByAlw = bFalse;
@@ -7673,8 +7669,8 @@ endsr;
 begsr floatkeys;
 
   if (set0009.set_float  = bTrue) and
-     ((accessMode = key_seq) or
-      (accessMode = sql_seq));
+     ((accessMode = KEY_SEQ) or
+      (accessMode = SQL_SEQ));
 
     monitor;
       peek34(set0001.set_dsp80: COPYRIGHT: '*FLOATKEYS'
@@ -8046,7 +8042,7 @@ begsr first;
   // - Öffnen der Datei
   if (isopen = bFalse);
     accessMode = i_access;
-    if (accessMode = sql_seq);
+    if (accessMode = SQL_SEQ);
       sqlwhere  = i_sqlwhere;
       sqlorder  = i_sqlorder;
     endif;

@@ -90,7 +90,7 @@ exsr inzsr;
 
 exsr first;
 
-if (i_access = sql_seq);
+if (i_access = SQL_SEQ);
   exsr sqlseq;
 else;
   exsr otherseq;

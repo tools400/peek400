@@ -612,7 +612,7 @@ begsr addDelimiter;
   if (set0003.set_dlmtr = '');
   // ohne Delimeter ausgeben
   else;
-    if (o_bufflen < rcd_buff_len);
+    if (o_bufflen < RCD_BUFF_LEN);
       o_bufflen = o_bufflen + 1;
       %subst(
        o_buffer: o_bufflen: 1) = set0003.set_dlmtr;
@@ -1078,7 +1078,7 @@ begsr cvtToZoned;
       // mit Vorzeichen
       // ... Vorzeichen extrahieren
       x = fldl0100.f1digt + 1;
-      if (x <= rcd_buff_len);
+      if (x <= RCD_BUFF_LEN);
         a1 = %subst(i_buffer: x: 1);
       else;
         a1 = *blanks;
@@ -1156,7 +1156,7 @@ begsr cvtToFloat;
     else;
       // mit Vorzeichen
       // ... Vorzeichen extrahieren
-      if (x <= rcd_buff_len);
+      if (x <= RCD_BUFF_LEN);
         a1 = %subst(i_buffer: x: 1);
       else;
         a1 = *blanks;

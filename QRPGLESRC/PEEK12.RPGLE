@@ -436,7 +436,7 @@ begsr first;
   open peekfmt;
 
   // - Prüfen auf Satzformat
-  if (i_fmtmode = mode_batch) and
+  if (i_fmtmode = MODE_BATCH) and
      ((peek_01_ds.nbrOfRcd = 1) or (i_fmtname <> ''));
     setll 1 fpeekfmt;
     dou %eof(peekfmt);

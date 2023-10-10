@@ -112,8 +112,8 @@ dcl-proc peek46;
 
   //---------------------------------------------------*
 
-  qusrspc.lib = usrspc_library;
-  qusrspc.name = usrspc_name;
+  qusrspc.lib = USRSPC_LIBRARY;
+  qusrspc.name = USRSPC_NAME;
 
   monitor;
 
