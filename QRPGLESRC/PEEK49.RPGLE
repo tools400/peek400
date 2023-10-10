@@ -70,7 +70,7 @@ dcl-s r$rels          char(2) inz(*blanks);
 dcl-s peek21_name     like(pgmcalln_t) inz;
 dcl-s peek23_name     like(pgmcalln_t) inz;
 
-dcl-s isInzSr         like(bool_t) inz(bfalse);
+dcl-s isInzSr         like(bool_t) inz(bFalse);
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
@@ -357,11 +357,11 @@ endsr;
 
 begsr inzsr;
 
-  if (isInzSr = btrue);
+  if (isInzSr = bTrue);
     leavesr;
   endif;
 
-  isInzSr = btrue;
+  isInzSr = bTrue;
 
   PGMQ = '*';
 

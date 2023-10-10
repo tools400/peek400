@@ -1452,7 +1452,7 @@ dcl-proc f_isvldopt;
   end-pi;
 
   //  Funktionswert ...
-  dcl-s iserror         like(bool_t) inz(bfalse);
+  dcl-s iserror         like(bool_t) inz(bFalse);
   //---------------------------------------------------*
 
   peek21('#' + i_option: sds.pgmname
@@ -1463,11 +1463,11 @@ dcl-proc f_isvldopt;
     usr8110.var1 = i_option;
     o_msgid  = 'USR8110';
     o_msgdta = usr8110;
-    iserror  = btrue;
+    iserror  = bTrue;
   else;
     o_msgid  = ' ';
     o_msgdta = ' ';
-    iserror  = bfalse;
+    iserror  = bFalse;
   endif;
 
   return iserror;

@@ -75,7 +75,7 @@ ceehdlr(%paddr('errorHandler')
        : *null: *omit);
 
 // - Meldung
-if (i_nomsg = btrue);
+if (i_nomsg = bTrue);
   p_sndstsmg('USR8157': ' ');
 else;
 //        keine Statusmeldung ausgeben

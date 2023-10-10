@@ -233,45 +233,45 @@
 
        //  lokale Arbeitsfelder
        //  ... ändern Bibliothek erlaubt
-       dcl-s usrchgl         like(bool_t) inz(bfalse);
-       dcl-s objchgl         like(bool_t) inz(bfalse);
-       dcl-s secchgl         like(bool_t) inz(bfalse);
-       dcl-s chgl            like(bool_t) inz(bfalse);
+       dcl-s usrchgl         like(bool_t) inz(bFalse);
+       dcl-s objchgl         like(bool_t) inz(bFalse);
+       dcl-s secchgl         like(bool_t) inz(bFalse);
+       dcl-s chgl            like(bool_t) inz(bFalse);
        //  ... ändern Datei erlaubt
-       dcl-s usrchgf         like(bool_t) inz(bfalse);
-       dcl-s objchgf         like(bool_t) inz(bfalse);
-       dcl-s secchgf         like(bool_t) inz(bfalse);
-       dcl-s chgf            like(bool_t) inz(bfalse);
+       dcl-s usrchgf         like(bool_t) inz(bFalse);
+       dcl-s objchgf         like(bool_t) inz(bFalse);
+       dcl-s secchgf         like(bool_t) inz(bFalse);
+       dcl-s chgf            like(bool_t) inz(bFalse);
        //  ... ändern Teildatei erlaubt
-       dcl-s usrchgm         like(bool_t) inz(bfalse);
-       dcl-s objchgm         like(bool_t) inz(bfalse);
-       dcl-s secchgm         like(bool_t) inz(bfalse);
-       dcl-s chgm            like(bool_t) inz(bfalse);
+       dcl-s usrchgm         like(bool_t) inz(bFalse);
+       dcl-s objchgm         like(bool_t) inz(bFalse);
+       dcl-s secchgm         like(bool_t) inz(bFalse);
+       dcl-s chgm            like(bool_t) inz(bFalse);
        //  ... Datensatzänderungen erlaubt
-       dcl-s usrupdmd        like(bool_t) inz(bfalse);
-       dcl-s objupdmd        like(bool_t) inz(bfalse);
-       dcl-s secupdmd        like(bool_t) inz(bfalse);
-       dcl-s updmd           like(bool_t) inz(bfalse);
+       dcl-s usrupdmd        like(bool_t) inz(bFalse);
+       dcl-s objupdmd        like(bool_t) inz(bFalse);
+       dcl-s secupdmd        like(bool_t) inz(bFalse);
+       dcl-s updmd           like(bool_t) inz(bFalse);
        //  ... Schlüsseländerung erlaubt
-       dcl-s usrupdky        like(bool_t) inz(bfalse);
-       dcl-s objupdky        like(bool_t) inz(bfalse);
-       dcl-s secupdky        like(bool_t) inz(bfalse);
-       dcl-s updky           like(bool_t) inz(bfalse);
+       dcl-s usrupdky        like(bool_t) inz(bFalse);
+       dcl-s objupdky        like(bool_t) inz(bFalse);
+       dcl-s secupdky        like(bool_t) inz(bFalse);
+       dcl-s updky           like(bool_t) inz(bFalse);
        //  ... ändern SQL WHERE erlaubt
-       dcl-s usrchgsqlw      like(bool_t) inz(bfalse);
-       dcl-s objchgsqlw      like(bool_t) inz(bfalse);
-       dcl-s secchgsqlw      like(bool_t) inz(bfalse);
-       dcl-s chgsqlw         like(bool_t) inz(bfalse);
+       dcl-s usrchgsqlw      like(bool_t) inz(bFalse);
+       dcl-s objchgsqlw      like(bool_t) inz(bFalse);
+       dcl-s secchgsqlw      like(bool_t) inz(bFalse);
+       dcl-s chgsqlw         like(bool_t) inz(bFalse);
        //  ... ändern SQL ORDERR BY erlaubt
-       dcl-s usrchgsqlo      like(bool_t) inz(bfalse);
-       dcl-s objchgsqlo      like(bool_t) inz(bfalse);
-       dcl-s secchgsqlo      like(bool_t) inz(bfalse);
-       dcl-s chgsqlo         like(bool_t) inz(bfalse);
+       dcl-s usrchgsqlo      like(bool_t) inz(bFalse);
+       dcl-s objchgsqlo      like(bool_t) inz(bFalse);
+       dcl-s secchgsqlo      like(bool_t) inz(bFalse);
+       dcl-s chgsqlo         like(bool_t) inz(bFalse);
        //  ... Zugriffsberechtigung
-       dcl-s usraccat        like(bool_t) inz(bfalse);
-       dcl-s objaccat        like(bool_t) inz(bfalse);
-       dcl-s secaccat        like(bool_t) inz(bfalse);
-       dcl-s accat           like(bool_t) inz(bfalse);
+       dcl-s usraccat        like(bool_t) inz(bFalse);
+       dcl-s objaccat        like(bool_t) inz(bFalse);
+       dcl-s secaccat        like(bool_t) inz(bFalse);
+       dcl-s accat           like(bool_t) inz(bFalse);
 
        //  ermitteln Benutzerberechtigung ...
        //  ... genau diese Datei (Priorität 1)
@@ -285,7 +285,7 @@
                    : usraccat
                    : sds.user
                    : gi_qFile.name
-                   : gi_qFile.lib) = bfalse;
+                   : gi_qFile.lib) = bFalse;
           //      ... alle Dateien diesen Typs (Priorität 2)
           f_usraut(usrchgl
                    : usrchgf
@@ -310,7 +310,7 @@
                    : objchgsqlo
                    : objaccat
                    : gi_qFile.name
-                   : gi_qFile.lib) = bfalse;
+                   : gi_qFile.lib) = bFalse;
           //      ... alle Dateien diesen Typs (Priorität 4)
           f_objaut(objchgl
                    : objchgf
@@ -334,7 +334,7 @@
                    : secchgsqlo
                    : secaccat
                    : sds.user
-                   : gi_qFile.lib) = bfalse;
+                   : gi_qFile.lib) = bFalse;
           //      ... für diesen Benutzer (Priorität 6)
           if f_secaut(secchgl
                       : secchgf
@@ -344,7 +344,7 @@
                       : secchgsqlw
                       : secchgsqlo
                       : secaccat
-                      : sds.user)  = bfalse;
+                      : sds.user)  = bFalse;
              //          ... für alle Benutzer, diese Bibliothek (Priorität 7)
              if f_secaut(secchgl
                          : secchgf
@@ -355,7 +355,7 @@
                          : secchgsqlo
                          : secaccat
                          : *omit
-                         : gi_qFile.lib) = bfalse;
+                         : gi_qFile.lib) = bFalse;
                 //              ... für alle Benutzer (Priorität 8)
                 if f_secaut(secchgl
                             : secchgf
@@ -364,7 +364,7 @@
                             : secupdky
                             : secchgsqlw
                             : secchgsqlo
-                            : secaccat  ) = bfalse;
+                            : secaccat  ) = bFalse;
                 endif;
              endif;
           endif;
@@ -435,12 +435,12 @@
        gio_chgsqlw = chgsqlw;
        gio_chgsqlo = chgsqlo;
 
-       if (accat  = btrue);
-          gio_accat = btrue;
+       if (accat  = bTrue);
+          gio_accat = bTrue;
           go_msgid  = ' ';
           go_msgdta = ' ';
        else;
-          gio_accat = bfalse;
+          gio_accat = bFalse;
           clear usr1000;
           usr1000.var1  = gi_qFile.name;
           usr1000.var2  = gi_qFile.lib;
@@ -474,7 +474,7 @@
        end-pi;
 
        //  Funktionswert
-       dcl-s isfound         like(bool_t) inz(bfalse);
+       dcl-s isfound         like(bool_t) inz(bFalse);
 
        //  Hilfsfelder für optionale Parameter
        dcl-s i5_lib          like(i_lib     ) inz;
@@ -499,7 +499,7 @@
        chain %kds(ex_key3: 3) fexit01;
        *in01 = not %found;
        if (*in01 = *off);
-          isfound     = btrue;
+          isfound     = bTrue;
           o_usrchgl   = ex_chglib;
           o_usrchgf   = ex_chgfile;
           o_usrchgm   = ex_chgmbr;
@@ -509,7 +509,7 @@
           o_usrchgsqlo= ex_chgsqlo;
           o_usraccat  = ex_accaut;
        else;
-          isfound     = bfalse;
+          isfound     = bFalse;
           o_usrchgl   = bnotdef;
           o_usrchgf   = bnotdef;
           o_usrchgm   = bnotdef;
@@ -545,7 +545,7 @@
        end-pi;
 
        //  Funktionswert
-       dcl-s isfound         like(bool_t) inz(bfalse);
+       dcl-s isfound         like(bool_t) inz(bFalse);
 
        //  Hilfsfelder für optionale Parameter
        dcl-s i7_lib          like(i_lib     ) inz;
@@ -570,7 +570,7 @@
        chain %kds(ex_key3: 3) fexit01;
        *in01 = not %found;
        if (*in01 = *off);
-          isfound     = btrue;
+          isfound     = bTrue;
           o_objchgl   = ex_chglib;
           o_objchgf   = ex_chgfile;
           o_objchgm   = ex_chgmbr;
@@ -580,7 +580,7 @@
           o_objchgsqlo= ex_chgsqlo;
           o_objaccat  = ex_accaut;
        else;
-          isfound     = bfalse;
+          isfound     = bFalse;
           o_objchgl   = bnotdef;
           o_objchgf   = bnotdef;
           o_objchgm   = bnotdef;
@@ -615,7 +615,7 @@
        end-pi;
 
        //  Funktionswert
-       dcl-s isfound         like(bool_t) inz(bfalse);
+       dcl-s isfound         like(bool_t) inz(bFalse);
 
        //  Hilfsfelder für optionale Parameter
        dcl-s i6_user         like(i_user    ) inz;
@@ -652,7 +652,7 @@
        chain %kds(ex_key3: 3) fexit01;
        *in01 = not %found;
        if (*in01 = *off);
-          isfound     = btrue;
+          isfound     = bTrue;
           o_secchgl   = ex_chglib;
           o_secchgf   = ex_chgfile;
           o_secchgm   = ex_chgmbr;
@@ -662,7 +662,7 @@
           o_secchgsqlo= ex_chgsqlo;
           o_secaccat  = ex_accaut;
        else;
-          isfound     = bfalse;
+          isfound     = bFalse;
           o_secchgl   = bnotdef;
           o_secchgf   = bnotdef;
           o_secchgm   = bnotdef;

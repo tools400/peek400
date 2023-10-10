@@ -359,7 +359,7 @@ begsr api_crt;
     endif;
 
     //  Join logical file
-    if (isjoinfile = btrue);
+    if (isjoinfile = bTrue);
       fild0100.atjoin = 'Y';
     else;
       fild0100.atjoin = 'N';
@@ -419,7 +419,7 @@ begsr based_on;
     exsr findrcdfmt;
   endif;
 
-  if (isfound = btrue);
+  if (isfound = bTrue);
     //  store number of key fields ...
     clear bspf0100;
     bspf0100.bffile = filescope.qdbfbf;
@@ -443,7 +443,7 @@ endsr;
 begsr key;
 
   exsr findrcdfmt;
-  if (isfound = btrue);
+  if (isfound = bTrue);
     //  store number of key fields ...
     nbrofkeyfd = filescope.qdbfbgky;
     posofkeyfd = *zeros;
@@ -662,7 +662,7 @@ endsr;
 begsr select;
 
   exsr findrcdfmt;
-  if (isfound = btrue);
+  if (isfound = bTrue);
     //  store number of select/omit statements ...
     nbrofslom = filescope.qdbfsoon;
     posofslom = *zeros;
@@ -809,7 +809,7 @@ begsr findrcdfmt;
     if filescope.qdbft = i_rcdfmt or
        i_rcdfmt = '*FIRST';
       //  Record format generic key field count ...
-      isfound = btrue;
+      isfound = bTrue;
       leave;
     else;
       //  No matching record format found ...
@@ -832,7 +832,7 @@ begsr findmbr;
   else;
     offset = filedefhd.qdbfos + ((mbrnbr -1) * %size(filescope));
     pFilescpay = %addr(rcvVarTab(offset + 1));
-    isfound = btrue;
+    isfound = bTrue;
   endif;
 
 endsr;

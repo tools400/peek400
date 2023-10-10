@@ -102,7 +102,7 @@ dcl-s ycopyright      char(512) inz(*blanks);
 dcl-s yfldname        like(fieldnme_t) inz;
 dcl-s yfldinhalt      like(rcdbuf_t) inz(*blanks);
 dcl-s ylength         like(int4_t) inz;
-dcl-s yprotect        like(bool_t) inz(btrue);
+dcl-s yprotect        like(bool_t) inz(bTrue);
 dcl-s yisucs2         like(int4_t) inz;
 
 dcl-s sflpage         like(int4_t) inz;
@@ -113,8 +113,8 @@ dcl-c NBR_F_KEYS const(3);
 
 dcl-s sfbot           like(int4_t) inz;
 
-dcl-s isrecord        like(bool_t) inz(bfalse);
-dcl-s iscvtchar       like(bool_t) inz(bfalse);
+dcl-s isrecord        like(bool_t) inz(bFalse);
+dcl-s iscvtchar       like(bool_t) inz(bFalse);
 
 dcl-s peek06_name     like(pgmcalln_t) inz;
 dcl-s peek21_name     like(pgmcalln_t) inz;
@@ -133,7 +133,7 @@ dcl-s rowcnt          like(int4_t) inz;
 
 dcl-s editor          char(10) inz;
 
-dcl-s isinzsr         like(bool_t) inz(bfalse);
+dcl-s isinzsr         like(bool_t) inz(bFalse);
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
@@ -386,7 +386,7 @@ begsr c_fldhexed;
   yheadertyp = io_headertype;
   ycopyright = i_copyright;
   yfldname = r$fnme;
-  yprotect = btrue;
+  yprotect = bTrue;
   ymsgid = *blanks;
   ymsgdta = *blanks;
 
@@ -457,7 +457,7 @@ begsr c_fldstred;
   yheadertyp = io_headertype;
   ycopyright = i_copyright;
   yfldname = r$fnme;
-  yprotect = btrue;
+  yprotect = bTrue;
   ymsgid = *blanks;
   ymsgdta = *blanks;
 
@@ -478,7 +478,7 @@ begsr frombuffer;
     p_sndpgmmg('USR8206': usr8206: sds.pgmname);
   else;
     f_rtvfld(yfldinhalt: io_buff:
-            fldl0100: bfalse);
+            fldl0100: bFalse);
 
     ylength = f_curfldln(io_buff: fldl0100);
 
@@ -491,12 +491,12 @@ begsr frombuffer;
     if (editor = '*HEX');
       peek45(i_dsp80: io_headertype: i_copyright
             : r$fnme: yfldinhalt: ylength
-            : btrue: yisucs2
+            : bTrue: yisucs2
             : ymsgid: ymsgdta);
     else;
       peek64(i_dsp80: io_headertype: i_copyright
             : r$fnme: yfldinhalt: ylength
-            : btrue: yisucs2
+            : bTrue: yisucs2
             : ymsgid: ymsgdta);
     endif;
   endif;
@@ -575,9 +575,9 @@ begsr c_print;
     peek65(i_rcdnbr
           : i_file: i_lib: i_mbr: i_rcdfmt
           : ymsgid: ymsgdta);
-    *in99 = bfalse;
+    *in99 = bFalse;
   on-error;
-    *in99 = btrue;
+    *in99 = bTrue;
   endmon;
 
   if (ymsgid <> '');
@@ -632,7 +632,7 @@ begsr pbinit;
   sfllastrcd = *zeros;
 
   //  Konvertieren nicht darstellbarer Zeichen
-  iscvtchar = bfalse;
+  iscvtchar = bFalse;
 
 endsr;
 
@@ -656,7 +656,7 @@ begsr pbreadup;
     fldl0100 = f_ffd;
 
     //  nicht erlaubte Feldtypen
-    if (f_isnotalw(fldl0100) = btrue);
+    if (f_isnotalw(fldl0100) = bTrue);
       iter;
     endif;
 
@@ -774,21 +774,21 @@ begsr pbfill;
     monitor;
       //  ... aufbereiten des Feldinhaltes
       peek06(fldl0100: 'FLDL0100': io_buff
-            : bfalse: btrue
+            : bFalse: bTrue
             : ystring: ystrlen: ymsgid: ymsgdta);
 
       //  ... Konvertieren nicht darstellbarer Zeichen
       peek32(ystring: ystrlen: 0
             : ymsgid: ymsgdta);
-      *in99 = bfalse;
+      *in99 = bFalse;
     on-error;
-      *in99 = btrue;
+      *in99 = bTrue;
     endmon;
 
     if (*in99 = *off);
-      if (iscvtchar = bfalse);
+      if (iscvtchar = bFalse);
         if (ymsgid <> *blanks);
-          iscvtchar = btrue;
+          iscvtchar = bTrue;
           p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
         else;
         //         keine Nachricht anstehend
@@ -880,12 +880,12 @@ begsr readrcd;
 
   if cio_chainwithrrn(hfile04
                    : i_rcdnbr
-                   : bfalse
+                   : bFalse
                    : io_buff
-                   : io_nullmap) = bfalse;
-    isrecord = bfalse;
+                   : io_nullmap) = bFalse;
+    isrecord = bFalse;
   else;
-    isrecord = btrue;
+    isrecord = bTrue;
   endif;
 
 endsr;
@@ -951,11 +951,11 @@ endsr;
 
 begsr inzsr;
 
-  if (isinzsr = btrue);
+  if (isinzsr = bTrue);
     leavesr;
   endif;
 
-  isinzsr = btrue;
+  isinzsr = bTrue;
 
   PGMQ = '*';
 

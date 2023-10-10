@@ -8211,7 +8211,7 @@ dcl-proc f_chain00;
   if (cio_getfile(hfile00)    <> i_file ) or
      (cio_getlibrary(hfile00) <> i_lib  ) or
      (cio_getmember(hfile00)  <> i_mbr  );
-    if (cio_isopen(hfile00) = btrue);
+    if (cio_isopen(hfile00) = bTrue);
       cio_close(hfile00);
     endif;
   endif;
@@ -8229,7 +8229,7 @@ dcl-proc f_chain00;
   yMsgID = '';
   yMsgDta = '';
 
-  if (cio_isopen(hfile00) = bfalse);
+  if (cio_isopen(hfile00) = bFalse);
     if (commitLvl = '1');
       cio_open(hfile00
               : i_file
@@ -8260,9 +8260,9 @@ dcl-proc f_chain00;
 
   if cio_chainwithrrn(hfile00
                    : i_rrn
-                   : btrue
+                   : bTrue
                    : io_buff
-                   : io_nullmap) = bfalse;
+                   : io_nullmap) = bFalse;
     isFound = bTrue;
   else;
     isFound = bFalse;
@@ -8293,12 +8293,12 @@ dcl-proc f_chain04;
   if (cio_getfile(hfile04)    <> i_file ) or
      (cio_getlibrary(hfile04) <> i_lib  ) or
      (cio_getmember(hfile04)  <> i_mbr  );
-    if (cio_isopen(hfile04) = btrue);
+    if (cio_isopen(hfile04) = bTrue);
       cio_close(hfile04);
     endif;
   endif;
 
-  if (cio_isopen(hfile04) = bfalse);
+  if (cio_isopen(hfile04) = bFalse);
     cio_open(hfile04
             : i_file
             : i_lib
@@ -8310,9 +8310,9 @@ dcl-proc f_chain04;
 
   if cio_chainwithrrn(hfile04
                    : i_rrn
-                   : bfalse
+                   : bFalse
                    : io_buff
-                   : io_nullmap) = bfalse;
+                   : io_nullmap) = bFalse;
     isFound = bTrue;
   else;
     isFound = bFalse;

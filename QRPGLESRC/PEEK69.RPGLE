@@ -78,9 +78,9 @@
        dcl-ds yqfile likeds(qobj_t) inz;
        dcl-ds rtnfile likeds(qobj_t) inz;
 
-       dcl-s isnewpos        char(1) inz(bfalse);
-       dcl-s isfound         char(1) inz(bfalse);
-       dcl-s issflerror      char(1) inz(bfalse);
+       dcl-s isnewpos        char(1) inz(bFalse);
+       dcl-s isfound         char(1) inz(bFalse);
+       dcl-s issflerror      char(1) inz(bFalse);
 
        dcl-s sftop           like(int4_t) inz;
        dcl-s sflpage         like(int4_t) inz;
@@ -108,7 +108,7 @@
        dcl-s dspmoderaw      char(1);
        dcl-ds errcode likeds(errcode_t) inz;
 
-       dcl-s isInzSr         like(bool_t) inz(bfalse);
+       dcl-s isInzSr         like(bool_t) inz(bFalse);
 
        //*******************************************************************
        //                 S T E U E R  -  R O U T I N E                    *
@@ -313,7 +313,7 @@
              p_sndpgmmg('USR8209': usr8209: sds.pgmname);
           else;
              exsr postombr;
-             if (isnewpos = btrue);
+             if (isnewpos = bTrue);
                 sfsanr = wrk_sfsanr;
              endif;
           endif;
@@ -331,18 +331,18 @@
           endif;
 
           if (lstfile = *blanks);
-             isnewpos = bfalse;
+             isnewpos = bFalse;
              lstnbrrcd = 0;
           else;
 
              exsr srchmbr;
-             if (isfound = bfalse);
-                isnewpos = bfalse;
+             if (isfound = bFalse);
+                isnewpos = bFalse;
                 clear usr8194;
                 usr8194.var1 = lstfile;
                 p_sndpgmmg('USR8194': usr8194: sds.pgmname);
              else;
-                isnewpos = btrue;
+                isnewpos = bTrue;
              endif;
           endif;
 
@@ -357,24 +357,24 @@
        begsr srchmbr;
 
           if (*in80 = *off);
-             isfound = bfalse;
+             isfound = bFalse;
           else;
 
-             isfound = bfalse;
+             isfound = bFalse;
              lstnbrrcd = lstnbrrcd + 1;
 
              for sflrec = lstnbrrcd to sflnbrrcd;
                 chain(e) sflrec pbsfl;
                 *in11 = %error or not %found;
                 if (*in11 = *on);
-                   isfound = bfalse;
+                   isfound = bFalse;
                    leave;
                 endif;
 
                 if lstfile =
                    %subst($$fnme: 1:(f_scan(' ':
                                          lstfile) - 1));
-                   isfound = btrue;
+                   isfound = bTrue;
                    leave;
                 else;
                    if (sfpau <> *blanks);
@@ -390,7 +390,7 @@
 
              endfor;
 
-             if (isfound = btrue);
+             if (isfound = bTrue);
                 wrk_sfsanr = sflrec;
                 lstnbrrcd = sflrec;
              else;
@@ -420,7 +420,7 @@
 
        begsr vreadc;
 
-          issflerror = bfalse;
+          issflerror = bFalse;
 
           if (*in80 = *off);
              //   keine Einträge in Subfile vorhanden ...
@@ -437,7 +437,7 @@
                 *in11 = not %found;
 
                 //  Cursorpositionierung ...
-                if (issflerror = bfalse);
+                if (issflerror = bFalse);
                    sflcsr = sflrec;
                 else;
                    //  Subfile nicht neu positionieren
@@ -454,7 +454,7 @@
                    p_sndpgmmg('USR8110': sfpau: sds.pgmname);
                    exsr vsfpauerr;
                    update pbsfl;
-                   issflerror = btrue;
+                   issflerror = bTrue;
                    iter;
                 endif;
 
@@ -475,7 +475,7 @@
                    p_sndpgmmg('USR8110': usr8110: sds.pgmname);
                    exsr vsfpauerr;
                    update pbsfl;
-                   issflerror = btrue;
+                   issflerror = bTrue;
                    iter;
                 endsl;
 
@@ -773,11 +773,11 @@
 
        begsr inzsr;
 
-          if (isInzSr = btrue);
+          if (isInzSr = bTrue);
              leavesr;
           endif;
 
-          isInzSr = btrue;
+          isInzSr = bTrue;
 
           PGMQ = '*';
 

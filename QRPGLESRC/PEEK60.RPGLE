@@ -60,7 +60,7 @@ o_numpasses = cnumpasses_peek08;
 o_numpasses = o_numpasses + cnumpasses_peek15;
 
 //  2. Aufruf PEEK15 (generieren Display File, lower cases)
-  if (i_alwlc = btrue);
+  if (i_alwlc = bTrue);
 o_numpasses = o_numpasses + cnumpasses_peek15;
 endif;
 

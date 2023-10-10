@@ -58,7 +58,7 @@ dcl-ds fldl0100   likeds(fldl0100_t) inz;
 
 dcl-s peek18_name like(pgmcalln_t) inz;
 
-dcl-s isinzsr     like(bool_t) inz(bfalse);
+dcl-s isinzsr     like(bool_t) inz(bFalse);
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
@@ -101,7 +101,7 @@ for do_x1 = 1 to *hival;
   f_rtvfld(ybuffer   :
           i_rcdbuffer:
           fldl0100  :
-          btrue     );
+          bTrue     );
 
   peek18(fldl0100: f2format: ybuffer
         : '*EXTERN': '*CURRENT'
@@ -143,11 +143,11 @@ endsr;
 
 begsr inzsr;
 
-  if (isinzsr = btrue);
+  if (isinzsr = bTrue);
     leavesr;
   endif;
 
-  isinzsr = btrue;
+  isinzsr = bTrue;
 
   peek18_name = f_pgmcalln('PEEK18');
 

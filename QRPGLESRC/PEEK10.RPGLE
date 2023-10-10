@@ -57,7 +57,7 @@ dcl-s nbroffmt        like(int4_t) inz;
 dcl-s fmtcnt          like(int4_t) inz;
 dcl-s rc              like(int4_t) inz;
 
-dcl-s isinzsr         like(bool_t) inz(bfalse);
+dcl-s isinzsr         like(bool_t) inz(bFalse);
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
@@ -162,11 +162,11 @@ endsr;
 
 begsr inzsr;
 
-  if (isinzsr = btrue);
+  if (isinzsr = bTrue);
     leavesr;
   endif;
 
-  isinzsr = btrue;
+  isinzsr = bTrue;
 
   peek11_name = f_pgmcalln('PEEK11');
 

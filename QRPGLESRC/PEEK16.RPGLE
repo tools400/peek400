@@ -448,7 +448,7 @@ begsr sub002;
 
   ds_lcas = srcdta;
 
-  if (i_case = btrue);
+  if (i_case = bTrue);
     $lcas_inz = 'bTrue';
   else;
     $lcas_inz = 'bFalse';
@@ -472,7 +472,7 @@ begsr sub003;
     p_wrtout(ds_page);
 
     //  Exfmt     LC001
-    if (i_alwlc = btrue);
+    if (i_alwlc = bTrue);
       reset ds_exfmt;
       $exfmt_neg = ' ';
       $exfmt_sc  = 'LC';
@@ -507,7 +507,7 @@ begsr sub004;
 
     fieldcount = fieldcount + 1;
 
-    if (f_isnotalw(fldl0100) = btrue);
+    if (f_isnotalw(fldl0100) = bTrue);
       reset ds_remark;
       $rem_txt = fldl0100.f1vfld + UNKNOWN_FIELD_TYPE;
       p_wrtout(ds_remark);
@@ -553,7 +553,7 @@ begsr sub005;
 
     //  Keine Felder größer als 512-Zeichen oder
     //  nicht erlaubte Feldtypen ...
-    if (f_isnotalw(fldl0100) = btrue);
+    if (f_isnotalw(fldl0100) = bTrue);
 
       reset ds_remark;
       $rem_txt = fldl0100.f1vfld + UNKNOWN_FIELD_TYPE;
@@ -575,14 +575,14 @@ begsr sub005;
 
     //            not (LNG0000001 = '1')
     reset ds_if;
-    $if_if (= ' ');
+    $if_if  = ' ';
     $if_fct2='not (LNG' + a#fdcount + ' = ''1'')';
     p_wrtout(ds_if);
 
     //  Übertragen BS-Feld in Dateifeld ...
     if (fldl0100.f1nalw = '1');
       reset ds_if;
-      $if_if (= '');
+      $if_if   = '';
       $if_fct2 = 'and not %nullind(' +
                    %trimr(fldl0100.f1vfld) + ')';
       p_wrtout(ds_if);
@@ -592,7 +592,8 @@ begsr sub005;
     $exsr_fct2 = 'f_' + %trim(fldl0100.f1vfld);
     p_wrtout(ds_exsr);
 
-    //  ENDIF (reset ds_endif);
+    //  ENDIF
+    reset ds_endif;
     p_wrtout(ds_endif);
 
   enddo;
@@ -748,8 +749,8 @@ begsr sub011;
     fieldcount = fieldcount + 1;
 
     //  Keine Felder größer als 512-Zeichen
-    if (f_istolong(fldl0100) = btrue) or
-       (f_isnotalw(fldl0100) = btrue);
+    if (f_istolong(fldl0100) = bTrue) or
+       (f_isnotalw(fldl0100) = bTrue);
       iter;
     endif;
 
@@ -830,7 +831,7 @@ begsr sub012;
 
   ds_alwl = srcdta;
 
-  if (i_alwlc = btrue);
+  if (i_alwlc = bTrue);
     $alwl_inz = 'bTrue';
   else;
     $alwl_inz = 'bFalse';
@@ -846,7 +847,7 @@ endsr;
 
 begsr sub013;
 
-  if (i_alwlc = btrue);
+  if (i_alwlc = bTrue);
     reset ds_exfmt;
     $exfmt_neg = ' ';
     $exfmt_sc  = 'LC';
@@ -988,7 +989,7 @@ begsr sub019;
 
   ds_rcdlock = srcdta;
 
-  if (i_rcdlock = btrue);
+  if (i_rcdlock = bTrue);
     $rcdlock_inz = 'bTrue';
   else;
     $rcdlock_inz = 'bFalse';
@@ -1014,7 +1015,7 @@ begsr sub020;
 
     fieldcount = fieldcount + 1;
 
-    if (f_isnotalw(fldl0100) = btrue);
+    if (f_isnotalw(fldl0100) = bTrue);
       iter;
     endif;
 
@@ -1039,7 +1040,7 @@ begsr sub020;
 
     //  Löschen Felder, wenn NULL-fähig oder VARLEN
     if fldl0100.f1nalw = '1' or
-       f_isvarlen(fldl0100) = btrue;
+       f_isvarlen(fldl0100) = bTrue;
 
       for curfield = 1 to totfields;
         reset ds_clear;
@@ -1203,7 +1204,7 @@ begsr sub021;
 
     fieldcount = fieldcount + 1;
 
-    if (f_isnotalw(fldl0100) = btrue);
+    if (f_isnotalw(fldl0100) = bTrue);
       iter;
     endif;
 
@@ -1217,7 +1218,7 @@ begsr sub021;
     $begsr_f1 = 'f_' + %trim(fldl0100.f1vfld);
     p_wrtout(ds_begsr);
 
-    if (f_ischarfld(fldl0100) = btrue);
+    if (f_ischarfld(fldl0100) = bTrue);
       reset ds_eval;
       $eval_fct2 =
        %trim(fldl0100.f1vfld) + ' = %trimR(';
@@ -1244,7 +1245,7 @@ begsr sub021;
       p_wrtout(ds_eval);
     endfor;
 
-    if (f_ischarfld(fldl0100) = btrue);
+    if (f_ischarfld(fldl0100) = bTrue);
       reset ds_eval;
       $eval_code = '';
       $eval_fct2 = ')';
@@ -1266,7 +1267,7 @@ endsr;
 
 begsr sub022;
 
-  if (i_nulldft = bfalse);
+  if (i_nulldft = bFalse);
     nulldft = '*ON';
   else;
     nulldft = '*OFF';
@@ -1282,7 +1283,7 @@ begsr sub022;
 
     fieldcount = fieldcount + 1;
 
-    if (f_isnotalw(fldl0100) = btrue);
+    if (f_isnotalw(fldl0100) = bTrue);
       iter;
     endif;
 
@@ -1313,7 +1314,7 @@ begsr sub023;
 
   ds_keepcrs = srcdta;
 
-  if (i_keepcrs = btrue);
+  if (i_keepcrs = bTrue);
     $keepcrs_inz = '''1''';
   else;
     $keepcrs_inz = '''0''';

@@ -279,7 +279,7 @@ dcl-ds ds_movel len(112);
   $movel_r        char(14) inz;
 end-ds;
 
-dcl-s isexit03        ind inz(bfalse);
+dcl-s isexit03        ind inz(bFalse);
 dcl-s exit03          like(pgmcalln_t) inz;
 dcl-ds qpgm qualified;
   name            char(10);
@@ -349,8 +349,8 @@ dcl-ds *N;
 end-ds;
 
 //  Arbeitsfelder
-dcl-s hasreffld       like(bool_t) inz(bfalse);
-dcl-s newscn          like(bool_t) inz(btrue);
+dcl-s hasreffld       like(bool_t) inz(bFalse);
+dcl-s newscn          like(bool_t) inz(bTrue);
 dcl-s x               like(int4_t) inz;
 dcl-s y               like(int4_t) inz;
 dcl-s z               like(int4_t) inz;
@@ -384,7 +384,7 @@ dcl-s headertype      varchar(20) inz;
 
 dcl-ds fldl0100 likeds(fldl0100_t) inz;
 
-dcl-s isInzSr         like(bool_t) inz(bfalse);
+dcl-s isInzSr         like(bool_t) inz(bFalse);
 
 //====================================================*
 //  Steuerleiste
@@ -430,9 +430,9 @@ endif;
 
 scn#    = 0;
 #srcseq = 0;
-newscn  = btrue;
+newscn  = bTrue;
 
-if (i_alwlc = bfalse);
+if (i_alwlc = bFalse);
   //  "Vorspann" nur kopieren, bei XAlwLC = FALSE
   exsr copyhead;
 else;
@@ -458,7 +458,7 @@ dow f_readfld() <> beof;
   fieldcount = fieldcount + 1;
 
   //  ... prüfen, ob das Feld erlaubt ist
-  if (f_isnotalw(fldl0100) = btrue);
+  if (f_isnotalw(fldl0100) = bTrue);
     iter;
   endif;
 
@@ -567,7 +567,7 @@ dow f_readfld <> beof;
   fieldcount = fieldcount + 1;
 
   //  ... prüfen, ob das Feld erlaubt ist
-  if (f_isnotalw(fldl0100) = btrue);
+  if (f_isnotalw(fldl0100) = bTrue);
     iter;
   endif;
 
@@ -769,10 +769,10 @@ begsr wrtfield;
   //   Ausgeben Kopfsatz
   // ---------------------------*
   if (row# + totlin - 1) > max_rows;
-    newscn = btrue;
+    newscn = bTrue;
   endif;
 
-  if (newscn = btrue);
+  if (newscn = bTrue);
     exsr inzscreen;
   endif;
 
@@ -895,9 +895,9 @@ begsr wrtfield;
       $fldd_ref  = 'R';
       $fldd_kwrd = 'REFFLD(' +
                   %trimr(fldl0100.f1fnme) + ' -';
-      hasreffld = btrue;
+      hasreffld = bTrue;
     else;
-      hasreffld = bfalse;
+      hasreffld = bFalse;
     endif;
 
     //          ... Datentyp
@@ -913,7 +913,7 @@ begsr wrtfield;
     endsl;
 
     //          ... Feldlänge
-    if (f_istolong(fldl0100) = btrue) or
+    if (f_istolong(fldl0100) = bTrue) or
        (fldl0100.f1dtyp = 'G' and totlin > 1);
       if (fldl0100.f1dtyp = 'G'); // = Graphic
         if (curlin < totlin);
@@ -933,7 +933,7 @@ begsr wrtfield;
     endif;
 
     if (fldl0100.f1dtyp = 'G' or       // = Graphic
-       f_istolong(fldl0100) = btrue);
+       f_istolong(fldl0100) = bTrue);
       $fldd_len  = newlen#a;
     else;
       $fldd_len  = '';
@@ -999,7 +999,7 @@ begsr wrtfield;
     //  Der tatsächliche Alias Name spielt keine Rolle und wird daher
     //  auf den generierten Namen 'ALSnnnnn' gesetzt. Es könnte auch
     //  jeder andere eindeutige Name sein.
-    if (fldl0100.f1afnl > 0 and hasreffld = btrue);
+    if (fldl0100.f1afnl > 0 and hasreffld = bTrue);
       reset ds_alias;
       $alias_kwrd = 'ALIAS(' +
                    'ALS' + a#fdcount
@@ -1021,15 +1021,15 @@ begsr wrtfield;
     endif;
 
     //  Feld schützen, wenn größer als 512-Zeichen ...
-    if (f_istolongmax(fldl0100) = btrue);
+    if (f_istolongmax(fldl0100) = bTrue);
       fldtolongmax = '1';
     else;
       fldtolongmax = '0';
     endif;
 
     //  Feld schützen, wenn größer als 512-Zeichen ...
-    if (f_istolong(fldl0100) = btrue) or
-       (f_isnotalw(fldl0100) = btrue);
+    if (f_istolong(fldl0100) = bTrue) or
+       (f_isnotalw(fldl0100) = bTrue);
       if (fldl0100.f1use <> 'I');
         reset ds_dspatr;
         $dspa_atr = 'DSPATR(PR)';
@@ -1043,7 +1043,7 @@ begsr wrtfield;
       fldtolong = '1';
     else;
       //  Schlüsselfelder schützen/freigeben ...
-      if (f_iskeyfld(fldl0100) = btrue);
+      if (f_iskeyfld(fldl0100) = bTrue);
         if (fldl0100.f1use <> 'I');
           reset ds_dspatr;
           $dspa_neg = 'N';
@@ -1065,7 +1065,7 @@ begsr wrtfield;
         reffile: reflib
         : sds.user: fldl0100.f1fnme: fldl0100.f1edtc);
       if (%error());
-        isexit03 = bfalse;
+        isexit03 = bFalse;
       endif;
     endif;
 
@@ -1082,15 +1082,15 @@ begsr wrtfield;
 
       //  Abfragen Feld-EDTCDE aus PEEKFLD ...
       when edtcde <> ' '           // Edit code
-         and f_isfloatfld(fldl0100) = bfalse;
+         and f_isfloatfld(fldl0100) = bFalse;
         reset ds_dspatr;
         $dspa_atr = 'EDTCDE(' + edtcde + ')';
         p_wrtdspf(ds_dspatr);
 
       other;
         //  Kein EDTWRD / kein EDTCDE
-        if (f_isnumfld(fldl0100)   = btrue ) and
-           (f_isfloatfld(fldl0100) = bfalse) and
+        if (f_isnumfld(fldl0100)   = bTrue ) and
+           (f_isfloatfld(fldl0100) = bFalse) and
            (fldl0100.f1decp > 0            );
           reset ds_dspatr;
           $dspa_atr = 'EDTCDE(' + 'P' + ')';
@@ -1104,7 +1104,7 @@ begsr wrtfield;
     //  bei Alpha-Feldern ...
     if (fldl0100.f1dtyp = 'A' or
        fldl0100.f1dtyp = 'G') and
-       (i_alwlc =  btrue) and
+       (i_alwlc =  bTrue) and
        (fldl0100.f1use <> 'I');
       reset ds_dspatr;
       $dspa_atr = 'CHECK(LC) ';
@@ -1200,7 +1200,7 @@ begsr inzscreen;
   //  Einen neuen Record im DspF anfangen ...
   reset ds_rcdfmt;
 
-  if (i_alwlc = bfalse);
+  if (i_alwlc = bFalse);
     $rcdfm_nme = 'UC' + scn#a;
   else;
     $rcdfm_nme = 'LC' + scn#a;
@@ -1249,7 +1249,7 @@ begsr inzscreen;
   //  Initialisierung Feldausgabe
   row#   = 4;
 
-  newscn = bfalse;
+  newscn = bFalse;
 
 endsr;
 
@@ -1282,8 +1282,8 @@ begsr wrtcopy1;
   reset ds_eval;
   $eval_fct2 = 'yOutBuffer =';
 
-  if (f_ischarfld(fldl0100) = btrue and
-     f_isvarlen(fldl0100) = btrue);
+  if (f_ischarfld(fldl0100) = bTrue and
+     f_isvarlen(fldl0100) = bTrue);
     $eval_fct2 = %trimr($eval_fct2) +
                 '%trimR(';
     closechar1 = ')';
@@ -1304,7 +1304,7 @@ begsr wrtcopy1;
     reset ds_eval;
     clear $eval_opc;
 
-    if (f_isnumfld(fldl0100) = btrue);
+    if (f_isnumfld(fldl0100) = bTrue);
       if (fldl0100.f1dtyp = 'F');
         $eval_fct2 = '%editflt(FLD' + a#fdcount;
         closechar2 = ')';
@@ -1340,7 +1340,7 @@ begsr wrtcopy1;
 
   //  Eval      yOutBuffLn = ??
 
-  if (f_ischarfld(fldl0100) = bfalse);
+  if (f_ischarfld(fldl0100) = bFalse);
     reset ds_eval;
     $eval_fct2 = 'yOutBuffLn = 0';
     p_wrtcopy1(ds_eval);
@@ -1348,7 +1348,7 @@ begsr wrtcopy1;
 
     reset ds_eval;
     $eval_fct2 = 'yOutBuffLn = %len(';
-    if (f_isvarlen(fldl0100) = btrue);
+    if (f_isvarlen(fldl0100) = bTrue);
       $eval_fct2 = %trimr($eval_fct2) + '%trimR(';
     endif;
     p_wrtcopy1(ds_eval);
@@ -1375,7 +1375,7 @@ begsr wrtcopy1;
     reset ds_eval;
     clear $eval_opc;
     $eval_fct2 = ')';
-    if (f_isvarlen(fldl0100) = btrue);
+    if (f_isvarlen(fldl0100) = bTrue);
       $eval_fct2 = %trimr($eval_fct2) + ')';
     endif;
     p_wrtcopy1(ds_eval);
@@ -1767,7 +1767,7 @@ begsr wrtcopy6;
   endif;
 
   //  Not a character Feld? => Error message
-  if (f_ischarfld(fldl0100) <> btrue);
+  if (f_ischarfld(fldl0100) <> bTrue);
     reset ds_exsr;
     $exsr_fct2 = 'MSG8221';
     p_wrtcopy6(ds_exsr);
@@ -1958,11 +1958,11 @@ endsr;
 
 begsr inzsr;
 
-  if (isInzSr = btrue);
+  if (isInzSr = bTrue);
     leavesr;
   endif;
 
-  isInzSr = btrue;
+  isInzSr = bTrue;
 
   exit03 = f_pgmcalln('EXIT03');
 
@@ -2012,7 +2012,7 @@ dcl-proc p_wrtcopy1;
     i_srcdta        const like(srcdta);
   end-pi;
 
-  if (i_alwlc = bfalse);
+  if (i_alwlc = bFalse);
     //  Nur einmal ausgeben, bei XAlwLC = FALSE
     srcseq = 0;
     srcdat = 0;
@@ -2034,7 +2034,7 @@ dcl-proc p_wrtcopy2;
     i_srcdta        const like(srcdta);
   end-pi;
 
-  if (i_alwlc = bfalse);
+  if (i_alwlc = bFalse);
     //  Nur einmal ausgeben, bei XAlwLC = FALSE
     srcseq = 0;
     srcdat = 0;
@@ -2057,7 +2057,7 @@ dcl-proc p_wrtcopy3;
     i_srcdta        const like(srcdta);
   end-pi;
 
-  if (i_alwlc = bfalse);
+  if (i_alwlc = bFalse);
     //  Nur einmal ausgeben, bei XAlwLC = FALSE
     srcseq = 0;
     srcdat = 0;
@@ -2080,7 +2080,7 @@ dcl-proc p_wrtcopy4;
     i_srcdta        const like(srcdta);
   end-pi;
 
-  if (i_alwlc = bfalse);
+  if (i_alwlc = bFalse);
     //  Nur einmal ausgeben, bei XAlwLC = FALSE
     srcseq = 0;
     srcdat = 0;
@@ -2103,7 +2103,7 @@ dcl-proc p_wrtcopy5;
     i_srcdta        const like(srcdta);
   end-pi;
 
-  if (i_alwlc = bfalse);
+  if (i_alwlc = bFalse);
     //  Nur einmal ausgeben, bei XAlwLC = FALSE
     srcseq = 0;
     srcdat = 0;
@@ -2126,7 +2126,7 @@ dcl-proc p_wrtcopy6;
     i_srcdta        const like(srcdta);
   end-pi;
 
-  if (i_alwlc = bfalse);
+  if (i_alwlc = bFalse);
     //  Nur einmal ausgeben, bei XAlwLC = FALSE
     srcseq = 0;
     srcdat = 0;

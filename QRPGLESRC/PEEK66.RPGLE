@@ -138,7 +138,7 @@
        clear o_msgid;
        clear o_msgdta;
 
-       if (f_isnumfld(i_informat) = btrue);
+       if (f_isnumfld(i_informat) = bTrue);
           convertfromnumeric(io_buffer: io_length: i_outformat
                              : o_msgid: o_msgdta);
        else;
@@ -161,7 +161,7 @@
        end-pi;
        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-       if (f_isnumfld(i_outformat) = btrue);
+       if (f_isnumfld(i_outformat) = bTrue);
           converttonumeric(io_buffer: io_length: i_outformat
                            : o_msgid: o_msgdta);
        else;
@@ -184,7 +184,7 @@
        end-pi;
        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-       if (f_isnumfld(i_outformat) = btrue);
+       if (f_isnumfld(i_outformat) = bTrue);
           converttonumeric(io_buffer: io_length: i_outformat
                            : o_msgid: o_msgdta);
        else;
@@ -233,14 +233,14 @@
             i_outformat.f1dtyp = 'I' or
             i_outformat.f1dtyp = 'U')
           and f_rpgtointlength(i_outformat.f1digt) = 1);
-          isonebyteint = btrue;
+          isonebyteint = bTrue;
           onebyteintadjust = 1;
        else;
-          isonebyteint = bfalse;
+          isonebyteint = bFalse;
           onebyteintadjust = 0;
        endif;
 
-       if (f_isfloatfld(i_outformat) = btrue);
+       if (f_isfloatfld(i_outformat) = bTrue);
           digits = i_outformat.f1flen;
        else;
           digits = i_outformat.f1digt;
@@ -258,7 +258,7 @@
                             : %decpos(innumeric))
              : %addr(innumeric));
 
-       if (isonebyteint = btrue);
+       if (isonebyteint = bTrue);
           %subst(io_buffer: 1: 1) = %subst(io_buffer: 2: 1);
           %subst(io_buffer: 2: 1) = x'00';
        endif;

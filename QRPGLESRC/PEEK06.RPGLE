@@ -166,9 +166,9 @@ begsr w_fldl0100;
 
   //  Erzwingen Edit Code, wenn die Aufbereitung für eine über
   //  QCMDEXC auszuführende Befehlszeile erfolgt.
-  if (i_qcmdexc = btrue) and
-     (f_isnumfld(fldl0100) = btrue) and
-     (f_isfloatfld(fldl0100) = bfalse);
+  if (i_qcmdexc = bTrue) and
+     (f_isnumfld(fldl0100) = bTrue) and
+     (f_isfloatfld(fldl0100) = bFalse);
     fldl0100.f1edtc = 'P';
     fldl0100.f1edwl = 0;
     fldl0100.f1edwd = '';
@@ -248,8 +248,8 @@ begsr w_fldl0100;
     tempstrlen =
       f_rtvfld(o_string: i_srcvar: fldl0100);
     //  Do not convert if we prepare the *HEADLINE (see: PEEK05, yCvtCcsid)
-    if f_hasccsid(fldl0100) = btrue and
-       i_cvtccsid = btrue;
+    if f_hasccsid(fldl0100) = bTrue and
+       i_cvtccsid = bTrue;
       htranscoder =
        transcoder_tojobccsid(fldl0100.f1fdcc);
       o_strlen =

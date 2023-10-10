@@ -52,7 +52,7 @@ dcl-s nbrofkey    like(int4_t);
 dcl-s tempfield   like(o_sqlorder );
 dcl-ds keyl0100   likeds(keyl0100_t) inz;
 
-dcl-s isinzsr         like(bool_t) inz(bfalse);
+dcl-s isinzsr         like(bool_t) inz(bFalse);
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
@@ -121,11 +121,11 @@ return;
 
 begsr inzsr;
 
-  if (isinzsr = btrue);
+  if (isinzsr = bTrue);
     leavesr;
   endif;
 
-  isinzsr = btrue;
+  isinzsr = bTrue;
 
   peek41_name = f_pgmcalln('PEEK41');
 

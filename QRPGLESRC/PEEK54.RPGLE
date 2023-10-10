@@ -283,7 +283,7 @@ dcl-proc p_main;
   pmsgdta = '';
 
   //  Prüfen, ob gespeichert werden darf
-  if (i_isautosave = btrue);
+  if (i_isautosave = bTrue);
     open(e) peekenv;
     if not %error();
       cansave =  f_checkautosave(pfile: plib);
@@ -296,14 +296,14 @@ dcl-proc p_main;
       usr9992.var3 = i_lib;
       usr9992.var4 = penvmbr;
       f_sndmsgtocmdline('USR9992': usr9992);
-      cansave = bfalse;
+      cansave = bFalse;
     endif;
   else;
-    cansave = btrue;
+    cansave = bTrue;
   endif;
 
   //  Löschen alte Daten ...
-  if (cansave = btrue);
+  if (cansave = bTrue);
 
     p_clrenv(i_envfile  :
             i_envlib   :
@@ -626,7 +626,7 @@ dcl-proc f_checkautosave;
   setll %kds(en_key1) fpeekenv;
   read fpeekenv;
   if (%eof(peekenv));
-    return btrue;
+    return bTrue;
   endif;
 
   en_key3.user    = '*ALL';
@@ -640,7 +640,7 @@ dcl-proc f_checkautosave;
     usr9992.var3 = '*N';
     usr9992.var4 = '*N';
     f_sndmsgtocmdline('USR9992': usr9992);
-    return bfalse;
+    return bFalse;
   endif;
 
   en_key4.user    = '*ALL';
@@ -655,10 +655,10 @@ dcl-proc f_checkautosave;
     usr9992.var3 = '*N';
     usr9992.var4 = '*N';
     f_sndmsgtocmdline('USR9992': usr9992);
-    return bfalse;
+    return bFalse;
   endif;
 
-  return btrue;
+  return bTrue;
 
 
 end-proc;

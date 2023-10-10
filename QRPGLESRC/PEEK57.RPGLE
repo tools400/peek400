@@ -65,12 +65,12 @@ dcl-s ynbrofkeys      like(int4_t);
 
 dcl-s sfbot           like(int4_t);
 dcl-c nbrfkeys const(2);
-dcl-s ispgmerror      like(bool_t) inz(bfalse);
+dcl-s ispgmerror      like(bool_t) inz(bFalse);
 
 dcl-s peek21_name     like(pgmcalln_t);
 dcl-s peek23_name     like(pgmcalln_t);
 
-dcl-s isInzSr         like(bool_t) inz(bfalse);
+dcl-s isInzSr         like(bool_t) inz(bFalse);
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
@@ -174,7 +174,7 @@ dow ('1');
   //  F9  - Löschen Arbeitsumgebung
   when (ypgmcmd = '*DELETEENV');
     exsr c_delenv;
-    if (ispgmerror = btrue);
+    if (ispgmerror = bTrue);
       leave;
     else;
       iter;
@@ -257,9 +257,9 @@ begsr c_delenv;
     p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
     ymsgid = '';
     ymsgdta = '';
-    ispgmerror = btrue;
+    ispgmerror = bTrue;
   else;
-    ispgmerror = bfalse;
+    ispgmerror = bFalse;
   endif;
 
 endsr;
@@ -330,11 +330,11 @@ endsr;
 
 begsr inzsr;
 
-  if (isInzSr = btrue);
+  if (isInzSr = bTrue);
     leavesr;
   endif;
 
-  isInzSr = btrue;
+  isInzSr = bTrue;
 
   PGMQ = '*';
 

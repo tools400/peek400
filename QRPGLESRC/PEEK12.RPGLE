@@ -81,8 +81,8 @@ dcl-s ynbrofkeys      like(int4_t) inz;
 
 /COPY QCOPYLE,CEECNDHDLR
 
-dcl-s isInzsr like(bool_t) inz(bfalse);
-dcl-s isExitPgm like(bool_t) inz(bfalse);
+dcl-s isInzsr like(bool_t) inz(bFalse);
+dcl-s isExitPgm like(bool_t) inz(bFalse);
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
@@ -488,11 +488,11 @@ endsr;
 
 begsr inzsr;
 
-  if (isInzsr = btrue);
+  if (isInzsr = bTrue);
     leavesr;
   endif;
 
-  isInzsr = btrue;
+  isInzsr = bTrue;
 
   PGMQ = '*';
 

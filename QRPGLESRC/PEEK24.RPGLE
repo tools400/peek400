@@ -78,7 +78,7 @@ dcl-s peek21_name     like(pgmcalln_t) inz;
 dcl-s peek23_name     like(pgmcalln_t) inz;
 dcl-s peek25_name     like(pgmcalln_t) inz;
 
-dcl-s isInzSr         like(bool_t) inz(bfalse);
+dcl-s isInzSr         like(bool_t) inz(bFalse);
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
@@ -491,9 +491,9 @@ begsr getcolor;
 
   monitor;
     peek25(i_dsp80: wrk_color: ymsgid: ymsgdta);
-    *in99 = bfalse;
+    *in99 = bFalse;
   on-error;
-    *in99 = btrue;
+    *in99 = bTrue;
   endmon;
 
   if (*in99 = *on);
@@ -573,11 +573,11 @@ endsr;
 
 begsr inzsr;
 
-  if (isInzSr = btrue);
+  if (isInzSr = bTrue);
     leavesr;
   endif;
 
-  isInzSr = btrue;
+  isInzSr = bTrue;
 
   PGMQ = '*';
 

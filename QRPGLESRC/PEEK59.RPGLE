@@ -70,7 +70,7 @@ dcl-s x               like(int4_t) inz;
 dcl-s tmpfkey         like($$fkey01);
 dcl-s int1            like(int4_t);
 dcl-s int2            like(int4_t);
-dcl-s ischanged       like(bool_t) inz(bfalse);
+dcl-s ischanged       like(bool_t) inz(bFalse);
 
 
 dcl-pr atoi            int(10) extproc('atoi');
@@ -85,7 +85,7 @@ end-pr;
 
 dcl-s $$fkey          like($$fkey01) dim(24);
 
-dcl-s isInzSr         like(bool_t) inz(bfalse);
+dcl-s isInzSr         like(bool_t) inz(bFalse);
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
@@ -395,15 +395,15 @@ begsr fill##;
 
   //  Sortieren der Funktionstasten
   if (nbrofkeys > 1);
-    dou ischanged = bfalse;
-      ischanged = bfalse;
+    dou ischanged = bFalse;
+      ischanged = bFalse;
       for x = 2 to nbrofkeys;
         tmpfkey = %subst(scrnfkeys(x-1): 2)+x'00';
         int1 = atoi(%addr(tmpfkey));
         tmpfkey = %subst(scrnfkeys(x  ): 2)+x'00';
         int2 = atoi(%addr(tmpfkey));
         if (int2 < int1);
-          ischanged = btrue;
+          ischanged = bTrue;
           tmpfkey = scrnfkeys(x-1);
           scrnfkeys(x-1) = scrnfkeys(x);
           scrnfkeys(x  ) = tmpfkey;
@@ -546,11 +546,11 @@ endsr;
 
 begsr inzsr;
 
-  if (isInzSr = btrue);
+  if (isInzSr = bTrue);
     leavesr;
   endif;
 
-  isInzSr = btrue;
+  isInzSr = bTrue;
 
   PGMQ = '*';
 

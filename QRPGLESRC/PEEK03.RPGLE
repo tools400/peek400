@@ -61,7 +61,7 @@ dcl-ds keyl0100_sql likeds(keyl0100_t) inz;
 dcl-s data            char(512) inz;
 dcl-s numkeyfld       like(int4_t);
 
-dcl-s isInzSr         like(bool_t) inz(bfalse);
+dcl-s isInzSr         like(bool_t) inz(bFalse);
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
@@ -243,11 +243,11 @@ endsr;
 
 begsr inzsr;
 
-  if (isInzSr = btrue);
+  if (isInzSr = bTrue);
     leavesr;
   endif;
 
-  isInzSr = btrue;
+  isInzSr = bTrue;
 
   peek41_name = f_pgmcalln('PEEK41');
 

@@ -122,11 +122,11 @@
 
        if (fd = *null);
           o_hfile.errno = f_errno();
-          return bfalse;
+          return bFalse;
        endif;
 
        o_hfile.fd        = fd;
-       o_hfile.isopen    = btrue;
+       o_hfile.isopen    = bTrue;
        o_hfile.name      = i_file;
        o_hfile.lib       = i_lib;
        o_hfile.mbr       = i_mbr;
@@ -137,7 +137,7 @@
        o_hfile.msgid     = '';
        o_hfile.msgdta    = '';
 
-       return btrue;
+       return bTrue;
 
        end-proc;
 
@@ -152,7 +152,7 @@
        // ------------------------------------------------------------------------
 
        if (i_hfile.fd = *null);
-          return bfalse;
+          return bFalse;
        endif;
 
        return i_hfile.isopen;
@@ -342,9 +342,9 @@
        // ------------------------------------------------------------------------
 
        if (i_hfile.errno <> 0 or i_hfile.msgid <> '');
-          return btrue;
+          return bTrue;
        else;
-          return bfalse;
+          return bFalse;
        endif;
 
        end-proc;
@@ -461,7 +461,7 @@
                        : options: i_rrn);
        if (riofb.numbyt <> rfile.buflen);
           io_hfile.errno = f_errno();
-          return bfalse;
+          return bFalse;
        endif;
 
        copyinnullmap(rfile: io_nullmap);
@@ -469,7 +469,7 @@
        io_hfile.lastoper = OPER_CHAIN_RRN;
        io_hfile.errno = 0;
 
-       return btrue;
+       return bTrue;
 
        end-proc;
 
@@ -499,7 +499,7 @@
 
        clearbufferandnullmap(rfile: io_rcdbuffer: io_nullmap);
 
-       if (i_dolock = btrue);
+       if (i_dolock = bTrue);
           options = f_bitor(dft: key_eq);
        else;
           options = f_bitor(no_lock: key_eq);
@@ -513,7 +513,7 @@
                        : options: %addr(key): keylen);
        if (riofb.numbyt <> rfile.buflen) or (riofb.numbyt = eof);
           io_hfile.errno = f_errno();
-          return bfalse;
+          return bFalse;
        endif;
 
        copyinnullmap(rfile: io_nullmap);
@@ -521,7 +521,7 @@
        io_hfile.lastoper = OPER_CHAIN_KEY;
        io_hfile.errno = 0;
 
-       return btrue;
+       return bTrue;
 
        end-proc;
 
@@ -576,18 +576,18 @@
 
        if (riofb.numbyt = eof);
           io_hfile.errno = f_errno();   // "End of File" erreicht
-          return bfalse;
+          return bFalse;
        endif;
 
        if (riofb.numbyt <> rfile.buflen);
           io_hfile.errno = f_errno();
-          return bfalse;
+          return bFalse;
        endif;
 
        io_hfile.lastoper = OPER_SETLL_RRN;
        io_hfile.errno = 0;
 
-       return btrue;
+       return bTrue;
 
        end-proc;
 
@@ -626,13 +626,13 @@
 
        if (riofb.numbyt = 0); // or (RIOFB.numByt = EOF);
           io_hfile.errno = f_errno();   //Fehler bei _Rlocate() aufgetreten
-          return bfalse;
+          return bFalse;
        endif;
 
        io_hfile.lastoper = OPER_SETLL_KEY;
        io_hfile.errno = 0;
 
-       return btrue;
+       return bTrue;
 
        end-proc;
 
@@ -667,12 +667,12 @@
 
        if (riofb.numbyt = 0);
           io_hfile.errno = f_errno();   // Fehler bei _Rlocate() aufgetreten
-          return bfalse;
+          return bFalse;
        endif;
 
        if (riofb.numbyt = eof);
           io_hfile.errno = f_errno();   // "End of File" erreicht
-          return bfalse;
+          return bFalse;
        endif;
 
        // Einlesen Datensatz
@@ -684,13 +684,13 @@
 
        if (riofb.numbyt <> rfile.buflen);
           io_hfile.errno = f_errno();
-          return bfalse;
+          return bFalse;
        endif;
 
        io_hfile.lastoper = OPER_SETGT_RRN;
        io_hfile.errno = 0;
 
-       return btrue;
+       return bTrue;
 
        end-proc;
 
@@ -729,13 +729,13 @@
 
        if (riofb.numbyt = 0); // or (RIOFB.numByt = EOF);
           io_hfile.errno = f_errno();   // Fehler bei _Rlocate() aufgetreten
-          return bfalse;
+          return bFalse;
        endif;
 
        io_hfile.lastoper = OPER_SETGT_KEY;
        io_hfile.errno = 0;
 
-       return btrue;
+       return bTrue;
 
        end-proc;
 
@@ -796,21 +796,21 @@
           msgid  = 'USR9994';
           msgdta = usr9994;
           p_sndpgmmg(msgid: msgdta: '*': msg_t_diag);
-          return btrue;   // Return "EOF" to caller
+          return bTrue;   // Return "EOF" to caller
        endif;
 
        select;
        when (riofb.numbyt = eof);
           io_hfile.lastoper = OPER_READ;
           io_hfile.errno = 0;
-          return btrue;   // Return "EOF" to caller
+          return bTrue;   // Return "EOF" to caller
        endsl;
 
        copyinnullmap(rfile: io_nullmap);
        io_hfile.lastoper = OPER_READ;
        io_hfile.errno = 0;
 
-       return bfalse;  // Return "found" to caller
+       return bFalse;  // Return "found" to caller
 
        end-proc;
 
@@ -840,7 +840,7 @@
 
        clearbufferandnullmap(rfile: io_rcdbuffer: io_nullmap);
 
-       if (i_dolock = btrue);
+       if (i_dolock = bTrue);
           options = dft;
        else;
           options = no_lock;
@@ -871,7 +871,7 @@
           msgid  = 'USR9994';
           msgdta = usr9994;
           p_sndpgmmg(msgid: msgdta: '*': msg_t_diag);
-          return btrue;   // Return "EOF" to caller
+          return bTrue;   // Return "EOF" to caller
        endif;
 
 
@@ -879,14 +879,14 @@
        when (riofb.numbyt = eof);
           io_hfile.lastoper = OPER_READP;
           io_hfile.errno = 0;
-          return btrue;   // Return "EOF" to caller
+          return bTrue;   // Return "EOF" to caller
        endsl;
 
        copyinnullmap(rfile: io_nullmap);
        io_hfile.lastoper = OPER_READP;
        io_hfile.errno = 0;
 
-       return bfalse;  // Return "found" to caller
+       return bFalse;  // Return "found" to caller
 
        end-proc;
 
@@ -909,13 +909,13 @@
        priofb = rdelete(io_hfile.fd);
        if (riofb.numbyt = 0);
           io_hfile.errno = f_errno();
-          return bfalse;
+          return bFalse;
        endif;
 
        io_hfile.lastoper = OPER_DELETE;
        io_hfile.errno = 0;
 
-       return btrue;
+       return bTrue;
 
        end-proc;
 
@@ -968,7 +968,7 @@
        endif;
 
        clear io_hfile;
-       io_hfile.isopen = bfalse;
+       io_hfile.isopen = bFalse;
        io_hfile.lastoper = OPER_CLOSE;
        io_hfile.errno = 0;
 

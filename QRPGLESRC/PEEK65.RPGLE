@@ -72,9 +72,9 @@
        dcl-ds yqfile likeds(qobj_t) inz;
 
        //  Arbeitsfelder
-       dcl-s isrecord        like(bool_t) inz(bfalse);
-       dcl-s iscvtchar       like(bool_t) inz(bfalse);
-       dcl-s isprinted       like(bool_t) inz(bfalse);
+       dcl-s isrecord        like(bool_t) inz(bFalse);
+       dcl-s iscvtchar       like(bool_t) inz(bFalse);
+       dcl-s isprinted       like(bool_t) inz(bFalse);
 
        dcl-s x               like(int4_t);
        dcl-s y               like(int4_t);
@@ -90,7 +90,7 @@
        //  Konstanten
        dcl-c cquote '''';
 
-       dcl-s isInzSr         like(bool_t) inz(bfalse);
+       dcl-s isInzSr         like(bool_t) inz(bFalse);
 
        //*******************************************************************
        //                 S T E U E R  -  R O U T I N E                    *
@@ -122,12 +122,12 @@
        exsr pbsetll;
        exsr pbreadup;
 
-       if (iscvtchar = btrue);
+       if (iscvtchar = bTrue);
           exsr pbseite;
           write error;
        endif;
 
-       if (isprinted = btrue);
+       if (isprinted = bTrue);
           o_msgid  = 'USR8226';
           o_msgdta = '';
        endif;
@@ -146,7 +146,7 @@
        begsr pbinit;
 
           //  Überlaufzeile
-          *in60 = btrue;
+          *in60 = bTrue;
 
           //  Kopfinformationen
           $$file = i_file;
@@ -155,7 +155,7 @@
           $$desc = objd0400.o4text;
 
           //  Konvertieren nicht darstellbarer Zeichen
-          iscvtchar = bfalse;
+          iscvtchar = bFalse;
 
        endsr;
 
@@ -187,7 +187,7 @@
              fldl0100 = f_ffd;
 
              //  nicht erlaubte Feldtypen
-             if (f_isnotalw(fldl0100) = btrue);
+             if (f_isnotalw(fldl0100) = bTrue);
                 iter;
              endif;
 
@@ -221,7 +221,7 @@
                 $$fnme = '';
                 $$text = '';
 
-                isprinted = btrue;
+                isprinted = bTrue;
              enddo;
 
           enddo;
@@ -260,21 +260,21 @@
 
                 //  ... aufbereiten des Feldinhaltes
                 peek06(fldl0100: 'FLDL0100': io_buff
-                      : bfalse: btrue: ystring: ystrlen
+                      : bFalse: bTrue: ystring: ystrlen
                       : ymsgid: ymsgdta);
 
                 //  ... Konvertieren nicht darstellbarer Zeichen
                 peek32(ystring: ystrlen: 0
                       : ymsgid: ymsgdta);
 
-                *in99 = bfalse;
+                *in99 = bFalse;
              on-error;
-                *in99 = btrue;
+                *in99 = bTrue;
              endmon;
 
              if (*in99 = *off);
 
-                if f_ischarfld(fldl0100) = btrue and
+                if f_ischarfld(fldl0100) = bTrue and
                    ystrlen < %len(ystring) - 2;
                    %subst(ystring: ystrlen+1: 1) = cquote;
                    ystrlen = ystrlen + 1;
@@ -283,9 +283,9 @@
                    ystrlen = ystrlen + 1;
                 endif;
 
-                if (iscvtchar = bfalse);
+                if (iscvtchar = bFalse);
                    if (ymsgid <> *blanks);
-                      iscvtchar = btrue;
+                      iscvtchar = bTrue;
                       $$error = f_msgtext(ymsgid: ymsgdta);
                    else;
                       // keine Nachricht anstehend
@@ -308,12 +308,12 @@
 
        begsr pbseite;
 
-          if (*in60 = btrue);
+          if (*in60 = bTrue);
              write newpage;
              write head1;
              write head2;
              write head3;
-             *in60 = bfalse;
+             *in60 = bFalse;
           endif;
 
        endsr;
@@ -328,9 +328,9 @@
           yqfile.lib = i_library;
           peek09(yqfile: objd0400: ymsgid: ymsgdta);
           monitor;
-             *in99 = bfalse;
+             *in99 = bFalse;
           on-error;
-             *in99 = btrue;
+             *in99 = bTrue;
           endmon;
 
           if (*in99 = '1');
@@ -347,12 +347,12 @@
 
           if (cio_chainwithrrn(hfile04
                            : i_rcdnbr
-                           : bfalse
+                           : bFalse
                            : io_buff
-                           : io_nullmap) = bfalse);
-             isrecord = bfalse;
+                           : io_nullmap) = bFalse);
+             isrecord = bFalse;
           else;
-             isrecord = btrue;
+             isrecord = bTrue;
           endif;
 
        endsr;
@@ -404,11 +404,11 @@
 
        begsr inzsr;
 
-          if (isInzSr = btrue);
+          if (isInzSr = bTrue);
              leavesr;
           endif;
 
-          isInzSr = btrue;
+          isInzSr = bTrue;
 
           peek06_name = f_pgmcalln('PEEK06');
           peek09_name = f_pgmcalln('PEEK09');

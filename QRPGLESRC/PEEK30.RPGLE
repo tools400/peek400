@@ -105,8 +105,8 @@ dcl-ds *N;
   currdayrv       zoned(2) overlay(currdaterv:7) inz;
 end-ds;
 
-dcl-c btrueext const( 66);
-dcl-c bfalseext const(-55);
+dcl-c bTrueext const( 66);
+dcl-c bFalseext const(-55);
 dcl-c bshareext const(243);
 
 dcl-s iscompok        char(1) inz(bFalse);
@@ -147,11 +147,11 @@ exsr first;
 
 if (iscompok = bFalse);
   //     Fehler in der Lizenz-Nr. ...
-  if (isdateerr = btrue);
+  if (isdateerr = bTrue);
     //     ... Datum abgelaufen
     //         ... Abfragen einer neuen LizenzNr.
     exsr getlicinf;
-    if (o_flag <> btrueext);
+    if (o_flag <> bTrueext);
       //         ... wenn keine neue LizenzNr eingetragen
       //             worden ist, dann bFalse zurückliefern,
       //             damit kein weiterer Test möglich ist.
@@ -160,7 +160,7 @@ if (iscompok = bFalse);
       pos = pos + 4;
       exfmt bild03;
       close peek30fm;
-      o_flag = bfalseext;
+      o_flag = bFalseext;
     else;
     //         ... neue LizenzNr. wurde eingetragen
     //             Rückkehrcode in XFLag ist OK
@@ -171,7 +171,7 @@ if (iscompok = bFalse);
   endif;
 else;
   //     Lizenznummer ist OK ...
-  o_flag = btrueext;
+  o_flag = bTrueext;
 endif;
 
 return;
@@ -219,7 +219,7 @@ begsr getlicinf;
     when (workstn.aid = k_enter);
       exsr c_enter;
       if (*in99 = *off);
-        o_flag = btrueext;
+        o_flag = bTrueext;
         leave;
       endif;
 
@@ -350,7 +350,7 @@ endsr;
 
 begsr fill##;
 
-  iscompok = btrue;
+  iscompok = bTrue;
   leavesr;
 
   //------------------------------------------*
@@ -386,7 +386,7 @@ begsr complicnbr;
   //      für normale Lizenznummer            *
   //------------------------------------------*
   iscompok = bFalse;
-  isdateerr = btrue;
+  isdateerr = bTrue;
 
   exsr clcintnbr;
   exsr complicnb2;
@@ -398,7 +398,7 @@ begsr complicnbr;
   //------------------------------------------*
   if (iscompok = bFalse);
     iscompok = bFalse;
-    isdateerr = btrue;
+    isdateerr = bTrue;
 
     exsr clcintnbrf;
     exsr complicnb2;
@@ -449,9 +449,9 @@ begsr complicnb2;
   else;
     if (deaddate < currdaterv);
       iscompok = bFalse;
-      isdateerr = btrue;
+      isdateerr = bTrue;
     else;
-      iscompok = btrue;
+      iscompok = bTrue;
       isdateerr = bFalse;
     endif;
   endif;
@@ -646,7 +646,7 @@ begsr first;
   p_rmvpgmmg(sds.pgmname);
 
   // - Rückgabewerte
-  o_flag = bfalseext;
+  o_flag = bFalseext;
   o_msgid = *blanks;
   o_msgdta = *blanks;
 
@@ -667,11 +667,11 @@ endsr;
 
 begsr inzsr;
 
-  if (isInzSr = btrue);
+  if (isInzSr = bTrue);
     leavesr;
   endif;
 
-  isInzSr = btrue;
+  isInzSr = bTrue;
 
   PGMQ = '*';
 

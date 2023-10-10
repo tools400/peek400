@@ -481,9 +481,9 @@
        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
        if (i_htranscoder = transcoder_null());
-          return btrue;
+          return bTrue;
        else;
-          return bfalse;
+          return bFalse;
        endif;
 
        end-proc;
@@ -526,7 +526,7 @@
        dcl-s poutbuf         pointer inz;
        dcl-s inpbuf          char(32767) based(i_pinbuf);
        dcl-s extendsize      int(10) inz;
-       dcl-s ismaxsize       ind inz(bfalse);
+       dcl-s ismaxsize       ind inz(bFalse);
 
        // No restriction of maximum buffer size
        dcl-c MAX_SIZE -1;
@@ -546,9 +546,9 @@
        endif;
 
        if (i_maxsize = -1);
-          ismaxsize = bfalse;
+          ismaxsize = bFalse;
        else;
-          ismaxsize = btrue;
+          ismaxsize = bTrue;
        endif;
 
        p_clrerrno();

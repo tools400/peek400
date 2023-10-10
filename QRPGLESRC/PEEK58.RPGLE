@@ -129,12 +129,12 @@ dcl-proc f_buffln export;
   if (%parms() >= %parmnum(i_withlen));
     withlen  = i_withlen;
   else;
-    withlen  = bfalse;
+    withlen  = bFalse;
   endif;
 
   if (i_fldl0100.f1vfmi = '1');
     //  Variable Feldlänge ...
-    if (withlen = btrue);
+    if (withlen = bTrue);
       //  ... incl. Längenbyte
       fldlen = i_fldl0100.f1flen;
     else;
@@ -213,7 +213,7 @@ dcl-proc f_rtvfld export;
   if (%parms() >= %parmnum(i_withlen));
     withlen  = i_withlen;
   else;
-    withlen  = bfalse;
+    withlen  = bFalse;
   endif;
 
   rtnlen = f_buffln(i_fldl0100: withlen);
@@ -222,7 +222,7 @@ dcl-proc f_rtvfld export;
   endif;
 
   if (i_fldl0100.f1vfmi = '1');
-    if (withlen = bfalse);
+    if (withlen = bFalse);
       %subst(o_buffer: 1: parmlen) =
       %subst(i_buffer: i_fldl0100.f1ibuf+2: rtnlen);
     else;
@@ -267,12 +267,12 @@ dcl-proc p_fldtobuf export;
   if (%parms() >= %parmnum(i_withlen));
     withlen = i_withlen;
   else;
-    withlen = bfalse;
+    withlen = bFalse;
   endif;
 
   if (i_fldl0100.f1vfmi = '1');
     //  Felder variabler Länge ...
-    if (withlen = bfalse);
+    if (withlen = bFalse);
       //  ... ohne Längenangabe
       //      (einfügen Längenangabe)
 
@@ -329,9 +329,9 @@ dcl-proc f_isvarlen export;
   // ------------------------------------------------------------------------
 
   if (i_fldl0100.f1vfmi = '1');
-    return btrue;
+    return bTrue;
   else;
-    return bfalse;
+    return bFalse;
   endif;
 
 end-proc;
@@ -536,14 +536,14 @@ dcl-proc f_vldfloat export;
   dcl-s i               int(10) inz;
   dcl-s c               char(1) inz;
   dcl-s dummy           float(8) inz;
-  dcl-s hasexponent     like(bool_t) inz(bfalse);
+  dcl-s hasexponent     like(bool_t) inz(bFalse);
   dcl-c cdigits '0123456789';
   //-------------------------------------------------------------------*
 
   monitor;
 
     if (%len(i_buffer) = 0);
-      return bfalse;
+      return bFalse;
     endif;
 
     i = %check(' ': i_buffer);
@@ -563,7 +563,7 @@ dcl-proc f_vldfloat export;
           leave;
         endif;
         if (%check(cdigits: c) <> 0);
-          return bfalse;
+          return bFalse;
         endif;
       endif;
       i = i + 1;
@@ -577,7 +577,7 @@ dcl-proc f_vldfloat export;
           leave;
         endif;
         if (%check(cdigits: c) <> 0);
-          return bfalse;
+          return bFalse;
         endif;
       endif;
       i = i + 1;
@@ -587,39 +587,39 @@ dcl-proc f_vldfloat export;
       // Prüfen auf Vorzeichen des Exponenten
       i = i + 1;
       if (i > %len(i_buffer));
-        return bfalse;
+        return bFalse;
       endif;
       c = %subst(i_buffer: i: 1);
       if (c <> '+' and c <> '-' and c <> ' ');
-        return bfalse;
+        return bFalse;
       endif;
 
       i = i + 1;
-      hasexponent = bfalse;
+      hasexponent = bFalse;
 
       // Prüfen auf nummerische Ziffern des Exponenten
       dow (i <= %len(i_buffer));
         c = %subst(i_buffer: i: 1);
         if (c <> ' ');
           if (%check(cdigits: c) <> 0);
-            return bfalse;
+            return bFalse;
           endif;
-          hasexponent = btrue;
+          hasexponent = bTrue;
         endif;
         i = i + 1;
       enddo;
 
-      if (hasexponent <> btrue);
-        return bfalse;
+      if (hasexponent <> bTrue);
+        return bFalse;
       endif;
     endif;
 
     dummy = %float(i_buffer);
 
-    return btrue;
+    return bTrue;
   on-error;
     p_rmvpgmmg('*');
-    return bfalse;
+    return bFalse;
   endmon;
 
 
@@ -637,7 +637,7 @@ dcl-proc f_execute export;
   end-pi;
 
   //  Definieren Funktionswert
-  dcl-s isok            like(bool_t) inz(bfalse);
+  dcl-s isok            like(bool_t) inz(bFalse);
 
   //  Definieren Parameter für p_getOpDesc
   dcl-s desctype        int(10) inz;
@@ -690,11 +690,11 @@ dcl-proc f_execute export;
   if (errcode.bytavl <> 0);
     o_msgid  = errcode.excid;
     o_msgdta = errcode.excdta;
-    isok     = bfalse;
+    isok     = bFalse;
   else;
     o_msgid  = ' ';
     o_msgdta = ' ';
-    isok     = btrue;
+    isok     = bTrue;
   endif;
 
   return isok;
@@ -719,7 +719,7 @@ dcl-proc f_basedpf export;
   end-pi;
 
   //  Definieren Funktionswert ...
-  dcl-s isbasedonpf     like(bool_t) inz(bfalse);
+  dcl-s isbasedonpf     like(bool_t) inz(bFalse);
 
   dcl-s tfile           like(i_file);
   dcl-s tlib            like(i_lib);
@@ -746,7 +746,7 @@ dcl-proc f_basedpf export;
   : '*CREATE': ynbrofent: ydata);
 
   if (ynbrofent = 0);
-    return bfalse;
+    return bFalse;
   endif;
 
   //      prüfen auf logische Datei
@@ -760,8 +760,8 @@ dcl-proc f_basedpf export;
       if f_basedmbr(i_file: i_lib: i_mbr
                  : i_rcdmbrnbr: i_rcdfmt
                  : tfile: tlib: tmbr: trcdfmt
-                 ) = bfalse;
-        return bfalse;
+                 ) = bFalse;
+        return bFalse;
       endif;
 
     when (fild0100.atnofm > 1);
@@ -769,8 +769,8 @@ dcl-proc f_basedpf export;
       if f_basedmbr(i_file: i_lib: i_mbr
                  : i_rcdmbrnbr: i_rcdfmt
                  : tfile: tlib: tmbr: trcdfmt
-                 ) = bfalse;
-        return bfalse;
+                 ) = bFalse;
+        return bFalse;
       endif;
 
     other;
@@ -778,13 +778,13 @@ dcl-proc f_basedpf export;
       if f_basedmbr(i_file: i_lib: i_mbr
                  : i_rcdmbrnbr: i_rcdfmt
                  : tfile: tlib: tmbr: trcdfmt
-                 ) = bfalse;
-        return bfalse;
+                 ) = bFalse;
+        return bFalse;
       endif;
     endsl;
 
 
-    isbasedonpf = btrue;
+    isbasedonpf = bTrue;
     o_pfile   = tfile;
     o_plib    = tlib;
     o_pmbr    = tmbr;
@@ -795,11 +795,11 @@ dcl-proc f_basedpf export;
     if f_basedmbr(i_file: i_lib: i_mbr
                : i_rcdmbrnbr: i_rcdfmt
                : tfile: tlib: tmbr: trcdfmt
-               ) = bfalse;
-      return bfalse;
+               ) = bFalse;
+      return bFalse;
     endif;
 
-    isbasedonpf = bfalse;
+    isbasedonpf = bFalse;
     o_pfile   = tfile;
     o_plib    = tlib;
     o_pmbr    = tmbr;
@@ -828,7 +828,7 @@ dcl-proc f_basedmbr export;
   end-pi;
 
   //  Definieren Funktionswert ...
-  dcl-s isMbrFound  like(bool_t) inz(bfalse);
+  dcl-s isMbrFound  like(bool_t) inz(bFalse);
 
   dcl-s mbrNbr      like(i_mbrnbr);
 
@@ -866,7 +866,7 @@ dcl-proc f_basedmbr export;
   qusrmbrd(mbrd0300: %size(mbrd0300): 'MBRD0300'
   : qFile: i_mbr: '0': errcode);
   if (errcode.bytavl <> 0);
-    isMbrFound = bfalse;
+    isMbrFound = bFalse;
     return isMbrFound;
   endif;
 
@@ -877,7 +877,7 @@ dcl-proc f_basedmbr export;
   qusrmbrd(mbrd0300: mbrd0300.m3bytavl: 'MBRD0300'
   : qFile: i_mbr: '0': errcode);
   if (errcode.bytavl <> 0);
-    isMbrFound = bfalse;
+    isMbrFound = bFalse;
     return isMbrFound;
   endif;
 
@@ -929,7 +929,7 @@ dcl-proc f_basedmbr export;
       o_pLib     = '*ERROR';
       o_pmbr     = '*ERROR';
       o_rcdfmt   = '*ERROR';
-      isMbrFound = bfalse;
+      isMbrFound = bFalse;
     endif;
   endsl;
 
@@ -1058,9 +1058,9 @@ dcl-proc f_cmdline export;
   qsyrusri (usri0200: %size(usri0200): 'USRI0200': sds.user: errcode);
 
   if (errcode.bytavl <> 0 or usri0200.lmtCap = '*YES');
-    f_cmdline = bfalse;
+    f_cmdline = bFalse;
   else;
-    f_cmdline = btrue;
+    f_cmdline = bTrue;
   endif;
 
   return f_cmdline;
@@ -1164,9 +1164,9 @@ dcl-proc f_isnumfld export;
   (i_fldl0100.f1dtyp = 'B') or                                          // Binary
   (i_fldl0100.f1dtyp = 'P') or                                          // Packed
   (i_fldl0100.f1dtyp = 'F');                                            // Float
-    isnumfld = btrue;
+    isnumfld = bTrue;
   else;
-    isnumfld = bfalse;
+    isnumfld = bFalse;
   endif;
 
   return isnumfld;
@@ -1187,9 +1187,9 @@ dcl-proc f_isfloatfld export;
   // ------------------------------------------------------------------------
 
   if (i_fldl0100.f1dtyp = 'F');                                            // Float
-    isfloat = btrue;
+    isfloat = bTrue;
   else;
-    isfloat = bfalse;
+    isfloat = bFalse;
   endif;
 
   return isfloat;
@@ -1211,9 +1211,9 @@ dcl-proc f_ischarfld export;
 
   if (i_fldl0100.f1dtyp = 'A' or                                           // Alpha
   i_fldl0100.f1dtyp = 'G');                                             // Graphic
-    ischarfld = btrue;
+    ischarfld = bTrue;
   else;
-    ischarfld = bfalse;
+    ischarfld = bFalse;
   endif;
 
   return ischarfld;
@@ -1235,9 +1235,9 @@ dcl-proc f_hasccsid export;
 
   if (i_fldl0100.f1fdcc > 0 and
   i_fldl0100.f1fdcc <> 65535);
-    hasccsid = btrue;
+    hasccsid = bTrue;
   else;
-    hasccsid = bfalse;
+    hasccsid = bFalse;
   endif;
 
   return hasccsid;
@@ -1400,9 +1400,9 @@ dcl-proc f_canusereffld export;
   (i_fldl0100.f1dtyp = 'A' and
   (i_fldl0100.f1fdcc = 1200 or
   i_fldl0100.f1fdcc = 1208)));
-    canusereffld = bfalse;
+    canusereffld = bFalse;
   else;
-    canusereffld = btrue;
+    canusereffld = bTrue;
   endif;
 
   return canusereffld;
@@ -1426,9 +1426,9 @@ dcl-proc f_canusecntfld export;
   (i_fldl0100.f1dtyp = 'A' and
   (i_fldl0100.f1fdcc = 1200 or
   i_fldl0100.f1fdcc = 1208)));
-    canusecntfld = bfalse;
+    canusecntfld = bFalse;
   else;
-    canusecntfld = btrue;
+    canusecntfld = bTrue;
   endif;
 
   return canusecntfld;
@@ -1452,10 +1452,10 @@ dcl-proc f_mustcvtccsid export;
   endif;
 
   if (g_jobccsid = 65535); // Job CCSID = *HEX
-    return btrue;
+    return bTrue;
   endif;
 
-  return bfalse;
+  return bFalse;
 
 end-proc;
 
@@ -1473,9 +1473,9 @@ dcl-proc f_istolong export;
   // ------------------------------------------------------------------------
 
   if f_dsplyln(i_fldl0100)>f_maxdspln(i_fldl0100);
-    tolong = btrue;
+    tolong = bTrue;
   else;
-    tolong = bfalse;
+    tolong = bFalse;
   endif;
 
   return tolong;
@@ -1496,9 +1496,9 @@ dcl-proc f_istolongmax export;
   // ------------------------------------------------------------------------
 
   if (f_buffln(i_fldl0100) > 1024);
-    tolong = btrue;
+    tolong = bTrue;
   else;
-    tolong = bfalse;
+    tolong = bFalse;
   endif;
 
   return tolong;
@@ -1560,7 +1560,7 @@ dcl-proc f_nbrdsprw export;
   dcl-s dsplylen        like(int4_t);
   //------------------------------------------------------------*
 
-  if (f_istolong(i_fldl0100) = btrue);
+  if (f_istolong(i_fldl0100) = bTrue);
     dsplylen = f_maxdspln(i_fldl0100);
   else;
     dsplylen = f_dsplyln(i_fldl0100);
@@ -1638,7 +1638,7 @@ dcl-proc f_isnotalw export;
   end-pi;
 
   // Funktionswert
-  dcl-s notAllowed      like(bool_t) inz(btrue);
+  dcl-s notAllowed      like(bool_t) inz(bTrue);
   // ------------------------------------------------------------------------
 
   //  Wenn es sich um einen der folgenden Feldtypen handelt, ...
@@ -1656,8 +1656,8 @@ dcl-proc f_isnotalw export;
       i_fldl0100.f1dtyp = 'G');     // = Graphic
     //  ... dann
     //      prüfen, ob es sich um ein GRAPHIC Feld ohne CCSID handelt
-    if (i_fldl0100.f1dtyp = 'G' and f_hasccsid(i_fldl0100) = bfalse);
-      notAllowed = btrue;
+    if (i_fldl0100.f1dtyp = 'G' and f_hasccsid(i_fldl0100) = bFalse);
+      notAllowed = bTrue;
       return notAllowed;
     endif;
 
@@ -1665,7 +1665,7 @@ dcl-proc f_isnotalw export;
     //      30 Stellen handelt.
     if (i_fldl0100.f1dtyp = 'P' or i_fldl0100.f1dtyp = 'S');
       if (i_fldl0100.f1digt > 30);
-        notAllowed = btrue;
+        notAllowed = bTrue;
         return notAllowed;
       endif;
     endif;
@@ -1673,24 +1673,24 @@ dcl-proc f_isnotalw export;
     //      prüfen, ob es sich um ein Feld variabler Länge handelt.
 
     //      Wenn es sich um ein Feld variabler Länge handelt, ...
-    if (f_isvarlen(i_fldl0100) = btrue);
+    if (f_isvarlen(i_fldl0100) = bTrue);
       //      ... dann
       //          prüfen, ob es sich um alpha-numerisches Feld handelt.
       if i_fldl0100.f1dtyp = 'A' or                                      // = Alpha
          i_fldl0100.f1dtyp = 'G';                                        // = Graphic
-        notAllowed = bfalse;
+        notAllowed = bFalse;
       else;
-        notAllowed = btrue;
+        notAllowed = bTrue;
       endif;
     else;
       //      ... sonst
       //          ist alles klar.
-      notAllowed = bfalse;
+      notAllowed = bFalse;
     endif;
   else;
     //  ... sonst
     //      setzen Markierung für unbekannten Feldtyp
-    notAllowed = btrue;
+    notAllowed = bTrue;
   endif;
 
   return notAllowed;
@@ -1707,16 +1707,16 @@ dcl-proc f_iskeyfld export;
   end-pi;
 
   // Funktionswert
-  dcl-s iskeyfld        like(bool_t) inz(bfalse);
+  dcl-s iskeyfld        like(bool_t) inz(bFalse);
   // ------------------------------------------------------------------------
 
   //  Wenn es sich um ein Schlüsselfeld handelt, ...
   if (i_fldl0100.f1keyf = '1');
     //  ... dann
-    iskeyfld = btrue;
+    iskeyfld = bTrue;
   else;
     //  ... sonst
-    iskeyfld = bfalse;
+    iskeyfld = bFalse;
   endif;
 
   return iskeyfld;
@@ -1832,7 +1832,7 @@ dcl-proc f_rtvmsgd export;
 
   //  Replace substitution variables
   if (%parms() >= %parmnum(i_rplcsubv));
-    if (i_rplcsubv = btrue);
+    if (i_rplcsubv = bTrue);
       rplcsubv = '*YES';
     else;
       rplcsubv = '*NO';
@@ -1843,7 +1843,7 @@ dcl-proc f_rtvmsgd export;
 
   //  Return format control characters
   if (%parms() >= %parmnum(i_rtnfmtcc));
-    if (i_rtnfmtcc = btrue);
+    if (i_rtnfmtcc = bTrue);
       rtnfmtcc = '*YES';
     else;
       rtnfmtcc = '*NO';
@@ -1883,11 +1883,11 @@ dcl-proc f_msgtext export;
 
   select;
   when (%parms() = %parmnum(i_msgf));
-    rtvm0100 = f_rtvmsgd(i_msgid: i_msgdta: btrue: bfalse: i_msgf);
+    rtvm0100 = f_rtvmsgd(i_msgid: i_msgdta: bTrue: bFalse: i_msgf);
   when (%parms() =  %parmnum(i_msgfl));
-    rtvm0100 = f_rtvmsgd(i_msgid: i_msgdta: btrue: bfalse: i_msgf: i_msgfl);
+    rtvm0100 = f_rtvmsgd(i_msgid: i_msgdta: bTrue: bFalse: i_msgf: i_msgfl);
   other;
-    rtvm0100 = f_rtvmsgd(i_msgid: i_msgdta: btrue: bfalse);
+    rtvm0100 = f_rtvmsgd(i_msgid: i_msgdta: bTrue: bFalse);
   endsl;
 
   if (rt1_lnmgrt > 0);
@@ -2222,9 +2222,9 @@ dcl-proc f_iskeyexc export;
 
   pgmCmd = i_data;
   if (%lookup(pgmCmd: i_exclkeys) > 0);
-    isExcluded = btrue;
+    isExcluded = bTrue;
   else;
-    isExcluded = bfalse;
+    isExcluded = bFalse;
   endif;
 
   *in01 = in01;
@@ -2479,7 +2479,7 @@ dcl-proc f_exist export;
   end-pi;
 
   //  Return value
-  dcl-s doesexist       ind inz(bfalse);
+  dcl-s doesexist       ind inz(bFalse);
 
   //  Optional parameter fields
   dcl-s lib             like(i_lib       ) inz;
@@ -2526,9 +2526,9 @@ dcl-proc f_exist export;
 
   // Set return value
   if (errcode.bytavl = 0);
-    doesexist = btrue;
+    doesexist = bTrue;
   else;
-    doesexist = bfalse;
+    doesexist = bFalse;
   endif;
 
   return doesexist;
@@ -2577,7 +2577,7 @@ dcl-proc f_wordwrap export;
 
   //  Local fields
   dcl-ds theeop qualified;
-    isfound         ind inz(bfalse);
+    isfound         ind inz(bFalse);
     position        int(10);
     string          varchar(2);
   end-ds;
@@ -2639,7 +2639,7 @@ dcl-proc f_wordwrap export;
 
     // Find next end-of-paragraph marker
     reset theeop;
-    theeop.isfound = bfalse;
+    theeop.isfound = bFalse;
     theeop.position = %scan(esc: string: io_startpos);
     dow not theeop.isfound and theeop.position > 0;
       // If there is an escape character, ...
@@ -2653,7 +2653,7 @@ dcl-proc f_wordwrap export;
             if f_ucase(tmpeop) = f_ucase(eop(x));
               // ... then set flag "EOP found"
               theeop.string  = eop(x);
-              theeop.isfound = btrue;
+              theeop.isfound = bTrue;
               leave;
             endif;
           endif;
@@ -2823,18 +2823,18 @@ dcl-proc isBitOn export;
   end-pi;
 
   //  Return value
-  dcl-s ison            ind inz(btrue);
+  dcl-s ison            ind inz(bTrue);
 
   //  Helper fields
   dcl-s x               int(3) inz;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  ison = btrue;
+  ison = bTrue;
 
   for   x = (%size(i_value) * 8) - 1 downto 0 ;
     if (tstbts(%addr(i_testbit): x) <> 0);
       if (tstbts(%addr(i_value): x) = 0);
-        ison = bfalse;
+        ison = bFalse;
         leave;
       endif;
     endif;
@@ -2912,7 +2912,7 @@ dcl-proc f_endswith export;
   end-pi;
 
   //  Return value
-  dcl-s endswith        ind inz(bfalse);
+  dcl-s endswith        ind inz(bFalse);
 
   //  Local fields
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2925,7 +2925,7 @@ dcl-proc f_endswith export;
 
   if %subst(i_string
   : %len(i_string) - %len(i_suffix) + 1) = i_suffix;
-    endswith = btrue;
+    endswith = bTrue;
   endif;
 
   return   endswith;
@@ -2996,7 +2996,7 @@ dcl-proc f_fieldtypeasstring export;
   dcl-s decposa         varchar(16) inz;
   // ------------------------------------------------------------------------
 
-  if (f_isnumfld(i_fldl0100) = btrue);
+  if (f_isnumfld(i_fldl0100) = bTrue);
     length = i_fldl0100.f1digt;
     decpos = i_fldl0100.f1decp;
     lengtha = %editc(length: '3');

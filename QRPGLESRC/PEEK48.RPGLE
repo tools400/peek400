@@ -104,7 +104,7 @@ dcl-ds pfile qualified;
   format          like(io_rcdfmt);
 end-ds;
 
-dcl-s isInzSr         like(bool_t) inz(bfalse);
+dcl-s isInzSr         like(bool_t) inz(bFalse);
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *

@@ -316,7 +316,7 @@ begsr c_search;
     p_sndpgmmg('USR8209': usr8209: sds.pgmname);
   else;
     exsr postofield;
-    if (isnewpos = btrue);
+    if (isnewpos = bTrue);
       sfsanr = wrk_sfsanr;
     endif;
   endif;
@@ -345,7 +345,7 @@ begsr postofield;
       usr8136.var1 = lstfield;
       p_sndpgmmg('USR8136': usr8136: sds.pgmname);
     else;
-      isnewpos = btrue;
+      isnewpos = bTrue;
     endif;
   endif;
 
@@ -377,7 +377,7 @@ begsr srchfield;
       if lstfield =
          %subst($$fnme: 1:(f_scan(' ':
                                lstfield) - 1));
-        isfound = btrue;
+        isfound = bTrue;
         leave;
       else;
         if (sfpau <> *blanks);
@@ -395,7 +395,7 @@ begsr srchfield;
 
     endfor;
 
-    if (isfound = btrue);
+    if (isfound = bTrue);
       wrk_sfsanr = sflrec;
       lstnbrrcd = sflrec;
     else;
@@ -463,7 +463,7 @@ begsr vreadc;
         //  Setzen Bezugszahlen ...
         exsr pbsetbz;
         update pbsfl;
-        issflerror = btrue;
+        issflerror = bTrue;
         iter;
       endif;
 
@@ -483,7 +483,7 @@ begsr vreadc;
         //  Setzen Bezugszahlen ...
         exsr pbsetbz;
         update pbsfl;
-        issflerror = btrue;
+        issflerror = bTrue;
         iter;
       endsl;
 
@@ -980,11 +980,11 @@ endsr;
 
 begsr inzsr;
 
-  if (isInzSr = btrue);
+  if (isInzSr = bTrue);
     leavesr;
   endif;
 
-  isInzSr = btrue;
+  isInzSr = bTrue;
 
   PGMQ = '*';
 

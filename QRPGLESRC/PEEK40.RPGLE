@@ -81,9 +81,9 @@ dcl-ds yqfile likeds(qobj_t) inz;
 dcl-s ymbr            char(10) inz(*blanks);
 dcl-s ydata           char(512) inz(*blanks);
 
-dcl-s isnewpos        char(1) inz(bfalse);
-dcl-s isfound         char(1) inz(bfalse);
-dcl-s issflerror      char(1) inz(bfalse);
+dcl-s isnewpos        char(1) inz(bFalse);
+dcl-s isfound         char(1) inz(bFalse);
+dcl-s issflerror      char(1) inz(bFalse);
 
 dcl-s rc              like(int4_t) inz;
 dcl-s numrel          like(int4_t) inz;
@@ -129,7 +129,7 @@ dcl-ds keyl0100 likeds(keyl0100_t) inz;
 dcl-ds dbrl0200 likeds(dbrl0200_t) inz;
 dcl-ds sell0100 likeds(sell0100_t) inz;
 
-dcl-s isInzSr         like(bool_t) inz(bfalse);
+dcl-s isInzSr         like(bool_t) inz(bFalse);
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
@@ -356,7 +356,7 @@ begsr c_search;
     p_sndpgmmg('USR8209': usr8209: sds.pgmname);
   else;
     exsr postofield;
-    if (isnewpos = btrue);
+    if (isnewpos = bTrue);
       sfsanr = wrk_sfsanr;
     endif;
   endif;
@@ -374,18 +374,18 @@ begsr postofield;
   endif;
 
   if (lstfile = *blanks);
-    isnewpos = bfalse;
+    isnewpos = bFalse;
     lstnbrrcd = 0;
   else;
 
     exsr srchfield;
-    if (isfound = bfalse);
-      isnewpos = bfalse;
+    if (isfound = bFalse);
+      isnewpos = bFalse;
       clear usr8136;
       usr8136.var1 = ##file;
       p_sndpgmmg('USR8136': usr8136: sds.pgmname);
     else;
-      isnewpos = btrue;
+      isnewpos = bTrue;
     endif;
   endif;
 
@@ -400,17 +400,17 @@ endsr;
 begsr srchfield;
 
   if (*in80 = *off);
-    isfound = bfalse;
+    isfound = bFalse;
   else;
 
-    isfound = bfalse;
+    isfound = bFalse;
     lstnbrrcd = lstnbrrcd + 1;
 
     for sflrec = lstnbrrcd to sflnbrrcd;
       chain(e) sflrec pbsfl;
       *in11 = %error or not %found;
       if (*in11 = *on);
-        isfound = bfalse;
+        isfound = bFalse;
         leave;
       endif;
 
@@ -424,7 +424,7 @@ begsr srchfield;
       if lstfile  =
          %subst($$file: spos:(f_scan(' ':
                            lstfile) - 1));
-        isfound = btrue;
+        isfound = bTrue;
         leave;
       else;
         if (sfpau <> *blanks);
@@ -442,7 +442,7 @@ begsr srchfield;
 
     endfor;
 
-    if (isfound = btrue);
+    if (isfound = bTrue);
       wrk_sfsanr = sflrec;
       lstnbrrcd = sflrec;
     else;
@@ -472,7 +472,7 @@ endsr;
 
 begsr vreadc;
 
-  issflerror = bfalse;
+  issflerror = bFalse;
 
   if (*in80 = *off);
   //   keine Einträge in Subfile vorhanden ...
@@ -491,7 +491,7 @@ begsr vreadc;
       exsr bztoscreen;
 
       //  Cursorpositionierung ...
-      if (issflerror = bfalse);
+      if (issflerror = bFalse);
         sflcsr = sflrec;
       else;
       //  Subfile nicht neu positionieren
@@ -510,7 +510,7 @@ begsr vreadc;
 
         exsr bztosubf;
         update pbsfl;
-        issflerror = btrue;
+        issflerror = bTrue;
         iter;
       endif;
 
@@ -533,7 +533,7 @@ begsr vreadc;
 
         exsr bztosubf;
         update pbsfl;
-        issflerror = btrue;
+        issflerror = bTrue;
         iter;
       endsl;
 
@@ -1040,7 +1040,7 @@ begsr first;
         usr0008.var2 = yqfile.lib;
         o_msgdta = usr0008;
       else;
-        if (i_basephyf = btrue);
+        if (i_basephyf = bTrue);
           //                   ... based-on
           pfile = %subst(ydata: 1: 10);
           plib  = %subst(ydata: 11: 10);
@@ -1086,11 +1086,11 @@ endsr;
 
 begsr inzsr;
 
-  if (isInzSr = btrue);
+  if (isInzSr = bTrue);
     leavesr;
   endif;
 
-  isInzSr = btrue;
+  isInzSr = bTrue;
 
   PGMQ = '*';
 

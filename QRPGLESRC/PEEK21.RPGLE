@@ -45,7 +45,7 @@
 
 /COPY QCOPYLE,USR8143
 
-dcl-s wrk_eof         char(1) inz(bfalse);
+dcl-s wrk_eof         char(1) inz(bFalse);
 
 dcl-s wrk_sectn       like(section_t);
 dcl-s wrk_key         like(key_t);
@@ -54,7 +54,7 @@ dcl-s wrk_data        like(set0000_t);
 dcl-s wrk_exclk       like(pgmcmd_t) dim(25);
 dcl-s p               like(int4_t);
 
-dcl-s isexit05        ind inz(bfalse);
+dcl-s isexit05        ind inz(bFalse);
 dcl-s exit05          like(pgmcalln_t);
 
 dcl-ds qpgm qualified;
@@ -83,7 +83,7 @@ dcl-pr callexit05;
   io_value        char(10);
 end-pr;
 
-dcl-s isInzSr         like(bool_t) inz(bfalse);
+dcl-s isInzSr         like(bool_t) inz(bFalse);
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
@@ -267,7 +267,7 @@ begsr mapusrinp;
       exsr chkentry;
       //  Wenn Tasten definiert sind,
       //  Dann Fehlermeldung ausgeben ...
-      if (wrk_eof = bfalse);
+      if (wrk_eof = bFalse);
         o_pgmcmd = *blanks;
         o_cmddta = *blanks;
         o_msgid = 'USR8143';
@@ -294,13 +294,13 @@ begsr chkentry;
   wrk_sectn = '*' + %trim(i_pgm);
   p_setllusr(wrk_sectn: '*F01');
   if (f_readeusr(wrk_sectn: tmp_key) = '1');
-    wrk_eof = btrue;
+    wrk_eof = bTrue;
   else;
     if tmp_key < '*F01'
        or tmp_key > '*F24';
-      wrk_eof = btrue;
+      wrk_eof = bTrue;
     else;
-      wrk_eof = bfalse;
+      wrk_eof = bFalse;
     endif;
   endif;
 
@@ -333,11 +333,11 @@ endsr;
 
 begsr inzsr;
 
-  if (isInzSr = btrue);
+  if (isInzSr = bTrue);
     leavesr;
   endif;
 
-  isInzSr = btrue;
+  isInzSr = bTrue;
 
   exit05 = f_pgmcalln('EXIT05');
 
@@ -374,7 +374,7 @@ dcl-proc callexit05;
                 : i_pgm: i_type: io_value);
     on-error;
       p_rmvpgmmg('*');
-      isexit05 = bfalse;
+      isexit05 = bFalse;
     endmon;
   endif;
 

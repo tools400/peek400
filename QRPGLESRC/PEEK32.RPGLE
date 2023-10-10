@@ -48,7 +48,7 @@ dcl-s x               like(int4_t);
 dcl-s pbuffer         pointer;
 dcl-s char            char(1) based(pChar);
 
-dcl-s isInzSr         like(bool_t) inz(bfalse);
+dcl-s isInzSr         like(bool_t) inz(bFalse);
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
@@ -130,11 +130,11 @@ endsr;
 
 begsr inzsr;
 
-  if (isInzSr = btrue);
+  if (isInzSr = bTrue);
     leavesr;
   endif;
 
-  isInzSr = btrue;
+  isInzSr = bTrue;
 
   exsr getUsrSetg;
 

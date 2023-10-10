@@ -76,8 +76,8 @@
        dcl-s peek23_name     like(pgmcalln_t);
 
        // Arbeitsfelder
-       dcl-s isPgmError      like(bool_t) inz(bfalse);
-       dcl-s isdatachg       like(bool_t) inz(bfalse);
+       dcl-s isPgmError      like(bool_t) inz(bFalse);
+       dcl-s isdatachg       like(bool_t) inz(bFalse);
        dcl-ds *N;
          pfldinhaltsbcs  like(rcdbuf_t) inz;
          pfldinhaltucs2  like(rcdbufucs2_t) inz
@@ -94,7 +94,7 @@
          #ucs2           ucs2(128) ccsid(13488) dim(16) pos(1);
        end-ds;
 
-       dcl-s isInzSr         like(bool_t) inz(bfalse);
+       dcl-s isInzSr         like(bool_t) inz(bFalse);
 
        //*******************************************************************
        //                 S T E U E R  -  R O U T I N E                    *
@@ -209,7 +209,7 @@
                 //  Datenfreigabe
              when (ypgmcmd = '*ENTER' or ypgmcmd = '*OK');
                 exsr c_enter;
-                if (isPgmError = bfalse);
+                if (isPgmError = bFalse);
                    o_msgid  = 'USR8112';
                    o_msgdta = ' ';
 
@@ -247,7 +247,7 @@
 
        begsr c_enter;
 
-          if (isPgmError = btrue);
+          if (isPgmError = bTrue);
 
              //    ---------------------------------
              //    *** Genereller Programmfehler ***
@@ -260,8 +260,8 @@
              //  Prüfen der Eingaben
              exsr prfb1;
 
-             if (isPgmError = bfalse);
-                if (isdatachg = btrue);
+             if (isPgmError = bFalse);
+                if (isdatachg = bTrue);
 
                    //  ... einsetzen in Zwischenfeld für Rückgabewert
                    if (i_isucs2 = 0);
@@ -309,7 +309,7 @@
           *in30 = *off; // #STRING/#UCS2
 
           //  Fehler
-          isPgmError = bfalse;
+          isPgmError = bFalse;
 
        endsr;
 
@@ -321,7 +321,7 @@
 
           //  Länge und der Zeichenkette
           exsr prf20;
-          if (isPgmError = btrue);
+          if (isPgmError = bTrue);
              leavesr;
           endif;
 
@@ -342,10 +342,10 @@
           //  Zeichenkette zu lang
           if (len > f_dsplyln(fldl0100));
              p_sndpgmmg('USR8176': '': sds.pgmname);
-             isPgmError = btrue;
+             isPgmError = bTrue;
           endif;
 
-          if (isPgmError = btrue);
+          if (isPgmError = bTrue);
              *in20 = *on;
              *in30 = *on;
           endif;
@@ -531,17 +531,17 @@
           f_key.f_field = i_fldname;
           chain %kds(f_key) fpeekfld;
           if (not %found(peekfld));
-             isPgmError = btrue;
+             isPgmError = bTrue;
              clear fldl0100;
              clear usr8136;
              usr8136.var1   = i_fldname;
              p_sndpgmmg('USR8136': usr8136: sds.pgmname);
           else;
-             isPgmError = bfalse;
+             isPgmError = bFalse;
              fldl0100   = f_ffd;
           endif;
 
-          if (isPgmError = btrue);
+          if (isPgmError = bTrue);
              leavesr;
           endif;
 
@@ -552,10 +552,10 @@
           o_msgdta = ' ';
 
           if (plength > maxfieldlength);
-             isfieldtoolarge = btrue;
-             *in70 = btrue;
+             isfieldtoolarge = bTrue;
+             *in70 = bTrue;
           else;
-             isfieldtoolarge = bfalse;
+             isfieldtoolarge = bFalse;
              *in70 = i_protect;
           endif;
 
@@ -586,11 +586,11 @@
 
        begsr inzsr;
 
-          if (isInzSr = btrue);
+          if (isInzSr = bTrue);
              leavesr;
           endif;
 
-          isInzSr = btrue;
+          isInzSr = bTrue;
 
           PGMQ = '*';
 

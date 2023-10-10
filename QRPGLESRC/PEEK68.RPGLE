@@ -66,7 +66,7 @@
        dcl-s ychoice         char(75) dim(32);
        dcl-s ynbrofch        like(int4_t);
 
-       dcl-s issflerror      char(1) inz(bfalse);
+       dcl-s issflerror      char(1) inz(bFalse);
 
        dcl-s sftop           like(int4_t);
        dcl-s sflpage         like(int4_t);
@@ -81,7 +81,7 @@
        dcl-s peek23_name     like(pgmcalln_t);
        dcl-s peek27_name     like(pgmcalln_t);
 
-       dcl-s iseof           like(bool_t) inz(bfalse);
+       dcl-s iseof           like(bool_t) inz(bFalse);
        dcl-s key             like(key_t);
        dcl-s data            like(set0000_t);
 
@@ -98,7 +98,7 @@
          text            char(28) pos(6);
        end-ds;
 
-       dcl-s isInzSr         like(bool_t) inz(bfalse);
+       dcl-s isInzSr         like(bool_t) inz(bFalse);
 
        //*******************************************************************
        //                 S T E U E R  -  R O U T I N E                    *
@@ -283,7 +283,7 @@
 
        begsr vreadc;
 
-          issflerror = bfalse;
+          issflerror = bFalse;
 
           if (*in80 = *off);
              //   keine Einträge in Subfile vorhanden ...
@@ -300,7 +300,7 @@
                 *in11 = not %found;
 
                 //  Cursorpositionierung ...
-                if (issflerror = bfalse);
+                if (issflerror = bFalse);
                    sflcsr = sflrec;
                 else;
                    //  Subfile nicht neu positionieren
@@ -317,7 +317,7 @@
                    p_sndpgmmg('USR8110': sfpau: sds.pgmname);
                    exsr vsfpauerr;
                    update pbsfl;
-                   issflerror = btrue;
+                   issflerror = bTrue;
                    iter;
                 endif;
 
@@ -338,7 +338,7 @@
                    p_sndpgmmg('USR8110': usr8110: sds.pgmname);
                    exsr vsfpauerr;
                    update pbsfl;
-                   issflerror = btrue;
+                   issflerror = bTrue;
                    iter;
                 endsl;
 
@@ -525,7 +525,7 @@
 
           dow ('1');
              iseof = f_readeusr(usrkey.section: key: data);
-             if (iseof = btrue);
+             if (iseof = bTrue);
                 leave;
              endif;
 
@@ -681,11 +681,11 @@
 
        begsr inzsr;
 
-          if (isInzSr = btrue);
+          if (isInzSr = bTrue);
              leavesr;
           endif;
 
-          isInzSr = btrue;
+          isInzSr = bTrue;
 
           PGMQ = '*';
 

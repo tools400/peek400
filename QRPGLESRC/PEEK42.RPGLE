@@ -522,7 +522,7 @@ dcl-proc lf_rtvfldformat;
 
   if (i_startpos > %len(io_buffer) or
       %subst(io_buffer: i_startpos: 1) <> cformat_start);
-    return bfalse;
+    return bFalse;
   endif;
 
   // Find end of format definition
@@ -543,7 +543,7 @@ dcl-proc lf_rtvfldformat;
   strformat = %subst(io_buffer: s+1: l-2);
 
   if (strformat = '');
-    return bfalse;
+    return bFalse;
   endif;
 
   // Remove format definition from buffer
@@ -564,7 +564,7 @@ dcl-proc lf_rtvfldformat;
       usr8229.var1 = %str(ptoken);
       o_msgid  = 'USR8229';
       o_msgdta = usr8229;
-      return bfalse;
+      return bFalse;
     endmon;
     ptoken = strtok(*null: cformat_delimiter);
   endif;
@@ -577,31 +577,31 @@ dcl-proc lf_rtvfldformat;
       usr8230.var1 = %str(ptoken);
       o_msgid  = 'USR8230';
       o_msgdta = usr8230;
-      return bfalse;
+      return bFalse;
     endmon;
   endif;
 
   // Compose new field type
-  if (lf_loadfldatr(fldname: fldl0100_tmp) = bfalse);
-    return bfalse;
+  if (lf_loadfldatr(fldname: fldl0100_tmp) = bFalse);
+    return bFalse;
   endif;
 
   fldl0100_tmp.f1dtyp = %xlate(clower: cupper: data.type);
-  if (f_isnotalw(fldl0100_tmp) = btrue);
+  if (f_isnotalw(fldl0100_tmp) = bTrue);
     clear usr8228;
     usr8228.var1 = data.type;
     o_msgid  = 'USR8228';
     o_msgdta = usr8228;
-    return bfalse;
+    return bFalse;
   endif;
 
   // Check data type
-  if (f_isnotalw(fldl0100_tmp) = btrue);
-    return bfalse;
+  if (f_isnotalw(fldl0100_tmp) = bTrue);
+    return bFalse;
   endif;
 
   // Replace length and decimal position
-  if (f_isnumfld(fldl0100) = btrue);
+  if (f_isnumfld(fldl0100) = bTrue);
     fldl0100_tmp.f1decp = data.decpos;
     select;
     when (fldl0100_tmp.f1dtyp = 'S');
@@ -634,7 +634,7 @@ dcl-proc lf_rtvfldformat;
         usr8230.var1 = %char(data.decpos);
         o_msgid  = 'USR8230';
         o_msgdta = usr8230;
-        return bfalse;
+        return bFalse;
       endif;
       select;
       when (data.length = 4);
@@ -650,7 +650,7 @@ dcl-proc lf_rtvfldformat;
         usr8229.var1 = %char(data.length);
         o_msgid  = 'USR8229';
         o_msgdta = usr8229;
-        return bfalse;
+        return bFalse;
       endsl;
     endsl;
   else;
@@ -663,7 +663,7 @@ dcl-proc lf_rtvfldformat;
 
   o_fldl0100 = fldl0100_tmp;
 
-  return btrue;
+  return bTrue;
 
 
 end-proc;
@@ -678,7 +678,7 @@ dcl-proc lf_loadfldatr;
   end-pi;
 
   //  Funktionswert
-  dcl-s isloaded        char(1) inz(bfalse);
+  dcl-s isloaded        char(1) inz(bFalse);
 
   //  Arbeitsfelder
   dcl-ds fldl0100 likeds(fldl0100_t) inz;
@@ -691,10 +691,10 @@ dcl-proc lf_loadfldatr;
   chain %kds(f_key) fpeekfld;
   if (%found(peekfld));
     fldl0100 = f_ffd;
-    isloaded = btrue;
+    isloaded = bTrue;
   else;
     clear fldl0100;
-    isloaded = bfalse;
+    isloaded = bFalse;
   endif;
 
   o_fldl0100 = fldl0100;
