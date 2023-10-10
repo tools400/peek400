@@ -115,7 +115,7 @@ endfor;
 //**                PARM                    YANZ
 //**                PARM                    YLIST
 
-if nbroffmt = *zeros;
+if (nbroffmt = *zeros);
   o_msgid = 'USR0002';
   usr0002.var1 = i_qfile.name;
   usr0002.var2 = i_qfile.lib;
@@ -145,7 +145,7 @@ begsr first;
   for do_x1 = 1 to *hival;
     read fpeekfmt;
     *in11 = %eof;
-    if *in11 = *on;
+    if (*in11 = *on);
       leave;
     endif;
 

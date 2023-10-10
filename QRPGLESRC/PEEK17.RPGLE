@@ -190,7 +190,7 @@
           //  in Programmbefehl
           peek21(workstn.aid: sds.pgmname
                 : ypgmcmd: ycmddta: ymsgid: ymsgdta);
-          if ymsgid <> *blanks;
+          if (ymsgid <> *blanks);
              p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
              ymsgid = '';
              ymsgdta = '';
@@ -200,33 +200,33 @@
           //  Abfragen der Programmbefehle
           select;
              //  F3  - Ende
-          when ypgmcmd = '*EXIT';
+          when (ypgmcmd = '*EXIT');
              exsr c_endpgm;
              leave;
 
              //  F4  - Prompt
-          when ypgmcmd = '*PROMPT';
+          when (ypgmcmd = '*PROMPT');
              exsr c_prompt;
              iter;
 
              //  F5  - Aktualisieren
-          when ypgmcmd = '*REFRESH';
+          when (ypgmcmd = '*REFRESH');
              exsr c_refresh;
              iter;
 
              //  F12 - Ende
-          when ypgmcmd = '*CANCEL';
+          when (ypgmcmd = '*CANCEL');
              exsr c_endpgm;
              leave;
 
              //  F24 - Weitere Tasten
-          when ypgmcmd = '*MOREKEYS';
+          when (ypgmcmd = '*MOREKEYS');
              exsr c_morekeys;
 
              //  Datenfreigabe
-          when ypgmcmd = '*ENTER';
+          when (ypgmcmd = '*ENTER');
              exsr c_enter;
-             if *in99 = *off;
+             if (*in99 = *off);
                 o_sgid = 'USR8112';
                 o_msgdta = *blanks;
                 leave;
@@ -257,7 +257,7 @@
 
              //  Prompt?
              //  ... ##Field
-             if %trim(##field ) = set0008.set_prmt;
+             if (%trim(##field ) = set0008.set_prmt);
                 exsr c_prompt;
                 if (*in99 = bTrue);
                    leave;
@@ -268,11 +268,11 @@
 
              exsr prfb1;
 
-             if ##field <> r_field;
+             if (##field <> r_field);
                 mustwait = bTrue;
              endif;
 
-             if mustwait = bTrue;
+             if (mustwait = bTrue);
                 *in99 = '1';
              else;
                 //  Wert belassen ...
@@ -280,7 +280,7 @@
 
           enddo;
 
-          if *in99 = *off;
+          if (*in99 = *off);
              o_field = ##field;
              o_operation = ##op;
              o_argument = r_arg30;
@@ -288,11 +288,11 @@
              o_srchnbrs = ##nbrs;
 
              select;
-             when ##type = 'U';
+             when (##type = 'U');
                 o_srchtype = '*UNDERLINE';
-             when ##type = 'R';
+             when (##type = 'R');
                 o_srchtype = '*REVERSE';
-             when ##type = 'P';
+             when (##type = 'P');
                 o_srchtype = '*PINROW';
              other;
                 o_srchtype = '*NORMAL';
@@ -381,7 +381,7 @@
 
           dou ('1');
 
-             if ##field = '*RECORD';
+             if (##field = '*RECORD');
                 //        suchen im ganzen Datensatz
              else;
 
@@ -449,7 +449,7 @@
                 leave;
              endif;
 
-             if ##field <> '*RECORD';
+             if (##field <> '*RECORD');
                 if ##op = 'LIKE'
                    or ##op = 'NLIKE';
                    //*   F1DTyp        IFNE      'A'  // alpha-num
@@ -481,7 +481,7 @@
 
           enddo;
 
-          if *in99 = *on;
+          if (*in99 = *on);
              *in21 = '1';
              *in31 = '1';
           endif;
@@ -499,7 +499,7 @@
              r_sign = *blanks;
              ##sign = *blanks;
 
-             if ##arg = *blanks;
+             if (##arg = *blanks);
                 *in99 = '1';
                 p_sndpgmmg('USR8140': usr8140: sds.pgmname);
                 leave;
@@ -525,7 +525,7 @@
              endsl;
 
              //  Verarbeiten numerischer Werte ...
-             if f_isnumfld(fldl0100) = bTrue;
+             if (f_isnumfld(fldl0100) = bTrue);
 
                 //  ... Vorzeichen, links
                 exsr signleft;
@@ -533,7 +533,7 @@
                 exsr signright;
 
                 //  ... umsetzen *BLANKS in '+' Zeichen
-                if ##sign = *blanks;
+                if (##sign = *blanks);
                    ##sign = set0003.set_signp;
                 else;
                    //      ... Vorzeichen stehen lassen
@@ -541,8 +541,8 @@
 
                 //  ... gültige Daten
                 //      ... Komma extrahieren
-                if fldl0100.f1dtyp = 'F'; // Float
-                   if f_vldfloat(r_arg30) = bFalse;
+                if (fldl0100.f1dtyp = 'F'); // Float
+                   if (f_vldfloat(r_arg30) = bFalse);
                       *in99 = '1';
                       clear usr8192.var1;
                       usr8192.var1 = ##field;
@@ -554,7 +554,7 @@
                    exsr chknumdata;
                 endif;
 
-                if *in99 = *on;
+                if (*in99 = *on);
                    leave;
                 endif;
 
@@ -579,7 +579,7 @@
 
           enddo;
 
-          if *in99 = *on;
+          if (*in99 = *on);
              *in22 = '1';
              *in32 = '1';
           endif;
@@ -594,7 +594,7 @@
 
           //   Suchen erstes Zeichen <> *BLANKS ...
           x = %check(' ':r_arg30);
-          if x = *zeros;
+          if (x = *zeros);
              //   Wenn nicht gefunden, dann ist nichts zu tun ...
           else;
              //   ansonsten das Zeichen extrahieren.
@@ -606,7 +606,7 @@
                 or r_sign = set0003.set_signp;
                 ##sign = r_sign;
                 x = x + 1;
-                if x <= 30;
+                if (x <= 30);
                    //*                 SUBST (P) R_Arg30:X     R_Arg30
                    r_arg30 = %subst(r_arg30: x);
                 else;
@@ -628,7 +628,7 @@
           //   Suchen letztes Zeichen <> *BLANKS ...
           //*   ' '           CHECKR    R_Arg30       X
           x = %checkr(' ': r_arg30);
-          if x = *zeros;
+          if (x = *zeros);
              //   Wenn nicht gefunden, dann ist nichts zu tun ...
           else;
              //   ansonsten das Zeichen extrahieren.
@@ -640,7 +640,7 @@
                 or r_sign = set0003.set_signp;
                 ##sign = r_sign;
                 x = x - 1;
-                if x > *zeros;
+                if (x > *zeros);
                    //*   X             SUBST (P) R_Arg30:1     R_Arg30
                    r_arg30 = %subst(r_arg30: 1: x);
                 else;
@@ -659,13 +659,13 @@
 
        begsr srchpoint;
 
-          if f_isnumfld(fldl0100) = bFalse;
+          if (f_isnumfld(fldl0100) = bFalse);
              //    keine Aufbereitung für nicht-numerische Daten
           else;
 
              //  Suchen nach Komma ...
              x = %scan(set0003.set_point: r_arg30);
-             if x = *zeros;
+             if (x = *zeros);
                 //   Wenn nicht gefunden, dann Länge +1 ...
                 //*   ' '           CHECKR    R_Arg30       X
                 x = %checkr(' ': r_arg30);
@@ -674,7 +674,7 @@
 
              //   ansonsten Vorkommastellen ...
              x = x - 1;
-             if x > *zeros;
+             if (x > *zeros);
                 //*   X             SUBST (P) R_Arg30:1     R_VorK
                 r_vork = %subst(r_arg30: 1: x);
              else;
@@ -682,7 +682,7 @@
              endif;
              //   ... und Nachkommastellen extrahieren
              x = x + 2;
-             if x <= 30;
+             if (x <= 30);
                 //*                 SUBST (P) R_Arg30:X     R_NachK
                 r_nachk = %subst(r_arg30: x);
              else;
@@ -690,7 +690,7 @@
              endif;
 
              //   Anzahl der Nachkommastellen auffüllen ...
-             if fldl0100.f1decp <= 0;
+             if (fldl0100.f1decp <= 0);
                 //   ... keine vorhanden
                 r_nachk = *blanks;
              else;
@@ -699,7 +699,7 @@
                    //*   1             SUBST     R_NachK:F1DECPR_A1
                    r_a1 = %subst(r_nachk: fldl0100.f1decp: 1);
 
-                   if r_a1 <> *blanks;
+                   if (r_a1 <> *blanks);
                       //*   F1DECP        SUBST (P) R_NachK       R_NachK
                       r_nachk = %subst(r_nachk: 1: fldl0100.f1decp);
                       leave;
@@ -723,7 +723,7 @@
 
           dou ('1');
 
-             if ##nbrs = *zeros;
+             if (##nbrs = *zeros);
                 *in99 = '1';
                 p_sndpgmmg('USR8125': '': sds.pgmname);
                 leave;
@@ -731,7 +731,7 @@
 
           enddo;
 
-          if *in99 = *on;
+          if (*in99 = *on);
              *in23 = '1';
              *in33 = '1';
           endif;
@@ -759,7 +759,7 @@
 
           enddo;
 
-          if *in99 = *on;
+          if (*in99 = *on);
              *in24 = '1';
              *in34 = '1';
           endif;
@@ -783,7 +783,7 @@
 
           enddo;
 
-          if *in99 = *on;
+          if (*in99 = *on);
              *in25 = '1';
              *in35 = '1';
           endif;
@@ -801,9 +801,9 @@
           o_sgid = 'USR8100';
 
           select;
-          when workstn.aid = k_f3;
+          when (workstn.aid = k_f3);
              usr8100.var1 = 'F3';
-          when workstn.aid = k_f12;
+          when (workstn.aid = k_f12);
              usr8100.var1 = 'F12';
           other;
              usr8100.var1 = 'Fxx';
@@ -839,7 +839,7 @@
           peek37(i_dsp80: i_copyright: yfield
                 : ymsgid: ymsgdta);
 
-          if ymsgid = *blanks;
+          if (ymsgid = *blanks);
              ##field = yfield;
           else;
              p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
@@ -898,7 +898,7 @@
           endif;
 
           //  Defaultoperationscode einsetzen ...
-          if ##op = *blanks;
+          if (##op = *blanks);
              ##op = 'EQ';
           else;
              //  Operationscode stehenlasen
@@ -906,9 +906,9 @@
 
           //  Sonderwerte einsetzen ...
           select;
-          when ##arg = *blanks;
+          when (##arg = *blanks);
              ##arg = '*BLANKS';
-          when ##arg = *zeros;
+          when (##arg = *zeros);
              ##arg = '*ZEROS';
           other;
              // ... Umsetzung nicht erforderlich
@@ -945,7 +945,7 @@
 
        begsr setscreen;
 
-          if i_dsp80 = '0';
+          if (i_dsp80 = '0');
              //   132-Zeichen Anzeige
              *in88 = '0';
              zei = 6;
@@ -991,7 +991,7 @@
 
        begsr trimnum;
 
-          if f_isnumfld(fldl0100) = bFalse;
+          if (f_isnumfld(fldl0100) = bFalse);
              //    keine Aufbereitung für nicht-numerische Daten
           else;
 
@@ -1005,7 +1005,7 @@
 
              // Argument bestand nur aus führenden Nullen
              // oder nur aus *BLANKS ...
-             if r_arg30 = *blanks;
+             if (r_arg30 = *blanks);
                 r_arg30 = '0';
              else;
                 // keine Korrektur der Aufbereitung
@@ -1022,7 +1022,7 @@
 
        begsr chknumdata;
 
-          if f_isnumfld(fldl0100) = bFalse;
+          if (f_isnumfld(fldl0100) = bFalse);
              //    keine Prüfung für nicht-numerische Daten
           else;
 
@@ -1043,7 +1043,7 @@
 
        begsr expandnum;
 
-          if f_isnumfld(fldl0100) = bFalse;
+          if (f_isnumfld(fldl0100) = bFalse);
              //    keine Aufbereitung für nicht-numerische Daten
           else;
 

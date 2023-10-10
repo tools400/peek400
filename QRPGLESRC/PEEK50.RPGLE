@@ -146,7 +146,7 @@ exsr first;
 dow ('1');
 
   //  Prüfen Positionierung der Subfile
-  if sfsanr <= *zeros;
+  if (sfsanr <= *zeros);
     sfsanr = 1;
   endif;
 
@@ -165,7 +165,7 @@ dow ('1');
   write msgctl;
 
   //  "Keine Sätze ..."
-  if *in80 = *off;
+  if (*in80 = *off);
     write pbleer;
   endif;
 
@@ -201,7 +201,7 @@ dow ('1');
   p_rmvpgmmg(sds.pgmname);
 
   //  Aktuelle Satz-Nr.
-  if sflcsr > *zeros;
+  if (sflcsr > *zeros);
     sfsanr = sflcsr;
   endif;
 
@@ -209,7 +209,7 @@ dow ('1');
   //  in Programmbefehl
   peek21(workstn.aid: sds.pgmname
         : ypgmcmd: ycmddta: ymsgid: ymsgdta);
-  if ymsgid <> *blanks;
+  if (ymsgid <> *blanks);
     p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
     ymsgid = '';
     ymsgdta = '';
@@ -219,55 +219,55 @@ dow ('1');
   //  Abfragen der Befehlstasten
   select;
   //  F3  - Ende
-  when ypgmcmd = '*EXIT';
+  when (ypgmcmd = '*EXIT');
     exsr c_endpgm;
     leave;
 
   //  F3  - Sichern & beenden
-  when ypgmcmd = '*SAVE_EXIT';
+  when (ypgmcmd = '*SAVE_EXIT');
     exsr c_saveexit;
     leave;
 
   //  F5  - Aktualisieren
-  when ypgmcmd = '*REFRESH';
+  when (ypgmcmd = '*REFRESH');
     exsr c_refresh;
     iter;
 
   //  F16 - Suchen
-  when ypgmcmd = '*SEARCH';
+  when (ypgmcmd = '*SEARCH');
     exsr c_search;
     iter;
 
   //   F17 - Anfang Datensatz
-  when ypgmcmd = '*TOP';
+  when (ypgmcmd = '*TOP');
     exsr c_top;
     iter;
   //   F18 - Ende Datensatz
-  when ypgmcmd = '*BOT';
+  when (ypgmcmd = '*BOT');
     exsr c_bot;
     iter;
 
   //  F22 - Alle Löschen
-  when ypgmcmd = '*CLRALL';
+  when (ypgmcmd = '*CLRALL');
     exsr c_clrall;
     iter;
 
   //  F12 - Ende
-  when ypgmcmd = '*CANCEL';
+  when (ypgmcmd = '*CANCEL');
     exsr c_endpgm;
     leave;
 
   //  F24 - Weitere Tasten
-  when ypgmcmd = '*MOREKEYS';
+  when (ypgmcmd = '*MOREKEYS');
     exsr c_morekeys;
 
   //  Datenfreigabe
-  when ypgmcmd = '*ENTER';
+  when (ypgmcmd = '*ENTER');
     exsr c_enter;
   //  Page up
-  when ypgmcmd = '*PAGEUP';
+  when (ypgmcmd = '*PAGEUP');
   //  Page down
-  when ypgmcmd = '*PAGEDOWN';
+  when (ypgmcmd = '*PAGEDOWN');
 
   other;
     //  Falsche Taste gedrückt
@@ -293,7 +293,7 @@ begsr c_enter;
 
   exsr vreadc;
 
-  if ##field <> *blanks;
+  if (##field <> *blanks);
     exsr c_search;
   endif;
 
@@ -305,18 +305,18 @@ endsr;
 
 begsr c_search;
 
-  if ##field <> *blanks;
+  if (##field <> *blanks);
     lstfield = ##field;
     ##field = *blanks;
   endif;
 
-  if lstfield = *blanks;
+  if (lstfield = *blanks);
     *in70 = '1';
     clear usr8209;
     p_sndpgmmg('USR8209': usr8209: sds.pgmname);
   else;
     exsr postofield;
-    if isnewpos = btrue;
+    if (isnewpos = btrue);
       sfsanr = wrk_sfsanr;
     endif;
   endif;
@@ -329,17 +329,17 @@ endsr;
 
 begsr postofield;
 
-  if lstfield <> r_field;
+  if (lstfield <> r_field);
     lstnbrrcd = 0;
   endif;
 
-  if lstfield = *blanks;
+  if (lstfield = *blanks);
     isnewpos = bFalse;
     lstnbrrcd = 0;
   else;
 
     exsr srchfield;
-    if isfound = bFalse;
+    if (isfound = bFalse);
       isnewpos = bFalse;
       clear usr8136;
       usr8136.var1 = lstfield;
@@ -359,7 +359,7 @@ endsr;
 
 begsr srchfield;
 
-  if *in80 = *off;
+  if (*in80 = *off);
     isfound = bFalse;
   else;
 
@@ -369,7 +369,7 @@ begsr srchfield;
     for sflrec = lstnbrrcd to sflnbrrcd;
       chain(e) sflrec pbsfl;
       *in11 = %error or not %found;
-      if *in11 = *on;
+      if (*in11 = *on);
         isfound = bFalse;
         leave;
       endif;
@@ -380,7 +380,7 @@ begsr srchfield;
         isfound = btrue;
         leave;
       else;
-        if sfpau <> *blanks;
+        if (sfpau <> *blanks);
           //  ... Satz geändert
           exsr vsfpauchg;
         else;
@@ -395,7 +395,7 @@ begsr srchfield;
 
     endfor;
 
-    if isfound = btrue;
+    if (isfound = btrue);
       wrk_sfsanr = sflrec;
       lstnbrrcd = sflrec;
     else;
@@ -427,14 +427,14 @@ begsr vreadc;
 
   issflerror = bFalse;
 
-  if *in80 = *off;
+  if (*in80 = *off);
   //   keine Einträge in Subfile vorhanden ...
   else;
 
     for do_x2 = 1 to sflnbrrcd;
       readc pbsfl;
       *in11 = %eof;
-      if *in11 = *on;
+      if (*in11 = *on);
         leave;
       endif;
 
@@ -444,7 +444,7 @@ begsr vreadc;
       exsr sflbzoff;
 
       //  Cursorpositionierung ...
-      if issflerror = bFalse;
+      if (issflerror = bFalse);
         sflcsr = sflrec;
       else;
       //  Subfile nicht neu positionieren
@@ -456,7 +456,7 @@ begsr vreadc;
       //  Zuordnung AUSWAHL => Befehl ...
       peek21('#' + sfpau: sds.pgmname
             : ypgmcmd: ycmddta: ymsgid: ymsgdta);
-      if ymsgid <> *blanks;
+      if (ymsgid <> *blanks);
         //  Fehlermeldung ...
         p_sndpgmmg('USR8110': sfpau: sds.pgmname);
         exsr vsfpauerr;
@@ -473,7 +473,7 @@ begsr vreadc;
       sfl_cmd = ypgmcmd;
 
       select;
-      when sfl_cmd = '*NONE';
+      when (sfl_cmd = '*NONE');
       other;
         //  Unbekannter Programmbefehl
         clear usr8110;
@@ -685,7 +685,7 @@ begsr vpos;
 
   chain recordnbr peekwrk_ ds_peekwrk;
   *in11 = not %found;
-  if *in11 = *on;
+  if (*in11 = *on);
   //  Weiß noch nicht, was zu tun ist ...
   else;
     wrk0002 = w_data;
@@ -775,7 +775,7 @@ begsr pbreadup;
     write pbsfl;
     sflnbrrcd = sflrec;
 
-    if sflrec >= sflpage;
+    if (sflrec >= sflpage);
       leave;
     endif;
 
@@ -845,7 +845,7 @@ endsr;
 
 begsr setscreen;
 
-  if i_dsp80 = '0';
+  if (i_dsp80 = '0');
     //   132-Zeichen Anzeige
     *in88 = '0';
     zei = 2;

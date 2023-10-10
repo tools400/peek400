@@ -268,7 +268,7 @@ dcl-proc p_main;
     //  Sonderwerte i_envLib ...
     select;
     //  ... *PRDLIB
-    when i_envlib = '*PRDLIB';
+    when (i_envlib = '*PRDLIB');
       i_envlib = sds.pgmlib;
     other;
     //  ... genau diese Bibliothek
@@ -277,7 +277,7 @@ dcl-proc p_main;
     //  Sonderwerte i_envMbr ...
     select;
     //  ... *FILE
-    when i_envmbr  = '*FILE';
+    when (i_envmbr  = '*FILE');
       penvmbr = i_file;
     other;
       //  ... genau diese Teildatei
@@ -319,7 +319,7 @@ dcl-proc p_main;
 
     if (i_option = '*SLCLAYOUT');
       p_loadrcdfmtid(prcdfmtid);
-      if prcdfmtid <> '' and prcdfmtid <> i_rcdfmtid;
+      if (prcdfmtid <> '' and prcdfmtid <> i_rcdfmtid);
         clear usr8234;
         usr8234.var1 = i_envfile;
         usr8234.var2 = i_envlib;
@@ -611,7 +611,7 @@ dcl-proc p_loadsqls;
 
   dow strPos <= lenSql;
 
-    if i_lib = '*NONE';
+    if (i_lib = '*NONE');
       reade %kds(en_key4: 3) fpeekenv;
     else;
       reade %kds(en_key4: 4) fpeekenv;
@@ -666,7 +666,7 @@ dcl-proc p_loadsqlo;
 
   dow strpos <= lensql;
 
-    if i_lib = '*NONE';
+    if (i_lib = '*NONE');
       reade %kds(en_key4: 3) fpeekenv;
     else;
       reade %kds(en_key4: 4) fpeekenv;
@@ -703,7 +703,7 @@ dcl-proc p_loadiskeylower;
   en_key4.en_section = '*KEYLUC';
   en_key4.en_file = i_file;
 
-  if i_lib = '*NONE';
+  if (i_lib = '*NONE');
     chain %kds(en_key4: 3) fpeekenv;
   else;
     en_key4.en_lib = i_lib;
@@ -798,7 +798,7 @@ dcl-proc p_loadpinc;
   en_key4.en_section = '*PINCOL';
   en_key4.en_file = i_file;
 
-  if i_lib = '*NONE';
+  if (i_lib = '*NONE');
     setll %kds(en_key4: 3) fpeekenv;
   else;
     en_key4.en_lib = i_lib;
@@ -806,7 +806,7 @@ dcl-proc p_loadpinc;
   endif;
 
   dow ('1');
-    if i_lib = '*NONE';
+    if (i_lib = '*NONE');
       reade %kds(en_key4: 3) fpeekenv;
     else;
       reade %kds(en_key4: 4) fpeekenv;
@@ -845,7 +845,7 @@ dcl-proc p_loadlyt;
   en_key4.en_section = '*LAYOUT';
   en_key4.en_file = i_file;
 
-  if i_lib = '*NONE';
+  if (i_lib = '*NONE');
     setll %kds(en_key4: 3) fpeekenv;
   else;
     en_key4.en_lib = i_lib;
@@ -853,7 +853,7 @@ dcl-proc p_loadlyt;
   endif;
 
   dow ('1');
-    if i_lib = '*NONE';
+    if (i_lib = '*NONE');
       reade %kds(en_key4: 3) fpeekenv;
     else;
       reade %kds(en_key4: 4) fpeekenv;

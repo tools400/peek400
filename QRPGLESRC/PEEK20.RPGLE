@@ -129,19 +129,19 @@ bp = 1;
 kp = 1;
 
 select;
-when i_keyval = '*PHIVAL';
+when (i_keyval = '*PHIVAL');
   wrk_keyval = '*HIVAL';
   exsr buildPseudoKey;
 
-  when i_keyval = '*PLOVAL';
+  when (i_keyval = '*PLOVAL');
   wrk_keyval = '*LOVAL';
 exsr buildPseudoKey;
 
-  when i_keyval = '*HIVAL';
+  when (i_keyval = '*HIVAL');
   wrk_keyval = '*HIVAL';
 exsr buildKey;
 
-  when i_keyval = '*LOVAL';
+  when (i_keyval = '*LOVAL');
   wrk_keyval = '*LOVAL';
 exsr buildKey;
 
@@ -179,7 +179,7 @@ return;
     leavesr;
     endif;
 
-      if bp > rcd_buff_len;
+      if (bp > rcd_buff_len);
     leave;
     endif;
 
@@ -239,8 +239,8 @@ endsr;
       fldl0100.f1dtyp = 'B' or    // Binary
       fldl0100.f1dtyp = 'P';      // Packed
     y = fldl0100.f1digt;
-      when fldl0100.f1dtyp = 'F';    // Float
-        if fldl0100.f1flen = 4;
+      when (fldl0100.f1dtyp = 'F');    // Float
+        if (fldl0100.f1flen = 4);
       y = 14;
         else;
       y = 23;
@@ -279,7 +279,7 @@ endsr;
   //     Zeitstempelfelder
   select;
   // ... Time
-    when fldl0100.f1dtyp = 'T';
+    when (fldl0100.f1dtyp = 'T');
       if (f2desc = 'D');
       dftval = TIME_D;
     dftvallen = %len(TIME_D);
@@ -289,7 +289,7 @@ endsr;
     endif;
   exsr chkvalue;
   // ... Date
-    when fldl0100.f1dtyp = 'L';
+    when (fldl0100.f1dtyp = 'L');
       if (f2desc = 'D');
       dftval = DATE_D;
     dftvallen = %len(DATE_D);
@@ -299,7 +299,7 @@ endsr;
     endif;
   exsr chkvalue;
   // ... Timestamp
-    when fldl0100.f1dtyp = 'Z';
+    when (fldl0100.f1dtyp = 'Z');
       if (f2desc = 'D');
       dftval = TIMESTAMP_D;
     dftvallen = %len(TIMESTAMP_D);
@@ -324,14 +324,14 @@ endsr;
   leavesr;
   endif;
 
-    if f_isvarlen(fldl0100) = bTrue;
+    if (f_isvarlen(fldl0100) = bTrue);
   youtbuffln = youtbuffln + 2;
   endif;
 
     for y = 1 to youtbuffln;
     yio_bufftb(bp) = %subst(youtbuffer:y:1);
     bp = bp + 1;
-      if bp > rcd_buff_len;
+      if (bp > rcd_buff_len);
     leave;
   endif;
   endfor;

@@ -178,7 +178,7 @@
              //  in Programmbefehl
              peek21(workstn.aid: sds.pgmname
                    : ypgmcmd: ycmddta: ymsgid: ymsgdta);
-             if ymsgid <> ' ';
+             if (ymsgid <> ' ');
                 p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
                 ymsgid = '';
                 ymsgdta = '';
@@ -188,28 +188,28 @@
              //  Abfragen der Programmbefehle
              select;
                 //  F3  - Ende
-             when ypgmcmd = '*EXIT' or ypgmcmd = '*NO';
+             when (ypgmcmd = '*EXIT' or ypgmcmd = '*NO');
                 exsr c_endpgm;
                 leave;
 
                 //  F5  - Aktualisieren
-             when ypgmcmd = '*REFRESH';
+             when (ypgmcmd = '*REFRESH');
                 exsr c_refresh;
                 iter;
 
                 //  F12 - Ende
-             when ypgmcmd = '*CANCEL';
+             when (ypgmcmd = '*CANCEL');
                 exsr c_endpgm;
                 leave;
 
                 //  F24 - Weitere Tasten
-             when ypgmcmd = '*MOREKEYS';
+             when (ypgmcmd = '*MOREKEYS');
                 exsr c_morekeys;
 
                 //  Datenfreigabe
-             when ypgmcmd = '*ENTER' or ypgmcmd = '*OK';
+             when (ypgmcmd = '*ENTER' or ypgmcmd = '*OK');
                 exsr c_enter;
-                if isPgmError = bfalse;
+                if (isPgmError = bfalse);
                    o_msgid  = 'USR8112';
                    o_msgdta = ' ';
 
@@ -247,7 +247,7 @@
 
        begsr c_enter;
 
-          if isPgmError = btrue;
+          if (isPgmError = btrue);
 
              //    ---------------------------------
              //    *** Genereller Programmfehler ***
@@ -260,8 +260,8 @@
              //  Prüfen der Eingaben
              exsr prfb1;
 
-             if isPgmError = bfalse;
-                if isdatachg = btrue;
+             if (isPgmError = bfalse);
+                if (isdatachg = btrue);
 
                    //  ... einsetzen in Zwischenfeld für Rückgabewert
                    if (i_isucs2 = 0);
@@ -321,7 +321,7 @@
 
           //  Länge und der Zeichenkette
           exsr prf20;
-          if isPgmError = btrue;
+          if (isPgmError = btrue);
              leavesr;
           endif;
 
@@ -345,7 +345,7 @@
              isPgmError = btrue;
           endif;
 
-          if isPgmError = btrue;
+          if (isPgmError = btrue);
              *in20 = *on;
              *in30 = *on;
           endif;
@@ -363,9 +363,9 @@
           o_msgid = 'USR8100';
 
           select;
-          when workstn.aid = k_f3;
+          when (workstn.aid = k_f3);
              usr8100.var1 = 'F3';
-          when workstn.aid = k_f12;
+          when (workstn.aid = k_f12);
              usr8100.var1 = 'F12';
           other;
              usr8100.var1 = 'Fxx';

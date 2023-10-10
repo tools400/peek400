@@ -283,7 +283,7 @@ dcl-proc p_main;
   pmsgdta = '';
 
   //  Prüfen, ob gespeichert werden darf
-  if i_isautosave = btrue;
+  if (i_isautosave = btrue);
     open(e) peekenv;
     if not %error();
       cansave =  f_checkautosave(pfile: plib);
@@ -303,7 +303,7 @@ dcl-proc p_main;
   endif;
 
   //  Löschen alte Daten ...
-  if cansave = btrue;
+  if (cansave = btrue);
 
     p_clrenv(i_envfile  :
             i_envlib   :
@@ -311,7 +311,7 @@ dcl-proc p_main;
             o_msgid    :
             o_msgdta   );
 
-    if go_msgid = ' ';
+    if (go_msgid = ' ');
 
       //  Öffnen Datei ...
       open peekenv;

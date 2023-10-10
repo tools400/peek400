@@ -252,47 +252,47 @@ dow ('1');
   //  Abfragen der Befehlstasten
   select;
   //  F3  - Ende
-  when ypgmcmd = '*EXIT';
+  when (ypgmcmd = '*EXIT');
     exsr c_endpgm;
     leave;
 
   //  F5  - Aktualisieren
-  when ypgmcmd = '*REFRESH';
+  when (ypgmcmd = '*REFRESH');
     exsr c_refresh;
     iter;
 
   //  F12 - Ende
-  when ypgmcmd = '*CANCEL';
+  when (ypgmcmd = '*CANCEL');
     exsr c_endpgm;
     leave;
 
   //  F16 - Suchen
-  when ypgmcmd = '*SEARCH';
+  when (ypgmcmd = '*SEARCH');
     exsr c_search;
     iter;
 
   //   F17 - Anfang Datensatz
-  when ypgmcmd = '*TOP';
+  when (ypgmcmd = '*TOP');
     exsr c_top;
     iter;
 
   //   F18 - Ende Datensatz
-  when ypgmcmd = '*BOT';
+  when (ypgmcmd = '*BOT');
     exsr c_bot;
     iter;
 
   //  F23 - Weitere Auswahlen
-  when ypgmcmd = '*MOREOPT';
+  when (ypgmcmd = '*MOREOPT');
     exsr c_moreopt;
 
   //  F24 - Weitere Tasten
-  when ypgmcmd = '*MOREKEYS';
+  when (ypgmcmd = '*MOREKEYS');
     exsr c_morekeys;
 
   //  Datenfreigabe
-  when ypgmcmd = '*ENTER';
+  when (ypgmcmd = '*ENTER');
     exsr c_enter;
-    if isCtlError = bFalse;
+    if (isCtlError = bFalse);
       exsr setusrsetg;
     endif;
     if o_mbr = *blanks
@@ -303,9 +303,9 @@ dow ('1');
       leave;
     endif;
   //  Page up
-  when ypgmcmd = '*PAGEUP';
+  when (ypgmcmd = '*PAGEUP');
   //  Page down
-  when ypgmcmd = '*PAGEDOWN';
+  when (ypgmcmd = '*PAGEDOWN');
 
   other;
     //  Falsche Taste gedrückt
@@ -452,7 +452,7 @@ begsr srchmbr;
         isfound = bTrue;
         leave;
       else;
-        if sfpau <> *blanks;
+        if (sfpau <> *blanks);
           //  ... Satz geändert
           exsr vsfpauchg;
         else;
@@ -519,7 +519,7 @@ begsr vctl;
   if (isDirty = bFalse);
     //  ##CTLAU
     exsr prf20;
-    if isCtlError = bTrue;
+    if (isCtlError = bTrue);
       leavesr;
     endif;
 
@@ -925,7 +925,7 @@ begsr vreadc;
     for do_x2 = 1 to sflnbrrcd;
       readc pbsfl;
       *in11 = %eof;
-      if *in11 = *on;
+      if (*in11 = *on);
         leave;
       endif;
 
@@ -933,7 +933,7 @@ begsr vreadc;
       *in11 = not %found;
 
       //  Cursorpositionierung ...
-      if isSflError = bFalse;
+      if (isSflError = bFalse);
         sflcsr = sflrec;
       else;
       //  Subfile nicht neu positionieren
@@ -961,10 +961,10 @@ begsr vreadc;
       sfl_cmd = ypgmcmd;
 
       select;
-      when sfl_cmd = '*NONE';
-      when sfl_cmd = '*SLCENV';
+      when (sfl_cmd = '*NONE');
+      when (sfl_cmd = '*SLCENV');
         exsr vpos;
-      when sfl_cmd = '*SLCLAYOUT';
+      when (sfl_cmd = '*SLCLAYOUT');
         exsr vpos;
       other;
         //  Unbekannter Programmbefehl
@@ -1206,7 +1206,7 @@ begsr pbreadup;
     write pbsfl;
     sflnbrrcd = sflrec;
 
-    if sflrec >= sflpage;
+    if (sflrec >= sflpage);
       leave;
     endif;
 
@@ -1337,9 +1337,9 @@ begsr first;
 
   // - Einlesen Subfileauswahlen
   select;
-  when i_mode = '*SAVE';
+  when (i_mode = '*SAVE');
     yexclkeys(1) = '*SLCLAYOUT';
-  when i_mode = '*DELETE';
+  when (i_mode = '*DELETE');
     yexclkeys(1) = '*SLCLAYOUT';
   other;
     //           keine Ausschlüsse
@@ -1359,17 +1359,17 @@ begsr first;
   exsr getusrsetg;
 
   select;
-  when i_envfile = '*NONE';
+  when (i_envfile = '*NONE');
     ##file = ' ';
   other;
     ##file = i_envfile;
   endsl;
 
   select;
-  when i_envlib = '*NONE';
+  when (i_envlib = '*NONE');
     ##lib = '';
     isprdlib = bFalse;
-  when i_envlib = '*PRDLIB';
+  when (i_envlib = '*PRDLIB');
     ##lib = sds.pgmlib;
     isprdlib = bTrue;
   other;

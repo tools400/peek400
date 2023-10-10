@@ -186,7 +186,7 @@ dow ('1');
   write msgctl;
 
   //  "Keine Sätze ..."
-  if *in80 = *off;
+  if (*in80 = *off);
     write pbleer;
   endif;
 
@@ -241,7 +241,7 @@ dow ('1');
   //  in Programmbefehl
   peek21(workstn.aid: sds.pgmname
         : ypgmcmd: ycmddta: ymsgid: ymsgdta);
-  if ymsgid <> *blanks;
+  if (ymsgid <> *blanks);
     p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
     ymsgid = '';
     ymsgdta = '';
@@ -251,69 +251,69 @@ dow ('1');
   //  Abfragen der Befehlstasten
   select;
   //  F3  - Ende
-  when ypgmcmd = '*EXIT';
+  when (ypgmcmd = '*EXIT');
     exsr c_endpgm;
     leave;
 
   //  F5  - Aktualisieren
-  when ypgmcmd = '*REFRESH';
+  when (ypgmcmd = '*REFRESH');
     exsr readrcd;
     exsr c_refresh;
     iter;
 
   //  F7  - Überschrift
-  when ypgmcmd = '*HEADLINE';
+  when (ypgmcmd = '*HEADLINE');
     exsr c_chghead;
     iter;
 
   //  F9  - Hexeditor
-  when ypgmcmd = '*HEXEDIT';
+  when (ypgmcmd = '*HEXEDIT');
     exsr c_fldhexed;
     exsr keepcsrpos;
     iter;
 
   //  F10 - Feldeditor
-  when ypgmcmd = '*STREDIT';
+  when (ypgmcmd = '*STREDIT');
     exsr c_fldstred;
     exsr keepcsrpos;
     iter;
 
   //  F12 - Ende
-  when ypgmcmd = '*CANCEL';
+  when (ypgmcmd = '*CANCEL');
     exsr c_endpgm;
     leave;
 
   //   F17 - Anfang Datensatz
-  when ypgmcmd = '*TOP';
+  when (ypgmcmd = '*TOP');
     exsr c_top;
     iter;
   //   F18 - Ende Datensatz
-  when ypgmcmd = '*BOT';
+  when (ypgmcmd = '*BOT');
     exsr c_bot;
     iter;
 
   //   F21 - Drucken Datensatz
-  when ypgmcmd = '*PRINT';
+  when (ypgmcmd = '*PRINT');
     exsr c_print;
     iter;
 
   //  F22 - Alle Datensätze verarbeiten
-  when ypgmcmd = '*YESTOALL';                                           // ZURÜCK
+  when (ypgmcmd = '*YESTOALL');                                           // ZURÜCK
     exsr c_allrcds;
     leave;
 
   //  F24 - Weitere Tasten
-  when ypgmcmd = '*MOREKEYS';
+  when (ypgmcmd = '*MOREKEYS');
     exsr c_morekeys;
 
   //  Datenfreigabe
-  when ypgmcmd = '*ENTER';
+  when (ypgmcmd = '*ENTER');
     exsr c_enter;
     leave;
   //  Page up
-  when ypgmcmd = '*PAGEUP';
+  when (ypgmcmd = '*PAGEUP');
   //  Page down
-  when ypgmcmd = '*PAGEDOWN';
+  when (ypgmcmd = '*PAGEDOWN');
 
   other;
     //  Falsche Taste gedrückt
@@ -348,14 +348,14 @@ endsr;
 begsr c_fldhexed;
 
   //  Error: No valid subfile record.
-  if sflcsr = *zeros;
+  if (sflcsr = *zeros);
     p_sndpgmmg('USR8204': '': sds.pgmname);
     leavesr;
   endif;
 
   chain sflcsr pbsfl;
   *in01 = not %found;
-  if *in01 = *on;
+  if (*in01 = *on);
     //  Error: Unable to find record.
     p_sndpgmmg('USR8120': '': sds.pgmname);
     leavesr;
@@ -365,7 +365,7 @@ begsr c_fldhexed;
   f1key.f_field = r$fnme;
   chain %kds(f1key) fpeekfld;
   *in11 = not %found;
-  if *in11 = *on;
+  if (*in11 = *on);
     //  Error: Unable to find record.
     p_sndpgmmg('USR8120': '': sds.pgmname);
     leavesr;
@@ -402,14 +402,14 @@ endsr;
 begsr c_fldstred;
 
   //  Error: No valid subfile record.
-  if sflcsr = *zeros;
+  if (sflcsr = *zeros);
     p_sndpgmmg('USR8204': '': sds.pgmname);
     leavesr;
   endif;
 
   chain sflcsr pbsfl;
   *in01 = not %found;
-  if *in01 = *on;
+  if (*in01 = *on);
     //  Error: Unable to find record.
     p_sndpgmmg('USR8120': '': sds.pgmname);
     leavesr;
@@ -419,7 +419,7 @@ begsr c_fldstred;
   f1key.f_field = r$fnme;
   chain %kds(f1key) fpeekfld;
   *in11 = not %found;
-  if *in11 = *on;
+  if (*in11 = *on);
     //  Error: Unable to find record.
     p_sndpgmmg('USR8120': '': sds.pgmname);
     leavesr;
@@ -472,7 +472,7 @@ endsr;
 
 begsr frombuffer;
 
-  if f_buffln(fldl0100) > rcd_buff_len;
+  if (f_buffln(fldl0100) > rcd_buff_len);
     clear usr8206;
     usr8206.var1 = rcd_buff_len;
     p_sndpgmmg('USR8206': usr8206: sds.pgmname);
@@ -488,7 +488,7 @@ begsr frombuffer;
       yisucs2 = 0;
     endif;
 
-    if editor = '*HEX';
+    if (editor = '*HEX');
       peek45(i_dsp80: io_headertype: i_copyright
             : r$fnme: yfldinhalt: ylength
             : btrue: yisucs2
@@ -580,7 +580,7 @@ begsr c_print;
     *in99 = btrue;
   endmon;
 
-  if ymsgid <> '';
+  if (ymsgid <> '');
     p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
     ymsgid  = '';
     ymsgdta = '';
@@ -656,7 +656,7 @@ begsr pbreadup;
     fldl0100 = f_ffd;
 
     //  nicht erlaubte Feldtypen
-    if f_isnotalw(fldl0100) = btrue;
+    if (f_isnotalw(fldl0100) = btrue);
       iter;
     endif;
 
@@ -674,7 +674,7 @@ begsr pbreadup;
        and x <= 512;
 
       sflrec = sflrec + 1;
-      if sflrec > 9999;
+      if (sflrec > 9999);
         *in83 = '1';
         leave;
       endif;
@@ -687,7 +687,7 @@ begsr pbreadup;
 
     rowcnt = rowcnt + totlin;
 
-    if sflrec >= sflpage;
+    if (sflrec >= sflpage);
       leave;
     endif;
 
@@ -723,7 +723,7 @@ begsr syncline;
     for do_x3 = rowcnt to 18;
       clear pbsfl;
       sflrec = sflrec + 1;
-      if sflrec > 9999;
+      if (sflrec > 9999);
         *in83 = '1';
         leave;
       endif;
@@ -746,7 +746,7 @@ begsr pbfill;
   r$fnme = fldl0100.f1fnme;
 
   //      ... überschreiben EDTCDE
-  if f_edtcde <> *blanks;
+  if (f_edtcde <> *blanks);
     fldl0100.f1edtc = f_edtcde;
   else;
   //       Original EDITCODE verwenden
@@ -785,9 +785,9 @@ begsr pbfill;
       *in99 = btrue;
     endmon;
 
-    if *in99 = *off;
-      if iscvtchar = bfalse;
-        if ymsgid <> *blanks;
+    if (*in99 = *off);
+      if (iscvtchar = bfalse);
+        if (ymsgid <> *blanks);
           iscvtchar = btrue;
           p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
         else;
@@ -842,7 +842,7 @@ endsr;
 
 begsr setscreen;
 
-  if i_dsp80 = '0';
+  if (i_dsp80 = '0');
     //   132-Zeichen Anzeige
     *in88 = '0';
     zei = 1;
@@ -860,11 +860,11 @@ begsr setscreen;
   %subarr(*in: 70: 10) = '0';
 
   select;
-  when i_function = '*DELETE';
+  when (i_function = '*DELETE');
     *in70 = '1';
-  when i_function = '*DISPLAY';
+  when (i_function = '*DISPLAY');
     *in75 = '1';
-  when i_function = '*COPYEXT';
+  when (i_function = '*COPYEXT');
     *in79 = '1';
   other;
   //              ????????????

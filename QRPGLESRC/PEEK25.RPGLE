@@ -146,7 +146,7 @@ dow ('1');
   //  in Programmbefehl
   peek21(workstn.aid: sds.pgmname
         : ypgmcmd: ycmddta: ymsgid: ymsgdta);
-  if ymsgid <> *blanks;
+  if (ymsgid <> *blanks);
     p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
     ymsgid = '';
     ymsgdta = '';
@@ -155,20 +155,20 @@ dow ('1');
 
   //  Abfragen der Befehlstasten
   select;
-  when ypgmcmd = '*EXIT';
+  when (ypgmcmd = '*EXIT');
     exsr c_endpgm;
     leave;
-  when ypgmcmd = '*REFRESH';
+  when (ypgmcmd = '*REFRESH');
     exsr c_refresh;
     iter;
-  when ypgmcmd = '*CANCEL';
+  when (ypgmcmd = '*CANCEL');
     exsr c_endpgm;
     leave;
-  when ypgmcmd = '*MOREKEYS';
+  when (ypgmcmd = '*MOREKEYS');
     exsr c_morekeys;
-  when ypgmcmd = '*ENTER';
+  when (ypgmcmd = '*ENTER');
     exsr c_enter;
-    if *in99 = *off;
+    if (*in99 = *off);
       leave;
     endif;
 
@@ -240,7 +240,7 @@ begsr prf20;
 
   enddo;
 
-  if *in99 = *on;
+  if (*in99 = *on);
   //               ??????????
   endif;
 
@@ -257,9 +257,9 @@ begsr c_endpgm;
   o_msgid = 'USR8100';
 
   select;
-  when workstn.aid = k_f3;
+  when (workstn.aid = k_f3);
     usr8100.var1 = 'F3';
-  when workstn.aid = k_f12;
+  when (workstn.aid = k_f12);
     usr8100.var1 = 'F12';
   other;
     usr8100.var1 = 'Fxx';
@@ -377,67 +377,67 @@ begsr poscsr;
 
   // Green
   select;
-  when o_colorattr = COLOR_green;
+  when (o_colorattr = COLOR_green);
     *in10 = '1';
-  when o_colorattr = COLOR_green_r;
+  when (o_colorattr = COLOR_green_r);
     *in11 = '1';
-  when o_colorattr = COLOR_green_u;
+  when (o_colorattr = COLOR_green_u);
     *in12 = '1';
-  when o_colorattr = COLOR_green_ru;
+  when (o_colorattr = COLOR_green_ru);
     *in13 = '1';
   // White
-  when o_colorattr = COLOR_white;
+  when (o_colorattr = COLOR_white);
     *in20 = '1';
-  when o_colorattr = COLOR_white_r;
+  when (o_colorattr = COLOR_white_r);
     *in21 = '1';
-  when o_colorattr = COLOR_white_u;
+  when (o_colorattr = COLOR_white_u);
     *in22 = '1';
   // Red
-  when o_colorattr = COLOR_red;
+  when (o_colorattr = COLOR_red);
     *in30 = '1';
-  when o_colorattr = COLOR_red_r;
+  when (o_colorattr = COLOR_red_r);
     *in31 = '1';
-  when o_colorattr = COLOR_red_u;
+  when (o_colorattr = COLOR_red_u);
     *in32 = '1';
-  when o_colorattr = COLOR_red_ru;
+  when (o_colorattr = COLOR_red_ru);
     *in33 = '1';
-  when o_colorattr = COLOR_red_b;
+  when (o_colorattr = COLOR_red_b);
     *in34 = '1';
-  when o_colorattr = COLOR_red_rb;
+  when (o_colorattr = COLOR_red_rb);
     *in35 = '1';
-  when o_colorattr = COLOR_red_ub;
+  when (o_colorattr = COLOR_red_ub);
     *in36 = '1';
   // Türkis
-  when o_colorattr = COLOR_turkis;
+  when (o_colorattr = COLOR_turkis);
     *in40 = '1';
-  when o_colorattr = COLOR_turkis_r;
+  when (o_colorattr = COLOR_turkis_r);
     *in41 = '1';
-  when o_colorattr = COLOR_turkis_u;
+  when (o_colorattr = COLOR_turkis_u);
     *in42 = '1';
-  when o_colorattr = COLOR_turkis_ru;
+  when (o_colorattr = COLOR_turkis_ru);
     *in43 = '1';
   // Yellow
-  when o_colorattr = COLOR_yellow;
+  when (o_colorattr = COLOR_yellow);
     *in50 = '1';
-  when o_colorattr = COLOR_yellow_r;
+  when (o_colorattr = COLOR_yellow_r);
     *in51 = '1';
-  when o_colorattr = COLOR_yellow_u;
+  when (o_colorattr = COLOR_yellow_u);
     *in52 = '1';
   // Pink
-  when o_colorattr = COLOR_pink;
+  when (o_colorattr = COLOR_pink);
     *in60 = '1';
-  when o_colorattr = COLOR_pink_r;
+  when (o_colorattr = COLOR_pink_r);
     *in61 = '1';
-  when o_colorattr = COLOR_pink_u;
+  when (o_colorattr = COLOR_pink_u);
     *in62 = '1';
-  when o_colorattr = COLOR_pink_ru;
+  when (o_colorattr = COLOR_pink_ru);
     *in63 = '1';
   // Blue
-  when o_colorattr = COLOR_blue;
+  when (o_colorattr = COLOR_blue);
     *in70 = '1';
-  when o_colorattr = COLOR_blue_r;
+  when (o_colorattr = COLOR_blue_r);
     *in71 = '1';
-  when o_colorattr = COLOR_blue_u;
+  when (o_colorattr = COLOR_blue_u);
     *in72 = '1';
 
   other;
@@ -452,7 +452,7 @@ endsr;
 
 begsr setscreen;
 
-  if i_dsp80 = '0';
+  if (i_dsp80 = '0');
     //   132-Zeichen Anzeige
     *in88 = '0';
     zei = 8;
@@ -474,74 +474,74 @@ begsr extrcolor;
 
   select;
   //  Green
-  when scnfld = '$GREEN';
+  when (scnfld = '$GREEN');
     wrk_field = $green;
-  when scnfld = '$GREEN_R';
+  when (scnfld = '$GREEN_R');
     wrk_field = $green_r;
-  when scnfld = '$GREEN_U';
+  when (scnfld = '$GREEN_U');
     wrk_field = $green_u;
-  when scnfld = '$GREEN_RU';
+  when (scnfld = '$GREEN_RU');
     wrk_field = $green_ru;
   //  White
-  when scnfld = '$WHITE';
+  when (scnfld = '$WHITE');
     wrk_field = $white;
-  when scnfld = '$WHITE_R';
+  when (scnfld = '$WHITE_R');
     wrk_field = $white_r;
-  when scnfld = '$WHITE_U';
+  when (scnfld = '$WHITE_U');
     wrk_field = $white_u;
   //  Red
-  when scnfld = '$RED';
+  when (scnfld = '$RED');
     wrk_field = $red;
-  when scnfld = '$RED_R';
+  when (scnfld = '$RED_R');
     wrk_field = $red_r;
-  when scnfld = '$RED_U';
+  when (scnfld = '$RED_U');
     wrk_field = $red_u;
-  when scnfld = '$RED_RU';
+  when (scnfld = '$RED_RU');
     wrk_field = $red_ru;
-  when scnfld = '$RED_B';
+  when (scnfld = '$RED_B');
     wrk_field = $red_b;
-  when scnfld = '$RED_RB';
+  when (scnfld = '$RED_RB');
     wrk_field = $red_rb;
-  when scnfld = '$RED_UB';
+  when (scnfld = '$RED_UB');
     wrk_field = $red_ub;
   //  Turquoise
-  when scnfld = '$TURKIS';
+  when (scnfld = '$TURKIS');
     wrk_field = $turkis;
-  when scnfld = '$TURKIS_R';
+  when (scnfld = '$TURKIS_R');
     wrk_field = $turkis_r;
-  when scnfld = '$TURKIS_U';
+  when (scnfld = '$TURKIS_U');
     wrk_field = $turkis_u;
-  when scnfld = '$TURKIS_RU';
+  when (scnfld = '$TURKIS_RU');
     wrk_field = $turkis_ru;
   //  Yellow
-  when scnfld = '$YELLOW';
+  when (scnfld = '$YELLOW');
     wrk_field = $yellow;
-  when scnfld = '$YELLOW_R';
+  when (scnfld = '$YELLOW_R');
     wrk_field = $yellow_r;
-  when scnfld = '$YELLOW_U';
+  when (scnfld = '$YELLOW_U');
     wrk_field = $yellow_u;
   //  Pink
-  when scnfld = '$PINK';
+  when (scnfld = '$PINK');
     wrk_field = $pink;
-  when scnfld = '$PINK_R';
+  when (scnfld = '$PINK_R');
     wrk_field = $pink_r;
-  when scnfld = '$PINK_U';
+  when (scnfld = '$PINK_U');
     wrk_field = $pink_u;
-  when scnfld = '$PINK_RU';
+  when (scnfld = '$PINK_RU');
     wrk_field = $pink_ru;
   //  Blue
-  when scnfld = '$BLUE';
+  when (scnfld = '$BLUE');
     wrk_field = $blue;
-  when scnfld = '$BLUE_R';
+  when (scnfld = '$BLUE_R');
     wrk_field = $blue_r;
-  when scnfld = '$BLUE_U';
+  when (scnfld = '$BLUE_U');
     wrk_field = $blue_u;
 
   other;
     wrk_field = *blanks;
   endsl;
 
-  if wrk_field <> *blanks;
+  if (wrk_field <> *blanks);
     o_colorattr = %subst(wrk_field:1:1);
   else;
   //                ????????

@@ -96,7 +96,7 @@ summe = *zeros;
 for x = 1 to 50;
   //*   1             SUBST     SysInpNbr:X   A1
   a1 = %subst(sysinpnbr: x: 1);
-  if a1 = x'00';
+  if (a1 = x'00');
     leave;
   endif;
 

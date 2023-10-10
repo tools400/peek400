@@ -90,7 +90,7 @@ for do_x1 = 1 to nbrofkey;
         : rc: ydata);
   keyl0100 = ydata;
 
-  if tempfield = *blanks;
+  if (tempfield = *blanks);
     tempfield =
      %trim(tempfield) +
      '"' + %trim(keyl0100.apkeyf) + '"';
@@ -101,9 +101,9 @@ for do_x1 = 1 to nbrofkey;
   endif;
 
   select;
-  when keyl0100.apkseq = 'A';
+  when (keyl0100.apkseq = 'A');
     tempfield = %trim(tempfield) + ' ASC';
-  when keyl0100.apkseq = 'D';
+  when (keyl0100.apkseq = 'D');
     tempfield = %trim(tempfield) + ' DESC';
   other;
   //          keine Schlüsselangaben gefunden

@@ -153,7 +153,7 @@ dow ('1');
   //  in Programmbefehl
   peek21(workstn.aid: sds.pgmname
         : ypgmcmd: ycmddta: ymsgid: ymsgdta);
-  if ymsgid <> *blanks;
+  if (ymsgid <> *blanks);
     p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
     ymsgid = '';
     ymsgdta = '';
@@ -162,21 +162,21 @@ dow ('1');
 
   //  Abfragen der Befehlstasten
   select;
-  when ypgmcmd = '*SAVE_EXIT';
+  when (ypgmcmd = '*SAVE_EXIT');
     exsr c_exit;
     leave;
-  when ypgmcmd = '*EXIT';
+  when (ypgmcmd = '*EXIT');
     exsr c_endpgm;
     leave;
-  when ypgmcmd = '*REFRESH';
+  when (ypgmcmd = '*REFRESH');
     exsr c_refresh;
     iter;
-  when ypgmcmd = '*CANCEL';
+  when (ypgmcmd = '*CANCEL');
     exsr c_endpgm;
     leave;
-  when ypgmcmd = '*MOREKEYS';
+  when (ypgmcmd = '*MOREKEYS');
     exsr c_morekeys;
-  when ypgmcmd = '*ENTER';
+  when (ypgmcmd = '*ENTER');
     exsr c_enter;
   other;
     p_wrongkey(workstn.aid: sds.pgmname);
@@ -197,7 +197,7 @@ return;
 begsr c_enter;
 
   exsr prfb1;
-  if *in99 = *off;
+  if (*in99 = *off);
     exsr getcolor;
   else;
   //          Fehlernachricht ausgeben
@@ -244,25 +244,25 @@ begsr prf20;
     wrk_field = %subst(scnfld:3:6);
 
     select;
-    when wrk_field = 'KEYCOL'; // Überschrift
+    when (wrk_field = 'KEYCOL'); // Überschrift
       wrk_color = set0001.set_keycol;
-    when wrk_field = 'HEDCOL'; // Überschrift
+    when (wrk_field = 'HEDCOL'); // Überschrift
       wrk_color = set0001.set_hedcol;
-    when wrk_field = 'PINCOL'; // Pined-Daten
+    when (wrk_field = 'PINCOL'); // Pined-Daten
       wrk_color = set0001.set_pincol;
-    when wrk_field = 'CLMCOL'; // SpaltenMark
+    when (wrk_field = 'CLMCOL'); // SpaltenMark
       wrk_color = set0001.set_clmcol;
-    when wrk_field = 'STDCOL'; // Standard
+    when (wrk_field = 'STDCOL'); // Standard
       wrk_color = set0001.set_stdcol;
-    when wrk_field = 'NMLCOL'; // Normale Suche
+    when (wrk_field = 'NMLCOL'); // Normale Suche
       wrk_color = set0001.set_nmlcol;
-    when wrk_field = 'UNDCOL'; // Unterstrichen
+    when (wrk_field = 'UNDCOL'); // Unterstrichen
       wrk_color = set0001.set_undcol;
-    when wrk_field = 'REVCOL'; // Reverse Suche
+    when (wrk_field = 'REVCOL'); // Reverse Suche
       wrk_color = set0001.set_revcol;
-    when wrk_field = 'TBLCOL'; // Tabellierpap.
+    when (wrk_field = 'TBLCOL'); // Tabellierpap.
       wrk_color = set0001.set_tblcol;
-    when wrk_field = 'EXCCOL'; // Exception
+    when (wrk_field = 'EXCCOL'); // Exception
       wrk_color = set0001.set_exccol;
     other;
       *in99 = '1';
@@ -272,7 +272,7 @@ begsr prf20;
 
   enddo;
 
-  if *in99 = *on;
+  if (*in99 = *on);
   //               ??????????
   endif;
 
@@ -302,9 +302,9 @@ begsr c_endpgm;
   o_msgid = 'USR8100';
 
   select;
-  when workstn.aid = k_f3;
+  when (workstn.aid = k_f3);
     usr8100.var1 = 'F3';
-  when workstn.aid = k_f12;
+  when (workstn.aid = k_f12);
     usr8100.var1 = 'F12';
   other;
     usr8100.var1 = 'Fxx';
@@ -449,7 +449,7 @@ endsr;
 
 begsr setscreen;
 
-  if i_dsp80 = '0';
+  if (i_dsp80 = '0');
     //   132-Zeichen Anzeige
     *in88 = '0';
     zei = 6;
@@ -501,25 +501,25 @@ begsr getcolor;
   else;
 
     select;
-    when wrk_field = 'KEYCOL'; // Überschrift
+    when (wrk_field = 'KEYCOL'); // Überschrift
       set0001.set_keycol = wrk_color;
-    when wrk_field = 'HEDCOL'; // Überschrift
+    when (wrk_field = 'HEDCOL'); // Überschrift
       set0001.set_hedcol = wrk_color;
-    when wrk_field = 'PINCOL'; // Pined-Daten
+    when (wrk_field = 'PINCOL'); // Pined-Daten
       set0001.set_pincol = wrk_color;
-    when wrk_field = 'CLMCOL'; // Spaltenmark.
+    when (wrk_field = 'CLMCOL'); // Spaltenmark.
       set0001.set_clmcol = wrk_color;
-    when wrk_field = 'STDCOL'; // Standard
+    when (wrk_field = 'STDCOL'); // Standard
       set0001.set_stdcol = wrk_color;
-    when wrk_field = 'NMLCOL'; // Normale Suche
+    when (wrk_field = 'NMLCOL'); // Normale Suche
       set0001.set_nmlcol = wrk_color;
-    when wrk_field = 'UNDCOL'; // Unterstrichen
+    when (wrk_field = 'UNDCOL'); // Unterstrichen
       set0001.set_undcol = wrk_color;
-    when wrk_field = 'REVCOL'; // Reverse Suche
+    when (wrk_field = 'REVCOL'); // Reverse Suche
       set0001.set_revcol = wrk_color;
-    when wrk_field = 'TBLCOL'; // Tabellierpap.
+    when (wrk_field = 'TBLCOL'); // Tabellierpap.
       set0001.set_tblcol = wrk_color;
-    when wrk_field = 'EXCCOL'; // Exception
+    when (wrk_field = 'EXCCOL'); // Exception
       set0001.set_exccol = wrk_color;
     other;
       *in99 = '1';

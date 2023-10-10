@@ -218,7 +218,7 @@ dow ('1');
   //  in Programmbefehl
   peek21(workstn.aid: sds.pgmname
         : ypgmcmd: ycmddta: ymsgid: ymsgdta);
-  if ymsgid <> ' ';
+  if (ymsgid <> ' ');
     p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
     ymsgid = '';
     ymsgdta = '';
@@ -228,58 +228,58 @@ dow ('1');
   //  Abfragen der Programmbefehle
   select;
   //  F3  - Ende
-  when ypgmcmd = '*EXIT';
+  when (ypgmcmd = '*EXIT');
     exsr c_endpgm;
     leave;
 
   //  F5  - Aktualisieren
-  when ypgmcmd = '*REFRESH';
+  when (ypgmcmd = '*REFRESH');
     exsr c_refresh;
     iter;
 
   //  F7  - Umschalten der Eingabe
-  when ypgmcmd = '*TGLINPUT';
+  when (ypgmcmd = '*TGLINPUT');
     exsr c_enter;
     exsr c_tginput;
     iter;
 
   //  F12 - Ende
-  when ypgmcmd = '*CANCEL';
+  when (ypgmcmd = '*CANCEL');
     exsr c_endpgm;
     leave;
 
   //  F17 - an den Afang gehen
-  when ypgmcmd = '*FIRSTPOS';
+  when (ypgmcmd = '*FIRSTPOS');
     exsr c_firstpos;
 
   //  F18 - ans Ende gehen
-  when ypgmcmd = '*LASTPOS';
+  when (ypgmcmd = '*LASTPOS');
     exsr c_lastpos;
 
   //  F19 - nach rechts verschieben (ein Feld)
-  when ypgmcmd = '*LEFT';
+  when (ypgmcmd = '*LEFT');
     exsr c_movel;
 
   //  F20 - nach links verschieben  (ein Feld)
-  when ypgmcmd = '*RIGHT';
+  when (ypgmcmd = '*RIGHT');
     exsr c_mover;
 
   //  F24 - Weitere Tasten
-  when ypgmcmd = '*MOREKEYS';
+  when (ypgmcmd = '*MOREKEYS');
     exsr c_morekeys;
 
   //  Page up
-  when ypgmcmd = '*PAGEUP';
+  when (ypgmcmd = '*PAGEUP');
     exsr c_pageup;
 
   //  Page down
-  when ypgmcmd = '*PAGEDOWN';
+  when (ypgmcmd = '*PAGEDOWN');
     exsr c_pagedown;
 
   //  Datenfreigabe
-  when ypgmcmd = '*ENTER';
+  when (ypgmcmd = '*ENTER');
     exsr c_enter;
-    if isPgmError = bFalse;
+    if (isPgmError = bFalse);
       o_msgid  = 'USR8112';
       o_msgdta = ' ';
 
@@ -319,7 +319,7 @@ return;
 
 begsr c_enter;
 
-  if isPgmError = bTrue;
+  if (isPgmError = bTrue);
 
   //    ---------------------------------
   //    *** Genereller Programmfehler ***
@@ -332,12 +332,12 @@ begsr c_enter;
     //  Prüfen der Eingaben
     exsr prfb1;
 
-    if isPgmError = bFalse;
+    if (isPgmError = bFalse);
 
 
-      if isdatachg = bTrue;
+      if (isdatachg = bTrue);
 
-        if isstringinp = bFalse;
+        if (isstringinp = bFalse);
           //  Einsetzen geänderten Hex-String ...
           //  ... umwandeln HexString (Bildschirmanzeige) nach HexWert (Pufferinhalt)
           ptmphexbin = ' ';
@@ -349,7 +349,7 @@ begsr c_enter;
         else;
           ptmphexbin = %subst(pfldinhaltsbcs:pstartpos);
           for x = 1 to %len($expstring);
-            if %subst($expstring: x: 1) <> set0006.set_cvtc;
+            if (%subst($expstring: x: 1) <> set0006.set_cvtc);
               %subst(ptmphexbin: x: 1) =
                    %subst($expstring: x: 1);
             endif;
@@ -389,7 +389,7 @@ endsr;
 begsr c_pageup;
 
   #startpos = #startpos + 128;
-  if #startpos > $buflaenge;
+  if (#startpos > $buflaenge);
     #startpos = $buflaenge - 128 + 1;
   endif;
 
@@ -407,7 +407,7 @@ endsr;
 begsr c_pagedown;
 
   #startpos = #startpos - 128;
-  if #startpos < 1;
+  if (#startpos < 1);
     #startpos = 1;
   endif;
 
@@ -436,7 +436,7 @@ begsr bzoff1;
   isPgmError = bFalse;
 
   //  Warnungen
-  if isdatachg = bTrue;
+  if (isdatachg = bTrue);
     warning_1 = bFalse;
     warning_2 = bFalse;
   endif;
@@ -451,13 +451,13 @@ begsr prfb1;
 
   //  Länge und Zeichen des Hex-Strings
   exsr prf20;
-  if isPgmError = bTrue;
+  if (isPgmError = bTrue);
     leavesr;
   endif;
 
   //  Startposition
   exsr prf21;
-  if isPgmError = bTrue;
+  if (isPgmError = bTrue);
     leavesr;
   endif;
 
@@ -484,7 +484,7 @@ begsr prf20;
     //  Zeichenkette zu lang
     if %len(%trimr(#hexstring))/2 + pstartpos - 1 >
        f_buffln(fldl0100);
-      if warning_2 = bTrue;
+      if (warning_2 = bTrue);
         #hexstring = %subst(#hexstring :
                            1          :
                            f_buffln(fldl0100) * 2);
@@ -511,7 +511,7 @@ begsr prf20;
        f_buffln(fldl0100)
        and
        (%len(%trimr(#hexstring)) < %len(#hexstring));
-      if warning_1 = bTrue;
+      if (warning_1 = bTrue);
         dow (%len(%trimr(#hexstring))/2 + pstartpos -1 <
             f_buffln(fldl0100))
            and
@@ -553,13 +553,13 @@ begsr prf21;
 
   dou ('1');
 
-    if #startpos <= *zeros;
+    if (#startpos <= *zeros);
       p_sndpgmmg('USR8178': '': sds.pgmname);
       isPgmError = bTrue;
       leave;
     endif;
 
-    if #startpos > $buflaenge;
+    if (#startpos > $buflaenge);
       p_sndpgmmg('USR8177': '': sds.pgmname);
       isPgmError = bTrue;
       leave;
@@ -585,9 +585,9 @@ begsr c_endpgm;
   o_msgid = 'USR8100';
 
   select;
-  when workstn.aid = k_f3;
+  when (workstn.aid = k_f3);
     usr8100.var1 = 'F3';
-  when workstn.aid = k_f12;
+  when (workstn.aid = k_f12);
     usr8100.var1 = 'F12';
   other;
     usr8100.var1 = 'Fxx';
@@ -619,7 +619,7 @@ begsr c_lastpos;
   #startpos = $buflaenge            -
              %len(#hexstring) / 2 +
              1;
-  if #startpos < 0;
+  if (#startpos < 0);
     #startpos = 1;
   endif;
 
@@ -634,7 +634,7 @@ endsr;
 
 begsr c_movel;
 
-  if #startpos - %len(#hexstring)/2 > 0;
+  if (#startpos - %len(#hexstring)/2 > 0);
     #startpos = #startpos - %len(#hexstring)/2;
   else;
     #startpos = 1;
@@ -651,12 +651,12 @@ endsr;
 
 begsr c_mover;
 
-  if #startpos + %len(#hexstring)/2 < $buflaenge;
+  if (#startpos + %len(#hexstring)/2 < $buflaenge);
     #startpos = #startpos + %len(#hexstring)/2;
   else;
     #startpos = $buflaenge - %len(#hexstring)/2
                + 1;
-    if #startpos < 0;
+    if (#startpos < 0);
       #startpos = 1;
     endif;
   endif;
@@ -686,7 +686,7 @@ endsr;
 
 begsr c_tginput;
 
-  if isstringinp = bTrue;
+  if (isstringinp = bTrue);
     isstringinp = bFalse;
   else;
     isstringinp = bTrue;
@@ -728,7 +728,7 @@ begsr fill##;
   endif;
 
   //  anzeigen Pufferlänge
-  if f_isvarlen(fldl0100) = bTrue;
+  if (f_isvarlen(fldl0100) = bTrue);
     *in61 = *on;
   else;
     *in61 = *off;
@@ -754,7 +754,7 @@ begsr fill##2;
   //  entnehmenden Binärzeichenkette
   ptmphexlen = $buflaenge - #startpos + 1;
 
-  if ptmphexlen > %len(#hexstring) / 2;
+  if (ptmphexlen > %len(#hexstring) / 2);
     ptmphexlen = %len(#hexstring) / 2;
   endif;
 
@@ -779,7 +779,7 @@ begsr fill##2;
                             : %addr(ptmphexbin)
                             : ptmphexlen
                             : %size(ptmphexbin));
-    if ptmphexlen = ptmpnewlen * 2;
+    if (ptmphexlen = ptmpnewlen * 2);
       for i = ptmpnewlen downto 1;
         %subst(ptmphexbin: (2*i)-1: 1) =
         %subst(ptmphexbin: i: 1);
@@ -803,7 +803,7 @@ endsr;
 
 begsr setscreen;
 
-  if i_dsp80 = *off;
+  if (i_dsp80 = *off);
     //   132-Zeichen Anzeige
     *in88 = *off;
     zei = 4;

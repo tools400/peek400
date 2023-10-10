@@ -120,7 +120,7 @@
           fd = *null;
        endmon;
 
-       if fd = *null;
+       if (fd = *null);
           o_hfile.errno = f_errno();
           return bfalse;
        endif;
@@ -552,15 +552,15 @@
        priofb = rlocate(io_hfile.fd: *null: i_rrn: options);
 
        select;
-       when riofb.numbyt = 0;   // Datensatz nicht vorhanden
+       when (riofb.numbyt = 0);   // Datensatz nicht vorhanden
           p_clrerrno();
           priofb = rreadn(io_hfile.fd : *null: 0: no_lock);
           errornbr = f_errno();
-       when riofb.numbyt = 1;   // Datensatz vorhanden
+       when (riofb.numbyt = 1);   // Datensatz vorhanden
           p_clrerrno();
           priofb = rreads(io_hfile.fd : *null: 0: no_lock);
           errornbr = f_errno();
-          if riofb.numbyt = 0 and errornbr = eiorecerr_c;   // wahrscheinlich ein
+          if (riofb.numbyt = 0 and errornbr = eiorecerr_c);   // wahrscheinlich ein
              // gelöschter Datensatz
              p_clrerrno();
              priofb = rreadn(io_hfile.fd : *null: 0: no_lock);
@@ -800,7 +800,7 @@
        endif;
 
        select;
-       when riofb.numbyt = eof;
+       when (riofb.numbyt = eof);
           io_hfile.lastoper = OPER_READ;
           io_hfile.errno = 0;
           return btrue;   // Return "EOF" to caller
@@ -840,7 +840,7 @@
 
        clearbufferandnullmap(rfile: io_rcdbuffer: io_nullmap);
 
-       if i_dolock = btrue;
+       if (i_dolock = btrue);
           options = dft;
        else;
           options = no_lock;
@@ -876,7 +876,7 @@
 
 
        select;
-       when riofb.numbyt = eof;
+       when (riofb.numbyt = eof);
           io_hfile.lastoper = OPER_READP;
           io_hfile.errno = 0;
           return btrue;   // Return "EOF" to caller
@@ -1115,7 +1115,7 @@
        i_default = %trim(i_default);
 
        x = %scan(i_parm + '=': i_mode);
-       if x = 0;
+       if (x = 0);
           return i_default;
        endif;
 

@@ -130,7 +130,7 @@
        dow ('1');
 
           //  Prüfen Positionierung der Subfile
-          if sfsanr <= *zeros;
+          if (sfsanr <= *zeros);
              sfsanr = 1;
           endif;
 
@@ -142,7 +142,7 @@
           write msgctl;
 
           //  "Keine Sätze ..."
-          if *in80 = *off;
+          if (*in80 = *off);
              write pbleer;
           endif;
 
@@ -203,7 +203,7 @@
           p_rmvpgmmg(sds.pgmname);
 
           //  Aktuelle Satz-Nr.
-          if sflcsr > *zeros;
+          if (sflcsr > *zeros);
              sfsanr = sflcsr;
           endif;
 
@@ -211,7 +211,7 @@
           //  in Programmbefehl
           peek21(workstn.aid: sds.pgmname
                 : ypgmcmd: ycmddta: ymsgid: ymsgdta);
-          if ymsgid <> *blanks;
+          if (ymsgid <> *blanks);
              p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
              ymsgid = '';
              ymsgdta = '';
@@ -220,34 +220,34 @@
 
           //  Abfragen der Befehlstasten
           select;
-          when ypgmcmd = '*EXIT';
+          when (ypgmcmd = '*EXIT');
              exsr c_endpgm;
              leave;
-          when ypgmcmd = '*REFRESH';
+          when (ypgmcmd = '*REFRESH');
              exsr c_refresh;
              iter;
-          when ypgmcmd = '*CANCEL';
+          when (ypgmcmd = '*CANCEL');
              exsr c_endpgm;
              leave;
-          when ypgmcmd = '*TOP';
+          when (ypgmcmd = '*TOP');
              exsr c_top;
              iter;
-          when ypgmcmd = '*BOT';
+          when (ypgmcmd = '*BOT');
              exsr c_bot;
              iter;
-          when ypgmcmd = '*MOREOPT';
+          when (ypgmcmd = '*MOREOPT');
              exsr c_moreopt;
-          when ypgmcmd = '*MOREKEYS';
+          when (ypgmcmd = '*MOREKEYS');
              exsr c_morekeys;
-          when ypgmcmd = '*ENTER';
+          when (ypgmcmd = '*ENTER');
              exsr c_enter;
-             if o_sflopt = *blanks;
+             if (o_sflopt = *blanks);
                 //  ... keine Auswahl getroffen, weiter machen
              else;
                 leave;
              endif;
-          when ypgmcmd = '*PAGEUP';
-          when ypgmcmd = '*PAGEDOWN';
+          when (ypgmcmd = '*PAGEUP');
+          when (ypgmcmd = '*PAGEDOWN');
 
           other;
              //  Falsche Taste gedrückt
@@ -285,14 +285,14 @@
 
           issflerror = bfalse;
 
-          if *in80 = *off;
+          if (*in80 = *off);
              //   keine Einträge in Subfile vorhanden ...
           else;
 
              for do_x2 = 1 to sflnbrrcd;
                 readc pbsfl;
                 *in11 = %eof;
-                if *in11 = *on;
+                if (*in11 = *on);
                    leave;
                 endif;
 
@@ -300,7 +300,7 @@
                 *in11 = not %found;
 
                 //  Cursorpositionierung ...
-                if issflerror = bfalse;
+                if (issflerror = bfalse);
                    sflcsr = sflrec;
                 else;
                    //  Subfile nicht neu positionieren
@@ -312,7 +312,7 @@
                 //  Zuordnung AUSWAHL => Befehl ...
                 peek21('#' + sfpau: sds.pgmname
                       : ypgmcmd: ycmddta: ymsgid: ymsgdta);
-                if ymsgid <> *blanks;
+                if (ymsgid <> *blanks);
                    //  Fehlermeldung ...
                    p_sndpgmmg('USR8110': sfpau: sds.pgmname);
                    exsr vsfpauerr;
@@ -327,8 +327,8 @@
                 sfl_cmd = ypgmcmd;
 
                 select;
-                when sfl_cmd = '*NONE';
-                when sfl_cmd = '*SELECT';
+                when (sfl_cmd = '*NONE');
+                when (sfl_cmd = '*SELECT');
                    exsr vpos;
                    leave;
                 other;
@@ -539,7 +539,7 @@
              write pbsfl;
              sflnbrrcd = sflrec;
 
-             if sflrec >= sflpage;
+             if (sflrec >= sflpage);
                 leave;
              endif;
 
@@ -553,7 +553,7 @@
 
        begsr pbseperator;
 
-          if sflrec >= sflpage;
+          if (sflrec >= sflpage);
              leavesr;
           endif;
 
@@ -583,7 +583,7 @@
        begsr pbfill;
 
           wrk_msgid = f_mapcmdtomsg(data);
-          if wrk_msgid <> '';
+          if (wrk_msgid <> '');
              wrk_msgid  = 'KEY' + wrk_msgid;
              wrk_msgtxt = f_msgtext(wrk_msgid: ' ');
           endif;
@@ -620,7 +620,7 @@
 
        begsr setscreen;
 
-          if i_dsp80 = '0';
+          if (i_dsp80 = '0');
              //   132-Zeichen Anzeige
              *in88 = '0';
              zei = 5;

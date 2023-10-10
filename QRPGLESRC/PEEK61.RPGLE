@@ -78,12 +78,6 @@
          i_width         int(10) const  options(*nopass);
        end-pi;
 
-       //  Optional parameter positions
-       dcl-c p_marker   3;
-       dcl-c p_waitsec  4;
-       dcl-c p_jobtype  5;
-       dcl-c p_width    6;
-
        //  Optional parameter fields
        dcl-s marker          like(i_marker);
        dcl-s waitsec         like(i_waitsec);
@@ -96,28 +90,28 @@
 
        //  Process optional parameters ...
        //  ... i_marker
-       if %parms >= p_marker;
+       if (%parms() >= %parmnum(i_marker));
           marker = i_marker;
        else;
           marker = cprgmtr_blue;
        endif;
 
        //  ... 'i_waitSec'
-       if %parms >= p_waitsec;
+       if (%parms() >= %parmnum(i_waitsec));
           waitsec = i_waitsec;
        else;
           waitsec = 0;
        endif;
 
        //  ... 'i_jobType'
-       if %parms >= p_jobtype;
+       if (%parms() >= %parmnum(i_jobtype));
           jobtype = i_jobtype;
        else;
           jobtype = cprgmtr_jobtype_all;
        endif;
 
        //  ... 'i_width'
-       if %parms >= p_width;
+       if (%parms() >= %parmnum(i_width));
           width = i_width;
        else;
           width = 0;
@@ -139,7 +133,7 @@
 
        // ... if an attribute below x'20' (normal green) specified,
        //     swap for yellow reverse (safer)
-       if marker < x'20';
+       if (marker < x'20');
           g_marker = cprgmtr_yellow;
        else;
           g_marker = marker;
@@ -151,10 +145,10 @@
        endif;
 
        // ... set screen width
-       if g_jobtype = 'B';
+       if (g_jobtype = 'B');
           g_width = 50;
        else;
-          if width > 0;
+          if (width > 0);
              g_width = width;
           else;
              g_width = lf_getnumdspcol() -
@@ -165,18 +159,18 @@
        //  ... check whether the progress meter must be shown for jobs of type ...
        select;
           //      ... all Jobs
-       when jobtype = cprgmtr_jobtype_all;
+       when (jobtype = cprgmtr_jobtype_all);
           g_showprgmtr = bTrue;
           //      ... interactive jobs
-       when jobtype = cprgmtr_jobtype_dlg;
-          if g_jobtype <> 'B';
+       when (jobtype = cprgmtr_jobtype_dlg);
+          if (g_jobtype <> 'B');
              g_showprgmtr = bTrue;
           else;
              g_showprgmtr = bFalse;
           endif;
           //      ... batch jobs
-       when jobtype = cprgmtr_jobtype_batch;
-          if g_jobtype = 'B';
+       when (jobtype = cprgmtr_jobtype_batch);
+          if (g_jobtype = 'B');
              g_showprgmtr = bTrue;
           else;
              g_showprgmtr = bFalse;
@@ -315,7 +309,7 @@
        dcl-s numDspColumns uns(10) inz;
        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-       if lf_getscreenmode() = SCR_MODE_DS3;
+       if (lf_getscreenmode() = SCR_MODE_DS3);
           numDspColumns = SCR_COLUMN_DS3;
        else;
           numDspColumns = SCR_COLUMN_DS4;
@@ -352,7 +346,7 @@
 
        qsnrtvmod(dspMode: *omit: errCode);
 
-       if dspMode = '3';
+       if (dspMode = '3');
           screenmode = SCR_MODE_DS3;
        else;
           screenmode = SCR_MODE_DS4;

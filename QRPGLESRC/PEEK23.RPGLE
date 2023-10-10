@@ -195,10 +195,10 @@ begsr fillfield;
   endif;
 
   select;
-  when wrk_key   = '*HELP';
+  when (wrk_key   = '*HELP');
     o_fkeys(x) = 'F1';
   other;
-    if wrk_key >= '*F10';
+    if (wrk_key >= '*F10');
       o_fkeys(x) = %subst(wrk_key: 2);
     else;
       a1 = %subst(wrk_key: 2: 1);

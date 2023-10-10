@@ -223,59 +223,59 @@ if (isBatch = bFalse);
     //  Abfragen der Befehlstasten
     select;
     //  F3  - Ende
-    when ypgmcmd = '*EXIT';
+    when (ypgmcmd = '*EXIT');
       exsr c_endpgm;
       leave;
 
     //  F3  - Sichern & beenden
-    when ypgmcmd = '*SAVE_EXIT';
+    when (ypgmcmd = '*SAVE_EXIT');
       exsr c_enter;
-      if issflerror = bFalse;
+      if (issflerror = bFalse);
         exsr c_saveexit;
         leave;
       endif;
 
     //  F5  - Aktualisieren
-    when ypgmcmd = '*REFRESH';
+    when (ypgmcmd = '*REFRESH');
       exsr c_refresh;
       iter;
 
     //  F11 - Float Keys
-    when ypgmcmd = '*FLOATKEYS';
+    when (ypgmcmd = '*FLOATKEYS');
       exsr c_floatkey;
       exsr c_refresh;
       iter;
 
     //  F12 - Ende
-    when ypgmcmd = '*CANCEL';
+    when (ypgmcmd = '*CANCEL');
       exsr c_endpgm;
       leave;
 
     //  F16 - Suchen
-    when ypgmcmd = '*SEARCH';
+    when (ypgmcmd = '*SEARCH');
       exsr c_search;
       iter;
 
     //   F17 - Anfang Datensatz
-    when ypgmcmd = '*TOP';
+    when (ypgmcmd = '*TOP');
       exsr c_top;
       iter;
     //   F18 - Ende Datensatz
-    when ypgmcmd = '*BOT';
+    when (ypgmcmd = '*BOT');
       exsr c_bot;
       iter;
 
     //  F24 - Weitere Tasten
-    when ypgmcmd = '*MOREKEYS';
+    when (ypgmcmd = '*MOREKEYS');
       exsr c_morekeys;
 
     //  Datenfreigabe
-    when ypgmcmd = '*ENTER';
+    when (ypgmcmd = '*ENTER');
       exsr c_enter;
     //  Page up
-    when ypgmcmd = '*PAGEUP';
+    when (ypgmcmd = '*PAGEUP');
     //  Page down
-    when ypgmcmd = '*PAGEDOWN';
+    when (ypgmcmd = '*PAGEDOWN');
 
     other;
       //  Falsche Taste gedrückt
@@ -328,7 +328,7 @@ begsr c_search;
     p_sndpgmmg('USR8209': usr8209: sds.pgmname);
   else;
     exsr postofield;
-    if isnewpos = bTrue;
+    if (isnewpos = bTrue);
       sfsanr = wrk_sfsanr;
     endif;
   endif;
@@ -391,7 +391,7 @@ begsr srchfield;
         isfound = bTrue;
         leave;
       else;
-        if sfpau <> *blanks;
+        if (sfpau <> *blanks);
           //  ... Satz geändert
           exsr vsfpauchg;
         else;
@@ -406,7 +406,7 @@ begsr srchfield;
 
     endfor;
 
-    if isfound = bTrue;
+    if (isfound = bTrue);
       wrk_sfsanr = sflrec;
       lstnbrrcd = sflrec;
     else;
@@ -438,7 +438,7 @@ begsr vreadc;
 
   issflerror = bFalse;
 
-  if *in80 = *off;
+  if (*in80 = *off);
   //   keine Einträge in Subfile vorhanden ...
   else;
 
@@ -453,7 +453,7 @@ begsr vreadc;
       exsr sflbzoff;
 
       //  Cursorpositionierung ...
-      if issflerror = bFalse;
+      if (issflerror = bFalse);
         sflcsr = sflrec;
       else;
       //  Subfile nicht neu positionieren
@@ -465,7 +465,7 @@ begsr vreadc;
       //  Zuordnung AUSWAHL => Befehl ...
       peek21('#' + sfpau: sds.pgmname
             : ypgmcmd: ycmddta: yMsgID: yMsgDta);
-      if yMsgID <> *blanks;
+      if (yMsgID <> *blanks);
         //  Fehlermeldung ...
         p_sndpgmmg('USR8110': sfpau: sds.pgmname);
         exsr vsfpauerr;
@@ -511,11 +511,11 @@ begsr vreadc;
         *in99 = bTrue;
       endmon;
       //  ... Fehler beim Programmaufruf
-      if *in99 = *on;
+      if (*in99 = *on);
         exsr vsfpauerr;
       else;
         //  ... Programaufruf war OK
-        if yMsgID = *blanks;
+        if (yMsgID = *blanks);
           //      ... Prüfung ist OK
           exsr vpos;
           exsr vsfpauclr;
@@ -546,7 +546,7 @@ endsr;
 
 begsr getcolor;
 
-  if ##color <> *blanks;
+  if (##color <> *blanks);
 
     ycolorattr = $$color;
 
@@ -557,7 +557,7 @@ begsr getcolor;
       *in99 = bTrue;
     endmon;
 
-    if *in99 = *on;
+    if (*in99 = *on);
     // Fehler aufgetreten
     else;
       $$color = ycolorattr;
@@ -913,7 +913,7 @@ begsr pbreadup;
     write pbsfl;
     sflnbrrcd = sflrec;
 
-    if sflrec >= sflpage;
+    if (sflrec >= sflpage);
       leave;
     endif;
 
@@ -960,14 +960,14 @@ begsr pbfill;
   endif;
 
   //  ... Variable Feldlänge
-  if f_isvarlen(fldl0100) = bTrue;
+  if (f_isvarlen(fldl0100) = bTrue);
     isvarlen = bTrue;
   else;
     isvarlen = bFalse;
   endif;
 
   //  ... Unbekannte Feldart
-  if f_unknown = bTrue;
+  if (f_unknown = bTrue);
     isunknown = bTrue;
   else;
     isunknown = bFalse;
@@ -976,7 +976,7 @@ begsr pbfill;
   //  ... Startposition
   $$ibuf = fldl0100.f1ibuf;
   //  ... Keyfeldnummer
-  if f_kseq <> *zeros;
+  if (f_kseq <> *zeros);
     $$kseq = 'K'+%editc(%dec(f_kseq: 3: 0): 'X');
   else;
     $$kseq = '';
@@ -1033,28 +1033,28 @@ endsr;
 begsr pbsetbz;
 
   //  Editcode
-  if isdecimal = bFalse;
+  if (isdecimal = bFalse);
     *in71 = '0';
   else;
     *in71 = '1';
   endif;
 
   //  Dezimalstellen
-  if isdecimal = bFalse;
+  if (isdecimal = bFalse);
     *in72 = '0';
   else;
     *in72 = '1';
   endif;
 
   //  Kennzeichnung für variable Länge
-  if isvarlen = bFalse;
+  if (isvarlen = bFalse);
     *in73 = '0';
   else;
     *in73 = '1';
   endif;
 
   //  Unbekannter Feldtyp
-  if isunknown = bFalse;
+  if (isunknown = bFalse);
     *in74 = '0';
   else;
     *in74 = '1';
@@ -1082,7 +1082,7 @@ endsr;
 
 begsr setscreen;
 
-  if i_dsp80 = '0';
+  if (i_dsp80 = '0');
     //   132-Zeichen Anzeige
     *in88 = '0';
     zei = 2;

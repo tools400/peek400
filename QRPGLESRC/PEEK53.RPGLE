@@ -582,7 +582,7 @@ dcl-proc p_setlldft export;
   p_initsrvpgm();
 
   p_opndft(msgid: msgdta);
-  if msgid = ' ';
+  if (msgid = ' ');
 
     clear d_key3;
     d_key3.d_user = '*NONE';
@@ -727,52 +727,52 @@ dcl-proc f_initusrs;
 
   select;
   //  SET0001 ...
-  when i_key = '*DSPATTR';
+  when (i_key = '*DSPATTR');
     f_initusrs = set0001;
   //  SET0002 ...
-  when i_key = '*SEARCH';
+  when (i_key = '*SEARCH');
     f_initusrs = set0002;
   //  SET0003 ...
-  when i_key = '*ACCESSKEY';
+  when (i_key = '*ACCESSKEY');
     f_initusrs = set0003;
   //  SET0004 ...
-  when i_key = '*LANGUAGE';
+  when (i_key = '*LANGUAGE');
     f_initusrs = set0004;
   //  SET0005 ...
-  when i_key = '*SPLASH';
+  when (i_key = '*SPLASH');
     f_initusrs = set0005;
   //  SET0006 ...
-  when i_key = '*CVTCHR';
+  when (i_key = '*CVTCHR');
     f_initusrs = set0006;
   //  SET0007 ...
-  when i_key = '*VERSION';
+  when (i_key = '*VERSION');
     f_initusrs = set0007;
   //  SET0008 ...
-  when i_key = '*PROMPT';
+  when (i_key = '*PROMPT');
     f_initusrs = set0008;
   //  SET0009 ...
-  when i_key = '*FLOATKEYS';
+  when (i_key = '*FLOATKEYS');
     f_initusrs = set0009;
   //  SET0010 ...
-  when i_key = '*SCROLL';
+  when (i_key = '*SCROLL');
     f_initusrs = set0010;
   //  SET0011 ...
-  when i_key = '*DFTDSPMDE';
+  when (i_key = '*DFTDSPMDE');
     f_initusrs = set0011;
   //  SET0012 ...
-  when i_key = '*CRTPGM';
+  when (i_key = '*CRTPGM');
     f_initusrs = set0012;
   //  SET0013 ...
-  when i_key = '*SECATRDFT';
+  when (i_key = '*SECATRDFT');
     f_initusrs = set0013;
   //  SET0014 ...
-  when i_key = '*PRVFILE';
+  when (i_key = '*PRVFILE');
     f_initusrs = set0014;
   //  SET0015 ...
-  when i_key = '*ENVFILE';
+  when (i_key = '*ENVFILE');
     f_initusrs = set0015;
   //  SET0016 ...
-  when i_key = '*SQLLMTCNT';
+  when (i_key = '*SQLLMTCNT');
     f_initusrs = set0016;
   //  Fehler ...
   other;
@@ -866,7 +866,7 @@ dcl-proc p_initsrvpgm;
   end-pi;
   // ------------------------------------------------------------------------
 
-  if g_isinit = bFalse;
+  if (g_isinit = bFalse);
 
     if (g_user = '');
       p_setusr(sds.user: sds.user: f_getprdlb());

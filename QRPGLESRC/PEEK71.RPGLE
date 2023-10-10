@@ -303,9 +303,6 @@
        //  Return value
        dcl-s rc int(10) inz(cError);
 
-       //  Parameter positions
-       dcl-c p_maxsize 4;
-
        //  Fields for optional parameters
        dcl-s maxsize    like(i_maxsize  );
 
@@ -317,7 +314,7 @@
        dcl-ds transcoder likeds(transcoder_t) based(i_htranscoder);
        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-       if (%parms() >= p_maxsize and %addr(i_maxsize) <> *null);
+       if (%parms() >= %parmnum(i_maxsize) and %addr(i_maxsize) <> *null);
           maxsize = i_maxsize;
        else;
           maxsize = i_size;

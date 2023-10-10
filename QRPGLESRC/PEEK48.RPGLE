@@ -191,7 +191,7 @@ dow ('1');
   //  in Programmbefehl
   peek21(workstn.aid: sds.pgmname
         : ypgmcmd: ycmddta: ymsgid: ymsgdta);
-  if ymsgid <> *blanks;
+  if (ymsgid <> *blanks);
     p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
     ymsgid = '';
     ymsgdta = '';
@@ -201,48 +201,48 @@ dow ('1');
   //  Abfragen der Programmbefehle
   select;
   //  F3  - Ende
-  when ypgmcmd = '*EXIT';
+  when (ypgmcmd = '*EXIT');
     exsr c_endpgm;
     leave;
   //  F4  - Prompt
-  when ypgmcmd = '*PROMPT';
+  when (ypgmcmd = '*PROMPT');
     tempscnfld = scnfld;
     tempfldpos = fldpos;
     exsr c_prompt;
     iter;
 
   //  F5  - Aktualisieren
-  when ypgmcmd = '*REFRESH';
+  when (ypgmcmd = '*REFRESH');
     exsr c_refresh;
     iter;
 
   //  F9  - Auswählen Sortierfolge
-  when ypgmcmd = '*DSPDBR';
+  when (ypgmcmd = '*DSPDBR');
     tempscnfld = scnfld;
     tempfldpos = fldpos;
     exsr c_selectky;
     iter;
 
   //  F11 - Einfügen Keyfelder
-  when ypgmcmd = '*INSKEYFLD';
+  when (ypgmcmd = '*INSKEYFLD');
     tempscnfld = scnfld;
     tempfldpos = fldpos;
     exsr c_inskeyfd;
     iter;
 
   //  F12 - Ende
-  when ypgmcmd = '*CANCEL';
+  when (ypgmcmd = '*CANCEL');
     exsr c_endpgm;
     leave;
 
   //  F24 - Weitere Tasten
-  when ypgmcmd = '*MOREKEYS';
+  when (ypgmcmd = '*MOREKEYS');
     exsr c_morekeys;
 
   //  Datenfreigabe
-  when ypgmcmd = '*ENTER';
+  when (ypgmcmd = '*ENTER');
     exsr c_enter;
-    if *in99 = *off;
+    if (*in99 = *off);
       o_msgid = 'USR8112';
       o_msgdta = *blanks;
       leave;
@@ -325,9 +325,9 @@ begsr c_endpgm;
   o_msgid = 'USR8100';
 
   select;
-  when workstn.aid = k_f3;
+  when (workstn.aid = k_f3);
     usr8100.var1 = 'F3';
-  when workstn.aid = k_f12;
+  when (workstn.aid = k_f12);
     usr8100.var1 = 'F12';
   other;
     usr8100.var1 = 'Fxx';
@@ -373,7 +373,7 @@ begsr pmt_field;
   peek37(i_dsp80: i_copyright: yfield
         :  ymsgid: ymsgdta);
 
-  if ymsgid = '';
+  if (ymsgid = '');
 
     templen = %checkr(' ': yfield);
 
@@ -450,8 +450,8 @@ endsr;
 begsr c_selectky;
 
   select;
-  when tempscnfld = '##ORDER';
-    if *in72 = *on;
+  when (tempscnfld = '##ORDER');
+    if (*in72 = *on);
       p_sndpgmmg('USR8195': '': sds.pgmname);
     else;
       exsr slc_key;

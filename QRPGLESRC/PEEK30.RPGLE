@@ -145,13 +145,13 @@ exsr inzsr;
 
 exsr first;
 
-if iscompok = bFalse;
+if (iscompok = bFalse);
   //     Fehler in der Lizenz-Nr. ...
-  if isdateerr = btrue;
+  if (isdateerr = btrue);
     //     ... Datum abgelaufen
     //         ... Abfragen einer neuen LizenzNr.
     exsr getlicinf;
-    if o_flag <> btrueext;
+    if (o_flag <> btrueext);
       //         ... wenn keine neue LizenzNr eingetragen
       //             worden ist, dann bFalse zurückliefern,
       //             damit kein weiterer Test möglich ist.
@@ -206,7 +206,7 @@ begsr getlicinf;
     //  Abfragen der Befehlstasten
     select;
     //  F9  - Ende
-    when workstn.aid = k_f9;
+    when (workstn.aid = k_f9);
       exsr c_endpgm;
       o_flag = bshareext;
       o_msgid = 'USR9997';
@@ -216,9 +216,9 @@ begsr getlicinf;
       leave;
 
     //  Datenfreigabe
-    when workstn.aid = k_enter;
+    when (workstn.aid = k_enter);
       exsr c_enter;
-      if *in99 = *off;
+      if (*in99 = *off);
         o_flag = btrueext;
         leave;
       endif;
@@ -254,9 +254,9 @@ begsr c_enter;
 
   exsr prfb1;
 
-  if *in99 = *off;
+  if (*in99 = *off);
     exsr wrtlicdata;
-    if iswriteok = bFalse;
+    if (iswriteok = bFalse);
       *in99 = '1';
       p_sndpgmmg('USR8159': '': sds.pgmname);
     else;
@@ -310,7 +310,7 @@ begsr prf20;
 
   dou ('1');
 
-    if ##licdata = *blanks;
+    if (##licdata = *blanks);
       clear usr8158;
       *in99 = '1';
       clear usr8158;
@@ -325,7 +325,7 @@ begsr prf20;
     ydateext = r_srldate;
 
     exsr complicnbr;
-    if iscompok = bFalse;
+    if (iscompok = bFalse);
       clear usr8158;
       *in99 = '1';
       clear usr8158;
@@ -336,7 +336,7 @@ begsr prf20;
 
   enddo;
 
-  if *in99 = *on;
+  if (*in99 = *on);
     *in20 = '1';
     *in30 = '1';
   endif;
@@ -396,7 +396,7 @@ begsr complicnbr;
   //      ( = YSrlNbrInt)                     *
   //      für Firmenlizenznummer              *
   //------------------------------------------*
-  if iscompok = bFalse;
+  if (iscompok = bFalse);
     iscompok = bFalse;
     isdateerr = btrue;
 
@@ -443,11 +443,11 @@ begsr complicnb2;
   currmonrv = currMonFW;
   curryearrv = currYearFW;
 
-  if zwext <> zwint;
+  if (zwext <> zwint);
     iscompok = bFalse;
     isdateerr = bFalse;
   else;
-    if deaddate < currdaterv;
+    if (deaddate < currdaterv);
       iscompok = bFalse;
       isdateerr = btrue;
     else;
@@ -491,16 +491,16 @@ endsr;
 begsr splittlic;
 
   x = %scan('-': r_srldata);
-  if x > *zeros;
+  if (x > *zeros);
     x = x - 1;
-    if x > *zeros;
+    if (x > *zeros);
       r_srlnbr = %subst(r_srldata: 1: x);
     else;
       r_srlnbr = *blanks;
     endif;
 
     x = x + 2;
-    if x <= 64;
+    if (x <= 64);
       r_srldate = %subst(r_srldata: x);
     else;
       r_srldate = *blanks;
@@ -521,7 +521,7 @@ begsr clcintnbr;
   // -  Netzwerkattribute
   peek07('SYSNAME': bFalse
         : yattrlen: yattrtyp: yvalue);
-  if yattrlen > *zeros;
+  if (yattrlen > *zeros);
     ysysname = %subst(yvalue: 1: yattrlen);
   else;
     ysysname = *blanks;
@@ -533,7 +533,7 @@ begsr clcintnbr;
   // -  Seriennummer
   peek28('QSRLNBR': bFalse
         : yattrlen: yattrtyp: yvalue);
-  if yattrlen > *zeros;
+  if (yattrlen > *zeros);
     ysyssrlnbr = %subst(yvalue: 1: yattrlen);
   else;
     ysyssrlnbr = *blanks;
@@ -585,7 +585,7 @@ begsr hextodec;
 
   for y = 1 to x;
     a1 = %subst(r_hex: y: 1);
-    if a1 = *blanks;
+    if (a1 = *blanks);
       leave;
     endif;
 
@@ -599,7 +599,7 @@ begsr hextodec;
     zw1 = zw1 - 1;
 
     exp = x - y;
-    if exp > *zeros;
+    if (exp > *zeros);
       //      ... Exponenten größer 0
       dou exp = *zeros;
         zw1 = zw1 * 16;
@@ -622,7 +622,7 @@ endsr;
 
 begsr setscreen;
 
-  if i_dsp80 = '0';
+  if (i_dsp80 = '0');
     //   132-Zeichen Anzeige
     *in88 = '0';
     zei = 2;

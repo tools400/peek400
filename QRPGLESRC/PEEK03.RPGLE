@@ -90,13 +90,13 @@ exsr inzsr;
 
 exsr first;
 
-if i_access = sql_seq;
+if (i_access = sql_seq);
   exsr sqlseq;
 else;
   exsr otherseq;
 endif;
 
-if nbrOfKey <= *zeros;
+if (nbrOfKey <= *zeros);
   o_msgid = 'USR0006';
   USR0006.var1 = i_qfile.name;
   USR0006.var2 = i_qfile.lib;
@@ -156,7 +156,7 @@ endsr;
 
 begsr getnextfld;
 
-  if x > 512;
+  if (x > 512);
     y = 0;
   else;
 

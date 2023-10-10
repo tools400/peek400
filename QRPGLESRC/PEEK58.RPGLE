@@ -99,7 +99,7 @@ dcl-proc f_dsplyln export;
 
   fldlen = i_fldl0100.f1flen;
 
-  if i_fldl0100.f1vfmi = '1';
+  if (i_fldl0100.f1vfmi = '1');
     //  Variable Feldlänge ...
     fldlen = fldlen - 2;
   endif;
@@ -119,9 +119,6 @@ dcl-proc f_buffln export;
          options(*nopass);
   end-pi;
 
-  //  Parameterpositionen optionaler Parameter
-  dcl-c p_withlen const(2);
-
   //  Funktionswert
   dcl-s fldlen          like(int4_t) inz;
 
@@ -129,15 +126,15 @@ dcl-proc f_buffln export;
   dcl-s withlen         like(i_withlen) inz;
   // ------------------------------------------------------------------------
 
-  if %parms >= p_withlen;
+  if (%parms() >= %parmnum(i_withlen));
     withlen  = i_withlen;
   else;
     withlen  = bfalse;
   endif;
 
-  if i_fldl0100.f1vfmi = '1';
+  if (i_fldl0100.f1vfmi = '1');
     //  Variable Feldlänge ...
-    if withlen = btrue;
+    if (withlen = btrue);
       //  ... incl. Längenbyte
       fldlen = i_fldl0100.f1flen;
     else;
@@ -167,7 +164,7 @@ dcl-proc f_curfldln export;
   dcl-s curfldln        like(int4_t) inz;
   // ------------------------------------------------------------------------
 
-  if i_fldl0100.f1vfmi = '1';
+  if (i_fldl0100.f1vfmi = '1');
     curfldln = f_bintodec(i_buffer: i_fldl0100.f1ibuf: 2);
   else;
     if (i_fldl0100.f1ndbc > 0);
@@ -195,9 +192,6 @@ dcl-proc f_rtvfld export;
          options(*nopass);
   end-pi;
 
-  //  Parameterpositionen optionaler Parameter
-  dcl-c p_withlen const(4);
-
   //  Funktionswert
   dcl-s rtnlen          like(int4_t) inz;
 
@@ -216,19 +210,19 @@ dcl-proc f_rtvfld export;
   descinfo1 : descinfo2: parmlen  :
   *omit);
 
-  if %parms >= p_withlen;
+  if (%parms() >= %parmnum(i_withlen));
     withlen  = i_withlen;
   else;
     withlen  = bfalse;
   endif;
 
   rtnlen = f_buffln(i_fldl0100: withlen);
-  if rtnlen > parmlen;
+  if (rtnlen > parmlen);
     rtnlen = parmlen;
   endif;
 
-  if i_fldl0100.f1vfmi = '1';
-    if withlen = bfalse;
+  if (i_fldl0100.f1vfmi = '1');
+    if (withlen = bfalse);
       %subst(o_buffer: 1: parmlen) =
       %subst(i_buffer: i_fldl0100.f1ibuf+2: rtnlen);
     else;
@@ -257,9 +251,6 @@ dcl-proc p_fldtobuf export;
          options(*nopass);
   end-pi;
 
-  //  Parameterpositionen optionaler Parameter
-  dcl-c p_withlen const(4);
-
   //  Arbeitsfelder
   dcl-s withlen         like(i_withlen) inz;
 
@@ -273,15 +264,15 @@ dcl-proc p_fldtobuf export;
   // ------------------------------------------------------------------------
   pfielddta = %addr(i_fielddta);
 
-  if %parms >= p_withlen;
+  if (%parms() >= %parmnum(i_withlen));
     withlen = i_withlen;
   else;
     withlen = bfalse;
   endif;
 
-  if i_fldl0100.f1vfmi = '1';
+  if (i_fldl0100.f1vfmi = '1');
     //  Felder variabler Länge ...
-    if withlen = bfalse;
+    if (withlen = bfalse);
       //  ... ohne Längenangabe
       //      (einfügen Längenangabe)
 
@@ -337,7 +328,7 @@ dcl-proc f_isvarlen export;
   end-pi;
   // ------------------------------------------------------------------------
 
-  if i_fldl0100.f1vfmi = '1';
+  if (i_fldl0100.f1vfmi = '1');
     return btrue;
   else;
     return bfalse;
@@ -368,9 +359,9 @@ dcl-proc f_bintodec export;
     p_kill('Start position and length outside range.');
   else;
     select;
-    when i_length = 2;
+    when (i_length = 2);
       alpha2 = %subst(i_string: i_startPos: i_length);
-    when i_length = 4;
+    when (i_length = 4);
       alpha4 = %subst(i_string: i_startPos: i_length);
     other;
       p_kill('Incorrect length: ' + %char(i_length));
@@ -696,7 +687,7 @@ dcl-proc f_execute export;
   optctrllen : optctrlfmt : cmd : lenavl :
   lenavlrtn : errcode );
 
-  if errcode.bytavl <> 0;
+  if (errcode.bytavl <> 0);
     o_msgid  = errcode.excid;
     o_msgdta = errcode.excdta;
     isok     = bfalse;
@@ -754,17 +745,17 @@ dcl-proc f_basedpf export;
   peek41(yqfile: i_rcdfmt
   : '*CREATE': ynbrofent: ydata);
 
-  if ynbrofent = 0;
+  if (ynbrofent = 0);
     return bfalse;
   endif;
 
   //      prüfen auf logische Datei
   fild0100 = ydata;
 
-  if fild0100.atfila = '*LGL';
+  if (fild0100.atfila = '*LGL');
     //      ... logical file
     select;
-    when fild0100.atnomb > 1;
+    when (fild0100.atnomb > 1);
       //          ... multi-based-member logical file
       if f_basedmbr(i_file: i_lib: i_mbr
                  : i_rcdmbrnbr: i_rcdfmt
@@ -773,7 +764,7 @@ dcl-proc f_basedpf export;
         return bfalse;
       endif;
 
-    when fild0100.atnofm > 1;
+    when (fild0100.atnofm > 1);
       //          ... multi-format logical file
       if f_basedmbr(i_file: i_lib: i_mbr
                  : i_rcdmbrnbr: i_rcdfmt
@@ -874,7 +865,7 @@ dcl-proc f_basedmbr export;
   pMbrd0300 = malloc(%size(mbrd0300));
   qusrmbrd(mbrd0300: %size(mbrd0300): 'MBRD0300'
   : qFile: i_mbr: '0': errcode);
-  if errcode.bytavl <> 0;
+  if (errcode.bytavl <> 0);
     isMbrFound = bfalse;
     return isMbrFound;
   endif;
@@ -885,7 +876,7 @@ dcl-proc f_basedmbr export;
   //  Abrufen Beschreibung der Teildatei
   qusrmbrd(mbrd0300: mbrd0300.m3bytavl: 'MBRD0300'
   : qFile: i_mbr: '0': errcode);
-  if errcode.bytavl <> 0;
+  if (errcode.bytavl <> 0);
     isMbrFound = bfalse;
     return isMbrFound;
   endif;
@@ -1002,10 +993,10 @@ dcl-proc f_numbased export;
   i_mbr          :
   '0'            :
   errcode        );
-  if errcode.bytavl <> 0;
+  if (errcode.bytavl <> 0);
     f_numbased = -1;
   else;
-    if m3fileattr = 'PF';
+    if (m3fileattr = 'PF');
       f_numbased = 1;
     else;
       f_numbased = m3nbrmbr;
@@ -1138,14 +1129,14 @@ dcl-proc f_headline export;
   //  Überschrift ...
   select;
   //  ... Feldtext
-  when i_headtyp = '*FIELDTEXT';
-    if i_fldl0100.f1ftxt = ' ';
+  when (i_headtyp = '*FIELDTEXT');
+    if (i_fldl0100.f1ftxt = ' ');
       heading = '?' + i_fldl0100.f1fnme;
     else;
       heading = i_fldl0100.f1ftxt;
     endif;
   //  ... Feldtyp
-  when i_headtyp = '*FIELDTYPE';
+  when (i_headtyp = '*FIELDTYPE');
     heading = f_fieldtypeasstring(i_fldl0100);
   //  ... Feldname
   other;
@@ -1504,7 +1495,7 @@ dcl-proc f_istolongmax export;
   dcl-s tolong          like(bool_t) inz;
   // ------------------------------------------------------------------------
 
-  if f_buffln(i_fldl0100) > 1024;
+  if (f_buffln(i_fldl0100) > 1024);
     tolong = btrue;
   else;
     tolong = bfalse;
@@ -1527,7 +1518,7 @@ dcl-proc f_maxdspln export;
   //------------------------------------------------------------*
 
   maxlen =  %int(f_cntfldln(i_fldl0100) * 15);
-  if maxlen > 512;
+  if (maxlen > 512);
     maxlen = 512;
   endif;
 
@@ -1546,7 +1537,7 @@ dcl-proc f_cntfldln export;
   //------------------------------------------------------------*
 
   if (i_fldl0100.f1dtyp = 'G');
-    return 34;                                                            // TODO:18
+    return 34;
   else;
     return 35;
   endif;
@@ -1569,7 +1560,7 @@ dcl-proc f_nbrdsprw export;
   dcl-s dsplylen        like(int4_t);
   //------------------------------------------------------------*
 
-  if f_istolong(i_fldl0100) = btrue;
+  if (f_istolong(i_fldl0100) = btrue);
     dsplylen = f_maxdspln(i_fldl0100);
   else;
     dsplylen = f_dsplyln(i_fldl0100);
@@ -1622,11 +1613,11 @@ dcl-proc p_dectobin export;
   else;
     intvalue = i_value;
     select;
-    when i_length = 2;
+    when (i_length = 2);
       %subst(io_string  :
             i_startpos :
             i_length   ) = alpha2;
-    when i_length = 4;
+    when (i_length = 4);
       %subst(io_string  :
             i_startpos :
             i_length   ) = alpha4;
@@ -1761,8 +1752,6 @@ dcl-proc p_sndstsmg export;
     i_msgdta        const like(msgdta_t);
   end-pi;
 
-  dcl-s ymsgid          like(msgid_t) inz;
-
   dcl-ds yqmsgf likeds(qObj_t) inz;
 
   dcl-s msgKey         char(4) inz;
@@ -1806,12 +1795,6 @@ dcl-proc f_rtvmsgd export;
          options(*nopass);
   end-pi;
 
-  //  Parameterpositionen optionaler Parameter
-  dcl-c p_rplcsubv const(3);
-  dcl-c p_rtnfmtcc const(4);
-  dcl-c p_msgf const(5);
-  dcl-c p_msgfl const(6);
-
   //  Funktionswert
   /COPY QCOPYLE,RTVM0100
 
@@ -1833,13 +1816,13 @@ dcl-proc f_rtvmsgd export;
   msgdlen  = %len(rtvm0100);
   format   = 'RTVM0100';
 
-  if %parms >= p_msgf;
+  if (%parms() >= %parmnum(i_msgf));
     msgf  = i_msgf;
   else;
     msgf  = f_appmsgf;
   endif;
 
-  if %parms >= p_msgfl;
+  if (%parms() >= %parmnum(i_msgfl));
     msgfl = i_msgfl;
   else;
     msgfl = f_appmsgfl;
@@ -1848,8 +1831,8 @@ dcl-proc f_rtvmsgd export;
   msgdtaln = %len(i_msgdta);
 
   //  Replace substitution variables
-  if %parms >= p_rplcsubv;
-    if i_rplcsubv = btrue;
+  if (%parms() >= %parmnum(i_rplcsubv));
+    if (i_rplcsubv = btrue);
       rplcsubv = '*YES';
     else;
       rplcsubv = '*NO';
@@ -1859,8 +1842,8 @@ dcl-proc f_rtvmsgd export;
   endif;
 
   //  Return format control characters
-  if %parms >= p_rtnfmtcc;
-    if i_rtnfmtcc = btrue;
+  if (%parms() >= %parmnum(i_rtnfmtcc));
+    if (i_rtnfmtcc = btrue);
       rtnfmtcc = '*YES';
     else;
       rtnfmtcc = '*NO';
@@ -1888,15 +1871,9 @@ dcl-proc f_msgtext export;
   dcl-pi *N              char(512);
     i_msgid         value  like(msgid_t);
     i_msgdta        value  like(msgdta_t);
-    i_msgf          value  like(file_t)
-         options(*nopass);
-    i_msgfl         value  like(lib_t)
-         options(*nopass);
+    i_msgf          value  like(file_t) options(*nopass);
+    i_msgfl         value  like(lib_t)  options(*nopass);
   end-pi;
-
-  //  Parameterpositionen optionaler Parameter
-  dcl-c p_msgf const(3);
-  dcl-c p_msgfl const(4);
 
   //  Funktionswert
   dcl-s msgtext         char(512) inz;
@@ -1905,20 +1882,15 @@ dcl-proc f_msgtext export;
   //------------------------------------------------------------*
 
   select;
-  when %parms =  p_msgf;
-    rtvm0100 = f_rtvmsgd(i_msgid :i_msgdta:
-                        btrue   :bfalse  :
-                        i_msgf           );
-  when %parms =  p_msgfl;
-    rtvm0100 = f_rtvmsgd(i_msgid :i_msgdta:
-                        btrue   :bfalse  :
-                        i_msgf  :i_msgfl );
+  when (%parms() = %parmnum(i_msgf));
+    rtvm0100 = f_rtvmsgd(i_msgid: i_msgdta: btrue: bfalse: i_msgf);
+  when (%parms() =  %parmnum(i_msgfl));
+    rtvm0100 = f_rtvmsgd(i_msgid: i_msgdta: btrue: bfalse: i_msgf: i_msgfl);
   other;
-    rtvm0100 = f_rtvmsgd(i_msgid :i_msgdta:
-                        btrue   :bfalse  );
+    rtvm0100 = f_rtvmsgd(i_msgid: i_msgdta: btrue: bfalse);
   endsl;
 
-  if rt1_lnmgrt > 0;
+  if (rt1_lnmgrt > 0);
     msgtext = %subst(rt1_data: 1: rt1_lnmgrt);
   else;
     msgtext = ' ';
@@ -2008,69 +1980,69 @@ dcl-proc p_keytomsg export;
   msgdta = ' ';
 
   select;
-  when i_scnaid = k_f1;
+  when (i_scnaid = k_f1);
     msgnbr   = '0031';
-  when i_scnaid = k_f2;
+  when (i_scnaid = k_f2);
     msgnbr   = '0032';
-  when i_scnaid = k_f3;
+  when (i_scnaid = k_f3);
     msgnbr   = '0033';
-  when i_scnaid = k_f4;
+  when (i_scnaid = k_f4);
     msgnbr   = '0034';
-  when i_scnaid = k_f5;
+  when (i_scnaid = k_f5);
     msgnbr   = '0035';
-  when i_scnaid = k_f6;
+  when (i_scnaid = k_f6);
     msgnbr   = '0036';
-  when i_scnaid = k_f7;
+  when (i_scnaid = k_f7);
     msgnbr   = '0037';
-  when i_scnaid = k_f8;
+  when (i_scnaid = k_f8);
     msgnbr   = '0038';
-  when i_scnaid = k_f9;
+  when (i_scnaid = k_f9);
     msgnbr   = '0039';
-  when i_scnaid = k_f10;
+  when (i_scnaid = k_f10);
     msgnbr   = '003A';
-  when i_scnaid = k_f11;
+  when (i_scnaid = k_f11);
     msgnbr   = '003B';
-  when i_scnaid = k_f12;
+  when (i_scnaid = k_f12);
     msgnbr   = '003C';
-  when i_scnaid = k_f13;
+  when (i_scnaid = k_f13);
     msgnbr   = '00B1';
-  when i_scnaid = k_f14;
+  when (i_scnaid = k_f14);
     msgnbr   = '00B2';
-  when i_scnaid = k_f15;
+  when (i_scnaid = k_f15);
     msgnbr   = '00B3';
-  when i_scnaid = k_f16;
+  when (i_scnaid = k_f16);
     msgnbr   = '00B4';
-  when i_scnaid = k_f17;
+  when (i_scnaid = k_f17);
     msgnbr   = '00B5';
-  when i_scnaid = k_f18;
+  when (i_scnaid = k_f18);
     msgnbr   = '00B6';
-  when i_scnaid = k_f19;
+  when (i_scnaid = k_f19);
     msgnbr   = '00B7';
-  when i_scnaid = k_f20;
+  when (i_scnaid = k_f20);
     msgnbr   = '00B8';
-  when i_scnaid = k_f21;
+  when (i_scnaid = k_f21);
     msgnbr   = '00B9';
-  when i_scnaid = k_f22;
+  when (i_scnaid = k_f22);
     msgnbr   = '00BA';
-  when i_scnaid = k_f23;
+  when (i_scnaid = k_f23);
     msgnbr   = '00BB';
-  when i_scnaid = k_f24;
+  when (i_scnaid = k_f24);
     msgnbr   = '00BC';
-  when i_scnaid = k_delete;
+  when (i_scnaid = k_delete);
     msgnbr   = '00BD';
-  when i_scnaid = k_enter;
+  when (i_scnaid = k_enter);
     msgnbr   = '00F1';
-  when i_scnaid = k_help;
+  when (i_scnaid = k_help);
     msgnbr   = '00F3';
-  when i_scnaid = k_page_down;
+  when (i_scnaid = k_page_down);
     msgnbr   = '00F4';
-  when i_scnaid = k_page_up;
+  when (i_scnaid = k_page_up);
     msgnbr   = '00F5';
-  when i_scnaid = k_print_screen;
+  when (i_scnaid = k_print_screen);
     msgnbr   = '00F6';
-  when i_scnaid = k_reset;
+  when (i_scnaid = k_reset);
     msgnbr   = '00F8';
-  when i_scnaid = k_light_pen;
+  when (i_scnaid = k_light_pen);
     msgnbr   = '003F';
   other;
     msgnbr   = '0100';
@@ -2138,7 +2110,7 @@ dcl-proc f_splttxt_DEPRECATED export;
 
     // Wenn keine nachgestellten Leezeichen
     // vorhanden sind, ...
-    if rtnLen = trimLen;
+    if (rtnLen = trimLen);
       // ... dann
       //     Folgezeichen im Eingabestring prüfen
       if (%len(i_text) > rtnLen);
@@ -2151,7 +2123,7 @@ dcl-proc f_splttxt_DEPRECATED export;
           //     rückwärts nach einer Lücke für
           //     den Zeilenumbruch suchen
           dow trimLen > 0;
-            if %subst(o_text: trimLen: 1) = ' ';
+            if (%subst(o_text: trimLen: 1) = ' ');
               rtnLen = trimLen;
               %subst(o_text: 1: %len(o_text)) =
                 %subst(o_text: 1: rtnLen);
@@ -2214,7 +2186,7 @@ dcl-proc f_addptr export;
 
     pofsary = i_pointer;
 
-    if i_offset <= %elem(ofsary) - 1;
+    if (i_offset <= %elem(ofsary) - 1);
       i_pointer = %addr(ofsary(i_offset + 1));
       i_offset = 0;
     else;
@@ -2442,7 +2414,7 @@ dcl-proc f_strerror export;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   perrtext = strerror(i_errno);
-  if   perrtext = *null;
+  if (perrtext = *null);
     errtext = '';
   else;
     errtext = %str(perrtext);
@@ -2464,11 +2436,6 @@ dcl-proc f_bitor export;
     i_arg4          uns(10) value  options(*nopass);
     i_arg5          uns(10) value  options(*nopass);
   end-pi;
-
-  //  Parameterpositionen optionaler Parameter
-  dcl-c p_arg3 const(3);
-  dcl-c p_arg4 const(4);
-  dcl-c p_arg5 const(5);
 
   //  Funktionswert
   dcl-s result          uns(10) inz;
@@ -2514,10 +2481,6 @@ dcl-proc f_exist export;
   //  Return value
   dcl-s doesexist       ind inz(bfalse);
 
-  //  Parameter positions
-  dcl-c p_lib const(2);
-  dcl-c p_mbr const(4);
-
   //  Optional parameter fields
   dcl-s lib             like(i_lib       ) inz;
   dcl-s mbr             like(i_mbr       ) inz;
@@ -2531,14 +2494,14 @@ dcl-proc f_exist export;
 
   // Process optional parameter values ...
   // ... i_lib
-  if (%parms() >= p_lib and %addr(i_lib) <> *null);
+  if (%parms() >= %parmnum(i_lib) and %addr(i_lib) <> *null);
     lib = i_lib;
   else;
     lib = '*LIBL';
   endif;
 
   // ... i_mbr
-  if (%parms() >= p_mbr);
+  if (%parms() >= %parmnum(i_mbr));
     mbr = i_mbr;
   else;
     mbr = '*NONE';
@@ -2609,9 +2572,6 @@ dcl-proc f_wordwrap export;
   //  Return value
   dcl-s text            varchar(4096) inz;
 
-  //  Parameter positions
-  dcl-c p_options const(4);
-
   //  Optional parameter fields
   dcl-s options         like(i_options) inz;
 
@@ -2632,7 +2592,7 @@ dcl-proc f_wordwrap export;
 
   // Process optional parameter values ...
   // ... options
-  if %parms >= p_options;
+  if (%parms() >= %parmnum(i_options));
     options = i_options;
   else;
     options = cwordwrap_paragraph_none +
@@ -2669,7 +2629,7 @@ dcl-proc f_wordwrap export;
   //  Perform word-wrap with no respect to
   //  end-of-paragraph markers.
   // ---------------------------------------------------
-  if numeop = 0;
+  if (numeop = 0);
     text = lf_wordwrap(string: i_width: io_startpos);
   else;
     // ---------------------------------------------------
@@ -2683,12 +2643,12 @@ dcl-proc f_wordwrap export;
     theeop.position = %scan(esc: string: io_startpos);
     dow not theeop.isfound and theeop.position > 0;
       // If there is an escape character, ...
-      if %subst(string: theeop.position: 1) = esc;
+      if (%subst(string: theeop.position: 1) = esc);
         // ... then check it against the list of EOP marker
         for x = 1 to numeop;
           // If there is enough space for a EOP after the escape character
           // and if it is a known EOP, ...
-          if theeop.position <= %len(string) - %len(eop(x)) + 1;
+          if (theeop.position <= %len(string) - %len(eop(x)) + 1);
             tmpeop = %subst(string: theeop.position: %len(eop(x)));
             if f_ucase(tmpeop) = f_ucase(eop(x));
               // ... then set flag "EOP found"
@@ -2710,7 +2670,7 @@ dcl-proc f_wordwrap export;
     enddo;
 
     // If no end-of-paragraph marker is found, ...
-    if not theeop.isfound;
+    if (not theeop.isfound);
       // ... then perform standard word wrap with no respect to EOP
       text = lf_wordwrap(string: i_width: io_startpos);
     else;
@@ -2734,7 +2694,7 @@ dcl-proc f_wordwrap export;
       // Set new start position. Skip EOP if EOP
       // caused new line.
       io_startpos = io_startpos + %len(text);
-      if theeop.position = io_startpos;
+      if (theeop.position = io_startpos);
         io_startpos = io_startpos + %len(theeop.string);
       endif;
       // Set start position to 0 if new start position
@@ -2804,7 +2764,7 @@ dcl-proc lf_wordwrap;
     dow   epos >= spos;
       char = %subst(i_string: epos: 1);
       // At position width + 1 ...
-      if   epos = eposconst;
+      if (epos = eposconst);
         // ... only BLANKS are allowed
         x = %check(' ': char);
       else;
@@ -2823,7 +2783,7 @@ dcl-proc lf_wordwrap;
   endif;
 
   // If there is no delimiter, ...
-  if   epos < spos;
+  if (epos < spos);
     // ... then assume the last character to be the delimiter.
     epos = spos + i_width - 1;
   endif;
@@ -2872,8 +2832,8 @@ dcl-proc isBitOn export;
   ison = btrue;
 
   for   x = (%size(i_value) * 8) - 1 downto 0 ;
-    if   tstbts(%addr(i_testbit): x) <> 0;
-      if   tstbts(%addr(i_value): x) = 0;
+    if (tstbts(%addr(i_testbit): x) <> 0);
+      if (tstbts(%addr(i_value): x) = 0);
         ison = bfalse;
         leave;
       endif;
@@ -2914,7 +2874,7 @@ dcl-proc f_ucase export;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
-  if   i_string <> '';
+  if (i_string <> '');
     reqctrlblk.type = CVTCASE_TYPE_CCSID;
     reqctrlblk.ccsid = CVTCASE_CCSID_Job;
     reqctrlblk.case = CVTCASE_TO_UPPER;
@@ -3207,175 +3167,175 @@ dcl-proc f_mapcmdtomsg export;
   // ------------------------------------------------------------------------
 
   select;
-  when i_command = '*ENTER';
+  when (i_command = '*ENTER');
     msgid = '0001';
-  when i_command = '*EXIT';
+  when (i_command = '*EXIT');
     msgid = '0002';
-  when i_command = '*REFRESH';
+  when (i_command = '*REFRESH');
     msgid = '0003';
-  when i_command = '*ADD';
+  when (i_command = '*ADD');
     msgid = '0004';
-  when i_command = '*HEADLINE';
+  when (i_command = '*HEADLINE');
     msgid = '0005';
-  when i_command = '*TGLMRKCOL';
+  when (i_command = '*TGLMRKCOL');
     msgid = '0006';
-  when i_command = '*MOVETOP';
+  when (i_command = '*MOVETOP');
     msgid = '0007';
-  when i_command = '*POSCSR';
+  when (i_command = '*POSCSR');
     msgid = '0008';
-  when i_command = '*SEARCH';
+  when (i_command = '*SEARCH');
     msgid = '0009';
-  when i_command = '*TOP';
+  when (i_command = '*TOP');
     msgid = '0010';
-  when i_command = '*BOT';
+  when (i_command = '*BOT');
     msgid = '0011';
-  when i_command = '*LEFT';
+  when (i_command = '*LEFT');
     msgid = '0012';
-  when i_command = '*RIGHT';
+  when (i_command = '*RIGHT');
     msgid = '0013';
-  when i_command = '*CMDLINE';
+  when (i_command = '*CMDLINE');
     msgid = '0014';
-  when i_command = '*132/80';
+  when (i_command = '*132/80');
     msgid = '0015';
-  when i_command = '*MOREKEYS';
+  when (i_command = '*MOREKEYS');
     msgid = '0016';
-  when i_command = '*PAGEDOWN';
+  when (i_command = '*PAGEDOWN');
     msgid = '0017';
-  when i_command = '*PAGEUP';
+  when (i_command = '*PAGEUP');
     msgid = '0018';
-  when i_command = '*PINROW';
+  when (i_command = '*PINROW');
     msgid = '0019';
-  when i_command = '*UNPINROW';
+  when (i_command = '*UNPINROW');
     msgid = '0020';
-  when i_command = '*CHANGE';
+  when (i_command = '*CHANGE');
     msgid = '0021';
-  when i_command = '*COPY';
+  when (i_command = '*COPY');
     msgid = '0022';
-  when i_command = '*DELETE';
+  when (i_command = '*DELETE');
     msgid = '0023';
-  when i_command = '*DISPLAY';
+  when (i_command = '*DISPLAY');
     msgid = '0024';
-  when i_command = '*USERSETG';
+  when (i_command = '*USERSETG');
     msgid = '0025';
-  when i_command = '*CANCEL';
+  when (i_command = '*CANCEL');
     msgid = '0026';
-  when i_command = '*SAVE_EXIT';
+  when (i_command = '*SAVE_EXIT');
     msgid = '0027';
-  when i_command = '*PINCOL';
+  when (i_command = '*PINCOL');
     msgid = '0028';
-  when i_command = '*UNPINCOL';
+  when (i_command = '*UNPINCOL');
     msgid = '0029';
-  when i_command = '*TGLPINCOL';
+  when (i_command = '*TGLPINCOL');
     msgid = '0030';
-  when i_command = '*TBLPAPON';
+  when (i_command = '*TBLPAPON');
     msgid = '0031';
-  when i_command = '*TBLPAPOFF';
+  when (i_command = '*TBLPAPOFF');
     msgid = '0032';
-  when i_command = '*TGLTBLPAP';
+  when (i_command = '*TGLTBLPAP');
     msgid = '0033';
-  when i_command = '*YESTOALL';
+  when (i_command = '*YESTOALL');
     msgid = '0034';
-  when i_command = '*MOREOPT';
+  when (i_command = '*MOREOPT');
     msgid = '0035';
-  when i_command = '*COPYEXT';
+  when (i_command = '*COPYEXT');
     msgid = '0036';
-  when i_command = '*MRKCOL';
+  when (i_command = '*MRKCOL');
     msgid = '0037';
-  when i_command = '*UNMRKCOL';
+  when (i_command = '*UNMRKCOL');
     msgid = '0038';
-  when i_command = '*LOWERCASE';
+  when (i_command = '*LOWERCASE');
     msgid = '0039';
-  when i_command = '*UPPERCASE';
+  when (i_command = '*UPPERCASE');
     msgid = '0040';
-  when i_command = '*TGLLUCASE';
+  when (i_command = '*TGLLUCASE');
     msgid = '0041';
-  when i_command = '*SPLASHON';
+  when (i_command = '*SPLASHON');
     msgid = '0042';
-  when i_command = '*SPLASHOFF';
+  when (i_command = '*SPLASHOFF');
     msgid = '0043';
-  when i_command = '*PAGELEFT';
+  when (i_command = '*PAGELEFT');
     msgid = '0044';
-  when i_command = '*PAGERIGHT';
+  when (i_command = '*PAGERIGHT');
     msgid = '0045';
-  when i_command = '*REPEAT';
+  when (i_command = '*REPEAT');
     msgid = '0046';
-  when i_command = '*REBUILD';
+  when (i_command = '*REBUILD');
     msgid = '0047';
-  when i_command = '*CLRPINROW';
+  when (i_command = '*CLRPINROW');
     msgid = '0048';
-  when i_command = '*CLRPINCOL';
+  when (i_command = '*CLRPINCOL');
     msgid = '0049';
-  when i_command = '*LAYOUT';
+  when (i_command = '*LAYOUT');
     msgid = '0050';
-  when i_command = '*FLOATKEYS';
+  when (i_command = '*FLOATKEYS');
     msgid = '0051';
-  when i_command = '*SELECT';
+  when (i_command = '*SELECT');
     msgid = '0052';
-  when i_command = '*NEXTMARK';
+  when (i_command = '*NEXTMARK');
     msgid = '0053';
-  when i_command = '*PREVMARK';
+  when (i_command = '*PREVMARK');
     msgid = '0054';
-  when i_command = '*DSPDBR';
+  when (i_command = '*DSPDBR');
     msgid = '0055';
-  when i_command = '*PROMPT';
+  when (i_command = '*PROMPT');
     msgid = '0056';
-  when i_command = '*KEY';
+  when (i_command = '*KEY');
     msgid = '0057';
-  when i_command = '*RRN';
+  when (i_command = '*RRN');
     msgid = '0058';
-  when i_command = '*TGLACCESS';
+  when (i_command = '*TGLACCESS');
     msgid = '0059';
-  when i_command = '*HEXEDIT';
+  when (i_command = '*HEXEDIT');
     msgid = '0060';
-  when i_command = '*ABOUT';
+  when (i_command = '*ABOUT');
     msgid = '0061';
-  when i_command = '*PINCOLDLG';
+  when (i_command = '*PINCOLDLG');
     msgid = '0062';
-  when i_command = '*CLRALL';
+  when (i_command = '*CLRALL');
     msgid = '0063';
-  when i_command = '*DSPNRM';
+  when (i_command = '*DSPNRM');
     msgid = '0064';
-  when i_command = '*DSPHEX';
+  when (i_command = '*DSPHEX');
     msgid = '0065';
-  when i_command = '*TGLDSP';
+  when (i_command = '*TGLDSP');
     msgid = '0066';
-  when i_command = '*SQL';
+  when (i_command = '*SQL');
     msgid = '0067';
-  when i_command = '*INSKEYFLD';
+  when (i_command = '*INSKEYFLD');
     msgid = '0068';
-  when i_command = '*SAVEENV';
+  when (i_command = '*SAVEENV');
     msgid = '0069';
-  when i_command = '*LOADENV';
+  when (i_command = '*LOADENV');
     msgid = '0070';
-  when i_command = '*DELETEENV';
+  when (i_command = '*DELETEENV');
     msgid = '0071';
-  when i_command = '*TGLSORT';
+  when (i_command = '*TGLSORT');
     msgid = '0072';
-  when i_command = '*YES';
+  when (i_command = '*YES');
     msgid = '0073';
-  when i_command = '*NO';
+  when (i_command = '*NO');
     msgid = '0074';
-  when i_command = '*OK';
+  when (i_command = '*OK');
     msgid = '0075';
-  when i_command = '*FIRSTPOS';
+  when (i_command = '*FIRSTPOS');
     msgid = '0076';
-  when i_command = '*LASTPOS';
+  when (i_command = '*LASTPOS');
     msgid = '0077';
-  when i_command = '*SLCENV';
+  when (i_command = '*SLCENV');
     msgid = '0078';
-  when i_command = '*SLCLAYOUT';
+  when (i_command = '*SLCLAYOUT');
     msgid = '0079';
-  when i_command = '*TGLNULL';
+  when (i_command = '*TGLNULL');
     msgid = '0080';
-  when i_command = '*TGLINPUT';
+  when (i_command = '*TGLINPUT');
     msgid = '0081';
-  when i_command = '*STREDIT';
+  when (i_command = '*STREDIT');
     msgid = '0082';
-  when i_command = '*TGLRCDLCK';
+  when (i_command = '*TGLRCDLCK');
     msgid = '0083';
-  when i_command = '*TGLKEYLUC';
+  when (i_command = '*TGLKEYLUC');
     msgid = '0084';
-  when i_command = '*PRINT';
+  when (i_command = '*PRINT');
     msgid = '0085';
   other;
     msgid = '';

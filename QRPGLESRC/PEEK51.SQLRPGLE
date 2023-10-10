@@ -147,7 +147,7 @@ dcl-proc SQL_prepareStatement export;
                  ' T3';
 
   //  ... plus SELECT
-  if i_sqlselct <> ' ';
+  if (i_sqlselct <> ' ');
     sqlselectstmt = %trim(sqlselectstmt)      +
                    ' WHERE'                  +
                    ' ' + %trim(i_sqlselct);
@@ -160,14 +160,14 @@ dcl-proc SQL_prepareStatement export;
              : i: %len('RRN(T3)'));
 
   //  ... plus ORDER BY
-  if i_sqlorder <> ' ';
+  if (i_sqlorder <> ' ');
     sqlselectstmt = %trim(sqlselectstmt)      +
                    ' ORDER BY'               +
                    ' ' + %trim(i_sqlorder);
   endif;
 
   // SQL-STATEMENT VORBEREITEN
-  if i_check = bTrue;
+  if (i_check = bTrue);
     EXEC SQL
      prepare g_chkstmt from :sqlselectstmt;
   else;
@@ -255,7 +255,7 @@ dcl-proc SQL_open export;
       *in99 = *on;
     endif;
 
-    if *in99 = *on;
+    if (*in99 = *on);
       f_opnsql = bFalse;
     else;
       f_opnsql = bTrue;
@@ -502,13 +502,13 @@ dcl-proc SQL_close export;
 
     f_clssql = bFalse;
   else;
-    if cio_close(g_hfile03) = bTrue;
+    if (cio_close(g_hfile03) = bTrue);
       *in99 = '0';
     else;
       *in99 = '1';
     endif;
 
-    if *in99 = *on;
+    if (*in99 = *on);
       f_clssql = bFalse;
     else;
       f_clssql = bTrue;
@@ -631,7 +631,7 @@ dcl-proc f_sqlMsgID;
   ds_sqlCode.sqlCode = i_sqlCode * -1;
 
   for idx = 1 to 7;
-    if %subst(ds_sqlCode.msgID: idx: 1) = '0';
+    if (%subst(ds_sqlCode.msgID: idx: 1) = '0');
       %subst(ds_sqlCode.msgID: idx: 1) = %subst(SQL0000: idx: 1);
     else;
       leave;
@@ -745,7 +745,7 @@ dcl-proc f_chgField;
     //  Prüfen auf Hochkomma ...
     if (%subst(i_string: x: 1) = '"')  or
        (%subst(i_string: x: 1) = '''');
-      if ishyphen = bTrue;
+      if (ishyphen = bTrue);
         ishyphen = bFalse;
       else;
         ishyphen = bTrue;

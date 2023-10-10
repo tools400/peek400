@@ -133,7 +133,7 @@ begsr prf20;
     if (not %found(peekwrk));
     //  Hurra, eindeutige Numnmer ...
     else;
-      if work_00_ds.rcdnbr = i_rcdnbr;
+      if (work_00_ds.rcdnbr = i_rcdnbr);
       //  ... auch gut, weil derselbe Datensatz
       else;
         //  ... Fehler, doppelter Sortierfolgen-Nr.

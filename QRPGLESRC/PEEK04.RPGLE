@@ -81,7 +81,7 @@ else;
   peek41(i_qfile: i_rcdfmt: '*KEY'
         : nbrofkey: data);
 
-  if nbrofkey <= *zeros;
+  if (nbrofkey <= *zeros);
     o_msgid = 'USR0006';
     usr0006.var1 = i_qfile.name;
     usr0006.var2 = i_qfile.lib;

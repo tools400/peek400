@@ -95,7 +95,7 @@ begsr getKeyMap;
   p_setllusr(wrk_sectn: wrk_key);
 
   for do_x1 = 1 to *hival;
-    if f_readeusr(wrk_sectn: wrk_key: data)= '1';
+    if (f_readeusr(wrk_sectn: wrk_key: data)= '1');
       leave;
     endif;
 
@@ -103,13 +103,13 @@ begsr getKeyMap;
     if %parms() >= %parmnum(o_exclkeys);
       pgmcmd = data;
       i = %lookup(pgmcmd: o_exclkeys);
-      if i > 0;
+      if (i > 0);
         iter;
       endif;
     endif;
 
     exsr buildstr;
-    if x > 32;
+    if (x > 32);
       //          Fertig, Tabelle ist voll
       leave;
     endif;
@@ -123,17 +123,17 @@ begsr getKeyMap;
   p_setllusr(wrk_sectn: wrk_key);
 
   for do_x2 = 1 to *hival;
-    if f_readeusr(wrk_sectn: wrk_key: data)= '1';
+    if (f_readeusr(wrk_sectn: wrk_key: data)= '1');
       leave;
     endif;
 
     //  Numerische-Auswahlen, siehe oben ...
-    if wrk_key > '0';
+    if (wrk_key > '0');
       leave;
     endif;
 
     exsr buildstr;
-    if x > 32;
+    if (x > 32);
       //          Fertig, Tabelle ist voll
       leave;
     endif;
@@ -159,22 +159,22 @@ begsr buildstr;
   //  Für Auswahl und "="-Zeichen
   z = z + 3;
   //  Für Trennleerraum ...
-  if o_choices(x) <> *blanks;
+  if (o_choices(x) <> *blanks);
     z = z + 2;
   endif;
 
   //  Freie Länge
   y = %checkr(' ': o_choices(x));
   y = 63 - y;
-  if y < z;
+  if (y < z);
     x = x + 1;
     o_numchoices = o_numchoices + 1;
   endif;
 
-  if x > 32;
+  if (x > 32);
   //               Nix tun, Tabelle ist voll
   else;
-    if o_choices(x) = *blanks;
+    if (o_choices(x) = *blanks);
       o_choices(x) = %trimr(wrk_key);
     else;
       o_choices(x) = %trimr(o_choices(x)) +

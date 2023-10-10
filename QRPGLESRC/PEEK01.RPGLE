@@ -195,60 +195,60 @@ begsr cvtedtcde;
 
   select;
   //  Keine Umsetzung der EDTCDE's
-  when set0001.set_dspsgn = '0';
+  when (set0001.set_dspsgn = '0');
 
   //  Mappen Edit Code
-  when set0001.set_dspsgn = '1';
+  when (set0001.set_dspsgn = '1');
     select;
-    when f_edtcde = '1';
+    when (f_edtcde = '1');
       f_edtcde = 'J';
-    when f_edtcde = '2';
+    when (f_edtcde = '2');
       f_edtcde = 'K';
-    when f_edtcde = '3';
+    when (f_edtcde = '3');
       f_edtcde = 'L';
-    when f_edtcde = '4';
+    when (f_edtcde = '4');
       f_edtcde = 'M';
-    when f_edtcde = 'Z';
+    when (f_edtcde = 'Z');
       f_edtcde = 'L';
-    when f_edtcde = 'X';
+    when (f_edtcde = 'X');
       f_edtcde = 'L';
     other;
     //  Keine Umsetzung des EDTCDE's
     endsl;
 
   //  Mappen Edit Code - Keine Nullenunterdrückung
-  when set0001.set_dspsgn = '2';
+  when (set0001.set_dspsgn = '2');
     select;
-    when f_edtcde = '1';
+    when (f_edtcde = '1');
       f_edtcde = 'J';
-    when f_edtcde = '2';
+    when (f_edtcde = '2');
       f_edtcde = 'J';
-    when f_edtcde = '3';
+    when (f_edtcde = '3');
       f_edtcde = 'L';
-    when f_edtcde = '4';
+    when (f_edtcde = '4');
       f_edtcde = 'L';
 
-    when f_edtcde = 'B';
+    when (f_edtcde = 'B');
       f_edtcde = 'A';
-    when f_edtcde = 'D';
+    when (f_edtcde = 'D');
       f_edtcde = 'C';
 
-    when f_edtcde = 'K';
+    when (f_edtcde = 'K');
       f_edtcde = 'J';
-    when f_edtcde = 'M';
+    when (f_edtcde = 'M');
       f_edtcde = 'L';
 
-    when f_edtcde = 'O';
+    when (f_edtcde = 'O');
       f_edtcde = 'N';
-    when f_edtcde = 'Q';
+    when (f_edtcde = 'Q');
       f_edtcde = 'P';
 
-    when f_edtcde = 'Z';
+    when (f_edtcde = 'Z');
       f_edtcde = 'L';
-    when f_edtcde = 'X';
+    when (f_edtcde = 'X');
       f_edtcde = 'L';
 
-    when f_edtcde = ' ';
+    when (f_edtcde = ' ');
       f_edtcde = set0001.set_editcode;
     endsl;
 

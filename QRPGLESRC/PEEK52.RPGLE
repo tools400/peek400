@@ -135,7 +135,7 @@ dow ('1');
   //  in Programmbefehl
   peek21(workstn.aid: sds.pgmname
         : ypgmcmd: ycmddta: ymsgid: ymsgdta);
-  if ymsgid <> *blanks;
+  if (ymsgid <> *blanks);
     p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
     ymsgid = '';
     ymsgdta = '';
@@ -145,28 +145,28 @@ dow ('1');
   //  Abfragen der Programmbefehle
   select;
   //  F3  - Ende
-  when ypgmcmd = '*EXIT';
+  when (ypgmcmd = '*EXIT');
     exsr c_endpgm;
     leave;
 
   //  F5  - Aktualisieren
-  when ypgmcmd = '*REFRESH';
+  when (ypgmcmd = '*REFRESH');
     exsr c_refresh;
     iter;
 
   //  F12 - Ende
-  when ypgmcmd = '*CANCEL';
+  when (ypgmcmd = '*CANCEL');
     exsr c_endpgm;
     leave;
 
   //  F24 - Weitere Tasten
-  when ypgmcmd = '*MOREKEYS';
+  when (ypgmcmd = '*MOREKEYS');
     exsr c_morekeys;
 
   //  Datenfreigabe
-  when ypgmcmd = '*ENTER';
+  when (ypgmcmd = '*ENTER');
     exsr c_enter;
-    if *in99 = *off;
+    if (*in99 = *off);
       o_msgid = 'USR8112';
       o_msgdta = *blanks;
 
@@ -257,7 +257,7 @@ begsr c_enter;
     o_cdlock = ##rcdlck;
     o_nulldft = ##nulldft;
     o_keepcrs = ##keepcrs;
-    if ##save = bTrue;
+    if (##save = bTrue);
       exsr savusrsetg;
     endif;
   endif;
@@ -332,7 +332,7 @@ begsr prf20;
 
   enddo;
 
-  if *in99 = *on;
+  if (*in99 = *on);
     *in20 = '1';
     *in30 = '1';
   endif;
@@ -357,7 +357,7 @@ begsr prf21;
 
   enddo;
 
-  if *in99 = *on;
+  if (*in99 = *on);
     *in21 = '1';
     *in31 = '1';
   endif;
@@ -382,7 +382,7 @@ begsr prf22;
 
   enddo;
 
-  if *in99 = *on;
+  if (*in99 = *on);
     *in22 = '1';
     *in32 = '1';
   endif;
@@ -407,7 +407,7 @@ begsr prf23;
 
   enddo;
 
-  if *in99 = *on;
+  if (*in99 = *on);
     *in23 = '1';
     *in33 = '1';
   endif;
@@ -431,7 +431,7 @@ begsr prf24;
 
   enddo;
 
-  if *in99 = *on;
+  if (*in99 = *on);
     *in20 = '1';
     *in30 = '1';
     *in22 = '1';
@@ -458,7 +458,7 @@ begsr prf25;
 
   enddo;
 
-  if *in99 = *on;
+  if (*in99 = *on);
     *in25 = '1';
     *in35 = '1';
   endif;
@@ -483,7 +483,7 @@ begsr prf26;
 
   enddo;
 
-  if *in99 = *on;
+  if (*in99 = *on);
     *in26 = '1';
     *in36 = '1';
   endif;
@@ -528,9 +528,9 @@ begsr c_endpgm;
   o_msgid = 'USR8100';
 
   select;
-  when workstn.aid = k_f3;
+  when (workstn.aid = k_f3);
     usr8100.var1 = 'F3';
-  when workstn.aid = k_f12;
+  when (workstn.aid = k_f12);
     usr8100.var1 = 'F12';
   other;
     usr8100.var1 = 'Fxx';

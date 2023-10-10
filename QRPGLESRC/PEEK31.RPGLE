@@ -65,7 +65,7 @@ o_msgid = *blanks;
 o_msgdta = *blanks;
 
 //  Ermitteln der zu verwendenden Sprache ...
-if io_language = '*DFT';
+if (io_language = '*DFT');
   //  ... Standardsprache
   set0004 = f_getusrsg('*LANGUAGE':  o_msgid: o_msgdta);
 else;

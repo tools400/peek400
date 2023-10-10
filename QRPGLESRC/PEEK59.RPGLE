@@ -173,7 +173,7 @@ dow ('1');
   //  in Programmbefehl
   peek21(workstn.aid: sds.pgmname
         : ypgmcmd: ycmddta: ymsgid: ymsgdta);
-  if ymsgid <> ' ';
+  if (ymsgid <> ' ');
     p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
     ymsgid = '';
     ymsgdta = '';
@@ -183,7 +183,7 @@ dow ('1');
   //  Abfragen der Programmbefehle
   select;
   //  F5  - Aktualisieren
-  when ypgmcmd = '*REFRESH';
+  when (ypgmcmd = '*REFRESH');
     exsr c_refresh;
     iter;
   //  F9  - Yes
@@ -205,7 +205,7 @@ dow ('1');
     leave;
 
   //  F24 - Weitere Tasten
-  when ypgmcmd = '*MOREKEYS';
+  when (ypgmcmd = '*MOREKEYS');
     exsr c_morekeys;
     iter;
 
@@ -340,22 +340,22 @@ begsr fill##;
   $$line#01 = f_wordwrap(msgtext: 40: strpos);
   $$line#01 = %triml($$line#01);
   //  ... Zeile 2
-  if strpos > 0;
+  if (strpos > 0);
     $$line#02 = f_wordwrap(msgtext: 40: strpos);
     $$line#02 = %triml($$line#02);
   endif;
   //  ... Zeile 3
-  if strpos > 0;
+  if (strpos > 0);
     $$line#03 = f_wordwrap(msgtext: 40: strpos);
     $$line#03 = %triml($$line#03);
   endif;
   //  ... Zeile 4
-  if strpos > 0;
+  if (strpos > 0);
     $$line#04 = f_wordwrap(msgtext: 40: strpos);
     $$line#04 = %triml($$line#04);
   endif;
   //  ... Zeile 5
-  if strpos > 0;
+  if (strpos > 0);
     $$line#05 = f_wordwrap(msgtext: 40: strpos);
     $$line#05 = %triml($$line#05);
   endif;
@@ -365,28 +365,28 @@ begsr fill##;
   yfkeys(*) = '';
   $$fkey(*) = '';
   //  ... YES
-  if f_scan('Y': i_keys) <> 0;
+  if (f_scan('Y': i_keys) <> 0);
     nbrofkeys = nbrofkeys + 1;
     ykey = '*YES';
     exsr getkey;
     $$fkey(nbrofkeys) = yfkeys(1);
   endif;
   //  ... NO
-  if f_scan('N': i_keys) <> 0;
+  if (f_scan('N': i_keys) <> 0);
     nbrofkeys = nbrofkeys + 1;
     ykey = '*NO';
     exsr getkey;
     $$fkey(nbrofkeys) = yfkeys(1);
   endif;
   //  ... OK
-  if f_scan('E': i_keys) <> 0;
+  if (f_scan('E': i_keys) <> 0);
     nbrofkeys = nbrofkeys + 1;
     ykey = '*OK';
     exsr getkey;
     $$fkey(nbrofkeys) = yfkeys(1);
   endif;
   //  ... CANCEL
-  if f_scan('C': i_keys) <> 0;
+  if (f_scan('C': i_keys) <> 0);
     nbrofkeys = nbrofkeys + 1;
     ykey = '*CANCEL';
     exsr getkey;
@@ -394,7 +394,7 @@ begsr fill##;
   endif;
 
   //  Sortieren der Funktionstasten
-  if nbrofkeys > 1;
+  if (nbrofkeys > 1);
     dou ischanged = bfalse;
       ischanged = bfalse;
       for x = 2 to nbrofkeys;
@@ -402,7 +402,7 @@ begsr fill##;
         int1 = atoi(%addr(tmpfkey));
         tmpfkey = %subst(scrnfkeys(x  ): 2)+x'00';
         int2 = atoi(%addr(tmpfkey));
-        if int2 < int1;
+        if (int2 < int1);
           ischanged = btrue;
           tmpfkey = scrnfkeys(x-1);
           scrnfkeys(x-1) = scrnfkeys(x);
@@ -433,7 +433,7 @@ endsr;
 
 begsr setscreen;
 
-  if i_dsp80 = *off;
+  if (i_dsp80 = *off);
     //   132-Zeichen Anzeige
     *in88 = *off;
     zei = 6 + 1;

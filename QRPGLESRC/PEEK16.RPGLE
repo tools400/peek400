@@ -289,7 +289,7 @@ open peeksrc;
 for do_x1 = 1 to *hival;
   read finput;
   *in11 = %eof;
-  if *in11 = beof;
+  if (*in11 = beof);
     leave;
   endif;
 
@@ -298,122 +298,122 @@ for do_x1 = 1 to *hival;
   select;
 
   //  File 1
-  when cmd = 'FMT1';
+  when (cmd = 'FMT1');
     ds_fmtnme = srcdta;
     $fmtnm_xnm = i_rcdfmt;
     p_wrtout(ds_fmtnme);
 
   //  Felddefinitionen
-  when cmd = 'DEF1';
+  when (cmd = 'DEF1');
     p_wrtout(srcdta);
     exsr sub014;
 
   //  Umbenennen /copy Anweisungen
-  when cmd = 'COPY';
+  when (cmd = 'COPY');
     exsr sub025;
     p_wrtout(srcdta);
 
   //  Konstanten für "Feld zu lang"
-  when cmd = 'DEF2';
+  when (cmd = 'DEF2');
     p_wrtout(srcdta);
     exsr sub016;
 
   //  Prüfen ...
-  when cmd = 'CHKS';
+  when (cmd = 'CHKS');
     p_wrtout(srcdta);
     exsr sub015;
 
   //  Blättern ...
-  when cmd = 'SCRN';
+  when (cmd = 'SCRN');
     p_wrtout(srcdta);
     exsr sub003;
 
   //  Letzte Seite ...
-  when cmd = 'LSCN';
+  when (cmd = 'LSCN');
     exsr sub001;
 
   //  isLower ...
-  when cmd = 'LCAS';
+  when (cmd = 'LCAS');
     exsr sub002;
 
   //  isRcdLock...
-  when cmd = 'RLCK';
+  when (cmd = 'RLCK');
     exsr sub019;
 
   //  Übertragen Dateifelder in Bildschirmfelder
-  when cmd = 'TSCN';
+  when (cmd = 'TSCN');
     p_wrtout(srcdta);
     exsr sub004;
 
   //  Übertragen Felder > 512 in Dateifelder
-  when cmd = 'FSCN';
+  when (cmd = 'FSCN');
     p_wrtout(srcdta);
     exsr sub007;
     exsr sub005;
 
   //  Prüfung ungültige Zeichen
-  when cmd = 'CHKC';
+  when (cmd = 'CHKC');
     p_wrtout(srcdta);
     exsr sub006;
 
   //  Setzen NULL Indicator
-  when cmd = 'NULL';
+  when (cmd = 'NULL');
     p_wrtout(srcdta);
     exsr sub017;
 
   //  Hex-Editierung
-  when cmd = 'HEX';
+  when (cmd = 'HEX');
     p_wrtout(srcdta);
     exsr sub008;
 
   //  Text-Editierung
-  when cmd = 'TXT';
+  when (cmd = 'TXT');
     p_wrtout(srcdta);
     exsr sub018;
 
   //  Rename-Struktur
-  when cmd = 'RNM2';
+  when (cmd = 'RNM2');
     p_wrtout(srcdta);
     exsr sub009;
 
   //  Rename-Struktur
-  when cmd = 'RNM1';
+  when (cmd = 'RNM1');
     ds_buflen = srcdta;
     $bufln_ln = rcd_buff_len;
     p_wrtout(ds_buflen);
     exsr sub010;
 
   //  initialisieren ISO-Felder
-  when cmd = 'ISO ';
+  when (cmd = 'ISO ');
     p_wrtout(srcdta);
     exsr sub011;
 
   //  isAlwLower ...
-  when cmd = 'ALWL';
+  when (cmd = 'ALWL');
     exsr sub012;
 
   //  1. Seite ...
-  when cmd = 'SCN1';
+  when (cmd = 'SCN1');
     exsr sub013;
 
   //  Übertragen Dateifelder in Bildschirmfelder
-  when cmd = 'TOS';
+  when (cmd = 'TOS');
     exsr sub020;
 
   //  Übertragen Bildschirmfelder in Dateifelder
-  when cmd = 'TOF';
+  when (cmd = 'TOF');
     exsr sub021;
 
   //  Löschen Felder im Datensatz
-  when cmd = 'CLR';
+  when (cmd = 'CLR');
     exsr sub022;
 
   //  Beibehalten Cursor Position
-  when cmd = 'KEEP';
+  when (cmd = 'KEEP');
     exsr sub023;
 
   //  UCS-2 Feld für String/Hex Editor
-  when cmd = 'UCS2';
+  when (cmd = 'UCS2');
   //**                Exsr      SUB024
 
   other;
@@ -448,7 +448,7 @@ begsr sub002;
 
   ds_lcas = srcdta;
 
-  if i_case = btrue;
+  if (i_case = btrue);
     $lcas_inz = 'bTrue';
   else;
     $lcas_inz = 'bFalse';
@@ -472,7 +472,7 @@ begsr sub003;
     p_wrtout(ds_page);
 
     //  Exfmt     LC001
-    if i_alwlc = btrue;
+    if (i_alwlc = btrue);
       reset ds_exfmt;
       $exfmt_neg = ' ';
       $exfmt_sc  = 'LC';
@@ -507,7 +507,7 @@ begsr sub004;
 
     fieldcount = fieldcount + 1;
 
-    if f_isnotalw(fldl0100) = btrue;
+    if (f_isnotalw(fldl0100) = btrue);
       reset ds_remark;
       $rem_txt = fldl0100.f1vfld + UNKNOWN_FIELD_TYPE;
       p_wrtout(ds_remark);
@@ -575,14 +575,14 @@ begsr sub005;
 
     //            not (LNG0000001 = '1')
     reset ds_if;
-    $if_if  = ' ';
+    $if_if (= ' ');
     $if_fct2='not (LNG' + a#fdcount + ' = ''1'')';
     p_wrtout(ds_if);
 
     //  Übertragen BS-Feld in Dateifeld ...
     if (fldl0100.f1nalw = '1');
       reset ds_if;
-      $if_if   = '';
+      $if_if (= '');
       $if_fct2 = 'and not %nullind(' +
                    %trimr(fldl0100.f1vfld) + ')';
       p_wrtout(ds_if);
@@ -592,8 +592,7 @@ begsr sub005;
     $exsr_fct2 = 'f_' + %trim(fldl0100.f1vfld);
     p_wrtout(ds_exsr);
 
-    //  ENDIF
-    reset ds_endif;
+    //  ENDIF (reset ds_endif);
     p_wrtout(ds_endif);
 
   enddo;
@@ -618,7 +617,7 @@ begsr sub006;
   for do_x2 = 1 to *hival;
     read fcopy1;
     *in11 = %eof;
-    if *in11 = beof;
+    if (*in11 = beof);
       leave;
     endif;
 
@@ -662,7 +661,7 @@ begsr sub008;
   for do_x3 = 1 to *hival;
     read fcopy2;
     *in11 = %eof;
-    if *in11 = beof;
+    if (*in11 = beof);
       leave;
     endif;
 
@@ -808,8 +807,7 @@ begsr sub011;
     endsl;
 
     p_wrtout(ds_eval);
-    //  Endif
-    reset ds_endif;
+    //  Endif (reset ds_endif);
     p_wrtout(ds_endif);
     //  Remark
     reset ds_remark;
@@ -832,7 +830,7 @@ begsr sub012;
 
   ds_alwl = srcdta;
 
-  if i_alwlc = btrue;
+  if (i_alwlc = btrue);
     $alwl_inz = 'bTrue';
   else;
     $alwl_inz = 'bFalse';
@@ -848,7 +846,7 @@ endsr;
 
 begsr sub013;
 
-  if i_alwlc = btrue;
+  if (i_alwlc = btrue);
     reset ds_exfmt;
     $exfmt_neg = ' ';
     $exfmt_sc  = 'LC';
@@ -877,7 +875,7 @@ begsr sub014;
   for do_x4 = 1 to *hival;
     read fcopy3;
     *in11 = %eof;
-    if *in11 = beof;
+    if (*in11 = beof);
       leave;
     endif;
 
@@ -923,7 +921,7 @@ begsr sub016;
   for do_x5 = 1 to *hival;
     read fcopy4;
     *in11 = %eof;
-    if *in11 = beof;
+    if (*in11 = beof);
       leave;
     endif;
 
@@ -947,7 +945,7 @@ begsr sub017;
   for do_x6 = 1 to *hival;
     read fcopy5;
     *in11 = %eof;
-    if *in11 = beof;
+    if (*in11 = beof);
       leave;
     endif;
 
@@ -971,7 +969,7 @@ begsr sub018;
   for do_x7 = 1 to *hival;
     read fcopy6;
     *in11 = %eof;
-    if *in11 = beof;
+    if (*in11 = beof);
       leave;
     endif;
 
@@ -990,7 +988,7 @@ begsr sub019;
 
   ds_rcdlock = srcdta;
 
-  if i_rcdlock = btrue;
+  if (i_rcdlock = btrue);
     $rcdlock_inz = 'bTrue';
   else;
     $rcdlock_inz = 'bFalse';
@@ -1016,7 +1014,7 @@ begsr sub020;
 
     fieldcount = fieldcount + 1;
 
-    if f_isnotalw(fldl0100) = btrue;
+    if (f_isnotalw(fldl0100) = btrue);
       iter;
     endif;
 
@@ -1045,7 +1043,7 @@ begsr sub020;
 
       for curfield = 1 to totfields;
         reset ds_clear;
-        if totfields = 1;
+        if (totfields = 1);
           $clear_field = 'FLD' + a#fdcount;
         else;
           $clear_field = 'FLD' + a#fdcount
@@ -1069,7 +1067,7 @@ begsr sub020;
 
     endif;
 
-    if totfields > 1;
+    if (totfields > 1);
 
       //  Generieren:    offs = 0
       reset ds_remark;
@@ -1126,14 +1124,14 @@ begsr sub020;
     for curfield = 1 to totfields;
 
       //  Generieren:    When (x = 1)
-      if totfields > 1;
+      if (totfields > 1);
         reset ds_when;
         $when_fct2 = '(x = ' + %char(curfield) +
                     ' and len > 0)';
         p_wrtout(ds_when);
       endif;
 
-      if totfields = 1;
+      if (totfields = 1);
         reset ds_eval;
         $eval_fct2 = 'FLD' + a#fdcount +
                     ' = ' + fldl0100.f1vfld;
@@ -1154,7 +1152,7 @@ begsr sub020;
     endfor;
 
     //  Generieren:    Endsl
-    if totfields > 1;
+    if (totfields > 1);
       reset ds_endsl;
       p_wrtout(ds_endsl);
 
@@ -1205,7 +1203,7 @@ begsr sub021;
 
     fieldcount = fieldcount + 1;
 
-    if f_isnotalw(fldl0100) = btrue;
+    if (f_isnotalw(fldl0100) = btrue);
       iter;
     endif;
 
@@ -1219,7 +1217,7 @@ begsr sub021;
     $begsr_f1 = 'f_' + %trim(fldl0100.f1vfld);
     p_wrtout(ds_begsr);
 
-    if f_ischarfld(fldl0100) = btrue;
+    if (f_ischarfld(fldl0100) = btrue);
       reset ds_eval;
       $eval_fct2 =
        %trim(fldl0100.f1vfld) + ' = %trimR(';
@@ -1235,10 +1233,10 @@ begsr sub021;
       reset ds_eval;
       clear $eval_code;
       $eval_fct2 = %trim('FLD' + a#fdcount);
-      if totfields > 1;
+      if (totfields > 1);
         $eval_fct2 = %trimr($eval_fct2) +
                     %editc(curfield: 'X');
-        if curfield < totfields;
+        if (curfield < totfields);
           $eval_fct2 = %trimr($eval_fct2) + ' +';
         endif;
       endif;
@@ -1246,7 +1244,7 @@ begsr sub021;
       p_wrtout(ds_eval);
     endfor;
 
-    if f_ischarfld(fldl0100) = btrue;
+    if (f_ischarfld(fldl0100) = btrue);
       reset ds_eval;
       $eval_code = '';
       $eval_fct2 = ')';
@@ -1284,7 +1282,7 @@ begsr sub022;
 
     fieldcount = fieldcount + 1;
 
-    if f_isnotalw(fldl0100) = btrue;
+    if (f_isnotalw(fldl0100) = btrue);
       iter;
     endif;
 
@@ -1315,7 +1313,7 @@ begsr sub023;
 
   ds_keepcrs = srcdta;
 
-  if i_keepcrs = btrue;
+  if (i_keepcrs = btrue);
     $keepcrs_inz = '''1''';
   else;
     $keepcrs_inz = '''0''';

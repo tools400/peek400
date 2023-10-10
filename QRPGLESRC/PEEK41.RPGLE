@@ -184,19 +184,19 @@ ceehdlr(%paddr('errorHandler')
        : *null: *omit);
 
 select;
-when i_function = '*CREATE';
+when (i_function = '*CREATE');
   exsr create;
-when i_function = '*BASED-ON';
+when (i_function = '*BASED-ON');
   exsr based_on;
-when i_function = '*KEY';
+when (i_function = '*KEY');
   exsr key;
-when i_function = '*READKEY';
+when (i_function = '*READKEY');
   exsr readkey;
-when i_function = '*READTEXT';
+when (i_function = '*READTEXT');
   exsr readtext;
-when i_function = '*SELECT';
+when (i_function = '*SELECT');
   exsr select;
-when i_function = '*READSEL';
+when (i_function = '*READSEL');
   exsr readselect;
 endsl;
 
@@ -250,7 +250,7 @@ begsr api_crt;
   //  Uhrzeit
   fild0100.atrtim = now.time6;
 
-  if o_nbrofent <= *zeros;
+  if (o_nbrofent <= *zeros);
     //  Fehler aufgetreten
     //  Datei/Bibliothek
     fild0100.atfile = '*ERROR';
@@ -410,7 +410,7 @@ endsr;
 
 begsr based_on;
 
-  if %check('0123456789': %trim(i_rcdfmt)) = 0;
+  if (%check('0123456789': %trim(i_rcdfmt)) = 0);
     //**                Eval      mbrNbr = %dec(%trim(XRcdFormat): 10: 0)
     //**                EXSR      FindMbr
     p_kill('Incorrect record format name: ' +
@@ -419,7 +419,7 @@ begsr based_on;
     exsr findrcdfmt;
   endif;
 
-  if isfound = btrue;
+  if (isfound = btrue);
     //  store number of key fields ...
     clear bspf0100;
     bspf0100.bffile = filescope.qdbfbf;
@@ -443,7 +443,7 @@ endsr;
 begsr key;
 
   exsr findrcdfmt;
-  if isfound = btrue;
+  if (isfound = btrue);
     //  store number of key fields ...
     nbrofkeyfd = filescope.qdbfbgky;
     posofkeyfd = *zeros;
@@ -463,7 +463,7 @@ endsr;
 
 begsr readkey;
 
-  if posofkeyfd < nbrofkeyfd;
+  if (posofkeyfd < nbrofkeyfd);
 
     offset = posofkeyfd * %size(keyspecay);
     offset = offset + filescope.qdbfksof;
@@ -509,27 +509,27 @@ begsr readkey;
       //  ... keyed
       select;
       //      ... arrival sequence
-      when filedefhd.qdbfpact = 'AR';
+      when (filedefhd.qdbfpact = 'AR');
         keyl0100.apuniq = '*BLANKS';                                 // no unique key
         keyl0100.apkeyo = '*BLANKS';                                 // no order
       //      ... keyed, no unique, FCFO order
-      when filedefhd.qdbfpact = 'KC';
+      when (filedefhd.qdbfpact = 'KC');
         keyl0100.apuniq = 'N';                                       // no unique key
         keyl0100.apkeyo = 'C';                                       // FCFO oder
       //      ... keyed, no unique, FIFO order
-      when filedefhd.qdbfpact = 'KF';
+      when (filedefhd.qdbfpact = 'KF');
         keyl0100.apuniq = 'N';                                       // no unique key
         keyl0100.apkeyo = 'F';                                       // FIFO order
       //      ... keyed, no unique, LIFO order
-      when filedefhd.qdbfpact = 'KL';
+      when (filedefhd.qdbfpact = 'KL');
         keyl0100.apuniq = 'N';                                       // no unique key
         keyl0100.apkeyo = 'L';                                       // LIFO order
       //      ... keyed, no unique, no order
-      when filedefhd.qdbfpact = 'KN';
+      when (filedefhd.qdbfpact = 'KN');
         keyl0100.apuniq = 'N';                                       // no unique key
         keyl0100.apkeyo = 'N';                                       // no order
       //      ... keyed, unique, FIFO order - see DSPFD
-      when filedefhd.qdbfpact = 'KU';
+      when (filedefhd.qdbfpact = 'KU');
         keyl0100.apuniq = 'Y';                                       // no unique key
         keyl0100.apkeyo = 'N';                                       // FIFO order
 
@@ -662,7 +662,7 @@ endsr;
 begsr select;
 
   exsr findrcdfmt;
-  if isfound = btrue;
+  if (isfound = btrue);
     //  store number of select/omit statements ...
     nbrofslom = filescope.qdbfsoon;
     posofslom = *zeros;
@@ -682,7 +682,7 @@ endsr;
 
 begsr readselect;
 
-  if posofslom < nbrofslom;
+  if (posofslom < nbrofslom);
 
     //  Set pointer to select/omit specification entry
     offset = posofslom * %size(selspecay);
@@ -827,7 +827,7 @@ endsr;
 
 begsr findmbr;
 
-  if mbrnbr < 1 or mbrnbr > filedefhd.qdbflbnum;
+  if (mbrnbr < 1 or mbrnbr > filedefhd.qdbflbnum);
     isfound = bFalse;
   else;
     offset = filedefhd.qdbfos + ((mbrnbr -1) * %size(filescope));

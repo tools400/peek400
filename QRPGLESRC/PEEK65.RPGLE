@@ -187,7 +187,7 @@
              fldl0100 = f_ffd;
 
              //  nicht erlaubte Feldtypen
-             if f_isnotalw(fldl0100) = btrue;
+             if (f_isnotalw(fldl0100) = btrue);
                 iter;
              endif;
 
@@ -284,7 +284,7 @@
                 endif;
 
                 if (iscvtchar = bfalse);
-                   if ymsgid <> *blanks;
+                   if (ymsgid <> *blanks);
                       iscvtchar = btrue;
                       $$error = f_msgtext(ymsgid: ymsgdta);
                    else;

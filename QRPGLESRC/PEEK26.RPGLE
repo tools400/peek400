@@ -156,7 +156,7 @@ dow ('1');
   //  in Programmbefehl
   peek21(workstn.aid: sds.pgmname
         : ypgmcmd: ycmddta: ymsgid: ymsgdta);
-  if ymsgid <> *blanks;
+  if (ymsgid <> *blanks);
     p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
     ymsgid = '';
     ymsgdta = '';
@@ -166,28 +166,28 @@ dow ('1');
   //  Abfragen der Befehlstasten
   select;
   //  F3  - Ende
-  when ypgmcmd = '*EXIT';
+  when (ypgmcmd = '*EXIT');
     exsr c_endpgm;
     leave;
 
   //  F5  - Aktualisieren
-  when ypgmcmd = '*REFRESH';
+  when (ypgmcmd = '*REFRESH');
     exsr c_refresh;
     iter;
 
   //  F12 - Ende
-  when ypgmcmd = '*CANCEL';
+  when (ypgmcmd = '*CANCEL');
     exsr c_endpgm;
     leave;
 
   //  F24 - Weitere Tasten
-  when ypgmcmd = '*MOREKEYS';
+  when (ypgmcmd = '*MOREKEYS');
     exsr c_morekeys;
 
   //  Datenfreigabe
-  when ypgmcmd = '*ENTER';
+  when (ypgmcmd = '*ENTER');
     exsr c_enter;
-    if *in99 = *off;
+    if (*in99 = *off);
       leave;
     endif;
 
@@ -211,7 +211,7 @@ begsr c_enter;
 
   exsr prfb1;
 
-  if *in99 = *off;
+  if (*in99 = *off);
     o_tofile = ##file;
     o_tolib = ##library;
     o_tombr = ##member;
@@ -327,9 +327,9 @@ begsr prf21;
     endif;
 
     %subst(a1:1:1) = %subst(##library:1:1);
-    if a1 = '*';
+    if (a1 = '*');
       //  Sonderwerte ...
-      if ##library = '*LIBL';
+      if (##library = '*LIBL');
       //  ... gültig
       else;
         //  ... ungültig
@@ -387,7 +387,7 @@ begsr prf22;
 
   enddo;
 
-  if *in99 = *on;
+  if (*in99 = *on);
     *in22 = '1';
     *in32 = '1';
   endif;
@@ -457,9 +457,9 @@ begsr c_endpgm;
   o_msgid = 'USR8100';
 
   select;
-  when workstn.aid = k_f3;
+  when (workstn.aid = k_f3);
     usr8100.var1 = 'F3';
-  when workstn.aid = k_f12;
+  when (workstn.aid = k_f12);
     usr8100.var1 = 'F12';
   other;
     usr8100.var1 = 'Fxx';
@@ -495,19 +495,19 @@ endsr;
 
 begsr fill##;
 
-  if ##library = '';
+  if (##library = '');
     ##library = '*LIBL';
   endif;
 
-  if ##member = '';
+  if (##member = '');
     ##member = '*FIRST';
   endif;
 
-  if ##mbropt = '';
+  if (##mbropt = '');
     ##mbropt = '*ADD';
   endif;
 
-  if ##crtfile = '';
+  if (##crtfile = '');
     ##crtfile = '*NO';
   endif;
 
@@ -519,7 +519,7 @@ endsr;
 
 begsr setscreen;
 
-  if i_dsp80 = '0';
+  if (i_dsp80 = '0');
     //   132-Zeichen Anzeige
     *in88 = '0';
     zei = 8;

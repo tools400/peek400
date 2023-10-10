@@ -153,7 +153,7 @@ dow ('1');
   //  in Programmbefehl
   peek21(workstn.aid: sds.pgmname
         : ypgmcmd: ycmddta: ymsgid: ymsgdta);
-  if ymsgid <> *blanks;
+  if (ymsgid <> *blanks);
     p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
     ymsgid = '';
     ymsgdta = '';
@@ -163,28 +163,28 @@ dow ('1');
   //  Abfragen der Programmbefehle
   select;
   //  F3  - Ende
-  when ypgmcmd = '*EXIT';
+  when (ypgmcmd = '*EXIT');
     exsr c_endpgm;
     leave;
 
   //  F5  - Aktualisieren
-  when ypgmcmd = '*REFRESH';
+  when (ypgmcmd = '*REFRESH');
     exsr c_refresh;
     iter;
 
   //  F12 - Ende
-  when ypgmcmd = '*CANCEL';
+  when (ypgmcmd = '*CANCEL');
     exsr c_endpgm;
     leave;
 
   //  F24 - Weitere Tasten
-  when ypgmcmd = '*MOREKEYS';
+  when (ypgmcmd = '*MOREKEYS');
     exsr c_morekeys;
 
   //  Datenfreigabe
-  when ypgmcmd = '*ENTER';
+  when (ypgmcmd = '*ENTER');
     exsr c_enter;
-    if *in99 = *off;
+    if (*in99 = *off);
       o_msgid = 'USR8112';
       o_msgdta = *blanks;
       leave;
@@ -237,9 +237,9 @@ begsr c_endpgm;
   o_msgid = 'USR8100';
 
   select;
-  when workstn.aid = k_f3;
+  when (workstn.aid = k_f3);
     usr8100.var1 = 'F3';
-  when workstn.aid = k_f12;
+  when (workstn.aid = k_f12);
     usr8100.var1 = 'F12';
   other;
     usr8100.var1 = 'Fxx';
@@ -283,15 +283,15 @@ begsr fill##;
   r$modf = %subst(i_version: 5: 2);
   r$rels = %subst(i_version: 8: 2);
 
-  if %subst(r$vers: 1: 1) = '0';
+  if (%subst(r$vers: 1: 1) = '0');
     %subst(r$vers: 1: 1) = ' ';
   endif;
 
-  if %subst(r$modf: 1: 1) = '0';
+  if (%subst(r$modf: 1: 1) = '0');
     %subst(r$modf: 1: 1) = ' ';
   endif;
 
-  if %subst(r$rels: 1: 1) = '0';
+  if (%subst(r$rels: 1: 1) = '0');
     %subst(r$rels: 1: 1) = ' ';
   endif;
 

@@ -224,7 +224,7 @@
                                 o_msgid    :
                                 o_msgdta   );
 
-       if o_msgid = ' ';
+       if (o_msgid = ' ');
           io_user = ui2_grpprf;
           io_file = ui2_grpprf;
        endif;
@@ -273,7 +273,7 @@
        qsyrusri(rcvvar: %size(rcvvar): i_format:
                i_user: errcode);
 
-       if err_bytavl <> 0;
+       if (err_bytavl <> 0);
           o_msgid  = err_excid;
           o_msgdta = err_excdata;
        else;

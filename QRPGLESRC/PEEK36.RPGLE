@@ -76,10 +76,10 @@ exsr first;
 //  Prüfen Format für ...
 select;
 // ... Datum
-when i_type = 'L';
+when (i_type = 'L');
   select;
   // ... *EUR
-  when i_dattimfmt = '*EUR';
+  when (i_dattimfmt = '*EUR');
     r_dateeur = %date(i_buffer: *eur);
   // ... *ISO
   other;
@@ -87,13 +87,13 @@ when i_type = 'L';
   endsl;
   r_fldlen = 10;
 // ... Zeit
-when i_type = 'T';
+when (i_type = 'T');
   select;
   // ... *HMS
-  when i_dattimfmt = '*HMS';
+  when (i_dattimfmt = '*HMS');
     r_timehms = %time(i_buffer: *hms);
   // ... *EUR
-  when i_dattimfmt = '*EUR';
+  when (i_dattimfmt = '*EUR');
     r_timeeur = %time(i_buffer: *eur);
   // ... *ISO
   other;
@@ -101,7 +101,7 @@ when i_type = 'T';
   endsl;
   r_fldlen = 8;
 // ... Zeitstempel
-when i_type = 'Z';
+when (i_type = 'Z');
   r_timestmp = %timestamp(i_buffer);
   r_fldlen = 26;
 other;
@@ -110,13 +110,13 @@ other;
 endsl;
 
 r_pos = r_fldlen + 1;
-if r_pos <= r_bufflen;
+if (r_pos <= r_bufflen);
   r_buffer = %subst(i_buffer: r_pos);
 else;
   r_buffer = '';
 endif;
 
-if r_buffer = '';
+if (r_buffer = '');
 // ... Alles in Ordnung
 else;
   p_kill('Incorrect timestamp format: ' + i_dattimfmt);

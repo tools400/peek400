@@ -140,7 +140,7 @@
        dow ('1');
 
           //  Prüfen Positionierung der Subfile
-          if sfsanr <= *zeros;
+          if (sfsanr <= *zeros);
              sfsanr = 1;
           endif;
 
@@ -152,7 +152,7 @@
           write msgctl;
 
           //  "Keine Sätze ..."
-          if *in80 = *off;
+          if (*in80 = *off);
              write pbleer;
           endif;
 
@@ -201,7 +201,7 @@
           p_rmvpgmmg(sds.pgmname);
 
           //  Aktuelle Satz-Nr.
-          if sflcsr > *zeros;
+          if (sflcsr > *zeros);
              sfsanr = sflcsr;
           endif;
 
@@ -209,7 +209,7 @@
           //  in Programmbefehl
           peek21(workstn.aid: sds.pgmname
                 : ypgmcmd: ycmddta: ymsgid: ymsgdta);
-          if ymsgid <> *blanks;
+          if (ymsgid <> *blanks);
              p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
              ymsgid = '';
              ymsgdta = '';
@@ -219,56 +219,56 @@
           //  Abfragen der Befehlstasten
           select;
              //  F3  - Ende
-          when ypgmcmd = '*EXIT';
+          when (ypgmcmd = '*EXIT');
              exsr c_endpgm;
              leave;
 
              //  F5  - Aktualisieren
-          when ypgmcmd = '*REFRESH';
+          when (ypgmcmd = '*REFRESH');
              exsr c_refresh;
              iter;
 
              //  F12 - Ende
-          when ypgmcmd = '*CANCEL';
+          when (ypgmcmd = '*CANCEL');
              exsr c_endpgm;
              leave;
 
              //  F16 - Suchen
-          when ypgmcmd = '*SEARCH';
+          when (ypgmcmd = '*SEARCH');
              exsr c_search;
              iter;
 
              //   F17 - Anfang Datensatz
-          when ypgmcmd = '*TOP';
+          when (ypgmcmd = '*TOP');
              exsr c_top;
              iter;
 
              //   F18 - Ende Datensatz
-          when ypgmcmd = '*BOT';
+          when (ypgmcmd = '*BOT');
              exsr c_bot;
              iter;
 
              //  F23 - Weitere Auswahlen
-          when ypgmcmd = '*MOREOPT';
+          when (ypgmcmd = '*MOREOPT');
              exsr c_moreopt;
 
              //  F24 - Weitere Tasten
-          when ypgmcmd = '*MOREKEYS';
+          when (ypgmcmd = '*MOREKEYS');
              exsr c_morekeys;
 
              //  Datenfreigabe
-          when ypgmcmd = '*ENTER';
+          when (ypgmcmd = '*ENTER');
              exsr c_enter;
-             if rtnfile.name = *blanks;
+             if (rtnfile.name = *blanks);
                 //  ... keine Auswahl getroffen, weiter machen
              else;
                 o_qfile = rtnfile;
                 leave;
              endif;
              //  Page up
-          when ypgmcmd = '*PAGEUP';
+          when (ypgmcmd = '*PAGEUP');
              //  Page down
-          when ypgmcmd = '*PAGEDOWN';
+          when (ypgmcmd = '*PAGEDOWN');
 
           other;
              //  Falsche Taste gedrückt
@@ -326,17 +326,17 @@
 
        begsr postombr;
 
-          if lstfile <> r_file;
+          if (lstfile <> r_file);
              lstnbrrcd = 0;
           endif;
 
-          if lstfile = *blanks;
+          if (lstfile = *blanks);
              isnewpos = bfalse;
              lstnbrrcd = 0;
           else;
 
              exsr srchmbr;
-             if isfound = bfalse;
+             if (isfound = bfalse);
                 isnewpos = bfalse;
                 clear usr8194;
                 usr8194.var1 = lstfile;
@@ -356,7 +356,7 @@
 
        begsr srchmbr;
 
-          if *in80 = *off;
+          if (*in80 = *off);
              isfound = bfalse;
           else;
 
@@ -366,7 +366,7 @@
              for sflrec = lstnbrrcd to sflnbrrcd;
                 chain(e) sflrec pbsfl;
                 *in11 = %error or not %found;
-                if *in11 = *on;
+                if (*in11 = *on);
                    isfound = bfalse;
                    leave;
                 endif;
@@ -377,7 +377,7 @@
                    isfound = btrue;
                    leave;
                 else;
-                   if sfpau <> *blanks;
+                   if (sfpau <> *blanks);
                       //  ... Satz geändert
                       exsr vsfpauchg;
                    else;
@@ -390,7 +390,7 @@
 
              endfor;
 
-             if isfound = btrue;
+             if (isfound = btrue);
                 wrk_sfsanr = sflrec;
                 lstnbrrcd = sflrec;
              else;
@@ -422,14 +422,14 @@
 
           issflerror = bfalse;
 
-          if *in80 = *off;
+          if (*in80 = *off);
              //   keine Einträge in Subfile vorhanden ...
           else;
 
              for do_x2 = 1 to sflnbrrcd;
                 readc pbsfl;
                 *in11 = %eof;
-                if *in11 = *on;
+                if (*in11 = *on);
                    leave;
                 endif;
 
@@ -437,7 +437,7 @@
                 *in11 = not %found;
 
                 //  Cursorpositionierung ...
-                if issflerror = bfalse;
+                if (issflerror = bfalse);
                    sflcsr = sflrec;
                 else;
                    //  Subfile nicht neu positionieren
@@ -449,7 +449,7 @@
                 //  Zuordnung AUSWAHL => Befehl ...
                 peek21('#' + sfpau: sds.pgmname
                       : ypgmcmd: ycmddta: ymsgid: ymsgdta);
-                if ymsgid <> *blanks;
+                if (ymsgid <> *blanks);
                    //  Fehlermeldung ...
                    p_sndpgmmg('USR8110': sfpau: sds.pgmname);
                    exsr vsfpauerr;
@@ -464,8 +464,8 @@
                 sfl_cmd = ypgmcmd;
 
                 select;
-                when sfl_cmd = '*NONE';
-                when sfl_cmd = '*SELECT';
+                when (sfl_cmd = '*NONE');
+                when (sfl_cmd = '*SELECT');
                    exsr vpos;
                    leave;
                 other;
@@ -610,11 +610,11 @@
 
           yqfile = o_qfile;
 
-          if yqfile.name = '';
+          if (yqfile.name = '');
              yqfile.name = '*ALL';
           endif;
 
-          if yqfile.lib = '';
+          if (yqfile.lib = '');
              yqfile.lib = '*LIBL';
           endif;
 
@@ -664,7 +664,7 @@
              write pbsfl;
              sflnbrrcd = sflrec;
 
-             if sflrec >= sflpage;
+             if (sflrec >= sflpage);
                 leave;
              endif;
 

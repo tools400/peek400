@@ -128,13 +128,6 @@
        dcl-pr p_main;
        end-pr;
 
-       //  test omitted parameter (CEETSTA)
-       dcl-pr p_testomit extproc('CEETSTA');
-         isPresent              like(int4_t);
-         argnumber       const  like(int4_t);
-         fc                     like(cee_fc_t) options(*omit);
-       end-pr;
-
        //  Programminformationsdatenstruktur
        dcl-ds sds qualified psds;
          // Programmname
@@ -442,7 +435,7 @@
        gio_chgsqlw = chgsqlw;
        gio_chgsqlo = chgsqlo;
 
-       if accat  = btrue;
+       if (accat  = btrue);
           gio_accat = btrue;
           go_msgid  = ' ';
           go_msgdta = ' ';
@@ -486,9 +479,6 @@
        //  Hilfsfelder für optionale Parameter
        dcl-s i5_lib          like(i_lib     ) inz;
 
-       //  Parameterpositionen
-       dcl-c p_lib 11;
-
        //  lokale Arbeitsfelder
        dcl-ds ex_key3 likerec(FEXIT01: *KEY);
 
@@ -496,7 +486,7 @@
        p_openfile();
 
        //  Prüfen optionale Parameter
-       if %parms >= p_lib;
+       if (%parms() >= %parmnum(i_lib));
           i5_lib = i_lib;
        else;
           i5_lib = '*ALLLIB';
@@ -508,7 +498,7 @@
        ex_key3.ex_lib  = i5_lib;
        chain %kds(ex_key3: 3) fexit01;
        *in01 = not %found;
-       if *in01 = *off;
+       if (*in01 = *off);
           isfound     = btrue;
           o_usrchgl   = ex_chglib;
           o_usrchgf   = ex_chgfile;
@@ -560,9 +550,6 @@
        //  Hilfsfelder für optionale Parameter
        dcl-s i7_lib          like(i_lib     ) inz;
 
-       //  Parameterpositionen
-       dcl-c p_lib 10;
-
        //  lokale Arbeitsfelder
        dcl-ds ex_key3 likerec(FEXIT01: *KEY);
 
@@ -570,7 +557,7 @@
        p_openfile();
 
        //  Prüfen optionale Parameter
-       if %parms >= p_lib;
+       if (%parms() >= %parmnum(i_lib));
           i7_lib = i_lib;
        else;
           i7_lib = '*ALLLIB';
@@ -582,7 +569,7 @@
        ex_key3.ex_lib  = i7_lib;
        chain %kds(ex_key3: 3) fexit01;
        *in01 = not %found;
-       if *in01 = *off;
+       if (*in01 = *off);
           isfound     = btrue;
           o_objchgl   = ex_chglib;
           o_objchgf   = ex_chgfile;
@@ -633,11 +620,6 @@
        //  Hilfsfelder für optionale Parameter
        dcl-s i6_user         like(i_user    ) inz;
        dcl-s i7_lib          like(i_lib     ) inz;
-       dcl-s ispresent       like(int4_t) inz;
-
-       //  Parameterpositionen
-       dcl-c p_user 9;
-       dcl-c p_lib 10;
 
        //  lokale Arbeitsfelder
        dcl-ds ex_key3 likerec(FEXIT01: *KEY);
@@ -647,9 +629,8 @@
 
        //  Prüfen optionale Parameter ...
        //  ... user
-       if %parms >= p_user;
-          p_testomit(ispresent: p_user: *omit);
-          if ispresent = 1;
+       if (%parms() >= %parmnum(i_user));
+          if (%addr(i_user) <> *null);
              i6_user = i_user;
           else;
              i6_user = '*ALLUSR';
@@ -657,8 +638,8 @@
        else;
           i6_user = '*ALLUSR';
        endif;
-       //  ... user
-       if %parms >= p_lib;
+       //  ... library
+       if (%parms() >= %parmnum(i_lib));
           i7_lib = i_lib;
        else;
           i7_lib = '*ALLLIB';
@@ -670,7 +651,7 @@
        ex_key3.ex_lib  = i7_lib;
        chain %kds(ex_key3: 3) fexit01;
        *in01 = not %found;
-       if *in01 = *off;
+       if (*in01 = *off);
           isfound     = btrue;
           o_secchgl   = ex_chglib;
           o_secchgf   = ex_chgfile;
@@ -717,21 +698,21 @@
        //---------------------------------------------------------------*
 
        //  Wenn die Benutzerberechtigung definiert worden ist, ...
-       if usraut <> bnotdef;
+       if (usraut <> bnotdef);
           //  ... dann
           //      benutzen Benutzerberechtigung   (Priorität 1, 2)
           tmpaut = usraut;
        else;
           //  ... sonst
           //      Wenn die Objektberechtigung definiert worden ist, dann ...
-          if objaut <> bnotdef;
+          if (objaut <> bnotdef);
              //      ... dann
              //          benutzen Objektberechtigung (Priorität 3, 4)
              tmpaut = objaut;
           else;
              //      ... sonst
              //          Wenn die *SECATR Werte definiert worden sind, dann ...
-             if secaut <> bnotdef;
+             if (secaut <> bnotdef);
                 //          ... dann
                 //              benutzen *SECATR Werte (Priorität 5-8)
                 tmpaut = secaut;

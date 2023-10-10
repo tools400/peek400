@@ -124,7 +124,7 @@ dow (isExitPgm = bFalse);
   write msgctl;
 
   //  "Keine Sätze ..."
-  if *in80 = *off;
+  if (*in80 = *off);
     write pbleer;
   endif;
 
@@ -165,7 +165,7 @@ dow (isExitPgm = bFalse);
   //  in Programmbefehl
   peek21(workstn.aid: sds.pgmname
         : ypgmcmd: ycmddta: ymsgid: ymsgdta);
-  if ymsgid <> *blanks;
+  if (ymsgid <> *blanks);
     p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
     iter;
   endif;
@@ -173,26 +173,26 @@ dow (isExitPgm = bFalse);
   //  Abfragen der Befehlstasten
   select;
   //  F3  - Ende
-  when ypgmcmd = '*EXIT';
+  when (ypgmcmd = '*EXIT');
     exsr c_endpgm;
     leave;
 
   //  F5  - Aktualisieren
-  when ypgmcmd = '*REFRESH';
+  when (ypgmcmd = '*REFRESH');
     exsr c_refresh;
     iter;
 
   //  F12 - Ende
-  when ypgmcmd = '*CANCEL';
+  when (ypgmcmd = '*CANCEL');
     exsr c_endpgm;
     leave;
 
   //  Datenfreigabe
-  when ypgmcmd = '*ENTER';
+  when (ypgmcmd = '*ENTER');
     exsr c_enter;
 
   //  F24 - Weitere Tasten
-  when ypgmcmd = '*MOREKEYS';
+  when (ypgmcmd = '*MOREKEYS');
     exsr c_morekeys;
 
   other;
@@ -213,7 +213,7 @@ close peekfmt;
 
 begsr c_enter;
 
-  if *in80 = *off;
+  if (*in80 = *off);
   // Subfile ist leer
   else;
     dow ('1');
@@ -246,9 +246,9 @@ begsr c_endpgm;
   o_msgid = 'USR8100';
 
   select;
-  when workstn.aid = k_f3;
+  when (workstn.aid = k_f3);
     usr8100.var1 = 'F3';
-  when workstn.aid = k_f12;
+  when (workstn.aid = k_f12);
     usr8100.var1 = 'F12';
   other;
     usr8100.var1 = 'Fxx';
@@ -345,7 +345,7 @@ begsr pbreadup;
 
     sflrec = sflrec + 1;
 
-    if sflrec > 9999;
+    if (sflrec > 9999);
       *in83 = bTrue;
       leave;
     endif;
@@ -356,7 +356,7 @@ begsr pbreadup;
 
     sfllastrcd = sflrec;
 
-    if sflrec >= sflpage;
+    if (sflrec >= sflpage);
       leave;
     endif;
   enddo;
@@ -410,7 +410,7 @@ endsr;
 
 begsr setscreen;
 
-  if i_dsp80 = '0';
+  if (i_dsp80 = '0');
     //   132-Zeichen Anzeige
     *in88 = '0';
     zei = 4;

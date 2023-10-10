@@ -214,7 +214,7 @@
       * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       /FREE
 
-         if i_msg.ID <> cMSG_ID_OK;
+         if (i_msg.ID <> cMSG_ID_OK);
             logMsg(i_msg);
             return cTrue;
          else;
@@ -253,7 +253,7 @@
                   'MAXRCDS(*NOMAX) '             +
                   'USRDTA(''' + i_usrDta + ''') ';
 
-         if i_layout = 'P';
+         if (i_layout = 'P');
             cmd = cmd + 'PAGESIZE(70 80) ' +
                         'OVRFLW(64) ';
          else;
@@ -291,7 +291,7 @@
       * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       /FREE
 
-         if i_msgText = '';
+         if (i_msgText = '');
             msg = f_newMsg(cMSG_ID_NONE: x'41');
          else;
             msg = f_newMsg(cMSG_ID_NONE: i_msgText);
@@ -461,7 +461,7 @@
          QMHRCVPM(rcvm0200: %size(rcvm0200): 'RCVM0200': '*': i_stckCnt:
                   '*ESCAPE': msgKey: 0: '*SAME': errCode);
 
-         if rcvm0200.lnRplDtR > 0;
+         if (rcvm0200.lnRplDtR > 0);
             msgData = %subst(rcvm0200.value: 1: rcvm0200.lnRplDtR);
          else;
             msgData = '';
@@ -534,7 +534,7 @@
          QMHRTVM(rtvm0100: %size(rtvm0100): 'RTVM0100': i_msg.ID: qMsgF:
                  i_msg.data: %len(i_msg.data): '*YES': '*NO': errCode);
 
-         if rtvm0100.lenMsgRet > 0;
+         if (rtvm0100.lenMsgRet > 0);
             msgText = %subst(rtvm0100.data: 1: rtvm0100.lenMsgRet);
          else;
             msgText = '';

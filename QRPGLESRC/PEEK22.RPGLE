@@ -58,7 +58,7 @@ ceehdlr(%paddr('errorHandler')
        : *null: *omit);
 
 //  Kopieren für alle Programme ...
-if i_section = '*ALL';
+if (i_section = '*ALL');
 
   wrk_sectn = '*PEEK05';
   exsr delrecords;

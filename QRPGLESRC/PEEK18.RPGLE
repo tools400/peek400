@@ -180,13 +180,13 @@ o_buffer = *blanks;
 o_bufflen = *zeros;
 
 select;
-when i_tgtformat = '*EXTERN';
+when (i_tgtformat = '*EXTERN');
   exsr toextern;
-when i_tgtformat = '*INTERN';
+when (i_tgtformat = '*INTERN');
   exsr toIntern;
-when i_tgtformat = '*ZONED';
+when (i_tgtformat = '*ZONED');
   exsr toZoned;
-when i_tgtformat = '*FLOAT';
+when (i_tgtformat = '*FLOAT');
   exsr toFloat;
 other;
 endsl;
@@ -200,17 +200,17 @@ return;
 begsr toextern;
 
   select;
-  when fldl0100.f1dtyp = 'A';
+  when (fldl0100.f1dtyp = 'A');
     exsr A_to_extern;
-  when fldl0100.f1dtyp = 'G';
+  when (fldl0100.f1dtyp = 'G');
     exsr G_to_extern;
-  when fldl0100.f1dtyp = 'S';
+  when (fldl0100.f1dtyp = 'S');
     exsr S_to_extern;
-  when fldl0100.f1dtyp = 'B';
+  when (fldl0100.f1dtyp = 'B');
     exsr B_to_extern;
-  when fldl0100.f1dtyp = 'P';
+  when (fldl0100.f1dtyp = 'P');
     exsr P_to_extern;
-  when fldl0100.f1dtyp = 'F';
+  when (fldl0100.f1dtyp = 'F');
     exsr F_to_extern;
 
   other;
@@ -228,7 +228,7 @@ begsr toIntern;
   //  Art des Schlüssel ermitteln ...
   exsr getKeyType;
   //  Ascending key ...
-  if f_desc = 'A';
+  if (f_desc = 'A');
     //  ... Keine Umsetzung erforderlich
     r_tgtvalue = i_tgtvalue;
   else;
@@ -236,7 +236,7 @@ begsr toIntern;
     if i_tgtvalue = '*HIVAL'
        or i_tgtvalue = '*LOVAL';
       //  ... *HIVAL ==> *LOVAL und umgekehrt
-      if i_tgtvalue = '*HIVAL';
+      if (i_tgtvalue = '*HIVAL');
         r_tgtvalue = '*LOVAL';
       else;
         r_tgtvalue = '*HIVAL';
@@ -248,23 +248,23 @@ begsr toIntern;
   endif;
 
   select;
-  when fldl0100.f1dtyp = 'A';
+  when (fldl0100.f1dtyp = 'A');
     exsr A_to_intern;
-  when fldl0100.f1dtyp = 'G';
+  when (fldl0100.f1dtyp = 'G');
     exsr G_to_intern;
-  when fldl0100.f1dtyp = 'S';
+  when (fldl0100.f1dtyp = 'S');
     exsr S_to_intern;
-  when fldl0100.f1dtyp = 'B';
+  when (fldl0100.f1dtyp = 'B');
     exsr B_to_intern;
-  when fldl0100.f1dtyp = 'P';
+  when (fldl0100.f1dtyp = 'P');
     exsr P_to_intern;
-  when fldl0100.f1dtyp = 'L';
+  when (fldl0100.f1dtyp = 'L');
     exsr L_to_intern;
-  when fldl0100.f1dtyp = 'T';
+  when (fldl0100.f1dtyp = 'T');
     exsr T_to_intern;
-  when fldl0100.f1dtyp = 'Z';
+  when (fldl0100.f1dtyp = 'Z');
     exsr Z_to_intern;
-  when fldl0100.f1dtyp = 'F';
+  when (fldl0100.f1dtyp = 'F');
     exsr F_to_intern;
 
   other;
@@ -282,13 +282,13 @@ begsr toZoned;
   fldl0100.f1digt = %len(zoned_a);
 
   select;
-  when fldl0100.f1dtyp = 'A';
+  when (fldl0100.f1dtyp = 'A');
     exsr A_to_zoned;
-  when fldl0100.f1dtyp = 'S';
+  when (fldl0100.f1dtyp = 'S');
     exsr S_to_zoned;
-  when fldl0100.f1dtyp = 'B';
+  when (fldl0100.f1dtyp = 'B');
     exsr B_to_zoned;
-  when fldl0100.f1dtyp = 'P';
+  when (fldl0100.f1dtyp = 'P');
     exsr P_to_zoned;
 
   other;
@@ -304,7 +304,7 @@ endsr;
 begsr toFloat;
 
   select;
-  when fldl0100.f1dtyp = 'F';
+  when (fldl0100.f1dtyp = 'F');
     exsr F_to_float;
 
   other;
@@ -318,7 +318,7 @@ endsr;
 
 begsr A_to_extern;
 
-  if f_isvarlen(fldl0100) = bTrue;
+  if (f_isvarlen(fldl0100) = bTrue);
     strpos = 3;
   else;
     strpos = 1;
@@ -346,7 +346,7 @@ endsr;
 
 begsr G_to_extern;
 
-  if f_isvarlen(fldl0100) = bTrue;
+  if (f_isvarlen(fldl0100) = bTrue);
     strpos = 3;
   else;
     strpos = 1;
@@ -358,7 +358,7 @@ begsr G_to_extern;
 
   o_bufflen = f_buffln(fldl0100);
 
-  if f_hasccsid(fldl0100) = bTrue;
+  if (f_hasccsid(fldl0100) = bTrue);
     o_bufflen =
     cvtToJobCcsid(
      o_buffer: o_bufflen: fldl0100.f1fdcc);
@@ -418,7 +418,7 @@ begsr F_to_extern;
 
   pfloat = %addr(i_buffer);
 
-  if f_buffln(fldl0100) = 4;
+  if (f_buffln(fldl0100) = 4);
     float = float4;
     exsr chgSignFloat;
     float4 = float;
@@ -518,7 +518,7 @@ begsr extractFloat;
 
   pfloat = %addr(i_buffer);
 
-  if f_buffln(fldl0100) = 4;
+  if (f_buffln(fldl0100) = 4);
     float = float4;
   else;
     float = float8;
@@ -546,7 +546,7 @@ begsr chgSign;
     endif;
   endif;
 
-  if isMinus = bTrue;
+  if (isMinus = bTrue);
     zoned = zoned * -1;
   endif;
 
@@ -569,7 +569,7 @@ begsr chgSignFloat;
     endif;
   endif;
 
-  if isMinus = bTrue;
+  if (isMinus = bTrue);
     float = float * -1;
   endif;
 
@@ -612,7 +612,7 @@ begsr addDelimiter;
   if (set0003.set_dlmtr = '');
   // ohne Delimeter ausgeben
   else;
-    if o_bufflen < rcd_buff_len;
+    if (o_bufflen < rcd_buff_len);
       o_bufflen = o_bufflen + 1;
       %subst(
        o_buffer: o_bufflen: 1) = set0003.set_dlmtr;
@@ -629,7 +629,7 @@ endsr;
 
 begsr A_to_intern;
 
-  if f_isvarlen(fldl0100) = bTrue;
+  if (f_isvarlen(fldl0100) = bTrue);
     strpos = 3;
   else;
     strpos = 1;
@@ -639,16 +639,16 @@ begsr A_to_intern;
 
   select;
   //  kleinester Wert ...
-  when r_tgtvalue = '*LOVAL';
+  when (r_tgtvalue = '*LOVAL');
     %subst(o_buffer: strpos: o_bufflen)
       = *allx'00';
   //  größter Wert ...
-  when r_tgtvalue = '*HIVAL';
+  when (r_tgtvalue = '*HIVAL');
     %subst(o_buffer: strpos: o_bufflen)
       = *allx'FF';
   //  aktueller Wert ...
-  when r_tgtvalue = '*CURRENT';
-    if f_hasccsid(fldl0100) = bTrue;
+  when (r_tgtvalue = '*CURRENT');
+    if (f_hasccsid(fldl0100) = bTrue);
       if (fldl0100.f1ndbc > 0);
         o_bufflen = fldl0100.f1ndbc;
       endif;
@@ -673,7 +673,7 @@ endsr;
 
 begsr G_to_intern;
 
-  if f_isvarlen(fldl0100) = bTrue;
+  if (f_isvarlen(fldl0100) = bTrue);
     strpos = 3;
   else;
     strpos = 1;
@@ -683,16 +683,16 @@ begsr G_to_intern;
 
   select;
   //  kleinester Wert ...
-  when r_tgtvalue = '*LOVAL';
+  when (r_tgtvalue = '*LOVAL');
     %subst(o_buffer: strpos: o_bufflen)
       = *allx'00';
   //  größter Wert ...
-  when r_tgtvalue = '*HIVAL';
+  when (r_tgtvalue = '*HIVAL');
     %subst(o_buffer: strpos: o_bufflen)
       = *allx'FF';
   //  aktueller Wert ...
-  when r_tgtvalue = '*CURRENT';
-    if f_hasccsid(fldl0100) = bTrue;
+  when (r_tgtvalue = '*CURRENT');
+    if (f_hasccsid(fldl0100) = bTrue);
       if (fldl0100.f1ndbc > 0);
         o_bufflen = fldl0100.f1ndbc;
       endif;
@@ -706,7 +706,7 @@ begsr G_to_intern;
   endsl;
 
   //  einfügen Längenangabe bei Feldern variabler Länge
-  if f_isvarlen(fldl0100) = bTrue;
+  if (f_isvarlen(fldl0100) = bTrue);
     p_dectobin(o_buffer: 1: 2: o_bufflen);
   endif;
 
@@ -738,13 +738,13 @@ endsr;
 begsr B_to_intern;
 
   select;
-  when f_buffln(fldl0100) = 1;
+  when (f_buffln(fldl0100) = 1);
     exsr B_to_intern_1;
-  when f_buffln(fldl0100) = 2;
+  when (f_buffln(fldl0100) = 2);
     exsr B_to_intern_2;
-  when f_buffln(fldl0100) = 4;
+  when (f_buffln(fldl0100) = 4);
     exsr B_to_intern_4;
-  when f_buffln(fldl0100) = 8;
+  when (f_buffln(fldl0100) = 8);
     exsr B_to_intern_8;
   other;
     p_kill('Illegal buffer length: ' +
@@ -760,11 +760,11 @@ endsr;
 begsr B_to_intern_1;
 
   select;
-  when r_tgtvalue = '*LOVAL';
+  when (r_tgtvalue = '*LOVAL');
     binary1 = *loval;
-  when r_tgtvalue = '*HIVAL';
+  when (r_tgtvalue = '*HIVAL');
     binary1 = *hival;
-  when r_tgtvalue = '*CURRENT';
+  when (r_tgtvalue = '*CURRENT');
     //  ... umsetzen in gezonten Wert
     exsr cvtToZoned;
     binary1 = zoned;
@@ -784,11 +784,11 @@ endsr;
 begsr B_to_intern_2;
 
   select;
-  when r_tgtvalue = '*LOVAL';
+  when (r_tgtvalue = '*LOVAL');
     binary2 = *loval;
-  when r_tgtvalue = '*HIVAL';
+  when (r_tgtvalue = '*HIVAL');
     binary2 = *hival;
-  when r_tgtvalue = '*CURRENT';
+  when (r_tgtvalue = '*CURRENT');
     //  ... umsetzen in gezonten Wert
     exsr cvtToZoned;
     binary2 = zoned;
@@ -808,11 +808,11 @@ endsr;
 begsr B_to_intern_4;
 
   select;
-  when r_tgtvalue = '*LOVAL';
+  when (r_tgtvalue = '*LOVAL');
     binary4 = *loval;
-  when r_tgtvalue = '*HIVAL';
+  when (r_tgtvalue = '*HIVAL');
     binary4 = *hival;
-  when r_tgtvalue = '*CURRENT';
+  when (r_tgtvalue = '*CURRENT');
     //  ... umsetzen in gezonten Wert
     exsr cvtToZoned;
     binary4 = zoned;
@@ -832,11 +832,11 @@ endsr;
 begsr B_to_intern_8;
 
   select;
-  when r_tgtvalue = '*LOVAL';
+  when (r_tgtvalue = '*LOVAL');
     binary8 = *loval;
-  when r_tgtvalue = '*HIVAL';
+  when (r_tgtvalue = '*HIVAL');
     binary8 = *hival;
-  when r_tgtvalue = '*CURRENT';
+  when (r_tgtvalue = '*CURRENT');
     //  ... umsetzen in gezonten Wert
     exsr cvtToZoned;
     binary8 = zoned;
@@ -890,15 +890,15 @@ begsr L_to_intern;
 
   select;
   //  kleinester Wert ...
-  when r_tgtvalue = '*LOVAL';
+  when (r_tgtvalue = '*LOVAL');
     r_dateiso = *loval;
     exsr dateToBuffer;
   //  größter Wert ...
-  when r_tgtvalue = '*HIVAL';
+  when (r_tgtvalue = '*HIVAL');
     r_dateiso = *hival;
     exsr dateToBuffer;
   //  aktueller Wert ...
-  when r_tgtvalue = '*CURRENT';
+  when (r_tgtvalue = '*CURRENT');
     o_buffer = i_buffer;
   other;
   endsl;
@@ -921,7 +921,7 @@ begsr dateToBuffer;
   //  Übertragen Zeitfeld gemäß Format ...
   select;
   //  ... *EUR (dd.mm.yyyy)
-  when fldl0100.f1dtfm = '*EUR';
+  when (fldl0100.f1dtfm = '*EUR');
     r_datebuf = %char(r_dateiso: *eur);
     r_dftsp = '.';
   //  ... *ISO (yyyy-mm-dd)
@@ -948,15 +948,15 @@ begsr T_to_intern;
 
   select;
   //  kleinester Wert ...
-  when r_tgtvalue = '*LOVAL';
+  when (r_tgtvalue = '*LOVAL');
     r_timeiso = *loval;
     exsr timeToBuffer;
   //  größter Wert ...
-  when r_tgtvalue = '*HIVAL';
+  when (r_tgtvalue = '*HIVAL');
     r_timeiso = *hival;
     exsr timeToBuffer;
   //  aktueller Wert ...
-  when r_tgtvalue = '*CURRENT';
+  when (r_tgtvalue = '*CURRENT');
     o_buffer = i_buffer;
   other;
   endsl;
@@ -979,11 +979,11 @@ begsr timeToBuffer;
   //  Übertragen Zeitfeld gemäß Format ...
   select;
   //  ... *HMS (hh:mm:ss)
-  when fldl0100.f1dtfm = '*HMS';
+  when (fldl0100.f1dtfm = '*HMS');
     r_timebuf = %char(r_timeiso: *hms);
     r_dftsp = ':';
   //  ... *EUR (hh.mm.ss)
-  when fldl0100.f1dtfm = '*EUR';
+  when (fldl0100.f1dtfm = '*EUR');
     r_timebuf = %char(r_timeiso: *eur);
     r_dftsp = '.';
   //  ... *ISO (hh.mm.ss)
@@ -1010,15 +1010,15 @@ begsr Z_to_intern;
 
   select;
   //  kleinester Wert ...
-  when r_tgtvalue = '*LOVAL';
+  when (r_tgtvalue = '*LOVAL');
     r_timestmp = *loval;
     o_buffer = %char(r_timestmp: *iso);
   //  größter Wert ...
-  when r_tgtvalue = '*HIVAL';
+  when (r_tgtvalue = '*HIVAL');
     r_timestmp = *hival;
     o_buffer = %char(r_timestmp: *iso);
   //  aktueller Wert ...
-  when r_tgtvalue = '*CURRENT';
+  when (r_tgtvalue = '*CURRENT');
     o_buffer = i_buffer;
   other;
   endsl;
@@ -1063,13 +1063,13 @@ begsr cvtToZoned;
 
   select;
   //  kleinester Wert ...
-  when r_tgtvalue = '*LOVAL';
+  when (r_tgtvalue = '*LOVAL');
     zoned = *loval;
   //  größter Wert ...
-  when r_tgtvalue = '*HIVAL';
+  when (r_tgtvalue = '*HIVAL');
     zoned = *hival;
   //  aktueller Wert ...
-  when r_tgtvalue = '*CURRENT';
+  when (r_tgtvalue = '*CURRENT');
 
     //  ... Vorzeichen
     if (set0003.set_signx = bFalse);
@@ -1129,22 +1129,22 @@ begsr cvtToFloat;
 
   select;
   //  kleinester Wert ...
-  when r_tgtvalue = '*LOVAL';
-    if f_buffln(fldl0100) = 4;
+  when (r_tgtvalue = '*LOVAL');
+    if (f_buffln(fldl0100) = 4);
       dsfloat.float4 = *loval;
     else;
       dsfloat.float8 = *loval;
     endif;
   //  größter Wert ...
-  when r_tgtvalue = '*HIVAL';
-    if f_buffln(fldl0100) = 4;
+  when (r_tgtvalue = '*HIVAL');
+    if (f_buffln(fldl0100) = 4);
       dsfloat.float4 = *hival;
     else;
       dsfloat.float8 = *hival;
     endif;
   //  aktueller Wert ...
-  when r_tgtvalue = '*CURRENT';
-    if f_buffln(fldl0100) = 4;
+  when (r_tgtvalue = '*CURRENT');
+    if (f_buffln(fldl0100) = 4);
       x = 14;
     else;
       x = 23;
@@ -1224,13 +1224,13 @@ endsr;
 begsr getBinary;
 
   select;
-  when f_buffln(fldl0100) = 1;
+  when (f_buffln(fldl0100) = 1);
     exsr getBinary_1;
-  when f_buffln(fldl0100) = 2;
+  when (f_buffln(fldl0100) = 2);
     exsr getBinary_2;
-  when f_buffln(fldl0100) = 4;
+  when (f_buffln(fldl0100) = 4);
     exsr getBinary_4;
-  when f_buffln(fldl0100) = 8;
+  when (f_buffln(fldl0100) = 8);
     exsr getBinary_8;
   other;
     p_kill('Illegal buffer length: ' +

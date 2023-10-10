@@ -258,7 +258,7 @@ begsr rpl_fldname;
 
     for i = 1 to %len(r_shortcmd);
 
-      if %subst(r_shortcmd: i: 1) = NAME_PREFIX;
+      if (%subst(r_shortcmd: i: 1) = NAME_PREFIX);
 
         exsr readrcd;
         if (isRecord = bFalse);
@@ -331,7 +331,7 @@ begsr rpl_fldname;
 
   enddo;
 
-  if cio_isopen(hfile00) = bTrue;
+  if (cio_isopen(hfile00) = bTrue);
     cio_close(hfile00);
   endif;
 
@@ -352,7 +352,7 @@ begsr rpl_var;
   dou s = 0;
 
     s = %scan(r_var: r_shortcmd: s);
-    if s = *zeros;
+    if (s = *zeros);
     //  Nix gefunden ...
     else;
       //  Variable ersetzen ...
@@ -366,7 +366,7 @@ begsr rpl_var;
 
       //  ... extrahieren 2. Teil
       s = s + 1 + %len(r_var);
-      if s > r_maxlen;
+      if (s > r_maxlen);
         r_cmd2 = '';
       else;
         r_cmd2 = %trimr(%subst(r_shortcmd: s));
@@ -473,7 +473,7 @@ dcl-proc lf_rtvfldname;
   fldname = '';
 
   for i = i_startpos + 1 to %len(i_buffer);
-    if %scan(%subst(i_buffer: i: 1): VALID_CHARS) = 0;
+    if (%scan(%subst(i_buffer: i: 1): VALID_CHARS) = 0);
       leave;
     endif;
 
@@ -582,7 +582,7 @@ dcl-proc lf_rtvfldformat;
   endif;
 
   // Compose new field type
-  if lf_loadfldatr(fldname: fldl0100_tmp) = bfalse;
+  if (lf_loadfldatr(fldname: fldl0100_tmp) = bfalse);
     return bfalse;
   endif;
 
