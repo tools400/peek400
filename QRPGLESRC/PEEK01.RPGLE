@@ -138,9 +138,9 @@ for do_x1 = 1 to numFields;
   endif;
 
   if (f_isvarlen(fldl0100) = bTrue);
-    fldl0100.f1vfld = 'V_' + %editc(fieldCount: 'X');
+    fldl0100.f1vfld = 'V_' + %editc(%dec(fieldCount: 8: 0): 'X');
   else;
-    fldl0100.f1vfld = 'P_' + %editc(fieldCount: 'X');
+    fldl0100.f1vfld = 'P_' + %editc(%dec(fieldCount: 8: 0): 'X');
   endif;
 
   //  Anzeigereihenfolge
