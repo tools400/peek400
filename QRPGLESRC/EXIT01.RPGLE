@@ -118,6 +118,7 @@
 
       /include QCOPYLE,D_VARDEF
       /include QCOPYLE,USR1000
+      /include QCOPYLE,CEERTX
 
       /define internal_prototype
       /include QCOPYLE,PEXIT01
@@ -129,9 +130,9 @@
 
        //  test omitted parameter (CEETSTA)
        dcl-pr p_testomit extproc('CEETSTA');
-         ispresent       like(int4_t);
+         isPresent              like(int4_t);
          argnumber       const  like(int4_t);
-         fc              like(fc_t) options(*omit);
+         fc                     like(cee_fc_t) options(*omit);
        end-pr;
 
        //  Programminformationsdatenstruktur

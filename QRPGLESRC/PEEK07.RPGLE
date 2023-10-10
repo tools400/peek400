@@ -1,3 +1,4 @@
+**free
        //===============================================================*
        //                                                               *
        //  (c) Thomas Raddatz                                           *
@@ -122,26 +123,21 @@
 
        // - Meldung
        if (i_nomsg = btrue);
-          p_sndstsmg('USR8106': ' ');
+         p_sndstsmg('USR8106': ' ');
        else;
-          //        keine Statusmeldung ausgeben
+       //        keine Statusmeldung ausgeben
        endif;
 
        qwcrneta(rcvvar: %size(rcvvar)
                : 1: i_attr: errcode);
 
        if (errcode.bytavl = 0);
-          exsr getattr;
+         exsr getattr;
        else;
-          o_attrlen = 0;
-          o_attrtyp = '';
-          o_alue = '';
+         o_attrlen = 0;
+         o_attrtyp = '';
+         o_alue = '';
        endif;
-
-       //---------------------------------------------------*
-       //  Ende Programm
-
-     C     ende          tag
 
        return;
 
@@ -151,18 +147,18 @@
 
        begsr getattr;
 
-          x = rcvvar.offstotble + 1;
+         x = rcvvar.offstotble + 1;
 
-          if (x >= 1 and x <= 256);
-             netattr = %subst(rcvvar: x);
-             o_alue = netattr.dta;
-             o_attrlen = netattr.dtalen;
-             o_attrtyp = netattr.dtatype;
-          else;
-             o_attrlen = 0;
-             o_attrtyp = '';
-             o_alue = '';
-          endif;
+         if (x >= 1 and x <= 256);
+           netattr = %subst(rcvvar: x);
+           o_alue = netattr.dta;
+           o_attrlen = netattr.dtalen;
+           o_attrtyp = netattr.dtatype;
+         else;
+           o_attrlen = 0;
+           o_attrtyp = '';
+           o_alue = '';
+         endif;
 
        endsr;
 
@@ -171,15 +167,15 @@
        //============================================================*
 
        dcl-proc errorhandler;
-       dcl-pi *N;
-         i_condtoken     value likeds(cee_fc_t);
-       i_pcommarea     int(10) value;
-       o_action        int(10);
-       o_newcondtoken  likeds(cee_fc_t);
-       end-pi;
+         dcl-pi *N;
+           i_condtoken     value likeds(cee_fc_t);
+           i_pcommarea     int(10) value;
+           o_action        int(10);
+           o_newcondtoken  likeds(cee_fc_t);
+         end-pi;
 
-       dump;
-       o_action = cee_percolate;
+         dump;
+         o_action = cee_percolate;
 
        end-proc;
 

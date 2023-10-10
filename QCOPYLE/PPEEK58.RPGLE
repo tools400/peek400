@@ -52,14 +52,14 @@ end-pr;
 
 //-------------------------------------------------------------------*
 dcl-pr f_bintodec opdesc like(int4_t);
-  i_string        const  like(string_t) options(*varsize);
-  i_startpos      const  like(int4_t);
+  i_string        const  like(varString_t) options(*varsize);
+  i_startPos      const  like(int4_t);
   i_length        const  like(int4_t);
 end-pr;
 
 //-------------------------------------------------------------------*
-dcl-pr f_len opdesc like(int4_t);
-  i_string        const  like(string_t) options(*varsize);
+dcl-pr f_len_DEPRECATED opdesc like(int4_t);
+  i_string        const  like(varString_t) options(*varsize);
 end-pr;
 
 //-------------------------------------------------------------------*
@@ -135,9 +135,9 @@ end-pr;
 
 //-------------------------------------------------------------------*
 dcl-pr p_expstr opdesc;
-  o_string               like(string_t) options(*varsize);
-  i_string        const  like(string_t) options(*varsize);
-  i_stepval       const  like(int4_t) options(*nopass);
+  o_string               like(varString_t) options(*varsize);
+  i_string        const  like(varString_t) options(*varsize);
+  i_stepVal       const  like(int4_t) options(*nopass);
 end-pr;
 
 //-------------------------------------------------------------------*
@@ -176,7 +176,7 @@ end-pr;
 
 //-------------------------------------------------------------------*
 dcl-pr p_rmvpgmmg;
-  i_pgmnme        const  like(pgm_t);
+  i_pgm           const  like(pgm_t);
 end-pr;
 
 //-------------------------------------------------------------------*
@@ -294,16 +294,16 @@ dcl-pr p_keytomsg;
 end-pr;
 
 //-------------------------------------------------------------------*
-dcl-pr f_splttxt opdesc like(int4_t);
-  i_text          const  like(string_t) options(*varsize);
-  i_strpos        const  like(int4_t);
+dcl-pr f_splttxt_DEPRECATED opdesc like(int4_t);
+  i_text          const  like(varString_t) options(*varsize);
+  i_strPos        const  like(int4_t);
   i_len           const  like(int4_t);
   o_text                 like(string_t) options(*varsize);
 end-pr;
 
 //-------------------------------------------------------------------*
-dcl-pr p_center opdesc;
-  io_text                like(string_t) options(*varsize);
+dcl-pr f_center like(varString_t) opdesc;
+  i_text          const  like(varString_t) options(*varsize);
 end-pr;
 
 //===================================================================*
@@ -431,7 +431,7 @@ end-pr;
 
 //-------------------------------------------------------------------*
 //  Returns an empty string with a given length.
-dcl-pr f_space varchar(4096);
+dcl-pr f_space like(varString_t);
   i_length        int(10) value;
 end-pr;
 
