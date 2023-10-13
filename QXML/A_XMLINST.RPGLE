@@ -22,7 +22,7 @@
       *---------------------------------------------------------------------------------------
       * >>PRE-COMPILER<<
       *   >>CRTCMD<< CRTBNDRPG    PGM(&LI/&OB) SRCFILE(&SL/&SF) SRCMBR(*PGM) +
-      *                           DBGVIEW(*LIST) OPTION(*EVENTF);
+      *                           DBGVIEW(*LIST) OPTION(*EVENTF) TGTRLS(V7R1M0);
       *   >>EXECUTE<<
       * >>END-PRE-COMPILER<<
       *---------------------------------------------------------------------------------------
