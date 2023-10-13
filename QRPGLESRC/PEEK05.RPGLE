@@ -370,7 +370,7 @@ end-ds;
 
 dcl-c HEX_CHAR const('-');
 
-dcl-s isreadsfl       char(1) inz(bFalse);
+dcl-s isReadSfl       char(1) inz(bFalse);
 dcl-s ispbinit        char(1) inz(bFalse);
 dcl-s isfirstsfl      char(1) inz(bFalse);
 dcl-s isfilechg       char(1) inz(bFalse);
@@ -986,20 +986,16 @@ begsr c_enter;
 
     //  Keine Eigaben ...
     //  ... also abfragen der Subfileauswahlen
-    if (isreadsfl = bTrue);
+    if (isReadSfl = bTrue);
     //       verhindern einer Rekursion
     else;
-      exsr c_readsfl;
+      exsr c_readSfl;
     endif;
 
   else;
 
     //  Wechsel der Datei ...
-    //**                If        AccessMode = SQL_SEQ
     newAccessMode = i_access;
-    //**                Else
-    //**                Eval      NewAccMode = AccessMode
-    //**                Endif (exsr changefile);
 
     exsr changeFile;
 
@@ -1033,7 +1029,7 @@ endsr;
 //    C_ReadSfl     Lesen & Verarbeiten der Subfile-Auswahlen *
 //============================================================*
 
-begsr c_readsfl;
+begsr c_readSfl;
 
   //  Merker für: Subfile gelöscht zurück setzen
   //              abbrechen READC, wenn Subfileinhalt
@@ -1042,7 +1038,7 @@ begsr c_readsfl;
   //  Merker für: Programmablauf innerhalb der READC-Schleife
   //              verhindern einer Rekursion über
   //              C_ENTER, C_PAGEUP, C_PAGEDOWN
-  isreadsfl = bTrue;
+  isReadSfl = bTrue;
 
   r#iscmderr = isCmdErr;
 
@@ -1169,7 +1165,7 @@ begsr c_readsfl;
   endif;
 
   isCmdErr = r#iscmderr;
-  isreadsfl = bFalse;
+  isReadSfl = bFalse;
 
   if (isreadc = bTrue);
     exsr getobjattr;
@@ -1240,10 +1236,10 @@ begsr c_pageup;
   else;
 
     //  Verarbeiten der Subfile-Auswahlen
-    if (isreadsfl = bTrue);
+    if (isReadSfl = bTrue);
     //       verhindern einer Rekursion
     else;
-      exsr c_readsfl;
+      exsr c_readSfl;
     endif;
 
     //  Blättern
@@ -1273,10 +1269,10 @@ begsr c_pagedown;
   else;
 
     //  Verarbeiten der Subfile-Auswahlen
-    if (isreadsfl = bTrue);
+    if (isReadSfl = bTrue);
     //       verhindern einer Rekursion
     else;
-      exsr c_readsfl;
+      exsr c_readSfl;
     endif;
 
     //  Blättern
