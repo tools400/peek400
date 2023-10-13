@@ -542,7 +542,7 @@ dcl-s a1              char(1) inz;
 //  .. aktuelle Sortierung
 dcl-s accessMode      char(1) inz(RRN_SEQ);
 //  .. neue Sortierung für ChangeFile
-dcl-s newaccmode      char(1) inz(RRN_SEQ);
+dcl-s newAccessMode      char(1) inz(RRN_SEQ);
 //  .. Sortierung vor SQl-Mode
 dcl-s oldaccmode      char(1) inz(RRN_SEQ);
 //  Arbeitsfeld für Befehlsverarbeitung, Verhinderung von Rekursionen
@@ -996,10 +996,12 @@ begsr c_enter;
 
     //  Wechsel der Datei ...
     //**                If        AccessMode = SQL_SEQ
-    newaccmode = i_access;
+    newAccessMode = i_access;
     //**                Else
     //**                Eval      NewAccMode = AccessMode
     //**                Endif (exsr changefile);
+
+    exsr changeFile;
 
     //  Prüfen Seq-Bereich (##WndNbr) ...
     exsr chkseqrnge;
@@ -2505,8 +2507,8 @@ begsr c_dspdbr;
       ##file    = yretfile;
       ##library = yretlib;
 
-      newaccmode = i_access;
-      exsr changefile;
+      newAccessMode = i_access;
+      exsr changeFile;
 
       if (isfilechg = bTrue);
         exsr c_top;
@@ -2532,7 +2534,7 @@ begsr c_sortbkey;
     else;
 
       //  Umschalten der Sortierung
-      newaccmode = KEY_SEQ;
+      newAccessMode = KEY_SEQ;
       exsr changesort;
 
     endif;
@@ -2557,7 +2559,7 @@ begsr c_sortbrrn;
       if f_numbased(##file    :
                  ##library :
                  ##member  ) = 1;
-        newaccmode = RRN_SEQ;
+        newAccessMode = RRN_SEQ;
         exsr changesort;
       else;
         clear usr8217;
@@ -5907,7 +5909,7 @@ endsr;
 //    ChangeFile    Prüfen, ob die Datei gewechselt hat       *
 //============================================================*
 
-begsr changefile;
+begsr changeFile;
 
   isfilechg = bFalse;
 
@@ -5929,7 +5931,7 @@ begsr changefile;
     exsr closefile;
 
     if (##file <> *blanks);
-      accessMode = newaccmode;
+      accessMode = newAccessMode;
       exsr openfile;
     endif;
   endif;
@@ -6037,7 +6039,7 @@ begsr changesort;
 
   //  Wechsel der Datei ...
   ispintoclr = bFalse;
-  exsr changefile;
+  exsr changeFile;
   ispintoclr = bTrue;
 
   //  Prüfen Seq-Bereich (##WndNbr) ...
