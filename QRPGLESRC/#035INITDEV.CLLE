@@ -59,7 +59,7 @@
              /* ---------------------------------------------------- */
 
              CALL       PGM(QTEMP/A_XMLINST) +
-                          PARM('PRTLOG' 'QXML' &DEVLIB)
+                          PARM('PRTLOG' 'QXML' &DEVLIB '' 'NO')
 
              /* ---------------------------------------------------- */
              /*  Delete XML installation utility.                    */
