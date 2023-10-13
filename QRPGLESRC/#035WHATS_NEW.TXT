@@ -854,8 +854,11 @@
        - Problem mit unzulässigen Sonderzeichen beim Überschreiben des Alias
          Namens (Schlüsselwort: ALIAS) behoben.
 
-  Version 3.5.8
+  Version 4.0.0
   =============
+
+  *  Alle
+       - Konvertiert nach **free.
 
   *  Update Program
        - Problem korrigiert, dass es bei Feldern größer 1024 Zeichen bei der
