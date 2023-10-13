@@ -147,6 +147,8 @@ INSERT INTO PEEKUSR (USER,SECTION,KEY,DATA)
          ('*NONE', '*PEEK45', '*F19', '*LEFT'),
          ('*NONE', '*PEEK45', '*F20', '*RIGHT'),
          ('*NONE', '*PEEK45', '*F24', '*MOREKEYS'),
+         ('*NONE', '*PEEK45', '*PAGEDOWN', '*PAGEDOWN'),
+         ('*NONE', '*PEEK45', '*PAGEUP', '*PAGEUP'),
          ('*NONE', '*PEEK47', ' ', '*NONE'),
          ('*NONE', '*PEEK47', '*ENTER', '*ENTER'),
          ('*NONE', '*PEEK47', '*F03', '*EXIT'),
