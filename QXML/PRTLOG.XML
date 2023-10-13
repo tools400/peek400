@@ -51,7 +51,7 @@
       appblddate CDATA #REQUIRED
      >
      ]>
-<upload  appname="PRTLOG"  appauthor="Thomas Raddatz"  appblddate="10/09/2023">
+<upload  appname="PRTLOG"  appauthor="Thomas Raddatz"  appblddate="10/13/2023">
 <install_instructions><![CDATA[
      *----------------------------------------------------------------      ------
      *  1. Upload entire XML to your AS/400 to a source file 112 long, into any mbr
@@ -1272,6 +1272,12 @@
 <chgvar   condition="*NONE" var="SRCFILE" value="QPRTLOG">
 <![CDATA[
 ]]>  </chgvar>
+<qrycond
+  msg="'Create sample programs? (YES, NO)'"
+  values="YES        NO"
+  var="CRTTSTPGM">
+<![CDATA[
+]]>  </qrycond>
 <sendmsg  sendmsgid="CPF9897" sendmsgtype = "*STATUS   "><![CDATA[
 Installing A_INSTALL  type CLLE - in progress.
 ]]>  </sendmsg>
@@ -1322,15 +1328,16 @@ srccssid=  "01141">
      /*     >>END-IMPORTANT<<                                               */
      /*     >>EXECUTE<<                                                     */
      /*     >>CMD<<       CALL   PGM(QTEMP/A_INSTALL) +                     */
-     /*                   PARM('*CURRENT' '&SF' '&LI');                     */
+     /*                   PARM('*CURRENT' '&SF' '&LI' 'NO');                */
      /*     >>CMD<<       DLTPGM PGM(QTEMP/A_INSTALL);                      */
      /*   >>END-PRE-COMPILER<<                                              */
      /* =================================================================== */
-             PGM        PARM(&TGTRLS &SRCFILE &TOLIB)
+             PGM        PARM(&TGTRLS &SRCFILE &TOLIB &CRTTSTPGM)
 
              DCL        VAR(&TGTRLS   ) TYPE(*CHAR) LEN(10)
              DCL        VAR(&SRCFILE  ) TYPE(*CHAR) LEN(10)
              DCL        VAR(&TOLIB    ) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&CRTTSTPGM) TYPE(*CHAR) LEN(10)
 
              DCL        VAR(&SRCLIB   ) TYPE(*CHAR) LEN(10)
 
@@ -1383,27 +1390,37 @@ srccssid=  "01141">
              DLTSPLF    FILE(PRTLOG    ) JOB(*) SPLNBR(*LAST)
              MONMSG     MSGID(CPF0000)
 
-             CRTRPGMOD  MODULE(&TOLIB/PRTLOG_T) +
-                          SRCFILE(&SRCLIB/&SRCFILE) SRCMBR(*MODULE) +
-                          DBGVIEW(*LIST) TRUNCNBR(*NO) +
-                          TGTRLS(&TGTRLS)
-             DLTSPLF    FILE(PRTLOG_T  ) JOB(*) SPLNBR(*LAST)
-             MONMSG     MSGID(CPF0000)
+     /* -------------------------------- */
+     /*  Create test programs            */
+     /* -------------------------------- */
+             IF         COND(&CRTTSTPGM *EQ 'YES') THEN(DO)
 
-             CRTPGM     PGM(&TOLIB/PRTLOG_T) +
-                          MODULE(&TOLIB/PRTLOG_T) +
-                          BNDSRVPGM(&TOLIB/PRTLOG &TOLIB/BASICS1) +
-                          ACTGRP(*NEW) +
-                          TGTRLS(&TGTRLS) +
-                          DETAIL(*BASIC)
-             DLTSPLF    FILE(PRTLOG_T  ) JOB(*) SPLNBR(*LAST)
-             MONMSG     MSGID(CPF0000)
+                CRTRPGMOD  MODULE(&TOLIB/PRTLOG_T) +
+                             SRCFILE(&SRCLIB/&SRCFILE) SRCMBR(*MODULE) +
+                             DBGVIEW(*LIST) TRUNCNBR(*NO) +
+                             TGTRLS(&TGTRLS)
+                DLTSPLF    FILE(PRTLOG_T  ) JOB(*) SPLNBR(*LAST)
+                MONMSG     MSGID(CPF0000)
+
+                CRTPGM     PGM(&TOLIB/PRTLOG_T) +
+                             MODULE(&TOLIB/PRTLOG_T) +
+                             BNDSRVPGM(&TOLIB/PRTLOG &TOLIB/BASICS1) +
+                             ACTGRP(*NEW) +
+                             TGTRLS(&TGTRLS) +
+                             DETAIL(*BASIC)
+                DLTSPLF    FILE(PRTLOG_T  ) JOB(*) SPLNBR(*LAST)
+                MONMSG     MSGID(CPF0000)
+
+             ENDDO
 
      /* -------------------------------- */
      /*  Delete obsolete objects         */
      /* -------------------------------- */
              DLTMOD     MODULE(&TOLIB/PRTLOG)
-             DLTMOD     MODULE(&TOLIB/PRTLOG_T)
+
+             IF         COND(&CRTTSTPGM *EQ 'YES') THEN(DO)
+                DLTMOD     MODULE(&TOLIB/PRTLOG_T)
+             ENDDO
 
              ENDPGM
 ]]>  </copysrc>
@@ -2452,7 +2469,7 @@ CRTBNDCL PGM(&tolib/A_INSTALL) SRCFILE(&tolib/QPRTLOG) SRCMBR(*PGM) DFTACTGRP(*N
 IEW(*LIST)
 ]]>  </qcmdexc>
 <qcmdexc condition="*NONE" release="*CURRENT" dltsplf="*NONE"><![CDATA[
-CALL PGM(&tolib/A_INSTALL) PARM('&TGTRLS' '&SRCFILE' '&tolib')
+CALL PGM(&tolib/A_INSTALL) PARM('&TGTRLS' '&SRCFILE' '&tolib' '&CRTTSTPGM')
 ]]>  </qcmdexc>
 <qcmdexc condition="*NONE" release="*CURRENT" dltsplf="*NONE"><![CDATA[
 DLTPGM PGM(&tolib/A_INSTALL)
