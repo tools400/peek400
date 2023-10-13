@@ -16,7 +16,8 @@
      /* >>PRE-COMPILER<<                                             */
      /*   >>CRTCMD<< CRTBNDCL PGM(&LI/&OB) +                         */
      /*                       SRCFILE(&SL/&SF) SRCMBR(&SM) +         */
-     /*                       DFTACTGRP(*NO) ACTGRP(*NEW);           */
+     /*                       DFTACTGRP(*NO) ACTGRP(*NEW) +          */
+     /*                       TGTRLS(V7R1M0);                        */
      /*   >>CMD<<    CRTCMD   CMD(&LI/CRTPEEKOBJ) +                  */
      /*                       SRCFILE(&SL/QCMDSRC) SRCMBR(*CMD) +    */
      /*                       PGM(&LI/PEEK99);                       */
@@ -38,28 +39,28 @@
              /* ---------------------------------------------------- */
 
              CRTBNDRPG  PGM(QTEMP/A_XMLINST) SRCFILE(&DEVLIB/QXML) +
-                          SRCMBR(*PGM) DBGVIEW(*LIST)
+                          SRCMBR(*PGM) DBGVIEW(*LIST) TGTRLS(&TGTRLS)
 
              /* ---------------------------------------------------- */
              /*  Create utility CRTMSGDS                             */
              /* ---------------------------------------------------- */
 
              CALL       PGM(QTEMP/A_XMLINST) +
-                          PARM('CRTMSGDS' 'QXML' &DEVLIB '' 'GER')
+                          PARM('CRTMSGDS' 'QXML' &DEVLIB '' 'GER' '&TGTRLS')
 
              /* ---------------------------------------------------- */
              /*  Create service program BASICS1                      */
              /* ---------------------------------------------------- */
 
              CALL       PGM(QTEMP/A_XMLINST) +
-                          PARM('BASICS1' 'QXML' &DEVLIB '' 'NO C_YES')
+                          PARM('BASICS1' 'QXML' &DEVLIB '' 'NO C_YES' '&TGTRLS')
 
              /* ---------------------------------------------------- */
              /*  Create service program PRTLOG                       */
              /* ---------------------------------------------------- */
 
              CALL       PGM(QTEMP/A_XMLINST) +
-                          PARM('PRTLOG' 'QXML' &DEVLIB '' 'NO')
+                          PARM('PRTLOG' 'QXML' &DEVLIB '' 'NO' '&TGTRLS')
 
              /* ---------------------------------------------------- */
              /*  Delete XML installation utility.                    */
