@@ -1,8 +1,9 @@
  /*===============================================================*
   * >>PRE-COMPILER<<                                              *
-  *   >>CRTCMD<<  CRTPF SRCFILE(&SL/&SF) SRCMBR(&SM);             *
+  *   >>CRTCMD<<  RUNSQLSTM SRCFILE(&SL/&SF) SRCMBR(&SM);         *
   *   >>IMPORTANT<<                                               *
   *     >>PARM<<  COMMIT(*NONE);                                  *
+  *     >>PARM<<  DFTRDBCOL(&SL);                                 *
   *   >>END-IMPORTANT<<                                           *
   *   >>EXECUTE<<                                                 *
   * >>END-PRE-COMPILER<<                                          *
