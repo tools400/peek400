@@ -16,6 +16,14 @@
      /*  PEEKENG, PEEKFRA und PEEKGER.                               */
      /*                                                              */
      /* ============================================================ */
+     /* >>PRE-COMPILER<<                                             */
+     /*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +   */
+     /*                           OBJLIB(&LI) DEVLIB(&LI) +          */
+     /*                           SBMJOB(*NO) BNDDIR(PEEK) +         */
+     /*                           INSTALL(*NO);                      */
+     /*   >>EXECUTE<<                                                */
+     /* >>END-PRE-COMPILER<<                                         */
+     /* ============================================================ */
 
           PGM        PARM(&MsgFLib    +
                           )
@@ -50,7 +58,7 @@
  /* Msg-DS     */
              CRTMSGDS   RANGE(*ALL) MSGF(&MSGFLIB/PEEKGER) +
                           FILE(&MSGFLIB/QCOPYLE) REPLACE(*YES) +
-                          TYPE(*ILERPG) DEFINE(*NO)
+                          TYPE(*FREE) DEFINE(*NO)
  /* Msg-Source     */
  /* German         */
              CRTMSGDS   RANGE(*ALL) MSGF(&MSGFLIB/PEEKGER) +
