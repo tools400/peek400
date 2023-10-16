@@ -13,6 +13,14 @@
      /*    Changes the object owner of a given library and all       */
      /*    objects of the library to a given user profile.           */
      /* ============================================================ */
+     /* >>PRE-COMPILER<<                                             */
+     /*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +   */
+     /*                           OBJLIB(&LI) DEVLIB(&LI) +          */
+     /*                           SBMJOB(*NO) BNDDIR(PEEK) +         */
+     /*                           INSTALL(*NO);                      */
+     /*   >>EXECUTE<<                                                */
+     /* >>END-PRE-COMPILER<<                                         */
+     /* ============================================================ */
              PGM        PARM(&LIB &NEWOWN)
 
              DCL        VAR(&LIB       ) TYPE(*CHAR) LEN(10)

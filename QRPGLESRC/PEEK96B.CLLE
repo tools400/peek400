@@ -12,6 +12,14 @@
      /*  Documentation:                                              */
      /*    Changes the owner of a given object to a given owner.     */
      /* ============================================================ */
+     /* >>PRE-COMPILER<<                                             */
+     /*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +   */
+     /*                           OBJLIB(&LI) DEVLIB(&LI) +          */
+     /*                           SBMJOB(*NO) BNDDIR(PEEK) +         */
+     /*                           INSTALL(*NO);                      */
+     /*   >>EXECUTE<<                                                */
+     /* >>END-PRE-COMPILER<<                                         */
+     /* ============================================================ */
              PGM        PARM(&OBJECT &LIB &TYPE &NEWOWN)
 
              DCL        VAR(&OBJECT    ) TYPE(*CHAR) LEN(10)
