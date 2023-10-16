@@ -166,27 +166,31 @@
                           TEXT('Peek/400 - Beispiel- und Exit-Programme')
              CPYF       FROMFILE(&DEVLIB/QRPGLESRC) +
                           TOFILE(&NEWLIB/QEXAMPLE) FROMMBR(EXIT01)   +
-                          TOMBR(*FROMMBR) MBROPT(*ADD) +
+                          TOMBR(*FROMMBR) MBROPT(*REPLACE) +
                           FMTOPT(*MAP)
              CPYF       FROMFILE(&DEVLIB/QRPGLESRC) +
                           TOFILE(&NEWLIB/QEXAMPLE) FROMMBR(EXIT02)   +
-                          TOMBR(*FROMMBR) MBROPT(*ADD) +
+                          TOMBR(*FROMMBR) MBROPT(*REPLACE) +
                           FMTOPT(*MAP)
              CPYF       FROMFILE(&DEVLIB/QRPGLESRC) +
                           TOFILE(&NEWLIB/QEXAMPLE) FROMMBR(EXIT03)   +
-                          TOMBR(*FROMMBR) MBROPT(*ADD) +
+                          TOMBR(*FROMMBR) MBROPT(*REPLACE) +
                           FMTOPT(*MAP)
              CPYF       FROMFILE(&DEVLIB/QRPGLESRC) +
                           TOFILE(&NEWLIB/QEXAMPLE) FROMMBR(EXIT04)   +
-                          TOMBR(*FROMMBR) MBROPT(*ADD) +
+                          TOMBR(*FROMMBR) MBROPT(*REPLACE) +
                           FMTOPT(*MAP)
              CPYF       FROMFILE(&DEVLIB/QRPGLESRC) +
                           TOFILE(&NEWLIB/QEXAMPLE) FROMMBR(EXIT05)   +
-                          TOMBR(*FROMMBR) MBROPT(*ADD) +
+                          TOMBR(*FROMMBR) MBROPT(*REPLACE) +
                           FMTOPT(*MAP)
              CPYF       FROMFILE(&DEVLIB/QDDSSRC  ) +
                           TOFILE(&NEWLIB/QEXAMPLE) FROMMBR(EXIT01PF) +
-                          TOMBR(*FROMMBR) MBROPT(*ADD) +
+                          TOMBR(*FROMMBR) MBROPT(*REPLACE) +
+                          FMTOPT(*MAP)
+             CPYF       FROMFILE(&DEVLIB/QDDSSRC  ) +
+                          TOFILE(&NEWLIB/QEXAMPLE) FROMMBR(EXIT04LOG) +
+                          TOMBR(*FROMMBR) MBROPT(*REPLACE) +
                           FMTOPT(*MAP)
              CRTMSGDS   RANGE(USR1000 USR1999) +
                           MSGF(&DEVLIB/PEEKGER) +
@@ -199,84 +203,87 @@
                           TEXT('Peek/400 - Template für Programme')
              CPYF       FROMFILE(&DEVLIB/PEEKSRC) +
                           TOFILE(&NEWLIB/PEEKSRC) FROMMBR(PGM) +
-                          TOMBR(PGM) MBROPT(*ADD) CRTFILE(*NO)
+                          TOMBR(PGM) MBROPT(*REPLACE) CRTFILE(*NO)
              CPYF       FROMFILE(&DEVLIB/PEEKSRC) +
                           TOFILE(&NEWLIB/PEEKSRC) FROMMBR(DSPF) +
-                          TOMBR(DSPF) MBROPT(*ADD) CRTFILE(*NO)
+                          TOMBR(DSPF) MBROPT(*REPLACE) CRTFILE(*NO)
 
  /* -------------------------------------------------------------- */
  /* QCOPYLE    */
              CRTSRCPF   FILE(&NEWLIB/QCOPYLE) RCDLEN(112) +
                           TEXT('Peek/400 - ILE Copy-Books')
              CPYF       FROMFILE(&DEVLIB/QCOPYLE) +
+                          TOFILE(&NEWLIB/QCOPYLE) FROMMBR(CEECNDHDLR) +
+                          TOMBR(*FROMMBR ) MBROPT(*REPLACE) CRTFILE(*NO)
+             CPYF       FROMFILE(&DEVLIB/QCOPYLE) +
+                          TOFILE(&NEWLIB/QCOPYLE) FROMMBR(CEERTX    ) +
+                          TOMBR(*FROMMBR ) MBROPT(*REPLACE) CRTFILE(*NO)
+             CPYF       FROMFILE(&DEVLIB/QCOPYLE) +
+                          TOFILE(&NEWLIB/QCOPYLE) FROMMBR(COPYRIGHT ) +
+                          TOMBR(*FROMMBR ) MBROPT(*REPLACE) CRTFILE(*NO)
+             CPYF       FROMFILE(&DEVLIB/QCOPYLE) +
                           TOFILE(&NEWLIB/QCOPYLE) FROMMBR(D_VARDEF  ) +
-                          TOMBR(*FROMMBR ) MBROPT(*ADD) CRTFILE(*NO)
+                          TOMBR(*FROMMBR ) MBROPT(*REPLACE) CRTFILE(*NO)
              CPYF       FROMFILE(&DEVLIB/QCOPYLE) +
                           TOFILE(&NEWLIB/QCOPYLE) FROMMBR(FLDL0100  ) +
-                          TOMBR(*FROMMBR ) MBROPT(*ADD) CRTFILE(*NO)
+                          TOMBR(*FROMMBR ) MBROPT(*REPLACE) CRTFILE(*NO)
+             CPYF       FROMFILE(&DEVLIB/QCOPYLE) +
+                          TOFILE(&NEWLIB/QCOPYLE) FROMMBR(H_SPEC    ) +
+                          TOMBR(*FROMMBR ) MBROPT(*REPLACE) CRTFILE(*NO)
+             CPYF       FROMFILE(&DEVLIB/QCOPYLE) +
+                          TOFILE(&NEWLIB/QCOPYLE) FROMMBR(PEXIT01   ) +
+                          TOMBR(*FROMMBR ) MBROPT(*REPLACE) CRTFILE(*NO)
+             CPYF       FROMFILE(&DEVLIB/QCOPYLE) +
+                          TOFILE(&NEWLIB/QCOPYLE) FROMMBR(PEXIT02   ) +
+                          TOMBR(*FROMMBR ) MBROPT(*REPLACE) CRTFILE(*NO)
+             CPYF       FROMFILE(&DEVLIB/QCOPYLE) +
+                          TOFILE(&NEWLIB/QCOPYLE) FROMMBR(PEXIT03   ) +
+                          TOMBR(*FROMMBR ) MBROPT(*REPLACE) CRTFILE(*NO)
+             CPYF       FROMFILE(&DEVLIB/QCOPYLE) +
+                          TOFILE(&NEWLIB/QCOPYLE) FROMMBR(PEXIT04   ) +
+                          TOMBR(*FROMMBR ) MBROPT(*REPLACE) CRTFILE(*NO)
+             CPYF       FROMFILE(&DEVLIB/QCOPYLE) +
+                          TOFILE(&NEWLIB/QCOPYLE) FROMMBR(PEXIT05   ) +
+                          TOMBR(*FROMMBR ) MBROPT(*REPLACE) CRTFILE(*NO)
              CPYF       FROMFILE(&DEVLIB/QCOPYLE) +
                           TOFILE(&NEWLIB/QCOPYLE) FROMMBR(PPEEK21   ) +
-                          TOMBR(*FROMMBR ) MBROPT(*ADD) CRTFILE(*NO)
+                          TOMBR(*FROMMBR ) MBROPT(*REPLACE) CRTFILE(*NO)
              CPYF       FROMFILE(&DEVLIB/QCOPYLE) +
                           TOFILE(&NEWLIB/QCOPYLE) FROMMBR(PPEEK23   ) +
-                          TOMBR(*FROMMBR ) MBROPT(*ADD) CRTFILE(*NO)
+                          TOMBR(*FROMMBR ) MBROPT(*REPLACE) CRTFILE(*NO)
              CPYF       FROMFILE(&DEVLIB/QCOPYLE) +
                           TOFILE(&NEWLIB/QCOPYLE) FROMMBR(PPEEK32   ) +
-                          TOMBR(*FROMMBR ) MBROPT(*ADD) CRTFILE(*NO)
+                          TOMBR(*FROMMBR ) MBROPT(*REPLACE) CRTFILE(*NO)
              CPYF       FROMFILE(&DEVLIB/QCOPYLE) +
                           TOFILE(&NEWLIB/QCOPYLE) FROMMBR(PPEEK45   ) +
-                          TOMBR(*FROMMBR ) MBROPT(*ADD) CRTFILE(*NO)
+                          TOMBR(*FROMMBR ) MBROPT(*REPLACE) CRTFILE(*NO)
              CPYF       FROMFILE(&DEVLIB/QCOPYLE) +
                           TOFILE(&NEWLIB/QCOPYLE) FROMMBR(PPEEK53   ) +
-                          TOMBR(*FROMMBR ) MBROPT(*ADD) CRTFILE(*NO)
+                          TOMBR(*FROMMBR ) MBROPT(*REPLACE) CRTFILE(*NO)
              CPYF       FROMFILE(&DEVLIB/QCOPYLE) +
                           TOFILE(&NEWLIB/QCOPYLE) FROMMBR(PPEEK58   ) +
-                          TOMBR(*FROMMBR ) MBROPT(*ADD) CRTFILE(*NO)
+                          TOMBR(*FROMMBR ) MBROPT(*REPLACE) CRTFILE(*NO)
              CPYF       FROMFILE(&DEVLIB/QCOPYLE) +
                           TOFILE(&NEWLIB/QCOPYLE) FROMMBR(PPEEK59   ) +
-                          TOMBR(*FROMMBR ) MBROPT(*ADD) CRTFILE(*NO)
+                          TOMBR(*FROMMBR ) MBROPT(*REPLACE) CRTFILE(*NO)
              CPYF       FROMFILE(&DEVLIB/QCOPYLE) +
                           TOFILE(&NEWLIB/QCOPYLE) FROMMBR(PPEEK64   ) +
-                          TOMBR(*FROMMBR ) MBROPT(*ADD) CRTFILE(*NO)
+                          TOMBR(*FROMMBR ) MBROPT(*REPLACE) CRTFILE(*NO)
              CPYF       FROMFILE(&DEVLIB/QCOPYLE) +
-                          TOFILE(&NEWLIB/QCOPYLE) FROMMBR(PEXIT04   ) +
-                          TOMBR(*FROMMBR ) MBROPT(*ADD) CRTFILE(*NO)
-             CPYF       FROMFILE(&DEVLIB/QCOPYLE) +
-                          TOFILE(&NEWLIB/QCOPYLE) FROMMBR(PEXIT04   ) +
-                          TOMBR(*FROMMBR ) MBROPT(*ADD) CRTFILE(*NO)
+                          TOFILE(&NEWLIB/QCOPYLE) FROMMBR(PUPDPGM   ) +
+                          TOMBR(*FROMMBR ) MBROPT(*REPLACE) CRTFILE(*NO)
              CPYF       FROMFILE(&DEVLIB/QCOPYLE) +
                           TOFILE(&NEWLIB/QCOPYLE) FROMMBR(QCMDEXC   ) +
-                          TOMBR(*FROMMBR ) MBROPT(*ADD) CRTFILE(*NO)
-             CPYF       FROMFILE(&DEVLIB/QCOPYLE) +
-                          TOFILE(&NEWLIB/QCOPYLE) FROMMBR(CEECNDHDLR) +
-                          TOMBR(*FROMMBR ) MBROPT(*ADD) CRTFILE(*NO)
+                          TOMBR(*FROMMBR ) MBROPT(*REPLACE) CRTFILE(*NO)
              CPYF       FROMFILE(&DEVLIB/QCOPYLE) +
                           TOFILE(&NEWLIB/QCOPYLE) FROMMBR(QTNRCMTI  ) +
-                          TOMBR(*FROMMBR ) MBROPT(*ADD) CRTFILE(*NO)
-
-
-
-       /*    CPYF       FROMFILE(&DEVLIB/QCOPYLE) +                         */
-       /*                 TOFILE(&NEWLIB/QCOPYLE) FROMMBR(D_VARDEF  ) +     */
-       /*                 TOMBR(D_VARDEF) MBROPT(*ADD) CRTFILE(*NO)         */
-       /*    CPYF       FROMFILE(&DEVLIB/QCOPYLE) +                         */
-       /*                 TOFILE(&NEWLIB/QCOPYLE) FROMMBR(FLDL0100  ) +     */
-       /*                 TOMBR(FLDL0100) MBROPT(*ADD) CRTFILE(*NO)         */
-       /*    CPYF       FROMFILE(&DEVLIB/QCOPYLE) +                         */
-       /*                 TOFILE(&NEWLIB/QCOPYLE) FROMMBR(PPEEK53  ) +     */
-       /*                 TOMBR(PPEEK58) MBROPT(*ADD) CRTFILE(*NO)         */
-       /*    CPYF       FROMFILE(&DEVLIB/QCOPYLE) +                         */
-       /*                 TOFILE(&NEWLIB/QCOPYLE) FROMMBR(PPEEK58  ) +     */
-       /*                 TOMBR(PPEEK58) MBROPT(*ADD) CRTFILE(*NO)         */
-       /*    CPYF       FROMFILE(&DEVLIB/QCOPYLE) +                         */
-       /*                 TOFILE(&NEWLIB/QCOPYLE) FROMMBR(QCMDEXC   ) +     */
-       /*                 TOMBR(PPEEK61) MBROPT(*ADD) CRTFILE(*NO)         */
-       /*    CPYF       FROMFILE(&DEVLIB/QCOPYLE) +                         */
-       /*                 TOFILE(&NEWLIB/QCOPYLE) FROMMBR(CEECNDHDLR) +     */
-       /*                 TOMBR(PPEEK63) MBROPT(*ADD) CRTFILE(*NO)         */
-       /*    CPYF       FROMFILE(&DEVLIB/QCOPYLE) +                         */
-       /*                 TOFILE(&NEWLIB/QCOPYLE) FROMMBR(QTNRCMTI  ) +     */
-       /*                 TOMBR(PPEEK71) MBROPT(*ADD) CRTFILE(*NO)         */
+                          TOMBR(*FROMMBR ) MBROPT(*REPLACE) CRTFILE(*NO)
+             CPYF       FROMFILE(&DEVLIB/QCOPYLE) +
+                          TOFILE(&NEWLIB/QCOPYLE) FROMMBR(SDS       ) +
+                          TOMBR(*FROMMBR ) MBROPT(*REPLACE) CRTFILE(*NO)
+             CPYF       FROMFILE(&DEVLIB/QCOPYLE) +
+                          TOFILE(&NEWLIB/QCOPYLE) FROMMBR(USR1000   ) +
+                          TOMBR(*FROMMBR ) MBROPT(*REPLACE) CRTFILE(*NO)
 
  /* -------------------------------------------------------------- */
  /* QCMDSRC    */
@@ -286,39 +293,39 @@
 
              CPYF       FROMFILE(&DEVLIB/QCMDSRC) +
                           TOFILE(&NEWLIB/QCMDSRC) FROMMBR(PEEK    ) +
-                          TOMBR(PEEK    ) MBROPT(*ADD) CRTFILE(*NO)
+                          TOMBR(PEEK    ) MBROPT(*REPLACE) CRTFILE(*NO)
              CPYF       FROMFILE(&DEVLIB/QCMDSRC) +
                           TOFILE(&NEWLIB/QCMDSRC) FROMMBR(TREE    ) +
-                          TOMBR(TREE    ) MBROPT(*ADD) CRTFILE(*NO)
+                          TOMBR(TREE    ) MBROPT(*REPLACE) CRTFILE(*NO)
 
              CPYF       FROMFILE(&DEVLIB/QCMDSRC) +
                           TOFILE(&NEWLIB/QCMDSRC) FROMMBR(PEEKENG ) +
-                          TOMBR(PEEKENG ) MBROPT(*ADD) CRTFILE(*NO)
+                          TOMBR(PEEKENG ) MBROPT(*REPLACE) CRTFILE(*NO)
              CPYF       FROMFILE(&DEVLIB/QCMDSRC) +
                           TOFILE(&NEWLIB/QCMDSRC) FROMMBR(PEEKFRA ) +
-                          TOMBR(PEEKFRA ) MBROPT(*ADD) CRTFILE(*NO)
+                          TOMBR(PEEKFRA ) MBROPT(*REPLACE) CRTFILE(*NO)
              CPYF       FROMFILE(&DEVLIB/QCMDSRC) +
                           TOFILE(&NEWLIB/QCMDSRC) FROMMBR(PEEKGER ) +
-                          TOMBR(PEEKGER ) MBROPT(*ADD) CRTFILE(*NO)
+                          TOMBR(PEEKGER ) MBROPT(*REPLACE) CRTFILE(*NO)
              CPYF       FROMFILE(&DEVLIB/QCMDSRC) +
                           TOFILE(&NEWLIB/QCMDSRC) FROMMBR(PEEKITA ) +
-                          TOMBR(PEEKITA ) MBROPT(*ADD) CRTFILE(*NO)
+                          TOMBR(PEEKITA ) MBROPT(*REPLACE) CRTFILE(*NO)
              CPYF       FROMFILE(&DEVLIB/QCMDSRC) +
                           TOFILE(&NEWLIB/QCMDSRC) FROMMBR(PEEKSPA ) +
-                          TOMBR(PEEKSPA ) MBROPT(*ADD) CRTFILE(*NO)
+                          TOMBR(PEEKSPA ) MBROPT(*REPLACE) CRTFILE(*NO)
 
              CPYF       FROMFILE(&DEVLIB/QCMDSRC) +
                           TOFILE(&NEWLIB/QCMDSRC) FROMMBR(TREEENG ) +
-                          TOMBR(TREEENG ) MBROPT(*ADD) CRTFILE(*NO)
+                          TOMBR(TREEENG ) MBROPT(*REPLACE) CRTFILE(*NO)
              CPYF       FROMFILE(&DEVLIB/QCMDSRC) +
                           TOFILE(&NEWLIB/QCMDSRC) FROMMBR(TREEGER ) +
-                          TOMBR(TREEGER ) MBROPT(*ADD) CRTFILE(*NO)
+                          TOMBR(TREEGER ) MBROPT(*REPLACE) CRTFILE(*NO)
              CPYF       FROMFILE(&DEVLIB/QCMDSRC) +
                           TOFILE(&NEWLIB/QCMDSRC) FROMMBR(TREEITA ) +
-                          TOMBR(TREEITA ) MBROPT(*ADD) CRTFILE(*NO)
+                          TOMBR(TREEITA ) MBROPT(*REPLACE) CRTFILE(*NO)
              CPYF       FROMFILE(&DEVLIB/QCMDSRC) +
                           TOFILE(&NEWLIB/QCMDSRC) FROMMBR(TREESPA ) +
-                          TOMBR(TREESPA ) MBROPT(*ADD) CRTFILE(*NO)
+                          TOMBR(TREESPA ) MBROPT(*REPLACE) CRTFILE(*NO)
 
  /* -------------------------------------------------------------- */
  /* PEEKENV    */
@@ -390,7 +397,7 @@
 
              CPYF       FROMFILE(&DEVLIB/PEEKUSR) +
                           TOFILE(&NEWLIB/PEEKUSR) FROMMBR(*FIRST) +
-                          TOMBR(*FIRST) MBROPT(*ADD) CRTFILE(*NO)
+                          TOMBR(*FIRST) MBROPT(*REPLACE) CRTFILE(*NO)
 
          /*  CALL       PGM(&DevLib/PEEK96B) PARM('PEEKUSR'   &NEWLIB '*FILE')  */
 
