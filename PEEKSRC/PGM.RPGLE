@@ -110,18 +110,22 @@ FMT1-F                                     rename(X________X:FFILE00)
 COPY- /include LIBRARY_NAME/QCOPYLE,D_VARDEF
 COPY- /include LIBRARY_NAME/QCOPYLE,FLDL0100
       *
+COPY- /include LIBRARY_NAME/QCOPYLE,PEXIT04
 COPY- /include LIBRARY_NAME/QCOPYLE,PPEEK21
 COPY- /include LIBRARY_NAME/QCOPYLE,PPEEK23
 COPY- /include LIBRARY_NAME/QCOPYLE,PPEEK32
 COPY- /include LIBRARY_NAME/QCOPYLE,PPEEK45
-COPY- /include LIBRARY_NAME/QCOPYLE,PPEEK59
-COPY- /include LIBRARY_NAME/QCOPYLE,PPEEK64
 COPY- /include LIBRARY_NAME/QCOPYLE,PPEEK53
 COPY- /include LIBRARY_NAME/QCOPYLE,PPEEK58
-COPY- /include LIBRARY_NAME/QCOPYLE,PEXIT04
+COPY- /include LIBRARY_NAME/QCOPYLE,PPEEK59
+COPY- /include LIBRARY_NAME/QCOPYLE,PPEEK64
 COPY- /include LIBRARY_NAME/QCOPYLE,QCMDEXC
 COPY- /include LIBRARY_NAME/QCOPYLE,CEECNDHDLR
 COPY- /include LIBRARY_NAME/QCOPYLE,QTNRCMTI
+      *
+      /define internal_prototype
+COPY- /include LIBRARY_NAME/QCOPYLE,PUPDPGM
+      /undefine internal_prototype
       *
       *====================================================*
       *  List API Format FLDL0100 mit eigenen zusätzlichen *
@@ -378,10 +382,6 @@ RNM1-D RCD_DS        E DS                  extname(FILE00)
      D pRCD_BUFFER     S               *   inz(%addr(RCD_DS))
      D RCD_BUFFER      S                   like(RCD_DS   )
      D                                     based(pRCD_BUFFER)
-      *
-      /define internal_prototype
-      /include QCOPYLE,PUPDPGM
-      /undefine internal_prototype
       *
      D UPDPGM          PI
      D  i_dsp80                            const like(dsp80_t)
