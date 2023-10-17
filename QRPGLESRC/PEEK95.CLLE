@@ -94,9 +94,6 @@
                                                          *tcat ')')          +
 
  /* Sichern PEEK        */
-             DLTF       FILE(&SAVLIB/EVFEVENT)
-             MONMSG     MSGID(CPF2105) /* File not found */
-
              CHGVAR     VAR(&SAVLIB) VALUE(&USER)
              CHGVAR     VAR(&SAVFILE) VALUE(%SST(&DEVLIB 1 7))
 
@@ -104,6 +101,10 @@
              MONMSG     MSGID(CPF2105)
 
              CRTSAVF    FILE(&SAVLIB/&SAVFILE) TEXT(&TEXT)
+
+             DLTF       FILE(&PRODLIB/EVFEVENT)
+             MONMSG     MSGID(CPF2105) /* File not found */
+
              SAVLIB     LIB(&PRODLIB) DEV(*SAVF) +
                           SAVF(&SAVLIB/&SAVFILE) TGTRLS(&TGTRLS) +
                           DTACPR(*YES ) OUTPUT(*PRINT)
