@@ -7957,10 +7957,8 @@ begsr first;
   exsr getusrsetg;
 
   // - Prüfen auf generischen Dateinamen
-  if %len(%trimr(io_qfile.name)) > 0 and
-     %subst(io_qfile.name
-         : %len(%trimr(io_qfile.lib)): 1) = '*';
-    if (*in75 = *off);
+  if (f_endswith('*': %trimr(io_qfile.name)));
+    if (*in75 = *off); // Feld ist nicht gesperrt
       ##file = io_qfile.name;
       ##library = io_qfile.lib;
       exsr pmt_file;
@@ -7968,8 +7966,8 @@ begsr first;
         io_qfile.name = ##file;
         io_qfile.lib = ##library;
       endif;
-      ##file = *blanks;
-      ##library = *blanks;
+      ##file = '';
+      ##library = '';
     endif;
   endif;
 

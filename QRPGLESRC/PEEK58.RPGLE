@@ -2917,18 +2917,15 @@ dcl-proc f_endswith export;
   //  Local fields
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  if %len(i_string) = 0  or
-  %len(i_suffix) = 0  or
-  %len(i_string) < %len(i_suffix);
+  if (%len(i_string) = 0  or %len(i_suffix) = 0  or %len(i_string) < %len(i_suffix));
     return endswith;
   endif;
 
-  if %subst(i_string
-  : %len(i_string) - %len(i_suffix) + 1) = i_suffix;
+  if (%subst(i_string: %len(i_string) - %len(i_suffix) + 1) = i_suffix);
     endswith = bTrue;
   endif;
 
-  return   endswith;
+  return endswith;
 
 
 end-proc;
