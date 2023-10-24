@@ -182,19 +182,19 @@ dcl-proc SQL_prepareStatement export;
   // PRÜFUNG AUSWERTEN
   if (f_isSqlErr(o_msgid: o_msgdta) = bTrue);
     f_prepstmt = bFalse;
-    g_file = ' ';
-    g_lib  = ' ';
-    g_mbr  = ' ';
-    g_fmt  = ' ';
+    g_file = '';
+    g_lib = '';
+    g_mbr = '';
+    g_fmt = '';
 
     p_cvtSqlMg('USR8210': o_msgid: o_msgdta);
 
   else;
     f_prepstmt = bTrue;
     g_file = i_file;
-    g_lib  = i_lib;
-    g_mbr  = i_mbr;
-    g_fmt  = i_fmt;
+    g_lib = i_lib;
+    g_mbr = i_mbr;
+    g_fmt = i_fmt;
   endif;
 
   return f_prepstmt;
@@ -708,22 +708,26 @@ dcl-proc f_chgField;
   end-pi;
 
   //  definieren Funktionswert ...
-  dcl-s f_chgfield      like(varString_t);
+  dcl-s f_chgfield  like(varString_t);
 
-  dcl-s x               like(int4_t);
-  dcl-s y               like(int4_t);
-  dcl-s lenstr          like(int4_t);
+  dcl-s x           like(int4_t);
+  dcl-s char        char(1);
 
-  dcl-s isHyphen        like(bool_t);
-  dcl-s isField         like(bool_t);
-  dcl-s isOrder         like(bool_t);
+  dcl-s isHyphen    like(bool_t);
+  dcl-s isField     like(bool_t);
+  dcl-s isOrder     like(bool_t);
 
-  dcl-s waitField       like(bool_t);
-  dcl-s waitOrder       like(bool_t);
+  dcl-s waitField   like(bool_t);
+  dcl-s waitOrder   like(bool_t);
+
+  dcl-s isEndOfQuotedValue like(bool_t);
+
+  dcl-c DOOUBLE_QUOTE   '"';
+  dcl-c SIGNLE_QUOTE    '''';
+  dcl-c COMMA           ',';
+  dcl-c SPACE           ' ';
+  dcl-c END_OF_FIELD    '"'', ';
   // ------------------------------------------------------------------------
-
-  y = 0;
-  lenstr = %len(i_string);
 
   isHyphen  = bFalse;
   isField   = bFalse;
@@ -732,14 +736,15 @@ dcl-proc f_chgField;
   waitField = bTrue;
   waitOrder = bFalse;
 
-  for x = 1 to lenstr;
-    if y = %len(f_chgfield);
+  for x = 1 to %len(i_string);
+    if (%len(f_chgfield) >= %len(f_chgfield: *max));
       leave;
     endif;
 
+    char = %subst(i_string: x: 1);
+
     //  Prüfen auf Hochkomma ...
-    if (%subst(i_string: x: 1) = '"')  or
-       (%subst(i_string: x: 1) = '''');
+    if (char = DOOUBLE_QUOTE or char = SIGNLE_QUOTE);
       if (isHyphen = bTrue);
         isHyphen = bFalse;
       else;
@@ -748,60 +753,48 @@ dcl-proc f_chgField;
     endif;
 
     //  Überlesen in Hochkomma eingeschlossene Felder ...
-    if (isHyphen = bTrue)      and
-       (isField  = bTrue);
-      y = y + 1;
-      %subst(f_chgfield: y: 1) =
-        %subst(i_string: x: 1);
+    if (isHyphen = bTrue and isField = bTrue);
+      f_chgfield = f_chgfield + char;
       iter;
     endif;
 
     //  Festellen Feldanfang ...
+    isEndOfQuotedValue = %check(END_OF_FIELD: char) = 0;
     select;
-    when (%subst(i_string: x: 1) <> ' ')  and
-       (waitField = bTrue);
+    when (char <> SPACE and waitField = bTrue);
       isField = bTrue;
       isOrder = bFalse;
       waitField = bFalse;
       waitOrder = bFalse;
 
-      if (%subst(i_string: x: 1) <> '"');
-        y = y + 1;
-        %subst(f_chgfield: y: 1) = '"';
+      if (char <> DOOUBLE_QUOTE);
+        f_chgfield = f_chgfield + DOOUBLE_QUOTE;
       endif;
 
     //  Festellen Feldende ...
-    when ((%subst(i_string: x: 1) =   ' ')  or
-       (%subst(i_string: x: 1) =   ',')  or
-       (%subst(i_string: x: 1) =   '"')  or
-       (%subst(i_string: x: 1) =  '''')) and
-       (isField   = bTrue)                   and
-       (waitField = bFalse);
+    // when ((char = SPACE or char = COMMA or char = DOOUBLE_QUOTE or char = SIGNLE_QUOTE) and
+    //        isField = bTrue and waitField = bFalse);
+    when (isEndOfQuotedValue and isField = bTrue and waitField = bFalse);
       isField   = bFalse;
       isOrder   = bFalse;
       waitField = bFalse;
       waitOrder = bTrue;
 
-      if (%subst(i_string: x: 1) <> '"');
-        y = y + 1;
-        %subst(f_chgfield: y: 1) = '"';
+      if (char <> DOOUBLE_QUOTE);
+        f_chgfield = f_chgfield + DOOUBLE_QUOTE;
       endif;
 
     //  Festellen Orderanfang ...
-    when (%subst(i_string: x: 1) <> ' ')  and
-       (waitOrder = bTrue);
+    when (char <> SPACE and waitOrder = bTrue);
       isField = bFalse;
       isOrder = bTrue;
       waitField = bFalse;
       waitOrder = bFalse;
 
     //  Festellen Orderende ...
-    when ((%subst(i_string: x: 1) =   ' ')  or
-       (%subst(i_string: x: 1) =   ',')  or
-       (%subst(i_string: x: 1) =   '"')  or
-       (%subst(i_string: x: 1) =  '''')) and
-       (isOrder   = bTrue)                   and
-       (waitOrder = bFalse);
+    // when ((char = SPACE or char = COMMA or char = DOOUBLE_QUOTE or char = SIGNLE_QUOTE) and
+    //        isOrder = bTrue and waitOrder = bFalse);
+    when (isEndOfQuotedValue and isOrder = bTrue and waitField = bFalse);
       isField   = bFalse;
       isOrder   = bFalse;
       waitField = bTrue;
@@ -809,7 +802,7 @@ dcl-proc f_chgField;
     endsl;
 
     //  Trennzeichen  ...
-    if (%subst(i_string: x: 1) =  ',');
+    if (char = COMMA);
       isField   = bFalse;
       isOrder   = bFalse;
       waitField = bTrue;
@@ -817,14 +810,11 @@ dcl-proc f_chgField;
     endif;
 
     //  Löschen Order ...
-    if (isOrder    = bTrue)  and
-       (i_rmvorder = bTrue);
+    if (isOrder = bTrue and i_rmvorder = bTrue);
     //**                Eval      y = y + 1
     //**                Eval      %subst(f_chgField: y: 1) = ' '
     else;
-      y = y + 1;
-      %subst(f_chgfield: y: 1) =
-        %subst(i_string: x: 1);
+      f_chgfield = f_chgfield + char;
     endif;
 
   endfor;

@@ -111,19 +111,19 @@ dcl-s isInzSr         like(bool_t) inz(bFalse);
 //*******************************************************************
 
 dcl-pi peek48;
-  i_dsp80         const like(dsp80_t);
-  i_copyright     const like(copyrght_t);
-  io_file         like(file_t);
-  io_library      like(lib_t);
-  io_member       like(mbr_t);
-  io_rcdfmt       like(fmt_t);
-  i_accessmode    const like(accessmode_t);
-  io_sqlwhere     like(sqlwhere_t);
-  io_sqlorder     like(sqlorder_t);
-  i_enablewhere   const like(bool_t);
-  i_enableorder   const like(bool_t);
-  o_msgid         like(msgid_t);
-  o_msgdta        like(msgdta_t);
+  i_dsp80                            const like(dsp80_t);
+  i_copyright                        const like(copyrght_t);
+  io_file                                  like(file_t);
+  io_library                               like(lib_t);
+  io_member                                like(mbr_t);
+  io_rcdfmt                                like(fmt_t);
+  i_accessmode                       const like(accessmode_t);
+  io_sqlwhere                              like(sqlwhere_t);
+  io_sqlorder                              like(sqlorder_t);
+  i_enablewhere                      const like(bool_t);
+  i_enableorder                      const like(bool_t);
+  o_msgid                                  like(msgid_t);
+  o_msgdta                                 like(msgdta_t);
 end-pi;
 //---------------------------------------------------*
 
@@ -270,17 +270,9 @@ begsr c_enter;
 
   ##order = sql_quote(##order);
 
-  if sql_preparestatement(
-             '1'       :
-             pfile.name    :
-             pfile.library :
-             pfile.member  :
-             pfile.format  :
-             ##where       :
-             ##order       :
-             ymsgid        :
-             ymsgdta       )
-     = bTrue;
+  if (sql_preparestatement(
+         '1': pfile.name: pfile.library: pfile.member: pfile.format:
+         ##where: ##order: ymsgid: ymsgdta));
     io_file      = pfile.name;
     io_library   = pfile.library;
     io_member    = pfile.member;
@@ -288,12 +280,12 @@ begsr c_enter;
     io_sqlwhere  = ##where;
     io_sqlorder  = ##order;
     *in99 = '0';
+  else;
     if (ymsgid <> '');
       p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
       ymsgid = '';
       ymsgdta = '';
     endif;
-  else;
     *in99 = '1';
   endif;
 
