@@ -434,7 +434,7 @@ dcl-s sflmode         char(10) inz;
 dcl-s sflpinrnge      like(int4_t) inz;
 
 dcl-c COPYRIGHT const('1997-2023, Thomas Raddatz - PEEK v4.0.0');
-dcl-c RELEASE const('Stand: 24.10.2023');
+dcl-c RELEASE const('Stand: 26.10.2023');
 dcl-c VERSION const('V04R00M00');
 
 dcl-s l#file          like(##file)    inz;
@@ -497,7 +497,7 @@ dcl-s exit04_name     like(pgmcalln_t) inz;
 dcl-s peekpgm         like(pgm_t) inz;
 dcl-s peekdspf        like(file_t) inz;
 
-dcl-ds sflrow qualified;
+dcl-ds sflDataRow qualified;
   chars           char(1) dim(256) inz;
 end-ds;
 
@@ -1246,9 +1246,9 @@ begsr c_pageup;
     endif;
 
     //  Blättern
-    exsr pbinit;
-    exsr pbpinrcd;
-    exsr pbreadup;
+    exsr pbInit;
+    exsr pbPinRcd;
+    exsr pbReadUp;
 
     //  Keine weiteren Einträge gefunden ...
     if (*in80 = *off);
@@ -1281,11 +1281,11 @@ begsr c_pagedown;
     //  Blättern
     sflCsr = nbrPinRcd + 1;
     exsr pbreadcsr;
-    exsr pbreaddn;
+    exsr pbReadDown;
 
-    exsr pbinit;
-    exsr pbpinrcd;
-    exsr pbreadup;
+    exsr pbInit;
+    exsr pbPinRcd;
+    exsr pbReadUp;
 
   endif;
 
@@ -1759,9 +1759,9 @@ begsr c_movetop;
     if (sflCsr > 0);
 
       exsr pbreadcsr;
-      exsr pbinit;
-      exsr pbpinrcd;
-      exsr pbreadup;
+      exsr pbInit;
+      exsr pbPinRcd;
+      exsr pbReadUp;
       sfsanr = nbrPinRcd + 1;
 
     else;
@@ -1928,13 +1928,13 @@ begsr c_search;
       srchfndrcd = file#x.rcdnbr;
       exsr pbreadp;
     else;
-      exsr pbreaddn;
+      exsr pbReadDown;
     endif;
 
     //  Anzeigen der Subfile
-    exsr pbinit;
-    exsr pbpinrcd;
-    exsr pbreadup;
+    exsr pbInit;
+    exsr pbPinRcd;
+    exsr pbReadUp;
 
     //  Meldung
     select;
@@ -1963,9 +1963,9 @@ begsr c_top;
   else;
 
     exsr pbmovetop;
-    exsr pbinit;
-    exsr pbpinrcd;
-    exsr pbreadup;
+    exsr pbInit;
+    exsr pbPinRcd;
+    exsr pbReadUp;
 
     sfsanr = nbrPinRcd + 1;
   endif;
@@ -1984,10 +1984,10 @@ begsr c_bot;
   else;
 
     exsr pbmovebot;
-    exsr pbinit;
-    exsr pbpinrcd;
-    exsr pbreaddn;
-    exsr pbreadup;
+    exsr pbInit;
+    exsr pbPinRcd;
+    exsr pbReadDown;
+    exsr pbReadUp;
 
     sfsanr = sflnbrrcd;
   endif;
@@ -2112,7 +2112,7 @@ begsr c_pageLeft;
       //  links zur Ermittlung des 1. anzuzeigenden
       //  Feldes ...
       if (##wndnbr > l#minseq);
-        exsr pbfillleft;
+        exsr pbFillDataRow_Left;
         //  ... kein Feld gefunden
         if (cp <= 0);
           ##wndnbr = l#minseq;
@@ -3662,7 +3662,8 @@ begsr pbQueryUser;
           : wrk#rcdnbr: h_file: h_lib: h_mbr
           : h_rcdfmt: yPgmCmd: commitLvl
           : yScreenNbr: yMsgID: yMsgDta);
-    exsr checkHeadlineChanged;
+    exsr checkHeadlineChanged;   // TODO: move to right position, so that isSflDirty
+                                 // is not set after a 'copy external' error.
     *in99 = bFalse;
   on-error;
     *in99 = bTrue;
@@ -4114,7 +4115,7 @@ begsr srchstrrcd;
     x = sflfirstrw + nbrPinRcd;
     if (cursorposition.row < x);
       //  ... oberhalb der Subfile
-      exsr pbreaddn;
+      exsr pbReadDown;
     else;
     //  ... unterhalb der Subfile
     //             einfach weitersuchen
@@ -4166,7 +4167,7 @@ begsr srchup;
       leave;
     endif;
 
-    exsr srchcomp;
+    exsr srchCompare;
     if (isfound = bTrue);
       srchmode = '*FOUND';
       //  ... suchen & pinnen
@@ -4205,7 +4206,7 @@ endsr;
 //    SrchComp      Vergleichen der Suchauswahl               *
 //============================================================*
 
-begsr srchcomp;
+begsr srchCompare;
 
   isfound = bFalse;
 
@@ -4593,7 +4594,7 @@ endsr;
 //                  der nächsten Seite                        *
 //============================================================*
 
-begsr pbinit;
+begsr pbInit;
 
   //  Merker für: Subfile gelöscht setzen
   ispbinit = bTrue;
@@ -4622,7 +4623,7 @@ begsr pbinit;
   $$head080 = set0001.set_hedcol;
 
   //  Aufbereiten der Überschrift
-  exsr pbheadline;
+  exsr pbHeadline;
 
   //  Logischer Schalter für Tabellierung
   istblcol = bFalse;
@@ -4679,7 +4680,7 @@ endsr;
 //    PBReadUP      Vorwärts füllen der Subfile               *
 //============================================================*
 
-begsr pbreadup;
+begsr pbReadUp;
 
   if (isOpen = bFalse);
   //      Nix tun, keine Datei vorhanden
@@ -4716,7 +4717,7 @@ begsr pbreadup;
         leave;
       endif;
 
-      exsr pbfillrigh;
+      exsr pbFillDataRow_Right;
 
       exsr pbsflwrite;
 
@@ -4764,7 +4765,7 @@ endsr;
 //    PBReadDn      1 Bildschirmseite rückwärts lesen         *
 //============================================================*
 
-begsr pbreaddn;
+begsr pbReadDown;
 
   if (isOpen = bFalse);
   //      Nix tun, keine Datei vorhanden
@@ -4916,7 +4917,7 @@ endsr;
 //    PBPinRcd      Füllen Subfile mit pinned Datensätzen     *
 //============================================================*
 
-begsr pbpinrcd;
+begsr pbPinRcd;
 
   ispinmoder = bTrue;
 
@@ -4943,7 +4944,7 @@ begsr pbpinrcd;
         iter;
       endif;
 
-      exsr pbfillrigh;
+      exsr pbFillDataRow_Right;
 
       sflrec132 = sflrec132 + 1;
       sflrec080 = sflrec080 + 1;
@@ -5077,10 +5078,10 @@ endsr;
 begsr pbrefresh;
 
   wrk#readdn = sflnbrrcd - sflpage;
-  exsr pbreaddn;
-  exsr pbinit;
-  exsr pbpinrcd;
-  exsr pbreadup;
+  exsr pbReadDown;
+  exsr pbInit;
+  exsr pbPinRcd;
+  exsr pbReadUp;
 
   //  Evtl. ist die Subfile doch nicht leer ...
   //  (letzter Satz in der Liste wurde gelöscht oder
@@ -5097,34 +5098,34 @@ endsr;
 //                  Feldern                                   *
 //============================================================*
 
-begsr pbheadline;
+begsr pbHeadline;
 
   //  Löschen der Überschrift
   $$head132 = *blanks;
   $$head080 = *blanks;
 
-  if not %open(peekfldl1);
+  if (not %open(peekfldl1));
     //  Keine Datei geöffnet
     leavesr;
   endif;
 
   //  Löschen Tabelle mit Feldpositionen ...
-  exsr clrfldarray;
+  exsr clrFldPosArray;
 
   //  Aufbereiten Pseudo-Datensatz
   peek20('*PHIVAL': io_buff: yMsgID: yMsgDta);
 
-  if (yMsgID = *blanks);
+  if (yMsgID = '');
 
     //  Füllen der Überschriftenzeile ...
     sflmode = '*HEADLINE';
     wrk#seqnbr = ##wndnbr;
-    exsr pbfill_r;
+    exsr pbFillHeadline_Right;
 
     //  Übertragen der Überschriftenzeile
     //  in Bildschirmfeld ...
-    $$head132 = sflrow;
-    $$head080 = sflrow;
+    $$head132 = sflDataRow;
+    $$head080 = sflDataRow;
   endif;
 
 endsr;
@@ -5134,14 +5135,14 @@ endsr;
 //                  nach links.                               *
 //============================================================*
 
-begsr pbfillleft;
+begsr pbFillDataRow_Left;
 
   if (isOpen = bFalse);
   //  Keine Datei geöffnet
   else;
 
     //  Löschen Tabelle mit Feldpositionen ...
-    exsr clrfldarray;
+    exsr clrFldPosArray;
 
     //  Aufbereiten Pseudo-Datensatz
     peek20('*PHIVAL': io_buff: yMsgID: yMsgDta);
@@ -5151,7 +5152,7 @@ begsr pbfillleft;
       //  Füllen der Überschriftenzeile ...
       sflmode = '*HEADLINE';
       wrk#seqnbr = ##wndnbr;
-      exsr pbfill_l;
+      exsr pbFillHeadline_Left;
     endif;
   endif;
 
@@ -5162,7 +5163,7 @@ endsr;
 //                  nach links.                               *
 //============================================================*
 
-begsr pbfillrigh;
+begsr pbFillDataRow_Right;
 
   f_basedpf(file#x.file   :
            file#x.library:
@@ -5183,22 +5184,21 @@ begsr pbfillrigh;
   isfound = bFalse;
 
   if (srchfield <> *blanks);
-    if srchtype = '*REVERSE'
-       or srchtype = '*UNDERLINE';
+    if (srchtype = '*REVERSE' or srchtype = '*UNDERLINE');
       exsr srchFldAtr;
-      exsr srchcomp;
+      exsr srchCompare;
     endif;
   endif;
 
   //  Füllen der Datenzeile ...
   sflmode = '*DATA';
   wrk#seqnbr = ##wndnbr;
-  exsr pbfill_r;
+  exsr pbFillHeadline_Right;
 
   //  Übertragen der Datenzeile in
   //  Bildschirmfeld ...
-  data132 = sflrow;
-  data080 = sflrow;
+  data132 = sflDataRow;
+  data080 = sflDataRow;
 
   //  ... anzeigen der Subfile
   *in80 = '1';
@@ -5215,10 +5215,10 @@ endsr;
 //                  Datenzeile, von links nach rechts         *
 //============================================================*
 
-begsr pbfill_r;
+begsr pbFillHeadline_Right;
 
   //  Löschen Datentabelle ...
-  clear sflrow;
+  clear sflDataRow;
   sflrowdatastr = 1;
 
   //  Eintragen gepinnter Spalten ...
@@ -5258,10 +5258,10 @@ endsr;
 //                  Datenzeile, von rechts nach links         *
 //============================================================*
 
-begsr pbfill_l;
+begsr pbFillHeadline_Left;
 
   //  Löschen Datentabelle ...
-  clear sflrow;
+  clear sflDataRow;
   sflrowdatastr = 1;
 
   //  Eintragen gepinnter Spalten ...
@@ -5535,7 +5535,7 @@ begsr pbreadfld1;
      sflrowdataend - sflrowdatastr + 1;
 
     //  ... übertragen aufbereitetes Feld in Subfile
-    %subst(sflrow: sflrowdatastr) =
+    %subst(sflDataRow: sflrowdatastr) =
     %subst(yhexstring: buffidx: sflrowdatalen);
 
     //  ... pflegen der Tabelle mit den Werten der
@@ -5562,7 +5562,7 @@ begsr pbreadfld1;
       //      ... Löschen von "überstehendem" Datenmüll
       if (columnlen = maxcollen and
          sflrowdatastr <= sfl_row_size);
-        sflrow.chars(sflrowdatastr) = '';
+        sflDataRow.chars(sflrowdatastr) = '';
       endif;
 
       //      ... umschalten auf "normale" Farbdarstellung
@@ -5578,9 +5578,9 @@ begsr pbreadfld1;
         if (sflmode = '*HEADLINE');
           if (f_kseq = 0) or
              (accessMode = RRN_SEQ);
-            sflrow.chars(colrofs) = set0001.set_hedcol;
+            sflDataRow.chars(colrofs) = set0001.set_hedcol;
           else;
-            sflrow.chars(colrofs) = set0001.set_keycol;
+            sflDataRow.chars(colrofs) = set0001.set_keycol;
           endif;
         else;
           exsr pbcolor;
@@ -5599,9 +5599,9 @@ endsr;
 begsr pbstdcol;
 
   if (istblcol = bFalse);
-    sflrow.chars(wrk#ofs) = set0001.set_stdcol;
+    sflDataRow.chars(wrk#ofs) = set0001.set_stdcol;
   else;
-    sflrow.chars(wrk#ofs) = set0001.set_tblcol;
+    sflDataRow.chars(wrk#ofs) = set0001.set_tblcol;
   endif;
 
 endsr;
@@ -5706,7 +5706,7 @@ begsr pbcolor;
   else;
 
     if (isColumnException = bTrue);
-      sflrow.chars(colrofs) = set0001.set_exccol;
+      sflDataRow.chars(colrofs) = set0001.set_exccol;
     else;
 
       //---------------------------------------*
@@ -5734,12 +5734,12 @@ begsr pbcolor;
       //---------------------------------------*
       //  Spaltenmarkierung ...
       if (f_markcol = bTrue);
-        sflrow.chars(colrofs) = f_color;
+        sflDataRow.chars(colrofs) = f_color;
       else;
         //  Keine Spaltenmarkierung ...
         if (ispinned = bTrue);
           //      ... pinned Datensatz
-          sflrow.chars(colrofs) = set0001.set_pincol;
+          sflDataRow.chars(colrofs) = set0001.set_pincol;
         else;
           //      ... normaler Datensatz
           wrk#ofs = colrofs;
@@ -5755,19 +5755,19 @@ begsr pbcolor;
         //      ... Suchfunktionen: *REVERSE
         when (srchtype = '*REVERSE');
           if (isfound = bTrue);
-            sflrow.chars(colrofs) = set0001.set_revcol;
+            sflDataRow.chars(colrofs) = set0001.set_revcol;
           endif;
 
         //      ... Suchfunktionen: *UNDERLINE
         when (srchtype = '*UNDERLINE');
           if (isfound = bTrue);
-            sflrow.chars(colrofs) = set0001.set_undcol;
+            sflDataRow.chars(colrofs) = set0001.set_undcol;
           endif;
 
         //      ... Suchfunktionen: *NORMAL
         when (srchtype = '*NORMAL');
           if (srchfndrcd = recordnbr);
-            sflrow.chars(colrofs) = set0001.set_nmlcol;
+            sflDataRow.chars(colrofs) = set0001.set_nmlcol;
           endif;
 
         other;
@@ -5893,7 +5893,7 @@ endsr;
 //    clrFldArray   Löschen Felder Array                      *
 //============================================================*
 
-begsr clrfldarray;
+begsr clrFldPosArray;
 
   col_field(*) = '';
   col_scnstr(*) = 0;
@@ -7298,7 +7298,7 @@ begsr closefile;
   yMsgDta = '';
 
   //  Subfile initialisieren
-  exsr pbinit;
+  exsr pbInit;
 
 endsr;
 
@@ -7650,9 +7650,9 @@ begsr keyhaschg;
     p_sndpgmmg('USR8139': '': sds.pgmname);
   else;
     exsr pbsetll;
-    exsr pbinit;
-    exsr pbpinrcd;
-    exsr pbreadup;
+    exsr pbInit;
+    exsr pbPinRcd;
+    exsr pbReadUp;
     //  Aufsetzkey überschreitet Dateiende
     if (*in80 = *off);
       exsr c_bot;
@@ -7989,7 +7989,7 @@ begsr first;
   ##strpage = 0;
   ##field = *blanks;
 
-  exsr clrfldarray;
+  exsr clrFldPosArray;
 
   $$system = *blanks;
   $$text40 = *blanks;
@@ -8084,7 +8084,7 @@ begsr first;
   endif;
 
   // - Subfile füllen
-  exsr pbinit;
+  exsr pbInit;
   exsr c_top;
 
   // - Copyright
