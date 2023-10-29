@@ -87,8 +87,8 @@ dcl-ds fldl0100 likeds(fldl0100_t) inz;
 
 dcl-s yfkeys          char(18) dim(32);
 dcl-s ynbrofkeys      like(int4_t);
-dcl-s ymsgid          char(7);
-dcl-s ymsgdta         char(512);
+dcl-s yMsgId          char(7);
+dcl-s yMsgDta         char(512);
 
 dcl-s ypgmcmd         char(10);
 dcl-s ycmddta         like(pgmcmddt_t);
@@ -96,13 +96,13 @@ dcl-s ycmddta         like(pgmcmddt_t);
 dcl-s ystring         like(rcdbuf_t);
 dcl-s ystrlen         like(int4_t);
 
-dcl-s ydsp80          char(1) inz(*blanks);
-dcl-s yheadertyp      char(10) inz(*blanks);
-dcl-s ycopyright      char(512) inz(*blanks);
-dcl-s yfldname        like(fieldnme_t) inz;
+dcl-s yDsp80          char(1) inz(*blanks);
+dcl-s yHeaderType      char(10) inz(*blanks);
+dcl-s yCopyright      char(512) inz(*blanks);
+dcl-s yFldName        like(fieldnme_t) inz;
 dcl-s yfldinhalt      like(rcdbuf_t) inz(*blanks);
 dcl-s ylength         like(int4_t) inz;
-dcl-s yprotect        like(bool_t) inz(bTrue);
+dcl-s yProtect        like(bool_t) inz(bTrue);
 dcl-s yisucs2         like(int4_t) inz;
 
 dcl-s sflpage         like(int4_t) inz;
@@ -240,11 +240,11 @@ dow ('1');
   //  Mappen der gedrückten Taste
   //  in Programmbefehl
   peek21(workstn.aid: sds.pgmname
-        : ypgmcmd: ycmddta: ymsgid: ymsgdta);
-  if (ymsgid <> *blanks);
-    p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
-    ymsgid = '';
-    ymsgdta = '';
+        : ypgmcmd: ycmddta: yMsgId: yMsgDta);
+  if (yMsgId <> *blanks);
+    p_sndpgmmg(yMsgId: yMsgDta: sds.pgmname);
+    yMsgId = '';
+    yMsgDta = '';
     iter;
   endif;
 
@@ -382,16 +382,16 @@ begsr c_fldhexed;
     leavesr;
   endif;
 
-  ydsp80 = i_dsp80;
-  yheadertyp = io_headertype;
-  ycopyright = i_copyright;
-  yfldname = r$fnme;
-  yprotect = bTrue;
-  ymsgid = *blanks;
-  ymsgdta = *blanks;
+  yDsp80 = i_dsp80;
+  yHeaderType = io_headertype;
+  yCopyright = i_copyright;
+  yFldName = r$fnme;
+  yProtect = bTrue;
+  yMsgId = '';
+  yMsgDta = '';
 
   editor = '*HEX';
-  exsr frombuffer;
+  exsr fromBuffer;
 
 endsr;
 
@@ -453,16 +453,16 @@ begsr c_fldstred;
     leavesr;
   endif;
 
-  ydsp80 = i_dsp80;
-  yheadertyp = io_headertype;
-  ycopyright = i_copyright;
-  yfldname = r$fnme;
-  yprotect = bTrue;
-  ymsgid = *blanks;
-  ymsgdta = *blanks;
+  yDsp80 = i_dsp80;
+  yHeaderType = io_headertype;
+  yCopyright = i_copyright;
+  yFldName = r$fnme;
+  yProtect = bTrue;
+  yMsgId = '';
+  yMsgDta = '';
 
   editor = '*STRING';
-  exsr frombuffer;
+  exsr fromBuffer;
 
 endsr;
 
@@ -470,7 +470,7 @@ endsr;
 //  FromBuffer - Übertragen Rohdaten aus IO-Puffer    *
 //====================================================*
 
-begsr frombuffer;
+begsr fromBuffer;
 
   if (f_buffln(fldl0100) > RCD_BUFF_LEN);
     clear usr8206;
@@ -492,12 +492,12 @@ begsr frombuffer;
       peek45(i_dsp80: io_headertype: i_copyright
             : r$fnme: yfldinhalt: ylength
             : bTrue: yisucs2
-            : ymsgid: ymsgdta);
+            : yMsgId: yMsgDta);
     else;
       peek64(i_dsp80: io_headertype: i_copyright
             : r$fnme: yfldinhalt: ylength
             : bTrue: yisucs2
-            : ymsgid: ymsgdta);
+            : yMsgId: yMsgDta);
     endif;
   endif;
 
@@ -574,16 +574,16 @@ begsr c_print;
   monitor;
     peek65(i_rcdnbr
           : i_file: i_lib: i_mbr: i_rcdfmt
-          : ymsgid: ymsgdta);
+          : yMsgId: yMsgDta);
     *in99 = bFalse;
   on-error;
     *in99 = bTrue;
   endmon;
 
-  if (ymsgid <> '');
-    p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
-    ymsgid  = '';
-    ymsgdta = '';
+  if (yMsgId <> '');
+    p_sndpgmmg(yMsgId: yMsgDta: sds.pgmname);
+    yMsgId  = '';
+    yMsgDta = '';
   endif;
 
 endsr;
@@ -775,11 +775,11 @@ begsr pbfill;
       //  ... aufbereiten des Feldinhaltes
       peek06(fldl0100: 'FLDL0100': io_buff
             : bFalse: bTrue
-            : ystring: ystrlen: ymsgid: ymsgdta);
+            : ystring: ystrlen: yMsgId: yMsgDta);
 
       //  ... Konvertieren nicht darstellbarer Zeichen
       peek32(ystring: ystrlen: 0
-            : ymsgid: ymsgdta);
+            : yMsgId: yMsgDta);
       *in99 = bFalse;
     on-error;
       *in99 = bTrue;
@@ -787,9 +787,9 @@ begsr pbfill;
 
     if (*in99 = *off);
       if (iscvtchar = bFalse);
-        if (ymsgid <> *blanks);
+        if (yMsgId <> *blanks);
           iscvtchar = bTrue;
-          p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
+          p_sndpgmmg(yMsgId: yMsgDta: sds.pgmname);
         else;
         //         keine Nachricht anstehend
         endif;
@@ -801,8 +801,8 @@ begsr pbfill;
     endif;
 
     //  Ende: F1NALW
-    ymsgid  = '';
-    ymsgdta = '';
+    yMsgId  = '';
+    yMsgDta = '';
   endif;
 
   //  ... anzeigen Subfile
