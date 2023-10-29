@@ -431,7 +431,7 @@ dcl-s sflmode         char(10) inz;
 dcl-s sflpinrnge      like(int4_t) inz;
 
 dcl-c COPYRIGHT const('1997-2023, Thomas Raddatz - PEEK v4.0.0');
-dcl-c RELEASE const('Stand: 26.10.2023');
+dcl-c RELEASE const('Stand: 29.10.2023');
 dcl-c VERSION const('V04R00M00');
 
 dcl-s l#file          like(##file)    inz;
@@ -498,7 +498,7 @@ dcl-ds sflDataRow qualified;
   chars           char(1) dim(256) inz;
 end-ds;
 
-dcl-c sfl_row_size %elem(sflrow.chars);
+dcl-c sfl_row_size %elem(sflDataRow.chars);
 
 dcl-s sflRowDataStr   like(int4_t);
 dcl-s sflrowdataend   like(int4_t);
@@ -678,8 +678,7 @@ dcl-ds f_key    likerec(fpeekfld: *key);
 //---------------------------------------------------*
 
 //  Register error handler
-ceehdlr(%paddr('errorHandler')
-       : *null: *omit);
+ceehdlr(%paddr('errorHandler'): *null: *omit);
 
 exsr inzsr;
 
@@ -1797,7 +1796,7 @@ begsr c_usersetg;
   if (*in99 = *on);
   //            Fehler aufgetreten
   else;
-    if (yMsgID = 'USR8112');
+    if (yMsgID = 'USR8112'); // Verarbeitung bestätigt.
       p_updusrsg('*DSPATTR' : set0001);
       exsr c_refresh;
     else;
@@ -1861,7 +1860,7 @@ begsr c_layout;
     *in99 = bTrue;
   endmon;
 
-  if (yMsgID = 'USR8112');
+  if (yMsgID = 'USR8112'); // Verarbeitung bestätigt.
     //  Beenden und Speichern ...
     //  Merker für aktualisieren der Subfile
     isSflDirty = bTrue;
@@ -1896,7 +1895,7 @@ begsr c_search;
       endmon;
 
       if (*in99 = *off);
-        if (yMsgID = 'USR8112');
+        if (yMsgID = 'USR8112'); // Verarbeitung bestätigt.
           exsr srchstart;
         else;
           p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
@@ -2332,7 +2331,7 @@ begsr c_buildpgm;
           : yalwlc: ycase: yrcdlock: ynulldft
           : ykeepcrs: yMsgID: yMsgDta: bFalse);
 
-    if (yMsgID = 'USR8112');
+    if (yMsgID = 'USR8112'); // Verarbeitung bestätigt.
 
       //  Rekursiver CALL auf sich selbst (= PEEK05),
       //  um die alte Referenz auf das Update-Programm zu löschen
@@ -2355,7 +2354,6 @@ begsr c_buildpgm;
                : yCursorPosition.column
                : yMsgID
                : yMsgDta);
-        exsr checkHeadlineChanged;
       on-error;
       endmon;
 
@@ -2623,7 +2621,7 @@ begsr c_pincdlg;
     endmon;
 
     if (*in99 = *off);
-      if (yMsgID = 'USR8112');
+      if (yMsgID = 'USR8112'); // Verarbeitung bestätigt.
 
         exsr clrpincol;
 
@@ -2717,7 +2715,7 @@ begsr c_sql;
     leavesr;
   endif;
 
-  if (yMsgID <> 'USR8112');
+  if (yMsgID <> 'USR8112'); // Verarbeitung bestätigt.
     leavesr;
   endif;
 
@@ -2849,12 +2847,12 @@ begsr s_copyExt;
 
         else;
           //  Kopieren ohne Sicherheitsabfrage ...
-          yMsgID = 'USR8112';
-          yMsgDta = *blanks;
+          yMsgID = 'USR8112'; // Verarbeitung bestätigt.
+          yMsgDta = '';
         endif;
 
         //  Datensatz kopieren ...
-        if (yMsgID = 'USR8112');
+        if (yMsgID = 'USR8112'); // Verarbeitung bestätigt.
           exsr copyExtRcd;
         endif;
 
@@ -2897,12 +2895,12 @@ begsr s_delete;
 
         else;
           //  Löschen ohne Sicherheitsabfrage ...
-          yMsgID = 'USR8112';
-          yMsgDta = *blanks;
+          yMsgID = 'USR8112'; // Verarbeitung bestätigt.
+          yMsgDta = '';
         endif;
 
         //  Datensatz löschen ...
-        if (yMsgID = 'USR8112');
+        if (yMsgID = 'USR8112'); // Verarbeitung bestätigt.
           exsr delRecord;
         endif;
 
@@ -2930,11 +2928,21 @@ begsr s_display;
     if (sflCsr > 0);
 
       monitor;
-        PEEK14(set0001.set_dsp80: set0001.set_hedtyp: COPYRIGHT
+        yHeaderType = set0001.set_hedtyp;
+        PEEK14(set0001.set_dsp80: yHeaderType: COPYRIGHT
               : wrk#rcdnbr: h_file: h_lib: h_mbr
               : h_rcdfmt: '*DISPLAY': commitLvl
               : yScreenNbr: yMsgID: yMsgDta);
-        exsr checkHeadlineChanged;
+        if (yMsgID = 'USR8100'); // Verarbeitung abgebrochen
+          p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
+          yMsgID = '';
+          yMsgDta = '';
+        else;
+          if (set0001.set_hedtyp <> yHeaderType);
+            set0001.set_hedtyp = yHeaderType;
+            exsr pbHeadline;
+          endif;
+        endif;
         *in99 = bFalse;
       on-error;
         *in99 = bTrue;
@@ -3574,10 +3582,10 @@ begsr msgnofile;
 endsr;
 
 //============================================================*
-//    MsgInvSqlFile Nachricht: Keine Datei geöffnet           *
+//    msgInvSqlFile Nachricht: Keine Datei geöffnet           *
 //============================================================*
 
-begsr msginvsqlfile;
+begsr msgInvSqlFile;
 
   clear usr9993;
   p_sndpgmmg('USR9993': usr9993: sds.pgmname);
@@ -3623,7 +3631,7 @@ endsr;
 begsr pbGetTarget;
 
   if (isTargetOK);
-    yMsgID = 'USR8112';
+    yMsgID = 'USR8112'; // Verarbeitung bestätigt.
     yMsgDta = '';
     leavesr;
   endif;
@@ -3659,8 +3667,16 @@ begsr pbQueryUser;
           : wrk#rcdnbr: h_file: h_lib: h_mbr
           : h_rcdfmt: yPgmCmd: commitLvl
           : yScreenNbr: yMsgID: yMsgDta);
-    exsr checkHeadlineChanged;   // TODO: move to right position, so that isSflDirty
-                                 // is not set after a 'copy external' error.
+    if (yMsgID = 'USR8100'); // Verarbeitung abgebrochen
+      p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
+      yMsgID = '';
+      yMsgDta = '';
+    else;
+      if (set0001.set_hedtyp <> yHeaderType);
+        set0001.set_hedtyp = yHeaderType;
+        exsr pbHeadline;
+      endif;
+  endif;
     *in99 = bFalse;
   on-error;
     *in99 = bTrue;
@@ -3671,14 +3687,16 @@ begsr pbQueryUser;
   else;
 
     select;
-    //  Abbruch über F3/F12 ...
-    when (yMsgID = 'USR8100'); // Verarbeitung abgebrochen
-    //  Alle Datensätze verarbeiten ...
-    when (yMsgID = 'USR8111');
+    when (yMsgID = 'USR8100'); // Verarbeitung abgebrochen. (F3/F12)
+
+    when (yMsgID = 'USR8111'); // Alle Datensätze verarbeiten.
       queryUser = yPgmCmd;
-      p_sndpgmmg('USR8112': '': sds.pgmname);
-    //  Verarbeitung bestätigt. ...
-    when (yMsgID = 'USR8112');
+      yMsgId = 'USR8112'; // Verarbeitung bestätigt.
+      yMsgDta = '';
+      p_sndpgmmg('USR8112': '': sds.pgmname); // Verarbeitung bestätigt.
+
+    when (yMsgID = 'USR8112'); // Verarbeitung bestätigt.
+
     //  Unerwartete Nachrichten-ID ...
     other;
       clear usr9998;
@@ -3879,6 +3897,7 @@ begsr copyExtRcd;
       : yMsgID: yMsgDta);
 
     if (yMsgID <> '');
+      isCmdErr = bTrue;
       p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
       yMsgID = '';
       yMsgDta = '';
@@ -3903,28 +3922,6 @@ begsr copyExtRcd;
 
   //  Alles weitere mit ...
   copyExternal.mbrOpt = '*ADD';
-
-endsr;
-
-//============================================================*
-//    ChkHeadChg    Prüfen, ob die Überschrift gewechselt hat *
-//                  nach:  S_Delete und S_Display             *
-//============================================================*
-
-begsr checkHeadlineChanged;
-
-  if (*in99 = *on);
-  // Fehler beim Programmaufruf
-  else;
-    if (yMsgID = 'USR8100'); // Verarbeitung abgebrochen
-      p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
-      yMsgID = '';
-      yMsgDta = '';
-    else;
-      set0001.set_hedtyp = yHeaderType;
-      isSflDirty = bTrue;
-    endif;
-  endif;
 
 endsr;
 
@@ -4526,7 +4523,17 @@ begsr callUpdPgm;
              : yCursorPosition.column
              : yMsgID
              : yMsgDta);
-      exsr checkHeadlineChanged;
+      if (yMsgID = 'USR8100'); // Verarbeitung abgebrochen
+        p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
+        yMsgID = '';
+        yMsgDta = '';
+      else;
+        isSflDirty = bTrue;
+        if (set0001.set_hedtyp <> yHeaderType);
+          set0001.set_hedtyp = yHeaderType;
+          exsr pbHeadline;
+        endif;
+      endif;
       *in99 = bFalse;
     on-error;
       *in99 = bTrue;
@@ -8315,7 +8322,7 @@ end-proc;
 //  Program error handler                                     *
 //============================================================*
 
-dcl-proc errorhandler;
+dcl-proc errorHandler;
   dcl-pi *N;
     i_condtoken     value likeds(cee_fc_t);
     i_pcommarea     int(10) value;
