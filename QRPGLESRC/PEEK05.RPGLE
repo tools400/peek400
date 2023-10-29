@@ -304,9 +304,6 @@ dcl-s ynbrofkeys      like(int4_t) inz;
 dcl-s ychoice         like(choice_t) dim(32) inz;
 dcl-s ynbrofch        like(int4_t) inz;
 
-dcl-s ymbropt         char(10) inz;
-dcl-s ycrtfile        char(10) inz;
-
 dcl-s yflag           inz(*zeros)  like(int4_t);
 
 dcl-s buffidx         like(int4_t) inz;
@@ -421,7 +418,7 @@ dcl-s sflpage         like(int4_t) inz;
 dcl-s sflrec080       inz(0) like(sflpage);
 dcl-s sflrec132       inz(0) like(sflpage);
 dcl-s sflnbrrcd       inz(0) like(sflpage);
-dcl-s sflmaxrowlen    like(int4_t) inz;
+dcl-s sflMaxRowLen    like(int4_t) inz;
 dcl-s sfldatalenfree  like(int4_t) inz;
 dcl-s sftop           like(int4_t) inz;
 dcl-s sfbot           like(int4_t) inz;
@@ -503,7 +500,7 @@ end-ds;
 
 dcl-c sfl_row_size %elem(sflrow.chars);
 
-dcl-s sflrowdatastr   like(int4_t);
+dcl-s sflRowDataStr   like(int4_t);
 dcl-s sflrowdataend   like(int4_t);
 dcl-s sflrowdatalen   like(int4_t);
 
@@ -1147,7 +1144,7 @@ begsr c_readSfl;
         exsr pbSflChain;
         if (%found());
           //  ... Abbruch mit F3/F12
-          if (yMsgID = 'USR8100');
+          if (yMsgID = 'USR8100'); // Verarbeitung abgebrochen
             *in84 = '1';
           else;
             //  ... Verarbeitung durchgeführt
@@ -1156,7 +1153,7 @@ begsr c_readSfl;
             sfpau = '';
           endif;
           exsr pbSflUpdate;
-          if (yMsgID = 'USR8100');
+          if (yMsgID = 'USR8100'); // Verarbeitung abgebrochen
             leave;
           endif;
         endif;
@@ -1312,7 +1309,7 @@ begsr c_endpgm;
     // - Endenachricht
     p_rmvpgmmg(sds.pgmname);
 
-    clear usr8100;
+    clear usr8100; // Verarbeitung abgebrochen
     usr8100.var1 = yPgmCmd;
     exitmsg = f_msgtext('USR8100': usr8100);
 
@@ -1523,20 +1520,20 @@ begsr pmt_sfpau;
   exsr pbSflChain;
 
   //  Abbruch mit F3/F12
-  if (yMsgID = 'USR8100');
+  if (yMsgID = 'USR8100'); // Verarbeitung abgebrochen
     sfpau = '';
-    *in84 = '1';                                                       // SFLNXTCHG
-    *in85 = '0';                                                       // SFPAU(RI)
+    *in84 = '1'; // SFLNXTCHG
+    *in85 = '0'; // SFPAU(RI)
   else;
     sfpau = ysflopt;
-    *in84 = '1';                                                       // SFLNXTCHG
-    *in85 = '0';                                                       // SFPAU(RI)
+    *in84 = '1'; // SFLNXTCHG
+    *in85 = '0'; // SFPAU(RI)
   endif;
 
   //  Aktualisieren Subfiledatensatz
   exsr pbSflUpdate;
 
-  if (yMsgID = 'USR8100');
+  if (yMsgID = 'USR8100'); // Verarbeitung abgebrochen
     p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
     yMsgID = '';
     yMsgDta = '';
@@ -3675,7 +3672,7 @@ begsr pbQueryUser;
 
     select;
     //  Abbruch über F3/F12 ...
-    when (yMsgID = 'USR8100');
+    when (yMsgID = 'USR8100'); // Verarbeitung abgebrochen
     //  Alle Datensätze verarbeiten ...
     when (yMsgID = 'USR8111');
       queryUser = yPgmCmd;
@@ -3919,7 +3916,7 @@ begsr checkHeadlineChanged;
   if (*in99 = *on);
   // Fehler beim Programmaufruf
   else;
-    if (yMsgID = 'USR8100');
+    if (yMsgID = 'USR8100'); // Verarbeitung abgebrochen
       p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
       yMsgID = '';
       yMsgDta = '';
@@ -4572,7 +4569,7 @@ endsr;
 
 begsr reloadusrstg;
 
-  if (yMsgID = 'USR8100');
+  if (yMsgID = 'USR8100'); // Verarbeitung abgebrochen
     leavesr;
   endif;
 
@@ -4617,7 +4614,7 @@ begsr pbInit;
   sflnbrrcd = 0;
 
   ##rcdnbr = 0;
-  ##key = *blanks;
+  ##key = '';
 
   $$head132 = set0001.set_hedcol;
   $$head080 = set0001.set_hedcol;
@@ -4869,14 +4866,12 @@ begsr pbPinColumn;
 
   //  Eintragen der gepinnten Spalten ...
   for pincol_x = 1 to nbrPinCol;
-    if (sflrowdatastr > sfl_row_size or
-       sflrowdatastr > sflmaxrowlen);
+    if (sflRowDataStr > sfl_row_size or sflRowDataStr > sflMaxRowLen);
       leave;
     endif;
 
-    if (sflrowdatastr > sflpinrnge);
-      p_sndpgmmg('USR8148'
-                : pinTabCol(pincol_x): sds.pgmname);
+    if (sflRowDataStr > sflpinrnge);
+      p_sndpgmmg('USR8148' : pinTabCol(pincol_x): sds.pgmname);
       exsr rmvPincolumn;
       if (ispinrmv = bTrue);
         pincol_x = pincol_x - 1;
@@ -4902,7 +4897,7 @@ begsr pbPinColumn;
       iter;
     endif;
 
-    exsr pbreadfld1;
+    exsr pbReadFld1;
     if (isError = bTrue);
       leave;
     endif;
@@ -5101,8 +5096,8 @@ endsr;
 begsr pbHeadline;
 
   //  Löschen der Überschrift
-  $$head132 = *blanks;
-  $$head080 = *blanks;
+  $$head132 = '';
+  $$head080 = '';
 
   if (not %open(peekfldl1));
     //  Keine Datei geöffnet
@@ -5147,7 +5142,7 @@ begsr pbFillDataRow_Left;
     //  Aufbereiten Pseudo-Datensatz
     peek20('*PHIVAL': io_buff: yMsgID: yMsgDta);
 
-    if (yMsgID = *blanks);
+    if (yMsgID = '');
 
       //  Füllen der Überschriftenzeile ...
       sflmode = '*HEADLINE';
@@ -5219,7 +5214,7 @@ begsr pbFillHeadline_Right;
 
   //  Löschen Datentabelle ...
   clear sflDataRow;
-  sflrowdatastr = 1;
+  sflRowDataStr = 1;
 
   //  Eintragen gepinnter Spalten ...
   exsr pbPinColumn;
@@ -5229,8 +5224,7 @@ begsr pbFillHeadline_Right;
   f1key_l1.f_seq = wrk#seqnbr;
   setll %kds(f1key_l1) fpeekfldl1;
 
-  dow (sflrowdatastr <= sfl_row_size and
-     sflrowdatastr <= sflmaxrowlen);
+  dow (sflRowDataStr <= sfl_row_size and sflRowDataStr <= sflMaxRowLen);
     read fpeekfldl1;
     if (%eof());
       leave;
@@ -5238,12 +5232,12 @@ begsr pbFillHeadline_Right;
 
     //  ... Feld anzeigen?
     wrk#field = f_field;
-    exsr chkvisible;
+    exsr chkVisible;
     if (isVisible = bFalse);
       iter;
     endif;
 
-    exsr pbreadfld1;
+    exsr pbReadFld1;
     if (isError = bTrue);
       leave;
     endif;
@@ -5262,7 +5256,7 @@ begsr pbFillHeadline_Left;
 
   //  Löschen Datentabelle ...
   clear sflDataRow;
-  sflrowdatastr = 1;
+  sflRowDataStr = 1;
 
   //  Eintragen gepinnter Spalten ...
   exsr pbPinColumn;
@@ -5272,8 +5266,8 @@ begsr pbFillHeadline_Left;
   f1key_l1.f_seq = wrk#seqnbr;
   setgt %kds(f1key_l1) fpeekfldl1;
 
-  dow (sflrowdatastr <= sfl_row_size and
-     sflrowdatastr <= sflmaxrowlen);
+  dow (sflRowDataStr <= sfl_row_size and
+     sflRowDataStr <= sflMaxRowLen);
     readp fpeekfldl1;
     if (%eof());
       leave;
@@ -5281,12 +5275,12 @@ begsr pbFillHeadline_Left;
 
     //  ... Feld anzeigen?
     wrk#field = f_field;
-    exsr chkvisible;
+    exsr chkVisible;
     if (isVisible = bFalse);
       iter;
     endif;
 
-    exsr pbreadfld1;
+    exsr pbReadFld1;
     if (isError = bTrue);
       leave;
     endif;
@@ -5303,7 +5297,7 @@ endsr;
 //    PBReadFld1    Hilfsroutine für PBReadFld                *
 //============================================================*
 
-begsr pbreadfld1;
+begsr pbReadFld1;
 
   //  umsetzen der Daten in die Job CCSID
   if (sflmode = '*HEADLINE');
@@ -5316,9 +5310,9 @@ begsr pbreadfld1;
   isColumnException = bFalse;
 
   //  merken Position für Farbattribut
-  if (sflrowdatastr <= sfl_row_size);
-    colrofs = sflrowdatastr;
-    sflrowdatastr = sflrowdatastr + 1;
+  if (sflRowDataStr <= sfl_row_size);
+    colrofs = sflRowDataStr;
+    sflRowDataStr = sflRowDataStr + 1;
   else;
     colrofs = 0;
   endif;
@@ -5501,7 +5495,7 @@ begsr pbreadfld1;
 
     //  ... Berechnen der Startposition im Puffer
     sfldatalenfree =
-     sflmaxrowlen - sflrowdatastr + 1;
+     sflMaxRowLen - sflRowDataStr + 1;
 
     if (##wndnbr = f_seq);
 
@@ -5524,7 +5518,7 @@ begsr pbreadfld1;
 
     //  ... Berechnen der zu extrahierenden Länge
     buffidx = fldstrpos;
-    sflrowdataend = sflrowdatastr + columnlen;
+    sflrowdataend = sflRowDataStr + columnlen;
     sflrowdataend = sflrowdataend - fldstrpos;
 
     if (sflrowdataend > sfl_row_size);
@@ -5532,23 +5526,23 @@ begsr pbreadfld1;
     endif;
 
     sflrowdatalen =
-     sflrowdataend - sflrowdatastr + 1;
+     sflrowdataend - sflRowDataStr + 1;
 
     //  ... übertragen aufbereitetes Feld in Subfile
-    %subst(sflDataRow: sflrowdatastr) =
+    %subst(sflDataRow: sflRowDataStr) =
     %subst(yhexstring: buffidx: sflrowdatalen);
 
     //  ... pflegen der Tabelle mit den Werten der
     //      Spaltenaufteilung ...
-    if (sflrowdataend >= sflrowdatastr);
+    if (sflrowdataend >= sflRowDataStr);
       //      ... pflegen der Feldpositionstabelle
       if (sflmode = '*HEADLINE');
         cp = cp + 1;
         col_field(cp) = fldl0100.f1fnme;
-        col_scnstr(cp) = sflrowdatastr;
+        col_scnstr(cp) = sflRowDataStr;
         col_scnend(cp) = sflrowdataend;
         //          ... ist das Feld komplett sichtbar?
-        if (col_scnend(cp) <= sflmaxrowlen);
+        if (col_scnend(cp) <= sflMaxRowLen);
           //              ... ja, kein Fehler
           col_error(cp) = bFalse;
         else;
@@ -5557,17 +5551,17 @@ begsr pbreadfld1;
         endif;
       endif;
 
-      sflrowdatastr = sflrowdataend + 1;
+      sflRowDataStr = sflrowdataend + 1;
 
       //      ... Löschen von "überstehendem" Datenmüll
       if (columnlen = maxcollen and
-         sflrowdatastr <= sfl_row_size);
-        sflDataRow.chars(sflrowdatastr) = '';
+         sflRowDataStr <= sfl_row_size);
+        sflDataRow.chars(sflRowDataStr) = '';
       endif;
 
       //      ... umschalten auf "normale" Farbdarstellung
-      if (sflrowdatastr <= sfl_row_size);
-        wrk#ofs = sflrowdatastr;
+      if (sflRowDataStr <= sfl_row_size);
+        wrk#ofs = sflRowDataStr;
         exsr pbstdcol;
       endif;
 
@@ -6388,7 +6382,7 @@ begsr openfile;
     exsr clrpincol;
     exsr clrpinrow;
     // ... auswerten Rückkehrcode
-    if (yMsgID = 'USR8100');
+    if (yMsgID = 'USR8100'); // Verarbeitung abgebrochen
       // ... Abbruch mit F3/F12
       exsr closefile;
     else;
@@ -6714,7 +6708,7 @@ begsr getfrstfld;
     for x = 1 to cp;
 
       wrk#field = col_field(x);
-      exsr chkvisible;
+      exsr chkVisible;
       if (isVisible = bFalse);
         //  ... nicht sichtbar
         iter;
@@ -6902,7 +6896,7 @@ begsr getrcdfrmt;
         : MODE_BATCH
         : rcdl0200: yfmtnbr: yMsgID: yMsgDta);
 
-  if (yMsgID <> 'USR8100');
+  if (yMsgID <> 'USR8100'); // Verarbeitung abgebrochen
     ##fmtnbr = yfmtnbr;
     ##format = rcdl0200.r2fmtname;
     $$length = rcdl0200.r2rcdlen;
@@ -7109,7 +7103,7 @@ begsr getmaxseq;
 
       //  ... Prüfen, ob Feld angezeigt wird
       wrk#field = f_field;
-      exsr chkvisible;
+      exsr chkVisible;
       if (isVisible = bFalse);
         iter;
       endif;
@@ -7132,7 +7126,7 @@ begsr getmaxseq;
 
       //  ... Prüfen, ob Feld angezeigt wird
       wrk#field = f_field;
-      exsr chkvisible;
+      exsr chkVisible;
       if (isVisible = bFalse);
         iter;
       endif;
@@ -7173,7 +7167,7 @@ begsr getprvseq;
 
     //  ... Prüfen, ob Feld angezeigt wird
     wrk#field = f_field;
-    exsr chkvisible;
+    exsr chkVisible;
     if (isVisible = bFalse);
       iter;
     endif;
@@ -7580,7 +7574,7 @@ begsr getnxtmark;
       leave;
     endif;
 
-    exsr chkvisible;
+    exsr chkVisible;
     if (isVisible = bFalse);
     // ... Feld ist nicht sichtbar
     else;
@@ -7616,7 +7610,7 @@ begsr getprvmark;
       leave;
     endif;
 
-    exsr chkvisible;
+    exsr chkVisible;
     if (isVisible = bFalse);
     // ... Feld ist nicht sichtbar
     else;
@@ -7724,7 +7718,7 @@ endsr;
 //    ChkVisible    Prüfen, ob Feld angezeigt wird            *
 //============================================================*
 
-begsr chkvisible;
+begsr chkVisible;
 
   isVisible = bTrue;
 
@@ -7802,7 +7796,7 @@ begsr setscreen;
     //    80-Zeichen Anzeige
     *in88 = '1';
     sflpage = 14;
-    sflmaxrowlen = 64;
+    sflMaxRowLen = 64;
     sflheadlrw = 6;
     sflfirstrw = 7;
     sfllastrw = 20;
@@ -7811,7 +7805,7 @@ begsr setscreen;
     //   132-Zeichen Anzeige
     *in88 = '0';
     sflpage = 16;
-    sflmaxrowlen = 116;
+    sflMaxRowLen = 116;
     sflheadlrw = 6;
     sflfirstrw = 8;
     sfllastrw = 23;
@@ -7819,7 +7813,7 @@ begsr setscreen;
   endif;
 
   //  Bereich für gepinnte Spalten
-  sflpinrnge = (sflmaxrowlen / 3) * 2;
+  sflpinrnge = (sflMaxRowLen / 3) * 2;
 
   //  Prompt-Felder anzeigen ...
   if (set0008.set_dsppmt = bTrue
