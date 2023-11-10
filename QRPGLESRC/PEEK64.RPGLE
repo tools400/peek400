@@ -26,8 +26,7 @@
       /COPY QCOPYLE,H_SPEC
       /COPY QCOPYLE,COPYRIGHT
 
-       dcl-f peek64fm workstn(*ext) usage(*input:*output)
-             usropn infds(workstn);
+       dcl-f peek64fm workstn(*ext) usage(*input:*output) usropn infds(workstn);
 
        dcl-f peekfld keyed usropn prefix(f_) infds(peek_01_ds);
 
@@ -61,15 +60,15 @@
 
        dcl-ds fldl0100 likeds(fldl0100_t) inz;
 
-       dcl-s ypgmcmd         like(pgmcmd_t);
-       dcl-s ycmddta         like(pgmcmddt_t);
-       dcl-s ymsgid          like(msgid_t);
-       dcl-s ymsgdta         like(msgdta_t);
+       dcl-s yPgmCmd         like(pgmcmd_t);
+       dcl-s yCmdDta         like(pgmcmddt_t);
+       dcl-s yMsgId          like(msgid_t);
+       dcl-s yMsgDta         like(msgdta_t);
 
-       dcl-s yfkeys          like(fkeydsp_t) dim(32);
-       dcl-s ynbrofkeys      like(int4_t) inz;
+       dcl-s yFKeys          like(fkeydsp_t) dim(32);
+       dcl-s yNbrOfKeys      like(int4_t) inz;
 
-       dcl-s sfbot           like(int4_t);
+       dcl-s sfBot           like(int4_t);
        dcl-c NBR_F_KEYS const(3);
 
        dcl-s peek21_name     like(pgmcalln_t);
@@ -77,17 +76,17 @@
 
        // Arbeitsfelder
        dcl-s isPgmError      like(bool_t) inz(bFalse);
-       dcl-s isdatachg       like(bool_t) inz(bFalse);
+       dcl-s isDataChg       like(bool_t) inz(bFalse);
+
        dcl-ds *N;
-         pfldinhaltsbcs  like(rcdbuf_t) inz;
-         pfldinhaltucs2  like(rcdbufucs2_t) inz
-              overlay(pfldinhaltsbcs);
+         pFldInhaltSbcs  like(rcdbuf_t) inz;
+         pFldInhaltUcs2  like(rcdbufucs2_t) overlay(pFldInhaltSbcs) inz;
        end-ds;
-       dcl-s plength         like(int4_t);
+
+       dcl-s pLength         like(int4_t);
        dcl-s len             like(int4_t);
-       dcl-s isfieldtoolarge
-             ind;
-       dcl-s maxfieldlength  int(10);
+       dcl-s isFieldTooLarge ind;
+       dcl-s maxFieldLength  int(10);
 
        dcl-ds *N;
          #ucs2str        ucs2(2048) pos(1);
@@ -133,30 +132,30 @@
 
              //  Anzeigen der Befehlstasten
              select;
-             when (sfbot = 2) and
-                (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
+             when (sfBot = 2) and
+                (yNbrOfKeys > NBR_F_KEYS * (sfBot - 1));
                 write pbbot#2;
-             when (sfbot = 3) and
-                (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
+             when (sfBot = 3) and
+                (yNbrOfKeys > NBR_F_KEYS * (sfBot - 1));
                 write pbbot#3;
-             when (sfbot = 4) and
-                (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
+             when (sfBot = 4) and
+                (yNbrOfKeys > NBR_F_KEYS * (sfBot - 1));
                 write pbbot#4;
-             when (sfbot = 5) and
-                (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
+             when (sfBot = 5) and
+                (yNbrOfKeys > NBR_F_KEYS * (sfBot - 1));
                 write pbbot#5;
-             when (sfbot = 6) and
-                (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
+             when (sfBot = 6) and
+                (yNbrOfKeys > NBR_F_KEYS * (sfBot - 1));
                 write pbbot#6;
-             when (sfbot = 7) and
-                (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
+             when (sfBot = 7) and
+                (yNbrOfKeys > NBR_F_KEYS * (sfBot - 1));
                 write pbbot#7;
-             when (sfbot = 8) and
-                (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
+             when (sfBot = 8) and
+                (yNbrOfKeys > NBR_F_KEYS * (sfBot - 1));
                 write pbbot#8;
              other;
                 write pbbot#1;
-                sfbot = 1;
+                sfBot = 1;
              endsl;
 
              //  Anzeigen Bildschirm
@@ -166,7 +165,7 @@
              exsr fillpgmflds;
 
              //  Daten geändert
-             isdatachg = *in93;
+             isDataChg = *in93;
 
              //  Nachrichten löschen
              p_rmvpgmmg(sds.pgmname);
@@ -177,49 +176,49 @@
              //  Mappen der gedrückten Taste
              //  in Programmbefehl
              peek21(workstn.aid: sds.pgmname
-                   : ypgmcmd: ycmddta: ymsgid: ymsgdta);
-             if (ymsgid <> ' ');
-                p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
-                ymsgid = '';
-                ymsgdta = '';
+                   : yPgmCmd: yCmdDta: yMsgId: yMsgDta);
+             if (yMsgId <> ' ');
+                p_sndpgmmg(yMsgId: yMsgDta: sds.pgmname);
+                yMsgId = '';
+                yMsgDta = '';
                 iter;
              endif;
 
              //  Abfragen der Programmbefehle
              select;
                 //  F3  - Ende
-             when (ypgmcmd = '*EXIT' or ypgmcmd = '*NO');
+             when (yPgmCmd = '*EXIT' or yPgmCmd = '*NO');
                 exsr c_endpgm;
                 leave;
 
                 //  F5  - Aktualisieren
-             when (ypgmcmd = '*REFRESH');
+             when (yPgmCmd = '*REFRESH');
                 exsr c_refresh;
                 iter;
 
                 //  F12 - Ende
-             when (ypgmcmd = '*CANCEL');
+             when (yPgmCmd = '*CANCEL');
                 exsr c_endpgm;
                 leave;
 
                 //  F24 - Weitere Tasten
-             when (ypgmcmd = '*MOREKEYS');
+             when (yPgmCmd = '*MOREKEYS');
                 exsr c_morekeys;
 
                 //  Datenfreigabe
-             when (ypgmcmd = '*ENTER' or ypgmcmd = '*OK');
+             when (yPgmCmd = '*ENTER' or yPgmCmd = '*OK');
                 exsr c_enter;
                 if (isPgmError = bFalse);
                    o_msgid  = 'USR8112';
                    o_msgdta = ' ';
 
                    if (i_isucs2 = 0);
-                      io_fldinhalt.sbcs = pfldinhaltsbcs;
+                      io_fldinhalt.sbcs = pFldInhaltSbcs;
                    else;
-                      io_fldinhalt.ucs2 = pfldinhaltucs2;
+                      io_fldinhalt.ucs2 = pFldInhaltUcs2;
                    endif;
 
-                   io_length = plength;
+                   io_length = pLength;
                    leave;
                 endif;
 
@@ -261,29 +260,29 @@
              exsr prfb1;
 
              if (isPgmError = bFalse);
-                if (isdatachg = bTrue);
+                if (isDataChg = bTrue);
 
                    //  ... einsetzen in Zwischenfeld für Rückgabewert
                    if (i_isucs2 = 0);
 
-                      if (isfieldtoolarge);
-                         plength = io_length;
+                      if (isFieldTooLarge);
+                         pLength = io_length;
                       else;
-                         plength = %len(%trimr(#string));
+                         pLength = %len(%trimr(#string));
                       endif;
 
-                      %subst(pfldinhaltsbcs: 1: %len(#string)) =
+                      %subst(pFldInhaltSbcs: 1: %len(#string)) =
                        #string;
 
                    else;
 
-                      if (isfieldtoolarge);
-                         plength = io_length;
+                      if (isFieldTooLarge);
+                         pLength = io_length;
                       else;
-                         plength = %len(%trimr(#ucs2str));
+                         pLength = %len(%trimr(#ucs2str));
                       endif;
 
-                      %subst(pfldinhaltucs2: 1: %len(#ucs2str)) =
+                      %subst(pFldInhaltUcs2: 1: %len(#ucs2str)) =
                        #ucs2str;
 
                    endif;
@@ -394,7 +393,7 @@
 
        begsr c_morekeys;
 
-          sfbot = sfbot + 1;
+          sfBot = sfBot + 1;
 
        endsr;
 
@@ -407,12 +406,12 @@
           //  anzeigen Feldinhalt
           if (i_isucs2 = 0);
 
-             #string = pfldinhaltsbcs;
+             #string = pFldInhaltSbcs;
              *in71 = '0';
 
           else;
 
-             #ucs2str = pfldinhaltucs2;
+             #ucs2str = pFldInhaltUcs2;
 
              #ucs2_1 = #ucs2(1);
              #ucs2_2 = #ucs2(2);
@@ -497,18 +496,18 @@
        begsr getparameters;
 
           if (i_isucs2 = 0);
-             clear pfldinhaltsbcs;
-             %subst(pfldinhaltsbcs: 1: io_length) =
+             clear pFldInhaltSbcs;
+             %subst(pFldInhaltSbcs: 1: io_length) =
                    io_fldinhalt.sbcs;
-             maxfieldlength = %len(#string);
+             maxFieldLength = %len(#string);
           else;
-             clear pfldinhaltucs2;
-             %subst(pfldinhaltucs2: 1: io_length) =
+             clear pFldInhaltUcs2;
+             %subst(pFldInhaltUcs2: 1: io_length) =
                    io_fldinhalt.ucs2;
-             maxfieldlength = %len(#ucs2str);
+             maxFieldLength = %len(#ucs2str);
           endif;
 
-          plength = io_length;
+          pLength = io_length;
 
        endsr;
 
@@ -551,11 +550,11 @@
           o_msgid  = ' ';
           o_msgdta = ' ';
 
-          if (plength > maxfieldlength);
-             isfieldtoolarge = bTrue;
+          if (pLength > maxFieldLength);
+             isFieldTooLarge = bTrue;
              *in70 = bTrue;
           else;
-             isfieldtoolarge = bFalse;
+             isFieldTooLarge = bFalse;
              *in70 = i_protect;
           endif;
 
@@ -570,7 +569,7 @@
           exsr fill##;
 
           // - Darstellung der Befehlstasten
-          sfbot = 1;
+          sfBot = 1;
 
           // - Einstellen der Bildschirmauflösung 80/132-Zeichen
           exsr setscreen;
@@ -598,8 +597,8 @@
           peek23_name = f_pgmcalln('PEEK23');
 
           peek23(sds.pgmname: '*ALL': 0
-                : yfkeys: ynbrofkeys);
-          scrnfkeys = %subarr(yfkeys: 1);
+                : yFKeys: yNbrOfKeys);
+          scrnfkeys = %subarr(yFKeys: 1);
 
        endsr;
 
