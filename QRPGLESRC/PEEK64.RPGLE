@@ -89,8 +89,8 @@
        dcl-s maxFieldLength  int(10);
 
        dcl-ds *N;
-         #ucs2str        ucs2(2048) pos(1);
-         #ucs2           ucs2(128) ccsid(13488) dim(16) pos(1);
+         #ucs2str        ucs2(1024) pos(1);
+         #ucs2           ucs2(64) ccsid(13488) dim(16) pos(1);
        end-ds;
 
        dcl-s isInzSr         like(bool_t) inz(bFalse);
