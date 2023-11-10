@@ -102,23 +102,22 @@ dcl-s isInzSr         like(bool_t) inz(bFalse);
 
 dcl-pi peek64;
   i_dsp80         const like(dsp80_t);
-  i_headtype      const like(headtyp_t);
+  i_headType      const like(headtyp_t);
   i_copyright     const like(copyrght_t);
-  i_fldname       const like(fieldnme_t);
-  io_fldinhalt    likeds(fldinhalt_t);
+  i_fldName       const like(fieldnme_t);
+  io_fldInhalt    likeds(fldinhalt_t);
   io_length       like(int4_t);
   i_protect       const like(bool_t);
-  i_isucs2        const like(int4_t);
-  o_msgid         like(msgid_t);
-  o_msgdta        like(msgdta_t);
+  i_isUcs2        const like(int4_t);
+  o_msgId         like(msgid_t);
+  o_msgDta        like(msgdta_t);
 end-pi;
 
 dcl-ds f_key likerec(fpeekfld: *key);
 //---------------------------------------------------*
 
 //  Register error handler
-ceehdlr(%paddr('errorHandler')
-       : *null: *omit);
+ceehdlr(%paddr('errorHandler'): *null: *omit);
 
 exsr inzsr;
 
@@ -163,13 +162,13 @@ if (isPgmError = bFalse);
     exfmt bild01;
 
     //  Übernehmen Bildschirmfelder in Programmfelder
-    exsr fillpgmflds;
+    exsr fillPgmFlds;
 
     //  Daten geändert
     isDataChg = *in93;
 
     //  Nachrichten löschen
-    p_rmvpgmmg(sds.pgmname);
+    p_rmvPgmMg(sds.pgmname);
 
     //  Bezugszahlen löschen
     exsr bzoff1;
@@ -188,7 +187,7 @@ if (isPgmError = bFalse);
     select;
     //  F3  - Ende
     when (yPgmCmd = '*EXIT' or yPgmCmd = '*NO');
-      exsr c_endpgm;
+      exsr c_endPgm;
       leave;
 
     //  F5  - Aktualisieren
@@ -198,24 +197,24 @@ if (isPgmError = bFalse);
 
     //  F12 - Ende
     when (yPgmCmd = '*CANCEL');
-      exsr c_endpgm;
+      exsr c_endPgm;
       leave;
 
     //  F24 - Weitere Tasten
     when (yPgmCmd = '*MOREKEYS');
-      exsr c_morekeys;
+      exsr c_moreKeys;
 
     //  Datenfreigabe
     when (yPgmCmd = '*ENTER' or yPgmCmd = '*OK');
       exsr c_enter;
       if (isPgmError = bFalse);
-        o_msgid  = 'USR8112';
-        o_msgdta = ' ';
+        o_msgId  = 'USR8112';
+        o_msgDta = ' ';
 
-        if (i_isucs2 = 0);
-          io_fldinhalt.sbcs = pFldInhaltSbcs;
+        if (i_isUcs2 = 0);
+          io_fldInhalt.sbcs = pFldInhaltSbcs;
         else;
-          io_fldinhalt.ucs2 = pFldInhaltUcs2;
+          io_fldInhalt.ucs2 = pFldInhaltUcs2;
         endif;
 
         io_length = pLength;
@@ -224,7 +223,7 @@ if (isPgmError = bFalse);
 
     other;
       //  Falsche Taste gedrückt
-      p_wrongkey(workstn.aid: sds.pgmname);
+      p_wrongKey(workstn.aid: sds.pgmname);
       iter;
     endsl;
 
@@ -263,7 +262,7 @@ begsr c_enter;
       if (isDataChg = bTrue);
 
         //  ... einsetzen in Zwischenfeld für Rückgabewert
-        if (i_isucs2 = 0);
+        if (i_isUcs2 = 0);
 
           if (isFieldTooLarge);
             pLength = io_length;
@@ -332,7 +331,7 @@ endsr;
 
 begsr prf20;
 
-  if (i_isucs2 = 0);
+  if (i_isUcs2 = 0);
     len = %len(%trimr(#string));
   else;
     len = %len(%trimr(#ucs2str));
@@ -355,11 +354,11 @@ endsr;
 //    c_endPgm      F3/F12 - Programm beenden                 *
 //============================================================*
 
-begsr c_endpgm;
+begsr c_endPgm;
 
-  p_rmvpgmmg(sds.pgmname);
+  p_rmvPgmMg(sds.pgmname);
 
-  o_msgid = 'USR8100';
+  o_msgId = 'USR8100';
 
   select;
   when (workstn.aid = k_f3);
@@ -370,7 +369,7 @@ begsr c_endpgm;
     usr8100.var1 = 'Fxx';
   endsl;
 
-  o_msgdta = usr8100;
+  o_msgDta = usr8100;
 
 endsr;
 
@@ -380,7 +379,7 @@ endsr;
 
 begsr c_refresh;
 
-  exsr getparameters;
+  exsr getParameters;
 
   exsr bzoff1;
   exsr fill##;
@@ -391,7 +390,7 @@ endsr;
 //    c_moreKeys    F24 - Weitere Tasten                      *
 //============================================================*
 
-begsr c_morekeys;
+begsr c_moreKeys;
 
   sfBot = sfBot + 1;
 
@@ -404,7 +403,7 @@ endsr;
 begsr fill##;
 
   //  anzeigen Feldinhalt
-  if (i_isucs2 = 0);
+  if (i_isUcs2 = 0);
 
     #string = pFldInhaltSbcs;
     *in71 = '0';
@@ -440,9 +439,9 @@ endsr;
 //    fillPgmFlds   Füllen Programmfelder                     *
 //============================================================*
 
-begsr fillpgmflds;
+begsr fillPgmFlds;
 
-  if (i_isucs2 = 0);
+  if (i_isUcs2 = 0);
 
   //    Nothing to do here
 
@@ -473,7 +472,7 @@ endsr;
 //    SetScreen     Einstellen 132/80-Zeichen Auflösung       *
 //============================================================*
 
-begsr setscreen;
+begsr setScreen;
 
   if (i_dsp80 = *off);
     //   132-Zeichen Anzeige
@@ -493,17 +492,17 @@ endsr;
 //    GetParameters Laden der Programmparameter               *
 //============================================================*
 
-begsr getparameters;
+begsr getParameters;
 
-  if (i_isucs2 = 0);
+  if (i_isUcs2 = 0);
     clear pFldInhaltSbcs;
     %subst(pFldInhaltSbcs: 1: io_length) =
-          io_fldinhalt.sbcs;
+          io_fldInhalt.sbcs;
     maxFieldLength = %len(#string);
   else;
     clear pFldInhaltUcs2;
     %subst(pFldInhaltUcs2: 1: io_length) =
-          io_fldinhalt.ucs2;
+          io_fldInhalt.ucs2;
     maxFieldLength = %len(#ucs2str);
   endif;
 
@@ -523,17 +522,17 @@ begsr first;
   open peek64fm;
 
   // - Programm initialisieren
-  p_rmvpgmmg(sds.pgmname);
+  p_rmvPgmMg(sds.pgmname);
 
   //  ermitteln der Feldeigenschaften
   clear f_key;
-  f_key.f_field = i_fldname;
+  f_key.f_field = i_fldName;
   chain %kds(f_key) fpeekfld;
   if (not %found(peekfld));
     isPgmError = bTrue;
     clear fldl0100;
     clear usr8136;
-    usr8136.var1   = i_fldname;
+    usr8136.var1   = i_fldName;
     p_sndpgmmg('USR8136': usr8136: sds.pgmname);
   else;
     isPgmError = bFalse;
@@ -545,10 +544,10 @@ begsr first;
   endif;
 
   // - Übernehmen der Programmparameter
-  exsr getparameters;
+  exsr getParameters;
 
-  o_msgid  = ' ';
-  o_msgdta = ' ';
+  o_msgId  = ' ';
+  o_msgDta = ' ';
 
   if (pLength > maxFieldLength);
     isFieldTooLarge = bTrue;
@@ -572,7 +571,7 @@ begsr first;
   sfBot = 1;
 
   // - Einstellen der Bildschirmauflösung 80/132-Zeichen
-  exsr setscreen;
+  exsr setScreen;
 
   // - Copyright
   p_sndpgmmg('USR9999': i_copyright: sds.pgmname);
@@ -605,16 +604,16 @@ endsr;
 //  Program error handler                                     *
 //============================================================*
 
-dcl-proc errorhandler;
+dcl-proc errorHandler;
   dcl-pi *N;
-    i_condtoken     value likeds(cee_fc_t);
-    i_pcommarea     int(10) value;
+    i_condToken     value likeds(cee_fc_t);
+    i_pcommArea     int(10) value;
     o_action        int(10);
-    o_newcondtoken  likeds(cee_fc_t);
+    o_newCondToken  likeds(cee_fc_t);
   end-pi;
 
   dump;
-  o_action = cee_percolate;
+  o_action = CEE_PERCOLATE;
 
 end-proc;
 
