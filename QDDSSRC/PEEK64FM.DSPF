@@ -17,7 +17,7 @@
       *                                                               *
       *===============================================================*
       * >>PRE-COMPILER<<                                              *
-      *   >>CRTCMD<< &LI/CMPPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
       *                           OBJLIB(&LI) DEVLIB(&LI) +           *
       *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
       *                           INSTALL(*NO);                       *
@@ -273,7 +273,7 @@
       *----------------------------------------------------*
      A          R MSGSFL                    SFL
       *%%TS  SD  19971017  155045  RADDATZ     REL-V3R6M0  5716-PW1
-     A  *DS3                                SFLMSGRCD(20)
+     A  *DS3                                SFLMSGRCD(21)
      A  *DS4                                SFLMSGRCD(21)
      A            MSGKY                     SFLMSGKEY
      A            PGMQ                      SFLPGMQ(10)
