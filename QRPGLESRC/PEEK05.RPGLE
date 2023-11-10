@@ -271,8 +271,7 @@ dcl-ds yCursorPosition likeds(cursorPosition_t) inz;
 dcl-s ycvtccsid       char(1) inz(bTrue  );
 dcl-s ydata           char(512) inz;
 
-dcl-s yretfile        char(10) inz;
-dcl-s yretlib         char(10) inz;
+dcl-ds yRetFile       likeds(qObj_t);
 
 dcl-s yrtncode        char(1) inz;
 
@@ -431,7 +430,7 @@ dcl-s sflmode         char(10) inz;
 dcl-s sflpinrnge      like(int4_t) inz;
 
 dcl-c COPYRIGHT const('1997-2023, Thomas Raddatz - PEEK v4.0.0');
-dcl-c RELEASE const('Stand: 29.10.2023');
+dcl-c RELEASE const('Stand: 02.11.2023');
 dcl-c VERSION const('V04R00M00');
 
 dcl-s l#file          like(##file)    inz;
@@ -2485,20 +2484,19 @@ begsr c_dspdbr;
       peek40(set0001.set_dsp80: COPYRIGHT
             : ##file: ##library: ##member
             : ##format: bTrue
-            : yretfile: yretlib
+            : yRetFile.name: yRetFile.lib
             : yMsgID: yMsgDta);
-      *in99 = bTrue;
+      *in99 = bFalse;
     on-error;
       *in99 = bTrue;
     endmon;
 
-    if (yretfile = ' ')  or
-       (*in99    = *on);
-    //  ... keine Auswahl getroffen
+    if (yRetFile.name = '' or *in99);
+    //  ... keine Auswahl getroffen oder Fehler aufgetreten
     else;
       //  ... prüfen auf neue Dateiauswahl
-      ##file    = yretfile;
-      ##library = yretlib;
+      ##file = yRetFile.name;
+      ##library = yRetFile.lib;
 
       newAccessMode = i_access;
       exsr changeFile;
