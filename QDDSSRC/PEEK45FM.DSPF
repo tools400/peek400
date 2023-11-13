@@ -91,7 +91,7 @@
      A            #STARTPOS      5Y 0B  6 17
      A  31                                  DSPATR(RI)
      A  21                                  DSPATR(PC)
-     A                                      EDTCDE(L)
+     A                                      EDTCDE(M)
      A            TXT0094       12A  O  8 10MSGID(TXT 0094 PEEKGER)
      A                                      COLOR(WHT)
      A            TXT0093       12A  O  8 50MSGID(TXT 0093 PEEKGER)
