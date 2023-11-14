@@ -67,6 +67,7 @@ dcl-pi peek23;
   i_posf24        const like(int4_t);
   o_fkeys               like(fkeydsp_t) dim(32);
   o_nbrofkeys           like(int4_t);
+  i_exclKeys      const like(fkeydsp_t) dim(8) options(*nopass);
 end-pi;
 
 //  Register error handler
@@ -151,8 +152,14 @@ begsr readKeyMap;
       leave;
     endif;
 
-    if (i_key <> '*ALL' and i_key <> data  );
+    if (i_key <> '*ALL' and i_key <> data);
       iter;
+    endif;
+
+    if (%parms() >= %parmnum(i_exclKeys));
+      if (%lookup(data: i_exclKeys) > 0);
+        iter;
+      endif;
     endif;
 
     wrk_msgid = f_mapCmdToMsg(data);

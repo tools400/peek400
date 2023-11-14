@@ -62,8 +62,18 @@
      A                                      CF22
      A                                      CF23
      A                                      CF24
+     A                                      ROLLUP(91)
+     A                                      ROLLDOWN(92)
      A N88                                  DSPMOD(*DS4)
+     A                                      RTNCSRLOC(*RECNAME -
+     A                                      &H_CSRRCD &H_CSRFLD &H_CSRPOS)
+     A                                      CSRLOC(H_CSRROW H_CSRCOL)
      A                                      OVERLAY
+     A            H_CSRROW       3S 0H
+     A            H_CSRCOL       3S 0H
+     A            H_CSRRCD      10A  H
+     A            H_CSRFLD      10A  H
+     A            H_CSRPOS       4S 0H
      A            TXT0128       12A  O  1 30MSGID(TXT 0128 PEEKGER)
      A                                      COLOR(WHT)
      A                                  2  1'                                  -
@@ -71,112 +81,114 @@
      A                                       '
      A                                      DSPATR(UL)
      A                                      COLOR(BLU)
-     A N71        #STRING     1024A  B  3  4CHECK(LC)
+     A            TXT0091       12A  O  4  2MSGID(TXT 0091 PEEKGER)
+     A                                      COLOR(WHT)
+     A            $FLDNAME      40A  O  4 15
+     A            TXT0092       12A  O  5  2MSGID(TXT 0092 PEEKGER)
+     A                                      COLOR(WHT)
+     A            $FLDLAENGE     5Y 0O  5 15EDTCDE(3)
+     A  61        TXT0146       10A  O  5 31MSGID(TXT 0146 PEEKGER)
+     A  62        TXT0147       10A  O  5 31MSGID(TXT 0147 PEEKGER)
+     A            TXT0095       14A  O  6  2MSGID(TXT 0095 PEEKGER)
+     A                                      COLOR(WHT)
+     A            #STARTPOS      5Y 0B  6 17
+     A  30                                  DSPATR(RI)
+     A  20                                  DSPATR(PC)
+     A                                      EDTCDE(M)
+     A  61
+     AO 62        TXT0148        5A  O  6 31MSGID(TXT 0148 PEEKGER)
+     A  61
+     AO 62        #SELSTART      5Y 0B  6 37
+     A  33                                  DSPATR(RI)
+     A  23                                  DSPATR(PC)
+     A                                      EDTCDE(M)
+     A  61
+     AO 62        TXT0149       10A  O  6 48MSGID(TXT 0149 PEEKGER)
+     A**62        TXT0150        6A  O  6 48MSGID(TXT 0150 PEEKGER)
+     A  61
+     AO 62        #SELLENGTH     5Y 0B  6 59
+     A  34                                  DSPATR(RI)
+     A  24                                  DSPATR(PC)
+     A                                      EDTCDE(M)
+     A N71        #STRING      704A  B  8  4CHECK(LC)
      A                                      CNTFLD(064)
      A***                                   WRDWRAP
      A  70                                  DSPATR(PR)
      A N70                                  DSPATR(UL)
-     A  20                                  DSPATR(PC)
-     A  30                                  DSPATR(RI)
+     A  22                                  DSPATR(PC)
+     A  32                                  DSPATR(RI)
       *
-     A  71        #UCS2_1       64G  B  3  4CCSID(13488 32)
+     A  71        #UCS2_1       64G  B  8  4CCSID(13488 32)
      A  70                                  DSPATR(PR)
      A N70                                  DSPATR(UL)
      A                                      CHECK(LC)
-     A  20                                  DSPATR(PC)
-     A  30                                  DSPATR(RI)
+     A  22                                  DSPATR(PC)
+     A  32                                  DSPATR(RI)
       *
-     A  71        #UCS2_2       64G  B  4  4CCSID(13488 32)
+     A  71        #UCS2_2       64G  B  9  4CCSID(13488 32)
      A  70                                  DSPATR(PR)
      A N70                                  DSPATR(UL)
      A                                      CHECK(LC)
-     A  30                                  DSPATR(RI)
+     A  32                                  DSPATR(RI)
       *
-     A  71        #UCS2_3       64G  B  5  4CCSID(13488 32)
+     A  71        #UCS2_3       64G  B 10  4CCSID(13488 32)
      A  70                                  DSPATR(PR)
      A N70                                  DSPATR(UL)
      A                                      CHECK(LC)
-     A  30                                  DSPATR(RI)
+     A  32                                  DSPATR(RI)
       *
-     A  71        #UCS2_4       64G  B  6  4CCSID(13488 32)
+     A  71        #UCS2_4       64G  B 11  4CCSID(13488 32)
      A  70                                  DSPATR(PR)
      A N70                                  DSPATR(UL)
      A                                      CHECK(LC)
-     A  30                                  DSPATR(RI)
+     A  32                                  DSPATR(RI)
       *
-     A  71        #UCS2_5       64G  B  7  4CCSID(13488 32)
+     A  71        #UCS2_5       64G  B 12  4CCSID(13488 32)
      A  70                                  DSPATR(PR)
      A N70                                  DSPATR(UL)
      A                                      CHECK(LC)
-     A  30                                  DSPATR(RI)
+     A  32                                  DSPATR(RI)
       *
-     A  71        #UCS2_6       64G  B  8  4CCSID(13488 32)
+     A  71        #UCS2_6       64G  B 13  4CCSID(13488 32)
      A  70                                  DSPATR(PR)
      A N70                                  DSPATR(UL)
      A                                      CHECK(LC)
-     A  30                                  DSPATR(RI)
+     A  32                                  DSPATR(RI)
       *
-     A  71        #UCS2_7       64G  B  9  4CCSID(13488 32)
+     A  71        #UCS2_7       64G  B 14  4CCSID(13488 32)
      A  70                                  DSPATR(PR)
      A N70                                  DSPATR(UL)
      A                                      CHECK(LC)
-     A  30                                  DSPATR(RI)
+     A  32                                  DSPATR(RI)
       *
-     A  71        #UCS2_8       64G  B 10  4CCSID(13488 32)
+     A  71        #UCS2_8       64G  B 15  4CCSID(13488 32)
      A  70                                  DSPATR(PR)
      A N70                                  DSPATR(UL)
      A                                      CHECK(LC)
-     A  30                                  DSPATR(RI)
+     A  32                                  DSPATR(RI)
       *
-     A  71        #UCS2_9       64G  B 11  4CCSID(13488 32)
+     A  71        #UCS2_9       64G  B 16  4CCSID(13488 32)
      A  70                                  DSPATR(PR)
      A N70                                  DSPATR(UL)
      A                                      CHECK(LC)
-     A  30                                  DSPATR(RI)
+     A  32                                  DSPATR(RI)
       *
-     A  71        #UCS2_10      64G  B 12  4CCSID(13488 32)
+     A  71        #UCS2_10      64G  B 17  4CCSID(13488 32)
      A  70                                  DSPATR(PR)
      A N70                                  DSPATR(UL)
      A                                      CHECK(LC)
-     A  30                                  DSPATR(RI)
+     A  32                                  DSPATR(RI)
       *
-     A  71        #UCS2_11      64G  B 13  4CCSID(13488 32)
+     A  71        #UCS2_11      64G  B 18  4CCSID(13488 32)
      A  70                                  DSPATR(PR)
      A N70                                  DSPATR(UL)
      A                                      CHECK(LC)
-     A  30                                  DSPATR(RI)
+     A  32                                  DSPATR(RI)
       *
-     A  71        #UCS2_12      64G  B 14  4CCSID(13488 32)
-     A  70                                  DSPATR(PR)
-     A N70                                  DSPATR(UL)
-     A                                      CHECK(LC)
-     A  30                                  DSPATR(RI)
+     A  83        TXT0067       11A  O 19 60MSGID(TXT 0067 PEEKGER)
+     A N83        TXT0066       11A  O 19 60MSGID(TXT 0066 PEEKGER)
       *
-     A  71        #UCS2_13      64G  B 15  4CCSID(13488 32)
-     A  70                                  DSPATR(PR)
-     A N70                                  DSPATR(UL)
-     A                                      CHECK(LC)
-     A  30                                  DSPATR(RI)
-      *
-     A  71        #UCS2_14      64G  B 16  4CCSID(13488 32)
-     A  70                                  DSPATR(PR)
-     A N70                                  DSPATR(UL)
-     A                                      CHECK(LC)
-     A  30                                  DSPATR(RI)
-      *
-     A  71        #UCS2_15      64G  B 17  4CCSID(13488 32)
-     A  70                                  DSPATR(PR)
-     A N70                                  DSPATR(UL)
-     A                                      CHECK(LC)
-     A  30                                  DSPATR(RI)
-      *
-     A  71        #UCS2_16      64G  B 18  4CCSID(13488 32)
-     A  70                                  DSPATR(PR)
-     A N70                                  DSPATR(UL)
-     A                                      CHECK(LC)
-     A  30                                  DSPATR(RI)
-      *
-     A                                 19  1'                                  -
+     A                                 20  1'                                  -
      A                                                                         -
      A                                       '
      A                                      DSPATR(UL)
@@ -189,9 +201,9 @@
      A  *DS4                                WINDOW(MSGCTL)
      A N88                                  DSPMOD(*DS4)
      A                                      OVERLAY
-     A            $$FKEY01      18A  O 20  2COLOR(BLU)
-     A            $$FKEY02      18A  O 20 22COLOR(BLU)
-     A            $$FKEY03      18A  O 20 42COLOR(BLU)
+     A            $$FKEY01      18A  O 21  2COLOR(BLU)
+     A            $$FKEY02      18A  O 21 22COLOR(BLU)
+     A            $$FKEY03      18A  O 21 42COLOR(BLU)
       *
       *----------------------------------------------------*
      A          R PBBOT#2
@@ -200,9 +212,9 @@
      A  *DS4                                WINDOW(MSGCTL)
      A N88                                  DSPMOD(*DS4)
      A                                      OVERLAY
-     A            $$FKEY04      18A  O 20  2COLOR(BLU)
-     A            $$FKEY05      18A  O 20 22COLOR(BLU)
-     A            $$FKEY06      18A  O 20 42COLOR(BLU)
+     A            $$FKEY04      18A  O 21  2COLOR(BLU)
+     A            $$FKEY05      18A  O 21 22COLOR(BLU)
+     A            $$FKEY06      18A  O 21 42COLOR(BLU)
       *
       *----------------------------------------------------*
      A          R PBBOT#3
@@ -211,9 +223,9 @@
      A  *DS4                                WINDOW(MSGCTL)
      A N88                                  DSPMOD(*DS4)
      A                                      OVERLAY
-     A            $$FKEY07      18A  O 20  2COLOR(BLU)
-     A            $$FKEY08      18A  O 20 22COLOR(BLU)
-     A            $$FKEY09      18A  O 20 42COLOR(BLU)
+     A            $$FKEY07      18A  O 21  2COLOR(BLU)
+     A            $$FKEY08      18A  O 21 22COLOR(BLU)
+     A            $$FKEY09      18A  O 21 42COLOR(BLU)
       *
       *----------------------------------------------------*
      A          R PBBOT#4
@@ -222,9 +234,9 @@
      A  *DS4                                WINDOW(MSGCTL)
      A N88                                  DSPMOD(*DS4)
      A                                      OVERLAY
-     A            $$FKEY10      18A  O 20  2COLOR(BLU)
-     A            $$FKEY11      18A  O 20 22COLOR(BLU)
-     A            $$FKEY12      18A  O 20 42COLOR(BLU)
+     A            $$FKEY10      18A  O 21  2COLOR(BLU)
+     A            $$FKEY11      18A  O 21 22COLOR(BLU)
+     A            $$FKEY12      18A  O 21 42COLOR(BLU)
       *
       *----------------------------------------------------*
      A          R PBBOT#5
@@ -233,9 +245,9 @@
      A  *DS4                                WINDOW(MSGCTL)
      A N88                                  DSPMOD(*DS4)
      A                                      OVERLAY
-     A            $$FKEY13      18A  O 20  2COLOR(BLU)
-     A            $$FKEY14      18A  O 20 22COLOR(BLU)
-     A            $$FKEY15      18A  O 20 42COLOR(BLU)
+     A            $$FKEY13      18A  O 21  2COLOR(BLU)
+     A            $$FKEY14      18A  O 21 22COLOR(BLU)
+     A            $$FKEY15      18A  O 21 42COLOR(BLU)
       *
       *----------------------------------------------------*
      A          R PBBOT#6
@@ -244,9 +256,9 @@
      A  *DS4                                WINDOW(MSGCTL)
      A N88                                  DSPMOD(*DS4)
      A                                      OVERLAY
-     A            $$FKEY16      18A  O 20  2COLOR(BLU)
-     A            $$FKEY17      18A  O 20 22COLOR(BLU)
-     A            $$FKEY18      18A  O 20 42COLOR(BLU)
+     A            $$FKEY16      18A  O 21  2COLOR(BLU)
+     A            $$FKEY17      18A  O 21 22COLOR(BLU)
+     A            $$FKEY18      18A  O 21 42COLOR(BLU)
       *
       *----------------------------------------------------*
      A          R PBBOT#7
@@ -255,9 +267,9 @@
      A  *DS4                                WINDOW(MSGCTL)
      A N88                                  DSPMOD(*DS4)
      A                                      OVERLAY
-     A            $$FKEY19      18A  O 20  2COLOR(BLU)
-     A            $$FKEY20      18A  O 20 22COLOR(BLU)
-     A            $$FKEY21      18A  O 20 42COLOR(BLU)
+     A            $$FKEY19      18A  O 21  2COLOR(BLU)
+     A            $$FKEY20      18A  O 21 22COLOR(BLU)
+     A            $$FKEY21      18A  O 21 42COLOR(BLU)
       *
       *----------------------------------------------------*
      A          R PBBOT#8
@@ -266,15 +278,15 @@
      A  *DS4                                WINDOW(MSGCTL)
      A N88                                  DSPMOD(*DS4)
      A                                      OVERLAY
-     A            $$FKEY22      18A  O 20  2COLOR(BLU)
-     A            $$FKEY23      18A  O 20 22COLOR(BLU)
-     A            $$FKEY24      18A  O 20 42COLOR(BLU)
+     A            $$FKEY22      18A  O 21  2COLOR(BLU)
+     A            $$FKEY23      18A  O 21 22COLOR(BLU)
+     A            $$FKEY24      18A  O 21 42COLOR(BLU)
       *
       *----------------------------------------------------*
      A          R MSGSFL                    SFL
       *%%TS  SD  19971017  155045  RADDATZ     REL-V3R6M0  5716-PW1
-     A  *DS3                                SFLMSGRCD(21)
-     A  *DS4                                SFLMSGRCD(21)
+     A  *DS3                                SFLMSGRCD(22)
+     A  *DS4                                SFLMSGRCD(22)
      A            MSGKY                     SFLMSGKEY
      A            PGMQ                      SFLPGMQ(10)
       *
@@ -292,8 +304,8 @@
      A  *DS4                                SFLSIZ(0050)
      A  *DS3                                SFLPAG(0001)
      A  *DS4                                SFLPAG(0001)
-     A  *DS3                                WINDOW(&ZEI &POS 21 70 *NOMSGLIN)
-     A  *DS4                                WINDOW(&ZEI &POS 21 70 *NOMSGLIN)
+     A  *DS3                                WINDOW(&ZEI &POS 22 70 *NOMSGLIN)
+     A  *DS4                                WINDOW(&ZEI &POS 22 70 *NOMSGLIN)
      A            PGMQ                      SFLPGMQ(10)
      A            ZEI            3S 0P
      A            POS            3S 0P

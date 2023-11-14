@@ -115,6 +115,9 @@ dcl-c elm030401 const(%elem(tb030401));
 dcl-s tb030500        char(100) dim(  4) ctdata perrcd(1);
 dcl-c elm030500 const(%elem(tb030500));
 
+dcl-s tb040000        char(100) dim( 16) ctdata perrcd(1);
+dcl-c elm040000 const(%elem(tb040000));
+
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
 //*******************************************************************
@@ -279,7 +282,7 @@ begsr v01r01m00;
 
   wrktab = %subarr(tb010100: 1);
   wrkelem = elm010100;
-  exsr updpeekusr;
+  exsr updPeekUsr;
 
   set0007.set_vsn = 'V01R01M00';
 
@@ -293,7 +296,7 @@ begsr v01r02m00;
 
   wrktab = %subarr(tb010200: 1);
   wrkelem = elm010200;
-  exsr updpeekusr;
+  exsr updPeekUsr;
 
   set0007.set_vsn = 'V01R02M00';
 
@@ -307,7 +310,7 @@ begsr v01r03m00;
 
   wrktab = %subarr(tb010300: 1);
   wrkelem = elm010300;
-  exsr updpeekusr;
+  exsr updPeekUsr;
 
   set0007.set_vsn = 'V01R03M00';
 
@@ -321,7 +324,7 @@ begsr v01r04m00;
 
   wrktab = %subarr(tb010400: 1);
   wrkelem = elm010400;
-  exsr updpeekusr;
+  exsr updPeekUsr;
 
   set0007.set_vsn = 'V01R04M00';
 
@@ -335,7 +338,7 @@ begsr v01r05m00;
 
   wrktab = %subarr(tb010500: 1);
   wrkelem = elm010500;
-  exsr updpeekusr;
+  exsr updPeekUsr;
 
   set0007.set_vsn = 'V01R05M00';
 
@@ -359,7 +362,7 @@ begsr v02r00m00;
 
   wrktab = %subarr(tb020000: 1);
   wrkelem = elm020000;
-  exsr updpeekusr;
+  exsr updPeekUsr;
 
   set0007.set_vsn = 'V02R00M00';
 
@@ -373,7 +376,7 @@ begsr v02r01m00;
 
   wrktab = %subarr(tb020100: 1);
   wrkelem = elm020100;
-  exsr updpeekusr;
+  exsr updPeekUsr;
 
   set0007.set_vsn = 'V02R01M00';
 
@@ -397,7 +400,7 @@ begsr v02r02m00;
 
   wrktab = %subarr(tb020200: 1);
   wrkelem = elm020200;
-  exsr updpeekusr;
+  exsr updPeekUsr;
 
   set0007.set_vsn = 'V02R02M00';
 
@@ -491,7 +494,7 @@ begsr v03r00m00;
 
   wrktab = %subarr(tb030000: 1);
   wrkelem = elm030000;
-  exsr updpeekusr;
+  exsr updPeekUsr;
 
   set0007.set_vsn = 'V03R00M00';
 
@@ -520,7 +523,7 @@ begsr v03r01m00;
 
   wrktab = %subarr(tb030100: 1);
   wrkelem = elm030100;
-  exsr updpeekusr;
+  exsr updPeekUsr;
 
   set0007.set_vsn = 'V03R01M00';
 
@@ -534,7 +537,7 @@ begsr v03r01m01;
 
   wrktab = %subarr(tb030101: 1);
   wrkelem = elm030101;
-  exsr updpeekusr;
+  exsr updPeekUsr;
 
   set0007.set_vsn = 'V03R01M01';
 
@@ -665,7 +668,7 @@ begsr v03r02m05;
 
   wrktab = %subarr(tb030205: 1);
   wrkelem = elm030205;
-  exsr updpeekusr;
+  exsr updPeekUsr;
 
   set0007.set_vsn = 'V03R02M05';
 
@@ -739,7 +742,7 @@ begsr v03r04m01;
 
   wrktab = %subarr(tb030401: 1);
   wrkelem = elm030401;
-  exsr updpeekusr;
+  exsr updPeekUsr;
 
   set0007.set_vsn = 'V03R04M01';
 
@@ -773,7 +776,7 @@ begsr v03r05m00;
 
   wrktab = %subarr(tb030500: 1);
   wrkelem = elm030500;
-  exsr updpeekusr;
+  exsr updPeekUsr;
 
   set0007.set_vsn = 'V03R05M00';
 
@@ -868,6 +871,10 @@ endsr;
 
 begsr v04r00m00;
 
+  wrktab = %subarr(tb040000: 1);
+  wrkelem = elm040000;
+  exsr updPeekUsr;
+
   set0007.set_vsn = 'V04R00M00';
 
 endsr;
@@ -876,7 +883,7 @@ endsr;
 //    UpdPeekUsr    Aktualisieren der PEEKUSR-Datei           *
 //============================================================*
 
-begsr updpeekusr;
+begsr updPeekUsr;
 
   for x = 1 to wrkelem;
 
@@ -1349,3 +1356,20 @@ alt: *PEEK64   *ENTER    *OK
 neu: *PEEK64   *ENTER    *ENTER
 alt: *PEEK64   *F3       *NO
 neu: *PEEK64   *F3       *EXIT
+**   Section---Schlüssel-Datenbereich-------------------------- Version 4.0.0 -----------
+alt: *PEEK64   *F07
+neu: *PEEK64   *F07      *INSERT
+alt: *PEEK64   *F08
+neu: *PEEK64   *F08      *DELETE
+alt: *PEEK64   *F19
+neu: *PEEK64   *F19      *LEFT
+alt: *PEEK64   *F20
+neu: *PEEK64   *F20      *RIGHT
+alt: *PEEK46   *F17
+neu: *PEEK64   *F17      *FIRSTPOS
+alt: *PEEK64   *F18
+neu: *PEEK64   *F18      *LASTPOS
+alt: *PEEK64   *PAGEUP
+neu: *PEEK64   *PAGEUP   *PAGEUP
+alt: *PEEK64   *PAGEDOWN
+neu: *PEEK64   *PAGEDOWN *PAGEDOWN

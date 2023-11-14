@@ -391,6 +391,12 @@ dcl-pr f_wordwrap varchar(4096);
 end-pr;
 
 //-------------------------------------------------------------------*
+dcl-pr f_startswith ind;
+  i_prefix        varchar(4096) const;
+  i_string        varchar(4096) const;
+end-pr;
+
+//-------------------------------------------------------------------*
 dcl-pr f_endswith ind;
   i_suffix        varchar(4096) const;
   i_string        varchar(4096) const;

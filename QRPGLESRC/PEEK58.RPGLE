@@ -2894,6 +2894,42 @@ dcl-proc f_ucase export;
 end-proc;
 
 //=========================================================================
+//  Tests if the specified string starts with the specified prefix.
+//=========================================================================
+//  Parameters:
+//   i_suffix      - The prefix.
+//   i_string      - The string that is tested.
+
+//  Returns:
+//   startsWith    - Returns TRUE if the string starts with the prefix,
+//                   else FALSE.
+//=========================================================================
+
+dcl-proc f_startsWith export;
+  dcl-pi *N              ind;
+    i_prefix        varchar(4096) const;
+    i_string        varchar(4096) const;
+  end-pi;
+
+  //  Return value
+  dcl-s startsWith ind inz(bFalse);
+
+  //  Local fields
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  if (%len(i_string) = 0  or %len(i_prefix) = 0  or %len(i_string) < %len(i_prefix));
+    return startsWith;
+  endif;
+
+  if (%subst(i_string: 1: %len(i_prefix)) = i_prefix);
+    startsWith = bTrue;
+  endif;
+
+  return startsWith;
+
+end-proc;
+
+//=========================================================================
 //  Tests if the specified string ends with the specified suffix.
 //=========================================================================
 //  Parameters:
@@ -3334,6 +3370,10 @@ dcl-proc f_mapcmdtomsg export;
     msgid = '0084';
   when (i_command = '*PRINT');
     msgid = '0085';
+  when (i_command = '*INSERT');
+    msgid = '0086';
+  when (i_command = '*DELETE');
+    msgid = '0087';
   other;
     msgid = '';
   endsl;
