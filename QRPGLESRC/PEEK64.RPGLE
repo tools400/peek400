@@ -470,7 +470,7 @@ begsr screenToBuffer;
   if (isDataChg);
 
     if (i_isUcs2 = 0);
-      //    Nothing to do here
+    //    Nothing to do here
     else;
       #ucs2(1) = #ucs2_1;
       #ucs2(2) = #ucs2_2;
@@ -838,10 +838,10 @@ endsr;
 
 begsr c_firstPos;
 
-  #startPos = buffer.offset + 1;
-
   buffer.offset = 0;
   isDataChg = bTrue;
+
+  exsr keepCsrPos;
 
 endsr;
 
@@ -851,10 +851,14 @@ endsr;
 
 begsr c_lastPos;
 
-  #startPos = buffer.offset + 1;
-
   buffer.offset = buffer.maxLength - maxEditLength;
+  if (buffer.offset < 0);
+    buffer.offset = 0;
+  endif;
+
   isDataChg = bTrue;
+
+  exsr keepCsrPos;
 
 endsr;
 
@@ -911,8 +915,6 @@ endsr;
 
 begsr c_pageUp;
 
-  #startPos = buffer.offset + 1;
-
   buffer.offset = buffer.offset + maxEditLength;
 
   if (buffer.offset >= buffer.maxLength);
@@ -922,6 +924,8 @@ begsr c_pageUp;
 
   isDataChg = bTrue;
 
+  exsr keepCsrPos;
+
 endsr;
 
 //============================================================*
@@ -930,8 +934,6 @@ endsr;
 
 begsr c_pageDown;
 
-  #startPos = buffer.offset + 1;
-
   buffer.offset = buffer.offset - maxEditLength;
   if (buffer.offset < 0);
     exsr c_firstPos;
@@ -939,6 +941,8 @@ begsr c_pageDown;
   endif;
 
   isDataChg = bTrue;
+
+  exsr keepCsrPos;
 
 endsr;
 

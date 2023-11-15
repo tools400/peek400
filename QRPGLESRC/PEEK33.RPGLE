@@ -115,8 +115,8 @@ dcl-c elm030401 const(%elem(tb030401));
 dcl-s tb030500        char(100) dim(  4) ctdata perrcd(1);
 dcl-c elm030500 const(%elem(tb030500));
 
-dcl-s tb040000        char(100) dim( 16) ctdata perrcd(1);
-dcl-c elm040000 const(%elem(tb040000));
+dcl-s tb040001        char(100) dim( 16) ctdata perrcd(1);
+dcl-c elm040001 const(%elem(tb040001));
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
@@ -262,8 +262,8 @@ begsr vpos;
       exsr v03r05m07;
     when (set0007.set_vsn < 'V03R05M08');
       exsr v03r05m08;
-    when (set0007.set_vsn < 'V04R00M00');
-      exsr v04r00m00;
+    when (set0007.set_vsn < 'V04R00M01');
+      exsr v04r00m01;
     other;
       leave;
     endsl;
@@ -866,13 +866,13 @@ begsr v03r05m08;
 endsr;
 
 //============================================================*
-//    V04R00M00     Aktualisierung auf Version 4.0.0          *
+//    V04R00M01     Aktualisierung auf Version 4.0.1          *
 //============================================================*
 
-begsr v04r00m00;
+begsr v04r00m01;
 
-  wrktab = %subarr(tb040000: 1);
-  wrkelem = elm040000;
+  wrktab = %subarr(tb040001: 1);
+  wrkelem = elm040001;
   exsr updPeekUsr;
 
   set0007.set_vsn = 'V04R00M00';
@@ -1356,7 +1356,7 @@ alt: *PEEK64   *ENTER    *OK
 neu: *PEEK64   *ENTER    *ENTER
 alt: *PEEK64   *F3       *NO
 neu: *PEEK64   *F3       *EXIT
-**   Section---Schlüssel-Datenbereich-------------------------- Version 4.0.0 -----------
+**   Section---Schlüssel-Datenbereich-------------------------- Version 4.0.1 -----------
 alt: *PEEK64   *F07
 neu: *PEEK64   *F07      *INSERT
 alt: *PEEK64   *F08
