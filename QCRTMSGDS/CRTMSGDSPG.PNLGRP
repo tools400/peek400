@@ -1,0 +1,363 @@
+000100000000.*=====================================================================*
+000200000000.*                                                                     *
+000300000000.*  Kurzdokumentation :                                                *
+000400000000.*                                                                     *
+000500000000.*  Bereich . . . : CRTMSGDS                                           *
+000600000000.*  Objekt  . . . : CRTMSGDSP                                          *
+000700000000.*  Beschreibung  : Create Message Data Structure - Ger                *
+000800000000.*  Author  . . . : Thomas Raddatz   <thomas.raddatz@tools400.de>      *
+000900000000.*  Datum . . . . : ?                                                  *
+001000000000.*                                                                     *
+001100000000.*=====================================================================*
+001200000000.*                                                                     *
+001300000000.*  This software is free software, you can redistribute it and/or     *
+001400000000.*  modify it under the terms of the GNU General Public License (GPL)  *
+001500000000.*  as published by the Free Software Foundation.                      *
+001600000000.*                                                                     *
+001700000000.*  See GNU General Public License for details.                        *
+001800000000.*          http://www.opensource.org                                  *
+001900000000.*          http://www.opensource.org/licenses/gpl-license.html        *
+002000000000.*                                                                     *
+002100000000.*=====================================================================*
+002200000000.*  History:                                                           *
+002300000000.*                                                                     *
+002400000000.*  Datum       Name          Änderung                                 *
+002500000000.*  ----------  ------------  ---------------------------------------  *
+002600000000.*  17.01.2021  Th.Raddatz    Added support for /free message data     *
+002700000000.*                            structures.                              *
+002800000000.*                                                                     *
+002900000000.*=====================================================================*
+003000000000.* >>PRE-COMPILER<<                                                    *
+003100000000.*                                                                     *
+003200000000.*   >>CRTCMD<< CRTPNLGRP    PNLGRP(&LI/CRTMSGDSP) +                   *
+003300000000.*                           SRCFILE(&SL/&SF) +                        *
+003400000000.*                           SRCMBR(&SM);                              *
+003500000000.*                                                                     *
+003600000000.*   >>COMPILE<<                                                       *
+003700000000.*   >>END-COMPILE<<                                                   *
+003800000000.*                                                                     *
+003900000000.*   >>EXECUTE<<                                                       *
+004000000000.*                                                                     *
+004100000000.* >>END-PRE-COMPILER<<                                                *
+004200000000.*=====================================================================*
+004300000000:PNLGRP.
+004400000000.*
+004500000000:HELP name='CRTMSGDS/ALL'.
+004600000000:IMHELP name=CRTMSGDS.
+004700000000:IMHELP name='CRTMSGDS/RANGE     '.
+004800000000:IMHELP name='CRTMSGDS/MSGF      '.
+004900000000:IMHELP name='CRTMSGDS/FILE      '.
+005000000000:IMHELP name='CRTMSGDS/MBR       '.
+005100000000:IMHELP name='CRTMSGDS/REPLACE   '.
+005200000000:IMHELP name='CRTMSGDS/TYPE      '.
+005300000000:IMHELP name='CRTMSGDS/DEFINE    '.
+005400000000:IMHELP name='CRTMSGDS/CRTMSGF   '.
+005500000000:EHELP.
+005600000000.*--------------------------------------------------------------------
+005700000000.* Hilfetext für den Befehl
+005800000000.*--------------------------------------------------------------------
+005900000000:HELP NAME='CRTMSGDS'.
+006000000000Nachrichten-DS erstellen (CRTMSGDS) - Hilfe
+006100000000:P.
+006200000000Der Befehl CRTMSGDS erstellt eine Datenstruktur für eine
+006300000000Nachrichtenbeschreibung. Außerdem ist es möglich mit dem Befehl
+006400000000CRTMSGDS ein CL Programm, bzw. ein CL-Script für den Befehl RUNCLSTM
+006500000000zu erstellen, welches den oder die Erstellungsbefehl(e) für eine
+006600000000oder mehrere Nachrichtenbeschreibungen enthält.
+006700000000.*
+006800000000:EHELP.
+006900000000.*
+007000000000.*--------------------------------------------------------------------
+007100000000.* Hilfetext für Schlüsselwort RANGE
+007200000000.*--------------------------------------------------------------------
+007300000000:HELP name='CRTMSGDS/RANGE     '.
+007400000000Bereich der Nachrichten-IDs - Hilfe
+007500000000:XH3.Bereich der Nachrichten-IDs (RANGE)
+007600000000:P.
+007700000000Gibt den Bereich der Nachrichten-IDs in der angegebenen Nachrichtendatei
+007800000000an, die verarbeitet werden. Alle Nachrichtenbeschreibungen
+007900000000in der bei :HP2.Nachrichtendatei:EHP2. (Parameter MSGF) angebenen
+008000000000Nachrichtendatei können durch die Angabe *ALL bei
+008100000000diesem Parameter verarbeitet werden.
+008200000000:P.
+008300000000Ist keine Anfangsnachrichten-ID angegeben, beginnt die Verarbeitung
+008400000000mit der ersten Nachricht in der angegebenen Nachrichtendatei. Ist
+008500000000keine Endnachrichten-ID angegeben, wird der Standardwert *ONLY verwendet,
+008600000000und es wird nur die Anfangsnachrichten-ID verarbeitet.
+008700000000.*
+008800000000:IMHELP name='COM/OPTPARM'.
+008900000000.*
+009000000000:XH3.Anfangsnachrichten-ID
+009100000000:P.
+009200000000Der erste der zwei Werte in diesem Parameter (die Anfangsnachrichten-ID
+009300000000genannt) gibt die Nachrichten-ID der Nachrichtenbeschreibung an, die
+009400000000zuerst verarbeitet werden soll.
+009500000000:P.
+009600000000:PARML.
+009700000000:PT.:PK DEF.*FIRST:EPK.
+009800000000:PD.Die Beschreibung der ersten Nachricht in der bei :HP2.Nachrichtendatei:EHP2.
+009900000000(Parameter MSGF) angegebenen Datei soll zuerst verarbeitet werden.
+010000000000:PT.:PV.Unterer Wert:EPV.
+010100000000:PD.Die ID (7 Zeichen) der Nachrichtenbeschreibung angeben, die zuerst
+010200000000verarbeitet werden soll.
+010300000000:EPARML.
+010400000000:P.
+010500000000:XH3.ID der letzten Nachricht
+010600000000:P.
+010700000000Der zweite der beiden Werte (Endenachrichten-ID genannt) gibt die
+010800000000Nachrichten-ID der Nachrichtenbeschreibung an, die zuletzt
+010900000000verarbeitet werden soll.
+011000000000:P.
+011100000000:PARML.
+011200000000:PT.:PK DEF.*ONLY:EPK.
+011300000000:PD.Nur die Beschreibung der Nachrichten-ID wird verarbeitet, die als
+011400000000Anfangsnachrichten-ID angegeben wurde.
+011500000000:PT.:PV.*LAST:EPV.
+011600000000:PD.Die Beschreibung der letzten Nachricht in der Datei wird zuletzt
+011700000000verarbeitet.
+011800000000:PT.:PV.Oberer Wert:EPV.
+011900000000:PD.Die ID (7 Zeichen) der Nachrichtenbeschreibung angeben, die zuletzt
+012000000000verarbeitet werden soll.
+012100000000:EPARML.
+012200000000:P.
+012300000000:XH3.Weitere Einzelwerte:
+012400000000:P.
+012500000000:PARML.
+012600000000:PT.:PV.*ALL:EPV.
+012700000000:PD.Alle Nachrichtenbeschreibungen in der angegebenen Nachrichtendatei
+012800000000werden verarbeitet. Dieser Wert kann nur im ersten Element dieses
+012900000000Parameters angegeben werden.
+013000000000:EPARML.
+013100000000.*
+013200000000:EHELP.
+013300000000.*
+013400000000.*--------------------------------------------------------------------
+013500000000.* Hilfetext für Schlüsselwort MSGF
+013600000000.*--------------------------------------------------------------------
+013700000000:HELP name='CRTMSGDS/MSGF'.
+013800000000Nachrichtendatei - Hilfe
+013900000000:XH3.Nachrichtendatei (MSGF)
+014000000000:P.
+014100000000Gibt den Namen und die Bibliothek der Nachrichtendatei an, aus der die
+014200000000Nachrichtenbeschreibungen stammen.
+014300000000.*
+014400000000:IMHELP name='COM/OPTPARM'.
+014500000000.*
+014600000000:PARML.
+014700000000:PT.:PK DEF.QCPFMSG:EPK.
+014800000000:PD.Die Nachrichtenbeschreibungen stammen aus der Systemnachrichtendatei
+014900000000QCPFMSG.
+015000000000:PT.:PV.Nachrichtendateiname:EPV.
+015100000000:PD.Den Namen der Nachrichtendatei angeben, aus der die
+015200000000Nachrichtenbeschreibungen stammen.
+015300000000:EPARML.
+015400000000:P.
+015500000000Gültige Bibliothekswerte sind:
+015600000000:P.
+015700000000:PARML.
+015800000000:PT.:PK DEF.*LIBL:EPK.
+015900000000:PD.Alle Bibliotheken in der Bibliotheksliste des Jobs werden
+016000000000durchsucht, bis die erste Übereinstimmung gefunden wird.
+016100000000:PT.:PV.*CURLIB:EPV.
+016200000000:PD.Die Nachrichtendatei wird in der aktuellen Bibliothek für den Job
+016300000000gesucht. Enthält die Bibliotheksliste keinen aktuellen
+016400000000Bibliothekseintrag, wird QGPL benutzt.
+016500000000:PT.:PV.Bibliotheksname:EPV.
+016600000000:PD.Bibliothek angeben, in der sich die Nachrichtendatei befindet.
+016700000000:EPARML.
+016800000000.*
+016900000000:EHELP.
+017000000000.*
+017100000000.*--------------------------------------------------------------------
+017200000000.* Hilfetext für Schlüsselwort FILE
+017300000000.*--------------------------------------------------------------------
+017400000000:HELP name='CRTMSGDS/FILE'.
+017500000000Datei - Hilfe
+017600000000:XH3.Datei (FILE)
+017700000000:P.
+017800000000Angeben, in welche Quellendatei die erstellte Quellenteildatei
+017900000000abgestellt werden soll.
+018000000000.*
+018100000000:IMHELP name='COM/OPTPARM'.
+018200000000.*
+018300000000:PARML.
+018400000000:PT.:PK DEF.QCOPYLE:EPK.
+018500000000:PD.Die Quellenteildatei wird in die Quellendatei QCOPYLE
+018600000000abgelegt.
+018700000000:PT.:PV.Quellendateiname:EPV.
+018800000000:PD.Quellendatei angeben, in die die Quellenteildatei abgelegt
+018900000000werden soll.
+019000000000:EPARML.
+019100000000:P.
+019200000000Gültige Bibliothekswerte sind:
+019300000000:P.
+019400000000:PARML.
+019500000000:PT.:PK DEF.*LIBL:EPK.
+019600000000:PD.Alle Bibliotheken in der Bibliotheksliste des Jobs werden
+019700000000durchsucht, bis die erste Übereinstimmung gefunden wird.
+019800000000:PT.:PV.*CURLIB:EPV.
+019900000000:PD.Die Quellendatei wird in der aktuellen Bibliothek für den Job
+020000000000gesucht. Enthält die Bibliotheksliste keinen aktuellen
+020100000000Bibliothekseintrag, wird QGPL benutzt.
+020200000000:PT.:PV.Bibliotheksname:EPV.
+020300000000:PD.Bibliothek angeben, in der sich die Quellendatei befindet.
+020400000000:EPARML.
+020500000000.*
+020600000000:EHELP.
+020700000000.*
+020800000000.*--------------------------------------------------------------------
+020900000000.* Hilfetext für Schlüsselwort MBR
+021000000000.*--------------------------------------------------------------------
+021100000000:HELP name='CRTMSGDS/MBR'.
+021200000000Teildatei - Hilfe
+021300000000:XH3.Teildatei (MBR)
+021400000000:P.
+021500000000Angeben, wie die Quellenteildatei heißen soll. Wird in diesem Parameter
+021600000000*GEN angegeben, so wird für jede verarbeitete Nachrichten-ID eine
+021700000000separate Quellenteildatei erstellt. Wird hingegen ein Name für die
+021800000000Quellenteildatei vorgegeben, so werden alle verarbeiteten Nachrichten-IDs
+021900000000in diese Quellenteildatei abgelegt.
+022000000000.*
+022100000000:IMHELP name='COM/OPTPARM'.
+022200000000.*
+022300000000:PARML.
+022400000000:PT.:PK DEF.*GEN:EPK.
+022500000000:PD.Der Name der Quellenteildatei wird aus der Nachrichten-ID
+022600000000generiert.
+022700000000:PT.:PV.Quellenteildateiname:EPV.
+022800000000:PD.Quellendateiname angeben.
+022900000000:EPARML.
+023000000000.*
+023100000000:EHELP.
+023200000000.*
+023300000000.*--------------------------------------------------------------------
+023400000000.* Hilfetext für Schlüsselwort REPLACE
+023500000000.*--------------------------------------------------------------------
+023600000000:HELP name='CRTMSGDS/REPLACE'.
+023700000000Bestehende Teildatei ersetzen - Hilfe
+023800000000:XH3.Bestehende Teildatei ersetzen (REPLACE)
+023900000000:P.
+024000000000Angeben, ob eine bestehende Quellenteildatei ersetzt werden darf.
+024100000000.*
+024200000000:IMHELP name='COM/OPTPARM'.
+024300000000.*
+024400000000:PARML.
+024500000000:PT.:PK DEF.*NO:EPK.
+024600000000:PD.Eine bestehende Quellenteildatei wird nicht ersetzt.
+024700000000:PT.:PV.*YES:EPV.
+024800000000:PD.Eine bestehende Quellenteildatei wird ersetzt, wenn sie bereits
+024900000000vorhanden ist. Der Inhalt der Quellenteildatei geht verloren.
+025000000000:EPARML.
+025100000000.*
+025200000000:EHELP.
+025300000000.*
+025400000000.*--------------------------------------------------------------------
+025500000000.* Hilfetext für Schlüsselwort TYPE
+025600000000.*--------------------------------------------------------------------
+025700000000:HELP name='CRTMSGDS/TYPE'.
+025800000000Zu generierende Sourceart - Hilfe
+025900000000:XH3.Zu generierende Sourceart (TYPE)
+026000000000:P.
+026100000000Angeben, welche Art von Quellcode generiert werden soll.
+026200000000.*
+026300000000:IMHELP name='COM/OPTPARM'.
+026400000000.*
+026500000000:PARML.
+026600000000:PT.:PK DEF.*ILERPG:EPK.
+026700000000:PD.Es wird eine Datenstruktur für RPG-IV erstellt.
+026800000000:PT.:PV.*RPG:EPV.
+026900000000:PD.Es wird eine Datenstruktur für RPG-III erstellt.
+027000000000:PT.:PV.*FREE:EPV.
+027100000000:PD.Es wird eine Datenstruktur für RPG-IV und das **free Format erstellt.
+027200000000:PT.:PV.*C:EPV.
+027300000000:PD.Es wird eine Datenstruktur für C erstellt.
+027400000000:PT.:PV.*CLP:EPV.
+027500000000:PD.Es wird ein CL-Programm erstellt.
+027600000000:PT.:PV.*CLLE:EPV.
+027700000000:PD.Es wird ein ILE CL-Programm erstellt.
+027800000000:PT.:PV.*SCRIPT:EPV.
+027900000000:PD.Es wird ein CL-Skript erstellt.
+028000000000:EPARML.
+028100000000.*
+028200000000:EHELP.
+028300000000.*
+028400000000.*--------------------------------------------------------------------
+028500000000.* Hilfetext für Schlüsselwort DEFINE
+028600000000.*--------------------------------------------------------------------
+028700000000:HELP name='CRTMSGDS/DEFINE'.
+028800000000DEFINE-Bestimmungen generieren - Hilfe
+028900000000:XH3.DEFINE-Bestimmungen generieren (DEFINE)
+029000000000:P.
+029100000000Angeben, ob DEFINE Bestimmungen generiert werden sollen. Dieser
+029200000000Parameter kann nur dann angegeben werden, wenn bei
+029300000000:HP2.Zu generierende Sourceart:EHP2. (Parameter TYPE) *ILERPG oder
+029400000000*C angegeben ist.
+029500000000.*
+029600000000:IMHELP name='COM/OPTPARM'.
+029700000000.*
+029800000000:PARML.
+029900000000:PT.:PK DEF.*YES:EPK.
+030000000000:PD.Es werden DEFINE-Anweisungen generiert.
+030100000000:PT.:PV.*NO:EPV.
+030200000000:PD.Es werden keine DEFINE-Anweisungen generiert.
+030300000000:EPARML.
+030400000000.*
+030500000000:EHELP.
+030600000000.*
+030700000000.*--------------------------------------------------------------------
+030800000000.* Hilfetext für Schlüsselwort CRTMSGF
+030900000000.*--------------------------------------------------------------------
+031000000000:HELP name='CRTMSGDS/CRTMSGF'.
+031100000000CRTMSGF-Befehl generieren - Hilfe
+031200000000:XH3.CRTMSGF-Befehl generieren (CRTMSGF)
+031300000000:P.
+031400000000Angeben, ob der CRTMSGF Befehl generiert werden soll. Dieser
+031500000000Parameter kann nur dann angegeben werden, wenn bei
+031600000000:HP2.Zu generierende Sourceart:EHP2. (Parameter TYPE) *CLP oder
+031700000000*CLLE angegeben ist.
+031800000000.*
+031900000000:IMHELP name='COM/OPTPARM'.
+032000000000.*
+032100000000:PARML.
+032200000000:PT.:PK DEF.*YES:EPK.
+032300000000:PD.Der CRTMSGF-Befehl wird generiert.
+032400000000:PT.:PV.*NO:EPV.
+032500000000:PD.Es wird kein CRTMSGF-Befehl generiert.
+032600000000:EPARML.
+032700000000.*
+032800000000:EHELP.
+032900000000.*
+033000000000.*====================================================================
+033100000000.*  Textbausteine, die an mehreren Stellen im Hilfetext
+033200000000.*  verwendet werden.
+033300000000.*====================================================================
+033400000000
+033500000000.*=====================================
+033600000000.*  Erforderlicher Parameter
+033700000000.*=====================================
+033800000000:HELP NAME='COM/REQPARM'.
+033900000000:P.
+034000000000Dieser Parameter ist erforderlich.
+034100000000:P.
+034200000000:IMHELP name='COM/VALUES'.
+034300000000:EHELP.
+034400000000
+034500000000.*=====================================
+034600000000.*  Optionaler Parameter
+034700000000.*=====================================
+034800000000:HELP NAME='COM/OPTPARM'.
+034900000000:P.
+035000000000Dieser Parameter ist optional.
+035100000000:P.
+035200000000:IMHELP name='COM/VALUES'.
+035300000000:EHELP.
+035400000000
+035500000000.*=====================================
+035600000000.*  Werteliste
+035700000000.*=====================================
+035800000000:HELP NAME='COM/VALUES'.
+035900000000:P.
+036000000000Mögliche Werte sind:
+036100000000:EHELP.
+036200000000.*
+036300000000:EPNLGRP.

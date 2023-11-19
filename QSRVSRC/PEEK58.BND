@@ -91,5 +91,7 @@
         EXPORT SYMBOL(p_kill)
         EXPORT SYMBOL(f_mapCmdToMsg)
 
+        EXPORT SYMBOL(f_startsWith)
+
       ENDPGMEXP
 

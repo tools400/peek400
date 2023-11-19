@@ -1,336 +1,336 @@
-.*=====================================================================*
-.*                                                                     *
-.*  Kurzdokumentation :                                                *
-.*                                                                     *
-.*  Bereich . . . : CRTMSGDS                                           *
-.*  Objekt  . . . : CRTMSGDSP                                          *
-.*  Beschreibung  : Tool: CRTMSGDS   (Create Message DS  ) Eng         *
-.*  Author  . . . : Thomas Raddatz   <thomas.raddatz@tools400.de>      *
-.*  Datum . . . . : 01.06.2002                                         *
-.*                                                                     *
-.*=====================================================================*
-.*                                                                     *
-.*  This software is free software, you can redistribute it and/or     *
-.*  modify it under the terms of the GNU General Public License (GPL)  *
-.*  as published by the Free Software Foundation.                      *
-.*                                                                     *
-.*  See GNU General Public License for details.                        *
-.*          http://www.opensource.org                                  *
-.*          http://www.opensource.org/licenses/gpl-license.html        *
-.*                                                                     *
-.*=====================================================================*
-.*  History:                                                           *
-.*                                                                     *
-.*  Datum       Name          Änderung                                 *
-.*  ----------  ------------  ---------------------------------------  *
-.*                                                                     *
-.*=====================================================================*
-.* >>PRE-COMPILER<<                                                    *
-.*                                                                     *
-.*   >>CRTCMD<< CRTPNLGRP    PNLGRP(&LI/&OB) +                         *
-.*                           SRCFILE(&SL/&SF) +                        *
-.*                           SRCMBR(&SM);                              *
-.*                                                                     *
-.*   >>COMPILE<<                                                       *
-.*   >>END-COMPILE<<                                                   *
-.*                                                                     *
-.*   >>EXECUTE<<                                                       *
-.*                                                                     *
-.* >>END-PRE-COMPILER<<                                                *
-.*=====================================================================*
-:PNLGRP.
-.*
-:HELP name='CRTMSGDS/ALL'.
-:IMHELP name=CRTMSGDS.
-:IMHELP name='CRTMSGDS/RANGE     '.
-:IMHELP name='CRTMSGDS/MSGF      '.
-:IMHELP name='CRTMSGDS/FILE      '.
-:IMHELP name='CRTMSGDS/MBR       '.
-:IMHELP name='CRTMSGDS/REPLACE   '.
-:IMHELP name='CRTMSGDS/TYPE      '.
-:IMHELP name='CRTMSGDS/DEFINE    '.
-:EHELP.
-.*--------------------------------------------------------------------
-.* Hilfetext für den Befehl
-.*--------------------------------------------------------------------
-:HELP NAME='CRTMSGDS'.
-Create Message Data Structure (CRTMSGDS) - Help
-:P.
-The CRTMSGDS command is used to create a data structure for the
-data fields of a message description. Also it is used to create a CL
-program or a CL script for a message description. The CL script
-then can be execute with the RUNCLSTM command in order to reproduce
-the message description.
-.*
-:EHELP.
-.*
-.*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort RANGE
-.*--------------------------------------------------------------------
-:HELP name='CRTMSGDS/RANGE     '.
-Range of message identifiers - Help
-:XH3.Range of message identifiers (RANGE)
-:P.
-Specifies the range of message identifiers in the
-specified message file which are processed by the command. All
-message descriptions in the message file specified on the
-:HP2.Message:EHP2. file prompt (MSGF parameter) can be processed
-by specifying *ALL on this parameter.
-:P.
-If the starting message identifier is not specified, the
-message descriptions begin with the first message in the
-specified message file.  If the ending message identifier
-is not specified, the default value, *ONLY, is used, and
-only the description of the starting message identifier is
-processed.
-.*
-:IMHELP name='COM/OPTPARM'.
-.*
-:XH3.Starting Message Identifier
-:P.
-The first of the two values in this parameter, called the
-starting message identifier, specifies the message
-identifier of the first message description to be processed.
-:P.
-:PARML.
-:PT.:PK DEF.*FIRST:EPK.
-:PD.The first message in the file specified on the :HP2.Message
-file:EHP2. prompt (MSGF parameter) is the first message
-whose description is processed.
-:PT.:PV.lower-value:EPV.
-:PD.Specify the 7-character identifier of the first
-message description to be processed.
-:EPARML.
-:P.
-:XH3.Ending Message Identifier
-:P.
-The second of the two values, called the ending message
-identifier, specifies the message identifier for the last
-message description to be processed.
-:P.
-:PARML.
-:PT.:PK DEF.*ONLY:EPK.
-:PD.Only the message identifier specified as a starting
-message identifier is processed.
-:PT.:PV.*LAST:EPV.
-:PD.The last message in the file is the last message whose
-description is processed.
-:PT.:PV.upper-value:EPV.
-:PD.Specify the 7-character identifier of the last message
-description to be processed.
-:EPARML.
-:P.
-:XH3.Other Single Values:
-:P.
-:PARML.
-:PT.:PV.*ALL:EPV.
-:PD.All message descriptions in the message file specified
-are processed.  This value can only be specified in the first
-element of this parameter.
-:EPARML.
-.*
-:EHELP.
-.*
-.*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort MSGF
-.*--------------------------------------------------------------------
-:HELP name='CRTMSGDS/MSGF'.
-Message file - Help
-:XH3.Message file (MSGF)
-:P.
-Specifies the name and library of the message file from
-which the message descriptions are taken.
-.*
-:IMHELP name='COM/OPTPARM'.
-.*
-:PARML.
-:PT.:PK DEF.QCPFMSG:EPK.
-:PD.Message descriptions are taken from the system message
-file, QCPFMSG.
-:PT.:PV.message-file-name:EPV.
-:PD.Specify the name of the message file from which the
-message descriptions are taken.
-:EPARML.
-:P.
-The possible library values are:
-:P.
-:PARML.
-:PT.:PK DEF.*LIBL:EPK.
-:PD.All libraries in the job's library list are searched
-until the first match is found.
-:PT.:PV.*CURLIB:EPV.
-:PD.The current library for the job is used to locate the
-message file.  If no current library entry exists in
-the library list, QGPL is used.
-:PT.:PV.library-name:EPV.
-:PD.Specify the library where the message file is located.
-:EPARML.
-.*
-:EHELP.
-.*
-.*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort FILE
-.*--------------------------------------------------------------------
-:HELP name='CRTMSGDS/FILE'.
-File - Help
-:XH3.File (FILE)
-:P.
-Specifies the name and library of the source file that contains the
-source member or where the member is added.
-.*
-:IMHELP name='COM/OPTPARM'.
-.*
-:PARML.
-:PT.:PK DEF.QCOPYLE:EPK.
-:PD.The source member is added to the QCOPYLE source file.
-:PT.:PV.source-file-name:EPV.
-:PD.Specify the name of the source file that the member
-is added to.
-:EPARML.
-:P.
-The possible library values are:
-:P.
-:PARML.
-:PT.:PK DEF.*LIBL:EPK.
-:PD.All libraries in the job's library list are searched
-until the first match is found.
-:PT.:PV.*CURLIB:EPV.
-:PD.The current library for the job is used to locate the
-message file.  If no current library entry exists in
-the library list, QGPL is used.
-:PT.:PV.library-name:EPV.
-:PD.Specify the library where the message file is located.
-:EPARML.
-.*
-:EHELP.
-.*
-.*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort MBR
-.*--------------------------------------------------------------------
-:HELP name='CRTMSGDS/MBR'.
-Member - Help
-:XH3.Member (MBR)
-:P.
-Specifies the name of the source member that is used to take the output of
-the CRTMSGDS command. If *GEN is specified, then a separate member name
-is produced for each message description. If a member name is specified, then
-the output of all message description specified is directed to that member.
-.*
-:IMHELP name='COM/OPTPARM'.
-.*
-:PARML.
-:PT.:PK DEF.*GEN:EPK.
-:PD.The name of the source member is produced based on the message identifier.
-:PT.:PV.source-member-name:EPV.
-:PD.Specify the name of the source member that is taken to get the output
-of the CRTMSGDS command.
-:EPARML.
-.*
-:EHELP.
-.*
-.*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort REPLACE
-.*--------------------------------------------------------------------
-:HELP name='CRTMSGDS/REPLACE'.
-Replace member - Help
-:XH3.Replace member (REPLACE)
-:P.
-Specifies whether an existing member is allowed to be replaced
-or not.
-.*
-:IMHELP name='COM/OPTPARM'.
-.*
-:PARML.
-:PT.:PK DEF.*NO:EPK.
-:PD.An existing member is not replaced. An error message is issued
-by the command instead.
-:PT.:PV.*YES:EPV.
-:PD.The content of an existing member is replaced.
-:EPARML.
-.*
-:EHELP.
-.*
-.*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort TYPE
-.*--------------------------------------------------------------------
-:HELP name='CRTMSGDS/TYPE'.
-Source type - Help
-:XH3.Source type (TYPE)
-:P.
-Specifies the type of source that is produced by the CRTMSGDS command.
-.*
-:IMHELP name='COM/OPTPARM'.
-.*
-:PARML.
-:PT.:PK DEF.*ILERPG:EPK.
-:PD.An ILE-RPG data structure is produced.
-:PT.:PV.*RPG:EPV.
-:PD.A RPG-III data structure is produced.
-:PT.:PV.*C:EPV.
-:PD.A C data structure is produced.
-:PT.:PV.*CLP:EPV.
-:PD.A CL program is produced.
-:PT.:PV.*CLLE:EPV.
-:PD.An ILE CL program is produced.
-:PT.:PV.*SCRIPT:EPV.
-:PD.A CL script is produced.
-:EPARML.
-.*
-:EHELP.
-.*
-.*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort DEFINE
-.*--------------------------------------------------------------------
-:HELP name='CRTMSGDS/DEFINE'.
-Create DEFINE specifications - Help
-:XH3.Create DEFINE specifications (DEFINE)
-:P.
-Specifies whether DEFINE specification are added to the source member
-or not. The value for this parameter can only be specified if
-:HP2.Source type:EHP2. (parameter TYPE) is set to *ILERPG or *C.
-.*
-:IMHELP name='COM/OPTPARM'.
-.*
-:PARML.
-:PT.:PK DEF.*YES:EPK.
-:PD.DEFINE specification are added to the source member.
-:PT.:PV.*NO:EPV.
-:PD.DEFINE specification are not added to the source member.
-:EPARML.
-.*
-:EHELP.
-.*
-.*====================================================================
-.*  Textbausteine, die an mehreren Stellen im Hilfetext
-.*  verwendet werden.
-.*====================================================================
-
-.*=====================================
-.*  Erforderlicher Parameter
-.*=====================================
-:HELP NAME='COM/REQPARM'.
-:P.
-This is a required parameter.
-:P.
-:IMHELP name='COM/VALUES'.
-:EHELP.
-
-.*=====================================
-.*  Optionaler Parameter
-.*=====================================
-:HELP NAME='COM/OPTPARM'.
-:P.
-This is an optional parameter.
-:P.
-:IMHELP name='COM/VALUES'.
-:EHELP.
-
-.*=====================================
-.*  Werteliste
-.*=====================================
-:HELP NAME='COM/VALUES'.
-:P.
-The possible values are:
-:EHELP.
-.*
-:EPNLGRP.
+000100231110.*=====================================================================*
+000200231110.*                                                                     *
+000300231110.*  Kurzdokumentation :                                                *
+000400231110.*                                                                     *
+000500231110.*  Bereich . . . : CRTMSGDS                                           *
+000600231110.*  Objekt  . . . : CRTMSGDSP                                          *
+000700231110.*  Beschreibung  : Tool: CRTMSGDS   (Create Message DS  ) Eng         *
+000800231110.*  Author  . . . : Thomas Raddatz   <thomas.raddatz@tools400.de>      *
+000900231110.*  Datum . . . . : 01.06.2002                                         *
+001000231110.*                                                                     *
+001100231110.*=====================================================================*
+001200231110.*                                                                     *
+001300231110.*  This software is free software, you can redistribute it and/or     *
+001400231110.*  modify it under the terms of the GNU General Public License (GPL)  *
+001500231110.*  as published by the Free Software Foundation.                      *
+001600231110.*                                                                     *
+001700231110.*  See GNU General Public License for details.                        *
+001800231110.*          http://www.opensource.org                                  *
+001900231110.*          http://www.opensource.org/licenses/gpl-license.html        *
+002000231110.*                                                                     *
+002100231110.*=====================================================================*
+002200231110.*  History:                                                           *
+002300231110.*                                                                     *
+002400231110.*  Datum       Name          Änderung                                 *
+002500231110.*  ----------  ------------  ---------------------------------------  *
+002600231110.*                                                                     *
+002700231110.*=====================================================================*
+002800231110.* >>PRE-COMPILER<<                                                    *
+002900231110.*                                                                     *
+003000231110.*   >>CRTCMD<< CRTPNLGRP    PNLGRP(&LI/&OB) +                         *
+003100231110.*                           SRCFILE(&SL/&SF) +                        *
+003200231110.*                           SRCMBR(&SM);                              *
+003300231110.*                                                                     *
+003400231110.*   >>COMPILE<<                                                       *
+003500231110.*   >>END-COMPILE<<                                                   *
+003600231110.*                                                                     *
+003700231110.*   >>EXECUTE<<                                                       *
+003800231110.*                                                                     *
+003900231110.* >>END-PRE-COMPILER<<                                                *
+004000231110.*=====================================================================*
+004100231110:PNLGRP.
+004200231110.*
+004300231110:HELP name='CRTMSGDS/ALL'.
+004400231110:IMHELP name=CRTMSGDS.
+004500231110:IMHELP name='CRTMSGDS/RANGE     '.
+004600231110:IMHELP name='CRTMSGDS/MSGF      '.
+004700231110:IMHELP name='CRTMSGDS/FILE      '.
+004800231110:IMHELP name='CRTMSGDS/MBR       '.
+004900231110:IMHELP name='CRTMSGDS/REPLACE   '.
+005000231110:IMHELP name='CRTMSGDS/TYPE      '.
+005100231110:IMHELP name='CRTMSGDS/DEFINE    '.
+005200231110:EHELP.
+005300231110.*--------------------------------------------------------------------
+005400231110.* Hilfetext für den Befehl
+005500231110.*--------------------------------------------------------------------
+005600231110:HELP NAME='CRTMSGDS'.
+005700231110Create Message Data Structure (CRTMSGDS) - Help
+005800231110:P.
+005900231110The CRTMSGDS command is used to create a data structure for the
+006000231110data fields of a message description. Also it is used to create a CL
+006100231110program or a CL script for a message description. The CL script
+006200231110then can be execute with the RUNCLSTM command in order to reproduce
+006300231110the message description.
+006400231110.*
+006500231110:EHELP.
+006600231110.*
+006700231110.*--------------------------------------------------------------------
+006800231110.* Hilfetext für Schlüsselwort RANGE
+006900231110.*--------------------------------------------------------------------
+007000231110:HELP name='CRTMSGDS/RANGE     '.
+007100231110Range of message identifiers - Help
+007200231110:XH3.Range of message identifiers (RANGE)
+007300231110:P.
+007400231110Specifies the range of message identifiers in the
+007500231110specified message file which are processed by the command. All
+007600231110message descriptions in the message file specified on the
+007700231110:HP2.Message:EHP2. file prompt (MSGF parameter) can be processed
+007800231110by specifying *ALL on this parameter.
+007900231110:P.
+008000231110If the starting message identifier is not specified, the
+008100231110message descriptions begin with the first message in the
+008200231110specified message file.  If the ending message identifier
+008300231110is not specified, the default value, *ONLY, is used, and
+008400231110only the description of the starting message identifier is
+008500231110processed.
+008600231110.*
+008700231110:IMHELP name='COM/OPTPARM'.
+008800231110.*
+008900231110:XH3.Starting Message Identifier
+009000231110:P.
+009100231110The first of the two values in this parameter, called the
+009200231110starting message identifier, specifies the message
+009300231110identifier of the first message description to be processed.
+009400231110:P.
+009500231110:PARML.
+009600231110:PT.:PK DEF.*FIRST:EPK.
+009700231110:PD.The first message in the file specified on the :HP2.Message
+009800231110file:EHP2. prompt (MSGF parameter) is the first message
+009900231110whose description is processed.
+010000231110:PT.:PV.lower-value:EPV.
+010100231110:PD.Specify the 7-character identifier of the first
+010200231110message description to be processed.
+010300231110:EPARML.
+010400231110:P.
+010500231110:XH3.Ending Message Identifier
+010600231110:P.
+010700231110The second of the two values, called the ending message
+010800231110identifier, specifies the message identifier for the last
+010900231110message description to be processed.
+011000231110:P.
+011100231110:PARML.
+011200231110:PT.:PK DEF.*ONLY:EPK.
+011300231110:PD.Only the message identifier specified as a starting
+011400231110message identifier is processed.
+011500231110:PT.:PV.*LAST:EPV.
+011600231110:PD.The last message in the file is the last message whose
+011700231110description is processed.
+011800231110:PT.:PV.upper-value:EPV.
+011900231110:PD.Specify the 7-character identifier of the last message
+012000231110description to be processed.
+012100231110:EPARML.
+012200231110:P.
+012300231110:XH3.Other Single Values:
+012400231110:P.
+012500231110:PARML.
+012600231110:PT.:PV.*ALL:EPV.
+012700231110:PD.All message descriptions in the message file specified
+012800231110are processed.  This value can only be specified in the first
+012900231110element of this parameter.
+013000231110:EPARML.
+013100231110.*
+013200231110:EHELP.
+013300231110.*
+013400231110.*--------------------------------------------------------------------
+013500231110.* Hilfetext für Schlüsselwort MSGF
+013600231110.*--------------------------------------------------------------------
+013700231110:HELP name='CRTMSGDS/MSGF'.
+013800231110Message file - Help
+013900231110:XH3.Message file (MSGF)
+014000231110:P.
+014100231110Specifies the name and library of the message file from
+014200231110which the message descriptions are taken.
+014300231110.*
+014400231110:IMHELP name='COM/OPTPARM'.
+014500231110.*
+014600231110:PARML.
+014700231110:PT.:PK DEF.QCPFMSG:EPK.
+014800231110:PD.Message descriptions are taken from the system message
+014900231110file, QCPFMSG.
+015000231110:PT.:PV.message-file-name:EPV.
+015100231110:PD.Specify the name of the message file from which the
+015200231110message descriptions are taken.
+015300231110:EPARML.
+015400231110:P.
+015500231110The possible library values are:
+015600231110:P.
+015700231110:PARML.
+015800231110:PT.:PK DEF.*LIBL:EPK.
+015900231110:PD.All libraries in the job's library list are searched
+016000231110until the first match is found.
+016100231110:PT.:PV.*CURLIB:EPV.
+016200231110:PD.The current library for the job is used to locate the
+016300231110message file.  If no current library entry exists in
+016400231110the library list, QGPL is used.
+016500231110:PT.:PV.library-name:EPV.
+016600231110:PD.Specify the library where the message file is located.
+016700231110:EPARML.
+016800231110.*
+016900231110:EHELP.
+017000231110.*
+017100231110.*--------------------------------------------------------------------
+017200231110.* Hilfetext für Schlüsselwort FILE
+017300231110.*--------------------------------------------------------------------
+017400231110:HELP name='CRTMSGDS/FILE'.
+017500231110File - Help
+017600231110:XH3.File (FILE)
+017700231110:P.
+017800231110Specifies the name and library of the source file that contains the
+017900231110source member or where the member is added.
+018000231110.*
+018100231110:IMHELP name='COM/OPTPARM'.
+018200231110.*
+018300231110:PARML.
+018400231110:PT.:PK DEF.QCOPYLE:EPK.
+018500231110:PD.The source member is added to the QCOPYLE source file.
+018600231110:PT.:PV.source-file-name:EPV.
+018700231110:PD.Specify the name of the source file that the member
+018800231110is added to.
+018900231110:EPARML.
+019000231110:P.
+019100231110The possible library values are:
+019200231110:P.
+019300231110:PARML.
+019400231110:PT.:PK DEF.*LIBL:EPK.
+019500231110:PD.All libraries in the job's library list are searched
+019600231110until the first match is found.
+019700231110:PT.:PV.*CURLIB:EPV.
+019800231110:PD.The current library for the job is used to locate the
+019900231110message file.  If no current library entry exists in
+020000231110the library list, QGPL is used.
+020100231110:PT.:PV.library-name:EPV.
+020200231110:PD.Specify the library where the message file is located.
+020300231110:EPARML.
+020400231110.*
+020500231110:EHELP.
+020600231110.*
+020700231110.*--------------------------------------------------------------------
+020800231110.* Hilfetext für Schlüsselwort MBR
+020900231110.*--------------------------------------------------------------------
+021000231110:HELP name='CRTMSGDS/MBR'.
+021100231110Member - Help
+021200231110:XH3.Member (MBR)
+021300231110:P.
+021400231110Specifies the name of the source member that is used to take the output of
+021500231110the CRTMSGDS command. If *GEN is specified, then a separate member name
+021600231110is produced for each message description. If a member name is specified, then
+021700231110the output of all message description specified is directed to that member.
+021800231110.*
+021900231110:IMHELP name='COM/OPTPARM'.
+022000231110.*
+022100231110:PARML.
+022200231110:PT.:PK DEF.*GEN:EPK.
+022300231110:PD.The name of the source member is produced based on the message identifier.
+022400231110:PT.:PV.source-member-name:EPV.
+022500231110:PD.Specify the name of the source member that is taken to get the output
+022600231110of the CRTMSGDS command.
+022700231110:EPARML.
+022800231110.*
+022900231110:EHELP.
+023000231110.*
+023100231110.*--------------------------------------------------------------------
+023200231110.* Hilfetext für Schlüsselwort REPLACE
+023300231110.*--------------------------------------------------------------------
+023400231110:HELP name='CRTMSGDS/REPLACE'.
+023500231110Replace member - Help
+023600231110:XH3.Replace member (REPLACE)
+023700231110:P.
+023800231110Specifies whether an existing member is allowed to be replaced
+023900231110or not.
+024000231110.*
+024100231110:IMHELP name='COM/OPTPARM'.
+024200231110.*
+024300231110:PARML.
+024400231110:PT.:PK DEF.*NO:EPK.
+024500231110:PD.An existing member is not replaced. An error message is issued
+024600231110by the command instead.
+024700231110:PT.:PV.*YES:EPV.
+024800231110:PD.The content of an existing member is replaced.
+024900231110:EPARML.
+025000231110.*
+025100231110:EHELP.
+025200231110.*
+025300231110.*--------------------------------------------------------------------
+025400231110.* Hilfetext für Schlüsselwort TYPE
+025500231110.*--------------------------------------------------------------------
+025600231110:HELP name='CRTMSGDS/TYPE'.
+025700231110Source type - Help
+025800231110:XH3.Source type (TYPE)
+025900231110:P.
+026000231110Specifies the type of source that is produced by the CRTMSGDS command.
+026100231110.*
+026200231110:IMHELP name='COM/OPTPARM'.
+026300231110.*
+026400231110:PARML.
+026500231110:PT.:PK DEF.*ILERPG:EPK.
+026600231110:PD.An ILE-RPG data structure is produced.
+026700231110:PT.:PV.*RPG:EPV.
+026800231110:PD.A RPG-III data structure is produced.
+026900231110:PT.:PV.*C:EPV.
+027000231110:PD.A C data structure is produced.
+027100231110:PT.:PV.*CLP:EPV.
+027200231110:PD.A CL program is produced.
+027300231110:PT.:PV.*CLLE:EPV.
+027400231110:PD.An ILE CL program is produced.
+027500231110:PT.:PV.*SCRIPT:EPV.
+027600231110:PD.A CL script is produced.
+027700231110:EPARML.
+027800231110.*
+027900231110:EHELP.
+028000231110.*
+028100231110.*--------------------------------------------------------------------
+028200231110.* Hilfetext für Schlüsselwort DEFINE
+028300231110.*--------------------------------------------------------------------
+028400231110:HELP name='CRTMSGDS/DEFINE'.
+028500231110Create DEFINE specifications - Help
+028600231110:XH3.Create DEFINE specifications (DEFINE)
+028700231110:P.
+028800231110Specifies whether DEFINE specification are added to the source member
+028900231110or not. The value for this parameter can only be specified if
+029000231110:HP2.Source type:EHP2. (parameter TYPE) is set to *ILERPG or *C.
+029100231110.*
+029200231110:IMHELP name='COM/OPTPARM'.
+029300231110.*
+029400231110:PARML.
+029500231110:PT.:PK DEF.*YES:EPK.
+029600231110:PD.DEFINE specification are added to the source member.
+029700231110:PT.:PV.*NO:EPV.
+029800231110:PD.DEFINE specification are not added to the source member.
+029900231110:EPARML.
+030000231110.*
+030100231110:EHELP.
+030200231110.*
+030300231110.*====================================================================
+030400231110.*  Textbausteine, die an mehreren Stellen im Hilfetext
+030500231110.*  verwendet werden.
+030600231110.*====================================================================
+030700231110
+030800231110.*=====================================
+030900231110.*  Erforderlicher Parameter
+031000231110.*=====================================
+031100231110:HELP NAME='COM/REQPARM'.
+031200231110:P.
+031300231110This is a required parameter.
+031400231110:P.
+031500231110:IMHELP name='COM/VALUES'.
+031600231110:EHELP.
+031700231110
+031800231110.*=====================================
+031900231110.*  Optionaler Parameter
+032000231110.*=====================================
+032100231110:HELP NAME='COM/OPTPARM'.
+032200231110:P.
+032300231110This is an optional parameter.
+032400231110:P.
+032500231110:IMHELP name='COM/VALUES'.
+032600231110:EHELP.
+032700231110
+032800231110.*=====================================
+032900231110.*  Werteliste
+033000231110.*=====================================
+033100231110:HELP NAME='COM/VALUES'.
+033200231110:P.
+033300231110The possible values are:
+033400231110:EHELP.
+033500231110.*
+033600231110:EPNLGRP.

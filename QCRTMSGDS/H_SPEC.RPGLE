@@ -1,4 +1,4 @@
-     H DEBUG
-     H OPTION(*SRCSTMT : *NODEBUGIO)
-     H DECEDIT('0,') DATEDIT(*DMY.)
-     H COPYRIGHT('V1.7 - 06.10.2009 - mailto:thomas.raddatz@tools400.de')
+000100231110     H DEBUG
+000200231110     H OPTION(*SRCSTMT : *NODEBUGIO)
+000300231110     H DECEDIT('0,') DATEDIT(*DMY.)
+000400231110     H COPYRIGHT('V1.7 - 06.10.2009 - mailto:thomas.raddatz@tools400.de')

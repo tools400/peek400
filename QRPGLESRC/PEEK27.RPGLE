@@ -58,9 +58,9 @@ dcl-s pgmcmd          like(pgmcmd_t) inz;
 
 dcl-pi peek27;
   i_pgm           const like(pgm_t);
-  o_choices       like(choice_t) dim(32);
-  o_numchoices    like(int4_t);
-  o_exclkeys      const like(pgmcmd_t) dim(25) options(*nopass);
+  o_choices             like(choice_t) dim(32);
+  o_numchoices          like(int4_t);
+  i_exclkeys      const like(pgmcmd_t) dim(25) options(*nopass);
 end-pi;
 
 dcl-s do_x1           packed(7);
@@ -100,9 +100,9 @@ begsr getKeyMap;
     endif;
 
     //  Überprüfen Auschlüsse
-    if %parms() >= %parmnum(o_exclkeys);
+    if %parms() >= %parmnum(i_exclkeys);
       pgmcmd = data;
-      i = %lookup(pgmcmd: o_exclkeys);
+      i = %lookup(pgmcmd: i_exclkeys);
       if (i > 0);
         iter;
       endif;

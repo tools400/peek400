@@ -1,490 +1,490 @@
-/* =================================================================== */
-/*                                                                     */
-/*  Kurzdokumentation :                                                */
-/*                                                                     */
-/*  Bereich . . . : CRTMSGDS                                           */
-/*  Objekt  . . . : CRTMSGDSC                                          */
-/*  Beschreibung  : Tool: CRTMSGDS   (Create Message DS  ) CPP         */
-/*  Author  . . . : Thomas Raddatz   <thomas.raddatz@tools400.de>      */
-/*  Datum . . . . : ?                                                  */
-/*                                                                     */
-/* =================================================================== */
-/*                                                                     */
-/*  This software is free software, you can redistribute it and/or     */
-/*  modify it under the terms of the GNU General Public License (GPL)  */
-/*  as published by the Free Software Foundation.                      */
-/*                                                                     */
-/*  See GNU General Public License for details.                        */
-/*          http://www.opensource.org                                  */
-/*          http://www.opensource.org/licenses/gpl-license.html        */
-/*                                                                     */
-/* =================================================================== */
-/*  History:                                                           */
-/*                                                                     */
-/*  Datum       Name          Änderung                                 */
-/*  ----------  ------------  ---------------------------------------  */
-/*  07.09.2001  Th.Raddatz    Fixed that REPLACE(*NO) appends source   */
-/*                            if member does already exist.            */
-/*                                                                     */
-/* =================================================================== */
-/* >>PRE-COMPILER<<                                                    */
-/*   >>CRTCMD<< CRTCLMOD     MODULE(&LI/&OB) +                         */
-/*                           SRCFILE(&SL/&SF) SRCMBR(&SM);             */
-/*   >>COMPILE<<                                                       */
-/*     >>PARM<< DBGVIEW(*LIST);                                        */
-/*     >>PARM<< TGTRLS(V7R1M0);                                        */
-/*   >>END-COMPILE<<                                                   */
-/*   >>EXECUTE<<                                                       */
-/*   >>CMD<<    CRTPGM  PGM(&LI/&OB) +                                 */
-/*                      MODULE(&LI/CRTMSGDSC +                         */
-/*                             &LI/CRTMSGDSR1 &LI/CRTMSGDSR2) +        */
-/*                      ACTGRP(*NEW) TGTRLS(V7R1M0);                   */
-/* >>END-PRE-COMPILER<<                                                */
-/* =================================================================== */
-             PGM        PARM(&MSGR &MSGF &CPYF &MBR +
-                          &REPLACE &TYP &DEFINE &I_MSGF)
-
-/*  Parameter  */
-             /*  Input      */
-             DCL        VAR(&MSGR        ) TYPE(*CHAR) LEN( 40  )
-             DCL        VAR(&MSGF        ) TYPE(*CHAR) LEN( 20  )
-             DCL        VAR(&CPYF        ) TYPE(*CHAR) LEN( 20  )
-             DCL        VAR(&MBR         ) TYPE(*CHAR) LEN( 10  )
-             DCL        VAR(&REPLACE     ) TYPE(*CHAR) LEN(  1  )
-             DCL        VAR(&TYP         ) TYPE(*CHAR) LEN(  1  )
-             DCL        VAR(&DEFINE      ) TYPE(*CHAR) LEN(  1  )
-             DCL        VAR(&I_MSGF      ) TYPE(*CHAR) LEN( 10  )
-
-/* interne Felder       */
-             DCL        VAR(&MSGLIB      ) TYPE(*CHAR) LEN( 10  )
-             DCL        VAR(&MSGFILE     ) TYPE(*CHAR) LEN( 10  )
-             DCL        VAR(&CPYLIB      ) TYPE(*CHAR) LEN( 10  )
-             DCL        VAR(&CPYFILE     ) TYPE(*CHAR) LEN( 10  )
-             DCL        VAR(&MSGREFID    ) TYPE(*CHAR) LEN(  7  )
-             DCL        VAR(&MSGIDVON    ) TYPE(*CHAR) LEN(  7  )
-             DCL        VAR(&MSGIDBIS    ) TYPE(*CHAR) LEN(  7  )
-             DCL        VAR(&MSGIDTEMP   ) TYPE(*CHAR) LEN(  7  )
-             DCL        VAR(&MSGID       ) TYPE(*CHAR) LEN(  7  )
-             DCL        VAR(&RETRIEVEOP  ) TYPE(*CHAR) LEN(  7  )
-             DCL        VAR(&CPYMBR      ) TYPE(*CHAR) LEN( 10  )
-             DCL        VAR(&CPYTYP      ) TYPE(*CHAR) LEN( 10  )
-             DCL        VAR(&MBREXIST    ) TYPE(*CHAR) LEN( 10  )
-             DCL        VAR(&MBRDESC     ) TYPE(*CHAR) LEN( 50  )
-             DCL        VAR(&SOURCETYPE  ) TYPE(*CHAR) LEN( 10  )
-             DCL        VAR(&MBRTEXT     ) TYPE(*CHAR) LEN( 80  )
-             DCL        VAR(&ERRID       ) TYPE(*CHAR) LEN(  7  )
-             DCL        VAR(&ERRDT       ) TYPE(*CHAR) LEN( 80  )
-             DCL        VAR(&IS_FIRST    ) TYPE(*LGL)
-             DCL        VAR(&IS_LAST     ) TYPE(*LGL)
-
-/* Fehlerbehandlung     */
-             DCL        VAR(&ERROR)      TYPE(*LGL) +
-                          VALUE('0')
-             DCL        VAR(&TRUE)       TYPE(*LGL) +
-                          VALUE('1')
-             DCL        VAR(&FALSE)      TYPE(*LGL) +
-                          VALUE('0')
-             DCL        VAR(&ERRMSGKEY)  TYPE(*CHAR) LEN(4)
-
-             DCL        VAR(&ERRMSGTYP)  TYPE(*CHAR) LEN(10) +
-                          VALUE('*DIAG')
-             DCL        VAR(&ERRNBRTYP)  TYPE(*CHAR) LEN(4) +
-                          VALUE(X'00000001')
-             DCL        VAR(&ERRPGMMSGQ) TYPE(*CHAR) LEN(10) +
-                          VALUE('*')
-             DCL        VAR(&ERRSTKCTR)  TYPE(*CHAR) LEN(4) +
-                          VALUE(X'00000001')
-             DCL        VAR(&ERRCODE  )  TYPE(*CHAR) LEN(4) +
-                          VALUE(X'00000000')
-
-/* Sende alle Fehler zur Error Handling Routine */
-             MONMSG     MSGID(CPF0000) EXEC(GOTO CMDLBL(ERROR))
-
-             CHGVAR     VAR(&ERROR    ) VALUE(&FALSE)
-
-/* -------------------------------------------------------------- */
-/*  Los geht's                                                    */
-/* -------------------------------------------------------------- */
-
-/* ---------------------------- */
-/* MSGF zerlegen in Lib         */
-/* und File                     */
-/* ---------------------------- */
-             CHGVAR     VAR(&MSGLIB    ) VALUE(%SST(&MSGF 11 10))
-             CHGVAR     VAR(&MSGFILE   ) VALUE(%SST(&MSGF  1 10))
-
-/* ---------------------------- */
-/* prüfen, Msg Datei vorhanden  */
-/* ---------------------------- */
-             CHKOBJ     OBJ(&MSGLIB/&MSGFILE) OBJTYPE(*MSGF)
-
-/* ---------------------------- */
-/* Lib durch qual. Namen        */
-/* ersetzen                     */
-/* ---------------------------- */
-             RTVOBJD    OBJ(&MSGLIB/&MSGFILE) OBJTYPE(*MSGF) +
-                          RTNLIB(&MSGLIB)
-
-/* ---------------------------- */
-/* CPYF zerlegen in Lib         */
-/* und File                     */
-/* ---------------------------- */
-             CHGVAR     VAR(&CPYLIB      ) VALUE(%SST(&CPYF 11 10))
-             CHGVAR     VAR(&CPYFILE     ) VALUE(%SST(&CPYF  1 10))
-
-/* ---------------------------- */
-/* Lib durch qual. Namen        */
-/* ersetzen                     */
-/* ---------------------------- */
-             RTVOBJD    OBJ(&CPYLIB/&CPYFILE) OBJTYPE(*FILE) +
-                          RTNLIB(&CPYLIB)
-
-/* ---------------------------- */
-/* prüfen, Cpy Datei vorhanden  */
-/* ---------------------------- */
-             CHKOBJ     OBJ(&CPYLIB/&CPYFILE) OBJTYPE(*FILE)
-
-/* ---------------------------- */
-/* Ermitteln der VON und BIS    */
-/* MSG-ID                       */
-/* ---------------------------- */
-             CHGVAR     VAR(&MSGIDVON  ) VALUE(%SST(&MSGR  3 7))
-             CHGVAR     VAR(&MSGIDBIS  ) VALUE(%SST(&MSGR 10 7))
-
-/* ---------------------------- */
-/* Wenn VON = '*ALL'            */
-/* dann VON auf *FIRST          */
-/* und BIS auf *LAST setzen     */
-/* ---------------------------- */
-               IF         COND(&MSGIDVON *EQ '*ALL') THEN(DO)
-                 CHGVAR     VAR(&MSGIDVON  ) VALUE('*FIRST')
-                 CHGVAR     VAR(&MSGIDBIS  ) VALUE('*LAST')
-               ENDDO
-
-/* ---------------------------- */
-/* Wenn VON = '*FIRST'          */
-/* dann die erste MSG ermitteln */
-/* ---------------------------- */
-               IF         COND(&MSGIDVON *EQ '*FIRST') THEN(DO)
-                 CHGVAR     VAR(&MSGREFID) VALUE('       ')
-                 CHGVAR     VAR(&RETRIEVEOP) VALUE('*FIRST ')
-                 CALLPRC      PRC(CRTMSGDSR1) PARM(&MSGLIB &MSGFILE +
-                                &MSGREFID +
-                                &RETRIEVEOP &MSGIDVON &ERRID &ERRDT)
-               ENDDO
-
-/* ---------------------------- */
-/* Wenn BIS = '*ONLY'           */
-/* dann die VON in BIS bringen  */
-/* ---------------------------- */
-               IF         COND(&MSGIDBIS *EQ '*ONLY') THEN(DO)
-                 CHGVAR     VAR(&MSGIDBIS  ) VALUE(&MSGIDVON)
-               ENDDO
-
-/* ---------------------------- */
-/* Prüfen, ob VON ein exis-     */
-/* tierende MSGID ist, wenn     */
-/* nicht, die folgende er-      */
-/* mitteln                      */
-/* ---------------------------- */
-             IF         COND(&MSGIDVON *NE '       ') THEN(DO)
-               RTVMSG     MSGID(&MSGIDVON) MSGF(&MSGLIB/&MSGFILE)
-               MONMSG     MSGID(CPF2419) EXEC(DO)
-                 CHGVAR     VAR(&MSGREFID)   VALUE(&MSGIDVON)
-                 CHGVAR     VAR(&RETRIEVEOP) VALUE('*NEXT  ')
-                CALLPRC    PRC(CRTMSGDSR1) PARM(&MSGLIB &MSGFILE +
-                                &MSGREFID +
-                                &RETRIEVEOP &MSGIDVON &ERRID &ERRDT)
-               ENDDO
-             ENDDO
-
-/* ---------------------------- */
-/* Wenn BIS = '*LAST'           */
-/* dann den höchsten Sortier-   */
-/* begriff in BIS bringen       */
-/* ---------------------------- */
-               IF         COND(&MSGIDBIS *EQ '*LAST') THEN(DO)
-                 CHGVAR     VAR(&MSGIDBIS  ) VALUE('ZZZFFFF')
-               ENDDO
-
-/* ---------------------------- */
-/* Schleifenbeginn.             */
-/* ---------------------------- */
-             CHGVAR     VAR(&MSGID) VALUE(&MSGIDVON)
-LOOP:
-
-/* ---------------------------- */
-/* Prüfen auf Schleifenende     */
-/* ---------------------------- */
-             IF         COND(&MSGID *NE '       ') THEN(DO)
-               IF         COND(&MSGID *GT &MSGIDBIS) THEN(DO)
-                 CHGVAR     VAR(&MSGID) VALUE('       ')
-               ENDDO
-             ENDDO
-
-             IF         COND(&MSGID *EQ '       ') THEN(DO)
-               GOTO ENDE
-             ENDDO
-
-/* ---------------------------- */
-/*  Ermitteln der nächsten      */
-/*  Nachrichten-ID              */
-/* ---------------------------- */
-             CHGVAR     VAR(&RETRIEVEOP) VALUE('*NEXT  ')
-             CHGVAR     VAR(&MSGREFID)   VALUE(&MSGID   )
-             CALLPRC    PRC(CRTMSGDSR1) PARM(&MSGLIB &MSGFILE +
-                          &MSGREFID +
-                          &RETRIEVEOP &MSGIDTEMP &ERRID &ERRDT)
-             IF         COND(&MSGIDTEMP *EQ ' '  +
-                        *OR  &MSGIDTEMP *GT &MSGIDBIS) THEN(DO)
-               CHGVAR     VAR(&MSGIDBIS) VALUE(&MSGID)
-             ENDDO
-
-/* ---------------------------- */
-/*  Member bekommt den Namen    */
-/*  der MSG-ID                  */
-/* ---------------------------- */
-             IF         COND(&MBR *EQ '*GEN') THEN(DO)
-/* Einzel-Mbr */
-               CHGVAR     VAR(&CPYMBR    ) VALUE(&MSGID)
-               CHGVAR     VAR(&IS_LAST) VALUE(&TRUE)
-               CHGVAR     VAR(&IS_FIRST) VALUE(&TRUE)
-             ENDDO
-             ELSE       CMD(DO)
-/* Sammel-Mbr */
-               CHGVAR     VAR(&CPYMBR    ) VALUE(&MBR)
-               IF         COND(&MSGID *EQ &MSGIDVON) THEN(DO)
-                 CHGVAR     VAR(&IS_FIRST) VALUE(&TRUE)
-               ENDDO
-               ELSE       CMD(DO)
-                 CHGVAR     VAR(&IS_FIRST) VALUE(&FALSE)
-               ENDDO
-
-               IF         COND(&MSGID *EQ &MSGIDBIS) THEN(DO)
-                 CHGVAR     VAR(&IS_LAST) VALUE(&TRUE)
-               ENDDO
-               ELSE       CMD(DO)
-                 CHGVAR     VAR(&IS_LAST) VALUE(&FALSE)
-               ENDDO
-             ENDDO
-
-/* ---------------------------- */
-/*  GENERIERUNGSART IN          */
-/*  SOURCETYP UMSETZEN          */
-/* ---------------------------- */
-
-             CHGVAR     VAR(&SOURCETYPE) VALUE('*NONE')
-             CHGVAR     VAR(&CPYTYP    ) VALUE('          ')
-
-/* RPG-III */
-             IF         COND(&TYP      *EQ '3'     ) THEN(DO)
-               CHGVAR     VAR(&SOURCETYPE) VALUE('*RPG')
-               CHGVAR     VAR(&CPYTYP    ) VALUE('RPG')
-             ENDDO
-
-/* ILE-RPG */
-             IF         COND(&TYP      *EQ '4'     ) THEN(DO)
-               CHGVAR     VAR(&SOURCETYPE) VALUE('*ILERPG')
-               CHGVAR     VAR(&CPYTYP    ) VALUE('RPGLE')
-             ENDDO
-
-/* CL-SRC  */
-             IF         COND(&TYP      *EQ '1'     ) THEN(DO)
-               CHGVAR     VAR(&SOURCETYPE) VALUE('*CLP')
-               CHGVAR     VAR(&CPYTYP    ) VALUE('CLP')
-             ENDDO
-/* CLLE-SRC */
-             IF         COND(&TYP      *EQ '6'     ) THEN(DO)
-               CHGVAR     VAR(&SOURCETYPE) VALUE('*CLLE')
-               CHGVAR     VAR(&CPYTYP    ) VALUE('CLLE')
-             ENDDO        R
-/* SCRIPT  */
-             IF         COND(&TYP      *EQ '2'     ) THEN(DO)
-               CHGVAR     VAR(&SOURCETYPE) VALUE('*SCRIPT')
-               CHGVAR     VAR(&CPYTYP    ) VALUE('MID')
-             ENDDO
-/* C       */
-             IF         COND(&TYP      *EQ '5'     ) THEN(DO)
-               CHGVAR     VAR(&SOURCETYPE) VALUE('*C')
-               CHGVAR     VAR(&CPYTYP    ) VALUE('H')
-             ENDDO
-
-/* ---------------------------- */
-/*  Prüfen, ob Member vorhanden */
-/* ---------------------------- */
-             CHGVAR     VAR(&MBREXIST  ) VALUE('*EXIST    ')
-             CHKOBJ     OBJ(&CPYLIB/&CPYFILE) OBJTYPE(*FILE) +
-                          MBR(&CPYMBR)
-             /* Member nicht vorhanden  */
-             MONMSG     MSGID(CPF9815) EXEC(CHGVAR VAR(&MBREXIST) +
-                          VALUE('*NOT_EXIST'))
-
-/* ---------------------------- */
-/* Anhand der Auswahl CpyMbr    */
-/* clearen oder anlegen         */
-/* ---------------------------- */
-             IF         COND(&REPLACE *EQ 'Y') THEN(DO)
-               IF         COND(&IS_FIRST *EQ &TRUE) THEN(DO)
-
-                 IF         COND(&MBREXIST *EQ '*EXIST') THEN(DO)
-                   CLRPFM     FILE(&CPYLIB/&CPYFILE) MBR(&CPYMBR)
-                 ENDDO
-
-                 IF         COND(&MBREXIST *EQ '*NOT_EXIST') THEN(DO)
-                   ADDPFM     FILE(&CPYLIB/&CPYFILE) MBR(&CPYMBR) +
-                              TEXT('??????')
-                 ENDDO
-
-               ENDDO
-               ELSE       CMD(DO)
-               /* Bei angegebener Teildatei,  */
-               /* nur beim ersten Mal löschen */
-               ENDDO
-             ENDDO
-             ELSE       CMD(DO)
-               IF         COND(&IS_FIRST *EQ &TRUE) THEN(DO)
-
-                 IF         COND(&MBREXIST *EQ '*EXIST') THEN(DO)
-                   IF         COND(&MBR *EQ '*GEN') THEN(DO)
-                     SNDPGMMSG  MSGID(USR0001) MSGF(*LIBL/&I_MSGF) +
-                                MSGDTA(&CPYFILE *CAT &CPYLIB *CAT +
-                                       &CPYMBR  *CAT &SOURCETYPE  ) +
-                                TOPGMQ(*PRV (*PGMBDY)) MSGTYPE(*DIAG)
-                     GOTO       CMDLBL(NEXT_MSGID)
-                   ENDDO
-                   ELSE       CMD(DO)
-                     SNDPGMMSG  MSGID(USR0001) MSGF(*LIBL/&I_MSGF) +
-                                MSGDTA(&CPYFILE *CAT &CPYLIB *CAT +
-                                       &CPYMBR  *CAT &SOURCETYPE  ) +
-                                TOPGMQ(*PRV (*PGMBDY)) MSGTYPE(*ESCAPE)
-                   ENDDO
-                 ENDDO
-
-                 IF         COND(&MBREXIST *EQ '*NOT_EXIST') THEN(DO)
-                   ADDPFM     FILE(&CPYLIB/&CPYFILE) MBR(&CPYMBR) +
-                              TEXT('??????')
-                 ENDDO
-               ENDDO
-               ELSE       CMD(DO)
-               /* Bei angegebener Teildatei,  */
-               /* nur beim ersten Mal prüfen  */
-               ENDDO
-
-             ENDDO
-
-/* ---------------------------- */
-/*  START DER VERARBEITUNG      */
-/*  KENNZEICHNEN                */
-/* ---------------------------- */
-             CHGPFM     FILE(&CPYLIB/&CPYFILE) MBR(&CPYMBR) +
-                        SRCTYPE(*NONE)                      +
-                        TEXT('*INUSE')
-
-/* ---------------------------- */
-/*  OVRDBF AUF NEUES MEMBER     */
-/* ---------------------------- */
-             OVRDBF     FILE(SRC) TOFILE(&CPYLIB/&CPYFILE) +
-                          MBR(&CPYMBR) OVRSCOPE(*CALLLVL)
-
-/* ---------------------------- */
-/*  SOURCEGENERIERUNGSPROGRAMM  */
-/*  AUFRUFEN                    */
-/* ---------------------------- */
-             CALLPRC    PRC(CRTMSGDSR2) PARM(&MSGLIB &MSGFILE +
-                          &MSGID &CPYLIB &CPYFILE &SOURCETYPE +
-                          &DEFINE &IS_FIRST &IS_LAST          +
-                          &MBRTEXT &ERRID &ERRDT)
-             DLTOVR     FILE(*ALL) LVL(*)
-
-/* ---------------------------- */
-/*  Wenn Fehler beim Generieren */
-/*  aufgetreten ist             */
-/* ---------------------------- */
-             IF         COND(&ERRID    *NE ' '     ) THEN(DO)
-               SNDPGMMSG  MSGID(&ERRID) MSGF(QCPFMSG) MSGDTA(&ERRDT) +
-                          TOPGMQ(*PRV (*PGMBDY)) MSGTYPE(*ESCAPE)
-             ENDDO
-
-/* ---------------------------- */
-/*  Memberbeschreibung setzen   */
-/*  Einzel-Member               */
-/* ---------------------------- */
-             IF         COND(&IS_LAST *EQ &TRUE) THEN(DO)
-              IF         COND(&MBR *EQ '*GEN') THEN(DO)
-               CHGVAR     VAR(&MBRDESC) VALUE('MSG:' *BCAT &MBRTEXT)
-              ENDDO
-              ELSE       CMD(DO)
-               CHGVAR     VAR(&MBRDESC) VALUE('MSG:' *BCAT &MSGIDVON +
-                                                     *BCAT '-'       +
-                                                     *BCAT &MSGIDBIS)
-              ENDDO
-              CHGPFM     FILE(&CPYLIB/&CPYFILE) MBR(&CPYMBR) +
-                           SRCTYPE(&CPYTYP) TEXT(&MBRDESC)
-
-/* ---------------------------- */
-/*  Fertig ...                  */
-/* ---------------------------- */
-               SNDPGMMSG  MSGID(USR0002) MSGF(*LIBL/&I_MSGF) +
-                                MSGDTA(&CPYFILE *CAT &CPYLIB *CAT +
-                                       &CPYMBR  *CAT &SOURCETYPE  ) +
-                          TOPGMQ(*PRV (*PGMBDY)) MSGTYPE(*INFO)
-             ENDDO
-
-/* ---------------------------- */
-/* Nächste MSG lesen            */
-/* Wenn es kein weitere MSG     */
-/* gibt (EOF) dann ist der      */
-/* Wert in &MSGID = *BLANK      */
-/* ---------------------------- */
-NEXT_MSGID:
-                 CHGVAR     VAR(&MSGREFID)   VALUE(&MSGID   )
-                 CHGVAR     VAR(&RETRIEVEOP) VALUE('*NEXT  ')
-                 CALLPRC    PRC(CRTMSGDSR1) PARM(&MSGLIB &MSGFILE +
-                              &MSGREFID +
-                              &RETRIEVEOP &MSGID &ERRID &ERRDT)
-
-/* ---------------------------- */
-/* Schleifenende                */
-/* ---------------------------- */
-               GOTO LOOP
-
-
-
- /* -------------------------------------------------------------- */
- /*  Programm beenden                                              */
- /* -------------------------------------------------------------- */
-
-ENDE:
-             DLTOVR     FILE(*ALL)
-             MONMSG     MSGID(CPF0000)
-
-             RCLRSC     LVL(*)
-
-/* -------------------------------------------------------------- */
-/*    Fehler aufgetreten ?                                        */
-/* -------------------------------------------------------------- */
-
-             IF         COND(&ERROR) THEN(DO)
-               /* Sende letzte *ESCAPE nochmals   */
-               CALL       PGM(QMHRSNEM) PARM(&ERRMSGKEY &ERRCODE)
-             ENDDO
-
-             RETURN
-
-/* ---------------- */
-/* Nachrichten      */
-/* weiterreichen    */
-/* ---------------- */
-
- ERROR:
-             IF         COND(&ERROR) THEN(GOTO CMDLBL(ENDE))
-             ELSE       CHGVAR     VAR(&ERROR) VALUE(&TRUE)
-
-/* Verschiebe alle *DIAG Nachrichten zur             */
-/* vorangegangenen Programmwarteschlange             */
-             CALL       PGM(QMHMOVPM) PARM(&ERRMSGKEY &ERRMSGTYP +
-                          &ERRNBRTYP &ERRPGMMSGQ &ERRSTKCTR &ERRCODE)
-
-             GOTO       CMDLBL(ENDE)
-
-             ENDPGM
+000100231110/* =================================================================== */
+000200231110/*                                                                     */
+000300231110/*  Kurzdokumentation :                                                */
+000400231110/*                                                                     */
+000500231110/*  Bereich . . . : CRTMSGDS                                           */
+000600231110/*  Objekt  . . . : CRTMSGDSC                                          */
+000700231110/*  Beschreibung  : Tool: CRTMSGDS   (Create Message DS  ) CPP         */
+000800231110/*  Author  . . . : Thomas Raddatz   <thomas.raddatz@tools400.de>      */
+000900231110/*  Datum . . . . : ?                                                  */
+001000231110/*                                                                     */
+001100231110/* =================================================================== */
+001200231110/*                                                                     */
+001300231110/*  This software is free software, you can redistribute it and/or     */
+001400231110/*  modify it under the terms of the GNU General Public License (GPL)  */
+001500231110/*  as published by the Free Software Foundation.                      */
+001600231110/*                                                                     */
+001700231110/*  See GNU General Public License for details.                        */
+001800231110/*          http://www.opensource.org                                  */
+001900231110/*          http://www.opensource.org/licenses/gpl-license.html        */
+002000231110/*                                                                     */
+002100231110/* =================================================================== */
+002200231110/*  History:                                                           */
+002300231110/*                                                                     */
+002400231110/*  Datum       Name          Änderung                                 */
+002500231110/*  ----------  ------------  ---------------------------------------  */
+002600231110/*  07.09.2001  Th.Raddatz    Fixed that REPLACE(*NO) appends source   */
+002700231110/*                            if member does already exist.            */
+002800231110/*                                                                     */
+002900231110/* =================================================================== */
+003000231110/* >>PRE-COMPILER<<                                                    */
+003100231110/*   >>CRTCMD<< CRTCLMOD     MODULE(&LI/&OB) +                         */
+003200231110/*                           SRCFILE(&SL/&SF) SRCMBR(&SM);             */
+003300231110/*   >>COMPILE<<                                                       */
+003400231110/*     >>PARM<< DBGVIEW(*LIST);                                        */
+003500231110/*     >>PARM<< TGTRLS(V7R1M0);                                        */
+003600231110/*   >>END-COMPILE<<                                                   */
+003700231110/*   >>EXECUTE<<                                                       */
+003800231110/*   >>CMD<<    CRTPGM  PGM(&LI/&OB) +                                 */
+003900231110/*                      MODULE(&LI/CRTMSGDSC +                         */
+004000231110/*                             &LI/CRTMSGDSR1 &LI/CRTMSGDSR2) +        */
+004100231110/*                      ACTGRP(*NEW) TGTRLS(V7R1M0);                   */
+004200231110/* >>END-PRE-COMPILER<<                                                */
+004300231110/* =================================================================== */
+004400231110             PGM        PARM(&MSGR &MSGF &CPYF &MBR +
+004500231110                          &REPLACE &TYP &DEFINE &I_MSGF)
+004600231110
+004700231110/*  Parameter  */
+004800231110             /*  Input      */
+004900231110             DCL        VAR(&MSGR        ) TYPE(*CHAR) LEN( 40  )
+005000231110             DCL        VAR(&MSGF        ) TYPE(*CHAR) LEN( 20  )
+005100231110             DCL        VAR(&CPYF        ) TYPE(*CHAR) LEN( 20  )
+005200231110             DCL        VAR(&MBR         ) TYPE(*CHAR) LEN( 10  )
+005300231110             DCL        VAR(&REPLACE     ) TYPE(*CHAR) LEN(  1  )
+005400231110             DCL        VAR(&TYP         ) TYPE(*CHAR) LEN(  1  )
+005500231110             DCL        VAR(&DEFINE      ) TYPE(*CHAR) LEN(  1  )
+005600231110             DCL        VAR(&I_MSGF      ) TYPE(*CHAR) LEN( 10  )
+005700231110
+005800231110/* interne Felder       */
+005900231110             DCL        VAR(&MSGLIB      ) TYPE(*CHAR) LEN( 10  )
+006000231110             DCL        VAR(&MSGFILE     ) TYPE(*CHAR) LEN( 10  )
+006100231110             DCL        VAR(&CPYLIB      ) TYPE(*CHAR) LEN( 10  )
+006200231110             DCL        VAR(&CPYFILE     ) TYPE(*CHAR) LEN( 10  )
+006300231110             DCL        VAR(&MSGREFID    ) TYPE(*CHAR) LEN(  7  )
+006400231110             DCL        VAR(&MSGIDVON    ) TYPE(*CHAR) LEN(  7  )
+006500231110             DCL        VAR(&MSGIDBIS    ) TYPE(*CHAR) LEN(  7  )
+006600231110             DCL        VAR(&MSGIDTEMP   ) TYPE(*CHAR) LEN(  7  )
+006700231110             DCL        VAR(&MSGID       ) TYPE(*CHAR) LEN(  7  )
+006800231110             DCL        VAR(&RETRIEVEOP  ) TYPE(*CHAR) LEN(  7  )
+006900231110             DCL        VAR(&CPYMBR      ) TYPE(*CHAR) LEN( 10  )
+007000231110             DCL        VAR(&CPYTYP      ) TYPE(*CHAR) LEN( 10  )
+007100231110             DCL        VAR(&MBREXIST    ) TYPE(*CHAR) LEN( 10  )
+007200231110             DCL        VAR(&MBRDESC     ) TYPE(*CHAR) LEN( 50  )
+007300231110             DCL        VAR(&SOURCETYPE  ) TYPE(*CHAR) LEN( 10  )
+007400231110             DCL        VAR(&MBRTEXT     ) TYPE(*CHAR) LEN( 80  )
+007500231110             DCL        VAR(&ERRID       ) TYPE(*CHAR) LEN(  7  )
+007600231110             DCL        VAR(&ERRDT       ) TYPE(*CHAR) LEN( 80  )
+007700231110             DCL        VAR(&IS_FIRST    ) TYPE(*LGL)
+007800231110             DCL        VAR(&IS_LAST     ) TYPE(*LGL)
+007900231110
+008000231110/* Fehlerbehandlung     */
+008100231110             DCL        VAR(&ERROR)      TYPE(*LGL) +
+008200231110                          VALUE('0')
+008300231110             DCL        VAR(&TRUE)       TYPE(*LGL) +
+008400231110                          VALUE('1')
+008500231110             DCL        VAR(&FALSE)      TYPE(*LGL) +
+008600231110                          VALUE('0')
+008700231110             DCL        VAR(&ERRMSGKEY)  TYPE(*CHAR) LEN(4)
+008800231110
+008900231110             DCL        VAR(&ERRMSGTYP)  TYPE(*CHAR) LEN(10) +
+009000231110                          VALUE('*DIAG')
+009100231110             DCL        VAR(&ERRNBRTYP)  TYPE(*CHAR) LEN(4) +
+009200231110                          VALUE(X'00000001')
+009300231110             DCL        VAR(&ERRPGMMSGQ) TYPE(*CHAR) LEN(10) +
+009400231110                          VALUE('*')
+009500231110             DCL        VAR(&ERRSTKCTR)  TYPE(*CHAR) LEN(4) +
+009600231110                          VALUE(X'00000001')
+009700231110             DCL        VAR(&ERRCODE  )  TYPE(*CHAR) LEN(4) +
+009800231110                          VALUE(X'00000000')
+009900231110
+010000231110/* Sende alle Fehler zur Error Handling Routine */
+010100231110             MONMSG     MSGID(CPF0000) EXEC(GOTO CMDLBL(ERROR))
+010200231110
+010300231110             CHGVAR     VAR(&ERROR    ) VALUE(&FALSE)
+010400231110
+010500231110/* -------------------------------------------------------------- */
+010600231110/*  Los geht's                                                    */
+010700231110/* -------------------------------------------------------------- */
+010800231110
+010900231110/* ---------------------------- */
+011000231110/* MSGF zerlegen in Lib         */
+011100231110/* und File                     */
+011200231110/* ---------------------------- */
+011300231110             CHGVAR     VAR(&MSGLIB    ) VALUE(%SST(&MSGF 11 10))
+011400231110             CHGVAR     VAR(&MSGFILE   ) VALUE(%SST(&MSGF  1 10))
+011500231110
+011600231110/* ---------------------------- */
+011700231110/* prüfen, Msg Datei vorhanden  */
+011800231110/* ---------------------------- */
+011900231110             CHKOBJ     OBJ(&MSGLIB/&MSGFILE) OBJTYPE(*MSGF)
+012000231110
+012100231110/* ---------------------------- */
+012200231110/* Lib durch qual. Namen        */
+012300231110/* ersetzen                     */
+012400231110/* ---------------------------- */
+012500231110             RTVOBJD    OBJ(&MSGLIB/&MSGFILE) OBJTYPE(*MSGF) +
+012600231110                          RTNLIB(&MSGLIB)
+012700231110
+012800231110/* ---------------------------- */
+012900231110/* CPYF zerlegen in Lib         */
+013000231110/* und File                     */
+013100231110/* ---------------------------- */
+013200231110             CHGVAR     VAR(&CPYLIB      ) VALUE(%SST(&CPYF 11 10))
+013300231110             CHGVAR     VAR(&CPYFILE     ) VALUE(%SST(&CPYF  1 10))
+013400231110
+013500231110/* ---------------------------- */
+013600231110/* Lib durch qual. Namen        */
+013700231110/* ersetzen                     */
+013800231110/* ---------------------------- */
+013900231110             RTVOBJD    OBJ(&CPYLIB/&CPYFILE) OBJTYPE(*FILE) +
+014000231110                          RTNLIB(&CPYLIB)
+014100231110
+014200231110/* ---------------------------- */
+014300231110/* prüfen, Cpy Datei vorhanden  */
+014400231110/* ---------------------------- */
+014500231110             CHKOBJ     OBJ(&CPYLIB/&CPYFILE) OBJTYPE(*FILE)
+014600231110
+014700231110/* ---------------------------- */
+014800231110/* Ermitteln der VON und BIS    */
+014900231110/* MSG-ID                       */
+015000231110/* ---------------------------- */
+015100231110             CHGVAR     VAR(&MSGIDVON  ) VALUE(%SST(&MSGR  3 7))
+015200231110             CHGVAR     VAR(&MSGIDBIS  ) VALUE(%SST(&MSGR 10 7))
+015300231110
+015400231110/* ---------------------------- */
+015500231110/* Wenn VON = '*ALL'            */
+015600231110/* dann VON auf *FIRST          */
+015700231110/* und BIS auf *LAST setzen     */
+015800231110/* ---------------------------- */
+015900231110               IF         COND(&MSGIDVON *EQ '*ALL') THEN(DO)
+016000231110                 CHGVAR     VAR(&MSGIDVON  ) VALUE('*FIRST')
+016100231110                 CHGVAR     VAR(&MSGIDBIS  ) VALUE('*LAST')
+016200231110               ENDDO
+016300231110
+016400231110/* ---------------------------- */
+016500231110/* Wenn VON = '*FIRST'          */
+016600231110/* dann die erste MSG ermitteln */
+016700231110/* ---------------------------- */
+016800231110               IF         COND(&MSGIDVON *EQ '*FIRST') THEN(DO)
+016900231110                 CHGVAR     VAR(&MSGREFID) VALUE('       ')
+017000231110                 CHGVAR     VAR(&RETRIEVEOP) VALUE('*FIRST ')
+017100231110                 CALLPRC      PRC(CRTMSGDSR1) PARM(&MSGLIB &MSGFILE +
+017200231110                                &MSGREFID +
+017300231110                                &RETRIEVEOP &MSGIDVON &ERRID &ERRDT)
+017400231110               ENDDO
+017500231110
+017600231110/* ---------------------------- */
+017700231110/* Wenn BIS = '*ONLY'           */
+017800231110/* dann die VON in BIS bringen  */
+017900231110/* ---------------------------- */
+018000231110               IF         COND(&MSGIDBIS *EQ '*ONLY') THEN(DO)
+018100231110                 CHGVAR     VAR(&MSGIDBIS  ) VALUE(&MSGIDVON)
+018200231110               ENDDO
+018300231110
+018400231110/* ---------------------------- */
+018500231110/* Prüfen, ob VON ein exis-     */
+018600231110/* tierende MSGID ist, wenn     */
+018700231110/* nicht, die folgende er-      */
+018800231110/* mitteln                      */
+018900231110/* ---------------------------- */
+019000231110             IF         COND(&MSGIDVON *NE '       ') THEN(DO)
+019100231110               RTVMSG     MSGID(&MSGIDVON) MSGF(&MSGLIB/&MSGFILE)
+019200231110               MONMSG     MSGID(CPF2419) EXEC(DO)
+019300231110                 CHGVAR     VAR(&MSGREFID)   VALUE(&MSGIDVON)
+019400231110                 CHGVAR     VAR(&RETRIEVEOP) VALUE('*NEXT  ')
+019500231110                CALLPRC    PRC(CRTMSGDSR1) PARM(&MSGLIB &MSGFILE +
+019600231110                                &MSGREFID +
+019700231110                                &RETRIEVEOP &MSGIDVON &ERRID &ERRDT)
+019800231110               ENDDO
+019900231110             ENDDO
+020000231110
+020100231110/* ---------------------------- */
+020200231110/* Wenn BIS = '*LAST'           */
+020300231110/* dann den höchsten Sortier-   */
+020400231110/* begriff in BIS bringen       */
+020500231110/* ---------------------------- */
+020600231110               IF         COND(&MSGIDBIS *EQ '*LAST') THEN(DO)
+020700231110                 CHGVAR     VAR(&MSGIDBIS  ) VALUE('ZZZFFFF')
+020800231110               ENDDO
+020900231110
+021000231110/* ---------------------------- */
+021100231110/* Schleifenbeginn.             */
+021200231110/* ---------------------------- */
+021300231110             CHGVAR     VAR(&MSGID) VALUE(&MSGIDVON)
+021400231110LOOP:
+021500231110
+021600231110/* ---------------------------- */
+021700231110/* Prüfen auf Schleifenende     */
+021800231110/* ---------------------------- */
+021900231110             IF         COND(&MSGID *NE '       ') THEN(DO)
+022000231110               IF         COND(&MSGID *GT &MSGIDBIS) THEN(DO)
+022100231110                 CHGVAR     VAR(&MSGID) VALUE('       ')
+022200231110               ENDDO
+022300231110             ENDDO
+022400231110
+022500231110             IF         COND(&MSGID *EQ '       ') THEN(DO)
+022600231110               GOTO ENDE
+022700231110             ENDDO
+022800231110
+022900231110/* ---------------------------- */
+023000231110/*  Ermitteln der nächsten      */
+023100231110/*  Nachrichten-ID              */
+023200231110/* ---------------------------- */
+023300231110             CHGVAR     VAR(&RETRIEVEOP) VALUE('*NEXT  ')
+023400231110             CHGVAR     VAR(&MSGREFID)   VALUE(&MSGID   )
+023500231110             CALLPRC    PRC(CRTMSGDSR1) PARM(&MSGLIB &MSGFILE +
+023600231110                          &MSGREFID +
+023700231110                          &RETRIEVEOP &MSGIDTEMP &ERRID &ERRDT)
+023800231110             IF         COND(&MSGIDTEMP *EQ ' '  +
+023900231110                        *OR  &MSGIDTEMP *GT &MSGIDBIS) THEN(DO)
+024000231110               CHGVAR     VAR(&MSGIDBIS) VALUE(&MSGID)
+024100231110             ENDDO
+024200231110
+024300231110/* ---------------------------- */
+024400231110/*  Member bekommt den Namen    */
+024500231110/*  der MSG-ID                  */
+024600231110/* ---------------------------- */
+024700231110             IF         COND(&MBR *EQ '*GEN') THEN(DO)
+024800231110/* Einzel-Mbr */
+024900231110               CHGVAR     VAR(&CPYMBR    ) VALUE(&MSGID)
+025000231110               CHGVAR     VAR(&IS_LAST) VALUE(&TRUE)
+025100231110               CHGVAR     VAR(&IS_FIRST) VALUE(&TRUE)
+025200231110             ENDDO
+025300231110             ELSE       CMD(DO)
+025400231110/* Sammel-Mbr */
+025500231110               CHGVAR     VAR(&CPYMBR    ) VALUE(&MBR)
+025600231110               IF         COND(&MSGID *EQ &MSGIDVON) THEN(DO)
+025700231110                 CHGVAR     VAR(&IS_FIRST) VALUE(&TRUE)
+025800231110               ENDDO
+025900231110               ELSE       CMD(DO)
+026000231110                 CHGVAR     VAR(&IS_FIRST) VALUE(&FALSE)
+026100231110               ENDDO
+026200231110
+026300231110               IF         COND(&MSGID *EQ &MSGIDBIS) THEN(DO)
+026400231110                 CHGVAR     VAR(&IS_LAST) VALUE(&TRUE)
+026500231110               ENDDO
+026600231110               ELSE       CMD(DO)
+026700231110                 CHGVAR     VAR(&IS_LAST) VALUE(&FALSE)
+026800231110               ENDDO
+026900231110             ENDDO
+027000231110
+027100231110/* ---------------------------- */
+027200231110/*  GENERIERUNGSART IN          */
+027300231110/*  SOURCETYP UMSETZEN          */
+027400231110/* ---------------------------- */
+027500231110
+027600231110             CHGVAR     VAR(&SOURCETYPE) VALUE('*NONE')
+027700231110             CHGVAR     VAR(&CPYTYP    ) VALUE('          ')
+027800231110
+027900231110/* RPG-III */
+028000231110             IF         COND(&TYP      *EQ '3'     ) THEN(DO)
+028100231110               CHGVAR     VAR(&SOURCETYPE) VALUE('*RPG')
+028200231110               CHGVAR     VAR(&CPYTYP    ) VALUE('RPG')
+028300231110             ENDDO
+028400231110
+028500231110/* ILE-RPG */
+028600231110             IF         COND(&TYP      *EQ '4'     ) THEN(DO)
+028700231110               CHGVAR     VAR(&SOURCETYPE) VALUE('*ILERPG')
+028800231110               CHGVAR     VAR(&CPYTYP    ) VALUE('RPGLE')
+028900231110             ENDDO
+029000231110
+029100231110/* CL-SRC  */
+029200231110             IF         COND(&TYP      *EQ '1'     ) THEN(DO)
+029300231110               CHGVAR     VAR(&SOURCETYPE) VALUE('*CLP')
+029400231110               CHGVAR     VAR(&CPYTYP    ) VALUE('CLP')
+029500231110             ENDDO
+029600231110/* CLLE-SRC */
+029700231110             IF         COND(&TYP      *EQ '6'     ) THEN(DO)
+029800231110               CHGVAR     VAR(&SOURCETYPE) VALUE('*CLLE')
+029900231110               CHGVAR     VAR(&CPYTYP    ) VALUE('CLLE')
+030000231110             ENDDO        R
+030100231110/* SCRIPT  */
+030200231110             IF         COND(&TYP      *EQ '2'     ) THEN(DO)
+030300231110               CHGVAR     VAR(&SOURCETYPE) VALUE('*SCRIPT')
+030400231110               CHGVAR     VAR(&CPYTYP    ) VALUE('MID')
+030500231110             ENDDO
+030600231110/* C       */
+030700231110             IF         COND(&TYP      *EQ '5'     ) THEN(DO)
+030800231110               CHGVAR     VAR(&SOURCETYPE) VALUE('*C')
+030900231110               CHGVAR     VAR(&CPYTYP    ) VALUE('H')
+031000231110             ENDDO
+031100231110
+031200231110/* ---------------------------- */
+031300231110/*  Prüfen, ob Member vorhanden */
+031400231110/* ---------------------------- */
+031500231110             CHGVAR     VAR(&MBREXIST  ) VALUE('*EXIST    ')
+031600231110             CHKOBJ     OBJ(&CPYLIB/&CPYFILE) OBJTYPE(*FILE) +
+031700231110                          MBR(&CPYMBR)
+031800231110             /* Member nicht vorhanden  */
+031900231110             MONMSG     MSGID(CPF9815) EXEC(CHGVAR VAR(&MBREXIST) +
+032000231110                          VALUE('*NOT_EXIST'))
+032100231110
+032200231110/* ---------------------------- */
+032300231110/* Anhand der Auswahl CpyMbr    */
+032400231110/* clearen oder anlegen         */
+032500231110/* ---------------------------- */
+032600231110             IF         COND(&REPLACE *EQ 'Y') THEN(DO)
+032700231110               IF         COND(&IS_FIRST *EQ &TRUE) THEN(DO)
+032800231110
+032900231110                 IF         COND(&MBREXIST *EQ '*EXIST') THEN(DO)
+033000231110                   CLRPFM     FILE(&CPYLIB/&CPYFILE) MBR(&CPYMBR)
+033100231110                 ENDDO
+033200231110
+033300231110                 IF         COND(&MBREXIST *EQ '*NOT_EXIST') THEN(DO)
+033400231110                   ADDPFM     FILE(&CPYLIB/&CPYFILE) MBR(&CPYMBR) +
+033500231110                              TEXT('??????')
+033600231110                 ENDDO
+033700231110
+033800231110               ENDDO
+033900231110               ELSE       CMD(DO)
+034000231110               /* Bei angegebener Teildatei,  */
+034100231110               /* nur beim ersten Mal löschen */
+034200231110               ENDDO
+034300231110             ENDDO
+034400231110             ELSE       CMD(DO)
+034500231110               IF         COND(&IS_FIRST *EQ &TRUE) THEN(DO)
+034600231110
+034700231110                 IF         COND(&MBREXIST *EQ '*EXIST') THEN(DO)
+034800231110                   IF         COND(&MBR *EQ '*GEN') THEN(DO)
+034900231110                     SNDPGMMSG  MSGID(USR0001) MSGF(*LIBL/&I_MSGF) +
+035000231110                                MSGDTA(&CPYFILE *CAT &CPYLIB *CAT +
+035100231110                                       &CPYMBR  *CAT &SOURCETYPE  ) +
+035200231110                                TOPGMQ(*PRV (*PGMBDY)) MSGTYPE(*DIAG)
+035300231110                     GOTO       CMDLBL(NEXT_MSGID)
+035400231110                   ENDDO
+035500231110                   ELSE       CMD(DO)
+035600231110                     SNDPGMMSG  MSGID(USR0001) MSGF(*LIBL/&I_MSGF) +
+035700231110                                MSGDTA(&CPYFILE *CAT &CPYLIB *CAT +
+035800231110                                       &CPYMBR  *CAT &SOURCETYPE  ) +
+035900231110                                TOPGMQ(*PRV (*PGMBDY)) MSGTYPE(*ESCAPE)
+036000231110                   ENDDO
+036100231110                 ENDDO
+036200231110
+036300231110                 IF         COND(&MBREXIST *EQ '*NOT_EXIST') THEN(DO)
+036400231110                   ADDPFM     FILE(&CPYLIB/&CPYFILE) MBR(&CPYMBR) +
+036500231110                              TEXT('??????')
+036600231110                 ENDDO
+036700231110               ENDDO
+036800231110               ELSE       CMD(DO)
+036900231110               /* Bei angegebener Teildatei,  */
+037000231110               /* nur beim ersten Mal prüfen  */
+037100231110               ENDDO
+037200231110
+037300231110             ENDDO
+037400231110
+037500231110/* ---------------------------- */
+037600231110/*  START DER VERARBEITUNG      */
+037700231110/*  KENNZEICHNEN                */
+037800231110/* ---------------------------- */
+037900231110             CHGPFM     FILE(&CPYLIB/&CPYFILE) MBR(&CPYMBR) +
+038000231110                        SRCTYPE(*NONE)                      +
+038100231110                        TEXT('*INUSE')
+038200231110
+038300231110/* ---------------------------- */
+038400231110/*  OVRDBF AUF NEUES MEMBER     */
+038500231110/* ---------------------------- */
+038600231110             OVRDBF     FILE(SRC) TOFILE(&CPYLIB/&CPYFILE) +
+038700231110                          MBR(&CPYMBR) OVRSCOPE(*CALLLVL)
+038800231110
+038900231110/* ---------------------------- */
+039000231110/*  SOURCEGENERIERUNGSPROGRAMM  */
+039100231110/*  AUFRUFEN                    */
+039200231110/* ---------------------------- */
+039300231110             CALLPRC    PRC(CRTMSGDSR2) PARM(&MSGLIB &MSGFILE +
+039400231110                          &MSGID &CPYLIB &CPYFILE &SOURCETYPE +
+039500231110                          &DEFINE &IS_FIRST &IS_LAST          +
+039600231110                          &MBRTEXT &ERRID &ERRDT)
+039700231110             DLTOVR     FILE(*ALL) LVL(*)
+039800231110
+039900231110/* ---------------------------- */
+040000231110/*  Wenn Fehler beim Generieren */
+040100231110/*  aufgetreten ist             */
+040200231110/* ---------------------------- */
+040300231110             IF         COND(&ERRID    *NE ' '     ) THEN(DO)
+040400231110               SNDPGMMSG  MSGID(&ERRID) MSGF(QCPFMSG) MSGDTA(&ERRDT) +
+040500231110                          TOPGMQ(*PRV (*PGMBDY)) MSGTYPE(*ESCAPE)
+040600231110             ENDDO
+040700231110
+040800231110/* ---------------------------- */
+040900231110/*  Memberbeschreibung setzen   */
+041000231110/*  Einzel-Member               */
+041100231110/* ---------------------------- */
+041200231110             IF         COND(&IS_LAST *EQ &TRUE) THEN(DO)
+041300231110              IF         COND(&MBR *EQ '*GEN') THEN(DO)
+041400231110               CHGVAR     VAR(&MBRDESC) VALUE('MSG:' *BCAT &MBRTEXT)
+041500231110              ENDDO
+041600231110              ELSE       CMD(DO)
+041700231110               CHGVAR     VAR(&MBRDESC) VALUE('MSG:' *BCAT &MSGIDVON +
+041800231110                                                     *BCAT '-'       +
+041900231110                                                     *BCAT &MSGIDBIS)
+042000231110              ENDDO
+042100231110              CHGPFM     FILE(&CPYLIB/&CPYFILE) MBR(&CPYMBR) +
+042200231110                           SRCTYPE(&CPYTYP) TEXT(&MBRDESC)
+042300231110
+042400231110/* ---------------------------- */
+042500231110/*  Fertig ...                  */
+042600231110/* ---------------------------- */
+042700231110               SNDPGMMSG  MSGID(USR0002) MSGF(*LIBL/&I_MSGF) +
+042800231110                                MSGDTA(&CPYFILE *CAT &CPYLIB *CAT +
+042900231110                                       &CPYMBR  *CAT &SOURCETYPE  ) +
+043000231110                          TOPGMQ(*PRV (*PGMBDY)) MSGTYPE(*INFO)
+043100231110             ENDDO
+043200231110
+043300231110/* ---------------------------- */
+043400231110/* Nächste MSG lesen            */
+043500231110/* Wenn es kein weitere MSG     */
+043600231110/* gibt (EOF) dann ist der      */
+043700231110/* Wert in &MSGID = *BLANK      */
+043800231110/* ---------------------------- */
+043900231110NEXT_MSGID:
+044000231110                 CHGVAR     VAR(&MSGREFID)   VALUE(&MSGID   )
+044100231110                 CHGVAR     VAR(&RETRIEVEOP) VALUE('*NEXT  ')
+044200231110                 CALLPRC    PRC(CRTMSGDSR1) PARM(&MSGLIB &MSGFILE +
+044300231110                              &MSGREFID +
+044400231110                              &RETRIEVEOP &MSGID &ERRID &ERRDT)
+044500231110
+044600231110/* ---------------------------- */
+044700231110/* Schleifenende                */
+044800231110/* ---------------------------- */
+044900231110               GOTO LOOP
+045000231110
+045100231110
+045200231110
+045300231110 /* -------------------------------------------------------------- */
+045400231110 /*  Programm beenden                                              */
+045500231110 /* -------------------------------------------------------------- */
+045600231110
+045700231110ENDE:
+045800231110             DLTOVR     FILE(*ALL)
+045900231110             MONMSG     MSGID(CPF0000)
+046000231110
+046100231110             RCLRSC     LVL(*)
+046200231110
+046300231110/* -------------------------------------------------------------- */
+046400231110/*    Fehler aufgetreten ?                                        */
+046500231110/* -------------------------------------------------------------- */
+046600231110
+046700231110             IF         COND(&ERROR) THEN(DO)
+046800231110               /* Sende letzte *ESCAPE nochmals   */
+046900231110               CALL       PGM(QMHRSNEM) PARM(&ERRMSGKEY &ERRCODE)
+047000231110             ENDDO
+047100231110
+047200231110             RETURN
+047300231110
+047400231110/* ---------------- */
+047500231110/* Nachrichten      */
+047600231110/* weiterreichen    */
+047700231110/* ---------------- */
+047800231110
+047900231110 ERROR:
+048000231110             IF         COND(&ERROR) THEN(GOTO CMDLBL(ENDE))
+048100231110             ELSE       CHGVAR     VAR(&ERROR) VALUE(&TRUE)
+048200231110
+048300231110/* Verschiebe alle *DIAG Nachrichten zur             */
+048400231110/* vorangegangenen Programmwarteschlange             */
+048500231110             CALL       PGM(QMHMOVPM) PARM(&ERRMSGKEY &ERRMSGTYP +
+048600231110                          &ERRNBRTYP &ERRPGMMSGQ &ERRSTKCTR &ERRCODE)
+048700231110
+048800231110             GOTO       CMDLBL(ENDE)
+048900231110
+049000231110             ENDPGM
