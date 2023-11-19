@@ -1,0 +1,172 @@
+     /* ============================================================ */
+     /*                                                              */
+     /*  (c) Thomas Raddatz                                          */
+     /*                                                              */
+     /*  Bereich  : PEEK, Version 3.1.2                              */
+     /*  Programm : PEEKUPDATE                                       */
+     /*  Typ      : CLLE                                             */
+     /*                                                              */
+     /*  erstellt : 19.11.2023  Raddatz                              */
+     /*                                                              */
+     /* ============================================================ */
+     /*                                                              */
+     /*  Dokumentation:                                              */
+     /*                                                              */
+     /*  Peek/400 - Distribuieren PEEK/400 Bibliothek                */
+     /*                                                              */
+     /*  Installiert die PEEK/400 Bibliothek als Bibliothek PEEK400  */
+     /*  auf den OBI Produktionsmaschinen.                           */
+     /*                                                              */
+     /* ============================================================ */
+     /*                                                              */
+     /*  Aufrufen Programm:                                          */
+     /*                                                              */
+     /*     CALL PGM(PEEK400P/PEEKDIST) PARM('user' 'password')      */
+     /*                                                              */
+     /* ============================================================ */
+     /* >>PRE-COMPILER<<                                             */
+     /*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +   */
+     /*                           OBJLIB(&LI) DEVLIB(&LI) +          */
+     /*                           SBMJOB(*NO) BNDDIR(PEEK) +         */
+     /*                           INSTALL(*NO);                      */
+     /*   >>EXECUTE<<                                                */
+     /* >>END-PRE-COMPILER<<                                         */
+     /* ============================================================ */
+          PGM        PARM(&USER       +
+                          &PASSWD     +
+                          &RMTLOC     +
+                          )
+
+             DCL        VAR(&USER      ) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&PASSWD    ) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&RMTLOC    ) TYPE(*CHAR) LEN(102)
+               DCL        VAR(&RMTLOCCNT ) TYPE(*INT) LEN(2) +
+                            STG(*DEFINED) DEFVAR(&RMTLOC 1)
+               DCL        VAR(&RMTLOCLIST) TYPE(*CHAR) LEN(100) +
+                            STG(*DEFINED) DEFVAR(&RMTLOC 3)
+
+             DCL        VAR(&RMTLOCNAME) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&I         ) TYPE(*INT) LEN(2)
+             DCL        VAR(&MSGID     ) TYPE(*CHAR) LEN(7)
+
+/* Fehlerbehandlung     */
+             DCL        VAR(&ERROR)      TYPE(*LGL) +
+                          VALUE('0')
+             DCL        VAR(&ERRMSGKEY)  TYPE(*CHAR) LEN(4)
+
+             DCL        VAR(&ERRMSGTYP)  TYPE(*CHAR) LEN(10) +
+                          VALUE('*DIAG')
+             DCL        VAR(&ERRNBRTYP)  TYPE(*CHAR) LEN(4) +
+                          VALUE(X'00000001')
+             DCL        VAR(&ERRPGMMSGQ) TYPE(*CHAR) LEN(10) +
+                          VALUE('*')
+             DCL        VAR(&ERRSTKCTR)  TYPE(*CHAR) LEN(4) +
+                          VALUE(X'00000001')
+             DCL        VAR(&ERRCODE  )  TYPE(*CHAR) LEN(4) +
+                          VALUE(X'00000000')
+
+/* Sende alle Fehler zur Error Handling Routine */
+             MONMSG     MSGID(CPF0000) EXEC(GOTO CMDLBL(ERROR))
+
+             CHGVAR     VAR(&ERROR    ) VALUE('0')
+
+ /* -------------------------------------------------------------- */
+ /*  Los geht's                                                    */
+ /* -------------------------------------------------------------- */
+
+             CHGVAR     VAR(&I) VALUE(1)
+
+             DOFOR VAR(&I) FROM(1) TO(&RMTLOCCNT)
+               CHGVAR     VAR(&RMTLOCNAME) +
+                            VALUE(%SUBSTRING(&RMTLOCLIST &I 10))
+               IF         COND(&RMTLOCNAME *NE '*NONE') THEN(DO)
+                 CALLSUBR   SUBR(DISTRIBUTE)
+               ENDDO
+               CHGVAR     VAR(&I) VALUE(&I + 10)
+             ENDDO
+
+             SNDPGMMSG  MSGID(CPF9897) MSGF(QCPFMSG) MSGTYPE(*INFO) +
+                          MSGDTA('Bibliothek PEEK/400 erfolgreich übertragen.')
+
+ENDE:
+             RETURN
+
+/* ---------------- */
+/* Error            */
+/* Handling         */
+/* ---------------- */
+ERROR:
+             IF         COND(&ERROR) THEN(GOTO CMDLBL(ENDE))
+             ELSE       CHGVAR     VAR(&ERROR) VALUE('1')
+
+/* Verschiebe alle *DIAG Nachrichten zur             */
+/* vorangegangenen Programmwarteschlange             */
+             CHGVAR     VAR(&ERRMSGTYP) VALUE('*DIAG')
+             CALL       PGM(QMHMOVPM) PARM(&ERRMSGKEY &ERRMSGTYP +
+                          &ERRNBRTYP &ERRPGMMSGQ &ERRSTKCTR &ERRCODE)
+             SNDPGMMSG  MSGID(CPF9898) MSGF(QCPFMSG) MSGTYPE(*ESCAPE) +
+                          MSGDTA('Übertragung nach' *BCAT &RMTLOCNAME *BCAT 'fehlgeschlagen')
+             GOTO       CMDLBL(ENDE)
+
+ /* -------------------------------------------------------------- */
+ /*  Installieren Bibliothek PEEK400 auf Zielsystem: &RMTLOCNAME   */
+ /* -------------------------------------------------------------- */
+
+             SUBR       SUBR(DISTRIBUTE)
+
+STEP_00:
+               RUNRMTCMD CMD('CHKOBJ OBJ(QSYS) OBJTYPE(*LIB)') +
+                           RMTLOCNAME(&RMTLOCNAME) RMTUSER(&USER) RMTPWD(&PASSWD)
+               RCVMSG     PGMQ(*SAME (*)) MSGTYPE(*ANY) MSGID(&MSGID)
+               IF         COND(&MSGID *EQ 'CPC91C1') THEN(DO)
+                 SNDPGMMSG  MSGID(CPF9898) MSGF(QCPFMSG) MSGTYPE(*ESCAPE) +
+                              MSGDTA('Fernes system' *BCAT &RMTLOCNAME *BCAT 'nicht gefunden')
+               ENDDO
+
+STEP_01:
+               SNDPGMMSG  MSGID(CPF9897) MSGF(QCPFMSG) +
+                            MSGDTA('Übertragen Peek/400 auf' *BCAT &RMTLOCNAME *BCAT '...') +
+                            TOPGMQ(*EXT) MSGTYPE(*STATUS)
+
+               RUNRMTCMD CMD('CHKOBJ OBJ(PEEK) OBJTYPE(*LIB)') +
+                           RMTLOCNAME(&RMTLOCNAME) RMTUSER(&USER) RMTPWD(&PASSWD)
+               MONMSG     MSGID(CPF91CF) EXEC(DO) /* Command failed on remote system. */
+                 GOTO       CMDLBL(STEP_02)
+               ENDDO
+
+               RUNRMTCMD CMD('DLTLIB LIB(PEEK)') +
+                           RMTLOCNAME(&RMTLOCNAME) RMTUSER(&USER) RMTPWD(&PASSWD)
+
+STEP_02:
+               RUNRMTCMD CMD('CHKOBJ OBJ(PEEK400#) OBJTYPE(*LIB)') +
+                           RMTLOCNAME(&RMTLOCNAME) RMTUSER(&USER) RMTPWD(&PASSWD)
+               MONMSG     MSGID(CPF91CF) EXEC(DO) /* Command failed on remote system. */
+                 GOTO       CMDLBL(STEP_03)
+               ENDDO
+
+               RUNRMTCMD CMD('DLTLIB LIB(PEEK400#)') +
+                           RMTLOCNAME(&RMTLOCNAME) RMTUSER(&USER) RMTPWD(&PASSWD)
+
+STEP_03:
+               RUNRMTCMD CMD('RNMOBJ OBJ(PEEK400) OBJTYPE(*LIB) NEWOBJ(PEEK400#)') +
+                           RMTLOCNAME(&RMTLOCNAME) RMTUSER(&USER) RMTPWD(&PASSWD)
+
+STEP_04:
+               SAVRSTLIB  LIB(PEEK) RMTLOCNAME(&RMTLOCNAME)
+
+STEP_05:
+               SNDPGMMSG  MSGID(CPF9897) MSGF(QCPFMSG) +
+                            MSGDTA('Installieren Peek/400 auf' *BCAT &RMTLOCNAME *BCAT '...') +
+                            TOPGMQ(*EXT) MSGTYPE(*STATUS)
+
+               RUNRMTCMD CMD('PEEK/PEEKCLONE TOLIB(PEEK400)') +
+                           RMTLOCNAME(&RMTLOCNAME) RMTUSER(&USER) RMTPWD(&PASSWD)
+
+STEP_06:
+               RUNRMTCMD CMD('CALL PGM(PEEK/PEEKUPDATE) PARM(''PEEK400'' ''PEEK400#'')') +
+                           RMTLOCNAME(&RMTLOCNAME) RMTUSER(&USER) RMTPWD(&PASSWD)
+
+             ENDSUBR
+
+             ENDPGM
+
