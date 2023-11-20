@@ -47,6 +47,7 @@
 
              DCL        VAR(&RMTLOCNAME) TYPE(*CHAR) LEN(10)
              DCL        VAR(&I         ) TYPE(*INT) LEN(2)
+             DCL        VAR(&POS       ) TYPE(*INT) LEN(2)
              DCL        VAR(&MSGID     ) TYPE(*CHAR) LEN(7)
 
 /* Fehlerbehandlung     */
@@ -74,15 +75,15 @@
  /*  Los geht's                                                    */
  /* -------------------------------------------------------------- */
 
-             CHGVAR     VAR(&I) VALUE(1)
+             CHGVAR     VAR(&POS) VALUE(1)
 
              DOFOR VAR(&I) FROM(1) TO(&RMTLOCCNT)
                CHGVAR     VAR(&RMTLOCNAME) +
-                            VALUE(%SUBSTRING(&RMTLOCLIST &I 10))
+                            VALUE(%SUBSTRING(&RMTLOCLIST &POS 10))
                IF         COND(&RMTLOCNAME *NE '*NONE') THEN(DO)
                  CALLSUBR   SUBR(DISTRIBUTE)
                ENDDO
-               CHGVAR     VAR(&I) VALUE(&I + 10)
+               CHGVAR     VAR(&POS) VALUE(&POS + 10)
              ENDDO
 
              SNDPGMMSG  MSGID(CPF9897) MSGF(QCPFMSG) MSGTYPE(*INFO) +
@@ -125,7 +126,8 @@ STEP_00:
 
 STEP_01:
                SNDPGMMSG  MSGID(CPF9897) MSGF(QCPFMSG) +
-                            MSGDTA('Übertragen Peek/400 auf' *BCAT &RMTLOCNAME *BCAT '...') +
+                            MSGDTA('Übertragen Peek/400 auf' +
+                                   *BCAT &RMTLOCNAME *BCAT '...') +
                             TOPGMQ(*EXT) MSGTYPE(*STATUS)
 
                RUNRMTCMD CMD('CHKOBJ OBJ(PEEK) OBJTYPE(*LIB)') +
@@ -156,13 +158,19 @@ STEP_04:
 
 STEP_05:
                SNDPGMMSG  MSGID(CPF9897) MSGF(QCPFMSG) +
-                            MSGDTA('Installieren Peek/400 auf' *BCAT &RMTLOCNAME *BCAT '...') +
+                            MSGDTA('Installieren Peek/400 auf' +
+                                   *BCAT &RMTLOCNAME *BCAT '...') +
                             TOPGMQ(*EXT) MSGTYPE(*STATUS)
 
                RUNRMTCMD CMD('PEEK/PEEKCLONE TOLIB(PEEK400)') +
                            RMTLOCNAME(&RMTLOCNAME) RMTUSER(&USER) RMTPWD(&PASSWD)
 
 STEP_06:
+               SNDPGMMSG  MSGID(CPF9897) MSGF(QCPFMSG) +
+                            MSGDTA('Aktualisieren Benutzereinstellungen auf' +
+                                   *BCAT &RMTLOCNAME *BCAT '...') +
+                            TOPGMQ(*EXT) MSGTYPE(*STATUS)
+
                RUNRMTCMD CMD('CALL PGM(PEEK/PEEKUPDATE) PARM(''PEEK400'' ''PEEK400#'')') +
                            RMTLOCNAME(&RMTLOCNAME) RMTUSER(&USER) RMTPWD(&PASSWD)
 

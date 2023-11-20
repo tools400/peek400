@@ -875,7 +875,7 @@ begsr v04r00m01;
   wrkelem = elm040001;
   exsr updPeekUsr;
 
-  set0007.set_vsn = 'V04R00M00';
+  set0007.set_vsn = 'V04R00M01';
 
 endsr;
 
