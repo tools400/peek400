@@ -395,7 +395,7 @@ dcl-s isCmdErr          char(1) inz(bFalse);
 dcl-s isCancel          char(1) inz(bFalse);
 dcl-s r#iscmderr        char(1) inz(bFalse);
 dcl-s iscvtchar         char(1) inz(bFalse);
-dcl-s ispintoclr        char(1) inz(bTrue );
+dcl-s isPinToClr        char(1) inz(bTrue );
 dcl-s isreadc           char(1) inz(bFalse);
 dcl-s isColumnException like(bool_t) inz(bFalse);
 dcl-s isKeyLower        like(bool_t) inz(bFalse);
@@ -2717,7 +2717,7 @@ begsr c_sql;
     leavesr;
   endif;
 
-  ispintoclr = bFalse;
+  isPinToClr = bFalse;
 
   exsr closefile;
 
@@ -2742,7 +2742,7 @@ begsr c_sql;
 
   exsr openfile;
 
-  ispintoclr = bTrue;
+  isPinToClr = bTrue;
 
 endsr;
 
@@ -3427,6 +3427,12 @@ begsr s_loadenv;
       yenvlib  = yLibrary;
       yenvmbr  = yMember;
       exsr loadenv;
+      if (yMsgID <> ' ');
+        p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
+        yMsgID = '';
+        yMsgDta = '';
+      endif;
+
       isSflDirty = bTrue;
     endif;
   endif;
@@ -3439,7 +3445,7 @@ endsr;
 
 begsr loadenv;
 
-  ispintoclr = bFalse;
+  isPinToClr = bFalse;
 
   if (##member = '*NONE');
     leavesr;
@@ -3459,9 +3465,10 @@ begsr loadenv;
         :yMsgID: yMsgDta);
 
   if (yMsgID <> ' ');
-    p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
-    yMsgID = '';
-    yMsgDta = '';
+    // TODO: remove code
+    // p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
+    // yMsgID = '';
+    // yMsgDta = '';
   else;
 
     if (##file     <> rtn.file or
@@ -3497,7 +3504,7 @@ begsr loadenv;
     isKeyLower = yIsKeyLower;
   endif;
 
-  ispintoclr = bTrue;
+  isPinToClr = bTrue;
 
 endsr;
 
@@ -3596,7 +3603,7 @@ endsr;
 
 begsr clrpinrow;
 
-  if (ispintoclr = bTrue);
+  if (isPinToClr = bTrue);
     nbrPinRcd = 0;
     exsr clrPinTabR;
     isSflDirty = bTrue;
@@ -3612,7 +3619,7 @@ endsr;
 
 begsr clrpincol;
 
-  if (ispintoclr = bTrue);
+  if (isPinToClr = bTrue);
     nbrPinCol = 0;
     clear pinTabCol;
     isSflDirty = bTrue;
@@ -6035,9 +6042,9 @@ begsr changesort;
   endif;
 
   //  Wechsel der Datei ...
-  ispintoclr = bFalse;
+  isPinToClr = bFalse;
   exsr changeFile;
-  ispintoclr = bTrue;
+  isPinToClr = bTrue;
 
   //  Prüfen Seq-Bereich (##WndNbr) ...
   exsr chkseqrnge;
@@ -8067,6 +8074,10 @@ begsr first;
       yoption = '*SLCENV';
     endif;
     exsr loadenv;
+    if (yMsgId = 'CPF9815'); // Teildatei nicht gefunden
+      yMsgID = '';
+      yMsgDta = '';
+    endif;
   endif;
 
   // - Ermitteln der Attribute der geöffneten Datei
