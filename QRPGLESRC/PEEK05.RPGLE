@@ -430,7 +430,7 @@ dcl-s sflmode         char(10) inz;
 dcl-s sflpinrnge      like(int4_t) inz;
 
 dcl-c COPYRIGHT const('1997-2023, Thomas Raddatz - PEEK v4.0.1');
-dcl-c RELEASE const('Stand: 20.11.2023');
+dcl-c RELEASE const('Stand: 24.11.2023');
 dcl-c VERSION const('V04R00M01');
 
 dcl-s l#file          like(##file)    inz;
@@ -6431,10 +6431,11 @@ begsr openfile;
 
       // ... Felder größer 512 Zeichen
       if (isfld512 = bTrue);
+        // TODO: remove code and /copy statement
         // ... ohne Commit
-        usr8123.var1 = COLOR_white_u;
-        usr8123.var2 = COLOR_white;
-        p_sndpgmmg('USR8123': usr8123: sds.pgmname);
+        // usr8123.var1 = COLOR_white_u;
+        // usr8123.var2 = COLOR_white;
+        // p_sndpgmmg('USR8123': usr8123: sds.pgmname);
       endif;
 
       // ... Felder, welche nicht erlaubt sind

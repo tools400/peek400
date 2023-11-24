@@ -179,6 +179,13 @@ if (isPgmError = bFalse);
     // Übertragen Buffer in Bildschirmfelder
     exsr bufferToScreen;
 
+    // Anzeigen Cursorposition im Feld #STRING/
+    if (isCursorDataField());
+      $CSRPOS = H_CSRPOS;
+    else;
+      $CSRPOS = 0;
+    endif;
+
     //  Anzeigen Bildschirm
     exfmt bild01;
 
@@ -193,12 +200,15 @@ if (isPgmError = bFalse);
     H_CSRROW = 0;
     H_CSRCOL = 0;
 
-    //  Daten geändert
-    if (isPgmError);
-      isDataChg = bTrue; // Erzwingen Prüfung der Eingabedaten
-    else;
+    // Erzwingen Prüfung der Eingabedaten ...
+    select;
+    when (isPgmError);
+      isDataChg = bTrue;
+    when (isCursorDataField() and H_CSRPOS <> 0 and $CSRPOS <> H_CSRPOS);
+      isDataChg = bTrue;
+    other;
       isDataChg = *in93;
-    endif;
+    endsl;
 
     //  Nachrichten löschen
     p_rmvPgmMg(sds.pgmname);
@@ -746,7 +756,7 @@ begsr c_insert;
   endsl;
 
   if (insDel.mode = MODE_INSERT);
-    if (H_CSRFLD = '#STRING' or f_startsWith('#UCS2_': H_CSRFLD));
+    if (isCursorDataField());
       if (insDel.startPos = 0);
         insDel.startPos = H_CSRPOS;
       else;
@@ -799,7 +809,7 @@ begsr c_delete;
   endsl;
 
   if (insDel.mode = MODE_DELETE);
-    if (H_CSRFLD = '#STRING' or f_startsWith('#UCS2_': H_CSRFLD));
+    if (isCursorDataField());
       if (insDel.startPos = 0);
         insDel.startPos = H_CSRPOS;
       else;
@@ -1143,10 +1153,11 @@ begsr first;
   endif;
 
   // - Feld zu groß Hinweis ausgeben
-  clear usr8123;
-  usr8123.var1 = COLOR_white_u;
-  usr8123.var2 = COLOR_white;
-  p_sndpgmmg('USR8123': usr8123: sds.pgmname);
+  // TODO: remove code and /copy statement
+  // clear usr8123;
+  // usr8123.var1 = COLOR_white_u;
+  // usr8123.var2 = COLOR_white;
+  // p_sndpgmmg('USR8123': usr8123: sds.pgmname);
 
   // - Einfügen/Löschen
   insDel.mode = MODE_OFF;
@@ -1156,6 +1167,15 @@ begsr first;
   // - Füllen der Bildschirmfelder
   exsr bzoff1;
   *in22 = bTrue; // Cursor auf Textfeld setzen
+  H_CSRPOS = 1;
+  H_CSRROW = 0;
+  H_CSRCOL = 0;
+
+  if (i_isUcs2 = 0);
+    H_CSRFLD = '#STRING';
+  else;
+    H_CSRFLD = '#UCS2_1';
+  endif;
 
   $fldName = i_fldName;
   $fldLaenge = buffer.maxLength;
@@ -1191,6 +1211,22 @@ begsr inzsr;
   peek23_name = f_pgmcalln('PEEK23');
 
 endsr;
+
+//============================================================*
+//  Prüft, ob der Cursor im Datenfeld (#STRING oder #UCS*) ist*
+//============================================================*
+
+dcl-proc isCursorDataField;
+  dcl-pi *N ind;
+  end-pi;
+
+  if (H_CSRFLD = '#STRING' or f_startsWith('#UCS2_': H_CSRFLD));
+    return bTrue;
+  else;
+    return bFalse;
+  endif;
+
+end-proc;
 
 //============================================================*
 //  Program error handler                                     *

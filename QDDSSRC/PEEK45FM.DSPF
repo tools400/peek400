@@ -73,12 +73,12 @@
      A                                       '
      A                                      DSPATR(UL)
      A                                      COLOR(BLU)
-     A            TXT0091       12A  O  4  2MSGID(TXT 0091 PEEKGER)
+     A            TXT0091       14A  O  4  2MSGID(TXT 0091 PEEKGER)
      A                                      COLOR(WHT)
-     A            $FLDNAME      40A  O  4 15
-     A            TXT0092       12A  O  5  2MSGID(TXT 0092 PEEKGER)
+     A            $FLDNAME      40A  O  4 17
+     A            TXT0092       14A  O  5  2MSGID(TXT 0092 PEEKGER)
      A                                      COLOR(WHT)
-     A            $FLDLAENGE     5Y 0O  5 15EDTCDE(3)
+     A            $FLDLAENGE     5Y 0O  5 17EDTCDE(3)
      A  60                              5 21','
      A                                      COLOR(WHT)
      A  60        $FLDDEZST      2Y 0O  5 23EDTCDE(3)

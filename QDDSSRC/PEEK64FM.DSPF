@@ -81,19 +81,17 @@
      A                                       '
      A                                      DSPATR(UL)
      A                                      COLOR(BLU)
-     A            TXT0091       12A  O  4  2MSGID(TXT 0091 PEEKGER)
+     A            TXT0091       14A  O  4  2MSGID(TXT 0091 PEEKGER)
      A                                      COLOR(WHT)
-     A            $FLDNAME      40A  O  4 15
-     A            TXT0092       12A  O  5  2MSGID(TXT 0092 PEEKGER)
+     A            $FLDNAME      40A  O  4 17
+     A            TXT0092       14A  O  5  2MSGID(TXT 0092 PEEKGER)
      A                                      COLOR(WHT)
-     A            $FLDLAENGE     5Y 0O  5 15EDTCDE(3)
+     A            $FLDLAENGE     5Y 0O  5 17EDTCDE(3)
      A  61        TXT0146       10A  O  5 31MSGID(TXT 0146 PEEKGER)
      A  62        TXT0147       10A  O  5 31MSGID(TXT 0147 PEEKGER)
-     A            TXT0095       14A  O  6  2MSGID(TXT 0095 PEEKGER)
+     A            TXT0151       14A  O  6  2MSGID(TXT 0151 PEEKGER)
      A                                      COLOR(WHT)
-     A            #STARTPOS      5Y 0B  6 17
-     A  30                                  DSPATR(RI)
-     A  20                                  DSPATR(PC)
+     A            $CSRPOS        5Y 0O  6 17
      A                                      EDTCDE(M)
      A  61
      AO 62        TXT0148        5A  O  6 31MSGID(TXT 0148 PEEKGER)
@@ -110,7 +108,14 @@
      A  34                                  DSPATR(RI)
      A  24                                  DSPATR(PC)
      A                                      EDTCDE(M)
-     A N71        #STRING      704A  B  8  4CHECK(LC)
+     A            TXT0095       14A  O  7  2MSGID(TXT 0095 PEEKGER)
+     A                                      COLOR(WHT)
+     A            #STARTPOS      5Y 0B  7 17
+     A  30                                  DSPATR(RI)
+     A  20                                  DSPATR(PC)
+     A                                      EDTCDE(M)
+      *
+     A N71        #STRING      704A  B  9  4CHECK(LC)
      A                                      CNTFLD(064)
      A***                                   WRDWRAP
      A  70                                  DSPATR(PR)
@@ -118,75 +123,75 @@
      A  22                                  DSPATR(PC)
      A  32                                  DSPATR(RI)
       *
-     A  71        #UCS2_1       64G  B  8  4CCSID(13488 32)
+     A  71        #UCS2_1       64G  B  9  4CCSID(13488 32)
      A  70                                  DSPATR(PR)
      A N70                                  DSPATR(UL)
      A                                      CHECK(LC)
      A  22                                  DSPATR(PC)
      A  32                                  DSPATR(RI)
       *
-     A  71        #UCS2_2       64G  B  9  4CCSID(13488 32)
+     A  71        #UCS2_2       64G  B 10  4CCSID(13488 32)
      A  70                                  DSPATR(PR)
      A N70                                  DSPATR(UL)
      A                                      CHECK(LC)
      A  32                                  DSPATR(RI)
       *
-     A  71        #UCS2_3       64G  B 10  4CCSID(13488 32)
+     A  71        #UCS2_3       64G  B 11  4CCSID(13488 32)
      A  70                                  DSPATR(PR)
      A N70                                  DSPATR(UL)
      A                                      CHECK(LC)
      A  32                                  DSPATR(RI)
       *
-     A  71        #UCS2_4       64G  B 11  4CCSID(13488 32)
+     A  71        #UCS2_4       64G  B 12  4CCSID(13488 32)
      A  70                                  DSPATR(PR)
      A N70                                  DSPATR(UL)
      A                                      CHECK(LC)
      A  32                                  DSPATR(RI)
       *
-     A  71        #UCS2_5       64G  B 12  4CCSID(13488 32)
+     A  71        #UCS2_5       64G  B 13  4CCSID(13488 32)
      A  70                                  DSPATR(PR)
      A N70                                  DSPATR(UL)
      A                                      CHECK(LC)
      A  32                                  DSPATR(RI)
       *
-     A  71        #UCS2_6       64G  B 13  4CCSID(13488 32)
+     A  71        #UCS2_6       64G  B 14  4CCSID(13488 32)
      A  70                                  DSPATR(PR)
      A N70                                  DSPATR(UL)
      A                                      CHECK(LC)
      A  32                                  DSPATR(RI)
       *
-     A  71        #UCS2_7       64G  B 14  4CCSID(13488 32)
+     A  71        #UCS2_7       64G  B 15  4CCSID(13488 32)
      A  70                                  DSPATR(PR)
      A N70                                  DSPATR(UL)
      A                                      CHECK(LC)
      A  32                                  DSPATR(RI)
       *
-     A  71        #UCS2_8       64G  B 15  4CCSID(13488 32)
+     A  71        #UCS2_8       64G  B 16  4CCSID(13488 32)
      A  70                                  DSPATR(PR)
      A N70                                  DSPATR(UL)
      A                                      CHECK(LC)
      A  32                                  DSPATR(RI)
       *
-     A  71        #UCS2_9       64G  B 16  4CCSID(13488 32)
+     A  71        #UCS2_9       64G  B 17  4CCSID(13488 32)
      A  70                                  DSPATR(PR)
      A N70                                  DSPATR(UL)
      A                                      CHECK(LC)
      A  32                                  DSPATR(RI)
       *
-     A  71        #UCS2_10      64G  B 17  4CCSID(13488 32)
+     A  71        #UCS2_10      64G  B 18  4CCSID(13488 32)
      A  70                                  DSPATR(PR)
      A N70                                  DSPATR(UL)
      A                                      CHECK(LC)
      A  32                                  DSPATR(RI)
       *
-     A  71        #UCS2_11      64G  B 18  4CCSID(13488 32)
+     A  71        #UCS2_11      64G  B 19  4CCSID(13488 32)
      A  70                                  DSPATR(PR)
      A N70                                  DSPATR(UL)
      A                                      CHECK(LC)
      A  32                                  DSPATR(RI)
       *
-     A  83        TXT0067       11A  O 19 60MSGID(TXT 0067 PEEKGER)
-     A N83        TXT0066       11A  O 19 60MSGID(TXT 0066 PEEKGER)
+     A  83        TXT0067       11A  O 20 60MSGID(TXT 0067 PEEKGER)
+     A N83        TXT0066       11A  O 20 60MSGID(TXT 0066 PEEKGER)
       *
      A                                 20  1'                                  -
      A                                                                         -

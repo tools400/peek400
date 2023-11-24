@@ -4695,7 +4695,7 @@
 004695000000
 004696000000     /*-------------------------------------------------------------*/
 004697000000     /*   Cmd-ADDMSGD für Message-ID :   TXT0091                    */
-004698000000     /* Campo......:                                                */
+004698000000     /* Campo .......:                                              */
 004699000000     /*-------------------------------------------------------------*/
 004700000000
 004701000000             RMVMSGD MSGID(TXT0091) MSGF(&LIB/&OBJ)
@@ -4705,7 +4705,7 @@
 004705000000                MSGID(TXT0091) +
 004706000000                MSGF(&LIB/&OBJ) +
 004707000000                MSG( +
-004708000000'Campo......:'                                                        +
+004708000000'Campo .......:'                                                      +
 004709000000                ) +
 004710000000                SEV(0) +
 004711000000     /*   No replacement variables defined!                         */ +
@@ -4715,7 +4715,7 @@
 004715000000
 004716000000     /*-------------------------------------------------------------*/
 004717000000     /*   Cmd-ADDMSGD für Message-ID :   TXT0092                    */
-004718000000     /* Dimensione.:                                                */
+004718000000     /* Dimensione ..:                                              */
 004719000000     /*-------------------------------------------------------------*/
 004720000000
 004721000000             RMVMSGD MSGID(TXT0092) MSGF(&LIB/&OBJ)
@@ -4725,7 +4725,7 @@
 004725000000                MSGID(TXT0092) +
 004726000000                MSGF(&LIB/&OBJ) +
 004727000000                MSG( +
-004728000000'Dimensione.:'                                                        +
+004728000000'Dimensione ..:'                                                      +
 004729000000                ) +
 004730000000                SEV(0) +
 004731000000     /*   No replacement variables defined!                         */ +
@@ -4735,7 +4735,7 @@
 004735000000
 004736000000     /*-------------------------------------------------------------*/
 004737000000     /*   Cmd-ADDMSGD für Message-ID :   TXT0093                    */
-004738000000     /* Contenuto..:                                                */
+004738000000     /* Contenuto .:                                                */
 004739000000     /*-------------------------------------------------------------*/
 004740000000
 004741000000             RMVMSGD MSGID(TXT0093) MSGF(&LIB/&OBJ)
@@ -4745,7 +4745,7 @@
 004745000000                MSGID(TXT0093) +
 004746000000                MSGF(&LIB/&OBJ) +
 004747000000                MSG( +
-004748000000'Contenuto..:'                                                        +
+004748000000'Contenuto .:'                                                        +
 004749000000                ) +
 004750000000                SEV(0) +
 004751000000     /*   No replacement variables defined!                         */ +
@@ -5874,85 +5874,85 @@
 005874000000                /*  -EOF-  */
 005875000000
 005876000000     /*-------------------------------------------------------------*/
-005877000000     /*   Cmd-ADDMSGD für Message-ID :   USR0001                    */
-005878000000     /* Formato rec. &3 del file &2/&1 non disponibile.             */
+005877000000     /*   Cmd-ADDMSGD für Message-ID :   TXT0151                    */
+005878000000     /* Pos. cursore :                                              */
 005879000000     /*-------------------------------------------------------------*/
 005880000000
-005881000000             RMVMSGD MSGID(USR0001) MSGF(&LIB/&OBJ)
+005881000000             RMVMSGD MSGID(TXT0151) MSGF(&LIB/&OBJ)
 005882000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 005883000000
 005884000000             ADDMSGD +
-005885000000                MSGID(USR0001) +
+005885000000                MSGID(TXT0151) +
 005886000000                MSGF(&LIB/&OBJ) +
 005887000000                MSG( +
-005888000000'Formato rec. &3 del file &2/&1 non disponibile.'                     +
+005888000000'Pos. cursore :'                                                      +
 005889000000                ) +
 005890000000                SEV(0) +
-005891000000                FMT( +
-005892000000                    (*CHAR 10) +
-005893000000                    (*CHAR 10) +
-005894000000                    (*CHAR 10) +
-005895000000                ) +
-005896000000                ALROPT(*NO) +
-005897000000                CCSID(65535) +
-005898000000                /*  -EOF-  */
-005899000000
-005900000000     /*-------------------------------------------------------------*/
-005901000000     /*   Cmd-ADDMSGD für Message-ID :   USR0002                    */
-005902000000     /* Impossibile reperire la lista dei formati record per il fil */
-005903000000     /*-------------------------------------------------------------*/
-005904000000
-005905000000             RMVMSGD MSGID(USR0002) MSGF(&LIB/&OBJ)
-005906000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-005907000000
-005908000000             ADDMSGD +
-005909000000                MSGID(USR0002) +
-005910000000                MSGF(&LIB/&OBJ) +
-005911000000                MSG( +
-005912000000'Impossibile reperire la lista dei formati record per il file &2/&1 .'+
-005913000000                ) +
-005914000000                SEV(0) +
-005915000000                FMT( +
-005916000000                    (*CHAR 10) +
-005917000000                    (*CHAR 10) +
-005918000000                ) +
-005919000000                ALROPT(*NO) +
-005920000000                CCSID(65535) +
-005921000000                /*  -EOF-  */
-005922000000
+005891000000     /*   No replacement variables defined!                         */ +
+005892000000                ALROPT(*NO) +
+005893000000                CCSID(65535) +
+005894000000                /*  -EOF-  */
+005895000000
+005896000000     /*-------------------------------------------------------------*/
+005897000000     /*   Cmd-ADDMSGD für Message-ID :   USR0001                    */
+005898000000     /* Formato rec. &3 del file &2/&1 non disponibile.             */
+005899000000     /*-------------------------------------------------------------*/
+005900000000
+005901000000             RMVMSGD MSGID(USR0001) MSGF(&LIB/&OBJ)
+005902000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+005903000000
+005904000000             ADDMSGD +
+005905000000                MSGID(USR0001) +
+005906000000                MSGF(&LIB/&OBJ) +
+005907000000                MSG( +
+005908000000'Formato rec. &3 del file &2/&1 non disponibile.'                     +
+005909000000                ) +
+005910000000                SEV(0) +
+005911000000                FMT( +
+005912000000                    (*CHAR 10) +
+005913000000                    (*CHAR 10) +
+005914000000                    (*CHAR 10) +
+005915000000                ) +
+005916000000                ALROPT(*NO) +
+005917000000                CCSID(65535) +
+005918000000                /*  -EOF-  */
+005919000000
+005920000000     /*-------------------------------------------------------------*/
+005921000000     /*   Cmd-ADDMSGD für Message-ID :   USR0002                    */
+005922000000     /* Impossibile reperire la lista dei formati record per il fil */
 005923000000     /*-------------------------------------------------------------*/
-005924000000     /*   Cmd-ADDMSGD für Message-ID :   USR0003                    */
-005925000000     /* Si sta usando il controllo di sincronia.                    */
-005926000000     /*-------------------------------------------------------------*/
+005924000000
+005925000000             RMVMSGD MSGID(USR0002) MSGF(&LIB/&OBJ)
+005926000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 005927000000
-005928000000             RMVMSGD MSGID(USR0003) MSGF(&LIB/&OBJ)
-005929000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-005930000000
-005931000000             ADDMSGD +
-005932000000                MSGID(USR0003) +
-005933000000                MSGF(&LIB/&OBJ) +
-005934000000                MSG( +
-005935000000'Si sta usando il controllo di sincronia.'                            +
-005936000000                ) +
-005937000000                SEV(0) +
-005938000000     /*   No replacement variables defined!                         */ +
+005928000000             ADDMSGD +
+005929000000                MSGID(USR0002) +
+005930000000                MSGF(&LIB/&OBJ) +
+005931000000                MSG( +
+005932000000'Impossibile reperire la lista dei formati record per il file &2/&1 .'+
+005933000000                ) +
+005934000000                SEV(0) +
+005935000000                FMT( +
+005936000000                    (*CHAR 10) +
+005937000000                    (*CHAR 10) +
+005938000000                ) +
 005939000000                ALROPT(*NO) +
 005940000000                CCSID(65535) +
 005941000000                /*  -EOF-  */
 005942000000
 005943000000     /*-------------------------------------------------------------*/
-005944000000     /*   Cmd-ADDMSGD für Message-ID :   USR0004                    */
-005945000000     /* Apertura file senza controllo di sincronia!                 */
+005944000000     /*   Cmd-ADDMSGD für Message-ID :   USR0003                    */
+005945000000     /* Si sta usando il controllo di sincronia.                    */
 005946000000     /*-------------------------------------------------------------*/
 005947000000
-005948000000             RMVMSGD MSGID(USR0004) MSGF(&LIB/&OBJ)
+005948000000             RMVMSGD MSGID(USR0003) MSGF(&LIB/&OBJ)
 005949000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 005950000000
 005951000000             ADDMSGD +
-005952000000                MSGID(USR0004) +
+005952000000                MSGID(USR0003) +
 005953000000                MSGF(&LIB/&OBJ) +
 005954000000                MSG( +
-005955000000'Apertura file senza controllo di sincronia!'                         +
+005955000000'Si sta usando il controllo di sincronia.'                            +
 005956000000                ) +
 005957000000                SEV(0) +
 005958000000     /*   No replacement variables defined!                         */ +
@@ -5961,233 +5961,233 @@
 005961000000                /*  -EOF-  */
 005962000000
 005963000000     /*-------------------------------------------------------------*/
-005964000000     /*   Cmd-ADDMSGD für Message-ID :   USR0005                    */
-005965000000     /* Il file &1 non puö essere aperto. Controlla la registrazion */
+005964000000     /*   Cmd-ADDMSGD für Message-ID :   USR0004                    */
+005965000000     /* Apertura file senza controllo di sincronia!                 */
 005966000000     /*-------------------------------------------------------------*/
 005967000000
-005968000000             RMVMSGD MSGID(USR0005) MSGF(&LIB/&OBJ)
+005968000000             RMVMSGD MSGID(USR0004) MSGF(&LIB/&OBJ)
 005969000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 005970000000
 005971000000             ADDMSGD +
-005972000000                MSGID(USR0005) +
+005972000000                MSGID(USR0004) +
 005973000000                MSGF(&LIB/&OBJ) +
 005974000000                MSG( +
-005975000000'Il file &1 non puö essere aperto. Controlla la registrazione del lavo-
-005976000000ro.'                                                                  +
-005977000000                ) +
-005978000000                SEV(0) +
-005979000000                FMT( +
-005980000000                    (*CHAR 10) +
-005981000000                ) +
-005982000000                ALROPT(*NO) +
-005983000000                CCSID(65535) +
-005984000000                /*  -EOF-  */
-005985000000
+005975000000'Apertura file senza controllo di sincronia!'                         +
+005976000000                ) +
+005977000000                SEV(0) +
+005978000000     /*   No replacement variables defined!                         */ +
+005979000000                ALROPT(*NO) +
+005980000000                CCSID(65535) +
+005981000000                /*  -EOF-  */
+005982000000
+005983000000     /*-------------------------------------------------------------*/
+005984000000     /*   Cmd-ADDMSGD für Message-ID :   USR0005                    */
+005985000000     /* Il file &1 non puö essere aperto. Controlla la registrazion */
 005986000000     /*-------------------------------------------------------------*/
-005987000000     /*   Cmd-ADDMSGD für Message-ID :   USR0006                    */
-005988000000     /* Non reperibili informazioni chiavi file &1 in libreria &2.  */
-005989000000     /*-------------------------------------------------------------*/
+005987000000
+005988000000             RMVMSGD MSGID(USR0005) MSGF(&LIB/&OBJ)
+005989000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 005990000000
-005991000000             RMVMSGD MSGID(USR0006) MSGF(&LIB/&OBJ)
-005992000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-005993000000
-005994000000             ADDMSGD +
-005995000000                MSGID(USR0006) +
-005996000000                MSGF(&LIB/&OBJ) +
-005997000000                MSG( +
-005998000000'Non reperibili informazioni chiavi file &1 in libreria &2.'          +
-005999000000                ) +
-006000000000                SEV(0) +
-006001000000                FMT( +
-006002000000                    (*CHAR 10) +
-006003000000                    (*CHAR 10) +
-006004000000                ) +
-006005000000                ALROPT(*NO) +
-006006000000                CCSID(65535) +
-006007000000                /*  -EOF-  */
-006008000000
+005991000000             ADDMSGD +
+005992000000                MSGID(USR0005) +
+005993000000                MSGF(&LIB/&OBJ) +
+005994000000                MSG( +
+005995000000'Il file &1 non puö essere aperto. Controlla la registrazione del lavo-
+005996000000ro.'                                                                  +
+005997000000                ) +
+005998000000                SEV(0) +
+005999000000                FMT( +
+006000000000                    (*CHAR 10) +
+006001000000                ) +
+006002000000                ALROPT(*NO) +
+006003000000                CCSID(65535) +
+006004000000                /*  -EOF-  */
+006005000000
+006006000000     /*-------------------------------------------------------------*/
+006007000000     /*   Cmd-ADDMSGD für Message-ID :   USR0006                    */
+006008000000     /* Non reperibili informazioni chiavi file &1 in libreria &2.  */
 006009000000     /*-------------------------------------------------------------*/
-006010000000     /*   Cmd-ADDMSGD für Message-ID :   USR0007                    */
-006011000000     /* Il file &2/&1 puö essere aperto solo in lettura. Modifica d */
-006012000000     /*-------------------------------------------------------------*/
+006010000000
+006011000000             RMVMSGD MSGID(USR0006) MSGF(&LIB/&OBJ)
+006012000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 006013000000
-006014000000             RMVMSGD MSGID(USR0007) MSGF(&LIB/&OBJ)
-006015000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-006016000000
-006017000000             ADDMSGD +
-006018000000                MSGID(USR0007) +
-006019000000                MSGF(&LIB/&OBJ) +
-006020000000                MSG( +
-006021000000'Il file &2/&1 puö essere aperto solo in lettura. Modifica dei dati no-
-006022000000n consentita.'                                                        +
-006023000000                ) +
-006024000000                SECLVL( +
-006025000000'&N &N Possibili cause:   &N &B 1. Sono state iniziate operazioni di D-
-006026000000EBUG con parametro UPPROD(*NO). &B 2. Il file contiene operatori JOIN -
-006027000000   &B 3. Sono attive regole di integritä referenziale ma i file non so-
-006028000000no sotto giornale. &B 4. E''stato definito un trigger ma il programma -
-006029000000trigger non ü nella lista delle librerie &B 5. Si opera con un file lo-
-006030000000gico multimembro.'                                                    +
-006031000000                ) +
-006032000000                SEV(0) +
-006033000000                FMT( +
-006034000000                    (*CHAR 10) +
-006035000000                    (*CHAR 10) +
-006036000000                ) +
-006037000000                ALROPT(*NO) +
-006038000000                CCSID(65535) +
-006039000000                /*  -EOF-  */
-006040000000
-006041000000     /*-------------------------------------------------------------*/
-006042000000     /*   Cmd-ADDMSGD für Message-ID :   USR0008                    */
-006043000000     /* Il file &2/&1 non ü stato trovato.                          */
-006044000000     /*-------------------------------------------------------------*/
-006045000000
-006046000000             RMVMSGD MSGID(USR0008) MSGF(&LIB/&OBJ)
-006047000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-006048000000
-006049000000             ADDMSGD +
-006050000000                MSGID(USR0008) +
-006051000000                MSGF(&LIB/&OBJ) +
-006052000000                MSG( +
-006053000000'Il file &2/&1 non ü stato trovato.'                                  +
-006054000000                ) +
-006055000000                SEV(0) +
-006056000000                FMT( +
-006057000000                    (*CHAR 10) +
-006058000000                    (*CHAR 10) +
-006059000000                ) +
-006060000000                ALROPT(*NO) +
-006061000000                CCSID(65535) +
-006062000000                /*  -EOF-  */
-006063000000
+006014000000             ADDMSGD +
+006015000000                MSGID(USR0006) +
+006016000000                MSGF(&LIB/&OBJ) +
+006017000000                MSG( +
+006018000000'Non reperibili informazioni chiavi file &1 in libreria &2.'          +
+006019000000                ) +
+006020000000                SEV(0) +
+006021000000                FMT( +
+006022000000                    (*CHAR 10) +
+006023000000                    (*CHAR 10) +
+006024000000                ) +
+006025000000                ALROPT(*NO) +
+006026000000                CCSID(65535) +
+006027000000                /*  -EOF-  */
+006028000000
+006029000000     /*-------------------------------------------------------------*/
+006030000000     /*   Cmd-ADDMSGD für Message-ID :   USR0007                    */
+006031000000     /* Il file &2/&1 puö essere aperto solo in lettura. Modifica d */
+006032000000     /*-------------------------------------------------------------*/
+006033000000
+006034000000             RMVMSGD MSGID(USR0007) MSGF(&LIB/&OBJ)
+006035000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+006036000000
+006037000000             ADDMSGD +
+006038000000                MSGID(USR0007) +
+006039000000                MSGF(&LIB/&OBJ) +
+006040000000                MSG( +
+006041000000'Il file &2/&1 puö essere aperto solo in lettura. Modifica dei dati no-
+006042000000n consentita.'                                                        +
+006043000000                ) +
+006044000000                SECLVL( +
+006045000000'&N &N Possibili cause:   &N &B 1. Sono state iniziate operazioni di D-
+006046000000EBUG con parametro UPPROD(*NO). &B 2. Il file contiene operatori JOIN -
+006047000000   &B 3. Sono attive regole di integritä referenziale ma i file non so-
+006048000000no sotto giornale. &B 4. E''stato definito un trigger ma il programma -
+006049000000trigger non ü nella lista delle librerie &B 5. Si opera con un file lo-
+006050000000gico multimembro.'                                                    +
+006051000000                ) +
+006052000000                SEV(0) +
+006053000000                FMT( +
+006054000000                    (*CHAR 10) +
+006055000000                    (*CHAR 10) +
+006056000000                ) +
+006057000000                ALROPT(*NO) +
+006058000000                CCSID(65535) +
+006059000000                /*  -EOF-  */
+006060000000
+006061000000     /*-------------------------------------------------------------*/
+006062000000     /*   Cmd-ADDMSGD für Message-ID :   USR0008                    */
+006063000000     /* Il file &2/&1 non ü stato trovato.                          */
 006064000000     /*-------------------------------------------------------------*/
-006065000000     /*   Cmd-ADDMSGD für Message-ID :   USR0009                    */
-006066000000     /* Errore nel reperimento descrizione oggetto del file  &2/&1. */
-006067000000     /*-------------------------------------------------------------*/
+006065000000
+006066000000             RMVMSGD MSGID(USR0008) MSGF(&LIB/&OBJ)
+006067000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 006068000000
-006069000000             RMVMSGD MSGID(USR0009) MSGF(&LIB/&OBJ)
-006070000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-006071000000
-006072000000             ADDMSGD +
-006073000000                MSGID(USR0009) +
-006074000000                MSGF(&LIB/&OBJ) +
-006075000000                MSG( +
-006076000000'Errore nel reperimento descrizione oggetto del file  &2/&1.'         +
-006077000000                ) +
-006078000000                SEV(0) +
-006079000000                FMT( +
-006080000000                    (*CHAR 10) +
-006081000000                    (*CHAR 10) +
-006082000000                ) +
-006083000000                ALROPT(*NO) +
-006084000000                CCSID(65535) +
-006085000000                /*  -EOF-  */
-006086000000
+006069000000             ADDMSGD +
+006070000000                MSGID(USR0008) +
+006071000000                MSGF(&LIB/&OBJ) +
+006072000000                MSG( +
+006073000000'Il file &2/&1 non ü stato trovato.'                                  +
+006074000000                ) +
+006075000000                SEV(0) +
+006076000000                FMT( +
+006077000000                    (*CHAR 10) +
+006078000000                    (*CHAR 10) +
+006079000000                ) +
+006080000000                ALROPT(*NO) +
+006081000000                CCSID(65535) +
+006082000000                /*  -EOF-  */
+006083000000
+006084000000     /*-------------------------------------------------------------*/
+006085000000     /*   Cmd-ADDMSGD für Message-ID :   USR0009                    */
+006086000000     /* Errore nel reperimento descrizione oggetto del file  &2/&1. */
 006087000000     /*-------------------------------------------------------------*/
-006088000000     /*   Cmd-ADDMSGD für Message-ID :   USR0010                    */
-006089000000     /* Libreria  &1 non trovato.                                   */
-006090000000     /*-------------------------------------------------------------*/
+006088000000
+006089000000             RMVMSGD MSGID(USR0009) MSGF(&LIB/&OBJ)
+006090000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 006091000000
-006092000000             RMVMSGD MSGID(USR0010) MSGF(&LIB/&OBJ)
-006093000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-006094000000
-006095000000             ADDMSGD +
-006096000000                MSGID(USR0010) +
-006097000000                MSGF(&LIB/&OBJ) +
-006098000000                MSG( +
-006099000000'Libreria  &1 non trovato.'                                           +
-006100000000                ) +
-006101000000                SEV(0) +
-006102000000                FMT( +
-006103000000                    (*CHAR 10) +
-006104000000                ) +
-006105000000                ALROPT(*NO) +
-006106000000                CCSID(65535) +
-006107000000                /*  -EOF-  */
-006108000000
-006109000000     /*-------------------------------------------------------------*/
-006110000000     /*   Cmd-ADDMSGD für Message-ID :   USR0011                    */
-006111000000     /* Il file non puö essere aperto. Ulteriori informazioni su me */
-006112000000     /*-------------------------------------------------------------*/
-006113000000
-006114000000             RMVMSGD MSGID(USR0011) MSGF(&LIB/&OBJ)
-006115000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-006116000000
-006117000000             ADDMSGD +
-006118000000                MSGID(USR0011) +
-006119000000                MSGF(&LIB/&OBJ) +
-006120000000                MSG( +
-006121000000'Il file non puö essere aperto. Ulteriori informazioni su messaggio di-
-006122000000 2Älivello o nella registrazione lavoro.'                             +
-006123000000                ) +
-006124000000                SECLVL( +
-006125000000'&N &N Testo errore. . :   &1'                                        +
-006126000000                ) +
-006127000000                SEV(0) +
-006128000000                FMT( +
-006129000000                    (*CHAR 256) +
-006130000000                ) +
-006131000000                ALROPT(*NO) +
-006132000000                CCSID(65535) +
-006133000000                /*  -EOF-  */
-006134000000
-006135000000     /*-------------------------------------------------------------*/
-006136000000     /*   Cmd-ADDMSGD für Message-ID :   USR0012                    */
-006137000000     /* Errore I/E  &2: &1                                          */
-006138000000     /*-------------------------------------------------------------*/
-006139000000
-006140000000             RMVMSGD MSGID(USR0012) MSGF(&LIB/&OBJ)
-006141000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-006142000000
-006143000000             ADDMSGD +
-006144000000                MSGID(USR0012) +
-006145000000                MSGF(&LIB/&OBJ) +
-006146000000                MSG( +
-006147000000'Errore I/E  &2: &1'                                                  +
-006148000000                ) +
-006149000000                SEV(0) +
-006150000000                FMT( +
-006151000000                    (*CHAR 256) +
-006152000000                    (*DEC 5 0) +
-006153000000                ) +
-006154000000                ALROPT(*NO) +
-006155000000                CCSID(65535) +
-006156000000                /*  -EOF-  */
-006157000000
+006092000000             ADDMSGD +
+006093000000                MSGID(USR0009) +
+006094000000                MSGF(&LIB/&OBJ) +
+006095000000                MSG( +
+006096000000'Errore nel reperimento descrizione oggetto del file  &2/&1.'         +
+006097000000                ) +
+006098000000                SEV(0) +
+006099000000                FMT( +
+006100000000                    (*CHAR 10) +
+006101000000                    (*CHAR 10) +
+006102000000                ) +
+006103000000                ALROPT(*NO) +
+006104000000                CCSID(65535) +
+006105000000                /*  -EOF-  */
+006106000000
+006107000000     /*-------------------------------------------------------------*/
+006108000000     /*   Cmd-ADDMSGD für Message-ID :   USR0010                    */
+006109000000     /* Libreria  &1 non trovato.                                   */
+006110000000     /*-------------------------------------------------------------*/
+006111000000
+006112000000             RMVMSGD MSGID(USR0010) MSGF(&LIB/&OBJ)
+006113000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+006114000000
+006115000000             ADDMSGD +
+006116000000                MSGID(USR0010) +
+006117000000                MSGF(&LIB/&OBJ) +
+006118000000                MSG( +
+006119000000'Libreria  &1 non trovato.'                                           +
+006120000000                ) +
+006121000000                SEV(0) +
+006122000000                FMT( +
+006123000000                    (*CHAR 10) +
+006124000000                ) +
+006125000000                ALROPT(*NO) +
+006126000000                CCSID(65535) +
+006127000000                /*  -EOF-  */
+006128000000
+006129000000     /*-------------------------------------------------------------*/
+006130000000     /*   Cmd-ADDMSGD für Message-ID :   USR0011                    */
+006131000000     /* Il file non puö essere aperto. Ulteriori informazioni su me */
+006132000000     /*-------------------------------------------------------------*/
+006133000000
+006134000000             RMVMSGD MSGID(USR0011) MSGF(&LIB/&OBJ)
+006135000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+006136000000
+006137000000             ADDMSGD +
+006138000000                MSGID(USR0011) +
+006139000000                MSGF(&LIB/&OBJ) +
+006140000000                MSG( +
+006141000000'Il file non puö essere aperto. Ulteriori informazioni su messaggio di-
+006142000000 2Älivello o nella registrazione lavoro.'                             +
+006143000000                ) +
+006144000000                SECLVL( +
+006145000000'&N &N Testo errore. . :   &1'                                        +
+006146000000                ) +
+006147000000                SEV(0) +
+006148000000                FMT( +
+006149000000                    (*CHAR 256) +
+006150000000                ) +
+006151000000                ALROPT(*NO) +
+006152000000                CCSID(65535) +
+006153000000                /*  -EOF-  */
+006154000000
+006155000000     /*-------------------------------------------------------------*/
+006156000000     /*   Cmd-ADDMSGD für Message-ID :   USR0012                    */
+006157000000     /* Errore I/E  &2: &1                                          */
 006158000000     /*-------------------------------------------------------------*/
-006159000000     /*   Cmd-ADDMSGD für Message-ID :   USR0013                    */
-006160000000     /* Richiesta SQL in corso ..                                   */
-006161000000     /*-------------------------------------------------------------*/
+006159000000
+006160000000             RMVMSGD MSGID(USR0012) MSGF(&LIB/&OBJ)
+006161000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 006162000000
-006163000000             RMVMSGD MSGID(USR0013) MSGF(&LIB/&OBJ)
-006164000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-006165000000
-006166000000             ADDMSGD +
-006167000000                MSGID(USR0013) +
-006168000000                MSGF(&LIB/&OBJ) +
-006169000000                MSG( +
-006170000000'Richiesta SQL in corso ..'                                           +
-006171000000                ) +
-006172000000                SEV(0) +
-006173000000     /*   No replacement variables defined!                         */ +
+006163000000             ADDMSGD +
+006164000000                MSGID(USR0012) +
+006165000000                MSGF(&LIB/&OBJ) +
+006166000000                MSG( +
+006167000000'Errore I/E  &2: &1'                                                  +
+006168000000                ) +
+006169000000                SEV(0) +
+006170000000                FMT( +
+006171000000                    (*CHAR 256) +
+006172000000                    (*DEC 5 0) +
+006173000000                ) +
 006174000000                ALROPT(*NO) +
 006175000000                CCSID(65535) +
 006176000000                /*  -EOF-  */
 006177000000
 006178000000     /*-------------------------------------------------------------*/
-006179000000     /*   Cmd-ADDMSGD für Message-ID :   USR0014                    */
-006180000000     /* Sto conteggiando il nÄ di rec.selezionati...                */
+006179000000     /*   Cmd-ADDMSGD für Message-ID :   USR0013                    */
+006180000000     /* Richiesta SQL in corso ..                                   */
 006181000000     /*-------------------------------------------------------------*/
 006182000000
-006183000000             RMVMSGD MSGID(USR0014) MSGF(&LIB/&OBJ)
+006183000000             RMVMSGD MSGID(USR0013) MSGF(&LIB/&OBJ)
 006184000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 006185000000
 006186000000             ADDMSGD +
-006187000000                MSGID(USR0014) +
+006187000000                MSGID(USR0013) +
 006188000000                MSGF(&LIB/&OBJ) +
 006189000000                MSG( +
-006190000000'Sto conteggiando il nÄ di rec.selezionati...'                        +
+006190000000'Richiesta SQL in corso ..'                                           +
 006191000000                ) +
 006192000000                SEV(0) +
 006193000000     /*   No replacement variables defined!                         */ +
@@ -6196,18 +6196,18 @@
 006196000000                /*  -EOF-  */
 006197000000
 006198000000     /*-------------------------------------------------------------*/
-006199000000     /*   Cmd-ADDMSGD für Message-ID :   USR0143                    */
-006200000000     /* - Scelta del membro -                                       */
+006199000000     /*   Cmd-ADDMSGD für Message-ID :   USR0014                    */
+006200000000     /* Sto conteggiando il nÄ di rec.selezionati...                */
 006201000000     /*-------------------------------------------------------------*/
 006202000000
-006203000000             RMVMSGD MSGID(USR0143) MSGF(&LIB/&OBJ)
+006203000000             RMVMSGD MSGID(USR0014) MSGF(&LIB/&OBJ)
 006204000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 006205000000
 006206000000             ADDMSGD +
-006207000000                MSGID(USR0143) +
+006207000000                MSGID(USR0014) +
 006208000000                MSGF(&LIB/&OBJ) +
 006209000000                MSG( +
-006210000000'- Scelta del membro -'                                               +
+006210000000'Sto conteggiando il nÄ di rec.selezionati...'                        +
 006211000000                ) +
 006212000000                SEV(0) +
 006213000000     /*   No replacement variables defined!                         */ +
@@ -6216,105 +6216,105 @@
 006216000000                /*  -EOF-  */
 006217000000
 006218000000     /*-------------------------------------------------------------*/
-006219000000     /*   Cmd-ADDMSGD für Message-ID :   USR1000                    */
-006220000000     /* Accesso non consentito a file &2/&1, membro &3.             */
+006219000000     /*   Cmd-ADDMSGD für Message-ID :   USR0143                    */
+006220000000     /* - Scelta del membro -                                       */
 006221000000     /*-------------------------------------------------------------*/
 006222000000
-006223000000             RMVMSGD MSGID(USR1000) MSGF(&LIB/&OBJ)
+006223000000             RMVMSGD MSGID(USR0143) MSGF(&LIB/&OBJ)
 006224000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 006225000000
 006226000000             ADDMSGD +
-006227000000                MSGID(USR1000) +
+006227000000                MSGID(USR0143) +
 006228000000                MSGF(&LIB/&OBJ) +
 006229000000                MSG( +
-006230000000'Accesso non consentito a file &2/&1, membro &3.'                     +
+006230000000'- Scelta del membro -'                                               +
 006231000000                ) +
 006232000000                SEV(0) +
-006233000000                FMT( +
-006234000000                    (*CHAR 10) +
-006235000000                    (*CHAR 10) +
-006236000000                    (*CHAR 10) +
-006237000000                ) +
-006238000000                ALROPT(*NO) +
-006239000000                CCSID(65535) +
-006240000000                /*  -EOF-  */
-006241000000
-006242000000     /*-------------------------------------------------------------*/
-006243000000     /*   Cmd-ADDMSGD für Message-ID :   USR8100                    */
-006244000000     /* Elaborazione interrotta da &1                               */
-006245000000     /*-------------------------------------------------------------*/
-006246000000
-006247000000             RMVMSGD MSGID(USR8100) MSGF(&LIB/&OBJ)
-006248000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-006249000000
-006250000000             ADDMSGD +
-006251000000                MSGID(USR8100) +
-006252000000                MSGF(&LIB/&OBJ) +
-006253000000                MSG( +
-006254000000'Elaborazione interrotta da &1 '                                      +
-006255000000                ) +
-006256000000                SEV(0) +
-006257000000                FMT( +
-006258000000                    (*CHAR 10) +
-006259000000                ) +
-006260000000                ALROPT(*NO) +
-006261000000                CCSID(65535) +
-006262000000                /*  -EOF-  */
-006263000000
-006264000000     /*-------------------------------------------------------------*/
-006265000000     /*   Cmd-ADDMSGD für Message-ID :   USR8101                    */
-006266000000     /* Inizializzazione in corso                                   */
-006267000000     /*-------------------------------------------------------------*/
-006268000000
-006269000000             RMVMSGD MSGID(USR8101) MSGF(&LIB/&OBJ)
-006270000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-006271000000
-006272000000             ADDMSGD +
-006273000000                MSGID(USR8101) +
-006274000000                MSGF(&LIB/&OBJ) +
-006275000000                MSG( +
-006276000000'Inizializzazione in corso'                                           +
-006277000000                ) +
-006278000000                SEV(0) +
-006279000000     /*   No replacement variables defined!                         */ +
+006233000000     /*   No replacement variables defined!                         */ +
+006234000000                ALROPT(*NO) +
+006235000000                CCSID(65535) +
+006236000000                /*  -EOF-  */
+006237000000
+006238000000     /*-------------------------------------------------------------*/
+006239000000     /*   Cmd-ADDMSGD für Message-ID :   USR1000                    */
+006240000000     /* Accesso non consentito a file &2/&1, membro &3.             */
+006241000000     /*-------------------------------------------------------------*/
+006242000000
+006243000000             RMVMSGD MSGID(USR1000) MSGF(&LIB/&OBJ)
+006244000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+006245000000
+006246000000             ADDMSGD +
+006247000000                MSGID(USR1000) +
+006248000000                MSGF(&LIB/&OBJ) +
+006249000000                MSG( +
+006250000000'Accesso non consentito a file &2/&1, membro &3.'                     +
+006251000000                ) +
+006252000000                SEV(0) +
+006253000000                FMT( +
+006254000000                    (*CHAR 10) +
+006255000000                    (*CHAR 10) +
+006256000000                    (*CHAR 10) +
+006257000000                ) +
+006258000000                ALROPT(*NO) +
+006259000000                CCSID(65535) +
+006260000000                /*  -EOF-  */
+006261000000
+006262000000     /*-------------------------------------------------------------*/
+006263000000     /*   Cmd-ADDMSGD für Message-ID :   USR8100                    */
+006264000000     /* Elaborazione interrotta da &1                               */
+006265000000     /*-------------------------------------------------------------*/
+006266000000
+006267000000             RMVMSGD MSGID(USR8100) MSGF(&LIB/&OBJ)
+006268000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+006269000000
+006270000000             ADDMSGD +
+006271000000                MSGID(USR8100) +
+006272000000                MSGF(&LIB/&OBJ) +
+006273000000                MSG( +
+006274000000'Elaborazione interrotta da &1 '                                      +
+006275000000                ) +
+006276000000                SEV(0) +
+006277000000                FMT( +
+006278000000                    (*CHAR 10) +
+006279000000                ) +
 006280000000                ALROPT(*NO) +
 006281000000                CCSID(65535) +
 006282000000                /*  -EOF-  */
 006283000000
 006284000000     /*-------------------------------------------------------------*/
-006285000000     /*   Cmd-ADDMSGD für Message-ID :   USR8102                    */
-006286000000     /* Sei pregato di posizionare il cursore sul record desiderato */
+006285000000     /*   Cmd-ADDMSGD für Message-ID :   USR8101                    */
+006286000000     /* Inizializzazione in corso                                   */
 006287000000     /*-------------------------------------------------------------*/
 006288000000
-006289000000             RMVMSGD MSGID(USR8102) MSGF(&LIB/&OBJ)
+006289000000             RMVMSGD MSGID(USR8101) MSGF(&LIB/&OBJ)
 006290000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 006291000000
 006292000000             ADDMSGD +
-006293000000                MSGID(USR8102) +
+006293000000                MSGID(USR8101) +
 006294000000                MSGF(&LIB/&OBJ) +
 006295000000                MSG( +
-006296000000'Sei pregato di posizionare il cursore sul record desiderato e ripeter-
-006297000000e la richiesta.'                                                      +
-006298000000                ) +
-006299000000                SEV(0) +
-006300000000     /*   No replacement variables defined!                         */ +
-006301000000                ALROPT(*NO) +
-006302000000                CCSID(65535) +
-006303000000                /*  -EOF-  */
-006304000000
-006305000000     /*-------------------------------------------------------------*/
-006306000000     /*   Cmd-ADDMSGD für Message-ID :   USR8103                    */
-006307000000     /* Non ü possibile chiudere il file ora.                       */
-006308000000     /*-------------------------------------------------------------*/
-006309000000
-006310000000             RMVMSGD MSGID(USR8103) MSGF(&LIB/&OBJ)
-006311000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-006312000000
-006313000000             ADDMSGD +
-006314000000                MSGID(USR8103) +
-006315000000                MSGF(&LIB/&OBJ) +
-006316000000                MSG( +
-006317000000'Non ü possibile chiudere il file ora.'                               +
+006296000000'Inizializzazione in corso'                                           +
+006297000000                ) +
+006298000000                SEV(0) +
+006299000000     /*   No replacement variables defined!                         */ +
+006300000000                ALROPT(*NO) +
+006301000000                CCSID(65535) +
+006302000000                /*  -EOF-  */
+006303000000
+006304000000     /*-------------------------------------------------------------*/
+006305000000     /*   Cmd-ADDMSGD für Message-ID :   USR8102                    */
+006306000000     /* Sei pregato di posizionare il cursore sul record desiderato */
+006307000000     /*-------------------------------------------------------------*/
+006308000000
+006309000000             RMVMSGD MSGID(USR8102) MSGF(&LIB/&OBJ)
+006310000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+006311000000
+006312000000             ADDMSGD +
+006313000000                MSGID(USR8102) +
+006314000000                MSGF(&LIB/&OBJ) +
+006315000000                MSG( +
+006316000000'Sei pregato di posizionare il cursore sul record desiderato e ripeter-
+006317000000e la richiesta.'                                                      +
 006318000000                ) +
 006319000000                SEV(0) +
 006320000000     /*   No replacement variables defined!                         */ +
@@ -6323,198 +6323,198 @@
 006323000000                /*  -EOF-  */
 006324000000
 006325000000     /*-------------------------------------------------------------*/
-006326000000     /*   Cmd-ADDMSGD für Message-ID :   USR8104                    */
-006327000000     /* Reperimento delle descrizioni dei campi del file &2/&1      */
+006326000000     /*   Cmd-ADDMSGD für Message-ID :   USR8103                    */
+006327000000     /* Non ü possibile chiudere il file ora.                       */
 006328000000     /*-------------------------------------------------------------*/
 006329000000
-006330000000             RMVMSGD MSGID(USR8104) MSGF(&LIB/&OBJ)
+006330000000             RMVMSGD MSGID(USR8103) MSGF(&LIB/&OBJ)
 006331000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 006332000000
 006333000000             ADDMSGD +
-006334000000                MSGID(USR8104) +
+006334000000                MSGID(USR8103) +
 006335000000                MSGF(&LIB/&OBJ) +
 006336000000                MSG( +
-006337000000'Reperimento delle descrizioni dei campi del file &2/&1'              +
+006337000000'Non ü possibile chiudere il file ora.'                               +
 006338000000                ) +
 006339000000                SEV(0) +
-006340000000                FMT( +
-006341000000                    (*CHAR 10) +
-006342000000                    (*CHAR 10) +
-006343000000                ) +
-006344000000                ALROPT(*NO) +
-006345000000                CCSID(65535) +
-006346000000                /*  -EOF-  */
-006347000000
+006340000000     /*   No replacement variables defined!                         */ +
+006341000000                ALROPT(*NO) +
+006342000000                CCSID(65535) +
+006343000000                /*  -EOF-  */
+006344000000
+006345000000     /*-------------------------------------------------------------*/
+006346000000     /*   Cmd-ADDMSGD für Message-ID :   USR8104                    */
+006347000000     /* Reperimento delle descrizioni dei campi del file &2/&1      */
 006348000000     /*-------------------------------------------------------------*/
-006349000000     /*   Cmd-ADDMSGD für Message-ID :   USR8105                    */
-006350000000     /* Reperimento formati record del file &2/&1.                  */
-006351000000     /*-------------------------------------------------------------*/
+006349000000
+006350000000             RMVMSGD MSGID(USR8104) MSGF(&LIB/&OBJ)
+006351000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 006352000000
-006353000000             RMVMSGD MSGID(USR8105) MSGF(&LIB/&OBJ)
-006354000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-006355000000
-006356000000             ADDMSGD +
-006357000000                MSGID(USR8105) +
-006358000000                MSGF(&LIB/&OBJ) +
-006359000000                MSG( +
-006360000000'Reperimento formati record del file &2/&1.'                          +
-006361000000                ) +
-006362000000                SEV(0) +
-006363000000                FMT( +
-006364000000                    (*CHAR 10) +
-006365000000                    (*CHAR 10) +
-006366000000                ) +
-006367000000                ALROPT(*NO) +
-006368000000                CCSID(65535) +
-006369000000                /*  -EOF-  */
-006370000000
+006353000000             ADDMSGD +
+006354000000                MSGID(USR8104) +
+006355000000                MSGF(&LIB/&OBJ) +
+006356000000                MSG( +
+006357000000'Reperimento delle descrizioni dei campi del file &2/&1'              +
+006358000000                ) +
+006359000000                SEV(0) +
+006360000000                FMT( +
+006361000000                    (*CHAR 10) +
+006362000000                    (*CHAR 10) +
+006363000000                ) +
+006364000000                ALROPT(*NO) +
+006365000000                CCSID(65535) +
+006366000000                /*  -EOF-  */
+006367000000
+006368000000     /*-------------------------------------------------------------*/
+006369000000     /*   Cmd-ADDMSGD für Message-ID :   USR8105                    */
+006370000000     /* Reperimento formati record del file &2/&1.                  */
 006371000000     /*-------------------------------------------------------------*/
-006372000000     /*   Cmd-ADDMSGD für Message-ID :   USR8106                    */
-006373000000     /* Reperimento degli attributi di rete                         */
-006374000000     /*-------------------------------------------------------------*/
+006372000000
+006373000000             RMVMSGD MSGID(USR8105) MSGF(&LIB/&OBJ)
+006374000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 006375000000
-006376000000             RMVMSGD MSGID(USR8106) MSGF(&LIB/&OBJ)
-006377000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-006378000000
-006379000000             ADDMSGD +
-006380000000                MSGID(USR8106) +
-006381000000                MSGF(&LIB/&OBJ) +
-006382000000                MSG( +
-006383000000'Reperimento degli attributi di rete'                                 +
-006384000000                ) +
-006385000000                SEV(0) +
-006386000000     /*   No replacement variables defined!                         */ +
+006376000000             ADDMSGD +
+006377000000                MSGID(USR8105) +
+006378000000                MSGF(&LIB/&OBJ) +
+006379000000                MSG( +
+006380000000'Reperimento formati record del file &2/&1.'                          +
+006381000000                ) +
+006382000000                SEV(0) +
+006383000000                FMT( +
+006384000000                    (*CHAR 10) +
+006385000000                    (*CHAR 10) +
+006386000000                ) +
 006387000000                ALROPT(*NO) +
 006388000000                CCSID(65535) +
 006389000000                /*  -EOF-  */
 006390000000
 006391000000     /*-------------------------------------------------------------*/
-006392000000     /*   Cmd-ADDMSGD für Message-ID :   USR8107                    */
-006393000000     /* Reperimento attributi dell'oggetto &2/&1.                   */
+006392000000     /*   Cmd-ADDMSGD für Message-ID :   USR8106                    */
+006393000000     /* Reperimento degli attributi di rete                         */
 006394000000     /*-------------------------------------------------------------*/
 006395000000
-006396000000             RMVMSGD MSGID(USR8107) MSGF(&LIB/&OBJ)
+006396000000             RMVMSGD MSGID(USR8106) MSGF(&LIB/&OBJ)
 006397000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 006398000000
 006399000000             ADDMSGD +
-006400000000                MSGID(USR8107) +
+006400000000                MSGID(USR8106) +
 006401000000                MSGF(&LIB/&OBJ) +
 006402000000                MSG( +
-006403000000'Reperimento attributi dell''oggetto &2/&1.'                          +
+006403000000'Reperimento degli attributi di rete'                                 +
 006404000000                ) +
 006405000000                SEV(0) +
-006406000000                FMT( +
-006407000000                    (*CHAR 10) +
-006408000000                    (*CHAR 10) +
-006409000000                    (*CHAR 10) +
-006410000000                ) +
-006411000000                ALROPT(*NO) +
-006412000000                CCSID(65535) +
-006413000000                /*  -EOF-  */
-006414000000
-006415000000     /*-------------------------------------------------------------*/
-006416000000     /*   Cmd-ADDMSGD für Message-ID :   USR8108                    */
-006417000000     /* Il campo '&1' non esiste nel file &3/&2                     */
-006418000000     /*-------------------------------------------------------------*/
-006419000000
-006420000000             RMVMSGD MSGID(USR8108) MSGF(&LIB/&OBJ)
-006421000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-006422000000
-006423000000             ADDMSGD +
-006424000000                MSGID(USR8108) +
-006425000000                MSGF(&LIB/&OBJ) +
-006426000000                MSG( +
-006427000000'Il campo ''&1'' non esiste nel file &3/&2'                           +
-006428000000                ) +
-006429000000                SEV(0) +
-006430000000                FMT( +
-006431000000                    (*CHAR 10) +
-006432000000                    (*CHAR 10) +
-006433000000                    (*CHAR 10) +
-006434000000                ) +
-006435000000                ALROPT(*NO) +
-006436000000                CCSID(65535) +
-006437000000                /*  -EOF-  */
-006438000000
-006439000000     /*-------------------------------------------------------------*/
-006440000000     /*   Cmd-ADDMSGD für Message-ID :   USR8109                    */
-006441000000     /* Reperimento descrizione del membro &3 del file &2/&1.       */
-006442000000     /*-------------------------------------------------------------*/
-006443000000
-006444000000             RMVMSGD MSGID(USR8109) MSGF(&LIB/&OBJ)
-006445000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-006446000000
-006447000000             ADDMSGD +
-006448000000                MSGID(USR8109) +
-006449000000                MSGF(&LIB/&OBJ) +
-006450000000                MSG( +
-006451000000'Reperimento descrizione del membro &3 del file &2/&1.'               +
-006452000000                ) +
-006453000000                SEV(0) +
-006454000000                FMT( +
-006455000000                    (*CHAR 10) +
-006456000000                    (*CHAR 10) +
-006457000000                    (*CHAR 10) +
-006458000000                ) +
-006459000000                ALROPT(*NO) +
-006460000000                CCSID(65535) +
-006461000000                /*  -EOF-  */
-006462000000
-006463000000     /*-------------------------------------------------------------*/
-006464000000     /*   Cmd-ADDMSGD für Message-ID :   USR8110                    */
-006465000000     /* Scelta  '&1' non valida.                                    */
-006466000000     /*-------------------------------------------------------------*/
-006467000000
-006468000000             RMVMSGD MSGID(USR8110) MSGF(&LIB/&OBJ)
-006469000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-006470000000
-006471000000             ADDMSGD +
-006472000000                MSGID(USR8110) +
-006473000000                MSGF(&LIB/&OBJ) +
-006474000000                MSG( +
-006475000000'Scelta  ''&1'' non valida.'                                          +
-006476000000                ) +
-006477000000                SEV(0) +
-006478000000                FMT( +
-006479000000                    (*CHAR 10) +
-006480000000                ) +
-006481000000                ALROPT(*NO) +
-006482000000                CCSID(65535) +
-006483000000                /*  -EOF-  */
-006484000000
-006485000000     /*-------------------------------------------------------------*/
-006486000000     /*   Cmd-ADDMSGD für Message-ID :   USR8111                    */
-006487000000     /* Tutti i record sono stati elaborati.                        */
-006488000000     /*-------------------------------------------------------------*/
-006489000000
-006490000000             RMVMSGD MSGID(USR8111) MSGF(&LIB/&OBJ)
-006491000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-006492000000
-006493000000             ADDMSGD +
-006494000000                MSGID(USR8111) +
-006495000000                MSGF(&LIB/&OBJ) +
-006496000000                MSG( +
-006497000000'Tutti i record sono stati elaborati.'                                +
-006498000000                ) +
-006499000000                SEV(0) +
-006500000000     /*   No replacement variables defined!                         */ +
+006406000000     /*   No replacement variables defined!                         */ +
+006407000000                ALROPT(*NO) +
+006408000000                CCSID(65535) +
+006409000000                /*  -EOF-  */
+006410000000
+006411000000     /*-------------------------------------------------------------*/
+006412000000     /*   Cmd-ADDMSGD für Message-ID :   USR8107                    */
+006413000000     /* Reperimento attributi dell'oggetto &2/&1.                   */
+006414000000     /*-------------------------------------------------------------*/
+006415000000
+006416000000             RMVMSGD MSGID(USR8107) MSGF(&LIB/&OBJ)
+006417000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+006418000000
+006419000000             ADDMSGD +
+006420000000                MSGID(USR8107) +
+006421000000                MSGF(&LIB/&OBJ) +
+006422000000                MSG( +
+006423000000'Reperimento attributi dell''oggetto &2/&1.'                          +
+006424000000                ) +
+006425000000                SEV(0) +
+006426000000                FMT( +
+006427000000                    (*CHAR 10) +
+006428000000                    (*CHAR 10) +
+006429000000                    (*CHAR 10) +
+006430000000                ) +
+006431000000                ALROPT(*NO) +
+006432000000                CCSID(65535) +
+006433000000                /*  -EOF-  */
+006434000000
+006435000000     /*-------------------------------------------------------------*/
+006436000000     /*   Cmd-ADDMSGD für Message-ID :   USR8108                    */
+006437000000     /* Il campo '&1' non esiste nel file &3/&2                     */
+006438000000     /*-------------------------------------------------------------*/
+006439000000
+006440000000             RMVMSGD MSGID(USR8108) MSGF(&LIB/&OBJ)
+006441000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+006442000000
+006443000000             ADDMSGD +
+006444000000                MSGID(USR8108) +
+006445000000                MSGF(&LIB/&OBJ) +
+006446000000                MSG( +
+006447000000'Il campo ''&1'' non esiste nel file &3/&2'                           +
+006448000000                ) +
+006449000000                SEV(0) +
+006450000000                FMT( +
+006451000000                    (*CHAR 10) +
+006452000000                    (*CHAR 10) +
+006453000000                    (*CHAR 10) +
+006454000000                ) +
+006455000000                ALROPT(*NO) +
+006456000000                CCSID(65535) +
+006457000000                /*  -EOF-  */
+006458000000
+006459000000     /*-------------------------------------------------------------*/
+006460000000     /*   Cmd-ADDMSGD für Message-ID :   USR8109                    */
+006461000000     /* Reperimento descrizione del membro &3 del file &2/&1.       */
+006462000000     /*-------------------------------------------------------------*/
+006463000000
+006464000000             RMVMSGD MSGID(USR8109) MSGF(&LIB/&OBJ)
+006465000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+006466000000
+006467000000             ADDMSGD +
+006468000000                MSGID(USR8109) +
+006469000000                MSGF(&LIB/&OBJ) +
+006470000000                MSG( +
+006471000000'Reperimento descrizione del membro &3 del file &2/&1.'               +
+006472000000                ) +
+006473000000                SEV(0) +
+006474000000                FMT( +
+006475000000                    (*CHAR 10) +
+006476000000                    (*CHAR 10) +
+006477000000                    (*CHAR 10) +
+006478000000                ) +
+006479000000                ALROPT(*NO) +
+006480000000                CCSID(65535) +
+006481000000                /*  -EOF-  */
+006482000000
+006483000000     /*-------------------------------------------------------------*/
+006484000000     /*   Cmd-ADDMSGD für Message-ID :   USR8110                    */
+006485000000     /* Scelta  '&1' non valida.                                    */
+006486000000     /*-------------------------------------------------------------*/
+006487000000
+006488000000             RMVMSGD MSGID(USR8110) MSGF(&LIB/&OBJ)
+006489000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+006490000000
+006491000000             ADDMSGD +
+006492000000                MSGID(USR8110) +
+006493000000                MSGF(&LIB/&OBJ) +
+006494000000                MSG( +
+006495000000'Scelta  ''&1'' non valida.'                                          +
+006496000000                ) +
+006497000000                SEV(0) +
+006498000000                FMT( +
+006499000000                    (*CHAR 10) +
+006500000000                ) +
 006501000000                ALROPT(*NO) +
 006502000000                CCSID(65535) +
 006503000000                /*  -EOF-  */
 006504000000
 006505000000     /*-------------------------------------------------------------*/
-006506000000     /*   Cmd-ADDMSGD für Message-ID :   USR8112                    */
-006507000000     /* Comando convalidato.                                        */
+006506000000     /*   Cmd-ADDMSGD für Message-ID :   USR8111                    */
+006507000000     /* Tutti i record sono stati elaborati.                        */
 006508000000     /*-------------------------------------------------------------*/
 006509000000
-006510000000             RMVMSGD MSGID(USR8112) MSGF(&LIB/&OBJ)
+006510000000             RMVMSGD MSGID(USR8111) MSGF(&LIB/&OBJ)
 006511000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 006512000000
 006513000000             ADDMSGD +
-006514000000                MSGID(USR8112) +
+006514000000                MSGID(USR8111) +
 006515000000                MSGF(&LIB/&OBJ) +
 006516000000                MSG( +
-006517000000'Comando convalidato.'                                                +
+006517000000'Tutti i record sono stati elaborati.'                                +
 006518000000                ) +
 006519000000                SEV(0) +
 006520000000     /*   No replacement variables defined!                         */ +
@@ -6523,60 +6523,60 @@
 006523000000                /*  -EOF-  */
 006524000000
 006525000000     /*-------------------------------------------------------------*/
-006526000000     /*   Cmd-ADDMSGD für Message-ID :   USR8113                    */
-006527000000     /* Comando interno &1 non valido.                              */
+006526000000     /*   Cmd-ADDMSGD für Message-ID :   USR8112                    */
+006527000000     /* Comando convalidato.                                        */
 006528000000     /*-------------------------------------------------------------*/
 006529000000
-006530000000             RMVMSGD MSGID(USR8113) MSGF(&LIB/&OBJ)
+006530000000             RMVMSGD MSGID(USR8112) MSGF(&LIB/&OBJ)
 006531000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 006532000000
 006533000000             ADDMSGD +
-006534000000                MSGID(USR8113) +
+006534000000                MSGID(USR8112) +
 006535000000                MSGF(&LIB/&OBJ) +
 006536000000                MSG( +
-006537000000'Comando interno &1 non valido.'                                      +
+006537000000'Comando convalidato.'                                                +
 006538000000                ) +
 006539000000                SEV(0) +
-006540000000                FMT( +
-006541000000                    (*CHAR 10) +
-006542000000                ) +
-006543000000                ALROPT(*NO) +
-006544000000                CCSID(65535) +
-006545000000                /*  -EOF-  */
-006546000000
-006547000000     /*-------------------------------------------------------------*/
-006548000000     /*   Cmd-ADDMSGD für Message-ID :   USR8114                    */
-006549000000     /* Creazione programma RPG  ...                                */
-006550000000     /*-------------------------------------------------------------*/
-006551000000
-006552000000             RMVMSGD MSGID(USR8114) MSGF(&LIB/&OBJ)
-006553000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-006554000000
-006555000000             ADDMSGD +
-006556000000                MSGID(USR8114) +
-006557000000                MSGF(&LIB/&OBJ) +
-006558000000                MSG( +
-006559000000'Creazione programma RPG  ...'                                        +
-006560000000                ) +
-006561000000                SEV(0) +
-006562000000     /*   No replacement variables defined!                         */ +
+006540000000     /*   No replacement variables defined!                         */ +
+006541000000                ALROPT(*NO) +
+006542000000                CCSID(65535) +
+006543000000                /*  -EOF-  */
+006544000000
+006545000000     /*-------------------------------------------------------------*/
+006546000000     /*   Cmd-ADDMSGD für Message-ID :   USR8113                    */
+006547000000     /* Comando interno &1 non valido.                              */
+006548000000     /*-------------------------------------------------------------*/
+006549000000
+006550000000             RMVMSGD MSGID(USR8113) MSGF(&LIB/&OBJ)
+006551000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+006552000000
+006553000000             ADDMSGD +
+006554000000                MSGID(USR8113) +
+006555000000                MSGF(&LIB/&OBJ) +
+006556000000                MSG( +
+006557000000'Comando interno &1 non valido.'                                      +
+006558000000                ) +
+006559000000                SEV(0) +
+006560000000                FMT( +
+006561000000                    (*CHAR 10) +
+006562000000                ) +
 006563000000                ALROPT(*NO) +
 006564000000                CCSID(65535) +
 006565000000                /*  -EOF-  */
 006566000000
 006567000000     /*-------------------------------------------------------------*/
-006568000000     /*   Cmd-ADDMSGD für Message-ID :   USR8115                    */
-006569000000     /* Si sta mostrando l'inizio dei dati                          */
+006568000000     /*   Cmd-ADDMSGD für Message-ID :   USR8114                    */
+006569000000     /* Creazione programma RPG  ...                                */
 006570000000     /*-------------------------------------------------------------*/
 006571000000
-006572000000             RMVMSGD MSGID(USR8115) MSGF(&LIB/&OBJ)
+006572000000             RMVMSGD MSGID(USR8114) MSGF(&LIB/&OBJ)
 006573000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 006574000000
 006575000000             ADDMSGD +
-006576000000                MSGID(USR8115) +
+006576000000                MSGID(USR8114) +
 006577000000                MSGF(&LIB/&OBJ) +
 006578000000                MSG( +
-006579000000'Si sta mostrando l''inizio dei dati'                                 +
+006579000000'Creazione programma RPG  ...'                                        +
 006580000000                ) +
 006581000000                SEV(0) +
 006582000000     /*   No replacement variables defined!                         */ +
@@ -6585,18 +6585,18 @@
 006585000000                /*  -EOF-  */
 006586000000
 006587000000     /*-------------------------------------------------------------*/
-006588000000     /*   Cmd-ADDMSGD für Message-ID :   USR8116                    */
-006589000000     /* Si sta mostrando la fine dei dati.                          */
+006588000000     /*   Cmd-ADDMSGD für Message-ID :   USR8115                    */
+006589000000     /* Si sta mostrando l'inizio dei dati                          */
 006590000000     /*-------------------------------------------------------------*/
 006591000000
-006592000000             RMVMSGD MSGID(USR8116) MSGF(&LIB/&OBJ)
+006592000000             RMVMSGD MSGID(USR8115) MSGF(&LIB/&OBJ)
 006593000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 006594000000
 006595000000             ADDMSGD +
-006596000000                MSGID(USR8116) +
+006596000000                MSGID(USR8115) +
 006597000000                MSGF(&LIB/&OBJ) +
 006598000000                MSG( +
-006599000000'Si sta mostrando la fine dei dati.'                                  +
+006599000000'Si sta mostrando l''inizio dei dati'                                 +
 006600000000                ) +
 006601000000                SEV(0) +
 006602000000     /*   No replacement variables defined!                         */ +
@@ -6605,39 +6605,39 @@
 006605000000                /*  -EOF-  */
 006606000000
 006607000000     /*-------------------------------------------------------------*/
-006608000000     /*   Cmd-ADDMSGD für Message-ID :   USR8117                    */
-006609000000     /* Si prega di posizionare il cursore sulla colonna scelta e r */
+006608000000     /*   Cmd-ADDMSGD für Message-ID :   USR8116                    */
+006609000000     /* Si sta mostrando la fine dei dati.                          */
 006610000000     /*-------------------------------------------------------------*/
 006611000000
-006612000000             RMVMSGD MSGID(USR8117) MSGF(&LIB/&OBJ)
+006612000000             RMVMSGD MSGID(USR8116) MSGF(&LIB/&OBJ)
 006613000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 006614000000
 006615000000             ADDMSGD +
-006616000000                MSGID(USR8117) +
+006616000000                MSGID(USR8116) +
 006617000000                MSGF(&LIB/&OBJ) +
 006618000000                MSG( +
-006619000000'Si prega di posizionare il cursore sulla colonna scelta e ripetere la-
-006620000000 richiesta.'                                                          +
-006621000000                ) +
-006622000000                SEV(0) +
-006623000000     /*   No replacement variables defined!                         */ +
-006624000000                ALROPT(*NO) +
-006625000000                CCSID(65535) +
-006626000000                /*  -EOF-  */
-006627000000
-006628000000     /*-------------------------------------------------------------*/
-006629000000     /*   Cmd-ADDMSGD für Message-ID :   USR8118                    */
-006630000000     /* Tabella per contrass.vuota                                  */
-006631000000     /*-------------------------------------------------------------*/
-006632000000
-006633000000             RMVMSGD MSGID(USR8118) MSGF(&LIB/&OBJ)
-006634000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-006635000000
-006636000000             ADDMSGD +
-006637000000                MSGID(USR8118) +
-006638000000                MSGF(&LIB/&OBJ) +
-006639000000                MSG( +
-006640000000'Tabella per contrass.vuota'                                          +
+006619000000'Si sta mostrando la fine dei dati.'                                  +
+006620000000                ) +
+006621000000                SEV(0) +
+006622000000     /*   No replacement variables defined!                         */ +
+006623000000                ALROPT(*NO) +
+006624000000                CCSID(65535) +
+006625000000                /*  -EOF-  */
+006626000000
+006627000000     /*-------------------------------------------------------------*/
+006628000000     /*   Cmd-ADDMSGD für Message-ID :   USR8117                    */
+006629000000     /* Si prega di posizionare il cursore sulla colonna scelta e r */
+006630000000     /*-------------------------------------------------------------*/
+006631000000
+006632000000             RMVMSGD MSGID(USR8117) MSGF(&LIB/&OBJ)
+006633000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+006634000000
+006635000000             ADDMSGD +
+006636000000                MSGID(USR8117) +
+006637000000                MSGF(&LIB/&OBJ) +
+006638000000                MSG( +
+006639000000'Si prega di posizionare il cursore sulla colonna scelta e ripetere la-
+006640000000 richiesta.'                                                          +
 006641000000                ) +
 006642000000                SEV(0) +
 006643000000     /*   No replacement variables defined!                         */ +
@@ -6646,18 +6646,18 @@
 006646000000                /*  -EOF-  */
 006647000000
 006648000000     /*-------------------------------------------------------------*/
-006649000000     /*   Cmd-ADDMSGD für Message-ID :   USR8119                    */
-006650000000     /* Record giä contrassegnato.                                  */
+006649000000     /*   Cmd-ADDMSGD für Message-ID :   USR8118                    */
+006650000000     /* Tabella per contrass.vuota                                  */
 006651000000     /*-------------------------------------------------------------*/
 006652000000
-006653000000             RMVMSGD MSGID(USR8119) MSGF(&LIB/&OBJ)
+006653000000             RMVMSGD MSGID(USR8118) MSGF(&LIB/&OBJ)
 006654000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 006655000000
 006656000000             ADDMSGD +
-006657000000                MSGID(USR8119) +
+006657000000                MSGID(USR8118) +
 006658000000                MSGF(&LIB/&OBJ) +
 006659000000                MSG( +
-006660000000'Record giä contrassegnato.'                                          +
+006660000000'Tabella per contrass.vuota'                                          +
 006661000000                ) +
 006662000000                SEV(0) +
 006663000000     /*   No replacement variables defined!                         */ +
@@ -6666,18 +6666,18 @@
 006666000000                /*  -EOF-  */
 006667000000
 006668000000     /*-------------------------------------------------------------*/
-006669000000     /*   Cmd-ADDMSGD für Message-ID :   USR8120                    */
-006670000000     /* Record non trovato                                          */
+006669000000     /*   Cmd-ADDMSGD für Message-ID :   USR8119                    */
+006670000000     /* Record giä contrassegnato.                                  */
 006671000000     /*-------------------------------------------------------------*/
 006672000000
-006673000000             RMVMSGD MSGID(USR8120) MSGF(&LIB/&OBJ)
+006673000000             RMVMSGD MSGID(USR8119) MSGF(&LIB/&OBJ)
 006674000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 006675000000
 006676000000             ADDMSGD +
-006677000000                MSGID(USR8120) +
+006677000000                MSGID(USR8119) +
 006678000000                MSGF(&LIB/&OBJ) +
 006679000000                MSG( +
-006680000000'Record non trovato'                                                  +
+006680000000'Record giä contrassegnato.'                                          +
 006681000000                ) +
 006682000000                SEV(0) +
 006683000000     /*   No replacement variables defined!                         */ +
@@ -6686,18 +6686,18 @@
 006686000000                /*  -EOF-  */
 006687000000
 006688000000     /*-------------------------------------------------------------*/
-006689000000     /*   Cmd-ADDMSGD für Message-ID :   USR8121                    */
-006690000000     /* Record non contrassegnato.                                  */
+006689000000     /*   Cmd-ADDMSGD für Message-ID :   USR8120                    */
+006690000000     /* Record non trovato                                          */
 006691000000     /*-------------------------------------------------------------*/
 006692000000
-006693000000             RMVMSGD MSGID(USR8121) MSGF(&LIB/&OBJ)
+006693000000             RMVMSGD MSGID(USR8120) MSGF(&LIB/&OBJ)
 006694000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 006695000000
 006696000000             ADDMSGD +
-006697000000                MSGID(USR8121) +
+006697000000                MSGID(USR8120) +
 006698000000                MSGF(&LIB/&OBJ) +
 006699000000                MSG( +
-006700000000'Record non contrassegnato.'                                          +
+006700000000'Record non trovato'                                                  +
 006701000000                ) +
 006702000000                SEV(0) +
 006703000000     /*   No replacement variables defined!                         */ +
@@ -6706,18 +6706,18 @@
 006706000000                /*  -EOF-  */
 006707000000
 006708000000     /*-------------------------------------------------------------*/
-006709000000     /*   Cmd-ADDMSGD für Message-ID :   USR8122                    */
-006710000000     /* Tasto funzionale non consentito                             */
+006709000000     /*   Cmd-ADDMSGD für Message-ID :   USR8121                    */
+006710000000     /* Record non contrassegnato.                                  */
 006711000000     /*-------------------------------------------------------------*/
 006712000000
-006713000000             RMVMSGD MSGID(USR8122) MSGF(&LIB/&OBJ)
+006713000000             RMVMSGD MSGID(USR8121) MSGF(&LIB/&OBJ)
 006714000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 006715000000
 006716000000             ADDMSGD +
-006717000000                MSGID(USR8122) +
+006717000000                MSGID(USR8121) +
 006718000000                MSGF(&LIB/&OBJ) +
 006719000000                MSG( +
-006720000000'Tasto funzionale non consentito'                                     +
+006720000000'Record non contrassegnato.'                                          +
 006721000000                ) +
 006722000000                SEV(0) +
 006723000000     /*   No replacement variables defined!                         */ +
@@ -6726,238 +6726,238 @@
 006726000000                /*  -EOF-  */
 006727000000
 006728000000     /*-------------------------------------------------------------*/
-006729000000     /*   Cmd-ADDMSGD für Message-ID :   USR8123                    */
-006730000000     /* Un campo pi` lungo di 1024 car. non  puö  essere&1modificat */
+006729000000     /*   Cmd-ADDMSGD für Message-ID :   USR8122                    */
+006730000000     /* Tasto funzionale non consentito                             */
 006731000000     /*-------------------------------------------------------------*/
 006732000000
-006733000000             RMVMSGD MSGID(USR8123) MSGF(&LIB/&OBJ)
+006733000000             RMVMSGD MSGID(USR8122) MSGF(&LIB/&OBJ)
 006734000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 006735000000
 006736000000             ADDMSGD +
-006737000000                MSGID(USR8123) +
+006737000000                MSGID(USR8122) +
 006738000000                MSGF(&LIB/&OBJ) +
 006739000000                MSG( +
-006740000000'Un campo pi` lungo di 1024 car. non  puö  essere&1modificato&2.'     +
+006740000000'Tasto funzionale non consentito'                                     +
 006741000000                ) +
 006742000000                SEV(0) +
-006743000000                FMT( +
-006744000000                    (*CHAR 1) +
-006745000000                    (*CHAR 1) +
-006746000000                ) +
-006747000000                ALROPT(*NO) +
-006748000000                CCSID(65535) +
-006749000000                /*  -EOF-  */
-006750000000
+006743000000     /*   No replacement variables defined!                         */ +
+006744000000                ALROPT(*NO) +
+006745000000                CCSID(65535) +
+006746000000                /*  -EOF-  */
+006747000000
+006748000000     /*-------------------------------------------------------------*/
+006749000000     /*   Cmd-ADDMSGD für Message-ID :   USR8123                    */
+006750000000     /* Un campo pi` lungo di 1024 car. non  puö  essere&1modificat */
 006751000000     /*-------------------------------------------------------------*/
-006752000000     /*   Cmd-ADDMSGD für Message-ID :   USR8124                    */
-006753000000     /* Operando di confronto '&1' non consentito.                  */
-006754000000     /*-------------------------------------------------------------*/
+006752000000
+006753000000             RMVMSGD MSGID(USR8123) MSGF(&LIB/&OBJ)
+006754000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 006755000000
-006756000000             RMVMSGD MSGID(USR8124) MSGF(&LIB/&OBJ)
-006757000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-006758000000
-006759000000             ADDMSGD +
-006760000000                MSGID(USR8124) +
-006761000000                MSGF(&LIB/&OBJ) +
-006762000000                MSG( +
-006763000000'Operando di confronto ''&1'' non consentito.'                        +
-006764000000                ) +
-006765000000                SECLVL( +
-006766000000'&N &B Gli operandi validi sono: &N &P EQ   - Uguale &P NE   - Diverso-
-006767000000  &P LT   - Minore  &P GT   - Maggiore &P LE   - Minore/Uguale  &P GE -
-006768000000  - Maggiore/Uguale &P LIKE - Simile'                                 +
-006769000000                ) +
-006770000000                SEV(0) +
-006771000000                FMT( +
-006772000000                    (*CHAR 10) +
-006773000000                ) +
-006774000000                ALROPT(*NO) +
-006775000000                CCSID(65535) +
-006776000000                /*  -EOF-  */
-006777000000
-006778000000     /*-------------------------------------------------------------*/
-006779000000     /*   Cmd-ADDMSGD für Message-ID :   USR8125                    */
-006780000000     /* Manca il numero massimo dei record su cui ricercare.        */
-006781000000     /*-------------------------------------------------------------*/
-006782000000
-006783000000             RMVMSGD MSGID(USR8125) MSGF(&LIB/&OBJ)
-006784000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-006785000000
-006786000000             ADDMSGD +
-006787000000                MSGID(USR8125) +
-006788000000                MSGF(&LIB/&OBJ) +
-006789000000                MSG( +
-006790000000'Manca il numero massimo dei record su cui ricercare.'                +
-006791000000                ) +
-006792000000                SEV(0) +
-006793000000     /*   No replacement variables defined!                         */ +
+006756000000             ADDMSGD +
+006757000000                MSGID(USR8123) +
+006758000000                MSGF(&LIB/&OBJ) +
+006759000000                MSG( +
+006760000000'Un campo pi` lungo di 1024 car. non  puö  essere&1modificato&2.'     +
+006761000000                ) +
+006762000000                SEV(0) +
+006763000000                FMT( +
+006764000000                    (*CHAR 1) +
+006765000000                    (*CHAR 1) +
+006766000000                ) +
+006767000000                ALROPT(*NO) +
+006768000000                CCSID(65535) +
+006769000000                /*  -EOF-  */
+006770000000
+006771000000     /*-------------------------------------------------------------*/
+006772000000     /*   Cmd-ADDMSGD für Message-ID :   USR8124                    */
+006773000000     /* Operando di confronto '&1' non consentito.                  */
+006774000000     /*-------------------------------------------------------------*/
+006775000000
+006776000000             RMVMSGD MSGID(USR8124) MSGF(&LIB/&OBJ)
+006777000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+006778000000
+006779000000             ADDMSGD +
+006780000000                MSGID(USR8124) +
+006781000000                MSGF(&LIB/&OBJ) +
+006782000000                MSG( +
+006783000000'Operando di confronto ''&1'' non consentito.'                        +
+006784000000                ) +
+006785000000                SECLVL( +
+006786000000'&N &B Gli operandi validi sono: &N &P EQ   - Uguale &P NE   - Diverso-
+006787000000  &P LT   - Minore  &P GT   - Maggiore &P LE   - Minore/Uguale  &P GE -
+006788000000  - Maggiore/Uguale &P LIKE - Simile'                                 +
+006789000000                ) +
+006790000000                SEV(0) +
+006791000000                FMT( +
+006792000000                    (*CHAR 10) +
+006793000000                ) +
 006794000000                ALROPT(*NO) +
 006795000000                CCSID(65535) +
 006796000000                /*  -EOF-  */
 006797000000
 006798000000     /*-------------------------------------------------------------*/
-006799000000     /*   Cmd-ADDMSGD für Message-ID :   USR8126                    */
-006800000000     /* Operando di confronto '&1' non consentito.                  */
+006799000000     /*   Cmd-ADDMSGD für Message-ID :   USR8125                    */
+006800000000     /* Manca il numero massimo dei record su cui ricercare.        */
 006801000000     /*-------------------------------------------------------------*/
 006802000000
-006803000000             RMVMSGD MSGID(USR8126) MSGF(&LIB/&OBJ)
+006803000000             RMVMSGD MSGID(USR8125) MSGF(&LIB/&OBJ)
 006804000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 006805000000
 006806000000             ADDMSGD +
-006807000000                MSGID(USR8126) +
+006807000000                MSGID(USR8125) +
 006808000000                MSGF(&LIB/&OBJ) +
 006809000000                MSG( +
-006810000000'Operando di confronto ''&1'' non consentito.'                        +
+006810000000'Manca il numero massimo dei record su cui ricercare.'                +
 006811000000                ) +
 006812000000                SEV(0) +
-006813000000                FMT( +
-006814000000                    (*CHAR 10) +
-006815000000                ) +
-006816000000                ALROPT(*NO) +
-006817000000                CCSID(65535) +
-006818000000                /*  -EOF-  */
-006819000000
-006820000000     /*-------------------------------------------------------------*/
-006821000000     /*   Cmd-ADDMSGD für Message-ID :   USR8127                    */
-006822000000     /* Ricerca in corso                                            */
-006823000000     /*-------------------------------------------------------------*/
-006824000000
-006825000000             RMVMSGD MSGID(USR8127) MSGF(&LIB/&OBJ)
-006826000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-006827000000
-006828000000             ADDMSGD +
-006829000000                MSGID(USR8127) +
-006830000000                MSGF(&LIB/&OBJ) +
-006831000000                MSG( +
-006832000000'Ricerca in corso'                                                    +
-006833000000                ) +
-006834000000                SEV(0) +
-006835000000     /*   No replacement variables defined!                         */ +
+006813000000     /*   No replacement variables defined!                         */ +
+006814000000                ALROPT(*NO) +
+006815000000                CCSID(65535) +
+006816000000                /*  -EOF-  */
+006817000000
+006818000000     /*-------------------------------------------------------------*/
+006819000000     /*   Cmd-ADDMSGD für Message-ID :   USR8126                    */
+006820000000     /* Operando di confronto '&1' non consentito.                  */
+006821000000     /*-------------------------------------------------------------*/
+006822000000
+006823000000             RMVMSGD MSGID(USR8126) MSGF(&LIB/&OBJ)
+006824000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+006825000000
+006826000000             ADDMSGD +
+006827000000                MSGID(USR8126) +
+006828000000                MSGF(&LIB/&OBJ) +
+006829000000                MSG( +
+006830000000'Operando di confronto ''&1'' non consentito.'                        +
+006831000000                ) +
+006832000000                SEV(0) +
+006833000000                FMT( +
+006834000000                    (*CHAR 10) +
+006835000000                ) +
 006836000000                ALROPT(*NO) +
 006837000000                CCSID(65535) +
 006838000000                /*  -EOF-  */
 006839000000
 006840000000     /*-------------------------------------------------------------*/
-006841000000     /*   Cmd-ADDMSGD für Message-ID :   USR8128                    */
-006842000000     /* Ricerca in corso. &1 su max. &2 record controllati...       */
+006841000000     /*   Cmd-ADDMSGD für Message-ID :   USR8127                    */
+006842000000     /* Ricerca in corso                                            */
 006843000000     /*-------------------------------------------------------------*/
 006844000000
-006845000000             RMVMSGD MSGID(USR8128) MSGF(&LIB/&OBJ)
+006845000000             RMVMSGD MSGID(USR8127) MSGF(&LIB/&OBJ)
 006846000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 006847000000
 006848000000             ADDMSGD +
-006849000000                MSGID(USR8128) +
+006849000000                MSGID(USR8127) +
 006850000000                MSGF(&LIB/&OBJ) +
 006851000000                MSG( +
-006852000000'Ricerca in corso. &1 su max. &2 record controllati...'               +
+006852000000'Ricerca in corso'                                                    +
 006853000000                ) +
 006854000000                SEV(0) +
-006855000000                FMT( +
-006856000000                    (*DEC 10 0) +
-006857000000                    (*DEC 10 0) +
-006858000000                ) +
-006859000000                ALROPT(*NO) +
-006860000000                CCSID(65535) +
-006861000000                /*  -EOF-  */
-006862000000
+006855000000     /*   No replacement variables defined!                         */ +
+006856000000                ALROPT(*NO) +
+006857000000                CCSID(65535) +
+006858000000                /*  -EOF-  */
+006859000000
+006860000000     /*-------------------------------------------------------------*/
+006861000000     /*   Cmd-ADDMSGD für Message-ID :   USR8128                    */
+006862000000     /* Ricerca in corso. &1 su max. &2 record controllati...       */
 006863000000     /*-------------------------------------------------------------*/
-006864000000     /*   Cmd-ADDMSGD für Message-ID :   USR8129                    */
-006865000000     /* Campo '&1' di tipo '&2' non consentito.                     */
-006866000000     /*-------------------------------------------------------------*/
+006864000000
+006865000000             RMVMSGD MSGID(USR8128) MSGF(&LIB/&OBJ)
+006866000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 006867000000
-006868000000             RMVMSGD MSGID(USR8129) MSGF(&LIB/&OBJ)
-006869000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-006870000000
-006871000000             ADDMSGD +
-006872000000                MSGID(USR8129) +
-006873000000                MSGF(&LIB/&OBJ) +
-006874000000                MSG( +
-006875000000'Campo ''&1'' di tipo ''&2'' non consentito.'                         +
-006876000000                ) +
-006877000000                SEV(0) +
-006878000000                FMT( +
-006879000000                    (*CHAR 10) +
-006880000000                    (*CHAR 10) +
-006881000000                ) +
-006882000000                ALROPT(*NO) +
-006883000000                CCSID(65535) +
-006884000000                /*  -EOF-  */
-006885000000
+006868000000             ADDMSGD +
+006869000000                MSGID(USR8128) +
+006870000000                MSGF(&LIB/&OBJ) +
+006871000000                MSG( +
+006872000000'Ricerca in corso. &1 su max. &2 record controllati...'               +
+006873000000                ) +
+006874000000                SEV(0) +
+006875000000                FMT( +
+006876000000                    (*DEC 10 0) +
+006877000000                    (*DEC 10 0) +
+006878000000                ) +
+006879000000                ALROPT(*NO) +
+006880000000                CCSID(65535) +
+006881000000                /*  -EOF-  */
+006882000000
+006883000000     /*-------------------------------------------------------------*/
+006884000000     /*   Cmd-ADDMSGD für Message-ID :   USR8129                    */
+006885000000     /* Campo '&1' di tipo '&2' non consentito.                     */
 006886000000     /*-------------------------------------------------------------*/
-006887000000     /*   Cmd-ADDMSGD für Message-ID :   USR8130                    */
-006888000000     /* Record trovato. 'Cerca'=prosegue /'ENTER'=fine.             */
-006889000000     /*-------------------------------------------------------------*/
+006887000000
+006888000000             RMVMSGD MSGID(USR8129) MSGF(&LIB/&OBJ)
+006889000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 006890000000
-006891000000             RMVMSGD MSGID(USR8130) MSGF(&LIB/&OBJ)
-006892000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-006893000000
-006894000000             ADDMSGD +
-006895000000                MSGID(USR8130) +
-006896000000                MSGF(&LIB/&OBJ) +
-006897000000                MSG( +
-006898000000'Record trovato. ''Cerca''=prosegue /''ENTER''=fine.'                 +
-006899000000                ) +
-006900000000                SEV(0) +
-006901000000     /*   No replacement variables defined!                         */ +
+006891000000             ADDMSGD +
+006892000000                MSGID(USR8129) +
+006893000000                MSGF(&LIB/&OBJ) +
+006894000000                MSG( +
+006895000000'Campo ''&1'' di tipo ''&2'' non consentito.'                         +
+006896000000                ) +
+006897000000                SEV(0) +
+006898000000                FMT( +
+006899000000                    (*CHAR 10) +
+006900000000                    (*CHAR 10) +
+006901000000                ) +
 006902000000                ALROPT(*NO) +
 006903000000                CCSID(65535) +
 006904000000                /*  -EOF-  */
 006905000000
 006906000000     /*-------------------------------------------------------------*/
-006907000000     /*   Cmd-ADDMSGD für Message-ID :   USR8131                    */
-006908000000     /* Raggiunta la fine dati. Argomento di ricerca non trovato. ' */
+006907000000     /*   Cmd-ADDMSGD für Message-ID :   USR8130                    */
+006908000000     /* Record trovato. 'Cerca'=prosegue /'ENTER'=fine.             */
 006909000000     /*-------------------------------------------------------------*/
 006910000000
-006911000000             RMVMSGD MSGID(USR8131) MSGF(&LIB/&OBJ)
+006911000000             RMVMSGD MSGID(USR8130) MSGF(&LIB/&OBJ)
 006912000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 006913000000
 006914000000             ADDMSGD +
-006915000000                MSGID(USR8131) +
+006915000000                MSGID(USR8130) +
 006916000000                MSGF(&LIB/&OBJ) +
 006917000000                MSG( +
-006918000000'Raggiunta la fine dati. Argomento di ricerca non trovato. ''Cerca''=C-
-006919000000ontinua a cercare/''ENTER''=FINE.'                                    +
-006920000000                ) +
-006921000000                SEV(0) +
-006922000000     /*   No replacement variables defined!                         */ +
-006923000000                ALROPT(*NO) +
-006924000000                CCSID(65535) +
-006925000000                /*  -EOF-  */
-006926000000
-006927000000     /*-------------------------------------------------------------*/
-006928000000     /*   Cmd-ADDMSGD für Message-ID :   USR8132                    */
-006929000000     /* Ricerca terminata su nÄmax di record  'Cerca '=Continua a c */
-006930000000     /*-------------------------------------------------------------*/
-006931000000
-006932000000             RMVMSGD MSGID(USR8132) MSGF(&LIB/&OBJ)
-006933000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-006934000000
-006935000000             ADDMSGD +
-006936000000                MSGID(USR8132) +
-006937000000                MSGF(&LIB/&OBJ) +
-006938000000                MSG( +
-006939000000'Ricerca terminata su nÄmax di record  ''Cerca ''=Continua a cercare/'-
-006940000000'ENTER''=Fine.'                                                       +
-006941000000                ) +
-006942000000                SEV(0) +
-006943000000     /*   No replacement variables defined!                         */ +
-006944000000                ALROPT(*NO) +
-006945000000                CCSID(65535) +
-006946000000                /*  -EOF-  */
-006947000000
-006948000000     /*-------------------------------------------------------------*/
-006949000000     /*   Cmd-ADDMSGD für Message-ID :   USR8133                    */
-006950000000     /* 1=maius.-minusc.; 0=ignora maius.-minusc.                   */
-006951000000     /*-------------------------------------------------------------*/
-006952000000
-006953000000             RMVMSGD MSGID(USR8133) MSGF(&LIB/&OBJ)
-006954000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-006955000000
-006956000000             ADDMSGD +
-006957000000                MSGID(USR8133) +
-006958000000                MSGF(&LIB/&OBJ) +
-006959000000                MSG( +
-006960000000'1=maius.-minusc.; 0=ignora maius.-minusc.'                           +
+006918000000'Record trovato. ''Cerca''=prosegue /''ENTER''=fine.'                 +
+006919000000                ) +
+006920000000                SEV(0) +
+006921000000     /*   No replacement variables defined!                         */ +
+006922000000                ALROPT(*NO) +
+006923000000                CCSID(65535) +
+006924000000                /*  -EOF-  */
+006925000000
+006926000000     /*-------------------------------------------------------------*/
+006927000000     /*   Cmd-ADDMSGD für Message-ID :   USR8131                    */
+006928000000     /* Raggiunta la fine dati. Argomento di ricerca non trovato. ' */
+006929000000     /*-------------------------------------------------------------*/
+006930000000
+006931000000             RMVMSGD MSGID(USR8131) MSGF(&LIB/&OBJ)
+006932000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+006933000000
+006934000000             ADDMSGD +
+006935000000                MSGID(USR8131) +
+006936000000                MSGF(&LIB/&OBJ) +
+006937000000                MSG( +
+006938000000'Raggiunta la fine dati. Argomento di ricerca non trovato. ''Cerca''=C-
+006939000000ontinua a cercare/''ENTER''=FINE.'                                    +
+006940000000                ) +
+006941000000                SEV(0) +
+006942000000     /*   No replacement variables defined!                         */ +
+006943000000                ALROPT(*NO) +
+006944000000                CCSID(65535) +
+006945000000                /*  -EOF-  */
+006946000000
+006947000000     /*-------------------------------------------------------------*/
+006948000000     /*   Cmd-ADDMSGD für Message-ID :   USR8132                    */
+006949000000     /* Ricerca terminata su nÄmax di record  'Cerca '=Continua a c */
+006950000000     /*-------------------------------------------------------------*/
+006951000000
+006952000000             RMVMSGD MSGID(USR8132) MSGF(&LIB/&OBJ)
+006953000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+006954000000
+006955000000             ADDMSGD +
+006956000000                MSGID(USR8132) +
+006957000000                MSGF(&LIB/&OBJ) +
+006958000000                MSG( +
+006959000000'Ricerca terminata su nÄmax di record  ''Cerca ''=Continua a cercare/'-
+006960000000'ENTER''=Fine.'                                                       +
 006961000000                ) +
 006962000000                SEV(0) +
 006963000000     /*   No replacement variables defined!                         */ +
@@ -6966,286 +6966,286 @@
 006966000000                /*  -EOF-  */
 006967000000
 006968000000     /*-------------------------------------------------------------*/
-006969000000     /*   Cmd-ADDMSGD für Message-ID :   USR8134                    */
-006970000000     /* Operando &1 con &2 non permesso.                            */
+006969000000     /*   Cmd-ADDMSGD für Message-ID :   USR8133                    */
+006970000000     /* 1=maius.-minusc.; 0=ignora maius.-minusc.                   */
 006971000000     /*-------------------------------------------------------------*/
 006972000000
-006973000000             RMVMSGD MSGID(USR8134) MSGF(&LIB/&OBJ)
+006973000000             RMVMSGD MSGID(USR8133) MSGF(&LIB/&OBJ)
 006974000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 006975000000
 006976000000             ADDMSGD +
-006977000000                MSGID(USR8134) +
+006977000000                MSGID(USR8133) +
 006978000000                MSGF(&LIB/&OBJ) +
 006979000000                MSG( +
-006980000000'Operando &1 con &2 non permesso.'                                    +
+006980000000'1=maius.-minusc.; 0=ignora maius.-minusc.'                           +
 006981000000                ) +
 006982000000                SEV(0) +
-006983000000                FMT( +
-006984000000                    (*CHAR 10) +
-006985000000                    (*CHAR 10) +
-006986000000                ) +
-006987000000                ALROPT(*NO) +
-006988000000                CCSID(65535) +
-006989000000                /*  -EOF-  */
-006990000000
+006983000000     /*   No replacement variables defined!                         */ +
+006984000000                ALROPT(*NO) +
+006985000000                CCSID(65535) +
+006986000000                /*  -EOF-  */
+006987000000
+006988000000     /*-------------------------------------------------------------*/
+006989000000     /*   Cmd-ADDMSGD für Message-ID :   USR8134                    */
+006990000000     /* Operando &1 con &2 non permesso.                            */
 006991000000     /*-------------------------------------------------------------*/
-006992000000     /*   Cmd-ADDMSGD für Message-ID :   USR8135                    */
-006993000000     /* Operando &1 non consentito se il campo ü di tipo &2.        */
-006994000000     /*-------------------------------------------------------------*/
+006992000000
+006993000000             RMVMSGD MSGID(USR8134) MSGF(&LIB/&OBJ)
+006994000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 006995000000
-006996000000             RMVMSGD MSGID(USR8135) MSGF(&LIB/&OBJ)
-006997000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-006998000000
-006999000000             ADDMSGD +
-007000000000                MSGID(USR8135) +
-007001000000                MSGF(&LIB/&OBJ) +
-007002000000                MSG( +
-007003000000'Operando &1 non consentito se il campo ü di tipo &2.'                +
-007004000000                ) +
-007005000000                SEV(0) +
-007006000000                FMT( +
-007007000000                    (*CHAR 10) +
-007008000000                    (*CHAR 10) +
-007009000000                ) +
-007010000000                ALROPT(*NO) +
-007011000000                CCSID(65535) +
-007012000000                /*  -EOF-  */
-007013000000
+006996000000             ADDMSGD +
+006997000000                MSGID(USR8134) +
+006998000000                MSGF(&LIB/&OBJ) +
+006999000000                MSG( +
+007000000000'Operando &1 con &2 non permesso.'                                    +
+007001000000                ) +
+007002000000                SEV(0) +
+007003000000                FMT( +
+007004000000                    (*CHAR 10) +
+007005000000                    (*CHAR 10) +
+007006000000                ) +
+007007000000                ALROPT(*NO) +
+007008000000                CCSID(65535) +
+007009000000                /*  -EOF-  */
+007010000000
+007011000000     /*-------------------------------------------------------------*/
+007012000000     /*   Cmd-ADDMSGD für Message-ID :   USR8135                    */
+007013000000     /* Operando &1 non consentito se il campo ü di tipo &2.        */
 007014000000     /*-------------------------------------------------------------*/
-007015000000     /*   Cmd-ADDMSGD für Message-ID :   USR8136                    */
-007016000000     /* Campo '&1' non trovato.                                     */
-007017000000     /*-------------------------------------------------------------*/
+007015000000
+007016000000             RMVMSGD MSGID(USR8135) MSGF(&LIB/&OBJ)
+007017000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 007018000000
-007019000000             RMVMSGD MSGID(USR8136) MSGF(&LIB/&OBJ)
-007020000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-007021000000
-007022000000             ADDMSGD +
-007023000000                MSGID(USR8136) +
-007024000000                MSGF(&LIB/&OBJ) +
-007025000000                MSG( +
-007026000000'Campo ''&1'' non trovato.'                                           +
-007027000000                ) +
-007028000000                SECLVL( +
-007029000000'&N &B Valore speciale: &N &P *RECORD - Ricerca in tutto il file possi-
-007030000000bile solo con EQ/NE.'                                                 +
-007031000000                ) +
-007032000000                SEV(0) +
-007033000000                FMT( +
-007034000000                    (*CHAR 10) +
-007035000000                ) +
-007036000000                ALROPT(*NO) +
-007037000000                CCSID(65535) +
-007038000000                /*  -EOF-  */
-007039000000
-007040000000     /*-------------------------------------------------------------*/
-007041000000     /*   Cmd-ADDMSGD für Message-ID :   USR8137                    */
-007042000000     /* Reperimento dei campi chiave del file &2/&1                 */
-007043000000     /*-------------------------------------------------------------*/
-007044000000
-007045000000             RMVMSGD MSGID(USR8137) MSGF(&LIB/&OBJ)
-007046000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-007047000000
-007048000000             ADDMSGD +
-007049000000                MSGID(USR8137) +
-007050000000                MSGF(&LIB/&OBJ) +
-007051000000                MSG( +
-007052000000'Reperimento dei campi chiave del file &2/&1'                         +
-007053000000                ) +
-007054000000                SEV(0) +
-007055000000                FMT( +
-007056000000                    (*CHAR 10) +
-007057000000                    (*CHAR 10) +
-007058000000                ) +
-007059000000                ALROPT(*NO) +
-007060000000                CCSID(65535) +
-007061000000                /*  -EOF-  */
-007062000000
+007019000000             ADDMSGD +
+007020000000                MSGID(USR8135) +
+007021000000                MSGF(&LIB/&OBJ) +
+007022000000                MSG( +
+007023000000'Operando &1 non consentito se il campo ü di tipo &2.'                +
+007024000000                ) +
+007025000000                SEV(0) +
+007026000000                FMT( +
+007027000000                    (*CHAR 10) +
+007028000000                    (*CHAR 10) +
+007029000000                ) +
+007030000000                ALROPT(*NO) +
+007031000000                CCSID(65535) +
+007032000000                /*  -EOF-  */
+007033000000
+007034000000     /*-------------------------------------------------------------*/
+007035000000     /*   Cmd-ADDMSGD für Message-ID :   USR8136                    */
+007036000000     /* Campo '&1' non trovato.                                     */
+007037000000     /*-------------------------------------------------------------*/
+007038000000
+007039000000             RMVMSGD MSGID(USR8136) MSGF(&LIB/&OBJ)
+007040000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+007041000000
+007042000000             ADDMSGD +
+007043000000                MSGID(USR8136) +
+007044000000                MSGF(&LIB/&OBJ) +
+007045000000                MSG( +
+007046000000'Campo ''&1'' non trovato.'                                           +
+007047000000                ) +
+007048000000                SECLVL( +
+007049000000'&N &B Valore speciale: &N &P *RECORD - Ricerca in tutto il file possi-
+007050000000bile solo con EQ/NE.'                                                 +
+007051000000                ) +
+007052000000                SEV(0) +
+007053000000                FMT( +
+007054000000                    (*CHAR 10) +
+007055000000                ) +
+007056000000                ALROPT(*NO) +
+007057000000                CCSID(65535) +
+007058000000                /*  -EOF-  */
+007059000000
+007060000000     /*-------------------------------------------------------------*/
+007061000000     /*   Cmd-ADDMSGD für Message-ID :   USR8137                    */
+007062000000     /* Reperimento dei campi chiave del file &2/&1                 */
 007063000000     /*-------------------------------------------------------------*/
-007064000000     /*   Cmd-ADDMSGD für Message-ID :   USR8138                    */
-007065000000     /* Trovato valore numerico non valido nel campo &1             */
-007066000000     /*-------------------------------------------------------------*/
+007064000000
+007065000000             RMVMSGD MSGID(USR8137) MSGF(&LIB/&OBJ)
+007066000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 007067000000
-007068000000             RMVMSGD MSGID(USR8138) MSGF(&LIB/&OBJ)
-007069000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-007070000000
-007071000000             ADDMSGD +
-007072000000                MSGID(USR8138) +
-007073000000                MSGF(&LIB/&OBJ) +
-007074000000                MSG( +
-007075000000'Trovato valore numerico non valido nel campo &1'                     +
-007076000000                ) +
-007077000000                SEV(0) +
-007078000000                FMT( +
-007079000000                    (*CHAR 10) +
-007080000000                ) +
-007081000000                ALROPT(*NO) +
-007082000000                CCSID(65535) +
-007083000000                /*  -EOF-  */
-007084000000
-007085000000     /*-------------------------------------------------------------*/
-007086000000     /*   Cmd-ADDMSGD für Message-ID :   USR8139                    */
-007087000000     /* Non riuscito il posizionamento                              */
-007088000000     /*-------------------------------------------------------------*/
-007089000000
-007090000000             RMVMSGD MSGID(USR8139) MSGF(&LIB/&OBJ)
-007091000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-007092000000
-007093000000             ADDMSGD +
-007094000000                MSGID(USR8139) +
-007095000000                MSGF(&LIB/&OBJ) +
-007096000000                MSG( +
-007097000000'Non riuscito il posizionamento'                                      +
-007098000000                ) +
-007099000000                SEV(0) +
-007100000000     /*   No replacement variables defined!                         */ +
+007068000000             ADDMSGD +
+007069000000                MSGID(USR8137) +
+007070000000                MSGF(&LIB/&OBJ) +
+007071000000                MSG( +
+007072000000'Reperimento dei campi chiave del file &2/&1'                         +
+007073000000                ) +
+007074000000                SEV(0) +
+007075000000                FMT( +
+007076000000                    (*CHAR 10) +
+007077000000                    (*CHAR 10) +
+007078000000                ) +
+007079000000                ALROPT(*NO) +
+007080000000                CCSID(65535) +
+007081000000                /*  -EOF-  */
+007082000000
+007083000000     /*-------------------------------------------------------------*/
+007084000000     /*   Cmd-ADDMSGD für Message-ID :   USR8138                    */
+007085000000     /* Trovato valore numerico non valido nel campo &1             */
+007086000000     /*-------------------------------------------------------------*/
+007087000000
+007088000000             RMVMSGD MSGID(USR8138) MSGF(&LIB/&OBJ)
+007089000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+007090000000
+007091000000             ADDMSGD +
+007092000000                MSGID(USR8138) +
+007093000000                MSGF(&LIB/&OBJ) +
+007094000000                MSG( +
+007095000000'Trovato valore numerico non valido nel campo &1'                     +
+007096000000                ) +
+007097000000                SEV(0) +
+007098000000                FMT( +
+007099000000                    (*CHAR 10) +
+007100000000                ) +
 007101000000                ALROPT(*NO) +
 007102000000                CCSID(65535) +
 007103000000                /*  -EOF-  */
 007104000000
 007105000000     /*-------------------------------------------------------------*/
-007106000000     /*   Cmd-ADDMSGD für Message-ID :   USR8140                    */
-007107000000     /* E'richiesto un argomento di ricerca.                        */
+007106000000     /*   Cmd-ADDMSGD für Message-ID :   USR8139                    */
+007107000000     /* Non riuscito il posizionamento                              */
 007108000000     /*-------------------------------------------------------------*/
 007109000000
-007110000000             RMVMSGD MSGID(USR8140) MSGF(&LIB/&OBJ)
+007110000000             RMVMSGD MSGID(USR8139) MSGF(&LIB/&OBJ)
 007111000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 007112000000
 007113000000             ADDMSGD +
-007114000000                MSGID(USR8140) +
+007114000000                MSGID(USR8139) +
 007115000000                MSGF(&LIB/&OBJ) +
 007116000000                MSG( +
-007117000000'E''richiesto un argomento di ricerca. '                              +
+007117000000'Non riuscito il posizionamento'                                      +
 007118000000                ) +
 007119000000                SEV(0) +
-007120000000                FMT( +
-007121000000                    (*CHAR 10) +
-007122000000                ) +
-007123000000                ALROPT(*NO) +
-007124000000                CCSID(65535) +
-007125000000                /*  -EOF-  */
-007126000000
-007127000000     /*-------------------------------------------------------------*/
-007128000000     /*   Cmd-ADDMSGD für Message-ID :   USR8141                    */
-007129000000     /* E'valido solo '&1' se il segno ü positivo e '&2' se negativ */
-007130000000     /*-------------------------------------------------------------*/
-007131000000
-007132000000             RMVMSGD MSGID(USR8141) MSGF(&LIB/&OBJ)
-007133000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-007134000000
-007135000000             ADDMSGD +
-007136000000                MSGID(USR8141) +
-007137000000                MSGF(&LIB/&OBJ) +
-007138000000                MSG( +
-007139000000'E''valido solo ''&1'' se il segno ü positivo e ''&2'' se negativo'   +
-007140000000                ) +
-007141000000                SEV(0) +
-007142000000                FMT( +
-007143000000                    (*CHAR 10) +
-007144000000                    (*CHAR 10) +
-007145000000                ) +
-007146000000                ALROPT(*NO) +
-007147000000                CCSID(65535) +
-007148000000                /*  -EOF-  */
-007149000000
+007120000000     /*   No replacement variables defined!                         */ +
+007121000000                ALROPT(*NO) +
+007122000000                CCSID(65535) +
+007123000000                /*  -EOF-  */
+007124000000
+007125000000     /*-------------------------------------------------------------*/
+007126000000     /*   Cmd-ADDMSGD für Message-ID :   USR8140                    */
+007127000000     /* E'richiesto un argomento di ricerca.                        */
+007128000000     /*-------------------------------------------------------------*/
+007129000000
+007130000000             RMVMSGD MSGID(USR8140) MSGF(&LIB/&OBJ)
+007131000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+007132000000
+007133000000             ADDMSGD +
+007134000000                MSGID(USR8140) +
+007135000000                MSGF(&LIB/&OBJ) +
+007136000000                MSG( +
+007137000000'E''richiesto un argomento di ricerca. '                              +
+007138000000                ) +
+007139000000                SEV(0) +
+007140000000                FMT( +
+007141000000                    (*CHAR 10) +
+007142000000                ) +
+007143000000                ALROPT(*NO) +
+007144000000                CCSID(65535) +
+007145000000                /*  -EOF-  */
+007146000000
+007147000000     /*-------------------------------------------------------------*/
+007148000000     /*   Cmd-ADDMSGD für Message-ID :   USR8141                    */
+007149000000     /* E'valido solo '&1' se il segno ü positivo e '&2' se negativ */
 007150000000     /*-------------------------------------------------------------*/
-007151000000     /*   Cmd-ADDMSGD für Message-ID :   USR8142                    */
-007152000000     /* La posizione &1 ü riservata per il segno dei valori numeric */
-007153000000     /*-------------------------------------------------------------*/
+007151000000
+007152000000             RMVMSGD MSGID(USR8141) MSGF(&LIB/&OBJ)
+007153000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 007154000000
-007155000000             RMVMSGD MSGID(USR8142) MSGF(&LIB/&OBJ)
-007156000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-007157000000
-007158000000             ADDMSGD +
-007159000000                MSGID(USR8142) +
-007160000000                MSGF(&LIB/&OBJ) +
-007161000000                MSG( +
-007162000000'La posizione &1 ü riservata per il segno dei valori numerici.'       +
-007163000000                ) +
-007164000000                SEV(0) +
-007165000000                FMT( +
-007166000000                    (*DEC 10 0) +
-007167000000                ) +
-007168000000                ALROPT(*NO) +
-007169000000                CCSID(65535) +
-007170000000                /*  -EOF-  */
-007171000000
-007172000000     /*-------------------------------------------------------------*/
-007173000000     /*   Cmd-ADDMSGD für Message-ID :   USR8143                    */
-007174000000     /* Il tasto &1 non ü assegnato a una funzione.                 */
-007175000000     /*-------------------------------------------------------------*/
-007176000000
-007177000000             RMVMSGD MSGID(USR8143) MSGF(&LIB/&OBJ)
-007178000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-007179000000
-007180000000             ADDMSGD +
-007181000000                MSGID(USR8143) +
-007182000000                MSGF(&LIB/&OBJ) +
-007183000000                MSG( +
-007184000000'Il tasto &1 non ü assegnato a una funzione.'                         +
-007185000000                ) +
-007186000000                SEV(0) +
-007187000000                FMT( +
-007188000000                    (*CHAR 10) +
-007189000000                ) +
-007190000000                ALROPT(*NO) +
-007191000000                CCSID(65535) +
-007192000000                /*  -EOF-  */
-007193000000
-007194000000     /*-------------------------------------------------------------*/
-007195000000     /*   Cmd-ADDMSGD für Message-ID :   USR8144                    */
-007196000000     /* Il comando &1 non puö essere richiamato ricorsivamente      */
-007197000000     /*-------------------------------------------------------------*/
-007198000000
-007199000000             RMVMSGD MSGID(USR8144) MSGF(&LIB/&OBJ)
-007200000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-007201000000
-007202000000             ADDMSGD +
-007203000000                MSGID(USR8144) +
-007204000000                MSGF(&LIB/&OBJ) +
-007205000000                MSG( +
-007206000000'Il comando &1 non puö essere richiamato ricorsivamente'              +
-007207000000                ) +
-007208000000                SEV(0) +
-007209000000                FMT( +
-007210000000                    (*CHAR 10) +
-007211000000                ) +
-007212000000                ALROPT(*NO) +
-007213000000                CCSID(65535) +
-007214000000                /*  -EOF-  */
-007215000000
-007216000000     /*-------------------------------------------------------------*/
-007217000000     /*   Cmd-ADDMSGD für Message-ID :   USR8145                    */
-007218000000     /* Comando non eseguibile con subfile vuoto.                   */
-007219000000     /*-------------------------------------------------------------*/
-007220000000
-007221000000             RMVMSGD MSGID(USR8145) MSGF(&LIB/&OBJ)
-007222000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-007223000000
-007224000000             ADDMSGD +
-007225000000                MSGID(USR8145) +
-007226000000                MSGF(&LIB/&OBJ) +
-007227000000                MSG( +
-007228000000'Comando non eseguibile con subfile vuoto.'                           +
-007229000000                ) +
-007230000000                SEV(0) +
-007231000000     /*   No replacement variables defined!                         */ +
+007155000000             ADDMSGD +
+007156000000                MSGID(USR8141) +
+007157000000                MSGF(&LIB/&OBJ) +
+007158000000                MSG( +
+007159000000'E''valido solo ''&1'' se il segno ü positivo e ''&2'' se negativo'   +
+007160000000                ) +
+007161000000                SEV(0) +
+007162000000                FMT( +
+007163000000                    (*CHAR 10) +
+007164000000                    (*CHAR 10) +
+007165000000                ) +
+007166000000                ALROPT(*NO) +
+007167000000                CCSID(65535) +
+007168000000                /*  -EOF-  */
+007169000000
+007170000000     /*-------------------------------------------------------------*/
+007171000000     /*   Cmd-ADDMSGD für Message-ID :   USR8142                    */
+007172000000     /* La posizione &1 ü riservata per il segno dei valori numeric */
+007173000000     /*-------------------------------------------------------------*/
+007174000000
+007175000000             RMVMSGD MSGID(USR8142) MSGF(&LIB/&OBJ)
+007176000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+007177000000
+007178000000             ADDMSGD +
+007179000000                MSGID(USR8142) +
+007180000000                MSGF(&LIB/&OBJ) +
+007181000000                MSG( +
+007182000000'La posizione &1 ü riservata per il segno dei valori numerici.'       +
+007183000000                ) +
+007184000000                SEV(0) +
+007185000000                FMT( +
+007186000000                    (*DEC 10 0) +
+007187000000                ) +
+007188000000                ALROPT(*NO) +
+007189000000                CCSID(65535) +
+007190000000                /*  -EOF-  */
+007191000000
+007192000000     /*-------------------------------------------------------------*/
+007193000000     /*   Cmd-ADDMSGD für Message-ID :   USR8143                    */
+007194000000     /* Il tasto &1 non ü assegnato a una funzione.                 */
+007195000000     /*-------------------------------------------------------------*/
+007196000000
+007197000000             RMVMSGD MSGID(USR8143) MSGF(&LIB/&OBJ)
+007198000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+007199000000
+007200000000             ADDMSGD +
+007201000000                MSGID(USR8143) +
+007202000000                MSGF(&LIB/&OBJ) +
+007203000000                MSG( +
+007204000000'Il tasto &1 non ü assegnato a una funzione.'                         +
+007205000000                ) +
+007206000000                SEV(0) +
+007207000000                FMT( +
+007208000000                    (*CHAR 10) +
+007209000000                ) +
+007210000000                ALROPT(*NO) +
+007211000000                CCSID(65535) +
+007212000000                /*  -EOF-  */
+007213000000
+007214000000     /*-------------------------------------------------------------*/
+007215000000     /*   Cmd-ADDMSGD für Message-ID :   USR8144                    */
+007216000000     /* Il comando &1 non puö essere richiamato ricorsivamente      */
+007217000000     /*-------------------------------------------------------------*/
+007218000000
+007219000000             RMVMSGD MSGID(USR8144) MSGF(&LIB/&OBJ)
+007220000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+007221000000
+007222000000             ADDMSGD +
+007223000000                MSGID(USR8144) +
+007224000000                MSGF(&LIB/&OBJ) +
+007225000000                MSG( +
+007226000000'Il comando &1 non puö essere richiamato ricorsivamente'              +
+007227000000                ) +
+007228000000                SEV(0) +
+007229000000                FMT( +
+007230000000                    (*CHAR 10) +
+007231000000                ) +
 007232000000                ALROPT(*NO) +
 007233000000                CCSID(65535) +
 007234000000                /*  -EOF-  */
 007235000000
 007236000000     /*-------------------------------------------------------------*/
-007237000000     /*   Cmd-ADDMSGD für Message-ID :   USR8146                    */
-007238000000     /* Nessun campo valido per la scelta del colore.               */
+007237000000     /*   Cmd-ADDMSGD für Message-ID :   USR8145                    */
+007238000000     /* Comando non eseguibile con subfile vuoto.                   */
 007239000000     /*-------------------------------------------------------------*/
 007240000000
-007241000000             RMVMSGD MSGID(USR8146) MSGF(&LIB/&OBJ)
+007241000000             RMVMSGD MSGID(USR8145) MSGF(&LIB/&OBJ)
 007242000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 007243000000
 007244000000             ADDMSGD +
-007245000000                MSGID(USR8146) +
+007245000000                MSGID(USR8145) +
 007246000000                MSGF(&LIB/&OBJ) +
 007247000000                MSG( +
-007248000000'Nessun campo valido per la scelta del colore.'                       +
+007248000000'Comando non eseguibile con subfile vuoto.'                           +
 007249000000                ) +
 007250000000                SEV(0) +
 007251000000     /*   No replacement variables defined!                         */ +
@@ -7254,82 +7254,82 @@
 007254000000                /*  -EOF-  */
 007255000000
 007256000000     /*-------------------------------------------------------------*/
-007257000000     /*   Cmd-ADDMSGD für Message-ID :   USR8147                    */
-007258000000     /* Colonna &1 non contrassegnata.                              */
+007257000000     /*   Cmd-ADDMSGD für Message-ID :   USR8146                    */
+007258000000     /* Nessun campo valido per la scelta del colore.               */
 007259000000     /*-------------------------------------------------------------*/
 007260000000
-007261000000             RMVMSGD MSGID(USR8147) MSGF(&LIB/&OBJ)
+007261000000             RMVMSGD MSGID(USR8146) MSGF(&LIB/&OBJ)
 007262000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 007263000000
 007264000000             ADDMSGD +
-007265000000                MSGID(USR8147) +
+007265000000                MSGID(USR8146) +
 007266000000                MSGF(&LIB/&OBJ) +
 007267000000                MSG( +
-007268000000'Colonna &1 non contrassegnata.'                                      +
+007268000000'Nessun campo valido per la scelta del colore.'                       +
 007269000000                ) +
 007270000000                SEV(0) +
-007271000000                FMT( +
-007272000000                    (*CHAR 10) +
-007273000000                ) +
-007274000000                ALROPT(*NO) +
-007275000000                CCSID(65535) +
-007276000000                /*  -EOF-  */
-007277000000
-007278000000     /*-------------------------------------------------------------*/
-007279000000     /*   Cmd-ADDMSGD für Message-ID :   USR8148                    */
-007280000000     /* Spazio non disponibile per la colonna '&1'!                 */
-007281000000     /*-------------------------------------------------------------*/
-007282000000
-007283000000             RMVMSGD MSGID(USR8148) MSGF(&LIB/&OBJ)
-007284000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-007285000000
-007286000000             ADDMSGD +
-007287000000                MSGID(USR8148) +
-007288000000                MSGF(&LIB/&OBJ) +
-007289000000                MSG( +
-007290000000'Spazio non disponibile per la colonna ''&1''!'                       +
-007291000000                ) +
-007292000000                SEV(0) +
-007293000000                FMT( +
-007294000000                    (*CHAR 10) +
-007295000000                ) +
-007296000000                ALROPT(*NO) +
-007297000000                CCSID(65535) +
-007298000000                /*  -EOF-  */
-007299000000
-007300000000     /*-------------------------------------------------------------*/
-007301000000     /*   Cmd-ADDMSGD für Message-ID :   USR8149                    */
-007302000000     /* Visualizzazione righe a colori alterni giä attiva.          */
-007303000000     /*-------------------------------------------------------------*/
-007304000000
-007305000000             RMVMSGD MSGID(USR8149) MSGF(&LIB/&OBJ)
-007306000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-007307000000
-007308000000             ADDMSGD +
-007309000000                MSGID(USR8149) +
-007310000000                MSGF(&LIB/&OBJ) +
-007311000000                MSG( +
-007312000000'Visualizzazione righe a colori alterni giä attiva.'                  +
-007313000000                ) +
-007314000000                SEV(0) +
-007315000000     /*   No replacement variables defined!                         */ +
+007271000000     /*   No replacement variables defined!                         */ +
+007272000000                ALROPT(*NO) +
+007273000000                CCSID(65535) +
+007274000000                /*  -EOF-  */
+007275000000
+007276000000     /*-------------------------------------------------------------*/
+007277000000     /*   Cmd-ADDMSGD für Message-ID :   USR8147                    */
+007278000000     /* Colonna &1 non contrassegnata.                              */
+007279000000     /*-------------------------------------------------------------*/
+007280000000
+007281000000             RMVMSGD MSGID(USR8147) MSGF(&LIB/&OBJ)
+007282000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+007283000000
+007284000000             ADDMSGD +
+007285000000                MSGID(USR8147) +
+007286000000                MSGF(&LIB/&OBJ) +
+007287000000                MSG( +
+007288000000'Colonna &1 non contrassegnata.'                                      +
+007289000000                ) +
+007290000000                SEV(0) +
+007291000000                FMT( +
+007292000000                    (*CHAR 10) +
+007293000000                ) +
+007294000000                ALROPT(*NO) +
+007295000000                CCSID(65535) +
+007296000000                /*  -EOF-  */
+007297000000
+007298000000     /*-------------------------------------------------------------*/
+007299000000     /*   Cmd-ADDMSGD für Message-ID :   USR8148                    */
+007300000000     /* Spazio non disponibile per la colonna '&1'!                 */
+007301000000     /*-------------------------------------------------------------*/
+007302000000
+007303000000             RMVMSGD MSGID(USR8148) MSGF(&LIB/&OBJ)
+007304000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+007305000000
+007306000000             ADDMSGD +
+007307000000                MSGID(USR8148) +
+007308000000                MSGF(&LIB/&OBJ) +
+007309000000                MSG( +
+007310000000'Spazio non disponibile per la colonna ''&1''!'                       +
+007311000000                ) +
+007312000000                SEV(0) +
+007313000000                FMT( +
+007314000000                    (*CHAR 10) +
+007315000000                ) +
 007316000000                ALROPT(*NO) +
 007317000000                CCSID(65535) +
 007318000000                /*  -EOF-  */
 007319000000
 007320000000     /*-------------------------------------------------------------*/
-007321000000     /*   Cmd-ADDMSGD für Message-ID :   USR8150                    */
-007322000000     /* Visualizzazione righe a colori alterni giä disattiva        */
+007321000000     /*   Cmd-ADDMSGD für Message-ID :   USR8149                    */
+007322000000     /* Visualizzazione righe a colori alterni giä attiva.          */
 007323000000     /*-------------------------------------------------------------*/
 007324000000
-007325000000             RMVMSGD MSGID(USR8150) MSGF(&LIB/&OBJ)
+007325000000             RMVMSGD MSGID(USR8149) MSGF(&LIB/&OBJ)
 007326000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 007327000000
 007328000000             ADDMSGD +
-007329000000                MSGID(USR8150) +
+007329000000                MSGID(USR8149) +
 007330000000                MSGF(&LIB/&OBJ) +
 007331000000                MSG( +
-007332000000'Visualizzazione righe a colori alterni giä disattiva'                +
+007332000000'Visualizzazione righe a colori alterni giä attiva.'                  +
 007333000000                ) +
 007334000000                SEV(0) +
 007335000000     /*   No replacement variables defined!                         */ +
@@ -7338,148 +7338,148 @@
 007338000000                /*  -EOF-  */
 007339000000
 007340000000     /*-------------------------------------------------------------*/
-007341000000     /*   Cmd-ADDMSGD für Message-ID :   USR8151                    */
-007342000000     /* Il nome '&1' non ü valido per il file.                      */
+007341000000     /*   Cmd-ADDMSGD für Message-ID :   USR8150                    */
+007342000000     /* Visualizzazione righe a colori alterni giä disattiva        */
 007343000000     /*-------------------------------------------------------------*/
 007344000000
-007345000000             RMVMSGD MSGID(USR8151) MSGF(&LIB/&OBJ)
+007345000000             RMVMSGD MSGID(USR8150) MSGF(&LIB/&OBJ)
 007346000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 007347000000
 007348000000             ADDMSGD +
-007349000000                MSGID(USR8151) +
+007349000000                MSGID(USR8150) +
 007350000000                MSGF(&LIB/&OBJ) +
 007351000000                MSG( +
-007352000000'Il nome ''&1'' non ü valido per il file.'                            +
+007352000000'Visualizzazione righe a colori alterni giä disattiva'                +
 007353000000                ) +
 007354000000                SEV(0) +
-007355000000                FMT( +
-007356000000                    (*CHAR 10) +
-007357000000                ) +
-007358000000                ALROPT(*NO) +
-007359000000                CCSID(65535) +
-007360000000                /*  -EOF-  */
-007361000000
-007362000000     /*-------------------------------------------------------------*/
-007363000000     /*   Cmd-ADDMSGD für Message-ID :   USR8152                    */
-007364000000     /* Nome libreria '&1' non valido per il file.                  */
-007365000000     /*-------------------------------------------------------------*/
-007366000000
-007367000000             RMVMSGD MSGID(USR8152) MSGF(&LIB/&OBJ)
-007368000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-007369000000
-007370000000             ADDMSGD +
-007371000000                MSGID(USR8152) +
-007372000000                MSGF(&LIB/&OBJ) +
-007373000000                MSG( +
-007374000000'Nome libreria ''&1'' non valido per il file.'                        +
-007375000000                ) +
-007376000000                SEV(0) +
-007377000000                FMT( +
-007378000000                    (*CHAR 10) +
-007379000000                ) +
-007380000000                ALROPT(*NO) +
-007381000000                CCSID(65535) +
-007382000000                /*  -EOF-  */
-007383000000
-007384000000     /*-------------------------------------------------------------*/
-007385000000     /*   Cmd-ADDMSGD für Message-ID :   USR8153                    */
-007386000000     /* Non ü valido il nome membro '&1' per il file.               */
-007387000000     /*-------------------------------------------------------------*/
-007388000000
-007389000000             RMVMSGD MSGID(USR8153) MSGF(&LIB/&OBJ)
-007390000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-007391000000
-007392000000             ADDMSGD +
-007393000000                MSGID(USR8153) +
-007394000000                MSGF(&LIB/&OBJ) +
-007395000000                MSG( +
-007396000000'Non ü valido il nome membro ''&1'' per il file.'                     +
-007397000000                ) +
-007398000000                SEV(0) +
-007399000000                FMT( +
-007400000000                    (*CHAR 10) +
-007401000000                ) +
-007402000000                ALROPT(*NO) +
-007403000000                CCSID(65535) +
-007404000000                /*  -EOF-  */
-007405000000
-007406000000     /*-------------------------------------------------------------*/
-007407000000     /*   Cmd-ADDMSGD für Message-ID :   USR8154                    */
-007408000000     /* Parametro '&1' non valido per immissione/aggiornamento.     */
-007409000000     /*-------------------------------------------------------------*/
-007410000000
-007411000000             RMVMSGD MSGID(USR8154) MSGF(&LIB/&OBJ)
-007412000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-007413000000
-007414000000             ADDMSGD +
-007415000000                MSGID(USR8154) +
-007416000000                MSGF(&LIB/&OBJ) +
-007417000000                MSG( +
-007418000000'Parametro ''&1'' non valido per immissione/aggiornamento.'           +
-007419000000                ) +
-007420000000                SEV(0) +
-007421000000                FMT( +
-007422000000                    (*CHAR 10) +
-007423000000                ) +
-007424000000                ALROPT(*NO) +
-007425000000                CCSID(65535) +
-007426000000                /*  -EOF-  */
-007427000000
-007428000000     /*-------------------------------------------------------------*/
-007429000000     /*   Cmd-ADDMSGD für Message-ID :   USR8155                    */
-007430000000     /* Parametro '&1' non valido per la creazione del file.        */
-007431000000     /*-------------------------------------------------------------*/
-007432000000
-007433000000             RMVMSGD MSGID(USR8155) MSGF(&LIB/&OBJ)
-007434000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-007435000000
-007436000000             ADDMSGD +
-007437000000                MSGID(USR8155) +
-007438000000                MSGF(&LIB/&OBJ) +
-007439000000                MSG( +
-007440000000'Parametro ''&1'' non valido per la creazione del file.'              +
-007441000000                ) +
-007442000000                SEV(0) +
-007443000000                FMT( +
-007444000000                    (*CHAR 10) +
-007445000000                ) +
-007446000000                ALROPT(*NO) +
-007447000000                CCSID(65535) +
-007448000000                /*  -EOF-  */
-007449000000
-007450000000     /*-------------------------------------------------------------*/
-007451000000     /*   Cmd-ADDMSGD für Message-ID :   USR8156                    */
-007452000000     /* Elaborazione tetminata causa errore.                        */
-007453000000     /*-------------------------------------------------------------*/
-007454000000
-007455000000             RMVMSGD MSGID(USR8156) MSGF(&LIB/&OBJ)
-007456000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-007457000000
-007458000000             ADDMSGD +
-007459000000                MSGID(USR8156) +
-007460000000                MSGF(&LIB/&OBJ) +
-007461000000                MSG( +
-007462000000'Elaborazione tetminata causa errore.'                                +
-007463000000                ) +
-007464000000                SEV(0) +
-007465000000     /*   No replacement variables defined!                         */ +
+007355000000     /*   No replacement variables defined!                         */ +
+007356000000                ALROPT(*NO) +
+007357000000                CCSID(65535) +
+007358000000                /*  -EOF-  */
+007359000000
+007360000000     /*-------------------------------------------------------------*/
+007361000000     /*   Cmd-ADDMSGD für Message-ID :   USR8151                    */
+007362000000     /* Il nome '&1' non ü valido per il file.                      */
+007363000000     /*-------------------------------------------------------------*/
+007364000000
+007365000000             RMVMSGD MSGID(USR8151) MSGF(&LIB/&OBJ)
+007366000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+007367000000
+007368000000             ADDMSGD +
+007369000000                MSGID(USR8151) +
+007370000000                MSGF(&LIB/&OBJ) +
+007371000000                MSG( +
+007372000000'Il nome ''&1'' non ü valido per il file.'                            +
+007373000000                ) +
+007374000000                SEV(0) +
+007375000000                FMT( +
+007376000000                    (*CHAR 10) +
+007377000000                ) +
+007378000000                ALROPT(*NO) +
+007379000000                CCSID(65535) +
+007380000000                /*  -EOF-  */
+007381000000
+007382000000     /*-------------------------------------------------------------*/
+007383000000     /*   Cmd-ADDMSGD für Message-ID :   USR8152                    */
+007384000000     /* Nome libreria '&1' non valido per il file.                  */
+007385000000     /*-------------------------------------------------------------*/
+007386000000
+007387000000             RMVMSGD MSGID(USR8152) MSGF(&LIB/&OBJ)
+007388000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+007389000000
+007390000000             ADDMSGD +
+007391000000                MSGID(USR8152) +
+007392000000                MSGF(&LIB/&OBJ) +
+007393000000                MSG( +
+007394000000'Nome libreria ''&1'' non valido per il file.'                        +
+007395000000                ) +
+007396000000                SEV(0) +
+007397000000                FMT( +
+007398000000                    (*CHAR 10) +
+007399000000                ) +
+007400000000                ALROPT(*NO) +
+007401000000                CCSID(65535) +
+007402000000                /*  -EOF-  */
+007403000000
+007404000000     /*-------------------------------------------------------------*/
+007405000000     /*   Cmd-ADDMSGD für Message-ID :   USR8153                    */
+007406000000     /* Non ü valido il nome membro '&1' per il file.               */
+007407000000     /*-------------------------------------------------------------*/
+007408000000
+007409000000             RMVMSGD MSGID(USR8153) MSGF(&LIB/&OBJ)
+007410000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+007411000000
+007412000000             ADDMSGD +
+007413000000                MSGID(USR8153) +
+007414000000                MSGF(&LIB/&OBJ) +
+007415000000                MSG( +
+007416000000'Non ü valido il nome membro ''&1'' per il file.'                     +
+007417000000                ) +
+007418000000                SEV(0) +
+007419000000                FMT( +
+007420000000                    (*CHAR 10) +
+007421000000                ) +
+007422000000                ALROPT(*NO) +
+007423000000                CCSID(65535) +
+007424000000                /*  -EOF-  */
+007425000000
+007426000000     /*-------------------------------------------------------------*/
+007427000000     /*   Cmd-ADDMSGD für Message-ID :   USR8154                    */
+007428000000     /* Parametro '&1' non valido per immissione/aggiornamento.     */
+007429000000     /*-------------------------------------------------------------*/
+007430000000
+007431000000             RMVMSGD MSGID(USR8154) MSGF(&LIB/&OBJ)
+007432000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+007433000000
+007434000000             ADDMSGD +
+007435000000                MSGID(USR8154) +
+007436000000                MSGF(&LIB/&OBJ) +
+007437000000                MSG( +
+007438000000'Parametro ''&1'' non valido per immissione/aggiornamento.'           +
+007439000000                ) +
+007440000000                SEV(0) +
+007441000000                FMT( +
+007442000000                    (*CHAR 10) +
+007443000000                ) +
+007444000000                ALROPT(*NO) +
+007445000000                CCSID(65535) +
+007446000000                /*  -EOF-  */
+007447000000
+007448000000     /*-------------------------------------------------------------*/
+007449000000     /*   Cmd-ADDMSGD für Message-ID :   USR8155                    */
+007450000000     /* Parametro '&1' non valido per la creazione del file.        */
+007451000000     /*-------------------------------------------------------------*/
+007452000000
+007453000000             RMVMSGD MSGID(USR8155) MSGF(&LIB/&OBJ)
+007454000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+007455000000
+007456000000             ADDMSGD +
+007457000000                MSGID(USR8155) +
+007458000000                MSGF(&LIB/&OBJ) +
+007459000000                MSG( +
+007460000000'Parametro ''&1'' non valido per la creazione del file.'              +
+007461000000                ) +
+007462000000                SEV(0) +
+007463000000                FMT( +
+007464000000                    (*CHAR 10) +
+007465000000                ) +
 007466000000                ALROPT(*NO) +
 007467000000                CCSID(65535) +
 007468000000                /*  -EOF-  */
 007469000000
 007470000000     /*-------------------------------------------------------------*/
-007471000000     /*   Cmd-ADDMSGD für Message-ID :   USR8157                    */
-007472000000     /* Reperimento valore di sistema.                              */
+007471000000     /*   Cmd-ADDMSGD für Message-ID :   USR8156                    */
+007472000000     /* Elaborazione tetminata causa errore.                        */
 007473000000     /*-------------------------------------------------------------*/
 007474000000
-007475000000             RMVMSGD MSGID(USR8157) MSGF(&LIB/&OBJ)
+007475000000             RMVMSGD MSGID(USR8156) MSGF(&LIB/&OBJ)
 007476000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 007477000000
 007478000000             ADDMSGD +
-007479000000                MSGID(USR8157) +
+007479000000                MSGID(USR8156) +
 007480000000                MSGF(&LIB/&OBJ) +
 007481000000                MSG( +
-007482000000'Reperimento valore di sistema.'                                      +
+007482000000'Elaborazione tetminata causa errore.'                                +
 007483000000                ) +
 007484000000                SEV(0) +
 007485000000     /*   No replacement variables defined!                         */ +
@@ -7488,103 +7488,103 @@
 007488000000                /*  -EOF-  */
 007489000000
 007490000000     /*-------------------------------------------------------------*/
-007491000000     /*   Cmd-ADDMSGD für Message-ID :   USR8158                    */
-007492000000     /* Il codice di licenza '&1' non ü valido                      */
+007491000000     /*   Cmd-ADDMSGD für Message-ID :   USR8157                    */
+007492000000     /* Reperimento valore di sistema.                              */
 007493000000     /*-------------------------------------------------------------*/
 007494000000
-007495000000             RMVMSGD MSGID(USR8158) MSGF(&LIB/&OBJ)
+007495000000             RMVMSGD MSGID(USR8157) MSGF(&LIB/&OBJ)
 007496000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 007497000000
 007498000000             ADDMSGD +
-007499000000                MSGID(USR8158) +
+007499000000                MSGID(USR8157) +
 007500000000                MSGF(&LIB/&OBJ) +
 007501000000                MSG( +
-007502000000'Il codice di licenza ''&1'' non ü valido'                            +
+007502000000'Reperimento valore di sistema.'                                      +
 007503000000                ) +
 007504000000                SEV(0) +
-007505000000                FMT( +
-007506000000                    (*CHAR 20) +
-007507000000                ) +
-007508000000                ALROPT(*NO) +
-007509000000                CCSID(65535) +
-007510000000                /*  -EOF-  */
-007511000000
-007512000000     /*-------------------------------------------------------------*/
-007513000000     /*   Cmd-ADDMSGD für Message-ID :   USR8159                    */
-007514000000     /* Impossibile salvare i dati relativi alla licenza.           */
-007515000000     /*-------------------------------------------------------------*/
-007516000000
-007517000000             RMVMSGD MSGID(USR8159) MSGF(&LIB/&OBJ)
-007518000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-007519000000
-007520000000             ADDMSGD +
-007521000000                MSGID(USR8159) +
-007522000000                MSGF(&LIB/&OBJ) +
-007523000000                MSG( +
-007524000000'Impossibile salvare i dati relativi alla licenza.'                   +
-007525000000                ) +
-007526000000                SEV(0) +
-007527000000     /*   No replacement variables defined!                         */ +
+007505000000     /*   No replacement variables defined!                         */ +
+007506000000                ALROPT(*NO) +
+007507000000                CCSID(65535) +
+007508000000                /*  -EOF-  */
+007509000000
+007510000000     /*-------------------------------------------------------------*/
+007511000000     /*   Cmd-ADDMSGD für Message-ID :   USR8158                    */
+007512000000     /* Il codice di licenza '&1' non ü valido                      */
+007513000000     /*-------------------------------------------------------------*/
+007514000000
+007515000000             RMVMSGD MSGID(USR8158) MSGF(&LIB/&OBJ)
+007516000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+007517000000
+007518000000             ADDMSGD +
+007519000000                MSGID(USR8158) +
+007520000000                MSGF(&LIB/&OBJ) +
+007521000000                MSG( +
+007522000000'Il codice di licenza ''&1'' non ü valido'                            +
+007523000000                ) +
+007524000000                SEV(0) +
+007525000000                FMT( +
+007526000000                    (*CHAR 20) +
+007527000000                ) +
 007528000000                ALROPT(*NO) +
 007529000000                CCSID(65535) +
 007530000000                /*  -EOF-  */
 007531000000
 007532000000     /*-------------------------------------------------------------*/
-007533000000     /*   Cmd-ADDMSGD für Message-ID :   USR8160                    */
-007534000000     /* Non ü disponibile il file di definizione richiesto per la l */
+007533000000     /*   Cmd-ADDMSGD für Message-ID :   USR8159                    */
+007534000000     /* Impossibile salvare i dati relativi alla licenza.           */
 007535000000     /*-------------------------------------------------------------*/
 007536000000
-007537000000             RMVMSGD MSGID(USR8160) MSGF(&LIB/&OBJ)
+007537000000             RMVMSGD MSGID(USR8159) MSGF(&LIB/&OBJ)
 007538000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 007539000000
 007540000000             ADDMSGD +
-007541000000                MSGID(USR8160) +
+007541000000                MSGID(USR8159) +
 007542000000                MSGF(&LIB/&OBJ) +
 007543000000                MSG( +
-007544000000'Non ü disponibile il file di definizione richiesto per la lingua &1 .-
-007545000000'                                                                     +
-007546000000                ) +
-007547000000                SEV(0) +
-007548000000                FMT( +
-007549000000                    (*CHAR 10) +
-007550000000                ) +
-007551000000                ALROPT(*NO) +
-007552000000                CCSID(65535) +
-007553000000                /*  -EOF-  */
-007554000000
+007544000000'Impossibile salvare i dati relativi alla licenza.'                   +
+007545000000                ) +
+007546000000                SEV(0) +
+007547000000     /*   No replacement variables defined!                         */ +
+007548000000                ALROPT(*NO) +
+007549000000                CCSID(65535) +
+007550000000                /*  -EOF-  */
+007551000000
+007552000000     /*-------------------------------------------------------------*/
+007553000000     /*   Cmd-ADDMSGD für Message-ID :   USR8160                    */
+007554000000     /* Non ü disponibile il file di definizione richiesto per la l */
 007555000000     /*-------------------------------------------------------------*/
-007556000000     /*   Cmd-ADDMSGD für Message-ID :   USR8161                    */
-007557000000     /* SPLASH-Screen abilitato.                                    */
-007558000000     /*-------------------------------------------------------------*/
+007556000000
+007557000000             RMVMSGD MSGID(USR8160) MSGF(&LIB/&OBJ)
+007558000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 007559000000
-007560000000             RMVMSGD MSGID(USR8161) MSGF(&LIB/&OBJ)
-007561000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-007562000000
-007563000000             ADDMSGD +
-007564000000                MSGID(USR8161) +
-007565000000                MSGF(&LIB/&OBJ) +
-007566000000                MSG( +
-007567000000'SPLASH-Screen abilitato.'                                            +
-007568000000                ) +
-007569000000                SEV(0) +
-007570000000     /*   No replacement variables defined!                         */ +
+007560000000             ADDMSGD +
+007561000000                MSGID(USR8160) +
+007562000000                MSGF(&LIB/&OBJ) +
+007563000000                MSG( +
+007564000000'Non ü disponibile il file di definizione richiesto per la lingua &1 .-
+007565000000'                                                                     +
+007566000000                ) +
+007567000000                SEV(0) +
+007568000000                FMT( +
+007569000000                    (*CHAR 10) +
+007570000000                ) +
 007571000000                ALROPT(*NO) +
 007572000000                CCSID(65535) +
 007573000000                /*  -EOF-  */
 007574000000
 007575000000     /*-------------------------------------------------------------*/
-007576000000     /*   Cmd-ADDMSGD für Message-ID :   USR8162                    */
-007577000000     /* SPLASH-Screen disabilitato.                                 */
+007576000000     /*   Cmd-ADDMSGD für Message-ID :   USR8161                    */
+007577000000     /* SPLASH-Screen abilitato.                                    */
 007578000000     /*-------------------------------------------------------------*/
 007579000000
-007580000000             RMVMSGD MSGID(USR8162) MSGF(&LIB/&OBJ)
+007580000000             RMVMSGD MSGID(USR8161) MSGF(&LIB/&OBJ)
 007581000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 007582000000
 007583000000             ADDMSGD +
-007584000000                MSGID(USR8162) +
+007584000000                MSGID(USR8161) +
 007585000000                MSGF(&LIB/&OBJ) +
 007586000000                MSG( +
-007587000000'SPLASH-Screen disabilitato.'                                         +
+007587000000'SPLASH-Screen abilitato.'                                            +
 007588000000                ) +
 007589000000                SEV(0) +
 007590000000     /*   No replacement variables defined!                         */ +
@@ -7593,84 +7593,84 @@
 007593000000                /*  -EOF-  */
 007594000000
 007595000000     /*-------------------------------------------------------------*/
-007596000000     /*   Cmd-ADDMSGD für Message-ID :   USR8163                    */
-007597000000     /* Il campo contiene caratteri non visualizzabili sostituiti c */
+007596000000     /*   Cmd-ADDMSGD für Message-ID :   USR8162                    */
+007597000000     /* SPLASH-Screen disabilitato.                                 */
 007598000000     /*-------------------------------------------------------------*/
 007599000000
-007600000000             RMVMSGD MSGID(USR8163) MSGF(&LIB/&OBJ)
+007600000000             RMVMSGD MSGID(USR8162) MSGF(&LIB/&OBJ)
 007601000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 007602000000
 007603000000             ADDMSGD +
-007604000000                MSGID(USR8163) +
+007604000000                MSGID(USR8162) +
 007605000000                MSGF(&LIB/&OBJ) +
 007606000000                MSG( +
-007607000000'Il campo contiene caratteri non visualizzabili sostituiti con: &1'   +
+007607000000'SPLASH-Screen disabilitato.'                                         +
 007608000000                ) +
 007609000000                SEV(0) +
-007610000000                FMT( +
-007611000000                    (*CHAR 1) +
-007612000000                ) +
-007613000000                ALROPT(*NO) +
-007614000000                CCSID(65535) +
-007615000000                /*  -EOF-  */
-007616000000
-007617000000     /*-------------------------------------------------------------*/
-007618000000     /*   Cmd-ADDMSGD für Message-ID :   USR8164                    */
-007619000000     /* I campi contenenti caratteri non visualizzabili non sono mo */
-007620000000     /*-------------------------------------------------------------*/
-007621000000
-007622000000             RMVMSGD MSGID(USR8164) MSGF(&LIB/&OBJ)
-007623000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-007624000000
-007625000000             ADDMSGD +
-007626000000                MSGID(USR8164) +
-007627000000                MSGF(&LIB/&OBJ) +
-007628000000                MSG( +
-007629000000'I campi contenenti caratteri non visualizzabili non sono mostrati.'  +
-007630000000                ) +
-007631000000                SEV(0) +
-007632000000     /*   No replacement variables defined!                         */ +
+007610000000     /*   No replacement variables defined!                         */ +
+007611000000                ALROPT(*NO) +
+007612000000                CCSID(65535) +
+007613000000                /*  -EOF-  */
+007614000000
+007615000000     /*-------------------------------------------------------------*/
+007616000000     /*   Cmd-ADDMSGD für Message-ID :   USR8163                    */
+007617000000     /* Il campo contiene caratteri non visualizzabili sostituiti c */
+007618000000     /*-------------------------------------------------------------*/
+007619000000
+007620000000             RMVMSGD MSGID(USR8163) MSGF(&LIB/&OBJ)
+007621000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+007622000000
+007623000000             ADDMSGD +
+007624000000                MSGID(USR8163) +
+007625000000                MSGF(&LIB/&OBJ) +
+007626000000                MSG( +
+007627000000'Il campo contiene caratteri non visualizzabili sostituiti con: &1'   +
+007628000000                ) +
+007629000000                SEV(0) +
+007630000000                FMT( +
+007631000000                    (*CHAR 1) +
+007632000000                ) +
 007633000000                ALROPT(*NO) +
 007634000000                CCSID(65535) +
 007635000000                /*  -EOF-  */
 007636000000
 007637000000     /*-------------------------------------------------------------*/
-007638000000     /*   Cmd-ADDMSGD für Message-ID :   USR8165                    */
-007639000000     /* "RIPETI" puö essere premuto solo se ü stata effettuata una  */
+007638000000     /*   Cmd-ADDMSGD für Message-ID :   USR8164                    */
+007639000000     /* I campi contenenti caratteri non visualizzabili non sono mo */
 007640000000     /*-------------------------------------------------------------*/
 007641000000
-007642000000             RMVMSGD MSGID(USR8165) MSGF(&LIB/&OBJ)
+007642000000             RMVMSGD MSGID(USR8164) MSGF(&LIB/&OBJ)
 007643000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 007644000000
 007645000000             ADDMSGD +
-007646000000                MSGID(USR8165) +
+007646000000                MSGID(USR8164) +
 007647000000                MSGF(&LIB/&OBJ) +
 007648000000                MSG( +
-007649000000'"RIPETI" puö essere premuto solo se ü stata effettuata una scelta.'  +
+007649000000'I campi contenenti caratteri non visualizzabili non sono mostrati.'  +
 007650000000                ) +
-007651000000                SECLVL( +
-007652000000'Spiegazione . . . : F13 (RIPETI) ü stato premuto, ma non ü stata effe-
-007653000000ttuata una scelta della funzione da ripetere.'                        +
-007654000000                ) +
-007655000000                SEV(0) +
-007656000000     /*   No replacement variables defined!                         */ +
-007657000000                ALROPT(*NO) +
-007658000000                CCSID(65535) +
-007659000000                /*  -EOF-  */
-007660000000
-007661000000     /*-------------------------------------------------------------*/
-007662000000     /*   Cmd-ADDMSGD für Message-ID :   USR8166                    */
-007663000000     /* Funzione non eseguibile; nessun file ü aperto.              */
-007664000000     /*-------------------------------------------------------------*/
-007665000000
-007666000000             RMVMSGD MSGID(USR8166) MSGF(&LIB/&OBJ)
-007667000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-007668000000
-007669000000             ADDMSGD +
-007670000000                MSGID(USR8166) +
-007671000000                MSGF(&LIB/&OBJ) +
-007672000000                MSG( +
-007673000000'Funzione non eseguibile; nessun file ü aperto.'                      +
+007651000000                SEV(0) +
+007652000000     /*   No replacement variables defined!                         */ +
+007653000000                ALROPT(*NO) +
+007654000000                CCSID(65535) +
+007655000000                /*  -EOF-  */
+007656000000
+007657000000     /*-------------------------------------------------------------*/
+007658000000     /*   Cmd-ADDMSGD für Message-ID :   USR8165                    */
+007659000000     /* "RIPETI" puö essere premuto solo se ü stata effettuata una  */
+007660000000     /*-------------------------------------------------------------*/
+007661000000
+007662000000             RMVMSGD MSGID(USR8165) MSGF(&LIB/&OBJ)
+007663000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+007664000000
+007665000000             ADDMSGD +
+007666000000                MSGID(USR8165) +
+007667000000                MSGF(&LIB/&OBJ) +
+007668000000                MSG( +
+007669000000'"RIPETI" puö essere premuto solo se ü stata effettuata una scelta.'  +
+007670000000                ) +
+007671000000                SECLVL( +
+007672000000'Spiegazione . . . : F13 (RIPETI) ü stato premuto, ma non ü stata effe-
+007673000000ttuata una scelta della funzione da ripetere.'                        +
 007674000000                ) +
 007675000000                SEV(0) +
 007676000000     /*   No replacement variables defined!                         */ +
@@ -7679,18 +7679,18 @@
 007679000000                /*  -EOF-  */
 007680000000
 007681000000     /*-------------------------------------------------------------*/
-007682000000     /*   Cmd-ADDMSGD für Message-ID :   USR8167                    */
-007683000000     /* I numeri di sequenza non univoci non sono permessi.         */
+007682000000     /*   Cmd-ADDMSGD für Message-ID :   USR8166                    */
+007683000000     /* Funzione non eseguibile; nessun file ü aperto.              */
 007684000000     /*-------------------------------------------------------------*/
 007685000000
-007686000000             RMVMSGD MSGID(USR8167) MSGF(&LIB/&OBJ)
+007686000000             RMVMSGD MSGID(USR8166) MSGF(&LIB/&OBJ)
 007687000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 007688000000
 007689000000             ADDMSGD +
-007690000000                MSGID(USR8167) +
+007690000000                MSGID(USR8166) +
 007691000000                MSGF(&LIB/&OBJ) +
 007692000000                MSG( +
-007693000000'I numeri di sequenza non univoci non sono permessi.'                 +
+007693000000'Funzione non eseguibile; nessun file ü aperto.'                      +
 007694000000                ) +
 007695000000                SEV(0) +
 007696000000     /*   No replacement variables defined!                         */ +
@@ -7699,257 +7699,257 @@
 007699000000                /*  -EOF-  */
 007700000000
 007701000000     /*-------------------------------------------------------------*/
-007702000000     /*   Cmd-ADDMSGD für Message-ID :   USR8168                    */
-007703000000     /* 'Il valore &1 non ü consentito per l'attributo "Visibile/In */
+007702000000     /*   Cmd-ADDMSGD für Message-ID :   USR8167                    */
+007703000000     /* I numeri di sequenza non univoci non sono permessi.         */
 007704000000     /*-------------------------------------------------------------*/
 007705000000
-007706000000             RMVMSGD MSGID(USR8168) MSGF(&LIB/&OBJ)
+007706000000             RMVMSGD MSGID(USR8167) MSGF(&LIB/&OBJ)
 007707000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 007708000000
 007709000000             ADDMSGD +
-007710000000                MSGID(USR8168) +
+007710000000                MSGID(USR8167) +
 007711000000                MSGF(&LIB/&OBJ) +
 007712000000                MSG( +
-007713000000'''Il valore &1 non ü consentito per l''attributo "Visibile/Invisibile-
-007714000000".'''                                                                 +
-007715000000                ) +
-007716000000                SEV(0) +
-007717000000                FMT( +
-007718000000                    (*CHAR 10) +
-007719000000                ) +
-007720000000                ALROPT(*NO) +
-007721000000                CCSID(65535) +
-007722000000                /*  -EOF-  */
-007723000000
+007713000000'I numeri di sequenza non univoci non sono permessi.'                 +
+007714000000                ) +
+007715000000                SEV(0) +
+007716000000     /*   No replacement variables defined!                         */ +
+007717000000                ALROPT(*NO) +
+007718000000                CCSID(65535) +
+007719000000                /*  -EOF-  */
+007720000000
+007721000000     /*-------------------------------------------------------------*/
+007722000000     /*   Cmd-ADDMSGD für Message-ID :   USR8168                    */
+007723000000     /* 'Il valore &1 non ü consentito per l'attributo "Visibile/In */
 007724000000     /*-------------------------------------------------------------*/
-007725000000     /*   Cmd-ADDMSGD für Message-ID :   USR8169                    */
-007726000000     /* Valore &1 non consentito per l'attributo "Evidenza la colon */
-007727000000     /*-------------------------------------------------------------*/
+007725000000
+007726000000             RMVMSGD MSGID(USR8168) MSGF(&LIB/&OBJ)
+007727000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 007728000000
-007729000000             RMVMSGD MSGID(USR8169) MSGF(&LIB/&OBJ)
-007730000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-007731000000
-007732000000             ADDMSGD +
-007733000000                MSGID(USR8169) +
-007734000000                MSGF(&LIB/&OBJ) +
-007735000000                MSG( +
-007736000000'Valore &1 non consentito per l''attributo "Evidenza la colonna".'    +
-007737000000                ) +
-007738000000                SEV(0) +
-007739000000                FMT( +
-007740000000                    (*CHAR 10) +
-007741000000                ) +
-007742000000                ALROPT(*NO) +
-007743000000                CCSID(65535) +
-007744000000                /*  -EOF-  */
-007745000000
-007746000000     /*-------------------------------------------------------------*/
-007747000000     /*   Cmd-ADDMSGD für Message-ID :   USR8170                    */
-007748000000     /* Il valore &1 per l'attributo "Dimensione massima" non ü con */
-007749000000     /*-------------------------------------------------------------*/
-007750000000
-007751000000             RMVMSGD MSGID(USR8170) MSGF(&LIB/&OBJ)
-007752000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-007753000000
-007754000000             ADDMSGD +
-007755000000                MSGID(USR8170) +
-007756000000                MSGF(&LIB/&OBJ) +
-007757000000                MSG( +
-007758000000'Il valore &1 per l''attributo "Dimensione massima" non ü consentito.'+
-007759000000                ) +
-007760000000                SEV(0) +
-007761000000                FMT( +
-007762000000                    (*DEC 10 0) +
-007763000000                ) +
-007764000000                ALROPT(*NO) +
-007765000000                CCSID(65535) +
-007766000000                /*  -EOF-  */
-007767000000
-007768000000     /*-------------------------------------------------------------*/
-007769000000     /*   Cmd-ADDMSGD für Message-ID :   USR8171                    */
-007770000000     /* Valore '&1' non valido per campi DATA, ORA o TIMESTAMP      */
-007771000000     /*-------------------------------------------------------------*/
-007772000000
-007773000000             RMVMSGD MSGID(USR8171) MSGF(&LIB/&OBJ)
-007774000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-007775000000
-007776000000             ADDMSGD +
-007777000000                MSGID(USR8171) +
-007778000000                MSGF(&LIB/&OBJ) +
-007779000000                MSG( +
-007780000000'Valore ''&1'' non valido per campi DATA, ORA o TIMESTAMP'            +
-007781000000                ) +
-007782000000                SEV(0) +
-007783000000                FMT( +
-007784000000                    (*CHAR 26) +
-007785000000                ) +
-007786000000                ALROPT(*NO) +
-007787000000                CCSID(65535) +
-007788000000                /*  -EOF-  */
-007789000000
-007790000000     /*-------------------------------------------------------------*/
-007791000000     /*   Cmd-ADDMSGD für Message-ID :   USR8172                    */
-007792000000     /* In elaborazione: &1                                         */
-007793000000     /*-------------------------------------------------------------*/
-007794000000
-007795000000             RMVMSGD MSGID(USR8172) MSGF(&LIB/&OBJ)
-007796000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-007797000000
-007798000000             ADDMSGD +
-007799000000                MSGID(USR8172) +
-007800000000                MSGF(&LIB/&OBJ) +
-007801000000                MSG( +
-007802000000'In elaborazione: &1'                                                 +
-007803000000                ) +
-007804000000                SEV(0) +
-007805000000                FMT( +
-007806000000                    (*CHAR 50) +
-007807000000                ) +
-007808000000                ALROPT(*NO) +
-007809000000                CCSID(65535) +
-007810000000                /*  -EOF-  */
-007811000000
-007812000000     /*-------------------------------------------------------------*/
-007813000000     /*   Cmd-ADDMSGD für Message-ID :   USR8173                    */
-007814000000     /* Peek/400 non puö essere chiamato ricorsivamente.            */
-007815000000     /*-------------------------------------------------------------*/
-007816000000
-007817000000             RMVMSGD MSGID(USR8173) MSGF(&LIB/&OBJ)
-007818000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-007819000000
-007820000000             ADDMSGD +
-007821000000                MSGID(USR8173) +
-007822000000                MSGF(&LIB/&OBJ) +
-007823000000                MSG( +
-007824000000'Peek/400 non puö essere chiamato ricorsivamente.'                    +
-007825000000                ) +
-007826000000                SEV(0) +
-007827000000     /*   No replacement variables defined!                         */ +
+007729000000             ADDMSGD +
+007730000000                MSGID(USR8168) +
+007731000000                MSGF(&LIB/&OBJ) +
+007732000000                MSG( +
+007733000000'''Il valore &1 non ü consentito per l''attributo "Visibile/Invisibile-
+007734000000".'''                                                                 +
+007735000000                ) +
+007736000000                SEV(0) +
+007737000000                FMT( +
+007738000000                    (*CHAR 10) +
+007739000000                ) +
+007740000000                ALROPT(*NO) +
+007741000000                CCSID(65535) +
+007742000000                /*  -EOF-  */
+007743000000
+007744000000     /*-------------------------------------------------------------*/
+007745000000     /*   Cmd-ADDMSGD für Message-ID :   USR8169                    */
+007746000000     /* Valore &1 non consentito per l'attributo "Evidenza la colon */
+007747000000     /*-------------------------------------------------------------*/
+007748000000
+007749000000             RMVMSGD MSGID(USR8169) MSGF(&LIB/&OBJ)
+007750000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+007751000000
+007752000000             ADDMSGD +
+007753000000                MSGID(USR8169) +
+007754000000                MSGF(&LIB/&OBJ) +
+007755000000                MSG( +
+007756000000'Valore &1 non consentito per l''attributo "Evidenza la colonna".'    +
+007757000000                ) +
+007758000000                SEV(0) +
+007759000000                FMT( +
+007760000000                    (*CHAR 10) +
+007761000000                ) +
+007762000000                ALROPT(*NO) +
+007763000000                CCSID(65535) +
+007764000000                /*  -EOF-  */
+007765000000
+007766000000     /*-------------------------------------------------------------*/
+007767000000     /*   Cmd-ADDMSGD für Message-ID :   USR8170                    */
+007768000000     /* Il valore &1 per l'attributo "Dimensione massima" non ü con */
+007769000000     /*-------------------------------------------------------------*/
+007770000000
+007771000000             RMVMSGD MSGID(USR8170) MSGF(&LIB/&OBJ)
+007772000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+007773000000
+007774000000             ADDMSGD +
+007775000000                MSGID(USR8170) +
+007776000000                MSGF(&LIB/&OBJ) +
+007777000000                MSG( +
+007778000000'Il valore &1 per l''attributo "Dimensione massima" non ü consentito.'+
+007779000000                ) +
+007780000000                SEV(0) +
+007781000000                FMT( +
+007782000000                    (*DEC 10 0) +
+007783000000                ) +
+007784000000                ALROPT(*NO) +
+007785000000                CCSID(65535) +
+007786000000                /*  -EOF-  */
+007787000000
+007788000000     /*-------------------------------------------------------------*/
+007789000000     /*   Cmd-ADDMSGD für Message-ID :   USR8171                    */
+007790000000     /* Valore '&1' non valido per campi DATA, ORA o TIMESTAMP      */
+007791000000     /*-------------------------------------------------------------*/
+007792000000
+007793000000             RMVMSGD MSGID(USR8171) MSGF(&LIB/&OBJ)
+007794000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+007795000000
+007796000000             ADDMSGD +
+007797000000                MSGID(USR8171) +
+007798000000                MSGF(&LIB/&OBJ) +
+007799000000                MSG( +
+007800000000'Valore ''&1'' non valido per campi DATA, ORA o TIMESTAMP'            +
+007801000000                ) +
+007802000000                SEV(0) +
+007803000000                FMT( +
+007804000000                    (*CHAR 26) +
+007805000000                ) +
+007806000000                ALROPT(*NO) +
+007807000000                CCSID(65535) +
+007808000000                /*  -EOF-  */
+007809000000
+007810000000     /*-------------------------------------------------------------*/
+007811000000     /*   Cmd-ADDMSGD für Message-ID :   USR8172                    */
+007812000000     /* In elaborazione: &1                                         */
+007813000000     /*-------------------------------------------------------------*/
+007814000000
+007815000000             RMVMSGD MSGID(USR8172) MSGF(&LIB/&OBJ)
+007816000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+007817000000
+007818000000             ADDMSGD +
+007819000000                MSGID(USR8172) +
+007820000000                MSGF(&LIB/&OBJ) +
+007821000000                MSG( +
+007822000000'In elaborazione: &1'                                                 +
+007823000000                ) +
+007824000000                SEV(0) +
+007825000000                FMT( +
+007826000000                    (*CHAR 50) +
+007827000000                ) +
 007828000000                ALROPT(*NO) +
 007829000000                CCSID(65535) +
 007830000000                /*  -EOF-  */
 007831000000
 007832000000     /*-------------------------------------------------------------*/
-007833000000     /*   Cmd-ADDMSGD für Message-ID :   USR8174                    */
-007834000000     /* Carattere non valido (&1) in stringa esadecimale.           */
+007833000000     /*   Cmd-ADDMSGD für Message-ID :   USR8173                    */
+007834000000     /* Peek/400 non puö essere chiamato ricorsivamente.            */
 007835000000     /*-------------------------------------------------------------*/
 007836000000
-007837000000             RMVMSGD MSGID(USR8174) MSGF(&LIB/&OBJ)
+007837000000             RMVMSGD MSGID(USR8173) MSGF(&LIB/&OBJ)
 007838000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 007839000000
 007840000000             ADDMSGD +
-007841000000                MSGID(USR8174) +
+007841000000                MSGID(USR8173) +
 007842000000                MSGF(&LIB/&OBJ) +
 007843000000                MSG( +
-007844000000'Carattere non valido (&1) in stringa esadecimale.'                   +
+007844000000'Peek/400 non puö essere chiamato ricorsivamente.'                    +
 007845000000                ) +
 007846000000                SEV(0) +
-007847000000                FMT( +
-007848000000                    (*CHAR 1) +
-007849000000                ) +
-007850000000                ALROPT(*NO) +
-007851000000                CCSID(65535) +
-007852000000                /*  -EOF-  */
-007853000000
-007854000000     /*-------------------------------------------------------------*/
-007855000000     /*   Cmd-ADDMSGD für Message-ID :   USR8175                    */
-007856000000     /* Il numero dei caratteri deve essere pari.                   */
-007857000000     /*-------------------------------------------------------------*/
-007858000000
-007859000000             RMVMSGD MSGID(USR8175) MSGF(&LIB/&OBJ)
-007860000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-007861000000
-007862000000             ADDMSGD +
-007863000000                MSGID(USR8175) +
-007864000000                MSGF(&LIB/&OBJ) +
-007865000000                MSG( +
-007866000000'Il numero dei caratteri deve essere pari.'                           +
-007867000000                ) +
-007868000000                SEV(0) +
-007869000000                FMT( +
-007870000000                    (*CHAR 1) +
-007871000000                ) +
-007872000000                ALROPT(*NO) +
-007873000000                CCSID(65535) +
-007874000000                /*  -EOF-  */
-007875000000
-007876000000     /*-------------------------------------------------------------*/
-007877000000     /*   Cmd-ADDMSGD für Message-ID :   USR8176                    */
-007878000000     /* La stringa ü troppo lunga.                                  */
-007879000000     /*-------------------------------------------------------------*/
-007880000000
-007881000000             RMVMSGD MSGID(USR8176) MSGF(&LIB/&OBJ)
-007882000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-007883000000
-007884000000             ADDMSGD +
-007885000000                MSGID(USR8176) +
-007886000000                MSGF(&LIB/&OBJ) +
-007887000000                MSG( +
-007888000000'La stringa ü troppo lunga.'                                          +
-007889000000                ) +
-007890000000                SEV(0) +
-007891000000                FMT( +
-007892000000                    (*CHAR 1) +
-007893000000                ) +
-007894000000                ALROPT(*NO) +
-007895000000                CCSID(65535) +
-007896000000                /*  -EOF-  */
-007897000000
-007898000000     /*-------------------------------------------------------------*/
-007899000000     /*   Cmd-ADDMSGD für Message-ID :   USR8177                    */
-007900000000     /* Non ü ammesso che la posizione iniziale superi la lunghezza */
-007901000000     /*-------------------------------------------------------------*/
-007902000000
-007903000000             RMVMSGD MSGID(USR8177) MSGF(&LIB/&OBJ)
-007904000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-007905000000
-007906000000             ADDMSGD +
-007907000000                MSGID(USR8177) +
-007908000000                MSGF(&LIB/&OBJ) +
-007909000000                MSG( +
-007910000000'Non ü ammesso che la posizione iniziale superi la lunghezza stringa.'+
-007911000000                ) +
-007912000000                SEV(0) +
-007913000000                FMT( +
-007914000000                    (*CHAR 1) +
-007915000000                ) +
-007916000000                ALROPT(*NO) +
-007917000000                CCSID(65535) +
-007918000000                /*  -EOF-  */
-007919000000
-007920000000     /*-------------------------------------------------------------*/
-007921000000     /*   Cmd-ADDMSGD für Message-ID :   USR8178                    */
-007922000000     /* La posizione iniziale non puö essere zero o inferiore.      */
-007923000000     /*-------------------------------------------------------------*/
-007924000000
-007925000000             RMVMSGD MSGID(USR8178) MSGF(&LIB/&OBJ)
-007926000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-007927000000
-007928000000             ADDMSGD +
-007929000000                MSGID(USR8178) +
-007930000000                MSGF(&LIB/&OBJ) +
-007931000000                MSG( +
-007932000000'La posizione iniziale non puö essere zero o inferiore.'              +
-007933000000                ) +
-007934000000                SEV(0) +
-007935000000     /*   No replacement variables defined!                         */ +
+007847000000     /*   No replacement variables defined!                         */ +
+007848000000                ALROPT(*NO) +
+007849000000                CCSID(65535) +
+007850000000                /*  -EOF-  */
+007851000000
+007852000000     /*-------------------------------------------------------------*/
+007853000000     /*   Cmd-ADDMSGD für Message-ID :   USR8174                    */
+007854000000     /* Carattere non valido (&1) in stringa esadecimale.           */
+007855000000     /*-------------------------------------------------------------*/
+007856000000
+007857000000             RMVMSGD MSGID(USR8174) MSGF(&LIB/&OBJ)
+007858000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+007859000000
+007860000000             ADDMSGD +
+007861000000                MSGID(USR8174) +
+007862000000                MSGF(&LIB/&OBJ) +
+007863000000                MSG( +
+007864000000'Carattere non valido (&1) in stringa esadecimale.'                   +
+007865000000                ) +
+007866000000                SEV(0) +
+007867000000                FMT( +
+007868000000                    (*CHAR 1) +
+007869000000                ) +
+007870000000                ALROPT(*NO) +
+007871000000                CCSID(65535) +
+007872000000                /*  -EOF-  */
+007873000000
+007874000000     /*-------------------------------------------------------------*/
+007875000000     /*   Cmd-ADDMSGD für Message-ID :   USR8175                    */
+007876000000     /* Il numero dei caratteri deve essere pari.                   */
+007877000000     /*-------------------------------------------------------------*/
+007878000000
+007879000000             RMVMSGD MSGID(USR8175) MSGF(&LIB/&OBJ)
+007880000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+007881000000
+007882000000             ADDMSGD +
+007883000000                MSGID(USR8175) +
+007884000000                MSGF(&LIB/&OBJ) +
+007885000000                MSG( +
+007886000000'Il numero dei caratteri deve essere pari.'                           +
+007887000000                ) +
+007888000000                SEV(0) +
+007889000000                FMT( +
+007890000000                    (*CHAR 1) +
+007891000000                ) +
+007892000000                ALROPT(*NO) +
+007893000000                CCSID(65535) +
+007894000000                /*  -EOF-  */
+007895000000
+007896000000     /*-------------------------------------------------------------*/
+007897000000     /*   Cmd-ADDMSGD für Message-ID :   USR8176                    */
+007898000000     /* La stringa ü troppo lunga.                                  */
+007899000000     /*-------------------------------------------------------------*/
+007900000000
+007901000000             RMVMSGD MSGID(USR8176) MSGF(&LIB/&OBJ)
+007902000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+007903000000
+007904000000             ADDMSGD +
+007905000000                MSGID(USR8176) +
+007906000000                MSGF(&LIB/&OBJ) +
+007907000000                MSG( +
+007908000000'La stringa ü troppo lunga.'                                          +
+007909000000                ) +
+007910000000                SEV(0) +
+007911000000                FMT( +
+007912000000                    (*CHAR 1) +
+007913000000                ) +
+007914000000                ALROPT(*NO) +
+007915000000                CCSID(65535) +
+007916000000                /*  -EOF-  */
+007917000000
+007918000000     /*-------------------------------------------------------------*/
+007919000000     /*   Cmd-ADDMSGD für Message-ID :   USR8177                    */
+007920000000     /* Non ü ammesso che la posizione iniziale superi la lunghezza */
+007921000000     /*-------------------------------------------------------------*/
+007922000000
+007923000000             RMVMSGD MSGID(USR8177) MSGF(&LIB/&OBJ)
+007924000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+007925000000
+007926000000             ADDMSGD +
+007927000000                MSGID(USR8177) +
+007928000000                MSGF(&LIB/&OBJ) +
+007929000000                MSG( +
+007930000000'Non ü ammesso che la posizione iniziale superi la lunghezza stringa.'+
+007931000000                ) +
+007932000000                SEV(0) +
+007933000000                FMT( +
+007934000000                    (*CHAR 1) +
+007935000000                ) +
 007936000000                ALROPT(*NO) +
 007937000000                CCSID(65535) +
 007938000000                /*  -EOF-  */
 007939000000
 007940000000     /*-------------------------------------------------------------*/
-007941000000     /*   Cmd-ADDMSGD für Message-ID :   USR8179                    */
-007942000000     /* Nessuna visualizzazione disponibile.                        */
+007941000000     /*   Cmd-ADDMSGD für Message-ID :   USR8178                    */
+007942000000     /* La posizione iniziale non puö essere zero o inferiore.      */
 007943000000     /*-------------------------------------------------------------*/
 007944000000
-007945000000             RMVMSGD MSGID(USR8179) MSGF(&LIB/&OBJ)
+007945000000             RMVMSGD MSGID(USR8178) MSGF(&LIB/&OBJ)
 007946000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 007947000000
 007948000000             ADDMSGD +
-007949000000                MSGID(USR8179) +
+007949000000                MSGID(USR8178) +
 007950000000                MSGF(&LIB/&OBJ) +
 007951000000                MSG( +
-007952000000'Nessuna visualizzazione disponibile.'                                +
+007952000000'La posizione iniziale non puö essere zero o inferiore.'              +
 007953000000                ) +
 007954000000                SEV(0) +
 007955000000     /*   No replacement variables defined!                         */ +
@@ -7958,123 +7958,123 @@
 007958000000                /*  -EOF-  */
 007959000000
 007960000000     /*-------------------------------------------------------------*/
-007961000000     /*   Cmd-ADDMSGD für Message-ID :   USR8180                    */
-007962000000     /* Non trovato il membro '&1' .                                */
+007961000000     /*   Cmd-ADDMSGD für Message-ID :   USR8179                    */
+007962000000     /* Nessuna visualizzazione disponibile.                        */
 007963000000     /*-------------------------------------------------------------*/
 007964000000
-007965000000             RMVMSGD MSGID(USR8180) MSGF(&LIB/&OBJ)
+007965000000             RMVMSGD MSGID(USR8179) MSGF(&LIB/&OBJ)
 007966000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 007967000000
 007968000000             ADDMSGD +
-007969000000                MSGID(USR8180) +
+007969000000                MSGID(USR8179) +
 007970000000                MSGF(&LIB/&OBJ) +
 007971000000                MSG( +
-007972000000'Non trovato il membro ''&1'' .'                                      +
+007972000000'Nessuna visualizzazione disponibile.'                                +
 007973000000                ) +
 007974000000                SEV(0) +
-007975000000                FMT( +
-007976000000                    (*CHAR 10) +
-007977000000                ) +
-007978000000                ALROPT(*NO) +
-007979000000                CCSID(65535) +
-007980000000                /*  -EOF-  */
-007981000000
-007982000000     /*-------------------------------------------------------------*/
-007983000000     /*   Cmd-ADDMSGD für Message-ID :   USR8181                    */
-007984000000     /* Non ü possibile salvare l'ambiente del lavoro senza un nome */
-007985000000     /*-------------------------------------------------------------*/
-007986000000
-007987000000             RMVMSGD MSGID(USR8181) MSGF(&LIB/&OBJ)
-007988000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-007989000000
-007990000000             ADDMSGD +
-007991000000                MSGID(USR8181) +
-007992000000                MSGF(&LIB/&OBJ) +
-007993000000                MSG( +
-007994000000'Non ü possibile salvare l''ambiente del lavoro senza un nome.'       +
-007995000000                ) +
-007996000000                SEV(0) +
-007997000000     /*   No replacement variables defined!                         */ +
+007975000000     /*   No replacement variables defined!                         */ +
+007976000000                ALROPT(*NO) +
+007977000000                CCSID(65535) +
+007978000000                /*  -EOF-  */
+007979000000
+007980000000     /*-------------------------------------------------------------*/
+007981000000     /*   Cmd-ADDMSGD für Message-ID :   USR8180                    */
+007982000000     /* Non trovato il membro '&1' .                                */
+007983000000     /*-------------------------------------------------------------*/
+007984000000
+007985000000             RMVMSGD MSGID(USR8180) MSGF(&LIB/&OBJ)
+007986000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+007987000000
+007988000000             ADDMSGD +
+007989000000                MSGID(USR8180) +
+007990000000                MSGF(&LIB/&OBJ) +
+007991000000                MSG( +
+007992000000'Non trovato il membro ''&1'' .'                                      +
+007993000000                ) +
+007994000000                SEV(0) +
+007995000000                FMT( +
+007996000000                    (*CHAR 10) +
+007997000000                ) +
 007998000000                ALROPT(*NO) +
 007999000000                CCSID(65535) +
 008000000000                /*  -EOF-  */
 008001000000
 008002000000     /*-------------------------------------------------------------*/
-008003000000     /*   Cmd-ADDMSGD für Message-ID :   USR8182                    */
-008004000000     /* Il valore &1 non ü un nome valido per un oggetto AS/400.    */
+008003000000     /*   Cmd-ADDMSGD für Message-ID :   USR8181                    */
+008004000000     /* Non ü possibile salvare l'ambiente del lavoro senza un nome */
 008005000000     /*-------------------------------------------------------------*/
 008006000000
-008007000000             RMVMSGD MSGID(USR8182) MSGF(&LIB/&OBJ)
+008007000000             RMVMSGD MSGID(USR8181) MSGF(&LIB/&OBJ)
 008008000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 008009000000
 008010000000             ADDMSGD +
-008011000000                MSGID(USR8182) +
+008011000000                MSGID(USR8181) +
 008012000000                MSGF(&LIB/&OBJ) +
 008013000000                MSG( +
-008014000000'Il valore &1 non ü un nome valido per un oggetto AS/400.'            +
+008014000000'Non ü possibile salvare l''ambiente del lavoro senza un nome.'       +
 008015000000                ) +
 008016000000                SEV(0) +
-008017000000                FMT( +
-008018000000                    (*CHAR 10) +
-008019000000                ) +
-008020000000                ALROPT(*NO) +
-008021000000                CCSID(65535) +
-008022000000                /*  -EOF-  */
-008023000000
-008024000000     /*-------------------------------------------------------------*/
-008025000000     /*   Cmd-ADDMSGD für Message-ID :   USR8183                    */
-008026000000     /* Scelta non coerente.                                        */
-008027000000     /*-------------------------------------------------------------*/
-008028000000
-008029000000             RMVMSGD MSGID(USR8183) MSGF(&LIB/&OBJ)
-008030000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-008031000000
-008032000000             ADDMSGD +
-008033000000                MSGID(USR8183) +
-008034000000                MSGF(&LIB/&OBJ) +
-008035000000                MSG( +
-008036000000'Scelta non coerente.'                                                +
-008037000000                ) +
-008038000000                SEV(0) +
-008039000000     /*   No replacement variables defined!                         */ +
+008017000000     /*   No replacement variables defined!                         */ +
+008018000000                ALROPT(*NO) +
+008019000000                CCSID(65535) +
+008020000000                /*  -EOF-  */
+008021000000
+008022000000     /*-------------------------------------------------------------*/
+008023000000     /*   Cmd-ADDMSGD für Message-ID :   USR8182                    */
+008024000000     /* Il valore &1 non ü un nome valido per un oggetto AS/400.    */
+008025000000     /*-------------------------------------------------------------*/
+008026000000
+008027000000             RMVMSGD MSGID(USR8182) MSGF(&LIB/&OBJ)
+008028000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+008029000000
+008030000000             ADDMSGD +
+008031000000                MSGID(USR8182) +
+008032000000                MSGF(&LIB/&OBJ) +
+008033000000                MSG( +
+008034000000'Il valore &1 non ü un nome valido per un oggetto AS/400.'            +
+008035000000                ) +
+008036000000                SEV(0) +
+008037000000                FMT( +
+008038000000                    (*CHAR 10) +
+008039000000                ) +
 008040000000                ALROPT(*NO) +
 008041000000                CCSID(65535) +
 008042000000                /*  -EOF-  */
 008043000000
 008044000000     /*-------------------------------------------------------------*/
-008045000000     /*   Cmd-ADDMSGD für Message-ID :   USR8184                    */
-008046000000     /* Questa funzione non ü abilitata; si prega di contattare l'a */
+008045000000     /*   Cmd-ADDMSGD für Message-ID :   USR8183                    */
+008046000000     /* Scelta non coerente.                                        */
 008047000000     /*-------------------------------------------------------------*/
 008048000000
-008049000000             RMVMSGD MSGID(USR8184) MSGF(&LIB/&OBJ)
+008049000000             RMVMSGD MSGID(USR8183) MSGF(&LIB/&OBJ)
 008050000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 008051000000
 008052000000             ADDMSGD +
-008053000000                MSGID(USR8184) +
+008053000000                MSGID(USR8183) +
 008054000000                MSGF(&LIB/&OBJ) +
 008055000000                MSG( +
-008056000000'Questa funzione non ü abilitata; si prega di contattare l''amministra-
-008057000000tore del sistema.'                                                    +
-008058000000                ) +
-008059000000                SEV(0) +
-008060000000     /*   No replacement variables defined!                         */ +
-008061000000                ALROPT(*NO) +
-008062000000                CCSID(65535) +
-008063000000                /*  -EOF-  */
-008064000000
-008065000000     /*-------------------------------------------------------------*/
-008066000000     /*   Cmd-ADDMSGD für Message-ID :   USR8185                    */
-008067000000     /* Non ü stato fornito e di conseguenza aperto un ambiente di  */
-008068000000     /*-------------------------------------------------------------*/
-008069000000
-008070000000             RMVMSGD MSGID(USR8185) MSGF(&LIB/&OBJ)
-008071000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-008072000000
-008073000000             ADDMSGD +
-008074000000                MSGID(USR8185) +
-008075000000                MSGF(&LIB/&OBJ) +
-008076000000                MSG( +
-008077000000'Non ü stato fornito e di conseguenza aperto un ambiente di lavoro.'  +
+008056000000'Scelta non coerente.'                                                +
+008057000000                ) +
+008058000000                SEV(0) +
+008059000000     /*   No replacement variables defined!                         */ +
+008060000000                ALROPT(*NO) +
+008061000000                CCSID(65535) +
+008062000000                /*  -EOF-  */
+008063000000
+008064000000     /*-------------------------------------------------------------*/
+008065000000     /*   Cmd-ADDMSGD für Message-ID :   USR8184                    */
+008066000000     /* Questa funzione non ü abilitata; si prega di contattare l'a */
+008067000000     /*-------------------------------------------------------------*/
+008068000000
+008069000000             RMVMSGD MSGID(USR8184) MSGF(&LIB/&OBJ)
+008070000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+008071000000
+008072000000             ADDMSGD +
+008073000000                MSGID(USR8184) +
+008074000000                MSGF(&LIB/&OBJ) +
+008075000000                MSG( +
+008076000000'Questa funzione non ü abilitata; si prega di contattare l''amministra-
+008077000000tore del sistema.'                                                    +
 008078000000                ) +
 008079000000                SEV(0) +
 008080000000     /*   No replacement variables defined!                         */ +
@@ -8083,18 +8083,18 @@
 008083000000                /*  -EOF-  */
 008084000000
 008085000000     /*-------------------------------------------------------------*/
-008086000000     /*   Cmd-ADDMSGD für Message-ID :   USR8186                    */
-008087000000     /* La stringa ü troppo breve.                                  */
+008086000000     /*   Cmd-ADDMSGD für Message-ID :   USR8185                    */
+008087000000     /* Non ü stato fornito e di conseguenza aperto un ambiente di  */
 008088000000     /*-------------------------------------------------------------*/
 008089000000
-008090000000             RMVMSGD MSGID(USR8186) MSGF(&LIB/&OBJ)
+008090000000             RMVMSGD MSGID(USR8185) MSGF(&LIB/&OBJ)
 008091000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 008092000000
 008093000000             ADDMSGD +
-008094000000                MSGID(USR8186) +
+008094000000                MSGID(USR8185) +
 008095000000                MSGF(&LIB/&OBJ) +
 008096000000                MSG( +
-008097000000'La stringa ü troppo breve.'                                          +
+008097000000'Non ü stato fornito e di conseguenza aperto un ambiente di lavoro.'  +
 008098000000                ) +
 008099000000                SEV(0) +
 008100000000     /*   No replacement variables defined!                         */ +
@@ -8103,18 +8103,18 @@
 008103000000                /*  -EOF-  */
 008104000000
 008105000000     /*-------------------------------------------------------------*/
-008106000000     /*   Cmd-ADDMSGD für Message-ID :   USR8187                    */
-008107000000     /* La dimensione del campo supera quella del buffer di dati.   */
+008106000000     /*   Cmd-ADDMSGD für Message-ID :   USR8186                    */
+008107000000     /* La stringa ü troppo breve.                                  */
 008108000000     /*-------------------------------------------------------------*/
 008109000000
-008110000000             RMVMSGD MSGID(USR8187) MSGF(&LIB/&OBJ)
+008110000000             RMVMSGD MSGID(USR8186) MSGF(&LIB/&OBJ)
 008111000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 008112000000
 008113000000             ADDMSGD +
-008114000000                MSGID(USR8187) +
+008114000000                MSGID(USR8186) +
 008115000000                MSGF(&LIB/&OBJ) +
 008116000000                MSG( +
-008117000000'La dimensione del campo supera quella del buffer di dati.'           +
+008117000000'La stringa ü troppo breve.'                                          +
 008118000000                ) +
 008119000000                SEV(0) +
 008120000000     /*   No replacement variables defined!                         */ +
@@ -8123,422 +8123,422 @@
 008123000000                /*  -EOF-  */
 008124000000
 008125000000     /*-------------------------------------------------------------*/
-008126000000     /*   Cmd-ADDMSGD für Message-ID :   USR8188                    */
-008127000000     /* Generazione formato video. Fase: &1, Campo: &2              */
+008126000000     /*   Cmd-ADDMSGD für Message-ID :   USR8187                    */
+008127000000     /* La dimensione del campo supera quella del buffer di dati.   */
 008128000000     /*-------------------------------------------------------------*/
 008129000000
-008130000000             RMVMSGD MSGID(USR8188) MSGF(&LIB/&OBJ)
+008130000000             RMVMSGD MSGID(USR8187) MSGF(&LIB/&OBJ)
 008131000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 008132000000
 008133000000             ADDMSGD +
-008134000000                MSGID(USR8188) +
+008134000000                MSGID(USR8187) +
 008135000000                MSGF(&LIB/&OBJ) +
 008136000000                MSG( +
-008137000000'Generazione formato video. Fase: &1, Campo: &2'                      +
+008137000000'La dimensione del campo supera quella del buffer di dati.'           +
 008138000000                ) +
 008139000000                SEV(0) +
-008140000000                FMT( +
-008141000000                    (*DEC 5 0) +
-008142000000                    (*CHAR 10) +
-008143000000                ) +
-008144000000                ALROPT(*NO) +
-008145000000                CCSID(65535) +
-008146000000                /*  -EOF-  */
-008147000000
+008140000000     /*   No replacement variables defined!                         */ +
+008141000000                ALROPT(*NO) +
+008142000000                CCSID(65535) +
+008143000000                /*  -EOF-  */
+008144000000
+008145000000     /*-------------------------------------------------------------*/
+008146000000     /*   Cmd-ADDMSGD für Message-ID :   USR8188                    */
+008147000000     /* Generazione formato video. Fase: &1, Campo: &2              */
 008148000000     /*-------------------------------------------------------------*/
-008149000000     /*   Cmd-ADDMSGD für Message-ID :   USR8189                    */
-008150000000     /* Generazione progr. RPG. Fase: &1, Campo: &2                 */
-008151000000     /*-------------------------------------------------------------*/
+008149000000
+008150000000             RMVMSGD MSGID(USR8188) MSGF(&LIB/&OBJ)
+008151000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 008152000000
-008153000000             RMVMSGD MSGID(USR8189) MSGF(&LIB/&OBJ)
-008154000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-008155000000
-008156000000             ADDMSGD +
-008157000000                MSGID(USR8189) +
-008158000000                MSGF(&LIB/&OBJ) +
-008159000000                MSG( +
-008160000000'Generazione progr. RPG. Fase: &1, Campo: &2'                         +
-008161000000                ) +
-008162000000                SEV(0) +
-008163000000                FMT( +
-008164000000                    (*DEC 5 0) +
-008165000000                    (*CHAR 10) +
-008166000000                ) +
-008167000000                ALROPT(*NO) +
-008168000000                CCSID(65535) +
-008169000000                /*  -EOF-  */
-008170000000
+008153000000             ADDMSGD +
+008154000000                MSGID(USR8188) +
+008155000000                MSGF(&LIB/&OBJ) +
+008156000000                MSG( +
+008157000000'Generazione formato video. Fase: &1, Campo: &2'                      +
+008158000000                ) +
+008159000000                SEV(0) +
+008160000000                FMT( +
+008161000000                    (*DEC 5 0) +
+008162000000                    (*CHAR 10) +
+008163000000                ) +
+008164000000                ALROPT(*NO) +
+008165000000                CCSID(65535) +
+008166000000                /*  -EOF-  */
+008167000000
+008168000000     /*-------------------------------------------------------------*/
+008169000000     /*   Cmd-ADDMSGD für Message-ID :   USR8189                    */
+008170000000     /* Generazione progr. RPG. Fase: &1, Campo: &2                 */
 008171000000     /*-------------------------------------------------------------*/
-008172000000     /*   Cmd-ADDMSGD für Message-ID :   USR8190                    */
-008173000000     /* Elaborazione terminata con &1.                              */
-008174000000     /*-------------------------------------------------------------*/
+008172000000
+008173000000             RMVMSGD MSGID(USR8189) MSGF(&LIB/&OBJ)
+008174000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 008175000000
-008176000000             RMVMSGD MSGID(USR8190) MSGF(&LIB/&OBJ)
-008177000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-008178000000
-008179000000             ADDMSGD +
-008180000000                MSGID(USR8190) +
-008181000000                MSGF(&LIB/&OBJ) +
-008182000000                MSG( +
-008183000000'Elaborazione terminata con &1.'                                      +
-008184000000                ) +
-008185000000                SEV(0) +
-008186000000                FMT( +
-008187000000                    (*CHAR 10) +
-008188000000                ) +
-008189000000                ALROPT(*NO) +
-008190000000                CCSID(65535) +
-008191000000                /*  -EOF-  */
-008192000000
-008193000000     /*-------------------------------------------------------------*/
-008194000000     /*   Cmd-ADDMSGD für Message-ID :   USR8191                    */
-008195000000     /* Il campo &1 non permette valori nulli                       */
-008196000000     /*-------------------------------------------------------------*/
-008197000000
-008198000000             RMVMSGD MSGID(USR8191) MSGF(&LIB/&OBJ)
-008199000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-008200000000
-008201000000             ADDMSGD +
-008202000000                MSGID(USR8191) +
-008203000000                MSGF(&LIB/&OBJ) +
-008204000000                MSG( +
-008205000000'Il campo &1 non permette valori nulli'                               +
-008206000000                ) +
-008207000000                SEV(0) +
-008208000000                FMT( +
-008209000000                    (*CHAR 10) +
-008210000000                ) +
-008211000000                ALROPT(*NO) +
-008212000000                CCSID(65535) +
-008213000000                /*  -EOF-  */
-008214000000
-008215000000     /*-------------------------------------------------------------*/
-008216000000     /*   Cmd-ADDMSGD für Message-ID :   USR8192                    */
-008217000000     /* Trovati valori a virgola mobile non validi nel campo &1.    */
-008218000000     /*-------------------------------------------------------------*/
-008219000000
-008220000000             RMVMSGD MSGID(USR8192) MSGF(&LIB/&OBJ)
-008221000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-008222000000
-008223000000             ADDMSGD +
-008224000000                MSGID(USR8192) +
-008225000000                MSGF(&LIB/&OBJ) +
-008226000000                MSG( +
-008227000000'Trovati valori a virgola mobile non validi nel campo &1.'            +
-008228000000                ) +
-008229000000                SEV(0) +
-008230000000                FMT( +
-008231000000                    (*CHAR 10) +
-008232000000                ) +
-008233000000                ALROPT(*NO) +
-008234000000                CCSID(65535) +
-008235000000                /*  -EOF-  */
-008236000000
-008237000000     /*-------------------------------------------------------------*/
-008238000000     /*   Cmd-ADDMSGD für Message-ID :   USR8193                    */
-008239000000     /* I campi '&1' contengono caratteri non visualizzabili e non  */
-008240000000     /*-------------------------------------------------------------*/
-008241000000
-008242000000             RMVMSGD MSGID(USR8193) MSGF(&LIB/&OBJ)
-008243000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-008244000000
-008245000000             ADDMSGD +
-008246000000                MSGID(USR8193) +
-008247000000                MSGF(&LIB/&OBJ) +
-008248000000                MSG( +
-008249000000'I campi ''&1'' contengono caratteri non visualizzabili e non sono edi-
-008250000000tabili in formato testo.'                                             +
-008251000000                ) +
-008252000000                SEV(0) +
-008253000000                FMT( +
-008254000000                    (*CHAR 10) +
-008255000000                ) +
-008256000000                ALROPT(*NO) +
-008257000000                CCSID(65535) +
-008258000000                /*  -EOF-  */
-008259000000
+008176000000             ADDMSGD +
+008177000000                MSGID(USR8189) +
+008178000000                MSGF(&LIB/&OBJ) +
+008179000000                MSG( +
+008180000000'Generazione progr. RPG. Fase: &1, Campo: &2'                         +
+008181000000                ) +
+008182000000                SEV(0) +
+008183000000                FMT( +
+008184000000                    (*DEC 5 0) +
+008185000000                    (*CHAR 10) +
+008186000000                ) +
+008187000000                ALROPT(*NO) +
+008188000000                CCSID(65535) +
+008189000000                /*  -EOF-  */
+008190000000
+008191000000     /*-------------------------------------------------------------*/
+008192000000     /*   Cmd-ADDMSGD für Message-ID :   USR8190                    */
+008193000000     /* Elaborazione terminata con &1.                              */
+008194000000     /*-------------------------------------------------------------*/
+008195000000
+008196000000             RMVMSGD MSGID(USR8190) MSGF(&LIB/&OBJ)
+008197000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+008198000000
+008199000000             ADDMSGD +
+008200000000                MSGID(USR8190) +
+008201000000                MSGF(&LIB/&OBJ) +
+008202000000                MSG( +
+008203000000'Elaborazione terminata con &1.'                                      +
+008204000000                ) +
+008205000000                SEV(0) +
+008206000000                FMT( +
+008207000000                    (*CHAR 10) +
+008208000000                ) +
+008209000000                ALROPT(*NO) +
+008210000000                CCSID(65535) +
+008211000000                /*  -EOF-  */
+008212000000
+008213000000     /*-------------------------------------------------------------*/
+008214000000     /*   Cmd-ADDMSGD für Message-ID :   USR8191                    */
+008215000000     /* Il campo &1 non permette valori nulli                       */
+008216000000     /*-------------------------------------------------------------*/
+008217000000
+008218000000             RMVMSGD MSGID(USR8191) MSGF(&LIB/&OBJ)
+008219000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+008220000000
+008221000000             ADDMSGD +
+008222000000                MSGID(USR8191) +
+008223000000                MSGF(&LIB/&OBJ) +
+008224000000                MSG( +
+008225000000'Il campo &1 non permette valori nulli'                               +
+008226000000                ) +
+008227000000                SEV(0) +
+008228000000                FMT( +
+008229000000                    (*CHAR 10) +
+008230000000                ) +
+008231000000                ALROPT(*NO) +
+008232000000                CCSID(65535) +
+008233000000                /*  -EOF-  */
+008234000000
+008235000000     /*-------------------------------------------------------------*/
+008236000000     /*   Cmd-ADDMSGD für Message-ID :   USR8192                    */
+008237000000     /* Trovati valori a virgola mobile non validi nel campo &1.    */
+008238000000     /*-------------------------------------------------------------*/
+008239000000
+008240000000             RMVMSGD MSGID(USR8192) MSGF(&LIB/&OBJ)
+008241000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+008242000000
+008243000000             ADDMSGD +
+008244000000                MSGID(USR8192) +
+008245000000                MSGF(&LIB/&OBJ) +
+008246000000                MSG( +
+008247000000'Trovati valori a virgola mobile non validi nel campo &1.'            +
+008248000000                ) +
+008249000000                SEV(0) +
+008250000000                FMT( +
+008251000000                    (*CHAR 10) +
+008252000000                ) +
+008253000000                ALROPT(*NO) +
+008254000000                CCSID(65535) +
+008255000000                /*  -EOF-  */
+008256000000
+008257000000     /*-------------------------------------------------------------*/
+008258000000     /*   Cmd-ADDMSGD für Message-ID :   USR8193                    */
+008259000000     /* I campi '&1' contengono caratteri non visualizzabili e non  */
 008260000000     /*-------------------------------------------------------------*/
-008261000000     /*   Cmd-ADDMSGD für Message-ID :   USR8194                    */
-008262000000     /* File '&1' non trovato.                                      */
-008263000000     /*-------------------------------------------------------------*/
+008261000000
+008262000000             RMVMSGD MSGID(USR8193) MSGF(&LIB/&OBJ)
+008263000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 008264000000
-008265000000             RMVMSGD MSGID(USR8194) MSGF(&LIB/&OBJ)
-008266000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-008267000000
-008268000000             ADDMSGD +
-008269000000                MSGID(USR8194) +
-008270000000                MSGF(&LIB/&OBJ) +
-008271000000                MSG( +
-008272000000'File ''&1'' non trovato.'                                            +
-008273000000                ) +
-008274000000                SEV(0) +
-008275000000                FMT( +
-008276000000                    (*CHAR 10) +
-008277000000                ) +
-008278000000                ALROPT(*NO) +
-008279000000                CCSID(65535) +
-008280000000                /*  -EOF-  */
-008281000000
-008282000000     /*-------------------------------------------------------------*/
-008283000000     /*   Cmd-ADDMSGD für Message-ID :   USR8195                    */
-008284000000     /* Richiesta non consentita. Il campo ü protetto.              */
-008285000000     /*-------------------------------------------------------------*/
-008286000000
-008287000000             RMVMSGD MSGID(USR8195) MSGF(&LIB/&OBJ)
-008288000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-008289000000
-008290000000             ADDMSGD +
-008291000000                MSGID(USR8195) +
-008292000000                MSGF(&LIB/&OBJ) +
-008293000000                MSG( +
-008294000000'Richiesta non consentita. Il campo ü protetto.'                      +
-008295000000                ) +
-008296000000                SEV(0) +
-008297000000     /*   No replacement variables defined!                         */ +
+008265000000             ADDMSGD +
+008266000000                MSGID(USR8193) +
+008267000000                MSGF(&LIB/&OBJ) +
+008268000000                MSG( +
+008269000000'I campi ''&1'' contengono caratteri non visualizzabili e non sono edi-
+008270000000tabili in formato testo.'                                             +
+008271000000                ) +
+008272000000                SEV(0) +
+008273000000                FMT( +
+008274000000                    (*CHAR 10) +
+008275000000                ) +
+008276000000                ALROPT(*NO) +
+008277000000                CCSID(65535) +
+008278000000                /*  -EOF-  */
+008279000000
+008280000000     /*-------------------------------------------------------------*/
+008281000000     /*   Cmd-ADDMSGD für Message-ID :   USR8194                    */
+008282000000     /* File '&1' non trovato.                                      */
+008283000000     /*-------------------------------------------------------------*/
+008284000000
+008285000000             RMVMSGD MSGID(USR8194) MSGF(&LIB/&OBJ)
+008286000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+008287000000
+008288000000             ADDMSGD +
+008289000000                MSGID(USR8194) +
+008290000000                MSGF(&LIB/&OBJ) +
+008291000000                MSG( +
+008292000000'File ''&1'' non trovato.'                                            +
+008293000000                ) +
+008294000000                SEV(0) +
+008295000000                FMT( +
+008296000000                    (*CHAR 10) +
+008297000000                ) +
 008298000000                ALROPT(*NO) +
 008299000000                CCSID(65535) +
 008300000000                /*  -EOF-  */
 008301000000
 008302000000     /*-------------------------------------------------------------*/
-008303000000     /*   Cmd-ADDMSGD für Message-ID :   USR8196                    */
-008304000000     /* Field &1 cannot be displayed or changed.                    */
+008303000000     /*   Cmd-ADDMSGD für Message-ID :   USR8195                    */
+008304000000     /* Richiesta non consentita. Il campo ü protetto.              */
 008305000000     /*-------------------------------------------------------------*/
 008306000000
-008307000000             RMVMSGD MSGID(USR8196) MSGF(&LIB/&OBJ)
+008307000000             RMVMSGD MSGID(USR8195) MSGF(&LIB/&OBJ)
 008308000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 008309000000
 008310000000             ADDMSGD +
-008311000000                MSGID(USR8196) +
+008311000000                MSGID(USR8195) +
 008312000000                MSGF(&LIB/&OBJ) +
 008313000000                MSG( +
-008314000000'Field &1 cannot be displayed or changed.'                            +
+008314000000'Richiesta non consentita. Il campo ü protetto.'                      +
 008315000000                ) +
-008316000000                SECLVL( +
-008317000000'&N &N Possible Causes: &N &B 1. Unknown data type. &B 2. Graphic fiel-
-008318000000d without CCSID. &B 3. Packed or zoned field with more than 30 digits.-
-008319000000 &B 4. Unknown variable length field.'                                +
-008320000000                ) +
-008321000000                SEV(0) +
-008322000000                FMT( +
-008323000000                    (*CHAR 10) +
-008324000000                ) +
-008325000000                ALROPT(*NO) +
-008326000000                CCSID(65535) +
-008327000000                /*  -EOF-  */
-008328000000
-008329000000     /*-------------------------------------------------------------*/
-008330000000     /*   Cmd-ADDMSGD für Message-ID :   USR8200                    */
-008331000000     /* Record &1 non cancellabile.                                 */
-008332000000     /*-------------------------------------------------------------*/
-008333000000
-008334000000             RMVMSGD MSGID(USR8200) MSGF(&LIB/&OBJ)
-008335000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-008336000000
-008337000000             ADDMSGD +
-008338000000                MSGID(USR8200) +
-008339000000                MSGF(&LIB/&OBJ) +
-008340000000                MSG( +
-008341000000'Record &1 non cancellabile.'                                         +
-008342000000                ) +
-008343000000                SEV(0) +
-008344000000                FMT( +
-008345000000                    (*DEC 10 0) +
-008346000000                ) +
-008347000000                ALROPT(*NO) +
-008348000000                CCSID(65535) +
-008349000000                /*  -EOF-  */
-008350000000
-008351000000     /*-------------------------------------------------------------*/
-008352000000     /*   Cmd-ADDMSGD für Message-ID :   USR8201                    */
-008353000000     /* Il record &1 ü stato cancellato.                            */
-008354000000     /*-------------------------------------------------------------*/
-008355000000
-008356000000             RMVMSGD MSGID(USR8201) MSGF(&LIB/&OBJ)
-008357000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-008358000000
-008359000000             ADDMSGD +
-008360000000                MSGID(USR8201) +
-008361000000                MSGF(&LIB/&OBJ) +
-008362000000                MSG( +
-008363000000'Il record &1 ü stato cancellato.'                                    +
-008364000000                ) +
-008365000000                SEV(0) +
-008366000000                FMT( +
-008367000000                    (*DEC 10 0) +
-008368000000                ) +
-008369000000                ALROPT(*NO) +
-008370000000                CCSID(65535) +
-008371000000                /*  -EOF-  */
-008372000000
-008373000000     /*-------------------------------------------------------------*/
-008374000000     /*   Cmd-ADDMSGD für Message-ID :   USR8202                    */
-008375000000     /* Il record &1 non puö essere copiato.                        */
-008376000000     /*-------------------------------------------------------------*/
-008377000000
-008378000000             RMVMSGD MSGID(USR8202) MSGF(&LIB/&OBJ)
-008379000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-008380000000
-008381000000             ADDMSGD +
-008382000000                MSGID(USR8202) +
-008383000000                MSGF(&LIB/&OBJ) +
-008384000000                MSG( +
-008385000000'Il record &1 non puö essere copiato.'                                +
-008386000000                ) +
-008387000000                SEV(0) +
-008388000000                FMT( +
-008389000000                    (*DEC 10 0) +
-008390000000                ) +
-008391000000                ALROPT(*NO) +
-008392000000                CCSID(65535) +
-008393000000                /*  -EOF-  */
-008394000000
-008395000000     /*-------------------------------------------------------------*/
-008396000000     /*   Cmd-ADDMSGD für Message-ID :   USR8203                    */
-008397000000     /* Il record &1 ü stato copiato.                               */
-008398000000     /*-------------------------------------------------------------*/
-008399000000
-008400000000             RMVMSGD MSGID(USR8203) MSGF(&LIB/&OBJ)
-008401000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-008402000000
-008403000000             ADDMSGD +
-008404000000                MSGID(USR8203) +
-008405000000                MSGF(&LIB/&OBJ) +
-008406000000                MSG( +
-008407000000'Il record &1 ü stato copiato.'                                       +
-008408000000                ) +
-008409000000                SEV(0) +
-008410000000                FMT( +
-008411000000                    (*DEC 10 0) +
-008412000000                ) +
-008413000000                ALROPT(*NO) +
-008414000000                CCSID(65535) +
-008415000000                /*  -EOF-  */
-008416000000
-008417000000     /*-------------------------------------------------------------*/
-008418000000     /*   Cmd-ADDMSGD für Message-ID :   USR8204                    */
-008419000000     /* Non selezionati record validi (Help 2Ä livello disponibile) */
-008420000000     /*-------------------------------------------------------------*/
-008421000000
-008422000000             RMVMSGD MSGID(USR8204) MSGF(&LIB/&OBJ)
-008423000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-008424000000
-008425000000             ADDMSGD +
-008426000000                MSGID(USR8204) +
-008427000000                MSGF(&LIB/&OBJ) +
-008428000000                MSG( +
-008429000000'Non selezionati record validi (Help 2Ä livello disponibile)'         +
-008430000000                ) +
-008431000000                SECLVL( +
-008432000000'&N &N Posizionare il cursore su un record del subfile e ripetere la r-
-008433000000ichiesta.'                                                            +
-008434000000                ) +
-008435000000                SEV(0) +
-008436000000     /*   No replacement variables defined!                         */ +
-008437000000                ALROPT(*NO) +
-008438000000                CCSID(65535) +
-008439000000                /*  -EOF-  */
-008440000000
-008441000000     /*-------------------------------------------------------------*/
-008442000000     /*   Cmd-ADDMSGD für Message-ID :   USR8205                    */
-008443000000     /* Non si possono evidenziare pi` di &1 colonne.               */
-008444000000     /*-------------------------------------------------------------*/
-008445000000
-008446000000             RMVMSGD MSGID(USR8205) MSGF(&LIB/&OBJ)
-008447000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-008448000000
-008449000000             ADDMSGD +
-008450000000                MSGID(USR8205) +
-008451000000                MSGF(&LIB/&OBJ) +
-008452000000                MSG( +
-008453000000'Non si possono evidenziare pi` di &1 colonne.'                       +
+008316000000                SEV(0) +
+008317000000     /*   No replacement variables defined!                         */ +
+008318000000                ALROPT(*NO) +
+008319000000                CCSID(65535) +
+008320000000                /*  -EOF-  */
+008321000000
+008322000000     /*-------------------------------------------------------------*/
+008323000000     /*   Cmd-ADDMSGD für Message-ID :   USR8196                    */
+008324000000     /* Field &1 cannot be displayed or changed.                    */
+008325000000     /*-------------------------------------------------------------*/
+008326000000
+008327000000             RMVMSGD MSGID(USR8196) MSGF(&LIB/&OBJ)
+008328000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+008329000000
+008330000000             ADDMSGD +
+008331000000                MSGID(USR8196) +
+008332000000                MSGF(&LIB/&OBJ) +
+008333000000                MSG( +
+008334000000'Field &1 cannot be displayed or changed.'                            +
+008335000000                ) +
+008336000000                SECLVL( +
+008337000000'&N &N Possible Causes: &N &B 1. Unknown data type. &B 2. Graphic fiel-
+008338000000d without CCSID. &B 3. Packed or zoned field with more than 30 digits.-
+008339000000 &B 4. Unknown variable length field.'                                +
+008340000000                ) +
+008341000000                SEV(0) +
+008342000000                FMT( +
+008343000000                    (*CHAR 10) +
+008344000000                ) +
+008345000000                ALROPT(*NO) +
+008346000000                CCSID(65535) +
+008347000000                /*  -EOF-  */
+008348000000
+008349000000     /*-------------------------------------------------------------*/
+008350000000     /*   Cmd-ADDMSGD für Message-ID :   USR8200                    */
+008351000000     /* Record &1 non cancellabile.                                 */
+008352000000     /*-------------------------------------------------------------*/
+008353000000
+008354000000             RMVMSGD MSGID(USR8200) MSGF(&LIB/&OBJ)
+008355000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+008356000000
+008357000000             ADDMSGD +
+008358000000                MSGID(USR8200) +
+008359000000                MSGF(&LIB/&OBJ) +
+008360000000                MSG( +
+008361000000'Record &1 non cancellabile.'                                         +
+008362000000                ) +
+008363000000                SEV(0) +
+008364000000                FMT( +
+008365000000                    (*DEC 10 0) +
+008366000000                ) +
+008367000000                ALROPT(*NO) +
+008368000000                CCSID(65535) +
+008369000000                /*  -EOF-  */
+008370000000
+008371000000     /*-------------------------------------------------------------*/
+008372000000     /*   Cmd-ADDMSGD für Message-ID :   USR8201                    */
+008373000000     /* Il record &1 ü stato cancellato.                            */
+008374000000     /*-------------------------------------------------------------*/
+008375000000
+008376000000             RMVMSGD MSGID(USR8201) MSGF(&LIB/&OBJ)
+008377000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+008378000000
+008379000000             ADDMSGD +
+008380000000                MSGID(USR8201) +
+008381000000                MSGF(&LIB/&OBJ) +
+008382000000                MSG( +
+008383000000'Il record &1 ü stato cancellato.'                                    +
+008384000000                ) +
+008385000000                SEV(0) +
+008386000000                FMT( +
+008387000000                    (*DEC 10 0) +
+008388000000                ) +
+008389000000                ALROPT(*NO) +
+008390000000                CCSID(65535) +
+008391000000                /*  -EOF-  */
+008392000000
+008393000000     /*-------------------------------------------------------------*/
+008394000000     /*   Cmd-ADDMSGD für Message-ID :   USR8202                    */
+008395000000     /* Il record &1 non puö essere copiato.                        */
+008396000000     /*-------------------------------------------------------------*/
+008397000000
+008398000000             RMVMSGD MSGID(USR8202) MSGF(&LIB/&OBJ)
+008399000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+008400000000
+008401000000             ADDMSGD +
+008402000000                MSGID(USR8202) +
+008403000000                MSGF(&LIB/&OBJ) +
+008404000000                MSG( +
+008405000000'Il record &1 non puö essere copiato.'                                +
+008406000000                ) +
+008407000000                SEV(0) +
+008408000000                FMT( +
+008409000000                    (*DEC 10 0) +
+008410000000                ) +
+008411000000                ALROPT(*NO) +
+008412000000                CCSID(65535) +
+008413000000                /*  -EOF-  */
+008414000000
+008415000000     /*-------------------------------------------------------------*/
+008416000000     /*   Cmd-ADDMSGD für Message-ID :   USR8203                    */
+008417000000     /* Il record &1 ü stato copiato.                               */
+008418000000     /*-------------------------------------------------------------*/
+008419000000
+008420000000             RMVMSGD MSGID(USR8203) MSGF(&LIB/&OBJ)
+008421000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+008422000000
+008423000000             ADDMSGD +
+008424000000                MSGID(USR8203) +
+008425000000                MSGF(&LIB/&OBJ) +
+008426000000                MSG( +
+008427000000'Il record &1 ü stato copiato.'                                       +
+008428000000                ) +
+008429000000                SEV(0) +
+008430000000                FMT( +
+008431000000                    (*DEC 10 0) +
+008432000000                ) +
+008433000000                ALROPT(*NO) +
+008434000000                CCSID(65535) +
+008435000000                /*  -EOF-  */
+008436000000
+008437000000     /*-------------------------------------------------------------*/
+008438000000     /*   Cmd-ADDMSGD für Message-ID :   USR8204                    */
+008439000000     /* Non selezionati record validi (Help 2Ä livello disponibile) */
+008440000000     /*-------------------------------------------------------------*/
+008441000000
+008442000000             RMVMSGD MSGID(USR8204) MSGF(&LIB/&OBJ)
+008443000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+008444000000
+008445000000             ADDMSGD +
+008446000000                MSGID(USR8204) +
+008447000000                MSGF(&LIB/&OBJ) +
+008448000000                MSG( +
+008449000000'Non selezionati record validi (Help 2Ä livello disponibile)'         +
+008450000000                ) +
+008451000000                SECLVL( +
+008452000000'&N &N Posizionare il cursore su un record del subfile e ripetere la r-
+008453000000ichiesta.'                                                            +
 008454000000                ) +
 008455000000                SEV(0) +
-008456000000                FMT( +
-008457000000                    (*DEC 5 0) +
-008458000000                ) +
-008459000000                ALROPT(*NO) +
-008460000000                CCSID(65535) +
-008461000000                /*  -EOF-  */
-008462000000
-008463000000     /*-------------------------------------------------------------*/
-008464000000     /*   Cmd-ADDMSGD für Message-ID :   USR8206                    */
-008465000000     /* Il record non puö essere mostrato; supera la lunghezza mass */
-008466000000     /*-------------------------------------------------------------*/
-008467000000
-008468000000             RMVMSGD MSGID(USR8206) MSGF(&LIB/&OBJ)
-008469000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-008470000000
-008471000000             ADDMSGD +
-008472000000                MSGID(USR8206) +
-008473000000                MSGF(&LIB/&OBJ) +
-008474000000                MSG( +
-008475000000'Il record non puö essere mostrato; supera la lunghezza massima consen-
-008476000000tita &1.'                                                             +
-008477000000                ) +
-008478000000                SEV(0) +
-008479000000                FMT( +
-008480000000                    (*DEC 5 0) +
-008481000000                ) +
-008482000000                ALROPT(*NO) +
-008483000000                CCSID(65535) +
-008484000000                /*  -EOF-  */
-008485000000
+008456000000     /*   No replacement variables defined!                         */ +
+008457000000                ALROPT(*NO) +
+008458000000                CCSID(65535) +
+008459000000                /*  -EOF-  */
+008460000000
+008461000000     /*-------------------------------------------------------------*/
+008462000000     /*   Cmd-ADDMSGD für Message-ID :   USR8205                    */
+008463000000     /* Non si possono evidenziare pi` di &1 colonne.               */
+008464000000     /*-------------------------------------------------------------*/
+008465000000
+008466000000             RMVMSGD MSGID(USR8205) MSGF(&LIB/&OBJ)
+008467000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+008468000000
+008469000000             ADDMSGD +
+008470000000                MSGID(USR8205) +
+008471000000                MSGF(&LIB/&OBJ) +
+008472000000                MSG( +
+008473000000'Non si possono evidenziare pi` di &1 colonne.'                       +
+008474000000                ) +
+008475000000                SEV(0) +
+008476000000                FMT( +
+008477000000                    (*DEC 5 0) +
+008478000000                ) +
+008479000000                ALROPT(*NO) +
+008480000000                CCSID(65535) +
+008481000000                /*  -EOF-  */
+008482000000
+008483000000     /*-------------------------------------------------------------*/
+008484000000     /*   Cmd-ADDMSGD für Message-ID :   USR8206                    */
+008485000000     /* Il record non puö essere mostrato; supera la lunghezza mass */
 008486000000     /*-------------------------------------------------------------*/
-008487000000     /*   Cmd-ADDMSGD für Message-ID :   USR8207                    */
-008488000000     /* Questo file non puö essere aperto. La lunghezza record ü ma */
-008489000000     /*-------------------------------------------------------------*/
+008487000000
+008488000000             RMVMSGD MSGID(USR8206) MSGF(&LIB/&OBJ)
+008489000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 008490000000
-008491000000             RMVMSGD MSGID(USR8207) MSGF(&LIB/&OBJ)
-008492000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-008493000000
-008494000000             ADDMSGD +
-008495000000                MSGID(USR8207) +
-008496000000                MSGF(&LIB/&OBJ) +
-008497000000                MSG( +
-008498000000'Questo file non puö essere aperto. La lunghezza record ü maggiore di -
-008499000000&1.'                                                                  +
-008500000000                ) +
-008501000000                SEV(0) +
-008502000000                FMT( +
-008503000000                    (*DEC 5 0) +
-008504000000                ) +
-008505000000                ALROPT(*NO) +
-008506000000                CCSID(65535) +
-008507000000                /*  -EOF-  */
-008508000000
+008491000000             ADDMSGD +
+008492000000                MSGID(USR8206) +
+008493000000                MSGF(&LIB/&OBJ) +
+008494000000                MSG( +
+008495000000'Il record non puö essere mostrato; supera la lunghezza massima consen-
+008496000000tita &1.'                                                             +
+008497000000                ) +
+008498000000                SEV(0) +
+008499000000                FMT( +
+008500000000                    (*DEC 5 0) +
+008501000000                ) +
+008502000000                ALROPT(*NO) +
+008503000000                CCSID(65535) +
+008504000000                /*  -EOF-  */
+008505000000
+008506000000     /*-------------------------------------------------------------*/
+008507000000     /*   Cmd-ADDMSGD für Message-ID :   USR8207                    */
+008508000000     /* Questo file non puö essere aperto. La lunghezza record ü ma */
 008509000000     /*-------------------------------------------------------------*/
-008510000000     /*   Cmd-ADDMSGD für Message-ID :   USR8208                    */
-008511000000     /* Non ü possibile modificare campi di sola lettura.           */
-008512000000     /*-------------------------------------------------------------*/
+008510000000
+008511000000             RMVMSGD MSGID(USR8207) MSGF(&LIB/&OBJ)
+008512000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 008513000000
-008514000000             RMVMSGD MSGID(USR8208) MSGF(&LIB/&OBJ)
-008515000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-008516000000
-008517000000             ADDMSGD +
-008518000000                MSGID(USR8208) +
-008519000000                MSGF(&LIB/&OBJ) +
-008520000000                MSG( +
-008521000000'Non ü possibile modificare campi di sola lettura.'                   +
-008522000000                ) +
-008523000000                SEV(0) +
-008524000000     /*   No replacement variables defined!                         */ +
+008514000000             ADDMSGD +
+008515000000                MSGID(USR8207) +
+008516000000                MSGF(&LIB/&OBJ) +
+008517000000                MSG( +
+008518000000'Questo file non puö essere aperto. La lunghezza record ü maggiore di -
+008519000000&1.'                                                                  +
+008520000000                ) +
+008521000000                SEV(0) +
+008522000000                FMT( +
+008523000000                    (*DEC 5 0) +
+008524000000                ) +
 008525000000                ALROPT(*NO) +
 008526000000                CCSID(65535) +
 008527000000                /*  -EOF-  */
 008528000000
 008529000000     /*-------------------------------------------------------------*/
-008530000000     /*   Cmd-ADDMSGD für Message-ID :   USR8209                    */
-008531000000     /* Si prega di fornire un argomento di ricerca.                */
+008530000000     /*   Cmd-ADDMSGD für Message-ID :   USR8208                    */
+008531000000     /* Non ü possibile modificare campi di sola lettura.           */
 008532000000     /*-------------------------------------------------------------*/
 008533000000
-008534000000             RMVMSGD MSGID(USR8209) MSGF(&LIB/&OBJ)
+008534000000             RMVMSGD MSGID(USR8208) MSGF(&LIB/&OBJ)
 008535000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 008536000000
 008537000000             ADDMSGD +
-008538000000                MSGID(USR8209) +
+008538000000                MSGID(USR8208) +
 008539000000                MSGF(&LIB/&OBJ) +
 008540000000                MSG( +
-008541000000'Si prega di fornire un argomento di ricerca.'                        +
+008541000000'Non ü possibile modificare campi di sola lettura.'                   +
 008542000000                ) +
 008543000000                SEV(0) +
 008544000000     /*   No replacement variables defined!                         */ +
@@ -8547,92 +8547,92 @@
 008547000000                /*  -EOF-  */
 008548000000
 008549000000     /*-------------------------------------------------------------*/
-008550000000     /*   Cmd-ADDMSGD für Message-ID :   USR8210                    */
-008551000000     /* Errore sql &1. &2; testo 2Älivello disponibile              */
+008550000000     /*   Cmd-ADDMSGD für Message-ID :   USR8209                    */
+008551000000     /* Si prega di fornire un argomento di ricerca.                */
 008552000000     /*-------------------------------------------------------------*/
 008553000000
-008554000000             RMVMSGD MSGID(USR8210) MSGF(&LIB/&OBJ)
+008554000000             RMVMSGD MSGID(USR8209) MSGF(&LIB/&OBJ)
 008555000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 008556000000
 008557000000             ADDMSGD +
-008558000000                MSGID(USR8210) +
+008558000000                MSGID(USR8209) +
 008559000000                MSGF(&LIB/&OBJ) +
 008560000000                MSG( +
-008561000000'Errore sql &1. &2; testo 2Älivello disponibile'                      +
+008561000000'Si prega di fornire un argomento di ricerca.'                        +
 008562000000                ) +
-008563000000                SECLVL( +
-008564000000'&N &N Possibile causa :   &2 &N &B Ulteriori informazioni sono reperi-
-008565000000bili nella guida SQL per il programmatore o nel file di messaggi QSYS/-
-008566000000QSQLMSG.'                                                             +
-008567000000                ) +
-008568000000                SEV(0) +
-008569000000                FMT( +
-008570000000                    (*CHAR 7) +
-008571000000                    (*CHAR 512) +
-008572000000                ) +
-008573000000                ALROPT(*NO) +
-008574000000                CCSID(65535) +
-008575000000                /*  -EOF-  */
+008563000000                SEV(0) +
+008564000000     /*   No replacement variables defined!                         */ +
+008565000000                ALROPT(*NO) +
+008566000000                CCSID(65535) +
+008567000000                /*  -EOF-  */
+008568000000
+008569000000     /*-------------------------------------------------------------*/
+008570000000     /*   Cmd-ADDMSGD für Message-ID :   USR8210                    */
+008571000000     /* Errore sql &1. &2; testo 2Älivello disponibile              */
+008572000000     /*-------------------------------------------------------------*/
+008573000000
+008574000000             RMVMSGD MSGID(USR8210) MSGF(&LIB/&OBJ)
+008575000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 008576000000
-008577000000     /*-------------------------------------------------------------*/
-008578000000     /*   Cmd-ADDMSGD für Message-ID :   USR8211                    */
-008579000000     /* Posizionare il cursore su un campo e ripetere la richiesta  */
-008580000000     /*-------------------------------------------------------------*/
-008581000000
-008582000000             RMVMSGD MSGID(USR8211) MSGF(&LIB/&OBJ)
-008583000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-008584000000
-008585000000             ADDMSGD +
-008586000000                MSGID(USR8211) +
-008587000000                MSGF(&LIB/&OBJ) +
-008588000000                MSG( +
-008589000000'Posizionare il cursore su un campo e ripetere la richiesta (vedi Help-
-008590000000 2Ä liv.)'                                                            +
-008591000000                ) +
-008592000000                SECLVL( +
-008593000000'Spiegazione . . :   Il cursore non ü posizionato su un campo oppure i-
-008594000000l campo su cui si trova non permette la richiesta.'                   +
-008595000000                ) +
-008596000000                SEV(0) +
-008597000000     /*   No replacement variables defined!                         */ +
-008598000000                ALROPT(*NO) +
-008599000000                CCSID(65535) +
-008600000000                /*  -EOF-  */
+008577000000             ADDMSGD +
+008578000000                MSGID(USR8210) +
+008579000000                MSGF(&LIB/&OBJ) +
+008580000000                MSG( +
+008581000000'Errore sql &1. &2; testo 2Älivello disponibile'                      +
+008582000000                ) +
+008583000000                SECLVL( +
+008584000000'&N &N Possibile causa :   &2 &N &B Ulteriori informazioni sono reperi-
+008585000000bili nella guida SQL per il programmatore o nel file di messaggi QSYS/-
+008586000000QSQLMSG.'                                                             +
+008587000000                ) +
+008588000000                SEV(0) +
+008589000000                FMT( +
+008590000000                    (*CHAR 7) +
+008591000000                    (*CHAR 512) +
+008592000000                ) +
+008593000000                ALROPT(*NO) +
+008594000000                CCSID(65535) +
+008595000000                /*  -EOF-  */
+008596000000
+008597000000     /*-------------------------------------------------------------*/
+008598000000     /*   Cmd-ADDMSGD für Message-ID :   USR8211                    */
+008599000000     /* Posizionare il cursore su un campo e ripetere la richiesta  */
+008600000000     /*-------------------------------------------------------------*/
 008601000000
-008602000000     /*-------------------------------------------------------------*/
-008603000000     /*   Cmd-ADDMSGD für Message-ID :   USR8212                    */
-008604000000     /* La selezione SQL ü consentita solo su file fisici. Si desid */
-008605000000     /*-------------------------------------------------------------*/
-008606000000
-008607000000             RMVMSGD MSGID(USR8212) MSGF(&LIB/&OBJ)
-008608000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-008609000000
-008610000000             ADDMSGD +
-008611000000                MSGID(USR8212) +
-008612000000                MSGF(&LIB/&OBJ) +
-008613000000                MSG( +
-008614000000'La selezione SQL ü consentita solo su file fisici. Si desidera che ve-
-008615000000nga aperto il file fisico?'                                           +
-008616000000                ) +
-008617000000                SEV(0) +
-008618000000     /*   No replacement variables defined!                         */ +
-008619000000                ALROPT(*NO) +
-008620000000                CCSID(65535) +
-008621000000                /*  -EOF-  */
-008622000000
-008623000000     /*-------------------------------------------------------------*/
-008624000000     /*   Cmd-ADDMSGD für Message-ID :   USR8213                    */
-008625000000     /* 1=salvare; 0=non salvare                                    */
-008626000000     /*-------------------------------------------------------------*/
-008627000000
-008628000000             RMVMSGD MSGID(USR8213) MSGF(&LIB/&OBJ)
-008629000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-008630000000
-008631000000             ADDMSGD +
-008632000000                MSGID(USR8213) +
-008633000000                MSGF(&LIB/&OBJ) +
-008634000000                MSG( +
-008635000000'1=salvare; 0=non salvare    '                                        +
+008602000000             RMVMSGD MSGID(USR8211) MSGF(&LIB/&OBJ)
+008603000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+008604000000
+008605000000             ADDMSGD +
+008606000000                MSGID(USR8211) +
+008607000000                MSGF(&LIB/&OBJ) +
+008608000000                MSG( +
+008609000000'Posizionare il cursore su un campo e ripetere la richiesta (vedi Help-
+008610000000 2Ä liv.)'                                                            +
+008611000000                ) +
+008612000000                SECLVL( +
+008613000000'Spiegazione . . :   Il cursore non ü posizionato su un campo oppure i-
+008614000000l campo su cui si trova non permette la richiesta.'                   +
+008615000000                ) +
+008616000000                SEV(0) +
+008617000000     /*   No replacement variables defined!                         */ +
+008618000000                ALROPT(*NO) +
+008619000000                CCSID(65535) +
+008620000000                /*  -EOF-  */
+008621000000
+008622000000     /*-------------------------------------------------------------*/
+008623000000     /*   Cmd-ADDMSGD für Message-ID :   USR8212                    */
+008624000000     /* La selezione SQL ü consentita solo su file fisici. Si desid */
+008625000000     /*-------------------------------------------------------------*/
+008626000000
+008627000000             RMVMSGD MSGID(USR8212) MSGF(&LIB/&OBJ)
+008628000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+008629000000
+008630000000             ADDMSGD +
+008631000000                MSGID(USR8212) +
+008632000000                MSGF(&LIB/&OBJ) +
+008633000000                MSG( +
+008634000000'La selezione SQL ü consentita solo su file fisici. Si desidera che ve-
+008635000000nga aperto il file fisico?'                                           +
 008636000000                ) +
 008637000000                SEV(0) +
 008638000000     /*   No replacement variables defined!                         */ +
@@ -8641,18 +8641,18 @@
 008641000000                /*  -EOF-  */
 008642000000
 008643000000     /*-------------------------------------------------------------*/
-008644000000     /*   Cmd-ADDMSGD für Message-ID :   USR8214                    */
-008645000000     /* 1=minuscole consentite; 0=solo maiuscole                    */
+008644000000     /*   Cmd-ADDMSGD für Message-ID :   USR8213                    */
+008645000000     /* 1=salvare; 0=non salvare                                    */
 008646000000     /*-------------------------------------------------------------*/
 008647000000
-008648000000             RMVMSGD MSGID(USR8214) MSGF(&LIB/&OBJ)
+008648000000             RMVMSGD MSGID(USR8213) MSGF(&LIB/&OBJ)
 008649000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 008650000000
 008651000000             ADDMSGD +
-008652000000                MSGID(USR8214) +
+008652000000                MSGID(USR8213) +
 008653000000                MSGF(&LIB/&OBJ) +
 008654000000                MSG( +
-008655000000'1=minuscole consentite; 0=solo maiuscole'                            +
+008655000000'1=salvare; 0=non salvare    '                                        +
 008656000000                ) +
 008657000000                SEV(0) +
 008658000000     /*   No replacement variables defined!                         */ +
@@ -8661,18 +8661,18 @@
 008661000000                /*  -EOF-  */
 008662000000
 008663000000     /*-------------------------------------------------------------*/
-008664000000     /*   Cmd-ADDMSGD für Message-ID :   USR8215                    */
-008665000000     /* Inserimento caratteri minuscoli non permesso.               */
+008664000000     /*   Cmd-ADDMSGD für Message-ID :   USR8214                    */
+008665000000     /* 1=minuscole consentite; 0=solo maiuscole                    */
 008666000000     /*-------------------------------------------------------------*/
 008667000000
-008668000000             RMVMSGD MSGID(USR8215) MSGF(&LIB/&OBJ)
+008668000000             RMVMSGD MSGID(USR8214) MSGF(&LIB/&OBJ)
 008669000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 008670000000
 008671000000             ADDMSGD +
-008672000000                MSGID(USR8215) +
+008672000000                MSGID(USR8214) +
 008673000000                MSGF(&LIB/&OBJ) +
 008674000000                MSG( +
-008675000000'Inserimento caratteri minuscoli non permesso.'                       +
+008675000000'1=minuscole consentite; 0=solo maiuscole'                            +
 008676000000                ) +
 008677000000                SEV(0) +
 008678000000     /*   No replacement variables defined!                         */ +
@@ -8681,199 +8681,199 @@
 008681000000                /*  -EOF-  */
 008682000000
 008683000000     /*-------------------------------------------------------------*/
-008684000000     /*   Cmd-ADDMSGD für Message-ID :   USR8216                    */
-008685000000     /* La combinazione immessa non ü valida.(Help 2Ä liv.)         */
+008684000000     /*   Cmd-ADDMSGD für Message-ID :   USR8215                    */
+008685000000     /* Inserimento caratteri minuscoli non permesso.               */
 008686000000     /*-------------------------------------------------------------*/
 008687000000
-008688000000             RMVMSGD MSGID(USR8216) MSGF(&LIB/&OBJ)
+008688000000             RMVMSGD MSGID(USR8215) MSGF(&LIB/&OBJ)
 008689000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 008690000000
 008691000000             ADDMSGD +
-008692000000                MSGID(USR8216) +
+008692000000                MSGID(USR8215) +
 008693000000                MSGF(&LIB/&OBJ) +
 008694000000                MSG( +
-008695000000'La combinazione immessa non ü valida.(Help 2Ä liv.)'                 +
+008695000000'Inserimento caratteri minuscoli non permesso.'                       +
 008696000000                ) +
-008697000000                SECLVL( +
-008698000000'Non si puö al tempo stesso proibire i caratteri minuscoli e contempor-
-008699000000aneamente prevederlo come valore di "default".'                       +
-008700000000                ) +
-008701000000                SEV(0) +
-008702000000     /*   No replacement variables defined!                         */ +
-008703000000                ALROPT(*NO) +
-008704000000                CCSID(65535) +
-008705000000                /*  -EOF-  */
-008706000000
-008707000000     /*-------------------------------------------------------------*/
-008708000000     /*   Cmd-ADDMSGD für Message-ID :   USR8217                    */
-008709000000     /* 'Ordinamento per numero di record non possibile (Help 2Ä li */
-008710000000     /*-------------------------------------------------------------*/
-008711000000
-008712000000             RMVMSGD MSGID(USR8217) MSGF(&LIB/&OBJ)
-008713000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-008714000000
-008715000000             ADDMSGD +
-008716000000                MSGID(USR8217) +
-008717000000                MSGF(&LIB/&OBJ) +
-008718000000                MSG( +
-008719000000'''Ordinamento per numero di record non possibile (Help 2Ä livello).' +
+008697000000                SEV(0) +
+008698000000     /*   No replacement variables defined!                         */ +
+008699000000                ALROPT(*NO) +
+008700000000                CCSID(65535) +
+008701000000                /*  -EOF-  */
+008702000000
+008703000000     /*-------------------------------------------------------------*/
+008704000000     /*   Cmd-ADDMSGD für Message-ID :   USR8216                    */
+008705000000     /* La combinazione immessa non ü valida.(Help 2Ä liv.)         */
+008706000000     /*-------------------------------------------------------------*/
+008707000000
+008708000000             RMVMSGD MSGID(USR8216) MSGF(&LIB/&OBJ)
+008709000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+008710000000
+008711000000             ADDMSGD +
+008712000000                MSGID(USR8216) +
+008713000000                MSGF(&LIB/&OBJ) +
+008714000000                MSG( +
+008715000000'La combinazione immessa non ü valida.(Help 2Ä liv.)'                 +
+008716000000                ) +
+008717000000                SECLVL( +
+008718000000'Non si puö al tempo stesso proibire i caratteri minuscoli e contempor-
+008719000000aneamente prevederlo come valore di "default".'                       +
 008720000000                ) +
-008721000000                SECLVL( +
-008722000000'Il file logico aperto si basa su pi` di un membro di file fisico.'   +
-008723000000                ) +
-008724000000                SEV(0) +
-008725000000     /*   No replacement variables defined!                         */ +
-008726000000                ALROPT(*NO) +
-008727000000                CCSID(65535) +
-008728000000                /*  -EOF-  */
-008729000000
+008721000000                SEV(0) +
+008722000000     /*   No replacement variables defined!                         */ +
+008723000000                ALROPT(*NO) +
+008724000000                CCSID(65535) +
+008725000000                /*  -EOF-  */
+008726000000
+008727000000     /*-------------------------------------------------------------*/
+008728000000     /*   Cmd-ADDMSGD für Message-ID :   USR8217                    */
+008729000000     /* 'Ordinamento per numero di record non possibile (Help 2Ä li */
 008730000000     /*-------------------------------------------------------------*/
-008731000000     /*   Cmd-ADDMSGD für Message-ID :   USR8218                    */
-008732000000     /* Il record non puö essere allocato in quanto il file logico  */
-008733000000     /*-------------------------------------------------------------*/
+008731000000
+008732000000             RMVMSGD MSGID(USR8217) MSGF(&LIB/&OBJ)
+008733000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 008734000000
-008735000000             RMVMSGD MSGID(USR8218) MSGF(&LIB/&OBJ)
-008736000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-008737000000
-008738000000             ADDMSGD +
-008739000000                MSGID(USR8218) +
-008740000000                MSGF(&LIB/&OBJ) +
-008741000000                MSG( +
-008742000000'Il record non puö essere allocato in quanto il file logico si basa su-
-008743000000 pi` membri fisici. (Help 2Äliv.)'                                    +
-008744000000                ) +
-008745000000                SECLVL( +
-008746000000'&N &N Causa . . . . :   Il record non puö essere bloccato, in quanto -
-008747000000il NRR non ü univoco, e non ü possibile determinare da quale membro di-
-008748000000 file fisico proviene.'                                               +
-008749000000                ) +
-008750000000                SEV(0) +
-008751000000     /*   No replacement variables defined!                         */ +
-008752000000                ALROPT(*NO) +
-008753000000                CCSID(65535) +
-008754000000                /*  -EOF-  */
-008755000000
-008756000000     /*-------------------------------------------------------------*/
-008757000000     /*   Cmd-ADDMSGD für Message-ID :   USR8219                    */
-008758000000     /* Il valore '&1' per scelta Si/No non ü consentito.           */
-008759000000     /*-------------------------------------------------------------*/
-008760000000
-008761000000             RMVMSGD MSGID(USR8219) MSGF(&LIB/&OBJ)
-008762000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-008763000000
-008764000000             ADDMSGD +
-008765000000                MSGID(USR8219) +
-008766000000                MSGF(&LIB/&OBJ) +
-008767000000                MSG( +
-008768000000'Il valore ''&1'' per scelta Si/No non ü consentito.'                 +
+008735000000             ADDMSGD +
+008736000000                MSGID(USR8217) +
+008737000000                MSGF(&LIB/&OBJ) +
+008738000000                MSG( +
+008739000000'''Ordinamento per numero di record non possibile (Help 2Ä livello).' +
+008740000000                ) +
+008741000000                SECLVL( +
+008742000000'Il file logico aperto si basa su pi` di un membro di file fisico.'   +
+008743000000                ) +
+008744000000                SEV(0) +
+008745000000     /*   No replacement variables defined!                         */ +
+008746000000                ALROPT(*NO) +
+008747000000                CCSID(65535) +
+008748000000                /*  -EOF-  */
+008749000000
+008750000000     /*-------------------------------------------------------------*/
+008751000000     /*   Cmd-ADDMSGD für Message-ID :   USR8218                    */
+008752000000     /* Il record non puö essere allocato in quanto il file logico  */
+008753000000     /*-------------------------------------------------------------*/
+008754000000
+008755000000             RMVMSGD MSGID(USR8218) MSGF(&LIB/&OBJ)
+008756000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+008757000000
+008758000000             ADDMSGD +
+008759000000                MSGID(USR8218) +
+008760000000                MSGF(&LIB/&OBJ) +
+008761000000                MSG( +
+008762000000'Il record non puö essere allocato in quanto il file logico si basa su-
+008763000000 pi` membri fisici. (Help 2Äliv.)'                                    +
+008764000000                ) +
+008765000000                SECLVL( +
+008766000000'&N &N Causa . . . . :   Il record non puö essere bloccato, in quanto -
+008767000000il NRR non ü univoco, e non ü possibile determinare da quale membro di-
+008768000000 file fisico proviene.'                                               +
 008769000000                ) +
 008770000000                SEV(0) +
-008771000000                FMT( +
-008772000000                    (*CHAR 1) +
-008773000000                ) +
-008774000000                ALROPT(*NO) +
-008775000000                CCSID(65535) +
-008776000000                /*  -EOF-  */
-008777000000
-008778000000     /*-------------------------------------------------------------*/
-008779000000     /*   Cmd-ADDMSGD für Message-ID :   USR8220                    */
-008780000000     /* Valore non editabile. Il campo &1 ü NULLO.                  */
-008781000000     /*-------------------------------------------------------------*/
-008782000000
-008783000000             RMVMSGD MSGID(USR8220) MSGF(&LIB/&OBJ)
-008784000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-008785000000
-008786000000             ADDMSGD +
-008787000000                MSGID(USR8220) +
-008788000000                MSGF(&LIB/&OBJ) +
-008789000000                MSG( +
-008790000000'Valore non editabile. Il campo &1 ü NULLO.'                          +
-008791000000                ) +
-008792000000                SEV(0) +
-008793000000                FMT( +
-008794000000                    (*CHAR 10) +
-008795000000                ) +
-008796000000                ALROPT(*NO) +
-008797000000                CCSID(65535) +
-008798000000                /*  -EOF-  */
-008799000000
-008800000000     /*-------------------------------------------------------------*/
-008801000000     /*   Cmd-ADDMSGD für Message-ID :   USR8221                    */
-008802000000     /* Campo &1 non editabile in quanto i dati contenuti sono non  */
-008803000000     /*-------------------------------------------------------------*/
-008804000000
-008805000000             RMVMSGD MSGID(USR8221) MSGF(&LIB/&OBJ)
-008806000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-008807000000
-008808000000             ADDMSGD +
-008809000000                MSGID(USR8221) +
-008810000000                MSGF(&LIB/&OBJ) +
-008811000000                MSG( +
-008812000000'Campo &1 non editabile in quanto i dati contenuti sono non validi.'  +
-008813000000                ) +
-008814000000                SEV(0) +
-008815000000                FMT( +
-008816000000                    (*CHAR 10) +
-008817000000                ) +
-008818000000                ALROPT(*NO) +
-008819000000                CCSID(65535) +
-008820000000                /*  -EOF-  */
-008821000000
-008822000000     /*-------------------------------------------------------------*/
-008823000000     /*   Cmd-ADDMSGD für Message-ID :   USR8222                    */
-008824000000     /* Lunghezza campo &1 supera il massimo permesso dall'editor.  */
-008825000000     /*-------------------------------------------------------------*/
-008826000000
-008827000000             RMVMSGD MSGID(USR8222) MSGF(&LIB/&OBJ)
-008828000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-008829000000
-008830000000             ADDMSGD +
-008831000000                MSGID(USR8222) +
-008832000000                MSGF(&LIB/&OBJ) +
-008833000000                MSG( +
-008834000000'Lunghezza campo &1 supera il massimo permesso dall''editor.'         +
-008835000000                ) +
-008836000000                SEV(0) +
-008837000000                FMT( +
-008838000000                    (*CHAR 10) +
-008839000000                ) +
-008840000000                ALROPT(*NO) +
-008841000000                CCSID(65535) +
-008842000000                /*  -EOF-  */
-008843000000
-008844000000     /*-------------------------------------------------------------*/
-008845000000     /*   Cmd-ADDMSGD für Message-ID :   USR8223                    */
-008846000000     /* Cambio modalitä immissione chiave (caratteri minuscoli).    */
-008847000000     /*-------------------------------------------------------------*/
-008848000000
-008849000000             RMVMSGD MSGID(USR8223) MSGF(&LIB/&OBJ)
-008850000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-008851000000
-008852000000             ADDMSGD +
-008853000000                MSGID(USR8223) +
-008854000000                MSGF(&LIB/&OBJ) +
-008855000000                MSG( +
-008856000000'Cambio modalitä immissione chiave (caratteri minuscoli).'            +
-008857000000                ) +
-008858000000                SEV(0) +
-008859000000     /*   No replacement variables defined!                         */ +
+008771000000     /*   No replacement variables defined!                         */ +
+008772000000                ALROPT(*NO) +
+008773000000                CCSID(65535) +
+008774000000                /*  -EOF-  */
+008775000000
+008776000000     /*-------------------------------------------------------------*/
+008777000000     /*   Cmd-ADDMSGD für Message-ID :   USR8219                    */
+008778000000     /* Il valore '&1' per scelta Si/No non ü consentito.           */
+008779000000     /*-------------------------------------------------------------*/
+008780000000
+008781000000             RMVMSGD MSGID(USR8219) MSGF(&LIB/&OBJ)
+008782000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+008783000000
+008784000000             ADDMSGD +
+008785000000                MSGID(USR8219) +
+008786000000                MSGF(&LIB/&OBJ) +
+008787000000                MSG( +
+008788000000'Il valore ''&1'' per scelta Si/No non ü consentito.'                 +
+008789000000                ) +
+008790000000                SEV(0) +
+008791000000                FMT( +
+008792000000                    (*CHAR 1) +
+008793000000                ) +
+008794000000                ALROPT(*NO) +
+008795000000                CCSID(65535) +
+008796000000                /*  -EOF-  */
+008797000000
+008798000000     /*-------------------------------------------------------------*/
+008799000000     /*   Cmd-ADDMSGD für Message-ID :   USR8220                    */
+008800000000     /* Valore non editabile. Il campo &1 ü NULLO.                  */
+008801000000     /*-------------------------------------------------------------*/
+008802000000
+008803000000             RMVMSGD MSGID(USR8220) MSGF(&LIB/&OBJ)
+008804000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+008805000000
+008806000000             ADDMSGD +
+008807000000                MSGID(USR8220) +
+008808000000                MSGF(&LIB/&OBJ) +
+008809000000                MSG( +
+008810000000'Valore non editabile. Il campo &1 ü NULLO.'                          +
+008811000000                ) +
+008812000000                SEV(0) +
+008813000000                FMT( +
+008814000000                    (*CHAR 10) +
+008815000000                ) +
+008816000000                ALROPT(*NO) +
+008817000000                CCSID(65535) +
+008818000000                /*  -EOF-  */
+008819000000
+008820000000     /*-------------------------------------------------------------*/
+008821000000     /*   Cmd-ADDMSGD für Message-ID :   USR8221                    */
+008822000000     /* Campo &1 non editabile in quanto i dati contenuti sono non  */
+008823000000     /*-------------------------------------------------------------*/
+008824000000
+008825000000             RMVMSGD MSGID(USR8221) MSGF(&LIB/&OBJ)
+008826000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+008827000000
+008828000000             ADDMSGD +
+008829000000                MSGID(USR8221) +
+008830000000                MSGF(&LIB/&OBJ) +
+008831000000                MSG( +
+008832000000'Campo &1 non editabile in quanto i dati contenuti sono non validi.'  +
+008833000000                ) +
+008834000000                SEV(0) +
+008835000000                FMT( +
+008836000000                    (*CHAR 10) +
+008837000000                ) +
+008838000000                ALROPT(*NO) +
+008839000000                CCSID(65535) +
+008840000000                /*  -EOF-  */
+008841000000
+008842000000     /*-------------------------------------------------------------*/
+008843000000     /*   Cmd-ADDMSGD für Message-ID :   USR8222                    */
+008844000000     /* Lunghezza campo &1 supera il massimo permesso dall'editor.  */
+008845000000     /*-------------------------------------------------------------*/
+008846000000
+008847000000             RMVMSGD MSGID(USR8222) MSGF(&LIB/&OBJ)
+008848000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+008849000000
+008850000000             ADDMSGD +
+008851000000                MSGID(USR8222) +
+008852000000                MSGF(&LIB/&OBJ) +
+008853000000                MSG( +
+008854000000'Lunghezza campo &1 supera il massimo permesso dall''editor.'         +
+008855000000                ) +
+008856000000                SEV(0) +
+008857000000                FMT( +
+008858000000                    (*CHAR 10) +
+008859000000                ) +
 008860000000                ALROPT(*NO) +
 008861000000                CCSID(65535) +
 008862000000                /*  -EOF-  */
 008863000000
 008864000000     /*-------------------------------------------------------------*/
-008865000000     /*   Cmd-ADDMSGD für Message-ID :   USR8224                    */
-008866000000     /* Cambio modalitä immissione chiave (caratteri maiuscoli).    */
+008865000000     /*   Cmd-ADDMSGD für Message-ID :   USR8223                    */
+008866000000     /* Cambio modalitä immissione chiave (caratteri minuscoli).    */
 008867000000     /*-------------------------------------------------------------*/
 008868000000
-008869000000             RMVMSGD MSGID(USR8224) MSGF(&LIB/&OBJ)
+008869000000             RMVMSGD MSGID(USR8223) MSGF(&LIB/&OBJ)
 008870000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 008871000000
 008872000000             ADDMSGD +
-008873000000                MSGID(USR8224) +
+008873000000                MSGID(USR8223) +
 008874000000                MSGF(&LIB/&OBJ) +
 008875000000                MSG( +
-008876000000'Cambio modalitä immissione chiave (caratteri maiuscoli).'            +
+008876000000'Cambio modalitä immissione chiave (caratteri minuscoli).'            +
 008877000000                ) +
 008878000000                SEV(0) +
 008879000000     /*   No replacement variables defined!                         */ +
@@ -8882,39 +8882,39 @@
 008882000000                /*  -EOF-  */
 008883000000
 008884000000     /*-------------------------------------------------------------*/
-008885000000     /*   Cmd-ADDMSGD für Message-ID :   USR8225                    */
-008886000000     /* Questo record ü in manutenzione da un altro lavoro. Modific */
+008885000000     /*   Cmd-ADDMSGD für Message-ID :   USR8224                    */
+008886000000     /* Cambio modalitä immissione chiave (caratteri maiuscoli).    */
 008887000000     /*-------------------------------------------------------------*/
 008888000000
-008889000000             RMVMSGD MSGID(USR8225) MSGF(&LIB/&OBJ)
+008889000000             RMVMSGD MSGID(USR8224) MSGF(&LIB/&OBJ)
 008890000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 008891000000
 008892000000             ADDMSGD +
-008893000000                MSGID(USR8225) +
+008893000000                MSGID(USR8224) +
 008894000000                MSGF(&LIB/&OBJ) +
 008895000000                MSG( +
-008896000000'Questo record ü in manutenzione da un altro lavoro. Modificarlo comun-
-008897000000que?'                                                                 +
-008898000000                ) +
-008899000000                SEV(0) +
-008900000000     /*   No replacement variables defined!                         */ +
-008901000000                ALROPT(*NO) +
-008902000000                CCSID(65535) +
-008903000000                /*  -EOF-  */
-008904000000
-008905000000     /*-------------------------------------------------------------*/
-008906000000     /*   Cmd-ADDMSGD für Message-ID :   USR8226                    */
-008907000000     /* Operazione di stampa completata con successo.               */
-008908000000     /*-------------------------------------------------------------*/
-008909000000
-008910000000             RMVMSGD MSGID(USR8226) MSGF(&LIB/&OBJ)
-008911000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-008912000000
-008913000000             ADDMSGD +
-008914000000                MSGID(USR8226) +
-008915000000                MSGF(&LIB/&OBJ) +
-008916000000                MSG( +
-008917000000'Operazione di stampa completata con successo.'                       +
+008896000000'Cambio modalitä immissione chiave (caratteri maiuscoli).'            +
+008897000000                ) +
+008898000000                SEV(0) +
+008899000000     /*   No replacement variables defined!                         */ +
+008900000000                ALROPT(*NO) +
+008901000000                CCSID(65535) +
+008902000000                /*  -EOF-  */
+008903000000
+008904000000     /*-------------------------------------------------------------*/
+008905000000     /*   Cmd-ADDMSGD für Message-ID :   USR8225                    */
+008906000000     /* Questo record ü in manutenzione da un altro lavoro. Modific */
+008907000000     /*-------------------------------------------------------------*/
+008908000000
+008909000000             RMVMSGD MSGID(USR8225) MSGF(&LIB/&OBJ)
+008910000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+008911000000
+008912000000             ADDMSGD +
+008913000000                MSGID(USR8225) +
+008914000000                MSGF(&LIB/&OBJ) +
+008915000000                MSG( +
+008916000000'Questo record ü in manutenzione da un altro lavoro. Modificarlo comun-
+008917000000que?'                                                                 +
 008918000000                ) +
 008919000000                SEV(0) +
 008920000000     /*   No replacement variables defined!                         */ +
@@ -8923,257 +8923,257 @@
 008923000000                /*  -EOF-  */
 008924000000
 008925000000     /*-------------------------------------------------------------*/
-008926000000     /*   Cmd-ADDMSGD für Message-ID :   USR8227                    */
-008927000000     /* Non ü possibile ottenere un valore numerico valido dalla st */
+008926000000     /*   Cmd-ADDMSGD für Message-ID :   USR8226                    */
+008927000000     /* Operazione di stampa completata con successo.               */
 008928000000     /*-------------------------------------------------------------*/
 008929000000
-008930000000             RMVMSGD MSGID(USR8227) MSGF(&LIB/&OBJ)
+008930000000             RMVMSGD MSGID(USR8226) MSGF(&LIB/&OBJ)
 008931000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 008932000000
 008933000000             ADDMSGD +
-008934000000                MSGID(USR8227) +
+008934000000                MSGID(USR8226) +
 008935000000                MSGF(&LIB/&OBJ) +
 008936000000                MSG( +
-008937000000'Non ü possibile ottenere un valore numerico valido dalla stringa ''&1-
-008938000000''. (Help 2Ä liv).'                                                   +
-008939000000                ) +
-008940000000                SECLVL( +
-008941000000'&N &N Informazioni. . :   Nella trasformazione in numero di  ''&1'' s-
-008942000000i ü verificato un errore. La stringa non ü convertibile in un valore n-
-008943000000umerico di tipo &2(&3,&4).'                                           +
-008944000000                ) +
-008945000000                SEV(0) +
-008946000000                FMT( +
-008947000000                    (*CHAR 256) +
-008948000000                    (*CHAR 1) +
-008949000000                    (*DEC 5 0) +
-008950000000                    (*DEC 5 0) +
-008951000000                ) +
-008952000000                ALROPT(*NO) +
-008953000000                CCSID(65535) +
-008954000000                /*  -EOF-  */
-008955000000
-008956000000     /*-------------------------------------------------------------*/
-008957000000     /*   Cmd-ADDMSGD für Message-ID :   USR8228                    */
-008958000000     /* Tipo di dato '&1' invalido                                  */
-008959000000     /*-------------------------------------------------------------*/
-008960000000
-008961000000             RMVMSGD MSGID(USR8228) MSGF(&LIB/&OBJ)
-008962000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-008963000000
-008964000000             ADDMSGD +
-008965000000                MSGID(USR8228) +
-008966000000                MSGF(&LIB/&OBJ) +
-008967000000                MSG( +
-008968000000'Tipo di dato ''&1'' invalido'                                        +
-008969000000                ) +
-008970000000                SECLVL( +
-008971000000'&N &N Spiegazione . . :   Il valore ''&1'' del tipo di dato non ü acc-
-008972000000ettato. Fornire un valore valido per i dati in RPG e ripetere l''opera-
-008973000000zione'                                                                +
-008974000000                ) +
-008975000000                SEV(0) +
-008976000000                FMT( +
-008977000000                    (*CHAR 256) +
-008978000000                ) +
-008979000000                ALROPT(*NO) +
-008980000000                CCSID(65535) +
-008981000000                /*  -EOF-  */
-008982000000
-008983000000     /*-------------------------------------------------------------*/
-008984000000     /*   Cmd-ADDMSGD für Message-ID :   USR8229                    */
-008985000000     /* Il valore '&1' non ü valido per la lunghezza.               */
-008986000000     /*-------------------------------------------------------------*/
-008987000000
-008988000000             RMVMSGD MSGID(USR8229) MSGF(&LIB/&OBJ)
-008989000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-008990000000
-008991000000             ADDMSGD +
-008992000000                MSGID(USR8229) +
-008993000000                MSGF(&LIB/&OBJ) +
-008994000000                MSG( +
-008995000000'Il valore ''&1'' non ü valido per la lunghezza.'                     +
-008996000000                ) +
-008997000000                SECLVL( +
-008998000000'&N &N Spiegazione . . :   Il valore fornito ''&1'' come lunghezza cam-
-008999000000po non ü valido. Correggere il dato e ripetere l''operazione.'        +
-009000000000                ) +
-009001000000                SEV(0) +
-009002000000                FMT( +
-009003000000                    (*CHAR 256) +
-009004000000                ) +
-009005000000                ALROPT(*NO) +
-009006000000                CCSID(65535) +
-009007000000                /*  -EOF-  */
-009008000000
-009009000000     /*-------------------------------------------------------------*/
-009010000000     /*   Cmd-ADDMSGD für Message-ID :   USR8230                    */
-009011000000     /* Numero '&1' di posizioni decimali fornito non valido.       */
-009012000000     /*-------------------------------------------------------------*/
-009013000000
-009014000000             RMVMSGD MSGID(USR8230) MSGF(&LIB/&OBJ)
-009015000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-009016000000
-009017000000             ADDMSGD +
-009018000000                MSGID(USR8230) +
-009019000000                MSGF(&LIB/&OBJ) +
-009020000000                MSG( +
-009021000000'Numero ''&1'' di posizioni decimali fornito non valido.'             +
-009022000000                ) +
-009023000000                SECLVL( +
-009024000000'&N &N Spiegazione . . :   Il valore ''&1'' fornito per le cifre decim-
-009025000000ali non ü valido. Correggere il valore e ripetere l''operazione. Notar-
-009026000000e che non per tutti i tipi di dati occorre fornire le posizioni decima-
-009027000000li.'                                                                  +
-009028000000                ) +
-009029000000                SEV(0) +
-009030000000                FMT( +
-009031000000                    (*CHAR 256) +
-009032000000                ) +
-009033000000                ALROPT(*NO) +
-009034000000                CCSID(65535) +
-009035000000                /*  -EOF-  */
+008937000000'Operazione di stampa completata con successo.'                       +
+008938000000                ) +
+008939000000                SEV(0) +
+008940000000     /*   No replacement variables defined!                         */ +
+008941000000                ALROPT(*NO) +
+008942000000                CCSID(65535) +
+008943000000                /*  -EOF-  */
+008944000000
+008945000000     /*-------------------------------------------------------------*/
+008946000000     /*   Cmd-ADDMSGD für Message-ID :   USR8227                    */
+008947000000     /* Non ü possibile ottenere un valore numerico valido dalla st */
+008948000000     /*-------------------------------------------------------------*/
+008949000000
+008950000000             RMVMSGD MSGID(USR8227) MSGF(&LIB/&OBJ)
+008951000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+008952000000
+008953000000             ADDMSGD +
+008954000000                MSGID(USR8227) +
+008955000000                MSGF(&LIB/&OBJ) +
+008956000000                MSG( +
+008957000000'Non ü possibile ottenere un valore numerico valido dalla stringa ''&1-
+008958000000''. (Help 2Ä liv).'                                                   +
+008959000000                ) +
+008960000000                SECLVL( +
+008961000000'&N &N Informazioni. . :   Nella trasformazione in numero di  ''&1'' s-
+008962000000i ü verificato un errore. La stringa non ü convertibile in un valore n-
+008963000000umerico di tipo &2(&3,&4).'                                           +
+008964000000                ) +
+008965000000                SEV(0) +
+008966000000                FMT( +
+008967000000                    (*CHAR 256) +
+008968000000                    (*CHAR 1) +
+008969000000                    (*DEC 5 0) +
+008970000000                    (*DEC 5 0) +
+008971000000                ) +
+008972000000                ALROPT(*NO) +
+008973000000                CCSID(65535) +
+008974000000                /*  -EOF-  */
+008975000000
+008976000000     /*-------------------------------------------------------------*/
+008977000000     /*   Cmd-ADDMSGD für Message-ID :   USR8228                    */
+008978000000     /* Tipo di dato '&1' invalido                                  */
+008979000000     /*-------------------------------------------------------------*/
+008980000000
+008981000000             RMVMSGD MSGID(USR8228) MSGF(&LIB/&OBJ)
+008982000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+008983000000
+008984000000             ADDMSGD +
+008985000000                MSGID(USR8228) +
+008986000000                MSGF(&LIB/&OBJ) +
+008987000000                MSG( +
+008988000000'Tipo di dato ''&1'' invalido'                                        +
+008989000000                ) +
+008990000000                SECLVL( +
+008991000000'&N &N Spiegazione . . :   Il valore ''&1'' del tipo di dato non ü acc-
+008992000000ettato. Fornire un valore valido per i dati in RPG e ripetere l''opera-
+008993000000zione'                                                                +
+008994000000                ) +
+008995000000                SEV(0) +
+008996000000                FMT( +
+008997000000                    (*CHAR 256) +
+008998000000                ) +
+008999000000                ALROPT(*NO) +
+009000000000                CCSID(65535) +
+009001000000                /*  -EOF-  */
+009002000000
+009003000000     /*-------------------------------------------------------------*/
+009004000000     /*   Cmd-ADDMSGD für Message-ID :   USR8229                    */
+009005000000     /* Il valore '&1' non ü valido per la lunghezza.               */
+009006000000     /*-------------------------------------------------------------*/
+009007000000
+009008000000             RMVMSGD MSGID(USR8229) MSGF(&LIB/&OBJ)
+009009000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+009010000000
+009011000000             ADDMSGD +
+009012000000                MSGID(USR8229) +
+009013000000                MSGF(&LIB/&OBJ) +
+009014000000                MSG( +
+009015000000'Il valore ''&1'' non ü valido per la lunghezza.'                     +
+009016000000                ) +
+009017000000                SECLVL( +
+009018000000'&N &N Spiegazione . . :   Il valore fornito ''&1'' come lunghezza cam-
+009019000000po non ü valido. Correggere il dato e ripetere l''operazione.'        +
+009020000000                ) +
+009021000000                SEV(0) +
+009022000000                FMT( +
+009023000000                    (*CHAR 256) +
+009024000000                ) +
+009025000000                ALROPT(*NO) +
+009026000000                CCSID(65535) +
+009027000000                /*  -EOF-  */
+009028000000
+009029000000     /*-------------------------------------------------------------*/
+009030000000     /*   Cmd-ADDMSGD für Message-ID :   USR8230                    */
+009031000000     /* Numero '&1' di posizioni decimali fornito non valido.       */
+009032000000     /*-------------------------------------------------------------*/
+009033000000
+009034000000             RMVMSGD MSGID(USR8230) MSGF(&LIB/&OBJ)
+009035000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 009036000000
-009037000000     /*-------------------------------------------------------------*/
-009038000000     /*   Cmd-ADDMSGD für Message-ID :   USR8231                    */
-009039000000     /* Allocazione del record non possibile in copia o inserimento */
-009040000000     /*-------------------------------------------------------------*/
-009041000000
-009042000000             RMVMSGD MSGID(USR8231) MSGF(&LIB/&OBJ)
-009043000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-009044000000
-009045000000             ADDMSGD +
-009046000000                MSGID(USR8231) +
-009047000000                MSGF(&LIB/&OBJ) +
-009048000000                MSG( +
-009049000000'Allocazione del record non possibile in copia o inserimento.'        +
-009050000000                ) +
-009051000000                SECLVL( +
-009052000000'&N &N Motivo dell''errore:   Si puö modificare l''allocazione di un r-
-009053000000ecord in aggiornamento, ma non durante una operazione di copia o di sc-
-009054000000rittura di un nuovo record.'                                          +
-009055000000                ) +
-009056000000                SEV(0) +
-009057000000     /*   No replacement variables defined!                         */ +
-009058000000                ALROPT(*NO) +
-009059000000                CCSID(65535) +
-009060000000                /*  -EOF-  */
+009037000000             ADDMSGD +
+009038000000                MSGID(USR8230) +
+009039000000                MSGF(&LIB/&OBJ) +
+009040000000                MSG( +
+009041000000'Numero ''&1'' di posizioni decimali fornito non valido.'             +
+009042000000                ) +
+009043000000                SECLVL( +
+009044000000'&N &N Spiegazione . . :   Il valore ''&1'' fornito per le cifre decim-
+009045000000ali non ü valido. Correggere il valore e ripetere l''operazione. Notar-
+009046000000e che non per tutti i tipi di dati occorre fornire le posizioni decima-
+009047000000li.'                                                                  +
+009048000000                ) +
+009049000000                SEV(0) +
+009050000000                FMT( +
+009051000000                    (*CHAR 256) +
+009052000000                ) +
+009053000000                ALROPT(*NO) +
+009054000000                CCSID(65535) +
+009055000000                /*  -EOF-  */
+009056000000
+009057000000     /*-------------------------------------------------------------*/
+009058000000     /*   Cmd-ADDMSGD für Message-ID :   USR8231                    */
+009059000000     /* Allocazione del record non possibile in copia o inserimento */
+009060000000     /*-------------------------------------------------------------*/
 009061000000
-009062000000     /*-------------------------------------------------------------*/
-009063000000     /*   Cmd-ADDMSGD für Message-ID :   USR8232                    */
-009064000000     /* Il record ü in modifica da un altro lavoro. Si vuole alloca */
-009065000000     /*-------------------------------------------------------------*/
-009066000000
-009067000000             RMVMSGD MSGID(USR8232) MSGF(&LIB/&OBJ)
-009068000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-009069000000
-009070000000             ADDMSGD +
-009071000000                MSGID(USR8232) +
-009072000000                MSGF(&LIB/&OBJ) +
-009073000000                MSG( +
-009074000000'Il record ü in modifica da un altro lavoro. Si vuole allocarlo comunq-
-009075000000ue?'                                                                  +
-009076000000                ) +
-009077000000                SEV(0) +
-009078000000     /*   No replacement variables defined!                         */ +
-009079000000                ALROPT(*NO) +
-009080000000                CCSID(65535) +
-009081000000                /*  -EOF-  */
-009082000000
-009083000000     /*-------------------------------------------------------------*/
-009084000000     /*   Cmd-ADDMSGD für Message-ID :   USR8233                    */
-009085000000     /* Error: Cannot use layout. Record format IDs are different.  */
-009086000000     /*-------------------------------------------------------------*/
-009087000000
-009088000000             RMVMSGD MSGID(USR8233) MSGF(&LIB/&OBJ)
-009089000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-009090000000
-009091000000             ADDMSGD +
-009092000000                MSGID(USR8233) +
-009093000000                MSGF(&LIB/&OBJ) +
-009094000000                MSG( +
-009095000000'Error: Cannot use layout. Record format IDs are different.'          +
+009062000000             RMVMSGD MSGID(USR8231) MSGF(&LIB/&OBJ)
+009063000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+009064000000
+009065000000             ADDMSGD +
+009066000000                MSGID(USR8231) +
+009067000000                MSGF(&LIB/&OBJ) +
+009068000000                MSG( +
+009069000000'Allocazione del record non possibile in copia o inserimento.'        +
+009070000000                ) +
+009071000000                SECLVL( +
+009072000000'&N &N Motivo dell''errore:   Si puö modificare l''allocazione di un r-
+009073000000ecord in aggiornamento, ma non durante una operazione di copia o di sc-
+009074000000rittura di un nuovo record.'                                          +
+009075000000                ) +
+009076000000                SEV(0) +
+009077000000     /*   No replacement variables defined!                         */ +
+009078000000                ALROPT(*NO) +
+009079000000                CCSID(65535) +
+009080000000                /*  -EOF-  */
+009081000000
+009082000000     /*-------------------------------------------------------------*/
+009083000000     /*   Cmd-ADDMSGD für Message-ID :   USR8232                    */
+009084000000     /* Il record ü in modifica da un altro lavoro. Si vuole alloca */
+009085000000     /*-------------------------------------------------------------*/
+009086000000
+009087000000             RMVMSGD MSGID(USR8232) MSGF(&LIB/&OBJ)
+009088000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+009089000000
+009090000000             ADDMSGD +
+009091000000                MSGID(USR8232) +
+009092000000                MSGF(&LIB/&OBJ) +
+009093000000                MSG( +
+009094000000'Il record ü in modifica da un altro lavoro. Si vuole allocarlo comunq-
+009095000000ue?'                                                                  +
 009096000000                ) +
-009097000000                SECLVL( +
-009098000000'&N &N Recovery  . . . :   Remove record *RCDFMTID from file &2/&1, me-
-009099000000mber &3 to disable level check and try to apply the layout again. On s-
-009100000000uccess save the layout to add the record format level ID.'            +
-009101000000                ) +
-009102000000                SEV(0) +
-009103000000                FMT( +
-009104000000                    (*CHAR 10) +
-009105000000                    (*CHAR 10) +
-009106000000                    (*CHAR 10) +
-009107000000                ) +
-009108000000                ALROPT(*NO) +
-009109000000                CCSID(65535) +
-009110000000                /*  -EOF-  */
-009111000000
-009112000000     /*-------------------------------------------------------------*/
-009113000000     /*   Cmd-ADDMSGD für Message-ID :   USR8234                    */
-009114000000     /* Failed to load layout because record format level IDs do no */
-009115000000     /*-------------------------------------------------------------*/
-009116000000
-009117000000             RMVMSGD MSGID(USR8234) MSGF(&LIB/&OBJ)
-009118000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-009119000000
-009120000000             ADDMSGD +
-009121000000                MSGID(USR8234) +
-009122000000                MSGF(&LIB/&OBJ) +
-009123000000                MSG( +
-009124000000'Failed to load layout because record format level IDs do not match.' +
-009125000000                ) +
-009126000000                SECLVL( +
-009127000000'&N &N Cause . . . . . :   The specified layout could not be loaded fr-
-009128000000om the environment file, because the record format level ID of the lay-
-009129000000out does not match the record format level ID of the specified file.&N-
-009130000000 Recovery  . . . :   Remove record *RCDFMTID from file &2/&1, member &-
-0091310000003 to disable level check and try to apply the layout again. On success-
-009132000000 save the layout to add the record format level ID.'                  +
-009133000000                ) +
-009134000000                SEV(0) +
-009135000000                FMT( +
-009136000000                    (*CHAR 10) +
-009137000000                    (*CHAR 10) +
-009138000000                    (*CHAR 10) +
-009139000000                ) +
-009140000000                ALROPT(*NO) +
-009141000000                CCSID(65535) +
-009142000000                /*  -EOF-  */
-009143000000
-009144000000     /*-------------------------------------------------------------*/
-009145000000     /*   Cmd-ADDMSGD für Message-ID :   USR8235                    */
-009146000000     /* SQL-Selection not supported for multi-member logical files. */
-009147000000     /*-------------------------------------------------------------*/
-009148000000
-009149000000             RMVMSGD MSGID(USR8235) MSGF(&LIB/&OBJ)
-009150000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-009151000000
-009152000000             ADDMSGD +
-009153000000                MSGID(USR8235) +
-009154000000                MSGF(&LIB/&OBJ) +
-009155000000                MSG( +
-009156000000'SQL-Selection not supported for multi-member logical files.'         +
-009157000000                ) +
-009158000000                SEV(0) +
-009159000000     /*   No replacement variables defined!                         */ +
+009097000000                SEV(0) +
+009098000000     /*   No replacement variables defined!                         */ +
+009099000000                ALROPT(*NO) +
+009100000000                CCSID(65535) +
+009101000000                /*  -EOF-  */
+009102000000
+009103000000     /*-------------------------------------------------------------*/
+009104000000     /*   Cmd-ADDMSGD für Message-ID :   USR8233                    */
+009105000000     /* Error: Cannot use layout. Record format IDs are different.  */
+009106000000     /*-------------------------------------------------------------*/
+009107000000
+009108000000             RMVMSGD MSGID(USR8233) MSGF(&LIB/&OBJ)
+009109000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+009110000000
+009111000000             ADDMSGD +
+009112000000                MSGID(USR8233) +
+009113000000                MSGF(&LIB/&OBJ) +
+009114000000                MSG( +
+009115000000'Error: Cannot use layout. Record format IDs are different.'          +
+009116000000                ) +
+009117000000                SECLVL( +
+009118000000'&N &N Recovery  . . . :   Remove record *RCDFMTID from file &2/&1, me-
+009119000000mber &3 to disable level check and try to apply the layout again. On s-
+009120000000uccess save the layout to add the record format level ID.'            +
+009121000000                ) +
+009122000000                SEV(0) +
+009123000000                FMT( +
+009124000000                    (*CHAR 10) +
+009125000000                    (*CHAR 10) +
+009126000000                    (*CHAR 10) +
+009127000000                ) +
+009128000000                ALROPT(*NO) +
+009129000000                CCSID(65535) +
+009130000000                /*  -EOF-  */
+009131000000
+009132000000     /*-------------------------------------------------------------*/
+009133000000     /*   Cmd-ADDMSGD für Message-ID :   USR8234                    */
+009134000000     /* Failed to load layout because record format level IDs do no */
+009135000000     /*-------------------------------------------------------------*/
+009136000000
+009137000000             RMVMSGD MSGID(USR8234) MSGF(&LIB/&OBJ)
+009138000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+009139000000
+009140000000             ADDMSGD +
+009141000000                MSGID(USR8234) +
+009142000000                MSGF(&LIB/&OBJ) +
+009143000000                MSG( +
+009144000000'Failed to load layout because record format level IDs do not match.' +
+009145000000                ) +
+009146000000                SECLVL( +
+009147000000'&N &N Cause . . . . . :   The specified layout could not be loaded fr-
+009148000000om the environment file, because the record format level ID of the lay-
+009149000000out does not match the record format level ID of the specified file.&N-
+009150000000 Recovery  . . . :   Remove record *RCDFMTID from file &2/&1, member &-
+0091510000003 to disable level check and try to apply the layout again. On success-
+009152000000 save the layout to add the record format level ID.'                  +
+009153000000                ) +
+009154000000                SEV(0) +
+009155000000                FMT( +
+009156000000                    (*CHAR 10) +
+009157000000                    (*CHAR 10) +
+009158000000                    (*CHAR 10) +
+009159000000                ) +
 009160000000                ALROPT(*NO) +
 009161000000                CCSID(65535) +
 009162000000                /*  -EOF-  */
 009163000000
 009164000000     /*-------------------------------------------------------------*/
-009165000000     /*   Cmd-ADDMSGD für Message-ID :   USR8236                    */
-009166000000     /* Modalitä di inserimento attivata.                           */
+009165000000     /*   Cmd-ADDMSGD für Message-ID :   USR8235                    */
+009166000000     /* SQL-Selection not supported for multi-member logical files. */
 009167000000     /*-------------------------------------------------------------*/
 009168000000
-009169000000             RMVMSGD MSGID(USR8236) MSGF(&LIB/&OBJ)
+009169000000             RMVMSGD MSGID(USR8235) MSGF(&LIB/&OBJ)
 009170000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 009171000000
 009172000000             ADDMSGD +
-009173000000                MSGID(USR8236) +
+009173000000                MSGID(USR8235) +
 009174000000                MSGF(&LIB/&OBJ) +
 009175000000                MSG( +
-009176000000'Modalitä di inserimento attivata.'                                   +
+009176000000'SQL-Selection not supported for multi-member logical files.'         +
 009177000000                ) +
 009178000000                SEV(0) +
 009179000000     /*   No replacement variables defined!                         */ +
@@ -9182,288 +9182,310 @@
 009182000000                /*  -EOF-  */
 009183000000
 009184000000     /*-------------------------------------------------------------*/
-009185000000     /*   Cmd-ADDMSGD für Message-ID :   USR8237                    */
-009186000000     /* Premere Invio per inserire il numero di spazi specificato.  */
+009185000000     /*   Cmd-ADDMSGD für Message-ID :   USR8236                    */
+009186000000     /* Modalitä di inserimento attivata. Posizionare il cursore, q */
 009187000000     /*-------------------------------------------------------------*/
 009188000000
-009189000000             RMVMSGD MSGID(USR8237) MSGF(&LIB/&OBJ)
+009189000000             RMVMSGD MSGID(USR8236) MSGF(&LIB/&OBJ)
 009190000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
 009191000000
 009192000000             ADDMSGD +
-009193000000                MSGID(USR8237) +
+009193000000                MSGID(USR8236) +
 009194000000                MSGF(&LIB/&OBJ) +
 009195000000                MSG( +
-009196000000'Premere Invio per inserire il numero di spazi specificato.'          +
-009197000000                ) +
-009198000000                SEV(0) +
-009199000000     /*   No replacement variables defined!                         */ +
-009200000000                ALROPT(*NO) +
-009201000000                CCSID(65535) +
-009202000000                /*  -EOF-  */
-009203000000
-009204000000     /*-------------------------------------------------------------*/
-009205000000     /*   Cmd-ADDMSGD für Message-ID :   USR8238                    */
-009206000000     /* Modalitä di cancellazione attivata.                         */
-009207000000     /*-------------------------------------------------------------*/
-009208000000
-009209000000             RMVMSGD MSGID(USR8238) MSGF(&LIB/&OBJ)
-009210000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-009211000000
-009212000000             ADDMSGD +
-009213000000                MSGID(USR8238) +
-009214000000                MSGF(&LIB/&OBJ) +
-009215000000                MSG( +
-009216000000'Modalitä di cancellazione attivata. '                                +
-009217000000                ) +
-009218000000                SEV(0) +
-009219000000     /*   No replacement variables defined!                         */ +
-009220000000                ALROPT(*NO) +
-009221000000                CCSID(65535) +
-009222000000                /*  -EOF-  */
-009223000000
-009224000000     /*-------------------------------------------------------------*/
-009225000000     /*   Cmd-ADDMSGD für Message-ID :   USR8239                    */
-009226000000     /* Premere Invio per eliminare l'intervallo di caratteri speci */
-009227000000     /*-------------------------------------------------------------*/
-009228000000
-009229000000             RMVMSGD MSGID(USR8239) MSGF(&LIB/&OBJ)
-009230000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-009231000000
-009232000000             ADDMSGD +
-009233000000                MSGID(USR8239) +
-009234000000                MSGF(&LIB/&OBJ) +
-009235000000                MSG( +
-009236000000'Premere Invio per eliminare l''intervallo di caratteri specificato.' +
-009237000000                ) +
-009238000000                SEV(0) +
-009239000000     /*   No replacement variables defined!                         */ +
-009240000000                ALROPT(*NO) +
-009241000000                CCSID(65535) +
-009242000000                /*  -EOF-  */
-009243000000
-009244000000     /*-------------------------------------------------------------*/
-009245000000     /*   Cmd-ADDMSGD für Message-ID :   USR8240                    */
-009246000000     /* Non deve essere inferiore a 1.                              */
-009247000000     /*-------------------------------------------------------------*/
-009248000000
-009249000000             RMVMSGD MSGID(USR8240) MSGF(&LIB/&OBJ)
-009250000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-009251000000
-009252000000             ADDMSGD +
-009253000000                MSGID(USR8240) +
-009254000000                MSGF(&LIB/&OBJ) +
-009255000000                MSG( +
-009256000000'Non deve essere inferiore a 1.'                                      +
-009257000000                ) +
-009258000000                SEV(0) +
-009259000000     /*   No replacement variables defined!                         */ +
-009260000000                ALROPT(*NO) +
-009261000000                CCSID(65535) +
-009262000000                /*  -EOF-  */
-009263000000
-009264000000     /*-------------------------------------------------------------*/
-009265000000     /*   Cmd-ADDMSGD für Message-ID :   USR8241                    */
-009266000000     /* Non deve superare la lunghezza del campo.                   */
-009267000000     /*-------------------------------------------------------------*/
-009268000000
-009269000000             RMVMSGD MSGID(USR8241) MSGF(&LIB/&OBJ)
-009270000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-009271000000
-009272000000             ADDMSGD +
-009273000000                MSGID(USR8241) +
-009274000000                MSGF(&LIB/&OBJ) +
-009275000000                MSG( +
-009276000000'Non deve superare la lunghezza del campo.'                           +
-009277000000                ) +
-009278000000                SEV(0) +
-009279000000     /*   No replacement variables defined!                         */ +
-009280000000                ALROPT(*NO) +
-009281000000                CCSID(65535) +
-009282000000                /*  -EOF-  */
-009283000000
-009284000000     /*-------------------------------------------------------------*/
-009285000000     /*   Cmd-ADDMSGD für Message-ID :   USR9992                    */
-009286000000     /* Le impostazioni dell'utente non possono essere salvate.     */
-009287000000     /*-------------------------------------------------------------*/
-009288000000
-009289000000             RMVMSGD MSGID(USR9992) MSGF(&LIB/&OBJ)
-009290000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-009291000000
-009292000000             ADDMSGD +
-009293000000                MSGID(USR9992) +
-009294000000                MSGF(&LIB/&OBJ) +
-009295000000                MSG( +
-009296000000'Le impostazioni dell''utente non possono essere salvate.'            +
-009297000000                ) +
-009298000000                SEV(0) +
-009299000000     /*   No replacement variables defined!                         */ +
-009300000000                ALROPT(*NO) +
-009301000000                CCSID(65535) +
-009302000000                /*  -EOF-  */
-009303000000
-009304000000     /*-------------------------------------------------------------*/
-009305000000     /*   Cmd-ADDMSGD für Message-ID :   USR9993                    */
-009306000000     /* Impossibile aprire il file. L'uso di SQL ü limitato ai FILE */
-009307000000     /*-------------------------------------------------------------*/
-009308000000
-009309000000             RMVMSGD MSGID(USR9993) MSGF(&LIB/&OBJ)
-009310000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-009311000000
-009312000000             ADDMSGD +
-009313000000                MSGID(USR9993) +
-009314000000                MSGF(&LIB/&OBJ) +
-009315000000                MSG( +
-009316000000'Impossibile aprire il file. L''uso di SQL ü limitato ai FILE FISICI' +
-009317000000                ) +
-009318000000                SEV(0) +
-009319000000                FMT( +
-009320000000                    (*DEC 5 0) +
-009321000000                    (*CHAR 32) +
-009322000000                    (*CHAR 256) +
-009323000000                ) +
-009324000000                ALROPT(*NO) +
-009325000000                CCSID(65535) +
-009326000000                /*  -EOF-  */
-009327000000
-009328000000     /*-------------------------------------------------------------*/
-009329000000     /*   Cmd-ADDMSGD für Message-ID :   USR9994                    */
-009330000000     /* Trovato errore imprevisto &1 nella funzione C &2.           */
-009331000000     /*-------------------------------------------------------------*/
-009332000000
-009333000000             RMVMSGD MSGID(USR9994) MSGF(&LIB/&OBJ)
-009334000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-009335000000
-009336000000             ADDMSGD +
-009337000000                MSGID(USR9994) +
-009338000000                MSGF(&LIB/&OBJ) +
-009339000000                MSG( +
-009340000000'Trovato errore imprevisto &1 nella funzione C &2. '                  +
-009341000000                ) +
-009342000000                SECLVL( +
-009343000000'&N &N Fehlertext  . . :   &3'                                        +
-009344000000                ) +
-009345000000                SEV(0) +
-009346000000                FMT( +
-009347000000                    (*DEC 5 0) +
-009348000000                    (*CHAR 32) +
-009349000000                    (*CHAR 256) +
-009350000000                ) +
-009351000000                ALROPT(*NO) +
-009352000000                CCSID(65535) +
-009353000000                /*  -EOF-  */
+009196000000'Modalitä di inserimento attivata. Posizionare il cursore, quindi prem-
+009197000000ere F7.'                                                              +
+009198000000                ) +
+009199000000                SEV(0) +
+009200000000     /*   No replacement variables defined!                         */ +
+009201000000                ALROPT(*NO) +
+009202000000                CCSID(65535) +
+009203000000                /*  -EOF-  */
+009204000000
+009205000000     /*-------------------------------------------------------------*/
+009206000000     /*   Cmd-ADDMSGD für Message-ID :   USR8237                    */
+009207000000     /* Premere Invio per inserire il numero di spazi specificato.  */
+009208000000     /*-------------------------------------------------------------*/
+009209000000
+009210000000             RMVMSGD MSGID(USR8237) MSGF(&LIB/&OBJ)
+009211000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+009212000000
+009213000000             ADDMSGD +
+009214000000                MSGID(USR8237) +
+009215000000                MSGF(&LIB/&OBJ) +
+009216000000                MSG( +
+009217000000'Premere Invio per inserire il numero di spazi specificato.'          +
+009218000000                ) +
+009219000000                SEV(0) +
+009220000000     /*   No replacement variables defined!                         */ +
+009221000000                ALROPT(*NO) +
+009222000000                CCSID(65535) +
+009223000000                /*  -EOF-  */
+009224000000
+009225000000     /*-------------------------------------------------------------*/
+009226000000     /*   Cmd-ADDMSGD für Message-ID :   USR8238                    */
+009227000000     /* Modalitä di cancellazione attivata. Posizionare il cursore, */
+009228000000     /*-------------------------------------------------------------*/
+009229000000
+009230000000             RMVMSGD MSGID(USR8238) MSGF(&LIB/&OBJ)
+009231000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+009232000000
+009233000000             ADDMSGD +
+009234000000                MSGID(USR8238) +
+009235000000                MSGF(&LIB/&OBJ) +
+009236000000                MSG( +
+009237000000'Modalitä di cancellazione attivata. Posizionare il cursore, quindi pr-
+009238000000emere F8.'                                                            +
+009239000000                ) +
+009240000000                SEV(0) +
+009241000000     /*   No replacement variables defined!                         */ +
+009242000000                ALROPT(*NO) +
+009243000000                CCSID(65535) +
+009244000000                /*  -EOF-  */
+009245000000
+009246000000     /*-------------------------------------------------------------*/
+009247000000     /*   Cmd-ADDMSGD für Message-ID :   USR8239                    */
+009248000000     /* Premere Invio per eliminare l'intervallo di caratteri speci */
+009249000000     /*-------------------------------------------------------------*/
+009250000000
+009251000000             RMVMSGD MSGID(USR8239) MSGF(&LIB/&OBJ)
+009252000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+009253000000
+009254000000             ADDMSGD +
+009255000000                MSGID(USR8239) +
+009256000000                MSGF(&LIB/&OBJ) +
+009257000000                MSG( +
+009258000000'Premere Invio per eliminare l''intervallo di caratteri specificato.' +
+009259000000                ) +
+009260000000                SEV(0) +
+009261000000     /*   No replacement variables defined!                         */ +
+009262000000                ALROPT(*NO) +
+009263000000                CCSID(65535) +
+009264000000                /*  -EOF-  */
+009265000000
+009266000000     /*-------------------------------------------------------------*/
+009267000000     /*   Cmd-ADDMSGD für Message-ID :   USR8240                    */
+009268000000     /* Non deve essere inferiore a 1.                              */
+009269000000     /*-------------------------------------------------------------*/
+009270000000
+009271000000             RMVMSGD MSGID(USR8240) MSGF(&LIB/&OBJ)
+009272000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+009273000000
+009274000000             ADDMSGD +
+009275000000                MSGID(USR8240) +
+009276000000                MSGF(&LIB/&OBJ) +
+009277000000                MSG( +
+009278000000'Non deve essere inferiore a 1.'                                      +
+009279000000                ) +
+009280000000                SEV(0) +
+009281000000     /*   No replacement variables defined!                         */ +
+009282000000                ALROPT(*NO) +
+009283000000                CCSID(65535) +
+009284000000                /*  -EOF-  */
+009285000000
+009286000000     /*-------------------------------------------------------------*/
+009287000000     /*   Cmd-ADDMSGD für Message-ID :   USR8241                    */
+009288000000     /* Non deve superare la lunghezza del campo.                   */
+009289000000     /*-------------------------------------------------------------*/
+009290000000
+009291000000             RMVMSGD MSGID(USR8241) MSGF(&LIB/&OBJ)
+009292000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+009293000000
+009294000000             ADDMSGD +
+009295000000                MSGID(USR8241) +
+009296000000                MSGF(&LIB/&OBJ) +
+009297000000                MSG( +
+009298000000'Non deve superare la lunghezza del campo.'                           +
+009299000000                ) +
+009300000000                SEV(0) +
+009301000000     /*   No replacement variables defined!                         */ +
+009302000000                ALROPT(*NO) +
+009303000000                CCSID(65535) +
+009304000000                /*  -EOF-  */
+009305000000
+009306000000     /*-------------------------------------------------------------*/
+009307000000     /*   Cmd-ADDMSGD für Message-ID :   USR9992                    */
+009308000000     /* Le impostazioni dell'utente non possono essere salvate.     */
+009309000000     /*-------------------------------------------------------------*/
+009310000000
+009311000000             RMVMSGD MSGID(USR9992) MSGF(&LIB/&OBJ)
+009312000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+009313000000
+009314000000             ADDMSGD +
+009315000000                MSGID(USR9992) +
+009316000000                MSGF(&LIB/&OBJ) +
+009317000000                MSG( +
+009318000000'Le impostazioni dell''utente non possono essere salvate.'            +
+009319000000                ) +
+009320000000                SEV(0) +
+009321000000     /*   No replacement variables defined!                         */ +
+009322000000                ALROPT(*NO) +
+009323000000                CCSID(65535) +
+009324000000                /*  -EOF-  */
+009325000000
+009326000000     /*-------------------------------------------------------------*/
+009327000000     /*   Cmd-ADDMSGD für Message-ID :   USR9993                    */
+009328000000     /* Impossibile aprire il file. L'uso di SQL ü limitato ai FILE */
+009329000000     /*-------------------------------------------------------------*/
+009330000000
+009331000000             RMVMSGD MSGID(USR9993) MSGF(&LIB/&OBJ)
+009332000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+009333000000
+009334000000             ADDMSGD +
+009335000000                MSGID(USR9993) +
+009336000000                MSGF(&LIB/&OBJ) +
+009337000000                MSG( +
+009338000000'Impossibile aprire il file. L''uso di SQL ü limitato ai FILE FISICI' +
+009339000000                ) +
+009340000000                SEV(0) +
+009341000000                FMT( +
+009342000000                    (*DEC 5 0) +
+009343000000                    (*CHAR 32) +
+009344000000                    (*CHAR 256) +
+009345000000                ) +
+009346000000                ALROPT(*NO) +
+009347000000                CCSID(65535) +
+009348000000                /*  -EOF-  */
+009349000000
+009350000000     /*-------------------------------------------------------------*/
+009351000000     /*   Cmd-ADDMSGD für Message-ID :   USR9994                    */
+009352000000     /* Trovato errore imprevisto &1 nella funzione C &2.           */
+009353000000     /*-------------------------------------------------------------*/
 009354000000
-009355000000     /*-------------------------------------------------------------*/
-009356000000     /*   Cmd-ADDMSGD für Message-ID :   USR9995                    */
-009357000000     /* Modifica parametri di impostazione in corso ...             */
-009358000000     /*-------------------------------------------------------------*/
-009359000000
-009360000000             RMVMSGD MSGID(USR9995) MSGF(&LIB/&OBJ)
-009361000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-009362000000
-009363000000             ADDMSGD +
-009364000000                MSGID(USR9995) +
-009365000000                MSGF(&LIB/&OBJ) +
-009366000000                MSG( +
-009367000000'Modifica parametri di impostazione in corso ...  '                   +
-009368000000                ) +
-009369000000                SEV(0) +
-009370000000     /*   No replacement variables defined!                         */ +
-009371000000                ALROPT(*NO) +
-009372000000                CCSID(65535) +
-009373000000                /*  -EOF-  */
-009374000000
-009375000000     /*-------------------------------------------------------------*/
-009376000000     /*   Cmd-ADDMSGD für Message-ID :   USR9996                    */
-009377000000     /* Nessun file ü aperto.                                       */
-009378000000     /*-------------------------------------------------------------*/
-009379000000
-009380000000             RMVMSGD MSGID(USR9996) MSGF(&LIB/&OBJ)
-009381000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-009382000000
-009383000000             ADDMSGD +
-009384000000                MSGID(USR9996) +
-009385000000                MSGF(&LIB/&OBJ) +
-009386000000                MSG( +
-009387000000'Nessun file ü aperto.'                                               +
-009388000000                ) +
-009389000000                SEV(0) +
-009390000000     /*   No replacement variables defined!                         */ +
-009391000000                ALROPT(*NO) +
-009392000000                CCSID(65535) +
-009393000000                /*  -EOF-  */
-009394000000
-009395000000     /*-------------------------------------------------------------*/
-009396000000     /*   Cmd-ADDMSGD für Message-ID :   USR9997                    */
-009397000000     /* &2PEEK/400 ü  &1 Shareware. &2 si prega di registrarsi!     */
-009398000000     /*-------------------------------------------------------------*/
-009399000000
-009400000000             RMVMSGD MSGID(USR9997) MSGF(&LIB/&OBJ)
-009401000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-009402000000
-009403000000             ADDMSGD +
-009404000000                MSGID(USR9997) +
-009405000000                MSGF(&LIB/&OBJ) +
-009406000000                MSG( +
-009407000000'&2PEEK/400 ü  &1 Shareware. &2 si prega di registrarsi!        '     +
-009408000000                ) +
-009409000000                SEV(0) +
-009410000000                FMT( +
-009411000000                    (*CHAR 1) +
-009412000000                    (*CHAR 1) +
-009413000000                ) +
-009414000000                ALROPT(*NO) +
-009415000000                CCSID(65535) +
-009416000000                /*  -EOF-  */
-009417000000
-009418000000     /*-------------------------------------------------------------*/
-009419000000     /*   Cmd-ADDMSGD für Message-ID :   USR9998                    */
-009420000000     /* Ricevuto messaggio inatteso &1 da Programma &2.             */
-009421000000     /*-------------------------------------------------------------*/
-009422000000
-009423000000             RMVMSGD MSGID(USR9998) MSGF(&LIB/&OBJ)
-009424000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-009425000000
-009426000000             ADDMSGD +
-009427000000                MSGID(USR9998) +
-009428000000                MSGF(&LIB/&OBJ) +
-009429000000                MSG( +
-009430000000'Ricevuto messaggio inatteso &1 da Programma &2.'                     +
-009431000000                ) +
-009432000000                SEV(0) +
-009433000000                FMT( +
-009434000000                    (*CHAR 7) +
-009435000000                    (*CHAR 10) +
-009436000000                ) +
-009437000000                ALROPT(*NO) +
-009438000000                CCSID(65535) +
-009439000000                /*  -EOF-  */
-009440000000
-009441000000     /*-------------------------------------------------------------*/
-009442000000     /*   Cmd-ADDMSGD für Message-ID :   USR9999                    */
-009443000000     /* &1                                                          */
-009444000000     /*-------------------------------------------------------------*/
-009445000000
-009446000000             RMVMSGD MSGID(USR9999) MSGF(&LIB/&OBJ)
-009447000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
-009448000000
-009449000000             ADDMSGD +
-009450000000                MSGID(USR9999) +
-009451000000                MSGF(&LIB/&OBJ) +
-009452000000                MSG( +
-009453000000'&1'                                                                  +
-009454000000                ) +
-009455000000                SECLVL( +
-009456000000'&2'                                                                  +
-009457000000                ) +
-009458000000                SEV(0) +
-009459000000                FMT( +
-009460000000                    (*CHAR 128) +
-009461000000                    (*CHAR 128) +
-009462000000                ) +
-009463000000                ALROPT(*NO) +
-009464000000                CCSID(65535) +
-009465000000                /*  -EOF-  */
-009466000000
-009467000000             RCLRSC LVL(*)
-009468000000
-009469000000             ENDPGM
+009355000000             RMVMSGD MSGID(USR9994) MSGF(&LIB/&OBJ)
+009356000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+009357000000
+009358000000             ADDMSGD +
+009359000000                MSGID(USR9994) +
+009360000000                MSGF(&LIB/&OBJ) +
+009361000000                MSG( +
+009362000000'Trovato errore imprevisto &1 nella funzione C &2. '                  +
+009363000000                ) +
+009364000000                SECLVL( +
+009365000000'&N &N Fehlertext  . . :   &3'                                        +
+009366000000                ) +
+009367000000                SEV(0) +
+009368000000                FMT( +
+009369000000                    (*DEC 5 0) +
+009370000000                    (*CHAR 32) +
+009371000000                    (*CHAR 256) +
+009372000000                ) +
+009373000000                ALROPT(*NO) +
+009374000000                CCSID(65535) +
+009375000000                /*  -EOF-  */
+009376000000
+009377000000     /*-------------------------------------------------------------*/
+009378000000     /*   Cmd-ADDMSGD für Message-ID :   USR9995                    */
+009379000000     /* Modifica parametri di impostazione in corso ...             */
+009380000000     /*-------------------------------------------------------------*/
+009381000000
+009382000000             RMVMSGD MSGID(USR9995) MSGF(&LIB/&OBJ)
+009383000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+009384000000
+009385000000             ADDMSGD +
+009386000000                MSGID(USR9995) +
+009387000000                MSGF(&LIB/&OBJ) +
+009388000000                MSG( +
+009389000000'Modifica parametri di impostazione in corso ...  '                   +
+009390000000                ) +
+009391000000                SEV(0) +
+009392000000     /*   No replacement variables defined!                         */ +
+009393000000                ALROPT(*NO) +
+009394000000                CCSID(65535) +
+009395000000                /*  -EOF-  */
+009396000000
+009397000000     /*-------------------------------------------------------------*/
+009398000000     /*   Cmd-ADDMSGD für Message-ID :   USR9996                    */
+009399000000     /* Nessun file ü aperto.                                       */
+009400000000     /*-------------------------------------------------------------*/
+009401000000
+009402000000             RMVMSGD MSGID(USR9996) MSGF(&LIB/&OBJ)
+009403000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+009404000000
+009405000000             ADDMSGD +
+009406000000                MSGID(USR9996) +
+009407000000                MSGF(&LIB/&OBJ) +
+009408000000                MSG( +
+009409000000'Nessun file ü aperto.'                                               +
+009410000000                ) +
+009411000000                SEV(0) +
+009412000000     /*   No replacement variables defined!                         */ +
+009413000000                ALROPT(*NO) +
+009414000000                CCSID(65535) +
+009415000000                /*  -EOF-  */
+009416000000
+009417000000     /*-------------------------------------------------------------*/
+009418000000     /*   Cmd-ADDMSGD für Message-ID :   USR9997                    */
+009419000000     /* &2PEEK/400 ü  &1 Shareware. &2 si prega di registrarsi!     */
+009420000000     /*-------------------------------------------------------------*/
+009421000000
+009422000000             RMVMSGD MSGID(USR9997) MSGF(&LIB/&OBJ)
+009423000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+009424000000
+009425000000             ADDMSGD +
+009426000000                MSGID(USR9997) +
+009427000000                MSGF(&LIB/&OBJ) +
+009428000000                MSG( +
+009429000000'&2PEEK/400 ü  &1 Shareware. &2 si prega di registrarsi!        '     +
+009430000000                ) +
+009431000000                SEV(0) +
+009432000000                FMT( +
+009433000000                    (*CHAR 1) +
+009434000000                    (*CHAR 1) +
+009435000000                ) +
+009436000000                ALROPT(*NO) +
+009437000000                CCSID(65535) +
+009438000000                /*  -EOF-  */
+009439000000
+009440000000     /*-------------------------------------------------------------*/
+009441000000     /*   Cmd-ADDMSGD für Message-ID :   USR9998                    */
+009442000000     /* Ricevuto messaggio inatteso &1 da Programma &2.             */
+009443000000     /*-------------------------------------------------------------*/
+009444000000
+009445000000             RMVMSGD MSGID(USR9998) MSGF(&LIB/&OBJ)
+009446000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+009447000000
+009448000000             ADDMSGD +
+009449000000                MSGID(USR9998) +
+009450000000                MSGF(&LIB/&OBJ) +
+009451000000                MSG( +
+009452000000'Ricevuto messaggio inatteso &1 da Programma &2.'                     +
+009453000000                ) +
+009454000000                SEV(0) +
+009455000000                FMT( +
+009456000000                    (*CHAR 7) +
+009457000000                    (*CHAR 10) +
+009458000000                ) +
+009459000000                ALROPT(*NO) +
+009460000000                CCSID(65535) +
+009461000000                /*  -EOF-  */
+009462000000
+009463000000     /*-------------------------------------------------------------*/
+009464000000     /*   Cmd-ADDMSGD für Message-ID :   USR9999                    */
+009465000000     /* &1                                                          */
+009466000000     /*-------------------------------------------------------------*/
+009467000000
+009468000000             RMVMSGD MSGID(USR9999) MSGF(&LIB/&OBJ)
+009469000000             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+009470000000
+009471000000             ADDMSGD +
+009472000000                MSGID(USR9999) +
+009473000000                MSGF(&LIB/&OBJ) +
+009474000000                MSG( +
+009475000000'&1'                                                                  +
+009476000000                ) +
+009477000000                SECLVL( +
+009478000000'&2'                                                                  +
+009479000000                ) +
+009480000000                SEV(0) +
+009481000000                FMT( +
+009482000000                    (*CHAR 128) +
+009483000000                    (*CHAR 128) +
+009484000000                ) +
+009485000000                ALROPT(*NO) +
+009486000000                CCSID(65535) +
+009487000000                /*  -EOF-  */
+009488000000
+009489000000             RCLRSC LVL(*)
+009490000000
+009491000000             ENDPGM
