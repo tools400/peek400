@@ -82,12 +82,12 @@ NO_UPD2:
                 CRTDUPOBJ  OBJ(&ODOBNM) FROMLIB(&ODLBNM) OBJTYPE(*PGM ) +
                            TOLIB(&NEWLIB)
                 MONMSG     MSGID(CPF0000)
-             ENDDO                                                        /* E01 */
+             ENDDO
 
              IF         COND(&ODOBTP *EQ '*FILE') THEN(DO)
                 CRTDUPOBJ  OBJ(&ODOBNM) FROMLIB(&ODLBNM) OBJTYPE(*FILE) +
                            TOLIB(&NEWLIB) DATA(*YES)
-             ENDDO                                                        /* E01 */
+             ENDDO
 
              GOTO       CMDLBL(LOOP2)
 EOF2:
@@ -109,11 +109,11 @@ NO_UPD:
              CALL       PGM(QMHMOVPM) PARM(&ERRMSGKEY &ERRMSGTYP +
                           &ERRNBRTYP &ERRPGMMSGQ &ERRSTKCTR &ERRCODE)
 
-             IF         COND(&ERROR) THEN(DO)                             /* B01 */
+             IF         COND(&ERROR) THEN(DO)
                 /* Sende letzte *ESCAPE nochmals   */
                 CALL       PGM(QMHRSNEM) PARM(&ERRMSGKEY &ERRCODE)
                 MONMSG     MSGID(CPF0000)
-             ENDDO                                                        /* E01 */
+             ENDDO
 
              RETURN
 

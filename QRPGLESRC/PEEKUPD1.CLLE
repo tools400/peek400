@@ -116,11 +116,11 @@ NO_UPD3:
              CALL       PGM(QMHMOVPM) PARM(&ERRMSGKEY &ERRMSGTYP +
                           &ERRNBRTYP &ERRPGMMSGQ &ERRSTKCTR &ERRCODE)
 
-             IF         COND(&ERROR) THEN(DO)                             /* B01 */
+             IF         COND(&ERROR) THEN(DO)
                 /* Sende letzte *ESCAPE nochmals   */
                 CALL       PGM(QMHRSNEM) PARM(&ERRMSGKEY &ERRCODE)
                 MONMSG     MSGID(CPF0000)
-             ENDDO                                                        /* E01 */
+             ENDDO
 
              RETURN
 

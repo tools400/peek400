@@ -128,7 +128,7 @@
              CHGVAR     VAR(&PEEKUSERMB) VALUE('PEEKUSR')
 
              CHKOBJ     OBJ(&PRODLIB/EXIT02) OBJTYPE(*PGM)
-             MONMSG     MSGID(CPF9801) EXEC(DO)                           /* B01 */
+             MONMSG     MSGID(CPF9801) EXEC(DO)
                 RCVMSG     PGMQ(*SAME (*)) MSGTYPE(*LAST) WAIT(0) +
                              RMV(*YES)
                 IF         COND(&PEEKUSERNM *EQ '*DFT') THEN(DO)
@@ -142,25 +142,25 @@
                    CHGVAR     VAR(&PEEKUSERLB) VALUE(&PRODLIB)
                 ENDDO
                 GOTO       CMDLBL(NO_EXIT02)
-             ENDDO                                                        /* E01 */
+             ENDDO
 
              CALL       PGM(&PRODLIB/EXIT02) PARM(&PEEKUSERNM +
                                                   &PEEKUSERFI +
                                                   &PEEKUSERLB +
                                                   &MSGID      +
                                                   &MSGDTA)
-             IF         COND(&MSGID *NE ' ') THEN(DO)                     /* B01 */
+             IF         COND(&MSGID *NE ' ') THEN(DO)
                 SNDPGMMSG  MSGID(&MSGID) MSGF(*LIBL/QCPFMSG) +
                            MSGDTA(&MSGDTA)                   +
                            TOPGMQ(*PRV (*)) MSGTYPE(*INFO)
                 GOTO       CMDLBL(ENDE)
-             ENDDO                                                        /* E01 */
+             ENDDO
 
 NO_EXIT02:
              CHKOBJ     OBJ(&PEEKUSERLB/&PEEKUSERFI) OBJTYPE(*FILE)
-             MONMSG     MSGID(CPF9801) EXEC(DO)                           /* B01 */
+             MONMSG     MSGID(CPF9801) EXEC(DO)
                 GOTO       CMDLBL(NO_PEEK62)
-             ENDDO                                                        /* E01 */
+             ENDDO
              CALL       PGM(&PRODLIB/PEEK62) PARM(&PEEKUSERFI &PEEKUSERLB)
 NO_PEEK62:
 
@@ -169,27 +169,27 @@ NO_PEEK62:
              CHKOBJ     OBJ(&PEEKUSERLB/&PEEKUSERFI) OBJTYPE(*FILE) +
                           MBR(*NONE) +
                           AUT(*NONE)
-             MONMSG     MSGID(CPF9801) EXEC(DO)                           /* B01 */
+             MONMSG     MSGID(CPF9801) EXEC(DO)
                CALLPRC    PRC(p_crtUsrSg) PARM(&PEEKUSERLB +
                                                &PEEKUSERFI +
                                                &MSGID      +
                                                &MSGDTA     )
-               IF         COND(&MSGID *NE ' ') THEN(DO)                   /* B02 */
+               IF         COND(&MSGID *NE ' ') THEN(DO)
                  SNDPGMMSG  MSGID(&MSGID) MSGF(*LIBL/QCPFMSG) +
                             MSGDTA(&MSGDTA)                   +
                             TOPGMQ(*PRV (*)) MSGTYPE(*INFO)
                  GOTO       CMDLBL(ENDE)
-               ENDDO                                                      /* E02 */
+               ENDDO
                CHGVAR     VAR(&INZPEEKUSR) VALUE(&TRUE)
-             ENDDO                                                        /* E01 */
+             ENDDO
 
              CHKOBJ     OBJ(&PEEKUSERLB/&PEEKUSERFI) OBJTYPE(*FILE) +
                           MBR(&PEEKUSERMB) +
                           AUT(*NONE)
-             MONMSG     MSGID(CPF9815) EXEC(DO)                           /* B01 */
+             MONMSG     MSGID(CPF9815) EXEC(DO)
                ADDPFM     FILE(&PEEKUSERLB/&PEEKUSERFI) MBR(&PEEKUSERMB)
                CHGVAR     VAR(&INZPEEKUSR) VALUE(&TRUE)
-             ENDDO                                                        /* E01 */
+             ENDDO
 
       /*     OVRDBF     FILE(PEEKUSR) TOFILE(&PEEKUSERLB/&PEEKUSER) +      */
       /*                  MBR(*FIRST) SECURE(*YES) +                       */
@@ -197,13 +197,13 @@ NO_PEEK62:
       /*                  OVRSCOPE(*ACTGRPDFN)     +                       */
       /*                  OPNSCOPE(*ACTGRPDFN)                             */
 
-      /*     IF         COND(&INZPEEKUSR *EQ &TRUE) THEN(DO)     */       /* B01 */
+      /*     IF         COND(&INZPEEKUSR *EQ &TRUE) THEN(DO)     */
       /*       CHGVAR     VAR(&MODE   )    VALUE('*REPLACE')     */
       /*       CHGVAR     VAR(&SECTION)    VALUE('*ALL'    )     */
       /*       CALL       PGM(&PRODLIB/PEEK22) PARM(&MODE   +    */
       /*                                            &SECTION)    */
       /*       CHGVAR     VAR(&INZPEEKUSR) VALUE(&FALSE)         */
-      /*     ENDDO                                               */       /* E01 */
+      /*     ENDDO                                               */
 
  /*  PEEKGER  */
              CHGVAR     VAR(&PREFIX) VALUE('PEEK')
@@ -211,12 +211,12 @@ NO_PEEK62:
                                                   &PREFIX   +
                                                   &MSGID    +
                                                   &MSGDTA )
-             IF         COND(&MSGID *NE ' ') THEN(DO)                     /* B01 */
+             IF         COND(&MSGID *NE ' ') THEN(DO)
                 SNDPGMMSG  MSGID(&MSGID) MSGF(*LIBL/QCPFMSG) +
                            MSGDTA(&MSGDTA)                   +
                            TOPGMQ(*PRV (*)) MSGTYPE(*INFO)
                 GOTO       CMDLBL(ENDE)
-             ENDDO                                                        /* E01 */
+             ENDDO
 
              CHGVAR     VAR(&MSGF) VALUE('PEEK' *TCAT &LANGUAGE)
              OVRMSGF    MSGF(PEEKGER) TOMSGF(&PRODLIB/&MSGF) +
@@ -226,10 +226,10 @@ NO_PEEK62:
              SNDPGMMSG  MSGID(USR8173) MSGF(&PRODLIB/PEEKGER) +
                           TOPGMQ(*SAME (&PROGRAM &PROGRAM &PROGRAM)) +
                           MSGTYPE(*INFO)
-             MONMSG     MSGID(CPF2469) EXEC(DO)                           /* B01 */
+             MONMSG     MSGID(CPF2469) EXEC(DO)
  /*  ... Aufrufstapeleintrag nicht gefunden. */
                GOTO       CMDLBL(START_PEEK)
-             ENDDO                                                        /* E01 */
+             ENDDO
 
              CHGVAR     VAR(&RECURSION) VALUE('1')
              RMVMSG     PGMQ(*SAME (*)) CLEAR(*ALL)
@@ -246,10 +246,10 @@ NO_PEEK62:
 
  LBL_STRCMT:
              STRCMTCTL  LCKLVL(*CHG) NFYOBJ(*NONE) CMTSCOPE(*ACTGRP)
-             MONMSG     MSGID(CPF8351) EXEC(DO)                           /* B01 */
+             MONMSG     MSGID(CPF8351) EXEC(DO)
                ENDCMTCTL
                GOTO LBL_STRCMT
-             ENDDO                                                        /* E01 */
+             ENDDO
 
  /*  Check Objects in QTEMP */
              CALL       PGM(&PRODLIB/PEEK67) PARM(&PRODLIB &TEMPLIB)
@@ -257,17 +257,17 @@ NO_PEEK62:
  /*  PEEKFLD  */
              CHKOBJ     OBJ(&TEMPLIB/PEEKFLD) OBJTYPE(*FILE) MBR(*NONE) +
                           AUT(*NONE)
-             MONMSG     MSGID(CPF9801) EXEC(DO)                           /* B01 */
+             MONMSG     MSGID(CPF9801) EXEC(DO)
                CRTDUPOBJ  OBJ(PEEKFLD) FROMLIB(&PRODLIB) +
                           OBJTYPE(*FILE) TOLIB(&TEMPLIB) NEWOBJ(*OBJ) +
                           DATA(*NO)
-             ENDDO                                                        /* E01 */
+             ENDDO
 
              CHKOBJ     OBJ(&TEMPLIB/PEEKFLD) OBJTYPE(*FILE) MBR(*FIRST) +
                           AUT(*NONE)
-             MONMSG     MSGID(CPF9815) EXEC(DO)                           /* B01 */
+             MONMSG     MSGID(CPF9815) EXEC(DO)
                ADDPFM     FILE(&TEMPLIB/PEEKFLD) MBR(PEEKFLD)
-             ENDDO                                                        /* E01 */
+             ENDDO
 
              OVRDBF     FILE(PEEKFLD) TOFILE(&TEMPLIB/PEEKFLD) +
                           MBR(*FIRST) SECURE(*YES) +
@@ -277,17 +277,17 @@ NO_PEEK62:
  /*  PEEKFMT  */
              CHKOBJ     OBJ(&TEMPLIB/PEEKFMT) OBJTYPE(*FILE) MBR(*NONE) +
                           AUT(*NONE)
-             MONMSG     MSGID(CPF9801) EXEC(DO)                           /* B01 */
+             MONMSG     MSGID(CPF9801) EXEC(DO)
                CRTDUPOBJ  OBJ(PEEKFMT) FROMLIB(&PRODLIB) +
                           OBJTYPE(*FILE) TOLIB(&TEMPLIB) NEWOBJ(*OBJ) +
                           DATA(*NO)
-             ENDDO                                                        /* E01 */
+             ENDDO
 
              CHKOBJ     OBJ(&TEMPLIB/PEEKFMT) OBJTYPE(*FILE) MBR(*FIRST) +
                           AUT(*NONE)
-             MONMSG     MSGID(CPF9815) EXEC(DO)                           /* B01 */
+             MONMSG     MSGID(CPF9815) EXEC(DO)
                ADDPFM     FILE(&TEMPLIB/PEEKFMT) MBR(PEEKFMT)
-             ENDDO                                                        /* E01 */
+             ENDDO
 
              OVRDBF     FILE(PEEKFMT) TOFILE(&TEMPLIB/PEEKFMT) +
                           MBR(*FIRST) SECURE(*YES) +
@@ -297,17 +297,17 @@ NO_PEEK62:
  /*  PEEKWRK  */
              CHKOBJ     OBJ(&TEMPLIB/PEEKWRK) OBJTYPE(*FILE) MBR(*NONE) +
                           AUT(*NONE)
-             MONMSG     MSGID(CPF9801) EXEC(DO)                           /* B01 */
+             MONMSG     MSGID(CPF9801) EXEC(DO)
                CRTDUPOBJ  OBJ(PEEKWRK) FROMLIB(&PRODLIB) +
                           OBJTYPE(*FILE) TOLIB(&TEMPLIB) NEWOBJ(*OBJ) +
                           DATA(*NO)
-             ENDDO                                                        /* E01 */
+             ENDDO
 
              CHKOBJ     OBJ(&TEMPLIB/PEEKWRK) OBJTYPE(*FILE) MBR(*FIRST) +
                           AUT(*NONE)
-             MONMSG     MSGID(CPF9815) EXEC(DO)                           /* B01 */
+             MONMSG     MSGID(CPF9815) EXEC(DO)
                ADDPFM     FILE(&TEMPLIB/PEEKWRK) MBR(PEEKWRK)
-             ENDDO                                                        /* E01 */
+             ENDDO
 
              OVRDBF     FILE(PEEKWRK) TOFILE(&TEMPLIB/PEEKWRK) +
                           MBR(*FIRST) SECURE(*YES) +
@@ -328,17 +328,17 @@ NO_PEEK62:
  /*  PEEKFLDL0 */
              CHKOBJ     OBJ(&TEMPLIB/PEEKFLDL0) OBJTYPE(*FILE) +
                           MBR(*NONE) AUT(*NONE)
-             MONMSG     MSGID(CPF9801) EXEC(DO)                           /* B01 */
+             MONMSG     MSGID(CPF9801) EXEC(DO)
                CRTDUPOBJ  OBJ(PEEKFLDL0) FROMLIB(&PRODLIB) +
                           OBJTYPE(*FILE) TOLIB(&TEMPLIB) NEWOBJ(*OBJ) +
                           DATA(*NO)
-             ENDDO                                                        /* E01 */
+             ENDDO
 
              CHKOBJ     OBJ(&TEMPLIB/PEEKFLDL0) OBJTYPE(*FILE) +
                           MBR(*FIRST) AUT(*NONE)
-             MONMSG     MSGID(CPF9815) EXEC(DO)                           /* B01 */
+             MONMSG     MSGID(CPF9815) EXEC(DO)
                ADDLFM     FILE(&TEMPLIB/PEEKFLDL0) MBR(PEEKFLDL0)
-             ENDDO                                                        /* E01 */
+             ENDDO
 
              OVRDBF     FILE(PEEKFLDL0) TOFILE(&TEMPLIB/PEEKFLDL0) +
                           MBR(*FIRST) SECURE(*YES) +
@@ -348,17 +348,17 @@ NO_PEEK62:
  /*  PEEKFLDL1 */
              CHKOBJ     OBJ(&TEMPLIB/PEEKFLDL1) OBJTYPE(*FILE) +
                           MBR(*NONE) AUT(*NONE)
-             MONMSG     MSGID(CPF9801) EXEC(DO)                           /* B01 */
+             MONMSG     MSGID(CPF9801) EXEC(DO)
                CRTDUPOBJ  OBJ(PEEKFLDL1) FROMLIB(&PRODLIB) +
                           OBJTYPE(*FILE) TOLIB(&TEMPLIB) NEWOBJ(*OBJ) +
                           DATA(*NO)
-             ENDDO                                                        /* E01 */
+             ENDDO
 
              CHKOBJ     OBJ(&TEMPLIB/PEEKFLDL1) OBJTYPE(*FILE) +
                           MBR(*FIRST) AUT(*NONE)
-             MONMSG     MSGID(CPF9815) EXEC(DO)                           /* B01 */
+             MONMSG     MSGID(CPF9815) EXEC(DO)
                ADDLFM     FILE(&TEMPLIB/PEEKFLDL1) MBR(PEEKFLDL1)
-             ENDDO                                                        /* E01 */
+             ENDDO
 
              OVRDBF     FILE(PEEKFLDL1) TOFILE(&TEMPLIB/PEEKFLDL1) +
                           MBR(*FIRST) SECURE(*YES) +
@@ -368,17 +368,17 @@ NO_PEEK62:
  /*  PEEKFLDL2 */
              CHKOBJ     OBJ(&TEMPLIB/PEEKFLDL2) OBJTYPE(*FILE) +
                           MBR(*NONE) AUT(*NONE)
-             MONMSG     MSGID(CPF9801) EXEC(DO)                           /* B01 */
+             MONMSG     MSGID(CPF9801) EXEC(DO)
                CRTDUPOBJ  OBJ(PEEKFLDL2) FROMLIB(&PRODLIB) +
                           OBJTYPE(*FILE) TOLIB(&TEMPLIB) NEWOBJ(*OBJ) +
                           DATA(*NO)
-             ENDDO                                                        /* E01 */
+             ENDDO
 
              CHKOBJ     OBJ(&TEMPLIB/PEEKFLDL2) OBJTYPE(*FILE) +
                           MBR(*FIRST) AUT(*NONE)
-             MONMSG     MSGID(CPF9815) EXEC(DO)                           /* B01 */
+             MONMSG     MSGID(CPF9815) EXEC(DO)
                ADDLFM     FILE(&TEMPLIB/PEEKFLDL2) MBR(PEEKFLDL2)
-             ENDDO                                                        /* E01 */
+             ENDDO
 
              OVRDBF     FILE(PEEKFLDL2) TOFILE(&TEMPLIB/PEEKFLDL2) +
                           MBR(*FIRST) SECURE(*YES) +
@@ -500,7 +500,7 @@ NO_PEEK62:
                                                 )
 
  ENDE:
-             IF         COND(&RECURSION *EQ '0') THEN(DO)                 /* B01 */
+             IF         COND(&RECURSION *EQ '0') THEN(DO)
 
                 DLTOVR     FILE(*ALL) LVL(*ACTGRPDFN)
                 MONMSG     MSGID(CPF0000)
@@ -517,7 +517,7 @@ NO_PEEK62:
                 CLRPFM     FILE(&TEMPLIB/§PEEK§)
                 MONMSG     MSGID(CPF0000)
 
-             ENDDO                                                        /* E01 */
+             ENDDO
 
 /* Verschiebe alle *INFO Nachrichten zur             */
 /* vorangegangenen Programmwarteschlange             */
@@ -526,10 +526,10 @@ NO_PEEK62:
              CALL       PGM(QMHMOVPM) PARM(&ERRMSGKEY &ERRMSGTYP +
                           &ERRNBRTYP &ERRPGMMSGQ &ERRSTKCTR &ERRCODE)
 
-             IF         COND(&ERROR) THEN(DO)                             /* B01 */
+             IF         COND(&ERROR) THEN(DO)
                 /* Sende letzte *ESCAPE nochmals   */
                 CALL       PGM(QMHRSNEM) PARM(&ERRMSGKEY &ERRCODE)
-             ENDDO                                                        /* E01 */
+             ENDDO
 
              RETURN
 

@@ -176,10 +176,10 @@
  /*  QPEEKGEN  */
              CHKOBJ     OBJ(QTEMP/QPEEKGEN ) OBJTYPE(*FILE) MBR(*NONE) +
                           AUT(*NONE)
-             MONMSG     MSGID(CPF9801) EXEC(DO)                           /* B01 */
+             MONMSG     MSGID(CPF9801) EXEC(DO)
                CRTSRCPF   FILE(QTEMP/QPEEKGEN ) RCDLEN(112) MBR(*NONE) +
                           IGCDTA(*NO) TEXT('PEEK - Arbeitsbereich')
-             ENDDO                                                        /* E01 */
+             ENDDO
 
  /*  SRC-MBR   */
  /*  DSP-FILE  */
@@ -189,9 +189,9 @@
              CHKOBJ     OBJ(QTEMP/QPEEKGEN ) OBJTYPE(*FILE) +
                           MBR(&DSPF)                        +
                           AUT(*NONE)
-             MONMSG     MSGID(CPF9815) EXEC(DO)                           /* B01 */
+             MONMSG     MSGID(CPF9815) EXEC(DO)
                ADDPFM     FILE(QTEMP/QPEEKGEN ) MBR(&DSPF)
-             ENDDO                                                        /* E01 */
+             ENDDO
 
              CLRPFM     FILE(QTEMP/QPEEKGEN ) MBR(&DSPF)
              CHGPFM     FILE(QTEMP/QPEEKGEN ) MBR(&DSPF)  +
@@ -202,9 +202,9 @@
              CHKOBJ     OBJ(QTEMP/QPEEKGEN ) OBJTYPE(*FILE) +
                           MBR(&COPY1)                       +
                           AUT(*NONE)
-             MONMSG     MSGID(CPF9815) EXEC(DO)                           /* B01 */
+             MONMSG     MSGID(CPF9815) EXEC(DO)
                ADDPFM     FILE(QTEMP/QPEEKGEN ) MBR(&COPY1)
-             ENDDO                                                        /* E01 */
+             ENDDO
 
              CLRPFM     FILE(QTEMP/QPEEKGEN ) MBR(&COPY1)
              CHGPFM     FILE(QTEMP/QPEEKGEN ) MBR(&COPY1) +
@@ -215,9 +215,9 @@
              CHKOBJ     OBJ(QTEMP/QPEEKGEN ) OBJTYPE(*FILE) +
                           MBR(&COPY2)                       +
                           AUT(*NONE)
-             MONMSG     MSGID(CPF9815) EXEC(DO)                           /* B01 */
+             MONMSG     MSGID(CPF9815) EXEC(DO)
                ADDPFM     FILE(QTEMP/QPEEKGEN ) MBR(&COPY2)
-             ENDDO                                                        /* E01 */
+             ENDDO
 
              CLRPFM     FILE(QTEMP/QPEEKGEN ) MBR(&COPY2)
              CHGPFM     FILE(QTEMP/QPEEKGEN ) MBR(&COPY2)  +
@@ -228,9 +228,9 @@
              CHKOBJ     OBJ(QTEMP/QPEEKGEN ) OBJTYPE(*FILE) +
                           MBR(&COPY3)                       +
                           AUT(*NONE)
-             MONMSG     MSGID(CPF9815) EXEC(DO)                           /* B01 */
+             MONMSG     MSGID(CPF9815) EXEC(DO)
                ADDPFM     FILE(QTEMP/QPEEKGEN ) MBR(&COPY3)
-             ENDDO                                                        /* E01 */
+             ENDDO
 
              CLRPFM     FILE(QTEMP/QPEEKGEN ) MBR(&COPY3)
              CHGPFM     FILE(QTEMP/QPEEKGEN ) MBR(&COPY3)  +
@@ -241,9 +241,9 @@
              CHKOBJ     OBJ(QTEMP/QPEEKGEN ) OBJTYPE(*FILE) +
                           MBR(&COPY4)                       +
                           AUT(*NONE)
-             MONMSG     MSGID(CPF9815) EXEC(DO)                           /* B01 */
+             MONMSG     MSGID(CPF9815) EXEC(DO)
                ADDPFM     FILE(QTEMP/QPEEKGEN ) MBR(&COPY4)
-             ENDDO                                                        /* E01 */
+             ENDDO
 
              CLRPFM     FILE(QTEMP/QPEEKGEN ) MBR(&COPY4)
              CHGPFM     FILE(QTEMP/QPEEKGEN ) MBR(&COPY4)  +
@@ -254,9 +254,9 @@
              CHKOBJ     OBJ(QTEMP/QPEEKGEN ) OBJTYPE(*FILE) +
                           MBR(&COPY5)                       +
                           AUT(*NONE)
-             MONMSG     MSGID(CPF9815) EXEC(DO)                           /* B01 */
+             MONMSG     MSGID(CPF9815) EXEC(DO)
                ADDPFM     FILE(QTEMP/QPEEKGEN ) MBR(&COPY5)
-             ENDDO                                                        /* E01 */
+             ENDDO
 
              CLRPFM     FILE(QTEMP/QPEEKGEN ) MBR(&COPY5)
              CHGPFM     FILE(QTEMP/QPEEKGEN ) MBR(&COPY5)  +
@@ -267,9 +267,9 @@
              CHKOBJ     OBJ(QTEMP/QPEEKGEN ) OBJTYPE(*FILE) +
                           MBR(&COPY6)                       +
                           AUT(*NONE)
-             MONMSG     MSGID(CPF9815) EXEC(DO)                           /* B01 */
+             MONMSG     MSGID(CPF9815) EXEC(DO)
                ADDPFM     FILE(QTEMP/QPEEKGEN ) MBR(&COPY6)
-             ENDDO                                                        /* E01 */
+             ENDDO
 
              CLRPFM     FILE(QTEMP/QPEEKGEN ) MBR(&COPY6)
              CHGPFM     FILE(QTEMP/QPEEKGEN ) MBR(&COPY6)  +
@@ -321,7 +321,7 @@
                                              &NUMSTAGES  +
                                              )
 
-             IF         COND(&ALWLC *EQ &TRUE) THEN(DO)                   /* B01 */
+             IF         COND(&ALWLC *EQ &TRUE) THEN(DO)
                 CHGVAR     VAR(&LOWERCASE) VALUE(&TRUE)
                 CALL       PGM(&PRODLIB/PEEK15) PARM(       +
                                                 &QFILE      +
@@ -330,7 +330,7 @@
                                                 &STAGE      +
                                                 &NUMSTAGES  +
                                                 )
-             ENDDO                                                        /* E01 */
+             ENDDO
 
              DLTOVR     FILE(QCOPYLE1 ) LVL(*)
              DLTOVR     FILE(QCOPYLE2 ) LVL(*)
@@ -346,9 +346,9 @@
              CHKOBJ     OBJ(QTEMP/QPEEKGEN ) OBJTYPE(*FILE) +
                           MBR(&PGM)                         +
                           AUT(*NONE)
-             MONMSG     MSGID(CPF9815) EXEC(DO)                           /* B01 */
+             MONMSG     MSGID(CPF9815) EXEC(DO)
                ADDPFM     FILE(QTEMP/QPEEKGEN ) MBR(&PGM)
-             ENDDO                                                        /* E01 */
+             ENDDO
 
              CLRPFM     FILE(QTEMP/QPEEKGEN ) MBR(&PGM)
              CHGPFM     FILE(QTEMP/QPEEKGEN ) MBR(&PGM) +
@@ -498,10 +498,10 @@
              DLTOVR     FILE(*ALL) LVL(*)
              MONMSG     MSGID(CPF0000)
 
-             IF         COND(&ERROR) THEN(DO)                             /* B01 */
+             IF         COND(&ERROR) THEN(DO)
                 /* Sende letzte *ESCAPE nochmals   */
                 CALL       PGM(QMHRSNEM) PARM(&ERRMSGKEY &ERRCODE)
-             ENDDO                                                        /* E01 */
+             ENDDO
 
              RETURN
 

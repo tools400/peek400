@@ -125,9 +125,9 @@
              CHGVAR     VAR(&IS_ADDED) VALUE(&TRUE)
 
              ADDLIBLE   LIB(&NEWLIB) POSITION(*FIRST)
-             MONMSG     MSGID(CPF2103) EXEC(DO)                           /* B01 */
+             MONMSG     MSGID(CPF2103) EXEC(DO)
                CHGVAR     VAR(&IS_ADDED) VALUE(&FALSE)
-             ENDDO                                                        /* E01 */
+             ENDDO
 
  /* PEEKPGM    */
              RTVSYSVAL  SYSVAL(QDATE) RTNVAR(&DATE_DMY)
@@ -557,9 +557,9 @@ Loop:
                         *AND &MLSEU2  *NE 'RPGLE'    +
                         *AND &MLSEU2  *NE 'SQLRPGLE' +
                         *AND &MLSEU2  *NE 'CLLE'     +
-                        *AND &MLSEU2  *NE 'CLP'  ) THEN(DO)               /* B01 */
+                        *AND &MLSEU2  *NE 'CLP'  ) THEN(DO)               /
                GOTO       CMDLBL(Loop)
-             ENDDO                                                        /* E01 */
+             ENDDO                                                        /
 
              IF         COND(%sst(&MLNAME 1 1)  *EQ '#') THEN(DO)
                GOTO       CMDLBL(Loop)
@@ -576,27 +576,27 @@ Loop:
              ENDDO
 
              IF         COND(&MLNAME  *GE 'PEEK90'  +
-                        *AND &MLNAME  *LE 'PEEK99') THEN(DO)              /* B01 */
+                        *AND &MLNAME  *LE 'PEEK99') THEN(DO)
                GOTO       CMDLBL(Loop)
-             ENDDO                                                        /* E01 */
+             ENDDO
 
              IF         COND(&MLNAME  *GE 'EXIT00'  +
-                        *AND &MLNAME  *LE 'EXIT99') THEN(DO)              /* B01 */
+                        *AND &MLNAME  *LE 'EXIT99') THEN(DO)
                GOTO       CMDLBL(Loop)
-             ENDDO                                                        /* E01 */
+             ENDDO
 
              IF         COND(&MLNAME  *GE 'TEST000'  +
                         *AND &MLNAME  *LE 'TEST999') THEN(DO)
                GOTO       CMDLBL(Loop)
              ENDDO
 
-             IF         COND(&MLNAME  *EQ 'PEEK00') THEN(DO)              /* B01 */
+             IF         COND(&MLNAME  *EQ 'PEEK00') THEN(DO)
                GOTO       CMDLBL(Loop)
-             ENDDO                                                        /* E01 */
+             ENDDO
 
-             IF         COND(&MLNAME  *EQ 'TESTPEEK_P') THEN(DO)          /* B01 */
+             IF         COND(&MLNAME  *EQ 'TESTPEEK_P') THEN(DO)
                GOTO       CMDLBL(Loop)
-             ENDDO                                                        /* E01 */
+             ENDDO
 
              CRTPEEKOBJ SRCFILE(&MLLIB/&MLFILE) SRCMBR(&MLNAME) +
                           OBJLIB(&NEWLIB) DEVLIB(&DEVLIB) +
@@ -634,16 +634,16 @@ Loop:
              RCLACTGRP  ACTGRP(PEEK) OPTION(*NORMAL)
              MONMSG     MSGID(CPF0000)
 
-             IF         COND(&IS_ADDED *EQ &TRUE) THEN(DO)                /* B01 */
+             IF         COND(&IS_ADDED *EQ &TRUE) THEN(DO)
                RMVLIBLE   LIB(&NEWLIB)
                MONMSG     MSGID(CPF0000)
-             ENDDO                                                        /* E01 */
+             ENDDO
 
              IF         COND(&ERROR) THEN(DO)
                 /* Sende letzte *ESCAPE nochmals   */
                 CALL       PGM(QMHRSNEM) PARM(&ERRMSGKEY &ERRCODE)
                 MONMSG     MSGID(CPF0000)
-             ENDDO                                                        /* E01 */
+             ENDDO
 
              RETURN
 

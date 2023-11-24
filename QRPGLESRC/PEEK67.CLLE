@@ -113,10 +113,10 @@
              CALL       PGM(QMHMOVPM) PARM(&ERRMSGKEY &ERRMSGTYP +
                           &ERRNBRTYP &ERRPGMMSGQ &ERRSTKCTR &ERRCODE)
 
-             IF         COND(&ERROR) THEN(DO)                             /* B01 */
+             IF         COND(&ERROR) THEN(DO)
                 /* Sende letzte *ESCAPE nochmals   */
                 CALL       PGM(QMHRSNEM) PARM(&ERRMSGKEY &ERRCODE)
-             ENDDO                                                        /* E01 */
+             ENDDO
 
              RETURN
 
