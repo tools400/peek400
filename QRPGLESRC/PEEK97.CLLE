@@ -56,7 +56,7 @@
  /* -------------------------------------------------------------- */
 
  /* Msg-DS     */
-             CRTMSGDS   RANGE(*ALL) MSGF(&MSGFLIB/PEEKGER) +
+             CRTMSGDS   RANGE(USRAAAA USR9999) MSGF(&MSGFLIB/PEEKGER) +
                           FILE(&MSGFLIB/QCOPYLE) REPLACE(*YES) +
                           TYPE(*FREE) DEFINE(*NO)
  /* Msg-Source     */
