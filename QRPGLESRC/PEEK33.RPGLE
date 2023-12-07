@@ -264,6 +264,8 @@ begsr vpos;
       exsr v03r05m08;
     when (set0007.set_vsn < 'V04R00M01');
       exsr v04r00m01;
+    when (set0007.set_vsn < 'V04R00M02');
+      exsr v04r00m02;
     other;
       leave;
     endsl;
@@ -876,6 +878,16 @@ begsr v04r00m01;
   exsr updPeekUsr;
 
   set0007.set_vsn = 'V04R00M01';
+
+endsr;
+
+//============================================================*
+//    V04R00M02     Aktualisierung auf Version 4.0.2          *
+//============================================================*
+
+begsr v04r00m02;
+
+  set0007.set_vsn = 'V04R00M02';
 
 endsr;
 

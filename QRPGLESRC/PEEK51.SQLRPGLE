@@ -761,7 +761,7 @@ dcl-proc f_chgField;
     //  Festellen Feldanfang ...
     isEndOfQuotedValue = %check(END_OF_FIELD: char) = 0;
     select;
-    when (char <> SPACE and waitField = bTrue);
+    when (char <> SPACE and char <> COMMA and waitField = bTrue);
       isField = bTrue;
       isOrder = bFalse;
       waitField = bFalse;

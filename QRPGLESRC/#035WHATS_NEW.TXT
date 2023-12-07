@@ -854,7 +854,7 @@
        - Problem mit unzulässigen Sonderzeichen beim Überschreiben des Alias
          Namens (Schlüsselwort: ALIAS) behoben.
 
-  Version 4.0.0
+  Version 4.0.1
   =============
 
   *  Alle
@@ -905,3 +905,10 @@
          PEEKUPD. Diese Aktivierungsgruppe wird beim Wchseln der Datei
          geschlossen, um alle Trigggerprogramme zu entladen und alle offenen
          Dateien der Triggerprogramme zu schließen.
+
+  Version 4.0.2
+  =============
+
+  *  PEEK51
+       - Korrektur der Funktion f_chgField().
+         
