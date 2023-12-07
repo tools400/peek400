@@ -557,9 +557,9 @@ Loop:
                         *AND &MLSEU2  *NE 'RPGLE'    +
                         *AND &MLSEU2  *NE 'SQLRPGLE' +
                         *AND &MLSEU2  *NE 'CLLE'     +
-                        *AND &MLSEU2  *NE 'CLP'  ) THEN(DO)               /
+                        *AND &MLSEU2  *NE 'CLP'  ) THEN(DO)
                GOTO       CMDLBL(Loop)
-             ENDDO                                                        /
+             ENDDO
 
              IF         COND(%sst(&MLNAME 1 1)  *EQ '#') THEN(DO)
                GOTO       CMDLBL(Loop)
