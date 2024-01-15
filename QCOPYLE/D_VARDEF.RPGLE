@@ -88,8 +88,8 @@ dcl-c NULL_MAP_SIZE   const(8000);
 
 dcl-s scnaid_t        char(10) template;
 dcl-s sqlSelect_t     char(512) template;
-dcl-s sqlOrder_t      char(512) template;
-dcl-s sqlWhere_t      char(512) template;
+dcl-s sqlOrder_t      varchar(512) template;
+dcl-s sqlWhere_t      varchar(512) template;
 dcl-s sqlStmt_t       char(2000) template;
 dcl-s user_t          char(10) template;
 

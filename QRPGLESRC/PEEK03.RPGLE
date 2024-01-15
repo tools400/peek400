@@ -55,7 +55,7 @@ dcl-s nbrOfKey        like(int4_t) inz;
 dcl-s x               like(int4_t) inz;
 dcl-s y               like(int4_t) inz;
 dcl-s z               like(int4_t) inz;
-dcl-s tempstr         like(i_sqlorder ) inz;
+dcl-s tempstr         like(i_sqlOrder ) inz;
 dcl-ds keyl0100 likeds(keyl0100_t) based(pkeyl0100);
 dcl-ds keyl0100_sql likeds(keyl0100_t) inz;
 dcl-s data            char(512) inz;
@@ -68,12 +68,12 @@ dcl-s isInzSr         like(bool_t) inz(bFalse);
 //*******************************************************************
 
 dcl-pi peek03;
-  i_qfile         const likeds(qobj_t);
-  i_rcdfmt        const like(fmt_t);
+  i_qFile         const likeds(qobj_t);
+  i_rcdFmt        const like(fmt_t);
   i_access        const like(accessMode_t);
-  i_sqlorder      const like(sqlOrder_t);
-  o_msgid         like(msgid_t);
-  o_msgdta        like(msgdta_t);
+  i_sqlOrder      const like(sqlOrder_t);
+  o_msgId         like(msgid_t);
+  o_msgDta        like(msgdta_t);
 end-pi;
 
 dcl-s do_x1           packed(7);
@@ -97,13 +97,13 @@ else;
 endif;
 
 if (nbrOfKey <= *zeros);
-  o_msgid = 'USR0006';
-  USR0006.var1 = i_qfile.name;
-  USR0006.var2 = i_qfile.lib;
-  o_msgdta = usr0006;
+  o_msgId = 'USR0006';
+  USR0006.var1 = i_qFile.name;
+  USR0006.var2 = i_qFile.lib;
+  o_msgDta = usr0006;
 else;
-  o_msgid = '';
-  o_msgdta = '';
+  o_msgId = '';
+  o_msgDta = '';
 endif;
 
 *inlr = '1';
@@ -123,7 +123,7 @@ begsr sqlseq;
 
   dow y > 1;
 
-    tempstr = %trim(%subst(i_sqlorder: x: y-x));
+    tempstr = %trim(%subst(i_sqlOrder: x: y-x));
     //  Ende des Feldes ...
     z = %scan('"': tempstr: 2);
     keyl0100.apkeyf =
@@ -156,15 +156,15 @@ endsr;
 
 begsr getnextfld;
 
-  if (x > 512);
+  if (x > %len(i_sqlOrder));
     y = 0;
   else;
 
-    y = %scan(',': i_sqlorder: x);
+    y = %scan(',': i_sqlOrder: x);
 
     if (y = 0) and
-       (%subst(i_sqlorder: x) <> ' ');
-      y = %checkr(' ': i_sqlorder);
+       (%subst(i_sqlOrder: x) <> ' ');
+      y = %checkr(' ': i_sqlOrder);
       y = y + 1;
     endif;
 
@@ -181,17 +181,17 @@ begsr otherseq;
   pkeyl0100 = %addr(data);
 
   //  Abrufen der Dateiinformationen ...
-  peek41(i_qfile: i_rcdfmt
+  peek41(i_qFile: i_rcdFmt
         : '*CREATE': rtncode: data);
   if (rtncode <= 0);
   //  ... schade, Aufruf ist fehlgeschlagen
   else;
     //  Einlesen der Schlüsselinformationen ...
-    peek41(i_qfile: i_rcdfmt
+    peek41(i_qFile: i_rcdFmt
           : '*KEY': nbrOfKey: data);
 
     for do_x1 = 1 to nbrOfKey;
-      peek41(i_qfile: i_rcdfmt
+      peek41(i_qFile: i_rcdFmt
             : '*READKEY': rtncode: data);
       exsr addkeyinf;
     endfor;
@@ -229,11 +229,11 @@ begsr first;
   nbrOfKey = *zeros;
 
   // - Meldung
-  p_sndstsmg('USR8137': i_qfile);
+  p_sndstsmg('USR8137': i_qFile);
 
   // - Los gehts'
-  o_msgid = *blanks;
-  o_msgdta = *blanks;
+  o_msgId = *blanks;
+  o_msgDta = *blanks;
 
 endsr;
 

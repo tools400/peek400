@@ -912,3 +912,14 @@
   *  PEEK51
        - Korrektur der Funktion f_chgField().
 
+  Version 4.0.3
+  =============
+
+  *  PEEK03
+       - Korrektur: RNQ0115 Length of varying length variable is out of range.
+  *  PEEK05
+       - Korrektur: Falsche Definition der Felder 'sqlWhere' und 'sqlOrder'.
+  *  PEEK48
+       - Korrektur: Falsche Definition von 'ySqlOrder'.
+  *  D_VARDEF
+       - Korrektur: Falsche Definition der Felder 'sqlOrder_t' und 'sqlWhere_t'.

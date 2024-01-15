@@ -64,20 +64,20 @@ dcl-ds cursorPosition likeds(cursorPosition_t) inz;
 
 dcl-ds set0008 likeds(set0008_t) inz;
 
-dcl-s yfkeys          char(18) dim(32) inz;
-dcl-s ynbrofkeys      like(int4_t) inz;
-dcl-s ymsgid          char(7) inz(*blanks);
-dcl-s ymsgdta         char(512) inz(*blanks);
+dcl-s yFKeys          char(18) dim(32) inz;
+dcl-s yNbrOfKeys      like(int4_t) inz;
+dcl-s yMsgId          char(7) inz(*blanks);
+dcl-s yMsgDta         char(512) inz(*blanks);
 
-dcl-s ypgmcmd         char(10) inz(*blanks);
-dcl-s ycmddta         like(pgmcmddt_t) inz;
+dcl-s yPgmCmd         char(10) inz(*blanks);
+dcl-s yCmdDta         like(pgmcmddt_t) inz;
 
-dcl-s yfield          char(10) inz(*blanks);
+dcl-s yField          char(10) inz(*blanks);
 
-dcl-s ysqlorder       char(512) inz(*blanks);
+dcl-s ySqlOrder       like(sqlOrder_t) inz(*blanks);
 
-dcl-s yretfile        char(10) inz(*blanks);
-dcl-s yretlib         char(10) inz(*blanks);
+dcl-s yRetFile        char(10) inz(*blanks);
+dcl-s yRetLib         char(10) inz(*blanks);
 
 dcl-s sfbot           like(int4_t) inz;
 dcl-c nbrfkeys const(3);
@@ -146,25 +146,25 @@ dow ('1');
   //  Anzeigen der Befehlstasten
   select;
   when (sfbot = 2) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1));
+     (yNbrOfKeys > nbrfkeys * (sfbot - 1));
     write pbbot#2;
   when (sfbot = 3) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1));
+     (yNbrOfKeys > nbrfkeys * (sfbot - 1));
     write pbbot#3;
   when (sfbot = 4) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1));
+     (yNbrOfKeys > nbrfkeys * (sfbot - 1));
     write pbbot#4;
   when (sfbot = 5) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1));
+     (yNbrOfKeys > nbrfkeys * (sfbot - 1));
     write pbbot#5;
   when (sfbot = 6) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1));
+     (yNbrOfKeys > nbrfkeys * (sfbot - 1));
     write pbbot#6;
   when (sfbot = 7) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1));
+     (yNbrOfKeys > nbrfkeys * (sfbot - 1));
     write pbbot#7;
   when (sfbot = 8) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1));
+     (yNbrOfKeys > nbrfkeys * (sfbot - 1));
     write pbbot#8;
   other;
     write pbbot#1;
@@ -190,57 +190,57 @@ dow ('1');
   //  Mappen der gedrückten Taste
   //  in Programmbefehl
   peek21(workstn.aid: sds.pgmname
-        : ypgmcmd: ycmddta: ymsgid: ymsgdta);
-  if (ymsgid <> *blanks);
-    p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
-    ymsgid = '';
-    ymsgdta = '';
+        : yPgmCmd: yCmdDta: yMsgId: yMsgDta);
+  if (yMsgId <> *blanks);
+    p_sndpgmmg(yMsgId: yMsgDta: sds.pgmname);
+    yMsgId = '';
+    yMsgDta = '';
     iter;
   endif;
 
   //  Abfragen der Programmbefehle
   select;
   //  F3  - Ende
-  when (ypgmcmd = '*EXIT');
+  when (yPgmCmd = '*EXIT');
     exsr c_endpgm;
     leave;
   //  F4  - Prompt
-  when (ypgmcmd = '*PROMPT');
+  when (yPgmCmd = '*PROMPT');
     tempscnfld = scnfld;
     tempfldpos = fldpos;
     exsr c_prompt;
     iter;
 
   //  F5  - Aktualisieren
-  when (ypgmcmd = '*REFRESH');
+  when (yPgmCmd = '*REFRESH');
     exsr c_refresh;
     iter;
 
   //  F9  - Auswählen Sortierfolge
-  when (ypgmcmd = '*DSPDBR');
+  when (yPgmCmd = '*DSPDBR');
     tempscnfld = scnfld;
     tempfldpos = fldpos;
     exsr c_selectky;
     iter;
 
   //  F11 - Einfügen Keyfelder
-  when (ypgmcmd = '*INSKEYFLD');
+  when (yPgmCmd = '*INSKEYFLD');
     tempscnfld = scnfld;
     tempfldpos = fldpos;
     exsr c_inskeyfd;
     iter;
 
   //  F12 - Ende
-  when (ypgmcmd = '*CANCEL');
+  when (yPgmCmd = '*CANCEL');
     exsr c_endpgm;
     leave;
 
   //  F24 - Weitere Tasten
-  when (ypgmcmd = '*MOREKEYS');
+  when (yPgmCmd = '*MOREKEYS');
     exsr c_morekeys;
 
   //  Datenfreigabe
-  when (ypgmcmd = '*ENTER');
+  when (yPgmCmd = '*ENTER');
     exsr c_enter;
     if (*in99 = *off);
       o_msgid = 'USR8112';
@@ -272,7 +272,7 @@ begsr c_enter;
 
   if (sql_preparestatement(
          '1': pfile.name: pfile.library: pfile.member: pfile.format:
-         ##where: ##order: ymsgid: ymsgdta));
+         ##where: ##order: yMsgId: yMsgDta));
     io_file      = pfile.name;
     io_library   = pfile.library;
     io_member    = pfile.member;
@@ -281,10 +281,10 @@ begsr c_enter;
     io_sqlorder  = ##order;
     *in99 = '0';
   else;
-    if (ymsgid <> '');
-      p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
-      ymsgid = '';
-      ymsgdta = '';
+    if (yMsgId <> '');
+      p_sndpgmmg(yMsgId: yMsgDta: sds.pgmname);
+      yMsgId = '';
+      yMsgDta = '';
     endif;
     *in99 = '1';
   endif;
@@ -362,16 +362,16 @@ endsr;
 
 begsr pmt_field;
 
-  peek37(i_dsp80: i_copyright: yfield
-        :  ymsgid: ymsgdta);
+  peek37(i_dsp80: i_copyright: yField
+        :  yMsgId: yMsgDta);
 
-  if (ymsgid = '');
+  if (yMsgId = '');
 
-    templen = %checkr(' ': yfield);
+    templen = %checkr(' ': yField);
 
     select;
     when (tempscnfld = '##WHERE');
-      ##where = %replace(%trimr(yfield) + ' '
+      ##where = %replace(%trimr(yField) + ' '
                         : ##where
                         : tempfldpos
                         : 0);
@@ -382,7 +382,7 @@ begsr pmt_field;
       tempfldby  = 42;
 
     when (tempscnfld = '##ORDER');
-      ##order  = %replace(%trimr(yfield) + ' '
+      ##order  = %replace(%trimr(yField) + ' '
                          : ##order
                          : tempfldpos
                          : 0);
@@ -417,9 +417,9 @@ begsr pmt_field;
     csrcol = tempcsrcol - 1;
 
   else;
-    p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
-    ymsgid = '';
-    ymsgdta = '';
+    p_sndpgmmg(yMsgId: yMsgDta: sds.pgmname);
+    yMsgId = '';
+    yMsgDta = '';
   endif;
 
 endsr;
@@ -463,14 +463,14 @@ begsr slc_key;
   peek40(i_dsp80: i_copyright
         : io_file: io_library: io_member
         : io_rcdfmt: bTrue
-        : yretfile: yretlib
-        : ymsgid: ymsgdta);
-  if yretfile = *blanks
+        : yRetFile: yRetLib
+        : yMsgId: yMsgDta);
+  if yRetFile = *blanks
      or *in99 = *on;
   //  ... keine Auswahl getroffen
   else;
-    io_file = yretfile;
-    io_library = yretlib;
+    io_file = yRetFile;
+    io_library = yRetLib;
     exsr ins_field;
   endif;
 
@@ -501,10 +501,10 @@ endsr;
 
 begsr ins_field;
 
-  ysqlorder = '';
-  peek38(io_file: io_library: ysqlorder);
+  ySqlOrder = '';
+  peek38(io_file: io_library: ySqlOrder);
 
-  tempfield = ysqlorder;
+  tempfield = ySqlOrder;
   //*   ' '           Checkr    tempField     tempLen
   templen = %checkr(' ': tempfield);
 
@@ -685,8 +685,8 @@ begsr inzsr;
   peek40_name = f_pgmcalln('PEEK40');
 
   peek23(sds.pgmname: '*ALL': nbrfkeys
-        : yfkeys: ynbrofkeys);
-  scrnfkeys = %subarr(yfkeys: 1);
+        : yFKeys: yNbrOfKeys);
+  scrnfkeys = %subarr(yFKeys: 1);
 
 endsr;
 

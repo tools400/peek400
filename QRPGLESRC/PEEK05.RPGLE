@@ -233,8 +233,8 @@ dcl-ds rtn qualified;
   member          like(##member);
   format          like(##format);
   accessmode      like(accessMode);
-  sqlwhere        like(sqlwhere);
-  sqlorder        like(sqlorder);
+  sqlwhere        like(sqlWhere);
+  sqlorder        like(sqlOrder);
 end-ds;
 
 dcl-ds yQFile inz;
@@ -615,9 +615,8 @@ end-ds;
 dcl-ds *N;
   ##key132lc      char(116);
   ##key80lc       char(67) overlay(##key132lc:1);
-
-  sqlwhere        char(512) inz;
-  sqlorder        char(512) inz;
+  sqlWhere        like(sqlWhere_t) inz;
+  sqlOrder        like(sqlOrder_t) inz;
 end-ds;
 dcl-ds *N;
   rcdnbr#         zoned(10);
@@ -2696,8 +2695,8 @@ begsr c_sql;
     yLibrary = ##library;
     yMember = ##member;
     yformat = ##format;
-    ysqlwhere = sqlwhere;
-    ysqlorder = sqlorder;
+    ysqlwhere = sqlWhere;
+    ysqlorder = sqlOrder;
     peek48(set0001.set_dsp80: COPYRIGHT
           : yFile: yLibrary: yMember
           : yformat
@@ -2732,12 +2731,12 @@ begsr c_sql;
       oldaccmode = accessMode;
     endif;
     accessMode = SQL_SEQ;
-    sqlwhere   = ysqlwhere;
-    sqlorder   = ysqlorder;
+    sqlWhere   = ysqlwhere;
+    sqlOrder   = ysqlorder;
   else;
     accessMode = oldaccmode;
-    sqlwhere   = ' ';
-    sqlorder   = ' ';
+    sqlWhere   = ' ';
+    sqlOrder   = ' ';
   endif;
 
   exsr openfile;
@@ -3476,16 +3475,16 @@ begsr loadenv;
        ##member   <> rtn.member or
        ##format   <> rtn.format or
        accessMode <> rtn.accessmode or
-       sqlwhere   <> rtn.sqlwhere or
-       sqlorder   <> rtn.sqlorder);
+       sqlWhere   <> rtn.sqlwhere or
+       sqlOrder   <> rtn.sqlorder);
       exsr closefile;
       ##file     = rtn.file;
       ##library  = rtn.library;
       ##member   = rtn.member;
       ##format   = rtn.format;
       accessMode = rtn.accessmode;
-      sqlwhere   = rtn.sqlwhere;
-      sqlorder   = rtn.sqlorder;
+      sqlWhere   = rtn.sqlwhere;
+      sqlOrder   = rtn.sqlorder;
       exsr openfile;
       peek55(##file: ##library: ##member: ##format
             : $$rcdfmtid
@@ -3520,8 +3519,8 @@ begsr saveenv;
         : yisautosave
         : pinTabRcd: nbrPinRcd
         : pinTabCol: nbrPinCol
-        : accessMode: sqlwhere
-        : sqlorder: isKeyLower
+        : accessMode: sqlWhere
+        : sqlOrder: isKeyLower
         : yMsgID: yMsgDta);
 
 endsr;
@@ -6180,10 +6179,10 @@ begsr openfile;
 
   //  Ermitteln Sortierung bei Zugriff über SQL ...
   if (accessMode = SQL_SEQ);
-    if (sqlorder = '*KEY');
-      peek38(##file: ##library: sqlorder);
+    if (sqlOrder = '*KEY');
+      peek38(##file: ##library: sqlOrder);
     else;
-      sqlorder = sql_quote(f_ucase(sqlorder));
+      sqlOrder = sql_quote(f_ucase(sqlOrder));
     endif;
   endif;
 
@@ -6339,8 +6338,8 @@ begsr openfile;
                  ##library :
                  ##member  :
                  ##format  :
-                 sqlwhere  :
-                 sqlorder  :
+                 sqlWhere  :
+                 sqlOrder  :
                yMsgID      :
                yMsgDta     ) = bTrue;
         if sql_open(hfile03     :
@@ -6894,7 +6893,7 @@ endsr;
 
 begsr getkeylist;
 
-  peek03(yQFile: ##format: accessMode: sqlorder
+  peek03(yQFile: ##format: accessMode: sqlOrder
         : yMsgID: yMsgDta);
 
 endsr;
@@ -7289,8 +7288,8 @@ begsr closefile;
     ##strpage = 0;
 
     //      ... SQL-Selektion
-    sqlwhere  = ' ';
-    sqlorder  = ' ';
+    sqlWhere  = ' ';
+    sqlOrder  = ' ';
 
   else;
   //             Weiss noch nicht!
@@ -8021,8 +8020,8 @@ begsr first;
   l#wndnbr = 0;
 
   //  SQL-Selektion
-  sqlwhere  = ' ';
-  sqlorder  = ' ';
+  sqlWhere  = ' ';
+  sqlOrder  = ' ';
 
   // - Einstellen der Bildschirmauflösung 80/132-Zeichen
   exsr setscreen;
@@ -8047,8 +8046,8 @@ begsr first;
   if (isOpen = bFalse);
     accessMode = i_access;
     if (accessMode = SQL_SEQ);
-      sqlwhere  = i_sqlwhere;
-      sqlorder  = i_sqlorder;
+      sqlWhere  = i_sqlwhere;
+      sqlOrder  = i_sqlorder;
     endif;
     exsr openfile;
   endif;
