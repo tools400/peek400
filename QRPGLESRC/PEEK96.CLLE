@@ -55,7 +55,7 @@
 
              DCL        VAR(&NEWLIB    ) TYPE(*CHAR) LEN(10) VALUE('PEEK')
              DCL        VAR(&DBGVIEW   ) TYPE(*CHAR) LEN(10) VALUE('*NONE')
-             DCL        VAR(&TGTRLS    ) TYPE(*CHAR) LEN(10) VALUE('V7R1M0')
+             DCL        VAR(&TGTRLS    ) TYPE(*CHAR) LEN(10) VALUE('V7R3M0')
 
              DCL        VAR(&DATE_DMY  ) TYPE(*CHAR) LEN( 6)
              DCL        VAR(&DATE_ISO  ) TYPE(*CHAR) LEN(10)
