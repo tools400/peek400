@@ -46,21 +46,21 @@
              /* ---------------------------------------------------- */
 
              CALL       PGM(QTEMP/A_XMLINST) +
-                          PARM('CRTMSGDS' 'QXML' &DEVLIB '' 'GER' '&TGTRLS')
+                          PARM('CRTMSGDS' 'QXML' &DEVLIB '' 'GER' &TGTRLS)
 
              /* ---------------------------------------------------- */
              /*  Create service program BASICS1                      */
              /* ---------------------------------------------------- */
 
              CALL       PGM(QTEMP/A_XMLINST) +
-                          PARM('BASICS1' 'QXML' &DEVLIB '' 'NO C_YES' '&TGTRLS')
+                          PARM('BASICS1' 'QXML' &DEVLIB '' 'NO C_YES' &TGTRLS)
 
              /* ---------------------------------------------------- */
              /*  Create service program PRTLOG                       */
              /* ---------------------------------------------------- */
 
              CALL       PGM(QTEMP/A_XMLINST) +
-                          PARM('PRTLOG' 'QXML' &DEVLIB '' 'NO' '&TGTRLS')
+                          PARM('PRTLOG' 'QXML' &DEVLIB '' 'NO' &TGTRLS)
 
              /* ---------------------------------------------------- */
              /*  Delete XML installation utility.                    */
