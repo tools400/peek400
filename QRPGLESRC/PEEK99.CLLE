@@ -295,6 +295,33 @@ ADDBNDDIRE:
                                         *TCAT  '*NO'        +
                                         *TCAT  ')'          )
                 ENDDO
+/* ----------------- */
+/* Erstellen         */
+/* BUILD ...         */
+/* ----------------- */
+                IF         COND(&MBR *EQ 'BUILD'            +
+                           ) THEN(DO)
+                   CHGVAR     VAR(&CMD) VALUE('CRTCMD'      +
+                                        *BCAT  'CMD('       +
+                                        *TCAT  &OBJLIB      +
+                                        *TCAT  '/'          +
+                                        *TCAT  &MBR         +
+                                        *TCAT  ')'          +
+                                        *BCAT  'PGM('       +
+                                        *TCAT  &OBJLIB      +
+                                        *TCAT  '/'          +
+                                        *TCAT  'PEEK96'     +
+                                        *TCAT  ')'          +
+                                        *BCAT  'MODE('      +
+                                        *TCAT  '*ALL'       +
+                                        *TCAT  ')'          +
+                                        *BCAT  'ALLOW('     +
+                                        *TCAT  '*ALL'       +
+                                        *TCAT  ')'          +
+                                        *BCAT  'ALWLMTUSR(' +
+                                        *TCAT  '*NO'        +
+                                        *TCAT  ')'          )
+                ENDDO
                 GOTO       CMDLBL(CRT_OBJ)
              ENDDO
 
