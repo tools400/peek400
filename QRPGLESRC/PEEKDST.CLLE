@@ -45,6 +45,7 @@
                DCL        VAR(&RMTLOCLIST) TYPE(*CHAR) LEN(100) +
                             STG(*DEFINED) DEFVAR(&RMTLOC 3)
 
+             DCL        VAR(&SYSNAME   ) TYPE(*CHAR) LEN(8)
              DCL        VAR(&RMTLOCNAME) TYPE(*CHAR) LEN(10)
              DCL        VAR(&I         ) TYPE(*INT) LEN(2)
              DCL        VAR(&POS       ) TYPE(*INT) LEN(2)
@@ -77,11 +78,18 @@
 
              CHGVAR     VAR(&POS) VALUE(1)
 
+             RTVNETA    SYSNAME(&SYSNAME)
+
              DOFOR VAR(&I) FROM(1) TO(&RMTLOCCNT)
                CHGVAR     VAR(&RMTLOCNAME) +
                             VALUE(%SUBSTRING(&RMTLOCLIST &POS 10))
                IF         COND(&RMTLOCNAME *NE '*NONE') THEN(DO)
-                 CALLSUBR   SUBR(DISTRIBUTE)
+                 IF         COND(&SYSNAME *NE &RMTLOCNAME) THEN(DO)
+                   CALLSUBR   SUBR(DISTRIBUTE)
+                 ENDDO
+                 ELSE       CMD(DO)
+                   CALLSUBR   SUBR(UPDATE)
+                 ENDDO
                ENDDO
                CHGVAR     VAR(&POS) VALUE(&POS + 10)
              ENDDO
@@ -108,6 +116,63 @@ ERROR:
              SNDPGMMSG  MSGID(CPF9898) MSGF(QCPFMSG) MSGTYPE(*ESCAPE) +
                           MSGDTA('Übertragung nach' *BCAT &RMTLOCNAME *BCAT 'fehlgeschlagen')
              GOTO       CMDLBL(ENDE)
+
+ /* -------------------------------------------------------------- */
+ /*  Installieren Bibliothek PEEK400 auf Zielsystem: &RMTLOCNAME   */
+ /* -------------------------------------------------------------- */
+
+             SUBR       SUBR(UPDATE)
+
+STEP_01:
+               SNDPGMMSG  MSGID(CPF9897) MSGF(QCPFMSG) +
+                            MSGDTA('Aktualisieren Peek/400 auf' +
+                                   *BCAT &SYSNAME *BCAT '...') +
+                            TOPGMQ(*EXT) MSGTYPE(*STATUS)
+
+               CHKOBJ OBJ(PEEK) OBJTYPE(*LIB)
+               MONMSG     MSGID(CPF9807) EXEC(DO) /* Bibliothek nicht gefunden. */
+                 SNDPGMMSG  MSGID(CPF9898) MSGF(QCPFMSG) +
+                              MSGDTA('Bibliothek PEEK auf' +
+                                     *BCAT &SYSNAME *BCAT ' nicht gefunden') +
+                              TOPGMQ(*EXT) MSGTYPE(*STATUS)
+               ENDDO
+
+               SNDPGMMSG  MSGID(CPF9897) MSGF(QCPFMSG) +
+                            MSGDTA('Aktualisieren Peek/400 auf' +
+                                   *BCAT &SYSNAME *BCAT '...') +
+                            TOPGMQ(*EXT) MSGTYPE(*STATUS)
+
+STEP_02:
+               CHKOBJ OBJ(PEEK400#) OBJTYPE(*LIB)
+               MONMSG     MSGID(CPF9801) EXEC(DO) /* Bibliothek nicht gefunden. */
+                 GOTO       CMDLBL(STEP_03)
+               ENDDO
+
+               DLTLIB LIB(PEEK400#)
+
+STEP_03:
+               RNMOBJ OBJ(PEEK400) OBJTYPE(*LIB) NEWOBJ(PEEK400#)
+
+STEP_04:
+               /* auf lokalem System nicht erforderlich */
+
+STEP_05:
+               SNDPGMMSG  MSGID(CPF9897) MSGF(QCPFMSG) +
+                            MSGDTA('Installieren Peek/400 auf' +
+                                   *BCAT &SYSNAME *BCAT '...') +
+                            TOPGMQ(*EXT) MSGTYPE(*STATUS)
+
+               PEEK/PEEKCLONE TOLIB(PEEK400)
+
+STEP_06:
+               SNDPGMMSG  MSGID(CPF9897) MSGF(QCPFMSG) +
+                            MSGDTA('Aktualisieren Benutzereinstellungen auf' +
+                                   *BCAT &SYSNAME *BCAT '...') +
+                            TOPGMQ(*EXT) MSGTYPE(*STATUS)
+
+               CALL PGM(PEEK/PEEKUPDATE) PARM('PEEK400' 'PEEK400#')
+
+             ENDSUBR
 
  /* -------------------------------------------------------------- */
  /*  Installieren Bibliothek PEEK400 auf Zielsystem: &RMTLOCNAME   */
