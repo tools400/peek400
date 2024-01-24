@@ -93,33 +93,42 @@
              /*  Create file and add initial data                    */
              /* ---------------------------------------------------- */
 
+             DLTF       FILE(&DEVLIB/EXIT01PF)
+             MONMSG     MSGID(CPF2105)
+
              CRTPF      FILE(&DEVLIB/EXIT01PF) +
                           SRCFILE(&DEVLIB/QDDSSRC) SRCMBR(*FILE) +
                           TEXT('Peek/400 - Sicherheitsattribute für EXIT01')
+
+             DLTF       FILE(&DEVLIB/EXIT04LOG)
+             MONMSG     MSGID(CPF2105)
 
              RUNSQLSTM  SRCFILE(&DEVLIB/QDDSSRC) SRCMBR(EXIT04LOG) +
                           COMMIT(*NONE) NAMING(*SQL) DATFMT(*ISO) TIMFMT(*ISO) +
                           DFTRDBCOL(&DEVLIB)
 
-             CRTPF      FILE(&DEVLIB/PEEKENV) +
-                          SRCFILE(&DEVLIB/QDDSSRC) SRCMBR(*FILE) +
-                          TEXT('Peek/400 - Arbeitsumgebungen')
+             CHKOBJ     OBJ(&DEVLIB/PEEKENV) OBJTYPE(*FILE)
+             MONMSG     MSGID(CPF9801) EXEC(DO)
+               CRTPF      FILE(&DEVLIB/PEEKENV) +
+                            SRCFILE(&DEVLIB/QDDSSRC) SRCMBR(*FILE) +
+                            TEXT('Peek/400 - Arbeitsumgebungen')
+             ENDDO
+
+             DLTF       FILE(&DEVLIB/PEEKFLDL0)
+             MONMSG     MSGID(CPF2105)
+
+             DLTF       FILE(&DEVLIB/PEEKFLDL1)
+             MONMSG     MSGID(CPF2105)
+
+             DLTF       FILE(&DEVLIB/PEEKFLDL2)
+             MONMSG     MSGID(CPF2105)
+
+             DLTF       FILE(&DEVLIB/PEEKFLD)
+             MONMSG     MSGID(CPF2105)
 
              CRTPF      FILE(&DEVLIB/PEEKFLD) +
                           SRCFILE(&DEVLIB/QDDSSRC) SRCMBR(*FILE) +
                           TEXT('Peek/400 - Satzaufbau')
-
-             CRTPF      FILE(&DEVLIB/PEEKFMT) +
-                          SRCFILE(&DEVLIB/QDDSSRC) SRCMBR(*FILE) +
-                          TEXT('Peek/400 - Satzformate')
-
-             CRTPF      FILE(&DEVLIB/PEEKWRK) +
-                          SRCFILE(&DEVLIB/QDDSSRC) SRCMBR(*FILE) +
-                          TEXT('Peek/400 - Arbeitsdatei')
-
-             CRTPF      FILE(&DEVLIB/PEEKUSR) +
-                          SRCFILE(&DEVLIB/QDDSSRC) SRCMBR(*FILE) +
-                          TEXT('Peek/400 - Template für Benutzervoreinstellungen')
 
              CRTLF      FILE(&DEVLIB/PEEKFLDL0) +
                           SRCFILE(&DEVLIB/QDDSSRC) SRCMBR(*FILE) +
@@ -133,6 +142,27 @@
                           SRCFILE(&DEVLIB/QDDSSRC) SRCMBR(*FILE) +
                           TEXT('Peek/400 - Satzaufbau')
 
+             DLTF       FILE(&DEVLIB/PEEKFMT)
+             MONMSG     MSGID(CPF2105)
+
+             CRTPF      FILE(&DEVLIB/PEEKFMT) +
+                          SRCFILE(&DEVLIB/QDDSSRC) SRCMBR(*FILE) +
+                          TEXT('Peek/400 - Satzformate')
+
+             DLTF       FILE(&DEVLIB/PEEKWRK)
+             MONMSG     MSGID(CPF2105)
+
+             CRTPF      FILE(&DEVLIB/PEEKWRK) +
+                          SRCFILE(&DEVLIB/QDDSSRC) SRCMBR(*FILE) +
+                          TEXT('Peek/400 - Arbeitsdatei')
+
+             CHKOBJ     OBJ(&DEVLIB/PEEKENV) OBJTYPE(*FILE)
+             MONMSG     MSGID(CPF9801) EXEC(DO)
+               CRTPF      FILE(&DEVLIB/PEEKUSR) +
+                            SRCFILE(&DEVLIB/QDDSSRC) SRCMBR(*FILE) +
+                            TEXT('Peek/400 - Arbeitsumgebungen')
+             ENDDO
+
              CLRPFM     FILE(&DEVLIB/EXIT01PF)
              CLRPFM     FILE(&DEVLIB/EXIT04LOG)
 
@@ -141,9 +171,16 @@
              CLRPFM     FILE(&DEVLIB/PEEKFMT)
              CLRPFM     FILE(&DEVLIB/PEEKWRK)
 
-             RUNSQLSTM  SRCFILE(&DEVLIB/QDDSSRC) SRCMBR(PEEKUSRDTA) +
-                          COMMIT(*NONE) NAMING(*SQL) DATFMT(*ISO) TIMFMT(*ISO) +
-                          DFTRDBCOL(&DEVLIB)
+             CHKOBJ     OBJ(&DEVLIB/PEEKUSR) OBJTYPE(*FILE)
+             MONMSG     MSGID(CPF9801) EXEC(DO)
+               CRTPF      FILE(&DEVLIB/PEEKUSR) +
+                            SRCFILE(&DEVLIB/QDDSSRC) SRCMBR(*FILE) +
+                            TEXT('Peek/400 - Template für Benutzervoreinstellungen')
+               RUNSQLSTM  SRCFILE(&DEVLIB/QDDSSRC) SRCMBR(PEEKUSRDTA) +
+                            COMMIT(*NONE) NAMING(*SQL) DATFMT(*ISO) TIMFMT(*ISO) +
+                            DFTRDBCOL(&DEVLIB)
+             ENDDO
+
 
              /* ---------------------------------------------------- */
              /*  Create PEEK compile program                         */
