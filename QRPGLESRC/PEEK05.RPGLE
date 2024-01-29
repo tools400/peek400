@@ -66,6 +66,7 @@ dcl-ds hfile04  likeds(hfile_t);
 /COPY QCOPYLE,ShortCmd_D
 /COPY QCOPYLE,D_WORKSTN
 /COPY QCOPYLE,D_COLORATR
+/COPY QCOPYLE,SCRNFKEYS
 /COPY QCOPYLE,SDS
 /COPY QCOPYLE,OBJD0400
 /COPY QCOPYLE,RCDL0200
@@ -297,8 +298,8 @@ dcl-s ykeyval         like(keybuf_t) inz;
 dcl-s yPgmCmd         char(10) inz;
 dcl-s ycmddta         like(pgmcmddt_t) inz;
 
-dcl-s yfkeys          char(18) dim(32)       inz;
-dcl-s ynbrofkeys      like(int4_t) inz;
+dcl-s yFKeys          char(18) dim(32)       inz;
+dcl-s yNbrOFKeys      like(int4_t) inz;
 
 dcl-s ychoice         like(choice_t) dim(32) inz;
 dcl-s ynbrofch        like(int4_t) inz;
@@ -327,42 +328,6 @@ dcl-s ytext           like(text_t);
 dcl-s ysflopt         char(2);
 dcl-s ystring         like(rcdbuf_t) inz;
 dcl-s ystringlen      like(int4_t) inz;
-
-dcl-ds *N;
-  scrnfkeys       char(18) dim(32) inz;
-  $$fkey01        char(18) pos(1);
-  $$fkey02        char(18) pos(19);
-  $$fkey03        char(18) pos(37);
-  $$fkey04        char(18) pos(55);
-  $$fkey05        char(18) pos(73);
-  $$fkey06        char(18) pos(91);
-  $$fkey07        char(18) pos(109);
-  $$fkey08        char(18) pos(127);
-  $$fkey09        char(18) pos(145);
-  $$fkey10        char(18) pos(163);
-  $$fkey11        char(18) pos(181);
-  $$fkey12        char(18) pos(199);
-  $$fkey13        char(18) pos(217);
-  $$fkey14        char(18) pos(235);
-  $$fkey15        char(18) pos(253);
-  $$fkey16        char(18) pos(271);
-  $$fkey17        char(18) pos(289);
-  $$fkey18        char(18) pos(307);
-  $$fkey19        char(18) pos(325);
-  $$fkey20        char(18) pos(343);
-  $$fkey21        char(18) pos(361);
-  $$fkey22        char(18) pos(379);
-  $$fkey23        char(18) pos(397);
-  $$fkey24        char(18) pos(415);
-  $$fkey25        char(18) pos(433);
-  $$fkey26        char(18) pos(451);
-  $$fkey27        char(18) pos(469);
-  $$fkey28        char(18) pos(487);
-  $$fkey29        char(18) pos(505);
-  $$fkey30        char(18) pos(523);
-  $$fkey31        char(18) pos(541);
-  $$fkey32        char(18) pos(559);
-end-ds;
 
 dcl-c HEX_CHAR const('-');
 
@@ -761,19 +726,19 @@ dow ('1');
 
   //  Anzeigen der Befehlstasten
   select;
-  when (sfbot = 2 and ynbrofkeys > 8);
+  when (sfbot = 2 and yNbrOFKeys > 8);
     if (*in88 = bFalse);
       write pbbot132#2;
     else;
       write pbbot080#2;
     endif;
-  when (sfbot = 3 and ynbrofkeys > 16);
+  when (sfbot = 3 and yNbrOFKeys > 16);
     if (*in88 = bFalse);
       write pbbot132#3;
     else;
       write pbbot080#3;
     endif;
-  when (sfbot = 4 and ynbrofkeys > 24);
+  when (sfbot = 4 and yNbrOFKeys > 24);
     if (*in88 = bFalse);
       write pbbot132#4;
     else;
@@ -8170,9 +8135,8 @@ begsr inzsr;
   // - Versionsabgleich durchführen
   exsr chkversion;
 
-  peek23(sds.pgmname: '*ALL': 8
-        : yfkeys: ynbrofkeys);
-  scrnfkeys = %subarr(yfkeys: 1);
+  peek23(sds.pgmname: '*ALL': 8: yFKeys: yNbrOFKeys);
+  scrnFKeys = %subarr(yFKeys: 1);
 
   peek27(sds.pgmname: ychoice: ynbrofch);
 
