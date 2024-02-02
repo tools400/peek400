@@ -923,3 +923,10 @@
        - Korrektur: Falsche Definition von 'ySqlOrder'.
   *  D_VARDEF
        - Korrektur: Falsche Definition der Felder 'sqlOrder_t' und 'sqlWhere_t'.
+
+  Version 4.0.4
+  =============
+
+  *  PEEK03
+       - Korrektur: RNQ0100 Length or start position is out of range for the
+         string operation

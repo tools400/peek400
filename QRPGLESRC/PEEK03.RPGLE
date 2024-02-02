@@ -130,7 +130,11 @@ begsr sqlseq;
      %trim(%subst(tempstr: 2: z-2));
 
     //  Alles hinter dem Feld ...
-    tempstr = %trim(%subst(tempstr: z+1));
+    if (z+1 <= %len(tempstr));
+      tempstr = %trim(%subst(tempstr: z+1));
+    else;
+      tempStr = '';
+    endif;
 
     if (tempstr = 'DESC');
       keyl0100.apkseq  = 'D';
