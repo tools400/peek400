@@ -198,17 +198,6 @@ ADDBNDDIRE:
              ENDDO
 
 /* ----------------- */
-/* Spez. OVR's für   */
-/* PEEK15/PEEK16     */
-/* ----------------- */
-               OVRDBF     FILE(QCOPYLE1) TOFILE(&LIB/QPEEKGEN) OVRSCOPE(*JOB)
-               OVRDBF     FILE(QCOPYLE2) TOFILE(&LIB/QPEEKGEN) OVRSCOPE(*JOB)
-               OVRDBF     FILE(QCOPYLE3) TOFILE(&LIB/QPEEKGEN) OVRSCOPE(*JOB)
-               OVRDBF     FILE(QCOPYLE4) TOFILE(&LIB/QPEEKGEN) OVRSCOPE(*JOB)
-               OVRDBF     FILE(QCOPYLE5) TOFILE(&LIB/QPEEKGEN) OVRSCOPE(*JOB)
-               OVRDBF     FILE(QCOPYLE6) TOFILE(&LIB/QPEEKGEN) OVRSCOPE(*JOB)
-
-/* ----------------- */
 /* commands          */
 /* ----------------- */
              IF         COND(&SRCTYPE *EQ 'CMD') THEN(DO)

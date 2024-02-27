@@ -27,19 +27,19 @@
 /COPY QCOPYLE,H_SPEC
 /COPY QCOPYLE,COPYRIGHT
 
-dcl-f qpeekgen usage(*output) usropn rename(qpeekgen :foutput);
+dcl-f qpeekgen extdesc('QPEEKGEN') usage(*output) usropn rename(qpeekgen :foutput) block(*no);
 
-dcl-f qcopyle1 usropn rename(qpeekgen :fcopy1 );
+dcl-f qcopyle1 extdesc('QPEEKGEN') usropn rename(qpeekgen :fcopy1);
 
-dcl-f qcopyle2 usropn rename(qpeekgen :fcopy2 );
+dcl-f qcopyle2 extdesc('QPEEKGEN') usropn rename(qpeekgen :fcopy2);
 
-dcl-f qcopyle3 usropn rename(qpeekgen :fcopy3 );
+dcl-f qcopyle3 extdesc('QPEEKGEN') usropn rename(qpeekgen :fcopy3);
 
-dcl-f qcopyle4 usropn rename(qpeekgen :fcopy4 );
+dcl-f qcopyle4 extdesc('QPEEKGEN') usropn rename(qpeekgen :fcopy4);
 
-dcl-f qcopyle5 usropn rename(qpeekgen :fcopy5 );
+dcl-f qcopyle5 extdesc('QPEEKGEN') usropn rename(qpeekgen :fcopy5);
 
-dcl-f qcopyle6 usropn rename(qpeekgen :fcopy6 );
+dcl-f qcopyle6 extdesc('QPEEKGEN') usropn rename(qpeekgen :fcopy6);
 
 dcl-f peeksrc usropn rename(peeksrc:finput);
 
@@ -216,6 +216,8 @@ dcl-ds *N;
   a#fdcount       char(5) overlay(fieldcount:1);
 end-ds;
 
+/COPY QCOPYLE,SDS
+
 dcl-s cmd             char(4) inz;
 dcl-s scnnbr          like(int4_t) inz;
 
@@ -239,11 +241,11 @@ dcl-s nulldft         char(4) inz;
 
 dcl-ds fldl0100 likeds(fldl0100_t) inz;
 
-dcl-pr p_wrtout;
+dcl-pr p_wrtout extproc(*dclcase);
   i_srcdta        const like(srcdta);
 end-pr;
 
-dcl-pr f_readfld       like(bool_t);
+dcl-pr f_readfld like(bool_t) extproc(*dclcase);
 end-pr;
 
 //====================================================*
@@ -273,6 +275,7 @@ end-pi;
 //  Register error handler
 ceehdlr(%paddr('errorHandler')
        : *null: *omit);
+
 open qpeekgen;
 open peeksrc;
 

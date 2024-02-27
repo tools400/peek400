@@ -113,7 +113,7 @@ for do_x1 = 1 to numFields;
   f_maxsize = *hival;
   f_edtcde = fldl0100.f1edtc;
 
-  f_unknown = f_isnotalw(fldl0100);
+  f_unknown = f_isNotAlw(fldl0100);
   if (f_unknown = bTrue);
     f_hidden = bTrue;
     f_istransc = bFalse;

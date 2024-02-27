@@ -17,6 +17,8 @@
 /* -------------------------------------------------------- */
 /EXEC SQL
 CREATE TABLE &LI.TESTPEEK (                                        +
+  BOOL        BOOLEAN                              DEFAULT NULL ,  +
+  BOOL_NN     BOOLEAN                     NOT NULL DEFAULT true,   +
   ALPHA       CHAR(10)                             DEFAULT NULL ,  +
   VARALPHA    CHAR(10)                             DEFAULT NULL ,  +
   INTEGER     INTEGER                              DEFAULT NULL ,  +
@@ -35,7 +37,14 @@ CREATE TABLE &LI.TESTPEEK (                                        +
   UTF16_NN    GRAPHIC(128)    CCSID 1200  NOT NULL DEFAULT ''   ,  +
   UTF16       GRAPHIC(128)    CCSID 1200           DEFAULT NULL ,  +
   VARUTF16_N  VARGRAPHIC(128) CCSID 1200  NOT NULL DEFAULT ''   ,  +
-  VARUTF16    VARGRAPHIC(128) CCSID 1200           DEFAULT NULL ,  +
-  UTF8        CHAR(10)        CCSID 1208           DEFAULT NULL ,  +
-  VARUTF8     CHAR(10)        CCSID 1208           DEFAULT NULL );
+  VARUTF16    VARGRAPHIC(128) CCSID 1200           DEFAULT NULL );
+/END-EXEC
+
+/EXEC SQL
+INSERT INTO PEEK405P.TESTPEEK (BOOL, BOOL_NN, UCS2)                +
+VALUES(null, false, 'Boolean: null/false'),                        +
+      ('false', 'true', 'Boolean: ''false''/''true'''),            +
+      (false, true, 'Boolean: false/true'),                        +
+      ('0', '1', 'Boolean: ''0''/''1'''),                          +
+      (0, 1, 'Boolean: 0/1');
 /END-EXEC

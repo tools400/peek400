@@ -28,52 +28,53 @@
 /COPY QCOPYLE,H_SPEC
 /COPY QCOPYLE,COPYRIGHT
 
-dcl-f qpeekgen usage(*output) usropn rename(qpeekgen :foutput);
+dcl-f qpeekgen extdesc('QPEEKGEN') usage(*output) usropn rename(qpeekgen :foutput) block(*no);
 
-dcl-f qcopyle1 usage(*output) usropn rename(qpeekgen :fcopy1 );
+dcl-f qcopyle1 extdesc('QPEEKGEN') usage(*output) usropn rename(qpeekgen :fcopy1 ) block(*no);
 
-dcl-f qcopyle2 usage(*output) usropn rename(qpeekgen :fcopy2 );
+dcl-f qcopyle2 extdesc('QPEEKGEN') usage(*output) usropn rename(qpeekgen :fcopy2 ) block(*no);
 
-dcl-f qcopyle3 usage(*output) usropn rename(qpeekgen :fcopy3 );
+dcl-f qcopyle3 extdesc('QPEEKGEN') usage(*output) usropn rename(qpeekgen :fcopy3 ) block(*no);
 
-dcl-f qcopyle4 usage(*output) usropn rename(qpeekgen :fcopy4 );
+dcl-f qcopyle4 extdesc('QPEEKGEN') usage(*output) usropn rename(qpeekgen :fcopy4 ) block(*no);
 
-dcl-f qcopyle5 usage(*output) usropn rename(qpeekgen :fcopy5 );
+dcl-f qcopyle5 extdesc('QPEEKGEN') usage(*output) usropn rename(qpeekgen :fcopy5 ) block(*no);
 
-dcl-f qcopyle6 usage(*output) usropn rename(qpeekgen :fcopy6 );
+dcl-f qcopyle6 extdesc('QPEEKGEN') usage(*output) usropn rename(qpeekgen :fcopy6 ) block(*no);
 
 dcl-f peeksrc usropn rename(peeksrc:finput);
+
 dcl-f peekfld usropn;
 
-dcl-pr p_wrtdspf;
+dcl-pr p_wrtdspf extproc(*dclcase);
   i_srcdta        const like(srcdta);
 end-pr;
 
-dcl-pr p_wrtcopy1;
+dcl-pr p_wrtcopy1 extproc(*dclcase);
   i_srcdta        const like(srcdta);
 end-pr;
 
-dcl-pr p_wrtcopy2;
+dcl-pr p_wrtcopy2 extproc(*dclcase);
   i_srcdta        const like(srcdta);
 end-pr;
 
-dcl-pr p_wrtcopy3;
+dcl-pr p_wrtcopy3 extproc(*dclcase);
   i_srcdta        const like(srcdta);
 end-pr;
 
-dcl-pr p_wrtcopy4;
+dcl-pr p_wrtcopy4 extproc(*dclcase);
   i_srcdta        const like(srcdta);
 end-pr;
 
-dcl-pr p_wrtcopy5;
+dcl-pr p_wrtcopy5 extproc(*dclcase);
   i_srcdta        const like(srcdta);
 end-pr;
 
-dcl-pr p_wrtcopy6;
+dcl-pr p_wrtcopy6 extproc(*dclcase);
   i_srcdta        const like(srcdta);
 end-pr;
 
-dcl-pr f_readfld       like(bool_t);
+dcl-pr f_readfld like(bool_t) extproc(*dclcase);
 end-pr;
 
 //===============================================================*
@@ -628,6 +629,10 @@ begsr copyhead;
   //  Inhalt:   c_fldHexEd                     *
   //-------------------------------------------*
 
+  //  Remark
+  reset ds_remark;
+  p_wrtcopy2(ds_remark);
+
   //  Begsr
   reset ds_begsr;
   $begsr_f1 = 'c_fldHexEd';
@@ -690,6 +695,10 @@ begsr copyhead;
   //  Initialisieren Copy-Book 6:              *
   //  Inhalt:   c_fldStrEd                     *
   //-------------------------------------------*
+
+  //  Remark
+  reset ds_remark;
+  p_wrtcopy6(ds_remark);
 
   //  Begsr
   reset ds_begsr;
@@ -888,7 +897,7 @@ begsr wrtfield;
     $fldd_col  = 29;
 
     //          ... Referenzfeld
-    if (fldl0100.f1dtyp <> 'G'); // = Graphic
+    if (fldl0100.f1dtyp <> 'G' and fldl0100.f1dtyp <> '8'); // = Graphic/Boolean
       $fldd_ref  = 'R';
       $fldd_kwrd = 'REFFLD(' +
                   %trimr(fldl0100.f1fnme) + ' -';
@@ -901,7 +910,8 @@ begsr wrtfield;
     select;
     when (fldl0100.f1dtyp = 'L') or // = Date
        (fldl0100.f1dtyp = 'T') or   // = Time
-       (fldl0100.f1dtyp = 'Z');     // = Timestamp
+       (fldl0100.f1dtyp = 'Z') or   // = Boolean
+       (fldl0100.f1dtyp = '8');     // = Timestamp
       $fldd_dtyp = 'A';
     when (fldl0100.f1dtyp = 'G');   // = Graphic
       $fldd_dtyp = 'G';
@@ -929,12 +939,15 @@ begsr wrtfield;
       newlen# = f_dsplyln(fldl0100);
     endif;
 
-    if (fldl0100.f1dtyp = 'G' or       // = Graphic
-       f_istolong(fldl0100) = bTrue);
+    select;
+    when (fldl0100.f1dtyp = '8');        // = Boolean
       $fldd_len  = newlen#a;
-    else;
+    when (fldl0100.f1dtyp = 'G' or       // = Graphic
+          f_istolong(fldl0100) = bTrue);
+      $fldd_len  = newlen#a;
+    other;
       $fldd_len  = '';
-    endif;
+    endsl;
 
     //          ... Bezugszahl
     $fldd_neg  = '  ';
@@ -951,7 +964,7 @@ begsr wrtfield;
     p_wrtdspf(ds_flddef);
 
     //      ... Referenzierung - Zeile 2
-    if (fldl0100.f1dtyp <> 'G'); // = Graphic
+    if (fldl0100.f1dtyp <> 'G' and fldl0100.f1dtyp <> '8'); // = Graphic/Boolean
       reset ds_fldcnt;
       $fldc_kwrd =
       %trimr(reflib) + '/' + %trimr(reffile) + ')';
@@ -1172,8 +1185,7 @@ begsr inzscreen;
 
   //           Remark
   reset ds_remark;
-  $rem_info = 'Prüfung auf ungültige +
-              Feldinhalte, Seite ' + scn#a;
+  $rem_info = 'Prüfung auf ungültige Feldinhalte, Seite ' + scn#a;
   p_wrtcopy1(ds_remark);
 
   //           Remark
@@ -2003,6 +2015,7 @@ end-proc;
 
 //============================================================*
 //    wrtCopy1      Ausgeben Copy-Book 1    'Axxxxxxxxx'      *
+//                  Prüfung auf ungültige Feldinhalte         *
 //============================================================*
 dcl-proc p_wrtcopy1;
   dcl-pi *N;
@@ -2025,6 +2038,7 @@ end-proc;
 
 //============================================================*
 //    wrtCopy2      Ausgeben Copy-Book 2    'Bxxxxxxxxx'      *
+//                  Starten Hex-Editor                        *
 //============================================================*
 dcl-proc p_wrtcopy2;
   dcl-pi *N;
@@ -2116,7 +2130,7 @@ end-proc;
 
 //============================================================*
 //    wrtCopy6      Ausgeben Copy-Book 6    'Gxxxxxxxxx'      *
-//                  Aufrufen Text-Editor                      *
+//                  Starten String-Editor                     *
 //============================================================*
 dcl-proc p_wrtcopy6;
   dcl-pi *N;

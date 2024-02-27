@@ -930,3 +930,12 @@
   *  PEEK03
        - Korrektur: RNQ0100 Length or start position is out of range for the
          string operation
+
+  Version 4.0.5
+  =============
+
+  *  PEEK15
+       - Unterstützung für neuen Datentyp 'Boolean' eingebaut.
+  *  PEEK58
+       - Unterstützung für neuen Datentyp 'Boolean' eingebaut.
+       

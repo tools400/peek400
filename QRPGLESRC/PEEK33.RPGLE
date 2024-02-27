@@ -270,6 +270,8 @@ begsr vpos;
       exsr v04r00m03;
     when (set0007.set_vsn < 'V04R00M04');
       exsr v04r00m04;
+    when (set0007.set_vsn < 'V04R00M05');
+      exsr v04r00m05;
     other;
       leave;
     endsl;
@@ -912,6 +914,16 @@ endsr;
 begsr v04r00m04;
 
   set0007.set_vsn = 'V04R00M04';
+
+endsr;
+
+//============================================================*
+//    V04R00M05     Aktualisierung auf Version 4.0.5          *
+//============================================================*
+
+begsr v04r00m05;
+
+  set0007.set_vsn = 'V04R00M05';
 
 endsr;
 

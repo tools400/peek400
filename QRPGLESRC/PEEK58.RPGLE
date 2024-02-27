@@ -1653,7 +1653,9 @@ dcl-proc f_isnotalw export;
       i_fldl0100.f1dtyp = 'O' or    // = DBCS-Open
       i_fldl0100.f1dtyp = 'E' or    // = DBCS-Either
       i_fldl0100.f1dtyp = 'F' or    // = Float
-      i_fldl0100.f1dtyp = 'G');     // = Graphic
+      i_fldl0100.f1dtyp = 'G' or    // = Graphic
+      i_fldl0100.f1dtyp = '8');     // = Boolean
+
     //  ... dann
     //      prüfen, ob es sich um ein GRAPHIC Feld ohne CCSID handelt
     if (i_fldl0100.f1dtyp = 'G' and f_hasccsid(i_fldl0100) = bFalse);
@@ -1671,7 +1673,6 @@ dcl-proc f_isnotalw export;
     endif;
 
     //      prüfen, ob es sich um ein Feld variabler Länge handelt.
-
     //      Wenn es sich um ein Feld variabler Länge handelt, ...
     if (f_isvarlen(i_fldl0100) = bTrue);
       //      ... dann
