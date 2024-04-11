@@ -97,7 +97,7 @@
        //*******************************************************************
 
        dcl-pi peek65;
-         i_rcdnbr        const like(rcdnbr_t);
+         i_rcdNbr        const like(rcdNbr_t);
          i_file          const like(file_t);
          i_library       const like(lib_t);
          i_member        const like(mbr_t);
@@ -151,7 +151,7 @@
           //  Kopfinformationen
           $$file = i_file;
           $$lib  = i_library;
-          $$rrn  = %editc(i_rcdnbr: 'X');
+          $$rrn  = %editc(i_rcdNbr: 'X');
           $$desc = objd0400.o4text;
 
           //  Konvertieren nicht darstellbarer Zeichen
@@ -346,7 +346,7 @@
        begsr readrcd;
 
           if (cio_chainwithrrn(hfile04
-                           : i_rcdnbr
+                           : i_rcdNbr
                            : bFalse
                            : io_buff
                            : io_nullmap) = bFalse);
@@ -371,7 +371,7 @@
                      SPLFNAME(' +
                        %trim(i_file) + ') +
                      USRDTA(''' +
-                       %editc(i_rcdnbr: 'X') + ''') +
+                       %editc(i_rcdNbr: 'X') + ''') +
                      OVRSCOPE(*CALLLVL)'
                     : ymsgid: ymsgdta);
           ymsgid = '';

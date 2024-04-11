@@ -143,7 +143,7 @@ dcl-pi peek14;
   i_dsp80         const like(dsp80_t);
   io_headertype   like(headertype_t);
   i_copyright     const like(copyrght_t);
-  i_rcdnbr        const like(rcdnbr_t);
+  i_rcdNbr        const like(rcdNbr_t);
   i_file          const like(file_t);
   i_lib           const like(lib_t);
   i_mbr           const like(mbr_t);
@@ -572,7 +572,7 @@ endsr;
 begsr c_print;
 
   monitor;
-    peek65(i_rcdnbr
+    peek65(i_rcdNbr
           : i_file: i_lib: i_mbr: i_rcdfmt
           : yMsgId: yMsgDta);
     *in99 = bFalse;
@@ -879,7 +879,7 @@ endsr;
 begsr readrcd;
 
   if cio_chainwithrrn(hfile04
-                   : i_rcdnbr
+                   : i_rcdNbr
                    : bFalse
                    : io_buff
                    : io_nullmap) = bFalse;
@@ -918,7 +918,7 @@ begsr first;
   o_msgdta = *blanks;
 
   // - Kopffelder
-  $$rcdn = i_rcdnbr;
+  $$rcdn = i_rcdNbr;
 
   // - Darstellung der Subfile
   sflmde = '1';

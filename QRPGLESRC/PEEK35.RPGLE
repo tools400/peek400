@@ -58,7 +58,7 @@ dcl-s isError         char(1) inz(bFalse);
 //*******************************************************************
 
 dcl-pi peek35;
-  i_rcdnbr        const like(rcdnbr_t);
+  i_rcdNbr        const like(rcdNbr_t);
   i_buffer        const like(buffer_t);
   o_fldname             like(fieldnme_t);
   o_msgid               like(msgid_t);
@@ -133,7 +133,7 @@ begsr prf20;
     if (not %found(peekwrk));
     //  Hurra, eindeutige Numnmer ...
     else;
-      if (work_00_ds.rcdnbr = i_rcdnbr);
+      if (work_00_ds.rcdnbr = i_rcdNbr);
       //  ... auch gut, weil derselbe Datensatz
       else;
         //  ... Fehler, doppelter Sortierfolgen-Nr.

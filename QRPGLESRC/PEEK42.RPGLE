@@ -132,7 +132,7 @@ dcl-pi peek42;
   i_member        const like(mbr_t);
   i_rcdformat     const like(fmt_t);
   i_shortcmd      const like(shortcmd_t);
-  i_rcdnbr        const like(rcdnbr_t);
+  i_rcdNbr        const like(rcdNbr_t);
   o_execcmd       like(cmdbuffer_t);
   o_msgid         like(msgid_t);
   o_msgdta        like(msgdta_t);
@@ -231,7 +231,7 @@ endsr;
 begsr rpl_rrn;
 
   r_var   = '&R';
-  r_value = %trimr(%editc(i_rcdnbr: 'X'));
+  r_value = %trimr(%editc(i_rcdNbr: 'X'));
   exsr rpl_var;
 
 endsr;
@@ -388,7 +388,7 @@ endsr;
 begsr readrcd;
 
   if cio_chainwithrrn(hfile00
-                   : i_rcdnbr
+                   : i_rcdNbr
                    : bFalse
                    : io_buff
                    : io_nullmap) = bFalse;

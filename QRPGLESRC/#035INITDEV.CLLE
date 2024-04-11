@@ -181,6 +181,13 @@
                             DFTRDBCOL(&DEVLIB)
              ENDDO
 
+             /* ---------------------------------------------------- */
+             /*  Remove old binding directory entries                */
+             /* ---------------------------------------------------- */
+
+             DLTBNDDIR  BNDDIR(&DEVLIB/PEEK)
+             MONMSG     MSGID(CPF2110 CPF2105) /* Library/Object not found */
+             CRTBNDDIR  BNDDIR(&DEVLIB/PEEK) TEXT('Peek/400 Binding Directory')
 
              /* ---------------------------------------------------- */
              /*  Create PEEK compile program                         */

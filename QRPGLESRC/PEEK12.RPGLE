@@ -55,10 +55,10 @@ dcl-ds rcdl0200 likeds(rcdl0200_t) inz;
 
 dcl-s sfbot           like(int4_t) inz;
 
-dcl-s lastrcdnbr      like(rcdnbr_t) inz;
+dcl-s lastRcdNbr      like(rcdNbr_t) inz;
 dcl-s sflpage         like(int4_t) inz;
-dcl-s sflrec          like(sflpage   ) inz;
-dcl-s sfllastrcd      like(sflpage   ) inz;
+dcl-s sflrec          like(sflpage) inz;
+dcl-s sfllastrcd      like(sflpage) inz;
 dcl-c NBR_F_KEYS const(3);
 
 dcl-s peek21_name     like(pgmcalln_t) inz;
@@ -71,7 +71,7 @@ dcl-s ymsgid          char(7) inz(*blanks);
 dcl-s ymsgdta         char(512) inz(*blanks);
 
 //  PEEK23
-dcl-s yfkeys          char(18) dim(32)       inz(*blanks);
+dcl-s yfkeys          char(18) dim(32) inz(*blanks);
 dcl-s ynbrofkeys      like(int4_t) inz;
 
 /COPY QCOPYLE,PPEEK21
@@ -316,15 +316,15 @@ endsr;
 begsr pbfirstrcd;
 
   if (*in80 = *off);
-    lastrcdnbr = 0;
+    lastRcdNbr = 0;
   else;
 
     chain 1 pbsfl;
 
     if (not %found());
-      lastrcdnbr = 0;
+      lastRcdNbr = 0;
     else;
-      lastrcdnbr = recordnbr;
+      lastRcdNbr = recordNbr;
     endif;
   endif;
 
@@ -386,11 +386,11 @@ begsr pbfill;
   $$rcdl0200 = f_fmt;
   $$format = rcdl0200.r2fmtname;
   $$text = rcdl0200.r2text;
-  recordnbr = peek_01_ds.rcdNbr;
+  recordNbr = peek_01_ds.rcdNbr;
   fmtnbr = f_fmtnbr;
 
   *in80 = '1'; // SFLDSP
-  lastrcdnbr = peek_01_ds.rcdNbr;
+  lastRcdNbr = peek_01_ds.rcdNbr;
 
 endsr;
 
@@ -400,7 +400,7 @@ endsr;
 
 begsr pbsetll;
 
-  setll lastrcdnbr fpeekfmt;
+  setll lastRcdNbr fpeekfmt;
 
 endsr;
 
@@ -472,7 +472,7 @@ begsr first;
   exsr setscreen;
 
   // - Subfile füllen
-  lastrcdnbr = 1;
+  lastRcdNbr = 1;
   exsr pbinit;
   exsr pbsetll;
   exsr pbreadup;

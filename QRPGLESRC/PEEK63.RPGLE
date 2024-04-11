@@ -54,32 +54,32 @@
        dcl-c OPER_DELETE    const('*DELETE');
        dcl-c OPER_UNLOCK    const('*UNLOCK');
 
-       dcl-c ERROR_RRN      const(-1);
+       dcl-c ERROR_RRN      const(0);
 
-       dcl-pr clearerrormsg;
+       dcl-pr clearErrorMsg;
          io_hfile        likeds(hfile_t);
        end-pr;
 
-       dcl-pr clearbufferandnullmap;
+       dcl-pr clearBufferAndNullMap;
          i_rfile         const  likeds(rfile_t );
          io_rcdbuffer    like(rcdbuf_t);
          io_nullmap      like(nullmap_t)
             dim(NULL_MAP_SIZE);
        end-pr;
 
-       dcl-pr copyinnullmap;
+       dcl-pr copyInNullMap;
          i_rfile         const  likeds(rfile_t );
          io_nullmap      like(nullmap_t) dim(NULL_MAP_SIZE);
        end-pr;
 
        //  Returns the value of the specified mode parameter.
-       dcl-pr getmode varchar(16);
+       dcl-pr getMode varchar(16);
          i_mode          varchar(512) value;
          i_parm          varchar(16) value;
          i_default       varchar(16) value;
        end-pr;
 
-       dcl-pr seteof;
+       dcl-pr setEOF;
          io_hfile        likeds(hfile_t);
          i_operation     char(10) value;
        end-pr;
@@ -88,7 +88,7 @@
        //  Opens a given file.                                   (Body)     *
        //===================================================================*
 
-       dcl-proc cio_open export;
+       dcl-proc CIO_open export;
        dcl-pi *N like(bool_t);
          o_hfile                likeds(hfile_t);
          i_file          const  like(file_t);
@@ -133,7 +133,7 @@
        o_hfile.rcdformat = i_rcdformat;
        o_hfile.errno     = 0;
        o_hfile.lastoper  = OPER_OPEN;
-       o_hfile.arrseq    = getmode(%str(i_mode): 'arrseq': 'N');
+       o_hfile.arrseq    = getMode(%str(i_mode): 'arrseq': 'N');
        o_hfile.msgid     = '';
        o_hfile.msgdta    = '';
 
@@ -145,7 +145,7 @@
        //  Checks whether the file identified by i_hFile is open or not.
        //===================================================================*
 
-       dcl-proc cio_isopen export;
+       dcl-proc CIO_isOpen export;
        dcl-pi *N like(bool_t);
          i_hfile         const  likeds(hfile_t);
        end-pi;
@@ -163,13 +163,13 @@
        //  Returns the name of the file identified by i_hFile.
        //===================================================================*
 
-       dcl-proc cio_getfile export;
+       dcl-proc CIO_getFile export;
        dcl-pi *N like(file_t);
          i_hfile         const  likeds(hfile_t);
        end-pi;
        // ------------------------------------------------------------------------
 
-       if (cio_isopen(i_hfile) = bFalse);
+       if (CIO_isOpen(i_hfile) = bFalse);
           return '';
        endif;
 
@@ -182,13 +182,13 @@
        //  identified by i_hFile.
        //===================================================================*
 
-       dcl-proc cio_getlibrary export;
+       dcl-proc CIO_getLibrary export;
        dcl-pi *N like(lib_t);
          i_hfile         const  likeds(hfile_t);
        end-pi;
        // ------------------------------------------------------------------------
 
-       if (cio_isopen(i_hfile) = bFalse);
+       if (CIO_isOpen(i_hfile) = bFalse);
           return '';
        endif;
 
@@ -200,13 +200,13 @@
        //  Returns the name of the member of the file identified by i_hFile.
        //===================================================================*
 
-       dcl-proc cio_getmember export;
+       dcl-proc CIO_getMember export;
        dcl-pi *N like(lib_t);
          i_hfile         const  likeds(hfile_t);
        end-pi;
        // ------------------------------------------------------------------------
 
-       if (cio_isopen(i_hfile) = bFalse);
+       if (CIO_isOpen(i_hfile) = bFalse);
           return '';
        endif;
 
@@ -219,13 +219,13 @@
        //  by i_hFile.
        //===================================================================*
 
-       dcl-proc cio_getrecordformat export;
+       dcl-proc CIO_getRecordFormat export;
        dcl-pi *N char(10);
          i_hfile         const  likeds(hfile_t);
        end-pi;
        // ------------------------------------------------------------------------
 
-       if (cio_isopen(i_hfile) = bFalse);
+       if (CIO_isOpen(i_hfile) = bFalse);
           return '';
        endif;
 
@@ -237,7 +237,7 @@
        //  Returns the record length of the file identified by i_hFile.
        //===================================================================*
 
-       dcl-proc cio_getrecordlength export;
+       dcl-proc CIO_getRecordLength export;
        dcl-pi *N int(10);
          i_hfile         const  likeds(hfile_t);
        end-pi;
@@ -246,8 +246,8 @@
        based(i_hfile.fd);
        // ----------------------------------------------------------------------
 
-       if (cio_isopen(i_hfile) = bFalse);
-          return -1;
+       if (CIO_isOpen(i_hfile) = bFalse);
+          return ERROR_RRN;
        endif;
 
        return rfile.buflen;
@@ -259,8 +259,8 @@
        //  identified by i_hFile.
        //===================================================================*
 
-       dcl-proc cio_getrrn export;
-       dcl-pi *N int(10);
+       dcl-proc CIO_getRrn export;
+       dcl-pi *N like(rcdNbr_t);
          i_hfile         const  likeds(hfile_t);
        end-pi;
 
@@ -268,8 +268,8 @@
        dcl-ds riofb likeds(riofb_t) based(priofb);
        // ----------------------------------------------------------------------
 
-       if (cio_isopen(i_hfile) = bFalse);
-          return -1;
+       if (CIO_isOpen(i_hfile) = bFalse);
+          return ERROR_RRN;
        endif;
 
        priofb = %addr(rfile.riofb);
@@ -283,7 +283,7 @@
        //  identified by i_hFile.
        //===================================================================*
 
-       dcl-proc cio_getmbrnbr export;
+       dcl-proc CIO_getMbrNbr export;
        dcl-pi *N int(10);
          i_hfile         const  likeds(hfile_t);
        end-pi;
@@ -292,8 +292,8 @@
        dcl-ds xxiofb_db likeds(xxiofb_db_t) based(pxxiofb_db);
        // ----------------------------------------------------------------------
 
-       if (cio_isopen(i_hfile) = bFalse);
-          return -1;
+       if (CIO_isOpen(i_hfile) = bFalse);
+          return ERROR_RRN;
        endif;
 
        pxxiofb = riofbk(i_hfile.fd);
@@ -308,7 +308,7 @@
        //  identified by i_hFile.
        //===================================================================*
 
-       dcl-proc cio_getinfds export;
+       dcl-proc CIO_getInfDS export;
        dcl-pi *N likeds(infds_t);
          i_hfile         const  likeds(hfile_t);
        end-pi;
@@ -318,14 +318,14 @@
        // ----------------------------------------------------------------------
 
        clear infds;
-       infds.isOpen  = cio_isopen(i_hfile);
-       infds.file    = cio_getfile(i_hfile);
-       infds.library = cio_getlibrary(i_hfile);
-       infds.rcdlen  = cio_getrecordlength(i_hfile);
-       infds.member  = cio_getmember(i_hfile);
-       infds.rcdfmt  = cio_getrecordformat(i_hfile);
-       infds.mbrnbr  = cio_getmbrnbr(i_hfile);
-       infds.rcdnbr  = cio_getrrn(i_hfile);
+       infds.isOpen  = CIO_isOpen(i_hfile);
+       infds.file    = CIO_getFile(i_hfile);
+       infds.library = CIO_getLibrary(i_hfile);
+       infds.rcdlen  = CIO_getRecordLength(i_hfile);
+       infds.member  = CIO_getMember(i_hfile);
+       infds.rcdfmt  = CIO_getRecordFormat(i_hfile);
+       infds.mbrnbr  = CIO_getMbrNbr(i_hfile);
+       infds.rcdnbr  = CIO_getRrn(i_hfile);
 
        return infds;
 
@@ -335,7 +335,7 @@
        //  Returns TRUE if the file is in error.
        //===================================================================*
 
-       dcl-proc cio_iserror export;
+       dcl-proc CIO_isError export;
        dcl-pi *N like(bool_t);
          i_hfile         const  likeds(hfile_t);
        end-pi;
@@ -353,7 +353,7 @@
        //  Sets an error.
        //===================================================================*
 
-       dcl-proc cio_seterrormsg export;
+       dcl-proc CIO_setErrorMsg export;
        dcl-pi *N;
          io_hfile        likeds(hfile_t);
          i_msgid         const  like(msgid_t);
@@ -361,7 +361,7 @@
        end-pi;
        // ------------------------------------------------------------------------
 
-       io_hfile.errno  = -1;
+       io_hfile.errno  = ERROR_RRN;
        io_hfile.msgid  = i_msgid;
        io_hfile.msgdta = i_msgdta;
 
@@ -371,7 +371,7 @@
        //  Gets the current error message.
        //===================================================================*
 
-       dcl-proc cio_geterrormsg export;
+       dcl-proc CIO_getErrorMsg export;
        dcl-pi *N;
          i_hfile         const  likeds(hfile_t);
          o_msgid         like(msgid_t);
@@ -386,8 +386,8 @@
           o_msgdta = i_hfile.msgdta;
        else;
           clear usr0012;
-          usr0012.var1 = cio_geterrortext(i_hfile);
-          usr0012.var2 = cio_geterror(i_hfile);
+          usr0012.var1 = CIO_getErrorText(i_hfile);
+          usr0012.var2 = CIO_getError(i_hfile);
           o_msgid  = 'USR0012';
           o_msgdta = usr0012;
        endif;
@@ -398,7 +398,7 @@
        //  Returns the latest error number associated to file i_hFile.
        //===================================================================*
 
-       dcl-proc cio_geterror export;
+       dcl-proc CIO_getError export;
        dcl-pi *N int(10);
          i_hfile         const  likeds(hfile_t);
        end-pi;
@@ -412,7 +412,7 @@
        //  Returns the latest error text associated to file i_hFile.
        //===================================================================*
 
-       dcl-proc cio_geterrortext export;
+       dcl-proc CIO_getErrorText export;
        dcl-pi *N varchar(512);
          i_hfile         const  likeds(hfile_t);
        end-pi;
@@ -430,10 +430,10 @@
        //  Reads the record identified by i_rrn from a given file.
        //===================================================================*
 
-       dcl-proc cio_chainwithrrn export;
+       dcl-proc CIO_chainWithRrn export;
        dcl-pi *N like(bool_t);
          io_hfile        likeds(hfile_t);
-         i_rrn           const  like(rcdnbr_t);
+         i_rrn           const  like(rcdNbr_t);
          i_dolock        const  like(bool_t);
          io_rcdbuffer    like(rcdbuf_t);
          io_nullmap      like(nullmap_t) dim(NULL_MAP_SIZE);
@@ -446,9 +446,9 @@
        // ----------------------------------------------------------------------
 
        p_clrerrno();
-       clearerrormsg(io_hfile);
+       clearErrorMsg(io_hfile);
 
-       clearbufferandnullmap(rfile: io_rcdbuffer: io_nullmap);
+       clearBufferAndNullMap(rfile: io_rcdbuffer: io_nullmap);
 
        if (i_dolock = bTrue);
           options = dft;
@@ -464,7 +464,7 @@
           return bFalse;
        endif;
 
-       copyinnullmap(rfile: io_nullmap);
+       copyInNullMap(rfile: io_nullmap);
 
        io_hfile.lastoper = OPER_CHAIN_RRN;
        io_hfile.errno = 0;
@@ -477,7 +477,7 @@
        //  Reads the record identified by i_key from a given file.
        //===================================================================*
 
-       dcl-proc cio_chainwithkey export;
+       dcl-proc CIO_chainWithKey export;
        dcl-pi *N like(bool_t);
          io_hfile        likeds(hfile_t);
          i_key           const  like(keybuf_t);
@@ -495,9 +495,9 @@
        // ----------------------------------------------------------------------
 
        p_clrerrno();
-       clearerrormsg(io_hfile);
+       clearErrorMsg(io_hfile);
 
-       clearbufferandnullmap(rfile: io_rcdbuffer: io_nullmap);
+       clearBufferAndNullMap(rfile: io_rcdbuffer: io_nullmap);
 
        if (i_dolock = bTrue);
           options = f_bitor(dft: key_eq);
@@ -516,7 +516,7 @@
           return bFalse;
        endif;
 
-       copyinnullmap(rfile: io_nullmap);
+       copyInNullMap(rfile: io_nullmap);
 
        io_hfile.lastoper = OPER_CHAIN_KEY;
        io_hfile.errno = 0;
@@ -529,10 +529,10 @@
        //  Positions the file right before the record identifed by i_rrn.
        //===================================================================*
 
-       dcl-proc cio_setllwithrrn export;
+       dcl-proc CIO_setllWithRrn export;
        dcl-pi *N like(bool_t);
          io_hfile        likeds(hfile_t);
-         i_rrn           const  like(rcdnbr_t);
+         i_rrn           const  like(rcdNbr_t);
        end-pi;
 
        dcl-s errornbr int(10) inz;
@@ -542,7 +542,7 @@
        dcl-ds riofb likeds(riofb_t) based(priofb);
        // ----------------------------------------------------------------------
 
-       clearerrormsg(io_hfile);
+       clearErrorMsg(io_hfile);
 
        // Setzen Datenzeiger auf angegebene Satznummer
        // (auch auf gelöschte Datensatze)
@@ -595,7 +595,7 @@
        //  Positions the file right before the record identifed by i_key.
        //===================================================================*
 
-       dcl-proc cio_setllwithkey export;
+       dcl-proc CIO_setllWithKey export;
        dcl-pi *N like(bool_t);
          io_hfile        likeds(hfile_t);
          i_key           const  like(keybuf_t);
@@ -610,7 +610,7 @@
        // ----------------------------------------------------------------------
 
        p_clrerrno();
-       clearerrormsg(io_hfile);
+       clearErrorMsg(io_hfile);
 
        // Setzen Datenzeiger auf angegebenen Schlüssel
        key = i_key;
@@ -640,10 +640,10 @@
        //  Positions the file right after the record identifed by i_rrn.
        //===================================================================*
 
-       dcl-proc cio_setgtwithrrn export;
+       dcl-proc CIO_setgtWithRrn export;
        dcl-pi *N like(bool_t);
          io_hfile        likeds(hfile_t);
-         i_rrn           const  like(rcdnbr_t);
+         i_rrn           const  like(rcdNbr_t);
        end-pi;
 
        dcl-s options         uns(10) inz;
@@ -653,7 +653,7 @@
        // ----------------------------------------------------------------------
 
        p_clrerrno();
-       clearerrormsg(io_hfile);
+       clearErrorMsg(io_hfile);
 
        // Setzen Datenzeiger auf angegebene Satznummer
        // (auch auf gelöschte Datensatze)
@@ -698,7 +698,7 @@
        //  Positions the file right after the record identifed by i_key.
        //===================================================================*
 
-       dcl-proc cio_setgtwithkey export;
+       dcl-proc CIO_setgtWithKey export;
        dcl-pi *N like(bool_t);
          io_hfile        likeds(hfile_t);
          i_key           const  like(keybuf_t);
@@ -713,7 +713,7 @@
        // ----------------------------------------------------------------------
 
        p_clrerrno();
-       clearerrormsg(io_hfile);
+       clearErrorMsg(io_hfile);
 
        // Setzen Datenzeiger auf angegebenen Schlüssel
        key = i_key;
@@ -743,7 +743,7 @@
        //  Returns the next record from the file.
        //===================================================================*
 
-       dcl-proc cio_read export;
+       dcl-proc CIO_read export;
        dcl-pi *N like(bool_t);
          io_hfile        likeds(hfile_t);
          i_dolock        const  like(bool_t);
@@ -761,9 +761,9 @@
        // ----------------------------------------------------------------------
 
        p_clrerrno();
-       clearerrormsg(io_hfile);
+       clearErrorMsg(io_hfile);
 
-       clearbufferandnullmap(rfile: io_rcdbuffer: io_nullmap);
+       clearBufferAndNullMap(rfile: io_rcdbuffer: io_nullmap);
 
        if (i_dolock = bTrue);
           options = dft;
@@ -806,7 +806,7 @@
           return bTrue;   // Return "EOF" to caller
        endsl;
 
-       copyinnullmap(rfile: io_nullmap);
+       copyInNullMap(rfile: io_nullmap);
        io_hfile.lastoper = OPER_READ;
        io_hfile.errno = 0;
 
@@ -818,7 +818,7 @@
        //  Returns the previous record from the file.
        //===================================================================*
 
-       dcl-proc cio_readp export;
+       dcl-proc CIO_readp export;
        dcl-pi *N like(bool_t);
          io_hfile        likeds(hfile_t);
          i_dolock        const  like(bool_t);
@@ -836,9 +836,9 @@
        // ----------------------------------------------------------------------
 
        p_clrerrno();
-       clearerrormsg(io_hfile);
+       clearErrorMsg(io_hfile);
 
-       clearbufferandnullmap(rfile: io_rcdbuffer: io_nullmap);
+       clearBufferAndNullMap(rfile: io_rcdbuffer: io_nullmap);
 
        if (i_dolock = bTrue);
           options = dft;
@@ -882,7 +882,7 @@
           return bTrue;   // Return "EOF" to caller
        endsl;
 
-       copyinnullmap(rfile: io_nullmap);
+       copyInNullMap(rfile: io_nullmap);
        io_hfile.lastoper = OPER_READP;
        io_hfile.errno = 0;
 
@@ -894,7 +894,7 @@
        //  Deletes the record that is currently locked for update.
        //===================================================================*
 
-       dcl-proc cio_delete export;
+       dcl-proc CIO_delete export;
        dcl-pi *N like(bool_t);
          io_hfile        likeds(hfile_t);
        end-pi;
@@ -904,7 +904,7 @@
        // ----------------------------------------------------------------------
 
        p_clrerrno();
-       clearerrormsg(io_hfile);
+       clearErrorMsg(io_hfile);
 
        priofb = rdelete(io_hfile.fd);
        if (riofb.numbyt = 0);
@@ -923,7 +923,7 @@
        //  Releases the lock on the currently locked record.
        //===================================================================*
 
-       dcl-proc cio_unlock export;
+       dcl-proc CIO_unlock export;
        dcl-pi *N like(bool_t);
          io_hfile        likeds(hfile_t);
        end-pi;
@@ -934,7 +934,7 @@
        // ------------------------------------------------------------------------
 
        p_clrerrno();
-       clearerrormsg(io_hfile);
+       clearErrorMsg(io_hfile);
 
        rc = rrlslck(io_hfile.fd);
        if (rc = 0);
@@ -953,14 +953,14 @@
        //  Closes the file identifed by io_hFile.
        //===================================================================*
 
-       dcl-proc cio_close export;
+       dcl-proc CIO_close export;
        dcl-pi *N like(bool_t);
          io_hfile        likeds(hfile_t);
        end-pi;
        // ------------------------------------------------------------------------
 
        p_clrerrno();
-       clearerrormsg(io_hfile);
+       clearErrorMsg(io_hfile);
 
        if (rclose(io_hfile.fd) <> 0);
           io_hfile.errno = f_errno();
@@ -981,13 +981,13 @@
        //  === Used by SQL_nextRow() ===
        //===================================================================*
 
-       dcl-proc cio_seteof_read export;
+       dcl-proc CIO_setEOF_read export;
        dcl-pi *N;
          io_hfile        likeds(hfile_t);
        end-pi;
        // ------------------------------------------------------------------------
 
-       seteof(io_hfile: OPER_READ);
+       setEOF(io_hfile: OPER_READ);
 
        end-proc;
 
@@ -996,13 +996,13 @@
        //  === Used by SQL_previousRow() ===
        //===================================================================*
 
-       dcl-proc cio_seteof_readp export;
+       dcl-proc CIO_setEOF_readp export;
        dcl-pi *N;
          io_hfile        likeds(hfile_t);
        end-pi;
        // ------------------------------------------------------------------------
 
-       seteof(io_hfile: OPER_READP);
+       setEOF(io_hfile: OPER_READP);
 
        end-proc;
 
@@ -1011,7 +1011,7 @@
        //  Sets the EOF indicator for a READ or READP operation.
        //===================================================================*
 
-       dcl-proc seteof;
+       dcl-proc setEOF;
        dcl-pi *N;
          io_hfile        likeds(hfile_t);
          i_operation     char(10) value;
@@ -1036,7 +1036,7 @@
        //  Clears the error information.
        //===================================================================*
 
-       dcl-proc clearerrormsg;
+       dcl-proc clearErrorMsg;
        dcl-pi *N;
          io_hfile        likeds(hfile_t);
        end-pi;
@@ -1053,7 +1053,7 @@
        //  Clears the file IO-buffer and NULL-map.
        //===================================================================*
 
-       dcl-proc clearbufferandnullmap;
+       dcl-proc clearBufferAndNullMap;
        dcl-pi *N;
          i_rfile         const  likeds(rfile_t );
        io_rcdbuffer    like(rcdbuf_t);
@@ -1077,7 +1077,7 @@
        //  Copies the file IN-NULL-map.
        //===================================================================*
 
-       dcl-proc copyinnullmap;
+       dcl-proc copyInNullMap;
        dcl-pi *N;
          i_rfile         const  likeds(rfile_t );
          io_nullmap      like(nullmap_t) dim(NULL_MAP_SIZE);
@@ -1098,7 +1098,7 @@
        //  Returns the value of the specified mode parameter.
        //===================================================================*
 
-       dcl-proc getmode;
+       dcl-proc getMode;
        dcl-pi *N varchar(16);
          i_mode          varchar(512) value;
          i_parm          varchar(16) value;

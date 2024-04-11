@@ -77,12 +77,12 @@ dcl-s string_t        char(32767) template;
 dcl-s varString_t     varchar(2048) template;
 
 dcl-ds rcdbuffer_t qualified template;
-  sbcs            char(32766);
-  ucs2            ucs2(16383) overlay(sbcs);
+  sbcs                char(32766);
+  ucs2                ucs2(16383) overlay(sbcs);
 end-ds;
 dcl-c RCD_BUFF_LEN const(32766);
 
-dcl-s rcdnbr_t        int(10) template;
+dcl-s rcdNbr_t        uns(10) template;
 dcl-s nullmap_t       zoned(1) dim(NULL_MAP_SIZE);
 dcl-c NULL_MAP_SIZE   const(8000);
 

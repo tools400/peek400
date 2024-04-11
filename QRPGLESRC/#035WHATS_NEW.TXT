@@ -938,4 +938,10 @@
        - Unterstützung für neuen Datentyp 'Boolean' eingebaut.
   *  PEEK58
        - Unterstützung für neuen Datentyp 'Boolean' eingebaut.
-       
+
+  Version 4.0.6
+  =============
+
+  *  PEEK*
+       - RRN geändert von int(10) auf uns(10) zur Korrektur des Fehler:
+         MCH1210 - Receiver value too small to hold result.

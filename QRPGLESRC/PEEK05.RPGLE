@@ -203,7 +203,7 @@ dcl-pr f_int           zoned(20);
 end-pr;
 
 dcl-pr f_chain00       char(1);
-  i_rrn           value  like(rcdnbr_t);
+  i_rrn           value  like(rcdNbr_t);
   i_file          value  like(file_t);
   i_lib           value  like(lib_t);
   i_mbr           value  like(mbr_t);
@@ -211,7 +211,7 @@ dcl-pr f_chain00       char(1);
 end-pr;
 
 dcl-pr f_chain04       char(1);
-  i_rrn           value  like(rcdnbr_t);
+  i_rrn           value  like(rcdNbr_t);
   i_file          value  like(file_t);
   i_lib           value  like(lib_t);
   i_mbr           value  like(mbr_t);
@@ -260,7 +260,7 @@ dcl-s yCopyright      like(copyrght_t) inz(COPYRIGHT);
 dcl-s yfmtnbr         int(5) inz;
 
 dcl-s yHeaderType     char(10) inz;
-dcl-s yRcdNbr         inz(0 ) like(rcdnbr_t);
+dcl-s yRcdNbr         inz(0) like(rcdNbr_t);
 dcl-s yFunction       char(10) inz;
 dcl-s yCommitLvl      like(commitLvl) inz('0');
 dcl-s yIsUpdKey       inz(bFalse)  like(isUpdKey );
@@ -395,8 +395,8 @@ dcl-s sflmode         char(10) inz;
 dcl-s sflpinrnge      like(int4_t) inz;
 
 dcl-c COPYRIGHT const('1997-2024, Thomas Raddatz - PEEK v4.0.4');
-dcl-c RELEASE const('Stand: 27.02.2024');
-dcl-c VERSION const('V04R00M05');
+dcl-c RELEASE const('Stand: 11.04.2024');
+dcl-c VERSION const('V04R00M06');
 
 dcl-s l#file          like(##file)    inz;
 dcl-s l#library       like(##library) inz;
@@ -515,7 +515,7 @@ dcl-s r#keyval        like(##key   )   inz;
 dcl-s pin#field       char(10) inz;
 //  Datensatz-Nr für SETLL und SETGG zum füllen der Subfile
 dcl-s wrk#readdn      like(sflpage)    inz(0);
-dcl-s wrk#rcdnbr      like(rcdnbr_t)   inz(0);
+dcl-s wrk#rcdnbr      like(rcdNbr_t)   inz(0);
 dcl-ds *N;
   wrk#keyval      like(keybuf_t) inz;
 end-ds;
@@ -525,14 +525,14 @@ dcl-s wrk#seqnbr      inz(0 )   like(f_seq);
 dcl-s wrk#recno       inz(0 )   like(sflrec132);
 dcl-s wrk#sfpau       inz            like(sfpau);
 //  Umschalten der Sortierung
-dcl-s last#rcdnr      like(rcdnbr_t)   inz(0);
+dcl-s last#rcdnr      like(rcdNbr_t)   inz(0);
 //  Farbattribute einsetzen
 dcl-s wrk#ofs         like(int4_t) inz;
 //  Felder mit mehr als 512 Zeichen im Datensatz
 dcl-s isfld512        char(1) inz(bFalse);
 //  Felder für Suchfunktion
 dcl-s srchmode        char(10) inz('*NEW');
-dcl-s srchfndrcd      like(rcdnbr_t)  inz(0 );
+dcl-s srchfndrcd      like(rcdNbr_t)  inz(0 );
 dcl-s srchfield       char(10) inz;
 dcl-s srchop          char(10) inz;
 dcl-s srcharg         char(63) inz;
@@ -8165,7 +8165,7 @@ end-proc;
 
 dcl-proc f_chain00;
   dcl-pi *N              char(1);
-    i_rrn           value  like(rcdnbr_t);
+    i_rrn           value  like(rcdNbr_t);
     i_file          value  like(file_t);
     i_lib           value  like(lib_t);
     i_mbr           value  like(mbr_t);
@@ -8247,7 +8247,7 @@ end-proc;
 
 dcl-proc f_chain04;
   dcl-pi *N              char(1);
-    i_rrn           value  like(rcdnbr_t);
+    i_rrn           value  like(rcdNbr_t);
     i_file          value  like(file_t);
     i_lib           value  like(lib_t);
     i_mbr           value  like(mbr_t);
