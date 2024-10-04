@@ -44,7 +44,7 @@ dcl-f peekfld keyed usropn prefix(p_);
 /COPY QCOPYLE,PPEEK53
 /COPY QCOPYLE,PPEEK58
 
-dcl-pr p_main;
+dcl-pr main;
   i_file          value  like(gi_file   );
   i_lib           value  like(gi_lib    );
   i_mbr           value  like(gi_mbr    );
@@ -64,95 +64,6 @@ dcl-pr p_main;
   i_iskeylower    value  like(gi_iskeylower);
   o_msgid         like(go_msgid  );
   o_msgdta        like(go_msgdta );
-end-pr;
-
-dcl-pr p_clrenv;
-  i_file          like(gi_file);
-  i_lib           like(gi_lib);
-  i_mbr           like(gi_mbr);
-  o_msgid         like(go_msgid);
-  o_msgdta        like(go_msgdta);
-end-pr;
-
-dcl-pr p_file;
-  i_file          like(gi_file);
-  i_lib           like(gi_lib);
-  i_filex         like(gi_file);
-end-pr;
-
-dcl-pr p_lib;
-  i_file          like(gi_file);
-  i_lib           like(gi_lib);
-  i_libx          like(gi_lib);
-end-pr;
-
-dcl-pr p_mbr;
-  i_file          like(gi_file);
-  i_lib           like(gi_lib);
-  i_mbr           like(gi_mbr);
-end-pr;
-
-dcl-pr p_rcdfmt;
-  i_file          like(gi_file);
-  i_lib           like(gi_lib);
-  i_rcdfmt        like(gi_rcdfmt);
-end-pr;
-
-dcl-pr p_rcdfmtid;
-  i_file          like(gi_file);
-  i_lib           like(gi_lib);
-  i_rcdfmtid      like(gi_rcdfmtid);
-end-pr;
-
-dcl-pr f_checkautosave
-       like(bool_t);
-  i_file          like(gi_file);
-  i_lib           like(gi_lib);
-end-pr;
-
-dcl-pr p_accmode;
-  i_file          like(gi_file);
-  i_lib           like(gi_lib);
-  i_accmode       like(gi_accmode);
-end-pr;
-
-dcl-pr p_sqlsel;
-  i_file          like(gi_file);
-  i_lib           like(gi_lib);
-  i_sqlsel        like(gi_sqlsel );
-end-pr;
-
-dcl-pr p_sqlord;
-  i_file          like(gi_file);
-  i_lib           like(gi_lib);
-  i_sqlord        like(gi_sqlord);
-end-pr;
-
-dcl-pr p_iskeylower;
-  i_file          like(gi_file);
-  i_lib           like(gi_lib);
-  i_iskeylower    like(gi_iskeylower);
-end-pr;
-
-dcl-pr p_wrtpinr;
-  i_file          like(gi_file);
-  i_lib           like(gi_lib);
-  i_pintabr       like(gi_pintabr)
-       dim(12);
-  i_nbrpinr       like(gi_nbrpinr);
-end-pr;
-
-dcl-pr p_wrtpinc;
-  i_file          like(gi_file);
-  i_lib           like(gi_lib);
-  i_pintabc       like(gi_pintabc)
-       dim(12);
-  i_nbrpinc       like(gi_nbrpinc);
-end-pr;
-
-dcl-pr p_wrtlyt;
-  i_file          like(gi_file);
-  i_lib           like(gi_lib);
 end-pr;
 
 //*******************************************************************
@@ -188,7 +99,7 @@ dcl-ds p_key1 likerec(fpeekfld: *key);
 ceehdlr(%paddr('errorHandler')
        : *null: *omit);
 
-p_main(gi_file    :
+main(gi_file    :
       gi_lib     :
       gi_mbr     :
       gi_rcdfmt  :
@@ -214,7 +125,7 @@ return;
 //  Prozedur:  p_crtUsrSg                                 (Body)     *
 //===================================================================*
 
-dcl-proc p_main;
+dcl-proc main;
   dcl-pi *N;
     i_file          value  like(gi_file   );
     i_lib           value  like(gi_lib    );
@@ -286,7 +197,7 @@ dcl-proc p_main;
   if (i_isautosave = bTrue);
     open(e) peekenv;
     if not %error();
-      cansave =  f_checkautosave(pfile: plib);
+      cansave =  checkAutoSave(pfile: plib);
       close peekenv;
     else;
       //     Fehler beim Öffnen aufgetreten
@@ -305,7 +216,7 @@ dcl-proc p_main;
   //  Löschen alte Daten ...
   if (cansave = bTrue);
 
-    p_clrenv(i_envfile  :
+    clearEnvironment(i_envfile  :
             i_envlib   :
             penvmbr    :
             o_msgid    :
@@ -317,62 +228,62 @@ dcl-proc p_main;
       open peekenv;
 
       //  Ausgeben AccessMode ...
-      p_accmode(pfile     :
+      writeAccessMode(pfile     :
                plib      :
                i_accmode );
 
       //  Ausgeben Datei ...
-      p_file(pfile  :
+      writeFile(pfile  :
             plib   :
             i_file );
 
       //  Ausgeben Bibliothek ...
-      p_lib(pfile :
+      writeLibrary(pfile :
            plib  :
            i_lib );
 
       //  Ausgeben Teildatei ...
-      p_mbr(pfile :
+      writeMember(pfile :
            plib  :
            i_mbr );
 
       //  Ausgeben Satzformat ...
-      p_rcdfmt(pfile    :
+      writeRecordFormat(pfile    :
               plib     :
               i_rcdfmt );
 
       //  Ausgeben Satzformat-ID ...
-      p_rcdfmtid(pfile     :
+      writeRecordFormatID(pfile     :
                 plib      :
                 i_rcdfmtid);
 
       //  Ausgeben SqlSelect ...
-      p_sqlsel(pfile     :
+      writeSQLSelect(pfile     :
               plib      :
               i_sqlsel  );
 
       //  Ausgeben SqlOrder ...
-      p_sqlord(pfile     :
+      writeSQLOrder(pfile     :
               plib      :
               i_sqlord  );
 
       //  Ausgeben isKeyLower ...
-      p_iskeylower(pfile       :
+      writeIsKeyLowerCase(pfile       :
                   plib        :
                   i_iskeylower);
 
       //  Ausgeben Layout ...
-      p_wrtlyt(pfile     :
+      writeLayout(pfile     :
               plib      );
 
       //  Ausgeben Pin-Record ...
-      p_wrtpinr(pfile    :
+      writePinnedRecords(pfile    :
                plib     :
                i_pintabr:
                i_nbrpinr);
 
       //  Ausgeben Pin-Column ...
-      p_wrtpinc(pfile    :
+      writePinnedColumns(pfile    :
                plib     :
                i_pintabc:
                i_nbrpinc);
@@ -399,8 +310,8 @@ end-proc;
 //  Prozedur:  p_clrEnv                                   (Body)     *
 //===================================================================*
 
-dcl-proc p_clrenv;
-  dcl-pi *N;
+dcl-proc clearEnvironment;
+  dcl-pi *N extproc(*dclcase);
     i_envfile       like(gi_envfile);
     i_envlib        like(gi_envlib );
     i_envmbr        like(gi_envmbr );
@@ -429,8 +340,8 @@ end-proc;
 //  Prozedur:  p_file                                     (Body)     *
 //===================================================================*
 
-dcl-proc p_file;
-  dcl-pi *N;
+dcl-proc writeFile;
+  dcl-pi *N extproc(*dclcase);
     i_file          like(gi_file   );
     i_lib           like(gi_lib    );
     i_filex         like(gi_file   );
@@ -462,8 +373,8 @@ end-proc;
 //  Prozedur:  p_lib                                      (Body)     *
 //===================================================================*
 
-dcl-proc p_lib;
-  dcl-pi *N;
+dcl-proc writeLibrary;
+  dcl-pi *N extproc(*dclcase);
     i_file          like(gi_file   );
     i_lib           like(gi_lib    );
     i_libx          like(gi_lib    );
@@ -495,8 +406,8 @@ end-proc;
 //  Prozedur:  p_mbr                                      (Body)     *
 //===================================================================*
 
-dcl-proc p_mbr;
-  dcl-pi *N;
+dcl-proc writeMember;
+  dcl-pi *N extproc(*dclcase);
     i_file          like(gi_file   );
     i_lib           like(gi_lib    );
     i_mbr           like(gi_mbr    );
@@ -528,8 +439,8 @@ end-proc;
 //  Prozedur:  p_rcdFmt                                   (Body)     *
 //===================================================================*
 
-dcl-proc p_rcdfmt;
-  dcl-pi *N;
+dcl-proc writeRecordFormat;
+  dcl-pi *N extproc(*dclcase);
     i_file          like(gi_file   );
     i_lib           like(gi_lib    );
     i_rcdfmt        like(gi_rcdfmt );
@@ -561,8 +472,8 @@ end-proc;
 //  Prozedur:  p_rcdFmtID                                 (Body)     *
 //===================================================================*
 
-dcl-proc p_rcdfmtid;
-  dcl-pi *N;
+dcl-proc writeRecordFormatID;
+  dcl-pi *N extproc(*dclcase);
     i_file          like(gi_file    );
     i_lib           like(gi_lib     );
     i_rcdfmtid      like(gi_rcdfmtid);
@@ -594,8 +505,8 @@ end-proc;
 //  Prozedur:  f_checkAutoSave                            (Body)     *
 //===================================================================*
 
-dcl-proc f_checkautosave;
-  dcl-pi *N        like(bool_t);
+dcl-proc checkAutoSave;
+  dcl-pi *N like(bool_t) extproc(*dclcase);
     i_file          like(gi_file   );
     i_lib           like(gi_lib    );
   end-pi;
@@ -667,8 +578,8 @@ end-proc;
 //  Prozedur:  p_accMode                                  (Body)     *
 //===================================================================*
 
-dcl-proc p_accmode;
-  dcl-pi *N;
+dcl-proc writeAccessMode;
+  dcl-pi *N extproc(*dclcase);
     i_file          like(gi_file   );
     i_lib           like(gi_lib    );
     i_accmode       like(gi_accmode);
@@ -700,8 +611,8 @@ end-proc;
 //  Prozedur:  p_sqlSel                                   (Body)     *
 //===================================================================*
 
-dcl-proc p_sqlsel;
-  dcl-pi *N;
+dcl-proc writeSQLSelect;
+  dcl-pi *N extproc(*dclcase);
     i_file          like(gi_file   );
     i_lib           like(gi_lib    );
     i_sqlsel        like(gi_sqlsel );
@@ -748,8 +659,8 @@ end-proc;
 //  Prozedur:  p_sqlOrd                                   (Body)     *
 //===================================================================*
 
-dcl-proc p_sqlord;
-  dcl-pi *N;
+dcl-proc writeSQLOrder;
+  dcl-pi *N extproc(*dclcase);
     i_file          like(gi_file   );
     i_lib           like(gi_lib    );
     i_sqlord        like(gi_sqlord );
@@ -798,8 +709,8 @@ end-proc;
 //  Prozedur:  p_isKeyLower                               (Body)     *
 //===================================================================*
 
-dcl-proc p_iskeylower;
-  dcl-pi *N;
+dcl-proc writeIsKeyLowerCase;
+  dcl-pi *N extproc(*dclcase);
     i_file          like(gi_file       );
     i_lib           like(gi_lib        );
     i_iskeylower    like(gi_iskeylower );
@@ -831,8 +742,8 @@ end-proc;
 //  Prozedur:  p_wrtPinR                                  (Body)     *
 //===================================================================*
 
-dcl-proc p_wrtpinr;
-  dcl-pi *N;
+dcl-proc writePinnedRecords;
+  dcl-pi *N extproc(*dclcase);
     i_file          like(gi_file   );
     i_lib           like(gi_lib    );
     i_pintabr       like(gi_pintabr)
@@ -869,8 +780,8 @@ end-proc;
 //  Prozedur:  p_wrtPinC                                  (Body)     *
 //===================================================================*
 
-dcl-proc p_wrtpinc;
-  dcl-pi *N;
+dcl-proc writePinnedColumns;
+  dcl-pi *N extproc(*dclcase);
     i_file          like(gi_file   );
     i_lib           like(gi_lib    );
     i_pintabc       like(gi_pintabc)
@@ -907,8 +818,8 @@ end-proc;
 //  Prozedur:  p_wrtLyt                                   (Body)     *
 //===================================================================*
 
-dcl-proc p_wrtlyt;
-  dcl-pi *N;
+dcl-proc writeLayout;
+  dcl-pi *N extproc(*dclcase);
     i_file          like(gi_file   );
     i_lib           like(gi_lib    );
   end-pi;
@@ -960,7 +871,7 @@ end-proc;
 //  Program error handler                                     *
 //============================================================*
 
-dcl-proc errorhandler;
+dcl-proc errorHandler;
   dcl-pi *N;
     i_condtoken     value likeds(cee_fc_t);
     i_pcommarea     int(10) value;

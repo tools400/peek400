@@ -45,49 +45,7 @@ dcl-f peekfld usage(*update:*delete) keyed usropn prefix(p_);
 /COPY QCOPYLE,PPEEK53
 /COPY QCOPYLE,PPEEK58
 
-dcl-pr p_loadfile;
-  o_file          like(go_file);
-end-pr;
-
-dcl-pr p_loadlib;
-  o_lib           like(go_lib);
-end-pr;
-
-dcl-pr p_loadmbr;
-  o_mbr           like(go_mbr);
-end-pr;
-
-dcl-pr p_loadrcdfmt;
-  o_rcdfmt        like(go_rcdfmt);
-end-pr;
-
-dcl-pr p_loadrcdfmtid;
-  o_rcdfmtid      like(fmtid_t);
-end-pr;
-
-dcl-pr p_loadaccm;
-  o_accmode       like(go_accmode);
-end-pr;
-
-dcl-pr p_loadsqls;
-  i_file          const  like(gi_file);
-  i_lib           const  like(gi_lib);
-  o_sqlsel        like(go_sqlsel);
-end-pr;
-
-dcl-pr p_loadsqlo;
-  i_file          const  like(gi_file);
-  i_lib           const  like(gi_lib);
-  o_sqlord        like(go_sqlord);
-end-pr;
-
-dcl-pr p_loadiskeylower;
-  i_file          const  like(gi_file);
-  i_lib           const  like(gi_lib);
-  o_iskeylower    like(go_iskeylower);
-end-pr;
-
-dcl-pr p_main;
+dcl-pr main;
   i_file          value  like(gi_file);
   i_lib           value  like(gi_lib);
   i_mbr           value  like(gi_mbr);
@@ -111,27 +69,6 @@ dcl-pr p_main;
   o_iskeylower    like(go_iskeylower);
   o_msgid         like(go_msgid);
   o_msgdta        like(go_msgdta);
-end-pr;
-
-dcl-pr p_loadpinr;
-  i_file          const  like(gi_file   );
-  i_lib           const  like(gi_lib    );
-  o_pintabr       like(go_pintabr)
-       dim(12);
-  o_nbrpinr       like(go_nbrpinr);
-end-pr;
-
-dcl-pr p_loadpinc;
-  i_file          const  like(gi_file   );
-  i_lib           const  like(gi_lib    );
-  o_pintabc       like(go_pintabc)
-       dim(12);
-  o_nbrpinc       like(go_nbrpinc);
-end-pr;
-
-dcl-pr p_loadlyt;
-  i_file          const  like(gi_file   );
-  i_lib           const  like(gi_lib    );
 end-pr;
 
 
@@ -175,7 +112,7 @@ dcl-ds p_key1 likerec(fpeekfld: *key);
 ceehdlr(%paddr('errorHandler')
        : *null: *omit);
 
-p_main(gi_file       :
+main(gi_file       :
       gi_lib        :
       gi_mbr        :
       gi_rcdfmt     :
@@ -205,7 +142,7 @@ return;
 //  Prozedur:  p_crtUsrSg                                 (Body)     *
 //===================================================================*
 
-dcl-proc p_main;
+dcl-proc main;
   dcl-pi *N;
     i_file          value  like(gi_file      );
     i_lib           value  like(gi_lib       );
@@ -318,7 +255,7 @@ dcl-proc p_main;
     open peekenv;
 
     if (i_option = '*SLCLAYOUT');
-      p_loadrcdfmtid(prcdfmtid);
+      loadRecordFormatID(prcdfmtid);
       if (prcdfmtid <> '' and prcdfmtid <> i_rcdfmtid);
         clear usr8234;
         usr8234.var1 = i_envfile;
@@ -335,19 +272,19 @@ dcl-proc p_main;
       o_rcdfmt = i_rcdfmt;
     else;
       //  Einlesen Datei ...
-      p_loadfile(o_file);
+      loadFile(o_file);
       if (o_file = NOT_FOUND);
         o_file = i_file;
       endif;
 
       //  Einlesen Bibliothek ...
-      p_loadlib(o_lib);
+      loadLibrary(o_lib);
       if (o_lib = NOT_FOUND);
         o_lib = i_lib;
       endif;
 
       //  Einlesen Teildatei ...
-      p_loadmbr(o_mbr);
+      loadMember(o_mbr);
       if (o_mbr = NOT_FOUND);
         o_mbr = i_mbr;
       endif;
@@ -355,7 +292,7 @@ dcl-proc p_main;
       //  Einlesen Satzformat ...
       //  (nur bei geänderter Datei)
       if (i_file <> o_file or i_lib  <> o_lib );
-        p_loadrcdfmt(o_rcdfmt);
+        loadRecordFormat(o_rcdfmt);
         if (o_rcdfmt = NOT_FOUND);
           o_rcdfmt = i_rcdfmt;
         endif;
@@ -370,16 +307,16 @@ dcl-proc p_main;
               : -1: pfile: plib: pmbr: pfmt);
 
     //  Einlesen AccessMode ...  (dateiunabhängig)
-    p_loadaccm(o_accmode);
+    loadAccessMode(o_accmode);
 
     //  Einlesen SqlSelect ...   (phys. Datei muss gleich sein)
-    p_loadsqls(pfile: '*NONE': o_sqlsel);
+    loadSQLSelect(pfile: '*NONE': o_sqlsel);
 
     //  Einlesen SqlOrder ...    (phys. Datei muss gleich sein)
-    p_loadsqlo(pfile: '*NONE': o_sqlord  );
+    loadSQLOrderBy(pfile: '*NONE': o_sqlord  );
 
     //  Einlesen isKeyLower ...  (phys. Datei muss gleich sein)
-    p_loadiskeylower(pfile: '*NONE': o_iskeylower);
+    loadIsKeyLowerCase(pfile: '*NONE': o_iskeylower);
 
     //  Beenden, wenn Datei gewechselt hat, weil die Datei neu geöffnet werden muss
     //  und damit alle Layout und PIN Informationen gelöscht werden. PEEK55 wird dann
@@ -391,13 +328,13 @@ dcl-proc p_main;
       // Aber wenn die Datei nicht gewechselt hat, dann ...
 
       //  Einlesen Layout ...          (phys. Datei muss gleich sein)
-      p_loadlyt(pfile: '*NONE');
+      loadLayout(pfile: '*NONE');
 
       //  Einlesen Pin-Record ...      (phys. Datei und Bibliothek müssen gleich sei
-      p_loadpinr(pfile: plib: o_pintabr: o_nbrpinr);
+      loadPinnedRecords(pfile: plib: o_pintabr: o_nbrpinr);
 
       //  Einlesen Pin-Column ...      (phys. Datei muss gleich sein)
-      p_loadpinc(pfile: '*NONE': o_pintabc: o_nbrpinc);
+      loadPinnedColumns(pfile: '*NONE': o_pintabc: o_nbrpinc);
 
     endif;
 
@@ -422,8 +359,8 @@ end-proc;
 //  Prozedur:  p_loadFile                                 (Body)     *
 //===================================================================*
 
-dcl-proc p_loadfile;
-  dcl-pi *N;
+dcl-proc loadFile;
+  dcl-pi *N extproc(*dclcase);
     o_file          like(go_file);
   end-pi;
 
@@ -448,8 +385,8 @@ end-proc;
 //  Prozedur:  p_loadLib                                  (Body)     *
 //===================================================================*
 
-dcl-proc p_loadlib;
-  dcl-pi *N;
+dcl-proc loadLibrary;
+  dcl-pi *N extproc(*dclcase);
     o_lib           like(go_lib);
   end-pi;
 
@@ -474,8 +411,8 @@ end-proc;
 //  Prozedur:  p_loadMbr                                  (Body)     *
 //===================================================================*
 
-dcl-proc p_loadmbr;
-  dcl-pi *N;
+dcl-proc loadMember;
+  dcl-pi *N extproc(*dclcase);
     o_mbr           like(go_mbr);
   end-pi;
 
@@ -500,8 +437,8 @@ end-proc;
 //  Prozedur:  p_loadRcdFmt                               (Body)     *
 //===================================================================*
 
-dcl-proc p_loadrcdfmt;
-  dcl-pi *N;
+dcl-proc loadRecordFormat;
+  dcl-pi *N extproc(*dclcase);
     o_rcdfmt        like(go_rcdfmt);
   end-pi;
 
@@ -526,8 +463,8 @@ end-proc;
 //  Prozedur:  p_loadRcdFmtID                             (Body)     *
 //===================================================================*
 
-dcl-proc p_loadrcdfmtid;
-  dcl-pi *N;
+dcl-proc loadRecordFormatID;
+  dcl-pi *N extproc(*dclcase);
     o_rcdfmtid      like(fmtid_t);
   end-pi;
 
@@ -552,8 +489,8 @@ end-proc;
 //  Prozedur:  p_loadAccM                                 (Body)     *
 //===================================================================*
 
-dcl-proc p_loadaccm;
-  dcl-pi *N;
+dcl-proc loadAccessMode;
+  dcl-pi *N extproc(*dclcase);
     o_accmode       like(go_accmode);
   end-pi;
 
@@ -578,8 +515,8 @@ end-proc;
 //  Prozedur:  p_loadSqlS                                 (Body)     *
 //===================================================================*
 
-dcl-proc p_loadsqls;
-  dcl-pi *N;
+dcl-proc loadSQLSelect;
+  dcl-pi *N extproc(*dclcase);
     i_file          const  like(gi_file   );
     i_lib           const  like(gi_lib    );
     o_sqlsel        like(go_sqlsel );
@@ -633,8 +570,8 @@ end-proc;
 //  Prozedur:  p_loadSqlO                                 (Body)     *
 //===================================================================*
 
-dcl-proc p_loadsqlo;
-  dcl-pi *N;
+dcl-proc loadSQLOrderBy;
+  dcl-pi *N extproc(*dclcase);
     i_file          const  like(gi_file   );
     i_lib           const  like(gi_lib    );
     o_sqlord        like(go_sqlord );
@@ -688,8 +625,8 @@ end-proc;
 //  Prozedur:  p_loadIsKeyLower                           (Body)     *
 //===================================================================*
 
-dcl-proc p_loadiskeylower;
-  dcl-pi *N;
+dcl-proc loadIsKeyLowerCase;
+  dcl-pi *N extproc(*dclcase);
     i_file          const  like(gi_file       );
     i_lib           const  like(gi_lib        );
     o_iskeylower    like(go_iskeylower);
@@ -724,8 +661,8 @@ end-proc;
 //  Prozedur:  p_loadPinR                                 (Body)     *
 //===================================================================*
 
-dcl-proc p_loadpinr;
-  dcl-pi *N;
+dcl-proc loadPinnedRecords;
+  dcl-pi *N extproc(*dclcase);
     i_file          const  like(gi_file   );
     i_lib           const  like(gi_lib    );
     o_pintabr       like(go_pintabr)
@@ -775,8 +712,8 @@ end-proc;
 //  Prozedur:  p_loadPinC                                 (Body)     *
 //===================================================================*
 
-dcl-proc p_loadpinc;
-  dcl-pi *N;
+dcl-proc loadPinnedColumns;
+  dcl-pi *N extproc(*dclcase);
     i_file          const  like(gi_file   );
     i_lib           const  like(gi_lib    );
     o_pintabc       like(go_pintabc)
@@ -828,8 +765,8 @@ end-proc;
 //  Prozedur:  p_loadLyt                                  (Body)     *
 //===================================================================*
 
-dcl-proc p_loadlyt;
-  dcl-pi *N;
+dcl-proc loadLayout;
+  dcl-pi *N extproc(*dclcase);
     i_file          const  like(gi_file   );
     i_lib           const  like(gi_lib    );
   end-pi;
