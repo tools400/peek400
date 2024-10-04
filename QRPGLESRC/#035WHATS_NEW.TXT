@@ -945,3 +945,9 @@
   *  PEEK*
        - RRN geändert von int(10) auf uns(10) zur Korrektur des Fehler:
          MCH1210 - Receiver value too small to hold result.
+
+  Version 4.0.7
+  =============
+  *  PEEK02
+       - Füllen Feld o_rcdFmtID.
+         

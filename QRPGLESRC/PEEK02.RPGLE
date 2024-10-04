@@ -83,19 +83,20 @@ ctl-opt main(peek02);
 /COPY QCOPYLE,PPEEK53
 /COPY QCOPYLE,PPEEK58
 
-dcl-ds qusrspc likeds(qobj_t) inz;
-dcl-s pspcptr         pointer;
-dcl-ds errcode likeds(errcode_t) inz;
+dcl-ds qUsrSpc likeds(qobj_t) inz;
+dcl-s pSpcPtr pointer;
+dcl-ds errCode likeds(errcode_t) inz;
 
-dcl-ds genheader likeds(genheader_t) based(pspcptr);
+dcl-ds genHeader likeds(genHeader_t) based(pSpcPtr);
+dcl-ds listHeader likeds(quslfld_header_t) based(pListHeader);
 
-dcl-s currliste       like(int4_t);
-dcl-s offsetliste     like(int4_t);
-dcl-s pliste          pointer;
-dcl-ds liste likeds(fldl0100_t) based(pliste);
+dcl-s currListE       like(int4_t);
+dcl-s offsetListE     like(int4_t);
+dcl-s pListE          pointer;
+dcl-ds listE likeds(fldl0100_t) based(pListE);
 
-dcl-s msgid           like(msgid_t);
-dcl-s msgdta          like(msgdta_t);
+dcl-s msgID           like(msgid_t);
+dcl-s msgDta          like(msgDta_t);
 
 //*******************************************************************
 //           Main  Control block                                    *
@@ -103,18 +104,18 @@ dcl-s msgdta          like(msgdta_t);
 
 dcl-proc peek02;
   dcl-pi *N;
-    i_qfile         const likeds(qobj_t);
-    i_rcdfmt        const like(fmt_t);
+    i_qFile         const likeds(qobj_t);
+    i_rcdFmt        const like(fmt_t);
     i_function      const like(function_t);
-    o_nume          like(int4_t);
+    o_numE          like(int4_t);
     o_fldl0100      likeds(fldl0100_t);
-    o_rcdfmtid      like(fmtid_t);
+    o_rcdFmtID      like(fmtid_t);
   end-pi;
 
   //---------------------------------------------------*
 
-  qusrspc.lib = USRSPC_LIBRARY;
-  qusrspc.name = USRSPC_NAME;
+  qUsrSpc.lib = USRSPC_LIBRARY;
+  qUsrSpc.name = USRSPC_NAME;
 
   monitor;
 
@@ -129,7 +130,7 @@ dcl-proc peek02;
 
   on-error;
     dump;
-    o_nume = 0;
+    o_numE = 0;
   endmon;
 
   //====================================================*
@@ -138,28 +139,31 @@ dcl-proc peek02;
 
   begsr create;
 
-    o_nume = *zeros;
+    o_numE = *zeros;
 
     //  create user space
     if (not f_exist(
-       qusrspc.name: qusrspc.lib: '*USRSPC'));
-      quscrtus(qusrspc: 'TEMP': 32767: x'00'
+       qUsrSpc.name: qUsrSpc.lib: '*USRSPC'));
+      quscrtus(qUsrSpc: 'TEMP': 32767: x'00'
               : '*ALL': 'Peek/400 - Work Area');
     endif;
 
     //  get user space pointer
-    qusptrus(qusrspc: pspcptr);
+    qusptrus(qUsrSpc: pSpcPtr);
 
     //  get file fields
-    quslfld(qusrspc: 'FLDL0100': i_qfile
-           : i_rcdfmt: '0': errcode);
+    quslfld(qUsrSpc: 'FLDL0100': i_qFile
+           : i_rcdFmt: '0': errCode);
 
-    if (errcode.bytavl > 0);
-      o_nume = 0;
-      currliste = -1;
+    if (errCode.bytavl > 0);
+      pListHeader = *null;
+      o_numE = 0;
+      currListE = -1;
     else;
-      o_nume = genheader.numlstent;
-      currliste = 0;
+      pListHeader = pSpcPtr + genHeader.offsetHdr;
+      o_numE = genHeader.numLstEnt;
+      o_rcdFmtID = listHeader.rcdFmtID;
+      currListE = 0;
     endif;
 
   endsr;
@@ -171,12 +175,12 @@ dcl-proc peek02;
   begsr delete;
 
     if (f_exist(
-       qusrspc.name: qusrspc.lib: '*USRSPC'));
+       qUsrSpc.name: qUsrSpc.lib: '*USRSPC'));
 
       f_execute('DLTUSRSPC USRSPC(' +
-                 %trim(qusrspc.lib) + '/' +
-                 %trim(qusrspc.name) +
-               ')': msgid: msgdta);
+                 %trim(qUsrSpc.lib) + '/' +
+                 %trim(qUsrSpc.name) +
+               ')': msgID: msgDta);
     endif;
 
   endsr;
@@ -189,23 +193,23 @@ dcl-proc peek02;
 
     clear o_fldl0100;
 
-    if (currliste < 0 or
-       currliste >= genheader.numlstent);
+    if (currListE < 0 or
+       currListE >= genHeader.numlstent);
       exsr seterror;
       leavesr;
     endif;
 
-    currliste = currliste + 1;
+    currListE = currListE + 1;
 
-    offsetliste =
-     genheader.offsetlst +
-     ((currliste - 1) * genheader.entrysize);
+    offsetListE =
+     genHeader.offsetlst +
+     ((currListE - 1) * genHeader.entrysize);
 
-    pliste = pspcptr + offsetliste;
+    pListE = pSpcPtr + offsetListE;
 
-    o_fldl0100 = liste;
+    o_fldl0100 = listE;
 
-    o_nume = genheader.numlstent - currliste;
+    o_numE = genHeader.numlstent - currListE;
 
   endsr;
 
@@ -215,8 +219,8 @@ dcl-proc peek02;
 
   begsr seterror;
 
-    o_nume = 0;
-    currliste = -1;
+    o_numE = 0;
+    currListE = -1;
 
   endsr;
 
