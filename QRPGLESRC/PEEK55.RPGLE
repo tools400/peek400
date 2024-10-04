@@ -46,29 +46,29 @@ dcl-f peekfld usage(*update:*delete) keyed usropn prefix(p_);
 /COPY QCOPYLE,PPEEK58
 
 dcl-pr main;
-  i_file          value  like(gi_file);
-  i_lib           value  like(gi_lib);
-  i_mbr           value  like(gi_mbr);
-  i_rcdfmt        value  like(gi_rcdfmt);
-  i_rcdfmtid      value  like(gi_rcdfmtid);
-  i_envfile       value  like(gi_envfile);
-  i_envlib        value  like(gi_envlib);
-  i_envmbr        value  like(gi_envmbr);
-  i_option        value  like(gi_option);
-  o_pintabr       like(go_pintabr) dim(12);
-  o_nbrpinr       like(go_nbrpinr);
-  o_pintabc       like(go_pintabc) dim(12);
-  o_nbrpinc       like(go_nbrpinc);
+  i_file          value like(gi_file);
+  i_lib           value like(gi_lib);
+  i_mbr           value like(gi_mbr);
+  i_rcdFmt        value like(gi_rcdFmt);
+  i_rcdFmtID      value like(gi_rcdFmtID);
+  i_envFile       value like(gi_envFile);
+  i_envLib        value like(gi_envLib);
+  i_envMbr        value like(gi_envMbr);
+  i_option        value like(gi_option);
+  o_pinTabR       like(go_pinTabR) dim(12);
+  o_nbrPinR       like(go_nbrPinR);
+  o_pinTabC       like(go_pinTabC) dim(12);
+  o_nbrPinC       like(go_nbrpinc);
   o_file          like(go_file);
   o_lib           like(go_lib);
   o_mbr           like(go_mbr);
-  o_rcdfmt        like(go_rcdfmt);
-  o_accmode       like(go_accmode);
-  o_sqlsel        like(go_sqlsel);
-  o_sqlord        like(go_sqlord);
-  o_iskeylower    like(go_iskeylower);
-  o_msgid         like(go_msgid);
-  o_msgdta        like(go_msgdta);
+  o_rcdFmt        like(go_rcdFmt);
+  o_accMode       like(go_accMode);
+  o_sqlSel        like(go_sqlSel);
+  o_sqlOrd        like(go_sqlOrd);
+  o_isKeyLower    like(go_isKeyLower);
+  o_msgID         like(go_msgID);
+  o_msgDta        like(go_msgDta);
 end-pr;
 
 
@@ -82,26 +82,26 @@ dcl-pi peek55;
   gi_file         const like(file_t);
   gi_lib          const like(lib_t);
   gi_mbr          const like(mbr_t);
-  gi_rcdfmt       const like(fmt_t);
-  gi_rcdfmtid     const like(fmtid_t);
-  gi_envfile      const like(file_t);
-  gi_envlib       const like(lib_t);
-  gi_envmbr       const like(mbr_t);
+  gi_rcdFmt       const like(fmt_t);
+  gi_rcdFmtID     const like(fmtid_t);
+  gi_envFile      const like(file_t);
+  gi_envLib       const like(lib_t);
+  gi_envMbr       const like(mbr_t);
   gi_option       const like(option_t);
-  go_pintabr      like(pintabr_t) dim(12);
-  go_nbrpinr      like(int4_t);
-  go_pintabc      like(fieldnme_t) dim(12);
+  go_pinTabR      like(pintabr_t) dim(12);
+  go_nbrPinR      like(int4_t);
+  go_pinTabC      like(fieldnme_t) dim(12);
   go_nbrpinc      like(int4_t);
   go_file         like(file_t);
   go_lib          like(lib_t);
   go_mbr          like(mbr_t);
-  go_rcdfmt       like(fmt_t);
-  go_accmode      like(accessmode_t);
-  go_sqlsel       like(sqlwhere_t);
-  go_sqlord       like(sqlorder_t);
-  go_iskeylower   like(bool_t);
-  go_msgid        like(msgid_t);
-  go_msgdta       like(msgdta_t);
+  go_rcdFmt       like(fmt_t);
+  go_accMode      like(accessmode_t);
+  go_sqlSel       like(sqlwhere_t);
+  go_sqlOrd       like(sqlorder_t);
+  go_isKeyLower   like(bool_t);
+  go_msgID        like(msgid_t);
+  go_msgDta       like(msgdta_t);
 end-pi;
 
 dcl-ds en_key4 likerec(fpeekenv: *key);
@@ -115,26 +115,26 @@ ceehdlr(%paddr('errorHandler')
 main(gi_file       :
       gi_lib        :
       gi_mbr        :
-      gi_rcdfmt     :
-      gi_rcdfmtid   :
-      gi_envfile    :
-      gi_envlib     :
-      gi_envmbr     :
+      gi_rcdFmt     :
+      gi_rcdFmtID   :
+      gi_envFile    :
+      gi_envLib     :
+      gi_envMbr     :
       gi_option     :
-      go_pintabr    :
-      go_nbrpinr    :
-      go_pintabc    :
+      go_pinTabR    :
+      go_nbrPinR    :
+      go_pinTabC    :
       go_nbrpinc    :
       go_file       :
       go_lib        :
       go_mbr        :
-      go_rcdfmt     :
-      go_accmode    :
-      go_sqlsel     :
-      go_sqlord     :
-      go_iskeylower :
-      go_msgid      :
-      go_msgdta     );
+      go_rcdFmt     :
+      go_accMode    :
+      go_sqlSel     :
+      go_sqlOrd     :
+      go_isKeyLower :
+      go_msgID      :
+      go_msgDta     );
 
 return;
 
@@ -144,29 +144,29 @@ return;
 
 dcl-proc main;
   dcl-pi *N;
-    i_file          value  like(gi_file      );
-    i_lib           value  like(gi_lib       );
-    i_mbr           value  like(gi_mbr       );
-    i_rcdfmt        value  like(gi_rcdfmt    );
-    i_rcdfmtid      value  like(gi_rcdfmtid  );
-    i_envfile       value  like(gi_envfile   );
-    i_envlib        value  like(gi_envlib    );
-    i_envmbr        value  like(gi_envmbr    );
-    i_option        value  like(gi_option    );
-    o_pintabr       like(go_pintabr   ) dim(12);
-    o_nbrpinr       like(go_nbrpinr   );
-    o_pintabc       like(go_pintabc   ) dim(12);
-    o_nbrpinc       like(go_nbrpinc   );
-    o_file          like(go_file      );
-    o_lib           like(go_lib       );
-    o_mbr           like(go_mbr       );
-    o_rcdfmt        like(go_rcdfmt    );
-    o_accmode       like(go_accmode   );
-    o_sqlsel        like(go_sqlsel    );
-    o_sqlord        like(go_sqlord    );
-    o_iskeylower    like(go_iskeylower);
-    o_msgid         like(go_msgid     );
-    o_msgdta        like(go_msgdta    );
+    i_file          value  like(gi_file);
+    i_lib           value  like(gi_lib);
+    i_mbr           value  like(gi_mbr);
+    i_rcdFmt        value  like(gi_rcdFmt);
+    i_rcdFmtID      value  like(gi_rcdFmtID);
+    i_envFile       value  like(gi_envFile);
+    i_envLib        value  like(gi_envLib);
+    i_envMbr        value  like(gi_envMbr);
+    i_option        value  like(gi_option);
+    o_pinTabR       like(go_pinTabR) dim(12);
+    o_nbrPinR       like(go_nbrPinR);
+    o_pinTabC       like(go_pinTabC) dim(12);
+    o_nbrPinC       like(go_nbrpinc);
+    o_file          like(go_file);
+    o_lib           like(go_lib);
+    o_mbr           like(go_mbr);
+    o_rcdFmt        like(go_rcdFmt);
+    o_accMode       like(go_accMode);
+    o_sqlSel        like(go_sqlSel);
+    o_sqlOrd        like(go_sqlOrd);
+    o_isKeyLower    like(go_isKeyLower);
+    o_msgID         like(go_msgID);
+    o_msgDta        like(go_msgDta);
   end-pi;
 
   //  Arbeitsfelder
@@ -174,7 +174,7 @@ dcl-proc main;
   dcl-s plib            like(lib_t);
   dcl-s pmbr            like(mbr_t);
   dcl-s pfmt            like(rcdfmt_t);
-  dcl-s penvmbr         like(i_envmbr  );
+  dcl-s penvmbr         like(i_envMbr);
   dcl-s prcdfmtid       like(fmtid_t);
   dcl-s pmsgid          like(msgid_t);
   dcl-s pmsgdta         like(msgdta_t);
@@ -189,15 +189,15 @@ dcl-proc main;
     //  Sonderwerte i_envFile ...
     select;
     //  ... *NONE
-    when (i_envfile = '*NONE');
-      o_msgid  = 'USR8185';
-      o_msgdta = ' ';
+    when (i_envFile = '*NONE');
+      o_msgID  = 'USR8185';
+      o_msgDta = ' ';
       leave;
     //  ... *ENVFILE
-    when (i_envfile = '*ENVFILE');
+    when (i_envFile = '*ENVFILE');
       set0015 = f_getusrsg('*ENVFILE'  );
-      i_envfile = set0015.set_envfil;
-      i_envlib  = set0015.set_envlib;
+      i_envFile = set0015.set_envfil;
+      i_envLib  = set0015.set_envlib;
     other;
     //  ... genau diese Datei
     endsl;
@@ -205,8 +205,8 @@ dcl-proc main;
     //  Sonderwerte i_envLib ...
     select;
     //  ... *PRDLIB
-    when (i_envlib = '*PRDLIB');
-      i_envlib = sds.pgmlib;
+    when (i_envLib = '*PRDLIB');
+      i_envLib = sds.pgmlib;
     other;
     //  ... genau diese Bibliothek
     endsl;
@@ -214,26 +214,26 @@ dcl-proc main;
     //  Sonderwerte i_envMbr ...
     select;
     //  ... *FILE
-    when (i_envmbr  = '*FILE');
+    when (i_envMbr  = '*FILE');
       penvmbr = i_file;
     other;
       //  ... genau diese Teildatei
-      penvmbr = i_envmbr;
+      penvmbr = i_envMbr;
     endsl;
 
     //  Prüfen Arbeitsumgebung  ...
     f_execute('CHKOBJ +
                 OBJ(' +
-                 %trim(i_envlib) + '/' +
-                 %trim(i_envfile) +
+                 %trim(i_envLib) + '/' +
+                 %trim(i_envFile) +
                 ') +
                 OBJTYPE(*FILE) +
                 MBR(' + %trim(penvmbr) + ') +
                 AUT(*USE)'
-              : o_msgid: o_msgdta);
+              : o_msgID: o_msgDta);
 
     //  Programm mit Fehlermeldung beenden
-    if (o_msgid <> '');
+    if (o_msgID <> '');
       leave;
     endif;
 
@@ -241,8 +241,8 @@ dcl-proc main;
     f_execute('OVRDBF +
                 FILE(PEEKENV) +
                 TOFILE(' +
-                 %trim(i_envlib) + '/' +
-                 %trim(i_envfile) +
+                 %trim(i_envLib) + '/' +
+                 %trim(i_envFile) +
                 ') +
                 MBR(' + %trim(penvmbr) + ') +
                 OVRSCOPE(*ACTGRPDFN) +
@@ -256,20 +256,20 @@ dcl-proc main;
 
     if (i_option = '*SLCLAYOUT');
       loadRecordFormatID(prcdfmtid);
-      if (prcdfmtid <> '' and prcdfmtid <> i_rcdfmtid);
+      if (prcdfmtid <> '' and prcdfmtid <> i_rcdFmtID);
         clear usr8234;
-        usr8234.var1 = i_envfile;
-        usr8234.var2 = i_envlib;
-        usr8234.var3 = i_envmbr;
-        o_msgid  = 'USR8234';
-        o_msgdta = usr8234;
+        usr8234.var1 = i_envFile;
+        usr8234.var2 = i_envLib;
+        usr8234.var3 = i_envMbr;
+        o_msgID  = 'USR8234';
+        o_msgDta = usr8234;
         leave;
       endif;
 
       o_file   = i_file;
       o_lib    = i_lib;
       o_mbr    = i_mbr;
-      o_rcdfmt = i_rcdfmt;
+      o_rcdFmt = i_rcdFmt;
     else;
       //  Einlesen Datei ...
       loadFile(o_file);
@@ -292,31 +292,31 @@ dcl-proc main;
       //  Einlesen Satzformat ...
       //  (nur bei geänderter Datei)
       if (i_file <> o_file or i_lib  <> o_lib );
-        loadRecordFormat(o_rcdfmt);
-        if (o_rcdfmt = NOT_FOUND);
-          o_rcdfmt = i_rcdfmt;
+        loadRecordFormat(o_rcdFmt);
+        if (o_rcdFmt = NOT_FOUND);
+          o_rcdFmt = i_rcdFmt;
         endif;
       else;
-        o_rcdfmt = i_rcdfmt;
+        o_rcdFmt = i_rcdFmt;
       endif;
 
     endif;
 
     //  Basiert auf physischer Datei ...
-    f_basedpf(o_file: o_lib: o_mbr: o_rcdfmt
+    f_basedpf(o_file: o_lib: o_mbr: o_rcdFmt
               : -1: pfile: plib: pmbr: pfmt);
 
     //  Einlesen AccessMode ...  (dateiunabhängig)
-    loadAccessMode(o_accmode);
+    loadAccessMode(o_accMode);
 
     //  Einlesen SqlSelect ...   (phys. Datei muss gleich sein)
-    loadSQLSelect(pfile: '*NONE': o_sqlsel);
+    loadSQLSelect(pfile: '*NONE': o_sqlSel);
 
     //  Einlesen SqlOrder ...    (phys. Datei muss gleich sein)
-    loadSQLOrderBy(pfile: '*NONE': o_sqlord  );
+    loadSQLOrderBy(pfile: '*NONE': o_sqlOrd  );
 
     //  Einlesen isKeyLower ...  (phys. Datei muss gleich sein)
-    loadIsKeyLowerCase(pfile: '*NONE': o_iskeylower);
+    loadIsKeyLowerCase(pfile: '*NONE': o_isKeyLower);
 
     //  Beenden, wenn Datei gewechselt hat, weil die Datei neu geöffnet werden muss
     //  und damit alle Layout und PIN Informationen gelöscht werden. PEEK55 wird dann
@@ -324,17 +324,17 @@ dcl-proc main;
     if (o_file = i_file and
         o_lib  = i_lib  and
         o_mbr  = i_mbr  and
-        o_rcdfmt = i_rcdfmt);
+        o_rcdFmt = i_rcdFmt);
       // Aber wenn die Datei nicht gewechselt hat, dann ...
 
       //  Einlesen Layout ...          (phys. Datei muss gleich sein)
       loadLayout(pfile: '*NONE');
 
       //  Einlesen Pin-Record ...      (phys. Datei und Bibliothek müssen gleich sei
-      loadPinnedRecords(pfile: plib: o_pintabr: o_nbrpinr);
+      loadPinnedRecords(pfile: plib: o_pinTabR: o_nbrPinR);
 
       //  Einlesen Pin-Column ...      (phys. Datei muss gleich sein)
-      loadPinnedColumns(pfile: '*NONE': o_pintabc: o_nbrpinc);
+      loadPinnedColumns(pfile: '*NONE': o_pinTabC: o_nbrPinC);
 
     endif;
 
@@ -439,7 +439,7 @@ end-proc;
 
 dcl-proc loadRecordFormat;
   dcl-pi *N extproc(*dclcase);
-    o_rcdfmt        like(go_rcdfmt);
+    o_rcdfmt        like(go_rcdFmt);
   end-pi;
 
   //  definieren Arbeitsfelder ...
@@ -491,7 +491,7 @@ end-proc;
 
 dcl-proc loadAccessMode;
   dcl-pi *N extproc(*dclcase);
-    o_accmode       like(go_accmode);
+    o_accmode       like(go_accMode);
   end-pi;
 
   //  definieren Arbeitsfelder ...
@@ -519,7 +519,7 @@ dcl-proc loadSQLSelect;
   dcl-pi *N extproc(*dclcase);
     i_file          const  like(gi_file   );
     i_lib           const  like(gi_lib    );
-    o_sqlsel        like(go_sqlsel );
+    o_sqlsel        like(go_sqlSel );
   end-pi;
 
   //  definieren Arbeitsfelder ...
@@ -574,7 +574,7 @@ dcl-proc loadSQLOrderBy;
   dcl-pi *N extproc(*dclcase);
     i_file          const  like(gi_file   );
     i_lib           const  like(gi_lib    );
-    o_sqlord        like(go_sqlord );
+    o_sqlord        like(go_sqlOrd );
   end-pi;
 
   //  definieren Arbeitsfelder ...
@@ -629,7 +629,7 @@ dcl-proc loadIsKeyLowerCase;
   dcl-pi *N extproc(*dclcase);
     i_file          const  like(gi_file       );
     i_lib           const  like(gi_lib        );
-    o_iskeylower    like(go_iskeylower);
+    o_iskeylower    like(go_isKeyLower);
   end-pi;
 
   //  definieren Arbeitsfelder ...
@@ -665,9 +665,9 @@ dcl-proc loadPinnedRecords;
   dcl-pi *N extproc(*dclcase);
     i_file          const  like(gi_file   );
     i_lib           const  like(gi_lib    );
-    o_pintabr       like(go_pintabr)
+    o_pintabr       like(go_pinTabR)
          dim(12);
-    o_nbrpinr       like(go_nbrpinr);
+    o_nbrpinr       like(go_nbrPinR);
   end-pi;
 
   //  definieren Arbeitsfelder ...
@@ -716,7 +716,7 @@ dcl-proc loadPinnedColumns;
   dcl-pi *N extproc(*dclcase);
     i_file          const  like(gi_file   );
     i_lib           const  like(gi_lib    );
-    o_pintabc       like(go_pintabc)
+    o_pintabc       like(go_pinTabC)
          dim(12);
     o_nbrpinc       like(go_nbrpinc);
   end-pi;
