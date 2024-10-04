@@ -273,19 +273,19 @@ dcl-proc main;
     else;
       //  Einlesen Datei ...
       loadFile(o_file);
-      if (o_file = NOT_FOUND);
+      if (o_file <> NOT_FOUND);
         o_file = i_file;
       endif;
 
       //  Einlesen Bibliothek ...
       loadLibrary(o_lib);
-      if (o_lib = NOT_FOUND);
+      if (o_lib <> NOT_FOUND);
         o_lib = i_lib;
       endif;
 
       //  Einlesen Teildatei ...
       loadMember(o_mbr);
-      if (o_mbr = NOT_FOUND);
+      if (o_mbr <> NOT_FOUND);
         o_mbr = i_mbr;
       endif;
 
@@ -293,7 +293,7 @@ dcl-proc main;
       //  (nur bei geänderter Datei)
       if (i_file <> o_file or i_lib  <> o_lib );
         loadRecordFormat(o_rcdFmt);
-        if (o_rcdFmt = NOT_FOUND);
+        if (o_rcdFmt <> NOT_FOUND);
           o_rcdFmt = i_rcdFmt;
         endif;
       else;
@@ -803,7 +803,7 @@ dcl-proc loadLayout;
     clear p_key1;
     p_key1.p_field = en_key;
     chain %kds(p_key1) fpeekfld;
-    if (not %found(peekfld));
+    if (%found(peekfld));
       env0001 = en_data;
       p_seq     = env0001.env_seq;
       p_hidden  = env0001.env_hidden;
