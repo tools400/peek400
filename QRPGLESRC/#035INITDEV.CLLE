@@ -112,6 +112,15 @@
              CALLSUBR   SUBR(CMPOBJ)
 
              /* ---------------------------------------------------- */
+             /*  Create working source file                          */
+             /* ---------------------------------------------------- */
+             CHKOBJ     OBJ(&DEVLIB/QPEEKGEN) OBJTYPE(*FILE)
+             MONMSG     MSGID(CPF9801) EXEC(DO)
+               CRTSRCPF   FILE(&DEVLIB/QPEEKGEN) RCDLEN(112) +
+                          TEXT('Peek/400 - Generated Sources(dummy)')
+             ENDDO
+
+             /* ---------------------------------------------------- */
              /*  Create files of exit programs                       */
              /* ---------------------------------------------------- */
 
