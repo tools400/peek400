@@ -404,6 +404,11 @@ ADDBNDDIRE:
                                         *TCAT  '*NOMAX'    +
                                         *TCAT  ')'         +
                                         )
+                   CHGVAR     VAR(&CMD) VALUE(&CMD         +
+                                        *BCAT  'MBR('      +
+                                        *TCAT  '*NONE'     +
+                                        *TCAT  ')'         +
+                                        )
                 ENDDO
                 ELSE       CMD(DO)
                    CHGVAR     VAR(&CMD) VALUE(&CMD         +
