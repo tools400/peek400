@@ -90,106 +90,6 @@
              CHGDTAARA  DTAARA(&DEVLIB/PEEKPGM (11 10)) VALUE(&TGTRLS)
 
              /* ---------------------------------------------------- */
-             /*  Create file and add initial data                    */
-             /* ---------------------------------------------------- */
-
-             DLTF       FILE(&DEVLIB/EXIT01PF)
-             MONMSG     MSGID(CPF2105)
-
-             CRTPF      FILE(&DEVLIB/EXIT01PF) +
-                          SRCFILE(&DEVLIB/QDDSSRC) SRCMBR(*FILE) +
-                          TEXT('Peek/400 - Sicherheitsattribute für EXIT01')
-
-             DLTF       FILE(&DEVLIB/EXIT04LOG)
-             MONMSG     MSGID(CPF2105)
-
-             RUNSQLSTM  SRCFILE(&DEVLIB/QDDSSRC) SRCMBR(EXIT04LOG) +
-                          COMMIT(*NONE) NAMING(*SQL) DATFMT(*ISO) TIMFMT(*ISO) +
-                          DFTRDBCOL(&DEVLIB)
-
-             CHKOBJ     OBJ(&DEVLIB/PEEKENV) OBJTYPE(*FILE)
-             MONMSG     MSGID(CPF9801) EXEC(DO)
-               CRTPF      FILE(&DEVLIB/PEEKENV) +
-                            SRCFILE(&DEVLIB/QDDSSRC) SRCMBR(*FILE) +
-                            TEXT('Peek/400 - Arbeitsumgebungen')
-             ENDDO
-
-             DLTF       FILE(&DEVLIB/PEEKFLDL0)
-             MONMSG     MSGID(CPF2105)
-
-             DLTF       FILE(&DEVLIB/PEEKFLDL1)
-             MONMSG     MSGID(CPF2105)
-
-             DLTF       FILE(&DEVLIB/PEEKFLDL2)
-             MONMSG     MSGID(CPF2105)
-
-             DLTF       FILE(&DEVLIB/PEEKFLD)
-             MONMSG     MSGID(CPF2105)
-
-             CRTPF      FILE(&DEVLIB/PEEKFLD) +
-                          SRCFILE(&DEVLIB/QDDSSRC) SRCMBR(*FILE) +
-                          TEXT('Peek/400 - Satzaufbau')
-
-             CRTLF      FILE(&DEVLIB/PEEKFLDL0) +
-                          SRCFILE(&DEVLIB/QDDSSRC) SRCMBR(*FILE) +
-                          TEXT('Peek/400 - Satzaufbau')
-
-             CRTLF      FILE(&DEVLIB/PEEKFLDL1) +
-                          SRCFILE(&DEVLIB/QDDSSRC) SRCMBR(*FILE) +
-                          TEXT('Peek/400 - Satzaufbau')
-
-             CRTLF      FILE(&DEVLIB/PEEKFLDL2) +
-                          SRCFILE(&DEVLIB/QDDSSRC) SRCMBR(*FILE) +
-                          TEXT('Peek/400 - Satzaufbau')
-
-             DLTF       FILE(&DEVLIB/PEEKFMT)
-             MONMSG     MSGID(CPF2105)
-
-             CRTPF      FILE(&DEVLIB/PEEKFMT) +
-                          SRCFILE(&DEVLIB/QDDSSRC) SRCMBR(*FILE) +
-                          TEXT('Peek/400 - Satzformate')
-
-             DLTF       FILE(&DEVLIB/PEEKWRK)
-             MONMSG     MSGID(CPF2105)
-
-             CRTPF      FILE(&DEVLIB/PEEKWRK) +
-                          SRCFILE(&DEVLIB/QDDSSRC) SRCMBR(*FILE) +
-                          TEXT('Peek/400 - Arbeitsdatei')
-
-             CHKOBJ     OBJ(&DEVLIB/PEEKENV) OBJTYPE(*FILE)
-             MONMSG     MSGID(CPF9801) EXEC(DO)
-               CRTPF      FILE(&DEVLIB/PEEKUSR) +
-                            SRCFILE(&DEVLIB/QDDSSRC) SRCMBR(*FILE) +
-                            TEXT('Peek/400 - Arbeitsumgebungen')
-             ENDDO
-
-             CLRPFM     FILE(&DEVLIB/EXIT01PF)
-             CLRPFM     FILE(&DEVLIB/EXIT04LOG)
-
-             CLRPFM     FILE(&DEVLIB/PEEKENV)
-             CLRPFM     FILE(&DEVLIB/PEEKFLD)
-             CLRPFM     FILE(&DEVLIB/PEEKFMT)
-             CLRPFM     FILE(&DEVLIB/PEEKWRK)
-
-             CHKOBJ     OBJ(&DEVLIB/PEEKUSR) OBJTYPE(*FILE)
-             MONMSG     MSGID(CPF9801) EXEC(DO)
-               CRTPF      FILE(&DEVLIB/PEEKUSR) +
-                            SRCFILE(&DEVLIB/QDDSSRC) SRCMBR(*FILE) +
-                            TEXT('Peek/400 - Template für Benutzervoreinstellungen')
-               RUNSQLSTM  SRCFILE(&DEVLIB/QDDSSRC) SRCMBR(PEEKUSRDTA) +
-                            COMMIT(*NONE) NAMING(*SQL) DATFMT(*ISO) TIMFMT(*ISO) +
-                            DFTRDBCOL(&DEVLIB)
-             ENDDO
-
-             /* ---------------------------------------------------- */
-             /*  Remove old binding directory entries                */
-             /* ---------------------------------------------------- */
-
-             DLTBNDDIR  BNDDIR(&DEVLIB/PEEK)
-             MONMSG     MSGID(CPF2110 CPF2105) /* Library/Object not found */
-             CRTBNDDIR  BNDDIR(&DEVLIB/PEEK) TEXT('Peek/400 Binding Directory')
-
-             /* ---------------------------------------------------- */
              /*  Create PEEK compile program                         */
              /* ---------------------------------------------------- */
 
@@ -210,6 +110,103 @@
              CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
              CHGVAR     VAR(&SRCMBR) VALUE('PEEK96B')
              CALLSUBR   SUBR(CMPOBJ)
+
+             /* ---------------------------------------------------- */
+             /*  Create files of exit programs                       */
+             /* ---------------------------------------------------- */
+
+             DLTF       FILE(&DEVLIB/EXIT01PF)
+             MONMSG     MSGID(CPF2105)
+
+             CRTPF      FILE(&DEVLIB/EXIT01PF) +
+                          SRCFILE(&DEVLIB/QDDSSRC) SRCMBR(*FILE) +
+                          TEXT('Peek/400 - Sicherheitsattribute für EXIT01')
+
+             DLTF       FILE(&DEVLIB/EXIT04LOG)
+             MONMSG     MSGID(CPF2105)
+
+             RUNSQLSTM  SRCFILE(&DEVLIB/QDDSSRC) SRCMBR(EXIT04LOG) +
+                          COMMIT(*NONE) NAMING(*SQL) DATFMT(*ISO) TIMFMT(*ISO) +
+                          DFTRDBCOL(&DEVLIB)
+
+             /* ---------------------------------------------------- */
+             /*  Create Peek/400 files and add initial data          */
+             /* ---------------------------------------------------- */
+
+             DLTF       FILE(&DEVLIB/PEEKFLDL0)
+             MONMSG     MSGID(CPF2105)
+
+             DLTF       FILE(&DEVLIB/PEEKFLDL1)
+             MONMSG     MSGID(CPF2105)
+
+             DLTF       FILE(&DEVLIB/PEEKFLDL2)
+             MONMSG     MSGID(CPF2105)
+
+             DLTF       FILE(&DEVLIB/PEEKFLD)
+             MONMSG     MSGID(CPF2105)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QDDSSRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEKFLD')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CRTLF      FILE(&DEVLIB/PEEKFLDL0) +
+                          SRCFILE(&DEVLIB/QDDSSRC) SRCMBR(*FILE) +
+                          TEXT('Peek/400 - Satzaufbau')
+
+             CRTLF      FILE(&DEVLIB/PEEKFLDL1) +
+                          SRCFILE(&DEVLIB/QDDSSRC) SRCMBR(*FILE) +
+                          TEXT('Peek/400 - Satzaufbau')
+
+             CRTLF      FILE(&DEVLIB/PEEKFLDL2) +
+                          SRCFILE(&DEVLIB/QDDSSRC) SRCMBR(*FILE) +
+                          TEXT('Peek/400 - Satzaufbau')
+
+             DLTF       FILE(&DEVLIB/PEEKFMT)
+             MONMSG     MSGID(CPF2105)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QDDSSRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEKFMT')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             DLTF       FILE(&DEVLIB/PEEKWRK)
+             MONMSG     MSGID(CPF2105)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QDDSSRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEKWRK')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHKOBJ     OBJ(&DEVLIB/PEEKENV) OBJTYPE(*FILE)
+             MONMSG     MSGID(CPF9801) EXEC(DO)
+               CHGVAR     VAR(&SRCFILE) VALUE('QDDSSRC')
+               CHGVAR     VAR(&SRCMBR) VALUE('PEEKENV')
+               CALLSUBR   SUBR(CMPOBJ)
+             ENDDO
+
+             CLRPFM     FILE(&DEVLIB/EXIT01PF)
+             CLRPFM     FILE(&DEVLIB/EXIT04LOG)
+
+             CLRPFM     FILE(&DEVLIB/PEEKENV)
+             CLRPFM     FILE(&DEVLIB/PEEKFLD)
+             CLRPFM     FILE(&DEVLIB/PEEKFMT)
+             CLRPFM     FILE(&DEVLIB/PEEKWRK)
+
+             CHKOBJ     OBJ(&DEVLIB/PEEKUSR) OBJTYPE(*FILE)
+             MONMSG     MSGID(CPF9801) EXEC(DO)
+               CHGVAR     VAR(&SRCFILE) VALUE('QDDSSRC')
+               CHGVAR     VAR(&SRCMBR) VALUE('PEEKUSR')
+               CALLSUBR   SUBR(CMPOBJ)
+               RUNSQLSTM  SRCFILE(&DEVLIB/QDDSSRC) SRCMBR(PEEKUSRDTA) +
+                            COMMIT(*NONE) NAMING(*SQL) DATFMT(*ISO) TIMFMT(*ISO) +
+                            DFTRDBCOL(&DEVLIB)
+             ENDDO
+
+             /* ---------------------------------------------------- */
+             /*  Remove old binding directory entries                */
+             /* ---------------------------------------------------- */
+
+             DLTBNDDIR  BNDDIR(&DEVLIB/PEEK)
+             MONMSG     MSGID(CPF2110 CPF2105) /* Library/Object not found */
+             CRTBNDDIR  BNDDIR(&DEVLIB/PEEK) TEXT('Peek/400 Binding Directory')
 
              /* ---------------------------------------------------- */
              /*  Create PEEK commands required for next step         */
@@ -877,6 +874,17 @@ CRTOBJ:
              /*  Subroutine: Compile PEEK object                     */
              /* ==================================================== */
              SUBR       SUBR(CMPOBJ)
+
+               CRTPEEKOBJ SRCFILE(&DEVLIB/&SRCFILE) SRCMBR(&SRCMBR) +
+                            OBJLIB(&DEVLIB) DEVLIB(&DEVLIB) +
+                            SBMJOB(*NO) BNDDIR(PEEK) INSTALL('*NO')
+
+             ENDSUBR
+
+             /* ==================================================== */
+             /*  Subroutine: Compile PEEK file                       */
+             /* ==================================================== */
+             SUBR       SUBR(CMPFILE)
 
                CRTPEEKOBJ SRCFILE(&DEVLIB/&SRCFILE) SRCMBR(&SRCMBR) +
                             OBJLIB(&DEVLIB) DEVLIB(&DEVLIB) +

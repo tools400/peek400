@@ -187,6 +187,8 @@ ADDBNDDIRE:
                         *AND &SRCTYPE *NE 'PNLGRP'   +
                         *AND &SRCTYPE *NE 'DSPF'     +
                         *AND &SRCTYPE *NE 'PRTF'     +
+                        *AND &SRCTYPE *NE 'PF'       +
+                        *AND &SRCTYPE *NE 'LF'       +
                         *AND &SRCTYPE *NE 'RPGLE'    +
                         *AND &SRCTYPE *NE 'SQLRPGLE' +
                         *AND &SRCTYPE *NE 'C'        +
@@ -370,6 +372,72 @@ ADDBNDDIRE:
           /*                         *BCAT 'CPI(12)'          +   */
           /*                         *BCAT 'OVRFLW(88)')          */
           /*    ENDDO                                             */
+                GOTO       CMDLBL(CRT_OBJ)
+             ENDDO
+
+/* ----------------- */
+/* physical files    */
+/* ----------------- */
+             IF         COND(&SRCTYPE *EQ 'PF') THEN(DO)
+                CHGVAR     VAR(&OBJTYPE) VALUE('*FILE')
+                CHGVAR     VAR(&CMD) VALUE('CRTPF'      +
+                                     *BCAT  'FILE('     +
+                                     *TCAT  &OBJLIB     +
+                                     *TCAT  '/'         +
+                                     *TCAT  &MBR        +
+                                     *TCAT  ')'         +
+                                     *BCAT  'SRCFILE('  +
+                                     *TCAT  &LIB        +
+                                     *TCAT  '/'         +
+                                     *TCAT  &FILE       +
+                                     *TCAT  ')'         +
+                                     *BCAT  'SRCMBR('   +
+                                     *TCAT  &MBR        +
+                                     *TCAT  ')'         +
+                                     *BCAT  'OPTION('   +
+                                     *TCAT  '*EVENTF'   +
+                                     *TCAT  ')'         +
+                                     )
+                IF         COND(&MBR *EQ 'PEEKENV') THEN(DO)
+                   CHGVAR     VAR(&CMD) VALUE(&CMD         +
+                                        *BCAT  'MAXMBRS('  +
+                                        *TCAT  '*NOMAX'    +
+                                        *TCAT  ')'         +
+                                        )
+                ENDDO
+                ELSE       CMD(DO)
+                   CHGVAR     VAR(&CMD) VALUE(&CMD         +
+                                        *BCAT  'MAXMBRS('  +
+                                        *TCAT  '1'         +
+                                        *TCAT  ')'         +
+                                        )
+                ENDDO
+                GOTO       CMDLBL(CRT_OBJ)
+             ENDDO
+
+/* ----------------- */
+/* logical files     */
+/* ----------------- */
+             IF         COND(&SRCTYPE *EQ 'LF') THEN(DO)
+                CHGVAR     VAR(&OBJTYPE) VALUE('*FILE')
+                CHGVAR     VAR(&CMD) VALUE('CRTLF'      +
+                                     *BCAT  'FILE('     +
+                                     *TCAT  &OBJLIB     +
+                                     *TCAT  '/'         +
+                                     *TCAT  &MBR        +
+                                     *TCAT  ')'         +
+                                     *BCAT  'SRCFILE('  +
+                                     *TCAT  &LIB        +
+                                     *TCAT  '/'         +
+                                     *TCAT  &FILE       +
+                                     *TCAT  ')'         +
+                                     *BCAT  'SRCMBR('   +
+                                     *TCAT  &MBR        +
+                                     *TCAT  ')'         +
+                                     *BCAT  'OPTION('   +
+                                     *TCAT  '*EVENTF'   +
+                                     *TCAT  ')'         +
+                                     )
                 GOTO       CMDLBL(CRT_OBJ)
              ENDDO
 

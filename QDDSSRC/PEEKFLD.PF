@@ -9,11 +9,10 @@
       *                                                               *
       *===============================================================*
       * >>PRE-COMPILER<<                                              *
-      *   >>CRTCMD<<  CRTPF FILE(&LI/&OB) +                           *
-      *                 SRCFILE(&SL/&SF) SRCMBR(&SM);                 *
-      *   >>IMPORTANT<<                                               *
-      *     >>PARM<<  OPTION(*EVENTF);                                *
-      *   >>END-IMPORTANT<<                                           *
+      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
+      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
+      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
+      *                           INSTALL(*NO);                       *
       *   >>CMD<<     DLTF FILE(&LI/PEEKFLDL0);                       *
       *   >>MONMSG<<                                                  *
       *     >>MSGID<<   CPF2105; // Object not found                  *
