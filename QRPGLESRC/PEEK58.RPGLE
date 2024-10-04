@@ -665,11 +665,11 @@ dcl-proc f_execute export;
   dcl-s lenavl          int(10) inz;
   dcl-s lenavlrtn       int(10) inz;
 
-  dcl-ds errcode likeds(errcode_t ) inz;
+  dcl-ds errCode likeds(errCode_t) inz;
   //-------------------------------------------------------------------
 
-  reset errcode;
-  errcode.bytprv = %size(errcode);
+  reset errCode;
+  errCode.bytprv = %size(errCode);
 
   ceedod(1: desctype: datatype:
   descinf1: descinf2:
@@ -680,16 +680,14 @@ dcl-proc f_execute export;
   lenavl     = %len(cmd);
 
   optctrllen = %len(optctrl);
-  reset errcode;
-  errcode.bytprv = %size(errcode);
+  reset errCode;
+  errCode.bytprv = %size(errCode);
 
-  qcapcmd ( cmd : cmdlen : optctrl :
-  optctrllen : optctrlfmt : cmd : lenavl :
-  lenavlrtn : errcode );
+  qcapcmd (cmd: cmdlen: optctrl :optctrllen: optctrlfmt: cmd: lenavl: lenavlrtn: errCode);
 
-  if (errcode.bytavl <> 0);
-    o_msgid  = errcode.excid;
-    o_msgdta = errcode.excdta;
+  if (errCode.bytAvl <> 0);
+    o_msgid  = errCode.excID;
+    o_msgdta = errCode.excDta;
     isok     = bFalse;
   else;
     o_msgid  = ' ';
@@ -742,8 +740,7 @@ dcl-proc f_basedpf export;
   //  Einlesen der Dateiinformationen ...
   yqfile.name = i_file;
   yqfile.lib = i_lib;
-  peek41(yqfile: i_rcdfmt
-  : '*CREATE': ynbrofent: ydata);
+  peek41(yqfile: i_rcdfmt: '*CREATE': ynbrofent: ydata);
 
   if (ynbrofent = 0);
     return bFalse;
@@ -756,29 +753,26 @@ dcl-proc f_basedpf export;
     //      ... logical file
     select;
     when (fild0100.atnomb > 1);
-      //          ... multi-based-member logical file
+      // ... multi-based-member logical file
       if f_basedmbr(i_file: i_lib: i_mbr
-                 : i_rcdmbrnbr: i_rcdfmt
-                 : tfile: tlib: tmbr: trcdfmt
-                 ) = bFalse;
+                    : i_rcdmbrnbr: i_rcdfmt
+                    : tfile: tlib: tmbr: trcdfmt) = bFalse;
         return bFalse;
       endif;
 
     when (fild0100.atnofm > 1);
-      //          ... multi-format logical file
+      // ... multi-format logical file
       if f_basedmbr(i_file: i_lib: i_mbr
-                 : i_rcdmbrnbr: i_rcdfmt
-                 : tfile: tlib: tmbr: trcdfmt
-                 ) = bFalse;
+                    : i_rcdmbrnbr: i_rcdfmt
+                    : tfile: tlib: tmbr: trcdfmt) = bFalse;
         return bFalse;
       endif;
 
     other;
-      //          ... single-format logical file
+      // ... single-format logical file
       if f_basedmbr(i_file: i_lib: i_mbr
-                 : i_rcdmbrnbr: i_rcdfmt
-                 : tfile: tlib: tmbr: trcdfmt
-                 ) = bFalse;
+                    : i_rcdmbrnbr: i_rcdfmt
+                    : tfile: tlib: tmbr: trcdfmt) = bFalse;
         return bFalse;
       endif;
     endsl;
@@ -791,11 +785,10 @@ dcl-proc f_basedpf export;
     o_prcdfmt = trcdfmt;
 
   else;
-    //      ... physical file
+    // ... physical file
     if f_basedmbr(i_file: i_lib: i_mbr
-               : i_rcdmbrnbr: i_rcdfmt
-               : tfile: tlib: tmbr: trcdfmt
-               ) = bFalse;
+                  : i_rcdmbrnbr: i_rcdfmt
+                  : tfile: tlib: tmbr: trcdfmt) = bFalse;
       return bFalse;
     endif;
 
@@ -834,7 +827,7 @@ dcl-proc f_basedmbr export;
 
   //  Arbeitsfelder
   dcl-ds qFile likeds(qObj_t) inz;
-  dcl-ds errcode likeds(errcode_t) inz;
+  dcl-ds errCode likeds(errCode_t) inz;
 
   dcl-ds bspf0100 likeds(bspf0100_t) inz;
 
@@ -857,15 +850,14 @@ dcl-proc f_basedmbr export;
   o_pmbr  = ' ';
 
   //  Ermitteln Speicherbedarf
-  reset errcode;
-  errcode.bytprv = %size(errcode);
+  reset errCode;
+  errCode.bytprv = %size(errCode);
 
   qFile.name = i_file;
   qFile.lib = i_lib;
   pMbrd0300 = malloc(%size(mbrd0300));
-  qusrmbrd(mbrd0300: %size(mbrd0300): 'MBRD0300'
-  : qFile: i_mbr: '0': errcode);
-  if (errcode.bytavl <> 0);
+  qusrmbrd(mbrd0300: %size(mbrd0300): 'MBRD0300': qFile: i_mbr: '0': errCode);
+  if (errCode.bytAvl <> 0);
     isMbrFound = bFalse;
     return isMbrFound;
   endif;
@@ -874,9 +866,8 @@ dcl-proc f_basedmbr export;
   pMbrd0300 = realloc(pMbrd0300: mbrd0300.m3bytavl);
 
   //  Abrufen Beschreibung der Teildatei
-  qusrmbrd(mbrd0300: mbrd0300.m3bytavl: 'MBRD0300'
-  : qFile: i_mbr: '0': errcode);
-  if (errcode.bytavl <> 0);
+  qusrmbrd(mbrd0300: mbrd0300.m3bytavl: 'MBRD0300': qFile: i_mbr: '0': errCode);
+  if (errCode.bytAvl <> 0);
     isMbrFound = bFalse;
     return isMbrFound;
   endif;
@@ -917,7 +908,7 @@ dcl-proc f_basedmbr export;
 
     if (mbrNbr > 0);
       offset = %size(mbrd0300) +
-       (mbrNbr - 1) * %size(basedOnE);
+        (mbrNbr - 1) * %size(basedOnE);
       pBasedOnE  = f_addptr(pMbrd0300: offset);
       o_pFile    = basedOnE.basedOnFile;
       o_pLib     = basedOnE.basedOnLib;
@@ -972,7 +963,7 @@ dcl-proc f_numbased export;
   dcl-s f_numbased      like(int4_t) inz;
 
   //  Arbeitsfelder
-  dcl-ds errcode likeds(errcode_t) inz;
+  dcl-ds errCode likeds(errCode_t) inz;
 
   dcl-ds mbrd0300 inz;
     m3bytprv        int(10);
@@ -983,17 +974,11 @@ dcl-proc f_numbased export;
   //------------------------------------------------------------*
 
   //  Ermitteln Anzahl basierender Teildateien
-  reset errcode;
-  errcode.bytprv = %size(errcode);
+  reset errCode;
+  errCode.bytprv = %size(errCode);
 
-  qusrmbrd(mbrd0300       :
-  %size(mbrd0300):
-  'MBRD0300'     :
-  i_file + i_lib :
-  i_mbr          :
-  '0'            :
-  errcode        );
-  if (errcode.bytavl <> 0);
+  qusrmbrd(mbrd0300: %size(mbrd0300): 'MBRD0300': i_file + i_lib: i_mbr: '0': errCode);
+  if (errCode.bytAvl <> 0);
     f_numbased = -1;
   else;
     if (m3fileattr = 'PF');
@@ -1047,17 +1032,17 @@ dcl-proc f_cmdline export;
   dcl-s f_cmdline       like(bool_t) inz;
 
   dcl-ds usri0200 likeds(usri0200_t) inz;
-  dcl-ds errcode likeds(errcode_t ) inz;
+  dcl-ds errCode likeds(errCode_t) inz;
   //------------------------------------------------------------*
 
   clear usri0200;
 
-  reset errcode;
-  errcode.bytprv = %size(errcode);
+  reset errCode;
+  errCode.bytprv = %size(errCode);
 
-  qsyrusri (usri0200: %size(usri0200): 'USRI0200': sds.user: errcode);
+  qsyrusri (usri0200: %size(usri0200): 'USRI0200': sds.user: errCode);
 
-  if (errcode.bytavl <> 0 or usri0200.lmtCap = '*YES');
+  if (errCode.bytAvl <> 0 or usri0200.lmtCap = '*YES');
     f_cmdline = bFalse;
   else;
     f_cmdline = bTrue;
@@ -1283,7 +1268,7 @@ dcl-proc p_rmvpgmmg export;
   dcl-s stackCount         like(int4_t) inz;
   dcl-s msgKey         char(4) inz;
 
-  dcl-ds errCode likeds(errcode_t ) inz;
+  dcl-ds errCode likeds(errCode_t) inz;
 
   dcl-ds qStackE qualified inz;
     mod        like(mod_t);
@@ -1306,8 +1291,7 @@ dcl-proc p_rmvpgmmg export;
   reset errCode;
   errCode.bytprv = %size(errCode);
 
-  qmhrmvpm(i_pgm: stackCount: msgKey: '*ALL': errCode
-           : %size(i_pgm): qStackE: '*NO');
+  qmhrmvpm(i_pgm: stackCount: msgKey: '*ALL': errCode: %size(i_pgm): qStackE: '*NO');
 
 end-proc;
 
@@ -1341,10 +1325,10 @@ dcl-proc p_sndpgmmg export;
   if (i_msgid <> '');
 
     if (%subst(i_msgid: 1: 3) = 'AID' or
-        %subst(i_msgid: 1: 3) = 'KEY' or
-        %subst(i_msgid: 1: 3) = 'MBX' or
-        %subst(i_msgid: 1: 3) = 'TXT' or
-        %subst(i_msgid: 1: 3) = 'USR');
+    %subst(i_msgid: 1: 3) = 'KEY' or
+    %subst(i_msgid: 1: 3) = 'MBX' or
+    %subst(i_msgid: 1: 3) = 'TXT' or
+    %subst(i_msgid: 1: 3) = 'USR');
       qMsgF.name = f_appmsgf;
       qMsgF.lib = f_appmsgfl;
     else;
@@ -1375,9 +1359,9 @@ dcl-proc p_sndpgmmg export;
     qStackE.module = i_pgmName;
 
     qmhsndpm(i_msgid: qMsgF
-             : i_msgDta: %size(i_msgDta): msgType: stackE: stackCount
-             : msgKey: errCode: %size(stackE): qStackE
-             : -1);
+    : i_msgDta: %size(i_msgDta): msgType: stackE: stackCount
+    : msgKey: errCode: %size(stackE): qStackE
+    : -1);
 
   endif;
 
@@ -1615,12 +1599,12 @@ dcl-proc p_dectobin export;
     select;
     when (i_length = 2);
       %subst(io_string  :
-            i_startpos :
-            i_length   ) = alpha2;
+        i_startpos :
+        i_length   ) = alpha2;
     when (i_length = 4);
       %subst(io_string  :
-            i_startpos :
-            i_length   ) = alpha4;
+        i_startpos :
+        i_length   ) = alpha4;
     other;
       p_kill('Incorrect length: ' + %char(i_length));
     endsl;
@@ -1643,18 +1627,18 @@ dcl-proc f_isnotalw export;
 
   //  Wenn es sich um einen der folgenden Feldtypen handelt, ...
   if (i_fldl0100.f1dtyp = 'A' or    // = Alpha
-      i_fldl0100.f1dtyp = 'B' or    // = Binary
-      i_fldl0100.f1dtyp = 'P' or    // = Packed
-      i_fldl0100.f1dtyp = 'S' or    // = Zoned
-      i_fldl0100.f1dtyp = 'L' or    // = Date
-      i_fldl0100.f1dtyp = 'T' or    // = Time
-      i_fldl0100.f1dtyp = 'Z' or    // = Timestamp
-      i_fldl0100.f1dtyp = 'J' or    // = DBCS-Only
-      i_fldl0100.f1dtyp = 'O' or    // = DBCS-Open
-      i_fldl0100.f1dtyp = 'E' or    // = DBCS-Either
-      i_fldl0100.f1dtyp = 'F' or    // = Float
-      i_fldl0100.f1dtyp = 'G' or    // = Graphic
-      i_fldl0100.f1dtyp = '8');     // = Boolean
+  i_fldl0100.f1dtyp = 'B' or    // = Binary
+  i_fldl0100.f1dtyp = 'P' or    // = Packed
+  i_fldl0100.f1dtyp = 'S' or    // = Zoned
+  i_fldl0100.f1dtyp = 'L' or    // = Date
+  i_fldl0100.f1dtyp = 'T' or    // = Time
+  i_fldl0100.f1dtyp = 'Z' or    // = Timestamp
+  i_fldl0100.f1dtyp = 'J' or    // = DBCS-Only
+  i_fldl0100.f1dtyp = 'O' or    // = DBCS-Open
+  i_fldl0100.f1dtyp = 'E' or    // = DBCS-Either
+  i_fldl0100.f1dtyp = 'F' or    // = Float
+  i_fldl0100.f1dtyp = 'G' or    // = Graphic
+  i_fldl0100.f1dtyp = '8');     // = Boolean
 
     //  ... dann
     //      prüfen, ob es sich um ein GRAPHIC Feld ohne CCSID handelt
@@ -1678,7 +1662,7 @@ dcl-proc f_isnotalw export;
       //      ... dann
       //          prüfen, ob es sich um alpha-numerisches Feld handelt.
       if i_fldl0100.f1dtyp = 'A' or                                      // = Alpha
-         i_fldl0100.f1dtyp = 'G';                                        // = Graphic
+      i_fldl0100.f1dtyp = 'G';                                        // = Graphic
         notAllowed = bFalse;
       else;
         notAllowed = bTrue;
@@ -1757,7 +1741,7 @@ dcl-proc p_sndstsmg export;
 
   dcl-s msgKey         char(4) inz;
 
-  dcl-ds errCode likeds(errcode_t ) inz;
+  dcl-ds errCode likeds(errcode_t) inz;
   //------------------------------------------------------------*
 
   if (i_msgid <> '');
@@ -1771,8 +1755,8 @@ dcl-proc p_sndstsmg export;
     errCode.bytprv = %size(errCode);
 
     qmhsndpm(i_msgid: yqmsgf
-             : i_msgdta: %size(i_msgdta): '*STATUS' : '*EXT'
-             : 0 : msgKey : errCode );
+    : i_msgdta: %size(i_msgdta): '*STATUS' : '*EXT'
+    : 0 : msgKey : errCode );
 
   endif;
 
@@ -1787,13 +1771,13 @@ dcl-proc f_rtvmsgd export;
     i_msgid         value  like(msgid_t);
     i_msgdta        value  like(msgdta_t);
     i_rplcsubv      const  like(bool_t)
-         options(*nopass);
+    options(*nopass);
     i_rtnfmtcc      const  like(bool_t)
-         options(*nopass);
+    options(*nopass);
     i_msgf          value  like(file_t)
-         options(*nopass);
+    options(*nopass);
     i_msgfl         value  like(lib_t)
-         options(*nopass);
+    options(*nopass);
   end-pi;
 
   //  Funktionswert
@@ -1809,7 +1793,7 @@ dcl-proc f_rtvmsgd export;
   dcl-s msgdtaln        int(10) inz;
   dcl-s rplcsubv        char(10) inz;
   dcl-s rtnfmtcc        char(10) inz;
-  dcl-ds errcode likeds(errcode_t ) inz;
+  dcl-ds errcode likeds(errcode_t) inz;
 
   //------------------------------------------------------------*
 
@@ -1913,7 +1897,7 @@ dcl-proc p_movpgmmg export;
   dcl-s msgKey      char(4) inz;
   dcl-s typesToMove char(10) dim(4);
 
-  dcl-ds errCode likeds(errcode_t ) inz;
+  dcl-ds errCode likeds(errcode_t) inz;
 
   dcl-ds toQStackE qualified;
     module       like(mod_t) inz;
@@ -1930,8 +1914,8 @@ dcl-proc p_movpgmmg export;
   typesToMove(4) = '*ESCAPE';
 
   qmhmovpm(msgKey: typesToMove
-           : %elem(typesToMove) : i_pgmnme : 2 : errCode
-           : %len(%trimr(i_pgmnme)) : toQStackE : '*CHAR' : *null: 1);
+  : %elem(typesToMove) : i_pgmnme : 2 : errCode
+  : %len(%trimr(i_pgmnme)) : toQStackE : '*CHAR' : *null: 1);
 
 end-proc;
 
@@ -2097,7 +2081,7 @@ dcl-proc f_splttxt_DEPRECATED export;
 
     //      Zeichenkette entnehmen
     %subst(o_text: 1: %len(o_text)) =
-      %subst(i_text: i_strPos: rtnLen);
+    %subst(i_text: i_strPos: rtnLen);
 
     //      Auf Zeilenwechsel prüfen
     pNewLine = %scan('°': %subst(o_text: 1: %len(o_text)));
@@ -2127,7 +2111,7 @@ dcl-proc f_splttxt_DEPRECATED export;
             if (%subst(o_text: trimLen: 1) = ' ');
               rtnLen = trimLen;
               %subst(o_text: 1: %len(o_text)) =
-                %subst(o_text: 1: rtnLen);
+              %subst(o_text: 1: rtnLen);
               leave;
             endif;
             trimLen = trimLen - 1;
@@ -2472,25 +2456,25 @@ end-proc;
 //   doesExists    - Returns bTrue when the object exists.
 //=========================================================================
 dcl-proc f_exist export;
-  dcl-pi *N              ind;
-    i_obj           char(10) const;
-    i_lib           char(10) const  options(*omit);
-    i_type          char(10) const;
-    i_mbr           char(10) const  options(*nopass);
+  dcl-pi *N ind;
+    i_obj    char(10) const;
+    i_lib    char(10) const  options(*omit);
+    i_type   char(10) const;
+    i_mbr    char(10) const  options(*nopass);
   end-pi;
 
   //  Return value
-  dcl-s doesexist       ind inz(bFalse);
+  dcl-s doesExist ind inz(bFalse);
 
   //  Optional parameter fields
-  dcl-s lib             like(i_lib       ) inz;
-  dcl-s mbr             like(i_mbr       ) inz;
+  dcl-s lib like(i_lib) inz;
+  dcl-s mbr like(i_mbr) inz;
 
   //  Local fields
   dcl-ds objd0100 likeds(objd0100_t) inz;
   dcl-ds mbrd0100 likeds(mbrd0100_t) inz;
-  dcl-ds qobj likeds(qobj_t) inz;
-  dcl-ds errcode likeds(errcode_t ) inz;
+  dcl-ds qObj likeds(qobj_t) inz;
+  dcl-ds errcode likeds(errcode_t) inz;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   // Process optional parameter values ...
@@ -2509,30 +2493,29 @@ dcl-proc f_exist export;
   endif;
 
   // Retrieve the object description
-  qobj.name = i_obj;
-  qobj.lib  = lib;
+  qObj.name = i_obj;
+  qObj.lib  = lib;
   reset errcode;
   errcode.bytprv = %size(errcode);
-  qusrobjd(objd0100: %size(objd0100): 'OBJD0100'
-  : qobj: i_type: errcode);
+
+  qusrobjd(objd0100: %size(objd0100): 'OBJD0100': qObj: i_type: errcode);
 
   // Retrieve member description if object is a file
   // and a member name was given
-  if (errcode.bytavl = 0) and (mbr <> '*NONE');
-    reset errcode;
-    errcode.bytprv = %size(errcode);
-    qusrmbrd(mbrd0100: %size(mbrd0100): 'MBRD0100'
-    : qobj: mbr: '0': errcode);
+  if (errCode.bytAvl = 0) and (mbr <> '*NONE');
+    reset errCode;
+    errCode.bytprv = %size(errCode);
+    qusrmbrd(mbrd0100: %size(mbrd0100): 'MBRD0100': qObj: mbr: '0': errCode);
   endif;
 
   // Set return value
-  if (errcode.bytavl = 0);
-    doesexist = bTrue;
+  if (errCode.bytAvl = 0);
+    doesExist = bTrue;
   else;
-    doesexist = bFalse;
+    doesExist = bFalse;
   endif;
 
-  return doesexist;
+  return doesExist;
 
 end-proc;
 
@@ -2597,7 +2580,7 @@ dcl-proc f_wordwrap export;
     options = i_options;
   else;
     options = cwordwrap_paragraph_none +
-    cwordwrap_paragraph_trimr;
+      cwordwrap_paragraph_trimr;
   endif;
 
   // TRIM trailing blanks
@@ -2688,7 +2671,7 @@ dcl-proc f_wordwrap export;
 
       // If all we got is a EOP, ...
       if (%len(text)    = %len(theeop.string)   ) and
-         (f_ucase(text) = f_ucase(theeop.string));
+      (f_ucase(text) = f_ucase(theeop.string));
         // ... then delete it
         text = '';
       endif;
@@ -2869,7 +2852,7 @@ dcl-proc f_ucase export;
 
   //  Fields for QlgConvertCase API
   dcl-s stringbuf       char(4096) inz;
-  dcl-ds errcode likeds(errcode_t ) inz;
+  dcl-ds errCode likeds(errCode_t) inz;
 
   dcl-ds reqctrlblk likeds(QLGCNVCS_reqCtrlBlk_t) inz;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2881,10 +2864,10 @@ dcl-proc f_ucase export;
     reqctrlblk.case = CVTCASE_TO_UPPER;
     reqctrlblk.reserved = *allx'00';
 
-    reset errcode;
+    reset errCode;
 
     qlgconvertcase(reqctrlblk
-                   : i_string: stringbuf: %len(i_string): errcode);
+    : i_string: stringbuf: %len(i_string): errCode);
     string = %subst(stringbuf: 1: %len(i_string));
   else;
     string = i_string;
@@ -2985,29 +2968,23 @@ dcl-proc f_sndmsgtocmdline export;
   //  Local fields
   dcl-s msgkey          char(4) inz;
 
-  dcl-ds qmsgf qualified            inz;
+  dcl-ds qmsgf qualified inz;
     name            char(10);
     lib             char(10);
   end-ds;
 
-  dcl-ds errcode qualified            inz;
-    bytprv          int(10);
-    bytavl          int(10);
-    excid           char(7);
-    reserved        char(1);
-    excdta          char(256);
-  end-ds;
+  dcl-ds errCode likeds(errCode_t) inz;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   clear qmsgf;
   qmsgf.name = f_appmsgf;
   qmsgf.lib  = f_appmsgfl;
 
-  clear errcode;
-  errcode.bytprv = %size(errcode);
+  clear errCode;
+  errCode.bytprv = %size(errCode);
 
   qmhsndpm(i_msgid: qmsgf: i_msgdta: %size(i_msgdta): '*DIAG'
-           : 'PEEK': 2: msgkey: errcode);
+  : 'PEEK': 2: msgkey: errCode);
 
 end-proc;
 
@@ -3101,7 +3078,7 @@ dcl-proc f_getrecordformatinf export;
   dcl-ds qdb_qddfmt likeds(qdb_qddfmt_t)
   based(pqdb_qddfmt);
   dcl-s size            int(10);
-  dcl-ds errcode likeds(errcode_t) inz;
+  dcl-ds errCode likeds(errCode_t) inz;
   // ----------------------------------------------------------------------
 
   clear rcdfmtinf;
@@ -3114,12 +3091,12 @@ dcl-proc f_getrecordformatinf export;
 
   monitor;
     qdbrtvfd(qdb_qddfmt: size: qfilertn: 'FILD0200': qfile
-    :'*FIRST' :'0' :'*LCL' :'*EXT' : errcode);
+      :'*FIRST' :'0' :'*LCL' :'*EXT' : errCode);
 
     size = (qdb_qddfmt.bytavl);
     pqdb_qddfmt = %realloc(pqdb_qddfmt: size);
     qdbrtvfd(qdb_qddfmt: size: qfilertn: 'FILD0200': qfile
-    :'*FIRST' :'0' :'*LCL' :'*EXT' : errcode);
+    :'*FIRST' :'0' :'*LCL' :'*EXT' : errCode);
 
     rcdfmtinf.name = qdb_qddfmt.qddfname;
     rcdfmtinf.id = qdb_qddfmt.qddfseq;
@@ -3183,7 +3160,7 @@ dcl-proc p_kill export;
   errCode.bytprv = %size(errCode);
 
   qmhsndpm('CPF9897': qMsgF: i_text: %len(i_text): '*ESCAPE'
-           : '*PGMBDY': 1: msgKey: errCode);
+  : '*PGMBDY': 1: msgKey: errCode);
 
 end-proc;
 
