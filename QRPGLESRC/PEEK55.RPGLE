@@ -170,14 +170,14 @@ dcl-proc main;
   end-pi;
 
   //  Arbeitsfelder
-  dcl-s pfile           like(file_t);
-  dcl-s plib            like(lib_t);
-  dcl-s pmbr            like(mbr_t);
-  dcl-s pfmt            like(rcdfmt_t);
-  dcl-s penvmbr         like(i_envMbr);
-  dcl-s prcdfmtid       like(fmtid_t);
-  dcl-s pmsgid          like(msgid_t);
-  dcl-s pmsgdta         like(msgdta_t);
+  dcl-s pFile           like(file_t);
+  dcl-s pLib            like(lib_t);
+  dcl-s pMbr            like(mbr_t);
+  dcl-s pFmt            like(rcdFmt_t);
+  dcl-s pEnvMbr         like(i_envMbr);
+  dcl-s RrcdFmtID       like(fmtID_t);
+  dcl-s pMsgID          like(msgID_t);
+  dcl-s pMsgDta         like(msgDta_t);
 
   dcl-ds set0015 likeds(set0015_t) inz;
 
@@ -215,22 +215,14 @@ dcl-proc main;
     select;
     //  ... *FILE
     when (i_envMbr  = '*FILE');
-      penvmbr = i_file;
+      pEnvMbr = i_file;
     other;
       //  ... genau diese Teildatei
-      penvmbr = i_envMbr;
+      pEnvMbr = i_envMbr;
     endsl;
 
     //  Prüfen Arbeitsumgebung  ...
-    f_execute('CHKOBJ +
-                OBJ(' +
-                 %trim(i_envLib) + '/' +
-                 %trim(i_envFile) +
-                ') +
-                OBJTYPE(*FILE) +
-                MBR(' + %trim(penvmbr) + ') +
-                AUT(*USE)'
-              : o_msgID: o_msgDta);
+    f_exist(i_envFile: i_envLib: '*FILE': pEnvMbr: o_msgID: o_msgDta);
 
     //  Programm mit Fehlermeldung beenden
     if (o_msgID <> '');
@@ -244,19 +236,19 @@ dcl-proc main;
                  %trim(i_envLib) + '/' +
                  %trim(i_envFile) +
                 ') +
-                MBR(' + %trim(penvmbr) + ') +
+                MBR(' + %trim(pEnvMbr) + ') +
                 OVRSCOPE(*ACTGRPDFN) +
                 SHARE(*NO) SEQONLY(*NO) SECURE(*YES)'
-              : pmsgid: pmsgdta);
-    pmsgid = '';
-    pmsgdta = '';
+              : pMsgID: pMsgDta);
+    pMsgID = '';
+    pMsgDta = '';
 
     //  Öffnen Datei ...
     open peekenv;
 
     if (i_option = '*SLCLAYOUT');
-      loadRecordFormatID(prcdfmtid);
-      if (prcdfmtid <> '' and prcdfmtid <> i_rcdFmtID);
+      loadRecordFormatID(RrcdFmtID);
+      if (RrcdFmtID <> '' and RrcdFmtID <> i_rcdFmtID);
         clear usr8234;
         usr8234.var1 = i_envFile;
         usr8234.var2 = i_envLib;
@@ -304,19 +296,19 @@ dcl-proc main;
 
     //  Basiert auf physischer Datei ...
     f_basedpf(o_file: o_lib: o_mbr: o_rcdFmt
-              : -1: pfile: plib: pmbr: pfmt);
+              : -1: pFile: pLib: pMbr: pFmt);
 
     //  Einlesen AccessMode ...  (dateiunabhängig)
     loadAccessMode(o_accMode);
 
     //  Einlesen SqlSelect ...   (phys. Datei muss gleich sein)
-    loadSQLSelect(pfile: '*NONE': o_sqlSel);
+    loadSQLSelect(pFile: '*NONE': o_sqlSel);
 
     //  Einlesen SqlOrder ...    (phys. Datei muss gleich sein)
-    loadSQLOrderBy(pfile: '*NONE': o_sqlOrd  );
+    loadSQLOrderBy(pFile: '*NONE': o_sqlOrd  );
 
     //  Einlesen isKeyLower ...  (phys. Datei muss gleich sein)
-    loadIsKeyLowerCase(pfile: '*NONE': o_isKeyLower);
+    loadIsKeyLowerCase(pFile: '*NONE': o_isKeyLower);
 
     //  Beenden, wenn Datei gewechselt hat, weil die Datei neu geöffnet werden muss
     //  und damit alle Layout und PIN Informationen gelöscht werden. PEEK55 wird dann
@@ -328,13 +320,13 @@ dcl-proc main;
       // Aber wenn die Datei nicht gewechselt hat, dann ...
 
       //  Einlesen Layout ...          (phys. Datei muss gleich sein)
-      loadLayout(pfile: '*NONE');
+      loadLayout(pFile: '*NONE');
 
       //  Einlesen Pin-Record ...      (phys. Datei und Bibliothek müssen gleich sei
-      loadPinnedRecords(pfile: plib: o_pinTabR: o_nbrPinR);
+      loadPinnedRecords(pFile: pLib: o_pinTabR: o_nbrPinR);
 
       //  Einlesen Pin-Column ...      (phys. Datei muss gleich sein)
-      loadPinnedColumns(pfile: '*NONE': o_pinTabC: o_nbrPinC);
+      loadPinnedColumns(pFile: '*NONE': o_pinTabC: o_nbrPinC);
 
     endif;
 
@@ -345,9 +337,9 @@ dcl-proc main;
     f_execute('DLTOVR +
                 FILE(PEEKENV) +
                 LVL(*ACTGRPDFN)'
-              : pmsgid: pmsgdta);
-    pmsgid = '';
-    pmsgdta = '';
+              : pMsgID: pMsgDta);
+    pMsgID = '';
+    pMsgDta = '';
 
   enddo;
 

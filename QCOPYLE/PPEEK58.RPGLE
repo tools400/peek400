@@ -376,10 +376,12 @@ end-pr;
 
 //-------------------------------------------------------------------*
 dcl-pr f_exist ind;
-  i_obj           char(10) const;
-  i_lib           char(10) const  options(*omit);
-  i_type          char(10) const;
-  i_mbr           char(10) const  options(*nopass);
+  i_obj     char(10) const;
+  i_lib     char(10) const options(*omit);
+  i_type    char(10) const;
+  i_mbr     char(10) const options(*omit: *nopass);
+  o_msgID   like(msgid_t) options(*omit: *nopass);
+  o_msgDta  like(msgdta_t) options(*omit: *nopass);
 end-pr;
 
 //-------------------------------------------------------------------*

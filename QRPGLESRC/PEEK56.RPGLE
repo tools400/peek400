@@ -73,8 +73,8 @@ dcl-s g_envmbr        char(10);
 dcl-s yfkeys          char(18) dim(32)       inz(*blanks);
 dcl-s ynbrofkeys      like(int4_t) inz;
 dcl-s yexclkeys       like(pgmcmd_t) dim(25);
-dcl-s ymsgid          char(7) inz(*blanks);
-dcl-s ymsgdta         char(512) inz(*blanks);
+dcl-s yMsgID          char(7) inz(*blanks);
+dcl-s yMsgDta         char(512) inz(*blanks);
 
 //  Peek46:
 dcl-ds yqfile;
@@ -116,7 +116,7 @@ dcl-s lstnbrrcd       inz(0) like(sflpage);
 
 dcl-s wrk_sfsanr      inz(*zeros ) like(sfsanr );
 
-dcl-s lastfile        like(##file    ) inz;
+dcl-s lastFile        like(##file    ) inz;
 dcl-s lastlib         like(##lib     ) inz;
 dcl-s isprdlib        like(bool_t) inz(bFalse);
 
@@ -228,7 +228,7 @@ dow ('1');
   *in70 = '0';
 
   //  Nachrichten löschen
-  p_rmvpgmmg(sds.pgmname);
+  p_rmvpgmmg(sds.pgmName);
 
   //  Bezugszahlen löschen
   exsr clrindctl;
@@ -240,12 +240,12 @@ dow ('1');
 
   //  Mappen der gedrückten Taste
   //  in Programmbefehl
-  peek21(workstn.aid: sds.pgmname
-        : ypgmcmd: ycmddta: ymsgid: ymsgdta);
-  if (ymsgid <> '');
-    p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
-    ymsgid = '';
-    ymsgdta = '';
+  peek21(workstn.aid: sds.pgmName
+        : ypgmcmd: ycmddta: yMsgID: yMsgDta);
+  if (yMsgID <> '');
+    p_sndpgmmg(yMsgID: yMsgDta: sds.pgmName);
+    yMsgID = '';
+    yMsgDta = '';
     iter;
   endif;
 
@@ -309,7 +309,7 @@ dow ('1');
 
   other;
     //  Falsche Taste gedrückt
-    p_wrongkey(workstn.aid: sds.pgmname);
+    p_wrongkey(workstn.aid: sds.pgmName);
     iter;
   endsl;
 
@@ -388,7 +388,7 @@ begsr c_search;
   if (lstmbr = '');
     *in70 = '1';
     clear usr8209;
-    p_sndpgmmg('USR8209': usr8209: sds.pgmname);
+    p_sndpgmmg('USR8209': usr8209: sds.pgmName);
   else;
     exsr postombr;
     if (isNewPos = bTrue);
@@ -418,7 +418,7 @@ begsr postombr;
       isNewPos = bFalse;
       clear usr8180;
       usr8180.var1 = lstmbr;
-      p_sndpgmmg('USR8180': usr8180: sds.pgmname);
+      p_sndpgmmg('USR8180': usr8180: sds.pgmName);
     else;
       isNewPos = bTrue;
     endif;
@@ -498,7 +498,7 @@ begsr vctl;
   // - Funktion nicht freigeschaltet
   if (##file = '' or ##lib  = '' or set0015.set_envena = bFalse);
     clear usr8184;
-    p_sndpgmmg('USR8184': usr8184: sds.pgmname);
+    p_sndpgmmg('USR8184': usr8184: sds.pgmName);
     isCtlError = bTrue;
     exsr poscsr;
     leavesr;
@@ -550,50 +550,34 @@ begsr prf40;
   dou ('1');
 
     //  gültiger Name ?
-    if (f_vldname(##file: ymsgid: ymsgdta) = bTrue);
+    if (f_vldname(##file: yMsgID: yMsgDta) = bTrue);
       isCtlError = bFalse;
     else;
       isCtlError = bTrue;
-      if (ymsgid <> '');
-        p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
-        ymsgid = '';
-        ymsgdta = '';
+      if (yMsgID <> '');
+        p_sndpgmmg(yMsgID: yMsgDta: sds.pgmName);
+        yMsgID = '';
+        yMsgDta = '';
       endif;
       leave;
     endif;
 
     //  Prüfen Datei
     //  ------------
-    f_execute('CHKOBJ'      +
-             ' OBJ('       +
-             %trim(##lib)  +
-             '/'           +
-             %trim(##file) +
-             ')'           +
-             ' OBJTYPE('   +
-             '*FILE'       +
-             ')'           +
-             ' MBR('       +
-              '*NONE'      +
-             ')'           +
-             ' AUT('       +
-             '*NONE'       +
-             ')'           :
-             ymsgid        :
-             ymsgdta       );
+    f_exist(##file: ##lib: '*FILE': '*NONE': yMsgID: yMsgDta);
 
-    if (ymsgid <> '');
+    if (yMsgID <> '');
       isCtlError = bTrue;
-      p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
-      ymsgid = '';
-      ymsgdta = '';
+      p_sndpgmmg(yMsgID: yMsgDta: sds.pgmName);
+      yMsgID = '';
+      yMsgDta = '';
       leave;
     else;
       isCtlError = bFalse;
     endif;
 
     //  Datei geändert ?
-    if (##file <> lastfile);
+    if (##file <> lastFile);
       isDirty = bTrue;
       leave;
     endif;
@@ -617,41 +601,26 @@ begsr prf41;
   dou ('1');
 
     //  gültiger Name ?
-    if (f_vldname(##lib: ymsgid: ymsgdta) = bTrue);
+    if (f_vldname(##lib: yMsgID: yMsgDta) = bTrue);
       isCtlError = bFalse;
     else;
       isCtlError = bTrue;
-      if (ymsgid <> '');
-        p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
-        ymsgid = '';
-        ymsgdta = '';
+      if (yMsgID <> '');
+        p_sndpgmmg(yMsgID: yMsgDta: sds.pgmName);
+        yMsgID = '';
+        yMsgDta = '';
       endif;
       leave;
     endif;
 
     //  Prüfen Bibliothek
     //  -----------------
-    f_execute('CHKOBJ'      +
-             ' OBJ('       +
-             %trim(##lib)  +
-             ')'           +
-             ' OBJTYPE('   +
-             '*LIB'        +
-             ')'           +
-             ' MBR('       +
-              '*NONE'      +
-             ')'           +
-             ' AUT('       +
-             '*NONE'       +
-             ')'           :
-             ymsgid        :
-             ymsgdta       );
-
-    if (ymsgid <> '');
+    f_exist(##lib: *omit: '*LIB': *omit: yMsgID: yMsgDta);
+    if (yMsgID <> '');
       isCtlError = bTrue;
-      p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
-      ymsgid = '';
-      ymsgdta = '';
+      p_sndpgmmg(yMsgID: yMsgDta: sds.pgmName);
+      yMsgID = '';
+      yMsgDta = '';
       leave;
     else;
       isCtlError = bFalse;
@@ -682,13 +651,13 @@ begsr prf20;
 
     //  Zuordnung AUSWAHL => Befehl ...
     isCtlError =
-     f_isvldopt(##ctlau: ymsgid: ymsgdta);
+     f_isvldopt(##ctlau: yMsgID: yMsgDta);
     if (isCtlError = bTrue);
       ctl_cmd = ' ';
-      if (ymsgid <> '');
-        p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
-        ymsgid = '';
-        ymsgdta = '';
+      if (yMsgID <> '');
+        p_sndpgmmg(yMsgID: yMsgDta: sds.pgmName);
+        yMsgID = '';
+        yMsgDta = '';
       endif;
       leave;
     endif;
@@ -698,7 +667,7 @@ begsr prf20;
     if ((##mnme  <> '' or ##mtxt  <> '') and ##ctlau = ' ');
       clear usr8110;
       usr8110.var1   = ##ctlau;
-      p_sndpgmmg('USR8110': usr8110: sds.pgmname);
+      p_sndpgmmg('USR8110': usr8110: sds.pgmName);
       isCtlError = bTrue;
       leave;
     endif;
@@ -719,20 +688,20 @@ endsr;
 begsr prf21;
 
   //  gültiger Name ?
-  if (f_vldname(##mnme: ymsgid: ymsgdta) = bTrue);
+  if (f_vldname(##mnme: yMsgID: yMsgDta) = bTrue);
     isCtlError = bFalse;
   else;
     isCtlError = bTrue;
-    if (ymsgid <> '');
-      p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
-      ymsgid = '';
-      ymsgdta = '';
+    if (yMsgID <> '');
+      p_sndpgmmg(yMsgID: yMsgDta: sds.pgmName);
+      yMsgID = '';
+      yMsgDta = '';
     endif;
   endif;
 
 
-  if (ymsgid = 'CPD0078');
-    p_sndpgmmg('CPD0078': ymsgdta: sds.pgmname);
+  if (yMsgID = 'CPD0078');
+    p_sndpgmmg('CPD0078': yMsgDta: sds.pgmName);
     isCtlError = bTrue;
   endif;
 
@@ -769,114 +738,82 @@ begsr chkfile;
 
   //  Prüfen Datei
   //  ------------
-  f_execute('CHKOBJ'           +
-           ' OBJ('            +
-           %trim(o_qfile.lib ) +
-           '/'                +
-           %trim(o_qfile.name) +
-           ')'                +
-           ' OBJTYPE('        +
-           '*FILE'            +
-           ')'                +
-           ' MBR('            +
-            '*NONE'           +
-           ')'                +
-           ' AUT('            +
-           '*NONE'            +
-           ')'                :
-           ymsgid             :
-           ymsgdta            );
+  f_exist(o_qfile.name: o_qfile.lib: '*FILE': '*NONE': yMsgID: yMsgDta);
 
   //  Wenn die Datei nicht gefunden werden konnte, ...
-  if (ymsgid = 'CPF9801');
+  if (yMsgID = 'CPF9801');
     //  ... dann
     //      anlegen Datei
-    f_execute('CRTDUPOBJ'        +
-             ' OBJ('            +
-              'PEEKENV'         +
-             ')'                +
-             ' FROMLIB('        +
-             %trim(sds.pgmlib) +
-             ')'                +
-             ' OBJTYPE('        +
-             '*FILE'            +
-             ')'                +
-             ' TOLIB('          +
-             %trim(o_qfile.lib ) +
-             ')'                +
-             ' NEWOBJ('         +
-             %trim(o_qfile.name) +
-             ')'                :
-             ymsgid             :
-             ymsgdta            );
+    f_execute('CRTDUPOBJ'         +
+              ' OBJ('             +
+               'PEEKENV'          +
+              ')'                 +
+              ' FROMLIB('         +
+              %trim(sds.pgmlib)   +
+              ')'                 +
+              ' OBJTYPE('         +
+              '*FILE'             +
+              ')'                 +
+              ' TOLIB('           +
+              %trim(o_qfile.lib ) +
+              ')'                 +
+              ' NEWOBJ('          +
+              %trim(o_qfile.name) +
+              ')'                 :
+              yMsgID              :
+              yMsgDta             );
 
-    if (ymsgid = '');
-      f_execute('RMVM'             +
-               ' FILE('           +
-               %trim(o_qfile.lib ) +
-               '/'                +
-               %trim(o_qfile.name) +
-               ')'                +
-               ' MBR('            +
-                '*ALL'            +
-               ')'                :
-               ymsgid             :
-               ymsgdta            );
+    if (yMsgID = '');
+      f_execute('RMVM'              +
+                ' FILE('            +
+                %trim(o_qfile.lib ) +
+                '/'                 +
+                %trim(o_qfile.name) +
+                ')'                 +
+                ' MBR('             +
+                 '*ALL'             +
+                ')'                 :
+                yMsgID              :
+                yMsgDta             );
 
-      ymsgid  = '';
-      ymsgdta = '';
+      yMsgID  = '';
+      yMsgDta = '';
     endif;
   endif;
 
-  if (ymsgid <> '');
-    p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
-    ymsgid = '';
-    ymsgdta = '';
+  if (yMsgID <> '');
+    p_sndpgmmg(yMsgID: yMsgDta: sds.pgmName);
+    yMsgID = '';
+    yMsgDta = '';
     exsr clrfilep;
     leavesr;
   endif;
 
   //  Prüfen Teildatei
   //  ----------------
-  f_execute('CHKOBJ'           +
-           ' OBJ('            +
-           %trim(o_qfile.lib ) +
-           '/'                +
-           %trim(o_qfile.name) +
-           ')'                +
-           ' OBJTYPE('        +
-           '*FILE'            +
-           ')'                +
-           ' MBR('            +
-           %trim(o_mbr  )      +
-           ')'                +
-           ' AUT('            +
-           '*NONE'            +
-           ')'                :
-           ymsgid             :
-           ymsgdta            );
+  f_exist(o_qfile.name: o_qfile.lib: '*FILE': o_mbr: yMsgID: yMsgDta);
 
   //  Wenn die Teildatei nicht gefunden werden konnte, ...
-  if (ymsgid = 'CPF9815');
+  if (yMsgID = 'CPF9815');
     //  ... dann
     //      anlegen Teildatei
-    f_execute('ADDPFM'           +
-             ' FILE('           +
-             %trim(o_qfile.lib ) +
-             '/'                +
-             %trim(o_qfile.name) +
-             ')'                +
-             ' MBR('            +
-             %trim(o_mbr )       +
-             ')'                :
-             ymsgid             :
-             ymsgdta            );
+    f_execute('ADDPFM'            +
+              ' FILE('            +
+              %trim(o_qfile.lib ) +
+              '/'                 +
+              %trim(o_qfile.name) +
+              ')'                 +
+              ' MBR('             +
+              %trim(o_mbr )       +
+              ')'                 :
+              yMsgID              :
+              yMsgDta             );
   endif;
 
-  if (ymsgid <> '');
-    p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
-    ymsgid = '';
-    ymsgdta = '';
+  if (yMsgID <> '');
+    p_sndpgmmg(yMsgID: yMsgDta: sds.pgmName);
+    yMsgID = '';
+    yMsgDta = '';
     exsr clrfilep;
     leavesr;
   endif;
@@ -884,25 +821,25 @@ begsr chkfile;
   //  Ändern Teildateitext
   //  --------------------
   if (o_text <> '');
-    f_execute('CHGPFM'           +
-             ' FILE('           +
-             %trim(o_qfile.lib ) +
-             '/'                +
-             %trim(o_qfile.name) +
-             ')'                +
-             ' MBR('            +
-             %trim(o_mbr )       +
-             ')'                +
-             ' TEXT('''         +
-             %trim(o_text)       +
-             ''')'              :
-             ymsgid             :
-             ymsgdta            );
+    f_execute('CHGPFM'            +
+              ' FILE('            +
+              %trim(o_qfile.lib ) +
+              '/'                 +
+              %trim(o_qfile.name) +
+              ')'                 +
+              ' MBR('             +
+              %trim(o_mbr )       +
+              ')'                 +
+              ' TEXT('''          +
+              %trim(o_text)       +
+              ''')'               :
+              yMsgID              :
+              yMsgDta             );
 
-    if (ymsgid <> '');
-      p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
-      ymsgid = '';
-      ymsgdta = '';
+    if (yMsgID <> '');
+      p_sndpgmmg(yMsgID: yMsgDta: sds.pgmName);
+      yMsgID = '';
+      yMsgDta = '';
       exsr clrfilep;
       leavesr;
     endif;
@@ -943,13 +880,11 @@ begsr vreadc;
       sfpau = %triml(sfpau);
 
       //  Zuordnung AUSWAHL => Befehl ...
-      isSflError = f_isvldopt(sfpau  :
-                             ymsgid :
-                             ymsgdta);
+      isSflError = f_isvldopt(sfpau: yMsgID: yMsgDta);
       if (isSflError = bTrue);
-        p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
-        ymsgid = '';
-        ymsgdta = '';
+        p_sndpgmmg(yMsgID: yMsgDta: sds.pgmName);
+        yMsgID = '';
+        yMsgDta = '';
         exsr vsfpauerr;
         update pbsfl;
         iter;
@@ -970,7 +905,7 @@ begsr vreadc;
         //  Unbekannter Programmbefehl
         clear usr8110;
         usr8110.var1 = ypgmcmd;
-        p_sndpgmmg('USR8110': usr8110: sds.pgmname);
+        p_sndpgmmg('USR8110': usr8110: sds.pgmName);
         exsr vsfpauerr;
         update pbsfl;
         isSflError = bTrue;
@@ -990,7 +925,7 @@ endsr;
 
 begsr c_endpgm;
 
-  p_rmvpgmmg(sds.pgmname);
+  p_rmvpgmmg(sds.pgmName);
 
   o_msgid = 'USR8100';
   usr8100.var1 = ypgmcmd;
@@ -1070,7 +1005,7 @@ begsr vpos;
     if (rcdfmtid <> '' and i_rcdfmtid <> rcdfmtid);
       isSflError = bTrue;
       clear usr8233;
-      p_sndpgmmg('USR8233': usr8233: sds.pgmname);
+      p_sndpgmmg('USR8233': usr8233: sds.pgmName);
       leavesr;
     endif;
   endif;
@@ -1149,20 +1084,19 @@ begsr pbinitkey;
 
   if (##file <> ' ' and ##lib  <> ' ');
 
-    lastfile = ##file;
+    lastFile = ##file;
     lastlib  = ##lib;
 
     yfile = ##file;
     ylib = ##lib;
-    peek46(yqfile: '*ALL':  '*CREATE'
-          : numMbr: mbrl0200);
+    peek46(yqfile: '*ALL':  '*CREATE': numMbr: mbrl0200);
 
     set0015.set_envfil = ##file;
     set0015.set_envlib = ##lib;
 
   else;
     clear usr8181;
-    p_sndpgmmg('USR8181': usr8181: sds.pgmname);
+    p_sndpgmmg('USR8181': usr8181: sds.pgmName);
   endif;
 
 endsr;
@@ -1346,7 +1280,7 @@ begsr first;
     yexclkeys(*) = '';
   endsl;
 
-  peek27(sds.pgmname: ychoice: ynbrofch);
+  peek27(sds.pgmName: ychoice: ynbrofch);
 
   // - Öffnen Bildschirmdatei
   if (workstn.isOpen = '0');
@@ -1354,7 +1288,7 @@ begsr first;
   endif;
 
   // - Programm initialisieren
-  p_rmvpgmmg(sds.pgmname);
+  p_rmvpgmmg(sds.pgmName);
 
   exsr getusrsetg;
 
@@ -1411,7 +1345,7 @@ begsr first;
   exsr c_refresh;
 
   // - Copyright
-  p_sndpgmmg('USR9999': i_copyright: sds.pgmname);
+  p_sndpgmmg('USR9999': i_copyright: sds.pgmName);
 
 endsr;
 
@@ -1434,8 +1368,7 @@ begsr inzsr;
   peek27_name = f_pgmcalln('PEEK27');
   peek46_name = f_pgmcalln('PEEK46');
 
-  peek23(sds.pgmname: '*ALL': nbrfkeys
-        : yfkeys: ynbrofkeys);
+  peek23(sds.pgmName: '*ALL': nbrfkeys: yfkeys: ynbrofkeys);
   scrnfkeys = %subarr(yfkeys: 1);
 
 endsr;
@@ -1456,8 +1389,8 @@ dcl-proc f_isvldopt;
   //---------------------------------------------------*
 
   peek21('#' + i_option: sds.pgmname
-        : ypgmcmd: ycmddta: ymsgid: ymsgdta);
-  if (ymsgid <> ' ');
+        : ypgmcmd: ycmddta: yMsgID: yMsgDta);
+  if (yMsgID <> ' ');
     //  Fehlermeldung ...
     clear usr8110;
     usr8110.var1 = i_option;
@@ -1488,7 +1421,7 @@ dcl-proc f_loadrcdfmtid;
   //---------------------------------------------------*
 
   g_envfile = %trim(i_envlib) + '/' +
-             %trim(i_envfile);
+              %trim(i_envfile);
   g_envmbr = $$mnme;
   open(e) peekenv;
   if (%error());

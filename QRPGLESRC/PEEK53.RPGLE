@@ -105,36 +105,36 @@ dcl-proc p_crtusrsg export;
   dcl-pi *N;
     i_prodlib       const  like(lib_t);
     i_user          const  like(user_t);
-    o_msgid         like(msgid_t);
-    o_msgdta        like(msgdta_t);
+    o_msgID         like(msgid_t);
+    o_msgDta        like(msgdta_t);
   end-pi;
 
   dcl-s cmd             char(256) inz;
   // ------------------------------------------------------------------------
   p_initsrvpgm();
 
+  if (not f_exist('PEEKUSR': i_prodlib: '*FILE': *omit: o_msgID: o_msgDta));
+    return;
+  endif;
+
   cmd = 'CRTDUPOBJ -
-              OBJ(PEEKUSR) +
-        FROMLIB(' + i_prodlib + ') +
-        OBJTYPE(*FILE) +
-        TOLIB(*FROMLIB) +
-        NEWOBJ(' + i_user + ') +
-        DATA(*NO)';
+           OBJ(PEEKUSR) +
+           FROMLIB(' + i_prodlib + ') +
+           OBJTYPE(*FILE) +
+           TOLIB(*FROMLIB) +
+           NEWOBJ(' + i_user + ') +
+           DATA(*NO)';
 
   f_execute(cmd     :
-           o_msgid :
-           o_msgdta);
+           o_msgID :
+           o_msgDta);
 
-  cmd = 'CHKOBJ -
-              OBJ(' + %trim(i_prodlib) +
-                      '/PEEKUSR) +
-        OBJTYPE(*FILE) +
-        MBR(*NONE) +
-        AUT(*ALL)';
+  if (not f_exist(i_user: i_prodlib: '*FILE': *omit: o_msgID: o_msgDta));
+    return;
+  endif;
 
-  f_execute(cmd     :
-           o_msgid :
-           o_msgdta);
+  o_msgID = '';
+  o_msgDta = '';
 
 end-proc;
 

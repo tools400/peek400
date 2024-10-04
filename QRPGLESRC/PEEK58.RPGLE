@@ -2457,10 +2457,12 @@ end-proc;
 //=========================================================================
 dcl-proc f_exist export;
   dcl-pi *N ind;
-    i_obj    char(10) const;
-    i_lib    char(10) const  options(*omit);
-    i_type   char(10) const;
-    i_mbr    char(10) const  options(*nopass);
+    i_obj     char(10) const;
+    i_lib     char(10) const options(*omit);
+    i_type    char(10) const;
+    i_mbr     char(10) const options(*omit: *nopass);
+    o_msgID   like(msgID_t) options(*omit: *nopass);
+    o_msgDta  like(msgDta_t) options(*omit: *nopass);
   end-pi;
 
   //  Return value
@@ -2469,12 +2471,17 @@ dcl-proc f_exist export;
   //  Optional parameter fields
   dcl-s lib like(i_lib) inz;
   dcl-s mbr like(i_mbr) inz;
+  dcl-s msgID like(o_msgID);
+  dcl-s msgDta like(o_msgDta);
 
   //  Local fields
   dcl-ds objd0100 likeds(objd0100_t) inz;
   dcl-ds mbrd0100 likeds(mbrd0100_t) inz;
   dcl-ds qObj likeds(qobj_t) inz;
   dcl-ds errcode likeds(errcode_t) inz;
+
+  /include QCOPYLE,CPF9801
+  /include QCOPYLE,CPF9815
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   // Process optional parameter values ...
@@ -2486,33 +2493,66 @@ dcl-proc f_exist export;
   endif;
 
   // ... i_mbr
-  if (%parms() >= %parmnum(i_mbr));
+  if (%parms() >= %parmnum(i_mbr) and %addr(i_mbr) <> *null);
     mbr = i_mbr;
   else;
     mbr = '*NONE';
   endif;
 
-  // Retrieve the object description
-  qObj.name = i_obj;
-  qObj.lib  = lib;
-  reset errcode;
-  errcode.bytprv = %size(errcode);
+  msgID = '';
+  msgDta = '';
 
-  qusrobjd(objd0100: %size(objd0100): 'OBJD0100': qObj: i_type: errcode);
+  dou *on;
 
-  // Retrieve member description if object is a file
-  // and a member name was given
-  if (errCode.bytAvl = 0) and (mbr <> '*NONE');
-    reset errCode;
-    errCode.bytprv = %size(errCode);
-    qusrmbrd(mbrd0100: %size(mbrd0100): 'MBRD0100': qObj: mbr: '0': errCode);
-  endif;
+    // Retrieve the object description
+    qObj.name = i_obj;
+    qObj.lib  = lib;
+    reset errcode;
+    errcode.bytprv = %size(errcode);
+
+    qusrobjd(objd0100: %size(objd0100): 'OBJD0100': qObj: i_type: errcode);
+    if (errCode.bytAvl > 0);
+      clear CPF9801; // Object &2 in library &3 not found.
+      CPF9801.var2 = qObj.name;
+      CPF9801.var3 = qObj.lib;
+      CPF9801.var5 = i_type;
+      msgID = 'CPF9801';
+      msgDta = CPF9801;
+      leave;
+    endif;
+
+    // Retrieve member description if object is a file
+    // and a member name was given
+    if (errCode.bytAvl = 0) and (mbr <> '*NONE');
+      reset errCode;
+      errCode.bytprv = %size(errCode);
+      qusrmbrd(mbrd0100: %size(mbrd0100): 'MBRD0100': qObj: mbr: '0': errCode);
+      if (errCode.bytAvl > 0);
+        clear CPF9815; // Object &2 in library &3 not found.
+        CPF9815.var2 = qObj.name;
+        CPF9815.var3 = qObj.lib;
+        CPF9815.var5 = mbr;
+        msgID = 'CPF9815';
+        msgDta = CPF9815;
+        leave;
+      endif;
+    endif;
+
+  enddo;
 
   // Set return value
   if (errCode.bytAvl = 0);
     doesExist = bTrue;
   else;
     doesExist = bFalse;
+  endif;
+
+  if (%parms() >= %parmnum(o_msgID) and %addr(o_msgID) <> *null);
+    o_msgID = msgID;
+  endif;
+
+  if (%parms() >= %parmnum(o_msgDta) and %addr(o_msgDta) <> *null);
+    o_msgDta = msgDta;
   endif;
 
   return doesExist;
