@@ -72,7 +72,7 @@ dcl-s g_envmbr        char(10);
 
 dcl-s yfkeys          char(18) dim(32)       inz(*blanks);
 dcl-s ynbrofkeys      like(int4_t) inz;
-dcl-s yexclkeys       like(pgmcmd_t) dim(25);
+dcl-s yExclKeys       like(pgmcmd_t) dim(25);
 dcl-s yMsgID          char(7) inz(*blanks);
 dcl-s yMsgDta         char(512) inz(*blanks);
 
@@ -86,8 +86,8 @@ dcl-s numMbr          like(int4_t) inz;
 dcl-s ypgmcmd         char(10) inz(*blanks);
 dcl-s ycmddta         like(pgmcmddt_t) inz(*blanks);
 
-dcl-s ychoice         char(75) dim(32);
-dcl-s ynbrofch        like(int4_t) inz;
+dcl-s yChoice         char(75) dim(32);
+dcl-s yNbrOfCh        like(int4_t) inz;
 
 dcl-s isNewPos        char(1) inz(bFalse);
 dcl-s isfound         char(1) inz(bFalse);
@@ -188,10 +188,10 @@ dow ('1');
   endif;
 
   //  Anzeigen der Einzelauswahlen
-  if (sftop > 32 or sftop > ynbrofch);
+  if (sftop > 32 or sftop > yNbrOfCh);
     sftop = 1;
   endif;
-  $$choice = ychoice(sftop);
+  $$choice = yChoice(sftop);
 
   //  Trennlinie
   write pbbot#0;
@@ -1272,15 +1272,15 @@ begsr first;
   // - Einlesen Subfileauswahlen
   select;
   when (i_mode = '*SAVE');
-    yexclkeys(1) = '*SLCLAYOUT';
+    yExclKeys(1) = '*SLCLAYOUT';
   when (i_mode = '*DELETE');
-    yexclkeys(1) = '*SLCLAYOUT';
+    yExclKeys(1) = '*SLCLAYOUT';
   other;
     //           keine Ausschlüsse
-    yexclkeys(*) = '';
+    yExclKeys(*) = '';
   endsl;
 
-  peek27(sds.pgmName: ychoice: ynbrofch);
+  peek27(sds.pgmName: yChoice: yNbrOfCh: yExclKeys);
 
   // - Öffnen Bildschirmdatei
   if (workstn.isOpen = '0');
