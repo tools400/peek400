@@ -228,7 +228,7 @@ end-ds;
 
 dcl-s io_nullmap      like(nullmap_t) dim(NULL_MAP_SIZE);
 
-dcl-ds rtn qualified;
+dcl-ds rtn qualified inz;
   file            like(##file);
   library         like(##library);
   member          like(##member);
@@ -3415,6 +3415,15 @@ begsr loadenv;
     leavesr;
   endif;
 
+  clear rtn;
+  rtn.file = ##file;
+  rtn.library = ##library;
+  rtn.member = ##member;
+  rtn.format = ##format;
+  rtn.accessmode = accessMode;
+  rtn.sqlwhere = sqlWhere;
+  rtn.sqlorder = sqlOrder;
+
   peek55(##file: ##library: ##member: ##format
         : $$rcdfmtid
         : yenvfile: yenvlib: yenvmbr
@@ -3426,7 +3435,7 @@ begsr loadenv;
         : rtn.accessmode: rtn.sqlwhere
         : rtn.sqlorder
         : isKeyLower
-        :yMsgID: yMsgDta);
+        : yMsgID: yMsgDta);
 
   if (yMsgID <> ' ');
     // TODO: remove code

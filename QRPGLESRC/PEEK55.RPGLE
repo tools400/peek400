@@ -264,7 +264,7 @@ dcl-proc main;
       o_mbr    = i_mbr;
       o_rcdFmt = i_rcdFmt;
 
-      loadLayout(i_file: i_lib);
+      loadLayout(i_file: '*NONE');
 
     else;
 
@@ -514,22 +514,21 @@ end-proc;
 
 dcl-proc loadSQLSelect;
   dcl-pi *N extproc(*dclcase);
-    i_file          const  like(gi_file   );
-    i_lib           const  like(gi_lib    );
-    o_sqlsel        like(go_sqlSel );
+    i_file          const  like(gi_file);
+    i_lib           const  like(gi_lib);
+    o_sqlsel        like(go_sqlSel);
   end-pi;
 
   //  definieren Arbeitsfelder ...
   dcl-s strPos          like(int4_t) inz;
-  dcl-s lenSql          like(int4_t) inz;
+  dcl-s maxLenSql       like(int4_t) inz;
   dcl-s lenData         like(int4_t) inz;
   //---------------------------------------------------*
 
-  o_sqlsel = ' ';
+  o_sqlsel = '';
 
   strPos  = 1;
-  lenSql  = %len(o_sqlsel);
-  lenData = %len(en_data);
+  maxLenSql  = %len(o_sqlsel: *max);
 
   clear en_key4;
   en_key4.en_user = '*ALL';
@@ -543,7 +542,7 @@ dcl-proc loadSQLSelect;
     setll %kds(en_key4: 4) fpeekenv;
   endif;
 
-  dow strPos <= lenSql;
+  dow (strPos < maxLenSql);
 
     if (i_lib = '*NONE');
       reade %kds(en_key4: 3) fpeekenv;
@@ -555,8 +554,8 @@ dcl-proc loadSQLSelect;
       leave;
     endif;
 
-    %subst(o_sqlsel:strPos:lenData) = en_data;
-    strPos   = strPos + lenData;
+    o_sqlsel = o_sqlsel + %trimr(en_data);
+    strPos = strPos + %len(%trimr(en_data));
   enddo;
 
   return;
@@ -576,15 +575,15 @@ dcl-proc loadSQLOrderBy;
 
   //  definieren Arbeitsfelder ...
   dcl-s strpos          like(int4_t) inz;
-  dcl-s lensql          like(int4_t) inz;
+  dcl-s maxLenSql       like(int4_t) inz;
   dcl-s lendata         like(int4_t) inz;
   //---------------------------------------------------*
 
-  o_sqlord = ' ';
+  o_sqlord = '';
 
   strpos  = 1;
-  lensql  = %len(o_sqlord);
-  lendata = %len(en_data);
+  maxLenSql  = %len(o_sqlord: *max);
+  lendata = %len(%trimr(en_data));
 
   clear en_key4;
   en_key4.en_user = '*ALL';
@@ -598,7 +597,7 @@ dcl-proc loadSQLOrderBy;
     setll %kds(en_key4: 4) fpeekenv;
   endif;
 
-  dow strpos <= lensql;
+  dow strpos <= maxLenSql;
 
     if (i_lib = '*NONE');
       reade %kds(en_key4: 3) fpeekenv;
@@ -610,8 +609,8 @@ dcl-proc loadSQLOrderBy;
       leave;
     endif;
 
-    %subst(o_sqlord:strpos:lendata) = en_data;
-    strpos   = strpos + lendata;
+    o_sqlord = o_sqlord + %trimr(en_data);
+    strPos = strPos + %len(%trimr(en_data));
   enddo;
 
   return;
