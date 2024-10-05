@@ -408,6 +408,18 @@ CRTOBJ:
              CALLSUBR   SUBR(CMPOBJ)
 
              /* ---------------------------------------------------- */
+             /*  Create command: PEEKDST                             */
+             /* ---------------------------------------------------- */
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QCMDSRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEKDST')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEKDST')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             /* ---------------------------------------------------- */
              /*  Create service programs                             */
              /* ---------------------------------------------------- */
 
