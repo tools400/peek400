@@ -13,7 +13,7 @@
 //                                                               *
 //  Dokumentation:                                               *
 //                                                               *
-//  Peek/400 - Sichern   Arbeitsumgebung                         *
+//  Peek/400 - Sichern Arbeitsumgebung                           *
 //                                                               *
 //===============================================================*
 // >>PRE-COMPILER<<                                              *
