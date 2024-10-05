@@ -950,4 +950,7 @@
   =============
   *  PEEK02
        - Füllen Feld o_rcdFmtID.
+     PEEK55
+       - Korrigiert, so dass ein gespeichertes Layout beim Laden einer
+         Arbeitsumgebungkorrekt wiederhergestellt wird.
          
