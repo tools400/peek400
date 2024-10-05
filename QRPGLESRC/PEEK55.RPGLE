@@ -13,7 +13,7 @@
 //                                                               *
 //  Dokumentation:                                               *
 //                                                               *
-//  Peek/400 - Laden     Arbeitsumgebung                         *
+//  Peek/400 - Laden Arbeitsumgebung                             *
 //                                                               *
 //===============================================================*
 // >>PRE-COMPILER<<                                              *
@@ -247,6 +247,7 @@ dcl-proc main;
     open peekenv;
 
     if (i_option = '*SLCLAYOUT');
+
       loadRecordFormatID(RrcdFmtID);
       if (RrcdFmtID <> '' and RrcdFmtID <> i_rcdFmtID);
         clear usr8234;
@@ -262,22 +263,26 @@ dcl-proc main;
       o_lib    = i_lib;
       o_mbr    = i_mbr;
       o_rcdFmt = i_rcdFmt;
+
+      loadLayout(i_file: i_lib);
+
     else;
+
       //  Einlesen Datei ...
       loadFile(o_file);
-      if (o_file <> NOT_FOUND);
+      if (o_file = NOT_FOUND);
         o_file = i_file;
       endif;
 
       //  Einlesen Bibliothek ...
       loadLibrary(o_lib);
-      if (o_lib <> NOT_FOUND);
+      if (o_lib = NOT_FOUND);
         o_lib = i_lib;
       endif;
 
       //  Einlesen Teildatei ...
       loadMember(o_mbr);
-      if (o_mbr <> NOT_FOUND);
+      if (o_mbr = NOT_FOUND);
         o_mbr = i_mbr;
       endif;
 
@@ -285,48 +290,47 @@ dcl-proc main;
       //  (nur bei geänderter Datei)
       if (i_file <> o_file or i_lib  <> o_lib );
         loadRecordFormat(o_rcdFmt);
-        if (o_rcdFmt <> NOT_FOUND);
+        if (o_rcdFmt = NOT_FOUND);
           o_rcdFmt = i_rcdFmt;
         endif;
       else;
         o_rcdFmt = i_rcdFmt;
       endif;
 
-    endif;
+      //  Basiert auf physischer Datei ...
+      f_basedPF(o_file: o_lib: o_mbr: o_rcdFmt: -1: pFile: pLib: pMbr: pFmt);
 
-    //  Basiert auf physischer Datei ...
-    f_basedpf(o_file: o_lib: o_mbr: o_rcdFmt
-              : -1: pFile: pLib: pMbr: pFmt);
+      //  Einlesen AccessMode ...  (dateiunabhängig)
+      loadAccessMode(o_accMode);
 
-    //  Einlesen AccessMode ...  (dateiunabhängig)
-    loadAccessMode(o_accMode);
+      //  Einlesen SqlSelect ...   (phys. Datei muss gleich sein)
+      loadSQLSelect(pFile: '*NONE': o_sqlSel);
 
-    //  Einlesen SqlSelect ...   (phys. Datei muss gleich sein)
-    loadSQLSelect(pFile: '*NONE': o_sqlSel);
+      //  Einlesen SqlOrder ...    (phys. Datei muss gleich sein)
+      loadSQLOrderBy(pFile: '*NONE': o_sqlOrd  );
 
-    //  Einlesen SqlOrder ...    (phys. Datei muss gleich sein)
-    loadSQLOrderBy(pFile: '*NONE': o_sqlOrd  );
+      //  Einlesen isKeyLower ...  (phys. Datei muss gleich sein)
+      loadIsKeyLowerCase(pFile: '*NONE': o_isKeyLower);
 
-    //  Einlesen isKeyLower ...  (phys. Datei muss gleich sein)
-    loadIsKeyLowerCase(pFile: '*NONE': o_isKeyLower);
+      //  Beenden, wenn Datei gewechselt hat, weil die Datei neu geöffnet werden muss
+      //  und damit alle Layout und PIN Informationen gelöscht werden. PEEK55 wird dann
+      //  von PEEK05 erneut aufgerufen, nachdem die Datei geöffnet worden ist.
+      if (o_file = i_file and
+          o_lib  = i_lib  and
+          o_mbr  = i_mbr  and
+          o_rcdFmt = i_rcdFmt);
+        // Aber wenn die Datei nicht gewechselt hat, dann ...
 
-    //  Beenden, wenn Datei gewechselt hat, weil die Datei neu geöffnet werden muss
-    //  und damit alle Layout und PIN Informationen gelöscht werden. PEEK55 wird dann
-    //  von PEEK05 erneut aufgerufen, nachdem die Datei geöffnet worden ist.
-    if (o_file = i_file and
-        o_lib  = i_lib  and
-        o_mbr  = i_mbr  and
-        o_rcdFmt = i_rcdFmt);
-      // Aber wenn die Datei nicht gewechselt hat, dann ...
+        //  Einlesen Layout ...          (phys. Datei muss gleich sein)
+        loadLayout(pFile: '*NONE');
 
-      //  Einlesen Layout ...          (phys. Datei muss gleich sein)
-      loadLayout(pFile: '*NONE');
+        //  Einlesen Pin-Record ...      (phys. Datei und Bibliothek müssen gleich sei
+        loadPinnedRecords(pFile: pLib: o_pinTabR: o_nbrPinR);
 
-      //  Einlesen Pin-Record ...      (phys. Datei und Bibliothek müssen gleich sei
-      loadPinnedRecords(pFile: pLib: o_pinTabR: o_nbrPinR);
+        //  Einlesen Pin-Column ...      (phys. Datei muss gleich sein)
+        loadPinnedColumns(pFile: '*NONE': o_pinTabC: o_nbrPinC);
 
-      //  Einlesen Pin-Column ...      (phys. Datei muss gleich sein)
-      loadPinnedColumns(pFile: '*NONE': o_pinTabC: o_nbrPinC);
+      endif;
 
     endif;
 
