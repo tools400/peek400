@@ -297,21 +297,6 @@ dcl-proc main;
         o_rcdFmt = i_rcdFmt;
       endif;
 
-      //  Basiert auf physischer Datei ...
-      f_basedPF(o_file: o_lib: o_mbr: o_rcdFmt: -1: pFile: pLib: pMbr: pFmt);
-
-      //  Einlesen AccessMode ...  (dateiunabhängig)
-      loadAccessMode(o_accMode);
-
-      //  Einlesen SqlSelect ...   (phys. Datei muss gleich sein)
-      loadSQLSelect(pFile: '*NONE': o_sqlSel);
-
-      //  Einlesen SqlOrder ...    (phys. Datei muss gleich sein)
-      loadSQLOrderBy(pFile: '*NONE': o_sqlOrd  );
-
-      //  Einlesen isKeyLower ...  (phys. Datei muss gleich sein)
-      loadIsKeyLowerCase(pFile: '*NONE': o_isKeyLower);
-
       //  Beenden, wenn Datei gewechselt hat, weil die Datei neu geöffnet werden muss
       //  und damit alle Layout und PIN Informationen gelöscht werden. PEEK55 wird dann
       //  von PEEK05 erneut aufgerufen, nachdem die Datei geöffnet worden ist.
@@ -319,7 +304,23 @@ dcl-proc main;
           o_lib  = i_lib  and
           o_mbr  = i_mbr  and
           o_rcdFmt = i_rcdFmt);
+
         // Aber wenn die Datei nicht gewechselt hat, dann ...
+
+        //  Einlesen basierende physiche Datei ...
+        f_basedPF(o_file: o_lib: o_mbr: o_rcdFmt: -1: pFile: pLib: pMbr: pFmt);
+
+        //  Einlesen AccessMode ...  (dateiunabhängig)
+        loadAccessMode(o_accMode);
+
+        //  Einlesen SqlSelect ...   (phys. Datei muss gleich sein)
+        loadSQLSelect(pFile: '*NONE': o_sqlSel);
+
+        //  Einlesen SqlOrder ...    (phys. Datei muss gleich sein)
+        loadSQLOrderBy(pFile: '*NONE': o_sqlOrd  );
+
+        //  Einlesen isKeyLower ...  (phys. Datei muss gleich sein)
+        loadIsKeyLowerCase(pFile: '*NONE': o_isKeyLower);
 
         //  Einlesen Layout ...          (phys. Datei muss gleich sein)
         loadLayout(pFile: '*NONE');
