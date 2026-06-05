@@ -128,7 +128,7 @@ dcl-pr rclose int(10) extproc('C_Rclose');
   i_fp            pointer value;
 end-pr;
 
-//  _Riofbk()  Obtain I/O Feedback Information
+//  _Riofbk() -- Obtain I/O Feedback Information
 //    #include <recio.h>
 //    #include <xxfdbk.h>
 //    _XXIOFB_T *_Riofbk(_RFILE *fp);
