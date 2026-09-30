@@ -176,7 +176,7 @@ if (isPgmError = bFalse);
       sfBot = 1;
     endsl;
 
-    // Übertragen Buffer in Bildschirmfelder
+    // Ãœbertragen Buffer in Bildschirmfelder
     exsr bufferToScreen;
 
     // Anzeigen Cursorposition im Feld #STRING/
@@ -189,18 +189,18 @@ if (isPgmError = bFalse);
     //  Anzeigen Bildschirm
     exfmt bild01;
 
-    //  Übertragen Bildschirmfelder in Buffer
+    //  Ãœbertragen Bildschirmfelder in Buffer
     exsr screenToBuffer;
 
     //  Berechnen Zeile/Spalte
     cursorPosition.row = workstn.csrpos / 256;
     cursorPosition.column = %rem(workstn.csrpos: 256);
 
-    // Löschen Cursorposition
+    // LÃ¶schen Cursorposition
     H_CSRROW = 0;
     H_CSRCOL = 0;
 
-    // Erzwingen Prüfung der Eingabedaten ...
+    // Erzwingen PrÃ¼fung der Eingabedaten ...
     select;
     when (isPgmError);
       isDataChg = bTrue;
@@ -210,13 +210,13 @@ if (isPgmError = bFalse);
       isDataChg = *in93;
     endsl;
 
-    //  Nachrichten löschen
+    //  Nachrichten lÃ¶schen
     p_rmvPgmMg(sds.pgmname);
 
-    //  Bezugszahlen löschen
+    //  Bezugszahlen lÃ¶schen
     exsr bzoff1;
 
-    //  Mappen der gedrückten Taste
+    //  Mappen der gedrÃ¼ckten Taste
     //  in Programmbefehl
     peek21(workstn.aid: sds.pgmname: yPgmCmd: yCmdDta: yMsgId: yMsgDta);
     if (yMsgId <> ' ');
@@ -299,7 +299,7 @@ if (isPgmError = bFalse);
       endif;
 
     other;
-      //  Falsche Taste gedrückt
+      //  Falsche Taste gedrÃ¼ckt
       p_wrongKey(workstn.aid: sds.pgmname);
       iter;
     endsl;
@@ -329,7 +329,7 @@ begsr keepCsrPos;
 endsr;
 
 //============================================================*
-//    Beenden Funktion Einfügen/Löschen                       *
+//    Beenden Funktion EinfÃ¼gen/LÃ¶schen                       *
 //============================================================*
 
 begsr endInsDel;
@@ -348,12 +348,12 @@ endsr;
 
 begsr c_enter;
 
-  //  Prüfen der Eingaben
+  //  PrÃ¼fen der Eingaben
   exsr prfb1;
 
   if (not isPgmError);
 
-    // Verarbeiten der Optionen Einfügen/Löschen
+    // Verarbeiten der Optionen EinfÃ¼gen/LÃ¶schen
     if (#selStart <> insDel.startPos);
       insDel.startPos = #selStart;
       select;
@@ -414,7 +414,7 @@ begsr c_enter;
 endsr;
 
 //============================================================*
-//    Einfügen Leerzeichen                                    *
+//    EinfÃ¼gen Leerzeichen                                    *
 //============================================================*
 
 begsr doInsert;
@@ -443,7 +443,7 @@ begsr doInsert;
 endsr;
 
 //============================================================*
-//    Löschen ausgewählten Bereich                            *
+//    LÃ¶schen ausgewÃ¤hlten Bereich                            *
 //============================================================*
 
 begsr doDelete;
@@ -538,7 +538,7 @@ begsr bzoff1;
 endsr;
 
 //============================================================*
-//    prfb1         Prüfen der Eingaben                       *
+//    prfb1         PrÃ¼fen der Eingaben                       *
 //============================================================*
 
 begsr prfb1;
@@ -551,19 +551,19 @@ begsr prfb1;
     leavesr;
   endif;
 
-  //  Feldlänge und Dateninhalt
+  //  FeldlÃ¤nge und Dateninhalt
   exsr prf22;
   if (isPgmError = bTrue);
     leavesr;
   endif;
 
-  //  Startposition (Einfügen/Löschen)
+  //  Startposition (EinfÃ¼gen/LÃ¶schen)
   exsr prf23;
   if (isPgmError = bTrue);
     leavesr;
   endif;
 
-  //  Länge/bis (Einfügen/Löschen)
+  //  LÃ¤nge/bis (EinfÃ¼gen/LÃ¶schen)
   exsr prf24;
   if (isPgmError = bTrue);
     leavesr;
@@ -572,7 +572,7 @@ begsr prfb1;
 endsr;
 
 //============================================================*
-//    Prüfen:  Startposition                                  *
+//    PrÃ¼fen:  Startposition                                  *
 //============================================================*
 
 begsr prf20;
@@ -601,7 +601,7 @@ begsr prf20;
 endsr;
 
 //============================================================*
-//    Feldlänge und Dateninhalt                               *
+//    FeldlÃ¤nge und Dateninhalt                               *
 //============================================================*
 
 begsr prf22;
@@ -632,7 +632,7 @@ begsr prf22;
 endsr;
 
 //============================================================*
-//    Kopieren/Löschen: Startposition                         *
+//    Kopieren/LÃ¶schen: Startposition                         *
 //============================================================*
 
 begsr prf23;
@@ -665,7 +665,7 @@ begsr prf23;
 endsr;
 
 //============================================================*
-//    Kopieren/Löschen: Länge                                 *
+//    Kopieren/LÃ¶schen: LÃ¤nge                                 *
 //============================================================*
 
 begsr prf24;
@@ -685,7 +685,7 @@ begsr prf24;
     endif;
 
     if (insDel.mode = MODE_DELETE);
-      // Löschen von Zeichen
+      // LÃ¶schen von Zeichen
       if (#selStart + #selLength - 1 > buffer.maxLength);
         clear usr8241;
         usr8241.var1 = (#selStart + #selLength) - buffer.maxLength;
@@ -694,7 +694,7 @@ begsr prf24;
         leave;
       endif;
     else;
-      // Einfügen von Leerzeichen
+      // EinfÃ¼gen von Leerzeichen
       if (buffer.trimLength + #selLength > buffer.maxLength);
         clear usr8241;
         usr8241.var1 = (buffer.trimLength + #selLength) - buffer.maxLength;
@@ -737,7 +737,7 @@ begsr c_endPgm;
 endsr;
 
 //============================================================*
-//    Setzen Startposition für Kopieren/Löschen               *
+//    Setzen Startposition fÃ¼r Kopieren/LÃ¶schen               *
 //============================================================*
 
 begsr c_insert;
@@ -790,7 +790,7 @@ begsr c_insert;
 endsr;
 
 //============================================================*
-//    Setzen Endposition für Kopieren/Löschen                 *
+//    Setzen Endposition fÃ¼r Kopieren/LÃ¶schen                 *
 //============================================================*
 
 begsr c_delete;
@@ -957,12 +957,12 @@ begsr c_pageDown;
 endsr;
 
 //============================================================*
-//    fill##        Füllen Bildschirm                         *
+//    fill##        FÃ¼llen Bildschirm                         *
 //============================================================*
 
 begsr fill##;
 
-  //  anzeigen Modus "kopieren" oder "löschen"
+  //  anzeigen Modus "kopieren" oder "lÃ¶schen"
   select;
   when (insDel.mode = MODE_INSERT);
     *in61 = bTrue;
@@ -1038,7 +1038,7 @@ begsr bufferToScreen;
 endsr;
 
 //============================================================*
-//    SetScreen     Einstellen 132/80-Zeichen Auflösung       *
+//    SetScreen     Einstellen 132/80-Zeichen AuflÃ¶sung       *
 //============================================================*
 
 begsr setScreen;
@@ -1080,7 +1080,7 @@ begsr getParameters;
 endsr;
 
 //============================================================*
-//    Setzen der getrimmten Länge des Buffers.                *
+//    Setzen der getrimmten LÃ¤nge des Buffers.                *
 //============================================================*
 
 begsr setTrimLength;
@@ -1109,7 +1109,7 @@ begsr first;
   peek23(sds.pgmname: '*ALL': 0: yFKeys: yNbrOfKeys: yExclKeys);
   scrnfkeys = %subarr(yFKeys: 1);
 
-  // - Öffnen der Dateien
+  // - Ã–ffnen der Dateien
   open peekfld;
 
   open peek64fm;
@@ -1152,19 +1152,19 @@ begsr first;
     *in71 = '1';
   endif;
 
-  // - Feld zu groß Hinweis ausgeben
+  // - Feld zu groÃŸ Hinweis ausgeben
   // TODO: remove code and /copy statement
   // clear usr8123;
   // usr8123.var1 = COLOR_white_u;
   // usr8123.var2 = COLOR_white;
   // p_sndpgmmg('USR8123': usr8123: sds.pgmname);
 
-  // - Einfügen/Löschen
+  // - EinfÃ¼gen/LÃ¶schen
   insDel.mode = MODE_OFF;
   insDel.startPos = 0;
   insDel.endPos = 0;
 
-  // - Füllen der Bildschirmfelder
+  // - FÃ¼llen der Bildschirmfelder
   exsr bzoff1;
   *in22 = bTrue; // Cursor auf Textfeld setzen
   H_CSRPOS = 1;
@@ -1185,7 +1185,7 @@ begsr first;
   // - Darstellung der Befehlstasten
   sfBot = 1;
 
-  // - Einstellen der Bildschirmauflösung 80/132-Zeichen
+  // - Einstellen der BildschirmauflÃ¶sung 80/132-Zeichen
   exsr setScreen;
 
   // - Copyright
@@ -1213,7 +1213,7 @@ begsr inzsr;
 endsr;
 
 //============================================================*
-//  Prüft, ob der Cursor im Datenfeld (#STRING oder #UCS*) ist*
+//  PrÃ¼ft, ob der Cursor im Datenfeld (#STRING oder #UCS*) ist*
 //============================================================*
 
 dcl-proc isCursorDataField;

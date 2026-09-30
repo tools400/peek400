@@ -1,7 +1,7 @@
 **free
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8155
-//  Ungültiger Parameter für DATEI ERSTELLEN '&1' für Zieldatei
+//  UngÃ¼ltiger Parameter fÃ¼r DATEI ERSTELLEN '&1' fÃ¼r Zieldatei
 dcl-ds USR8155 qualified;
   var1  char(10) inz;
 end-ds;

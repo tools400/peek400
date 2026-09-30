@@ -85,7 +85,7 @@ FMT1-F                                     rename(TESTPEEK  :FFILE00)
      D r_sqlStmt       S           2000A   based(ptrDummy)
      D r_user          S             10A   based(ptrDummy)
       *
-      *  Integer & Binärwerte:
+      *  Integer & BinÃ¤rwerte:
      D*r_bin2          S              4B 0 based(ptrDummy)
      D*r_bin4          S              9B 0 based(ptrDummy)
      D*r_int2          S              5I 0 based(ptrDummy)
@@ -114,7 +114,7 @@ FMT1-F                                     rename(TESTPEEK  :FFILE00)
      D cTypEscape      C                   CONST('*ESCAPE')
      D cTypStatus      C                   CONST('*STATUS')
       *
-      *  Ausgewählter Editor:
+      *  AusgewÃ¤hlter Editor:
      D Editor          S             10A   inz
      D cEDITOR_HEX     C                   const('*HEX')
      D cEDITOR_STRING  C                   const('*STRING')
@@ -134,7 +134,7 @@ FMT1-F                                     rename(TESTPEEK  :FFILE00)
      D o_TOLIB         S             10A   inz
      D o_QCMDL         S             15P 5 inz
       *
-      *  Übertragen VARGRAPHIC Felder
+      *  Ãœbertragen VARGRAPHIC Felder
      D x               S             10I 0 inz
      D offs            S             10I 0 inz
      D rem             S             10I 0 inz
@@ -183,7 +183,7 @@ FMT1-F                                     rename(TESTPEEK  :FFILE00)
      D  i_pgmNme                           const  like(r_pgm     )
       *
       *====================================================*
-      *  List API Format FLDL0100 mit eigenen zusätzlichen *
+      *  List API Format FLDL0100 mit eigenen zusÃ¤tzlichen *
       *  Feldern.                                          *
       *====================================================*
      D FLDL0100        DS
@@ -215,7 +215,7 @@ FMT1-F                                     rename(TESTPEEK  :FFILE00)
      D  F1FDCC               273    276I 0
      D  F1CHCC               277    280I 0
      D  F1EWCC               281    284I 0
-      *  zusätzliche Felder
+      *  zusÃ¤tzliche Felder
      D  F1PFLD               501    512
      D  F1VFLD               513    522
      D  F1LFLD               523    532
@@ -252,7 +252,7 @@ KEEP-D  keepCrsPos     C                   '0'
      D  PsLastSeq                     8A
       * Letzte Unterroutine
      D  PsLastSubr                    8A
-      * Anzahl übergebener Parameter
+      * Anzahl Ã¼bergebener Parameter
      D  PsNbrParm                     3S 0
       * Fehler-Msg
      D  PsMsgID                       7A
@@ -262,7 +262,7 @@ KEEP-D  keepCrsPos     C                   '0'
      D   PsMsgNbr                     4A   OVERLAY(PsMsgID:4)
       * MI-Instruktions-Nr.
      D  PsMI_Instr                    4A
-      * Arbeitsbereich für Nachrichten
+      * Arbeitsbereich fÃ¼r Nachrichten
      D  PsWorkArea                   30A
       * Programmbiblitohek
      D  PsPgmLib                     10A
@@ -288,7 +288,7 @@ KEEP-D  keepCrsPos     C                   '0'
      D  PsJobNbr                      6S 0
       * Jobdatum, Aufbau wie UDATE
      D  PsJobD                        6S 0
-      * Programm-Ausführungsdatum, Aufbau wie UDATE
+      * Programm-AusfÃ¼hrungsdatum, Aufbau wie UDATE
      D  PsJobDate                     6S 0
       * Job-Zeit (HHMMSS)
      D  PsJobTime                     6S 0
@@ -425,9 +425,9 @@ KEEP-D  keepCrsPos     C                   '0'
       *
      D isFound         S                   like(r_bool    ) inz(bFalse)
      D isError         S                   like(r_bool    ) inz(bFalse)
-    R *  Standardwert für "Eingabe in Kleinbuchstaben"
+    R *  Standardwert fÃ¼r "Eingabe in Kleinbuchstaben"
 LCAS-D isLower         S                   like(r_bool    ) inz(bFalse)
-    R *  Standardwert für "Satz gesperrt einlesen"
+    R *  Standardwert fÃ¼r "Satz gesperrt einlesen"
 RLCK-D isRcdLockDft    S                   like(r_bool    ) inz(bTrue )
     R *  Eingabe in Kleinbuchstaben erlaubt Ja/Nein
 ALWL-D isAlwLower      S                   like(r_bool    ) inz(bTrue )
@@ -468,7 +468,7 @@ DEF1- *
      D EDT00014        S              1A   inz
      D EDT00015        S              1A   inz
       *
-    R *  ... Konstanten für "Felder zu lang" (> 512 Byte und > 1024 Byte)
+    R *  ... Konstanten fÃ¼r "Felder zu lang" (> 512 Byte und > 1024 Byte)
 DEF2- *
      D LNG00001        C                   const('0')
      D MAX00001        C                   const('0')
@@ -501,11 +501,11 @@ DEF2- *
      D LNG00015        C                   const('0')
      D MAX00015        C                   const('0')
       *
-      *  Before-Image für Prüfung auf Datensatzänderung
+      *  Before-Image fÃ¼r PrÃ¼fung auf DatensatzÃ¤nderung
       *  bei optimistischer Satzsperre
      D b4Image         DS                  likeds(RCD_DS   ) inz
       *
-      *  Datenpuffer für Hex-Editor ...
+      *  Datenpuffer fÃ¼r Hex-Editor ...
     R *  ... umbenennen der Feldnamen
 RNM1-D RCD_DS        E DS         32766    extname(FILE00)
      D P_00000001    E                     extfld(ALPHA)
@@ -569,7 +569,7 @@ RNM2-IFFILE00
      C                   Parm                    xMsgDta
       *
       *----------------------------------------------------*
-      *  Parameterliste für PEEK21
+      *  Parameterliste fÃ¼r PEEK21
      C     P_PEEK21      Plist
      C                   Parm                    yScnAID
      C                   Parm                    yPgm
@@ -579,7 +579,7 @@ RNM2-IFFILE00
      C                   Parm                    yMsgDta
       *
       *----------------------------------------------------*
-      *  Parameterliste für PEEK23
+      *  Parameterliste fÃ¼r PEEK23
      C     P_PEEK23      Plist
      C                   Parm                    yPgm
      C                   Parm                    yKey
@@ -590,7 +590,7 @@ RNM2-IFFILE00
      C                   Parm                    yMsgDta
       *
       *----------------------------------------------------*
-      *  Parameterliste für PEEK32
+      *  Parameterliste fÃ¼r PEEK32
      C     P_PEEK32      Plist
      C                   Parm                    yOutBuffer
      C                   Parm                    yOutBuffLn
@@ -598,7 +598,7 @@ RNM2-IFFILE00
      C                   Parm                    yMsgDta
       *
       *----------------------------------------------------*
-      *  Parameterliste für PEEK59
+      *  Parameterliste fÃ¼r PEEK59
      C     P_PEEK59      Plist
      C                   Parm                    yDsp80
      C                   Parm                    yType
@@ -608,7 +608,7 @@ RNM2-IFFILE00
      C                   Parm                    yMsgID
      C                   Parm                    yMsgDta
       *
-      *  Parameterliste für PEEK45/PEEK64
+      *  Parameterliste fÃ¼r PEEK45/PEEK64
      C     P_PEEK_EDIT   Plist
      C                   Parm                    yDsp80
      C                   Parm                    yHeaderTyp
@@ -620,7 +620,7 @@ RNM2-IFFILE00
      C                   Parm                    yMsgDta
       *
       *----------------------------------------------------*
-      *  Schlüsselliste für PEEKFLD
+      *  SchlÃ¼sselliste fÃ¼r PEEKFLD
      C     F_KEY         Klist
      C                   Kfld                    F_Field
       *
@@ -640,10 +640,10 @@ RNM2-IFFILE00
       * - Setzen Bildschirmattribute
      C                   Exsr      setScreen
       *
-      * - Löschen Programmnachrichten
+      * - LÃ¶schen Programmnachrichten
      C                   Callp     p_rmvPgmMg(psPgmName)
       *
-      * - Öffnen der Dateien
+      * - Ã–ffnen der Dateien
      C                   Exsr      openFiles
       *
       * - Daten aktualisieren
@@ -668,7 +668,7 @@ RNM2-IFFILE00
       *------------------*
      C                   Do        *hival
       *
-      * - Flag für nicht darstellbare Zeichen
+      * - Flag fÃ¼r nicht darstellbare Zeichen
      C                   Eval      isCvtChar = bFalse
       *
       * - Feldbezeichnung
@@ -685,10 +685,10 @@ RNM2-IFFILE00
      C                   Eval      *in71 = *off
      C                   Endif
       *
-      * - geschütze Felder nicht unterstreichen
+      * - geschÃ¼tze Felder nicht unterstreichen
      C                   Eval      *in72 = *off
       *
-      * - Freigeben Schlüsselfelder
+      * - Freigeben SchlÃ¼sselfelder
      C                   If        (xIsUpdKey = bTrue  )  or
      C                             (xFunction = '*ADD' )  or
      C                             (xFunction = '*COPY')
@@ -716,7 +716,7 @@ RNM2-IFFILE00
 LSCN-C                             (scnNbr > 005)
      C                   Eval      scnNbr = 1
      C                   Else
-      *   ... Wert ist im gültigen Bereich
+      *   ... Wert ist im gÃ¼ltigen Bereich
      C                   Endif
       *
       * - Anzeigen "Weitere"/"Ende"
@@ -727,7 +727,7 @@ LSCN-C                   If        (scnNbr = 005)
      C                   Eval      *in83 = *off
      C                   Endif
       *
-      * - Prüfen ...
+      * - PrÃ¼fen ...
      C                   Select
     R *  ... Bildschirmfelder auf nicht darstellbare Zeichen
 CHKS- *
@@ -788,10 +788,10 @@ CHKS- *
      C                   Eval      sfBot = 1
      C                   Endsl
       *
-      * - Blättern ...
+      * - BlÃ¤ttern ...
      C                   Select
     R *  ... generieren Auswahl der anzuzeigenden Bildschirmseite
-SCRN- * - Blättern
+SCRN- * - BlÃ¤ttern
      C                   When      scnNbr = 001
      C   71              Exfmt     LC001
      C  N71              Exfmt     UC001
@@ -815,17 +815,17 @@ SCRN- * - Blättern
      C                   Eval      scnNbr = 1
      C                   Endsl
       *
-      * - Zurückgeben aktuelle Bildschirmnummer
+      * - ZurÃ¼ckgeben aktuelle Bildschirmnummer
      C                   Eval      xScreenNbr = scnNbr
       *
-      * - Löschen Programmnachrichten
+      * - LÃ¶schen Programmnachrichten
      C                   Callp     p_rmvPgmMg(psPgmName)
       *
       * - Berechnen Zeile/Spalte
      C     wScnCsrPos    Div       256           wScnCsrRow
      C                   Mvr                     wScnCsrCol
       *
-      * - Löschen der Cursorposition
+      * - LÃ¶schen der Cursorposition
      C                   Eval      csrRow = 0
      C                   Eval      csrCol = 0
       *
@@ -833,7 +833,7 @@ SCRN- * - Blättern
      C                   Eval      xCsrRow = wScnCsrRow - wndTopRow
      C                   Eval      xCsrCol = wScnCsrCol - wndLeftCol - 1
       *
-      * - Mappen der gedrückten Taste
+      * - Mappen der gedrÃ¼ckten Taste
       *   in Programmbefehl
      C                   Eval      yScnAID = wScnAID
      C                   Eval      yPgm    = 'PXXXXXXXX'
@@ -865,11 +865,11 @@ SCRN- * - Blättern
      C                   When      yPgmCmd = '*UPPERCASE'
      C                   Exsr      c_uppCase
       *
-      *   F7  - Umschalten der Überschrift
+      *   F7  - Umschalten der Ãœberschrift
      C                   When      yPgmCmd = '*HEADLINE'
      C                   Exsr      c_chgHead
       *
-      *   F8  - Setzen/Löschen NULL Indicator
+      *   F8  - Setzen/LÃ¶schen NULL Indicator
      C                   When      yPgmCmd = '*TGLNULL'
      C                   Exsr      c_tgNullInd
      C                   Exsr      keepCsrPos
@@ -927,7 +927,7 @@ LSCN-C                             (scnNbr < 005)
       *   Beenden Programm
      C     ende          Tag
       *
-      *   Schließen Dateien
+      *   SchlieÃŸen Dateien
      C                   Exsr      closeFiles
       *
       *   Merken Eingabe in Kleinbuchstaben
@@ -936,12 +936,12 @@ LSCN-C                             (scnNbr < 005)
      C                   Eval      *inlr = *on
       *
       *===================================================*
-      *    Einlesen Datensatz & füllen Bildschirm         *
+      *    Einlesen Datensatz & fÃ¼llen Bildschirm         *
       *===================================================*
       *
      C     readRecord    Begsr
       *
-      *  Einlesen Datensatz für ...
+      *  Einlesen Datensatz fÃ¼r ...
      C                   Select
       *  ... update
      C                   When      xFunction = '*CHANGE'
@@ -1000,7 +1000,7 @@ LSCN-C                             (scnNbr < 005)
      C                   Endsr
       *
       *===================================================*
-      *    Löschen aller Felder im Datensatz.             *
+      *    LÃ¶schen aller Felder im Datensatz.             *
       *===================================================*
       *
      C     clearRecord   Begsr
@@ -1021,7 +1021,7 @@ LSCN-C                             (scnNbr < 005)
      C                   Endsr
       *
       *============================================================*
-      *    DataToScn     Übertragen der Dateifelder in die         *
+      *    DataToScn     Ãœbertragen der Dateifelder in die         *
       *                  Bildschirmfelder                          *
       *============================================================*
       *
@@ -1033,7 +1033,7 @@ LSCN-C                             (scnNbr < 005)
       *  Anzuzeigender Bildschirm
      C                   Eval      scnNbr = xScreenNbr
       *
-      *  Übertragen Dateifelder
+      *  Ãœbertragen Dateifelder
       *  in die Bildschirmfelder ...
     R *  ... generieren MOVEL extField => intField (ToScreen)
 TSCN- *
@@ -1053,7 +1053,7 @@ TSCN- *
      C                   Exsr      s_V_00000014
      C                   Exsr      s_V_00000015
       *
-    R *  ... prüfen auf ISO-Felder
+    R *  ... prÃ¼fen auf ISO-Felder
 ISO - *
      C                   If        FLD00006= ' '
      C                   Eval      FLD00006 = ISOL
@@ -1076,10 +1076,10 @@ ISO - *
       *
      C     c_endPgm      Begsr
       *
-      * - Löschen Programmnachrichten
+      * - LÃ¶schen Programmnachrichten
      C                   Callp     p_rmvPgmMg(psPgmName)
       *
-      * - Zurückgeben Abbruchmeldung
+      * - ZurÃ¼ckgeben Abbruchmeldung
      C                   Eval      xMsgID  = 'USR8100'
      C                   Eval      xMsgDta = yPgmCmd
       *
@@ -1095,7 +1095,7 @@ ISO - *
       *   Einblenden aller Felder
      C                   Exsr      EnableEdit
       *
-      * - Einlesen der Daten und füllen Bildschirm
+      * - Einlesen der Daten und fÃ¼llen Bildschirm
      C                   Exsr      readRecord
      C                   Exsr      dataToScn
       *
@@ -1151,7 +1151,7 @@ ISO - *
      C                   Endsr
       *
       *============================================================*
-      *    c_chgHead     F7  - Umschalten der Überschrift          *
+      *    c_chgHead     F7  - Umschalten der Ãœberschrift          *
       *============================================================*
       *
      C     c_chgHead     Begsr
@@ -1201,7 +1201,7 @@ ISO - *
      C                   Eval      isError = bTrue
      C                   Leavesr
      C                   Endif
-      *      ... abbrechen der Operation, wenn vom Benutzer gewünscht
+      *      ... abbrechen der Operation, wenn vom Benutzer gewÃ¼nscht
      C                   If        yMsgID = 'USR8190' and yMsgDta <> '*YES'
      C                   Callp     p_sndPgmMg(yMsgID : yMsgDta : psPgmName)
      C                   Eval      isError = bTrue
@@ -1209,7 +1209,7 @@ ISO - *
      C                   Endif
      C                   Endif
       *
-      *      ... sperren Datensatz für UPDATE
+      *      ... sperren Datensatz fÃ¼r UPDATE
      C                   Exsr      lockRecord
      C                   Endif
       *
@@ -1255,14 +1255,14 @@ ISO - *
      C                   Eval      isError = bTrue
      C                   Leavesr
      C                   Endif
-      *      ... abbrechen der Operation, wenn vom Benutzer gewünscht
+      *      ... abbrechen der Operation, wenn vom Benutzer gewÃ¼nscht
      C                   If        yMsgID = 'USR8190' and yMsgDta <> '*YES'
      C                   Callp     p_sndPgmMg(yMsgID : yMsgDta : psPgmName)
      C                   Eval      isError = bTrue
      C                   Leavesr
      C                   Endif
       *
-      *      ... sperren Datensatz für UPDATE
+      *      ... sperren Datensatz fÃ¼r UPDATE
      C                   If        (isRcdLocked = bFalse)
      C                   Exsr      lockRecord
      C                   If        (isFound = bFalse) or (isError = bTrue)
@@ -1273,7 +1273,7 @@ ISO - *
      C                   Endif
      C                   Endif
       *
-    R *  ... prüfen auf ISO-Felder
+    R *  ... prÃ¼fen auf ISO-Felder
 ISO - *
      C                   If        FLD00006= ' '
      C                   Eval      FLD00006 = ISOL
@@ -1288,7 +1288,7 @@ ISO - *
      C                   Endif
       *
       *
-      *  Übertragen Felder vom Bildschirm
+      *  Ãœbertragen Felder vom Bildschirm
       *  in die Dateifelder ...
     R *  ... generieren MOVEL intField => extField (FromScreen)
 FSCN- *
@@ -1354,17 +1354,17 @@ FSCN- *
      C                   Exsr      f_V_00000015
      C                   Endif
       *
-      *  Abschließen der Verarbeitung ...
+      *  AbschlieÃŸen der Verarbeitung ...
      C                   Select
-      *  ... für update
+      *  ... fÃ¼r update
      C                   When      xFunction = '*CHANGE'
      C                   Update(E) FFILE00
      C                   Eval      isError = %error()
-      *  ... für copy
+      *  ... fÃ¼r copy
      C                   When      xFunction = '*COPY'
      C                   Write(E)  FFILE00
      C                   Eval      isError = %error()
-      *  ... für add
+      *  ... fÃ¼r add
      C                   When      xFunction = '*ADD '
      C                   Write(E)  FFILE00
      C                   Eval      isError = %error()
@@ -1386,7 +1386,7 @@ FSCN- *
       *  Updatze/write OK ...
      C   95              Commit
      C  N95              Unlock    File00
-      *  Löschen Fehler-Flag ...
+      *  LÃ¶schen Fehler-Flag ...
      C                   Eval      isError = bFalse
      C                   Endif
       *
@@ -1398,7 +1398,7 @@ FSCN- *
       *
      C     lockRecord    Begsr
       *
-      *  Lesen Datensatz mit Satzsperre für nachfolgenden UPDATE ...
+      *  Lesen Datensatz mit Satzsperre fÃ¼r nachfolgenden UPDATE ...
      C     xRcdNbr       Chain(E)  FFILE00
      C                   Eval      isFound = %found(FILE00)
      C                   Eval      isError = %error()
@@ -1440,8 +1440,8 @@ FSCN- *
      C                   Endsr
       *
       *============================================================*
-      *    chkChar       Prüfen auf nicht darstellbare Zeichen     *
-      *                  und Schlüsselfeld                         *
+      *    chkChar       PrÃ¼fen auf nicht darstellbare Zeichen     *
+      *                  und SchlÃ¼sselfeld                         *
       *============================================================*
       *
      C     chkChar       Begsr
@@ -1456,7 +1456,7 @@ FSCN- *
       *
      C                   Eval      FLDL0100 = F_FFD
       *
-      *  ... prüfen auf nicht darstellbare Zeichen
+      *  ... prÃ¼fen auf nicht darstellbare Zeichen
       *      ... Konvertieren nicht darstellbarer Zeichen
      C     ' '           Checkr    YOutBuffer:512YOutBuffLn
      C                   Call(E)   PEEK32        P_Peek32
@@ -1476,7 +1476,7 @@ FSCN- *
      C                   Eval      isVisible = *on
      C                   Endif
       *
-      *  Schlüsselfeld?
+      *  SchlÃ¼sselfeld?
      C                   If        (F_DESC <> ' ')
       *  ... JA
      C                   Eval      keyChar = '>'
@@ -1488,12 +1488,12 @@ FSCN- *
      C                   Endsr
       *
       *============================================================*
-      *    Öffnen der Dateien                                      *
+      *    Ã–ffnen der Dateien                                      *
       *============================================================*
       *
      C     openFiles     Begsr
       *
-      *  Überschreiben DB-Datei:
+      *  Ãœberschreiben DB-Datei:
      C                   Eval      o_File     = 'FILE00'
      C                   Eval      o_ToFile   = xFile
      C                   Eval      o_ToLib    = xLibrary
@@ -1504,14 +1504,14 @@ FSCN- *
      C                   Eval      o_Secure   = '*YES'
      C                   Exsr      OvrDbf
       *
-      *  Überschreiben Bildschirmdatei:
+      *  Ãœberschreiben Bildschirmdatei:
      C                   Eval      o_File     = 'DSPF'
      C                   Eval      o_ToFile   = 'F' + %subst(PsPgmName: 2)
      C                   Eval      o_ToLib    = PsPgmLib
      C                   Eval      o_OvrScope = '*CALLLVL'
      C                   Exsr      OvrDspF
       *
-      *  Datei öffnen ...
+      *  Datei Ã¶ffnen ...
      C                   If        xCommitLVL = '0'
       *  ... ohne Commit
      C                   Eval      *in95 = *off
@@ -1522,7 +1522,7 @@ FSCN- *
       *
      C                   Open(E)   FILE00
      C                   If        %error()
-      *  Datei konnte nicht geöffnet werden
+      *  Datei konnte nicht geÃ¶ffnet werden
      C                   Callp     p_movPgmMg(psPgmName)
      C                   Eval      pgmMsgID  = 'USR0005'
      C                   Eval      pgmMsgDta = 'FILE00'
@@ -1531,10 +1531,10 @@ FSCN- *
      C                   Goto      Ende
      C                   Endif
       *
-      *  Öffnen der Bildschirmdatei
+      *  Ã–ffnen der Bildschirmdatei
      C                   Open(E)   DSPF
      C                   If        %error()
-      *  Datei konnte nicht geöffnet werden
+      *  Datei konnte nicht geÃ¶ffnet werden
      C                   Callp     p_movPgmMg(psPgmName)
      C                   Eval      pgmMsgID  = 'USR0005'
      C                   Eval      pgmMsgDta = 'DSPF'
@@ -1543,10 +1543,10 @@ FSCN- *
      C                   Goto      Ende
      C                   Endif
       *
-      *  Öffnen der Feldbeschreibung
+      *  Ã–ffnen der Feldbeschreibung
      C                   Open(E)   PEEKFLD
      C                   If        %error()
-      *  Datei konnte nicht geöffnet werden
+      *  Datei konnte nicht geÃ¶ffnet werden
      C                   Callp     p_movPgmMg(psPgmName)
      C                   Eval      pgmMsgID  = 'USR0005'
      C                   Eval      pgmMsgDta = 'PEEKFLD'
@@ -1558,7 +1558,7 @@ FSCN- *
      C                   Endsr
       *
       *============================================================*
-      *    Schließen der Dateien                                   *
+      *    SchlieÃŸen der Dateien                                   *
       *============================================================*
       *
      C     closeFiles    Begsr
@@ -1594,7 +1594,7 @@ FSCN- *
      C                   Endsr
       *
       *============================================================*
-      *    setScreen     Einstellen 132/80-Zeichen Auflösung       *
+      *    setScreen     Einstellen 132/80-Zeichen AuflÃ¶sung       *
       *============================================================*
       *
      C     setScreen     Begsr
@@ -1657,7 +1657,7 @@ FSCN- *
      C                   Endsr
       *
       *====================================================*
-      *  fromBuffer - Übertragen Rohdaten aus IO-Puffer    *
+      *  fromBuffer - Ãœbertragen Rohdaten aus IO-Puffer    *
       *====================================================*
       *
      C     fromBuffer    Begsr
@@ -1686,7 +1686,7 @@ FSCN- *
      C                   Endsr
       *
       *====================================================*
-      *  toBuffer   - Übertragen Rohdaten nach IO-Puffer   *
+      *  toBuffer   - Ãœbertragen Rohdaten nach IO-Puffer   *
       *====================================================*
       *
      C     toBuffer      Begsr
@@ -1720,7 +1720,7 @@ FSCN- *
       *
       *====================================================*
       *  MSG8208    - Ausgeben Fehlernachricht             *
-      *  Nur INPUT-Felder können nicht geändert werden.    *
+      *  Nur INPUT-Felder kÃ¶nnen nicht geÃ¤ndert werden.    *
       *====================================================*
       *
      C     MSG8208       Begsr
@@ -1733,7 +1733,7 @@ FSCN- *
       *
       *====================================================*
       *  USR8193    - Ausgeben Fehlernachricht             *
-      *  Felder &1 enthält nicht darstellbaren Zeichen und *
+      *  Felder &1 enthÃ¤lt nicht darstellbaren Zeichen und *
       *  kann daher nicht mit dem Texteditor bearbeitet    *
       *  werden.                                           *
       *====================================================*
@@ -1748,7 +1748,7 @@ FSCN- *
       *
       *====================================================*
       *  MSG8221    - Ausgeben Fehlernachricht             *
-      *  Editor nicht zulässig. Feld &1 hat ungültigen     *
+      *  Editor nicht zulÃ¤ssig. Feld &1 hat ungÃ¼ltigen     *
       *  Datentyp.                                         *
       *====================================================*
       *
@@ -1761,12 +1761,12 @@ FSCN- *
      C                   Endsr
       *
       *====================================================*
-      *  OvrDbf     - Überschreiben DB-Datei               *
+      *  OvrDbf     - Ãœberschreiben DB-Datei               *
       *====================================================*
       *
      C     OvrDbf        Begsr
       *
-      *  Überschreiben mit neuer Datei ...
+      *  Ãœberschreiben mit neuer Datei ...
       *     OVRDBF
      C                   MOVEL(P)  'OVRDBF'      o_QCMD
       *     File
@@ -1835,12 +1835,12 @@ FSCN- *
      C                   Endsr
       *
       *====================================================*
-      *  OvrDspF    - Überschreiben Bildschirmdatei        *
+      *  OvrDspF    - Ãœberschreiben Bildschirmdatei        *
       *====================================================*
       *
      C     OvrDspF       Begsr
       *
-      *  Überschreiben mit neuer Datei ...
+      *  Ãœberschreiben mit neuer Datei ...
       *     OVRDSPF
      C                   MOVEL(P)  'OVRDSPF'     o_QCMD
       *     File
@@ -1878,12 +1878,12 @@ FSCN- *
      C                   Endsr
     R *
     R *====================================================*
-    R *  Ab hier folgen die Unterroutinen für die          *
-    R *  Prüfung auf ungültige Feldinhalte                 *
+    R *  Ab hier folgen die Unterroutinen fÃ¼r die          *
+    R *  PrÃ¼fung auf ungÃ¼ltige Feldinhalte                 *
     R *====================================================*
 CHKC- *
       *====================================================*
-      *  Prüfung auf ungültige Feldinhalte, Seite 001
+      *  PrÃ¼fung auf ungÃ¼ltige Feldinhalte, Seite 001
       *====================================================*
       *
      C     chkChar001    Begsr
@@ -2107,7 +2107,7 @@ CHKC- *
      C                   Endsr
       *
       *====================================================*
-      *  Prüfung auf ungültige Feldinhalte, Seite 002
+      *  PrÃ¼fung auf ungÃ¼ltige Feldinhalte, Seite 002
       *====================================================*
       *
      C     chkChar002    Begsr
@@ -2138,7 +2138,7 @@ CHKC- *
      C                   Endsr
       *
       *====================================================*
-      *  Prüfung auf ungültige Feldinhalte, Seite 003
+      *  PrÃ¼fung auf ungÃ¼ltige Feldinhalte, Seite 003
       *====================================================*
       *
      C     chkChar003    Begsr
@@ -2174,7 +2174,7 @@ CHKC- *
      C                   Endsr
       *
       *====================================================*
-      *  Prüfung auf ungültige Feldinhalte, Seite 004
+      *  PrÃ¼fung auf ungÃ¼ltige Feldinhalte, Seite 004
       *====================================================*
       *
      C     chkChar004    Begsr
@@ -2205,7 +2205,7 @@ CHKC- *
      C                   Endsr
       *
       *====================================================*
-      *  Prüfung auf ungültige Feldinhalte, Seite 005
+      *  PrÃ¼fung auf ungÃ¼ltige Feldinhalte, Seite 005
       *====================================================*
       *
      C     chkChar005    Begsr
@@ -2266,8 +2266,8 @@ CHKC- *
       *
     R *
     R *====================================================*
-    R *  Ab hier folgen die Unterroutinen für das          *
-    R *  Setzen/Löschen der NULL Indicator                 *
+    R *  Ab hier folgen die Unterroutinen fÃ¼r das          *
+    R *  Setzen/LÃ¶schen der NULL Indicator                 *
     R *====================================================*
       *
      C     c_tgNullInd   Begsr
@@ -2391,7 +2391,7 @@ NULL- *
      C                   Endsr
     R *
     R *====================================================*
-    R *  Ab hier folgen die Unterroutinen für den          *
+    R *  Ab hier folgen die Unterroutinen fÃ¼r den          *
     R *  Hex-Editor                                        *
     R *====================================================*
 HEX - *
@@ -2669,7 +2669,7 @@ HEX - *
       *
     R *
     R *====================================================*
-    R *  Ab hier folgen die Unterroutinen für den          *
+    R *  Ab hier folgen die Unterroutinen fÃ¼r den          *
     R *  String-Editor                                     *
     R *====================================================*
 TXT - *
@@ -2807,8 +2807,8 @@ TXT - *
       *
     R *
     R *====================================================*
-    R *  Ab hier folgen die Unterroutinen für den          *
-    R *  das Übertragen der Dateifelder ind die Felder     *
+    R *  Ab hier folgen die Unterroutinen fÃ¼r den          *
+    R *  das Ãœbertragen der Dateifelder ind die Felder     *
     R *  des Bildschirms.                                  *
     R *====================================================*
       *  ALPHA
@@ -3082,8 +3082,8 @@ TXT - *
      C                   Endsr
     R *
     R *====================================================*
-    R *  Ab hier folgen die Unterroutinen für den          *
-    R *  das Übertragen der Dateifelder in die Felder      *
+    R *  Ab hier folgen die Unterroutinen fÃ¼r den          *
+    R *  das Ãœbertragen der Dateifelder in die Felder      *
     R *  der Datei.                                        *
     R *====================================================*
      C     f_P_00000001  Begsr

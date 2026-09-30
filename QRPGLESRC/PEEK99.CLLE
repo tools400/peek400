@@ -7,7 +7,7 @@
      /*  Typ      : CLP                                              */
      /*                                                              */
      /*  erstellt : 11.11.1997  Raddatz                              */
-     /*  ge‰ndert : 27.04.1999  2.1.0                                */
+     /*  ge√§ndert : 27.04.1999  2.1.0                                */
      /*                                                              */
      /* ============================================================ */
      /*                                                              */
@@ -163,7 +163,7 @@ ADDBNDDIRE:
              IF         COND(&RTNLIB *NE '*N') THEN(DO)
                 SNDPGMMSG  MSGID(CPF9898) MSGF(QCPFMSG) +
                            MSGDTA('RPGLEHSPEC in Bibliothek ''' *TCAT &RTNLIB +
-                           *TCAT ''' nicht zul‰ssig') TOPGMQ(*PRV +
+                           *TCAT ''' nicht zul√§ssig') TOPGMQ(*PRV +
                            (*)) MSGTYPE(*ESCAPE)
              ENDDO
 
@@ -172,7 +172,7 @@ ADDBNDDIRE:
                         *AND &DBGVIEW *NE '*NONE') THEN(DO)
                 SNDPGMMSG  MSGID(CPF9898) MSGF(QCPFMSG) +
                            MSGDTA('DBGVIEW ''' *TCAT &DBGVIEW *TCAT +
-                           ''' nicht zul‰ssig') TOPGMQ(*PRV (*)) +
+                           ''' nicht zul√§ssig') TOPGMQ(*PRV (*)) +
                            MSGTYPE(*ESCAPE)
              ENDDO
 
@@ -195,7 +195,7 @@ ADDBNDDIRE:
                         *AND &SRCTYPE *NE 'CLLE' )   THEN(DO)
                 SNDPGMMSG  MSGID(CPF9898) MSGF(QCPFMSG) +
                            MSGDTA('SRCTYPE ''' *TCAT &SRCTYPE *TCAT +
-                           ''' nicht zul‰ssig') TOPGMQ(*PRV (*)) +
+                           ''' nicht zul√§ssig') TOPGMQ(*PRV (*)) +
                            MSGTYPE(*ESCAPE)
              ENDDO
 
@@ -627,7 +627,7 @@ ADDBNDDIRE:
 
 /* ----------------- */
 /* Sonstige          */
-/* Parameter f¸r     */
+/* Parameter f√ºr     */
 /* Modulerstellung   */
 /* ----------------- */
              CHGVAR     VAR(&CMD) VALUE(&CMD          +
@@ -781,7 +781,7 @@ CRT_MOD:
 
 /* ----------------- */
 /* Sonstige          */
-/* Parameter f¸r     */
+/* Parameter f√ºr     */
 /* Programmerstell.  */
 /* ----------------- */
                 CHGVAR     VAR(&CMD) VALUE(&CMD          +
@@ -876,7 +876,7 @@ CRT_OBJ:
 
    /* ----------------- */
    /* Module            */
-   /* lˆschen           */
+   /* l√∂schen           */
    /* ----------------- */
              CHGVAR     VAR(&CMD) VALUE('DLTMOD'      +
                                   *BCAT  'MODULE('    +

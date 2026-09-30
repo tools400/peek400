@@ -1,7 +1,7 @@
 **FREE
 //
 //====================================================*
-//  Definitionen für Format: RTVM0100  (QMHRTVM)      *
+//  Definitionen fÃ¼r Format: RTVM0100  (QMHRTVM)      *
 //====================================================*
 //
 dcl-ds rtvm0100 len(2048);

@@ -1,15 +1,15 @@
 **FREE
 //---------------------------------------------------------------
-// Datenstruktur f¸r Generieren Programme
+// Datenstruktur f√ºr Generieren Programme
 // SET0012   *CRTPGM
 //---------------------------------------------------------------
 //
 dcl-ds set0012_t len(256) qualified template;
   //  Kleinbuchstaben erlaubt: 1=Ja; 0=Nein
   set_alwlc       char(1) inz('1');
-  //  Standardm‰ﬂig Klienbuchstaben: 1=Ja; 0=Nein
+  //  Standardm√§√üig Klienbuchstaben: 1=Ja; 0=Nein
   set_case        char(1) inz('0');
-  //  Standardm‰ﬂig Satzsperre: 1=Ja; 0=Nein
+  //  Standardm√§√üig Satzsperre: 1=Ja; 0=Nein
   set_rcd_lock    char(1) inz('1');
   //  Initialisieren NULL-Felder: 1=Ja; 0=Nein
   set_null_dft    char(1) inz('1');

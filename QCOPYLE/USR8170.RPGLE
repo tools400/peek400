@@ -1,7 +1,7 @@
 **free
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8170
-//  Wert &1 für Attribut "Max. Größe" nicht zulässig.
+//  Wert &1 fÃ¼r Attribut "Max. GrÃ¶ÃŸe" nicht zulÃ¤ssig.
 dcl-ds USR8170 qualified;
   var1  packed(10:0) inz;
 end-ds;

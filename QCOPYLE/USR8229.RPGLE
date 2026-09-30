@@ -1,7 +1,7 @@
 **free
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8229
-//  Wert '&1' für die Feldlänge ist ungültig.
+//  Wert '&1' fÃ¼r die FeldlÃ¤nge ist ungÃ¼ltig.
 dcl-ds USR8229 qualified;
   var1  char(256) inz;
 end-ds;

@@ -1,7 +1,7 @@
 **free
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8220
-//  Editor nicht zul‰ssig. Feld &1 enth‰lt NULL Wert.
+//  Editor nicht zul√§ssig. Feld &1 enth√§lt NULL Wert.
 dcl-ds USR8220 qualified;
   var1  char(10) inz;
 end-ds;

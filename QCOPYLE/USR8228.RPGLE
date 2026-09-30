@@ -1,7 +1,7 @@
 **free
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8228
-//  Datentyp '&1' ist ungültig.
+//  Datentyp '&1' ist ungÃ¼ltig.
 dcl-ds USR8228 qualified;
   var1  char(256) inz;
 end-ds;

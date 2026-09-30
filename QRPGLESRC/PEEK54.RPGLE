@@ -179,7 +179,7 @@ dcl-proc main;
            pmbr      :
            pfmt      );
 
-  //  Überschreiben Datei ...
+  //  Ãœberschreiben Datei ...
   f_execute('OVRDBF ' +
              'FILE(PEEKENV) ' +
              'TOFILE(' +
@@ -193,14 +193,14 @@ dcl-proc main;
   pmsgid = '';
   pmsgdta = '';
 
-  //  Prüfen, ob gespeichert werden darf
+  //  PrÃ¼fen, ob gespeichert werden darf
   if (i_isautosave = bTrue);
     open(e) peekenv;
     if not %error();
       cansave =  checkAutoSave(pfile: plib);
       close peekenv;
     else;
-      //     Fehler beim Öffnen aufgetreten
+      //     Fehler beim Ã–ffnen aufgetreten
       clear usr9992;
       usr9992.var1 = 3;
       usr9992.var2 = i_file;
@@ -213,7 +213,7 @@ dcl-proc main;
     cansave = bTrue;
   endif;
 
-  //  Löschen alte Daten ...
+  //  LÃ¶schen alte Daten ...
   if (cansave = bTrue);
 
     clearEnvironment(i_envfile  :
@@ -224,7 +224,7 @@ dcl-proc main;
 
     if (go_msgid = ' ');
 
-      //  Öffnen Datei ...
+      //  Ã–ffnen Datei ...
       open peekenv;
 
       //  Ausgeben AccessMode ...
@@ -288,13 +288,13 @@ dcl-proc main;
                i_pintabc:
                i_nbrpinc);
 
-      //  Schließen Datei ...
+      //  SchlieÃŸen Datei ...
       close peekenv;
 
     endif;
   endif;
 
-  //  Löschen Überschreibung ...
+  //  LÃ¶schen Ã¼berschreibung ...
   f_execute('DLTOVR ' +
              'FILE(PEEKENV) ' +
              'LVL(*ACTGRPDFN) '

@@ -45,15 +45,15 @@
 //                *BASED-ON - 1=OK                               *
 //                            0=Fehler                           *
 //                            o_data = BSPF0100                  *
-//                *KEY      - x=Anzahl Schlüsselfelder           *
+//                *KEY      - x=Anzahl SchlÃ¼sselfelder           *
 //                            o_data = ''                        *
-//                *READKEY  - x=Nr. des Schlüsselfeldes          *
+//                *READKEY  - x=Nr. des SchlÃ¼sselfeldes          *
 //                            o_data = KEYL0100                  *
-//                *READTEXT - x=Länge der Textbescheibung        *
+//                *READTEXT - x=LÃ¤nge der Textbescheibung        *
 //                            o_data = description               *
-//                *SELECT   - x=Anzahl SELECT Einträge           *
+//                *SELECT   - x=Anzahl SELECT EintrÃ¤ge           *
 //                            o_data = ''                        *
-//                *READSEL  - x=Anzahl SELECT Einträge           *
+//                *READSEL  - x=Anzahl SELECT EintrÃ¤ge           *
 //                            o_data = SELL0100                  *
 //                                                               *
 //  XData       - entry                                          *
@@ -256,7 +256,7 @@ begsr api_crt;
     fild0100.atfile = '*ERROR';
     fild0100.atlib = '*ERROR';
   else;
-    //  restliche Felder füllen
+    //  restliche Felder fÃ¼llen
     //  Datei/Bibliothek
     fild0100.atfile = retQfile.name;
     fild0100.atlib = retQfile.lib;
@@ -378,7 +378,7 @@ begsr api_crt;
     //  Auxiliary storage pool ID
     fild0100.atasp = filedefhd.qdbfasp;
 
-    //  nicht unterstützt:
+    //  nicht unterstÃ¼tzt:
     fild0100.atmxdd = '';
     fild0100.atmxdc = '';
     fild0100.atmxdb = '';
@@ -481,11 +481,11 @@ begsr readkey;
     keyl0100.apfile = fild0100.atfile;
     //  Bibliothek
     keyl0100.aplib = fild0100.atlib;
-    //  Anzahl Schlüsselfelder
+    //  Anzahl SchlÃ¼sselfelder
     keyl0100.apnkyf = nbrofkeyfd;
     //  Feldname
     keyl0100.apkeyf = keyspecay.qdbfkfld;                              // Feldname
-    //  Schlüsselfeldnummer
+    //  SchlÃ¼sselfeldnummer
     keyl0100.apkeyn = posofkeyfd + 1;
     //  Dateiart
     keyl0100.apftyp = fild0100.atftyp;                                 // file type
@@ -568,7 +568,7 @@ begsr readkey;
     endif;
 
     //------------------------------------------*
-    //  Schlüsselfeldattribute:                 *
+    //  SchlÃ¼sselfeldattribute:                 *
     //------------------------------------------*
     //  Bit 0   - Qdbfksad - Ascending/Descending indicator
     //*                 EVAL      *in98 = %bitand(Qdbfksq: x'80') = x'80'
@@ -713,7 +713,7 @@ begsr readselect;
     if (selspecay.qdbfsoso <= 0);
     // ... es sind aber keine vorhanden
     else;
-      // ... dann diese ermitteln und zurückliefern
+      // ... dann diese ermitteln und zurÃ¼ckliefern
 
       // ... Feldname
       sell0100.sofld = selspecay.qdbfssfn;
@@ -724,7 +724,7 @@ begsr readselect;
       offset = selspecay.qdbfsoso;
       pSelparmay = %addr(rcvVarTab(offset + 1));
 
-      // ...  ermitteln SELECT/OMIT Wert und Wertlänge
+      // ...  ermitteln SELECT/OMIT Wert und WertlÃ¤nge
       dow ('1');
 
         lenofslom = selparmay.qdbfspln - 20;
@@ -744,12 +744,12 @@ begsr readselect;
           sell0100.sovalu =
            %trimr(sell0100.sovalu) + ' ' + r_valu;
         endif;
-        // ... SELECT/OMIT Wertlänge
+        // ... SELECT/OMIT WertlÃ¤nge
         sell0100.sovall = lenofslom;
 
         // ... wenn weitere Werte vorhanden sind, ...
         if (selparmay.qdbfspno <> 0);
-          //          ... dann den Zeiger auf den nächsten Wert ausrichten
+          //          ... dann den Zeiger auf den nÃ¤chsten Wert ausrichten
           offset = selparmay.qdbfspno;
           pSelparmay = %addr(rcvVarTab(offset + 1));
         else;

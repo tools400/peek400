@@ -8,7 +8,7 @@
 //  Typ      : RPG                                               *
 //                                                               *
 //  erstellt : 16.03.99  Raddatz                                 *
-//  geändert : 27.04.99  2.1.0                                   *
+//  geÃ¤ndert : 27.04.99  2.1.0                                   *
 //                                                               *
 //===============================================================*
 //                                                               *
@@ -135,7 +135,7 @@ exsr inzsr;
 exsr first;
 
 //---------------------------------------------------*
-//  Schleife für Programmbearbeitung
+//  Schleife fÃ¼r Programmbearbeitung
 
 dow ('1');
 
@@ -178,16 +178,16 @@ dow ('1');
   cursorposition.row = workstn.csrpos / 256;
   cursorposition.column = %rem(workstn.csrpos: 256);
 
-  //  Nachrichten löschen
+  //  Nachrichten lÃ¶schen
   p_rmvpgmmg(sds.pgmname);
 
   //  Merken Cursorposition
   exsr keepcsrpos;
 
-  //  Bezugszahlen löschen
+  //  Bezugszahlen lÃ¶schen
   exsr bzoff1;
 
-  //  Mappen der gedrückten Taste
+  //  Mappen der gedrÃ¼ckten Taste
   //  in Programmbefehl
   peek21(workstn.aid: sds.pgmname
         : yPgmCmd: yCmdDta: yMsgId: yMsgDta);
@@ -216,14 +216,14 @@ dow ('1');
     exsr c_refresh;
     iter;
 
-  //  F9  - Auswählen Sortierfolge
+  //  F9  - AuswÃ¤hlen Sortierfolge
   when (yPgmCmd = '*DSPDBR');
     tempscnfld = scnfld;
     tempfldpos = fldpos;
     exsr c_selectky;
     iter;
 
-  //  F11 - Einfügen Keyfelder
+  //  F11 - EinfÃ¼gen Keyfelder
   when (yPgmCmd = '*INSKEYFLD');
     tempscnfld = scnfld;
     tempfldpos = fldpos;
@@ -249,7 +249,7 @@ dow ('1');
     endif;
 
   other;
-    //  Falsche Taste gedrückt
+    //  Falsche Taste gedrÃ¼ckt
     p_wrongkey(workstn.aid: sds.pgmname);
     iter;
   endsl;
@@ -436,7 +436,7 @@ begsr c_refresh;
 endsr;
 
 //============================================================*
-//    C_SelectKy    Auswählen Sortierfolge                    *
+//    C_SelectKy    AuswÃ¤hlen Sortierfolge                    *
 //============================================================*
 
 begsr c_selectky;
@@ -455,7 +455,7 @@ begsr c_selectky;
 endsr;
 
 //============================================================*
-//    Slc_Key       Auswählen Sortierfolge                   *
+//    Slc_Key       AuswÃ¤hlen Sortierfolge                   *
 //============================================================*
 
 begsr slc_key;
@@ -530,7 +530,7 @@ begsr c_morekeys;
 endsr;
 
 //============================================================*
-//    FILL##        Füllen Bildschirm                         *
+//    FILL##        FÃ¼llen Bildschirm                         *
 //============================================================*
 
 begsr fill##;
@@ -570,12 +570,12 @@ begsr keepcsrpos;
 endsr;
 
 //============================================================*
-//    DltCsrPos     Löschen der Cursorposition                *
+//    DltCsrPos     LÃ¶schen der Cursorposition                *
 //============================================================*
 
 begsr dltcsrpos;
 
-  //  Löschen der Cursorosition
+  //  LÃ¶schen der Cursorosition
   csrrow = *zeros;
   csrcol = *zeros;
 
@@ -593,7 +593,7 @@ begsr getusrsetg;
 endsr;
 
 //============================================================*
-//    SetScreen     Einstellen 132/80-Zeichen Auflösung       *
+//    SetScreen     Einstellen 132/80-Zeichen AuflÃ¶sung       *
 //============================================================*
 
 begsr setscreen;
@@ -629,14 +629,14 @@ begsr first;
            pfile.member  :
            pfile.format  );
 
-  // - Öffnen der Dateien
+  // - Ã–ffnen der Dateien
   open peek48fm;
 
-  // - Füllen der Bildschirmfelder
+  // - FÃ¼llen der Bildschirmfelder
   exsr bzoff1;
   exsr fill##;
 
-  // - Setzen Ändern erlaubt für: WHERE und ORDER BY
+  // - Setzen Ã„ndern erlaubt fÃ¼r: WHERE und ORDER BY
   if (i_enablewhere = bTrue);
     *in71 = *off;
   else;
@@ -659,7 +659,7 @@ begsr first;
   // - Darstellung der Befehlstasten
   sfbot = 1;
 
-  // - Einstellen der Bildschirmauflösung 80/132-Zeichen
+  // - Einstellen der BildschirmauflÃ¶sung 80/132-Zeichen
   exsr setscreen;
 
 endsr;

@@ -11,29 +11,29 @@
        //===============================================================*
        //                                                               *
        //  Kurzdokumentation :                                          *
-       //  ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯                                          *
+       //  ===================                                          *
        //  EXIT-Programm zur Ermittlung der Datei mit den               *
        //  Benutzereinstellungen (PEEKUSR).                             *
        //                                                               *
        //  Parameterliste:                                              *
-       //  ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯                                              *
+       //  ===============                                              *
        //     I/O:  gio_user   - Name Benutzerprofil                    *
        //     I/O:  gio_file   - Name der Settings-Datei                *
        //     I/O:  gio_lib    - Bibliothek mit Settings-Datei          *
        //     Out:  go_msgID   - Nachrichten-ID                         *
        //     Out:  go_msgDta  - Nachrichtendaten                       *
        //                                                               *
-       //  Berechnen der Rückgabewerte:                                 *
-       //  ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯                                 *
+       //  Berechnen der RÃ¼ckgabewerte:                                 *
+       //  ============================                                 *
        //  In diesem Beispielprogramm wird der Name der Settings-Datei  *
        //  gleich einem im Benutzerprofil hinterlegten Gruppenprofil    *
        //  gesetzt.                                                     *
        //                                                               *
-       //  Natürlich könnte der Name der Settings-Datei auch über eine  *
+       //  NatÃ¼rlich kÃ¶nnte der Name der Settings-Datei auch Ã¼ber eine  *
        //  andere Logik, bspw. einer Mapping-Datei ermittelt werden.    *
        //                                                               *
        //  Erstellen des Programms:                                     *
-       //  ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯                                     *
+       //  ========================                                     *
        //  CRTRPGMOD MODULE(PEEK/EXIT02) DBGVIEW(*ALL) TRUNCNBR(*NO)    *
        //  SRCFILE(PEEK/QRPGLESRC) SRCMBR(EXIT02)                       *
        //  REPLACE(*YES) LANGID(*JOBRUN) TGTRLS(V4R5M0)                 *
@@ -90,7 +90,7 @@
          lastseq         char(8);
          // Letzte Unterroutine
          lastsubr        char(8);
-         // Anzahl übergebener Parameter
+         // Anzahl Ã¼bergebener Parameter
          nbrparm         zoned(3);
          // Fehler-Msg
          msgid           char(7);
@@ -100,7 +100,7 @@
          msgnbr          char(4) overlay(msgid:4);
          // MI-Instruktions-Nr.
          mi_instr        char(4);
-         // Arbeitsbereich für Nachrichten
+         // Arbeitsbereich fÃ¼r Nachrichten
          workarea        char(30);
          // Programmbiblitohek
          pgmlib          char(10);
@@ -126,7 +126,7 @@
          jobnbr          zoned(6);
          // Jobdatum, Aufbau wie UDATE
          jobd            zoned(6);
-         // Programm-Ausführungsdatum, Aufbau wie UDATE
+         // Programm-AusfÃ¼hrungsdatum, Aufbau wie UDATE
          jobdate         zoned(6);
          // Job-Zeit (HHMMSS)
          jobtime         zoned(6);
@@ -235,7 +235,7 @@
 
        //===============================================================*
        //    Funktion:                                                  *
-       //    Abrufen Informationen über Benutzerprofil                  *
+       //    Abrufen Informationen Ã¼ber Benutzerprofil                  *
        //===============================================================*
 
        dcl-proc f_rtvusrprfinf;

@@ -1,7 +1,7 @@
 **free
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8128
-//  Suche l‰uft. &1 von max. &2 Datens‰tzen durchsucht ...
+//  Suche l√§uft. &1 von max. &2 Datens√§tzen durchsucht ...
 dcl-ds USR8128 qualified;
   var1  packed(10:0) inz;
   var2  packed(10:0) inz;

@@ -1,11 +1,11 @@
 **FREE
 //---------------------------------------------------------------
-// Datenstruktur für Letzte geöffnete Datei
+// Datenstruktur fÃ¼r Letzte geÃ¶ffnete Datei
 // SET0014   *PRVFILE
 //---------------------------------------------------------------
 //
 dcl-ds set0014_t len(256) qualified template;
-  //  Letzte geöffnete Datei ...
+  //  Letzte geÃ¶ffnete Datei ...
   set_prvfil      char(10) inz('*NONE');
   //  ... Bibliothek
   set_prvlib      char(10) inz('*NONE');

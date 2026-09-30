@@ -1,7 +1,7 @@
 **free
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8201
-//  Datensatz &1 wurde gelöscht.
+//  Datensatz &1 wurde gelÃ¶scht.
 dcl-ds USR8201 qualified;
   var1  packed(10:0) inz;
 end-ds;

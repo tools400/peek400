@@ -1,7 +1,7 @@
 **free
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8231
-//  Eine Änderung der Satzsperre ist nur im Änderungsmodus mögl
+//  Eine Ã„nderung der Satzsperre ist nur im Ã„nderungsmodus mÃ¶gl
 dcl-ds USR8231 qualified;
       //  No replacement variables available!
 end-ds;

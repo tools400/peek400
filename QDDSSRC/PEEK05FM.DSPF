@@ -8,7 +8,7 @@
       *  Typ      : DSPF                                              *
       *                                                               *
       *  erstellt : 29.09.1997                                        *
-      *  geändert : 27.04.1999 für Version 2.1.0                      *
+      *  geÃ¤ndert : 27.04.1999 fÃ¼r Version 2.1.0                      *
       *                                                               *
       *===============================================================*
       *                                                               *
@@ -19,33 +19,33 @@
       *===============================================================*
       *  BEZUGSZAHLEN:                                                *
       *                                                               *
-      *  70 - Hide/Show  FÜR ##RCDNBR versus ##KEY*                   *
-      *  71 - COLOR(YLW) FÜR SFPAU, ##FILE, ##MEMBER, ##FIELD, ...    *
-      *  72 - DSPATR(PR) FÜR ##STRPAGE                                *
-      *  73 - DSPATR(PR) FÜR ##RCDNBR, ##KEY*                         *
-      *  74 - DSPATR(PR) FÜR ##LIBRARY                                *
-      *  75 - DSPATR(PR) FÜR ##FILE                                   *
-      *  76 - DSPATR(PR) FÜR SFPAU                                    *
-      *  77 - DSPATR(PR) FÜR ##MEMBER                                 *
-      *  78 - CHECK(LC)  FÜR ##KEY*                                   *
-      *  79 - Hide/Show  FÜR $$RECORDS                                *
+      *  70 - Hide/Show  FÃœR ##RCDNBR versus ##KEY*                   *
+      *  71 - COLOR(YLW) FÃœR SFPAU, ##FILE, ##MEMBER, ##FIELD, ...    *
+      *  72 - DSPATR(PR) FÃœR ##STRPAGE                                *
+      *  73 - DSPATR(PR) FÃœR ##RCDNBR, ##KEY*                         *
+      *  74 - DSPATR(PR) FÃœR ##LIBRARY                                *
+      *  75 - DSPATR(PR) FÃœR ##FILE                                   *
+      *  76 - DSPATR(PR) FÃœR SFPAU                                    *
+      *  77 - DSPATR(PR) FÃœR ##MEMBER                                 *
+      *  78 - CHECK(LC)  FÃœR ##KEY*                                   *
+      *  79 - Hide/Show  FÃœR $$RECORDS                                *
       *                                                               *
-      *  80 - SFLDSP, EXSR SFLC, SÄTZE GEF./NICHT GEFUNDEN            *
+      *  80 - SFLDSP, EXSR SFLC, SÃ„TZE GEF./NICHT GEFUNDEN            *
       *  81 - SFLDSPCTL                                               *
       *  82 - SFLCLR                                                  *
       *  83 - SFLEND                                                  *
       *  84 - SFLNXTCHG                                               *
-      *  85 - DSPATR(RI) FÜR SFPAU                                    *
+      *  85 - DSPATR(RI) FÃœR SFPAU                                    *
       *  86 - SFLDROP/SFLFOLD                                         *
-      *  87 - DSPATR(PC) FÜR AUFSETZKEY                               *
+      *  87 - DSPATR(PC) FÃœR AUFSETZKEY                               *
       *  88 - 80/132-ZEICHEN ANZEIGE                                  *
       *  89 - SFLEND, MSGCTL                                          *
       *                                                               *
-      *  96 - Feld für Eingabe sperren  VDSP;VDEL                     *
-      *  98 - Feld für Eingabe sperren  VCHG                          *
+      *  96 - Feld fÃ¼r Eingabe sperren  VDSP;VDEL                     *
+      *  98 - Feld fÃ¼r Eingabe sperren  VCHG                          *
       *                                                               *
-      *  91 - Vorwärts blättern                                       *
-      *  92 - Rückwärts blättern                                      *
+      *  91 - VorwÃ¤rts blÃ¤ttern                                       *
+      *  92 - RÃ¼ckwÃ¤rts blÃ¤ttern                                      *
       *                                                               *
       *===============================================================*
       * >>PRE-COMPILER<<                                              *

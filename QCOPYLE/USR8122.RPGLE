@@ -1,7 +1,7 @@
 **free
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8122
-//  Funktionstaste nicht zul‰ssig.
+//  Funktionstaste nicht zul√§ssig.
 dcl-ds USR8122 qualified;
       //  No replacement variables available!
 end-ds;

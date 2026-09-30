@@ -7,15 +7,15 @@
      /*  Typ      : RPG                                              */
      /*                                                              */
      /*  erstellt : 26.09.97                                         */
-     /*  geändert : 27.04.99 für Version 2.1.0                       */
-     /*  geändert : 29.07.99 für Version 2.2.0                       */
-     /*  geändert : 22.11.04 für Version 2.3.1                       */
+     /*  geÃ¤ndert : 27.04.99 fÃ¼r Version 2.1.0                       */
+     /*  geÃ¤ndert : 29.07.99 fÃ¼r Version 2.2.0                       */
+     /*  geÃ¤ndert : 22.11.04 fÃ¼r Version 2.3.1                       */
      /*                                                              */
      /* ============================================================ */
      /*                                                              */
      /*  Dokumentation:                                              */
      /*                                                              */
-     /*  Initialisierungsprogramm für Programm PEEK05                */
+     /*  Initialisierungsprogramm fÃ¼r Programm PEEK05                */
      /*                                                              */
      /* ============================================================ */
      /* >>PRE-COMPILER<<                                             */
@@ -514,7 +514,7 @@ NO_PEEK62:
                 CLRPFM     FILE(&TEMPLIB/PEEKFLD)
                 MONMSG     MSGID(CPF0000)
 
-                CLRPFM     FILE(&TEMPLIB/§PEEK§)
+                CLRPFM     FILE(&TEMPLIB/Â§PEEKÂ§)
                 MONMSG     MSGID(CPF0000)
 
              ENDDO

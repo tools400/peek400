@@ -13,7 +13,7 @@
       *                                                               *
       *  Kurzdokumentation :                                          *
       *                                                               *
-      *  Peek/400 - Prüfen der Lizenzdaten                            *
+      *  Peek/400 - PrÃ¼fen der Lizenzdaten                            *
       *                                                               *
       *===============================================================*
       * >>PRE-COMPILER<<                                              *
@@ -161,16 +161,16 @@
      A            TXT0072       28A  O 12 42MSGID(TXT 0072 PEEKGER )
      A                                      COLOR(WHT)
      A                                 14  2'Peek/400 wird als Shareware vertri-
-     A                                      eben. Sie können das Programm'
+     A                                      eben. Sie kÃ¶nnen das Programm'
      A                                      COLOR(WHT)
-     A                                 15  2'über einen Zeitraum von 30 Tagen t-
-     A                                      esten. Danach müssen Sie sich'
+     A                                 15  2'Ã¼ber einen Zeitraum von 30 Tagen t-
+     A                                      esten. Danach mÃ¼ssen Sie sich'
      A                                      COLOR(WHT)
      A                                 16  2'registrieren lassen oder Peek/400 -
-     A                                      von Ihrem System löschen.    '
+     A                                      von Ihrem System lÃ¶schen.    '
      A                                      COLOR(WHT)
-     A                                 17  2'   Es wird keine Haftung für evtl.-
-     A                                       auftr. Datenverlust übernommen!  '
+     A                                 17  2'   Es wird keine Haftung fÃ¼r evtl.-
+     A                                       auftr. Datenverlust Ã¼bernommen!  '
      A                                      DSPATR(RI)
      A                                      COLOR(RED)
      A                                 18  1'                                  -
@@ -253,7 +253,7 @@
      A            POS            3S 0P
       *
       *----------------------------------------------------*
-      *  RMVWDW ZUM LÖSCHEN DES WINDOWS
+      *  RMVWDW ZUM LÃ–SCHEN DES WINDOWS
       *
      A          R RMVWDW                    CLRL(*NO) OVERLAY FRCDTA
      A N88                                  DSPMOD(*DS4)

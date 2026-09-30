@@ -1,7 +1,7 @@
 **free
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8230
-//  Wert '&1' für die Anzahl Nachkommastellen ist ungültig.
+//  Wert '&1' fÃ¼r die Anzahl Nachkommastellen ist ungÃ¼ltig.
 dcl-ds USR8230 qualified;
   var1  char(256) inz;
 end-ds;

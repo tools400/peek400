@@ -1,6 +1,6 @@
 **FREE
 //---------------------------------------------------------------
-// Datenstruktur für Aufbereiten Aufsetzschlüssel
+// Datenstruktur fÃ¼r Aufbereiten AufsetzschlÃ¼ssel
 // SET0003   *ACCESSKEY
 //---------------------------------------------------------------
 //

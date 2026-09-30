@@ -1,7 +1,7 @@
 **free
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8193
-//  Felder '&1' enth‰lt nicht darstellbaren Zeichen und kann da
+//  Felder '&1' enth√§lt nicht darstellbaren Zeichen und kann da
 dcl-ds USR8193 qualified;
   var1  char(10) inz;
 end-ds;

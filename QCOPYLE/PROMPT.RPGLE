@@ -30,7 +30,7 @@ endsl;
      C                   movel(p)  scnfld        ypromptfor
      C                   call      peek38        p_peek38               99
 if *in99 = *on;
-   //  ... Fehler, also ungültige Rückgabedaten
+   //  ... Fehler, also ungÃ¼ltige RÃ¼ckgabedaten
 else;
    //
    if ymsgid <> *blanks;

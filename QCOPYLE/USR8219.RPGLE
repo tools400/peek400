@@ -1,7 +1,7 @@
 **free
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8219
-//  Wert '&1' für Auswahl Ja/Nein nicht zulässig.
+//  Wert '&1' fÃ¼r Auswahl Ja/Nein nicht zulÃ¤ssig.
 dcl-ds USR8219 qualified;
   var1  char(1) inz;
 end-ds;

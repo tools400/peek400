@@ -373,7 +373,7 @@
      A                                      COLOR(BLU)
       *
       *----------------------------------------------------*
-      *  RMVWDW ZUM LÖSCHEN DES WINDOWS
+      *  RMVWDW ZUM LÃ–SCHEN DES WINDOWS
       *
      A          R RMVWDW                    CLRL(*NO) OVERLAY FRCDTA
      A N88                                  DSPMOD(*DS4)

@@ -8,7 +8,7 @@
 //  Typ      : RPG                                               *
 //                                                               *
 //  erstellt : 03.11.97  Raddatz                                 *
-//  geändert : 27.04.99  2.1.0                                   *
+//  geÃ¤ndert : 27.04.99  2.1.0                                   *
 //                                                               *
 //===============================================================*
 //                                                               *
@@ -99,7 +99,7 @@ begsr getKeyMap;
       leave;
     endif;
 
-    //  Überprüfen Auschlüsse
+    //  Ã¼berprÃ¼fen AuschlÃ¼sse
     if %parms() >= %parmnum(i_exclkeys);
       pgmcmd = data;
       i = %lookup(pgmcmd: i_exclkeys);
@@ -154,16 +154,16 @@ begsr buildstr;
     wrk_msgtxt = f_msgtext(wrk_msgid: ' ');
   endif;
 
-  //  Stringlänge
+  //  StringlÃ¤nge
   z = %checkr(' ': wrk_msgtxt);
-  //  Für Auswahl und "="-Zeichen
+  //  FÃ¼r Auswahl und "="-Zeichen
   z = z + 3;
-  //  Für Trennleerraum ...
+  //  FÃ¼r Trennleerraum ...
   if (o_choices(x) <> *blanks);
     z = z + 2;
   endif;
 
-  //  Freie Länge
+  //  Freie LÃ¤nge
   y = %checkr(' ': o_choices(x));
   y = 63 - y;
   if (y < z);

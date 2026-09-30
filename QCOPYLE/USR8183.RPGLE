@@ -1,7 +1,7 @@
 **free
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8183
-//  Unvollst‰ndige Auswahl.
+//  Unvollst√§ndige Auswahl.
 dcl-ds USR8183 qualified;
       //  No replacement variables available!
 end-ds;

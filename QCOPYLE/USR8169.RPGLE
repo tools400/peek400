@@ -1,7 +1,7 @@
 **free
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8169
-//  Wert &1 für Attribut "Spaltenmarkierung" nicht zulässig.
+//  Wert &1 fÃ¼r Attribut "Spaltenmarkierung" nicht zulÃ¤ssig.
 dcl-ds USR8169 qualified;
   var1  char(10) inz;
 end-ds;

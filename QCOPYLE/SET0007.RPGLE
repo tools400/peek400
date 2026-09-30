@@ -1,6 +1,6 @@
 **FREE
 //---------------------------------------------------------------
-// Datenstruktur für Versionsnummer
+// Datenstruktur fÃ¼r Versionsnummer
 // SET0007   *VERSION
 //---------------------------------------------------------------
 //

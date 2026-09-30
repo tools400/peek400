@@ -13,7 +13,7 @@
 //                                                               *
 //  Dokumentation:                                               *
 //                                                               *
-//  Abrufen einer Satzformatbeschreibung über API's              *
+//  Abrufen einer Satzformatbeschreibung Ã¼ber API's              *
 //                                                               *
 //===============================================================*
 //                                                               *

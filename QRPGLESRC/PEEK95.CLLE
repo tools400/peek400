@@ -65,7 +65,7 @@
  /*  Los geht's                                                    */
  /* -------------------------------------------------------------- */
 
- /* Löschen *UPDPGM     */
+ /* LÃ¶schen *UPDPGM     */
              CALL       PGM(PEEK94) PARM(&DEVLIB)
 
  /* Anpassen Berechtigungen   */

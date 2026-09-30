@@ -1,7 +1,7 @@
 **free
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8167
-//  Identische Folgenummern nicht zul‰ssig.
+//  Identische Folgenummern nicht zul√§ssig.
 dcl-ds USR8167 qualified;
       //  No replacement variables available!
 end-ds;

@@ -1,12 +1,17 @@
      /*-----------------------------------------------------------------------*/
+     /* Hinweis: Dieses CL muss in einem Job mit der Sprache der              */
+     /*          Zielnachrichtendatei kompiliert und ausgefÃ¼hrt werden.       */
+     /*-----------------------------------------------------------------------*/
      /* STRPREPRC Compile Options:                                            */
      /* >>PRE-COMPILER<<                                                      */
      /*   >>CRTCMD<<  CALL       PGM(QTEMP/&OB) PARM(&LI &OB);                */
+     /*   >>CMD<<     CHGJOB  LANGID(DEU) CNTRYID(DE) CCSID(273);             */
      /*   >>CMD<<     CRTCLPGM   PGM(QTEMP/&OB) +                             */
      /*                          SRCFILE(&SL/&SF) SRCMBR(&SM) +               */
-     /*               TEXT('Peek/400 - Deutsche Übersetzung');                */
+     /*               TEXT('Peek/400 - Deutsche Ã¼bersetzung');                */
      /*   >>EXECUTE<<                                                         */
      /*   >>CMD<<     DLTPGM PGM(QTEMP/&OB);                                  */
+     /*   >>CMD<<     CHGJOB  LANGID(DEU) CNTRYID(DE) CCSID(273);             */
      /* >>END-PRE-COMPILER<<                                                  */
      /*-----------------------------------------------------------------------*/
              PGM        PARM(&I_LIB &I_OBJ)
@@ -32,8 +37,8 @@
              ENDDO
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   AID00BA                    */
-     /* Funktionstaste F22 nicht gültig.                            */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   AID00BA                    */
+     /* Funktionstaste F22 nicht gÃ¼ltig.                            */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID00BA) MSGF(&LIB/&OBJ)
@@ -43,7 +48,7 @@
                 MSGID(AID00BA) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Funktionstaste F22 nicht gültig.'                                    +
+'Funktionstaste F22 nicht gÃ¼ltig.'                                    +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -52,8 +57,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   AID00BB                    */
-     /* Funktionstaste F23 nicht gültig.                            */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   AID00BB                    */
+     /* Funktionstaste F23 nicht gÃ¼ltig.                            */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID00BB) MSGF(&LIB/&OBJ)
@@ -63,7 +68,7 @@
                 MSGID(AID00BB) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Funktionstaste F23 nicht gültig.'                                    +
+'Funktionstaste F23 nicht gÃ¼ltig.'                                    +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -72,8 +77,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   AID00BC                    */
-     /* Funktionstaste F24 nicht gültig.                            */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   AID00BC                    */
+     /* Funktionstaste F24 nicht gÃ¼ltig.                            */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID00BC) MSGF(&LIB/&OBJ)
@@ -83,7 +88,7 @@
                 MSGID(AID00BC) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Funktionstaste F24 nicht gültig.'                                    +
+'Funktionstaste F24 nicht gÃ¼ltig.'                                    +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -92,8 +97,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   AID00BD                    */
-     /* Taste 'LÖSCHEN' nicht gültig                                */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   AID00BD                    */
+     /* Taste 'LÃ–SCHEN' nicht gÃ¼ltig                                */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID00BD) MSGF(&LIB/&OBJ)
@@ -103,7 +108,7 @@
                 MSGID(AID00BD) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Taste ''LÖSCHEN'' nicht gültig'                                      +
+'Taste ''LÃ–SCHEN'' nicht gÃ¼ltig'                                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -112,8 +117,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   AID00B1                    */
-     /* Funktionstaste F13 nicht gültig.                            */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   AID00B1                    */
+     /* Funktionstaste F13 nicht gÃ¼ltig.                            */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID00B1) MSGF(&LIB/&OBJ)
@@ -123,7 +128,7 @@
                 MSGID(AID00B1) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Funktionstaste F13 nicht gültig.'                                    +
+'Funktionstaste F13 nicht gÃ¼ltig.'                                    +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -132,8 +137,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   AID00B2                    */
-     /* Funktionstaste F14 nicht gültig.                            */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   AID00B2                    */
+     /* Funktionstaste F14 nicht gÃ¼ltig.                            */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID00B2) MSGF(&LIB/&OBJ)
@@ -143,7 +148,7 @@
                 MSGID(AID00B2) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Funktionstaste F14 nicht gültig.'                                    +
+'Funktionstaste F14 nicht gÃ¼ltig.'                                    +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -152,8 +157,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   AID00B3                    */
-     /* Funktionstaste F15 nicht gültig.                            */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   AID00B3                    */
+     /* Funktionstaste F15 nicht gÃ¼ltig.                            */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID00B3) MSGF(&LIB/&OBJ)
@@ -163,7 +168,7 @@
                 MSGID(AID00B3) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Funktionstaste F15 nicht gültig.'                                    +
+'Funktionstaste F15 nicht gÃ¼ltig.'                                    +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -172,8 +177,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   AID00B4                    */
-     /* Funktionstaste F16 nicht gültig.                            */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   AID00B4                    */
+     /* Funktionstaste F16 nicht gÃ¼ltig.                            */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID00B4) MSGF(&LIB/&OBJ)
@@ -183,7 +188,7 @@
                 MSGID(AID00B4) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Funktionstaste F16 nicht gültig.'                                    +
+'Funktionstaste F16 nicht gÃ¼ltig.'                                    +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -192,8 +197,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   AID00B5                    */
-     /* Funktionstaste F17 nicht gültig.                            */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   AID00B5                    */
+     /* Funktionstaste F17 nicht gÃ¼ltig.                            */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID00B5) MSGF(&LIB/&OBJ)
@@ -203,7 +208,7 @@
                 MSGID(AID00B5) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Funktionstaste F17 nicht gültig.'                                    +
+'Funktionstaste F17 nicht gÃ¼ltig.'                                    +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -212,8 +217,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   AID00B6                    */
-     /* Funktionstaste F18 nicht gültig.                            */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   AID00B6                    */
+     /* Funktionstaste F18 nicht gÃ¼ltig.                            */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID00B6) MSGF(&LIB/&OBJ)
@@ -223,7 +228,7 @@
                 MSGID(AID00B6) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Funktionstaste F18 nicht gültig.'                                    +
+'Funktionstaste F18 nicht gÃ¼ltig.'                                    +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -232,8 +237,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   AID00B7                    */
-     /* Funktionstaste F19 nicht gültig.                            */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   AID00B7                    */
+     /* Funktionstaste F19 nicht gÃ¼ltig.                            */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID00B7) MSGF(&LIB/&OBJ)
@@ -243,7 +248,7 @@
                 MSGID(AID00B7) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Funktionstaste F19 nicht gültig.'                                    +
+'Funktionstaste F19 nicht gÃ¼ltig.'                                    +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -252,8 +257,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   AID00B8                    */
-     /* Funktionstaste F20 nicht gültig.                            */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   AID00B8                    */
+     /* Funktionstaste F20 nicht gÃ¼ltig.                            */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID00B8) MSGF(&LIB/&OBJ)
@@ -263,7 +268,7 @@
                 MSGID(AID00B8) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Funktionstaste F20 nicht gültig.'                                    +
+'Funktionstaste F20 nicht gÃ¼ltig.'                                    +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -272,8 +277,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   AID00B9                    */
-     /* Funktionstaste F21 nicht gültig.                            */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   AID00B9                    */
+     /* Funktionstaste F21 nicht gÃ¼ltig.                            */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID00B9) MSGF(&LIB/&OBJ)
@@ -283,7 +288,7 @@
                 MSGID(AID00B9) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Funktionstaste F21 nicht gültig.'                                    +
+'Funktionstaste F21 nicht gÃ¼ltig.'                                    +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -292,8 +297,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   AID00F1                    */
-     /* Taste 'DATENFREIGABE' nicht gültig                          */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   AID00F1                    */
+     /* Taste 'DATENFREIGABE' nicht gÃ¼ltig                          */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID00F1) MSGF(&LIB/&OBJ)
@@ -303,7 +308,7 @@
                 MSGID(AID00F1) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Taste ''DATENFREIGABE'' nicht gültig'                                +
+'Taste ''DATENFREIGABE'' nicht gÃ¼ltig'                                +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -312,8 +317,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   AID00F3                    */
-     /* Taste 'HILFE' nicht gültig                                  */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   AID00F3                    */
+     /* Taste 'HILFE' nicht gÃ¼ltig                                  */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID00F3) MSGF(&LIB/&OBJ)
@@ -323,7 +328,7 @@
                 MSGID(AID00F3) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Taste ''HILFE'' nicht gültig'                                        +
+'Taste ''HILFE'' nicht gÃ¼ltig'                                        +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -332,8 +337,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   AID00F4                    */
-     /* Taste 'BILD RUNTER' nicht gültig                            */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   AID00F4                    */
+     /* Taste 'BILD RUNTER' nicht gÃ¼ltig                            */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID00F4) MSGF(&LIB/&OBJ)
@@ -343,7 +348,7 @@
                 MSGID(AID00F4) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Taste ''BILD RUNTER'' nicht gültig'                                  +
+'Taste ''BILD RUNTER'' nicht gÃ¼ltig'                                  +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -352,8 +357,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   AID00F5                    */
-     /* Taste 'BILD HOCH' nicht gültig                              */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   AID00F5                    */
+     /* Taste 'BILD HOCH' nicht gÃ¼ltig                              */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID00F5) MSGF(&LIB/&OBJ)
@@ -363,7 +368,7 @@
                 MSGID(AID00F5) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Taste ''BILD HOCH'' nicht gültig'                                    +
+'Taste ''BILD HOCH'' nicht gÃ¼ltig'                                    +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -372,8 +377,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   AID00F6                    */
-     /* Taste 'DRUCKEN' nicht gültig                                */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   AID00F6                    */
+     /* Taste 'DRUCKEN' nicht gÃ¼ltig                                */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID00F6) MSGF(&LIB/&OBJ)
@@ -383,7 +388,7 @@
                 MSGID(AID00F6) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Taste ''DRUCKEN'' nicht gültig'                                      +
+'Taste ''DRUCKEN'' nicht gÃ¼ltig'                                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -392,8 +397,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   AID00F8                    */
-     /* Taste 'GRUNDSTELLUNG' nicht gültig                          */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   AID00F8                    */
+     /* Taste 'GRUNDSTELLUNG' nicht gÃ¼ltig                          */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID00F8) MSGF(&LIB/&OBJ)
@@ -403,7 +408,7 @@
                 MSGID(AID00F8) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Taste ''GRUNDSTELLUNG'' nicht gültig'                                +
+'Taste ''GRUNDSTELLUNG'' nicht gÃ¼ltig'                                +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -412,8 +417,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   AID003A                    */
-     /* Funktionstaste F10 nicht gültig.                            */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   AID003A                    */
+     /* Funktionstaste F10 nicht gÃ¼ltig.                            */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID003A) MSGF(&LIB/&OBJ)
@@ -423,7 +428,7 @@
                 MSGID(AID003A) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Funktionstaste F10 nicht gültig.'                                    +
+'Funktionstaste F10 nicht gÃ¼ltig.'                                    +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -432,8 +437,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   AID003B                    */
-     /* Funktionstaste F11 nicht gültig.                            */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   AID003B                    */
+     /* Funktionstaste F11 nicht gÃ¼ltig.                            */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID003B) MSGF(&LIB/&OBJ)
@@ -443,7 +448,7 @@
                 MSGID(AID003B) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Funktionstaste F11 nicht gültig.'                                    +
+'Funktionstaste F11 nicht gÃ¼ltig.'                                    +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -452,8 +457,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   AID003C                    */
-     /* Funktionstaste F12 nicht gültig.                            */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   AID003C                    */
+     /* Funktionstaste F12 nicht gÃ¼ltig.                            */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID003C) MSGF(&LIB/&OBJ)
@@ -463,7 +468,7 @@
                 MSGID(AID003C) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Funktionstaste F12 nicht gültig.'                                    +
+'Funktionstaste F12 nicht gÃ¼ltig.'                                    +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -472,8 +477,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   AID003F                    */
-     /* Taste 'LICHTGRIFFEL' nicht gültig                           */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   AID003F                    */
+     /* Taste 'LICHTGRIFFEL' nicht gÃ¼ltig                           */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID003F) MSGF(&LIB/&OBJ)
@@ -483,7 +488,7 @@
                 MSGID(AID003F) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Taste ''LICHTGRIFFEL'' nicht gültig'                                 +
+'Taste ''LICHTGRIFFEL'' nicht gÃ¼ltig'                                 +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -492,8 +497,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   AID0031                    */
-     /* Funktionstaste F1 nicht gültig.                             */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   AID0031                    */
+     /* Funktionstaste F1 nicht gÃ¼ltig.                             */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID0031) MSGF(&LIB/&OBJ)
@@ -503,7 +508,7 @@
                 MSGID(AID0031) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Funktionstaste F1 nicht gültig.'                                     +
+'Funktionstaste F1 nicht gÃ¼ltig.'                                     +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -512,8 +517,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   AID0032                    */
-     /* Funktionstaste F2 nicht gültig.                             */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   AID0032                    */
+     /* Funktionstaste F2 nicht gÃ¼ltig.                             */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID0032) MSGF(&LIB/&OBJ)
@@ -523,7 +528,7 @@
                 MSGID(AID0032) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Funktionstaste F2 nicht gültig.'                                     +
+'Funktionstaste F2 nicht gÃ¼ltig.'                                     +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -532,8 +537,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   AID0033                    */
-     /* Funktionstaste F3 nicht gültig.                             */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   AID0033                    */
+     /* Funktionstaste F3 nicht gÃ¼ltig.                             */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID0033) MSGF(&LIB/&OBJ)
@@ -543,7 +548,7 @@
                 MSGID(AID0033) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Funktionstaste F3 nicht gültig.'                                     +
+'Funktionstaste F3 nicht gÃ¼ltig.'                                     +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -552,8 +557,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   AID0034                    */
-     /* Funktionstaste F4 nicht gültig.                             */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   AID0034                    */
+     /* Funktionstaste F4 nicht gÃ¼ltig.                             */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID0034) MSGF(&LIB/&OBJ)
@@ -563,7 +568,7 @@
                 MSGID(AID0034) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Funktionstaste F4 nicht gültig.'                                     +
+'Funktionstaste F4 nicht gÃ¼ltig.'                                     +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -572,8 +577,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   AID0035                    */
-     /* Funktionstaste F5 nicht gültig.                             */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   AID0035                    */
+     /* Funktionstaste F5 nicht gÃ¼ltig.                             */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID0035) MSGF(&LIB/&OBJ)
@@ -583,7 +588,7 @@
                 MSGID(AID0035) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Funktionstaste F5 nicht gültig.'                                     +
+'Funktionstaste F5 nicht gÃ¼ltig.'                                     +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -592,8 +597,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   AID0036                    */
-     /* Funktionstaste F6 nicht gültig.                             */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   AID0036                    */
+     /* Funktionstaste F6 nicht gÃ¼ltig.                             */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID0036) MSGF(&LIB/&OBJ)
@@ -603,7 +608,7 @@
                 MSGID(AID0036) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Funktionstaste F6 nicht gültig.'                                     +
+'Funktionstaste F6 nicht gÃ¼ltig.'                                     +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -612,8 +617,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   AID0037                    */
-     /* Funktionstaste F7 nicht gültig.                             */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   AID0037                    */
+     /* Funktionstaste F7 nicht gÃ¼ltig.                             */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID0037) MSGF(&LIB/&OBJ)
@@ -623,7 +628,7 @@
                 MSGID(AID0037) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Funktionstaste F7 nicht gültig.'                                     +
+'Funktionstaste F7 nicht gÃ¼ltig.'                                     +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -632,8 +637,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   AID0038                    */
-     /* Funktionstaste F8 nicht gültig.                             */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   AID0038                    */
+     /* Funktionstaste F8 nicht gÃ¼ltig.                             */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID0038) MSGF(&LIB/&OBJ)
@@ -643,7 +648,7 @@
                 MSGID(AID0038) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Funktionstaste F8 nicht gültig.'                                     +
+'Funktionstaste F8 nicht gÃ¼ltig.'                                     +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -652,8 +657,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   AID0039                    */
-     /* Funktionstaste F9 nicht gültig.                             */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   AID0039                    */
+     /* Funktionstaste F9 nicht gÃ¼ltig.                             */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID0039) MSGF(&LIB/&OBJ)
@@ -663,7 +668,7 @@
                 MSGID(AID0039) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Funktionstaste F9 nicht gültig.'                                     +
+'Funktionstaste F9 nicht gÃ¼ltig.'                                     +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -672,8 +677,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   AID0100                    */
-     /* Unbekannte und nicht zulässige Taste                        */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   AID0100                    */
+     /* Unbekannte und nicht zulÃ¤ssige Taste                        */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID0100) MSGF(&LIB/&OBJ)
@@ -683,7 +688,7 @@
                 MSGID(AID0100) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Unbekannte und nicht zulässige Taste'                                +
+'Unbekannte und nicht zulÃ¤ssige Taste'                                +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -692,7 +697,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0001                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0001                    */
      /* Datenfreigabe                                               */
      /*-------------------------------------------------------------*/
 
@@ -712,7 +717,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0002                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0002                    */
      /* Beenden                                                     */
      /*-------------------------------------------------------------*/
 
@@ -732,7 +737,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0003                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0003                    */
      /* Aktualisieren                                               */
      /*-------------------------------------------------------------*/
 
@@ -752,7 +757,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0004                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0004                    */
      /* Neuanlage                                                   */
      /*-------------------------------------------------------------*/
 
@@ -772,8 +777,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0005                    */
-     /* Überschrift                                                 */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0005                    */
+     /* Ãœberschrift                                                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0005) MSGF(&LIB/&OBJ)
@@ -783,7 +788,7 @@
                 MSGID(KEY0005) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Überschrift       '                                                  +
+'Ãœberschrift       '                                                  +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -792,7 +797,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0006                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0006                    */
      /* Spalte mark.+/-                                             */
      /*-------------------------------------------------------------*/
 
@@ -812,7 +817,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0007                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0007                    */
      /* Nach oben zieh.                                             */
      /*-------------------------------------------------------------*/
 
@@ -832,7 +837,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0008                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0008                    */
      /* Cursor pos.                                                 */
      /*-------------------------------------------------------------*/
 
@@ -852,7 +857,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0009                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0009                    */
      /* Suchen                                                      */
      /*-------------------------------------------------------------*/
 
@@ -872,7 +877,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0010                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0010                    */
      /* Anfang                                                      */
      /*-------------------------------------------------------------*/
 
@@ -892,7 +897,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0011                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0011                    */
      /* Ende                                                        */
      /*-------------------------------------------------------------*/
 
@@ -912,7 +917,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0012                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0012                    */
      /* Links                                                       */
      /*-------------------------------------------------------------*/
 
@@ -932,7 +937,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0013                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0013                    */
      /* Rechts                                                      */
      /*-------------------------------------------------------------*/
 
@@ -952,7 +957,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0014                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0014                    */
      /* Befehlszeile                                                */
      /*-------------------------------------------------------------*/
 
@@ -972,7 +977,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0015                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0015                    */
      /* 80/132 Zeichen                                              */
      /*-------------------------------------------------------------*/
 
@@ -992,7 +997,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0016                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0016                    */
      /* Weitere Tasten                                              */
      /*-------------------------------------------------------------*/
 
@@ -1012,7 +1017,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0017                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0017                    */
      /* Bild runter                                                 */
      /*-------------------------------------------------------------*/
 
@@ -1032,7 +1037,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0018                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0018                    */
      /* Bild hoch                                                   */
      /*-------------------------------------------------------------*/
 
@@ -1052,7 +1057,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0019                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0019                    */
      /* Pin-Zeile                                                   */
      /*-------------------------------------------------------------*/
 
@@ -1072,7 +1077,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0020                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0020                    */
      /* UnPin-Zeile                                                 */
      /*-------------------------------------------------------------*/
 
@@ -1092,8 +1097,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0021                    */
-     /* Ändern                                                      */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0021                    */
+     /* Ã„ndern                                                      */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0021) MSGF(&LIB/&OBJ)
@@ -1103,7 +1108,7 @@
                 MSGID(KEY0021) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Ändern            '                                                  +
+'Ã„ndern            '                                                  +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -1112,7 +1117,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0022                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0022                    */
      /* Kopieren                                                    */
      /*-------------------------------------------------------------*/
 
@@ -1132,8 +1137,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0023                    */
-     /* Löschen                                                     */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0023                    */
+     /* LÃ¶schen                                                     */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0023) MSGF(&LIB/&OBJ)
@@ -1143,7 +1148,7 @@
                 MSGID(KEY0023) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Löschen           '                                                  +
+'LÃ¶schen           '                                                  +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -1152,7 +1157,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0024                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0024                    */
      /* Anzeigen                                                    */
      /*-------------------------------------------------------------*/
 
@@ -1172,7 +1177,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0025                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0025                    */
      /* Einstellungen                                               */
      /*-------------------------------------------------------------*/
 
@@ -1192,7 +1197,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0026                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0026                    */
      /* Abbrechen                                                   */
      /*-------------------------------------------------------------*/
 
@@ -1212,7 +1217,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0027                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0027                    */
      /* Sich. & Ende                                                */
      /*-------------------------------------------------------------*/
 
@@ -1232,7 +1237,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0028                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0028                    */
      /* Pin-Spalte                                                  */
      /*-------------------------------------------------------------*/
 
@@ -1252,7 +1257,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0029                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0029                    */
      /* UnPin-Spalte                                                */
      /*-------------------------------------------------------------*/
 
@@ -1272,7 +1277,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0030                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0030                    */
      /* Pin-Spalte +/-                                              */
      /*-------------------------------------------------------------*/
 
@@ -1292,7 +1297,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0031                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0031                    */
      /* Tab.Papier Ein                                              */
      /*-------------------------------------------------------------*/
 
@@ -1312,7 +1317,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0032                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0032                    */
      /* Tab.Papier aus                                              */
      /*-------------------------------------------------------------*/
 
@@ -1332,7 +1337,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0033                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0033                    */
      /* Tab.Papier +/-                                              */
      /*-------------------------------------------------------------*/
 
@@ -1352,8 +1357,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0034                    */
-     /* Alle Datensätze                                             */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0034                    */
+     /* Alle DatensÃ¤tze                                             */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0034) MSGF(&LIB/&OBJ)
@@ -1363,7 +1368,7 @@
                 MSGID(KEY0034) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Alle Datensätze'                                                     +
+'Alle DatensÃ¤tze'                                                     +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -1372,7 +1377,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0035                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0035                    */
      /* Weitere Ausw.                                               */
      /*-------------------------------------------------------------*/
 
@@ -1392,7 +1397,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0036                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0036                    */
      /* ext. Kopieren                                               */
      /*-------------------------------------------------------------*/
 
@@ -1412,7 +1417,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0037                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0037                    */
      /* Spalte mark.                                                */
      /*-------------------------------------------------------------*/
 
@@ -1432,7 +1437,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0038                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0038                    */
      /* Splt.Mark.aufh.                                             */
      /*-------------------------------------------------------------*/
 
@@ -1452,7 +1457,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0039                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0039                    */
      /* Kleinbuchstaben                                             */
      /*-------------------------------------------------------------*/
 
@@ -1472,8 +1477,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0040                    */
-     /* Großbuchstaben                                              */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0040                    */
+     /* GroÃŸbuchstaben                                              */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0040) MSGF(&LIB/&OBJ)
@@ -1483,7 +1488,7 @@
                 MSGID(KEY0040) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Großbuchstaben'                                                      +
+'GroÃŸbuchstaben'                                                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -1492,8 +1497,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0041                    */
-     /* Klein/Großb.+/-                                             */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0041                    */
+     /* Klein/GroÃŸb.+/-                                             */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0041) MSGF(&LIB/&OBJ)
@@ -1503,7 +1508,7 @@
                 MSGID(KEY0041) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Klein/Großb.+/-'                                                     +
+'Klein/GroÃŸb.+/-'                                                     +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -1512,7 +1517,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0042                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0042                    */
      /* Splash-Ein                                                  */
      /*-------------------------------------------------------------*/
 
@@ -1532,7 +1537,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0043                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0043                    */
      /* Splash-Aus                                                  */
      /*-------------------------------------------------------------*/
 
@@ -1552,7 +1557,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0044                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0044                    */
      /* Seite links                                                 */
      /*-------------------------------------------------------------*/
 
@@ -1572,7 +1577,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0045                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0045                    */
      /* Seite rechts                                                */
      /*-------------------------------------------------------------*/
 
@@ -1592,7 +1597,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0046                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0046                    */
      /* Wiederholen                                                 */
      /*-------------------------------------------------------------*/
 
@@ -1612,7 +1617,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0047                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0047                    */
      /* Neuerstellung                                               */
      /*-------------------------------------------------------------*/
 
@@ -1632,7 +1637,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0048                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0048                    */
      /* UnPin Zeilen                                                */
      /*-------------------------------------------------------------*/
 
@@ -1652,7 +1657,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0049                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0049                    */
      /* UnPin Spalten                                               */
      /*-------------------------------------------------------------*/
 
@@ -1672,7 +1677,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0050                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0050                    */
      /* Layout                                                      */
      /*-------------------------------------------------------------*/
 
@@ -1692,7 +1697,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0051                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0051                    */
      /* Key-Felder                                                  */
      /*-------------------------------------------------------------*/
 
@@ -1712,7 +1717,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0052                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0052                    */
      /* Auswahl                                                     */
      /*-------------------------------------------------------------*/
 
@@ -1732,8 +1737,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0053                    */
-     /* Nächste Mark.                                               */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0053                    */
+     /* NÃ¤chste Mark.                                               */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0053) MSGF(&LIB/&OBJ)
@@ -1743,7 +1748,7 @@
                 MSGID(KEY0053) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Nächste Mark.'                                                       +
+'NÃ¤chste Mark.'                                                       +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -1752,7 +1757,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0054                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0054                    */
      /* Vorherige Mark.                                             */
      /*-------------------------------------------------------------*/
 
@@ -1772,7 +1777,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0055                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0055                    */
      /* Relationen                                                  */
      /*-------------------------------------------------------------*/
 
@@ -1792,8 +1797,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0056                    */
-     /* Bedienerführung                                             */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0056                    */
+     /* BedienerfÃ¼hrung                                             */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0056) MSGF(&LIB/&OBJ)
@@ -1803,7 +1808,7 @@
                 MSGID(KEY0056) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Bedienerführung'                                                     +
+'BedienerfÃ¼hrung'                                                     +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -1812,8 +1817,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0057                    */
-     /* Schlüsselfolge                                              */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0057                    */
+     /* SchlÃ¼sselfolge                                              */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0057) MSGF(&LIB/&OBJ)
@@ -1823,7 +1828,7 @@
                 MSGID(KEY0057) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Schlüsselfolge'                                                      +
+'SchlÃ¼sselfolge'                                                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -1832,7 +1837,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0058                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0058                    */
      /* Satzfolge                                                   */
      /*-------------------------------------------------------------*/
 
@@ -1852,7 +1857,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0059                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0059                    */
      /* Key/RRN                                                     */
      /*-------------------------------------------------------------*/
 
@@ -1872,7 +1877,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0060                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0060                    */
      /* Hex-Edit                                                    */
      /*-------------------------------------------------------------*/
 
@@ -1892,7 +1897,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0061                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0061                    */
      /* Info                                                        */
      /*-------------------------------------------------------------*/
 
@@ -1912,7 +1917,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0062                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0062                    */
      /* Spalten pinnen                                              */
      /*-------------------------------------------------------------*/
 
@@ -1932,8 +1937,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0063                    */
-     /* Alles Löschen                                               */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0063                    */
+     /* Alles LÃ¶schen                                               */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0063) MSGF(&LIB/&OBJ)
@@ -1943,7 +1948,7 @@
                 MSGID(KEY0063) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Alles Löschen'                                                       +
+'Alles LÃ¶schen'                                                       +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -1952,7 +1957,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0064                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0064                    */
      /* Norm. Anzeige                                               */
      /*-------------------------------------------------------------*/
 
@@ -1972,7 +1977,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0065                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0065                    */
      /* Hex-Anzeige                                                 */
      /*-------------------------------------------------------------*/
 
@@ -1992,7 +1997,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0066                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0066                    */
      /* Umsch.Anzeige                                               */
      /*-------------------------------------------------------------*/
 
@@ -2012,7 +2017,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0067                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0067                    */
      /* SQL-Auswahl                                                 */
      /*-------------------------------------------------------------*/
 
@@ -2032,7 +2037,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0068                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0068                    */
      /* Einf.Schl.Fld.                                              */
      /*-------------------------------------------------------------*/
 
@@ -2052,8 +2057,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0069                    */
-     /* Sichern Arbeitsumgebung                                     */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0069                    */
+     /* Sichern Arb.Umg                                             */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0069) MSGF(&LIB/&OBJ)
@@ -2063,7 +2068,7 @@
                 MSGID(KEY0069) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Sichern Arbeitsumgebung'                                             +
+'Sichern Arb.Umg'                                                     +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -2072,8 +2077,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0070                    */
-     /* Laden Arbeitsumgebung                                       */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0070                    */
+     /* Laden Arb.Umg                                               */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0070) MSGF(&LIB/&OBJ)
@@ -2083,7 +2088,7 @@
                 MSGID(KEY0070) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Laden Arbeitsumgebung'                                               +
+'Laden Arb.Umg'                                                       +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -2092,8 +2097,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0071                    */
-     /* Löschen Arb.Umg                                             */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0071                    */
+     /* LÃ¶schen Arb.Umg                                             */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0071) MSGF(&LIB/&OBJ)
@@ -2103,7 +2108,7 @@
                 MSGID(KEY0071) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Löschen Arb.Umg'                                                     +
+'LÃ¶schen Arb.Umg'                                                     +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -2112,7 +2117,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0072                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0072                    */
      /* Sortierfolge                                                */
      /*-------------------------------------------------------------*/
 
@@ -2132,7 +2137,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0073                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0073                    */
      /* Ja                                                          */
      /*-------------------------------------------------------------*/
 
@@ -2152,7 +2157,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0074                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0074                    */
      /* Nein                                                        */
      /*-------------------------------------------------------------*/
 
@@ -2172,7 +2177,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0075                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0075                    */
      /* OK                                                          */
      /*-------------------------------------------------------------*/
 
@@ -2192,7 +2197,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0076                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0076                    */
      /* Anfang                                                      */
      /*-------------------------------------------------------------*/
 
@@ -2212,7 +2217,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0077                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0077                    */
      /* Ende                                                        */
      /*-------------------------------------------------------------*/
 
@@ -2232,7 +2237,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0078                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0078                    */
      /* Umgebung                                                    */
      /*-------------------------------------------------------------*/
 
@@ -2252,7 +2257,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0079                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0079                    */
      /* nur Layout                                                  */
      /*-------------------------------------------------------------*/
 
@@ -2272,7 +2277,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0080                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0080                    */
      /* Umsch. NULL-Ind.                                            */
      /*-------------------------------------------------------------*/
 
@@ -2292,7 +2297,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0081                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0081                    */
      /* Umsch. Eingabe                                              */
      /*-------------------------------------------------------------*/
 
@@ -2312,7 +2317,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0082                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0082                    */
      /* String-Edit                                                 */
      /*-------------------------------------------------------------*/
 
@@ -2332,7 +2337,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0083                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0083                    */
      /* Satzsperre                                                  */
      /*-------------------------------------------------------------*/
 
@@ -2352,7 +2357,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0084                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0084                    */
      /* Aufsetzen Kleinb.                                           */
      /*-------------------------------------------------------------*/
 
@@ -2372,7 +2377,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0085                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0085                    */
      /* Drucken                                                     */
      /*-------------------------------------------------------------*/
 
@@ -2392,8 +2397,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0086                    */
-     /* Einfügen                                                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0086                    */
+     /* EinfÃ¼gen                                                    */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0086) MSGF(&LIB/&OBJ)
@@ -2403,7 +2408,7 @@
                 MSGID(KEY0086) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Einfügen'                                                            +
+'EinfÃ¼gen'                                                            +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -2412,8 +2417,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   KEY0087                    */
-     /* Löschen                                                     */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   KEY0087                    */
+     /* LÃ¶schen                                                     */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0087) MSGF(&LIB/&OBJ)
@@ -2423,7 +2428,7 @@
                 MSGID(KEY0087) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Löschen'                                                             +
+'LÃ¶schen'                                                             +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -2432,7 +2437,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   MBX0001                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   MBX0001                    */
      /* Information                                                 */
      /*-------------------------------------------------------------*/
 
@@ -2452,7 +2457,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   MBX0002                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   MBX0002                    */
      /* Frage                                                       */
      /*-------------------------------------------------------------*/
 
@@ -2472,7 +2477,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   PMT0001                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   PMT0001                    */
      /* Datei                                                       */
      /*-------------------------------------------------------------*/
 
@@ -2492,7 +2497,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   PMT0002                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   PMT0002                    */
      /* Teildatei                                                   */
      /*-------------------------------------------------------------*/
 
@@ -2512,7 +2517,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   PMT0003                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   PMT0003                    */
      /* Zugriffsart                                                 */
      /*-------------------------------------------------------------*/
 
@@ -2532,7 +2537,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   PMT0004                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   PMT0004                    */
      /* Sprache                                                     */
      /*-------------------------------------------------------------*/
 
@@ -2552,8 +2557,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   PMT0005                    */
-     /* Ändern Bibliothek erlaubt                                   */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   PMT0005                    */
+     /* Ã„ndern Bibliothek erlaubt                                   */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(PMT0005) MSGF(&LIB/&OBJ)
@@ -2563,7 +2568,7 @@
                 MSGID(PMT0005) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Ändern Bibliothek erlaubt'                                           +
+'Ã„ndern Bibliothek erlaubt'                                           +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -2572,8 +2577,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   PMT0006                    */
-     /* Ändern Datei erlaubt                                        */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   PMT0006                    */
+     /* Ã„ndern Datei erlaubt                                        */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(PMT0006) MSGF(&LIB/&OBJ)
@@ -2583,7 +2588,7 @@
                 MSGID(PMT0006) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Ändern Datei erlaubt'                                                +
+'Ã„ndern Datei erlaubt'                                                +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -2592,8 +2597,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   PMT0007                    */
-     /* Ändern Teildatei erlaubt                                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   PMT0007                    */
+     /* Ã„ndern Teildatei erlaubt                                    */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(PMT0007) MSGF(&LIB/&OBJ)
@@ -2603,7 +2608,7 @@
                 MSGID(PMT0007) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Ändern Teildatei erlaubt'                                            +
+'Ã„ndern Teildatei erlaubt'                                            +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -2612,8 +2617,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   PMT0008                    */
-     /* Ändern Datensätze erlaubt                                   */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   PMT0008                    */
+     /* Ã„ndern DatensÃ¤tze erlaubt                                   */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(PMT0008) MSGF(&LIB/&OBJ)
@@ -2623,7 +2628,7 @@
                 MSGID(PMT0008) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Ändern Datensätze erlaubt'                                           +
+'Ã„ndern DatensÃ¤tze erlaubt'                                           +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -2632,8 +2637,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   PMT0009                    */
-     /* Ändern SQL WHERE erlaubt                                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   PMT0009                    */
+     /* Ã„ndern SQL WHERE erlaubt                                    */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(PMT0009) MSGF(&LIB/&OBJ)
@@ -2643,7 +2648,7 @@
                 MSGID(PMT0009) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Ändern SQL WHERE erlaubt'                                            +
+'Ã„ndern SQL WHERE erlaubt'                                            +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -2652,8 +2657,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   PMT0010                    */
-     /* Ändern SQL ORDER BY erlaubt                                 */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   PMT0010                    */
+     /* Ã„ndern SQL ORDER BY erlaubt                                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(PMT0010) MSGF(&LIB/&OBJ)
@@ -2663,7 +2668,7 @@
                 MSGID(PMT0010) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Ändern SQL ORDER BY erlaubt'                                         +
+'Ã„ndern SQL ORDER BY erlaubt'                                         +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -2672,7 +2677,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   PMT0011                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   PMT0011                    */
      /* Arbeitsumgebung                                             */
      /*-------------------------------------------------------------*/
 
@@ -2692,7 +2697,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   PMT0012                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   PMT0012                    */
      /*   Teildatei                                                 */
      /*-------------------------------------------------------------*/
 
@@ -2712,7 +2717,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   PMT0013                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   PMT0013                    */
      /* SQL WHERE                                                   */
      /*-------------------------------------------------------------*/
 
@@ -2732,7 +2737,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   PMT0014                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   PMT0014                    */
      /* SQL ORDER BY                                                */
      /*-------------------------------------------------------------*/
 
@@ -2752,7 +2757,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   PMT0015                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   PMT0015                    */
      /* Bibliothek                                                  */
      /*-------------------------------------------------------------*/
 
@@ -2772,7 +2777,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   PMT0016                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   PMT0016                    */
      /* Benutzereinstellungen                                       */
      /*-------------------------------------------------------------*/
 
@@ -2792,7 +2797,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   PMT0017                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   PMT0017                    */
      /* Benutzerprofil                                              */
      /*-------------------------------------------------------------*/
 
@@ -2812,7 +2817,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   PMT0018                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   PMT0018                    */
      /* Speichern beim Verlassen                                    */
      /*-------------------------------------------------------------*/
 
@@ -2832,7 +2837,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   PMT0019                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   PMT0019                    */
      /* Nur Layout laden                                            */
      /*-------------------------------------------------------------*/
 
@@ -2852,7 +2857,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   PMT0100                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   PMT0100                    */
      /* Datenbankbrowser - Peek/400                                 */
      /*-------------------------------------------------------------*/
 
@@ -2872,7 +2877,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   PMT0101                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   PMT0101                    */
      /* Anzeigen Datenbankrelationen                                */
      /*-------------------------------------------------------------*/
 
@@ -2892,7 +2897,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0001                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0001                    */
      /* Datei:                                                      */
      /*-------------------------------------------------------------*/
 
@@ -2912,7 +2917,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0002                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0002                    */
      /* Bibliothek:                                                 */
      /*-------------------------------------------------------------*/
 
@@ -2932,7 +2937,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0003                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0003                    */
      /* Teildatei:                                                  */
      /*-------------------------------------------------------------*/
 
@@ -2952,8 +2957,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0004                    */
-     /* Satzlänge :                                                 */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0004                    */
+     /* SatzlÃ¤nge :                                                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0004) MSGF(&LIB/&OBJ)
@@ -2963,7 +2968,7 @@
                 MSGID(TXT0004) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Satzlänge :'                                                         +
+'SatzlÃ¤nge :'                                                         +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -2972,8 +2977,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0005                    */
-     /* Anz. Sätze:                                                 */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0005                    */
+     /* Anz. SÃ¤tze:                                                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0005) MSGF(&LIB/&OBJ)
@@ -2983,7 +2988,7 @@
                 MSGID(TXT0005) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Anz. Sätze:'                                                         +
+'Anz. SÃ¤tze:'                                                         +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -2992,7 +2997,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0006                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0006                    */
      /* Feld-Nummer:                                                */
      /*-------------------------------------------------------------*/
 
@@ -3012,7 +3017,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0007                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0007                    */
      /*         Feld:                                               */
      /*-------------------------------------------------------------*/
 
@@ -3032,7 +3037,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0008                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0008                    */
      /*    Format:                                                  */
      /*-------------------------------------------------------------*/
 
@@ -3052,8 +3057,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0009                    */
-     /* Dateigröße:                                                 */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0009                    */
+     /* DateigrÃ¶ÃŸe:                                                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0009) MSGF(&LIB/&OBJ)
@@ -3063,7 +3068,7 @@
                 MSGID(TXT0009) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Dateigröße:'                                                         +
+'DateigrÃ¶ÃŸe:'                                                         +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -3072,7 +3077,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0010                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0010                    */
      /* Satz-Nr. ..:                                                */
      /*-------------------------------------------------------------*/
 
@@ -3092,8 +3097,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0011                    */
-     /* Schlüssel  :                                                */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0011                    */
+     /* SchlÃ¼ssel  :                                                */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0011) MSGF(&LIB/&OBJ)
@@ -3103,7 +3108,7 @@
                 MSGID(TXT0011) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Schlüssel  :'                                                        +
+'SchlÃ¼ssel  :'                                                        +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -3112,7 +3117,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0012                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0012                    */
      /*     Auswahl:                                                */
      /*-------------------------------------------------------------*/
 
@@ -3132,7 +3137,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0013                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0013                    */
      /* Datei:                                                      */
      /*-------------------------------------------------------------*/
 
@@ -3152,7 +3157,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0014                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0014                    */
      /* Bib:                                                        */
      /*-------------------------------------------------------------*/
 
@@ -3172,7 +3177,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0015                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0015                    */
      /* Mbr:                                                        */
      /*-------------------------------------------------------------*/
 
@@ -3192,8 +3197,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0016                    */
-     /*  Länge:                                                     */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0016                    */
+     /*  LÃ¤nge:                                                     */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0016) MSGF(&LIB/&OBJ)
@@ -3203,7 +3208,7 @@
                 MSGID(TXT0016) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-' Länge:'                                                             +
+' LÃ¤nge:'                                                             +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -3212,8 +3217,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0017                    */
-     /*  Sätze:                                                     */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0017                    */
+     /*  SÃ¤tze:                                                     */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0017) MSGF(&LIB/&OBJ)
@@ -3223,7 +3228,7 @@
                 MSGID(TXT0017) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-' Sätze:'                                                             +
+' SÃ¤tze:'                                                             +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -3232,7 +3237,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0018                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0018                    */
      /* Feld-Nr. :                                                  */
      /*-------------------------------------------------------------*/
 
@@ -3252,7 +3257,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0019                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0019                    */
      /*     Feldname:                                               */
      /*-------------------------------------------------------------*/
 
@@ -3272,7 +3277,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0020                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0020                    */
      /* Format:                                                     */
      /*-------------------------------------------------------------*/
 
@@ -3292,8 +3297,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0021                    */
-     /*  Größe:                                                     */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0021                    */
+     /*  GrÃ¶ÃŸe:                                                     */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0021) MSGF(&LIB/&OBJ)
@@ -3303,7 +3308,7 @@
                 MSGID(TXT0021) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-' Größe:'                                                             +
+' GrÃ¶ÃŸe:'                                                             +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -3312,7 +3317,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0022                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0022                    */
      /* Satz-Nr. :                                                  */
      /*-------------------------------------------------------------*/
 
@@ -3332,8 +3337,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0023                    */
-     /* Schlüssel:                                                  */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0023                    */
+     /* SchlÃ¼ssel:                                                  */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0023) MSGF(&LIB/&OBJ)
@@ -3343,7 +3348,7 @@
                 MSGID(TXT0023) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Schlüssel:'                                                          +
+'SchlÃ¼ssel:'                                                          +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -3352,7 +3357,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0024                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0024                    */
      /* Auswahl:                                                    */
      /*-------------------------------------------------------------*/
 
@@ -3372,8 +3377,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0025                    */
-     /* (Keine Datensätze gefunden)                                 */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0025                    */
+     /* (Keine DatensÃ¤tze gefunden)                                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0025) MSGF(&LIB/&OBJ)
@@ -3383,7 +3388,7 @@
                 MSGID(TXT0025) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'(Keine Datensätze gefunden)'                                         +
+'(Keine DatensÃ¤tze gefunden)'                                         +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -3392,8 +3397,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0026                    */
-     /* 'ENTER' = Löschen ...                                       */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0026                    */
+     /* 'ENTER' = LÃ¶schen ...                                       */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0026) MSGF(&LIB/&OBJ)
@@ -3403,7 +3408,7 @@
                 MSGID(TXT0026) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'''ENTER'' = Löschen ...'                                             +
+'''ENTER'' = LÃ¶schen ...'                                             +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -3412,7 +3417,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0027                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0027                    */
      /* Datensatzanzeige ...                                        */
      /*-------------------------------------------------------------*/
 
@@ -3432,7 +3437,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0028                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0028                    */
      /* 'ENTER' = Kopieren ...                                      */
      /*-------------------------------------------------------------*/
 
@@ -3452,7 +3457,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0029                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0029                    */
      /* Satz-Nr:                                                    */
      /*-------------------------------------------------------------*/
 
@@ -3472,7 +3477,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0030                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0030                    */
      /* Commit-Steuerung                                            */
      /*-------------------------------------------------------------*/
 
@@ -3492,7 +3497,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0031                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0031                    */
      /* ohne Commitsteuer.                                          */
      /*-------------------------------------------------------------*/
 
@@ -3512,8 +3517,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0032                    */
-     /* (keine Datensätze gefunden)                                 */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0032                    */
+     /* (keine DatensÃ¤tze gefunden)                                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0032) MSGF(&LIB/&OBJ)
@@ -3523,7 +3528,7 @@
                 MSGID(TXT0032) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'(keine Datensätze gefunden)'                                         +
+'(keine DatensÃ¤tze gefunden)'                                         +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -3532,7 +3537,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0033                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0033                    */
      /*      - Suchen -                                             */
      /*-------------------------------------------------------------*/
 
@@ -3552,7 +3557,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0034                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0034                    */
      /*  Feld                                                       */
      /*-------------------------------------------------------------*/
 
@@ -3572,7 +3577,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0035                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0035                    */
      /* Oper.                                                       */
      /*-------------------------------------------------------------*/
 
@@ -3592,7 +3597,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0036                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0036                    */
      /* Wert (ohne Hochkomma)                                       */
      /*-------------------------------------------------------------*/
 
@@ -3612,7 +3617,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0037                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0037                    */
      /* generische Suche)                                           */
      /*-------------------------------------------------------------*/
 
@@ -3632,8 +3637,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0038                    */
-     /* Max.Anz. Sätze:                                             */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0038                    */
+     /* Max.Anz. SÃ¤tze:                                             */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0038) MSGF(&LIB/&OBJ)
@@ -3643,7 +3648,7 @@
                 MSGID(TXT0038) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Max.Anz. Sätze:'                                                     +
+'Max.Anz. SÃ¤tze:'                                                     +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -3652,7 +3657,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0039                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0039                    */
      /* Art der Suche :                                             */
      /*-------------------------------------------------------------*/
 
@@ -3672,7 +3677,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0040                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0040                    */
      /* (Normal/Underline/Reverse/Pin)                              */
      /*-------------------------------------------------------------*/
 
@@ -3692,8 +3697,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0041                    */
-     /* Groß-/Klein ..:                                             */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0041                    */
+     /* GroÃŸ-/Klein ..:                                             */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0041) MSGF(&LIB/&OBJ)
@@ -3703,7 +3708,7 @@
                 MSGID(TXT0041) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Groß-/Klein ..:'                                                     +
+'GroÃŸ-/Klein ..:'                                                     +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -3712,7 +3717,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0042                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0042                    */
      /* (1=Ja; 0=Nein)                                              */
      /*-------------------------------------------------------------*/
 
@@ -3732,7 +3737,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0043                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0043                    */
      /* - Farbeinstellung -                                         */
      /*-------------------------------------------------------------*/
 
@@ -3752,7 +3757,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0044                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0044                    */
      /*   - Farbauswahl -                                           */
      /*-------------------------------------------------------------*/
 
@@ -3772,8 +3777,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0045                    */
-     /* Grün                                                        */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0045                    */
+     /* GrÃ¼n                                                        */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0045) MSGF(&LIB/&OBJ)
@@ -3783,7 +3788,7 @@
                 MSGID(TXT0045) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Grün     '                                                           +
+'GrÃ¼n     '                                                           +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -3792,8 +3797,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0046                    */
-     /* Weiß                                                        */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0046                    */
+     /* WeiÃŸ                                                        */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0046) MSGF(&LIB/&OBJ)
@@ -3803,7 +3808,7 @@
                 MSGID(TXT0046) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Weiß     '                                                           +
+'WeiÃŸ     '                                                           +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -3812,7 +3817,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0047                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0047                    */
      /* Rot                                                         */
      /*-------------------------------------------------------------*/
 
@@ -3832,8 +3837,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0048                    */
-     /* Türkis                                                      */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0048                    */
+     /* TÃ¼rkis                                                      */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0048) MSGF(&LIB/&OBJ)
@@ -3843,7 +3848,7 @@
                 MSGID(TXT0048) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Türkis   '                                                           +
+'TÃ¼rkis   '                                                           +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -3852,7 +3857,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0049                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0049                    */
      /* Gelb                                                        */
      /*-------------------------------------------------------------*/
 
@@ -3872,7 +3877,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0050                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0050                    */
      /* Rosa                                                        */
      /*-------------------------------------------------------------*/
 
@@ -3892,7 +3897,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0051                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0051                    */
      /* Blau                                                        */
      /*-------------------------------------------------------------*/
 
@@ -3912,7 +3917,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0052                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0052                    */
      /*  - ext. Kopieren -                                          */
      /*-------------------------------------------------------------*/
 
@@ -3932,7 +3937,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0053                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0053                    */
      /* Datei ...........:                                          */
      /*-------------------------------------------------------------*/
 
@@ -3952,7 +3957,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0054                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0054                    */
      /* Bibliothek ......:                                          */
      /*-------------------------------------------------------------*/
 
@@ -3972,7 +3977,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0055                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0055                    */
      /* Teildatei .......:                                          */
      /*-------------------------------------------------------------*/
 
@@ -3992,8 +3997,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0056                    */
-     /* Sätze ersetzen ..:                                          */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0056                    */
+     /* SÃ¤tze ersetzen ..:                                          */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0056) MSGF(&LIB/&OBJ)
@@ -4003,7 +4008,7 @@
                 MSGID(TXT0056) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Sätze ersetzen ..:'                                                  +
+'SÃ¤tze ersetzen ..:'                                                  +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -4012,7 +4017,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0057                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0057                    */
      /* Datei erstellen .:                                          */
      /*-------------------------------------------------------------*/
 
@@ -4032,7 +4037,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0058                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0058                    */
      /*   - Lizenzdaten -                                           */
      /*-------------------------------------------------------------*/
 
@@ -4052,7 +4057,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0059                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0059                    */
      /*  Lizenz-Nr:                                                 */
      /*-------------------------------------------------------------*/
 
@@ -4072,7 +4077,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0060                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0060                    */
      /* F9=Testen                                                   */
      /*-------------------------------------------------------------*/
 
@@ -4092,7 +4097,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0061                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0061                    */
      /* Lizenzdaten wurden gesichert!                               */
      /*-------------------------------------------------------------*/
 
@@ -4112,7 +4117,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0062                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0062                    */
      /* Sorry, der Testzeitraum ist abgelaufen.                     */
      /*-------------------------------------------------------------*/
 
@@ -4132,8 +4137,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0063                    */
-     /* 'ENTER' = Ändern ...                                        */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0063                    */
+     /* 'ENTER' = Ã„ndern ...                                        */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0063) MSGF(&LIB/&OBJ)
@@ -4143,7 +4148,7 @@
                 MSGID(TXT0063) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'''ENTER'' = Ändern ...'                                              +
+'''ENTER'' = Ã„ndern ...'                                              +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -4152,7 +4157,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0064                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0064                    */
      /* 'ENTER' = Kopieren ...                                      */
      /*-------------------------------------------------------------*/
 
@@ -4172,8 +4177,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0065                    */
-     /* 'ENTER' = Einfügen ...                                      */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0065                    */
+     /* 'ENTER' = EinfÃ¼gen ...                                      */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0065) MSGF(&LIB/&OBJ)
@@ -4183,7 +4188,7 @@
                 MSGID(TXT0065) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'''ENTER'' = Einfügen ...'                                            +
+'''ENTER'' = EinfÃ¼gen ...'                                            +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -4192,7 +4197,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0066                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0066                    */
      /* Weitere ...                                                 */
      /*-------------------------------------------------------------*/
 
@@ -4212,7 +4217,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0067                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0067                    */
      /*        Ende                                                 */
      /*-------------------------------------------------------------*/
 
@@ -4232,7 +4237,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0068                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0068                    */
      /* Commit & Rollback                                           */
      /*-------------------------------------------------------------*/
 
@@ -4252,7 +4257,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0069                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0069                    */
      /* 80-/132- Zeichen Modus                                      */
      /*-------------------------------------------------------------*/
 
@@ -4272,7 +4277,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0070                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0070                    */
      /* Flexible Suchfunktionen                                     */
      /*-------------------------------------------------------------*/
 
@@ -4292,7 +4297,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0071                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0071                    */
      /* Indiv. Tastaturbelegung                                     */
      /*-------------------------------------------------------------*/
 
@@ -4312,7 +4317,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0072                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0072                    */
      /* Indiv. Spracherweiterungen                                  */
      /*-------------------------------------------------------------*/
 
@@ -4332,7 +4337,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0073                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0073                    */
      /*  Der ultimative                                             */
      /*-------------------------------------------------------------*/
 
@@ -4352,7 +4357,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0074                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0074                    */
      /* Datenbankbrowser                                            */
      /*-------------------------------------------------------------*/
 
@@ -4372,7 +4377,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0075                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0075                    */
      /*         * Highlights *                                      */
      /*-------------------------------------------------------------*/
 
@@ -4392,8 +4397,8 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0076                    */
-     /* Unzulässige Zeichen                                         */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0076                    */
+     /* UnzulÃ¤ssige Zeichen                                         */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0076) MSGF(&LIB/&OBJ)
@@ -4403,7 +4408,7 @@
                 MSGID(TXT0076) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Unzulässige Zeichen'                                                 +
+'UnzulÃ¤ssige Zeichen'                                                 +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -4412,7 +4417,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0077                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0077                    */
      /* - Layout -                                                  */
      /*-------------------------------------------------------------*/
 
@@ -4432,7 +4437,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0078                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0078                    */
      /* Suchen:                                                     */
      /*-------------------------------------------------------------*/
 
@@ -4452,7 +4457,7 @@
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0079                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0079                    */
      /*  A   Folge  Feld        Bezeichnung                     Typ */
      /*-------------------------------------------------------------*/
 
@@ -4473,7 +4478,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0080                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0080                    */
      /* Sichtbar .:                                                 */
      /*-------------------------------------------------------------*/
 
@@ -4493,7 +4498,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0081                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0081                    */
      /* Farbe ..:                                                   */
      /*-------------------------------------------------------------*/
 
@@ -4513,7 +4518,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0082                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0082                    */
      /* Markierung:                                                 */
      /*-------------------------------------------------------------*/
 
@@ -4533,7 +4538,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0083                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0083                    */
      /* Max.Breite:                                                 */
      /*-------------------------------------------------------------*/
 
@@ -4553,7 +4558,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0084                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0084                    */
      /* Editcode:                                                   */
      /*-------------------------------------------------------------*/
 
@@ -4573,7 +4578,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0085                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0085                    */
      /* - Feldauswahl -                                             */
      /*-------------------------------------------------------------*/
 
@@ -4593,7 +4598,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0086                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0086                    */
      /*  A   Feld        Bezeichnung                                */
      /*-------------------------------------------------------------*/
 
@@ -4613,7 +4618,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0087                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0087                    */
      /*  A  Datei                  Beschreibung                     */
      /*-------------------------------------------------------------*/
 
@@ -4634,7 +4639,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0088                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0088                    */
      /* - Anz. Datenbankrelationen   -                              */
      /*-------------------------------------------------------------*/
 
@@ -4654,7 +4659,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0089                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0089                    */
      /* Log. Sichten:                                               */
      /*-------------------------------------------------------------*/
 
@@ -4674,7 +4679,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0090                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0090                    */
      /* Hex-Eingabe                                                 */
      /*-------------------------------------------------------------*/
 
@@ -4694,7 +4699,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0091                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0091                    */
      /* Feld ........:                                              */
      /*-------------------------------------------------------------*/
 
@@ -4714,8 +4719,8 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0092                    */
-     /* Feldlänge ...:                                              */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0092                    */
+     /* FeldlÃ¤nge ...:                                              */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0092) MSGF(&LIB/&OBJ)
@@ -4725,7 +4730,7 @@ rPos '                                                                +
                 MSGID(TXT0092) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Feldlänge ...:'                                                      +
+'FeldlÃ¤nge ...:'                                                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -4734,7 +4739,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0093                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0093                    */
      /* Inhalt ....:                                                */
      /*-------------------------------------------------------------*/
 
@@ -4754,7 +4759,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0094                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0094                    */
      /* Hex .......:                                                */
      /*-------------------------------------------------------------*/
 
@@ -4774,7 +4779,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0095                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0095                    */
      /* Startposition:                                              */
      /*-------------------------------------------------------------*/
 
@@ -4794,8 +4799,8 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0096                    */
-     /* Pufferlänge:                                                */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0096                    */
+     /* PufferlÃ¤nge:                                                */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0096) MSGF(&LIB/&OBJ)
@@ -4805,7 +4810,7 @@ rPos '                                                                +
                 MSGID(TXT0096) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Pufferlänge:'                                                        +
+'PufferlÃ¤nge:'                                                        +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -4814,7 +4819,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0097                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0097                    */
      /*  A   Teildatei   Bezeichnung                                */
      /*-------------------------------------------------------------*/
 
@@ -4834,7 +4839,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0098                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0098                    */
      /* - Auswahl Teildatei -                                       */
      /*-------------------------------------------------------------*/
 
@@ -4854,7 +4859,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0099                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0099                    */
      /* Anz. Teild:                                                 */
      /*-------------------------------------------------------------*/
 
@@ -4874,7 +4879,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0100                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0100                    */
      /*  Teild:                                                     */
      /*-------------------------------------------------------------*/
 
@@ -4894,8 +4899,8 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0101                    */
-     /* - Über Peek/400 -                                           */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0101                    */
+     /* - Ãœber Peek/400 -                                           */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0101) MSGF(&LIB/&OBJ)
@@ -4905,7 +4910,7 @@ rPos '                                                                +
                 MSGID(TXT0101) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'- Über Peek/400 - '                                                  +
+'- Ãœber Peek/400 - '                                                  +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -4914,7 +4919,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0102                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0102                    */
      /* Datum . . .                                                 */
      /*-------------------------------------------------------------*/
 
@@ -4934,7 +4939,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0103                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0103                    */
      /* Version . .                                                 */
      /*-------------------------------------------------------------*/
 
@@ -4954,7 +4959,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0104                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0104                    */
      /* E-mail  . .                                                 */
      /*-------------------------------------------------------------*/
 
@@ -4974,7 +4979,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0105                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0105                    */
      /* Homepage  .                                                 */
      /*-------------------------------------------------------------*/
 
@@ -4994,7 +4999,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0106                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0106                    */
      /* Spalten Pinnen                                              */
      /*-------------------------------------------------------------*/
 
@@ -5014,7 +5019,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0107                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0107                    */
      /*  Folge  Feld        Bezeichnung                      Schl.F */
      /*-------------------------------------------------------------*/
 
@@ -5034,7 +5039,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0108                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0108                    */
      /*  - SQL  Auswahl -                                           */
      /*-------------------------------------------------------------*/
 
@@ -5054,7 +5059,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0109                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0109                    */
      /* WHERE  ....:                                                */
      /*-------------------------------------------------------------*/
 
@@ -5074,7 +5079,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0110                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0110                    */
      /* ORDER BY  .:                                                */
      /*-------------------------------------------------------------*/
 
@@ -5094,7 +5099,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0111                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0111                    */
      /* - Programm erstellen -                                      */
      /*-------------------------------------------------------------*/
 
@@ -5114,7 +5119,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0112                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0112                    */
      /* Kleinbuchst. erlaubt?                                       */
      /*-------------------------------------------------------------*/
 
@@ -5134,8 +5139,8 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0113                    */
-     /* Default Groß-/Kleinb.?                                      */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0113                    */
+     /* Default GroÃŸ-/Kleinb.?                                      */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0113) MSGF(&LIB/&OBJ)
@@ -5145,7 +5150,7 @@ rPos '                                                                +
                 MSGID(TXT0113) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Default Groß-/Kleinb.?'                                              +
+'Default GroÃŸ-/Kleinb.?'                                              +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -5154,7 +5159,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0114                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0114                    */
      /* Als Default speichern?                                      */
      /*-------------------------------------------------------------*/
 
@@ -5174,7 +5179,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0115                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0115                    */
      /* SQL-Auswahl                                                 */
      /*-------------------------------------------------------------*/
 
@@ -5194,8 +5199,8 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0116                    */
-     /* Auswählen Arbeitsumgebung                                   */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0116                    */
+     /* AuswÃ¤hlen Arbeitsumgebung                                   */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0116) MSGF(&LIB/&OBJ)
@@ -5205,7 +5210,7 @@ rPos '                                                                +
                 MSGID(TXT0116) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Auswählen Arbeitsumgebung'                                           +
+'AuswÃ¤hlen Arbeitsumgebung'                                           +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -5214,7 +5219,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0117                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0117                    */
      /* Datei:                                                      */
      /*-------------------------------------------------------------*/
 
@@ -5234,7 +5239,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0118                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0118                    */
      /* Bibliothek:                                                 */
      /*-------------------------------------------------------------*/
 
@@ -5254,7 +5259,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0119                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0119                    */
      /*  A   Umgebung    Bezeichnung                                */
      /*-------------------------------------------------------------*/
 
@@ -5274,8 +5279,8 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0120                    */
-     /* Löschen Arbeitsumgebung                                     */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0120                    */
+     /* LÃ¶schen Arbeitsumgebung                                     */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0120) MSGF(&LIB/&OBJ)
@@ -5285,7 +5290,7 @@ rPos '                                                                +
                 MSGID(TXT0120) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Löschen Arbeitsumgebung'                                             +
+'LÃ¶schen Arbeitsumgebung'                                             +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -5294,7 +5299,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0121                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0121                    */
      /* Datei . . . :                                               */
      /*-------------------------------------------------------------*/
 
@@ -5314,7 +5319,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0122                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0122                    */
      /* Bibliothek:                                                 */
      /*-------------------------------------------------------------*/
 
@@ -5334,7 +5339,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0123                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0123                    */
      /* Teildatei . :                                               */
      /*-------------------------------------------------------------*/
 
@@ -5354,7 +5359,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0124                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0124                    */
      /* Beschreibung:                                               */
      /*-------------------------------------------------------------*/
 
@@ -5374,8 +5379,8 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0125                    */
-     /* Akt.Länge .:                                                */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0125                    */
+     /* Akt.LÃ¤nge .:                                                */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0125) MSGF(&LIB/&OBJ)
@@ -5385,7 +5390,7 @@ rPos '                                                                +
                 MSGID(TXT0125) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Akt.Länge .:'                                                        +
+'Akt.LÃ¤nge .:'                                                        +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -5394,7 +5399,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0126                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0126                    */
      /*  - Auswahl Satzformat -                                     */
      /*-------------------------------------------------------------*/
 
@@ -5414,7 +5419,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0127                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0127                    */
      /* NULL Wert                                                   */
      /*-------------------------------------------------------------*/
 
@@ -5434,7 +5439,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0128                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0128                    */
      /* Text-Editor                                                 */
      /*-------------------------------------------------------------*/
 
@@ -5454,7 +5459,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0129                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0129                    */
      /* *** Datensatz gesperrt ***                                  */
      /*-------------------------------------------------------------*/
 
@@ -5474,7 +5479,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0130                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0130                    */
      /* Datensatz nicht gesperrt                                    */
      /*-------------------------------------------------------------*/
 
@@ -5494,7 +5499,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0131                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0131                    */
      /* Satz gesperrt lesen?                                        */
      /*-------------------------------------------------------------*/
 
@@ -5514,7 +5519,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0132                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0132                    */
      /* Datei:                                                      */
      /*-------------------------------------------------------------*/
 
@@ -5534,7 +5539,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0133                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0133                    */
      /* Bibliothek:                                                 */
      /*-------------------------------------------------------------*/
 
@@ -5554,7 +5559,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0134                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0134                    */
      /* RRN:                                                        */
      /*-------------------------------------------------------------*/
 
@@ -5574,7 +5579,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0135                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0135                    */
      /* Seite:                                                      */
      /*-------------------------------------------------------------*/
 
@@ -5594,7 +5599,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0136                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0136                    */
      /* Feldname                                                    */
      /*-------------------------------------------------------------*/
 
@@ -5614,7 +5619,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0137                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0137                    */
      /* Feldbeschreibung                                            */
      /*-------------------------------------------------------------*/
 
@@ -5634,7 +5639,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0138                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0138                    */
      /* Feldinhalt                                                  */
      /*-------------------------------------------------------------*/
 
@@ -5654,7 +5659,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0139                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0139                    */
      /* Text:                                                       */
      /*-------------------------------------------------------------*/
 
@@ -5674,7 +5679,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0140                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0140                    */
      /*  A   Opt  Bezeichnung                                       */
      /*-------------------------------------------------------------*/
 
@@ -5694,7 +5699,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0141                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0141                    */
      /* --------- Kurzbefehle ---------                             */
      /*-------------------------------------------------------------*/
 
@@ -5714,7 +5719,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0142                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0142                    */
      /*  A   Datei       Bibliothek   Bezeichnung                   */
      /*-------------------------------------------------------------*/
 
@@ -5734,7 +5739,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0143                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0143                    */
      /* - Auswahl Datei -                                           */
      /*-------------------------------------------------------------*/
 
@@ -5754,7 +5759,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0144                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0144                    */
      /* Init. NULL-Felder?                                          */
      /*-------------------------------------------------------------*/
 
@@ -5774,7 +5779,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0145                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0145                    */
      /* Cursorposition merken?                                      */
      /*-------------------------------------------------------------*/
 
@@ -5794,8 +5799,8 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0146                    */
-     /* Einfügen                                                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0146                    */
+     /* EinfÃ¼gen                                                    */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0146) MSGF(&LIB/&OBJ)
@@ -5805,7 +5810,7 @@ rPos '                                                                +
                 MSGID(TXT0146) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Einfügen'                                                            +
+'EinfÃ¼gen'                                                            +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -5814,8 +5819,8 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0147                    */
-     /* Löschen                                                     */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0147                    */
+     /* LÃ¶schen                                                     */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0147) MSGF(&LIB/&OBJ)
@@ -5825,7 +5830,7 @@ rPos '                                                                +
                 MSGID(TXT0147) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Löschen'                                                             +
+'LÃ¶schen'                                                             +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -5834,7 +5839,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0148                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0148                    */
      /* von:                                                        */
      /*-------------------------------------------------------------*/
 
@@ -5854,8 +5859,8 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0149                    */
-     /* Länge:                                                      */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0149                    */
+     /* LÃ¤nge:                                                      */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0149) MSGF(&LIB/&OBJ)
@@ -5865,7 +5870,7 @@ rPos '                                                                +
                 MSGID(TXT0149) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Länge: '                                                             +
+'LÃ¤nge: '                                                             +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -5874,7 +5879,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0150                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0150                    */
      /* bis:                                                        */
      /*-------------------------------------------------------------*/
 
@@ -5894,7 +5899,7 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   TXT0151                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   TXT0151                    */
      /* Cursor Pos. .:                                              */
      /*-------------------------------------------------------------*/
 
@@ -5914,8 +5919,8 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR0001                    */
-     /* Satzformat &3 für Datei &2/&1 konnte nicht abgerufen werden */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR0001                    */
+     /* Satzformat &3 fÃ¼r Datei &2/&1 konnte nicht abgerufen werden */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR0001) MSGF(&LIB/&OBJ)
@@ -5925,7 +5930,7 @@ rPos '                                                                +
                 MSGID(USR0001) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Satzformat &3 für Datei &2/&1 konnte nicht abgerufen werden.'        +
+'Satzformat &3 fÃ¼r Datei &2/&1 konnte nicht abgerufen werden.'        +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -5938,8 +5943,8 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR0002                    */
-     /* Liste der Satzformate für Datei &2/&1 konnte nicht abgerufe */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR0002                    */
+     /* Liste der Satzformate fÃ¼r Datei &2/&1 konnte nicht abgerufe */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR0002) MSGF(&LIB/&OBJ)
@@ -5949,7 +5954,7 @@ rPos '                                                                +
                 MSGID(USR0002) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Liste der Satzformate für Datei &2/&1 konnte nicht abgerufen werden.'+
+'Liste der Satzformate fÃ¼r Datei &2/&1 konnte nicht abgerufen werden.'+
                 ) +
                 SEV(0) +
                 FMT( +
@@ -5961,8 +5966,8 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR0003                    */
-     /* Datei mit Commitment-Kontrolle geöffnet.                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR0003                    */
+     /* Datei mit Commitment-Kontrolle geÃ¶ffnet.                    */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR0003) MSGF(&LIB/&OBJ)
@@ -5972,7 +5977,7 @@ rPos '                                                                +
                 MSGID(USR0003) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Datei mit Commitment-Kontrolle geöffnet.'                            +
+'Datei mit Commitment-Kontrolle geÃ¶ffnet.'                            +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -5981,8 +5986,8 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR0004                    */
-     /* Datei OHNE Commitment-Kontrolle geöffnet!                   */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR0004                    */
+     /* Datei OHNE Commitment-Kontrolle geÃ¶ffnet!                   */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR0004) MSGF(&LIB/&OBJ)
@@ -5992,7 +5997,7 @@ rPos '                                                                +
                 MSGID(USR0004) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Datei OHNE Commitment-Kontrolle geöffnet!'                           +
+'Datei OHNE Commitment-Kontrolle geÃ¶ffnet!'                           +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -6001,8 +6006,8 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR0005                    */
-     /* Datei &1 konnte nicht geöffnet werden. Siehe Jobprotokoll.  */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR0005                    */
+     /* Datei &1 konnte nicht geÃ¶ffnet werden. Siehe Jobprotokoll.  */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR0005) MSGF(&LIB/&OBJ)
@@ -6012,7 +6017,7 @@ rPos '                                                                +
                 MSGID(USR0005) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Datei &1 konnte nicht geöffnet werden. Siehe Jobprotokoll.'          +
+'Datei &1 konnte nicht geÃ¶ffnet werden. Siehe Jobprotokoll.'          +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -6023,8 +6028,8 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR0006                    */
-     /* Keine Schlüsselinformationen in Datei &1 in Bibliothek &2.  */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR0006                    */
+     /* Keine SchlÃ¼sselinformationen in Datei &1 in Bibliothek &2.  */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR0006) MSGF(&LIB/&OBJ)
@@ -6034,7 +6039,7 @@ rPos '                                                                +
                 MSGID(USR0006) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Keine Schlüsselinformationen in Datei &1 in Bibliothek &2.'          +
+'Keine SchlÃ¼sselinformationen in Datei &1 in Bibliothek &2.'          +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -6046,8 +6051,8 @@ rPos '                                                                +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR0007                    */
-     /* Die Datei &2/&1 konnte nur für INPUT geöffnet werden. Änder */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR0007                    */
+     /* Die Datei &2/&1 konnte nur fÃ¼r INPUT geÃ¶ffnet werden. Ã„nder */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR0007) MSGF(&LIB/&OBJ)
@@ -6057,13 +6062,13 @@ rPos '                                                                +
                 MSGID(USR0007) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Die Datei &2/&1 konnte nur für INPUT geöffnet werden. Änderungen sind-
- nicht möglich.'                                                      +
+'Die Datei &2/&1 konnte nur fÃ¼r INPUT geÃ¶ffnet werden. Ã„nderungen sind-
+ nicht mÃ¶glich.'                                                      +
                 ) +
                 SECLVL( +
-'&N &N Mögliche Ursachen: &N &B 1. Der Debugger ist mit dem Parameter -
+'&N &N MÃ¶gliche Ursachen: &N &B 1. Der Debugger ist mit dem Parameter -
 UPDPROD(*NO) gestartet worden. &B 2. Es handelt sich um eine JOIN-Date-
-i &B 3. Es gibt referenzielle Integritätsregeln und die Datei wird nic-
+i &B 3. Es gibt referenzielle IntegritÃ¤tsregeln und die Datei wird nic-
 ht journalisiert. &B 4. Es gibt Triggerdefinitionen und die Triggerpro-
 gramme befinden sich nicht in der Bibliotheksliste &B 5. Es handelt si-
 ch um eine logische Datei, die auf mehreren Teildateien basiert.'     +
@@ -6078,7 +6083,7 @@ ch um eine logische Datei, die auf mehreren Teildateien basiert.'     +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR0008                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR0008                    */
      /* Die Datei &2/&1 konnte nicht gefunden werden.               */
      /*-------------------------------------------------------------*/
 
@@ -6101,8 +6106,8 @@ ch um eine logische Datei, die auf mehreren Teildateien basiert.'     +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR0009                    */
-     /* Fehler beim Abrufen der Objektbeschreibung für Datei &2/&1. */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR0009                    */
+     /* Fehler beim Abrufen der Objektbeschreibung fÃ¼r Datei &2/&1. */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR0009) MSGF(&LIB/&OBJ)
@@ -6112,7 +6117,7 @@ ch um eine logische Datei, die auf mehreren Teildateien basiert.'     +
                 MSGID(USR0009) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Fehler beim Abrufen der Objektbeschreibung für Datei &2/&1.'         +
+'Fehler beim Abrufen der Objektbeschreibung fÃ¼r Datei &2/&1.'         +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -6124,7 +6129,7 @@ ch um eine logische Datei, die auf mehreren Teildateien basiert.'     +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR0010                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR0010                    */
      /* Bibliothek &1 nicht gefunden.                               */
      /*-------------------------------------------------------------*/
 
@@ -6146,8 +6151,8 @@ ch um eine logische Datei, die auf mehreren Teildateien basiert.'     +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR0011                    */
-     /* Datei konnte nicht geöffnet werden. Weitere Informationen i */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR0011                    */
+     /* Datei konnte nicht geÃ¶ffnet werden. Weitere Informationen i */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR0011) MSGF(&LIB/&OBJ)
@@ -6157,7 +6162,7 @@ ch um eine logische Datei, die auf mehreren Teildateien basiert.'     +
                 MSGID(USR0011) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Datei konnte nicht geöffnet werden. Weitere Informationen im erweiter-
+'Datei konnte nicht geÃ¶ffnet werden. Weitere Informationen im erweiter-
 ten Hilfetext oder im Jobprotokoll.'                                  +
                 ) +
                 SECLVL( +
@@ -6172,7 +6177,7 @@ ten Hilfetext oder im Jobprotokoll.'                                  +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR0012                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR0012                    */
      /* C-IO Fehler &2: &1                                          */
      /*-------------------------------------------------------------*/
 
@@ -6195,8 +6200,8 @@ ten Hilfetext oder im Jobprotokoll.'                                  +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR0013                    */
-     /* Ausführen SQL Abfrage ...                                   */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR0013                    */
+     /* AusfÃ¼hren SQL Abfrage ...                                   */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR0013) MSGF(&LIB/&OBJ)
@@ -6206,7 +6211,7 @@ ten Hilfetext oder im Jobprotokoll.'                                  +
                 MSGID(USR0013) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Ausführen SQL Abfrage ...'                                           +
+'AusfÃ¼hren SQL Abfrage ...'                                           +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -6215,8 +6220,8 @@ ten Hilfetext oder im Jobprotokoll.'                                  +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR0014                    */
-     /* Bestimmen Anzahl ausgewählter Datensätze ...                */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR0014                    */
+     /* Bestimmen Anzahl ausgewÃ¤hlter DatensÃ¤tze ...                */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR0014) MSGF(&LIB/&OBJ)
@@ -6226,7 +6231,7 @@ ten Hilfetext oder im Jobprotokoll.'                                  +
                 MSGID(USR0014) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Bestimmen Anzahl ausgewählter Datensätze ...'                        +
+'Bestimmen Anzahl ausgewÃ¤hlter DatensÃ¤tze ...'                        +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -6235,8 +6240,8 @@ ten Hilfetext oder im Jobprotokoll.'                                  +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR0143                    */
-     /* - Auswahl Teildatei -                                       */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR0143                    */
+     /* - Auswahl Datei -                                           */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR0143) MSGF(&LIB/&OBJ)
@@ -6246,7 +6251,7 @@ ten Hilfetext oder im Jobprotokoll.'                                  +
                 MSGID(USR0143) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'- Auswahl Teildatei -'                                               +
+'- Auswahl Datei -'                                                   +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -6255,8 +6260,8 @@ ten Hilfetext oder im Jobprotokoll.'                                  +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR1000                    */
-     /* Keine Berechtigung für Datei &2/&1, Teildatei &3.           */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR1000                    */
+     /* Keine Berechtigung fÃ¼r Datei &2/&1, Teildatei &3.           */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR1000) MSGF(&LIB/&OBJ)
@@ -6266,7 +6271,7 @@ ten Hilfetext oder im Jobprotokoll.'                                  +
                 MSGID(USR1000) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Keine Berechtigung für Datei &2/&1, Teildatei &3.'                   +
+'Keine Berechtigung fÃ¼r Datei &2/&1, Teildatei &3.'                   +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -6279,7 +6284,7 @@ ten Hilfetext oder im Jobprotokoll.'                                  +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8100                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8100                    */
      /* Verarbeitung mit &1 abgebrochen.                            */
      /*-------------------------------------------------------------*/
 
@@ -6301,8 +6306,8 @@ ten Hilfetext oder im Jobprotokoll.'                                  +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8101                    */
-     /* Initialisierung läuft ...                                   */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8101                    */
+     /* Initialisierung lÃ¤uft ...                                   */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8101) MSGF(&LIB/&OBJ)
@@ -6312,7 +6317,7 @@ ten Hilfetext oder im Jobprotokoll.'                                  +
                 MSGID(USR8101) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Initialisierung läuft ...'                                           +
+'Initialisierung lÃ¤uft ...'                                           +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -6321,7 +6326,7 @@ ten Hilfetext oder im Jobprotokoll.'                                  +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8102                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8102                    */
      /* Bitte mit dem Cursor auf den Datensatz zeigen und die Anfor */
      /*-------------------------------------------------------------*/
 
@@ -6342,7 +6347,7 @@ derholen.'                                                            +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8103                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8103                    */
      /* Datei kann nicht geschlossen werden.                        */
      /*-------------------------------------------------------------*/
 
@@ -6362,8 +6367,8 @@ derholen.'                                                            +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8104                    */
-     /* Abrufen der Feldbeschreibung für Datei &1 in Bibliothek &2. */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8104                    */
+     /* Abrufen der Feldbeschreibung fÃ¼r Datei &1 in Bibliothek &2. */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8104) MSGF(&LIB/&OBJ)
@@ -6373,7 +6378,7 @@ derholen.'                                                            +
                 MSGID(USR8104) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Abrufen der Feldbeschreibung für Datei &1 in Bibliothek &2.'         +
+'Abrufen der Feldbeschreibung fÃ¼r Datei &1 in Bibliothek &2.'         +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -6385,8 +6390,8 @@ derholen.'                                                            +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8105                    */
-     /* Abrufen der Satzformate für Datei &1 in Bibliothek &2.      */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8105                    */
+     /* Abrufen der Satzformate fÃ¼r Datei &1 in Bibliothek &2.      */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8105) MSGF(&LIB/&OBJ)
@@ -6396,7 +6401,7 @@ derholen.'                                                            +
                 MSGID(USR8105) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Abrufen der Satzformate für Datei &1 in Bibliothek &2.'              +
+'Abrufen der Satzformate fÃ¼r Datei &1 in Bibliothek &2.'              +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -6408,7 +6413,7 @@ derholen.'                                                            +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8106                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8106                    */
      /* Abrufen von Netzwerkattributen.                             */
      /*-------------------------------------------------------------*/
 
@@ -6428,8 +6433,8 @@ derholen.'                                                            +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8107                    */
-     /* Abrufen von Objektattributen für Objekt &1 in Bibliothek &2 */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8107                    */
+     /* Abrufen von Objektattributen fÃ¼r Objekt &1 in Bibliothek &2 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8107) MSGF(&LIB/&OBJ)
@@ -6439,7 +6444,7 @@ derholen.'                                                            +
                 MSGID(USR8107) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Abrufen von Objektattributen für Objekt &1 in Bibliothek &2.'        +
+'Abrufen von Objektattributen fÃ¼r Objekt &1 in Bibliothek &2.'        +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -6452,7 +6457,7 @@ derholen.'                                                            +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8108                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8108                    */
      /* Feld '&1' in Datei &2 in Bibliothek &3 nicht gefunden.      */
      /*-------------------------------------------------------------*/
 
@@ -6476,8 +6481,8 @@ derholen.'                                                            +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8109                    */
-     /* Abrufen der Teildateibeschreibung für Teildatei &3 in Datei */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8109                    */
+     /* Abrufen der Teildateibeschreibung fÃ¼r Teildatei &3 in Datei */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8109) MSGF(&LIB/&OBJ)
@@ -6487,7 +6492,7 @@ derholen.'                                                            +
                 MSGID(USR8109) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Abrufen der Teildateibeschreibung für Teildatei &3 in Datei &1 in Bib-
+'Abrufen der Teildateibeschreibung fÃ¼r Teildatei &3 in Datei &1 in Bib-
 liothek &2.'                                                          +
                 ) +
                 SEV(0) +
@@ -6501,8 +6506,8 @@ liothek &2.'                                                          +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8110                    */
-     /* Auswahl '&1' nicht gültig.                                  */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8110                    */
+     /* Auswahl '&1' nicht gÃ¼ltig.                                  */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8110) MSGF(&LIB/&OBJ)
@@ -6512,7 +6517,7 @@ liothek &2.'                                                          +
                 MSGID(USR8110) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Auswahl ''&1'' nicht gültig.'                                        +
+'Auswahl ''&1'' nicht gÃ¼ltig.'                                        +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -6523,8 +6528,8 @@ liothek &2.'                                                          +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8111                    */
-     /* Alle Datensätze verarbeiten.                                */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8111                    */
+     /* Alle DatensÃ¤tze verarbeiten.                                */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8111) MSGF(&LIB/&OBJ)
@@ -6534,7 +6539,7 @@ liothek &2.'                                                          +
                 MSGID(USR8111) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Alle Datensätze verarbeiten.'                                        +
+'Alle DatensÃ¤tze verarbeiten.'                                        +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -6543,8 +6548,8 @@ liothek &2.'                                                          +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8112                    */
-     /* Verarbeitung bestätigt.                                     */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8112                    */
+     /* Verarbeitung bestÃ¤tigt.                                     */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8112) MSGF(&LIB/&OBJ)
@@ -6554,7 +6559,7 @@ liothek &2.'                                                          +
                 MSGID(USR8112) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Verarbeitung bestätigt.'                                             +
+'Verarbeitung bestÃ¤tigt.'                                             +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -6563,8 +6568,8 @@ liothek &2.'                                                          +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8113                    */
-     /* Interner Befehl &1 nicht gültig.                            */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8113                    */
+     /* Interner Befehl &1 nicht gÃ¼ltig.                            */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8113) MSGF(&LIB/&OBJ)
@@ -6574,7 +6579,7 @@ liothek &2.'                                                          +
                 MSGID(USR8113) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Interner Befehl &1 nicht gültig.'                                    +
+'Interner Befehl &1 nicht gÃ¼ltig.'                                    +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -6585,7 +6590,7 @@ liothek &2.'                                                          +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8114                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8114                    */
      /* RPG-Programm wird erstellt ...                              */
      /*-------------------------------------------------------------*/
 
@@ -6605,7 +6610,7 @@ liothek &2.'                                                          +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8115                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8115                    */
      /* Anfang des Datensatzes angezeigt.                           */
      /*-------------------------------------------------------------*/
 
@@ -6625,7 +6630,7 @@ liothek &2.'                                                          +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8116                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8116                    */
      /* Ende des Datensatzes angezeigt.                             */
      /*-------------------------------------------------------------*/
 
@@ -6645,7 +6650,7 @@ liothek &2.'                                                          +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8117                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8117                    */
      /* Bitte mit dem Cursor auf eine Spalte zeigen und die Anforde */
      /*-------------------------------------------------------------*/
 
@@ -6666,8 +6671,8 @@ rholen.'                                                              +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8118                    */
-     /* Tabelle für PIN ist voll.                                   */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8118                    */
+     /* Tabelle fÃ¼r PIN ist voll.                                   */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8118) MSGF(&LIB/&OBJ)
@@ -6677,7 +6682,7 @@ rholen.'                                                              +
                 MSGID(USR8118) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Tabelle für PIN ist voll.'                                           +
+'Tabelle fÃ¼r PIN ist voll.'                                           +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -6686,7 +6691,7 @@ rholen.'                                                              +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8119                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8119                    */
      /* Datensatz bereits gepinned.                                 */
      /*-------------------------------------------------------------*/
 
@@ -6706,7 +6711,7 @@ rholen.'                                                              +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8120                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8120                    */
      /* Datensatz nicht gefunden.                                   */
      /*-------------------------------------------------------------*/
 
@@ -6726,7 +6731,7 @@ rholen.'                                                              +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8121                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8121                    */
      /* Datensatz ist nicht gepinned.                               */
      /*-------------------------------------------------------------*/
 
@@ -6746,8 +6751,8 @@ rholen.'                                                              +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8122                    */
-     /* Funktionstaste nicht zulässig.                              */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8122                    */
+     /* Funktionstaste nicht zulÃ¤ssig.                              */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8122) MSGF(&LIB/&OBJ)
@@ -6757,7 +6762,7 @@ rholen.'                                                              +
                 MSGID(USR8122) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Funktionstaste nicht zulässig.'                                      +
+'Funktionstaste nicht zulÃ¤ssig.'                                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -6766,8 +6771,8 @@ rholen.'                                                              +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8123                    */
-     /* Felder mit mehr als 1024-Zeichen können&1nicht&2geändert we */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8123                    */
+     /* Felder mit mehr als 1024-Zeichen kÃ¶nnen&1nicht&2geÃ¤ndert we */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8123) MSGF(&LIB/&OBJ)
@@ -6777,7 +6782,7 @@ rholen.'                                                              +
                 MSGID(USR8123) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Felder mit mehr als 1024-Zeichen können&1nicht&2geändert werden.'    +
+'Felder mit mehr als 1024-Zeichen kÃ¶nnen&1nicht&2geÃ¤ndert werden.'    +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -6789,8 +6794,8 @@ rholen.'                                                              +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8124                    */
-     /* Vergleichsoperand '&1' nicht zulässig.                      */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8124                    */
+     /* Vergleichsoperand '&1' nicht zulÃ¤ssig.                      */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8124) MSGF(&LIB/&OBJ)
@@ -6800,12 +6805,12 @@ rholen.'                                                              +
                 MSGID(USR8124) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Vergleichsoperand ''&1'' nicht zulässig.'                            +
+'Vergleichsoperand ''&1'' nicht zulÃ¤ssig.'                            +
                 ) +
                 SECLVL( +
-'&N &B Zulässige Operanden sind: &N &P EQ   - Gleich &P NE   - Ungleic-
-h &P LT   - Kleiner &P GT   - Größer &P LE   - Kleiner/Gleich &P GE   -
-- Größer/Gleich &P LIKE - Ähnlich'                                    +
+'&N &B ZulÃ¤ssige Operanden sind: &N &P EQ   - Gleich &P NE   - Ungleic-
+h &P LT   - Kleiner &P GT   - GrÃ¶ÃŸer &P LE   - Kleiner/Gleich &P GE   -
+- GrÃ¶ÃŸer/Gleich &P LIKE - Ã„hnlich'                                    +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -6816,8 +6821,8 @@ h &P LT   - Kleiner &P GT   - Größer &P LE   - Kleiner/Gleich &P GE   -
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8125                    */
-     /* Keine Anzahl der max. zu durchsuchenden Datensätze angegebe */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8125                    */
+     /* Keine Anzahl der max. zu durchsuchenden DatensÃ¤tze angegebe */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8125) MSGF(&LIB/&OBJ)
@@ -6827,7 +6832,7 @@ h &P LT   - Kleiner &P GT   - Größer &P LE   - Kleiner/Gleich &P GE   -
                 MSGID(USR8125) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Keine Anzahl der max. zu durchsuchenden Datensätze angegeben.'       +
+'Keine Anzahl der max. zu durchsuchenden DatensÃ¤tze angegeben.'       +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -6836,8 +6841,8 @@ h &P LT   - Kleiner &P GT   - Größer &P LE   - Kleiner/Gleich &P GE   -
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8126                    */
-     /* Vergleichsoperand '&1' nicht zulässig.                      */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8126                    */
+     /* Vergleichsoperand '&1' nicht zulÃ¤ssig.                      */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8126) MSGF(&LIB/&OBJ)
@@ -6847,7 +6852,7 @@ h &P LT   - Kleiner &P GT   - Größer &P LE   - Kleiner/Gleich &P GE   -
                 MSGID(USR8126) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Vergleichsoperand ''&1'' nicht zulässig.'                            +
+'Vergleichsoperand ''&1'' nicht zulÃ¤ssig.'                            +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -6858,8 +6863,8 @@ h &P LT   - Kleiner &P GT   - Größer &P LE   - Kleiner/Gleich &P GE   -
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8127                    */
-     /* Suche läuft ...                                             */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8127                    */
+     /* Suche lÃ¤uft ...                                             */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8127) MSGF(&LIB/&OBJ)
@@ -6869,7 +6874,7 @@ h &P LT   - Kleiner &P GT   - Größer &P LE   - Kleiner/Gleich &P GE   -
                 MSGID(USR8127) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Suche läuft ...'                                                     +
+'Suche lÃ¤uft ...'                                                     +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -6878,8 +6883,8 @@ h &P LT   - Kleiner &P GT   - Größer &P LE   - Kleiner/Gleich &P GE   -
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8128                    */
-     /* Suche läuft. &1 von max. &2 Datensätzen durchsucht ...      */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8128                    */
+     /* Suche lÃ¤uft. &1 von max. &2 DatensÃ¤tzen durchsucht ...      */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8128) MSGF(&LIB/&OBJ)
@@ -6889,7 +6894,7 @@ h &P LT   - Kleiner &P GT   - Größer &P LE   - Kleiner/Gleich &P GE   -
                 MSGID(USR8128) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Suche läuft. &1 von max. &2 Datensätzen durchsucht ...'              +
+'Suche lÃ¤uft. &1 von max. &2 DatensÃ¤tzen durchsucht ...'              +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -6901,8 +6906,8 @@ h &P LT   - Kleiner &P GT   - Größer &P LE   - Kleiner/Gleich &P GE   -
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8129                    */
-     /* Feld '&1' mit Datentyp '&2' nicht zulässig.                 */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8129                    */
+     /* Feld '&1' mit Datentyp '&2' nicht zulÃ¤ssig.                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8129) MSGF(&LIB/&OBJ)
@@ -6912,7 +6917,7 @@ h &P LT   - Kleiner &P GT   - Größer &P LE   - Kleiner/Gleich &P GE   -
                 MSGID(USR8129) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Feld ''&1'' mit Datentyp ''&2'' nicht zulässig.'                     +
+'Feld ''&1'' mit Datentyp ''&2'' nicht zulÃ¤ssig.'                     +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -6924,7 +6929,7 @@ h &P LT   - Kleiner &P GT   - Größer &P LE   - Kleiner/Gleich &P GE   -
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8130                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8130                    */
      /* Datensatz gefunden. 'SUCHEN'=Weitersuchen/'ENTER'=Ende.     */
      /*-------------------------------------------------------------*/
 
@@ -6944,7 +6949,7 @@ h &P LT   - Kleiner &P GT   - Größer &P LE   - Kleiner/Gleich &P GE   -
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8131                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8131                    */
      /* Dateiende erreicht. Zeichenfolge nicht gefunden. 'SUCHEN'=W */
      /*-------------------------------------------------------------*/
 
@@ -6965,8 +6970,8 @@ hen/''ENTER''=Ende.'                                                  +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8132                    */
-     /* Maximale Anzahl Datensätze durchsucht. 'SUCHEN'=Weitersuche */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8132                    */
+     /* Maximale Anzahl DatensÃ¤tze durchsucht. 'SUCHEN'=Weitersuche */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8132) MSGF(&LIB/&OBJ)
@@ -6976,7 +6981,7 @@ hen/''ENTER''=Ende.'                                                  +
                 MSGID(USR8132) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Maximale Anzahl Datensätze durchsucht. ''SUCHEN''=Weitersuchen/''ENTE-
+'Maximale Anzahl DatensÃ¤tze durchsucht. ''SUCHEN''=Weitersuchen/''ENTE-
 R''=Ende.'                                                            +
                 ) +
                 SEV(0) +
@@ -6986,7 +6991,7 @@ R''=Ende.'                                                            +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8133                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8133                    */
      /* 1=case-sensitive; 0=nicht case-sensitive                    */
      /*-------------------------------------------------------------*/
 
@@ -7006,7 +7011,7 @@ R''=Ende.'                                                            +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8134                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8134                    */
      /* Operand &1 bei &2 nicht erlaubt.                            */
      /*-------------------------------------------------------------*/
 
@@ -7029,7 +7034,7 @@ R''=Ende.'                                                            +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8135                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8135                    */
      /* Operand &1 ist bei Datentyp &2 nicht erlaubt.               */
      /*-------------------------------------------------------------*/
 
@@ -7052,7 +7057,7 @@ R''=Ende.'                                                            +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8136                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8136                    */
      /* Feld '&1' nicht gefunden.                                   */
      /*-------------------------------------------------------------*/
 
@@ -7067,7 +7072,7 @@ R''=Ende.'                                                            +
                 ) +
                 SECLVL( +
 '&N &B Sonderwerte: &N &P *RECORD - Im ganzen Datensatz suchen, nur mi-
-t EQ/NE möglich.'                                                     +
+t EQ/NE mÃ¶glich.'                                                     +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -7078,8 +7083,8 @@ t EQ/NE möglich.'                                                     +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8137                    */
-     /* Abrufen der Schlüsselfelder für Datei &1 in Bibliothek &2.  */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8137                    */
+     /* Abrufen der SchlÃ¼sselfelder fÃ¼r Datei &1 in Bibliothek &2.  */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8137) MSGF(&LIB/&OBJ)
@@ -7089,7 +7094,7 @@ t EQ/NE möglich.'                                                     +
                 MSGID(USR8137) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Abrufen der Schlüsselfelder für Datei &1 in Bibliothek &2.'          +
+'Abrufen der SchlÃ¼sselfelder fÃ¼r Datei &1 in Bibliothek &2.'          +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -7101,8 +7106,8 @@ t EQ/NE möglich.'                                                     +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8138                    */
-     /* Ungültige numerische Werte im Feld &1 gefunden.             */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8138                    */
+     /* UngÃ¼ltige numerische Werte im Feld &1 gefunden.             */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8138) MSGF(&LIB/&OBJ)
@@ -7112,7 +7117,7 @@ t EQ/NE möglich.'                                                     +
                 MSGID(USR8138) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Ungültige numerische Werte im Feld &1 gefunden.'                     +
+'UngÃ¼ltige numerische Werte im Feld &1 gefunden.'                     +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -7123,7 +7128,7 @@ t EQ/NE möglich.'                                                     +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8139                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8139                    */
      /* Positionierung fehlgeschlagen.                              */
      /*-------------------------------------------------------------*/
 
@@ -7143,7 +7148,7 @@ t EQ/NE möglich.'                                                     +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8140                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8140                    */
      /* Bitte geben Sie eine Suchargument ein.                      */
      /*-------------------------------------------------------------*/
 
@@ -7165,8 +7170,8 @@ t EQ/NE möglich.'                                                     +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8141                    */
-     /* Nur '&1' für positive und '&2' für negative Zahlen als Vorz */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8141                    */
+     /* Nur '&1' fÃ¼r positive und '&2' fÃ¼r negative Zahlen als Vorz */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8141) MSGF(&LIB/&OBJ)
@@ -7176,8 +7181,8 @@ t EQ/NE möglich.'                                                     +
                 MSGID(USR8141) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Nur ''&1'' für positive und ''&2'' für negative Zahlen als Vorzeichen-
- gültig.'                                                             +
+'Nur ''&1'' fÃ¼r positive und ''&2'' fÃ¼r negative Zahlen als Vorzeichen-
+ gÃ¼ltig.'                                                             +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -7189,8 +7194,8 @@ t EQ/NE möglich.'                                                     +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8142                    */
-     /* Die Stelle &1 ist bei numerischen Werten für das Vorzeichen */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8142                    */
+     /* Die Stelle &1 ist bei numerischen Werten fÃ¼r das Vorzeichen */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8142) MSGF(&LIB/&OBJ)
@@ -7200,7 +7205,7 @@ t EQ/NE möglich.'                                                     +
                 MSGID(USR8142) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Die Stelle &1 ist bei numerischen Werten für das Vorzeichen reservier-
+'Die Stelle &1 ist bei numerischen Werten fÃ¼r das Vorzeichen reservier-
 t.'                                                                   +
                 ) +
                 SEV(0) +
@@ -7212,7 +7217,7 @@ t.'                                                                   +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8143                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8143                    */
      /* Der Taste &1 ist keine Programmfunktion zugeordnet.         */
      /*-------------------------------------------------------------*/
 
@@ -7234,8 +7239,8 @@ t.'                                                                   +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8144                    */
-     /* Rekursive Befehlsausführung für Befehl &1 nicht zulässig.   */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8144                    */
+     /* Rekursive BefehlsausfÃ¼hrung fÃ¼r Befehl &1 nicht zulÃ¤ssig.   */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8144) MSGF(&LIB/&OBJ)
@@ -7245,7 +7250,7 @@ t.'                                                                   +
                 MSGID(USR8144) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Rekursive Befehlsausführung für Befehl &1 nicht zulässig.'           +
+'Rekursive BefehlsausfÃ¼hrung fÃ¼r Befehl &1 nicht zulÃ¤ssig.'           +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -7256,8 +7261,8 @@ t.'                                                                   +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8145                    */
-     /* Funktion kann bei leerer Subfile nicht ausgeführt werden.   */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8145                    */
+     /* Funktion kann bei leerer Subfile nicht ausgefÃ¼hrt werden.   */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8145) MSGF(&LIB/&OBJ)
@@ -7267,7 +7272,7 @@ t.'                                                                   +
                 MSGID(USR8145) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Funktion kann bei leerer Subfile nicht ausgeführt werden.'           +
+'Funktion kann bei leerer Subfile nicht ausgefÃ¼hrt werden.'           +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -7276,8 +7281,8 @@ t.'                                                                   +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8146                    */
-     /* Kein gültiges Feld für Farbauswahl.                         */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8146                    */
+     /* Kein gÃ¼ltiges Feld fÃ¼r Farbauswahl.                         */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8146) MSGF(&LIB/&OBJ)
@@ -7287,7 +7292,7 @@ t.'                                                                   +
                 MSGID(USR8146) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Kein gültiges Feld für Farbauswahl.'                                 +
+'Kein gÃ¼ltiges Feld fÃ¼r Farbauswahl.'                                 +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -7296,7 +7301,7 @@ t.'                                                                   +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8147                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8147                    */
      /* Spalte &1 ist nicht gepinned.                               */
      /*-------------------------------------------------------------*/
 
@@ -7318,8 +7323,8 @@ t.'                                                                   +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8148                    */
-     /* Kein Platz mehr für Spalte '&1'!                            */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8148                    */
+     /* Kein Platz mehr fÃ¼r Spalte '&1'!                            */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8148) MSGF(&LIB/&OBJ)
@@ -7329,7 +7334,7 @@ t.'                                                                   +
                 MSGID(USR8148) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Kein Platz mehr für Spalte ''&1''!'                                  +
+'Kein Platz mehr fÃ¼r Spalte ''&1''!'                                  +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -7340,7 +7345,7 @@ t.'                                                                   +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8149                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8149                    */
      /* Tabellierpapier ist bereits eingeschaltet.                  */
      /*-------------------------------------------------------------*/
 
@@ -7360,7 +7365,7 @@ t.'                                                                   +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8150                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8150                    */
      /* Tabellierpapier ist bereits ausgeschaltet.                  */
      /*-------------------------------------------------------------*/
 
@@ -7380,8 +7385,8 @@ t.'                                                                   +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8151                    */
-     /* Ungültige Name '&1' für Zieldatei.                          */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8151                    */
+     /* UngÃ¼ltige Name '&1' fÃ¼r Zieldatei.                          */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8151) MSGF(&LIB/&OBJ)
@@ -7391,7 +7396,7 @@ t.'                                                                   +
                 MSGID(USR8151) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Ungültige Name ''&1'' für Zieldatei.'                                +
+'UngÃ¼ltige Name ''&1'' fÃ¼r Zieldatei.'                                +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -7402,8 +7407,8 @@ t.'                                                                   +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8152                    */
-     /* Ungültige Bibliothek '&1' für Zieldatei.                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8152                    */
+     /* UngÃ¼ltige Bibliothek '&1' fÃ¼r Zieldatei.                    */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8152) MSGF(&LIB/&OBJ)
@@ -7413,7 +7418,7 @@ t.'                                                                   +
                 MSGID(USR8152) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Ungültige Bibliothek ''&1'' für Zieldatei.'                          +
+'UngÃ¼ltige Bibliothek ''&1'' fÃ¼r Zieldatei.'                          +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -7424,8 +7429,8 @@ t.'                                                                   +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8153                    */
-     /* Ungültige Teildatei '&1' für Zieldatei.                     */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8153                    */
+     /* UngÃ¼ltige Teildatei '&1' fÃ¼r Zieldatei.                     */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8153) MSGF(&LIB/&OBJ)
@@ -7435,7 +7440,7 @@ t.'                                                                   +
                 MSGID(USR8153) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Ungültige Teildatei ''&1'' für Zieldatei.'                           +
+'UngÃ¼ltige Teildatei ''&1'' fÃ¼r Zieldatei.'                           +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -7446,8 +7451,8 @@ t.'                                                                   +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8154                    */
-     /* Ungültiger Parameter für ERSETZEN/HINZUFÜGEN '&1' für Zield */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8154                    */
+     /* UngÃ¼ltiger Parameter fÃ¼r ERSETZEN/HINZUFÃœGEN '&1' fÃ¼r Zield */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8154) MSGF(&LIB/&OBJ)
@@ -7457,7 +7462,7 @@ t.'                                                                   +
                 MSGID(USR8154) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Ungültiger Parameter für ERSETZEN/HINZUFÜGEN ''&1'' für Zieldatei.'  +
+'UngÃ¼ltiger Parameter fÃ¼r ERSETZEN/HINZUFÃœGEN ''&1'' fÃ¼r Zieldatei.'  +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -7468,8 +7473,8 @@ t.'                                                                   +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8155                    */
-     /* Ungültiger Parameter für DATEI ERSTELLEN '&1' für Zieldatei */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8155                    */
+     /* UngÃ¼ltiger Parameter fÃ¼r DATEI ERSTELLEN '&1' fÃ¼r Zieldatei */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8155) MSGF(&LIB/&OBJ)
@@ -7479,7 +7484,7 @@ t.'                                                                   +
                 MSGID(USR8155) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Ungültiger Parameter für DATEI ERSTELLEN ''&1'' für Zieldatei.'      +
+'UngÃ¼ltiger Parameter fÃ¼r DATEI ERSTELLEN ''&1'' fÃ¼r Zieldatei.'      +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -7490,7 +7495,7 @@ t.'                                                                   +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8156                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8156                    */
      /* Verarbeitung fehlerhaft beendet.                            */
      /*-------------------------------------------------------------*/
 
@@ -7510,7 +7515,7 @@ t.'                                                                   +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8157                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8157                    */
      /* Abrufen von Systemwerten.                                   */
      /*-------------------------------------------------------------*/
 
@@ -7530,8 +7535,8 @@ t.'                                                                   +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8158                    */
-     /* Ungültige Lizenznummer '&1' eingetragen.                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8158                    */
+     /* UngÃ¼ltige Lizenznummer '&1' eingetragen.                    */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8158) MSGF(&LIB/&OBJ)
@@ -7541,7 +7546,7 @@ t.'                                                                   +
                 MSGID(USR8158) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Ungültige Lizenznummer ''&1'' eingetragen.'                          +
+'UngÃ¼ltige Lizenznummer ''&1'' eingetragen.'                          +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -7552,7 +7557,7 @@ t.'                                                                   +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8159                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8159                    */
      /* Lizenzdaten konnten nicht gesichert werden.                 */
      /*-------------------------------------------------------------*/
 
@@ -7572,8 +7577,8 @@ t.'                                                                   +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8160                    */
-     /* Srachendefinition für Sprache &1 nicht verfügbar.           */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8160                    */
+     /* Srachendefinition fÃ¼r Sprache &1 nicht verfÃ¼gbar.           */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8160) MSGF(&LIB/&OBJ)
@@ -7583,7 +7588,7 @@ t.'                                                                   +
                 MSGID(USR8160) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Srachendefinition für Sprache &1 nicht verfügbar.'                   +
+'Srachendefinition fÃ¼r Sprache &1 nicht verfÃ¼gbar.'                   +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -7594,7 +7599,7 @@ t.'                                                                   +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8161                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8161                    */
      /* SPLASH-Screen eingeschaltet.                                */
      /*-------------------------------------------------------------*/
 
@@ -7614,7 +7619,7 @@ t.'                                                                   +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8162                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8162                    */
      /* SPLASH-Screen ausgeschaltet.                                */
      /*-------------------------------------------------------------*/
 
@@ -7634,8 +7639,8 @@ t.'                                                                   +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8163                    */
-     /* Zeichenkette enthält nicht darstellbare Zeichen. Ersetzungs */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8163                    */
+     /* Zeichenkette enthÃ¤lt nicht darstellbare Zeichen. Ersetzungs */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8163) MSGF(&LIB/&OBJ)
@@ -7645,7 +7650,7 @@ t.'                                                                   +
                 MSGID(USR8163) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Zeichenkette enthält nicht darstellbare Zeichen. Ersetzungszeichen: &-
+'Zeichenkette enthÃ¤lt nicht darstellbare Zeichen. Ersetzungszeichen: &-
 1'                                                                    +
                 ) +
                 SEV(0) +
@@ -7657,7 +7662,7 @@ t.'                                                                   +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8164                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8164                    */
      /* Felder mit nicht darstellbaren Zeichen wurden ausgeblendet. */
      /*-------------------------------------------------------------*/
 
@@ -7677,8 +7682,8 @@ t.'                                                                   +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8165                    */
-     /* "WIEDERHOLEN" kann erst gedrückt werden, wenn auf dieser Se */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8165                    */
+     /* "WIEDERHOLEN" kann erst gedrÃ¼ckt werden, wenn auf dieser Se */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8165) MSGF(&LIB/&OBJ)
@@ -7688,14 +7693,14 @@ t.'                                                                   +
                 MSGID(USR8165) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'"WIEDERHOLEN" kann erst gedrückt werden, wenn auf dieser Seite eine A-
+'"WIEDERHOLEN" kann erst gedrÃ¼ckt werden, wenn auf dieser Seite eine A-
 uswahl eingegeben wurde.'                                             +
                 ) +
                 SECLVL( +
-'Ursache . . . . . : F13 (Wiederholen) wurde gedrückt, es wurde jedoch-
- auf dieser Seite keine Funktion zur Wiederholung ausgewählt. &N Fehle-
+'Ursache . . . . . : F13 (Wiederholen) wurde gedrÃ¼ckt, es wurde jedoch-
+ auf dieser Seite keine Funktion zur Wiederholung ausgewÃ¤hlt. &N Fehle-
 rbeseitigung : Eine Auswahl in die Auswahlspalte auf dieser Seite eing-
-eben und "WIEDERHOLEN" ernaut auslösen.'                              +
+eben und "WIEDERHOLEN" erneut auslÃ¶sen.'                              +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -7704,8 +7709,8 @@ eben und "WIEDERHOLEN" ernaut auslösen.'                              +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8166                    */
-     /* Funktion nicht möglich. Keine Datei geöffnet!               */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8166                    */
+     /* Funktion nicht mÃ¶glich. Keine Datei geÃ¶ffnet!               */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8166) MSGF(&LIB/&OBJ)
@@ -7715,7 +7720,7 @@ eben und "WIEDERHOLEN" ernaut auslösen.'                              +
                 MSGID(USR8166) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Funktion nicht möglich. Keine Datei geöffnet!'                       +
+'Funktion nicht mÃ¶glich. Keine Datei geÃ¶ffnet!'                       +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -7724,8 +7729,8 @@ eben und "WIEDERHOLEN" ernaut auslösen.'                              +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8167                    */
-     /* Identische Folgenummern nicht zulässig.                     */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8167                    */
+     /* Identische Folgenummern nicht zulÃ¤ssig.                     */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8167) MSGF(&LIB/&OBJ)
@@ -7735,7 +7740,7 @@ eben und "WIEDERHOLEN" ernaut auslösen.'                              +
                 MSGID(USR8167) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Identische Folgenummern nicht zulässig.'                             +
+'Identische Folgenummern nicht zulÃ¤ssig.'                             +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -7744,8 +7749,8 @@ eben und "WIEDERHOLEN" ernaut auslösen.'                              +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8168                    */
-     /* Wert &1 für Attribut "Sichtbar/Unsichtbar" nicht zulässig.  */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8168                    */
+     /* Wert &1 fÃ¼r Attribut "Sichtbar/Unsichtbar" nicht zulÃ¤ssig.  */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8168) MSGF(&LIB/&OBJ)
@@ -7755,7 +7760,7 @@ eben und "WIEDERHOLEN" ernaut auslösen.'                              +
                 MSGID(USR8168) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Wert &1 für Attribut "Sichtbar/Unsichtbar" nicht zulässig.'          +
+'Wert &1 fÃ¼r Attribut "Sichtbar/Unsichtbar" nicht zulÃ¤ssig.'          +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -7766,8 +7771,8 @@ eben und "WIEDERHOLEN" ernaut auslösen.'                              +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8169                    */
-     /* Wert &1 für Attribut "Spaltenmarkierung" nicht zulässig.    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8169                    */
+     /* Wert &1 fÃ¼r Attribut "Spaltenmarkierung" nicht zulÃ¤ssig.    */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8169) MSGF(&LIB/&OBJ)
@@ -7777,7 +7782,7 @@ eben und "WIEDERHOLEN" ernaut auslösen.'                              +
                 MSGID(USR8169) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Wert &1 für Attribut "Spaltenmarkierung" nicht zulässig.'            +
+'Wert &1 fÃ¼r Attribut "Spaltenmarkierung" nicht zulÃ¤ssig.'            +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -7788,8 +7793,8 @@ eben und "WIEDERHOLEN" ernaut auslösen.'                              +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8170                    */
-     /* Wert &1 für Attribut "Max. Größe" nicht zulässig.           */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8170                    */
+     /* Wert &1 fÃ¼r Attribut "Max. GrÃ¶ÃŸe" nicht zulÃ¤ssig.           */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8170) MSGF(&LIB/&OBJ)
@@ -7799,7 +7804,7 @@ eben und "WIEDERHOLEN" ernaut auslösen.'                              +
                 MSGID(USR8170) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Wert &1 für Attribut "Max. Größe" nicht zulässig.'                   +
+'Wert &1 fÃ¼r Attribut "Max. GrÃ¶ÃŸe" nicht zulÃ¤ssig.'                   +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -7810,8 +7815,8 @@ eben und "WIEDERHOLEN" ernaut auslösen.'                              +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8171                    */
-     /* Ungültiger Wert '&1' für Zeit-, Datum- oder Zeitmarkenfeld  */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8171                    */
+     /* UngÃ¼ltiger Wert '&1' fÃ¼r Zeit-, Datum- oder Zeitmarkenfeld  */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8171) MSGF(&LIB/&OBJ)
@@ -7821,7 +7826,7 @@ eben und "WIEDERHOLEN" ernaut auslösen.'                              +
                 MSGID(USR8171) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Ungültiger Wert ''&1'' für Zeit-, Datum- oder Zeitmarkenfeld'        +
+'UngÃ¼ltiger Wert ''&1'' fÃ¼r Zeit-, Datum- oder Zeitmarkenfeld'        +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -7832,7 +7837,7 @@ eben und "WIEDERHOLEN" ernaut auslösen.'                              +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8172                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8172                    */
      /* Bearbeite: &1                                               */
      /*-------------------------------------------------------------*/
 
@@ -7854,7 +7859,7 @@ eben und "WIEDERHOLEN" ernaut auslösen.'                              +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8173                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8173                    */
      /* Peek/400 kann nicht rekursiv aufgerufen werden.             */
      /*-------------------------------------------------------------*/
 
@@ -7874,8 +7879,8 @@ eben und "WIEDERHOLEN" ernaut auslösen.'                              +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8174                    */
-     /* Unzulässige Zeichen (&1) im Hex-String.                     */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8174                    */
+     /* UnzulÃ¤ssige Zeichen (&1) im Hex-String.                     */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8174) MSGF(&LIB/&OBJ)
@@ -7885,7 +7890,7 @@ eben und "WIEDERHOLEN" ernaut auslösen.'                              +
                 MSGID(USR8174) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Unzulässige Zeichen (&1) im Hex-String.'                             +
+'UnzulÃ¤ssige Zeichen (&1) im Hex-String.'                             +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -7896,8 +7901,8 @@ eben und "WIEDERHOLEN" ernaut auslösen.'                              +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8175                    */
-     /* Ungerade Anzahl Zeichen nicht zulässig.                     */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8175                    */
+     /* Ungerade Anzahl Zeichen nicht zulÃ¤ssig.                     */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8175) MSGF(&LIB/&OBJ)
@@ -7907,7 +7912,7 @@ eben und "WIEDERHOLEN" ernaut auslösen.'                              +
                 MSGID(USR8175) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Ungerade Anzahl Zeichen nicht zulässig.'                             +
+'Ungerade Anzahl Zeichen nicht zulÃ¤ssig.'                             +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -7918,7 +7923,7 @@ eben und "WIEDERHOLEN" ernaut auslösen.'                              +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8176                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8176                    */
      /* Warnung: Zeichenkette zu lang.                              */
      /*-------------------------------------------------------------*/
 
@@ -7940,8 +7945,8 @@ eben und "WIEDERHOLEN" ernaut auslösen.'                              +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8177                    */
-     /* Startposition darf nicht größer als Feldlänge sein.         */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8177                    */
+     /* Startposition darf nicht grÃ¶ÃŸer als FeldlÃ¤nge sein.         */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8177) MSGF(&LIB/&OBJ)
@@ -7951,7 +7956,7 @@ eben und "WIEDERHOLEN" ernaut auslösen.'                              +
                 MSGID(USR8177) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Startposition darf nicht größer als Feldlänge sein.'                 +
+'Startposition darf nicht grÃ¶ÃŸer als FeldlÃ¤nge sein.'                 +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -7962,7 +7967,7 @@ eben und "WIEDERHOLEN" ernaut auslösen.'                              +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8178                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8178                    */
      /* Startposition darf nicht kleiner/gleich Null sein.          */
      /*-------------------------------------------------------------*/
 
@@ -7982,8 +7987,8 @@ eben und "WIEDERHOLEN" ernaut auslösen.'                              +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8179                    */
-     /* Keine Bedienerführung verfügbar.                            */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8179                    */
+     /* Keine BedienerfÃ¼hrung verfÃ¼gbar.                            */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8179) MSGF(&LIB/&OBJ)
@@ -7993,7 +7998,7 @@ eben und "WIEDERHOLEN" ernaut auslösen.'                              +
                 MSGID(USR8179) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Keine Bedienerführung verfügbar.'                                    +
+'Keine BedienerfÃ¼hrung verfÃ¼gbar.'                                    +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -8002,7 +8007,7 @@ eben und "WIEDERHOLEN" ernaut auslösen.'                              +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8180                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8180                    */
      /* Teildatei '&1' nicht gefunden.                              */
      /*-------------------------------------------------------------*/
 
@@ -8024,7 +8029,7 @@ eben und "WIEDERHOLEN" ernaut auslösen.'                              +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8181                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8181                    */
      /* Keine Datei zur Speicherung der Arbeitsumgebung angegeben.  */
      /*-------------------------------------------------------------*/
 
@@ -8044,8 +8049,8 @@ eben und "WIEDERHOLEN" ernaut auslösen.'                              +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8182                    */
-     /* Wert &1 als Name für ein AS/400 Objekt ungültig.            */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8182                    */
+     /* Wert &1 als Name fÃ¼r ein AS/400 Objekt ungÃ¼ltig.            */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8182) MSGF(&LIB/&OBJ)
@@ -8055,7 +8060,7 @@ eben und "WIEDERHOLEN" ernaut auslösen.'                              +
                 MSGID(USR8182) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Wert &1 als Name für ein AS/400 Objekt ungültig.'                    +
+'Wert &1 als Name fÃ¼r ein AS/400 Objekt ungÃ¼ltig.'                    +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -8066,8 +8071,8 @@ eben und "WIEDERHOLEN" ernaut auslösen.'                              +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8183                    */
-     /* Unvollständige Auswahl.                                     */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8183                    */
+     /* UnvollstÃ¤ndige Auswahl.                                     */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8183) MSGF(&LIB/&OBJ)
@@ -8077,7 +8082,7 @@ eben und "WIEDERHOLEN" ernaut auslösen.'                              +
                 MSGID(USR8183) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Unvollständige Auswahl.'                                             +
+'UnvollstÃ¤ndige Auswahl.'                                             +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -8086,7 +8091,7 @@ eben und "WIEDERHOLEN" ernaut auslösen.'                              +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8184                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8184                    */
      /* Diese Funktion ist nicht freigeschaltet. Bitte wenden Sie s */
      /*-------------------------------------------------------------*/
 
@@ -8107,8 +8112,8 @@ en Administrator.'                                                    +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8185                    */
-     /* Keine Arbeitsumgebung angegeben. Arbeitsumgebung nicht geöf */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8185                    */
+     /* Keine Arbeitsumgebung angegeben. Arbeitsumgebung nicht geÃ¶f */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8185) MSGF(&LIB/&OBJ)
@@ -8118,7 +8123,7 @@ en Administrator.'                                                    +
                 MSGID(USR8185) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Keine Arbeitsumgebung angegeben. Arbeitsumgebung nicht geöffnet.'    +
+'Keine Arbeitsumgebung angegeben. Arbeitsumgebung nicht geÃ¶ffnet.'    +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -8127,7 +8132,7 @@ en Administrator.'                                                    +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8186                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8186                    */
      /* Warnung: Zeichenkette zu kurz.                              */
      /*-------------------------------------------------------------*/
 
@@ -8147,8 +8152,8 @@ en Administrator.'                                                    +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8187                    */
-     /* Feldlänge ist größer als Dateipuffer.                       */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8187                    */
+     /* FeldlÃ¤nge ist grÃ¶ÃŸer als Dateipuffer.                       */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8187) MSGF(&LIB/&OBJ)
@@ -8158,7 +8163,7 @@ en Administrator.'                                                    +
                 MSGID(USR8187) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Feldlänge ist größer als Dateipuffer.'                               +
+'FeldlÃ¤nge ist grÃ¶ÃŸer als Dateipuffer.'                               +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -8167,7 +8172,7 @@ en Administrator.'                                                    +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8188                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8188                    */
      /* Generieren Bildschirmdatei. Lauf: &1, Feld: &2              */
      /*-------------------------------------------------------------*/
 
@@ -8190,7 +8195,7 @@ en Administrator.'                                                    +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8189                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8189                    */
      /* Generieren RPG-Programm. Lauf: &1, Feld: &2                 */
      /*-------------------------------------------------------------*/
 
@@ -8213,7 +8218,7 @@ en Administrator.'                                                    +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8190                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8190                    */
      /* Verarbeitung beendet mit &1.                                */
      /*-------------------------------------------------------------*/
 
@@ -8235,8 +8240,8 @@ en Administrator.'                                                    +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8191                    */
-     /* Feld &1 ist nicht NULL-fähig.                               */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8191                    */
+     /* Feld &1 ist nicht NULL-fÃ¤hig.                               */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8191) MSGF(&LIB/&OBJ)
@@ -8246,7 +8251,7 @@ en Administrator.'                                                    +
                 MSGID(USR8191) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Feld &1 ist nicht NULL-fähig.'                                       +
+'Feld &1 ist nicht NULL-fÃ¤hig.'                                       +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -8257,8 +8262,8 @@ en Administrator.'                                                    +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8192                    */
-     /* Ungültigen Float Wert in &1 gefunden.                       */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8192                    */
+     /* UngÃ¼ltigen Float Wert in &1 gefunden.                       */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8192) MSGF(&LIB/&OBJ)
@@ -8268,7 +8273,7 @@ en Administrator.'                                                    +
                 MSGID(USR8192) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Ungültigen Float Wert in &1 gefunden.'                               +
+'UngÃ¼ltigen Float Wert in &1 gefunden.'                               +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -8279,8 +8284,8 @@ en Administrator.'                                                    +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8193                    */
-     /* Felder '&1' enthält nicht darstellbaren Zeichen und kann da */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8193                    */
+     /* Felder '&1' enthÃ¤lt nicht darstellbaren Zeichen und kann da */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8193) MSGF(&LIB/&OBJ)
@@ -8290,7 +8295,7 @@ en Administrator.'                                                    +
                 MSGID(USR8193) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Felder ''&1'' enthält nicht darstellbaren Zeichen und kann daher nich-
+'Felder ''&1'' enthÃ¤lt nicht darstellbaren Zeichen und kann daher nich-
 t mit dem Texteditor bearbeitet werden.'                              +
                 ) +
                 SEV(0) +
@@ -8302,7 +8307,7 @@ t mit dem Texteditor bearbeitet werden.'                              +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8194                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8194                    */
      /* Datei '&1' nicht gefunden.                                  */
      /*-------------------------------------------------------------*/
 
@@ -8324,8 +8329,8 @@ t mit dem Texteditor bearbeitet werden.'                              +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8195                    */
-     /* Unzulässige Anforderung. Feld ist für Änderungen gesperrt.  */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8195                    */
+     /* UnzulÃ¤ssige Anforderung. Feld ist fÃ¼r Ã„nderungen gesperrt.  */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8195) MSGF(&LIB/&OBJ)
@@ -8335,7 +8340,7 @@ t mit dem Texteditor bearbeitet werden.'                              +
                 MSGID(USR8195) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Unzulässige Anforderung. Feld ist für Änderungen gesperrt.'          +
+'UnzulÃ¤ssige Anforderung. Feld ist fÃ¼r Ã„nderungen gesperrt.'          +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -8344,8 +8349,8 @@ t mit dem Texteditor bearbeitet werden.'                              +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8196                    */
-     /* Feld &1 kann nicht angezeigt und geändert werden.           */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8196                    */
+     /* Feld &1 kann nicht angezeigt und geÃ¤ndert werden.           */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8196) MSGF(&LIB/&OBJ)
@@ -8355,12 +8360,12 @@ t mit dem Texteditor bearbeitet werden.'                              +
                 MSGID(USR8196) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Feld &1 kann nicht angezeigt und geändert werden.'                   +
+'Feld &1 kann nicht angezeigt und geÃ¤ndert werden.'                   +
                 ) +
                 SECLVL( +
-'&N &N Mögliche Ursachen: &N &B 1. Unbekannter Datentyp. &B 2. Datenty-
+'&N &N MÃ¶gliche Ursachen: &N &B 1. Unbekannter Datentyp. &B 2. Datenty-
 p Graphic ohne CCSID. &B 3. Datentyp Packed oder Zoned mit mehr als 30-
- Stellen. &B 4. Feld variabler Länge mit unbekanntem Datentyp.'       +
+ Stellen. &B 4. Feld variabler LÃ¤nge mit unbekanntem Datentyp.'       +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -8371,8 +8376,8 @@ p Graphic ohne CCSID. &B 3. Datentyp Packed oder Zoned mit mehr als 30-
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8200                    */
-     /* Datensatz &1 konnte nicht gelöscht werden.                  */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8200                    */
+     /* Datensatz &1 konnte nicht gelÃ¶scht werden.                  */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8200) MSGF(&LIB/&OBJ)
@@ -8382,7 +8387,7 @@ p Graphic ohne CCSID. &B 3. Datentyp Packed oder Zoned mit mehr als 30-
                 MSGID(USR8200) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Datensatz &1 konnte nicht gelöscht werden.'                          +
+'Datensatz &1 konnte nicht gelÃ¶scht werden.'                          +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -8393,8 +8398,8 @@ p Graphic ohne CCSID. &B 3. Datentyp Packed oder Zoned mit mehr als 30-
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8201                    */
-     /* Datensatz &1 wurde gelöscht.                                */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8201                    */
+     /* Datensatz &1 wurde gelÃ¶scht.                                */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8201) MSGF(&LIB/&OBJ)
@@ -8404,7 +8409,7 @@ p Graphic ohne CCSID. &B 3. Datentyp Packed oder Zoned mit mehr als 30-
                 MSGID(USR8201) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Datensatz &1 wurde gelöscht.'                                        +
+'Datensatz &1 wurde gelÃ¶scht.'                                        +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -8415,7 +8420,7 @@ p Graphic ohne CCSID. &B 3. Datentyp Packed oder Zoned mit mehr als 30-
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8202                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8202                    */
      /* Datensatz &1 konnte nicht kopiert werden.                   */
      /*-------------------------------------------------------------*/
 
@@ -8437,7 +8442,7 @@ p Graphic ohne CCSID. &B 3. Datentyp Packed oder Zoned mit mehr als 30-
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8203                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8203                    */
      /* Datensatz &1 wurde kopiert.                                 */
      /*-------------------------------------------------------------*/
 
@@ -8459,8 +8464,8 @@ p Graphic ohne CCSID. &B 3. Datentyp Packed oder Zoned mit mehr als 30-
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8204                    */
-     /* Keine gültige Satzauswahl getroffen.                        */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8204                    */
+     /* Keine gÃ¼ltige Satzauswahl getroffen.                        */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8204) MSGF(&LIB/&OBJ)
@@ -8470,7 +8475,7 @@ p Graphic ohne CCSID. &B 3. Datentyp Packed oder Zoned mit mehr als 30-
                 MSGID(USR8204) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Keine gültige Satzauswahl getroffen.'                                +
+'Keine gÃ¼ltige Satzauswahl getroffen.'                                +
                 ) +
                 SECLVL( +
 '&N &N Zeigen Sie mit dem Cursor auf einen Datensatz der Subfile und w-
@@ -8483,8 +8488,8 @@ iederholen Sie die Anforderung.'                                      +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8205                    */
-     /* Warnung: Es können nicht mehr als &1 Spalten gepinnt werden */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8205                    */
+     /* Warnung: Es kÃ¶nnen nicht mehr als &1 Spalten gepinnt werden */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8205) MSGF(&LIB/&OBJ)
@@ -8494,7 +8499,7 @@ iederholen Sie die Anforderung.'                                      +
                 MSGID(USR8205) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Warnung: Es können nicht mehr als &1 Spalten gepinnt werden!'        +
+'Warnung: Es kÃ¶nnen nicht mehr als &1 Spalten gepinnt werden!'        +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -8505,8 +8510,8 @@ iederholen Sie die Anforderung.'                                      +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8206                    */
-     /* Anzeige nicht möglich. Die Satzlänge ist größer als &1 Zeic */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8206                    */
+     /* Anzeige nicht mÃ¶glich. Die SatzlÃ¤nge ist grÃ¶ÃŸer als &1 Zeic */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8206) MSGF(&LIB/&OBJ)
@@ -8516,7 +8521,7 @@ iederholen Sie die Anforderung.'                                      +
                 MSGID(USR8206) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Anzeige nicht möglich. Die Satzlänge ist größer als &1 Zeichen.'     +
+'Anzeige nicht mÃ¶glich. Die SatzlÃ¤nge ist grÃ¶ÃŸer als &1 Zeichen.'     +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -8527,8 +8532,8 @@ iederholen Sie die Anforderung.'                                      +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8207                    */
-     /* Datei konnte nicht geöffnet werden. Die Satzlänge ist größe */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8207                    */
+     /* Datei konnte nicht geÃ¶ffnet werden. Die SatzlÃ¤nge ist grÃ¶ÃŸe */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8207) MSGF(&LIB/&OBJ)
@@ -8538,7 +8543,7 @@ iederholen Sie die Anforderung.'                                      +
                 MSGID(USR8207) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Datei konnte nicht geöffnet werden. Die Satzlänge ist größer als &1 Z-
+'Datei konnte nicht geÃ¶ffnet werden. Die SatzlÃ¤nge ist grÃ¶ÃŸer als &1 Z-
 eichen.'                                                              +
                 ) +
                 SEV(0) +
@@ -8550,8 +8555,8 @@ eichen.'                                                              +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8208                    */
-     /* Nur INPUT-Felder können nicht geändert werden.              */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8208                    */
+     /* Nur INPUT-Felder kÃ¶nnen nicht geÃ¤ndert werden.              */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8208) MSGF(&LIB/&OBJ)
@@ -8561,7 +8566,7 @@ eichen.'                                                              +
                 MSGID(USR8208) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Nur INPUT-Felder können nicht geändert werden.'                      +
+'Nur INPUT-Felder kÃ¶nnen nicht geÃ¤ndert werden.'                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -8570,7 +8575,7 @@ eichen.'                                                              +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8209                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8209                    */
      /* Bitte geben Sie in Suchargument ein.                        */
      /*-------------------------------------------------------------*/
 
@@ -8590,7 +8595,7 @@ eichen.'                                                              +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8210                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8210                    */
      /* SQL-Fehler &1 aufgetreten. &2                               */
      /*-------------------------------------------------------------*/
 
@@ -8604,7 +8609,7 @@ eichen.'                                                              +
 'SQL-Fehler &1 aufgetreten. &2'                                       +
                 ) +
                 SECLVL( +
-'&N &N Hinweis . . . . :   &2 &N &B Weitere Informationen enthält des -
+'&N &N Hinweis . . . . :   &2 &N &B Weitere Informationen enthÃ¤lt des -
 SQL Programmierhandbuch oder die Nachrichtendatei QSYS/QSQLMSG.'      +
                 ) +
                 SEV(0) +
@@ -8617,7 +8622,7 @@ SQL Programmierhandbuch oder die Nachrichtendatei QSYS/QSQLMSG.'      +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8211                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8211                    */
      /* Bitte mit dem Cursor auf ein Feld zeigen und die Anforderun */
      /*-------------------------------------------------------------*/
 
@@ -8633,7 +8638,7 @@ len.'                                                                 +
                 ) +
                 SECLVL( +
 'Ursache . . . . :   Der Cursor steht nicht in einem Feld oder das Fel-
-d ist für die Anforderung nicht zulässig.'                            +
+d ist fÃ¼r die Anforderung nicht zulÃ¤ssig.'                            +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -8642,7 +8647,7 @@ d ist für die Anforderung nicht zulässig.'                            +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8212                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8212                    */
      /* Die SQL-Auswahl kann nur auf physischen Dateien angewendet  */
      /*-------------------------------------------------------------*/
 
@@ -8654,7 +8659,7 @@ d ist für die Anforderung nicht zulässig.'                            +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
 'Die SQL-Auswahl kann nur auf physischen Dateien angewendet werden. So-
-ll die physische Datei geöffnet werden?'                              +
+ll die physische Datei geÃ¶ffnet werden?'                              +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -8663,7 +8668,7 @@ ll die physische Datei geöffnet werden?'                              +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8213                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8213                    */
      /* 1=speichern; 0=nicht speichern                              */
      /*-------------------------------------------------------------*/
 
@@ -8683,8 +8688,8 @@ ll die physische Datei geöffnet werden?'                              +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8214                    */
-     /* 1=Kleinbuchstaben erlaubt; 0=nur Großbuchstaben             */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8214                    */
+     /* 1=Kleinbuchstaben erlaubt; 0=nur GroÃŸbuchstaben             */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8214) MSGF(&LIB/&OBJ)
@@ -8694,7 +8699,7 @@ ll die physische Datei geöffnet werden?'                              +
                 MSGID(USR8214) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'1=Kleinbuchstaben erlaubt; 0=nur Großbuchstaben'                     +
+'1=Kleinbuchstaben erlaubt; 0=nur GroÃŸbuchstaben'                     +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -8703,7 +8708,7 @@ ll die physische Datei geöffnet werden?'                              +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8215                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8215                    */
      /* Eingabe in Kleinbuchstaben nicht erlaubt.                   */
      /*-------------------------------------------------------------*/
 
@@ -8723,7 +8728,7 @@ ll die physische Datei geöffnet werden?'                              +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8216                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8216                    */
      /* Diese Eingabekombination ist nicht erlaubt.                 */
      /*-------------------------------------------------------------*/
 
@@ -8747,8 +8752,8 @@ s auch nicht als Standardwert vorbesetzt werden.'                     +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8217                    */
-     /* Sortierung nach relativer Satznummer nicht möglich.         */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8217                    */
+     /* Sortierung nach relativer Satznummer nicht mÃ¶glich.         */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8217) MSGF(&LIB/&OBJ)
@@ -8758,11 +8763,11 @@ s auch nicht als Standardwert vorbesetzt werden.'                     +
                 MSGID(USR8217) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Sortierung nach relativer Satznummer nicht möglich.'                 +
+'Sortierung nach relativer Satznummer nicht mÃ¶glich.'                 +
                 ) +
                 SECLVL( +
-'Eine Sortierung nach relativer Satznummer ist nicht möglich, weil die-
- geöffnete Datei auf mehrenen Teildateien basiert.'                   +
+'Eine Sortierung nach relativer Satznummer ist nicht mÃ¶glich, weil die-
+ geÃ¶ffnete Datei auf mehrenen Teildateien basiert.'                   +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -8771,7 +8776,7 @@ s auch nicht als Standardwert vorbesetzt werden.'                     +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8218                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8218                    */
      /* Datensatz kann nicht gepinnt werden, wenn die logische Date */
      /*-------------------------------------------------------------*/
 
@@ -8797,8 +8802,8 @@ den kann, aus welcher physischen Teildatei der Satz kommt.'           +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8219                    */
-     /* Wert '&1' für Auswahl Ja/Nein nicht zulässig.               */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8219                    */
+     /* Wert '&1' fÃ¼r Auswahl Ja/Nein nicht zulÃ¤ssig.               */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8219) MSGF(&LIB/&OBJ)
@@ -8808,7 +8813,7 @@ den kann, aus welcher physischen Teildatei der Satz kommt.'           +
                 MSGID(USR8219) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Wert ''&1'' für Auswahl Ja/Nein nicht zulässig.'                     +
+'Wert ''&1'' fÃ¼r Auswahl Ja/Nein nicht zulÃ¤ssig.'                     +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -8819,8 +8824,8 @@ den kann, aus welcher physischen Teildatei der Satz kommt.'           +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8220                    */
-     /* Editor nicht zulässig. Feld &1 enthält NULL Wert.           */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8220                    */
+     /* Editor nicht zulÃ¤ssig. Feld &1 enthÃ¤lt NULL Wert.           */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8220) MSGF(&LIB/&OBJ)
@@ -8830,7 +8835,7 @@ den kann, aus welcher physischen Teildatei der Satz kommt.'           +
                 MSGID(USR8220) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Editor nicht zulässig. Feld &1 enthält NULL Wert.'                   +
+'Editor nicht zulÃ¤ssig. Feld &1 enthÃ¤lt NULL Wert.'                   +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -8841,8 +8846,8 @@ den kann, aus welcher physischen Teildatei der Satz kommt.'           +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8221                    */
-     /* Editor nicht zulässig. Feld &1 hat ungültigen Datentyp.     */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8221                    */
+     /* Editor nicht zulÃ¤ssig. Feld &1 hat ungÃ¼ltigen Datentyp.     */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8221) MSGF(&LIB/&OBJ)
@@ -8852,7 +8857,7 @@ den kann, aus welcher physischen Teildatei der Satz kommt.'           +
                 MSGID(USR8221) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Editor nicht zulässig. Feld &1 hat ungültigen Datentyp.'             +
+'Editor nicht zulÃ¤ssig. Feld &1 hat ungÃ¼ltigen Datentyp.'             +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -8863,8 +8868,8 @@ den kann, aus welcher physischen Teildatei der Satz kommt.'           +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8222                    */
-     /* Feld &1 zu lang für Editor.                                 */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8222                    */
+     /* Feld &1 zu lang fÃ¼r Editor.                                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8222) MSGF(&LIB/&OBJ)
@@ -8874,7 +8879,7 @@ den kann, aus welcher physischen Teildatei der Satz kommt.'           +
                 MSGID(USR8222) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Feld &1 zu lang für Editor.'                                         +
+'Feld &1 zu lang fÃ¼r Editor.'                                         +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -8885,8 +8890,8 @@ den kann, aus welcher physischen Teildatei der Satz kommt.'           +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8223                    */
-     /* Eingabe der Schlüsselfelder auf Kleinbuchstaben geschaltet. */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8223                    */
+     /* Eingabe der SchlÃ¼sselfelder auf Kleinbuchstaben geschaltet. */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8223) MSGF(&LIB/&OBJ)
@@ -8896,7 +8901,7 @@ den kann, aus welcher physischen Teildatei der Satz kommt.'           +
                 MSGID(USR8223) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Eingabe der Schlüsselfelder auf Kleinbuchstaben geschaltet.'         +
+'Eingabe der SchlÃ¼sselfelder auf Kleinbuchstaben geschaltet.'         +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -8905,8 +8910,8 @@ den kann, aus welcher physischen Teildatei der Satz kommt.'           +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8224                    */
-     /* Eingabe der Schlüsselfelder auf Grossbuchstaben geschaltet. */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8224                    */
+     /* Eingabe der SchlÃ¼sselfelder auf Grossbuchstaben geschaltet. */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8224) MSGF(&LIB/&OBJ)
@@ -8916,7 +8921,7 @@ den kann, aus welcher physischen Teildatei der Satz kommt.'           +
                 MSGID(USR8224) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Eingabe der Schlüsselfelder auf Grossbuchstaben geschaltet.'         +
+'Eingabe der SchlÃ¼sselfelder auf Grossbuchstaben geschaltet.'         +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -8925,8 +8930,8 @@ den kann, aus welcher physischen Teildatei der Satz kommt.'           +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8225                    */
-     /* Datensatz wurde zwischenzeitlich von einem anderem Job geän */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8225                    */
+     /* Datensatz wurde zwischenzeitlich von einem anderem Job geÃ¤n */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8225) MSGF(&LIB/&OBJ)
@@ -8936,8 +8941,8 @@ den kann, aus welcher physischen Teildatei der Satz kommt.'           +
                 MSGID(USR8225) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Datensatz wurde zwischenzeitlich von einem anderem Job geändert.°°Tro-
-tzdem ändern?'                                                        +
+'Datensatz wurde zwischenzeitlich von einem anderem Job geÃ¤ndert.&N&NT-
+rotzdem Ã¤ndern?'                                                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -8946,7 +8951,7 @@ tzdem ändern?'                                                        +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8226                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8226                    */
      /* Druckvorgang erfolgreich beendet.                           */
      /*-------------------------------------------------------------*/
 
@@ -8966,7 +8971,7 @@ tzdem ändern?'                                                        +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8227                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8227                    */
      /* Die Zeichenkette '&1' konnte nicht in einen numerischen Wer */
      /*-------------------------------------------------------------*/
 
@@ -8997,8 +9002,8 @@ erischen Wert vom Typ &2(&3,&4) umgesetzt werden.'                    +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8228                    */
-     /* Datentyp '&1' ist ungültig.                                 */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8228                    */
+     /* Datentyp '&1' ist ungÃ¼ltig.                                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8228) MSGF(&LIB/&OBJ)
@@ -9008,11 +9013,11 @@ erischen Wert vom Typ &2(&3,&4) umgesetzt werden.'                    +
                 MSGID(USR8228) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Datentyp ''&1'' ist ungültig.'                                       +
+'Datentyp ''&1'' ist ungÃ¼ltig.'                                       +
                 ) +
                 SECLVL( +
 '&N &N Information . . :   Der angegebene Datentyp ''&1'' wird nicht u-
-nterstützt. Bitte geben Sie einen gültigen RPG Datentyp an und wiederh-
+nterstÃ¼tzt. Bitte geben Sie einen gÃ¼ltigen RPG Datentyp an und wiederh-
 olen Sie die Anforderung.'                                            +
                 ) +
                 SEV(0) +
@@ -9024,8 +9029,8 @@ olen Sie die Anforderung.'                                            +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8229                    */
-     /* Wert '&1' für die Feldlänge ist ungültig.                   */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8229                    */
+     /* Wert '&1' fÃ¼r die FeldlÃ¤nge ist ungÃ¼ltig.                   */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8229) MSGF(&LIB/&OBJ)
@@ -9035,11 +9040,11 @@ olen Sie die Anforderung.'                                            +
                 MSGID(USR8229) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Wert ''&1'' für die Feldlänge ist ungültig.'                         +
+'Wert ''&1'' fÃ¼r die FeldlÃ¤nge ist ungÃ¼ltig.'                         +
                 ) +
                 SECLVL( +
-'&N &N Information . . :   Der angegebene Wert ''&1'' für die Feldläng-
-e ist ungültig. Bitte korrigieren Sie die Feldlänge und wiederholen Si-
+'&N &N Information . . :   Der angegebene Wert ''&1'' fÃ¼r die FeldlÃ¤ng-
+e ist ungÃ¼ltig. Bitte korrigieren Sie die FeldlÃ¤nge und wiederholen Si-
 e die Anforderung.'                                                   +
                 ) +
                 SEV(0) +
@@ -9051,8 +9056,8 @@ e die Anforderung.'                                                   +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8230                    */
-     /* Wert '&1' für die Anzahl Nachkommastellen ist ungültig.     */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8230                    */
+     /* Wert '&1' fÃ¼r die Anzahl Nachkommastellen ist ungÃ¼ltig.     */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8230) MSGF(&LIB/&OBJ)
@@ -9062,13 +9067,13 @@ e die Anforderung.'                                                   +
                 MSGID(USR8230) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Wert ''&1'' für die Anzahl Nachkommastellen ist ungültig.'           +
+'Wert ''&1'' fÃ¼r die Anzahl Nachkommastellen ist ungÃ¼ltig.'           +
                 ) +
                 SECLVL( +
-'&N &N Information . . :   Der angegebene Wert ''&1'' für die Anzahl N-
-achkommastellen ist ungültig. Bitte korrigieren Sie die Anzahl Nachkom-
+'&N &N Information . . :   Der angegebene Wert ''&1'' fÃ¼r die Anzahl N-
+achkommastellen ist ungÃ¼ltig. Bitte korrigieren Sie die Anzahl Nachkom-
 mastellen und wiederholen Sie die Anforderung. Beachten Sie, dass nich-
-t alle Datentypen, z.B. ''A'' für Zeichenketten, Nachkommastellen erfo-
+t alle Datentypen, z.B. ''A'' fÃ¼r Zeichenketten, Nachkommastellen erfo-
 rdern.'                                                               +
                 ) +
                 SEV(0) +
@@ -9080,8 +9085,8 @@ rdern.'                                                               +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8231                    */
-     /* Eine Änderung der Satzsperre ist nur im Änderungsmodus mögl */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8231                    */
+     /* Eine Ã„nderung der Satzsperre ist nur im Ã„nderungsmodus mÃ¶gl */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8231) MSGF(&LIB/&OBJ)
@@ -9091,12 +9096,12 @@ rdern.'                                                               +
                 MSGID(USR8231) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Eine Änderung der Satzsperre ist nur im Änderungsmodus möglich.'     +
+'Eine Ã„nderung der Satzsperre ist nur im Ã„nderungsmodus mÃ¶glich.'     +
                 ) +
                 SECLVL( +
-'&N &N Information . . :   Die Satzsperre kann nur im Änderungsmodus a-
+'&N &N Information . . :   Die Satzsperre kann nur im Ã„nderungsmodus a-
 ngefordert oder freigegeben werden. Beim Kopieren oder bei der Neuanla-
-ge von Datensätzen ist dies nicht möglich.'                           +
+ge von DatensÃ¤tzen ist dies nicht mÃ¶glich.'                           +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -9105,8 +9110,8 @@ ge von Datensätzen ist dies nicht möglich.'                           +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8232                    */
-     /* Datensatz wurde zwischenzeitlich von einem anderem Job geän */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8232                    */
+     /* Datensatz wurde zwischenzeitlich von einem anderem Job geÃ¤n */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8232) MSGF(&LIB/&OBJ)
@@ -9116,8 +9121,8 @@ ge von Datensätzen ist dies nicht möglich.'                           +
                 MSGID(USR8232) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Datensatz wurde zwischenzeitlich von einem anderem Job geändert.°°Tro-
-tzdem sperren?'                                                       +
+'Datensatz wurde zwischenzeitlich von einem anderem Job geÃ¤ndert.&N&NT-
+rotzdem sperren?'                                                     +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -9126,8 +9131,8 @@ tzdem sperren?'                                                       +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8233                    */
-     /* Fehler: Ungültiges Layout aufgrund abweichender Satzformat- */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8233                    */
+     /* Fehler: UngÃ¼ltiges Layout aufgrund abweichender Satzformat- */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8233) MSGF(&LIB/&OBJ)
@@ -9137,14 +9142,14 @@ tzdem sperren?'                                                       +
                 MSGID(USR8233) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Fehler: Ungültiges Layout aufgrund abweichender Satzformat-ID.'      +
+'Fehler: UngÃ¼ltiges Layout aufgrund abweichender Satzformat-ID.'      +
                 ) +
                 SECLVL( +
 '&N &N Fehlerkorrektur :   Versuchsweise kann der Eintrag *RCDFMTID au-
-s der Datei &2/&1, Teildatei &3 gelöscht werden, um die Prüfung der Sa-
+s der Datei &2/&1, Teildatei &3 gelÃ¶scht werden, um die PrÃ¼fung der Sa-
 tzformat_ID ausser Kraft zu setzen. Kann das Layout danach geladen wer-
 den, muss es erneut gespeichert werden, um die Satzformat ID wieder hi-
-nzuzufügen.'                                                          +
+nzuzufÃ¼gen.'                                                          +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -9157,7 +9162,7 @@ nzuzufügen.'                                                          +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8234                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8234                    */
      /* Layout konnte aufgrund abweichender Satzformat-IDs nicht ge */
      /*-------------------------------------------------------------*/
 
@@ -9176,9 +9181,9 @@ en.'                                                                  +
 werden, weil die im Layout gespeicherte Formatebenen-ID von der Format-
 ebenen-ID der anzuzeigenden Datei abweicht.&N Fehlerkorrektur : Versuc-
 hsweise kann der Eintrag *RCDFMTID aus der Datei &2/&1, Teildatei &3 g-
-elöscht werden, um die Prüfung der Satzformat_ID ausser Kraft zu setze-
+elÃ¶scht werden, um die PrÃ¼fung der Satzformat_ID ausser Kraft zu setze-
 n. Kann das Layout danach geladen werden, muss es erneut gespeichert w-
-erden, um die Satzformat ID wieder hinzuzufügen.'                     +
+erden, um die Satzformat ID wieder hinzuzufÃ¼gen.'                     +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -9191,8 +9196,8 @@ erden, um die Satzformat ID wieder hinzuzufügen.'                     +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8235                    */
-     /* SQL-Auswahl wird für Multi-Member logische Dateien nicht un */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8235                    */
+     /* SQL-Auswahl wird fÃ¼r Multi-Member logische Dateien nicht un */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8235) MSGF(&LIB/&OBJ)
@@ -9202,7 +9207,7 @@ erden, um die Satzformat ID wieder hinzuzufügen.'                     +
                 MSGID(USR8235) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'SQL-Auswahl wird für Multi-Member logische Dateien nicht unterstützt.-
+'SQL-Auswahl wird fÃ¼r Multi-Member logische Dateien nicht unterstÃ¼tzt.-
 '                                                                     +
                 ) +
                 SEV(0) +
@@ -9212,8 +9217,8 @@ erden, um die Satzformat ID wieder hinzuzufügen.'                     +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8236                    */
-     /* Einfügemodus aktiviert. Positionieren Cursor, dann F7 drück */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8236                    */
+     /* EinfÃ¼gemodus aktiviert. Positionieren Cursor, dann F7 drÃ¼ck */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8236) MSGF(&LIB/&OBJ)
@@ -9223,7 +9228,7 @@ erden, um die Satzformat ID wieder hinzuzufügen.'                     +
                 MSGID(USR8236) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Einfügemodus aktiviert. Positionieren Cursor, dann F7 drücken.'      +
+'EinfÃ¼gemodus aktiviert. Positionieren Cursor, dann F7 drÃ¼cken.'      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -9232,8 +9237,8 @@ erden, um die Satzformat ID wieder hinzuzufügen.'                     +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8237                    */
-     /* Eingabetaste drücken, um die angegebenen Anzahl Leerzeichen */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8237                    */
+     /* Eingabetaste drÃ¼cken, um die angegebenen Anzahl Leerzeichen */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8237) MSGF(&LIB/&OBJ)
@@ -9243,7 +9248,7 @@ erden, um die Satzformat ID wieder hinzuzufügen.'                     +
                 MSGID(USR8237) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Eingabetaste drücken, um die angegebenen Anzahl Leerzeichen einzufüge-
+'Eingabetaste drÃ¼cken, um die angegebenen Anzahl Leerzeichen einzufÃ¼ge-
 n.'                                                                   +
                 ) +
                 SEV(0) +
@@ -9253,8 +9258,8 @@ n.'                                                                   +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8238                    */
-     /* Löschmodus aktiviert. Positionieren Cursor, dann F8 drücken */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8238                    */
+     /* LÃ¶schmodus aktiviert. Positionieren Cursor, dann F8 drÃ¼cken */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8238) MSGF(&LIB/&OBJ)
@@ -9264,7 +9269,7 @@ n.'                                                                   +
                 MSGID(USR8238) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Löschmodus aktiviert. Positionieren Cursor, dann F8 drücken.'        +
+'LÃ¶schmodus aktiviert. Positionieren Cursor, dann F8 drÃ¼cken.'        +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -9273,8 +9278,8 @@ n.'                                                                   +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8239                    */
-     /* Eingabetaste drücken, um den angegebenen Bereich von Zeiche */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8239                    */
+     /* Eingabetaste drÃ¼cken, um den angegebenen Bereich von Zeiche */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8239) MSGF(&LIB/&OBJ)
@@ -9284,7 +9289,7 @@ n.'                                                                   +
                 MSGID(USR8239) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Eingabetaste drücken, um den angegebenen Bereich von Zeichen zu lösch-
+'Eingabetaste drÃ¼cken, um den angegebenen Bereich von Zeichen zu lÃ¶sch-
 en.'                                                                  +
                 ) +
                 SEV(0) +
@@ -9294,7 +9299,7 @@ en.'                                                                  +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8240                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8240                    */
      /* Wert darf nicht kleiner &1 sein.                            */
      /*-------------------------------------------------------------*/
 
@@ -9316,8 +9321,8 @@ en.'                                                                  +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR8241                    */
-     /* Feldlänge überschritten. Der Wert ist um &1 Zeichen zu groß */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR8241                    */
+     /* FeldlÃ¤nge Ã¼berschritten. Der Wert ist um &1 Zeichen zu groÃŸ */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8241) MSGF(&LIB/&OBJ)
@@ -9327,7 +9332,7 @@ en.'                                                                  +
                 MSGID(USR8241) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Feldlänge überschritten. Der Wert ist um &1 Zeichen zu groß.'        +
+'FeldlÃ¤nge Ã¼berschritten. Der Wert ist um &1 Zeichen zu groÃŸ.'        +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -9338,7 +9343,7 @@ en.'                                                                  +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR9992                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR9992                    */
      /* Benutzereinstellungen konnten nicht gespeichert werden.     */
      /*-------------------------------------------------------------*/
 
@@ -9353,11 +9358,11 @@ en.'                                                                  +
                 ) +
                 SECLVL( +
 '&N &N Ursache . . . . :   Die Benutzereinstellungen konnten aufgrund -
-von Ursachencode &1 nicht gespeichert werden. &N &N Die möglichen Ursa-
-chencodes sind: &N &B 1 - Name der Datei (&2) stimmt nicht mit der geö-
-ffneten Datei überein. &B 2 - Name der Bibliothek (&2) stimmt nicht mi-
-t der Bibliothek der geöfneten Datei überein. &B 3 - Datei für Benutze-
-reinstellungen &3/&2 mit Teildatei &4 konnte nicht geöffnet werden.'  +
+von Ursachencode &1 nicht gespeichert werden. &N &N Die mÃ¶glichen Ursa-
+chencodes sind: &N &B 1 - Name der Datei (&2) stimmt nicht mit der geÃ¶-
+ffneten Datei Ã¼berein. &B 2 - Name der Bibliothek (&2) stimmt nicht mi-
+t der Bibliothek der geÃ¶ffneten Datei Ã¼berein. &B 3 - Datei fÃ¼r Benutz-
+ereinstellungen &3/&2 mit Teildatei &4 konnte nicht geÃ¶ffnet werden.' +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -9371,8 +9376,8 @@ reinstellungen &3/&2 mit Teildatei &4 konnte nicht geöffnet werden.'  +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR9993                    */
-     /* Keine Datei geöffnet. Der Zugriff über SQL kann nur auf phy */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR9993                    */
+     /* Keine Datei geÃ¶ffnet. Der Zugriff Ã¼ber SQL kann nur auf phy */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR9993) MSGF(&LIB/&OBJ)
@@ -9382,21 +9387,16 @@ reinstellungen &3/&2 mit Teildatei &4 konnte nicht geöffnet werden.'  +
                 MSGID(USR9993) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Keine Datei geöffnet. Der Zugriff über SQL kann nur auf physische Dat-
+'Keine Datei geÃ¶ffnet. Der Zugriff Ã¼ber SQL kann nur auf physische Dat-
 eien angewendet werden.'                                              +
                 ) +
                 SEV(0) +
-                FMT( +
-                    (*DEC 5 0) +
-                    (*CHAR 32) +
-                    (*CHAR 256) +
-                ) +
                 ALROPT(*NO) +
                 CCSID(65535) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR9994                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR9994                    */
      /* Unerwarteter Fehler &1 in C Funktion &2 aufgetreten.        */
      /*-------------------------------------------------------------*/
 
@@ -9423,7 +9423,7 @@ eien angewendet werden.'                                              +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR9995                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR9995                    */
      /* Struktur der Einstellungsdatei wird angepasst ...           */
      /*-------------------------------------------------------------*/
 
@@ -9443,8 +9443,8 @@ eien angewendet werden.'                                              +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR9996                    */
-     /* Keine Datei geöffnet.                                       */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR9996                    */
+     /* Keine Datei geÃ¶ffnet.                                       */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR9996) MSGF(&LIB/&OBJ)
@@ -9454,7 +9454,7 @@ eien angewendet werden.'                                              +
                 MSGID(USR9996) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Keine Datei geöffnet.'                                               +
+'Keine Datei geÃ¶ffnet.'                                               +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
@@ -9463,7 +9463,7 @@ eien angewendet werden.'                                              +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR9997                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR9997                    */
      /* &2PEEK/400 ist&1 Shareware. &2Bitte lassen Sie sich registr */
      /*-------------------------------------------------------------*/
 
@@ -9486,7 +9486,7 @@ eien angewendet werden.'                                              +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR9998                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR9998                    */
      /* Unerwartete Nachrichten-ID &1 von Programm &2.              */
      /*-------------------------------------------------------------*/
 
@@ -9509,7 +9509,7 @@ eien angewendet werden.'                                              +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
-     /*   Cmd-ADDMSGD für Message-ID :   USR9999                    */
+     /*   Cmd-ADDMSGD fÃ¼r Message-ID :   USR9999                    */
      /* &1                                                          */
      /*-------------------------------------------------------------*/
 

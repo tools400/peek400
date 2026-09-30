@@ -11,11 +11,11 @@
        //===============================================================*
        //                                                               *
        //  Kurzdokumentation :                                          *
-       //  ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯                                          *
+       //  ===================                                          *
        //  EXIT-Programm zur Anpassung von Benutzereingaben.            *
        //                                                               *
        //  Parameterliste:                                              *
-       //  ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯                                              *
+       //  ===============                                              *
        //     In :  gi_file      - Name of the user settings file.      *
        //                                                               *
        //     In :  gi_lib       - Name of the library that contains    *
@@ -35,7 +35,7 @@
        //                                                               *
        //                                                               *
        //  Beispiel:                                                    *
-       //  ¯¯¯¯¯¯¯¯¯                                                    *
+       //  =========                                                    *
        //  Typische Aufrufreihenfolge am Beispiel der Auswahl '5'       *
        //  im Programm PEEK05:                                          *
        //                                                               *
@@ -50,7 +50,7 @@
        //                                                               *
        //                                                               *
        //  Erstellen des Programms:                                     *
-       //  ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯                                     *
+       //  ========================                                     *
        //  CRTRPGMOD MODULE(PEEK/EXIT05) DBGVIEW(*ALL) TRUNCNBR(*NO)    *
        //  SRCFILE(PEEK/QRPGLESRC) SRCMBR(EXIT05)                       *
        //  REPLACE(*YES) LANGID(*JOBRUN) TGTRLS(V5R3M0)                 *

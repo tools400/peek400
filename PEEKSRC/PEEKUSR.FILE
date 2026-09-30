@@ -206,21 +206,21 @@
 *NONE     *PEEK59   *F09      *YES
 *NONE     *PEEK59   *F12      *CANCEL
 *NONE     *PEEK59   *F21      *NO
-*NONE     *PGM      *ACCESSKEY-+,1;»
-*NONE     *PGM      *CRTPGM   1         0         »
-*NONE     *PGM      *CVTCHR   ÷»
-*NONE     *PGM      *DFTDSPMDE*DSPNRM   »
-*NONE     *PGM      *DSPATTR  0???????*FIELDNAME?01?*DSPNRM   1?»
-*NONE     *PGM      *ENVFILE  PEEKENV   *PRDLIB   11»
-*NONE     *PGM      *FLOATKEYS1»
-*NONE     *PGM      *LANGUAGE GER»
-*NONE     *PGM      *PROMPT   ?1»
-*NONE     *PGM      *PRVFILE  *NONE     *NONE     *NONE     »
-*NONE     *PGM      *SCROLL   *BOTH     1»
-*NONE     *PGM      *SEARCH   %10000»
-*NONE     *PGM      *SECATRDFT111111»
-*NONE     *PGM      *SPLASH   1»
-*NONE     *PGM      *VERSION  V02R02M02»
+*NONE     *PGM      *ACCESSKEY-+,1;Â»
+*NONE     *PGM      *CRTPGM   1         0         Â»
+*NONE     *PGM      *CVTCHR   Ã·Â»
+*NONE     *PGM      *DFTDSPMDE*DSPNRM   Â»
+*NONE     *PGM      *DSPATTR  0???????*FIELDNAME?01?*DSPNRM   1?Â»
+*NONE     *PGM      *ENVFILE  PEEKENV   *PRDLIB   11Â»
+*NONE     *PGM      *FLOATKEYS1Â»
+*NONE     *PGM      *LANGUAGE GERÂ»
+*NONE     *PGM      *PROMPT   ?1Â»
+*NONE     *PGM      *PRVFILE  *NONE     *NONE     *NONE     Â»
+*NONE     *PGM      *SCROLL   *BOTH     1Â»
+*NONE     *PGM      *SEARCH   %10000Â»
+*NONE     *PGM      *SECATRDFT111111Â»
+*NONE     *PGM      *SPLASH   1Â»
+*NONE     *PGM      *VERSION  V02R02M02Â»
 *NONE     *PXXXXXXXX*ENTER    *ENTER
 *NONE     *PXXXXXXXX*F03      *EXIT
 *NONE     *PXXXXXXXX*F05      *REFRESH

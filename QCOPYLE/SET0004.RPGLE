@@ -1,6 +1,6 @@
 **FREE
 //---------------------------------------------------------------
-// Datenstruktur für Spracheneinstellungen
+// Datenstruktur fÃ¼r Spracheneinstellungen
 // SET0004   *LANGUAGE
 //---------------------------------------------------------------
 //

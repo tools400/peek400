@@ -8,7 +8,7 @@
 //  Typ      : RPG                                               *
 //                                                               *
 //  erstellt : 26.09.97  Raddatz                                 *
-//  geändert : 27.04.99  für Version 2.1.0                       *
+//  geÃ¤ndert : 27.04.99  fÃ¼r Version 2.1.0                       *
 //                                                               *
 //===============================================================*
 //                                                               *
@@ -216,7 +216,7 @@ begsr cvtedtcde;
     //  Keine Umsetzung des EDTCDE's
     endsl;
 
-  //  Mappen Edit Code - Keine Nullenunterdrückung
+  //  Mappen Edit Code - Keine NullenunterdrÃ¼ckung
   when (set0001.set_dspsgn = '2');
     select;
     when (f_edtcde = '1');

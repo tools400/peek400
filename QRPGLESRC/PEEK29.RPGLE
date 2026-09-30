@@ -90,7 +90,7 @@ sysinpnbr.sysvers = i_sysversion;
 // -  Seriennummer des AS/400 Systems
 sysinpnbr.syssrlnbr = i_syssrlnbr;
 
-//  - Berechnung der Prüfsumme
+//  - Berechnung der PrÃ¼fsumme
 summe = *zeros;
 
 for x = 1 to 50;
@@ -117,14 +117,14 @@ endfor;
 summe = summe - i_sysdate;
 summe = summe + 99999999;
 
-//  - Prüfsumme in HEX-Wert umsetzen
+//  - PrÃ¼fsumme in HEX-Wert umsetzen
 r_dec = summe;
 exsr dectohex;
 intsrlnbr = r_hex;
 
 intsrlnbr = %trimr(intsrlnbr) + '-';
 
-//  - Originaldatum anfügen, als Komplement gespeichert!
+//  - Originaldatum anfÃ¼gen, als Komplement gespeichert!
 r_dec = 0 - i_sysdate;
 r_dec = r_dec + 99999999;
 exsr dectohex;

@@ -18,22 +18,22 @@
       *===============================================================*
       *  BEZUGSZAHLEN:                                                *
       *                                                               *
-      *  80 - SFLDSP, EXSR SFLC, SÄTZE GEF./NICHT GEFUNDEN            *
+      *  80 - SFLDSP, EXSR SFLC, SÃ„TZE GEF./NICHT GEFUNDEN            *
       *  81 - SFLDSPCTL                                               *
       *  82 - SFLCLR                                                  *
       *  83 - SFLEND                                                  *
       *  84 - SFLNXTCHG                                               *
-      *  85 - DSPATR(RI) FÜR SFPAU                                    *
+      *  85 - DSPATR(RI) FÃœR SFPAU                                    *
       *  86 - SFLDROP/SFLFOLD                                         *
-      *  87 - DSPATR(PC) FÜR AUFSETZKEY                               *
+      *  87 - DSPATR(PC) FÃœR AUFSETZKEY                               *
       *  88 - 80/132-ZEICHEN ANZEIGE                                  *
       *  89 - SFLEND, MSGCTL                                          *
       *                                                               *
-      *  96 - Feld für Eingabe sperren  VDSP;VDEL                     *
-      *  98 - Feld für Eingabe sperren  VCHG                          *
+      *  96 - Feld fÃ¼r Eingabe sperren  VDSP;VDEL                     *
+      *  98 - Feld fÃ¼r Eingabe sperren  VCHG                          *
       *                                                               *
-      *  91 - Vorwärts blättern                                       *
-      *  92 - Rückwärts blättern                                      *
+      *  91 - VorwÃ¤rts blÃ¤ttern                                       *
+      *  92 - RÃ¼ckwÃ¤rts blÃ¤ttern                                      *
       *                                                               *
       *===============================================================*
       * >>PRE-COMPILER<<                                              *
@@ -282,7 +282,7 @@
      A            POS            3S 0P
       *
       *----------------------------------------------------*
-      *  RMVWDW ZUM LÖSCHEN DES WINDOWS
+      *  RMVWDW ZUM LÃ–SCHEN DES WINDOWS
       *
      A          R RMVWDW                    CLRL(*NO) OVERLAY FRCDTA
      A N88                                  DSPMOD(*DS4)

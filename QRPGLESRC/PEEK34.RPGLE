@@ -158,7 +158,7 @@ if (isBatch = bFalse);
 
   dow ('1');
 
-    //  Prüfen Positionierung der Subfile
+    //  PrÃ¼fen Positionierung der Subfile
     if (sfsanr <= 0);
       sfsanr = 1;
     endif;
@@ -170,7 +170,7 @@ if (isBatch = bFalse);
     *in89 = '0';
     write msgctl;
 
-    //  "Keine Sätze ..."
+    //  "Keine SÃ¤tze ..."
     if (*in80 = *off);
       write pbleer;
     endif;
@@ -201,7 +201,7 @@ if (isBatch = bFalse);
     exfmt pbctl;
     *in70 = '0';
 
-    //  Nachrichten löschen
+    //  Nachrichten lÃ¶schen
     p_rmvpgmmg(sds.pgmname);
 
     //  Aktuelle Satz-Nr.
@@ -209,7 +209,7 @@ if (isBatch = bFalse);
       sfsanr = sflcsr;
     endif;
 
-    //  Mappen der gedrückten Taste
+    //  Mappen der gedrÃ¼ckten Taste
     //  in Programmbefehl
     peek21(workstn.aid: sds.pgmname
           : ypgmcmd: ycmddta: yMsgID: yMsgDta);
@@ -278,7 +278,7 @@ if (isBatch = bFalse);
     when (ypgmcmd = '*PAGEDOWN');
 
     other;
-      //  Falsche Taste gedrückt
+      //  Falsche Taste gedrÃ¼ckt
       p_wrongkey(workstn.aid: sds.pgmname);
       iter;
     endsl;
@@ -392,10 +392,10 @@ begsr srchfield;
         leave;
       else;
         if (sfpau <> *blanks);
-          //  ... Satz geändert
+          //  ... Satz geÃ¤ndert
           exsr vsfpauchg;
         else;
-          //  ... Satz nicht geändert
+          //  ... Satz nicht geÃ¤ndert
           exsr vsfpauclr;
         endif;
         //  Setzen Bezugszahlen ...
@@ -439,7 +439,7 @@ begsr vreadc;
   issflerror = bFalse;
 
   if (*in80 = *off);
-  //   keine Einträge in Subfile vorhanden ...
+  //   keine EintrÃ¤ge in Subfile vorhanden ...
   else;
 
     for do_x2 = 1 to sflnbrrcd;
@@ -459,7 +459,7 @@ begsr vreadc;
       //  Subfile nicht neu positionieren
       endif;
 
-      //  Linksbündig setzen ...
+      //  LinksbÃ¼ndig setzen ...
       sfpau = %triml(sfpau);
 
       //  Zuordnung AUSWAHL => Befehl ...
@@ -477,7 +477,7 @@ begsr vreadc;
       endif;
 
       //----------------------------*
-      //  Ausführen SFL-Befehl ...  *
+      //  AusfÃ¼hren SFL-Befehl ...  *
       //----------------------------*
       sfl_cmd = ypgmcmd;
 
@@ -498,11 +498,11 @@ begsr vreadc;
 
       //----------------------------*
       //  Verarbeiten               *
-      //  Datensatzänderungen       *
+      //  DatensatzÃ¤nderungen       *
       //----------------------------*
       exsr getcolor;
       exsr fillrecord;
-      //  Prüfen, Datensatz ...
+      //  PrÃ¼fen, Datensatz ...
       monitor;
         peek35(recordnbr: wrk0001: yfield
               : yMsgID: yMsgDta);
@@ -516,11 +516,11 @@ begsr vreadc;
       else;
         //  ... Programaufruf war OK
         if (yMsgID = *blanks);
-          //      ... Prüfung ist OK
+          //      ... PrÃ¼fung ist OK
           exsr vpos;
           exsr vsfpauclr;
         else;
-          //      ... Fehler bei der Prüfung
+          //      ... Fehler bei der PrÃ¼fung
           exsr vposcsr;
           exsr vsfpauerr;
           *in85 = '0'; // DSPATR(RI)
@@ -541,7 +541,7 @@ begsr vreadc;
 endsr;
 
 //============================================================*
-//    GetColor      Auswählen neue Farbe                      *
+//    GetColor      AuswÃ¤hlen neue Farbe                      *
 //============================================================*
 
 begsr getcolor;
@@ -648,12 +648,12 @@ begsr c_refresh;
 endsr;
 
 //============================================================*
-//    C_FloatKey    F11 - Schlüsselfelder an den Anfang       *
+//    C_FloatKey    F11 - SchlÃ¼sselfelder an den Anfang       *
 //============================================================*
 
 begsr c_floatkey;
 
-  //  Alle nicht Schlüsselfelder mit
+  //  Alle nicht SchlÃ¼sselfelder mit
   //  negativen Folgenummern versehen ...
   clear w0key;
   w0key.w_key = 0;
@@ -694,13 +694,13 @@ begsr c_floatkey;
 
     wrk0001 = w_data;
 
-    //  Schlüsselfelder? ...
+    //  SchlÃ¼sselfelder? ...
     if (wrk0001.wrk_kseq = 0);
-      //  ... nein, kein Schlüselfeld
+      //  ... nein, kein SchlÃ¼sselfeld
       r_seq = r_seq + 10;
       wrk0001.wrk_seq = r_seq;
     else;
-      //  ... ja, Schlüselfeld
+      //  ... ja, SchlÃ¼sselfeld
       wrk0001.wrk_seq = wrk0001.wrk_kseq * 10;
       if (wrk0001.wrk_seq > r_seq);
         r_seq = wrk0001.wrk_seq;
@@ -747,7 +747,7 @@ begsr c_morekeys;
 endsr;
 
 //============================================================*
-//    FillRecord    Füllen Datensatz in PEEKWRK               *
+//    FillRecord    FÃ¼llen Datensatz in PEEKWRK               *
 //============================================================*
 
 begsr fillrecord;
@@ -772,7 +772,7 @@ endsr;
 
 //============================================================*
 //    SflBzoff      Aussetzen aller Subfilebezugszahlen       *
-//                  für die MArkierung von Eingabefehlern     *
+//                  fÃ¼r die MArkierung von Eingabefehlern     *
 //============================================================*
 
 begsr sflbzoff;
@@ -811,7 +811,7 @@ begsr vposcsr;
     *in25 = '1';         // DSPATR(PC)
     *in35 = '1';
   other;
-  //  Weiß noch nicht
+  //  WeiÃŸ noch nicht
   endsl;
 
 endsr;
@@ -824,7 +824,7 @@ begsr vpos;
 
   chain recordnbr peekwrk_ ds_peekwrk;
   if (not %found(peekwrk_));
-  //  Weiß noch nicht, was zu tun ist ...
+  //  WeiÃŸ noch nicht, was zu tun ist ...
   else;
     wrk0001 = w_data;
     exsr fillrecord;
@@ -836,7 +836,7 @@ begsr vpos;
 endsr;
 
 //============================================================*
-//    VSfpauClr     Löschen Subfileauswahl                    *
+//    VSfpauClr     LÃ¶schen Subfileauswahl                    *
 //============================================================*
 
 begsr vsfpauclr;
@@ -859,7 +859,7 @@ begsr vsfpauerr;
 endsr;
 
 //============================================================*
-//    VSfpauChg     Datensatz in Subfile als geändert         *
+//    VSfpauChg     Datensatz in Subfile als geÃ¤ndert         *
 //                  markieren                                 *
 //============================================================*
 
@@ -871,7 +871,7 @@ endsr;
 
 //============================================================*
 //    PBInit        Initialisieren der Subfile zur Anzeige    *
-//                  der nächsten Seite                        *
+//                  der nÃ¤chsten Seite                        *
 //============================================================*
 
 begsr pbinit;
@@ -893,7 +893,7 @@ begsr pbinit;
 endsr;
 
 //============================================================*
-//    PBReadUP      Vorwärts füllen der Subfile               *
+//    PBReadUP      VorwÃ¤rts fÃ¼llen der Subfile               *
 //============================================================*
 
 begsr pbreadup;
@@ -922,7 +922,7 @@ begsr pbreadup;
 endsr;
 
 //============================================================*
-//    PBFill        Füllen Subfilesatz                        *
+//    PBFill        FÃ¼llen Subfilesatz                        *
 //============================================================*
 
 begsr pbfill;
@@ -959,7 +959,7 @@ begsr pbfill;
     isdecimal = bFalse;
   endif;
 
-  //  ... Variable Feldlänge
+  //  ... Variable FeldlÃ¤nge
   if (f_isvarlen(fldl0100) = bTrue);
     isvarlen = bTrue;
   else;
@@ -995,7 +995,7 @@ begsr pbfill;
   $$color = wrk0001.wrk_color;
   //  ... Farbmarkierung
   ##markcol = wrk0001.wrk_mrkcol;
-  //  ... Max. Anzeigebreite (Größe)
+  //  ... Max. Anzeigebreite (GrÃ¶ÃŸe)
   ##maxsize = wrk0001.wrk_maxsiz;
   //  ... Editcode
   ##edtcde = wrk0001.wrk_edtcde;
@@ -1011,7 +1011,7 @@ begsr pbfill;
   //  ... anzeigen Subfile
   *in80 = '1'; // SFLDSP
 
-  //  ... Löschen Subfileauswahl
+  //  ... LÃ¶schen Subfileauswahl
   exsr vsfpauclr;
 
 endsr;
@@ -1046,7 +1046,7 @@ begsr pbsetbz;
     *in72 = '1';
   endif;
 
-  //  Kennzeichnung für variable Länge
+  //  Kennzeichnung fÃ¼r variable LÃ¤nge
   if (isvarlen = bFalse);
     *in73 = '0';
   else;
@@ -1077,7 +1077,7 @@ begsr pbsfltxt;
 endsr;
 
 //============================================================*
-//    SetScreen     Einstellen 132/80-Zeichen Auflösung       *
+//    SetScreen     Einstellen 132/80-Zeichen AuflÃ¶sung       *
 //============================================================*
 
 begsr setscreen;
@@ -1100,7 +1100,7 @@ begsr setscreen;
 endsr;
 
 //============================================================*
-//    ClrPeekWrk    Löschen der Datei PEEKWRK                 *
+//    ClrPeekWrk    LÃ¶schen der Datei PEEKWRK                 *
 //============================================================*
 
 begsr clrpeekwrk;
@@ -1163,7 +1163,7 @@ endsr;
 
 begsr first;
 
-  // - Öffnen der Dateien
+  // - Ã–ffnen der Dateien
   open peekfldl1;
   open peekfld;
 
@@ -1177,7 +1177,7 @@ begsr first;
 
   ##field = '';
 
-  // - Rückkehrcode
+  // - RÃ¼ckkehrcode
   o_msgid = '';
   o_msgdta = '';
 
@@ -1199,13 +1199,13 @@ begsr first;
   // - Darstellung der Befehlstasten
   sfbot = 1;
 
-  // - Einstellen der Bildschirmauflösung 80/132-Zeichen
+  // - Einstellen der BildschirmauflÃ¶sung 80/132-Zeichen
   exsr setscreen;
 
   // - Anzuzeigender Subfilesatz
   sfsanr = 1;
 
-  // - Subfile füllen
+  // - Subfile fÃ¼llen
   exsr c_refresh;
 
   // - Copyright

@@ -28,11 +28,11 @@
                         LEN(4) +
                         DFT(*DFT) +
                         PMTCTL(*PMTRQS) +
-                        CHOICE('*DFT, Sprachenkürzel') +
+                        CHOICE('*DFT, SprachenkÃ¼rzel') +
                         PROMPT(PMT0004 3)                             /* RADD */
 
-    /* Ändern Bibliothek erlaubt              */
-    /* PMT0005:  Ändern Bibliothek erlaubt    */                      /* RADD */
+    /* Ã„ndern Bibliothek erlaubt              */
+    /* PMT0005:  Ã„ndern Bibliothek erlaubt    */                      /* RADD */
              PARM       KWD(ALWCHGLIB) +
                         TYPE(*CHAR) +
                         LEN(1) +
@@ -44,8 +44,8 @@
                         PMTCTL(*PMTRQS) +
                         PROMPT(PMT0005 4)                             /* RADD */
 
-    /* Ändern Datei erlaubt                   */
-    /* PMT0006:  Ändern Datei erlaubt         */                      /* RADD */
+    /* Ã„ndern Datei erlaubt                   */
+    /* PMT0006:  Ã„ndern Datei erlaubt         */                      /* RADD */
              PARM       KWD(ALWCHGFILE) +
                         TYPE(*CHAR) +
                         LEN(1) +
@@ -57,8 +57,8 @@
                         PMTCTL(*PMTRQS) +
                         PROMPT(PMT0006 5)                             /* RADD */
 
-    /* Ändern Teildatei erlaubt               */
-    /* PMT0007:  Ändern Teildatei erlaubt     */                      /* RADD */
+    /* Ã„ndern Teildatei erlaubt               */
+    /* PMT0007:  Ã„ndern Teildatei erlaubt     */                      /* RADD */
              PARM       KWD(ALWCHGMBR) +
                         TYPE(*CHAR) +
                         LEN(1) +
@@ -70,8 +70,8 @@
                         PMTCTL(*PMTRQS) +
                         PROMPT(PMT0007 6)                             /* RADD */
 
-    /* Ändern Datensätze erlaubt              */
-    /* PMT0008:  Ändern Datensätze erlaubt    */                      /* RADD */
+    /* Ã„ndern DatensÃ¤tze erlaubt              */
+    /* PMT0008:  Ã„ndern DatensÃ¤tze erlaubt    */                      /* RADD */
              PARM       KWD(ALWCHGRCD) +
                         TYPE(*CHAR) +
                         LEN(1) +
@@ -83,8 +83,8 @@
                         PMTCTL(*PMTRQS) +
                         PROMPT(PMT0008 7)                             /* RADD */
                                                                       /* RADD */
-    /* Ändern SQL WHERE erlaubt               */
-    /* PMT0009:  Ändern SQL WHERE erlaubt     */                      /* RADD */
+    /* Ã„ndern SQL WHERE erlaubt               */
+    /* PMT0009:  Ã„ndern SQL WHERE erlaubt     */                      /* RADD */
              PARM       KWD(ALWCHGSQLW) +
                         TYPE(*CHAR) +
                         LEN(1) +
@@ -96,8 +96,8 @@
                         PMTCTL(*PMTRQS) +
                         PROMPT(PMT0009 8)                             /* RADD */
                                                                       /* RADD */
-    /* Ändern SQL WHERE erlaubt               */
-    /* PMT0009:  Ändern SQL WHERE erlaubt     */                      /* RADD */
+    /* Ã„ndern SQL WHERE erlaubt               */
+    /* PMT0009:  Ã„ndern SQL WHERE erlaubt     */                      /* RADD */
              PARM       KWD(ALWCHGSQLO) +
                         TYPE(*CHAR) +
                         LEN(1) +

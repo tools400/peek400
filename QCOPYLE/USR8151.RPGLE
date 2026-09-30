@@ -1,7 +1,7 @@
 **free
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8151
-//  Ungültige Name '&1' für Zieldatei.
+//  UngÃ¼ltige Name '&1' fÃ¼r Zieldatei.
 dcl-ds USR8151 qualified;
   var1  char(10) inz;
 end-ds;

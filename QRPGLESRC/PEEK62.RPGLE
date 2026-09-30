@@ -12,7 +12,7 @@
        //                                                               *
        //  Kurzdokumentation :                                          *
        //                                                               *
-       //  Peek/400 - Ändern Satzformat PEEKUSR                         *
+       //  Peek/400 - Ã„ndern Satzformat PEEKUSR                         *
        //                                                               *
        //===============================================================*
        // >>PRE-COMPILER<<                                              *

@@ -1,6 +1,6 @@
 **FREE
 //---------------------------------------------------------------
-// Datenstruktur für Default Display Mode
+// Datenstruktur fÃ¼r Default Display Mode
 // SET0011   *DFTDSPMDE
 //---------------------------------------------------------------
 //

@@ -7,7 +7,7 @@
        //  Typ      : RPGLE                                             *
        //                                                               *
        //  erstellt : 25.01.07  Raddatz                                 *
-       //  geändert :                                                   *
+       //  geÃ¤ndert :                                                   *
        //                                                               *
        //===============================================================*
        //                                                               *
@@ -545,7 +545,7 @@
        clearErrorMsg(io_hfile);
 
        // Setzen Datenzeiger auf angegebene Satznummer
-       // (auch auf gelöschte Datensatze)
+       // (auch auf gelÃ¶schte Datensatze)
        options = f_bitor(rrn_eq: no_lock);
 
        p_clrerrno();
@@ -561,7 +561,7 @@
           priofb = rreads(io_hfile.fd : *null: 0: no_lock);
           errornbr = f_errno();
           if (riofb.numbyt = 0 and errornbr = eiorecerr_c);   // wahrscheinlich ein
-             // gelöschter Datensatz
+             // gelÃ¶schter Datensatz
              p_clrerrno();
              priofb = rreadn(io_hfile.fd : *null: 0: no_lock);
           endif;
@@ -612,7 +612,7 @@
        p_clrerrno();
        clearErrorMsg(io_hfile);
 
-       // Setzen Datenzeiger auf angegebenen Schlüssel
+       // Setzen Datenzeiger auf angegebenen SchlÃ¼ssel
        key = i_key;
        keylen = %len(key);
 
@@ -656,7 +656,7 @@
        clearErrorMsg(io_hfile);
 
        // Setzen Datenzeiger auf angegebene Satznummer
-       // (auch auf gelöschte Datensatze)
+       // (auch auf gelÃ¶schte Datensatze)
        options = f_bitor(rrn_eq: no_lock);
 
        priofb = rlocate(io_hfile.fd: *null: i_rrn: options);
@@ -678,7 +678,7 @@
        // Einlesen Datensatz
        priofb = rreads(io_hfile.fd : *null: 0: no_lock);
        if (riofb.numbyt = 0 and f_errno() = eiorecerr_c);   // wahrscheinlich ein
-          // gelöschter Datensatz
+          // gelÃ¶schter Datensatz
           priofb = rreadn(io_hfile.fd : *null: 0: no_lock);
        endif;
 
@@ -715,7 +715,7 @@
        p_clrerrno();
        clearErrorMsg(io_hfile);
 
-       // Setzen Datenzeiger auf angegebenen Schlüssel
+       // Setzen Datenzeiger auf angegebenen SchlÃ¼ssel
        key = i_key;
        keylen = %len(key);
 

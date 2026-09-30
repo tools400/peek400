@@ -8,7 +8,7 @@
 //  Typ      : RPG                                               *
 //                                                               *
 //  erstellt : 29.10.97  Raddatz                                 *
-//  geändert : 27.04.99  2.1.0                                   *
+//  geÃ¤ndert : 27.04.99  2.1.0                                   *
 //                                                               *
 //===============================================================*
 //                                                               *
@@ -57,7 +57,7 @@ end-pi;
 ceehdlr(%paddr('errorHandler')
        : *null: *omit);
 
-//  Kopieren für alle Programme ...
+//  Kopieren fÃ¼r alle Programme ...
 if (i_section = '*ALL');
 
   wrk_sectn = '*PEEK05';
@@ -166,7 +166,7 @@ if (i_section = '*ALL');
 
 else;
 
-  //  Kopieren für ein Programm
+  //  Kopieren fÃ¼r ein Programm
   wrk_sectn = i_section;
   exsr delrecords;
   exsr addrecords;
@@ -176,7 +176,7 @@ endif;
 *inlr = '1';
 
 //============================================================*
-//    DelRecords    Löschen von Datensätzen                   *
+//    DelRecords    LÃ¶schen von DatensÃ¤tzen                   *
 //============================================================*
 
 begsr delrecords;
@@ -191,7 +191,7 @@ begsr delrecords;
     enddo;
 
   else;
-  //    Löschen bestehender Datensäötze nur bei
+  //    LÃ¶schen bestehender DatensÃ¤tze nur bei
   //    Betriebsart *REPLACE oder *DELETE.
   //    Sonst nicht!
   endif;
@@ -199,7 +199,7 @@ begsr delrecords;
 endsr;
 
 //============================================================*
-//    AddRecords    Hinzufügen von Datensätzen                *
+//    AddRecords    HinzufÃ¼gen von DatensÃ¤tzen                *
 //============================================================*
 
 begsr addrecords;
@@ -216,7 +216,7 @@ begsr addrecords;
     enddo;
 
   else;
-  //    Hinzufügen von Datensätzen nur in der
+  //    HinzufÃ¼gen von DatensÃ¤tzen nur in der
   //    Betriebsart *ADD oder *REPLACE.
   //    Sonst nicht!
   endif;

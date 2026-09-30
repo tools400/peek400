@@ -1,7 +1,7 @@
 **free
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR0004
-//  Datei OHNE Commitment-Kontrolle geöffnet!
+//  Datei OHNE Commitment-Kontrolle geÃ¶ffnet!
 dcl-ds USR0004 qualified;
       //  No replacement variables available!
 end-ds;

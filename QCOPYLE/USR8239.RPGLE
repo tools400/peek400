@@ -1,7 +1,7 @@
 **free
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8239
-//  Eingabetaste drücken, um die angegebenen Anzahl zu löschen.
+//  Eingabetaste drÃ¼cken, um die angegebenen Anzahl zu lÃ¶schen.
 dcl-ds USR8239 qualified;
       //  No replacement variables available!
 end-ds;

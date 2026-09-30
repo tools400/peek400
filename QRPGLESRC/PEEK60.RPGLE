@@ -13,7 +13,7 @@
 //                                                               *
 //  Kurzdokumentation :                                          *
 //                                                               *
-//  Peek/400 - Ermitteln Aufwand für Pgm-Generieren              *
+//  Peek/400 - Ermitteln Aufwand fÃ¼r Pgm-Generieren              *
 //                                                               *
 // ============================================================= *
 // >>PRE-COMPILER<<                                              *

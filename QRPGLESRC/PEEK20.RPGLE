@@ -8,8 +8,8 @@
 //  Typ      : RPG                                               *
 //                                                               *
 //  erstellt : 27.10.97    Raddatz                               *
-//  geändert : 27.04.99    2.1.0                                 *
-//  geändert : 01.04.2004  2.2.2   Fixed problem that ybuffer    *
+//  geÃ¤ndert : 27.04.99    2.1.0                                 *
+//  geÃ¤ndert : 01.04.2004  2.2.2   Fixed problem that ybuffer    *
 //                                 was not cleared correclty     *
 //                                 for data/time/timestamp       *
 //                                 fields.                       *
@@ -18,7 +18,7 @@
 //                                                               *
 //  Kurzdokumentation :                                          *
 //                                                               *
-//  Erstellen internen Aufsetzschlüssel                          *
+//  Erstellen internen AufsetzschlÃ¼ssel                          *
 //                                                               *
 //===============================================================*
 // >>PRE-COMPILER<<                                              *
@@ -159,7 +159,7 @@ endif;
 return;
 
 //============================================================*
-//    BuildKey      Erstellen internen Aufsetzschlüssel       *
+//    BuildKey      Erstellen internen AufsetzschlÃ¼ssel       *
 //============================================================*
 
   begsr buildKey;
@@ -253,8 +253,8 @@ endsr;
     endif;
     endsl;
 
-    //  ... Länge +1 wegen nachgestelltem Vorzeichen
-    //      grundsätzlich, ob mit oder ohne Vorzeichen
+    //  ... LÃ¤nge +1 wegen nachgestelltem Vorzeichen
+    //      grundsÃ¤tzlich, ob mit oder ohne Vorzeichen
     //      Vorzeichen wird in PEEK18 ausgewertet
       if (f_isnumfld(fldl0100) = bTrue);
     y = y + 1;
@@ -310,8 +310,8 @@ endsr;
   exsr chkvalue;
   // ... alle anderen Datentypen
   other;
-  // werden nicht vorgeprüft
-  // und vervollständigt
+  // werden nicht vorgeprÃ¼ft
+  // und vervollstÃ¤ndigt
   endsl;
 
   peek18(fldl0100: f2format: ybuffer
@@ -373,7 +373,7 @@ endif;
 endsr;
 
 //============================================================*
-//    ChkValue      Prüfen und vervollständigen Datums-,      *
+//    ChkValue      PrÃ¼fen und vervollstÃ¤ndigen Datums-,      *
 //                  Zeit- und Zeitstempelfelder               *
 //============================================================*
 

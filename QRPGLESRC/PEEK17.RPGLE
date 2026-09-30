@@ -7,8 +7,8 @@
        //  Typ      : RPG                                               *
        //                                                               *
        //  erstellt : 20.10.97  Raddatz                                 *
-       //  geändert : 27.04.99  für Version 2.1.0                       *
-       //  geändert : 29.07.99  für Version 2.2.0                       *
+       //  geÃ¤ndert : 27.04.99  fÃ¼r Version 2.1.0                       *
+       //  geÃ¤ndert : 29.07.99  fÃ¼r Version 2.2.0                       *
        //                                                               *
        //===============================================================*
        //                                                               *
@@ -180,13 +180,13 @@
           //  Anzeigen Bildschirm
           exfmt bild01;
 
-          //  Nachrichten löschen
+          //  Nachrichten lÃ¶schen
           p_rmvpgmmg(sds.pgmname);
 
-          //  Bezugszahlen löschen
+          //  Bezugszahlen lÃ¶schen
           exsr bzoff1;
 
-          //  Mappen der gedrückten Taste
+          //  Mappen der gedrÃ¼ckten Taste
           //  in Programmbefehl
           peek21(workstn.aid: sds.pgmname
                 : ypgmcmd: ycmddta: ymsgid: ymsgdta);
@@ -233,7 +233,7 @@
              endif;
 
           other;
-             //  Falsche Taste gedrückt
+             //  Falsche Taste gedrÃ¼ckt
              p_wrongkey(workstn.aid: sds.pgmname);
              iter;
           endsl;
@@ -334,7 +334,7 @@
        endsr;
 
        //============================================================*
-       //    PRFB1         Prüfen der Eingaben                       *
+       //    PRFB1         PrÃ¼fen der Eingaben                       *
        //============================================================*
 
        begsr prfb1;
@@ -374,7 +374,7 @@
        endsr;
 
        //============================================================*
-       //    PRF20         Prüfen:  Feldname                         *
+       //    PRF20         PrÃ¼fen:  Feldname                         *
        //============================================================*
 
        begsr prf20;
@@ -427,7 +427,7 @@
        endsr;
 
        //============================================================*
-       //    PRF21         Prüfen:  Operation                        *
+       //    PRF21         PrÃ¼fen:  Operation                        *
        //============================================================*
 
        begsr prf21;
@@ -489,7 +489,7 @@
        endsr;
 
        //============================================================*
-       //    PRF22         Prüfen:  Argument                         *
+       //    PRF22         PrÃ¼fen:  Argument                         *
        //============================================================*
 
        begsr prf22;
@@ -538,7 +538,7 @@
                    //      ... Vorzeichen stehen lassen
                 endif;
 
-                //  ... gültige Daten
+                //  ... gÃ¼ltige Daten
                 //      ... Komma extrahieren
                 if (fldl0100.f1dtyp = 'F'); // Float
                    if (f_vldfloat(r_arg30) = bFalse);
@@ -586,7 +586,7 @@
        endsr;
 
        //============================================================*
-       //    SignLeft      Prüfen extrahieren Vorzeichen links       *
+       //    SignLeft      PrÃ¼fen extrahieren Vorzeichen links       *
        //============================================================*
 
        begsr signleft;
@@ -619,7 +619,7 @@
        endsr;
 
        //============================================================*
-       //    SignRight     Prüfen und umsetzen Vorzeichen rechts     *
+       //    SignRight     PrÃ¼fen und umsetzen Vorzeichen rechts     *
        //============================================================*
 
        begsr signright;
@@ -653,19 +653,19 @@
        endsr;
 
        //============================================================*
-       //    SrchPoint     Prüfen und umsetzen Komma                 *
+       //    SrchPoint     PrÃ¼fen und umsetzen Komma                 *
        //============================================================*
 
        begsr srchpoint;
 
           if (f_isnumfld(fldl0100) = bFalse);
-             //    keine Aufbereitung für nicht-numerische Daten
+             //    keine Aufbereitung fÃ¼r nicht-numerische Daten
           else;
 
              //  Suchen nach Komma ...
              x = %scan(set0003.set_point: r_arg30);
              if (x = *zeros);
-                //   Wenn nicht gefunden, dann Länge +1 ...
+                //   Wenn nicht gefunden, dann LÃ¤nge +1 ...
                 //*   ' '           CHECKR    R_Arg30       X
                 x = %checkr(' ': r_arg30);
                 x = x + 1;
@@ -688,12 +688,12 @@
                 r_nachk = *blanks;
              endif;
 
-             //   Anzahl der Nachkommastellen auffüllen ...
+             //   Anzahl der Nachkommastellen auffÃ¼llen ...
              if (fldl0100.f1decp <= 0);
                 //   ... keine vorhanden
                 r_nachk = *blanks;
              else;
-                //   ... auffüllen
+                //   ... auffÃ¼llen
                 for do_x2 = 1 to *hival;
                    //*   1             SUBST     R_NachK:F1DECPR_A1
                    r_a1 = %subst(r_nachk: fldl0100.f1decp: 1);
@@ -715,7 +715,7 @@
        endsr;
 
        //============================================================*
-       //    PRF23         Prüfen:  Anzahl Datensätze                *
+       //    PRF23         PrÃ¼fen:  Anzahl DatensÃ¤tze                *
        //============================================================*
 
        begsr prf23;
@@ -738,7 +738,7 @@
        endsr;
 
        //============================================================*
-       //    PRF24         Prüfen:  Suchtyp                          *
+       //    PRF24         PrÃ¼fen:  Suchtyp                          *
        //============================================================*
 
        begsr prf24;
@@ -766,7 +766,7 @@
        endsr;
 
        //============================================================*
-       //    PRF25         Prüfen:  case-sensitive                   *
+       //    PRF25         PrÃ¼fen:  case-sensitive                   *
        //============================================================*
 
        begsr prf25;
@@ -870,7 +870,7 @@
        endsr;
 
        //============================================================*
-       //    FILL##        Füllen Bildschirm                         *
+       //    FILL##        FÃ¼llen Bildschirm                         *
        //============================================================*
 
        begsr fill##;
@@ -939,7 +939,7 @@
        endsr;
 
        //============================================================*
-       //    SetScreen     Einstellen 132/80-Zeichen Auflösung       *
+       //    SetScreen     Einstellen 132/80-Zeichen AuflÃ¶sung       *
        //============================================================*
 
        begsr setscreen;
@@ -976,7 +976,7 @@
           //  Attribute der Suchfunktion
           set0002 = f_getusrsg('*SEARCH'   );
 
-          //  Attribute der Schlüsselaufbeeitung
+          //  Attribute der SchlÃ¼sselaufbeeitung
           set0003 = f_getusrsg('*ACCESSKEY');
 
           //  *PROMPT
@@ -985,24 +985,24 @@
        endsr;
 
        //============================================================*
-       //    TrimNum       Nullenunterdrückung für numerische Daten  *
+       //    TrimNum       NullenunterdrÃ¼ckung fÃ¼r numerische Daten  *
        //============================================================*
 
        begsr trimnum;
 
           if (f_isnumfld(fldl0100) = bFalse);
-             //    keine Aufbereitung für nicht-numerische Daten
+             //    keine Aufbereitung fÃ¼r nicht-numerische Daten
           else;
 
              x = %check('0':r_arg30);
              if (x > 0);
                 r_arg30 = %subst(r_arg30: x);
              else;
-                // Nur führende Nullen vorhanden
+                // Nur fÃ¼hrende Nullen vorhanden
                 r_arg30 = *blanks;
              endif;
 
-             // Argument bestand nur aus führenden Nullen
+             // Argument bestand nur aus fÃ¼hrenden Nullen
              // oder nur aus *BLANKS ...
              if (r_arg30 = *blanks);
                 r_arg30 = '0';
@@ -1016,13 +1016,13 @@
        endsr;
 
        //============================================================*
-       //    ChkNumData    auf gültige numerische Daten prüfen       *
+       //    ChkNumData    auf gÃ¼ltige numerische Daten prÃ¼fen       *
        //============================================================*
 
        begsr chknumdata;
 
           if (f_isnumfld(fldl0100) = bFalse);
-             //    keine Prüfung für nicht-numerische Daten
+             //    keine PrÃ¼fung fÃ¼r nicht-numerische Daten
           else;
 
              if (%check(NUMERIC_DIGITS: r_arg30) > 0);
@@ -1037,13 +1037,13 @@
        endsr;
 
        //============================================================*
-       //    ExpandNum     numerische Daten rechtsbündig setzen      *
+       //    ExpandNum     numerische Daten rechtsbÃ¼ndig setzen      *
        //============================================================*
 
        begsr expandnum;
 
           if (f_isnumfld(fldl0100) = bFalse);
-             //    keine Aufbereitung für nicht-numerische Daten
+             //    keine Aufbereitung fÃ¼r nicht-numerische Daten
           else;
 
              x = %checkr(' ': r_arg30);
@@ -1051,7 +1051,7 @@
              if (x > 0);
                 r_arg30 = f_space(x) +  r_arg30;
              else;
-                // ... ist bereits rechtbündig
+                // ... ist bereits rechtbÃ¼ndig
              endif;
 
              r_arg30 = %xlate(' ': '0': r_arg30);
@@ -1066,14 +1066,14 @@
 
        begsr first;
 
-          // - Öffnen der Dateien
+          // - Ã–ffnen der Dateien
           open peekfld;
           open peek17fm;
 
           // - Benutzervoreinstellungen
           exsr getusrsetg;
 
-          // - Füllen der Bildschirmfelder
+          // - FÃ¼llen der Bildschirmfelder
           exsr fill##;
 
           // - Programm initialisieren
@@ -1085,7 +1085,7 @@
           // - Darstellung der Befehlstasten
           sfbot = 1;
 
-          // - Einstellen der Bildschirmauflösung 80/132-Zeichen
+          // - Einstellen der BildschirmauflÃ¶sung 80/132-Zeichen
           exsr setscreen;
 
           // - Copyright

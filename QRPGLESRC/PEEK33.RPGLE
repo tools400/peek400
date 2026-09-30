@@ -35,7 +35,7 @@
 /COPY QCOPYLE,SET0001                    // Benutzervoreinstellungen
 /COPY QCOPYLE,SET0007                    // Versionsnummer
 /COPY QCOPYLE,SET0012                    // Generieren Programme *CRTPGM
-/COPY QCOPYLE,SET0016                    // SQL: Limit zum Anzeigen der Anzahl Datensät
+/COPY QCOPYLE,SET0016                    // SQL: Limit zum Anzeigen der Anzahl DatensÃ¤t
 
 /define internal_prototype
 /COPY QCOPYLE,PPEEK33
@@ -51,7 +51,7 @@ dcl-ds set0016  likeds(set0016_t) inz;
 dcl-ds set0012_alt qualified;
   //  Kleinbuchstaben erlaubt: 1=Ja; 0=Nein
   set_alwlc       char(10) inz('1');
-  //  Standardmäßig Klienbuchstaben: 1=Ja; 0=Nein
+  //  StandardmÃ¤ÃŸig Klienbuchstaben: 1=Ja; 0=Nein
   set_case        char(10) inz('0');
   //  Endemarkierung
   set_0012        char(1) inz(x'8B');
@@ -151,7 +151,7 @@ endif;
 *inlr = '1';
 
 //============================================================*
-//    VPos          Durchführen der Aktualisierungsarbeiten   *
+//    VPos          DurchfÃ¼hren der Aktualisierungsarbeiten   *
 //============================================================*
 
 begsr vpos;
@@ -160,7 +160,7 @@ begsr vpos;
   //  der jetzige Versionsstand erreicht worden ist.
   dow (set0007.set_vsn <= i_version);
 
-    //  ... aktualiseren der früheren Versionsstände
+    //  ... aktualiseren der frÃ¼heren VersionsstÃ¤nde
     select;
     when (set0007.set_vsn < 'V01R01M00');
       exsr v01r01m00;
@@ -641,7 +641,7 @@ begsr v03r02m02;
 
   set0007.set_vsn = 'V03R02M02';
 
-  //  Ändern Default Edit Code von 'J' auf 'L'
+  //  Ã„ndern Default Edit Code von 'J' auf 'L'
   set0001 = f_getusrsg('*DSPATTR');
 
   if (set0001.set_editcode = 'J');
@@ -792,7 +792,7 @@ begsr v03r05m00;
 
   set0007.set_vsn = 'V03R05M00';
 
-  //  Anlegen Einstellung für max. Anzahl Sätze für SQL-COUNT()
+  //  Anlegen Einstellung fÃ¼r max. Anzahl SÃ¤tze fÃ¼r SQL-COUNT()
   set0016 = f_getusrsg('*SQLLMTCNT');
 
 endsr;
@@ -969,10 +969,10 @@ begsr updPeekUsr;
     //  Wenn der Datenbereich anders als erwartet
     //  belegt ist, ...
     if (o_data <> wrktabds.data);
-      //  ... dann keine Änderung durchführen
+      //  ... dann keine Ã„nderung durchfÃ¼hren
       iter;
     else;
-      //  ... ansonsten die Änderung vollziehen
+      //  ... ansonsten die Ã„nderung vollziehen
       wrktabds = wrktab(x);
       if (*in11 = '1');
         f_writeusr(wrktabds.section
@@ -1026,7 +1026,7 @@ dcl-proc errorhandler;
 
 end-proc;
 
-**   Section---Schlüssel-Datenbereich-------------------------- Version 1.1.0 -----------
+**   Section---SchlÃ¼ssel-Datenbereich-------------------------- Version 1.1.0 -----------
 alt: *PEEK05   *F11
 neu: *PEEK05   *F11      *LAYOUT
 alt: *PEEK05   *F13      *USERSETG
@@ -1085,7 +1085,7 @@ alt: *PEEK37   *PAGEDOWN
 neu: *PEEK37   *PAGEDOWN *PAGEDOWN
 alt: *PEEK37   1
 neu: *PEEK37   1         *SELECT
-**   Section---Schlüssel-Datenbereich-------------------------- Version 1.2.0 -----------
+**   Section---SchlÃ¼ssel-Datenbereich-------------------------- Version 1.2.0 -----------
 alt: *CMD      DM
 neu: *CMD      DM        DSPMSG
 alt: *CMD      EA
@@ -1122,7 +1122,7 @@ alt: *PXXXXXXXX*F17
 neu: *PXXXXXXXX*F17      *TOP
 alt: *PXXXXXXXX*F18
 neu: *PXXXXXXXX*F18      *BOT
-**   Section---Schlüssel-Datenbereich-------------------------- Version 1.3.0 -----------
+**   Section---SchlÃ¼ssel-Datenbereich-------------------------- Version 1.3.0 -----------
 alt: *PXXXXXXXX*F09
 neu: *PXXXXXXXX*F09      *HEXEDIT
 alt: *PEEK45   *F03
@@ -1135,7 +1135,7 @@ alt: *PEEK45   *F24
 neu: *PEEK45   *F24      *MOREKEYS
 alt: *PEEK45   *ENTER
 neu: *PEEK45   *ENTER    *ENTER
-**   Section---Schlüssel-Datenbereich-------------------------- Version 1.4.0 -----------
+**   Section---SchlÃ¼ssel-Datenbereich-------------------------- Version 1.4.0 -----------
 alt: *PEEK47   *ENTER
 neu: *PEEK47   *ENTER    *ENTER
 alt: *PEEK47   *F03
@@ -1178,7 +1178,7 @@ alt: *PEEK49   *F24
 neu: *PEEK49   *F24      *MOREKEYS
 alt: *PEEK05   A
 neu: *PEEK05   A         *ABOUT
-**   Section---Schlüssel-Datenbereich-------------------------- Version 1.5.0 -----------
+**   Section---SchlÃ¼ssel-Datenbereich-------------------------- Version 1.5.0 -----------
 alt: *PEEK50
 neu: *PEEK50             *NONE
 alt: *PEEK50   *F03
@@ -1231,7 +1231,7 @@ alt: *PEEK47   *F17
 neu: *PEEK47   *F17      *TOP
 alt: *PEEK47   *F18
 neu: *PEEK47   *F18      *BOT
-**   Section---Schlüssel-Datenbereich-------------------------- Version 2.0.0 -----------
+**   Section---SchlÃ¼ssel-Datenbereich-------------------------- Version 2.0.0 -----------
 alt: *PEEK48   *ENTER
 neu: *PEEK48   *ENTER    *ENTER
 alt: *PEEK48   *F03
@@ -1266,7 +1266,7 @@ alt: *PEEK40   *F17
 neu: *PEEK40   *F17      *TOP
 alt: *PEEK40   *F18
 neu: *PEEK40   *F18      *BOT
-**   Section---Schlüssel-Datenbereich-------------------------- Version 2.1.0 -----------
+**   Section---SchlÃ¼ssel-Datenbereich-------------------------- Version 2.1.0 -----------
 alt: *PEEK56   *ENTER
 neu: *PEEK56   *ENTER    *ENTER
 alt: *PEEK56   *F03
@@ -1307,7 +1307,7 @@ alt: *PEEK57   *F12
 neu: *PEEK57   *F12      *CANCEL
 alt: *PEEK57   *F24
 neu: *PEEK57   *F24      *MOREKEYS
-**   Section---Schlüssel-Datenbereich-------------------------- Version 2.2.0 -----------
+**   Section---SchlÃ¼ssel-Datenbereich-------------------------- Version 2.2.0 -----------
 alt: *PEEK45   *F19
 neu: *PEEK45   *F19      *LEFT
 alt: *PEEK45   *F20
@@ -1338,7 +1338,7 @@ alt: *PEEK56   1         *SELECT
 neu: *PEEK56   1         *SLCENV
 alt: *PEEK56   2
 neu: *PEEK56   2         *SLCLAYOUT
-**   Section---Schlüssel-Datenbereich-------------------------- Version 3.0.0 -----------
+**   Section---SchlÃ¼ssel-Datenbereich-------------------------- Version 3.0.0 -----------
 alt: *PXXXXXXXX*F08
 neu: *PXXXXXXXX*F08      *TGLNULL
 alt: *PXXXXXXXX*F10
@@ -1361,12 +1361,12 @@ alt: *PEEK64   *F24
 neu: *PEEK64   *F24      *MOREKEYS
 alt: *PEEK05   K
 neu: *PEEK05   K         *TGLKEYLUC
-**   Section---Schlüssel-Datenbereich-------------------------- Version 3.1.0 -----------
+**   Section---SchlÃ¼ssel-Datenbereich-------------------------- Version 3.1.0 -----------
 alt: *PEEK05   6
 neu: *PEEK05   6         *PRINT
 alt: *PEEK14   *F21
 neu: *PEEK14   *F21      *PRINT
-**   Section---Schlüssel-Datenbereich-------------------------- Version 3.1.1 -----------
+**   Section---SchlÃ¼ssel-Datenbereich-------------------------- Version 3.1.1 -----------
 neu: *PEEK68
 neu: *PEEK68             *NONE
 alt: *PEEK68   *ENTER
@@ -1391,7 +1391,7 @@ alt: *PEEK68   *PAGEDOWN
 neu: *PEEK68   *PAGEDOWN *PAGEDOWN
 alt: *PEEK68   1
 neu: *PEEK68   1         *SELECT
-**   Section---Schlüssel-Datenbereich-------------------------- Version 3.2.5 -----------
+**   Section---SchlÃ¼ssel-Datenbereich-------------------------- Version 3.2.5 -----------
 neu: *PEEK69
 neu: *PEEK69             *NONE
 alt: *PEEK69   *ENTER
@@ -1418,17 +1418,17 @@ alt: *PEEK69   *PAGEUP
 neu: *PEEK69   *PAGEUP   *PAGEUP
 alt: *PEEK69   1
 neu: *PEEK69   1         *SELECT
-**   Section---Schlüssel-Datenbereich-------------------------- Version 3.4.1 -----------
+**   Section---SchlÃ¼ssel-Datenbereich-------------------------- Version 3.4.1 -----------
 alt: *PEEK45   *PAGEUP
 neu: *PEEK45   *PAGEUP   *PAGEUP
 alt: *PEEK45   *PAGEDOWN
 neu: *PEEK45   *PAGEDOWN *PAGEDOWN
-**   Section---Schlüssel-Datenbereich-------------------------- Version 3.5.0 -----------
+**   Section---SchlÃ¼ssel-Datenbereich-------------------------- Version 3.5.0 -----------
 alt: *PEEK64   *ENTER    *OK
 neu: *PEEK64   *ENTER    *ENTER
 alt: *PEEK64   *F3       *NO
 neu: *PEEK64   *F3       *EXIT
-**   Section---Schlüssel-Datenbereich-------------------------- Version 4.0.1 -----------
+**   Section---SchlÃ¼ssel-Datenbereich-------------------------- Version 4.0.1 -----------
 alt: *PEEK64   *F07
 neu: *PEEK64   *F07      *INSERT
 alt: *PEEK64   *F08

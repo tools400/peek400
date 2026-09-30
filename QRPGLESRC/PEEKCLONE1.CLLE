@@ -76,7 +76,7 @@
                 RMVBNDDIRE BNDDIR(&BNDRLB/&BNDRNM) +
                            OBJ((&BNOLNM/&BNOBNM &BNOBTP))
 
-                /* Hinzufügen neuen Eintrag   */
+                /* HinzufÃ¼gen neuen Eintrag   */
                 ADDBNDDIRE BNDDIR(&BNDRLB/&BNDRNM) +
                            OBJ((&NEWLIB/&BNOBNM &BNOBTP)) +
                            POSITION(*LAST)

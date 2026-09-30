@@ -1,7 +1,7 @@
 **free
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8174
-//  Unzul‰ssige Zeichen (&1) im Hex-String.
+//  Unzul√§ssige Zeichen (&1) im Hex-String.
 dcl-ds USR8174 qualified;
   var1  char(1) inz;
 end-ds;

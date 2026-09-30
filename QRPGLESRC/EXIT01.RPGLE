@@ -11,38 +11,38 @@
        //===============================================================*
        //                                                               *
        //  Kurzdokumentation :                                          *
-       //  ØØØØØØØØØØØØØØØØØØØ                                          *
-       //  EXIT-Programm zur Pr¸fung der Sicherheitswerte:              *
+       //  ===================                                          *
+       //  EXIT-Programm zur Pr√ºfung der Sicherheitswerte:              *
        //                                                               *
-       //     - ƒnderung der Bibliothek erlaubt                         *
-       //     - ƒnderung der Datei erlaubt                              *
-       //     - ƒnderung der Teildatei erlaubt                          *
-       //     - Datensatz‰nderungen erlaubt                             *
-       //     - ƒndern SQL WHERE erlaubt                                *
-       //     - ƒndern SQL ORDER BY erlaubt                             *
+       //     - √Ñnderung der Bibliothek erlaubt                         *
+       //     - √Ñnderung der Datei erlaubt                              *
+       //     - √Ñnderung der Teildatei erlaubt                          *
+       //     - Datensatz√§nderungen erlaubt                             *
+       //     - √Ñndern SQL WHERE erlaubt                                *
+       //     - √Ñndern SQL ORDER BY erlaubt                             *
        //     - Zugriff auf Datei erlaubt                               *
        //                                                               *
        //  Das Exit-Programm muss in der Peek/400 Produktbibliothek     *
        //  vorhanden sein.                                              *
        //                                                               *
        //  Parameterliste:                                              *
-       //  ØØØØØØØØØØØØØØØ                                              *
+       //  ===============                                              *
        //     Inp:  gi_qFile    - qualifizierter Dateiname              *
        //     Inp:  gi_mbr      - Teildatei                             *
        //     Inp:  gi_access   - Zugriffsmodus                         *
-       //     I/O:  gio_chgL    - ƒnderung Bibliothek erlaubt           *
-       //     I/O:  gio_chgF    - ƒnderung Datei erlaubt                *
-       //     I/O:  gio_chgM    - ƒnderung Teildatei erlaubt            *
-       //     I/O:  gio_updMd   - Datensatz‰nderung erlaubt             *
-       //     I/O:  gio_updKy   - Schl¸ssel‰nderung erlaubt             *
-       //     I/O:  gio_chgSqlW - ƒnderung SQL WHERE erlaubt            *
-       //     I/O:  gio_chgSqlO - ƒnderung SQL ORDER BY erlaubt         *
+       //     I/O:  gio_chgL    - √Ñnderung Bibliothek erlaubt           *
+       //     I/O:  gio_chgF    - √Ñnderung Datei erlaubt                *
+       //     I/O:  gio_chgM    - √Ñnderung Teildatei erlaubt            *
+       //     I/O:  gio_updMd   - Datensatz√§nderung erlaubt             *
+       //     I/O:  gio_updKy   - Schl√ºssel√Ñnderung erlaubt             *
+       //     I/O:  gio_chgSqlW - √Ñnderung SQL WHERE erlaubt            *
+       //     I/O:  gio_chgSqlO - √Ñnderung SQL ORDER BY erlaubt         *
        //     I/O:  gio_accAt   - allg. Zugriffsberechtigung            *
        //     Out:  go_msgID    - Nachrichten-ID                        *
        //     Out:  go_msgDta   - Nachrichtendaten                      *
        //                                                               *
        //  Herkunft der Eingangsparameter:                              *
-       //  ØØØØØØØØØØØØØØØØØØØØØØØØØØØØØØØ                              *
+       //  ===============================                              *
        //     I/O:  gio_chgL    - Befehl PEEK oder *SECATRDFT wenn *DFT *
        //     I/O:  gio_chgF    - Befehl PEEK oder *SECATRDFT wenn *DFT *
        //     I/O:  gio_chgM    - Befehl PEEK oder *SECATRDFT wenn *DFT *
@@ -52,38 +52,38 @@
        //     I/O:  gio_chgSqlO - Befehl PEEK oder *SECATRDFT wenn *DFT *
        //     I/O:  gio_accAt   - *SECATRDFT                            *
        //                                                               *
-       //  Bis hierher gibt es keine Priorit‰ten bei der Ermittlung     *
-       //  der Werte. Sofern im Befehl f¸r einen der Parameter          *
+       //  Bis hierher gibt es keine Priorit√§ten bei der Ermittlung     *
+       //  der Werte. Sofern im Befehl f√ºr einen der Parameter          *
        //  *YES oder *NO angegeben worden ist, so werden diese          *
        //  Werte verwendet. Bei *DFT werden die Werte aus *SECATRDFT    *
        //  benutzt.                                                     *
        //                                                               *
-       //  Berechnen der R¸ckgabewerte:                                 *
-       //  ØØØØØØØØØØØØØØØØØØØØØØØØØØØØ                                 *
-       //  Die Ermittlung der R¸ckgabewerte erfolgt in folgender        *
+       //  Berechnen der R√ºckgabewerte:                                 *
+       //  ============================                                 *
+       //  Die Ermittlung der R√ºckgabewerte erfolgt in folgender        *
        //  Reihenfolge:                                                 *
        //                                                               *
-       //     (1) spez. Benutzerberechtigung f¸r qualifiziertes Objekt  *
-       //     (2) spez. Benutzerberechtigung f¸r Objekt in *ALLLIB      *
-       //     (3) allg. Objektberechtigung f¸r qualifiziertes Objekt    *
-       //     (4) allg. Objektberechtigung f¸r Objekt in *ALLLIB        *
-       //     (5) spez. *SECATR f¸r einen Benutzer, Bibliothek          *
-       //     (6) allg. *SECATR f¸r einen Benutzer, *ALLLIB             *
-       //     (7) spez. *SECATR f¸r alle Benutzer, Bibliothek           *
-       //     (8) allg. *SECATR f¸r alle Benutzer, *ALLUSR              *
+       //     (1) spez. Benutzerberechtigung f√ºr qualifiziertes Objekt  *
+       //     (2) spez. Benutzerberechtigung f√ºr Objekt in *ALLLIB      *
+       //     (3) allg. Objektberechtigung f√ºr qualifiziertes Objekt    *
+       //     (4) allg. Objektberechtigung f√ºr Objekt in *ALLLIB        *
+       //     (5) spez. *SECATR f√ºr einen Benutzer, Bibliothek          *
+       //     (6) allg. *SECATR f√ºr einen Benutzer, *ALLLIB             *
+       //     (7) spez. *SECATR f√ºr alle Benutzer, Bibliothek           *
+       //     (8) allg. *SECATR f√ºr alle Benutzer, *ALLUSR              *
        //     (9) bisher ermittelte Berechtigung (Eing.Wert)            *
        //                                                               *
        //  Hinweise:                                                    *
-       //  ØØØØØØØØØ                                                    *
-       //  Im Systemwert *SECATRDFT werden die Standardwerte f¸r        *
+       //  =========                                                    *
+       //  Im Systemwert *SECATRDFT werden die Standardwerte f√ºr        *
        //  die Benutzer definiert.                                      *
        //                                                               *
-       //  Ohne Datens‰tze in der Datei EXIT01PF kˆnnen diese Standard- *
-       //  werte ¸ber die Parameterwerte des Befehls PEEK ¸berschrieben *
+       //  Ohne Datens√§tze in der Datei EXIT01PF k√∂nnen diese Standard- *
+       //  werte √ºber die Parameterwerte des Befehls PEEK √ºberschrieben *
        //  werden.                                                      *
        //                                                               *
-       //  Mit Datens‰tzen in der Datei PEEK kˆnnen diese Standardwerte *
-       //  gezielt abge‰ndert werden. Hierbei haben die Werte aus       *
+       //  Mit Datens√§tzen in der Datei PEEK k√∂nnen diese Standardwerte *
+       //  gezielt abge√§ndert werden. Hierbei haben die Werte aus       *
        //  der Datei EXIT01PF Vorrang vor den Standardwerten aus        *
        //  *SECATRDFT.                                                  *
        //                                                               *
@@ -92,14 +92,14 @@
        //  wird, wird der entsprechnde Wert aus *SECATRDFT genommen.    *
        //                                                               *
        //  Erstellen des Programms:                                     *
-       //  ØØØØØØØØØØØØØØØØØØØØØØØØ                                     *
+       //  ========================                                     *
        //  CRTRPGMOD MODULE(PEEK/EXIT01) DBGVIEW(*ALL) TRUNCNBR(*NO)    *
        //  SRCFILE(PEEK/QRPGLESRC) SRCMBR(EXIT01)                       *
        //  REPLACE(*YES) LANGID(*JOBRUN) TGTRLS(V4R5M0)                 *
        //                                                               *
        //  CRTPGM PGM(PEEK/EXIT01) MODULE(PEEK/EXIT01*)                 *
        //  BNDDIR( QC2LE PEEK) REPLACE(*YES)                            *
-       //  TEXT('Peek/400 - EXIT-Programm: Berechtigungspr¸fung')       *
+       //  TEXT('Peek/400 - EXIT-Programm: Berechtigungspr√ºfung')       *
        //  TGTRLS(V4R5M0) DETAIL(*BASIC) ACTGRP(PEEK)                   *
        //                                                               *
        // ============================================================= *
@@ -161,37 +161,37 @@
        end-pi;
 
        //  lokale Arbeitsfelder
-       //  ... ‰ndern Bibliothek erlaubt
+       //  ... √Ñndern Bibliothek erlaubt
        dcl-s usrchgl         like(bool_t) inz(bFalse);
        dcl-s objchgl         like(bool_t) inz(bFalse);
        dcl-s secchgl         like(bool_t) inz(bFalse);
        dcl-s chgl            like(bool_t) inz(bFalse);
-       //  ... ‰ndern Datei erlaubt
+       //  ... √Ñndern Datei erlaubt
        dcl-s usrchgf         like(bool_t) inz(bFalse);
        dcl-s objchgf         like(bool_t) inz(bFalse);
        dcl-s secchgf         like(bool_t) inz(bFalse);
        dcl-s chgf            like(bool_t) inz(bFalse);
-       //  ... ‰ndern Teildatei erlaubt
+       //  ... √Ñndern Teildatei erlaubt
        dcl-s usrchgm         like(bool_t) inz(bFalse);
        dcl-s objchgm         like(bool_t) inz(bFalse);
        dcl-s secchgm         like(bool_t) inz(bFalse);
        dcl-s chgm            like(bool_t) inz(bFalse);
-       //  ... Datensatz‰nderungen erlaubt
+       //  ... Datensatz√§nderungen erlaubt
        dcl-s usrupdmd        like(bool_t) inz(bFalse);
        dcl-s objupdmd        like(bool_t) inz(bFalse);
        dcl-s secupdmd        like(bool_t) inz(bFalse);
        dcl-s updmd           like(bool_t) inz(bFalse);
-       //  ... Schl¸ssel‰nderung erlaubt
+       //  ... Schl√ºssel√Ñnderung erlaubt
        dcl-s usrupdky        like(bool_t) inz(bFalse);
        dcl-s objupdky        like(bool_t) inz(bFalse);
        dcl-s secupdky        like(bool_t) inz(bFalse);
        dcl-s updky           like(bool_t) inz(bFalse);
-       //  ... ‰ndern SQL WHERE erlaubt
+       //  ... √Ñndern SQL WHERE erlaubt
        dcl-s usrchgsqlw      like(bool_t) inz(bFalse);
        dcl-s objchgsqlw      like(bool_t) inz(bFalse);
        dcl-s secchgsqlw      like(bool_t) inz(bFalse);
        dcl-s chgsqlw         like(bool_t) inz(bFalse);
-       //  ... ‰ndern SQL ORDERR BY erlaubt
+       //  ... √Ñndern SQL ORDERR BY erlaubt
        dcl-s usrchgsqlo      like(bool_t) inz(bFalse);
        dcl-s objchgsqlo      like(bool_t) inz(bFalse);
        dcl-s secchgsqlo      like(bool_t) inz(bFalse);
@@ -203,7 +203,7 @@
        dcl-s accat           like(bool_t) inz(bFalse);
 
        //  ermitteln Benutzerberechtigung ...
-       //  ... genau diese Datei (Priorit‰t 1)
+       //  ... genau diese Datei (  Priorit√§t 1)
        if f_usraut(usrchgl
                    : usrchgf
                    : usrchgm
@@ -215,7 +215,7 @@
                    : sds.user
                    : gi_qFile.name
                    : gi_qFile.lib) = bFalse;
-          //      ... alle Dateien diesen Typs (Priorit‰t 2)
+          //      ... alle Dateien diesen Typs (Priorit√§t 2)
           f_usraut(usrchgl
                    : usrchgf
                    : usrchgm
@@ -229,7 +229,7 @@
        endif;
 
        //  ermitteln Objektberechtigung ...
-       //  ... genau diese Datei (Priorit‰t 3)
+       //  ... genau diese Datei (Priorit√§t 3)
        if f_objaut(objchgl
                    : objchgf
                    : objchgm
@@ -240,7 +240,7 @@
                    : objaccat
                    : gi_qFile.name
                    : gi_qFile.lib) = bFalse;
-          //      ... alle Dateien diesen Typs (Priorit‰t 4)
+          //      ... alle Dateien diesen Typs (Priorit√§t 4)
           f_objaut(objchgl
                    : objchgf
                    : objchgm
@@ -253,7 +253,7 @@
        endif;
 
        //  ermitteln *SECATR ...
-       //  ... f¸r diesen Benutzer, diese Bibliothek (Priorit‰t 5)
+       //  ... f√ºr diesen Benutzer, diese Bibliothek (Priorit√§t 5)
        if f_secaut(secchgl
                    : secchgf
                    : secchgm
@@ -264,7 +264,7 @@
                    : secaccat
                    : sds.user
                    : gi_qFile.lib) = bFalse;
-          //      ... f¸r diesen Benutzer (Priorit‰t 6)
+          //      ... f√ºr diesen Benutzer (Priorit√§t 6)
           if f_secaut(secchgl
                       : secchgf
                       : secchgm
@@ -274,7 +274,7 @@
                       : secchgsqlo
                       : secaccat
                       : sds.user)  = bFalse;
-             //          ... f¸r alle Benutzer, diese Bibliothek (Priorit‰t 7)
+             //          ... f√ºr alle Benutzer, diese Bibliothek (Priorit√§t 7)
              if f_secaut(secchgl
                          : secchgf
                          : secchgm
@@ -285,7 +285,7 @@
                          : secaccat
                          : *omit
                          : gi_qFile.lib) = bFalse;
-                //              ... f¸r alle Benutzer (Priorit‰t 8)
+                //              ... f√ºr alle Benutzer (Priorit√§t 8)
                 if f_secaut(secchgl
                             : secchgf
                             : secchgm
@@ -299,63 +299,63 @@
           endif;
        endif;
 
-       //  Verkn¸pfen ƒnderung der Bibliothek erlaubt aus
-       //  Objekt- und Benutzerberechtigung (Priorit‰ten 1-9)
+       //  Verkn√ºpfen √Ñnderung der Bibliothek erlaubt aus
+       //  Objekt- und Benutzerberechtigung (Priorit√§ten 1-9)
        chgl   = f_mrgaut(usrchgl   :
                         objchgl   :
                         secchgl   :
                         gio_chgl  );
 
-       //  Verkn¸pfen ƒnderung der Datei erlaubt aus
-       //  Objekt- und Benutzerberechtigung (Priorit‰ten 1-9)
+       //  Verkn√ºpfen √Ñnderung der Datei erlaubt aus
+       //  Objekt- und Benutzerberechtigung (Priorit√§ten 1-9)
        chgf   = f_mrgaut(usrchgf    :
                         objchgf    :
                         secchgf   :
                         gio_chgf   );
 
-       //  Verkn¸pfen ƒnderung der Teildatei erlaubt aus
-       //  Objekt- und Benutzerberechtigung (Priorit‰ten 1-9)
+       //  Verkn√ºpfen √Ñnderung der Teildatei erlaubt aus
+       //  Objekt- und Benutzerberechtigung (Priorit√§ten 1-9)
        chgm   = f_mrgaut(usrchgm   :
                         objchgm   :
                         secchgm   :
                         gio_chgm  );
 
-       //  verkn¸pfen Objekt- und Benutzerberechtigung
-       //  zur Datensatz‰nderungen (Priorit‰ten 1-9)
+       //  verkn√ºpfen Objekt- und Benutzerberechtigung
+       //  zur Datensatz√§nderungen (Priorit√§ten 1-9)
        updmd  = f_mrgaut(usrupdmd  :
                         objupdmd  :
                         secupdmd  :
                         gio_updmd );
 
-       //  verkn¸pfen Objekt- und Benutzerberechtigung
-       //  zur Schl¸ssel‰nderung (Priorit‰ten 1-9)
+       //  verkn√ºpfen Objekt- und Benutzerberechtigung
+       //  zur Schl√ºssel√Ñnderung (Priorit√§ten 1-9)
        updky  = f_mrgaut(usrupdky  :
                         objupdky  :
                         secupdky  :
                         gio_updky );
 
-       //  Verkn¸pfen ƒnderung SQL WHERE erlaubt aus
-       //  Objekt- und Benutzerberechtigung (Priorit‰ten 1-9)
+       //  Verkn√ºpfen √Ñnderung SQL WHERE erlaubt aus
+       //  Objekt- und Benutzerberechtigung (Priorit√§ten 1-9)
        chgsqlw= f_mrgaut(usrchgsqlw:
                         objchgsqlw:
                         secchgsqlw:
                         gio_chgsqlw);
 
-       //  Verkn¸pfen ƒnderung SQL ORDER BY erlaubt aus
-       //  Objekt- und Benutzerberechtigung (Priorit‰ten 1-9)
+       //  Verkn√ºpfen √Ñnderung SQL ORDER BY erlaubt aus
+       //  Objekt- und Benutzerberechtigung (Priorit√§ten 1-9)
        chgsqlo= f_mrgaut(usrchgsqlo:
                         objchgsqlo:
                         secchgsqlo:
                         gio_chgsqlo);
 
-       //  verkn¸pfen Objekt- und Benutzerberechtigung
-       //  zur Zugriffsberechtigung (Priorit‰ten 1-9)
+       //  verkn√ºpfen Objekt- und Benutzerberechtigung
+       //  zur Zugriffsberechtigung (Priorit√§ten 1-9)
        accat  = f_mrgaut(usraccat  :
                         objaccat  :
                         secaccat  :
                         gio_accat );
 
-       //  F¸llen Output-Parameter
+       //  F√ºllen Output-Parameter
        gio_chgl    = chgl;
        gio_chgf    = chgf;
        gio_chgm    = chgm;
@@ -405,16 +405,16 @@
        //  Funktionswert
        dcl-s isfound         like(bool_t) inz(bFalse);
 
-       //  Hilfsfelder f¸r optionale Parameter
+       //  Hilfsfelder f√ºr optionale Parameter
        dcl-s i5_lib          like(i_lib     ) inz;
 
        //  lokale Arbeitsfelder
        dcl-ds ex_key3 likerec(FEXIT01: *KEY);
 
-       //  ÷ffnen Datei
+       //  √ñffnen Datei
        p_openfile();
 
-       //  Pr¸fen optionale Parameter
+       //  Pr√ºfen optionale Parameter
        if (%parms() >= %parmnum(i_lib));
           i5_lib = i_lib;
        else;
@@ -476,16 +476,16 @@
        //  Funktionswert
        dcl-s isfound         like(bool_t) inz(bFalse);
 
-       //  Hilfsfelder f¸r optionale Parameter
+       //  Hilfsfelder f√ºr optionale Parameter
        dcl-s i7_lib          like(i_lib);
 
        //  lokale Arbeitsfelder
        dcl-ds ex_key3 likerec(FEXIT01: *KEY);
 
-       //  ÷ffnen Datei
+       //  √ñffnen Datei
        p_openfile();
 
-       //  Pr¸fen optionale Parameter
+       //  Pr√ºfen optionale Parameter
        if (%parms() >= %parmnum(i_lib));
           i7_lib = i_lib;
        else;
@@ -546,17 +546,17 @@
        //  Funktionswert
        dcl-s isfound         like(bool_t) inz(bFalse);
 
-       //  Hilfsfelder f¸r optionale Parameter
+       //  Hilfsfelder f√ºr optionale Parameter
        dcl-s i6_user         like(i_user);
        dcl-s i7_lib          like(i_lib);
 
        //  lokale Arbeitsfelder
        dcl-ds ex_key3 likerec(FEXIT01: *KEY);
 
-       //  ÷ffnen Datei
+       //  √ñffnen Datei
        p_openfile();
 
-       //  Pr¸fen optionale Parameter ...
+       //  Pr√ºfen optionale Parameter ...
        //  ... user
        if (%parms() >= %parmnum(i_user));
           if (%addr(i_user) <> *null);
@@ -608,7 +608,7 @@
 
        //===============================================================*
        //    Funktion:                                                  *
-       //    f_mrgAut     Verkn¸pfen Benutzer-/Objektrechte             *
+       //    f_mrgAut     Verkn√ºpfen Benutzer-/Objektrechte             *
        //===============================================================*
 
        dcl-proc f_mrgaut;
@@ -629,27 +629,27 @@
        //  Wenn die Benutzerberechtigung definiert worden ist, ...
        if (usraut <> bNotDef);
           //  ... dann
-          //      benutzen Benutzerberechtigung   (Priorit‰t 1, 2)
+          //      benutzen Benutzerberechtigung   (Priorit√§t 1, 2)
           tmpaut = usraut;
        else;
           //  ... sonst
           //      Wenn die Objektberechtigung definiert worden ist, dann ...
           if (objaut <> bNotDef);
              //      ... dann
-             //          benutzen Objektberechtigung (Priorit‰t 3, 4)
+             //          benutzen Objektberechtigung (Priorit√§t 3, 4)
              tmpaut = objaut;
           else;
              //      ... sonst
              //          Wenn die *SECATR Werte definiert worden sind, dann ...
              if (secaut <> bNotDef);
                 //          ... dann
-                //              benutzen *SECATR Werte (Priorit‰t 5-8)
+                //              benutzen *SECATR Werte (Priorit√§t 5-8)
                 tmpaut = secaut;
              else;
                 //          ... sonst
-                //              erteilen Standardberechtigung (Priorit‰t 9)
+                //              erteilen Standardberechtigung (Priorit√§t 9)
                 //              (kommt aus Befehl PEEK oder aus der
-                //              Benutzerdatei, Schl¸ssel *SECATRDFT)
+                //              Benutzerdatei, Schl√ºssel *SECATRDFT)
                 tmpaut = dftaut;
              endif;
           endif;
@@ -663,7 +663,7 @@
 
        //===============================================================*
        //    Prozedur:                                                  *
-       //    p_openFile    ÷ffnen Datei                                 *
+       //    p_openFile    √ñffnen Datei                                 *
        //===============================================================*
 
        dcl-proc p_openfile;

@@ -8,7 +8,7 @@
       *                                                               *
       *  Rahmentestprogramm mit Protokollausgabe                      *
       *  Thema:                                                       *
-      *     Test: Kurzbefehl für Datei TESTPEEK                       *
+      *     Test: Kurzbefehl fÃ¼r Datei TESTPEEK                       *
       *                                                               *
       *===============================================================*
       * >>PRE-COMPILER<<                                              *
@@ -117,7 +117,7 @@
      D                 PR                         likeds(msg_t    )
      D  i_stckCnt                    10I 0 const
       *
-      *  Abrufen Nachrichtentext für Nachricht.
+      *  Abrufen Nachrichtentext fÃ¼r Nachricht.
      D rtvMsgText...
      D                 PR          1024A          varying
      D  i_msg                                     const  likeds(msg_t   )
@@ -473,7 +473,7 @@
       *
       *===============================================================*
     R *  *** Private ***
-      *  Abrufen Nachrichtentext für Nachricht.
+      *  Abrufen Nachrichtentext fÃ¼r Nachricht.
       *===============================================================*
      P rtvMsgText...
      P                 B

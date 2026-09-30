@@ -1,7 +1,7 @@
 **free
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8101
-//  Initialisierung l‰uft ...
+//  Initialisierung l√§uft ...
 dcl-ds USR8101 qualified;
       //  No replacement variables available!
 end-ds;

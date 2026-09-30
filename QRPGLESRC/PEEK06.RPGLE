@@ -9,7 +9,7 @@
 //                                                               *
 //  erstellt : 26.09.97  RADDATZ                                 *
 //                                                               *
-//  geändert : 11.10.06  für Version 2.4.1                       *
+//  geÃ¤ndert : 11.10.06  fÃ¼r Version 2.4.1                       *
 //                       added support for  3I0 fields           *
 //                       added support for 20I0 fields           *
 //                                                               *
@@ -164,8 +164,8 @@ begsr w_fldl0100;
 
   fldl0100 = i_fldl0100;
 
-  //  Erzwingen Edit Code, wenn die Aufbereitung für eine über
-  //  QCMDEXC auszuführende Befehlszeile erfolgt.
+  //  Erzwingen Edit Code, wenn die Aufbereitung fÃ¼r eine Ã¼ber
+  //  QCMDEXC auszufÃ¼hrende Befehlszeile erfolgt.
   if (i_qcmdexc = bTrue) and
      (f_isnumfld(fldl0100) = bTrue) and
      (f_isfloatfld(fldl0100) = bFalse);

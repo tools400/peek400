@@ -13,7 +13,7 @@
 //                                                               *
 //  Kurzdokumentation :                                          *
 //                                                               *
-//  Lizenzprüfung                                                *
+//  LizenzprÃ¼fung                                                *
 //                                                               *
 //===============================================================*
 // >>PRE-COMPILER<<                                              *
@@ -153,8 +153,8 @@ if (iscompok = bFalse);
     exsr getlicinf;
     if (o_flag <> bTrueext);
       //         ... wenn keine neue LizenzNr eingetragen
-      //             worden ist, dann bFalse zurückliefern,
-      //             damit kein weiterer Test möglich ist.
+      //             worden ist, dann bFalse zurÃ¼ckliefern,
+      //             damit kein weiterer Test mÃ¶glich ist.
       open peek30fm;
       zei = zei + 4;
       pos = pos + 4;
@@ -163,7 +163,7 @@ if (iscompok = bFalse);
       o_flag = bFalseext;
     else;
     //         ... neue LizenzNr. wurde eingetragen
-    //             Rückkehrcode in XFLag ist OK
+    //             RÃ¼ckkehrcode in XFLag ist OK
     endif;
   else;
     //     ... Lizenzdaten abfragen
@@ -182,10 +182,10 @@ return;
 
 begsr getlicinf;
 
-  // - Öffnen der Dateien
+  // - Ã–ffnen der Dateien
   open peek30fm;
 
-  //  Löschen Lizenznummer
+  //  LÃ¶schen Lizenznummer
   ##licdata = *blanks;
 
   for do_x1 = 1 to *hival;
@@ -197,10 +197,10 @@ begsr getlicinf;
     //  Anzeigen Bildschirm
     exfmt bild01;
 
-    //  Nachrichten löschen
+    //  Nachrichten lÃ¶schen
     p_rmvpgmmg(sds.pgmname);
 
-    //  Bezugszahlen löschen
+    //  Bezugszahlen lÃ¶schen
     exsr bzoff1;
 
     //  Abfragen der Befehlstasten
@@ -224,14 +224,14 @@ begsr getlicinf;
       endif;
 
     other;
-      //  Falsche Taste gedrückt
+      //  Falsche Taste gedrÃ¼ckt
       p_wrongkey(workstn.aid: sds.pgmname);
       iter;
     endsl;
 
   endfor;
 
-  // - Schließen der Dateien
+  // - SchlieÃŸen der Dateien
   close peek30fm;
 
 endsr;
@@ -286,7 +286,7 @@ begsr bzoff1;
 endsr;
 
 //============================================================*
-//    PRFB1         Prüfen der Eingaben                       *
+//    PRFB1         PrÃ¼fen der Eingaben                       *
 //============================================================*
 
 begsr prfb1;
@@ -303,7 +303,7 @@ begsr prfb1;
 endsr;
 
 //============================================================*
-//    PRF20         Prüfen:  Lizenznummer                     *
+//    PRF20         PrÃ¼fen:  Lizenznummer                     *
 //============================================================*
 
 begsr prf20;
@@ -344,7 +344,7 @@ begsr prf20;
 endsr;
 
 //============================================================*
-//    Fill##        Abrufen der Lizenzdaten und füllen der    *
+//    Fill##        Abrufen der Lizenzdaten und fÃ¼llen der    *
 //                  BIldschirmfelder                          *
 //============================================================*
 
@@ -354,7 +354,7 @@ begsr fill##;
   leavesr;
 
   //------------------------------------------*
-  //  ... Existenzprüfung  UserSpace          *
+  //  ... ExistenzprÃ¼fung  UserSpace          *
   //------------------------------------------*
   if (not f_exist(
      qusrspc.name: qusrspc.lib: '*USRSPC'));
@@ -383,7 +383,7 @@ begsr complicnbr;
   //------------------------------------------*
   //  ... berechnen der Vergleichsserien-Nr.  *
   //      ( = YSrlNbrInt)                     *
-  //      für normale Lizenznummer            *
+  //      fÃ¼r normale Lizenznummer            *
   //------------------------------------------*
   iscompok = bFalse;
   isdateerr = bTrue;
@@ -394,7 +394,7 @@ begsr complicnbr;
   //------------------------------------------*
   //  ... berechnen der Vergleichsserien-Nr.  *
   //      ( = YSrlNbrInt)                     *
-  //      für Firmenlizenznummer              *
+  //      fÃ¼r Firmenlizenznummer              *
   //------------------------------------------*
   if (iscompok = bFalse);
     iscompok = bFalse;
@@ -550,7 +550,7 @@ endsr;
 
 //============================================================*
 //    ClcIntNbrF    Berechnen der internen Serien-Nr.         *
-//                  für eine Firmenlizenz                     *
+//                  fÃ¼r eine Firmenlizenz                     *
 //============================================================*
 
 begsr clcintnbrf;
@@ -600,7 +600,7 @@ begsr hextodec;
 
     exp = x - y;
     if (exp > *zeros);
-      //      ... Exponenten größer 0
+      //      ... Exponenten grÃ¶ÃŸer 0
       dou exp = *zeros;
         zw1 = zw1 * 16;
         exp = exp - 1;
@@ -617,7 +617,7 @@ begsr hextodec;
 endsr;
 
 //============================================================*
-//    SetScreen     Einstellen 132/80-Zeichen Auflösung       *
+//    SetScreen     Einstellen 132/80-Zeichen AuflÃ¶sung       *
 //============================================================*
 
 begsr setscreen;
@@ -645,15 +645,15 @@ begsr first;
   // - Programm initialisieren
   p_rmvpgmmg(sds.pgmname);
 
-  // - Rückgabewerte
+  // - RÃ¼ckgabewerte
   o_flag = bFalseext;
   o_msgid = *blanks;
   o_msgdta = *blanks;
 
-  // - Einlesen und prüfen der Lizenzdaten
+  // - Einlesen und prÃ¼fen der Lizenzdaten
   exsr fill##;
 
-  // - Einstellen der Bildschirmauflösung 80/132-Zeichen
+  // - Einstellen der BildschirmauflÃ¶sung 80/132-Zeichen
   exsr setscreen;
 
   // - Copyright

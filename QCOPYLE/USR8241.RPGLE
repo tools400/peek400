@@ -1,7 +1,7 @@
 **free
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8241
-//  Feldl‰nge ¸berschritten. Der Wert ist um &1 Zeichen zu groﬂ
+//  Feldl√§nge √ºberschritten. Der Wert ist um &1 Zeichen zu gro√ü
 dcl-ds USR8241 qualified;
   var1  packed(5:0) inz;
 end-ds;

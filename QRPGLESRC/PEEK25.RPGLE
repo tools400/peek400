@@ -94,7 +94,7 @@ exsr inzsr;
 
 exsr first;
 
-//  Schleife für Programmbearbeitung
+//  Schleife fÃ¼r Programmbearbeitung
 
 dow ('1');
 
@@ -136,13 +136,13 @@ dow ('1');
   csrcol = cursorposition.column - pos;
   csrcol = csrcol - 1;
 
-  //  Nachrichten löschen
+  //  Nachrichten lÃ¶schen
   p_rmvpgmmg(sds.pgmname);
 
-  //  Bezugszahlen löschen
+  //  Bezugszahlen lÃ¶schen
   exsr bzoff1;
 
-  //  Mappen der gedrückten Taste
+  //  Mappen der gedrÃ¼ckten Taste
   //  in Programmbefehl
   peek21(workstn.aid: sds.pgmname
         : ypgmcmd: ycmddta: ymsgid: ymsgdta);
@@ -173,7 +173,7 @@ dow ('1');
     endif;
 
   other;
-    //  Falsche Taste gedrückt
+    //  Falsche Taste gedrÃ¼ckt
     p_wrongkey(workstn.aid: sds.pgmname);
     iter;
   endsl;
@@ -206,7 +206,7 @@ begsr bzoff1;
 endsr;
 
 //============================================================*
-//    PRFB1         Prüfen der Eingaben                       *
+//    PRFB1         PrÃ¼fen der Eingaben                       *
 //============================================================*
 
 begsr prfb1;
@@ -223,7 +223,7 @@ begsr prfb1;
 endsr;
 
 //============================================================*
-//    PRF20         Prüfen:  Feldauswahl                      *
+//    PRF20         PrÃ¼fen:  Feldauswahl                      *
 //============================================================*
 
 begsr prf20;
@@ -291,7 +291,7 @@ begsr c_morekeys;
 endsr;
 
 //============================================================*
-//    FILL##        Füllen Bildschirm                         *
+//    FILL##        FÃ¼llen Bildschirm                         *
 //============================================================*
 
 begsr fill##;
@@ -370,7 +370,7 @@ begsr poscsr;
   %subarr(*in: 10: 10) = '0'; // - Green
   %subarr(*in: 20: 10) = '0'; // - White
   %subarr(*in: 30: 10) = '0'; // - Red
-  %subarr(*in: 40: 10) = '0'; // - Türkis
+  %subarr(*in: 40: 10) = '0'; // - TÃ¼rkis
   %subarr(*in: 50: 10) = '0'; // - Yellow
   %subarr(*in: 60: 10) = '0'; // - Pink
   %subarr(*in: 70: 10) = '0'; // - Blue
@@ -407,7 +407,7 @@ begsr poscsr;
     *in35 = '1';
   when (o_colorattr = COLOR_red_ub);
     *in36 = '1';
-  // Türkis
+  // TÃ¼rkis
   when (o_colorattr = COLOR_turkis);
     *in40 = '1';
   when (o_colorattr = COLOR_turkis_r);
@@ -447,7 +447,7 @@ begsr poscsr;
 endsr;
 
 //============================================================*
-//    SetScreen     Einstellen 132/80-Zeichen Auflösung       *
+//    SetScreen     Einstellen 132/80-Zeichen AuflÃ¶sung       *
 //============================================================*
 
 begsr setscreen;
@@ -555,27 +555,27 @@ endsr;
 
 begsr first;
 
-  // - Öffnen der Dateien
+  // - Ã–ffnen der Dateien
   open peek25fm;
 
   // - Programm initialisieren
   p_rmvpgmmg(sds.pgmname);
 
-  // - Bildschirmfelder füllen
+  // - Bildschirmfelder fÃ¼llen
   exsr fill##;
   exsr poscsr;
 
   o_msgid = *blanks;
   o_msgdta = *blanks;
 
-  //  Löschen der Cursorosition
+  //  LÃ¶schen der Cursorosition
   csrrow = *zeros;
   csrcol = *zeros;
 
   // - Einstellen Darstellung der Funktionstasten
   sfbot = 1;
 
-  // - Einstellen der Bildschirmauflösung 80/132-Zeichen
+  // - Einstellen der BildschirmauflÃ¶sung 80/132-Zeichen
   exsr setscreen;
 
 endsr;

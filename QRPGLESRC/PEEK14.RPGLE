@@ -8,7 +8,7 @@
 //  Typ      : RPG                                               *
 //                                                               *
 //  erstellt : 08.10.97  Raddatz                                 *
-//  geändert : 21.07.99  Raddatz für Version 2.2                 *
+//  geÃ¤ndert : 21.07.99  Raddatz fÃ¼r Version 2.2                 *
 //                                                               *
 //===============================================================*
 //                                                               *
@@ -172,7 +172,7 @@ exsr first;
 
 dow ('1');
 
-  //  Prüfen Positionierung der Subfile
+  //  PrÃ¼fen Positionierung der Subfile
   if (sfsanr <= 0)  or
      (sfsanr > sfllastrcd);
     sfsanr = 1;
@@ -185,7 +185,7 @@ dow ('1');
   *in89 = '0';
   write msgctl;
 
-  //  "Keine Sätze ..."
+  //  "Keine SÃ¤tze ..."
   if (*in80 = *off);
     write pbleer;
   endif;
@@ -219,7 +219,7 @@ dow ('1');
   cursorposition.row = workstn.csrpos / 256;
   cursorposition.column = %rem(workstn.csrpos: 256);
 
-  // - Löschen der Cursorposition
+  // - LÃ¶schen der Cursorposition
   csrRow = *zeros;
   csrCol = *zeros;
 
@@ -231,13 +231,13 @@ dow ('1');
     io_screennbr = io_screennbr + 1;
   endif;
 
-  //  Nachrichten löschen
+  //  Nachrichten lÃ¶schen
   p_rmvpgmmg(sds.pgmname);
 
   //  Aktuelle Satz-Nr.
   sfsanr = sflcsr;
 
-  //  Mappen der gedrückten Taste
+  //  Mappen der gedrÃ¼ckten Taste
   //  in Programmbefehl
   peek21(workstn.aid: sds.pgmname
         : ypgmcmd: ycmddta: yMsgId: yMsgDta);
@@ -261,7 +261,7 @@ dow ('1');
     exsr c_refresh;
     iter;
 
-  //  F7  - Überschrift
+  //  F7  - Ãœberschrift
   when (ypgmcmd = '*HEADLINE');
     exsr c_chghead;
     iter;
@@ -297,8 +297,8 @@ dow ('1');
     exsr c_print;
     iter;
 
-  //  F22 - Alle Datensätze verarbeiten
-  when (ypgmcmd = '*YESTOALL');                                           // ZURÜCK
+  //  F22 - Alle DatensÃ¤tze verarbeiten
+  when (ypgmcmd = '*YESTOALL');
     exsr c_allrcds;
     leave;
 
@@ -316,7 +316,7 @@ dow ('1');
   when (ypgmcmd = '*PAGEDOWN');
 
   other;
-    //  Falsche Taste gedrückt
+    //  Falsche Taste gedrÃ¼ckt
     p_wrongkey(workstn.aid: sds.pgmname);
     iter;
   endsl;
@@ -467,7 +467,7 @@ begsr c_fldstred;
 endsr;
 
 //====================================================*
-//  FromBuffer - Übertragen Rohdaten aus IO-Puffer    *
+//  FromBuffer - Ãœbertragen Rohdaten aus IO-Puffer    *
 //====================================================*
 
 begsr fromBuffer;
@@ -533,7 +533,7 @@ begsr c_refresh;
 endsr;
 
 //============================================================*
-//    C_ChgHead     F7  - Umschalten der Überschrift          *
+//    C_ChgHead     F7  - Umschalten der Ãœberschrift          *
 //============================================================*
 
 begsr c_chghead;
@@ -589,7 +589,7 @@ begsr c_print;
 endsr;
 
 //============================================================*
-//    C_AllRcds     F22 - Alle Datensätze verarbeiten         *
+//    C_AllRcds     F22 - Alle DatensÃ¤tze verarbeiten         *
 //============================================================*
 
 begsr c_allrcds;
@@ -611,7 +611,7 @@ endsr;
 
 //============================================================*
 //    PBInit        Initialisieren der Subfile zur Anzeige    *
-//                  der nächsten Seite                        *
+//                  der nÃ¤chsten Seite                        *
 //============================================================*
 
 begsr pbinit;
@@ -637,7 +637,7 @@ begsr pbinit;
 endsr;
 
 //============================================================*
-//    PBReadUP      Vorwärts füllen der Subfile               *
+//    PBReadUP      VorwÃ¤rts fÃ¼llen der Subfile               *
 //============================================================*
 
 begsr pbreadup;
@@ -713,7 +713,7 @@ begsr wrtpbsfl;
 endsr;
 
 //============================================================*
-//    synCline      Synchronisieren wie Änderungsbildschirm   *
+//    synCline      Synchronisieren wie Ã„nderungsbildschirm   *
 //============================================================*
 
 begsr syncline;
@@ -737,7 +737,7 @@ begsr syncline;
 endsr;
 
 //============================================================*
-//    PBFill        Füllen Subfilesatz                        *
+//    PBFill        FÃ¼llen Subfilesatz                        *
 //============================================================*
 
 begsr pbfill;
@@ -745,19 +745,19 @@ begsr pbfill;
   //      ... Feldname
   r$fnme = fldl0100.f1fnme;
 
-  //      ... überschreiben EDTCDE
+  //      ... Ãœberschreiben EDTCDE
   if (f_edtcde <> *blanks);
     fldl0100.f1edtc = f_edtcde;
   else;
   //       Original EDITCODE verwenden
   endif;
 
-  //      ... eintragen Überschrift
+  //      ... eintragen Ãœberschrift
   $$text =
    %trimr(f_headline(
      io_headertype: fldl0100)) + ' ' + dotline;
 
-  //      ... Markieren Schlüsselfelder
+  //      ... Markieren SchlÃ¼sselfelder
   if (f_kseq <> 0);
     %subst($$text: %len($$text) - 1: 2) = ' >';
   else;
@@ -837,7 +837,7 @@ begsr keepcsrpos;
 endsr;
 
 //============================================================*
-//    SetScreen     Einstellen 132/80-Zeichen Auflösung       *
+//    SetScreen     Einstellen 132/80-Zeichen AuflÃ¶sung       *
 //============================================================*
 
 begsr setscreen;
@@ -896,7 +896,7 @@ endsr;
 
 begsr first;
 
-  // - Öffnen der Dateien
+  // - Ã–ffnen der Dateien
   open peek14fm;
   open peekfld;
   open peekfldl0;
@@ -926,13 +926,13 @@ begsr first;
   // - Darstellung der Befehlstasten
   sfbot = 1;
 
-  // - Einstellen der Bildschirmauflösung 80/132-Zeichen
+  // - Einstellen der BildschirmauflÃ¶sung 80/132-Zeichen
   exsr setscreen;
 
   // - Einlesen des anzuzeigenden Satzes
   exsr readrcd;
 
-  // - Subfile füllen
+  // - Subfile fÃ¼llen
   clear f1key_l0;
   f1key_l0.f_fldseq = 0;
 

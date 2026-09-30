@@ -13,7 +13,7 @@
 //                                                               *
 //  Kurzdokumentation :                                          *
 //                                                               *
-//  Änderung der Farbeinstellung                                 *
+//  Ã„nderung der Farbeinstellung                                 *
 //                                                               *
 //===============================================================*
 // >>PRE-COMPILER<<                                              *
@@ -101,7 +101,7 @@ exsr inzsr;
 
 exsr first;
 
-//  Schleife für Programmbearbeitung
+//  Schleife fÃ¼r Programmbearbeitung
 
 dow ('1');
 
@@ -143,13 +143,13 @@ dow ('1');
   csrcol = cursorposition.column - pos;
   csrcol = csrcol - 1;
 
-  //  Nachrichten löschen
+  //  Nachrichten lÃ¶schen
   p_rmvpgmmg(sds.pgmname);
 
-  //  Bezugszahlen löschen
+  //  Bezugszahlen lÃ¶schen
   exsr bzoff1;
 
-  //  Mappen der gedrückten Taste
+  //  Mappen der gedrÃ¼ckten Taste
   //  in Programmbefehl
   peek21(workstn.aid: sds.pgmname
         : ypgmcmd: ycmddta: ymsgid: ymsgdta);
@@ -185,7 +185,7 @@ dow ('1');
 
 enddo;
 
-// - Dateien schließen
+// - Dateien schlieÃŸen
 close peek24fm;
 
 return;
@@ -217,7 +217,7 @@ begsr bzoff1;
 endsr;
 
 //============================================================*
-//    PRFB1         Prüfen der Eingaben                       *
+//    PRFB1         PrÃ¼fen der Eingaben                       *
 //============================================================*
 
 begsr prfb1;
@@ -234,7 +234,7 @@ begsr prfb1;
 endsr;
 
 //============================================================*
-//    PRF20         Prüfen:  Feldauswahl                      *
+//    PRF20         PrÃ¼fen:  Feldauswahl                      *
 //============================================================*
 
 begsr prf20;
@@ -244,9 +244,9 @@ begsr prf20;
     wrk_field = %subst(scnfld:3:6);
 
     select;
-    when (wrk_field = 'KEYCOL'); // Überschrift
+    when (wrk_field = 'KEYCOL'); // Ãœberschrift
       wrk_color = set0001.set_keycol;
-    when (wrk_field = 'HEDCOL'); // Überschrift
+    when (wrk_field = 'HEDCOL'); // Ãœberschrift
       wrk_color = set0001.set_hedcol;
     when (wrk_field = 'PINCOL'); // Pined-Daten
       wrk_color = set0001.set_pincol;
@@ -335,7 +335,7 @@ begsr c_morekeys;
 endsr;
 
 //============================================================*
-//    FILL##        Füllen Bildschirm                         *
+//    FILL##        FÃ¼llen Bildschirm                         *
 //============================================================*
 
 begsr fill##;
@@ -444,7 +444,7 @@ begsr fill##;
 endsr;
 
 //============================================================*
-//    SetScreen     Einstellen 132/80-Zeichen Auflösung       *
+//    SetScreen     Einstellen 132/80-Zeichen AuflÃ¶sung       *
 //============================================================*
 
 begsr setscreen;
@@ -484,7 +484,7 @@ begsr setusrsetg;
 endsr;
 
 //============================================================*
-//    GetColor      Auswählen neue Farbe                      *
+//    GetColor      AuswÃ¤hlen neue Farbe                      *
 //============================================================*
 
 begsr getcolor;
@@ -501,9 +501,9 @@ begsr getcolor;
   else;
 
     select;
-    when (wrk_field = 'KEYCOL'); // Überschrift
+    when (wrk_field = 'KEYCOL'); // Ãœberschrift
       set0001.set_keycol = wrk_color;
-    when (wrk_field = 'HEDCOL'); // Überschrift
+    when (wrk_field = 'HEDCOL'); // Ãœberschrift
       set0001.set_hedcol = wrk_color;
     when (wrk_field = 'PINCOL'); // Pined-Daten
       set0001.set_pincol = wrk_color;
@@ -537,7 +537,7 @@ endsr;
 
 begsr first;
 
-  // - Dateien öffnen
+  // - Dateien Ã¶ffnen
   open peek24fm;
 
   // - Programm initialisieren
@@ -546,20 +546,20 @@ begsr first;
   // - Benutzervoreinstellungen
   exsr getusrsetg;
 
-  // - Bildschirmfelder füllen
+  // - Bildschirmfelder fÃ¼llen
   exsr fill##;
 
   o_msgid = *blanks;
   o_msgdta = *blanks;
 
-  //  Löschen der Cursorosition
+  //  LÃ¶schen der Cursorosition
   csrrow = *zeros;
   csrcol = *zeros;
 
   // - Einstellen Darstellung der Funktionstasten
   sfbot = 1;
 
-  // - Einstellen der Bildschirmauflösung 80/132-Zeichen
+  // - Einstellen der BildschirmauflÃ¶sung 80/132-Zeichen
   exsr setscreen;
 
   // - Copyright

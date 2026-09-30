@@ -28,9 +28,9 @@ Entry '*VERSION' of file PEEKUSR must be changed to contain
 the new version number:
 
   USER       SECTION    KEY        DATA
-  *NONE      *PGM       *VERSION   V03R05M00»
+  *NONE      *PGM       *VERSION   V03R05M00
 
-Constants §CopyRight, §Release and §Version of program PEEK05
+Constants 'CopyRight', 'Release' and 'Version' of program PEEK05
 must be changed to reflect the current version number and date.
 
 Create Library:

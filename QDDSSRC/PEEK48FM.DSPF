@@ -223,7 +223,7 @@
      A            POS            3S 0P
       *
       *----------------------------------------------------*
-      *  RMVWDW ZUM LÖSCHEN DES WINDOWS
+      *  RMVWDW ZUM LÃ–SCHEN DES WINDOWS
       *
      A          R RMVWDW                    CLRL(*NO) OVERLAY FRCDTA
      A N88                                  DSPMOD(*DS4)

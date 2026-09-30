@@ -8,19 +8,19 @@
 //  Typ      : RPG                                               *
 //                                                               *
 //  erstellt : 24.10.97  Raddatz                                 *
-//  geändert : 27.04.99  für Version 2.1.0                       *
-//  geändert : 23.05.02  für Version 2.2.0                       *
+//  geÃ¤ndert : 27.04.99  fÃ¼r Version 2.1.0                       *
+//  geÃ¤ndert : 23.05.02  fÃ¼r Version 2.2.0                       *
 //                       fixed problem with 2B0 fields           *
-//  geändert : 23.03.04  für Version 2.2.2                       *
+//  geÃ¤ndert : 23.03.04  fÃ¼r Version 2.2.2                       *
 //                       added support for  3I0 fields           *
 //                       added support for 20I0 fields           *
-//  geändert : 01.04.04  für Version 2.2.2                       *
+//  geÃ¤ndert : 01.04.04  fÃ¼r Version 2.2.2                       *
 //                     added support for time format *HMS, *EUR  *
 //                     added support for date format *EUR        *
-//  geändert : 11.10.06  für Version 2.4.1                       *
+//  geÃ¤ndert : 11.10.06  fÃ¼r Version 2.4.1                       *
 //                       added support for  3I0 key fields       *
 //                       added support for 20I0 key fields       *
-//  geändert:  29.07.20  RNX0100: Length or start position is    *
+//  geÃ¤ndert:  29.07.20  RNX0100: Length or start position is    *
 //                       out of range ...                        *
 //                                                               *
 //===============================================================*
@@ -72,7 +72,7 @@ dcl-s isMinus         char(1) inz(bFalse);
 dcl-s x               like(int4_t) inz;
 dcl-s a1              char(1) inz(*blanks);
 
-// Maximale Feldlänge liegt bei 30 Stellen wegen Bildschirmgroesse.
+// Maximale FeldlÃ¤nge liegt bei 30 Stellen wegen Bildschirmgroesse.
 // Siehe PEEK58, f_isNotAlw().
 dcl-ds *N;
   zoned           zoned(63) inz;
@@ -225,7 +225,7 @@ endsr;
 
 begsr toIntern;
 
-  //  Art des Schlüssel ermitteln ...
+  //  Art des SchlÃ¼ssel ermitteln ...
   exsr getKeyType;
   //  Ascending key ...
   if (f_desc = 'A');
@@ -432,7 +432,7 @@ begsr F_to_extern;
     o_bufflen = 23;
   endif;
 
-  //  Entfernen führendes Vorzeichen
+  //  Entfernen fÃ¼hrendes Vorzeichen
   o_buffer = %subst(o_buffer: 2);
   o_bufflen = o_bufflen - 1;
 
@@ -530,7 +530,7 @@ begsr extractFloat;
 endsr;
 
 //============================================================*
-//    ChgSign       Prüfen auf negatives Vorzeichen           *
+//    ChgSign       PrÃ¼fen auf negatives Vorzeichen           *
 //============================================================*
 
 begsr chgSign;
@@ -553,7 +553,7 @@ begsr chgSign;
 endsr;
 
 //============================================================*
-//    ChgSignFloat  Prüfen auf negatives Vorzeichen           *
+//    ChgSignFloat  PrÃ¼fen auf negatives Vorzeichen           *
 //============================================================*
 
 begsr chgSignFloat;
@@ -576,7 +576,7 @@ begsr chgSignFloat;
 endsr;
 
 //============================================================*
-//    AddSign       hinzufügen von Vorzeichen                 *
+//    AddSign       hinzufÃ¼gen von Vorzeichen                 *
 //============================================================*
 
 begsr addSign;
@@ -604,7 +604,7 @@ begsr addSign;
 endsr;
 
 //============================================================*
-//    AddDlmtr      hinzufügen des Delimeters                 *
+//    AddDlmtr      hinzufÃ¼gen des Delimeters                 *
 //============================================================*
 
 begsr addDelimiter;
@@ -642,7 +642,7 @@ begsr A_to_intern;
   when (r_tgtvalue = '*LOVAL');
     %subst(o_buffer: strpos: o_bufflen)
       = *allx'00';
-  //  größter Wert ...
+  //  grÃ¶ÃŸter Wert ...
   when (r_tgtvalue = '*HIVAL');
     %subst(o_buffer: strpos: o_bufflen)
       = *allx'FF';
@@ -660,7 +660,7 @@ begsr A_to_intern;
   other;
   endsl;
 
-  //  einfügen Längenangabe bei Feldern variabler Länge                                   R
+  //  einfÃ¼gen LÃ¤ngenangabe bei Feldern variabler LÃ¤nge                                   R
   if (f_isvarlen(fldl0100) = bTrue);
     p_dectobin(o_buffer: 1: 2: o_bufflen);
   endif;
@@ -686,7 +686,7 @@ begsr G_to_intern;
   when (r_tgtvalue = '*LOVAL');
     %subst(o_buffer: strpos: o_bufflen)
       = *allx'00';
-  //  größter Wert ...
+  //  grÃ¶ÃŸter Wert ...
   when (r_tgtvalue = '*HIVAL');
     %subst(o_buffer: strpos: o_bufflen)
       = *allx'FF';
@@ -705,7 +705,7 @@ begsr G_to_intern;
   other;
   endsl;
 
-  //  einfügen Längenangabe bei Feldern variabler Länge
+  //  einfÃ¼gen LÃ¤ngenangabe bei Feldern variabler LÃ¤nge
   if (f_isvarlen(fldl0100) = bTrue);
     p_dectobin(o_buffer: 1: 2: o_bufflen);
   endif;
@@ -771,7 +771,7 @@ begsr B_to_intern_1;
   other;
   endsl;
 
-  //  extrahieren Binärwert ...
+  //  extrahieren BinÃ¤rwert ...
   o_bufflen = f_buffln(fldl0100);
   o_buffer = %subst(binary1_a: 1: o_bufflen);
 
@@ -795,7 +795,7 @@ begsr B_to_intern_2;
   other;
   endsl;
 
-  //  extrahieren Binärwert ...
+  //  extrahieren BinÃ¤rwert ...
   o_bufflen = f_buffln(fldl0100);
   o_buffer = %subst(binary2_a: 1: o_bufflen);
 
@@ -819,7 +819,7 @@ begsr B_to_intern_4;
   other;
   endsl;
 
-  //  extrahieren Binärwert ...
+  //  extrahieren BinÃ¤rwert ...
   o_bufflen = f_buffln(fldl0100);
   o_buffer = %subst(binary4_a: 1: o_bufflen);
 
@@ -843,7 +843,7 @@ begsr B_to_intern_8;
   other;
   endsl;
 
-  //  extrahieren Binärwert ...
+  //  extrahieren BinÃ¤rwert ...
   o_bufflen = f_buffln(fldl0100);
   o_buffer = %subst(binary8_a: 1: o_bufflen);
 
@@ -861,7 +861,7 @@ begsr P_to_intern;
   //  umsetzen gezont -> gepacked ...
   packed = zoned;
 
-  //  extrahieren Binärwert ...
+  //  extrahieren BinÃ¤rwert ...
   x = %len(packed_a) - f_buffln(fldl0100) + 1;
 
   o_bufflen = f_buffln(fldl0100);
@@ -893,7 +893,7 @@ begsr L_to_intern;
   when (r_tgtvalue = '*LOVAL');
     r_dateiso = *loval;
     exsr dateToBuffer;
-  //  größter Wert ...
+  //  grÃ¶ÃŸter Wert ...
   when (r_tgtvalue = '*HIVAL');
     r_dateiso = *hival;
     exsr dateToBuffer;
@@ -906,19 +906,19 @@ begsr L_to_intern;
   o_bufflen = f_buffln(fldl0100);
   o_buffer = %subst(o_buffer:1:o_bufflen);
 
-  //  Wert überprüfen über PEEK36 ...
+  //  Wert Ã¼berprÃ¼fen Ã¼ber PEEK36 ...
   exsr chkValue;
 
 endsr;
 
 //============================================================*
-//    dateToBuffer  Übertragen und konvertieren Datumsfeld    *
+//    dateToBuffer  Ãœbertragen und konvertieren Datumsfeld    *
 //                  nach Ausgabepuffer.                       *
 //============================================================*
 
 begsr dateToBuffer;
 
-  //  Übertragen Zeitfeld gemäß Format ...
+  //  Ãœbertragen Zeitfeld gemÃ¤ÃŸ Format ...
   select;
   //  ... *EUR (dd.mm.yyyy)
   when (fldl0100.f1dtfm = '*EUR');
@@ -951,7 +951,7 @@ begsr T_to_intern;
   when (r_tgtvalue = '*LOVAL');
     r_timeiso = *loval;
     exsr timeToBuffer;
-  //  größter Wert ...
+  //  grÃ¶ÃŸter Wert ...
   when (r_tgtvalue = '*HIVAL');
     r_timeiso = *hival;
     exsr timeToBuffer;
@@ -964,19 +964,19 @@ begsr T_to_intern;
   o_bufflen = f_buffln(fldl0100);
   o_buffer = %subst(o_buffer:1:o_bufflen);
 
-  //  Wert überprüfen über PEEK36 ...
+  //  Wert Ã¼berprÃ¼fen Ã¼ber PEEK36 ...
   exsr chkValue;
 
 endsr;
 
 //============================================================*
-//    timeToBuffer  Übertragen und konvertieren Zeitfeld      *
+//    timeToBuffer  Ãœbertragen und konvertieren Zeitfeld      *
 //                  nach Ausgabepuffer.                       *
 //============================================================*
 
 begsr timeToBuffer;
 
-  //  Übertragen Zeitfeld gemäß Format ...
+  //  Ãœbertragen Zeitfeld gemÃ¤ÃŸ Format ...
   select;
   //  ... *HMS (hh:mm:ss)
   when (fldl0100.f1dtfm = '*HMS');
@@ -1013,7 +1013,7 @@ begsr Z_to_intern;
   when (r_tgtvalue = '*LOVAL');
     r_timestmp = *loval;
     o_buffer = %char(r_timestmp: *iso);
-  //  größter Wert ...
+  //  grÃ¶ÃŸter Wert ...
   when (r_tgtvalue = '*HIVAL');
     r_timestmp = *hival;
     o_buffer = %char(r_timestmp: *iso);
@@ -1026,13 +1026,13 @@ begsr Z_to_intern;
   o_bufflen = f_buffln(fldl0100);
   o_buffer = %subst(o_buffer:1:o_bufflen);
 
-  //  Wert überprüfen über PEEK36 ...
+  //  Wert Ã¼berprÃ¼fen Ã¼ber PEEK36 ...
   exsr chkValue;
 
 endsr;
 
 //============================================================*
-//    ChkValue      Prüfen Wert im Zeit-, Datums-,            *
+//    ChkValue      PrÃ¼fen Wert im Zeit-, Datums-,            *
 //                  oder Zeitstempelfeld                      *
 //============================================================*
 
@@ -1065,7 +1065,7 @@ begsr cvtToZoned;
   //  kleinester Wert ...
   when (r_tgtvalue = '*LOVAL');
     zoned = *loval;
-  //  größter Wert ...
+  //  grÃ¶ÃŸter Wert ...
   when (r_tgtvalue = '*HIVAL');
     zoned = *hival;
   //  aktueller Wert ...
@@ -1083,7 +1083,7 @@ begsr cvtToZoned;
       else;
         a1 = *blanks;
       endif;
-      // ... auf definiertes Minus-Zeichen prüfen
+      // ... auf definiertes Minus-Zeichen prÃ¼fen
       if (a1 = SET_SIGN_MINUS);
         isMinus = bTrue;
       else;
@@ -1097,7 +1097,7 @@ begsr cvtToZoned;
       %subst(i_buffer: 1: fldl0100.f1digt);
     zoned_a = %xlate(' ':'0' : zoned_a);
 
-    //  ... gültige numerische Daten prüfen
+    //  ... gÃ¼ltige numerische Daten prÃ¼fen
     if (%check(NUMERIC_DIGITS: zoned_a) > 0);
       o_msgid = 'USR8138';
       usr8138.var1 = fldl0100.f1fnme;
@@ -1135,7 +1135,7 @@ begsr cvtToFloat;
     else;
       dsfloat.float8 = *loval;
     endif;
-  //  größter Wert ...
+  //  grÃ¶ÃŸter Wert ...
   when (r_tgtvalue = '*HIVAL');
     if (f_buffln(fldl0100) = 4);
       dsfloat.float4 = *hival;
@@ -1161,7 +1161,7 @@ begsr cvtToFloat;
       else;
         a1 = *blanks;
       endif;
-      // ... auf definiertes Minus-Zeichen prüfen
+      // ... auf definiertes Minus-Zeichen prÃ¼fen
       if (a1 = SET_SIGN_MINUS);
         isMinus = bTrue;
       else;
@@ -1169,7 +1169,7 @@ begsr cvtToFloat;
       endif;
     endif;
 
-    //  ... gültige numerische Daten prüfen
+    //  ... gÃ¼ltige numerische Daten prÃ¼fen
     if (f_vldfloat(%subst(i_buffer: 1: x-1)) = bFalse);
       o_msgid = 'USR8138';
       usr8138.var1 = fldl0100.f1fnme;
@@ -1340,7 +1340,7 @@ begsr getUsrSetg;
 endsr;
 
 //============================================================*
-//    GetKeyType    Ermitteln, ob Schlüsselfeld und ob        *
+//    GetKeyType    Ermitteln, ob SchlÃ¼sselfeld und ob        *
 //                  Descending oder Ascending                 *
 //============================================================*
 

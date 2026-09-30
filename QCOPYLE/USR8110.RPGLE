@@ -1,7 +1,7 @@
 **free
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8110
-//  Auswahl '&1' nicht gültig.
+//  Auswahl '&1' nicht gÃ¼ltig.
 dcl-ds USR8110 qualified;
   var1  char(10) inz;
 end-ds;

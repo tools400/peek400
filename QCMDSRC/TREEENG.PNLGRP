@@ -1,4 +1,7 @@
 .*=====================================================================*
+.* Hinweis: Dieses CL muss in einem Job mit der Sprache der            *.
+.*          Zielnachrichtendatei kompiliert und ausgefÃ¼hrt werden.     *.
+.*=====================================================================*
 .*                                                                     *
 .*  Kurzdokumentation :                                                *
 .*                                                                     *
@@ -21,26 +24,22 @@
 .*=====================================================================*
 .*  History:                                                           *
 .*                                                                     *
-.*  Datum       Name          Änderung                                 *
+.*  Datum       Name          Ã„nderung                                 *
 .*  ----------  ------------  ---------------------------------------  *
 .*                                                                     *
 .*=====================================================================*
 .* >>PRE-COMPILER<<                                                    *
-.*                                                                     *
 .*   >>CRTCMD<< CRTPNLGRP    PNLGRP(&LI/&OB) +                         *
 .*                           SRCFILE(&SL/&SF) +                        *
 .*                           SRCMBR(&SM);                              *
-.*                                                                     *
-.*   >>COMPILE<<                                                       *
-.*   >>END-COMPILE<<                                                   *
-.*                                                                     *
+.*   >>CMD<<     CHGJOB  LANGID(ENG) CNTRYID(US) CCSID(1140);          *
 .*   >>EXECUTE<<                                                       *
-.*                                                                     *
+.*   >>CMD<<     CHGJOB  LANGID(DEU) CNTRYID(DE) CCSID(273);           *
 .* >>END-PRE-COMPILER<<                                                *
 .*=====================================================================*
 :PNLGRP.
 .*--------------------------------------------------------------------
-.* Hilfetext für den Befehl
+.* Hilfetext fÃ¼r den Befehl
 .*--------------------------------------------------------------------
 :HELP NAME='TREE'.
 Display Database Relations (TREE) - Help
@@ -51,7 +50,7 @@ given file and to start Peek/400 for the selected entry.
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort FILE
+.* Hilfetext fÃ¼r SchlÃ¼sselwort FILE
 .*--------------------------------------------------------------------
 :HELP name='TREE/FILE'.
 Datei - Help
@@ -86,7 +85,7 @@ for the job, the QGPL library is used.
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort ACCESS
+.* Hilfetext fÃ¼r SchlÃ¼sselwort ACCESS
 .*--------------------------------------------------------------------
 :HELP name='TREE/ACCESS'.
 Type of record access - Help
@@ -115,7 +114,7 @@ to the sort sequence given at parameter :HP2.SQL ORDER BY
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort LANGUAGE
+.* Hilfetext fÃ¼r SchlÃ¼sselwort LANGUAGE
 .*--------------------------------------------------------------------
 :HELP name='TREE/LANGUAGE'.
 Language - Help
@@ -141,7 +140,7 @@ to identify the message file containing the language constants.
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort ALWCHGLIB
+.* Hilfetext fÃ¼r SchlÃ¼sselwort ALWCHGLIB
 .*--------------------------------------------------------------------
 :HELP name='TREE/ALWCHGLIB'.
 Allow to change library - Help
@@ -165,7 +164,7 @@ Peek/400.
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort ALWCHGFILE
+.* Hilfetext fÃ¼r SchlÃ¼sselwort ALWCHGFILE
 .*--------------------------------------------------------------------
 :HELP name='TREE/ALWCHGFILE'.
 Allow to change file - Help
@@ -189,7 +188,7 @@ Peek/400.
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort ALWCHGMBR
+.* Hilfetext fÃ¼r SchlÃ¼sselwort ALWCHGMBR
 .*--------------------------------------------------------------------
 :HELP name='TREE/ALWCHGMBR'.
 Allow to change member - Help
@@ -213,7 +212,7 @@ Peek/400.
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort ALWCHGRCD
+.* Hilfetext fÃ¼r SchlÃ¼sselwort ALWCHGRCD
 .*--------------------------------------------------------------------
 :HELP name='TREE/ALWCHGRCD'.
 Allow to change records - Help
@@ -239,7 +238,7 @@ at any time.
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort ALWCHGSQLW
+.* Hilfetext fÃ¼r SchlÃ¼sselwort ALWCHGSQLW
 .*--------------------------------------------------------------------
 :HELP name='TREE/ALWCHGSQLW'.
 Allow to change SQL WHERE - Help
@@ -262,7 +261,7 @@ SQL WHERE clause used to select the records to be displayed.
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort ALWCHGSQLO
+.* Hilfetext fÃ¼r SchlÃ¼sselwort ALWCHGSQLO
 .*--------------------------------------------------------------------
 :HELP name='TREE/ALWCHGSQLO'.
 Allow to change SQL ORDER BY - Help
@@ -286,7 +285,7 @@ the records.
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort SETTINGS
+.* Hilfetext fÃ¼r SchlÃ¼sselwort SETTINGS
 .*--------------------------------------------------------------------
 :HELP name='TREE/SETTINGS'.
 User settings - Help
@@ -340,7 +339,7 @@ for the job, the QGPL library is used.
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort WHERE
+.* Hilfetext fÃ¼r SchlÃ¼sselwort WHERE
 .*--------------------------------------------------------------------
 :HELP name='TREE/WHERE'.
 SQL WHERE - Help
@@ -361,7 +360,7 @@ displayed.
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort ORDERBY
+.* Hilfetext fÃ¼r SchlÃ¼sselwort ORDERBY
 .*--------------------------------------------------------------------
 :HELP name='TREE/ORDERBY'.
 SQL ORDER BY - Help

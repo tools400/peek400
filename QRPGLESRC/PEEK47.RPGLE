@@ -125,11 +125,11 @@ exsr inzsr;
 exsr first;
 
 //---------------------------------------------------*
-//  Schleife für Programmbearbeitung
+//  Schleife fÃ¼r Programmbearbeitung
 
 dow ('1');
 
-  //  Prüfen Positionierung der Subfile
+  //  PrÃ¼fen Positionierung der Subfile
   if (sfsanr <= *zeros);
     sfsanr = 1;
   endif;
@@ -141,7 +141,7 @@ dow ('1');
   *in89 = '0';
   write msgctl;
 
-  //  "Keine Sätze ..."
+  //  "Keine SÃ¤tze ..."
   if (*in80 = *off);
     write pbleer;
   endif;
@@ -187,7 +187,7 @@ dow ('1');
   exfmt pbctl;
   *in70 = '0';
 
-  //  Nachrichten löschen
+  //  Nachrichten lÃ¶schen
   p_rmvpgmmg(sds.pgmname);
 
   //  Aktuelle Satz-Nr.
@@ -195,7 +195,7 @@ dow ('1');
     sfsanr = sflcsr;
   endif;
 
-  //  Mappen der gedrückten Taste
+  //  Mappen der gedrÃ¼ckten Taste
   //  in Programmbefehl
   peek21(workstn.aid: sds.pgmname
         : ypgmcmd: ycmddta: ymsgid: ymsgdta);
@@ -260,7 +260,7 @@ dow ('1');
   when (ypgmcmd = '*PAGEDOWN');
 
   other;
-    //  Falsche Taste gedrückt
+    //  Falsche Taste gedrÃ¼ckt
     p_wrongkey(workstn.aid: sds.pgmname);
     iter;
   endsl;
@@ -367,10 +367,10 @@ begsr srchmbr;
         leave;
       else;
         if (sfpau <> '');
-          //  ... Satz geändert
+          //  ... Satz geÃ¤ndert
           exsr vsfpauchg;
         else;
-          //  ... Satz nicht geändert
+          //  ... Satz nicht geÃ¤ndert
           exsr vsfpauclr;
         endif;
         update pbsfl;
@@ -412,7 +412,7 @@ begsr vreadc;
   isSflError = bFalse;
 
   if (*in80 = *off);
-  //   keine Einträge in Subfile vorhanden ...
+  //   keine EintrÃ¤ge in Subfile vorhanden ...
   else;
 
     for do_x2 = 1 to sflnbrrcd;
@@ -432,7 +432,7 @@ begsr vreadc;
       //  Subfile nicht neu positionieren
       endif;
 
-      //  Linksbündig setzen ...
+      //  LinksbÃ¼ndig setzen ...
       sfpau = %triml(sfpau);
 
       //  Zuordnung AUSWAHL => Befehl ...
@@ -448,7 +448,7 @@ begsr vreadc;
       endif;
 
       //----------------------------*
-      //  Ausführen SFL-Befehl ...  *
+      //  AusfÃ¼hren SFL-Befehl ...  *
       //----------------------------*
       sfl_cmd = ypgmcmd;
 
@@ -556,7 +556,7 @@ begsr vpos;
 endsr;
 
 //============================================================*
-//    VSfpauClr     Löschen Subfileauswahl                    *
+//    VSfpauClr     LÃ¶schen Subfileauswahl                    *
 //============================================================*
 
 begsr vsfpauclr;
@@ -579,7 +579,7 @@ begsr vsfpauerr;
 endsr;
 
 //============================================================*
-//    VSfpauChg     Datensatz in Subfile als geändert         *
+//    VSfpauChg     Datensatz in Subfile als geÃ¤ndert         *
 //                  markieren                                 *
 //============================================================*
 
@@ -590,8 +590,8 @@ begsr vsfpauchg;
 endsr;
 
 //============================================================*
-//    PBInitKey     Initialisieren der Schlüsselfelder        *
-//                  zum Füllen der Subfile                    *
+//    PBInitKey     Initialisieren der SchlÃ¼sselfelder        *
+//                  zum FÃ¼llen der Subfile                    *
 //============================================================*
 
 begsr pbinitkey;
@@ -603,7 +603,7 @@ endsr;
 
 //============================================================*
 //    PBInit        Initialisieren der Subfile zur Anzeige    *
-//                  der nächsten Seite                        *
+//                  der nÃ¤chsten Seite                        *
 //============================================================*
 
 begsr pbinit;
@@ -625,7 +625,7 @@ begsr pbinit;
 endsr;
 
 //============================================================*
-//    PBReadUP      Vorwärts füllen der Subfile               *
+//    PBReadUP      VorwÃ¤rts fÃ¼llen der Subfile               *
 //============================================================*
 
 begsr pbreadup;
@@ -650,7 +650,7 @@ begsr pbreadup;
 endsr;
 
 //============================================================*
-//    PBFill        Füllen Subfilesatz                        *
+//    PBFill        FÃ¼llen Subfilesatz                        *
 //============================================================*
 
 begsr pbfill;
@@ -663,7 +663,7 @@ begsr pbfill;
   //  ... anzeigen Subfile
   *in80 = '1'; // SFLDSP
 
-  //  ... Löschen Subfileauswahl
+  //  ... LÃ¶schen Subfileauswahl
   exsr vsfpauclr;
 
 endsr;
@@ -677,7 +677,7 @@ begsr pbsetll;
 endsr;
 
 //============================================================*
-//    SetScreen     Einstellen 132/80-Zeichen Auflösung       *
+//    SetScreen     Einstellen 132/80-Zeichen AuflÃ¶sung       *
 //============================================================*
 
 begsr setscreen;
@@ -705,7 +705,7 @@ endsr;
 
 begsr first;
 
-  // - Öffnen der Dateien
+  // - Ã–ffnen der Dateien
   open peek47fm;
 
   // - Programm initialisieren
@@ -713,7 +713,7 @@ begsr first;
 
   ##mbr = *blanks;
 
-  // - Rückkehrcode
+  // - RÃ¼ckkehrcode
   i_mbr = *blanks;
   o_msgid = *blanks;
   o_msgdta = *blanks;
@@ -725,13 +725,13 @@ begsr first;
   sftop = 1;
   sfbot = 1;
 
-  // - Einstellen der Bildschirmauflösung 80/132-Zeichen
+  // - Einstellen der BildschirmauflÃ¶sung 80/132-Zeichen
   exsr setscreen;
 
   // - Anzuzeigender Subfilesatz
   sfsanr = 1;
 
-  // - Subfile füllen
+  // - Subfile fÃ¼llen
   exsr c_refresh;
 
   // - Copyright

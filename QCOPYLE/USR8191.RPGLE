@@ -1,7 +1,7 @@
 **free
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8191
-//  Feld &1 ist nicht NULL-f‰hig.
+//  Feld &1 ist nicht NULL-f√§hig.
 dcl-ds USR8191 qualified;
   var1  char(10) inz;
 end-ds;

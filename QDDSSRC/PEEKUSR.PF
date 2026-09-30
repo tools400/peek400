@@ -36,9 +36,9 @@
      A                                             '                    ')
       *
      A            KEY           10A
-     A                                      TEXT('Schlüssel             -
+     A                                      TEXT('SchlÃ¼ssel             -
      A                                                                  ')
-     A                                      COLHDG('Schlüssel           ' -
+     A                                      COLHDG('SchlÃ¼ssel           ' -
      A                                             '                    ' -
      A                                             '                    ')
       *

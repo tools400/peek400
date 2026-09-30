@@ -1,7 +1,7 @@
 **free
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8192
-//  Ungültigen Float Wert in &1 gefunden.
+//  UngÃ¼ltigen Float Wert in &1 gefunden.
 dcl-ds USR8192 qualified;
   var1  char(10) inz;
 end-ds;

@@ -17,10 +17,10 @@
 //                                                               *
 //===============================================================*
 //                                                               *
-//  Gültige Ersatzvariablen:                                     *
+//  GÃ¼ltige Ersatzvariablen:                                     *
 //  ------------------------                                     *
-//     &L           - Bibliothek der geöffneten Datei            *
-//     &F           - Name der geöffneten Datei                  *
+//     &L           - Bibliothek der geÃ¶ffneten Datei            *
+//     &F           - Name der geÃ¶ffneten Datei                  *
 //     &N           - Name der Teildatei                         *
 //     &R           - Relative Satznummer                        *
 //     % + Feldname - Wert des angegebenen Feldes                *
@@ -117,7 +117,7 @@ dcl-c cformat_end const(')');
 dcl-c cformat_delimiter
       const(',');
 
-// Für Einzelsatzzugriff
+// FÃ¼r Einzelsatzzugriff
 dcl-ds hfile00  likeds(hfile_t);
 
 dcl-s isInzSr         like(bool_t) inz(bFalse);
@@ -167,7 +167,7 @@ endsl;
 return;
 
 //============================================================*
-//    BuildCmd      Aufbereiten des auszuführenden Befehls    *
+//    BuildCmd      Aufbereiten des auszufÃ¼hrenden Befehls    *
 //============================================================*
 
 begsr buildcmd;
@@ -372,7 +372,7 @@ begsr rpl_var;
         r_cmd2 = %trimr(%subst(r_shortcmd: s));
       endif;
 
-      //  ... zusammenführen Teil 1, Variable und Teil 2
+      //  ... zusammenfÃ¼hren Teil 1, Variable und Teil 2
       r_shortcmd = r_cmd1 + r_value + r_cmd2;
 
     endif;
@@ -466,8 +466,8 @@ dcl-proc lf_rtvfldname;
   //  Arbeitsfelder
   dcl-s i               like(int4_t) inz;
 
-  //  Gültige Zeichen für Feldnamen
-  dcl-c VALID_CHARS const('_$#§ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890');
+  //  GÃ¼ltige Zeichen fÃ¼r Feldnamen
+  dcl-c VALID_CHARS const('_$#Â§ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890');
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   fldname = '';

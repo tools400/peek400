@@ -140,12 +140,12 @@
 
        //============================================================*
        //    PBInit        Initialisieren der Subfile zur Anzeige    *
-       //                  der nächsten Seite                        *
+       //                  der nÃ¤chsten Seite                        *
        //============================================================*
 
        begsr pbinit;
 
-          //  Überlaufzeile
+          //  Ã¼berlaufzeile
           *in60 = bTrue;
 
           //  Kopfinformationen
@@ -229,12 +229,12 @@
        endsr;
 
        //============================================================*
-       //    PBFill        Füllen Datenzeile                         *
+       //    PBFill        FÃ¼llen Datenzeile                         *
        //============================================================*
 
        begsr pbfill;
 
-          //      ... überschreiben EDTCDE
+          //      ... Ãœberschreiben EDTCDE
           if (f_edtcde <> '');
              fldl0100.f1edtc = f_edtcde;
           else;
@@ -303,7 +303,7 @@
        endsr;
 
        //============================================================*
-       //    PBSeite       Prüfen auf Seitenwechsel                  *
+       //    PBSeite       PrÃ¼fen auf Seitenwechsel                  *
        //============================================================*
 
        begsr pbseite;
@@ -363,7 +363,7 @@
 
        begsr first;
 
-          // - Öffnen der Dateien
+          // - Ã–ffnen der Dateien
           f_execute('OVRPRTF +
                      FILE(PEEK65P) +
                      TOFILE(' +

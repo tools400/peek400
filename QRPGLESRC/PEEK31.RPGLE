@@ -8,7 +8,7 @@
 //  Typ      : RPG                                               *
 //                                                               *
 //  erstellt : 13.11.97  Raddatz                                 *
-//  geändert : 27.04.99  2.1.0                                   *
+//  geÃ¤ndert : 27.04.99  2.1.0                                   *
 //                                                               *
 //===============================================================*
 //                                                               *
@@ -69,12 +69,12 @@ if (io_language = '*DFT');
   //  ... Standardsprache
   set0004 = f_getusrsg('*LANGUAGE':  o_msgid: o_msgdta);
 else;
-  //  ... Benutzen der übergebenen Sprache
+  //  ... Benutzen der Ã¼bergebenen Sprache
   set0004.set_lang = io_language;
 endif;
 
 if (o_msgid = '');
-  //  ... Prüfen der Nachrichtendatei
+  //  ... PrÃ¼fen der Nachrichtendatei
   for do_x1 = 1 to 2;
 
     if (f_exist(%trimr(i_prefix) + set0004.set_lang

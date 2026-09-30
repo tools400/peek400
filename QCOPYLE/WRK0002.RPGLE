@@ -1,6 +1,6 @@
 **FREE
 //---------------------------------------------------------------
-// Datenstruktur für Benutzervoreinstellungen:  WRK0002
+// Datenstruktur fÃ¼r Benutzervoreinstellungen:  WRK0002
 //
 dcl-ds wrk0002_t qualified template;
   wrk_rcdnbr      packed(10) inz(0);

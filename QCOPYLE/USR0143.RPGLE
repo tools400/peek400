@@ -1,7 +1,7 @@
 **free
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR0143
-//  - Auswahl Teildatei -
+//  - Auswahl Datei -
 dcl-ds USR0143 qualified;
       //  No replacement variables available!
 end-ds;

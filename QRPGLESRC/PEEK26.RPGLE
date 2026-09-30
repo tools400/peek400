@@ -109,7 +109,7 @@ exsr inzsr;
 
 exsr first;
 
-//  Schleife für Programmbearbeitung
+//  Schleife fÃ¼r Programmbearbeitung
 
 dow ('1');
 
@@ -146,13 +146,13 @@ dow ('1');
   cursorposition.row = workstn.csrpos / 256;
   cursorposition.column = %rem(workstn.csrpos: 256);
 
-  //  Nachrichten löschen
+  //  Nachrichten lÃ¶schen
   p_rmvpgmmg(sds.pgmname);
 
-  //  Bezugszahlen löschen
+  //  Bezugszahlen lÃ¶schen
   exsr bzoff1;
 
-  //  Mappen der gedrückten Taste
+  //  Mappen der gedrÃ¼ckten Taste
   //  in Programmbefehl
   peek21(workstn.aid: sds.pgmname
         : ypgmcmd: ycmddta: ymsgid: ymsgdta);
@@ -192,7 +192,7 @@ dow ('1');
     endif;
 
   other;
-    //  Falsche Taste gedrückt
+    //  Falsche Taste gedrÃ¼ckt
     p_wrongkey(workstn.aid: sds.pgmname);
     iter;
   endsl;
@@ -249,7 +249,7 @@ begsr bzoff1;
 endsr;
 
 //============================================================*
-//    PRFB1         Prüfen der Eingaben                       *
+//    PRFB1         PrÃ¼fen der Eingaben                       *
 //============================================================*
 
 begsr prfb1;
@@ -286,7 +286,7 @@ begsr prfb1;
 endsr;
 
 //============================================================*
-//    PRF20         Prüfen:  Datei                            *
+//    PRF20         PrÃ¼fen:  Datei                            *
 //============================================================*
 
 begsr prf20;
@@ -311,7 +311,7 @@ begsr prf20;
 endsr;
 
 //============================================================*
-//    PRF21         Prüfen:  Bibliothek                       *
+//    PRF21         PrÃ¼fen:  Bibliothek                       *
 //============================================================*
 
 begsr prf21;
@@ -330,9 +330,9 @@ begsr prf21;
     if (a1 = '*');
       //  Sonderwerte ...
       if (##library = '*LIBL');
-      //  ... gültig
+      //  ... gÃ¼ltig
       else;
-        //  ... ungültig
+        //  ... ungÃ¼ltig
         *in99 = '1';
         clear usr8152;
         usr8152.var1 = ##library;
@@ -353,7 +353,7 @@ begsr prf21;
 endsr;
 
 //============================================================*
-//    PRF22         Prüfen:  Teildatei                        *
+//    PRF22         PrÃ¼fen:  Teildatei                        *
 //============================================================*
 
 begsr prf22;
@@ -372,9 +372,9 @@ begsr prf22;
     if (a1 = '*');
       //  Sonderwerte ...
       if (##member = '*FIRST');
-      //  ... gültig
+      //  ... gÃ¼ltig
       else;
-        //  ... ungültig
+        //  ... ungÃ¼ltig
         *in99 = '1';
         clear usr8153;
         usr8153.var1 = ##member;
@@ -395,7 +395,7 @@ begsr prf22;
 endsr;
 
 //============================================================*
-//    PRF23         Prüfen:  Member Option                    *
+//    PRF23         PrÃ¼fen:  Member Option                    *
 //============================================================*
 
 begsr prf23;
@@ -422,7 +422,7 @@ begsr prf23;
 endsr;
 
 //============================================================*
-//    PRF24         Prüfen:  Datei erstellen                  *
+//    PRF24         PrÃ¼fen:  Datei erstellen                  *
 //============================================================*
 
 begsr prf24;
@@ -490,7 +490,7 @@ begsr c_morekeys;
 endsr;
 
 //============================================================*
-//    FILL##        Füllen Bildschirm                         *
+//    FILL##        FÃ¼llen Bildschirm                         *
 //============================================================*
 
 begsr fill##;
@@ -514,7 +514,7 @@ begsr fill##;
 endsr;
 
 //============================================================*
-//    SetScreen     Einstellen 132/80-Zeichen Auflösung       *
+//    SetScreen     Einstellen 132/80-Zeichen AuflÃ¶sung       *
 //============================================================*
 
 begsr setscreen;
@@ -557,7 +557,7 @@ begsr first;
   ##mbropt = *blanks;
   ##crtfile = *blanks;
 
-  // - Öffnen der Dateien
+  // - Ã–ffnen der Dateien
   open peek26fm;
 
   // - Programm initialisieren
@@ -566,17 +566,17 @@ begsr first;
   o_msgid = *blanks;
   o_msgdta = *blanks;
 
-  // - Bildschirmfelder füllen
+  // - Bildschirmfelder fÃ¼llen
   exsr fill##;
 
-  //  Löschen der Cursorosition
+  //  LÃ¶schen der Cursorosition
   csrrow = *zeros;
   csrcol = *zeros;
 
   // - Einstellen Darstellung der Funktionstasten
   sfbot = 1;
 
-  // - Einstellen der Bildschirmauflösung 80/132-Zeichen
+  // - Einstellen der BildschirmauflÃ¶sung 80/132-Zeichen
   exsr setscreen;
 
 endsr;

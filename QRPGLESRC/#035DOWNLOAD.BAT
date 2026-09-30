@@ -14,7 +14,7 @@ set DEV_LIB=PEEK%PEEK_VERSION%P
 if "%PASS%"=="" goto usage
 
 rem **************************************
-rem   Löschen Verzeichnisse
+rem   LÃ¶schen Verzeichnisse
 rem **************************************
 
 if exist *.file (
@@ -24,7 +24,7 @@ if exist *.file (
 )
 
 rem **************************************
-rem   Löschen Sicherungsdateien
+rem   LÃ¶schen Sicherungsdateien
 rem **************************************
 
 if exist *.savf (

@@ -1,18 +1,18 @@
       /*===============================================================*/
       /* >>PRE-COMPILER<<                                              */
-      /*   >>CRTCMD<<  CALL PGM(&LI/CRTPEEKOBJ) PARM(+                 */
-      /*                        '&SF' '&SL' '&SM' '&LI' '*NO' +        */
-      /*                        'PEEK' '&LI' '*NO');                   */
+      /*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    */
+      /*                           OBJLIB(&LI) DEVLIB(&LI) +           */
+      /*                           SBMJOB(*NO) BNDDIR(PEEK) +          */
+      /*                           INSTALL(*NO);                       */
       /*   >>EXECUTE<<                                                 */
       /* >>END-PRE-COMPILER<<                                          */
       /*===============================================================*/
              CMD        PROMPT('Peek/400 Build')
 
-             PARM       KWD(PRDLIB) +
+             PARM       KWD(DEVLIB) +
                           TYPE(*NAME) +
                           LEN(10) +
-                          DFT(PEEK) +
-                          PROMPT('Production library')
+                          PROMPT('Development library')
 
              PARM       KWD(DBGVIEW) +
                           TYPE(*CHAR) +

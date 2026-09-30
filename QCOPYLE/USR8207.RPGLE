@@ -1,7 +1,7 @@
 **free
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8207
-//  Datei konnte nicht geöffnet werden. Die Satzlänge ist größe
+//  Datei konnte nicht geÃ¶ffnet werden. Die SatzlÃ¤nge ist grÃ¶ÃŸe
 dcl-ds USR8207 qualified;
   var1  packed(5:0) inz;
 end-ds;

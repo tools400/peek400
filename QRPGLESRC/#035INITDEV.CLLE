@@ -129,7 +129,7 @@
 
              CRTPF      FILE(&DEVLIB/EXIT01PF) +
                           SRCFILE(&DEVLIB/QDDSSRC) SRCMBR(*FILE) +
-                          TEXT('Peek/400 - Sicherheitsattribute für EXIT01')
+                          TEXT('Peek/400 - Sicherheitsattribute fÃ¼r EXIT01')
 
              DLTF       FILE(&DEVLIB/EXIT04LOG)
              MONMSG     MSGID(CPF2105)
@@ -264,7 +264,7 @@
              CHKOBJ     OBJ(&DEVLIB/PEEKENG) OBJTYPE(*MSGF)
              MONMSG     MSGID(CPF9801) EXEC(DO)
                CRTMSGF    MSGF(&DEVLIB/PEEKENG) +
-                            TEXT('Peek/400 - Englische Übersetzung') CCSID(*HEX)
+                            TEXT('Peek/400 - Englische Ã¼bersetzung') CCSID(*HEX)
              ENDDO
              CRTCLPGM   PGM(&DEVLIB/PEEKENG) +
                           SRCFILE(&DEVLIB/QMSG_ENG) SRCMBR(*PGM) TGTRLS(&TGTRLS)
@@ -273,7 +273,7 @@
              CHKOBJ     OBJ(&DEVLIB/PEEKFRA) OBJTYPE(*MSGF)
              MONMSG     MSGID(CPF9801) EXEC(DO)
                CRTMSGF    MSGF(&DEVLIB/PEEKFRA) +
-                            TEXT('Peek/400 - Französische Übersetzung') CCSID(*HEX)
+                            TEXT('Peek/400 - FranzÃ¶sische Ã¼bersetzung') CCSID(*HEX)
              ENDDO
              CRTCLPGM   PGM(&DEVLIB/PEEKFRA) +
                           SRCFILE(&DEVLIB/QMSG_FRA) SRCMBR(*PGM) TGTRLS(&TGTRLS)
@@ -282,7 +282,7 @@
              CHKOBJ     OBJ(&DEVLIB/PEEKGER) OBJTYPE(*MSGF)
              MONMSG     MSGID(CPF9801) EXEC(DO)
                CRTMSGF    MSGF(&DEVLIB/PEEKGER) +
-                            TEXT('Peek/400 - Deutsche Übersetzung') CCSID(*HEX)
+                            TEXT('Peek/400 - Deutsche Ã¼bersetzung') CCSID(*HEX)
              ENDDO
              CRTCLPGM   PGM(&DEVLIB/PEEKGER) +
                           SRCFILE(&DEVLIB/QMSG_GER) SRCMBR(*PGM) TGTRLS(&TGTRLS)
@@ -291,7 +291,7 @@
              CHKOBJ     OBJ(&DEVLIB/PEEKITA) OBJTYPE(*MSGF)
              MONMSG     MSGID(CPF9801) EXEC(DO)
                CRTMSGF    MSGF(&DEVLIB/PEEKITA) +
-                            TEXT('Peek/400 - Italienische Übersetzung') CCSID(*HEX)
+                            TEXT('Peek/400 - Italienische Ã¼bersetzung') CCSID(*HEX)
              ENDDO
              CRTCLPGM   PGM(&DEVLIB/PEEKITA) +
                           SRCFILE(&DEVLIB/QMSG_ITA) SRCMBR(*PGM) TGTRLS(&TGTRLS)
@@ -300,7 +300,7 @@
              CHKOBJ     OBJ(&DEVLIB/PEEKSPA) OBJTYPE(*MSGF)
              MONMSG     MSGID(CPF9801) EXEC(DO)
                CRTMSGF    MSGF(&DEVLIB/PEEKSPA) +
-                            TEXT('Peek/400 - Spanische Übersetzung') CCSID(*HEX)
+                            TEXT('Peek/400 - Spanische Ã¼bersetzung') CCSID(*HEX)
              ENDDO
              CRTCLPGM   PGM(&DEVLIB/PEEKSPA) +
                           SRCFILE(&DEVLIB/QMSG_SPA) SRCMBR(*PGM) TGTRLS(&TGTRLS)
@@ -436,7 +436,7 @@ CRTOBJ:
              CALLSUBR   SUBR(CMPOBJ)
 
              CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
-             CHGVAR     VAR(&SRCMBR) VALUE('PEEK63C') /* Dateizugriffsroutinen  C-Helper */
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEK63C') /* Dateizugriffsroutinen */
              CALLSUBR   SUBR(CMPOBJ)
 
              CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')

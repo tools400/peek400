@@ -8,13 +8,13 @@
 //  Typ      : RPG                                               *
 //                                                               *
 //  erstellt : 27.10.97  Raddatz                                 *
-//  geändert : 27.04.99  2.1.0                                   *
+//  geÃ¤ndert : 27.04.99  2.1.0                                   *
 //                                                               *
 //===============================================================*
 //                                                               *
 //  Kurzdokumentation :                                          *
 //                                                               *
-//  Mappen einer gedrückten Taste auf einen Programmbefehl       *
+//  Mappen einer gedrÃ¼ckten Taste auf einen Programmbefehl       *
 //                                                               *
 // ============================================================= *
 // >>PRE-COMPILER<<                                              *
@@ -121,7 +121,7 @@ endif;
 return;
 
 //============================================================*
-//    MapSflOpt    Übersetzen Subfileauswahlen                *
+//    MapSflOpt    Ã¼bersetzen Subfileauswahlen                *
 //============================================================*
 
 begsr mapsflopt;
@@ -129,7 +129,7 @@ begsr mapsflopt;
   //*                 SUBST (P) XscnAID:2     Wrk_Key
   wrk_key = %subst(i_scnaid: 2);
 
-  //   Übersetzen key code vor dem Mapping:
+  //   Ã¼bersetzen key code vor dem Mapping:
   callexit05(i_pgm: '*OPTION': wrk_key);
 
   exsr mapusrinp;
@@ -137,7 +137,7 @@ begsr mapsflopt;
 endsr;
 
 //============================================================*
-//    MapCmdKey     Übersetzen Tastendruck in Programmbefehl  *
+//    MapCmdKey     Ã¼bersetzen Tastendruck in Programmbefehl  *
 //============================================================*
 
 begsr mapcmdkey;
@@ -212,7 +212,7 @@ begsr mapcmdkey;
 
   other;
     //  Unbekanntes AID-Byte ...
-    //  muß unbekannte HEX-Wert einer
+    //  muÃŸ unbekannte HEX-Wert einer
     //  unbekannten Taste sein.
     wrk_key = *blanks;
     p_keytomsg(i_scnaid: o_msgid: o_msgdta);
@@ -222,7 +222,7 @@ begsr mapcmdkey;
     leavesr;
   endif;
 
-  //   Übersetzen key code vor dem Mapping:
+  //   Ã¼bersetzen key code vor dem Mapping:
   callexit05(i_pgm: '*CMDKEY': wrk_key);
 
   exsr mapusrinp;
@@ -230,12 +230,12 @@ begsr mapcmdkey;
 endsr;
 
 //============================================================*
-//    MapUsrInp     Übersetzen Tastendruck in Programmbefehl  *
+//    MapUsrInp     Ã¼bersetzen Tastendruck in Programmbefehl  *
 //============================================================*
 
 begsr mapusrinp;
 
-  //   Übersetzen ...
+  //   Ã¼bersetzen ...
   wrk_sectn = '*' + %trim(i_pgm);
   if f_chainusr(wrk_sectn :
              wrk_key   :
@@ -243,7 +243,7 @@ begsr mapusrinp;
      f_iskeyexc(wrk_data  :
              wrk_exclk )= '0';
 
-    //   Übersetzen key code nach dem Mapping:
+    //   Ã¼bersetzen key code nach dem Mapping:
     callexit05(i_pgm: '*EVENT': wrk_data);
 
     o_pgmcmd = wrk_data;
@@ -252,10 +252,10 @@ begsr mapusrinp;
     o_msgdta = *blanks;
   else;
 
-    //   Übersetzen key code nach dem Mapping:
+    //   Ã¼bersetzen key code nach dem Mapping:
     callexit05(i_pgm: '*USROPT': wrk_key);
 
-    //   Prüfen auf Kurzbefehl ...
+    //   PrÃ¼fen auf Kurzbefehl ...
     wrk_sectn = '*CMD';
     if (f_chainusr(wrk_sectn: wrk_key: wrk_data)='0');
       o_pgmcmd = '*CMD';
@@ -285,12 +285,12 @@ begsr mapusrinp;
 endsr;
 
 //============================================================*
-//    ChkEntry      Prüfen auf Einträge zum Programm          *
+//    ChkEntry      PrÃ¼fen auf EintrÃ¤ge zum Programm          *
 //============================================================*
 
 begsr chkentry;
 
-  //   Prüfen ...
+  //   PrÃ¼fen ...
   wrk_sectn = '*' + %trim(i_pgm);
   p_setllusr(wrk_sectn: '*F01');
   if (f_readeusr(wrk_sectn: tmp_key) = '1');
@@ -317,8 +317,7 @@ begsr first;
 
   o_msgid = *blanks;
   o_msgdta = *blanks;
-  //   Prüfen auf Ausschlüsse ...
-  //   Prüfen auf Ausschlüsse ...
+  //   PrÃ¼fen auf AusschlÃ¼sse ...
   if %parms() >= %parmnum(i_exclkeys);
     wrk_exclk = %subarr(i_exclkeys: 1);
   else;

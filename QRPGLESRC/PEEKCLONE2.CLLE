@@ -84,7 +84,7 @@
                                 BNDSRVPGM(&OLDLIB/PEEK*) SRVPGMLIB(&NEWLIB)
                 ENDDO
 
-                /* Ändern Befehl              */
+                /* Ã„ndern Befehl              */
                 IF         COND(&ODOBTP = '*CMD') THEN(DO)
                    CHGCMD     CMD(&NEWLIB/&ODOBNM) PRDLIB(&NEWLIB)
                 ENDDO

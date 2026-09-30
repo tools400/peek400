@@ -13,9 +13,9 @@
 //                                                               *
 //  Kurzdokumentation :                                          *
 //                                                               *
-//  Peek/400 - Prüfen Datum-, Zeit, Zeitstempelfelder            *
+//  Peek/400 - PrÃ¼fen Datum-, Zeit, Zeitstempelfelder            *
 //                                                               *
-//  geändert : 01.04.04  für Version 2.2.2                       *
+//  geÃ¤ndert : 01.04.04  fÃ¼r Version 2.2.2                       *
 //                     added support for time format *HMS, *EUR  *
 //                     added support for date format *EUR        *
 //                                                               *
@@ -73,7 +73,7 @@ ceehdlr(%paddr('errorHandler')
        : *null: *omit);
 exsr first;
 
-//  Prüfen Format für ...
+//  PrÃ¼fen Format fÃ¼r ...
 select;
 // ... Datum
 when (i_type = 'L');

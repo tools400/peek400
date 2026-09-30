@@ -1,7 +1,7 @@
 **free
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8158
-//  Ungültige Lizenznummer '&1' eingetragen.
+//  UngÃ¼ltige Lizenznummer '&1' eingetragen.
 dcl-ds USR8158 qualified;
   var1  char(20) inz;
 end-ds;

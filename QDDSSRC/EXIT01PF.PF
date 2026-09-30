@@ -49,25 +49,25 @@
      A                                             '                    ')
       *
      A            CHGLIB         1A
-     A                                      TEXT('Ändern Bibliothek erla-
+     A                                      TEXT('Ã„ndern Bibliothek erla-
      A                                      ubt                         ')
-     A                                      COLHDG('Ändern Bibliothek   ' -
+     A                                      COLHDG('Ã„ndern Bibliothek   ' -
      A                                             '"1"=Ja, "0"=Nein    ' -
      A                                             '"-"=nicht definiert ')
  RAD A                                      DFT('-')
       *
      A            CHGFILE        1A
-     A                                      TEXT('Ändern Datei erlaubt  -
+     A                                      TEXT('Ã„ndern Datei erlaubt  -
      A                                                                  ')
-     A                                      COLHDG('Ändern Datei        ' -
+     A                                      COLHDG('Ã„ndern Datei        ' -
      A                                             '"1"=Ja, "0"=Nein    ' -
      A                                             '"-"=nicht definiert ')
  RAD A                                      DFT('-')
       *
      A            CHGMBR         1A
-     A                                      TEXT('Ändern Teildatei erlau-
+     A                                      TEXT('Ã„ndern Teildatei erlau-
      A                                      bt                          ')
-     A                                      COLHDG('Ändern Teildatei    ' -
+     A                                      COLHDG('Ã„ndern Teildatei    ' -
      A                                             '"1"=Ja, "0"=Nein    ' -
      A                                             '"-"=nicht definiert ')
  RAD A                                      DFT('-')
@@ -81,25 +81,25 @@
  RAD A                                      DFT('-')
  RAD  *
  RAD A            UPDKEY         1A
- RAD A                                      TEXT('Datensatzschlüsselände-
+ RAD A                                      TEXT('DatensatzschlÃ¼sselÃ¤nde-
  RAD A                                      rung                        ')
- RAD A                                      COLHDG('Schlüsseländerung   ' -
+ RAD A                                      COLHDG('SchlÃ¼sselÃ„nderung   ' -
  RAD A                                             '"1"=Ja, "0"=Nein    ' -
  RAD A                                             '"-"=nicht definiert ')
  RAD A                                      DFT('-')
  RAD  *
  RAD A            CHGSQLW        1A
- RAD A                                      TEXT('Ändern SQL WHERE erlau-
+ RAD A                                      TEXT('Ã„ndern SQL WHERE erlau-
  RAD A                                      bt                          ')
- RAD A                                      COLHDG('Ändern SQL WHERE    ' -
+ RAD A                                      COLHDG('Ã„ndern SQL WHERE    ' -
  RAD A                                             '"1"=Ja, "0"=Nein    ' -
  RAD A                                             '"-"=nicht definiert ')
  RAD A                                      DFT('-')
  RAD  *
  RAD A            CHGSQLO        1A
- RAD A                                      TEXT('Ändern SQL ORDER BY er-
+ RAD A                                      TEXT('Ã„ndern SQL ORDER BY er-
  RAD A                                      laubt                       ')
- RAD A                                      COLHDG('Ändern SQL ORDER BY ' -
+ RAD A                                      COLHDG('Ã„ndern SQL ORDER BY ' -
  RAD A                                             '"1"=Ja, "0"=Nein    ' -
  RAD A                                             '"-"=nicht definiert ')
  RAD A                                      DFT('-')

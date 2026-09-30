@@ -64,17 +64,17 @@
      A                                             '                    ')
       *
      A            KSEQ           5S 0
-     A                                      TEXT('Sortierfolge der Schlü-
+     A                                      TEXT('Sortierfolge der SchlÃ¼-
      A                                      sselfelder                  ')
      A                                      COLHDG('Sortierfolge        ' -
-     A                                             'Schlüsselfelder     ' -
+     A                                             'SchlÃ¼sselfelder     ' -
      A                                             '                    ')
       *
      A            DESC           1A
      A                                      TEXT('absteigende Sortierfol-
      A                                      ge                          ')
      A                                      COLHDG('DESCEND             ' -
-     A                                             'Schlüsselfolge      ' -
+     A                                             'SchlÃ¼sselfolge      ' -
      A                                             '                    ')
       *
      A            HIDDEN         1A
@@ -99,9 +99,9 @@
      A                                             '                    ')
       *
      A            MAXSIZE        5P 0
-     A                                      TEXT('Max. Feldgröße in der -
+     A                                      TEXT('Max. FeldgrÃ¶ÃŸe in der -
      A                                      Datensatzliste              ')
-     A                                      COLHDG('Max. Feldgröße in   ' -
+     A                                      COLHDG('Max. FeldgrÃ¶ÃŸe in   ' -
      A                                             'Datensatzliste      ' -
      A                                             '                    ')
       *

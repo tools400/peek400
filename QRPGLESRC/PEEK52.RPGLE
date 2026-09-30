@@ -8,7 +8,7 @@
 //  Typ      : RPG                                               *
 //                                                               *
 //  erstellt : 20.01.99  Raddatz                                 *
-//  geändert : 27.04.99  2.1.0                                   *
+//  geÃ¤ndert : 27.04.99  2.1.0                                   *
 //                                                               *
 //===============================================================*
 //                                                               *
@@ -110,7 +110,7 @@ endif;
 exsr first;
 
 //---------------------------------------------------*
-//  Schleife für Programmbearbeitung
+//  Schleife fÃ¼r Programmbearbeitung
 
 dow ('1');
 
@@ -125,13 +125,13 @@ dow ('1');
   //  Anzeigen Bildschirm
   exfmt bild01;
 
-  //  Nachrichten löschen
+  //  Nachrichten lÃ¶schen
   p_rmvpgmmg(sds.pgmname);
 
-  //  Bezugszahlen löschen
+  //  Bezugszahlen lÃ¶schen
   exsr bzoff1;
 
-  //  Mappen der gedrückten Taste
+  //  Mappen der gedrÃ¼ckten Taste
   //  in Programmbefehl
   peek21(workstn.aid: sds.pgmname
         : ypgmcmd: ycmddta: ymsgid: ymsgdta);
@@ -179,7 +179,7 @@ dow ('1');
     endif;
 
   other;
-    //  Falsche Taste gedrückt
+    //  Falsche Taste gedrÃ¼ckt
     p_wrongkey(workstn.aid: sds.pgmname);
     iter;
   endsl;
@@ -265,7 +265,7 @@ begsr c_enter;
 endsr;
 
 //============================================================*
-//    PRFB1         Prüfen der Eingaben                       *
+//    PRFB1         PrÃ¼fen der Eingaben                       *
 //============================================================*
 
 begsr prfb1;
@@ -315,7 +315,7 @@ begsr prfb1;
 endsr;
 
 //============================================================*
-//    PRF20         Prüfen:  case-sensitive                   *
+//    PRF20         PrÃ¼fen:  case-sensitive                   *
 //============================================================*
 
 begsr prf20;
@@ -340,7 +340,7 @@ begsr prf20;
 endsr;
 
 //============================================================*
-//    PRF21         Prüfen:  save                             *
+//    PRF21         PrÃ¼fen:  save                             *
 //============================================================*
 
 begsr prf21;
@@ -365,7 +365,7 @@ begsr prf21;
 endsr;
 
 //============================================================*
-//    PRF22         Prüfen:  alwlc                            *
+//    PRF22         PrÃ¼fen:  alwlc                            *
 //============================================================*
 
 begsr prf22;
@@ -390,7 +390,7 @@ begsr prf22;
 endsr;
 
 //============================================================*
-//    PRF23         Prüfen:  Satz gesperrt einlesen           *
+//    PRF23         PrÃ¼fen:  Satz gesperrt einlesen           *
 //============================================================*
 
 begsr prf23;
@@ -415,7 +415,7 @@ begsr prf23;
 endsr;
 
 //============================================================*
-//    PRF24         Prüfen:  case-sensitive                   *
+//    PRF24         PrÃ¼fen:  case-sensitive                   *
 //============================================================*
 
 begsr prf24;
@@ -441,7 +441,7 @@ begsr prf24;
 endsr;
 
 //============================================================*
-//    PRF25         Prüfen:  nullDft                          *
+//    PRF25         PrÃ¼fen:  nullDft                          *
 //============================================================*
 
 begsr prf25;
@@ -466,7 +466,7 @@ begsr prf25;
 endsr;
 
 //============================================================*
-//    PRF26         Prüfen:  keepCrs                          *
+//    PRF26         PrÃ¼fen:  keepCrs                          *
 //============================================================*
 
 begsr prf26;
@@ -562,7 +562,7 @@ begsr c_morekeys;
 endsr;
 
 //============================================================*
-//    FILL##        Füllen Bildschirm                         *
+//    FILL##        FÃ¼llen Bildschirm                         *
 //============================================================*
 
 begsr fill##;
@@ -577,7 +577,7 @@ begsr fill##;
 endsr;
 
 //============================================================*
-//    SetScreen     Einstellen 132/80-Zeichen Auflösung       *
+//    SetScreen     Einstellen 132/80-Zeichen AuflÃ¶sung       *
 //============================================================*
 
 begsr setscreen;
@@ -631,13 +631,13 @@ endsr;
 
 begsr first;
 
-  // - Öffnen der Dateien
+  // - Ã–ffnen der Dateien
   open peek52fm;
 
   // - Benutzervoreinstellungen
   exsr getusrsetg;
 
-  // - Füllen der Bildschirmfelder
+  // - FÃ¼llen der Bildschirmfelder
   exsr bzoff1;
   exsr fill##;
 
@@ -650,7 +650,7 @@ begsr first;
   // - Darstellung der Befehlstasten
   sfbot = 1;
 
-  // - Einstellen der Bildschirmauflösung 80/132-Zeichen
+  // - Einstellen der BildschirmauflÃ¶sung 80/132-Zeichen
   exsr setscreen;
 
 endsr;

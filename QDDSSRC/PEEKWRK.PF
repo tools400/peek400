@@ -3,7 +3,7 @@
       *  (c) Thomas Raddatz                                           *
       *                                                               *
       *  Bereich  : PEEK                                              *
-      *  Datei    : PEEKWRK      temporäre Arbeitsdatei               *
+      *  Datei    : PEEKWRK      temporÃ¤re Arbeitsdatei               *
       *  Typ      : PF                                                *
       *  Erstellt : 30.12.1997   Raddatz                              *
       *                                                               *
@@ -24,16 +24,16 @@
      A          R FPEEKWRK                  TEXT('PEEK - Work')
       *
      A            KEY            5P 0
-     A                                      TEXT('Schlüsselfeld         -
+     A                                      TEXT('SchlÃ¼sselfeld         -
      A                                                                  ')
-     A                                      COLHDG('Schlüsselfeld       ' -
+     A                                      COLHDG('SchlÃ¼sselfeld       ' -
      A                                             'numerisch           ' -
      A                                             '                    ')
       *
      A            KEY2          20A
-     A                                      TEXT('Schlüsselfeld 2       -
+     A                                      TEXT('SchlÃ¼sselfeld 2       -
      A                                                                  ')
-     A                                      COLHDG('Schlüsselfeld 2     ' -
+     A                                      COLHDG('SchlÃ¼sselfeld 2     ' -
      A                                             'alphanumerisch      ' -
      A                                             '                    ')
       *

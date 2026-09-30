@@ -1,7 +1,7 @@
 **free
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8166
-//  Funktion nicht möglich. Keine Datei geöffnet!
+//  Funktion nicht mÃ¶glich. Keine Datei geÃ¶ffnet!
 dcl-ds USR8166 qualified;
       //  No replacement variables available!
 end-ds;

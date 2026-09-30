@@ -1,11 +1,11 @@
 **FREE
 //---------------------------------------------------------------
-// Datenstruktur für Hilfe-Prompt
+// Datenstruktur fÃ¼r Hilfe-Prompt
 // SET0008   *PROMPT
 //---------------------------------------------------------------
 //
 dcl-ds set0008_t len(256) qualified template;
-  //  Zeichen für Promptfunktion
+  //  Zeichen fÃ¼r Promptfunktion
   set_prmt        char(1) inz('?');
   //  F4-Felder farbig markieren
   set_dsppmt      char(1) inz(btrue);

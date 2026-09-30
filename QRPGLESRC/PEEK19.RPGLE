@@ -13,7 +13,7 @@
 //                                                               *
 //  Kurzdokumentation :                                          *
 //                                                               *
-//  Erstellen externen Aufsetzschlüssel                          *
+//  Erstellen externen AufsetzschlÃ¼ssel                          *
 //                                                               *
 // ============================================================= *
 // >>PRE-COMPILER<<                                              *

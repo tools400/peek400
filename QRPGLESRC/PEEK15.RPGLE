@@ -8,7 +8,7 @@
 //  Typ      : RPG                                               *
 //                                                               *
 //  erstellt : 14.10.97  Raddatz                                 *
-//  geändert : 21.07.99  Raddatz für Version 2.2                 *
+//  geÃ¤ndert : 21.07.99  Raddatz fÃ¼r Version 2.2                 *
 //                                                               *
 //===============================================================*
 //                                                               *
@@ -78,7 +78,7 @@ dcl-pr f_readfld like(bool_t) extproc(*dclcase);
 end-pr;
 
 //===============================================================*
-//  Datenstrukturen für die Codegenerierung
+//  Datenstrukturen fÃ¼r die Codegenerierung
 //===============================================================*
 
 dcl-ds ds_rcdfmt len(112);
@@ -318,27 +318,27 @@ dcl-ds *N;
   newlen#a        char(5) overlay(newlen#: 1);
 end-ds;
 
-//  Satzformatzähler
+//  SatzformatzÃ¤hler
 dcl-ds *N;
   scn#            zoned(3) inz;
   scn#a           char(3) overlay(scn#: 1);
 end-ds;
-//  Feldzähler pro Satzformat
+//  FeldzÃ¤hler pro Satzformat
 dcl-ds *N;
   fieldcount      zoned(5) inz(*zeros);
   a#fdcount       char(5) overlay(fieldcount:1);
 end-ds;
-//  Bezugszahlenzähler pro Satzformat für Felder mit unzulässigen Zeichen
+//  BezugszahlenzÃ¤hler pro Satzformat fÃ¼r Felder mit unzulÃ¤ssigen Zeichen
 dcl-ds *N;
   ind40#          zoned(2) inz;
   ind40#a         char(2) overlay(ind40#: 1);
 end-ds;
-//  Bezugszahlenzähler pro Satzformat für Felder mit NULL Werten
+//  BezugszahlenzÃ¤hler pro Satzformat fÃ¼r Felder mit NULL Werten
 dcl-ds *N;
   ind50#          zoned(2) inz;
   ind50#a         char(2) overlay(ind50#: 1);
 end-ds;
-//  Zeilenzähler im Satzformat
+//  ZeilenzÃ¤hler im Satzformat
 dcl-ds *N;
   row#            zoned(2) inz;
   row#a           char(2) overlay(row#: 1);
@@ -453,10 +453,10 @@ dow (f_readfld() <> bEOF);
   //**                Eval      USR8188.var2 = FLDL0100.F1FNME
   //**                Callp     p_sndStsMg('USR8188': USR8188)
 
-  //  ... erhöhen lfd. Feldnummer
+  //  ... erhÃ¶hen lfd. Feldnummer
   fieldcount = fieldcount + 1;
 
-  //  ... prüfen, ob das Feld erlaubt ist
+  //  ... prÃ¼fen, ob das Feld erlaubt ist
   if (f_isnotalw(fldl0100) = bTrue);
     iter;
   endif;
@@ -469,7 +469,7 @@ io_stage = io_stage + 1;
 p_showprogressmeter(io_stage);
 
 //-------------------------------------------*
-//  Abschließen Copy-Book 1:                 *
+//  AbschlieÃŸen Copy-Book 1:                 *
 //  Inhalt:   chkCharXXX                     *
 //-------------------------------------------*
 
@@ -481,7 +481,7 @@ reset ds_remark;
 p_wrtcopy1(ds_remark);
 
 //-------------------------------------------*
-//  Abschließen Copy-Book 2:                 *
+//  AbschlieÃŸen Copy-Book 2:                 *
 //  Inhalt:   c_fldHexEd                     *
 //-------------------------------------------*
 
@@ -499,7 +499,7 @@ reset ds_remark;
 p_wrtcopy2(ds_remark);
 
 //-------------------------------------------*
-//  Abschließen Copy-Book 6:                 *
+//  AbschlieÃŸen Copy-Book 6:                 *
 //  Inhalt:   c_fldStrEd                     *
 //-------------------------------------------*
 
@@ -517,7 +517,7 @@ reset ds_remark;
 p_wrtcopy6(ds_remark);
 
 //-------------------------------------------*
-//  Zufügen Copy-Book 1:                     *
+//  ZufÃ¼gen Copy-Book 1:                     *
 //  Inhalt:   EnableEdit                     *
 //-------------------------------------------*
 
@@ -562,10 +562,10 @@ dow f_readfld <> bEOF;
   //**                Eval      USR8188.var2 = FLDL0100.F1FNME
   //**                Callp     p_sndStsMg('USR8188': USR8188)
 
-  //  ... erhöhen lfd. Feldnummer
+  //  ... erhÃ¶hen lfd. Feldnummer
   fieldcount = fieldcount + 1;
 
-  //  ... prüfen, ob das Feld erlaubt ist
+  //  ... prÃ¼fen, ob das Feld erlaubt ist
   if (f_isnotalw(fldl0100) = bTrue);
     iter;
   endif;
@@ -642,7 +642,7 @@ begsr copyhead;
   reset ds_remark;
   p_wrtcopy2(ds_remark);
 
-  //  füllen Parameter für PEEK45
+  //  fÃ¼llen Parameter fÃ¼r PEEK45
   //  Eval      yDsp80     = i_dsp80
   reset ds_eval;
   $eval_fct2 = 'yDsp80     = i_dsp80';
@@ -709,7 +709,7 @@ begsr copyhead;
   reset ds_remark;
   p_wrtcopy6(ds_remark);
 
-  //  füllen Parameter für PEEK45
+  //  fÃ¼llen Parameter fÃ¼r PEEK45
   //  Eval      yDsp80     = i_dsp80
   reset ds_eval;
   $eval_fct2 = 'yDsp80     = i_dsp80';
@@ -766,7 +766,7 @@ endsr;
 
 begsr wrtfield;
 
-  //   Berechnen Anzahl benötigter Zeilen ...
+  //   Berechnen Anzahl benÃ¶tigter Zeilen ...
   totlin = f_nbrdsprw(fldl0100);
   curlin = 1;
   dsplen = 0;
@@ -793,14 +793,14 @@ begsr wrtfield;
 
   dou curlin > totlin;
     //
-    //  Generieren ALPHA Felder als GRAPHIC für CCSIDs 1200 und 1208.
+    //  Generieren ALPHA Felder als GRAPHIC fÃ¼r CCSIDs 1200 und 1208.
     //**                If         FLDL0100.F1DTYP = 'A' and
     //**                           (FLDL0100.F1FDCC = 1200 or FLDL0100.F1FDCC = 1208)
     //**                Eval       FLDL0100.F1DTYP = 'G'
     //**                Endif
 
-    //  Generieren Felder für mehrzeilige GRAPHIC Felder, weil das
-    //  Schlüsselwort 'CNTFLD()' für GRAPHIC Felder nicht zulässig ist.
+    //  Generieren Felder fÃ¼r mehrzeilige GRAPHIC Felder, weil das
+    //  SchlÃ¼sselwort 'CNTFLD()' fÃ¼r GRAPHIC Felder nicht zulÃ¤ssig ist.
     if (basefldname <> '*CNT_ERROR' and
        fldl0100.f1dtyp = 'G' and totlin > 1);
       fieldname = %trimr(basefldname) +
@@ -839,7 +839,7 @@ begsr wrtfield;
       exsr #text;
     endif;
 
-    //  ... ausgeben Feld für Schlüsselanzeiger
+    //  ... ausgeben Feld fÃ¼r SchlÃ¼sselanzeiger
     if (curlin = 1);
       reset ds_flddef;
       $fldd_fldn = 'KEY' + a#fdcount;
@@ -852,14 +852,14 @@ begsr wrtfield;
       p_wrtdspf(ds_flddef);
     endif;
 
-    //  ... ausgeben "hidden field" für Nachrichtennummer TXT...
+    //  ... ausgeben "hidden field" fÃ¼r Nachrichtennummer TXT...
     if (curlin = 1);
       reset ds_msghidden;
       $msgh_fldn = 'MSG' + a#fdcount;
       p_wrtdspf(ds_msghidden);
     endif;
 
-    //  ... ausgeben Hinweis "Unzulässige Zeichen"
+    //  ... ausgeben Hinweis "UnzulÃ¤ssige Zeichen"
     if (curlin = 1);
       reset ds_msgchar;
       $msgc_ind  = ind40#a;
@@ -881,7 +881,7 @@ begsr wrtfield;
       p_wrtdspf(ds_msgchar);
     endif;
 
-    //  ... Farbe: weiß
+    //  ... Farbe: weiÃŸ
     if (curlin = 1);
       reset ds_dspatr;
       $dspa_atr = 'COLOR(WHT)';
@@ -919,7 +919,7 @@ begsr wrtfield;
       $fldd_dtyp = ' ';
     endsl;
 
-    //          ... Feldlänge
+    //          ... FeldlÃ¤nge
     if (f_istolong(fldl0100) = bTrue) or
        (fldl0100.f1dtyp = 'G' and totlin > 1);
       if (fldl0100.f1dtyp = 'G'); // = Graphic
@@ -971,7 +971,7 @@ begsr wrtfield;
       p_wrtdspf(ds_fldcnt);
     endif;
 
-    //  ... Feld über mehrere Zeilen verteilen
+    //  ... Feld Ã¼ber mehrere Zeilen verteilen
     if (fldl0100.f1dtyp <> 'G'); // = Graphic
       if (totlin > 1);
         reset ds_dspatr;
@@ -979,10 +979,10 @@ begsr wrtfield;
         p_wrtdspf(ds_dspatr);
       endif;
     else;
-    //       // TODO: Feld über mehrere Zeilen splitten
+    //       // TODO: Feld Ã¼ber mehrere Zeilen splitten
     endif;
 
-    //  ... CCSID und Feldlänge für GRAPHIC Felder
+    //  ... CCSID und FeldlÃ¤nge fÃ¼r GRAPHIC Felder
     if (fldl0100.f1dtyp = 'G'); // = Graphic
       reset ds_dspatr;
       $dspa_atr = 'CCSID(13488 ' +
@@ -1002,12 +1002,12 @@ begsr wrtfield;
       p_wrtdspf(ds_dspatr);
     endif;
 
-    //  Alias Feldname überschreiben, weil:
-    //   - Aliasnamen in Groß-/Kleinbuchstaben sind nicht zulässig.
+    //  Alias Feldname Ãœberschreiben, weil:
+    //   - Aliasnamen in GroÃŸ-/Kleinbuchstaben sind nicht zulÃ¤ssig.
     //   - Einige Sonderzeichen wie zum Beispiel '#' oder '.' sind
-    //     in einer Display File nicht zulässig.
-    //  Der tatsächliche Alias Name spielt keine Rolle und wird daher
-    //  auf den generierten Namen 'ALSnnnnn' gesetzt. Es könnte auch
+    //     in einer Display File nicht zulÃ¤ssig.
+    //  Der tatsÃ¤chliche Alias Name spielt keine Rolle und wird daher
+    //  auf den generierten Namen 'ALSnnnnn' gesetzt. Es kÃ¶nnte auch
     //  jeder andere eindeutige Name sein.
     if (fldl0100.f1afnl > 0 and hasreffld = bTrue);
       reset ds_alias;
@@ -1017,27 +1017,27 @@ begsr wrtfield;
       p_wrtdspf(ds_alias);
     endif;
 
-    //  Auf INPUT-Only-Felder prüfen ...
+    //  Auf INPUT-Only-Felder prÃ¼fen ...
     if (fldl0100.f1use <> 'I');
-      //  .. Farbe = weiß
+      //  .. Farbe = weiÃŸ
       reset ds_dspatr;
       $dspa_atr = 'COLOR(WHT)';
       p_wrtdspf(ds_dspatr);
     else;
-      //  .. Farbe = grün
+      //  .. Farbe = grÃ¼n
       reset ds_dspatr;
       $dspa_atr = 'COLOR(GRN)';
       p_wrtdspf(ds_dspatr);
     endif;
 
-    //  Feld schützen, wenn größer als 512-Zeichen ...
+    //  Feld schÃ¼tzen, wenn grÃ¶ÃŸer als 512-Zeichen ...
     if (f_istolongmax(fldl0100) = bTrue);
       fldtolongmax = '1';
     else;
       fldtolongmax = '0';
     endif;
 
-    //  Feld schützen, wenn größer als 512-Zeichen ...
+    //  Feld schÃ¼tzen, wenn grÃ¶ÃŸer als 512-Zeichen ...
     if (f_istolong(fldl0100) = bTrue) or
        (f_isnotalw(fldl0100) = bTrue);
       if (fldl0100.f1use <> 'I');
@@ -1052,7 +1052,7 @@ begsr wrtfield;
       endif;
       fldtolong = '1';
     else;
-      //  Schlüsselfelder schützen/freigeben ...
+      //  SchlÃ¼sselfelder schÃ¼tzen/freigeben ...
       if (f_iskeyfld(fldl0100) = bTrue);
         if (fldl0100.f1use <> 'I');
           reset ds_dspatr;
@@ -1082,7 +1082,7 @@ begsr wrtfield;
     if (not isexit03);
       //  EDTWRD/EDTCDE ausgeben ...
       select;
-      //  EDTWRD prüfen ...
+      //  EDTWRD prÃ¼fen ...
       when (fldl0100.f1edwd <> ' '); // Edit word
         reset ds_dspatr;
         $dspa_atr = 'EDTWRD(''' + fldl0100.f1edwd;
@@ -1140,12 +1140,12 @@ begsr wrtfield;
   exsr wrtcopy6;
 
   // ---------------------------*
-  //  erhöhen Zeilenzähler
+  //  erhÃ¶hen ZeilenzÃ¤hler
   // ---------------------------*
   row# = row# + totlin;
 
   // ---------------------------*
-  //  erhöhen Bezugszahlenzähler
+  //  erhÃ¶hen BezugszahlenzÃ¤hler
   // ---------------------------*
   ind40# = ind40# + 1;
   ind50# = ind50# + 1;
@@ -1161,10 +1161,10 @@ begsr inzscreen;
   //  Wenn die laufende Bildschirm-Nr. = 0 ist,
   //  dann ...
   if (scn# = 0);
-  //    ... ist keine abzuschließende
+  //    ... ist keine abzuschlieÃŸende
   //        Subroutine vorhanden
   else;
-    //    ... ansonsten Subroutine abschließen  (Copy-Book 1)
+    //    ... ansonsten Subroutine abschlieÃŸen  (Copy-Book 1)
     //           Endsr
     reset ds_endsr;
     p_wrtcopy1(ds_endsr);
@@ -1185,7 +1185,7 @@ begsr inzscreen;
 
   //           Remark
   reset ds_remark;
-  $rem_info = 'Prüfung auf ungültige Feldinhalte, Seite ' + scn#a;
+  $rem_info = 'PrÃ¼fung auf ungÃ¼ltige Feldinhalte, Seite ' + scn#a;
   p_wrtcopy1(ds_remark);
 
   //           Remark
@@ -1220,11 +1220,11 @@ begsr inzscreen;
   //  OVERLAY
   reset ds_overlay;
   p_wrtdspf(ds_overlay);
-  //  WINDOW-Definition für *DS3
+  //  WINDOW-Definition fÃ¼r *DS3
   reset ds_window;
   $wdw_mode = '*DS3';
   p_wrtdspf(ds_window);
-  //  WINDOW-Definition für *DS4
+  //  WINDOW-Definition fÃ¼r *DS4
   reset ds_window;
   $wdw_mode = '*DS4';
   p_wrtdspf(ds_window);
@@ -1264,7 +1264,7 @@ endsr;
 
 //============================================================*
 //    wrtCopy1      Ausgeben Copy-Book 1 pro Feld             *
-//                  Prüfung auf nicht darstellbare Zeichen    *
+//                  PrÃ¼fung auf nicht darstellbare Zeichen    *
 //============================================================*
 
 begsr wrtcopy1;
@@ -1614,7 +1614,7 @@ endsr;
 
 //============================================================*
 //    wrtCopy3      Ausgeben Copy-Book 3 pro Feld             *
-//                  Felder für Feldsperre                     *
+//                  Felder fÃ¼r Feldsperre                     *
 //============================================================*
 
 begsr wrtcopy3;
@@ -1633,7 +1633,7 @@ endsr;
 
 //============================================================*
 //    wrtCopy4      Ausgeben Copy-Book 4 pro Feld             *
-//                  Konstanten für "Feld zu lang"             *
+//                  Konstanten fÃ¼r "Feld zu lang"             *
 //============================================================*
 
 begsr wrtcopy4;
@@ -1708,7 +1708,7 @@ begsr wrtcopy5;
 
   else;
 
-    //  Setzen Fehlerflag: Feld ist nicht NULL-fähig
+    //  Setzen Fehlerflag: Feld ist nicht NULL-fÃ¤hig
     reset ds_eval;
     $eval_fct2 = 'pgmMsgID = ''USR8191''';
 
@@ -1891,7 +1891,7 @@ begsr #text;
       x = %len(%trimr($lit_kwrd));
       y = x;
     else;
-      //  Textbezeichnung auf ' prüfen ...
+      //  Textbezeichnung auf ' prÃ¼fen ...
       r$ftxt = '';
       x = 1;
       y = 1;
@@ -1914,16 +1914,16 @@ begsr #text;
     endif;
   endsl;
 
-  //  Hinzufügen '........'
+  //  HinzufÃ¼gen '........'
   $lit_kwrd = %trimr($lit_kwrd) + dotline;
 
-  //  Begrenzen Textlänge auf max. mögliche Anzahl Zeichen
+  //  Begrenzen TextlÃ¤nge auf max. mÃ¶gliche Anzahl Zeichen
   if (26 + y - x <= %len($lit_kwrd));
     %subst($lit_kwrd: 25 + y - x: 1) = '''';
     %subst($lit_kwrd: 26 + y - x   ) = ' ';
   endif;
 
-  //  Prüfen auf ungerade Anzahl ' (Hochkommata)
+  //  PrÃ¼fen auf ungerade Anzahl ' (Hochkommata)
   numquote = 0;
 
   z = 0;
@@ -1949,7 +1949,7 @@ begsr #text;
       dow %subst($lit_kwrd: z: 1) <> '''';
         z = z - 1;
       enddo;
-      //      und löschen ales hinter dem letzten Hochkomma
+      //      und lÃ¶schen ales hinter dem letzten Hochkomma
       %subst($lit_kwrd: z + 1) = '';
     endif;
   endif;
@@ -2015,7 +2015,7 @@ end-proc;
 
 //============================================================*
 //    wrtCopy1      Ausgeben Copy-Book 1    'Axxxxxxxxx'      *
-//                  Prüfung auf ungültige Feldinhalte         *
+//                  PrÃ¼fung auf ungÃ¼ltige Feldinhalte         *
 //============================================================*
 dcl-proc p_wrtcopy1;
   dcl-pi *N;
@@ -2084,7 +2084,7 @@ end-proc;
 
 //============================================================*
 //    wrtCopy4      Ausgeben Copy-Book 4    'Dxxxxxxxxx'      *
-//                  Konstanten für "Feld zu lang"             *
+//                  Konstanten fÃ¼r "Feld zu lang"             *
 //============================================================*
 dcl-proc p_wrtcopy4;
   dcl-pi *N;
@@ -2152,7 +2152,7 @@ dcl-proc p_wrtcopy6;
 end-proc;
 
 //============================================================*
-//    readFld       Lesen nächstes Feld aus PEEKFLD           *
+//    readFld       Lesen nÃ¤chstes Feld aus PEEKFLD           *
 // Returns bTrue on end-of-file, else bFalse.                 *
 //============================================================*
 dcl-proc f_readfld;

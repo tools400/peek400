@@ -13,7 +13,7 @@
 //                                                               *
 //  Kurzdokumentation :                                          *
 //                                                               *
-//  Peek/400 - Auswählen "Arbeitsumgebung"                       *
+//  Peek/400 - AuswÃ¤hlen "Arbeitsumgebung"                       *
 //                                                               *
 //===============================================================*
 // >>PRE-COMPILER<<                                              *
@@ -170,7 +170,7 @@ exsr first;
 
 dow ('1');
 
-  //  Prüfen Positionierung der Subfile
+  //  PrÃ¼fen Positionierung der Subfile
   if (sfsanr <= 0);
     sfsanr = 1;
   endif;
@@ -182,7 +182,7 @@ dow ('1');
   *in89 = '0';
   write msgctl;
 
-  //  "Keine Sätze ..."
+  //  "Keine SÃ¤tze ..."
   if (*in80 = *off);
     write pbleer;
   endif;
@@ -227,10 +227,10 @@ dow ('1');
   exfmt pbctl;
   *in70 = '0';
 
-  //  Nachrichten löschen
+  //  Nachrichten lÃ¶schen
   p_rmvpgmmg(sds.pgmName);
 
-  //  Bezugszahlen löschen
+  //  Bezugszahlen lÃ¶schen
   exsr clrindctl;
 
   //  Aktuelle Satz-Nr.
@@ -238,7 +238,7 @@ dow ('1');
     sfsanr = sflcsr;
   endif;
 
-  //  Mappen der gedrückten Taste
+  //  Mappen der gedrÃ¼ckten Taste
   //  in Programmbefehl
   peek21(workstn.aid: sds.pgmName
         : ypgmcmd: ycmddta: yMsgID: yMsgDta);
@@ -308,7 +308,7 @@ dow ('1');
   when (ypgmcmd = '*PAGEDOWN');
 
   other;
-    //  Falsche Taste gedrückt
+    //  Falsche Taste gedrÃ¼ckt
     p_wrongkey(workstn.aid: sds.pgmName);
     iter;
   endsl;
@@ -330,16 +330,16 @@ begsr c_enter;
   isCtlError = bFalse;
   isDirty = bFalse;
 
-  //  Prüfen der Eingaben im Kontrollsatz
+  //  PrÃ¼fen der Eingaben im Kontrollsatz
   exsr vctl;
 
-  //  Wenn alles OK ist und die Subfile weiterhin gültig ist, ...
+  //  Wenn alles OK ist und die Subfile weiterhin gÃ¼ltig ist, ...
   if (isCtlError = bFalse and isDirty = bFalse);
     // ... dann
-    //     Wenn der Teildateiname gefüllt ist, ...
+    //     Wenn der Teildateiname gefÃ¼llt ist, ...
     if (##mnme <> '');
       // ... dann
-      //     füllen der Rückgabeparameter
+      //     fÃ¼llen der RÃ¼ckgabeparameter
       o_qfile.name = ##file;
       o_qfile.lib = ##lib;
       o_mbr    = ##mnme;
@@ -347,27 +347,27 @@ begsr c_enter;
       o_option = ctl_cmd;
     else;
       // ... sonst
-      //     prüfen der Subfile
+      //     prÃ¼fen der Subfile
       exsr vreadc;
 
     endif;
   endif;
 
-  // Wenn die Subfile ungültig ist, ...
+  // Wenn die Subfile ungÃ¼ltig ist, ...
   if (isDirty = bTrue);
     // ... dann
     //     aktualisieren der Subfile
     exsr c_refresh;
   else;
     // ... sonst
-    //     Wenn die Teildatei ausgefüllt ist, ...
+    //     Wenn die Teildatei ausgefÃ¼llt ist, ...
     if (##mbr <> '');
       // ... dann
-      //     ausführen Suchfunktion
+      //     ausfÃ¼hren Suchfunktion
       exsr c_search;
     else;
       // ... sonst
-      //     prüfen der Dateiangaben
+      //     prÃ¼fen der Dateiangaben
       exsr chkfile;
     endif;
   endif;
@@ -453,10 +453,10 @@ begsr srchmbr;
         leave;
       else;
         if (sfpau <> *blanks);
-          //  ... Satz geändert
+          //  ... Satz geÃ¤ndert
           exsr vsfpauchg;
         else;
-          //  ... Satz nicht geändert
+          //  ... Satz nicht geÃ¤ndert
           exsr vsfpauclr;
         endif;
         update pbsfl;
@@ -542,14 +542,14 @@ begsr vctl;
 endsr;
 
 //============================================================*
-//    Prf40         Prüfen ##File                             *
+//    Prf40         PrÃ¼fen ##File                             *
 //============================================================*
 
 begsr prf40;
 
   dou ('1');
 
-    //  gültiger Name ?
+    //  gÃ¼ltiger Name ?
     if (f_vldname(##file: yMsgID: yMsgDta) = bTrue);
       isCtlError = bFalse;
     else;
@@ -562,7 +562,7 @@ begsr prf40;
       leave;
     endif;
 
-    //  Prüfen Datei
+    //  PrÃ¼fen Datei
     //  ------------
     f_exist(##file: ##lib: '*FILE': '*NONE': yMsgID: yMsgDta);
 
@@ -576,7 +576,7 @@ begsr prf40;
       isCtlError = bFalse;
     endif;
 
-    //  Datei geändert ?
+    //  Datei geÃ¤ndert ?
     if (##file <> lastFile);
       isDirty = bTrue;
       leave;
@@ -593,14 +593,14 @@ begsr prf40;
 endsr;
 
 //============================================================*
-//    Prf41         Prüfen ##Lib                              *
+//    Prf41         PrÃ¼fen ##Lib                              *
 //============================================================*
 
 begsr prf41;
 
   dou ('1');
 
-    //  gültiger Name ?
+    //  gÃ¼ltiger Name ?
     if (f_vldname(##lib: yMsgID: yMsgDta) = bTrue);
       isCtlError = bFalse;
     else;
@@ -613,7 +613,7 @@ begsr prf41;
       leave;
     endif;
 
-    //  Prüfen Bibliothek
+    //  PrÃ¼fen Bibliothek
     //  -----------------
     f_exist(##lib: *omit: '*LIB': *omit: yMsgID: yMsgDta);
     if (yMsgID <> '');
@@ -626,7 +626,7 @@ begsr prf41;
       isCtlError = bFalse;
     endif;
 
-    //  Bibliothek geändert ?
+    //  Bibliothek geÃ¤ndert ?
     if (##lib <> lastlib);
       isDirty = bTrue;
       leave;
@@ -642,7 +642,7 @@ begsr prf41;
 endsr;
 
 //============================================================*
-//    Prf20         Prüfen ##CTLAU                            *
+//    Prf20         PrÃ¼fen ##CTLAU                            *
 //============================================================*
 
 begsr prf20;
@@ -682,12 +682,12 @@ begsr prf20;
 endsr;
 
 //============================================================*
-//    Prf21         Prüfen ##MNME                             *
+//    Prf21         PrÃ¼fen ##MNME                             *
 //============================================================*
 
 begsr prf21;
 
-  //  gültiger Name ?
+  //  gÃ¼ltiger Name ?
   if (f_vldname(##mnme: yMsgID: yMsgDta) = bTrue);
     isCtlError = bFalse;
   else;
@@ -713,7 +713,7 @@ begsr prf21;
 endsr;
 
 //============================================================*
-//    Prf22         Prüfen ##MTXT                             *
+//    Prf22         PrÃ¼fen ##MTXT                             *
 //============================================================*
 
 begsr prf22;
@@ -726,7 +726,7 @@ begsr prf22;
 endsr;
 
 //============================================================*
-//    ChkFile       Prüfen/Anlegen Env.Datei                  *
+//    ChkFile       PrÃ¼fen/Anlegen Env.Datei                  *
 //============================================================*
 
 begsr chkfile;
@@ -736,7 +736,7 @@ begsr chkfile;
     leavesr;
   endif;
 
-  //  Prüfen Datei
+  //  PrÃ¼fen Datei
   //  ------------
   f_exist(o_qfile.name: o_qfile.lib: '*FILE': '*NONE': yMsgID: yMsgDta);
 
@@ -789,7 +789,7 @@ begsr chkfile;
     leavesr;
   endif;
 
-  //  Prüfen Teildatei
+  //  PrÃ¼fen Teildatei
   //  ----------------
   f_exist(o_qfile.name: o_qfile.lib: '*FILE': o_mbr: yMsgID: yMsgDta);
 
@@ -818,7 +818,7 @@ begsr chkfile;
     leavesr;
   endif;
 
-  //  Ändern Teildateitext
+  //  Ã„ndern Teildateitext
   //  --------------------
   if (o_text <> '');
     f_execute('CHGPFM'            +
@@ -856,7 +856,7 @@ begsr vreadc;
   isSflError = bFalse;
 
   if (*in80 = *off);
-  //   keine Einträge in Subfile vorhanden ...
+  //   keine EintrÃ¤ge in Subfile vorhanden ...
   else;
 
     for do_x2 = 1 to sflnbrrcd;
@@ -876,7 +876,7 @@ begsr vreadc;
       //  Subfile nicht neu positionieren
       endif;
 
-      //  Linksbündig setzen ...
+      //  LinksbÃ¼ndig setzen ...
       sfpau = %triml(sfpau);
 
       //  Zuordnung AUSWAHL => Befehl ...
@@ -891,7 +891,7 @@ begsr vreadc;
       endif;
 
       //----------------------------*
-      //  Ausführen SFL-Befehl ...  *
+      //  AusfÃ¼hren SFL-Befehl ...  *
       //----------------------------*
       sfl_cmd = ypgmcmd;
 
@@ -939,7 +939,7 @@ endsr;
 
 begsr c_refresh;
 
-  // - Kontrollsatz füllen
+  // - Kontrollsatz fÃ¼llen
   exsr ctfill;
 
   // - Subfile neu aufbauen
@@ -1019,7 +1019,7 @@ begsr vpos;
 endsr;
 
 //============================================================*
-//    VSfpauClr     Löschen Subfileauswahl                    *
+//    VSfpauClr     LÃ¶schen Subfileauswahl                    *
 //============================================================*
 
 begsr vsfpauclr;
@@ -1031,7 +1031,7 @@ begsr vsfpauclr;
 endsr;
 
 //============================================================*
-//    clrIndCtl     Löschen Bezugszahlen Kontrollsatz         *
+//    clrIndCtl     LÃ¶schen Bezugszahlen Kontrollsatz         *
 //============================================================*
 
 begsr clrindctl;
@@ -1065,7 +1065,7 @@ begsr vsfpauerr;
 endsr;
 
 //============================================================*
-//    VSfpauChg     Datensatz in Subfile als geändert         *
+//    VSfpauChg     Datensatz in Subfile als geÃ¤ndert         *
 //                  markieren                                 *
 //============================================================*
 
@@ -1076,8 +1076,8 @@ begsr vsfpauchg;
 endsr;
 
 //============================================================*
-//    PBInitKey     Initialisieren der Schlüsselfelder        *
-//                  zum Füllen der Subfile                    *
+//    PBInitKey     Initialisieren der SchlÃ¼sselfelder        *
+//                  zum FÃ¼llen der Subfile                    *
 //============================================================*
 
 begsr pbinitkey;
@@ -1103,7 +1103,7 @@ endsr;
 
 //============================================================*
 //    PBInit        Initialisieren der Subfile zur Anzeige    *
-//                  der nächsten Seite                        *
+//                  der nÃ¤chsten Seite                        *
 //============================================================*
 
 begsr pbinit;
@@ -1125,7 +1125,7 @@ begsr pbinit;
 endsr;
 
 //============================================================*
-//    PBReadUP      Vorwärts füllen der Subfile               *
+//    PBReadUP      VorwÃ¤rts fÃ¼llen der Subfile               *
 //============================================================*
 
 begsr pbreadup;
@@ -1149,7 +1149,7 @@ begsr pbreadup;
 endsr;
 
 //============================================================*
-//    PBFill        Füllen Subfilesatz                        *
+//    PBFill        FÃ¼llen Subfilesatz                        *
 //============================================================*
 
 begsr pbfill;
@@ -1162,7 +1162,7 @@ begsr pbfill;
   //  ... anzeigen Subfile
   *in80 = '1'; // SFLDSP
 
-  //  ... Löschen Subfileauswahl
+  //  ... LÃ¶schen Subfileauswahl
   exsr vsfpauclr;
 
 endsr;
@@ -1176,7 +1176,7 @@ begsr pbsetll;
 endsr;
 
 //============================================================*
-//    CTFill        Füllen Kontrollsatz                       *
+//    CTFill        FÃ¼llen Kontrollsatz                       *
 //============================================================*
 
 begsr ctfill;
@@ -1188,7 +1188,7 @@ begsr ctfill;
 endsr;
 
 //============================================================*
-//    SetScreen     Einstellen 132/80-Zeichen Auflösung       *
+//    SetScreen     Einstellen 132/80-Zeichen AuflÃ¶sung       *
 //============================================================*
 
 begsr setscreen;
@@ -1236,7 +1236,7 @@ begsr setusrsetg;
 endsr;
 
 //============================================================*
-//    clrFileP      Löschen Dateiangaben (Rückkehrwerte)      *
+//    clrFileP      LÃ¶schen Dateiangaben (RÃ¼ckkehrwerte)      *
 //============================================================*
 
 begsr clrfilep;
@@ -1276,13 +1276,13 @@ begsr first;
   when (i_mode = '*DELETE');
     yExclKeys(1) = '*SLCLAYOUT';
   other;
-    //           keine Ausschlüsse
+    //           keine AusschlÃ¼sse
     yExclKeys(*) = '';
   endsl;
 
   peek27(sds.pgmName: yChoice: yNbrOfCh: yExclKeys);
 
-  // - Öffnen Bildschirmdatei
+  // - Ã–ffnen Bildschirmdatei
   if (workstn.isOpen = '0');
     open peek56fm;
   endif;
@@ -1323,7 +1323,7 @@ begsr first;
     *in72 = '1'; // Ausblenden
   endif;
 
-  // - Rückkehrcode
+  // - RÃ¼ckkehrcode
   o_msgid = *blanks;
   o_msgdta = *blanks;
   exsr clrfilep;
@@ -1335,13 +1335,13 @@ begsr first;
   sftop = 1;
   sfbot = 1;
 
-  // - Einstellen der Bildschirmauflösung 80/132-Zeichen
+  // - Einstellen der BildschirmauflÃ¶sung 80/132-Zeichen
   exsr setscreen;
 
   // - Anzuzeigender Subfilesatz
   sfsanr = 1;
 
-  // - Subfile füllen
+  // - Subfile fÃ¼llen
   exsr c_refresh;
 
   // - Copyright

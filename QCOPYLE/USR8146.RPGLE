@@ -1,7 +1,7 @@
 **free
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8146
-//  Kein gültiges Feld für Farbauswahl.
+//  Kein gÃ¼ltiges Feld fÃ¼r Farbauswahl.
 dcl-ds USR8146 qualified;
       //  No replacement variables available!
 end-ds;

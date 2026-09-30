@@ -11,32 +11,32 @@
        //===============================================================*
        //                                                               *
        //  Kurzdokumentation :                                          *
-       //  ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯                                          *
+       //  ===================                                          *
        //  EXIT-Programm zur Ermittlung der der Edit Codes              *
-       //  für die generierten Update Programme.                        *
+       //  fÃ¼r die generierten Update Programme.                        *
        //                                                               *
        //  Parameterliste:                                              *
-       //  ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯                                              *
-       //     In :  gi_file    - Name der Datei, für die das Update     *
+       //  ===============                                              *
+       //     In :  gi_file    - Name der Datei, fÃ¼r die das Update     *
        //                        Programm erzeugt wird.                 *
        //     In :  gi_lib     - Name der Bilbiothek, in der gi_file    *
        //                        Enthalten ist.                         *
        //     In :  gi_user    - Name des Benutzer, der das Programm    *
-       //                        gerade ausführt.                       *
-       //     In :  gi_field   - Name des Feldes, für das gerade der    *
+       //                        gerade ausfÃ¼hrt.                       *
+       //     In :  gi_field   - Name des Feldes, fÃ¼r das gerade der    *
        //                        Programmcode erzeugt wird.             *
        //     I/O:  gio_edtCde - Edit Code von i_field. Kann in diesem  *
-       //                        Programm überschrieben werden.         *
+       //                        Programm Ã¼berschrieben werden.         *
        //                                                               *
-       //  Berechnen der Rückgabewerte:                                 *
-       //  ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯                                 *
-       //  In diesem Beispielprogramm werden unabhängig der zu          *
-       //  zu ändernden Datei (gi_file/gi_lib) und des aktuellen        *
+       //  Berechnen der RÃ¼ckgabewerte:                                 *
+       //  ============================                                 *
+       //  In diesem Beispielprogramm werden unabhÃ¤ngig der zu          *
+       //  zu Ã„ndernden Datei (gi_file/gi_lib) und des aktuellen        *
        //  Feldes (gi_field) Edit Codes ohne Vorzeichen in Edit Codes   *
-       //  mit Vorzeichen und ohne Tausenderpunkt geändert.             *
+       //  mit Vorzeichen und ohne Tausenderpunkt geÃ¤ndert.             *
        //                                                               *
        //  Erstellen des Programms:                                     *
-       //  ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯                                     *
+       //  ========================                                     *
        //  CRTRPGMOD MODULE(PEEK/EXIT03) DBGVIEW(*ALL) TRUNCNBR(*NO)    *
        //  SRCFILE(PEEK/QRPGLESRC) SRCMBR(EXIT03)                       *
        //  REPLACE(*YES) LANGID(*JOBRUN) TGTRLS(V5R2M0)                 *
@@ -108,13 +108,13 @@
 
        select;
        when (in(io_edtcde: '24BDKMOQ'));
-          io_edtcde = 'M';           // Minus-Zeichen, Nullenunterdrückung
+          io_edtcde = 'M';           // Minus-Zeichen, NullenunterdrÃ¼ckung
        when (io_edtcde = 'Z');
-          io_edtcde = 'M';           // Minus-Zeichen, Nullenunterdrückung
+          io_edtcde = 'M';           // Minus-Zeichen, NullenunterdrÃ¼ckung
        when (in(io_edtcde: '13ACJLNP'));
-          io_edtcde = 'L';           // Minus-Zeichen, keine Nullenunterdrückung
+          io_edtcde = 'L';           // Minus-Zeichen, keine NullenunterdrÃ¼ckung
        when (io_edtcde = ' ');
-          io_edtcde = 'L';           // Minus-Zeichen, keine Nullenunterdrückung
+          io_edtcde = 'L';           // Minus-Zeichen, keine NullenunterdrÃ¼ckung
        endsl;
 
        return;

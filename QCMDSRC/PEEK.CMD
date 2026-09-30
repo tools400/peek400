@@ -1,33 +1,34 @@
       /*===============================================================*/
       /* >>PRE-COMPILER<<                                              */
-      /*   >>CRTCMD<<  CALL PGM(&LI/CRTPEEKOBJ) PARM(+                 */
-      /*                        '&SF' '&SL' '&SM' '&LI' '*NO' +        */
-      /*                        'PEEK' '&LI' '*NO');                   */
+      /*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    */
+      /*                           OBJLIB(&LI) DEVLIB(&LI) +           */
+      /*                           SBMJOB(*NO) BNDDIR(PEEK) +          */
+      /*                           INSTALL(*NO);                       */
       /*   >>EXECUTE<<                                                 */
       /* >>END-PRE-COMPILER<<                                          */
       /*===============================================================*/
-             CMD        PROMPT(PMT0100)                               /* RADD */
+             CMD        PROMPT(PMT0100)
 
     /* Datei                                  */
-    /* PMT0001:  Datei                        */                      /* RADD */
+    /* PMT0001:  Datei                        */
              PARM       KWD(FILE)                +
                         TYPE(FILE)               +
                         MIN(1)                   +
                         CHOICE(*NONE)            +
-                        PROMPT(PMT0001 1)                             /* RADD */
+                        PROMPT(PMT0001 1)
 
     /* Teildatei                              */
-    /* PMT0002:  Teildatei                    */                      /* RADD */
+    /* PMT0002:  Teildatei                    */
              PARM       KWD(MEMBER)              +
                         TYPE(*NAME)              +
                         LEN(10)                  +
                         DFT(*FIRST)              +
                         SPCVAL((*FIRST *FIRST)   +
                                (*NONE  *NONE ))  +
-                        PROMPT(PMT0002 2)                             /* RADD */
-                                                                      /* RADD */
+                        PROMPT(PMT0002 2)
+
     /* Zugriffsart                            */
-    /* PMT0003:  Zugriffsart                  */                      /* RADD */
+    /* PMT0003:  Zugriffsart                  */
              PARM       KWD(ACCESS)              +
                         TYPE(*CHAR)              +
                         LEN(1)                   +
@@ -36,20 +37,20 @@
                         SPCVAL((*SQL 2)          +
                                (*KEY 1)          +
                                (*RRN 0))         +
-                        PROMPT(PMT0003 3)                             /* RADD */
+                        PROMPT(PMT0003 3)
 
     /* Sprache                                */
-    /* PMT0004:  Sprache                      */                      /* RADD */
+    /* PMT0004:  Sprache                      */
              PARM       KWD(LANGUAGE)            +
                         TYPE(*CHAR)              +
                         LEN(4)                   +
                         DFT(*DFT)                +
                         SPCVAL((*DFT  ))         +
                         PMTCTL(*PMTRQS)          +
-                        PROMPT(PMT0004 4)                             /* RADD */
-                                                                      /* RADD */
-    /* Ändern Bibliothek erlaubt              */
-    /* PMT0005:  Ändern Bibliothek erlaubt    */                      /* RADD */
+                        PROMPT(PMT0004 4)
+
+    /* Ã„ndern Bibliothek erlaubt              */
+    /* PMT0005:  Ã„ndern Bibliothek erlaubt    */
              PARM       KWD(ALWCHGLIB)           +
                         TYPE(*CHAR)              +
                         LEN(1)                   +
@@ -59,10 +60,10 @@
                                (*YES '1')        +
                                (*NO  '0'))       +
                         PMTCTL(*PMTRQS)          +
-                        PROMPT(PMT0005 5)                             /* RADD */
+                        PROMPT(PMT0005 5)
 
-    /* Ändern Datei erlaubt                   */
-    /* PMT0006:  Ändern Datei erlaubt         */                      /* RADD */
+    /* Ã„ndern Datei erlaubt                   */
+    /* PMT0006:  Ã„ndern Datei erlaubt         */
              PARM       KWD(ALWCHGFILE)          +
                         TYPE(*CHAR)              +
                         LEN(1)                   +
@@ -72,10 +73,10 @@
                                (*YES '1')        +
                                (*NO  '0'))       +
                         PMTCTL(*PMTRQS)          +
-                        PROMPT(PMT0006 6)                             /* RADD */
-                                                                      /* RADD */
-    /* Ändern Teildatei erlaubt               */
-    /* PMT0007:  Ändern Teildatei erlaubt     */                      /* RADD */
+                        PROMPT(PMT0006 6)
+
+    /* Ã„ndern Teildatei erlaubt               */
+    /* PMT0007:  Ã„ndern Teildatei erlaubt     */
              PARM       KWD(ALWCHGMBR)           +
                         TYPE(*CHAR)              +
                         LEN(1)                   +
@@ -85,10 +86,10 @@
                                (*YES '1')        +
                                (*NO  '0'))       +
                         PMTCTL(*PMTRQS)          +
-                        PROMPT(PMT0007 7)                             /* RADD */
+                        PROMPT(PMT0007 7)
 
-    /* Ändern Datensätze erlaubt              */
-    /* PMT0008:  Ändern Datensätze erlaubt    */                      /* RADD */
+    /* Ã„ndern DatensÃ¤tze erlaubt              */
+    /* PMT0008:  Ã„ndern DatensÃ¤tze erlaubt    */
              PARM       KWD(ALWCHGRCD)           +
                         TYPE(*CHAR)              +
                         LEN(1)                   +
@@ -99,10 +100,10 @@
                                (*NOKEY '2')      +
                                (*NO    '0'))     +
                         PMTCTL(*PMTRQS)          +
-                        PROMPT(PMT0008 8)                             /* RADD */
-                                                                      /* RADD */
-    /* Ändern SQL WHERE erlaubt               */
-    /* PMT0009:  Ändern SQL WHERE erlaubt     */                      /* RADD */
+                        PROMPT(PMT0008 8)
+
+    /* Ã„ndern SQL WHERE erlaubt               */
+    /* PMT0009:  Ã„ndern SQL WHERE erlaubt     */
              PARM       KWD(ALWCHGSQLW)          +
                         TYPE(*CHAR)              +
                         LEN(1)                   +
@@ -112,10 +113,10 @@
                                (*YES '1')        +
                                (*NO  '0'))       +
                         PMTCTL(*PMTRQS)          +
-                        PROMPT(PMT0009 9)                             /* RADD */
-                                                                      /* RADD */
-    /* Ändern SQL ORDER BY erlaubt            */
-    /* PMT0010:  Ändern SQL ORDER BY erlaubt  */                      /* RADD */
+                        PROMPT(PMT0009 9)
+
+    /* Ã„ndern SQL ORDER BY erlaubt            */
+    /* PMT0010:  Ã„ndern SQL ORDER BY erlaubt  */
              PARM       KWD(ALWCHGSQLO)          +
                         TYPE(*CHAR)              +
                         LEN(1)                   +
@@ -125,19 +126,19 @@
                                (*YES '1')        +
                                (*NO  '0'))       +
                         PMTCTL(*PMTRQS)          +
-                        PROMPT(PMT0010 10)                            /* RADD */
+                        PROMPT(PMT0010 10)
 
     /* Arbeitsumgebung                        */
-    /* PMT0011:  Arbeitsumgebung              */                      /* RADD */
+    /* PMT0011:  Arbeitsumgebung              */
              PARM       KWD(ENVFILE)             +
                         TYPE(ENVFILE)            +
                         MIN(0)                   +
                         CHOICE(*NONE)            +
                         PMTCTL(*PMTRQS)          +
-                        PROMPT(PMT0011 11)                            /* RADD */
+                        PROMPT(PMT0011 11)
 
     /* ... Teildatei                          */
-    /* PMT0012:  Teildatei                    */                      /* RADD */
+    /* PMT0012:  Teildatei                    */
              PARM       KWD(ENVMBR)              +
                         TYPE(*NAME)              +
                         LEN(10)                  +
@@ -145,10 +146,10 @@
                         SPCVAL((*FILE )          +
                                (*FIRST))         +
                         PMTCTL(*PMTRQS)          +
-                        PROMPT(PMT0012 12)                            /* RADD */
-                                                                      /* RADD */
+                        PROMPT(PMT0012 12)
+
     /* ... Autom. speichern ENVFILE           */
-    /* PMT0018:  Speichern beim Verlassen     */                      /* RADD */
+    /* PMT0018:  Speichern beim Verlassen     */
              PARM       KWD(ENVSAVE)             +
                         TYPE(*CHAR)              +
                         LEN(1)                   +
@@ -156,10 +157,10 @@
                         SPCVAL((*NO  '0')        +
                                (*YES '1'))       +
                         PMTCTL(*PMTRQS)          +
-                        PROMPT(PMT0018 13)                            /* RADD */
-                                                                      /* RADD */
+                        PROMPT(PMT0018 13)
+
     /* ... Nur Layout laden                   */
-    /* PMT0019:  Nur Layout laden             */                      /* RADD */
+    /* PMT0019:  Nur Layout laden             */
              PARM       KWD(ENVLAYOUT)           +
                         TYPE(*CHAR)              +
                         LEN(1)                   +
@@ -167,19 +168,19 @@
                         SPCVAL((*NO  '0')        +
                                (*YES '1'))       +
                         PMTCTL(*PMTRQS)          +
-                        PROMPT(PMT0019 14)                            /* RADD */
-                                                                      /* RADD */
+                        PROMPT(PMT0019 14)
+
     /* Benutzereinstellungen                  */
-    /* PMT0016:  Benutzereinstellungen        */                      /* RADD */
+    /* PMT0016:  Benutzereinstellungen        */
              PARM       KWD(SETTINGS)            +
                         TYPE(SETTINGS)           +
                         MIN(0)                   +
                         CHOICE(*NONE)            +
                         PMTCTL(*PMTRQS)          +
-                        PROMPT(PMT0016 15)                            /* RADD */
-                                                                      /* RADD */
+                        PROMPT(PMT0016 15)
+
     /* SQL WHERE                              */
-    /* PMT0013:  SQL WHERE                    */                      /* RADD */
+    /* PMT0013:  SQL WHERE                    */
              PARM       KWD(WHERE )              +
                         TYPE(*CHAR)              +
                         LEN(512)                 +
@@ -188,10 +189,10 @@
                         VARY(*YES *INT2)         +
                         CASE(*MIXED)             +
                         PMTCTL(PMTCTL1)          +
-                        PROMPT(PMT0013 16)                            /* RADD */
-                                                                      /* RADD */
+                        PROMPT(PMT0013 16)
+
     /* SQL ORDER BY                           */
-    /* PMT0014:  SQL ORDER BY                 */                      /* RADD */
+    /* PMT0014:  SQL ORDER BY                 */
              PARM       KWD(ORDERBY)             +
                         TYPE(*CHAR)              +
                         LEN(512)                 +
@@ -200,60 +201,60 @@
                                (*KEY    ))       +
                         VARY(*YES *INT2)         +
                         PMTCTL(PMTCTL1)          +
-                        PROMPT(PMT0014 17)                            /* RADD */
-                                                                      /* RADD */
+                        PROMPT(PMT0014 17)
+
  PMTCTL1:    PMTCTL     CTL(ACCESS  ) COND((*EQ '2')) +
-                                      NBRTRUE(*EQ 1)                  /* RADD */
+                                      NBRTRUE(*EQ 1)
 
     /* Datei                                  */
-    /* PMT0015:  Bibliothek                   */                      /* RADD */
+    /* PMT0015:  Bibliothek                   */
 FILE:        QUAL       TYPE(*GENERIC)           +
                         LEN(10)                  +
                         MIN(1)                   +
-                        SPCVAL((*PRV))                                /* RADD */
+                        SPCVAL((*PRV))
              QUAL       TYPE(*NAME)              +
                         LEN(10)                  +
                         DFT(*LIBL)               +
                         SPCVAL((*LIBL )          +
                                (*CURLIB))        +
-                        PROMPT(PMT0015)                               /* RADD */
+                        PROMPT(PMT0015)
 
     /* Arbeitsumgebung                        */
-    /* PMT0015:  Bibliothek                   */                      /* RADD */
+    /* PMT0015:  Bibliothek                   */
 ENVFILE:     QUAL       TYPE(*NAME)              +
                         LEN(10)                  +
                         MIN(0)                   +
                         DFT(*ENVFILE)            +
                         SPCVAL((*NONE)           +
-                               (*ENVFILE))                            /* RADD */
+                               (*ENVFILE))
              QUAL       TYPE(*NAME)              +
                         LEN(10)                  +
                         DFT(*LIBL)               +
                         SPCVAL((*LIBL ))         +
-                        PROMPT(PMT0015)                               /* RADD */
-                                                                      /* RADD */
+                        PROMPT(PMT0015)
+
     /* Benutzereinstellungen                  */
-    /* PMT0001:  Datei                        */                      /* RADD */
-    /* PMT0017:  Benutzerprofil               */                      /* RADD */
+    /* PMT0001:  Datei                        */
+    /* PMT0017:  Benutzerprofil               */
 SETTINGS:    ELEM       TYPE(STGFILE)            +
                         DFT(*DFT)                +
                         SNGVAL((*DFT))           +
-                        PROMPT(PMT0001)                               /* RADD */
+                        PROMPT(PMT0001)
              ELEM       TYPE(*NAME)              +
                         DFT(*DFT)                +
                         SPCVAL((*DFT))           +
-                        PROMPT(PMT0017)                               /* RADD */
-                                                                      /* RADD */
+                        PROMPT(PMT0017)
+
     /* Benutzereinstellungen                  */
-    /* PMT0015:  Bibliothek                   */                      /* RADD */
+    /* PMT0015:  Bibliothek                   */
 STGFILE:     QUAL       TYPE(*NAME)              +
                         LEN(10)                  +
-                        MIN(1)                                        /* RADD */
+                        MIN(1)
              QUAL       TYPE(*NAME)              +
                         LEN(10)                  +
                         DFT(*PRDLIB)             +
                         SPCVAL((*LIBL )          +
                                (*CURLIB)         +
                                (*PRDLIB))        +
-                        PROMPT(PMT0015)                               /* RADD */
+                        PROMPT(PMT0015)
 

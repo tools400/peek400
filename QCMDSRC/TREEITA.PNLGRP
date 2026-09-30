@@ -1,4 +1,7 @@
 .*=====================================================================*
+.* Hinweis: Dieses CL muss in einem Job mit der Sprache der            *.
+.*          Zielnachrichtendatei kompiliert und ausgefÃ¼hrt werden.     *.
+.*=====================================================================*
 .*                                                                     *
 .*  Kurzdokumentation :                                                *
 .*                                                                     *
@@ -22,37 +25,33 @@
 .*=====================================================================*
 .*  History:                                                           *
 .*                                                                     *
-.*  Datum       Name          Änderung                                 *
+.*  Datum       Name          Ã„nderung                                 *
 .*  ----------  ------------  ---------------------------------------  *
 .*                                                                     *
 .*=====================================================================*
 .* >>PRE-COMPILER<<                                                    *
-.*                                                                     *
 .*   >>CRTCMD<< CRTPNLGRP    PNLGRP(&LI/&OB) +                         *
 .*                           SRCFILE(&SL/&SF) +                        *
 .*                           SRCMBR(&SM);                              *
-.*                                                                     *
-.*   >>COMPILE<<                                                       *
-.*   >>END-COMPILE<<                                                   *
-.*                                                                     *
+.*   >>CMD<<     CHGJOB  LANGID(ITA) CNTRYID(IT) CCSID(1144);          *
 .*   >>EXECUTE<<                                                       *
-.*                                                                     *
+.*   >>CMD<<     CHGJOB  LANGID(DEU) CNTRYID(DE) CCSID(273);           *
 .* >>END-PRE-COMPILER<<                                                *
 .*=====================================================================*
 :PNLGRP.
 .*--------------------------------------------------------------------
-.* Hilfetext für den Befehl
+.* Hilfetext fÃ¼r den Befehl
 .*--------------------------------------------------------------------
 :HELP NAME='TREE'.
 Mostra le relazioni di database (TREE) - Help
 :P.
-Il comando TREE ü utile per mostrare le relazioni di database di
+Il comando TREE Ã¨ utile per mostrare le relazioni di database di
 un dato file e avviare  Peek/400 per la voce selezionata.
 .*
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort FILE
+.* Hilfetext fÃ¼r SchlÃ¼sselwort FILE
 .*--------------------------------------------------------------------
 :HELP name='TREE/FILE'.
 File - Aiuto
@@ -78,7 +77,7 @@ contenente i record da visualizzare.
 lavoro attuale.
 :PT.:PV.*CURLIB:EPV.
 :PD.La libreria corrente del lavoro contiene il file
-Se non ü definita, si usa la libreria QGPL.
+Se non Ã¨ definita, si usa la libreria QGPL.
 :PT.:PV.Nome:EPV.
 :PD.Nome della libreria in cui cercare il file.
 :EPARML.
@@ -86,7 +85,7 @@ Se non ü definita, si usa la libreria QGPL.
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort ACCESS
+.* Hilfetext fÃ¼r SchlÃ¼sselwort ACCESS
 .*--------------------------------------------------------------------
 :HELP name='TREE/ACCESS'.
 Tipo di accesso ai dati - Help
@@ -114,7 +113,7 @@ e ordinati secondo i criteri dal parametro :HP2.SQL ORDER BY
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort LANGUAGE
+.* Hilfetext fÃ¼r SchlÃ¼sselwort LANGUAGE
 .*--------------------------------------------------------------------
 :HELP name='TREE/LANGUAGE'.
 Lingua - Aiuto
@@ -129,8 +128,8 @@ ENG (Inglese), ITA (Italiano) or SPA (Spagnolo).
 .*
 :PARML.
 :PT.:PK DEF.*DFT:EPK.
-:PD.Il linguaggio ü usato in base alla impostazione utente.
-Se ü la prima volta, l'identificativo ü reperito nella chiave
+:PD.Il linguaggio Ã¨ usato in base alla impostazione utente.
+Se Ã¨ la prima volta, l'identificativo Ã¨ reperito nella chiave
 *LANGUAGE nel file PEEKUSR.
 :PT.:PV.Lingua  :EPV.
 :PD.Specifica un identificativo di lingua (3 caratteri) usato
@@ -140,134 +139,134 @@ per individuare un file messaggi contenente le costanti in lingua.
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort ALWCHGLIB
+.* Hilfetext fÃ¼r SchlÃ¼sselwort ALWCHGLIB
 .*--------------------------------------------------------------------
 :HELP name='TREE/ALWCHGLIB'.
 Permesso cambio libreria- Aiuto
 :XH3.Permesso cambio libreria (ALWCHGLIB)
 :P.
-Specifica se ü possibile o no cambiare il nome della libreria
+Specifica se Ã¨ possibile o no cambiare il nome della libreria
 che contiene il file del quale sono in visualizzazione i record.
 .*
 :IMHELP name='COM/OPTPARM'.
 .*
 :PARML.
 :PT.:PK DEF.*DFT:EPK.
-:PD.Il valore attuale ü passato dal pgm di uscita EXIT01.
+:PD.Il valore attuale Ã¨ passato dal pgm di uscita EXIT01.
 :PT.:PV.*YES:EPV.
-:PD.La libreria puö essere cambiata in ogni momento.
+:PD.La libreria puÃ² essere cambiata in ogni momento.
 :PT.:PV.*NO:EPV.
-:PD.Non ü possibile cambiare la libreria dall'interno di
+:PD.Non Ã¨ possibile cambiare la libreria dall'interno di
 Peek/400.
 :EPARML.
 .*
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort ALWCHGFILE
+.* Hilfetext fÃ¼r SchlÃ¼sselwort ALWCHGFILE
 .*--------------------------------------------------------------------
 :HELP name='TREE/ALWCHGFILE'.
 Permesso cambio file - Aiuto
 :XH3.Permesso cambio file (ALWCHGFILE)
 :P.
-Specifica se ü possibile o no cambiare il nome del file
+Specifica se Ã¨ possibile o no cambiare il nome del file
 che contiene i record in visualizzazione.
 .*
 :IMHELP name='COM/OPTPARM'.
 .*
 :PARML.
 :PT.:PK DEF.*DFT:EPK.
-:PD.Il valore attuale ü fornito dal pgm di uscita EXIT01.
+:PD.Il valore attuale Ã¨ fornito dal pgm di uscita EXIT01.
 :PT.:PV.*YES:EPV.
-:PD.Il file puö esser cambiato in ogni momento.
+:PD.Il file puÃ² essere cambiato in ogni momento.
 :PT.:PV.*NO:EPV.
-:PD.Non si puö modificare il file dall'interno di
+:PD.Non si puÃ² modificare il file dall'interno di
 Peek/400.
 :EPARML.
 .*
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort ALWCHGMBR
+.* Hilfetext fÃ¼r SchlÃ¼sselwort ALWCHGMBR
 .*--------------------------------------------------------------------
 :HELP name='TREE/ALWCHGMBR'.
 Permesso cambio membro - Aiuto
 :XH3.Permette il cambio membro (ALWCHGMBR)
 :P.
-Specifica se ü consentito o no modificare il nome del membro
+Specifica se Ã¨ consentito o no modificare il nome del membro
 contenente i record in visualizzazione.
 .*
 :IMHELP name='COM/OPTPARM'.
 .*
 :PARML.
 :PT.:PK DEF.*DFT:EPK.
-:PD.Il valore attuale ü fornito dal pgm di uscita EXIT01.
+:PD.Il valore attuale Ã¨ fornito dal pgm di uscita EXIT01.
 :PT.:PV.*YES:EPV.
-:PD.Il membro puö essere cambiato in ogni occasione.
+:PD.Il membro puÃ² essere cambiato in ogni occasione.
 :PT.:PV.*NO:EPV.
-:PD.Il membro non puö essere cambiato dall'interno di
+:PD.Il membro non puÃ² essere cambiato dall'interno di
 Peek/400.
 :EPARML.
 .*
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort ALWCHGRCD
+.* Hilfetext fÃ¼r SchlÃ¼sselwort ALWCHGRCD
 .*--------------------------------------------------------------------
 :HELP name='TREE/ALWCHGRCD'.
 Permessa modifica record - Aiuto
 :XH3.Permessa modifica record (ALWCHGRCD)
 :P.
-Specifica se si ü autorizzati ad inserire, modificare,
+Specifica se si Ã¨ autorizzati ad inserire, modificare,
 cancellare o copiare record.
 .*
 :IMHELP name='COM/OPTPARM'.
 .*
 :PARML.
 :PT.:PK DEF.*DFT:EPK.
-:PD.Il valore attuale ü fornito dal pgm di uscita EXIT01.
+:PD.Il valore attuale Ã¨ fornito dal pgm di uscita EXIT01.
 :PT.:PV.*YES:EPV.
-:PD.Si puö inserire, cancellare, copiare, modificare i record.
+:PD.Si puÃ² inserire, cancellare, copiare, modificare i record.
 in ogni momento.
 :PT.:PV.*NOKEY:EPV.
-:PD.Si puö, con l'eccezione dei campi chiave.
+:PD.Si puÃ², con l'eccezione dei campi chiave.
 :PT.:PV.*NO:EPV.
-:PD.Non si puö inserire, cancellare, copiare, modificare i record.
+:PD.Non si puÃ² inserire, cancellare, copiare, modificare i record.
 :EPARML.
 .*
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort ALWCHGSQLW
+.* Hilfetext fÃ¼r SchlÃ¼sselwort ALWCHGSQLW
 .*--------------------------------------------------------------------
 :HELP name='TREE/ALWCHGSQLW'.
 Permessa modifica SQL WHERE - Aiuto
 :XH3.Permessa modifica SQL WHERE (ALWCHGSQLW)
 :P.
-Specifica se ü permesso o non lo ü modificare la clausola
+Specifica se Ã¨ permesso o non lo Ã¨ modificare la clausola
 SQL WHERE usata per filtrare i record da mostrare.
 .*
 :IMHELP name='COM/OPTPARM'.
 .*
 :PARML.
 :PT.:PK DEF.*DFT:EPK.
-:PD.Il valore attuale ü fornito dal pgm di uscita EXIT01.
+:PD.Il valore attuale Ã¨ fornito dal pgm di uscita EXIT01.
 :PT.:PV.*YES:EPV.
-:PD.La clausola WHERE ü modificabile in ogni momento.
+:PD.La clausola WHERE Ã¨ modificabile in ogni momento.
 :PT.:PV.*NO:EPV.
-:PD.La clausola WHERE ü protetta dalle modifiche.
+:PD.La clausola WHERE Ã¨ protetta dalle modifiche.
 :EPARML.
 .*
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort ALWCHGSQLO
+.* Hilfetext fÃ¼r SchlÃ¼sselwort ALWCHGSQLO
 .*--------------------------------------------------------------------
 :HELP name='TREE/ALWCHGSQLO'.
 Permette di cambiare SQL ORDER BY - Aiuto
 :XH3.Permette di cambiare SQL ORDER BY (ALWCHGSQLO)
 :P.
-Specifica se ü permesso o non lo ü modificare la clausola
+Specifica se Ã¨ permesso o non lo Ã¨ modificare la clausola
 SQL ORDER BY che definisce la sequenza di ordinamento dei
 record.
 .*
@@ -275,17 +274,17 @@ record.
 .*
 :PARML.
 :PT.:PK DEF.*DFT:EPK.
-:PD.Il valore attuale ü fornito dal pgm di uscita EXIT01.
+:PD.Il valore attuale Ã¨ fornito dal pgm di uscita EXIT01.
 :PT.:PV.*YES:EPV.
-:PD.La clausola ORDER BY puö essere cambiata in ogni momento.
+:PD.La clausola ORDER BY puÃ² essere cambiata in ogni momento.
 :PT.:PV.*NO:EPV.
-:PD.La clausola ORDER BY ü protetta dalle modifiche.
+:PD.La clausola ORDER BY Ã¨ protetta dalle modifiche.
 :EPARML.
 .*
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort SETTINGS
+.* Hilfetext fÃ¼r SchlÃ¼sselwort SETTINGS
 .*--------------------------------------------------------------------
 :HELP name='TREE/SETTINGS'.
 Impostazioni utente - Aiuto
@@ -293,7 +292,7 @@ Impostazioni utente - Aiuto
 :P.
 Specifica quali impostazioni vanno usate. Le impostazioni assunte sono
 memorizzate nella libreria prodotto. Il nome del file che le contiene
-ü uguale al nome profilo utente che ha eseguito il signon.
+Ã¨ uguale al nome profilo utente che ha eseguito il signon.
 .*
 :IMHELP name='COM/OPTPARM'.
 :P.
@@ -313,13 +312,13 @@ le impostazioni.
 :P.
 :PARML.
 :PT.:PK DEF.*PRDLIB:EPK.
-:PD.Specifica che il file con le impostazioni ü nella libreria
+:PD.Specifica che il file con le impostazioni Ã¨ nella libreria
 di prodotto Peek/400.
 :PT.:PV.*LIBL:EPV.
 :PD.La ricerca del file viene eseguita nelle librerie del
 lavoro attivo.
 :PT.:PV.*CURLIB:EPV.
-:PD.La libreria corrente ü usata per individuare il file.
+:PD.La libreria corrente Ã¨ usata per individuare il file.
  In assenza di una libreria corrente viene utilizzata
 la libreria QGPL.
 :PT.:PV.Nome:EPV.
@@ -338,7 +337,7 @@ la libreria QGPL.
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort WHERE
+.* Hilfetext fÃ¼r SchlÃ¼sselwort WHERE
 .*--------------------------------------------------------------------
 :HELP name='TREE/WHERE'.
 SQL WHERE - Aiuto
@@ -359,7 +358,7 @@ mostrare.
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort ORDERBY
+.* Hilfetext fÃ¼r SchlÃ¼sselwort ORDERBY
 .*--------------------------------------------------------------------
 :HELP name='TREE/ORDERBY'.
 SQL ORDER BY - Aiuto
@@ -393,7 +392,7 @@ RRN.
 .*=====================================
 :HELP NAME='COM/REQPARM'.
 :P.
-Questo parametro ü obbligatorio.
+Questo parametro Ã¨ obbligatorio.
 :P.
 :IMHELP name='COM/VALUES'.
 :EHELP.
@@ -403,7 +402,7 @@ Questo parametro ü obbligatorio.
 .*=====================================
 :HELP NAME='COM/OPTPARM'.
 :P.
-Questo parametro ü facoltativo.
+Questo parametro Ã¨ facoltativo.
 :P.
 :IMHELP name='COM/VALUES'.
 :EHELP.

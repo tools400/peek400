@@ -1,7 +1,7 @@
 **free
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR9993
-//  Keine Datei geöffnet. Der Zugriff über SQL kann nur auf phy
+//  Keine Datei geÃ¶ffnet. Der Zugriff Ã¼ber SQL kann nur auf phy
 dcl-ds USR9993 qualified;
   var1  packed(5:0) inz;
   var2  char(32) inz;

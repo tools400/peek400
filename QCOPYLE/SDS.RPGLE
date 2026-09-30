@@ -14,7 +14,7 @@ dcl-ds sds qualified psds;
   lastSeq         char(8);
   // Letzte Unterroutine
   lastSubr        char(8);
-  // Anzahl übergebener Parameter
+  // Anzahl Ã¼bergebener Parameter
   nbrParm         zoned(3);
   // Fehler-Msg
   msgID           char(7);
@@ -24,7 +24,7 @@ dcl-ds sds qualified psds;
   msgNbr          char(4) overlay(msgid:4);
   // MI-Instruktions-Nr.
   mi_instr        char(4);
-  // Arbeitsbereich für Nachrichten
+  // Arbeitsbereich fÃ¼r Nachrichten
   workArea        char(30);
   // Programmbiblitohek
   pgmLib          char(10);
@@ -50,7 +50,7 @@ dcl-ds sds qualified psds;
   jobNbr          zoned(6);
   // Jobdatum, Aufbau wie UDATE
   jobD            zoned(6);
-  // Programm-Ausführungsdatum, Aufbau wie UDATE
+  // Programm-AusfÃ¼hrungsdatum, Aufbau wie UDATE
   jobDate         zoned(6);
   // Job-Zeit (HHMMSS)
   jobTime         zoned(6);

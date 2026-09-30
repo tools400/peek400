@@ -68,7 +68,7 @@ dcl-pr qcmdexc extpgm('QCMDEXC');
   i_length        packed(15:5) const;
 end-pr;
 
-// Für Sortierung nach relativer Satznummer
+// FÃ¼r Sortierung nach relativer Satznummer
 dcl-ds g_hfile03 likeds(hfile_t);
 
 dcl-s g_file          char(10);
@@ -179,7 +179,7 @@ dcl-proc SQL_prepareStatement export;
     endif;
   endif;
 
-  // PRÜFUNG AUSWERTEN
+  // PRÃœFUNG AUSWERTEN
   if (f_isSqlErr(o_msgid: o_msgdta) = bTrue);
     f_prepstmt = bFalse;
     g_file = '';
@@ -226,13 +226,13 @@ dcl-proc SQL_open export;
   endif;
 
 
-  // CURSOR CS ÖFFNEN
+  // CURSOR CS Ã–FFNEN
   if (sqlCode >= 0);
     EXEC SQL
      open g_filesql;
   endif;
 
-  // PRÜFUNG AUSWERTEN
+  // PRÃœFUNG AUSWERTEN
   if (f_isSqlErr(o_msgid :
               o_msgdta) = bTrue);
 
@@ -261,7 +261,7 @@ dcl-proc SQL_open export;
     endif;
   endif;
 
-  //  Setzen Rückgabeparameter
+  //  Setzen RÃ¼ckgabeparameter
   o_hfile = g_hfile03;
 
   return f_opnsql;
@@ -301,7 +301,7 @@ dcl-proc SQL_nextRow export;
   EXEC SQL
    fetch next from g_filesql into :recnbr;
 
-  // PRÜFUNG AUSWERTEN
+  // PRÃœFUNG AUSWERTEN
   if (f_isSqlErr(o_msgid :
               o_msgdta) = bTrue);
 
@@ -329,7 +329,7 @@ dcl-proc SQL_nextRow export;
 
   endif;
 
-  //  Setzen Rückgabeparameter
+  //  Setzen RÃ¼ckgabeparameter
   o_hfile = g_hfile03;
 
   return iseof;
@@ -369,7 +369,7 @@ dcl-proc SQL_previousRow export;
   EXEC SQL
    fetch prior from g_filesql into :recnbr;
 
-  // PRÜFUNG AUSWERTEN
+  // PRÃœFUNG AUSWERTEN
   if (f_isSqlErr(o_msgid :
               o_msgdta) = bTrue);
 
@@ -397,7 +397,7 @@ dcl-proc SQL_previousRow export;
 
   endif;
 
-  //  Setzen Rückgabeparameter
+  //  Setzen RÃ¼ckgabeparameter
   o_hfile = g_hfile03;
 
   return iseof;
@@ -423,7 +423,7 @@ dcl-proc SQL_gotoTop export;
   EXEC SQL
    fetch before from g_filesql;
 
-  // PRÜFUNG AUSWERTEN
+  // PRÃœFUNG AUSWERTEN
   if (f_isSqlErr(o_msgid :
               o_msgdta) = bTrue);
 
@@ -457,7 +457,7 @@ dcl-proc SQL_gotoBottom export;
   EXEC SQL
    fetch last   from g_filesql;
 
-  // PRÜFUNG AUSWERTEN
+  // PRÃœFUNG AUSWERTEN
   if (f_isSqlErr(o_msgid :
               o_msgdta) = bTrue);
 
@@ -488,11 +488,11 @@ dcl-proc SQL_close export;
 
   // ------------------------------------------------------------------------
 
-  // CURSOR CS SCHLIEßEN
+  // CURSOR CS SCHLIESSEN
   EXEC SQL
    close g_filesql;
 
-  // PRÜFUNG AUSWERTEN
+  // PRÃœFUNG AUSWERTEN
   if (f_isSqlErr(o_msgid :
               o_msgdta) = bTrue);
 
@@ -516,7 +516,7 @@ dcl-proc SQL_close export;
     endif;
   endif;
 
-  //  Setzen Rückgabeparameter
+  //  Setzen RÃ¼ckgabeparameter
   o_hfile = g_hfile03;
 
   return f_clssql;
@@ -546,7 +546,7 @@ dcl-proc SQL_count export;
   EXEC SQL
    declare g_countsql scroll cursor for g_prepcountstmt;
 
-  // CURSOR CS ÖFFNEN
+  // CURSOR CS Ã–FFNEN
   EXEC SQL
    open g_countsql;
 
@@ -562,7 +562,7 @@ dcl-proc SQL_count export;
     return -1;
   endif;
 
-  // CURSOR CS SCHLIEßEN
+  // CURSOR CS SCHLIESSEN
   EXEC SQL
    close g_countsql;
   if (f_isSqlErr(msgid: msgdta) = bTrue);
@@ -743,7 +743,7 @@ dcl-proc f_chgField;
 
     char = %subst(i_string: x: 1);
 
-    //  Prüfen auf Hochkomma ...
+    //  PrÃ¼fen auf Hochkomma ...
     if (char = DOOUBLE_QUOTE or char = SIGNLE_QUOTE);
       if (isHyphen = bTrue);
         isHyphen = bFalse;
@@ -752,7 +752,7 @@ dcl-proc f_chgField;
       endif;
     endif;
 
-    //  Überlesen in Hochkomma eingeschlossene Felder ...
+    //  Ã¼berlesen in Hochkomma eingeschlossene Felder ...
     if (isHyphen = bTrue and isField = bTrue);
       f_chgfield = f_chgfield + char;
       iter;
@@ -809,7 +809,7 @@ dcl-proc f_chgField;
       waitOrder = bFalse;
     endif;
 
-    //  Löschen Order ...
+    //  LÃ¶schen Order ...
     if (isOrder = bTrue and i_rmvorder = bTrue);
     //**                Eval      y = y + 1
     //**                Eval      %subst(f_chgField: y: 1) = ' '

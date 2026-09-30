@@ -72,6 +72,7 @@ dcl-s int1            like(int4_t);
 dcl-s int2            like(int4_t);
 dcl-s ischanged       like(bool_t) inz(bFalse);
 
+dcl-s options         uns(10);
 
 dcl-pr atoi            int(10) extproc('atoi');
   i_string        pointer value;
@@ -163,13 +164,13 @@ dow ('1');
 
   exsr fromscreen;
 
-  //  Nachrichten löschen
+  //  Nachrichten lÃ¶schen
   p_rmvpgmmg(sds.pgmname);
 
-  //  Bezugszahlen löschen
+  //  Bezugszahlen lÃ¶schen
   exsr bzoff1;
 
-  //  Mappen der gedrückten Taste
+  //  Mappen der gedrÃ¼ckten Taste
   //  in Programmbefehl
   peek21(workstn.aid: sds.pgmname
         : ypgmcmd: ycmddta: ymsgid: ymsgdta);
@@ -216,7 +217,7 @@ dow ('1');
     leave;
 
   other;
-    //  Falsche Taste gedrückt
+    //  Falsche Taste gedrÃ¼ckt
     p_wrongkey(workstn.aid: sds.pgmname);
     iter;
   endsl;
@@ -315,12 +316,12 @@ begsr c_morekeys;
 endsr;
 
 //============================================================*
-//    FILL##        Füllen Bildschirm                         *
+//    FILL##        FÃ¼llen Bildschirm                         *
 //============================================================*
 
 begsr fill##;
 
-  //  Überschrift ...
+  //  Ãœberschrift ...
   select;
   when (i_type = '*INFO');
     $$headline = f_msgtext('MBX0001': ' ');
@@ -335,28 +336,30 @@ begsr fill##;
   //  Nachrichtentext ...
   msgtext = f_msgtext(i_msgid: i_msgdta);
 
+  options = cWORDWRAP_PARAGRAPH_MSGD + cWORDWRAP_PARAGRAPH_TRIMR;
+
   //  ... Zeile 1
   strpos = 1;
-  $$line#01 = f_wordwrap(msgtext: 40: strpos);
+  $$line#01 = f_wordwrap(msgtext: 40: strpos: options);
   $$line#01 = %triml($$line#01);
   //  ... Zeile 2
   if (strpos > 0);
-    $$line#02 = f_wordwrap(msgtext: 40: strpos);
+    $$line#02 = f_wordwrap(msgtext: 40: strpos: options);
     $$line#02 = %triml($$line#02);
   endif;
   //  ... Zeile 3
   if (strpos > 0);
-    $$line#03 = f_wordwrap(msgtext: 40: strpos);
+    $$line#03 = f_wordwrap(msgtext: 40: strpos: options);
     $$line#03 = %triml($$line#03);
   endif;
   //  ... Zeile 4
   if (strpos > 0);
-    $$line#04 = f_wordwrap(msgtext: 40: strpos);
+    $$line#04 = f_wordwrap(msgtext: 40: strpos: options);
     $$line#04 = %triml($$line#04);
   endif;
   //  ... Zeile 5
   if (strpos > 0);
-    $$line#05 = f_wordwrap(msgtext: 40: strpos);
+    $$line#05 = f_wordwrap(msgtext: 40: strpos: options);
     $$line#05 = %triml($$line#05);
   endif;
 
@@ -428,7 +431,7 @@ begsr getkey;
 endsr;
 
 //============================================================*
-//    SetScreen     Einstellen 132/80-Zeichen Auflösung       *
+//    SetScreen     Einstellen 132/80-Zeichen AuflÃ¶sung       *
 //============================================================*
 
 begsr setscreen;
@@ -519,7 +522,7 @@ endsr;
 
 begsr first;
 
-  // - Öffnen der Dateien
+  // - Ã–ffnen der Dateien
   open peek59fm;
 
   // - Programm initialisieren
@@ -528,14 +531,14 @@ begsr first;
   o_msgid  = ' ';
   o_msgdta = ' ';
 
-  // - Füllen der Bildschirmfelder
+  // - FÃ¼llen der Bildschirmfelder
   exsr bzoff1;
   exsr fill##;
 
   // - Darstellung der Befehlstasten
   sfbot = 1;
 
-  // - Einstellen der Bildschirmauflösung 80/132-Zeichen
+  // - Einstellen der BildschirmauflÃ¶sung 80/132-Zeichen
   exsr setscreen;
 
 endsr;

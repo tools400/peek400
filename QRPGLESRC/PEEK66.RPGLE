@@ -12,7 +12,7 @@
        //                                                               *
        //  Kurzdokumentation :                                          *
        //                                                               *
-       //  Konvertieren Datenformat für Kurzbefehl                      *
+       //  Konvertieren Datenformat fÃ¼r Kurzbefehl                      *
        //                                                               *
        // ============================================================= *
        // >>PRE-COMPILER<<                                              *

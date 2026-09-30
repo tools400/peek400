@@ -1,7 +1,7 @@
 **free
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8179
-//  Keine Bedienerführung verfügbar.
+//  Keine BedienerfÃ¼hrung verfÃ¼gbar.
 dcl-ds USR8179 qualified;
       //  No replacement variables available!
 end-ds;

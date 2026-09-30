@@ -95,7 +95,7 @@
              ENDDO
 
              SNDPGMMSG  MSGID(CPF9897) MSGF(QCPFMSG) MSGTYPE(*INFO) +
-                          MSGDTA('Bibliothek PEEK/400 erfolgreich übertragen.')
+                          MSGDTA('Bibliothek PEEK/400 erfolgreich Ã¼bertragen.')
 
 ENDE:
              RETURN
@@ -114,7 +114,7 @@ ERROR:
              CALL       PGM(QMHMOVPM) PARM(&ERRMSGKEY &ERRMSGTYP +
                           &ERRNBRTYP &ERRPGMMSGQ &ERRSTKCTR &ERRCODE)
              SNDPGMMSG  MSGID(CPF9898) MSGF(QCPFMSG) MSGTYPE(*ESCAPE) +
-                          MSGDTA('Übertragung nach' *BCAT &RMTLOCNAME *BCAT 'fehlgeschlagen')
+                          MSGDTA('Ã¼bertragung nach' *BCAT &RMTLOCNAME *BCAT 'fehlgeschlagen')
              GOTO       CMDLBL(ENDE)
 
  /* -------------------------------------------------------------- */
@@ -191,7 +191,7 @@ STEP_00:
 
 STEP_01:
                SNDPGMMSG  MSGID(CPF9897) MSGF(QCPFMSG) +
-                            MSGDTA('Übertragen Peek/400 auf' +
+                            MSGDTA('Ãœbertragen Peek/400 auf' +
                                    *BCAT &RMTLOCNAME *BCAT '...') +
                             TOPGMQ(*EXT) MSGTYPE(*STATUS)
 

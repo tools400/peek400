@@ -13,7 +13,7 @@
 //                                                               *
 //  Kurzdokumentation :                                          *
 //                                                               *
-//  Prüfen Datensatz PEEKWRK für WRK0001 auf Plausibilität       *
+//  PrÃ¼fen Datensatz PEEKWRK fÃ¼r WRK0001 auf PlausibilitÃ¤t       *
 //                                                               *
 // ============================================================= *
 // >>PRE-COMPILER<<                                              *
@@ -80,7 +80,7 @@ close peekwrk;
 return;
 
 //============================================================*
-//    PrfB1         Prüfen Datensatz                          *
+//    PrfB1         PrÃ¼fen Datensatz                          *
 //============================================================*
 
 begsr prfb1;
@@ -120,7 +120,7 @@ begsr prfb1;
 endsr;
 
 //============================================================*
-//    Prf20         Prüfen der Sortierfolge                   *
+//    Prf20         PrÃ¼fen der Sortierfolge                   *
 //============================================================*
 
 begsr prf20;
@@ -153,7 +153,7 @@ begsr prf20;
 endsr;
 
 //============================================================*
-//    Prf21         Prüfen des Attributs: Sichtbar            *
+//    Prf21         PrÃ¼fen des Attributs: Sichtbar            *
 //============================================================*
 
 begsr prf21;
@@ -162,9 +162,9 @@ begsr prf21;
 
     select;
     when (wrk0001.wrk_hidden = bTrue);
-    //  ist zulässig
+    //  ist zulÃ¤ssig
     when (wrk0001.wrk_hidden = bFalse);
-    //  ist zulässig
+    //  ist zulÃ¤ssig
     other;
       isError = bTrue;
       o_msgid = 'USR8168';
@@ -182,7 +182,7 @@ begsr prf21;
 endsr;
 
 //============================================================*
-//    Prf22         Prüfen des Attributs: Farbe               *
+//    Prf22         PrÃ¼fen des Attributs: Farbe               *
 //============================================================*
 
 begsr prf22;
@@ -194,7 +194,7 @@ begsr prf22;
 endsr;
 
 //============================================================*
-//    Prf23         Prüfen des Attributs: Spaltenmarkierung   *
+//    Prf23         PrÃ¼fen des Attributs: Spaltenmarkierung   *
 //============================================================*
 
 begsr prf23;
@@ -203,9 +203,9 @@ begsr prf23;
 
     select;
     when (wrk0001.wrk_mrkcol = bTrue);
-    //  ist zulässig
+    //  ist zulÃ¤ssig
     when (wrk0001.wrk_mrkcol = bFalse);
-    //  ist zulässig
+    //  ist zulÃ¤ssig
     other;
       isError = bTrue;
       o_msgid = 'USR8169';
@@ -223,7 +223,7 @@ begsr prf23;
 endsr;
 
 //============================================================*
-//    Prf24         Prüfen des Attributs: Max. Breite         *
+//    Prf24         PrÃ¼fen des Attributs: Max. Breite         *
 //============================================================*
 
 begsr prf24;
@@ -231,7 +231,7 @@ begsr prf24;
   dou ('1');
 
     if (wrk0001.wrk_maxsiz > 0);
-    //  ist zulässig
+    //  ist zulÃ¤ssig
     else;
       isError = bTrue;
       o_msgid = 'USR8170';
@@ -249,7 +249,7 @@ begsr prf24;
 endsr;
 
 //============================================================*
-//    Prf25         Prüfen des Attributs: Editiercode         *
+//    Prf25         PrÃ¼fen des Attributs: Editiercode         *
 //============================================================*
 
 begsr prf25;
@@ -270,7 +270,7 @@ begsr first;
 
   wrk0001 = i_buffer;
 
-  // - Rückkehrcode
+  // - RÃ¼ckkehrcode
   o_fldname = '';
   o_msgid = '';
   o_msgdta = '';

@@ -8,7 +8,7 @@
 //  Typ      : RPGLE                                             *
 //                                                               *
 //  erstellt : 21.07.99  Raddatz                                 *
-//  geändert :                                                   *
+//  geÃ¤ndert :                                                   *
 //                                                               *
 //===============================================================*
 //                                                               *
@@ -100,7 +100,7 @@ dcl-proc f_dsplyln export;
   fldlen = i_fldl0100.f1flen;
 
   if (i_fldl0100.f1vfmi = '1');
-    //  Variable Feldlänge ...
+    //  Variable FeldlÃ¤nge ...
     fldlen = fldlen - 2;
   endif;
 
@@ -133,16 +133,16 @@ dcl-proc f_buffln export;
   endif;
 
   if (i_fldl0100.f1vfmi = '1');
-    //  Variable Feldlänge ...
+    //  Variable FeldlÃ¤nge ...
     if (withlen = bTrue);
-      //  ... incl. Längenbyte
+      //  ... incl. LÃ¤ngenbyte
       fldlen = i_fldl0100.f1flen;
     else;
-      //  ... ohne Längenbyte
+      //  ... ohne LÃ¤ngenbyte
       fldlen = i_fldl0100.f1flen - 2;
     endif;
   else;
-    //  Felder fester Länge
+    //  Felder fester LÃ¤nge
     fldlen = i_fldl0100.f1flen;
   endif;
 
@@ -271,10 +271,10 @@ dcl-proc p_fldtobuf export;
   endif;
 
   if (i_fldl0100.f1vfmi = '1');
-    //  Felder variabler Länge ...
+    //  Felder variabler LÃ¤nge ...
     if (withlen = bFalse);
-      //  ... ohne Längenangabe
-      //      (einfügen Längenangabe)
+      //  ... ohne LÃ¤ngenangabe
+      //      (einfÃ¼gen LÃ¤ngenangabe)
 
       if (i_fldl0100.f1dtyp = 'G');
         buffln = %len(%trimr(
@@ -302,14 +302,14 @@ dcl-proc p_fldtobuf export;
             2          )
                = bufflna;
     else;
-      //  ... incl. Längenangabe
+      //  ... incl. LÃ¤ngenangabe
       %subst(io_buffer  :
             i_fldl0100.f1ibuf   :
             f_buffln(i_fldl0100: withlen))
                = i_fielddta;
     endif;
   else;
-    //  Felder fester Länge ...
+    //  Felder fester LÃ¤nge ...
     %subst(io_buffer  :
           i_fldl0100.f1ibuf   :
           f_buffln(i_fldl0100))
@@ -449,8 +449,8 @@ dcl-proc f_vldname export;
   dcl-s startString       like(bool_t) inz(bFalse);
   dcl-s endString       like(bool_t) inz(bFalse);
 
-  dcl-c VALID_FIRST_CHAR '§$#ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  dcl-c VALID_CHAR '§$#ABCDEFGHIJKLMNOPQRSTUVWXYZ_.1234567890';
+  dcl-c VALID_FIRST_CHAR 'Â§$#ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  dcl-c VALID_CHAR 'Â§$#ABCDEFGHIJKLMNOPQRSTUVWXYZ_.1234567890';
 
   /COPY QCOPYLE,USR8182
   //-------------------------------------------------------------------*
@@ -463,7 +463,7 @@ dcl-proc f_vldname export;
 
     chr = %subst(i_name: idx: 1);
 
-    //  Prüfen Start des Strings und 1. Zeichen ...
+    //  PrÃ¼fen Start des Strings und 1. Zeichen ...
     if (startString =  bFalse and endString =  bFalse and chr <> '');
       startString = bTrue;
       if (%check(VALID_FIRST_CHAR: chr) > 0);
@@ -477,7 +477,7 @@ dcl-proc f_vldname export;
       iter;
     endif;
 
-    //  Prüfen Ende des Strings ...
+    //  PrÃ¼fen Ende des Strings ...
     if (startString =  bTrue )  and
        (endString =  bFalse)  and
        (chr       =  ' '   );
@@ -485,7 +485,7 @@ dcl-proc f_vldname export;
       iter;
     endif;
 
-    //  Prüfen Zeichen des Strings ...
+    //  PrÃ¼fen Zeichen des Strings ...
     if (startString =  bTrue and endString = bFalse);
       if (%check(VALID_CHAR: chr) > 0);
         clear usr8182;
@@ -497,7 +497,7 @@ dcl-proc f_vldname export;
       endif;
     endif;
 
-    //  Prüfen Zeichen hinter dem Ende des Strings ...
+    //  PrÃ¼fen Zeichen hinter dem Ende des Strings ...
     if (startString =  bTrue and endString =  bTrue);
       if (chr <> '');
         clear usr8182;
@@ -548,18 +548,18 @@ dcl-proc f_vldfloat export;
 
     i = %check(' ': i_buffer);
 
-    // Prüfen auf führendes Vorzeichen
+    // PrÃ¼fen auf fÃ¼hrendes Vorzeichen
     c = %subst(i_buffer: i: 1);
-    if (c = '+' or c = '-');   // Überspringen Vorzeichen
+    if (c = '+' or c = '-');   // Ã¼berspringen Vorzeichen
       i = i + 1;
     endif;
 
-    // Prüfen auf nummerische Ziffern vor dem Komma
+    // PrÃ¼fen auf nummerische Ziffern vor dem Komma
     dow (i <= %len(i_buffer));
       c = %subst(i_buffer: i: 1);
       if (c <> ' ');
         if (c = ',' or c = '.');
-          i = i + 1;   // Überspringen Komma
+          i = i + 1;   // Ã¼berspringen Komma
           leave;
         endif;
         if (%check(cdigits: c) <> 0);
@@ -569,7 +569,7 @@ dcl-proc f_vldfloat export;
       i = i + 1;
     enddo;
 
-    // Prüfen auf nummerische Ziffern hinter dem Komma
+    // PrÃ¼fen auf nummerische Ziffern hinter dem Komma
     dow (i <= %len(i_buffer));
       c = %subst(i_buffer: i: 1);
       if (c <> ' ');
@@ -584,7 +584,7 @@ dcl-proc f_vldfloat export;
     enddo;
 
     if (c = 'e' or c = 'E');
-      // Prüfen auf Vorzeichen des Exponenten
+      // PrÃ¼fen auf Vorzeichen des Exponenten
       i = i + 1;
       if (i > %len(i_buffer));
         return bFalse;
@@ -597,7 +597,7 @@ dcl-proc f_vldfloat export;
       i = i + 1;
       hasexponent = bFalse;
 
-      // Prüfen auf nummerische Ziffern des Exponenten
+      // PrÃ¼fen auf nummerische Ziffern des Exponenten
       dow (i <= %len(i_buffer));
         c = %subst(i_buffer: i: 1);
         if (c <> ' ');
@@ -639,7 +639,7 @@ dcl-proc f_execute export;
   //  Definieren Funktionswert
   dcl-s isok            like(bool_t) inz(bFalse);
 
-  //  Definieren Parameter für p_getOpDesc
+  //  Definieren Parameter fÃ¼r p_getOpDesc
   dcl-s desctype        int(10) inz;
   dcl-s datatype        int(10) inz;
   dcl-s descinf1        int(10) inz;
@@ -647,7 +647,7 @@ dcl-proc f_execute export;
   dcl-s datalen         int(10) inz;
   dcl-s feedback        char(12) inz;
 
-  //  Definitionen für QCAPCMD
+  //  Definitionen fÃ¼r QCAPCMD
   dcl-s cmdlen          int(10) inz;
 
   dcl-ds optctrl;
@@ -746,7 +746,7 @@ dcl-proc f_basedpf export;
     return bFalse;
   endif;
 
-  //      prüfen auf logische Datei
+  //      prÃ¼fen auf logische Datei
   fild0100 = ydata;
 
   if (fild0100.atfila = '*LGL');
@@ -877,7 +877,7 @@ dcl-proc f_basedmbr export;
   when (mbrd0300.m3joinmbr = '1' or
   mbrd0300.m3sqlfiletype = 'VIEW');
     //  ... dann
-    //      zurückgeben der Eingangsmemberdaten, wegen Join Datei
+    //      zurÃ¼ckgeben der Eingangsmemberdaten, wegen Join Datei
     o_pFile   = i_file;
     o_pLib    = i_lib;
     o_pmbr    = i_mbr;
@@ -887,7 +887,7 @@ dcl-proc f_basedmbr export;
   //  Wenn es keine basierenden physischen Member gibt, ...
   when (mbrd0300.m3numBasedOnMbr = 0);
     //  ... dann
-    //      zurückgeben der Eingangsmemberdaten
+    //      zurÃ¼ckgeben der Eingangsmemberdaten
     o_pFile   = i_file;
     o_pLib    = i_lib;
     o_pmbr    = i_mbr;
@@ -895,7 +895,7 @@ dcl-proc f_basedmbr export;
     isMbrFound = bTrue;
   other;
     //  ... sonst
-    //      zurückgeben des basierenden physischen Members
+    //      zurÃ¼ckgeben des basierenden physischen Members
     if (i_mbrnbr > 0);
       mbrNbr = i_mbrnbr;
     else;
@@ -1111,7 +1111,7 @@ dcl-proc f_headline export;
   dcl-s heading         like(colheading_t);
   // ------------------------------------------------------------------------
 
-  //  Überschrift ...
+  //  Ãœberschrift ...
   select;
   //  ... Feldtext
   when (i_headtyp = '*FIELDTEXT');
@@ -1264,7 +1264,7 @@ dcl-proc p_rmvpgmmg export;
     i_pgm        const  like(pgm_t);
   end-pi;
 
-  //  Parameter für QMHRMVPM API
+  //  Parameter fÃ¼r QMHRMVPM API
   dcl-s stackCount         like(int4_t) inz;
   dcl-s msgKey         char(4) inz;
 
@@ -1641,13 +1641,13 @@ dcl-proc f_isnotalw export;
   i_fldl0100.f1dtyp = '8');     // = Boolean
 
     //  ... dann
-    //      prüfen, ob es sich um ein GRAPHIC Feld ohne CCSID handelt
+    //      prÃ¼fen, ob es sich um ein GRAPHIC Feld ohne CCSID handelt
     if (i_fldl0100.f1dtyp = 'G' and f_hasccsid(i_fldl0100) = bFalse);
       notAllowed = bTrue;
       return notAllowed;
     endif;
 
-    //      prüfen, ob es sich um ein Packed oder Zoned Feld mit mehr als
+    //      prÃ¼fen, ob es sich um ein Packed oder Zoned Feld mit mehr als
     //      30 Stellen handelt.
     if (i_fldl0100.f1dtyp = 'P' or i_fldl0100.f1dtyp = 'S');
       if (i_fldl0100.f1digt > 30);
@@ -1656,11 +1656,11 @@ dcl-proc f_isnotalw export;
       endif;
     endif;
 
-    //      prüfen, ob es sich um ein Feld variabler Länge handelt.
-    //      Wenn es sich um ein Feld variabler Länge handelt, ...
+    //      prÃ¼fen, ob es sich um ein Feld variabler LÃ¤nge handelt.
+    //      Wenn es sich um ein Feld variabler LÃ¤nge handelt, ...
     if (f_isvarlen(i_fldl0100) = bTrue);
       //      ... dann
-      //          prüfen, ob es sich um alpha-numerisches Feld handelt.
+      //          prÃ¼fen, ob es sich um alpha-numerisches Feld handelt.
       if i_fldl0100.f1dtyp = 'A' or                                      // = Alpha
       i_fldl0100.f1dtyp = 'G';                                        // = Graphic
         notAllowed = bFalse;
@@ -1674,7 +1674,7 @@ dcl-proc f_isnotalw export;
     endif;
   else;
     //  ... sonst
-    //      setzen Markierung für unbekannten Feldtyp
+    //      setzen Markierung fÃ¼r unbekannten Feldtyp
     notAllowed = bTrue;
   endif;
 
@@ -1695,7 +1695,7 @@ dcl-proc f_iskeyfld export;
   dcl-s iskeyfld        like(bool_t) inz(bFalse);
   // ------------------------------------------------------------------------
 
-  //  Wenn es sich um ein Schlüsselfeld handelt, ...
+  //  Wenn es sich um ein SchlÃ¼sselfeld handelt, ...
   if (i_fldl0100.f1keyf = '1');
     //  ... dann
     iskeyfld = bTrue;
@@ -1783,7 +1783,7 @@ dcl-proc f_rtvmsgd export;
   //  Funktionswert
   /COPY QCOPYLE,RTVM0100
 
-  //  Parameter für QMHSNDPM
+  //  Parameter fÃ¼r QMHSNDPM
   dcl-s msgdlen         int(10) inz;
   dcl-s format          char(8) inz;
   dcl-ds qmsgf;
@@ -2059,16 +2059,16 @@ dcl-proc f_splttxt_DEPRECATED export;
   dcl-s trimLen         like(int4_t) inz;
   //------------------------------------------------------------*
 
-  //  Wenn die Startposition außerhalb des gültigen
+  //  Wenn die Startposition auÃŸerhalb des gÃ¼ltigen
   //  Bereichs liegt, ...
   if (i_strPos > %len(i_text));
     //  ... dann
-    //      einen Leerstring zurück geben
+    //      einen Leerstring zurÃ¼ck geben
     %subst(o_text: 1: %len(o_text)) = ' ';
     rtnLen = 0;
   else;
     //  ... sonst
-    //      prüfen zu entnehmende Länge
+    //      prÃ¼fen zu entnehmende LÃ¤nge
     if (i_strPos + i_len - 1) <= %len(i_text);
       rtnLen = i_len;
     else;
@@ -2083,29 +2083,29 @@ dcl-proc f_splttxt_DEPRECATED export;
     %subst(o_text: 1: %len(o_text)) =
     %subst(i_text: i_strPos: rtnLen);
 
-    //      Auf Zeilenwechsel prüfen
-    pNewLine = %scan('°': %subst(o_text: 1: %len(o_text)));
+    //      Auf Zeilenwechsel prÃ¼fen
+    pNewLine = %scan('Â°': %subst(o_text: 1: %len(o_text)));
     if (pNewLine > 0);
       rtnLen = pNewLine;
       %subst(o_text: rtnLen: %len(o_text) - rtnLen + 1) = '';
     endif;
 
-    //      Bestimmen Länge ohne nachgestellte Leezeichen
+    //      Bestimmen LÃ¤nge ohne nachgestellte Leezeichen
     trimLen = %len(%trimr(%subst(o_text: 1: rtnLen)));
 
     // Wenn keine nachgestellten Leezeichen
     // vorhanden sind, ...
     if (rtnLen = trimLen);
       // ... dann
-      //     Folgezeichen im Eingabestring prüfen
+      //     Folgezeichen im Eingabestring prÃ¼fen
       if (%len(i_text) > rtnLen);
         nextChar = %subst(i_text: rtnLen + 1: 1);
 
         // Wenn das Folgezeichen <> ' ' ist, d.h.
         // wir befinden uns mitten in der Zeichenkette, ...
-        if (nextChar <> ' ') and (nextChar <> '°');
+        if (nextChar <> ' ') and (nextChar <> 'Â°');
           // ... dann
-          //     rückwärts nach einer Lücke für
+          //     rÃ¼ckwÃ¤rts nach einer LÃ¼cke fÃ¼r
           //     den Zeilenumbruch suchen
           dow trimLen > 0;
             if (%subst(o_text: trimLen: 1) = ' ');
@@ -2619,8 +2619,8 @@ dcl-proc f_wordwrap export;
   if (%parms() >= %parmnum(i_options));
     options = i_options;
   else;
-    options = cwordwrap_paragraph_none +
-      cwordwrap_paragraph_trimr;
+    options = cWORDWRAP_PARAGRAPH_NONE +
+      cWORDWRAP_PARAGRAPH_TRIMR;
   endif;
 
   // TRIM trailing blanks
@@ -2629,12 +2629,12 @@ dcl-proc f_wordwrap export;
   // Determine how to treat end-of-paragraph markers:
   select;
   // ... do not respect end-of-paragraph marker
-  when isBitOn(cwordwrap_paragraph_none: options);
+  when isBitOn(cWORDWRAP_PARAGRAPH_NONE: options);
     clear eop;
     clear esc;
     numeop = 0;
   // ... respect end-of-paragraph marker of message descriptions: &N, &P, &B
-  when isBitOn(cwordwrap_paragraph_msgd: options);
+  when isBitOn(cWORDWRAP_PARAGRAPH_MSGD: options);
     clear eop;
     eop(1) = '&N';
     eop(2) = '&P';
@@ -2642,7 +2642,7 @@ dcl-proc f_wordwrap export;
     esc    = '&';
     numeop = 3;
   // ... respect end-of-paragraph marker of text: \n
-  when isBitOn(cwordwrap_paragraph_text: options);
+  when isBitOn(cWORDWRAP_PARAGRAPH_TEXT: options);
     clear eop;
     eop(1) = '\N';
     esc    = '\';
@@ -2731,7 +2731,7 @@ dcl-proc f_wordwrap export;
   endif;
 
   // If the user requested to remove BLANKS, ...
-  if isBitOn(cwordwrap_paragraph_trimr: options);
+  if isBitOn(cWORDWRAP_PARAGRAPH_TRIMR: options);
     // ... then remove BLANKS.
     text = %trimr(text);
   endif;

@@ -1,7 +1,7 @@
 **free
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8154
-//  Ungültiger Parameter für ERSETZEN/HINZUFÜGEN '&1' für Zield
+//  UngÃ¼ltiger Parameter fÃ¼r ERSETZEN/HINZUFÃœGEN '&1' fÃ¼r Zield
 dcl-ds USR8154 qualified;
   var1  char(10) inz;
 end-ds;

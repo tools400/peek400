@@ -8,7 +8,7 @@
 //  Typ      : RPG                                               *
 //                                                               *
 //  erstellt : 20.03.1998  Raddatz                               *
-//  geändert : 06.04.1999  für Version 2.1.0                     *
+//  geÃ¤ndert : 06.04.1999  fÃ¼r Version 2.1.0                     *
 //                                                               *
 //===============================================================*
 //                                                               *
@@ -165,11 +165,11 @@ exsr first;
 if (o_msgid = '');
 
   //---------------------------------------------------*
-  //  Schleife für Programmbearbeitung
+  //  Schleife fÃ¼r Programmbearbeitung
 
   dow ('1');
 
-    //  Prüfen Positionierung der Subfile
+    //  PrÃ¼fen Positionierung der Subfile
     if (sfsanr <= *zeros);
       sfsanr = 1;
     endif;
@@ -181,7 +181,7 @@ if (o_msgid = '');
     *in89 = '0';
     write msgctl;
 
-    //  "Keine Sätze ..."
+    //  "Keine SÃ¤tze ..."
     if (*in80 = *off);
       write pbleer;
     endif;
@@ -239,7 +239,7 @@ if (o_msgid = '');
     exfmt pbctl;
     *in70 = '0';
 
-    //  Nachrichten löschen
+    //  Nachrichten lÃ¶schen
     p_rmvpgmmg(sds.pgmname);
 
     //  Aktuelle Satz-Nr.
@@ -247,7 +247,7 @@ if (o_msgid = '');
       sfsanr = sflcsr;
     endif;
 
-    //  Mappen der gedrückten Taste
+    //  Mappen der gedrÃ¼ckten Taste
     //  in Programmbefehl
     peek21(workstn.aid: sds.pgmname
           : ypgmcmd: ycmddta: ymsgid: ymsgdta);
@@ -312,7 +312,7 @@ if (o_msgid = '');
     when (ypgmcmd = '*PAGEDOWN');
 
     other;
-      //  Falsche Taste gedrückt
+      //  Falsche Taste gedrÃ¼ckt
       p_wrongkey(workstn.aid: sds.pgmname);
       iter;
     endsl;
@@ -428,10 +428,10 @@ begsr srchfield;
         leave;
       else;
         if (sfpau <> *blanks);
-          //  ... Satz geändert
+          //  ... Satz geÃ¤ndert
           exsr vsfpauchg;
         else;
-          //  ... Satz nicht geändert
+          //  ... Satz nicht geÃ¤ndert
           exsr vsfpauclr;
         endif;
 
@@ -475,7 +475,7 @@ begsr vreadc;
   issflerror = bFalse;
 
   if (*in80 = *off);
-  //   keine Einträge in Subfile vorhanden ...
+  //   keine EintrÃ¤ge in Subfile vorhanden ...
   else;
 
     for do_x2 = 1 to sflnbrrcd;
@@ -497,7 +497,7 @@ begsr vreadc;
       //  Subfile nicht neu positionieren
       endif;
 
-      //  Linksbündig setzen ...
+      //  LinksbÃ¼ndig setzen ...
       sfpau = %triml(sfpau);
 
       //  Zuordnung AUSWAHL => Befehl ...
@@ -515,7 +515,7 @@ begsr vreadc;
       endif;
 
       //----------------------------*
-      //  Ausführen SFL-Befehl ...  *
+      //  AusfÃ¼hren SFL-Befehl ...  *
       //----------------------------*
       sfl_cmd = ypgmcmd;
 
@@ -626,7 +626,7 @@ begsr vpos;
 endsr;
 
 //============================================================*
-//    VSfpauClr     Löschen Subfileauswahl                    *
+//    VSfpauClr     LÃ¶schen Subfileauswahl                    *
 //============================================================*
 
 begsr vsfpauclr;
@@ -649,7 +649,7 @@ begsr vsfpauerr;
 endsr;
 
 //============================================================*
-//    VSfpauChg     Datensatz in Subfile als geändert         *
+//    VSfpauChg     Datensatz in Subfile als geÃ¤ndert         *
 //                  markieren                                 *
 //============================================================*
 
@@ -661,7 +661,7 @@ endsr;
 
 //============================================================*
 //    PBInit        Initialisieren der Subfile zur Anzeige    *
-//                  der nächsten Seite                        *
+//                  der nÃ¤chsten Seite                        *
 //============================================================*
 
 begsr pbinit;
@@ -684,7 +684,7 @@ begsr pbinit;
 endsr;
 
 //============================================================*
-//    PBReadUP      Vorwärts füllen der Subfile               *
+//    PBReadUP      VorwÃ¤rts fÃ¼llen der Subfile               *
 //============================================================*
 
 begsr pbreadup;
@@ -753,7 +753,7 @@ begsr statmsg;
 endsr;
 
 //============================================================*
-//    BzToScreen    Übertragen Bezugszahlen in Bildschirm     *
+//    BzToScreen    Ãœbertragen Bezugszahlen in Bildschirm     *
 //============================================================*
 
 begsr bztoscreen;
@@ -764,7 +764,7 @@ begsr bztoscreen;
 endsr;
 
 //============================================================*
-//    BzToSubf      Übertragen Bezugszahlen in Subfile        *
+//    BzToSubf      Ãœbertragen Bezugszahlen in Subfile        *
 //============================================================*
 
 begsr bztosubf;
@@ -775,7 +775,7 @@ begsr bztosubf;
 endsr;
 
 //============================================================*
-//    PBFill        Füllen Subfilesatz                        *
+//    PBFill        FÃ¼llen Subfilesatz                        *
 //============================================================*
 
 begsr pbfill;
@@ -783,7 +783,7 @@ begsr pbfill;
   //  Datensatz komplett anzeigen ...
   *in71 = '0';
 
-  //  Abhängigkeit prüfen ...
+  //  AbhÃ¤ngigkeit prÃ¼fen ...
   if (dbrl0200.b2lnmeused = h_lib or
      *in80 = '0');
     *in20 = '0';
@@ -807,7 +807,7 @@ begsr pbfill;
 endsr;
 
 //============================================================*
-//    PBFillKey     Füllen Subfilesatz, Schlüsselfelder       *
+//    PBFillKey     FÃ¼llen Subfilesatz, SchlÃ¼sselfelder       *
 //============================================================*
 
 begsr pbfillkey;
@@ -815,7 +815,7 @@ begsr pbfillkey;
   //  Datensatz nicht komplett anzeigen ...
   *in71 = '1';
 
-  //  Einlesen der Schlüsselinformationen ...
+  //  Einlesen der SchlÃ¼sselinformationen ...
   peek41(yqfile
         : '*FIRST': '*KEY': numkey: ydata);
 
@@ -864,7 +864,7 @@ begsr pbfillkey;
 endsr;
 
 //============================================================*
-//    PBFillSel     Füllen Subfilesatz, SELECT/OMIT           *
+//    PBFillSel     FÃ¼llen Subfilesatz, SELECT/OMIT           *
 //============================================================*
 
 begsr pbfillsel;
@@ -883,7 +883,7 @@ begsr pbfillsel;
 
     //  Wenn das Ende der Liste rreicht ist, ...
     if (sell0100.socomp = 'AL');
-    //  ... dann den Eintrag überlesen
+    //  ... dann den Eintrag Ã¼berlesen
     else;
       //  ... ansonsten den Eintrag aufbereiten und anzeigen
       select;
@@ -934,7 +934,7 @@ begsr pbwrite;
   //  Anzeigen der Subfile ...
   *in80 = '1';
 
-  //  Löschen Subfileauswahl ...
+  //  LÃ¶schen Subfileauswahl ...
   exsr vsfpauclr;
 
   //  Schreiben des Subfilesatzes ...
@@ -965,7 +965,7 @@ begsr pbsetll;
 endsr;
 
 //============================================================*
-//    SetScreen     Einstellen 132/80-Zeichen Auflösung       *
+//    SetScreen     Einstellen 132/80-Zeichen AuflÃ¶sung       *
 //============================================================*
 
 begsr setscreen;
@@ -993,7 +993,7 @@ endsr;
 
 begsr first;
 
-  // - Öffnen der Dateien
+  // - Ã–ffnen der Dateien
   open peek40fm;
 
   // - Programm initialisieren
@@ -1002,7 +1002,7 @@ begsr first;
   ##file = *blanks;
   r_file = ##file;
 
-  // - Rückkehrcode
+  // - RÃ¼ckkehrcode
   o_file = *blanks;
   o_lib = *blanks;
   o_msgid = *blanks;
@@ -1065,13 +1065,13 @@ begsr first;
     sftop = 1;
     sfbot = 1;
 
-    // - Einstellen der Bildschirmauflösung 80/132-Zeichen
+    // - Einstellen der BildschirmauflÃ¶sung 80/132-Zeichen
     exsr setscreen;
 
     // - Anzuzeigender Subfilesatz
     sfsanr = 1;
 
-    // - Subfile füllen
+    // - Subfile fÃ¼llen
     exsr c_refresh;
 
     // - Copyright

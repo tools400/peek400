@@ -57,7 +57,7 @@
        //  OUTPUT-Parameter:                                            *
        //  =================                                            *
        //                                                               *
-       //  XAttrLen- Länge des Wertes                                   *
+       //  XAttrLen- LÃ¤nge des Wertes                                   *
        //  XAttrTyp- Typ des Wertes                                     *
        //  XValue  - Attributwert                                       *
        //                                                               *

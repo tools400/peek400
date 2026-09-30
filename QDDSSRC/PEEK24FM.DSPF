@@ -13,7 +13,7 @@
       *                                                               *
       *  Kurzdokumentation :                                          *
       *                                                               *
-      *  Peek/400 - Änderung der Farbeinstellung                      *
+      *  Peek/400 - Ã„nderung der Farbeinstellung                      *
       *                                                               *
       *===============================================================*
       * >>PRE-COMPILER<<                                              *
@@ -238,7 +238,7 @@
      A            POS            3S 0P
       *
       *----------------------------------------------------*
-      *  RMVWDW ZUM LÖSCHEN DES WINDOWS
+      *  RMVWDW ZUM LÃ–SCHEN DES WINDOWS
       *
      A          R RMVWDW                    CLRL(*NO) OVERLAY FRCDTA
      A N88                                  DSPMOD(*DS4)

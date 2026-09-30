@@ -11,13 +11,13 @@
        //===============================================================*
        //                                                               *
        //  Kurzdokumentation :                                          *
-       //  ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯                                          *
-       //  EXIT-Programm zur Protokollierung von Datensatzänderungen.   *
+       //  ===================                                          *
+       //  EXIT-Programm zur Protokollierung von DatensatzÃ¤nderungen.   *
        //                                                               *
        //  Das Exit-Programm ist optional.                              *
        //                                                               *
        //  Parameterliste:                                              *
-       //  ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯                                              *
+       //  ===============                                              *
        //     In :  gi_file      - Name of the file.                    *
        //                                                               *
        //     In :  gi_lib       - Name of the library that contains    *
@@ -40,7 +40,7 @@
        //     In :  gi_aImage    - After-Image of the record.           *
        //                                                               *
        //  Erstellen des Datei EXIT04 (Beispiel):                       *
-       //  ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯                       *
+       //  ======================================                       *
        //  CREATE TABLE PEEK.EXIT04LOG (                                *
        //     "FILE"      CHARACTER ( 10) NOT NULL WITH DEFAULT,        *
        //     LIB         CHARACTER ( 10) NOT NULL WITH DEFAULT,        *
@@ -54,7 +54,7 @@
        //     AIMAGE      CHARACTER (500) NOT NULL WITH DEFAULT)        *
        //                                                               *
        //  Erstellen des Programms (CRTRPGMOD + CRTPGM)                 *
-       //  ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯                 *
+       //  ============================================                 *
        //  CRTRPGMOD MODULE(PEEK/EXIT04) DBGVIEW(*ALL) TRUNCNBR(*NO)    *
        //  SRCFILE(PEEK/QEXAMPLE) SRCMBR(EXIT04)                        *
        //  REPLACE(*YES) LANGID(*JOBRUN) TGTRLS(V5R3M0)                 *
@@ -65,7 +65,7 @@
        //  TEXT('Peek/400 - EXIT-Programm: Protokollierung         ')   *
        //                                                               *
        //  Erstellen des Programms (CRTBNDRPG):                         *
-       //  ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯                         *
+       //  ====================================                         *
        //  CRTBNDRPG PGM(PEEK/EXIT04) DBGVIEW(*ALL) TRUNCNBR(*NO)       *
        //  SRCFILE(PEEK/QEXAMPLE) SRCMBR(EXIT04)                        *
        //  REPLACE(*YES) LANGID(*JOBRUN) TGTRLS(V5R3M0)                 *

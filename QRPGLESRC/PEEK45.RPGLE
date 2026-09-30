@@ -8,7 +8,7 @@
 //  Typ      : RPG                                               *
 //                                                               *
 //  erstellt : 15.08.98  Raddatz                                 *
-//  geändert : 27.04.99  2.1.0                                   *
+//  geÃ¤ndert : 27.04.99  2.1.0                                   *
 //                                                               *
 //===============================================================*
 //                                                               *
@@ -156,7 +156,7 @@ exsr inzsr;
 exsr first;
 
 //---------------------------------------------------*
-//  Schleife für Programmbearbeitung
+//  Schleife fÃ¼r Programmbearbeitung
 
 dow ('1');
 
@@ -192,7 +192,7 @@ dow ('1');
     sfbot = 1;
   endsl;
 
-  //  Füllen "Offset" Angaben
+  //  FÃ¼llen "Offset" Angaben
   idx = 0;
   ofs = pstartpos - 1;
   for idx = 1 to %elem($ofsval);
@@ -205,16 +205,16 @@ dow ('1');
   exfmt bild01;
   exsr fromscreen;
 
-  //  Daten geändert
+  //  Daten geÃ¤ndert
   isdatachg = *in93;
 
-  //  Nachrichten löschen
+  //  Nachrichten lÃ¶schen
   p_rmvpgmmg(sds.pgmname);
 
-  //  Bezugszahlen löschen
+  //  Bezugszahlen lÃ¶schen
   exsr bzoff1;
 
-  //  Mappen der gedrückten Taste
+  //  Mappen der gedrÃ¼ckten Taste
   //  in Programmbefehl
   peek21(workstn.aid: sds.pgmname
         : ypgmcmd: ycmddta: ymsgid: ymsgdta);
@@ -294,7 +294,7 @@ dow ('1');
     endif;
 
   other;
-    //  Falsche Taste gedrückt
+    //  Falsche Taste gedrÃ¼ckt
     p_wrongkey(workstn.aid: sds.pgmname);
     iter;
   endsl;
@@ -324,12 +324,12 @@ begsr c_enter;
   //    ---------------------------------
   //    *** Genereller Programmfehler ***
   //    ***    keine Verarbeitung     ***
-  //    ***          möglich          ***
+  //    ***          mÃ¶glich          ***
   //    ---------------------------------
 
   else;
 
-    //  Prüfen der Eingaben
+    //  PrÃ¼fen der Eingaben
     exsr prfb1;
 
     if (isPgmError = bFalse);
@@ -338,13 +338,13 @@ begsr c_enter;
       if (isdatachg = bTrue);
 
         if (isstringinp = bFalse);
-          //  Einsetzen geänderten Hex-String ...
+          //  Einsetzen geÃ¤nderten Hex-String ...
           //  ... umwandeln HexString (Bildschirmanzeige) nach HexWert (Pufferinhalt)
           ptmphexbin = ' ';
           p_chrtohex(ptmphexbin               :
                     #hexstring               :
                     %len(%trimr(#hexstring)));
-          //      (Länge_Hex_Nibble / 2 = Länge_Hex_Bin)
+          //      (LÃ¤nge_Hex_Nibble / 2 = LÃ¤nge_Hex_Bin)
           x = %len(%trimr(#hexstring)) / 2;
         else;
           ptmphexbin = %subst(pfldinhaltsbcs:pstartpos);
@@ -354,11 +354,11 @@ begsr c_enter;
                    %subst($expstring: x: 1);
             endif;
           endfor;
-          //      (Länge = Feldlänge)
+          //      (LÃ¤nge = FeldlÃ¤nge)
           x = %len($expstring);
         endif;
 
-        //  ... einsetzen in Zwischenfeld für Rückgabewert
+        //  ... einsetzen in Zwischenfeld fÃ¼r RÃ¼ckgabewert
         %subst(pfldinhaltsbcs: pstartpos: x) =
           %subst(ptmphexbin: 1: x);
 
@@ -368,7 +368,7 @@ begsr c_enter;
           plength = %len(%trimr(pfldinhaltucs2));
         endif;
 
-        //  Füllen #HexString und $ExpString
+        //  FÃ¼llen #HexString und $ExpString
         exsr fill##2;
 
         //  Merken der neuen Startposition
@@ -444,12 +444,12 @@ begsr bzoff1;
 endsr;
 
 //============================================================*
-//    prfb1         Prüfen der Eingaben                       *
+//    prfb1         PrÃ¼fen der Eingaben                       *
 //============================================================*
 
 begsr prfb1;
 
-  //  Länge und Zeichen des Hex-Strings
+  //  LÃ¤nge und Zeichen des Hex-Strings
   exsr prf20;
   if (isPgmError = bTrue);
     leavesr;
@@ -464,14 +464,14 @@ begsr prfb1;
 endsr;
 
 //============================================================*
-//    prf20         Prüfen:  Hex-String                       *
+//    prf20         PrÃ¼fen:  Hex-String                       *
 //============================================================*
 
 begsr prf20;
 
   dou ('1');
 
-    //  prüfen auf unzulässige Zeichen
+    //  prÃ¼fen auf unzulÃ¤ssige Zeichen
     x = %check(HEX_DIGITS: #hexstring);
     if (x > 0  and x <= %len(%trimr(#hexstring)));
       p_sndpgmmg('USR8174'
@@ -546,7 +546,7 @@ begsr prf20;
 endsr;
 
 //============================================================*
-//    prf21         Prüfen:  Startposition                    *
+//    prf21         PrÃ¼fen:  Startposition                    *
 //============================================================*
 
 begsr prf21;
@@ -707,12 +707,12 @@ begsr c_morekeys;
 endsr;
 
 //============================================================*
-//    fill##        Füllen Bildschirm                         *
+//    fill##        FÃ¼llen Bildschirm                         *
 //============================================================*
 
 begsr fill##;
 
-  //  anzeigen Feldüberschrift
+  //  anzeigen FeldÃœberschrift
   $fldname = f_headline(i_headtype: fldl0100);
 
   //  anzeigen alphanumerisches oder numerisches Feld
@@ -727,7 +727,7 @@ begsr fill##;
     $flddezst  = 0;
   endif;
 
-  //  anzeigen Pufferlänge
+  //  anzeigen PufferlÃ¤nge
   if (f_isvarlen(fldl0100) = bTrue);
     *in61 = *on;
   else;
@@ -743,26 +743,26 @@ begsr fill##;
 endsr;
 
 //=========================================================*
-//    fill##2    - füllen Felder:  #HexString             *
+//    fill##2    - fÃ¼llen Felder:  #HexString             *
 //                                 $ExpString             *
 //                 aus pFldInhalt                         *
 //=========================================================*
 
 begsr fill##2;
 
-  //  berechnen der Länge der aus dem Puffer zu
-  //  entnehmenden Binärzeichenkette
+  //  berechnen der LÃ¤nge der aus dem Puffer zu
+  //  entnehmenden BinÃ¤rzeichenkette
   ptmphexlen = $buflaenge - #startpos + 1;
 
   if (ptmphexlen > %len(#hexstring) / 2);
     ptmphexlen = %len(#hexstring) / 2;
   endif;
 
-  //  entnehmen der Binärzeichenkette aus dem Puffer
+  //  entnehmen der BinÃ¤rzeichenkette aus dem Puffer
   %subst(ptmphexbin: 1) =
   %subst(pfldinhaltsbcs: #startpos: ptmphexlen);
 
-  //  umwandeln einer Binärzeichenkette in eine
+  //  umwandeln einer BinÃ¤rzeichenkette in eine
   //  lesbare Hex-Zeichenkette zur Editierung
   //  durch den Benutzer
   #hexstring = ' ';
@@ -798,7 +798,7 @@ begsr fill##2;
 endsr;
 
 //============================================================*
-//    SetScreen     Einstellen 132/80-Zeichen Auflösung       *
+//    SetScreen     Einstellen 132/80-Zeichen AuflÃ¶sung       *
 //============================================================*
 
 begsr setscreen;
@@ -854,7 +854,7 @@ endsr;
 
 begsr first;
 
-  // - Öffnen der Dateien
+  // - Ã–ffnen der Dateien
   open peekfld;
 
   open peek45fm;
@@ -880,7 +880,7 @@ begsr first;
     fldl0100   = f_ffd;
   endif;
 
-  // - Übernehmen der Programmparameter
+  // - Ã¼bernehmen der Programmparameter
   pstartpos  = 1;
   exsr getparameters;
 
@@ -896,21 +896,21 @@ begsr first;
   // - Benutzervoreinstellungen
   exsr getusrsetg;
 
-  // - Sperren Felder für Offset-Anzeige
+  // - Sperren Felder fÃ¼r Offset-Anzeige
   *in50 = '0';
 
-  // - Sperren Felder für String-Eingabe
+  // - Sperren Felder fÃ¼r String-Eingabe
   isstringinp = bFalse;
   *in51 = isstringinp;
 
-  // - Füllen der Bildschirmfelder
+  // - FÃ¼llen der Bildschirmfelder
   exsr bzoff1;
   exsr fill##;
 
   // - Darstellung der Befehlstasten
   sfbot = 1;
 
-  // - Einstellen der Bildschirmauflösung 80/132-Zeichen
+  // - Einstellen der BildschirmauflÃ¶sung 80/132-Zeichen
   exsr setscreen;
 
   // - Copyright

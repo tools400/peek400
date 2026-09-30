@@ -24,7 +24,7 @@
              exsr c_refresh;
           when ypgmcmd = '*ADD';       //  F6  - Neuanlage Datensatz
              exsr c_add;
-          when ypgmcmd = '*HEADLINE';  //  F7  - Umschalten der Überschrift
+          when ypgmcmd = '*HEADLINE';  //  F7  - Umschalten der Ãœberschrift
              exsr c_chghead;
           when ypgmcmd = '*MRKCOL';    //  F8  - Spalte markieren, ein
              exsr c_mrkcol;
@@ -56,43 +56,43 @@
              exsr c_top;
           when ypgmcmd = '*BOT';       //  F18 - Ende der Datei
              exsr c_bot;
-          when ypgmcmd = '*LEFT';      //  F19 - nach rechts verschieben (ein Feld)
+          when ypgmcmd = '*LEFT';      //  F19 - nach rechts verschieben (ein Fe
              exsr c_movel;
-          when ypgmcmd = '*RIGHT';     //  F20 - nach links verschieben  (ein Feld)
+          when ypgmcmd = '*RIGHT';     //  F20 - nach links verschieben  (ein Fe
              exsr c_mover;
-          when ypgmcmd = '*PAGELEFT';  //  F19 - nach rechts verschieben (eine Seite)
+          when ypgmcmd = '*PAGELEFT';  //  F19 - nach rechts verschieben (eine S
              exsr c_pageleft;
-          when ypgmcmd = '*PAGERIGHT'; //  F20 - nach links verschieben  (eine Seite)
+          when ypgmcmd = '*PAGERIGHT'; //  F20 - nach links verschieben  (eine S
              exsr c_pageright;
           when ypgmcmd = '*CMDLINE';   //  F21 - OS/400 Befehlzeile
              exsr c_cmdline;
-          when ypgmcmd = '*132/80';    //  F22 - Bildschirmauflösung 132/80
+          when ypgmcmd = '*132/80';    //  F22 - BildschirmauflÃ¶sung 132/80
              exsr c_chgscn;
           when ypgmcmd = '*MOREOPT';   //  F23 - weitere Auswahlen
              exsr c_moreopt;
           when ypgmcmd = '*MOREKEYS';  //  F24 - weitere Tasten anzeigen
              exsr c_morekeys;
-          when ypgmcmd = '*NEXTMARK';  //  Fxx - zum nächsten markierten Feld verschieben
+          when ypgmcmd = '*NEXTMARK';  //  Fxx - zum nÃ¤chsten markierten Feld ve
              exsr c_nextmark;
-          when ypgmcmd = '*PREVMARK';  //  Fxx - zum vorherigen markierten Feld verschieben
+          when ypgmcmd = '*PREVMARK';  //  Fxx - zum vorherigen markierten Feld 
              exsr c_prevmark;
-          when ypgmcmd = '*DSPDBR';    //  Fxx - anzeigen der Datenbankrelationen
+          when ypgmcmd = '*DSPDBR';    //  Fxx - anzeigen der Datenbankrelatione
              exsr c_dspdbr;
           when ypgmcmd = '*PINCOLDLG'; //  Fxx - Pin-Dialog
              exsr c_pincdlg;
-          when ypgmcmd = '*PAGEUP';    //  vorwärts blättern
+          when ypgmcmd = '*PAGEUP';    //  vorwÃ¤rts blÃ¤ttern
              exsr c_pageup;
-          when ypgmcmd = '*PAGEDOWN';  //  rückwärts blättern
+          when ypgmcmd = '*PAGEDOWN';  //  rÃ¼ckwÃ¤rts blÃ¤ttern
              exsr c_pagedown;
           when ypgmcmd = '*ENTER';     //  Datenfreigabe
              exsr c_enter;
           when ypgmcmd = '*REBUILD';   //  Programm neu erstellen
              exsr c_buildpgm;
-          when ypgmcmd = '*CLRPINROW'; //  Löschen Pin-Tabelle für Zeilen
+          when ypgmcmd = '*CLRPINROW'; //  LÃ¶schen Pin-Tabelle fÃ¼r Zeilen
              exsr c_clrpinrw;
-          when ypgmcmd = '*CLRPINCOL'; //  Löschen Pin-Tabelle für Spalten
+          when ypgmcmd = '*CLRPINCOL'; //  LÃ¶schen Pin-Tabelle fÃ¼r Spalten
              exsr c_clrpincl;
-          when ypgmcmd = '*KEY';       //  Sortierung in Schlüsselfolge
+          when ypgmcmd = '*KEY';       //  Sortierung in SchlÃ¼sselfolge
              exsr c_sortbkey;
           when ypgmcmd = '*RRN';       //  Sortierung in Satzfolge
              exsr c_sortbrrn;
@@ -101,12 +101,12 @@
           when ypgmcmd = '*SQL';       //  SQL-Select ...
              exsr c_sql;
           when ypgmcmd = '*NONE';      //  Nix tun
-             // keinen Befehl ausführen
-          when ypgmcmd = '*CHANGE';    //  Ändern Datensatz ...
+             // keinen Befehl ausfÃ¼hren
+          when ypgmcmd = '*CHANGE';    //  Ã„ndern Datensatz ...
              exsr s_change;
           when ypgmcmd = '*COPY';      //  Kopieren Datensatz ...
              exsr s_copy;
-          when ypgmcmd = '*DELETE';    //  Löschen Datensatz ...
+          when ypgmcmd = '*DELETE';    //  LÃ¶schen Datensatz ...
              exsr s_delete;
           when ypgmcmd = '*DISPLAY';   //  Anzeigen Datensatz ...
              exsr s_display;
@@ -134,7 +134,7 @@
              exsr s_splashon;
           when ypgmcmd = '*SPLASHOFF'; //  Splash-Screen Ausschalten ...
              exsr s_splashof;
-          when ypgmcmd = '*CMD';       //  Ausführen Kurzbefehl ...
+          when ypgmcmd = '*CMD';       //  AusfÃ¼hren Kurzbefehl ...
              exsr s_shortcmd;
           when ypgmcmd = '*ABOUT';     //  Anzeigen "About" ...
              exsr s_about;
@@ -148,9 +148,9 @@
              exsr s_saveenv;
           when ypgmcmd = '*LOADENV';   //  Laden Arbeitsumgebung ...
              exsr s_loadenv;
-          when ypgmcmd = '*DELETEENV'; //  Löschen Arbeitsumgebung ...
+          when ypgmcmd = '*DELETEENV'; //  LÃ¶schen Arbeitsumgebung ...
              exsr s_delenv;
-          when ypgmcmd = '*TGLKEYLUC'; //  Umschalten Eingabe der Schlüsselfelder ...
+          when ypgmcmd = '*TGLKEYLUC'; //  Umschalten Eingabe der SchlÃ¼sselfelde
              exsr s_tglkeylc_uc;
              exsr c_poscsr;
           other;

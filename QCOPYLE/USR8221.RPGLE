@@ -1,7 +1,7 @@
 **free
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8221
-//  Editor nicht zulässig. Feld &1 hat ungültigen Datentyp.
+//  Editor nicht zulÃ¤ssig. Feld &1 hat ungÃ¼ltigen Datentyp.
 dcl-ds USR8221 qualified;
   var1  char(10) inz;
 end-ds;

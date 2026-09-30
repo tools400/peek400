@@ -13,7 +13,7 @@
 //                                                               *
 //  Dokumentation:                                               *
 //                                                               *
-//  Erstellen einer Liste aller verfügbaren Satzformate          *
+//  Erstellen einer Liste aller verfÃ¼gbaren Satzformate          *
 //  einer Datei.                                                 *
 //                                                               *
 // ============================================================= *

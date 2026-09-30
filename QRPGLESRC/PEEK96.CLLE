@@ -7,8 +7,8 @@
      /*  Typ      : CLP                                              */
      /*                                                              */
      /*  erstellt : 23.01.1998  Raddatz                              */
-     /*  geändert : 22.07.1999  für Version 2.2.0                    */
-     /*  geändert : 20.04.2007  für Version 3.0.0                    */
+     /*  geÃ¤ndert : 22.07.1999  fÃ¼r Version 2.2.0                    */
+     /*  geÃ¤ndert : 20.04.2007  fÃ¼r Version 3.0.0                    */
      /*                                                              */
      /* ============================================================ */
      /*                                                              */
@@ -22,7 +22,7 @@
      /*                                                              */
      /*     CALL PGM(PEEK96) PARM('PEEK326P' '*ALL')                 */
      /*                                                              */
-     /*  Mögliche Werte für Parameter &DbgViewX (siehe PEEK99):      */
+     /*  MÃ¶gliche Werte fÃ¼r Parameter &DbgViewX (siehe PEEK99):      */
      /*     *NONE      Programme ohne Debug View erstellen           */
      /*     *ALL       Programme mit allen Debug Views erstellen     */
      /* ============================================================ */
@@ -200,7 +200,7 @@
  /* -------------------------------------------------------------- */
  /* PEEKSRC    */
              CRTSRCPF   FILE(&NEWLIB/PEEKSRC) RCDLEN(112) +
-                          TEXT('Peek/400 - Template für Programme')
+                          TEXT('Peek/400 - Template fÃ¼r Programme')
              CPYF       FROMFILE(&DEVLIB/PEEKSRC) +
                           TOFILE(&NEWLIB/PEEKSRC) FROMMBR(PGM) +
                           TOMBR(PGM) MBROPT(*REPLACE) CRTFILE(*NO)

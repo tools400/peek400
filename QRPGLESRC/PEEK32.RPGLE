@@ -8,7 +8,7 @@
 //  Typ      : RPG                                               *
 //                                                               *
 //  erstellt : 26.11.97  Raddatz                                 *
-//  geändert : 27.04.99  2.1.0                                   *
+//  geÃ¤ndert : 27.04.99  2.1.0                                   *
 //                                                               *
 //===============================================================*
 //                                                               *
@@ -73,7 +73,7 @@ o_msgid = '';
 o_msgdta = '';
 
 //    Zeichen mit einer DOUBLE BYTE CCSID, wie 1200 oder 13488
-//    können zur Zeit nicht geprüft werden.
+//    kÃ¶nnen zur Zeit nicht geprÃ¼ft werden.
 if (i_ccsid <> 0);
   exsr check_ucs2;
 else;
@@ -83,17 +83,17 @@ endif;
 return;
 
 //============================================================*
-//    Prüfen UCS2 Zeichenkette auf ungültige Zeichen          *
+//    PrÃ¼fen UCS2 Zeichenkette auf ungÃ¼ltige Zeichen          *
 //============================================================*
 
 begsr check_ucs2;
 
-//      DBCS Zeichen lassen sich zur Zeit nicht prüfen.
+//      DBCS Zeichen lassen sich zur Zeit nicht prÃ¼fen.
 
 endsr;
 
 //============================================================*
-//    Prüfen SBCS Zeichenkette auf ungültige Zeichen          *
+//    PrÃ¼fen SBCS Zeichenkette auf ungÃ¼ltige Zeichen          *
 //============================================================*
 
 begsr check_sbcs;

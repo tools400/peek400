@@ -13,7 +13,7 @@
 //                                                               *
 //  Dokumentation:                                               *
 //                                                               *
-//  Aktualisieren der Feldliste mit Schlüsselinformationen       *
+//  Aktualisieren der Feldliste mit SchlÃ¼sselinformationen       *
 //                                                               *
 // ============================================================= *
 // >>PRE-COMPILER<<                                              *
@@ -155,7 +155,7 @@ begsr sqlseq;
 endsr;
 
 //====================================================*
-//  getNextFld  nächstes Feld im SQL-String           *
+//  getNextFld  nÃ¤chstes Feld im SQL-String           *
 //====================================================*
 
 begsr getnextfld;
@@ -190,7 +190,7 @@ begsr otherseq;
   if (rtncode <= 0);
   //  ... schade, Aufruf ist fehlgeschlagen
   else;
-    //  Einlesen der Schlüsselinformationen ...
+    //  Einlesen der SchlÃ¼sselinformationen ...
     peek41(i_qFile: i_rcdFmt
           : '*KEY': nbrOfKey: data);
 
@@ -205,7 +205,7 @@ begsr otherseq;
 endsr;
 
 //====================================================*
-//  AddKeyInf  Hinzufügen Schlüsselinformationen      *
+//  AddKeyInf  HinzufÃ¼gen SchlÃ¼sselinformationen      *
 //====================================================*
 
 begsr addkeyinf;

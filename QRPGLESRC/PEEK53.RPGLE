@@ -8,7 +8,7 @@
 //  Typ      : RPG                                               *
 //                                                               *
 //  erstellt : 27.04.99  Raddatz                                 *
-//  geändert : 27.04.99  2.1.0                                   *
+//  geÃ¤ndert : 27.04.99  2.1.0                                   *
 //                                                               *
 //===============================================================*
 //                                                               *
@@ -152,7 +152,7 @@ dcl-proc f_getusrsg export;
   //  definieren Funktionswert ...
   dcl-s f_getusrsg      like(set0000_t) inz;
 
-  //  Hilfsfelder für optionale Parameter ...
+  //  Hilfsfelder fÃ¼r optionale Parameter ...
   dcl-s o2_msgid        like(o_msgid) inz;
   dcl-s o3_msgdta       like(o_msgdta) inz;
 
@@ -184,7 +184,7 @@ dcl-proc f_getusrsg export;
 
   endif;
 
-  //  Füllen optionale Rückgabeparameter ...
+  //  FÃ¼llen optionale RÃ¼ckgabeparameter ...
   if (%parms() >= %parmnum(o_msgid));
     o_msgid = o2_msgid;
   endif;
@@ -196,8 +196,8 @@ dcl-proc f_getusrsg export;
   return f_getusrsg;
 
   // ---------------------------------------------------------- *
-  //    ChkUsrSetg    Prüfen der Benutzervoreinstellungen       *
-  //                  auf Aktualität                            *
+  //    ChkUsrSetg    PrÃ¼fen der Benutzervoreinstellungen       *
+  //                  auf AktualitÃ¤t                            *
   // ---------------------------------------------------------- *
 
   begsr chkusrsetg;
@@ -214,14 +214,14 @@ dcl-proc f_getusrsg export;
     y = %scan(x'8B': set0000: 1) - 1;
 
     //  Aktualisieren, wenn die neuen Daten
-    //  länger als die "Altdaten" sind ...
+    //  lÃ¤nger als die "Altdaten" sind ...
     if (y > x);
       //  ... extrahieren alte Daten
       s_data = %subst(s_data: 1: x);
-      //  ... extrahieren überhang der neuen Daten
+      //  ... extrahieren Ã¼berhang der neuen Daten
       x = x + 1;
       set0000 = %subst(set0000: x);
-      //  ... zusammenfügen alt + neu
+      //  ... zusammenfÃ¼gen alt + neu
       %subst(s_data: x) = set0000;
     endif;
 
@@ -521,7 +521,7 @@ dcl-proc f_readeusr export;
   //  definieren Funktionswert ...
   dcl-s f_readeusr      like(bool_t) inz;
 
-  //  definieren Hilfsfelder für optionale Parameter ...
+  //  definieren Hilfsfelder fÃ¼r optionale Parameter ...
   dcl-s o2_key          like(key_t) inz;
   dcl-s o3_data         like(set0000_t) inz;
 
@@ -552,7 +552,7 @@ dcl-proc f_readeusr export;
   o2_key  = s_key;
   o3_data = s_data;
 
-  //  Füllen optionale Rückgabeparameter ...
+  //  FÃ¼llen optionale RÃ¼ckgabeparameter ...
   if (%parms() >= %parmnum(o_key));
     o_key   = o2_key;
   endif;
@@ -614,7 +614,7 @@ dcl-proc f_readedft export;
   //  definieren Funktionswert ...
   dcl-s f_readedft      like(bool_t) inz;
 
-  //  definieren Hilfsfelder für optionale Parameter ...
+  //  definieren Hilfsfelder fÃ¼r optionale Parameter ...
   dcl-s o2_key          like(key_t) inz;
   dcl-s o3_data         like(set0000_t) inz;
 
@@ -646,7 +646,7 @@ dcl-proc f_readedft export;
   o2_key  = d_key;
   o3_data = d_data;
 
-  //  Füllen optionale Rückgabeparameter ...
+  //  FÃ¼llen optionale RÃ¼ckgabeparameter ...
   if (%parms() >= %parmnum(o_key));
     o_key   = o2_key;
   endif;
@@ -799,7 +799,7 @@ dcl-proc p_opnfile;
   dcl-s set0000         like(set0000_t);
   // ------------------------------------------------------------------------
 
-  //  Öffnen Datei PEEKUSR ...
+  //  Ã–ffnen Datei PEEKUSR ...
   if (file_00_ds.isOpen <> '1');
 
     g_peekusr = %trim(g_lib) + '/' + %trim(g_file);
@@ -836,7 +836,7 @@ dcl-proc p_opndft;
   end-pi;
   // ------------------------------------------------------------------------
 
-  //  Öffnen Datei DEFAULT (PEEKUSR) ...
+  //  Ã–ffnen Datei DEFAULT (PEEKUSR) ...
   if (file_01_ds.isOpen <> '1');
 
     g_default = %trim(f_getprdlb()) + '/' + 'PEEKUSR';

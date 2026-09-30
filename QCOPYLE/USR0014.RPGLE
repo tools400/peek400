@@ -1,7 +1,7 @@
 **free
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR0014
-//  Bestimmen Anzahl ausgew‰hlter Datens‰tze ...
+//  Bestimmen Anzahl ausgew√§hlter Datens√§tze ...
 dcl-ds USR0014 qualified;
       //  No replacement variables available!
 end-ds;

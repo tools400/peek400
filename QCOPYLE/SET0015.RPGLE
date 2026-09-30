@@ -1,6 +1,6 @@
 **FREE
 //---------------------------------------------------------------
-// Datenstruktur für Speichern der Arbeitsumgebung
+// Datenstruktur fÃ¼r Speichern der Arbeitsumgebung
 // SET0015   *ENVFILE
 //---------------------------------------------------------------
 //
@@ -9,7 +9,7 @@ dcl-ds set0015_t len(256) qualified template;
   set_envfil      char(10) inz('PEEKENV');
   //  ... Bibliothek
   set_envlib      char(10) inz('*PRDLIB');
-  //  Ändern Datei erlaubt: 1=Ja; 0=Nein
+  //  Ã„ndern Datei erlaubt: 1=Ja; 0=Nein
   set_envchg      char(1) inz('1');
   //  Funktion aktiv: 1=Ja; 0=Nein
   set_envena      char(1) inz('1');

@@ -1,7 +1,7 @@
 **free
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8153
-//  Ungültige Teildatei '&1' für Zieldatei.
+//  UngÃ¼ltige Teildatei '&1' fÃ¼r Zieldatei.
 dcl-ds USR8153 qualified;
   var1  char(10) inz;
 end-ds;

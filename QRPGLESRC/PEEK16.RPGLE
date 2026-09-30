@@ -46,7 +46,7 @@ dcl-f peeksrc usropn rename(peeksrc:finput);
 dcl-f peekfld usropn;
 
 //===============================================================*
-//  Datenstrukturen für die Codegenerierung
+//  Datenstrukturen fÃ¼r die Codegenerierung
 //===============================================================*
 
 dcl-ds ds_page len(112);
@@ -307,17 +307,17 @@ dow ('1');
     exsr sub025;
     p_wrtout(srcdta);
 
-  //  Konstanten für "Feld zu lang"
+  //  Konstanten fÃ¼r "Feld zu lang"
   when (cmd = 'DEF2');
     p_wrtout(srcdta);
     exsr sub016;
 
-  //  Prüfen ...
+  //  PrÃ¼fen ...
   when (cmd = 'CHKS');
     p_wrtout(srcdta);
     exsr sub015;
 
-  //  Blättern ...
+  //  BlÃ¤ttern ...
   when (cmd = 'SCRN');
     p_wrtout(srcdta);
     exsr sub003;
@@ -334,18 +334,18 @@ dow ('1');
   when (cmd = 'RLCK');
     exsr sub019;
 
-  //  Übertragen Dateifelder in Bildschirmfelder
+  //  Ãœbertragen Dateifelder in Bildschirmfelder
   when (cmd = 'TSCN');
     p_wrtout(srcdta);
     exsr sub004;
 
-  //  Übertragen Felder > 512 in Dateifelder
+  //  Ãœbertragen Felder > 512 in Dateifelder
   when (cmd = 'FSCN');
     p_wrtout(srcdta);
     exsr sub007;
     exsr sub005;
 
-  //  Prüfung ungültige Zeichen
+  //  PrÃ¼fung ungÃ¼ltige Zeichen
   when (cmd = 'CHKC');
     p_wrtout(srcdta);
     exsr sub006;
@@ -390,15 +390,15 @@ dow ('1');
   when (cmd = 'SCN1');
     exsr sub013;
 
-  //  Übertragen Dateifelder in Bildschirmfelder
+  //  Ãœbertragen Dateifelder in Bildschirmfelder
   when (cmd = 'TOS');
     exsr sub020;
 
-  //  Übertragen Bildschirmfelder in Dateifelder
+  //  Ãœbertragen Bildschirmfelder in Dateifelder
   when (cmd = 'TOF');
     exsr sub021;
 
-  //  Löschen Felder im Datensatz
+  //  LÃ¶schen Felder im Datensatz
   when (cmd = 'CLR');
     exsr sub022;
 
@@ -406,7 +406,7 @@ dow ('1');
   when (cmd = 'KEEP');
     exsr sub023;
 
-  //  UCS-2 Feld für String/Hex Editor
+  //  UCS-2 Feld fÃ¼r String/Hex Editor
   when (cmd = 'UCS2');
   //**                Exsr      SUB024
 
@@ -453,7 +453,7 @@ begsr sub002;
 endsr;
 
 //============================================================*
-//    SUB003        Blättern                                  *
+//    SUB003        BlÃ¤ttern                                  *
 //============================================================*
 
 begsr sub003;
@@ -542,10 +542,10 @@ begsr sub005;
 
   dow f_readfld <> bEOF;
 
-    //  Feldzähler ...
+    //  FeldzÃ¤hler ...
     fieldcount = fieldcount + 1;
 
-    //  Keine Felder größer als 512-Zeichen oder
+    //  Keine Felder grÃ¶ÃŸer als 512-Zeichen oder
     //  nicht erlaubte Feldtypen ...
     if (f_isnotalw(fldl0100) = bTrue);
 
@@ -573,7 +573,7 @@ begsr sub005;
     $if_fct2='not (LNG' + a#fdcount + ' = ''1'')';
     p_wrtout(ds_if);
 
-    //  Übertragen BS-Feld in Dateifeld ...
+    //  Ãœbertragen BS-Feld in Dateifeld ...
     if (fldl0100.f1nalw = '1');
       reset ds_if;
       $if_if   = '';
@@ -600,7 +600,7 @@ begsr sub005;
 endsr;
 
 //============================================================*
-//    SUB006        Prüfung ungültige Zeichen kopieren        *
+//    SUB006        PrÃ¼fung ungÃ¼ltige Zeichen kopieren        *
 //============================================================*
 
 begsr sub006;
@@ -623,7 +623,7 @@ begsr sub006;
 endsr;
 
 //============================================================*
-//    SUB007        Alle Felder prüfen                        *
+//    SUB007        Alle Felder prÃ¼fen                        *
 //============================================================*
 
 begsr sub007;
@@ -636,7 +636,7 @@ begsr sub007;
 
   endfor;
 
-  //   Remark einfügen ...
+  //   Remark einfÃ¼gen ...
   reset ds_remark;
   p_wrtout(ds_remark);
 
@@ -737,10 +737,10 @@ begsr sub011;
 
   dow f_readfld <> bEOF;
 
-    //  Feldzähler ...
+    //  FeldzÃ¤hler ...
     fieldcount = fieldcount + 1;
 
-    //  Keine Felder größer als 512-Zeichen
+    //  Keine Felder grÃ¶ÃŸer als 512-Zeichen
     if (f_istolong(fldl0100) = bTrue) or
        (f_isnotalw(fldl0100) = bTrue);
       iter;
@@ -879,7 +879,7 @@ begsr sub014;
 endsr;
 
 //============================================================*
-//    SUB015        Prüfen Feldinhalte                        *
+//    SUB015        PrÃ¼fen Feldinhalte                        *
 //============================================================*
 
 begsr sub015;
@@ -988,7 +988,7 @@ begsr sub019;
 endsr;
 
 //============================================================*
-//    SUB020        Übertragen Dateifelder in Bildschirmfelder*
+//    SUB020        Ãœbertragen Dateifelder in Bildschirmfelder*
 //============================================================*
 
 begsr sub020;
@@ -1026,7 +1026,7 @@ begsr sub020;
 
     pos = 1;
 
-    //  Löschen Felder, wenn NULL-fähig oder VARLEN
+    //  LÃ¶schen Felder, wenn NULL-fÃ¤hig oder VARLEN
     if fldl0100.f1nalw = '1' or
        f_isvarlen(fldl0100) = bTrue;
 
@@ -1109,7 +1109,7 @@ begsr sub020;
 
     endif;
 
-    //  Übertragen Dateifeld --> Bildschirmfeld
+    //  Ãœbertragen Dateifeld --> Bildschirmfeld
     for curfield = 1 to totfields;
 
       //  Generieren:    When (x = 1)
@@ -1150,7 +1150,7 @@ begsr sub020;
       $eval_fct2 = 'offs = offs + len';
       p_wrtout(ds_eval);
 
-      //  ENDFOR von:  For-Schleife über Feldsegmente
+      //  ENDFOR von:  For-Schleife Ã¼ber Feldsegmente
       reset ds_endfor;
       p_wrtout(ds_endfor);
     endif;
@@ -1177,7 +1177,7 @@ begsr sub020;
 endsr;
 
 //============================================================*
-//    SUB021        Übertragen Bildschirmfelder in Dateifelder*
+//    SUB021        Ãœbertragen Bildschirmfelder in Dateifelder*
 //============================================================*
 
 begsr sub021;
@@ -1250,7 +1250,7 @@ begsr sub021;
 endsr;
 
 //============================================================*
-//    SUB022        Löschen Felder im Datensatz               *
+//    SUB022        LÃ¶schen Felder im Datensatz               *
 //============================================================*
 
 begsr sub022;
@@ -1313,7 +1313,7 @@ begsr sub023;
 endsr;
 
 //============================================================*
-//    SUB024        UCS2-Feld für String/Hex Editor           *
+//    SUB024        UCS2-Feld fÃ¼r String/Hex Editor           *
 //============================================================*
 
 begsr sub024;
@@ -1357,7 +1357,7 @@ dcl-proc p_wrtout;
 end-proc;
 
 //============================================================*
-//    readFld       Lesen nächstes Feld aus PEEKFLD           *
+//    readFld       Lesen nÃ¤chstes Feld aus PEEKFLD           *
 // Returns bTrue on end-of-file, else bFalse.                 *
 //============================================================*
 dcl-proc f_readfld;

@@ -1,7 +1,7 @@
 **free
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8177
-//  Startposition darf nicht grˆﬂer als Feldl‰nge sein.
+//  Startposition darf nicht gr√∂√üer als Feldl√§nge sein.
 dcl-ds USR8177 qualified;
   var1  char(1) inz;
 end-ds;

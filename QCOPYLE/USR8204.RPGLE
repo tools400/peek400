@@ -1,7 +1,7 @@
 **free
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8204
-//  Keine gültige Satzauswahl getroffen.
+//  Keine gÃ¼ltige Satzauswahl getroffen.
 dcl-ds USR8204 qualified;
       //  No replacement variables available!
 end-ds;

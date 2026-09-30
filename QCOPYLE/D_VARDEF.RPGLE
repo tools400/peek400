@@ -106,13 +106,13 @@ dcl-ds errcode_t qualified template;
   excdta          char(256);
 end-ds;
 
-//  Feldinhalt für Text-/Hex-Editor
+//  Feldinhalt fÃ¼r Text-/Hex-Editor
 dcl-ds fldinhalt_t qualified template;
   sbcs            like(rcdbuf_t);
   ucs2            like(rcdbufucs2_t) overlay(sbcs);
 end-ds;
 
-//  Verwaltung gepinnter Datensätze
+//  Verwaltung gepinnter DatensÃ¤tze
 dcl-ds pintabr_t qualified template;
   rcdnbr              int(10);
   file                char(10);
@@ -122,19 +122,19 @@ dcl-ds pintabr_t qualified template;
   mbrnbr              int(10);
 end-ds;
 
-//  Integer & Binärwerte:
+//  Integer & BinÃ¤rwerte:
 dcl-s int1_t          int(3) template;
 dcl-s int2_t          int(5) template;
 dcl-s int4_t          int(10) template;
 dcl-s uint4_t         uns(10) template;
 
 //  Lower/Upper case:
-dcl-c C_LOWER          'abcdefghijklmnopqrstuvwxyzäöüß';
-dcl-c C_UPPER          'ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜß';
+dcl-c C_LOWER          'abcdefghijklmnopqrstuvwxyzÃ¤Ã¶Ã¼ÃŸ';
+dcl-c C_UPPER          'ABCDEFGHIJKLMNOPQRSTUVWXYZÃ„Ã–ÃœÃŸ';
 
 dcl-c NUMERIC_DIGITS  '1234567890';
 
-//  Grenzen für relative Satznummer
+//  Grenzen fÃ¼r relative Satznummer
 dcl-c LOW_RCD_NBR     1;
 dcl-c HIGH_RCD_NBR    2147483647;
 
@@ -175,7 +175,7 @@ dcl-c MSG_T_STATUS    '*STATUS';
 dcl-c MODE_BATCH      '*BATCH';
 dcl-c MODE_INTER      '*INTER';
 
-dcl-c USRSPC_NAME        '§PEEK§';
+dcl-c USRSPC_NAME        'Â§PEEKÂ§';
 dcl-c USRSPC_LIBRARY     'QTEMP';
 
 dcl-c WORK_FILE_NAME     'PEEKWRK';

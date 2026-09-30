@@ -1,7 +1,7 @@
 **free
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8132
-//  Maximale Anzahl Datens‰tze durchsucht. 'SUCHEN'=Weitersuche
+//  Maximale Anzahl Datens√§tze durchsucht. 'SUCHEN'=Weitersuche
 dcl-ds USR8132 qualified;
       //  No replacement variables available!
 end-ds;

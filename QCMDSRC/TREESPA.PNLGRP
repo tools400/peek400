@@ -1,12 +1,15 @@
 .*=====================================================================*
+.* Hinweis: Dieses CL muss in einem Job mit der Sprache der            *.
+.*          Zielnachrichtendatei kompiliert und ausgefÃ¼hrt werden.     *.
+.*=====================================================================*
 .*                                                                     *
 .*  Kurzdokumentation :                                                *
 .*                                                                     *
 .*  Bereich . . . : PEEK                                               *
 .*  Objekt  . . . : TREESPA                                            *
-.*  Beschreibung  : Peek/400 - Display Database Relations, Französisch *
+.*  Beschreibung  : Peek/400 - Display Database Relations, Spanisch    *
 .*  Author  . . . : Thomas Raddatz   <thomas.raddatz@tools400.de>      *
-.*                  Antón Vigo                                         *
+.*                  AntÃ³n Vigo                                         *
 .*  Datum . . . . : 15.04.2011                                         *
 .*                                                                     *
 .*=====================================================================*
@@ -22,29 +25,25 @@
 .*=====================================================================*
 .*  History:                                                           *
 .*                                                                     *
-.*  Datum       Name          Änderung                                 *
+.*  Datum       Name          Ã„nderung                                 *
 .*  ----------  ------------  ---------------------------------------  *
 .*                                                                     *
 .*=====================================================================*
 .* >>PRE-COMPILER<<                                                    *
-.*                                                                     *
 .*   >>CRTCMD<< CRTPNLGRP    PNLGRP(&LI/&OB) +                         *
 .*                           SRCFILE(&SL/&SF) +                        *
 .*                           SRCMBR(&SM);                              *
-.*                                                                     *
-.*   >>COMPILE<<                                                       *
-.*   >>END-COMPILE<<                                                   *
-.*                                                                     *
+.*   >>CMD<<     CHGJOB  LANGID(ESP) CNTRYID(ES) CCSID(1145);          *
 .*   >>EXECUTE<<                                                       *
-.*                                                                     *
+.*   >>CMD<<     CHGJOB  LANGID(DEU) CNTRYID(DE) CCSID(273);           *
 .* >>END-PRE-COMPILER<<                                                *
 .*=====================================================================*
 :PNLGRP.
 .*--------------------------------------------------------------------
-.* Hilfetext für den Befehl
+.* Hilfetext fÃ¼r den Befehl
 .*--------------------------------------------------------------------
 :HELP NAME='TREE'.
-Ver relación de base de datos (TREE) - Ayuda
+Ver relaciÃ³n de base de datos (TREE) - Ayuda
 :P.
 El comando TREE se utiliza para mostrar relaciones de base de datos
 de un determinado archivo y arrancar Peek/400 para la entrada
@@ -53,7 +52,7 @@ seleccionada.
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort FILE
+.* Hilfetext fÃ¼r SchlÃ¼sselwort FILE
 .*--------------------------------------------------------------------
 :HELP name='TREE/FILE'.
 Fichero - Ayuda
@@ -68,33 +67,33 @@ de datos que contiene los registros que se muestran.
 .*
 :PARML.
 :PT.:PV.Nombre:EPV.
-:PD.Nombre del archivo físico o lógico que contiene los registros.
+:PD.Nombre del archivo fÃ­sico o lÃ³gico que contiene los registros.
 :EPARML.
 :P.
 :HP2.Calificador 2: Biblioteca:EHP2.
 :P.
 :PARML.
 :PT.:PK DEF.*LIBL:EPK.
-:PD.Se buscará en todas las bibliotecas del trabajo actual
+:PD.Se buscarÃ¡ en todas las bibliotecas del trabajo actual
 hasta que se encuentre el archivo.
 :PT.:PV.*CURLIB:EPV.
 :PD.La biblioteca actual del trabajo se utiliza para localizar el
 archivo. Si ninguna se especifica como biblioteca la biblioteca
 actual para el trabajo, se utiliza la biblioteca QGPL.
 :PT.:PV.Nombre:EPV.
-:PD.Nombre de la biblioteca en la que se buscará.
+:PD.Nombre de la biblioteca en la que se buscarÃ¡.
 :EPARML.
 .*
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort ACCESS
+.* Hilfetext fÃ¼r SchlÃ¼sselwort ACCESS
 .*--------------------------------------------------------------------
 :HELP name='TREE/ACCESS'.
 Tipo de acceso de registro - Ayuda
 :XH3.Tipo de acceso de registro (ACCESS)
 :P.
-Especifica la secuencia de clasificación y la forma de
+Especifica la secuencia de clasificaciÃ³n y la forma de
 seleccionar los registros que se muestran.
 .*
 :IMHELP name='COM/OPTPARM'.
@@ -103,21 +102,21 @@ seleccionar los registros que se muestran.
 :PT.:PK DEF.*KEY:EPK.
 :PD.Todos los registros del archivo especificado se muestran
 en secuencia de clave. Si el archivo no tiene clave los
-registros se muestran por número de registro.
+registros se muestran por nÃºmero de registro.
 :PT.:PV.*RRN:EPV.
-:PD.Todos los registros del archivo se muestran por número de
+:PD.Todos los registros del archivo se muestran por nÃºmero de
 registro.
 :PT.:PV.*SQL:EPV.
 :PD.Todos los registros coincidentes con los criterios especificados
-en el el parámetro :HP2.SQL WHERE (WHERE):EHP2. se seleccionan y
-se muestran de acuerdo a la secuencia de ordenación dada en el el
-parámetro :HP2.SQL ORDER BY (ORDERBY):EHP2..
+en el parÃ¡metro :HP2.SQL WHERE (WHERE):EHP2. se seleccionan y
+se muestran de acuerdo a la secuencia de ordenaciÃ³n dada en el
+parÃ¡metro :HP2.SQL ORDER BY (ORDERBY):EHP2..
 :EPARML.
 .*
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort LANGUAGE
+.* Hilfetext fÃ¼r SchlÃ¼sselwort LANGUAGE
 .*--------------------------------------------------------------------
 :HELP name='TREE/LANGUAGE'.
 Idioma - Ayuda
@@ -125,18 +124,18 @@ Idioma - Ayuda
 :P.
 Especifica el idioma de la interfaz de usuario de Peek/400
 y de los mensajes. El nombre del archivo de mensajes consiste en
-'PEEK ' más un identificador de idioma de 3 dígitos, como GER
-(alemán), ENG (Inglés), ITA (Italiano) o SPA (español).
+'PEEK ' mÃ¡s un identificador de idioma de 3 dÃ­gitos, como GER
+(alemÃ¡n), ENG (InglÃ©s), ITA (Italiano) o SPA (espaÃ±ol).
 .*
 :IMHELP name='COM/OPTPARM'.
 .*
 :PARML.
 :PT.:PK DEF.*DFT:EPK.
-:PD.Se utiliza el idioma de la configuración del usuario.
+:PD.Se utiliza el idioma de la configuraciÃ³n del usuario.
 Si Peek/400 se arranca por primera vez, se recupera el
 idioma de la clave *LANGUAGE en el archivo PEEKUSR.
 :PT.:PV.Idioma:EPV.
-:PD.Especifica el identificador de idioma de 3 dígitos que se usa
+:PD.Especifica el identificador de idioma de 3 dÃ­gitos que se usa
 para identificar el archivo de mensaje que contiene las constantes
 del idioma.
 :EPARML.
@@ -144,7 +143,7 @@ del idioma.
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort ALWCHGLIB
+.* Hilfetext fÃ¼r SchlÃ¼sselwort ALWCHGLIB
 .*--------------------------------------------------------------------
 :HELP name='TREE/ALWCHGLIB'.
 Permitir cambio de biblioteca - Ayuda
@@ -168,7 +167,7 @@ principal de Peek/400.
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort ALWCHGFILE
+.* Hilfetext fÃ¼r SchlÃ¼sselwort ALWCHGFILE
 .*--------------------------------------------------------------------
 :HELP name='TREE/ALWCHGFILE'.
 Permitir cambio de archivo- Ayuda
@@ -192,7 +191,7 @@ principal de Peek/400.
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort ALWCHGMBR
+.* Hilfetext fÃ¼r SchlÃ¼sselwort ALWCHGMBR
 .*--------------------------------------------------------------------
 :HELP name='TREE/ALWCHGMBR'.
 Permitir cambio de miembro - Ayuda
@@ -216,13 +215,13 @@ principal de Peek/400.
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort ALWCHGRCD
+.* Hilfetext fÃ¼r SchlÃ¼sselwort ALWCHGRCD
 .*--------------------------------------------------------------------
 :HELP name='TREE/ALWCHGRCD'.
 Permitir cambiar registros - Ayuda
 :XH3.Permitir cambiar registros (ALWCHGRCD)
 :P.
-Especifica si se permite o no añadir, modificar,
+Especifica si se permite o no aÃ±adir, modificar,
 eliminar o copiar registros.
 .*
 :IMHELP name='COM/OPTPARM'.
@@ -233,21 +232,21 @@ eliminar o copiar registros.
 :PT.:PV.*YES:EPV.
 :PD.Los registros pueden cambiarse en cualquier momento.
 :PT.:PV.*NOKEY:EPV.
-:PD.Los campos de clave están bloqueados y no pueden modificarse.
+:PD.Los campos de clave estÃ¡n bloqueados y no pueden modificarse.
 :PT.:PV.*NO:EPV.
-:PD.No se puede añadir, modificar, eliminar o copiar registros.
+:PD.No se puede aÃ±adir, modificar, eliminar o copiar registros.
 :EPARML.
 .*
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort ALWCHGSQLW
+.* Hilfetext fÃ¼r SchlÃ¼sselwort ALWCHGSQLW
 .*--------------------------------------------------------------------
 :HELP name='TREE/ALWCHGSQLW'.
 Permitir cambiar SQL WHERE - Ayuda
 :XH3.Permitir cambiar SQL WHERE (ALWCHGSQLW)
 :P.
-Especifica si se permite o no cambiar la cláusula SQL WHERE
+Especifica si se permite o no cambiar la clÃ¡usula SQL WHERE
 usada para seleccionar los registros que se muestren.
 .*
 :IMHELP name='COM/OPTPARM'.
@@ -256,22 +255,22 @@ usada para seleccionar los registros que se muestren.
 :PT.:PK DEF.*DFT:EPK.
 :PD.El valor real es proporcionado por el programa de salida EXIT01.
 :PT.:PV.*YES:EPV.
-:PD.La cláusula SQL WHERE se puede cambiar en cualquier momento.
+:PD.La clÃ¡usula SQL WHERE se puede cambiar en cualquier momento.
 :PT.:PV.*NO:EPV.
-:PD.La cláusula SQL WHERE está bloqueada y no se se puede cambiar.
+:PD.La clÃ¡usula SQL WHERE estÃ¡ bloqueada y no se puede cambiar.
 :EPARML.
 .*
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort ALWCHGSQLO
+.* Hilfetext fÃ¼r SchlÃ¼sselwort ALWCHGSQLO
 .*--------------------------------------------------------------------
 :HELP name='TREE/ALWCHGSQLO'.
 Permitir cambiar SQL ORDER BY - Ayuda
 :XH3.Permitir cambiar SQL ORDER BY (ALWCHGSQLO)
 :P.
-Especifica si se permite o no cambiar la cláusula SQL
-ORDER BY que define la secuencia de clasificación de los
+Especifica si se permite o no cambiar la clÃ¡usula SQL
+ORDER BY que define la secuencia de clasificaciÃ³n de los
 registros.
 .*
 :IMHELP name='COM/OPTPARM'.
@@ -280,75 +279,78 @@ registros.
 :PT.:PK DEF.*DFT:EPK.
 :PD.El valor real es proporcionado por el programa de salida EXIT01.
 :PT.:PV.*YES:EPV.
-:PD.La cláusula SQL ORDER BY se puede cambiar en cualquier momento.
+:PD.La clÃ¡usula SQL ORDER BY se puede cambiar en cualquier momento.
 :PT.:PV.*NO:EPV.
-:PD.La cláusula SQL ORDER BY está bloqueada y no se se puede cambiar.
+:PD.La clÃ¡usula SQL ORDER BY estÃ¡ bloqueada y no se puede cambiar.
 :EPARML.
 .*
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort SETTINGS
+.* Hilfetext fÃ¼r SchlÃ¼sselwort SETTINGS
 .*--------------------------------------------------------------------
 :HELP name='TREE/SETTINGS'.
-User settings - Help
-:XH3.User settings (SETTINGS)
+ConfiguraciÃ³n de usuario - Ayuda
+:XH3.ConfiguraciÃ³n de usuario (SETTINGS)
 :P.
-Specifies which user settings are used. By default the user settings
-are stored in the Peek/400 product library. The name of the settings
-file is equal to the name of the user profile that is signed on to
-the system.
+Especifica quÃ© configuraciÃ³n de usuario se utiliza. Por omisiÃ³n la
+configuraciÃ³n de usuario se guarda en la biblioteca del producto
+Peek/400. El nombre del archivo de configuraciÃ³n coincide con el
+nombre del perfil de usuario conectado al sistema.
 .*
 :IMHELP name='COM/OPTPARM'.
 :P.
-:HP2.Element 1: File:EHP2.
+:HP2.Elemento 1: Archivo:EHP2.
 :P.
-:HP2.Qualifier 1: File:EHP2.
+:HP2.Calificador 1: Archivo:EHP2.
 .*
 :PARML.
 :PT.:PK DEF.*DFT:EPK.
-:PD.The name of the current user profile is used to identify
-the user settings file.
-:PT.:PV.Name:EPV.
-:PD.Name of the file that contains the user settings.
+:PD.Se utiliza el nombre del perfil de usuario actual para
+identificar el archivo de configuraciÃ³n de usuario.
+:PT.:PV.Nombre:EPV.
+:PD.Nombre del archivo que contiene la configuraciÃ³n de usuario.
 :EPARML.
 :P.
-:HP2.Qualifier 2: Library:EHP2.
+:HP2.Calificador 2: Biblioteca:EHP2.
 :P.
 :PARML.
 :PT.:PK DEF.*PRDLIB:EPK.
-:PD.Specifies that the user settings file is stored in the
-Peek/400 product library.
+:PD.Indica que el archivo de configuraciÃ³n de usuario se guarda en
+la biblioteca del producto Peek/400.
 :PT.:PV.*LIBL:EPV.
-:PD.All libraries of the current job are searched until the
-file is found.
+:PD.Se buscarÃ¡ en todas las bibliotecas del trabajo actual hasta
+que se encuentre el archivo.
 :PT.:PV.*CURLIB:EPV.
-:PD.The current library of the job is used to locate the user
-settings file. If no library is specified as the current library
-for the job, the QGPL library is used.
-:PT.:PV.Name:EPV.
-:PD.Name of the library that contains the user settings file.
+:PD.Se utiliza la biblioteca actual del trabajo para localizar el
+archivo de configuraciÃ³n de usuario. Si el trabajo no tiene
+biblioteca actual, se utiliza la biblioteca QGPL.
+:PT.:PV.Nombre:EPV.
+:PD.Nombre de la biblioteca que contiene el archivo de
+configuraciÃ³n de usuario.
 :EPARML.
 :P.
-:HP2.Element 2: User profile:EHP2.
+:HP2.Elemento 2: Perfil de usuario:EHP2.
 :P.
 :PARML.
 :PT.:PK DEF.*DFT:EPK.
-:PD.The name of the current user is used to load the user settings.
-:PT.:PV.Name:EPV.
-:PD.Name of the user profile used to load the user settings.
+:PD.Se utiliza el nombre del usuario actual para cargar la
+configuraciÃ³n de usuario.
+:PT.:PV.Nombre:EPV.
+:PD.Nombre del perfil de usuario utilizado para cargar la
+configuraciÃ³n de usuario.
 :EPARML.
 .*
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort WHERE
+.* Hilfetext fÃ¼r SchlÃ¼sselwort WHERE
 .*--------------------------------------------------------------------
 :HELP name='TREE/WHERE'.
 SQL WHERE - Ayuda
 :XH3.SQL WHERE (WHERE)
 :P.
-Especifica una cláusula SQL WHERE para seleccionar los registros
+Especifica una clÃ¡usula SQL WHERE para seleccionar los registros
 que se muestran.
 .*
 :IMHELP name='COM/OPTPARM'.
@@ -356,35 +358,35 @@ que se muestran.
 :PARML.
 :PT.:PK DEF.*NONE:EPK.
 :PD.Se muestran todos los registros.
-:PT.:PV.Criterios de selección:EPV.
-:PD.Sólo se muestran los registros coincidentes de la cláusula
+:PT.:PV.Criterios de selecciÃ³n:EPV.
+:PD.SÃ³lo se muestran los registros coincidentes de la clÃ¡usula
 SQL WHERE.
 :EPARML.
 .*
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort ORDERBY
+.* Hilfetext fÃ¼r SchlÃ¼sselwort ORDERBY
 .*--------------------------------------------------------------------
 :HELP name='TREE/ORDERBY'.
 SQL ORDER BY - Ayuda
 :XH3.SQL ORDER BY (ORDERBY)
 :P.
-Especifica una cláusula SQL ORDER BY para establecer la secuencia
-de clasificación de los registros que se muestran.
+Especifica una clÃ¡usula SQL ORDER BY para establecer la secuencia
+de clasificaciÃ³n de los registros que se muestran.
 .*
 :IMHELP name='COM/OPTPARM'.
 .*
 :PARML.
 :PT.:PK DEF.*NONE:EPK.
-:PD.Los registros seleccionados se muestran por número de registro.
+:PD.Los registros seleccionados se muestran por nÃºmero de registro.
 :PT.:PK DEF.*KEY:EPK.
 :PD.Los registros seleccionados se muestran en secuencia de clave.
-Si el archivo no tiene clave los registros se muestran por número
+Si el archivo no tiene clave los registros se muestran por nÃºmero
 de registro.
-:PT.:PV.Secuencia de clasificación:EPV.
+:PT.:PV.Secuencia de clasificaciÃ³n:EPV.
 :PD.Los registros seleccionados se muestran con la secuencia de
-clasificación especificada.
+clasificaciÃ³n especificada.
 :EPARML.
 .*
 :EHELP.
@@ -399,7 +401,7 @@ clasificación especificada.
 .*=====================================
 :HELP NAME='COM/REQPARM'.
 :P.
-Este es un parámetro requerido.
+Este es un parÃ¡metro requerido.
 :P.
 :IMHELP name='COM/VALUES'.
 :EHELP.
@@ -409,7 +411,7 @@ Este es un parámetro requerido.
 .*=====================================
 :HELP NAME='COM/OPTPARM'.
 :P.
-Este es un parámetro opcional.
+Este es un parÃ¡metro opcional.
 :P.
 :IMHELP name='COM/VALUES'.
 :EHELP.

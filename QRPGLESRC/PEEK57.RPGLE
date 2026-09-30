@@ -13,7 +13,7 @@
 //                                                               *
 //  Kurzdokumentation :                                          *
 //                                                               *
-//  Peek/400 - Löschen   "Arbeitsumgebung"                       *
+//  Peek/400 - LÃ¶schen   "Arbeitsumgebung"                       *
 //                                                               *
 //===============================================================*
 // >>PRE-COMPILER<<                                              *
@@ -146,10 +146,10 @@ dow ('1');
   exfmt bild01;
   *in70 = '0';
 
-  //  Nachrichten löschen
+  //  Nachrichten lÃ¶schen
   p_rmvpgmmg(sds.pgmname);
 
-  //  Mappen der gedrückten Taste
+  //  Mappen der gedrÃ¼ckten Taste
   //  in Programmbefehl
   peek21(workstn.aid: sds.pgmname
         : ypgmcmd: ycmddta: ymsgid: ymsgdta);
@@ -171,7 +171,7 @@ dow ('1');
     exsr c_refresh;
     iter;
 
-  //  F9  - Löschen Arbeitsumgebung
+  //  F9  - LÃ¶schen Arbeitsumgebung
   when (ypgmcmd = '*DELETEENV');
     exsr c_delenv;
     if (ispgmerror = bTrue);
@@ -190,7 +190,7 @@ dow ('1');
     exsr c_morekeys;
 
   other;
-    //  Falsche Taste gedrückt
+    //  Falsche Taste gedrÃ¼ckt
     p_wrongkey(workstn.aid: sds.pgmname);
     iter;
   endsl;
@@ -265,7 +265,7 @@ begsr c_delenv;
 endsr;
 
 //============================================================*
-//    FILL##        Füllen Bildschirm                         *
+//    FILL##        FÃ¼llen Bildschirm                         *
 //============================================================*
 
 begsr fill##;
@@ -278,7 +278,7 @@ begsr fill##;
 endsr;
 
 //============================================================*
-//    SetScreen     Einstellen 132/80-Zeichen Auflösung       *
+//    SetScreen     Einstellen 132/80-Zeichen AuflÃ¶sung       *
 //============================================================*
 
 begsr setscreen;
@@ -303,23 +303,23 @@ endsr;
 
 begsr first;
 
-  // - Öffnen der Dateien
+  // - Ã–ffnen der Dateien
   open peek57fm;
 
   // - Programm initialisieren
   p_rmvpgmmg(sds.pgmname);
 
-  // - Rückkehrcode
+  // - RÃ¼ckkehrcode
   o_msgid = *blanks;
   o_msgdta = *blanks;
 
   // - Darstellung der Befehlstasten
   sfbot = 1;
 
-  // - Einstellen der Bildschirmauflösung 80/132-Zeichen
+  // - Einstellen der BildschirmauflÃ¶sung 80/132-Zeichen
   exsr setscreen;
 
-  // - Bildschirm füllen
+  // - Bildschirm fÃ¼llen
   exsr c_refresh;
 
 endsr;

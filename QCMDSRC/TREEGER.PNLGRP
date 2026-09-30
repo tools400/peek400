@@ -1,9 +1,12 @@
 .*=====================================================================*
+.* Hinweis: Dieses CL muss in einem Job mit der Sprache der            *.
+.*          Zielnachrichtendatei kompiliert und ausgef√ºhrt werden.     *.
+.*=====================================================================*
 .*                                                                     *
 .*  Kurzdokumentation :                                                *
 .*                                                                     *
 .*  Bereich . . . : PEEK                                               *
-.*  Objekt  . . . : PEEKGER                                            *
+.*  Objekt  . . . : TREEGER                                            *
 .*  Beschreibung  : Peek/400 - Display Database Relations, Deutsch     *
 .*  Author  . . . : Thomas Raddatz   <thomas.raddatz@tools400.de>      *
 .*  Datum . . . . : 15.04.2011                                         *
@@ -21,45 +24,41 @@
 .*=====================================================================*
 .*  History:                                                           *
 .*                                                                     *
-.*  Datum       Name          ƒnderung                                 *
+.*  Datum       Name          √Ñnderung                                 *
 .*  ----------  ------------  ---------------------------------------  *
 .*                                                                     *
 .*=====================================================================*
 .* >>PRE-COMPILER<<                                                    *
-.*                                                                     *
 .*   >>CRTCMD<< CRTPNLGRP    PNLGRP(&LI/&OB) +                         *
 .*                           SRCFILE(&SL/&SF) +                        *
 .*                           SRCMBR(&SM);                              *
-.*                                                                     *
-.*   >>COMPILE<<                                                       *
-.*   >>END-COMPILE<<                                                   *
-.*                                                                     *
+.*   >>CMD<<     CHGJOB  LANGID(DEU) CNTRYID(DE) CCSID(273);           *
 .*   >>EXECUTE<<                                                       *
-.*                                                                     *
+.*   >>CMD<<     CHGJOB  LANGID(DEU) CNTRYID(DE) CCSID(273);           *
 .* >>END-PRE-COMPILER<<                                                *
 .*=====================================================================*
 :PNLGRP.
 .*--------------------------------------------------------------------
-.* Hilfetext f¸r den Befehl
+.* Hilfetext f√ºr den Befehl
 .*--------------------------------------------------------------------
 :HELP NAME='TREE'.
 Anzeigen Datenbankrelationen (TREE) - Hilfe
 :P.
 Der Befehl TREE dient zur Anzeige der Datenbankrelationen einer
-angegebenen Datenbankdatei. Anschlieﬂend wird f¸r die ausgew‰hlte
+angegebenen Datenbankdatei. Anschlie√üend wird f√ºr die ausgew√§hlte
 Datei der Datenbankbrowser Peek/400 gestartet.
 .*
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext f¸r Schl¸sselwort FILE
+.* Hilfetext f√ºr Schl√ºsselwort FILE
 .*--------------------------------------------------------------------
 :HELP name='TREE/FILE'.
 Datei - Hilfe
 :XH3.Datei (FILE)
 :P.
 Gibt den Namen der Datenbankdatei an, die die anzuzeigenden
-Datens‰tze enth‰lt.
+Datens√§tze enth√§lt.
 .*
 :IMHELP name='COM/REQPARM'.
 :P.
@@ -67,8 +66,8 @@ Datens‰tze enth‰lt.
 .*
 :PARML.
 :PT.:PV.Name:EPV.
-:PD.Name der Datenbankdatei, die die anzuzeigenden S‰tze
-enth‰lt.
+:PD.Name der Datenbankdatei, die die anzuzeigenden S√§tze
+enth√§lt.
 :EPARML.
 :P.
 :HP2.Qualifikationsmerkmal 2: Bibliothek:EHP2.
@@ -81,53 +80,53 @@ der Bibliotheksliste des Jobs nach der Datei durchsucht werden.
 :PD.Gibt an, dass die aktuelle Jobbibliothek nach der Datei
 durchsucht wird. Ist keine aktuelle Jobbibliothek zugeordnet,
 wird die Bibliothek QGPL benutzt.
-anzuzeigenden S‰tzen enth‰lt.
+anzuzeigenden S√§tzen enth√§lt.
 :PT.:PV.Name:EPV.
 :PD.Name der Bibliothek, die die Datei mit den
-anzuzeigenden S‰tzen enth‰lt.
+anzuzeigenden S√§tzen enth√§lt.
 :EPARML.
 .*
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext f¸r Schl¸sselwort ACCESS
+.* Hilfetext f√ºr Schl√ºsselwort ACCESS
 .*--------------------------------------------------------------------
 :HELP name='TREE/ACCESS'.
 Zugriffsart - Hilfe
 :XH3.Zugriffsart (ACCESS)
 :P.
-Gibt an, auf welche Art und Weise die anzuzeigenden S‰tze
-ausgew‰hlt und in welcher Sortierfolge die S‰tze angezeigt
+Gibt an, auf welche Art und Weise die anzuzeigenden S√§tze
+ausgew√§hlt und in welcher Sortierfolge die S√§tze angezeigt
 werden.
 .*
 :IMHELP name='COM/OPTPARM'.
 .*
 :PARML.
 :PT.:PK DEF.*KEY:EPK.
-:PD.Alle enthaltenden S‰tze werden in Schl¸sselfolge
-angezeigt. Wenn die Datei nicht ¸ber einen Schl¸ssel
-verf¸gt, werden die S‰tze in Satzfolge angezeigt.
+:PD.Alle enthaltenden S√§tze werden in Schl√ºsselfolge
+angezeigt. Wenn die Datei nicht √ºber einen Schl√ºssel
+verf√ºgt, werden die S√§tze in Satzfolge angezeigt.
 :PT.:PV.*RRN:EPV.
-:PD.Alle enthaltenen S‰tze werden in Satzfolge angezeigt.
+:PD.Alle enthaltenen S√§tze werden in Satzfolge angezeigt.
 :PT.:PV.*SQL:EPV.
-:PD.Alle ¸ber den Parameter :HP2.SQL WHERE (WHERE):EHP2.
-ausgew‰hlten S‰tze werden in der unter :HP2.SQL ORDER BY
+:PD.Alle √ºber den Parameter :HP2.SQL WHERE (WHERE):EHP2.
+ausgew√§hlten S√§tze werden in der unter :HP2.SQL ORDER BY
 (ORDERBY):EHP2. angegebenen Sortierfolge angezeigt.
 :EPARML.
 .*
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext f¸r Schl¸sselwort LANGUAGE
+.* Hilfetext f√ºr Schl√ºsselwort LANGUAGE
 .*--------------------------------------------------------------------
 :HELP name='TREE/LANGUAGE'.
 Sprache - Hilfe
 :XH3.Sprache (LANGUAGE)
 :P.
 Gibt an, in welcher Sprache Peek/400 gestartet wird. Die zur
-Verf¸gung stehenden Sprachen definieren sich ¸ber die vorhandenen
+Verf√ºgung stehenden Sprachen definieren sich √ºber die vorhandenen
 PEEK* Nachrichtendateien. Der Name der Nachrichtendatei setzt sich
-zusammen aus 'PEEK' plus einem 3 stelligen Sprachenk¸rzel, wie
+zusammen aus 'PEEK' plus einem 3 stelligen Sprachenk√ºrzel, wie
 zum Beispiel GER (German), ENG (English), ITA (Italian) oder
 SPA (Spanish).
 .*
@@ -137,179 +136,179 @@ SPA (Spanish).
 :PT.:PK DEF.*DFT:EPK.
 :PD.Peek/400 wird in der in den Benutzereinstellungen
 hinterlegten Sprache gestartet. Bei einem neuen Benutzer
-ist dies die unter dem Schl¸ssel *LANGUAGE in der Datei
+ist dies die unter dem Schl√ºssel *LANGUAGE in der Datei
 PEEKUSR hinterlegte Sprache.
 :PT.:PV.Sprache:EPV.
-:PD.Gibt das 3-stellige Sprachenk¸rzel der gew¸nschten Sprache
+:PD.Gibt das 3-stellige Sprachenk√ºrzel der gew√ºnschten Sprache
 an. Der Name der entsprechenden Nachrichtendatei ergibt sich aus
-dem Pr‰fix 'PEEK' + Sprachenk¸rzel.
+dem Pr√§fix 'PEEK' + Sprachenk√ºrzel.
 :EPARML.
 .*
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext f¸r Schl¸sselwort ALWCHGLIB
+.* Hilfetext f√ºr Schl√ºsselwort ALWCHGLIB
 .*--------------------------------------------------------------------
 :HELP name='TREE/ALWCHGLIB'.
-ƒndern Bibliothek erlaubt - Hilfe
-:XH3.ƒndern Bibliothek erlaubt (ALWCHGLIB)
+√Ñndern Bibliothek erlaubt - Hilfe
+:XH3.√Ñndern Bibliothek erlaubt (ALWCHGLIB)
 :P.
 Gibt an, ob nach dem Starten von Peek die Bibliothek, welche die
-Datei mit den anzuzeigenden S‰tzen enth‰lt, ge‰ndert werden kann.
+Datei mit den anzuzeigenden S√§tzen enth√§lt, ge√§ndert werden kann.
 .*
 :IMHELP name='COM/OPTPARM'.
 .*
 :PARML.
 :PT.:PK DEF.*DFT:EPK.
-:PD.Der endg¸ltige Wert wird ¸ber das das Exit-Programm EXIT01
+:PD.Der endg√ºltige Wert wird √ºber das Exit-Programm EXIT01
 berechnet.
 :PT.:PV.*YES:EPV.
-:PD.Die Bibliothek darf ge‰ndert werden.
+:PD.Die Bibliothek darf ge√§ndert werden.
 :PT.:PV.*NO:EPV.
 :PD.Die Bibliothek kann nach dem Starten von Peek/400 nicht
-mehr ge‰ndert werden.
+mehr ge√§ndert werden.
 :EPARML.
 .*
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext f¸r Schl¸sselwort ALWCHGFILE
+.* Hilfetext f√ºr Schl√ºsselwort ALWCHGFILE
 .*--------------------------------------------------------------------
 :HELP name='TREE/ALWCHGFILE'.
-ƒndern Datei erlaubt - Hilfe
-:XH3.ƒndern Datei erlaubt (ALWCHGFILE)
+√Ñndern Datei erlaubt - Hilfe
+:XH3.√Ñndern Datei erlaubt (ALWCHGFILE)
 :P.
 Gibt an, ob nach dem Starten von Peek die Datei, welche die
-anzuzeigende S‰tze enth‰lt, ge‰ndert werden kann.
+anzuzeigende S√§tze enth√§lt, ge√§ndert werden kann.
 .*
 :IMHELP name='COM/OPTPARM'.
 .*
 :PARML.
 :PT.:PK DEF.*DFT:EPK.
-:PD.Der endg¸ltige Wert wird ¸ber das das Exit-Programm EXIT01
+:PD.Der endg√ºltige Wert wird √ºber das Exit-Programm EXIT01
 berechnet.
 :PT.:PV.*YES:EPV.
-:PD.Die Datei darf ge‰ndert werden.
+:PD.Die Datei darf ge√§ndert werden.
 :PT.:PV.*NO:EPV.
 :PD.Die Datei kann nach dem Starten von Peek/400 nicht
-mehr ge‰ndert werden.
+mehr ge√§ndert werden.
 :EPARML.
 .*
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext f¸r Schl¸sselwort ALWCHGMBR
+.* Hilfetext f√ºr Schl√ºsselwort ALWCHGMBR
 .*--------------------------------------------------------------------
 :HELP name='TREE/ALWCHGMBR'.
-ƒndern Teildatei erlaubt - Hilfe
-:XH3.ƒndern Teildatei erlaubt (ALWCHGMBR)
+√Ñndern Teildatei erlaubt - Hilfe
+:XH3.√Ñndern Teildatei erlaubt (ALWCHGMBR)
 :P.
 Gibt an, ob nach dem Starten von Peek die Teildatei, welche die
-anzuzeigende S‰tze enth‰lt, ge‰ndert werden kann.
+anzuzeigende S√§tze enth√§lt, ge√§ndert werden kann.
 .*
 :IMHELP name='COM/OPTPARM'.
 .*
 :PARML.
 :PT.:PK DEF.*DFT:EPK.
-:PD.Der endg¸ltige Wert wird ¸ber das das Exit-Programm EXIT01
+:PD.Der endg√ºltige Wert wird √ºber das Exit-Programm EXIT01
 berechnet.
 :PT.:PV.*YES:EPV.
-:PD.Die Teildatei darf ge‰ndert werden.
+:PD.Die Teildatei darf ge√§ndert werden.
 :PT.:PV.*NO:EPV.
 :PD.Die Teildatei kann nach dem Starten von Peek/400 nicht
-mehr ge‰ndert werden.
+mehr ge√§ndert werden.
 :EPARML.
 .*
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext f¸r Schl¸sselwort ALWCHGRCD
+.* Hilfetext f√ºr Schl√ºsselwort ALWCHGRCD
 .*--------------------------------------------------------------------
 :HELP name='TREE/ALWCHGRCD'.
-ƒndern Datens‰tze erlaubt - Hilfe
-:XH3.ƒndern Datens‰tze erlaubt (ALWCHGRCD)
+√Ñndern Datens√§tze erlaubt - Hilfe
+:XH3.√Ñndern Datens√§tze erlaubt (ALWCHGRCD)
 :P.
-Gibt an, ob nach dem Starten von Peek Datens‰tze angelegt,
-ge‰ndert, gelˆscht oder kopiert werden kˆnnen.
+Gibt an, ob nach dem Starten von Peek Datens√§tze angelegt,
+ge√§ndert, gel√∂scht oder kopiert werden k√∂nnen.
 .*
 :IMHELP name='COM/OPTPARM'.
 .*
 :PARML.
 :PT.:PK DEF.*DFT:EPK.
-:PD.Der endg¸ltige Wert wird ¸ber das das Exit-Programm EXIT01
+:PD.Der endg√ºltige Wert wird √ºber das Exit-Programm EXIT01
 berechnet.
 :PT.:PV.*YES:EPV.
-:PD.Datens‰tze kˆnnen neu angelegt, ge‰ndert, gelˆscht und
+:PD.Datens√§tze k√∂nnen neu angelegt, ge√§ndert, gel√∂scht und
 kopiert werden.
 :PT.:PV.*NOKEY:EPV.
-:PD.Die Schl¸sselfelder der Datens‰tze sind gesperrt und
-kˆnnen nicht ge‰ndert werden.
+:PD.Die Schl√ºsselfelder der Datens√§tze sind gesperrt und
+k√∂nnen nicht ge√§ndert werden.
 :PT.:PV.*NO:EPV.
-:PD.Datens‰tze kˆnnen nach dem Starten von Peek/400 nicht
-neu angelegt, ge‰ndert, gelˆscht oder kopiert werden.
+:PD.Datens√§tze k√∂nnen nach dem Starten von Peek/400 nicht
+neu angelegt, ge√§ndert, gel√∂scht oder kopiert werden.
 :EPARML.
 .*
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext f¸r Schl¸sselwort ALWCHGSQLW
+.* Hilfetext f√ºr Schl√ºsselwort ALWCHGSQLW
 .*--------------------------------------------------------------------
 :HELP name='TREE/ALWCHGSQLW'.
-ƒndern SQL WHERE erlaubt - Hilfe
-:XH3.ƒndern SQL WHERE erlaubt (ALWCHGSQLW)
+√Ñndern SQL WHERE erlaubt - Hilfe
+:XH3.√Ñndern SQL WHERE erlaubt (ALWCHGSQLW)
 :P.
 Gibt an, ob nach dem Starten von Peek die SQL WHERE
-Bedingung ge‰ndert werden kann.
+Bedingung ge√§ndert werden kann.
 .*
 :IMHELP name='COM/OPTPARM'.
 .*
 :PARML.
 :PT.:PK DEF.*DFT:EPK.
-:PD.Der endg¸ltige Wert wird ¸ber das das Exit-Programm EXIT01
+:PD.Der endg√ºltige Wert wird √ºber das Exit-Programm EXIT01
 berechnet.
 :PT.:PV.*YES:EPV.
-:PD.Die SQL WHERE Bedingung kann jederzeit ge‰ndert werden.
+:PD.Die SQL WHERE Bedingung kann jederzeit ge√§ndert werden.
 :PT.:PV.*NO:EPV.
 :PD.Die SQL WHERE Bedingung kann nach dem Starten von Peek/400
-nicht mehr ge‰ndert werden.
+nicht mehr ge√§ndert werden.
 :EPARML.
 .*
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext f¸r Schl¸sselwort ALWCHGSQLO
+.* Hilfetext f√ºr Schl√ºsselwort ALWCHGSQLO
 .*--------------------------------------------------------------------
 :HELP name='TREE/ALWCHGSQLO'.
-ƒndern SQL ORDER BY erlaubt - Hilfe
-:XH3.ƒndern SQL ORDER BY erlaubt (ALWCHGSQLO)
+√Ñndern SQL ORDER BY erlaubt - Hilfe
+:XH3.√Ñndern SQL ORDER BY erlaubt (ALWCHGSQLO)
 :P.
 Gibt an, ob nach dem Starten von Peek die SQL ORDER BY
-Bedingung ge‰ndert werden kann.
+Bedingung ge√§ndert werden kann.
 .*
 :IMHELP name='COM/OPTPARM'.
 .*
 :PARML.
 :PT.:PK DEF.*DFT:EPK.
-:PD.Der endg¸ltige Wert wird ¸ber das das Exit-Programm EXIT01
+:PD.Der endg√ºltige Wert wird √ºber das Exit-Programm EXIT01
 berechnet.
 :PT.:PV.*YES:EPV.
-:PD.Die SQL ORDER BY Bedingung kann jederzeit ge‰ndert werden.
+:PD.Die SQL ORDER BY Bedingung kann jederzeit ge√§ndert werden.
 :PT.:PV.*NO:EPV.
 :PD.Die SQL ORDER BY Bedingung kann nach dem Starten von Peek/400
-nicht mehr ge‰ndert werden.
+nicht mehr ge√§ndert werden.
 :EPARML.
 .*
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext f¸r Schl¸sselwort SETTINGS
+.* Hilfetext f√ºr Schl√ºsselwort SETTINGS
 .*--------------------------------------------------------------------
 :HELP name='TREE/SETTINGS'.
 Benutzereinstellungen - Hilfe
 :XH3.Benutzereinstellungen (SETTINGS)
 :P.
 Gibt an, welche Benutzereinstellungen zu verwenden sind.
-Standardm‰ﬂig wird die Datei mit den Benutzereinstellungen in der
+Standardm√§√üig wird die Datei mit den Benutzereinstellungen in der
 PEEK/400 Produktbibliothek abgelegt. Der Name der Datei entspricht
 hierbei dem Namen des angemeldeten Benutzerprofils.
 .*
@@ -343,7 +342,7 @@ befindet. Ist keine Bibliothek als aktuelle Jobbibliothek
 angegeben, wird die  Bibliothek QGPL benutzt.
 :PT.:PV.Name:EPV.
 :PD.Name der Bibliothek, die die Datei mit den Benutzereinstellungen
-enth‰lt.
+enth√§lt.
 :EPARML.
 :P.
 :HP2.Element 2: Benutzerprofil:EHP2.
@@ -359,49 +358,49 @@ Benutzerprofils verwendet werden.
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext f¸r Schl¸sselwort WHERE
+.* Hilfetext f√ºr Schl√ºsselwort WHERE
 .*--------------------------------------------------------------------
 :HELP name='TREE/WHERE'.
 SQL WHERE - Hilfe
 :XH3.SQL WHERE (WHERE)
 :P.
-Gibt an, welchen Kriterien die anzuzeigenden Datens‰tze
-entsprechen m¸ssen. Die Bedingung muss ein g¸ltiger
+Gibt an, welchen Kriterien die anzuzeigenden Datens√§tze
+entsprechen m√ºssen. Die Bedingung muss ein g√ºltiger
 SQL WHERE Ausdruck sein.
 .*
 :IMHELP name='COM/OPTPARM'.
 .*
 :PARML.
 :PT.:PK DEF.*NONE:EPK.
-:PD.Es werden alle Datens‰tze angezeigt.
+:PD.Es werden alle Datens√§tze angezeigt.
 :PT.:PV.Auswahlkriterien:EPV.
-:PD.Nur die der SQL Bedingung entsprechenden S‰tze werden angezeigt.
+:PD.Nur die der SQL Bedingung entsprechenden S√§tze werden angezeigt.
 :EPARML.
 .*
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext f¸r Schl¸sselwort ORDERBY
+.* Hilfetext f√ºr Schl√ºsselwort ORDERBY
 .*--------------------------------------------------------------------
 :HELP name='TREE/ORDERBY'.
 SQL ORDER BY - Hilfe
 :XH3.SQL ORDER BY (ORDERBY)
 :P.
-Gibt an, in welcher Sortierfolge die Datens‰tze
-angezeigt werden. Die Bedingung muss ein g¸ltiger
+Gibt an, in welcher Sortierfolge die Datens√§tze
+angezeigt werden. Die Bedingung muss ein g√ºltiger
 SQL ORDER BY Ausdruck sein.
 .*
 :IMHELP name='COM/OPTPARM'.
 .*
 :PARML.
 :PT.:PK DEF.*NONE:EPK.
-:PD.Die S‰tze werden in Satzfolge angezeigt.
+:PD.Die S√§tze werden in Satzfolge angezeigt.
 :PT.:PK DEF.*KEY:EPK.
-:PD.Die S‰tze werden in der Sortierfolge des Dateischl¸ssels
-angezeigt. Wenn die Datei nicht ¸ber einen Schl¸ssel
-verf¸gt, werden die S‰tze in Satzfolge angezeigt.
+:PD.Die S√§tze werden in der Sortierfolge des Dateischl√ºssels
+angezeigt. Wenn die Datei nicht √ºber einen Schl√ºssel
+verf√ºgt, werden die S√§tze in Satzfolge angezeigt.
 :PT.:PV.Sortierfolge:EPV.
-:PD.Die S‰tze werden entsprechend der angegebenen Sortierung
+:PD.Die S√§tze werden entsprechend der angegebenen Sortierung
 angezeigt.
 :EPARML.
 .*
@@ -437,7 +436,7 @@ Dieser Parameter ist optional.
 .*=====================================
 :HELP NAME='COM/VALUES'.
 :P.
-Mˆgliche Werte sind:
+M√∂gliche Werte sind:
 :EHELP.
 .*
 :EPNLGRP.

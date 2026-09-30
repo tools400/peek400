@@ -13,8 +13,8 @@
 //                                                               *
 //  Dokumentation:                                               *
 //                                                               *
-//  Abrufen der Dateiinformationen: hier prüfen auf              *
-//                                  Schlüsselinformationen       *
+//  Abrufen der Dateiinformationen: hier prÃ¼fen auf              *
+//                                  SchlÃ¼sselinformationen       *
 //                                                               *
 // ============================================================= *
 // >>PRE-COMPILER<<                                              *
@@ -77,7 +77,7 @@ peek41(i_qfile: i_rcdfmt: '*CREATE'
 if (nbrofkey <= 0);
 //  ... schade, Aufruf ist fehlgeschlagen
 else;
-  //  Abrufen der Schlüsselfeldinformationen ...
+  //  Abrufen der SchlÃ¼sselfeldinformationen ...
   peek41(i_qfile: i_rcdfmt: '*KEY'
         : nbrofkey: data);
 

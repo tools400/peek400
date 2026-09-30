@@ -79,7 +79,7 @@ yqfile.lib = i_lib;
 peek41(yqfile: '*FIRST': '*CREATE'
       : rc: ydata);
 
-//  Einlesen der Schlüsselinformationen ...
+//  Einlesen der SchlÃ¼sselinformationen ...
 peek41(yqfile: '*FIRST': '*KEY'
       : nbrofkey: ydata);
 
@@ -106,7 +106,7 @@ for do_x1 = 1 to nbrofkey;
   when (keyl0100.apkseq = 'D');
     tempfield = %trim(tempfield) + ' DESC';
   other;
-  //          keine Schlüsselangaben gefunden
+  //          keine SchlÃ¼sselangaben gefunden
   endsl;
 
 endfor;

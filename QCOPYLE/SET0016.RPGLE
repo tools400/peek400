@@ -1,12 +1,12 @@
 **FREE
 //---------------------------------------------------------------
-// Datenstruktur f¸r SQL: Limit zum Anzeigen der Anzahl Datens‰tze
+// Datenstruktur f√ºr SQL: Limit zum Anzeigen der Anzahl Datens√§tze
 // SET0016   *SQLLMTCNT
 //---------------------------------------------------------------
 //
 dcl-ds set0016_t len(256) qualified template;
-  //  Maximale Anzahl S‰tze, bis zu der ein COUNT(*)
-  //  zur Ermittlung der Anzahl selektierter Datens‰tze
+  //  Maximale Anzahl S√§tze, bis zu der ein COUNT(*)
+  //  zur Ermittlung der Anzahl selektierter Datens√§tze
   //  abgesetzt wird.
   set_maxrcds     zoned(10) inz(0005000000);
   set_0016        char(1) inz(x'8B');

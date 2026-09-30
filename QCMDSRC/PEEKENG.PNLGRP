@@ -1,4 +1,7 @@
 .*=====================================================================*
+.* Hinweis: Dieses CL muss in einem Job mit der Sprache der            *.
+.*          Zielnachrichtendatei kompiliert und ausgefÃ¼hrt werden.     *.
+.*=====================================================================*
 .*                                                                     *
 .*  Kurzdokumentation :                                                *
 .*                                                                     *
@@ -21,20 +24,23 @@
 .*=====================================================================*
 .*  History:                                                           *
 .*                                                                     *
-.*  Datum       Name          Änderung                                 *
+.*  Datum       Name          Ã„nderung                                 *
 .*  ----------  ------------  ---------------------------------------  *
 .*                                                                     *
 .*=====================================================================*
 .* >>PRE-COMPILER<<                                                    *
-.*   >>CRTCMD<<  CALL PGM(&LI/CRTPEEKOBJ) PARM(+                       *
-.*                        '&SF' '&SL' '&SM' '&LI' '*NO' +              *
-.*                        'PEEK' '&LI' '*NO');                         *
+.*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +          *
+.*                           OBJLIB(&LI) DEVLIB(&LI) +                 *
+.*                           SBMJOB(*NO) BNDDIR(PEEK) +                *
+.*                           INSTALL(*NO);                             *
+.*   >>CMD<<     CHGJOB  LANGID(ENG) CNTRYID(US) CCSID(1140);          *
 .*   >>EXECUTE<<                                                       *
+.*   >>CMD<<     CHGJOB  LANGID(DEU) CNTRYID(DE) CCSID(273);           *
 .* >>END-PRE-COMPILER<<                                                *
 .*=====================================================================*
 :PNLGRP.
 .*--------------------------------------------------------------------
-.* Hilfetext für den Befehl
+.* Hilfetext fÃ¼r den Befehl
 .*--------------------------------------------------------------------
 :HELP NAME='PEEK'.
 File Editor - Peek/400 (PEEK) - Help
@@ -45,7 +51,7 @@ delete records of a given database file and member.
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort FILE
+.* Hilfetext fÃ¼r SchlÃ¼sselwort FILE
 .*--------------------------------------------------------------------
 :HELP name='PEEK/FILE'.
 Datei - Help
@@ -80,7 +86,7 @@ for the job, the QGPL library is used.
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort MEMBER
+.* Hilfetext fÃ¼r SchlÃ¼sselwort MEMBER
 .*--------------------------------------------------------------------
 :HELP name='PEEK/MEMBER'.
 Member - Help
@@ -104,7 +110,7 @@ displaying external data structures.
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort ACCESS
+.* Hilfetext fÃ¼r SchlÃ¼sselwort ACCESS
 .*--------------------------------------------------------------------
 :HELP name='PEEK/ACCESS'.
 Type of record access - Help
@@ -133,7 +139,7 @@ to the sort sequence given at parameter :HP2.SQL ORDER BY
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort LANGUAGE
+.* Hilfetext fÃ¼r SchlÃ¼sselwort LANGUAGE
 .*--------------------------------------------------------------------
 :HELP name='PEEK/LANGUAGE'.
 Language - Help
@@ -159,7 +165,7 @@ to identify the message file containing the language constants.
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort ALWCHGLIB
+.* Hilfetext fÃ¼r SchlÃ¼sselwort ALWCHGLIB
 .*--------------------------------------------------------------------
 :HELP name='PEEK/ALWCHGLIB'.
 Allow to change library - Help
@@ -183,7 +189,7 @@ Peek/400.
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort ALWCHGFILE
+.* Hilfetext fÃ¼r SchlÃ¼sselwort ALWCHGFILE
 .*--------------------------------------------------------------------
 :HELP name='PEEK/ALWCHGFILE'.
 Allow to change file - Help
@@ -207,7 +213,7 @@ Peek/400.
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort ALWCHGMBR
+.* Hilfetext fÃ¼r SchlÃ¼sselwort ALWCHGMBR
 .*--------------------------------------------------------------------
 :HELP name='PEEK/ALWCHGMBR'.
 Allow to change member - Help
@@ -231,7 +237,7 @@ Peek/400.
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort ALWCHGRCD
+.* Hilfetext fÃ¼r SchlÃ¼sselwort ALWCHGRCD
 .*--------------------------------------------------------------------
 :HELP name='PEEK/ALWCHGRCD'.
 Allow to change records - Help
@@ -257,7 +263,7 @@ at any time.
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort ALWCHGSQLW
+.* Hilfetext fÃ¼r SchlÃ¼sselwort ALWCHGSQLW
 .*--------------------------------------------------------------------
 :HELP name='PEEK/ALWCHGSQLW'.
 Allow to change SQL WHERE - Help
@@ -280,7 +286,7 @@ SQL WHERE clause used to select the records to be displayed.
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort ALWCHGSQLO
+.* Hilfetext fÃ¼r SchlÃ¼sselwort ALWCHGSQLO
 .*--------------------------------------------------------------------
 :HELP name='PEEK/ALWCHGSQLO'.
 Allow to change SQL ORDER BY - Help
@@ -304,7 +310,7 @@ the records.
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort ENVFILE
+.* Hilfetext fÃ¼r SchlÃ¼sselwort ENVFILE
 .*--------------------------------------------------------------------
 :HELP name='PEEK/ENVFILE'.
 Environment - Help
@@ -336,7 +342,7 @@ a Peek/400 workspace.
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort ENVMBR
+.* Hilfetext fÃ¼r SchlÃ¼sselwort ENVMBR
 .*--------------------------------------------------------------------
 :HELP name='PEEK/ENVMBR'.
 Member - Help
@@ -361,7 +367,7 @@ workspace settings.
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort ENVSAVE
+.* Hilfetext fÃ¼r SchlÃ¼sselwort ENVSAVE
 .*--------------------------------------------------------------------
 :HELP name='PEEK/ENVSAVE'.
 Save on Exit - Help
@@ -376,7 +382,7 @@ ends.
 :PARML.
 :PT.:PK DEF.*NO:EPK.
 :PD.The current environment settings are not automatically saved
-to the specified environemnt file and member.
+to the specified environment file and member.
 :PT.:PV.*YES:EPV.
 :PD.The current environment settings are automatically saved to
 the specified environment file and member.
@@ -385,7 +391,7 @@ the specified environment file and member.
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort ENVLAYOUT
+.* Hilfetext fÃ¼r SchlÃ¼sselwort ENVLAYOUT
 .*--------------------------------------------------------------------
 :HELP name='PEEK/ENVLAYOUT'.
 Load layout only - Help
@@ -404,13 +410,13 @@ the specified member is overridden by the member of the
 environment.
 :PT.:PV.*YES:EPV.
 :PD.Only the layout is loaded from the environment file. The
-specified file and member are kept untouched and opended.
+specified file and member are kept untouched and opened.
 :EPARML.
 .*
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort SETTINGS
+.* Hilfetext fÃ¼r SchlÃ¼sselwort SETTINGS
 .*--------------------------------------------------------------------
 :HELP name='PEEK/SETTINGS'.
 User settings - Help
@@ -464,7 +470,7 @@ for the job, the QGPL library is used.
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort WHERE
+.* Hilfetext fÃ¼r SchlÃ¼sselwort WHERE
 .*--------------------------------------------------------------------
 :HELP name='PEEK/WHERE'.
 SQL WHERE - Help
@@ -485,7 +491,7 @@ displayed.
 :EHELP.
 .*
 .*--------------------------------------------------------------------
-.* Hilfetext für Schlüsselwort ORDERBY
+.* Hilfetext fÃ¼r SchlÃ¼sselwort ORDERBY
 .*--------------------------------------------------------------------
 :HELP name='PEEK/ORDERBY'.
 SQL ORDER BY - Help

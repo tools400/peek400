@@ -110,7 +110,7 @@ exsr first;
 
 dow (isExitPgm = bFalse);
 
-  //  Prüfen Positionierung der Subfile
+  //  PrÃ¼fen Positionierung der Subfile
   if (sfsanr <= 0     )  or
      (sfsanr >  sflrec);
     sfsanr = 1;
@@ -123,7 +123,7 @@ dow (isExitPgm = bFalse);
   *in89 = '0';
   write msgctl;
 
-  //  "Keine Sätze ..."
+  //  "Keine SÃ¤tze ..."
   if (*in80 = *off);
     write pbleer;
   endif;
@@ -155,13 +155,13 @@ dow (isExitPgm = bFalse);
   //  Anzeige der Subfile
   exfmt pbctl;
 
-  //  Nachrichten löschen
+  //  Nachrichten lÃ¶schen
   p_rmvpgmmg(sds.pgmname);
 
   //  Aktuelle Satz-Nr.
   sfsanr = sflcsr;
 
-  //  Mappen der gedrückten Taste
+  //  Mappen der gedrÃ¼ckten Taste
   //  in Programmbefehl
   peek21(workstn.aid: sds.pgmname
         : ypgmcmd: ycmddta: ymsgid: ymsgdta);
@@ -196,7 +196,7 @@ dow (isExitPgm = bFalse);
     exsr c_morekeys;
 
   other;
-    //  Falsche Taste gedrückt
+    //  Falsche Taste gedrÃ¼ckt
     p_wrongkey(workstn.aid: sds.pgmname);
     iter;
   endsl;
@@ -286,7 +286,7 @@ endsr;
 
 //============================================================*
 //    PBInit        Initialisieren der Subfile zur Anzeige    *
-//                  der nächsten Seite                        *
+//                  der nÃ¤chsten Seite                        *
 //============================================================*
 
 begsr pbinit;
@@ -331,7 +331,7 @@ begsr pbfirstrcd;
 endsr;
 
 //============================================================*
-//    PBReadUP      Vorwärts füllen der Subfile               *
+//    PBReadUP      VorwÃ¤rts fÃ¼llen der Subfile               *
 //============================================================*
 
 begsr pbreadup;
@@ -366,7 +366,7 @@ begsr pbreadup;
 endsr;
 
 //============================================================*
-//    PBExit        Hinter füllen Subfile                     *
+//    PBExit        Hinter fÃ¼llen Subfile                     *
 //============================================================*
 
 begsr pbexit;
@@ -376,7 +376,7 @@ begsr pbexit;
 endsr;
 
 //============================================================*
-//    PBFill        Füllen Subfilesatz                        *
+//    PBFill        FÃ¼llen Subfilesatz                        *
 //============================================================*
 
 begsr pbfill;
@@ -405,7 +405,7 @@ begsr pbsetll;
 endsr;
 
 //============================================================*
-//    SetScreen     Einstellen 132/80-Zeichen Auflösung       *
+//    SetScreen     Einstellen 132/80-Zeichen AuflÃ¶sung       *
 //============================================================*
 
 begsr setscreen;
@@ -432,10 +432,10 @@ endsr;
 
 begsr first;
 
-  // - Dateien öffnen
+  // - Dateien Ã¶ffnen
   open peekfmt;
 
-  // - Prüfen auf Satzformat
+  // - PrÃ¼fen auf Satzformat
   if (i_fmtmode = MODE_BATCH) and
      ((peek_01_ds.nbrOfRcd = 1) or (i_fmtname <> ''));
     setll 1 fpeekfmt;
@@ -468,10 +468,10 @@ begsr first;
   // - Darstellung der Befehlstasten
   sfbot = 1;
 
-  // - Einstellen der Bildschirmauflösung 80/132-Zeichen
+  // - Einstellen der BildschirmauflÃ¶sung 80/132-Zeichen
   exsr setscreen;
 
-  // - Subfile füllen
+  // - Subfile fÃ¼llen
   lastRcdNbr = 1;
   exsr pbinit;
   exsr pbsetll;

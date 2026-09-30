@@ -221,7 +221,7 @@ dcl-proc main;
       pEnvMbr = i_envMbr;
     endsl;
 
-    //  Prüfen Arbeitsumgebung  ...
+    //  PrÃ¼fen Arbeitsumgebung  ...
     f_exist(i_envFile: i_envLib: '*FILE': pEnvMbr: o_msgID: o_msgDta);
 
     //  Programm mit Fehlermeldung beenden
@@ -229,7 +229,7 @@ dcl-proc main;
       leave;
     endif;
 
-    //  Überschreiben Datei ...
+    //  Ãœberschreiben Datei ...
     f_execute('OVRDBF +
                 FILE(PEEKENV) +
                 TOFILE(' +
@@ -243,7 +243,7 @@ dcl-proc main;
     pMsgID = '';
     pMsgDta = '';
 
-    //  Öffnen Datei ...
+    //  Ã–ffnen Datei ...
     open peekenv;
 
     if (i_option = '*SLCLAYOUT');
@@ -287,7 +287,7 @@ dcl-proc main;
       endif;
 
       //  Einlesen Satzformat ...
-      //  (nur bei geänderter Datei)
+      //  (nur bei geÃ¤nderter Datei)
       if (i_file <> o_file or i_lib  <> o_lib );
         loadRecordFormat(o_rcdFmt);
         if (o_rcdFmt = NOT_FOUND);
@@ -297,9 +297,9 @@ dcl-proc main;
         o_rcdFmt = i_rcdFmt;
       endif;
 
-      //  Beenden, wenn Datei gewechselt hat, weil die Datei neu geöffnet werden muss
-      //  und damit alle Layout und PIN Informationen gelöscht werden. PEEK55 wird dann
-      //  von PEEK05 erneut aufgerufen, nachdem die Datei geöffnet worden ist.
+      //  Beenden, wenn Datei gewechselt hat, weil die Datei neu geÃ¶ffnet werden muss
+      //  und damit alle Layout und PIN Informationen gelÃ¶scht werden. PEEK55 wird dann
+      //  von PEEK05 erneut aufgerufen, nachdem die Datei geÃ¶ffnet worden ist.
       if (o_file = i_file and
           o_lib  = i_lib  and
           o_mbr  = i_mbr  and
@@ -310,7 +310,7 @@ dcl-proc main;
         //  Einlesen basierende physiche Datei ...
         f_basedPF(o_file: o_lib: o_mbr: o_rcdFmt: -1: pFile: pLib: pMbr: pFmt);
 
-        //  Einlesen AccessMode ...  (dateiunabhängig)
+        //  Einlesen AccessMode ...  (dateiunabhÃ¤ngig)
         loadAccessMode(o_accMode);
 
         //  Einlesen SqlSelect ...   (phys. Datei muss gleich sein)
@@ -325,7 +325,7 @@ dcl-proc main;
         //  Einlesen Layout ...          (phys. Datei muss gleich sein)
         loadLayout(pFile: '*NONE');
 
-        //  Einlesen Pin-Record ...      (phys. Datei und Bibliothek müssen gleich sei
+        //  Einlesen Pin-Record ...      (phys. Datei und Bibliothek mÃ¼ssen gleich sei
         loadPinnedRecords(pFile: pLib: o_pinTabR: o_nbrPinR);
 
         //  Einlesen Pin-Column ...      (phys. Datei muss gleich sein)
@@ -335,10 +335,10 @@ dcl-proc main;
 
     endif;
 
-    //  Schließen Datei ...
+    //  SchlieÃŸen Datei ...
     close peekenv;
 
-    //  Löschen Überschreibung ...
+    //  LÃ¶schen Ã¼berschreibung ...
     f_execute('DLTOVR +
                 FILE(PEEKENV) +
                 LVL(*ACTGRPDFN)'

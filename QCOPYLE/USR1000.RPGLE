@@ -1,7 +1,7 @@
 **free
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR1000
-//  Keine Berechtigung für Datei &2/&1, Teildatei &3.
+//  Keine Berechtigung fÃ¼r Datei &2/&1, Teildatei &3.
 dcl-ds USR1000 qualified;
   var1  char(10) inz;
   var2  char(10) inz;
