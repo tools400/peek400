@@ -286,46 +286,117 @@
                           TOMBR(*FROMMBR ) MBROPT(*REPLACE) CRTFILE(*NO)
 
  /* -------------------------------------------------------------- */
+ /* QMSG_ENG   */
+             CRTSRCPF   FILE(&NEWLIB/QMSG_ENG) +
+                          RCDLEN(112)          +
+                          CCSID(1140)          +
+                          TEXT('Peek/400 - English (1140)')
+
+             CPYF       FROMFILE(&DEVLIB/QMSG_ENG) +
+                          TOFILE(&NEWLIB/QMSG_ENG) FROMMBR(PEEKENGMG ) +
+                          TOMBR(PEEKENGMG ) MBROPT(*REPLACE) CRTFILE(*NO)
+
+             CPYF       FROMFILE(&DEVLIB/QMSG_ENG) +
+                          TOFILE(&NEWLIB/QMSG_ENG) FROMMBR(PEEKENGPG ) +
+                          TOMBR(PEEKENGPG ) MBROPT(*REPLACE) CRTFILE(*NO)
+
+             CPYF       FROMFILE(&DEVLIB/QMSG_ENG) +
+                          TOFILE(&NEWLIB/QMSG_ENG) FROMMBR(TREEENGPG ) +
+                          TOMBR(TREEENGPG ) MBROPT(*REPLACE) CRTFILE(*NO)
+
+ /* -------------------------------------------------------------- */
+ /* QMSG_FRA   */
+             CRTSRCPF   FILE(&NEWLIB/QMSG_FRA) +
+                          RCDLEN(112)          +
+                          CCSID(1147)          +
+                          TEXT('Peek/400 - French (1147)')
+
+             CPYF       FROMFILE(&DEVLIB/QMSG_FRA) +
+                          TOFILE(&NEWLIB/QMSG_FRA) FROMMBR(PEEKFRAMG ) +
+                          TOMBR(PEEKFRAMG ) MBROPT(*REPLACE) CRTFILE(*NO)
+
+             CPYF       FROMFILE(&DEVLIB/QMSG_FRA) +
+                          TOFILE(&NEWLIB/QMSG_FRA) FROMMBR(PEEKFRAPG ) +
+                          TOMBR(PEEKFRAPG ) MBROPT(*REPLACE) CRTFILE(*NO)
+
+             CPYF       FROMFILE(&DEVLIB/QMSG_FRA) +
+                          TOFILE(&NEWLIB/QMSG_FRA) FROMMBR(TREEFRAPG ) +
+                          TOMBR(TREEENGPG ) MBROPT(*REPLACE) CRTFILE(*NO)
+
+ /* -------------------------------------------------------------- */
+ /* QMSG_GER   */
+             CRTSRCPF   FILE(&NEWLIB/QMSG_GER) +
+                          RCDLEN(112)          +
+                          CCSID(1141)          +
+                          TEXT('Peek/400 - German (1141)')
+
+             CPYF       FROMFILE(&DEVLIB/QMSG_GER) +
+                          TOFILE(&NEWLIB/QMSG_GER) FROMMBR(PEEKGERMG ) +
+                          TOMBR(PEEKGERMG ) MBROPT(*REPLACE) CRTFILE(*NO)
+
+             CPYF       FROMFILE(&DEVLIB/QMSG_GER) +
+                          TOFILE(&NEWLIB/QMSG_GER) FROMMBR(PEEKGERPG ) +
+                          TOMBR(PEEKGERPG ) MBROPT(*REPLACE) CRTFILE(*NO)
+
+             CPYF       FROMFILE(&DEVLIB/QMSG_GER) +
+                          TOFILE(&NEWLIB/QMSG_GER) FROMMBR(TREEGERPG ) +
+                          TOMBR(TREEGERPG ) MBROPT(*REPLACE) CRTFILE(*NO)
+
+ /* -------------------------------------------------------------- */
+ /* QMSG_ITA   */
+             CRTSRCPF   FILE(&NEWLIB/QMSG_ITA) +
+                          RCDLEN(112)          +
+                          CCSID(1144)          +
+                          TEXT('Peek/400 - Italian (1144)')
+
+             CPYF       FROMFILE(&DEVLIB/QMSG_ITA) +
+                          TOFILE(&NEWLIB/QMSG_ITA) FROMMBR(PEEKITAMG ) +
+                          TOMBR(PEEKITAMG ) MBROPT(*REPLACE) CRTFILE(*NO)
+
+             CPYF       FROMFILE(&DEVLIB/QMSG_ITA) +
+                          TOFILE(&NEWLIB/QMSG_ITA) FROMMBR(PEEKITAPG ) +
+                          TOMBR(PEEKITAPG ) MBROPT(*REPLACE) CRTFILE(*NO)
+
+             CPYF       FROMFILE(&DEVLIB/QMSG_ITA) +
+                          TOFILE(&NEWLIB/QMSG_ITA) FROMMBR(TREEITAPG ) +
+                          TOMBR(TREEITAPG ) MBROPT(*REPLACE) CRTFILE(*NO)
+
+ /* -------------------------------------------------------------- */
+ /* QMSG_SPA   */
+             CRTSRCPF   FILE(&NEWLIB/QMSG_SPA) +
+                          RCDLEN(112)          +
+                          CCSID(1145)          +
+                          TEXT('Peek/400 - Spanish (1145)')
+
+             CPYF       FROMFILE(&DEVLIB/QMSG_SPA) +
+                          TOFILE(&NEWLIB/QMSG_SPA) FROMMBR(PEEKSPAMG ) +
+                          TOMBR(PEEKSPAMG ) MBROPT(*REPLACE) CRTFILE(*NO)
+
+             CPYF       FROMFILE(&DEVLIB/QMSG_SPA) +
+                          TOFILE(&NEWLIB/QMSG_SPA) FROMMBR(PEEKSPAPG ) +
+                          TOMBR(PEEKSPAPG ) MBROPT(*REPLACE) CRTFILE(*NO)
+
+             CPYF       FROMFILE(&DEVLIB/QMSG_SPA) +
+                          TOFILE(&NEWLIB/QMSG_SPA) FROMMBR(TREESPAPG ) +
+                          TOMBR(TREESPAPG ) MBROPT(*REPLACE) CRTFILE(*NO)
+
+ /* -------------------------------------------------------------- */
  /* QCMDSRC    */
              CRTSRCPF   FILE(&NEWLIB/QCMDSRC ) +
-                          RCDLEN( 92)          +
+                          RCDLEN(92)           +
                           TEXT('Peek/400 - Befehle')
 
              CPYF       FROMFILE(&DEVLIB/QCMDSRC) +
                           TOFILE(&NEWLIB/QCMDSRC) FROMMBR(PEEK    ) +
                           TOMBR(PEEK    ) MBROPT(*REPLACE) CRTFILE(*NO)
+
+             CPYF       FROMFILE(&DEVLIB/QCMDSRC) +
+                          TOFILE(&NEWLIB/QCMDSRC) FROMMBR(PEEK    ) +
+                          TOMBR(PEEK    ) MBROPT(*REPLACE) CRTFILE(*NO)
+
              CPYF       FROMFILE(&DEVLIB/QCMDSRC) +
                           TOFILE(&NEWLIB/QCMDSRC) FROMMBR(TREE    ) +
                           TOMBR(TREE    ) MBROPT(*REPLACE) CRTFILE(*NO)
-
-             CPYF       FROMFILE(&DEVLIB/QCMDSRC) +
-                          TOFILE(&NEWLIB/QCMDSRC) FROMMBR(PEEKENG ) +
-                          TOMBR(PEEKENG ) MBROPT(*REPLACE) CRTFILE(*NO)
-             CPYF       FROMFILE(&DEVLIB/QCMDSRC) +
-                          TOFILE(&NEWLIB/QCMDSRC) FROMMBR(PEEKFRA ) +
-                          TOMBR(PEEKFRA ) MBROPT(*REPLACE) CRTFILE(*NO)
-             CPYF       FROMFILE(&DEVLIB/QCMDSRC) +
-                          TOFILE(&NEWLIB/QCMDSRC) FROMMBR(PEEKGER ) +
-                          TOMBR(PEEKGER ) MBROPT(*REPLACE) CRTFILE(*NO)
-             CPYF       FROMFILE(&DEVLIB/QCMDSRC) +
-                          TOFILE(&NEWLIB/QCMDSRC) FROMMBR(PEEKITA ) +
-                          TOMBR(PEEKITA ) MBROPT(*REPLACE) CRTFILE(*NO)
-             CPYF       FROMFILE(&DEVLIB/QCMDSRC) +
-                          TOFILE(&NEWLIB/QCMDSRC) FROMMBR(PEEKSPA ) +
-                          TOMBR(PEEKSPA ) MBROPT(*REPLACE) CRTFILE(*NO)
-
-             CPYF       FROMFILE(&DEVLIB/QCMDSRC) +
-                          TOFILE(&NEWLIB/QCMDSRC) FROMMBR(TREEENG ) +
-                          TOMBR(TREEENG ) MBROPT(*REPLACE) CRTFILE(*NO)
-             CPYF       FROMFILE(&DEVLIB/QCMDSRC) +
-                          TOFILE(&NEWLIB/QCMDSRC) FROMMBR(TREEGER ) +
-                          TOMBR(TREEGER ) MBROPT(*REPLACE) CRTFILE(*NO)
-             CPYF       FROMFILE(&DEVLIB/QCMDSRC) +
-                          TOFILE(&NEWLIB/QCMDSRC) FROMMBR(TREEITA ) +
-                          TOMBR(TREEITA ) MBROPT(*REPLACE) CRTFILE(*NO)
-             CPYF       FROMFILE(&DEVLIB/QCMDSRC) +
-                          TOFILE(&NEWLIB/QCMDSRC) FROMMBR(TREESPA ) +
-                          TOMBR(TREESPA ) MBROPT(*REPLACE) CRTFILE(*NO)
 
  /* -------------------------------------------------------------- */
  /* PEEKENV    */
@@ -459,6 +530,23 @@
              CRTDUPOBJ  OBJ(PEEKITA) FROMLIB(&DEVLIB) +
                           OBJTYPE(*MSGF) TOLIB(&NEWLIB) NEWOBJ(*OBJ)
              CRTDUPOBJ  OBJ(PEEKITA) FROMLIB(&DEVLIB) +
+                          OBJTYPE(*PNLGRP) TOLIB(&NEWLIB) NEWOBJ(*OBJ)
+
+ /* -------------------------------------------------------------- */
+ /* TREEENG    */
+             CRTDUPOBJ  OBJ(TREEENG) FROMLIB(&DEVLIB) +
+                          OBJTYPE(*PNLGRP) TOLIB(&NEWLIB) NEWOBJ(*OBJ)
+ /* TREEFRA    */
+             CRTDUPOBJ  OBJ(TREEFRA) FROMLIB(&DEVLIB) +
+                          OBJTYPE(*PNLGRP) TOLIB(&NEWLIB) NEWOBJ(*OBJ)
+ /* TREEGER    */
+             CRTDUPOBJ  OBJ(TREEGER) FROMLIB(&DEVLIB) +
+                          OBJTYPE(*PNLGRP) TOLIB(&NEWLIB) NEWOBJ(*OBJ)
+ /* TREESPA    */
+             CRTDUPOBJ  OBJ(TREESPA) FROMLIB(&DEVLIB) +
+                          OBJTYPE(*PNLGRP) TOLIB(&NEWLIB) NEWOBJ(*OBJ)
+ /* TREEITA    */
+             CRTDUPOBJ  OBJ(TREEITA) FROMLIB(&DEVLIB) +
                           OBJTYPE(*PNLGRP) TOLIB(&NEWLIB) NEWOBJ(*OBJ)
 
  /* -------------------------------------------------------------- */
