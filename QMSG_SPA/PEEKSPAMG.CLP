@@ -4,41 +4,41 @@
      /*-----------------------------------------------------------------------*/
      /* STRPREPRC Compile Options:                                            */
      /* >>PRE-COMPILER<<                                                      */
-     /*   >>CRTCMD<<  CALL       PGM(QTEMP/&OB) PARM(&LI &OB);                */
-     /*   >>CMD<<     CHGJOB  LANGID(FRA) CNTRYID(FR) CCSID(1147);            */
+     /*   >>CRTCMD<<  CALL       PGM(QTEMP/&OB) PARM(&LI);                    */
+     /*   >>CMD<<     CHGJOB  LANGID(ESP) CNTRYID(ES) CCSID(1145);            */
      /*   >>CMD<<     CRTCLPGM   PGM(QTEMP/&OB) +                             */
      /*                          SRCFILE(&SL/&SF) SRCMBR(&SM) +               */
-     /*               TEXT('Peek/400 - Französische übersetzung');            */
+     /*               TEXT('Peek/400 - Espanol');                             */
      /*   >>EXECUTE<<                                                         */
      /*   >>CMD<<     DLTPGM PGM(QTEMP/&OB);                                  */
      /*   >>CMD<<     CHGJOB  LANGID(DEU) CNTRYID(DE) CCSID(273);             */
      /* >>END-PRE-COMPILER<<                                                  */
      /*-----------------------------------------------------------------------*/
-             PGM        PARM(&I_LIB &I_OBJ)
+             PGM        PARM(&I_LIB)
 
              DCL        VAR(&I_LIB     ) TYPE(*CHAR) LEN(10)
              DCL        VAR(&I_OBJ     ) TYPE(*CHAR) LEN(10)
              DCL        VAR(&LIB       ) TYPE(*CHAR) LEN(10)
-             DCL        VAR(&OBJ       ) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&OBJ       ) TYPE(*CHAR) LEN(10)  VALUE('PEEKSPA')
+             DCL        VAR(&CCSID     ) TYPE(*DEC ) LEN(5 0) VALUE(1145)
+             DCL        VAR(&LANGUAGE  ) TYPE(*CHAR) LEN(20)  VALUE('Espanol')
 
              CHGVAR     VAR(&LIB       ) VALUE(&I_LIB)
              MONMSG     MSGID(MCH3601) EXEC(DO)
                RMVMSG     PGMQ(*SAME (*)) CLEAR(*ALL)
                SNDPGMMSG  MSGID(CPF9898) MSGF(*LIBL/QCPFMSG) +
-                            MSGDTA('Usage: CALL PGM(PEEKFRA) +
-                                    PARM(libName [msgFName)') +
+                            MSGDTA('Usage: CALL PGM(PEEKSPAMG) PARM(libName)') +
                             TOPGMQ(*PRV (*PGMBDY)) MSGTYPE(*ESCAPE)
              ENDDO
 
-             CHGVAR     VAR(&OBJ       ) VALUE(&I_OBJ)
-             MONMSG     MSGID(MCH3601) EXEC(DO)
-               RMVMSG     PGMQ(*SAME (*)) CLEAR(*ALL)
-               CHGVAR     VAR(&OBJ) VALUE('PEEKFRA   ')
-             ENDDO
+             DLTMSGF    MSGF(&LIB/&OBJ)
+             MONMSG     MSGID(CPF2105) /* Object not found */
+
+             CRTMSGF MSGF(&LIB/&OBJ ) TEXT('Peek/400 - ' *CAT &LANGUAGE)
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   AID00BA                    */
-     /* Touche F22 non valide                                       */
+     /* Tecla F22 no válida.                                        */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID00BA) MSGF(&LIB/&OBJ)
@@ -48,17 +48,17 @@
                 MSGID(AID00BA) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Touche F22 non valide'                                               +
+'Tecla F22 no válida.'                                                +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   AID00BB                    */
-     /* Touche F23 non valide                                       */
+     /* Tecla F23 no válida.                                        */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID00BB) MSGF(&LIB/&OBJ)
@@ -68,17 +68,17 @@
                 MSGID(AID00BB) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Touche F23 non valide'                                               +
+'Tecla F23 no válida.'                                                +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   AID00BC                    */
-     /* Touche F24 non valide                                       */
+     /* Tecla F24 no válida.                                        */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID00BC) MSGF(&LIB/&OBJ)
@@ -88,17 +88,17 @@
                 MSGID(AID00BC) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Touche F24 non valide'                                               +
+'Tecla F24 no válida.'                                                +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   AID00BD                    */
-     /* Touche 'SUPPR' invalide                                     */
+     /* Tecla 'DELETE' no válida.                                   */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID00BD) MSGF(&LIB/&OBJ)
@@ -108,17 +108,17 @@
                 MSGID(AID00BD) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Touche ''SUPPR'' invalide'                                           +
+'Tecla ''DELETE'' no válida.'                                         +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   AID00B1                    */
-     /* Touche F13 non valide                                       */
+     /* Tecla F13 no válida.                                        */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID00B1) MSGF(&LIB/&OBJ)
@@ -128,17 +128,17 @@
                 MSGID(AID00B1) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Touche F13 non valide'                                               +
+'Tecla F13 no válida.'                                                +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   AID00B2                    */
-     /* Touche F14 non valide                                       */
+     /* TEcla F14 no válida.                                        */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID00B2) MSGF(&LIB/&OBJ)
@@ -148,17 +148,17 @@
                 MSGID(AID00B2) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Touche F14 non valide'                                               +
+'TEcla F14 no válida.'                                                +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   AID00B3                    */
-     /* Touche F15 non valide                                       */
+     /* Tecla F15 no válida.                                        */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID00B3) MSGF(&LIB/&OBJ)
@@ -168,17 +168,17 @@
                 MSGID(AID00B3) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Touche F15 non valide'                                               +
+'Tecla F15 no válida.'                                                +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   AID00B4                    */
-     /* Touche F16 non valide                                       */
+     /* Tecla F16 no válida.                                        */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID00B4) MSGF(&LIB/&OBJ)
@@ -188,17 +188,17 @@
                 MSGID(AID00B4) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Touche F16 non valide'                                               +
+'Tecla F16 no válida.'                                                +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   AID00B5                    */
-     /* Touche F17 non valide                                       */
+     /* Tecla F17 no válida.                                        */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID00B5) MSGF(&LIB/&OBJ)
@@ -208,17 +208,17 @@
                 MSGID(AID00B5) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Touche F17 non valide'                                               +
+'Tecla F17 no válida.'                                                +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   AID00B6                    */
-     /* Touche F18 non valide                                       */
+     /* Tecla F18 no válida.                                        */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID00B6) MSGF(&LIB/&OBJ)
@@ -228,17 +228,17 @@
                 MSGID(AID00B6) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Touche F18 non valide'                                               +
+'Tecla F18 no válida.'                                                +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   AID00B7                    */
-     /* Touche F19 non valide                                       */
+     /* Tecla F19 no válida.                                        */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID00B7) MSGF(&LIB/&OBJ)
@@ -248,17 +248,17 @@
                 MSGID(AID00B7) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Touche F19 non valide'                                               +
+'Tecla F19 no válida.'                                                +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   AID00B8                    */
-     /* Touche F20 non valide                                       */
+     /* Tecla F20 no válida.                                        */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID00B8) MSGF(&LIB/&OBJ)
@@ -268,17 +268,17 @@
                 MSGID(AID00B8) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Touche F20 non valide'                                               +
+'Tecla F20 no válida.'                                                +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   AID00B9                    */
-     /* Touche F21 non valide                                       */
+     /* Tecla F21 no válida.                                        */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID00B9) MSGF(&LIB/&OBJ)
@@ -288,17 +288,17 @@
                 MSGID(AID00B9) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Touche F21 non valide'                                               +
+'Tecla F21 no válida.'                                                +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   AID00F1                    */
-     /* Touche 'ENTREE' non valide                                  */
+     /* Tecla 'ENTER' no válida.                                    */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID00F1) MSGF(&LIB/&OBJ)
@@ -308,17 +308,17 @@
                 MSGID(AID00F1) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Touche ''ENTREE'' non valide'                                        +
+'Tecla ''ENTER'' no válida.'                                          +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   AID00F3                    */
-     /* Touche 'AIDE' non valide                                    */
+     /* Tecla 'AYUDA' no válida.                                    */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID00F3) MSGF(&LIB/&OBJ)
@@ -328,17 +328,17 @@
                 MSGID(AID00F3) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Touche ''AIDE'' non valide'                                          +
+'Tecla ''AYUDA'' no válida.'                                          +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   AID00F4                    */
-     /* Touche 'PAGE PREC' non valide                               */
+     /* Tecla 'PAG. ABAJO' no válida.                               */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID00F4) MSGF(&LIB/&OBJ)
@@ -348,17 +348,17 @@
                 MSGID(AID00F4) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Touche ''PAGE PREC'' non valide'                                     +
+'Tecla ''PAG. ABAJO'' no válida.'                                     +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   AID00F5                    */
-     /* Touche 'PAGE SUIV' non valide                               */
+     /* Tecla 'PAG.ARRIBA' no válida.                               */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID00F5) MSGF(&LIB/&OBJ)
@@ -368,17 +368,17 @@
                 MSGID(AID00F5) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Touche ''PAGE SUIV'' non valide'                                     +
+'Tecla ''PAG.ARRIBA'' no válida.'                                     +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   AID00F6                    */
-     /* Touche 'IMPR' non valide                                    */
+     /* Tecla 'PRINT' no válida.                                    */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID00F6) MSGF(&LIB/&OBJ)
@@ -388,17 +388,17 @@
                 MSGID(AID00F6) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Touche ''IMPR'' non valide'                                          +
+'Tecla ''PRINT'' no válida.'                                          +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   AID00F8                    */
-     /* Touche 'RESET' non valide                                   */
+     /* Tecla 'RESET' no válida.                                    */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID00F8) MSGF(&LIB/&OBJ)
@@ -408,17 +408,17 @@
                 MSGID(AID00F8) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Touche ''RESET'' non valide'                                         +
+'Tecla ''RESET'' no válida.'                                          +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   AID003A                    */
-     /* Touche F10 non valide                                       */
+     /* Tecla F10 no válida.                                        */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID003A) MSGF(&LIB/&OBJ)
@@ -428,17 +428,17 @@
                 MSGID(AID003A) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Touche F10 non valide'                                               +
+'Tecla F10 no válida.'                                                +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   AID003B                    */
-     /* Touche F11 non valide                                       */
+     /* Tecla F11 no válida.                                        */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID003B) MSGF(&LIB/&OBJ)
@@ -448,17 +448,17 @@
                 MSGID(AID003B) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Touche F11 non valide'                                               +
+'Tecla F11 no válida.'                                                +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   AID003C                    */
-     /* Touche F12 non valide                                       */
+     /* Tecla F12 no válida.                                        */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID003C) MSGF(&LIB/&OBJ)
@@ -468,17 +468,17 @@
                 MSGID(AID003C) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Touche F12 non valide'                                               +
+'Tecla F12 no válida.'                                                +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   AID003F                    */
-     /* Touche 'CRAYON OPTIQUE' non valide                          */
+     /* Tecla 'LIGHT PEN' no válida.                                */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID003F) MSGF(&LIB/&OBJ)
@@ -488,17 +488,17 @@
                 MSGID(AID003F) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Touche ''CRAYON OPTIQUE'' non valide'                                +
+'Tecla ''LIGHT PEN'' no válida.'                                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   AID0031                    */
-     /* Touche F1 non valide                                        */
+     /* Tecla F1 no válida.                                         */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID0031) MSGF(&LIB/&OBJ)
@@ -508,17 +508,17 @@
                 MSGID(AID0031) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Touche F1 non valide'                                                +
+'Tecla F1 no válida.'                                                 +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   AID0032                    */
-     /* Touche F2 non valide                                        */
+     /* Tecla F2 no válida.                                         */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID0032) MSGF(&LIB/&OBJ)
@@ -528,17 +528,17 @@
                 MSGID(AID0032) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Touche F2 non valide'                                                +
+'Tecla F2 no válida.'                                                 +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   AID0033                    */
-     /* Touche F3 non valide                                        */
+     /* Tecla F3 no válida.                                         */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID0033) MSGF(&LIB/&OBJ)
@@ -548,17 +548,17 @@
                 MSGID(AID0033) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Touche F3 non valide'                                                +
+'Tecla F3 no válida.'                                                 +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   AID0034                    */
-     /* Touche F4 non valide                                        */
+     /* Tecla F4 no válida.                                         */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID0034) MSGF(&LIB/&OBJ)
@@ -568,17 +568,17 @@
                 MSGID(AID0034) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Touche F4 non valide'                                                +
+'Tecla F4 no válida.'                                                 +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   AID0035                    */
-     /* Touche F5 non valide                                        */
+     /* Tecla F5 no válida.                                         */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID0035) MSGF(&LIB/&OBJ)
@@ -588,17 +588,17 @@
                 MSGID(AID0035) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Touche F5 non valide'                                                +
+'Tecla F5 no válida.'                                                 +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   AID0036                    */
-     /* Touche F6 non valide                                        */
+     /* Tecla F6 no válida.                                         */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID0036) MSGF(&LIB/&OBJ)
@@ -608,17 +608,17 @@
                 MSGID(AID0036) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Touche F6 non valide'                                                +
+'Tecla F6 no válida.'                                                 +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   AID0037                    */
-     /* Touche F7 non valide                                        */
+     /* Tecla F7 no válida.                                         */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID0037) MSGF(&LIB/&OBJ)
@@ -628,17 +628,17 @@
                 MSGID(AID0037) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Touche F7 non valide'                                                +
+'Tecla F7 no válida.'                                                 +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   AID0038                    */
-     /* Touche F8 non valide                                        */
+     /* Tecla F8 no válida.                                         */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID0038) MSGF(&LIB/&OBJ)
@@ -648,17 +648,17 @@
                 MSGID(AID0038) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Touche F8 non valide'                                                +
+'Tecla F8 no válida.'                                                 +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   AID0039                    */
-     /* Touche F9 non valide                                        */
+     /* Tecla F9 no válida.                                         */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID0039) MSGF(&LIB/&OBJ)
@@ -668,17 +668,17 @@
                 MSGID(AID0039) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Touche F9 non valide'                                                +
+'Tecla F9 no válida.'                                                 +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   AID0100                    */
-     /* Touche invalide                                             */
+     /* Tecla desconocida y no válida                               */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(AID0100) MSGF(&LIB/&OBJ)
@@ -688,17 +688,17 @@
                 MSGID(AID0100) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Touche invalide'                                                     +
+'Tecla desconocida y no válida'                                       +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0001                    */
-     /* Entrée                                                      */
+     /* Entrada datos                                               */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0001) MSGF(&LIB/&OBJ)
@@ -708,17 +708,17 @@
                 MSGID(KEY0001) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Entrée        '                                                      +
+'Entrada datos '                                                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0002                    */
-     /* Fin                                                         */
+     /* Salir                                                       */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0002) MSGF(&LIB/&OBJ)
@@ -728,17 +728,17 @@
                 MSGID(KEY0002) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Fin           '                                                      +
+'Salir         '                                                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0003                    */
-     /* Rafraîchir                                                  */
+     /* Refrescar                                                   */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0003) MSGF(&LIB/&OBJ)
@@ -748,17 +748,17 @@
                 MSGID(KEY0003) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Rafraîchir    '                                                      +
+'Refrescar     '                                                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0004                    */
-     /* Ajouter                                                     */
+     /* Añadir registro                                             */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0004) MSGF(&LIB/&OBJ)
@@ -768,17 +768,17 @@
                 MSGID(KEY0004) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Ajouter  '                                                           +
+'Añadir registro'                                                     +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0005                    */
-     /* Nom/lib. champ                                              */
+     /* Cabecera                                                    */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0005) MSGF(&LIB/&OBJ)
@@ -788,17 +788,17 @@
                 MSGID(KEY0005) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Nom/lib. champ'                                                      +
+'Cabecera      '                                                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0006                    */
-     /* Sélec.col. +/-                                              */
+     /* Marcar columna                                              */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0006) MSGF(&LIB/&OBJ)
@@ -808,17 +808,17 @@
                 MSGID(KEY0006) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Sélec.col. +/-'                                                      +
+'Marcar columna'                                                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0007                    */
-     /* Haut de page                                                */
+     /* Mover arriba                                                */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0007) MSGF(&LIB/&OBJ)
@@ -828,17 +828,17 @@
                 MSGID(KEY0007) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Haut de page'                                                        +
+'Mover arriba  '                                                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0008                    */
-     /* Pos. Curseur                                                */
+     /* Pos. Cursor                                                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0008) MSGF(&LIB/&OBJ)
@@ -848,17 +848,17 @@
                 MSGID(KEY0008) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Pos. Curseur  '                                                      +
+'Pos. Cursor   '                                                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0009                    */
-     /* Recherche                                                   */
+     /* Buscar                                                      */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0009) MSGF(&LIB/&OBJ)
@@ -868,17 +868,17 @@
                 MSGID(KEY0009) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Recherche     '                                                      +
+'Buscar        '                                                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0010                    */
-     /* Début                                                       */
+     /* Arriba                                                      */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0010) MSGF(&LIB/&OBJ)
@@ -888,17 +888,17 @@
                 MSGID(KEY0010) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Début         '                                                      +
+'Arriba        '                                                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0011                    */
-     /* Fin                                                         */
+     /* Abajo                                                       */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0011) MSGF(&LIB/&OBJ)
@@ -908,17 +908,17 @@
                 MSGID(KEY0011) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Fin           '                                                      +
+'Abajo         '                                                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0012                    */
-     /* Gauche                                                      */
+     /* Izquierda                                                   */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0012) MSGF(&LIB/&OBJ)
@@ -928,17 +928,17 @@
                 MSGID(KEY0012) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Gauche        '                                                      +
+'Izquierda     '                                                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0013                    */
-     /* Droite                                                      */
+     /* Derecha                                                     */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0013) MSGF(&LIB/&OBJ)
@@ -948,17 +948,17 @@
                 MSGID(KEY0013) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Droite        '                                                      +
+'Derecha       '                                                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0014                    */
-     /* Ligne commande                                              */
+     /* Lín.mandatos                                                */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0014) MSGF(&LIB/&OBJ)
@@ -968,17 +968,17 @@
                 MSGID(KEY0014) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Ligne commande'                                                      +
+'Lín.mandatos'                                                        +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0015                    */
-     /* 80/132 colonne                                              */
+     /* 80/132 Car.                                                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0015) MSGF(&LIB/&OBJ)
@@ -988,17 +988,17 @@
                 MSGID(KEY0015) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'80/132 colonne'                                                      +
+'80/132 Car.  '                                                       +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0016                    */
-     /* Autres touches                                              */
+     /* Más teclas                                                  */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0016) MSGF(&LIB/&OBJ)
@@ -1008,17 +1008,17 @@
                 MSGID(KEY0016) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Autres touches'                                                      +
+'Más teclas    '                                                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0017                    */
-     /* Page avant                                                  */
+     /* Pag. abajo                                                  */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0017) MSGF(&LIB/&OBJ)
@@ -1028,17 +1028,17 @@
                 MSGID(KEY0017) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Page avant    '                                                      +
+'Pag. abajo    '                                                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0018                    */
-     /* Page arrière                                                */
+     /* Pag. arriba                                                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0018) MSGF(&LIB/&OBJ)
@@ -1048,17 +1048,17 @@
                 MSGID(KEY0018) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Page arrière  '                                                      +
+'Pag. arriba   '                                                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0019                    */
-     /* Fixer ligne                                                 */
+     /* Clavar fila                                                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0019) MSGF(&LIB/&OBJ)
@@ -1068,17 +1068,17 @@
                 MSGID(KEY0019) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Fixer ligne'                                                         +
+'Clavar fila   '                                                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0020                    */
-     /* Défixer ligne                                               */
+     /* Desclavar fila                                              */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0020) MSGF(&LIB/&OBJ)
@@ -1088,17 +1088,17 @@
                 MSGID(KEY0020) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Défixer ligne'                                                       +
+'Desclavar fila'                                                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0021                    */
-     /* Modifier                                                    */
+     /* Cambiar                                                     */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0021) MSGF(&LIB/&OBJ)
@@ -1108,17 +1108,17 @@
                 MSGID(KEY0021) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Modifier      '                                                      +
+'Cambiar'                                                             +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0022                    */
-     /* Dupliquer                                                   */
+     /* Copiar                                                      */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0022) MSGF(&LIB/&OBJ)
@@ -1128,17 +1128,17 @@
                 MSGID(KEY0022) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Dupliquer     '                                                      +
+'Copiar'                                                              +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0023                    */
-     /* Supprimer                                                   */
+     /* Borrar                                                      */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0023) MSGF(&LIB/&OBJ)
@@ -1148,17 +1148,17 @@
                 MSGID(KEY0023) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Supprimer     '                                                      +
+'Borrar'                                                              +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0024                    */
-     /* Afficher                                                    */
+     /* Ver                                                         */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0024) MSGF(&LIB/&OBJ)
@@ -1168,17 +1168,17 @@
                 MSGID(KEY0024) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Afficher      '                                                      +
+'Ver'                                                                 +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0025                    */
-     /* Paramétrages                                                */
+     /* Configuración                                               */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0025) MSGF(&LIB/&OBJ)
@@ -1188,17 +1188,17 @@
                 MSGID(KEY0025) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Paramétrages  '                                                      +
+'Configuración '                                                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0026                    */
-     /* Abandonner                                                  */
+     /* Cancelar                                                    */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0026) MSGF(&LIB/&OBJ)
@@ -1208,17 +1208,17 @@
                 MSGID(KEY0026) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Abandonner    '                                                      +
+'Cancelar      '                                                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0027                    */
-     /* Enreg. & quitter                                            */
+     /* Salvar & Salir                                              */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0027) MSGF(&LIB/&OBJ)
@@ -1228,17 +1228,17 @@
                 MSGID(KEY0027) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Enreg. & quitter'                                                    +
+'Salvar & Salir'                                                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0028                    */
-     /* Fixer col.                                                  */
+     /* Clavar Columna                                              */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0028) MSGF(&LIB/&OBJ)
@@ -1248,17 +1248,17 @@
                 MSGID(KEY0028) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Fixer col.'                                                          +
+'Clavar Columna'                                                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0029                    */
-     /* Défixer col.                                                */
+     /* Desclavar Columna                                           */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0029) MSGF(&LIB/&OBJ)
@@ -1268,17 +1268,17 @@
                 MSGID(KEY0029) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Défixer col.'                                                        +
+'Desclavar Columna'                                                   +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0030                    */
-     /* Fixer col. +/-                                              */
+     /* Clavar Columna +/-                                          */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0030) MSGF(&LIB/&OBJ)
@@ -1288,17 +1288,17 @@
                 MSGID(KEY0030) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Fixer col. +/-'                                                      +
+'Clavar Columna +/-'                                                  +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0031                    */
-     /* Lig. en couleur                                             */
+     /* Líneas Coloreadas                                           */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0031) MSGF(&LIB/&OBJ)
@@ -1308,17 +1308,17 @@
                 MSGID(KEY0031) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Lig. en couleur'                                                     +
+'Líneas Coloreadas'                                                   +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0032                    */
-     /* Lig. monochrome                                             */
+     /* Líneas B/N                                                  */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0032) MSGF(&LIB/&OBJ)
@@ -1328,17 +1328,17 @@
                 MSGID(KEY0032) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Lig. monochrome'                                                     +
+'Líneas B/N    '                                                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0033                    */
-     /* Couleur/mono.                                               */
+     /* Color <-> B/N                                               */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0033) MSGF(&LIB/&OBJ)
@@ -1348,17 +1348,17 @@
                 MSGID(KEY0033) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Couleur/mono.'                                                       +
+'Color <-> B/N'                                                       +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0034                    */
-     /* Tous                                                        */
+     /* Sí a todo                                                   */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0034) MSGF(&LIB/&OBJ)
@@ -1368,17 +1368,17 @@
                 MSGID(KEY0034) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Tous          '                                                      +
+'Sí a todo     '                                                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0035                    */
-     /* Plus d'options                                              */
+     /* Más opciones                                                */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0035) MSGF(&LIB/&OBJ)
@@ -1388,17 +1388,17 @@
                 MSGID(KEY0035) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Plus d''options'                                                     +
+'Más opciones  '                                                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0036                    */
-     /* Copier vers                                                 */
+     /* Copiar a archivo                                            */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0036) MSGF(&LIB/&OBJ)
@@ -1408,17 +1408,17 @@
                 MSGID(KEY0036) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Copier vers   '                                                      +
+'Copiar a archivo'                                                    +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0037                    */
-     /* Sélect. champ                                               */
+     /* Marcar columna                                              */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0037) MSGF(&LIB/&OBJ)
@@ -1428,17 +1428,17 @@
                 MSGID(KEY0037) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Sélect. champ'                                                       +
+'Marcar columna'                                                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0038                    */
-     /* Libérer champ                                               */
+     /* Desmarcar columna                                           */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0038) MSGF(&LIB/&OBJ)
@@ -1448,17 +1448,17 @@
                 MSGID(KEY0038) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Libérer champ'                                                       +
+'Desmarcar columna'                                                   +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0039                    */
-     /* Minuscule                                                   */
+     /* Minúsculas                                                  */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0039) MSGF(&LIB/&OBJ)
@@ -1468,17 +1468,17 @@
                 MSGID(KEY0039) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Minuscule '                                                          +
+'Minúsculas'                                                          +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0040                    */
-     /* Majuscule                                                   */
+     /* Mayúsculas                                                  */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0040) MSGF(&LIB/&OBJ)
@@ -1488,17 +1488,17 @@
                 MSGID(KEY0040) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Majuscule '                                                          +
+'Mayúsculas'                                                          +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0041                    */
-     /* Maj. / Min.                                                 */
+     /* Min/May +/-                                                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0041) MSGF(&LIB/&OBJ)
@@ -1508,17 +1508,17 @@
                 MSGID(KEY0041) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Maj. / Min.'                                                         +
+'Min/May +/-'                                                         +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0042                    */
-     /* Page d'accueil                                              */
+     /* Splash-On                                                   */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0042) MSGF(&LIB/&OBJ)
@@ -1528,17 +1528,17 @@
                 MSGID(KEY0042) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Page d''accueil'                                                     +
+'Splash-On'                                                           +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0043                    */
-     /* Pas de page                                                 */
+     /* Splash-Off                                                  */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0043) MSGF(&LIB/&OBJ)
@@ -1548,17 +1548,17 @@
                 MSGID(KEY0043) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Pas de page'                                                         +
+'Splash-Off'                                                          +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0044                    */
-     /* Page gauche                                                 */
+     /* Pag. izquierda                                              */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0044) MSGF(&LIB/&OBJ)
@@ -1568,17 +1568,17 @@
                 MSGID(KEY0044) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Page gauche'                                                         +
+'Pag. izquierda'                                                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0045                    */
-     /* Page droite                                                 */
+     /* Pag. derecha                                                */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0045) MSGF(&LIB/&OBJ)
@@ -1588,17 +1588,17 @@
                 MSGID(KEY0045) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Page droite'                                                         +
+'Pag. derecha'                                                        +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0046                    */
-     /* Repéter                                                     */
+     /* Repetir                                                     */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0046) MSGF(&LIB/&OBJ)
@@ -1608,17 +1608,17 @@
                 MSGID(KEY0046) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Repéter'                                                             +
+'Repetir'                                                             +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0047                    */
-     /* Reconstruire                                                */
+     /* Reconstruir                                                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0047) MSGF(&LIB/&OBJ)
@@ -1628,17 +1628,17 @@
                 MSGID(KEY0047) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Reconstruire'                                                        +
+'Reconstruir'                                                         +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0048                    */
-     /* Défixer les lignes                                          */
+     /* Desclavar filas                                             */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0048) MSGF(&LIB/&OBJ)
@@ -1648,17 +1648,17 @@
                 MSGID(KEY0048) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Défixer les lignes'                                                  +
+'Desclavar filas'                                                     +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0049                    */
-     /* Défixer colonnes                                            */
+     /* Desclavar columnas                                          */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0049) MSGF(&LIB/&OBJ)
@@ -1668,17 +1668,17 @@
                 MSGID(KEY0049) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Défixer colonnes'                                                    +
+'Desclavar columnas'                                                  +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0050                    */
-     /* Maquette                                                    */
+     /* Diseño                                                      */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0050) MSGF(&LIB/&OBJ)
@@ -1688,17 +1688,17 @@
                 MSGID(KEY0050) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Maquette'                                                            +
+'Diseño'                                                              +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0051                    */
-     /* Touches flott.                                              */
+     /* Teclas flotantes                                            */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0051) MSGF(&LIB/&OBJ)
@@ -1708,17 +1708,17 @@
                 MSGID(KEY0051) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Touches flott.'                                                      +
+'Teclas flotantes'                                                    +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0052                    */
-     /* Sélectionner                                                */
+     /* Seleccionar                                                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0052) MSGF(&LIB/&OBJ)
@@ -1728,17 +1728,17 @@
                 MSGID(KEY0052) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Sélectionner'                                                        +
+'Seleccionar'                                                         +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0053                    */
-     /* Sélection suivante                                          */
+     /* Marca siguiente.                                            */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0053) MSGF(&LIB/&OBJ)
@@ -1748,17 +1748,17 @@
                 MSGID(KEY0053) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Sélection suivante'                                                  +
+'Marca siguiente.'                                                    +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0054                    */
-     /* Sélection préc.                                             */
+     /* Marca Anterior                                              */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0054) MSGF(&LIB/&OBJ)
@@ -1768,17 +1768,17 @@
                 MSGID(KEY0054) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Sélection préc.'                                                     +
+'Marca Anterior'                                                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0055                    */
-     /* Relations                                                   */
+     /* Relaciones                                                  */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0055) MSGF(&LIB/&OBJ)
@@ -1788,17 +1788,17 @@
                 MSGID(KEY0055) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Relations'                                                           +
+'Relaciones'                                                          +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0056                    */
-     /* Guide                                                       */
+     /* Solicitud                                                   */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0056) MSGF(&LIB/&OBJ)
@@ -1808,17 +1808,17 @@
                 MSGID(KEY0056) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Guide '                                                              +
+'Solicitud'                                                           +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0057                    */
-     /* Ordre clé                                                   */
+     /* Orden por clave                                             */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0057) MSGF(&LIB/&OBJ)
@@ -1828,17 +1828,17 @@
                 MSGID(KEY0057) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Ordre clé'                                                           +
+'Orden por clave'                                                     +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0058                    */
-     /* Ordre enreg.                                                */
+     /* Orden por registro                                          */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0058) MSGF(&LIB/&OBJ)
@@ -1848,17 +1848,17 @@
                 MSGID(KEY0058) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Ordre enreg.'                                                        +
+'Orden por registro'                                                  +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0059                    */
-     /* Tri Clef/N°enr.                                             */
+     /* Clave/RRN                                                   */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0059) MSGF(&LIB/&OBJ)
@@ -1868,17 +1868,17 @@
                 MSGID(KEY0059) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Tri Clef/N°enr.'                                                     +
+'Clave/RRN'                                                           +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0060                    */
-     /* Editeur Hexa                                                */
+     /* Edicion Hex.                                                */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0060) MSGF(&LIB/&OBJ)
@@ -1888,17 +1888,17 @@
                 MSGID(KEY0060) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Editeur Hexa'                                                        +
+'Edicion Hex.'                                                        +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0061                    */
-     /* Infos                                                       */
+     /* Acerca de                                                   */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0061) MSGF(&LIB/&OBJ)
@@ -1908,17 +1908,17 @@
                 MSGID(KEY0061) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Infos'                                                               +
+'Acerca de'                                                           +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0062                    */
-     /* Fixer champs                                                */
+     /* Col.clavadas                                                */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0062) MSGF(&LIB/&OBJ)
@@ -1928,17 +1928,17 @@
                 MSGID(KEY0062) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Fixer champs'                                                        +
+'Col.clavadas'                                                        +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0063                    */
-     /* Efface tout                                                 */
+     /* Borrar todo                                                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0063) MSGF(&LIB/&OBJ)
@@ -1948,17 +1948,17 @@
                 MSGID(KEY0063) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Efface tout'                                                         +
+'Borrar todo'                                                         +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0064                    */
-     /* Affichage normal                                            */
+     /* Vis.Normal                                                  */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0064) MSGF(&LIB/&OBJ)
@@ -1968,17 +1968,17 @@
                 MSGID(KEY0064) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Affichage normal'                                                    +
+'Vis.Normal'                                                          +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0065                    */
-     /* Affichage hexa                                              */
+     /* Vis.Hex                                                     */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0065) MSGF(&LIB/&OBJ)
@@ -1988,17 +1988,17 @@
                 MSGID(KEY0065) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Affichage hexa'                                                      +
+'Vis.Hex'                                                             +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0066                    */
-     /* Hexa/car.                                                   */
+     /* Cambiar modo vis.                                           */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0066) MSGF(&LIB/&OBJ)
@@ -2008,17 +2008,17 @@
                 MSGID(KEY0066) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Hexa/car.'                                                           +
+'Cambiar modo vis.'                                                   +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0067                    */
-     /* Sélection SQL                                               */
+     /* Selección SQL                                               */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0067) MSGF(&LIB/&OBJ)
@@ -2028,17 +2028,17 @@
                 MSGID(KEY0067) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Sélection SQL'                                                       +
+'Selección SQL'                                                       +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0068                    */
-     /* Ins.champs clef                                             */
+     /* Ins.Cpos Clave                                              */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0068) MSGF(&LIB/&OBJ)
@@ -2048,17 +2048,17 @@
                 MSGID(KEY0068) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Ins.champs clef'                                                     +
+'Ins.Cpos Clave'                                                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0069                    */
-     /* Sauve environ.                                              */
+     /* Salvar Entorno                                              */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0069) MSGF(&LIB/&OBJ)
@@ -2068,17 +2068,17 @@
                 MSGID(KEY0069) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Sauve environ.'                                                      +
+'Salvar Entorno'                                                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0070                    */
-     /* Charge environ.                                             */
+     /* Cargar Entorno                                              */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0070) MSGF(&LIB/&OBJ)
@@ -2088,17 +2088,17 @@
                 MSGID(KEY0070) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Charge environ.'                                                     +
+'Cargar Entorno'                                                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0071                    */
-     /* Supprime environ.                                           */
+     /* Borrar Entorno                                              */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0071) MSGF(&LIB/&OBJ)
@@ -2108,17 +2108,17 @@
                 MSGID(KEY0071) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Supprime environ.'                                                   +
+'Borrar Entorno '                                                     +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0072                    */
-     /* Séquence de tri                                             */
+     /* Sec. clasificación                                          */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0072) MSGF(&LIB/&OBJ)
@@ -2128,17 +2128,17 @@
                 MSGID(KEY0072) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Séquence de tri'                                                     +
+'Sec. clasificación'                                                  +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0073                    */
-     /* Oui                                                         */
+     /* Sí                                                          */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0073) MSGF(&LIB/&OBJ)
@@ -2148,17 +2148,17 @@
                 MSGID(KEY0073) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Oui'                                                                 +
+'Sí'                                                                  +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0074                    */
-     /* Non                                                         */
+     /* No                                                          */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0074) MSGF(&LIB/&OBJ)
@@ -2168,12 +2168,12 @@
                 MSGID(KEY0074) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Non'                                                                 +
+'No'                                                                  +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2193,12 +2193,12 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0076                    */
-     /* Prem. Pos.                                                  */
+     /* Primera Pos.                                                */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0076) MSGF(&LIB/&OBJ)
@@ -2208,17 +2208,17 @@
                 MSGID(KEY0076) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Prem. Pos.'                                                          +
+'Primera Pos.'                                                        +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0077                    */
-     /* Dern. Pos.                                                  */
+     /* Ultima Pos.                                                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0077) MSGF(&LIB/&OBJ)
@@ -2228,17 +2228,17 @@
                 MSGID(KEY0077) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Dern. Pos.'                                                          +
+'Ultima Pos.'                                                         +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0078                    */
-     /* Environnement                                               */
+     /* Entorno                                                     */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0078) MSGF(&LIB/&OBJ)
@@ -2248,17 +2248,17 @@
                 MSGID(KEY0078) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Environnement'                                                       +
+'Entorno'                                                             +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0079                    */
-     /* Maquette seule                                              */
+     /* Diseño sólo                                                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0079) MSGF(&LIB/&OBJ)
@@ -2268,17 +2268,17 @@
                 MSGID(KEY0079) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Maquette seule'                                                      +
+'Diseño sólo'                                                         +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0080                    */
-     /* NULL accepté                                                */
+     /* Cambiar NULL-Flag                                           */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0080) MSGF(&LIB/&OBJ)
@@ -2288,17 +2288,17 @@
                 MSGID(KEY0080) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'NULL accepté'                                                        +
+'Cambiar NULL-Flag'                                                   +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0081                    */
-     /* Chg mode entrée                                             */
+     /* Cambiar modo ent.                                           */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0081) MSGF(&LIB/&OBJ)
@@ -2308,17 +2308,17 @@
                 MSGID(KEY0081) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Chg mode entrée'                                                     +
+'Cambiar modo ent.'                                                   +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0082                    */
-     /* Edite chaîne                                                */
+     /* Editar cadena                                               */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0082) MSGF(&LIB/&OBJ)
@@ -2328,17 +2328,17 @@
                 MSGID(KEY0082) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Edite chaîne'                                                        +
+'Editar cadena'                                                       +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0083                    */
-     /* Verrouillage                                                */
+     /* Bloqueo registro                                            */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0083) MSGF(&LIB/&OBJ)
@@ -2348,17 +2348,17 @@
                 MSGID(KEY0083) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Verrouillage'                                                        +
+'Bloqueo registro'                                                    +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0084                    */
-     /* Min./maj.                                                   */
+     /* Tecla minúscúlas                                            */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0084) MSGF(&LIB/&OBJ)
@@ -2368,17 +2368,17 @@
                 MSGID(KEY0084) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Min./maj.'                                                           +
+'Tecla minúscúlas'                                                    +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0085                    */
-     /* Imprimer                                                    */
+     /* Imprimir                                                    */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0085) MSGF(&LIB/&OBJ)
@@ -2388,17 +2388,17 @@
                 MSGID(KEY0085) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Imprimer'                                                            +
+'Imprimir'                                                            +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0086                    */
-     /* Insérer                                                     */
+     /* Inserte                                                     */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0086) MSGF(&LIB/&OBJ)
@@ -2408,17 +2408,17 @@
                 MSGID(KEY0086) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Insérer'                                                             +
+'Inserte'                                                             +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   KEY0087                    */
-     /* Supprimer                                                   */
+     /* Borrar                                                      */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(KEY0087) MSGF(&LIB/&OBJ)
@@ -2428,17 +2428,17 @@
                 MSGID(KEY0087) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Supprimer'                                                           +
+'Borrar'                                                              +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   MBX0001                    */
-     /* Information                                                 */
+     /* Información                                                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(MBX0001) MSGF(&LIB/&OBJ)
@@ -2448,17 +2448,17 @@
                 MSGID(MBX0001) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Information'                                                         +
+'Información'                                                         +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   MBX0002                    */
-     /* Questions                                                   */
+     /* Preguntas                                                   */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(MBX0002) MSGF(&LIB/&OBJ)
@@ -2468,17 +2468,17 @@
                 MSGID(MBX0002) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Questions'                                                           +
+'Preguntas'                                                           +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   PMT0001                    */
-     /* Fichier                                                     */
+     /* Fichero                                                     */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(PMT0001) MSGF(&LIB/&OBJ)
@@ -2488,17 +2488,17 @@
                 MSGID(PMT0001) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Fichier'                                                             +
+'Fichero'                                                             +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   PMT0002                    */
-     /* Membre                                                      */
+     /* Miembro                                                     */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(PMT0002) MSGF(&LIB/&OBJ)
@@ -2508,17 +2508,17 @@
                 MSGID(PMT0002) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Membre'                                                              +
+'Miembro'                                                             +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   PMT0003                    */
-     /* Type d'accès                                                */
+     /* Tipo de acceso de registro                                  */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(PMT0003) MSGF(&LIB/&OBJ)
@@ -2528,17 +2528,17 @@
                 MSGID(PMT0003) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Type d''accès'                                                       +
+'Tipo de acceso de registro'                                          +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   PMT0004                    */
-     /* Langue                                                      */
+     /* Idioma                                                      */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(PMT0004) MSGF(&LIB/&OBJ)
@@ -2548,17 +2548,17 @@
                 MSGID(PMT0004) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Langue'                                                              +
+'Idioma'                                                              +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   PMT0005                    */
-     /* Droit de changer bibliothèque                               */
+     /* Permitir cambio de biblioteca                               */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(PMT0005) MSGF(&LIB/&OBJ)
@@ -2568,17 +2568,17 @@
                 MSGID(PMT0005) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Droit de changer bibliothèque'                                       +
+'Permitir cambio de biblioteca'                                       +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   PMT0006                    */
-     /* Droit de changer de fichier                                 */
+     /* Permitir cambio de archivo                                  */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(PMT0006) MSGF(&LIB/&OBJ)
@@ -2588,17 +2588,17 @@
                 MSGID(PMT0006) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Droit de changer de fichier'                                         +
+'Permitir cambio de archivo'                                          +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   PMT0007                    */
-     /* Droit de changer de membre                                  */
+     /* Permitir cambio de miembro                                  */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(PMT0007) MSGF(&LIB/&OBJ)
@@ -2608,17 +2608,17 @@
                 MSGID(PMT0007) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Droit de changer de membre'                                          +
+'Permitir cambio de miembro'                                          +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   PMT0008                    */
-     /* Droit modifier enregistrement                               */
+     /* Permitir cambiar registros                                  */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(PMT0008) MSGF(&LIB/&OBJ)
@@ -2628,17 +2628,17 @@
                 MSGID(PMT0008) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Droit modifier enregistrement'                                       +
+'Permitir cambiar registros'                                          +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   PMT0009                    */
-     /* Droit de modifier SQL WHERE                                 */
+     /* Permitir cambiar SQL WHERE                                  */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(PMT0009) MSGF(&LIB/&OBJ)
@@ -2648,17 +2648,17 @@
                 MSGID(PMT0009) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Droit de modifier SQL WHERE'                                         +
+'Permitir cambiar SQL WHERE'                                          +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   PMT0010                    */
-     /* Droit de modifier ORDER BY                                  */
+     /* Permitir cambiar SQL ORDER BY                               */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(PMT0010) MSGF(&LIB/&OBJ)
@@ -2668,17 +2668,17 @@
                 MSGID(PMT0010) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Droit de modifier ORDER BY'                                          +
+'Permitir cambiar SQL ORDER BY'                                       +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   PMT0011                    */
-     /* Environnement                                               */
+     /* Entorno                                                     */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(PMT0011) MSGF(&LIB/&OBJ)
@@ -2688,17 +2688,17 @@
                 MSGID(PMT0011) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Environnement'                                                       +
+'Entorno'                                                             +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   PMT0012                    */
-     /*   Membre                                                    */
+     /*   Miembro                                                   */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(PMT0012) MSGF(&LIB/&OBJ)
@@ -2708,17 +2708,17 @@
                 MSGID(PMT0012) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'  Membre'                                                            +
+'  Miembro'                                                           +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   PMT0013                    */
-     /* Clause SQL WHERE                                            */
+     /* Claúsula SQL WHERE                                          */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(PMT0013) MSGF(&LIB/&OBJ)
@@ -2728,17 +2728,17 @@
                 MSGID(PMT0013) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Clause SQL WHERE'                                                    +
+'Claúsula SQL WHERE'                                                  +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   PMT0014                    */
-     /* Clause SQL ORDER BY                                         */
+     /* Claúsula SQL ORDER BY                                       */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(PMT0014) MSGF(&LIB/&OBJ)
@@ -2748,17 +2748,17 @@
                 MSGID(PMT0014) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Clause SQL ORDER BY'                                                 +
+'Claúsula SQL ORDER BY'                                               +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   PMT0015                    */
-     /* Bibliothèque                                                */
+     /* Biblioteca                                                  */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(PMT0015) MSGF(&LIB/&OBJ)
@@ -2768,17 +2768,17 @@
                 MSGID(PMT0015) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Bibliothèque'                                                        +
+'Biblioteca'                                                          +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   PMT0016                    */
-     /* Préférences utilisateur                                     */
+     /* Configuración de usuario                                    */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(PMT0016) MSGF(&LIB/&OBJ)
@@ -2788,17 +2788,17 @@
                 MSGID(PMT0016) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Préférences utilisateur'                                             +
+'Configuración de usuario'                                            +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   PMT0017                    */
-     /* Profil utilisateur                                          */
+     /* Perfil de Usuario                                           */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(PMT0017) MSGF(&LIB/&OBJ)
@@ -2808,17 +2808,17 @@
                 MSGID(PMT0017) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Profil utilisateur'                                                  +
+'Perfil de Usuario'                                                   +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   PMT0018                    */
-     /* Sauvegarder en quittant                                     */
+     /* Guardar al salir                                            */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(PMT0018) MSGF(&LIB/&OBJ)
@@ -2828,17 +2828,17 @@
                 MSGID(PMT0018) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Sauvegarder en quittant'                                             +
+'Guardar al salir'                                                    +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   PMT0019                    */
-     /* Charger seulement la maquette                               */
+     /* Cargar solo el diseño                                       */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(PMT0019) MSGF(&LIB/&OBJ)
@@ -2848,17 +2848,17 @@
                 MSGID(PMT0019) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Charger seulement la maquette'                                       +
+'Cargar solo el diseño'                                               +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   PMT0100                    */
-     /* Editeur B.D.D Peek/400                                      */
+     /* Editor de Archivo - Peek/400                                */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(PMT0100) MSGF(&LIB/&OBJ)
@@ -2868,17 +2868,17 @@
                 MSGID(PMT0100) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Editeur B.D.D Peek/400'                                              +
+'Editor de Archivo - Peek/400'                                        +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   PMT0101                    */
-     /* Afficher relations logiques                                 */
+     /* Ver relación de base de datos                               */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(PMT0101) MSGF(&LIB/&OBJ)
@@ -2888,17 +2888,17 @@
                 MSGID(PMT0101) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Afficher relations logiques'                                         +
+'Ver relación de base de datos'                                       +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0001                    */
-     /* Fich.:                                                      */
+     /* Fich:                                                       */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0001) MSGF(&LIB/&OBJ)
@@ -2908,17 +2908,17 @@
                 MSGID(TXT0001) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Fich.:'                                                              +
+'Fich:'                                                               +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0002                    */
-     /* Bibliothè.:                                                 */
+     /* Biblioteca:                                                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0002) MSGF(&LIB/&OBJ)
@@ -2928,17 +2928,17 @@
                 MSGID(TXT0002) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Bibliothè.:'                                                         +
+'Biblioteca:'                                                         +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0003                    */
-     /*   Membre :                                                  */
+     /*   Miembro:                                                  */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0003) MSGF(&LIB/&OBJ)
@@ -2948,17 +2948,17 @@
                 MSGID(TXT0003) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'  Membre :'                                                          +
+'  Miembro:'                                                          +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0004                    */
-     /* Longueur....:                                               */
+     /* Longitud :                                                  */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0004) MSGF(&LIB/&OBJ)
@@ -2968,17 +2968,17 @@
                 MSGID(TXT0004) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Longueur....:'                                                       +
+'Longitud :'                                                          +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0005                    */
-     /* Nbre enreg..:                                               */
+     /* Registros:                                                  */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0005) MSGF(&LIB/&OBJ)
@@ -2988,17 +2988,17 @@
                 MSGID(TXT0005) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Nbre enreg..:'                                                       +
+'Registros:'                                                          +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0006                    */
-     /* N° champ....:                                               */
+     /* Campo-No.:                                                  */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0006) MSGF(&LIB/&OBJ)
@@ -3008,17 +3008,17 @@
                 MSGID(TXT0006) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'N° champ....:'                                                       +
+'Campo-No.:'                                                          +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0007                    */
-     /* Nom du champ:                                               */
+     /*  Campo vent.:                                               */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0007) MSGF(&LIB/&OBJ)
@@ -3028,17 +3028,17 @@
                 MSGID(TXT0007) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Nom du champ:'                                                       +
+' Campo vent.:'                                                       +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0008                    */
-     /*   Format :                                                  */
+     /*   Formato:                                                  */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0008) MSGF(&LIB/&OBJ)
@@ -3048,17 +3048,17 @@
                 MSGID(TXT0008) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'  Format :'                                                          +
+'  Formato:'                                                          +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0009                    */
-     /* Taille fich.:                                               */
+     /* Tamaño arch.:                                               */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0009) MSGF(&LIB/&OBJ)
@@ -3068,17 +3068,17 @@
                 MSGID(TXT0009) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Taille fich.:'                                                       +
+'Tamaño arch.:'                                                       +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0010                    */
-     /* N° enregist.:                                               */
+     /* Registro-No:                                                */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0010) MSGF(&LIB/&OBJ)
@@ -3088,17 +3088,17 @@
                 MSGID(TXT0010) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'N° enregist.:'                                                       +
+'Registro-No:'                                                        +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0011                    */
-     /* Valeur clefs:                                               */
+     /* Valor de Clave:                                             */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0011) MSGF(&LIB/&OBJ)
@@ -3108,17 +3108,17 @@
                 MSGID(TXT0011) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Valeur clefs:'                                                       +
+'Valor de Clave:'                                                     +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0012                    */
-     /*  Options :                                                  */
+     /*   Opciones:                                                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0012) MSGF(&LIB/&OBJ)
@@ -3128,17 +3128,17 @@
                 MSGID(TXT0012) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-' Options :'                                                          +
+'  Opciones:'                                                         +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0013                    */
-     /* Fich.:                                                      */
+     /*  Fich:                                                      */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0013) MSGF(&LIB/&OBJ)
@@ -3148,12 +3148,12 @@
                 MSGID(TXT0013) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Fich.:'                                                              +
+' Fich:'                                                              +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3173,7 +3173,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3193,12 +3193,12 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0016                    */
-     /* Taille:                                                     */
+     /* Long..:                                                     */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0016) MSGF(&LIB/&OBJ)
@@ -3208,17 +3208,17 @@
                 MSGID(TXT0016) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Taille:'                                                             +
+'Long..:'                                                             +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0017                    */
-     /* Enreg.:                                                     */
+     /* Reg...:                                                     */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0017) MSGF(&LIB/&OBJ)
@@ -3228,17 +3228,17 @@
                 MSGID(TXT0017) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Enreg.:'                                                             +
+'Reg...:'                                                             +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0018                    */
-     /* N°champ.:                                                   */
+     /* Campo-No.:                                                  */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0018) MSGF(&LIB/&OBJ)
@@ -3248,17 +3248,17 @@
                 MSGID(TXT0018) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'N°champ.:'                                                           +
+'Campo-No.:'                                                          +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0019                    */
-     /* Nom champ:                                                  */
+     /* Cpo Ventana:                                                */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0019) MSGF(&LIB/&OBJ)
@@ -3268,17 +3268,17 @@
                 MSGID(TXT0019) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Nom champ:'                                                          +
+'Cpo Ventana:'                                                        +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0020                    */
-     /* Format:                                                     */
+     /* Fmto..:                                                     */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0020) MSGF(&LIB/&OBJ)
@@ -3288,17 +3288,17 @@
                 MSGID(TXT0020) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Format:'                                                             +
+'Fmto..:'                                                             +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0021                    */
-     /* Taille:                                                     */
+     /* Tamaño:                                                     */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0021) MSGF(&LIB/&OBJ)
@@ -3308,17 +3308,17 @@
                 MSGID(TXT0021) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Taille:'                                                             +
+'Tamaño:'                                                             +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0022                    */
-     /* N° enreg.:                                                  */
+     /* Reg-No:                                                     */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0022) MSGF(&LIB/&OBJ)
@@ -3328,17 +3328,17 @@
                 MSGID(TXT0022) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'N° enreg.:'                                                          +
+'Reg-No:'                                                             +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0023                    */
-     /* Valeur clefs:                                               */
+     /* Clave....:                                                  */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0023) MSGF(&LIB/&OBJ)
@@ -3348,17 +3348,17 @@
                 MSGID(TXT0023) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Valeur clefs:'                                                       +
+'Clave....:'                                                          +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0024                    */
-     /* Options:                                                    */
+     /* Opcion.:                                                    */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0024) MSGF(&LIB/&OBJ)
@@ -3368,17 +3368,17 @@
                 MSGID(TXT0024) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Options:'                                                            +
+'Opcion.:'                                                            +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0025                    */
-     /* (Pas d'enregistrement)                                      */
+     /* (No hay registros)                                          */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0025) MSGF(&LIB/&OBJ)
@@ -3388,17 +3388,17 @@
                 MSGID(TXT0025) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'(Pas d''enregistrement)'                                             +
+'(No hay registros)'                                                  +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0026                    */
-     /* Tapez ENTREE pour supprimer.                                */
+     /* Pulse ENTER para Borrar..                                   */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0026) MSGF(&LIB/&OBJ)
@@ -3408,17 +3408,17 @@
                 MSGID(TXT0026) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Tapez ENTREE pour supprimer.'                                        +
+'Pulse ENTER para Borrar..'                                           +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0027                    */
-     /* Détail enregistrement                                       */
+     /* Reg. Expandido  ...                                         */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0027) MSGF(&LIB/&OBJ)
@@ -3428,17 +3428,17 @@
                 MSGID(TXT0027) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Détail enregistrement'                                               +
+'Reg. Expandido  ...'                                                 +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0028                    */
-     /* Tapez ENTREE pour copier.                                   */
+     /* Pulse ENTER para COPIA.                                     */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0028) MSGF(&LIB/&OBJ)
@@ -3448,17 +3448,17 @@
                 MSGID(TXT0028) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Tapez ENTREE pour copier.'                                           +
+'Pulse ENTER para COPIA.'                                             +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0029                    */
-     /* Enreg.:                                                     */
+     /* N° reg.:                                                    */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0029) MSGF(&LIB/&OBJ)
@@ -3468,17 +3468,17 @@
                 MSGID(TXT0029) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Enreg.:'                                                             +
+'N° reg.:'                                                            +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0030                    */
-     /* Journalisation                                              */
+     /* Ctl.Compromiso                                              */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0030) MSGF(&LIB/&OBJ)
@@ -3488,17 +3488,17 @@
                 MSGID(TXT0030) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Journalisation'                                                      +
+'Ctl.Compromiso    '                                                  +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0031                    */
-     /* Non journalisé                                              */
+     /* w/o Ctl.Compromiso                                          */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0031) MSGF(&LIB/&OBJ)
@@ -3508,17 +3508,17 @@
                 MSGID(TXT0031) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Non journalisé'                                                      +
+'w/o Ctl.Compromiso'                                                  +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0032                    */
-     /* (Pas d'enregistrement)                                      */
+     /* (No hay registros)                                          */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0032) MSGF(&LIB/&OBJ)
@@ -3528,17 +3528,17 @@
                 MSGID(TXT0032) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'(Pas d''enregistrement)'                                             +
+'(No hay registros)'                                                  +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0033                    */
-     /*     - Recherche -                                           */
+     /*     -Encontrar-                                             */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0033) MSGF(&LIB/&OBJ)
@@ -3548,17 +3548,17 @@
                 MSGID(TXT0033) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'    - Recherche -'                                                   +
+'    -Encontrar-'                                                     +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0034                    */
-     /* Champ                                                       */
+     /* Campo                                                       */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0034) MSGF(&LIB/&OBJ)
@@ -3568,12 +3568,12 @@
                 MSGID(TXT0034) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Champ'                                                               +
+'Campo'                                                               +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3593,12 +3593,12 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0036                    */
-     /* Valeur (sans quotes)                                        */
+     /* Valor (sin comillas)                                        */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0036) MSGF(&LIB/&OBJ)
@@ -3608,17 +3608,17 @@
                 MSGID(TXT0036) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Valeur (sans quotes)'                                                +
+'Valor (sin comillas)'                                                +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0037                    */
-     /* pour recherche gén)                                         */
+     /* para búsq. genér.)                                          */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0037) MSGF(&LIB/&OBJ)
@@ -3628,17 +3628,17 @@
                 MSGID(TXT0037) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'pour recherche gén)'                                                 +
+'para búsq. genér.)'                                                  +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0038                    */
-     /* Nb.lignes maxi:                                             */
+     /* Busq. Max. ...:                                             */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0038) MSGF(&LIB/&OBJ)
@@ -3648,17 +3648,17 @@
                 MSGID(TXT0038) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Nb.lignes maxi:'                                                     +
+'Busq. Max. ...:'                                                     +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0039                    */
-     /* Type recherche:                                             */
+     /* Tipo Busq.  ..:                                             */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0039) MSGF(&LIB/&OBJ)
@@ -3668,17 +3668,17 @@
                 MSGID(TXT0039) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Type recherche:'                                                     +
+'Tipo Busq.  ..:'                                                     +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0040                    */
-     /* (Normal/Underline/Reverse/Pin)                              */
+     /* (Normal/Subrayado/Reverso/Cla)                              */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0040) MSGF(&LIB/&OBJ)
@@ -3688,17 +3688,17 @@
                 MSGID(TXT0040) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'(Normal/Underline/Reverse/Pin)'                                      +
+'(Normal/Subrayado/Reverso/Cla)'                                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0041                    */
-     /* Respect casse :                                             */
+     /* Sensible-Mayus:                                             */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0041) MSGF(&LIB/&OBJ)
@@ -3708,17 +3708,17 @@
                 MSGID(TXT0041) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Respect casse :'                                                     +
+'Sensible-Mayus:'                                                     +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0042                    */
-     /* (1=Oui, 0=Non)                                              */
+     /* (1=Sí , 0=No)                                               */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0042) MSGF(&LIB/&OBJ)
@@ -3728,17 +3728,17 @@
                 MSGID(TXT0042) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'(1=Oui, 0=Non)'                                                      +
+'(1=Sí , 0=No)'                                                       +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0043                    */
-     /*    - Couleur -                                              */
+     /*     - Color  -                                              */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0043) MSGF(&LIB/&OBJ)
@@ -3748,17 +3748,17 @@
                 MSGID(TXT0043) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'   - Couleur -'                                                      +
+'    - Color  -'                                                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0044                    */
-     /* -  Choix Couleur  -                                         */
+     /* -  Selec. Color   -                                         */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0044) MSGF(&LIB/&OBJ)
@@ -3768,17 +3768,17 @@
                 MSGID(TXT0044) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'-  Choix Couleur  -'                                                 +
+'-  Selec. Color   -'                                                 +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0045                    */
-     /* Vert                                                        */
+     /* Verde                                                       */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0045) MSGF(&LIB/&OBJ)
@@ -3788,17 +3788,17 @@
                 MSGID(TXT0045) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Vert     '                                                           +
+'Verde    '                                                           +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0046                    */
-     /* Blanc                                                       */
+     /* Blanco                                                      */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0046) MSGF(&LIB/&OBJ)
@@ -3808,17 +3808,17 @@
                 MSGID(TXT0046) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Blanc    '                                                           +
+'Blanco   '                                                           +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0047                    */
-     /* Rouge                                                       */
+     /* Rojo                                                        */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0047) MSGF(&LIB/&OBJ)
@@ -3828,17 +3828,17 @@
                 MSGID(TXT0047) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Rouge    '                                                           +
+'Rojo     '                                                           +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0048                    */
-     /* Turquoise                                                   */
+     /* Turquesa                                                    */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0048) MSGF(&LIB/&OBJ)
@@ -3848,17 +3848,17 @@
                 MSGID(TXT0048) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Turquoise'                                                           +
+'Turquesa '                                                           +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0049                    */
-     /* Jaune                                                       */
+     /* Amarillo                                                    */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0049) MSGF(&LIB/&OBJ)
@@ -3868,17 +3868,17 @@
                 MSGID(TXT0049) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Jaune    '                                                           +
+'Amarillo '                                                           +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0050                    */
-     /* Rose                                                        */
+     /* Rosa                                                        */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0050) MSGF(&LIB/&OBJ)
@@ -3888,17 +3888,17 @@
                 MSGID(TXT0050) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Rose     '                                                           +
+'Rosa     '                                                           +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0051                    */
-     /* Bleu                                                        */
+     /* Azul                                                        */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0051) MSGF(&LIB/&OBJ)
@@ -3908,17 +3908,17 @@
                 MSGID(TXT0051) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Bleu     '                                                           +
+'Azul     '                                                           +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0052                    */
-     /* - Copier vers fic.-                                         */
+     /*   -Copiar a Fich.-                                          */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0052) MSGF(&LIB/&OBJ)
@@ -3928,17 +3928,17 @@
                 MSGID(TXT0052) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'- Copier vers fic.-'                                                 +
+'  -Copiar a Fich.-'                                                  +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0053                    */
-     /* Fichier..........:                                          */
+     /* Fichero .........:                                          */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0053) MSGF(&LIB/&OBJ)
@@ -3948,17 +3948,17 @@
                 MSGID(TXT0053) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Fichier..........:'                                                  +
+'Fichero .........:'                                                  +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0054                    */
-     /* Bibliothèque.....:                                          */
+     /* Biblioteca.......:                                          */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0054) MSGF(&LIB/&OBJ)
@@ -3968,17 +3968,17 @@
                 MSGID(TXT0054) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Bibliothèque.....:'                                                  +
+'Biblioteca.......:'                                                  +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0055                    */
-     /* Membre ..........:                                          */
+     /* Miembro .........:                                          */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0055) MSGF(&LIB/&OBJ)
@@ -3988,17 +3988,17 @@
                 MSGID(TXT0055) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Membre ..........:'                                                  +
+'Miembro .........:'                                                  +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0056                    */
-     /* Remplacer enreg..:                                          */
+     /* Reemplazar Regs .:                                          */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0056) MSGF(&LIB/&OBJ)
@@ -4008,17 +4008,17 @@
                 MSGID(TXT0056) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Remplacer enreg..:'                                                  +
+'Reemplazar Regs .:'                                                  +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0057                    */
-     /* Créer Fichier....:                                          */
+     /* Crear Archivo ...:                                          */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0057) MSGF(&LIB/&OBJ)
@@ -4028,17 +4028,17 @@
                 MSGID(TXT0057) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Créer Fichier....:'                                                  +
+'Crear Archivo ...:'                                                  +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0058                    */
-     /* - Données Licence -                                         */
+     /*   - Fecha Licenc.-                                          */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0058) MSGF(&LIB/&OBJ)
@@ -4048,17 +4048,17 @@
                 MSGID(TXT0058) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'- Données Licence -'                                                 +
+'  - Fecha Licenc.-'                                                  +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0059                    */
-     /* N° licence:                                                 */
+     /* Licenc.-No:                                                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0059) MSGF(&LIB/&OBJ)
@@ -4068,17 +4068,17 @@
                 MSGID(TXT0059) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'N° licence:'                                                         +
+'Licenc.-No:'                                                         +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0060                    */
-     /* F9=Testez!                                                  */
+     /* F9=Prueba !                                                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0060) MSGF(&LIB/&OBJ)
@@ -4088,17 +4088,17 @@
                 MSGID(TXT0060) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'F9=Testez!'                                                          +
+'F9=Prueba !'                                                         +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0061                    */
-     /* Les données de la licence ont été sauvegardées              */
+     /* Fecha Lic. se ha salvado   !                                */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0061) MSGF(&LIB/&OBJ)
@@ -4108,17 +4108,17 @@
                 MSGID(TXT0061) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Les données de la licence ont été sauvegardées'                      +
+'Fecha Lic. se ha salvado   !'                                        +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0062                    */
-     /* Désolé, fin de la période ...........                       */
+     /* Perdón, ya no queda tiempo        ...                       */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0062) MSGF(&LIB/&OBJ)
@@ -4128,17 +4128,17 @@
                 MSGID(TXT0062) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Désolé, fin de la période ...........'                               +
+'Perdón, ya no queda tiempo        ...'                               +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0063                    */
-     /* ENTREE pour modif.                                          */
+     /* Pulse ENTER para CAMBIAR.                                   */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0063) MSGF(&LIB/&OBJ)
@@ -4148,17 +4148,17 @@
                 MSGID(TXT0063) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'ENTREE pour modif.'                                                  +
+'Pulse ENTER para CAMBIAR.'                                           +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0064                    */
-     /* ENTREE pour copie                                           */
+     /* Pulse ENTER para COPIAR                                     */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0064) MSGF(&LIB/&OBJ)
@@ -4168,17 +4168,17 @@
                 MSGID(TXT0064) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'ENTREE pour copie'                                                   +
+'Pulse ENTER para COPIAR'                                             +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0065                    */
-     /* ENTREE pour ajout                                           */
+     /* Pulse ENTER para AÑAD.                                      */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0065) MSGF(&LIB/&OBJ)
@@ -4188,17 +4188,17 @@
                 MSGID(TXT0065) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'ENTREE pour ajout'                                                   +
+'Pulse ENTER para AÑAD.'                                              +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0066                    */
-     /* A suivre...                                                 */
+     /*    Más  ...                                                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0066) MSGF(&LIB/&OBJ)
@@ -4208,12 +4208,12 @@
                 MSGID(TXT0066) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'A suivre...'                                                         +
+'   Más  ...'                                                         +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4233,12 +4233,12 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0068                    */
-     /* Journalisation                                              */
+     /* Commit & Rollback                                           */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0068) MSGF(&LIB/&OBJ)
@@ -4248,17 +4248,17 @@
                 MSGID(TXT0068) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Journalisation'                                                      +
+'Commit & Rollback'                                                   +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0069                    */
-     /* Mode écran 80/132 car.                                      */
+     /* 80-/132- Modo Caracter                                      */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0069) MSGF(&LIB/&OBJ)
@@ -4268,17 +4268,17 @@
                 MSGID(TXT0069) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Mode écran 80/132 car.'                                              +
+'80-/132- Modo Caracter '                                             +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0070                    */
-     /* Moteur de recherche puissant                                */
+     /* Motor de Búsq. Avanzado                                     */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0070) MSGF(&LIB/&OBJ)
@@ -4288,17 +4288,17 @@
                 MSGID(TXT0070) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Moteur de recherche puissant'                                        +
+'Motor de Búsq. Avanzado'                                             +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0071                    */
-     /* Touches de fonction personnalisables                        */
+     /* Teclado def. por usuario                                    */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0071) MSGF(&LIB/&OBJ)
@@ -4308,17 +4308,17 @@
                 MSGID(TXT0071) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Touches de fonction personnalisables'                                +
+'Teclado def. por usuario    '                                        +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0072                    */
-     /* Choix de la langue                                          */
+     /* Lenguas def.por usuar.                                      */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0072) MSGF(&LIB/&OBJ)
@@ -4328,17 +4328,17 @@
                 MSGID(TXT0072) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Choix de la langue'                                                  +
+'Lenguas def.por usuar.'                                              +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0073                    */
-     /*   L'ultime                                                  */
+     /*  El definitivo                                              */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0073) MSGF(&LIB/&OBJ)
@@ -4348,17 +4348,17 @@
                 MSGID(TXT0073) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'  L''ultime'                                                         +
+' El definitivo '                                                     +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0074                    */
-     /* navigateur de BD                                            */
+     /* navegador de BD                                             */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0074) MSGF(&LIB/&OBJ)
@@ -4368,17 +4368,17 @@
                 MSGID(TXT0074) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'navigateur de BD'                                                    +
+'navegador de BD  '                                                   +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0075                    */
-     /*       * Points forts *                                      */
+     /*         * Highlights *                                      */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0075) MSGF(&LIB/&OBJ)
@@ -4388,17 +4388,17 @@
                 MSGID(TXT0075) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'      * Points forts *      '                                        +
+'        * Highlights *        '                                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0076                    */
-     /* Caractère non imprimable                                    */
+     /* Car.no Imprim.                                              */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0076) MSGF(&LIB/&OBJ)
@@ -4408,17 +4408,17 @@
                 MSGID(TXT0076) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Caractère non imprimable'                                            +
+'Car.no Imprim.  '                                                    +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0077                    */
-     /* -Maquette-                                                  */
+     /* - Diseño -                                                  */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0077) MSGF(&LIB/&OBJ)
@@ -4428,17 +4428,17 @@
                 MSGID(TXT0077) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'-Maquette-'                                                          +
+'- Diseño -'                                                          +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0078                    */
-     /* Rech.:                                                      */
+     /* Busqu.:                                                     */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0078) MSGF(&LIB/&OBJ)
@@ -4448,17 +4448,17 @@
                 MSGID(TXT0078) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Rech.:'                                                              +
+'Busqu.:'                                                             +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0079                    */
-     /*  O   Enr.   Champ       Description                     Typ */
+     /*  O   Sec.   Campo       Descripción                     Tip */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0079) MSGF(&LIB/&OBJ)
@@ -4468,13 +4468,13 @@
                 MSGID(TXT0079) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-' O   Enr.   Champ       Description                     Type      Pos-
-.déb '                                                                +
+' O   Sec.   Campo       Descripción                     Tipo       Po-
+sIni '                                                                +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4494,12 +4494,12 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0081                    */
-     /* Couleur.:                                                   */
+     /* Color  .:                                                   */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0081) MSGF(&LIB/&OBJ)
@@ -4509,17 +4509,17 @@
                 MSGID(TXT0081) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Couleur.:'                                                           +
+'Color  .:'                                                           +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0082                    */
-     /* Sélection :                                                 */
+     /* Selección :                                                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0082) MSGF(&LIB/&OBJ)
@@ -4529,17 +4529,17 @@
                 MSGID(TXT0082) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Sélection :'                                                         +
+'Selección :'                                                         +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0083                    */
-     /* Largeur max                                                 */
+     /* Max. Ancho:                                                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0083) MSGF(&LIB/&OBJ)
@@ -4549,17 +4549,17 @@
                 MSGID(TXT0083) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Largeur max'                                                         +
+'Max. Ancho:'                                                         +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0084                    */
-     /* Code Edi:                                                   */
+     /* Editcod.:                                                   */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0084) MSGF(&LIB/&OBJ)
@@ -4569,17 +4569,17 @@
                 MSGID(TXT0084) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Code Edi:'                                                           +
+'Editcod.:'                                                           +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0085                    */
-     /* - Choix champ -                                             */
+     /* - Selec. Campo -                                            */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0085) MSGF(&LIB/&OBJ)
@@ -4589,17 +4589,17 @@
                 MSGID(TXT0085) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'- Choix champ -'                                                     +
+'- Selec. Campo -'                                                    +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0086                    */
-     /*  O   Champ       Description                                */
+     /*  O   Campo       Descripción                                */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0086) MSGF(&LIB/&OBJ)
@@ -4609,17 +4609,17 @@
                 MSGID(TXT0086) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-' O   Champ       Description                    '                    +
+' O   Campo       Descripción                    '                    +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0087                    */
-     /*  O  Fichier                Description                      */
+     /*  O  Fich                   Descripción                      */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0087) MSGF(&LIB/&OBJ)
@@ -4629,18 +4629,18 @@
                 MSGID(TXT0087) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-' O  Fichier                Description                               -
+' O  Fich                   Descripción                               -
    '                                                                  +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0088                    */
-     /* -Afficher relations fichiers-                               */
+     /* - Ver Rel. de Base de Datos  -                              */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0088) MSGF(&LIB/&OBJ)
@@ -4650,17 +4650,17 @@
                 MSGID(TXT0088) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'-Afficher relations fichiers-'                                       +
+'- Ver Rel. de Base de Datos  -'                                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0089                    */
-     /* Dépendances:                                                */
+     /* Dependencias:                                               */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0089) MSGF(&LIB/&OBJ)
@@ -4670,17 +4670,17 @@
                 MSGID(TXT0089) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Dépendances:'                                                        +
+'Dependencias:'                                                       +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0090                    */
-     /* Editeur Hex                                                 */
+     /* Editor-Hex                                                  */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0090) MSGF(&LIB/&OBJ)
@@ -4690,17 +4690,17 @@
                 MSGID(TXT0090) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Editeur Hex'                                                         +
+'Editor-Hex '                                                         +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0091                    */
-     /* Champ .......:                                              */
+     /* Campo .......:                                              */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0091) MSGF(&LIB/&OBJ)
@@ -4710,17 +4710,17 @@
                 MSGID(TXT0091) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Champ .......:'                                                      +
+'Campo .......:'                                                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0092                    */
-     /* Longueur ....:                                              */
+     /* Long.  ......:                                              */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0092) MSGF(&LIB/&OBJ)
@@ -4730,17 +4730,17 @@
                 MSGID(TXT0092) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Longueur ....:'                                                      +
+'Long.  ......:'                                                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0093                    */
-     /* Contenu ...:                                                */
+     /* Contenido .:                                                */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0093) MSGF(&LIB/&OBJ)
@@ -4750,17 +4750,17 @@
                 MSGID(TXT0093) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Contenu ...:'                                                        +
+'Contenido .:'                                                        +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0094                    */
-     /* Hexa ......:                                                */
+     /* Hex .......:                                                */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0094) MSGF(&LIB/&OBJ)
@@ -4770,17 +4770,17 @@
                 MSGID(TXT0094) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Hexa ......:'                                                        +
+'Hex .......:'                                                        +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0095                    */
-     /* Position déb.:                                              */
+     /* PosInicial ..:                                              */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0095) MSGF(&LIB/&OBJ)
@@ -4790,17 +4790,17 @@
                 MSGID(TXT0095) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Position déb.:'                                                      +
+'PosInicial ..:'                                                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0096                    */
-     /* Tail. Tampon                                                */
+     /* Long.Buffer:                                                */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0096) MSGF(&LIB/&OBJ)
@@ -4810,17 +4810,17 @@
                 MSGID(TXT0096) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Tail. Tampon'                                                        +
+'Long.Buffer:'                                                        +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0097                    */
-     /*  A   Membre      Description                                */
+     /*  A   Miembro     Descripción                                */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0097) MSGF(&LIB/&OBJ)
@@ -4830,17 +4830,17 @@
                 MSGID(TXT0097) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-' A   Membre      Description                                        '+
+' A   Miembro     Descripción                                        '+
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0098                    */
-     /*   - Choix Membre -                                          */
+     /*   - Selecc Mbro   -                                         */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0098) MSGF(&LIB/&OBJ)
@@ -4850,17 +4850,17 @@
                 MSGID(TXT0098) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'  - Choix Membre -   '                                               +
+'  - Selecc Mbro   -   '                                              +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0099                    */
-     /*  N° membre :                                                */
+     /* Miembro  :                                                  */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0099) MSGF(&LIB/&OBJ)
@@ -4870,17 +4870,17 @@
                 MSGID(TXT0099) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-' N° membre :'                                                        +
+'Miembro  :'                                                          +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0100                    */
-     /* Mbr   :                                                     */
+     /* Mbro..:                                                     */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0100) MSGF(&LIB/&OBJ)
@@ -4890,17 +4890,17 @@
                 MSGID(TXT0100) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Mbr   :'                                                             +
+'Mbro..:'                                                             +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0101                    */
-     /* - Peek/400 -                                                */
+     /* - Sobre Peek/400 -                                          */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0101) MSGF(&LIB/&OBJ)
@@ -4910,17 +4910,17 @@
                 MSGID(TXT0101) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'- Peek/400 -'                                                        +
+'- Sobre Peek/400 -'                                                  +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0102                    */
-     /* Date  . . .                                                 */
+     /* Fecha . . .                                                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0102) MSGF(&LIB/&OBJ)
@@ -4930,17 +4930,17 @@
                 MSGID(TXT0102) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Date  . . .'                                                         +
+'Fecha . . .'                                                         +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0103                    */
-     /* Version . .                                                 */
+     /* Versión . .                                                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0103) MSGF(&LIB/&OBJ)
@@ -4950,12 +4950,12 @@
                 MSGID(TXT0103) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Version . .'                                                         +
+'Versión . .'                                                         +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4975,7 +4975,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4995,12 +4995,12 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0106                    */
-     /* Fixer champs                                                */
+     /*  Col Clavadas                                               */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0106) MSGF(&LIB/&OBJ)
@@ -5010,17 +5010,17 @@
                 MSGID(TXT0106) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Fixer champs'                                                        +
+' Col Clavadas '                                                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0107                    */
-     /*  N°Enr. Champ       Description                      Champ  */
+     /*  Sec.   Campo       Descripción                      Cpo Cl */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0107) MSGF(&LIB/&OBJ)
@@ -5030,17 +5030,17 @@
                 MSGID(TXT0107) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-' N°Enr. Champ       Description                      Champ clé'      +
+' Sec.   Campo       Descripción                      Cpo Clave'      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0108                    */
-     /* - Sélection SQL -                                           */
+     /* - Selección SQL  -                                          */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0108) MSGF(&LIB/&OBJ)
@@ -5050,12 +5050,12 @@
                 MSGID(TXT0108) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'- Sélection SQL -'                                                   +
+'- Selección SQL  -'                                                  +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5075,7 +5075,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5095,12 +5095,12 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0111                    */
-     /* -Créer Programme Màj-                                       */
+     /* - Crear Prog.Act.    -                                      */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0111) MSGF(&LIB/&OBJ)
@@ -5110,17 +5110,17 @@
                 MSGID(TXT0111) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'-Créer Programme Màj-'                                               +
+'- Crear Prog.Act.    -'                                              +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0112                    */
-     /* Minuscules admises.... ?                                    */
+     /* Minúsculas permitidas?                                      */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0112) MSGF(&LIB/&OBJ)
@@ -5130,17 +5130,17 @@
                 MSGID(TXT0112) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Minuscules admises.... ?'                                            +
+'Minúsculas permitidas?'                                              +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0113                    */
-     /* Minuscules par défaut. ?                                    */
+     /* Minusc. por defecto?                                        */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0113) MSGF(&LIB/&OBJ)
@@ -5150,17 +5150,17 @@
                 MSGID(TXT0113) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Minuscules par défaut. ?'                                            +
+'Minusc. por defecto?  '                                              +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0114                    */
-     /* Sauvegarder par défaut ?                                    */
+     /* Salvar como default                                         */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0114) MSGF(&LIB/&OBJ)
@@ -5170,17 +5170,17 @@
                 MSGID(TXT0114) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Sauvegarder par défaut ?'                                            +
+'Salvar como default   '                                              +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0115                    */
-     /* Sélection SQL                                               */
+     /* Selección SQL                                               */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0115) MSGF(&LIB/&OBJ)
@@ -5190,17 +5190,17 @@
                 MSGID(TXT0115) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Sélection SQL'                                                       +
+'Selección SQL'                                                       +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0116                    */
-     /*    Choix Environment                                        */
+     /*    Selecc Entorno                                           */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0116) MSGF(&LIB/&OBJ)
@@ -5210,17 +5210,17 @@
                 MSGID(TXT0116) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'   Choix Environment    '                                            +
+'   Selecc Entorno        '                                           +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0117                    */
-     /* Fich.:                                                      */
+     /* Fich :                                                      */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0117) MSGF(&LIB/&OBJ)
@@ -5230,17 +5230,17 @@
                 MSGID(TXT0117) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Fich.:'                                                              +
+'Fich :'                                                              +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0118                    */
-     /* Biblioth..:                                                 */
+     /* Biblioteca:                                                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0118) MSGF(&LIB/&OBJ)
@@ -5250,17 +5250,17 @@
                 MSGID(TXT0118) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Biblioth..:'                                                         +
+'Biblioteca:'                                                         +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0119                    */
-     /*  A   Description  environnement                             */
+     /*  A   Descripción de Entorno                                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0119) MSGF(&LIB/&OBJ)
@@ -5270,17 +5270,17 @@
                 MSGID(TXT0119) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-' A   Description  environnement'                                     +
+' A   Descripción de Entorno '                                        +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0120                    */
-     /* Supprimer environnement                                     */
+     /*   Borrar entorno                                            */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0120) MSGF(&LIB/&OBJ)
@@ -5290,17 +5290,17 @@
                 MSGID(TXT0120) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Supprimer environnement'                                             +
+'  Borrar entorno       '                                             +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0121                    */
-     /* Fichier . . :                                               */
+     /* Fich  . . . :                                               */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0121) MSGF(&LIB/&OBJ)
@@ -5310,17 +5310,17 @@
                 MSGID(TXT0121) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Fichier . . :'                                                       +
+'Fich  . . . :'                                                       +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0122                    */
-     /* Biblioth. :                                                 */
+     /* Biblioteca:                                                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0122) MSGF(&LIB/&OBJ)
@@ -5330,17 +5330,17 @@
                 MSGID(TXT0122) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Biblioth. :'                                                         +
+'Biblioteca:'                                                         +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0123                    */
-     /* Membre  . . :                                               */
+     /* Miembro . . :                                               */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0123) MSGF(&LIB/&OBJ)
@@ -5350,17 +5350,17 @@
                 MSGID(TXT0123) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Membre  . . :'                                                       +
+'Miembro . . :'                                                       +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0124                    */
-     /* Description :                                               */
+     /* Descripción :                                               */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0124) MSGF(&LIB/&OBJ)
@@ -5370,17 +5370,17 @@
                 MSGID(TXT0124) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Description :'                                                       +
+'Descripción :'                                                       +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0125                    */
-     /* Long.variable:                                              */
+     /* Long.Var.  :                                                */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0125) MSGF(&LIB/&OBJ)
@@ -5390,17 +5390,17 @@
                 MSGID(TXT0125) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Long.variable:'                                                      +
+'Long.Var.  :'                                                        +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0126                    */
-     /* - Sélect. Format Enreg. -                                   */
+     /* - Selecc Formato Reg.  -                                    */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0126) MSGF(&LIB/&OBJ)
@@ -5410,17 +5410,17 @@
                 MSGID(TXT0126) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'- Sélect. Format Enreg. -'                                           +
+'- Selecc Formato Reg.  -'                                            +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0127                    */
-     /* Valeur NULL                                                 */
+     /* Valor NULL                                                  */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0127) MSGF(&LIB/&OBJ)
@@ -5430,17 +5430,17 @@
                 MSGID(TXT0127) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Valeur NULL'                                                         +
+'Valor NULL'                                                          +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0128                    */
-     /* Editeur                                                     */
+     /* Editor Txt                                                  */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0128) MSGF(&LIB/&OBJ)
@@ -5450,17 +5450,17 @@
                 MSGID(TXT0128) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Editeur'                                                             +
+'Editor Txt '                                                         +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0129                    */
-     /* ***Enreg.verouillé***                                       */
+     /* *** Reg.Bloqueado ***                                       */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0129) MSGF(&LIB/&OBJ)
@@ -5470,17 +5470,17 @@
                 MSGID(TXT0129) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'***Enreg.verouillé***'                                               +
+'*** Reg.Bloqueado ***'                                               +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0130                    */
-     /* Enreg. déverouillé                                          */
+     /* Reg.Desbloqu.                                               */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0130) MSGF(&LIB/&OBJ)
@@ -5490,17 +5490,17 @@
                 MSGID(TXT0130) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Enreg. déverouillé'                                                  +
+'Reg.Desbloqu.  '                                                     +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0131                    */
-     /* Verrouiller enregistr. ?                                    */
+     /* Bloquear Reg para Act.?                                     */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0131) MSGF(&LIB/&OBJ)
@@ -5510,17 +5510,17 @@
                 MSGID(TXT0131) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Verrouiller enregistr. ?'                                            +
+'Bloquear Reg para Act.?'                                             +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0132                    */
-     /* Fich.:                                                      */
+     /* Fich:                                                       */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0132) MSGF(&LIB/&OBJ)
@@ -5530,17 +5530,17 @@
                 MSGID(TXT0132) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Fich.:'                                                              +
+'Fich: '                                                              +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0133                    */
-     /*   Biblioth:                                                 */
+     /*    Bibliot:                                                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0133) MSGF(&LIB/&OBJ)
@@ -5550,17 +5550,17 @@
                 MSGID(TXT0133) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'  Biblioth:'                                                         +
+'   Bibliot:'                                                         +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0134                    */
-     /* Enr:                                                        */
+     /* RRN:                                                        */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0134) MSGF(&LIB/&OBJ)
@@ -5570,17 +5570,17 @@
                 MSGID(TXT0134) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Enr:'                                                                +
+'RRN:'                                                                +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0135                    */
-     /*  Page:                                                      */
+     /*  Pag.:                                                      */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0135) MSGF(&LIB/&OBJ)
@@ -5590,17 +5590,17 @@
                 MSGID(TXT0135) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-' Page:'                                                              +
+' Pag.:'                                                              +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0136                    */
-     /* Nom champ                                                   */
+     /* Nombre Cpo                                                  */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0136) MSGF(&LIB/&OBJ)
@@ -5610,17 +5610,17 @@
                 MSGID(TXT0136) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Nom champ'                                                           +
+'Nombre Cpo'                                                          +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0137                    */
-     /* Description champ                                           */
+     /* Descripción Campo                                           */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0137) MSGF(&LIB/&OBJ)
@@ -5630,17 +5630,17 @@
                 MSGID(TXT0137) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Description champ'                                                   +
+'Descripción Campo'                                                   +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0138                    */
-     /* Valeur champ                                                */
+     /* Valor Campo                                                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0138) MSGF(&LIB/&OBJ)
@@ -5650,17 +5650,17 @@
                 MSGID(TXT0138) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Valeur champ'                                                        +
+'Valor Campo'                                                         +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0139                    */
-     /* Texte                                                       */
+     /* Txt :                                                       */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0139) MSGF(&LIB/&OBJ)
@@ -5670,17 +5670,17 @@
                 MSGID(TXT0139) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Texte'                                                               +
+'Txt :'                                                               +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0140                    */
-     /*  O   Opt  Description                                       */
+     /*  O   Opc  Descripción                                       */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0140) MSGF(&LIB/&OBJ)
@@ -5690,17 +5690,17 @@
                 MSGID(TXT0140) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-' O   Opt  Description                 '                              +
+' O   Opc  Descripción                 '                              +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0141                    */
-     /* ----- Options utilisateur  -----                            */
+     /* ----- Opciones Def Usuario -----                            */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0141) MSGF(&LIB/&OBJ)
@@ -5710,17 +5710,17 @@
                 MSGID(TXT0141) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'----- Options utilisateur  ----- '                                   +
+'----- Opciones Def Usuario ----- '                                   +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0142                    */
-     /*  O   Fichier     Bibliothèque Description                   */
+     /*  O   Fich        Bibliot      Descripción                   */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0142) MSGF(&LIB/&OBJ)
@@ -5730,17 +5730,17 @@
                 MSGID(TXT0142) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-' O   Fichier     Bibliothèque Description'                           +
+' O   Fich        Bibliot      Descripción'                           +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0143                    */
-     /*  -Fichier sélec.-                                           */
+     /*  - Selecc Fich  -                                           */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0143) MSGF(&LIB/&OBJ)
@@ -5750,17 +5750,17 @@
                 MSGID(TXT0143) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-' -Fichier sélec.-'                                                   +
+' - Selecc Fich  - '                                                  +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0144                    */
-     /* Initialise champs NULL ?                                    */
+     /* Inic. campos NULL?                                          */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0144) MSGF(&LIB/&OBJ)
@@ -5770,17 +5770,17 @@
                 MSGID(TXT0144) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Initialise champs NULL ?'                                            +
+'Inic. campos NULL?'                                                  +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0145                    */
-     /* Conserve pos. curseur. ?                                    */
+     /* Recordar pos. cursor?                                       */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0145) MSGF(&LIB/&OBJ)
@@ -5790,17 +5790,17 @@
                 MSGID(TXT0145) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Conserve pos. curseur. ?'                                            +
+'Recordar pos. cursor?'                                               +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0146                    */
-     /* Insérer                                                     */
+     /* Inserte                                                     */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0146) MSGF(&LIB/&OBJ)
@@ -5810,17 +5810,17 @@
                 MSGID(TXT0146) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Insérer'                                                             +
+'Inserte'                                                             +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0147                    */
-     /* Supprimer                                                   */
+     /* Borrar                                                      */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0147) MSGF(&LIB/&OBJ)
@@ -5830,12 +5830,12 @@
                 MSGID(TXT0147) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Supprimer'                                                           +
+'Borrar'                                                              +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5855,12 +5855,12 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0149                    */
-     /* Longueur:                                                   */
+     /* Longitud:                                                   */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0149) MSGF(&LIB/&OBJ)
@@ -5870,17 +5870,17 @@
                 MSGID(TXT0149) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Longueur:'                                                           +
+'Longitud:'                                                           +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0150                    */
-     /* à:                                                          */
+     /* hasta:                                                      */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0150) MSGF(&LIB/&OBJ)
@@ -5890,17 +5890,17 @@
                 MSGID(TXT0150) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'à:'                                                                  +
+'hasta:'                                                              +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   TXT0151                    */
-     /* Pos.du curseur                                              */
+     /* Pos.del cursor                                              */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(TXT0151) MSGF(&LIB/&OBJ)
@@ -5910,17 +5910,17 @@
                 MSGID(TXT0151) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Pos. curseur :'                                                      +
+'Pos. cursor .:'                                                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR0001                    */
-     /* Enregistrement du format &3 du fichier &2/&1 inaccessible   */
+     /* Incapaz de recuperar fmto de reg &3 de fich &2/&1.          */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR0001) MSGF(&LIB/&OBJ)
@@ -5930,7 +5930,7 @@
                 MSGID(USR0001) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Enregistrement du format &3 du fichier &2/&1 inaccessible'           +
+'Incapaz de recuperar fmto de reg &3 de fich &2/&1.'                  +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -5939,12 +5939,12 @@
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR0002                    */
-     /* Extraction impossible de la liste des formats du fichier &2 */
+     /* Incapaz de recuperar lista de fmts de reg de fich &2/&1.    */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR0002) MSGF(&LIB/&OBJ)
@@ -5954,7 +5954,7 @@
                 MSGID(USR0002) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Extraction impossible de la liste des formats du fichier &2/&1.'     +
+'Incapaz de recuperar lista de fmts de reg de fich &2/&1.'            +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -5962,12 +5962,12 @@
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR0003                    */
-     /* Journalisation active sur ce fichier                        */
+     /* Usando control de comprom...                                */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR0003) MSGF(&LIB/&OBJ)
@@ -5977,17 +5977,17 @@
                 MSGID(USR0003) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Journalisation active sur ce fichier'                                +
+'Usando control de comprom...'                                        +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR0004                    */
-     /* Pas de journalisation sur ce fichier                        */
+     /* Incapaz de abrir fich usando control de compromiso.         */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR0004) MSGF(&LIB/&OBJ)
@@ -5997,17 +5997,17 @@
                 MSGID(USR0004) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Pas de journalisation sur ce fichier'                                +
+'Incapaz de abrir fich usando control de compromiso.'                 +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR0005                    */
-     /* Fichier &1 non ouvert. Voir journal.                        */
+     /* Incapaz de abrir fich &1. Ver joblog.                       */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR0005) MSGF(&LIB/&OBJ)
@@ -6017,19 +6017,19 @@
                 MSGID(USR0005) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Fichier &1 non ouvert. Voir journal.'                                +
+'Incapaz de abrir fich &1. Ver joblog.'                               +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR0006                    */
-     /* Pas d'information clef sur fichier &2/&1.                   */
+     /* Sin información de clave para fich.  &2/&1.                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR0006) MSGF(&LIB/&OBJ)
@@ -6039,7 +6039,7 @@
                 MSGID(USR0006) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Pas d''information clef sur fichier &2/&1.'                          +
+'Sin información de clave para fich.  &2/&1.'                         +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -6047,12 +6047,12 @@
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR0007                    */
-     /* Ouverture impossible du fichier &2/&1 en mode MàJ. Modifica */
+     /* Incapaz de abrir fich &2/&1 para Actualiz. .No se puede cam */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR0007) MSGF(&LIB/&OBJ)
@@ -6062,15 +6062,16 @@
                 MSGID(USR0007) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Ouverture impossible du fichier &2/&1 en mode MàJ. Modifications impo-
-ossibles.'                                                            +
+'Incapaz de abrir fich &2/&1 para Actualiz. .No se puede cambiar el fi-
+chero.      '                                                         +
                 ) +
                 SECLVL( +
-'&N &N Causes possibles: &N &B 1. Le debugger a été démarré en UPDPROD-
-(*NO). &B 2. Le fichier est un logique joint &B 3. Le fichier a des rè-
-gles d''intégrité mais n''est pas journalisé. &B 4. Le fichier possède-
- des déclencheurs introuvables. &B 5. Le fichier est un logique multi--
-membre.'                                                              +
+'&N &N Causas posibles: &N &B 1. El depurador se ha iniciado con UPDPR-
+OD(*NO). &B 2. El archivo es un archivo JOIN. &B 3. El archivo tiene r-
+eglas de integridad referencial pero no se registra por diario. &B 4. -
+El archivo tiene desencadenantes pero no se encuentran los programas c-
+orrespondientes. &B 5. El archivo es un archivo lógico basado en más d-
+e un miembro.'                                                        +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -6078,12 +6079,12 @@ membre.'                                                              +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR0008                    */
-     /* Fichier &2/&1 introuvable                                   */
+     /* Incapaz de situar fich &2/&1                                */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR0008) MSGF(&LIB/&OBJ)
@@ -6093,7 +6094,7 @@ membre.'                                                              +
                 MSGID(USR0008) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Fichier &2/&1 introuvable'                                           +
+'Incapaz de situar fich &2/&1'                                        +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -6101,12 +6102,12 @@ membre.'                                                              +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR0009                    */
-     /* Extraction impossible de la description du fichier &2/&1.   */
+     /* Incapaz de recuperar desc. de objeto de fich. &2/&1.        */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR0009) MSGF(&LIB/&OBJ)
@@ -6116,7 +6117,7 @@ membre.'                                                              +
                 MSGID(USR0009) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Extraction impossible de la description du fichier &2/&1.'           +
+'Incapaz de recuperar desc. de objeto de fich. &2/&1.'                +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -6124,12 +6125,12 @@ membre.'                                                              +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR0010                    */
-     /* Bibliothèque &1 inexistante                                 */
+     /* Incapaz de situar Bibl. &1.                                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR0010) MSGF(&LIB/&OBJ)
@@ -6139,19 +6140,19 @@ membre.'                                                              +
                 MSGID(USR0010) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Bibliothèque &1 inexistante'                                         +
+'Incapaz de situar Bibl. &1.'                                         +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR0011                    */
-     /* Fichier non ouvert. Voir message de second niveau ou la log */
+     /* No se pudo abrir el archivo. Consulte el segundo nivel de ay*/
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR0011) MSGF(&LIB/&OBJ)
@@ -6161,23 +6162,23 @@ membre.'                                                              +
                 MSGID(USR0011) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Fichier non ouvert. Voir message de second niveau ou la log pour plus-
- d''informations.'                                                    +
+'No se pudo abrir el archivo. Consulte el segundo nivel de ayuda o el -
+registro del trabajo para obtener más información.'                   +
                 ) +
                 SECLVL( +
-'&N &N Erreur . .  . . :   &1'                                        +
+'&N &N Texto error . . :   &1'                                        +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*CHAR 256) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR0012                    */
-     /* Erreur E/S &2: &1                                           */
+     /* Error C-E/S &2: &1                                          */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR0012) MSGF(&LIB/&OBJ)
@@ -6187,7 +6188,7 @@ membre.'                                                              +
                 MSGID(USR0012) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Erreur E/S &2: &1'                                                   +
+'Error C-E/S &2: &1'                                                  +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -6195,12 +6196,12 @@ membre.'                                                              +
                     (*DEC 5 0) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR0013                    */
-     /* Exécution de la requête.                                    */
+     /* Ejecutando petición SQL ...                                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR0013) MSGF(&LIB/&OBJ)
@@ -6210,17 +6211,17 @@ membre.'                                                              +
                 MSGID(USR0013) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Exécution de la requête.'                                            +
+'Ejecutando petición SQL ...'                                         +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR0014                    */
-     /* Calcule nombre d'enregistrements selectionnés.              */
+     /* Determinando el número de registros seleccionados ...       */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR0014) MSGF(&LIB/&OBJ)
@@ -6230,17 +6231,17 @@ membre.'                                                              +
                 MSGID(USR0014) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Calcule nombre d''enregistrements selectionnés.'                     +
+'Determinando el número de registros seleccionados ...'               +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR0143                    */
-     /* - Choix Fichier -                                           */
+     /* - Selecc Fichero -                                          */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR0143) MSGF(&LIB/&OBJ)
@@ -6250,17 +6251,17 @@ membre.'                                                              +
                 MSGID(USR0143) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'- Choix Fichier -'                                                   +
+'- Selecc Fichero -'                                                  +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR1000                    */
-     /* Accès non autorisé pour le fichier &2/&1, membre &3.        */
+     /* Access no permitido para fich &2/&1, mbr &3.                */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR1000) MSGF(&LIB/&OBJ)
@@ -6270,7 +6271,7 @@ membre.'                                                              +
                 MSGID(USR1000) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Accès non autorisé pour le fichier &2/&1, membre &3.'                +
+'Access no permitido para fich &2/&1, mbr &3.'                        +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -6279,12 +6280,12 @@ membre.'                                                              +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8100                    */
-     /* Abandon par utilisateur avec &1                             */
+     /* Cancel por usr usando &1.                                   */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8100) MSGF(&LIB/&OBJ)
@@ -6294,19 +6295,19 @@ membre.'                                                              +
                 MSGID(USR8100) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Abandon par utilisateur avec &1'                                     +
+'Cancel por usr usando &1.'                                           +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8101                    */
-     /* Veuillez patienter un moment  ...                           */
+     /* Un momento. Permanezca atento..                             */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8101) MSGF(&LIB/&OBJ)
@@ -6316,17 +6317,17 @@ membre.'                                                              +
                 MSGID(USR8101) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Veuillez patienter un moment  ...'                                   +
+'Un momento. Permanezca atento..'                                     +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8102                    */
-     /* Pointez sur un enregistement et réessayez                   */
+     /* Apunte al reg. y reintente                                  */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8102) MSGF(&LIB/&OBJ)
@@ -6336,17 +6337,17 @@ membre.'                                                              +
                 MSGID(USR8102) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Pointez sur un enregistement et réessayez'                           +
+'Apunte al reg. y reintente'                                          +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8103                    */
-     /* Impossible de fermer le fichier.                            */
+     /* Incapaz de cerr.fich.                                       */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8103) MSGF(&LIB/&OBJ)
@@ -6356,17 +6357,17 @@ membre.'                                                              +
                 MSGID(USR8103) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Impossible de fermer le fichier.'                                    +
+'Incapaz de cerr.fich.'                                               +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8104                    */
-     /* Extraction de la description du fichier &2/&1.              */
+     /* Recuperando descr. de campo de fich. &2/&1.                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8104) MSGF(&LIB/&OBJ)
@@ -6376,7 +6377,7 @@ membre.'                                                              +
                 MSGID(USR8104) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Extraction de la description du fichier &2/&1.'                      +
+'Recuperando descr. de campo de fich. &2/&1.'                         +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -6384,12 +6385,12 @@ membre.'                                                              +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8105                    */
-     /* Extraction de la liste des formats du fichier &2/&1.        */
+     /* Recuperando lista de fmtos de reg de fich &2/&1.            */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8105) MSGF(&LIB/&OBJ)
@@ -6399,7 +6400,7 @@ membre.'                                                              +
                 MSGID(USR8105) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Extraction de la liste des formats du fichier &2/&1.'                +
+'Recuperando lista de fmtos de reg de fich &2/&1.'                    +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -6407,12 +6408,12 @@ membre.'                                                              +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8106                    */
-     /* Extraction des attributs réseau.                            */
+     /* Recuperando atributos de red.                               */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8106) MSGF(&LIB/&OBJ)
@@ -6422,17 +6423,17 @@ membre.'                                                              +
                 MSGID(USR8106) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Extraction des attributs réseau.'                                    +
+'Recuperando atributos de red.'                                       +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8107                    */
-     /* Extraction des attributs de l'objet &2/&1.                  */
+     /* Recuperando atributos de objeto &2/&1.                      */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8107) MSGF(&LIB/&OBJ)
@@ -6442,7 +6443,7 @@ membre.'                                                              +
                 MSGID(USR8107) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Extraction des attributs de l''objet &2/&1.'                         +
+'Recuperando atributos de objeto &2/&1.'                              +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -6451,12 +6452,12 @@ membre.'                                                              +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8108                    */
-     /* Champ '&1' non trouvé dans fichier &3/&2.                   */
+     /* No encuentro campo '&1' en fich &3/&2.                      */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8108) MSGF(&LIB/&OBJ)
@@ -6466,7 +6467,7 @@ membre.'                                                              +
                 MSGID(USR8108) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Champ ''&1'' non trouvé dans fichier &3/&2.'                         +
+'No encuentro campo ''&1'' en fich &3/&2.'                            +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -6475,12 +6476,12 @@ membre.'                                                              +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8109                    */
-     /* Extraction de la description du membre &3 du fichier &2/&1. */
+     /* Recuperando descripción de mimbro &3 de fich &2/&1.         */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8109) MSGF(&LIB/&OBJ)
@@ -6490,7 +6491,7 @@ membre.'                                                              +
                 MSGID(USR8109) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Extraction de la description du membre &3 du fichier &2/&1.'         +
+'Recuperando descripción de mimbro &3 de fich &2/&1.'                 +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -6499,12 +6500,12 @@ membre.'                                                              +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8110                    */
-     /* Option '&1' non valide                                      */
+     /* Opción '&1' no válida.                                      */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8110) MSGF(&LIB/&OBJ)
@@ -6514,19 +6515,19 @@ membre.'                                                              +
                 MSGID(USR8110) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Option ''&1'' non valide'                                            +
+'Opción ''&1'' no válida.'                                            +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8111                    */
-     /* Oui à tout                                                  */
+     /* Sí a todo.                                                  */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8111) MSGF(&LIB/&OBJ)
@@ -6536,17 +6537,17 @@ membre.'                                                              +
                 MSGID(USR8111) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Oui à tout'                                                          +
+'Sí a todo.'                                                          +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8112                    */
-     /* Commande acceptée                                           */
+     /* Mdato aceptado.                                             */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8112) MSGF(&LIB/&OBJ)
@@ -6556,17 +6557,17 @@ membre.'                                                              +
                 MSGID(USR8112) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Commande acceptée'                                                   +
+'Mdato aceptado.  '                                                   +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8113                    */
-     /* Commande interne &1 invalide                                */
+     /* Mdato interno &1 no válido.                                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8113) MSGF(&LIB/&OBJ)
@@ -6576,19 +6577,19 @@ membre.'                                                              +
                 MSGID(USR8113) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Commande interne &1 invalide'                                        +
+'Mdato interno &1 no válido.'                                         +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8114                    */
-     /* Création du programme RPG ..                                */
+     /* Creando Programa-RPG ...                                    */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8114) MSGF(&LIB/&OBJ)
@@ -6598,17 +6599,17 @@ membre.'                                                              +
                 MSGID(USR8114) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Création du programme RPG ..'                                        +
+'Creando Programa-RPG ...'                                            +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8115                    */
-     /* Début des enregistrements                                   */
+     /* Inicio de reg.                                              */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8115) MSGF(&LIB/&OBJ)
@@ -6618,17 +6619,17 @@ membre.'                                                              +
                 MSGID(USR8115) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Début des enregistrements'                                           +
+'Inicio de reg.  '                                                    +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8116                    */
-     /* Dernière colonne                                            */
+     /* Fin of reg.                                                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8116) MSGF(&LIB/&OBJ)
@@ -6638,17 +6639,17 @@ membre.'                                                              +
                 MSGID(USR8116) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Dernière colonne'                                                    +
+'Fin of reg.   '                                                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8117                    */
-     /* Pointez un champ et réessayez                               */
+     /* Apunte a la columna y reintente.                            */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8117) MSGF(&LIB/&OBJ)
@@ -6658,17 +6659,17 @@ membre.'                                                              +
                 MSGID(USR8117) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Pointez un champ et réessayez'                                       +
+'Apunte a la columna y reintente.'                                    +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8118                    */
-     /* Tableau plein                                               */
+     /* Pin-Array llena.                                            */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8118) MSGF(&LIB/&OBJ)
@@ -6678,17 +6679,17 @@ membre.'                                                              +
                 MSGID(USR8118) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Tableau plein'                                                       +
+'Pin-Array llena.'                                                    +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8119                    */
-     /* Enregistrement déjà fixé                                    */
+     /* Registro ya clavado.                                        */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8119) MSGF(&LIB/&OBJ)
@@ -6698,17 +6699,17 @@ membre.'                                                              +
                 MSGID(USR8119) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Enregistrement déjà fixé'                                            +
+'Registro ya clavado.'                                                +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8120                    */
-     /* Enregistrement non trouvé                                   */
+     /* No encuentro el reg.                                        */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8120) MSGF(&LIB/&OBJ)
@@ -6718,17 +6719,17 @@ membre.'                                                              +
                 MSGID(USR8120) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Enregistrement non trouvé'                                           +
+'No encuentro el reg.  '                                              +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8121                    */
-     /* Enregistrement non fixé                                     */
+     /* Reg. sin clavar.                                            */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8121) MSGF(&LIB/&OBJ)
@@ -6738,17 +6739,17 @@ membre.'                                                              +
                 MSGID(USR8121) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Enregistrement non fixé'                                             +
+'Reg. sin clavar.'                                                    +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8122                    */
-     /* Touche incorrecte                                           */
+     /* Mandato no válido.                                          */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8122) MSGF(&LIB/&OBJ)
@@ -6758,17 +6759,17 @@ membre.'                                                              +
                 MSGID(USR8122) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Touche incorrecte'                                                   +
+'Mandato no válido.    '                                              +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8123                    */
-     /* Les champs supérieurs à 1024 car. ne peuvent être &1modifié */
+     /* Campos mayores de 1024 no se pueden &1cambiar&2.            */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8123) MSGF(&LIB/&OBJ)
@@ -6778,7 +6779,7 @@ membre.'                                                              +
                 MSGID(USR8123) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Les champs supérieurs à 1024 car. ne peuvent être &1modifiés&2.'     +
+'Campos mayores de 1024 no se pueden &1cambiar&2.'                    +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -6786,12 +6787,12 @@ membre.'                                                              +
                     (*CHAR 1) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8124                    */
-     /* Opérande '&1' invalide                                      */
+     /* Oper.   '&1' no válido.                                     */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8124) MSGF(&LIB/&OBJ)
@@ -6801,24 +6802,24 @@ membre.'                                                              +
                 MSGID(USR8124) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Opérande ''&1'' invalide'                                            +
+'Oper.   ''&1'' no válido.'                                           +
                 ) +
                 SECLVL( +
-'&N &B Opérandes valides: &N &P EQ   - égal à &P NE   - différent de &-
-P LT   - plus petit que &P GT   - plus grand que &P LE   - plus petit -
-ou égal à &P GE   - plus grand ou égal à &P LIKE - comme'             +
+'&N &B Los operandos válidos son: &N &P EQ   - igual &P NE   - distint-
+o &P LT   - menor &P GT   - mayor &P LE   - menor/igual &P GE   - mayo-
+r/igual &P LIKE - similar'                                            +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8125                    */
-     /* Valeur incorrecte pour le nombre d'enregistrements à recher */
+     /* Valor no válido para número de regs. a buscar.              */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8125) MSGF(&LIB/&OBJ)
@@ -6828,17 +6829,17 @@ ou égal à &P GE   - plus grand ou égal à &P LIKE - comme'             +
                 MSGID(USR8125) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Valeur incorrecte pour le nombre d''enregistrements à rechercher'    +
+'Valor no válido para número de regs. a buscar.'                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8126                    */
-     /* Type de recherche '&1' non valide                           */
+     /* Tipo de busq invalido. '&1'                                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8126) MSGF(&LIB/&OBJ)
@@ -6848,19 +6849,19 @@ ou égal à &P GE   - plus grand ou égal à &P LIKE - comme'             +
                 MSGID(USR8126) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Type de recherche ''&1'' non valide'                                 +
+'Tipo de busq invalido. ''&1'''                                       +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8127                    */
-     /* Recherche en cours                                          */
+     /* Buscando  ...                                               */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8127) MSGF(&LIB/&OBJ)
@@ -6870,17 +6871,17 @@ ou égal à &P GE   - plus grand ou égal à &P LIKE - comme'             +
                 MSGID(USR8127) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Recherche en cours'                                                  +
+'Buscando  ...'                                                       +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8128                    */
-     /* Recherche en cours. &1 de &2 enregistrements recherchés     */
+     /* Buscando. &1 de &2 regs buscados.                           */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8128) MSGF(&LIB/&OBJ)
@@ -6890,7 +6891,7 @@ ou égal à &P GE   - plus grand ou égal à &P LIKE - comme'             +
                 MSGID(USR8128) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Recherche en cours. &1 de &2 enregistrements recherchés'             +
+'Buscando. &1 de &2 regs buscados.'                                   +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -6898,12 +6899,12 @@ ou égal à &P GE   - plus grand ou égal à &P LIKE - comme'             +
                     (*DEC 10 0) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8129                    */
-     /* Champ '&1' de type '&2' non valide                          */
+     /* Campo '&1' de tipo '&2' no válido                           */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8129) MSGF(&LIB/&OBJ)
@@ -6913,7 +6914,7 @@ ou égal à &P GE   - plus grand ou égal à &P LIKE - comme'             +
                 MSGID(USR8129) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Champ ''&1'' de type ''&2'' non valide'                              +
+'Campo ''&1'' de tipo ''&2'' no válido'                               +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -6921,12 +6922,12 @@ ou égal à &P GE   - plus grand ou égal à &P LIKE - comme'             +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8130                    */
-     /* Enregistrement trouvé. 'F16'=continuer/'ENTREE'=Fin.        */
+     /* Ref. hallado. 'SEARCH'=continua/'ENTER'=Cancel.             */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8130) MSGF(&LIB/&OBJ)
@@ -6936,17 +6937,17 @@ ou égal à &P GE   - plus grand ou égal à &P LIKE - comme'             +
                 MSGID(USR8130) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Enregistrement trouvé. ''F16''=continuer/''ENTREE''=Fin.'            +
+'Ref. hallado. ''SEARCH''=continua/''ENTER''=Cancel.'                 +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8131                    */
-     /* Fin de fichier - aucun résultat. 'F16'=continuer / 'ENTREE' */
+     /* Fin de fich - cad. no hallada. 'SEARCH'=continua/'ENTER'=Ca */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8131) MSGF(&LIB/&OBJ)
@@ -6956,17 +6957,17 @@ ou égal à &P GE   - plus grand ou égal à &P LIKE - comme'             +
                 MSGID(USR8131) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Fin de fichier - aucun résultat. ''F16''=continuer / ''ENTREE''=Fin.'+
+'Fin de fich - cad. no hallada. ''SEARCH''=continua/''ENTER''=Cancel.'+
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8132                    */
-     /* Nbre maximum de lignes atteint 'F16'=Continuer 'ENTREE'=Aba */
+     /* Maximo de regs buscadnos. 'SEARCH'=continua/'ENTER'=Cancel. */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8132) MSGF(&LIB/&OBJ)
@@ -6976,17 +6977,17 @@ ou égal à &P GE   - plus grand ou égal à &P LIKE - comme'             +
                 MSGID(USR8132) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Nbre maximum de lignes atteint ''F16''=Continuer ''ENTREE''=Abandon' +
+'Maximo de regs buscadnos. ''SEARCH''=continua/''ENTER''=Cancel.'     +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8133                    */
-     /* 1=Respect casse; 0=non respect casse                        */
+     /* 1=Sensible Mayus; 0=No Sensible Mayus                       */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8133) MSGF(&LIB/&OBJ)
@@ -6996,17 +6997,17 @@ ou égal à &P GE   - plus grand ou égal à &P LIKE - comme'             +
                 MSGID(USR8133) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'1=Respect casse; 0=non respect casse'                                +
+'1=Sensible Mayus; 0=No Sensible Mayus'                               +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8134                    */
-     /* La combinaison de l'opérande &1 avec le champ &2 est invali */
+     /* Combinación de operando &1 cpo &2 no válida                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8134) MSGF(&LIB/&OBJ)
@@ -7016,7 +7017,7 @@ ou égal à &P GE   - plus grand ou égal à &P LIKE - comme'             +
                 MSGID(USR8134) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'La combinaison de l''opérande &1 avec le champ &2 est invalide.'     +
+'Combinación de operando &1 cpo &2 no válida'                         +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -7024,12 +7025,12 @@ ou égal à &P GE   - plus grand ou égal à &P LIKE - comme'             +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8135                    */
-     /* Opérande &1 invalide avec champ de type &2.                 */
+     /* Operando &1 no válido con campo tipo &2.                    */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8135) MSGF(&LIB/&OBJ)
@@ -7039,7 +7040,7 @@ ou égal à &P GE   - plus grand ou égal à &P LIKE - comme'             +
                 MSGID(USR8135) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Opérande &1 invalide avec champ de type &2.'                         +
+'Operando &1 no válido con campo tipo &2.'                            +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -7047,12 +7048,12 @@ ou égal à &P GE   - plus grand ou égal à &P LIKE - comme'             +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8136                    */
-     /* Champ '&1' introuvable                                      */
+     /* Campo '&1' no hallado                                       */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8136) MSGF(&LIB/&OBJ)
@@ -7062,23 +7063,23 @@ ou égal à &P GE   - plus grand ou égal à &P LIKE - comme'             +
                 MSGID(USR8136) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Champ ''&1'' introuvable'                                            +
+'Campo ''&1'' no hallado'                                             +
                 ) +
                 SECLVL( +
-'&N &B Valeurs possibles: &N &P *RECORD - Recherchez dans tout l''enre-
-gistrement'                                                           +
+'&N &B Valores especiales: &N &P *RECORD - Buscar en todo el registro.-
+'                                                                     +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8137                    */
-     /* Extraction information clef de &2/&1.                       */
+     /* Recuperando inf. de clave de fich. &2/&1.                   */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8137) MSGF(&LIB/&OBJ)
@@ -7088,7 +7089,7 @@ gistrement'                                                           +
                 MSGID(USR8137) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Extraction information clef de &2/&1.'                               +
+'Recuperando inf. de clave de fich. &2/&1.'                           +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -7096,12 +7097,12 @@ gistrement'                                                           +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8138                    */
-     /* Champ &1 contient des données décimales invalides           */
+     /* Campo &1 tiene datos decim. no válidos                      */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8138) MSGF(&LIB/&OBJ)
@@ -7111,19 +7112,19 @@ gistrement'                                                           +
                 MSGID(USR8138) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Champ &1 contient des données décimales invalides'                   +
+'Campo &1 tiene datos decim. no válidos'                              +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8139                    */
-     /* Impossible de positionner le sous-fichier                   */
+     /* No puedo situar subfichero.                                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8139) MSGF(&LIB/&OBJ)
@@ -7133,17 +7134,17 @@ gistrement'                                                           +
                 MSGID(USR8139) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Impossible de positionner le sous-fichier'                           +
+'No puedo situar subfichero.'                                         +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8140                    */
-     /* Veuillez saisir un argument de recherche                    */
+     /* Introduzca argumento de búsqueda.                           */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8140) MSGF(&LIB/&OBJ)
@@ -7153,19 +7154,19 @@ gistrement'                                                           +
                 MSGID(USR8140) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Veuillez saisir un argument de recherche'                            +
+'Introduzca argumento de búsqueda.'                                   +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8141                    */
-     /* Utiliser '&1' pour les valeurs positives et '&2' pour les n */
+     /* Use '&1' para signo positivo y '&2' para signo negativo.    */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8141) MSGF(&LIB/&OBJ)
@@ -7175,8 +7176,7 @@ gistrement'                                                           +
                 MSGID(USR8141) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Utiliser ''&1'' pour les valeurs positives et ''&2'' pour les négativ-
-es.'                                                                  +
+'Use ''&1'' para signo positivo y ''&2'' para signo negativo.'        +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -7184,12 +7184,12 @@ es.'                                                                  +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8142                    */
-     /* Position &1 est réservée au signe des valeurs numériques.   */
+     /* Posición &1 se reserva para signo de valores numéricos.     */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8142) MSGF(&LIB/&OBJ)
@@ -7199,19 +7199,19 @@ es.'                                                                  +
                 MSGID(USR8142) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Position &1 est réservée au signe des valeurs numériques.'           +
+'Posición &1 se reserva para signo de valores numéricos.'             +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*DEC 10 0) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8143                    */
-     /* Pas de programme associé à la touche &1.                    */
+     /* No hay función de programa para tecla &1                    */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8143) MSGF(&LIB/&OBJ)
@@ -7221,19 +7221,19 @@ es.'                                                                  +
                 MSGID(USR8143) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Pas de programme associé à la touche &1.'                            +
+'No hay función de programa para tecla &1'                            +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8144                    */
-     /* Exécution récursive impossible pour commande &1.            */
+     /* Imposible ejecucion recursiva para el mandato &1.           */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8144) MSGF(&LIB/&OBJ)
@@ -7243,19 +7243,19 @@ es.'                                                                  +
                 MSGID(USR8144) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Exécution récursive impossible pour commande &1.'                    +
+'Imposible ejecucion recursiva para el mandato &1.'                   +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8145                    */
-     /* Impossible d'exécuter une commande - sous-fichier vide.     */
+     /* Subfichero vacío. Imposible ejecutar mdato.                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8145) MSGF(&LIB/&OBJ)
@@ -7265,17 +7265,17 @@ es.'                                                                  +
                 MSGID(USR8145) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Impossible d''exécuter une commande - sous-fichier vide.'            +
+'Subfichero vacío. Imposible ejecutar mdato.'                         +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8146                    */
-     /* Positionnez le curseur sur un champ puis Entrée.            */
+     /* No puedo definir color para campo selecc.                   */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8146) MSGF(&LIB/&OBJ)
@@ -7285,17 +7285,17 @@ es.'                                                                  +
                 MSGID(USR8146) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Positionnez le curseur sur un champ puis Entrée.'                    +
+'No puedo definir color para campo selecc.'                           +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8147                    */
-     /* Le champ &1 n'a pas été pointé                              */
+     /* Columna &1 sin clavar.                                      */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8147) MSGF(&LIB/&OBJ)
@@ -7305,19 +7305,19 @@ es.'                                                                  +
                 MSGID(USR8147) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Le champ &1 n''a pas été pointé'                                     +
+'Columna &1 sin clavar.'                                              +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8148                    */
-     /* Plus de place pour le champ '&1'.                           */
+     /* Sin espacio para col clavada '&1'.                          */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8148) MSGF(&LIB/&OBJ)
@@ -7327,19 +7327,19 @@ es.'                                                                  +
                 MSGID(USR8148) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Plus de place pour le champ ''&1''.'                                 +
+'Sin espacio para col clavada ''&1''.'                                +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8149                    */
-     /* Mode couleur déjà activé pour les lignes.                   */
+     /* Líneas coloreadas ya activas.                               */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8149) MSGF(&LIB/&OBJ)
@@ -7349,17 +7349,17 @@ es.'                                                                  +
                 MSGID(USR8149) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Mode couleur déjà activé pour les lignes.'                           +
+'Líneas coloreadas ya activas.'                                       +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8150                    */
-     /* Mode monochrome déjà activé pour les lignes.                */
+     /* Líneas B/N ya activas.                                      */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8150) MSGF(&LIB/&OBJ)
@@ -7369,17 +7369,17 @@ es.'                                                                  +
                 MSGID(USR8150) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Mode monochrome déjà activé pour les lignes.'                        +
+'Líneas B/N ya activas.'                                              +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8151                    */
-     /* Nom invalide pour fichier cible '&1'.                       */
+     /* nombre inval. para fich.dest '&1'.                          */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8151) MSGF(&LIB/&OBJ)
@@ -7389,19 +7389,19 @@ es.'                                                                  +
                 MSGID(USR8151) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Nom invalide pour fichier cible ''&1''.'                             +
+'nombre inval. para fich.dest ''&1''.'                                +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8152                    */
-     /* Nom invalide pour bibliothèque cible '&1'.                  */
+     /* Nombre inválido para lib. dest '&1'.                        */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8152) MSGF(&LIB/&OBJ)
@@ -7411,19 +7411,19 @@ es.'                                                                  +
                 MSGID(USR8152) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Nom invalide pour bibliothèque cible ''&1''.'                        +
+'Nombre inválido para lib. dest ''&1''.'                              +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8153                    */
-     /* Nom invalide pour membre cible '&1'.                        */
+     /* Nombre invalido para mbro dest '&1'.                        */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8153) MSGF(&LIB/&OBJ)
@@ -7433,19 +7433,19 @@ es.'                                                                  +
                 MSGID(USR8153) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Nom invalide pour membre cible ''&1''.'                              +
+'Nombre invalido para mbro dest ''&1''.'                              +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8154                    */
-     /* Paramètre invalide '&1' pour ajout/remplacement.            */
+     /* Parám. invalid '&1' para ADD/REPLACE.                       */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8154) MSGF(&LIB/&OBJ)
@@ -7455,19 +7455,19 @@ es.'                                                                  +
                 MSGID(USR8154) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Paramètre invalide ''&1'' pour ajout/remplacement.'                  +
+'Parám. invalid ''&1'' para ADD/REPLACE.'                             +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8155                    */
-     /* Paramètre invalide '&1' pour création de fichier.           */
+     /* Param. inválido  '&1' para CREATE FILE.                     */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8155) MSGF(&LIB/&OBJ)
@@ -7477,19 +7477,19 @@ es.'                                                                  +
                 MSGID(USR8155) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Paramètre invalide ''&1'' pour création de fichier.'                 +
+'Param. inválido  ''&1'' para CREATE FILE.'                           +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8156                    */
-     /* Execution en échec                                          */
+     /* Ejecución falló.                                            */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8156) MSGF(&LIB/&OBJ)
@@ -7499,17 +7499,17 @@ es.'                                                                  +
                 MSGID(USR8156) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Execution en échec'                                                  +
+'Ejecución falló.'                                                    +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8157                    */
-     /* Extraction des valeurs système                              */
+     /* Recuperando val. de sist.                                   */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8157) MSGF(&LIB/&OBJ)
@@ -7519,17 +7519,17 @@ es.'                                                                  +
                 MSGID(USR8157) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Extraction des valeurs système'                                      +
+'Recuperando val. de sist.'                                           +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8158                    */
-     /* Licence invalide N°. '&1'.                                  */
+     /* No.de lic inv-No. '&1'.                                     */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8158) MSGF(&LIB/&OBJ)
@@ -7539,19 +7539,19 @@ es.'                                                                  +
                 MSGID(USR8158) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Licence invalide N°. ''&1''.'                                        +
+'No.de lic inv-No. ''&1''.'                                           +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*CHAR 20) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8159                    */
-     /* Impossible de sauvegarder les données de licence.           */
+     /* No puedo salvar datos de lic                                */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8159) MSGF(&LIB/&OBJ)
@@ -7561,17 +7561,17 @@ es.'                                                                  +
                 MSGID(USR8159) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Impossible de sauvegarder les données de licence.'                   +
+'No puedo salvar datos de lic'                                        +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8160                    */
-     /* Fichier des définitions inexistant pour la langue &1.       */
+     /* fich. de definicíon de lenguaje &1 no disponible.           */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8160) MSGF(&LIB/&OBJ)
@@ -7581,19 +7581,19 @@ es.'                                                                  +
                 MSGID(USR8160) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Fichier des définitions inexistant pour la langue &1.'               +
+'fich. de definicíon de lenguaje &1 no disponible.'                   +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8161                    */
-     /* Ecran d'accueil activé                                      */
+     /* SPLASH-Pant.Habilitada                                      */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8161) MSGF(&LIB/&OBJ)
@@ -7603,17 +7603,17 @@ es.'                                                                  +
                 MSGID(USR8161) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Ecran d''accueil activé'                                             +
+'SPLASH-Pant.Habilitada'                                              +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8162                    */
-     /* Ecran d'accueil désactivé                                   */
+     /* SPLASH-Pant.Deshabilit.                                     */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8162) MSGF(&LIB/&OBJ)
@@ -7623,17 +7623,17 @@ es.'                                                                  +
                 MSGID(USR8162) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Ecran d''accueil désactivé'                                          +
+'SPLASH-Pant.Deshabilit.'                                             +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8163                    */
-     /* La chaîne contient des caractères <  x''40'' ou = x''FF''.  */
+     /* Cadena tiene caracteres menores que  x'40' o iguales a 'FF' */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8163) MSGF(&LIB/&OBJ)
@@ -7643,20 +7643,20 @@ es.'                                                                  +
                 MSGID(USR8163) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'La chaîne contient des caractères <  x''''40'''' ou = x''''FF''''. Re-
-mplacés par: &1'''                                                    +
+'Cadena tiene caracteres menores que  x''40'' o iguales a ''FF''. Sust-
+ con: &1'                                                             +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*CHAR 1) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8164                    */
-     /* Les champs contenant des caractères non éditables sont igno */
+     /* Campos con caract. no imprimibles se han escondidos.        */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8164) MSGF(&LIB/&OBJ)
@@ -7666,17 +7666,17 @@ mplacés par: &1'''                                                    +
                 MSGID(USR8164) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Les champs contenant des caractères non éditables sont ignorés'      +
+'Campos con caract. no imprimibles se han escondidos.'                +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8165                    */
-     /* Veuillez choisir une option avant de faire 'répéter'        */
+     /* introduzca opción antes de elegir "REPETIR".                */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8165) MSGF(&LIB/&OBJ)
@@ -7686,23 +7686,23 @@ mplacés par: &1'''                                                    +
                 MSGID(USR8165) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Veuillez choisir une option avant de faire ''répéter'''              +
+'introduzca opción antes de elegir "REPETIR".'                        +
                 ) +
                 SECLVL( +
-'Cause . . . . . . : F13 (Répéter) a été actionnée, mais aucune foncti-
-on à répéter n''a été sélectionnée sur cette page. &N Reprise . . . . -
-. : Indiquer une option dans la colonne des options de cette page, pui-
-s actionner de nouveau ''répéter''.'                                  +
+'Causa . . . . . . : Se ha pulsado F13 (Repetir), pero en esta página -
+no se ha seleccionado ninguna función para repetir. &N Recuperación  .-
+ . : Indique una opción en la columna de opciones de esta página y vue-
+lva a pulsar "REPETIR".'                                              +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8166                    */
-     /* Impossible d'éxécuter l'option sans fichier ouvert          */
+     /* No puedo ejecutar función. Fichero no abierto !             */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8166) MSGF(&LIB/&OBJ)
@@ -7712,17 +7712,17 @@ s actionner de nouveau ''répéter''.'                                  +
                 MSGID(USR8166) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Impossible d''éxécuter l''option sans fichier ouvert'                +
+'No puedo ejecutar función. Fichero no abierto !'                     +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8167                    */
-     /* Le n° de séquence doit être unique.                         */
+     /* Num. de sec. debe ser único.                                */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8167) MSGF(&LIB/&OBJ)
@@ -7732,17 +7732,17 @@ s actionner de nouveau ''répéter''.'                                  +
                 MSGID(USR8167) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Le n° de séquence doit être unique.'                                 +
+'Num. de sec. debe ser único.'                                        +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8168                    */
-     /* Valeur &1 interdite pour l'attribut "Visible/invisible".    */
+     /* Valor &1 no permitido para atr. "visible/unvisible".        */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8168) MSGF(&LIB/&OBJ)
@@ -7752,19 +7752,19 @@ s actionner de nouveau ''répéter''.'                                  +
                 MSGID(USR8168) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Valeur &1 interdite pour l''attribut "Visible/invisible".'           +
+'Valor &1 no permitido para atr. "visible/unvisible".'                +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8169                    */
-     /* Valeur &1 interdite pour l'attribut "Repérer champ".        */
+     /* Valor &1 no permitido para atr. "Marcar columna".           */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8169) MSGF(&LIB/&OBJ)
@@ -7774,19 +7774,19 @@ s actionner de nouveau ''répéter''.'                                  +
                 MSGID(USR8169) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Valeur &1 interdite pour l''attribut "Repérer champ".'               +
+'Valor &1 no permitido para atr. "Marcar columna".'                   +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8170                    */
-     /* Valeur &1 interdite pour l'attribut "Taille le maximum".    */
+     /* Valor &1 no permitido para atr. "Tamaño.Max".               */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8170) MSGF(&LIB/&OBJ)
@@ -7796,19 +7796,19 @@ s actionner de nouveau ''répéter''.'                                  +
                 MSGID(USR8170) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Valeur &1 interdite pour l''attribut "Taille le maximum".'           +
+'Valor &1 no permitido para atr. "Tamaño.Max".'                       +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*DEC 10 0) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8171                    */
-     /* Valeur invalide '&1' pour champ date, heure ou horodatage.  */
+     /* Valor Inválido '&1' for time-, date- o timestamp            */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8171) MSGF(&LIB/&OBJ)
@@ -7818,19 +7818,19 @@ s actionner de nouveau ''répéter''.'                                  +
                 MSGID(USR8171) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Valeur invalide ''&1'' pour champ date, heure ou horodatage.'        +
+'Valor Inválido ''&1'' for time-, date- o timestamp'                  +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*CHAR 26) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8172                    */
-     /* En traitement: &1                                           */
+     /* Procesando: &1                                              */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8172) MSGF(&LIB/&OBJ)
@@ -7840,19 +7840,19 @@ s actionner de nouveau ''répéter''.'                                  +
                 MSGID(USR8172) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'En traitement: &1'                                                   +
+'Procesando: &1'                                                      +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*CHAR 50) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8173                    */
-     /* Appels récursifs non supportés par Peek/400.                */
+     /* PEEK no soporta llamada recursiva.                          */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8173) MSGF(&LIB/&OBJ)
@@ -7862,17 +7862,17 @@ s actionner de nouveau ''répéter''.'                                  +
                 MSGID(USR8173) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Appels récursifs non supportés par Peek/400.'                        +
+'PEEK no soporta llamada recursiva.'                                  +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8174                    */
-     /* Caractère (&1) interdit dans une chaîne hexa                */
+     /* Caracter (&1) no permitido en cadena hex                    */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8174) MSGF(&LIB/&OBJ)
@@ -7882,19 +7882,19 @@ s actionner de nouveau ''répéter''.'                                  +
                 MSGID(USR8174) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Caractère (&1) interdit dans une chaîne hexa'                        +
+'Caracter (&1) no permitido en cadena hex'                            +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*CHAR 1) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8175                    */
-     /* Il est interdit de saisir un nombre impair de caractères    */
+     /* No se permite entrar un número impar de caracteres.         */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8175) MSGF(&LIB/&OBJ)
@@ -7904,19 +7904,19 @@ s actionner de nouveau ''répéter''.'                                  +
                 MSGID(USR8175) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Il est interdit de saisir un nombre impair de caractères'            +
+'No se permite entrar un número impar de caracteres.'                 +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*CHAR 1) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8176                    */
-     /* Attention : Chaîne trop longue.                             */
+     /* Aviso: Cadena muy larga                                     */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8176) MSGF(&LIB/&OBJ)
@@ -7926,19 +7926,19 @@ s actionner de nouveau ''répéter''.'                                  +
                 MSGID(USR8176) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Attention : Chaîne trop longue.'                                     +
+'Aviso: Cadena muy larga'                                             +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*CHAR 1) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8177                    */
-     /* La position de départ dépasse la taille du champ.           */
+     /* PosIniciañ excede long. de campo.                           */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8177) MSGF(&LIB/&OBJ)
@@ -7948,19 +7948,19 @@ s actionner de nouveau ''répéter''.'                                  +
                 MSGID(USR8177) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'La position de départ dépasse la taille du champ.'                   +
+'PosIniciañ excede long. de campo.'                                   +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*CHAR 1) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8178                    */
-     /* Position de départ inférieure ou égale à 0.                 */
+     /* No entre una pos. inic. menor o igual que null.             */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8178) MSGF(&LIB/&OBJ)
@@ -7970,17 +7970,17 @@ s actionner de nouveau ''répéter''.'                                  +
                 MSGID(USR8178) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Position de départ inférieure ou égale à 0.'                         +
+'No entre una pos. inic. menor o igual que null.'                     +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8179                    */
-     /* Pas de guide disponible                                     */
+     /* No prompt disponible                                        */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8179) MSGF(&LIB/&OBJ)
@@ -7990,17 +7990,17 @@ s actionner de nouveau ''répéter''.'                                  +
                 MSGID(USR8179) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Pas de guide disponible'                                             +
+'No prompt disponible'                                                +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8180                    */
-     /* Membre &1 introuvable.                                      */
+     /* Mbro '&1' no hallado                                        */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8180) MSGF(&LIB/&OBJ)
@@ -8010,19 +8010,19 @@ s actionner de nouveau ''répéter''.'                                  +
                 MSGID(USR8180) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Membre &1 introuvable.'                                              +
+'Mbro ''&1'' no hallado'                                              +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8181                    */
-     /* Sauvegarde de l'environment impossible. Il manque le nom du */
+     /* No puedo salvar entorno. Falta nombre de fich.              */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8181) MSGF(&LIB/&OBJ)
@@ -8032,18 +8032,17 @@ s actionner de nouveau ''répéter''.'                                  +
                 MSGID(USR8181) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Sauvegarde de l''environment impossible. Il manque le nom du fichier.-
-'                                                                     +
+'No puedo salvar entorno. Falta nombre de fich.'                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8182                    */
-     /* &1 n'est pas un nom valide pour un objet AS/400.            */
+     /* Valor &1 no válido como nombre para obj. AS/400.            */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8182) MSGF(&LIB/&OBJ)
@@ -8053,19 +8052,19 @@ s actionner de nouveau ''répéter''.'                                  +
                 MSGID(USR8182) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'&1 n''est pas un nom valide pour un objet AS/400.'                   +
+'Valor &1 no válido como nombre para obj. AS/400.'                    +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8183                    */
-     /* Informations manquantes.                                    */
+     /* Falta alguna información.                                   */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8183) MSGF(&LIB/&OBJ)
@@ -8075,17 +8074,17 @@ s actionner de nouveau ''répéter''.'                                  +
                 MSGID(USR8183) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Informations manquantes.'                                            +
+'Falta alguna información.'                                           +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8184                    */
-     /* Cette fonction est inactive. Veuillez contacter votre admin */
+     /* Esta función no se ha habilitado. Contacte con administrado */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8184) MSGF(&LIB/&OBJ)
@@ -8095,18 +8094,17 @@ s actionner de nouveau ''répéter''.'                                  +
                 MSGID(USR8184) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Cette fonction est inactive. Veuillez contacter votre administrateur.-
-'                                                                     +
+'Esta función no se ha habilitado. Contacte con administrador.'       +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8185                    */
-     /* Aucun environnement ouvert car aucun spécifié.              */
+     /* Sin entorno especifocado. No se abrió entorno.              */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8185) MSGF(&LIB/&OBJ)
@@ -8116,17 +8114,17 @@ s actionner de nouveau ''répéter''.'                                  +
                 MSGID(USR8185) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Aucun environnement ouvert car aucun spécifié.'                      +
+'Sin entorno especifocado. No se abrió entorno.'                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8186                    */
-     /* Attention : chaîne trop courte.                             */
+     /* Aviso: Cadena muy corta                                     */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8186) MSGF(&LIB/&OBJ)
@@ -8136,17 +8134,17 @@ s actionner de nouveau ''répéter''.'                                  +
                 MSGID(USR8186) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Attention : chaîne trop courte.'                                     +
+'Aviso: Cadena muy corta'                                             +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8187                    */
-     /* La longueur du champ dépasse la taille du tampon d'E/S      */
+     /* Long.de campo excede tamaño de buffer d cpo                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8187) MSGF(&LIB/&OBJ)
@@ -8156,17 +8154,17 @@ s actionner de nouveau ''répéter''.'                                  +
                 MSGID(USR8187) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'La longueur du champ dépasse la taille du tampon d''E/S'             +
+'Long.de campo excede tamaño de buffer d cpo'                         +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8188                    */
-     /* Création fichier écran. Etape: &1, Champ: &2                */
+     /* Crear Fich. de Pant. Fase: &1, Campo: &2                    */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8188) MSGF(&LIB/&OBJ)
@@ -8176,7 +8174,7 @@ s actionner de nouveau ''répéter''.'                                  +
                 MSGID(USR8188) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Création fichier écran. Etape: &1, Champ: &2'                        +
+'Crear Fich. de Pant. Fase: &1, Campo: &2'                            +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -8184,12 +8182,12 @@ s actionner de nouveau ''répéter''.'                                  +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8189                    */
-     /* Création programme RPG. Etape: &1, Champ: &2                */
+     /* Crear Programa RPG. Fase: &1, Campo: &2                     */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8189) MSGF(&LIB/&OBJ)
@@ -8199,7 +8197,7 @@ s actionner de nouveau ''répéter''.'                                  +
                 MSGID(USR8189) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Création programme RPG. Etape: &1, Champ: &2'                        +
+'Crear Programa RPG. Fase: &1, Campo: &2'                             +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -8207,12 +8205,12 @@ s actionner de nouveau ''répéter''.'                                  +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8190                    */
-     /* Réponse &1 à la requête.                                    */
+     /* Petic.respondida por &1                                     */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8190) MSGF(&LIB/&OBJ)
@@ -8222,19 +8220,19 @@ s actionner de nouveau ''répéter''.'                                  +
                 MSGID(USR8190) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Réponse &1 à la requête.'                                            +
+'Petic.respondida por &1'                                             +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8191                    */
-     /* Le champ &1 n'accepte pas la valeur NULL.                   */
+     /* Campo &1 no puede ser NULL.                                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8191) MSGF(&LIB/&OBJ)
@@ -8244,19 +8242,19 @@ s actionner de nouveau ''répéter''.'                                  +
                 MSGID(USR8191) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Le champ &1 n''accepte pas la valeur NULL.'                          +
+'Campo &1 no puede ser NULL.'                                         +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8192                    */
-     /* Le champ &1 contient des données flottantes incorrectes     */
+     /* Campo &1 tiene datos flot.no válidos.                       */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8192) MSGF(&LIB/&OBJ)
@@ -8266,19 +8264,19 @@ s actionner de nouveau ''répéter''.'                                  +
                 MSGID(USR8192) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Le champ &1 contient des données flottantes incorrectes'             +
+'Campo &1 tiene datos flot.no válidos.'                               +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8193                    */
-     /* Le champ '&1' contient des caractères ne pouvant être trait */
+     /* Campo '&1' tiene caracter no imprimible yno se puede editar */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8193) MSGF(&LIB/&OBJ)
@@ -8288,20 +8286,20 @@ s actionner de nouveau ''répéter''.'                                  +
                 MSGID(USR8193) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Le champ ''&1'' contient des caractères ne pouvant être traités dans -
-l''éditeur'                                                           +
+'Campo ''&1'' tiene caracter no imprimible yno se puede editar con edi-
+tor de textos.'                                                       +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8194                    */
-     /* Fichier '&1' introuvable                                    */
+     /* Fich '&1' no halla.                                         */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8194) MSGF(&LIB/&OBJ)
@@ -8311,19 +8309,19 @@ l''éditeur'                                                           +
                 MSGID(USR8194) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Fichier ''&1'' introuvable'                                          +
+'Fich ''&1'' no halla.'                                               +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8195                    */
-     /* Requête illégale car ce champ est protégé                   */
+     /* Petición ilegal. Cpo protegido.                             */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8195) MSGF(&LIB/&OBJ)
@@ -8333,17 +8331,17 @@ l''éditeur'                                                           +
                 MSGID(USR8195) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Requête illégale car ce champ est protégé'                           +
+'Petición ilegal. Cpo protegido.'                                     +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8196                    */
-     /* Le champ &1 ne peut pas être affiché ni modifié.            */
+     /* El campo &1 no se puede mostrar ni modificar.               */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8196) MSGF(&LIB/&OBJ)
@@ -8353,24 +8351,24 @@ l''éditeur'                                                           +
                 MSGID(USR8196) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Le champ &1 ne peut pas être affiché ni modifié.'                    +
+'El campo &1 no se puede mostrar ni modificar.'                       +
                 ) +
                 SECLVL( +
-'&N &N Causes possibles: &N &B 1. Type de données inconnu. &B 2. Champ-
- graphique sans CCSID. &B 3. Champ packed ou zoned de plus de 30 chiff-
-res. &B 4. Champ de longueur variable de type inconnu.'               +
+'&N &N Causas posibles: &N &B 1. Tipo de datos desconocido. &B 2. Camp-
+o gráfico sin CCSID. &B 3. Campo packed o zoned con más de 30 dígitos.-
+ &B 4. Campo de longitud variable de tipo desconocido.'               +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8200                    */
-     /* Suppression enregistrement &1 impossible                    */
+     /* No puedo borrar registro &1                                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8200) MSGF(&LIB/&OBJ)
@@ -8380,19 +8378,19 @@ res. &B 4. Champ de longueur variable de type inconnu.'               +
                 MSGID(USR8200) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Suppression enregistrement &1 impossible'                            +
+'No puedo borrar registro &1'                                         +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*DEC 10 0) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8201                    */
-     /* Enregistrement &1 supprimé                                  */
+     /* Registro &1 se ha borrado                                   */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8201) MSGF(&LIB/&OBJ)
@@ -8402,19 +8400,19 @@ res. &B 4. Champ de longueur variable de type inconnu.'               +
                 MSGID(USR8201) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Enregistrement &1 supprimé'                                          +
+'Registro &1 se ha borrado'                                           +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*DEC 10 0) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8202                    */
-     /* Copie enregistrement &1 impossible                          */
+     /* No puedo copiar reg. &1.                                    */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8202) MSGF(&LIB/&OBJ)
@@ -8424,19 +8422,19 @@ res. &B 4. Champ de longueur variable de type inconnu.'               +
                 MSGID(USR8202) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Copie enregistrement &1 impossible'                                  +
+'No puedo copiar reg. &1.'                                            +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*DEC 10 0) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8203                    */
-     /* Enregistrement &1 copié                                     */
+     /* Reg &1 ha sido copiado.                                     */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8203) MSGF(&LIB/&OBJ)
@@ -8446,19 +8444,19 @@ res. &B 4. Champ de longueur variable de type inconnu.'               +
                 MSGID(USR8203) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Enregistrement &1 copié'                                             +
+'Reg &1 ha sido copiado.'                                             +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*DEC 10 0) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8204                    */
-     /* Enreg. de sous fichier invalide                             */
+     /* Reg de subarch no válido                                    */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8204) MSGF(&LIB/&OBJ)
@@ -8468,20 +8466,21 @@ res. &B 4. Champ de longueur variable de type inconnu.'               +
                 MSGID(USR8204) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Enreg. de sous fichier invalide'                                     +
+'Reg de subarch no válido'                                            +
                 ) +
                 SECLVL( +
-'&N &N Pointez sur l''enregistrement désiré et répétez votre requête.'+
+'&N &N Sitúe el cursor sobre el registro deseado y repita la petición.-
+'                                                                     +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8205                    */
-     /* Attention: Impossible de fixer plus de &1 colonnes!         */
+     /* Atención: No es posible clavar más de &1 columnas!          */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8205) MSGF(&LIB/&OBJ)
@@ -8491,19 +8490,19 @@ res. &B 4. Champ de longueur variable de type inconnu.'               +
                 MSGID(USR8205) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Attention: Impossible de fixer plus de &1 colonnes!'                 +
+'Atención: No es posible clavar más de &1 columnas!'                  +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*DEC 5 0) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8206                    */
-     /* Enregistrement non affichable. La taille dépasse le maximum */
+     /* No puedo ver registro. Long. de reg. excede maximo de &1 by */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8206) MSGF(&LIB/&OBJ)
@@ -8513,20 +8512,19 @@ res. &B 4. Champ de longueur variable de type inconnu.'               +
                 MSGID(USR8206) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Enregistrement non affichable. La taille dépasse le maximum de &1 oct-
-ets.'                                                                 +
+'No puedo ver registro. Long. de reg. excede maximo de &1 bytes.'     +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*DEC 5 0) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8207                    */
-     /* Le fichier ne peut être ouvert, la longueur de l'enregistre */
+     /* No se puede abrir fichero porque su longitud de registro es */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8207) MSGF(&LIB/&OBJ)
@@ -8536,20 +8534,20 @@ ets.'                                                                 +
                 MSGID(USR8207) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Le fichier ne peut être ouvert, la longueur de l''enregistrement dépa-
-ssant &1 octets.'                                                     +
+'No se puede abrir fichero porque su longitud de registro es mayor que-
+ &1.'                                                                 +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*DEC 5 0) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8208                    */
-     /* Vous n'êtes pas autorisé à modifier des fichiers en lecture */
+     /* No puedes cambiar ficheros de solo entrada.                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8208) MSGF(&LIB/&OBJ)
@@ -8559,17 +8557,17 @@ ssant &1 octets.'                                                     +
                 MSGID(USR8208) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Vous n''êtes pas autorisé à modifier des fichiers en lecture seule.' +
+'No puedes cambiar ficheros de solo entrada.'                         +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8209                    */
-     /* Veuillez entrer un argument de recherche.                   */
+     /* Entre un argumento de búsqueda.                             */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8209) MSGF(&LIB/&OBJ)
@@ -8579,17 +8577,17 @@ ssant &1 octets.'                                                     +
                 MSGID(USR8209) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Veuillez entrer un argument de recherche.'                           +
+'Entre un argumento de búsqueda.'                                     +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8210                    */
-     /* Erreur SQL &1. &2                                           */
+     /* Error SQL &1. &2                                            */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8210) MSGF(&LIB/&OBJ)
@@ -8599,12 +8597,12 @@ ssant &1 octets.'                                                     +
                 MSGID(USR8210) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Erreur SQL &1. &2'                                                   +
+'Error SQL &1. &2'                                                    +
                 ) +
                 SECLVL( +
-'''&N &N Cause  . . . . :   &2 &N &B Vous trouverez plus d''informatio-
-n sur ce code erreur dans le manuel de programmation SQL ou dans le fi-
-chier de messages QSYS/QSQLMSG.'''                                    +
+'&N &N Motivo  . . . . :   &2 &N &B Encontrará más información sobre e-
+ste código de error en el manual de programación SQL o en el archivo d-
+e mensajes QSYS/QSQLMSG.'                                             +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -8612,12 +8610,12 @@ chier de messages QSYS/QSQLMSG.'''                                    +
                     (*CHAR 512) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8211                    */
-     /* Veuillez placer le curseur dans un champ et relancer votre  */
+     /* Coloque el cursor sobre un campo u reinicie su petición de  */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8211) MSGF(&LIB/&OBJ)
@@ -8627,21 +8625,21 @@ chier de messages QSYS/QSQLMSG.'''                                    +
                 MSGID(USR8211) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Veuillez placer le curseur dans un champ et relancer votre requête.' +
+'Coloque el cursor sobre un campo u reinicie su petición de nuevo'    +
                 ) +
                 SECLVL( +
-'Cause  . . . . :   Le curseur se trouve hors d''un champ ou le champ -
-n''est pas valide pour la requête.'                                   +
+'Motivo  . . . . :   El cursor está fuera de un campo o el campo no es-
+ válido para esta petición.'                                          +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8212                    */
-     /* Une sélection SQL ne peut s'appliquer qu'aux fichiers physi */
+     /* La selección SQL solo puede usarse con ficheros físicos. ¿Ab*/
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8212) MSGF(&LIB/&OBJ)
@@ -8651,18 +8649,18 @@ n''est pas valide pour la requête.'                                   +
                 MSGID(USR8212) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Une sélection SQL ne peut s''appliquer qu''aux fichiers physiques. Ou-
-vrir le fichier physique ?'''                                         +
+'La selección SQL solo puede usarse con ficheros físicos. ¿Abrir fiche-
+ro físico?'                                                           +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8213                    */
-     /* 1=Sauvegarder; 0=Ne pas sauvegarder                         */
+     /* 1=salvar; 0=No salvar                                       */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8213) MSGF(&LIB/&OBJ)
@@ -8672,17 +8670,17 @@ vrir le fichier physique ?'''                                         +
                 MSGID(USR8213) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'1=Sauvegarder; 0=Ne pas sauvegarder'                                 +
+'1=salvar; 0=No salvar'                                               +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8214                    */
-     /* 1=Admettre minuscules 0=Majuscules seulement                */
+     /* 1=Habilita Minus; 0=Solo Mayus                              */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8214) MSGF(&LIB/&OBJ)
@@ -8692,17 +8690,17 @@ vrir le fichier physique ?'''                                         +
                 MSGID(USR8214) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'1=Admettre minuscules 0=Majuscules seulement'                        +
+'1=Habilita Minus; 0=Solo Mayus'                                      +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8215                    */
-     /* Minuscule interdite                                         */
+     /* No se permiten Minúsculas.                                  */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8215) MSGF(&LIB/&OBJ)
@@ -8712,17 +8710,17 @@ vrir le fichier physique ?'''                                         +
                 MSGID(USR8215) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Minuscule interdite'                                                 +
+'No se permiten Minúsculas.'                                          +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8216                    */
-     /* Ces valeurs sont incompatibles.                             */
+     /* Valores no casan unos con otros.                            */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8216) MSGF(&LIB/&OBJ)
@@ -8732,21 +8730,21 @@ vrir le fichier physique ?'''                                         +
                 MSGID(USR8216) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Ces valeurs sont incompatibles.'                                     +
+'Valores no casan unos con otros.'                                    +
                 ) +
                 SECLVL( +
-'Si vous voulez interdire à l''utilisateur de saisir des minuscules, v-
-ous ne pouvez prendre cette valeur comme défaut.'''                   +
+'Si no desea permitir que el usuario introduzca minúsculas, no puede e-
+stablecer esto como valor por omisión.'                               +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8217                    */
-     /* Trier sur le n° d'enregistement relatif est impossible.     */
+     /* Imposible Clas. por RRN                                     */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8217) MSGF(&LIB/&OBJ)
@@ -8756,21 +8754,21 @@ ous ne pouvez prendre cette valeur comme défaut.'''                   +
                 MSGID(USR8217) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Trier sur le n° d''enregistement relatif est impossible.'            +
+'Imposible Clas. por RRN'                                             +
                 ) +
                 SECLVL( +
-'Il est impossible d''ouvrir ce fichier trié sur le n° relatif car il -
-est basé sur plus d''un membre.'                                      +
+'No es posible abrir el archivo para una secuencia por RRN, ya que el -
+archivo se basa en más de un miembro.'                                +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8218                    */
-     /* L'enregistement ne peut être fixé. La vue se base sur de mu */
+     /* No puedo clavar registro, porque el lógico se basa en múlti */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8218) MSGF(&LIB/&OBJ)
@@ -8780,23 +8778,23 @@ est basé sur plus d''un membre.'                                      +
                 MSGID(USR8218) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'L''enregistement ne peut être fixé. La vue se base sur de multiples m-
-embres physiques.'                                                    +
+'No puedo clavar registro, porque el lógico se basa en múltiples miemb-
+ros físicos.'                                                         +
                 ) +
                 SECLVL( +
-'&N &N Cause . . . . . :  L''enregistrement ne peut être fixé. Le n° d-
-''enregistrement n''est pas unique et il est impossible de déterminer -
-le membre physique qui le contient.'                                  +
+'&N &N Causa . . . . . :   No se puede clavar el registro porque el nú-
+mero relativo de registro no es único y no se puede determinar el miem-
+bro físico que lo contiene.'                                          +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8219                    */
-     /* Valeur '&1' incorrecte pour un choix Oui/Non                */
+     /* Valor '&1' no válido para sel. Sí/No.                       */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8219) MSGF(&LIB/&OBJ)
@@ -8806,19 +8804,19 @@ le membre physique qui le contient.'                                  +
                 MSGID(USR8219) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Valeur ''&1'' incorrecte pour un choix Oui/Non'                      +
+'Valor ''&1'' no válido para sel. Sí/No.'                             +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*CHAR 1) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8220                    */
-     /* Edition interdite. Le champ &1 contient NULL.               */
+     /* Editor no permitido. Campo &1 es NULL                       */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8220) MSGF(&LIB/&OBJ)
@@ -8828,19 +8826,19 @@ le membre physique qui le contient.'                                  +
                 MSGID(USR8220) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Edition interdite. Le champ &1 contient NULL.'                       +
+'Editor no permitido. Campo &1 es NULL'                               +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8221                    */
-     /* L'éditeur ne supporte pas le type de données du champ &1.   */
+     /* Editor no soporta el tipo de datos de cpo &1.               */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8221) MSGF(&LIB/&OBJ)
@@ -8850,19 +8848,19 @@ le membre physique qui le contient.'                                  +
                 MSGID(USR8221) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'L''éditeur ne supporte pas le type de données du champ &1.'          +
+'Editor no soporta el tipo de datos de cpo &1.'                       +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8222                    */
-     /* Le champ &1 dépasse la taille maximum allouée à l'éditeur   */
+     /* Campo &1 excede long. máxima permitida para editor.         */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8222) MSGF(&LIB/&OBJ)
@@ -8872,19 +8870,19 @@ le membre physique qui le contient.'                                  +
                 MSGID(USR8222) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Le champ &1 dépasse la taille maximum allouée à l''éditeur'          +
+'Campo &1 excede long. máxima permitida para editor.'                 +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8223                    */
-     /* Saisie basculée en mode minuscule                           */
+     /* Campo de clave cambiado a minúsculas.                       */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8223) MSGF(&LIB/&OBJ)
@@ -8894,17 +8892,17 @@ le membre physique qui le contient.'                                  +
                 MSGID(USR8223) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Saisie basculée en mode minuscule'                                   +
+'Campo de clave cambiado a minúsculas.'                               +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8224                    */
-     /* Saisie basculée en mode majuscule                           */
+     /* Campo de clave cambiado a mayúsculas.                       */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8224) MSGF(&LIB/&OBJ)
@@ -8914,17 +8912,17 @@ le membre physique qui le contient.'                                  +
                 MSGID(USR8224) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Saisie basculée en mode majuscule'                                   +
+'Campo de clave cambiado a mayúsculas.'                               +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8225                    */
-     /* L'enregistrement a été modifié par un autre utilisateur. M  */
+     /* Registro cambiado por otro usuario. ¿Actualizar de todos mod*/
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8225) MSGF(&LIB/&OBJ)
@@ -8934,18 +8932,17 @@ le membre physique qui le contient.'                                  +
                 MSGID(USR8225) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'L''enregistrement a été modifié par un autre utilisateur.&N&NModifier-
- tout de même ?'                                                      +
+'Registro cambiado por otro usuario.&N&N¿Actualizar de todos modos?'  +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8226                    */
-     /* Impression effectuée                                        */
+     /* Operación de impresión acabó con éxito.                     */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8226) MSGF(&LIB/&OBJ)
@@ -8955,17 +8952,17 @@ le membre physique qui le contient.'                                  +
                 MSGID(USR8226) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Impression effectuée'                                                +
+'Operación de impresión acabó con éxito.'                             +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8227                    */
-     /* Echec de conversion '&1' en numérique                       */
+     /* Error al convertir '&1' a valor numérico                    */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8227) MSGF(&LIB/&OBJ)
@@ -8975,11 +8972,12 @@ le membre physique qui le contient.'                                  +
                 MSGID(USR8227) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Echec de conversion ''&1'' en numérique'                             +
+'Error al convertir ''&1'' a valor numérico'                          +
                 ) +
                 SECLVL( +
-'&N &N Information . . :   Erreur lors de laconversion ''&1'' en numér-
-ique. La chaîne n''a pas pu être convertie en numérique &2(&3,&4).'   +
+'&N &N Información . . :   Se ha producido un error al convertir ''&1'-
+' en un valor numérico. La cadena no se pudo convertir en un valor num-
+érico de &2(&3,&4).'                                                  +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -8989,12 +8987,12 @@ ique. La chaîne n''a pas pu être convertie en numérique &2(&3,&4).'   +
                     (*DEC 5 0) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8228                    */
-     /* Type de donnée incorrect '&1'.                              */
+     /* Entr.Inv de tipo de dato: '&1'                              */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8228) MSGF(&LIB/&OBJ)
@@ -9004,24 +9002,23 @@ ique. La chaîne n''a pas pu être convertie en numérique &2(&3,&4).'   +
                 MSGID(USR8228) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Type de donnée incorrect ''&1''.'                                    +
+'Entr.Inv de tipo de dato: ''&1'''                                    +
                 ) +
                 SECLVL( +
-'&N &N Information . . :   Le type de donnée spécifié  ''&1'' est inco-
-rrect.. Veuillez spécifier un type de donnée RPG valide et relancer vo-
-tre requête.'                                                         +
+'&N &N Información . . :   El tipo de datos indicado ''&1'' no es váli-
+do. Indique un tipo de datos RPG válido y repita la petición.'        +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*CHAR 256) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8229                    */
-     /* Taille du champ invalide: '&1'.                             */
+     /* Entr.de long de cpo no val: '&1'.                           */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8229) MSGF(&LIB/&OBJ)
@@ -9031,23 +9028,23 @@ tre requête.'                                                         +
                 MSGID(USR8229) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Taille du champ invalide: ''&1''.'                                   +
+'Entr.de long de cpo no val: ''&1''.'                                 +
                 ) +
                 SECLVL( +
-'&N &N Information . . :   La taille du champ ''&1'' est incorrecte. V-
-euillez corriger cette valeur et relancer votre requête'              +
+'&N &N Información . . :   La longitud de campo indicada ''&1'' no es -
+válida. Corrija la longitud de campo y repita la petición.'           +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*CHAR 256) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8230                    */
-     /* Nombre incorrect de positions décimales: '&1'.              */
+     /* Número inválido de pos. decimales: '&1'.                    */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8230) MSGF(&LIB/&OBJ)
@@ -9057,25 +9054,25 @@ euillez corriger cette valeur et relancer votre requête'              +
                 MSGID(USR8230) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Nombre incorrect de positions décimales: ''&1''.'                    +
+'Número inválido de pos. decimales: ''&1''.'                          +
                 ) +
                 SECLVL( +
-'&N &N Information . . :   Le nombre de décimales indiqué ''&1'' est i-
-ncorrect. Veuillez corriger le nombre de décimales et relancer votre r-
-equête. Notez que les décimales ne sont pas requises pour tous les typ-
-es de données, par exemple ''A'' pour les chaînes de caractères.'     +
+'&N &N Información . . :   El número de posiciones decimales indicado -
+''&1'' no es válido. Corrija el número de posiciones decimales y repit-
+a la petición. Tenga en cuenta que no todos los tipos de datos, como '-
+'A'' para cadenas, requieren posiciones decimales.'                   +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*CHAR 256) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8231                    */
-     /* Etat de verrouillage de l'enregistrement non modifiable dur */
+     /* No puedo cambiar Bloq.reg. por 'copy' o 'add'.              */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8231) MSGF(&LIB/&OBJ)
@@ -9085,23 +9082,22 @@ es de données, par exemple ''A'' pour les chaînes de caractères.'     +
                 MSGID(USR8231) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Etat de verrouillage de l''enregistrement non modifiable durant la co-
-pie ou l''ajout.'''                                                   +
+'No puedo cambiar Bloq.reg. por ''copy'' o ''add''.'                  +
                 ) +
                 SECLVL( +
-'&N &N Information . . :   le verrouillage de l''enregistrement ne peu-
-t être changé. Seule la modification de l''enregistrement peut le chan-
-ger.'''                                                               +
+'&N &N Información . . :   No se puede cambiar el estado actual del bl-
+oqueo de registro. El bloqueo solo se puede cambiar al modificar un re-
+gistro, no al copiar o añadir uno.'                                   +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8232                    */
-     /* L'enregistrement a été modifié par un autre utilisateur.    */
+     /* Registro cambiado por otro usuario. ¿Bloquear de todos modos*/
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8232) MSGF(&LIB/&OBJ)
@@ -9111,18 +9107,17 @@ ger.'''                                                               +
                 MSGID(USR8232) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'L''enregistrement a été modifié par un autre utilisateur. Verrouiller-
- l''enregistrement tout de même ?'                                    +
+'Registro cambiado por otro usuario.&N&N¿Bloquear de todos modos?'    +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8233                    */
-     /* Erreur: Maquette inutilisable. Niveaux de format différents */
+     /* Error: no se puede usar el diseño. Los ID de formato de regi*/
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8233) MSGF(&LIB/&OBJ)
@@ -9132,12 +9127,14 @@ ger.'''                                                               +
                 MSGID(USR8233) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Erreur: Maquette inutilisable. Niveaux de format différents'         +
+'Error: no se puede usar el diseño. Los ID de formato de registro difi-
+eren.'                                                                +
                 ) +
                 SECLVL( +
-'&N &N Solution  . . . :   Retirer l''ID niveau du fichier &2/&1, memb-
-re &3 pour désactiver le contrôle et appliquer à nouveau la maquette. -
-Puis sauvegardez la maquette.'                                        +
+'&N &N Recuperación  . :   Elimine el registro *RCDFMTID del archivo &-
+2/&1, miembro &3, para desactivar la comprobación de nivel y vuelva a -
+aplicar el diseño. Si funciona, guarde el diseño para añadir el ID de -
+nivel de formato de registro.'                                        +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -9146,12 +9143,12 @@ Puis sauvegardez la maquette.'                                        +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8234                    */
-     /* Impossible de charger la maquette - les niveaux de format n */
+     /* No se pudo cargar el diseño porque los ID de nivel de format*/
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8234) MSGF(&LIB/&OBJ)
@@ -9161,17 +9158,17 @@ Puis sauvegardez la maquette.'                                        +
                 MSGID(USR8234) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Impossible de charger la maquette - les niveaux de format ne correspo-
-ndent pas.'                                                           +
+'No se pudo cargar el diseño porque los ID de nivel de formato de regi-
+stro no coinciden.'                                                   +
                 ) +
                 SECLVL( +
-'&N &N Cause . . . . . :   La maquette indiquée n''a pas pu être charg-
-ée, car l''ID de niveau de format enregistré dans la maquette diffère -
-de celui du fichier à afficher.&N Reprise . . . . :   Supprimer l''enr-
-egistrement *RCDFMTID du fichier &2/&1, membre &3, pour désactiver le -
-contrôle de niveau, puis appliquer à nouveau la maquette. Si le charge-
-ment réussit, sauvegarder la maquette pour réintégrer l''ID de niveau -
-de format.'                                                           +
+'&N &N Causa . . . . . :   No se pudo cargar el diseño indicado desde -
+el archivo de entorno, porque el ID de nivel de formato de registro de-
+l diseño no coincide con el del archivo indicado.&N Recuperación  . : -
+  Elimine el registro *RCDFMTID del archivo &2/&1, miembro &3, para de-
+sactivar la comprobación de nivel y vuelva a aplicar el diseño. Si fun-
+ciona, guarde el diseño para añadir el ID de nivel de formato de regis-
+tro.'                                                                 +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -9180,12 +9177,12 @@ de format.'                                                           +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8235                    */
-     /* La sélection SQL n'est pas prise en charge pour les fichiers*/
+     /* La selección SQL no está soportada para archivos lógicos de */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8235) MSGF(&LIB/&OBJ)
@@ -9195,18 +9192,18 @@ de format.'                                                           +
                 MSGID(USR8235) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'La sélection SQL n''est pas prise en charge pour les fichiers logique-
-s multi-membres.'                                                     +
+'La selección SQL no está soportada para archivos lógicos de varios mi-
+embros.'                                                              +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8236                    */
-     /* Mode insertion activé. Positionnez le curseur, puis appuyez */
+     /* Modo de inserción activado. Coloque el cursor y luego presi */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8236) MSGF(&LIB/&OBJ)
@@ -9216,17 +9213,17 @@ s multi-membres.'                                                     +
                 MSGID(USR8236) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Mode insertion activé. Positionnez le curseur, puis appuyez sur F7.' +
+'Modo de inserción activado. Coloque el cursor y luego presione F7.'  +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8237                    */
-     /* Appuyer sur la touche "Entrée" pour insérer le nombre d'esp */
+     /* Pulse Intro para insertar el número de espacios especificad */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8237) MSGF(&LIB/&OBJ)
@@ -9236,18 +9233,17 @@ s multi-membres.'                                                     +
                 MSGID(USR8237) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Appuyer sur la touche "Entrée" pour insérer le nombre d''espaces indi-
-qué.'                                                                 +
+'Pulse Intro para insertar el número de espacios especificado.'       +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8238                    */
-     /* Mode de suppression activé. Positionnez le curseur, puis ap */
+     /* Modo de borrar activado. Coloque el cursor y luego presione */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8238) MSGF(&LIB/&OBJ)
@@ -9257,18 +9253,17 @@ qué.'                                                                 +
                 MSGID(USR8238) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Mode de suppression activé. Positionnez le curseur, puis appuyez sur -
-F8.'                                                                  +
+'Modo de borrar activado. Coloque el cursor y luego presione F8.'     +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8239                    */
-     /* Appuyer sur la touche "Entrée" pour effacer la plage de car */
+     /* Pulse Intro para borrar el intervalo de     caracteres espe */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8239) MSGF(&LIB/&OBJ)
@@ -9278,18 +9273,17 @@ F8.'                                                                  +
                 MSGID(USR8239) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Appuyer sur la touche "Entrée" pour effacer la plage de caractères sp-
-écifiée.'                                                             +
+'Pulse Intro para borrar el intervalo de     caracteres especificado.'+
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8240                    */
-     /* La valeur ne doit pas être inférieure à &1.                 */
+     /* No debe ser inferior a &1.                                  */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8240) MSGF(&LIB/&OBJ)
@@ -9299,19 +9293,19 @@ F8.'                                                                  +
                 MSGID(USR8240) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'La valeur ne doit pas être inférieure à &1.'                         +
+'No debe ser inferior a &1.'                                          +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*DEC 5 0) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8241                    */
-     /* Longueur de champ dépassée. La valeur est trop longue de &1 */
+     /* Longitud de campo superada. El valor excede en &1 caracteres*/
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8241) MSGF(&LIB/&OBJ)
@@ -9321,20 +9315,19 @@ F8.'                                                                  +
                 MSGID(USR8241) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Longueur de champ dépassée. La valeur est trop longue de &1 caractère-
-s.'                                                                   +
+'Longitud de campo superada. El valor excede en &1 caracteres.'       +
                 ) +
                 SEV(0) +
                 FMT( +
                     (*DEC 5 0) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR9992                    */
-     /* Echec sauvegarde paramètres utilisateur                     */
+     /* No se pudieron guardar los ajustes del usuario.             */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR9992) MSGF(&LIB/&OBJ)
@@ -9344,15 +9337,15 @@ s.'                                                                   +
                 MSGID(USR9992) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Echec sauvegarde paramètres utilisateur'                             +
+'No se pudieron guardar los ajustes del usuario.'                     +
                 ) +
                 SECLVL( +
-'&N &N Cause . . . . . :   Les paramètres utilisateur n''ont pas pu êt-
-re sauvegardés en raison du code d''erreur &1. &N &N Les codes d''erre-
-ur possibles sont: &N &B 1 - Le nom du fichier (&2) ne correspond pas -
-au fichier ouvert. &B 2 - Le nom de la bibliothèque (&2) ne correspond-
- pas à la bibliothèque du fichier ouvert. &B 3 - Le fichier des paramè-
-tres utilisateur &3/&2, membre &4, n''a pas pu être ouvert.'          +
+'&N &N Causa . . . . . :   No se pudieron guardar los ajustes del usua-
+rio debido al código de error &1. &N &N Los códigos de error posibles -
+son: &N &B 1 - El nombre del archivo (&2) no coincide con el archivo a-
+bierto. &B 2 - El nombre de la biblioteca (&2) no coincide con la bibl-
+ioteca del archivo abierto. &B 3 - No se pudo abrir el archivo de ajus-
+tes del usuario &3/&2 con el miembro &4.'                             +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -9362,12 +9355,12 @@ tres utilisateur &3/&2, membre &4, n''a pas pu être ouvert.'          +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR9993                    */
-     /* Fichier non ouvert. SQL est limité aux fichiers physiques   */
+     /* No se abrió el fichero. El uso de SQL es posible solo para  */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR9993) MSGF(&LIB/&OBJ)
@@ -9377,17 +9370,18 @@ tres utilisateur &3/&2, membre &4, n''a pas pu être ouvert.'          +
                 MSGID(USR9993) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Fichier non ouvert. SQL est limité aux fichiers physiques'           +
+'No se abrió el fichero. El uso de SQL es posible solo para archivos f-
+ísicos.'                                                              +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR9994                    */
-     /* Erreur inattendue &1 dans la procédure C &2.                */
+     /* Error inesperado &1 en proced. C &2.                        */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR9994) MSGF(&LIB/&OBJ)
@@ -9397,10 +9391,10 @@ tres utilisateur &3/&2, membre &4, n''a pas pu être ouvert.'          +
                 MSGID(USR9994) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Erreur inattendue &1 dans la procédure C &2.'                        +
+'Error inesperado &1 en proced. C &2.'                                +
                 ) +
                 SECLVL( +
-'&N &N Description . . :   &3'                                        +
+'&N &N Descripción . . :   &3'                                        +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -9409,12 +9403,12 @@ tres utilisateur &3/&2, membre &4, n''a pas pu être ouvert.'          +
                     (*CHAR 256) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR9995                    */
-     /* Modifie le format d'enregistrement des fichiers de configur */
+     /* Cambiando fmt de reg. del fich de config...                 */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR9995) MSGF(&LIB/&OBJ)
@@ -9424,18 +9418,17 @@ tres utilisateur &3/&2, membre &4, n''a pas pu être ouvert.'          +
                 MSGID(USR9995) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Modifie le format d''enregistrement des fichiers de configuration ...-
-'                                                                     +
+'Cambiando fmt de reg. del fich de config...'                         +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR9996                    */
-     /* Aucun fichier ouvert.                                       */
+     /* Fich no abierto                                             */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR9996) MSGF(&LIB/&OBJ)
@@ -9445,17 +9438,17 @@ tres utilisateur &3/&2, membre &4, n''a pas pu être ouvert.'          +
                 MSGID(USR9996) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Aucun fichier ouvert.'                                               +
+'Fich no abierto'                                                     +
                 ) +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR9997                    */
-     /* &2PEEK/400 est&1 un partagiciel &2Veuillez vous enregistrer */
+     /* &2PEEK/400 es&1 Shareware. &2Registre su copia.             */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR9997) MSGF(&LIB/&OBJ)
@@ -9465,7 +9458,7 @@ tres utilisateur &3/&2, membre &4, n''a pas pu être ouvert.'          +
                 MSGID(USR9997) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'&2PEEK/400 est&1 un partagiciel &2Veuillez vous enregistrer.'        +
+'&2PEEK/400 es&1 Shareware. &2Registre su copia.'                     +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -9473,12 +9466,12 @@ tres utilisateur &3/&2, membre &4, n''a pas pu être ouvert.'          +
                     (*CHAR 1) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR9998                    */
-     /* Message inattendu n° &1 reçu du programme &2.               */
+     /* id de msg inesperado &1 recivido de programa &2.            */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR9998) MSGF(&LIB/&OBJ)
@@ -9488,7 +9481,7 @@ tres utilisateur &3/&2, membre &4, n''a pas pu être ouvert.'          +
                 MSGID(USR9998) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Message inattendu n° &1 reçu du programme &2.'                       +
+'id de msg inesperado &1 recivido de programa &2.'                    +
                 ) +
                 SEV(0) +
                 FMT( +
@@ -9496,7 +9489,7 @@ tres utilisateur &3/&2, membre &4, n''a pas pu être ouvert.'          +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -9522,7 +9515,7 @@ tres utilisateur &3/&2, membre &4, n''a pas pu être ouvert.'          +
                     (*CHAR 128) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
              RCLRSC LVL(*)

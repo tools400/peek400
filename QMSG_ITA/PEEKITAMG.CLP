@@ -4,37 +4,37 @@
      /*-----------------------------------------------------------------------*/
      /* STRPREPRC Compile Options:                                            */
      /* >>PRE-COMPILER<<                                                      */
-     /*   >>CRTCMD<<  CALL       PGM(QTEMP/&OB) PARM(&LI &OB);                */
+     /*   >>CRTCMD<<  CALL       PGM(QTEMP/&OB) PARM(&LI);                    */
      /*   >>CMD<<     CHGJOB  LANGID(ITA) CNTRYID(IT) CCSID(1144);            */
      /*   >>CMD<<     CRTCLPGM   PGM(QTEMP/&OB) +                             */
      /*                          SRCFILE(&SL/&SF) SRCMBR(&SM) +               */
-     /*               TEXT('Peek/400 - Italienische übersetzung');            */
+     /*               TEXT('Peek/400 - Italiano');                            */
      /*   >>EXECUTE<<                                                         */
      /*   >>CMD<<     DLTPGM PGM(QTEMP/&OB);                                  */
      /*   >>CMD<<     CHGJOB  LANGID(DEU) CNTRYID(DE) CCSID(273);             */
      /* >>END-PRE-COMPILER<<                                                  */
      /*-----------------------------------------------------------------------*/
-             PGM        PARM(&I_LIB &I_OBJ)
+             PGM        PARM(&I_LIB)
 
              DCL        VAR(&I_LIB     ) TYPE(*CHAR) LEN(10)
              DCL        VAR(&I_OBJ     ) TYPE(*CHAR) LEN(10)
              DCL        VAR(&LIB       ) TYPE(*CHAR) LEN(10)
-             DCL        VAR(&OBJ       ) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&OBJ       ) TYPE(*CHAR) LEN(10)  VALUE('PEEKITA')
+             DCL        VAR(&CCSID     ) TYPE(*DEC ) LEN(5 0) VALUE(1144)
+             DCL        VAR(&LANGUAGE  ) TYPE(*CHAR) LEN(20)  VALUE('Italiano')
 
              CHGVAR     VAR(&LIB       ) VALUE(&I_LIB)
              MONMSG     MSGID(MCH3601) EXEC(DO)
                RMVMSG     PGMQ(*SAME (*)) CLEAR(*ALL)
                SNDPGMMSG  MSGID(CPF9898) MSGF(*LIBL/QCPFMSG) +
-                            MSGDTA('Usage: CALL PGM(PEEKITA) +
-                                    PARM(libName [msgFName)') +
+                            MSGDTA('Usage: CALL PGM(PEEKITAMG) PARM(libName)') +
                             TOPGMQ(*PRV (*PGMBDY)) MSGTYPE(*ESCAPE)
              ENDDO
 
-             CHGVAR     VAR(&OBJ       ) VALUE(&I_OBJ)
-             MONMSG     MSGID(MCH3601) EXEC(DO)
-               RMVMSG     PGMQ(*SAME (*)) CLEAR(*ALL)
-               CHGVAR     VAR(&OBJ) VALUE('PEEKITA   ')
-             ENDDO
+             DLTMSGF    MSGF(&LIB/&OBJ)
+             MONMSG     MSGID(CPF2105) /* Object not found */
+
+             CRTMSGF MSGF(&LIB/&OBJ ) TEXT('Peek/400 - ' *CAT &LANGUAGE)
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   AID00BA                    */
@@ -53,7 +53,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -73,7 +73,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -93,7 +93,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -113,7 +113,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -133,7 +133,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -153,7 +153,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -173,7 +173,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -193,7 +193,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -213,7 +213,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -233,7 +233,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -253,7 +253,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -273,7 +273,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -293,7 +293,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -313,7 +313,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -333,7 +333,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -353,7 +353,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -373,7 +373,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -393,7 +393,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -413,7 +413,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -433,7 +433,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -453,7 +453,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -473,7 +473,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -493,7 +493,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -513,7 +513,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -533,7 +533,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -553,7 +553,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -573,7 +573,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -593,7 +593,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -613,7 +613,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -633,7 +633,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -653,7 +653,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -673,7 +673,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -693,7 +693,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -713,7 +713,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -733,7 +733,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -753,7 +753,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -773,7 +773,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -793,7 +793,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -813,7 +813,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -833,7 +833,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -853,7 +853,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -873,7 +873,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -893,7 +893,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -913,7 +913,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -933,7 +933,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -953,7 +953,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -973,7 +973,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -993,7 +993,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1013,7 +1013,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1033,7 +1033,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1053,7 +1053,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1073,7 +1073,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1093,7 +1093,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1113,7 +1113,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1133,7 +1133,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1153,7 +1153,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1173,7 +1173,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1193,7 +1193,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1213,7 +1213,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1233,7 +1233,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1253,7 +1253,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1273,7 +1273,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1293,7 +1293,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1313,7 +1313,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1333,7 +1333,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1353,7 +1353,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1373,7 +1373,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1393,7 +1393,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1413,7 +1413,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1433,7 +1433,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1453,7 +1453,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1473,7 +1473,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1493,7 +1493,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1513,7 +1513,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1533,7 +1533,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1553,7 +1553,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1573,7 +1573,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1593,7 +1593,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1613,7 +1613,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1633,7 +1633,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1653,7 +1653,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1673,7 +1673,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1693,7 +1693,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1713,7 +1713,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1733,7 +1733,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1753,7 +1753,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1773,7 +1773,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1793,7 +1793,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1813,7 +1813,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1833,7 +1833,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1853,7 +1853,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1873,7 +1873,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1893,7 +1893,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1913,7 +1913,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1933,7 +1933,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1953,7 +1953,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1973,7 +1973,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -1993,7 +1993,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2013,7 +2013,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2033,7 +2033,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2053,7 +2053,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2073,7 +2073,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2093,7 +2093,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2113,7 +2113,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2133,7 +2133,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2153,7 +2153,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2173,7 +2173,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2193,7 +2193,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2213,7 +2213,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2233,7 +2233,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2253,7 +2253,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2273,7 +2273,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2293,7 +2293,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2313,7 +2313,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2333,7 +2333,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2353,7 +2353,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2373,7 +2373,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2393,7 +2393,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2413,7 +2413,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2433,7 +2433,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2453,7 +2453,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2473,7 +2473,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2493,7 +2493,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2513,7 +2513,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2533,7 +2533,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2553,7 +2553,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2573,7 +2573,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2593,7 +2593,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2613,7 +2613,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2633,7 +2633,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2653,7 +2653,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2673,7 +2673,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2693,7 +2693,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2713,7 +2713,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2733,7 +2733,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2753,7 +2753,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2773,7 +2773,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2793,7 +2793,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2813,7 +2813,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2833,7 +2833,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2853,7 +2853,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2873,7 +2873,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2893,7 +2893,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2913,7 +2913,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2933,7 +2933,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2953,7 +2953,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2973,7 +2973,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -2993,7 +2993,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3013,7 +3013,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3033,7 +3033,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3053,7 +3053,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3073,7 +3073,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3093,7 +3093,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3113,7 +3113,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3133,7 +3133,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3153,7 +3153,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3173,7 +3173,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3193,7 +3193,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3213,7 +3213,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3233,7 +3233,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3253,7 +3253,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3273,7 +3273,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3293,7 +3293,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3313,7 +3313,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3333,7 +3333,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3353,7 +3353,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3373,7 +3373,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3393,7 +3393,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3413,7 +3413,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3433,7 +3433,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3453,7 +3453,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3473,7 +3473,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3493,7 +3493,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3513,7 +3513,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3533,7 +3533,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3553,7 +3553,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3573,7 +3573,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3593,7 +3593,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3613,7 +3613,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3633,7 +3633,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3653,7 +3653,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3673,7 +3673,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3693,7 +3693,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3713,7 +3713,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3733,7 +3733,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3753,7 +3753,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3773,7 +3773,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3793,7 +3793,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3813,7 +3813,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3833,7 +3833,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3853,7 +3853,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3873,7 +3873,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3893,7 +3893,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3913,7 +3913,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3933,7 +3933,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3953,7 +3953,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3973,7 +3973,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -3993,7 +3993,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4013,7 +4013,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4033,7 +4033,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4053,7 +4053,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4073,7 +4073,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4093,7 +4093,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4113,7 +4113,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4133,7 +4133,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4153,7 +4153,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4173,7 +4173,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4193,7 +4193,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4213,7 +4213,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4233,7 +4233,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4253,7 +4253,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4273,7 +4273,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4293,7 +4293,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4313,7 +4313,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4333,7 +4333,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4353,7 +4353,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4373,7 +4373,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4393,7 +4393,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4413,7 +4413,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4433,7 +4433,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4453,7 +4453,7 @@
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4474,7 +4474,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4494,7 +4494,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4514,7 +4514,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4534,7 +4534,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4554,7 +4554,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4574,7 +4574,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4594,7 +4594,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4614,7 +4614,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4635,7 +4635,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4655,7 +4655,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4675,7 +4675,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4695,7 +4695,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4715,7 +4715,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4735,7 +4735,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4755,7 +4755,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4775,7 +4775,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4795,7 +4795,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4815,7 +4815,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4835,7 +4835,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4855,7 +4855,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4875,7 +4875,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4895,7 +4895,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4915,7 +4915,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4935,7 +4935,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4955,7 +4955,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4975,7 +4975,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -4995,7 +4995,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5015,7 +5015,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5035,7 +5035,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5055,7 +5055,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5075,7 +5075,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5095,7 +5095,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5115,7 +5115,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5135,7 +5135,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5155,7 +5155,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5175,7 +5175,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5195,7 +5195,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5215,7 +5215,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5235,7 +5235,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5255,7 +5255,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5275,7 +5275,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5295,7 +5295,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5315,7 +5315,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5335,7 +5335,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5355,7 +5355,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5375,7 +5375,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5395,7 +5395,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5415,7 +5415,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5435,7 +5435,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5455,7 +5455,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5475,7 +5475,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5495,7 +5495,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5515,7 +5515,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5535,7 +5535,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5555,7 +5555,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5575,7 +5575,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5595,7 +5595,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5615,7 +5615,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5635,7 +5635,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5655,7 +5655,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5675,7 +5675,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5695,7 +5695,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5715,7 +5715,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5735,7 +5735,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5755,7 +5755,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5775,7 +5775,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5795,7 +5795,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5815,7 +5815,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5835,7 +5835,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5855,7 +5855,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5875,7 +5875,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5895,7 +5895,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5915,7 +5915,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5939,7 +5939,7 @@ sIniz'                                                                +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5962,7 +5962,7 @@ sIniz'                                                                +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -5982,7 +5982,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -6002,7 +6002,7 @@ sIniz'                                                                +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -6025,7 +6025,7 @@ ro.'                                                                  +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -6048,7 +6048,7 @@ ro.'                                                                  +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -6080,7 +6080,7 @@ gico multimembro.'                                                    +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -6103,7 +6103,7 @@ gico multimembro.'                                                    +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -6126,7 +6126,7 @@ gico multimembro.'                                                    +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -6148,7 +6148,7 @@ gico multimembro.'                                                    +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -6174,7 +6174,7 @@ gico multimembro.'                                                    +
                     (*CHAR 256) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -6197,7 +6197,7 @@ gico multimembro.'                                                    +
                     (*DEC 5 0) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -6217,7 +6217,7 @@ gico multimembro.'                                                    +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -6237,7 +6237,7 @@ gico multimembro.'                                                    +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -6257,7 +6257,7 @@ gico multimembro.'                                                    +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -6281,7 +6281,7 @@ gico multimembro.'                                                    +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -6303,7 +6303,7 @@ gico multimembro.'                                                    +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -6323,7 +6323,7 @@ gico multimembro.'                                                    +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -6344,7 +6344,7 @@ e la richiesta.'                                                      +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -6364,7 +6364,7 @@ e la richiesta.'                                                      +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -6387,7 +6387,7 @@ e la richiesta.'                                                      +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -6410,7 +6410,7 @@ e la richiesta.'                                                      +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -6430,7 +6430,7 @@ e la richiesta.'                                                      +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -6454,7 +6454,7 @@ e la richiesta.'                                                      +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -6478,7 +6478,7 @@ e la richiesta.'                                                      +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -6502,7 +6502,7 @@ e la richiesta.'                                                      +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -6524,7 +6524,7 @@ e la richiesta.'                                                      +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -6544,7 +6544,7 @@ e la richiesta.'                                                      +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -6564,7 +6564,7 @@ e la richiesta.'                                                      +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -6586,7 +6586,7 @@ e la richiesta.'                                                      +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -6606,7 +6606,7 @@ e la richiesta.'                                                      +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -6626,7 +6626,7 @@ e la richiesta.'                                                      +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -6646,7 +6646,7 @@ e la richiesta.'                                                      +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -6667,7 +6667,7 @@ e la richiesta.'                                                      +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -6687,7 +6687,7 @@ e la richiesta.'                                                      +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -6707,7 +6707,7 @@ e la richiesta.'                                                      +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -6727,7 +6727,7 @@ e la richiesta.'                                                      +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -6747,7 +6747,7 @@ e la richiesta.'                                                      +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -6767,7 +6767,7 @@ e la richiesta.'                                                      +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -6790,7 +6790,7 @@ e la richiesta.'                                                      +
                     (*CHAR 1) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -6817,7 +6817,7 @@ e la richiesta.'                                                      +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -6837,7 +6837,7 @@ e la richiesta.'                                                      +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -6859,7 +6859,7 @@ e la richiesta.'                                                      +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -6879,7 +6879,7 @@ e la richiesta.'                                                      +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -6902,7 +6902,7 @@ e la richiesta.'                                                      +
                     (*DEC 10 0) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -6925,7 +6925,7 @@ e la richiesta.'                                                      +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -6945,7 +6945,7 @@ e la richiesta.'                                                      +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -6966,7 +6966,7 @@ ontinua a cercare/''ENTER''=FINE.'                                    +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -6987,7 +6987,7 @@ ontinua a cercare/''ENTER''=FINE.'                                    +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -7007,7 +7007,7 @@ ontinua a cercare/''ENTER''=FINE.'                                    +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -7030,7 +7030,7 @@ ontinua a cercare/''ENTER''=FINE.'                                    +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -7053,7 +7053,7 @@ ontinua a cercare/''ENTER''=FINE.'                                    +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -7079,7 +7079,7 @@ bile solo con EQ/NE.'                                                 +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -7102,7 +7102,7 @@ bile solo con EQ/NE.'                                                 +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -7124,7 +7124,7 @@ bile solo con EQ/NE.'                                                 +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -7144,7 +7144,7 @@ bile solo con EQ/NE.'                                                 +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -7166,7 +7166,7 @@ bile solo con EQ/NE.'                                                 +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -7189,7 +7189,7 @@ bile solo con EQ/NE.'                                                 +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -7211,7 +7211,7 @@ bile solo con EQ/NE.'                                                 +
                     (*DEC 10 0) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -7233,7 +7233,7 @@ bile solo con EQ/NE.'                                                 +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -7255,7 +7255,7 @@ bile solo con EQ/NE.'                                                 +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -7275,7 +7275,7 @@ bile solo con EQ/NE.'                                                 +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -7295,7 +7295,7 @@ bile solo con EQ/NE.'                                                 +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -7317,7 +7317,7 @@ bile solo con EQ/NE.'                                                 +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -7339,7 +7339,7 @@ bile solo con EQ/NE.'                                                 +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -7359,7 +7359,7 @@ bile solo con EQ/NE.'                                                 +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -7379,7 +7379,7 @@ bile solo con EQ/NE.'                                                 +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -7401,7 +7401,7 @@ bile solo con EQ/NE.'                                                 +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -7423,7 +7423,7 @@ bile solo con EQ/NE.'                                                 +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -7445,7 +7445,7 @@ bile solo con EQ/NE.'                                                 +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -7467,7 +7467,7 @@ bile solo con EQ/NE.'                                                 +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -7489,7 +7489,7 @@ bile solo con EQ/NE.'                                                 +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -7509,7 +7509,7 @@ bile solo con EQ/NE.'                                                 +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -7529,7 +7529,7 @@ bile solo con EQ/NE.'                                                 +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -7551,7 +7551,7 @@ bile solo con EQ/NE.'                                                 +
                     (*CHAR 20) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -7571,7 +7571,7 @@ bile solo con EQ/NE.'                                                 +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -7594,7 +7594,7 @@ bile solo con EQ/NE.'                                                 +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -7614,7 +7614,7 @@ bile solo con EQ/NE.'                                                 +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -7634,7 +7634,7 @@ bile solo con EQ/NE.'                                                 +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -7656,7 +7656,7 @@ bile solo con EQ/NE.'                                                 +
                     (*CHAR 1) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -7676,7 +7676,7 @@ bile solo con EQ/NE.'                                                 +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -7702,7 +7702,7 @@ ere di nuovo "RIPETI".'                                               +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -7722,7 +7722,7 @@ ere di nuovo "RIPETI".'                                               +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -7742,7 +7742,7 @@ ere di nuovo "RIPETI".'                                               +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -7765,7 +7765,7 @@ ere di nuovo "RIPETI".'                                               +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -7787,7 +7787,7 @@ ere di nuovo "RIPETI".'                                               +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -7809,7 +7809,7 @@ ere di nuovo "RIPETI".'                                               +
                     (*DEC 10 0) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -7831,7 +7831,7 @@ ere di nuovo "RIPETI".'                                               +
                     (*CHAR 26) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -7853,7 +7853,7 @@ ere di nuovo "RIPETI".'                                               +
                     (*CHAR 50) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -7873,7 +7873,7 @@ ere di nuovo "RIPETI".'                                               +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -7895,7 +7895,7 @@ ere di nuovo "RIPETI".'                                               +
                     (*CHAR 1) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -7917,7 +7917,7 @@ ere di nuovo "RIPETI".'                                               +
                     (*CHAR 1) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -7939,7 +7939,7 @@ ere di nuovo "RIPETI".'                                               +
                     (*CHAR 1) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -7961,7 +7961,7 @@ ere di nuovo "RIPETI".'                                               +
                     (*CHAR 1) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -7981,7 +7981,7 @@ ere di nuovo "RIPETI".'                                               +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -8001,7 +8001,7 @@ ere di nuovo "RIPETI".'                                               +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -8023,7 +8023,7 @@ ere di nuovo "RIPETI".'                                               +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -8043,7 +8043,7 @@ ere di nuovo "RIPETI".'                                               +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -8065,7 +8065,7 @@ ere di nuovo "RIPETI".'                                               +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -8085,7 +8085,7 @@ ere di nuovo "RIPETI".'                                               +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -8106,7 +8106,7 @@ tore del sistema.'                                                    +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -8126,7 +8126,7 @@ tore del sistema.'                                                    +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -8146,7 +8146,7 @@ tore del sistema.'                                                    +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -8166,7 +8166,7 @@ tore del sistema.'                                                    +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -8189,7 +8189,7 @@ tore del sistema.'                                                    +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -8212,7 +8212,7 @@ tore del sistema.'                                                    +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -8234,7 +8234,7 @@ tore del sistema.'                                                    +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -8256,7 +8256,7 @@ tore del sistema.'                                                    +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -8278,7 +8278,7 @@ tore del sistema.'                                                    +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -8301,7 +8301,7 @@ tabili in formato testo.'                                             +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -8323,7 +8323,7 @@ tabili in formato testo.'                                             +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -8343,7 +8343,7 @@ tabili in formato testo.'                                             +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -8370,7 +8370,7 @@ tabili in formato testo.'                                             +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -8392,7 +8392,7 @@ tabili in formato testo.'                                             +
                     (*DEC 10 0) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -8414,7 +8414,7 @@ tabili in formato testo.'                                             +
                     (*DEC 10 0) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -8436,7 +8436,7 @@ tabili in formato testo.'                                             +
                     (*DEC 10 0) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -8458,7 +8458,7 @@ tabili in formato testo.'                                             +
                     (*DEC 10 0) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -8482,7 +8482,7 @@ ichiesta.'                                                            +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -8504,7 +8504,7 @@ ichiesta.'                                                            +
                     (*DEC 5 0) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -8527,7 +8527,7 @@ tita &1.'                                                             +
                     (*DEC 5 0) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -8550,7 +8550,7 @@ tita &1.'                                                             +
                     (*DEC 5 0) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -8570,7 +8570,7 @@ tita &1.'                                                             +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -8590,7 +8590,7 @@ tita &1.'                                                             +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -8618,7 +8618,7 @@ QSQLMSG.'                                                             +
                     (*CHAR 512) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -8643,7 +8643,7 @@ l campo su cui si trova non permette la richiesta.'                   +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -8664,7 +8664,7 @@ nga aperto il file fisico?'                                           +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -8684,7 +8684,7 @@ nga aperto il file fisico?'                                           +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -8704,7 +8704,7 @@ nga aperto il file fisico?'                                           +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -8724,7 +8724,7 @@ nga aperto il file fisico?'                                           +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -8748,7 +8748,7 @@ aneamente prevederlo come valore di "default".'                       +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -8771,7 +8771,7 @@ aneamente prevederlo come valore di "default".'                       +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -8797,7 +8797,7 @@ il NRR non è univoco, e non è possibile determinare da quale membro di-
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -8819,7 +8819,7 @@ il NRR non è univoco, e non è possibile determinare da quale membro di-
                     (*CHAR 1) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -8841,7 +8841,7 @@ il NRR non è univoco, e non è possibile determinare da quale membro di-
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -8863,7 +8863,7 @@ il NRR non è univoco, e non è possibile determinare da quale membro di-
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -8885,7 +8885,7 @@ il NRR non è univoco, e non è possibile determinare da quale membro di-
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -8905,7 +8905,7 @@ il NRR non è univoco, e non è possibile determinare da quale membro di-
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -8925,7 +8925,7 @@ il NRR non è univoco, e non è possibile determinare da quale membro di-
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -8946,7 +8946,7 @@ munque?'                                                              +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -8966,7 +8966,7 @@ munque?'                                                              +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -8997,7 +8997,7 @@ umerico di tipo &2(&3,&4).'                                           +
                     (*DEC 5 0) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -9024,7 +9024,7 @@ zione'                                                                +
                     (*CHAR 256) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -9050,7 +9050,7 @@ po non è valido. Correggere il dato e ripetere l''operazione.'        +
                     (*CHAR 256) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -9078,7 +9078,7 @@ li.'                                                                  +
                     (*CHAR 256) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -9103,7 +9103,7 @@ rittura di un nuovo record.'                                          +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -9124,7 +9124,7 @@ unque?'                                                               +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -9155,7 +9155,7 @@ e l''ID di livello del formato record.'                               +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -9189,7 +9189,7 @@ ovo la disposizione. Se riesce, salvare la disposizione per aggiungere-
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -9209,7 +9209,7 @@ ovo la disposizione. Se riesce, salvare la disposizione per aggiungere-
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -9230,7 +9230,7 @@ ere F7.'                                                              +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -9250,7 +9250,7 @@ ere F7.'                                                              +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -9271,7 +9271,7 @@ emere F8.'                                                            +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -9291,7 +9291,7 @@ emere F8.'                                                            +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -9313,7 +9313,7 @@ emere F8.'                                                            +
                     (*DEC 5 0) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -9335,7 +9335,7 @@ emere F8.'                                                            +
                     (*DEC 5 0) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -9368,7 +9368,7 @@ delle impostazioni utente &3/&2, membro &4.'                          +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -9387,7 +9387,7 @@ delle impostazioni utente &3/&2, membro &4.'                          +
                 ) +
                 SEV(0) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -9414,7 +9414,7 @@ delle impostazioni utente &3/&2, membro &4.'                          +
                     (*CHAR 256) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -9434,7 +9434,7 @@ delle impostazioni utente &3/&2, membro &4.'                          +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -9454,7 +9454,7 @@ delle impostazioni utente &3/&2, membro &4.'                          +
                 SEV(0) +
      /*   No replacement variables defined!                         */ +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -9477,7 +9477,7 @@ delle impostazioni utente &3/&2, membro &4.'                          +
                     (*CHAR 1) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -9500,7 +9500,7 @@ delle impostazioni utente &3/&2, membro &4.'                          +
                     (*CHAR 10) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
@@ -9526,7 +9526,7 @@ delle impostazioni utente &3/&2, membro &4.'                          +
                     (*CHAR 128) +
                 ) +
                 ALROPT(*NO) +
-                CCSID(65535) +
+                CCSID(&CCSID) +
                 /*  -EOF-  */
 
              RCLRSC LVL(*)
