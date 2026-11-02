@@ -162,6 +162,12 @@ for do_x1 = 1 to numFields;
     endif;
   endif;
 
+  //  Leeren Feldtext durch die Spaltenüberschrift ersetzen,
+  //  z.B. bei SQL Tabellen ohne LABEL ON ... TEXT IS
+  if (fldl0100.f1ftxt = ' ');
+    fldl0100.f1ftxt = f_headline('*COLHDG': fldl0100);
+  endif;
+
   f_ffd = fldl0100;
 
   write fpeekfld;

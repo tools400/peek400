@@ -19,6 +19,8 @@
        //  einmal für jedes Feld auf, wenn es in der Produkt-           *
        //  bibliothek vorhanden ist. Die zurückgegebenen Werte          *
        //  werden anstelle der Werte aus der Datei angezeigt.           *
+       //  Bleibt der Feldtext leer, ersetzt Peek/400 ihn danach        *
+       //  durch die Spaltenüberschriften.                              *
        //                                                               *
        //  Parameterliste:                                              *
        //  ===============                                              *

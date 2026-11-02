@@ -960,8 +960,14 @@
        - Neues Exit-Programm EXIT06 zum Überschreiben der Spalten-
          überschriften und des Feldtexts. Peek/400 ruft EXIT06 für jedes
          Feld auf, wenn es in der Produktbibliothek vorhanden ist.
+       - Leere Feldtexte werden durch die Spaltenüberschriften ersetzt,
+         z.B. bei SQL Tabellen ohne LABEL ON ... TEXT IS.
      PEEK58
        - Neue Spaltenüberschrift: *COLHDG. Mit F7 können die Spalten-
          überschriften (COLHDG) einzeilig angezeigt werden.
      Allgemein
        - Kaputte Sonderzeichen und Umlaute, sowie Akzentzeichen korrigiert.
+       - Bestehende Update-Programme werden beim Update übernommen und
+         zeigen die neue Spaltenüberschrift *COLHDG und die ersetzten
+         leeren Feldtexte erst, nachdem sie mit dem Kurzbefehl RB neu
+         erstellt wurden.
