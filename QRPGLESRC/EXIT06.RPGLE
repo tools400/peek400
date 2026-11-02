@@ -37,9 +37,12 @@
        //                                                               *
        //  Berechnen der Rückgabewerte:                                 *
        //  ============================                                 *
-       //  In diesem Beispielprogramm wird der Feldtext aus den         *
-       //  Spaltenüberschriften gebildet, wenn das Feld keinen          *
-       //  Feldtext hat. Alle anderen Werte bleiben unverändert.        *
+       //  In diesem Beispielprogramm werden die Spaltenüberschriften   *
+       //  aus dem Feldtext gebildet, wenn das Feld keine eigenen       *
+       //  Spaltenüberschriften hat, die Überschrift also nur der       *
+       //  Feldname ist (z.B. bei SQL Tabellen ohne LABEL ON). Der      *
+       //  Feldtext wird dazu auf bis zu drei Zeilen mit je 20 Zeichen  *
+       //  umgebrochen. Alle anderen Werte bleiben unverändert.         *
        //                                                               *
        //  Natürlich könnten die Werte auch aus einer eigenen Tabelle   *
        //  mit Feldbeschreibungen ermittelt werden.                     *
@@ -105,8 +108,7 @@
        //    Main Procedure (local fields)                              *
        //===============================================================*
        dcl-proc main;
-
-       dcl-pi main;
+       dcl-pi *n;
          i_file          const  like(gi_file   );
          i_lib           const  like(gi_lib    );
          i_user          const  like(gi_user   );
@@ -117,18 +119,48 @@
          io_text         like(gio_text  );
        end-pi;
 
-       //  Build the field text from the column headings, if the field
-       //  has no field text.
-       if (io_text = ' ');
-          io_text = %trim(io_col1);
-          if (io_col2 <> ' ');
-             io_text = %trimr(io_text) + ' ' + %trim(io_col2);
-          endif;
-          if (io_col3 <> ' ');
-             io_text = %trimr(io_text) + ' ' + %trim(io_col3);
-          endif;
+       //  lokale Arbeitsfelder
+       dcl-s text            varchar(50);
+       dcl-s word            varchar(50);
+       dcl-s p               int(10);
+       dcl-s line            int(10);
+       dcl-s lines           char(20) dim(3);
+       //---------------------------------------------------------------*
+
+       //  Build the column headings from the field text, if the field
+       //  has no column headings of its own (heading = field name).
+       if (%trim(io_col1) = %trim(i_field) and
+           io_col2 = ' ' and io_col3 = ' ' and io_text <> ' ');
+
+          //  Wrap the field text into lines of 20 characters.
+          text = %trim(io_text);
+          line = 1;
+          dow (text <> '' and line <= %elem(lines));
+             p = %scan(' ': text);
+             if (p = 0);
+                word = text;
+                text = '';
+             else;
+                word = %subst(text: 1: p - 1);
+                text = %triml(%subst(text: p));
+             endif;
+             select;
+             when (lines(line) = ' ');
+                lines(line) = word;
+             when (%len(%trimr(lines(line))) + 1 + %len(word)
+                   <= %len(lines(line)));
+                lines(line) = %trimr(lines(line)) + ' ' + word;
+             other;
+                line = line + 1;
+                if (line <= %elem(lines));
+                   lines(line) = word;
+                endif;
+             endsl;
+          enddo;
+
+          io_col1 = lines(1);
+          io_col2 = lines(2);
+          io_col3 = lines(3);
        endif;
 
-       return;
-
-       end-proc main;
+       end-proc;
