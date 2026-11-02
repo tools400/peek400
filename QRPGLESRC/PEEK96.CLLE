@@ -321,7 +321,7 @@
 
              CPYF       FROMFILE(&DEVLIB/QMSG_FRA) +
                           TOFILE(&NEWLIB/QMSG_FRA) FROMMBR(TREEFRAPG ) +
-                          TOMBR(TREEENGPG ) MBROPT(*REPLACE) CRTFILE(*NO)
+                          TOMBR(TREEFRAPG ) MBROPT(*REPLACE) CRTFILE(*NO)
 
  /* -------------------------------------------------------------- */
  /* QMSG_GER   */
@@ -385,10 +385,6 @@
              CRTSRCPF   FILE(&NEWLIB/QCMDSRC ) +
                           RCDLEN(92)           +
                           TEXT('Peek/400 - Befehle')
-
-             CPYF       FROMFILE(&DEVLIB/QCMDSRC) +
-                          TOFILE(&NEWLIB/QCMDSRC) FROMMBR(PEEK    ) +
-                          TOMBR(PEEK    ) MBROPT(*REPLACE) CRTFILE(*NO)
 
              CPYF       FROMFILE(&DEVLIB/QCMDSRC) +
                           TOFILE(&NEWLIB/QCMDSRC) FROMMBR(PEEK    ) +

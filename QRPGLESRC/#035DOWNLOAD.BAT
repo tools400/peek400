@@ -140,6 +140,22 @@ echo mget %RMT_FILE%.*   >> %TEMPFILE%
 echo lcd ..              >> %TEMPFILE%
 
 rem **************************************
+rem   Download: QMSG_FRA
+rem **************************************
+
+set TFR_FILE=QMSG_FRA
+set RMT_FILE=%TFR_FILE%
+set LCL_FILE=%RMT_FILE%.FILE
+
+if not exist %LCL_FILE% (
+   md %LCL_FILE%
+)
+
+echo lcd %LCL_FILE%      >> %TEMPFILE%
+echo mget %RMT_FILE%.*   >> %TEMPFILE%
+echo lcd ..              >> %TEMPFILE%
+
+rem **************************************
 rem   Download: QMSG_GER
 rem **************************************
 
