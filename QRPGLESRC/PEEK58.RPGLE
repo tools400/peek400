@@ -73,6 +73,12 @@ dcl-pr isBitOn ind;
   i_value         uns(10) value;
 end-pr;
 
+//  Appends a line of the column heading to a heading.
+dcl-pr lf_appendColHdg like(colheading_t);
+  i_heading       like(colheading_t) const;
+  i_line          char(20) const;
+end-pr;
+
 dcl-s g_prdlib        like(lib_t) inz;
 
 dcl-s g_jobccsid      uns(10) inz(0);
@@ -1120,12 +1126,60 @@ dcl-proc f_headline export;
     else;
       heading = i_fldl0100.f1ftxt;
     endif;
+  //  ... Spaltenüberschrift
+  when (i_headtyp = '*COLHDG');
+    heading = lf_appendColHdg('': i_fldl0100.f1col1);
+    heading = lf_appendColHdg(heading: i_fldl0100.f1col2);
+    heading = lf_appendColHdg(heading: i_fldl0100.f1col3);
+    if (heading = '');
+      heading = '?' + i_fldl0100.f1fnme;
+    endif;
   //  ... Feldtyp
   when (i_headtyp = '*FIELDTYPE');
     heading = f_fieldtypeasstring(i_fldl0100);
   //  ... Feldname
   other;
     heading = i_fldl0100.f1fnme;
+  endsl;
+
+  return heading;
+
+end-proc;
+
+//=========================================================================
+//  Appends a line of the column heading to a heading. A heading that
+//  ends with a hyphen is continued without a blank. The hyphen is
+//  removed, if the line starts with a lowercase letter.
+//=========================================================================
+
+dcl-proc lf_appendColHdg;
+  dcl-pi *N              like(colheading_t);
+    i_heading       like(colheading_t) const;
+    i_line          char(20) const;
+  end-pi;
+
+  dcl-c LOWERCASE 'abcdefghijklmnopqrstuvwxyzäöüßàâçéèêëîïôùûáíóúñìò';
+
+  //  Return value
+  dcl-s heading         like(colheading_t) inz;
+
+  //  Local fields
+  dcl-s line            varchar(20) inz;
+  // ------------------------------------------------------------------------
+
+  heading = i_heading;
+  line = %trim(i_line);
+
+  select;
+  when (line = '');
+  when (heading = '');
+    heading = line;
+  when (%subst(heading: %len(heading): 1) <> '-');
+    heading = heading + ' ' + line;
+  when (%scan(%subst(line: 1: 1): LOWERCASE) > 0);
+    heading = %subst(heading: 1: %len(heading) - 1) + line;
+  other;
+    heading = heading + line;
   endsl;
 
   return heading;
@@ -3089,6 +3143,8 @@ dcl-proc f_nextheadertype export;
   when (i_headertype = '*FIELDNAME');
     type = '*FIELDTEXT';
   when (i_headertype = '*FIELDTEXT');
+    type = '*COLHDG';
+  when (i_headertype = '*COLHDG');
     type = '*FIELDTYPE';
   other;
     type = '*FIELDNAME';

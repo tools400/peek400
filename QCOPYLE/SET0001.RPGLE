@@ -21,7 +21,8 @@ dcl-ds set0001_t len(256) qualified template;
   set_undcol      char(1) inz(color_green_u);
   //  Farbe: Gefunden (invers)
   set_revcol      char(1) inz(color_green_r);
-  //  Art der Überschriftszeile: *FILEDNAME=Feldnamen; *FIELDTEXT=Feldtex
+  //  Art der Überschriftszeile: *FIELDNAME, *FIELDTEXT, *COLHDG oder
+  //  *FIELDTYPE
   set_hedtyp      char(10) inz('*FIELDNAME');
   //  Farbe: Tabellierpapier
   set_tblcol      char(1) inz(color_blue);

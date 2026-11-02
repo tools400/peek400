@@ -469,6 +469,9 @@ RNM2-IFFILE00
      C                   When      io_headerType = '*FIELDTYPE'
      C                   Eval      *in70 = *off
      C                   Eval      *in75 = *on
+     C                   When      io_headerType = '*COLHDG'
+     C                   Eval      *in70 = *on
+     C                   Eval      *in75 = *on
      C                   Other
      C                   Eval      *in70 = *on
      C                   Eval      *in75 = *off

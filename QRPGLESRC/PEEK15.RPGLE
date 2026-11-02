@@ -360,6 +360,7 @@ dcl-s numquote        like(int4_t) inz;
 dcl-s basefldname     like(fieldnme_t) inz;
 dcl-s fieldname       like(fieldnme_t) inz;
 dcl-s r$ftxt          like(fldl0100_t.f1ftxt) inz;
+dcl-s r$text          like(colheading_t) inz;
 dcl-s reffile         like(file_t) inz;
 dcl-s reflib          like(lib_t) inz;
 dcl-s fldtolong       like(bool_t) inz;
@@ -833,6 +834,15 @@ begsr wrtfield;
       headertype = '*FIELDTYPE';
       reset ds_literal;
       $lit_neg_1 = 'N';
+      $lit_ind_1 = '70';
+      $lit_neg_2 = ' ';
+      $lit_ind_2 = '75';
+      exsr #text;
+
+      //      ... Spaltenüberschrift
+      headertype = '*COLHDG';
+      reset ds_literal;
+      $lit_neg_1 = ' ';
       $lit_ind_1 = '70';
       $lit_neg_2 = ' ';
       $lit_ind_2 = '75';
@@ -1883,35 +1893,29 @@ begsr #text;
                f_headline(headertype: fldl0100);
     x = %len(%trimr($lit_kwrd));
     y = x;
-  // Feldtext
+  // Feldtext oder Spaltenüberschrift
   other;
-    if (fldl0100.f1ftxt = ' ');
-      $lit_kwrd =
-       %trimr($lit_kwrd) + '?' + fldl0100.f1fnme;
-      x = %len(%trimr($lit_kwrd));
-      y = x;
-    else;
-      //  Textbezeichnung auf ' prüfen ...
-      r$ftxt = '';
-      x = 1;
-      y = 1;
-      dow (x <= %len(%trimr(fldl0100.f1ftxt))) and
-         (y <= %len(r$ftxt));
-        %subst(r$ftxt: y: 1) =
-         %subst(fldl0100.f1ftxt: x: 1);
+    //  Bezeichnung auf ' prüfen ...
+    r$text = f_headline(headertype: fldl0100);
+    r$ftxt = '';
+    x = 1;
+    y = 1;
+    dow (x <= %len(%trimr(r$text))) and
+       (y <= %len(r$ftxt));
+      %subst(r$ftxt: y: 1) =
+       %subst(r$text: x: 1);
 
-        if (%subst(fldl0100.f1ftxt: x: 1) = '''') and
-           (y < %len(r$ftxt));
-          y = y + 1;
-          %subst(r$ftxt: y: 1) = '''';
-        endif;
-
-        x = x + 1;
+      if (%subst(r$text: x: 1) = '''') and
+         (y < %len(r$ftxt));
         y = y + 1;
-      enddo;
+        %subst(r$ftxt: y: 1) = '''';
+      endif;
 
-      $lit_kwrd = %trimr($lit_kwrd) + r$ftxt;
-    endif;
+      x = x + 1;
+      y = y + 1;
+    enddo;
+
+    $lit_kwrd = %trimr($lit_kwrd) + r$ftxt;
   endsl;
 
   //  Hinzufügen '........'
