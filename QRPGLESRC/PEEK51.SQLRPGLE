@@ -752,7 +752,7 @@ dcl-proc f_chgField;
       endif;
     endif;
 
-    //  überlesen in Hochkomma eingeschlossene Felder ...
+    //  Überlesen in Hochkomma eingeschlossene Felder ...
     if (isHyphen = bTrue and isField = bTrue);
       f_chgfield = f_chgfield + char;
       iter;

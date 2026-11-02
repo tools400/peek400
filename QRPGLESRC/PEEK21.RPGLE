@@ -121,7 +121,7 @@ endif;
 return;
 
 //============================================================*
-//    MapSflOpt    übersetzen Subfileauswahlen                *
+//    MapSflOpt    Übersetzen Subfileauswahlen                *
 //============================================================*
 
 begsr mapsflopt;
@@ -129,7 +129,7 @@ begsr mapsflopt;
   //*                 SUBST (P) XscnAID:2     Wrk_Key
   wrk_key = %subst(i_scnaid: 2);
 
-  //   übersetzen key code vor dem Mapping:
+  //   Übersetzen key code vor dem Mapping:
   callexit05(i_pgm: '*OPTION': wrk_key);
 
   exsr mapusrinp;
@@ -137,7 +137,7 @@ begsr mapsflopt;
 endsr;
 
 //============================================================*
-//    MapCmdKey     übersetzen Tastendruck in Programmbefehl  *
+//    MapCmdKey     Übersetzen Tastendruck in Programmbefehl  *
 //============================================================*
 
 begsr mapcmdkey;
@@ -222,7 +222,7 @@ begsr mapcmdkey;
     leavesr;
   endif;
 
-  //   übersetzen key code vor dem Mapping:
+  //   Übersetzen key code vor dem Mapping:
   callexit05(i_pgm: '*CMDKEY': wrk_key);
 
   exsr mapusrinp;
@@ -230,12 +230,12 @@ begsr mapcmdkey;
 endsr;
 
 //============================================================*
-//    MapUsrInp     übersetzen Tastendruck in Programmbefehl  *
+//    MapUsrInp     Übersetzen Tastendruck in Programmbefehl  *
 //============================================================*
 
 begsr mapusrinp;
 
-  //   übersetzen ...
+  //   Übersetzen ...
   wrk_sectn = '*' + %trim(i_pgm);
   if f_chainusr(wrk_sectn :
              wrk_key   :
@@ -243,7 +243,7 @@ begsr mapusrinp;
      f_iskeyexc(wrk_data  :
              wrk_exclk )= '0';
 
-    //   übersetzen key code nach dem Mapping:
+    //   Übersetzen key code nach dem Mapping:
     callexit05(i_pgm: '*EVENT': wrk_data);
 
     o_pgmcmd = wrk_data;
@@ -252,7 +252,7 @@ begsr mapusrinp;
     o_msgdta = *blanks;
   else;
 
-    //   übersetzen key code nach dem Mapping:
+    //   Übersetzen key code nach dem Mapping:
     callexit05(i_pgm: '*USROPT': wrk_key);
 
     //   Prüfen auf Kurzbefehl ...

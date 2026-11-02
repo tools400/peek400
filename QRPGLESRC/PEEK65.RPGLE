@@ -145,7 +145,7 @@
 
        begsr pbinit;
 
-          //  überlaufzeile
+          //  Überlaufzeile
           *in60 = bTrue;
 
           //  Kopfinformationen

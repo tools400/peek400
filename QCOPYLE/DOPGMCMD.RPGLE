@@ -56,13 +56,13 @@
              exsr c_top;
           when ypgmcmd = '*BOT';       //  F18 - Ende der Datei
              exsr c_bot;
-          when ypgmcmd = '*LEFT';      //  F19 - nach rechts verschieben (ein Fe
+          when ypgmcmd = '*LEFT';      //  F19 - nach rechts verschieben (ein Feld)
              exsr c_movel;
-          when ypgmcmd = '*RIGHT';     //  F20 - nach links verschieben  (ein Fe
+          when ypgmcmd = '*RIGHT';     //  F20 - nach links verschieben  (ein Feld)
              exsr c_mover;
-          when ypgmcmd = '*PAGELEFT';  //  F19 - nach rechts verschieben (eine S
+          when ypgmcmd = '*PAGELEFT';  //  F19 - nach rechts verschieben (eine Seite)
              exsr c_pageleft;
-          when ypgmcmd = '*PAGERIGHT'; //  F20 - nach links verschieben  (eine S
+          when ypgmcmd = '*PAGERIGHT'; //  F20 - nach links verschieben  (eine Seite)
              exsr c_pageright;
           when ypgmcmd = '*CMDLINE';   //  F21 - OS/400 Befehlzeile
              exsr c_cmdline;
@@ -72,11 +72,11 @@
              exsr c_moreopt;
           when ypgmcmd = '*MOREKEYS';  //  F24 - weitere Tasten anzeigen
              exsr c_morekeys;
-          when ypgmcmd = '*NEXTMARK';  //  Fxx - zum nächsten markierten Feld ve
+          when ypgmcmd = '*NEXTMARK';  //  Fxx - zum nächsten markierten Feld verschieben
              exsr c_nextmark;
-          when ypgmcmd = '*PREVMARK';  //  Fxx - zum vorherigen markierten Feld 
+          when ypgmcmd = '*PREVMARK';  //  Fxx - zum vorherigen markierten Feld verschieben
              exsr c_prevmark;
-          when ypgmcmd = '*DSPDBR';    //  Fxx - anzeigen der Datenbankrelatione
+          when ypgmcmd = '*DSPDBR';    //  Fxx - anzeigen der Datenbankrelationen
              exsr c_dspdbr;
           when ypgmcmd = '*PINCOLDLG'; //  Fxx - Pin-Dialog
              exsr c_pincdlg;
@@ -150,7 +150,7 @@
              exsr s_loadenv;
           when ypgmcmd = '*DELETEENV'; //  Löschen Arbeitsumgebung ...
              exsr s_delenv;
-          when ypgmcmd = '*TGLKEYLUC'; //  Umschalten Eingabe der Schlüsselfelde
+          when ypgmcmd = '*TGLKEYLUC'; //  Umschalten Eingabe der Schlüsselfelder ...
              exsr s_tglkeylc_uc;
              exsr c_poscsr;
           other;

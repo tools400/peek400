@@ -14,7 +14,7 @@
      /*                                                              */
      /*  Peek/400 - Aktualisieren neue PEEK/400 Bibliothek           */
      /*                                                              */
-     /*  übernimmt die Benutzereinstellungen, Arbeitsumgebungen und  */
+     /*  Übernimmt die Benutzereinstellungen, Arbeitsumgebungen und  */
      /*  auf Wunsch auch die Updateprogramme aus einer gegebenen,    */
      /*  alten Peek/400 Bibliothek in die neue PEEK/400 Bibliothek.  */
      /*                                                              */

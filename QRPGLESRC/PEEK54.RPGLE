@@ -294,7 +294,7 @@ dcl-proc main;
     endif;
   endif;
 
-  //  Löschen überschreibung ...
+  //  Löschen Überschreibung ...
   f_execute('DLTOVR ' +
              'FILE(PEEKENV) ' +
              'LVL(*ACTGRPDFN) '

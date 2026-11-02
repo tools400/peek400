@@ -114,7 +114,7 @@ ERROR:
              CALL       PGM(QMHMOVPM) PARM(&ERRMSGKEY &ERRMSGTYP +
                           &ERRNBRTYP &ERRPGMMSGQ &ERRSTKCTR &ERRCODE)
              SNDPGMMSG  MSGID(CPF9898) MSGF(QCPFMSG) MSGTYPE(*ESCAPE) +
-                          MSGDTA('übertragung nach' *BCAT &RMTLOCNAME *BCAT 'fehlgeschlagen')
+                          MSGDTA('Übertragung nach' *BCAT &RMTLOCNAME *BCAT 'fehlgeschlagen')
              GOTO       CMDLBL(ENDE)
 
  /* -------------------------------------------------------------- */

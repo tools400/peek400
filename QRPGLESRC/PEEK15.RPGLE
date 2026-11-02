@@ -1002,7 +1002,7 @@ begsr wrtfield;
       p_wrtdspf(ds_dspatr);
     endif;
 
-    //  Alias Feldname Überschreiben, weil:
+    //  Alias Feldname überschreiben, weil:
     //   - Aliasnamen in Groß-/Kleinbuchstaben sind nicht zulässig.
     //   - Einige Sonderzeichen wie zum Beispiel '#' oder '.' sind
     //     in einer Display File nicht zulässig.

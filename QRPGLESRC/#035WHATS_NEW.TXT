@@ -91,7 +91,7 @@
      Anzeigeprogramm.
 
   23.07.1999, Bugfix:
-  *  Ausführen von Kurzbefehlen. übergabe ShortCmd an PEEK42.
+  *  Ausführen von Kurzbefehlen. Übergabe ShortCmd an PEEK42.
      Parameterlänge zu kurz definiert.
 
   29.07.1999, Verbesserung:
@@ -257,7 +257,7 @@
        - Ausgeben Fehlermeldung, wenn ein Datensatz einer
          logischen Sicht gepinnt werden soll und die logische
          Datei auf mehreren physischen Teildateien basiert.
-       - überlesen leerer Subfileauswahlen.
+       - Überlesen leerer Subfileauswahlen.
 
   *  PEEK40:
        - Fehler beim Setzen der UNIQUE Markierung behoben.
@@ -391,7 +391,7 @@
        - Füllen der Funktionstastenbezeichnung korrigiert.
 
   *  PEEKPGM:
-       - Window für Abfrage "Trotzdem Ändern", wenn der Satz zwischenzeitlich
+       - Window für Abfrage "Trotzdem ändern", wenn der Satz zwischenzeitlich
          von einem anderen Benutzer geändert worden ist.
 
   *  PEEK00:
@@ -606,7 +606,7 @@
   ===========
 
   *  PEEKSPA
-       - Spanische übersetzung von Antón Vigo.
+       - Spanische Übersetzung von Antón Vigo.
 
   *  PEEK05:
        - Erweiterung der Befehle PEEK und TREE um die Parameter
@@ -670,7 +670,7 @@
          angepasst wird.
 
   *  PEEKITA
-       - Spanische übersetzung von Marco Alberici.
+       - Spanische Übersetzung von Marco Alberici.
 
 
   Version 3.4.2
@@ -683,7 +683,7 @@
        - Sprachenabhängige Ausgabe der ENDE-Nachricht (USR8100) korrigiert.
 
   *  PEEK05/PEEK14/PEEK15
-       - Neue SpaltenÜberschrift: *FIELDTYPE
+       - Neue Spaltenüberschrift: *FIELDTYPE
 
 
   Version 3.4.3
@@ -691,7 +691,7 @@
 
   *  PEEK58
        - Fehler bei der Aufbereitung der Feldlängen als Spalten-
-         Überschrift korrigiert.
+         überschrift korrigiert.
 
 
   Version 3.5
@@ -710,7 +710,7 @@
 
   *  PEEK21:
        - EXIT05 eingebaut, um Befehlstasten und Subfileauswahlen filtern,
-         bzw. verÄndern zu können.
+         bzw. verändern zu können.
 
   *  PEEK06:
        - PEEK06 geändert, so dass alte Anzeigewerte nicht verschleppt werden.
@@ -762,7 +762,7 @@
          konvertierung gelesen wird.
 
   *  PEEKFRA
-       - Französische übersetzung von Alain Lotzer.
+       - Französische Übersetzung von Alain Lotzer.
 
 
   Version 3.5.1
@@ -800,7 +800,7 @@
          gleichgesetzt zu *ENTER. Ebenso *NO für *EXIT.
 
   *  PEEKITA (*MSGF)
-       - Von Marco Riva überarbeitete Italienische übersetzung.
+       - Von Marco Riva überarbeitete Italienische Übersetzung.
 
   Version 3.5.4
   =============

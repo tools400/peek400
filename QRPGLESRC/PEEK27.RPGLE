@@ -99,7 +99,7 @@ begsr getKeyMap;
       leave;
     endif;
 
-    //  überprüfen Auschlüsse
+    //  Überprüfen Auschlüsse
     if %parms() >= %parmnum(i_exclkeys);
       pgmcmd = data;
       i = %lookup(pgmcmd: i_exclkeys);

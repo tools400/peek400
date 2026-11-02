@@ -712,7 +712,7 @@ endsr;
 
 begsr fill##;
 
-  //  anzeigen FeldÜberschrift
+  //  anzeigen Feldüberschrift
   $fldname = f_headline(i_headtype: fldl0100);
 
   //  anzeigen alphanumerisches oder numerisches Feld
@@ -880,7 +880,7 @@ begsr first;
     fldl0100   = f_ffd;
   endif;
 
-  // - übernehmen der Programmparameter
+  // - Übernehmen der Programmparameter
   pstartpos  = 1;
   exsr getparameters;
 

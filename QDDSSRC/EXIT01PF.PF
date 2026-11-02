@@ -83,7 +83,7 @@
  RAD A            UPDKEY         1A
  RAD A                                      TEXT('Datensatzschlüsselände-
  RAD A                                      rung                        ')
- RAD A                                      COLHDG('SchlüsselÄnderung   ' -
+ RAD A                                      COLHDG('Schlüsseländerung   ' -
  RAD A                                             '"1"=Ja, "0"=Nein    ' -
  RAD A                                             '"-"=nicht definiert ')
  RAD A                                      DFT('-')

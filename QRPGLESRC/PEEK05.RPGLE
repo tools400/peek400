@@ -571,7 +571,7 @@ dcl-ds copyExternal qualified;
   crtFile     char(10) inz;
 end-ds;
 
-//  überlagern von ##Key132uc mit ##Key80uc
+//  Überlagern von ##Key132uc mit ##Key80uc
 dcl-s ##key           like(##key132uc) inz;
 dcl-ds *N;
   ##key132uc      char(116);
@@ -764,7 +764,7 @@ dow ('1');
     exfmt pbctl080;
   endif;
 
-  //  übernehmen Schlüsselfelder
+  //  Übernehmen Schlüsselfelder
   if (isKeyLower = bFalse);
     ##key = ##key132uc;
   else;
@@ -3240,7 +3240,7 @@ begsr s_shortcmd;
 endsr;
 
 //============================================================*
-//    S_About        A - über Peek/400                        *
+//    S_About        A - Über Peek/400                        *
 //============================================================*
 
 begsr s_about;
@@ -3909,7 +3909,7 @@ endsr;
 
 begsr srchstart;
 
-  //  Übertragen der übergabeparameter ...
+  //  Übertragen der Übergabeparameter ...
   srchfield = yfield;
   srchop = yoperation;
   srcharg = %trimr(yargument);
@@ -4386,7 +4386,7 @@ begsr srchcomp_f;
         isfound = bTrue;
       endif;
     endif;
-  //  ähnlich ...
+  //  Ähnlich ...
   when srchop = 'LIKE'
      or srchop = 'NLIKE';
 
@@ -4620,7 +4620,7 @@ begsr pbInit;
 endsr;
 
 //============================================================*
-//    PBCsrTRcd     übersetzen SflCsr ==> rel. Satznummer     *
+//    PBCsrTRcd     Übersetzen SflCsr ==> rel. Satznummer     *
 //============================================================*
 
 begsr pbCsrToRcd;
@@ -6105,7 +6105,7 @@ begsr openfile;
   //      ... abrufen der Objektattribute (auflösen *LIBL, *CURLIB)
   exsr getobjattr;
   if (isError = bTrue);
-    //  Fehler aufgetreten, öffnen abbrechen.
+    //  Fehler aufgetreten, Öffnen abbrechen.
     exsr msgnofile;
     leavesr;
   endif;
@@ -6131,7 +6131,7 @@ begsr openfile;
   //      ... prüfen Name der Teildatei
   exsr checkmbrname;
   if (isError = bTrue);
-    //  Fehler aufgetreten, öffnen abbrechen.
+    //  Fehler aufgetreten, Öffnen abbrechen.
     exsr msgnofile;
     leavesr;
   endif;
@@ -7476,7 +7476,7 @@ begsr getusrsetg;
 endsr;
 
 //============================================================*
-//    GetSeqNbr     übersetzen Field Name in Sequence Nbr     *
+//    GetSeqNbr     Übersetzen Field Name in Sequence Nbr     *
 //============================================================*
 
 begsr getseqnbr;

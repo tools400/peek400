@@ -550,7 +550,7 @@ dcl-proc f_vldfloat export;
 
     // Prüfen auf führendes Vorzeichen
     c = %subst(i_buffer: i: 1);
-    if (c = '+' or c = '-');   // überspringen Vorzeichen
+    if (c = '+' or c = '-');   // Überspringen Vorzeichen
       i = i + 1;
     endif;
 
@@ -559,7 +559,7 @@ dcl-proc f_vldfloat export;
       c = %subst(i_buffer: i: 1);
       if (c <> ' ');
         if (c = ',' or c = '.');
-          i = i + 1;   // überspringen Komma
+          i = i + 1;   // Überspringen Komma
           leave;
         endif;
         if (%check(cdigits: c) <> 0);

@@ -34,7 +34,7 @@
        //     I/O:  gio_chgF    - Änderung Datei erlaubt                *
        //     I/O:  gio_chgM    - Änderung Teildatei erlaubt            *
        //     I/O:  gio_updMd   - Datensatzänderung erlaubt             *
-       //     I/O:  gio_updKy   - SchlüsselÄnderung erlaubt             *
+       //     I/O:  gio_updKy   - Schlüsseländerung erlaubt             *
        //     I/O:  gio_chgSqlW - Änderung SQL WHERE erlaubt            *
        //     I/O:  gio_chgSqlO - Änderung SQL ORDER BY erlaubt         *
        //     I/O:  gio_accAt   - allg. Zugriffsberechtigung            *
@@ -181,7 +181,7 @@
        dcl-s objupdmd        like(bool_t) inz(bFalse);
        dcl-s secupdmd        like(bool_t) inz(bFalse);
        dcl-s updmd           like(bool_t) inz(bFalse);
-       //  ... SchlüsselÄnderung erlaubt
+       //  ... Schlüsseländerung erlaubt
        dcl-s usrupdky        like(bool_t) inz(bFalse);
        dcl-s objupdky        like(bool_t) inz(bFalse);
        dcl-s secupdky        like(bool_t) inz(bFalse);
@@ -328,7 +328,7 @@
                         gio_updmd );
 
        //  verknüpfen Objekt- und Benutzerberechtigung
-       //  zur SchlüsselÄnderung (Prioritäten 1-9)
+       //  zur Schlüsseländerung (Prioritäten 1-9)
        updky  = f_mrgaut(usrupdky  :
                         objupdky  :
                         secupdky  :

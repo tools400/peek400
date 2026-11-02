@@ -31,7 +31,7 @@
        //  Berechnen der Rückgabewerte:                                 *
        //  ============================                                 *
        //  In diesem Beispielprogramm werden unabhängig der zu          *
-       //  zu Ändernden Datei (gi_file/gi_lib) und des aktuellen        *
+       //  zu ändernden Datei (gi_file/gi_lib) und des aktuellen        *
        //  Feldes (gi_field) Edit Codes ohne Vorzeichen in Edit Codes   *
        //  mit Vorzeichen und ohne Tausenderpunkt geändert.             *
        //                                                               *
