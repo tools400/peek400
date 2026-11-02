@@ -3,7 +3,7 @@ rem **************************************************************
 rem *  This is an MS-DOS BATCH file for downloading the          *
 rem *  PEEK/400 source code to a PC.                             *
 rem **************************************************************
-set PEEK_VERSION=350
+set PEEK_VERSION=408
 
 set TEMPFILE=peek.ftpcmds
 set HOST=ghentw.gfd.de
