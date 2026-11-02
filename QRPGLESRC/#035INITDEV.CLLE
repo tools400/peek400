@@ -29,6 +29,7 @@
              DCL        VAR(&DEVLIB)  TYPE(*CHAR) LEN(10)
              DCL        VAR(&SRCFILE) TYPE(*CHAR) LEN(10)
              DCL        VAR(&SRCMBR)  TYPE(*CHAR) LEN(10)
+             DCL        VAR(&OBJ)     TYPE(*CHAR) LEN(10)
 
              DCL        VAR(&TGTRLS)  TYPE(*CHAR) LEN(10) VALUE('V7R3M0')
 
@@ -264,47 +265,47 @@
              CHKOBJ     OBJ(&DEVLIB/PEEKENG) OBJTYPE(*MSGF)
              MONMSG     MSGID(CPF9801) EXEC(DO)
                CRTMSGF    MSGF(&DEVLIB/PEEKENG) +
-                            TEXT('Peek/400 - Englische übersetzung') CCSID(*HEX)
+                            TEXT('Peek/400 - Englische Übersetzung') CCSID(*HEX)
              ENDDO
-             CRTCLPGM   PGM(&DEVLIB/PEEKENG) +
+             CRTCLPGM   PGM(&DEVLIB/PEEKENGMG) +
                           SRCFILE(&DEVLIB/QMSG_ENG) SRCMBR(*PGM) TGTRLS(&TGTRLS)
-             CALL       PGM(&DEVLIB/PEEKENG) PARM(&DEVLIB 'PEEKENG')
+             CALL       PGM(&DEVLIB/PEEKENGMG) PARM(&DEVLIB)
 
              CHKOBJ     OBJ(&DEVLIB/PEEKFRA) OBJTYPE(*MSGF)
              MONMSG     MSGID(CPF9801) EXEC(DO)
                CRTMSGF    MSGF(&DEVLIB/PEEKFRA) +
-                            TEXT('Peek/400 - Französische übersetzung') CCSID(*HEX)
+                            TEXT('Peek/400 - Französische Übersetzung') CCSID(*HEX)
              ENDDO
-             CRTCLPGM   PGM(&DEVLIB/PEEKFRA) +
+             CRTCLPGM   PGM(&DEVLIB/PEEKFRAMG) +
                           SRCFILE(&DEVLIB/QMSG_FRA) SRCMBR(*PGM) TGTRLS(&TGTRLS)
-             CALL       PGM(&DEVLIB/PEEKFRA) PARM(&DEVLIB 'PEEKFRA')
+             CALL       PGM(&DEVLIB/PEEKFRAMG) PARM(&DEVLIB)
 
              CHKOBJ     OBJ(&DEVLIB/PEEKGER) OBJTYPE(*MSGF)
              MONMSG     MSGID(CPF9801) EXEC(DO)
                CRTMSGF    MSGF(&DEVLIB/PEEKGER) +
-                            TEXT('Peek/400 - Deutsche übersetzung') CCSID(*HEX)
+                            TEXT('Peek/400 - Deutsche Übersetzung') CCSID(*HEX)
              ENDDO
-             CRTCLPGM   PGM(&DEVLIB/PEEKGER) +
+             CRTCLPGM   PGM(&DEVLIB/PEEKGERMG) +
                           SRCFILE(&DEVLIB/QMSG_GER) SRCMBR(*PGM) TGTRLS(&TGTRLS)
-             CALL       PGM(&DEVLIB/PEEKGER) PARM(&DEVLIB 'PEEKGER')
+             CALL       PGM(&DEVLIB/PEEKGERMG) PARM(&DEVLIB)
 
              CHKOBJ     OBJ(&DEVLIB/PEEKITA) OBJTYPE(*MSGF)
              MONMSG     MSGID(CPF9801) EXEC(DO)
                CRTMSGF    MSGF(&DEVLIB/PEEKITA) +
-                            TEXT('Peek/400 - Italienische übersetzung') CCSID(*HEX)
+                            TEXT('Peek/400 - Italienische Übersetzung') CCSID(*HEX)
              ENDDO
-             CRTCLPGM   PGM(&DEVLIB/PEEKITA) +
+             CRTCLPGM   PGM(&DEVLIB/PEEKITAMG) +
                           SRCFILE(&DEVLIB/QMSG_ITA) SRCMBR(*PGM) TGTRLS(&TGTRLS)
-             CALL       PGM(&DEVLIB/PEEKITA) PARM(&DEVLIB 'PEEKITA')
+             CALL       PGM(&DEVLIB/PEEKITAMG) PARM(&DEVLIB)
 
              CHKOBJ     OBJ(&DEVLIB/PEEKSPA) OBJTYPE(*MSGF)
              MONMSG     MSGID(CPF9801) EXEC(DO)
                CRTMSGF    MSGF(&DEVLIB/PEEKSPA) +
-                            TEXT('Peek/400 - Spanische übersetzung') CCSID(*HEX)
+                            TEXT('Peek/400 - Spanische Übersetzung') CCSID(*HEX)
              ENDDO
-             CRTCLPGM   PGM(&DEVLIB/PEEKSPA) +
+             CRTCLPGM   PGM(&DEVLIB/PEEKSPAMG) +
                           SRCFILE(&DEVLIB/QMSG_SPA) SRCMBR(*PGM) TGTRLS(&TGTRLS)
-             CALL       PGM(&DEVLIB/PEEKSPA) PARM(&DEVLIB 'PEEKSPA')
+             CALL       PGM(&DEVLIB/PEEKSPAMG) PARM(&DEVLIB)
 
              /* ---------------------------------------------------- */
              /*  Create command: PEEK                                */
@@ -315,25 +316,30 @@ CRTOBJ:
              CHGVAR     VAR(&SRCMBR) VALUE('PEEK')
              CALLSUBR   SUBR(CMPOBJ)
 
-             CHGVAR     VAR(&SRCFILE) VALUE('QCMDSRC')
-             CHGVAR     VAR(&SRCMBR) VALUE('PEEKENG')
-             CALLSUBR   SUBR(CMPOBJ)
+             CHGVAR     VAR(&SRCFILE) VALUE('QMSG_ENG')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEKENGPG')
+             CHGVAR     VAR(&OBJ) VALUE('PEEKENG')
+             CALLSUBR   SUBR(CMPPNLGRP)
 
-             CHGVAR     VAR(&SRCFILE) VALUE('QCMDSRC')
-             CHGVAR     VAR(&SRCMBR) VALUE('PEEKFRA')
-             CALLSUBR   SUBR(CMPOBJ)
+             CHGVAR     VAR(&SRCFILE) VALUE('QMSG_FRA')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEKFRAPG')
+             CHGVAR     VAR(&OBJ) VALUE('PEEKFRA')
+             CALLSUBR   SUBR(CMPPNLGRP)
 
-             CHGVAR     VAR(&SRCFILE) VALUE('QCMDSRC')
-             CHGVAR     VAR(&SRCMBR) VALUE('PEEKGER')
-             CALLSUBR   SUBR(CMPOBJ)
+             CHGVAR     VAR(&SRCFILE) VALUE('QMSG_GER')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEKGERPG')
+             CHGVAR     VAR(&OBJ) VALUE('PEEKGER')
+             CALLSUBR   SUBR(CMPPNLGRP)
 
-             CHGVAR     VAR(&SRCFILE) VALUE('QCMDSRC')
-             CHGVAR     VAR(&SRCMBR) VALUE('PEEKITA')
-             CALLSUBR   SUBR(CMPOBJ)
+             CHGVAR     VAR(&SRCFILE) VALUE('QMSG_ITA')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEKITAPG')
+             CHGVAR     VAR(&OBJ) VALUE('PEEKITA')
+             CALLSUBR   SUBR(CMPPNLGRP)
 
-             CHGVAR     VAR(&SRCFILE) VALUE('QCMDSRC')
-             CHGVAR     VAR(&SRCMBR) VALUE('PEEKSPA')
-             CALLSUBR   SUBR(CMPOBJ)
+             CHGVAR     VAR(&SRCFILE) VALUE('QMSG_SPA')
+             CHGVAR     VAR(&SRCMBR) VALUE('PEEKSPAPG')
+             CHGVAR     VAR(&OBJ) VALUE('PEEKSPA')
+             CALLSUBR   SUBR(CMPPNLGRP)
 
              /* ---------------------------------------------------- */
              /*  Create command: TREE                                */
@@ -343,25 +349,30 @@ CRTOBJ:
              CHGVAR     VAR(&SRCMBR) VALUE('TREE')
              CALLSUBR   SUBR(CMPOBJ)
 
-             CHGVAR     VAR(&SRCFILE) VALUE('QCMDSRC')
-             CHGVAR     VAR(&SRCMBR) VALUE('TREEENG')
-             CALLSUBR   SUBR(CMPOBJ)
+             CHGVAR     VAR(&SRCFILE) VALUE('QMSG_ENG')
+             CHGVAR     VAR(&SRCMBR) VALUE('TREEENGPG')
+             CHGVAR     VAR(&OBJ) VALUE('TREEENG')
+             CALLSUBR   SUBR(CMPPNLGRP)
 
-             CHGVAR     VAR(&SRCFILE) VALUE('QCMDSRC')
-             CHGVAR     VAR(&SRCMBR) VALUE('TREEFRA')
-             CALLSUBR   SUBR(CMPOBJ)
+             CHGVAR     VAR(&SRCFILE) VALUE('QMSG_FRA')
+             CHGVAR     VAR(&SRCMBR) VALUE('TREEFRAPG')
+             CHGVAR     VAR(&OBJ) VALUE('TREEFRA')
+             CALLSUBR   SUBR(CMPPNLGRP)
 
-             CHGVAR     VAR(&SRCFILE) VALUE('QCMDSRC')
-             CHGVAR     VAR(&SRCMBR) VALUE('TREEGER')
-             CALLSUBR   SUBR(CMPOBJ)
+             CHGVAR     VAR(&SRCFILE) VALUE('QMSG_GER')
+             CHGVAR     VAR(&SRCMBR) VALUE('TREEGERPG')
+             CHGVAR     VAR(&OBJ) VALUE('TREEGER')
+             CALLSUBR   SUBR(CMPPNLGRP)
 
-             CHGVAR     VAR(&SRCFILE) VALUE('QCMDSRC')
-             CHGVAR     VAR(&SRCMBR) VALUE('TREEITA')
-             CALLSUBR   SUBR(CMPOBJ)
+             CHGVAR     VAR(&SRCFILE) VALUE('QMSG_ITA')
+             CHGVAR     VAR(&SRCMBR) VALUE('TREEITAPG')
+             CHGVAR     VAR(&OBJ) VALUE('TREEITA')
+             CALLSUBR   SUBR(CMPPNLGRP)
 
-             CHGVAR     VAR(&SRCFILE) VALUE('QCMDSRC')
-             CHGVAR     VAR(&SRCMBR) VALUE('TREESPA')
-             CALLSUBR   SUBR(CMPOBJ)
+             CHGVAR     VAR(&SRCFILE) VALUE('QMSG_SPA')
+             CHGVAR     VAR(&SRCMBR) VALUE('TREESPAPG')
+             CHGVAR     VAR(&OBJ) VALUE('TREESPA')
+             CALLSUBR   SUBR(CMPPNLGRP)
 
              /* ---------------------------------------------------- */
              /*  Create command: PEEKCLONE                           */
@@ -899,6 +910,24 @@ CRTOBJ:
                CRTPEEKOBJ SRCFILE(&DEVLIB/&SRCFILE) SRCMBR(&SRCMBR) +
                             OBJLIB(&DEVLIB) DEVLIB(&DEVLIB) +
                             SBMJOB(*NO) BNDDIR(PEEK) INSTALL('*NO')
+
+             ENDSUBR
+
+             /* ==================================================== */
+             /*  Subroutine: Compile PEEK panel group                */
+             /*  CRTPEEKOBJ names the panel group after the source   */
+             /*  member, but the members in QMSG_* end with 'PG'.    */
+             /* ==================================================== */
+             SUBR       SUBR(CMPPNLGRP)
+
+               CRTPNLGRP  PNLGRP(&DEVLIB/&OBJ) +
+                            SRCFILE(&DEVLIB/&SRCFILE) SRCMBR(&SRCMBR) +
+                            OPTION(*EVENTF)
+
+               DLTSPLF    FILE(&OBJ) JOB(*) SPLNBR(*LAST)
+               MONMSG     MSGID(CPF3303)
+
+               CALL       PGM(&DEVLIB/PEEK96B) PARM(&OBJ &DEVLIB '*PNLGRP')
 
              ENDSUBR
 
