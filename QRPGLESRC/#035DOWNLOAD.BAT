@@ -109,6 +109,7 @@ echo lcd ..              >> %TEMPFILE%
 
 rem **************************************
 rem   Download: QEXAMPLE
+rem   PEEK96 erstellt QEXAMPLE nur in PEEK
 rem **************************************
 
 set TFR_FILE=QEXAMPLE
@@ -119,9 +120,11 @@ if not exist %LCL_FILE% (
    md %LCL_FILE%
 )
 
+echo cd PEEK>> %TEMPFILE%
 echo lcd %LCL_FILE%      >> %TEMPFILE%
 echo mget %RMT_FILE%.*   >> %TEMPFILE%
 echo lcd ..              >> %TEMPFILE%
+echo cd %DEV_LIB%>> %TEMPFILE%
 
 rem **************************************
 rem   Download: QMSG_ENG
