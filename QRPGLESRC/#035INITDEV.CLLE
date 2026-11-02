@@ -603,6 +603,10 @@ CRTOBJ:
              CALLSUBR   SUBR(CMPOBJ)
 
              CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
+             CHGVAR     VAR(&SRCMBR) VALUE('EXIT06')
+             CALLSUBR   SUBR(CMPOBJ)
+
+             CHGVAR     VAR(&SRCFILE) VALUE('QRPGLESRC')
              CHGVAR     VAR(&SRCMBR) VALUE('PEEK')
              CALLSUBR   SUBR(CMPOBJ)
 

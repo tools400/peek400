@@ -184,6 +184,10 @@
                           TOFILE(&NEWLIB/QEXAMPLE) FROMMBR(EXIT05)   +
                           TOMBR(*FROMMBR) MBROPT(*REPLACE) +
                           FMTOPT(*MAP)
+             CPYF       FROMFILE(&DEVLIB/QRPGLESRC) +
+                          TOFILE(&NEWLIB/QEXAMPLE) FROMMBR(EXIT06)   +
+                          TOMBR(*FROMMBR) MBROPT(*REPLACE) +
+                          FMTOPT(*MAP)
              CPYF       FROMFILE(&DEVLIB/QDDSSRC  ) +
                           TOFILE(&NEWLIB/QEXAMPLE) FROMMBR(EXIT01PF) +
                           TOMBR(*FROMMBR) MBROPT(*REPLACE) +
@@ -244,6 +248,9 @@
                           TOMBR(*FROMMBR ) MBROPT(*REPLACE) CRTFILE(*NO)
              CPYF       FROMFILE(&DEVLIB/QCOPYLE) +
                           TOFILE(&NEWLIB/QCOPYLE) FROMMBR(PEXIT05   ) +
+                          TOMBR(*FROMMBR ) MBROPT(*REPLACE) CRTFILE(*NO)
+             CPYF       FROMFILE(&DEVLIB/QCOPYLE) +
+                          TOFILE(&NEWLIB/QCOPYLE) FROMMBR(PEXIT06   ) +
                           TOMBR(*FROMMBR ) MBROPT(*REPLACE) CRTFILE(*NO)
              CPYF       FROMFILE(&DEVLIB/QCOPYLE) +
                           TOFILE(&NEWLIB/QCOPYLE) FROMMBR(PPEEK21   ) +

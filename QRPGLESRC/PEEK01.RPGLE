@@ -48,6 +48,7 @@ dcl-f peekfld usage(*update:*delete:*output) usropn prefix(f_);
 /COPY QCOPYLE,PPEEK53
 /COPY QCOPYLE,PPEEK58
 /COPY QCOPYLE,PPEEK71
+/COPY QCOPYLE,PEXIT06
 
 dcl-ds set0001  likeds(set0001_t);
 dcl-ds fldl0100 likeds(fldl0100_t);
@@ -56,6 +57,8 @@ dcl-s numFields like(int4_t);
 dcl-s rc like(int4_t);
 
 dcl-s peek02_name like(pgmcalln_t);
+dcl-s exit06_name like(pgmcalln_t);
+dcl-s isExit06 like(bool_t) inz(bFalse);
 
 dcl-s isFld512 char(1) inz(bFalse);
 
@@ -148,6 +151,16 @@ for do_x1 = 1 to numFields;
 
   //  UCS-2 Feld
   fldl0100.f1ucs2 = (fldl0100.f1dtyp = 'G');
+
+  //  Spaltenüberschriften und Feldtext über EXIT06 überschreiben
+  if (isExit06 = bTrue);
+    callp(e) exit06(i_qfile.name: i_qfile.lib: sds.user: fldl0100.f1fnme
+                   : fldl0100.f1col1: fldl0100.f1col2: fldl0100.f1col3
+                   : fldl0100.f1ftxt);
+    if (%error());
+      isExit06 = bFalse;
+    endif;
+  endif;
 
   f_ffd = fldl0100;
 
@@ -312,6 +325,9 @@ begsr inzsr;
   isInzSr = bTrue;
 
   peek02_name = f_pgmcalln('PEEK02');
+
+  exit06_name = f_pgmcalln('EXIT06');
+  isExit06 = f_exist('EXIT06': f_getprdlb(): '*PGM');
 
   open peekfld;
 
