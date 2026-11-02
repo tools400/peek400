@@ -162,7 +162,8 @@ STEP_05:
                                    *BCAT &SYSNAME *BCAT '...') +
                             TOPGMQ(*EXT) MSGTYPE(*STATUS)
 
-               PEEK/PEEKCLONE TOLIB(PEEK400)
+               /* über QCMDEXC, damit PEEK beim Umwandeln nicht existieren muss */
+               CALL       PGM(QCMDEXC) PARM('PEEK/PEEKCLONE TOLIB(PEEK400)' 29)
 
 STEP_06:
                SNDPGMMSG  MSGID(CPF9897) MSGF(QCPFMSG) +
