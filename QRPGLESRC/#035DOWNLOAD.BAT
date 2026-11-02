@@ -34,209 +34,52 @@ if exist *.savf (
 )
 
 rem **************************************
-rem   sign on
+rem   Auflisten Teildateien
+rem   ftp.exe sendet bei mget TYPE A und
+rem   hebt damit TYPE C 819 auf. Deshalb
+rem   erst auflisten, dann einzeln holen.
 rem **************************************
 
-echo %USER%> %TEMPFILE%
-echo %PASS%>> %TEMPFILE%
-echo quote site namefmt 0 >> %TEMPFILE%
-echo cd %DEV_LIB%>> %TEMPFILE%
+call :signon
+call :list PEEKSRC   %DEV_LIB%
+call :list QCMDSRC   %DEV_LIB%
+call :list QCOPYLE   %DEV_LIB%
+call :list QDDSSRC   %DEV_LIB%
+rem PEEK96 erstellt QEXAMPLE nur in PEEK
+call :list QEXAMPLE  PEEK
+call :list QMSG_ENG  %DEV_LIB%
+call :list QMSG_FRA  %DEV_LIB%
+call :list QMSG_GER  %DEV_LIB%
+call :list QMSG_ITA  %DEV_LIB%
+call :list QMSG_SPA  %DEV_LIB%
+call :list QRPGLESRC %DEV_LIB%
+call :list QSRVSRC   %DEV_LIB%
+echo quit >> %TEMPFILE%
+
+pause
+ftp -i -s:%TEMPFILE% %HOST%
+
+rem **************************************
+rem   Download Teildateien
+rem   ascii: ftp.exe sendet danach kein
+rem   TYPE A mehr vor einem get.
+rem **************************************
+
+call :signon
+echo ascii>> %TEMPFILE%
 echo quote type c 819>> %TEMPFILE%
-
-rem **************************************
-rem   Download: PEEKSRC
-rem **************************************
-
-set TFR_FILE=PEEKSRC
-set RMT_FILE=%TFR_FILE%
-set LCL_FILE=%RMT_FILE%.FILE
-
-if not exist %LCL_FILE% (
-   md %LCL_FILE%
-)
-
-echo lcd %LCL_FILE%      >> %TEMPFILE%
-echo mget %RMT_FILE%.*  >> %TEMPFILE%
-echo lcd ..              >> %TEMPFILE%
-
-rem **************************************
-rem   Download: QCMDSRC
-rem **************************************
-
-set TFR_FILE=QCMDSRC
-set RMT_FILE=%TFR_FILE%
-set LCL_FILE=%RMT_FILE%.FILE
-
-if not exist %LCL_FILE% (
-   md %LCL_FILE%
-)
-
-echo lcd %LCL_FILE%      >> %TEMPFILE%
-echo mget %RMT_FILE%.*  >> %TEMPFILE%
-echo lcd ..              >> %TEMPFILE%
-
-rem **************************************
-rem   Download: QCOPYLE
-rem **************************************
-
-set TFR_FILE=QCOPYLE
-set RMT_FILE=%TFR_FILE%
-set LCL_FILE=%RMT_FILE%.FILE
-
-if not exist %LCL_FILE% (
-   md %LCL_FILE%
-)
-
-echo lcd %LCL_FILE%      >> %TEMPFILE%
-echo mget %RMT_FILE%.*   >> %TEMPFILE%
-echo lcd ..              >> %TEMPFILE%
-
-rem **************************************
-rem   Download: QDDSSRC
-rem **************************************
-
-set TFR_FILE=QDDSSRC
-set RMT_FILE=%TFR_FILE%
-set LCL_FILE=%RMT_FILE%.FILE
-
-if not exist %LCL_FILE% (
-   md %LCL_FILE%
-)
-
-echo lcd %LCL_FILE%      >> %TEMPFILE%
-echo mget %RMT_FILE%.*   >> %TEMPFILE%
-echo lcd ..              >> %TEMPFILE%
-
-rem **************************************
-rem   Download: QEXAMPLE
-rem   PEEK96 erstellt QEXAMPLE nur in PEEK
-rem **************************************
-
-set TFR_FILE=QEXAMPLE
-set RMT_FILE=%TFR_FILE%
-set LCL_FILE=%RMT_FILE%.FILE
-
-if not exist %LCL_FILE% (
-   md %LCL_FILE%
-)
-
-echo cd PEEK>> %TEMPFILE%
-echo lcd %LCL_FILE%      >> %TEMPFILE%
-echo mget %RMT_FILE%.*   >> %TEMPFILE%
-echo lcd ..              >> %TEMPFILE%
-echo cd %DEV_LIB%>> %TEMPFILE%
-
-rem **************************************
-rem   Download: QMSG_ENG
-rem **************************************
-
-set TFR_FILE=QMSG_ENG
-set RMT_FILE=%TFR_FILE%
-set LCL_FILE=%RMT_FILE%.FILE
-
-if not exist %LCL_FILE% (
-   md %LCL_FILE%
-)
-
-echo lcd %LCL_FILE%      >> %TEMPFILE%
-echo mget %RMT_FILE%.*   >> %TEMPFILE%
-echo lcd ..              >> %TEMPFILE%
-
-rem **************************************
-rem   Download: QMSG_FRA
-rem **************************************
-
-set TFR_FILE=QMSG_FRA
-set RMT_FILE=%TFR_FILE%
-set LCL_FILE=%RMT_FILE%.FILE
-
-if not exist %LCL_FILE% (
-   md %LCL_FILE%
-)
-
-echo lcd %LCL_FILE%      >> %TEMPFILE%
-echo mget %RMT_FILE%.*   >> %TEMPFILE%
-echo lcd ..              >> %TEMPFILE%
-
-rem **************************************
-rem   Download: QMSG_GER
-rem **************************************
-
-set TFR_FILE=QMSG_GER
-set RMT_FILE=%TFR_FILE%
-set LCL_FILE=%RMT_FILE%.FILE
-
-if not exist %LCL_FILE% (
-   md %LCL_FILE%
-)
-
-echo lcd %LCL_FILE%      >> %TEMPFILE%
-echo mget %RMT_FILE%.*   >> %TEMPFILE%
-echo lcd ..              >> %TEMPFILE%
-
-rem **************************************
-rem   Download: QMSG_ITA
-rem **************************************
-
-set TFR_FILE=QMSG_ITA
-set RMT_FILE=%TFR_FILE%
-set LCL_FILE=%RMT_FILE%.FILE
-
-if not exist %LCL_FILE% (
-   md %LCL_FILE%
-)
-
-echo lcd %LCL_FILE%      >> %TEMPFILE%
-echo mget %RMT_FILE%.*   >> %TEMPFILE%
-echo lcd ..              >> %TEMPFILE%
-
-rem **************************************
-rem   Download: QMSG_SPA
-rem **************************************
-
-set TFR_FILE=QMSG_SPA
-set RMT_FILE=%TFR_FILE%
-set LCL_FILE=%RMT_FILE%.FILE
-
-if not exist %LCL_FILE% (
-   md %LCL_FILE%
-)
-
-echo lcd %LCL_FILE%      >> %TEMPFILE%
-echo mget %RMT_FILE%.*   >> %TEMPFILE%
-echo lcd ..              >> %TEMPFILE%
-
-rem **************************************
-rem   Download: QRPGLESRC
-rem **************************************
-
-set TFR_FILE=QRPGLESRC
-set RMT_FILE=%TFR_FILE%
-set LCL_FILE=%RMT_FILE%.FILE
-
-if not exist %LCL_FILE% (
-   md %LCL_FILE%
-)
-
-echo lcd %LCL_FILE%      >> %TEMPFILE%
-echo mget %RMT_FILE%.*   >> %TEMPFILE%
-echo lcd ..              >> %TEMPFILE%
-
-rem **************************************
-rem   Download: QSRVSRC
-rem **************************************
-
-set TFR_FILE=QSRVSRC
-set RMT_FILE=%TFR_FILE%
-set LCL_FILE=%RMT_FILE%.FILE
-
-if not exist %LCL_FILE% (
-   md %LCL_FILE%
-)
-
-echo lcd %LCL_FILE%      >> %TEMPFILE%
-echo mget %RMT_FILE%.*   >> %TEMPFILE%
-echo lcd ..              >> %TEMPFILE%
+call :get PEEKSRC   %DEV_LIB%
+call :get QCMDSRC   %DEV_LIB%
+call :get QCOPYLE   %DEV_LIB%
+call :get QDDSSRC   %DEV_LIB%
+call :get QEXAMPLE  PEEK
+call :get QMSG_ENG  %DEV_LIB%
+call :get QMSG_FRA  %DEV_LIB%
+call :get QMSG_GER  %DEV_LIB%
+call :get QMSG_ITA  %DEV_LIB%
+call :get QMSG_SPA  %DEV_LIB%
+call :get QRPGLESRC %DEV_LIB%
+call :get QSRVSRC   %DEV_LIB%
 
 rem **************************************
 rem   Download save file
@@ -257,10 +100,42 @@ echo binary >> %TEMPFILE%
 echo get %PRD_LIB%/%PRD_FILE%  %PRD_FILE%.SAVF >> %TEMPFILE%
 
 echo quit >> %TEMPFILE%
-pause
 ftp -i -s:%TEMPFILE% %HOST%
 del %TEMPFILE%
 goto end
+
+rem **************************************
+rem   sign on
+rem **************************************
+:signon
+echo %USER%> %TEMPFILE%
+echo %PASS%>> %TEMPFILE%
+echo quote site namefmt 0 >> %TEMPFILE%
+goto :eof
+
+rem **************************************
+rem   Auflisten: Datei Bibliothek
+rem **************************************
+:list
+echo cd %2>> %TEMPFILE%
+echo ls %1.* %1.lst>> %TEMPFILE%
+goto :eof
+
+rem **************************************
+rem   Download: Datei Bibliothek
+rem **************************************
+:get
+if not exist %1.FILE (
+   md %1.FILE
+)
+echo cd %2>> %TEMPFILE%
+echo lcd %1.FILE>> %TEMPFILE%
+if exist %1.lst (
+   for /F %%m in (%1.lst) do echo get %%m>> %TEMPFILE%
+   del %1.lst
+)
+echo lcd ..>> %TEMPFILE%
+goto :eof
 
 :usage
 echo.
