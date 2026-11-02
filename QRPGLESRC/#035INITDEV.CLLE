@@ -30,6 +30,7 @@
              DCL        VAR(&SRCFILE) TYPE(*CHAR) LEN(10)
              DCL        VAR(&SRCMBR)  TYPE(*CHAR) LEN(10)
              DCL        VAR(&OBJ)     TYPE(*CHAR) LEN(10)
+             DCL        VAR(&JOBCCSID) TYPE(*DEC) LEN(5 0)
 
              DCL        VAR(&TGTRLS)  TYPE(*CHAR) LEN(10) VALUE('V7R3M0')
 
@@ -260,52 +261,67 @@
 
              /* ---------------------------------------------------- */
              /*  Create message file                                 */
+             /*  The CL programs must be compiled with the CCSID of  */
+             /*  their language. Otherwise the compiler converts the */
+             /*  message texts to the CCSID of the job.              */
              /* ---------------------------------------------------- */
+
+             RTVJOBA    CCSID(&JOBCCSID)
 
              CHKOBJ     OBJ(&DEVLIB/PEEKENG) OBJTYPE(*MSGF)
              MONMSG     MSGID(CPF9801) EXEC(DO)
                CRTMSGF    MSGF(&DEVLIB/PEEKENG) +
                             TEXT('Peek/400 - Englische Übersetzung') CCSID(*HEX)
              ENDDO
+             CHGJOB     CCSID(1140)
              CRTCLPGM   PGM(&DEVLIB/PEEKENGMG) +
                           SRCFILE(&DEVLIB/QMSG_ENG) SRCMBR(*PGM) TGTRLS(&TGTRLS)
              CALL       PGM(&DEVLIB/PEEKENGMG) PARM(&DEVLIB)
+             CHGJOB     CCSID(&JOBCCSID)
 
              CHKOBJ     OBJ(&DEVLIB/PEEKFRA) OBJTYPE(*MSGF)
              MONMSG     MSGID(CPF9801) EXEC(DO)
                CRTMSGF    MSGF(&DEVLIB/PEEKFRA) +
                             TEXT('Peek/400 - Französische Übersetzung') CCSID(*HEX)
              ENDDO
+             CHGJOB     CCSID(1147)
              CRTCLPGM   PGM(&DEVLIB/PEEKFRAMG) +
                           SRCFILE(&DEVLIB/QMSG_FRA) SRCMBR(*PGM) TGTRLS(&TGTRLS)
              CALL       PGM(&DEVLIB/PEEKFRAMG) PARM(&DEVLIB)
+             CHGJOB     CCSID(&JOBCCSID)
 
              CHKOBJ     OBJ(&DEVLIB/PEEKGER) OBJTYPE(*MSGF)
              MONMSG     MSGID(CPF9801) EXEC(DO)
                CRTMSGF    MSGF(&DEVLIB/PEEKGER) +
                             TEXT('Peek/400 - Deutsche Übersetzung') CCSID(*HEX)
              ENDDO
+             CHGJOB     CCSID(1141)
              CRTCLPGM   PGM(&DEVLIB/PEEKGERMG) +
                           SRCFILE(&DEVLIB/QMSG_GER) SRCMBR(*PGM) TGTRLS(&TGTRLS)
              CALL       PGM(&DEVLIB/PEEKGERMG) PARM(&DEVLIB)
+             CHGJOB     CCSID(&JOBCCSID)
 
              CHKOBJ     OBJ(&DEVLIB/PEEKITA) OBJTYPE(*MSGF)
              MONMSG     MSGID(CPF9801) EXEC(DO)
                CRTMSGF    MSGF(&DEVLIB/PEEKITA) +
                             TEXT('Peek/400 - Italienische Übersetzung') CCSID(*HEX)
              ENDDO
+             CHGJOB     CCSID(1144)
              CRTCLPGM   PGM(&DEVLIB/PEEKITAMG) +
                           SRCFILE(&DEVLIB/QMSG_ITA) SRCMBR(*PGM) TGTRLS(&TGTRLS)
              CALL       PGM(&DEVLIB/PEEKITAMG) PARM(&DEVLIB)
+             CHGJOB     CCSID(&JOBCCSID)
 
              CHKOBJ     OBJ(&DEVLIB/PEEKSPA) OBJTYPE(*MSGF)
              MONMSG     MSGID(CPF9801) EXEC(DO)
                CRTMSGF    MSGF(&DEVLIB/PEEKSPA) +
                             TEXT('Peek/400 - Spanische Übersetzung') CCSID(*HEX)
              ENDDO
+             CHGJOB     CCSID(1145)
              CRTCLPGM   PGM(&DEVLIB/PEEKSPAMG) +
                           SRCFILE(&DEVLIB/QMSG_SPA) SRCMBR(*PGM) TGTRLS(&TGTRLS)
              CALL       PGM(&DEVLIB/PEEKSPAMG) PARM(&DEVLIB)
+             CHGJOB     CCSID(&JOBCCSID)
 
              /* ---------------------------------------------------- */
              /*  Create command: PEEK                                */
