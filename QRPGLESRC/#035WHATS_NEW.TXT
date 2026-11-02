@@ -953,5 +953,8 @@
      PEEK55
        - Korrigiert, so dass ein gespeichertes Layout beim Laden einer
          Arbeitsumgebungkorrekt wiederhergestellt wird.
-     Allgemein
+
+  Version 4.0.8
+  =============
+  *  Allgemein
        - Kaputte Sonderzeichen und Umlaute, sowie Akzentzeichen korrigiert.
