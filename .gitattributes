@@ -1,3 +1,6 @@
 # Binärdateien: kein Umbau der Zeilenenden, keine Text-Diffs.
 *.doc binary
 *.pdf binary
+
+# Batch-Dateien brauchen CRLF, auch bei einem Checkout ohne core.autocrlf.
+*.cmd text eol=crlf

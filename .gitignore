@@ -1,0 +1,6 @@
+# Sicherungsdateien gehören ins Release, nicht ins Repository (siehe .github/release.ps1).
+*.savf
+*.SAVF
+
+# Arbeitsverzeichnis von .github/release.ps1: Downloads und Dateien des Releases.
+/temp/
