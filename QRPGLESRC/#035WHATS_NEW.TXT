@@ -971,3 +971,12 @@
          zeigen die neue Spaltenüberschrift *COLHDG und die ersetzten
          leeren Feldtexte erst, nachdem sie mit dem Kurzbefehl RB neu
          erstellt wurden.
+
+  Version 4.1.0
+  =============
+  *  PEEK15
+       - EXIT03: Der von EXIT03 zurückgegebene Edit Code wird jetzt in die
+         Bildschirmdatei der Update-Programme übernommen. Bisher schrieb
+         PEEK15 keinen Edit Code, sobald EXIT03 vorhanden war.
+       - EXIT03 erhält den Edit Code aus PEEKFLD und wird nur noch für
+         numerische Felder aufgerufen.

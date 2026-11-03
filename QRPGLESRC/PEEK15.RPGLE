@@ -44,7 +44,7 @@ dcl-f qcopyle6 extdesc('QPEEKGEN') usage(*output) usropn rename(qpeekgen :fcopy6
 
 dcl-f peeksrc usropn rename(peeksrc:finput);
 
-dcl-f peekfld usropn;
+dcl-f peekfld usropn prefix(f_);
 
 dcl-pr p_wrtdspf extproc(*dclcase);
   i_srcdta        const like(srcdta);
@@ -280,7 +280,7 @@ dcl-ds ds_movel len(112);
   $movel_r        char(14) inz;
 end-ds;
 
-dcl-s isexit03        ind inz(bFalse);
+dcl-s isExit03        ind inz(bFalse);
 dcl-s exit03          like(pgmcalln_t) inz;
 dcl-ds qpgm qualified;
   name            char(10);
@@ -422,7 +422,7 @@ if (p > 1);
   qpgm.lib = %subst(exit03: 1: p-1);
   if p < %len(exit03);
     qpgm.name = %subst(exit03: p+1);
-    isexit03  = f_exist(qpgm.name
+    isExit03  = f_exist(qpgm.name
                        : qpgm.lib
                        : '*PGM');
   endif;
@@ -1080,45 +1080,47 @@ begsr wrtfield;
       fldtolong = '0';
     endif;
 
-    if (isexit03);
+    //  EXIT03 kann den Edit Code aus PEEKFLD überschreiben. Nur bei
+    //  numerischen Feldern, denn EDTCDE ist bei Zeichenfeldern nicht
+    //  zulässig.
+    if (isExit03 and
+        f_isnumfld(fldl0100)   = bTrue and
+        f_isfloatfld(fldl0100) = bFalse);
       callp(e) cvteditcode(
         reffile: reflib
-        : sds.user: fldl0100.f1fnme: fldl0100.f1edtc);
+        : sds.user: fldl0100.f1fnme: f_edtcde);
       if (%error());
-        isexit03 = bFalse;
+        isExit03 = bFalse;
       endif;
     endif;
 
-    if (not isexit03);
-      //  EDTWRD/EDTCDE ausgeben ...
-      select;
-      //  EDTWRD prüfen ...
-      when (fldl0100.f1edwd <> ' '); // Edit word
+    //  EDTWRD/EDTCDE ausgeben ...
+    select;
+    //  EDTWRD prüfen ...
+    when (fldl0100.f1edwd <> ' '); // Edit word
+      reset ds_dspatr;
+      $dspa_atr = 'EDTWRD(''' + fldl0100.f1edwd;
+      %subst($dspa_atr
+            : fldl0100.f1edwl + 9: 2) = ''')';
+      p_wrtdspf(ds_dspatr);
+
+    //  Abfragen Feld-EDTCDE aus PEEKFLD ...
+    when f_edtcde <> ' '           // Edit code
+       and f_isfloatfld(fldl0100) = bFalse;
+      reset ds_dspatr;
+      $dspa_atr = 'EDTCDE(' + f_edtcde + ')';
+      p_wrtdspf(ds_dspatr);
+
+    other;
+      //  Kein EDTWRD / kein EDTCDE
+      if (f_isnumfld(fldl0100)   = bTrue ) and
+         (f_isfloatfld(fldl0100) = bFalse) and
+         (fldl0100.f1decp > 0            );
         reset ds_dspatr;
-        $dspa_atr = 'EDTWRD(''' + fldl0100.f1edwd;
-        %subst($dspa_atr
-              : fldl0100.f1edwl + 9: 2) = ''')';
+        $dspa_atr = 'EDTCDE(' + 'P' + ')';
         p_wrtdspf(ds_dspatr);
-
-      //  Abfragen Feld-EDTCDE aus PEEKFLD ...
-      when edtcde <> ' '           // Edit code
-         and f_isfloatfld(fldl0100) = bFalse;
-        reset ds_dspatr;
-        $dspa_atr = 'EDTCDE(' + edtcde + ')';
-        p_wrtdspf(ds_dspatr);
-
-      other;
-        //  Kein EDTWRD / kein EDTCDE
-        if (f_isnumfld(fldl0100)   = bTrue ) and
-           (f_isfloatfld(fldl0100) = bFalse) and
-           (fldl0100.f1decp > 0            );
-          reset ds_dspatr;
-          $dspa_atr = 'EDTCDE(' + 'P' + ')';
-          p_wrtdspf(ds_dspatr);
-        endif;
-      endsl;
-
-    endif;
+      endif;
+    endsl;
 
     //  Lower case Attribut
     //  bei Alpha-Feldern ...
@@ -2168,7 +2170,7 @@ dcl-proc f_readfld;
   if (%eof());
     return bTrue;
   else;
-    fldl0100 = ffd;
+    fldl0100 = f_ffd;
     return bFalse;
   endif;
 
