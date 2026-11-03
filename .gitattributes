@@ -1,0 +1,3 @@
+# Binärdateien: kein Umbau der Zeilenenden, keine Text-Diffs.
+*.doc binary
+*.pdf binary
