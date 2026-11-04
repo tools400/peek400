@@ -20,7 +20,6 @@
       *   >>COMPILE<<                                                 *
       *     >>PARM<< TRUNCNBR(*NO);                                   *
       *     >>PARM<< DBGVIEW(*LIST);                                  *
-      *     >>PARM<< TGTRLS(V5R2M0);                                  *
       *   >>END-COMPILE<<                                             *
       *                                                               *
       *   >>EXECUTE<<                                                 *
@@ -33,7 +32,6 @@
       *                                          ) +                  *
       *                           BNDDIR(*LIBL/QC2LE) +               *
       *                           DETAIL(*BASIC) +                    *
-      *                           TGTRLS(V5R2M0) +                    *
       *                           ACTGRP(*NEW);                       *
       *                                                               *
       * >>END-PRE-COMPILER<<                                          *
