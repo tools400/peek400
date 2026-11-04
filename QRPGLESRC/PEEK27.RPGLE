@@ -148,7 +148,7 @@ endsr;
 
 begsr buildstr;
 
-  wrk_msgid = f_mapCmdToMsg(data);
+  wrk_msgid = f_mapCmdToMsg(data: wrk_sectn);
   if (wrk_msgid <> '');
     wrk_msgid = 'KEY' + %trim(wrk_msgid);
     wrk_msgtxt = f_msgtext(wrk_msgid: ' ');

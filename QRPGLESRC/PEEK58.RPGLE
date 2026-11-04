@@ -83,8 +83,6 @@ dcl-s g_prdlib        like(lib_t) inz;
 
 dcl-s g_jobccsid      uns(10) inz(0);
 
-dcl-s do_x1           packed(7);
-
 //===================================================================*
 //  Funktion:  f_dsplyLn                                  (Body)     *
 //===================================================================*
@@ -837,7 +835,7 @@ dcl-proc f_basedmbr export;
 
   dcl-ds bspf0100 likeds(bspf0100_t) inz;
 
-  dcl-s pMbrd0300 pointer inz static;
+  dcl-s pMbrd0300 pointer inz;
   dcl-ds mbrd0300 likeds(mbrd0300_t) based(pMbrd0300);
 
   dcl-ds basedOnE likeds(MBRD0300_basedOnE_t) based(pBasedOnE);
@@ -930,9 +928,6 @@ dcl-proc f_basedmbr export;
     endif;
   endsl;
 
-  //  Freigeben Speicher ...
-  free(pMbrd0300);
-
   if (o_rcdfmt = '*FIRST');
 
     //  Einlesen der Dateiinformationen ...
@@ -951,6 +946,11 @@ dcl-proc f_basedmbr export;
   endif;
 
   return isMbrFound;
+
+on-exit;
+  if (pMbrd0300 <> *null);
+    free(pMbrd0300);
+  endif;
 
 end-proc;
 
@@ -1077,6 +1077,7 @@ dcl-proc p_expstr export;
   dcl-s stepval         int(10) inz;
   dcl-s iidx            int(10) inz;
   dcl-s oidx            int(10) inz;
+  dcl-s x               int(10) inz;
   // ------------------------------------------------------------------------
 
   if (%parms() >= %parmnum(i_stepVal));
@@ -1084,6 +1085,9 @@ dcl-proc p_expstr export;
   else;
     stepval = 1;
   endif;
+
+  ostrlen = %len(o_string);
+  istrlen = %len(i_string);
 
   iidx = 1;
   oidx = 1;
@@ -1095,7 +1099,10 @@ dcl-proc p_expstr export;
     iidx = iidx + 1;
     oidx = oidx + 1;
 
-    for do_x1 = 1 to stepval;
+    for x = 1 to stepval;
+      if (oidx > ostrlen);
+        leave;
+      endif;
       %subst(o_string: oidx: 1) = '';
       oidx = oidx + 1;
     endfor;
@@ -2478,17 +2485,21 @@ dcl-proc f_bitor export;
 
   //  Funktionswert
   dcl-s result          uns(10) inz;
-
-  //  OR String (ORSTR)
-  dcl-pr orstr extproc('_ORSTR');
-    i_preceiver     pointer value;
-    i_pfirstsrc     pointer value  options(*string);
-    i_psecondsrc    pointer value  options(*string);
-    i_length        uns(10) value;
-  end-pr;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  orstr(%addr(result): %addr(i_arg1): %addr(i_arg2): %size(result));
+  result = %bitor(i_arg1: i_arg2);
+
+  if (%parms() >= %parmnum(i_arg3));
+    result = %bitor(result: i_arg3);
+  endif;
+
+  if (%parms() >= %parmnum(i_arg4));
+    result = %bitor(result: i_arg4);
+  endif;
+
+  if (%parms() >= %parmnum(i_arg5));
+    result = %bitor(result: i_arg5);
+  endif;
 
   return result;
 
@@ -3262,16 +3273,29 @@ end-proc;
 
 //===================================================================*
 //  Map command to message ID.                            (Body)     *
+//  i_section is the section of the user settings, the command was  *
+//  read from, e.g. '*PEEK64'. It distinguishes commands that have   *
+//  different meanings in different programs.                        *
 //===================================================================*
 
 dcl-proc f_mapcmdtomsg export;
   dcl-pi *N like(msgid_t);
     i_command       char(256) const;
+    i_section       const  like(section_t) options(*nopass);
   end-pi;
 
   //  Funktionswert
   dcl-s msgid           like(msgid_t);
+
+  //  Optionale Parameter
+  dcl-s section         like(section_t) inz;
   // ------------------------------------------------------------------------
+
+  if (%parms() >= %parmnum(i_section));
+    section = i_section;
+  else;
+    section = '';
+  endif;
 
   select;
   when (i_command = '*ENTER');
@@ -3318,8 +3342,10 @@ dcl-proc f_mapcmdtomsg export;
     msgid = '0021';
   when (i_command = '*COPY');
     msgid = '0022';
+  when (i_command = '*DELETE' and section = '*PEEK64');
+    msgid = '0087';   // Text editor: Delete
   when (i_command = '*DELETE');
-    msgid = '0023';
+    msgid = '0023';   // Delete record
   when (i_command = '*DISPLAY');
     msgid = '0024';
   when (i_command = '*USERSETG');
@@ -3446,8 +3472,6 @@ dcl-proc f_mapcmdtomsg export;
     msgid = '0085';
   when (i_command = '*INSERT');
     msgid = '0086';
-  when (i_command = '*DELETE');
-    msgid = '0087';
   other;
     msgid = '';
   endsl;

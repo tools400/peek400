@@ -67,6 +67,7 @@
       /COPY QCOPYLE,PPEEK53                       Zugriff auf Benutzerdaten
       /COPY QCOPYLE,PPEEK58                       Allgemeine Routinen
       /COPY QCOPYLE,QUSRJOBI                       Retrieve Job Information (QUSRJOBI) API
+      /COPY QCOPYLE,QMHSNDPM                       Send Program Message (QMHSNDPM) API
 
        // ------------------------------------
        //  Internal prototypes
@@ -98,6 +99,7 @@
        //  Kills utility with an ESCAPE message.
        dcl-pr kill extproc('kill');
          i_text          varchar(128) const;
+         i_errno         int(10) const  options(*nopass);
        end-pr;
 
        //  Returns the CCSID of the current job.
@@ -205,8 +207,7 @@
 
        hiconv = qtqiconv_open(tocode: fromcode);
        if (hiconv.return_value = -1);
-          kill('Failed to initialize character: ' +
-                f_strerror(f_errno()));
+          kill('Failed to initialize character conversion': f_errno());
        endif;
 
        pTranscoder = %alloc(%size(transcoder));
@@ -236,8 +237,8 @@
        //   o_msg         - Optional. Error message.
 
        //  Returns:
-       //   rc            - Returns the new length of the buffer on
-       //                   success, else -1.
+       //   rc            - Returns the new length of the buffer.
+       //                   Sends escape message CPF9897 on error.
        //=====================================================================*
        dcl-proc transcoder_xlateraw export;
        dcl-pi *N              int(10) opdesc;
@@ -289,8 +290,8 @@
        //   o_msg         - Optional. Error message.
 
        //  Returns:
-       //   rc            - Returns the new length of the buffer on
-       //                   success, else -1.
+       //   rc            - Returns the new length of the buffer.
+       //                   Sends escape message CPF9897 on error.
        //=====================================================================*
        dcl-proc transcoder_xlatebuffer export;
        dcl-pi *N              int(10) opdesc;
@@ -352,8 +353,8 @@
        //   o_msg         - Optional. Error message.
 
        //  Returns:
-       //   string        - Varying field containing the translated data on
-       //                   success, else an empty string.
+       //   string        - Varying field containing the translated data.
+       //                   Sends escape message CPF9897 on error.
        //=====================================================================*
        dcl-proc transcoder_xlatestring export;
        dcl-pi *N              varchar(32767) opdesc;
@@ -527,6 +528,7 @@
        dcl-s inpbuf          char(32767) based(i_pinbuf);
        dcl-s extendsize      int(10) inz;
        dcl-s ismaxsize       ind inz(bFalse);
+       dcl-s errnbr          int(10) inz;
 
        // No restriction of maximum buffer size
        dcl-c MAX_SIZE -1;
@@ -579,11 +581,14 @@
 
        if (rc = ciconv_error);
           length = rc;
-          if (f_errno() = e2big_c);
-             kill('Target buffer too small to hold result.');
+          errnbr = f_errno();
+          //  Release the output buffer, because the escape message
+          //  skips the clean-up of the caller.
+          dealloc(n) o_poutbuf;
+          if (errnbr = e2big_c);
+             kill('Target buffer too small to hold result': errnbr);
           else;
-             kill('Failed to transcode characters: ' +
-                  f_strerror(f_errno()));
+             kill('Failed to transcode characters': errnbr);
           endif;
        endif;
 
@@ -675,13 +680,39 @@
        //=====================================================================*
        //  *** private ***
        //  Kills utility with an ESCAPE message.
+       //  i_errno is optional. If passed, the message contains the
+       //  error number and its text, e.g.:
+       //    Failed to transcode characters (errno 3491): <text>
        //=====================================================================*
        dcl-proc kill;
        dcl-pi *N;
          i_text          varchar(128) const;
+         i_errno         int(10) const  options(*nopass);
        end-pi;
+
+       dcl-s text       varchar(512) inz;
+       dcl-s msgkey     char(4) inz;
+       dcl-ds qmsgf     likeds(qobj_t) inz;
+       dcl-ds errcode   likeds(errcode_t) inz;
        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+       if (%parms() >= %parmnum(i_errno));
+          text = i_text + ' (errno ' + %char(i_errno) + '): '
+                 + %trimr(f_strerror(i_errno));
+       else;
+          text = i_text;
+       endif;
+
+       qmsgf.name = 'QCPFMSG';
+       qmsgf.lib  = '*LIBL';
+
+       clear errcode;
+       errcode.bytprv = %size(errcode);
+
+       //  Send the escape message to the caller of this service
+       //  program, so that it does not pass the control boundary.
+       qmhsndpm('CPF9897': qmsgf: text: %len(text): '*ESCAPE'
+                : '*PGMBDY': 1: msgkey: errcode);
 
        end-proc;
 

@@ -582,7 +582,7 @@
 
        begsr pbfill;
 
-          wrk_msgid = f_mapcmdtomsg(data);
+          wrk_msgid = f_mapcmdtomsg(data: usrkey.section);
           if (wrk_msgid <> '');
              wrk_msgid  = 'KEY' + wrk_msgid;
              wrk_msgtxt = f_msgtext(wrk_msgid: ' ');

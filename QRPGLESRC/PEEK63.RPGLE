@@ -117,6 +117,10 @@
              rformat(fd: %trim(i_rcdformat));
           endif;
        on-error;
+          //  Do not leave the file open, if _Rformat() failed.
+          if (fd <> *null);
+             rclose(fd);
+          endif;
           fd = *null;
        endmon;
 
@@ -620,7 +624,8 @@
 
        priofb = rlocate(io_hfile.fd: %addr(key): keylen: options);
        if (riofb.numbyt = 0 or riofb.numbyt = eof);
-          options = f_bitor(start: data_only);
+          //  No key >= i_key: position to the end of the file like SETLL
+          options = f_bitor(end: data_only);
           priofb = rlocate(io_hfile.fd: %addr(key): keylen: options);
        endif;
 

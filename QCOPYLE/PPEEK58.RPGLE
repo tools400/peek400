@@ -462,5 +462,6 @@ end-pr;
 //-------------------------------------------------------------------*
 dcl-pr f_mapcmdtomsg like(msgid_t);
   i_command       char(256) const;
+  i_section       const  like(section_t) options(*nopass);
 end-pr;
 

@@ -772,13 +772,20 @@ begsr fill##2;
 
   //  Umsetzen Zeichensatz
   if (f_hasccsid(fldl0100) = bTrue);
-    htranscoder =
-     transcoder_tojobccsid(fldl0100.f1fdcc);
-    ptmpnewlen =
-     transcoder_xlatebuffer(htranscoder
-                            : %addr(ptmphexbin)
-                            : ptmphexlen
-                            : %size(ptmphexbin));
+    monitor;
+      htranscoder =
+       transcoder_tojobccsid(fldl0100.f1fdcc);
+      ptmpnewlen =
+       transcoder_xlatebuffer(htranscoder
+                              : %addr(ptmphexbin)
+                              : ptmphexlen
+                              : %size(ptmphexbin));
+    on-error;
+      //  Umsetzung gescheitert (Escape-Nachricht CPF9897 von PEEK71):
+      //  Zeichen unverändert anzeigen. PEEK71 ändert den Puffer im
+      //  Fehlerfall nicht.
+      ptmpnewlen = ptmphexlen;
+    endmon;
     if (ptmphexlen = ptmpnewlen * 2);
       for i = ptmpnewlen downto 1;
         %subst(ptmphexbin: (2*i)-1: 1) =

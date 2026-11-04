@@ -47,6 +47,10 @@ dcl-pr f_sqlMsgID      char(7);
   i_sqlCode        int(10) const;
 end-pr;
 
+dcl-pr f_isDeleted like(bool_t);
+  i_hfile         const likeds(hfile_t);
+end-pr;
+
 dcl-pr p_cvtSqlMg;
   i_tomsgid       char(7) const;
   io_msgid        like(msgid_t);
@@ -107,6 +111,8 @@ dcl-proc SQL_prepareStatement export;
   dcl-s pmbr            like(mbr_t);
   dcl-s pfmt            like(rcdfmt_t);
 
+  dcl-s cmdovrdbf       like(g_cmdovrdbf);
+
   // ------------------------------------------------------------------------
 
   //**                If         f_basedPF(i_file: i_lib: i_mbr: i_fmt: -1
@@ -120,7 +126,9 @@ dcl-proc SQL_prepareStatement export;
   //**                Endif
 
   //  ovrDbf
-  g_cmdovrdbf = 'OVRDBF FILE(FILE03)'       +
+  //  (Eine Prüfung darf den Zustand des offenen Cursors nicht ändern,
+  //  deshalb übernimmt erst eine erfolgreiche Vorbereitung g_cmdovrdbf.)
+  cmdovrdbf = 'OVRDBF FILE(FILE03)'         +
                ' TOFILE('                  +
                %trim(plib )                +
                '/'                         +
@@ -133,7 +141,7 @@ dcl-proc SQL_prepareStatement export;
                ' SHARE(*NO)'               +
                ' SECURE(*YES)'             +
                ' SEQONLY(*NO)';
-  qcmdexc(g_cmdovrdbf: %len(g_cmdovrdbf));
+  qcmdexc(cmdovrdbf: %len(cmdovrdbf));
 
   //  Statement ...
   sqlselectstmt = 'SELECT'                  +
@@ -182,19 +190,24 @@ dcl-proc SQL_prepareStatement export;
   // PRÜFUNG AUSWERTEN
   if (f_isSqlErr(o_msgid: o_msgdta) = bTrue);
     f_prepstmt = bFalse;
-    g_file = '';
-    g_lib = '';
-    g_mbr = '';
-    g_fmt = '';
+    if (i_check = bFalse);
+      g_file = '';
+      g_lib = '';
+      g_mbr = '';
+      g_fmt = '';
+    endif;
 
     p_cvtSqlMg('USR8210': o_msgid: o_msgdta);
 
   else;
     f_prepstmt = bTrue;
-    g_file = i_file;
-    g_lib = i_lib;
-    g_mbr = i_mbr;
-    g_fmt = i_fmt;
+    if (i_check = bFalse);
+      g_cmdovrdbf = cmdovrdbf;
+      g_file = i_file;
+      g_lib = i_lib;
+      g_mbr = i_mbr;
+      g_fmt = i_fmt;
+    endif;
   endif;
 
   return f_prepstmt;
@@ -220,17 +233,12 @@ dcl-proc SQL_open export;
   callp qcmdexc(g_cmdovrdbf: %len(g_cmdovrdbf));
 
   // CURSOR fileSQL DEKLARIEREN
-  if (sqlCode >= 0);
-    EXEC SQL
-     declare g_filesql scroll cursor for g_prepselectstmt;
-  endif;
-
+  EXEC SQL
+   declare g_filesql scroll cursor for g_prepselectstmt;
 
   // CURSOR CS ÖFFNEN
-  if (sqlCode >= 0);
-    EXEC SQL
-     open g_filesql;
-  endif;
+  EXEC SQL
+   open g_filesql;
 
   // PRÜFUNG AUSWERTEN
   if (f_isSqlErr(o_msgid :
@@ -256,6 +264,10 @@ dcl-proc SQL_open export;
 
     if (*in99 = *on);
       f_opnsql = bFalse;
+      //  Cursor schließen, sonst scheitert das nächste
+      //  SQL_open() mit SQL0502.
+      EXEC SQL
+       close g_filesql;
     else;
       f_opnsql = bTrue;
     endif;
@@ -286,6 +298,7 @@ dcl-proc SQL_nextRow export;
 
   //  definieren lokale Variablen ...
   dcl-s recnbr          int(10);
+  dcl-s isdeleted       like(bool_t);
 
   dcl-ds io_buff based(ptrbuffer);
     io_bufffld      like(rcdbuf_t);
@@ -297,37 +310,43 @@ dcl-proc SQL_nextRow export;
   ptrbuffer = %addr(o_buffer );
   ptrnullmap= %addr(o_nullmap);
 
-  // GET NEXT ROW
-  EXEC SQL
-   fetch next from g_filesql into :recnbr;
+  //  Sätze, die nach dem Öffnen des Cursors gelöscht wurden, überlesen
+  dou (isdeleted = bFalse);
+    isdeleted = bFalse;
 
-  // PRÜFUNG AUSWERTEN
-  if (f_isSqlErr(o_msgid :
-              o_msgdta) = bTrue);
+    // GET NEXT ROW
+    EXEC SQL
+     fetch next from g_filesql into :recnbr;
 
-    p_cvtSqlMg('USR8210': o_msgid: o_msgdta);
-    cio_seterrormsg(g_hfile03: o_msgid: o_msgdta);
-    iseof = bTrue;
+    // PRÜFUNG AUSWERTEN
+    if (f_isSqlErr(o_msgid :
+                o_msgdta) = bTrue);
 
-  else;
+      p_cvtSqlMg('USR8210': o_msgid: o_msgdta);
+      cio_seterrormsg(g_hfile03: o_msgid: o_msgdta);
+      iseof = bTrue;
 
-    if (sqlCode = 100);
-      cio_seteof_read(g_hfile03);
     else;
 
-      if cio_chainwithrrn(g_hfile03
-                       : recnbr
-                       : bTrue
-                       : io_buff
-                       : io_nullmap) = bFalse;
-        iseof = bTrue;
+      if (sqlCode = 100);
+        cio_seteof_read(g_hfile03);
       else;
-        iseof = bFalse;
+
+        if cio_chainwithrrn(g_hfile03
+                         : recnbr
+                         : bTrue
+                         : io_buff
+                         : io_nullmap) = bFalse;
+          isdeleted = f_isDeleted(g_hfile03);
+          iseof = bTrue;
+        else;
+          iseof = bFalse;
+        endif;
+
       endif;
 
     endif;
-
-  endif;
+  enddo;
 
   //  Setzen Rückgabeparameter
   o_hfile = g_hfile03;
@@ -354,6 +373,7 @@ dcl-proc SQL_previousRow export;
 
   //  definieren lokale Variablen ...
   dcl-s recnbr          int(10);
+  dcl-s isdeleted       like(bool_t);
 
   dcl-ds io_buff based(ptrbuffer);
     io_bufffld      like(rcdbuf_t);
@@ -365,37 +385,43 @@ dcl-proc SQL_previousRow export;
   ptrbuffer = %addr(o_buffer );
   ptrnullmap= %addr(o_nullmap);
 
-  // GET NEXT ROW
-  EXEC SQL
-   fetch prior from g_filesql into :recnbr;
+  //  Sätze, die nach dem Öffnen des Cursors gelöscht wurden, überlesen
+  dou (isdeleted = bFalse);
+    isdeleted = bFalse;
 
-  // PRÜFUNG AUSWERTEN
-  if (f_isSqlErr(o_msgid :
-              o_msgdta) = bTrue);
+    // GET PREVIOUS ROW
+    EXEC SQL
+     fetch prior from g_filesql into :recnbr;
 
-    p_cvtSqlMg('USR8210': o_msgid: o_msgdta);
-    cio_seterrormsg(g_hfile03: o_msgid: o_msgdta);
-    iseof = bTrue;
+    // PRÜFUNG AUSWERTEN
+    if (f_isSqlErr(o_msgid :
+                o_msgdta) = bTrue);
 
-  else;
+      p_cvtSqlMg('USR8210': o_msgid: o_msgdta);
+      cio_seterrormsg(g_hfile03: o_msgid: o_msgdta);
+      iseof = bTrue;
 
-    if (sqlCode = 100);
-      cio_seteof_readp(g_hfile03);
     else;
 
-      if cio_chainwithrrn(g_hfile03
-                       : recnbr
-                       : bTrue
-                       : io_buff
-                       : io_nullmap) = bFalse;
-        iseof = bTrue;
+      if (sqlCode = 100);
+        cio_seteof_readp(g_hfile03);
       else;
-        iseof = bFalse;
+
+        if cio_chainwithrrn(g_hfile03
+                         : recnbr
+                         : bTrue
+                         : io_buff
+                         : io_nullmap) = bFalse;
+          isdeleted = f_isDeleted(g_hfile03);
+          iseof = bTrue;
+        else;
+          iseof = bFalse;
+        endif;
+
       endif;
 
     endif;
-
-  endif;
+  enddo;
 
   //  Setzen Rückgabeparameter
   o_hfile = g_hfile03;
@@ -559,6 +585,9 @@ dcl-proc SQL_count export;
    fetch first from g_countsql into :f_count;
 
   if (f_isSqlErr(msgid: msgdta) = bTrue);
+    //  Cursor schließen, sonst scheitert der nächste Aufruf.
+    EXEC SQL
+     close g_countsql;
     return -1;
   endif;
 
@@ -597,6 +626,27 @@ dcl-proc f_isSqlErr;
   endif;
 
   return f_issqlerr;
+
+end-proc;
+
+//===================================================================*
+//  Prozedur:  f_isDeleted                                (Body)     *
+//  Prüft, ob der letzte Zugriff auf die Datei fehlschlug, weil der  *
+//  Satz nicht mehr existiert.                                       *
+//===================================================================*
+
+dcl-proc f_isDeleted;
+  dcl-pi *N like(bool_t);
+    i_hfile         const likeds(hfile_t);
+  end-pi;
+  // ------------------------------------------------------------------------
+
+  if (cio_geterror(i_hfile) = enorec_c or
+      cio_geterror(i_hfile) = eiorecerr_c);
+    return bTrue;
+  endif;
+
+  return bFalse;
 
 end-proc;
 
@@ -818,6 +868,11 @@ dcl-proc f_chgField;
     endif;
 
   endfor;
+
+  //  Abschließen Feldname am Ende der Zeichenkette ...
+  if (isField = bTrue and %len(f_chgfield) < %len(f_chgfield: *max));
+    f_chgfield = f_chgfield + DOOUBLE_QUOTE;
+  endif;
 
   return f_chgfield;
 

@@ -162,7 +162,7 @@ begsr readKeyMap;
       endif;
     endif;
 
-    wrk_msgid = f_mapCmdToMsg(data);
+    wrk_msgid = f_mapCmdToMsg(data: wrk_sectn);
     if (data = '*MOREKEYS');
       r_msgid = wrk_msgid;
       r_key = wrk_key;
