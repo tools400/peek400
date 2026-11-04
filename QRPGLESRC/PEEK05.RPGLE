@@ -2982,7 +2982,7 @@ begsr s_pinrcd;
 
         else;
           //  Datensatz nicht gefunden ...
-          p_sndpgmmg('USR8118': '': sds.pgmname);
+          p_sndpgmmg('USR8120': '': sds.pgmname);
         endif;
 
       else;

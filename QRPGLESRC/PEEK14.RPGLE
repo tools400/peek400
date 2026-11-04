@@ -109,6 +109,12 @@ dcl-c NBR_F_KEYS const(3);
 dcl-s sfbot           like(int4_t) inz;
 
 dcl-s isrecord        like(bool_t) inz(bFalse);
+
+//  Zuletzt gelesener Satz: Fehlt der Satz beim Aktualisieren (F5),
+//  werden dessen Schlüsselfelder weiter angezeigt.
+dcl-s hasprevrcd      like(bool_t) inz(bFalse);
+dcl-s prevbuff        like(rcdbuf_t);
+dcl-s prevnullmap     like(nullmap_t) dim(NULL_MAP_SIZE);
 dcl-s iscvtchar       like(bool_t) inz(bFalse);
 
 dcl-s peek06_name     like(pgmcalln_t) inz;
@@ -342,6 +348,12 @@ endsr;
 
 begsr c_fldhexed;
 
+  //  Error: Record not found (empty record, see readrcd).
+  if (isrecord = bFalse);
+    p_sndpgmmg('USR8120': '': sds.pgmname);
+    leavesr;
+  endif;
+
   //  Error: No valid subfile record.
   if (sflcsr = *zeros);
     p_sndpgmmg('USR8204': '': sds.pgmname);
@@ -395,6 +407,12 @@ endsr;
 //============================================================*
 
 begsr c_fldstred;
+
+  //  Error: Record not found (empty record, see readrcd).
+  if (isrecord = bFalse);
+    p_sndpgmmg('USR8120': '': sds.pgmname);
+    leavesr;
+  endif;
 
   //  Error: No valid subfile record.
   if (sflcsr = *zeros);
@@ -759,8 +777,15 @@ begsr pbfill;
     %subst($$text: %len($$text) - 1: 2) = ' :';
   endif;
 
+  //  ... Satz nicht gefunden: leer, außer den Schlüsselfeldern des
+  //      zuletzt angezeigten Satzes (siehe readrcd)
+  if (isrecord = bFalse and
+      (f_kseq = 0 or hasprevrcd = bFalse));
+    ystring = '';
+    ystrlen = f_dsplyln(fldl0100);
+
   //  ... NULL erlaubt?
-  if fldl0100.f1nalw = '1' and
+  elseif fldl0100.f1nalw = '1' and
      io_nullmap(fldl0100.f1seq) = 1;
     ystring = f_msgtext('TXT0127': '');
     ystrlen = %len(%trimr(ystring));
@@ -873,6 +898,12 @@ endsr;
 
 begsr readrcd;
 
+  if (isrecord = bTrue);
+    prevbuff = io_bufffld;
+    prevnullmap = io_nullmap;
+    hasprevrcd = bTrue;
+  endif;
+
   isrecord = bFalse;
   if (cio_isopen(hfile04) = bTrue);
     if cio_chainwithrrn(hfile04
@@ -884,9 +915,15 @@ begsr readrcd;
     endif;
   endif;
 
-  //  Satz nicht mehr vorhanden (z.B. inzwischen gelöscht): Der Puffer
-  //  ist leer, deshalb Meldung "Datensatz nicht gefunden."
+  //  Satz nicht mehr vorhanden (z.B. inzwischen gelöscht): Meldung
+  //  "Datensatz nicht gefunden." und leerer Satz, nur die Schlüssel-
+  //  felder aus dem zuletzt angezeigten Satz (siehe pbfill). Der von
+  //  cio_chainwithrrn geleerte Puffer enthält keine gültigen Werte.
   if (isrecord = bFalse);
+    if (hasprevrcd = bTrue);
+      io_bufffld = prevbuff;
+      io_nullmap = prevnullmap;
+    endif;
     p_sndpgmmg('USR8120': '': sds.pgmname);
   endif;
 
