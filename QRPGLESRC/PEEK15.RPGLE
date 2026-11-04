@@ -369,6 +369,7 @@ dcl-s fldtolongmax    like(bool_t) inz;
 dcl-s closechar1      varchar(1) inz;
 dcl-s closechar2      varchar(1) inz;
 dcl-s headertype      varchar(20) inz;
+dcl-s edtwrd          varchar(140) inz;
 
 /COPY QCOPYLE,D_VARDEF
 /COPY QCOPYLE,FLDL0100
@@ -430,8 +431,16 @@ if (p > 1);
 endif;
 
 scn#    = 0;
-#srcseq = 0;
 newscn  = bTrue;
+
+//  Der zweite Durchlauf (Kleinbuchstaben) schreibt in dieselbe
+//  Teildatei weiter: Folgenummern dort ab 5000, damit sie aufsteigend
+//  bleiben (sonst CPD9805 und Fehlermarken an falschen Zeilen).
+if (i_alwlc = bFalse);
+  #srcseq = 0;
+else;
+  #srcseq = 5000;
+endif;
 
 if (i_alwlc = bFalse);
   //  "Vorspann" nur kopieren, bei XAlwLC = FALSE
@@ -1106,10 +1115,24 @@ begsr wrtfield;
     select;
     //  EDTWRD prüfen ...
     when (fldl0100.f1edwd <> ' '); // Edit word
+      //  Hochkommas verdoppeln und das Schlüsselwort auf Folgezeilen
+      //  verteilen ('-' in Stelle 80): Der Schlüsselwortbereich hat 36
+      //  Stellen, ein Editierwort bis zu 64 Zeichen.
+      if (fldl0100.f1edwl > 0 and
+          fldl0100.f1edwl <= %len(fldl0100.f1edwd));
+        edtwrd = %subst(fldl0100.f1edwd: 1: fldl0100.f1edwl);
+      else;
+        edtwrd = %trimr(fldl0100.f1edwd);
+      endif;
+      edtwrd = 'EDTWRD(''' + %scanrpl('''': '''''': edtwrd) + ''')';
+      dow (%len(edtwrd) > %len($dspa_atr));
+        reset ds_dspatr;
+        $dspa_atr = %subst(edtwrd: 1: %len($dspa_atr) - 1) + '-';
+        p_wrtdspf(ds_dspatr);
+        edtwrd = %subst(edtwrd: %len($dspa_atr));
+      enddo;
       reset ds_dspatr;
-      $dspa_atr = 'EDTWRD(''' + fldl0100.f1edwd;
-      %subst($dspa_atr
-            : fldl0100.f1edwl + 9: 2) = ''')';
+      $dspa_atr = edtwrd;
       p_wrtdspf(ds_dspatr);
 
     //  Abfragen Feld-EDTCDE aus PEEKFLD ...

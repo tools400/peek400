@@ -49,7 +49,8 @@
           DCL        VAR(&PRODLIB   ) TYPE(*CHAR)  LEN(10)
           DCL        VAR(&RTNCODE   ) TYPE(*LGL )
 
-          DCL        VAR(&SCNNBRS   ) TYPE(*DEC )  LEN(2 0)
+/* Anzahl Bildschirme, 2-Byte-Binärzahl wie int2_t in PEEK15/PEEK16 */
+          DCL        VAR(&SCNNBRS   ) TYPE(*INT )  LEN(2)
           DCL        VAR(&LOWERCASE ) TYPE(*LGL )
           DCL        VAR(&DSPF      ) TYPE(*CHAR)  LEN(10)
           DCL        VAR(&COPY1     ) TYPE(*CHAR)  LEN(10)

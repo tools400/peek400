@@ -1,8 +1,9 @@
 **FREE
 // ==========================================================================
 //  Peek/400 - Unit-Tests der Programme PEEK01, PEEK02, PEEK03, PEEK04,
-//  PEEK06, PEEK07, PEEK10, PEEK11, PEEK18, PEEK19 und PEEK20 sowie der
-//  Transcoder-Liste von PEEK71 und der Datei PEEKFMT (iRPGUnit).
+//  PEEK06, PEEK07, PEEK10, PEEK11, PEEK15, PEEK18, PEEK19, PEEK20 und
+//  PEEK36 sowie der Transcoder-Liste von PEEK71 und der Datei PEEKFMT
+//  (iRPGUnit).
 //
 //  Zum Erstellen und Ausführen muss die Peek-Bibliothek (QCOPYLE,
 //  Bindeverzeichnis PEEK, PEEKUSR, PEEKFLD, PEEKFMT, Nachrichtendatei
@@ -47,9 +48,11 @@ ctl-opt nomain;
 /copy QCOPYLE,PPEEK10
 /copy QCOPYLE,PPEEK11
 /copy QCOPYLE,PPEEK13
+/copy QCOPYLE,PPEEK15
 /copy QCOPYLE,PPEEK18
 /copy QCOPYLE,PPEEK19
 /copy QCOPYLE,PPEEK20
+/copy QCOPYLE,PPEEK36
 /undefine internal_prototype
 
 /copy QCOPYLE,PPEEK53
@@ -106,6 +109,8 @@ dcl-c TST_FILE   'PEEKKEYS';     // Tabelle mit langem SQL-Spaltennamen
 dcl-c TST_CCSID  'PEEKCCSID';    // Tabelle mit nicht umsetzbarer CCSID
 dcl-c TST_FLOAT  'PEEKFLOAT';    // Tabelle mit REAL und DOUBLE
 dcl-c TST_UTF8   'PEEKUTF8';     // Tabelle mit CHAR CCSID 1208
+dcl-c TST_MDY    'PEEKMDY';      // DDS-Datei mit *MDY-Datum, *USA-Zeit
+dcl-c TST_EDW    'PEEKEDW';      // DDS-Datei mit langem Editierwort
 dcl-c TST_USRF   'PEEKTSTUSR';   // Kopie von PEEKUSR
 dcl-c TST_USER   'TESTUSER';
 
@@ -707,8 +712,260 @@ dcl-proc test17_peek18_accessKeyChanged export;
 end-proc;
 
 // ==========================================================================
+//  PEEK36: Datums- und Zeitwerte in allen Formaten werden angenommen, ein
+//  ungültiger Wert ergibt USR8242 statt eines Abbruchs (RNQ0112).
+// ==========================================================================
+
+dcl-proc test18_peek36_dateTimeFormats export;
+  chkPeek36('L': '*ISO': '-': '2026-11-04': '');
+  chkPeek36('L': '*EUR': '.': '04.11.2026': '');
+  chkPeek36('L': '*USA': '/': '11/04/2026': '');
+  chkPeek36('L': '*JIS': '-': '2026-11-04': '');
+  chkPeek36('L': '*MDY': '/': '11/04/26': '');
+  chkPeek36('L': '*DMY': '.': '04.11.26': '');
+  chkPeek36('L': '*YMD': '-': '26-11-04': '');
+  chkPeek36('L': '*JUL': '/': '26/308': '');
+  chkPeek36('T': '*ISO': '.': '13.45.00': '');
+  chkPeek36('T': '*EUR': '.': '13.45.00': '');
+  chkPeek36('T': '*HMS': ':': '13:45:00': '');
+  chkPeek36('T': '*USA': ':': '01:45 PM': '');
+  chkPeek36('T': '*JIS': ':': '13:45:00': '');
+
+  chkPeek36('L': '*MDY': '/': '13/45/26': 'USR8242');
+  chkPeek36('L': '*MDY': '/': '9999-12-': 'USR8242');
+  chkPeek36('T': '*USA': ':': '13:45:00': 'USR8242');
+end-proc;
+
+// ==========================================================================
+//  PEEK20/PEEK18: Der Pseudo-Datensatz für die Überschrift (PEEK05 beim
+//  Öffnen der Datei) enthält *HIVAL/*LOVAL im Format der Felder. Bisher
+//  brach PEEK36 bei einem *MDY-Datum mit RNQ0112 ab.
+// ==========================================================================
+
+dcl-proc test19_peek20_mdyDatePseudoRecord export;
+  dcl-ds qfile likeds(qobj_t) inz;
+  dcl-s buffer like(rcdbuf_t);
+  dcl-s msgid like(msgid_t);
+  dcl-s msgdta like(msgdta_t);
+
+  crtDdsFile(TST_MDY
+             : '     A          R PEEKMDY'
+             : '     A            ID             5S 0'
+             : '     A            DMDY            L         +
+DATFMT(*MDY) DATSEP(''/'')'
+             : '     A            TUSA            T         TIMFMT(*USA)'
+             : '     A          K ID');
+
+  qfile.name = TST_MDY;
+  qfile.lib = TST_LIB;
+  loadFields(qfile);
+
+  monitor;
+    peek20('*PHIVAL': buffer: msgid: msgdta);
+  on-error;
+    fail('PEEK20 *PHIVAL bricht bei *MDY/*USA ab: ' + lastMsg());
+  endmon;
+  aEqual('': msgid: 'PEEK20 *PHIVAL msgid');
+  chkMdyUsa(buffer: '*PHIVAL');
+
+  monitor;
+    peek20('*PLOVAL': buffer: msgid: msgdta);
+  on-error;
+    fail('PEEK20 *PLOVAL bricht bei *MDY/*USA ab: ' + lastMsg());
+  endmon;
+  aEqual('': msgid: 'PEEK20 *PLOVAL msgid');
+  chkMdyUsa(buffer: '*PLOVAL');
+end-proc;
+
+//  Felder ohne Schlüssel gelten in PEEK18 als absteigend, *HIVAL und
+//  *LOVAL tauschen dort. Geprüft wird deshalb nur, dass DMDY und TUSA
+//  einen der beiden Grenzwerte im Format des Feldes enthalten.
+dcl-proc chkMdyUsa;
+  dcl-pi *n;
+    i_buffer like(rcdbuf_t) const;
+    i_value  varchar(7) const;
+  end-pi;
+
+  dcl-ds rcd qualified inz;
+    id   zoned(5: 0);
+    dmdy char(8);
+    tusa char(8);
+  end-ds;
+  //  Zur Laufzeit umsetzen wie PEEK18: 00.00.00 ist dann '12:00 AM'
+  dcl-s timeLo time(*iso) inz(T'00.00.00');
+  dcl-s timeHi time(*iso) inz(T'23.59.59');
+
+  rcd = i_buffer;
+  assert(rcd.dmdy = '12/31/39' or rcd.dmdy = '01/01/40'
+         : 'DMDY bei ' + i_value + ' ist ''' + rcd.dmdy
+         + ''', erwartet 12/31/39 oder 01/01/40');
+  assert(rcd.tusa = %char(timeHi: *usa) or
+         rcd.tusa = %char(timeLo: *usa)
+         : 'TUSA bei ' + i_value + ' ist ''' + rcd.tusa + ''', erwartet '''
+         + %char(timeHi: *usa) + ''' oder ''' + %char(timeLo: *usa) + '''');
+end-proc;
+
+// ==========================================================================
+//  PEEK15: Ein Editierwort mit mehr als 26 Zeichen passt nicht in eine
+//  Zeile des Schlüsselwortbereichs (36 Stellen). PEEK15 verteilt es auf
+//  Folgezeilen, statt mit RNX0100 abzubrechen, und CRTDSPF nimmt die
+//  erzeugte Bildschirmdatei an.
+// ==========================================================================
+
+dcl-proc test20_peek15_longEditWord export;
+  dcl-ds qfile likeds(qobj_t) inz;
+  dcl-s scnnbrs like(int2_t);
+  dcl-s stage like(int4_t);
+  dcl-s peekLib like(lib_t);
+  dcl-s mbr char(10);
+  dcl-s i int(10);
+  dcl-s prefixes char(7) inz('FABCDEG');
+
+  //  AMOUNT 21P 2 mit einem Editierwort von 29 Zeichen
+  crtDdsFile(TST_EDW
+             : '     A          R PEEKEDW'
+             : '     A            ID             5S 0'
+             : '     A            AMOUNT        21P 2       +
+EDTWRD('' .   .   .   .   .   .  0, -'
+             : '     A                                       -'')');
+
+  qfile.name = TST_EDW;
+  qfile.lib = TST_LIB;
+  loadFields(qfile);
+
+  //  Quellteildateien und Overrides wie PEEK08
+  monitor;
+    runCmd('CRTSRCPF FILE(QTEMP/QPEEKGEN) RCDLEN(112) MBR(*NONE)');
+  on-error;
+  endmon;
+  for i = 1 to 7;
+    mbr = %subst(prefixes: i: 1) + 'EDW';
+    monitor;
+      runCmd('ADDPFM FILE(QTEMP/QPEEKGEN) MBR(' + %trim(mbr) + ')');
+    on-error;
+    endmon;
+    runCmd('CLRPFM FILE(QTEMP/QPEEKGEN) MBR(' + %trim(mbr) + ')');
+  endfor;
+
+  peekLib = getPeekLib();
+  runCmd('OVRDBF FILE(QPEEKGEN) TOFILE(QTEMP/QPEEKGEN) MBR(FEDW) +
+          OVRSCOPE(*JOB) SHARE(*NO)');
+  for i = 1 to 6;
+    runCmd('OVRDBF FILE(QCOPYLE' + %char(i) + ') TOFILE(QTEMP/QPEEKGEN) +
+            MBR(' + %subst(prefixes: i + 1: 1) + 'EDW) +
+            OVRSCOPE(*JOB) SHARE(*NO)');
+  endfor;
+  runCmd('OVRDBF FILE(PEEKSRC) TOFILE(' + %trim(peekLib) + '/PEEKSRC) +
+          MBR(DSPF) OVRSCOPE(*JOB) SHARE(*NO)');
+
+  scnnbrs = 0;
+  stage = 0;
+  monitor;
+    peek15(qfile: scnnbrs: bFalse: stage: 10);
+  on-error;
+    dltOvrPeek15();
+    fail('PEEK15 bricht beim Editierwort mit 29 Zeichen ab: ' + lastMsg());
+  endmon;
+  dltOvrPeek15();
+
+  monitor;
+    runCmd('CRTDSPF FILE(QTEMP/FEDW) SRCFILE(QTEMP/QPEEKGEN) +
+            SRCMBR(FEDW) REPLACE(*YES)');
+  on-error;
+    fail('CRTDSPF der von PEEK15 erzeugten DDS scheitert: ' + lastMsg());
+  endmon;
+
+  iEqual(1: scnnbrs: 'PEEK15 Anzahl Bildschirme');
+end-proc;
+
+// ==========================================================================
 //  Hilfsprozeduren
 // ==========================================================================
+
+//  Calls PEEK36 and compares the message ID (blank = value accepted).
+dcl-proc chkPeek36;
+  dcl-pi *n;
+    i_type      char(1) const;
+    i_format    char(4) const;
+    i_separator char(1) const;
+    i_value     varchar(26) const;
+    i_msgid     char(7) const;
+  end-pi;
+
+  dcl-s buffer like(smallBuffer_t);
+  dcl-s msgid like(msgid_t);
+  dcl-s msgdta like(msgdta_t);
+
+  buffer = i_value;
+  monitor;
+    peek36(buffer: i_type: i_format: i_separator: msgid: msgdta);
+  on-error;
+    fail('PEEK36 bricht bei ' + i_type + ' ' + i_format + ' '''
+         + i_value + ''' ab: ' + lastMsg());
+  endmon;
+
+  aEqual(i_msgid: msgid: 'PEEK36 ' + i_type + ' ' + i_format + ' '''
+         + i_value + '''');
+end-proc;
+
+//  Creates the physical file QTEMP/<i_file> from DDS lines, using a source
+//  file QTEMP/Q<i_file> (any existing file is replaced).
+dcl-proc crtDdsFile;
+  dcl-pi *n;
+    i_file  char(9) const;
+    i_line1 varchar(80) const;
+    i_line2 varchar(80) const;
+    i_line3 varchar(80) const;
+    i_line4 varchar(80) const;
+    i_line5 varchar(80) const options(*nopass);
+  end-pi;
+
+  dcl-s srcFile varchar(10);
+
+  srcFile = 'Q' + %trim(i_file);
+
+  monitor;
+    runCmd('DLTF FILE(QTEMP/' + %trim(i_file) + ')');
+  on-error;
+  endmon;
+  monitor;
+    runCmd('DLTF FILE(QTEMP/' + srcFile + ')');
+  on-error;
+  endmon;
+  runCmd('CRTSRCPF FILE(QTEMP/' + srcFile + ') RCDLEN(92) +
+          MBR(' + %trim(i_file) + ')');
+
+  addDdsLine(srcFile: 1: i_line1);
+  addDdsLine(srcFile: 2: i_line2);
+  addDdsLine(srcFile: 3: i_line3);
+  addDdsLine(srcFile: 4: i_line4);
+  if (%parms() >= %parmnum(i_line5));
+    addDdsLine(srcFile: 5: i_line5);
+  endif;
+
+  runCmd('CRTPF FILE(QTEMP/' + %trim(i_file) + ') +
+          SRCFILE(QTEMP/' + srcFile + ') SRCMBR(' + %trim(i_file) + ')');
+end-proc;
+
+dcl-proc addDdsLine;
+  dcl-pi *n;
+    i_srcFile varchar(10) const;
+    i_seq     int(10) const;
+    i_line    varchar(80) const;
+  end-pi;
+
+  runSql('INSERT INTO QTEMP/' + i_srcFile +
+         ' (SRCSEQ, SRCDAT, SRCDTA) VALUES(' + %char(i_seq) + ', 0, ''' +
+         %scanrpl('''': '''''': i_line) + ''')');
+end-proc;
+
+dcl-proc dltOvrPeek15;
+  monitor;
+    runCmd('DLTOVR FILE(QPEEKGEN QCOPYLE1 QCOPYLE2 QCOPYLE3 QCOPYLE4 +
+            QCOPYLE5 QCOPYLE6 PEEKSRC) LVL(*JOB)');
+  on-error;
+  endmon;
+end-proc;
 
 //  Returns the first candidate CCSID that cannot be converted to the job
 //  CCSID. With i_createTable = *on, also creates table QTEMP/PEEKCCSID

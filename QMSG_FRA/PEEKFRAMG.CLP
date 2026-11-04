@@ -9333,6 +9333,28 @@ s.'                                                                   +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
+     /*   Cmd-ADDMSGD für Message-ID :   USR8242                    */
+     /* Date, heure ou horodatage non valide dans la zone &1.      */
+     /*-------------------------------------------------------------*/
+
+             RMVMSGD MSGID(USR8242) MSGF(&LIB/&OBJ)
+             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+
+             ADDMSGD +
+                MSGID(USR8242) +
+                MSGF(&LIB/&OBJ) +
+                MSG( +
+'Date, heure ou horodatage non valide dans la zone &1.'               +
+                ) +
+                SEV(0) +
+                FMT( +
+                    (*CHAR 10) +
+                ) +
+                ALROPT(*NO) +
+                CCSID(&CCSID) +
+                /*  -EOF-  */
+
+     /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR9992                    */
      /* Echec sauvegarde paramètres utilisateur                     */
      /*-------------------------------------------------------------*/

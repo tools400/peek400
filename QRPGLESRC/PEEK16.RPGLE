@@ -224,7 +224,6 @@ dcl-s scnnbr          like(int4_t) inz;
 dcl-c UNKNOWN_FIELD_TYPE const(': Unknown field type');
 
 dcl-s pos             int(10) inz;
-dcl-s totlin          int(10) inz;
 
 dcl-s totfields       int(10) inz;
 dcl-s curfield        zoned(2) inz;
@@ -410,6 +409,16 @@ dow ('1');
   when (cmd = 'UCS2');
   //**                Exsr      SUB024
 
+  //  Sichern NULL-Indikatoren
+  when (cmd = 'NSAV');
+    p_wrtout(srcdta);
+    exsr sub026;
+
+  //  Zurückschreiben NULL-Indikatoren
+  when (cmd = 'NRST');
+    p_wrtout(srcdta);
+    exsr sub027;
+
   other;
     //  Nur kopieren ...
     p_wrtout(srcdta);
@@ -508,12 +517,6 @@ begsr sub004;
       iter;
     endif;
 
-    if (fldl0100.f1dtyp = 'G'); // = Graphic
-      totlin = f_nbrdsprw(fldl0100);
-    else;
-      totlin = 1;
-    endif;
-
     reset ds_exsr;
     $exsr_fct2 = 's_' + %trim(fldl0100.f1vfld);
     p_wrtout(ds_exsr);
@@ -554,12 +557,6 @@ begsr sub005;
       p_wrtout(ds_remark);
 
       iter;
-    endif;
-
-    if (fldl0100.f1dtyp = 'G'); // = Graphic
-      totlin = f_nbrdsprw(fldl0100);
-    else;
-      totlin = 1;
     endif;
 
     //  If        (EDT00002 = '1') and
@@ -763,37 +760,17 @@ begsr sub011;
 
     $eval_fct2 = 'FLD' + a#fdcount;
 
-    //  Initialisieren ...
+    //  Initialisieren mit dem kleinsten Wert im Format des Feldes
+    //  (alle Formate, z.B. '01/01/40' für *MDY; QCOPYLE,DATTIMFMT)
     select;
     //  ... Zeitfeld
     when (fldl0100.f1dtyp = 'T');
-      select;
-      //      ... *EUR
-      when (fldl0100.f1dtfm = '*EUR');
-        $eval_fct2  = %trimr($eval_fct2) + ' = EURT';
-      //      ... *JIS
-      when (fldl0100.f1dtfm = '*JIS');
-        $eval_fct2  = %trimr($eval_fct2) + ' = JIST';
-      //      ... *HMS
-      when (fldl0100.f1dtfm = '*HMS');
-        $eval_fct2  = %trimr($eval_fct2) + ' = HMST';
-      //      ... *ISO
-      other;
-        $eval_fct2  = %trimr($eval_fct2) + ' = ISOT';
-      endsl;
+      $eval_fct2  = %trimr($eval_fct2) + ' = ''' +
+                    f_extTime(fldl0100: T'00.00.00') + '''';
     //  ... Datumsfeld
     when (fldl0100.f1dtyp = 'L');
-      select;
-      //      ... *EUR
-      when (fldl0100.f1dtfm = '*EUR');
-        $eval_fct2  = %trimr($eval_fct2) + ' = EURL';
-      //      ... *JIS
-      when (fldl0100.f1dtfm = '*JIS');
-        $eval_fct2  = %trimr($eval_fct2) + ' = JISL';
-      //      ... *ISO
-      other;
-        $eval_fct2  = %trimr($eval_fct2) + ' = ISOL';
-      endsl;
+      $eval_fct2  = %trimr($eval_fct2) + ' = ''' +
+                    f_extDate(fldl0100: D'0001-01-01') + '''';
     //  ... Zeitstempelfeld
     when (fldl0100.f1dtyp = 'Z');
       $eval_fct2  = %trimr($eval_fct2) + ' = ISOZ';
@@ -1206,6 +1183,29 @@ begsr sub021;
     $begsr_f1 = 'f_' + %trim(fldl0100.f1vfld);
     p_wrtout(ds_begsr);
 
+    //  Felder variabler Länge nur bei einer Änderung übernehmen: Das
+    //  Bildschirmfeld hat feste Länge, %trimR entfernt sonst auch die
+    //  nachgestellten Leerzeichen eines unveränderten Wertes.
+    //    If        %trimR(FLD00005) <> %trimR(P_00000005)
+    //    Eval      P_00000005 = %trimR(FLD00005)
+    //    Endif
+    if (f_ischarfld(fldl0100) = bTrue and
+        f_isvarlen(fldl0100) = bTrue and totfields = 1);
+      reset ds_if;
+      $if_fct2 = '%trimR(FLD' + a#fdcount + ') <> %trimR(' +
+                 %trim(fldl0100.f1vfld) + ')';
+      p_wrtout(ds_if);
+      reset ds_eval;
+      $eval_fct2 = %trim(fldl0100.f1vfld) +
+                   ' = %trimR(FLD' + a#fdcount + ')';
+      p_wrtout(ds_eval);
+      reset ds_endif;
+      p_wrtout(ds_endif);
+      reset ds_endsr;
+      p_wrtout(ds_endsr);
+      iter;
+    endif;
+
     if (f_ischarfld(fldl0100) = bTrue);
       reset ds_eval;
       $eval_fct2 =
@@ -1327,6 +1327,70 @@ begsr sub024;
 endsr;
 
 //============================================================*
+//    SUB026        Sichern NULL-Indikatoren                  *
+//                  nullSave(00005) = %nullind(P_00000005)    *
+//============================================================*
+
+begsr sub026;
+
+  open peekfld;
+
+  fieldcount = 0;
+
+  setll 1 fpeekfld;
+
+  dow f_readfld <> bEOF;
+
+    fieldcount = fieldcount + 1;
+
+    if (f_isnotalw(fldl0100) = bTrue or fldl0100.f1nalw <> '1');
+      iter;
+    endif;
+
+    reset ds_eval;
+    $eval_fct2 = 'nullSave(' + a#fdcount + ') = %nullind(' +
+                 %trim(fldl0100.f1vfld) + ')';
+    p_wrtout(ds_eval);
+
+  enddo;
+
+  close peekfld;
+
+endsr;
+
+//============================================================*
+//    SUB027        Zurückschreiben NULL-Indikatoren          *
+//                  %nullind(P_00000005) = nullSave(00005)    *
+//============================================================*
+
+begsr sub027;
+
+  open peekfld;
+
+  fieldcount = 0;
+
+  setll 1 fpeekfld;
+
+  dow f_readfld <> bEOF;
+
+    fieldcount = fieldcount + 1;
+
+    if (f_isnotalw(fldl0100) = bTrue or fldl0100.f1nalw <> '1');
+      iter;
+    endif;
+
+    reset ds_eval;
+    $eval_fct2 = '%nullind(' + %trim(fldl0100.f1vfld) +
+                 ') = nullSave(' + a#fdcount + ')';
+    p_wrtout(ds_eval);
+
+  enddo;
+
+  close peekfld;
+
+endsr;
+
+//============================================================*
 //    SUB025        Umbenennen /copy Anweisungen              *
 //============================================================*
 
@@ -1391,4 +1455,9 @@ dcl-proc errorhandler;
   o_action = cee_percolate;
 
 end-proc;
+
+//============================================================*
+//  Datum und Zeit im Format des Feldes (f_extDate, f_extTime)*
+//============================================================*
+/COPY QCOPYLE,DATTIMFMT
 

@@ -9326,6 +9326,29 @@ embros.'                                                              +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
+     /*   Cmd-ADDMSGD für Message-ID :   USR8242                    */
+     /* Valor de fecha, hora o indicación de fecha y hora no válido*/
+     /*-------------------------------------------------------------*/
+
+             RMVMSGD MSGID(USR8242) MSGF(&LIB/&OBJ)
+             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+
+             ADDMSGD +
+                MSGID(USR8242) +
+                MSGF(&LIB/&OBJ) +
+                MSG( +
+'Valor de fecha, hora o indicación de fecha y hora no válido en el cam-
+po &1.'                                                               +
+                ) +
+                SEV(0) +
+                FMT( +
+                    (*CHAR 10) +
+                ) +
+                ALROPT(*NO) +
+                CCSID(&CCSID) +
+                /*  -EOF-  */
+
+     /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR9992                    */
      /* No se pudieron guardar los ajustes del usuario.             */
      /*-------------------------------------------------------------*/

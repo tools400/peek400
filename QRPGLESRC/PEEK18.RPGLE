@@ -122,9 +122,6 @@ dcl-s r_tgtvalue      like(i_tgtvalue) inz(*blanks);
 dcl-s r_dateiso       date(*iso) inz(*loval );
 dcl-s r_timeiso       time(*iso) inz(*loval );
 dcl-s r_timestmp      timestamp inz(*loval );
-dcl-s r_dftsp         like(fldl0100_t.f1dtsp) inz;
-dcl-s r_timebuf       char(8) inz;
-dcl-s r_datebuf       char(10) inz;
 
 dcl-s strpos          like(int4_t) inz;
 
@@ -942,25 +939,9 @@ endsr;
 
 begsr dateToBuffer;
 
-  //  Übertragen Zeitfeld gemäß Format ...
-  select;
-  //  ... *EUR (dd.mm.yyyy)
-  when (fldl0100.f1dtfm = '*EUR');
-    r_datebuf = %char(r_dateiso: *eur);
-    r_dftsp = '.';
-  //  ... *ISO (yyyy-mm-dd)
-  other;
-    r_datebuf = %char(r_dateiso: *iso);
-    r_dftsp = '-';
-  endsl;
-
-  if (fldl0100.f1dtsp <> ' '    ) and
-     (fldl0100.f1dtsp <> r_dftsp);
-    o_buffer =
-     %xlate(r_dftsp: fldl0100.f1dtsp: r_datebuf);
-  else;
-    o_buffer = r_datebuf;
-  endif;
+  //  Übertragen Datum gemäß Format und Trennzeichen des Feldes
+  //  (alle Formate, bisher nur *EUR und *ISO; QCOPYLE,DATTIMFMT)
+  o_buffer = f_extDate(fldl0100: r_dateiso);
 
 endsr;
 
@@ -1000,29 +981,9 @@ endsr;
 
 begsr timeToBuffer;
 
-  //  Übertragen Zeitfeld gemäß Format ...
-  select;
-  //  ... *HMS (hh:mm:ss)
-  when (fldl0100.f1dtfm = '*HMS');
-    r_timebuf = %char(r_timeiso: *hms);
-    r_dftsp = ':';
-  //  ... *EUR (hh.mm.ss)
-  when (fldl0100.f1dtfm = '*EUR');
-    r_timebuf = %char(r_timeiso: *eur);
-    r_dftsp = '.';
-  //  ... *ISO (hh.mm.ss)
-  other;
-    r_timebuf = %char(r_timeiso: *iso);
-    r_dftsp = '.';
-  endsl;
-
-  if (fldl0100.f1dtsp <> ' '    ) and
-     (fldl0100.f1dtsp <> r_dftsp);
-    o_buffer =
-     %xlate(r_dftsp: fldl0100.f1dtsp: r_timebuf);
-  else;
-    o_buffer = r_timebuf;
-  endif;
+  //  Übertragen Zeit gemäß Format und Trennzeichen des Feldes
+  //  (alle Formate, bisher ohne *USA und *JIS; QCOPYLE,DATTIMFMT)
+  o_buffer = f_extTime(fldl0100: r_timeiso);
 
 endsr;
 
@@ -1070,8 +1031,10 @@ begsr chkValue;
   if (ymsgid = '');
   //   Alles in Ordnung ...
   else;
+    //  USR8242: Ungültiger Datums-, Zeit- oder Zeitstempelwert im
+    //  Feld &1
     o_msgid = ymsgid;
-    o_msgdta = ymsgdta;
+    o_msgdta = fldl0100.f1fnme;
     leavesr;
   endif;
 
@@ -1494,4 +1457,9 @@ dcl-proc errorhandler;
   o_action = cee_percolate;
 
 end-proc;
+
+//============================================================*
+//  Datum und Zeit im Format des Feldes (f_extDate, f_extTime)*
+//============================================================*
+/COPY QCOPYLE,DATTIMFMT
 

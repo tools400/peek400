@@ -87,12 +87,7 @@ dcl-s dftval          char(30) inz(*blanks);
 dcl-s dftvallen       like(int4_t) inz;
 dcl-s idx             like(int4_t) inz;
 
-dcl-c TIME_A   '00.00.00';
-dcl-c DATE_A   '0001-01-01';
 dcl-c TIMESTMP_A  '0001-01-01-00.00.00.000000';
-
-dcl-c TIME_D   '23.59.59';
-dcl-c DATE_D   '9999-12-31';
 dcl-c TIMESTAMP_D  '9999-12-31-23.59.59.999999';
 
 dcl-ds fldl0100 likeds(fldl0100_t) inz;
@@ -278,25 +273,23 @@ endsr;
   // ... Aufbereiten Datums-, Zeit- und
   //     Zeitstempelfelder
   select;
-  // ... Time
+  // ... Time (im Format des Feldes, QCOPYLE,DATTIMFMT)
     when (fldl0100.f1dtyp = 'T');
       if (f2desc = 'D');
-      dftval = TIME_D;
-    dftvallen = %len(TIME_D);
+      dftval = f_extTime(fldl0100: T'23.59.59');
       else;
-      dftval = TIME_A;
-    dftvallen = %len(TIME_A);
+      dftval = f_extTime(fldl0100: T'00.00.00');
     endif;
+    dftvallen = %len(%trimr(dftval));
   exsr chkvalue;
-  // ... Date
+  // ... Date (im Format des Feldes, QCOPYLE,DATTIMFMT)
     when (fldl0100.f1dtyp = 'L');
       if (f2desc = 'D');
-      dftval = DATE_D;
-    dftvallen = %len(DATE_D);
+      dftval = f_extDate(fldl0100: D'9999-12-31');
       else;
-      dftval = DATE_A;
-    dftvallen = %len(DATE_A);
+      dftval = f_extDate(fldl0100: D'0001-01-01');
     endif;
+    dftvallen = %len(%trimr(dftval));
   exsr chkvalue;
   // ... Timestamp
     when (fldl0100.f1dtyp = 'Z');
@@ -462,4 +455,9 @@ endsr;
 o_action = cee_percolate;
 
 end-proc;
+
+//============================================================*
+//  Datum und Zeit im Format des Feldes (f_extDate, f_extTime)*
+//============================================================*
+/COPY QCOPYLE,DATTIMFMT
 

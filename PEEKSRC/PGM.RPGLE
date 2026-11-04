@@ -273,15 +273,8 @@ KEEP-D  keepCrsPos     C                   X__X
      D PEEK64_NAME     S                   like(r_pgmCallN) inz
      D EXIT04_NAME     S                   like(r_pgmCallN) inz
       *
-     D ISOT            C                   CONST('00.00.00')
-     D HMST            C                   CONST('00:00:00')
-     D EURT            C                   CONST('00.00.00')
-     D JIST            C                   CONST('00:00:00')
-      *
-     D ISOL            C                   CONST('0001-01-01')
-     D EURL            C                   CONST('01.01.0001')
-     D JISL            C                   CONST('0001-01-01')
-      *
+      *  Vorbelegung leerer Zeitstempelfelder. Datums- und Zeitfelder
+      *  belegt PEEK16 im Format des Feldes vor (ISO -).
      D ISOZ            C                   CONST('0001-01-01-00.00.00.000000')
       *
      D yFile           S             10A   inz
@@ -364,6 +357,10 @@ ALWL-D isAlwLower      S                   like(r_bool    ) inz(X____X)
      D pgmMsgDta       S                   like(r_msgDta  ) inz
       *
      D isInzSr         S                   like(bool_t) inz(bFalse)
+      *
+      *  NULL-Indikatoren (F8) während des erneuten Lesens zum Sperren
+      *  (Index = Feldnummer, max. 8000 Felder je Satzformat)
+     D nullSave        S               N   dim(8000) inz
       *
       *  ... Feldefinitionen zur Bildschirmsteuerung
 DEF1- *
@@ -865,7 +862,7 @@ ISO - *
      C                   Else
      C                   Eval      pgmMsgID  = 'USR8215'
      C                   Eval      pgmMsgDta = ' '
-     C                   Callp     p_sndPgmMg(pgmMsgID : pgmMsgDta : 'PEEK05')
+     C                   Callp     p_sndPgmMg(pgmMsgID : pgmMsgDta : psPgmName)
      C                   Endif
       *
       *  Beibehalten der Cursorposition ...
@@ -918,7 +915,10 @@ ISO - *
      C                   Else
       *
       *  ... vergleichen Before-Images auf Abweichungen
+      *      (NULL-Indikatoren aus F8 beim Lesen nicht verlieren)
+     C                   Exsr      saveNull
      C                   Exsr      readRecord
+     C                   Exsr      rstNull
      C                   If        b4Image <> RCD_DS
       *      ... freigeben Datensatz, bei unterschiedlichen Images
       *          und fragen Benutzer, wie es weiter gehen soll (dennoch aktualisieren?)
@@ -1033,7 +1033,9 @@ FSCN- *
      C                   Else
      C                   Unlock    File00
      C                   Endif
+     C                   Exsr      saveNull
      C                   Exsr      ReadRecord
+     C                   Exsr      rstNull
       ***                Exsr      DataToScn
       *  Setzen Fehler-Flag ...
      C                   Eval      isError = bTrue
@@ -1072,9 +1074,14 @@ FSCN- *
      C     lockRecord    Begsr
       *
       *  Lesen Datensatz mit Satzsperre für nachfolgenden UPDATE ...
+      *  CHAIN überschreibt auch die NULL-Indikatoren. Die mit F8
+      *  gesetzten Indikatoren sichern und danach zurückschreiben,
+      *  die Feldinhalte überträgt FSCN anschließend vom Bildschirm.
+     C                   Exsr      saveNull
      C     i_rcdNbr      Chain(E)  FFILE00
      C                   Eval      isFound = %found(FILE00)
      C                   Eval      isError = %error()
+     C                   Exsr      rstNull
       *  ... Fehler aufgetreten
      C                   If        isError = bTrue
      C                   Eval      pgmMsgID  = 'USR8156'
@@ -1098,6 +1105,19 @@ FSCN- *
      C                   Eval      isRcdLocked = bFalse
      C                   Endif
       *
+     C                   Endsr
+      *
+      *============================================================*
+      *    saveNull      Sichern der NULL-Indikatoren (F8)         *
+      *    rstNull       Zurückschreiben der NULL-Indikatoren      *
+      *============================================================*
+      *
+     C     saveNull      Begsr
+NSAV- *
+     C                   Endsr
+      *
+     C     rstNull       Begsr
+NRST- *
      C                   Endsr
       *
       *============================================================*
@@ -1389,10 +1409,12 @@ FSCN- *
      C                                    : yProtect: yIsUcs2
      C                                    : yMsgID: yMsgDta)
      C                   Else
+      *  Die Datenbank hat CHAR-Felder schon beim Lesen in die
+      *  Job-CCSID umgesetzt: PEEK45 darf sie nicht noch einmal umsetzen.
      C                   Callp     PEEK45(i_dsp80: io_headerType: i_copyright
      C                                    : yFldName: yFldInhalt: yLength
      C                                    : yProtect: yIsUcs2
-     C                                    : yMsgID: yMsgDta)
+     C                                    : yMsgID: yMsgDta: bTrue)
      C                   Endif
       *
      C                   If        yMsgID = 'USR8112'                           = ENTER

@@ -125,6 +125,9 @@ dcl-s idx             int(10) inz;
 dcl-s ofs             int(10) inz;
 dcl-s htranscoder     like(htranscoder_t ) inz;
 
+//  Der Wert steht schon in der Job-CCSID (Änderungsprogramm, PGM)
+dcl-s isjobccsid      like(bool_t) inz(bFalse);
+
 dcl-s isInzSr         like(bool_t) inz(bFalse);
 
 //*******************************************************************
@@ -142,6 +145,7 @@ dcl-pi peek45;
   i_isucs2        const like(int4_t);
   o_msgid         like(msgid_t);
   o_msgdta        like(msgdta_t);
+  i_isjobccsid    const like(bool_t) options(*nopass);
 end-pi;
 
 dcl-ds f_key likerec(fpeekfld: *key);
@@ -770,8 +774,10 @@ begsr fill##2;
             ptmphexbin    :
             ptmphexlen * 2);
 
-  //  Umsetzen Zeichensatz
-  if (f_hasccsid(fldl0100) = bTrue);
+  //  Umsetzen Zeichensatz (nicht, wenn die Datenbank CHAR-Felder schon
+  //  in die Job-CCSID umgesetzt hat; UCS-2 setzt sie nicht um)
+  if (f_hasccsid(fldl0100) = bTrue and
+      (isjobccsid = bFalse or i_isucs2 <> 0));
     monitor;
       htranscoder =
        transcoder_tojobccsid(fldl0100.f1fdcc);
@@ -865,6 +871,13 @@ endsr;
 //============================================================*
 
 begsr first;
+
+  // - Steht der Wert schon in der Job-CCSID?
+  if (%parms() >= %parmnum(i_isjobccsid));
+    isjobccsid = i_isjobccsid;
+  else;
+    isjobccsid = bFalse;
+  endif;
 
   // - Öffnen der Dateien
   open peekfld;

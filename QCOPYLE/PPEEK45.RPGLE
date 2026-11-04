@@ -15,4 +15,6 @@ dcl-pr peek45 extpgm(peek45_name);
   i_isucs2                           const like(int4_t);
   o_msgid                                  like(msgid_t);
   o_msgdta                                 like(msgdta_t);
+  //  bTrue: Der Wert steht schon in der Job-CCSID (Änderungsprogramm)
+  i_isjobccsid                       const like(bool_t) options(*nopass);
 end-pr;
