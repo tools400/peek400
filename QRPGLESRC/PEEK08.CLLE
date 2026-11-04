@@ -64,6 +64,11 @@
           DCL        VAR(&TEXT      ) TYPE(*CHAR)  LEN(50)
           DCL        VAR(&DBGVIEW   ) TYPE(*CHAR)  LEN(10) VALUE(*SOURCE)
 
+/* Parameter der Subroutinen PRPSRCMBR und OVRGEN */
+          DCL        VAR(&SRCMBR    ) TYPE(*CHAR)  LEN(10)
+          DCL        VAR(&SRCTYPE   ) TYPE(*CHAR)  LEN(10)
+          DCL        VAR(&TMPLMBR   ) TYPE(*CHAR)  LEN(10)
+
           DCL        VAR(&NUMVAL    ) TYPE(*DEC )  LEN(10 0)
           DCL        VAR(&STAGE     ) TYPE(*CHAR)  LEN( 4)
           DCL        VAR(&NUMSTAGES ) TYPE(*INT )  LEN( 4)
@@ -182,131 +187,33 @@
              ENDDO
 
  /*  SRC-MBR   */
- /*  DSP-FILE  */
              CHGVAR     VAR(&TEXT) VALUE(&QFile *CAT &FormatID *CAT +
                           &FormatName *CAT &UpdPgm)
 
-             CHKOBJ     OBJ(QTEMP/QPEEKGEN ) OBJTYPE(*FILE) +
-                          MBR(&DSPF)                        +
-                          AUT(*NONE)
-             MONMSG     MSGID(CPF9815) EXEC(DO)
-               ADDPFM     FILE(QTEMP/QPEEKGEN ) MBR(&DSPF)
-             ENDDO
+ /*  DSP-FILE  */
+             CHGVAR     VAR(&SRCMBR ) VALUE(&DSPF)
+             CHGVAR     VAR(&SRCTYPE) VALUE('DSPF')
+             CALLSUBR   SUBR(PRPSRCMBR)
 
-             CLRPFM     FILE(QTEMP/QPEEKGEN ) MBR(&DSPF)
-             CHGPFM     FILE(QTEMP/QPEEKGEN ) MBR(&DSPF)  +
-                          SRCTYPE(DSPF) TEXT(&TEXT)
-
- /*  SRC-MBR   */
- /*  COPY      */
-             CHKOBJ     OBJ(QTEMP/QPEEKGEN ) OBJTYPE(*FILE) +
-                          MBR(&COPY1)                       +
-                          AUT(*NONE)
-             MONMSG     MSGID(CPF9815) EXEC(DO)
-               ADDPFM     FILE(QTEMP/QPEEKGEN ) MBR(&COPY1)
-             ENDDO
-
-             CLRPFM     FILE(QTEMP/QPEEKGEN ) MBR(&COPY1)
-             CHGPFM     FILE(QTEMP/QPEEKGEN ) MBR(&COPY1) +
-                          SRCTYPE(RPGLE) TEXT(&TEXT)
-
- /*  SRC-MBR   */
- /*  COPY2     */
-             CHKOBJ     OBJ(QTEMP/QPEEKGEN ) OBJTYPE(*FILE) +
-                          MBR(&COPY2)                       +
-                          AUT(*NONE)
-             MONMSG     MSGID(CPF9815) EXEC(DO)
-               ADDPFM     FILE(QTEMP/QPEEKGEN ) MBR(&COPY2)
-             ENDDO
-
-             CLRPFM     FILE(QTEMP/QPEEKGEN ) MBR(&COPY2)
-             CHGPFM     FILE(QTEMP/QPEEKGEN ) MBR(&COPY2)  +
-                          SRCTYPE(RPGLE) TEXT(&TEXT)
-
- /*  SRC-MBR   */
- /*  COPY3     */
-             CHKOBJ     OBJ(QTEMP/QPEEKGEN ) OBJTYPE(*FILE) +
-                          MBR(&COPY3)                       +
-                          AUT(*NONE)
-             MONMSG     MSGID(CPF9815) EXEC(DO)
-               ADDPFM     FILE(QTEMP/QPEEKGEN ) MBR(&COPY3)
-             ENDDO
-
-             CLRPFM     FILE(QTEMP/QPEEKGEN ) MBR(&COPY3)
-             CHGPFM     FILE(QTEMP/QPEEKGEN ) MBR(&COPY3)  +
-                          SRCTYPE(RPGLE) TEXT(&TEXT)
-
- /*  SRC-MBR   */
- /*  COPY4     */
-             CHKOBJ     OBJ(QTEMP/QPEEKGEN ) OBJTYPE(*FILE) +
-                          MBR(&COPY4)                       +
-                          AUT(*NONE)
-             MONMSG     MSGID(CPF9815) EXEC(DO)
-               ADDPFM     FILE(QTEMP/QPEEKGEN ) MBR(&COPY4)
-             ENDDO
-
-             CLRPFM     FILE(QTEMP/QPEEKGEN ) MBR(&COPY4)
-             CHGPFM     FILE(QTEMP/QPEEKGEN ) MBR(&COPY4)  +
-                          SRCTYPE(RPGLE) TEXT(&TEXT)
-
- /*  SRC-MBR   */
- /*  COPY5     */
-             CHKOBJ     OBJ(QTEMP/QPEEKGEN ) OBJTYPE(*FILE) +
-                          MBR(&COPY5)                       +
-                          AUT(*NONE)
-             MONMSG     MSGID(CPF9815) EXEC(DO)
-               ADDPFM     FILE(QTEMP/QPEEKGEN ) MBR(&COPY5)
-             ENDDO
-
-             CLRPFM     FILE(QTEMP/QPEEKGEN ) MBR(&COPY5)
-             CHGPFM     FILE(QTEMP/QPEEKGEN ) MBR(&COPY5)  +
-                          SRCTYPE(RPGLE) TEXT(&TEXT)
-
- /*  SRC-MBR   */
- /*  COPY6     */
-             CHKOBJ     OBJ(QTEMP/QPEEKGEN ) OBJTYPE(*FILE) +
-                          MBR(&COPY6)                       +
-                          AUT(*NONE)
-             MONMSG     MSGID(CPF9815) EXEC(DO)
-               ADDPFM     FILE(QTEMP/QPEEKGEN ) MBR(&COPY6)
-             ENDDO
-
-             CLRPFM     FILE(QTEMP/QPEEKGEN ) MBR(&COPY6)
-             CHGPFM     FILE(QTEMP/QPEEKGEN ) MBR(&COPY6)  +
-                          SRCTYPE(RPGLE) TEXT(&TEXT)
+ /*  COPY1 - COPY6  */
+             CHGVAR     VAR(&SRCTYPE) VALUE('RPGLE')
+             CHGVAR     VAR(&SRCMBR ) VALUE(&COPY1)
+             CALLSUBR   SUBR(PRPSRCMBR)
+             CHGVAR     VAR(&SRCMBR ) VALUE(&COPY2)
+             CALLSUBR   SUBR(PRPSRCMBR)
+             CHGVAR     VAR(&SRCMBR ) VALUE(&COPY3)
+             CALLSUBR   SUBR(PRPSRCMBR)
+             CHGVAR     VAR(&SRCMBR ) VALUE(&COPY4)
+             CALLSUBR   SUBR(PRPSRCMBR)
+             CHGVAR     VAR(&SRCMBR ) VALUE(&COPY5)
+             CALLSUBR   SUBR(PRPSRCMBR)
+             CHGVAR     VAR(&SRCMBR ) VALUE(&COPY6)
+             CALLSUBR   SUBR(PRPSRCMBR)
 
  /*  OVRDBF'S  */
-             OVRDBF     FILE(QPEEKGEN ) TOFILE(QTEMP/QPEEKGEN ) +
-                          MBR(&DSPF) SECURE(*YES) +
-                          OVRSCOPE(*CALLLVL) SHARE(*NO)
-
-             OVRDBF     FILE(QCOPYLE1 ) TOFILE(QTEMP/QPEEKGEN ) +
-                          MBR(&COPY1) SECURE(*YES) +
-                          OVRSCOPE(*CALLLVL) SHARE(*NO)
-
-             OVRDBF     FILE(QCOPYLE2 ) TOFILE(QTEMP/QPEEKGEN ) +
-                          MBR(&COPY2) SECURE(*YES) +
-                          OVRSCOPE(*CALLLVL) SHARE(*NO)
-
-             OVRDBF     FILE(QCOPYLE3 ) TOFILE(QTEMP/QPEEKGEN ) +
-                          MBR(&COPY3) SECURE(*YES) +
-                          OVRSCOPE(*CALLLVL) SHARE(*NO)
-
-             OVRDBF     FILE(QCOPYLE4 ) TOFILE(QTEMP/QPEEKGEN ) +
-                          MBR(&COPY4) SECURE(*YES) +
-                          OVRSCOPE(*CALLLVL) SHARE(*NO)
-
-             OVRDBF     FILE(QCOPYLE5 ) TOFILE(QTEMP/QPEEKGEN ) +
-                          MBR(&COPY5) SECURE(*YES) +
-                          OVRSCOPE(*CALLLVL) SHARE(*NO)
-
-             OVRDBF     FILE(QCOPYLE6 ) TOFILE(QTEMP/QPEEKGEN ) +
-                          MBR(&COPY6) SECURE(*YES) +
-                          OVRSCOPE(*CALLLVL) SHARE(*NO)
-
-             OVRDBF     FILE(PEEKSRC  ) TOFILE(&PRODLIB/PEEKSRC) +
-                          MBR(DSPF) SECURE(*YES) +
-                          OVRSCOPE(*CALLLVL) SHARE(*NO)
+             CHGVAR     VAR(&SRCMBR ) VALUE(&DSPF)
+             CHGVAR     VAR(&TMPLMBR) VALUE('DSPF')
+             CALLSUBR   SUBR(OVRGEN)
 
  /*  PROGRAMM STARTEN  */
              RMVMSG     PGMQ(*SAME (*)) CLEAR(*ALL)
@@ -332,60 +239,18 @@
                                                 )
              ENDDO
 
-             DLTOVR     FILE(QCOPYLE1 ) LVL(*)
-             DLTOVR     FILE(QCOPYLE2 ) LVL(*)
-             DLTOVR     FILE(QCOPYLE3 ) LVL(*)
-             DLTOVR     FILE(QCOPYLE4 ) LVL(*)
-             DLTOVR     FILE(QCOPYLE5 ) LVL(*)
-             DLTOVR     FILE(QCOPYLE6 ) LVL(*)
-             DLTOVR     FILE(QPEEKGEN ) LVL(*)
-             DLTOVR     FILE(PEEKSRC  ) LVL(*)
+             CALLSUBR   SUBR(DLTOVRGEN)
 
  /*  SRC-MBR   */
  /*  PROGRAMM  */
-             CHKOBJ     OBJ(QTEMP/QPEEKGEN ) OBJTYPE(*FILE) +
-                          MBR(&PGM)                         +
-                          AUT(*NONE)
-             MONMSG     MSGID(CPF9815) EXEC(DO)
-               ADDPFM     FILE(QTEMP/QPEEKGEN ) MBR(&PGM)
-             ENDDO
-
-             CLRPFM     FILE(QTEMP/QPEEKGEN ) MBR(&PGM)
-             CHGPFM     FILE(QTEMP/QPEEKGEN ) MBR(&PGM) +
-                          SRCTYPE(RPGLE) TEXT(&TEXT)
+             CHGVAR     VAR(&SRCMBR ) VALUE(&PGM)
+             CHGVAR     VAR(&SRCTYPE) VALUE('RPGLE')
+             CALLSUBR   SUBR(PRPSRCMBR)
 
  /*  OVRDBF'S  */
-             OVRDBF     FILE(QPEEKGEN ) TOFILE(QTEMP/QPEEKGEN ) +
-                          MBR(&PGM) SECURE(*YES) +
-                          OVRSCOPE(*CALLLVL) SHARE(*NO)
-
-             OVRDBF     FILE(QCOPYLE1 ) TOFILE(QTEMP/QPEEKGEN ) +
-                          MBR(&COPY1) SECURE(*YES) +
-                          OVRSCOPE(*CALLLVL) SHARE(*NO)
-
-             OVRDBF     FILE(QCOPYLE2 ) TOFILE(QTEMP/QPEEKGEN ) +
-                          MBR(&COPY2) SECURE(*YES) +
-                          OVRSCOPE(*CALLLVL) SHARE(*NO)
-
-             OVRDBF     FILE(QCOPYLE3 ) TOFILE(QTEMP/QPEEKGEN ) +
-                          MBR(&COPY3) SECURE(*YES) +
-                          OVRSCOPE(*CALLLVL) SHARE(*NO)
-
-             OVRDBF     FILE(QCOPYLE4 ) TOFILE(QTEMP/QPEEKGEN ) +
-                          MBR(&COPY4) SECURE(*YES) +
-                          OVRSCOPE(*CALLLVL) SHARE(*NO)
-
-             OVRDBF     FILE(QCOPYLE5 ) TOFILE(QTEMP/QPEEKGEN ) +
-                          MBR(&COPY5) SECURE(*YES) +
-                          OVRSCOPE(*CALLLVL) SHARE(*NO)
-
-             OVRDBF     FILE(QCOPYLE6 ) TOFILE(QTEMP/QPEEKGEN ) +
-                          MBR(&COPY6) SECURE(*YES) +
-                          OVRSCOPE(*CALLLVL) SHARE(*NO)
-
-             OVRDBF     FILE(PEEKSRC  ) TOFILE(&PRODLIB/PEEKSRC) +
-                          MBR(PGM) SECURE(*YES) +
-                          OVRSCOPE(*CALLLVL) SHARE(*NO)
+             CHGVAR     VAR(&SRCMBR ) VALUE(&PGM)
+             CHGVAR     VAR(&TMPLMBR) VALUE('PGM')
+             CALLSUBR   SUBR(OVRGEN)
 
  /*  PROGRAMM STARTEN  */
              RMVMSG     PGMQ(*SAME (*)) CLEAR(*ALL)
@@ -405,14 +270,7 @@
                                              &NUMSTAGES  +
                                              )
 
-             DLTOVR     FILE(QCOPYLE1 ) LVL(*)
-             DLTOVR     FILE(QCOPYLE2 ) LVL(*)
-             DLTOVR     FILE(QCOPYLE3 ) LVL(*)
-             DLTOVR     FILE(QCOPYLE4 ) LVL(*)
-             DLTOVR     FILE(QCOPYLE5 ) LVL(*)
-             DLTOVR     FILE(QCOPYLE6 ) LVL(*)
-             DLTOVR     FILE(QPEEKGEN ) LVL(*)
-             DLTOVR     FILE(PEEKSRC  ) LVL(*)
+             CALLSUBR   SUBR(DLTOVRGEN)
 
  /*  CRTDSPF           */
              CHGVAR     VAR(&NUMVAL) VALUE(%BIN(&STAGE 1 4) + 1)
@@ -520,6 +378,81 @@
                           &ERRNBRTYP &ERRPGMMSGQ &ERRSTKCTR &ERRCODE)
 
              GOTO       CMDLBL(ENDE)
+
+/* ---------------------------------------------------------------- */
+/* Quellteildatei &SRCMBR in QTEMP/QPEEKGEN anlegen und leeren      */
+/* (Teildatei-Art &SRCTYPE)                                         */
+/* ---------------------------------------------------------------- */
+             SUBR       SUBR(PRPSRCMBR)
+
+               CHKOBJ     OBJ(QTEMP/QPEEKGEN ) OBJTYPE(*FILE) +
+                            MBR(&SRCMBR) AUT(*NONE)
+               MONMSG     MSGID(CPF9815) EXEC(DO)
+                 ADDPFM     FILE(QTEMP/QPEEKGEN ) MBR(&SRCMBR)
+               ENDDO
+
+               CLRPFM     FILE(QTEMP/QPEEKGEN ) MBR(&SRCMBR)
+               CHGPFM     FILE(QTEMP/QPEEKGEN ) MBR(&SRCMBR) +
+                            SRCTYPE(&SRCTYPE) TEXT(&TEXT)
+
+             ENDSUBR
+
+/* ---------------------------------------------------------------- */
+/* Overrides für die Generierung: QPEEKGEN auf &SRCMBR, QCOPYLE1 -  */
+/* QCOPYLE6 auf &COPY1 - &COPY6 und PEEKSRC auf die Vorlage         */
+/* &TMPLMBR                                                         */
+/* ---------------------------------------------------------------- */
+             SUBR       SUBR(OVRGEN)
+
+               OVRDBF     FILE(QPEEKGEN ) TOFILE(QTEMP/QPEEKGEN ) +
+                            MBR(&SRCMBR) SECURE(*YES) +
+                            OVRSCOPE(*CALLLVL) SHARE(*NO)
+
+               OVRDBF     FILE(QCOPYLE1 ) TOFILE(QTEMP/QPEEKGEN ) +
+                            MBR(&COPY1) SECURE(*YES) +
+                            OVRSCOPE(*CALLLVL) SHARE(*NO)
+
+               OVRDBF     FILE(QCOPYLE2 ) TOFILE(QTEMP/QPEEKGEN ) +
+                            MBR(&COPY2) SECURE(*YES) +
+                            OVRSCOPE(*CALLLVL) SHARE(*NO)
+
+               OVRDBF     FILE(QCOPYLE3 ) TOFILE(QTEMP/QPEEKGEN ) +
+                            MBR(&COPY3) SECURE(*YES) +
+                            OVRSCOPE(*CALLLVL) SHARE(*NO)
+
+               OVRDBF     FILE(QCOPYLE4 ) TOFILE(QTEMP/QPEEKGEN ) +
+                            MBR(&COPY4) SECURE(*YES) +
+                            OVRSCOPE(*CALLLVL) SHARE(*NO)
+
+               OVRDBF     FILE(QCOPYLE5 ) TOFILE(QTEMP/QPEEKGEN ) +
+                            MBR(&COPY5) SECURE(*YES) +
+                            OVRSCOPE(*CALLLVL) SHARE(*NO)
+
+               OVRDBF     FILE(QCOPYLE6 ) TOFILE(QTEMP/QPEEKGEN ) +
+                            MBR(&COPY6) SECURE(*YES) +
+                            OVRSCOPE(*CALLLVL) SHARE(*NO)
+
+               OVRDBF     FILE(PEEKSRC  ) TOFILE(&PRODLIB/PEEKSRC) +
+                            MBR(&TMPLMBR) SECURE(*YES) +
+                            OVRSCOPE(*CALLLVL) SHARE(*NO)
+
+             ENDSUBR
+
+/* ---------------------------------------------------------------- */
+/* Overrides für die Generierung entfernen                          */
+/* ---------------------------------------------------------------- */
+             SUBR       SUBR(DLTOVRGEN)
+
+               DLTOVR     FILE(QCOPYLE1 ) LVL(*)
+               DLTOVR     FILE(QCOPYLE2 ) LVL(*)
+               DLTOVR     FILE(QCOPYLE3 ) LVL(*)
+               DLTOVR     FILE(QCOPYLE4 ) LVL(*)
+               DLTOVR     FILE(QCOPYLE5 ) LVL(*)
+               DLTOVR     FILE(QCOPYLE6 ) LVL(*)
+               DLTOVR     FILE(QPEEKGEN ) LVL(*)
+               DLTOVR     FILE(PEEKSRC  ) LVL(*)
+
+             ENDSUBR
 
              ENDPGM
 

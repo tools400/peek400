@@ -2,7 +2,7 @@
 // ==========================================================================
 //  Peek/400 - Unit-Tests der Programme PEEK01, PEEK02, PEEK03, PEEK04,
 //  PEEK06, PEEK07, PEEK10 und PEEK11 sowie der Transcoder-Liste von
-//  PEEK71 (iRPGUnit).
+//  PEEK71 und der Datei PEEKFMT (iRPGUnit).
 //
 //  Zum Erstellen und Ausführen muss die Peek-Bibliothek (QCOPYLE,
 //  Bindeverzeichnis PEEK, PEEKUSR, PEEKFLD, PEEKFMT, Nachrichtendatei
@@ -31,6 +31,7 @@ ctl-opt nomain;
 /copy QCOPYLE,D_INFDS
 /copy QCOPYLE,FLDL0100
 /copy QCOPYLE,RCDL0200
+/copy QCOPYLE,MBRD0200
 /copy QCOPYLE,OBJD0100
 /copy QCOPYLE,QUSROBJD
 /copy QCOPYLE,QUSRJOBI
@@ -44,6 +45,7 @@ ctl-opt nomain;
 /copy QCOPYLE,PPEEK07
 /copy QCOPYLE,PPEEK10
 /copy QCOPYLE,PPEEK11
+/copy QCOPYLE,PPEEK13
 /undefine internal_prototype
 
 /copy QCOPYLE,PPEEK53
@@ -477,6 +479,35 @@ dcl-proc test12_peek10_unknownFile export;
   endmon;
 
   aEqual('USR0002': msgid: 'PEEK10 msgid für NOFILE');
+end-proc;
+
+// ==========================================================================
+//  PEEKFMT: PEEK10 leert PEEKFMT bei jedem Aufruf und schreibt die
+//  Satzformate neu. Mit REUSEDLT(*YES) (CRTPEEKOBJ) sammeln sich dabei
+//  keine gelöschten Sätze an.
+// ==========================================================================
+
+dcl-proc test13_peekfmt_reuseDeletedRecords export;
+  dcl-ds qfile likeds(qobj_t) inz;
+  dcl-ds qfmt likeds(qobj_t) inz;
+  dcl-ds mbrd0200 likeds(mbrd0200_t) inz;
+  dcl-s msgid like(msgid_t);
+  dcl-s msgdta like(msgdta_t);
+  dcl-s i int(10);
+
+  qfile.name = TST_FILE;
+  qfile.lib = TST_LIB;
+  for i = 1 to 3;
+    peek10(qfile: msgid: msgdta);
+  endfor;
+
+  qfmt.name = 'PEEKFMT';
+  qfmt.lib = TST_LIB;
+  peek13(qfmt: '*FIRST': mbrd0200);
+
+  iEqual(1: mbrd0200.m2nbrrcdon: 'Sätze in PEEKFMT nach 3 x PEEK10');
+  iEqual(0: mbrd0200.m2nbrrcddl
+         : 'Gelöschte Sätze in PEEKFMT nach 3 x PEEK10 (REUSEDLT(*YES)?)');
 end-proc;
 
 // ==========================================================================

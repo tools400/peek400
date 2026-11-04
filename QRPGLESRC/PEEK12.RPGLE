@@ -222,8 +222,13 @@ begsr c_enter;
         leave;
       endif;
 
-      o_rcdl0200 = $$rcdl0200;
-      o_fmtnbr = fmtnbr;
+      //  Die erste markierte Zeile auswählen. Weitere Markierungen und
+      //  Zeilen, deren Markierung wieder gelöscht wurde, ignorieren.
+      if (sfpau <> '');
+        o_rcdl0200 = $$rcdl0200;
+        o_fmtnbr = fmtnbr;
+        leave;
+      endif;
     enddo;
   endif;
 

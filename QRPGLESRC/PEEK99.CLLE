@@ -397,7 +397,13 @@ ADDBNDDIRE:
                                      *BCAT  'OPTION('   +
                                      *TCAT  '*EVENTF'   +
                                      *TCAT  ')'         +
+                                     *BCAT  'REUSEDLT(' +
+                                     *TCAT  '*YES'      +
+                                     *TCAT  ')'         +
                                      )
+                /* REUSEDLT(*YES): Gelöschte Sätze wiederverwenden,  */
+                /* z.B. in PEEKFMT und PEEKFLD, die bei jedem Öffnen */
+                /* einer Datei geleert und neu gefüllt werden.       */
                 IF         COND(&MBR *EQ 'PEEKENV') THEN(DO)
                    CHGVAR     VAR(&CMD) VALUE(&CMD         +
                                         *BCAT  'MAXMBRS('  +
