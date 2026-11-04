@@ -6136,6 +6136,15 @@ begsr openfile;
   //  ... Satzformate
   //      ... abrufen der Satzformate
   exsr getfmtlist;
+  if (yMsgID <> '');
+    //  Satzformate konnten nicht abgerufen werden (USR0002),
+    //  Öffnen abbrechen.
+    p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
+    yMsgID = '';
+    yMsgDta = '';
+    exsr msgnofile;
+    leavesr;
+  endif;
   //      ... auswählen Satzformat
   exsr getrcdfrmt;
 

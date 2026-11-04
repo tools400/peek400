@@ -435,6 +435,9 @@ begsr first;
   // - Dateien öffnen
   open peekfmt;
 
+  o_msgid = *blanks;
+  o_msgdta = *blanks;
+
   // - Prüfen auf Satzformat
   if (i_fmtmode = MODE_BATCH) and
      ((peek_01_ds.nbrOfRcd = 1) or (i_fmtname <> ''));
@@ -459,8 +462,6 @@ begsr first;
 
   o_rcdl0200 = *blanks;
   o_fmtnbr = *zeros;
-  o_msgid = *blanks;
-  o_msgdta = *blanks;
 
   // - Darstellung der Subfile
   sflmde = '1';

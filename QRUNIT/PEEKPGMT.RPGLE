@@ -1,15 +1,17 @@
 **FREE
 // ==========================================================================
 //  Peek/400 - Unit-Tests der Programme PEEK01, PEEK02, PEEK03, PEEK04,
-//  PEEK06 und PEEK07 sowie der Transcoder-Liste von PEEK71 (iRPGUnit).
+//  PEEK06, PEEK07, PEEK10 und PEEK11 sowie der Transcoder-Liste von
+//  PEEK71 (iRPGUnit).
 //
 //  Zum Erstellen und Ausführen muss die Peek-Bibliothek (QCOPYLE,
-//  Bindeverzeichnis PEEK, PEEKUSR, PEEKFLD, Nachrichtendatei PEEKGER) in
-//  der Bibliotheksliste stehen.
+//  Bindeverzeichnis PEEK, PEEKUSR, PEEKFLD, PEEKFMT, Nachrichtendatei
+//  PEEKGER) in der Bibliotheksliste stehen.
 //
 //  Die Tests legen ihre Testdateien in QTEMP an und überschreiben PEEKFLD
-//  mit QTEMP/PEEKFLD. Die Peek-Bibliothek ist die Bibliothek, in der die
-//  Datei PEEKUSR in der Bibliotheksliste steht.
+//  und PEEKFMT mit QTEMP/PEEKFLD und QTEMP/PEEKFMT. Die Peek-Bibliothek
+//  ist die Bibliothek, in der die Datei PEEKUSR in der Bibliotheksliste
+//  steht.
 // ==========================================================================
 //    >>PRE-COMPILER<<
 //      >>CRTCMD<<  RUCRTRPG    TSTPGM(&LI/&OB) +
@@ -28,6 +30,7 @@ ctl-opt nomain;
 /copy QCOPYLE,D_VARDEF
 /copy QCOPYLE,D_INFDS
 /copy QCOPYLE,FLDL0100
+/copy QCOPYLE,RCDL0200
 /copy QCOPYLE,OBJD0100
 /copy QCOPYLE,QUSROBJD
 /copy QCOPYLE,QUSRJOBI
@@ -39,6 +42,8 @@ ctl-opt nomain;
 /copy QCOPYLE,PPEEK04
 /copy QCOPYLE,PPEEK06
 /copy QCOPYLE,PPEEK07
+/copy QCOPYLE,PPEEK10
+/copy QCOPYLE,PPEEK11
 /undefine internal_prototype
 
 /copy QCOPYLE,PPEEK53
@@ -127,6 +132,14 @@ dcl-proc setUpSuite export;
   on-error;
   endmon;
   runCmd('OVRDBF FILE(PEEKFLD) TOFILE(QTEMP/PEEKFLD) OVRSCOPE(*JOB)');
+
+  //  PEEK10 löscht und schreibt PEEKFMT.
+  monitor;
+    runCmd('CRTDUPOBJ OBJ(PEEKFMT) FROMLIB(' + %trim(peekLib) + ') +
+            OBJTYPE(*FILE) TOLIB(QTEMP) DATA(*NO)');
+  on-error;
+  endmon;
+  runCmd('OVRDBF FILE(PEEKFMT) TOFILE(QTEMP/PEEKFMT) OVRSCOPE(*JOB)');
 
   monitor;
     runSql('CREATE TABLE QTEMP/PEEKKEYS (KEY CHAR(10) NOT NULL, +
@@ -412,6 +425,58 @@ dcl-proc test10_peek71_failedTranscoderUsesSlot export;
 
   iEqual(70: failures: 'Aufrufe mit CCSID ' + %char(ccsid)
          + ', die ohne "Maximum number of transcoders reached." scheitern');
+end-proc;
+
+// ==========================================================================
+//  PEEK11: Ein gescheitertes *CREATE (Datei nicht vorhanden) ergibt 0
+//  Satzformate ohne Escape-Nachricht und ohne DUMP. Ein *READ danach darf
+//  nicht die vorherige Liste weiterlesen.
+// ==========================================================================
+
+dcl-proc test11_peek11_failedCreate export;
+  dcl-ds qfile likeds(qobj_t) inz;
+  dcl-ds rcdl0200 likeds(rcdl0200_t) inz;
+  dcl-s nume like(int4_t);
+
+  qfile.name = TST_FILE;
+  qfile.lib = TST_LIB;
+  peek11(qfile: '*CREATE': nume: rcdl0200);
+  iEqual(1: nume: 'PEEK11 *CREATE für ' + TST_FILE + ', Anzahl');
+
+  qfile.name = 'NOFILE';
+  monitor;
+    peek11(qfile: '*CREATE': nume: rcdl0200);
+  on-error;
+    fail('PEEK11 *CREATE für NOFILE bricht ab: ' + lastMsg());
+  endmon;
+  iEqual(0: nume: 'PEEK11 *CREATE für NOFILE, Anzahl');
+
+  peek11(qfile: '*READ': nume: rcdl0200);
+  aEqual('': rcdl0200.r2fmtname
+         : 'PEEK11 *READ nach gescheitertem *CREATE, Satzformat');
+end-proc;
+
+// ==========================================================================
+//  PEEK10: Datei nicht vorhanden. PEEK10 meldet USR0002 ("Liste der
+//  Satzformate ... konnte nicht abgerufen werden"), PEEK05 bricht dann
+//  das Öffnen ab.
+// ==========================================================================
+
+dcl-proc test12_peek10_unknownFile export;
+  dcl-ds qfile likeds(qobj_t) inz;
+  dcl-s msgid like(msgid_t);
+  dcl-s msgdta like(msgdta_t);
+
+  qfile.name = 'NOFILE';
+  qfile.lib = TST_LIB;
+
+  monitor;
+    peek10(qfile: msgid: msgdta);
+  on-error;
+    fail('PEEK10 bricht ab: ' + lastMsg());
+  endmon;
+
+  aEqual('USR0002': msgid: 'PEEK10 msgid für NOFILE');
 end-proc;
 
 // ==========================================================================

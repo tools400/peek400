@@ -126,6 +126,7 @@ dcl-proc peek11;
   on-error;
     dump;
     o_nume = 0;
+    currliste = -1;
   endmon;
 
   //====================================================*
@@ -147,8 +148,11 @@ dcl-proc peek11;
     qusptrus(qusrspc: pspcptr);
 
     //  get file record formats
-    quslrcd(qusrspc: 'RCDL0200'
-           : i_qfile: '0': errcode);
+    //  (Fehler als Rückgabewert, nicht als Escape-Nachricht, z.B.
+    //  CPF9812, wenn die Datei nicht existiert)
+    clear errcode;
+    errcode.bytprv = %size(errcode);
+    quslrcd(qusrspc: 'RCDL0200': i_qfile: '0': errcode);
 
     if (errcode.bytavl > 0);
       o_nume = 0;
@@ -212,6 +216,7 @@ dcl-proc peek11;
   begsr seterror;
 
     o_nume = 0;
+    currliste = -1;
 
   endsr;
 
