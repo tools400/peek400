@@ -122,7 +122,7 @@
               : *null: *omit);
 
        // - Meldung
-       if (i_nomsg = bTrue);
+       if (i_nomsg = bFalse);
          p_sndstsmg('USR8106': ' ');
        else;
        //        keine Statusmeldung ausgeben

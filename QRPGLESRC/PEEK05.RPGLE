@@ -98,7 +98,6 @@ dcl-ds hfile04  likeds(hfile_t);
 /COPY QCOPYLE,USR8100
 /COPY QCOPYLE,USR8108
 /COPY QCOPYLE,USR8110
-/COPY QCOPYLE,USR8123
 /COPY QCOPYLE,USR8128
 /COPY QCOPYLE,USR8144
 /COPY QCOPYLE,USR8147
@@ -528,8 +527,6 @@ dcl-s wrk#sfpau       inz            like(sfpau);
 dcl-s last#rcdnr      like(rcdNbr_t)   inz(0);
 //  Farbattribute einsetzen
 dcl-s wrk#ofs         like(int4_t) inz;
-//  Felder mit mehr als 512 Zeichen im Datensatz
-dcl-s isfld512        char(1) inz(bFalse);
 //  Felder für Suchfunktion
 dcl-s srchmode        char(10) inz('*NEW');
 dcl-s srchfndrcd      like(rcdNbr_t)  inz(0 );
@@ -6413,15 +6410,6 @@ begsr openfile;
         exsr s_dspnrm;
       endif;
 
-      // ... Felder größer 512 Zeichen
-      if (isfld512 = bTrue);
-        // TODO: remove code and /copy statement
-        // ... ohne Commit
-        // usr8123.var1 = COLOR_white_u;
-        // usr8123.var2 = COLOR_white;
-        // p_sndpgmmg('USR8123': usr8123: sds.pgmname);
-      endif;
-
       // ... Felder, welche nicht erlaubt sind
       clear f_key;
       f_key.f_field = *blanks;
@@ -6853,12 +6841,6 @@ begsr getfldlist;
   yLibrary = ##library;
   peek01(yQFile: ##format: $$rcdfmtid
         : yMsgID: yMsgDta);
-
-  if (yMsgID = 'USR8123');
-    isfld512 = bTrue;
-  else;
-    isfld512 = bFalse;
-  endif;
 
   open peekfld;
   open peekfldl1;
@@ -8011,8 +7993,8 @@ begsr first;
   sftop = 1;
   sfbot = 1;
 
-  // -  Netzwerkattribute
-  peek07('SYSNAME': bFalse
+  // -  Netzwerkattribute (ohne Statusmeldung)
+  peek07('SYSNAME': bTrue
         : yattrlen: yattrtyp: yvalue);
   if (yattrlen > 0);
     $$system = %subst(yvalue: 1: yattrlen);

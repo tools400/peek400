@@ -518,8 +518,8 @@ endsr;
 
 begsr clcintnbr;
 
-  // -  Netzwerkattribute
-  peek07('SYSNAME': bFalse
+  // -  Netzwerkattribute (ohne Statusmeldung)
+  peek07('SYSNAME': bTrue
         : yattrlen: yattrtyp: yvalue);
   if (yattrlen > *zeros);
     ysysname = %subst(yvalue: 1: yattrlen);

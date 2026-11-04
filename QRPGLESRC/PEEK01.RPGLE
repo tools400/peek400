@@ -60,8 +60,6 @@ dcl-s peek02_name like(pgmcalln_t);
 dcl-s exit06_name like(pgmcalln_t);
 dcl-s isExit06 like(bool_t) inz(bFalse);
 
-dcl-s isFld512 char(1) inz(bFalse);
-
 dcl-s seqNbr like(f_seq);
 dcl-s fieldCount like(int4_t);
 
@@ -90,18 +88,15 @@ exsr inzsr;
 exsr first;
 
 //  create list of database relation
-peek02(i_qfile: i_rcdfmt: '*CREATE': numFields
-      : fldl0100: o_rcdfmtid);
+peek02(i_qfile: i_rcdfmt: '*CREATE': numFields: fldl0100: o_rcdfmtid);
 
 seqNbr = 0;
 fieldCount = 0;
-isFld512 = bFalse;
 
 //  read each entry
 for do_x1 = 1 to numFields;
 
-  peek02(i_qfile: i_rcdfmt: '*READ': rc
-        : fldl0100: o_rcdfmtid);
+  peek02(i_qfile: i_rcdfmt: '*READ': rc: fldl0100: o_rcdfmtid);
 
   clear fpeekfld;
 
@@ -179,8 +174,6 @@ for do_x1 = 1 to numFields;
   f_ffd = fldl0100;
 
   write fpeekfld;
-
-  isFld512 = f_istolong(fldl0100);
 endfor;
 
 //  delete list
@@ -194,13 +187,8 @@ if (numFields = 0);
   USR0001.var3 = i_rcdfmt;
   o_msgdta = usr0001;
 else;
-  if (isFld512 = bTrue);
-    o_msgid = 'USR8123';
-    o_msgdta = '';
-  else;
-    o_msgid = '';
-    o_msgdta = '';
-  endif;
+  o_msgid = '';
+  o_msgdta = '';
 endif;
 
 *inlr = '1';
