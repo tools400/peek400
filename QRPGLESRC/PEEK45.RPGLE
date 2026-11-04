@@ -792,6 +792,11 @@ begsr fill##2;
         %subst(ptmphexbin: i: 1);
         %subst(ptmphexbin: (2*i)  : 1) = ' ';
       endfor;
+    elseif (ptmpnewlen < ptmphexlen);
+      //  Kürzer, aber nicht halb so lang (UTF-8: 'Ä' 2 Bytes -> 1 Zeichen):
+      //  Rest mit Leerzeichen füllen, sonst erscheinen dort die
+      //  restlichen, nicht umgesetzten Bytes.
+      %subst(ptmphexbin: ptmpnewlen + 1: ptmphexlen - ptmpnewlen) = '';
     endif;
   endif;
 

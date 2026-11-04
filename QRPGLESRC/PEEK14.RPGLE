@@ -77,6 +77,7 @@ dcl-s io_nullmap like(nullmap_t) dim(NULL_MAP_SIZE);
 /COPY QCOPYLE,PPEEK53
 /COPY QCOPYLE,PPEEK58
 /COPY QCOPYLE,PPEEK63
+/COPY QCOPYLE,PPEEK71
 
 dcl-ds fldl0100 likeds(fldl0100_t) inz;
 
@@ -99,6 +100,8 @@ dcl-s yfldinhalt      like(rcdbuf_t) inz(*blanks);
 dcl-s ylength         like(int4_t) inz;
 dcl-s yProtect        like(bool_t) inz(bTrue);
 dcl-s yisucs2         like(int4_t) inz;
+dcl-s htranscoder     like(htranscoder_t) inz;
+dcl-s cvtlength       like(int4_t) inz;
 
 dcl-s sflpage         like(int4_t) inz;
 dcl-s sflpagedds      like(sflpage   ) inz;
@@ -499,6 +502,32 @@ begsr fromBuffer;
       yisucs2 = fldl0100.f1fdcc;
     else;
       yisucs2 = 0;
+    endif;
+
+    //  Der Texteditor zeigt die Zeichen in der Job-CCSID an: CHAR-Felder
+    //  mit eigener CCSID (z.B. UTF-8) wie in der Liste (PEEK06) umsetzen.
+    //  Der Editor wird nur zur Anzeige aufgerufen, deshalb wird nicht
+    //  zurückgesetzt. Wird der Wert kürzer, bleibt die Feldlänge.
+    if (editor = '*STRING' and yisucs2 = 0 and
+        f_hasccsid(fldl0100) = bTrue);
+      monitor;
+        htranscoder = transcoder_tojobccsid(fldl0100.f1fdcc);
+        cvtlength = transcoder_xlatebuffer(htranscoder
+                                          : %addr(yfldinhalt)
+                                          : ylength
+                                          : %size(yfldinhalt));
+      on-error;
+        //  Error: Editor not allowed (CCSID cannot be converted).
+        clear usr8221;
+        usr8221.var1 = fldl0100.f1fnme;
+        p_sndpgmmg('USR8221': usr8221: sds.pgmname);
+        leavesr;
+      endmon;
+      if (cvtlength < ylength);
+        %subst(yfldinhalt: cvtlength + 1: ylength - cvtlength) = '';
+      else;
+        ylength = cvtlength;
+      endif;
     endif;
 
     if (editor = '*HEX');
