@@ -42,11 +42,6 @@ dcl-ds peek# likeds(infds_t);
 
 dcl-ds hfile04  likeds(hfile_t);
 
-dcl-ds cursorPos qualified;
-  row    int(10) inz;
-  column int(10) inz;
-end-ds;
-
 dcl-ds io_buff;
   io_bufffld like(rcdbuf_t);
 end-ds;
@@ -826,9 +821,9 @@ endsr;
 
 begsr keepcsrpos;
 
-  //  Beibehalten der Cursorosition
-  csrRow = cursorPos.row;
-  csrCol = cursorPos.column;
+  //  Beibehalten der Cursorosition (nach EXFMT PBCTL berechnet)
+  csrRow = cursorPosition.row;
+  csrCol = cursorPosition.column;
 
   csrCol = csrCol - pos;
   csrCol = csrCol - 1;
@@ -878,14 +873,21 @@ endsr;
 
 begsr readrcd;
 
-  if cio_chainwithrrn(hfile04
-                   : i_rcdNbr
-                   : bFalse
-                   : io_buff
-                   : io_nullmap) = bFalse;
-    isrecord = bFalse;
-  else;
-    isrecord = bTrue;
+  isrecord = bFalse;
+  if (cio_isopen(hfile04) = bTrue);
+    if cio_chainwithrrn(hfile04
+                     : i_rcdNbr
+                     : bFalse
+                     : io_buff
+                     : io_nullmap) = bTrue;
+      isrecord = bTrue;
+    endif;
+  endif;
+
+  //  Satz nicht mehr vorhanden (z.B. inzwischen gelöscht): Der Puffer
+  //  ist leer, deshalb Meldung "Datensatz nicht gefunden."
+  if (isrecord = bFalse);
+    p_sndpgmmg('USR8120': '': sds.pgmname);
   endif;
 
 endsr;

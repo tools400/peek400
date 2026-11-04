@@ -694,17 +694,15 @@
                 r_nachk = *blanks;
              else;
                 //   ... auffüllen
-                for do_x2 = 1 to *hival;
-                   //*   1             SUBST     R_NachK:F1DECPR_A1
+                for do_x2 = 1 to %len(r_nachk);
                    r_a1 = %subst(r_nachk: fldl0100.f1decp: 1);
 
                    if (r_a1 <> *blanks);
-                      //*   F1DECP        SUBST (P) R_NachK       R_NachK
                       r_nachk = %subst(r_nachk: 1: fldl0100.f1decp);
                       leave;
                    endif;
 
-                   r_nachk = r_nachk + '0';
+                   r_nachk = %trimr(r_nachk) + '0';
                 endfor;
              endif;
 

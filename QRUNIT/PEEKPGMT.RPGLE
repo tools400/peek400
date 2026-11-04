@@ -1,17 +1,17 @@
 **FREE
 // ==========================================================================
 //  Peek/400 - Unit-Tests der Programme PEEK01, PEEK02, PEEK03, PEEK04,
-//  PEEK06, PEEK07, PEEK10 und PEEK11 sowie der Transcoder-Liste von
-//  PEEK71 und der Datei PEEKFMT (iRPGUnit).
+//  PEEK06, PEEK07, PEEK10, PEEK11, PEEK18, PEEK19 und PEEK20 sowie der
+//  Transcoder-Liste von PEEK71 und der Datei PEEKFMT (iRPGUnit).
 //
 //  Zum Erstellen und Ausführen muss die Peek-Bibliothek (QCOPYLE,
 //  Bindeverzeichnis PEEK, PEEKUSR, PEEKFLD, PEEKFMT, Nachrichtendatei
 //  PEEKGER) in der Bibliotheksliste stehen.
 //
 //  Die Tests legen ihre Testdateien in QTEMP an und überschreiben PEEKFLD
-//  und PEEKFMT mit QTEMP/PEEKFLD und QTEMP/PEEKFMT. Die Peek-Bibliothek
-//  ist die Bibliothek, in der die Datei PEEKUSR in der Bibliotheksliste
-//  steht.
+//  mit seinen logischen Dateien und PEEKFMT mit den Kopien in QTEMP. Die
+//  Peek-Bibliothek ist die Bibliothek, in der die Datei PEEKUSR in der
+//  Bibliotheksliste steht.
 // ==========================================================================
 //    >>PRE-COMPILER<<
 //      >>CRTCMD<<  RUCRTRPG    TSTPGM(&LI/&OB) +
@@ -35,6 +35,7 @@ ctl-opt nomain;
 /copy QCOPYLE,OBJD0100
 /copy QCOPYLE,QUSROBJD
 /copy QCOPYLE,QUSRJOBI
+/copy QCOPYLE,SET0003
 
 /define internal_prototype
 /copy QCOPYLE,PPEEK01
@@ -46,6 +47,9 @@ ctl-opt nomain;
 /copy QCOPYLE,PPEEK10
 /copy QCOPYLE,PPEEK11
 /copy QCOPYLE,PPEEK13
+/copy QCOPYLE,PPEEK18
+/copy QCOPYLE,PPEEK19
+/copy QCOPYLE,PPEEK20
 /undefine internal_prototype
 
 /copy QCOPYLE,PPEEK53
@@ -100,6 +104,8 @@ end-pr;
 dcl-c TST_LIB    'QTEMP';
 dcl-c TST_FILE   'PEEKKEYS';     // Tabelle mit langem SQL-Spaltennamen
 dcl-c TST_CCSID  'PEEKCCSID';    // Tabelle mit nicht umsetzbarer CCSID
+dcl-c TST_FLOAT  'PEEKFLOAT';    // Tabelle mit REAL und DOUBLE
+dcl-c TST_UTF8   'PEEKUTF8';     // Tabelle mit CHAR CCSID 1208
 dcl-c TST_USRF   'PEEKTSTUSR';   // Kopie von PEEKUSR
 dcl-c TST_USER   'TESTUSER';
 
@@ -127,26 +133,32 @@ dcl-proc setUpSuite export;
   endmon;
   p_setusr(TST_USER: TST_USRF: TST_LIB);
 
-  //  PEEK01 löscht und schreibt PEEKFLD.
-  monitor;
-    runCmd('CRTDUPOBJ OBJ(PEEKFLD) FROMLIB(' + %trim(peekLib) + ') +
-            OBJTYPE(*FILE) TOLIB(QTEMP) DATA(*NO)');
-  on-error;
-  endmon;
-  runCmd('OVRDBF FILE(PEEKFLD) TOFILE(QTEMP/PEEKFLD) OVRSCOPE(*JOB)');
+  //  PEEK01 löscht und schreibt PEEKFLD. PEEK19 und PEEK20 lesen es über
+  //  die logischen Dateien, deren Kopien auf QTEMP/PEEKFLD verweisen.
+  dupAndOverride(peekLib: 'PEEKFLD');
+  dupAndOverride(peekLib: 'PEEKFLDL0');
+  dupAndOverride(peekLib: 'PEEKFLDL1');
+  dupAndOverride(peekLib: 'PEEKFLDL2');
 
   //  PEEK10 löscht und schreibt PEEKFMT.
-  monitor;
-    runCmd('CRTDUPOBJ OBJ(PEEKFMT) FROMLIB(' + %trim(peekLib) + ') +
-            OBJTYPE(*FILE) TOLIB(QTEMP) DATA(*NO)');
-  on-error;
-  endmon;
-  runCmd('OVRDBF FILE(PEEKFMT) TOFILE(QTEMP/PEEKFMT) OVRSCOPE(*JOB)');
+  dupAndOverride(peekLib: 'PEEKFMT');
 
   monitor;
     runSql('CREATE TABLE QTEMP/PEEKKEYS (KEY CHAR(10) NOT NULL, +
             SEQ NUMERIC(5, 0) NOT NULL, +
             CUSTOMER_NUMBER FOR COLUMN CUSTNBR DECIMAL(7, 0) NOT NULL)');
+  on-error;
+  endmon;
+
+  monitor;
+    runSql('CREATE TABLE QTEMP/PEEKFLOAT (F REAL NOT NULL, +
+            D DOUBLE NOT NULL, C CHAR(5) NOT NULL)');
+  on-error;
+  endmon;
+
+  monitor;
+    runSql('CREATE TABLE QTEMP/PEEKUTF8 (U CHAR(10) CCSID 1208 NOT NULL, +
+            C CHAR(5) NOT NULL)');
   on-error;
   endmon;
 end-proc;
@@ -511,6 +523,190 @@ dcl-proc test13_peekfmt_reuseDeletedRecords export;
 end-proc;
 
 // ==========================================================================
+//  PEEK18: Ein Schlüsselfeld, dessen CCSID nicht in die Job-CCSID umgesetzt
+//  werden kann (GRAPHIC CCSID 835), darf PEEK18 und damit PEEK19, PEEK20
+//  und PEEK05 nicht abbrechen. Die Längen bleiben die, mit denen PEEK20
+//  rechnet: extern ein Zeichen je Grafikzeichen, intern die Feldlänge.
+// ==========================================================================
+
+dcl-proc test14_peek18_unconvertibleCcsid export;
+  dcl-ds qfile likeds(qobj_t) inz;
+  dcl-ds fldl0100 likeds(fldl0100_t) inz;
+  dcl-ds set0003 likeds(set0003_t) inz;
+  dcl-s buffer like(rcdbuf_t);
+  dcl-s outbuf like(rcdbuf_t);
+  dcl-s outlen like(int4_t);
+  dcl-s msgid like(msgid_t);
+  dcl-s msgdta like(msgdta_t);
+  dcl-s ccsid int(10);
+
+  ccsid = findUnconvertibleCcsid(*on);
+  if (ccsid = 0);
+    fail('Keine GRAPHIC-CCSID gefunden, die nicht in die Job-CCSID '
+         + %char(getJobCcsid()) + ' umgesetzt werden kann.');
+  endif;
+
+  qfile.name = TST_CCSID;
+  qfile.lib = TST_LIB;
+  setKeys(qfile: '"G"');
+  fldl0100 = fieldOf('G');
+  set0003 = f_getusrsg('*ACCESSKEY');
+
+  buffer = *allx'40';
+  monitor;
+    peek18(fldl0100: TST_CCSID: buffer: '*EXTERN': '*CURRENT'
+           : outbuf: outlen: msgid: msgdta);
+  on-error;
+    fail('PEEK18 *EXTERN bricht bei GRAPHIC CCSID ' + %char(ccsid)
+         + ' ab: ' + lastMsg());
+  endmon;
+  iEqual(5 + %len(%trimr(set0003.set_dlmtr)): outlen
+         : 'PEEK18 *EXTERN Länge von GRAPHIC(5) mit Trennzeichen');
+
+  buffer = *allx'40';
+  monitor;
+    peek18(fldl0100: TST_CCSID: buffer: '*INTERN': '*CURRENT'
+           : outbuf: outlen: msgid: msgdta);
+  on-error;
+    fail('PEEK18 *INTERN bricht bei GRAPHIC CCSID ' + %char(ccsid)
+         + ' ab: ' + lastMsg());
+  endmon;
+  iEqual(10: outlen: 'PEEK18 *INTERN Länge von GRAPHIC(5)');
+end-proc;
+
+// ==========================================================================
+//  PEEK19 und PEEK20: Hinter einem REAL- oder DOUBLE-Schlüsselfeld liest
+//  PEEK20 das nächste Feld dort, wo PEEK19 es abgelegt hat (Breite von
+//  %editflt, nicht die Feldlänge 4 oder 8).
+// ==========================================================================
+
+dcl-proc test15_peek20_floatKey export;
+  dcl-ds qfile likeds(qobj_t) inz;
+  dcl-ds rcd qualified inz;
+    f float(4);
+    d float(8);
+    c char(5);
+  end-ds;
+  dcl-s buffer like(rcdbuf_t);
+  dcl-s keyval like(keybuf_t);
+  dcl-s keybuf like(rcdbuf_t);
+  dcl-s msgid like(msgid_t);
+  dcl-s msgdta like(msgdta_t);
+
+  qfile.name = TST_FLOAT;
+  qfile.lib = TST_LIB;
+  setKeys(qfile: '"F", "D", "C"');
+
+  rcd.f = 1.5;
+  rcd.d = -2.25;
+  rcd.c = 'ABCDE';
+  buffer = rcd;
+
+  peek19(buffer: keyval: msgid: msgdta);
+  peek20(keyval: keybuf: msgid: msgdta);
+  aEqual('': msgid: 'PEEK20 msgid');
+
+  rcd = keybuf;
+  assert(rcd.f = 1.5: 'F nach PEEK19/PEEK20 ist ' + %char(rcd.f)
+         + ', Schlüssel ''' + %trimr(keyval) + '''');
+  assert(rcd.d = -2.25: 'D nach PEEK19/PEEK20 ist ' + %char(rcd.d)
+         + ', Schlüssel ''' + %trimr(keyval) + '''');
+  aEqual('ABCDE': rcd.c: 'C nach PEEK19/PEEK20 (REAL und DOUBLE davor)');
+end-proc;
+
+// ==========================================================================
+//  PEEK19 und PEEK20 mit CHAR(10) CCSID 1208 = 'ÄÖÜ': Der externe Teil ist
+//  10 Zeichen breit, obwohl 'ÄÖÜ' in UTF-8 nur 6 Bytes belegt, und PEEK20
+//  macht daraus wieder genau 10 Bytes.
+// ==========================================================================
+
+dcl-proc test16_peek20_utf8Key export;
+  dcl-ds qfile likeds(qobj_t) inz;
+  dcl-ds set0003 likeds(set0003_t) inz;
+  dcl-s buffer like(rcdbuf_t);
+  dcl-s keyval like(keybuf_t);
+  dcl-s keybuf like(rcdbuf_t);
+  dcl-s msgid like(msgid_t);
+  dcl-s msgdta like(msgdta_t);
+
+  qfile.name = TST_UTF8;
+  qfile.lib = TST_LIB;
+  setKeys(qfile: '"U", "C"');
+  set0003 = f_getusrsg('*ACCESSKEY');
+
+  //  U = 'ÄÖÜ' in UTF-8 und 4 Leerzeichen, C = 'ABCDE'
+  buffer = x'C384C396C39C20202020' + 'ABCDE';
+
+  peek19(buffer: keyval: msgid: msgdta);
+  iEqual(10 + %len(%trimr(set0003.set_dlmtr)) + 1: %scan('ABCDE': keyval)
+         : 'Position von C im externen Schlüssel');
+
+  peek20(keyval: keybuf: msgid: msgdta);
+  aEqual(hexOf(%subst(buffer: 1: 15)): hexOf(%subst(keybuf: 1: 15))
+         : 'Schlüssel nach PEEK19/PEEK20');
+end-proc;
+
+// ==========================================================================
+//  PEEK18 und PEEK20 lesen *ACCESSKEY bei jedem Aufruf: Nach einer
+//  Änderung (ohne Vorzeichen, Trennzeichen |) passen PEEK19 und PEEK20
+//  sofort zusammen.
+// ==========================================================================
+
+dcl-proc test17_peek18_accessKeyChanged export;
+  dcl-ds qfile likeds(qobj_t) inz;
+  dcl-ds rcd qualified inz;
+    f float(4);
+    d float(8);
+    c char(5);
+  end-ds;
+  dcl-ds orig likeds(set0003_t) inz;
+  dcl-ds chg likeds(set0003_t) inz;
+  dcl-s buffer like(rcdbuf_t);
+  dcl-s keyval like(keybuf_t);
+  dcl-s keybuf like(rcdbuf_t);
+  dcl-s msgid like(msgid_t);
+  dcl-s msgdta like(msgdta_t);
+  dcl-s expected varchar(64);
+
+  qfile.name = TST_FLOAT;
+  qfile.lib = TST_LIB;
+  setKeys(qfile: '"F", "D", "C"');
+
+  rcd.f = 1.5;
+  rcd.d = 2.25;
+  rcd.c = 'ABCDE';
+  buffer = rcd;
+
+  //  Erst mit der bisherigen Einstellung, damit PEEK18 und PEEK20 sie
+  //  schon einmal gelesen haben.
+  orig = f_getusrsg('*ACCESSKEY');
+  peek19(buffer: keyval: msgid: msgdta);
+  peek20(keyval: keybuf: msgid: msgdta);
+
+  chg = orig;
+  chg.set_signx = bFalse;
+  chg.set_dlmtr = '|';
+  p_updusrsg('*ACCESSKEY': chg);
+  monitor;
+    peek19(buffer: keyval: msgid: msgdta);
+    peek20(keyval: keybuf: msgid: msgdta);
+  on-error;
+    p_updusrsg('*ACCESSKEY': orig);
+    fail('PEEK19/PEEK20 brechen nach Änderung von *ACCESSKEY ab: '
+         + lastMsg());
+  endmon;
+  p_updusrsg('*ACCESSKEY': orig);
+
+  //  %editflt ohne führendes Vorzeichen (PEEK18 F_to_extern)
+  expected = %subst(%editflt(rcd.f): 2) + '|'
+           + %subst(%editflt(rcd.d): 2) + '|ABCDE|';
+  aEqual(expected: %trimr(keyval): 'PEEK19 ohne Vorzeichen, Trennzeichen |');
+
+  rcd = keybuf;
+  aEqual('ABCDE': rcd.c: 'C nach PEEK20 ohne Vorzeichen, Trennzeichen |');
+end-proc;
+
+// ==========================================================================
 //  Hilfsprozeduren
 // ==========================================================================
 
@@ -600,6 +796,65 @@ dcl-proc loadFields;
   if (msgid <> '');
     fail('PEEK01 für ' + %trim(i_qfile.name) + ': ' + msgid);
   endif;
+end-proc;
+
+//  Fills PEEKFLD with the fields of the file and marks the fields of
+//  i_order as key fields (PEEK01, PEEK03).
+dcl-proc setKeys;
+  dcl-pi *n;
+    i_qfile likeds(qobj_t) const;
+    i_order varchar(256) const;
+  end-pi;
+
+  dcl-s msgid like(msgid_t);
+  dcl-s msgdta like(msgdta_t);
+
+  loadFields(i_qfile);
+  peek03(i_qfile: i_qfile.name: SQL_SEQ: i_order: msgid: msgdta);
+  if (msgid <> '');
+    fail('PEEK03 für ' + %trim(i_qfile.name) + ': ' + msgid);
+  endif;
+end-proc;
+
+//  Returns the field description of a field in QTEMP/PEEKFLD.
+dcl-proc fieldOf;
+  dcl-pi *n likeds(fldl0100_t);
+    i_field char(10) const;
+  end-pi;
+
+  dcl-ds fldl0100 likeds(fldl0100_t) inz;
+  dcl-s isFound ind;
+
+  open peekfld;
+  chain i_field rpeekfld;
+  isFound = %found(peekfld);
+  if (isFound);
+    fldl0100 = k_ffd;
+  endif;
+  close peekfld;
+
+  if (not isFound);
+    fail('Feld ' + %trim(i_field) + ' nicht in QTEMP/PEEKFLD.');
+  endif;
+
+  return fldl0100;
+end-proc;
+
+//  Copies a file of the Peek library without data to QTEMP (unless it is
+//  already there) and overrides the file with the copy for the job.
+dcl-proc dupAndOverride;
+  dcl-pi *n;
+    i_peekLib like(lib_t) const;
+    i_file    char(10) const;
+  end-pi;
+
+  monitor;
+    runCmd('CRTDUPOBJ OBJ(' + %trim(i_file) + ') FROMLIB('
+           + %trim(i_peekLib) + ') OBJTYPE(*FILE) TOLIB(QTEMP) DATA(*NO)');
+  on-error;
+  endmon;
+  runCmd('OVRDBF FILE(' + %trim(i_file) + ') TOFILE(QTEMP/'
+         + %trim(i_file) + ') OVRSCOPE(*JOB)');
 end-proc;
 
 //  Returns KSEQ of a field in QTEMP/PEEKFLD, -1 if not found.

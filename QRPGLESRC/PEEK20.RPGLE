@@ -350,6 +350,17 @@ endsr;
       else;
       // keine Korrektur erforderlich
     endif;
+      elseif (f_isfloatfld(fldl0100) = bTrue);
+      // ... bei Gleitkommawerten: %editflt ohne führendes
+      //     Vorzeichen (PEEK18 F_to_extern), nicht f1flen
+        if (fldl0100.f1flen = 4);
+      kp = kp + 13;
+        else;
+      kp = kp + 22;
+    endif;
+        if (set0003.set_signx <> bFalse);
+      kp = kp + 1;
+    endif;
       else;
       // ... bei alpha-numerischen Werten
         if (fldl0100.f1dtyp = 'G');
@@ -410,6 +421,10 @@ endsr;
   o_msgid = '';
 o_msgdta = '';
 
+  //  *ACCESSKEY bei jedem Aufruf lesen, damit eine Änderung sofort
+  //  wirkt (wie in PEEK05 und PEEK18)
+  exsr getusrsetg;
+
 endsr;
 
 //====================================================*
@@ -428,8 +443,6 @@ endsr;
 
   open peekfldl0;
   open peekfldl2;
-
-exsr getusrsetg;
 
 endsr;
 

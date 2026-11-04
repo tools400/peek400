@@ -181,8 +181,12 @@ o_bufflen = *zeros;
 
 select;
 when (i_tgtformat = '*EXTERN');
+  //  *ACCESSKEY bei jedem Aufruf lesen, damit eine Änderung sofort
+  //  wirkt (PEEK05 und PEEK20 lesen die Einstellung ebenfalls neu)
+  exsr getUsrSetg;
   exsr toextern;
 when (i_tgtformat = '*INTERN');
+  exsr getUsrSetg;
   exsr toIntern;
 when (i_tgtformat = '*ZONED');
   exsr toZoned;
@@ -330,10 +334,11 @@ begsr A_to_extern;
 
   o_bufflen = f_buffln(fldl0100);
 
+  //  Die Länge bleibt die Feldlänge, weil PEEK20 den externen Teil so
+  //  breit liest. Wird der Wert kürzer (UTF-8: 'Ä' 2 Bytes -> 1 Zeichen),
+  //  füllt cvtToJobCcsid mit Leerzeichen auf.
   if (f_hasccsid(fldl0100) = bTrue);
-    o_bufflen =
-    cvtToJobCcsid(
-     o_buffer: o_bufflen: fldl0100.f1fdcc);
+    cvtToJobCcsid(o_buffer: o_bufflen: fldl0100.f1fdcc);
   endif;
 
   exsr addDelimiter;
@@ -362,6 +367,15 @@ begsr G_to_extern;
     o_bufflen =
     cvtToJobCcsid(
      o_buffer: o_bufflen: fldl0100.f1fdcc);
+  endif;
+
+  //  So breit, wie PEEK20 den externen Teil liest (Anzahl Zeichen),
+  //  auch wenn die CCSID nicht umsetzbar ist (z.B. GRAPHIC 835)
+  if (fldl0100.f1ndbc > 0);
+    o_bufflen = fldl0100.f1ndbc;
+    if (f_isvarlen(fldl0100) = bTrue);
+      o_bufflen = o_bufflen - 2;
+    endif;
   endif;
 
   exsr addDelimiter;
@@ -660,6 +674,12 @@ begsr A_to_intern;
   other;
   endsl;
 
+  //  Immer genau so lang wie das Feld, sonst verschieben sich die
+  //  folgenden Schlüsselfelder: UTF-8 wird länger ('Ä' braucht 2 Bytes)
+  //  und wird abgeschnitten, ein kürzerer Wert behält die Leerzeichen
+  //  aus o_buffer.
+  o_bufflen = f_buffln(fldl0100);
+
   //  einfügen Längenangabe bei Feldern variabler Länge                                   R
   if (f_isvarlen(fldl0100) = bTrue);
     p_dectobin(o_buffer: 1: 2: o_bufflen);
@@ -704,6 +724,10 @@ begsr G_to_intern;
       = %subst(i_buffer: 1: o_bufflen);
   other;
   endsl;
+
+  //  Immer genau so lang wie das Feld (siehe A_to_intern), z.B. wenn
+  //  die CCSID nicht umsetzbar ist (GRAPHIC 835)
+  o_bufflen = f_buffln(fldl0100);
 
   //  einfügen Längenangabe bei Feldern variabler Länge
   if (f_isvarlen(fldl0100) = bTrue);
@@ -1382,8 +1406,6 @@ begsr inzsr;
 
   open peekfld;
 
-  exsr getUsrSetg;
-
 endsr;
 
 //============================================================*
@@ -1399,12 +1421,18 @@ dcl-proc cvtToJobCcsid;
   dcl-s tLength         int(10);
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  htranscoder = transcoder_tojobccsid(i_ccsid);
-  tLength =
-    transcoder_xlatebuffer(htranscoder
-                           : %addr(io_buffer)
-                           : i_length
-                           :%size(io_buffer));
+  //  Nicht umsetzbare CCSID (z.B. GRAPHIC 835): Puffer unverändert
+  //  lassen statt abzubrechen (PEEK71 sendet CPF9897)
+  monitor;
+    htranscoder = transcoder_tojobccsid(i_ccsid);
+    tLength =
+      transcoder_xlatebuffer(htranscoder
+                             : %addr(io_buffer)
+                             : i_length
+                             :%size(io_buffer));
+  on-error;
+    return i_length;
+  endmon;
   if (i_length > tLength);
     %subst(io_buffer
           : tLength+1
@@ -1428,13 +1456,18 @@ dcl-proc cvtToFileCcsid;
   dcl-s tLength         int(10);
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  htranscoder =
-    transcoder_tofieldccsid(i_ccsid);
-  tLength =
-    transcoder_xlatebuffer(htranscoder
-                           : %addr(io_buffer)
-                           : i_length
-                           :%size(io_buffer));
+  //  Nicht umsetzbare CCSID: Puffer unverändert lassen
+  monitor;
+    htranscoder =
+      transcoder_tofieldccsid(i_ccsid);
+    tLength =
+      transcoder_xlatebuffer(htranscoder
+                             : %addr(io_buffer)
+                             : i_length
+                             :%size(io_buffer));
+  on-error;
+    return i_length;
+  endmon;
   if (i_length > tLength);
     %subst(io_buffer
           : tLength+1
