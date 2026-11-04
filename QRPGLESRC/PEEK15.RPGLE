@@ -351,6 +351,7 @@ end-ds;
 
 //  Arbeitsfelder
 dcl-s hasreffld       like(bool_t) inz(bFalse);
+dcl-s isutf8          like(bool_t) inz(bFalse);
 dcl-s newscn          like(bool_t) inz(bTrue);
 dcl-s x               like(int4_t) inz;
 dcl-s y               like(int4_t) inz;
@@ -906,8 +907,23 @@ begsr wrtfield;
     $fldd_row  = row# + (curlin - 1);
     $fldd_col  = 29;
 
+    //  CHAR-Felder mit CCSID 1208 (UTF-8) nicht referenzieren: REFFLD
+    //  übernimmt die CCSID, die eine Bildschirmdatei nicht kennt
+    //  (CPD5112), und CCSID() ist nur für GRAPHIC-Felder zulässig
+    //  (CPD7554). Das Feld wird als CHAR-Feld in Feldlänge erzeugt;
+    //  beim Lesen und Schreiben des Satzes setzt die Datenbank zwischen
+    //  UTF-8 und der Job-CCSID um.
+    if (fldl0100.f1dtyp = 'A' and
+       (fldl0100.f1fdcc = 1200 or
+       fldl0100.f1fdcc = 1208));
+      isutf8 = bTrue;
+    else;
+      isutf8 = bFalse;
+    endif;
+
     //          ... Referenzfeld
-    if (fldl0100.f1dtyp <> 'G' and fldl0100.f1dtyp <> '8'); // = Graphic/Boolean
+    if (fldl0100.f1dtyp <> 'G' and fldl0100.f1dtyp <> '8' and // = Graphic/Boolean
+       isutf8 = bFalse);
       $fldd_ref  = 'R';
       $fldd_kwrd = 'REFFLD(' +
                   %trimr(fldl0100.f1fnme) + ' -';
@@ -925,6 +941,8 @@ begsr wrtfield;
       $fldd_dtyp = 'A';
     when (fldl0100.f1dtyp = 'G');   // = Graphic
       $fldd_dtyp = 'G';
+    when (isutf8 = bTrue);          // = UTF-8, ohne REFFLD
+      $fldd_dtyp = 'A';
     other;
       $fldd_dtyp = ' ';
     endsl;
@@ -953,7 +971,8 @@ begsr wrtfield;
     when (fldl0100.f1dtyp = '8');        // = Boolean
       $fldd_len  = newlen#a;
     when (fldl0100.f1dtyp = 'G' or       // = Graphic
-          f_istolong(fldl0100) = bTrue);
+          f_istolong(fldl0100) = bTrue or
+          isutf8 = bTrue);               // = UTF-8, ohne REFFLD
       $fldd_len  = newlen#a;
     other;
       $fldd_len  = '';
@@ -974,7 +993,7 @@ begsr wrtfield;
     p_wrtdspf(ds_flddef);
 
     //      ... Referenzierung - Zeile 2
-    if (fldl0100.f1dtyp <> 'G' and fldl0100.f1dtyp <> '8'); // = Graphic/Boolean
+    if (hasreffld = bTrue);
       reset ds_fldcnt;
       $fldc_kwrd =
       %trimr(reflib) + '/' + %trimr(reffile) + ')';
@@ -997,17 +1016,6 @@ begsr wrtfield;
       reset ds_dspatr;
       $dspa_atr = 'CCSID(13488 ' +
                   %char(%int((newlen# / 2) + .5))
-                  + ')';
-      p_wrtdspf(ds_dspatr);
-    endif;
-
-    //  ... CCSID CHARACTER Felder mit CCSID 1208 oder 1200
-    if (fldl0100.f1dtyp = 'A' and
-       (fldl0100.f1fdcc = 1200 or
-       fldl0100.f1fdcc = 1208));
-      reset ds_dspatr;
-      $dspa_atr = 'CCSID(13488 ' +
-                  %char(newlen#)
                   + ')';
       p_wrtdspf(ds_dspatr);
     endif;
