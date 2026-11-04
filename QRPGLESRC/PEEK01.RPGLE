@@ -123,9 +123,17 @@ for do_x1 = 1 to numFields;
   else;
     f_hidden = bFalse;
     if (f_hasccsid(fldl0100) = bTrue);
-      transcoder_tojobccsid(fldl0100.f1fdcc);
-      transcoder_tofieldccsid(fldl0100.f1fdcc);
-      f_istransc = bTrue;
+      //  PEEK71 sendet die Escape-Nachricht CPF9897, wenn die CCSID des
+      //  Feldes nicht in die Job-CCSID umgesetzt werden kann, z.B.
+      //  GRAPHIC mit CCSID 835. Die Feldliste wird trotzdem erstellt;
+      //  PEEK06 zeigt das Feld dann leer an.
+      monitor;
+        transcoder_tojobccsid(fldl0100.f1fdcc);
+        transcoder_tofieldccsid(fldl0100.f1fdcc);
+        f_istransc = bTrue;
+      on-error;
+        f_istransc = bFalse;
+      endmon;
     else;
       f_istransc = bFalse;
     endif;

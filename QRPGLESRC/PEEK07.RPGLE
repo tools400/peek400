@@ -128,8 +128,11 @@
        //        keine Statusmeldung ausgeben
        endif;
 
-       qwcrneta(rcvvar: %size(rcvvar)
-               : 1: i_attr: errcode);
+       //  Fehler als Rückgabewert, nicht als Escape-Nachricht, z.B.
+       //  CPF1860 bei einem unbekannten Attribut
+       clear errcode;
+       errcode.bytprv = %size(errcode);
+       qwcrneta(rcvvar: %size(rcvvar): 1: i_attr: errcode);
 
        if (errcode.bytavl = 0);
          exsr getattr;

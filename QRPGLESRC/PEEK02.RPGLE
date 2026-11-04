@@ -131,6 +131,7 @@ dcl-proc peek02;
   on-error;
     dump;
     o_numE = 0;
+    currListE = -1;
   endmon;
 
   //====================================================*
@@ -152,6 +153,10 @@ dcl-proc peek02;
     qusptrus(qUsrSpc: pSpcPtr);
 
     //  get file fields
+    //  (Fehler als Rückgabewert, nicht als Escape-Nachricht, z.B.
+    //  CPF3C28, wenn das Satzformat nicht existiert)
+    clear errCode;
+    errCode.bytprv = %size(errCode);
     quslfld(qUsrSpc: 'FLDL0100': i_qFile
            : i_rcdFmt: '0': errCode);
 

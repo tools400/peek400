@@ -631,6 +631,8 @@
          i_toccsid       uns(10) const;
          i_fromccsid     uns(10) const;
        end-pi;
+
+       dcl-s htranscoder like(htranscoder_t) inz;
        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
        if (g_transcoders.nume = %elem(g_transcoders.item));
@@ -638,14 +640,16 @@
           return transcoder_null();
        endif;
 
+       //  Count the new transcoder only after transcoder_new() succeeded.
+       //  transcoder_new() sends an escape message on error, which
+       //  would otherwise leave an empty entry in the list.
+       htranscoder = transcoder_new(i_toccsid: i_fromccsid);
+
        g_transcoders.nume = g_transcoders.nume + 1;
 
-       g_transcoders.item(g_transcoders.nume).htranscoder =
-                transcoder_new(i_toccsid: i_fromccsid);
-       g_transcoders.item(g_transcoders.nume).toccsid =
-                i_toccsid;
-       g_transcoders.item(g_transcoders.nume).fromccsid =
-                i_fromccsid;
+       g_transcoders.item(g_transcoders.nume).htranscoder = htranscoder;
+       g_transcoders.item(g_transcoders.nume).toccsid = i_toccsid;
+       g_transcoders.item(g_transcoders.nume).fromccsid = i_fromccsid;
 
        return g_transcoders.item(g_transcoders.nume).htranscoder;
 

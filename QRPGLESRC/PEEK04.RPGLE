@@ -74,22 +74,22 @@ exsr first;
 peek41(i_qfile: i_rcdfmt: '*CREATE'
       : nbrofkey: data);
 
-if (nbrofkey <= 0);
-//  ... schade, Aufruf ist fehlgeschlagen
-else;
+if (nbrofkey > 0);
   //  Abrufen der Schlüsselfeldinformationen ...
   peek41(i_qfile: i_rcdfmt: '*KEY'
         : nbrofkey: data);
+endif;
 
-  if (nbrofkey <= *zeros);
-    o_msgid = 'USR0006';
-    usr0006.var1 = i_qfile.name;
-    usr0006.var2 = i_qfile.lib;
-    o_msgdta = usr0006;
-  else;
-    o_msgid = *blanks;
-    o_msgdta = *blanks;
-  endif;
+//  Auch wenn schon der Abruf der Dateiinformationen fehlgeschlagen
+//  ist, gibt es keine Schlüsselinformationen.
+if (nbrofkey <= *zeros);
+  o_msgid = 'USR0006';
+  usr0006.var1 = i_qfile.name;
+  usr0006.var2 = i_qfile.lib;
+  o_msgdta = usr0006;
+else;
+  o_msgid = *blanks;
+  o_msgdta = *blanks;
 endif;
 
 *inlr = '1';

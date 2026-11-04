@@ -92,6 +92,9 @@ dcl-s float4buf       char(4) based(pfloat);
 dcl-s float8buf       char(8) based(pfloat);
 dcl-s maxfloat4       packed(12:4) inz(*hival);
 dcl-s maxfloat8       packed(21:4) inz(*hival);
+dcl-s tmpfloat4       float(4) inz;
+dcl-s tmpfloat8       float(8) inz;
+dcl-s isexact         ind inz;
 dcl-s len             int(10) inz;
 
 dcl-s tempstrlen      int(10) inz;
@@ -106,15 +109,17 @@ dcl-ds zonedbuffer;
   zoned20         zoned(20) inz   POS(1);
 end-ds;
 
-dcl-s hex_null        like(rcdbuf_t) inz(*allx'00');
-
-dcl-c spcval_nan_4 x'7FC00000';
-dcl-c spcval_nan_8 x'7FF8000000000000';
-dcl-c spcval_inf_4 x'7F800000';
-dcl-c spcval_inf_8 x'7FF0000000000000';
+//  Sonderwerte: alle Bits des Exponenten gesetzt. Mantisse = 0: Inf,
+//  sonst NaN, jeweils mit beliebigem Vorzeichen.
+dcl-c fltmask_exp_4 x'7F800000';
+dcl-c fltmask_man_4 x'007FFFFF';
+dcl-c fltmask_exp_8 x'7FF0000000000000';
+dcl-c fltmask_man_8 x'000FFFFFFFFFFFFF';
+dcl-c fltmask_sign  x'80';
 
 dcl-c spcval_nan '*NaN';
 dcl-c spcval_inf '*Inf';
+dcl-c spcval_neginf '-*Inf';
 
 /COPY QCOPYLE,PPEEK53
 /COPY QCOPYLE,PPEEK58
@@ -211,14 +216,26 @@ begsr w_fldl0100;
     //         Float 4
     if (len = 4);
       select;
-      when (float4buf = spcval_nan_4);
-        o_string = spcval_nan;
-      when (float4buf = spcval_inf_4);
-        o_string = spcval_inf;
+      when (%bitand(float4buf: fltmask_exp_4) = fltmask_exp_4);
+        if (%bitand(float4buf: fltmask_man_4) <> *allx'00');
+          o_string = spcval_nan;
+        elseif (%bitand(%subst(float4buf: 1: 1): fltmask_sign)
+                = fltmask_sign);
+          o_string = spcval_neginf;
+        else;
+          o_string = spcval_inf;
+        endif;
       other;
+        //  Mit 4 Nachkommastellen nur, wenn dabei keine Ziffern
+        //  verloren gehen (z.B. 1,2345E-5), sonst mit Exponent.
         maxfloat4 = *hival;
+        isexact = *off;
         if (%abs(float4) <= maxfloat4);
-          maxfloat4 = float4;
+          eval(h) maxfloat4 = float4;
+          tmpfloat4 = maxfloat4;
+          isexact = (tmpfloat4 = float4);
+        endif;
+        if (isexact);
           o_string = %editc(maxfloat4: 'P');
         else;
           o_string = %editflt(float4);
@@ -228,14 +245,24 @@ begsr w_fldl0100;
     else;
       //         Float 8
       select;
-      when (float8buf = spcval_nan_8);
-        o_string = spcval_nan;
-      when (float8buf = spcval_inf_8);
-        o_string = spcval_inf;
+      when (%bitand(float8buf: fltmask_exp_8) = fltmask_exp_8);
+        if (%bitand(float8buf: fltmask_man_8) <> *allx'00');
+          o_string = spcval_nan;
+        elseif (%bitand(%subst(float8buf: 1: 1): fltmask_sign)
+                = fltmask_sign);
+          o_string = spcval_neginf;
+        else;
+          o_string = spcval_inf;
+        endif;
       other;
         maxfloat8 = *hival;
+        isexact = *off;
         if (%abs(float8) <= maxfloat8);
-          maxfloat8 = float8;
+          eval(h) maxfloat8 = float8;
+          tmpfloat8 = maxfloat8;
+          isexact = (tmpfloat8 = float8);
+        endif;
+        if (isexact);
           o_string = %editc(maxfloat8: 'P');
         else;
           o_string = %editflt(float8);
@@ -308,9 +335,42 @@ begsr convert;
 
   if (editword <> '');
     exsr cvtedtword;
-  else;
-    exsr cvtedtcode;
+    if (errcode.bytavl = 0);
+      exsr edit;
+    endif;
   endif;
+
+  //  Edit-Code, wenn kein Edit-Wort angegeben ist oder das Edit-Wort
+  //  nicht zum Feld passt
+  if (editword = '' or errcode.bytavl > 0);
+    exsr cvtedtcode;
+    if (errcode.bytavl = 0);
+      exsr edit;
+    endif;
+  endif;
+
+  //  Edit-Code passt nicht zum Feld (z.B. Y bei mehr als 9 Stellen):
+  //  Standard-Edit-Code L
+  if (errcode.bytavl > 0 and editcode <> 'L');
+    editcode = 'L';
+    exsr cvtedtcode;
+    if (errcode.bytavl = 0);
+      exsr edit;
+    endif;
+  endif;
+
+  if (errcode.bytavl > 0);
+    o_string = '';
+    o_strlen = 0;
+  endif;
+
+endsr;
+
+//====================================================*
+//  Edit  --  Edit the value with the edit mask       *
+//====================================================*
+
+begsr edit;
 
   cvtvarlen = rcvvarlen;
 
@@ -329,11 +389,8 @@ begsr convert;
 
   if (errcode.bytavl = 0);
     o_string = %subst(cvtvar: 1: cvtvarlen);
-  else;
-    o_string = %subst(hex_null: 1: cvtvarlen);
+    o_strlen = cvtvarlen;
   endif;
-
-  o_strlen = cvtvarlen;
 
 endsr;
 

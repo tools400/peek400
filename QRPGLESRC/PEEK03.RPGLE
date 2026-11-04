@@ -60,6 +60,7 @@ dcl-ds keyl0100 likeds(keyl0100_t) based(pkeyl0100);
 dcl-ds keyl0100_sql likeds(keyl0100_t) inz;
 dcl-s data            char(512) inz;
 dcl-s numkeyfld       like(int4_t);
+dcl-s sqlName         varchar(128) inz;
 
 dcl-s isInzSr         like(bool_t) inz(bFalse);
 
@@ -126,8 +127,8 @@ begsr sqlseq;
     tempstr = %trim(%subst(i_sqlOrder: x: y-x));
     //  Ende des Feldes ...
     z = %scan('"': tempstr: 2);
-    keyl0100.apkeyf =
-     %trim(%subst(tempstr: 2: z-2));
+    sqlName = %trim(%subst(tempstr: 2: z-2));
+    exsr getsysname;
 
     //  Alles hinter dem Feld ...
     if (z+1 <= %len(tempstr));
@@ -150,6 +151,45 @@ begsr sqlseq;
 
     x = y + 1;
     exsr getnextfld;
+  enddo;
+
+  nbrOfKey = numkeyfld;
+
+endsr;
+
+//====================================================*
+//  getSysName  Systemname des Feldes in sqlName      *
+//====================================================*
+
+begsr getsysname;
+
+  //  In der SQL-Sortierung kann auch der lange SQL-Name einer Spalte
+  //  stehen. PEEKFLD ist aber über den Systemnamen verschlüsselt.
+  keyl0100.apkeyf = '';
+
+  if (sqlName = '');
+    leavesr;
+  endif;
+
+  if (%len(sqlName) <= %len(keyl0100.apkeyf));
+    f_key.f_field = sqlName;
+    chain(n) %kds(f_key) fpeekfld;
+    if (%found());
+      keyl0100.apkeyf = sqlName;
+      leavesr;
+    endif;
+  endif;
+
+  //  ... sonst nach dem alternativen Namen suchen
+  setll *loval fpeekfld;
+  read(n) fpeekfld;
+  dow (not %eof());
+    fldl0100 = f_ffd;
+    if (fldl0100.f1afnm = sqlName);
+      keyl0100.apkeyf = f_field;
+      leavesr;
+    endif;
+    read(n) fpeekfld;
   enddo;
 
 endsr;
