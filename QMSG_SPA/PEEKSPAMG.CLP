@@ -9349,6 +9349,28 @@ po &1.'                                                               +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
+     /*   Cmd-ADDMSGD für Message-ID :   USR8243                    */
+     /* Valor &1 no permitido para atr. "Código edic.".             */
+     /*-------------------------------------------------------------*/
+
+             RMVMSGD MSGID(USR8243) MSGF(&LIB/&OBJ)
+             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+
+             ADDMSGD +
+                MSGID(USR8243) +
+                MSGF(&LIB/&OBJ) +
+                MSG( +
+'Valor &1 no permitido para atr. "Código edic.".'                     +
+                ) +
+                SEV(0) +
+                FMT( +
+                    (*CHAR 1) +
+                ) +
+                ALROPT(*NO) +
+                CCSID(&CCSID) +
+                /*  -EOF-  */
+
+     /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR9992                    */
      /* No se pudieron guardar los ajustes del usuario.             */
      /*-------------------------------------------------------------*/

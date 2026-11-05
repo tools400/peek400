@@ -121,6 +121,18 @@ dcl-s r_field         like(##field);
 dcl-s r_seq           like(f_seq);
 dcl-s lstfield        like(##field);
 dcl-s lstnbrrcd       like(sflpage);
+
+//  Prüfung auf doppelte Folgenummern
+dcl-s isdupseq        like(bool_t) inz(bFalse);
+dcl-s isfirst         like(bool_t) inz(bFalse);
+dcl-s lstseq          like(wrk0001_t.wrk_seq) inz;
+dcl-s lstrcdnbr       like(int4_t) inz;
+dcl-s dupnbr          like(int4_t) inz;
+//  Zeilen der Subfile: als doppelte Folgenummer markiert (bisher/neu)
+//  und in diesem Durchlauf von VReadC verarbeitet
+dcl-s isduprow        ind dim(9999) inz(*off);
+dcl-s isnewdup        ind dim(9999) inz(*off);
+dcl-s isreadrow       ind dim(9999) inz(*off);
 dcl-s wrk_sfsanr      like(sfsanr);
 
 
@@ -385,23 +397,13 @@ begsr srchfield;
         leave;
       endif;
 
+      //  Nur lesen: Die Sätze bleiben unverändert, auch die
+      //  Fehlermarkierungen und SFLNXTCHG von Eingabefehlern.
       if lstfield =
          %subst($$fnme: 1:(f_scan(' ':
                         lstfield) - 1));
         isfound = bTrue;
         leave;
-      else;
-        if (sfpau <> *blanks);
-          //  ... Satz geändert
-          exsr vsfpauchg;
-        else;
-          //  ... Satz nicht geändert
-          exsr vsfpauclr;
-        endif;
-        //  Setzen Bezugszahlen ...
-        exsr pbsetbz;
-        update pbsfl;
-        iter;
       endif;
 
     endfor;
@@ -437,6 +439,7 @@ endsr;
 begsr vreadc;
 
   issflerror = bFalse;
+  isreadrow(*) = *off;
 
   if (*in80 = *off);
   //   keine Einträge in Subfile vorhanden ...
@@ -449,6 +452,7 @@ begsr vreadc;
       endif;
 
       chain sflrec pbsfl;
+      isreadrow(sflrec) = *on;
 
       exsr sflbzoff;
 
@@ -536,7 +540,98 @@ begsr vreadc;
       update pbsfl;
     endfor;
 
+    //  Doppelte Folgenummern erst nach allen Änderungen prüfen,
+    //  damit zwei Felder ihre Nummern tauschen können.
+    exsr chkdupseq;
+
   endif;
+
+endsr;
+
+//============================================================*
+//    ChkDupSeq     Prüfen auf doppelte Folgenummern          *
+//============================================================*
+
+begsr chkdupseq;
+
+  isdupseq = bFalse;
+  isfirst = bTrue;
+  isnewdup(*) = *off;
+
+  //  PEEKWRK ist nach der Folgenummer sortiert: Doppelte
+  //  Nummern liegen direkt hintereinander.
+  clear w0key;
+  w0key.w_key = *loval;
+  setll %kds(w0key: 1) fpeekwrk;
+
+  dow ('1');
+    read(n) fpeekwrk;
+    if (%eof(peekwrk));
+      leave;
+    endif;
+
+    if (isfirst = bFalse and w_key = lstseq);
+      isdupseq = bTrue;
+      dupnbr = lstrcdnbr;
+      exsr markdupseq;
+      dupnbr = work_00_ds.rcdnbr;
+      exsr markdupseq;
+    endif;
+
+    isfirst = bFalse;
+    lstseq = w_key;
+    lstrcdnbr = work_00_ds.rcdnbr;
+  enddo;
+
+  if (isdupseq = bTrue);
+    p_sndpgmmg('USR8167': '': sds.pgmname);
+    issflerror = bTrue;
+  endif;
+
+  //  Markierungen entfernen, die nicht mehr zutreffen. READC liefert
+  //  diese Zeilen nicht wieder (SFLNXTCHG wirkt nach CHAIN/UPDATE
+  //  nicht); Zeilen aus diesem Durchlauf hat VReadC neu geschrieben.
+  for sflrec = 1 to sflnbrrcd;
+    if (isduprow(sflrec) and not isnewdup(sflrec)
+        and not isreadrow(sflrec));
+      chain(e) sflrec pbsfl;
+      if (not %error() and %found());
+        exsr sflbzoff;
+        exsr vsfpauclr;
+        exsr pbsetbz;
+        update pbsfl;
+      endif;
+    endif;
+  endfor;
+
+  isduprow = isnewdup;
+
+endsr;
+
+//============================================================*
+//    MarkDupSeq    Markieren Folgenummer von Satz DupNbr     *
+//============================================================*
+
+begsr markdupseq;
+
+  for sflrec = 1 to sflnbrrcd;
+    chain(e) sflrec pbsfl;
+    if (%error() or not %found());
+      leave;
+    endif;
+
+    if (recordnbr = dupnbr);
+      isnewdup(sflrec) = *on;
+      exsr sflbzoff;
+      *in20 = '1';         // DSPATR(PC)
+      *in30 = '1';         // DSPATR(RI)
+      *in85 = '0';         // DSPATR(RI) Auswahl
+      exsr vsfpauchg;
+      exsr pbsetbz;
+      update pbsfl;
+      leave;
+    endif;
+  endfor;
 
 endsr;
 
@@ -608,6 +703,10 @@ begsr c_saveexit;
     wrk0001 = w_data;
 
     chain wrk0001.wrk_rcdnbr fpeekfld;
+    if (not %found(peekfld));
+      //  Feld nicht mehr vorhanden, z.B. Feldliste neu aufgebaut
+      iter;
+    endif;
 
     f_seq = r_seq;
     f_hidden = wrk0001.wrk_hidden;
@@ -889,6 +988,9 @@ begsr pbinit;
 
   sflrec = 0;
   sflnbrrcd = 0;
+
+  //  Neue Subfile: keine Markierungen für doppelte Folgenummern
+  isduprow(*) = *off;
 
 endsr;
 

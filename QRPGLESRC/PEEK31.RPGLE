@@ -55,6 +55,8 @@ end-pi;
 
 dcl-s do_x1     packed(7);
 dcl-ds set0004  likeds(set0004_t) inz;
+dcl-s isFallback like(bool_t) inz(bFalse);
+dcl-s msgf      like(file_t);
 //----------------------------------------------------*
 
 //  Register error handler
@@ -63,6 +65,7 @@ ceehdlr(%paddr('errorHandler')
 
 o_msgid = *blanks;
 o_msgdta = *blanks;
+isFallback = bFalse;
 
 //  Ermitteln der zu verwendenden Sprache ...
 if (io_language = '*DFT');
@@ -84,15 +87,16 @@ if (o_msgid = '');
     else;
       //  ... Fehler aufgetreten
       if (set0004.set_lang = 'GER');
-        //  ... Standardsprache
-        o_msgid  = 'CPF9897';
-        o_msgdta = 'Sprachendefinition ''' +
-                   %trim(io_language) +
-                   ''' nicht gefunden.';
+        //  ... Standardsprache: CPF2407 Nachrichtendatei &1 in &2
+        //      nicht gefunden (aus QCPFMSG, in der Systemsprache)
+        msgf = %trimr(i_prefix) + set0004.set_lang;
+        o_msgid  = 'CPF2407';
+        o_msgdta = msgf + sds.pgmlib;
         leave;
       else;
         //  ... Benutzersprache
         set0004.set_lang = 'GER';
+        isFallback = bTrue;
         iter;
       endif;
     endif;
@@ -101,7 +105,11 @@ if (o_msgid = '');
 endif;
 
 if (o_msgid = '');
-  p_updusrsg('*LANGUAGE': set0004);
+  //  Nur eine gefundene Sprache speichern. Das Ausweichen auf GER gilt
+  //  nur für diesen Aufruf, die eingestellte Sprache bleibt erhalten.
+  if (isFallback = bFalse);
+    p_updusrsg('*LANGUAGE': set0004);
+  endif;
   io_language = set0004.set_lang;
 else;
   io_language = '';

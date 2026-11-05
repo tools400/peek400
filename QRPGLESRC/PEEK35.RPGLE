@@ -27,11 +27,6 @@
 /COPY QCOPYLE,H_SPEC
 /COPY QCOPYLE,COPYRIGHT
 
-// Feldliste nach Anzeigefolge
-dcl-f peekwrk keyed usropn infds(work_00_ds) prefix(w_);
-
-dcl-ds work_00_ds likeds(infds_t);
-
 /COPY QCOPYLE,D_VARDEF
 /COPY QCOPYLE,D_INFDS
 /COPY QCOPYLE,SDS
@@ -40,10 +35,10 @@ dcl-ds work_00_ds likeds(infds_t);
 
 /COPY QCOPYLE,WRK0001
 
-/COPY QCOPYLE,USR8167
 /COPY QCOPYLE,USR8168
 /COPY QCOPYLE,USR8169
 /COPY QCOPYLE,USR8170
+/COPY QCOPYLE,USR8243
 
 /define internal_prototype
 /COPY QCOPYLE,PPEEK35
@@ -65,7 +60,6 @@ dcl-pi peek35;
   o_msgdta              like(msgdta_t);
 end-pi;
 
-dcl-ds w0key likerec(fpeekwrk: *key);
 //---------------------------------------------------*
 
 //  Register error handler
@@ -74,8 +68,6 @@ ceehdlr(%paddr('errorHandler')
 exsr first;
 
 exsr prfb1;
-
-close peekwrk;
 
 return;
 
@@ -87,10 +79,8 @@ begsr prfb1;
 
   isError = bFalse;
 
-  exsr prf20;           // = SEQ
-  if (isError = bTrue);
-    leavesr;
-  endif;
+  //  Doppelte Folgenummern (SEQ) prüft PEEK34 nach allen Änderungen,
+  //  damit zwei Felder ihre Nummern tauschen können.
 
   exsr prf21;           // = HIDDEN
   if (isError = bTrue);
@@ -115,39 +105,6 @@ begsr prfb1;
   exsr prf25;           // = EDTCDE
   if (isError = bTrue);
     leavesr;
-  endif;
-
-endsr;
-
-//============================================================*
-//    Prf20         Prüfen der Sortierfolge                   *
-//============================================================*
-
-begsr prf20;
-
-  dou ('1');
-
-    clear w0key;
-    w0key.w_key = wrk0001.wrk_seq;
-    chain %kds(w0key: 1) fpeekwrk;
-    if (not %found(peekwrk));
-    //  Hurra, eindeutige Numnmer ...
-    else;
-      if (work_00_ds.rcdnbr = i_rcdNbr);
-      //  ... auch gut, weil derselbe Datensatz
-      else;
-        //  ... Fehler, doppelter Sortierfolgen-Nr.
-        isError = bTrue;
-        o_msgid = 'USR8167';
-        o_msgdta = usr8167;
-        leave;
-      endif;
-    endif;
-
-  enddo;
-
-  if (isError = bTrue);
-    o_fldname = 'SEQ';
   endif;
 
 endsr;
@@ -254,6 +211,26 @@ endsr;
 
 begsr prf25;
 
+  dou ('1');
+
+    //  Edit-Codes wie in PEEK06
+    select;
+    when (wrk0001.wrk_edtcde = ' ');
+    //  kein Edit-Code
+    when (wrk0001.wrk_edtcde >= 'A' and wrk0001.wrk_edtcde <= 'D');
+    when (wrk0001.wrk_edtcde >= 'J' and wrk0001.wrk_edtcde <= 'Q');
+    when (wrk0001.wrk_edtcde >= 'X' and wrk0001.wrk_edtcde <= 'Z');
+    when (wrk0001.wrk_edtcde >= '1' and wrk0001.wrk_edtcde <= '9');
+    other;
+      isError = bTrue;
+      o_msgid = 'USR8243';
+      usr8243.var1 = wrk0001.wrk_edtcde;
+      o_msgdta = usr8243;
+      leave;
+    endsl;
+
+  enddo;
+
   if (isError = bTrue);
     o_fldname = 'EDTCDE';
   endif;
@@ -265,8 +242,6 @@ endsr;
 //============================================================*
 
 begsr first;
-
-  open peekwrk;
 
   wrk0001 = i_buffer;
 

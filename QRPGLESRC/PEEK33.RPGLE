@@ -279,6 +279,9 @@ begsr vpos;
     when (set0007.set_vsn < 'V04R00M08');
       exsr v04r00m08;
     other;
+      //  ... kein weiterer Schritt: aktuelle Versions-Nr. speichern
+      set0007.set_vsn = i_version;
+      exsr setUsrSetg;
       leave;
     endsl;
 

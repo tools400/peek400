@@ -9361,6 +9361,28 @@ emere F8.'                                                            +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
+     /*   Cmd-ADDMSGD für Message-ID :   USR8243                    */
+     /* Il valore &1 per l'attributo "Codice edit" non è consentito.*/
+     /*-------------------------------------------------------------*/
+
+             RMVMSGD MSGID(USR8243) MSGF(&LIB/&OBJ)
+             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+
+             ADDMSGD +
+                MSGID(USR8243) +
+                MSGF(&LIB/&OBJ) +
+                MSG( +
+'Il valore &1 per l''attributo "Codice edit" non è consentito.'       +
+                ) +
+                SEV(0) +
+                FMT( +
+                    (*CHAR 1) +
+                ) +
+                ALROPT(*NO) +
+                CCSID(&CCSID) +
+                /*  -EOF-  */
+
+     /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR9992                    */
      /* Le impostazioni dell'utente non possono essere salvate.     */
      /*-------------------------------------------------------------*/

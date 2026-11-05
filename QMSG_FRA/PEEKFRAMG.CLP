@@ -9355,6 +9355,28 @@ s.'                                                                   +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
+     /*   Cmd-ADDMSGD für Message-ID :   USR8243                    */
+     /* Valeur &1 interdite pour l'attribut "Code d'édition".       */
+     /*-------------------------------------------------------------*/
+
+             RMVMSGD MSGID(USR8243) MSGF(&LIB/&OBJ)
+             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+
+             ADDMSGD +
+                MSGID(USR8243) +
+                MSGF(&LIB/&OBJ) +
+                MSG( +
+'Valeur &1 interdite pour l''attribut "Code d''édition".'             +
+                ) +
+                SEV(0) +
+                FMT( +
+                    (*CHAR 1) +
+                ) +
+                ALROPT(*NO) +
+                CCSID(&CCSID) +
+                /*  -EOF-  */
+
+     /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR9992                    */
      /* Echec sauvegarde paramètres utilisateur                     */
      /*-------------------------------------------------------------*/

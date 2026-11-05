@@ -2,8 +2,8 @@
 // ==========================================================================
 //  Peek/400 - Unit-Tests der Programme PEEK01, PEEK02, PEEK03, PEEK04,
 //  PEEK06, PEEK07, PEEK10, PEEK11, PEEK15, PEEK18, PEEK19, PEEK20, PEEK22,
-//  PEEK23, PEEK27 und PEEK36 sowie der Transcoder-Liste von PEEK71 und der
-//  Datei PEEKFMT (iRPGUnit).
+//  PEEK23, PEEK27, PEEK31, PEEK33 und PEEK36 sowie der Transcoder-Liste von
+//  PEEK71 und der Datei PEEKFMT (iRPGUnit).
 //
 //  Zum Erstellen und Ausführen muss die Peek-Bibliothek (QCOPYLE,
 //  Bindeverzeichnis PEEK, PEEKUSR, PEEKFLD, PEEKFMT, Nachrichtendatei
@@ -37,6 +37,8 @@ ctl-opt nomain;
 /copy QCOPYLE,QUSROBJD
 /copy QCOPYLE,QUSRJOBI
 /copy QCOPYLE,SET0003
+/copy QCOPYLE,SET0004
+/copy QCOPYLE,SET0007
 
 /define internal_prototype
 /copy QCOPYLE,PPEEK01
@@ -55,6 +57,8 @@ ctl-opt nomain;
 /copy QCOPYLE,PPEEK22
 /copy QCOPYLE,PPEEK23
 /copy QCOPYLE,PPEEK27
+/copy QCOPYLE,PPEEK31
+/copy QCOPYLE,PPEEK33
 /copy QCOPYLE,PPEEK36
 /undefine internal_prototype
 
@@ -1092,6 +1096,104 @@ dcl-proc test28_peek27_lineWidth export;
 
   assert(n > 1: 'Nur eine Zeile:' + all);
   assert(%scan(' 5=': all) > 0: 'Option 5 fehlt:' + all);
+end-proc;
+
+// ==========================================================================
+//  PEEK31: Fehlt die Nachrichtendatei der eingestellten Sprache, gilt GER
+//  nur für diesen Aufruf; die Einstellung bleibt erhalten.
+// ==========================================================================
+
+dcl-proc test29_peek31_fallbackNotSaved export;
+  dcl-ds set0004 likeds(set0004_t);
+  dcl-ds orig likeds(set0004_t);
+  dcl-s lang like(language_t);
+  dcl-s msgid like(msgid_t);
+  dcl-s msgdta like(msgdta_t);
+
+  orig = f_getusrsg('*LANGUAGE');
+  set0004 = orig;
+  set0004.set_lang = 'XYZ';
+  p_updusrsg('*LANGUAGE': set0004);
+
+  lang = '*DFT';
+  monitor;
+    peek31(lang: 'PEEK': msgid: msgdta);
+  on-error;
+    p_updusrsg('*LANGUAGE': orig);
+    fail('PEEK31 bricht ab: ' + lastMsg());
+  endmon;
+
+  set0004 = f_getusrsg('*LANGUAGE');
+  p_updusrsg('*LANGUAGE': orig);
+
+  aEqual('': msgid: 'Nachricht');
+  aEqual('GER': lang: 'Verwendete Sprache');
+  aEqual('XYZ': set0004.set_lang: 'Gespeicherte Sprache');
+end-proc;
+
+// ==========================================================================
+//  PEEK31: Eine ausdrücklich angegebene Sprache wird gespeichert.
+// ==========================================================================
+
+dcl-proc test30_peek31_explicitSaved export;
+  dcl-ds set0004 likeds(set0004_t);
+  dcl-ds orig likeds(set0004_t);
+  dcl-s lang like(language_t);
+  dcl-s msgid like(msgid_t);
+  dcl-s msgdta like(msgdta_t);
+
+  orig = f_getusrsg('*LANGUAGE');
+  set0004 = orig;
+  set0004.set_lang = 'XYZ';
+  p_updusrsg('*LANGUAGE': set0004);
+
+  lang = 'GER';
+  peek31(lang: 'PEEK': msgid: msgdta);
+
+  set0004 = f_getusrsg('*LANGUAGE');
+  p_updusrsg('*LANGUAGE': orig);
+
+  aEqual('': msgid: 'Nachricht');
+  aEqual('GER': lang: 'Verwendete Sprache');
+  aEqual('GER': set0004.set_lang: 'Gespeicherte Sprache');
+end-proc;
+
+// ==========================================================================
+//  PEEK31: Fehlt auch die Nachrichtendatei für GER, kommt CPF2407 mit
+//  Datei und Bibliothek statt eines deutschen Textes.
+// ==========================================================================
+
+dcl-proc test31_peek31_missingMsgf export;
+  dcl-s lang like(language_t);
+  dcl-s msgid like(msgid_t);
+  dcl-s msgdta like(msgdta_t);
+
+  lang = 'GER';
+  peek31(lang: 'XXXX': msgid: msgdta);
+
+  aEqual('CPF2407': msgid: 'Nachricht');
+  aEqual('XXXXGER   ' + getPeekLib(): %subst(msgdta: 1: 20): 'Daten');
+  aEqual('': lang: 'Sprache');
+end-proc;
+
+// ==========================================================================
+//  PEEK33: Nach dem letzten Migrationsschritt wird die aktuelle Version
+//  gespeichert.
+// ==========================================================================
+
+dcl-proc test32_peek33_versionRaised export;
+  dcl-ds set0007 likeds(set0007_t);
+  dcl-s msgid like(msgid_t);
+  dcl-s msgdta like(msgdta_t);
+
+  set0007 = f_getusrsg('*VERSION');
+  set0007.set_vsn = 'V04R00M08';
+  p_updusrsg('*VERSION': set0007);
+
+  peek33('V04R00M09': msgid: msgdta);
+
+  set0007 = f_getusrsg('*VERSION');
+  aEqual('V04R00M09': set0007.set_vsn: 'Gespeicherte Version');
 end-proc;
 
 // ==========================================================================
