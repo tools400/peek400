@@ -122,8 +122,9 @@ dcl-s r_seq           like(f_seq);
 dcl-s lstfield        like(##field);
 dcl-s lstnbrrcd       like(sflpage);
 dcl-s srchrec         like(sflpage);
-//  Feldnamen der Subfile-Sätze für die Suche
+//  Feldnamen und Satznummern der Subfile-Sätze für die Suche
 dcl-s sfl_fnmes       like($$fnme) dim(9999);
+dcl-s sfl_rcdnbrs     like(recordnbr) dim(9999);
 
 //  Prüfung auf doppelte Folgenummern
 dcl-s isdupseq        like(bool_t) inz(bFalse);
@@ -131,11 +132,17 @@ dcl-s isfirst         like(bool_t) inz(bFalse);
 dcl-s lstseq          like(wrk0001_t.wrk_seq) inz;
 dcl-s lstrcdnbr       like(int4_t) inz;
 dcl-s dupnbr          like(int4_t) inz;
+dcl-s duprrn          like(int4_t) inz;
 //  Zeilen der Subfile: als doppelte Folgenummer markiert (bisher/neu)
 //  und in diesem Durchlauf von VReadC verarbeitet
 dcl-s isduprow        ind dim(9999) inz(*off);
 dcl-s isnewdup        ind dim(9999) inz(*off);
 dcl-s isreadrow       ind dim(9999) inz(*off);
+//  Feld mit Eingabefehler je Zeile und ob es in diesem Durchlauf von
+//  VReadC Eingabefehler gab: Sie behalten Markierung und Cursor, auch
+//  wenn die Zeile zusätzlich eine doppelte Folgenummer hat.
+dcl-s errfield        like(yfield) dim(9999) inz;
+dcl-s isinperr        like(bool_t) inz(bFalse);
 dcl-s wrk_sfsanr      like(sfsanr);
 
 
@@ -438,6 +445,8 @@ begsr vreadc;
 
   issflerror = bFalse;
   isreadrow(*) = *off;
+  errfield(*) = '';
+  isinperr = bFalse;
 
   if (*in80 = *off);
   //   keine Einträge in Subfile vorhanden ...
@@ -530,6 +539,8 @@ begsr vreadc;
           yMsgID = '';
           yMsgDta = '';
           issflerror = bTrue;
+          errfield(sflrec) = yfield;
+          isinperr = bTrue;
         endif;
       endif;
 
@@ -587,8 +598,8 @@ begsr chkdupseq;
   endif;
 
   //  Markierungen entfernen, die nicht mehr zutreffen. READC liefert
-  //  diese Zeilen nicht wieder (SFLNXTCHG wirkt nach CHAIN/UPDATE
-  //  nicht); Zeilen aus diesem Durchlauf hat VReadC neu geschrieben.
+  //  nicht jede markierte Zeile wieder; Zeilen aus diesem Durchlauf hat
+  //  VReadC neu geschrieben.
   for sflrec = 1 to sflnbrrcd;
     if (isduprow(sflrec) and not isnewdup(sflrec)
         and not isreadrow(sflrec));
@@ -612,24 +623,36 @@ endsr;
 
 begsr markdupseq;
 
-  for sflrec = 1 to sflnbrrcd;
-    chain(e) sflrec pbsfl;
-    if (%error() or not %found());
-      leave;
-    endif;
+  //  Die Zeile über die gemerkten Satznummern suchen, statt jede
+  //  Zeile per CHAIN zu lesen.
+  duprrn = 0;
+  if (sflnbrrcd > 0);
+    duprrn = %lookup(dupnbr: sfl_rcdnbrs: 1: sflnbrrcd);
+  endif;
 
-    if (recordnbr = dupnbr);
+  if (duprrn > 0);
+    sflrec = duprrn;
+    chain(e) sflrec pbsfl;
+    if (not %error() and %found());
       isnewdup(sflrec) = *on;
       exsr sflbzoff;
-      *in20 = '1';         // DSPATR(PC)
+      //  Ein Eingabefehler dieser Zeile bleibt markiert. Gibt es
+      //  Eingabefehler, bekommen sie den Cursor, nicht die doppelte
+      //  Folgenummer.
+      if (errfield(sflrec) <> '');
+        yfield = errfield(sflrec);
+        exsr vposcsr;
+      endif;
+      if (isinperr = bFalse);
+        *in20 = '1';       // DSPATR(PC)
+      endif;
       *in30 = '1';         // DSPATR(RI)
       *in85 = '0';         // DSPATR(RI) Auswahl
       exsr vsfpauchg;
       exsr pbsetbz;
       update pbsfl;
-      leave;
     endif;
-  endfor;
+  endif;
 
 endsr;
 
@@ -1013,6 +1036,7 @@ begsr pbreadup;
     write pbsfl;
     sflnbrrcd = sflrec;
     sfl_fnmes(sflrec) = $$fnme;
+    sfl_rcdnbrs(sflrec) = recordnbr;
 
     if (sflrec >= sflpage);
       leave;
