@@ -7386,7 +7386,7 @@ t.'                                                                   +
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8151                    */
-     /* Ungültige Name '&1' für Zieldatei.                          */
+     /* Ungültiger Name '&1' für Zieldatei.                         */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8151) MSGF(&LIB/&OBJ)
@@ -7396,7 +7396,7 @@ t.'                                                                   +
                 MSGID(USR8151) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Ungültige Name ''&1'' für Zieldatei.'                                +
+'Ungültiger Name ''&1'' für Zieldatei.'                               +
                 ) +
                 SEV(0) +
                 FMT( +

@@ -77,22 +77,32 @@
      A            TXT0053       18A  O  4  3MSGID(TXT 0053 PEEKGER)
      A                                      COLOR(WHT)
      A            ##FILE        10A  B  4 23
+     A  20                                  DSPATR(PC)
+     A  30                                  DSPATR(RI)
      A            TXT0054       18A  O  5  3MSGID(TXT 0054 PEEKGER)
      A                                      COLOR(WHT)
      A            ##LIBRARY     10A  B  5 23
+     A  21                                  DSPATR(PC)
+     A  31                                  DSPATR(RI)
      A            TXT0055       18A  O  6  3MSGID(TXT 0055 PEEKGER)
      A                                      COLOR(WHT)
      A            ##MEMBER      10A  B  6 23
+     A  22                                  DSPATR(PC)
+     A  32                                  DSPATR(RI)
      A                                  7 34'*ADD,'
      A                                      COLOR(WHT)
      A            TXT0056       18A  O  8  3MSGID(TXT 0056 PEEKGER)
      A                                      COLOR(WHT)
      A            ##MBROPT      10A  B  8 23
+     A  23                                  DSPATR(PC)
+     A  33                                  DSPATR(RI)
      A                                  8 34'*REPLACE, *UPDADD'
      A                                      COLOR(WHT)
      A            TXT0057       18A  O  9  3MSGID(TXT 0057 PEEKGER)
      A                                      COLOR(WHT)
      A            ##CRTFILE      4A  B  9 23
+     A  24                                  DSPATR(PC)
+     A  34                                  DSPATR(RI)
      A                                  9 34'*NO, *YES'
      A                                      COLOR(WHT)
      A                                 12  1'                                  -

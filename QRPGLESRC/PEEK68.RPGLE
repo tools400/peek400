@@ -697,7 +697,7 @@
                 : yfkeys: ynbrofkeys);
           scrnfkeys = %subarr(yfkeys: 1);
 
-          peek27(sds.pgmname: ychoice: ynbrofch);
+          peek27(sds.pgmname: ychoice: ynbrofch: *omit: %len($$choice));
 
        endsr;
 

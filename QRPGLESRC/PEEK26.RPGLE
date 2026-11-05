@@ -31,7 +31,6 @@ dcl-f peek26fm workstn(*ext) usage(*input:*output)
       usropn infds(workstn);
 
 dcl-ds workstn likeds(workstn_t);
-dcl-ds cursorPosition likeds(cursorPosition_t) inz;
 
 /COPY QCOPYLE,D_VARDEF
 /COPY QCOPYLE,FLDL0100
@@ -73,11 +72,16 @@ dcl-c nbrfkeys const(2);
 dcl-s peek21_name     like(pgmcalln_t);
 dcl-s peek23_name     like(pgmcalln_t);
 
-dcl-s a1              char(1);
-
 dcl-s r_srcfile       like(i_qsrcfile.name);
 dcl-s r_srclib        like(i_qsrcfile.lib);
 dcl-s r_srcmbr        like(i_srcmbr);
+
+//  Werte beim Öffnen des Fensters, F5 stellt sie wieder her
+dcl-s r_file          like(file_t);
+dcl-s r_library       like(lib_t);
+dcl-s r_member        like(mbr_t);
+dcl-s r_mbropt        like(option_t);
+dcl-s r_crtfile       like(option_t);
 
 dcl-s isInzSr         like(bool_t) inz(bFalse);
 
@@ -98,7 +102,6 @@ dcl-pi peek26;
   o_msgdta              like(msgdta_t);
 end-pi;
 
-dcl-s do_x1       packed(7);
 //---------------------------------------------------*
 
 //  Register error handler
@@ -141,10 +144,6 @@ dow ('1');
 
   //  Anzeigen Bildschirm
   exfmt bild01;
-
-  //  Berechnen Zeile/Spalte
-  cursorposition.row = workstn.csrpos / 256;
-  cursorposition.column = %rem(workstn.csrpos: 256);
 
   //  Nachrichten löschen
   p_rmvpgmmg(sds.pgmname);
@@ -293,7 +292,9 @@ begsr prf20;
 
   dou ('1');
 
-    if (##file = '');
+    if (##file = '' or f_vldname(##file: ymsgid: ymsgdta) = bFalse);
+      ymsgid = '';
+      ymsgdta = '';
       *in99 = '1';
       clear usr8151.var1;
       usr8151.var1 = ##file;
@@ -326,10 +327,9 @@ begsr prf21;
       leave;
     endif;
 
-    %subst(a1:1:1) = %subst(##library:1:1);
-    if (a1 = '*');
+    if (%subst(##library: 1: 1) = '*');
       //  Sonderwerte ...
-      if (##library = '*LIBL');
+      if (##library = '*LIBL' or ##library = '*CURLIB');
       //  ... gültig
       else;
         //  ... ungültig
@@ -339,8 +339,14 @@ begsr prf21;
         p_sndpgmmg('USR8152': usr8152: sds.pgmname);
         leave;
       endif;
-    else;
-    //  Keine Sonderwerte ...
+    elseif (f_vldname(##library: ymsgid: ymsgdta) = bFalse);
+      ymsgid = '';
+      ymsgdta = '';
+      *in99 = '1';
+      clear usr8152;
+      usr8152.var1 = ##library;
+      p_sndpgmmg('USR8152': usr8152: sds.pgmname);
+      leave;
     endif;
 
   enddo;
@@ -368,8 +374,7 @@ begsr prf22;
       leave;
     endif;
 
-    %subst(a1:1:1) = %subst(##member:1:1);
-    if (a1 = '*');
+    if (%subst(##member: 1: 1) = '*');
       //  Sonderwerte ...
       if (##member = '*FIRST');
       //  ... gültig
@@ -381,8 +386,14 @@ begsr prf22;
         p_sndpgmmg('USR8153': usr8153: sds.pgmname);
         leave;
       endif;
-    else;
-    //  Keine Sonderwerte ...
+    elseif (f_vldname(##member: ymsgid: ymsgdta) = bFalse);
+      ymsgid = '';
+      ymsgdta = '';
+      *in99 = '1';
+      clear usr8153;
+      usr8153.var1 = ##member;
+      p_sndpgmmg('USR8153': usr8153: sds.pgmname);
+      leave;
     endif;
 
   enddo;
@@ -431,18 +442,26 @@ begsr prf24;
 
     if (##crtfile <> '*YES' and ##crtfile <> '*NO');
       *in99 = '1';
+      *in24 = '1';
+      *in34 = '1';
       clear usr8155;
       usr8155.var1 = ##crtfile;
       p_sndpgmmg('USR8155': usr8155: sds.pgmname);
       leave;
     endif;
 
-  enddo;
+    //  CPYF lässt *LIBL mit CRTFILE(*YES) nicht zu (CPF2877)
+    if (##crtfile = '*YES' and ##library = '*LIBL');
+      *in99 = '1';
+      *in21 = '1';
+      *in31 = '1';
+      clear usr8152;
+      usr8152.var1 = ##library;
+      p_sndpgmmg('USR8152': usr8152: sds.pgmname);
+      leave;
+    endif;
 
-  if (*in99 = *on);
-    *in24 = '1';
-    *in34 = '1';
-  endif;
+  enddo;
 
 endsr;
 
@@ -470,10 +489,17 @@ begsr c_endpgm;
 endsr;
 
 //============================================================*
-//    C_Refresh     F5  - Aktualisieren Bildschirm            *
+//    C_Refresh     F5  - Eingaben verwerfen                  *
 //============================================================*
 
 begsr c_refresh;
+
+  //  Werte beim Öffnen des Fensters wiederherstellen
+  ##file = r_file;
+  ##library = r_library;
+  ##member = r_member;
+  ##mbropt = r_mbropt;
+  ##crtfile = r_crtfile;
 
   exsr fill##;
 
@@ -568,6 +594,13 @@ begsr first;
 
   // - Bildschirmfelder füllen
   exsr fill##;
+
+  // - Werte für F5 merken
+  r_file = ##file;
+  r_library = ##library;
+  r_member = ##member;
+  r_mbropt = ##mbropt;
+  r_crtfile = ##crtfile;
 
   //  Löschen der Cursorosition
   csrrow = *zeros;

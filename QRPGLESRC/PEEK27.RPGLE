@@ -40,7 +40,6 @@
 /COPY QCOPYLE,PPEEK53
 /COPY QCOPYLE,PPEEK58
 
-dcl-s i               like(int4_t) inz;
 dcl-s x               like(int4_t) inz;
 dcl-s y               like(int4_t) inz;
 dcl-s z               like(int4_t) inz;
@@ -50,7 +49,10 @@ dcl-s wrk_msgtxt      like(msgdta_t) inz;
 dcl-s wrk_key         like(key_t) inz;
 dcl-s wrk_sectn       like(section_t) inz;
 dcl-s data            like(set0000_t) inz;
-dcl-s pgmcmd          like(pgmcmd_t) inz;
+
+//  Breite der Auswahlzeile und Ausschlüsse des Aufrufers
+dcl-s width           like(int4_t) inz(63);
+dcl-s isExclKeys      like(bool_t) inz(bFalse);
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
@@ -60,7 +62,8 @@ dcl-pi peek27;
   i_pgm           const like(pgm_t);
   o_choices             like(choice_t) dim(32);
   o_numchoices          like(int4_t);
-  i_exclkeys      const like(pgmcmd_t) dim(25) options(*nopass);
+  i_exclkeys      const like(pgmcmd_t) dim(25) options(*nopass: *omit);
+  i_width         const like(int4_t) options(*nopass);
 end-pi;
 
 dcl-s do_x1           packed(7);
@@ -74,6 +77,20 @@ ceehdlr(%paddr('errorHandler')
 
 o_choices(*) = *blanks;
 o_numchoices = *zeros;
+
+isExclKeys = bFalse;
+if (%parms() >= %parmnum(i_exclkeys));
+  if (%addr(i_exclkeys) <> *null);
+    isExclKeys = bTrue;
+  endif;
+endif;
+
+width = 63;
+if (%parms() >= %parmnum(i_width));
+  if (i_width > 0 and i_width <= %len(o_choices(1)));
+    width = i_width;
+  endif;
+endif;
 
 exsr getKeyMap;
 
@@ -99,11 +116,9 @@ begsr getKeyMap;
       leave;
     endif;
 
-    //  Überprüfen Auschlüsse
-    if %parms() >= %parmnum(i_exclkeys);
-      pgmcmd = data;
-      i = %lookup(pgmcmd: i_exclkeys);
-      if (i > 0);
+    //  Überprüfen Ausschlüsse
+    if (isExclKeys);
+      if (f_iskeyexc(data: i_exclkeys) = bTrue);
         iter;
       endif;
     endif;
@@ -132,6 +147,13 @@ begsr getKeyMap;
       leave;
     endif;
 
+    //  Überprüfen Ausschlüsse
+    if (isExclKeys);
+      if (f_iskeyexc(data: i_exclkeys) = bTrue);
+        iter;
+      endif;
+    endif;
+
     exsr buildstr;
     if (x > 32);
       //          Fertig, Tabelle ist voll
@@ -152,6 +174,9 @@ begsr buildstr;
   if (wrk_msgid <> '');
     wrk_msgid = 'KEY' + %trim(wrk_msgid);
     wrk_msgtxt = f_msgtext(wrk_msgid: ' ');
+  else;
+    //  Befehl ohne Nachrichtentext
+    wrk_msgtxt = '???';
   endif;
 
   //  Stringlänge
@@ -165,7 +190,7 @@ begsr buildstr;
 
   //  Freie Länge
   y = %checkr(' ': o_choices(x));
-  y = 63 - y;
+  y = width - y;
   if (y < z);
     x = x + 1;
     o_numchoices = o_numchoices + 1;

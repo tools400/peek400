@@ -1280,7 +1280,7 @@ begsr first;
     yExclKeys(*) = '';
   endsl;
 
-  peek27(sds.pgmName: yChoice: yNbrOfCh: yExclKeys);
+  peek27(sds.pgmName: yChoice: yNbrOfCh: yExclKeys: %len($$choice));
 
   // - Öffnen Bildschirmdatei
   if (workstn.isOpen = '0');

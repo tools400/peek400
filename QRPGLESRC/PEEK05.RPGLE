@@ -3625,7 +3625,12 @@ begsr pbGetTarget;
     isTargetOK = bFalse;
   else;
     isError = bFalse;
-    isTargetOK = bTrue;
+    //  Abbruch mit F3/F12 (USR8100): kein Ziel, nichts kopieren
+    if (yMsgID = 'USR8112'); // Verarbeitung bestätigt.
+      isTargetOK = bTrue;
+    else;
+      isTargetOK = bFalse;
+    endif;
   endif;
 
 endsr;

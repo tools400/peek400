@@ -2,8 +2,8 @@
 // ==========================================================================
 //  Peek/400 - Unit-Tests der Programme PEEK01, PEEK02, PEEK03, PEEK04,
 //  PEEK06, PEEK07, PEEK10, PEEK11, PEEK15, PEEK18, PEEK19, PEEK20, PEEK22,
-//  PEEK23 und PEEK36 sowie der Transcoder-Liste von PEEK71 und der Datei
-//  PEEKFMT (iRPGUnit).
+//  PEEK23, PEEK27 und PEEK36 sowie der Transcoder-Liste von PEEK71 und der
+//  Datei PEEKFMT (iRPGUnit).
 //
 //  Zum Erstellen und Ausführen muss die Peek-Bibliothek (QCOPYLE,
 //  Bindeverzeichnis PEEK, PEEKUSR, PEEKFLD, PEEKFMT, Nachrichtendatei
@@ -54,6 +54,7 @@ ctl-opt nomain;
 /copy QCOPYLE,PPEEK20
 /copy QCOPYLE,PPEEK22
 /copy QCOPYLE,PPEEK23
+/copy QCOPYLE,PPEEK27
 /copy QCOPYLE,PPEEK36
 /undefine internal_prototype
 
@@ -1006,6 +1007,91 @@ dcl-proc test25_peek23_moreKeysEveryThird export;
 
   assert(n > 0: 'Keine Tasten für PEEK14.');
   assert(errors = '': 'Tastenleiste PEEK14:' + errors);
+end-proc;
+
+// ==========================================================================
+//  PEEK27: Ein Befehl ohne Nachrichtentext zeigt '???' statt des Textes
+//  der Auswahl davor.
+// ==========================================================================
+
+dcl-proc test26_peek27_textOfCmdWithoutMsg export;
+  dcl-s choices like(choice_t) dim(32);
+  dcl-s n like(int4_t);
+  dcl-s data like(set0000_t);
+
+  peek22('*REPLACE': '*PEEK37');
+  data = '*NOTEXT';
+  f_writeusr('*PEEK37': '2': data);
+
+  peek27('PEEK37': choices: n);
+
+  assert(%scan('  2=???': choices(1)) > 0
+         : 'Option 2 ohne Text: ''' + %trimr(choices(1)) + '''');
+end-proc;
+
+// ==========================================================================
+//  PEEK27: Ausschlüsse gelten auch für Auswahlen mit Buchstaben.
+// ==========================================================================
+
+dcl-proc test27_peek27_exclusionLetterOption export;
+  dcl-s choices like(choice_t) dim(32);
+  dcl-s n like(int4_t);
+  dcl-s excl like(pgmcmd_t) dim(25);
+  dcl-s data like(set0000_t);
+  dcl-s all varchar(2500) inz;
+  dcl-s i like(int4_t);
+
+  //  PEEK56: Option 2 und zusätzlich L mit *SLCLAYOUT
+  peek22('*REPLACE': '*PEEK56');
+  data = '*SLCLAYOUT';
+  f_writeusr('*PEEK56': 'L': data);
+  excl(1) = '*SLCLAYOUT';
+
+  peek27('PEEK56': choices: n: excl);
+
+  for i = 1 to n;
+    all += ' ' + %trimr(choices(i));
+  endfor;
+
+  assert(%scan(' 1=': all) > 0: 'Option 1 fehlt:' + all);
+  assert(%scan(' 2=': all) = 0: 'Ausgeschlossene Option 2 angezeigt:' + all);
+  assert(%scan(' L=': all) = 0: 'Ausgeschlossene Option L angezeigt:' + all);
+end-proc;
+
+// ==========================================================================
+//  PEEK27: Die Auswahlzeilen passen in die Breite des Aufrufers (PEEK68FM:
+//  29 Zeichen), statt bis 63 Zeichen gefüllt zu werden.
+// ==========================================================================
+
+dcl-proc test28_peek27_lineWidth export;
+  dcl-s choices like(choice_t) dim(32);
+  dcl-s n like(int4_t);
+  dcl-s data like(set0000_t);
+  dcl-s all varchar(2500) inz;
+  dcl-s i like(int4_t);
+  dcl-s len like(int4_t);
+
+  peek22('*REPLACE': '*PEEK68');
+  data = '*CHANGE';
+  f_writeusr('*PEEK68': '2': data);
+  data = '*COPY';
+  f_writeusr('*PEEK68': '3': data);
+  data = '*DELETE';
+  f_writeusr('*PEEK68': '4': data);
+  data = '*DISPLAY';
+  f_writeusr('*PEEK68': '5': data);
+
+  peek27('PEEK68': choices: n: *omit: 29);
+
+  for i = 1 to n;
+    len = %len(%trimr(choices(i)));
+    assert(len <= 29: 'Zeile ' + %char(i) + ' hat ' + %char(len)
+           + ' Zeichen: ''' + %trimr(choices(i)) + '''');
+    all += ' ' + %trimr(choices(i));
+  endfor;
+
+  assert(n > 1: 'Nur eine Zeile:' + all);
+  assert(%scan(' 5=': all) > 0: 'Option 5 fehlt:' + all);
 end-proc;
 
 // ==========================================================================
