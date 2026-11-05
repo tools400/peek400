@@ -34,6 +34,10 @@
 /COPY QCOPYLE,PPEEK60
 /undefine internal_prototype
 
+//  Anzahl der Schritte der Fortschrittsanzeige je Programm. Sie muss zu
+//  den Aufrufen von p_showprogressmeter() passen: PEEK08 4, PEEK15 2 und
+//  PEEK16 7 (je Marke der Vorlage PEEKSRC/PGM: RNM1 zwei, RNM2, TSCN,
+//  FSCN und ISO je einen; ISO steht zweimal in der Vorlage).
 dcl-c cnumpasses_peek08 4;
 dcl-c cnumpasses_peek15 2;
 dcl-c cnumpasses_peek16 7;

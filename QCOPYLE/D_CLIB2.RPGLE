@@ -215,47 +215,6 @@ dcl-pr rrlslck int(10) extproc('C_Rrlslck');  // int 1=success
   i_fp            pointer value;              //     0=error
 end-pr;
 
-//  _Rupdate -- Update a Record
-//    #include <recio.h>
-//    _RIOFB_T *_Rupdate(_RFILE *fp, void *buf, size_t size);
-dcl-pr rupdate pointer extproc('C_Rupdate'); // _RIOFB_T
-  i_fp            pointer value;
-/if defined(RUPDATE_OPTIONS_STRING)
-  i_pbuffer       pointer value  options(*string);
-/else
-  i_pbuffer       pointer value;
-/endif
-  i_size          uns(10) value;
-end-pr;
-
-
-//  _Rwrite -- Write the next record
-//    #include <recio.h>
-//    _RIOFB_T * _Rwrite(_RFILE *fp, void *buf, size_t size);
-dcl-pr rwrite pointer extproc('C_Rwrite'); // _RIOFB_T
-  i_fp            pointer value;
-/if defined(RWRITE_OPTIONS_STRING)
-  i_pbuffer       pointer value  options(*string);
-/else
-  i_pbuffer       pointer value;
-/endif
-  i_size          uns(10) value;
-end-pr;
-
-//  _Rwrited -- Write a Record Directly
-//    #include <recio.h>
-//    _RIOFB_T *_Rwrited(_RFILE *fp, void *buf, size_t size, unsigned long rrn);
-dcl-pr rwrited pointer extproc('C_Rwrited'); // _RIOFB_T
-  i_fp            pointer value;
-/if defined(RWRITE_OPTIONS_STRING)
-  i_pbuffer       pointer value  options(*string);
-/else
-  i_pbuffer       pointer value;
-/endif
-  i_size          uns(10) value;
-  i_rrn           uns(10) value;
-end-pr;
-
 //  _Rformat -- Set the Record Format Name
 //    #include <recio.h>
 //    void  _Rformat(_RFILE *fp, char *fmt);

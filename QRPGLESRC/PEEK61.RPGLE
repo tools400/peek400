@@ -122,7 +122,13 @@
                : 'JOBI0100': '*': '');
 
        // Set processing attributes ...
-       g_jobtype = jobi0100.type;
+       // (only interactive jobs have a display, all other job types
+       //  use the batch layout)
+       if (jobi0100.type = 'I');
+          g_jobtype = 'I';
+       else;
+          g_jobtype = 'B';
+       endif;
 
        g_text        = %trimr(i_text) + ' ';
        g_maxvalue    = i_maxvalue;
@@ -154,6 +160,12 @@
              g_width = lf_getnumdspcol() -
                          %len(g_text) - 10;
           endif;
+       endif;
+
+       // ... at most the size of the progress field (128 characters,
+       //     one of them for the closing attribute)
+       if (g_width > 127);
+          g_width = 127;
        endif;
 
        //  ... check whether the progress meter must be shown for jobs of type ...
@@ -216,7 +228,8 @@
        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
        //  Check whether the progress meter must be shown
-       if (not g_showprgmtr);
+       //  (no maximum value: nothing to show, avoid dividing by zero)
+       if (not g_showprgmtr or g_maxvalue <= 0);
           return;
        endif;
 

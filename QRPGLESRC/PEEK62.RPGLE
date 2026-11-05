@@ -43,6 +43,7 @@
       /COPY QCOPYLE,CEECNDHDLR
 
       /COPY QCOPYLE,USR9995
+      /COPY QCOPYLE,USR9989
 
       /define internal_prototype
       /COPY QCOPYLE,PPEEK62
@@ -155,6 +156,8 @@
        dcl-pi peek62;
          i_file          const like(file_t);
          i_lib           const like(lib_t);
+         o_msgid               like(msgid_t);
+         o_msgdta              like(msgdta_t);
        end-pi;
        //---------------------------------------------------*
 
@@ -162,19 +165,34 @@
        ceehdlr(%paddr('errorHandler')
               : *null: *omit);
 
+       o_msgid = '';
+       o_msgdta = '';
+
        g_oldfile = %trim(i_lib ) + '/' + %trim(i_file);
-
-       open oldfile;
-       p_rmvpgmmg(sds.pgmname);
-
-       rcdLen1 = file_01_ds.rcdlen;
-       close oldfile;
-
        g_peekusr = %trim(f_getprdlb()) + '/' + 'PEEKUSR';
 
-       open peekusr;
-       rcdLen2 = file_02_ds.rcdlen;
-       close peekusr;
+       //  Satzlängen vergleichen. Lässt sich eine der Dateien nicht öffnen
+       //  (z. B. gesperrt), entfällt die Anpassung; den Fehler meldet dann
+       //  PEEK31 beim Lesen der Einstellungen.
+       monitor;
+          open oldfile;
+          rcdLen1 = file_01_ds.rcdlen;
+          close oldfile;
+
+          open peekusr;
+          rcdLen2 = file_02_ds.rcdlen;
+          close peekusr;
+       on-error;
+          if (%open(oldfile));
+             close oldfile;
+          endif;
+          if (%open(peekusr));
+             close peekusr;
+          endif;
+          return;
+       endmon;
+
+       p_rmvpgmmg(sds.pgmname);
 
          if (rcdLen1 <> rcdLen2);
 
@@ -246,6 +264,28 @@
           //  Free Environment Handle
           if (hEnv <> 0);
              retCode = sqlfreeenv(hEnv);
+          endif;
+
+          //  Prüfen, ob die Anpassung gelungen ist: Scheitert das ALTER
+          //  (z. B. Datei in Benutzung) oder weicht eine andere Spalte ab,
+          //  hat die Datei weiterhin eine andere Satzlänge.
+          rcdLen1 = 0;
+          monitor;
+             open oldfile;
+             rcdLen1 = file_01_ds.rcdlen;
+             close oldfile;
+          on-error;
+             if (%open(oldfile));
+                close oldfile;
+             endif;
+          endmon;
+
+          if (rcdLen1 <> rcdLen2);
+             clear usr9989;
+             usr9989.var1 = i_file;
+             usr9989.var2 = i_lib;
+             o_msgid  = 'USR9989';
+             o_msgdta = usr9989;
           endif;
 
        endif;

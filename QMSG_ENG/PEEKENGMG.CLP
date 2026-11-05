@@ -9365,6 +9365,29 @@ out does not match the record format level ID of the specified file.&N-
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
+     /*   Cmd-ADDMSGD für Message-ID :   USR9989                    */
+     /* Could not change the record format of settings file &2/&1.  */
+     /*-------------------------------------------------------------*/
+
+             RMVMSGD MSGID(USR9989) MSGF(&LIB/&OBJ)
+             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+
+             ADDMSGD +
+                MSGID(USR9989) +
+                MSGF(&LIB/&OBJ) +
+                MSG( +
+'Could not change the record format of settings file &2/&1.'          +
+                ) +
+                SEV(0) +
+                FMT( +
+                    (*CHAR 10) +
+                    (*CHAR 10) +
+                ) +
+                ALROPT(*NO) +
+                CCSID(&CCSID) +
+                /*  -EOF-  */
+
+     /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR9992                    */
      /* Faild to save workspace settings.                           */
      /*-------------------------------------------------------------*/

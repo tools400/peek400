@@ -9377,6 +9377,30 @@ s.'                                                                   +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
+     /*   Cmd-ADDMSGD für Message-ID :   USR9989                    */
+     /* Le format d'enregistrement du fichier de configuration &2/&1*/
+     /*-------------------------------------------------------------*/
+
+             RMVMSGD MSGID(USR9989) MSGF(&LIB/&OBJ)
+             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+
+             ADDMSGD +
+                MSGID(USR9989) +
+                MSGF(&LIB/&OBJ) +
+                MSG( +
+'Le format d''enregistrement du fichier de configuration &2/&1 n''a pa-
+s pu être modifié.'                                                   +
+                ) +
+                SEV(0) +
+                FMT( +
+                    (*CHAR 10) +
+                    (*CHAR 10) +
+                ) +
+                ALROPT(*NO) +
+                CCSID(&CCSID) +
+                /*  -EOF-  */
+
+     /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR9992                    */
      /* Echec sauvegarde paramètres utilisateur                     */
      /*-------------------------------------------------------------*/

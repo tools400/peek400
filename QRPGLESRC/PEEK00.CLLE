@@ -161,7 +161,18 @@ NO_EXIT02:
              MONMSG     MSGID(CPF9801) EXEC(DO)
                 GOTO       CMDLBL(NO_PEEK62)
              ENDDO
-             CALL       PGM(&PRODLIB/PEEK62) PARM(&PEEKUSERFI &PEEKUSERLB)
+             CALL       PGM(&PRODLIB/PEEK62) PARM(&PEEKUSERFI +
+                                                  &PEEKUSERLB +
+                                                  &MSGID      +
+                                                  &MSGDTA)
+ /*  Einstellungsdatei nicht angepasst: Die Sprache ist noch nicht    */
+ /*  bekannt, deshalb kommt die Meldung aus PEEKGER.                  */
+             IF         COND(&MSGID *NE ' ') THEN(DO)
+                SNDPGMMSG  MSGID(&MSGID) MSGF(&PRODLIB/PEEKGER) +
+                           MSGDTA(&MSGDTA)                      +
+                           TOPGMQ(*PRV (*)) MSGTYPE(*INFO)
+                GOTO       CMDLBL(ENDE)
+             ENDDO
 NO_PEEK62:
 
              CALLPRC    PRC(p_setUsr) PARM(&PEEKUSERNM &PEEKUSERFI &PEEKUSERLB)

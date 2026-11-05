@@ -2,9 +2,9 @@
 // ==========================================================================
 //  Peek/400 - Unit-Tests der Programme PEEK01, PEEK02, PEEK03, PEEK04,
 //  PEEK06, PEEK07, PEEK10, PEEK11, PEEK15, PEEK18, PEEK19, PEEK20, PEEK22,
-//  PEEK23, PEEK27, PEEK31, PEEK33, PEEK36, PEEK38, PEEK54 und PEEK55
-//  sowie der Transcoder-Liste von PEEK71 und der Datei PEEKFMT
-//  (iRPGUnit).
+//  PEEK23, PEEK27, PEEK31, PEEK33, PEEK36, PEEK38, PEEK54, PEEK55 und
+//  PEEK62, des Serviceprogramms PEEK61, der Transcoder-Liste von PEEK71
+//  und der Datei PEEKFMT (iRPGUnit).
 //
 //  Zum Erstellen und Ausführen muss die Peek-Bibliothek (QCOPYLE,
 //  Bindeverzeichnis PEEK, PEEKUSR, PEEKFLD, PEEKFMT, Nachrichtendatei
@@ -64,14 +64,21 @@ ctl-opt nomain;
 /copy QCOPYLE,PPEEK38
 /copy QCOPYLE,PPEEK54
 /copy QCOPYLE,PPEEK55
+/copy QCOPYLE,PPEEK62
 /undefine internal_prototype
 
 /copy QCOPYLE,PPEEK53
 /copy QCOPYLE,PPEEK58
 /copy QCOPYLE,PPEEK71
+/copy QCOPYLE,PPEEK61
 
 dcl-f peekfld disk keyed usropn extfile('QTEMP/PEEKFLD') prefix(k_)
       rename(fpeekfld: rpeekfld);
+
+//  Beliebige Datei, nur für die Satzlänge (PEEK62)
+dcl-f anyfile disk(32766) usropn infds(anyfile_ds) extfile(g_anyfile);
+dcl-ds anyfile_ds likeds(infds_t);
+dcl-s g_anyfile char(21);
 
 // --------------------------------------------------------------------------
 //  iRPGUnit API. Nicht per QINCLUDE,TESTCASE, weil dessen TEMPLATES
@@ -127,6 +134,9 @@ dcl-c TST_KEY35I 'PEEKKEY35I';   // Index über alle 35 Spalten
 dcl-c TST_ENVF   'PEEKENVT';     // Kopie von PEEKENV (Arbeitsumgebung)
 dcl-c TST_ENVM   'PEEKKEYS';     // Teildatei der Arbeitsumgebung
 dcl-c TST_FMTID  'PEEKKEYS00001'; // Satzformat-ID für die Umgebung
+dcl-c TST_OLDU1  'PEEKOLDU1';    // Einstellungsdatei mit DATA 128
+dcl-c TST_OLDU2  'PEEKOLDU2';    // Einstellungsdatei mit KEY 12
+dcl-c PEEKUSR_LEN 286;           // Satzlänge von PEEKUSR
 dcl-c TST_USRF   'PEEKTSTUSR';   // Kopie von PEEKUSR
 dcl-c TST_USER   'TESTUSER';
 
@@ -1355,8 +1365,102 @@ dcl-proc test38_peek55_loadAfterUsr8234 export;
 end-proc;
 
 // ==========================================================================
+//  PEEK62: Eine Einstellungsdatei mit DATA 128 wird auf die Satzlänge von
+//  PEEKUSR umgestellt.
+// ==========================================================================
+
+dcl-proc test39_peek62_convertsOldFile export;
+  dcl-s msgid like(msgid_t);
+  dcl-s msgdta like(msgdta_t);
+
+  crtOldUsr(TST_OLDU1: 10: 128);
+
+  monitor;
+    peek62(TST_OLDU1: TST_LIB: msgid: msgdta);
+  on-error;
+    fail('PEEK62 bricht ab: ' + lastMsg());
+  endmon;
+  aEqual('': msgid: 'Nachricht');
+  iEqual(PEEKUSR_LEN: rcdLen(TST_OLDU1): 'Satzlänge');
+end-proc;
+
+// ==========================================================================
+//  PEEK62: Weicht eine andere Spalte als DATA ab, bleibt die Satzlänge
+//  falsch; PEEK62 meldet USR9989. Bisher kehrte es still zurück.
+// ==========================================================================
+
+dcl-proc test40_peek62_otherColumnDiffers export;
+  dcl-s msgid like(msgid_t);
+  dcl-s msgdta like(msgdta_t);
+
+  crtOldUsr(TST_OLDU2: 12: 256);
+
+  monitor;
+    peek62(TST_OLDU2: TST_LIB: msgid: msgdta);
+  on-error;
+    fail('PEEK62 bricht ab: ' + lastMsg());
+  endmon;
+  aEqual('USR9989': msgid: 'Nachricht');
+  aEqual(TST_OLDU2 + ' ' + TST_LIB: %subst(msgdta: 1: 15): 'Daten');
+end-proc;
+
+// ==========================================================================
+//  PEEK61: Fortschrittsanzeige mit Höchstwert 0. Bisher teilte sie durch
+//  null (MCH1211).
+// ==========================================================================
+
+dcl-proc test41_peek61_maxValueZero export;
+  monitor;
+    p_inzprogressmeter('Test': 0);
+    p_showprogressmeter(0);
+  on-error;
+    fail('PEEK61 bricht ab: ' + lastMsg());
+  endmon;
+end-proc;
+
+// ==========================================================================
 //  Hilfsprozeduren
 // ==========================================================================
+
+//  Creates the settings file QTEMP/<i_file> in an old layout with the
+//  given lengths of KEY and DATA (any existing file is replaced).
+dcl-proc crtOldUsr;
+  dcl-pi *n;
+    i_file    varchar(10) const;
+    i_keyLen  int(10) const;
+    i_dataLen int(10) const;
+  end-pi;
+
+  monitor;
+    runSql('DROP TABLE ' + TST_LIB + '/' + i_file);
+  on-error;
+  endmon;
+  runSql('CREATE TABLE ' + TST_LIB + '/' + i_file + ' (+
+          "USER" CHAR(10) NOT NULL WITH DEFAULT, +
+          "SECTION" CHAR(10) NOT NULL WITH DEFAULT, +
+          "KEY" CHAR(' + %char(i_keyLen) + ') NOT NULL WITH DEFAULT, +
+          "DATA" CHAR(' + %char(i_dataLen) + ') NOT NULL WITH DEFAULT)');
+end-proc;
+
+//  Returns the record length of QTEMP/<i_file> (0 if it cannot be opened).
+dcl-proc rcdLen;
+  dcl-pi *n int(10);
+    i_file varchar(10) const;
+  end-pi;
+
+  dcl-s len int(10) inz(0);
+
+  g_anyfile = TST_LIB + '/' + i_file;
+  monitor;
+    open anyfile;
+    len = anyfile_ds.rcdlen;
+    close anyfile;
+  on-error;
+    len = 0;
+  endmon;
+
+  return len;
+end-proc;
 
 //  Saves the environment of QTEMP/PEEKKEYS with the given WHERE into
 //  QTEMP/PEEKENVT(PEEKKEYS) and returns the message ID.

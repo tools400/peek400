@@ -1,0 +1,8 @@
+**free
+// ---------------------------------------------------------------
+//  Data structure for message ID: USR9989
+//  Die Einstellungsdatei &2/&1 konnte nicht angepasst werden.
+dcl-ds USR9989 qualified;
+  var1  char(10) inz;
+  var2  char(10) inz;
+end-ds;

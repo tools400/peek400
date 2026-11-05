@@ -9383,6 +9383,29 @@ emere F8.'                                                            +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
+     /*   Cmd-ADDMSGD für Message-ID :   USR9989                    */
+     /* Impossibile adattare il file delle impostazioni &2/&1.      */
+     /*-------------------------------------------------------------*/
+
+             RMVMSGD MSGID(USR9989) MSGF(&LIB/&OBJ)
+             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+
+             ADDMSGD +
+                MSGID(USR9989) +
+                MSGF(&LIB/&OBJ) +
+                MSG( +
+'Impossibile adattare il file delle impostazioni &2/&1.'              +
+                ) +
+                SEV(0) +
+                FMT( +
+                    (*CHAR 10) +
+                    (*CHAR 10) +
+                ) +
+                ALROPT(*NO) +
+                CCSID(&CCSID) +
+                /*  -EOF-  */
+
+     /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR9992                    */
      /* Le impostazioni dell'utente non possono essere salvate.     */
      /*-------------------------------------------------------------*/
