@@ -276,9 +276,6 @@ begsr prfb1;
     if (*in99 = bTrue);
       leave;
     endif;
-    if (*in99 = bTrue);
-      leave;
-    endif;
 
     exsr prf20;
     if (*in99 = bTrue);
@@ -585,13 +582,11 @@ begsr setscreen;
   if (i_dsp80 = '0');
     //   132-Zeichen Anzeige
     *in88 = '0';
-    zei = 6;
     zei = 1;
     pos = 40;
   else;
     //    80-Zeichen Anzeige
     *in88 = '1';
-    zei = 4;
     zei = 3;
     pos = 7;
   endif;

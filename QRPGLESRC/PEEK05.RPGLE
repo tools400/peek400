@@ -483,6 +483,8 @@ dcl-s columnlen       like(int4_t);
 dcl-s pincol_x        like(int4_t);
 dcl-c max_pin_col %elem(pinTabCol);
 dcl-s pinTabCol       like(fieldnme_t) dim(12);
+//  Rückgabe des Pin-Dialogs (PEEK50): clrpincol löscht pinTabCol
+dcl-s yPinTabCol      like(fieldnme_t) dim(12);
 dcl-s nbrPinCol       like(int4_t);
 
 dcl-s pinrcd_x        like(int4_t);
@@ -2572,7 +2574,8 @@ begsr c_pincdlg;
   else;
 
     monitor;
-      peek50(set0001.set_dsp80: COPYRIGHT: pinTabCol
+      yPinTabCol = pinTabCol;
+      peek50(set0001.set_dsp80: COPYRIGHT: yPinTabCol
             : yMsgID: yMsgDta);
       *in99 = bFalse;
     on-error;
@@ -2585,8 +2588,8 @@ begsr c_pincdlg;
         exsr clrpincol;
 
         for y = 1 to max_pin_col;
-          if (pinTabCol(y) <> ' ');
-            wrk#field = pinTabCol(y);
+          if (yPinTabCol(y) <> ' ');
+            wrk#field = yPinTabCol(y);
             exsr pincol;
           endif;
         endfor;

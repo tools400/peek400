@@ -90,6 +90,9 @@ dcl-s peek46_name     like(pgmcalln_t);
 dcl-s r_mbr           like(##mbr);
 dcl-s lstmbr          like(##mbr);
 dcl-s lstnbrrcd       like(sflpage);
+dcl-s srchrec         like(sflpage);
+//  Teildateinamen der Subfile-Sätze für die Suche
+dcl-s sfl_mbrs        like($$mnme) dim(9999);
 
 dcl-s wrk_sfsanr      like(sfsanr);
 
@@ -352,36 +355,22 @@ begsr srchmbr;
     isfound = bFalse;
     lstnbrrcd = lstnbrrcd + 1;
 
-    for sflrec = lstnbrrcd to sflnbrrcd;
-      chain(e) sflrec pbsfl;
-      *in11 = %error or not %found;
-      if (*in11 = *on);
-        isfound = bFalse;
-        leave;
-      endif;
-
+    //  Die Suche liest die Subfile nicht, sondern die gemerkten
+    //  Teildateinamen: Die Sätze bleiben unverändert, auch Auswahlen
+    //  und deren Fehlermarkierungen.
+    for srchrec = lstnbrrcd to sflnbrrcd;
       if lstmbr =
-         %subst($$mnme: 1:(f_scan(' ':
+         %subst(sfl_mbrs(srchrec): 1:(f_scan(' ':
                                lstmbr) - 1));
         isfound = bTrue;
         leave;
-      else;
-        if (sfpau <> '');
-          //  ... Satz geändert
-          exsr vsfpauchg;
-        else;
-          //  ... Satz nicht geändert
-          exsr vsfpauclr;
-        endif;
-        update pbsfl;
-        iter;
       endif;
 
     endfor;
 
     if (isfound = bTrue);
-      wrk_sfsanr = sflrec;
-      lstnbrrcd = sflrec;
+      wrk_sfsanr = srchrec;
+      lstnbrrcd = srchrec;
     else;
       wrk_sfsanr = 0;
       lstnbrrcd = 0;
@@ -434,6 +423,14 @@ begsr vreadc;
 
       //  Linksbündig setzen ...
       sfpau = %triml(sfpau);
+
+      //  Leere Auswahl wird nicht geprüft. Nur eine alte
+      //  Fehlermarkierung (RI, SFLNXTCHG) wird entfernt.
+      if (sfpau = *blanks);
+        exsr vsfpauclr;
+        update pbsfl;
+        iter;
+      endif;
 
       //  Zuordnung AUSWAHL => Befehl ...
       peek21('#' + sfpau: sds.pgmname
@@ -640,6 +637,7 @@ begsr pbreadup;
     sflrec = sflrec + 1;
     write pbsfl;
     sflnbrrcd = sflrec;
+    sfl_mbrs(sflrec) = $$mnme;
 
     if (sflrec >= sflpage);
       leave;

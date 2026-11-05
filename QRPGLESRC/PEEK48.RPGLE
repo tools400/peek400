@@ -90,12 +90,17 @@ dcl-s peek40_name     like(pgmcalln_t) inz;
 
 dcl-s tempscnfld      like(scnfld  ) inz;
 dcl-s tempfldpos      like(fldpos  ) inz;
-dcl-s tempfield       like(##where ) inz;
 dcl-s templen         like(int4_t) inz;
 dcl-s tempcsrrow      like(int4_t) inz;
 dcl-s tempcsrcol      like(int4_t) inz;
 dcl-s tempfldlen      like(int4_t) inz;
 dcl-s tempfldby       like(int4_t) inz;
+
+//  Einfügen der Schlüsselfelder in ##ORDER
+dcl-s inskeys         like(sqlOrder_t) inz;
+dcl-s keylen          like(int4_t) inz;
+dcl-s scanpos         like(int4_t) inz;
+dcl-s usedlen         like(int4_t) inz;
 
 dcl-ds pfile qualified;
   name            like(io_file);
@@ -335,15 +340,26 @@ endsr;
 
 begsr c_prompt;
 
+  //  Steht im Feld nur das Prompt-Zeichen (z. B. '?'), gilt der Prompt
+  //  diesem Feld, auch wenn der Cursor nicht darin steht. Der
+  //  ausgewählte Feldname ersetzt das Zeichen (pmt_field).
+  if (set0008.set_prmt <> ' ');
+    if (##where = set0008.set_prmt and tempscnfld <> '##ORDER');
+      tempscnfld = '##WHERE';
+    elseif (##order = set0008.set_prmt and tempscnfld <> '##WHERE');
+      tempscnfld = '##ORDER';
+    endif;
+  endif;
+
   select;
-  when (tempscnfld = '##WHERE' or ##where = set0008.set_prmt);
+  when (tempscnfld = '##WHERE');
     if (*in71 = *on);
       p_sndpgmmg('USR8195': '': sds.pgmname);
     else;
       exsr pmt_field;
     endif;
 
-  when (tempscnfld = '##ORDER' or ##order = set0008.set_prmt);
+  when (tempscnfld = '##ORDER');
     if (*in72 = *on);
       p_sndpgmmg('USR8195': '': sds.pgmname);
     else;
@@ -371,6 +387,10 @@ begsr pmt_field;
 
     select;
     when (tempscnfld = '##WHERE');
+      if (set0008.set_prmt <> ' ' and ##where = set0008.set_prmt);
+        ##where = '';
+        tempfldpos = 1;
+      endif;
       ##where = %replace(%trimr(yField) + ' '
                         : ##where
                         : tempfldpos
@@ -382,6 +402,10 @@ begsr pmt_field;
       tempfldby  = 42;
 
     when (tempscnfld = '##ORDER');
+      if (set0008.set_prmt <> ' ' and ##order = set0008.set_prmt);
+        ##order = '';
+        tempfldpos = 1;
+      endif;
       ##order  = %replace(%trimr(yField) + ' '
                          : ##order
                          : tempfldpos
@@ -389,9 +413,12 @@ begsr pmt_field;
       tempcsrrow = 12;
       tempcsrcol = 17;
       tempfldpos = tempfldpos + templen + 1;
-      tempfldlen = %len(##where);
+      tempfldlen = %len(##order);
       tempfldby  = 42;
 
+    other;
+      //  Kein Eingabefeld: nichts einfügen, Cursor nicht versetzen
+      leavesr;
     endsl;
 
     if (tempfldpos > tempfldlen);
@@ -460,19 +487,27 @@ endsr;
 
 begsr slc_key;
 
+  yMsgId = '';
+  yMsgDta = '';
   peek40(i_dsp80: i_copyright
         : io_file: io_library: io_member
         : io_rcdfmt: bTrue
         : yRetFile: yRetLib
         : yMsgId: yMsgDta);
-  if yRetFile = *blanks
-     or *in99 = *on;
-  //  ... keine Auswahl getroffen
-  else;
+
+  select;
+  //  ... Fehler von PEEK40 (USR8100: mit F3/F12 verlassen)
+  when (yMsgId <> '' and yMsgId <> 'USR8100');
+    p_sndpgmmg(yMsgId: yMsgDta: sds.pgmname);
+  //  ... Datei ausgewählt
+  when (yRetFile <> *blanks);
     io_file = yRetFile;
     io_library = yRetLib;
     exsr ins_field;
-  endif;
+  endsl;
+
+  yMsgId = '';
+  yMsgDta = '';
 
 endsr;
 
@@ -503,19 +538,34 @@ begsr ins_field;
 
   ySqlOrder = '';
   peek38(io_file: io_library: ySqlOrder);
+  inskeys = %trimr(ySqlOrder);
 
-  tempfield = ySqlOrder;
-  //*   ' '           Checkr    tempField     tempLen
-  templen = %checkr(' ': tempfield);
+  //  Die Schlüsselfelder werden an der Cursorposition in ##ORDER
+  //  eingefügt, vorhandener Text rückt nach rechts (wie bei F4).
+  usedlen = %len(%trimr(##order));
+  if (tempfldpos - 1 > usedlen);
+    usedlen = tempfldpos - 1;
+  endif;
 
-  select;
-  when (tempscnfld = '##WHERE');
-    %subst(##where: tempfldpos: templen)
-    = tempfield;
-  when (tempscnfld = '##ORDER');
-    %subst(##order : tempfldpos: templen)
-    = tempfield;
-  endsl;
+  //  Nur ganze Schlüsselfelder einfügen, soweit sie Platz haben.
+  if (%len(inskeys) > %len(##order) - usedlen);
+    keylen = 0;
+    scanpos = %scan(', ': inskeys);
+    dow (scanpos > 0 and scanpos - 1 <= %len(##order) - usedlen);
+      keylen = scanpos - 1;
+      if (scanpos + 2 > %len(inskeys));
+        leave;
+      endif;
+      scanpos = %scan(', ': inskeys: scanpos + 2);
+    enddo;
+    inskeys = %subst(inskeys: 1: keylen);
+    //  USR8176: Warnung: Zeichenkette zu lang.
+    p_sndpgmmg('USR8176': '': sds.pgmname);
+  endif;
+
+  if (%len(inskeys) > 0);
+    ##order = %replace(inskeys: ##order: tempfldpos: 0);
+  endif;
 
 endsr;
 
@@ -547,11 +597,12 @@ begsr fill##;
   ##where = io_sqlwhere;
   ##order = io_sqlorder;
 
+  //  Schlüsselfolge als Vorgabe, auch wenn ORDER BY nicht geändert
+  //  werden darf: Sie hält bei SQL-Zugriff die bisherige Reihenfolge.
   if (i_accessmode = KEY_SEQ) and
      (##order  = ' '    );
-    tempscnfld = '##ORDER';
     tempfldpos = 1;
-    exsr c_inskeyfd;
+    exsr ins_field;
   endif;
 
 endsr;
@@ -632,9 +683,12 @@ begsr first;
   // - Öffnen der Dateien
   open peek48fm;
 
-  // - Füllen der Bildschirmfelder
-  exsr bzoff1;
-  exsr fill##;
+  // - Programm initialisieren (vor fill##, damit dessen Warnung
+  //   USR8176 erhalten bleibt)
+  p_rmvpgmmg(sds.pgmname);
+
+  // - Benutzervoreinstellungen (Prompt-Zeichen)
+  exsr getusrsetg;
 
   // - Setzen Ändern erlaubt für: WHERE und ORDER BY
   if (i_enablewhere = bTrue);
@@ -649,8 +703,10 @@ begsr first;
     *in72 = *on;
   endif;
 
-  // - Programm initialisieren
-  p_rmvpgmmg(sds.pgmname);
+  // - Füllen der Bildschirmfelder
+  exsr bzoff1;
+  exsr fill##;
+
   exsr dltcsrpos;
 
   o_msgid = '';
