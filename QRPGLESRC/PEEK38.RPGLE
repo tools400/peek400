@@ -50,6 +50,7 @@ dcl-s peek41_name like(pgmcalln_t);
 dcl-s rc          like(int4_t);
 dcl-s nbrofkey    like(int4_t);
 dcl-s tempfield   like(o_sqlorder );
+dcl-s keypart     varchar(32);
 dcl-ds keyl0100   likeds(keyl0100_t) inz;
 
 dcl-s isinzsr         like(bool_t) inz(bFalse);
@@ -83,32 +84,35 @@ peek41(yqfile: '*FIRST': '*CREATE'
 peek41(yqfile: '*FIRST': '*KEY'
       : nbrofkey: ydata);
 
-tempfield = ' ';
+tempfield = '';
 
 for do_x1 = 1 to nbrofkey;
   peek41(yqfile: '*FIRST': '*READKEY'
         : rc: ydata);
   keyl0100 = ydata;
 
-  if (tempfield = *blanks);
-    tempfield =
-     %trim(tempfield) +
-     '"' + %trim(keyl0100.apkeyf) + '"';
-  else;
-    tempfield =
-     %trim(tempfield) +
-     ', "' + %trim(keyl0100.apkeyf) + '"';
-  endif;
+  keypart = '"' + %trim(keyl0100.apkeyf) + '"';
 
   select;
   when (keyl0100.apkseq = 'A');
-    tempfield = %trim(tempfield) + ' ASC';
+    keypart += ' ASC';
   when (keyl0100.apkseq = 'D');
-    tempfield = %trim(tempfield) + ' DESC';
+    keypart += ' DESC';
   other;
   //          keine Schlüsselangaben gefunden
   endsl;
 
+  if (tempfield <> '');
+    keypart = ', ' + keypart;
+  endif;
+
+  //  Nur vollständige Schlüsselfelder übernehmen: Ein abgeschnittener
+  //  Name ergäbe ungültiges SQL. Dann wird nach den ersten Feldern sortiert.
+  if (%len(tempfield) + %len(keypart) > %len(tempfield: *max));
+    leave;
+  endif;
+
+  tempfield += keypart;
 endfor;
 
 o_sqlorder = tempfield;

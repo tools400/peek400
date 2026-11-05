@@ -46,11 +46,11 @@
 
 dcl-s r_dateiso       date(*iso) inz(*loval );
 dcl-s r_timeiso       time(*iso) inz(*loval );
-dcl-s r_timestmp      timestamp inz(*loval );
+dcl-s r_timestmp      timestamp(12) inz(*loval );
 dcl-s r_fldlen        like(int4_t);
 dcl-s r_pos           like(int4_t);
 dcl-s r_buffer        like(i_buffer);
-dcl-s r_value         varchar(26);
+dcl-s r_value         varchar(32);
 dcl-s r_dftsep        char(1);
 dcl-c r_bufflen       const(%size(i_buffer));
 
@@ -89,8 +89,7 @@ monitor;
     exsr chktime;
   // ... Zeitstempel
   other;
-    r_timestmp = %timestamp(i_buffer);
-    r_fldlen = 26;
+    exsr chktimestamp;
   endsl;
 on-error;
   o_msgid = 'USR8242';
@@ -191,6 +190,41 @@ begsr chktime;
   other;
     r_timeiso = %time(r_value: *iso);
   endsl;
+
+endsr;
+
+//============================================================*
+//    ChkTimestamp  Prüfen Zeitstempel                        *
+//============================================================*
+
+begsr chktimestamp;
+
+  //  yyyy-mm-dd-hh.mm.ss ohne oder mit 1 bis 12 Nachkommastellen
+  //  (TIMESTAMP(0) bis TIMESTAMP(12)): Die Länge ergibt sich aus
+  //  dem Wert.
+  r_fldlen = %scan(' ': i_buffer) - 1;
+  if (r_fldlen < 0);
+    r_fldlen = r_bufflen;
+  endif;
+
+  //  Andere Längen wie bisher mit 26 Stellen prüfen, damit der Wert
+  //  oder das, was dahinter steht, zu USR8242 führt.
+  if (r_fldlen <> 19 and (r_fldlen < 21 or r_fldlen > 32));
+    r_fldlen = 26;
+  endif;
+
+  //  %timestamp(...: *iso: 12) erwartet genau 12 Nachkommastellen:
+  //  fehlende Stellen mit Nullen auffüllen.
+  if (r_fldlen = 19);
+    r_value = %subst(i_buffer: 1: 19) + '.';
+  else;
+    r_value = %subst(i_buffer: 1: r_fldlen);
+  endif;
+  if (%len(r_value) < 32);
+    r_value += %subst('000000000000': 1: 32 - %len(r_value));
+  endif;
+
+  r_timestmp = %timestamp(r_value: *iso: 12);
 
 endsr;
 

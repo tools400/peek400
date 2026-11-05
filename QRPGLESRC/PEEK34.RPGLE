@@ -121,6 +121,9 @@ dcl-s r_field         like(##field);
 dcl-s r_seq           like(f_seq);
 dcl-s lstfield        like(##field);
 dcl-s lstnbrrcd       like(sflpage);
+dcl-s srchrec         like(sflpage);
+//  Feldnamen der Subfile-Sätze für die Suche
+dcl-s sfl_fnmes       like($$fnme) dim(9999);
 
 //  Prüfung auf doppelte Folgenummern
 dcl-s isdupseq        like(bool_t) inz(bFalse);
@@ -390,17 +393,12 @@ begsr srchfield;
     isfound = bFalse;
     lstnbrrcd = lstnbrrcd + 1;
 
-    for sflrec = lstnbrrcd to sflnbrrcd;
-      chain(e) sflrec pbsfl;
-      if (%error() or not %found());
-        isfound = bFalse;
-        leave;
-      endif;
-
-      //  Nur lesen: Die Sätze bleiben unverändert, auch die
-      //  Fehlermarkierungen und SFLNXTCHG von Eingabefehlern.
+    //  Die Suche liest die Subfile nicht, sondern die gemerkten
+    //  Feldnamen: Nach einem CHAIN auf die Subfile lieferte READC
+    //  Zeilen mit Eingabefehlern (SFLNXTCHG) nicht mehr.
+    for srchrec = lstnbrrcd to sflnbrrcd;
       if lstfield =
-         %subst($$fnme: 1:(f_scan(' ':
+         %subst(sfl_fnmes(srchrec): 1:(f_scan(' ':
                         lstfield) - 1));
         isfound = bTrue;
         leave;
@@ -409,8 +407,8 @@ begsr srchfield;
     endfor;
 
     if (isfound = bTrue);
-      wrk_sfsanr = sflrec;
-      lstnbrrcd = sflrec;
+      wrk_sfsanr = srchrec;
+      lstnbrrcd = srchrec;
     else;
       wrk_sfsanr = *zeros;
       lstnbrrcd = 0;
@@ -1014,6 +1012,7 @@ begsr pbreadup;
     exsr pbsetbz;
     write pbsfl;
     sflnbrrcd = sflrec;
+    sfl_fnmes(sflrec) = $$fnme;
 
     if (sflrec >= sflpage);
       leave;

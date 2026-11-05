@@ -49,8 +49,8 @@ dcl-ds workstn likeds(workstn_t);
 /COPY QCOPYLE,USR0008
 /COPY QCOPYLE,USR8100
 /COPY QCOPYLE,USR8110
-/COPY QCOPYLE,USR8136
 /COPY QCOPYLE,USR8172
+/COPY QCOPYLE,USR8194
 /COPY QCOPYLE,USR8209
 
 /define internal_prototype
@@ -100,7 +100,6 @@ dcl-c nbrfkeys const(2);
 dcl-s sfl_cmd         char(10) inz(*blanks);
 
 dcl-c UNIQUE const('*UNIQUE');
-dcl-c CST    const('*CST');
 
 dcl-s peek21_name     like(pgmcalln_t) inz;
 dcl-s peek23_name     like(pgmcalln_t) inz;
@@ -112,6 +111,9 @@ dcl-s r_file          inz(*blanks) like(##file );
 dcl-s lstfile         inz(*blanks) like(##file );
 dcl-s lstnbrrcd       inz(0) like(sflpage);
 dcl-s spos            like(int4_t) inz;
+dcl-s srchrec         inz(0) like(sflpage);
+//  Dateinamen der Subfile-Sätze für die Suche
+dcl-s sfl_files       like($$file) dim(9999);
 
 dcl-s wrk_sfsanr      inz(*zeros ) like(sfsanr );
 
@@ -381,9 +383,10 @@ begsr postofield;
     exsr srchfield;
     if (isfound = bFalse);
       isnewpos = bFalse;
-      clear usr8136;
-      usr8136.var1 = ##file;
-      p_sndpgmmg('USR8136': usr8136: sds.pgmname);
+      //  USR8194: Datei '&1' nicht gefunden. (##file ist schon gelöscht)
+      clear usr8194;
+      usr8194.var1 = lstfile;
+      p_sndpgmmg('USR8194': usr8194: sds.pgmname);
     else;
       isnewpos = bTrue;
     endif;
@@ -406,45 +409,27 @@ begsr srchfield;
     isfound = bFalse;
     lstnbrrcd = lstnbrrcd + 1;
 
-    for sflrec = lstnbrrcd to sflnbrrcd;
-      chain(e) sflrec pbsfl;
-      *in11 = %error or not %found;
-      if (*in11 = *on);
-        isfound = bFalse;
-        leave;
-      endif;
-
-      exsr bztoscreen;
-
-      spos = %check(' ':$$file);
+    //  Die Suche liest die Subfile nicht, sondern die gemerkten
+    //  Dateinamen: Nach einem CHAIN auf die Subfile lieferte READC
+    //  Zeilen mit Eingabefehlern (SFLNXTCHG) nicht mehr.
+    for srchrec = lstnbrrcd to sflnbrrcd;
+      spos = %check(' ': sfl_files(srchrec));
       if (spos <= 0);
         spos = 1;
       endif;
 
       if lstfile  =
-         %subst($$file: spos:(f_scan(' ':
+         %subst(sfl_files(srchrec): spos:(f_scan(' ':
                            lstfile) - 1));
         isfound = bTrue;
         leave;
-      else;
-        if (sfpau <> *blanks);
-          //  ... Satz geändert
-          exsr vsfpauchg;
-        else;
-          //  ... Satz nicht geändert
-          exsr vsfpauclr;
-        endif;
-
-        exsr bztosubf;
-        update pbsfl;
-        iter;
       endif;
 
     endfor;
 
     if (isfound = bTrue);
-      wrk_sfsanr = sflrec;
-      lstnbrrcd = sflrec;
+      wrk_sfsanr = srchrec;
+      lstnbrrcd = srchrec;
     else;
       wrk_sfsanr = *zeros;
       lstnbrrcd = 0;
@@ -499,6 +484,15 @@ begsr vreadc;
 
       //  Linksbündig setzen ...
       sfpau = %triml(sfpau);
+
+      //  Leere Auswahl wird nicht geprüft. Nur eine alte
+      //  Fehlermarkierung (RI, SFLNXTCHG) wird entfernt.
+      if (sfpau = *blanks);
+        exsr vsfpauclr;
+        exsr bztosubf;
+        update pbsfl;
+        iter;
+      endif;
 
       //  Zuordnung AUSWAHL => Befehl ...
       peek21('#' + sfpau: sds.pgmname
@@ -840,12 +834,6 @@ begsr pbfillkey;
     buffer = %trimr(buffer) + COLOR_white + UNIQUE;
   endif;
 
-  select;
-  when (dbrl0200.b2deptype = 'C');
-    buffer = %trimr(buffer) + COLOR_white + CST;
-  other;
-  endsl;
-
   buffer = %trimr(buffer) + COLOR_green;
 
   strpos = 1;
@@ -942,6 +930,7 @@ begsr pbwrite;
   exsr bztosubf;
   write pbsfl;
   sflnbrrcd = sflrec;
+  sfl_files(sflrec) = $$file;
 
   if (h_file = i_file and h_lib = i_lib and *in71 = *off);
     sfsanr = sflrec;
@@ -1036,6 +1025,8 @@ begsr first;
             : pfmtname: '*BASED-ON': rc: ydata);
       if (rc = *zeros);
         //               ... Fehler
+        o_msgid = 'USR0008';
+        clear usr0008;
         usr0008.var1 = yqfile.name;
         usr0008.var2 = yqfile.lib;
         o_msgdta = usr0008;

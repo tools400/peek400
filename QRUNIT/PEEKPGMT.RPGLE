@@ -2,8 +2,8 @@
 // ==========================================================================
 //  Peek/400 - Unit-Tests der Programme PEEK01, PEEK02, PEEK03, PEEK04,
 //  PEEK06, PEEK07, PEEK10, PEEK11, PEEK15, PEEK18, PEEK19, PEEK20, PEEK22,
-//  PEEK23, PEEK27, PEEK31, PEEK33 und PEEK36 sowie der Transcoder-Liste von
-//  PEEK71 und der Datei PEEKFMT (iRPGUnit).
+//  PEEK23, PEEK27, PEEK31, PEEK33, PEEK36 und PEEK38 sowie der
+//  Transcoder-Liste von PEEK71 und der Datei PEEKFMT (iRPGUnit).
 //
 //  Zum Erstellen und Ausführen muss die Peek-Bibliothek (QCOPYLE,
 //  Bindeverzeichnis PEEK, PEEKUSR, PEEKFLD, PEEKFMT, Nachrichtendatei
@@ -60,6 +60,7 @@ ctl-opt nomain;
 /copy QCOPYLE,PPEEK31
 /copy QCOPYLE,PPEEK33
 /copy QCOPYLE,PPEEK36
+/copy QCOPYLE,PPEEK38
 /undefine internal_prototype
 
 /copy QCOPYLE,PPEEK53
@@ -118,6 +119,8 @@ dcl-c TST_FLOAT  'PEEKFLOAT';    // Tabelle mit REAL und DOUBLE
 dcl-c TST_UTF8   'PEEKUTF8';     // Tabelle mit CHAR CCSID 1208
 dcl-c TST_MDY    'PEEKMDY';      // DDS-Datei mit *MDY-Datum, *USA-Zeit
 dcl-c TST_EDW    'PEEKEDW';      // DDS-Datei mit langem Editierwort
+dcl-c TST_KEY35  'PEEKKEY35';    // Tabelle mit 35 Spalten
+dcl-c TST_KEY35I 'PEEKKEY35I';   // Index über alle 35 Spalten
 dcl-c TST_USRF   'PEEKTSTUSR';   // Kopie von PEEKUSR
 dcl-c TST_USER   'TESTUSER';
 
@@ -171,6 +174,11 @@ dcl-proc setUpSuite export;
   monitor;
     runSql('CREATE TABLE QTEMP/PEEKUTF8 (U CHAR(10) CCSID 1208 NOT NULL, +
             C CHAR(5) NOT NULL)');
+  on-error;
+  endmon;
+
+  monitor;
+    crtKey35();
   on-error;
   endmon;
 end-proc;
@@ -1197,8 +1205,74 @@ dcl-proc test32_peek33_versionRaised export;
 end-proc;
 
 // ==========================================================================
+//  PEEK36: Zeitstempel mit 0 bis 12 Nachkommastellen werden angenommen.
+//  Bisher ergaben TIMESTAMP(7) bis TIMESTAMP(12) USR8242.
+// ==========================================================================
+
+dcl-proc test33_peek36_timestampLengths export;
+  chkPeek36('Z': '': '': '2026-11-05-10.00.00': '');
+  chkPeek36('Z': '': '': '2026-11-05-10.00.00.1': '');
+  chkPeek36('Z': '': '': '2026-11-05-10.00.00.123456': '');
+  chkPeek36('Z': '': '': '2026-11-05-10.00.00.123456789012': '');
+end-proc;
+
+// ==========================================================================
+//  PEEK36: Ungültige Zeitstempel ergeben USR8242.
+// ==========================================================================
+
+dcl-proc test34_peek36_invalidTimestamps export;
+  chkPeek36('Z': '': '': '2026-11-05-10.00.00.1234567890123': 'USR8242');
+  chkPeek36('Z': '': '': '2026-11-05-10.00.00.123456 X': 'USR8242');
+  chkPeek36('Z': '': '': '2026-11-05-10.00.00.': 'USR8242');
+  chkPeek36('Z': '': '': '2026-13-05-10.00.00.000000': 'USR8242');
+end-proc;
+
+// ==========================================================================
+//  PEEK38: Bei 35 Schlüsselfeldern endet ORDER BY mit einem vollständigen
+//  Schlüsselfeld. Bisher wurde die Klausel nach 512 Zeichen mitten im
+//  Spaltennamen abgeschnitten.
+// ==========================================================================
+
+dcl-proc test35_peek38_manyKeys export;
+  dcl-s order like(sqlOrder_t);
+  dcl-s tail varchar(32);
+
+  peek38(TST_KEY35I: TST_LIB: order);
+
+  tail = '" ASC';
+  assert(%len(order) > 20
+         and %subst(order: %len(order) - %len(tail) + 1) = tail
+         and %subst(order: %len(order) - 15: 9) = '"KEYFIELD'
+         : 'ORDER BY (' + %char(%len(order)) + ' Zeichen) endet mit '''
+         + %subst(order: %max(1: %len(order) - 40)) + '''');
+end-proc;
+
+// ==========================================================================
 //  Hilfsprozeduren
 // ==========================================================================
+
+//  Creates the table QTEMP/PEEKKEY35 with 35 columns KEYFIELD01..35 and
+//  the index QTEMP/PEEKKEY35I over all of them.
+dcl-proc crtKey35;
+  dcl-s cols varchar(2000) inz;
+  dcl-s keys varchar(2000) inz;
+  dcl-s name varchar(10);
+  dcl-s i like(int4_t);
+
+  for i = 1 to 35;
+    name = 'KEYFIELD' + %editc(%dec(i: 2: 0): 'X');
+    if (i > 1);
+      cols += ', ';
+      keys += ', ';
+    endif;
+    cols += name + ' CHAR(1)';
+    keys += name;
+  endfor;
+
+  runSql('CREATE TABLE ' + TST_LIB + '/' + TST_KEY35 + ' (' + cols + ')');
+  runSql('CREATE INDEX ' + TST_LIB + '/' + TST_KEY35I + ' ON '
+         + TST_LIB + '/' + TST_KEY35 + ' (' + keys + ')');
+end-proc;
 
 //  Sets the data of a key in the user settings (TESTUSER).
 dcl-proc setUsrData;
@@ -1242,7 +1316,7 @@ dcl-proc chkPeek36;
     i_type      char(1) const;
     i_format    char(4) const;
     i_separator char(1) const;
-    i_value     varchar(26) const;
+    i_value     varchar(40) const;
     i_msgid     char(7) const;
   end-pi;
 

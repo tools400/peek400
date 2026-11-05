@@ -90,6 +90,9 @@ dcl-s peek27_name     like(pgmcalln_t) inz;
 dcl-s r_field         inz(*blanks) like(##field);
 dcl-s lstfield        inz(*blanks) like(##field);
 dcl-s lstnbrrcd       inz(0) like(sflpage);
+dcl-s srchrec         inz(0) like(sflpage);
+//  Feldnamen der Subfile-Sätze für die Suche
+dcl-s sfl_fnmes       like($$fnme) dim(9999);
 
 dcl-s wrk_sfsanr      inz(*zeros ) like(sfsanr );
 
@@ -339,36 +342,22 @@ begsr srchfield;
     isfound = bFalse;
     lstnbrrcd = lstnbrrcd + 1;
 
-    for sflrec = lstnbrrcd to sflnbrrcd;
-      chain(e) sflrec pbsfl;
-      *in11 = %error or not %found;
-      if (*in11 = *on);
-        isfound = bFalse;
-        leave;
-      endif;
-
+    //  Die Suche liest die Subfile nicht, sondern die gemerkten
+    //  Feldnamen: Nach einem CHAIN auf die Subfile lieferte READC
+    //  Zeilen mit Eingabefehlern (SFLNXTCHG) nicht mehr.
+    for srchrec = lstnbrrcd to sflnbrrcd;
       if lstfield =
-         %subst($$fnme: 1:(f_scan(' ':
+         %subst(sfl_fnmes(srchrec): 1:(f_scan(' ':
                                lstfield) - 1));
         isfound = bTrue;
         leave;
-      else;
-        if (sfpau <> *blanks);
-          //  ... Satz geändert
-          exsr vsfpauchg;
-        else;
-          //  ... Satz nicht geändert
-          exsr vsfpauclr;
-        endif;
-        update pbsfl;
-        iter;
       endif;
 
     endfor;
 
     if (isfound = bTrue);
-      wrk_sfsanr = sflrec;
-      lstnbrrcd = sflrec;
+      wrk_sfsanr = srchrec;
+      lstnbrrcd = srchrec;
     else;
       wrk_sfsanr = *zeros;
       lstnbrrcd = 0;
@@ -421,6 +410,14 @@ begsr vreadc;
 
       //  Linksbündig setzen ...
       sfpau = %triml(sfpau);
+
+      //  Leere Auswahl wird nicht geprüft. Nur eine alte
+      //  Fehlermarkierung (RI, SFLNXTCHG) wird entfernt.
+      if (sfpau = *blanks);
+        exsr vsfpauclr;
+        update pbsfl;
+        iter;
+      endif;
 
       //  Zuordnung AUSWAHL => Befehl ...
       peek21('#' + sfpau: sds.pgmname
@@ -583,7 +580,7 @@ endsr;
 
 begsr pbinitkey;
 
-  f_field = *blanks;
+  clear f_key;
 
 endsr;
 
@@ -628,6 +625,7 @@ begsr pbreadup;
     sflrec = sflrec + 1;
     write pbsfl;
     sflnbrrcd = sflrec;
+    sfl_fnmes(sflrec) = $$fnme;
 
     if (sflrec >= sflpage);
       leave;

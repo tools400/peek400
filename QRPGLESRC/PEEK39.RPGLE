@@ -163,7 +163,9 @@ dcl-proc peek39;
     //  get user space pointer
     qusptrus(qusrspc: pspcptr);
 
-    //  get database relations
+    //  get database relations (Fehler über errcode statt Ausnahme)
+    clear errcode;
+    errcode.bytprv = %size(errcode);
     qdbldbr(qusrspc: 'DBRL0200'
            : i_qfile: i_mbr: '': errcode);
 
