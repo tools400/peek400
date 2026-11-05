@@ -2,8 +2,9 @@
 // ==========================================================================
 //  Peek/400 - Unit-Tests der Programme PEEK01, PEEK02, PEEK03, PEEK04,
 //  PEEK06, PEEK07, PEEK10, PEEK11, PEEK15, PEEK18, PEEK19, PEEK20, PEEK22,
-//  PEEK23, PEEK27, PEEK31, PEEK33, PEEK36 und PEEK38 sowie der
-//  Transcoder-Liste von PEEK71 und der Datei PEEKFMT (iRPGUnit).
+//  PEEK23, PEEK27, PEEK31, PEEK33, PEEK36, PEEK38, PEEK54 und PEEK55
+//  sowie der Transcoder-Liste von PEEK71 und der Datei PEEKFMT
+//  (iRPGUnit).
 //
 //  Zum Erstellen und Ausführen muss die Peek-Bibliothek (QCOPYLE,
 //  Bindeverzeichnis PEEK, PEEKUSR, PEEKFLD, PEEKFMT, Nachrichtendatei
@@ -61,6 +62,8 @@ ctl-opt nomain;
 /copy QCOPYLE,PPEEK33
 /copy QCOPYLE,PPEEK36
 /copy QCOPYLE,PPEEK38
+/copy QCOPYLE,PPEEK54
+/copy QCOPYLE,PPEEK55
 /undefine internal_prototype
 
 /copy QCOPYLE,PPEEK53
@@ -121,6 +124,9 @@ dcl-c TST_MDY    'PEEKMDY';      // DDS-Datei mit *MDY-Datum, *USA-Zeit
 dcl-c TST_EDW    'PEEKEDW';      // DDS-Datei mit langem Editierwort
 dcl-c TST_KEY35  'PEEKKEY35';    // Tabelle mit 35 Spalten
 dcl-c TST_KEY35I 'PEEKKEY35I';   // Index über alle 35 Spalten
+dcl-c TST_ENVF   'PEEKENVT';     // Kopie von PEEKENV (Arbeitsumgebung)
+dcl-c TST_ENVM   'PEEKKEYS';     // Teildatei der Arbeitsumgebung
+dcl-c TST_FMTID  'PEEKKEYS00001'; // Satzformat-ID für die Umgebung
 dcl-c TST_USRF   'PEEKTSTUSR';   // Kopie von PEEKUSR
 dcl-c TST_USER   'TESTUSER';
 
@@ -179,6 +185,18 @@ dcl-proc setUpSuite export;
 
   monitor;
     crtKey35();
+  on-error;
+  endmon;
+
+  //  Arbeitsumgebung für PEEK54 und PEEK55
+  monitor;
+    runCmd('CRTDUPOBJ OBJ(PEEKENV) FROMLIB(' + %trim(peekLib) + ') +
+            OBJTYPE(*FILE) TOLIB(QTEMP) NEWOBJ(' + TST_ENVF + ') +
+            DATA(*NO)');
+  on-error;
+  endmon;
+  monitor;
+    runCmd('ADDPFM FILE(QTEMP/' + TST_ENVF + ') MBR(' + TST_ENVM + ')');
   on-error;
   endmon;
 end-proc;
@@ -1248,8 +1266,149 @@ dcl-proc test35_peek38_manyKeys export;
 end-proc;
 
 // ==========================================================================
+//  PEEK54/PEEK55: Ein WHERE, das kürzer als ein Stück (64 Zeichen) ist,
+//  wird gesichert und unverändert geladen. Bisher brach PEEK54 mit
+//  RNX0100 ab.
+// ==========================================================================
+
+dcl-proc test36_peek54_saveShortWhere export;
+  dcl-s loaded like(sqlWhere_t);
+  dcl-s msgid like(msgid_t);
+
+  monitor;
+    msgid = saveEnv('ID = 1');
+  on-error;
+    fail('PEEK54 bricht ab: ' + lastMsg());
+  endmon;
+  aEqual('': msgid: 'Sichern');
+
+  monitor;
+    msgid = loadEnv('*SLCENV': TST_FMTID: loaded);
+  on-error;
+    fail('PEEK55 bricht ab: ' + lastMsg());
+  endmon;
+  aEqual('': msgid: 'Laden');
+  aEqual('ID = 1': loaded: 'WHERE nach dem Laden');
+end-proc;
+
+// ==========================================================================
+//  PEEK55: Ein Leerzeichen am Ende eines Stücks bleibt erhalten. Bisher
+//  wurde jedes Stück mit %trimr gekürzt.
+// ==========================================================================
+
+dcl-proc test37_peek55_blankAtChunkEnd export;
+  dcl-s where like(sqlWhere_t);
+  dcl-s loaded like(sqlWhere_t);
+  dcl-s msgid like(msgid_t);
+  dcl-s i like(int4_t);
+
+  where = '';
+  for i = 1 to 63;
+    where += 'A';
+  endfor;
+  where += ' ';
+  for i = 1 to 64;
+    where += 'B';
+  endfor;
+
+  monitor;
+    msgid = saveEnv(where);
+  on-error;
+    fail('PEEK54 bricht ab: ' + lastMsg());
+  endmon;
+  aEqual('': msgid: 'Sichern');
+
+  monitor;
+    msgid = loadEnv('*SLCENV': TST_FMTID: loaded);
+  on-error;
+    fail('PEEK55 bricht ab: ' + lastMsg());
+  endmon;
+  aEqual('': msgid: 'Laden');
+  aEqual(where: loaded: 'WHERE nach dem Laden');
+end-proc;
+
+// ==========================================================================
+//  PEEK55: Nach USR8234 (Layout eines anderen Satzformats) lässt sich die
+//  Umgebung wieder laden. Bisher blieb PEEKENV offen (RNX1215).
+// ==========================================================================
+
+dcl-proc test38_peek55_loadAfterUsr8234 export;
+  dcl-s loaded like(sqlWhere_t);
+  dcl-s msgid like(msgid_t);
+
+  monitor;
+    msgid = saveEnv('');
+  on-error;
+    fail('PEEK54 bricht ab: ' + lastMsg());
+  endmon;
+  aEqual('': msgid: 'Sichern');
+
+  msgid = loadEnv('*SLCLAYOUT': 'XXXXXXXXXXXXX': loaded);
+  aEqual('USR8234': msgid: 'Anderes Satzformat');
+
+  monitor;
+    msgid = loadEnv('*SLCENV': TST_FMTID: loaded);
+  on-error;
+    fail('Zweites Laden bricht ab: ' + lastMsg());
+  endmon;
+  aEqual('': msgid: 'Zweites Laden');
+end-proc;
+
+// ==========================================================================
 //  Hilfsprozeduren
 // ==========================================================================
+
+//  Saves the environment of QTEMP/PEEKKEYS with the given WHERE into
+//  QTEMP/PEEKENVT(PEEKKEYS) and returns the message ID.
+dcl-proc saveEnv;
+  dcl-pi *n like(msgid_t);
+    i_where varchar(512) const;
+  end-pi;
+
+  dcl-ds pinTabR likeds(pintabr_t) dim(12) inz;
+  dcl-s pinTabC like(fieldnme_t) dim(12) inz;
+  dcl-s msgid like(msgid_t);
+  dcl-s msgdta like(msgdta_t);
+
+  peek54(TST_FILE: TST_LIB: TST_FILE: TST_FILE: TST_FMTID
+        : TST_ENVF: TST_LIB: TST_ENVM: bFalse
+        : pinTabR: 0: pinTabC: 0
+        : SQL_SEQ: i_where: '': KEY_MODE_UPPER
+        : msgid: msgdta);
+
+  return msgid;
+end-proc;
+
+//  Loads the environment of QTEMP/PEEKKEYS and returns the message ID.
+dcl-proc loadEnv;
+  dcl-pi *n like(msgid_t);
+    i_option  like(option_t) const;
+    i_fmtid   like(fmtid_t) const;
+    o_where   like(sqlWhere_t);
+  end-pi;
+
+  dcl-ds pinTabR likeds(pintabr_t) dim(12) inz;
+  dcl-s pinTabC like(fieldnme_t) dim(12) inz;
+  dcl-s nbrPinR like(int4_t);
+  dcl-s nbrPinC like(int4_t);
+  dcl-s file like(file_t);
+  dcl-s lib like(lib_t);
+  dcl-s mbr like(mbr_t);
+  dcl-s fmt like(fmt_t);
+  dcl-s accMode like(accessmode_t);
+  dcl-s order like(sqlOrder_t);
+  dcl-s keyLower like(bool_t);
+  dcl-s msgid like(msgid_t);
+  dcl-s msgdta like(msgdta_t);
+
+  peek55(TST_FILE: TST_LIB: TST_FILE: TST_FILE: i_fmtid
+        : TST_ENVF: TST_LIB: TST_ENVM: i_option
+        : pinTabR: nbrPinR: pinTabC: nbrPinC
+        : file: lib: mbr: fmt: accMode: o_where: order: keyLower
+        : msgid: msgdta);
+
+  return msgid;
+end-proc;
 
 //  Creates the table QTEMP/PEEKKEY35 with 35 columns KEYFIELD01..35 and
 //  the index QTEMP/PEEKKEY35I over all of them.

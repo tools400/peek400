@@ -627,23 +627,32 @@ dcl-proc writeSQLSelect;
   dcl-s strpos          like(int4_t) inz;
   dcl-s lensql          like(int4_t) inz;
   dcl-s lendata         like(int4_t) inz;
+  dcl-s lenpart         like(int4_t) inz;
   //---------------------------------------------------*
 
   clear fpeekenv;
 
+  //  Die Anweisung wird in Stücken von %len(en_data) Zeichen gesichert,
+  //  das letzte Stück ist kürzer. PEEK55 hängt die Stücke ungekürzt
+  //  aneinander.
   idx     = 1;
   strpos  = 1;
-  lensql  = %len(%trim(i_sqlsel));
+  lensql  = %len(%trimr(i_sqlsel));
   lendata = %len(en_data);
 
-  dow strpos < lensql;
+  dow (strpos <= lensql);
+
+    lenpart = lensql - strpos + 1;
+    if (lenpart > lendata);
+      lenpart = lendata;
+    endif;
 
     en_user    = '*ALL';
     en_section = '*SQLSELECT';
     en_file    = i_file;
     en_lib     = i_lib;
     en_key     = chridx;
-    en_data    = %subst(i_sqlsel:strpos:lendata);
+    en_data    = %subst(i_sqlsel: strpos: lenpart);
 
     write fpeekenv;
 
@@ -675,31 +684,38 @@ dcl-proc writeSQLOrder;
   dcl-s strpos          like(int4_t) inz;
   dcl-s lensql          like(int4_t) inz;
   dcl-s lendata         like(int4_t) inz;
+  dcl-s lenpart         like(int4_t) inz;
   //---------------------------------------------------*
 
   clear fpeekenv;
 
+  //  Die Anweisung wird in Stücken von %len(en_data) Zeichen gesichert,
+  //  das letzte Stück ist kürzer. PEEK55 hängt die Stücke ungekürzt
+  //  aneinander.
   idx     = 1;
   strpos  = 1;
-  lensql  = %len(%trim(i_sqlord));
+  lensql  = %len(%trimr(i_sqlord));
   lendata = %len(en_data);
 
-  dow strpos < lensql;
+  dow (strpos <= lensql);
+
+    lenpart = lensql - strpos + 1;
+    if (lenpart > lendata);
+      lenpart = lendata;
+    endif;
 
     en_user    = '*ALL';
     en_section = '*SQLORDER';
     en_file    = i_file;
     en_lib     = i_lib;
     en_key     = chridx;
-    en_data    = %subst(i_sqlord:strpos:lendata);
+    en_data    = %subst(i_sqlord: strpos: lenpart);
 
     write fpeekenv;
 
     idx    = idx + 1;
     strpos = strpos + lendata;
   enddo;
-
-  return;
 
   return;
 

@@ -396,20 +396,22 @@ begsr fill##;
     $$fkey(nbrofkeys) = yfkeys(1);
   endif;
 
-  //  Sortieren der Funktionstasten
+  //  Sortieren der Funktionstasten nach der Nummer der F-Taste
+  //  (in $$fkey: toscreen überträgt es vor jeder Anzeige in die
+  //  Bildschirmfelder $$FKEY01 ff.)
   if (nbrofkeys > 1);
     dou ischanged = bFalse;
       ischanged = bFalse;
       for x = 2 to nbrofkeys;
-        tmpfkey = %subst(scrnfkeys(x-1): 2)+x'00';
+        tmpfkey = %subst($$fkey(x-1): 2)+x'00';
         int1 = atoi(%addr(tmpfkey));
-        tmpfkey = %subst(scrnfkeys(x  ): 2)+x'00';
+        tmpfkey = %subst($$fkey(x  ): 2)+x'00';
         int2 = atoi(%addr(tmpfkey));
         if (int2 < int1);
           ischanged = bTrue;
-          tmpfkey = scrnfkeys(x-1);
-          scrnfkeys(x-1) = scrnfkeys(x);
-          scrnfkeys(x  ) = tmpfkey;
+          tmpfkey = $$fkey(x-1);
+          $$fkey(x-1) = $$fkey(x);
+          $$fkey(x  ) = tmpfkey;
         endif;
       endfor;
     enddo;

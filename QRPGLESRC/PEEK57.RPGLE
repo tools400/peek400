@@ -172,12 +172,14 @@ dow ('1');
     iter;
 
   //  F9  - Löschen Arbeitsumgebung
+  //  (nach dem Löschen zurück zur Liste; bei einem Fehler bleibt das
+  //  Fenster mit der Meldung offen)
   when (ypgmcmd = '*DELETEENV');
     exsr c_delenv;
     if (ispgmerror = bTrue);
-      leave;
-    else;
       iter;
+    else;
+      leave;
     endif;
 
   //  F12 - Ende

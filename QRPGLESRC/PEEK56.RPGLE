@@ -113,6 +113,9 @@ dcl-s peek46_name     like(pgmcalln_t) inz;
 dcl-s r_mbr           inz(*blanks) like(##mbr  );
 dcl-s lstmbr          inz(*blanks) like(##mbr  );
 dcl-s lstnbrrcd       inz(0) like(sflpage);
+dcl-s srchrec         inz(0) like(sflpage);
+//  Namen der Umgebungen (Teildateien) der Subfile-Sätze für die Suche
+dcl-s sfl_mbrs        like($$mnme) dim(9999);
 
 dcl-s wrk_sfsanr      inz(*zeros ) like(sfsanr );
 
@@ -441,33 +444,19 @@ begsr srchmbr;
     isfound = bFalse;
     lstnbrrcd = lstnbrrcd + 1;
 
-    for sflrec = lstnbrrcd to sflnbrrcd;
-      chain(e) sflrec pbsfl;
-      if (%error() or not %found());
-        isfound = bFalse;
-        leave;
-      endif;
-
-      if (lstmbr = %subst($$mnme: 1:(f_scan(' ': lstmbr) - 1)));
+    //  Die Suche liest die Subfile nicht, sondern die gemerkten Namen:
+    //  Die Sätze bleiben unverändert, auch Auswahlen und deren
+    //  Fehlermarkierungen.
+    for srchrec = lstnbrrcd to sflnbrrcd;
+      if (lstmbr = %subst(sfl_mbrs(srchrec): 1:(f_scan(' ': lstmbr) - 1)));
         isfound = bTrue;
         leave;
-      else;
-        if (sfpau <> *blanks);
-          //  ... Satz geändert
-          exsr vsfpauchg;
-        else;
-          //  ... Satz nicht geändert
-          exsr vsfpauclr;
-        endif;
-        update pbsfl;
-        iter;
       endif;
-
     endfor;
 
     if (isfound = bTrue);
-      wrk_sfsanr = sflrec;
-      lstnbrrcd = sflrec;
+      wrk_sfsanr = srchrec;
+      lstnbrrcd = srchrec;
     else;
       wrk_sfsanr = 0;
       lstnbrrcd = 0;
@@ -831,7 +820,7 @@ begsr chkfile;
               %trim(o_mbr )       +
               ')'                 +
               ' TEXT('''          +
-              %trim(o_text)       +
+              %scanrpl('''': '''''': %trim(o_text)) +
               ''')'               :
               yMsgID              :
               yMsgDta             );
@@ -879,9 +868,21 @@ begsr vreadc;
       //  Linksbündig setzen ...
       sfpau = %triml(sfpau);
 
+      //  Leere Auswahl wird nicht geprüft. Nur eine alte
+      //  Fehlermarkierung (RI, SFLNXTCHG) wird entfernt.
+      if (sfpau = *blanks);
+        exsr vsfpauclr;
+        update pbsfl;
+        iter;
+      endif;
+
+      *in85 = '0'; // DSPATR(RI)
+
       //  Zuordnung AUSWAHL => Befehl ...
-      isSflError = f_isvldopt(sfpau: yMsgID: yMsgDta);
-      if (isSflError = bTrue);
+      //  (Ein Fehler bleibt bestehen, auch wenn eine spätere Zeile
+      //  gültig ist.)
+      if (f_isvldopt(sfpau: yMsgID: yMsgDta) = bTrue);
+        isSflError = bTrue;
         p_sndpgmmg(yMsgID: yMsgDta: sds.pgmName);
         yMsgID = '';
         yMsgDta = '';
@@ -1006,6 +1007,7 @@ begsr vpos;
       isSflError = bTrue;
       clear usr8233;
       p_sndpgmmg('USR8233': usr8233: sds.pgmName);
+      exsr vsfpauerr;
       leavesr;
     endif;
   endif;
@@ -1139,6 +1141,7 @@ begsr pbreadup;
     sflrec = sflrec + 1;
     write pbsfl;
     sflnbrrcd = sflrec;
+    sfl_mbrs(sflrec) = $$mnme;
 
     if (sflrec >= sflpage);
       leave;
@@ -1420,23 +1423,24 @@ dcl-proc f_loadrcdfmtid;
   dcl-ds en_key2 likerec(fpeekenv: *key);
   //---------------------------------------------------*
 
-  g_envfile = %trim(i_envlib) + '/' +
-              %trim(i_envfile);
+  //  Die Umgebungsdatei aus dem Fenster: Der Benutzer kann Datei und
+  //  Bibliothek ändern, i_envlib kann auch '*PRDLIB' sein.
+  g_envfile = %trim(##lib) + '/' +
+              %trim(##file);
   g_envmbr = $$mnme;
   open(e) peekenv;
   if (%error());
     return '';
   endif;
 
+  rcdfmtid = '';
   clear en_key2;
   en_key2.en_user = '*ALL';
   en_key2.en_section = '*RCDFMTID';
   chain %kds(en_key2: 2) fpeekenv;
-  if (not %found(peekenv));
-    return '';
+  if (%found(peekenv));
+    rcdfmtid = en_data;
   endif;
-
-  rcdfmtid = en_data;
 
   close peekenv;
 

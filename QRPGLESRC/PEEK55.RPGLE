@@ -248,6 +248,8 @@ dcl-proc main;
 
     if (i_option = '*SLCLAYOUT');
 
+      //  (kein LEAVE: PEEKENV und die Überschreibung werden unten
+      //  wieder entfernt)
       loadRecordFormatID(RrcdFmtID);
       if (RrcdFmtID <> '' and RrcdFmtID <> i_rcdFmtID);
         clear usr8234;
@@ -256,15 +258,16 @@ dcl-proc main;
         usr8234.var3 = i_envMbr;
         o_msgID  = 'USR8234';
         o_msgDta = usr8234;
-        leave;
+      else;
+        o_file   = i_file;
+        o_lib    = i_lib;
+        o_mbr    = i_mbr;
+        o_rcdFmt = i_rcdFmt;
+
+        //  Das Layout gilt für das Satzformat (geprüft über die ID),
+        //  nicht für den Dateinamen, unter dem es gesichert wurde.
+        loadLayout('*ALL': '*NONE');
       endif;
-
-      o_file   = i_file;
-      o_lib    = i_lib;
-      o_mbr    = i_mbr;
-      o_rcdFmt = i_rcdFmt;
-
-      loadLayout(i_file: '*NONE');
 
     else;
 
@@ -554,9 +557,13 @@ dcl-proc loadSQLSelect;
       leave;
     endif;
 
-    o_sqlsel = o_sqlsel + %trimr(en_data);
-    strPos = strPos + %len(%trimr(en_data));
+    //  Die Stücke ungekürzt aneinanderhängen: Ein Leerzeichen am Ende
+    //  eines Stücks gehört zur Anweisung. Gekürzt wird nur das Ergebnis.
+    o_sqlsel = o_sqlsel + en_data;
+    strPos = %len(o_sqlsel) + 1;
   enddo;
+
+  o_sqlsel = %trimr(o_sqlsel);
 
   return;
 
@@ -576,14 +583,12 @@ dcl-proc loadSQLOrderBy;
   //  definieren Arbeitsfelder ...
   dcl-s strpos          like(int4_t) inz;
   dcl-s maxLenSql       like(int4_t) inz;
-  dcl-s lendata         like(int4_t) inz;
   //---------------------------------------------------*
 
   o_sqlord = '';
 
   strpos  = 1;
   maxLenSql  = %len(o_sqlord: *max);
-  lendata = %len(%trimr(en_data));
 
   clear en_key4;
   en_key4.en_user = '*ALL';
@@ -609,9 +614,12 @@ dcl-proc loadSQLOrderBy;
       leave;
     endif;
 
-    o_sqlord = o_sqlord + %trimr(en_data);
-    strPos = strPos + %len(%trimr(en_data));
+    //  Die Stücke ungekürzt aneinanderhängen (siehe loadSQLSelect)
+    o_sqlord = o_sqlord + en_data;
+    strPos = %len(o_sqlord) + 1;
   enddo;
+
+  o_sqlord = %trimr(o_sqlord);
 
   return;
 
@@ -696,6 +704,11 @@ dcl-proc loadPinnedRecords;
       leave;
     endif;
 
+    //  Mehr als 12 Einträge passen nicht in die Tabelle
+    if (o_nbrpinr >= %elem(o_pintabr));
+      leave;
+    endif;
+
     o_nbrpinr = o_nbrpinr + 1;
     o_pintabr(o_nbrpinr) = en_data;
   enddo;
@@ -749,6 +762,11 @@ dcl-proc loadPinnedColumns;
       leave;
     endif;
 
+    //  Mehr als 12 Einträge passen nicht in die Tabelle
+    if (o_nbrpinc >= %elem(o_pintabc));
+      leave;
+    endif;
+
     o_nbrpinc = o_nbrpinc + 1;
     o_pintabc(o_nbrpinc) = en_data;
   enddo;
@@ -773,24 +791,31 @@ dcl-proc loadLayout;
 
   open peekfld;
 
+  //  i_file = '*ALL': alle *LAYOUT-Sätze, unabhängig von der Datei
   clear en_key4;
   en_key4.en_user = '*ALL';
   en_key4.en_section = '*LAYOUT';
   en_key4.en_file = i_file;
 
-  if (i_lib = '*NONE');
+  select;
+  when (i_file = '*ALL');
+    setll %kds(en_key4: 2) fpeekenv;
+  when (i_lib = '*NONE');
     setll %kds(en_key4: 3) fpeekenv;
-  else;
+  other;
     en_key4.en_lib = i_lib;
     setll %kds(en_key4: 4) fpeekenv;
-  endif;
+  endsl;
 
   dow ('1');
-    if (i_lib = '*NONE');
+    select;
+    when (i_file = '*ALL');
+      reade %kds(en_key4: 2) fpeekenv;
+    when (i_lib = '*NONE');
       reade %kds(en_key4: 3) fpeekenv;
-    else;
+    other;
       reade %kds(en_key4: 4) fpeekenv;
-    endif;
+    endsl;
 
     if (%eof());
       leave;
