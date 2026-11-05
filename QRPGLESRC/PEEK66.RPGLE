@@ -212,6 +212,8 @@
        dcl-s innumeric        like(numeric_t);
        dcl-s tmpbuffer        like(io_buffer);
        dcl-s digits           int(10);
+       dcl-s inbuffer         like(io_buffer);
+       dcl-s inlength         like(io_length);
 
       /COPY QCOPYLE,USR8227
        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -246,17 +248,35 @@
           digits = i_outformat.f1digt;
        endif;
 
+       inbuffer = io_buffer;
+       inlength = io_length;
+
        clear io_buffer;
        clear io_length;
 
-       cpynv(f_num_descr2(i_outformat.f1dtyp
-                          : digits + onebyteintadjust
-                          : i_outformat.f1decp)
-             : %addr(io_buffer)
-             : f_num_descr2(cdata_type
-                            : %len(innumeric)
-                            : %decpos(innumeric))
-             : %addr(innumeric));
+       //  Passt der Wert nicht in das Ausgabeformat, meldet CPYNV
+       //  MCH1210 (Empfänger zu klein).
+       monitor;
+          cpynv(f_num_descr2(i_outformat.f1dtyp
+                             : digits + onebyteintadjust
+                             : i_outformat.f1decp)
+                : %addr(io_buffer)
+                : f_num_descr2(cdata_type
+                               : %len(innumeric)
+                               : %decpos(innumeric))
+                : %addr(innumeric));
+       on-error;
+          io_buffer = inbuffer;
+          io_length = inlength;
+          clear usr8227;
+          usr8227.var1 = %subst(io_buffer: 1: io_length);
+          usr8227.var2 = i_outformat.f1dtyp;
+          usr8227.var3 = digits;
+          usr8227.var4 = i_outformat.f1decp;
+          o_msgid  = 'USR8227';
+          o_msgdta = usr8227;
+          return;
+       endmon;
 
        if (isonebyteint = bTrue);
           %subst(io_buffer: 1: 1) = %subst(io_buffer: 2: 1);

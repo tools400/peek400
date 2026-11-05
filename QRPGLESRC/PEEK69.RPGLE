@@ -99,6 +99,10 @@
        dcl-s r_file          inz(*blanks) like(##file );
        dcl-s lstfile         inz(*blanks) like(##file );
        dcl-s lstnbrrcd       inz(0) like(sflpage);
+       dcl-s srchrec         like(sflpage);
+
+       //  Dateinamen der Subfile für die Suche
+       dcl-s sfl_files       like($$fnme) dim(9999);
 
        dcl-s wrk_sfsanr      like(sfsanr);
 
@@ -290,7 +294,9 @@
 
           exsr vreadc;
 
-          if (##file <> '');
+          //  Erst die ungültigen Auswahlen korrigieren, dann suchen; der
+          //  Suchbegriff bleibt bis dahin stehen.
+          if (##file <> '' and issflerror = bFalse);
              exsr c_search;
           endif;
 
@@ -363,36 +369,24 @@
              isfound = bFalse;
              lstnbrrcd = lstnbrrcd + 1;
 
-             for sflrec = lstnbrrcd to sflnbrrcd;
-                chain(e) sflrec pbsfl;
-                *in11 = %error or not %found;
-                if (*in11 = *on);
-                   isfound = bFalse;
+             //  Die Suche liest die Subfile nicht, sondern die gemerkten
+             //  Dateinamen: CHAIN und UPDATE auf die Subfile setzten die
+             //  Markierung ungültiger Auswahlen (*IN85) zurück.
+             for srchrec = lstnbrrcd to sflnbrrcd;
+                if (srchrec > %elem(sfl_files));
                    leave;
                 endif;
 
                 if lstfile =
-                   %subst($$fnme: 1:(f_scan(' ':
-                                         lstfile) - 1));
+                   %subst(sfl_files(srchrec): 1: %len(%trimr(lstfile)));
                    isfound = bTrue;
                    leave;
-                else;
-                   if (sfpau <> *blanks);
-                      //  ... Satz geändert
-                      exsr vsfpauchg;
-                   else;
-                      //  ... Satz nicht geändert
-                      exsr vsfpauclr;
-                   endif;
-                   update pbsfl;
-                   iter;
                 endif;
-
              endfor;
 
              if (isfound = bTrue);
-                wrk_sfsanr = sflrec;
-                lstnbrrcd = sflrec;
+                wrk_sfsanr = srchrec;
+                lstnbrrcd = srchrec;
              else;
                 wrk_sfsanr = 0;
                 lstnbrrcd = 0;
@@ -421,6 +415,7 @@
        begsr vreadc;
 
           issflerror = bFalse;
+          clear rtnfile;
 
           if (*in80 = *off);
              //   keine Einträge in Subfile vorhanden ...
@@ -465,9 +460,17 @@
 
                 select;
                 when (sfl_cmd = '*NONE');
+                   //  Leere Auswahl: Markierung eines früheren Fehlers
+                   //  löschen
+                   exsr vsfpauclr;
                 when (sfl_cmd = '*SELECT');
-                   exsr vpos;
-                   leave;
+                   //  Die erste Auswahl merken. Ausgeführt wird sie nur,
+                   //  wenn keine Zeile eine ungültige Auswahl enthält.
+                   if (rtnfile.name = *blanks);
+                      exsr vpos;
+                   endif;
+                   *in85 = '0'; // DSPATR(RI)
+                   exsr vsfpauchg;
                 other;
                    //  Unbekannter Programmbefehl
                    clear usr8110;
@@ -481,6 +484,13 @@
 
                 update pbsfl;
              endfor;
+
+             //  Ungültige Auswahl: keine Datei übernehmen und den
+             //  Cursor auf die erste fehlerhafte Zeile setzen
+             if (issflerror = bTrue);
+                clear rtnfile;
+                sfsanr = sflcsr;
+             endif;
 
           endif;
 
@@ -663,6 +673,9 @@
              sflrec = sflrec + 1;
              write pbsfl;
              sflnbrrcd = sflrec;
+             if (sflrec <= %elem(sfl_files));
+                sfl_files(sflrec) = $$fnme;
+             endif;
 
              if (sflrec >= sflpage);
                 leave;

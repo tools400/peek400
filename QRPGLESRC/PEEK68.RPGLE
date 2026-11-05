@@ -284,6 +284,7 @@
        begsr vreadc;
 
           issflerror = bFalse;
+          o_sflopt = *blanks;
 
           if (*in80 = *off);
              //   keine Einträge in Subfile vorhanden ...
@@ -328,9 +329,17 @@
 
                 select;
                 when (sfl_cmd = '*NONE');
+                   //  Leere Auswahl: Markierung eines früheren Fehlers
+                   //  löschen
+                   exsr vsfpauclr;
                 when (sfl_cmd = '*SELECT');
-                   exsr vpos;
-                   leave;
+                   //  Die erste Auswahl merken. Ausgeführt wird sie nur,
+                   //  wenn keine Zeile eine ungültige Auswahl enthält.
+                   if (o_sflopt = *blanks);
+                      exsr vpos;
+                   endif;
+                   *in85 = '0'; // DSPATR(RI)
+                   exsr vsfpauchg;
                 other;
                    //  Unbekannter Programmbefehl
                    clear usr8110;
@@ -344,6 +353,13 @@
 
                 update pbsfl;
              endfor;
+
+             //  Ungültige Auswahl: keine Auswahl übernehmen und den
+             //  Cursor auf die erste fehlerhafte Zeile setzen
+             if (issflerror = bTrue);
+                o_sflopt = *blanks;
+                sfsanr = sflcsr;
+             endif;
 
           endif;
 
@@ -586,6 +602,9 @@
           if (wrk_msgid <> '');
              wrk_msgid  = 'KEY' + wrk_msgid;
              wrk_msgtxt = f_msgtext(wrk_msgid: ' ');
+          else;
+             //  Kurzbefehl ohne eigene Nachricht: Befehl anzeigen
+             wrk_msgtxt = data;
           endif;
 
           clear sflline;

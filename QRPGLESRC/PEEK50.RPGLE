@@ -300,7 +300,9 @@ begsr c_enter;
 
   exsr vreadc;
 
-  if (##field <> *blanks);
+  //  Erst die ungültigen Auswahlen korrigieren, dann suchen; der
+  //  Suchbegriff bleibt bis dahin stehen.
+  if (##field <> *blanks and issflerror = bFalse);
     exsr c_search;
   endif;
 
@@ -489,6 +491,12 @@ begsr vreadc;
       exsr pbsetbz;
       update pbsfl;
     endfor;
+
+    //  Ungültige Auswahl: Cursor auf die erste fehlerhafte Zeile setzen
+    //  (sfsanr wird sonst nur nach der Anzeige aus SFLCSRRRN gesetzt)
+    if (issflerror = bTrue);
+      sfsanr = sflcsr;
+    endif;
 
   endif;
 

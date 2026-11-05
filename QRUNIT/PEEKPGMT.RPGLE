@@ -2,9 +2,9 @@
 // ==========================================================================
 //  Peek/400 - Unit-Tests der Programme PEEK01, PEEK02, PEEK03, PEEK04,
 //  PEEK06, PEEK07, PEEK10, PEEK11, PEEK15, PEEK18, PEEK19, PEEK20, PEEK22,
-//  PEEK23, PEEK27, PEEK31, PEEK33, PEEK36, PEEK38, PEEK54, PEEK55 und
-//  PEEK62, des Serviceprogramms PEEK61, der Transcoder-Liste von PEEK71
-//  und der Datei PEEKFMT (iRPGUnit).
+//  PEEK23, PEEK27, PEEK31, PEEK33, PEEK36, PEEK38, PEEK54, PEEK55, PEEK62,
+//  PEEK65 und PEEK66, des Serviceprogramms PEEK61, der Transcoder-Liste
+//  von PEEK71 und der Datei PEEKFMT (iRPGUnit).
 //
 //  Zum Erstellen und Ausführen muss die Peek-Bibliothek (QCOPYLE,
 //  Bindeverzeichnis PEEK, PEEKUSR, PEEKFLD, PEEKFMT, Nachrichtendatei
@@ -65,6 +65,8 @@ ctl-opt nomain;
 /copy QCOPYLE,PPEEK54
 /copy QCOPYLE,PPEEK55
 /copy QCOPYLE,PPEEK62
+/copy QCOPYLE,PPEEK65
+/copy QCOPYLE,PPEEK66
 /undefine internal_prototype
 
 /copy QCOPYLE,PPEEK53
@@ -136,6 +138,7 @@ dcl-c TST_ENVM   'PEEKKEYS';     // Teildatei der Arbeitsumgebung
 dcl-c TST_FMTID  'PEEKKEYS00001'; // Satzformat-ID für die Umgebung
 dcl-c TST_OLDU1  'PEEKOLDU1';    // Einstellungsdatei mit DATA 128
 dcl-c TST_OLDU2  'PEEKOLDU2';    // Einstellungsdatei mit KEY 12
+dcl-c TST_PRT    'PEEK65T';      // Tabelle für PEEK65, Satz 2 gelöscht
 dcl-c PEEKUSR_LEN 286;           // Satzlänge von PEEKUSR
 dcl-c TST_USRF   'PEEKTSTUSR';   // Kopie von PEEKUSR
 dcl-c TST_USER   'TESTUSER';
@@ -195,6 +198,16 @@ dcl-proc setUpSuite export;
 
   monitor;
     crtKey35();
+  on-error;
+  endmon;
+
+  //  Tabelle für PEEK65 mit den Sätzen 1 und 3; Satz 2 ist gelöscht
+  monitor;
+    runSql('CREATE TABLE QTEMP/' + TST_PRT + ' (ID INTEGER NOT NULL, +
+            NAME CHAR(10) NOT NULL, AMOUNT DECIMAL(7, 2) NOT NULL)');
+    runSql('INSERT INTO QTEMP/' + TST_PRT + ' VALUES(1, ''EINS'', 1.50), +
+            (2, ''ZWEI'', 2.50), (3, ''DREI'', 3.50)');
+    runSql('DELETE FROM QTEMP/' + TST_PRT + ' WHERE ID = 2');
   on-error;
   endmon;
 
@@ -1419,8 +1432,202 @@ dcl-proc test41_peek61_maxValueZero export;
 end-proc;
 
 // ==========================================================================
+//  PEEK65: Ein vorhandener Satz wird gedruckt (USR8226).
+// ==========================================================================
+
+dcl-proc test42_peek65_printsRecord export;
+  dcl-s msgid like(msgid_t);
+  dcl-s msgdta like(msgdta_t);
+
+  loadPrtFields();
+
+  monitor;
+    peek65(1: TST_PRT: TST_LIB: TST_PRT: '': msgid: msgdta);
+  on-error;
+    fail('PEEK65 bricht ab: ' + lastMsg());
+  endmon;
+  dltPrtSplf();
+  aEqual('USR8226': msgid: 'Nachricht');
+end-proc;
+
+// ==========================================================================
+//  PEEK65: Ein gelöschter Satz wird nicht gedruckt (USR8120). Bisher wurde
+//  ein leerer Satz gedruckt und USR8226 gemeldet.
+// ==========================================================================
+
+dcl-proc test43_peek65_deletedRecord export;
+  dcl-s msgid like(msgid_t);
+  dcl-s msgdta like(msgdta_t);
+
+  loadPrtFields();
+
+  monitor;
+    peek65(2: TST_PRT: TST_LIB: TST_PRT: '': msgid: msgdta);
+  on-error;
+    fail('PEEK65 bricht ab: ' + lastMsg());
+  endmon;
+  dltPrtSplf();
+  aEqual('USR8120': msgid: 'Nachricht');
+end-proc;
+
+// ==========================================================================
+//  PEEK65: Ein Satz, den es nicht gibt, wird nicht gedruckt (USR8120).
+// ==========================================================================
+
+dcl-proc test44_peek65_rrnNotExists export;
+  dcl-s msgid like(msgid_t);
+  dcl-s msgdta like(msgdta_t);
+
+  loadPrtFields();
+
+  monitor;
+    peek65(99: TST_PRT: TST_LIB: TST_PRT: '': msgid: msgdta);
+  on-error;
+    fail('PEEK65 bricht ab: ' + lastMsg());
+  endmon;
+  dltPrtSplf();
+  aEqual('USR8120': msgid: 'Nachricht');
+end-proc;
+
+// ==========================================================================
+//  PEEK65: Lässt sich die Datei nicht öffnen, meldet PEEK65 USR0005. Bisher
+//  brach es mit MCH3601 ab.
+// ==========================================================================
+
+dcl-proc test45_peek65_fileNotFound export;
+  dcl-s msgid like(msgid_t);
+  dcl-s msgdta like(msgdta_t);
+
+  monitor;
+    peek65(1: 'NOSUCHF': TST_LIB: 'NOSUCHF': '': msgid: msgdta);
+  on-error;
+    fail('PEEK65 bricht ab: ' + lastMsg());
+  endmon;
+  aEqual('USR0005': msgid: 'Nachricht');
+  aEqual('NOSUCHF': %subst(msgdta: 1: 7): 'Daten');
+end-proc;
+
+// ==========================================================================
+//  PEEK66: 123 passt in gepackt 3,0.
+// ==========================================================================
+
+dcl-proc test46_peek66_valueFits export;
+  dcl-s buffer like(cmdbuffer_t);
+  dcl-s length int(10);
+  dcl-ds infmt likeds(fldl0100_t) inz;
+  dcl-ds outfmt likeds(fldl0100_t) inz;
+  dcl-s msgid like(msgid_t);
+  dcl-s msgdta like(msgdta_t);
+
+  numFmt(infmt: 'P': 9: 0);
+  numFmt(outfmt: 'P': 3: 0);
+  buffer = '123';
+  length = 3;
+
+  monitor;
+    peek66(buffer: length: infmt: outfmt: msgid: msgdta);
+  on-error;
+    fail('PEEK66 bricht ab: ' + lastMsg());
+  endmon;
+  aEqual('': msgid: 'Nachricht');
+  aEqual('x''123F''': %subst(buffer: 1: length): 'Puffer');
+end-proc;
+
+// ==========================================================================
+//  PEEK66: 12345 passt nicht in gepackt 3,0 - PEEK66 meldet USR8227 und
+//  lässt den Puffer unverändert. Bisher kam MCH1210 aus CPYNV.
+// ==========================================================================
+
+dcl-proc test47_peek66_overflow export;
+  dcl-s buffer like(cmdbuffer_t);
+  dcl-s length int(10);
+  dcl-ds infmt likeds(fldl0100_t) inz;
+  dcl-ds outfmt likeds(fldl0100_t) inz;
+  dcl-s msgid like(msgid_t);
+  dcl-s msgdta like(msgdta_t);
+
+  numFmt(infmt: 'P': 9: 0);
+  numFmt(outfmt: 'P': 3: 0);
+  buffer = '12345';
+  length = 5;
+
+  monitor;
+    peek66(buffer: length: infmt: outfmt: msgid: msgdta);
+  on-error;
+    fail('PEEK66 bricht ab: ' + lastMsg());
+  endmon;
+  aEqual('USR8227': msgid: 'Nachricht');
+  aEqual('12345': %subst(buffer: 1: length): 'Puffer');
+  aEqual('P': %subst(msgdta: 257: 1): 'Datentyp');
+end-proc;
+
+// ==========================================================================
+//  PEEK66: Die Zeichenkette 12345 passt nicht in gezont 3,0 (USR8227).
+// ==========================================================================
+
+dcl-proc test48_peek66_overflowFromChar export;
+  dcl-s buffer like(cmdbuffer_t);
+  dcl-s length int(10);
+  dcl-ds infmt likeds(fldl0100_t) inz;
+  dcl-ds outfmt likeds(fldl0100_t) inz;
+  dcl-s msgid like(msgid_t);
+  dcl-s msgdta like(msgdta_t);
+
+  infmt.f1dtyp = 'A';
+  infmt.f1flen = 10;
+  numFmt(outfmt: 'S': 3: 0);
+  buffer = '12345';
+  length = 5;
+
+  monitor;
+    peek66(buffer: length: infmt: outfmt: msgid: msgdta);
+  on-error;
+    fail('PEEK66 bricht ab: ' + lastMsg());
+  endmon;
+  aEqual('USR8227': msgid: 'Nachricht');
+  aEqual('S': %subst(msgdta: 257: 1): 'Datentyp');
+end-proc;
+
+// ==========================================================================
 //  Hilfsprozeduren
 // ==========================================================================
+
+//  Loads the fields of QTEMP/PEEK65T into PEEKFLD (other tests load other
+//  files into PEEKFLD).
+dcl-proc loadPrtFields;
+  dcl-ds qfile likeds(qobj_t) inz;
+
+  qfile.name = TST_PRT;
+  qfile.lib = TST_LIB;
+  loadFields(qfile);
+end-proc;
+
+//  Deletes the last spooled file PEEK65T of this job (if any).
+dcl-proc dltPrtSplf;
+  monitor;
+    runCmd('DLTSPLF FILE(' + TST_PRT + ') JOB(*) SPLNBR(*LAST)');
+  on-error;
+  endmon;
+end-proc;
+
+//  Sets the numeric format of a FLDL0100 entry (PEEK66).
+dcl-proc numFmt;
+  dcl-pi *n;
+    io_fmt  likeds(fldl0100_t);
+    i_type  char(1) const;
+    i_digt  int(10) const;
+    i_decp  int(10) const;
+  end-pi;
+
+  io_fmt.f1dtyp = i_type;
+  io_fmt.f1digt = i_digt;
+  io_fmt.f1decp = i_decp;
+  if (i_type = 'P');
+    io_fmt.f1flen = %int(i_digt / 2) + 1;
+  else;
+    io_fmt.f1flen = i_digt;
+  endif;
+end-proc;
 
 //  Creates the settings file QTEMP/<i_file> in an old layout with the
 //  given lengths of KEY and DATA (any existing file is replaced).

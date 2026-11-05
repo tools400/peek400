@@ -269,7 +269,9 @@ begsr c_enter;
 
   exsr vreadc;
 
-  if (##field <> *blanks);
+  //  Erst die ungültigen Auswahlen korrigieren, dann suchen; der
+  //  Suchbegriff bleibt bis dahin stehen.
+  if (##field <> *blanks and issflerror = bFalse);
     exsr c_search;
   endif;
 
@@ -386,6 +388,7 @@ endsr;
 begsr vreadc;
 
   issflerror = bFalse;
+  o_feld = *blanks;
 
   if (*in80 = *off);
   //   keine Einträge in Subfile vorhanden ...
@@ -439,8 +442,13 @@ begsr vreadc;
       select;
       when (sfl_cmd = '*NONE');
       when (sfl_cmd = '*SELECT');
-        exsr vpos;
-        leave;
+        //  Die erste Auswahl merken. Ausgeführt wird sie nur, wenn keine
+        //  Zeile eine ungültige Auswahl enthält.
+        if (o_feld = *blanks);
+          exsr vpos;
+        endif;
+        *in85 = '0'; // DSPATR(RI)
+        exsr vsfpauchg;
       other;
         //  Unbekannter Programmbefehl
         clear usr8110;
@@ -454,6 +462,14 @@ begsr vreadc;
 
       update pbsfl;
     endfor;
+
+    //  Ungültige Auswahl: keine Auswahl übernehmen und den Cursor auf
+    //  die erste fehlerhafte Zeile setzen (sfsanr wird sonst nur nach
+    //  der Anzeige aus SFLCSRRRN gesetzt)
+    if (issflerror = bTrue);
+      o_feld = *blanks;
+      sfsanr = sflcsr;
+    endif;
 
   endif;
 

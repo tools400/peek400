@@ -111,6 +111,7 @@ end-ds;
 
 dcl-s start  int(10);
 dcl-s length int(10);
+dcl-s relPos int(10);
 
 dcl-s isInzSr         like(bool_t) inz(bFalse);
 
@@ -380,13 +381,13 @@ begsr c_enter;
     endif;
 
     if (insDel.mode <> MODE_OFF);
-      if (insDel.startPos - buffer.offset <= maxEditLength);
-        cursorPosition.row = 12 + %int(insDel.startPos / %len(#ucs2_1));
-        cursorPosition.column = 47 + %rem(insDel.startPos: %len(#ucs2_1)) - buffer.offset;
-        if (%rem(insDel.startPos: %len(#ucs2_1)) = 0);
-          cursorPosition.row -= 1;
-          cursorPosition.column += %len(#ucs2_1);
-        endif;
+      //  Cursor auf die Startposition setzen, wenn sie angezeigt wird.
+      //  Das Textfeld beginnt im Fenster (zei/pos) in Zeile 8, Spalte 4
+      //  und hat %len(#ucs2_1) Zeichen je Zeile.
+      relPos = insDel.startPos - buffer.offset;
+      if (relPos >= 1 and relPos <= maxEditLength);
+        cursorPosition.row = zei + 8 + %div(relPos - 1: %len(#ucs2_1));
+        cursorPosition.column = pos + 5 + %rem(relPos - 1: %len(#ucs2_1));
       else;
         clear cursorPosition;
       endif;
@@ -478,7 +479,9 @@ endsr;
 
 begsr screenToBuffer;
 
-  if (isDataChg);
+  //  isDataChg ist hier noch der Stand des vorherigen Durchlaufs; eine
+  //  Änderung auf dem gerade gelesenen Bildschirm meldet *IN93.
+  if (isDataChg or *in93 = *on);
 
     if (i_isUcs2 = 0);
     //    Nothing to do here
@@ -689,7 +692,7 @@ begsr prf24;
       // Löschen von Zeichen
       if (#selStart + #selLength - 1 > buffer.maxLength);
         clear usr8241;
-        usr8241.var1 = (#selStart + #selLength) - buffer.maxLength;
+        usr8241.var1 = (#selStart + #selLength - 1) - buffer.maxLength;
         p_sndpgmmg('USR8241': usr8241: sds.pgmname);
         isPgmError = bTrue;
         leave;
@@ -766,7 +769,7 @@ begsr c_insert;
     else;
       insDel.startPos = #selStart;
       if (#selLength > 0);
-        insDel.endPos = #selLength - #selStart + 1;
+        insDel.endPos = #selStart + #selLength - 1;
       else;
         insDel.endPos=0;
       endif;
@@ -819,7 +822,7 @@ begsr c_delete;
     else;
       insDel.startPos = #selStart;
       if (#selLength > 0);
-        insDel.endPos = #selLength - #selStart + 1;
+        insDel.endPos = #selStart + #selLength - 1;
       else;
         insDel.endPos=0;
       endif;
@@ -1107,7 +1110,7 @@ begsr first;
     yExclKeys(2) = '*DELETE';
   endif;
 
-  peek23(sds.pgmname: '*ALL': 0: yFKeys: yNbrOfKeys: yExclKeys);
+  peek23(sds.pgmname: '*ALL': NBR_F_KEYS: yFKeys: yNbrOfKeys: yExclKeys);
   scrnfkeys = %subarr(yFKeys: 1);
 
   // - Öffnen der Dateien

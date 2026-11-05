@@ -42,6 +42,7 @@
       /COPY QCOPYLE,FLDL0100
       /COPY QCOPYLE,SCRNFKEYS
       /COPY QCOPYLE,CEECNDHDLR
+      /COPY QCOPYLE,USR0005
 
       /define internal_prototype
       /COPY QCOPYLE,PPEEK65
@@ -118,23 +119,31 @@
        exsr first;
 
        //  Drucken Datensatz
-       exsr pbinit;
-       exsr pbsetll;
-       exsr pbreadup;
+       if (o_msgid = '');
+          exsr pbinit;
+          exsr pbsetll;
+          exsr pbreadup;
 
-       if (iscvtchar = bTrue);
-          exsr pbseite;
-          write error;
+          if (iscvtchar = bTrue);
+             exsr pbseite;
+             write error;
+          endif;
+
+          if (isprinted = bTrue);
+             o_msgid  = 'USR8226';
+             o_msgdta = '';
+          endif;
        endif;
 
-       if (isprinted = bTrue);
-          o_msgid  = 'USR8226';
-          o_msgdta = '';
+       if (%open(peek65p));
+          close peek65p;
        endif;
-
-       close peek65p;
-       close peekfldl0;
-       cio_close(hfile04);
+       if (%open(peekfldl0));
+          close peekfldl0;
+       endif;
+       if (cio_isopen(hfile04) = bTrue);
+          cio_close(hfile04);
+       endif;
 
        return;
 
@@ -326,16 +335,18 @@
 
           yqfile.name = i_file;
           yqfile.lib = i_library;
-          peek09(yqfile: objd0400: ymsgid: ymsgdta);
           monitor;
+             peek09(yqfile: objd0400: ymsgid: ymsgdta);
              *in99 = bFalse;
           on-error;
              *in99 = bTrue;
           endmon;
 
-          if (*in99 = '1');
+          if (*in99 = '1' or ymsgid <> '');
              clear objd0400;
           endif;
+          ymsgid = '';
+          ymsgdta = '';
 
        endsr;
 
@@ -363,7 +374,38 @@
 
        begsr first;
 
-          // - Öffnen der Dateien
+          // - Programm initialisieren
+          o_msgid = '';
+          o_msgdta = '';
+          isprinted = bFalse;
+
+          // - Öffnen der Datei und Einlesen des zu druckenden Satzes;
+          //   die Druckdatei wird erst danach geöffnet, damit ohne
+          //   Satz keine Liste entsteht
+          if (cio_open(hfile04
+                      : i_file
+                      : i_library
+                      : i_member
+                      : i_rcdformat
+                      : 'rr,arrseq=Y,nullcap=Y,riofb=Y') = bFalse);
+             clear usr0005;
+             usr0005.var1 = i_file;
+             o_msgid  = 'USR0005';
+             o_msgdta = usr0005;
+             leavesr;
+          endif;
+
+          exsr readrcd;
+          if (isrecord = bFalse);
+             o_msgid  = 'USR8120';
+             o_msgdta = '';
+             leavesr;
+          endif;
+
+          // - Einlesen Objektbeschreibung
+          exsr getobjtext;
+
+          // - Öffnen der Druckdatei und der Feldliste
           f_execute('OVRPRTF +
                      FILE(PEEK65P) +
                      TOFILE(' +
@@ -379,22 +421,6 @@
 
           open peek65p;
           open peekfldl0;
-          cio_open(hfile04
-                  : i_file
-                  : i_library
-                  : i_member
-                  : i_rcdformat
-                  : 'rr,arrseq=Y,nullcap=Y,riofb=Y');
-
-          // - Programm initialisieren
-          o_msgid = '';
-          o_msgdta = '';
-
-          // - Einlesen Objektbeschreibung
-          exsr getobjtext;
-
-          // - Einlesen des anzuzeigenden Satzes
-          exsr readrcd;
 
        endsr;
 

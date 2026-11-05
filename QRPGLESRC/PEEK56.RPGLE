@@ -916,6 +916,12 @@ begsr vreadc;
       update pbsfl;
     endfor;
 
+    //  Ungültige Auswahl: Cursor auf die erste fehlerhafte Zeile setzen
+    //  (sfsanr wird sonst nur nach der Anzeige aus SFLCSRRRN gesetzt)
+    if (issflerror = bTrue);
+      sfsanr = sflcsr;
+    endif;
+
   endif;
 
 endsr;
