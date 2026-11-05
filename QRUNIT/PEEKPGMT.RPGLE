@@ -3,8 +3,8 @@
 //  Peek/400 - Unit-Tests der Programme PEEK01, PEEK02, PEEK03, PEEK04,
 //  PEEK06, PEEK07, PEEK10, PEEK11, PEEK15, PEEK18, PEEK19, PEEK20, PEEK22,
 //  PEEK23, PEEK27, PEEK31, PEEK33, PEEK36, PEEK38, PEEK54, PEEK55, PEEK62,
-//  PEEK65 und PEEK66, des Serviceprogramms PEEK61, der Transcoder-Liste
-//  von PEEK71 und der Datei PEEKFMT (iRPGUnit).
+//  PEEK65, PEEK66 und PEEK70, der Serviceprogramme PEEK61 und PEEK71
+//  und der Datei PEEKFMT (iRPGUnit).
 //
 //  Zum Erstellen und Ausführen muss die Peek-Bibliothek (QCOPYLE,
 //  Bindeverzeichnis PEEK, PEEKUSR, PEEKFLD, PEEKFMT, Nachrichtendatei
@@ -32,6 +32,7 @@ ctl-opt nomain;
 /copy QCOPYLE,D_VARDEF
 /copy QCOPYLE,D_INFDS
 /copy QCOPYLE,FLDL0100
+/copy QCOPYLE,OBJL0200
 /copy QCOPYLE,RCDL0200
 /copy QCOPYLE,MBRD0200
 /copy QCOPYLE,OBJD0100
@@ -67,6 +68,7 @@ ctl-opt nomain;
 /copy QCOPYLE,PPEEK62
 /copy QCOPYLE,PPEEK65
 /copy QCOPYLE,PPEEK66
+/copy QCOPYLE,PPEEK70
 /undefine internal_prototype
 
 /copy QCOPYLE,PPEEK53
@@ -139,6 +141,7 @@ dcl-c TST_FMTID  'PEEKKEYS00001'; // Satzformat-ID für die Umgebung
 dcl-c TST_OLDU1  'PEEKOLDU1';    // Einstellungsdatei mit DATA 128
 dcl-c TST_OLDU2  'PEEKOLDU2';    // Einstellungsdatei mit KEY 12
 dcl-c TST_PRT    'PEEK65T';      // Tabelle für PEEK65, Satz 2 gelöscht
+dcl-c TST_LST    'PEEKLST';      // PEEKLST1..3 für die Dateiliste (PEEK70)
 dcl-c PEEKUSR_LEN 286;           // Satzlänge von PEEKUSR
 dcl-c TST_USRF   'PEEKTSTUSR';   // Kopie von PEEKUSR
 dcl-c TST_USER   'TESTUSER';
@@ -208,6 +211,14 @@ dcl-proc setUpSuite export;
     runSql('INSERT INTO QTEMP/' + TST_PRT + ' VALUES(1, ''EINS'', 1.50), +
             (2, ''ZWEI'', 2.50), (3, ''DREI'', 3.50)');
     runSql('DELETE FROM QTEMP/' + TST_PRT + ' WHERE ID = 2');
+  on-error;
+  endmon;
+
+  //  Dateien für die Dateiliste von PEEK70
+  monitor;
+    runSql('CREATE TABLE QTEMP/' + TST_LST + '1 (C CHAR(1))');
+    runSql('CREATE TABLE QTEMP/' + TST_LST + '2 (C CHAR(1))');
+    runSql('CREATE TABLE QTEMP/' + TST_LST + '3 (C CHAR(1))');
   on-error;
   endmon;
 
@@ -1586,6 +1597,256 @@ dcl-proc test48_peek66_overflowFromChar export;
   endmon;
   aEqual('USR8227': msgid: 'Nachricht');
   aEqual('S': %subst(msgdta: 257: 1): 'Datentyp');
+end-proc;
+
+// ==========================================================================
+//  PEEK71: Ein leerer Puffer wird nicht umgesetzt. Bisher brach PEEK71 mit
+//  RNX0425 ab (%alloc(0)), z.B. im Editor für ein leeres VARCHAR-Feld.
+// ==========================================================================
+
+dcl-proc test49_peek71_emptyBuffer export;
+  dcl-s htranscoder like(htranscoder_t);
+  dcl-s buffer char(10) inz;
+  dcl-s length int(10);
+
+  monitor;
+    htranscoder = transcoder_tojobccsid(1208);
+    length = transcoder_xlatebuffer(htranscoder: %addr(buffer): 0
+                                    : %size(buffer));
+  on-error;
+    fail('PEEK71 bricht ab: ' + lastMsg());
+  endmon;
+  iEqual(0: length: 'Länge');
+end-proc;
+
+// ==========================================================================
+//  PEEK71: Eine leere Zeichenkette ergibt eine leere Zeichenkette.
+// ==========================================================================
+
+dcl-proc test50_peek71_emptyString export;
+  dcl-s htranscoder like(htranscoder_t);
+  dcl-s result varchar(100);
+
+  monitor;
+    htranscoder = transcoder_tojobccsid(1208);
+    result = transcoder_xlatestring(htranscoder: '');
+  on-error;
+    fail('PEEK71 bricht ab: ' + lastMsg());
+  endmon;
+  iEqual(0: %len(result): 'Länge');
+end-proc;
+
+// ==========================================================================
+//  PEEK71: Nach CHGJOB CCSID und transcoder_reset() (PEEK05 beim Start)
+//  wird in die neue Job-CCSID umgesetzt. Bisher blieb die alte CCSID bis
+//  zum Ende der Aktivierungsgruppe gespeichert.
+// ==========================================================================
+
+dcl-proc test51_peek71_jobCcsidChanged export;
+  dcl-ds jobi0400 likeds(jobi0400_t) inz;
+  dcl-s htranscoder like(htranscoder_t);
+  dcl-s oldCcsid int(10);
+  dcl-s newCcsid int(10);
+  dcl-s toCcsid int(10);
+
+  qusrjobi(jobi0400: %size(jobi0400): 'JOBI0400': '*': '');
+  oldCcsid = jobi0400.ccsid;
+  if (getJobCcsid() = 37);
+    newCcsid = 1141;
+  else;
+    newCcsid = 37;
+  endif;
+
+  runCmd('CHGJOB CCSID(' + %char(newCcsid) + ')');
+  monitor;
+    transcoder_reset();
+    htranscoder = transcoder_tojobccsid(1252);
+    toCcsid = transcoder_gettoccsid(htranscoder);
+  on-error;
+    runCmd('CHGJOB CCSID(' + %char(oldCcsid) + ')');
+    transcoder_reset();
+    fail('PEEK71 bricht ab: ' + lastMsg());
+  endmon;
+  runCmd('CHGJOB CCSID(' + %char(oldCcsid) + ')');
+  transcoder_reset();
+
+  iEqual(newCcsid: toCcsid: 'Ziel-CCSID nach CHGJOB');
+end-proc;
+
+// ==========================================================================
+//  PEEK71: transcoder_delete() entfernt einen Umsetzer auch aus der Liste
+//  der erstellten Umsetzer. Bisher lieferte transcoder_toJobCcsid() danach
+//  den gelöschten (geleerten) Umsetzer mit von-CCSID 0. Die Adresse des
+//  neuen Umsetzers kann dieselbe sein (%alloc nach dealloc).
+// ==========================================================================
+
+dcl-proc test52_peek71_deleteCachedHandle export;
+  dcl-s htranscoder like(htranscoder_t);
+  dcl-s fromCcsid int(10);
+
+  htranscoder = transcoder_tojobccsid(500);
+  transcoder_delete(htranscoder);
+
+  monitor;
+    htranscoder = transcoder_tojobccsid(500);
+    fromCcsid = transcoder_getfromccsid(htranscoder);
+  on-error;
+    fail('PEEK71 bricht ab: ' + lastMsg());
+  endmon;
+  iEqual(500: fromCcsid: 'Von-CCSID');
+end-proc;
+
+// ==========================================================================
+//  PEEK71: Ein ungültiger Umsetzer wird mit CPF9897 gemeldet. Bisher kam
+//  MCH3601.
+// ==========================================================================
+
+dcl-proc test53_peek71_nullHandle export;
+  dcl-ds msg likeds(rtnMsgInfo_t);
+  dcl-s ccsid int(10);
+
+  monitor;
+    ccsid = transcoder_getfromccsid(transcoder_null());
+  on-error;
+    msg = getMonitoredMessage(*on);
+    aEqual('CPF9897': msg.id: 'Nachricht');
+    return;
+  endmon;
+  fail('Keine Ausnahme, von-CCSID ' + %char(ccsid));
+end-proc;
+
+// ==========================================================================
+//  PEEK71: 32765 x 'a' und ein Sonderzeichen (32766 Bytes) ergeben in
+//  UTF-8 32767 Bytes. Bisher war die Ausgabe auf 32765 Bytes begrenzt.
+// ==========================================================================
+
+dcl-proc test54_peek71_longStringExpand export;
+  dcl-s htranscoder like(htranscoder_t);
+  dcl-s input varchar(32767);
+  dcl-s result varchar(32767);
+  dcl-s aaa char(32765) inz(*all'a');
+
+  //  x'4A' ist in allen EBCDIC-Job-CCSIDs ein Zeichen außerhalb von ASCII
+  //  (CCSID 37: Cent, CCSID 273/1141: Ä), also 2 Bytes in UTF-8.
+  input = aaa + x'4A';
+
+  monitor;
+    htranscoder = transcoder_tofieldccsid(1208);
+    result = transcoder_xlatestring(htranscoder: input);
+  on-error;
+    fail('PEEK71 bricht ab: ' + lastMsg());
+  endmon;
+  iEqual(32767: %len(result): 'Länge in UTF-8');
+end-proc;
+
+// ==========================================================================
+//  PEEK71: Ist die Liste der Umsetzer voll (64), schafft transcoder_reset()
+//  wieder Platz. PEEK05 ruft es bei jedem Start von Peek auf.
+// ==========================================================================
+
+dcl-proc test55_peek71_resetFreesCache export;
+  dcl-c CCSIDS '37 273 277 278 280 284 285 297 500 871 1140 1141 +
+                1142 1143 1144 1145 1146 1147 1148 1149 1047 870 1153 +
+                1025 1154 1026 1155 875 1112 1122 819 850 1252 437 852 +
+                1250 1251 1254 367 912 ';
+  dcl-s htranscoder like(htranscoder_t);
+  dcl-s pos int(10) inz(1);
+  dcl-s nxt int(10);
+  dcl-s ccsid int(10);
+  dcl-s isFull ind inz(*off);
+  dcl-ds msg likeds(rtnMsgInfo_t);
+
+  dow (pos < %len(CCSIDS) and not isFull);
+    nxt = %scan(' ': CCSIDS: pos);
+    ccsid = %int(%subst(CCSIDS: pos: nxt - pos));
+    pos = nxt + 1;
+    monitor;
+      htranscoder = transcoder_tojobccsid(ccsid);
+      htranscoder = transcoder_tofieldccsid(ccsid);
+    on-error;
+      msg = getMonitoredMessage(*on);
+      isFull = (%scan('Maximum number': msg.txt) > 0);
+    endmon;
+  enddo;
+  assert(isFull: 'Die Liste der Umsetzer wurde nicht voll');
+
+  transcoder_reset();
+  monitor;
+    htranscoder = transcoder_tojobccsid(37);
+  on-error;
+    fail('Nach transcoder_reset(): ' + lastMsg());
+  endmon;
+  transcoder_reset();
+end-proc;
+
+// ==========================================================================
+//  PEEK70: Unbekannte Bibliothek - 0 Einträge ohne Ausnahme, und ein *READ
+//  danach liest keine alte Liste weiter.
+// ==========================================================================
+
+dcl-proc test56_peek70_unknownLib export;
+  dcl-ds qfile likeds(qobj_t) inz;
+  dcl-ds objl0200 likeds(objl0200_t) inz;
+  dcl-s nume int(10);
+
+  qfile.name = TST_LST + '*';
+  qfile.lib = TST_LIB;
+  peek70(qfile: '*CREATE': nume: objl0200);
+  iEqual(3: nume: 'Anzahl ' + TST_LST + '*');
+
+  qfile.lib = 'NOSUCHLIB';
+  monitor;
+    peek70(qfile: '*CREATE': nume: objl0200);
+  on-error;
+    fail('PEEK70 bricht ab: ' + lastMsg());
+  endmon;
+  iEqual(0: nume: 'Anzahl NOSUCHLIB');
+
+  peek70(qfile: '*READ': nume: objl0200);
+  aEqual('': objl0200.o2onme: '*READ nach gescheitertem *CREATE');
+end-proc;
+
+// ==========================================================================
+//  PEEK70: Eigener Benutzerbereich - PEEK11 zwischen *CREATE und *READ
+//  ändert die Dateiliste nicht. Bisher benutzten beide QTEMP/§PEEK§.
+// ==========================================================================
+
+dcl-proc test57_peek70_ownUserSpace export;
+  dcl-ds qfile likeds(qobj_t) inz;
+  dcl-ds objl0200 likeds(objl0200_t) inz;
+  dcl-ds rcdl0200 likeds(rcdl0200_t) inz;
+  dcl-s nume int(10);
+  dcl-s nrcd int(10);
+
+  qfile.name = TST_LST + '*';
+  qfile.lib = TST_LIB;
+  peek70(qfile: '*CREATE': nume: objl0200);
+  peek70(qfile: '*READ': nume: objl0200);
+  aEqual(TST_LST + '1': objl0200.o2onme: 'Erster Eintrag');
+
+  qfile.name = TST_FILE;
+  peek11(qfile: '*CREATE': nrcd: rcdl0200);
+
+  qfile.name = TST_LST + '*';
+  peek70(qfile: '*READ': nume: objl0200);
+  aEqual(TST_LST + '2': objl0200.o2onme: 'Zweiter Eintrag nach PEEK11');
+end-proc;
+
+// ==========================================================================
+//  PEEK70: Eine unbekannte Funktion ergibt 0 Einträge. Bisher blieb der
+//  Wert des Aufrufers stehen.
+// ==========================================================================
+
+dcl-proc test58_peek70_unknownFunction export;
+  dcl-ds qfile likeds(qobj_t) inz;
+  dcl-ds objl0200 likeds(objl0200_t) inz;
+  dcl-s nume int(10);
+
+  qfile.name = TST_LST + '*';
+  qfile.lib = TST_LIB;
+  nume = 7;
+  peek70(qfile: '*FOO': nume: objl0200);
+  iEqual(0: nume: 'Anzahl');
 end-proc;
 
 // ==========================================================================

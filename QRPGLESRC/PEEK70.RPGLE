@@ -14,43 +14,37 @@
        //                                                               *
        //  Peek/400 - Ermitteln Dateiliste                              *
        //                                                               *
-       //===============================================================*
-       //                                                               *
-       //  INPUT-Parameter:                                             *
-       //  ================                                             *
-       //                                                               *
-       //  XQFILE  - Qualified file name                                *
-       //             1 - 10:  file                                     *
-       //            11 - 20:  library                                  *
-       //                                                               *
-       //  XRFMT   - Record format name                                 *
-       //                                                               *
-       //  XFUNK   - control of modul function                          *
-       //     *CREATE  - create list of database relations   CREATE     *
-       //     *READ    - get next entry                      READ       *
-       //     *DELETE  - delete list                         DELETE     *
-       //                                                               *
-       //  OUTPUT-Parameter:                                            *
-       //  =================                                            *
-       //                                                               *
-       //  XANZ    - number of entry (depedencies)                      *
-       //            parameter is supported using XFUNK=1   (create)    *
-       //                                                               *
-       //  XLIST   - entry                                              *
-       //            parameter is supported using XFUNK=5   (read)      *
-       //            (must be splitted using a data structure)          *
+       //  Listet die Objekte vom Typ *FILE (QUSLOBJ, Format OBJL0200)  *
+       //  im eigenen Benutzerbereich QTEMP/PEEK70SPC.                  *
        //                                                               *
        //===============================================================*
        //                                                               *
-       //  Typical call sequence:                                       *
+       //  Parameter:                                                   *
+       //  ==========                                                   *
        //                                                               *
-       //      PEEK70 - Funktion (*CREATE) create list                  *
+       //  i_qFile     - Datei (auch generisch, *ALL) und Bibliothek    *
+       //                (auch *LIBL, *CURLIB, ...)                     *
        //                                                               *
-       //  1   DO  XANZ                                                 *
-       //      PEEK70 - Funktion (*READ)   read next entry              *
-       //      ENDDO                                                    *
+       //  i_function  - Funktion                                       *
+       //     *CREATE  - Liste erstellen                                *
+       //     *READ    - nächsten Eintrag lesen                         *
+       //     *DELETE  - Liste (Benutzerbereich) löschen                *
        //                                                               *
-       //      PEEK70 - Funktion (*DELETE) delete list (user space)     *
+       //  o_nume      - *CREATE: Anzahl Einträge                       *
+       //                *READ:   Anzahl noch folgender Einträge        *
+       //                0, wenn die Liste nicht erstellt werden konnte *
+       //                oder kein Eintrag mehr da ist                  *
+       //                                                               *
+       //  o_objl0200  - *READ: gelesener Eintrag                       *
+       //                                                               *
+       //===============================================================*
+       //                                                               *
+       //  Aufruffolge:                                                 *
+       //                                                               *
+       //      PEEK70 *CREATE  - Liste erstellen (o_nume Einträge)      *
+       //      solange o_nume > 0:                                      *
+       //         PEEK70 *READ - Eintrag lesen                          *
+       //      PEEK70 *DELETE  - Benutzerbereich löschen (optional)     *
        //                                                               *
        // ============================================================= *
        // >>PRE-COMPILER<<                                              *
@@ -80,15 +74,19 @@
       /COPY QCOPYLE,PPEEK53
       /COPY QCOPYLE,PPEEK58
 
+       //  Eigener Benutzerbereich: QTEMP/§PEEK§ benutzen und löschen auch
+       //  PEEK02, PEEK11, PEEK39 und PEEK46.
+       dcl-c USRSPC_PEEK70   'PEEK70SPC';
+
        dcl-ds qusrspc likeds(qobj_t) inz;
-       dcl-s pspcptr         pointer;
+       dcl-s pspcptr         pointer inz(*null);
        dcl-ds errcode likeds(errcode_t) inz;
 
        //  Organisation of generic header
        dcl-ds genheader likeds(genheader_t) based(pspcptr);
 
-       //  List data
-       dcl-s currliste       like(int4_t);
+       //  List data (-1: keine Liste erstellt)
+       dcl-s currliste       like(int4_t) inz(-1);
        dcl-s offsetliste     like(int4_t);
        dcl-s pliste          pointer;
        dcl-ds liste likeds(objl0200_t) based(pliste);
@@ -110,7 +108,7 @@
        //---------------------------------------------------*
 
        qusrspc.lib = USRSPC_LIBRARY;
-       qusrspc.name = USRSPC_NAME;
+       qusrspc.name = USRSPC_PEEK70;
 
        monitor;
 
@@ -121,11 +119,16 @@
              exsr delete;
           when (i_function = '*READ');
              exsr read;
+          other;
+             //  Unbekannte Funktion
+             exsr seterror;
           endsl;
 
        on-error;
           dump;
-          o_nume = 0;
+          //  Nach einem Fehler gibt es keine gültige Liste mehr
+          currliste = -1;
+          exsr seterror;
        endmon;
 
        //====================================================*
@@ -135,6 +138,7 @@
        begsr create;
 
           o_nume = *zeros;
+          currliste = -1;
 
           //  create user space
           if (not f_exist(
@@ -146,7 +150,9 @@
           //  get user space pointer
           qusptrus(qusrspc: pspcptr);
 
-          //  get file format description
+          //  get list of files (errors are returned in errcode)
+          clear errcode;
+          errcode.bytprv = %size(errcode);
           quslobj(qusrspc: 'OBJL0200'
                  : i_qfile: '*FILE': errcode);
 
@@ -175,6 +181,10 @@
                       ')': msgid: msgdta);
           endif;
 
+          pspcptr = *null;
+          currliste = -1;
+          o_nume = 0;
+
        endsr;
 
        //====================================================*
@@ -185,8 +195,13 @@
 
           clear o_objl0200;
 
-          if (currliste < 0 or
-             currliste >= genheader.numlstent);
+          //  Keine Liste erstellt (oder gelöscht) oder Listenende
+          if (pspcptr = *null or currliste < 0);
+             exsr seterror;
+             leavesr;
+          endif;
+
+          if (currliste >= genheader.numlstent);
              exsr seterror;
              leavesr;
           endif;
@@ -212,6 +227,7 @@
        begsr seterror;
 
           o_nume = 0;
+          clear o_objl0200;
 
        endsr;
 

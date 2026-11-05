@@ -32,9 +32,6 @@
        //  Constants
        // ------------------------------------
 
-       //  ERROR return code
-       dcl-c cError -1;
-
        //  Transcoder handle identifier
        dcl-c class_transcoder
              '*CLASS:ccsid.TRANSCODER';
@@ -104,6 +101,11 @@
 
        //  Returns the CCSID of the current job.
        dcl-pr getjobccsid int(10) extproc('getJobCcsid');
+       end-pr;
+
+       //  Kills utility, if a given handle is not a transcoder.
+       dcl-pr checkhandle extproc('checkHandle');
+         i_htranscoder   const  like(htranscoder_t);
        end-pr;
 
        // ------------------------------------
@@ -249,31 +251,26 @@
        end-pi;
 
        //  Return value
-       dcl-s rc int(10) inz(cError);
+       dcl-s rc int(10) inz(0);
 
        //  Helper fields
-       dcl-s trc        uns(10);
        dcl-s poutbuf    pointer;
-
-       //  Transcoder handle
-       dcl-ds transcoder likeds(transcoder_t) based(i_htranscoder);
        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+       checkhandle(i_htranscoder);
 
        o_poutbuf = *null;
        poutbuf   = *null;
 
-       trc = performtranslation(i_htranscoder
-                                : i_pinbuf
-                                : i_size
-                                : poutbuf
-                                : -1);
+       //  performTranslation() sends CPF9897 on error. For an empty
+       //  input buffer it returns 0 and o_pOutBuf stays *null.
+       rc = performtranslation(i_htranscoder
+                               : i_pinbuf
+                               : i_size
+                               : poutbuf
+                               : -1);
 
-       if (trc = ciconv_error);
-          rc = cError;
-       else;
-          rc = trc;
-          o_poutbuf = poutbuf;
-       endif;
+       o_poutbuf = poutbuf;
 
        return rc;
 
@@ -302,18 +299,16 @@
        end-pi;
 
        //  Return value
-       dcl-s rc int(10) inz(cError);
+       dcl-s rc int(10) inz(0);
 
        //  Fields for optional parameters
        dcl-s maxsize    like(i_maxsize  );
 
        //  Helper fields
-       dcl-s trc        uns(10);
        dcl-s poutbuf    pointer;
-
-       //  Transcoder handle
-       dcl-ds transcoder likeds(transcoder_t) based(i_htranscoder);
        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+       checkhandle(i_htranscoder);
 
        if (%parms() >= %parmnum(i_maxsize) and %addr(i_maxsize) <> *null);
           maxsize = i_maxsize;
@@ -323,16 +318,14 @@
 
        poutbuf = *null;
 
-       trc = performtranslation(i_htranscoder
-                                : i_pinbuf
-                                : i_size
-                                : poutbuf
-                                : maxsize);
+       //  performTranslation() sends CPF9897 on error.
+       rc = performtranslation(i_htranscoder
+                               : i_pinbuf
+                               : i_size
+                               : poutbuf
+                               : maxsize);
 
-       if (trc = ciconv_error);
-          rc = cError;
-       else;
-          rc = trc;
+       if (rc > 0);
           memcpy(i_pinbuf: poutbuf: rc);
        endif;
 
@@ -362,37 +355,33 @@
          i_string        varchar(32767) const   options(*varsize);
        end-pi;
 
-       //  Return value
+       //  Return value (data covers all 32767 bytes of the string)
        dcl-ds rtn qualified;
          string  varchar(32767);
          len     int(5) pos(1);
-         data    char(32765) pos(3);
+         data    char(32767) pos(3);
        end-ds;
 
        //  Helper fields
-       dcl-s trc       uns(10);
        dcl-s pinbuf    pointer;
        dcl-s poutbuf   pointer;
-
-       //  Transcoder handle
-       dcl-ds transcoder likeds(transcoder_t) based(i_htranscoder);
        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+       checkhandle(i_htranscoder);
 
        rtn.string = i_string;
 
        pinbuf  = %addr(rtn.data);
        poutbuf = *null;
 
-       trc = performtranslation(i_htranscoder
-                                : pinbuf
-                                : %len(i_string)
-                                : poutbuf
-                                : %size(rtn.data));
+       //  performTranslation() sends CPF9897 on error.
+       rtn.len = performtranslation(i_htranscoder
+                                    : pinbuf
+                                    : %len(i_string)
+                                    : poutbuf
+                                    : %size(rtn.data));
 
-       if (trc = ciconv_error);
-          rtn.len = 0;
-       else;
-          rtn.len = trc;
+       if (rtn.len > 0);
           memcpy(%addr(rtn.data): poutbuf: rtn.len);
        endif;
 
@@ -422,6 +411,8 @@
        dcl-ds transcoder likeds(transcoder_t) based(i_htranscoder);
        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+       checkhandle(i_htranscoder);
+
        return transcoder.fromccsid;
 
        end-proc;
@@ -444,6 +435,8 @@
        dcl-ds transcoder likeds(transcoder_t) based(i_htranscoder);
        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+       checkhandle(i_htranscoder);
+
        return transcoder.toccsid;
 
        end-proc;
@@ -458,15 +451,56 @@
        end-pi;
 
        //  Helper fields
+       dcl-s x int(10);
+       dcl-s y int(10);
 
        //  Transcoder handle
        dcl-ds transcoder likeds(transcoder_t) based(io_htranscoder);
        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+       checkhandle(io_htranscoder);
+
+       //  Remove the transcoder from the list of created transcoders,
+       //  otherwise transcoder_toJobCcsid() would return the deleted
+       //  handle.
+       for x = 1 to g_transcoders.nume;
+          if (g_transcoders.item(x).htranscoder = io_htranscoder);
+             for y = x to g_transcoders.nume - 1;
+                g_transcoders.item(y) = g_transcoders.item(y + 1);
+             endfor;
+             clear g_transcoders.item(g_transcoders.nume);
+             g_transcoders.nume = g_transcoders.nume - 1;
+             leave;
+          endif;
+       endfor;
+
        iconv_close(transcoder.hiconv);
        clear transcoder;
 
        dealloc(n) io_htranscoder;
+
+       return;
+
+       end-proc;
+
+       //=====================================================================*
+       //  Deletes all transcoders created by transcoder_toJobCcsid() and
+       //  transcoder_toFieldCcsid() and forgets the job CCSID. Called at
+       //  the start of Peek, so that a changed job CCSID (CHGJOB) is used.
+       //=====================================================================*
+       dcl-proc transcoder_reset export;
+       dcl-pi *N;
+       end-pi;
+
+       dcl-s htranscoder like(htranscoder_t);
+       // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+       dow (g_transcoders.nume > 0);
+          htranscoder = g_transcoders.item(g_transcoders.nume).htranscoder;
+          transcoder_delete(htranscoder);
+       enddo;
+
+       g_jobccsid = 0;
 
        return;
 
@@ -525,17 +559,18 @@
        dcl-s bufsize         int(10) inz;
        dcl-s pinbuf          pointer inz;
        dcl-s poutbuf         pointer inz;
-       dcl-s inpbuf          char(32767) based(i_pinbuf);
        dcl-s extendsize      int(10) inz;
        dcl-s ismaxsize       ind inz(bFalse);
        dcl-s errnbr          int(10) inz;
 
-       // No restriction of maximum buffer size
-       dcl-c MAX_SIZE -1;
-
        //  Transcoder handle
        dcl-ds transcoder likeds(transcoder_t) based(i_htranscoder);
        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+       //  Nothing to translate: %alloc(0) is not allowed (RNX0425).
+       if (i_length <= 0);
+          return 0;
+       endif;
 
        bytprv    = i_length;
        bytleft   = i_length;
@@ -562,9 +597,6 @@
                 leave;
              endif;
              extendsize = bytprv * 2;
-             if (MAX_SIZE > 0 and extendsize > MAX_SIZE);
-                extendsize = MAX_SIZE - bufsize;
-             endif;
              if (ismaxsize and (bufsize + extendsize) > i_maxsize);
                 extendsize = i_maxsize - bufsize;
              endif;
@@ -580,7 +612,6 @@
        enddo;
 
        if (rc = ciconv_error);
-          length = rc;
           errnbr = f_errno();
           //  Release the output buffer, because the escape message
           //  skips the clean-up of the caller.
@@ -678,6 +709,30 @@
        endif;
 
        return g_jobccsid;
+
+       end-proc;
+
+       //=====================================================================*
+       //  *** private ***
+       //  Kills utility with an ESCAPE message, if a given handle is not
+       //  a transcoder (*null, deleted or a foreign pointer).
+       //=====================================================================*
+       dcl-proc checkhandle;
+       dcl-pi *N;
+         i_htranscoder   const  like(htranscoder_t);
+       end-pi;
+
+       //  Transcoder handle
+       dcl-ds transcoder likeds(transcoder_t) based(i_htranscoder);
+       // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+       if (i_htranscoder = *null);
+          kill('Invalid transcoder handle: *NULL');
+       endif;
+
+       if (transcoder.class.name <> class_transcoder);
+          kill('Invalid transcoder handle');
+       endif;
 
        end-proc;
 

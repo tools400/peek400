@@ -113,4 +113,12 @@ dcl-pr transcoder_isnull
   i_htranscoder   const  like(htranscoder_t );
 end-pr;
 
+//  Deletes the transcoders created by transcoder_toJobCcsid() and
+//  transcoder_toFieldCcsid() and forgets the job CCSID.
+dcl-pr transcoder_reset
+       extproc('PEEK71_+
+       Transcoder_reset+
+       ');
+end-pr;
+
 /ENDIF

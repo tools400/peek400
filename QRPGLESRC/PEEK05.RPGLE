@@ -171,6 +171,7 @@ dcl-ds hfile04  likeds(hfile_t);
 /COPY QCOPYLE,PPEEK51
 /COPY QCOPYLE,PPEEK53
 /COPY QCOPYLE,PPEEK58
+/COPY QCOPYLE,PPEEK71
 /COPY QCOPYLE,PPEEK63
 
 /COPY QCOPYLE,PEXIT01
@@ -7937,6 +7938,10 @@ begsr first;
 
   // - Programm initialisieren
   p_rmvpgmmg(sds.pgmname);
+
+  // - Zeichenumsetzung neu beginnen: Die Job-CCSID kann sich seit dem
+  //   letzten Aufruf geändert haben (CHGJOB CCSID).
+  transcoder_reset();
 
   // - Einlesen der Benutzervoreinstellungen
   exsr getusrsetg;

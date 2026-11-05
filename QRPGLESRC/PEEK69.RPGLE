@@ -40,6 +40,7 @@
       /COPY QCOPYLE,SCRNFKEYS
       /COPY QCOPYLE,CEECNDHDLR
 
+      /COPY QCOPYLE,USR0010
       /COPY QCOPYLE,USR8100
       /COPY QCOPYLE,USR8110
       /COPY QCOPYLE,USR8194
@@ -628,7 +629,17 @@
              yqfile.lib = '*LIBL';
           endif;
 
-          peek70(yqfile: '*CREATE': numfiles: objl0200);
+          //  Bibliothek prüfen (nicht die Sonderwerte wie *LIBL): PEEK70
+          //  liefert für eine unbekannte Bibliothek nur eine leere Liste.
+          if (%subst(yqfile.lib: 1: 1) <> '*' and
+              not f_exist(yqfile.lib: 'QSYS': '*LIB'));
+             clear usr0010;
+             usr0010.var1 = yqfile.lib;
+             p_sndpgmmg('USR0010': usr0010: sds.pgmname);
+             numfiles = 0;
+          else;
+             peek70(yqfile: '*CREATE': numfiles: objl0200);
+          endif;
 
        endsr;
 

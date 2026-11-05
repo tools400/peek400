@@ -13,5 +13,6 @@ STRPGMEXP  PGMLVL(*CURRENT) SIGNATURE('CharacterTranslationServices') /* RADD */
   EXPORT SYMBOL('PEEK71_Transcoder_xlateRaw')                         /* RADD */
   EXPORT SYMBOL('PEEK71_Transcoder_isNull')                           /* RADD */
   EXPORT SYMBOL('PEEK71_Transcoder_null')                             /* RADD */
+  EXPORT SYMBOL('PEEK71_Transcoder_reset')
 
 ENDPGMEXP
