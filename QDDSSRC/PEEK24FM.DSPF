@@ -144,9 +144,9 @@
      A  *DS4                                WINDOW(MSGCTL)
      A N88                                  DSPMOD(*DS4)
      A                                      OVERLAY
-     A            $$FKEY01      18A  O 14  1
+     A            $$FKEY01      18A  O 14  2
      A                                      COLOR(BLU)
-     A            $$FKEY02      18A  O 14 21
+     A            $$FKEY02      18A  O 14 22
      A                                      COLOR(BLU)
       *
       *----------------------------------------------------*

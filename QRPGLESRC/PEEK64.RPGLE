@@ -70,7 +70,7 @@ dcl-s yMsgDta         like(msgdta_t);
 
 dcl-s yFKeys          like(fkeydsp_t) dim(32);
 dcl-s yNbrOfKeys      like(int4_t) inz;
-dcl-s yExclKeys       like(fkeydsp_t) dim(8);
+dcl-s yExclKeys       like(pgmcmd_t) dim(25);
 
 dcl-s sfBot           like(int4_t);
 dcl-c NBR_F_KEYS const(3);
@@ -218,7 +218,8 @@ if (isPgmError = bFalse);
 
     //  Mappen der gedrückten Taste
     //  in Programmbefehl
-    peek21(workstn.aid: sds.pgmname: yPgmCmd: yCmdDta: yMsgId: yMsgDta);
+    peek21(workstn.aid: sds.pgmname: yPgmCmd: yCmdDta: yMsgId: yMsgDta
+          : yExclKeys);
     if (yMsgId <> ' ');
       p_sndpgmmg(yMsgId: yMsgDta: sds.pgmname);
       yMsgId = '';

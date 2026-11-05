@@ -28,7 +28,11 @@
 /COPY QCOPYLE,H_SPEC
 /COPY QCOPYLE,COPYRIGHT
 
+dcl-f default keyed usropn extdesc('PEEKUSR') extfile(g_default)
+      rename(fpeekusr: fdefault) prefix(d_);
+
 /COPY QCOPYLE,D_VARDEF
+/COPY QCOPYLE,FLDL0100
 /COPY QCOPYLE,SDS
 /COPY QCOPYLE,CEECNDHDLR
 
@@ -37,7 +41,12 @@
 /undefine internal_prototype
 
 /COPY QCOPYLE,PPEEK53
+/COPY QCOPYLE,PPEEK58
 
+//  Benutzer der Standardeinstellungen
+dcl-c DFT_USER        '*NONE';
+
+dcl-s g_default       char(21) inz;
 dcl-s wrk_sectn       like(section_t) inz;
 dcl-s wrk_key         like(key_t) inz;
 dcl-s wrk_data        like(set0000_t) inz;
@@ -57,112 +66,26 @@ end-pi;
 ceehdlr(%paddr('errorHandler')
        : *null: *omit);
 
-//  Kopieren für alle Programme ...
+//  Kopieren für alle Bereiche der Standardeinstellungen ...
 if (i_section = '*ALL');
 
-  wrk_sectn = '*PEEK05';
-  exsr delrecords;
-  exsr addrecords;
+  g_default = %trim(f_getprdlb()) + '/PEEKUSR';
+  open(e) default;
 
-  wrk_sectn = '*PEEK12';
-  exsr delrecords;
-  exsr addrecords;
+  if (not %error());
+    setll (DFT_USER) fdefault;
+    reade (DFT_USER) fdefault;
+    dow (not %eof(default));
+      wrk_sectn = d_section;
+      exsr delrecords;
+      exsr addrecords;
+      //  ... weiter mit dem nächsten Bereich
+      setgt (DFT_USER: wrk_sectn) fdefault;
+      reade (DFT_USER) fdefault;
+    enddo;
 
-  wrk_sectn = '*PEEK14';
-  exsr delrecords;
-  exsr addrecords;
-
-  wrk_sectn = '*PEEK17';
-  exsr delrecords;
-  exsr addrecords;
-
-  wrk_sectn = '*PEEK24';
-  exsr delrecords;
-  exsr addrecords;
-
-  wrk_sectn = '*PEEK25';
-  exsr delrecords;
-  exsr addrecords;
-
-  wrk_sectn = '*PEEK26';
-  exsr delrecords;
-  exsr addrecords;
-
-  wrk_sectn = '*PEEK30';
-  exsr delrecords;
-  exsr addrecords;
-
-  wrk_sectn = '*PEEK34';
-  exsr delrecords;
-  exsr addrecords;
-
-  wrk_sectn = '*PEEK37';
-  exsr delrecords;
-  exsr addrecords;
-
-  wrk_sectn = '*PEEK40';
-  exsr delrecords;
-  exsr addrecords;
-
-  wrk_sectn = '*PEEK45';
-  exsr delrecords;
-  exsr addrecords;
-
-  wrk_sectn = '*PEEK47';
-  exsr delrecords;
-  exsr addrecords;
-
-  wrk_sectn = '*PEEK48';
-  exsr delrecords;
-  exsr addrecords;
-
-  wrk_sectn = '*PEEK49';
-  exsr delrecords;
-  exsr addrecords;
-
-  wrk_sectn = '*PEEK50';
-  exsr delrecords;
-  exsr addrecords;
-
-  wrk_sectn = '*PEEK52';
-  exsr delrecords;
-  exsr addrecords;
-
-  wrk_sectn = '*PEEK56';
-  exsr delrecords;
-  exsr addrecords;
-
-  wrk_sectn = '*PEEK57';
-  exsr delrecords;
-  exsr addrecords;
-
-  wrk_sectn = '*PEEK59';
-  exsr delrecords;
-  exsr addrecords;
-
-  wrk_sectn = '*PEEK64';
-  exsr delrecords;
-  exsr addrecords;
-
-  wrk_sectn = '*PEEK68';
-  exsr delrecords;
-  exsr addrecords;
-
-  wrk_sectn = '*PEEK69';
-  exsr delrecords;
-  exsr addrecords;
-
-  wrk_sectn = '*PXXXXXXXX';
-  exsr delrecords;
-  exsr addrecords;
-
-  wrk_sectn = '*CMD';
-  exsr delrecords;
-  exsr addrecords;
-
-  wrk_sectn = '*PGM';
-  exsr delrecords;
-  exsr addrecords;
+    close default;
+  endif;
 
 else;
 
@@ -184,7 +107,9 @@ begsr delrecords;
   if i_mode = '*REPLACE'
      or i_mode = '*DELETE';
 
-    p_setllusr(wrk_sectn: '*F01');
+    //  Alle Schlüssel des Bereichs, auch '*ENTER' und die leere
+    //  Auswahl, die vor '*F01' sortiert werden.
+    p_setllusr(wrk_sectn);
 
     dow f_readeusr(wrk_sectn: wrk_key)= '0';
       f_deletusr(wrk_sectn: wrk_key);

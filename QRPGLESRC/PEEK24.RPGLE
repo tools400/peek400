@@ -72,6 +72,10 @@ dcl-c NBR_F_KEYS const(2);
 dcl-s wrk_field       char(10) inz(*blanks);
 dcl-s wrk_color       char(1) inz(*blanks);
 
+//  Farbe in SET0001, die mit PEEK25 geändert wird (aus PRF20)
+dcl-s pSetColor       pointer inz(*null);
+dcl-s setColor        char(1) based(pSetColor);
+
 dcl-ds set0001        likeds(set0001_t) inz;
 
 dcl-s peek21_name     like(pgmcalln_t) inz;
@@ -87,7 +91,7 @@ dcl-s isInzSr         like(bool_t) inz(bFalse);
 dcl-pi peek24;
   i_dsp80         const like(dsp80_t);
   i_copyright     const like(copyrght_t);
-  o_set0001       likeds(set0001);
+  o_set0001       likeds(set0001_t);
   o_msgid         like(msgid_t);
   o_msgdta        like(msgdta_t);
 end-pi;
@@ -244,31 +248,34 @@ begsr prf20;
     wrk_field = %subst(scnfld:3:6);
 
     select;
-    when (wrk_field = 'KEYCOL'); // Überschrift
-      wrk_color = set0001.set_keycol;
+    when (wrk_field = 'KEYCOL'); // Schlüsselfelder
+      pSetColor = %addr(set0001.set_keycol);
     when (wrk_field = 'HEDCOL'); // Überschrift
-      wrk_color = set0001.set_hedcol;
+      pSetColor = %addr(set0001.set_hedcol);
     when (wrk_field = 'PINCOL'); // Pined-Daten
-      wrk_color = set0001.set_pincol;
+      pSetColor = %addr(set0001.set_pincol);
     when (wrk_field = 'CLMCOL'); // SpaltenMark
-      wrk_color = set0001.set_clmcol;
+      pSetColor = %addr(set0001.set_clmcol);
     when (wrk_field = 'STDCOL'); // Standard
-      wrk_color = set0001.set_stdcol;
+      pSetColor = %addr(set0001.set_stdcol);
     when (wrk_field = 'NMLCOL'); // Normale Suche
-      wrk_color = set0001.set_nmlcol;
+      pSetColor = %addr(set0001.set_nmlcol);
     when (wrk_field = 'UNDCOL'); // Unterstrichen
-      wrk_color = set0001.set_undcol;
+      pSetColor = %addr(set0001.set_undcol);
     when (wrk_field = 'REVCOL'); // Reverse Suche
-      wrk_color = set0001.set_revcol;
+      pSetColor = %addr(set0001.set_revcol);
     when (wrk_field = 'TBLCOL'); // Tabellierpap.
-      wrk_color = set0001.set_tblcol;
+      pSetColor = %addr(set0001.set_tblcol);
     when (wrk_field = 'EXCCOL'); // Exception
-      wrk_color = set0001.set_exccol;
+      pSetColor = %addr(set0001.set_exccol);
     other;
+      pSetColor = *null;
       *in99 = '1';
       p_sndpgmmg('USR8146': '': sds.pgmname);
       leave;
     endsl;
+
+    wrk_color = setColor;
 
   enddo;
 
@@ -315,11 +322,13 @@ begsr c_endpgm;
 endsr;
 
 //============================================================*
-//    C_Refresh     F5  - Aktualisieren der Subfile           *
+//    C_Refresh     F5  - Änderungen verwerfen                *
 //============================================================*
 
 begsr c_refresh;
 
+  //  Nicht gespeicherte Änderungen zurücknehmen
+  exsr getusrsetg;
   exsr fill##;
 
 endsr;
@@ -500,31 +509,8 @@ begsr getcolor;
   // Fehler aufgetreten
   else;
 
-    select;
-    when (wrk_field = 'KEYCOL'); // Überschrift
-      set0001.set_keycol = wrk_color;
-    when (wrk_field = 'HEDCOL'); // Überschrift
-      set0001.set_hedcol = wrk_color;
-    when (wrk_field = 'PINCOL'); // Pined-Daten
-      set0001.set_pincol = wrk_color;
-    when (wrk_field = 'CLMCOL'); // Spaltenmark.
-      set0001.set_clmcol = wrk_color;
-    when (wrk_field = 'STDCOL'); // Standard
-      set0001.set_stdcol = wrk_color;
-    when (wrk_field = 'NMLCOL'); // Normale Suche
-      set0001.set_nmlcol = wrk_color;
-    when (wrk_field = 'UNDCOL'); // Unterstrichen
-      set0001.set_undcol = wrk_color;
-    when (wrk_field = 'REVCOL'); // Reverse Suche
-      set0001.set_revcol = wrk_color;
-    when (wrk_field = 'TBLCOL'); // Tabellierpap.
-      set0001.set_tblcol = wrk_color;
-    when (wrk_field = 'EXCCOL'); // Exception
-      set0001.set_exccol = wrk_color;
-    other;
-      *in99 = '1';
-      p_sndpgmmg('USR8146': '': sds.pgmname);
-    endsl;
+    //  Neue Farbe in das Feld von SET0001 übernehmen
+    setColor = wrk_color;
 
     exsr fill##;
   endif;
@@ -585,6 +571,9 @@ begsr inzsr;
   peek23_name = f_pgmcalln('PEEK23');
   peek25_name = f_pgmcalln('PEEK25');
 
+  //  0 statt NBR_F_KEYS: Keinen Platz für "F24=Weitere Tasten"
+  //  reservieren, damit F3 und F5 nebeneinander in die Tastenleiste
+  //  passen. Die übrigen Tasten (z.B. F12) erscheinen nach F24.
   peek23(sds.pgmname: '*ALL': 0
         : yfkeys: ynbrofkeys);
   scrnfkeys = %subarr(yfkeys: 1);

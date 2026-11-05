@@ -65,9 +65,20 @@ dcl-s ycmddta         like(pgmcmddt_t);
 dcl-s sfbot           like(int4_t);
 dcl-c nbrfkeys const(2);
 
-dcl-s wrk_field       char(10);
-
 dcl-c CHAR const('x');
+
+//  Farbtabelle: Bildschirmfeld, Farbattribut, Bezugszahl für
+//  DSPATR(PC) und Adresse des Bildschirmfelds
+dcl-c MAX_COLORS const(28);
+dcl-s colorName       char(10) dim(MAX_COLORS);
+dcl-s colorAttr       char(1) dim(MAX_COLORS);
+dcl-s colorInd        int(5) dim(MAX_COLORS);
+dcl-s colorField      pointer dim(MAX_COLORS);
+dcl-s nbrColors       like(int4_t) inz(0);
+
+dcl-s pScnColor       pointer inz(*null);
+dcl-s scnColor        char(3) based(pScnColor);
+dcl-s i               like(int4_t);
 
 dcl-s peek21_name     like(pgmcalln_t) inz;
 dcl-s peek23_name     like(pgmcalln_t) inz;
@@ -228,21 +239,7 @@ endsr;
 
 begsr prf20;
 
-  dou ('1');
-
-    if (scnfld <> '');
-      exsr extrcolor;
-    else;
-      *in99 = '1';
-      p_sndpgmmg('USR8147': '': sds.pgmname);
-      leave;
-    endif;
-
-  enddo;
-
-  if (*in99 = *on);
-  //               ??????????
-  endif;
+  exsr extrcolor;
 
 endsr;
 
@@ -278,6 +275,11 @@ begsr c_refresh;
   exsr fill##;
   exsr poscsr;
 
+  //  Cursor auf die aktuelle Farbe (DSPATR(PC)). Mit einer Position
+  //  in CSRROW/CSRCOL hätte CSRLOC Vorrang.
+  csrrow = 0;
+  csrcol = 0;
+
 endsr;
 
 //============================================================*
@@ -296,68 +298,11 @@ endsr;
 
 begsr fill##;
 
-  $green = COLOR_green;
-  $green = %xlate(' ': CHAR: $green);
-  $green_r = COLOR_green_r;
-  $green_r = %xlate(' ': CHAR: $green_r);
-  $green_u = COLOR_green_u;
-  $green_u = %xlate(' ': CHAR: $green_u);
-  $green_ru = COLOR_green_ru;
-  $green_ru = %xlate(' ': CHAR: $green_ru);
-
-  $white = COLOR_white;
-  $white = %xlate(' ': CHAR: $white);
-  $white_r = COLOR_white_r;
-  $white_r = %xlate(' ': CHAR: $white_r);
-  $white_u = COLOR_white_u;
-  $white_u = %xlate(' ': CHAR: $white_u);
-
-  $red = COLOR_red;
-  $red = %xlate(' ': CHAR: $red);
-  $red_r = COLOR_red_r;
-  $red_r = %xlate(' ': CHAR: $red_r);
-  $red_u = COLOR_red_u;
-  $red_u = %xlate(' ': CHAR: $red_u);
-  $red_ru = COLOR_red_ru;
-  $red_ru = %xlate(' ': CHAR: $red_ru);
-  $red_b = COLOR_red_b;
-  $red_b = %xlate(' ': CHAR: $red_b);
-  $red_rb = COLOR_red_rb;
-  $red_rb = %xlate(' ': CHAR: $red_rb);
-  $red_ub = COLOR_red_ub;
-  $red_ub = %xlate(' ': CHAR: $red_ub);
-
-  $turkis = COLOR_turkis;
-  $turkis = %xlate(' ': CHAR: $turkis);
-  $turkis_r = COLOR_turkis_r;
-  $turkis_r = %xlate(' ': CHAR: $turkis_r);
-  $turkis_u = COLOR_turkis_u;
-  $turkis_u = %xlate(' ': CHAR: $turkis_u);
-  $turkis_ru = COLOR_turkis_ru;
-  $turkis_ru = %xlate(' ': CHAR: $turkis_ru);
-
-  $yellow = COLOR_yellow;
-  $yellow = %xlate(' ': CHAR: $yellow);
-  $yellow_r = COLOR_yellow_r;
-  $yellow_r = %xlate(' ': CHAR: $yellow_r);
-  $yellow_u = COLOR_yellow_u;
-  $yellow_u = %xlate(' ': CHAR: $yellow_u);
-
-  $pink = COLOR_pink;
-  $pink = %xlate(' ': CHAR: $pink);
-  $pink_r = COLOR_pink_r;
-  $pink_r = %xlate(' ': CHAR: $pink_r);
-  $pink_u = COLOR_pink_u;
-  $pink_u = %xlate(' ': CHAR: $pink_u);
-  $pink_ru = COLOR_pink_ru;
-  $pink_ru = %xlate(' ': CHAR: $pink_ru);
-
-  $blue = COLOR_blue;
-  $blue = %xlate(' ': CHAR: $blue);
-  $blue_r = COLOR_blue_r;
-  $blue_r = %xlate(' ': CHAR: $blue_r);
-  $blue_u = COLOR_blue_u;
-  $blue_u = %xlate(' ': CHAR: $blue_u);
+  //  Farbattribut und zwei Zeichen in der Farbe
+  for i = 1 to nbrColors;
+    pScnColor = colorField(i);
+    scnColor = colorAttr(i) + CHAR + CHAR;
+  endfor;
 
 endsr;
 
@@ -367,82 +312,16 @@ endsr;
 
 begsr poscsr;
 
-  %subarr(*in: 10: 10) = '0'; // - Green
-  %subarr(*in: 20: 10) = '0'; // - White
-  %subarr(*in: 30: 10) = '0'; // - Red
-  %subarr(*in: 40: 10) = '0'; // - Türkis
-  %subarr(*in: 50: 10) = '0'; // - Yellow
-  %subarr(*in: 60: 10) = '0'; // - Pink
-  %subarr(*in: 70: 10) = '0'; // - Blue
+  for i = 1 to nbrColors;
+    *in(colorInd(i)) = *off;
+  endfor;
 
-  // Green
-  select;
-  when (o_colorattr = COLOR_green);
-    *in10 = '1';
-  when (o_colorattr = COLOR_green_r);
-    *in11 = '1';
-  when (o_colorattr = COLOR_green_u);
-    *in12 = '1';
-  when (o_colorattr = COLOR_green_ru);
-    *in13 = '1';
-  // White
-  when (o_colorattr = COLOR_white);
-    *in20 = '1';
-  when (o_colorattr = COLOR_white_r);
-    *in21 = '1';
-  when (o_colorattr = COLOR_white_u);
-    *in22 = '1';
-  // Red
-  when (o_colorattr = COLOR_red);
-    *in30 = '1';
-  when (o_colorattr = COLOR_red_r);
-    *in31 = '1';
-  when (o_colorattr = COLOR_red_u);
-    *in32 = '1';
-  when (o_colorattr = COLOR_red_ru);
-    *in33 = '1';
-  when (o_colorattr = COLOR_red_b);
-    *in34 = '1';
-  when (o_colorattr = COLOR_red_rb);
-    *in35 = '1';
-  when (o_colorattr = COLOR_red_ub);
-    *in36 = '1';
-  // Türkis
-  when (o_colorattr = COLOR_turkis);
-    *in40 = '1';
-  when (o_colorattr = COLOR_turkis_r);
-    *in41 = '1';
-  when (o_colorattr = COLOR_turkis_u);
-    *in42 = '1';
-  when (o_colorattr = COLOR_turkis_ru);
-    *in43 = '1';
-  // Yellow
-  when (o_colorattr = COLOR_yellow);
-    *in50 = '1';
-  when (o_colorattr = COLOR_yellow_r);
-    *in51 = '1';
-  when (o_colorattr = COLOR_yellow_u);
-    *in52 = '1';
-  // Pink
-  when (o_colorattr = COLOR_pink);
-    *in60 = '1';
-  when (o_colorattr = COLOR_pink_r);
-    *in61 = '1';
-  when (o_colorattr = COLOR_pink_u);
-    *in62 = '1';
-  when (o_colorattr = COLOR_pink_ru);
-    *in63 = '1';
-  // Blue
-  when (o_colorattr = COLOR_blue);
-    *in70 = '1';
-  when (o_colorattr = COLOR_blue_r);
-    *in71 = '1';
-  when (o_colorattr = COLOR_blue_u);
-    *in72 = '1';
-
-  other;
-    p_kill('Illegal color attribute.');
-  endsl;
+  //  Ein unbekanntes Attribut, z.B. aus alten Einstellungen, wird
+  //  nicht vorausgewählt.
+  i = %lookup(o_colorattr: colorAttr: 1: nbrColors);
+  if (i > 0);
+    *in(colorInd(i)) = *on;
+  endif;
 
 endsr;
 
@@ -472,79 +351,13 @@ endsr;
 
 begsr extrcolor;
 
-  select;
-  //  Green
-  when (scnfld = '$GREEN');
-    wrk_field = $green;
-  when (scnfld = '$GREEN_R');
-    wrk_field = $green_r;
-  when (scnfld = '$GREEN_U');
-    wrk_field = $green_u;
-  when (scnfld = '$GREEN_RU');
-    wrk_field = $green_ru;
-  //  White
-  when (scnfld = '$WHITE');
-    wrk_field = $white;
-  when (scnfld = '$WHITE_R');
-    wrk_field = $white_r;
-  when (scnfld = '$WHITE_U');
-    wrk_field = $white_u;
-  //  Red
-  when (scnfld = '$RED');
-    wrk_field = $red;
-  when (scnfld = '$RED_R');
-    wrk_field = $red_r;
-  when (scnfld = '$RED_U');
-    wrk_field = $red_u;
-  when (scnfld = '$RED_RU');
-    wrk_field = $red_ru;
-  when (scnfld = '$RED_B');
-    wrk_field = $red_b;
-  when (scnfld = '$RED_RB');
-    wrk_field = $red_rb;
-  when (scnfld = '$RED_UB');
-    wrk_field = $red_ub;
-  //  Turquoise
-  when (scnfld = '$TURKIS');
-    wrk_field = $turkis;
-  when (scnfld = '$TURKIS_R');
-    wrk_field = $turkis_r;
-  when (scnfld = '$TURKIS_U');
-    wrk_field = $turkis_u;
-  when (scnfld = '$TURKIS_RU');
-    wrk_field = $turkis_ru;
-  //  Yellow
-  when (scnfld = '$YELLOW');
-    wrk_field = $yellow;
-  when (scnfld = '$YELLOW_R');
-    wrk_field = $yellow_r;
-  when (scnfld = '$YELLOW_U');
-    wrk_field = $yellow_u;
-  //  Pink
-  when (scnfld = '$PINK');
-    wrk_field = $pink;
-  when (scnfld = '$PINK_R');
-    wrk_field = $pink_r;
-  when (scnfld = '$PINK_U');
-    wrk_field = $pink_u;
-  when (scnfld = '$PINK_RU');
-    wrk_field = $pink_ru;
-  //  Blue
-  when (scnfld = '$BLUE');
-    wrk_field = $blue;
-  when (scnfld = '$BLUE_R');
-    wrk_field = $blue_r;
-  when (scnfld = '$BLUE_U');
-    wrk_field = $blue_u;
-
-  other;
-    wrk_field = *blanks;
-  endsl;
-
-  if (wrk_field <> *blanks);
-    o_colorattr = %subst(wrk_field:1:1);
+  i = %lookup(scnfld: colorName: 1: nbrColors);
+  if (i > 0);
+    o_colorattr = colorAttr(i);
   else;
-  //                ????????
+    //  Cursor steht auf keiner Farbe, z.B. auf der Zeilenbeschriftung
+    *in99 = '1';
+    p_sndpgmmg('USR8146': '': sds.pgmname);
   endif;
 
 endsr;
@@ -594,14 +407,66 @@ begsr inzsr;
 
   PGMQ = '*';
 
+  //  Farbtabelle (Bezugszahlen aus PEEK25FM)
+  addColor('$GREEN'    : COLOR_green    : 10: %addr($green));
+  addColor('$GREEN_R'  : COLOR_green_r  : 11: %addr($green_r));
+  addColor('$GREEN_U'  : COLOR_green_u  : 12: %addr($green_u));
+  addColor('$GREEN_RU' : COLOR_green_ru : 13: %addr($green_ru));
+  addColor('$WHITE'    : COLOR_white    : 20: %addr($white));
+  addColor('$WHITE_R'  : COLOR_white_r  : 21: %addr($white_r));
+  addColor('$WHITE_U'  : COLOR_white_u  : 22: %addr($white_u));
+  addColor('$RED'      : COLOR_red      : 30: %addr($red));
+  addColor('$RED_R'    : COLOR_red_r    : 31: %addr($red_r));
+  addColor('$RED_U'    : COLOR_red_u    : 32: %addr($red_u));
+  addColor('$RED_RU'   : COLOR_red_ru   : 33: %addr($red_ru));
+  addColor('$RED_B'    : COLOR_red_b    : 34: %addr($red_b));
+  addColor('$RED_RB'   : COLOR_red_rb   : 35: %addr($red_rb));
+  addColor('$RED_UB'   : COLOR_red_ub   : 36: %addr($red_ub));
+  addColor('$TURKIS'   : COLOR_turkis   : 40: %addr($turkis));
+  addColor('$TURKIS_R' : COLOR_turkis_r : 41: %addr($turkis_r));
+  addColor('$TURKIS_U' : COLOR_turkis_u : 42: %addr($turkis_u));
+  addColor('$TURKIS_RU': COLOR_turkis_ru: 43: %addr($turkis_ru));
+  addColor('$YELLOW'   : COLOR_yellow   : 50: %addr($yellow));
+  addColor('$YELLOW_R' : COLOR_yellow_r : 51: %addr($yellow_r));
+  addColor('$YELLOW_U' : COLOR_yellow_u : 52: %addr($yellow_u));
+  addColor('$PINK'     : COLOR_pink     : 60: %addr($pink));
+  addColor('$PINK_R'   : COLOR_pink_r   : 61: %addr($pink_r));
+  addColor('$PINK_U'   : COLOR_pink_u   : 62: %addr($pink_u));
+  addColor('$PINK_RU'  : COLOR_pink_ru  : 63: %addr($pink_ru));
+  addColor('$BLUE'     : COLOR_blue     : 70: %addr($blue));
+  addColor('$BLUE_R'   : COLOR_blue_r   : 71: %addr($blue_r));
+  addColor('$BLUE_U'   : COLOR_blue_u   : 72: %addr($blue_u));
+
   peek21_name = f_pgmcalln('PEEK21');
   peek23_name = f_pgmcalln('PEEK23');
 
+  //  0 statt nbrfkeys: Keinen Platz für "F24=Weitere Tasten"
+  //  reservieren, damit F3 und F5 nebeneinander in die Tastenleiste
+  //  passen. Die übrigen Tasten (z.B. F12) erscheinen nach F24.
   peek23(sds.pgmname: '*ALL': 0
         : yfkeys: ynbrofkeys);
   scrnfkeys = %subarr(yfkeys: 1);
 
 endsr;
+
+//============================================================*
+//  Farbe in die Farbtabelle aufnehmen                        *
+//============================================================*
+dcl-proc addColor;
+  dcl-pi *n;
+    i_name          char(10) const;
+    i_attr          char(1) const;
+    i_ind           int(5) const;
+    i_field         pointer const;
+  end-pi;
+
+  nbrColors += 1;
+  colorName(nbrColors) = i_name;
+  colorAttr(nbrColors) = i_attr;
+  colorInd(nbrColors) = i_ind;
+  colorField(nbrColors) = i_field;
+
+end-proc;
 
 //============================================================*
 //  Program error handler                                     *

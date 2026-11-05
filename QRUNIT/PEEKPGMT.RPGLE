@@ -1,9 +1,9 @@
 **FREE
 // ==========================================================================
 //  Peek/400 - Unit-Tests der Programme PEEK01, PEEK02, PEEK03, PEEK04,
-//  PEEK06, PEEK07, PEEK10, PEEK11, PEEK15, PEEK18, PEEK19, PEEK20 und
-//  PEEK36 sowie der Transcoder-Liste von PEEK71 und der Datei PEEKFMT
-//  (iRPGUnit).
+//  PEEK06, PEEK07, PEEK10, PEEK11, PEEK15, PEEK18, PEEK19, PEEK20, PEEK22,
+//  PEEK23 und PEEK36 sowie der Transcoder-Liste von PEEK71 und der Datei
+//  PEEKFMT (iRPGUnit).
 //
 //  Zum Erstellen und Ausführen muss die Peek-Bibliothek (QCOPYLE,
 //  Bindeverzeichnis PEEK, PEEKUSR, PEEKFLD, PEEKFMT, Nachrichtendatei
@@ -52,6 +52,8 @@ ctl-opt nomain;
 /copy QCOPYLE,PPEEK18
 /copy QCOPYLE,PPEEK19
 /copy QCOPYLE,PPEEK20
+/copy QCOPYLE,PPEEK22
+/copy QCOPYLE,PPEEK23
 /copy QCOPYLE,PPEEK36
 /undefine internal_prototype
 
@@ -879,8 +881,172 @@ EDTWRD('' .   .   .   .   .   .  0, -'
 end-proc;
 
 // ==========================================================================
+//  PEEK22: *REPLACE ersetzt alle Schlüssel eines Bereichs, auch '*ENTER'
+//  und die *PGM-Einstellungen, die vor '*F01' sortiert werden.
+// ==========================================================================
+
+dcl-proc test21_peek22_replaceResetsAll export;
+  dcl-s errors varchar(1024) inz;
+
+  setUsrData('*PEEK05': '*ENTER': '*CHANGED');
+  setUsrData('*PEEK05': '*F05': '*CHANGED');
+  setUsrData('*PGM': '*DSPATTR': '*CHANGED');
+  setUsrData('*PGM': '*LANGUAGE': '*CHANGED');
+
+  peek22('*REPLACE': '*ALL');
+
+  errors += chkUsrReset('*PEEK05': '*ENTER');
+  errors += chkUsrReset('*PEEK05': '*F05');
+  errors += chkUsrReset('*PGM': '*DSPATTR');
+  errors += chkUsrReset('*PGM': '*LANGUAGE');
+
+  assert(errors = '': 'Von *REPLACE nicht zurückgesetzt:' + errors);
+end-proc;
+
+// ==========================================================================
+//  PEEK23: Tasten außer F1 bis F24 werden mit ihrem Namen beschriftet
+//  ('*ENTER' ergab 'ETER').
+// ==========================================================================
+
+dcl-proc test22_peek23_enterLabel export;
+  dcl-s fkeys like(fkeydsp_t) dim(32);
+  dcl-s n like(int4_t);
+
+  //  PEEK59: *OK liegt standardmäßig auf Enter
+  peek22('*REPLACE': '*PEEK59');
+
+  peek23('PEEK59': '*OK': 0: fkeys: n);
+
+  iEqual(1: n: 'Anzahl Tasten für *OK');
+  aEqual('ENTER=': %subst(fkeys(1): 1: 6): 'Beschriftung für *OK');
+end-proc;
+
+// ==========================================================================
+//  PEEK23: Ohne Taste für *MOREKEYS werden keine Plätze für
+//  "F24=Weitere Tasten" reserviert.
+// ==========================================================================
+
+dcl-proc test23_peek23_noGapWithoutMoreKeys export;
+  dcl-s fkeys like(fkeydsp_t) dim(32);
+  dcl-s n like(int4_t);
+  dcl-s i like(int4_t);
+  dcl-s gaps varchar(256) inz;
+
+  peek22('*REPLACE': '*PEEK14');
+  f_deletusr('*PEEK14': '*F24');
+
+  peek23('PEEK14': '*ALL': 3: fkeys: n);
+
+  for i = 1 to n;
+    if (fkeys(i) = '');
+      gaps += ' ' + %char(i);
+    endif;
+  endfor;
+
+  assert(n > 0: 'Keine Tasten für PEEK14.');
+  assert(gaps = '': 'Leere Plätze in der Tastenleiste:' + gaps);
+end-proc;
+
+// ==========================================================================
+//  PEEK23: Bei 3 Tasten pro Seite, 21 Tasten und F24 läge der F24-Platz
+//  der letzten Seite hinter der Liste (Platz 33, MCH0603).
+// ==========================================================================
+
+dcl-proc test24_peek23_manyKeysNoOverflow export;
+  dcl-s fkeys like(fkeydsp_t) dim(32);
+  dcl-s n like(int4_t);
+  dcl-s i like(int4_t);
+  dcl-s key like(key_t);
+  dcl-s data like(set0000_t);
+
+  peek22('*REPLACE': '*PEEK14');
+  for i = 1 to 24;
+    key = '*F' + %editc(%dec(i: 2: 0): 'X');
+    f_deletusr('*PEEK14': key);
+  endfor;
+
+  for i = 1 to 21;
+    key = '*F' + %editc(%dec(i: 2: 0): 'X');
+    data = '*REFRESH';
+    f_writeusr('*PEEK14': key: data);
+  endfor;
+  data = '*MOREKEYS';
+  f_writeusr('*PEEK14': '*F24': data);
+
+  monitor;
+    peek23('PEEK14': '*ALL': 3: fkeys: n);
+  on-error;
+    fail('PEEK23 bricht bei 21 Tasten und F24 ab: ' + lastMsg());
+  endmon;
+
+  assert(n <= %elem(fkeys): 'Anzahl Tasten > 32: ' + %char(n));
+end-proc;
+
+// ==========================================================================
+//  PEEK23: Mit F24=*MOREKEYS steht auf jedem 3. Platz "F24=...".
+// ==========================================================================
+
+dcl-proc test25_peek23_moreKeysEveryThird export;
+  dcl-s fkeys like(fkeydsp_t) dim(32);
+  dcl-s n like(int4_t);
+  dcl-s i like(int4_t);
+  dcl-s errors varchar(1024) inz;
+
+  peek22('*REPLACE': '*PEEK14');
+
+  peek23('PEEK14': '*ALL': 3: fkeys: n);
+
+  for i = 1 to n;
+    if (fkeys(i) = '');
+      errors += ' leer:' + %char(i);
+    elseif (%rem(i: 3) = 0 and %subst(fkeys(i): 1: 4) <> 'F24=');
+      errors += ' kein F24:' + %char(i);
+    endif;
+  endfor;
+
+  assert(n > 0: 'Keine Tasten für PEEK14.');
+  assert(errors = '': 'Tastenleiste PEEK14:' + errors);
+end-proc;
+
+// ==========================================================================
 //  Hilfsprozeduren
 // ==========================================================================
+
+//  Sets the data of a key in the user settings (TESTUSER).
+dcl-proc setUsrData;
+  dcl-pi *n;
+    i_section like(section_t) const;
+    i_key     like(key_t) const;
+    i_data    varchar(256) const;
+  end-pi;
+
+  dcl-s data like(set0000_t);
+
+  data = i_data;
+  if (f_updatusr(i_section: i_key: data) = bTrue);
+    f_writeusr(i_section: i_key: data);
+  endif;
+end-proc;
+
+//  Returns ' <section>/<key>' if the key is missing or still '*CHANGED'.
+dcl-proc chkUsrReset;
+  dcl-pi *n varchar(100);
+    i_section like(section_t) const;
+    i_key     like(key_t) const;
+  end-pi;
+
+  dcl-s data like(set0000_t);
+
+  if (f_chainusr(i_section: i_key: data) = bTrue);
+    return ' ' + %trim(i_section) + '/' + %trim(i_key) + '=fehlt';
+  endif;
+
+  if (%subst(data: 1: 8) = '*CHANGED');
+    return ' ' + %trim(i_section) + '/' + %trim(i_key);
+  endif;
+
+  return '';
+end-proc;
 
 //  Calls PEEK36 and compares the message ID (blank = value accepted).
 dcl-proc chkPeek36;

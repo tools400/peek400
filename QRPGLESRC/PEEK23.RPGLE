@@ -38,7 +38,6 @@
 
 dcl-s x               like(int4_t) inz;
 dcl-s y               like(int4_t) inz;
-dcl-s a1              char(1) inz(*blanks);
 
 dcl-s r_msgid         char(4) inz(*blanks);
 dcl-s r_key           like(key_t)  inz(*blanks);
@@ -67,7 +66,7 @@ dcl-pi peek23;
   i_posf24        const like(int4_t);
   o_fkeys               like(fkeydsp_t) dim(32);
   o_nbrofkeys           like(int4_t);
-  i_exclKeys      const like(fkeydsp_t) dim(8) options(*nopass);
+  i_exclKeys      const like(pgmcmd_t) dim(25) options(*nopass);
 end-pi;
 
 //  Register error handler
@@ -91,6 +90,15 @@ begsr getKeyMap;
   r_msgid = *blanks;
   r_key = *blanks;
   r_posf24 = i_posf24;
+
+  //  Plätze für "F24=Weitere Tasten" nur reservieren, wenn der
+  //  Befehl *MOREKEYS einer Taste zugeordnet ist.
+  if (i_posf24 > 0);
+    exsr chkMoreKeys;
+    if (r_msgid = '');
+      r_posf24 = 0;
+    endif;
+  endif;
 
   //  Hilfetaste
   if (i_key = '*HELP' or i_key = '*ALL');
@@ -127,6 +135,10 @@ begsr getKeyMap;
       y = y * i_posf24;
 
       for x = i_posf24 by i_posF24 to y;
+        //  Der Platz der letzten Seite kann hinter der Liste liegen
+        if (x > %elem(o_fkeys));
+          leave;
+        endif;
         wrk_msgid = r_msgid;
         wrk_key = r_key;
         exsr fillfield;
@@ -157,7 +169,7 @@ begsr readKeyMap;
     endif;
 
     if (%parms() >= %parmnum(i_exclKeys));
-      if (%lookup(data: i_exclKeys) > 0);
+      if (f_iskeyexc(data: i_exclKeys) = bTrue);
         iter;
       endif;
     endif;
@@ -173,17 +185,45 @@ begsr readKeyMap;
     endif;
 
     //  *MOREKEYS
-    if (x = r_posf24);
+    if (x = r_posf24 and x <= %elem(o_fkeys));
       //  ... Platz reservieren
       x = x + 1;
       o_nbrofkeys = o_nbrofkeys + 1;
       r_posf24 = r_posf24 + i_posf24;
     endif;
 
-    if (x > 32);
+    if (x > %elem(o_fkeys));
       leave;
     endif;
 
+  enddo;
+
+endsr;
+
+//============================================================*
+//    ChkMoreKeys   Suchen der Taste für *MOREKEYS            *
+//============================================================*
+
+begsr chkMoreKeys;
+
+  wrk_sectn = '*' + i_pgm;
+  p_setllusr(wrk_sectn: '*F01');
+
+  dow (f_readeusr(wrk_sectn: wrk_key: data) = '0');
+    if (wrk_key > '*F24');
+      leave;
+    endif;
+
+    if (data = '*MOREKEYS');
+      if (%parms() >= %parmnum(i_exclKeys));
+        if (f_iskeyexc(data: i_exclKeys) = bTrue);
+          iter;
+        endif;
+      endif;
+      r_msgid = f_mapCmdToMsg(data: wrk_sectn);
+      r_key = wrk_key;
+      leave;
+    endif;
   enddo;
 
 endsr;
@@ -204,14 +244,15 @@ begsr fillfield;
   select;
   when (wrk_key   = '*HELP');
     o_fkeys(x) = 'F1';
+  when (%subst(wrk_key: 1: 3) = '*F0');
+    //  '*F01' bis '*F09' -> 'F1' bis 'F9'
+    o_fkeys(x) = 'F' + %subst(wrk_key: 4: 1);
+  when (%subst(wrk_key: 1: 1) = '*');
+    //  '*F10' bis '*F24' -> 'F10' bis 'F24', '*ENTER' -> 'ENTER'
+    o_fkeys(x) = %subst(wrk_key: 2);
   other;
-    if (wrk_key >= '*F10');
-      o_fkeys(x) = %subst(wrk_key: 2);
-    else;
-      a1 = %subst(wrk_key: 2: 1);
-      o_fkeys(x) = %subst(wrk_key: 4);
-      o_fkeys(x) = %trimr(a1) + o_fkeys(x);
-    endif;
+    //  Auswahl, z.B. 'A'
+    o_fkeys(x) = wrk_key;
   endsl;
 
   o_fkeys(x) = %trimr(o_fkeys(x)) + '=' + %trim(wrk_msgtxt);
