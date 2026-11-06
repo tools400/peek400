@@ -200,6 +200,10 @@ dcl-s yFldInhalt like(r_rcdBuf) inz;
 dcl-s yProtect like(r_bool) inz(bFalse);
 dcl-s yIsUcs2 like(r_int4) inz;
 dcl-s yLength like(r_int4) inz;
+//  Feldinhalt als UCS-2 und aktuelle Länge eines Feldes variabler Länge
+dcl-s pFldInhalt pointer inz(%addr(yFldInhalt));
+dcl-s yFldInhaltUcs2 ucs2(16383) based(pFldInhalt);
+dcl-s fldCurLen like(r_int4) inz;
 
 dcl-s sfBot like(r_int4) inz;
 
@@ -1280,6 +1284,25 @@ begsr fromBuffer;
       yIsUcs2 = 0;
       yLength = f_rtvFld(yFldInhalt: Rcd_Buffer:
                          FLDL0100: bFalse);
+    endif;
+
+    //  Felder variabler Länge: f_rtvFld liefert die maximale Länge. Den
+    //  Teil hinter der aktuellen Länge mit Leerzeichen füllen, sonst
+    //  zeigen die Editoren die alten Bytes des Satzpuffers an und
+    //  p_fldToBuf schreibt sie zurück.
+    if (FLDL0100.F1VFMI = '1');
+      fldCurLen = f_curFldLn(Rcd_Buffer: FLDL0100);
+      if (fldCurLen < 0);
+        fldCurLen = 0;
+      endif;
+      if (fldCurLen < yLength);
+        if (FLDL0100.F1UCS2 = '1');
+          %subst(yFldInhaltUcs2: fldCurLen + 1: yLength - fldCurLen) =
+            *blanks;
+        else;
+          %subst(yFldInhalt: fldCurLen + 1: yLength - fldCurLen) = *blanks;
+        endif;
+      endif;
     endif;
 
     if (Editor = cEDITOR_STRING);

@@ -1233,17 +1233,19 @@ begsr wrtCopy2;
     p_wrtCopy2('    exsr fromBuffer;');
 
     //      if (yMsgID = 'USR8112');
+    //        %nullind(P_00000001) = *OFF;
     //        exsr s_P_00000001;
     //        EDT00001 = '1';
-    //        %nullind(P_00000001) = *OFF;
     //      endif;
+    //  Den NULL-Anzeiger vor s_P_... zurücksetzen: s_P_... überträgt
+    //  den Wert eines NULL-Feldes nicht auf den Bildschirm.
     p_wrtCopy2('    if (yMsgID = ''USR8112'');');
-    p_wrtCopy2('      exsr s_' + %trim(fldl0100.f1vfld) + ';');
-    p_wrtCopy2('      EDT' + a#fldCount + ' = ''1'';');
     if (fldl0100.f1nalw = '1');
       p_wrtCopy2('      %nullind(' + %trimr(fldl0100.f1vfld) +
                  ') = *OFF;');
     endif;
+    p_wrtCopy2('      exsr s_' + %trim(fldl0100.f1vfld) + ';');
+    p_wrtCopy2('      EDT' + a#fldCount + ' = ''1'';');
     p_wrtCopy2('    endif;');
 
     p_wrtCopy2('');
@@ -1373,17 +1375,19 @@ begsr wrtCopy6;
   p_wrtCopy6('    exsr fromBuffer;');
 
   //    if (yMsgID = 'USR8112');
+  //      %nullind(P_00000001) = *OFF;
   //      exsr s_P_00000001;
   //      EDT00001 = '1';
-  //      %nullind(P_00000001) = *OFF;
   //    endif;
+  //  Den NULL-Anzeiger vor s_P_... zurücksetzen: s_P_... überträgt
+  //  den Wert eines NULL-Feldes nicht auf den Bildschirm.
   p_wrtCopy6('    if (yMsgID = ''USR8112'');');
-  p_wrtCopy6('      exsr s_' + %trim(fldl0100.f1vfld) + ';');
-  p_wrtCopy6('      EDT' + a#fldCount + ' = ''1'';');
   if (fldl0100.f1nalw = '1');
     p_wrtCopy6('      %nullind(' + %trimr(fldl0100.f1vfld) +
                ') = *OFF;');
   endif;
+  p_wrtCopy6('      exsr s_' + %trim(fldl0100.f1vfld) + ';');
+  p_wrtCopy6('      EDT' + a#fldCount + ' = ''1'';');
   p_wrtCopy6('    endif;');
 
   p_wrtCopy6('');
