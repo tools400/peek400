@@ -9365,6 +9365,52 @@ out does not match the record format level ID of the specified file.&N-
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
+     /*   Cmd-ADDMSGD für Message-ID :   USR8244                    */
+     /* Value in field &1 outside the range &2 to &3.               */
+     /*-------------------------------------------------------------*/
+
+             RMVMSGD MSGID(USR8244) MSGF(&LIB/&OBJ)
+             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+
+             ADDMSGD +
+                MSGID(USR8244) +
+                MSGF(&LIB/&OBJ) +
+                MSG( +
+'Value in field &1 outside the range &2 to &3.'                       +
+                ) +
+                SEV(0) +
+                FMT( +
+                    (*CHAR 10) +
+                    (*CHAR 20) +
+                    (*CHAR 20) +
+                ) +
+                ALROPT(*NO) +
+                CCSID(&CCSID) +
+                /*  -EOF-  */
+
+     /*-------------------------------------------------------------*/
+     /*   Cmd-ADDMSGD für Message-ID :   USR8245                    */
+     /* Field &1 only allows 0 (false) and 1 (true).                */
+     /*-------------------------------------------------------------*/
+
+             RMVMSGD MSGID(USR8245) MSGF(&LIB/&OBJ)
+             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+
+             ADDMSGD +
+                MSGID(USR8245) +
+                MSGF(&LIB/&OBJ) +
+                MSG( +
+'Field &1 only allows 0 (false) and 1 (true).'                        +
+                ) +
+                SEV(0) +
+                FMT( +
+                    (*CHAR 10) +
+                ) +
+                ALROPT(*NO) +
+                CCSID(&CCSID) +
+                /*  -EOF-  */
+
+     /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR9989                    */
      /* Could not change the record format of settings file &2/&1.  */
      /*-------------------------------------------------------------*/

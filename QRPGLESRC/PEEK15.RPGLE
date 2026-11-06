@@ -274,6 +274,16 @@ dcl-s exprOpen varchar(40) inz;
 dcl-s exprClose varchar(4) inz;
 dcl-s headerType varchar(20) inz;
 dcl-s edtWrd varchar(140) inz;
+dcl-s rangeMin varchar(20) inz;
+dcl-s rangeMax varchar(20) inz;
+
+//  Seite und Zeile der Felder, deren Wert chkValues prüft
+//  (Index: lfd. Feldnummer, 0 = keine Prüfung)
+dcl-ds chkPos qualified dim(8000) inz;
+  scn like(int4_t);
+  row like(int4_t);
+  col like(int4_t);
+end-ds;
 
 /copy QCOPYLE,D_VARDEF
 /copy QCOPYLE,FLDL0100
@@ -446,6 +456,100 @@ io_stage = io_stage + 1;
 p_showProgressMeter(io_stage);
 
 p_wrtCopy1('');
+p_wrtCopy1('endsr;');
+p_wrtCopy1('');
+
+//-------------------------------------------*
+//  Zufügen Copy-Book 1:                     *
+//  Inhalt:   chkValues                      *
+//-------------------------------------------*
+
+//  Ausgeben COPY-Strecke: chkValues
+//  Prüft vor dem Speichern die Werte der Ganzzahlen und der BOOLEAN-
+//  Felder. Ein ungültiger Wert zeigt die Seite des Feldes an, setzt
+//  den Cursor auf das Feld und meldet USR8244/USR8245 in der
+//  Nachrichtenzeile des Fensters.
+p_wrtCopy1('//' + REM_LINE);
+p_wrtCopy1('//  Prüfen der Wertebereiche (Ganzzahlen, BOOLEAN)');
+p_wrtCopy1('//' + REM_LINE);
+p_wrtCopy1('');
+p_wrtCopy1('begsr chkValues;');
+p_wrtCopy1('');
+p_wrtCopy1('  isError = bFalse;');
+p_wrtCopy1('');
+
+fieldCount = 0;
+
+//  Abarbeiten der Feldliste ...
+setll 1 peekFld;
+
+dow (f_readFld <> bEOF);
+
+  //  ... erhöhen lfd. Feldnummer
+  fieldCount = fieldCount + 1;
+
+  //  ... prüfen, ob das Feld erlaubt ist
+  if (f_isNotAlw(fldl0100) = bTrue);
+    iter;
+  endif;
+
+  //  ... nur Felder, die wrtField für die Prüfung gemerkt hat
+  if (fieldCount > %elem(chkPos));
+    iter;
+  endif;
+  if (chkPos(fieldCount).row = 0);
+    iter;
+  endif;
+
+  exsr getRange;
+
+  //  // SMALLINT
+  //  if ((EDT00009 = '1') and
+  //      not (LNG00009 = '1') and
+  //      not %nullind(P_00000009) and
+  //      (FLD00009 < -32768 or
+  //       FLD00009 > 32767));
+  //    pgmMsgID = 'USR8244';
+  //    pgmMsgDta = 'SMALLINT';
+  //    %subst(pgmMsgDta: 11: 20) = '-32768';
+  //    %subst(pgmMsgDta: 31: 20) = '32767';
+  //    p_sndPgmMg(pgmMsgID: pgmMsgDta: psPgmName);
+  //    scnNbr = 1;
+  //    csrRow = 12;
+  //    csrCol = 29;
+  //    isError = bTrue;
+  //    leavesr;
+  //  endif;
+  p_wrtCopy1('  // ' + %trimr(fldl0100.f1FNme));
+  p_wrtCopy1('  if ((EDT' + a#fldCount + ' = ''1'') and');
+  p_wrtCopy1('      not (LNG' + a#fldCount + ' = ''1'') and');
+  if (fldl0100.f1nalw = '1');
+    p_wrtCopy1('      not %nullind(' + %trimr(fldl0100.f1vfld) + ') and');
+  endif;
+  if (rangeMax <> '');
+    p_wrtCopy1('      (FLD' + a#fldCount + ' < ' + rangeMin + ' or');
+    p_wrtCopy1('       FLD' + a#fldCount + ' > ' + rangeMax + '));');
+    p_wrtCopy1('    pgmMsgID = ''USR8244'';');
+  else;
+    p_wrtCopy1('      FLD' + a#fldCount + ' <> ''0'' and');
+    p_wrtCopy1('      FLD' + a#fldCount + ' <> ''1'');');
+    p_wrtCopy1('    pgmMsgID = ''USR8245'';');
+  endif;
+  p_wrtCopy1('    pgmMsgDta = ''' + %trimr(fldl0100.f1FNme) + ''';');
+  if (rangeMax <> '');
+    p_wrtCopy1('    %subst(pgmMsgDta: 11: 20) = ''' + rangeMin + ''';');
+    p_wrtCopy1('    %subst(pgmMsgDta: 31: 20) = ''' + rangeMax + ''';');
+  endif;
+  p_wrtCopy1('    p_sndPgmMg(pgmMsgID: pgmMsgDta: psPgmName);');
+  p_wrtCopy1('    scnNbr = ' + %char(chkPos(fieldCount).scn) + ';');
+  p_wrtCopy1('    csrRow = ' + %char(chkPos(fieldCount).row) + ';');
+  p_wrtCopy1('    csrCol = ' + %char(chkPos(fieldCount).col) + ';');
+  p_wrtCopy1('    isError = bTrue;');
+  p_wrtCopy1('    leavesr;');
+  p_wrtCopy1('  endif;');
+  p_wrtCopy1('');
+enddo;
+
 p_wrtCopy1('endsr;');
 p_wrtCopy1('');
 
@@ -702,8 +806,8 @@ begsr wrtField;
     select;
     when ((fldl0100.f1DTyp = 'L') or // = Date
        (fldl0100.f1DTyp = 'T') or   // = Time
-       (fldl0100.f1DTyp = 'Z') or   // = Boolean
-       (fldl0100.f1DTyp = '8'));     // = Timestamp
+       (fldl0100.f1DTyp = 'Z') or   // = Timestamp
+       (fldl0100.f1DTyp = '8'));     // = Boolean
       $fldD_dTyp = 'A';
     when (fldl0100.f1DTyp = 'G');   // = Graphic
       $fldD_dTyp = 'G';
@@ -733,7 +837,26 @@ begsr wrtField;
       newLen# = f_dsplyLn(fldl0100);
     endif;
 
+    //  Ganzzahlen (SMALLINT, INTEGER, BIGINT): REFFLD übernimmt die
+    //  Stellen des Binärfeldes (4, 9, 18), die nicht jeden Wert fassen,
+    //  z.B. -32768. Das Bildschirmfeld erhält daher die Stellen des
+    //  größten Wertes; den Wertebereich prüft chkValues.
+    exsr getRange;
+
+    //  Seite und Zeile für chkValues merken: Ganzzahlen und BOOLEAN,
+    //  nur Eingabefelder.
+    if ((rangeMax <> '' or fldl0100.f1DTyp = '8') and
+        fldl0100.f1use <> 'I' and
+        fieldCount <= %elem(chkPos));
+      chkPos(fieldCount).scn = scn#;
+      chkPos(fieldCount).row = $fldD_row;
+      chkPos(fieldCount).col = $fldD_col;
+    endif;
+
     select;
+    when (rangeMax <> '');               // = Ganzzahl
+      newLen# = %len(rangeMax);
+      $fldD_len  = newLen#a;
     when (fldl0100.f1DTyp = '8');        // = Boolean
       $fldD_len  = newLen#a;
     when (fldl0100.f1DTyp = 'G' or       // = Graphic
@@ -755,7 +878,11 @@ begsr wrtField;
       $fldD_io   = 'B';
     endif;
 
-    $fldD_decP = '  ';
+    if (rangeMax <> '');
+      $fldD_decP = ' 0';
+    else;
+      $fldD_decP = '  ';
+    endif;
     p_wrtDspF(ds_fldDef);
 
     //      ... Referenzierung - Zeile 2
@@ -942,6 +1069,33 @@ begsr wrtField;
   // ---------------------------*
   ind40# = ind40# + 1;
   ind50# = ind50# + 1;
+
+endsr;
+
+//============================================================*
+//    getRange      Wertebereich einer Ganzzahl (SMALLINT,    *
+//                  INTEGER, BIGINT) in rangeMin/rangeMax,    *
+//                  leer bei anderen Feldern                  *
+//============================================================*
+
+begsr getRange;
+
+  rangeMin = '';
+  rangeMax = '';
+
+  if (fldl0100.f1DTyp = 'B' and fldl0100.f1DecP = 0);
+    select;
+    when (fldl0100.f1FLen = 2);
+      rangeMin = '-32768';
+      rangeMax = '32767';
+    when (fldl0100.f1FLen = 4);
+      rangeMin = '-2147483648';
+      rangeMax = '2147483647';
+    when (fldl0100.f1FLen = 8);
+      rangeMin = '-9223372036854775808';
+      rangeMax = '9223372036854775807';
+    endsl;
+  endif;
 
 endsr;
 

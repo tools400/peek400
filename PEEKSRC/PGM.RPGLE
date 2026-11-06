@@ -16,6 +16,9 @@
 ctl-opt debug;
 ctl-opt alwnull(*usrctl);
 ctl-opt option(*srcstmt: *nodebugio);
+//  Binärfelder ohne Dezimalstellen (SMALLINT, INTEGER, BIGINT) als
+//  Ganzzahlen: B(4,0) fasst nur 4 Stellen, SMALLINT aber -32768.
+ctl-opt extbinint(*yes);
 
 //====================================================*
 //  Dateiliste                                        *
@@ -842,6 +845,12 @@ endsr;
 //===================================================*
 
 begsr updateFile;
+
+  //  Prüfen der Wertebereiche (Ganzzahlen, BOOLEAN) ...
+  exsr chkValues;
+  if (isError = bTrue);
+    leavesr;
+  endif;
 
   //  Sperren Datensatz, wenn nicht bereits geschehen ...
   if ((i_function = '*CHANGE') and

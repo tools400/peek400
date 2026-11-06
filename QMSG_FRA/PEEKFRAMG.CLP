@@ -9377,6 +9377,52 @@ s.'                                                                   +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
+     /*   Cmd-ADDMSGD für Message-ID :   USR8244                    */
+     /* Valeur du champ &1 hors de la plage &2 à &3.                */
+     /*-------------------------------------------------------------*/
+
+             RMVMSGD MSGID(USR8244) MSGF(&LIB/&OBJ)
+             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+
+             ADDMSGD +
+                MSGID(USR8244) +
+                MSGF(&LIB/&OBJ) +
+                MSG( +
+'Valeur du champ &1 hors de la plage &2 à &3.'                        +
+                ) +
+                SEV(0) +
+                FMT( +
+                    (*CHAR 10) +
+                    (*CHAR 20) +
+                    (*CHAR 20) +
+                ) +
+                ALROPT(*NO) +
+                CCSID(&CCSID) +
+                /*  -EOF-  */
+
+     /*-------------------------------------------------------------*/
+     /*   Cmd-ADDMSGD für Message-ID :   USR8245                    */
+     /* Le champ &1 n'accepte que 0 (faux) et 1 (vrai).             */
+     /*-------------------------------------------------------------*/
+
+             RMVMSGD MSGID(USR8245) MSGF(&LIB/&OBJ)
+             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+
+             ADDMSGD +
+                MSGID(USR8245) +
+                MSGF(&LIB/&OBJ) +
+                MSG( +
+'Le champ &1 n''accepte que 0 (faux) et 1 (vrai).'                    +
+                ) +
+                SEV(0) +
+                FMT( +
+                    (*CHAR 10) +
+                ) +
+                ALROPT(*NO) +
+                CCSID(&CCSID) +
+                /*  -EOF-  */
+
+     /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR9989                    */
      /* Le format d'enregistrement du fichier de configuration &2/&1*/
      /*-------------------------------------------------------------*/

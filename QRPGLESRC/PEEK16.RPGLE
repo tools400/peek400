@@ -1003,6 +1003,17 @@ begsr sub021;
       iter;
     endif;
 
+    //  BOOLEAN: Nur '1' ist wahr. Ein leeres Feld, z.B. nach dem
+    //  Aufheben des NULL-Wertes, ergibt falsch.
+    //    P_00000002 = (FLD00002 = '1');
+    if (fldl0100.f1DTyp = '8');
+      p_wrtCode('  ' + %trim(fldl0100.f1vfld) +
+                ' = (FLD' + a#fldCount + ' = ''1'');');
+      p_wrtCode('endsr;');
+      p_wrtCode('');
+      iter;
+    endif;
+
     //  P_00000005 = %trimR(FLD00005);    (Zeichenfelder)
     //  P_00000005 = FLD00005;            (sonstige Felder)
     if (f_isCharFld(fldl0100) = bTrue);

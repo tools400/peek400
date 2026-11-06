@@ -9371,6 +9371,52 @@ po &1.'                                                               +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
+     /*   Cmd-ADDMSGD für Message-ID :   USR8244                    */
+     /* Valor del campo &1 fuera del rango de &2 a &3.              */
+     /*-------------------------------------------------------------*/
+
+             RMVMSGD MSGID(USR8244) MSGF(&LIB/&OBJ)
+             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+
+             ADDMSGD +
+                MSGID(USR8244) +
+                MSGF(&LIB/&OBJ) +
+                MSG( +
+'Valor del campo &1 fuera del rango de &2 a &3.'                      +
+                ) +
+                SEV(0) +
+                FMT( +
+                    (*CHAR 10) +
+                    (*CHAR 20) +
+                    (*CHAR 20) +
+                ) +
+                ALROPT(*NO) +
+                CCSID(&CCSID) +
+                /*  -EOF-  */
+
+     /*-------------------------------------------------------------*/
+     /*   Cmd-ADDMSGD für Message-ID :   USR8245                    */
+     /* El campo &1 solo admite 0 (falso) y 1 (verdadero).          */
+     /*-------------------------------------------------------------*/
+
+             RMVMSGD MSGID(USR8245) MSGF(&LIB/&OBJ)
+             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+
+             ADDMSGD +
+                MSGID(USR8245) +
+                MSGF(&LIB/&OBJ) +
+                MSG( +
+'El campo &1 solo admite 0 (falso) y 1 (verdadero).'                  +
+                ) +
+                SEV(0) +
+                FMT( +
+                    (*CHAR 10) +
+                ) +
+                ALROPT(*NO) +
+                CCSID(&CCSID) +
+                /*  -EOF-  */
+
+     /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR9989                    */
      /* No se pudo cambiar el fmt de reg. del fich de config &2/&1. */
      /*-------------------------------------------------------------*/

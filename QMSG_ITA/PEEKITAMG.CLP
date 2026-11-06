@@ -9383,6 +9383,52 @@ emere F8.'                                                            +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
+     /*   Cmd-ADDMSGD für Message-ID :   USR8244                    */
+     /* Valore del campo &1 fuori dall'intervallo da &2 a &3.       */
+     /*-------------------------------------------------------------*/
+
+             RMVMSGD MSGID(USR8244) MSGF(&LIB/&OBJ)
+             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+
+             ADDMSGD +
+                MSGID(USR8244) +
+                MSGF(&LIB/&OBJ) +
+                MSG( +
+'Valore del campo &1 fuori dall''intervallo da &2 a &3.'              +
+                ) +
+                SEV(0) +
+                FMT( +
+                    (*CHAR 10) +
+                    (*CHAR 20) +
+                    (*CHAR 20) +
+                ) +
+                ALROPT(*NO) +
+                CCSID(&CCSID) +
+                /*  -EOF-  */
+
+     /*-------------------------------------------------------------*/
+     /*   Cmd-ADDMSGD für Message-ID :   USR8245                    */
+     /* Il campo &1 accetta solo 0 (falso) e 1 (vero).              */
+     /*-------------------------------------------------------------*/
+
+             RMVMSGD MSGID(USR8245) MSGF(&LIB/&OBJ)
+             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+
+             ADDMSGD +
+                MSGID(USR8245) +
+                MSGF(&LIB/&OBJ) +
+                MSG( +
+'Il campo &1 accetta solo 0 (falso) e 1 (vero).'                      +
+                ) +
+                SEV(0) +
+                FMT( +
+                    (*CHAR 10) +
+                ) +
+                ALROPT(*NO) +
+                CCSID(&CCSID) +
+                /*  -EOF-  */
+
+     /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR9989                    */
      /* Impossibile adattare il file delle impostazioni &2/&1.      */
      /*-------------------------------------------------------------*/

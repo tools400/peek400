@@ -9387,6 +9387,52 @@ en.'                                                                  +
                 /*  -EOF-  */
 
      /*-------------------------------------------------------------*/
+     /*   Cmd-ADDMSGD für Message-ID :   USR8244                    */
+     /* Wert im Feld &1 außerhalb des Bereichs &2 bis &3.           */
+     /*-------------------------------------------------------------*/
+
+             RMVMSGD MSGID(USR8244) MSGF(&LIB/&OBJ)
+             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+
+             ADDMSGD +
+                MSGID(USR8244) +
+                MSGF(&LIB/&OBJ) +
+                MSG( +
+'Wert im Feld &1 außerhalb des Bereichs &2 bis &3.'                   +
+                ) +
+                SEV(0) +
+                FMT( +
+                    (*CHAR 10) +
+                    (*CHAR 20) +
+                    (*CHAR 20) +
+                ) +
+                ALROPT(*NO) +
+                CCSID(&CCSID) +
+                /*  -EOF-  */
+
+     /*-------------------------------------------------------------*/
+     /*   Cmd-ADDMSGD für Message-ID :   USR8245                    */
+     /* Im Feld &1 sind nur 0 (falsch) und 1 (wahr) zulässig.       */
+     /*-------------------------------------------------------------*/
+
+             RMVMSGD MSGID(USR8245) MSGF(&LIB/&OBJ)
+             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+
+             ADDMSGD +
+                MSGID(USR8245) +
+                MSGF(&LIB/&OBJ) +
+                MSG( +
+'Im Feld &1 sind nur 0 (falsch) und 1 (wahr) zulässig.'               +
+                ) +
+                SEV(0) +
+                FMT( +
+                    (*CHAR 10) +
+                ) +
+                ALROPT(*NO) +
+                CCSID(&CCSID) +
+                /*  -EOF-  */
+
+     /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR9989                    */
      /* Die Einstellungsdatei &2/&1 konnte nicht angepasst werden.  */
      /*-------------------------------------------------------------*/
