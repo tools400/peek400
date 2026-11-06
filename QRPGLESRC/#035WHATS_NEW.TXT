@@ -992,6 +992,15 @@
          gehen nicht mehr verloren. Felder variabler Länge zeigen hinter
          der aktuellen Länge keine alten Daten mehr an. Der Hex-Editor
          setzt CHAR-Felder mit CCSID nicht mehr doppelt um.
+       - Ganzzahlen (SMALLINT, INTEGER, BIGINT) werden mit ihrem ganzen
+         Wertebereich angezeigt und geändert. Bisher brachen Werte mit
+         mehr Stellen als das Binärfeld (z.B. -32768 bei SMALLINT) das
+         Programm mit MCH1210 ab. Werte außerhalb des Wertebereichs meldet
+         die neue Nachricht USR8244.
+       - BOOLEAN-Felder nehmen nur 0 (falsch) und 1 (wahr) an. Andere
+         Eingaben meldet die neue Nachricht USR8245, bisher wurden sie als
+         "wahr" gespeichert. Bei beiden Nachrichten steht der Cursor auf
+         dem Feld.
        - CHAR-Felder mit CCSID 1208 oder 1200 verhindern nicht mehr das
          Erstellen der Bildschirmdatei, Editierwörter mit mehr als 26
          Zeichen brechen die Generierung nicht mehr ab.
