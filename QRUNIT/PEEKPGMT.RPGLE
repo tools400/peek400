@@ -1,4 +1,4 @@
-**FREE
+**free
 // ==========================================================================
 //  Peek/400 - Unit-Tests der Programme PEEK01, PEEK02, PEEK03, PEEK04,
 //  PEEK06, PEEK07, PEEK10, PEEK11, PEEK15, PEEK18, PEEK19, PEEK20, PEEK22,
@@ -76,8 +76,7 @@ ctl-opt nomain;
 /copy QCOPYLE,PPEEK71
 /copy QCOPYLE,PPEEK61
 
-dcl-f peekfld disk keyed usropn extfile('QTEMP/PEEKFLD') prefix(k_)
-      rename(fpeekfld: rpeekfld);
+dcl-f peekfld disk keyed usropn extfile('QTEMP/PEEKFLD') prefix(k_) rename(fpeekfld: rpeekfld);
 
 //  Beliebige Datei, nur für die Satzlänge (PEEK62)
 dcl-f anyfile disk(32766) usropn infds(anyfile_ds) extfile(g_anyfile);
@@ -106,48 +105,47 @@ dcl-pr assert extproc('assert') opdesc;
 end-pr;
 
 dcl-pr fail extproc('fail') opdesc;
-  msg        varchar(16384) options(*varsize: *nopass) const;
+  msg varchar(16384) options(*varsize: *nopass) const;
 end-pr;
 
 dcl-ds rtnMsgInfo_t qualified template;
-  id      char(7);
-  txt     varchar(256);
-  pgm     char(10);
-  mod     char(10);
-  proc    varchar(256);
-  specNb  char(10);
+  id     char(7);
+  txt    varchar(256);
+  pgm    char(10);
+  mod    char(10);
+  proc   varchar(256);
+  specNb char(10);
 end-ds;
 
-dcl-pr getMonitoredMessage likeds(rtnMsgInfo_t)
-       extproc('getMonitoredMessage') opdesc;
+dcl-pr getMonitoredMessage likeds(rtnMsgInfo_t) extproc('getMonitoredMessage') opdesc;
   doRmvMsg ind options(*nopass) const;
 end-pr;
 
 // --------------------------------------------------------------------------
 //  Testumgebung
 // --------------------------------------------------------------------------
-dcl-c TST_LIB    'QTEMP';
-dcl-c TST_FILE   'PEEKKEYS';     // Tabelle mit langem SQL-Spaltennamen
-dcl-c TST_CCSID  'PEEKCCSID';    // Tabelle mit nicht umsetzbarer CCSID
-dcl-c TST_FLOAT  'PEEKFLOAT';    // Tabelle mit REAL und DOUBLE
-dcl-c TST_UTF8   'PEEKUTF8';     // Tabelle mit CHAR CCSID 1208
-dcl-c TST_MDY    'PEEKMDY';      // DDS-Datei mit *MDY-Datum, *USA-Zeit
-dcl-c TST_EDW    'PEEKEDW';      // DDS-Datei mit langem Editierwort
-dcl-c TST_KEY35  'PEEKKEY35';    // Tabelle mit 35 Spalten
-dcl-c TST_KEY35I 'PEEKKEY35I';   // Index über alle 35 Spalten
-dcl-c TST_ENVF   'PEEKENVT';     // Kopie von PEEKENV (Arbeitsumgebung)
-dcl-c TST_ENVM   'PEEKKEYS';     // Teildatei der Arbeitsumgebung
-dcl-c TST_FMTID  'PEEKKEYS00001'; // Satzformat-ID für die Umgebung
-dcl-c TST_OLDU1  'PEEKOLDU1';    // Einstellungsdatei mit DATA 128
-dcl-c TST_OLDU2  'PEEKOLDU2';    // Einstellungsdatei mit KEY 12
-dcl-c TST_PRT    'PEEK65T';      // Tabelle für PEEK65, Satz 2 gelöscht
-dcl-c TST_LST    'PEEKLST';      // PEEKLST1..3 für die Dateiliste (PEEK70)
-dcl-c PEEKUSR_LEN 286;           // Satzlänge von PEEKUSR
-dcl-c TST_USRF   'PEEKTSTUSR';   // Kopie von PEEKUSR
-dcl-c TST_USER   'TESTUSER';
+dcl-c TST_LIB 'QTEMP';
+dcl-c TST_FILE 'PEEKKEYS'; // Tabelle mit langem SQL-Spaltennamen
+dcl-c TST_CCSID 'PEEKCCSID'; // Tabelle mit nicht umsetzbarer CCSID
+dcl-c TST_FLOAT 'PEEKFLOAT'; // Tabelle mit REAL und DOUBLE
+dcl-c TST_UTF8 'PEEKUTF8'; // Tabelle mit CHAR CCSID 1208
+dcl-c TST_MDY 'PEEKMDY'; // DDS-Datei mit *MDY-Datum, *USA-Zeit
+dcl-c TST_EDW 'PEEKEDW'; // DDS-Datei mit langem Editierwort
+dcl-c TST_KEY35 'PEEKKEY35'; // Tabelle mit 35 Spalten
+dcl-c TST_KEY35I 'PEEKKEY35I'; // Index über alle 35 Spalten
+dcl-c TST_ENVF 'PEEKENVT'; // Kopie von PEEKENV (Arbeitsumgebung)
+dcl-c TST_ENVM 'PEEKKEYS'; // Teildatei der Arbeitsumgebung
+dcl-c TST_FMTID 'PEEKKEYS00001'; // Satzformat-ID für die Umgebung
+dcl-c TST_OLDU1 'PEEKOLDU1'; // Einstellungsdatei mit DATA 128
+dcl-c TST_OLDU2 'PEEKOLDU2'; // Einstellungsdatei mit KEY 12
+dcl-c TST_PRT 'PEEK65T'; // Tabelle für PEEK65, Satz 2 gelöscht
+dcl-c TST_LST 'PEEKLST'; // PEEKLST1..3 für die Dateiliste (PEEK70)
+dcl-c PEEKUSR_LEN 286; // Satzlänge von PEEKUSR
+dcl-c TST_USRF 'PEEKTSTUSR'; // Kopie von PEEKUSR
+dcl-c TST_USER 'TESTUSER';
 
 dcl-pr qcmdexc extpgm('QCMDEXC');
-  i_cmd    char(32702) const options(*varsize);
+  i_cmd    char(32702) options(*varsize) const;
   i_length packed(15: 5) const;
 end-pr;
 
@@ -1745,10 +1743,10 @@ end-proc;
 // ==========================================================================
 
 dcl-proc test55_peek71_resetFreesCache export;
-  dcl-c CCSIDS '37 273 277 278 280 284 285 297 500 871 1140 1141 +
-                1142 1143 1144 1145 1146 1147 1148 1149 1047 870 1153 +
-                1025 1154 1026 1155 875 1112 1122 819 850 1252 437 852 +
-                1250 1251 1254 367 912 ';
+  dcl-c CCSIDS '37 273 277 278 280 284 285 297 500 871 1140 1141 1142 1143 +
+    1144 1145 1146 1147 1148 1149 1047 870 1153 1025 1154 1026 +
+    1155 875 1112 1122 819 850 1252 437 852 1250 1251 1254 367 +
+    912 ';
   dcl-s htranscoder like(htranscoder_t);
   dcl-s pos int(10) inz(1);
   dcl-s nxt int(10);
@@ -1874,10 +1872,10 @@ end-proc;
 //  Sets the numeric format of a FLDL0100 entry (PEEK66).
 dcl-proc numFmt;
   dcl-pi *n;
-    io_fmt  likeds(fldl0100_t);
-    i_type  char(1) const;
-    i_digt  int(10) const;
-    i_decp  int(10) const;
+    io_fmt likeds(fldl0100_t);
+    i_type char(1) const;
+    i_digt int(10) const;
+    i_decp int(10) const;
   end-pi;
 
   io_fmt.f1dtyp = i_type;
@@ -1954,9 +1952,9 @@ end-proc;
 //  Loads the environment of QTEMP/PEEKKEYS and returns the message ID.
 dcl-proc loadEnv;
   dcl-pi *n like(msgid_t);
-    i_option  like(option_t) const;
-    i_fmtid   like(fmtid_t) const;
-    o_where   like(sqlWhere_t);
+    i_option like(option_t) const;
+    i_fmtid  like(fmtid_t) const;
+    o_where  like(sqlWhere_t);
   end-pi;
 
   dcl-ds pinTabR likeds(pintabr_t) dim(12) inz;
@@ -2076,7 +2074,7 @@ dcl-proc crtDdsFile;
     i_line2 varchar(80) const;
     i_line3 varchar(80) const;
     i_line4 varchar(80) const;
-    i_line5 varchar(80) const options(*nopass);
+    i_line5 varchar(80) options(*nopass) const;
   end-pi;
 
   dcl-s srcFile varchar(10);
@@ -2345,10 +2343,10 @@ end-proc;
 //  Formats a packed value with PEEK06.
 dcl-proc editPacked;
   dcl-pi *n varchar(64);
-    i_pValue  pointer value;
-    i_digits  int(10) const;
-    i_edtcde  char(1) const;
-    i_edtwrd  varchar(64) const;
+    i_pValue pointer value;
+    i_digits int(10) const;
+    i_edtcde char(1) const;
+    i_edtwrd varchar(64) const;
   end-pi;
 
   dcl-ds fldl0100 likeds(fldl0100_t) inz;

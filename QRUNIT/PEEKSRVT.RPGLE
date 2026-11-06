@@ -1,4 +1,4 @@
-**FREE
+**free
 // ==========================================================================
 //  Peek/400 - Unit-Tests der Service-Programme PEEK51, PEEK53, PEEK58,
 //  PEEK63 und PEEK71 (iRPGUnit).
@@ -58,37 +58,36 @@ dcl-pr assert extproc('assert') opdesc;
 end-pr;
 
 dcl-pr fail extproc('fail') opdesc;
-  msg        varchar(16384) options(*varsize: *nopass) const;
+  msg varchar(16384) options(*varsize: *nopass) const;
 end-pr;
 
 dcl-ds rtnMsgInfo_t qualified template;
-  id      char(7);
-  txt     varchar(256);
-  pgm     char(10);
-  mod     char(10);
-  proc    varchar(256);
-  specNb  char(10);
+  id     char(7);
+  txt    varchar(256);
+  pgm    char(10);
+  mod    char(10);
+  proc   varchar(256);
+  specNb char(10);
 end-ds;
 
-dcl-pr getMonitoredMessage likeds(rtnMsgInfo_t)
-       extproc('getMonitoredMessage') opdesc;
+dcl-pr getMonitoredMessage likeds(rtnMsgInfo_t) extproc('getMonitoredMessage') opdesc;
   doRmvMsg ind options(*nopass) const;
 end-pr;
 
 // --------------------------------------------------------------------------
 //  Testumgebung
 // --------------------------------------------------------------------------
-dcl-c TST_LIB    'QTEMP';
-dcl-c TST_FILE   'PEEKTSTPF';    // Tabelle mit den Sätzen B, D, F
-dcl-c TST_INDEX  'PEEKTSTI';     // Index über KEY für die CIO-Tests
-dcl-c TST_FILE2  'PEEKTST2';     // Tabelle mit 5 Sätzen
-dcl-c TST_FMT    'FTST';
-dcl-c TST_USRF   'PEEKTSTUSR';   // Kopie von PEEKUSR
-dcl-c TST_USER   'TESTUSER';
-dcl-c MODE_RR    'rr, arrseq=N, commit=N, nullcap=Y, riofb=Y, secure=Y';
+dcl-c TST_LIB 'QTEMP';
+dcl-c TST_FILE 'PEEKTSTPF'; // Tabelle mit den Sätzen B, D, F
+dcl-c TST_INDEX 'PEEKTSTI'; // Index über KEY für die CIO-Tests
+dcl-c TST_FILE2 'PEEKTST2'; // Tabelle mit 5 Sätzen
+dcl-c TST_FMT 'FTST';
+dcl-c TST_USRF 'PEEKTSTUSR'; // Kopie von PEEKUSR
+dcl-c TST_USER 'TESTUSER';
+dcl-c MODE_RR 'rr, arrseq=N, commit=N, nullcap=Y, riofb=Y, secure=Y';
 
 dcl-pr qcmdexc extpgm('QCMDEXC');
-  i_cmd    char(32702) const options(*varsize);
+  i_cmd    char(32702) options(*varsize) const;
   i_length packed(15: 5) const;
 end-pr;
 
@@ -99,7 +98,7 @@ dcl-pr fillArgArea;
 end-pr;
 
 dcl-ds g_hfile likeds(hfile_t) inz;
-dcl-s  g_lastMsg varchar(600);
+dcl-s g_lastMsg varchar(600);
 
 // ==========================================================================
 //  Setup und Teardown
@@ -541,11 +540,11 @@ end-proc;
 //  else bFalse and the message in g_lastMsg.
 dcl-proc prepare;
   dcl-pi *n like(bool_t);
-    i_check  like(bool_t) const;
-    i_file   like(file_t) const;
-    i_fmt    like(rcdfmt_t) const;
-    i_where  varchar(512) const;
-    i_order  varchar(512) const;
+    i_check like(bool_t) const;
+    i_file  like(file_t) const;
+    i_fmt   like(rcdfmt_t) const;
+    i_where varchar(512) const;
+    i_order varchar(512) const;
   end-pi;
 
   dcl-s isOk like(bool_t);
