@@ -174,8 +174,8 @@ exsr first;
 dow ('1');
 
   //  Prüfen Positionierung der Subfile
-  if (sfsanr <= 0)  or
-     (sfsanr > sfllastrcd);
+  if ((sfsanr <= 0)  or
+      (sfsanr > sfllastrcd));
     sfsanr = 1;
   endif;
 
@@ -193,20 +193,20 @@ dow ('1');
 
   //  Anzeigen der Befehlstasten
   select;
-  when (sfbot = 2) and
-     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
+  when ((sfbot = 2) and
+     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1)));
     write pbbot#2;
-  when (sfbot = 3) and
-     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
+  when ((sfbot = 3) and
+     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1)));
     write pbbot#3;
-  when (sfbot = 4) and
-     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
+  when ((sfbot = 4) and
+     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1)));
     write pbbot#4;
-  when (sfbot = 5) and
-     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
+  when ((sfbot = 5) and
+     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1)));
     write pbbot#5;
-  when (sfbot = 6) and
-     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
+  when ((sfbot = 6) and
+     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1)));
     write pbbot#6;
   other;
     write pbbot#1;
@@ -381,8 +381,8 @@ begsr c_fldhexed;
   fldl0100 = f_ffd;
 
   //  Error: Editor not allowed. Field &1 is NULL.
-  if fldl0100.f1nalw = '1' and
-     io_nullmap(fldl0100.f1seq) = 1;
+  if (fldl0100.f1nalw = '1' and
+      io_nullmap(fldl0100.f1seq) = 1);
     clear usr8220;
     usr8220.var1 = fldl0100.f1fnme;
     p_sndpgmmg('USR8220': usr8220: sds.pgmname);
@@ -441,8 +441,8 @@ begsr c_fldstred;
   fldl0100 = f_ffd;
 
   //  Error: Editor does not support data type of field &1.
-  if fldl0100.f1dtyp <> 'A' and
-     fldl0100.f1dtyp <> 'G';
+  if (fldl0100.f1dtyp <> 'A' and
+      fldl0100.f1dtyp <> 'G');
     clear usr8221;
     usr8221.var1 = fldl0100.f1fnme;
     p_sndpgmmg('USR8221': usr8221: sds.pgmname);
@@ -458,8 +458,8 @@ begsr c_fldstred;
   //*                 ENDIF
 
   //  Error: Editor not allowed. Field &1 is NULL.
-  if fldl0100.f1nalw = '1' and
-     io_nullmap(fldl0100.f1seq) = 1;
+  if (fldl0100.f1nalw = '1' and
+      io_nullmap(fldl0100.f1seq) = 1);
     clear usr8220;
     usr8220.var1 = fldl0100.f1fnme;
     p_sndpgmmg('USR8220': usr8220: sds.pgmname);
@@ -709,8 +709,8 @@ begsr pbreadup;
     exsr pbfill;
     *in60 = '0'; // DSPATR(ND)
 
-    dow x <= ystrlen
-       and x <= 512;
+    dow (x <= ystrlen
+       and x <= 512);
 
       sflrec = sflrec + 1;
       if (sflrec > 9999);
@@ -744,8 +744,8 @@ begsr wrtpbsfl;
   sfllastrcd = sflrec;
   *in60 = '1';                                                          // DSPATR(ND)
 
-  if sflrec = io_screennbr * sflpagedds +
-                1 - sflpagedds;
+  if (sflrec = io_screennbr * sflpagedds +
+                 1 - sflpagedds);
     sfsanr = sflrec;
   endif;
 
@@ -757,7 +757,7 @@ endsr;
 
 begsr syncline;
 
-  if (rowcnt + totlin - 1) > 18;
+  if ((rowcnt + totlin - 1) > 18);
 
     for do_x3 = rowcnt to 18;
       clear pbsfl;
@@ -811,8 +811,8 @@ begsr pbfill;
     ystrlen = f_dsplyln(fldl0100);
 
   //  ... NULL erlaubt?
-  elseif fldl0100.f1nalw = '1' and
-     io_nullmap(fldl0100.f1seq) = 1;
+  elseif (fldl0100.f1nalw = '1' and
+     io_nullmap(fldl0100.f1seq) = 1);
     ystring = f_msgtext('TXT0127': '');
     ystrlen = %len(%trimr(ystring));
   else;
@@ -932,11 +932,11 @@ begsr readrcd;
 
   isrecord = bFalse;
   if (cio_isopen(hfile04) = bTrue);
-    if cio_chainwithrrn(hfile04
-                     : i_rcdNbr
-                     : bFalse
-                     : io_buff
-                     : io_nullmap) = bTrue;
+    if (cio_chainwithrrn(hfile04
+                      : i_rcdNbr
+                      : bFalse
+                      : io_buff
+                      : io_nullmap) = bTrue);
       isrecord = bTrue;
     endif;
   endif;

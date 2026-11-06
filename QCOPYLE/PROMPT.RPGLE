@@ -11,7 +11,7 @@ dcl-s r#member char(10);
 // --------------------------------------------------------------------
 
 select;
-when scnfld = '##FIELD';
+when (scnfld = '##FIELD');
   C                   movel(p)  ##field       r#field
   C                   movel(p)  ##field       ydata
 ydatatyp = *blanks;
@@ -33,15 +33,15 @@ if *in99 = *on;
 //  ... Fehler, also ungültige Rückgabedaten
 else;
 
-if ymsgid <> *blanks;
+if (ymsgid <> *blanks);
 
-  if ymsgid = '*NONE';
+  if (ymsgid = '*NONE');
     ymsgid = *blanks;
     ymsgdta = *blanks;
   endif;
 
   select;
-  when scnfld = '##FIELD';
+  when (scnfld = '##FIELD');
     C                   movel(p)  r#field       ##field
      when scnfld = '##MEMBER';
     C                   movel(p)  r#member      ##member
@@ -50,9 +50,9 @@ if ymsgid <> *blanks;
   else;
 
     select;
-    when scnfld = '##FIELD';
+    when (scnfld = '##FIELD');
       ##field = %subst(yretdata:1:ydatalen);
-    when scnfld = '##MEMBER';
+    when (scnfld = '##MEMBER');
       ##member = %subst(yretdata:1:ydatalen);
     endsl;
 

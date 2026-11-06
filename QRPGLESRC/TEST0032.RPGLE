@@ -106,7 +106,7 @@ dcl-proc main;
 
   open TEST0032FM;
 
-  dow '1';
+  dow ('1');
 
     exfmt SCREEN01;
 

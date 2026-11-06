@@ -147,7 +147,7 @@ dcl-proc p_inzprogressmeter export;
   endif;
 
   // ... change marker acording to job type
-  if (g_jobtype = 'B') and (g_marker < ' ');
+  if ((g_jobtype = 'B') and (g_marker < ' '));
     g_marker = '#';
   endif;
 
@@ -279,7 +279,7 @@ dcl-proc p_showprogressmeter export;
       msgDta = g_text + %editc(%dech(percentage: 3: 0):'Z') +
                '% ' + progress;
     else;
-      if fraction < %len(progress);
+      if (fraction < %len(progress));
         %subst(progress : fraction + 1 : 1) = x'22';
       else;
         progress = progress + x'22';

@@ -205,17 +205,17 @@ dcl-proc p_main;
 
   //  ermitteln Benutzerberechtigung ...
   //  ... genau diese Datei (  Priorität 1)
-  if f_usraut(usrchgl
-              : usrchgf
-              : usrchgm
-              : usrupdmd
-              : usrupdky
-              : usrchgsqlw
-              : usrchgsqlo
-              : usraccat
-              : sds.user
-              : gi_qFile.name
-              : gi_qFile.lib) = bFalse;
+  if (f_usraut(usrchgl
+               : usrchgf
+               : usrchgm
+               : usrupdmd
+               : usrupdky
+               : usrchgsqlw
+               : usrchgsqlo
+               : usraccat
+               : sds.user
+               : gi_qFile.name
+               : gi_qFile.lib) = bFalse);
     //      ... alle Dateien diesen Typs (Priorität 2)
     f_usraut(usrchgl
              : usrchgf
@@ -231,16 +231,16 @@ dcl-proc p_main;
 
   //  ermitteln Objektberechtigung ...
   //  ... genau diese Datei (Priorität 3)
-  if f_objaut(objchgl
-              : objchgf
-              : objchgm
-              : objupdmd
-              : objupdky
-              : objchgsqlw
-              : objchgsqlo
-              : objaccat
-              : gi_qFile.name
-              : gi_qFile.lib) = bFalse;
+  if (f_objaut(objchgl
+               : objchgf
+               : objchgm
+               : objupdmd
+               : objupdky
+               : objchgsqlw
+               : objchgsqlo
+               : objaccat
+               : gi_qFile.name
+               : gi_qFile.lib) = bFalse);
     //      ... alle Dateien diesen Typs (Priorität 4)
     f_objaut(objchgl
              : objchgf
@@ -255,46 +255,46 @@ dcl-proc p_main;
 
   //  ermitteln *SECATR ...
   //  ... für diesen Benutzer, diese Bibliothek (Priorität 5)
-  if f_secaut(secchgl
-              : secchgf
-              : secchgm
-              : secupdmd
-              : secupdky
-              : secchgsqlw
-              : secchgsqlo
-              : secaccat
-              : sds.user
-              : gi_qFile.lib) = bFalse;
+  if (f_secaut(secchgl
+               : secchgf
+               : secchgm
+               : secupdmd
+               : secupdky
+               : secchgsqlw
+               : secchgsqlo
+               : secaccat
+               : sds.user
+               : gi_qFile.lib) = bFalse);
     //      ... für diesen Benutzer (Priorität 6)
-    if f_secaut(secchgl
-                : secchgf
-                : secchgm
-                : secupdmd
-                : secupdky
-                : secchgsqlw
-                : secchgsqlo
-                : secaccat
-                : sds.user)  = bFalse;
+    if (f_secaut(secchgl
+                 : secchgf
+                 : secchgm
+                 : secupdmd
+                 : secupdky
+                 : secchgsqlw
+                 : secchgsqlo
+                 : secaccat
+                 : sds.user)  = bFalse);
       //          ... für alle Benutzer, diese Bibliothek (Priorität 7)
-      if f_secaut(secchgl
-                  : secchgf
-                  : secchgm
-                  : secupdmd
-                  : secupdky
-                  : secchgsqlw
-                  : secchgsqlo
-                  : secaccat
-                  : *omit
-                  : gi_qFile.lib) = bFalse;
+      if (f_secaut(secchgl
+                   : secchgf
+                   : secchgm
+                   : secupdmd
+                   : secupdky
+                   : secchgsqlw
+                   : secchgsqlo
+                   : secaccat
+                   : *omit
+                   : gi_qFile.lib) = bFalse);
         //              ... für alle Benutzer (Priorität 8)
-        if f_secaut(secchgl
-                    : secchgf
-                    : secchgm
-                    : secupdmd
-                    : secupdky
-                    : secchgsqlw
-                    : secchgsqlo
-                    : secaccat  ) = bFalse;
+        if (f_secaut(secchgl
+                     : secchgf
+                     : secchgm
+                     : secupdmd
+                     : secupdky
+                     : secchgsqlw
+                     : secchgsqlo
+                     : secaccat  ) = bFalse);
         endif;
       endif;
     endif;

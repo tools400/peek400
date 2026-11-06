@@ -196,26 +196,26 @@ dow ('1');
   write pbbot#0;
   //  Anzeigen der Befehlstasten
   select;
-  when (sfbot = 2) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1));
+  when ((sfbot = 2) and
+     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
     write pbbot#2;
-  when (sfbot = 3) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1));
+  when ((sfbot = 3) and
+     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
     write pbbot#3;
-  when (sfbot = 4) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1));
+  when ((sfbot = 4) and
+     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
     write pbbot#4;
-  when (sfbot = 5) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1));
+  when ((sfbot = 5) and
+     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
     write pbbot#5;
-  when (sfbot = 6) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1));
+  when ((sfbot = 6) and
+     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
     write pbbot#6;
-  when (sfbot = 7) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1));
+  when ((sfbot = 7) and
+     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
     write pbbot#7;
-  when (sfbot = 8) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1));
+  when ((sfbot = 8) and
+     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
     write pbbot#8;
   other;
     write pbbot#1;
@@ -294,9 +294,9 @@ dow ('1');
     if (isCtlError = bFalse);
       exsr setusrsetg;
     endif;
-    if o_mbr = *blanks
-       or isCtlError = bTrue
-       or isSflError = bTrue;
+    if (o_mbr = *blanks
+        or isCtlError = bTrue
+        or isSflError = bTrue);
     //  ... keine Auswahl getroffen, weiter machen
     else;
       leave;

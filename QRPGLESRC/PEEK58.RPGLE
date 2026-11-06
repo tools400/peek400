@@ -355,7 +355,7 @@ dcl-proc f_bintodec export;
   end-ds;
   // ------------------------------------------------------------------------
 
-  if (i_startPos + i_length - 1) > %len(i_string);
+  if ((i_startPos + i_length - 1) > %len(i_string));
     p_kill('Start position and length outside range.');
   else;
     select;
@@ -478,9 +478,9 @@ dcl-proc f_vldname export;
     endif;
 
     //  Prüfen Ende des Strings ...
-    if (startString =  bTrue )  and
-       (endString =  bFalse)  and
-       (chr       =  ' '   );
+    if ((startString =  bTrue )  and
+        (endString =  bFalse)  and
+        (chr       =  ' '   ));
       endString = bTrue;
       iter;
     endif;
@@ -754,25 +754,25 @@ dcl-proc f_basedpf export;
     select;
     when (fild0100.atnomb > 1);
       // ... multi-based-member logical file
-      if f_basedmbr(i_file: i_lib: i_mbr
-                    : i_rcdmbrnbr: i_rcdfmt
-                    : tfile: tlib: tmbr: trcdfmt) = bFalse;
+      if (f_basedmbr(i_file: i_lib: i_mbr
+                     : i_rcdmbrnbr: i_rcdfmt
+                     : tfile: tlib: tmbr: trcdfmt) = bFalse);
         return bFalse;
       endif;
 
     when (fild0100.atnofm > 1);
       // ... multi-format logical file
-      if f_basedmbr(i_file: i_lib: i_mbr
-                    : i_rcdmbrnbr: i_rcdfmt
-                    : tfile: tlib: tmbr: trcdfmt) = bFalse;
+      if (f_basedmbr(i_file: i_lib: i_mbr
+                     : i_rcdmbrnbr: i_rcdfmt
+                     : tfile: tlib: tmbr: trcdfmt) = bFalse);
         return bFalse;
       endif;
 
     other;
       // ... single-format logical file
-      if f_basedmbr(i_file: i_lib: i_mbr
-                    : i_rcdmbrnbr: i_rcdfmt
-                    : tfile: tlib: tmbr: trcdfmt) = bFalse;
+      if (f_basedmbr(i_file: i_lib: i_mbr
+                     : i_rcdmbrnbr: i_rcdfmt
+                     : tfile: tlib: tmbr: trcdfmt) = bFalse);
         return bFalse;
       endif;
     endsl;
@@ -786,9 +786,9 @@ dcl-proc f_basedpf export;
 
   else;
     // ... physical file
-    if f_basedmbr(i_file: i_lib: i_mbr
-                  : i_rcdmbrnbr: i_rcdfmt
-                  : tfile: tlib: tmbr: trcdfmt) = bFalse;
+    if (f_basedmbr(i_file: i_lib: i_mbr
+                   : i_rcdmbrnbr: i_rcdfmt
+                   : tfile: tlib: tmbr: trcdfmt) = bFalse);
       return bFalse;
     endif;
 
@@ -1202,10 +1202,10 @@ dcl-proc f_isnumfld export;
   dcl-s isnumfld like(bool_t) inz;
   // ------------------------------------------------------------------------
 
-  if (i_fldl0100.f1dtyp = 'S') or                                          // Zoned
+  if ((i_fldl0100.f1dtyp = 'S') or                                          // Zoned
   (i_fldl0100.f1dtyp = 'B') or                                          // Binary
   (i_fldl0100.f1dtyp = 'P') or                                          // Packed
-  (i_fldl0100.f1dtyp = 'F');                                            // Float
+  (i_fldl0100.f1dtyp = 'F'));                                            // Float
     isnumfld = bTrue;
   else;
     isnumfld = bFalse;
@@ -1513,7 +1513,7 @@ dcl-proc f_istolong export;
   dcl-s tolong like(bool_t) inz;
   // ------------------------------------------------------------------------
 
-  if f_dsplyln(i_fldl0100)>f_maxdspln(i_fldl0100);
+  if (f_dsplyln(i_fldl0100)>f_maxdspln(i_fldl0100));
     tolong = bTrue;
   else;
     tolong = bFalse;
@@ -1609,8 +1609,8 @@ dcl-proc f_nbrdsprw export;
 
   nbrdsprow = dsplylen / f_cntfldln(i_fldl0100);
 
-  if dsplylen <>
-  (nbrdsprow * f_cntfldln(i_fldl0100));
+  if (dsplylen <>
+  (nbrdsprow * f_cntfldln(i_fldl0100)));
     nbrdsprow = nbrdsprow + 1;
   endif;
 
@@ -1649,7 +1649,7 @@ dcl-proc p_dectobin export;
   descinfo1 : descinfo2: parmlen  :
   *omit);
 
-  if (i_startpos + i_length - 1) > parmlen;
+  if ((i_startpos + i_length - 1) > parmlen);
     p_kill('Start position and length outside range.');
   else;
     intvalue = i_value;
@@ -1718,8 +1718,8 @@ dcl-proc f_isnotalw export;
     if (f_isvarlen(i_fldl0100) = bTrue);
       //      ... dann
       //          prüfen, ob es sich um alpha-numerisches Feld handelt.
-      if i_fldl0100.f1dtyp = 'A' or                                      // = Alpha
-      i_fldl0100.f1dtyp = 'G';                                        // = Graphic
+      if (i_fldl0100.f1dtyp = 'A' or                                      // = Alpha
+      i_fldl0100.f1dtyp = 'G');                                        // = Graphic
         notAllowed = bFalse;
       else;
         notAllowed = bTrue;
@@ -2122,7 +2122,7 @@ dcl-proc f_splttxt_DEPRECATED export;
   else;
     //  ... sonst
     //      prüfen zu entnehmende Länge
-    if (i_strPos + i_len - 1) <= %len(i_text);
+    if ((i_strPos + i_len - 1) <= %len(i_text));
       rtnLen = i_len;
     else;
       rtnLen = %len(i_text) - i_strPos + 1;
@@ -2156,11 +2156,11 @@ dcl-proc f_splttxt_DEPRECATED export;
 
         // Wenn das Folgezeichen <> ' ' ist, d.h.
         // wir befinden uns mitten in der Zeichenkette, ...
-        if (nextChar <> ' ') and (nextChar <> '°');
+        if ((nextChar <> ' ') and (nextChar <> '°'));
           // ... dann
           //     rückwärts nach einer Lücke für
           //     den Zeilenumbruch suchen
-          dow trimLen > 0;
+          dow (trimLen > 0);
             if (%subst(o_text: trimLen: 1) = ' ');
               rtnLen = trimLen;
               %subst(o_text: 1: %len(o_text)) =
@@ -2220,7 +2220,7 @@ dcl-proc f_addptr export;
   dcl-s ofsary char(1) dim(32767) based(pofsary);
   //------------------------------------------------------------*
 
-  dow i_offset > 0;
+  dow (i_offset > 0);
 
     pofsary = i_pointer;
 
@@ -2556,7 +2556,7 @@ dcl-proc f_exist export;
   msgID = '';
   msgDta = '';
 
-  dou *on;
+  dou (*on);
 
     // Retrieve the object description
     qObj.name = i_obj;
@@ -2577,7 +2577,7 @@ dcl-proc f_exist export;
 
     // Retrieve member description if object is a file
     // and a member name was given
-    if (errCode.bytAvl = 0) and (mbr <> '*NONE');
+    if ((errCode.bytAvl = 0) and (mbr <> '*NONE'));
       reset errCode;
       errCode.bytprv = %size(errCode);
       qusrmbrd(mbrd0100: %size(mbrd0100): 'MBRD0100': qObj: mbr: '0': errCode);
@@ -2683,12 +2683,12 @@ dcl-proc f_wordwrap export;
   // Determine how to treat end-of-paragraph markers:
   select;
   // ... do not respect end-of-paragraph marker
-  when isBitOn(cWORDWRAP_PARAGRAPH_NONE: options);
+  when (isBitOn(cWORDWRAP_PARAGRAPH_NONE: options));
     clear eop;
     clear esc;
     numeop = 0;
   // ... respect end-of-paragraph marker of message descriptions: &N, &P, &B
-  when isBitOn(cWORDWRAP_PARAGRAPH_MSGD: options);
+  when (isBitOn(cWORDWRAP_PARAGRAPH_MSGD: options));
     clear eop;
     eop(1) = '&N';
     eop(2) = '&P';
@@ -2696,7 +2696,7 @@ dcl-proc f_wordwrap export;
     esc    = '&';
     numeop = 3;
   // ... respect end-of-paragraph marker of text: \n
-  when isBitOn(cWORDWRAP_PARAGRAPH_TEXT: options);
+  when (isBitOn(cWORDWRAP_PARAGRAPH_TEXT: options));
     clear eop;
     eop(1) = '\N';
     esc    = '\';
@@ -2719,7 +2719,7 @@ dcl-proc f_wordwrap export;
     reset theeop;
     theeop.isfound = bFalse;
     theeop.position = %scan(esc: string: io_startpos);
-    dow not theeop.isfound and theeop.position > 0;
+    dow (not theeop.isfound and theeop.position > 0);
       // If there is an escape character, ...
       if (%subst(string: theeop.position: 1) = esc);
         // ... then check it against the list of EOP marker
@@ -2728,7 +2728,7 @@ dcl-proc f_wordwrap export;
           // and if it is a known EOP, ...
           if (theeop.position <= %len(string) - %len(eop(x)) + 1);
             tmpeop = %subst(string: theeop.position: %len(eop(x)));
-            if f_ucase(tmpeop) = f_ucase(eop(x));
+            if (f_ucase(tmpeop) = f_ucase(eop(x)));
               // ... then set flag "EOP found"
               theeop.string  = eop(x);
               theeop.isfound = bTrue;
@@ -2754,7 +2754,7 @@ dcl-proc f_wordwrap export;
     else;
       // ... else perform word wrap for text portion
       //     before end-of-paragraph marker
-      if (theeop.position - io_startpos) > 0;
+      if ((theeop.position - io_startpos) > 0);
         string   = %subst(string: io_startpos:
           theeop.position - io_startpos);
         startpos = 1;
@@ -2764,8 +2764,8 @@ dcl-proc f_wordwrap export;
       endif;
 
       // If all we got is a EOP, ...
-      if (%len(text)    = %len(theeop.string)   ) and
-      (f_ucase(text) = f_ucase(theeop.string));
+      if ((%len(text)    = %len(theeop.string)   ) and
+      (f_ucase(text) = f_ucase(theeop.string)));
         // ... then delete it
         text = '';
       endif;
@@ -2777,7 +2777,7 @@ dcl-proc f_wordwrap export;
       endif;
       // Set start position to 0 if new start position
       // exceeds maximum length of text.
-      if io_startpos > %len(i_string);
+      if (io_startpos > %len(i_string));
         io_startpos = 0;
       endif;
     endif;
@@ -2785,7 +2785,7 @@ dcl-proc f_wordwrap export;
   endif;
 
   // If the user requested to remove BLANKS, ...
-  if isBitOn(cWORDWRAP_PARAGRAPH_TRIMR: options);
+  if (isBitOn(cWORDWRAP_PARAGRAPH_TRIMR: options));
     // ... then remove BLANKS.
     text = %trimr(text);
   endif;
@@ -2832,14 +2832,14 @@ dcl-proc lf_wordwrap;
   eposconst = epos;
 
   // If the end position is out of range ...
-  if   epos > %len(i_string);
+  if   (epos > %len(i_string));
     // ... then
     //     assume the last character to be the delimiter
     epos = %len(i_string);
   else;
     // ... else
     //     look backwards for a deliniter.
-    dow   epos >= spos;
+    dow   (epos >= spos);
       char = %subst(i_string: epos: 1);
       // At position width + 1 ...
       if (epos = eposconst);
@@ -2872,7 +2872,7 @@ dcl-proc lf_wordwrap;
 
   // ... and set new start position.
   spos = spos + length;
-  if spos <= %len(i_string);
+  if (spos <= %len(i_string));
     io_startpos = %check(' ': i_string: spos);
   else;
     io_startpos = 0;
@@ -3220,7 +3220,7 @@ dcl-proc f_space export;
   // ------------------------------------------------------------------------
 
   x = i_length;
-  dow x > 0;
+  dow (x > 0);
     spaces = spaces + ' ';
     x = x - 1;
   enddo;

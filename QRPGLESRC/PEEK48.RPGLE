@@ -148,26 +148,26 @@ dow ('1');
 
   //  Anzeigen der Befehlstasten
   select;
-  when (sfbot = 2) and
-     (yNbrOfKeys > nbrfkeys * (sfbot - 1));
+  when ((sfbot = 2) and
+     (yNbrOfKeys > nbrfkeys * (sfbot - 1)));
     write pbbot#2;
-  when (sfbot = 3) and
-     (yNbrOfKeys > nbrfkeys * (sfbot - 1));
+  when ((sfbot = 3) and
+     (yNbrOfKeys > nbrfkeys * (sfbot - 1)));
     write pbbot#3;
-  when (sfbot = 4) and
-     (yNbrOfKeys > nbrfkeys * (sfbot - 1));
+  when ((sfbot = 4) and
+     (yNbrOfKeys > nbrfkeys * (sfbot - 1)));
     write pbbot#4;
-  when (sfbot = 5) and
-     (yNbrOfKeys > nbrfkeys * (sfbot - 1));
+  when ((sfbot = 5) and
+     (yNbrOfKeys > nbrfkeys * (sfbot - 1)));
     write pbbot#5;
-  when (sfbot = 6) and
-     (yNbrOfKeys > nbrfkeys * (sfbot - 1));
+  when ((sfbot = 6) and
+     (yNbrOfKeys > nbrfkeys * (sfbot - 1)));
     write pbbot#6;
-  when (sfbot = 7) and
-     (yNbrOfKeys > nbrfkeys * (sfbot - 1));
+  when ((sfbot = 7) and
+     (yNbrOfKeys > nbrfkeys * (sfbot - 1)));
     write pbbot#7;
-  when (sfbot = 8) and
-     (yNbrOfKeys > nbrfkeys * (sfbot - 1));
+  when ((sfbot = 8) and
+     (yNbrOfKeys > nbrfkeys * (sfbot - 1)));
     write pbbot#8;
   other;
     write pbbot#1;
@@ -597,8 +597,8 @@ begsr fill##;
 
   //  Schlüsselfolge als Vorgabe, auch wenn ORDER BY nicht geändert
   //  werden darf: Sie hält bei SQL-Zugriff die bisherige Reihenfolge.
-  if (i_accessmode = KEY_SEQ) and
-     (##order  = ' '    );
+  if ((i_accessmode = KEY_SEQ) and
+      (##order  = ' '    ));
     tempfldpos = 1;
     exsr ins_field;
   endif;

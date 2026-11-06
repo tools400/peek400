@@ -167,26 +167,26 @@ dow ('1');
 
   //  Anzeigen der Befehlstasten
   select;
-  when (sfbot = 2) and
-     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
+  when ((sfbot = 2) and
+     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1)));
     write pbbot#2;
-  when (sfbot = 3) and
-     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
+  when ((sfbot = 3) and
+     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1)));
     write pbbot#3;
-  when (sfbot = 4) and
-     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
+  when ((sfbot = 4) and
+     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1)));
     write pbbot#4;
-  when (sfbot = 5) and
-     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
+  when ((sfbot = 5) and
+     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1)));
     write pbbot#5;
-  when (sfbot = 6) and
-     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
+  when ((sfbot = 6) and
+     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1)));
     write pbbot#6;
-  when (sfbot = 7) and
-     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
+  when ((sfbot = 7) and
+     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1)));
     write pbbot#7;
-  when (sfbot = 8) and
-     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
+  when ((sfbot = 8) and
+     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1)));
     write pbbot#8;
   other;
     write pbbot#1;
@@ -302,11 +302,11 @@ dow ('1');
 
 enddo;
 
-if %open(peekfld);
+if (%open(peekfld));
   close peekfld;
 endif;
 
-if %open(peekfld);
+if (%open(peekfld));
   close peekfld;
 endif;
 
@@ -483,8 +483,8 @@ begsr prf20;
     endif;
 
     //  Zeichenkette zu lang
-    if %len(%trimr(#hexstring))/2 + pstartpos - 1 >
-       f_buffln(fldl0100);
+    if (%len(%trimr(#hexstring))/2 + pstartpos - 1 >
+        f_buffln(fldl0100));
       if (warning_2 = bTrue);
         #hexstring = %subst(#hexstring :
                            1          :
@@ -508,15 +508,15 @@ begsr prf20;
     endif;
 
     //  Zeichenkette zu kurz
-    if %len(%trimr(#hexstring))/2 + pstartpos -1 <
-       f_buffln(fldl0100)
-       and
-       (%len(%trimr(#hexstring)) < %len(#hexstring));
+    if (%len(%trimr(#hexstring))/2 + pstartpos -1 <
+        f_buffln(fldl0100)
+        and
+        (%len(%trimr(#hexstring)) < %len(#hexstring)));
       if (warning_1 = bTrue);
-        dow (%len(%trimr(#hexstring))/2 + pstartpos -1 <
-            f_buffln(fldl0100))
+        dow ((%len(%trimr(#hexstring))/2 + pstartpos -1 <
+             f_buffln(fldl0100))
            and
-           (%len(%trimr(#hexstring)) < %len(#hexstring));
+           (%len(%trimr(#hexstring)) < %len(#hexstring)));
 
           if (i_isucs2 = 0);
             #hexstring = %trimr(#hexstring) + '40';
@@ -717,8 +717,8 @@ begsr fill##;
   $fldname = f_headline(i_headtype: fldl0100);
 
   //  anzeigen alphanumerisches oder numerisches Feld
-  if (f_isnumfld(fldl0100) = bTrue) and
-     (f_isfloatfld(fldl0100) = bFalse);
+  if ((f_isnumfld(fldl0100) = bTrue) and
+      (f_isfloatfld(fldl0100) = bFalse));
     *in60 = *on;
     $fldlaenge = fldl0100.f1digt;
     $flddezst  = fldl0100.f1decp;

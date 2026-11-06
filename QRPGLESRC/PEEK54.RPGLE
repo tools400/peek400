@@ -195,7 +195,7 @@ dcl-proc main;
   //  Prüfen, ob gespeichert werden darf
   if (i_isautosave = bTrue);
     open(e) peekenv;
-    if not %error();
+    if (not %error());
       cansave =  checkAutoSave(pfile: plib);
       close peekenv;
     else;

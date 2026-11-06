@@ -505,7 +505,7 @@ begsr sub004;
 
   setll 1 fpeekfld;
 
-  dow f_readfld <> bEOF;
+  dow (f_readfld <> bEOF);
 
     fieldcount = fieldcount + 1;
 
@@ -542,7 +542,7 @@ begsr sub005;
 
   setll 1 fpeekfld;
 
-  dow f_readfld <> bEOF;
+  dow (f_readfld <> bEOF);
 
     //  Feldzähler ...
     fieldcount = fieldcount + 1;
@@ -671,7 +671,7 @@ begsr sub009;
 
   setll 1 fpeekfld;
 
-  dow f_readfld <> bEOF;
+  dow (f_readfld <> bEOF);
 
     //  Rename
     reset ds_rnmbuf;
@@ -698,7 +698,7 @@ begsr sub010;
 
   setll 1 fpeekfld;
 
-  dow f_readfld <> bEOF;
+  dow (f_readfld <> bEOF);
 
     //  Rename
     reset ds_rnmex;
@@ -731,21 +731,21 @@ begsr sub011;
 
   setll 1 fpeekfld;
 
-  dow f_readfld <> bEOF;
+  dow (f_readfld <> bEOF);
 
     //  Feldzähler ...
     fieldcount = fieldcount + 1;
 
     //  Keine Felder größer als 512-Zeichen
-    if (f_istolong(fldl0100) = bTrue) or
-       (f_isnotalw(fldl0100) = bTrue);
+    if ((f_istolong(fldl0100) = bTrue) or
+        (f_isnotalw(fldl0100) = bTrue));
       iter;
     endif;
 
     //  Kein ISO Feld
-    if (fldl0100.f1dtyp <> 'T') and
-       (fldl0100.f1dtyp <> 'L') and
-       (fldl0100.f1dtyp <> 'Z');
+    if ((fldl0100.f1dtyp <> 'T') and
+        (fldl0100.f1dtyp <> 'L') and
+        (fldl0100.f1dtyp <> 'Z'));
       iter;
     endif;
 
@@ -975,7 +975,7 @@ begsr sub020;
 
   setll 1 fpeekfld;
 
-  dow f_readfld <> bEOF;
+  dow (f_readfld <> bEOF);
 
     fieldcount = fieldcount + 1;
 
@@ -1003,8 +1003,8 @@ begsr sub020;
     pos = 1;
 
     //  Löschen Felder, wenn NULL-fähig oder VARLEN
-    if fldl0100.f1nalw = '1' or
-       f_isvarlen(fldl0100) = bTrue;
+    if (fldl0100.f1nalw = '1' or
+        f_isvarlen(fldl0100) = bTrue);
 
       for curfield = 1 to totfields;
         reset ds_clear;
@@ -1164,7 +1164,7 @@ begsr sub021;
 
   setll 1 fpeekfld;
 
-  dow f_readfld <> bEOF;
+  dow (f_readfld <> bEOF);
 
     fieldcount = fieldcount + 1;
 
@@ -1266,7 +1266,7 @@ begsr sub022;
 
   setll 1 fpeekfld;
 
-  dow f_readfld <> bEOF;
+  dow (f_readfld <> bEOF);
 
     fieldcount = fieldcount + 1;
 
@@ -1338,7 +1338,7 @@ begsr sub026;
 
   setll 1 fpeekfld;
 
-  dow f_readfld <> bEOF;
+  dow (f_readfld <> bEOF);
 
     fieldcount = fieldcount + 1;
 
@@ -1370,7 +1370,7 @@ begsr sub027;
 
   setll 1 fpeekfld;
 
-  dow f_readfld <> bEOF;
+  dow (f_readfld <> bEOF);
 
     fieldcount = fieldcount + 1;
 

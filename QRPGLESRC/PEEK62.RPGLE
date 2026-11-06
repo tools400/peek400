@@ -199,7 +199,7 @@ if (rcdLen1 <> rcdLen2);
 
   p_sndstsmg('USR9995': usr9995);
 
-  dou 1=1;
+  dou (1=1);
     //  Allocate SQL Environment Handle and ...
     retCode = sqlallocenv(%addr(hEnv));
     if (retCode <> 0);

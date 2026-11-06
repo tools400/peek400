@@ -150,26 +150,26 @@ if (isPgmError = bFalse);
 
     //  Anzeigen der Befehlstasten
     select;
-    when (sfBot = 2) and
-       (yNbrOfKeys > NBR_F_KEYS * (sfBot - 1));
+    when ((sfBot = 2) and
+       (yNbrOfKeys > NBR_F_KEYS * (sfBot - 1)));
       write pbbot#2;
-    when (sfBot = 3) and
-       (yNbrOfKeys > NBR_F_KEYS * (sfBot - 1));
+    when ((sfBot = 3) and
+       (yNbrOfKeys > NBR_F_KEYS * (sfBot - 1)));
       write pbbot#3;
-    when (sfBot = 4) and
-       (yNbrOfKeys > NBR_F_KEYS * (sfBot - 1));
+    when ((sfBot = 4) and
+       (yNbrOfKeys > NBR_F_KEYS * (sfBot - 1)));
       write pbbot#4;
-    when (sfBot = 5) and
-       (yNbrOfKeys > NBR_F_KEYS * (sfBot - 1));
+    when ((sfBot = 5) and
+       (yNbrOfKeys > NBR_F_KEYS * (sfBot - 1)));
       write pbbot#5;
-    when (sfBot = 6) and
-       (yNbrOfKeys > NBR_F_KEYS * (sfBot - 1));
+    when ((sfBot = 6) and
+       (yNbrOfKeys > NBR_F_KEYS * (sfBot - 1)));
       write pbbot#6;
-    when (sfBot = 7) and
-       (yNbrOfKeys > NBR_F_KEYS * (sfBot - 1));
+    when ((sfBot = 7) and
+       (yNbrOfKeys > NBR_F_KEYS * (sfBot - 1)));
       write pbbot#7;
-    when (sfBot = 8) and
-       (yNbrOfKeys > NBR_F_KEYS * (sfBot - 1));
+    when ((sfBot = 8) and
+       (yNbrOfKeys > NBR_F_KEYS * (sfBot - 1)));
       write pbbot#8;
     other;
       write pbbot#1;
@@ -309,7 +309,7 @@ if (isPgmError = bFalse);
 
 endif;
 
-if %open(peekfld);
+if (%open(peekfld));
   close peekfld;
 endif;
 

@@ -420,7 +420,7 @@ open peekfld;
 p = %scan('/': exit03);
 if (p > 1);
   qpgm.lib = %subst(exit03: 1: p-1);
-  if p < %len(exit03);
+  if (p < %len(exit03));
     qpgm.name = %subst(exit03: p+1);
     isExit03  = f_exist(qpgm.name
                        : qpgm.lib
@@ -564,7 +564,7 @@ fieldcount = 0;
 //  Abarbeiten der Feldliste ...
 setll 1 peekfld;
 
-dow f_readfld <> bEOF;
+dow (f_readfld <> bEOF);
 
   //**                Clear                   USR8188
   //**                Eval      USR8188.var1 = xStage
@@ -783,7 +783,7 @@ begsr wrtfield;
   // ---------------------------*
   //   Ausgeben Kopfsatz
   // ---------------------------*
-  if (row# + totlin - 1) > max_rows;
+  if ((row# + totlin - 1) > max_rows);
     newscn = bTrue;
   endif;
 
@@ -800,7 +800,7 @@ begsr wrtfield;
     basefldname = '*CNT_ERROR';
   endif;
 
-  dou curlin > totlin;
+  dou (curlin > totlin);
 
     //  Generieren ALPHA Felder als GRAPHIC für CCSIDs 1200 und 1208.
     //**                If         FLDL0100.F1DTYP = 'A' and
@@ -941,10 +941,10 @@ begsr wrtfield;
 
     //          ... Datentyp
     select;
-    when (fldl0100.f1dtyp = 'L') or // = Date
+    when ((fldl0100.f1dtyp = 'L') or // = Date
        (fldl0100.f1dtyp = 'T') or   // = Time
        (fldl0100.f1dtyp = 'Z') or   // = Boolean
-       (fldl0100.f1dtyp = '8');     // = Timestamp
+       (fldl0100.f1dtyp = '8'));     // = Timestamp
       $fldd_dtyp = 'A';
     when (fldl0100.f1dtyp = 'G');   // = Graphic
       $fldd_dtyp = 'G';
@@ -955,14 +955,14 @@ begsr wrtfield;
     endsl;
 
     //          ... Feldlänge
-    if (f_istolong(fldl0100) = bTrue) or
-       (fldl0100.f1dtyp = 'G' and totlin > 1);
+    if ((f_istolong(fldl0100) = bTrue) or
+        (fldl0100.f1dtyp = 'G' and totlin > 1));
       if (fldl0100.f1dtyp = 'G'); // = Graphic
         if (curlin < totlin);
           newlen# = f_cntfldln(fldl0100);
         else;
           newlen# = f_dsplyln(fldl0100) - dsplen;
-          if newlen# > f_cntfldln(fldl0100);
+          if (newlen# > f_cntfldln(fldl0100));
             newlen# = f_cntfldln(fldl0100);
           endif;
         endif;
@@ -1063,8 +1063,8 @@ begsr wrtfield;
     endif;
 
     //  Feld schützen, wenn größer als 512-Zeichen ...
-    if (f_istolong(fldl0100) = bTrue) or
-       (f_isnotalw(fldl0100) = bTrue);
+    if ((f_istolong(fldl0100) = bTrue) or
+        (f_isnotalw(fldl0100) = bTrue));
       if (fldl0100.f1use <> 'I');
         reset ds_dspatr;
         $dspa_atr = 'DSPATR(PR)';
@@ -1134,17 +1134,17 @@ begsr wrtfield;
       p_wrtdspf(ds_dspatr);
 
     //  Abfragen Feld-EDTCDE aus PEEKFLD ...
-    when f_edtcde <> ' '           // Edit code
-       and f_isfloatfld(fldl0100) = bFalse;
+    when (f_edtcde <> ' '           // Edit code
+       and f_isfloatfld(fldl0100) = bFalse);
       reset ds_dspatr;
       $dspa_atr = 'EDTCDE(' + f_edtcde + ')';
       p_wrtdspf(ds_dspatr);
 
     other;
       //  Kein EDTWRD / kein EDTCDE
-      if (f_isnumfld(fldl0100)   = bTrue ) and
-         (f_isfloatfld(fldl0100) = bFalse) and
-         (fldl0100.f1decp > 0            );
+      if ((f_isnumfld(fldl0100)   = bTrue ) and
+          (f_isfloatfld(fldl0100) = bFalse) and
+          (fldl0100.f1decp > 0            ));
         reset ds_dspatr;
         $dspa_atr = 'EDTCDE(' + 'P' + ')';
         p_wrtdspf(ds_dspatr);
@@ -1153,10 +1153,10 @@ begsr wrtfield;
 
     //  Lower case Attribut
     //  bei Alpha-Feldern ...
-    if (fldl0100.f1dtyp = 'A' or
-       fldl0100.f1dtyp = 'G') and
-       (i_alwlc =  bTrue) and
-       (fldl0100.f1use <> 'I');
+    if ((fldl0100.f1dtyp = 'A' or
+        fldl0100.f1dtyp = 'G') and
+        (i_alwlc =  bTrue) and
+        (fldl0100.f1use <> 'I'));
       reset ds_dspatr;
       $dspa_atr = 'CHECK(LC) ';
       p_wrtdspf(ds_dspatr);
@@ -1931,13 +1931,13 @@ begsr #text;
     r$ftxt = '';
     x = 1;
     y = 1;
-    dow (x <= %len(%trimr(r$text))) and
-       (y <= %len(r$ftxt));
+    dow ((x <= %len(%trimr(r$text))) and
+       (y <= %len(r$ftxt)));
       %subst(r$ftxt: y: 1) =
        %subst(r$text: x: 1);
 
-      if (%subst(r$text: x: 1) = '''') and
-         (y < %len(r$ftxt));
+      if ((%subst(r$text: x: 1) = '''') and
+          (y < %len(r$ftxt)));
         y = y + 1;
         %subst(r$ftxt: y: 1) = '''';
       endif;
@@ -1962,7 +1962,7 @@ begsr #text;
   numquote = 0;
 
   z = 0;
-  dow z < %len(%trimr($lit_kwrd));
+  dow (z < %len(%trimr($lit_kwrd)));
     z = z + 1;
     if (%subst($lit_kwrd: z: 1) = '''');
       numquote = numquote + 1;
@@ -1972,7 +1972,7 @@ begsr #text;
   //  Bei einer ungeraden Anzahl von Hochkommata ...
   if (%rem(numquote : 2) <> 0);
     //  ... suchen letztes Hochkomma
-    dow %subst($lit_kwrd: z: 1) <> '''';
+    dow (%subst($lit_kwrd: z: 1) <> '''');
       z = z - 1;
     enddo;
     //  ... ersetzen letztes Hochkomma durch Leerzeichen
@@ -1981,7 +1981,7 @@ begsr #text;
     else;
       %subst($lit_kwrd: z: 1) = ' ';
       //  ... suchen letztes Hochkomma
-      dow %subst($lit_kwrd: z: 1) <> '''';
+      dow (%subst($lit_kwrd: z: 1) <> '''');
         z = z - 1;
       enddo;
       //      und löschen ales hinter dem letzten Hochkomma

@@ -714,8 +714,8 @@ dow ('1');
   endif;
 
   //  Anzeigen der Einzelauswahlen
-  if sftop > 32
-     or sftop > ynbrofch;
+  if (sftop > 32
+      or sftop > ynbrofch);
     sftop = 1;
   endif;
   $$choice = ychoice(sftop);
@@ -845,8 +845,8 @@ begsr doScreenCmd;
   else;
 
     //  Positionieren auf Feldanfang bei Wechsel des Startfeldes
-    if ##wndnbr <> b4.wndnbr
-       and ##strpage = b4.strpage;
+    if (##wndnbr <> b4.wndnbr
+        and ##strpage = b4.strpage);
       ##strpage = 1;
     endif;
 
@@ -898,21 +898,21 @@ begsr c_enter;
   exsr dltcsrpos;
 
   //  Datei hat gewechselt ...
-  if ((##file    <> l#file) and
-     (not f_endswith('*': %trim(##file))) and
-     (%trim(##file  ) <> set0008.set_prmt)) or
-     (##library  <> l#library      ) or
-     ((##member  <> l#member) and
-     (%trim(##member) <> set0008.set_prmt)) or
-     ((##format  <> l#format) and
-     (%trim(##format) <> set0008.set_prmt));
+  if (((##file    <> l#file) and
+      (not f_endswith('*': %trim(##file))) and
+      (%trim(##file  ) <> set0008.set_prmt)) or
+      (##library  <> l#library      ) or
+      ((##member  <> l#member) and
+      (%trim(##member) <> set0008.set_prmt)) or
+      ((##format  <> l#format) and
+      (%trim(##format) <> set0008.set_prmt)));
     *in93 = '1';
   else;
 
     //  Abfragen Prompt?
     //  ... ##File
-    if %trim(##file) = set0008.set_prmt or
-       f_endswith('*': %trim(##file));
+    if (%trim(##file) = set0008.set_prmt or
+        f_endswith('*': %trim(##file)));
       exsr c_prompt;
       if (*in93 = '0');
         leavesr;
@@ -1008,7 +1008,7 @@ begsr c_readSfl;
   //           Keine Einträge vorhanden
   else;
 
-    dou queryUser = *allx'00';
+    dou (queryUser = *allx'00');
 
       queryUser = *allx'00';
 
@@ -1016,7 +1016,7 @@ begsr c_readSfl;
       //  Sätze mehr da sind, oder bis durch einen
       //  Kurzbefehl (SFPAU) die Subfile neu auf-
       //  gebaut worden ist.
-      dow ispbinit = bFalse;
+      dow (ispbinit = bFalse);
 
         if (*in88 = bFalse);
           readc pbsfl132;
@@ -1369,8 +1369,8 @@ begsr pmt_file;
   else;
     //  ... sonst
     //      aufrufen "Auswahl Datei"
-    if ##file = *blanks
-       or ##file = set0008.set_prmt;
+    if (##file = *blanks
+        or ##file = set0008.set_prmt);
       yFile = '*ALL';
     else;
       yFile = ##file;
@@ -1996,8 +1996,8 @@ begsr c_mover;
     exsr msgnofile;
   else;
 
-    if (cp = 1) and
-       (col_error(cp) = bTrue);
+    if ((cp = 1) and
+        (col_error(cp) = bTrue));
       if ((set0010.set_scroll = '*BOTH') or
          (set0010.set_scroll = '*RIGHT'));
         ##strpage = ##strpage + 1;
@@ -2035,8 +2035,8 @@ begsr c_pageLeft;
   else;
 
     //  Bereits am Anfang
-    if ##wndnbr = l#minseq
-       and ##strpage = 1;
+    if (##wndnbr = l#minseq
+        and ##strpage = 1);
     else;
 
       //  Ermitteln der Feldnummer des 1. angezeigten
@@ -2364,9 +2364,9 @@ begsr c_register;
     isLicenceError = bTrue;
     leavesr;
   else;
-    if yflag <> -55
-       and yflag <> 66
-       and yflag <> 243;
+    if (yflag <> -55
+        and yflag <> 66
+        and yflag <> 243);
       //  Fehler im Wertebereich ...
       isLicenceError = bTrue;
       leavesr;
@@ -2507,9 +2507,9 @@ begsr c_sortbrrn;
     //    ... Sortierung stimmt bereits
     else;
 
-      if f_numbased(##file    :
-                 ##library :
-                 ##member  ) = 1;
+      if (f_numbased(##file    :
+                  ##library :
+                  ##member  ) = 1);
         newAccessMode = RRN_SEQ;
         exsr changesort;
       else;
@@ -2618,8 +2618,8 @@ begsr c_sql;
       //  ... dann prüfen, ob diese Datei über mehere Member geht.
       //      Sortierung nach SQL wird für "multi-member logical files"
       //      (noch) nicht unterstützt ...
-      if fild0100.atjoin = 'N' and
-         f_numbased(##file: ##library: ##member) > 1;
+      if (fild0100.atjoin = 'N' and
+          f_numbased(##file: ##library: ##member) > 1);
 
         clear usr8235;
         p_sndpgmmg('USR8235': usr8235: sds.pgmname);
@@ -2687,8 +2687,8 @@ begsr c_sql;
   ##member = yMember;
   ##format = yformat;
 
-  if (ysqlwhere  <> ' ') or
-     (ysqlorder  <> ' ');
+  if ((ysqlwhere  <> ' ') or
+      (ysqlorder  <> ' '));
     if (accessMode <> SQL_SEQ);
       oldaccmode = accessMode;
     endif;
@@ -2973,11 +2973,11 @@ begsr s_pinrcd;
 
       if (sflCsr > 0);
 
-        if f_chain04(wrk#rcdnbr:
-                  h_file   :
-                  h_lib    :
-                  h_mbr    :
-                  h_rcdfmt ) = '0';
+        if (f_chain04(wrk#rcdnbr:
+                   h_file   :
+                   h_lib    :
+                   h_mbr    :
+                   h_rcdfmt ) = '0');
           exsr pinrecord;
 
         else;
@@ -3830,11 +3830,11 @@ endsr;
 
 begsr copyExtRcd;
 
-  if f_chain04(wrk#rcdnbr:
-            h_file   :
-            h_lib    :
-            h_mbr    :
-            h_rcdfmt ) = '0';
+  if (f_chain04(wrk#rcdnbr:
+             h_file   :
+             h_lib    :
+             h_mbr    :
+             h_rcdfmt ) = '0');
 
     rcdnbr# = cio_getrrn(hfile04);
 
@@ -3918,8 +3918,8 @@ begsr srchstart;
   srchsign = ysign;
 
   //  ... Anpassungen für LIKE/NLIKE ...
-  if srchop = 'LIKE'
-     or srchop = 'NLIKE';
+  if (srchop = 'LIKE'
+      or srchop = 'NLIKE');
     //      ... führendes %-Zeichen
     a1 = %subst(srcharg:1:1);
     if (a1 = set0002.set_wldcd);
@@ -4069,8 +4069,8 @@ begsr srchstrrcd;
   //---------------------------------------*
   //  Cursor im Subfilebereich ...
   //---------------------------------------*
-  if sflCsr <> 0
-     and sflCsr > nbrPinRcd;
+  if (sflCsr <> 0
+      and sflCsr > nbrPinRcd);
 
     //  ... übersetzen in Satznummer
     exsr pbCsrToRcd;
@@ -4311,10 +4311,10 @@ begsr srchcomp_f;
         isfound = bTrue;
       endif;
     else;
-      if (srchargisfloat = bFalse and
-         srchcmpval = srchargval) or
-         (srchargisfloat = bTrue  and
-         srchcmpfloat = srchargfloat);
+      if ((srchargisfloat = bFalse and
+          srchcmpval = srchargval) or
+          (srchargisfloat = bTrue  and
+          srchcmpfloat = srchargfloat));
         isfound = bTrue;
       endif;
     endif;
@@ -4325,10 +4325,10 @@ begsr srchcomp_f;
         isfound = bTrue;
       endif;
     else;
-      if (srchargisfloat = bFalse and
-         srchcmpval <> srchargval) or
-         (srchargisfloat = bTrue  and
-         srchcmpfloat <> srchargfloat);
+      if ((srchargisfloat = bFalse and
+          srchcmpval <> srchargval) or
+          (srchargisfloat = bTrue  and
+          srchcmpfloat <> srchargfloat));
         isfound = bTrue;
       endif;
     endif;
@@ -4339,10 +4339,10 @@ begsr srchcomp_f;
         isfound = bTrue;
       endif;
     else;
-      if (srchargisfloat = bFalse and
-         srchcmpval > srchargval) or
-         (srchargisfloat = bTrue  and
-         srchcmpfloat > srchargfloat);
+      if ((srchargisfloat = bFalse and
+          srchcmpval > srchargval) or
+          (srchargisfloat = bTrue  and
+          srchcmpfloat > srchargfloat));
         isfound = bTrue;
       endif;
     endif;
@@ -4353,10 +4353,10 @@ begsr srchcomp_f;
         isfound = bTrue;
       endif;
     else;
-      if (srchargisfloat = bFalse and
-         srchcmpval < srchargval) or
-         (srchargisfloat = bTrue  and
-         srchcmpfloat < srchargfloat);
+      if ((srchargisfloat = bFalse and
+          srchcmpval < srchargval) or
+          (srchargisfloat = bTrue  and
+          srchcmpfloat < srchargfloat));
         isfound = bTrue;
       endif;
     endif;
@@ -4367,10 +4367,10 @@ begsr srchcomp_f;
         isfound = bTrue;
       endif;
     else;
-      if (srchargisfloat = bFalse and
-         srchcmpval >= srchargval) or
-         (srchargisfloat = bTrue  and
-         srchcmpfloat >= srchargfloat);
+      if ((srchargisfloat = bFalse and
+          srchcmpval >= srchargval) or
+          (srchargisfloat = bTrue  and
+          srchcmpfloat >= srchargfloat));
         isfound = bTrue;
       endif;
     endif;
@@ -4381,16 +4381,16 @@ begsr srchcomp_f;
         isfound = bTrue;
       endif;
     else;
-      if (srchargisfloat = bFalse and
-         srchcmpval <= srchargval) or
-         (srchargisfloat = bTrue  and
-         srchcmpfloat <= srchargfloat);
+      if ((srchargisfloat = bFalse and
+          srchcmpval <= srchargval) or
+          (srchargisfloat = bTrue  and
+          srchcmpfloat <= srchargfloat));
         isfound = bTrue;
       endif;
     endif;
   //  Ähnlich ...
-  when srchop = 'LIKE'
-     or srchop = 'NLIKE';
+  when (srchop = 'LIKE'
+     or srchop = 'NLIKE');
 
     select;
     //  ...   ('%ABCD')
@@ -4472,7 +4472,7 @@ begsr callUpdPgm;
 
   isTryed = bFalse;
 
-  dou *in99 = *off;
+  dou (*in99 = *off);
 
     exsr getPgmName;
     exsr getDspName;
@@ -4692,15 +4692,15 @@ begsr pbReadUp;
         sflrec080 = sflrec080 + 1;
       endif;
 
-      if sflrec132 > 9999
-         or sflrec080 > 9999;
+      if (sflrec132 > 9999
+          or sflrec080 > 9999);
         *in83 = '1';
         exsr pbreadp;
         leave;
       endif;
 
-      if sflrec132 > sflpage
-         or sflrec080 > sflpage;
+      if (sflrec132 > sflpage
+          or sflrec080 > sflpage);
         exsr pbreadp;
         leave;
       endif;
@@ -4917,11 +4917,11 @@ begsr pbPinRcd;
         leave;
       endif;
 
-      if f_chain04(pinTabRcdE.rcdnbr :
-                pinTabRcdE.file   :
-                pinTabRcdE.lib    :
-                pinTabRcdE.mbr    :
-                pinTabRcdE.rcdfmt ) = '1';
+      if (f_chain04(pinTabRcdE.rcdnbr :
+                 pinTabRcdE.file   :
+                 pinTabRcdE.lib    :
+                 pinTabRcdE.mbr    :
+                 pinTabRcdE.rcdfmt ) = '1');
         //           Eintrag austragen
         exsr rmvpinrcd;
         if (ispinrmv = bTrue);
@@ -5441,11 +5441,11 @@ begsr pbReadFld1;
     if (sflmode   = '*HEADLINE');
 
       //      ... für die Überschrift
-      if (columnlen < headlen ) or
-         (columnlen < fieldlen);
+      if ((columnlen < headlen ) or
+          (columnlen < fieldlen));
 
         select;
-        when (headlen + 3) <= columnlen;
+        when ((headlen + 3) <= columnlen);
           %subst(yhexstring: headlen + 1: 3)
           = %subst('...': 1: 3);
         other;
@@ -5458,14 +5458,14 @@ begsr pbReadFld1;
     else;
 
       //      ... für die Datenzeile
-      if (sflmode   <> '*HEADLINE') and
-         (columnlen <  fieldlen   );
+      if ((sflmode   <> '*HEADLINE') and
+          (columnlen <  fieldlen   ));
         if (f_isnumfld(fldl0100) = bTrue);
           //          ... numerische Werte
-          if (set0001.set_enexc = bTrue) and
-             (%subst(yhexstring          :
-                  1                   :
-                  fieldlen - columnlen) <> *blanks);
+          if ((set0001.set_enexc = bTrue) and
+              (%subst(yhexstring          :
+                   1                   :
+                   fieldlen - columnlen) <> *blanks));
             isColumnException = bTrue;
           endif;
           yhexstring = %subst(yhexstring              :
@@ -5473,10 +5473,10 @@ begsr pbReadFld1;
                              columnlen               );
         else;
           //          ... alphanumerische Werte
-          if (set0001.set_enexc = bTrue) and
-             (%subst(yhexstring              :
-                  columnlen + 1           :
-                  1 + fieldlen - columnlen) <> *blanks);
+          if ((set0001.set_enexc = bTrue) and
+              (%subst(yhexstring              :
+                   columnlen + 1           :
+                   1 + fieldlen - columnlen) <> *blanks));
             isColumnException = bTrue;
           endif;
         endif;
@@ -5490,10 +5490,10 @@ begsr pbReadFld1;
 
     if (##wndnbr = f_seq);
 
-      if (##strpage * sfldatalenfree) > columnlen;
+      if ((##strpage * sfldatalenfree) > columnlen);
 
-        if (columnlen / sfldatalenfree) =
-           f_int(columnlen / sfldatalenfree);
+        if ((columnlen / sfldatalenfree) =
+            f_int(columnlen / sfldatalenfree));
           ##strpage = (columnlen / sfldatalenfree);
         else;
           ##strpage = (columnlen / sfldatalenfree) + 1;
@@ -5561,8 +5561,8 @@ begsr pbReadFld1;
       //          ... Pech gehabt
       else;
         if (sflmode = '*HEADLINE');
-          if (f_kseq = 0) or
-             (accessMode = RRN_SEQ);
+          if ((f_kseq = 0) or
+              (accessMode = RRN_SEQ));
             sflDataRow.chars(colrofs) = set0001.set_hedcol;
           else;
             sflDataRow.chars(colrofs) = set0001.set_keycol;
@@ -5896,10 +5896,10 @@ begsr changeFile;
 
   isfilechg = bFalse;
 
-  if l#file <> ##file
-     or l#library <> ##library
-     or l#member <> ##member
-     or l#format <> ##format;
+  if (l#file <> ##file
+      or l#library <> ##library
+      or l#member <> ##member
+      or l#format <> ##format);
 
     isfilechg = bTrue;
     //  ... Änderungen prüfen
@@ -5964,8 +5964,8 @@ endsr;
 
 begsr changekey;
 
-  if ##rcdnbr <> r#rcdnbr
-     or ##key <> r#keyval;
+  if (##rcdnbr <> r#rcdnbr
+      or ##key <> r#keyval);
     iskeychg = bTrue;
   else;
     iskeychg = bFalse;
@@ -6045,11 +6045,11 @@ begsr changesort;
     //    ... Einlesen letzten Datensatz
     recordnbr = last#rcdnr;
 
-    if f_chain04(recordnbr:
-              h_file   :
-              h_lib    :
-              h_mbr    :
-              h_rcdfmt ) = '1';
+    if (f_chain04(recordnbr:
+               h_file   :
+               h_lib    :
+               h_mbr    :
+               h_rcdfmt ) = '1');
     //    ... Zugriff fehlgeschlagen
     else;
       //    ... Generieren Aufsetzkey
@@ -6158,8 +6158,8 @@ begsr openfile;
   exsr getnbrkeyf;
   //      ... wenn keine Schlüsselinformationen
   //          vorhanden sind, ...
-  if iskeyavail = bFalse
-     and accessMode = KEY_SEQ;
+  if (iskeyavail = bFalse
+      and accessMode = KEY_SEQ);
     //          ... dann über RRN zugreifen
     accessMode = RRN_SEQ;
   else;
@@ -6265,7 +6265,7 @@ begsr openfile;
       *in99 = '0';
     endif;
 
-    if (isUpdMod = bTrue) and (auth.isUpdKeyAlw = bTrue);
+    if ((isUpdMod = bTrue) and (auth.isUpdKeyAlw = bTrue));
       isUpdKey = bTrue;
     else;
       isUpdKey = bFalse;
@@ -6321,19 +6321,19 @@ begsr openfile;
     if (accessMode = SQL_SEQ);
       clear usr0013;
       p_sndstsmg('USR0013': usr0013);
-      if sql_preparestatement(
-                 '0'       :
-                 ##file    :
-                 ##library :
-                 ##member  :
-                 ##format  :
-                 sqlWhere  :
-                 sqlOrder  :
-               yMsgID      :
-               yMsgDta     ) = bTrue;
-        if sql_open(hfile03     :
-                 yMsgID      :
-                 yMsgDta     ) = bTrue;
+      if (sql_preparestatement(
+                  '0'       :
+                  ##file    :
+                  ##library :
+                  ##member  :
+                  ##format  :
+                  sqlWhere  :
+                  sqlOrder  :
+                yMsgID      :
+                yMsgDta     ) = bTrue);
+        if (sql_open(hfile03     :
+                  yMsgID      :
+                  yMsgDta     ) = bTrue);
           *in99 = *off;
           yMsgID = '';
           yMsgDta = '';
@@ -6485,12 +6485,12 @@ begsr pbread;
 
   isfileerror = bFalse;
 
-  dou (file#x.rcdfmt = ##format) or (*in99 = *on);
+  dou ((file#x.rcdfmt = ##format) or (*in99 = *on));
 
     select;
     when (accessMode = KEY_SEQ);
-      if cio_read(hfile02: bFalse
-               : io_buff: io_nullmap) = bEOF;
+      if (cio_read(hfile02: bFalse
+                : io_buff: io_nullmap) = bEOF);
         *in99 = *on;
       else;
         *in99 = *off;
@@ -6498,8 +6498,8 @@ begsr pbread;
       exsr f2tofx;
       isfileerror = cio_iserror(hfile02);
     when (accessMode = RRN_SEQ);
-      if cio_read(hfile01: bFalse
-               : io_buff: io_nullmap) = bEOF;
+      if (cio_read(hfile01: bFalse
+                : io_buff: io_nullmap) = bEOF);
         *in99 = *on;
       else;
         *in99 = *off;
@@ -6507,8 +6507,8 @@ begsr pbread;
       exsr f1tofx;
       isfileerror = cio_iserror(hfile01);
     when (accessMode = SQL_SEQ);
-      if sql_nextrow(io_buff: io_nullmap: hfile03:
-                  yMsgID : yMsgDta)  = bEOF;
+      if (sql_nextrow(io_buff: io_nullmap: hfile03:
+                   yMsgID : yMsgDta)  = bEOF);
         *in99 = *on;
         p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
         yMsgID = '';
@@ -6545,28 +6545,28 @@ endsr;
 
 begsr pbreadp;
 
-  dou (file#x.rcdfmt = ##format) or (*in99 = *on);
+  dou ((file#x.rcdfmt = ##format) or (*in99 = *on));
 
     select;
     when (accessMode = KEY_SEQ);
-      if cio_readp(hfile02: bFalse
-                : io_buff: io_nullmap) = bEOF;
+      if (cio_readp(hfile02: bFalse
+                 : io_buff: io_nullmap) = bEOF);
         *in99 = *on;
       else;
         *in99 = *off;
       endif;
       exsr f2tofx;
     when (accessMode = RRN_SEQ);
-      if cio_readp(hfile01: bFalse
-                : io_buff: io_nullmap) = bEOF;
+      if (cio_readp(hfile01: bFalse
+                 : io_buff: io_nullmap) = bEOF);
         *in99 = *on;
       else;
         *in99 = *off;
       endif;
       exsr f1tofx;
     when (accessMode = SQL_SEQ);
-      if sql_previousrow(io_buff: io_nullmap: hfile03:
-                      yMsgID : yMsgDta) = bEOF;
+      if (sql_previousrow(io_buff: io_nullmap: hfile03:
+                       yMsgID : yMsgDta) = bEOF);
         *in99 = *on;
         if (yMsgID <> '');
           p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
@@ -7139,14 +7139,14 @@ begsr getprvseq;
   clear f1key_l1;
   f1key_l1.f_seq = wrk#seqnbr;
   chain %kds(f1key_l1) fpeekfldl1;
-  if not %found();
+  if (not %found());
     wrk#seqnbr = l#minseq;
     leavesr;
   endif;
 
   for do_x10 = 1 to *hival;
     readp fpeekfldl1;
-    if %eof();
+    if (%eof());
       wrk#seqnbr = l#minseq;
       leave;
     endif;
@@ -7198,8 +7198,8 @@ begsr closefile;
       endif;
       exsr f1tofx;
     when (accessMode = SQL_SEQ);
-      if sql_close(hfile03:yMsgID :yMsgDta)
-         = bTrue;
+      if (sql_close(hfile03:yMsgID :yMsgDta)
+          = bTrue);
         *in99 = *off;
         yMsgID = '';
         yMsgDta = '';
@@ -7232,7 +7232,7 @@ begsr closefile;
   if (*in99 = *off);
     isOpen = bFalse;
     //  Löschen Satzaufbau
-    if %open(peekfld);
+    if (%open(peekfld));
       clear f_key;
       f_key.f_field = *blanks;
       setll %kds(f_key) fpeekfld;
@@ -7647,9 +7647,9 @@ endsr;
 
 begsr floatkeys;
 
-  if (set0009.set_float  = bTrue) and
-     ((accessMode = KEY_SEQ) or
-      (accessMode = SQL_SEQ));
+  if ((set0009.set_float  = bTrue) and
+      ((accessMode = KEY_SEQ) or
+       (accessMode = SQL_SEQ)));
 
     monitor;
       peek34(set0001.set_dsp80: COPYRIGHT: '*FLOATKEYS'
@@ -8188,9 +8188,9 @@ dcl-proc f_chain00;
   dcl-s isFound like(bool_t) inz(bFalse);
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  if (cio_getfile(hfile00)    <> i_file ) or
-     (cio_getlibrary(hfile00) <> i_lib  ) or
-     (cio_getmember(hfile00)  <> i_mbr  );
+  if ((cio_getfile(hfile00)    <> i_file ) or
+      (cio_getlibrary(hfile00) <> i_lib  ) or
+      (cio_getmember(hfile00)  <> i_mbr  ));
     if (cio_isopen(hfile00) = bTrue);
       cio_close(hfile00);
     endif;
@@ -8238,11 +8238,11 @@ dcl-proc f_chain00;
   yMsgID = '';
   yMsgDta = '';
 
-  if cio_chainwithrrn(hfile00
-                   : i_rrn
-                   : bTrue
-                   : io_buff
-                   : io_nullmap) = bFalse;
+  if (cio_chainwithrrn(hfile00
+                    : i_rrn
+                    : bTrue
+                    : io_buff
+                    : io_nullmap) = bFalse);
     isFound = bTrue;
   else;
     isFound = bFalse;
@@ -8270,9 +8270,9 @@ dcl-proc f_chain04;
   dcl-s isFound like(bool_t) inz(bFalse);
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  if (cio_getfile(hfile04)    <> i_file ) or
-     (cio_getlibrary(hfile04) <> i_lib  ) or
-     (cio_getmember(hfile04)  <> i_mbr  );
+  if ((cio_getfile(hfile04)    <> i_file ) or
+      (cio_getlibrary(hfile04) <> i_lib  ) or
+      (cio_getmember(hfile04)  <> i_mbr  ));
     if (cio_isopen(hfile04) = bTrue);
       cio_close(hfile04);
     endif;
@@ -8288,11 +8288,11 @@ dcl-proc f_chain04;
                nullcap=Y, riofb=Y, ccsid=65535');
   endif;
 
-  if cio_chainwithrrn(hfile04
-                   : i_rrn
-                   : bFalse
-                   : io_buff
-                   : io_nullmap) = bFalse;
+  if (cio_chainwithrrn(hfile04
+                    : i_rrn
+                    : bFalse
+                    : io_buff
+                    : io_nullmap) = bFalse);
     isFound = bTrue;
   else;
     isFound = bFalse;

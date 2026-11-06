@@ -268,8 +268,8 @@ begsr rpl_fldname;
         endif;
 
         fldname = lf_rtvfldname(r_shortcmd: i);
-        if (fldname <> '') and
-           (lf_loadfldatr(fldname: fldl0100) = bTrue);
+        if ((fldname <> '') and
+            (lf_loadfldatr(fldname: fldl0100) = bTrue));
 
           monitor;
             peek06(fldl0100: 'FLDL0100': io_buff
@@ -333,7 +333,7 @@ begsr rpl_fldname;
     cio_close(hfile00);
   endif;
 
-  if %open(peekfld);
+  if (%open(peekfld));
     close peekfld;
   endif;
 
@@ -347,7 +347,7 @@ begsr rpl_var;
 
   s = 1;
 
-  dou s = 0;
+  dou (s = 0);
 
     s = %scan(r_var: r_shortcmd: s);
     if (s = *zeros);
@@ -385,11 +385,11 @@ endsr;
 
 begsr readrcd;
 
-  if cio_chainwithrrn(hfile00
-                   : i_rcdNbr
-                   : bFalse
-                   : io_buff
-                   : io_nullmap) = bFalse;
+  if (cio_chainwithrrn(hfile00
+                    : i_rcdNbr
+                    : bFalse
+                    : io_buff
+                    : io_nullmap) = bFalse);
     isRecord = bFalse;
   else;
     isRecord = bTrue;

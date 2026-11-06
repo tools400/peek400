@@ -227,9 +227,9 @@ begsr intern;
     ytgtvalue = '*CURRENT';
 
     select;
-    when fldl0100.f1dtyp = 'S' or  // Zoned
+    when (fldl0100.f1dtyp = 'S' or  // Zoned
     fldl0100.f1dtyp = 'B' or    // Binary
-    fldl0100.f1dtyp = 'P';      // Packed
+    fldl0100.f1dtyp = 'P');      // Packed
       y = fldl0100.f1digt;
     when (fldl0100.f1dtyp = 'F');    // Float
       if (fldl0100.f1flen = 4);
@@ -330,8 +330,8 @@ begsr intern;
   // Puffer zu Ende
   else;
     //  Neue Startposition in Wrk_KeyVal
-    if (f_isnumfld(fldl0100) = bTrue) and
-    (f_isfloatfld(fldl0100) = bFalse);
+    if ((f_isnumfld(fldl0100) = bTrue) and
+    (f_isfloatfld(fldl0100) = bFalse));
       // ... bei numerischen Werten
       kp = kp + fldl0100.f1digt;
       // ... wegen nachgestelltem Vorzeichen

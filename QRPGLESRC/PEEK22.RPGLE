@@ -103,14 +103,14 @@ endif;
 
 begsr delrecords;
 
-  if i_mode = '*REPLACE'
-     or i_mode = '*DELETE';
+  if (i_mode = '*REPLACE'
+      or i_mode = '*DELETE');
 
     //  Alle Schlüssel des Bereichs, auch '*ENTER' und die leere
     //  Auswahl, die vor '*F01' sortiert werden.
     p_setllusr(wrk_sectn);
 
-    dow f_readeusr(wrk_sectn: wrk_key)= '0';
+    dow (f_readeusr(wrk_sectn: wrk_key)= '0');
       f_deletusr(wrk_sectn: wrk_key);
     enddo;
 
@@ -128,12 +128,12 @@ endsr;
 
 begsr addrecords;
 
-  if i_mode = '*ADD'
-     or i_mode = '*REPLACE';
+  if (i_mode = '*ADD'
+      or i_mode = '*REPLACE');
 
     p_setlldft(wrk_sectn);
 
-    dow f_readedft(wrk_sectn: wrk_key: wrk_data)='0';
+    dow (f_readedft(wrk_sectn: wrk_key: wrk_data)='0');
       f_writeusr(wrk_sectn :
                 wrk_key   :
                 wrk_data  );

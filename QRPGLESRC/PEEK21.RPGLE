@@ -235,11 +235,11 @@ begsr mapusrinp;
 
   //   Übersetzen ...
   wrk_sectn = '*' + %trim(i_pgm);
-  if f_chainusr(wrk_sectn :
-             wrk_key   :
-             wrk_data  ) = '0'   and
-     f_iskeyexc(wrk_data  :
-             wrk_exclk )= '0';
+  if (f_chainusr(wrk_sectn :
+              wrk_key   :
+              wrk_data  ) = '0'   and
+      f_iskeyexc(wrk_data  :
+              wrk_exclk )= '0');
 
     //   Übersetzen key code nach dem Mapping:
     callexit05(i_pgm: '*EVENT': wrk_data);
@@ -294,8 +294,8 @@ begsr chkentry;
   if (f_readeusr(wrk_sectn: tmp_key) = '1');
     wrk_eof = bTrue;
   else;
-    if tmp_key < '*F01'
-       or tmp_key > '*F24';
+    if (tmp_key < '*F01'
+        or tmp_key > '*F24');
       wrk_eof = bTrue;
     else;
       wrk_eof = bFalse;
@@ -316,7 +316,7 @@ begsr first;
   o_msgid = *blanks;
   o_msgdta = *blanks;
   //   Prüfen auf Ausschlüsse ...
-  if %parms() >= %parmnum(i_exclkeys);
+  if (%parms() >= %parmnum(i_exclkeys));
     wrk_exclk = %subarr(i_exclkeys: 1);
   else;
     wrk_exclk(*) = '';
@@ -341,7 +341,7 @@ begsr inzsr;
   p = %scan('/': exit05);
   if (p > 1);
     qpgm.lib = %subst(exit05: 1: p-1);
-    if p < %len(exit05);
+    if (p < %len(exit05));
       qpgm.name = %subst(exit05: p+1);
       isexit05  = f_exist(qpgm.name
                          : qpgm.lib

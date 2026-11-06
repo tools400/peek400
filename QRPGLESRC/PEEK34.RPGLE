@@ -193,20 +193,20 @@ if (isBatch = bFalse);
 
     //  Anzeigen der Befehlstasten
     select;
-    when (sfbot = 2) and
-       (ynbrofkeys > nbrfkeys * (sfbot - 1));
+    when ((sfbot = 2) and
+       (ynbrofkeys > nbrfkeys * (sfbot - 1)));
       write pbbot#2;
-    when (sfbot = 3) and
-       (ynbrofkeys > nbrfkeys * (sfbot - 1));
+    when ((sfbot = 3) and
+       (ynbrofkeys > nbrfkeys * (sfbot - 1)));
       write pbbot#3;
-    when (sfbot = 4) and
-       (ynbrofkeys > nbrfkeys * (sfbot - 1));
+    when ((sfbot = 4) and
+       (ynbrofkeys > nbrfkeys * (sfbot - 1)));
       write pbbot#4;
-    when (sfbot = 5) and
-       (ynbrofkeys > nbrfkeys * (sfbot - 1));
+    when ((sfbot = 5) and
+       (ynbrofkeys > nbrfkeys * (sfbot - 1)));
       write pbbot#5;
-    when (sfbot = 6) and
-       (ynbrofkeys > nbrfkeys * (sfbot - 1));
+    when ((sfbot = 6) and
+       (ynbrofkeys > nbrfkeys * (sfbot - 1)));
       write pbbot#6;
     other;
       write pbbot#1;
@@ -398,9 +398,9 @@ begsr srchfield;
     //  Feldnamen: Nach einem CHAIN auf die Subfile lieferte READC
     //  Zeilen mit Eingabefehlern (SFLNXTCHG) nicht mehr.
     for srchrec = lstnbrrcd to sflnbrrcd;
-      if lstfield =
-         %subst(sfl_fnmes(srchrec): 1:(f_scan(' ':
-                        lstfield) - 1));
+      if (lstfield =
+          %subst(sfl_fnmes(srchrec): 1:(f_scan(' ':
+                         lstfield) - 1)));
         isfound = bTrue;
         leave;
       endif;
@@ -1066,8 +1066,8 @@ begsr pbfill;
   $$dtyp = fldl0100.f1dtyp;
 
   //  ... Anzahl Dezimalstellen
-  if (f_isnumfld(fldl0100) = bTrue) and
-     (f_isfloatfld(fldl0100) = bFalse);
+  if ((f_isnumfld(fldl0100) = bTrue) and
+      (f_isfloatfld(fldl0100) = bFalse));
     $$digt = fldl0100.f1digt;
     //      ... Anzahl Nachkommastellen
     $$decp = fldl0100.f1decp;

@@ -728,8 +728,8 @@ begsr readselect;
 
         lenofslom = selparmay.qdbfspln - 20;
 
-        if lenofslom >= 1
-           and lenofslom <= 32;
+        if (lenofslom >= 1
+            and lenofslom <= 32);
           r_valu =
            %subst(selparmay.qdbfspvl: 1: lenofslom);
         else;
@@ -802,11 +802,11 @@ begsr findrcdfmt;
   offset = filedefhd.qdbfos;
   counter = filedefhd.qdbflbnum;
 
-  dow counter > 0;
+  dow (counter > 0);
     pFilescpay = %addr(rcvVarTab(offset + 1));
 
-    if filescope.qdbft = i_rcdfmt or
-       i_rcdfmt = '*FIRST';
+    if (filescope.qdbft = i_rcdfmt or
+        i_rcdfmt = '*FIRST');
       //  Record format generic key field count ...
       isfound = bTrue;
       leave;

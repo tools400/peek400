@@ -119,38 +119,38 @@ dow ('1');
 
   //  Anzeigen der Befehlstasten
   select;
-  when (sfbot = 2) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1));
+  when ((sfbot = 2) and
+     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
     write pbbot#2;
-  when (sfbot = 3) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1));
+  when ((sfbot = 3) and
+     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
     write pbbot#3;
-  when (sfbot = 4) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1));
+  when ((sfbot = 4) and
+     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
     write pbbot#4;
-  when (sfbot = 5) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1));
+  when ((sfbot = 5) and
+     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
     write pbbot#5;
-  when (sfbot = 6) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1));
+  when ((sfbot = 6) and
+     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
     write pbbot#6;
-  when (sfbot = 7) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1));
+  when ((sfbot = 7) and
+     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
     write pbbot#7;
-  when (sfbot = 8) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1));
+  when ((sfbot = 8) and
+     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
     write pbbot#8;
-  when (sfbot = 9) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1));
+  when ((sfbot = 9) and
+     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
     write pbbot#9;
-  when (sfbot = 10) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1));
+  when ((sfbot = 10) and
+     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
     write pbbot#10;
-  when (sfbot = 11) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1));
+  when ((sfbot = 11) and
+     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
     write pbbot#11;
-  when (sfbot = 12) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1));
+  when ((sfbot = 12) and
+     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
     write pbbot#12;
   other;
     write pbbot#1;
@@ -186,20 +186,20 @@ dow ('1');
     exsr c_refresh;
     iter;
   //  F9  - Yes
-  when (ypgmcmd = '*YES'   )  and
-     (f_scan('Y': i_keys  ) <> 0);
+  when ((ypgmcmd = '*YES'   )  and
+     (f_scan('Y': i_keys  ) <> 0));
     exsr c_yes;
     leave;
 
   //  F21 - No
-  when (ypgmcmd = '*NO'    ) and
-     (f_scan('N': i_keys  ) <> 0);
+  when ((ypgmcmd = '*NO'    ) and
+     (f_scan('N': i_keys  ) <> 0));
     exsr c_no;
     leave;
 
   //  F12 - Cancel
-  when (ypgmcmd = '*CANCEL') and
-     (f_scan('C': i_keys  ) <> 0);
+  when ((ypgmcmd = '*CANCEL') and
+     (f_scan('C': i_keys  ) <> 0));
     exsr c_cancel;
     leave;
 
@@ -209,8 +209,8 @@ dow ('1');
     iter;
 
   //  Datenfreigabe = OK
-  when (ypgmcmd = '*ENTER' ) and
-     (f_scan('E': i_keys  ) <> 0);
+  when ((ypgmcmd = '*ENTER' ) and
+     (f_scan('E': i_keys  ) <> 0));
     exsr c_enter;
     leave;
 
@@ -398,7 +398,7 @@ begsr fill##;
   //  (in $$fkey: toscreen überträgt es vor jeder Anzeige in die
   //  Bildschirmfelder $$FKEY01 ff.)
   if (nbrofkeys > 1);
-    dou ischanged = bFalse;
+    dou (ischanged = bFalse);
       ischanged = bFalse;
       for x = 2 to nbrofkeys;
         tmpfkey = %subst($$fkey(x-1): 2)+x'00';

@@ -161,8 +161,8 @@ dow ('1');
   endif;
 
   //  Anzeigen der Einzelauswahlen
-  if sftop > 32
-     or sftop > ynbrofch;
+  if (sftop > 32
+      or sftop > ynbrofch);
     sftop = 1;
   endif;
   $$choice = ychoice(sftop);
@@ -171,26 +171,26 @@ dow ('1');
   write pbbot#0;
   //  Anzeigen der Befehlstasten
   select;
-  when (sfbot = 2) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1));
+  when ((sfbot = 2) and
+     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
     write pbbot#2;
-  when (sfbot = 3) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1));
+  when ((sfbot = 3) and
+     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
     write pbbot#3;
-  when (sfbot = 4) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1));
+  when ((sfbot = 4) and
+     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
     write pbbot#4;
-  when (sfbot = 5) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1));
+  when ((sfbot = 5) and
+     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
     write pbbot#5;
-  when (sfbot = 6) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1));
+  when ((sfbot = 6) and
+     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
     write pbbot#6;
-  when (sfbot = 7) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1));
+  when ((sfbot = 7) and
+     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
     write pbbot#7;
-  when (sfbot = 8) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1));
+  when ((sfbot = 8) and
+     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
     write pbbot#8;
   other;
     write pbbot#1;
@@ -377,8 +377,8 @@ begsr srchmbr;
         leave;
       endif;
 
-      if lstfile =
-         %subst(sfl_files(srchrec): 1: %len(%trimr(lstfile)));
+      if (lstfile =
+          %subst(sfl_files(srchrec): 1: %len(%trimr(lstfile))));
         isfound = bTrue;
         leave;
       endif;
@@ -671,10 +671,10 @@ endsr;
 
 begsr pbreadup;
 
-  dow numfiles > 0;
+  dow (numfiles > 0);
     peek70(yqfile: '*READ': numfiles: objl0200);
-    if not (objl0200.o2xatr = 'PF' or
-         objl0200.o2xatr = 'LF');
+    if (not (objl0200.o2xatr = 'PF' or
+          objl0200.o2xatr = 'LF'));
       iter;
     endif;
 

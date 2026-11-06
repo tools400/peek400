@@ -331,11 +331,11 @@ dcl-proc SQL_nextRow export;
         cio_seteof_read(g_hfile03);
       else;
 
-        if cio_chainwithrrn(g_hfile03
-                         : recnbr
-                         : bTrue
-                         : io_buff
-                         : io_nullmap) = bFalse;
+        if (cio_chainwithrrn(g_hfile03
+                          : recnbr
+                          : bTrue
+                          : io_buff
+                          : io_nullmap) = bFalse);
           isdeleted = f_isDeleted(g_hfile03);
           iseof = bTrue;
         else;
@@ -405,11 +405,11 @@ dcl-proc SQL_previousRow export;
         cio_seteof_readp(g_hfile03);
       else;
 
-        if cio_chainwithrrn(g_hfile03
-                         : recnbr
-                         : bTrue
-                         : io_buff
-                         : io_nullmap) = bFalse;
+        if (cio_chainwithrrn(g_hfile03
+                          : recnbr
+                          : bTrue
+                          : io_buff
+                          : io_nullmap) = bFalse);
           isdeleted = f_isDeleted(g_hfile03);
           iseof = bTrue;
         else;

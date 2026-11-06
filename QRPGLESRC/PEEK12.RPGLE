@@ -109,8 +109,8 @@ exsr first;
 dow (isExitPgm = bFalse);
 
   //  Prüfen Positionierung der Subfile
-  if (sfsanr <= 0     )  or
-     (sfsanr >  sflrec);
+  if ((sfsanr <= 0     )  or
+      (sfsanr >  sflrec));
     sfsanr = 1;
   endif;
 
@@ -130,20 +130,20 @@ dow (isExitPgm = bFalse);
   write pbbot#0;
 
   select;
-  when (sfbot = 2) and
-     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
+  when ((sfbot = 2) and
+     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1)));
     write pbbot#2;
-  when (sfbot = 3) and
-     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
+  when ((sfbot = 3) and
+     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1)));
     write pbbot#3;
-  when (sfbot = 4) and
-     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
+  when ((sfbot = 4) and
+     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1)));
     write pbbot#4;
-  when (sfbot = 5) and
-     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
+  when ((sfbot = 5) and
+     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1)));
     write pbbot#5;
-  when (sfbot = 6) and
-     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
+  when ((sfbot = 6) and
+     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1)));
     write pbbot#6;
   other;
     write pbbot#1;
@@ -442,15 +442,15 @@ begsr first;
   o_msgdta = *blanks;
 
   // - Prüfen auf Satzformat
-  if (i_fmtmode = MODE_BATCH) and
-     ((peek_01_ds.nbrOfRcd = 1) or (i_fmtname <> ''));
+  if ((i_fmtmode = MODE_BATCH) and
+      ((peek_01_ds.nbrOfRcd = 1) or (i_fmtname <> '')));
     setll 1 fpeekfmt;
-    dou %eof(peekfmt);
+    dou (%eof(peekfmt));
       read fpeekfmt;
       if (not %eof(peekfmt));
         rcdl0200 = f_fmt;
-        if (rcdl0200.r2fmtname = i_fmtname) or
-           ((peek_01_ds.nbrOfRcd = 1) and (i_fmtname = ''));
+        if ((rcdl0200.r2fmtname = i_fmtname) or
+            ((peek_01_ds.nbrOfRcd = 1) and (i_fmtname = '')));
           o_rcdl0200 = f_fmt;
           o_fmtnbr = f_fmtnbr;
           isExitPgm = bTrue;

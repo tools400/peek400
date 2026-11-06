@@ -243,7 +243,7 @@ dcl-proc openLogger;
   f_execute(cmd);
 
   // Open logger
-  if f_opnPrtLog('Examinee: '+ i_usrDta: cFalse: g_hLogger);   //no scndlvl Tx
+  if (f_opnPrtLog('Examinee: '+ i_usrDta: cFalse: g_hLogger));   //no scndlvl Tx
     log('######## Start of Test ########');
   endif;
 
@@ -577,7 +577,7 @@ dcl-proc main;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   // Do until everything is done or an error occured
-  dou '1';
+  dou ('1');
 
     log('Real:   ' + %char(i_real  ));
     log('Double: ' + %char(i_double));

@@ -197,38 +197,38 @@ begsr dspcmdkeys;
   endif;
 
   select;
-  when (sfbot = 2) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1));
+  when ((sfbot = 2) and
+     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
     write pbbot#2;
-  when (sfbot = 3) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1));
+  when ((sfbot = 3) and
+     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
     write pbbot#3;
-  when (sfbot = 4) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1));
+  when ((sfbot = 4) and
+     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
     write pbbot#4;
-  when (sfbot = 5) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1));
+  when ((sfbot = 5) and
+     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
     write pbbot#5;
-  when (sfbot = 6) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1));
+  when ((sfbot = 6) and
+     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
     write pbbot#6;
-  when (sfbot = 7) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1));
+  when ((sfbot = 7) and
+     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
     write pbbot#7;
-  when (sfbot = 8) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1));
+  when ((sfbot = 8) and
+     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
     write pbbot#8;
-  when (sfbot = 9) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1));
+  when ((sfbot = 9) and
+     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
     write pbbot#9;
-  when (sfbot = 10) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1));
+  when ((sfbot = 10) and
+     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
     write pbbot#10;
-  when (sfbot = 11) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1));
+  when ((sfbot = 11) and
+     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
     write pbbot#11;
-  when (sfbot = 12) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1));
+  when ((sfbot = 12) and
+     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
     write pbbot#12;
   other;
     if (not dogenerate);

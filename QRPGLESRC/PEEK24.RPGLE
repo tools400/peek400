@@ -113,20 +113,20 @@ dow ('1');
 
   //  Anzeigen der Befehlstasten
   select;
-  when (sfbot = 2) and
-     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
+  when ((sfbot = 2) and
+     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1)));
     write pbbot#2;
-  when (sfbot = 3) and
-     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
+  when ((sfbot = 3) and
+     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1)));
     write pbbot#3;
-  when (sfbot = 4) and
-     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
+  when ((sfbot = 4) and
+     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1)));
     write pbbot#4;
-  when (sfbot = 5) and
-     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
+  when ((sfbot = 5) and
+     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1)));
     write pbbot#5;
-  when (sfbot = 6) and
-     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
+  when ((sfbot = 6) and
+     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1)));
     write pbbot#6;
   other;
     write pbbot#1;

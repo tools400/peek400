@@ -517,11 +517,11 @@ begsr v03r00m00;
   //  Umsetzen Datenstruktur "Generieren Programme" (*CRTPGM, SET0012)
   set0012_alt = f_getusrsg('*CRTPGM');
 
-  if (set0012_alt.set_alwlc = '0' or
-     set0012_alt.set_alwlc = '1'   ) and
-     (set0012_alt.set_case  = '0' or
-     set0012_alt.set_case  = '1'   ) and
-     (set0012_alt.set_0012  = x'8B' );
+  if ((set0012_alt.set_alwlc = '0' or
+      set0012_alt.set_alwlc = '1'   ) and
+      (set0012_alt.set_case  = '0' or
+      set0012_alt.set_case  = '1'   ) and
+      (set0012_alt.set_0012  = x'8B' ));
     reset set0012;
     set0012.set_alwlc = set0012_alt.set_alwlc;
     set0012.set_case  = set0012_alt.set_case;

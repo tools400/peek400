@@ -121,7 +121,7 @@ begsr sqlseq;
   x = 1;
   exsr getnextfld;
 
-  dow y > 1;
+  dow (y > 1);
 
     tempstr = %trim(%subst(i_sqlOrder: x: y-x));
     //  Ende des Feldes ...
@@ -205,8 +205,8 @@ begsr getnextfld;
 
     y = %scan(',': i_sqlOrder: x);
 
-    if (y = 0) and
-       (%subst(i_sqlOrder: x) <> ' ');
+    if ((y = 0) and
+        (%subst(i_sqlOrder: x) <> ' '));
       y = %checkr(' ': i_sqlOrder);
       y = y + 1;
     endif;

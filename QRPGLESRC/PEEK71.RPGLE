@@ -588,8 +588,8 @@ dcl-proc performtranslation;
   endif;
 
   p_clrerrno();
-  dou (rc <> ciconv_error) or (f_errno() <> e2big_c or
-       (ismaxsize and bufsize >= i_maxsize));
+  dou ((rc <> ciconv_error) or (f_errno() <> e2big_c or
+        (ismaxsize and bufsize >= i_maxsize)));
 
     if (f_errno() = e2big_c);
       if (ismaxsize and bufsize >= i_maxsize);

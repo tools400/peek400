@@ -514,7 +514,7 @@ dcl-proc CIO_chainWithKey export;
   priofb = rreadk(io_hfile.fd
                   : %addr(io_rcdbuffer): %size(io_rcdbuffer)
                   : options: %addr(key): keylen);
-  if (riofb.numbyt <> rfile.buflen) or (riofb.numbyt = eof);
+  if ((riofb.numbyt <> rfile.buflen) or (riofb.numbyt = eof));
     io_hfile.errno = f_errno();
     return bFalse;
   endif;
@@ -726,7 +726,7 @@ dcl-proc CIO_setgtWithKey export;
   options = f_bitor(key_gt: prior: data_only);
 
   priofb = rlocate(io_hfile.fd: %addr(key): keylen: options);
-  if (riofb.numbyt = 0) or (riofb.numbyt = eof);
+  if ((riofb.numbyt = 0) or (riofb.numbyt = eof));
     options = f_bitor(end: data_only);
     priofb = rlocate(io_hfile.fd: %addr(key): keylen: options);
   endif;
@@ -775,8 +775,8 @@ dcl-proc CIO_read export;
     options = no_lock;
   endif;
 
-  if (io_hfile.lastoper = OPER_SETLL_RRN) or
-     (io_hfile.lastoper = OPER_SETGT_RRN);
+  if ((io_hfile.lastoper = OPER_SETLL_RRN) or
+      (io_hfile.lastoper = OPER_SETGT_RRN));
     //?(io_hFile.lastOper = cOPER_SETLL_KEY) or
     //?(io_hFile.lastOper = cOPER_SETGT_KEY);
     function = '_Rreads';
@@ -850,8 +850,8 @@ dcl-proc CIO_readp export;
     options = no_lock;
   endif;
 
-  if (io_hfile.lastoper = OPER_SETLL_RRN) or
-     (io_hfile.lastoper = OPER_SETGT_RRN);
+  if ((io_hfile.lastoper = OPER_SETLL_RRN) or
+      (io_hfile.lastoper = OPER_SETGT_RRN));
     //?(io_hFile.lastOper = cOPER_SETLL_KEY) or
     //?(io_hFile.lastOper = cOPER_SETGT_KEY);
     function = '_Rreads';

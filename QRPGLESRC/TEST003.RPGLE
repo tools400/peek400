@@ -251,7 +251,7 @@ dcl-proc openLogger;
   f_execute(cmd);
 
   // Open logger
-  if f_opnPrtLog('Examinee: '+ i_usrDta: cFalse: g_hLogger);   //no scndlvl Tx
+  if (f_opnPrtLog('Examinee: '+ i_usrDta: cFalse: g_hLogger));   //no scndlvl Tx
     log('######## Start of Test ########');
   endif;
 
@@ -582,7 +582,7 @@ dcl-proc main;
 
   open TEST003FM;
 
-  dow '1';
+  dow ('1');
 
     open MARKTSTAMM;
     read(N) FMARKT;

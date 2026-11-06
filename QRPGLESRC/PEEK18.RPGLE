@@ -233,8 +233,8 @@ begsr toIntern;
     r_tgtvalue = i_tgtvalue;
   else;
     //  Descending key ...
-    if i_tgtvalue = '*HIVAL'
-       or i_tgtvalue = '*LOVAL';
+    if (i_tgtvalue = '*HIVAL'
+        or i_tgtvalue = '*LOVAL');
       //  ... *HIVAL ==> *LOVAL und umgekehrt
       if (i_tgtvalue = '*HIVAL');
         r_tgtvalue = '*LOVAL';

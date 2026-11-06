@@ -156,20 +156,20 @@ dow ('1');
 
   //  Anzeigen der Befehlstasten
   select;
-  when (sfbot = 2) and
-     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
+  when ((sfbot = 2) and
+     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1)));
     write pbbot#2;
-  when (sfbot = 3) and
-     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
+  when ((sfbot = 3) and
+     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1)));
     write pbbot#3;
-  when (sfbot = 4) and
-     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
+  when ((sfbot = 4) and
+     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1)));
     write pbbot#4;
-  when (sfbot = 5) and
-     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
+  when ((sfbot = 5) and
+     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1)));
     write pbbot#5;
-  when (sfbot = 6) and
-     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1));
+  when ((sfbot = 6) and
+     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1)));
     write pbbot#6;
   other;
     write pbbot#1;
@@ -398,14 +398,14 @@ begsr prf20;
         fldl0100 = f_ffd;
       endif;
 
-      if fldl0100.f1dtyp <> 'A' and    // alpha-num
-         // FLDL0100.F1DTyp <> 'G' and // graphic
-         fldl0100.f1dtyp <> 'S' and    // Zoned
-         fldl0100.f1dtyp <> 'B' and    // Binary
-         fldl0100.f1dtyp <> 'P' and    // Packed
-         fldl0100.f1dtyp <> 'T' and    // Time
-         fldl0100.f1dtyp <> 'L' and    // Date
-         fldl0100.f1dtyp <> 'F';       // Float
+      if (fldl0100.f1dtyp <> 'A' and    // alpha-num
+          // FLDL0100.F1DTyp <> 'G' and // graphic
+          fldl0100.f1dtyp <> 'S' and    // Zoned
+          fldl0100.f1dtyp <> 'B' and    // Binary
+          fldl0100.f1dtyp <> 'P' and    // Packed
+          fldl0100.f1dtyp <> 'T' and    // Time
+          fldl0100.f1dtyp <> 'L' and    // Date
+          fldl0100.f1dtyp <> 'F');       // Float
         *in99 = '1';
         clear usr8129;
         usr8129.var1 = ##field;
@@ -433,14 +433,14 @@ begsr prf21;
 
   dou ('1');
 
-    if ##op <> 'EQ'
-       and ##op <> 'NE'
-       and ##op <> 'LT'
-       and ##op <> 'GT'
-       and ##op <> 'LE'
-       and ##op <> 'GE'
-       and ##op <> 'LIKE'
-       and ##op <> 'NLIKE';
+    if (##op <> 'EQ'
+        and ##op <> 'NE'
+        and ##op <> 'LT'
+        and ##op <> 'GT'
+        and ##op <> 'LE'
+        and ##op <> 'GE'
+        and ##op <> 'LIKE'
+        and ##op <> 'NLIKE');
       *in99 = '1';
       clear usr8124;
       usr8124.var1 = ##op;
@@ -449,14 +449,14 @@ begsr prf21;
     endif;
 
     if (##field <> '*RECORD');
-      if ##op = 'LIKE'
-         or ##op = 'NLIKE';
+      if (##op = 'LIKE'
+          or ##op = 'NLIKE');
         //*   F1DTyp        IFNE      'A'  // alpha-num
         //*   F1DTyp        ANDNE     'L'  // Date
         //*   F1DTyp        ANDNE     'T'  // Time
-        if fldl0100.f1dtyp <> 'A' and      // alpha-num
-           fldl0100.f1dtyp <> 'L' and      // Date
-           fldl0100.f1dtyp <> 'T';         // Time
+        if (fldl0100.f1dtyp <> 'A' and      // alpha-num
+            fldl0100.f1dtyp <> 'L' and      // Date
+            fldl0100.f1dtyp <> 'T');         // Time
           *in99 = '1';
           clear usr8135;
           usr8135.var1 = ##op;
@@ -467,9 +467,9 @@ begsr prf21;
       endif;
     endif;
 
-    if ##field = '*RECORD'
-       and ##op <> 'LIKE'
-       and ##op <> 'NLIKE';
+    if (##field = '*RECORD'
+        and ##op <> 'LIKE'
+        and ##op <> 'NLIKE');
       *in99 = '1';
       clear usr8134;
       usr8134.var1 = ##op;    // Operation
@@ -509,13 +509,13 @@ begsr prf22;
 
     select;
     //  Umsetzen des Sonderwertes "*BLANKS" ...
-    when r_arg30 = '*BLANKS'
-       or r_arg30 = '*BLANK';
+    when (r_arg30 = '*BLANKS'
+       or r_arg30 = '*BLANK');
       r_arg30 = *blanks;
 
     //  Umsetzen des Sonderwertes "*ZEROS" ...
-    when r_arg30 = '*ZEROS'
-       or r_arg30 = '*ZERO';
+    when (r_arg30 = '*ZEROS'
+       or r_arg30 = '*ZERO');
       r_arg30 = *zeros;
     other;
       //  ... aktuellen Wert belassen
@@ -600,8 +600,8 @@ begsr signleft;
     r_sign = %subst(r_arg30: x: 1);
     //   Wenn das extrahierte Zeichen dem '+' oder '-'
     //   Zeichen entspricht, dann die Umsetzung vornehmen ...
-    if r_sign = set0003.set_signm
-       or r_sign = set0003.set_signp;
+    if (r_sign = set0003.set_signm
+        or r_sign = set0003.set_signp);
       ##sign = r_sign;
       x = x + 1;
       if (x <= 30);
@@ -634,8 +634,8 @@ begsr signright;
     r_sign = %subst(r_arg30: x: 1);
     //   Wenn das extrahierte Zeichen dem '+' oder '-'
     //   Zeichen entspricht, dann die Umsetzung vornehmen ...
-    if r_sign = set0003.set_signm
-       or r_sign = set0003.set_signp;
+    if (r_sign = set0003.set_signm
+        or r_sign = set0003.set_signp);
       ##sign = r_sign;
       x = x - 1;
       if (x > *zeros);
@@ -742,10 +742,10 @@ begsr prf24;
 
   dou ('1');
 
-    if ##type <> 'N'
-       and ##type <> 'R'
-       and ##type <> 'U'
-       and ##type <> 'P';
+    if (##type <> 'N'
+        and ##type <> 'R'
+        and ##type <> 'U'
+        and ##type <> 'P');
       *in99 = '1';
       clear usr8126;
       usr8126.var1 = ##type;
@@ -770,8 +770,8 @@ begsr prf25;
 
   dou ('1');
 
-    if ##case <> bTrue
-       and ##case <> bFalse;
+    if (##case <> bTrue
+        and ##case <> bFalse);
       *in99 = '1';
       p_sndpgmmg('USR8133': '': sds.pgmname);
       leave;
@@ -816,8 +816,8 @@ endsr;
 begsr c_prompt;
 
   select;
-  when scnfld = '##FIELD'
-     or ##field = set0008.set_prmt;
+  when (scnfld = '##FIELD'
+     or ##field = set0008.set_prmt);
     exsr pmt_field;
   other;
     p_sndpgmmg('USR8179': '': sds.pgmname);
@@ -873,8 +873,8 @@ endsr;
 begsr fill##;
 
   //  Wenn die Datei oder das Member gewechselt hat,
-  if i_qfile <> r_qfile
-     or i_member <> r_member;
+  if (i_qfile <> r_qfile
+      or i_member <> r_member);
     //  ... dann die Bildschirmfelder neu
     //      initialisieren.
     exsr initfield;

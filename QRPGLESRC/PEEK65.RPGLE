@@ -211,13 +211,13 @@ begsr pbreadup;
 
       exsr pbseite;
 
-      if y <= %len(r$text);
+      if (y <= %len(r$text));
         $$text = %subst(r$text : y: %len($$text));
       else;
         $$text = '';
       endif;
 
-      if x <= %len(ystring);
+      if (x <= %len(ystring));
         $$data = %subst(ystring: x: %len($$data));
       else;
         $$data = '';
@@ -282,8 +282,8 @@ begsr pbfill;
 
     if (*in99 = *off);
 
-      if f_ischarfld(fldl0100) = bTrue and
-         ystrlen < %len(ystring) - 2;
+      if (f_ischarfld(fldl0100) = bTrue and
+          ystrlen < %len(ystring) - 2);
         %subst(ystring: ystrlen+1: 1) = cquote;
         ystrlen = ystrlen + 1;
         %subst(ystring: 2) = ystring;

@@ -601,7 +601,7 @@ dcl-proc loadSQLOrderBy;
     setll %kds(en_key4: 4) fpeekenv;
   endif;
 
-  dow strpos <= maxLenSql;
+  dow (strpos <= maxLenSql);
 
     if (i_lib = '*NONE');
       reade %kds(en_key4: 3) fpeekenv;

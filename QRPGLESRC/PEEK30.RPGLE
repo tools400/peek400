@@ -599,7 +599,7 @@ begsr hextodec;
     exp = x - y;
     if (exp > *zeros);
       //      ... Exponenten größer 0
-      dou exp = *zeros;
+      dou (exp = *zeros);
         zw1 = zw1 * 16;
         exp = exp - 1;
       enddo;
