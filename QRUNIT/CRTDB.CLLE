@@ -27,6 +27,8 @@
              DLTF       FILE(&LIB/HORDER)
              DLTF       FILE(&LIB/HCUSTOMER)
 
+             DLTF       FILE(&LIB/ALLTYPES)
+
              STRPREPRC  USESRCFILE(&LIB/QRUNIT) USESRCMBR(CUSTOMER) +
                           LIB(&LIB) OBJ(*DFT) SRCLIB(*DFT) +
                           SRCFILE(*DFT) SRCMBR(*DFT)
@@ -73,6 +75,11 @@
 
     /* Create a multi-member logical file */
              STRPREPRC  USESRCFILE(&LIB/QRUNIT) USESRCMBR(HORDER1) +
+                          LIB(&LIB) OBJ(*DFT) SRCLIB(*DFT) +
+                          SRCFILE(*DFT) SRCMBR(*DFT)
+
+    /* Create a table with all field types */
+             STRPREPRC  USESRCFILE(&LIB/QRUNIT) USESRCMBR(ALLTYPES) +
                           LIB(&LIB) OBJ(*DFT) SRCLIB(*DFT) +
                           SRCFILE(*DFT) SRCMBR(*DFT)
 

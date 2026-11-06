@@ -74,3 +74,60 @@ INSERT INTO ITEM (ORDNBR,ITMSQN,ITMNBR,PRICE,QTYORD)
 INSERT INTO ITEM (ORDNBR,ITMSQN,ITMNBR,PRICE,QTYORD)
   VALUES (1 , 20 ,'100101', 5.10 , 3);
 
+/* ALLTYPES: */
+/* Characters outside of ASCII are given as UTF-16 (UX'...'), so that   */
+/* this script does not depend on the CCSID of the source file.          */
+
+/* 1: Only the key, all NULL-capable fields are NULL. */
+INSERT INTO ALLTYPES (ID) VALUES (1);
+
+/* 2: All fields with typical values. */
+INSERT INTO ALLTYPES (ID, BOOL, BOOL_NN, ALPHA, VARALPHA, NOT_NULL,
+                      UTF8, VARUTF8, "SMALLINT", "INTEGER", "BIGINT",
+                      PACKED, ZONED, REAL, "DOUBLE",
+                      "DATE", "TIME", "TIMESTAMP", TS12,
+                      UCS2_NN, UCS2, VARUCS2_NN, VARUCS2,
+                      UTF16_NN, UTF16, VARUTF16_N, VARUTF16, LONG_CHAR)
+  VALUES (2, TRUE, FALSE, 'Alpha', 'Varchar', 'Not null',
+          'UTF-8', 'Varchar UTF-8', 12345, 1234567890,
+          1234567890123456789,
+          123456789.12, -123456789.12, 1.5E-5, -1.234567890123E+100,
+          '2026-11-06', '20:35:00', '2026-11-06-20.35.00.123456',
+          '2026-11-06-20.35.00.123456789012',
+          'UCS-2 not null', 'UCS-2', 'Vargraphic UCS-2 not null',
+          'Vargraphic UCS-2',
+          'UTF-16 not null', 'UTF-16', 'Vargraphic UTF-16 not null',
+          'Vargraphic UTF-16',
+          'Start of the long field' || REPEAT(' ', 1001) ||
+          'Behind position 1024' || REPEAT(' ', 935) ||
+          'End of the field');
+
+/* 3: Umlauts, characters that the job CCSID cannot display (Chinese,  */
+/*    emoji in UTF-16), empty fields of variable length and the lowest  */
+/*    values.                                                           */
+INSERT INTO ALLTYPES (ID, BOOL, BOOL_NN, ALPHA, VARALPHA, NOT_NULL,
+                      UTF8, VARUTF8, "SMALLINT", "INTEGER", "BIGINT",
+                      PACKED, ZONED, REAL, "DOUBLE",
+                      "DATE", "TIME", "TIMESTAMP", TS12,
+                      UCS2_NN, UCS2, VARUCS2_NN, VARUCS2,
+                      UTF16_NN, UTF16, VARUTF16_N, VARUTF16, LONG_CHAR)
+  VALUES (3, FALSE, TRUE,
+          /* Umlauts A, O, U, a, o, u and sharp s */
+          UX'00C400D600DC00E400F600FC00DF',
+          '', '',
+          /* 'Gruesse' with u umlaut and sharp s, two Chinese characters */
+          UX'0047007200FC00DF006500206C495B57',
+          '',
+          -32768, -2147483648, -9223372036854775808,
+          -999999999.99, 0, 0, 0,
+          '0001-01-01', '00:00:00', '0001-01-01-00.00.00.000000',
+          '0001-01-01-00.00.00.000000000000',
+          /* Umlauts A, O, U and two Chinese characters */
+          UX'00C400D600DC00206C495B57', UX'00C400D600DC00206C495B57',
+          '', '',
+          /* Umlauts A, O, U, two Chinese characters and an emoji */
+          UX'00C400D600DC00206C495B570020D83DDE00',
+          UX'00C400D600DC00206C495B570020D83DDE00',
+          '', '',
+          '');
+
