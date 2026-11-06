@@ -777,9 +777,9 @@ begsr fill##2;
       (isjobccsid = bFalse or i_isUcs2 <> 0));
     monitor;
       hTranscoder =
-       transcoder_toJobCcsid(fldl0100.f1fdcc);
+       Transcoder_toJobCcsid(fldl0100.f1fdcc);
       pTmpNewLen =
-       transcoder_xlateBuffer(hTranscoder
+       Transcoder_xlateBuffer(hTranscoder
                               : %addr(pTmpHexBin)
                               : pTmpHexLen
                               : %size(pTmpHexBin));

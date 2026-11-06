@@ -277,9 +277,9 @@ begsr w_fldl0100;
     if (f_hasCcsid(fldl0100) = bTrue and
         i_cvtCcsid = bTrue);
       hTranscoder =
-       transcoder_toJobCcsid(fldl0100.f1fdcc);
+       Transcoder_toJobCcsid(fldl0100.f1fdcc);
       o_strLen =
-        transcoder_xlateBuffer(hTranscoder
+        Transcoder_xlateBuffer(hTranscoder
                                : %addr(o_string)
                                : tempStrLen
                                : %size(o_string));

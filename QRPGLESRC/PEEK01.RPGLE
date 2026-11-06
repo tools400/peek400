@@ -122,8 +122,8 @@ for do_x1 = 1 to numFields;
       //  GRAPHIC mit CCSID 835. Die Feldliste wird trotzdem erstellt;
       //  PEEK06 zeigt das Feld dann leer an.
       monitor;
-        transcoder_toJobCcsid(fldl0100.f1fdcc);
-        transcoder_toFieldCcsid(fldl0100.f1fdcc);
+        Transcoder_toJobCcsid(fldl0100.f1fdcc);
+        Transcoder_toFieldCcsid(fldl0100.f1fdcc);
         f_isTransc = bTrue;
       on-error;
         f_isTransc = bFalse;

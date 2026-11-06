@@ -156,15 +156,15 @@ dcl-proc tearDown export;
   dcl-s msgID like(msgId_t);
   dcl-s msgDta like(msgDta_t);
 
-  if (cio_isOpen(g_hfile) = bTrue);
-    cio_close(g_hfile);
+  if (CIO_isOpen(g_hfile) = bTrue);
+    CIO_close(g_hfile);
   endif;
   clear g_hfile;
 
   //  SQL-Cursor von PEEK51 schließen. sql_close liefert einen Fehler,
   //  wenn kein Cursor offen ist.
   monitor;
-    sql_close(hFile: msgID: msgDta);
+    SQL_close(hFile: msgID: msgDta);
   on-error;
   endmon;
 end-proc;
@@ -175,17 +175,17 @@ end-proc;
 // ==========================================================================
 
 dcl-proc test01_sqlQuote_singleField export;
-  aEqual('"CUSTNO"': sql_quote('CUSTNO'));
+  aEqual('"CUSTNO"': SQL_quote('CUSTNO'));
 end-proc;
 
 dcl-proc test02_sqlQuote_fieldList export;
-  aEqual('"A", "B"': sql_quote('A, B'));
+  aEqual('"A", "B"': SQL_quote('A, B'));
 end-proc;
 
 dcl-proc test03_sqlQuote_prepareOrderBy export;
   dcl-s order varchar(512);
 
-  order = sql_quote('KEY');
+  order = SQL_quote('KEY');
   assert(prepare(bTrue: TST_FILE: TST_FMT: '': order)
          : 'PREPARE mit ORDER BY ' + order + ' fehlgeschlagen: ' + g_lastMsg);
 end-proc;
@@ -245,7 +245,7 @@ dcl-proc test07_transcoderNew_invalidCcsid export;
   dcl-ds msg likeds(rtnMsgInfo_t);
 
   monitor;
-    hTranscoder = transcoder_new(37: 99999);
+    hTranscoder = Transcoder_new(37: 99999);
   on-error;
     //  Erwartet: Escape-Nachricht
     msg = getMonitoredMessage(*on);
@@ -257,7 +257,7 @@ dcl-proc test07_transcoderNew_invalidCcsid export;
   endmon;
 
   monitor;
-    length = transcoder_xlateBuffer(hTranscoder: %addr(buffer): 3
+    length = Transcoder_xlateBuffer(hTranscoder: %addr(buffer): 3
                                     : %size(buffer));
     result = 'transcoder_xlateBuffer liefert ' + %char(length);
   on-error;
@@ -269,7 +269,7 @@ dcl-proc test07_transcoderNew_invalidCcsid export;
 end-proc;
 
 // ==========================================================================
-//  transcoder_xlateBuffer(): eine Escape-Nachricht senden, wenn die
+//  Transcoder_xlateBuffer(): eine Escape-Nachricht senden, wenn die
 //  Umsetzung scheitert, weil die Aufrufer (PEEK06, PEEK18, PEEK45) den
 //  Rückgabewert -1 nicht prüfen.
 // ==========================================================================
@@ -281,10 +281,10 @@ dcl-proc test08_transcoderXlateBuffer_bufferTooSmall export;
   dcl-ds msg likeds(rtnMsgInfo_t);
 
   //  'ABC' braucht in UTF-16 sechs Bytes, der Puffer hat nur drei.
-  hTranscoder = transcoder_new(1200: 37);
+  hTranscoder = Transcoder_new(1200: 37);
 
   monitor;
-    length = transcoder_xlateBuffer(hTranscoder: %addr(buffer)
+    length = Transcoder_xlateBuffer(hTranscoder: %addr(buffer)
                                     : %size(buffer): %size(buffer));
   on-error;
     //  Erwartet: Escape-Nachricht
@@ -302,7 +302,7 @@ dcl-proc test08_transcoderXlateBuffer_bufferTooSmall export;
 end-proc;
 
 // ==========================================================================
-//  cio_setllWithKey() und cio_setgtWithKey(): Positionieren wie SETLL
+//  CIO_setllWithKey() und CIO_setgtWithKey(): Positionieren wie SETLL
 //  und SETGT in RPG, auch vor dem ersten und hinter dem letzten Satz.
 //  Testdaten: B, D, F
 // ==========================================================================
@@ -355,19 +355,19 @@ end-proc;
 dcl-proc test19_cioClose_afterFailedOpen export;
   dcl-ds hFile likeds(hFile_t);
 
-  assert(not cio_open(hFile: 'NOTEXIST': TST_LIB: 'NOTEXIST': '': MODE_RR)
+  assert(not CIO_open(hFile: 'NOTEXIST': TST_LIB: 'NOTEXIST': '': MODE_RR)
          : 'Vorbedingung: CIO_open einer nicht vorhandenen Datei war '
          + 'erfolgreich');
 
   monitor;
-    cio_close(hFile);
+    CIO_close(hFile);
   on-error;
     fail('CIO_close nach gescheitertem CIO_open bricht ab: ' + lastMsg());
   endmon;
 end-proc;
 
 // ==========================================================================
-//  sql_prepareStatement(): Eine Prüfung (i_check = '1') ändert den
+//  SQL_prepareStatement(): Eine Prüfung (i_check = '1') ändert den
 //  Zustand des offenen Cursors nicht.
 // ==========================================================================
 
@@ -378,14 +378,14 @@ dcl-proc test20_sqlPrepare_checkKeepsCursor export;
 
   assert(prepare(bFalse: TST_FILE: TST_FMT: '': '')
          : 'Vorbedingung: PREPARE fehlgeschlagen: ' + g_lastMsg);
-  assert(sql_open(hFile: msgID: msgDta)
+  assert(SQL_open(hFile: msgID: msgDta)
          : 'Vorbedingung: SQL_open fehlgeschlagen: ' + msgText(msgID: msgDta));
 
   //  Prüfung einer anderen Datei, wie in PEEK48
   assert(prepare(bTrue: TST_FILE2: TST_FMT: '': '')
          : 'Vorbedingung: Prüfung von PEEKTST2 fehlgeschlagen: ' + g_lastMsg);
 
-  iEqual(3: sql_count()
+  iEqual(3: SQL_count()
          : 'SQL_count des offenen Cursors nach Prüfung von PEEKTST2');
 end-proc;
 
@@ -399,12 +399,12 @@ dcl-proc test21_sqlOpen_afterFailedCheck export;
   assert(not prepare(bTrue: TST_FILE: TST_FMT: 'NOCOL = 1': '')
          : 'Vorbedingung: Prüfung mit unbekannter Spalte war erfolgreich');
 
-  assert(sql_open(hFile: msgID: msgDta)
+  assert(SQL_open(hFile: msgID: msgDta)
          : 'SQL_open nach gescheiterter Prüfung: ' + msgText(msgID: msgDta));
 end-proc;
 
 // ==========================================================================
-//  sql_nextRow(): Sätze überlesen, die nach dem Öffnen des Cursors
+//  SQL_nextRow(): Sätze überlesen, die nach dem Öffnen des Cursors
 //  gelöscht wurden.
 // ==========================================================================
 
@@ -419,16 +419,16 @@ dcl-proc test22_sqlNextRow_deletedRow export;
   //  ORDER BY TEXT erzwingt eine Sortierung (kein Zugriffspfad)
   assert(prepare(bFalse: TST_FILE: TST_FMT: '': '"TEXT" DESC')
          : 'Vorbedingung: PREPARE fehlgeschlagen: ' + g_lastMsg);
-  assert(sql_open(hFile: msgID: msgDta)
+  assert(SQL_open(hFile: msgID: msgDta)
          : 'Vorbedingung: SQL_open fehlgeschlagen: ' + msgText(msgID: msgDta));
 
-  isEOF = sql_nextRow(buffer: nullMap: hFile: msgID: msgDta);
+  isEOF = SQL_nextRow(buffer: nullMap: hFile: msgID: msgDta);
   assert(not isEOF: 'Vorbedingung: erster FETCH liefert EOF');
   aEqual('F': %trimr(%subst(buffer: 1: 10)): 'Vorbedingung: erster Satz');
 
   runSql('DELETE FROM QTEMP/PEEKTSTPF WHERE KEY = ''D''');
 
-  isEOF = sql_nextRow(buffer: nullMap: hFile: msgID: msgDta);
+  isEOF = SQL_nextRow(buffer: nullMap: hFile: msgID: msgDta);
   assert(not isEOF: 'SQL_nextRow meldet nach dem gelöschten Satz D das '
                     + 'Dateiende (' + msgText(msgID: msgDta) + ')');
   aEqual('B': %trimr(%subst(buffer: 1: 10)): 'Satz nach dem gelöschten Satz D');
@@ -488,11 +488,11 @@ end-proc;
 dcl-proc test28_sqlCount_afterFetchError export;
   assert(prepare(bFalse: TST_FILE: TST_FMT: '1/(SEQ-2) > 0': '')
          : 'Vorbedingung: PREPARE fehlgeschlagen: ' + g_lastMsg);
-  iEqual(-1: sql_count(): 'Vorbedingung: SQL_count mit Division durch 0');
+  iEqual(-1: SQL_count(): 'Vorbedingung: SQL_count mit Division durch 0');
 
   assert(prepare(bFalse: TST_FILE: TST_FMT: '': '')
          : 'PREPARE nach dem Fehler in SQL_count: ' + g_lastMsg);
-  iEqual(3: sql_count(): 'SQL_count nach dem Fehler in SQL_count');
+  iEqual(3: SQL_count(): 'SQL_count nach dem Fehler in SQL_count');
 end-proc;
 
 // ==========================================================================
@@ -512,21 +512,21 @@ dcl-proc positionAndRead;
   dcl-s nullMap like(nullMap_t) dim(NULL_MAP_SIZE);
   dcl-s isEOF like(bool_t);
 
-  if (not cio_isOpen(g_hfile));
-    assert(cio_open(g_hfile: TST_INDEX: TST_LIB: TST_INDEX: '': MODE_RR)
+  if (not CIO_isOpen(g_hfile));
+    assert(CIO_open(g_hfile: TST_INDEX: TST_LIB: TST_INDEX: '': MODE_RR)
            : 'Vorbedingung: CIO_open fehlgeschlagen');
   endif;
 
   if (i_operation = 'SETLL');
-    cio_setllWithKey(g_hfile: i_key);
+    CIO_setllWithKey(g_hfile: i_key);
   else;
-    cio_setgtWithKey(g_hfile: i_key);
+    CIO_setgtWithKey(g_hfile: i_key);
   endif;
 
   if (i_readPrv);
-    isEOF = cio_readp(g_hfile: bFalse: buffer: nullMap);
+    isEOF = CIO_readp(g_hfile: bFalse: buffer: nullMap);
   else;
-    isEOF = cio_read(g_hfile: bFalse: buffer: nullMap);
+    isEOF = CIO_read(g_hfile: bFalse: buffer: nullMap);
   endif;
 
   if (isEOF);
@@ -551,7 +551,7 @@ dcl-proc prepare;
   dcl-s msgID like(msgId_t);
   dcl-s msgDta like(msgDta_t);
 
-  isOK = sql_prepareStatement(i_check: i_file: TST_LIB: i_file: i_fmt
+  isOK = SQL_prepareStatement(i_check: i_file: TST_LIB: i_file: i_fmt
                               : i_where: i_order: msgID: msgDta);
   if (not isOK);
     g_lastMsg = msgText(msgID: msgDta);

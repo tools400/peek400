@@ -327,7 +327,7 @@ enddo;
 close peek14fm;
 close peekFld;
 close peekfldl0;
-cio_close(hFile04);
+CIO_close(hFile04);
 
 return;
 
@@ -508,8 +508,8 @@ begsr fromBuffer;
     if (editor = '*STRING' and yIsUcs2 = 0 and
         f_hasCcsid(fldl0100) = bTrue);
       monitor;
-        hTranscoder = transcoder_toJobCcsid(fldl0100.f1fdcc);
-        cvtlength = transcoder_xlateBuffer(hTranscoder
+        hTranscoder = Transcoder_toJobCcsid(fldl0100.f1fdcc);
+        cvtlength = Transcoder_xlateBuffer(hTranscoder
                                           : %addr(yFldInhalt)
                                           : yLength
                                           : %size(yFldInhalt));
@@ -931,8 +931,8 @@ begsr readRcd;
   endif;
 
   isRecord = bFalse;
-  if (cio_isOpen(hFile04) = bTrue);
-    if (cio_chainWithRRN(hFile04
+  if (CIO_isOpen(hFile04) = bTrue);
+    if (CIO_chainWithRRN(hFile04
                       : i_rcdNbr
                       : bFalse
                       : io_buff
@@ -965,7 +965,7 @@ begsr first;
   open peek14fm;
   open peekFld;
   open peekfldl0;
-  cio_open(hFile04
+  CIO_open(hFile04
           : i_file
           : i_lib
           : i_mbr

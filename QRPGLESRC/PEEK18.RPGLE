@@ -1386,9 +1386,9 @@ dcl-proc cvtToJobCcsid;
   //  Nicht umsetzbare CCSID (z.B. GRAPHIC 835): Puffer unverändert
   //  lassen statt abzubrechen (PEEK71 sendet CPF9897)
   monitor;
-    hTranscoder = transcoder_toJobCcsid(i_ccsid);
+    hTranscoder = Transcoder_toJobCcsid(i_ccsid);
     tLength =
-      transcoder_xlateBuffer(hTranscoder
+      Transcoder_xlateBuffer(hTranscoder
                              : %addr(io_buffer)
                              : i_length
                              :%size(io_buffer));
@@ -1421,9 +1421,9 @@ dcl-proc cvtToFileCcsid;
   //  Nicht umsetzbare CCSID: Puffer unverändert lassen
   monitor;
     hTranscoder =
-      transcoder_toFieldCcsid(i_ccsid);
+      Transcoder_toFieldCcsid(i_ccsid);
     tLength =
-      transcoder_xlateBuffer(hTranscoder
+      Transcoder_xlateBuffer(hTranscoder
                              : %addr(io_buffer)
                              : i_length
                              :%size(io_buffer));

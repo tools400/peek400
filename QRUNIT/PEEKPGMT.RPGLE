@@ -489,7 +489,7 @@ dcl-proc test10_peek71_failedTranscoderUsesSlot export;
 
   for i = 1 to 70;
     monitor;
-      hTranscoder = transcoder_toJobCcsid(ccsid);
+      hTranscoder = Transcoder_toJobCcsid(ccsid);
     on-error;
       msg = getMonitoredMessage(*on);
       if (%scan('Maximum number': msg.txt) = 1);
@@ -500,7 +500,7 @@ dcl-proc test10_peek71_failedTranscoderUsesSlot export;
   endfor;
 
   monitor;
-    hTranscoder = transcoder_toJobCcsid(37);
+    hTranscoder = Transcoder_toJobCcsid(37);
   on-error;
     fail('transcoder_tojobccsid(37) scheitert nach ' + %char(failures)
          + ' gescheiterten Aufrufen mit CCSID ' + %char(ccsid) + ': '
@@ -1608,8 +1608,8 @@ dcl-proc test49_peek71_emptyBuffer export;
   dcl-s length int(10);
 
   monitor;
-    hTranscoder = transcoder_toJobCcsid(1208);
-    length = transcoder_xlateBuffer(hTranscoder: %addr(buffer): 0
+    hTranscoder = Transcoder_toJobCcsid(1208);
+    length = Transcoder_xlateBuffer(hTranscoder: %addr(buffer): 0
                                     : %size(buffer));
   on-error;
     fail('PEEK71 bricht ab: ' + lastMsg());
@@ -1626,8 +1626,8 @@ dcl-proc test50_peek71_emptyString export;
   dcl-s result varchar(100);
 
   monitor;
-    hTranscoder = transcoder_toJobCcsid(1208);
-    result = transcoder_xlateString(hTranscoder: '');
+    hTranscoder = Transcoder_toJobCcsid(1208);
+    result = Transcoder_xlateString(hTranscoder: '');
   on-error;
     fail('PEEK71 bricht ab: ' + lastMsg());
   endmon;
@@ -1657,23 +1657,23 @@ dcl-proc test51_peek71_jobCcsidChanged export;
 
   runCmd('CHGJOB CCSID(' + %char(newCcsid) + ')');
   monitor;
-    transcoder_reset();
-    hTranscoder = transcoder_toJobCcsid(1252);
-    toCcsid = transcoder_getToCcsid(hTranscoder);
+    Transcoder_reset();
+    hTranscoder = Transcoder_toJobCcsid(1252);
+    toCcsid = Transcoder_getToCcsid(hTranscoder);
   on-error;
     runCmd('CHGJOB CCSID(' + %char(oldCcsid) + ')');
-    transcoder_reset();
+    Transcoder_reset();
     fail('PEEK71 bricht ab: ' + lastMsg());
   endmon;
   runCmd('CHGJOB CCSID(' + %char(oldCcsid) + ')');
-  transcoder_reset();
+  Transcoder_reset();
 
   iEqual(newCcsid: toCcsid: 'Ziel-CCSID nach CHGJOB');
 end-proc;
 
 // ==========================================================================
 //  PEEK71: transcoder_delete() entfernt einen Umsetzer auch aus der Liste
-//  der erstellten Umsetzer. Bisher lieferte transcoder_toJobCcsid() danach
+//  der erstellten Umsetzer. Bisher lieferte Transcoder_toJobCcsid() danach
 //  den gelöschten (geleerten) Umsetzer mit von-CCSID 0. Die Adresse des
 //  neuen Umsetzers kann dieselbe sein (%alloc nach dealloc).
 // ==========================================================================
@@ -1682,12 +1682,12 @@ dcl-proc test52_peek71_deleteCachedHandle export;
   dcl-s hTranscoder like(hTranscoder_t);
   dcl-s fromCcsid int(10);
 
-  hTranscoder = transcoder_toJobCcsid(500);
-  transcoder_delete(hTranscoder);
+  hTranscoder = Transcoder_toJobCcsid(500);
+  Transcoder_delete(hTranscoder);
 
   monitor;
-    hTranscoder = transcoder_toJobCcsid(500);
-    fromCcsid = transcoder_getFromCcsid(hTranscoder);
+    hTranscoder = Transcoder_toJobCcsid(500);
+    fromCcsid = Transcoder_getFromCcsid(hTranscoder);
   on-error;
     fail('PEEK71 bricht ab: ' + lastMsg());
   endmon;
@@ -1704,7 +1704,7 @@ dcl-proc test53_peek71_nullHandle export;
   dcl-s ccsid int(10);
 
   monitor;
-    ccsid = transcoder_getFromCcsid(transcoder_null());
+    ccsid = Transcoder_getFromCcsid(Transcoder_null());
   on-error;
     msg = getMonitoredMessage(*on);
     aEqual('CPF9897': msg.id: 'Nachricht');
@@ -1729,8 +1729,8 @@ dcl-proc test54_peek71_longStringExpand export;
   input = aaa + x'4A';
 
   monitor;
-    hTranscoder = transcoder_toFieldCcsid(1208);
-    result = transcoder_xlateString(hTranscoder: input);
+    hTranscoder = Transcoder_toFieldCcsid(1208);
+    result = Transcoder_xlateString(hTranscoder: input);
   on-error;
     fail('PEEK71 bricht ab: ' + lastMsg());
   endmon;
@@ -1759,8 +1759,8 @@ dcl-proc test55_peek71_resetFreesCache export;
     ccsid = %int(%subst(CCSIDS: pos: nxt - pos));
     pos = nxt + 1;
     monitor;
-      hTranscoder = transcoder_toJobCcsid(ccsid);
-      hTranscoder = transcoder_toFieldCcsid(ccsid);
+      hTranscoder = Transcoder_toJobCcsid(ccsid);
+      hTranscoder = Transcoder_toFieldCcsid(ccsid);
     on-error;
       msg = getMonitoredMessage(*on);
       isFull = (%scan('Maximum number': msg.txt) > 0);
@@ -1768,13 +1768,13 @@ dcl-proc test55_peek71_resetFreesCache export;
   enddo;
   assert(isFull: 'Die Liste der Umsetzer wurde nicht voll');
 
-  transcoder_reset();
+  Transcoder_reset();
   monitor;
-    hTranscoder = transcoder_toJobCcsid(37);
+    hTranscoder = Transcoder_toJobCcsid(37);
   on-error;
     fail('Nach transcoder_reset(): ' + lastMsg());
   endmon;
-  transcoder_reset();
+  Transcoder_reset();
 end-proc;
 
 // ==========================================================================
@@ -2151,8 +2151,8 @@ dcl-proc findUnconvertibleCcsid;
     //  transcoder_new() does not add the transcoder to the list.
     isConvertible = *on;
     monitor;
-      hTranscoder = transcoder_new(getJobCcsid(): candidates(i));
-      transcoder_delete(hTranscoder);
+      hTranscoder = Transcoder_new(getJobCcsid(): candidates(i));
+      Transcoder_delete(hTranscoder);
     on-error;
       isConvertible = *off;
       getMonitoredMessage(*on);

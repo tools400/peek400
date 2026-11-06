@@ -22,7 +22,7 @@ dcl-ds hFile_t qualified template;
 end-ds;
 
 //-------------------------------------------------------------------*
-dcl-pr cio_open like(bool_t) extproc('PEEK63_CIO_open');
+dcl-pr CIO_open like(bool_t) extproc('PEEK63_CIO_open');
   o_hFile     likeds(hFile_t);
   i_file      like(file_t) const;
   i_lib       like(lib_t) const;
@@ -32,69 +32,69 @@ dcl-pr cio_open like(bool_t) extproc('PEEK63_CIO_open');
 end-pr;
 
 //-------------------------------------------------------------------*
-dcl-pr cio_isOpen like(bool_t) extproc('PEEK63_CIO_isOpen');
+dcl-pr CIO_isOpen like(bool_t) extproc('PEEK63_CIO_isOpen');
   i_hFile likeds(hFile_t) const;
 end-pr;
 
 //-------------------------------------------------------------------*
-dcl-pr cio_getFile like(file_t) extproc('PEEK63_CIO_getFile');
+dcl-pr CIO_getFile like(file_t) extproc('PEEK63_CIO_getFile');
   i_hFile likeds(hFile_t) const;
 end-pr;
 
 //-------------------------------------------------------------------*
-dcl-pr cio_getLibrary like(lib_t) extproc('PEEK63_CIO_getLibrary');
+dcl-pr CIO_getLibrary like(lib_t) extproc('PEEK63_CIO_getLibrary');
   i_hFile likeds(hFile_t) const;
 end-pr;
 
 //-------------------------------------------------------------------*
-dcl-pr cio_getMember like(mbr_t) extproc('PEEK63_CIO_getMember');
+dcl-pr CIO_getMember like(mbr_t) extproc('PEEK63_CIO_getMember');
   i_hFile likeds(hFile_t) const;
 end-pr;
 
 //-------------------------------------------------------------------*
-dcl-pr cio_getRecordFormat char(10) extproc('PEEK63_CIO_getRecordFormat');
+dcl-pr CIO_getRecordFormat char(10) extproc('PEEK63_CIO_getRecordFormat');
   i_hFile likeds(hFile_t) const;
 end-pr;
 
 //-------------------------------------------------------------------*
-dcl-pr cio_getRecordLength int(10) extproc('PEEK63_CIO_getRecordLength');
+dcl-pr CIO_getRecordLength int(10) extproc('PEEK63_CIO_getRecordLength');
   i_hFile likeds(hFile_t) const;
 end-pr;
 
 //-------------------------------------------------------------------*
-dcl-pr cio_getRRN int(10) extproc('PEEK63_CIO_getRRN');
+dcl-pr CIO_getRRN int(10) extproc('PEEK63_CIO_getRRN');
   i_hFile likeds(hFile_t) const;
 end-pr;
 
 //-------------------------------------------------------------------*
-dcl-pr cio_getInfDS likeds(infds_t) extproc('PEEK63_CIO_getInfDS');
+dcl-pr CIO_getInfDS likeds(infds_t) extproc('PEEK63_CIO_getInfDS');
   i_hFile likeds(hFile_t) const;
 end-pr;
 
 //-------------------------------------------------------------------*
-dcl-pr cio_isError like(bool_t) extproc('PEEK63_CIO_isError');
+dcl-pr CIO_isError like(bool_t) extproc('PEEK63_CIO_isError');
   i_hFile likeds(hFile_t) const;
 end-pr;
 
 //-------------------------------------------------------------------*
-dcl-pr cio_setErrorMsg extproc('PEEK63_CIO_setErrorMsg');
+dcl-pr CIO_setErrorMsg extproc('PEEK63_CIO_setErrorMsg');
   io_hFile likeds(hFile_t);
   i_msgID  like(msgId_t) const;
   i_msgDta like(msgDta_t) const;
 end-pr;
 
 //-------------------------------------------------------------------*
-dcl-pr cio_getError int(10) extproc('PEEK63_CIO_getError');
+dcl-pr CIO_getError int(10) extproc('PEEK63_CIO_getError');
   i_hFile likeds(hFile_t) const;
 end-pr;
 
 //-------------------------------------------------------------------*
-dcl-pr cio_getErrorText varchar(512) extproc('PEEK63_CIO_getErrorText');
+dcl-pr CIO_getErrorText varchar(512) extproc('PEEK63_CIO_getErrorText');
   i_hFile likeds(hFile_t) const;
 end-pr;
 
 //-------------------------------------------------------------------*
-dcl-pr cio_chainWithRRN like(bool_t) extproc('PEEK63_CIO_chainWithRRN');
+dcl-pr CIO_chainWithRRN like(bool_t) extproc('PEEK63_CIO_chainWithRRN');
   io_hFile     likeds(hFile_t);
   i_rrn        like(rcdNbr_t) const;
   i_doLock     like(bool_t) const;
@@ -103,7 +103,7 @@ dcl-pr cio_chainWithRRN like(bool_t) extproc('PEEK63_CIO_chainWithRRN');
 end-pr;
 
 //-------------------------------------------------------------------*
-dcl-pr cio_chainWithKey like(bool_t) extproc('PEEK63_CIO_chainWithKey');
+dcl-pr CIO_chainWithKey like(bool_t) extproc('PEEK63_CIO_chainWithKey');
   io_hFile     likeds(hFile_t);
   i_key        like(keyBuf_t) const;
   i_doLock     like(bool_t) const;
@@ -112,31 +112,31 @@ dcl-pr cio_chainWithKey like(bool_t) extproc('PEEK63_CIO_chainWithKey');
 end-pr;
 
 //-------------------------------------------------------------------*
-dcl-pr cio_setllWithRRN like(bool_t) extproc('PEEK63_CIO_setllWithRRN');
+dcl-pr CIO_setllWithRRN like(bool_t) extproc('PEEK63_CIO_setllWithRRN');
   io_hFile likeds(hFile_t);
   i_rrn    like(rcdNbr_t) const;
 end-pr;
 
 //-------------------------------------------------------------------*
-dcl-pr cio_setllWithKey like(bool_t) extproc('PEEK63_CIO_setllWithKey');
+dcl-pr CIO_setllWithKey like(bool_t) extproc('PEEK63_CIO_setllWithKey');
   io_hFile likeds(hFile_t);
   i_key    like(keyBuf_t) const;
 end-pr;
 
 //-------------------------------------------------------------------*
-dcl-pr cio_setgtWithRRN like(bool_t) extproc('PEEK63_CIO_setgtWithRRN');
+dcl-pr CIO_setgtWithRRN like(bool_t) extproc('PEEK63_CIO_setgtWithRRN');
   io_hFile likeds(hFile_t);
   i_rrn    like(rcdNbr_t) const;
 end-pr;
 
 //-------------------------------------------------------------------*
-dcl-pr cio_setgtWithKey like(bool_t) extproc('PEEK63_CIO_setgtWithKey');
+dcl-pr CIO_setgtWithKey like(bool_t) extproc('PEEK63_CIO_setgtWithKey');
   io_hFile likeds(hFile_t);
   i_key    like(keyBuf_t) const;
 end-pr;
 
 //-------------------------------------------------------------------*
-dcl-pr cio_read like(bool_t) extproc('PEEK63_CIO_read');
+dcl-pr CIO_read like(bool_t) extproc('PEEK63_CIO_read');
   io_hFile     likeds(hFile_t);
   i_doLock     like(bool_t) const;
   io_rcdBuffer like(rcdBuf_t);
@@ -144,7 +144,7 @@ dcl-pr cio_read like(bool_t) extproc('PEEK63_CIO_read');
 end-pr;
 
 //-------------------------------------------------------------------*
-dcl-pr cio_readp like(bool_t) extproc('PEEK63_CIO_readp');
+dcl-pr CIO_readp like(bool_t) extproc('PEEK63_CIO_readp');
   io_hFile     likeds(hFile_t);
   i_doLock     like(bool_t) const;
   io_rcdBuffer like(rcdBuf_t);
@@ -152,17 +152,17 @@ dcl-pr cio_readp like(bool_t) extproc('PEEK63_CIO_readp');
 end-pr;
 
 //-------------------------------------------------------------------*
-dcl-pr cio_delete like(bool_t) extproc('PEEK63_CIO_delete');
+dcl-pr CIO_delete like(bool_t) extproc('PEEK63_CIO_delete');
   io_hFile likeds(hFile_t);
 end-pr;
 
 //-------------------------------------------------------------------*
-dcl-pr cio_unlock like(bool_t) extproc('PEEK63_CIO_unlock');
+dcl-pr CIO_unlock like(bool_t) extproc('PEEK63_CIO_unlock');
   io_hFile likeds(hFile_t);
 end-pr;
 
 //-------------------------------------------------------------------*
-dcl-pr cio_close like(bool_t) extproc('PEEK63_CIO_close');
+dcl-pr CIO_close like(bool_t) extproc('PEEK63_CIO_close');
   io_hFile likeds(hFile_t);
 end-pr;
 

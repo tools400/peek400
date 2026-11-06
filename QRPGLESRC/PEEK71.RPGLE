@@ -128,7 +128,7 @@ end-ds;
 //  Returns a Transcoder to convert from a
 //  given CCSID to the job CCSID.
 //=====================================================================*
-dcl-proc transcoder_toJobCcsid export;
+dcl-proc Transcoder_toJobCcsid export;
   dcl-pi *n like(hTranscoder_t);
     i_fromCcsid uns(10) const;
   end-pi;
@@ -138,7 +138,7 @@ dcl-proc transcoder_toJobCcsid export;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   hTranscoder = findTranscoder(getJobCcsid(): i_fromCcsid);
-  if (transcoder_isNull(hTranscoder));
+  if (Transcoder_isNull(hTranscoder));
     hTranscoder = createTranscoder(getJobCcsid(): i_fromCcsid);
   endif;
 
@@ -150,7 +150,7 @@ end-proc;
 //  Returns a Transcoder to convert from a
 //  given CCSID to the file field CCSID.
 //=====================================================================*
-dcl-proc transcoder_toFieldCcsid export;
+dcl-proc Transcoder_toFieldCcsid export;
   dcl-pi *n like(hTranscoder_t);
     i_toCcsid uns(10) const;
   end-pi;
@@ -160,7 +160,7 @@ dcl-proc transcoder_toFieldCcsid export;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   hTranscoder = findTranscoder(i_toCcsid: getJobCcsid());
-  if (transcoder_isNull(hTranscoder));
+  if (Transcoder_isNull(hTranscoder));
     hTranscoder = createTranscoder(i_toCcsid: getJobCcsid());
   endif;
 
@@ -171,7 +171,7 @@ end-proc;
 //=====================================================================*
 //  Initializes character translation.
 //=====================================================================*
-dcl-proc transcoder_new export;
+dcl-proc Transcoder_new export;
   dcl-pi *n like(hTranscoder_t);
     i_toCcsid   uns(10) const;
     i_fromCcsid uns(10) const;
@@ -242,7 +242,7 @@ end-proc;
 //   rc            - Returns the new length of the buffer.
 //                   Sends escape message CPF9897 on error.
 //=====================================================================*
-dcl-proc transcoder_xlateRaw export;
+dcl-proc Transcoder_xlateRaw export;
   dcl-pi *n int(10) opdesc;
     i_hTranscoder like(hTranscoder_t) const;
     i_pInBuf      pointer value;
@@ -290,7 +290,7 @@ end-proc;
 //   rc            - Returns the new length of the buffer.
 //                   Sends escape message CPF9897 on error.
 //=====================================================================*
-dcl-proc transcoder_xlateBuffer export;
+dcl-proc Transcoder_xlateBuffer export;
   dcl-pi *n int(10) opdesc;
     i_hTranscoder like(hTranscoder_t) const;
     i_pInBuf      pointer value;
@@ -349,7 +349,7 @@ end-proc;
 //   string        - Varying field containing the translated data.
 //                   Sends escape message CPF9897 on error.
 //=====================================================================*
-dcl-proc transcoder_xlateString export;
+dcl-proc Transcoder_xlateString export;
   dcl-pi *n varchar(32767) opdesc;
     i_hTranscoder like(hTranscoder_t) const;
     i_string      varchar(32767) options(*varsize) const;
@@ -402,7 +402,7 @@ end-proc;
 //  Returns:
 //   ccsid         - CCSID, a given buffer or string is translated from.
 //=====================================================================*
-dcl-proc transcoder_getFromCcsid export;
+dcl-proc Transcoder_getFromCcsid export;
   dcl-pi *n int(10);
     i_hTranscoder like(hTranscoder_t) const;
   end-pi;
@@ -426,7 +426,7 @@ end-proc;
 //  Returns:
 //   ccsid         - CCSID, a given buffer or string is translated to.
 //=====================================================================*
-dcl-proc transcoder_getToCcsid export;
+dcl-proc Transcoder_getToCcsid export;
   dcl-pi *n int(10);
     i_hTranscoder like(hTranscoder_t) const;
   end-pi;
@@ -444,7 +444,7 @@ end-proc;
 //=====================================================================*
 //  Terminates character translation.
 //=====================================================================*
-dcl-proc transcoder_delete export;
+dcl-proc Transcoder_delete export;
   dcl-pi *n;
     io_hTranscoder like(hTranscoder_t);
   end-pi;
@@ -460,7 +460,7 @@ dcl-proc transcoder_delete export;
   checkhandle(io_hTranscoder);
 
   //  Remove the transcoder from the list of created transcoders,
-  //  otherwise transcoder_toJobCcsid() would return the deleted
+  //  otherwise Transcoder_toJobCcsid() would return the deleted
   //  handle.
   for x = 1 to g_transcoders.numE;
     if (g_transcoders.item(x).hTranscoder = io_hTranscoder);
@@ -483,11 +483,11 @@ dcl-proc transcoder_delete export;
 end-proc;
 
 //=====================================================================*
-//  Deletes all transcoders created by transcoder_toJobCcsid() and
-//  transcoder_toFieldCcsid() and forgets the job CCSID. Called at
+//  Deletes all transcoders created by Transcoder_toJobCcsid() and
+//  Transcoder_toFieldCcsid() and forgets the job CCSID. Called at
 //  the start of Peek, so that a changed job CCSID (CHGJOB) is used.
 //=====================================================================*
-dcl-proc transcoder_reset export;
+dcl-proc Transcoder_reset export;
   dcl-pi *n;
   end-pi;
 
@@ -496,7 +496,7 @@ dcl-proc transcoder_reset export;
 
   dow (g_transcoders.numE > 0);
     hTranscoder = g_transcoders.item(g_transcoders.numE).hTranscoder;
-    transcoder_delete(hTranscoder);
+    Transcoder_delete(hTranscoder);
   enddo;
 
   g_jobCcsid = 0;
@@ -508,13 +508,13 @@ end-proc;
 //=====================================================================*
 //  Returns bTrue if a given Transcoder handle is NULL.
 //=====================================================================*
-dcl-proc transcoder_isNull export;
+dcl-proc Transcoder_isNull export;
   dcl-pi *n ind;
     i_hTranscoder like(hTranscoder_t) const;
   end-pi;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  if (i_hTranscoder = transcoder_null());
+  if (i_hTranscoder = Transcoder_null());
     return bTrue;
   else;
     return bFalse;
@@ -525,7 +525,7 @@ end-proc;
 //=====================================================================*
 //  Returns a Transcoder NULL-handle.
 //=====================================================================*
-dcl-proc transcoder_null export;
+dcl-proc Transcoder_null export;
   dcl-pi *n like(hTranscoder_t);
   end-pi;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -647,7 +647,7 @@ dcl-proc findTranscoder;
     endif;
   endfor;
 
-  return transcoder_null();
+  return Transcoder_null();
 
 end-proc;
 
@@ -667,13 +667,13 @@ dcl-proc createTranscoder;
 
   if (g_transcoders.numE = %elem(g_transcoders.item));
     kill('Maximum number of transcoders reached.');
-    return transcoder_null();
+    return Transcoder_null();
   endif;
 
   //  Count the new transcoder only after transcoder_new() succeeded.
   //  transcoder_new() sends an escape message on error, which
   //  would otherwise leave an empty entry in the list.
-  hTranscoder = transcoder_new(i_toCcsid: i_fromCcsid);
+  hTranscoder = Transcoder_new(i_toCcsid: i_fromCcsid);
 
   g_transcoders.numE = g_transcoders.numE + 1;
 

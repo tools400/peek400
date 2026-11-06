@@ -3774,7 +3774,7 @@ begsr delRecord;
 
   else;
 
-    if (cio_delete(hFile00) = bTrue);
+    if (CIO_delete(hFile00) = bTrue);
       *in99 = '0';
     else;
       *in99 = '1';
@@ -3785,7 +3785,7 @@ begsr delRecord;
       if (*in55 = bTrue);
         rolbk;
       else;
-        cio_unlock(hFile00);
+        CIO_unlock(hFile00);
       endif;
       exsr f0toFx;
 
@@ -3795,7 +3795,7 @@ begsr delRecord;
       if (*in55 = bTrue);
         commit;
       else;
-        cio_unlock(hFile00);
+        CIO_unlock(hFile00);
       endif;
       exsr f0toFx;
       exsr callExit04;
@@ -3836,14 +3836,14 @@ begsr copyExtRcd;
              h_mbr    :
              h_rcdfmt ) = '0');
 
-    rcdNbr# = cio_getRRN(hFile04);
+    rcdNbr# = CIO_getRRN(hFile04);
 
     f_execute(
       'CPYF ' +
         'FROMFILE(' +
-          %trim(cio_getLibrary(hFile04)) +
+          %trim(CIO_getLibrary(hFile04)) +
         '/' +
-          %trim(cio_getFile(hFile04)) +
+          %trim(CIO_getFile(hFile04)) +
         ') ' +
         'TOFILE(' +
           %trim(copyExternal.lib) +
@@ -3851,7 +3851,7 @@ begsr copyExtRcd;
           %trim(copyExternal.file) +
         ') ' +
         'FROMMBR(' +
-          %trim(cio_getMember(hFile04)) +
+          %trim(CIO_getMember(hFile04)) +
         ') ' +
         'TOMBR(' +
           %trim(copyExternal.toMbr) +
@@ -3872,7 +3872,7 @@ begsr copyExtRcd;
           '*MAP *DROP' +
         ') ' +
         'RCDFMT(' +
-          %trim(cio_getRecordFormat(hFile04)) +
+          %trim(CIO_getRecordFormat(hFile04)) +
            ')'
       : yMsgID: yMsgDta);
 
@@ -5777,10 +5777,10 @@ begsr pbSetLL;
 
     select;
     when (accessMode = KEY_SEQ);
-      cio_setllWithKey(hFile02: wrk#KeyVal);
+      CIO_setllWithKey(hFile02: wrk#KeyVal);
       exsr f2toFx;
     when (accessMode = RRN_SEQ);
-      cio_setllWithRRN(hFile01: wrk#RcdNbr);
+      CIO_setllWithRRN(hFile01: wrk#RcdNbr);
       exsr f1toFx;
     when (accessMode = SQL_SEQ);
     other;
@@ -5802,10 +5802,10 @@ begsr pbSetGT;
 
     select;
     when (accessMode = KEY_SEQ);
-      cio_setgtWithKey(hFile02: wrk#KeyVal);
+      CIO_setgtWithKey(hFile02: wrk#KeyVal);
       exsr f2toFx;
     when (accessMode = RRN_SEQ);
-      cio_setgtWithRRN(hFile01: wrk#RcdNbr);
+      CIO_setgtWithRRN(hFile01: wrk#RcdNbr);
       exsr f1toFx;
     when (accessMode = SQL_SEQ);
     other;
@@ -5826,7 +5826,7 @@ begsr pbMoveTop;
   else;
 
     if (accessMode = SQL_SEQ);
-      sql_gotoTop(yMsgID: yMsgDta);
+      SQL_gotoTop(yMsgID: yMsgDta);
       if (yMsgID <> '');
         p_sndPgmMg(yMsgID: yMsgDta: sds.pgmName);
         yMsgID = '';
@@ -5855,7 +5855,7 @@ begsr pbMoveBot;
   else;
 
     if (accessMode = SQL_SEQ);
-      sql_gotoBottom(yMsgID: yMsgDta);
+      SQL_gotoBottom(yMsgID: yMsgDta);
       if (yMsgID <> '');
         p_sndPgmMg(yMsgID: yMsgDta: sds.pgmName);
         yMsgID = '';
@@ -6171,7 +6171,7 @@ begsr openFile;
     if (sqlOrder = '*KEY');
       peek38(##file: ##library: sqlOrder);
     else;
-      sqlOrder = sql_quote(f_ucase(sqlOrder));
+      sqlOrder = SQL_quote(f_ucase(sqlOrder));
     endif;
   endif;
 
@@ -6226,7 +6226,7 @@ begsr openFile;
     if (auth.isUpdAlw = bTrue);
       commitLvl = '1';
       //          ... mit Commit-Steuerung
-      if cio_open(hFile00
+      if CIO_open(hFile00
                : ##file
                : ##library
                : ##member
@@ -6239,7 +6239,7 @@ begsr openFile;
       else;
         //          ... ohne Commit-Steuerung
         commitLvl = '0';
-        if cio_open(hFile00
+        if CIO_open(hFile00
                  : ##file
                  : ##library
                  : ##member
@@ -6277,7 +6277,7 @@ begsr openFile;
 
     //  Sortierung 2 nach Schlüsselfelder
     if (accessMode = KEY_SEQ);
-      if cio_open(hFile02
+      if CIO_open(hFile02
                : ##file
                : ##library
                : ##member
@@ -6288,7 +6288,7 @@ begsr openFile;
         *in99 = *off;
       else;
         *in99 = *on;
-        cio_getErrorMsg(hFile02: yMsgID: yMsgDta);
+        CIO_getErrorMsg(hFile02: yMsgID: yMsgDta);
         p_sndPgmMg(yMsgID: yMsgDta: sds.pgmName);
         yMsgID = '';
         yMsgDta = '';
@@ -6298,7 +6298,7 @@ begsr openFile;
 
     //  Sortierung 1 nach Satzfolge
     if (accessMode = RRN_SEQ);
-      if cio_open(hFile01
+      if CIO_open(hFile01
                : ##file
                : ##library
                : ##member
@@ -6309,7 +6309,7 @@ begsr openFile;
         *in99 = *off;
       else;
         *in99 = *on;
-        cio_getErrorMsg(hFile01: yMsgID: yMsgDta);
+        CIO_getErrorMsg(hFile01: yMsgID: yMsgDta);
         p_sndPgmMg(yMsgID: yMsgDta: sds.pgmName);
         yMsgID = '';
         yMsgDta = '';
@@ -6321,7 +6321,7 @@ begsr openFile;
     if (accessMode = SQL_SEQ);
       clear usr0013;
       p_sndStsMg('USR0013': usr0013);
-      if (sql_prepareStatement(
+      if (SQL_prepareStatement(
                   '0'       :
                   ##file    :
                   ##library :
@@ -6331,7 +6331,7 @@ begsr openFile;
                   sqlOrder  :
                 yMsgID      :
                 yMsgDta     ) = bTrue);
-        if (sql_open(hFile03     :
+        if (SQL_open(hFile03     :
                   yMsgID      :
                   yMsgDta     ) = bTrue);
           *in99 = *off;
@@ -6339,7 +6339,7 @@ begsr openFile;
           yMsgDta = '';
         else;
           *in99 = *on;
-          cio_getErrorMsg(hFile03: yMsgID: yMsgDta);
+          CIO_getErrorMsg(hFile03: yMsgID: yMsgDta);
           p_sndPgmMg(yMsgID: yMsgDta: sds.pgmName);
           yMsgID = '';
           yMsgDta = '';
@@ -6489,25 +6489,25 @@ begsr pbRead;
 
     select;
     when (accessMode = KEY_SEQ);
-      if (cio_read(hFile02: bFalse
+      if (CIO_read(hFile02: bFalse
                 : io_buff: io_nullMap) = bEOF);
         *in99 = *on;
       else;
         *in99 = *off;
       endif;
       exsr f2toFx;
-      isFileError = cio_isError(hFile02);
+      isFileError = CIO_isError(hFile02);
     when (accessMode = RRN_SEQ);
-      if (cio_read(hFile01: bFalse
+      if (CIO_read(hFile01: bFalse
                 : io_buff: io_nullMap) = bEOF);
         *in99 = *on;
       else;
         *in99 = *off;
       endif;
       exsr f1toFx;
-      isFileError = cio_isError(hFile01);
+      isFileError = CIO_isError(hFile01);
     when (accessMode = SQL_SEQ);
-      if (sql_nextRow(io_buff: io_nullMap: hFile03:
+      if (SQL_nextRow(io_buff: io_nullMap: hFile03:
                    yMsgID : yMsgDta)  = bEOF);
         *in99 = *on;
         p_sndPgmMg(yMsgID: yMsgDta: sds.pgmName);
@@ -6519,7 +6519,7 @@ begsr pbRead;
         yMsgDta = '';
       endif;
       exsr f3toFx;
-      isFileError = cio_isError(hFile03);
+      isFileError = CIO_isError(hFile03);
     other;
     endsl;
 
@@ -6549,7 +6549,7 @@ begsr pbReadP;
 
     select;
     when (accessMode = KEY_SEQ);
-      if (cio_readp(hFile02: bFalse
+      if (CIO_readp(hFile02: bFalse
                  : io_buff: io_nullMap) = bEOF);
         *in99 = *on;
       else;
@@ -6557,7 +6557,7 @@ begsr pbReadP;
       endif;
       exsr f2toFx;
     when (accessMode = RRN_SEQ);
-      if (cio_readp(hFile01: bFalse
+      if (CIO_readp(hFile01: bFalse
                  : io_buff: io_nullMap) = bEOF);
         *in99 = *on;
       else;
@@ -6565,7 +6565,7 @@ begsr pbReadP;
       endif;
       exsr f1toFx;
     when (accessMode = SQL_SEQ);
-      if (sql_previousRow(io_buff: io_nullMap: hFile03:
+      if (SQL_previousRow(io_buff: io_nullMap: hFile03:
                        yMsgID : yMsgDta) = bEOF);
         *in99 = *on;
         if (yMsgID <> '');
@@ -6579,7 +6579,7 @@ begsr pbReadP;
         yMsgDta = '';
       endif;
       exsr f3toFx;
-      isFileError = cio_isError(hFile03);
+      isFileError = CIO_isError(hFile03);
     other;
     endsl;
 
@@ -6602,7 +6602,7 @@ endsr;
 
 begsr f0toFx;
 
-  file#X = cio_getInfDS(hFile00);
+  file#X = CIO_getInfDS(hFile00);
 
 endsr;
 
@@ -6614,7 +6614,7 @@ endsr;
 
 begsr f1toFx;
 
-  file#X = cio_getInfDS(hFile01);
+  file#X = CIO_getInfDS(hFile01);
 
 endsr;
 
@@ -6626,7 +6626,7 @@ endsr;
 
 begsr f2toFx;
 
-  file#X = cio_getInfDS(hFile02);
+  file#X = CIO_getInfDS(hFile02);
 
 endsr;
 
@@ -6638,7 +6638,7 @@ endsr;
 
 begsr f3toFx;
 
-  file#X = cio_getInfDS(hFile03);
+  file#X = CIO_getInfDS(hFile03);
 
 endsr;
 
@@ -7032,7 +7032,7 @@ begsr getMbrAttr;
     else;
       clear usr0014;
       p_sndStsMg('USR0014': usr0014);
-      $$records = sql_count();
+      $$records = SQL_count();
       *in79 = *on;
       $$lmtCnt = *blanks;
     endif;
@@ -7176,14 +7176,14 @@ begsr closeFile;
     yCursorPosition.column = 0;
 
     //  Datei 04 für Einzelsatzzugriff
-    if (cio_isOpen(hFile04) = bTrue);
-      cio_close(hFile04);
+    if (CIO_isOpen(hFile04) = bTrue);
+      CIO_close(hFile04);
     endif;
 
     select;
     when (accessMode = KEY_SEQ);
       //  Sortierung 2 für Schlüsselfolge
-      if (cio_close(hFile02) = bTrue);
+      if (CIO_close(hFile02) = bTrue);
         *in99 = '0';
       else;
         *in99 = '1';
@@ -7191,14 +7191,14 @@ begsr closeFile;
       exsr f2toFx;
     when (accessMode = RRN_SEQ);
       //  Sortierung 1 für Satzfolge
-      if (cio_close(hFile01) = bTrue);
+      if (CIO_close(hFile01) = bTrue);
         *in99 = '0';
       else;
         *in99 = '1';
       endif;
       exsr f1toFx;
     when (accessMode = SQL_SEQ);
-      if (sql_close(hFile03:yMsgID :yMsgDta)
+      if (SQL_close(hFile03:yMsgID :yMsgDta)
           = bTrue);
         *in99 = *off;
         yMsgID = '';
@@ -7220,8 +7220,8 @@ begsr closeFile;
   endif;
 
   //  Sortierung 0 für Einzelzugriff
-  if (cio_isOpen(hFile00) = bTrue);
-    if (cio_close(hFile00) = bTrue);
+  if (CIO_isOpen(hFile00) = bTrue);
+    if (CIO_close(hFile00) = bTrue);
       *in99 = '0';
     else;
       *in99 = '1';
@@ -7937,7 +7937,7 @@ begsr first;
 
   // - Zeichenumsetzung neu beginnen: Die Job-CCSID kann sich seit dem
   //   letzten Aufruf geändert haben (CHGJOB CCSID).
-  transcoder_reset();
+  Transcoder_reset();
 
   // - Einlesen der Benutzervoreinstellungen
   exsr getUsrSetg;
@@ -8188,11 +8188,11 @@ dcl-proc f_chain00;
   dcl-s isFound like(bool_t) inz(bFalse);
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  if ((cio_getFile(hFile00)    <> i_file ) or
-      (cio_getLibrary(hFile00) <> i_lib  ) or
-      (cio_getMember(hFile00)  <> i_mbr  ));
-    if (cio_isOpen(hFile00) = bTrue);
-      cio_close(hFile00);
+  if ((CIO_getFile(hFile00)    <> i_file ) or
+      (CIO_getLibrary(hFile00) <> i_lib  ) or
+      (CIO_getMember(hFile00)  <> i_mbr  ));
+    if (CIO_isOpen(hFile00) = bTrue);
+      CIO_close(hFile00);
     endif;
   endif;
 
@@ -8209,9 +8209,9 @@ dcl-proc f_chain00;
   yMsgID = '';
   yMsgDta = '';
 
-  if (cio_isOpen(hFile00) = bFalse);
+  if (CIO_isOpen(hFile00) = bFalse);
     if (commitLvl = '1');
-      cio_open(hFile00
+      CIO_open(hFile00
               : i_file
               : i_lib
               : i_mbr
@@ -8220,7 +8220,7 @@ dcl-proc f_chain00;
                  nullcap=Y, riofb=Y, +
                  secure=N, ccsid=65535');
     else;
-      cio_open(hFile00
+      CIO_open(hFile00
               : i_file
               : i_lib
               : i_mbr
@@ -8238,7 +8238,7 @@ dcl-proc f_chain00;
   yMsgID = '';
   yMsgDta = '';
 
-  if (cio_chainWithRRN(hFile00
+  if (CIO_chainWithRRN(hFile00
                     : i_rrn
                     : bTrue
                     : io_buff
@@ -8248,7 +8248,7 @@ dcl-proc f_chain00;
     isFound = bFalse;
   endif;
 
-  file#X = cio_getInfDS(hFile00);
+  file#X = CIO_getInfDS(hFile00);
 
   return isFound;
 
@@ -8270,16 +8270,16 @@ dcl-proc f_chain04;
   dcl-s isFound like(bool_t) inz(bFalse);
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  if ((cio_getFile(hFile04)    <> i_file ) or
-      (cio_getLibrary(hFile04) <> i_lib  ) or
-      (cio_getMember(hFile04)  <> i_mbr  ));
-    if (cio_isOpen(hFile04) = bTrue);
-      cio_close(hFile04);
+  if ((CIO_getFile(hFile04)    <> i_file ) or
+      (CIO_getLibrary(hFile04) <> i_lib  ) or
+      (CIO_getMember(hFile04)  <> i_mbr  ));
+    if (CIO_isOpen(hFile04) = bTrue);
+      CIO_close(hFile04);
     endif;
   endif;
 
-  if (cio_isOpen(hFile04) = bFalse);
-    cio_open(hFile04
+  if (CIO_isOpen(hFile04) = bFalse);
+    CIO_open(hFile04
             : i_file
             : i_lib
             : i_mbr
@@ -8288,7 +8288,7 @@ dcl-proc f_chain04;
                nullcap=Y, riofb=Y, ccsid=65535');
   endif;
 
-  if (cio_chainWithRRN(hFile04
+  if (CIO_chainWithRRN(hFile04
                     : i_rrn
                     : bFalse
                     : io_buff
@@ -8298,7 +8298,7 @@ dcl-proc f_chain04;
     isFound = bFalse;
   endif;
 
-  file#X = cio_getInfDS(hFile04);
+  file#X = CIO_getInfDS(hFile04);
 
   return isFound;
 

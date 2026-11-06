@@ -140,8 +140,8 @@ endif;
 if (%open(peekfldl0));
   close peekfldl0;
 endif;
-if (cio_isOpen(hFile04) = bTrue);
-  cio_close(hFile04);
+if (CIO_isOpen(hFile04) = bTrue);
+  CIO_close(hFile04);
 endif;
 
 return;
@@ -355,7 +355,7 @@ endsr;
 
 begsr readRcd;
 
-  if (cio_chainWithRRN(hFile04
+  if (CIO_chainWithRRN(hFile04
                    : i_rcdNbr
                    : bFalse
                    : io_buff
@@ -381,7 +381,7 @@ begsr first;
   // - Öffnen der Datei und Einlesen des zu druckenden Satzes;
   //   die Druckdatei wird erst danach geöffnet, damit ohne
   //   Satz keine Liste entsteht
-  if (cio_open(hFile04
+  if (CIO_open(hFile04
               : i_file
               : i_library
               : i_member

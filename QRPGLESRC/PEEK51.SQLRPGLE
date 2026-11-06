@@ -83,10 +83,10 @@ dcl-s g_fmt char(10);
 dcl-s g_cmdOvrDbf like(varString_t);
 
 //===================================================================*
-//  Prozedur:  sql_prepareStatement                       (Body)     *
+//  Prozedur:  SQL_prepareStatement                       (Body)     *
 //===================================================================*
 
-dcl-proc sql_prepareStatement export;
+dcl-proc SQL_prepareStatement export;
   dcl-pi *n like(bool_t);
     i_check     like(bool_t) value;
     i_file      like(file_t) value;
@@ -218,7 +218,7 @@ end-proc;
 //  Prozedur:  sql_open                                   (Body)     *
 //===================================================================*
 
-dcl-proc sql_open export;
+dcl-proc SQL_open export;
   dcl-pi *n like(bool_t);
     o_hFile  likeds(hFile_t);
     o_msgID  like(msgId_t);
@@ -245,11 +245,11 @@ dcl-proc sql_open export;
               o_msgDta) = bTrue);
 
     p_cvtSqlMg('USR8210': o_msgID: o_msgDta);
-    cio_setErrorMsg(g_hFile03: o_msgID: o_msgDta);
+    CIO_setErrorMsg(g_hFile03: o_msgID: o_msgDta);
 
     f_opnSql = bFalse;
   else;
-    if cio_open(g_hFile03
+    if CIO_open(g_hFile03
              : g_file
              : g_lib
              : g_mbr
@@ -281,10 +281,10 @@ dcl-proc sql_open export;
 end-proc;
 
 //===================================================================*
-//  Prozedur:  sql_nextRow                                (Body)     *
+//  Prozedur:  SQL_nextRow                                (Body)     *
 //===================================================================*
 
-dcl-proc sql_nextRow export;
+dcl-proc SQL_nextRow export;
   dcl-pi *n like(bool_t);
     o_buffer  like(rcdBuf_t);
     o_nullMap like(nullMap_t) dim(NULL_MAP_SIZE);
@@ -322,16 +322,16 @@ dcl-proc sql_nextRow export;
                 o_msgDta) = bTrue);
 
       p_cvtSqlMg('USR8210': o_msgID: o_msgDta);
-      cio_setErrorMsg(g_hFile03: o_msgID: o_msgDta);
+      CIO_setErrorMsg(g_hFile03: o_msgID: o_msgDta);
       isEOF = bTrue;
 
     else;
 
       if (sqlCode = 100);
-        cio_setEOF_read(g_hFile03);
+        CIO_setEOF_read(g_hFile03);
       else;
 
-        if (cio_chainWithRRN(g_hFile03
+        if (CIO_chainWithRRN(g_hFile03
                           : recNbr
                           : bTrue
                           : io_buff
@@ -355,10 +355,10 @@ dcl-proc sql_nextRow export;
 end-proc;
 
 //===================================================================*
-//  Prozedur:  sql_previousRow                            (Body)     *
+//  Prozedur:  SQL_previousRow                            (Body)     *
 //===================================================================*
 
-dcl-proc sql_previousRow export;
+dcl-proc SQL_previousRow export;
   dcl-pi *n like(bool_t);
     o_buffer  like(rcdBuf_t);
     o_nullMap like(nullMap_t) dim(NULL_MAP_SIZE);
@@ -396,16 +396,16 @@ dcl-proc sql_previousRow export;
                 o_msgDta) = bTrue);
 
       p_cvtSqlMg('USR8210': o_msgID: o_msgDta);
-      cio_setErrorMsg(g_hFile03: o_msgID: o_msgDta);
+      CIO_setErrorMsg(g_hFile03: o_msgID: o_msgDta);
       isEOF = bTrue;
 
     else;
 
       if (sqlCode = 100);
-        cio_setEOF_readp(g_hFile03);
+        CIO_setEOF_readp(g_hFile03);
       else;
 
-        if (cio_chainWithRRN(g_hFile03
+        if (CIO_chainWithRRN(g_hFile03
                           : recNbr
                           : bTrue
                           : io_buff
@@ -429,10 +429,10 @@ dcl-proc sql_previousRow export;
 end-proc;
 
 //===================================================================*
-//  Prozedur:  sql_gotoTop                                (Body)     *
+//  Prozedur:  SQL_gotoTop                                (Body)     *
 //===================================================================*
 
-dcl-proc sql_gotoTop export;
+dcl-proc SQL_gotoTop export;
   dcl-pi *n like(bool_t);
     o_msgID  like(msgId_t);
     o_msgDta like(msgDta_t);
@@ -463,10 +463,10 @@ dcl-proc sql_gotoTop export;
 end-proc;
 
 //===================================================================*
-//  Prozedur:  sql_gotoBottom                             (Body)     *
+//  Prozedur:  SQL_gotoBottom                             (Body)     *
 //===================================================================*
 
-dcl-proc sql_gotoBottom export;
+dcl-proc SQL_gotoBottom export;
   dcl-pi *n like(bool_t);
     o_msgID  like(msgId_t);
     o_msgDta like(msgDta_t);
@@ -500,7 +500,7 @@ end-proc;
 //  Prozedur:  sql_close                                  (Body)     *
 //===================================================================*
 
-dcl-proc sql_close export;
+dcl-proc SQL_close export;
   dcl-pi *n like(bool_t);
     o_hFile  likeds(hFile_t);
     o_msgID  like(msgId_t);
@@ -524,7 +524,7 @@ dcl-proc sql_close export;
 
     f_clsSql = bFalse;
   else;
-    if (cio_close(g_hFile03) = bTrue);
+    if (CIO_close(g_hFile03) = bTrue);
       *in99 = '0';
     else;
       *in99 = '1';
@@ -551,7 +551,7 @@ end-proc;
 //  Prozedur:  sql_count                                  (Body)     *
 //===================================================================*
 
-dcl-proc sql_count export;
+dcl-proc SQL_count export;
   dcl-pi *n like(int4_t);
   end-pi;
 
@@ -639,8 +639,8 @@ dcl-proc f_isDeleted;
   end-pi;
   // ------------------------------------------------------------------------
 
-  if (cio_getError(i_hFile) = enorec_c or
-      cio_getError(i_hFile) = eiorecerr_c);
+  if (CIO_getError(i_hFile) = enorec_c or
+      CIO_getError(i_hFile) = eiorecerr_c);
     return bTrue;
   endif;
 
@@ -735,7 +735,7 @@ end-proc;
 //  Prozedur:  sql_quote                                  (Body)     *
 //===================================================================*
 
-dcl-proc sql_quote export;
+dcl-proc SQL_quote export;
   dcl-pi *n like(varString_t);
     i_string like(varString_t) const;
   end-pi;

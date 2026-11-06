@@ -242,7 +242,7 @@ begsr rpl_fldName;
 
   dou ('1');
 
-    if cio_open(hFile00
+    if CIO_open(hFile00
              : i_file
              : i_library
              : i_member
@@ -329,8 +329,8 @@ begsr rpl_fldName;
 
   enddo;
 
-  if (cio_isOpen(hFile00) = bTrue);
-    cio_close(hFile00);
+  if (CIO_isOpen(hFile00) = bTrue);
+    CIO_close(hFile00);
   endif;
 
   if (%open(peekFld));
@@ -385,7 +385,7 @@ endsr;
 
 begsr readRcd;
 
-  if (cio_chainWithRRN(hFile00
+  if (CIO_chainWithRRN(hFile00
                     : i_rcdNbr
                     : bFalse
                     : io_buff

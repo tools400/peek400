@@ -271,9 +271,9 @@ begsr c_enter;
 
   exsr dltCsrPos;
 
-  ##order = sql_quote(##order);
+  ##order = SQL_quote(##order);
 
-  if (sql_prepareStatement(
+  if (SQL_prepareStatement(
          '1': pFile.name: pFile.library: pFile.member: pFile.format:
          ##where: ##order: yMsgID: yMsgDta));
     io_file      = pFile.name;
