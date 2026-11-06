@@ -1,11 +1,11 @@
-**FREE
+**free
 //===============================================================*
 //                                                               *
 //  Additional information about MBRD0200:                       *
 //                                                               *
 //                                                               *
 //===============================================================*
-//
+
 //  API format MBRD0200
 //  (data structure can be used within the calling program
 //  to splitt XValue into its units.)
@@ -29,8 +29,7 @@ dcl-ds mbrd0200_t qualified template;
   m2nbrrcddl      int(10);
   m2dtaspcsz      uns(10);
   m2accspcsz      uns(10);
-  m2numbasedonmbr
-  int(10);
+  m2numbasedonmbr int(10);
   m2chgdatetime   char(13);
   m2savdatetime   char(13);
   m2rstdatetime   char(13);
@@ -50,4 +49,4 @@ dcl-ds mbrd0200_t qualified template;
   m2numdltrcds    uns(10);
   m2reserved_3    char(6);
 end-ds;
-//
+

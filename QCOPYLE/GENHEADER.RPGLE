@@ -1,24 +1,24 @@
-**FREE
+**free
 /if defined(genHeader_t)
 /eof
 /endif
 /define genHeader_t
 
 dcl-ds genHeader_t qualified template;
-  sizeHeader      int(10) pos(65);
-  release_level   char(4);
-  format          char(9) pos(72);
-  api_used        char(10);
-  crtDateTime     char(13);
-  infStatus       char(1);
-  sizeUsed        int(10);
-  offsetInp       int(10);
-  sizeInz         int(10);
-  offsetHdr       int(10);
-  sizeHdr         int(10);
-  offsetLst       int(10);
-  sizeLst         int(10);
-  numLstEnt       int(10);
-  entrySize       int(10);
+  sizeHeader    int(10) pos(65);
+  release_level char(4);
+  format        char(9) pos(72);
+  api_used      char(10);
+  crtDateTime   char(13);
+  infStatus     char(1);
+  sizeUsed      int(10);
+  offsetInp     int(10);
+  sizeInz       int(10);
+  offsetHdr     int(10);
+  sizeHdr       int(10);
+  offsetLst     int(10);
+  sizeLst       int(10);
+  numLstEnt     int(10);
+  entrySize     int(10);
 end-ds;
 

@@ -1,4 +1,4 @@
-**FREE
+**free
 //===============================================================*
 //                                                               *
 //  Additional information about FLDL0100:                       *
@@ -83,40 +83,40 @@
 //   F1UCS2 - UCS-2 Field                                        *
 //                                                               *
 //===============================================================*
-//
+
 //  list API format FLDL0100
 dcl-ds fldl0100_t qualified template;
-  f1fnme          char(10);
-  f1dtyp          char(1);
-  f1use           char(1);
-  f1obuf          int(10);
-  f1ibuf          int(10);
-  f1flen          int(10);
-  f1digt          int(10);
-  f1decp          int(10);
-  f1ftxt          char(50);
-  f1edtc          char(2);
-  f1edwl          int(10);
-  f1edwd          char(64);
-  f1col1          char(20);
-  f1col2          char(20);
-  f1col3          char(20);
-  f1ifnm          char(10);
-  f1afnm          char(30);
-  f1afnl          int(10);
-  f1ndbc          int(10);
-  f1nalw          char(1);
-  f1hvri          char(1);
-  f1dtfm          char(4);
-  f1dtsp          char(1);
-  f1vfmi          char(1);
-  f1ftcc          int(10);
-  f1fdcc          int(10);
-  f1chcc          int(10);
-  f1ewcc          int(10);
-  f1vfld          char(10) pos(513);
-  f1keyf          char(2) pos(533);
-  f1seq           int(10);
-  f1ucs2          char(1);
+  f1fnme char(10);
+  f1dtyp char(1);
+  f1use  char(1);
+  f1obuf int(10);
+  f1ibuf int(10);
+  f1flen int(10);
+  f1digt int(10);
+  f1decp int(10);
+  f1ftxt char(50);
+  f1edtc char(2);
+  f1edwl int(10);
+  f1edwd char(64);
+  f1col1 char(20);
+  f1col2 char(20);
+  f1col3 char(20);
+  f1ifnm char(10);
+  f1afnm char(30);
+  f1afnl int(10);
+  f1ndbc int(10);
+  f1nalw char(1);
+  f1hvri char(1);
+  f1dtfm char(4);
+  f1dtsp char(1);
+  f1vfmi char(1);
+  f1ftcc int(10);
+  f1fdcc int(10);
+  f1chcc int(10);
+  f1ewcc int(10);
+  f1vfld char(10) pos(513);
+  f1keyf char(2) pos(533);
+  f1seq  int(10);
+  f1ucs2 char(1);
 end-ds;
-//
+

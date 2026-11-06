@@ -1,13 +1,13 @@
-**FREE
+**free
 //---------------------------------------------------------------
 // Datenstruktur für Zeichenkonvertierung
 // SET0006   *CVTCHR
 //---------------------------------------------------------------
-//
+
 dcl-ds set0006_t len(256) qualified template;
   //  Ersetzungszeichen für nicht darstellbare Zeichen
-  set_cvtc        char(1) inz('÷');
+  set_cvtc char(1) inz('÷');
   //  Endemarkierung
-  set_0006        char(1) inz(x'8B');
+  set_0006 char(1) inz(x'8B');
 end-ds;
-//
+

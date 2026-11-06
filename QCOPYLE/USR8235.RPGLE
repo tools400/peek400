@@ -3,5 +3,5 @@
 //  Data structure for message ID: USR8235
 //  SQL-Auswahl wird für Multi-Member logische Dateien nicht un
 dcl-ds USR8235 qualified;
-      //  No replacement variables available!
+//  No replacement variables available!
 end-ds;

@@ -3,5 +3,5 @@
 //  Data structure for message ID: USR8154
 //  Ungültiger Parameter für ERSETZEN/HINZUFÜGEN '&1' für Zield
 dcl-ds USR8154 qualified;
-  var1  char(10) inz;
+  var1 char(10) inz;
 end-ds;

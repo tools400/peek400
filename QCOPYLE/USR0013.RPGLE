@@ -3,5 +3,5 @@
 //  Data structure for message ID: USR0013
 //  Ausführen SQL Abfrage ...
 dcl-ds USR0013 qualified;
-      //  No replacement variables available!
+//  No replacement variables available!
 end-ds;

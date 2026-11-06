@@ -3,6 +3,6 @@
 //  Data structure for message ID: USR8188
 //  Generieren Bildschirmdatei. Lauf: &1, Feld: &2
 dcl-ds USR8188 qualified;
-  var1  packed(5:0) inz;
-  var2  char(10) inz;
+  var1 packed(5: 0) inz;
+  var2 char(10) inz;
 end-ds;

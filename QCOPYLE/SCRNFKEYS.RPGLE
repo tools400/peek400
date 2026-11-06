@@ -1,42 +1,42 @@
-**FREE
-//
+**free
+
 //============================================================*
 //    Definition F-Tatsen Bildschirmfelder                    *
 //============================================================*
-//
-dcl-ds *N;
-  scrnfkeys       char(18) dim(32)       inz(*blanks);
-  $$fkey01        char(18) pos(1);
-  $$fkey02        char(18) pos(19);
-  $$fkey03        char(18) pos(37);
-  $$fkey04        char(18) pos(55);
-  $$fkey05        char(18) pos(73);
-  $$fkey06        char(18) pos(91);
-  $$fkey07        char(18) pos(109);
-  $$fkey08        char(18) pos(127);
-  $$fkey09        char(18) pos(145);
-  $$fkey10        char(18) pos(163);
-  $$fkey11        char(18) pos(181);
-  $$fkey12        char(18) pos(199);
-  $$fkey13        char(18) pos(217);
-  $$fkey14        char(18) pos(235);
-  $$fkey15        char(18) pos(253);
-  $$fkey16        char(18) pos(271);
-  $$fkey17        char(18) pos(289);
-  $$fkey18        char(18) pos(307);
-  $$fkey19        char(18) pos(325);
-  $$fkey20        char(18) pos(343);
-  $$fkey21        char(18) pos(361);
-  $$fkey22        char(18) pos(379);
-  $$fkey23        char(18) pos(397);
-  $$fkey24        char(18) pos(415);
-  $$fkey25        char(18) pos(433);
-  $$fkey26        char(18) pos(451);
-  $$fkey27        char(18) pos(469);
-  $$fkey28        char(18) pos(487);
-  $$fkey29        char(18) pos(505);
-  $$fkey30        char(18) pos(523);
-  $$fkey31        char(18) pos(541);
-  $$fkey32        char(18) pos(559);
+
+dcl-ds *n;
+  scrnfkeys char(18) dim(32) inz(*blanks);
+  $$fkey01  char(18) pos(1);
+  $$fkey02  char(18) pos(19);
+  $$fkey03  char(18) pos(37);
+  $$fkey04  char(18) pos(55);
+  $$fkey05  char(18) pos(73);
+  $$fkey06  char(18) pos(91);
+  $$fkey07  char(18) pos(109);
+  $$fkey08  char(18) pos(127);
+  $$fkey09  char(18) pos(145);
+  $$fkey10  char(18) pos(163);
+  $$fkey11  char(18) pos(181);
+  $$fkey12  char(18) pos(199);
+  $$fkey13  char(18) pos(217);
+  $$fkey14  char(18) pos(235);
+  $$fkey15  char(18) pos(253);
+  $$fkey16  char(18) pos(271);
+  $$fkey17  char(18) pos(289);
+  $$fkey18  char(18) pos(307);
+  $$fkey19  char(18) pos(325);
+  $$fkey20  char(18) pos(343);
+  $$fkey21  char(18) pos(361);
+  $$fkey22  char(18) pos(379);
+  $$fkey23  char(18) pos(397);
+  $$fkey24  char(18) pos(415);
+  $$fkey25  char(18) pos(433);
+  $$fkey26  char(18) pos(451);
+  $$fkey27  char(18) pos(469);
+  $$fkey28  char(18) pos(487);
+  $$fkey29  char(18) pos(505);
+  $$fkey30  char(18) pos(523);
+  $$fkey31  char(18) pos(541);
+  $$fkey32  char(18) pos(559);
 end-ds;
-//
+

@@ -3,6 +3,6 @@
 //  Data structure for message ID: USR8128
 //  Suche läuft. &1 von max. &2 Datensätzen durchsucht ...
 dcl-ds USR8128 qualified;
-  var1  packed(10:0) inz;
-  var2  packed(10:0) inz;
+  var1 packed(10: 0) inz;
+  var2 packed(10: 0) inz;
 end-ds;

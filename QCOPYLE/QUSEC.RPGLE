@@ -1,4 +1,4 @@
-**FREE
+**free
 //** START HEADER FILE SPECIFICATIONS ****************************
 //
 //Header File Name: H/QUSEC
@@ -46,15 +46,15 @@
 //****************************************************************
 dcl-ds qusec;
   //                                             Qus EC
-  qusbprv         int(10) inz(256);
+  qusbprv  int(10) inz(256);
   //                                             Bytes Provided
-  qusbavl         int(10);
+  qusbavl  int(10);
   //                                             Bytes Available
-  qusei           char(7);
+  qusei    char(7);
   //                                             Exception Id
-  quserved        char(1);
+  quserved char(1);
   //                                             Reserved
-  qused01         char(240);
+  qused01  char(240);
 end-ds;
-//
+
 //                                      Varying length

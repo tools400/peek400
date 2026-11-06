@@ -3,5 +3,5 @@
 //  Data structure for message ID: USR0005
 //  Datei &1 konnte nicht geöffnet werden. Siehe Jobprotokoll.
 dcl-ds USR0005 qualified;
-  var1  char(10) inz;
+  var1 char(10) inz;
 end-ds;

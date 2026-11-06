@@ -3,5 +3,5 @@
 //  Data structure for message ID: USR8207
 //  Datei konnte nicht geöffnet werden. Die Satzlänge ist größe
 dcl-ds USR8207 qualified;
-  var1  packed(5:0) inz;
+  var1 packed(5: 0) inz;
 end-ds;

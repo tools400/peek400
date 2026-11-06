@@ -3,5 +3,5 @@
 //  Data structure for message ID: USR8110
 //  Auswahl '&1' nicht gültig.
 dcl-ds USR8110 qualified;
-  var1  char(10) inz;
+  var1 char(10) inz;
 end-ds;

@@ -3,5 +3,5 @@
 //  Data structure for message ID: USR8214
 //  1=Kleinbuchstaben erlaubt; 0=nur Großbuchstaben
 dcl-ds USR8214 qualified;
-      //  No replacement variables available!
+//  No replacement variables available!
 end-ds;

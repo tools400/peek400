@@ -3,5 +3,5 @@
 //  Data structure for message ID: USR8171
 //  Ungültiger Wert '&1' für Zeit-, Datum- oder Zeitmarkenfeld
 dcl-ds USR8171 qualified;
-  var1  char(26) inz;
+  var1 char(26) inz;
 end-ds;

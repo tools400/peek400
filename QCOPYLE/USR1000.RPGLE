@@ -3,7 +3,7 @@
 //  Data structure for message ID: USR1000
 //  Keine Berechtigung für Datei &2/&1, Teildatei &3.
 dcl-ds USR1000 qualified;
-  var1  char(10) inz;
-  var2  char(10) inz;
-  var3  char(10) inz;
+  var1 char(10) inz;
+  var2 char(10) inz;
+  var3 char(10) inz;
 end-ds;

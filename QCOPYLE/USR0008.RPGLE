@@ -3,6 +3,6 @@
 //  Data structure for message ID: USR0008
 //  Die Datei &2/&1 konnte nicht gefunden werden.
 dcl-ds USR0008 qualified;
-  var1  char(10) inz;
-  var2  char(10) inz;
+  var1 char(10) inz;
+  var2 char(10) inz;
 end-ds;

@@ -3,5 +3,5 @@
 //  Data structure for message ID: USR8148
 //  Kein Platz mehr für Spalte '&1'!
 dcl-ds USR8148 qualified;
-  var1  char(10) inz;
+  var1 char(10) inz;
 end-ds;

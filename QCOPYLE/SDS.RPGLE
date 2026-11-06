@@ -1,76 +1,76 @@
-**FREE
-//
+**free
+
 //====================================================*
 //  Program Status Data Structure                     *
 //====================================================*
 dcl-ds sds qualified psds;
   // Programmname
-  pgmName         char(10);
+  pgmName  char(10);
   // Programmfehlerstatus
-  pgmStat         zoned(5);
+  pgmStat  zoned(5);
   // vorheriger Programmfehlerstatus
-  prevStat        zoned(5);
+  prevStat zoned(5);
   // Letzte Anweisungsnummer
-  lastSeq         char(8);
+  lastSeq  char(8);
   // Letzte Unterroutine
-  lastSubr        char(8);
+  lastSubr char(8);
   // Anzahl übergebener Parameter
-  nbrParm         zoned(3);
+  nbrParm  zoned(3);
   // Fehler-Msg
-  msgID           char(7);
+  msgID    char(7);
   //  Fehler-Art
-  msgPrfx         char(3) overlay(msgid);
+  msgPrfx  char(3) overlay(msgid);
   //  Fehler-Nummer
-  msgNbr          char(4) overlay(msgid:4);
+  msgNbr   char(4) overlay(msgid: 4);
   // MI-Instruktions-Nr.
-  mi_instr        char(4);
+  mi_instr char(4);
   // Arbeitsbereich für Nachrichten
-  workArea        char(30);
+  workArea char(30);
   // Programmbiblitohek
-  pgmLib          char(10);
+  pgmLib   char(10);
   // CPF-Fehlertext
-  msgText         char(80);
+  msgText  char(80);
   // Kz der Ausnahmebedingung
-  aube            char(4);
+  aube     char(4);
   // unbenutzt
-  unused_1        char(16);
+  unused_1 char(16);
   // Datumsformat
-  datFmt          char(8);
+  datFmt   char(8);
   // Ersten 2 stellen von *YEAR
-  year            zoned(2);
+  year     zoned(2);
   // Letzte Dateioperation: Dateiname
-  fileOpr         char(8);
+  fileOpr  char(8);
   // Datei-Staus-Information
-  fileStat        char(35);
+  fileStat char(35);
   // Jobname
-  job             char(10);
+  job      char(10);
   // Benutzer
-  user            char(10);
+  user     char(10);
   // Jobnummer
-  jobNbr          zoned(6);
+  jobNbr   zoned(6);
   // Jobdatum, Aufbau wie UDATE
-  jobD            zoned(6);
+  jobD     zoned(6);
   // Programm-Ausführungsdatum, Aufbau wie UDATE
-  jobDate         zoned(6);
+  jobDate  zoned(6);
   // Job-Zeit (HHMMSS)
-  jobTime         zoned(6);
+  jobTime  zoned(6);
   // Umwandlungsdatum
-  crtdate         char(6);
+  crtdate  char(6);
   // Umwandlungszeit (HHMMSS)
-  crtTime         char(6);
+  crtTime  char(6);
   // Compiler Version
-  compVer         char(4);
+  compVer  char(4);
   // Quellendatei
-  srcFile         char(10);
+  srcFile  char(10);
   // Bibliothek mit Quellendatei
-  srcLib          char(10);
+  srcLib   char(10);
   // Quellenteildatei
-  srcMbr          char(10);
+  srcMbr   char(10);
   // Program containing procedure
-  pgmProc         char(10);
+  pgmProc  char(10);
   // Module containing procedure
-  modProc         char(10);
+  modProc  char(10);
   // unbenutzt
-  unused_2        char(76);
+  unused_2 char(76);
 end-ds;
-//
+

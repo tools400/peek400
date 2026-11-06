@@ -1,24 +1,24 @@
-**FREE
+**free
 
 /if defined(internal_prototype)
 dcl-pr peek05 extpgm('PEEK05');
 /else
 dcl-pr peek05 extpgm(peek05_name);
 /endif
-  io_qfile                                 likeds(qobj_t);
-  i_member                           const like(mbr_t);
-  i_access                           const like(accessmode_t);
-  i_prodlib                          const like(lib_t);
-  i_chglib                           const like(bool_t);
-  i_chgfile                          const like(bool_t);
-  i_chgmbr                           const like(bool_t);
-  i_updmodkey                        const like(bool_t);
-  i_chgsqlw                          const like(bool_t);
-  i_chgsqlo                          const like(bool_t);
-  i_qenvfile                         const likeds(qobj_t);
-  i_envmbr                           const like(mbr_t);
-  i_envsave                          const like(bool_t);
-  i_envlayout                        const like(bool_t);
-  i_sqlwhere                         const like(sqlwhere_t);
-  i_sqlorder                         const like(sqlorder_t);
+  io_qfile    likeds(qobj_t);
+  i_member    like(mbr_t) const;
+  i_access    like(accessmode_t) const;
+  i_prodlib   like(lib_t) const;
+  i_chglib    like(bool_t) const;
+  i_chgfile   like(bool_t) const;
+  i_chgmbr    like(bool_t) const;
+  i_updmodkey like(bool_t) const;
+  i_chgsqlw   like(bool_t) const;
+  i_chgsqlo   like(bool_t) const;
+  i_qenvfile  likeds(qobj_t) const;
+  i_envmbr    like(mbr_t) const;
+  i_envsave   like(bool_t) const;
+  i_envlayout like(bool_t) const;
+  i_sqlwhere  like(sqlwhere_t) const;
+  i_sqlorder  like(sqlorder_t) const;
 end-pr;

@@ -3,7 +3,7 @@
 //  Data structure for message ID: USR9994
 //  Unerwarteter Fehler &1 in C Funktion &2 aufgetreten.
 dcl-ds USR9994 qualified;
-  var1  packed(5:0) inz;
-  var2  char(32) inz;
-  var3  char(256) inz;
+  var1 packed(5: 0) inz;
+  var2 char(32) inz;
+  var3 char(256) inz;
 end-ds;

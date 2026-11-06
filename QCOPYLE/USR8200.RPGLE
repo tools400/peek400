@@ -3,5 +3,5 @@
 //  Data structure for message ID: USR8200
 //  Datensatz &1 konnte nicht gelöscht werden.
 dcl-ds USR8200 qualified;
-  var1  packed(10:0) inz;
+  var1 packed(10: 0) inz;
 end-ds;

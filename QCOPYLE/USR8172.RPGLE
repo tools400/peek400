@@ -3,5 +3,5 @@
 //  Data structure for message ID: USR8172
 //  Bearbeite: &1
 dcl-ds USR8172 qualified;
-  var1  char(50) inz;
+  var1 char(50) inz;
 end-ds;

@@ -3,5 +3,5 @@
 //  Data structure for message ID: USR8232
 //  Datensatz wurde zwischenzeitlich von einem anderem Job geän
 dcl-ds USR8232 qualified;
-      //  No replacement variables available!
+//  No replacement variables available!
 end-ds;

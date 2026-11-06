@@ -1,11 +1,11 @@
-**FREE
+**free
 //==================================================================*
 //  Datums- und Zeitwerte im externen Format eines Feldes
-//
+
 //  f_extDate() und f_extTime() geben einen Wert so aus, wie er im
 //  Satzpuffer eines Feldes steht: im Format DATFMT/TIMFMT des Feldes
 //  und mit seinem Trennzeichen (FLDL0100.F1DTFM, FLDL0100.F1DTSP).
-//
+
 //  Der Member enthält Prozeduren, nicht nur Prototypen. Er wird am
 //  Ende des Quellcodes nach /COPY QCOPYLE,FLDL0100 eingebunden.
 //==================================================================*
@@ -17,12 +17,12 @@
 //------------------------------------------------------------------*
 dcl-proc f_extDate;
   dcl-pi *n varchar(10);
-    i_fldl0100      const likeds(fldl0100_t);
-    i_date          date(*iso) value;
+    i_fldl0100 likeds(fldl0100_t) const;
+    i_date     date(*iso) value;
   end-pi;
 
-  dcl-s text            varchar(10);
-  dcl-s dftsep          char(1);
+  dcl-s text varchar(10);
+  dcl-s dftsep char(1);
 
   if (i_fldl0100.f1dtfm = '*MDY' or i_fldl0100.f1dtfm = '*DMY' or
       i_fldl0100.f1dtfm = '*YMD' or i_fldl0100.f1dtfm = '*JUL');
@@ -73,12 +73,12 @@ end-proc;
 //------------------------------------------------------------------*
 dcl-proc f_extTime;
   dcl-pi *n varchar(8);
-    i_fldl0100      const likeds(fldl0100_t);
-    i_time          time(*iso) value;
+    i_fldl0100 likeds(fldl0100_t) const;
+    i_time     time(*iso) value;
   end-pi;
 
-  dcl-s text            varchar(8);
-  dcl-s dftsep          char(1);
+  dcl-s text varchar(8);
+  dcl-s dftsep char(1);
 
   //  *HIVAL ist 24.00.00. Im Format *USA wäre das '12:00 AM' und damit
   //  wieder Mitternacht am Tagesanfang; größter *USA-Wert ist 11:59 PM.

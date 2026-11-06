@@ -3,5 +3,5 @@
 //  Data structure for message ID: USR8220
 //  Editor nicht zulässig. Feld &1 enthält NULL Wert.
 dcl-ds USR8220 qualified;
-  var1  char(10) inz;
+  var1 char(10) inz;
 end-ds;

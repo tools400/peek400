@@ -3,5 +3,5 @@
 //  Data structure for message ID: USR8217
 //  Sortierung nach relativer Satznummer nicht möglich.
 dcl-ds USR8217 qualified;
-      //  No replacement variables available!
+//  No replacement variables available!
 end-ds;
