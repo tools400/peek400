@@ -1245,13 +1245,13 @@ dcl-proc test32_peek33_versionRaised export;
   dcl-s msgDta like(msgDta_t);
 
   set0007 = f_getUsrSg('*VERSION');
-  set0007.set_vsn = 'V04R00M08';
+  set0007.set_vsn = 'V04R01M00';
   p_updUsrSg('*VERSION': set0007);
 
-  peek33('V04R00M09': msgID: msgDta);
+  peek33('V04R01M01': msgID: msgDta);
 
   set0007 = f_getUsrSg('*VERSION');
-  aEqual('V04R00M09': set0007.set_vsn: 'Gespeicherte Version');
+  aEqual('V04R01M01': set0007.set_vsn: 'Gespeicherte Version');
 end-proc;
 
 // ==========================================================================

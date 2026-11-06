@@ -391,9 +391,9 @@ dcl-s sflLeftOfs like(int4_t) inz;
 dcl-s sflMode char(10) inz;
 dcl-s sflPinRnge like(int4_t) inz;
 
-dcl-c COPYRIGHT '1997-2026, Thomas Raddatz - PEEK v4.0.8';
-dcl-c RELEASE 'Stand: 02.11.2026';
-dcl-c Version 'V04R00M08';
+dcl-c COPYRIGHT '1997-2026, Thomas Raddatz - PEEK v4.1.0';
+dcl-c RELEASE 'Stand: 06.11.2026';
+dcl-c Version 'V04R01M00';
 
 dcl-s l#File like(##file) inz;
 dcl-s l#Library like(##library) inz;
