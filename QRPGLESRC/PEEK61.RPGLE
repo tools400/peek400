@@ -59,10 +59,10 @@ dcl-c SCR_COLUMN_DS3 80;
 dcl-c SCR_COLUMN_DS4 132;
 
 //  Private Prototypes
-dcl-pr lf_getNumDspCol uns(10) extproc('lf_getnumdspcol');
+dcl-pr lf_getnumdspcol uns(10) extproc('lf_getnumdspcol');
 end-pr;
 
-dcl-pr lf_getScreenMode char(10) extproc('lf_getscreenmode');
+dcl-pr lf_getscreenmode char(10) extproc('lf_getscreenmode');
 end-pr;
 
 //===============================================================*
@@ -94,7 +94,7 @@ dcl-proc p_inzProgressMeter export;
   if (%parms() >= %parmnum(i_marker));
     marker = i_marker;
   else;
-    marker = cPrgMtr_blue;
+    marker = cPrgMtr_Blue;
   endif;
 
   //  ... 'i_waitSec'
@@ -108,7 +108,7 @@ dcl-proc p_inzProgressMeter export;
   if (%parms() >= %parmnum(i_jobType));
     jobtype = i_jobType;
   else;
-    jobtype = cPrgMtr_jobType_all;
+    jobtype = cPrgMtr_JobType_All;
   endif;
 
   //  ... 'i_width'
@@ -141,7 +141,7 @@ dcl-proc p_inzProgressMeter export;
   // ... if an attribute below x'20' (normal green) specified,
   //     swap for yellow reverse (safer)
   if (marker < x'20');
-    g_marker = cPrgMtr_yellow;
+    g_marker = cPrgMtr_Yellow;
   else;
     g_marker = marker;
   endif;
@@ -158,7 +158,7 @@ dcl-proc p_inzProgressMeter export;
     if (width > 0);
       g_width = width;
     else;
-      g_width = lf_getNumDspCol() -
+      g_width = lf_getnumdspcol() -
                   %len(g_text) - 10;
     endif;
   endif;
@@ -172,17 +172,17 @@ dcl-proc p_inzProgressMeter export;
   //  ... check whether the progress meter must be shown for jobs of type ...
   select;
   //      ... all Jobs
-  when (jobtype = cPrgMtr_jobType_all);
+  when (jobtype = cPrgMtr_JobType_All);
     g_showPrgMtr = bTrue;
   //      ... interactive jobs
-  when (jobtype = cPrgMtr_jobType_dlg);
+  when (jobtype = cPrgMtr_JobType_Dlg);
     if (g_jobType <> 'B');
       g_showPrgMtr = bTrue;
     else;
       g_showPrgMtr = bFalse;
     endif;
   //      ... batch jobs
-  when (jobtype = cPrgMtr_jobType_batch);
+  when (jobtype = cPrgMtr_JobType_Batch);
     if (g_jobType = 'B');
       g_showPrgMtr = bTrue;
     else;
@@ -315,7 +315,7 @@ end-proc;
 //  Get number of display columns
 //===============================================================*
 
-dcl-proc lf_getNumDspCol;
+dcl-proc lf_getnumdspcol;
   dcl-pi *n uns(10);
   end-pi;
 
@@ -323,7 +323,7 @@ dcl-proc lf_getNumDspCol;
   dcl-s numDspColumns uns(10) inz;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  if (lf_getScreenMode() = SCR_MODE_DS3);
+  if (lf_getscreenmode() = SCR_MODE_DS3);
     numDspColumns = SCR_COLUMN_DS3;
   else;
     numDspColumns = SCR_COLUMN_DS4;
@@ -337,7 +337,7 @@ end-proc;
 //  Get screen mode
 //===============================================================*
 
-dcl-proc lf_getScreenMode;
+dcl-proc lf_getscreenmode;
   dcl-pi *n char(10);
   end-pi;
 

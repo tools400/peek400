@@ -34,10 +34,10 @@ dcl-ds riofb_t qualified align template;
   numByt int(10);
   blkCnt int(5);
   blkFld char(1);
-  bitfld char(1);
-  dupKy  char(1) overlay(bitfld: 1);
-  icfLc  char(1) overlay(bitfld: 1);
-  res01  char(1) overlay(bitfld: 1);
+  bitFld char(1);
+  dupKy  char(1) overlay(bitFld: 1);
+  icfLc  char(1) overlay(bitFld: 1);
+  res01  char(1) overlay(bitFld: 1);
   res02  char(20);
 end-ds;
 
@@ -94,7 +94,7 @@ dcl-c key_prevunq x'06000100';
 dcl-c key_nexteq x'0E000100';
 dcl-c key_preveq x'0F000100';
 
-dcl-c first x'01000300';
+dcl-c First x'01000300';
 dcl-c last x'02000300';
 dcl-c next x'03000300';
 dcl-c previous x'04000300';

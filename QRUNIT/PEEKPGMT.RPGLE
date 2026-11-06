@@ -452,24 +452,24 @@ end-proc;
 // ==========================================================================
 
 dcl-proc test09_peek07_invalidAttribute export;
-  dcl-s attrlen like(int4_t);
-  dcl-s attrtyp like(attrType_t);
-  dcl-s attrval like(attrValue_t);
+  dcl-s attrLen like(int4_t);
+  dcl-s attrTyp like(attrType_t);
+  dcl-s attrVal like(attrValue_t);
 
   monitor;
-    peek07('NOTEXIST': bTrue: attrlen: attrtyp: attrval);
+    peek07('NOTEXIST': bTrue: attrLen: attrTyp: attrVal);
   on-error;
     fail('PEEK07 bricht bei einem unbekannten Attribut ab: ' + lastMsg());
   endmon;
 
-  iEqual(0: attrlen: 'PEEK07 Länge bei unbekanntem Attribut');
+  iEqual(0: attrLen: 'PEEK07 Länge bei unbekanntem Attribut');
 
-  peek07('SYSNAME': bTrue: attrlen: attrtyp: attrval);
-  iEqual(8: attrlen: 'PEEK07 Länge von SYSNAME');
+  peek07('SYSNAME': bTrue: attrLen: attrTyp: attrVal);
+  iEqual(8: attrLen: 'PEEK07 Länge von SYSNAME');
 end-proc;
 
 // ==========================================================================
-//  PEEK71: Ein gescheitertes transcoder_new() darf keinen Platz in der
+//  PEEK71: Ein gescheitertes Transcoder_new() darf keinen Platz in der
 //  Transcoder-Liste belegen, sonst lässt sich nach 64 gescheiterten
 //  Versuchen kein Transcoder mehr anlegen.
 // ==========================================================================
@@ -604,8 +604,8 @@ dcl-proc test14_peek18_unconvertibleCcsid export;
   dcl-ds fldl0100 likeds(fldl0100_t) inz;
   dcl-ds set0003 likeds(set0003_t) inz;
   dcl-s buffer like(rcdBuf_t);
-  dcl-s outbuf like(rcdBuf_t);
-  dcl-s outlen like(int4_t);
+  dcl-s outBuf like(rcdBuf_t);
+  dcl-s outLen like(int4_t);
   dcl-s msgID like(msgId_t);
   dcl-s msgDta like(msgDta_t);
   dcl-s ccsid int(10);
@@ -625,23 +625,23 @@ dcl-proc test14_peek18_unconvertibleCcsid export;
   buffer = *allx'40';
   monitor;
     peek18(fldl0100: TST_CCSID: buffer: '*EXTERN': '*CURRENT'
-           : outbuf: outlen: msgID: msgDta);
+           : outBuf: outLen: msgID: msgDta);
   on-error;
     fail('PEEK18 *EXTERN bricht bei GRAPHIC CCSID ' + %char(ccsid)
          + ' ab: ' + lastMsg());
   endmon;
-  iEqual(5 + %len(%trimr(set0003.set_dlmtr)): outlen
+  iEqual(5 + %len(%trimr(set0003.set_dlmtr)): outLen
          : 'PEEK18 *EXTERN Länge von GRAPHIC(5) mit Trennzeichen');
 
   buffer = *allx'40';
   monitor;
     peek18(fldl0100: TST_CCSID: buffer: '*INTERN': '*CURRENT'
-           : outbuf: outlen: msgID: msgDta);
+           : outBuf: outLen: msgID: msgDta);
   on-error;
     fail('PEEK18 *INTERN bricht bei GRAPHIC CCSID ' + %char(ccsid)
          + ' ab: ' + lastMsg());
   endmon;
-  iEqual(10: outlen: 'PEEK18 *INTERN Länge von GRAPHIC(5)');
+  iEqual(10: outLen: 'PEEK18 *INTERN Länge von GRAPHIC(5)');
 end-proc;
 
 // ==========================================================================
@@ -658,7 +658,7 @@ dcl-proc test15_peek20_floatKey export;
     c char(5);
   end-ds;
   dcl-s buffer like(rcdBuf_t);
-  dcl-s keyval like(keyBuf_t);
+  dcl-s keyVal like(keyBuf_t);
   dcl-s keyBuf like(rcdBuf_t);
   dcl-s msgID like(msgId_t);
   dcl-s msgDta like(msgDta_t);
@@ -672,15 +672,15 @@ dcl-proc test15_peek20_floatKey export;
   rcd.c = 'ABCDE';
   buffer = rcd;
 
-  peek19(buffer: keyval: msgID: msgDta);
-  peek20(keyval: keyBuf: msgID: msgDta);
+  peek19(buffer: keyVal: msgID: msgDta);
+  peek20(keyVal: keyBuf: msgID: msgDta);
   aEqual('': msgID: 'PEEK20 msgid');
 
   rcd = keyBuf;
   assert(rcd.f = 1.5: 'F nach PEEK19/PEEK20 ist ' + %char(rcd.f)
-         + ', Schlüssel ''' + %trimr(keyval) + '''');
+         + ', Schlüssel ''' + %trimr(keyVal) + '''');
   assert(rcd.d = -2.25: 'D nach PEEK19/PEEK20 ist ' + %char(rcd.d)
-         + ', Schlüssel ''' + %trimr(keyval) + '''');
+         + ', Schlüssel ''' + %trimr(keyVal) + '''');
   aEqual('ABCDE': rcd.c: 'C nach PEEK19/PEEK20 (REAL und DOUBLE davor)');
 end-proc;
 
@@ -694,7 +694,7 @@ dcl-proc test16_peek20_utf8Key export;
   dcl-ds qFile likeds(qObj_t) inz;
   dcl-ds set0003 likeds(set0003_t) inz;
   dcl-s buffer like(rcdBuf_t);
-  dcl-s keyval like(keyBuf_t);
+  dcl-s keyVal like(keyBuf_t);
   dcl-s keyBuf like(rcdBuf_t);
   dcl-s msgID like(msgId_t);
   dcl-s msgDta like(msgDta_t);
@@ -707,11 +707,11 @@ dcl-proc test16_peek20_utf8Key export;
   //  U = 'ÄÖÜ' in UTF-8 und 4 Leerzeichen, C = 'ABCDE'
   buffer = x'C384C396C39C20202020' + 'ABCDE';
 
-  peek19(buffer: keyval: msgID: msgDta);
-  iEqual(10 + %len(%trimr(set0003.set_dlmtr)) + 1: %scan('ABCDE': keyval)
+  peek19(buffer: keyVal: msgID: msgDta);
+  iEqual(10 + %len(%trimr(set0003.set_dlmtr)) + 1: %scan('ABCDE': keyVal)
          : 'Position von C im externen Schlüssel');
 
-  peek20(keyval: keyBuf: msgID: msgDta);
+  peek20(keyVal: keyBuf: msgID: msgDta);
   aEqual(hexOf(%subst(buffer: 1: 15)): hexOf(%subst(keyBuf: 1: 15))
          : 'Schlüssel nach PEEK19/PEEK20');
 end-proc;
@@ -732,7 +732,7 @@ dcl-proc test17_peek18_accessKeyChanged export;
   dcl-ds orig likeds(set0003_t) inz;
   dcl-ds chg likeds(set0003_t) inz;
   dcl-s buffer like(rcdBuf_t);
-  dcl-s keyval like(keyBuf_t);
+  dcl-s keyVal like(keyBuf_t);
   dcl-s keyBuf like(rcdBuf_t);
   dcl-s msgID like(msgId_t);
   dcl-s msgDta like(msgDta_t);
@@ -750,16 +750,16 @@ dcl-proc test17_peek18_accessKeyChanged export;
   //  Erst mit der bisherigen Einstellung, damit PEEK18 und PEEK20 sie
   //  schon einmal gelesen haben.
   orig = f_getUsrSg('*ACCESSKEY');
-  peek19(buffer: keyval: msgID: msgDta);
-  peek20(keyval: keyBuf: msgID: msgDta);
+  peek19(buffer: keyVal: msgID: msgDta);
+  peek20(keyVal: keyBuf: msgID: msgDta);
 
   chg = orig;
   chg.set_signX = bFalse;
   chg.set_dlmtr = '|';
   p_updUsrSg('*ACCESSKEY': chg);
   monitor;
-    peek19(buffer: keyval: msgID: msgDta);
-    peek20(keyval: keyBuf: msgID: msgDta);
+    peek19(buffer: keyVal: msgID: msgDta);
+    peek20(keyVal: keyBuf: msgID: msgDta);
   on-error;
     p_updUsrSg('*ACCESSKEY': orig);
     fail('PEEK19/PEEK20 brechen nach Änderung von *ACCESSKEY ab: '
@@ -770,7 +770,7 @@ dcl-proc test17_peek18_accessKeyChanged export;
   //  %editflt ohne führendes Vorzeichen (PEEK18 f_to_extern)
   expected = %subst(%editflt(rcd.f): 2) + '|'
            + %subst(%editflt(rcd.d): 2) + '|ABCDE|';
-  aEqual(expected: %trimr(keyval): 'PEEK19 ohne Vorzeichen, Trennzeichen |');
+  aEqual(expected: %trimr(keyVal): 'PEEK19 ohne Vorzeichen, Trennzeichen |');
 
   rcd = keyBuf;
   aEqual('ABCDE': rcd.c: 'C nach PEEK20 ohne Vorzeichen, Trennzeichen |');
@@ -879,7 +879,7 @@ end-proc;
 
 dcl-proc test20_peek15_longEditWord export;
   dcl-ds qFile likeds(qObj_t) inz;
-  dcl-s scnnbrs like(int2_t);
+  dcl-s scnNbrs like(int2_t);
   dcl-s stage like(int4_t);
   dcl-s peekLib like(lib_t);
   dcl-s mbr char(10);
@@ -923,10 +923,10 @@ EDTWRD('' .   .   .   .   .   .  0, -'
   runCmd('OVRDBF FILE(PEEKSRC) TOFILE(' + %trim(peekLib) + '/PEEKSRC) +
           MBR(DSPF) OVRSCOPE(*JOB) SHARE(*NO)');
 
-  scnnbrs = 0;
+  scnNbrs = 0;
   stage = 0;
   monitor;
-    peek15(qFile: scnnbrs: bFalse: stage: 10);
+    peek15(qFile: scnNbrs: bFalse: stage: 10);
   on-error;
     dltOvrPeek15();
     fail('PEEK15 bricht beim Editierwort mit 29 Zeichen ab: ' + lastMsg());
@@ -940,7 +940,7 @@ EDTWRD('' .   .   .   .   .   .  0, -'
     fail('CRTDSPF der von PEEK15 erzeugten DDS scheitert: ' + lastMsg());
   endmon;
 
-  iEqual(1: scnnbrs: 'PEEK15 Anzahl Bildschirme');
+  iEqual(1: scnNbrs: 'PEEK15 Anzahl Bildschirme');
 end-proc;
 
 // ==========================================================================
@@ -1523,18 +1523,18 @@ end-proc;
 dcl-proc test46_peek66_valueFits export;
   dcl-s buffer like(cmdBuffer_t);
   dcl-s length int(10);
-  dcl-ds infmt likeds(fldl0100_t) inz;
-  dcl-ds outfmt likeds(fldl0100_t) inz;
+  dcl-ds inFmt likeds(fldl0100_t) inz;
+  dcl-ds outFmt likeds(fldl0100_t) inz;
   dcl-s msgID like(msgId_t);
   dcl-s msgDta like(msgDta_t);
 
-  numFmt(infmt: 'P': 9: 0);
-  numFmt(outfmt: 'P': 3: 0);
+  numFmt(inFmt: 'P': 9: 0);
+  numFmt(outFmt: 'P': 3: 0);
   buffer = '123';
   length = 3;
 
   monitor;
-    peek66(buffer: length: infmt: outfmt: msgID: msgDta);
+    peek66(buffer: length: inFmt: outFmt: msgID: msgDta);
   on-error;
     fail('PEEK66 bricht ab: ' + lastMsg());
   endmon;
@@ -1550,18 +1550,18 @@ end-proc;
 dcl-proc test47_peek66_overflow export;
   dcl-s buffer like(cmdBuffer_t);
   dcl-s length int(10);
-  dcl-ds infmt likeds(fldl0100_t) inz;
-  dcl-ds outfmt likeds(fldl0100_t) inz;
+  dcl-ds inFmt likeds(fldl0100_t) inz;
+  dcl-ds outFmt likeds(fldl0100_t) inz;
   dcl-s msgID like(msgId_t);
   dcl-s msgDta like(msgDta_t);
 
-  numFmt(infmt: 'P': 9: 0);
-  numFmt(outfmt: 'P': 3: 0);
+  numFmt(inFmt: 'P': 9: 0);
+  numFmt(outFmt: 'P': 3: 0);
   buffer = '12345';
   length = 5;
 
   monitor;
-    peek66(buffer: length: infmt: outfmt: msgID: msgDta);
+    peek66(buffer: length: inFmt: outFmt: msgID: msgDta);
   on-error;
     fail('PEEK66 bricht ab: ' + lastMsg());
   endmon;
@@ -1577,19 +1577,19 @@ end-proc;
 dcl-proc test48_peek66_overflowFromChar export;
   dcl-s buffer like(cmdBuffer_t);
   dcl-s length int(10);
-  dcl-ds infmt likeds(fldl0100_t) inz;
-  dcl-ds outfmt likeds(fldl0100_t) inz;
+  dcl-ds inFmt likeds(fldl0100_t) inz;
+  dcl-ds outFmt likeds(fldl0100_t) inz;
   dcl-s msgID like(msgId_t);
   dcl-s msgDta like(msgDta_t);
 
-  infmt.f1DTyp = 'A';
-  infmt.f1FLen = 10;
-  numFmt(outfmt: 'S': 3: 0);
+  inFmt.f1DTyp = 'A';
+  inFmt.f1FLen = 10;
+  numFmt(outFmt: 'S': 3: 0);
   buffer = '12345';
   length = 5;
 
   monitor;
-    peek66(buffer: length: infmt: outfmt: msgID: msgDta);
+    peek66(buffer: length: inFmt: outFmt: msgID: msgDta);
   on-error;
     fail('PEEK66 bricht ab: ' + lastMsg());
   endmon;
@@ -1635,7 +1635,7 @@ dcl-proc test50_peek71_emptyString export;
 end-proc;
 
 // ==========================================================================
-//  PEEK71: Nach CHGJOB CCSID und transcoder_reset() (PEEK05 beim Start)
+//  PEEK71: Nach CHGJOB CCSID und Transcoder_reset() (PEEK05 beim Start)
 //  wird in die neue Job-CCSID umgesetzt. Bisher blieb die alte CCSID bis
 //  zum Ende der Aktivierungsgruppe gespeichert.
 // ==========================================================================
@@ -1672,7 +1672,7 @@ dcl-proc test51_peek71_jobCcsidChanged export;
 end-proc;
 
 // ==========================================================================
-//  PEEK71: transcoder_delete() entfernt einen Umsetzer auch aus der Liste
+//  PEEK71: Transcoder_delete() entfernt einen Umsetzer auch aus der Liste
 //  der erstellten Umsetzer. Bisher lieferte Transcoder_toJobCcsid() danach
 //  den gelöschten (geleerten) Umsetzer mit von-CCSID 0. Die Adresse des
 //  neuen Umsetzers kann dieselbe sein (%alloc nach dealloc).
@@ -1738,7 +1738,7 @@ dcl-proc test54_peek71_longStringExpand export;
 end-proc;
 
 // ==========================================================================
-//  PEEK71: Ist die Liste der Umsetzer voll (64), schafft transcoder_reset()
+//  PEEK71: Ist die Liste der Umsetzer voll (64), schafft Transcoder_reset()
 //  wieder Platz. PEEK05 ruft es bei jedem Start von Peek auf.
 // ==========================================================================
 
@@ -2148,7 +2148,7 @@ dcl-proc findUnconvertibleCcsid;
   candidates(9) = 28709;
 
   for i = 1 to %elem(candidates);
-    //  transcoder_new() does not add the transcoder to the list.
+    //  Transcoder_new() does not add the transcoder to the list.
     isConvertible = *on;
     monitor;
       hTranscoder = Transcoder_new(getJobCcsid(): candidates(i));
@@ -2302,7 +2302,7 @@ dcl-proc isTranscOf;
   open peekFld;
   chain i_field rpeekfld;
   if (%found(peekFld));
-    isTransc = k_istransc;
+    isTransc = k_isTransc;
   else;
     isTransc = '?';
   endif;
@@ -2345,8 +2345,8 @@ dcl-proc editPacked;
   dcl-pi *n varchar(64);
     i_pValue pointer value;
     i_digits int(10) const;
-    i_edtcde char(1) const;
-    i_edtwrd varchar(64) const;
+    i_edtCde char(1) const;
+    i_edtWrd varchar(64) const;
   end-pi;
 
   dcl-ds fldl0100 likeds(fldl0100_t) inz;
@@ -2365,9 +2365,9 @@ dcl-proc editPacked;
   fldl0100.f1Digt = i_digits;
   fldl0100.f1DecP = 0;
   fldl0100.f1vfmi = '0';
-  fldl0100.f1EdtC = i_edtcde;
-  fldl0100.f1EdWd = i_edtwrd;
-  fldl0100.f1EdWl = %len(i_edtwrd);
+  fldl0100.f1EdtC = i_edtCde;
+  fldl0100.f1EdWd = i_edtWrd;
+  fldl0100.f1EdWl = %len(i_edtWrd);
 
   srcVar = %subst(value: 1: fldl0100.f1FLen);
   peek06(fldl0100: 'FLDL0100': srcVar: bFalse: bTrue

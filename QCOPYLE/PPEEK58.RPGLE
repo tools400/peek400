@@ -5,10 +5,10 @@
 //============================================================*
 
 //  Konstants: f_wordWrap()
-dcl-c cWORDWRAP_paragraph_none 1;
-dcl-c cWORDWRAP_paragraph_msgd 2;
-dcl-c cWORDWRAP_paragraph_text 4;
-dcl-c cWORDWRAP_paragraph_trimr 8;
+dcl-c cWORDWRAP_PARAGRAPH_NONE 1;
+dcl-c cWORDWRAP_PARAGRAPH_MSGD 2;
+dcl-c cWORDWRAP_PARAGRAPH_TEXT 4;
+dcl-c cWORDWRAP_PARAGRAPH_TRIMR 8;
 
 //-------------------------------------------------------------------*
 dcl-pr f_dsplyLn like(int4_t);

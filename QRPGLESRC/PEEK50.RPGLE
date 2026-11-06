@@ -33,9 +33,9 @@ dcl-f peekFldL1 keyed usropn infds(peek_01_ds) rename(fpeekfld: fpeekfldl1) pref
 
 dcl-f peekFld usropn infds(peek_00_ds) prefix(f_);
 
-dcl-f peekwrk usage(*update: *delete) keyed usropn infds(work_00_ds) prefix(w_);
+dcl-f peekWrk usage(*update: *delete) keyed usropn infds(work_00_ds) prefix(w_);
 
-dcl-f peekwrk_ disk(1024) usage(*update: *delete: *output) usropn infds(work_01_ds);
+dcl-f peekWrk_ disk(1024) usage(*update: *delete: *output) usropn infds(work_01_ds);
 
 dcl-ds workstn likeds(workstn_t);
 
@@ -73,7 +73,7 @@ dcl-ds work_01_ds likeds(infds_t);
 
 dcl-ds fldl0100 likeds(fldl0100_t) inz;
 
-dcl-ds ds_peekwrk extname('PEEKWRK') inz len(1024) prefix(w_);
+dcl-ds ds_peekWrk extname('PEEKWRK') inz len(1024) prefix(w_);
 end-ds;
 
 dcl-s yFKeys char(18) dim(32);
@@ -90,7 +90,7 @@ dcl-s sflRec like(sflPage);
 dcl-s sflNbrRcd like(sflPage);
 
 dcl-s sfBot like(int4_t);
-dcl-c nbrFKeys 3;
+dcl-c NbrFKeys 3;
 dcl-s sfl_cmd char(10);
 
 dcl-s isSflError char(1) inz(bFalse);
@@ -103,7 +103,7 @@ dcl-s peek23_name like(pgmCallN_t);
 dcl-s r_field like(##field);
 dcl-s lstField like(##field);
 dcl-s lstNbrRcd like(sflPage);
-dcl-s srchrec like(sflPage);
+dcl-s srchRec like(sflPage);
 //  Feldnamen der Subfile-Sätze für die Suche
 dcl-s sfl_fnmes like($$fNme) dim(9999);
 
@@ -159,7 +159,7 @@ dow ('1');
 
   //  Nachrichten anzeigen
   *in89 = '0';
-  write msgctl;
+  write msgCtl;
 
   //  "Keine Sätze ..."
   if (*in80 = *off);
@@ -171,19 +171,19 @@ dow ('1');
 
   select;
   when ((sfBot = 2) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#2;
   when ((sfBot = 3) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#3;
   when ((sfBot = 4) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#4;
   when ((sfBot = 5) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#5;
   when ((sfBot = 6) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#6;
   other;
     write pbbot#1;
@@ -191,7 +191,7 @@ dow ('1');
   endsl;
 
   //  Anzeige der Subfile
-  exfmt pbctl;
+  exfmt pbCtl;
   *in70 = '0';
 
   //  Nachrichten löschen
@@ -281,8 +281,8 @@ enddo;
 close peek50fm;
 close peekFld;
 close peekFldL1;
-close peekwrk;
-close peekwrk_;
+close peekWrk;
+close peekWrk_;
 
 return;
 
@@ -372,9 +372,9 @@ begsr srchField;
     //  Die Suche liest die Subfile nicht, sondern die gemerkten
     //  Feldnamen: Ein UPDATE der durchsuchten Zeilen verwarf bei F16
     //  ohne ENTER die eingegebenen Folgenummern.
-    for srchrec = lstNbrRcd to sflNbrRcd;
+    for srchRec = lstNbrRcd to sflNbrRcd;
       if (lstField =
-          %subst(sfl_fnmes(srchrec): 1:(f_scan(' ':
+          %subst(sfl_fnmes(srchRec): 1:(f_scan(' ':
                                 lstField) - 1)));
         isFound = bTrue;
         leave;
@@ -383,8 +383,8 @@ begsr srchField;
     endfor;
 
     if (isFound = bTrue);
-      wrk_sfsanr = srchrec;
-      lstNbrRcd = srchrec;
+      wrk_sfsanr = srchRec;
+      lstNbrRcd = srchRec;
     else;
       wrk_sfsanr = *zeros;
       lstNbrRcd = 0;
@@ -525,7 +525,7 @@ begsr c_saveExit;
 
   dow ('1');
     read(n) fpeekwrk;
-    if (%eof(peekwrk));
+    if (%eof(peekWrk));
       *in83 = *on;
       leave;
     endif;
@@ -595,7 +595,7 @@ begsr c_clrAll;
 
   dow ('1');
     read fpeekwrk;
-    if (%eof(peekwrk));
+    if (%eof(peekWrk));
       *in83 = *on;
       leave;
     endif;
@@ -676,7 +676,7 @@ endsr;
 
 begsr vPos;
 
-  chain recordNbr peekwrk_ ds_peekwrk;
+  chain recordNbr peekWrk_ ds_peekWrk;
   *in11 = not %found;
   if (*in11 = *on);
   //  Weiß noch nicht, was zu tun ist ...
@@ -685,7 +685,7 @@ begsr vPos;
     exsr fillRecord;
     exsr fillKey;
     w_data = wrk0002;
-    update peekwrk_ ds_peekwrk;
+    update peekWrk_ ds_peekWrk;
   endif;
 
 endsr;
@@ -732,13 +732,13 @@ endsr;
 begsr pbInit;
 
   *in89 = '0';
-  write msgctl;
+  write msgCtl;
 
   *in80 = '0'; // SFLDSP
   *in81 = '1'; // SFLDSPCTL
   *in82 = '1'; // SFLCLR
   *in83 = '1'; // SFLEND
-  write pbctl;
+  write pbCtl;
 
   *in82 = '0'; // SFLCLR
 
@@ -755,7 +755,7 @@ begsr pbReadUp;
 
   dow ('1');
     read(n) fpeekwrk;
-    if (%eof(peekwrk));
+    if (%eof(peekWrk));
       *in83 = *on;
       leave;
     endif;
@@ -891,7 +891,7 @@ begsr copyToWork;
     endif;
 
     clear wrk0002;
-    clear ds_peekwrk;
+    clear ds_peekWrk;
 
     fldl0100 = f_ffd;
 
@@ -917,7 +917,7 @@ begsr copyToWork;
     w_format = 'WRK0002';
     w_data = wrk0002;
 
-    write peekwrk_ ds_peekwrk;
+    write peekWrk_ ds_peekWrk;
   enddo;
 
 endsr;
@@ -933,8 +933,8 @@ begsr first;
   open peekFldL1;
 
   exsr clrPeekWrk;
-  open peekwrk;
-  open peekwrk_;
+  open peekWrk;
+  open peekWrk_;
   exsr copyToWork;
 
   open peek50fm;
@@ -980,12 +980,12 @@ begsr inzsr;
 
   isInzSr = bTrue;
 
-  PGMQ = '*';
+  pgmQ = '*';
 
   peek21_name = f_pgmCallN('PEEK21');
   peek23_name = f_pgmCallN('PEEK23');
 
-  peek23(sds.pgmName: '*ALL': nbrFKeys
+  peek23(sds.pgmName: '*ALL': NbrFKeys
         : yFKeys: yNbrOfKeys);
   scrnFKeys = %subarr(yFKeys: 1);
 

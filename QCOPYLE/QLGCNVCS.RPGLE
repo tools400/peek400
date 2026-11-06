@@ -23,6 +23,6 @@ dcl-c cvtcase_type_table 2;
 dcl-c cvtcase_type_user_def 3;
 dcl-c cvtcase_to_upper 0;
 dcl-c cvtcase_to_lower 1;
-dcl-c cvtcase_ccsid_job 0;
+dcl-c CVTCASE_CCSID_Job 0;
 
 /endif

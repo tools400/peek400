@@ -176,8 +176,8 @@ for do_x1 = 1 to numFields;
 endfor;
 
 //  delete list
-// peek02(i_qfile: i_rcdfmt: '*DELETE': rc
-//        : fldl0100: o_rcdfmtid);
+// peek02(i_qFile: i_rcdFmt: '*DELETE': rc
+//        : fldl0100: o_rcdFmtID);
 
 if (numFields = 0);
   o_msgID = 'USR0001';

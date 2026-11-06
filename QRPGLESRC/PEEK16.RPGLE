@@ -41,7 +41,7 @@ dcl-f qcopyle5 extdesc('QPEEKGEN') usropn rename(qpeekgen: fcopy5);
 
 dcl-f qcopyle6 extdesc('QPEEKGEN') usropn rename(qpeekgen: fcopy6);
 
-dcl-f peeksrc usropn rename(peeksrc: finput);
+dcl-f peekSrc usropn rename(peekSrc: finput);
 
 dcl-f peekFld usropn;
 
@@ -186,7 +186,7 @@ dcl-ds ds_clear len(112);
 end-ds;
 
 dcl-ds ds_remark len(112);
-  $rem_atrB char(1) inz(color_white);
+  $rem_atrB char(1) inz(COLOR_white);
   $rem_rem  char(1) inz('*') pos(7);
   $rem_txt  char(103) inz pos(10);
 end-ds;
@@ -208,8 +208,8 @@ dcl-ds ds_exsr len(112);
   $exsr_fct2 char(14) inz;
 end-ds;
 
-dcl-s #srcseq like(srcseq);
-dcl-c #increment 0,01;
+dcl-s #srcSeq like(srcSeq);
+dcl-c #Increment 0,01;
 
 dcl-ds *n;
   fieldCount zoned(5) inz(*zeros);
@@ -241,7 +241,7 @@ dcl-s nullDft char(4) inz;
 dcl-ds fldl0100 likeds(fldl0100_t) inz;
 
 dcl-pr p_wrtOut extproc(*dclcase);
-  i_srcDta like(srcdta) const;
+  i_srcDta like(srcDta) const;
 end-pr;
 
 dcl-pr f_readFld like(bool_t) extproc(*dclcase);
@@ -275,9 +275,9 @@ ceehdlr(%paddr('errorHandler')
        : *null: *omit);
 
 open qpeekgen;
-open peeksrc;
+open peekSrc;
 
-#srcseq = 0;
+#srcSeq = 0;
 
 dow ('1');
   read finput;
@@ -285,39 +285,39 @@ dow ('1');
     leave;
   endif;
 
-  cmd = %subst(srcdta: 1: 4);
+  cmd = %subst(srcDta: 1: 4);
 
   select;
 
   //  File 1
   when (cmd = 'FMT1');
-    ds_fmtNme = srcdta;
+    ds_fmtNme = srcDta;
     $fmtNm_xNm = i_rcdFmt;
     p_wrtOut(ds_fmtNme);
 
   //  Felddefinitionen
   when (cmd = 'DEF1');
-    p_wrtOut(srcdta);
+    p_wrtOut(srcDta);
     exsr sub014;
 
   //  Umbenennen /copy Anweisungen
   when (cmd = 'COPY');
     exsr sub025;
-    p_wrtOut(srcdta);
+    p_wrtOut(srcDta);
 
   //  Konstanten für "Feld zu lang"
   when (cmd = 'DEF2');
-    p_wrtOut(srcdta);
+    p_wrtOut(srcDta);
     exsr sub016;
 
   //  Prüfen ...
   when (cmd = 'CHKS');
-    p_wrtOut(srcdta);
+    p_wrtOut(srcDta);
     exsr sub015;
 
   //  Blättern ...
   when (cmd = 'SCRN');
-    p_wrtOut(srcdta);
+    p_wrtOut(srcDta);
     exsr sub003;
 
   //  Letzte Seite ...
@@ -334,50 +334,50 @@ dow ('1');
 
   //  Übertragen Dateifelder in Bildschirmfelder
   when (cmd = 'TSCN');
-    p_wrtOut(srcdta);
+    p_wrtOut(srcDta);
     exsr sub004;
 
   //  Übertragen Felder > 512 in Dateifelder
   when (cmd = 'FSCN');
-    p_wrtOut(srcdta);
+    p_wrtOut(srcDta);
     exsr sub007;
     exsr sub005;
 
   //  Prüfung ungültige Zeichen
   when (cmd = 'CHKC');
-    p_wrtOut(srcdta);
+    p_wrtOut(srcDta);
     exsr sub006;
 
   //  Setzen NULL Indicator
   when (cmd = 'NULL');
-    p_wrtOut(srcdta);
+    p_wrtOut(srcDta);
     exsr sub017;
 
   //  Hex-Editierung
   when (cmd = 'HEX');
-    p_wrtOut(srcdta);
+    p_wrtOut(srcDta);
     exsr sub008;
 
   //  Text-Editierung
   when (cmd = 'TXT');
-    p_wrtOut(srcdta);
+    p_wrtOut(srcDta);
     exsr sub018;
 
   //  Rename-Struktur
   when (cmd = 'RNM2');
-    p_wrtOut(srcdta);
+    p_wrtOut(srcDta);
     exsr sub009;
 
   //  Rename-Struktur
   when (cmd = 'RNM1');
-    ds_bufLen = srcdta;
+    ds_bufLen = srcDta;
     $bufLn_ln = RCD_BUFF_LEN;
     p_wrtOut(ds_bufLen);
     exsr sub010;
 
   //  initialisieren ISO-Felder
   when (cmd = 'ISO ');
-    p_wrtOut(srcdta);
+    p_wrtOut(srcDta);
     exsr sub011;
 
   //  isAlwLower ...
@@ -410,23 +410,23 @@ dow ('1');
 
   //  Sichern NULL-Indikatoren
   when (cmd = 'NSAV');
-    p_wrtOut(srcdta);
+    p_wrtOut(srcDta);
     exsr sub026;
 
   //  Zurückschreiben NULL-Indikatoren
   when (cmd = 'NRST');
-    p_wrtOut(srcdta);
+    p_wrtOut(srcDta);
     exsr sub027;
 
   other;
     //  Nur kopieren ...
-    p_wrtOut(srcdta);
+    p_wrtOut(srcDta);
   endsl;
 
 enddo;
 
 close qpeekgen;
-close peeksrc;
+close peekSrc;
 
 *inlr = *on;
 
@@ -436,7 +436,7 @@ close peeksrc;
 
 begsr sub001;
 
-  ds_more    = srcdta;
+  ds_more    = srcDta;
   $more_scnN = i_scnNbrs;
   p_wrtOut(ds_more);
 
@@ -448,7 +448,7 @@ endsr;
 
 begsr sub002;
 
-  ds_lcas = srcdta;
+  ds_lcas = srcDta;
 
   if (i_case = bTrue);
     $lcas_inz = 'bTrue';
@@ -611,7 +611,7 @@ begsr sub006;
       leave;
     endif;
 
-    p_wrtOut(srcdta);
+    p_wrtOut(srcDta);
   enddo;
 
   close qcopyle1;
@@ -654,7 +654,7 @@ begsr sub008;
       leave;
     endif;
 
-    p_wrtOut(srcdta);
+    p_wrtOut(srcDta);
   enddo;
 
   close qcopyle2;
@@ -797,7 +797,7 @@ endsr;
 
 begsr sub012;
 
-  ds_alwl = srcdta;
+  ds_alwl = srcDta;
 
   if (i_alwLC = bTrue);
     $alwl_inz = 'bTrue';
@@ -847,7 +847,7 @@ begsr sub014;
       leave;
     endif;
 
-    p_wrtOut(srcdta);
+    p_wrtOut(srcDta);
   enddo;
 
   close qcopyle3;
@@ -892,7 +892,7 @@ begsr sub016;
       leave;
     endif;
 
-    p_wrtOut(srcdta);
+    p_wrtOut(srcDta);
   enddo;
 
   close qcopyle4;
@@ -915,7 +915,7 @@ begsr sub017;
       leave;
     endif;
 
-    p_wrtOut(srcdta);
+    p_wrtOut(srcDta);
   enddo;
 
   close qcopyle5;
@@ -938,7 +938,7 @@ begsr sub018;
       leave;
     endif;
 
-    p_wrtOut(srcdta);
+    p_wrtOut(srcDta);
   enddo;
 
   close qcopyle6;
@@ -951,7 +951,7 @@ endsr;
 
 begsr sub019;
 
-  ds_rcdLock = srcdta;
+  ds_rcdLock = srcDta;
 
   if (i_rcdLock = bTrue);
     $rcdLock_inz = 'bTrue';
@@ -1299,7 +1299,7 @@ endsr;
 
 begsr sub023;
 
-  ds_keepCrs = srcdta;
+  ds_keepCrs = srcDta;
 
   if (i_keepCrs = bTrue);
     $keepCrs_inz = '''1''';
@@ -1317,7 +1317,7 @@ endsr;
 
 begsr sub024;
 
-  ds_ucs2 = srcdta;
+  ds_ucs2 = srcDta;
 
   $ucs2_value = '(FLDL0100.F1UCS2 = ''1'')';
 
@@ -1395,9 +1395,9 @@ endsr;
 
 begsr sub025;
 
-  srcdta = %scanrpl('LIBRARY_NAME'
+  srcDta = %scanrpl('LIBRARY_NAME'
                    : %trim(i_prodLib)
-                   :srcdta);
+                   :srcDta);
 
 endsr;
 
@@ -1406,13 +1406,13 @@ endsr;
 //============================================================*
 dcl-proc p_wrtOut;
   dcl-pi *n;
-    i_srcDta like(srcdta) const;
+    i_srcDta like(srcDta) const;
   end-pi;
 
-  #srcseq = #srcseq + #increment;
+  #srcSeq = #srcSeq + #Increment;
 
-  srcseq  = #srcseq;
-  srcdta  = i_srcDta;
+  srcSeq  = #srcSeq;
+  srcDta  = i_srcDta;
   write foutput;
 
   return;

@@ -27,7 +27,7 @@
 /copy QCOPYLE,H_SPEC
 /copy QCOPYLE,COPYRIGHT
 
-dcl-f peekenv usage(*update: *delete: *output) keyed usropn prefix(en_);
+dcl-f peekEnv usage(*update: *delete: *output) keyed usropn prefix(en_);
 dcl-f peekFld keyed usropn prefix(p_);
 
 /copy QCOPYLE,D_VARDEF
@@ -194,10 +194,10 @@ dcl-proc main;
 
   //  Prüfen, ob gespeichert werden darf
   if (i_isAutoSave = bTrue);
-    open(e) peekenv;
+    open(e) peekEnv;
     if (not %error());
       canSave =  checkAutoSave(pFile: pLib);
-      close peekenv;
+      close peekEnv;
     else;
       //     Fehler beim Öffnen aufgetreten
       clear usr9992;
@@ -224,7 +224,7 @@ dcl-proc main;
     if (go_msgID = ' ');
 
       //  Öffnen Datei ...
-      open peekenv;
+      open peekEnv;
 
       //  Ausgeben accessMode ...
       writeAccessMode(pFile     :
@@ -288,7 +288,7 @@ dcl-proc main;
                i_nbrPinC);
 
       //  Schließen Datei ...
-      close peekenv;
+      close peekEnv;
 
     endif;
   endif;
@@ -535,7 +535,7 @@ dcl-proc checkAutoSave;
   en_key1.user    = *loval;
   setll %kds(en_key1) fpeekenv;
   read fpeekenv;
-  if (%eof(peekenv));
+  if (%eof(peekEnv));
     return bTrue;
   endif;
 
@@ -543,7 +543,7 @@ dcl-proc checkAutoSave;
   en_key3.section = '*FILE';
   en_key3.file    = i_file;
   chain %kds(en_key3) fpeekenv;
-  if (not %found(peekenv));
+  if (not %found(peekEnv));
     clear usr9992;
     usr9992.var1 = 1;
     usr9992.var2 = i_file;
@@ -558,7 +558,7 @@ dcl-proc checkAutoSave;
   en_key4.file    = i_file;
   en_key4.lib     = i_lib;
   chain %kds(en_key4) fpeekenv;
-  if (not %found(peekenv));
+  if (not %found(peekEnv));
     clear usr9992;
     usr9992.var1 = 2;
     usr9992.var2 = i_lib;
@@ -865,9 +865,9 @@ dcl-proc writeLayout;
     env0001.env_seq    = p_seq;
     env0001.env_hidden = p_hidden;
     env0001.env_color  = p_color;
-    env0001.env_mark   = p_markcol;
+    env0001.env_mark   = p_markCol;
     env0001.env_size   = p_maxSize;
-    env0001.env_edtcde = p_edtcde;
+    env0001.env_edtCde = p_edtCde;
     en_data = env0001;
 
     write fpeekenv;

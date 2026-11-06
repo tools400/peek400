@@ -127,7 +127,7 @@ begsr sqlSeq;
     //  Ende des Feldes ...
     z = %scan('"': tempStr: 2);
     sqlName = %trim(%subst(tempStr: 2: z-2));
-    exsr getsysname;
+    exsr getSysName;
 
     //  Alles hinter dem Feld ...
     if (z+1 <= %len(tempStr));
@@ -160,7 +160,7 @@ endsr;
 //  getSysName  Systemname des Feldes in sqlName      *
 //====================================================*
 
-begsr getsysname;
+begsr getSysName;
 
   //  In der SQL-Sortierung kann auch der lange SQL-Name einer Spalte
   //  stehen. PEEKFLD ist aber über den Systemnamen verschlüsselt.

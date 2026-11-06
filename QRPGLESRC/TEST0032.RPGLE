@@ -111,11 +111,11 @@ dcl-proc main;
     exfmt SCREEN01;
 
     select;
-    when (workstn.AID = K_ENTER);
+    when (workstn.AID = k_enter);
       leave;
-    when (workstn.AID = K_F3);
+    when (workstn.AID = k_f3);
       leave;
-    when (workstn.AID = K_F12);
+    when (workstn.AID = k_f12);
       leave;
     endsl;
 

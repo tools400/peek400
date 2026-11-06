@@ -8,7 +8,7 @@ dcl-ds env0001_t len(64) qualified template;
   env_color  char(1) inz('');
   env_mark   char(1) inz('');
   env_size   zoned(5) inz(0);
-  env_edtcde char(1) inz('');
+  env_edtCde char(1) inz('');
   env_0001   char(1) inz(x'8B');
 end-ds;
 

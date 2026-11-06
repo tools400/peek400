@@ -82,7 +82,7 @@ ctl-opt main(peek39);
 dcl-s size_t uns(10) template;
 
 //  qsort -- Sort Array
-dcl-pr qSort pointer extproc('qsort');
+dcl-pr qsort pointer extproc('qsort');
   memPtr    pointer value;
   numElem   like(size_t) value;
   width     like(size_t) value;
@@ -175,7 +175,7 @@ dcl-proc peek39;
     else;
 
       //  sort entries by name
-      qSort(pSpcPtr + genHeader.offsetLst
+      qsort(pSpcPtr + genHeader.offsetLst
            : genHeader.numLstEnt
            : genHeader.entrySize
            : %paddr(sortByName));

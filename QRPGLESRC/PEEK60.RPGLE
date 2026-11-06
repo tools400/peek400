@@ -35,12 +35,12 @@
 /undefine internal_prototype
 
 //  Anzahl der Schritte der Fortschrittsanzeige je Programm. Sie muss zu
-//  den Aufrufen von p_showprogressmeter() passen: PEEK08 4, PEEK15 2 und
+//  den Aufrufen von p_showProgressMeter() passen: PEEK08 4, PEEK15 2 und
 //  PEEK16 7 (je Marke der Vorlage PEEKSRC/PGM: RNM1 zwei, RNM2, TSCN,
 //  FSCN und ISO je einen; ISO steht zweimal in der Vorlage).
-dcl-c cNumPasses_peek08 4;
-dcl-c cNumPasses_peek15 2;
-dcl-c cNumPasses_peek16 7;
+dcl-c cNumPasses_PEEK08 4;
+dcl-c cNumPasses_PEEK15 2;
+dcl-c cNumPasses_PEEK16 7;
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
@@ -57,18 +57,18 @@ ceehdlr(%paddr('errorHandler')
        : *null: *omit);
 
 //  Steuerung: Generieren Display File und RPG Programm
-o_numPasses = cNumPasses_peek08;
+o_numPasses = cNumPasses_PEEK08;
 
 //  1. Aufruf PEEK15 (generieren Display File)
-o_numPasses = o_numPasses + cNumPasses_peek15;
+o_numPasses = o_numPasses + cNumPasses_PEEK15;
 
 //  2. Aufruf PEEK15 (generieren Display File, lower cases)
 if (i_alwLC = bTrue);
-  o_numPasses = o_numPasses + cNumPasses_peek15;
+  o_numPasses = o_numPasses + cNumPasses_PEEK15;
 endif;
 
 //  3. Aufruf PEEK16 (generieren RPG Programm)
-o_numPasses = o_numPasses + cNumPasses_peek16;
+o_numPasses = o_numPasses + cNumPasses_PEEK16;
 
 return;
 

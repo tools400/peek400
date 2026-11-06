@@ -161,7 +161,7 @@ dcl-proc tearDown export;
   endif;
   clear g_hfile;
 
-  //  SQL-Cursor von PEEK51 schließen. sql_close liefert einen Fehler,
+  //  SQL-Cursor von PEEK51 schließen. SQL_close liefert einen Fehler,
   //  wenn kein Cursor offen ist.
   monitor;
     SQL_close(hFile: msgID: msgDta);
@@ -170,7 +170,7 @@ dcl-proc tearDown export;
 end-proc;
 
 // ==========================================================================
-//  sql_quote(): Feldnamen in Anführungszeichen einschließen, auch den
+//  SQL_quote(): Feldnamen in Anführungszeichen einschließen, auch den
 //  letzten Feldnamen ohne nachfolgendes Leerzeichen.
 // ==========================================================================
 
@@ -199,7 +199,7 @@ dcl-proc test04_fBitOr_threeArguments export;
 end-proc;
 
 // ==========================================================================
-//  p_setlldft(): den optionalen Parameter i_key nicht lesen, wenn er
+//  p_setllDft(): den optionalen Parameter i_key nicht lesen, wenn er
 //  nicht übergeben wurde.
 // ==========================================================================
 
@@ -233,7 +233,7 @@ dcl-proc test06_pSetllDft_withoutKey_afterOtherCall export;
 end-proc;
 
 // ==========================================================================
-//  transcoder_new(): eine Escape-Nachricht senden, wenn iconv_open()
+//  Transcoder_new(): eine Escape-Nachricht senden, wenn iconv_open()
 //  scheitert, statt einen unbrauchbaren Transcoder zu liefern.
 // ==========================================================================
 
@@ -348,7 +348,7 @@ dcl-proc test18_setgtBeforeFirstKey_readp export;
 end-proc;
 
 // ==========================================================================
-//  cio_close(): nach einem gescheiterten cio_open() einen Fehler
+//  CIO_close(): nach einem gescheiterten CIO_open() einen Fehler
 //  liefern, aber nicht abbrechen.
 // ==========================================================================
 
@@ -435,7 +435,7 @@ dcl-proc test22_sqlNextRow_deletedRow export;
 end-proc;
 
 // ==========================================================================
-//  f_updatusr(): '0' bei Erfolg, '1' bei Fehler, wie f_writeusr().
+//  f_updatUsr(): '0' bei Erfolg, '1' bei Fehler, wie f_writeUsr().
 // ==========================================================================
 
 dcl-proc test23_fUpdatUsr_returnValue export;
@@ -451,7 +451,7 @@ dcl-proc test23_fUpdatUsr_returnValue export;
 end-proc;
 
 // ==========================================================================
-//  p_expstr(): Zeichenkette mit Leerzeichen erweitern.
+//  p_expStr(): Zeichenkette mit Leerzeichen erweitern.
 // ==========================================================================
 
 dcl-proc test24_pExpStr_expandsString export;
@@ -463,7 +463,7 @@ dcl-proc test24_pExpStr_expandsString export;
 end-proc;
 
 // ==========================================================================
-//  f_mapcmdtomsg(): *DELETE bedeutet im Text-Editor PEEK64 'Löschen'
+//  f_mapCmdToMsg(): *DELETE bedeutet im Text-Editor PEEK64 'Löschen'
 //  (0087), sonst 'Satz löschen' (0023).
 // ==========================================================================
 
@@ -480,9 +480,9 @@ dcl-proc test27_fMapCmdToMsg_insertInTextEditor export;
 end-proc;
 
 // ==========================================================================
-//  sql_count(): Cursor auch nach einem FETCH-Fehler schließen.
+//  SQL_count(): Cursor auch nach einem FETCH-Fehler schließen.
 //  Letzter Test, weil ein offener Cursor alle folgenden Aufrufe von
-//  sql_count() scheitern ließe.
+//  SQL_count() scheitern ließe.
 // ==========================================================================
 
 dcl-proc test28_sqlCount_afterFetchError export;

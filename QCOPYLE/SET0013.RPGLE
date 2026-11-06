@@ -16,7 +16,7 @@ dcl-ds set0013_t len(256) qualified template;
   //  Allg. Zugriffsberechtigung: 1=Ja; 0=Nein
   set_accAut char(1) inz('1');
   //  Ändern Schlüsselfelder
-  set_updkey char(1) inz('1');
+  set_updKey char(1) inz('1');
   //  Endemarkierung
   set_0013   char(1) inz(x'8B');
 end-ds;

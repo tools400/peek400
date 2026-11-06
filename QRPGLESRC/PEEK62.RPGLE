@@ -27,15 +27,15 @@
 /copy QCOPYLE,H_SPEC
 /copy QCOPYLE,COPYRIGHT
 
-dcl-f oldfile disk(32766) usropn infds(file_01_ds) extfile(g_oldFile);
+dcl-f oldFile disk(32766) usropn infds(file_01_ds) extfile(g_oldFile);
 
-dcl-f peekusr usropn infds(file_02_ds) extfile(g_peekusr);
+dcl-f peekusr usropn infds(file_02_ds) extfile(g_peekUsr);
 
 dcl-ds file_01_ds likeds(infds_t);
 dcl-ds file_02_ds likeds(infds_t);
 
 dcl-s g_oldFile char(21) inz;
-dcl-s g_peekusr char(21) inz;
+dcl-s g_peekUsr char(21) inz;
 
 /copy QCOPYLE,D_VARDEF
 /copy QCOPYLE,D_INFDS
@@ -59,7 +59,7 @@ dcl-s short_t int(5) template;
 dcl-s henv_t like(long_t) template;
 dcl-s hdbc_t like(long_t) template;
 dcl-s hstmt_t like(long_t) template;
-dcl-s retcode_t like(sqlinteger_t) template;
+dcl-s retCode_t like(sqlinteger_t) template;
 dcl-s ptr_t pointer template;
 
 dcl-s sqlinteger_t like(long_t) template;
@@ -67,7 +67,7 @@ dcl-s sqlsmallint_t like(short_t) template;
 dcl-s sqlhenv_t like(henv_t) template;
 dcl-s sqlhdbc_t like(hdbc_t) template;
 dcl-s sqlhstmt_t like(hstmt_t) template;
-dcl-s sqlreturn_t like(retcode_t) template;
+dcl-s sqlreturn_t like(retCode_t) template;
 dcl-s sqlpointer_t like(ptr_t) template;
 
 dcl-c SQL_NTS -3;
@@ -77,18 +77,18 @@ dcl-c sql_attr_commit 0;
 dcl-c sql_commit_none 1;
 
 //  Allocate Environment Handle
-dcl-pr sqlAllocEnv extproc('SQLAllocEnv') like(sqlreturn_t);
+dcl-pr SQLAllocEnv extproc('SQLAllocEnv') like(sqlreturn_t);
   o_phenv pointer value;
 end-pr;
 
 //  Allocate Connection Handle
-dcl-pr sqlAllocConnect extproc('SQLAllocConnect') like(sqlreturn_t);
+dcl-pr SQLAllocConnect extproc('SQLAllocConnect') like(sqlreturn_t);
   i_henv  like(sqlhenv_t) value;
   o_phdbc pointer value;
 end-pr;
 
 //  Connect to a Data Source
-dcl-pr sqlConnect extproc('SQLConnect') like(sqlreturn_t);
+dcl-pr SQLConnect extproc('SQLConnect') like(sqlreturn_t);
   i_hdbc      like(sqlhdbc_t) value;
   i_szDSN     pointer options(*string) value;
   i_cbDSN     like(sqlsmallint_t) value;
@@ -99,43 +99,43 @@ dcl-pr sqlConnect extproc('SQLConnect') like(sqlreturn_t);
 end-pr;
 
 //  Set Connection Option
-dcl-pr sqlSetConnectOption extproc('SQLSetConnectOption') like(sqlreturn_t);
+dcl-pr SQLSetConnectOption extproc('SQLSetConnectOption') like(sqlreturn_t);
   i_hdbc    like(sqlhdbc_t) value;
   i_fOption like(sqlsmallint_t) value;
   i_vParam  like(sqlpointer_t) value;
 end-pr;
 
 //  Allocate a Statement Handle
-dcl-pr sqlAllocStmt extproc('SQLAllocStmt') like(sqlreturn_t);
+dcl-pr SQLAllocStmt extproc('SQLAllocStmt') like(sqlreturn_t);
   i_hdbc   like(sqlhdbc_t) value;
   o_phstmt pointer value;
 end-pr;
 
 //  Execute a Statement Directly
-dcl-pr sqlExecDirect extproc('SQLExecDirect') like(sqlreturn_t);
+dcl-pr SQLExecDirect extproc('SQLExecDirect') like(sqlreturn_t);
   i_hstmt    like(sqlhstmt_t) value;
   i_szSqlStr pointer options(*string) value;
   i_cbSqlStr like(sqlinteger_t) value;
 end-pr;
 
 //  Free (or Reset) a Statement Handle
-dcl-pr sqlFreeStmt extproc('SQLFreeStmt') like(sqlreturn_t);
+dcl-pr SQLFreeStmt extproc('SQLFreeStmt') like(sqlreturn_t);
   i_hstmt   like(sqlhstmt_t) value;
   i_fOption like(sqlsmallint_t) value;
 end-pr;
 
 //  Disconnect from a Data Source
-dcl-pr sqlDisconnect extproc('SQLDisconnect') like(sqlreturn_t);
+dcl-pr SQLDisconnect extproc('SQLDisconnect') like(sqlreturn_t);
   i_hdbc like(sqlhdbc_t) value;
 end-pr;
 
 //  Free Connection Handle
-dcl-pr sqlFreeConnect extproc('SQLFreeConnect') like(sqlreturn_t);
+dcl-pr SQLFreeConnect extproc('SQLFreeConnect') like(sqlreturn_t);
   i_hdbc like(sqlhdbc_t) value;
 end-pr;
 
 //  Free Environment Handle
-dcl-pr sqlFreeEnv extproc('SQLFreeEnv') like(sqlreturn_t);
+dcl-pr SQLFreeEnv extproc('SQLFreeEnv') like(sqlreturn_t);
   i_henv like(sqlhenv_t) value;
 end-pr;
 
@@ -168,22 +168,22 @@ o_msgID = '';
 o_msgDta = '';
 
 g_oldFile = %trim(i_lib ) + '/' + %trim(i_file);
-g_peekusr = %trim(f_getPrdLb()) + '/' + 'PEEKUSR';
+g_peekUsr = %trim(f_getPrdLb()) + '/' + 'PEEKUSR';
 
 //  Satzlängen vergleichen. Lässt sich eine der Dateien nicht öffnen
 //  (z. B. gesperrt), entfällt die Anpassung; den Fehler meldet dann
 //  PEEK31 beim Lesen der Einstellungen.
 monitor;
-  open oldfile;
+  open oldFile;
   rcdLen1 = file_01_ds.rcdLen;
-  close oldfile;
+  close oldFile;
 
   open peekusr;
   rcdLen2 = file_02_ds.rcdLen;
   close peekusr;
 on-error;
-  if (%open(oldfile));
-    close oldfile;
+  if (%open(oldFile));
+    close oldFile;
   endif;
   if (%open(peekusr));
     close peekusr;
@@ -201,31 +201,31 @@ if (rcdLen1 <> rcdLen2);
 
   dou (1=1);
     //  Allocate SQL Environment Handle and ...
-    retCode = sqlAllocEnv(%addr(hEnv));
+    retCode = SQLAllocEnv(%addr(hEnv));
     if (retCode <> 0);
       leave;
     endif;
 
     //  Allocate SQL Connection Handle
-    retCode = sqlAllocConnect(hEnv: %addr(hDBc));
+    retCode = SQLAllocConnect(hEnv: %addr(hDBc));
     if (retCode <> 0);
       leave;
     endif;
 
     //  ... Set Connection Attribute
     cOptVal = sql_commit_none;
-    retCode = sqlSetConnectOption(hDBc
+    retCode = SQLSetConnectOption(hDBc
                                   : sql_attr_commit: %addr(cOptVal));
 
     //  Connect to Server and ...
-    retCode = sqlConnect(hDBc: '*LOCAL': SQL_NTS
+    retCode = SQLConnect(hDBc: '*LOCAL': SQL_NTS
                          : *null: SQL_NTS: *null: SQL_NTS);
     if (retCode <> 0);
       leave;
     endif;
 
     //  Allocate Statement Handle
-    retCode = sqlAllocStmt(hDBc: %addr(hStmt));
+    retCode = SQLAllocStmt(hDBc: %addr(hStmt));
     if (retCode <> 0);
       leave;
     endif;
@@ -238,7 +238,7 @@ if (rcdLen1 <> rcdLen2);
        SET DATA TYPE CHARACTER (256) +
            NOT NULL WITH DEFAULT';
 
-    retCode = sqlExecDirect(hStmt: sqlStr: SQL_NTS);
+    retCode = SQLExecDirect(hStmt: sqlStr: SQL_NTS);
     if (retCode <> 0);
       leave;
     endif;
@@ -247,22 +247,22 @@ if (rcdLen1 <> rcdLen2);
 
   //  Free Statement Handle
   if (hStmt <> 0);
-    retCode = sqlFreeStmt(hStmt: SQL_DROP);
+    retCode = SQLFreeStmt(hStmt: SQL_DROP);
   endif;
 
   //  Disconnect from Server
   if (hDBc <> 0);
-    retCode = sqlDisconnect(hDBc);
+    retCode = SQLDisconnect(hDBc);
   endif;
 
   //  Free Connection Handle
   if (hDBc <> 0);
-    retCode = sqlFreeConnect(hDBc);
+    retCode = SQLFreeConnect(hDBc);
   endif;
 
   //  Free Environment Handle
   if (hEnv <> 0);
-    retCode = sqlFreeEnv(hEnv);
+    retCode = SQLFreeEnv(hEnv);
   endif;
 
   //  Prüfen, ob die Anpassung gelungen ist: Scheitert das ALTER
@@ -270,12 +270,12 @@ if (rcdLen1 <> rcdLen2);
   //  hat die Datei weiterhin eine andere Satzlänge.
   rcdLen1 = 0;
   monitor;
-    open oldfile;
+    open oldFile;
     rcdLen1 = file_01_ds.rcdLen;
-    close oldfile;
+    close oldFile;
   on-error;
-    if (%open(oldfile));
-      close oldfile;
+    if (%open(oldFile));
+      close oldFile;
     endif;
   endmon;
 

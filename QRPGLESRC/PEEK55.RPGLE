@@ -27,7 +27,7 @@
 /copy QCOPYLE,H_SPEC
 /copy QCOPYLE,COPYRIGHT
 
-dcl-f peekenv keyed usropn prefix(en_);
+dcl-f peekEnv keyed usropn prefix(en_);
 dcl-f peekFld usage(*update: *delete) keyed usropn prefix(p_);
 
 /copy QCOPYLE,D_VARDEF
@@ -243,7 +243,7 @@ dcl-proc main;
     pMsgDta = '';
 
     //  Öffnen Datei ...
-    open peekenv;
+    open peekEnv;
 
     if (i_option = '*SLCLAYOUT');
 
@@ -338,7 +338,7 @@ dcl-proc main;
     endif;
 
     //  Schließen Datei ...
-    close peekenv;
+    close peekEnv;
 
     //  Löschen Überschreibung ...
     f_execute('DLTOVR +
@@ -370,7 +370,7 @@ dcl-proc loadFile;
   en_key4.en_user = '*ALL';
   en_key4.en_section = '*FILE';
   chain %kds(en_key4: 2) fpeekenv;
-  if (not %found(peekenv));
+  if (not %found(peekEnv));
     o_file = NOT_FOUND;
   else;
     o_file = en_data;
@@ -396,7 +396,7 @@ dcl-proc loadLibrary;
   en_key4.en_user = '*ALL';
   en_key4.en_section = '*LIB';
   chain %kds(en_key4: 2) fpeekenv;
-  if (not %found(peekenv));
+  if (not %found(peekEnv));
     o_lib = NOT_FOUND;
   else;
     o_lib = en_data;
@@ -422,7 +422,7 @@ dcl-proc loadMember;
   en_key4.en_user = '*ALL';
   en_key4.en_section = '*MBR';
   chain %kds(en_key4: 2) fpeekenv;
-  if (not %found(peekenv));
+  if (not %found(peekEnv));
     o_mbr  = NOT_FOUND;
   else;
     o_mbr  = en_data;
@@ -448,7 +448,7 @@ dcl-proc loadRecordFormat;
   en_key4.en_user = '*ALL';
   en_key4.en_section = '*RCDFMT';
   chain %kds(en_key4: 2) fpeekenv;
-  if (not %found(peekenv));
+  if (not %found(peekEnv));
     o_rcdFmt = NOT_FOUND;
   else;
     o_rcdFmt = en_data;
@@ -474,7 +474,7 @@ dcl-proc loadRecordFormatID;
   en_key4.en_user = '*ALL';
   en_key4.en_section = '*RCDFMTID';
   chain %kds(en_key4: 2) fpeekenv;
-  if (not %found(peekenv));
+  if (not %found(peekEnv));
     o_rcdFmtID = '';
   else;
     o_rcdFmtID = en_data;
@@ -500,7 +500,7 @@ dcl-proc loadAccessMode;
   en_key4.en_user = '*ALL';
   en_key4.en_section = '*ACCMODE';
   chain %kds(en_key4: 2) fpeekenv;
-  if (not %found(peekenv));
+  if (not %found(peekEnv));
     o_accMode = KEY_SEQ;
   else;
     o_accMode = en_data;
@@ -650,7 +650,7 @@ dcl-proc loadIsKeyLowerCase;
     chain %kds(en_key4: 4) fpeekenv;
   endif;
 
-  if (not %found(peekenv));
+  if (not %found(peekEnv));
     o_isKeyLower = KEY_MODE_UPPER;
   else;
     o_isKeyLower = en_data;
@@ -826,9 +826,9 @@ dcl-proc loadLayout;
       p_seq     = env0001.env_seq;
       p_hidden  = env0001.env_hidden;
       p_color   = env0001.env_color;
-      p_markcol = env0001.env_mark;
+      p_markCol = env0001.env_mark;
       p_maxSize = env0001.env_size;
-      p_edtcde  = env0001.env_edtcde;
+      p_edtCde  = env0001.env_edtCde;
       update fpeekfld;
     endif;
 

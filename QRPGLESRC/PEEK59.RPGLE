@@ -57,7 +57,7 @@ dcl-s yFKeys like(fKeyDsp_t) dim(32);
 dcl-s yNbrOfKeys like(int4_t);
 
 dcl-s sfBot like(int4_t);
-dcl-c nbrFKeys 2;
+dcl-c NbrFKeys 2;
 dcl-s msgText char(200);
 dcl-s strPos like(uint4_t);
 dcl-s nbrOfKeys like(int4_t);
@@ -115,42 +115,42 @@ dow ('1');
 
   //  Nachrichten anzeigen
   *in89 = *off;
-  write msgctl;
+  write msgCtl;
 
   //  Anzeigen der Befehlstasten
   select;
   when ((sfBot = 2) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#2;
   when ((sfBot = 3) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#3;
   when ((sfBot = 4) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#4;
   when ((sfBot = 5) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#5;
   when ((sfBot = 6) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#6;
   when ((sfBot = 7) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#7;
   when ((sfBot = 8) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#8;
   when ((sfBot = 9) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#9;
   when ((sfBot = 10) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#10;
   when ((sfBot = 11) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#11;
   when ((sfBot = 12) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#12;
   other;
     write pbbot#1;
@@ -334,7 +334,7 @@ begsr fill##;
   //  Nachrichtentext ...
   msgText = f_msgText(i_msgID: i_msgDta);
 
-  options = cWORDWRAP_paragraph_msgd + cWORDWRAP_paragraph_trimr;
+  options = cWORDWRAP_PARAGRAPH_MSGD + cWORDWRAP_PARAGRAPH_TRIMR;
 
   //  ... Zeile 1
   strPos = 1;
@@ -555,7 +555,7 @@ begsr inzsr;
 
   isInzSr = bTrue;
 
-  PGMQ = '*';
+  pgmQ = '*';
 
   peek21_name = f_pgmCallN('PEEK21');
   peek23_name = f_pgmCallN('PEEK23');

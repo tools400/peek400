@@ -66,7 +66,7 @@ dcl-s yPgmCmd char(10);
 dcl-s yCmdDta like(pgmCmdDt_t);
 
 dcl-s sfBot like(int4_t);
-dcl-c nbrFKeys 2;
+dcl-c NbrFKeys 2;
 
 dcl-s peek21_name like(pgmCallN_t);
 dcl-s peek23_name like(pgmCallN_t);
@@ -79,8 +79,8 @@ dcl-s r_srcMbr like(i_srcMbr);
 dcl-s r_file like(file_t);
 dcl-s r_library like(lib_t);
 dcl-s r_member like(mbr_t);
-dcl-s r_mbropt like(option_t);
-dcl-s r_crtfile like(option_t);
+dcl-s r_mbrOpt like(option_t);
+dcl-s r_crtFile like(option_t);
 
 dcl-s isInzSr like(bool_t) inz(bFalse);
 
@@ -116,24 +116,24 @@ dow ('1');
 
   //  Nachrichten anzeigen
   *in89 = '0';
-  write msgctl;
+  write msgCtl;
 
   //  Anzeigen der Befehlstasten
   select;
   when ((sfBot = 2) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#2;
   when ((sfBot = 3) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#3;
   when ((sfBot = 4) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#4;
   when ((sfBot = 5) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#5;
   when ((sfBot = 6) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#6;
   other;
     write pbbot#1;
@@ -496,8 +496,8 @@ begsr c_refresh;
   ##file = r_file;
   ##library = r_library;
   ##member = r_member;
-  ##mbrOpt = r_mbropt;
-  ##crtFile = r_crtfile;
+  ##mbrOpt = r_mbrOpt;
+  ##crtFile = r_crtFile;
 
   exsr fill##;
 
@@ -597,8 +597,8 @@ begsr first;
   r_file = ##file;
   r_library = ##library;
   r_member = ##member;
-  r_mbropt = ##mbrOpt;
-  r_crtfile = ##crtFile;
+  r_mbrOpt = ##mbrOpt;
+  r_crtFile = ##crtFile;
 
   //  Löschen der Cursorosition
   csrRow = *zeros;
@@ -624,7 +624,7 @@ begsr inzsr;
 
   isInzSr = bTrue;
 
-  PGMQ = '*';
+  pgmQ = '*';
 
   peek21_name = f_pgmCallN('PEEK21');
   peek23_name = f_pgmCallN('PEEK23');

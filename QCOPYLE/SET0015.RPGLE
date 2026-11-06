@@ -10,7 +10,7 @@ dcl-ds set0015_t len(256) qualified template;
   //  ... Bibliothek
   set_envLib char(10) inz('*PRDLIB');
   //  Ändern Datei erlaubt: 1=Ja; 0=Nein
-  set_envchg char(1) inz('1');
+  set_envChg char(1) inz('1');
   //  Funktion aktiv: 1=Ja; 0=Nein
   set_envena char(1) inz('1');
   //  Endemarkierung

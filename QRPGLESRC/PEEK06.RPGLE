@@ -94,7 +94,7 @@ dcl-s maxFloat4 packed(12: 4) inz(*hival);
 dcl-s maxFloat8 packed(21: 4) inz(*hival);
 dcl-s tmpfloat4 float(4) inz;
 dcl-s tmpfloat8 float(8) inz;
-dcl-s isexact ind inz;
+dcl-s isExact ind inz;
 dcl-s len int(10) inz;
 
 dcl-s tempStrLen int(10) inz;
@@ -228,13 +228,13 @@ begsr w_fldl0100;
         //  Mit 4 Nachkommastellen nur, wenn dabei keine Ziffern
         //  verloren gehen (z.B. 1,2345E-5), sonst mit Exponent.
         maxFloat4 = *hival;
-        isexact = *off;
+        isExact = *off;
         if (%abs(float4) <= maxFloat4);
           eval(h) maxFloat4 = float4;
           tmpfloat4 = maxFloat4;
-          isexact = (tmpfloat4 = float4);
+          isExact = (tmpfloat4 = float4);
         endif;
-        if (isexact);
+        if (isExact);
           o_string = %editc(maxFloat4: 'P');
         else;
           o_string = %editflt(float4);
@@ -255,13 +255,13 @@ begsr w_fldl0100;
         endif;
       other;
         maxFloat8 = *hival;
-        isexact = *off;
+        isExact = *off;
         if (%abs(float8) <= maxFloat8);
           eval(h) maxFloat8 = float8;
           tmpfloat8 = maxFloat8;
-          isexact = (tmpfloat8 = float8);
+          isExact = (tmpfloat8 = float8);
         endif;
-        if (isexact);
+        if (isExact);
           o_string = %editc(maxFloat8: 'P');
         else;
           o_string = %editflt(float8);
@@ -297,9 +297,9 @@ begsr w_fldl0100;
 
   when (srcVarCls = 'B');
     f_rtvFld(srcVar: i_srcVar: fldl0100);
-    cpynv(f_num_descr(t_zoned: precision: 0)
+    cpynv(f_num_descr(T_Zoned: precision: 0)
          : %addr(zonedBuffer)
-         : f_num_descr(t_signed: binLength: 0)
+         : f_num_descr(T_Signed: binLength: 0)
          : %addr(srcVar));
     srcVar = zonedBuffer;
     srcVarCls = 'S';

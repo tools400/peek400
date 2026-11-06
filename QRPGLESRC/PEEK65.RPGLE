@@ -317,7 +317,7 @@ endsr;
 begsr pbSeite;
 
   if (*in60 = bTrue);
-    write newpage;
+    write newPage;
     write head1;
     write head2;
     write head3;

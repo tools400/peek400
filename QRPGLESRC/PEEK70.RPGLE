@@ -31,7 +31,7 @@
 //     *READ    - nächsten Eintrag lesen                         *
 //     *DELETE  - Liste (Benutzerbereich) löschen                *
 //                                                               *
-//  o_nume      - *CREATE: Anzahl Einträge                       *
+//  o_numE      - *CREATE: Anzahl Einträge                       *
 //                *READ:   Anzahl noch folgender Einträge        *
 //                0, wenn die Liste nicht erstellt werden konnte *
 //                oder kein Eintrag mehr da ist                  *
@@ -42,8 +42,8 @@
 //                                                               *
 //  Aufruffolge:                                                 *
 //                                                               *
-//      PEEK70 *CREATE  - Liste erstellen (o_nume Einträge)      *
-//      solange o_nume > 0:                                      *
+//      PEEK70 *CREATE  - Liste erstellen (o_numE Einträge)      *
+//      solange o_numE > 0:                                      *
 //         PEEK70 *READ - Eintrag lesen                          *
 //      PEEK70 *DELETE  - Benutzerbereich löschen (optional)     *
 //                                                               *

@@ -42,36 +42,36 @@ dcl-f qcopyle5 extdesc('QPEEKGEN') usage(*output) usropn rename(qpeekgen: fcopy5
 
 dcl-f qcopyle6 extdesc('QPEEKGEN') usage(*output) usropn rename(qpeekgen: fcopy6) block(*no);
 
-dcl-f peeksrc usropn rename(peeksrc: finput);
+dcl-f peekSrc usropn rename(peekSrc: finput);
 
 dcl-f peekFld usropn prefix(f_);
 
 dcl-pr p_wrtDspF extproc(*dclcase);
-  i_srcDta like(srcdta) const;
+  i_srcDta like(srcDta) const;
 end-pr;
 
 dcl-pr p_wrtCopy1 extproc(*dclcase);
-  i_srcDta like(srcdta) const;
+  i_srcDta like(srcDta) const;
 end-pr;
 
 dcl-pr p_wrtCopy2 extproc(*dclcase);
-  i_srcDta like(srcdta) const;
+  i_srcDta like(srcDta) const;
 end-pr;
 
 dcl-pr p_wrtCopy3 extproc(*dclcase);
-  i_srcDta like(srcdta) const;
+  i_srcDta like(srcDta) const;
 end-pr;
 
 dcl-pr p_wrtCopy4 extproc(*dclcase);
-  i_srcDta like(srcdta) const;
+  i_srcDta like(srcDta) const;
 end-pr;
 
 dcl-pr p_wrtCopy5 extproc(*dclcase);
-  i_srcDta like(srcdta) const;
+  i_srcDta like(srcDta) const;
 end-pr;
 
 dcl-pr p_wrtCopy6 extproc(*dclcase);
-  i_srcDta like(srcdta) const;
+  i_srcDta like(srcDta) const;
 end-pr;
 
 dcl-pr f_readFld like(bool_t) extproc(*dclcase);
@@ -255,7 +255,7 @@ dcl-ds ds_endsl len(112);
 end-ds;
 
 dcl-ds ds_remark len(112);
-  $rem_atrB char(1) inz(color_white);
+  $rem_atrB char(1) inz(COLOR_white);
   $rem_rem  char(1) inz('*') pos(7);
   $rem_txt  char(105) inz;
   $rem_info char(103) inz overlay($rem_txt: 3);
@@ -298,8 +298,8 @@ end-pr;
 
 dcl-s dotLine char(40) inz(*all'.');
 
-dcl-s #srcseq like(srcseq) inz;
-dcl-c #increment 0,01;
+dcl-s #srcSeq like(srcSeq) inz;
+dcl-c #Increment 0,01;
 
 dcl-c max_rows 18;
 
@@ -368,7 +368,7 @@ dcl-s fldToLongMax like(bool_t) inz;
 dcl-s closeChar1 varchar(1) inz;
 dcl-s closeChar2 varchar(1) inz;
 dcl-s headerType varchar(20) inz;
-dcl-s edtwrd varchar(140) inz;
+dcl-s edtWrd varchar(140) inz;
 
 /copy QCOPYLE,D_VARDEF
 /copy QCOPYLE,FLDL0100
@@ -435,9 +435,9 @@ newScn  = bTrue;
 //  Teildatei weiter: Folgenummern dort ab 5000, damit sie aufsteigend
 //  bleiben (sonst CPD9805 und Fehlermarken an falschen Zeilen).
 if (i_alwLC = bFalse);
-  #srcseq = 0;
+  #srcSeq = 0;
 else;
-  #srcseq = 5000;
+  #srcSeq = 5000;
 endif;
 
 if (i_alwLC = bFalse);
@@ -619,7 +619,7 @@ io_scnNbrs = scn#;
 
 begsr copyHead;
 
-  open peeksrc;
+  open peekSrc;
 
   dow ('1');
     read finput;
@@ -628,10 +628,10 @@ begsr copyHead;
     endif;
 
     //  Nur kopieren ...
-    p_wrtDspF(srcdta);
+    p_wrtDspF(srcDta);
   enddo;
 
-  close peeksrc;
+  close peekSrc;
 
   //-------------------------------------------*
   //  Initialisieren Copy-Book 2:              *
@@ -1118,19 +1118,19 @@ begsr wrtField;
       //  Stellen, ein Editierwort bis zu 64 Zeichen.
       if (fldl0100.f1EdWl > 0 and
           fldl0100.f1EdWl <= %len(fldl0100.f1EdWd));
-        edtwrd = %subst(fldl0100.f1EdWd: 1: fldl0100.f1EdWl);
+        edtWrd = %subst(fldl0100.f1EdWd: 1: fldl0100.f1EdWl);
       else;
-        edtwrd = %trimr(fldl0100.f1EdWd);
+        edtWrd = %trimr(fldl0100.f1EdWd);
       endif;
-      edtwrd = 'EDTWRD(''' + %scanrpl('''': '''''': edtwrd) + ''')';
-      dow (%len(edtwrd) > %len($dspA_atr));
+      edtWrd = 'EDTWRD(''' + %scanrpl('''': '''''': edtWrd) + ''')';
+      dow (%len(edtWrd) > %len($dspA_atr));
         reset ds_dspAtr;
-        $dspA_atr = %subst(edtwrd: 1: %len($dspA_atr) - 1) + '-';
+        $dspA_atr = %subst(edtWrd: 1: %len($dspA_atr) - 1) + '-';
         p_wrtDspF(ds_dspAtr);
-        edtwrd = %subst(edtwrd: %len($dspA_atr));
+        edtWrd = %subst(edtWrd: %len($dspA_atr));
       enddo;
       reset ds_dspAtr;
-      $dspA_atr = edtwrd;
+      $dspA_atr = edtWrd;
       p_wrtDspF(ds_dspAtr);
 
     //  Abfragen Feld-EDTCDE aus PEEKFLD ...
@@ -2034,14 +2034,14 @@ end-proc;
 //============================================================*
 dcl-proc p_wrtDspF;
   dcl-pi *n;
-    i_srcDta like(srcdta) const;
+    i_srcDta like(srcDta) const;
   end-pi;
 
-  #srcseq = #srcseq + #increment;
+  #srcSeq = #srcSeq + #Increment;
 
-  srcseq  = #srcseq;
-  srcdat = 0;
-  srcdta  = i_srcDta;
+  srcSeq  = #srcSeq;
+  srcDat = 0;
+  srcDta  = i_srcDta;
   write foutput;
 
   return;
@@ -2054,14 +2054,14 @@ end-proc;
 //============================================================*
 dcl-proc p_wrtCopy1;
   dcl-pi *n;
-    i_srcDta like(srcdta) const;
+    i_srcDta like(srcDta) const;
   end-pi;
 
   if (i_alwLC = bFalse);
     //  Nur einmal ausgeben, bei XAlwLC = FALSE
-    srcseq = 0;
-    srcdat = 0;
-    srcdta  = i_srcDta;
+    srcSeq = 0;
+    srcDat = 0;
+    srcDta  = i_srcDta;
     write fcopy1;
   else;
   //  kein zweites Mal ausgeben
@@ -2077,14 +2077,14 @@ end-proc;
 //============================================================*
 dcl-proc p_wrtCopy2;
   dcl-pi *n;
-    i_srcDta like(srcdta) const;
+    i_srcDta like(srcDta) const;
   end-pi;
 
   if (i_alwLC = bFalse);
     //  Nur einmal ausgeben, bei XAlwLC = FALSE
-    srcseq = 0;
-    srcdat = 0;
-    srcdta  = i_srcDta;
+    srcSeq = 0;
+    srcDat = 0;
+    srcDta  = i_srcDta;
     write fcopy2;
   else;
   //  kein zweites Mal ausgeben
@@ -2100,14 +2100,14 @@ end-proc;
 //============================================================*
 dcl-proc p_wrtCopy3;
   dcl-pi *n;
-    i_srcDta like(srcdta) const;
+    i_srcDta like(srcDta) const;
   end-pi;
 
   if (i_alwLC = bFalse);
     //  Nur einmal ausgeben, bei XAlwLC = FALSE
-    srcseq = 0;
-    srcdat = 0;
-    srcdta  = i_srcDta;
+    srcSeq = 0;
+    srcDat = 0;
+    srcDta  = i_srcDta;
     write fcopy3;
   else;
   //  kein zweites Mal ausgeben
@@ -2123,14 +2123,14 @@ end-proc;
 //============================================================*
 dcl-proc p_wrtCopy4;
   dcl-pi *n;
-    i_srcDta like(srcdta) const;
+    i_srcDta like(srcDta) const;
   end-pi;
 
   if (i_alwLC = bFalse);
     //  Nur einmal ausgeben, bei XAlwLC = FALSE
-    srcseq = 0;
-    srcdat = 0;
-    srcdta  = i_srcDta;
+    srcSeq = 0;
+    srcDat = 0;
+    srcDta  = i_srcDta;
     write fcopy4;
   else;
   //  kein zweites Mal ausgeben
@@ -2146,14 +2146,14 @@ end-proc;
 //============================================================*
 dcl-proc p_wrtCopy5;
   dcl-pi *n;
-    i_srcDta like(srcdta) const;
+    i_srcDta like(srcDta) const;
   end-pi;
 
   if (i_alwLC = bFalse);
     //  Nur einmal ausgeben, bei XAlwLC = FALSE
-    srcseq = 0;
-    srcdat = 0;
-    srcdta  = i_srcDta;
+    srcSeq = 0;
+    srcDat = 0;
+    srcDta  = i_srcDta;
     write fcopy5;
   else;
   //  kein zweites Mal ausgeben
@@ -2169,14 +2169,14 @@ end-proc;
 //============================================================*
 dcl-proc p_wrtCopy6;
   dcl-pi *n;
-    i_srcDta like(srcdta) const;
+    i_srcDta like(srcDta) const;
   end-pi;
 
   if (i_alwLC = bFalse);
     //  Nur einmal ausgeben, bei XAlwLC = FALSE
-    srcseq = 0;
-    srcdat = 0;
-    srcdta  = i_srcDta;
+    srcSeq = 0;
+    srcDat = 0;
+    srcDta  = i_srcDta;
     write fcopy6;
   else;
   //  kein zweites Mal ausgeben

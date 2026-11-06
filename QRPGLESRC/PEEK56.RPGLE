@@ -29,7 +29,7 @@
 
 dcl-f peek56fm workstn(*ext) usage(*input: *output) usropn infds(workstn) sfile(pbSfl: sflRec);
 
-dcl-f peekenv keyed usropn extfile(g_envFile) extmbr(g_envMbr) prefix(en_);
+dcl-f peekEnv keyed usropn extfile(g_envFile) extmbr(g_envMbr) prefix(en_);
 
 dcl-ds workstn likeds(workstn_t);
 
@@ -101,7 +101,7 @@ dcl-s sflNbrRcd like(sflPage) inz;
 dcl-s sfBot like(int4_t) inz;
 dcl-s sfl_cmd char(10) inz(*blanks);
 dcl-s ctl_cmd char(10) inz(*blanks);
-dcl-c nbrFKeys 3;
+dcl-c NbrFKeys 3;
 
 dcl-s peek21_name like(pgmCallN_t) inz;
 dcl-s peek23_name like(pgmCallN_t) inz;
@@ -111,7 +111,7 @@ dcl-s peek46_name like(pgmCallN_t) inz;
 dcl-s r_mbr inz(*blanks) like(##mbr);
 dcl-s lstMbr inz(*blanks) like(##mbr);
 dcl-s lstNbrRcd inz(0) like(sflPage);
-dcl-s srchrec inz(0) like(sflPage);
+dcl-s srchRec inz(0) like(sflPage);
 //  Namen der Umgebungen (Teildateien) der Subfile-Sätze für die Suche
 dcl-s sfl_mbrs like($$mNme) dim(9999);
 
@@ -179,7 +179,7 @@ dow ('1');
 
   //  Nachrichten anzeigen
   *in89 = '0';
-  write msgctl;
+  write msgCtl;
 
   //  "Keine Sätze ..."
   if (*in80 = *off);
@@ -197,25 +197,25 @@ dow ('1');
   //  Anzeigen der Befehlstasten
   select;
   when ((sfBot = 2) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#2;
   when ((sfBot = 3) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#3;
   when ((sfBot = 4) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#4;
   when ((sfBot = 5) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#5;
   when ((sfBot = 6) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#6;
   when ((sfBot = 7) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#7;
   when ((sfBot = 8) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#8;
   other;
     write pbbot#1;
@@ -223,7 +223,7 @@ dow ('1');
   endsl;
 
   //  Anzeige der Subfile
-  exfmt pbctl;
+  exfmt pbCtl;
   *in70 = '0';
 
   //  Nachrichten löschen
@@ -443,16 +443,16 @@ begsr srchMbr;
     //  Die Suche liest die Subfile nicht, sondern die gemerkten Namen:
     //  Die Sätze bleiben unverändert, auch Auswahlen und deren
     //  Fehlermarkierungen.
-    for srchrec = lstNbrRcd to sflNbrRcd;
-      if (lstMbr = %subst(sfl_mbrs(srchrec): 1:(f_scan(' ': lstMbr) - 1)));
+    for srchRec = lstNbrRcd to sflNbrRcd;
+      if (lstMbr = %subst(sfl_mbrs(srchRec): 1:(f_scan(' ': lstMbr) - 1)));
         isFound = bTrue;
         leave;
       endif;
     endfor;
 
     if (isFound = bTrue);
-      wrk_sfsanr = srchrec;
-      lstNbrRcd = srchrec;
+      wrk_sfsanr = srchRec;
+      lstNbrRcd = srchRec;
     else;
       wrk_sfsanr = 0;
       lstNbrRcd = 0;
@@ -1113,13 +1113,13 @@ endsr;
 begsr pbInit;
 
   *in89 = '0';
-  write msgctl;
+  write msgCtl;
 
   *in80 = '0'; // SFLDSP
   *in81 = '1'; // SFLDSPCTL
   *in82 = '1'; // SFLCLR
   *in83 = '1'; // SFLEND
-  write pbctl;
+  write pbCtl;
 
   *in82 = '0'; // SFLCLR
 
@@ -1316,7 +1316,7 @@ begsr first;
     isPrdLib = bFalse;
   endsl;
 
-  if (set0015.set_envchg =  bFalse or set0015.set_envena =  bFalse );
+  if (set0015.set_envChg =  bFalse or set0015.set_envena =  bFalse );
     *in71 = *on;
   else;
     *in71 = *off;
@@ -1366,14 +1366,14 @@ begsr inzsr;
 
   isInzSr = bTrue;
 
-  PGMQ = '*';
+  pgmQ = '*';
 
   peek21_name = f_pgmCallN('PEEK21');
   peek23_name = f_pgmCallN('PEEK23');
   peek27_name = f_pgmCallN('PEEK27');
   peek46_name = f_pgmCallN('PEEK46');
 
-  peek23(sds.pgmName: '*ALL': nbrFKeys: yFKeys: yNbrOfKeys);
+  peek23(sds.pgmName: '*ALL': NbrFKeys: yFKeys: yNbrOfKeys);
   scrnFKeys = %subarr(yFKeys: 1);
 
 endsr;
@@ -1426,11 +1426,11 @@ dcl-proc f_loadRcdFmtID;
   //---------------------------------------------------*
 
   //  Die Umgebungsdatei aus dem Fenster: Der Benutzer kann Datei und
-  //  Bibliothek ändern, i_envlib kann auch '*PRDLIB' sein.
+  //  Bibliothek ändern, i_envLib kann auch '*PRDLIB' sein.
   g_envFile = %trim(##lib) + '/' +
               %trim(##file);
   g_envMbr = $$mNme;
-  open(e) peekenv;
+  open(e) peekEnv;
   if (%error());
     return '';
   endif;
@@ -1440,11 +1440,11 @@ dcl-proc f_loadRcdFmtID;
   en_key2.en_user = '*ALL';
   en_key2.en_section = '*RCDFMTID';
   chain %kds(en_key2: 2) fpeekenv;
-  if (%found(peekenv));
+  if (%found(peekEnv));
     rcdFmtID = en_data;
   endif;
 
-  close peekenv;
+  close peekEnv;
 
   return rcdFmtID;
 end-proc;

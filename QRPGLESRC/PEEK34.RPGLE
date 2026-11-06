@@ -29,9 +29,9 @@
 
 dcl-f peek34fm workstn(*ext) usage(*input: *output) usropn infds(workstn) sfile(pbSfl: sflRec);
 
-dcl-f peekwrk usage(*update: *delete) keyed usropn infds(work_00_ds) prefix(w_);
+dcl-f peekWrk usage(*update: *delete) keyed usropn infds(work_00_ds) prefix(w_);
 
-dcl-f peekwrk_ disk(1024) usage(*update: *delete: *output) usropn infds(work_01_ds);
+dcl-f peekWrk_ disk(1024) usage(*update: *delete: *output) usropn infds(work_01_ds);
 
 dcl-f peekFldL1 usage(*input) keyed usropn infds(peek_01_ds) rename(fpeekfld: fpeekfldl1) prefix(f_)
   ;
@@ -78,7 +78,7 @@ dcl-ds peek_01_ds likeds(infds_t);
 //  I N F D S - D E F I N I T I O N E N               *
 //----------------------------------------------------*
 
-dcl-ds ds_peekwrk extname('PEEKWRK') inz len(1024) prefix(w_);
+dcl-ds ds_peekWrk extname('PEEKWRK') inz len(1024) prefix(w_);
 end-ds;
 
 dcl-s yFKeys char(18) dim(32);
@@ -97,7 +97,7 @@ dcl-s sflPage like(int4_t);
 dcl-s sflPageDDS like(sflPage);
 dcl-s sflRec like(sflPage);
 dcl-s sflNbrRcd like(sflPage);
-dcl-c nbrFKeys 3;
+dcl-c NbrFKeys 3;
 
 dcl-s sfBot like(int4_t);
 dcl-s sfl_cmd char(10);
@@ -116,28 +116,28 @@ dcl-s r_field like(##field);
 dcl-s r_seq like(f_seq);
 dcl-s lstField like(##field);
 dcl-s lstNbrRcd like(sflPage);
-dcl-s srchrec like(sflPage);
+dcl-s srchRec like(sflPage);
 //  Feldnamen und Satznummern der Subfile-Sätze für die Suche
 dcl-s sfl_fnmes like($$fNme) dim(9999);
-dcl-s sfl_rcdnbrs like(recordNbr) dim(9999);
+dcl-s sfl_rcdNbrs like(recordNbr) dim(9999);
 
 //  Prüfung auf doppelte Folgenummern
-dcl-s isdupseq like(bool_t) inz(bFalse);
-dcl-s isfirst like(bool_t) inz(bFalse);
-dcl-s lstseq like(wrk0001_t.wrk_seq) inz;
-dcl-s lstrcdnbr like(int4_t) inz;
-dcl-s dupnbr like(int4_t) inz;
-dcl-s duprrn like(int4_t) inz;
+dcl-s isDupSeq like(bool_t) inz(bFalse);
+dcl-s isFirst like(bool_t) inz(bFalse);
+dcl-s lstSeq like(wrk0001_t.wrk_seq) inz;
+dcl-s lstRcdNbr like(int4_t) inz;
+dcl-s dupNbr like(int4_t) inz;
+dcl-s dupRrn like(int4_t) inz;
 //  Zeilen der Subfile: als doppelte Folgenummer markiert (bisher/neu)
 //  und in diesem Durchlauf von vReadC verarbeitet
-dcl-s isduprow ind dim(9999) inz(*off);
-dcl-s isnewdup ind dim(9999) inz(*off);
-dcl-s isreadrow ind dim(9999) inz(*off);
+dcl-s isDupRow ind dim(9999) inz(*off);
+dcl-s isNewDup ind dim(9999) inz(*off);
+dcl-s isReadRow ind dim(9999) inz(*off);
 //  Feld mit Eingabefehler je Zeile und ob es in diesem Durchlauf von
 //  vReadC Eingabefehler gab: Sie behalten Markierung und Cursor, auch
 //  wenn die Zeile zusätzlich eine doppelte Folgenummer hat.
-dcl-s errfield like(yField) dim(9999) inz;
-dcl-s isinperr like(bool_t) inz(bFalse);
+dcl-s errField like(yField) dim(9999) inz;
+dcl-s isInpErr like(bool_t) inz(bFalse);
 dcl-s wrk_sfsanr like(sfsanr);
 
 
@@ -184,7 +184,7 @@ if (isBatch = bFalse);
 
     //  Nachrichten anzeigen
     *in89 = '0';
-    write msgctl;
+    write msgCtl;
 
     //  "Keine Sätze ..."
     if (*in80 = *off);
@@ -194,19 +194,19 @@ if (isBatch = bFalse);
     //  Anzeigen der Befehlstasten
     select;
     when ((sfBot = 2) and
-       (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+       (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
       write pbbot#2;
     when ((sfBot = 3) and
-       (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+       (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
       write pbbot#3;
     when ((sfBot = 4) and
-       (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+       (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
       write pbbot#4;
     when ((sfBot = 5) and
-       (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+       (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
       write pbbot#5;
     when ((sfBot = 6) and
-       (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+       (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
       write pbbot#6;
     other;
       write pbbot#1;
@@ -214,7 +214,7 @@ if (isBatch = bFalse);
     endsl;
 
     //  Anzeige der Subfile
-    exfmt pbctl;
+    exfmt pbCtl;
     *in70 = '0';
 
     //  Nachrichten löschen
@@ -307,8 +307,8 @@ endif;
 close peekFldL1;
 close peekFld;
 
-close peekwrk;
-close peekwrk_;
+close peekWrk;
+close peekWrk_;
 exsr clrPeekWrk;
 
 return;
@@ -397,9 +397,9 @@ begsr srchField;
     //  Die Suche liest die Subfile nicht, sondern die gemerkten
     //  Feldnamen: Nach einem CHAIN auf die Subfile lieferte READC
     //  Zeilen mit Eingabefehlern (SFLNXTCHG) nicht mehr.
-    for srchrec = lstNbrRcd to sflNbrRcd;
+    for srchRec = lstNbrRcd to sflNbrRcd;
       if (lstField =
-          %subst(sfl_fnmes(srchrec): 1:(f_scan(' ':
+          %subst(sfl_fnmes(srchRec): 1:(f_scan(' ':
                          lstField) - 1)));
         isFound = bTrue;
         leave;
@@ -408,8 +408,8 @@ begsr srchField;
     endfor;
 
     if (isFound = bTrue);
-      wrk_sfsanr = srchrec;
-      lstNbrRcd = srchrec;
+      wrk_sfsanr = srchRec;
+      lstNbrRcd = srchRec;
     else;
       wrk_sfsanr = *zeros;
       lstNbrRcd = 0;
@@ -438,9 +438,9 @@ endsr;
 begsr vReadC;
 
   isSflError = bFalse;
-  isreadrow(*) = *off;
-  errfield(*) = '';
-  isinperr = bFalse;
+  isReadRow(*) = *off;
+  errField(*) = '';
+  isInpErr = bFalse;
 
   if (*in80 = *off);
   //   keine Einträge in Subfile vorhanden ...
@@ -453,7 +453,7 @@ begsr vReadC;
       endif;
 
       chain sflRec pbSfl;
-      isreadrow(sflRec) = *on;
+      isReadRow(sflRec) = *on;
 
       exsr sflBzoff;
 
@@ -533,8 +533,8 @@ begsr vReadC;
           yMsgID = '';
           yMsgDta = '';
           isSflError = bTrue;
-          errfield(sflRec) = yField;
-          isinperr = bTrue;
+          errField(sflRec) = yField;
+          isInpErr = bTrue;
         endif;
       endif;
 
@@ -545,21 +545,21 @@ begsr vReadC;
 
     //  Doppelte Folgenummern erst nach allen Änderungen prüfen,
     //  damit zwei Felder ihre Nummern tauschen können.
-    exsr chkdupseq;
+    exsr chkDupSeq;
 
   endif;
 
 endsr;
 
 //============================================================*
-//    ChkDupSeq     Prüfen auf doppelte Folgenummern          *
+//    chkDupSeq     Prüfen auf doppelte Folgenummern          *
 //============================================================*
 
-begsr chkdupseq;
+begsr chkDupSeq;
 
-  isdupseq = bFalse;
-  isfirst = bTrue;
-  isnewdup(*) = *off;
+  isDupSeq = bFalse;
+  isFirst = bTrue;
+  isNewDup(*) = *off;
 
   //  PEEKWRK ist nach der Folgenummer sortiert: Doppelte
   //  Nummern liegen direkt hintereinander.
@@ -569,24 +569,24 @@ begsr chkdupseq;
 
   dow ('1');
     read(n) fpeekwrk;
-    if (%eof(peekwrk));
+    if (%eof(peekWrk));
       leave;
     endif;
 
-    if (isfirst = bFalse and w_key = lstseq);
-      isdupseq = bTrue;
-      dupnbr = lstrcdnbr;
-      exsr markdupseq;
-      dupnbr = work_00_ds.rcdNbr;
-      exsr markdupseq;
+    if (isFirst = bFalse and w_key = lstSeq);
+      isDupSeq = bTrue;
+      dupNbr = lstRcdNbr;
+      exsr markDupSeq;
+      dupNbr = work_00_ds.rcdNbr;
+      exsr markDupSeq;
     endif;
 
-    isfirst = bFalse;
-    lstseq = w_key;
-    lstrcdnbr = work_00_ds.rcdNbr;
+    isFirst = bFalse;
+    lstSeq = w_key;
+    lstRcdNbr = work_00_ds.rcdNbr;
   enddo;
 
-  if (isdupseq = bTrue);
+  if (isDupSeq = bTrue);
     p_sndPgmMg('USR8167': '': sds.pgmName);
     isSflError = bTrue;
   endif;
@@ -595,8 +595,8 @@ begsr chkdupseq;
   //  nicht jede markierte Zeile wieder; Zeilen aus diesem Durchlauf hat
   //  vReadC neu geschrieben.
   for sflRec = 1 to sflNbrRcd;
-    if (isduprow(sflRec) and not isnewdup(sflRec)
-        and not isreadrow(sflRec));
+    if (isDupRow(sflRec) and not isNewDup(sflRec)
+        and not isReadRow(sflRec));
       chain(e) sflRec pbSfl;
       if (not %error() and %found());
         exsr sflBzoff;
@@ -607,37 +607,37 @@ begsr chkdupseq;
     endif;
   endfor;
 
-  isduprow = isnewdup;
+  isDupRow = isNewDup;
 
 endsr;
 
 //============================================================*
-//    MarkDupSeq    Markieren Folgenummer von Satz DupNbr     *
+//    markDupSeq    Markieren Folgenummer von Satz dupNbr     *
 //============================================================*
 
-begsr markdupseq;
+begsr markDupSeq;
 
   //  Die Zeile über die gemerkten Satznummern suchen, statt jede
   //  Zeile per CHAIN zu lesen.
-  duprrn = 0;
+  dupRrn = 0;
   if (sflNbrRcd > 0);
-    duprrn = %lookup(dupnbr: sfl_rcdnbrs: 1: sflNbrRcd);
+    dupRrn = %lookup(dupNbr: sfl_rcdNbrs: 1: sflNbrRcd);
   endif;
 
-  if (duprrn > 0);
-    sflRec = duprrn;
+  if (dupRrn > 0);
+    sflRec = dupRrn;
     chain(e) sflRec pbSfl;
     if (not %error() and %found());
-      isnewdup(sflRec) = *on;
+      isNewDup(sflRec) = *on;
       exsr sflBzoff;
       //  Ein Eingabefehler dieser Zeile bleibt markiert. Gibt es
       //  Eingabefehler, bekommen sie den Cursor, nicht die doppelte
       //  Folgenummer.
-      if (errfield(sflRec) <> '');
-        yField = errfield(sflRec);
+      if (errField(sflRec) <> '');
+        yField = errField(sflRec);
         exsr vPosCsr;
       endif;
-      if (isinperr = bFalse);
+      if (isInpErr = bFalse);
         *in20 = '1';       // DSPATR(PC)
       endif;
       *in30 = '1';         // DSPATR(RI)
@@ -709,7 +709,7 @@ begsr c_saveExit;
 
   dow ('1');
     read(n) fpeekwrk;
-    if (%eof(peekwrk));
+    if (%eof(peekWrk));
       leave;
     endif;
 
@@ -775,7 +775,7 @@ begsr c_floatKey;
 
   dow ('1');
     read fpeekwrk;
-    if (%eof(peekwrk));
+    if (%eof(peekWrk));
       leave;
     endif;
 
@@ -802,7 +802,7 @@ begsr c_floatKey;
 
   dow ('1');
     readp fpeekwrk;
-    if (%eof(peekwrk));
+    if (%eof(peekWrk));
       leave;
     endif;
 
@@ -936,15 +936,15 @@ endsr;
 
 begsr vPos;
 
-  chain recordNbr peekwrk_ ds_peekwrk;
-  if (not %found(peekwrk_));
+  chain recordNbr peekWrk_ ds_peekWrk;
+  if (not %found(peekWrk_));
   //  Weiß noch nicht, was zu tun ist ...
   else;
     wrk0001 = w_data;
     exsr fillRecord;
     w_key = wrk0001.wrk_seq;
     w_data = wrk0001;
-    update peekwrk_ ds_peekwrk;
+    update peekWrk_ ds_peekWrk;
   endif;
 
 endsr;
@@ -991,13 +991,13 @@ endsr;
 begsr pbInit;
 
   *in89 = '0';
-  write msgctl;
+  write msgCtl;
 
   *in80 = '0'; // SFLDSP
   *in81 = '1'; // SFLDSPCTL
   *in82 = '1'; // SFLCLR
   *in83 = '1'; // SFLEND
-  write pbctl;
+  write pbCtl;
 
   *in82 = '0'; // SFLCLR
 
@@ -1005,7 +1005,7 @@ begsr pbInit;
   sflNbrRcd = 0;
 
   //  Neue Subfile: keine Markierungen für doppelte Folgenummern
-  isduprow(*) = *off;
+  isDupRow(*) = *off;
 
 endsr;
 
@@ -1017,7 +1017,7 @@ begsr pbReadUp;
 
   dow ('1');
     read(n) fpeekwrk;
-    if (%eof(peekwrk));
+    if (%eof(peekWrk));
       *in83 = *on;
       leave;
     endif;
@@ -1030,7 +1030,7 @@ begsr pbReadUp;
     write pbSfl;
     sflNbrRcd = sflRec;
     sfl_fnmes(sflRec) = $$fNme;
-    sfl_rcdnbrs(sflRec) = recordNbr;
+    sfl_rcdNbrs(sflRec) = recordNbr;
 
     if (sflRec >= sflPage);
       leave;
@@ -1253,7 +1253,7 @@ begsr copyToWork;
     endif;
 
     clear wrk0001;
-    clear ds_peekwrk;
+    clear ds_peekWrk;
 
     r_seq = r_seq + 10;
 
@@ -1271,7 +1271,7 @@ begsr copyToWork;
     w_format = 'WRK0001';
     w_data = wrk0001;
 
-    write peekwrk_ ds_peekwrk;
+    write peekWrk_ ds_peekWrk;
   enddo;
 
 endsr;
@@ -1287,8 +1287,8 @@ begsr first;
   open peekFld;
 
   exsr clrPeekWrk;
-  open peekwrk;
-  open peekwrk_;
+  open peekWrk;
+  open peekWrk_;
   exsr copyToWork;
 
   // - Programm initialisieren
@@ -1345,14 +1345,14 @@ begsr inzsr;
 
   isInzSr = bTrue;
 
-  PGMQ = '*';
+  pgmQ = '*';
 
   peek21_name = f_pgmCallN('PEEK21');
   peek23_name = f_pgmCallN('PEEK23');
   peek25_name = f_pgmCallN('PEEK25');
   peek35_name = f_pgmCallN('PEEK35');
 
-  peek23(sds.pgmName: '*ALL': nbrFKeys
+  peek23(sds.pgmName: '*ALL': NbrFKeys
         : yFKeys: yNbrOfKeys);
   scrnFKeys = %subarr(yFKeys: 1);
 

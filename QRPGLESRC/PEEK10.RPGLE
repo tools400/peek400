@@ -28,7 +28,7 @@
 /copy QCOPYLE,H_SPEC
 /copy QCOPYLE,COPYRIGHT
 
-dcl-f peekfmt usage(*update: *delete: *output) usropn prefix(f_);
+dcl-f peekFmt usage(*update: *delete: *output) usropn prefix(f_);
 
 /copy QCOPYLE,D_VARDEF
 /copy QCOPYLE,FLDL0100
@@ -169,7 +169,7 @@ begsr inzsr;
 
   peek11_name = f_pgmCallN('PEEK11');
 
-  open peekfmt;
+  open peekFmt;
 
 endsr;
 

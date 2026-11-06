@@ -88,7 +88,7 @@
 ctl-opt dftactgrp(*no) actgrp(*caller);
 /endif
 
-dcl-f exit04log usage(*update: *delete: *output) keyed usropn rename(exit04log: fexit04log)
+dcl-f exit04Log usage(*update: *delete: *output) keyed usropn rename(exit04Log: fexit04log)
   prefix(log_);
 
 /define internal_prototype
@@ -150,7 +150,7 @@ dcl-proc main;
   dcl-s aImage char(32767) based(i_aImage);
   //---------------------------------------------------------------*
 
-  open(e) exit04log;
+  open(e) exit04Log;
   if (%error());
     return;
   endif;
@@ -163,7 +163,7 @@ dcl-proc main;
     log_event     = i_event;
     log_user      = i_user;
     log_timestamp = i_timestamp;
-    log_rcdnbr    = i_rcdNbr;
+    log_rcdNbr    = i_rcdNbr;
     log_size      = i_size;
     if (i_bImage <> *null); // *CHANGE, *COPY or *DELETE
       log_bimage = %subst(bImage: 1: i_size);
@@ -179,7 +179,7 @@ dcl-proc main;
   on-error;
   endmon;
 
-  close exit04log;
+  close exit04Log;
 
 
 end-proc main;

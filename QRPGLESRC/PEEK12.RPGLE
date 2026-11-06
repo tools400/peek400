@@ -29,7 +29,7 @@
 
 dcl-f peek12fm workstn(*ext) usage(*input: *output) usropn infds(workstn) sfile(pbSfl: sflRec);
 
-dcl-f peekfmt usropn infds(peek_01_ds) prefix(f_);
+dcl-f peekFmt usropn infds(peek_01_ds) prefix(f_);
 
 dcl-ds workstn likeds(workstn_t);
 
@@ -119,7 +119,7 @@ dow (isExitPgm = bFalse);
 
   //  Nachrichten anzeigen
   *in89 = '0';
-  write msgctl;
+  write msgCtl;
 
   //  "Keine Sätze ..."
   if (*in80 = *off);
@@ -151,7 +151,7 @@ dow (isExitPgm = bFalse);
   endsl;
 
   //  Anzeige der Subfile
-  exfmt pbctl;
+  exfmt pbCtl;
 
   //  Nachrichten löschen
   p_rmvPgmMg(sds.pgmName);
@@ -201,7 +201,7 @@ dow (isExitPgm = bFalse);
 
 enddo;
 
-close peekfmt;
+close peekFmt;
 
 *inlr = *on;
 
@@ -224,7 +224,7 @@ begsr c_enter;
       //  Zeilen, deren Markierung wieder gelöscht wurde, ignorieren.
       if (sfpau <> '');
         o_rcdl0200 = $$rcdl0200;
-        o_fmtNbr = fmtnbr;
+        o_fmtNbr = fmtNbr;
         leave;
       endif;
     enddo;
@@ -295,13 +295,13 @@ endsr;
 begsr pbInit;
 
   *in89 = '0';
-  write msgctl;
+  write msgCtl;
 
   *in80 = '0'; // SFLDSP
   *in81 = '1'; // SFLDSPCTL
   *in82 = '1'; // SFLCLR
   *in83 = '1'; // SFLEND
-  write pbctl;
+  write pbCtl;
 
   *in82 = '0'; // SFLCLR
 
@@ -390,7 +390,7 @@ begsr pbFill;
   $$format = rcdl0200.r2FmtName;
   $$text = rcdl0200.r2Text;
   recordNbr = peek_01_ds.rcdNbr;
-  fmtnbr = f_fmtNbr;
+  fmtNbr = f_fmtNbr;
 
   *in80 = '1'; // SFLDSP
   lastRcdNbr = peek_01_ds.rcdNbr;
@@ -436,7 +436,7 @@ endsr;
 begsr first;
 
   // - Dateien öffnen
-  open peekfmt;
+  open peekFmt;
 
   o_msgID = *blanks;
   o_msgDta = *blanks;
@@ -445,9 +445,9 @@ begsr first;
   if ((i_fmtMode = MODE_BATCH) and
       ((peek_01_ds.nbrOfRcd = 1) or (i_fmtName <> '')));
     setll 1 fpeekfmt;
-    dou (%eof(peekfmt));
+    dou (%eof(peekFmt));
       read fpeekfmt;
-      if (not %eof(peekfmt));
+      if (not %eof(peekFmt));
         rcdl0200 = f_fmt;
         if ((rcdl0200.r2FmtName = i_fmtName) or
             ((peek_01_ds.nbrOfRcd = 1) and (i_fmtName = '')));
@@ -498,7 +498,7 @@ begsr inzsr;
 
   isInzSr = bTrue;
 
-  PGMQ = '*';
+  pgmQ = '*';
 
   peek21_name = f_pgmCallN('PEEK21');
   peek23_name = f_pgmCallN('PEEK23');

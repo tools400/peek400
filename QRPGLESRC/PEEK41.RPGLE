@@ -244,21 +244,21 @@ begsr api_crt;
   endif;
 
   //  Datum
-  fild0100.atrdat = now.date6;
+  fild0100.atrDat = now.date6;
 
   //  Uhrzeit
-  fild0100.atrtim = now.time6;
+  fild0100.atrTim = now.time6;
 
   if (o_nbrOfEnt <= *zeros);
     //  Fehler aufgetreten
     //  Datei/Bibliothek
-    fild0100.atfile = '*ERROR';
-    fild0100.atlib = '*ERROR';
+    fild0100.atFile = '*ERROR';
+    fild0100.atLib = '*ERROR';
   else;
     //  restliche Felder füllen
     //  Datei/Bibliothek
-    fild0100.atfile = retQfile.name;
-    fild0100.atlib = retQfile.lib;
+    fild0100.atFile = retQfile.name;
+    fild0100.atLib = retQfile.lib;
     //  Bit 2   - Qdbfhfpl - Type of file
     //                  D=Einheit, P=PF, L=LF, R=DDM PF, S=DDM LF
     //*                 EVAL      *in98 = %bitand(QdbfhflgH: x'20') = x'20'
@@ -287,7 +287,7 @@ begsr api_crt;
     endif;
 
     //  Dateiwartezeit - Qdbfwtfi
-    fild0100.atwait = fileDefHd.Qdbfwtfi;
+    fild0100.atWait = fileDefHd.Qdbfwtfi;
 
     //  Satzwartezeit  - Qdbfbrwt
     fild0100.atwatr = fileDefHd.Qdbfbrwt;
@@ -305,7 +305,7 @@ begsr api_crt;
     endif;
 
     //  Textbeschreibung
-    fild0100.attxt = fileDefHd.Qdbfhtxt;
+    fild0100.atTxt = fileDefHd.Qdbfhtxt;
 
     //  Extern/Intern beschriebene Datei
     //  Bit 7   - Qdbfpgmd - program described file indicator
@@ -359,13 +359,13 @@ begsr api_crt;
 
     //  Join logical file
     if (isJoinFile = bTrue);
-      fild0100.atjoin = 'Y';
+      fild0100.atJoin = 'Y';
     else;
-      fild0100.atjoin = 'N';
+      fild0100.atJoin = 'N';
     endif;
 
     //  Anzahl Satzformate
-    if (fild0100.atjoin = 'Y');
+    if (fild0100.atJoin = 'Y');
       fild0100.atnofm = 1;
     else;
       fild0100.atnofm = fileDefHd.Qdbflbnum;
@@ -375,7 +375,7 @@ begsr api_crt;
     fild0100.atnomb = fileDefHd.Qdbfhmnum;
 
     //  Auxiliary storage pool ID
-    fild0100.atasp = fileDefHd.Qdbfasp;
+    fild0100.atAsp = fileDefHd.Qdbfasp;
 
     //  nicht unterstützt:
     fild0100.atmxdd = '';
@@ -473,13 +473,13 @@ begsr readKey;
     //  Jahrhundert
     keyl0100.aprcen = fild0100.atrcen;
     //  Datum
-    keyl0100.aprdat = fild0100.atrdat;
+    keyl0100.aprdat = fild0100.atrDat;
     //  Uhrzeit
-    keyl0100.aprtim = fild0100.atrtim;
+    keyl0100.aprtim = fild0100.atrTim;
     //  Datei
-    keyl0100.apfile = fild0100.atfile;
+    keyl0100.apfile = fild0100.atFile;
     //  Bibliothek
-    keyl0100.aplib = fild0100.atlib;
+    keyl0100.aplib = fild0100.atLib;
     //  Anzahl Schlüsselfelder
     keyl0100.apnkyf = nbrOfKeyFd;
     //  Feldname
@@ -692,16 +692,16 @@ begsr readSelect;
     clear sell0100;
 
     sell0100.sorcen = fild0100.atrcen;    //  Jahrhundert
-    sell0100.sordat = fild0100.atrdat;    //  Datum
-    sell0100.sortim = fild0100.atrtim;    //  Uhrzeit
-    sell0100.sofile = fild0100.atfile;    //  Datei
-    sell0100.solib = fild0100.atlib;      //  Bibliothek
+    sell0100.sordat = fild0100.atrDat;    //  Datum
+    sell0100.sortim = fild0100.atrTim;    //  Uhrzeit
+    sell0100.sofile = fild0100.atFile;    //  Datei
+    sell0100.solib = fild0100.atLib;      //  Bibliothek
     sell0100.softyp = fild0100.atftyp;    //  Dateiart
     sell0100.sofila = fild0100.atfila;    //  Dateiattribut
     sell0100.somxd = '';                  //  Reserviert
     sell0100.sofatr = fild0100.atfatr;    //  Dateiattribut
     sell0100.sosysn = fild0100.atsysn;    //  Systemname
-    sell0100.soasp = fild0100.atasp;      //  ASP Zusatzspeicher
+    sell0100.soasp = fild0100.atAsp;      //  ASP Zusatzspeicher
     sell0100.sores = '';                  //  Reserviert
     sell0100.sonrul = nbrOfSlOm;          //  Anzahl SELECT/OMIT Regeln
     sell0100.sorfmt = fileScope.Qdbft;    //  Satzformat
@@ -785,7 +785,7 @@ endsr;
 begsr readText;
 
   //  Textbeschreibung
-  o_data = fild0100.attxt;
+  o_data = fild0100.atTxt;
   //*   ' '           CHECKR    XData         xPos
   xPos = %checkr(' ': o_data);
   o_nbrOfEnt = xPos;

@@ -16,10 +16,10 @@ dcl-pr qmhrmvpm extpgm('QMHRMVPM');
   i_alwDfRpyRjc char(10) options(*nopass) const; // | optGrp 3
 end-pr;
 
-dcl-c cRMV_all '*ALL';
-dcl-c cRMV_ny_key '*BYKEY';
-dcl-c cRMV_new '*NEW';
-dcl-c cRMV_old '*OLD';
-dcl-c cRMV_scope '*SCOPE';
+dcl-c cRMV_All '*ALL';
+dcl-c cRMV_NY_KEY '*BYKEY';
+dcl-c cRMV_NEW '*NEW';
+dcl-c cRMV_OLD '*OLD';
+dcl-c cRMV_SCOPE '*SCOPE';
 
 /endif

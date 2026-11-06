@@ -95,7 +95,7 @@ dcl-s sflPageDDS inz(0) like(sflPage);
 dcl-s sflRec inz(0) like(sflPage);
 dcl-s sflNbrRcd inz(0) like(sflPage);
 dcl-s sfBot like(int4_t) inz;
-dcl-c nbrFKeys 2;
+dcl-c NbrFKeys 2;
 dcl-s sfl_cmd char(10) inz(*blanks);
 
 dcl-c UNIQUE '*UNIQUE';
@@ -110,7 +110,7 @@ dcl-s r_file inz(*blanks) like(##file);
 dcl-s lstFile inz(*blanks) like(##file);
 dcl-s lstNbrRcd inz(0) like(sflPage);
 dcl-s sPos like(int4_t) inz;
-dcl-s srchrec inz(0) like(sflPage);
+dcl-s srchRec inz(0) like(sflPage);
 //  Dateinamen der Subfile-Sätze für die Suche
 dcl-s sfl_files like($$file) dim(9999);
 
@@ -179,7 +179,7 @@ if (o_msgID = '');
 
     //  Nachrichten anzeigen
     *in89 = '0';
-    write msgctl;
+    write msgCtl;
 
     //  "Keine Sätze ..."
     if (*in80 = *off);
@@ -198,37 +198,37 @@ if (o_msgID = '');
     //  Anzeigen der Befehlstasten
     select;
     when ((sfBot = 2) and
-       (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+       (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
       write pbbot#2;
     when ((sfBot = 3) and
-       (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+       (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
       write pbbot#3;
     when ((sfBot = 4) and
-       (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+       (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
       write pbbot#4;
     when ((sfBot = 5) and
-       (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+       (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
       write pbbot#5;
     when ((sfBot = 6) and
-       (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+       (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
       write pbbot#6;
     when ((sfBot = 7) and
-       (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+       (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
       write pbbot#7;
     when ((sfBot = 8) and
-       (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+       (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
       write pbbot#8;
     when ((sfBot = 9) and
-       (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+       (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
       write pbbot#9;
     when ((sfBot = 10) and
-       (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+       (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
       write pbbot#10;
     when ((sfBot = 11) and
-       (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+       (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
       write pbbot#11;
     when ((sfBot = 12) and
-       (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+       (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
       write pbbot#12;
     other;
       write pbbot#1;
@@ -236,7 +236,7 @@ if (o_msgID = '');
     endsl;
 
     //  Anzeige der Subfile
-    exfmt pbctl;
+    exfmt pbCtl;
     *in70 = '0';
 
     //  Nachrichten löschen
@@ -412,14 +412,14 @@ begsr srchField;
     //  Die Suche liest die Subfile nicht, sondern die gemerkten
     //  Dateinamen: Nach einem CHAIN auf die Subfile lieferte READC
     //  Zeilen mit Eingabefehlern (SFLNXTCHG) nicht mehr.
-    for srchrec = lstNbrRcd to sflNbrRcd;
-      sPos = %check(' ': sfl_files(srchrec));
+    for srchRec = lstNbrRcd to sflNbrRcd;
+      sPos = %check(' ': sfl_files(srchRec));
       if (sPos <= 0);
         sPos = 1;
       endif;
 
       if (lstFile  =
-          %subst(sfl_files(srchrec): sPos:(f_scan(' ':
+          %subst(sfl_files(srchRec): sPos:(f_scan(' ':
                             lstFile) - 1)));
         isFound = bTrue;
         leave;
@@ -428,8 +428,8 @@ begsr srchField;
     endfor;
 
     if (isFound = bTrue);
-      wrk_sfsanr = srchrec;
-      lstNbrRcd = srchrec;
+      wrk_sfsanr = srchRec;
+      lstNbrRcd = srchRec;
     else;
       wrk_sfsanr = *zeros;
       lstNbrRcd = 0;
@@ -675,13 +675,13 @@ endsr;
 begsr pbInit;
 
   *in89 = '0';
-  write msgctl;
+  write msgCtl;
 
   *in80 = '0'; // SFLDSP
   *in81 = '1'; // SFLDSPCTL
   *in82 = '1'; // SFLCLR
   *in83 = '1'; // SFLEND
-  write pbctl;
+  write pbCtl;
 
   *in82 = '0'; // SFLCLR
 
@@ -835,9 +835,9 @@ begsr pbFillKey;
     keyl0100 = yData;
 
     if (keyl0100.apkseq = 'D');
-      buffer = %trimr(buffer) + color_white;
+      buffer = %trimr(buffer) + COLOR_white;
     else;
-      buffer = %trimr(buffer) + color_green;
+      buffer = %trimr(buffer) + COLOR_green;
     endif;
 
     buffer = %trimr(buffer) + keyl0100.apkeyf;
@@ -845,10 +845,10 @@ begsr pbFillKey;
 
   if (numKey >= 1 and
      keyl0100.apuniq = 'Y');
-    buffer = %trimr(buffer) + color_white + UNIQUE;
+    buffer = %trimr(buffer) + COLOR_white + UNIQUE;
   endif;
 
-  buffer = %trimr(buffer) + color_green;
+  buffer = %trimr(buffer) + COLOR_green;
 
   strPos = 1;
   dou (strPos = 0);
@@ -890,11 +890,11 @@ begsr pbFillSel;
       //  ... ansonsten den Eintrag aufbereiten und anzeigen
       select;
       when (sell0100.sorule = 'S');
-        buffer = color_white + '*SELECT';
+        buffer = COLOR_white + '*SELECT';
       when (sell0100.sorule = 'O');
-        buffer = color_white + '*OMIT';
+        buffer = COLOR_white + '*OMIT';
       other;
-        buffer = color_white;
+        buffer = COLOR_white;
       endsl;
 
       %subst(buffer: 10: %len(sell0100.sofld)) =
@@ -902,7 +902,7 @@ begsr pbFillSel;
       %subst(buffer: 21: %len(sell0100.socomp)) =
        sell0100.socomp;
       buffer = %trimr(buffer) + ' ' +
-              sell0100.sovalu + color_green;
+              sell0100.sovalu + COLOR_green;
       $$fTxt = buffer;
       //  Schreiben der Subfile ...
       exsr pbWrite;
@@ -1097,7 +1097,7 @@ begsr inzsr;
 
   isInzSr = bTrue;
 
-  PGMQ = '*';
+  pgmQ = '*';
 
   peek21_name = f_pgmCallN('PEEK21');
   peek23_name = f_pgmCallN('PEEK23');

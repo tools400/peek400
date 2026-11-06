@@ -124,7 +124,7 @@ dcl-s ofs int(10) inz;
 dcl-s hTranscoder like(hTranscoder_t) inz;
 
 //  Der Wert steht schon in der Job-CCSID (Änderungsprogramm, PGM)
-dcl-s isjobccsid like(bool_t) inz(bFalse);
+dcl-s isJobCcsid like(bool_t) inz(bFalse);
 
 dcl-s isInzSr like(bool_t) inz(bFalse);
 
@@ -142,7 +142,7 @@ dcl-pi peek45;
   i_isUcs2     like(int4_t) const;
   o_msgID      like(msgId_t);
   o_msgDta     like(msgDta_t);
-  i_isjobccsid like(bool_t) options(*nopass) const;
+  i_isJobCcsid like(bool_t) options(*nopass) const;
 end-pi;
 
 dcl-ds f_key likerec(fpeekfld: *key);
@@ -163,7 +163,7 @@ dow ('1');
 
   //  Nachrichten anzeigen
   *in89 = *off;
-  write msgctl;
+  write msgCtl;
 
   //  Anzeigen der Befehlstasten
   select;
@@ -774,7 +774,7 @@ begsr fill##2;
   //  Umsetzen Zeichensatz (nicht, wenn die Datenbank CHAR-Felder schon
   //  in die Job-CCSID umgesetzt hat; UCS-2 setzt sie nicht um)
   if (f_hasCcsid(fldl0100) = bTrue and
-      (isjobccsid = bFalse or i_isUcs2 <> 0));
+      (isJobCcsid = bFalse or i_isUcs2 <> 0));
     monitor;
       hTranscoder =
        Transcoder_toJobCcsid(fldl0100.f1fdcc);
@@ -870,10 +870,10 @@ endsr;
 begsr first;
 
   // - Steht der Wert schon in der Job-CCSID?
-  if (%parms() >= %parmnum(i_isjobccsid));
-    isjobccsid = i_isjobccsid;
+  if (%parms() >= %parmnum(i_isJobCcsid));
+    isJobCcsid = i_isJobCcsid;
   else;
-    isjobccsid = bFalse;
+    isJobCcsid = bFalse;
   endif;
 
   // - Öffnen der Dateien
@@ -1084,7 +1084,7 @@ begsr inzsr;
 
   isInzSr = bTrue;
 
-  PGMQ = '*';
+  pgmQ = '*';
 
   peek21_name = f_pgmCallN('PEEK21');
   peek23_name = f_pgmCallN('PEEK23');

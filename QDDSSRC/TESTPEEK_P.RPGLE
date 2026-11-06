@@ -130,8 +130,8 @@ FMT1-F                                     rename(TESTPEEK  :FFILE00)
      D o_SECURE        S             10A   inz
      D o_SEQONLY       S             10A   inz
      D o_SHARE         S             10A   inz
-     D o_TOFILE        S             10A   inz
-     D o_TOLIB         S             10A   inz
+     D o_toFile        S             10A   inz
+     D o_toLib         S             10A   inz
      D o_QCMDL         S             15P 5 inz
       *
       *  Übertragen VARGRAPHIC Felder
@@ -316,7 +316,7 @@ KEEP-D  keepCrsPos     C                   '0'
       *============================================================*
       *
      D                 DS
-     D ScrnFKeys                     18A   DIM(32)       INZ(*BLANKS)
+     D scrnFKeys                     18A   DIM(32)       INZ(*BLANKS)
      D  XXFKEY01               1     18A
      D  XXFKEY02              19     36A
      D  XXFKEY03              37     54A
@@ -407,7 +407,7 @@ KEEP-D  keepCrsPos     C                   '0'
       * - PEEK 45 -
      D yDsp80          S                   like(r_dsp80   ) inz
      D yHeaderTyp      S                   like(r_headTyp ) inz
-     D yCopyRight      S                   like(r_copyRght) inz
+     D yCopyright      S                   like(r_copyRght) inz
      D yFldName        S                   like(r_fieldNme) inz
      D yFldInhalt      S                   like(r_rcdBuf  ) inz
      D yProtect        S                   like(r_bool    ) inz(bFalse)
@@ -612,7 +612,7 @@ RNM2-IFFILE00
      C     P_PEEK_EDIT   Plist
      C                   Parm                    yDsp80
      C                   Parm                    yHeaderTyp
-     C                   Parm                    yCopyRight
+     C                   Parm                    yCopyright
      C                   Parm                    yFldName
      C                   Parm                    yFldInhalt
      C                   Parm                    yProtect
@@ -1458,7 +1458,7 @@ FSCN- *
       *
       *  ... prüfen auf nicht darstellbare Zeichen
       *      ... Konvertieren nicht darstellbarer Zeichen
-     C     ' '           Checkr    YOutBuffer:512YOutBuffLn
+     C     ' '           Checkr    yOutBuffer:512yOutBuffLn
      C                   Call(E)   PEEK32        P_Peek32
      C                   If        %error()
      C                   Eval      yMsgID  = 'USR8163'
@@ -1495,8 +1495,8 @@ FSCN- *
       *
       *  Überschreiben DB-Datei:
      C                   Eval      o_File     = 'FILE00'
-     C                   Eval      o_ToFile   = xFile
-     C                   Eval      o_ToLib    = xLibrary
+     C                   Eval      o_toFile   = xFile
+     C                   Eval      o_toLib    = xLibrary
      C                   Eval      o_Mbr      = xMember
      C                   Eval      o_OvrScope = '*CALLLVL'
      C                   Eval      o_Share    = '*NO'
@@ -1506,8 +1506,8 @@ FSCN- *
       *
       *  Überschreiben Bildschirmdatei:
      C                   Eval      o_File     = 'DSPF'
-     C                   Eval      o_ToFile   = 'F' + %subst(PsPgmName: 2)
-     C                   Eval      o_ToLib    = PsPgmLib
+     C                   Eval      o_toFile   = 'F' + %subst(PsPgmName: 2)
+     C                   Eval      o_toLib    = PsPgmLib
      C                   Eval      o_OvrScope = '*CALLLVL'
      C                   Exsr      OvrDspF
       *
@@ -1692,7 +1692,7 @@ FSCN- *
      C     toBuffer      Begsr
       *
      C                   Callp     p_fldToBuf(Rcd_Buffer :
-     C                                        YFldInhalt :
+     C                                        yFldInhalt :
      C                                        FLDL0100   :
      C                                        bFalse     )
       *
@@ -1776,11 +1776,11 @@ FSCN- *
       *     ToFile
      C                   CAT       'TO':1        o_QCMD
      C                   CAT       'FILE(':0     o_QCMD
-     C     o_TOLIB       IFNE      *BLANKS
-     C                   CAT       o_TOLIB:0     o_QCMD
+     C     o_toLib       IFNE      *BLANKS
+     C                   CAT       o_toLib:0     o_QCMD
      C                   CAT       '/':0         o_QCMD
      C                   ENDIF
-     C                   CAT       o_TOFILE:0    o_QCMD
+     C                   CAT       o_toFile:0    o_QCMD
      C                   CAT       ')':0         o_QCMD
       *     Mbr
      C     o_MBR         IFNE      *BLANKS
@@ -1850,11 +1850,11 @@ FSCN- *
       *     ToFile
      C                   CAT       'TO':1        o_QCMD
      C                   CAT       'FILE(':0     o_QCMD
-     C     o_TOLIB       IFNE      *BLANKS
-     C                   CAT       o_TOLIB:0     o_QCMD
+     C     o_toLib       IFNE      *BLANKS
+     C                   CAT       o_toLib:0     o_QCMD
      C                   CAT       '/':0         o_QCMD
      C                   ENDIF
-     C                   CAT       o_TOFILE:0    o_QCMD
+     C                   CAT       o_toFile:0    o_QCMD
      C                   CAT       ')':0         o_QCMD
       *     OvrScope
      C     o_OVRSCOPE    IFNE      *BLANKS
@@ -2399,7 +2399,7 @@ HEX - *
       *
      C                   Eval      yDsp80     = xDsp80
      C                   Eval      yHeaderTyp = xHeaderTyp
-     C                   Eval      yCopyRight = xCopyRight
+     C                   Eval      yCopyright = xCopyRight
      C                   Eval      yProtect   = '0'
      C                   Eval      yMsgID     = ' '
      C                   Eval      yMsgDta    = ' '
@@ -2677,7 +2677,7 @@ TXT - *
       *
      C                   Eval      yDsp80     = xDsp80
      C                   Eval      yHeaderTyp = xHeaderTyp
-     C                   Eval      yCopyRight = xCopyRight
+     C                   Eval      yCopyright = xCopyRight
      C                   Eval      yProtect   = '0'
      C                   Eval      yMsgID     = ' '
      C                   Eval      yMsgDta    = ' '

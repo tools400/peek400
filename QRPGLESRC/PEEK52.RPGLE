@@ -63,7 +63,7 @@ dcl-s yPgmCmd char(10) inz;
 dcl-s yCmdDta like(pgmCmdDt_t) inz;
 
 dcl-s sfBot like(int4_t) inz;
-dcl-c nbrFKeys 2;
+dcl-c NbrFKeys 2;
 
 dcl-s peek21_name like(pgmCallN_t) inz;
 dcl-s peek23_name like(pgmCallN_t) inz;
@@ -114,7 +114,7 @@ dow ('1');
 
   //  Nachrichten anzeigen
   *in89 = '0';
-  write msgctl;
+  write msgCtl;
 
   //  Anzeigen der Befehlstasten
   doGenerate = bFalse;
@@ -198,37 +198,37 @@ begsr dspCmdKeys;
 
   select;
   when ((sfBot = 2) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#2;
   when ((sfBot = 3) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#3;
   when ((sfBot = 4) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#4;
   when ((sfBot = 5) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#5;
   when ((sfBot = 6) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#6;
   when ((sfBot = 7) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#7;
   when ((sfBot = 8) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#8;
   when ((sfBot = 9) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#9;
   when ((sfBot = 10) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#10;
   when ((sfBot = 11) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#11;
   when ((sfBot = 12) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#12;
   other;
     if (not doGenerate);
@@ -250,11 +250,11 @@ begsr c_enter;
   exsr prfB1;
 
   if (*in99 = *off);
-    o_alwLc = ##alwlc;
+    o_alwLc = ##alwLc;
     o_case = ##case;
-    o_cdLock = ##rcdlck;
-    o_nullDft = ##nulldft;
-    o_keepCrs = ##keepcrs;
+    o_cdLock = ##rcdLck;
+    o_nullDft = ##nullDft;
+    o_keepCrs = ##keepCrs;
     if (##save = bTrue);
       exsr savUsrSetg;
     endif;
@@ -367,10 +367,10 @@ begsr prf22;
 
   dou ('1');
 
-    if (##alwlc <> bTrue and ##alwlc <> bFalse);
+    if (##alwLc <> bTrue and ##alwLc <> bFalse);
       *in99 = '1';
       clear usr8219;
-      usr8219.var1 = ##alwlc;
+      usr8219.var1 = ##alwLc;
       p_sndPgmMg('USR8219': usr8219: sds.pgmName);
       leave;
     endif;
@@ -392,10 +392,10 @@ begsr prf23;
 
   dou ('1');
 
-    if (##rcdlck <> bTrue and ##rcdlck <> bFalse);
+    if (##rcdLck <> bTrue and ##rcdLck <> bFalse);
       *in99 = '1';
       clear usr8219;
-      usr8219.var1 = ##rcdlck;
+      usr8219.var1 = ##rcdLck;
       p_sndPgmMg('USR8219': usr8219: sds.pgmName);
       leave;
     endif;
@@ -417,7 +417,7 @@ begsr prf24;
 
   dou ('1');
 
-    if (##alwlc = bFalse and ##case  = bTrue);
+    if (##alwLc = bFalse and ##case  = bTrue);
       *in99 = '1';
       clear usr8216;
       p_sndPgmMg('USR8216': usr8216: sds.pgmName);
@@ -443,10 +443,10 @@ begsr prf25;
 
   dou ('1');
 
-    if (##nulldft <> bTrue and ##nulldft <> bFalse);
+    if (##nullDft <> bTrue and ##nullDft <> bFalse);
       *in99 = '1';
       clear usr8219;
-      usr8219.var1 = ##nulldft;
+      usr8219.var1 = ##nullDft;
       p_sndPgmMg('USR8219': usr8219: sds.pgmName);
       leave;
     endif;
@@ -468,10 +468,10 @@ begsr prf26;
 
   dou ('1');
 
-    if (##keepcrs <> bTrue and ##keepcrs <> bFalse);
+    if (##keepCrs <> bTrue and ##keepCrs <> bFalse);
       *in99 = '1';
       clear usr8219;
-      usr8219.var1 = ##keepcrs;
+      usr8219.var1 = ##keepCrs;
       p_sndPgmMg('USR8219': usr8219: sds.pgmName);
       leave;
     endif;
@@ -562,11 +562,11 @@ endsr;
 
 begsr fill##;
 
-  ##alwlc   = set0012.set_alwlc;
+  ##alwLc   = set0012.set_alwLc;
   ##case    = set0012.set_case;
-  ##rcdlck  = set0012.set_rcd_lock;
-  ##nulldft = set0012.set_null_dft;
-  ##keepcrs = set0012.set_keep_crs;
+  ##rcdLck  = set0012.set_rcd_lock;
+  ##nullDft = set0012.set_null_dft;
+  ##keepCrs = set0012.set_keep_crs;
   ##save    = bFalse;
 
 endsr;
@@ -610,10 +610,10 @@ begsr savUsrSetg;
 
   //  *CRTPGM
   set0012.set_case = ##case;
-  set0012.set_rcd_lock = ##rcdlck;
-  set0012.set_alwlc = ##alwlc;
-  set0012.set_null_dft = ##nulldft;
-  set0012.set_keep_crs = ##keepcrs;
+  set0012.set_rcd_lock = ##rcdLck;
+  set0012.set_alwLc = ##alwLc;
+  set0012.set_null_dft = ##nullDft;
+  set0012.set_keep_crs = ##keepCrs;
   p_updUsrSg('*CRTPGM': set0012);
 
 endsr;
@@ -660,7 +660,7 @@ begsr inzsr;
 
   isInzSr = bTrue;
 
-  PGMQ = '*';
+  pgmQ = '*';
 
   peek21_name = f_pgmCallN('PEEK21');
   peek23_name = f_pgmCallN('PEEK23');

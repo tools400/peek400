@@ -190,7 +190,7 @@ begsr getLicInf;
 
     //  Nachrichten anzeigen
     *in89 = '0';
-    write msgctl;
+    write msgCtl;
 
     //  Anzeigen Bildschirm
     exfmt bild01;
@@ -208,8 +208,8 @@ begsr getLicInf;
       exsr c_endPgm;
       o_flag = bShareExt;
       o_msgID = 'USR9997';
-      usr9997.var1 = color_yellow_r;
-      usr9997.var2 = color_white;
+      usr9997.var1 = COLOR_yellow_r;
+      usr9997.var2 = COLOR_white;
       o_msgDta = usr9997;
       leave;
 
@@ -671,7 +671,7 @@ begsr inzsr;
 
   isInzSr = bTrue;
 
-  PGMQ = '*';
+  pgmQ = '*';
 
   peek07_name = f_pgmCallN('PEEK07');
   peek28_name = f_pgmCallN('PEEK28');

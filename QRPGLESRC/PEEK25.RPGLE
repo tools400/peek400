@@ -62,7 +62,7 @@ dcl-s yPgmCmd char(10);
 dcl-s yCmdDta like(pgmCmdDt_t);
 
 dcl-s sfBot like(int4_t);
-dcl-c nbrFKeys 2;
+dcl-c NbrFKeys 2;
 
 dcl-c CHAR 'x';
 
@@ -109,24 +109,24 @@ dow ('1');
 
   //  Nachrichten anzeigen
   *in89 = '0';
-  write msgctl;
+  write msgCtl;
 
   //  Anzeigen der Befehlstasten
   select;
   when ((sfBot = 2) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#2;
   when ((sfBot = 3) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#3;
   when ((sfBot = 4) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#4;
   when ((sfBot = 5) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#5;
   when ((sfBot = 6) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#6;
   other;
     write pbbot#1;
@@ -403,37 +403,37 @@ begsr inzsr;
 
   isInzSr = bTrue;
 
-  PGMQ = '*';
+  pgmQ = '*';
 
   //  Farbtabelle (Bezugszahlen aus PEEK25FM)
-  addColor('$GREEN'    : color_green    : 10: %addr($green));
-  addColor('$GREEN_R'  : color_green_r  : 11: %addr($green_r));
-  addColor('$GREEN_U'  : color_green_u  : 12: %addr($green_u));
-  addColor('$GREEN_RU' : color_green_ru : 13: %addr($green_ru));
-  addColor('$WHITE'    : color_white    : 20: %addr($white));
-  addColor('$WHITE_R'  : color_white_r  : 21: %addr($white_r));
-  addColor('$WHITE_U'  : color_white_u  : 22: %addr($white_u));
-  addColor('$RED'      : color_red      : 30: %addr($red));
-  addColor('$RED_R'    : color_red_r    : 31: %addr($red_r));
-  addColor('$RED_U'    : color_red_u    : 32: %addr($red_u));
-  addColor('$RED_RU'   : color_red_ru   : 33: %addr($red_ru));
-  addColor('$RED_B'    : color_red_b    : 34: %addr($red_b));
-  addColor('$RED_RB'   : color_red_rb   : 35: %addr($red_rb));
-  addColor('$RED_UB'   : color_red_ub   : 36: %addr($red_ub));
-  addColor('$TURKIS'   : color_turkis   : 40: %addr($turkis));
-  addColor('$TURKIS_R' : color_turkis_r : 41: %addr($turkis_r));
-  addColor('$TURKIS_U' : color_turkis_u : 42: %addr($turkis_u));
-  addColor('$TURKIS_RU': color_turkis_ru: 43: %addr($turkis_ru));
-  addColor('$YELLOW'   : color_yellow   : 50: %addr($yellow));
-  addColor('$YELLOW_R' : color_yellow_r : 51: %addr($yellow_r));
-  addColor('$YELLOW_U' : color_yellow_u : 52: %addr($yellow_u));
-  addColor('$PINK'     : color_pink     : 60: %addr($pink));
-  addColor('$PINK_R'   : color_pink_r   : 61: %addr($pink_r));
-  addColor('$PINK_U'   : color_pink_u   : 62: %addr($pink_u));
-  addColor('$PINK_RU'  : color_pink_ru  : 63: %addr($pink_ru));
-  addColor('$BLUE'     : color_blue     : 70: %addr($blue));
-  addColor('$BLUE_R'   : color_blue_r   : 71: %addr($blue_r));
-  addColor('$BLUE_U'   : color_blue_u   : 72: %addr($blue_u));
+  addColor('$GREEN'    : COLOR_green    : 10: %addr($green));
+  addColor('$GREEN_R'  : COLOR_green_r  : 11: %addr($green_r));
+  addColor('$GREEN_U'  : COLOR_green_u  : 12: %addr($green_u));
+  addColor('$GREEN_RU' : COLOR_green_ru : 13: %addr($green_ru));
+  addColor('$WHITE'    : COLOR_white    : 20: %addr($white));
+  addColor('$WHITE_R'  : COLOR_White_R  : 21: %addr($white_r));
+  addColor('$WHITE_U'  : COLOR_white_u  : 22: %addr($white_u));
+  addColor('$RED'      : COLOR_red      : 30: %addr($red));
+  addColor('$RED_R'    : COLOR_red_r    : 31: %addr($red_r));
+  addColor('$RED_U'    : COLOR_red_u    : 32: %addr($red_u));
+  addColor('$RED_RU'   : COLOR_red_ru   : 33: %addr($red_ru));
+  addColor('$RED_B'    : COLOR_red_b    : 34: %addr($red_b));
+  addColor('$RED_RB'   : COLOR_red_rb   : 35: %addr($red_rb));
+  addColor('$RED_UB'   : COLOR_red_ub   : 36: %addr($red_ub));
+  addColor('$TURKIS'   : COLOR_turkis   : 40: %addr($turkis));
+  addColor('$TURKIS_R' : COLOR_turkis_r : 41: %addr($turkis_r));
+  addColor('$TURKIS_U' : COLOR_turkis_u : 42: %addr($turkis_u));
+  addColor('$TURKIS_RU': COLOR_turkis_ru: 43: %addr($turkis_ru));
+  addColor('$YELLOW'   : COLOR_yellow   : 50: %addr($yellow));
+  addColor('$YELLOW_R' : COLOR_yellow_r : 51: %addr($yellow_r));
+  addColor('$YELLOW_U' : COLOR_yellow_u : 52: %addr($yellow_u));
+  addColor('$PINK'     : COLOR_pink     : 60: %addr($pink));
+  addColor('$PINK_R'   : COLOR_pink_r   : 61: %addr($pink_r));
+  addColor('$PINK_U'   : COLOR_pink_u   : 62: %addr($pink_u));
+  addColor('$PINK_RU'  : COLOR_pink_ru  : 63: %addr($pink_ru));
+  addColor('$BLUE'     : COLOR_blue     : 70: %addr($blue));
+  addColor('$BLUE_R'   : COLOR_blue_r   : 71: %addr($blue_r));
+  addColor('$BLUE_U'   : COLOR_blue_u   : 72: %addr($blue_u));
 
   peek21_name = f_pgmCallN('PEEK21');
   peek23_name = f_pgmCallN('PEEK23');

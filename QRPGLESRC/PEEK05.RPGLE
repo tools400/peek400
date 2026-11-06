@@ -393,7 +393,7 @@ dcl-s sflPinRnge like(int4_t) inz;
 
 dcl-c COPYRIGHT '1997-2026, Thomas Raddatz - PEEK v4.0.8';
 dcl-c RELEASE 'Stand: 02.11.2026';
-dcl-c VERSION 'V04R00M08';
+dcl-c Version 'V04R00M08';
 
 dcl-s l#File like(##file) inz;
 dcl-s l#Library like(##library) inz;
@@ -536,9 +536,9 @@ dcl-s srchArg char(63) inz;
 dcl-s srchSign char(1) inz;
 dcl-s srchArgFloat float(8) inz;
 dcl-s srchArgVal zoned(63) inz;
-dcl-c cSRCHARG_digits %len(srchArgVal);
+dcl-c cSRCHARG_DIGITS %len(srchArgVal);
 
-dcl-c cSRCHARG_decpos %decpos(srchArgVal);
+dcl-c cSRCHARG_DECPOS %decpos(srchArgVal);
 
 dcl-s srchLikeTp like(int4_t) inz;
 dcl-s srchLikeLn like(int4_t) inz;
@@ -575,8 +575,8 @@ dcl-ds *n;
   ##key80uc  char(67) overlay(##key132uc: 1);
 end-ds;
 dcl-ds *n;
-  ##key132lc char(116);
-  ##key80lc  char(67) overlay(##key132lc: 1);
+  ##key132Lc char(116);
+  ##key80Lc  char(67) overlay(##key132Lc: 1);
   sqlWhere   like(sqlWhere_t) inz;
   sqlOrder   like(sqlOrder_t) inz;
 end-ds;
@@ -689,7 +689,7 @@ dow ('1');
     ##key132uc = ##key;
   else;
     *in78 = *on;
-    ##key132lc = ##key;
+    ##key132Lc = ##key;
   endif;
 
   //  Prüfen Positionierung der Subfile
@@ -706,7 +706,7 @@ dow ('1');
 
   //  Nachrichten anzeigen
   *in89 = '0';
-  write msgctl;
+  write msgCtl;
 
   //  "Keine Sätze ..."
   if (*in80 = *off);
@@ -764,7 +764,7 @@ dow ('1');
   if (isKeyLower = bFalse);
     ##key = ##key132uc;
   else;
-    ##key = ##key132lc;
+    ##key = ##key132Lc;
   endif;
 
   //  Berechnen Zeile/Spalte
@@ -985,7 +985,7 @@ begsr c_enter;
 endsr;
 
 //============================================================*
-//    C_ReadSfl     Lesen & Verarbeiten der Subfile-Auswahlen *
+//    c_readSfl     Lesen & Verarbeiten der Subfile-Auswahlen *
 //============================================================*
 
 begsr c_readSfl;
@@ -1450,7 +1450,7 @@ begsr pmt_fmt;
         : rcdl0200: yFmtNbr: yMsgID: yMsgDta);
 
   if (yMsgID = *blanks);
-    ##fmtnbr = yFmtNbr;
+    ##fmtNbr = yFmtNbr;
     ##format = rcdl0200.r2FmtName;
     $$length = rcdl0200.r2RcdLen;
     *in93 = '1';
@@ -2618,7 +2618,7 @@ begsr c_sql;
       //  ... dann prüfen, ob diese Datei über mehere Member geht.
       //      Sortierung nach SQL wird für "multi-member logical files"
       //      (noch) nicht unterstützt ...
-      if (fild0100.atjoin = 'N' and
+      if (fild0100.atJoin = 'N' and
           f_numBased(##file: ##library: ##member) > 1);
 
         clear usr8235;
@@ -2638,7 +2638,7 @@ begsr c_sql;
                  ##library  :
                  ##member   :
                  ##format   :
-                 ##fmtnbr   :
+                 ##fmtNbr   :
                  ##file     :
                  ##library  :
                  ##member   :
@@ -2890,7 +2890,7 @@ begsr s_display;
         yHeaderType = set0001.set_hedTyp;
         PEEK14(set0001.set_dsp80: yHeaderType: COPYRIGHT
               : wrk#RcdNbr: h_file: h_lib: h_mbr
-              : h_rcdfmt: '*DISPLAY': commitLvl
+              : h_rcdFmt: '*DISPLAY': commitLvl
               : yScreenNbr: yMsgID: yMsgDta);
         if (yMsgID = 'USR8100'); // Verarbeitung abgebrochen
           p_sndPgmMg(yMsgID: yMsgDta: sds.pgmName);
@@ -2977,7 +2977,7 @@ begsr s_pinRcd;
                    h_file   :
                    h_lib    :
                    h_mbr    :
-                   h_rcdfmt ) = '0');
+                   h_rcdFmt ) = '0');
           exsr pinRecord;
 
         else;
@@ -3202,7 +3202,7 @@ begsr s_shortCmd;
       shortCmd.sc_cmd = yCmdDta;
 
       monitor;
-        peek42(h_file: h_lib: h_mbr: h_rcdfmt
+        peek42(h_file: h_lib: h_mbr: h_rcdFmt
               : shortCmd: wrk#RcdNbr: yExecCmd
               : yMsgID: yMsgDta);
         *in99 = bFalse;
@@ -3243,7 +3243,7 @@ endsr;
 begsr s_about;
 
   peek49(set0001.set_dsp80: COPYRIGHT
-        : RELEASE: VERSION
+        : RELEASE: Version
         : yMsgID: yMsgDta);
 
 endsr;
@@ -3436,7 +3436,7 @@ begsr loadEnv;
 
   if (yMsgID <> ' ');
   // TODO: remove code
-  // p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
+  // p_sndPgmMg(yMsgID: yMsgDta: sds.pgmname);
   // yMsgID = '';
   // yMsgDta = '';
   else;
@@ -3645,7 +3645,7 @@ begsr pbQueryUser;
     yHeaderType = set0001.set_hedTyp;
     PEEK14(set0001.set_dsp80: yHeaderType: COPYRIGHT
           : wrk#RcdNbr: h_file: h_lib: h_mbr
-          : h_rcdfmt: yPgmCmd: commitLvl
+          : h_rcdFmt: yPgmCmd: commitLvl
           : yScreenNbr: yMsgID: yMsgDta);
     if (yMsgID = 'USR8100'); // Verarbeitung abgebrochen
       p_sndPgmMg(yMsgID: yMsgDta: sds.pgmName);
@@ -3708,8 +3708,8 @@ begsr pinRecord;
       pinTabRcdE.file = h_file;
       pinTabRcdE.lib = h_lib;
       pinTabRcdE.mbr = h_mbr;
-      pinTabRcdE.rcdFmt = h_rcdfmt;
-      pinTabRcdE.mbrNbr = h_mbrnbr;
+      pinTabRcdE.rcdFmt = h_rcdFmt;
+      pinTabRcdE.mbrNbr = h_mbrNbr;
       pinTabRcd(x) = pinTabRcdE;
 
       nbrPinRcd = x;
@@ -3834,7 +3834,7 @@ begsr copyExtRcd;
              h_file   :
              h_lib    :
              h_mbr    :
-             h_rcdfmt ) = '0');
+             h_rcdFmt ) = '0');
 
     rcdNbr# = CIO_getRRN(hFile04);
 
@@ -3987,8 +3987,8 @@ begsr srchStart;
       srchArgIsFloat = bTrue;
     else;
       srchArgVal   = %dec(srchArg
-                         : cSRCHARG_digits
-                         : cSRCHARG_decpos);
+                         : cSRCHARG_DIGITS
+                         : cSRCHARG_DECPOS);
       srchArgFloat = 0;
       srchArgIsFloat = bFalse;
     endif;
@@ -4658,7 +4658,7 @@ begsr initSCmd;
   shortCmd.sc_file = ##file;
   shortCmd.sc_lib = ##library;
   shortCmd.sc_mbr = ##member;
-  peek42(h_file: h_lib: h_mbr: h_rcdfmt
+  peek42(h_file: h_lib: h_mbr: h_rcdFmt
         : shortCmd: wrk#RcdNbr: yExecCmd
         : yMsgID: yMsgDta);
 
@@ -4962,8 +4962,8 @@ begsr chkPinRcd;
   pinTabRcdE.file = h_file;
   pinTabRcdE.lib = h_lib;
   pinTabRcdE.mbr = h_mbr;
-  pinTabRcdE.rcdFmt = h_rcdfmt;
-  pinTabRcdE.mbrNbr = h_mbrnbr;
+  pinTabRcdE.rcdFmt = h_rcdFmt;
+  pinTabRcdE.mbrNbr = h_mbrNbr;
   pinRcd_x = %lookup(
            pinTabRcdE: pinTabRcd: pinRcd_x);
   if (pinRcd_x > 0);
@@ -5159,10 +5159,10 @@ begsr pbFillDataRow_right;
            h_file        :
            h_lib         :
            h_mbr         :
-           h_rcdfmt      );
+           h_rcdFmt      );
 
   sfpau = *blanks;
-  h_mbrnbr = file#X.mbrNbr;
+  h_mbrNbr = file#X.mbrNbr;
   recordNbr = file#X.rcdNbr;
 
   //  Prüfen auf Suchfunktion:
@@ -6049,7 +6049,7 @@ begsr changeSort;
                h_file   :
                h_lib    :
                h_mbr    :
-               h_rcdfmt ) = '1');
+               h_rcdFmt ) = '1');
     //    ... Zugriff fehlgeschlagen
     else;
       //    ... Generieren Aufsetzkey
@@ -6883,7 +6883,7 @@ begsr getRcdFrmt;
         : rcdl0200: yFmtNbr: yMsgID: yMsgDta);
 
   if (yMsgID <> 'USR8100'); // Verarbeitung abgebrochen
-    ##fmtnbr = yFmtNbr;
+    ##fmtNbr = yFmtNbr;
     ##format = rcdl0200.r2FmtName;
     $$length = rcdl0200.r2RcdLen;
   else;
@@ -7025,7 +7025,7 @@ begsr getMbrAttr;
   endif;
 
   if (accessMode = SQL_SEQ);
-    if ($$records > set0016.set_maxrcds);
+    if ($$records > set0016.set_maxRcds);
       $$records = 0;
       *in79 = *off;
       $$lmtCnt = '*SQLLMTCNT';
@@ -7852,8 +7852,8 @@ endsr;
 
 begsr chkVersion;
 
-  if (set0007.set_vsn <> VERSION);
-    peek33(VERSION: yMsgID: yMsgDta);
+  if (set0007.set_vsn <> Version);
+    peek33(Version: yMsgID: yMsgDta);
   else;
   //  Kein Abgleich erforderlich ...
   endif;
@@ -8095,7 +8095,7 @@ begsr inzsr;
 
   isInzSr = bTrue;
 
-  PGMQ = '*';
+  pgmQ = '*';
 
   peek01_name = f_pgmCallN('PEEK01');
   peek03_name = f_pgmCallN('PEEK03');

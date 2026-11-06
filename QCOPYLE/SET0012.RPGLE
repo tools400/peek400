@@ -6,7 +6,7 @@
 
 dcl-ds set0012_t len(256) qualified template;
   //  Kleinbuchstaben erlaubt: 1=Ja; 0=Nein
-  set_alwlc    char(1) inz('1');
+  set_alwLc    char(1) inz('1');
   //  Standardmäßig Klienbuchstaben: 1=Ja; 0=Nein
   set_case     char(1) inz('0');
   //  Standardmäßig Satzsperre: 1=Ja; 0=Nein

@@ -601,7 +601,7 @@ dcl-proc main;
     exfmt SCREEN01;
 
     select;
-    when (workstn.AID = K_ENTER);
+    when (workstn.AID = k_enter);
       open MARKTSTAMM;
       read FMARKT;
       if (not %eof(MARKTSTAMM));
@@ -615,9 +615,9 @@ dcl-proc main;
         update FMARKT;
       endif;
       close MARKTSTAMM;
-    when (workstn.AID = K_F3);
+    when (workstn.AID = k_f3);
       leave;
-    when (workstn.AID = K_F12);
+    when (workstn.AID = k_f12);
       leave;
     endsl;
 

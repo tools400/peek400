@@ -2342,21 +2342,21 @@ dcl-proc f_num_descr2 export;
   select;
   // ... zoned
   when (i_type = 'S');
-    type = t_zoned;
+    type = T_Zoned;
   // ... packed
   when (i_type = 'P');
     type = t_packed;
   // ... binary
   when (i_type = 'B');
-    type = t_signed;
+    type = T_Signed;
     i_length = f_rpgToIntLength(i_length);
   // ... integer
   when (i_type = 'I');
-    type = t_signed;
+    type = T_Signed;
     i_length = f_rpgToIntLength(i_length);
   // ... unsigned integer
   when (i_type = 'U');
-    type = t_signed;
+    type = T_Signed;
     i_length = f_rpgToIntLength(i_length);
   // ... float
   when (i_type = 'F');
@@ -2673,8 +2673,8 @@ dcl-proc f_wordWrap export;
   if (%parms() >= %parmnum(i_options));
     options = i_options;
   else;
-    options = cWORDWRAP_paragraph_none +
-      cWORDWRAP_paragraph_trimr;
+    options = cWORDWRAP_PARAGRAPH_NONE +
+      cWORDWRAP_PARAGRAPH_TRIMR;
   endif;
 
   // TRIM trailing blanks
@@ -2683,12 +2683,12 @@ dcl-proc f_wordWrap export;
   // Determine how to treat end-of-paragraph markers:
   select;
   // ... do not respect end-of-paragraph marker
-  when (isBitOn(cWORDWRAP_paragraph_none: options));
+  when (isBitOn(cWORDWRAP_PARAGRAPH_NONE: options));
     clear eop;
     clear esc;
     numEOP = 0;
   // ... respect end-of-paragraph marker of message descriptions: &N, &P, &B
-  when (isBitOn(cWORDWRAP_paragraph_msgd: options));
+  when (isBitOn(cWORDWRAP_PARAGRAPH_MSGD: options));
     clear eop;
     eop(1) = '&N';
     eop(2) = '&P';
@@ -2696,7 +2696,7 @@ dcl-proc f_wordWrap export;
     esc    = '&';
     numEOP = 3;
   // ... respect end-of-paragraph marker of text: \n
-  when (isBitOn(cWORDWRAP_paragraph_text: options));
+  when (isBitOn(cWORDWRAP_PARAGRAPH_TEXT: options));
     clear eop;
     eop(1) = '\N';
     esc    = '\';
@@ -2785,7 +2785,7 @@ dcl-proc f_wordWrap export;
   endif;
 
   // If the user requested to remove BLANKS, ...
-  if (isBitOn(cWORDWRAP_paragraph_trimr: options));
+  if (isBitOn(cWORDWRAP_PARAGRAPH_TRIMR: options));
     // ... then remove BLANKS.
     text = %trimr(text);
   endif;
@@ -2953,9 +2953,9 @@ dcl-proc f_ucase export;
 
 
   if (i_string <> '');
-    reqCtrlBlk.type = CVTCASE_TYPE_CCSID;
-    reqCtrlBlk.ccsid = cvtcase_ccsid_job;
-    reqCtrlBlk.case = CVTCASE_TO_UPPER;
+    reqCtrlBlk.type = cvtcase_type_ccsid;
+    reqCtrlBlk.ccsid = CVTCASE_CCSID_Job;
+    reqCtrlBlk.case = cvtcase_to_upper;
     reqCtrlBlk.reserved = *allx'00';
 
     reset errCode;

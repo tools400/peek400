@@ -20,7 +20,7 @@
       *  Eintragen Satzformatname
 FMT1-F                                     rename(X________X:FFILE00)
      F                                     infds(rcdFile00)
-     F                                     commit(commitLVL)
+     F                                     commit(commitLvl)
       *
      FPEEKFLD   IF   E           K DISK    usropn
      F                                     prefix(F_)
@@ -229,7 +229,7 @@ KEEP-D  keepCrsPos     C                   X__X
       *============================================================*
       *
      D                 DS
-     D ScrnFKeys                     18A   DIM(32)       INZ(*BLANKS)
+     D scrnFKeys                     18A   DIM(32)       INZ(*BLANKS)
      D  XXFKEY01               1     18A
      D  XXFKEY02              19     36A
      D  XXFKEY03              37     54A
@@ -307,7 +307,7 @@ KEEP-D  keepCrsPos     C                   X__X
       * - PEEK 45 -
      D yDsp80          S                   like(r_dsp80   ) inz
      D yHeaderTyp      S                   like(r_headTyp ) inz
-     D yCopyRight      S                   like(r_copyRght) inz
+     D yCopyright      S                   like(r_copyRght) inz
      D yFldName        S                   like(r_fieldNme) inz
      D yFldInhalt      S                   like(r_rcdBuf  ) inz
      D yProtect        S                   like(r_bool    ) inz(bFalse)
@@ -1352,7 +1352,7 @@ NRST- *
      C                   Eval      PEEK45_NAME = f_pgmCallN('PEEK45')
      C                   Eval      PEEK59_NAME = f_pgmCallN('PEEK59')
      C                   Eval      PEEK64_NAME = f_pgmCallN('PEEK64')
-     C                   Eval      EXIT04_NAME = f_pgmcalln('EXIT04': '*LIBL')
+     C                   Eval      EXIT04_NAME = f_pgmCallN('EXIT04': '*LIBL')
       *
      C                   Eval      pgmQ = '*'
       *
@@ -1431,7 +1431,7 @@ NRST- *
      C     toBuffer      Begsr
       *
      C                   Callp     p_fldToBuf(Rcd_Buffer :
-     C                                        YFldInhalt :
+     C                                        yFldInhalt :
      C                                        FLDL0100   :
      C                                        bFalse     )
       *

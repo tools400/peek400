@@ -93,7 +93,7 @@ end-ds;
 dcl-s maxEditLength int(10);
 
 dcl-ds *n;
-  #ucs2str ucs2(704) pos(1);
+  #ucs2Str ucs2(704) pos(1);
   #ucs2    ucs2(64) ccsid(13488) dim(11) pos(1);
 end-ds;
 
@@ -146,7 +146,7 @@ if (isPgmError = bFalse);
 
     //  Nachrichten anzeigen
     *in89 = *off;
-    write msgctl;
+    write msgCtl;
 
     //  Anzeigen der Befehlstasten
     select;
@@ -181,9 +181,9 @@ if (isPgmError = bFalse);
 
     // Anzeigen Cursorposition im Feld #STRING/
     if (isCursorDataField());
-      $CSRPOS = H_CSRPOS + buffer.offset;
+      $csrPos = h_csrPos + buffer.offset;
     else;
-      $CSRPOS = 0;
+      $csrPos = 0;
     endif;
 
     //  Anzeigen Bildschirm
@@ -197,14 +197,14 @@ if (isPgmError = bFalse);
     cursorPosition.column = %rem(workstn.csrPos: 256);
 
     // Löschen Cursorposition
-    H_CSRROW = 0;
-    H_CSRCOL = 0;
+    h_csrRow = 0;
+    h_csrCol = 0;
 
     // Erzwingen Prüfung der Eingabedaten ...
     select;
     when (isPgmError);
       isDataChg = bTrue;
-    when (isCursorDataField() and H_CSRPOS <> 0 and $CSRPOS <> H_CSRPOS);
+    when (isCursorDataField() and h_csrPos <> 0 and $csrPos <> h_csrPos);
       isDataChg = bTrue;
     other;
       isDataChg = *in93;
@@ -324,8 +324,8 @@ return;
 begsr keepCsrPos;
 
   //  Beibehalten der Cursorosition
-  H_CSRROW = cursorPosition.row - zei;
-  H_CSRCOL = cursorPosition.column - pos - 1;
+  h_csrRow = cursorPosition.row - zei;
+  h_csrCol = cursorPosition.column - pos - 1;
 
 endsr;
 
@@ -359,9 +359,9 @@ begsr c_enter;
       insDel.startPos = #selStart;
       select;
       when (insDel.mode = MODE_INSERT and insDel.endPos > 0);
-      // p_sndpgmmg('USR8237': '': sds.pgmname);
+      // p_sndPgmMg('USR8237': '': sds.pgmname);
       when (insDel.mode = MODE_DELETE and insDel.endPos > 0);
-      // p_sndpgmmg('USR8239': '': sds.pgmname);
+      // p_sndPgmMg('USR8239': '': sds.pgmname);
       endsl;
     endif;
 
@@ -369,9 +369,9 @@ begsr c_enter;
       insDel.endPos = #selLength + insDel.startPos - 1;
       select;
       when (insDel.mode = MODE_INSERT and insDel.endPos > 0);
-      // p_sndpgmmg('USR8237': '': sds.pgmname);
+      // p_sndPgmMg('USR8237': '': sds.pgmname);
       when (insDel.mode = MODE_DELETE and insDel.endPos > 0);
-      // p_sndpgmmg('USR8239': '': sds.pgmname);
+      // p_sndPgmMg('USR8239': '': sds.pgmname);
       endsl;
     endif;
 
@@ -509,7 +509,7 @@ begsr screenToBuffer;
     if (i_isUcs2 = 0);
       %subst(buffer.pFldInhaltSbcs: start: length) = %subst(#string: 1: length);
     else;
-      %subst(buffer.pFldInhaltUcs2: start: length) = %subst(#ucs2str: 1: length);
+      %subst(buffer.pFldInhaltUcs2: start: length) = %subst(#ucs2Str: 1: length);
     endif;
 
     exsr setTrimLength;
@@ -616,7 +616,7 @@ begsr prf22;
       if (i_isUcs2 = 0);
         isPgmError = %subst(#string: start) <> '';
       else;
-        isPgmError = %subst(#ucs2str: start) <> '';
+        isPgmError = %subst(#ucs2Str: start) <> '';
       endif;
 
       if (isPgmError);
@@ -752,7 +752,7 @@ begsr c_insert;
     *in61 = bTrue;
     *in62 = bFalse;
     p_sndPgmMg('USR8236': '': sds.pgmName);
-  when (insDel.mode = MODE_INSERT and insDel.endPos <> H_CSRPOS + buffer.offset);
+  when (insDel.mode = MODE_INSERT and insDel.endPos <> h_csrPos + buffer.offset);
   // nichts zu tun
   other;
     exsr endInsDel;
@@ -761,9 +761,9 @@ begsr c_insert;
   if (insDel.mode = MODE_INSERT);
     if (isCursorDataField());
       if (insDel.startPos = 0);
-        insDel.startPos = H_CSRPOS + buffer.offset;
+        insDel.startPos = h_csrPos + buffer.offset;
       else;
-        insDel.endPos = H_CSRPOS + buffer.offset;
+        insDel.endPos = h_csrPos + buffer.offset;
       endif;
     else;
       insDel.startPos = #selStart;
@@ -805,7 +805,7 @@ begsr c_delete;
     *in61 = bFalse;
     *in62 = bTrue;
     p_sndPgmMg('USR8238': '': sds.pgmName);
-  when (insDel.mode = MODE_DELETE and insDel.endPos <> H_CSRPOS + buffer.offset);
+  when (insDel.mode = MODE_DELETE and insDel.endPos <> h_csrPos + buffer.offset);
   // nichts zu tun
   other;
     exsr endInsDel;
@@ -814,9 +814,9 @@ begsr c_delete;
   if (insDel.mode = MODE_DELETE);
     if (isCursorDataField());
       if (insDel.startPos = 0);
-        insDel.startPos = H_CSRPOS + buffer.offset;
+        insDel.startPos = h_csrPos + buffer.offset;
       else;
-        insDel.endPos = H_CSRPOS + buffer.offset;
+        insDel.endPos = h_csrPos + buffer.offset;
       endif;
     else;
       insDel.startPos = #selStart;
@@ -1015,7 +1015,7 @@ begsr bufferToScreen;
 
   else;
 
-    #ucs2str = %subst(buffer.pFldInhaltUcs2: buffer.offset + 1: length);
+    #ucs2Str = %subst(buffer.pFldInhaltUcs2: buffer.offset + 1: length);
 
     #ucs2_1 = #ucs2(1);
     #ucs2_2 = #ucs2(2);
@@ -1073,7 +1073,7 @@ begsr getParameters;
   else;
     clear buffer.pFldInhaltUcs2;
     %subst(buffer.pFldInhaltUcs2: 1: io_length) = io_fldInhalt.ucs2;
-    maxEditLength = %len(#ucs2str);
+    maxEditLength = %len(#ucs2Str);
   endif;
 
   buffer.maxLength = io_length;
@@ -1158,9 +1158,9 @@ begsr first;
   // - Feld zu groß Hinweis ausgeben
   // TODO: remove code and /copy statement
   // clear usr8123;
-  // usr8123.var1 = color_white_u;
-  // usr8123.var2 = color_white;
-  // p_sndpgmmg('USR8123': usr8123: sds.pgmname);
+  // usr8123.var1 = COLOR_white_u;
+  // usr8123.var2 = COLOR_white;
+  // p_sndPgmMg('USR8123': usr8123: sds.pgmname);
 
   // - Einfügen/Löschen
   insDel.mode = MODE_OFF;
@@ -1170,14 +1170,14 @@ begsr first;
   // - Füllen der Bildschirmfelder
   exsr bzoff1;
   *in22 = bTrue; // Cursor auf Textfeld setzen
-  H_CSRPOS = 1;
-  H_CSRROW = 0;
-  H_CSRCOL = 0;
+  h_csrPos = 1;
+  h_csrRow = 0;
+  h_csrCol = 0;
 
   if (i_isUcs2 = 0);
-    H_CSRFLD = '#STRING';
+    h_csrFld = '#STRING';
   else;
-    H_CSRFLD = '#UCS2_1';
+    h_csrFld = '#UCS2_1';
   endif;
 
   $fldName = i_fldName;
@@ -1208,7 +1208,7 @@ begsr inzsr;
 
   isInzSr = bTrue;
 
-  PGMQ = '*';
+  pgmQ = '*';
 
   peek21_name = f_pgmCallN('PEEK21');
   peek23_name = f_pgmCallN('PEEK23');
@@ -1223,7 +1223,7 @@ dcl-proc isCursorDataField;
   dcl-pi *n ind;
   end-pi;
 
-  if (H_CSRFLD = '#STRING' or f_startsWith('#UCS2_': H_CSRFLD));
+  if (h_csrFld = '#STRING' or f_startsWith('#UCS2_': h_csrFld));
     return bTrue;
   else;
     return bFalse;
@@ -1244,7 +1244,7 @@ dcl-proc errorHandler;
   end-pi;
 
   dump;
-  o_action = CEE_PERCOLATE;
+  o_action = cee_percolate;
 
 end-proc;
 

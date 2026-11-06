@@ -52,7 +52,7 @@ dcl-s r_pos like(int4_t);
 dcl-s r_buffer like(i_buffer);
 dcl-s r_value varchar(32);
 dcl-s r_dftsep char(1);
-dcl-c r_buffLen %size(i_buffer);
+dcl-c R_BuffLen %size(i_buffer);
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
@@ -82,10 +82,10 @@ monitor;
   select;
   // ... Datum
   when (i_type = 'L');
-    exsr chkdate;
+    exsr chkDate;
   // ... Zeit
   when (i_type = 'T');
-    exsr chktime;
+    exsr chkTime;
   // ... Zeitstempel
   other;
     exsr chktimestamp;
@@ -97,7 +97,7 @@ endmon;
 
 //  Hinter dem Wert darf nichts mehr stehen
 r_pos = r_fldLen + 1;
-if (r_pos <= r_buffLen);
+if (r_pos <= R_BuffLen);
   r_buffer = %subst(i_buffer: r_pos);
 else;
   r_buffer = '';
@@ -110,10 +110,10 @@ endif;
 return;
 
 //============================================================*
-//    ChkDate       Prüfen Datum in allen Formaten            *
+//    chkDate       Prüfen Datum in allen Formaten            *
 //============================================================*
 
-begsr chkdate;
+begsr chkDate;
 
   select;
   when (i_datTimFmt = '*EUR');
@@ -137,7 +137,7 @@ begsr chkdate;
     r_fldLen = 10;
   endsl;
 
-  exsr getvalue;
+  exsr getValue;
 
   select;
   when (i_datTimFmt = '*EUR');
@@ -161,10 +161,10 @@ begsr chkdate;
 endsr;
 
 //============================================================*
-//    ChkTime       Prüfen Zeit in allen Formaten             *
+//    chkTime       Prüfen Zeit in allen Formaten             *
 //============================================================*
 
-begsr chktime;
+begsr chkTime;
 
   select;
   when (i_datTimFmt = '*HMS' or i_datTimFmt = '*USA' or
@@ -175,7 +175,7 @@ begsr chktime;
   endsl;
   r_fldLen = 8;
 
-  exsr getvalue;
+  exsr getValue;
 
   select;
   when (i_datTimFmt = '*HMS');
@@ -203,7 +203,7 @@ begsr chktimestamp;
   //  dem Wert.
   r_fldLen = %scan(' ': i_buffer) - 1;
   if (r_fldLen < 0);
-    r_fldLen = r_buffLen;
+    r_fldLen = R_BuffLen;
   endif;
 
   //  Andere Längen wie bisher mit 26 Stellen prüfen, damit der Wert
@@ -228,11 +228,11 @@ begsr chktimestamp;
 endsr;
 
 //============================================================*
-//    GetValue      Wert mit dem Standardtrennzeichen des     *
+//    getValue      Wert mit dem Standardtrennzeichen des     *
 //                  Formats, damit %date/%time ihn lesen kann *
 //============================================================*
 
-begsr getvalue;
+begsr getValue;
 
   r_value = %subst(i_buffer: 1: r_fldLen);
   if (i_separator <> ' ' and i_separator <> r_dftsep);

@@ -111,7 +111,7 @@ dcl-proc SQL_prepareStatement export;
   dcl-s pMbr like(mbr_t);
   dcl-s pFmt like(rcdFmt_t);
 
-  dcl-s cmdovrdbf like(g_cmdOvrDbf);
+  dcl-s cmdOvrDbf like(g_cmdOvrDbf);
 
   // ------------------------------------------------------------------------
 
@@ -127,8 +127,8 @@ dcl-proc SQL_prepareStatement export;
 
   //  ovrDbf
   //  (Eine Prüfung darf den Zustand des offenen Cursors nicht ändern,
-  //  deshalb übernimmt erst eine erfolgreiche Vorbereitung g_cmdovrdbf.)
-  cmdovrdbf = 'OVRDBF FILE(FILE03)'         +
+  //  deshalb übernimmt erst eine erfolgreiche Vorbereitung g_cmdOvrDbf.)
+  cmdOvrDbf = 'OVRDBF FILE(FILE03)'         +
                ' TOFILE('                  +
                %trim(pLib )                +
                '/'                         +
@@ -141,7 +141,7 @@ dcl-proc SQL_prepareStatement export;
                ' SHARE(*NO)'               +
                ' SECURE(*YES)'             +
                ' SEQONLY(*NO)';
-  qcmdexc(cmdovrdbf: %len(cmdovrdbf));
+  qcmdexc(cmdOvrDbf: %len(cmdOvrDbf));
 
   //  Statement ...
   sqlSelectStmt = 'SELECT'                  +
@@ -202,7 +202,7 @@ dcl-proc SQL_prepareStatement export;
   else;
     f_prepStmt = bTrue;
     if (i_check = bFalse);
-      g_cmdOvrDbf = cmdovrdbf;
+      g_cmdOvrDbf = cmdOvrDbf;
       g_file = i_file;
       g_lib = i_lib;
       g_mbr = i_mbr;
@@ -215,7 +215,7 @@ dcl-proc SQL_prepareStatement export;
 end-proc;
 
 //===================================================================*
-//  Prozedur:  sql_open                                   (Body)     *
+//  Prozedur:  SQL_open                                   (Body)     *
 //===================================================================*
 
 dcl-proc SQL_open export;
@@ -265,7 +265,7 @@ dcl-proc SQL_open export;
     if (*in99 = *on);
       f_opnSql = bFalse;
       //  Cursor schließen, sonst scheitert das nächste
-      //  sql_open() mit SQL0502.
+      //  SQL_open() mit SQL0502.
       EXEC SQL
        close g_fileSQL;
     else;
@@ -298,7 +298,7 @@ dcl-proc SQL_nextRow export;
 
   //  definieren lokale Variablen ...
   dcl-s recNbr int(10);
-  dcl-s isdeleted like(bool_t);
+  dcl-s isDeleted like(bool_t);
 
   dcl-ds io_buff based(ptrBuffer);
     io_buffFld like(rcdBuf_t);
@@ -310,8 +310,8 @@ dcl-proc SQL_nextRow export;
   ptrNullMap= %addr(o_nullMap);
 
   //  Sätze, die nach dem Öffnen des Cursors gelöscht wurden, überlesen
-  dou (isdeleted = bFalse);
-    isdeleted = bFalse;
+  dou (isDeleted = bFalse);
+    isDeleted = bFalse;
 
     // GET NEXT ROW
     EXEC SQL
@@ -336,7 +336,7 @@ dcl-proc SQL_nextRow export;
                           : bTrue
                           : io_buff
                           : io_nullMap) = bFalse);
-          isdeleted = f_isDeleted(g_hFile03);
+          isDeleted = f_isDeleted(g_hFile03);
           isEOF = bTrue;
         else;
           isEOF = bFalse;
@@ -372,7 +372,7 @@ dcl-proc SQL_previousRow export;
 
   //  definieren lokale Variablen ...
   dcl-s recNbr int(10);
-  dcl-s isdeleted like(bool_t);
+  dcl-s isDeleted like(bool_t);
 
   dcl-ds io_buff based(ptrBuffer);
     io_buffFld like(rcdBuf_t);
@@ -384,8 +384,8 @@ dcl-proc SQL_previousRow export;
   ptrNullMap= %addr(o_nullMap);
 
   //  Sätze, die nach dem Öffnen des Cursors gelöscht wurden, überlesen
-  dou (isdeleted = bFalse);
-    isdeleted = bFalse;
+  dou (isDeleted = bFalse);
+    isDeleted = bFalse;
 
     // GET PREVIOUS ROW
     EXEC SQL
@@ -410,7 +410,7 @@ dcl-proc SQL_previousRow export;
                           : bTrue
                           : io_buff
                           : io_nullMap) = bFalse);
-          isdeleted = f_isDeleted(g_hFile03);
+          isDeleted = f_isDeleted(g_hFile03);
           isEOF = bTrue;
         else;
           isEOF = bFalse;
@@ -497,7 +497,7 @@ dcl-proc SQL_gotoBottom export;
 end-proc;
 
 //===================================================================*
-//  Prozedur:  sql_close                                  (Body)     *
+//  Prozedur:  SQL_close                                  (Body)     *
 //===================================================================*
 
 dcl-proc SQL_close export;
@@ -548,7 +548,7 @@ dcl-proc SQL_close export;
 end-proc;
 
 //===================================================================*
-//  Prozedur:  sql_count                                  (Body)     *
+//  Prozedur:  SQL_count                                  (Body)     *
 //===================================================================*
 
 dcl-proc SQL_count export;
@@ -732,7 +732,7 @@ dcl-proc f_getField;
 end-proc;
 
 //===================================================================*
-//  Prozedur:  sql_quote                                  (Body)     *
+//  Prozedur:  SQL_quote                                  (Body)     *
 //===================================================================*
 
 dcl-proc SQL_quote export;

@@ -90,7 +90,7 @@ dcl-s sflRec like(sflPage) inz;
 dcl-s sflNbrRcd like(sflPage) inz;
 dcl-s sfBot like(int4_t) inz;
 dcl-s sfl_cmd char(10) inz(*blanks);
-dcl-c nbrFKeys 3;
+dcl-c NbrFKeys 3;
 
 dcl-s peek21_name like(pgmCallN_t) inz;
 dcl-s peek23_name like(pgmCallN_t) inz;
@@ -100,7 +100,7 @@ dcl-s peek70_name like(pgmCallN_t) inz;
 dcl-s r_file inz(*blanks) like(##file);
 dcl-s lstFile inz(*blanks) like(##file);
 dcl-s lstNbrRcd inz(0) like(sflPage);
-dcl-s srchrec like(sflPage);
+dcl-s srchRec like(sflPage);
 
 //  Dateinamen der Subfile für die Suche
 dcl-s sfl_files like($$fNme) dim(9999);
@@ -153,7 +153,7 @@ dow ('1');
 
   //  Nachrichten anzeigen
   *in89 = '0';
-  write msgctl;
+  write msgCtl;
 
   //  "Keine Sätze ..."
   if (*in80 = *off);
@@ -172,25 +172,25 @@ dow ('1');
   //  Anzeigen der Befehlstasten
   select;
   when ((sfBot = 2) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#2;
   when ((sfBot = 3) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#3;
   when ((sfBot = 4) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#4;
   when ((sfBot = 5) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#5;
   when ((sfBot = 6) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#6;
   when ((sfBot = 7) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#7;
   when ((sfBot = 8) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#8;
   other;
     write pbbot#1;
@@ -198,7 +198,7 @@ dow ('1');
   endsl;
 
   //  Anzeige der Subfile
-  exfmt pbctl;
+  exfmt pbCtl;
   *in70 = '0';
 
   //  Nachrichten löschen
@@ -372,21 +372,21 @@ begsr srchMbr;
     //  Die Suche liest die Subfile nicht, sondern die gemerkten
     //  Dateinamen: CHAIN und UPDATE auf die Subfile setzten die
     //  Markierung ungültiger Auswahlen (*IN85) zurück.
-    for srchrec = lstNbrRcd to sflNbrRcd;
-      if (srchrec > %elem(sfl_files));
+    for srchRec = lstNbrRcd to sflNbrRcd;
+      if (srchRec > %elem(sfl_files));
         leave;
       endif;
 
       if (lstFile =
-          %subst(sfl_files(srchrec): 1: %len(%trimr(lstFile))));
+          %subst(sfl_files(srchRec): 1: %len(%trimr(lstFile))));
         isFound = bTrue;
         leave;
       endif;
     endfor;
 
     if (isFound = bTrue);
-      wrk_sfsanr = srchrec;
-      lstNbrRcd = srchrec;
+      wrk_sfsanr = srchRec;
+      lstNbrRcd = srchRec;
     else;
       wrk_sfsanr = 0;
       lstNbrRcd = 0;
@@ -650,13 +650,13 @@ endsr;
 begsr pbInit;
 
   *in89 = '0';
-  write msgctl;
+  write msgCtl;
 
   *in80 = '0'; // SFLDSP
   *in81 = '1'; // SFLDSPCTL
   *in82 = '1'; // SFLCLR
   *in83 = '1'; // SFLEND
-  write pbctl;
+  write pbCtl;
 
   *in82 = '0'; // SFLCLR
 
@@ -802,14 +802,14 @@ begsr inzsr;
 
   isInzSr = bTrue;
 
-  PGMQ = '*';
+  pgmQ = '*';
 
   peek21_name = f_pgmCallN('PEEK21');
   peek23_name = f_pgmCallN('PEEK23');
   peek27_name = f_pgmCallN('PEEK27');
   peek70_name = f_pgmCallN('PEEK70');
 
-  peek23(sds.pgmName: '*ALL': nbrFKeys
+  peek23(sds.pgmName: '*ALL': NbrFKeys
         : yFKeys: yNbrOfKeys);
   scrnFKeys = %subarr(yFKeys: 1);
 

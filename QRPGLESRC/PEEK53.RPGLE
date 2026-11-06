@@ -30,7 +30,7 @@ ctl-opt nomain;
 /copy QCOPYLE,COPYRIGHT
 
 dcl-f peekusr usage(*update: *delete: *output) keyed usropn prefix(s_) infds(file_00_ds)
-  extfile(g_peekusr);
+  extfile(g_peekUsr);
 
 dcl-f default keyed usropn extdesc('PEEKUSR') rename(fpeekusr: fdefault) prefix(d_)
   infds(file_01_ds) extfile(g_default);
@@ -38,7 +38,7 @@ dcl-f default keyed usropn extdesc('PEEKUSR') rename(fpeekusr: fdefault) prefix(
 dcl-ds file_00_ds likeds(infds_t);
 dcl-ds file_01_ds likeds(infds_t);
 
-dcl-s g_peekusr char(21);
+dcl-s g_peekUsr char(21);
 dcl-s g_default char(21);
 
 dcl-s g_isInit like(bool_t) inz(bFalse);
@@ -799,7 +799,7 @@ dcl-proc p_opnFile;
   //  Öffnen Datei PEEKUSR ...
   if (file_00_ds.isOpen <> '1');
 
-    g_peekusr = %trim(g_lib) + '/' + %trim(g_file);
+    g_peekUsr = %trim(g_lib) + '/' + %trim(g_file);
 
     open(e) peekusr;
     if (%error());

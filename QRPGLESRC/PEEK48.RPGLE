@@ -79,7 +79,7 @@ dcl-s yRetFile char(10) inz(*blanks);
 dcl-s yRetLib char(10) inz(*blanks);
 
 dcl-s sfBot like(int4_t) inz;
-dcl-c nbrFKeys 3;
+dcl-c NbrFKeys 3;
 
 dcl-s peek21_name like(pgmCallN_t) inz;
 dcl-s peek23_name like(pgmCallN_t) inz;
@@ -96,10 +96,10 @@ dcl-s tempFldLen like(int4_t) inz;
 dcl-s tempFldBy like(int4_t) inz;
 
 //  Einfügen der Schlüsselfelder in ##ORDER
-dcl-s inskeys like(sqlOrder_t) inz;
+dcl-s insKeys like(sqlOrder_t) inz;
 dcl-s keyLen like(int4_t) inz;
 dcl-s scanpos like(int4_t) inz;
-dcl-s usedlen like(int4_t) inz;
+dcl-s usedLen like(int4_t) inz;
 
 dcl-ds pFile qualified;
   name    like(io_file);
@@ -144,30 +144,30 @@ dow ('1');
 
   //  Nachrichten anzeigen
   *in89 = '0';
-  write msgctl;
+  write msgCtl;
 
   //  Anzeigen der Befehlstasten
   select;
   when ((sfBot = 2) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#2;
   when ((sfBot = 3) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#3;
   when ((sfBot = 4) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#4;
   when ((sfBot = 5) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#5;
   when ((sfBot = 6) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#6;
   when ((sfBot = 7) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#7;
   when ((sfBot = 8) and
-     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfBot - 1)));
     write pbbot#8;
   other;
     write pbbot#1;
@@ -536,33 +536,33 @@ begsr ins_field;
 
   ySqlOrder = '';
   peek38(io_file: io_library: ySqlOrder);
-  inskeys = %trimr(ySqlOrder);
+  insKeys = %trimr(ySqlOrder);
 
   //  Die Schlüsselfelder werden an der Cursorposition in ##ORDER
   //  eingefügt, vorhandener Text rückt nach rechts (wie bei F4).
-  usedlen = %len(%trimr(##order));
-  if (tempFldPos - 1 > usedlen);
-    usedlen = tempFldPos - 1;
+  usedLen = %len(%trimr(##order));
+  if (tempFldPos - 1 > usedLen);
+    usedLen = tempFldPos - 1;
   endif;
 
   //  Nur ganze Schlüsselfelder einfügen, soweit sie Platz haben.
-  if (%len(inskeys) > %len(##order) - usedlen);
+  if (%len(insKeys) > %len(##order) - usedLen);
     keyLen = 0;
-    scanpos = %scan(', ': inskeys);
-    dow (scanpos > 0 and scanpos - 1 <= %len(##order) - usedlen);
+    scanpos = %scan(', ': insKeys);
+    dow (scanpos > 0 and scanpos - 1 <= %len(##order) - usedLen);
       keyLen = scanpos - 1;
-      if (scanpos + 2 > %len(inskeys));
+      if (scanpos + 2 > %len(insKeys));
         leave;
       endif;
-      scanpos = %scan(', ': inskeys: scanpos + 2);
+      scanpos = %scan(', ': insKeys: scanpos + 2);
     enddo;
-    inskeys = %subst(inskeys: 1: keyLen);
+    insKeys = %subst(insKeys: 1: keyLen);
     //  USR8176: Warnung: Zeichenkette zu lang.
     p_sndPgmMg('USR8176': '': sds.pgmName);
   endif;
 
-  if (%len(inskeys) > 0);
-    ##order = %replace(inskeys: ##order: tempFldPos: 0);
+  if (%len(insKeys) > 0);
+    ##order = %replace(insKeys: ##order: tempFldPos: 0);
   endif;
 
 endsr;
@@ -730,7 +730,7 @@ begsr inzsr;
 
   isInzSr = bTrue;
 
-  PGMQ = '*';
+  pgmQ = '*';
 
   peek21_name = f_pgmCallN('PEEK21');
   peek23_name = f_pgmCallN('PEEK23');
@@ -738,7 +738,7 @@ begsr inzsr;
   peek38_name = f_pgmCallN('PEEK38');
   peek40_name = f_pgmCallN('PEEK40');
 
-  peek23(sds.pgmName: '*ALL': nbrFKeys
+  peek23(sds.pgmName: '*ALL': NbrFKeys
         : yFKeys: yNbrOfKeys);
   scrnFKeys = %subarr(yFKeys: 1);
 

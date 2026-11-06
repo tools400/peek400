@@ -3,7 +3,7 @@
 /define CEERTX
 
 //  Register Call Stack Entry Termination User Exit Procedure (CEERTX)
-dcl-pr ceertx extproc('CEERTX');
+dcl-pr CEERTX extproc('CEERTX');
   i_procPtr  pointer(*proc) const;
   i_rtxToken pointer options(*omit) const;
   o_fc       likeds(cee_fc_t) options(*omit);

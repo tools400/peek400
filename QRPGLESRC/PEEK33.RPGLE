@@ -50,7 +50,7 @@ dcl-ds set0016 likeds(set0016_t) inz;
 //  Vor V3.0.0
 dcl-ds set0012_alt qualified;
   //  Kleinbuchstaben erlaubt: 1=Ja; 0=Nein
-  set_alwlc char(10) inz('1');
+  set_alwLc char(10) inz('1');
   //  Standardmäßig Klienbuchstaben: 1=Ja; 0=Nein
   set_case  char(10) inz('0');
   //  Endemarkierung
@@ -517,13 +517,13 @@ begsr v03r00m00;
   //  Umsetzen Datenstruktur "Generieren Programme" (*CRTPGM, SET0012)
   set0012_alt = f_getUsrSg('*CRTPGM');
 
-  if ((set0012_alt.set_alwlc = '0' or
-      set0012_alt.set_alwlc = '1'   ) and
+  if ((set0012_alt.set_alwLc = '0' or
+      set0012_alt.set_alwLc = '1'   ) and
       (set0012_alt.set_case  = '0' or
       set0012_alt.set_case  = '1'   ) and
       (set0012_alt.set_0012  = x'8B' ));
     reset set0012;
-    set0012.set_alwlc = set0012_alt.set_alwlc;
+    set0012.set_alwLc = set0012_alt.set_alwLc;
     set0012.set_case  = set0012_alt.set_case;
     set0012.set_0012  = set0012_alt.set_0012;
     p_updUsrSg('*CRTPGM': set0012);
@@ -1040,7 +1040,7 @@ dcl-proc errorHandler;
 
 end-proc;
 
-**   section---schlüssel-datenbereich-------------------------- version 1.1.0 -----------
+**   Section---Schlüssel-Datenbereich-------------------------- Version 1.1.0 -----------
 alt: *PEEK05   *F11
 neu: *PEEK05   *F11      *LAYOUT
 alt: *PEEK05   *F13      *USERSETG
@@ -1099,7 +1099,7 @@ alt: *PEEK37   *PAGEDOWN
 neu: *PEEK37   *PAGEDOWN *PAGEDOWN
 alt: *PEEK37   1
 neu: *PEEK37   1         *SELECT
-**   section---schlüssel-datenbereich-------------------------- version 1.2.0 -----------
+**   Section---Schlüssel-Datenbereich-------------------------- Version 1.2.0 -----------
 alt: *CMD      DM
 neu: *CMD      DM        DSPMSG
 alt: *CMD      EA
@@ -1136,7 +1136,7 @@ alt: *PXXXXXXXX*F17
 neu: *PXXXXXXXX*F17      *TOP
 alt: *PXXXXXXXX*F18
 neu: *PXXXXXXXX*F18      *BOT
-**   section---schlüssel-datenbereich-------------------------- version 1.3.0 -----------
+**   Section---Schlüssel-Datenbereich-------------------------- Version 1.3.0 -----------
 alt: *PXXXXXXXX*F09
 neu: *PXXXXXXXX*F09      *HEXEDIT
 alt: *PEEK45   *F03
@@ -1149,7 +1149,7 @@ alt: *PEEK45   *F24
 neu: *PEEK45   *F24      *MOREKEYS
 alt: *PEEK45   *ENTER
 neu: *PEEK45   *ENTER    *ENTER
-**   section---schlüssel-datenbereich-------------------------- version 1.4.0 -----------
+**   Section---Schlüssel-Datenbereich-------------------------- Version 1.4.0 -----------
 alt: *PEEK47   *ENTER
 neu: *PEEK47   *ENTER    *ENTER
 alt: *PEEK47   *F03
@@ -1192,7 +1192,7 @@ alt: *PEEK49   *F24
 neu: *PEEK49   *F24      *MOREKEYS
 alt: *PEEK05   A
 neu: *PEEK05   A         *ABOUT
-**   section---schlüssel-datenbereich-------------------------- version 1.5.0 -----------
+**   Section---Schlüssel-Datenbereich-------------------------- Version 1.5.0 -----------
 alt: *PEEK50
 neu: *PEEK50             *NONE
 alt: *PEEK50   *F03
@@ -1245,7 +1245,7 @@ alt: *PEEK47   *F17
 neu: *PEEK47   *F17      *TOP
 alt: *PEEK47   *F18
 neu: *PEEK47   *F18      *BOT
-**   section---schlüssel-datenbereich-------------------------- version 2.0.0 -----------
+**   Section---Schlüssel-Datenbereich-------------------------- Version 2.0.0 -----------
 alt: *PEEK48   *ENTER
 neu: *PEEK48   *ENTER    *ENTER
 alt: *PEEK48   *F03
@@ -1280,7 +1280,7 @@ alt: *PEEK40   *F17
 neu: *PEEK40   *F17      *TOP
 alt: *PEEK40   *F18
 neu: *PEEK40   *F18      *BOT
-**   section---schlüssel-datenbereich-------------------------- version 2.1.0 -----------
+**   Section---Schlüssel-Datenbereich-------------------------- Version 2.1.0 -----------
 alt: *PEEK56   *ENTER
 neu: *PEEK56   *ENTER    *ENTER
 alt: *PEEK56   *F03
@@ -1321,7 +1321,7 @@ alt: *PEEK57   *F12
 neu: *PEEK57   *F12      *CANCEL
 alt: *PEEK57   *F24
 neu: *PEEK57   *F24      *MOREKEYS
-**   section---schlüssel-datenbereich-------------------------- version 2.2.0 -----------
+**   Section---Schlüssel-Datenbereich-------------------------- Version 2.2.0 -----------
 alt: *PEEK45   *F19
 neu: *PEEK45   *F19      *LEFT
 alt: *PEEK45   *F20
@@ -1352,7 +1352,7 @@ alt: *PEEK56   1         *SELECT
 neu: *PEEK56   1         *SLCENV
 alt: *PEEK56   2
 neu: *PEEK56   2         *SLCLAYOUT
-**   section---schlüssel-datenbereich-------------------------- version 3.0.0 -----------
+**   Section---Schlüssel-Datenbereich-------------------------- Version 3.0.0 -----------
 alt: *PXXXXXXXX*F08
 neu: *PXXXXXXXX*F08      *TGLNULL
 alt: *PXXXXXXXX*F10
@@ -1375,12 +1375,12 @@ alt: *PEEK64   *F24
 neu: *PEEK64   *F24      *MOREKEYS
 alt: *PEEK05   K
 neu: *PEEK05   K         *TGLKEYLUC
-**   section---schlüssel-datenbereich-------------------------- version 3.1.0 -----------
+**   Section---Schlüssel-Datenbereich-------------------------- Version 3.1.0 -----------
 alt: *PEEK05   6
 neu: *PEEK05   6         *PRINT
 alt: *PEEK14   *F21
 neu: *PEEK14   *F21      *PRINT
-**   section---schlüssel-datenbereich-------------------------- version 3.1.1 -----------
+**   Section---Schlüssel-Datenbereich-------------------------- Version 3.1.1 -----------
 neu: *PEEK68
 neu: *PEEK68             *NONE
 alt: *PEEK68   *ENTER
@@ -1405,7 +1405,7 @@ alt: *PEEK68   *PAGEDOWN
 neu: *PEEK68   *PAGEDOWN *PAGEDOWN
 alt: *PEEK68   1
 neu: *PEEK68   1         *SELECT
-**   section---schlüssel-datenbereich-------------------------- version 3.2.5 -----------
+**   Section---Schlüssel-Datenbereich-------------------------- Version 3.2.5 -----------
 neu: *PEEK69
 neu: *PEEK69             *NONE
 alt: *PEEK69   *ENTER
@@ -1432,17 +1432,17 @@ alt: *PEEK69   *PAGEUP
 neu: *PEEK69   *PAGEUP   *PAGEUP
 alt: *PEEK69   1
 neu: *PEEK69   1         *SELECT
-**   section---schlüssel-datenbereich-------------------------- version 3.4.1 -----------
+**   Section---Schlüssel-Datenbereich-------------------------- Version 3.4.1 -----------
 alt: *PEEK45   *PAGEUP
 neu: *PEEK45   *PAGEUP   *PAGEUP
 alt: *PEEK45   *PAGEDOWN
 neu: *PEEK45   *PAGEDOWN *PAGEDOWN
-**   section---schlüssel-datenbereich-------------------------- version 3.5.0 -----------
+**   Section---Schlüssel-Datenbereich-------------------------- Version 3.5.0 -----------
 alt: *PEEK64   *ENTER    *OK
 neu: *PEEK64   *ENTER    *ENTER
 alt: *PEEK64   *F3       *NO
 neu: *PEEK64   *F3       *EXIT
-**   section---schlüssel-datenbereich-------------------------- version 4.0.1 -----------
+**   Section---Schlüssel-Datenbereich-------------------------- Version 4.0.1 -----------
 alt: *PEEK64   *F07
 neu: *PEEK64   *F07      *INSERT
 alt: *PEEK64   *F08

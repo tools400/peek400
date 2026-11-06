@@ -91,7 +91,7 @@ dcl-s r_mbr like(shortCmd_t.sc_mbr) inz;
 dcl-s r_shortCmd like(o_execCmd) inz(*blanks);
 dcl-s r_cmd1 varchar(32702) inz(*blanks);
 dcl-s r_cmd2 varchar(32702) inz(*blanks);
-dcl-c r_maxLen 256;
+dcl-c R_MaxLen 256;
 dcl-s r_var varchar(10) inz(*blanks);
 dcl-s r_value varchar(32766) inz('');
 dcl-s s like(int4_t) inz;
@@ -112,9 +112,9 @@ dcl-s yMsgID like(msgId_t) inz(*blanks);
 dcl-s yMsgDta like(msgDta_t) inz(*blanks);
 
 dcl-c NAME_PREFIX '%';
-dcl-c cFORMAT_start '(';
-dcl-c cFORMAT_end ')';
-dcl-c cFORMAT_delimiter ',';
+dcl-c cFORMAT_START '(';
+dcl-c cFORMAT_END ')';
+dcl-c cFORMAT_DELIMITER ',';
 
 // Für Einzelsatzzugriff
 dcl-ds hFile00 likeds(hFile_t);
@@ -364,7 +364,7 @@ begsr rpl_var;
 
       //  ... extrahieren 2. Teil
       s = s + 1 + %len(r_var);
-      if (s > r_maxLen);
+      if (s > R_MaxLen);
         r_cmd2 = '';
       else;
         r_cmd2 = %trimr(%subst(r_shortCmd: s));
@@ -519,7 +519,7 @@ dcl-proc lf_rtvFldFormat;
   clear o_msgDta;
 
   if (i_startPos > %len(io_buffer) or
-      %subst(io_buffer: i_startPos: 1) <> cFORMAT_start);
+      %subst(io_buffer: i_startPos: 1) <> cFORMAT_START);
     return bFalse;
   endif;
 
@@ -529,7 +529,7 @@ dcl-proc lf_rtvFldFormat;
   l = 0;
 
   dow (e <= %len(io_buffer));
-    if (%subst(io_buffer: e: 1) = cFORMAT_end);
+    if (%subst(io_buffer: e: 1) = cFORMAT_END);
       l = e - s + 1;
       leave;
     else;
@@ -548,10 +548,10 @@ dcl-proc lf_rtvFldFormat;
   io_buffer = %replace('': io_buffer: s: l);
 
   // Splitt format into data type, length and decimal positions
-  pToken = strtok(strFormat: cFORMAT_delimiter);
+  pToken = strtok(strFormat: cFORMAT_DELIMITER);
   if (pToken <> *null);            // data type
     data.type = %str(pToken);
-    pToken = strtok(*null: cFORMAT_delimiter);
+    pToken = strtok(*null: cFORMAT_DELIMITER);
   endif;
 
   if (pToken <> *null);            // field length
@@ -564,7 +564,7 @@ dcl-proc lf_rtvFldFormat;
       o_msgDta = usr8229;
       return bFalse;
     endmon;
-    pToken = strtok(*null: cFORMAT_delimiter);
+    pToken = strtok(*null: cFORMAT_DELIMITER);
   endif;
 
   if (pToken <> *null);            // decimal positions

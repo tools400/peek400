@@ -99,7 +99,7 @@ dcl-s yLength like(int4_t) inz;
 dcl-s yProtect like(bool_t) inz(bTrue);
 dcl-s yIsUcs2 like(int4_t) inz;
 dcl-s hTranscoder like(hTranscoder_t) inz;
-dcl-s cvtlength like(int4_t) inz;
+dcl-s cvtLength like(int4_t) inz;
 
 dcl-s sflPage like(int4_t) inz;
 dcl-s sflPageDDS like(sflPage) inz;
@@ -113,9 +113,9 @@ dcl-s isRecord like(bool_t) inz(bFalse);
 
 //  Zuletzt gelesener Satz: Fehlt der Satz beim Aktualisieren (F5),
 //  werden dessen Schlüsselfelder weiter angezeigt.
-dcl-s hasprevrcd like(bool_t) inz(bFalse);
-dcl-s prevbuff like(rcdBuf_t);
-dcl-s prevnullmap like(nullMap_t) dim(NULL_MAP_SIZE);
+dcl-s hasPrevRcd like(bool_t) inz(bFalse);
+dcl-s prevBuff like(rcdBuf_t);
+dcl-s prevNullMap like(nullMap_t) dim(NULL_MAP_SIZE);
 dcl-s isCvtChar like(bool_t) inz(bFalse);
 
 dcl-s peek06_name like(pgmCallN_t) inz;
@@ -184,7 +184,7 @@ dow ('1');
 
   //  Nachrichten anzeigen
   *in89 = '0';
-  write msgctl;
+  write msgCtl;
 
   //  "Keine Sätze ..."
   if (*in80 = *off);
@@ -214,7 +214,7 @@ dow ('1');
   endsl;
 
   //  Anzeige der Subfile
-  exfmt pbctl;
+  exfmt pbCtl;
 
   // - Berechnen Zeile/Spalte
   cursorPosition.row = workstn.csrPos / 256;
@@ -509,7 +509,7 @@ begsr fromBuffer;
         f_hasCcsid(fldl0100) = bTrue);
       monitor;
         hTranscoder = Transcoder_toJobCcsid(fldl0100.f1fdcc);
-        cvtlength = Transcoder_xlateBuffer(hTranscoder
+        cvtLength = Transcoder_xlateBuffer(hTranscoder
                                           : %addr(yFldInhalt)
                                           : yLength
                                           : %size(yFldInhalt));
@@ -520,10 +520,10 @@ begsr fromBuffer;
         p_sndPgmMg('USR8221': usr8221: sds.pgmName);
         leavesr;
       endmon;
-      if (cvtlength < yLength);
-        %subst(yFldInhalt: cvtlength + 1: yLength - cvtlength) = '';
+      if (cvtLength < yLength);
+        %subst(yFldInhalt: cvtLength + 1: yLength - cvtLength) = '';
       else;
-        yLength = cvtlength;
+        yLength = cvtLength;
       endif;
     endif;
 
@@ -656,13 +656,13 @@ endsr;
 begsr pbInit;
 
   *in89 = '0';
-  write msgctl;
+  write msgCtl;
 
   *in80 = '0';                                                          // SFLDSP
   *in81 = '1';                                                          // SFLDSPCTL
   *in82 = '1';                                                          // SFLCLR
   *in83 = '1';                                                          // SFLEND
-  write pbctl;
+  write pbCtl;
 
   *in82 = '0';                                                          // SFLCLR
 
@@ -806,7 +806,7 @@ begsr pbFill;
   //  ... Satz nicht gefunden: leer, außer den Schlüsselfeldern des
   //      zuletzt angezeigten Satzes (siehe readrcd)
   if (isRecord = bFalse and
-      (f_kSeq = 0 or hasprevrcd = bFalse));
+      (f_kSeq = 0 or hasPrevRcd = bFalse));
     yString = '';
     yStrLen = f_dsplyLn(fldl0100);
 
@@ -925,9 +925,9 @@ endsr;
 begsr readRcd;
 
   if (isRecord = bTrue);
-    prevbuff = io_buffFld;
-    prevnullmap = io_nullMap;
-    hasprevrcd = bTrue;
+    prevBuff = io_buffFld;
+    prevNullMap = io_nullMap;
+    hasPrevRcd = bTrue;
   endif;
 
   isRecord = bFalse;
@@ -944,11 +944,11 @@ begsr readRcd;
   //  Satz nicht mehr vorhanden (z.B. inzwischen gelöscht): Meldung
   //  "Datensatz nicht gefunden." und leerer Satz, nur die Schlüssel-
   //  felder aus dem zuletzt angezeigten Satz (siehe pbfill). Der von
-  //  cio_chainwithrrn geleerte Puffer enthält keine gültigen Werte.
+  //  CIO_chainWithRRN geleerte Puffer enthält keine gültigen Werte.
   if (isRecord = bFalse);
-    if (hasprevrcd = bTrue);
-      io_buffFld = prevbuff;
-      io_nullMap = prevnullmap;
+    if (hasPrevRcd = bTrue);
+      io_buffFld = prevBuff;
+      io_nullMap = prevNullMap;
     endif;
     p_sndPgmMg('USR8120': '': sds.pgmName);
   endif;
@@ -1022,7 +1022,7 @@ begsr inzsr;
 
   isInzSr = bTrue;
 
-  PGMQ = '*';
+  pgmQ = '*';
 
   peek06_name = f_pgmCallN('PEEK06');
   peek21_name = f_pgmCallN('PEEK21');

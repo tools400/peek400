@@ -104,7 +104,7 @@ dcl-pr getJobCcsid int(10) extproc('getJobCcsid');
 end-pr;
 
 //  Kills utility, if a given handle is not a transcoder.
-dcl-pr checkhandle extproc('checkHandle');
+dcl-pr checkHandle extproc('checkHandle');
   i_hTranscoder like(hTranscoder_t) const;
 end-pr;
 
@@ -257,7 +257,7 @@ dcl-proc Transcoder_xlateRaw export;
   dcl-s pOutBuf pointer;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  checkhandle(i_hTranscoder);
+  checkHandle(i_hTranscoder);
 
   o_pOutBuf = *null;
   pOutBuf   = *null;
@@ -308,7 +308,7 @@ dcl-proc Transcoder_xlateBuffer export;
   dcl-s pOutBuf pointer;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  checkhandle(i_hTranscoder);
+  checkHandle(i_hTranscoder);
 
   if (%parms() >= %parmnum(i_maxSize) and %addr(i_maxSize) <> *null);
     maxSize = i_maxSize;
@@ -367,7 +367,7 @@ dcl-proc Transcoder_xlateString export;
   dcl-s pOutBuf pointer;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  checkhandle(i_hTranscoder);
+  checkHandle(i_hTranscoder);
 
   rtn.string = i_string;
 
@@ -411,7 +411,7 @@ dcl-proc Transcoder_getFromCcsid export;
   dcl-ds transcoder likeds(transcoder_t) based(i_hTranscoder);
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  checkhandle(i_hTranscoder);
+  checkHandle(i_hTranscoder);
 
   return transcoder.fromCcsid;
 
@@ -435,7 +435,7 @@ dcl-proc Transcoder_getToCcsid export;
   dcl-ds transcoder likeds(transcoder_t) based(i_hTranscoder);
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  checkhandle(i_hTranscoder);
+  checkHandle(i_hTranscoder);
 
   return transcoder.toCcsid;
 
@@ -457,7 +457,7 @@ dcl-proc Transcoder_delete export;
   dcl-ds transcoder likeds(transcoder_t) based(io_hTranscoder);
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  checkhandle(io_hTranscoder);
+  checkHandle(io_hTranscoder);
 
   //  Remove the transcoder from the list of created transcoders,
   //  otherwise Transcoder_toJobCcsid() would return the deleted
@@ -560,7 +560,7 @@ dcl-proc performTranslation;
   dcl-s pOutBuf pointer inz;
   dcl-s extendSize int(10) inz;
   dcl-s isMaxSize ind inz(bFalse);
-  dcl-s errnbr int(10) inz;
+  dcl-s errNbr int(10) inz;
 
   //  Transcoder handle
   dcl-ds transcoder likeds(transcoder_t) based(i_hTranscoder);
@@ -588,7 +588,7 @@ dcl-proc performTranslation;
   endif;
 
   p_clrErrno();
-  dou ((rc <> cICONV_error) or (f_errno() <> e2big_c or
+  dou ((rc <> cICONV_ERROR) or (f_errno() <> e2big_c or
         (isMaxSize and bufSize >= i_maxSize)));
 
     if (f_errno() = e2big_c);
@@ -610,15 +610,15 @@ dcl-proc performTranslation;
 
   enddo;
 
-  if (rc = cICONV_error);
-    errnbr = f_errno();
+  if (rc = cICONV_ERROR);
+    errNbr = f_errno();
     //  Release the output buffer, because the escape message
     //  skips the clean-up of the caller.
     dealloc(n) o_pOutBuf;
-    if (errnbr = e2big_c);
-      kill('Target buffer too small to hold result': errnbr);
+    if (errNbr = e2big_c);
+      kill('Target buffer too small to hold result': errNbr);
     else;
-      kill('Failed to transcode characters': errnbr);
+      kill('Failed to transcode characters': errNbr);
     endif;
   endif;
 
@@ -670,8 +670,8 @@ dcl-proc createTranscoder;
     return Transcoder_null();
   endif;
 
-  //  Count the new transcoder only after transcoder_new() succeeded.
-  //  transcoder_new() sends an escape message on error, which
+  //  Count the new transcoder only after Transcoder_new() succeeded.
+  //  Transcoder_new() sends an escape message on error, which
   //  would otherwise leave an empty entry in the list.
   hTranscoder = Transcoder_new(i_toCcsid: i_fromCcsid);
 
@@ -716,7 +716,7 @@ end-proc;
 //  Kills utility with an ESCAPE message, if a given handle is not
 //  a transcoder (*null, deleted or a foreign pointer).
 //=====================================================================*
-dcl-proc checkhandle;
+dcl-proc checkHandle;
   dcl-pi *n;
     i_hTranscoder like(hTranscoder_t) const;
   end-pi;

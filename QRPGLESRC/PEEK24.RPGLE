@@ -109,7 +109,7 @@ dow ('1');
 
   //  Nachrichten anzeigen
   *in89 = '0';
-  write msgctl;
+  write msgCtl;
 
   //  Anzeigen der Befehlstasten
   select;
@@ -348,14 +348,14 @@ endsr;
 begsr fill##;
 
   //  set_keyCol
-  $$keycol = set0001.set_keyCol;
+  $$keyCol = set0001.set_keyCol;
   //*                 CAT       'KeyField':0  $$KEYCOL
-  $$keycol = %trimr($$keycol) + 'KeyField';
+  $$keyCol = %trimr($$keyCol) + 'KeyField';
 
   //  set_hedCol
-  $$hedcol = set0001.set_hedCol;
+  $$hedCol = set0001.set_hedCol;
   //*                 CAT       'Headline':0  $$HEDCOL
-  $$hedcol = %trimr($$hedcol) + 'Headline';
+  $$hedCol = %trimr($$hedCol) + 'Headline';
 
   //  set_pinCol
   $$pincol1 = set0001.set_pinCol;
@@ -563,7 +563,7 @@ begsr inzsr;
 
   isInzSr = bTrue;
 
-  PGMQ = '*';
+  pgmQ = '*';
 
   peek21_name = f_pgmCallN('PEEK21');
   peek23_name = f_pgmCallN('PEEK23');

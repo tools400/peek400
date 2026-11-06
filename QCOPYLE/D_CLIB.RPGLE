@@ -15,7 +15,7 @@ dcl-s excp_msgid char(7) import('_EXCP_MSGID');
 
 //  time -- Determine Current Time
 dcl-pr time int(10) extproc('time');
-  timeptr pointer value;
+  timePtr pointer value;
 end-pr;
 
 //  strftime -- Convert to Formatted Time
@@ -23,7 +23,7 @@ dcl-pr strftime int(10) extproc('strftime');
   dest    pointer value;
   maxSize int(10) value;
   format  pointer options(*string) value;
-  timeptr likeds(tm_t) const;
+  timePtr likeds(tm_t) const;
 end-pr;
 
 dcl-ds tm_t qualified template;
@@ -139,12 +139,12 @@ dcl-pr tmpnam pointer extproc('tmpnam');
   pTmpNme pointer value;
 end-pr;
 
-dcl-c l_tmpnam 39; // ! <stdio.h>
+dcl-c L_tmpnam 39; // ! <stdio.h>
 
 dcl-c tmp_max 32767; // ! <stdio.h>
 
 //  qsort -- Sort Array
-dcl-pr qSort pointer extproc('qsort');
+dcl-pr qsort pointer extproc('qsort');
   memPtr    pointer value;
   numElem   like(size_t) value;
   width     like(size_t) value;
@@ -213,7 +213,7 @@ dcl-pr iconv uns(10) extproc('iconv');
   i_outBytLeft uns(10);
 end-pr;
 
-dcl-c cICONV_error 4294967295;
+dcl-c cICONV_ERROR 4294967295;
 
 //  iconv_close()--Code Conversion Deallocation API
 dcl-pr iconv_close int(10) extproc('iconv_close');
@@ -238,8 +238,8 @@ dcl-ds st_stat_t qualified align template;
   mtime      int(10);
   ctime      int(10);
   dev        uns(10);
-  blksize    uns(10);
-  allocsize  uns(10);
+  blkSize    uns(10);
+  allocSize  uns(10);
   objtype    char(11);
   reserved3  char(1);
   codePage   uns(5);
@@ -410,14 +410,14 @@ dcl-c o_rdwr 4; // ! Read/Write
 dcl-pr read extproc('read') like(ssize_t);
   i_fd      int(10) value;
   i_pBuffer pointer value;
-  i_buflen  like(size_t) value;
+  i_bufLen  like(size_t) value;
 end-pr;
 
 //  value/-1 = write()--Write to Descriptor            // include <unistd.h>
 dcl-pr write extproc('write') like(ssize_t);
   i_fd      int(10) value;
   i_pBuffer pointer value;
-  i_buflen  like(size_t) value;
+  i_bufLen  like(size_t) value;
 end-pr;
 
 //  0/-1 = ftruncate()--Truncate File                  // include <unistd.h>
@@ -680,7 +680,7 @@ dcl-ds cipherCtrls_t qualified align template;
   hashAlg       char(1) pos(3);
   sequence      char(1) pos(4);
   dataLength    uns(10) pos(5);
-  output        char(1) pos(9);
+  outPut        char(1) pos(9);
   reserved_1    char(7) pos(10);
   hashContext   pointer pos(17);
   hmacKey       pointer pos(33);
@@ -688,15 +688,15 @@ dcl-ds cipherCtrls_t qualified align template;
   reserved_2    char(44) pos(53);
 end-ds;
 
-dcl-c cCIPHER_md5 x'00';
-dcl-c cCIPHER_sha1 x'01';
+dcl-c cCIPHER_MD5 x'00';
+dcl-c cCIPHER_SHA1 x'01';
 
-dcl-c cCIPHER_only x'00';
-dcl-c cCIPHER_first x'01';
-dcl-c cCIPHER_middle x'02';
-dcl-c cCIPHER_final x'03';
+dcl-c cCIPHER_ONLY x'00';
+dcl-c cCIPHER_FIRST x'01';
+dcl-c cCIPHER_MIDDLE x'02';
+dcl-c cCIPHER_FINAL x'03';
 
-dcl-c cCIPHER_hash x'00';
-dcl-c cCIPHER_hmac x'01';
+dcl-c cCIPHER_HASH x'00';
+dcl-c cCIPHER_HMAC x'01';
 
 /endif

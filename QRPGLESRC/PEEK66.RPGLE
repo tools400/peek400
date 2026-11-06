@@ -42,11 +42,11 @@
 /copy QCOPYLE,PPEEK58
 
 dcl-s numeric_t packed(31: 10) template;
-dcl-c cDATA_type 'P';
+dcl-c cDATA_TYPE 'P';
 dcl-c cDIGITS %len(numeric_t);
 dcl-c cDECPOS %decpos(numeric_t);
 
-dcl-c cCHR_x 'x';
+dcl-c cCHR_X 'x';
 dcl-c cQUOTE '''';
 
 dcl-pr main extproc('main');
@@ -213,8 +213,8 @@ dcl-proc convertToNumeric;
   dcl-s inNumeric like(numeric_t);
   dcl-s tmpBuffer like(io_buffer);
   dcl-s digits int(10);
-  dcl-s inbuffer like(io_buffer);
-  dcl-s inlength like(io_length);
+  dcl-s inBuffer like(io_buffer);
+  dcl-s inLength like(io_length);
 
 /copy QCOPYLE,USR8227
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -224,7 +224,7 @@ dcl-proc convertToNumeric;
   on-error;
     clear usr8227;
     usr8227.var1 = %subst(io_buffer: 1: io_length);
-    usr8227.var2 = cDATA_type;
+    usr8227.var2 = cDATA_TYPE;
     usr8227.var3 = cDIGITS;
     usr8227.var4 = cDECPOS;
     o_msgID  = 'USR8227';
@@ -249,8 +249,8 @@ dcl-proc convertToNumeric;
     digits = i_outFormat.f1Digt;
   endif;
 
-  inbuffer = io_buffer;
-  inlength = io_length;
+  inBuffer = io_buffer;
+  inLength = io_length;
 
   clear io_buffer;
   clear io_length;
@@ -262,13 +262,13 @@ dcl-proc convertToNumeric;
                        : digits + oneByteIntAdjust
                        : i_outFormat.f1DecP)
           : %addr(io_buffer)
-          : f_num_descr2(cDATA_type
+          : f_num_descr2(cDATA_TYPE
                          : %len(inNumeric)
                          : %decpos(inNumeric))
           : %addr(inNumeric));
   on-error;
-    io_buffer = inbuffer;
-    io_length = inlength;
+    io_buffer = inBuffer;
+    io_length = inLength;
     clear usr8227;
     usr8227.var1 = %subst(io_buffer: 1: io_length);
     usr8227.var2 = i_outFormat.f1DTyp;
@@ -301,8 +301,8 @@ dcl-proc convertToNumeric;
   io_length = io_length * 2;
   io_buffer = %subst(tmpBuffer: 1: io_length);
 
-  io_buffer = cCHR_x + cQUOTE + %subst(io_buffer: 1: io_length) + cQUOTE;
-  io_length = io_length + %len(cCHR_x) + %len(cQUOTE) * 2;
+  io_buffer = cCHR_X + cQUOTE + %subst(io_buffer: 1: io_length) + cQUOTE;
+  io_length = io_length + %len(cCHR_X) + %len(cQUOTE) * 2;
 
 end-proc;
 
