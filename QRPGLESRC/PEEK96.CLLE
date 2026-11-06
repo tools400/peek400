@@ -685,10 +685,6 @@ Loop:
                GOTO       CMDLBL(Loop)
              ENDDO
 
-             IF         COND(&MLNAME  *EQ 'TESTPEEK_P') THEN(DO)
-               GOTO       CMDLBL(Loop)
-             ENDDO
-
              CRTPEEKOBJ SRCFILE(&MLLIB/&MLFILE) SRCMBR(&MLNAME) +
                           OBJLIB(&NEWLIB) DEVLIB(&DEVLIB) +
                           SBMJOB(*YES) BNDDIR(PEEK) INSTALL(&TRUE)
