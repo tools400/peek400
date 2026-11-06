@@ -31,11 +31,11 @@
 
 dcl-f peek17fm workstn(*ext) usage(*input: *output) usropn infds(workstn);
 
-dcl-f peekfld keyed usropn infds(peek_01_ds) prefix(f_);
+dcl-f peekfld keyed usropn infds(Peek_01_DS) prefix(f_);
 
 dcl-ds workstn likeds(workstn_t);
 
-dcl-ds peek_01_ds likeds(infds_t);
+dcl-ds Peek_01_DS likeds(infds_t);
 
 
 /copy QCOPYLE,D_VARDEF
@@ -68,41 +68,41 @@ dcl-ds peek_01_ds likeds(infds_t);
 /copy QCOPYLE,USR8142
 /copy QCOPYLE,USR8192
 
-dcl-ds set0002 likeds(set0002_t) inz;
-dcl-ds set0003 likeds(set0003_t) inz;
+dcl-ds set0002 likeds(SET0002_t) inz;
+dcl-ds set0003 likeds(SET0003_t) inz;
 dcl-ds set0008 likeds(set0008_t) inz;
 
 dcl-ds fldl0100 likeds(fldl0100_t) inz;
 
-dcl-s yfkeys char(18) dim(32);
-dcl-s ynbrofkeys like(int4_t);
-dcl-s ymsgid char(7);
-dcl-s ymsgdta char(512);
+dcl-s yFKeys char(18) dim(32);
+dcl-s yNbrOfKeys like(int4_t);
+dcl-s YMsgID char(7);
+dcl-s YMsgDta char(512);
 
-dcl-s ypgmcmd char(10);
-dcl-s ycmddta like(pgmcmddt_t);
+dcl-s YPgmCmd char(10);
+dcl-s YCmdDta like(pgmCmdDt_t);
 
-dcl-s yfield char(10);
+dcl-s YField char(10);
 
 dcl-s sfbot like(int4_t);
 dcl-c NBR_F_KEYS 2;
 
-dcl-s mustwait char(1) inz(bFalse);
+dcl-s MustWait char(1) inz(bFalse);
 
 dcl-s x like(int4_t) inz;
 
-dcl-s r_sign like(##sign);
-dcl-s r_arg30 like(##arg);
-dcl-s r_qfile like(i_qfile);
-dcl-s r_member like(i_member);
-dcl-s r_vork like(##arg);
-dcl-s r_nachk like(##arg);
+dcl-s R_Sign like(##Sign);
+dcl-s R_Arg30 like(##Arg);
+dcl-s R_QFile like(i_qFile);
+dcl-s R_Member like(i_member);
+dcl-s R_VorK like(##Arg);
+dcl-s R_NachK like(##Arg);
 dcl-s r_a1 char(1);
-dcl-s r_field like(##field);
+dcl-s R_Field like(##Field);
 
-dcl-s peek21_name like(pgmcalln_t) inz;
-dcl-s peek23_name like(pgmcalln_t) inz;
-dcl-s peek37_name like(pgmcalln_t) inz;
+dcl-s peek21_name like(pgmCallN_t) inz;
+dcl-s peek23_name like(pgmCallN_t) inz;
+dcl-s peek37_name like(pgmCallN_t) inz;
 
 /copy QCOPYLE,PPEEK21
 /copy QCOPYLE,PPEEK23
@@ -120,18 +120,18 @@ dcl-s isInzSr like(bool_t) inz(bFalse);
 //*******************************************************************
 dcl-pi peek17;
   i_dsp80     like(bool_t) const;
-  i_copyright like(copyrght_t) const;
-  i_qfile     like(qobj_t) const;
+  i_copyright like(copyright_t) const;
+  i_qFile     like(qObj_t) const;
   i_member    like(mbr_t) const;
   o_field     like(fieldNme_t);
   o_operation like(operation_t);
   o_argument  like(argument_t);
   o_sign      like(sign_t);
-  o_srchnbrs  like(srchNbrs_t);
-  o_srchtype  like(type_t);
-  o_srchcase  like(bool_t);
-  o_sgid      like(msgid_t);
-  o_msgdta    like(msgdta_t);
+  o_srchNbrs  like(srchNbrs_t);
+  o_srchType  like(type_t);
+  o_srchCase  like(bool_t);
+  o_sgID      like(msgId_t);
+  o_msgDta    like(msgDta_t);
 end-pi;
 
 dcl-s do_x2 packed(7);
@@ -146,7 +146,7 @@ ceehdlr(%paddr('errorHandler')
 
 exsr inzsr;
 
-exsr first;
+exsr First;
 
 dow ('1');
 
@@ -157,19 +157,19 @@ dow ('1');
   //  Anzeigen der Befehlstasten
   select;
   when ((sfbot = 2) and
-     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1)));
+     (yNbrOfKeys > NBR_F_KEYS * (sfbot - 1)));
     write pbbot#2;
   when ((sfbot = 3) and
-     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1)));
+     (yNbrOfKeys > NBR_F_KEYS * (sfbot - 1)));
     write pbbot#3;
   when ((sfbot = 4) and
-     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1)));
+     (yNbrOfKeys > NBR_F_KEYS * (sfbot - 1)));
     write pbbot#4;
   when ((sfbot = 5) and
-     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1)));
+     (yNbrOfKeys > NBR_F_KEYS * (sfbot - 1)));
     write pbbot#5;
   when ((sfbot = 6) and
-     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1)));
+     (yNbrOfKeys > NBR_F_KEYS * (sfbot - 1)));
     write pbbot#6;
   other;
     write pbbot#1;
@@ -180,60 +180,60 @@ dow ('1');
   exfmt bild01;
 
   //  Nachrichten löschen
-  p_rmvpgmmg(sds.pgmname);
+  p_rmvPgmMg(sds.pgmName);
 
   //  Bezugszahlen löschen
   exsr bzoff1;
 
   //  Mappen der gedrückten Taste
   //  in Programmbefehl
-  peek21(workstn.aid: sds.pgmname
-        : ypgmcmd: ycmddta: ymsgid: ymsgdta);
-  if (ymsgid <> *blanks);
-    p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
-    ymsgid = '';
-    ymsgdta = '';
+  peek21(workstn.aid: sds.pgmName
+        : YPgmCmd: YCmdDta: YMsgID: YMsgDta);
+  if (YMsgID <> *blanks);
+    p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
+    YMsgID = '';
+    YMsgDta = '';
     iter;
   endif;
 
   //  Abfragen der Programmbefehle
   select;
   //  F3  - Ende
-  when (ypgmcmd = '*EXIT');
-    exsr c_endpgm;
+  when (YPgmCmd = '*EXIT');
+    exsr C_EndPgm;
     leave;
 
   //  F4  - Prompt
-  when (ypgmcmd = '*PROMPT');
-    exsr c_prompt;
+  when (YPgmCmd = '*PROMPT');
+    exsr C_Prompt;
     iter;
 
   //  F5  - Aktualisieren
-  when (ypgmcmd = '*REFRESH');
-    exsr c_refresh;
+  when (YPgmCmd = '*REFRESH');
+    exsr C_Refresh;
     iter;
 
   //  F12 - Ende
-  when (ypgmcmd = '*CANCEL');
-    exsr c_endpgm;
+  when (YPgmCmd = '*CANCEL');
+    exsr C_EndPgm;
     leave;
 
   //  F24 - Weitere Tasten
-  when (ypgmcmd = '*MOREKEYS');
-    exsr c_morekeys;
+  when (YPgmCmd = '*MOREKEYS');
+    exsr C_MoreKeys;
 
   //  Datenfreigabe
-  when (ypgmcmd = '*ENTER');
-    exsr c_enter;
+  when (YPgmCmd = '*ENTER');
+    exsr C_Enter;
     if (*in99 = *off);
-      o_sgid = 'USR8112';
-      o_msgdta = *blanks;
+      o_sgID = 'USR8112';
+      o_msgDta = *blanks;
       leave;
     endif;
 
   other;
     //  Falsche Taste gedrückt
-    p_wrongkey(workstn.aid: sds.pgmname);
+    p_wrongKey(workstn.aid: sds.pgmName);
     iter;
   endsl;
 
@@ -248,16 +248,16 @@ return;
 //    C_Enter       "Datenfreigabetaste"                      *
 //============================================================*
 
-begsr c_enter;
+begsr C_Enter;
 
   dou ('1');
 
-    r_field = ##field;
+    R_Field = ##Field;
 
     //  Prompt?
     //  ... ##Field
-    if (%trim(##field ) = set0008.set_prmt);
-      exsr c_prompt;
+    if (%trim(##Field ) = set0008.set_prmt);
+      exsr C_Prompt;
       if (*in99 = bTrue);
         leave;
       else;
@@ -267,11 +267,11 @@ begsr c_enter;
 
     exsr prfb1;
 
-    if (##field <> r_field);
-      mustwait = bTrue;
+    if (##Field <> R_Field);
+      MustWait = bTrue;
     endif;
 
-    if (mustwait = bTrue);
+    if (MustWait = bTrue);
       *in99 = '1';
     else;
     //  Wert belassen ...
@@ -280,27 +280,27 @@ begsr c_enter;
   enddo;
 
   if (*in99 = *off);
-    o_field = ##field;
+    o_field = ##Field;
     o_operation = ##op;
-    o_argument = r_arg30;
-    o_sign = ##sign;
-    o_srchnbrs = ##nbrs;
+    o_argument = R_Arg30;
+    o_sign = ##Sign;
+    o_srchNbrs = ##Nbrs;
 
     select;
     when (##type = 'U');
-      o_srchtype = '*UNDERLINE';
+      o_srchType = '*UNDERLINE';
     when (##type = 'R');
-      o_srchtype = '*REVERSE';
+      o_srchType = '*REVERSE';
     when (##type = 'P');
-      o_srchtype = '*PINROW';
+      o_srchType = '*PINROW';
     other;
-      o_srchtype = '*NORMAL';
+      o_srchType = '*NORMAL';
     endsl;
 
-    o_srchcase = ##case;
+    o_srchCase = ##case;
 
-    o_sgid = 'USR8112';
-    o_msgdta = *blanks;
+    o_sgID = 'USR8112';
+    o_msgDta = *blanks;
   endif;
 
 endsr;
@@ -338,7 +338,7 @@ endsr;
 
 begsr prfb1;
 
-  mustwait = bFalse;
+  MustWait = bFalse;
 
   exsr prf20; // Field
   if (*in99 = bTrue);
@@ -380,37 +380,37 @@ begsr prf20;
 
   dou ('1');
 
-    if (##field = '*RECORD');
+    if (##Field = '*RECORD');
     //        suchen im ganzen Datensatz
     else;
 
       clear f_key;
-      f_key.f_field = ##field;
+      f_key.F_Field = ##Field;
       chain %kds(f_key) fpeekfld;
       if (not %found());
         //  Fehlermeldung ...
         *in99 = '1';
         clear usr8136;
-        usr8136.var1 = ##field;
-        p_sndpgmmg('USR8136': usr8136: sds.pgmname);
+        usr8136.var1 = ##Field;
+        p_sndPgmMg('USR8136': usr8136: sds.pgmName);
         leave;
       else;
         fldl0100 = f_ffd;
       endif;
 
-      if (fldl0100.f1dtyp <> 'A' and    // alpha-num
+      if (fldl0100.F1DTyp <> 'A' and    // alpha-num
           // FLDL0100.F1DTyp <> 'G' and // graphic
-          fldl0100.f1dtyp <> 'S' and    // Zoned
-          fldl0100.f1dtyp <> 'B' and    // Binary
-          fldl0100.f1dtyp <> 'P' and    // Packed
-          fldl0100.f1dtyp <> 'T' and    // Time
-          fldl0100.f1dtyp <> 'L' and    // Date
-          fldl0100.f1dtyp <> 'F');       // Float
+          fldl0100.F1DTyp <> 'S' and    // Zoned
+          fldl0100.F1DTyp <> 'B' and    // Binary
+          fldl0100.F1DTyp <> 'P' and    // Packed
+          fldl0100.F1DTyp <> 'T' and    // Time
+          fldl0100.F1DTyp <> 'L' and    // Date
+          fldl0100.F1DTyp <> 'F');       // Float
         *in99 = '1';
         clear usr8129;
-        usr8129.var1 = ##field;
-        usr8129.var2 = fldl0100.f1dtyp;
-        p_sndpgmmg('USR8129': usr8129: sds.pgmname);
+        usr8129.var1 = ##Field;
+        usr8129.var2 = fldl0100.F1DTyp;
+        p_sndPgmMg('USR8129': usr8129: sds.pgmName);
         leave;
       endif;
 
@@ -444,37 +444,37 @@ begsr prf21;
       *in99 = '1';
       clear usr8124;
       usr8124.var1 = ##op;
-      p_sndpgmmg('USR8124': usr8124: sds.pgmname);
+      p_sndPgmMg('USR8124': usr8124: sds.pgmName);
       leave;
     endif;
 
-    if (##field <> '*RECORD');
+    if (##Field <> '*RECORD');
       if (##op = 'LIKE'
           or ##op = 'NLIKE');
         //*   F1DTyp        IFNE      'A'  // alpha-num
         //*   F1DTyp        ANDNE     'L'  // Date
         //*   F1DTyp        ANDNE     'T'  // Time
-        if (fldl0100.f1dtyp <> 'A' and      // alpha-num
-            fldl0100.f1dtyp <> 'L' and      // Date
-            fldl0100.f1dtyp <> 'T');         // Time
+        if (fldl0100.F1DTyp <> 'A' and      // alpha-num
+            fldl0100.F1DTyp <> 'L' and      // Date
+            fldl0100.F1DTyp <> 'T');         // Time
           *in99 = '1';
           clear usr8135;
           usr8135.var1 = ##op;
-          usr8135.var2 = fldl0100.f1dtyp;
-          p_sndpgmmg('USR8135': usr8135: sds.pgmname);
+          usr8135.var2 = fldl0100.F1DTyp;
+          p_sndPgmMg('USR8135': usr8135: sds.pgmName);
           leave;
         endif;
       endif;
     endif;
 
-    if (##field = '*RECORD'
+    if (##Field = '*RECORD'
         and ##op <> 'LIKE'
         and ##op <> 'NLIKE');
       *in99 = '1';
       clear usr8134;
       usr8134.var1 = ##op;    // Operation
-      usr8134.var2 = ##field; // Feld
-      p_sndpgmmg('USR8134': usr8134: sds.pgmname);
+      usr8134.var2 = ##Field; // Feld
+      p_sndPgmMg('USR8134': usr8134: sds.pgmName);
       leave;
     endif;
 
@@ -495,61 +495,61 @@ begsr prf22;
 
   dou ('1');
 
-    r_sign = *blanks;
-    ##sign = *blanks;
+    R_Sign = *blanks;
+    ##Sign = *blanks;
 
-    if (##arg = *blanks);
+    if (##Arg = *blanks);
       *in99 = '1';
-      p_sndpgmmg('USR8140': usr8140: sds.pgmname);
+      p_sndPgmMg('USR8140': usr8140: sds.pgmName);
       leave;
     endif;
 
     //  Umsetzen in internes Arbeitsfeld ...
-    r_arg30 = %xlate(C_LOWER: C_UPPER: ##arg);
+    R_Arg30 = %xlate(C_LOWER: C_UPPER: ##Arg);
 
     select;
     //  Umsetzen des Sonderwertes "*BLANKS" ...
-    when (r_arg30 = '*BLANKS'
-       or r_arg30 = '*BLANK');
-      r_arg30 = *blanks;
+    when (R_Arg30 = '*BLANKS'
+       or R_Arg30 = '*BLANK');
+      R_Arg30 = *blanks;
 
     //  Umsetzen des Sonderwertes "*ZEROS" ...
-    when (r_arg30 = '*ZEROS'
-       or r_arg30 = '*ZERO');
-      r_arg30 = *zeros;
+    when (R_Arg30 = '*ZEROS'
+       or R_Arg30 = '*ZERO');
+      R_Arg30 = *zeros;
     other;
       //  ... aktuellen Wert belassen
-      r_arg30 = ##arg;
+      R_Arg30 = ##Arg;
     endsl;
 
     //  Verarbeiten numerischer Werte ...
-    if (f_isnumfld(fldl0100) = bTrue);
+    if (f_isNumFld(fldl0100) = bTrue);
 
       //  ... Vorzeichen, links
-      exsr signleft;
+      exsr SignLeft;
       //  ... Vorzeichen, rechts
-      exsr signright;
+      exsr SignRight;
 
       //  ... umsetzen *BLANKS in '+' Zeichen
-      if (##sign = *blanks);
-        ##sign = set0003.set_signp;
+      if (##Sign = *blanks);
+        ##Sign = set0003.SET_SignP;
       else;
       //      ... Vorzeichen stehen lassen
       endif;
 
       //  ... gültige Daten
       //      ... Komma extrahieren
-      if (fldl0100.f1dtyp = 'F'); // Float
-        if (f_vldfloat(r_arg30) = bFalse);
+      if (fldl0100.F1DTyp = 'F'); // Float
+        if (f_vldFloat(R_Arg30) = bFalse);
           *in99 = '1';
           clear usr8192.var1;
-          usr8192.var1 = ##field;
-          p_sndpgmmg('USR8192': usr8192: sds.pgmname);
+          usr8192.var1 = ##Field;
+          p_sndPgmMg('USR8192': usr8192: sds.pgmName);
         endif;
       else;
-        exsr srchpoint;
-        exsr expandnum;
-        exsr chknumdata;
+        exsr SrchPoint;
+        exsr ExpandNum;
+        exsr ChkNumData;
       endif;
 
       if (*in99 = *on);
@@ -557,13 +557,13 @@ begsr prf22;
       endif;
 
       //  ... falsches Vorzeichen
-      if (##sign <> set0003.set_signm and
-          ##sign <> set0003.set_signp);
+      if (##Sign <> set0003.SET_SignM and
+          ##Sign <> set0003.SET_SignP);
         *in99 = '1';
         clear usr8141;
-        usr8141.var1 = set0003.set_signp;
-        usr8141.var2 = set0003.set_signm;
-        p_sndpgmmg('USR8141': usr8141: sds.pgmname);
+        usr8141.var1 = set0003.SET_SignP;
+        usr8141.var2 = set0003.SET_SignM;
+        p_sndPgmMg('USR8141': usr8141: sds.pgmName);
         leave;
       else;
       //  ... richtiges Vorzeichen
@@ -572,7 +572,7 @@ begsr prf22;
     else;
       //  Alpha-numerische Werte ...
       //  ... Vorzeichen
-      ##sign = *blanks;
+      ##Sign = *blanks;
     endif;
 
   enddo;
@@ -588,27 +588,27 @@ endsr;
 //    SignLeft      Prüfen extrahieren Vorzeichen links       *
 //============================================================*
 
-begsr signleft;
+begsr SignLeft;
 
   //   Suchen erstes Zeichen <> *BLANKS ...
-  x = %check(' ':r_arg30);
+  x = %check(' ':R_Arg30);
   if (x = *zeros);
   //   Wenn nicht gefunden, dann ist nichts zu tun ...
   else;
     //   ansonsten das Zeichen extrahieren.
     //*   1             SUBST (P) R_Arg30:X     R_Sign
-    r_sign = %subst(r_arg30: x: 1);
+    R_Sign = %subst(R_Arg30: x: 1);
     //   Wenn das extrahierte Zeichen dem '+' oder '-'
     //   Zeichen entspricht, dann die Umsetzung vornehmen ...
-    if (r_sign = set0003.set_signm
-        or r_sign = set0003.set_signp);
-      ##sign = r_sign;
+    if (R_Sign = set0003.SET_SignM
+        or R_Sign = set0003.SET_SignP);
+      ##Sign = R_Sign;
       x = x + 1;
       if (x <= 30);
         //*                 SUBST (P) R_Arg30:X     R_Arg30
-        r_arg30 = %subst(r_arg30: x);
+        R_Arg30 = %subst(R_Arg30: x);
       else;
-        r_arg30 = *blanks;
+        R_Arg30 = *blanks;
       endif;
     else;
     //   ... ansonsten ist nix zu tun.
@@ -621,28 +621,28 @@ endsr;
 //    SignRight     Prüfen und umsetzen Vorzeichen rechts     *
 //============================================================*
 
-begsr signright;
+begsr SignRight;
 
   //   Suchen letztes Zeichen <> *BLANKS ...
   //*   ' '           CHECKR    R_Arg30       X
-  x = %checkr(' ': r_arg30);
+  x = %checkr(' ': R_Arg30);
   if (x = *zeros);
   //   Wenn nicht gefunden, dann ist nichts zu tun ...
   else;
     //   ansonsten das Zeichen extrahieren.
     //*   1             SUBST (P) R_Arg30:X     R_Sign
-    r_sign = %subst(r_arg30: x: 1);
+    R_Sign = %subst(R_Arg30: x: 1);
     //   Wenn das extrahierte Zeichen dem '+' oder '-'
     //   Zeichen entspricht, dann die Umsetzung vornehmen ...
-    if (r_sign = set0003.set_signm
-        or r_sign = set0003.set_signp);
-      ##sign = r_sign;
+    if (R_Sign = set0003.SET_SignM
+        or R_Sign = set0003.SET_SignP);
+      ##Sign = R_Sign;
       x = x - 1;
       if (x > *zeros);
         //*   X             SUBST (P) R_Arg30:1     R_Arg30
-        r_arg30 = %subst(r_arg30: 1: x);
+        R_Arg30 = %subst(R_Arg30: 1: x);
       else;
-        r_arg30 = *blanks;
+        R_Arg30 = *blanks;
       endif;
     else;
     //   ... ansonsten ist nix zu tun.
@@ -655,18 +655,18 @@ endsr;
 //    SrchPoint     Prüfen und umsetzen Komma                 *
 //============================================================*
 
-begsr srchpoint;
+begsr SrchPoint;
 
-  if (f_isnumfld(fldl0100) = bFalse);
+  if (f_isNumFld(fldl0100) = bFalse);
   //    keine Aufbereitung für nicht-numerische Daten
   else;
 
     //  Suchen nach Komma ...
-    x = %scan(set0003.set_point: r_arg30);
+    x = %scan(set0003.SET_Point: R_Arg30);
     if (x = *zeros);
       //   Wenn nicht gefunden, dann Länge +1 ...
       //*   ' '           CHECKR    R_Arg30       X
-      x = %checkr(' ': r_arg30);
+      x = %checkr(' ': R_Arg30);
       x = x + 1;
     endif;
 
@@ -674,39 +674,39 @@ begsr srchpoint;
     x = x - 1;
     if (x > *zeros);
       //*   X             SUBST (P) R_Arg30:1     R_VorK
-      r_vork = %subst(r_arg30: 1: x);
+      R_VorK = %subst(R_Arg30: 1: x);
     else;
-      r_vork = *blanks;
+      R_VorK = *blanks;
     endif;
     //   ... und Nachkommastellen extrahieren
     x = x + 2;
     if (x <= 30);
       //*                 SUBST (P) R_Arg30:X     R_NachK
-      r_nachk = %subst(r_arg30: x);
+      R_NachK = %subst(R_Arg30: x);
     else;
-      r_nachk = *blanks;
+      R_NachK = *blanks;
     endif;
 
     //   Anzahl der Nachkommastellen auffüllen ...
     if (fldl0100.f1decp <= 0);
       //   ... keine vorhanden
-      r_nachk = *blanks;
+      R_NachK = *blanks;
     else;
       //   ... auffüllen
-      for do_x2 = 1 to %len(r_nachk);
-        r_a1 = %subst(r_nachk: fldl0100.f1decp: 1);
+      for do_x2 = 1 to %len(R_NachK);
+        r_a1 = %subst(R_NachK: fldl0100.f1decp: 1);
 
         if (r_a1 <> *blanks);
-          r_nachk = %subst(r_nachk: 1: fldl0100.f1decp);
+          R_NachK = %subst(R_NachK: 1: fldl0100.f1decp);
           leave;
         endif;
 
-        r_nachk = %trimr(r_nachk) + '0';
+        R_NachK = %trimr(R_NachK) + '0';
       endfor;
     endif;
 
     //   Ganzzahl zusammenbauen ...
-    r_arg30 = %trimr(r_vork) + r_nachk;
+    R_Arg30 = %trimr(R_VorK) + R_NachK;
   endif;
 
 endsr;
@@ -719,9 +719,9 @@ begsr prf23;
 
   dou ('1');
 
-    if (##nbrs = *zeros);
+    if (##Nbrs = *zeros);
       *in99 = '1';
-      p_sndpgmmg('USR8125': '': sds.pgmname);
+      p_sndPgmMg('USR8125': '': sds.pgmName);
       leave;
     endif;
 
@@ -749,7 +749,7 @@ begsr prf24;
       *in99 = '1';
       clear usr8126;
       usr8126.var1 = ##type;
-      p_sndpgmmg('USR8126': usr8126: sds.pgmname);
+      p_sndPgmMg('USR8126': usr8126: sds.pgmName);
       leave;
     endif;
 
@@ -773,7 +773,7 @@ begsr prf25;
     if (##case <> bTrue
         and ##case <> bFalse);
       *in99 = '1';
-      p_sndpgmmg('USR8133': '': sds.pgmname);
+      p_sndPgmMg('USR8133': '': sds.pgmName);
       leave;
     endif;
 
@@ -790,11 +790,11 @@ endsr;
 //    C_EndPgm      F3/F12 - Programm beenden                 *
 //============================================================*
 
-begsr c_endpgm;
+begsr C_EndPgm;
 
-  p_rmvpgmmg(sds.pgmname);
+  p_rmvPgmMg(sds.pgmName);
 
-  o_sgid = 'USR8100';
+  o_sgID = 'USR8100';
 
   select;
   when (workstn.aid = k_f3);
@@ -805,7 +805,7 @@ begsr c_endpgm;
     usr8100.var1 = 'Fxx';
   endsl;
 
-  o_msgdta = usr8100;
+  o_msgDta = usr8100;
 
 endsr;
 
@@ -813,14 +813,14 @@ endsr;
 //    C_Prompt      F4  - Prompt                              *
 //============================================================*
 
-begsr c_prompt;
+begsr C_Prompt;
 
   select;
-  when (scnfld = '##FIELD'
-     or ##field = set0008.set_prmt);
-    exsr pmt_field;
+  when (ScnFld = '##FIELD'
+     or ##Field = set0008.set_prmt);
+    exsr Pmt_Field;
   other;
-    p_sndpgmmg('USR8179': '': sds.pgmname);
+    p_sndPgmMg('USR8179': '': sds.pgmName);
     *in99 = bTrue;
   endsl;
 
@@ -830,17 +830,17 @@ endsr;
 //    Pmt_Field     Prompt - Field                            *
 //============================================================*
 
-begsr pmt_field;
+begsr Pmt_Field;
 
-  peek37(i_dsp80: i_copyright: yfield
-        : ymsgid: ymsgdta);
+  peek37(i_dsp80: i_copyright: YField
+        : YMsgID: YMsgDta);
 
-  if (ymsgid = *blanks);
-    ##field = yfield;
+  if (YMsgID = *blanks);
+    ##Field = YField;
   else;
-    p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
-    ymsgid = '';
-    ymsgdta = '';
+    p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
+    YMsgID = '';
+    YMsgDta = '';
     *in99 = bTrue;
   endif;
 
@@ -850,7 +850,7 @@ endsr;
 //    C_Refresh     F5  - Aktualisieren der Subfile           *
 //============================================================*
 
-begsr c_refresh;
+begsr C_Refresh;
 
   exsr fill##;
 
@@ -860,7 +860,7 @@ endsr;
 //    C_MoreKeys    F24 - Weitere Tasten                      *
 //============================================================*
 
-begsr c_morekeys;
+begsr C_MoreKeys;
 
   sfbot = sfbot + 1;
 
@@ -873,19 +873,19 @@ endsr;
 begsr fill##;
 
   //  Wenn die Datei oder das Member gewechselt hat,
-  if (i_qfile <> r_qfile
-      or i_member <> r_member);
+  if (i_qFile <> R_QFile
+      or i_member <> R_Member);
     //  ... dann die Bildschirmfelder neu
     //      initialisieren.
-    exsr initfield;
-    r_qfile = i_qfile;
-    r_member = i_member;
+    exsr InitField;
+    R_QFile = i_qFile;
+    R_Member = i_member;
   else;
   //  ... sonst die Bildschirmfelder belassen
   endif;
 
   clear f_key;
-  f_key.f_field = ##field;
+  f_key.F_Field = ##Field;
   chain %kds(f_key) fpeekfld;
   if (not %found());
     clear fldl0100;
@@ -902,16 +902,16 @@ begsr fill##;
 
   //  Sonderwerte einsetzen ...
   select;
-  when (##arg = *blanks);
-    ##arg = '*BLANKS';
-  when (##arg = *zeros);
-    ##arg = '*ZEROS';
+  when (##Arg = *blanks);
+    ##Arg = '*BLANKS';
+  when (##Arg = *zeros);
+    ##Arg = '*ZEROS';
   other;
   // ... Umsetzung nicht erforderlich
   endsl;
 
-  if (##nbrs = 0);
-    ##nbrs = set0002.set_snbrs;
+  if (##Nbrs = 0);
+    ##Nbrs = set0002.SET_SNbrs;
   else;
   //  Wert stehenlassen ...
   endif;
@@ -922,14 +922,14 @@ endsr;
 //    InitField     Initialisieren der Bildschirmfelder       *
 //============================================================*
 
-begsr initfield;
+begsr InitField;
 
-  ##field = '';
+  ##Field = '';
   ##op = '';
-  ##arg = '';
-  ##sign = '';
+  ##Arg = '';
+  ##Sign = '';
   $$wldcd = set0002.set_wldcd;
-  ##nbrs = 0;
+  ##Nbrs = 0;
   ##type = 'N';
   ##case = bFalse;
 
@@ -939,7 +939,7 @@ endsr;
 //    SetScreen     Einstellen 132/80-Zeichen Auflösung       *
 //============================================================*
 
-begsr setscreen;
+begsr SetScreen;
 
   if (i_dsp80 = '0');
     //   132-Zeichen Anzeige
@@ -956,7 +956,7 @@ begsr setscreen;
   endif;
 
   //  Prompt-Felder anzeigen ...
-  if (set0008.set_dsppmt = bTrue);
+  if (set0008.SET_DspPmt = bTrue);
     *in71 = '1';
   else;
     *in71 = '0';
@@ -968,16 +968,16 @@ endsr;
 //    GetUsrSetg    Ermitteln der Benutzervoreinstellungen    *
 //============================================================*
 
-begsr getusrsetg;
+begsr GetUsrSetg;
 
   //  Attribute der Suchfunktion
-  set0002 = f_getusrsg('*SEARCH'   );
+  set0002 = f_getUsrSg('*SEARCH'   );
 
   //  Attribute der Schlüsselaufbeeitung
-  set0003 = f_getusrsg('*ACCESSKEY');
+  set0003 = f_getUsrSg('*ACCESSKEY');
 
   //  *PROMPT
-  set0008 = f_getusrsg('*PROMPT'   );
+  set0008 = f_getUsrSg('*PROMPT'   );
 
 endsr;
 
@@ -985,24 +985,24 @@ endsr;
 //    TrimNum       Nullenunterdrückung für numerische Daten  *
 //============================================================*
 
-begsr trimnum;
+begsr TrimNum;
 
-  if (f_isnumfld(fldl0100) = bFalse);
+  if (f_isNumFld(fldl0100) = bFalse);
   //    keine Aufbereitung für nicht-numerische Daten
   else;
 
-    x = %check('0':r_arg30);
+    x = %check('0':R_Arg30);
     if (x > 0);
-      r_arg30 = %subst(r_arg30: x);
+      R_Arg30 = %subst(R_Arg30: x);
     else;
       // Nur führende Nullen vorhanden
-      r_arg30 = *blanks;
+      R_Arg30 = *blanks;
     endif;
 
     // Argument bestand nur aus führenden Nullen
     // oder nur aus *BLANKS ...
-    if (r_arg30 = *blanks);
-      r_arg30 = '0';
+    if (R_Arg30 = *blanks);
+      R_Arg30 = '0';
     else;
     // keine Korrektur der Aufbereitung
     // erforderlich
@@ -1016,17 +1016,17 @@ endsr;
 //    ChkNumData    auf gültige numerische Daten prüfen       *
 //============================================================*
 
-begsr chknumdata;
+begsr ChkNumData;
 
-  if (f_isnumfld(fldl0100) = bFalse);
+  if (f_isNumFld(fldl0100) = bFalse);
   //    keine Prüfung für nicht-numerische Daten
   else;
 
-    if (%check(NUMERIC_DIGITS: r_arg30) > 0);
+    if (%check(NUMERIC_DIGITS: R_Arg30) > 0);
       *in99 = bTrue;
       clear usr8138.var1;
-      usr8138.var1 = ##field;
-      p_sndpgmmg('USR8138': usr8138: sds.pgmname);
+      usr8138.var1 = ##Field;
+      p_sndPgmMg('USR8138': usr8138: sds.pgmName);
     endif;
 
   endif;
@@ -1037,21 +1037,21 @@ endsr;
 //    ExpandNum     numerische Daten rechtsbündig setzen      *
 //============================================================*
 
-begsr expandnum;
+begsr ExpandNum;
 
-  if (f_isnumfld(fldl0100) = bFalse);
+  if (f_isNumFld(fldl0100) = bFalse);
   //    keine Aufbereitung für nicht-numerische Daten
   else;
 
-    x = %checkr(' ': r_arg30);
+    x = %checkr(' ': R_Arg30);
     x = 30 - x;
     if (x > 0);
-      r_arg30 = f_space(x) +  r_arg30;
+      R_Arg30 = f_space(x) +  R_Arg30;
     else;
     // ... ist bereits rechtbündig
     endif;
 
-    r_arg30 = %xlate(' ': '0': r_arg30);
+    R_Arg30 = %xlate(' ': '0': R_Arg30);
 
   endif;
 
@@ -1061,32 +1061,32 @@ endsr;
 //    First         Initialisierung                           *
 //============================================================*
 
-begsr first;
+begsr First;
 
   // - Öffnen der Dateien
   open peekfld;
   open peek17fm;
 
   // - Benutzervoreinstellungen
-  exsr getusrsetg;
+  exsr GetUsrSetg;
 
   // - Füllen der Bildschirmfelder
   exsr fill##;
 
   // - Programm initialisieren
-  p_rmvpgmmg(sds.pgmname);
+  p_rmvPgmMg(sds.pgmName);
 
-  o_sgid = *blanks;
-  o_msgdta = *blanks;
+  o_sgID = *blanks;
+  o_msgDta = *blanks;
 
   // - Darstellung der Befehlstasten
   sfbot = 1;
 
   // - Einstellen der Bildschirmauflösung 80/132-Zeichen
-  exsr setscreen;
+  exsr SetScreen;
 
   // - Copyright
-  p_sndpgmmg('USR9999': i_copyright: sds.pgmname);
+  p_sndPgmMg('USR9999': i_copyright: sds.pgmName);
 
 endsr;
 
@@ -1104,13 +1104,13 @@ begsr inzsr;
 
   PGMQ = '*';
 
-  peek21_name = f_pgmcalln('PEEK21');
-  peek23_name = f_pgmcalln('PEEK23');
-  peek37_name = f_pgmcalln('PEEK37');
+  peek21_name = f_pgmCallN('PEEK21');
+  peek23_name = f_pgmCallN('PEEK23');
+  peek37_name = f_pgmCallN('PEEK37');
 
-  peek23(sds.pgmname: '*ALL': 0
-        : yfkeys: ynbrofkeys);
-  scrnfkeys = %subarr(yfkeys: 1);
+  peek23(sds.pgmName: '*ALL': 0
+        : yFKeys: yNbrOfKeys);
+  ScrnFKeys = %subarr(yFKeys: 1);
 
 endsr;
 
@@ -1118,12 +1118,12 @@ endsr;
 //  Program error handler                                     *
 //============================================================*
 
-dcl-proc errorhandler;
+dcl-proc errorHandler;
   dcl-pi *n;
-    i_condtoken    likeds(cee_fc_t) value;
-    i_pcommarea    int(10) value;
+    i_condToken    likeds(cee_fc_t) value;
+    i_pCommArea    int(10) value;
     o_action       int(10);
-    o_newcondtoken likeds(cee_fc_t);
+    o_newCondToken likeds(cee_fc_t);
   end-pi;
 
   dump;

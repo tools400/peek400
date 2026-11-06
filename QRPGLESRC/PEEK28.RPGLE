@@ -39,32 +39,32 @@
 /copy QCOPYLE,PPEEK53
 /copy QCOPYLE,PPEEK58
 
-dcl-ds yrcvvar len(128) inz;
-  rcvnbrret int(10);
-  rcvoffset int(10);
-  rcvdata   char(120);
+dcl-ds YRcvVar len(128) inz;
+  RcvNbrRet int(10);
+  RcvOffset int(10);
+  RcvData   char(120);
 end-ds;
 
-dcl-ds ysystemval len(128) inz;
-  systemval  char(10);
-  typeofdata char(1);
-  infstatus  char(1);
-  lenofdata  int(10);
-  sysvaldata char(112);
+dcl-ds YSystemVal len(128) inz;
+  SystemVal  char(10);
+  TypeOfData char(1);
+  infStatus  char(1);
+  LenOfData  int(10);
+  SysValData char(112);
 end-ds;
 
 dcl-s x like(int4_t) inz;
-dcl-ds errcode likeds(errcode_t) inz;
+dcl-ds errCode likeds(errCode_t) inz;
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
 //*******************************************************************
 dcl-pi peek28;
   i_attr      like(attr_t) const;
-  i_nomsg     like(bool_t) const;
-  o_attrlen   like(int4_t);
-  o_attrtype  like(attrtype_t);
-  o_attrvalue like(attrvalue_t);
+  i_noMsg     like(bool_t) const;
+  o_attrLen   like(int4_t);
+  o_attrType  like(attrType_t);
+  o_attrValue like(attrValue_t);
 end-pi;
 
 //---------------------------------------------------*
@@ -74,24 +74,24 @@ ceehdlr(%paddr('errorHandler')
        : *null: *omit);
 
 // - Meldung
-if (i_nomsg = bTrue);
-  p_sndstsmg('USR8157': ' ');
+if (i_noMsg = bTrue);
+  p_sndStsMg('USR8157': ' ');
 else;
 //        keine Statusmeldung ausgeben
 endif;
 
-clear errcode;
-errcode.bytprv = %size(errcode);
+clear errCode;
+errCode.bytPrv = %size(errCode);
 
-qwcrsval(yrcvvar: %size(yrcvvar): 1
-        : i_attr: errcode);
+qwcrsval(YRcvVar: %size(YRcvVar): 1
+        : i_attr: errCode);
 
-if (errcode.bytavl = 0);
-  exsr getattr;
+if (errCode.bytAvl = 0);
+  exsr GetAttr;
 else;
-  o_attrlen = 0;
-  o_attrtype = '';
-  o_attrvalue = '';
+  o_attrLen = 0;
+  o_attrType = '';
+  o_attrValue = '';
 endif;
 
 return;
@@ -100,17 +100,17 @@ return;
 //  GetAttr -  Abrufen der Attributwertes             *
 //====================================================*
 
-begsr getattr;
+begsr GetAttr;
 
-  x = rcvoffset + 1;
-  ysystemval = %subst(yrcvvar: x);
+  x = RcvOffset + 1;
+  YSystemVal = %subst(YRcvVar: x);
 
-  o_attrlen = lenofdata;
-  o_attrtype = typeofdata;
+  o_attrLen = LenOfData;
+  o_attrType = TypeOfData;
 
   x = 1;
-  o_attrvalue =
-   %subst(sysvaldata: x: o_attrlen);
+  o_attrValue =
+   %subst(SysValData: x: o_attrLen);
 
 endsr;
 
@@ -118,12 +118,12 @@ endsr;
 //  Program error handler                                     *
 //============================================================*
 
-dcl-proc errorhandler;
+dcl-proc errorHandler;
   dcl-pi *n;
-    i_condtoken    likeds(cee_fc_t) value;
-    i_pcommarea    int(10) value;
+    i_condToken    likeds(cee_fc_t) value;
+    i_pCommArea    int(10) value;
     o_action       int(10);
-    o_newcondtoken likeds(cee_fc_t);
+    o_newCondToken likeds(cee_fc_t);
   end-pi;
 
   dump;

@@ -10,18 +10,18 @@
 //  (data structure can be used within the calling program
 //  to splitt XLIST into its units.)
 dcl-ds dbrl0200_t qualified template;
-  b2fnmeused   char(10);
-  b2lnmeused   char(10);
-  b2mnmeused   char(10);
-  b2depfile    char(10);
-  b2deplib     char(10);
-  b2depmbr     char(10);
-  b2deptype    char(1);
-  b2res_01     char(3);
-  b2joinrnbr   int(10);
-  b2joinfnbr   int(10);
-  b2cnstnmelib char(10);
-  b2cnstnmelen int(10);
-  b2cnstnme    char(258);
+  B2FNmeUsed   char(10);
+  B2LNmeUsed   char(10);
+  B2MNmeUsed   char(10);
+  B2DepFile    char(10);
+  B2DepLib     char(10);
+  B2DepMbr     char(10);
+  B2DepType    char(1);
+  B2Res_01     char(3);
+  B2JoinRNbr   int(10);
+  B2JoinFNbr   int(10);
+  B2CnstNmeLib char(10);
+  B2CnstNmeLen int(10);
+  B2CnstNme    char(258);
 end-ds;
 

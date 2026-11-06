@@ -10,9 +10,9 @@ dcl-pr exit04 extpgm(exit04_name);
   gi_event     char(10) const;
   gi_user      char(10) const;
   gi_timestamp timestamp const;
-  gi_rcdnbr    int(10) const;
+  gi_rcdNbr    int(10) const;
   gi_size      int(10) const;
-  gi_bimage    pointer const;
-  gi_aimage    pointer const;
+  gi_bImage    pointer const;
+  gi_aImage    pointer const;
 end-pr;
 

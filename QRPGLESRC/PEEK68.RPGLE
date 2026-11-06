@@ -27,7 +27,7 @@
 /copy QCOPYLE,H_SPEC
 /copy QCOPYLE,COPYRIGHT
 
-dcl-f peek68fm workstn(*ext) usage(*input: *output) usropn infds(workstn) sfile(pbsfl: sflrec);
+dcl-f peek68fm workstn(*ext) usage(*input: *output) usropn infds(workstn) sfile(pbsfl: SflRec);
 
 dcl-ds workstn likeds(workstn_t);
 
@@ -55,45 +55,45 @@ dcl-ds workstn likeds(workstn_t);
 /copy QCOPYLE,PPEEK53
 /copy QCOPYLE,PPEEK58
 
-dcl-s yfkeys char(18) dim(32);
-dcl-s ynbrofkeys like(int4_t);
-dcl-s ymsgid char(7);
-dcl-s ymsgdta char(512);
+dcl-s yFKeys char(18) dim(32);
+dcl-s yNbrOfKeys like(int4_t);
+dcl-s YMsgID char(7);
+dcl-s YMsgDta char(512);
 
-dcl-s ypgmcmd char(10);
-dcl-s ycmddta like(pgmcmddt_t);
+dcl-s YPgmCmd char(10);
+dcl-s YCmdDta like(pgmCmdDt_t);
 
-dcl-s ychoice char(75) dim(32);
-dcl-s ynbrofch like(int4_t);
+dcl-s YChoice char(75) dim(32);
+dcl-s YNbrOfCh like(int4_t);
 
-dcl-s issflerror char(1) inz(bFalse);
+dcl-s IsSflError char(1) inz(bFalse);
 
-dcl-s sftop like(int4_t);
-dcl-s sflpage like(int4_t);
-dcl-s sflpagedds like(sflpage);
-dcl-s sflrec like(sflpage);
-dcl-s sflnbrrcd like(sflpage);
+dcl-s SFTop like(int4_t);
+dcl-s SflPage like(int4_t);
+dcl-s SflPageDDS like(SflPage);
+dcl-s SflRec like(SflPage);
+dcl-s SflNbrRcd like(SflPage);
 dcl-s sfbot like(int4_t);
-dcl-c nbrfkeys 2;
-dcl-s sfl_cmd char(10);
+dcl-c NbrFKeys 2;
+dcl-s Sfl_Cmd char(10);
 
-dcl-s peek21_name like(pgmcalln_t);
-dcl-s peek23_name like(pgmcalln_t);
-dcl-s peek27_name like(pgmcalln_t);
+dcl-s peek21_name like(pgmCallN_t);
+dcl-s peek23_name like(pgmCallN_t);
+dcl-s peek27_name like(pgmCallN_t);
 
-dcl-s iseof like(bool_t) inz(bFalse);
-dcl-s key like(key_t);
-dcl-s data like(set0000_t);
+dcl-s IsEOF like(bool_t) inz(bFalse);
+dcl-s key like(KEY_t);
+dcl-s data like(SET0000_t);
 
-dcl-s wrk_msgid like(msgid_t);
-dcl-s wrk_msgtxt like(msgdta_t);
+dcl-s wrk_MsgID like(msgId_t);
+dcl-s wrk_MsgTxt like(msgDta_t);
 
-dcl-ds usrkey qualified inz;
-  section like(section_t);
-  key     like(key_t);
+dcl-ds usrKey qualified inz;
+  section like(SECTION_t);
+  key     like(KEY_t);
 end-ds;
 
-dcl-ds sflline qualified inz;
+dcl-ds sflLine qualified inz;
   opt  char(2);
   text char(28) pos(6);
 end-ds;
@@ -106,10 +106,10 @@ dcl-s isInzSr like(bool_t) inz(bFalse);
 dcl-pi peek68;
   i_dsp80     like(dsp80_t) const;
   i_pgm       like(pgm_t) const;
-  i_copyright like(copyrght_t) const;
-  o_sflopt    like(sfpau_t);
-  o_msgid     like(msgid_t);
-  o_msgdta    like(msgdta_t);
+  i_copyright like(copyright_t) const;
+  o_sflOpt    like(sfpau_t);
+  o_msgID     like(msgId_t);
+  o_msgDta    like(msgDta_t);
 end-pi;
 
 dcl-s do_x2 packed(7);
@@ -121,7 +121,7 @@ ceehdlr(%paddr('errorHandler')
 
 exsr inzsr;
 
-exsr first;
+exsr First;
 
 //---------------------------------------------------*
 //  Schleife für Programmbearbeitung
@@ -146,48 +146,48 @@ dow ('1');
   endif;
 
   //  Anzeigen der Einzelauswahlen
-  if (sftop > 32
-      or sftop > ynbrofch);
-    sftop = 1;
+  if (SFTop > 32
+      or SFTop > YNbrOfCh);
+    SFTop = 1;
   endif;
-  $$choice = ychoice(sftop);
+  $$choice = YChoice(SFTop);
 
   //  Trennlinie
   write pbbot#0;
   //  Anzeigen der Befehlstasten
   select;
   when ((sfbot = 2) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
     write pbbot#2;
   when ((sfbot = 3) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
     write pbbot#3;
   when ((sfbot = 4) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
     write pbbot#4;
   when ((sfbot = 5) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
     write pbbot#5;
   when ((sfbot = 6) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
     write pbbot#6;
   when ((sfbot = 7) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
     write pbbot#7;
   when ((sfbot = 8) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
     write pbbot#8;
   when ((sfbot = 9) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
     write pbbot#9;
   when ((sfbot = 10) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
     write pbbot#10;
   when ((sfbot = 11) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
     write pbbot#11;
   when ((sfbot = 12) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
     write pbbot#12;
   other;
     write pbbot#1;
@@ -199,58 +199,58 @@ dow ('1');
   *in70 = '0';
 
   //  Nachrichten löschen
-  p_rmvpgmmg(sds.pgmname);
+  p_rmvPgmMg(sds.pgmName);
 
   //  Aktuelle Satz-Nr.
-  if (sflcsr > *zeros);
-    sfsanr = sflcsr;
+  if (SflCsr > *zeros);
+    sfsanr = SflCsr;
   endif;
 
   //  Mappen der gedrückten Taste
   //  in Programmbefehl
-  peek21(workstn.aid: sds.pgmname
-        : ypgmcmd: ycmddta: ymsgid: ymsgdta);
-  if (ymsgid <> *blanks);
-    p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
-    ymsgid = '';
-    ymsgdta = '';
+  peek21(workstn.aid: sds.pgmName
+        : YPgmCmd: YCmdDta: YMsgID: YMsgDta);
+  if (YMsgID <> *blanks);
+    p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
+    YMsgID = '';
+    YMsgDta = '';
     iter;
   endif;
 
   //  Abfragen der Befehlstasten
   select;
-  when (ypgmcmd = '*EXIT');
-    exsr c_endpgm;
+  when (YPgmCmd = '*EXIT');
+    exsr C_EndPgm;
     leave;
-  when (ypgmcmd = '*REFRESH');
-    exsr c_refresh;
+  when (YPgmCmd = '*REFRESH');
+    exsr C_Refresh;
     iter;
-  when (ypgmcmd = '*CANCEL');
-    exsr c_endpgm;
+  when (YPgmCmd = '*CANCEL');
+    exsr C_EndPgm;
     leave;
-  when (ypgmcmd = '*TOP');
-    exsr c_top;
+  when (YPgmCmd = '*TOP');
+    exsr C_Top;
     iter;
-  when (ypgmcmd = '*BOT');
-    exsr c_bot;
+  when (YPgmCmd = '*BOT');
+    exsr C_Bot;
     iter;
-  when (ypgmcmd = '*MOREOPT');
-    exsr c_moreopt;
-  when (ypgmcmd = '*MOREKEYS');
-    exsr c_morekeys;
-  when (ypgmcmd = '*ENTER');
-    exsr c_enter;
-    if (o_sflopt = *blanks);
+  when (YPgmCmd = '*MOREOPT');
+    exsr C_MoreOpt;
+  when (YPgmCmd = '*MOREKEYS');
+    exsr C_MoreKeys;
+  when (YPgmCmd = '*ENTER');
+    exsr C_Enter;
+    if (o_sflOpt = *blanks);
     //  ... keine Auswahl getroffen, weiter machen
     else;
       leave;
     endif;
-  when (ypgmcmd = '*PAGEUP');
-  when (ypgmcmd = '*PAGEDOWN');
+  when (YPgmCmd = '*PAGEUP');
+  when (YPgmCmd = '*PAGEDOWN');
 
   other;
     //  Falsche Taste gedrückt
-    p_wrongkey(workstn.aid: sds.pgmname);
+    p_wrongKey(workstn.aid: sds.pgmName);
     iter;
   endsl;
 
@@ -264,9 +264,9 @@ return;
 //    C_Enter       "Datenfreigabetaste"                      *
 //============================================================*
 
-begsr c_enter;
+begsr C_Enter;
 
-  exsr vreadc;
+  exsr VReadC;
 
 endsr;
 
@@ -274,28 +274,28 @@ endsr;
 //    VReadC        Verarbeiten der Subfileauswahlen          *
 //============================================================*
 
-begsr vreadc;
+begsr VReadC;
 
-  issflerror = bFalse;
-  o_sflopt = *blanks;
+  IsSflError = bFalse;
+  o_sflOpt = *blanks;
 
   if (*in80 = *off);
   //   keine Einträge in Subfile vorhanden ...
   else;
 
-    for do_x2 = 1 to sflnbrrcd;
+    for do_x2 = 1 to SflNbrRcd;
       readc pbsfl;
       *in11 = %eof;
       if (*in11 = *on);
         leave;
       endif;
 
-      chain sflrec pbsfl;
+      chain SflRec pbsfl;
       *in11 = not %found;
 
       //  Cursorpositionierung ...
-      if (issflerror = bFalse);
-        sflcsr = sflrec;
+      if (IsSflError = bFalse);
+        SflCsr = SflRec;
       else;
       //  Subfile nicht neu positionieren
       endif;
@@ -304,43 +304,43 @@ begsr vreadc;
       sfpau = %triml(sfpau);
 
       //  Zuordnung AUSWAHL => Befehl ...
-      peek21('#' + sfpau: sds.pgmname
-            : ypgmcmd: ycmddta: ymsgid: ymsgdta);
-      if (ymsgid <> *blanks);
+      peek21('#' + sfpau: sds.pgmName
+            : YPgmCmd: YCmdDta: YMsgID: YMsgDta);
+      if (YMsgID <> *blanks);
         //  Fehlermeldung ...
-        p_sndpgmmg('USR8110': sfpau: sds.pgmname);
-        exsr vsfpauerr;
+        p_sndPgmMg('USR8110': sfpau: sds.pgmName);
+        exsr VSfpauErr;
         update pbsfl;
-        issflerror = bTrue;
+        IsSflError = bTrue;
         iter;
       endif;
 
       //----------------------------*
       //  Ausführen SFL-Befehl ...  *
       //----------------------------*
-      sfl_cmd = ypgmcmd;
+      Sfl_Cmd = YPgmCmd;
 
       select;
-      when (sfl_cmd = '*NONE');
+      when (Sfl_Cmd = '*NONE');
         //  Leere Auswahl: Markierung eines früheren Fehlers
         //  löschen
-        exsr vsfpauclr;
-      when (sfl_cmd = '*SELECT');
+        exsr VSfpauClr;
+      when (Sfl_Cmd = '*SELECT');
         //  Die erste Auswahl merken. Ausgeführt wird sie nur,
         //  wenn keine Zeile eine ungültige Auswahl enthält.
-        if (o_sflopt = *blanks);
-          exsr vpos;
+        if (o_sflOpt = *blanks);
+          exsr VPos;
         endif;
         *in85 = '0'; // DSPATR(RI)
-        exsr vsfpauchg;
+        exsr VSfpauChg;
       other;
         //  Unbekannter Programmbefehl
         clear usr8110;
-        usr8110.var1 = ypgmcmd;
-        p_sndpgmmg('USR8110': usr8110: sds.pgmname);
-        exsr vsfpauerr;
+        usr8110.var1 = YPgmCmd;
+        p_sndPgmMg('USR8110': usr8110: sds.pgmName);
+        exsr VSfpauErr;
         update pbsfl;
-        issflerror = bTrue;
+        IsSflError = bTrue;
         iter;
       endsl;
 
@@ -349,9 +349,9 @@ begsr vreadc;
 
     //  Ungültige Auswahl: keine Auswahl übernehmen und den
     //  Cursor auf die erste fehlerhafte Zeile setzen
-    if (issflerror = bTrue);
-      o_sflopt = *blanks;
-      sfsanr = sflcsr;
+    if (IsSflError = bTrue);
+      o_sflOpt = *blanks;
+      sfsanr = SflCsr;
     endif;
 
   endif;
@@ -362,13 +362,13 @@ endsr;
 //    C_EndPgm      F3/F12 - Programm beenden                 *
 //============================================================*
 
-begsr c_endpgm;
+begsr C_EndPgm;
 
-  p_rmvpgmmg(sds.pgmname);
+  p_rmvPgmMg(sds.pgmName);
 
-  o_msgid = 'USR8100';
-  usr8100.var1 = ypgmcmd;
-  o_msgdta = usr8100;
+  o_msgID = 'USR8100';
+  usr8100.var1 = YPgmCmd;
+  o_msgDta = usr8100;
 
 endsr;
 
@@ -376,20 +376,20 @@ endsr;
 //    C_Refresh     F5  - Aktualisieren der Subfile           *
 //============================================================*
 
-begsr c_refresh;
+begsr C_Refresh;
 
   // - Subfile neu aufbauen
-  exsr pbinit;
+  exsr PBInit;
   //   Einlesen Subfileauswahlen
-  exsr pbinitkey;
-  exsr pbsetll;
-  exsr pbreadup;
+  exsr PBInitKey;
+  exsr PBSetLL;
+  exsr PBReadUp;
   //   Einlesen Kurzbefehle
   if (i_pgm = 'PEEK05');
-    exsr pbseperator;
-    exsr pbinitkeycmd;
-    exsr pbsetll;
-    exsr pbreadup;
+    exsr PBSeperator;
+    exsr PBInitKeyCmd;
+    exsr PBSetLL;
+    exsr PBReadUp;
   endif;
 
 endsr;
@@ -398,7 +398,7 @@ endsr;
 //    C_Top         F17 - Anfang der Subfile                  *
 //============================================================*
 
-begsr c_top;
+begsr C_Top;
 
   sfsanr = 1;
 
@@ -408,9 +408,9 @@ endsr;
 //    C_Bot         F18 - Ende der Subfile                    *
 //============================================================*
 
-begsr c_bot;
+begsr C_Bot;
 
-  sfsanr = sflnbrrcd;
+  sfsanr = SflNbrRcd;
 
 endsr;
 
@@ -418,9 +418,9 @@ endsr;
 //    C_MoreOpt     F23 - Weitere Auswahlen                   *
 //============================================================*
 
-begsr c_moreopt;
+begsr C_MoreOpt;
 
-  sftop = sftop + 1;
+  SFTop = SFTop + 1;
 
 endsr;
 
@@ -428,7 +428,7 @@ endsr;
 //    C_MoreKeys    F24 - Weitere Tasten                      *
 //============================================================*
 
-begsr c_morekeys;
+begsr C_MoreKeys;
 
   sfbot = sfbot + 1;
 
@@ -438,10 +438,10 @@ endsr;
 //    VPos          Verarbeiten der Eingaben                  *
 //============================================================*
 
-begsr vpos;
+begsr VPos;
 
-  sflline = $$line;
-  o_sflopt = sflline.opt;
+  sflLine = $$line;
+  o_sflOpt = sflLine.opt;
 
 endsr;
 
@@ -449,7 +449,7 @@ endsr;
 //    VSfpauClr     Löschen Subfileauswahl                    *
 //============================================================*
 
-begsr vsfpauclr;
+begsr VSfpauClr;
 
   sfpau = *blanks;
   *in85 = '0'; // DSPATR(RI)
@@ -461,10 +461,10 @@ endsr;
 //    VSfpauErr     Anzeigen fehlerhafter Subfileauswahl      *
 //============================================================*
 
-begsr vsfpauerr;
+begsr VSfpauErr;
 
   *in85 = '1'; // DSPATR(RI)
-  exsr vsfpauchg;
+  exsr VSfpauChg;
 
 endsr;
 
@@ -473,7 +473,7 @@ endsr;
 //                  markieren                                 *
 //============================================================*
 
-begsr vsfpauchg;
+begsr VSfpauChg;
 
   *in84 = '1'; // SFLNXTCHG
 
@@ -484,10 +484,10 @@ endsr;
 //                  zum Füllen der Subfile                    *
 //============================================================*
 
-begsr pbinitkey;
+begsr PBInitKey;
 
-  usrkey.section = '*' + i_pgm;
-  usrkey.key     = '';
+  usrKey.section = '*' + i_pgm;
+  usrKey.key     = '';
 
 endsr;
 
@@ -496,10 +496,10 @@ endsr;
 //                  zum Füllen der Subfile (Kurzbefehle)      *
 //============================================================*
 
-begsr pbinitkeycmd;
+begsr PBInitKeyCmd;
 
-  usrkey.section = '*CMD';
-  usrkey.key     = '';
+  usrKey.section = '*CMD';
+  usrKey.key     = '';
 
 endsr;
 
@@ -508,7 +508,7 @@ endsr;
 //                  der nächsten Seite                        *
 //============================================================*
 
-begsr pbinit;
+begsr PBInit;
 
   *in89 = '0';
   write msgctl;
@@ -521,8 +521,8 @@ begsr pbinit;
 
   *in82 = '0'; // SFLCLR
 
-  sflrec = *zeros;
-  sflnbrrcd = *zeros;
+  SflRec = *zeros;
+  SflNbrRcd = *zeros;
 
 endsr;
 
@@ -530,11 +530,11 @@ endsr;
 //    PBReadUP      Vorwärts füllen der Subfile               *
 //============================================================*
 
-begsr pbreadup;
+begsr PBReadUp;
 
   dow ('1');
-    iseof = f_readeusr(usrkey.section: key: data);
-    if (iseof = bTrue);
+    IsEOF = f_readeUsr(usrKey.section: key: data);
+    if (IsEOF = bTrue);
       leave;
     endif;
 
@@ -542,13 +542,13 @@ begsr pbreadup;
       iter;
     endif;
 
-    exsr pbfill;
+    exsr PBFill;
 
-    sflrec = sflrec + 1;
+    SflRec = SflRec + 1;
     write pbsfl;
-    sflnbrrcd = sflrec;
+    SflNbrRcd = SflRec;
 
-    if (sflrec >= sflpage);
+    if (SflRec >= SflPage);
       leave;
     endif;
 
@@ -560,28 +560,28 @@ endsr;
 //    PBSeperator   Einfügen Trennlinie für Kurzbefehle       *
 //============================================================*
 
-begsr pbseperator;
+begsr PBSeperator;
 
-  if (sflrec >= sflpage);
+  if (SflRec >= SflPage);
     leavesr;
   endif;
 
-  clear sflline;
-  sflline = f_msgtext('TXT0141': '');
-  $$line = sflline;
+  clear sflLine;
+  sflLine = f_msgText('TXT0141': '');
+  $$line = sflLine;
 
   //  ... anzeigen Subfile
   *in80 = '1'; // SFLDSP
 
   //  ... Löschen Subfileauswahl
-  exsr vsfpauclr;
+  exsr VSfpauClr;
 
   //  ... Sperren Eingabefeld
   *in90 = '1'; // SFPAU(PR)
 
-  sflrec = sflnbrrcd + 1;
+  SflRec = SflNbrRcd + 1;
   write pbsfl;
-  sflnbrrcd = sflrec;
+  SflNbrRcd = SflRec;
 
 endsr;
 
@@ -589,21 +589,21 @@ endsr;
 //    PBFill        Füllen Subfilesatz                        *
 //============================================================*
 
-begsr pbfill;
+begsr PBFill;
 
-  wrk_msgid = f_mapcmdtomsg(data: usrkey.section);
-  if (wrk_msgid <> '');
-    wrk_msgid  = 'KEY' + wrk_msgid;
-    wrk_msgtxt = f_msgtext(wrk_msgid: ' ');
+  wrk_MsgID = f_mapCmdToMsg(data: usrKey.section);
+  if (wrk_MsgID <> '');
+    wrk_MsgID  = 'KEY' + wrk_MsgID;
+    wrk_MsgTxt = f_msgText(wrk_MsgID: ' ');
   else;
     //  Kurzbefehl ohne eigene Nachricht: Befehl anzeigen
-    wrk_msgtxt = data;
+    wrk_MsgTxt = data;
   endif;
 
-  clear sflline;
-  sflline.opt  = key;
-  sflline.text = wrk_msgtxt;
-  $$line = sflline;
+  clear sflLine;
+  sflLine.opt  = key;
+  sflLine.text = wrk_MsgTxt;
+  $$line = sflLine;
 
   //  ... anzeigen Subfile
   *in80 = '1'; // SFLDSP
@@ -612,7 +612,7 @@ begsr pbfill;
   *in90 = '0'; // SFPAU(PR)
 
   //  ... Löschen Subfileauswahl
-  exsr vsfpauclr;
+  exsr VSfpauClr;
 
 endsr;
 
@@ -620,9 +620,9 @@ endsr;
 //    PBSetLL       Setzen Dateizeiger                        *
 //============================================================*
 
-begsr pbsetll;
+begsr PBSetLL;
 
-  p_setllusr(usrkey.section: usrkey.key);
+  p_setllUsr(usrKey.section: usrKey.key);
 
 endsr;
 
@@ -630,7 +630,7 @@ endsr;
 //    SetScreen     Einstellen 132/80-Zeichen Auflösung       *
 //============================================================*
 
-begsr setscreen;
+begsr SetScreen;
 
   if (i_dsp80 = '0');
     //   132-Zeichen Anzeige
@@ -644,8 +644,8 @@ begsr setscreen;
     pos = 23;
   endif;
 
-  sflpage = *hival;
-  sflpagedds = 6;
+  SflPage = *hival;
+  SflPageDDS = 6;
 
 endsr;
 
@@ -653,37 +653,37 @@ endsr;
 //    First         Initialisierung                           *
 //============================================================*
 
-begsr first;
+begsr First;
 
   // - Öffnen der Dateien
   open peek68fm;
 
   // - Programm initialisieren
-  p_rmvpgmmg(sds.pgmname);
+  p_rmvPgmMg(sds.pgmName);
 
   // - Rückkehrcode
-  o_sflopt = *blanks;
-  o_msgid = *blanks;
-  o_msgdta = *blanks;
+  o_sflOpt = *blanks;
+  o_msgID = *blanks;
+  o_msgDta = *blanks;
 
   // - Darstellung der Subfile
   sflmde = '1';
 
   // - Darstellung der Befehlstasten
-  sftop = 1;
+  SFTop = 1;
   sfbot = 1;
 
   // - Einstellen der Bildschirmauflösung 80/132-Zeichen
-  exsr setscreen;
+  exsr SetScreen;
 
   // - Anzuzeigender Subfilesatz
   sfsanr = 1;
 
   // - Subfile füllen
-  exsr c_refresh;
+  exsr C_Refresh;
 
   // - Copyright
-  p_sndpgmmg('USR9999': i_copyright: sds.pgmname);
+  p_sndPgmMg('USR9999': i_copyright: sds.pgmName);
 
 endsr;
 
@@ -701,15 +701,15 @@ begsr inzsr;
 
   PGMQ = '*';
 
-  peek21_name = f_pgmcalln('PEEK21');
-  peek23_name = f_pgmcalln('PEEK23');
-  peek27_name = f_pgmcalln('PEEK27');
+  peek21_name = f_pgmCallN('PEEK21');
+  peek23_name = f_pgmCallN('PEEK23');
+  peek27_name = f_pgmCallN('PEEK27');
 
-  peek23(sds.pgmname: '*ALL': 0
-        : yfkeys: ynbrofkeys);
-  scrnfkeys = %subarr(yfkeys: 1);
+  peek23(sds.pgmName: '*ALL': 0
+        : yFKeys: yNbrOfKeys);
+  ScrnFKeys = %subarr(yFKeys: 1);
 
-  peek27(sds.pgmname: ychoice: ynbrofch: *omit: %len($$choice));
+  peek27(sds.pgmName: YChoice: YNbrOfCh: *omit: %len($$choice));
 
 endsr;
 
@@ -717,12 +717,12 @@ endsr;
 //  Program error handler                                     *
 //============================================================*
 
-dcl-proc errorhandler;
+dcl-proc errorHandler;
   dcl-pi *n;
-    i_condtoken    likeds(cee_fc_t) value;
-    i_pcommarea    int(10) value;
+    i_condToken    likeds(cee_fc_t) value;
+    i_pCommArea    int(10) value;
     o_action       int(10);
-    o_newcondtoken likeds(cee_fc_t);
+    o_newCondToken likeds(cee_fc_t);
   end-pi;
 
   dump;

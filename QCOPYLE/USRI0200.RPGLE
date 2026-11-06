@@ -1,19 +1,19 @@
 **free
 
-dcl-ds usri0200_t qualified template;
-  bytret       int(10);
-  bytavl       int(10);
+dcl-ds USRI0200_t qualified template;
+  bytRet       int(10);
+  bytAvl       int(10);
   usrprf       char(10);
-  usrcls       char(10);
-  spcauts      char(15);
-  grpprf       char(10);
+  usrCls       char(10);
+  spcAuts      char(15);
+  grpPrf       char(10);
   owner        char(10);
-  grpaut       char(10);
-  lmtcap       char(10);
-  grpauttype   char(10);
+  grpAut       char(10);
+  lmtCap       char(10);
+  grpAutType   char(10);
   reserved_01  char(3);
-  ofssupplgrps int(10);
-  numsupplgrps int(10);
-  supplgrps    char(10) dim(10);
+  ofsSupplGrps int(10);
+  numSupplGrps int(10);
+  supplGrps    char(10) dim(10);
 end-ds;
 

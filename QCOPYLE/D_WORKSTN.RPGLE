@@ -1,18 +1,18 @@
 **free
 
 //  Work fields for calculating the cursor position
-dcl-ds cursorposition_t qualified template;
+dcl-ds cursorPosition_t qualified template;
   row    int(10);
   column int(10);
 end-ds;
 
 dcl-ds workstn_t qualified template;
-  isOpen  char(1) pos(9);
+  IsOpen  char(1) pos(9);
   status  zoned(5) pos(11);
-  numrows int(5) pos(152);
-  offset  int(5) pos(241);
+  numRows int(5) pos(152);
+  Offset  int(5) pos(241);
   aid     char(1) pos(369);
-  csrpos  int(5);
+  csrPos  int(5);
 end-ds;
 
 //====================================================*

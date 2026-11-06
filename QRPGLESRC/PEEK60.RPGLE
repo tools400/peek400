@@ -38,16 +38,16 @@
 //  den Aufrufen von p_showprogressmeter() passen: PEEK08 4, PEEK15 2 und
 //  PEEK16 7 (je Marke der Vorlage PEEKSRC/PGM: RNM1 zwei, RNM2, TSCN,
 //  FSCN und ISO je einen; ISO steht zweimal in der Vorlage).
-dcl-c cnumpasses_peek08 4;
-dcl-c cnumpasses_peek15 2;
-dcl-c cnumpasses_peek16 7;
+dcl-c cNumPasses_PEEK08 4;
+dcl-c cNumPasses_PEEK15 2;
+dcl-c cNumPasses_PEEK16 7;
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
 //*******************************************************************
 dcl-pi peek60;
-  i_alwlc     like(bool_t) const;
-  o_numpasses like(int4_t);
+  i_alwLC     like(bool_t) const;
+  o_numPasses like(int4_t);
 end-pi;
 
 //---------------------------------------------------*
@@ -57,18 +57,18 @@ ceehdlr(%paddr('errorHandler')
        : *null: *omit);
 
 //  Steuerung: Generieren Display File und RPG Programm
-o_numpasses = cnumpasses_peek08;
+o_numPasses = cNumPasses_PEEK08;
 
 //  1. Aufruf PEEK15 (generieren Display File)
-o_numpasses = o_numpasses + cnumpasses_peek15;
+o_numPasses = o_numPasses + cNumPasses_PEEK15;
 
 //  2. Aufruf PEEK15 (generieren Display File, lower cases)
-if (i_alwlc = bTrue);
-  o_numpasses = o_numpasses + cnumpasses_peek15;
+if (i_alwLC = bTrue);
+  o_numPasses = o_numPasses + cNumPasses_PEEK15;
 endif;
 
 //  3. Aufruf PEEK16 (generieren RPG Programm)
-o_numpasses = o_numpasses + cnumpasses_peek16;
+o_numPasses = o_numPasses + cNumPasses_PEEK16;
 
 return;
 
@@ -76,12 +76,12 @@ return;
 //  Program error handler                                     *
 //============================================================*
 
-dcl-proc errorhandler;
+dcl-proc errorHandler;
   dcl-pi *n;
-    i_condtoken    likeds(cee_fc_t) value;
-    i_pcommarea    int(10) value;
+    i_condToken    likeds(cee_fc_t) value;
+    i_pCommArea    int(10) value;
     o_action       int(10);
-    o_newcondtoken likeds(cee_fc_t);
+    o_newCondToken likeds(cee_fc_t);
   end-pi;
 
   dump;

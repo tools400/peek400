@@ -9,7 +9,7 @@
 //  list API format KEYL0100
 //  (data structure can be used within the calling program
 //  to splitt XLIST into its units. See GETDBR_DMO)
-dcl-ds keyl0100_t len(256) qualified;
+dcl-ds KEYL0100_t len(256) qualified;
   aprcen char(1);
   aprdat char(6);
   aprtim char(6);

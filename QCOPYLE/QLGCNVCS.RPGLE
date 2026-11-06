@@ -3,15 +3,15 @@
 /define QLGCNVCS
 
 //  Convert Case (QLGCNVCS, QlgConvertCase) API
-dcl-pr qlgconvertcase extproc('QlgConvertCase');
-  i_reqctrlblk char(32767) options(*varsize) const;
-  i_indata     char(32767) options(*varsize) const;
-  o_outdata    char(32767) options(*varsize);
+dcl-pr QlgConvertCase extproc('QlgConvertCase');
+  i_reqCtrlBlk char(32767) options(*varsize) const;
+  i_inData     char(32767) options(*varsize) const;
+  o_outData    char(32767) options(*varsize);
   i_length     int(10) const;
-  io_errcode   char(32767) options(*nopass: *varsize);
+  io_ErrCode   char(32767) options(*nopass: *varsize);
 end-pr;
 
-dcl-ds qlgcnvcs_reqctrlblk_t qualified;
+dcl-ds QLGCNVCS_reqCtrlBlk_t qualified;
   type     int(10);
   ccsid    int(10);
   case     int(10);
@@ -23,6 +23,6 @@ dcl-c cvtcase_type_table 2;
 dcl-c cvtcase_type_user_def 3;
 dcl-c cvtcase_to_upper 0;
 dcl-c cvtcase_to_lower 1;
-dcl-c cvtcase_ccsid_job 0;
+dcl-c CVTCASE_CCSID_Job 0;
 
 /endif

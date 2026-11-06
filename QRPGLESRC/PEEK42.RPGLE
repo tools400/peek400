@@ -40,11 +40,11 @@
 // Aufbau des Satzformats
 dcl-f peekfld keyed usropn prefix(f_);
 
-dcl-ds io_buff;
-  io_bufffld like(rcdbuf_t);
+dcl-ds IO_Buff;
+  IO_BuffFld like(rcdBuf_t);
 end-ds;
 
-dcl-s io_nullmap like(nullmap_t) dim(NULL_MAP_SIZE);
+dcl-s IO_NullMap like(nullMap_t) dim(NULL_MAP_SIZE);
 
 /copy QCOPYLE,D_VARDEF
 /copy QCOPYLE,FLDL0100
@@ -64,60 +64,60 @@ dcl-s io_nullmap like(nullmap_t) dim(NULL_MAP_SIZE);
 /copy QCOPYLE,PPEEK58
 /copy QCOPYLE,PPEEK63
 
-dcl-pr lf_rtvfldname varchar(10);
-  i_buffer   like(r_shortcmd) const;
-  i_startpos like(int4_t) const;
+dcl-pr lf_rtvFldName varchar(10);
+  i_buffer   like(R_ShortCmd) const;
+  i_startPos like(int4_t) const;
 end-pr;
 
-dcl-pr lf_rtvfldformat like(bool_t);
-  io_buffer  like(r_shortcmd);
-  i_startpos like(int4_t) const;
+dcl-pr lf_rtvFldFormat like(bool_t);
+  io_buffer  like(R_ShortCmd);
+  i_startPos like(int4_t) const;
   o_fldl0100 likeds(fldl0100_t);
-  o_msgid    like(msgid_t);
-  o_msgdta   like(msgdta_t);
+  o_msgID    like(msgId_t);
+  o_msgDta   like(msgDta_t);
 end-pr;
 
-dcl-pr lf_loadfldatr char(1);
-  i_fldname  char(10) const;
+dcl-pr lf_loadFldAtr char(1);
+  i_fldName  char(10) const;
   o_fldl0100 likeds(fldl0100_t);
 end-pr;
 
 dcl-s isInit like(bool_t) inz(bFalse);
-dcl-s isRecord like(bool_t) inz(bFalse);
+dcl-s IsRecord like(bool_t) inz(bFalse);
 
-dcl-s r_file like(shortcmd_t.sc_file) inz;
-dcl-s r_lib like(shortcmd_t.sc_lib) inz;
-dcl-s r_mbr like(shortcmd_t.sc_mbr) inz;
-dcl-s r_shortcmd like(o_execcmd) inz(*blanks);
-dcl-s r_cmd1 varchar(32702) inz(*blanks);
-dcl-s r_cmd2 varchar(32702) inz(*blanks);
-dcl-c r_maxlen 256;
-dcl-s r_var varchar(10) inz(*blanks);
-dcl-s r_value varchar(32766) inz('');
+dcl-s R_File like(ShortCmd_t.SC_File) inz;
+dcl-s R_Lib like(ShortCmd_t.SC_Lib) inz;
+dcl-s R_Mbr like(ShortCmd_t.SC_Mbr) inz;
+dcl-s R_ShortCmd like(o_execCmd) inz(*blanks);
+dcl-s R_Cmd1 varchar(32702) inz(*blanks);
+dcl-s R_Cmd2 varchar(32702) inz(*blanks);
+dcl-c R_MaxLen 256;
+dcl-s R_Var varchar(10) inz(*blanks);
+dcl-s R_Value varchar(32766) inz('');
 dcl-s s like(int4_t) inz;
 dcl-s i like(int4_t) inz;
-dcl-s fldname varchar(10) inz(*blanks);
-dcl-s isoutformat like(bool_t) inz(bFalse);
-dcl-ds shortcmd likeds(shortcmd_t) inz;
+dcl-s fldName varchar(10) inz(*blanks);
+dcl-s isOutFormat like(bool_t) inz(bFalse);
+dcl-ds ShortCmd likeds(ShortCmd_t) inz;
 dcl-ds fldl0100 likeds(fldl0100_t) inz;
 dcl-ds fldl0100_out likeds(fldl0100_t) inz;
 
-dcl-s peek06_name like(pgmcalln_t) inz;
-dcl-s peek66_name like(pgmcalln_t) inz;
+dcl-s peek06_name like(pgmCallN_t) inz;
+dcl-s peek66_name like(pgmCallN_t) inz;
 
 //  Parameterliste PEEK06
-dcl-s youtbuffer like(rcdbuf_t);
-dcl-s youtbuffln like(int4_t) inz;
-dcl-s ymsgid like(msgid_t) inz(*blanks);
-dcl-s ymsgdta like(msgdta_t) inz(*blanks);
+dcl-s YOutBuffer like(rcdBuf_t);
+dcl-s YOutBuffLn like(int4_t) inz;
+dcl-s YMsgID like(msgId_t) inz(*blanks);
+dcl-s YMsgDta like(msgDta_t) inz(*blanks);
 
 dcl-c NAME_PREFIX '%';
-dcl-c cformat_start '(';
-dcl-c cformat_end ')';
-dcl-c cformat_delimiter ',';
+dcl-c cFORMAT_START '(';
+dcl-c cFORMAT_END ')';
+dcl-c cFORMAT_DELIMITER ',';
 
 // Für Einzelsatzzugriff
-dcl-ds hfile00 likeds(hfile_t);
+dcl-ds hFile00 likeds(hFile_t);
 
 dcl-s isInzSr like(bool_t) inz(bFalse);
 
@@ -128,12 +128,12 @@ dcl-pi peek42;
   i_file      like(file_t) const;
   i_library   like(lib_t) const;
   i_member    like(mbr_t) const;
-  i_rcdformat like(fmt_t) const;
-  i_shortcmd  like(shortcmd_t) const;
+  i_rcdFormat like(fmt_t) const;
+  i_shortCmd  like(ShortCmd_t) const;
   i_rcdNbr    like(rcdNbr_t) const;
-  o_execcmd   like(cmdbuffer_t);
-  o_msgid     like(msgid_t);
-  o_msgdta    like(msgdta_t);
+  o_execCmd   like(cmdBuffer_t);
+  o_msgID     like(msgId_t);
+  o_msgDta    like(msgDta_t);
 end-pi;
 
 //---------------------------------------------------*
@@ -144,22 +144,22 @@ ceehdlr(%paddr('errorHandler')
 
 exsr inzsr;
 
-exsr first;
+exsr First;
 
 select;
 // Initialisierung
-when (shortcmd.sc_action = '*INIT');
-  r_file = shortcmd.sc_file;
-  r_lib = shortcmd.sc_lib;
-  r_mbr = shortcmd.sc_mbr;
+when (ShortCmd.SC_Action = '*INIT');
+  R_File = ShortCmd.SC_File;
+  R_Lib = ShortCmd.SC_Lib;
+  R_Mbr = ShortCmd.SC_Mbr;
   isInit = bTrue;
 // Befehl
-when (shortcmd.sc_action = '*CMD');
-  exsr buildcmd;
+when (ShortCmd.SC_Action = '*CMD');
+  exsr BuildCmd;
 //  Unbekannte Aktion
 other;
   p_kill('Unknown short command action: ' +
-        shortcmd.sc_action);
+        ShortCmd.SC_Action);
 endsl;
 
 return;
@@ -168,21 +168,21 @@ return;
 //    BuildCmd      Aufbereiten des auszuführenden Befehls    *
 //============================================================*
 
-begsr buildcmd;
+begsr BuildCmd;
 
-  r_shortcmd = shortcmd.sc_cmd;
+  R_ShortCmd = ShortCmd.SC_Cmd;
 
   if (isInit = bFalse);
   //  keine Initialisierung
   else;
-    exsr rpl_file;
-    exsr rpl_lib;
-    exsr rpl_mbr;
-    exsr rpl_rrn;
-    exsr rpl_fldname;
+    exsr Rpl_File;
+    exsr Rpl_Lib;
+    exsr Rpl_Mbr;
+    exsr Rpl_Rrn;
+    exsr Rpl_FldName;
   endif;
 
-  o_execcmd = r_shortcmd;
+  o_execCmd = R_ShortCmd;
 
 endsr;
 
@@ -190,11 +190,11 @@ endsr;
 //    Rpl_File      Ersetzen der Ersatzvariablen &F           *
 //============================================================*
 
-begsr rpl_file;
+begsr Rpl_File;
 
-  r_var   = '&F';
-  r_value = %trimr(r_file);
-  exsr rpl_var;
+  R_Var   = '&F';
+  R_Value = %trimr(R_File);
+  exsr Rpl_Var;
 
 endsr;
 
@@ -202,11 +202,11 @@ endsr;
 //    Rpl_Lib       Ersetzen der Ersatzvariablen &L           *
 //============================================================*
 
-begsr rpl_lib;
+begsr Rpl_Lib;
 
-  r_var   = '&L';
-  r_value = %trimr(r_lib);
-  exsr rpl_var;
+  R_Var   = '&L';
+  R_Value = %trimr(R_Lib);
+  exsr Rpl_Var;
 
 endsr;
 
@@ -214,11 +214,11 @@ endsr;
 //    Rpl_Mbr       Ersetzen der Ersatzvariablen &N           *
 //============================================================*
 
-begsr rpl_mbr;
+begsr Rpl_Mbr;
 
-  r_var   = '&N';
-  r_value = %trimr(r_mbr);
-  exsr rpl_var;
+  R_Var   = '&N';
+  R_Value = %trimr(R_Mbr);
+  exsr Rpl_Var;
 
 endsr;
 
@@ -226,11 +226,11 @@ endsr;
 //    Rpl_Rrn       Ersetzen der Ersatzvariablen &R           *
 //============================================================*
 
-begsr rpl_rrn;
+begsr Rpl_Rrn;
 
-  r_var   = '&R';
-  r_value = %trimr(%editc(i_rcdNbr: 'X'));
-  exsr rpl_var;
+  R_Var   = '&R';
+  R_Value = %trimr(%editc(i_rcdNbr: 'X'));
+  exsr Rpl_Var;
 
 endsr;
 
@@ -238,11 +238,11 @@ endsr;
 //    Rpl_FldName   Ersetzen der Ersatzvariablen %*           *
 //============================================================*
 
-begsr rpl_fldname;
+begsr Rpl_FldName;
 
   dou ('1');
 
-    if cio_open(hfile00
+    if CIO_open(hFile00
              : i_file
              : i_library
              : i_member
@@ -250,16 +250,16 @@ begsr rpl_fldname;
              : 'rr, arrseq=Y, commit=N, +
                 nullcap=Y, riofb=Y, +
                 secure=Y') = bFalse;
-      isRecord = bFalse;
+      IsRecord = bFalse;
       leave;
     endif;
 
-    for i = 1 to %len(r_shortcmd);
+    for i = 1 to %len(R_ShortCmd);
 
-      if (%subst(r_shortcmd: i: 1) = NAME_PREFIX);
+      if (%subst(R_ShortCmd: i: 1) = NAME_PREFIX);
 
-        exsr readrcd;
-        if (isRecord = bFalse);
+        exsr ReadRcd;
+        if (IsRecord = bFalse);
           leave;
         endif;
 
@@ -267,60 +267,60 @@ begsr rpl_fldname;
           open peekfld;
         endif;
 
-        fldname = lf_rtvfldname(r_shortcmd: i);
-        if ((fldname <> '') and
-            (lf_loadfldatr(fldname: fldl0100) = bTrue));
+        fldName = lf_rtvFldName(R_ShortCmd: i);
+        if ((fldName <> '') and
+            (lf_loadFldAtr(fldName: fldl0100) = bTrue));
 
           monitor;
-            peek06(fldl0100: 'FLDL0100': io_buff
+            peek06(fldl0100: 'FLDL0100': IO_Buff
                   : bTrue: bTrue
-                  : youtbuffer: youtbuffln
-                  : ymsgid: ymsgdta);
+                  : YOutBuffer: YOutBuffLn
+                  : YMsgID: YMsgDta);
             *in99 = bFalse;
           on-error;
             *in99 = bTrue;
           endmon;
 
-          isoutformat = lf_rtvfldformat(
-                          r_shortcmd
-                          : i+%len(%trimr(fldname))+1
+          isOutFormat = lf_rtvFldFormat(
+                          R_ShortCmd
+                          : i+%len(%trimr(fldName))+1
                           : fldl0100_out
-                          : ymsgid
-                          : ymsgdta);
+                          : YMsgID
+                          : YMsgDta);
 
-          if (ymsgid <> '');
-            o_msgid  = ymsgid;
-            o_msgdta = ymsgdta;
+          if (YMsgID <> '');
+            o_msgID  = YMsgID;
+            o_msgDta = YMsgDta;
             leave;
           endif;
 
-          r_var = NAME_PREFIX + fldname;
+          R_Var = NAME_PREFIX + fldName;
 
-          if (isoutformat = bFalse);
-            r_value = %trimr(%subst(youtbuffer :
+          if (isOutFormat = bFalse);
+            R_Value = %trimr(%subst(YOutBuffer :
                                    1          :
-                                   youtbuffln ));
+                                   YOutBuffLn ));
           else;
             monitor;
-              peek66(youtbuffer: youtbuffln
+              peek66(YOutBuffer: YOutBuffLn
                     : fldl0100: fldl0100_out
-                    : ymsgid: ymsgdta);
+                    : YMsgID: YMsgDta);
               *in99 = bFalse;
             on-error;
               *in99 = bTrue;
             endmon;
 
-            if (ymsgid <> '');
-              o_msgid  = ymsgid;
-              o_msgdta = ymsgdta;
+            if (YMsgID <> '');
+              o_msgID  = YMsgID;
+              o_msgDta = YMsgDta;
               leave;
             endif;
 
-            r_value = %subst(youtbuffer: 1: youtbuffln);
+            R_Value = %subst(YOutBuffer: 1: YOutBuffLn);
           endif;
 
-          r_shortcmd =
-            %replace(r_value: r_shortcmd: i: %len(r_var));
+          R_ShortCmd =
+            %replace(R_Value: R_ShortCmd: i: %len(R_Var));
         endif;
 
       endif;
@@ -329,8 +329,8 @@ begsr rpl_fldname;
 
   enddo;
 
-  if (cio_isopen(hfile00) = bTrue);
-    cio_close(hfile00);
+  if (CIO_isOpen(hFile00) = bTrue);
+    CIO_close(hFile00);
   endif;
 
   if (%open(peekfld));
@@ -343,13 +343,13 @@ endsr;
 //    Rpl_Var       Ersetzen der Ersatzvariablen              *
 //============================================================*
 
-begsr rpl_var;
+begsr Rpl_Var;
 
   s = 1;
 
   dou (s = 0);
 
-    s = %scan(r_var: r_shortcmd: s);
+    s = %scan(R_Var: R_ShortCmd: s);
     if (s = *zeros);
     //  Nix gefunden ...
     else;
@@ -357,21 +357,21 @@ begsr rpl_var;
       //  ... extrahieren 1. Teil
       s = s - 1;
       if (s <= 0);
-        r_cmd1 = '';
+        R_Cmd1 = '';
       else;
-        r_cmd1 = %subst(r_shortcmd: 1: s);
+        R_Cmd1 = %subst(R_ShortCmd: 1: s);
       endif;
 
       //  ... extrahieren 2. Teil
-      s = s + 1 + %len(r_var);
-      if (s > r_maxlen);
-        r_cmd2 = '';
+      s = s + 1 + %len(R_Var);
+      if (s > R_MaxLen);
+        R_Cmd2 = '';
       else;
-        r_cmd2 = %trimr(%subst(r_shortcmd: s));
+        R_Cmd2 = %trimr(%subst(R_ShortCmd: s));
       endif;
 
       //  ... zusammenführen Teil 1, Variable und Teil 2
-      r_shortcmd = r_cmd1 + r_value + r_cmd2;
+      R_ShortCmd = R_Cmd1 + R_Value + R_Cmd2;
 
     endif;
 
@@ -383,16 +383,16 @@ endsr;
 //    ReadRcd       Einlesen des anzuzeigenden Satzes         *
 //============================================================*
 
-begsr readrcd;
+begsr ReadRcd;
 
-  if (cio_chainwithrrn(hfile00
+  if (CIO_chainWithRRN(hFile00
                     : i_rcdNbr
                     : bFalse
-                    : io_buff
-                    : io_nullmap) = bFalse);
-    isRecord = bFalse;
+                    : IO_Buff
+                    : IO_NullMap) = bFalse);
+    IsRecord = bFalse;
   else;
-    isRecord = bTrue;
+    IsRecord = bTrue;
   endif;
 
 endsr;
@@ -401,15 +401,15 @@ endsr;
 //    First         Initialisierung                           *
 //============================================================*
 
-begsr first;
+begsr First;
 
   // - Programm initialisieren
   //**                Callp     p_rmvPgmMg(sds.pgmName)
 
-  o_msgid = *blanks;
-  o_msgdta = *blanks;
+  o_msgID = *blanks;
+  o_msgDta = *blanks;
 
-  shortcmd = i_shortcmd;
+  ShortCmd = i_shortCmd;
 
 endsr;
 
@@ -427,8 +427,8 @@ begsr inzsr;
 
   isInit = bFalse;
 
-  peek06_name = f_pgmcalln('PEEK06');
-  peek66_name = f_pgmcalln('PEEK66');
+  peek06_name = f_pgmCallN('PEEK06');
+  peek66_name = f_pgmCallN('PEEK66');
 
 endsr;
 
@@ -436,12 +436,12 @@ endsr;
 //  Program error handler                                     *
 //============================================================*
 
-dcl-proc errorhandler;
+dcl-proc errorHandler;
   dcl-pi *n;
-    i_condtoken    likeds(cee_fc_t) value;
-    i_pcommarea    int(10) value;
+    i_condToken    likeds(cee_fc_t) value;
+    i_pCommArea    int(10) value;
     o_action       int(10);
-    o_newcondtoken likeds(cee_fc_t);
+    o_newCondToken likeds(cee_fc_t);
   end-pi;
 
   dump;
@@ -452,14 +452,14 @@ end-proc;
 //============================================================*
 //    Ermitteln Feldname aus Kurzbefehl                       *
 //============================================================*
-dcl-proc lf_rtvfldname;
+dcl-proc lf_rtvFldName;
   dcl-pi *n varchar(10);
-    i_buffer   like(r_shortcmd) const;
-    i_startpos like(int4_t) const;
+    i_buffer   like(R_ShortCmd) const;
+    i_startPos like(int4_t) const;
   end-pi;
 
   //  Funktionswert
-  dcl-s fldname char(10) inz;
+  dcl-s fldName char(10) inz;
 
   //  Arbeitsfelder
   dcl-s i like(int4_t) inz;
@@ -468,44 +468,44 @@ dcl-proc lf_rtvfldname;
   dcl-c VALID_CHARS '_$#§ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  fldname = '';
+  fldName = '';
 
-  for i = i_startpos + 1 to %len(i_buffer);
+  for i = i_startPos + 1 to %len(i_buffer);
     if (%scan(%subst(i_buffer: i: 1): VALID_CHARS) = 0);
       leave;
     endif;
 
-    fldname = %trimr(fldname) +
+    fldName = %trimr(fldName) +
              %subst(i_buffer: i: 1);
   endfor;
 
-  return %trimr(fldname);
+  return %trimr(fldName);
 
 end-proc;
 
 //============================================================*
 //    Ermitteln Feldformat                                    *
 //============================================================*
-dcl-proc lf_rtvfldformat;
+dcl-proc lf_rtvFldFormat;
   dcl-pi *n like(bool_t);
-    io_buffer  like(r_shortcmd);
-    i_startpos like(int4_t) const;
+    io_buffer  like(R_ShortCmd);
+    i_startPos like(int4_t) const;
     o_fldl0100 likeds(fldl0100_t);
-    o_msgid    like(msgid_t);
-    o_msgdta   like(msgdta_t);
+    o_msgID    like(msgId_t);
+    o_msgDta   like(msgDta_t);
   end-pi;
 
   //  Arbeitsfelder
   dcl-s s like(int4_t) inz;
   dcl-s e like(int4_t) inz;
   dcl-s l like(int4_t) inz;
-  dcl-s strformat char(256) inz;
+  dcl-s strFormat char(256) inz;
   dcl-ds data qualified inz;
     type   char(1);
     length int(10);
     decpos int(10);
   end-ds;
-  dcl-s ptoken pointer inz;
+  dcl-s pToken pointer inz;
   dcl-ds fldl0100_tmp likeds(fldl0100_t) inz;
 
   //  Nachrichten
@@ -515,21 +515,21 @@ dcl-proc lf_rtvfldformat;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   clear o_fldl0100;
-  clear o_msgid;
-  clear o_msgdta;
+  clear o_msgID;
+  clear o_msgDta;
 
-  if (i_startpos > %len(io_buffer) or
-      %subst(io_buffer: i_startpos: 1) <> cformat_start);
+  if (i_startPos > %len(io_buffer) or
+      %subst(io_buffer: i_startPos: 1) <> cFORMAT_START);
     return bFalse;
   endif;
 
   // Find end of format definition
-  s = i_startpos;
+  s = i_startPos;
   e = s;
   l = 0;
 
   dow (e <= %len(io_buffer));
-    if (%subst(io_buffer: e: 1) = cformat_end);
+    if (%subst(io_buffer: e: 1) = cFORMAT_END);
       l = e - s + 1;
       leave;
     else;
@@ -538,9 +538,9 @@ dcl-proc lf_rtvfldformat;
   enddo;
 
   // Get format without leading and trailing parenthesis
-  strformat = %subst(io_buffer: s+1: l-2);
+  strFormat = %subst(io_buffer: s+1: l-2);
 
-  if (strformat = '');
+  if (strFormat = '');
     return bFalse;
   endif;
 
@@ -548,70 +548,70 @@ dcl-proc lf_rtvfldformat;
   io_buffer = %replace('': io_buffer: s: l);
 
   // Splitt format into data type, length and decimal positions
-  ptoken = strtok(strformat: cformat_delimiter);
-  if (ptoken <> *null);            // data type
-    data.type = %str(ptoken);
-    ptoken = strtok(*null: cformat_delimiter);
+  pToken = strtok(strFormat: cFORMAT_DELIMITER);
+  if (pToken <> *null);            // data type
+    data.type = %str(pToken);
+    pToken = strtok(*null: cFORMAT_DELIMITER);
   endif;
 
-  if (ptoken <> *null);            // field length
+  if (pToken <> *null);            // field length
     monitor;
-      data.length = %dec(%str(ptoken): 10: 0);
+      data.length = %dec(%str(pToken): 10: 0);
     on-error;
       clear usr8229;
-      usr8229.var1 = %str(ptoken);
-      o_msgid  = 'USR8229';
-      o_msgdta = usr8229;
+      usr8229.var1 = %str(pToken);
+      o_msgID  = 'USR8229';
+      o_msgDta = usr8229;
       return bFalse;
     endmon;
-    ptoken = strtok(*null: cformat_delimiter);
+    pToken = strtok(*null: cFORMAT_DELIMITER);
   endif;
 
-  if (ptoken <> *null);            // decimal positions
+  if (pToken <> *null);            // decimal positions
     monitor;
-      data.decpos = %dec(%str(ptoken): 10: 0);
+      data.decpos = %dec(%str(pToken): 10: 0);
     on-error;
       clear usr8230;
-      usr8230.var1 = %str(ptoken);
-      o_msgid  = 'USR8230';
-      o_msgdta = usr8230;
+      usr8230.var1 = %str(pToken);
+      o_msgID  = 'USR8230';
+      o_msgDta = usr8230;
       return bFalse;
     endmon;
   endif;
 
   // Compose new field type
-  if (lf_loadfldatr(fldname: fldl0100_tmp) = bFalse);
+  if (lf_loadFldAtr(fldName: fldl0100_tmp) = bFalse);
     return bFalse;
   endif;
 
-  fldl0100_tmp.f1dtyp = %xlate(C_LOWER: C_UPPER: data.type);
-  if (f_isnotalw(fldl0100_tmp) = bTrue);
+  fldl0100_tmp.F1DTyp = %xlate(C_LOWER: C_UPPER: data.type);
+  if (f_isNotAlw(fldl0100_tmp) = bTrue);
     clear usr8228;
     usr8228.var1 = data.type;
-    o_msgid  = 'USR8228';
-    o_msgdta = usr8228;
+    o_msgID  = 'USR8228';
+    o_msgDta = usr8228;
     return bFalse;
   endif;
 
   // Check data type
-  if (f_isnotalw(fldl0100_tmp) = bTrue);
+  if (f_isNotAlw(fldl0100_tmp) = bTrue);
     return bFalse;
   endif;
 
   // Replace length and decimal position
-  if (f_isnumfld(fldl0100) = bTrue);
+  if (f_isNumFld(fldl0100) = bTrue);
     fldl0100_tmp.f1decp = data.decpos;
     select;
-    when (fldl0100_tmp.f1dtyp = 'S');
+    when (fldl0100_tmp.F1DTyp = 'S');
       fldl0100_tmp.f1digt = data.length;
       fldl0100_tmp.f1flen = data.length;
-    when (fldl0100_tmp.f1dtyp = 'P');
+    when (fldl0100_tmp.F1DTyp = 'P');
       fldl0100_tmp.f1digt = data.length;
       fldl0100_tmp.f1flen = %int(data.length / 2);
       if (%rem(data.length: 2) <> 0);
         fldl0100_tmp.f1flen = fldl0100_tmp.f1flen + 1;
       endif;
-    when (fldl0100_tmp.f1dtyp = 'B' or fldl0100_tmp.f1dtyp = 'I');
+    when (fldl0100_tmp.F1DTyp = 'B' or fldl0100_tmp.F1DTyp = 'I');
       select;
       when (data.length <= 3);
         fldl0100_tmp.f1digt = 3;
@@ -626,12 +626,12 @@ dcl-proc lf_rtvfldformat;
         fldl0100_tmp.f1digt = 20;
         fldl0100_tmp.f1flen = 8;
       endsl;
-    when (fldl0100_tmp.f1dtyp = 'F');
+    when (fldl0100_tmp.F1DTyp = 'F');
       if (data.decpos <> 0);
         clear usr8230;
         usr8230.var1 = %char(data.decpos);
-        o_msgid  = 'USR8230';
-        o_msgdta = usr8230;
+        o_msgID  = 'USR8230';
+        o_msgDta = usr8230;
         return bFalse;
       endif;
       select;
@@ -646,8 +646,8 @@ dcl-proc lf_rtvfldformat;
       other;
         clear usr8229;
         usr8229.var1 = %char(data.length);
-        o_msgid  = 'USR8229';
-        o_msgdta = usr8229;
+        o_msgID  = 'USR8229';
+        o_msgDta = usr8229;
         return bFalse;
       endsl;
     endsl;
@@ -657,7 +657,7 @@ dcl-proc lf_rtvfldformat;
 
   // Replace start position
   fldl0100_tmp.f1obuf = 1;
-  fldl0100_tmp.f1ibuf = 1;
+  fldl0100_tmp.F1IBuf = 1;
 
   o_fldl0100 = fldl0100_tmp;
 
@@ -669,14 +669,14 @@ end-proc;
 //============================================================*
 //    Laden Feldattribute                                     *
 //============================================================*
-dcl-proc lf_loadfldatr;
+dcl-proc lf_loadFldAtr;
   dcl-pi *n char(1);
-    i_fldname  char(10) const;
+    i_fldName  char(10) const;
     o_fldl0100 likeds(fldl0100_t);
   end-pi;
 
   //  Funktionswert
-  dcl-s isloaded char(1) inz(bFalse);
+  dcl-s isLoaded char(1) inz(bFalse);
 
   //  Arbeitsfelder
   dcl-ds fldl0100 likeds(fldl0100_t) inz;
@@ -685,19 +685,19 @@ dcl-proc lf_loadfldatr;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   clear f_key;
-  f_key.f_field = i_fldname;
+  f_key.F_Field = i_fldName;
   chain %kds(f_key) fpeekfld;
   if (%found(peekfld));
     fldl0100 = f_ffd;
-    isloaded = bTrue;
+    isLoaded = bTrue;
   else;
     clear fldl0100;
-    isloaded = bFalse;
+    isLoaded = bFalse;
   endif;
 
   o_fldl0100 = fldl0100;
 
-  return isloaded;
+  return isLoaded;
 
 end-proc;
 

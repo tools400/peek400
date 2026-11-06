@@ -27,23 +27,23 @@
 /copy QCOPYLE,H_SPEC
 /copy QCOPYLE,COPYRIGHT
 
-dcl-f peek34fm workstn(*ext) usage(*input: *output) usropn infds(workstn) sfile(pbsfl: sflrec);
+dcl-f peek34fm workstn(*ext) usage(*input: *output) usropn infds(workstn) sfile(pbsfl: SflRec);
 
-dcl-f peekwrk usage(*update: *delete) keyed usropn infds(work_00_ds) prefix(w_);
+dcl-f peekwrk usage(*update: *delete) keyed usropn infds(Work_00_DS) prefix(w_);
 
-dcl-f peekwrk_ disk(1024) usage(*update: *delete: *output) usropn infds(work_01_ds);
+dcl-f peekwrk_ disk(1024) usage(*update: *delete: *output) usropn infds(Work_01_DS);
 
-dcl-f peekfldl1 usage(*input) keyed usropn infds(peek_01_ds) rename(fpeekfld: fpeekfldl1) prefix(f_)
+dcl-f peekfldl1 usage(*input) keyed usropn infds(Peek_01_DS) rename(fpeekfld: fpeekfldl1) prefix(f_)
   ;
 
-dcl-f peekfld usage(*update: *delete) usropn infds(peek_00_ds) prefix(f_);
+dcl-f peekfld usage(*update: *delete) usropn infds(Peek_00_DS) prefix(f_);
 
 dcl-ds workstn likeds(workstn_t);
 
-dcl-ds work_00_ds likeds(infds_t);
-dcl-ds work_01_ds likeds(infds_t);
-dcl-ds peek_00_ds likeds(infds_t);
-dcl-ds peek_01_ds likeds(infds_t);
+dcl-ds Work_00_DS likeds(infds_t);
+dcl-ds Work_01_DS likeds(infds_t);
+dcl-ds Peek_00_DS likeds(infds_t);
+dcl-ds Peek_01_DS likeds(infds_t);
 
 /copy QCOPYLE,D_VARDEF
 /copy QCOPYLE,D_INFDS
@@ -81,42 +81,42 @@ dcl-ds peek_01_ds likeds(infds_t);
 dcl-ds ds_peekwrk extname('PEEKWRK') inz len(1024) prefix(w_);
 end-ds;
 
-dcl-s yfkeys char(18) dim(32);
-dcl-s ynbrofkeys like(int4_t);
-dcl-s yMsgID char(7);
-dcl-s yMsgDta char(512);
+dcl-s yFKeys char(18) dim(32);
+dcl-s yNbrOfKeys like(int4_t);
+dcl-s YMsgID char(7);
+dcl-s YMsgDta char(512);
 
-dcl-s ypgmcmd char(10);
-dcl-s ycmddta like(pgmcmddt_t);
+dcl-s YPgmCmd char(10);
+dcl-s YCmdDta like(pgmCmdDt_t);
 
-dcl-s yfield char(10);
+dcl-s YField char(10);
 
-dcl-s ycolorattr char(1);
+dcl-s YColorAttr char(1);
 
-dcl-s sflpage like(int4_t);
-dcl-s sflpagedds like(sflpage);
-dcl-s sflrec like(sflpage);
-dcl-s sflnbrrcd like(sflpage);
-dcl-c nbrfkeys 3;
+dcl-s SflPage like(int4_t);
+dcl-s SflPageDDS like(SflPage);
+dcl-s SflRec like(SflPage);
+dcl-s SflNbrRcd like(SflPage);
+dcl-c NbrFKeys 3;
 
 dcl-s sfbot like(int4_t);
-dcl-s sfl_cmd char(10);
+dcl-s Sfl_Cmd char(10);
 
-dcl-s issflerror char(1) inz(bFalse);
-dcl-s isnewpos char(1) inz(bFalse);
-dcl-s isfound char(1) inz(bFalse);
+dcl-s IsSflError char(1) inz(bFalse);
+dcl-s IsNewPos char(1) inz(bFalse);
+dcl-s IsFound char(1) inz(bFalse);
 dcl-s isBatch char(1) inz(bFalse);
 
-dcl-s peek21_name like(pgmcalln_t);
-dcl-s peek23_name like(pgmcalln_t);
-dcl-s peek25_name like(pgmcalln_t);
-dcl-s peek35_name like(pgmcalln_t);
+dcl-s peek21_name like(pgmCallN_t);
+dcl-s peek23_name like(pgmCallN_t);
+dcl-s peek25_name like(pgmCallN_t);
+dcl-s peek35_name like(pgmCallN_t);
 
-dcl-s r_field like(##field);
-dcl-s r_seq like(f_seq);
-dcl-s lstfield like(##field);
-dcl-s lstnbrrcd like(sflpage);
-dcl-s srchrec like(sflpage);
+dcl-s R_Field like(##Field);
+dcl-s R_Seq like(F_Seq);
+dcl-s LstField like(##Field);
+dcl-s LstNbrRcd like(SflPage);
+dcl-s srchrec like(SflPage);
 //  Feldnamen und Satznummern der Subfile-Sätze für die Suche
 dcl-s sfl_fnmes like($$fnme) dim(9999);
 dcl-s sfl_rcdnbrs like(recordnbr) dim(9999);
@@ -124,7 +124,7 @@ dcl-s sfl_rcdnbrs like(recordnbr) dim(9999);
 //  Prüfung auf doppelte Folgenummern
 dcl-s isdupseq like(bool_t) inz(bFalse);
 dcl-s isfirst like(bool_t) inz(bFalse);
-dcl-s lstseq like(wrk0001_t.wrk_seq) inz;
+dcl-s lstseq like(WRK0001_t.WRK_Seq) inz;
 dcl-s lstrcdnbr like(int4_t) inz;
 dcl-s dupnbr like(int4_t) inz;
 dcl-s duprrn like(int4_t) inz;
@@ -136,13 +136,13 @@ dcl-s isreadrow ind dim(9999) inz(*off);
 //  Feld mit Eingabefehler je Zeile und ob es in diesem Durchlauf von
 //  VReadC Eingabefehler gab: Sie behalten Markierung und Cursor, auch
 //  wenn die Zeile zusätzlich eine doppelte Folgenummer hat.
-dcl-s errfield like(yfield) dim(9999) inz;
+dcl-s errfield like(YField) dim(9999) inz;
 dcl-s isinperr like(bool_t) inz(bFalse);
-dcl-s wrk_sfsanr like(sfsanr);
+dcl-s Wrk_SFSANR like(sfsanr);
 
 
 dcl-ds fldl0100 likeds(fldl0100_t) inz;
-dcl-ds wrk0001 likeds(wrk0001_t) inz(*likeds);
+dcl-ds wrk0001 likeds(WRK0001_t) inz(*likeds);
 
 dcl-s isInzSr like(bool_t) inz(bFalse);
 
@@ -151,16 +151,16 @@ dcl-s isInzSr like(bool_t) inz(bFalse);
 //*******************************************************************
 dcl-pi peek34;
   i_dsp80     like(dsp80_t) const;
-  i_copyright like(copyrght_t) const;
+  i_copyright like(copyright_t) const;
   i_function  like(option_t) const;
-  o_msgid     like(msgid_t);
-  o_msgdta    like(msgdta_t);
+  o_msgID     like(msgId_t);
+  o_msgDta    like(msgDta_t);
 end-pi;
 
 dcl-s do_x2 packed(7);
 
-dcl-ds w0key likerec(fpeekwrk: *key);
-dcl-ds f1key likerec(fpeekfldl1: *key);
+dcl-ds W0Key likerec(fpeekwrk: *key);
+dcl-ds F1Key likerec(fpeekfldl1: *key);
 //---------------------------------------------------*
 
 //  Register error handler
@@ -169,7 +169,7 @@ ceehdlr(%paddr('errorHandler')
 
 exsr inzsr;
 
-exsr first;
+exsr First;
 if (isBatch = bFalse);
 
   dow ('1');
@@ -194,19 +194,19 @@ if (isBatch = bFalse);
     //  Anzeigen der Befehlstasten
     select;
     when ((sfbot = 2) and
-       (ynbrofkeys > nbrfkeys * (sfbot - 1)));
+       (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
       write pbbot#2;
     when ((sfbot = 3) and
-       (ynbrofkeys > nbrfkeys * (sfbot - 1)));
+       (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
       write pbbot#3;
     when ((sfbot = 4) and
-       (ynbrofkeys > nbrfkeys * (sfbot - 1)));
+       (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
       write pbbot#4;
     when ((sfbot = 5) and
-       (ynbrofkeys > nbrfkeys * (sfbot - 1)));
+       (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
       write pbbot#5;
     when ((sfbot = 6) and
-       (ynbrofkeys > nbrfkeys * (sfbot - 1)));
+       (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
       write pbbot#6;
     other;
       write pbbot#1;
@@ -218,84 +218,84 @@ if (isBatch = bFalse);
     *in70 = '0';
 
     //  Nachrichten löschen
-    p_rmvpgmmg(sds.pgmname);
+    p_rmvPgmMg(sds.pgmName);
 
     //  Aktuelle Satz-Nr.
-    if (sflcsr > 0);
-      sfsanr = sflcsr;
+    if (SflCsr > 0);
+      sfsanr = SflCsr;
     endif;
 
     //  Mappen der gedrückten Taste
     //  in Programmbefehl
-    peek21(workstn.aid: sds.pgmname
-          : ypgmcmd: ycmddta: yMsgID: yMsgDta);
-    if (yMsgID <> '');
-      p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
-      yMsgID = '';
-      yMsgDta = '';
+    peek21(workstn.aid: sds.pgmName
+          : YPgmCmd: YCmdDta: YMsgID: YMsgDta);
+    if (YMsgID <> '');
+      p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
+      YMsgID = '';
+      YMsgDta = '';
       iter;
     endif;
 
     //  Abfragen der Befehlstasten
     select;
     //  F3  - Ende
-    when (ypgmcmd = '*EXIT');
-      exsr c_endpgm;
+    when (YPgmCmd = '*EXIT');
+      exsr C_EndPgm;
       leave;
 
     //  F3  - Sichern & beenden
-    when (ypgmcmd = '*SAVE_EXIT');
-      exsr c_enter;
-      if (issflerror = bFalse);
-        exsr c_saveexit;
+    when (YPgmCmd = '*SAVE_EXIT');
+      exsr C_Enter;
+      if (IsSflError = bFalse);
+        exsr C_SaveExit;
         leave;
       endif;
 
     //  F5  - Aktualisieren
-    when (ypgmcmd = '*REFRESH');
-      exsr c_refresh;
+    when (YPgmCmd = '*REFRESH');
+      exsr C_Refresh;
       iter;
 
     //  F11 - Float Keys
-    when (ypgmcmd = '*FLOATKEYS');
-      exsr c_floatkey;
-      exsr c_refresh;
+    when (YPgmCmd = '*FLOATKEYS');
+      exsr C_FloatKey;
+      exsr C_Refresh;
       iter;
 
     //  F12 - Ende
-    when (ypgmcmd = '*CANCEL');
-      exsr c_endpgm;
+    when (YPgmCmd = '*CANCEL');
+      exsr C_EndPgm;
       leave;
 
     //  F16 - Suchen
-    when (ypgmcmd = '*SEARCH');
-      exsr c_search;
+    when (YPgmCmd = '*SEARCH');
+      exsr C_Search;
       iter;
 
     //   F17 - Anfang Datensatz
-    when (ypgmcmd = '*TOP');
-      exsr c_top;
+    when (YPgmCmd = '*TOP');
+      exsr C_Top;
       iter;
     //   F18 - Ende Datensatz
-    when (ypgmcmd = '*BOT');
-      exsr c_bot;
+    when (YPgmCmd = '*BOT');
+      exsr C_Bot;
       iter;
 
     //  F24 - Weitere Tasten
-    when (ypgmcmd = '*MOREKEYS');
-      exsr c_morekeys;
+    when (YPgmCmd = '*MOREKEYS');
+      exsr C_MoreKeys;
 
     //  Datenfreigabe
-    when (ypgmcmd = '*ENTER');
-      exsr c_enter;
+    when (YPgmCmd = '*ENTER');
+      exsr C_Enter;
     //  Page up
-    when (ypgmcmd = '*PAGEUP');
+    when (YPgmCmd = '*PAGEUP');
     //  Page down
-    when (ypgmcmd = '*PAGEDOWN');
+    when (YPgmCmd = '*PAGEDOWN');
 
     other;
       //  Falsche Taste gedrückt
-      p_wrongkey(workstn.aid: sds.pgmname);
+      p_wrongKey(workstn.aid: sds.pgmName);
       iter;
     endsl;
 
@@ -309,7 +309,7 @@ close peekfld;
 
 close peekwrk;
 close peekwrk_;
-exsr clrpeekwrk;
+exsr ClrPeekWrk;
 
 return;
 
@@ -317,12 +317,12 @@ return;
 //    C_Enter       "Datenfreigabetaste"                      *
 //============================================================*
 
-begsr c_enter;
+begsr C_Enter;
 
-  exsr vreadc;
+  exsr VReadC;
 
-  if (##field <> '');
-    exsr c_search;
+  if (##Field <> '');
+    exsr C_Search;
   endif;
 
 endsr;
@@ -331,21 +331,21 @@ endsr;
 //    C_Search      F16 - Suchen                              *
 //============================================================*
 
-begsr c_search;
+begsr C_Search;
 
-  if (##field <> '');
-    lstfield = ##field;
-    ##field = '';
+  if (##Field <> '');
+    LstField = ##Field;
+    ##Field = '';
   endif;
 
-  if (lstfield = '');
+  if (LstField = '');
     *in70 = '1';
     clear usr8209;
-    p_sndpgmmg('USR8209': usr8209: sds.pgmname);
+    p_sndPgmMg('USR8209': usr8209: sds.pgmName);
   else;
-    exsr postofield;
-    if (isnewpos = bTrue);
-      sfsanr = wrk_sfsanr;
+    exsr PosToField;
+    if (IsNewPos = bTrue);
+      sfsanr = Wrk_SFSANR;
     endif;
   endif;
 
@@ -355,29 +355,29 @@ endsr;
 //    PosToField    Subfile neu positionieren                 *
 //============================================================*
 
-begsr postofield;
+begsr PosToField;
 
-  if (lstfield <> r_field);
-    lstnbrrcd = 0;
+  if (LstField <> R_Field);
+    LstNbrRcd = 0;
   endif;
 
-  if (lstfield = '');
-    isnewpos = bFalse;
-    lstnbrrcd = 0;
+  if (LstField = '');
+    IsNewPos = bFalse;
+    LstNbrRcd = 0;
   else;
 
-    exsr srchfield;
-    if (isfound = bFalse);
-      isnewpos = bFalse;
+    exsr SrchField;
+    if (IsFound = bFalse);
+      IsNewPos = bFalse;
       clear usr8136;
-      usr8136.var1 = lstfield;
-      p_sndpgmmg('USR8136': usr8136: sds.pgmname);
+      usr8136.var1 = LstField;
+      p_sndPgmMg('USR8136': usr8136: sds.pgmName);
     else;
-      isnewpos = bTrue;
+      IsNewPos = bTrue;
     endif;
   endif;
 
-  r_field = lstfield;
+  R_Field = LstField;
 
 endsr;
 
@@ -385,34 +385,34 @@ endsr;
 //    SrchField     Suchen Feld in Subfile                    *
 //============================================================*
 
-begsr srchfield;
+begsr SrchField;
 
   if (*in80 = *off);
-    isfound = bFalse;
+    IsFound = bFalse;
   else;
 
-    isfound = bFalse;
-    lstnbrrcd = lstnbrrcd + 1;
+    IsFound = bFalse;
+    LstNbrRcd = LstNbrRcd + 1;
 
     //  Die Suche liest die Subfile nicht, sondern die gemerkten
     //  Feldnamen: Nach einem CHAIN auf die Subfile lieferte READC
     //  Zeilen mit Eingabefehlern (SFLNXTCHG) nicht mehr.
-    for srchrec = lstnbrrcd to sflnbrrcd;
-      if (lstfield =
+    for srchrec = LstNbrRcd to SflNbrRcd;
+      if (LstField =
           %subst(sfl_fnmes(srchrec): 1:(f_scan(' ':
-                         lstfield) - 1)));
-        isfound = bTrue;
+                         LstField) - 1)));
+        IsFound = bTrue;
         leave;
       endif;
 
     endfor;
 
-    if (isfound = bTrue);
-      wrk_sfsanr = srchrec;
-      lstnbrrcd = srchrec;
+    if (IsFound = bTrue);
+      Wrk_SFSANR = srchrec;
+      LstNbrRcd = srchrec;
     else;
-      wrk_sfsanr = *zeros;
-      lstnbrrcd = 0;
+      Wrk_SFSANR = *zeros;
+      LstNbrRcd = 0;
     endif;
 
   endif;
@@ -423,11 +423,11 @@ endsr;
 //    SrchInit      Initialisieren Suchfunktion               *
 //============================================================*
 
-begsr srchinit;
+begsr SrchInit;
 
-  lstfield  = ' ';
-  lstnbrrcd = 0;
-  r_field   = lstfield;
+  LstField  = ' ';
+  LstNbrRcd = 0;
+  R_Field   = LstField;
 
 endsr;
 
@@ -435,9 +435,9 @@ endsr;
 //    VReadC        Verarbeiten der Subfileauswahlen          *
 //============================================================*
 
-begsr vreadc;
+begsr VReadC;
 
-  issflerror = bFalse;
+  IsSflError = bFalse;
   isreadrow(*) = *off;
   errfield(*) = '';
   isinperr = bFalse;
@@ -446,20 +446,20 @@ begsr vreadc;
   //   keine Einträge in Subfile vorhanden ...
   else;
 
-    for do_x2 = 1 to sflnbrrcd;
+    for do_x2 = 1 to SflNbrRcd;
       readc pbsfl;
       if (%eof());
         leave;
       endif;
 
-      chain sflrec pbsfl;
-      isreadrow(sflrec) = *on;
+      chain SflRec pbsfl;
+      isreadrow(SflRec) = *on;
 
-      exsr sflbzoff;
+      exsr SflBzoff;
 
       //  Cursorpositionierung ...
-      if (issflerror = bFalse);
-        sflcsr = sflrec;
+      if (IsSflError = bFalse);
+        SflCsr = SflRec;
       else;
       //  Subfile nicht neu positionieren
       endif;
@@ -468,36 +468,36 @@ begsr vreadc;
       sfpau = %triml(sfpau);
 
       //  Zuordnung AUSWAHL => Befehl ...
-      peek21('#' + sfpau: sds.pgmname
-            : ypgmcmd: ycmddta: yMsgID: yMsgDta);
-      if (yMsgID <> *blanks);
+      peek21('#' + sfpau: sds.pgmName
+            : YPgmCmd: YCmdDta: YMsgID: YMsgDta);
+      if (YMsgID <> *blanks);
         //  Fehlermeldung ...
-        p_sndpgmmg('USR8110': sfpau: sds.pgmname);
-        exsr vsfpauerr;
+        p_sndPgmMg('USR8110': sfpau: sds.pgmName);
+        exsr VSfpauErr;
         //  Setzen Bezugszahlen ...
-        exsr pbsetbz;
+        exsr PBSetBZ;
         update pbsfl;
-        issflerror = bTrue;
+        IsSflError = bTrue;
         iter;
       endif;
 
       //----------------------------*
       //  Ausführen SFL-Befehl ...  *
       //----------------------------*
-      sfl_cmd = ypgmcmd;
+      Sfl_Cmd = YPgmCmd;
 
       select;
-      when (sfl_cmd = '*NONE');
+      when (Sfl_Cmd = '*NONE');
       other;
         //  Unbekannter Programmbefehl
         clear usr8110.var1;
-        usr8110.var1 = ypgmcmd;
-        p_sndpgmmg('USR8110': usr8110: sds.pgmname);
-        exsr vsfpauerr;
+        usr8110.var1 = YPgmCmd;
+        p_sndPgmMg('USR8110': usr8110: sds.pgmName);
+        exsr VSfpauErr;
         //  Setzen Bezugszahlen ...
-        exsr pbsetbz;
+        exsr PBSetBZ;
         update pbsfl;
-        issflerror = bTrue;
+        IsSflError = bTrue;
         iter;
       endsl;
 
@@ -505,41 +505,41 @@ begsr vreadc;
       //  Verarbeiten               *
       //  Datensatzänderungen       *
       //----------------------------*
-      exsr getcolor;
-      exsr fillrecord;
+      exsr GetColor;
+      exsr FillRecord;
       //  Prüfen, Datensatz ...
       monitor;
-        peek35(recordnbr: wrk0001: yfield
-              : yMsgID: yMsgDta);
+        peek35(recordnbr: wrk0001: YField
+              : YMsgID: YMsgDta);
         *in99 = bFalse;
       on-error;
         *in99 = bTrue;
       endmon;
       //  ... Fehler beim Programmaufruf
       if (*in99 = *on);
-        exsr vsfpauerr;
+        exsr VSfpauErr;
       else;
         //  ... Programaufruf war OK
-        if (yMsgID = *blanks);
+        if (YMsgID = *blanks);
           //      ... Prüfung ist OK
-          exsr vpos;
-          exsr vsfpauclr;
+          exsr VPos;
+          exsr VSfpauClr;
         else;
           //      ... Fehler bei der Prüfung
-          exsr vposcsr;
-          exsr vsfpauerr;
+          exsr VPosCsr;
+          exsr VSfpauErr;
           *in85 = '0'; // DSPATR(RI)
-          p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
-          yMsgID = '';
-          yMsgDta = '';
-          issflerror = bTrue;
-          errfield(sflrec) = yfield;
+          p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
+          YMsgID = '';
+          YMsgDta = '';
+          IsSflError = bTrue;
+          errfield(SflRec) = YField;
           isinperr = bTrue;
         endif;
       endif;
 
       //  Setzen Bezugszahlen ...
-      exsr pbsetbz;
+      exsr PBSetBZ;
       update pbsfl;
     endfor;
 
@@ -563,9 +563,9 @@ begsr chkdupseq;
 
   //  PEEKWRK ist nach der Folgenummer sortiert: Doppelte
   //  Nummern liegen direkt hintereinander.
-  clear w0key;
-  w0key.w_key = *loval;
-  setll %kds(w0key: 1) fpeekwrk;
+  clear W0Key;
+  W0Key.W_Key = *loval;
+  setll %kds(W0Key: 1) fpeekwrk;
 
   dow ('1');
     read(n) fpeekwrk;
@@ -573,35 +573,35 @@ begsr chkdupseq;
       leave;
     endif;
 
-    if (isfirst = bFalse and w_key = lstseq);
+    if (isfirst = bFalse and W_Key = lstseq);
       isdupseq = bTrue;
       dupnbr = lstrcdnbr;
       exsr markdupseq;
-      dupnbr = work_00_ds.rcdnbr;
+      dupnbr = Work_00_DS.RcdNbr;
       exsr markdupseq;
     endif;
 
     isfirst = bFalse;
-    lstseq = w_key;
-    lstrcdnbr = work_00_ds.rcdnbr;
+    lstseq = W_Key;
+    lstrcdnbr = Work_00_DS.RcdNbr;
   enddo;
 
   if (isdupseq = bTrue);
-    p_sndpgmmg('USR8167': '': sds.pgmname);
-    issflerror = bTrue;
+    p_sndPgmMg('USR8167': '': sds.pgmName);
+    IsSflError = bTrue;
   endif;
 
   //  Markierungen entfernen, die nicht mehr zutreffen. READC liefert
   //  nicht jede markierte Zeile wieder; Zeilen aus diesem Durchlauf hat
   //  VReadC neu geschrieben.
-  for sflrec = 1 to sflnbrrcd;
-    if (isduprow(sflrec) and not isnewdup(sflrec)
-        and not isreadrow(sflrec));
-      chain(e) sflrec pbsfl;
+  for SflRec = 1 to SflNbrRcd;
+    if (isduprow(SflRec) and not isnewdup(SflRec)
+        and not isreadrow(SflRec));
+      chain(e) SflRec pbsfl;
       if (not %error() and %found());
-        exsr sflbzoff;
-        exsr vsfpauclr;
-        exsr pbsetbz;
+        exsr SflBzoff;
+        exsr VSfpauClr;
+        exsr PBSetBZ;
         update pbsfl;
       endif;
     endif;
@@ -620,30 +620,30 @@ begsr markdupseq;
   //  Die Zeile über die gemerkten Satznummern suchen, statt jede
   //  Zeile per CHAIN zu lesen.
   duprrn = 0;
-  if (sflnbrrcd > 0);
-    duprrn = %lookup(dupnbr: sfl_rcdnbrs: 1: sflnbrrcd);
+  if (SflNbrRcd > 0);
+    duprrn = %lookup(dupnbr: sfl_rcdnbrs: 1: SflNbrRcd);
   endif;
 
   if (duprrn > 0);
-    sflrec = duprrn;
-    chain(e) sflrec pbsfl;
+    SflRec = duprrn;
+    chain(e) SflRec pbsfl;
     if (not %error() and %found());
-      isnewdup(sflrec) = *on;
-      exsr sflbzoff;
+      isnewdup(SflRec) = *on;
+      exsr SflBzoff;
       //  Ein Eingabefehler dieser Zeile bleibt markiert. Gibt es
       //  Eingabefehler, bekommen sie den Cursor, nicht die doppelte
       //  Folgenummer.
-      if (errfield(sflrec) <> '');
-        yfield = errfield(sflrec);
-        exsr vposcsr;
+      if (errfield(SflRec) <> '');
+        YField = errfield(SflRec);
+        exsr VPosCsr;
       endif;
       if (isinperr = bFalse);
         *in20 = '1';       // DSPATR(PC)
       endif;
       *in30 = '1';         // DSPATR(RI)
       *in85 = '0';         // DSPATR(RI) Auswahl
-      exsr vsfpauchg;
-      exsr pbsetbz;
+      exsr VSfpauChg;
+      exsr PBSetBZ;
       update pbsfl;
     endif;
   endif;
@@ -654,14 +654,14 @@ endsr;
 //    GetColor      Auswählen neue Farbe                      *
 //============================================================*
 
-begsr getcolor;
+begsr GetColor;
 
-  if (##color <> *blanks);
+  if (##Color <> *blanks);
 
-    ycolorattr = $$color;
+    YColorAttr = $$Color;
 
     monitor;
-      peek25(i_dsp80: ycolorattr: yMsgID: yMsgDta);
+      peek25(i_dsp80: YColorAttr: YMsgID: YMsgDta);
       *in99 = bFalse;
     on-error;
       *in99 = bTrue;
@@ -670,14 +670,14 @@ begsr getcolor;
     if (*in99 = *on);
     // Fehler aufgetreten
     else;
-      $$color = ycolorattr;
+      $$Color = YColorAttr;
     endif;
 
   else;
   //  Cursor steht auf falschem Feld ...
   endif;
 
-  ##color = *blanks;
+  ##Color = *blanks;
 
 endsr;
 
@@ -685,13 +685,13 @@ endsr;
 //    C_EndPgm      F3/F12 - Programm beenden                 *
 //============================================================*
 
-begsr c_endpgm;
+begsr C_EndPgm;
 
-  p_rmvpgmmg(sds.pgmname);
+  p_rmvPgmMg(sds.pgmName);
 
-  o_msgid = 'USR8100';
-  usr8100.var1 = ypgmcmd;
-  o_msgdta = usr8100;
+  o_msgID = 'USR8100';
+  usr8100.var1 = YPgmCmd;
+  o_msgDta = usr8100;
 
 endsr;
 
@@ -699,13 +699,13 @@ endsr;
 //    C_SaveExit    F3     - Sichern und beenden              *
 //============================================================*
 
-begsr c_saveexit;
+begsr C_SaveExit;
 
-  r_seq = *zeros;
+  R_Seq = *zeros;
 
-  clear w0key;
-  w0key.w_key = 0;
-  setll %kds(w0key: 1) fpeekwrk;
+  clear W0Key;
+  W0Key.W_Key = 0;
+  setll %kds(W0Key: 1) fpeekwrk;
 
   dow ('1');
     read(n) fpeekwrk;
@@ -713,30 +713,30 @@ begsr c_saveexit;
       leave;
     endif;
 
-    r_seq = r_seq + 1;
+    R_Seq = R_Seq + 1;
 
-    wrk0001 = w_data;
+    wrk0001 = W_Data;
 
-    chain wrk0001.wrk_rcdnbr fpeekfld;
+    chain wrk0001.WRK_RcdNbr fpeekfld;
     if (not %found(peekfld));
       //  Feld nicht mehr vorhanden, z.B. Feldliste neu aufgebaut
       iter;
     endif;
 
-    f_seq = r_seq;
-    f_hidden = wrk0001.wrk_hidden;
-    f_color = wrk0001.wrk_color;
-    f_markcol = wrk0001.wrk_mrkcol;
-    f_maxsize = wrk0001.wrk_maxsiz;
-    f_edtcde = wrk0001.wrk_edtcde;
+    F_Seq = R_Seq;
+    F_Hidden = wrk0001.WRK_Hidden;
+    F_Color = wrk0001.Wrk_Color;
+    F_MarkCol = wrk0001.WRK_MrkCol;
+    F_MaxSize = wrk0001.WRK_MaxSiz;
+    F_EdtCde = wrk0001.WRK_EdtCde;
 
     update fpeekfld;
   enddo;
 
-  p_rmvpgmmg(sds.pgmname);
+  p_rmvPgmMg(sds.pgmName);
 
-  o_msgid = 'USR8112';
-  o_msgdta = '';
+  o_msgID = 'USR8112';
+  o_msgDta = '';
 
 endsr;
 
@@ -744,20 +744,20 @@ endsr;
 //    C_Refresh     F5  - Aktualisieren der Subfile           *
 //============================================================*
 
-begsr c_refresh;
+begsr C_Refresh;
 
   // - Abrufen der Subfiletexte
-  exsr pbsfltxt;
+  exsr PBSflTxt;
 
   // - Subfile neu aufbauen
-  clear w0key;
-  w0key.w_key = 0;
+  clear W0Key;
+  W0Key.W_Key = 0;
 
-  exsr pbinit;
-  exsr pbsetll;
-  exsr pbreadup;
+  exsr PBInit;
+  exsr PBSetLL;
+  exsr PBReadUp;
 
-  exsr srchinit;
+  exsr SrchInit;
 
 endsr;
 
@@ -765,13 +765,13 @@ endsr;
 //    C_FloatKey    F11 - Schlüsselfelder an den Anfang       *
 //============================================================*
 
-begsr c_floatkey;
+begsr C_FloatKey;
 
   //  Alle nicht Schlüsselfelder mit
   //  negativen Folgenummern versehen ...
-  clear w0key;
-  w0key.w_key = 0;
-  setll %kds(w0key: 1) fpeekwrk;
+  clear W0Key;
+  W0Key.W_Key = 0;
+  setll %kds(W0Key: 1) fpeekwrk;
 
   dow ('1');
     read fpeekwrk;
@@ -779,26 +779,26 @@ begsr c_floatkey;
       leave;
     endif;
 
-    wrk0001 = w_data;
+    wrk0001 = W_Data;
 
-    if (wrk0001.wrk_kseq = 0);
-      wrk0001.wrk_seq = wrk0001.wrk_seq * -1;
+    if (wrk0001.WRK_KSeq = 0);
+      wrk0001.WRK_Seq = wrk0001.WRK_Seq * -1;
     else;
-      wrk0001.wrk_seq = 0;
+      wrk0001.WRK_Seq = 0;
     endif;
 
-    w_key = wrk0001.wrk_seq;
-    w_data = wrk0001;
+    W_Key = wrk0001.WRK_Seq;
+    W_Data = wrk0001;
     update fpeekwrk;
   enddo;
 
   //  Nun alle negative Folgenummern neu
   //  durchnummerieren ...
-  r_seq = 0;
+  R_Seq = 0;
 
-  clear w0key;
-  w0key.w_key = *hival;
-  setgt %kds(w0key: 1) fpeekwrk;
+  clear W0Key;
+  W0Key.W_Key = *hival;
+  setgt %kds(W0Key: 1) fpeekwrk;
 
   dow ('1');
     readp fpeekwrk;
@@ -806,25 +806,25 @@ begsr c_floatkey;
       leave;
     endif;
 
-    wrk0001 = w_data;
+    wrk0001 = W_Data;
 
     //  Schlüsselfelder? ...
-    if (wrk0001.wrk_kseq = 0);
+    if (wrk0001.WRK_KSeq = 0);
       //  ... nein, kein Schlüsselfeld
-      r_seq = r_seq + 10;
-      wrk0001.wrk_seq = r_seq;
+      R_Seq = R_Seq + 10;
+      wrk0001.WRK_Seq = R_Seq;
     else;
       //  ... ja, Schlüsselfeld
-      wrk0001.wrk_seq = wrk0001.wrk_kseq * 10;
-      if (wrk0001.wrk_seq > r_seq);
-        r_seq = wrk0001.wrk_seq;
+      wrk0001.WRK_Seq = wrk0001.WRK_KSeq * 10;
+      if (wrk0001.WRK_Seq > R_Seq);
+        R_Seq = wrk0001.WRK_Seq;
       else;
       //    R_Seq stehenlassen ...
       endif;
     endif;
 
-    w_key = wrk0001.wrk_seq;
-    w_data = wrk0001;
+    W_Key = wrk0001.WRK_Seq;
+    W_Data = wrk0001;
     update fpeekwrk;
   enddo;
 
@@ -834,7 +834,7 @@ endsr;
 //    C_Top         F17 - Anfang der Subfile                  *
 //============================================================*
 
-begsr c_top;
+begsr C_Top;
 
   sfsanr = 1;
 
@@ -844,9 +844,9 @@ endsr;
 //    C_Bot         F18 - Ende der Subfile                    *
 //============================================================*
 
-begsr c_bot;
+begsr C_Bot;
 
-  sfsanr = sflnbrrcd;
+  sfsanr = SflNbrRcd;
 
 endsr;
 
@@ -854,7 +854,7 @@ endsr;
 //    C_MoreKeys    F24 - Weitere Tasten                      *
 //============================================================*
 
-begsr c_morekeys;
+begsr C_MoreKeys;
 
   sfbot = sfbot + 1;
 
@@ -864,23 +864,23 @@ endsr;
 //    FillRecord    Füllen Datensatz in PEEKWRK               *
 //============================================================*
 
-begsr fillrecord;
+begsr FillRecord;
 
-  wrk0001.wrk_seq = ##seq;
+  wrk0001.WRK_Seq = ##Seq;
 
   select;
-  when (##hidden = bTrue);
-    wrk0001.wrk_hidden = bFalse;
-  when (##hidden = bFalse);
-    wrk0001.wrk_hidden = bTrue;
+  when (##Hidden = bTrue);
+    wrk0001.WRK_Hidden = bFalse;
+  when (##Hidden = bFalse);
+    wrk0001.WRK_Hidden = bTrue;
   other;
-    wrk0001.wrk_hidden = ##hidden;
+    wrk0001.WRK_Hidden = ##Hidden;
   endsl;
 
-  wrk0001.wrk_color = $$color;
-  wrk0001.wrk_mrkcol = ##markcol;
-  wrk0001.wrk_maxsiz = ##maxsize;
-  wrk0001.wrk_edtcde = ##edtcde;
+  wrk0001.Wrk_Color = $$Color;
+  wrk0001.WRK_MrkCol = ##MarkCol;
+  wrk0001.WRK_MaxSiz = ##MaxSize;
+  wrk0001.WRK_EdtCde = ##EdtCde;
 
 endsr;
 
@@ -889,7 +889,7 @@ endsr;
 //                  für die MArkierung von Eingabefehlern     *
 //============================================================*
 
-begsr sflbzoff;
+begsr SflBzoff;
 
   //  DSPATR(PC)
   %subarr(*in: 20: 10) = '0';
@@ -903,25 +903,25 @@ endsr;
 //                  Feld in der Subfile                       *
 //============================================================*
 
-begsr vposcsr;
+begsr VPosCsr;
 
   select;
-  when (yfield = 'SEQ');
+  when (YField = 'SEQ');
     *in20 = '1';         // DSPATR(PC)
     *in30 = '1';         // DSPATR(RI)
-  when (yfield = 'HIDDEN');
+  when (YField = 'HIDDEN');
     *in21 = '1';         // DSPATR(PC)
     *in31 = '1';         // DSPATR(RI)
-  when (yfield = 'COLOR');
+  when (YField = 'COLOR');
     *in22 = '1';         // DSPATR(PC)
     *in32 = '1';         // DSPATR(RI)
-  when (yfield = 'MARKCOL');
+  when (YField = 'MARKCOL');
     *in23 = '1';         // DSPATR(PC)
     *in33 = '1';         // DSPATR(RI)
-  when (yfield = 'MAXSIZE');
+  when (YField = 'MAXSIZE');
     *in24 = '1';         // DSPATR(PC)
     *in34 = '1';         // DSPATR(RI)
-  when (yfield = 'EDTCDE');
+  when (YField = 'EDTCDE');
     *in25 = '1';         // DSPATR(PC)
     *in35 = '1';
   other;
@@ -934,16 +934,16 @@ endsr;
 //    VPos          Verarbeiten der Eingaben                  *
 //============================================================*
 
-begsr vpos;
+begsr VPos;
 
   chain recordnbr peekwrk_ ds_peekwrk;
   if (not %found(peekwrk_));
   //  Weiß noch nicht, was zu tun ist ...
   else;
-    wrk0001 = w_data;
-    exsr fillrecord;
-    w_key = wrk0001.wrk_seq;
-    w_data = wrk0001;
+    wrk0001 = W_Data;
+    exsr FillRecord;
+    W_Key = wrk0001.WRK_Seq;
+    W_Data = wrk0001;
     update peekwrk_ ds_peekwrk;
   endif;
 
@@ -953,7 +953,7 @@ endsr;
 //    VSfpauClr     Löschen Subfileauswahl                    *
 //============================================================*
 
-begsr vsfpauclr;
+begsr VSfpauClr;
 
   sfpau = '';
   *in85 = '0'; // DSPATR(RI)
@@ -965,10 +965,10 @@ endsr;
 //    VSfpauErr     Anzeigen fehlerhafter Subfileauswahl      *
 //============================================================*
 
-begsr vsfpauerr;
+begsr VSfpauErr;
 
   *in85 = '1'; // DSPATR(RI)
-  exsr vsfpauchg;
+  exsr VSfpauChg;
 
 endsr;
 
@@ -977,7 +977,7 @@ endsr;
 //                  markieren                                 *
 //============================================================*
 
-begsr vsfpauchg;
+begsr VSfpauChg;
 
   *in84 = '1'; // SFLNXTCHG
 
@@ -988,7 +988,7 @@ endsr;
 //                  der nächsten Seite                        *
 //============================================================*
 
-begsr pbinit;
+begsr PBInit;
 
   *in89 = '0';
   write msgctl;
@@ -1001,8 +1001,8 @@ begsr pbinit;
 
   *in82 = '0'; // SFLCLR
 
-  sflrec = 0;
-  sflnbrrcd = 0;
+  SflRec = 0;
+  SflNbrRcd = 0;
 
   //  Neue Subfile: keine Markierungen für doppelte Folgenummern
   isduprow(*) = *off;
@@ -1013,7 +1013,7 @@ endsr;
 //    PBReadUP      Vorwärts füllen der Subfile               *
 //============================================================*
 
-begsr pbreadup;
+begsr PBReadUp;
 
   dow ('1');
     read(n) fpeekwrk;
@@ -1022,17 +1022,17 @@ begsr pbreadup;
       leave;
     endif;
 
-    exsr pbfill;
+    exsr PBFill;
 
-    sflrec = sflrec + 1;
+    SflRec = SflRec + 1;
     //  Setzen Bezugszahlen ...
-    exsr pbsetbz;
+    exsr PBSetBZ;
     write pbsfl;
-    sflnbrrcd = sflrec;
-    sfl_fnmes(sflrec) = $$fnme;
-    sfl_rcdnbrs(sflrec) = recordnbr;
+    SflNbrRcd = SflRec;
+    sfl_fnmes(SflRec) = $$fnme;
+    sfl_rcdnbrs(SflRec) = recordnbr;
 
-    if (sflrec >= sflpage);
+    if (SflRec >= SflPage);
       leave;
     endif;
 
@@ -1044,94 +1044,94 @@ endsr;
 //    PBFill        Füllen Subfilesatz                        *
 //============================================================*
 
-begsr pbfill;
+begsr PBFill;
 
-  exsr sflbzoff;
+  exsr SflBzoff;
 
-  recordnbr = work_00_ds.rcdnbr;
+  recordnbr = Work_00_DS.RcdNbr;
 
-  wrk0001 = w_data;
+  wrk0001 = W_Data;
 
-  chain(n) wrk0001.wrk_rcdnbr fpeekfld;
+  chain(n) wrk0001.WRK_RcdNbr fpeekfld;
 
   fldl0100 = f_ffd;
 
   //  ... Anzeigereihenfolge
-  ##seq = wrk0001.wrk_seq;
+  ##Seq = wrk0001.WRK_Seq;
   //  ... Feldname
   $$fnme = fldl0100.f1fnme;
   //  ... Feldbezeichnung
   $$ftxt = fldl0100.f1ftxt;
   //  ... Datentyp
-  $$dtyp = fldl0100.f1dtyp;
+  $$DTyp = fldl0100.F1DTyp;
 
   //  ... Anzahl Dezimalstellen
-  if ((f_isnumfld(fldl0100) = bTrue) and
-      (f_isfloatfld(fldl0100) = bFalse));
-    $$digt = fldl0100.f1digt;
+  if ((f_isNumFld(fldl0100) = bTrue) and
+      (f_isFloatFld(fldl0100) = bFalse));
+    $$Digt = fldl0100.f1digt;
     //      ... Anzahl Nachkommastellen
-    $$decp = fldl0100.f1decp;
+    $$DecP = fldl0100.f1decp;
     isdecimal = bTrue;
   else;
-    $$digt = f_buffln(fldl0100);
-    $$decp = 0;
+    $$Digt = f_buffLn(fldl0100);
+    $$DecP = 0;
     isdecimal = bFalse;
   endif;
 
   //  ... Variable Feldlänge
-  if (f_isvarlen(fldl0100) = bTrue);
-    isvarlen = bTrue;
+  if (f_isVarLen(fldl0100) = bTrue);
+    isVarLen = bTrue;
   else;
-    isvarlen = bFalse;
+    isVarLen = bFalse;
   endif;
 
   //  ... Unbekannte Feldart
-  if (f_unknown = bTrue);
-    isunknown = bTrue;
+  if (F_UnKnown = bTrue);
+    isUnKnown = bTrue;
   else;
-    isunknown = bFalse;
+    isUnKnown = bFalse;
   endif;
 
   //  ... Startposition
-  $$ibuf = fldl0100.f1ibuf;
+  $$IBuf = fldl0100.F1IBuf;
   //  ... Keyfeldnummer
-  if (f_kseq <> *zeros);
-    $$kseq = 'K'+%editc(%dec(f_kseq: 3: 0): 'X');
+  if (F_KSeq <> *zeros);
+    $$KSeq = 'K'+%editc(%dec(F_KSeq: 3: 0): 'X');
   else;
-    $$kseq = '';
+    $$KSeq = '';
   endif;
   //  ... Sichtbar
   select;
-  when (wrk0001.wrk_hidden = bTrue);
-    ##hidden = bFalse;
-  when (wrk0001.wrk_hidden = bFalse);
-    ##hidden = bTrue;
+  when (wrk0001.WRK_Hidden = bTrue);
+    ##Hidden = bFalse;
+  when (wrk0001.WRK_Hidden = bFalse);
+    ##Hidden = bTrue;
   other;
-    ##hidden = wrk0001.wrk_hidden;
+    ##Hidden = wrk0001.WRK_Hidden;
   endsl;
   //  ... Farbe
-  ##color = '';
-  $$color = wrk0001.wrk_color;
+  ##Color = '';
+  $$Color = wrk0001.Wrk_Color;
   //  ... Farbmarkierung
-  ##markcol = wrk0001.wrk_mrkcol;
+  ##MarkCol = wrk0001.WRK_MrkCol;
   //  ... Max. Anzeigebreite (Größe)
-  ##maxsize = wrk0001.wrk_maxsiz;
+  ##MaxSize = wrk0001.WRK_MaxSiz;
   //  ... Editcode
-  ##edtcde = wrk0001.wrk_edtcde;
+  ##EdtCde = wrk0001.WRK_EdtCde;
   //  ... Original-Editcode
   if (fldl0100.f1edtc <> '');
     $$edtc = '(' + %trim(fldl0100.f1edtc) + ')';
-    iseditcode = '1';
+    IsEditcode = '1';
   else;
     $$edtc = '';
-    iseditcode = '0';
+    IsEditcode = '0';
   endif;
 
   //  ... anzeigen Subfile
   *in80 = '1'; // SFLDSP
 
   //  ... Löschen Subfileauswahl
-  exsr vsfpauclr;
+  exsr VSfpauClr;
 
 endsr;
 
@@ -1139,9 +1139,9 @@ endsr;
 //    PBSetLL       Setzen Dateizeiger                        *
 //============================================================*
 
-begsr pbsetll;
+begsr PBSetLL;
 
-  setll %kds(w0key: 1) fpeekwrk;
+  setll %kds(W0Key: 1) fpeekwrk;
 
 endsr;
 
@@ -1149,7 +1149,7 @@ endsr;
 //    PBSetBZ       Setzen Bezugszahlen                       *
 //============================================================*
 
-begsr pbsetbz;
+begsr PBSetBZ;
 
   //  Editcode
   if (isdecimal = bFalse);
@@ -1166,14 +1166,14 @@ begsr pbsetbz;
   endif;
 
   //  Kennzeichnung für variable Länge
-  if (isvarlen = bFalse);
+  if (isVarLen = bFalse);
     *in73 = '0';
   else;
     *in73 = '1';
   endif;
 
   //  Unbekannter Feldtyp
-  if (isunknown = bFalse);
+  if (isUnKnown = bFalse);
     *in74 = '0';
   else;
     *in74 = '1';
@@ -1185,13 +1185,13 @@ endsr;
 //    PBSflTxt      Abrufen der Subfiletexte                  *
 //============================================================*
 
-begsr pbsfltxt;
+begsr PBSflTxt;
 
-  txt0080 = f_msgtext('TXT0080': ' ');
-  txt0081 = f_msgtext('TXT0081': ' ');
-  txt0082 = f_msgtext('TXT0082': ' ');
-  txt0083 = f_msgtext('TXT0083': ' ');
-  txt0084 = f_msgtext('TXT0084': ' ');
+  txt0080 = f_msgText('TXT0080': ' ');
+  txt0081 = f_msgText('TXT0081': ' ');
+  txt0082 = f_msgText('TXT0082': ' ');
+  txt0083 = f_msgText('TXT0083': ' ');
+  txt0084 = f_msgText('TXT0084': ' ');
 
 endsr;
 
@@ -1199,7 +1199,7 @@ endsr;
 //    SetScreen     Einstellen 132/80-Zeichen Auflösung       *
 //============================================================*
 
-begsr setscreen;
+begsr SetScreen;
 
   if (i_dsp80 = '0');
     //   132-Zeichen Anzeige
@@ -1213,8 +1213,8 @@ begsr setscreen;
     pos = 2;
   endif;
 
-  sflpage = *hival;
-  sflpagedds = 4;
+  SflPage = *hival;
+  SflPageDDS = 4;
 
 endsr;
 
@@ -1222,15 +1222,15 @@ endsr;
 //    ClrPeekWrk    Löschen der Datei PEEKWRK                 *
 //============================================================*
 
-begsr clrpeekwrk;
+begsr ClrPeekWrk;
 
   f_execute('CLRPFM FILE(' +
               %trimr(WORK_FILE_LIBRARY) + '/' +
               %trimr(WORK_FILE_NAME) +
             ') MBR(' + %trimr(WORK_FILE_MEMBER) + ')'
-            :yMsgID: yMsgDta);
-  yMsgID = '';
-  yMsgDta = '';
+            :YMsgID: YMsgDta);
+  YMsgID = '';
+  YMsgDta = '';
 
 endsr;
 
@@ -1238,13 +1238,13 @@ endsr;
 //    CopyToWork    Kopieren PEEKFLD nach PEEKWRK             *
 //============================================================*
 
-begsr copytowork;
+begsr CopyToWork;
 
-  r_seq = 0;
+  R_Seq = 0;
 
-  clear f1key;
-  f1key.f_seq = 0;
-  setll %kds(f1key: 1) fpeekfldl1;
+  clear F1Key;
+  F1Key.F_Seq = 0;
+  setll %kds(F1Key: 1) fpeekfldl1;
 
   dow ('1');
     read fpeekfldl1;
@@ -1255,21 +1255,21 @@ begsr copytowork;
     clear wrk0001;
     clear ds_peekwrk;
 
-    r_seq = r_seq + 10;
+    R_Seq = R_Seq + 10;
 
-    w_key = r_seq;
+    W_Key = R_Seq;
 
-    wrk0001.wrk_rcdnbr = peek_01_ds.rcdnbr;
-    wrk0001.wrk_seq = r_seq;
-    wrk0001.wrk_kseq = f_kseq;
-    wrk0001.wrk_hidden = f_hidden;
-    wrk0001.wrk_color = f_color;
-    wrk0001.wrk_mrkcol = f_markcol;
-    wrk0001.wrk_maxsiz = f_maxsize;
-    wrk0001.wrk_edtcde = f_edtcde;
+    wrk0001.WRK_RcdNbr = Peek_01_DS.RcdNbr;
+    wrk0001.WRK_Seq = R_Seq;
+    wrk0001.WRK_KSeq = F_KSeq;
+    wrk0001.WRK_Hidden = F_Hidden;
+    wrk0001.Wrk_Color = F_Color;
+    wrk0001.WRK_MrkCol = F_MarkCol;
+    wrk0001.WRK_MaxSiz = F_MaxSize;
+    wrk0001.WRK_EdtCde = F_EdtCde;
 
-    w_format = 'WRK0001';
-    w_data = wrk0001;
+    W_Format = 'WRK0001';
+    W_Data = wrk0001;
 
     write peekwrk_ ds_peekwrk;
   enddo;
@@ -1280,31 +1280,31 @@ endsr;
 //    First         Initialisierung                           *
 //============================================================*
 
-begsr first;
+begsr First;
 
   // - Öffnen der Dateien
   open peekfldl1;
   open peekfld;
 
-  exsr clrpeekwrk;
+  exsr ClrPeekWrk;
   open peekwrk;
   open peekwrk_;
-  exsr copytowork;
+  exsr CopyToWork;
 
   // - Programm initialisieren
-  p_rmvpgmmg(sds.pgmname);
+  p_rmvPgmMg(sds.pgmName);
 
-  ##field = '';
+  ##Field = '';
 
   // - Rückkehrcode
-  o_msgid = '';
-  o_msgdta = '';
+  o_msgID = '';
+  o_msgDta = '';
 
   // - Batchverarbeitung
   select;
   when (i_function = '*FLOATKEYS');
-    exsr c_floatkey;
-    exsr c_saveexit;
+    exsr C_FloatKey;
+    exsr C_SaveExit;
     isBatch = bTrue;
     leavesr;
   other;
@@ -1319,16 +1319,16 @@ begsr first;
   sfbot = 1;
 
   // - Einstellen der Bildschirmauflösung 80/132-Zeichen
-  exsr setscreen;
+  exsr SetScreen;
 
   // - Anzuzeigender Subfilesatz
   sfsanr = 1;
 
   // - Subfile füllen
-  exsr c_refresh;
+  exsr C_Refresh;
 
   // - Copyright
-  p_sndpgmmg('USR9999': i_copyright: sds.pgmname);
+  p_sndPgmMg('USR9999': i_copyright: sds.pgmName);
 
 endsr;
 
@@ -1347,14 +1347,14 @@ begsr inzsr;
 
   PGMQ = '*';
 
-  peek21_name = f_pgmcalln('PEEK21');
-  peek23_name = f_pgmcalln('PEEK23');
-  peek25_name = f_pgmcalln('PEEK25');
-  peek35_name = f_pgmcalln('PEEK35');
+  peek21_name = f_pgmCallN('PEEK21');
+  peek23_name = f_pgmCallN('PEEK23');
+  peek25_name = f_pgmCallN('PEEK25');
+  peek35_name = f_pgmCallN('PEEK35');
 
-  peek23(sds.pgmname: '*ALL': nbrfkeys
-        : yfkeys: ynbrofkeys);
-  scrnfkeys = %subarr(yfkeys: 1);
+  peek23(sds.pgmName: '*ALL': NbrFKeys
+        : yFKeys: yNbrOfKeys);
+  ScrnFKeys = %subarr(yFKeys: 1);
 
 endsr;
 
@@ -1362,12 +1362,12 @@ endsr;
 //  Program error handler                                     *
 //============================================================*
 
-dcl-proc errorhandler;
+dcl-proc errorHandler;
   dcl-pi *n;
-    i_condtoken    likeds(cee_fc_t) value;
-    i_pcommarea    int(10) value;
+    i_condToken    likeds(cee_fc_t) value;
+    i_pCommArea    int(10) value;
     o_action       int(10);
-    o_newcondtoken likeds(cee_fc_t);
+    o_newCondToken likeds(cee_fc_t);
   end-pi;
 
   dump;

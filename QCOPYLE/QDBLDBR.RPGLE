@@ -4,12 +4,12 @@
 
 //  List Database Relations (QDBLDBR) API
 dcl-pr qdbldbr extpgm('QDBLDBR');
-  i_qusrspc  char(20) const;
+  i_qUsrSpc  char(20) const;
   i_format   char(8) const;
-  i_qfile    char(20) const;
+  i_qFile    char(20) const;
   i_mbr      char(10) const;
-  i_rcdfmt   char(10) const;
-  io_errcode char(65535) options(*varsize);
+  i_rcdFmt   char(10) const;
+  io_ErrCode char(65535) options(*varsize);
 end-pr;
 
 /endif

@@ -6,6 +6,6 @@ dcl-pr peek33 extpgm('PEEK33');
 dcl-pr peek33 extpgm(peek33_name);
 /endif
   i_version like(version_t) const;
-  o_msgid   like(msgid_t);
-  o_msgdta  like(msgdta_t);
+  o_msgID   like(msgId_t);
+  o_msgDta  like(msgDta_t);
 end-pr;

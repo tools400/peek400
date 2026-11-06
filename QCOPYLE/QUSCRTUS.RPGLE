@@ -4,19 +4,19 @@
 
 //  List Objects (QUSCRTUS) API
 dcl-pr quscrtus extpgm('QUSCRTUS');
-  i_qusrspc       char(20) const;
-  i_extattr       char(10) const;
-  i_initsize      int(10) const;
-  i_initvalue     char(1) const;
-  i_pubauth       char(10) const;
+  i_qUsrSpc       char(20) const;
+  i_extAttr       char(10) const;
+  i_initSize      int(10) const;
+  i_initValue     char(1) const;
+  i_pubAuth       char(10) const;
   i_text          char(50) const;
   i_replace       char(10) options(*nopass) const; // | optGrp 1
-  io_errcode      char(65535) options(*nopass: *varsize); // |
+  io_ErrCode      char(65535) options(*nopass: *varsize); // |
   i_domain        char(10) options(*nopass) const; // | optGrp 2
   // | optGrp 3
-  i_transsizereq  char(10) options(*nopass) const; // |
+  i_transSizeReq  char(10) options(*nopass) const; // |
   // |
-  i_optspacealign char(1) options(*nopass) const; // |
+  i_optSpaceAlign char(1) options(*nopass) const; // |
 end-pr;
 
 /endif

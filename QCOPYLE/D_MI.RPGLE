@@ -2,21 +2,21 @@
 /if NOT defined(D_MI)
 /define D_MI
 
-dcl-s num_descr_t int(10) template;
+dcl-s NUM_Descr_T int(10) template;
 
 //  Copy Numeric Value (CPYNV)
 dcl-pr cpynv pointer extproc('cpynv');
-  i_rcvdesc like(num_descr_t) value;
-  i_prcvvar pointer value;
-  i_srcdesc like(num_descr_t) value;
-  i_psrcvar pointer value;
+  i_rcvDesc like(NUM_Descr_T) value;
+  i_pRcvVar pointer value;
+  i_srcDesc like(NUM_Descr_T) value;
+  i_pSrcVar pointer value;
 end-pr;
 
 //  These values must be specified on the Scalar Type for CPYNV,
 //  CVTEFN, and EDIT instructions.                              QSYSINC/MIH.MICPTCOM
-dcl-c t_signed x'00';
+dcl-c T_Signed x'00';
 dcl-c t_float x'01';
-dcl-c t_zoned x'02';
+dcl-c T_Zoned x'02';
 dcl-c t_packed x'03';
 dcl-c t_char x'04';
 dcl-c t_onlyns x'06';

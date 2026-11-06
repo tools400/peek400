@@ -3,46 +3,46 @@
 /define CLIB2
 
 //  File open feedback data structure
-dcl-ds rfile_t qualified template;
+dcl-ds RFILE_t qualified template;
   res01   char(16);
-  pinbuf  pointer;
-  poutbuf pointer;
+  pInBuf  pointer;
+  pOutBuf pointer;
   res02   char(48);
 /if not defined(*V5R3M0)
-  riofb   like(riofb_t);
+  riofb   like(RIOFB_t);
 /else
-  riofb   likeds(riofb_t);
+  riofb   likeds(RIOFB_t);
 /endif
   res03   char(32);
-  buflen  uns(10);
+  bufLen  uns(10);
   res04   char(28);
-  pinnull pointer;
-  poutnul pointer;
-  pkeynul pointer;
+  pInNull pointer;
+  pOutNul pointer;
+  pKeyNul pointer;
   res05   char(48);
-  minlen  int(10);
-  nmaplen int(5);
-  nkeylen int(5);
+  minLen  int(10);
+  nMapLen int(5);
+  nKeyLen int(5);
   res06   char(8);
 end-ds;
 
 //  Record IO feedback data structure
-dcl-ds riofb_t qualified align template;
-  pkey   pointer;
-  psysp  pointer;
+dcl-ds RIOFB_t qualified align template;
+  pKey   pointer;
+  pSysP  pointer;
   rrn    uns(10);
-  numbyt int(10);
-  blkcnt int(5);
-  blkfld char(1);
+  numByt int(10);
+  blkCnt int(5);
+  blkFld char(1);
   bitfld char(1);
-  dupky  char(1) overlay(bitfld: 1);
-  icflc  char(1) overlay(bitfld: 1);
+  dupKy  char(1) overlay(bitfld: 1);
+  icfLc  char(1) overlay(bitfld: 1);
   res01  char(1) overlay(bitfld: 1);
   res02  char(20);
 end-ds;
 
 //  Record IO feedback data structure
-dcl-ds xxiofb_t qualified template;
+dcl-ds XXIOFB_t qualified template;
   file_dep_fb_offset int(5);
   write_count        int(10);
   read_count         int(10);
@@ -62,7 +62,7 @@ dcl-ds xxiofb_t qualified template;
   reserved4          char(8);
 end-ds;
 
-dcl-ds xxiofb_db_t qualified template;
+dcl-ds XXIOFB_DB_t qualified template;
   db_fdbk_size       int(10);
   join_default_flags char(4);
   reserved1          char(2);
@@ -70,12 +70,12 @@ dcl-ds xxiofb_db_t qualified template;
   fields_in_fmt      int(5);
   reserved2          char(4);
   reserved3          char(1);
-  flags              int(3);
+  Flags              int(3);
   num_key_fields     int(5);
   reserved4          char(4);
   key_len            uns(5);
   data_mbr_num       int(5);
-  data_mbr_rrn       uns(10);
+  data_mbr_RRN       uns(10);
   key_value          char(1) dim(max_key_size);
 end-ds;
 
@@ -94,7 +94,7 @@ dcl-c key_prevunq x'06000100';
 dcl-c key_nexteq x'0E000100';
 dcl-c key_preveq x'0F000100';
 
-dcl-c first x'01000300';
+dcl-c First x'01000300';
 dcl-c last x'02000300';
 dcl-c next x'03000300';
 dcl-c previous x'04000300';
@@ -116,15 +116,15 @@ dcl-c eof -1;
 //  _Ropen -- Open a Record File for I/O Operatins
 //    #include <recio.h>
 //    _RFILE *_Ropen(const char * filename, const char * mode, ...);
-dcl-pr ropen pointer extproc('C_Ropen'); // _RFILE
-  i_filename pointer options(*string) value;
+dcl-pr Ropen pointer extproc('C_Ropen'); // _RFILE
+  i_fileName pointer options(*string) value;
   i_mode     pointer options(*string) value;
 end-pr;
 
 //  _Rclose -- Close a File
 //    #include <recio.h>
 //    int _Rclose(_RFILE *fp);
-dcl-pr rclose int(10) extproc('C_Rclose');
+dcl-pr Rclose int(10) extproc('C_Rclose');
   i_fp pointer value;
 end-pr;
 
@@ -132,14 +132,14 @@ end-pr;
 //    #include <recio.h>
 //    #include <xxfdbk.h>
 //    _XXIOFB_T *_Riofbk(_RFILE *fp);
-dcl-pr riofbk pointer extproc('C_Riofbk'); // _XXIOFB_T
+dcl-pr Riofbk pointer extproc('C_Riofbk'); // _XXIOFB_T
   i_fp pointer value;
 end-pr;
 
 //  _Rlocate -- Position to a Record
 //    #include <recio.h>
 //    _RIOFB_T *_Rlocate(_RFILE *fp, void *key, int klen_rrn, int opts);
-dcl-pr rlocate pointer extproc('C_Rlocate'); // _RIOFB_T
+dcl-pr Rlocate pointer extproc('C_Rlocate'); // _RIOFB_T
   i_fp       pointer value;
   i_key      pointer value;
   i_klen_rrn int(10) value;
@@ -150,9 +150,9 @@ end-pr;
 //    #include <recio.h>
 //    _RIOFB_T *_Rreadd (_RFILE *fp, void *buf, size_t size,
 //                                int opts, long rrn);
-dcl-pr rreadd pointer extproc('C_Rreadd'); // _RIOFB_T
+dcl-pr Rreadd pointer extproc('C_Rreadd'); // _RIOFB_T
   i_fp      pointer value;
-  i_pbuffer pointer value;
+  i_pBuffer pointer value;
   i_size    uns(10) value;
   i_opts    int(10) value;
   i_rrn     int(10) value;
@@ -161,16 +161,16 @@ end-pr;
 //  _Rdelete -- Delete a Record
 //    #include <recio.h>
 //    _RIOFB_T *_Rdelete(_RFILE *fp);
-dcl-pr rdelete pointer extproc('C_Rdelete'); // _RIOFB_T
+dcl-pr Rdelete pointer extproc('C_Rdelete'); // _RIOFB_T
   i_fp pointer value;
 end-pr;
 
 //  _Rreadn -- Read the next Record
 //    #include <recio.h>
 //    _RIOFB_T *_Rreadn (_RFILE *fp, void *buf, size_t size, int opts);
-dcl-pr rreadn pointer extproc('C_Rreadn'); // _RIOFB_T
+dcl-pr Rreadn pointer extproc('C_Rreadn'); // _RIOFB_T
   i_fp      pointer value;
-  i_pbuffer pointer value;
+  i_pBuffer pointer value;
   i_size    uns(10) value;
   i_opts    int(10) value;
 end-pr;
@@ -178,9 +178,9 @@ end-pr;
 //  _Rreadp -- Read the Previous Record
 //    #include <recio.h>
 //    _RIOFB_T *_Rreadp (_RFILE *fp, void *buf, size_t size, int opts);
-dcl-pr rreadp pointer extproc('C_Rreadp'); // _RIOFB_T
+dcl-pr Rreadp pointer extproc('C_Rreadp'); // _RIOFB_T
   i_fp      pointer value;
-  i_pbuffer pointer value;
+  i_pBuffer pointer value;
   i_size    uns(10) value;
   i_opts    int(10) value;
 end-pr;
@@ -189,9 +189,9 @@ end-pr;
 //    #include <recio.h>
 //    _RIOFB_T *_Rreadk(_RFILE *fp, void *buf, size_t size,
 //                       int opts, void *key, unsigned int keylen);
-dcl-pr rreadk pointer extproc('C_Rreadk'); // _RIOFB_T
+dcl-pr Rreadk pointer extproc('C_Rreadk'); // _RIOFB_T
   i_fp      pointer value;
-  i_pbuffer pointer value;
+  i_pBuffer pointer value;
   i_size    uns(10) value;
   i_opts    int(10) value;
   i_key     pointer value;
@@ -201,9 +201,9 @@ end-pr;
 //  _Rreads -- Read the Same Record
 //    #include <recio.h>
 //    _RIOFB_T *_Rreads(_RFILE *fp, void *buf, size_t size, int opts);
-dcl-pr rreads pointer extproc('C_Rreads'); // _RIOFB_T
+dcl-pr Rreads pointer extproc('C_Rreads'); // _RIOFB_T
   i_fp      pointer value;
-  i_pbuffer pointer value;
+  i_pBuffer pointer value;
   i_size    uns(10) value;
   i_opts    int(10) value;
 end-pr;
@@ -211,14 +211,14 @@ end-pr;
 //  _Rrlslck -- Release a Record Lock
 //    #include <recio.h>
 //    int _Rrlslck(_RFILE *fp);
-dcl-pr rrlslck int(10) extproc('C_Rrlslck'); // int 1=success
+dcl-pr RrlsLck int(10) extproc('C_Rrlslck'); // int 1=success
   i_fp pointer value; //     0=error
 end-pr;
 
 //  _Rformat -- Set the Record Format Name
 //    #include <recio.h>
 //    void  _Rformat(_RFILE *fp, char *fmt);
-dcl-pr rformat extproc('C_Rformat');
+dcl-pr Rformat extproc('C_Rformat');
   i_handle pointer value;
   i_format pointer options(*string) value;
 end-pr;

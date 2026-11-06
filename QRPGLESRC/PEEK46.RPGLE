@@ -81,21 +81,21 @@ ctl-opt main(peek46);
 /copy QCOPYLE,PPEEK53
 /copy QCOPYLE,PPEEK58
 
-dcl-ds qusrspc likeds(qobj_t);
-dcl-s pspcptr pointer;
-dcl-ds errcode likeds(errcode_t) inz;
+dcl-ds qUsrSpc likeds(qObj_t);
+dcl-s pSpcPtr pointer;
+dcl-ds errCode likeds(errCode_t) inz;
 
 //  Organisation of generic header
-dcl-ds genheader likeds(genheader_t) based(pspcptr);
+dcl-ds GenHeader likeds(genHeader_t) based(pSpcPtr);
 
 //  List data
-dcl-s currliste like(int4_t);
-dcl-s offsetliste like(int4_t);
-dcl-s pliste pointer;
-dcl-ds liste likeds(mbrl0200_t) based(pliste);
+dcl-s currListE like(int4_t);
+dcl-s offsetListE like(int4_t);
+dcl-s pListE pointer;
+dcl-ds listE likeds(MBRL0200_t) based(pListE);
 
-dcl-s msgid like(msgid_t);
-dcl-s msgdta like(msgdta_t);
+dcl-s msgID like(msgId_t);
+dcl-s msgDta like(msgDta_t);
 
 //*******************************************************************
 //           Main  Control block                                    *
@@ -103,23 +103,23 @@ dcl-s msgdta like(msgdta_t);
 
 dcl-proc peek46;
   dcl-pi *n;
-    i_qfile    likeds(qobj_t) const;
+    i_qFile    likeds(qObj_t) const;
     i_mbr      like(mbr_t) const;
     i_function like(function_t) const;
-    o_nume     like(int4_t);
-    o_mbrl0200 likeds(mbrl0200_t);
+    o_numE     like(int4_t);
+    o_mbrl0200 likeds(MBRL0200_t);
   end-pi;
 
   //---------------------------------------------------*
 
-  qusrspc.lib = USRSPC_LIBRARY;
-  qusrspc.name = USRSPC_NAME;
+  qUsrSpc.lib = USRSPC_LIBRARY;
+  qUsrSpc.name = USRSPC_NAME;
 
   monitor;
 
     select;
     when (i_function = '*CREATE');
-      exsr create;
+      exsr Create;
     when (i_function = '*DELETE');
       exsr delete;
     when (i_function = '*READ');
@@ -128,37 +128,37 @@ dcl-proc peek46;
 
   on-error;
     dump;
-    o_nume = 0;
+    o_numE = 0;
   endmon;
 
   //====================================================*
   //  Create --  create user space and get database rel.*
   //====================================================*
 
-  begsr create;
+  begsr Create;
 
-    o_nume = *zeros;
+    o_numE = *zeros;
 
     //  create user space
     if (not f_exist(
-       qusrspc.name: qusrspc.lib: '*USRSPC'));
-      quscrtus(qusrspc: 'TEMP': 32767: x'00'
+       qUsrSpc.name: qUsrSpc.lib: '*USRSPC'));
+      quscrtus(qUsrSpc: 'TEMP': 32767: x'00'
               : '*ALL': 'Peek/400 - Work Area');
     endif;
 
     //  get user space pointer
-    qusptrus(qusrspc: pspcptr);
+    qusptrus(qUsrSpc: pSpcPtr);
 
     //  get file member list
-    quslmbr(qusrspc: 'MBRL0200'
-           : i_qfile: i_mbr: '0': errcode);
+    quslmbr(qUsrSpc: 'MBRL0200'
+           : i_qFile: i_mbr: '0': errCode);
 
-    if (errcode.bytavl > 0);
-      o_nume = 0;
-      currliste = -1;
+    if (errCode.bytAvl > 0);
+      o_numE = 0;
+      currListE = -1;
     else;
-      o_nume = genheader.numlstent;
-      currliste = 0;
+      o_numE = GenHeader.NumLstEnt;
+      currListE = 0;
     endif;
 
   endsr;
@@ -169,11 +169,11 @@ dcl-proc peek46;
 
   begsr delete;
 
-    if (f_exist(qusrspc.name: qusrspc.lib: '*USRSPC'));
+    if (f_exist(qUsrSpc.name: qUsrSpc.lib: '*USRSPC'));
       f_execute('DLTUSRSPC USRSPC(' +
-                 %trim(qusrspc.lib) + '/' +
-                 %trim(qusrspc.name) +
-               ')': msgid: msgdta);
+                 %trim(qUsrSpc.lib) + '/' +
+                 %trim(qUsrSpc.name) +
+               ')': msgID: msgDta);
     endif;
 
   endsr;
@@ -186,23 +186,23 @@ dcl-proc peek46;
 
     clear o_mbrl0200;
 
-    if (currliste < 0 or
-       currliste >= genheader.numlstent);
-      exsr seterror;
+    if (currListE < 0 or
+       currListE >= GenHeader.NumLstEnt);
+      exsr setError;
       leavesr;
     endif;
 
-    currliste = currliste + 1;
+    currListE = currListE + 1;
 
-    offsetliste =
-     genheader.offsetlst +
-     ((currliste - 1) * genheader.entrysize);
+    offsetListE =
+     GenHeader.OffsetLst +
+     ((currListE - 1) * GenHeader.EntrySize);
 
-    pliste = pspcptr + offsetliste;
+    pListE = pSpcPtr + offsetListE;
 
-    o_mbrl0200 = liste;
+    o_mbrl0200 = listE;
 
-    o_nume = genheader.numlstent - currliste;
+    o_numE = GenHeader.NumLstEnt - currListE;
 
   endsr;
 
@@ -210,9 +210,9 @@ dcl-proc peek46;
   //  Set error condition                               *
   //====================================================*
 
-  begsr seterror;
+  begsr setError;
 
-    o_nume = 0;
+    o_numE = 0;
 
   endsr;
 

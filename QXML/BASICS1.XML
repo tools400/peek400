@@ -30167,7 +30167,7 @@ srccssid=  "01141">
       *
      D msg_t           DS                  qualified           based(pDummy)
       /if defined(*V5R3M0)
-     D  ID                                 likeds(msgID_t)
+     D  ID                                 likeds(msgId_t)
       /else
      D  ID                            7A
       /endif
@@ -30177,7 +30177,7 @@ srccssid=  "01141">
      D  lib                          10A
       *
       /if defined(*V5R3M0)
-     D msgID_t         DS                  qualified           based(pDummy)
+     D msgId_t         DS                  qualified           based(pDummy)
      D  prefix                        3A
      D  nbr                           4S 0
       /endif

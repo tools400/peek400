@@ -65,44 +65,44 @@
 /undefine internal_prototype
 
 //  declarations for Convert Edit Code: QECCVTEC
-dcl-s editmask char(256) inz(*blanks);
-dcl-s editmaskln inz(*zeros) like(int4_t);
-dcl-s rcvvarlen inz(*zeros) like(int4_t);
-dcl-s zerobalanc char(1) inz(*blanks);
-dcl-s editcode char(1) inz(*blanks);
-dcl-s currind char(1) inz(*blanks);
-dcl-s precision inz(*zeros) like(int4_t);
-dcl-s binlength inz(*zeros) like(int4_t);
-dcl-s decimal inz(*zeros) like(int4_t);
+dcl-s EditMask char(256) inz(*blanks);
+dcl-s EditMaskLn inz(*zeros) like(int4_t);
+dcl-s rcvVarLen inz(*zeros) like(int4_t);
+dcl-s ZeroBalanc char(1) inz(*blanks);
+dcl-s EditCode char(1) inz(*blanks);
+dcl-s CurrInd char(1) inz(*blanks);
+dcl-s Precision inz(*zeros) like(int4_t);
+dcl-s BinLength inz(*zeros) like(int4_t);
+dcl-s Decimal inz(*zeros) like(int4_t);
 
 //  additional
 //  declarations for Convert Edit Word: QECCVTEW
-dcl-s editword char(256) inz(*blanks);
-dcl-s editwordln inz(*zeros) like(int4_t);
+dcl-s EditWord char(256) inz(*blanks);
+dcl-s EditWordLn inz(*zeros) like(int4_t);
 
 //  additional
 //  declarations for Edit: QECEDT
-dcl-s cvtvar char(256) inz(*blanks);
-dcl-s cvtvarlen inz(256) like(int4_t);
-dcl-s srcvar inz(*blanks) like(i_srcvar);
-dcl-s srcvarcls char(10) inz(*blanks);
-dcl-s float4 float(4) based(pfloat);
-dcl-s float8 float(8) based(pfloat);
-dcl-s float4buf char(4) based(pfloat);
-dcl-s float8buf char(8) based(pfloat);
-dcl-s maxfloat4 packed(12: 4) inz(*hival);
-dcl-s maxfloat8 packed(21: 4) inz(*hival);
+dcl-s CvtVar char(256) inz(*blanks);
+dcl-s CvtVarLen inz(256) like(int4_t);
+dcl-s srcVar inz(*blanks) like(i_srcVar);
+dcl-s SrcVarCls char(10) inz(*blanks);
+dcl-s Float4 float(4) based(pFloat);
+dcl-s Float8 float(8) based(pFloat);
+dcl-s Float4Buf char(4) based(pFloat);
+dcl-s Float8Buf char(8) based(pFloat);
+dcl-s MaxFloat4 packed(12: 4) inz(*hival);
+dcl-s MaxFloat8 packed(21: 4) inz(*hival);
 dcl-s tmpfloat4 float(4) inz;
 dcl-s tmpfloat8 float(8) inz;
 dcl-s isexact ind inz;
 dcl-s len int(10) inz;
 
-dcl-s tempstrlen int(10) inz;
+dcl-s TempStrLen int(10) inz;
 
-dcl-s htranscoder like(htranscoder_t) inz;
+dcl-s hTranscoder like(hTranscoder_t) inz;
 
 //  helper fields to convert 3I0 and 20I0 fields
-dcl-ds zonedbuffer;
+dcl-ds zonedBuffer;
   zoned3  zoned(3) inz pos(1);
   zoned5  zoned(5) inz pos(1);
   zoned10 zoned(10) inz pos(1);
@@ -128,34 +128,34 @@ dcl-c spcval_neginf '-*Inf';
 //           Main  Control block                                    *
 //*******************************************************************
 dcl-pi peek06;
-  i_fldl0100 likeds(fldl0100_t) const;
-  i_rcdfmt   like(fmt_t) const;
-  i_srcvar   like(rcdbuf_t) const;
+  i_FLDL0100 likeds(fldl0100_t) const;
+  i_rcdFmt   like(fmt_t) const;
+  i_srcVar   like(rcdBuf_t) const;
   i_qcmdexc  like(bool_t) const;
-  i_cvtccsid like(bool_t) const;
-  o_string   like(rcdbuf_t);
-  o_strlen   like(int4_t);
-  o_msgid    like(msgid_t);
-  o_msgdta   like(msgdta_t);
+  i_cvtCcsid like(bool_t) const;
+  o_string   like(rcdBuf_t);
+  o_strLen   like(int4_t);
+  o_msgID    like(msgId_t);
+  o_msgDta   like(msgDta_t);
 end-pi;
 
 dcl-ds fldl0100 likeds(fldl0100_t) inz;
-dcl-ds errcode likeds(errcode_t) inz;
+dcl-ds errCode likeds(errCode_t) inz;
 //---------------------------------------------------*
 
 o_string = '';
-o_strlen = 0;
+o_strLen = 0;
 
 monitor;
 
   select;
-  when (i_rcdfmt = 'FLDL0100');
+  when (i_rcdFmt = 'FLDL0100');
     exsr w_fldl0100;
   endsl;
 
 on-error;
   o_string = '';
-  o_strlen = 0;
+  o_strLen = 0;
 endmon;
 
 return;
@@ -166,59 +166,59 @@ return;
 
 begsr w_fldl0100;
 
-  fldl0100 = i_fldl0100;
+  fldl0100 = i_FLDL0100;
 
   //  Erzwingen Edit Code, wenn die Aufbereitung für eine über
   //  QCMDEXC auszuführende Befehlszeile erfolgt.
   if ((i_qcmdexc = bTrue) and
-      (f_isnumfld(fldl0100) = bTrue) and
-      (f_isfloatfld(fldl0100) = bFalse));
+      (f_isNumFld(fldl0100) = bTrue) and
+      (f_isFloatFld(fldl0100) = bFalse));
     fldl0100.f1edtc = 'P';
     fldl0100.f1edwl = 0;
     fldl0100.f1edwd = '';
   endif;
 
-  editcode = fldl0100.f1edtc;
-  editword = fldl0100.f1edwd;
-  currind = '';
-  editwordln = fldl0100.f1edwl;
-  srcvarcls = fldl0100.f1dtyp;
+  EditCode = fldl0100.f1edtc;
+  EditWord = fldl0100.f1edwd;
+  CurrInd = '';
+  EditWordLn = fldl0100.f1edwl;
+  SrcVarCls = fldl0100.F1DTyp;
 
-  if (srcvarcls = 'B');
+  if (SrcVarCls = 'B');
 
     select;
-    when (f_buffln(fldl0100) = 1);
-      precision = 3;
-      binlength = 1;
-    when (f_buffln(fldl0100) = 2);
-      precision = 5;
-      binlength = 2;
-    when (f_buffln(fldl0100) = 4);
-      precision = 10;
-      binlength = 4;
+    when (f_buffLn(fldl0100) = 1);
+      Precision = 3;
+      BinLength = 1;
+    when (f_buffLn(fldl0100) = 2);
+      Precision = 5;
+      BinLength = 2;
+    when (f_buffLn(fldl0100) = 4);
+      Precision = 10;
+      BinLength = 4;
     other;
-      precision = 20;
-      binlength = 8;
+      Precision = 20;
+      BinLength = 8;
     endsl;
 
   else;
 
-    precision = fldl0100.f1digt;
+    Precision = fldl0100.f1digt;
   endif;
 
-  decimal = fldl0100.f1decp;
+  Decimal = fldl0100.f1decp;
 
   select;
-  when (srcvarcls = 'F');
-    len = f_rtvfld(srcvar: i_srcvar: fldl0100);
-    pfloat = %addr(srcvar);
+  when (SrcVarCls = 'F');
+    len = f_rtvFld(srcVar: i_srcVar: fldl0100);
+    pFloat = %addr(srcVar);
     //         Float 4
     if (len = 4);
       select;
-      when (%bitand(float4buf: fltmask_exp_4) = fltmask_exp_4);
-        if (%bitand(float4buf: fltmask_man_4) <> *allx'00');
+      when (%bitand(Float4Buf: fltmask_exp_4) = fltmask_exp_4);
+        if (%bitand(Float4Buf: fltmask_man_4) <> *allx'00');
           o_string = spcval_nan;
-        elseif (%bitand(%subst(float4buf: 1: 1): fltmask_sign)
+        elseif (%bitand(%subst(Float4Buf: 1: 1): fltmask_sign)
                 = fltmask_sign);
           o_string = spcval_neginf;
         else;
@@ -227,92 +227,92 @@ begsr w_fldl0100;
       other;
         //  Mit 4 Nachkommastellen nur, wenn dabei keine Ziffern
         //  verloren gehen (z.B. 1,2345E-5), sonst mit Exponent.
-        maxfloat4 = *hival;
+        MaxFloat4 = *hival;
         isexact = *off;
-        if (%abs(float4) <= maxfloat4);
-          eval(h) maxfloat4 = float4;
-          tmpfloat4 = maxfloat4;
-          isexact = (tmpfloat4 = float4);
+        if (%abs(Float4) <= MaxFloat4);
+          eval(h) MaxFloat4 = Float4;
+          tmpfloat4 = MaxFloat4;
+          isexact = (tmpfloat4 = Float4);
         endif;
         if (isexact);
-          o_string = %editc(maxfloat4: 'P');
+          o_string = %editc(MaxFloat4: 'P');
         else;
-          o_string = %editflt(float4);
+          o_string = %editflt(Float4);
         endif;
       endsl;
-      o_strlen = 14;
+      o_strLen = 14;
     else;
       //         Float 8
       select;
-      when (%bitand(float8buf: fltmask_exp_8) = fltmask_exp_8);
-        if (%bitand(float8buf: fltmask_man_8) <> *allx'00');
+      when (%bitand(Float8Buf: fltmask_exp_8) = fltmask_exp_8);
+        if (%bitand(Float8Buf: fltmask_man_8) <> *allx'00');
           o_string = spcval_nan;
-        elseif (%bitand(%subst(float8buf: 1: 1): fltmask_sign)
+        elseif (%bitand(%subst(Float8Buf: 1: 1): fltmask_sign)
                 = fltmask_sign);
           o_string = spcval_neginf;
         else;
           o_string = spcval_inf;
         endif;
       other;
-        maxfloat8 = *hival;
+        MaxFloat8 = *hival;
         isexact = *off;
-        if (%abs(float8) <= maxfloat8);
-          eval(h) maxfloat8 = float8;
-          tmpfloat8 = maxfloat8;
-          isexact = (tmpfloat8 = float8);
+        if (%abs(Float8) <= MaxFloat8);
+          eval(h) MaxFloat8 = Float8;
+          tmpfloat8 = MaxFloat8;
+          isexact = (tmpfloat8 = Float8);
         endif;
         if (isexact);
-          o_string = %editc(maxfloat8: 'P');
+          o_string = %editc(MaxFloat8: 'P');
         else;
-          o_string = %editflt(float8);
+          o_string = %editflt(Float8);
         endif;
       endsl;
-      o_strlen = 23;
+      o_strLen = 23;
     endif;
 
-  when (srcvarcls = 'A' or srcvarcls = 'G');
-    tempstrlen =
-      f_rtvfld(o_string: i_srcvar: fldl0100);
+  when (SrcVarCls = 'A' or SrcVarCls = 'G');
+    TempStrLen =
+      f_rtvFld(o_string: i_srcVar: fldl0100);
     //  Do not convert if we prepare the *HEADLINE (see: PEEK05, yCvtCcsid)
-    if (f_hasccsid(fldl0100) = bTrue and
-        i_cvtccsid = bTrue);
-      htranscoder =
-       transcoder_tojobccsid(fldl0100.f1fdcc);
-      o_strlen =
-        transcoder_xlatebuffer(htranscoder
+    if (f_hasCcsid(fldl0100) = bTrue and
+        i_cvtCcsid = bTrue);
+      hTranscoder =
+       Transcoder_toJobCcsid(fldl0100.f1fdcc);
+      o_strLen =
+        Transcoder_xlateBuffer(hTranscoder
                                : %addr(o_string)
-                               : tempstrlen
+                               : TempStrLen
                                : %size(o_string));
-      if (tempstrlen > o_strlen);
-        %subst(o_string: o_strlen+1
-              : tempstrlen - o_strlen) = '';
+      if (TempStrLen > o_strLen);
+        %subst(o_string: o_strLen+1
+              : TempStrLen - o_strLen) = '';
       endif;
     else;
       if (fldl0100.f1ndbc > 0);
-        o_strlen = fldl0100.f1ndbc;
+        o_strLen = fldl0100.f1ndbc;
       else;
-        o_strlen = tempstrlen;
+        o_strLen = TempStrLen;
       endif;
     endif;
 
-  when (srcvarcls = 'B');
-    f_rtvfld(srcvar: i_srcvar: fldl0100);
-    cpynv(f_num_descr(t_zoned: precision: 0)
-         : %addr(zonedbuffer)
-         : f_num_descr(t_signed: binlength: 0)
-         : %addr(srcvar));
-    srcvar = zonedbuffer;
-    srcvarcls = 'S';
-    exsr convert;
-  when (srcvarcls = 'P');
-    f_rtvfld(srcvar: i_srcvar: fldl0100);
-    exsr convert;
-  when (srcvarcls = 'S');
-    f_rtvfld(srcvar: i_srcvar: fldl0100);
-    exsr convert;
+  when (SrcVarCls = 'B');
+    f_rtvFld(srcVar: i_srcVar: fldl0100);
+    cpynv(f_NUM_Descr(T_Zoned: Precision: 0)
+         : %addr(zonedBuffer)
+         : f_NUM_Descr(T_Signed: BinLength: 0)
+         : %addr(srcVar));
+    srcVar = zonedBuffer;
+    SrcVarCls = 'S';
+    exsr Convert;
+  when (SrcVarCls = 'P');
+    f_rtvFld(srcVar: i_srcVar: fldl0100);
+    exsr Convert;
+  when (SrcVarCls = 'S');
+    f_rtvFld(srcVar: i_srcVar: fldl0100);
+    exsr Convert;
   other;
-    o_strlen =
-      f_rtvfld(o_string: i_srcvar: fldl0100);
+    o_strLen =
+      f_rtvFld(o_string: i_srcVar: fldl0100);
   endsl;
 
 endsr;
@@ -321,46 +321,46 @@ endsr;
 //  Convert--  Convert to String                      *
 //====================================================*
 
-begsr convert;
+begsr Convert;
 
   select;
-  when (srcvarcls = 'B');
-    srcvarcls = '*BINARY';
-  when (srcvarcls = 'P');
-    srcvarcls = '*PACKED';
-  when (srcvarcls = 'S');
-    srcvarcls = '*ZONED';
+  when (SrcVarCls = 'B');
+    SrcVarCls = '*BINARY';
+  when (SrcVarCls = 'P');
+    SrcVarCls = '*PACKED';
+  when (SrcVarCls = 'S');
+    SrcVarCls = '*ZONED';
   endsl;
 
-  if (editword <> '');
-    exsr cvtedtword;
-    if (errcode.bytavl = 0);
+  if (EditWord <> '');
+    exsr CvtEdtWord;
+    if (errCode.bytAvl = 0);
       exsr edit;
     endif;
   endif;
 
   //  Edit-Code, wenn kein Edit-Wort angegeben ist oder das Edit-Wort
   //  nicht zum Feld passt
-  if (editword = '' or errcode.bytavl > 0);
-    exsr cvtedtcode;
-    if (errcode.bytavl = 0);
+  if (EditWord = '' or errCode.bytAvl > 0);
+    exsr CvtEdtCode;
+    if (errCode.bytAvl = 0);
       exsr edit;
     endif;
   endif;
 
   //  Edit-Code passt nicht zum Feld (z.B. Y bei mehr als 9 Stellen):
   //  Standard-Edit-Code L
-  if (errcode.bytavl > 0 and editcode <> 'L');
-    editcode = 'L';
-    exsr cvtedtcode;
-    if (errcode.bytavl = 0);
+  if (errCode.bytAvl > 0 and EditCode <> 'L');
+    EditCode = 'L';
+    exsr CvtEdtCode;
+    if (errCode.bytAvl = 0);
       exsr edit;
     endif;
   endif;
 
-  if (errcode.bytavl > 0);
+  if (errCode.bytAvl > 0);
     o_string = '';
-    o_strlen = 0;
+    o_strLen = 0;
   endif;
 
 endsr;
@@ -371,24 +371,24 @@ endsr;
 
 begsr edit;
 
-  cvtvarlen = rcvvarlen;
+  CvtVarLen = rcvVarLen;
 
-  clear errcode;
-  errcode.bytprv = %size(errcode);
+  clear errCode;
+  errCode.bytPrv = %size(errCode);
 
-  qecedt(cvtvar
-        : cvtvarlen
-        : srcvar
-        : srcvarcls
-        : precision
-        : editmask
-        : editmaskln
-        : zerobalanc
-        : errcode);
+  qecedt(CvtVar
+        : CvtVarLen
+        : srcVar
+        : SrcVarCls
+        : Precision
+        : EditMask
+        : EditMaskLn
+        : ZeroBalanc
+        : errCode);
 
-  if (errcode.bytavl = 0);
-    o_string = %subst(cvtvar: 1: cvtvarlen);
-    o_strlen = cvtvarlen;
+  if (errCode.bytAvl = 0);
+    o_string = %subst(CvtVar: 1: CvtVarLen);
+    o_strLen = CvtVarLen;
   endif;
 
 endsr;
@@ -397,20 +397,20 @@ endsr;
 //  CvtEdtWord                                        *
 //====================================================*
 
-begsr cvtedtword;
+begsr CvtEdtWord;
 
-  clear errcode;
-  errcode.bytprv = %size(errcode);
+  clear errCode;
+  errCode.bytPrv = %size(errCode);
 
-  clear editmask;
-  clear editmaskln;
+  clear EditMask;
+  clear EditMaskLn;
 
-  qeccvtew(editmask
-          : editmaskln
-          : rcvvarlen
-          : editword
-          : editwordln
-          : errcode);
+  qeccvtew(EditMask
+          : EditMaskLn
+          : rcvVarLen
+          : EditWord
+          : EditWordLn
+          : errCode);
 
 endsr;
 
@@ -418,39 +418,39 @@ endsr;
 //  CvtEdtCode                                        *
 //====================================================*
 
-begsr cvtedtcode;
+begsr CvtEdtCode;
 
   select;
   // A-D
-  when (editcode >= 'A' and editcode <= 'D');
+  when (EditCode >= 'A' and EditCode <= 'D');
   // J-Q
-  when (editcode >= 'J' and editcode <= 'Q');
+  when (EditCode >= 'J' and EditCode <= 'Q');
   // Y-Z
-  when (editcode >= 'Y' and editcode <= 'Z');
+  when (EditCode >= 'Y' and EditCode <= 'Z');
   // 1-9
-  when (editcode >= '1' and editcode <= '9');
+  when (EditCode >= '1' and EditCode <= '9');
   // X
-  when (editcode = 'X');
-    editcode = 'Z';
+  when (EditCode = 'X');
+    EditCode = 'Z';
   other;
-    editcode = 'L';
+    EditCode = 'L';
   endsl;
 
-  clear errcode;
-  errcode.bytprv = %size(errcode);
+  clear errCode;
+  errCode.bytPrv = %size(errCode);
 
-  clear editmask;
-  clear editmaskln;
+  clear EditMask;
+  clear EditMaskLn;
 
-  qeccvtec(editmask
-          : editmaskln
-          : rcvvarlen
-          : zerobalanc
-          : editcode
-          : currind
-          : precision
-          : decimal
-          : errcode);
+  qeccvtec(EditMask
+          : EditMaskLn
+          : rcvVarLen
+          : ZeroBalanc
+          : EditCode
+          : CurrInd
+          : Precision
+          : Decimal
+          : errCode);
 
 endsr;
 

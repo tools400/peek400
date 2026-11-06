@@ -7,7 +7,7 @@
 //===============================================================*
 
 //  API format FILD0100
-dcl-ds fild0100_t len(256) qualified template;
+dcl-ds FILD0100_t len(256) qualified template;
   atrcen char(1);
   atrdat char(6);
   atrtim char(6);

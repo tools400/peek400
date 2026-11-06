@@ -44,9 +44,9 @@
 /copy QCOPYLE,PPEEK35
 /undefine internal_prototype
 
-dcl-ds wrk0001 likeds(wrk0001_t) inz(*likeds);
+dcl-ds wrk0001 likeds(WRK0001_t) inz(*likeds);
 
-dcl-s isError char(1) inz(bFalse);
+dcl-s IsError char(1) inz(bFalse);
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
@@ -54,9 +54,9 @@ dcl-s isError char(1) inz(bFalse);
 dcl-pi peek35;
   i_rcdNbr  like(rcdNbr_t) const;
   i_buffer  like(buffer_t) const;
-  o_fldname like(fieldnme_t);
-  o_msgid   like(msgid_t);
-  o_msgdta  like(msgdta_t);
+  o_fldName like(fieldNme_t);
+  o_msgID   like(msgId_t);
+  o_msgDta  like(msgDta_t);
 end-pi;
 
 //---------------------------------------------------*
@@ -64,7 +64,7 @@ end-pi;
 //  Register error handler
 ceehdlr(%paddr('errorHandler')
        : *null: *omit);
-exsr first;
+exsr First;
 
 exsr prfb1;
 
@@ -76,33 +76,33 @@ return;
 
 begsr prfb1;
 
-  isError = bFalse;
+  IsError = bFalse;
 
   //  Doppelte Folgenummern (SEQ) prüft PEEK34 nach allen Änderungen,
   //  damit zwei Felder ihre Nummern tauschen können.
 
   exsr prf21;           // = HIDDEN
-  if (isError = bTrue);
+  if (IsError = bTrue);
     leavesr;
   endif;
 
   exsr prf22;           // = COLOR
-  if (isError = bTrue);
+  if (IsError = bTrue);
     leavesr;
   endif;
 
   exsr prf23;           // = MARKCOL
-  if (isError = bTrue);
+  if (IsError = bTrue);
     leavesr;
   endif;
 
   exsr prf24;           // = MAXSIZE
-  if (isError = bTrue);
+  if (IsError = bTrue);
     leavesr;
   endif;
 
   exsr prf25;           // = EDTCDE
-  if (isError = bTrue);
+  if (IsError = bTrue);
     leavesr;
   endif;
 
@@ -117,22 +117,22 @@ begsr prf21;
   dou ('1');
 
     select;
-    when (wrk0001.wrk_hidden = bTrue);
+    when (wrk0001.WRK_Hidden = bTrue);
     //  ist zulässig
-    when (wrk0001.wrk_hidden = bFalse);
+    when (wrk0001.WRK_Hidden = bFalse);
     //  ist zulässig
     other;
-      isError = bTrue;
-      o_msgid = 'USR8168';
-      usr8168.var1 = wrk0001.wrk_hidden;
-      o_msgdta = usr8168;
+      IsError = bTrue;
+      o_msgID = 'USR8168';
+      usr8168.var1 = wrk0001.WRK_Hidden;
+      o_msgDta = usr8168;
       leave;
     endsl;
 
   enddo;
 
-  if (isError = bTrue);
-    o_fldname = 'HIDDEN';
+  if (IsError = bTrue);
+    o_fldName = 'HIDDEN';
   endif;
 
 endsr;
@@ -143,8 +143,8 @@ endsr;
 
 begsr prf22;
 
-  if (isError = bTrue);
-    o_fldname = 'COLOR';
+  if (IsError = bTrue);
+    o_fldName = 'COLOR';
   endif;
 
 endsr;
@@ -158,22 +158,22 @@ begsr prf23;
   dou ('1');
 
     select;
-    when (wrk0001.wrk_mrkcol = bTrue);
+    when (wrk0001.WRK_MrkCol = bTrue);
     //  ist zulässig
-    when (wrk0001.wrk_mrkcol = bFalse);
+    when (wrk0001.WRK_MrkCol = bFalse);
     //  ist zulässig
     other;
-      isError = bTrue;
-      o_msgid = 'USR8169';
-      usr8169.var1 = wrk0001.wrk_mrkcol;
-      o_msgdta = usr8169;
+      IsError = bTrue;
+      o_msgID = 'USR8169';
+      usr8169.var1 = wrk0001.WRK_MrkCol;
+      o_msgDta = usr8169;
       leave;
     endsl;
 
   enddo;
 
-  if (isError = bTrue);
-    o_fldname = 'MARKCOL';
+  if (IsError = bTrue);
+    o_fldName = 'MARKCOL';
   endif;
 
 endsr;
@@ -186,20 +186,20 @@ begsr prf24;
 
   dou ('1');
 
-    if (wrk0001.wrk_maxsiz > 0);
+    if (wrk0001.WRK_MaxSiz > 0);
     //  ist zulässig
     else;
-      isError = bTrue;
-      o_msgid = 'USR8170';
-      usr8170.var1 = wrk0001.wrk_maxsiz;
-      o_msgdta = usr8170;
+      IsError = bTrue;
+      o_msgID = 'USR8170';
+      usr8170.var1 = wrk0001.WRK_MaxSiz;
+      o_msgDta = usr8170;
       leave;
     endif;
 
   enddo;
 
-  if (isError = bTrue);
-    o_fldname = 'MAXSIZE';
+  if (IsError = bTrue);
+    o_fldName = 'MAXSIZE';
   endif;
 
 endsr;
@@ -214,24 +214,24 @@ begsr prf25;
 
     //  Edit-Codes wie in PEEK06
     select;
-    when (wrk0001.wrk_edtcde = ' ');
+    when (wrk0001.WRK_EdtCde = ' ');
     //  kein Edit-Code
-    when (wrk0001.wrk_edtcde >= 'A' and wrk0001.wrk_edtcde <= 'D');
-    when (wrk0001.wrk_edtcde >= 'J' and wrk0001.wrk_edtcde <= 'Q');
-    when (wrk0001.wrk_edtcde >= 'X' and wrk0001.wrk_edtcde <= 'Z');
-    when (wrk0001.wrk_edtcde >= '1' and wrk0001.wrk_edtcde <= '9');
+    when (wrk0001.WRK_EdtCde >= 'A' and wrk0001.WRK_EdtCde <= 'D');
+    when (wrk0001.WRK_EdtCde >= 'J' and wrk0001.WRK_EdtCde <= 'Q');
+    when (wrk0001.WRK_EdtCde >= 'X' and wrk0001.WRK_EdtCde <= 'Z');
+    when (wrk0001.WRK_EdtCde >= '1' and wrk0001.WRK_EdtCde <= '9');
     other;
-      isError = bTrue;
-      o_msgid = 'USR8243';
-      usr8243.var1 = wrk0001.wrk_edtcde;
-      o_msgdta = usr8243;
+      IsError = bTrue;
+      o_msgID = 'USR8243';
+      usr8243.var1 = wrk0001.WRK_EdtCde;
+      o_msgDta = usr8243;
       leave;
     endsl;
 
   enddo;
 
-  if (isError = bTrue);
-    o_fldname = 'EDTCDE';
+  if (IsError = bTrue);
+    o_fldName = 'EDTCDE';
   endif;
 
 endsr;
@@ -240,14 +240,14 @@ endsr;
 //    First         Initialisierung                           *
 //============================================================*
 
-begsr first;
+begsr First;
 
   wrk0001 = i_buffer;
 
   // - Rückkehrcode
-  o_fldname = '';
-  o_msgid = '';
-  o_msgdta = '';
+  o_fldName = '';
+  o_msgID = '';
+  o_msgDta = '';
 
 endsr;
 
@@ -255,12 +255,12 @@ endsr;
 //  Program error handler                                     *
 //============================================================*
 
-dcl-proc errorhandler;
+dcl-proc errorHandler;
   dcl-pi *n;
-    i_condtoken    likeds(cee_fc_t) value;
-    i_pcommarea    int(10) value;
+    i_condToken    likeds(cee_fc_t) value;
+    i_pCommArea    int(10) value;
     o_action       int(10);
-    o_newcondtoken likeds(cee_fc_t);
+    o_newCondToken likeds(cee_fc_t);
   end-pi;
 
   dump;

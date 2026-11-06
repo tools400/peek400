@@ -59,19 +59,19 @@ end-ds;
 
 dcl-s x like(int4_t) inz;
 
-dcl-ds wrktabds qualified;
-  remark  char(5) inz(*blanks);
+dcl-ds WrkTabDS qualified;
+  Remark  char(5) inz(*blanks);
   section char(10) inz(*blanks);
   key     char(10) inz(*blanks);
-  data    like(set0000_t) inz(*blanks);
+  data    like(SET0000_t) inz(*blanks);
 end-ds;
 
-dcl-ds set0001 likeds(set0001_t) inz;
+dcl-ds set0001 likeds(SET0001_t) inz;
 
-dcl-s o_data like(set0000_t) inz;
+dcl-s o_data like(SET0000_t) inz;
 
-dcl-s wrktab char(100) dim(100) inz(*blanks);
-dcl-s wrkelem like(int4_t) inz;
+dcl-s WrkTab char(100) dim(100) inz(*blanks);
+dcl-s WrkElem like(int4_t) inz;
 
 dcl-s tb010100 char(100) dim(58) ctdata perrcd(1);
 dcl-c elm010100 %elem(tb010100);
@@ -123,8 +123,8 @@ dcl-c elm040001 %elem(tb040001);
 //*******************************************************************
 dcl-pi peek33;
   i_version like(version_t) const;
-  o_msgid   like(msgid_t);
-  o_msgdta  like(msgdta_t);
+  o_msgID   like(msgId_t);
+  o_msgDta  like(msgDta_t);
 end-pi;
 
 //----------------------------------------------------*
@@ -133,17 +133,17 @@ end-pi;
 ceehdlr(%paddr('errorHandler')
        : *null: *omit);
 
-o_msgid = '';
-o_msgdta = '';
+o_msgID = '';
+o_msgDta = '';
 
 //  Ermitteln der abgespeicherten Versions-Nr. ...
-exsr getUsrSetg;
+exsr GetUsrSetg;
 
 //  Vergleichen mit jetziger Versions-Nr. ...
 if (set0007.set_vsn <> i_version);
   //  ... und bei Abweichungen den
   //      Aktualisierungsvorgang starten
-  exsr vpos;
+  exsr VPos;
 else;
 endif;
 
@@ -153,7 +153,7 @@ endif;
 //    VPos          Durchführen der Aktualisierungsarbeiten   *
 //============================================================*
 
-begsr vpos;
+begsr VPos;
 
   //  Schleife solabge durchlaufen, bis das
   //  der jetzige Versionsstand erreicht worden ist.
@@ -280,12 +280,12 @@ begsr vpos;
     other;
       //  ... kein weiterer Schritt: aktuelle Versions-Nr. speichern
       set0007.set_vsn = i_version;
-      exsr setUsrSetg;
+      exsr SetUsrSetg;
       leave;
     endsl;
 
     //  ... Abspeichern der neuen Versions-Nr.
-    exsr setUsrSetg;
+    exsr SetUsrSetg;
   enddo;
 
 endsr;
@@ -296,8 +296,8 @@ endsr;
 
 begsr v01r01m00;
 
-  wrktab = %subarr(tb010100: 1);
-  wrkelem = elm010100;
+  WrkTab = %subarr(tb010100: 1);
+  WrkElem = elm010100;
   exsr updPeekUsr;
 
   set0007.set_vsn = 'V01R01M00';
@@ -310,8 +310,8 @@ endsr;
 
 begsr v01r02m00;
 
-  wrktab = %subarr(tb010200: 1);
-  wrkelem = elm010200;
+  WrkTab = %subarr(tb010200: 1);
+  WrkElem = elm010200;
   exsr updPeekUsr;
 
   set0007.set_vsn = 'V01R02M00';
@@ -324,8 +324,8 @@ endsr;
 
 begsr v01r03m00;
 
-  wrktab = %subarr(tb010300: 1);
-  wrkelem = elm010300;
+  WrkTab = %subarr(tb010300: 1);
+  WrkElem = elm010300;
   exsr updPeekUsr;
 
   set0007.set_vsn = 'V01R03M00';
@@ -338,8 +338,8 @@ endsr;
 
 begsr v01r04m00;
 
-  wrktab = %subarr(tb010400: 1);
-  wrkelem = elm010400;
+  WrkTab = %subarr(tb010400: 1);
+  WrkElem = elm010400;
   exsr updPeekUsr;
 
   set0007.set_vsn = 'V01R04M00';
@@ -352,8 +352,8 @@ endsr;
 
 begsr v01r05m00;
 
-  wrktab = %subarr(tb010500: 1);
-  wrkelem = elm010500;
+  WrkTab = %subarr(tb010500: 1);
+  WrkElem = elm010500;
   exsr updPeekUsr;
 
   set0007.set_vsn = 'V01R05M00';
@@ -376,8 +376,8 @@ endsr;
 
 begsr v02r00m00;
 
-  wrktab = %subarr(tb020000: 1);
-  wrkelem = elm020000;
+  WrkTab = %subarr(tb020000: 1);
+  WrkElem = elm020000;
   exsr updPeekUsr;
 
   set0007.set_vsn = 'V02R00M00';
@@ -390,8 +390,8 @@ endsr;
 
 begsr v02r01m00;
 
-  wrktab = %subarr(tb020100: 1);
-  wrkelem = elm020100;
+  WrkTab = %subarr(tb020100: 1);
+  WrkElem = elm020100;
   exsr updPeekUsr;
 
   set0007.set_vsn = 'V02R01M00';
@@ -414,8 +414,8 @@ endsr;
 
 begsr v02r02m00;
 
-  wrktab = %subarr(tb020200: 1);
-  wrkelem = elm020200;
+  WrkTab = %subarr(tb020200: 1);
+  WrkElem = elm020200;
   exsr updPeekUsr;
 
   set0007.set_vsn = 'V02R02M00';
@@ -508,14 +508,14 @@ endsr;
 
 begsr v03r00m00;
 
-  wrktab = %subarr(tb030000: 1);
-  wrkelem = elm030000;
+  WrkTab = %subarr(tb030000: 1);
+  WrkElem = elm030000;
   exsr updPeekUsr;
 
   set0007.set_vsn = 'V03R00M00';
 
   //  Umsetzen Datenstruktur "Generieren Programme" (*CRTPGM, SET0012)
-  set0012_alt = f_getusrsg('*CRTPGM');
+  set0012_alt = f_getUsrSg('*CRTPGM');
 
   if ((set0012_alt.set_alwlc = '0' or
       set0012_alt.set_alwlc = '1'   ) and
@@ -526,7 +526,7 @@ begsr v03r00m00;
     set0012.set_alwlc = set0012_alt.set_alwlc;
     set0012.set_case  = set0012_alt.set_case;
     set0012.set_0012  = set0012_alt.set_0012;
-    p_updusrsg('*CRTPGM': set0012);
+    p_updUsrSg('*CRTPGM': set0012);
   endif;
 
 endsr;
@@ -537,8 +537,8 @@ endsr;
 
 begsr v03r01m00;
 
-  wrktab = %subarr(tb030100: 1);
-  wrkelem = elm030100;
+  WrkTab = %subarr(tb030100: 1);
+  WrkElem = elm030100;
   exsr updPeekUsr;
 
   set0007.set_vsn = 'V03R01M00';
@@ -551,8 +551,8 @@ endsr;
 
 begsr v03r01m01;
 
-  wrktab = %subarr(tb030101: 1);
-  wrkelem = elm030101;
+  WrkTab = %subarr(tb030101: 1);
+  WrkElem = elm030101;
   exsr updPeekUsr;
 
   set0007.set_vsn = 'V03R01M01';
@@ -628,11 +628,11 @@ begsr v03r02m01;
   set0007.set_vsn = 'V03R02M01';
 
   //  Eintragen Art und Weise der Umsetzung von Edit Codes in der Subfile:
-  set0001 = f_getusrsg('*DSPATTR');
+  set0001 = f_getUsrSg('*DSPATTR');
 
-  if (set0001.set_dspsgn <> '2');
-    set0001.set_dspsgn   = '2';
-    p_updusrsg('*DSPATTR': set0001);
+  if (set0001.SET_DspSgn <> '2');
+    set0001.SET_DspSgn   = '2';
+    p_updUsrSg('*DSPATTR': set0001);
   endif;
 
 endsr;
@@ -646,12 +646,12 @@ begsr v03r02m02;
   set0007.set_vsn = 'V03R02M02';
 
   //  Ändern Default Edit Code von 'J' auf 'L'
-  set0001 = f_getusrsg('*DSPATTR');
+  set0001 = f_getUsrSg('*DSPATTR');
 
-  if (set0001.set_editcode = 'J');
-    set0001.set_editcode = 'L';
-    set0001.set_dspsgn   = '2';
-    p_updusrsg('*DSPATTR': set0001);
+  if (set0001.SET_editCode = 'J');
+    set0001.SET_editCode = 'L';
+    set0001.SET_DspSgn   = '2';
+    p_updUsrSg('*DSPATTR': set0001);
   endif;
 
 endsr;
@@ -682,8 +682,8 @@ endsr;
 
 begsr v03r02m05;
 
-  wrktab = %subarr(tb030205: 1);
-  wrkelem = elm030205;
+  WrkTab = %subarr(tb030205: 1);
+  WrkElem = elm030205;
   exsr updPeekUsr;
 
   set0007.set_vsn = 'V03R02M05';
@@ -756,8 +756,8 @@ endsr;
 
 begsr v03r04m01;
 
-  wrktab = %subarr(tb030401: 1);
-  wrkelem = elm030401;
+  WrkTab = %subarr(tb030401: 1);
+  WrkElem = elm030401;
   exsr updPeekUsr;
 
   set0007.set_vsn = 'V03R04M01';
@@ -790,14 +790,14 @@ endsr;
 
 begsr v03r05m00;
 
-  wrktab = %subarr(tb030500: 1);
-  wrkelem = elm030500;
+  WrkTab = %subarr(tb030500: 1);
+  WrkElem = elm030500;
   exsr updPeekUsr;
 
   set0007.set_vsn = 'V03R05M00';
 
   //  Anlegen Einstellung für max. Anzahl Sätze für SQL-COUNT()
-  set0016 = f_getusrsg('*SQLLMTCNT');
+  set0016 = f_getUsrSg('*SQLLMTCNT');
 
 endsr;
 
@@ -887,8 +887,8 @@ endsr;
 
 begsr v04r00m01;
 
-  wrktab = %subarr(tb040001: 1);
-  wrkelem = elm040001;
+  WrkTab = %subarr(tb040001: 1);
+  WrkElem = elm040001;
   exsr updPeekUsr;
 
   set0007.set_vsn = 'V04R00M01';
@@ -971,29 +971,29 @@ endsr;
 
 begsr updPeekUsr;
 
-  for x = 1 to wrkelem;
+  for x = 1 to WrkElem;
 
-    wrktabds = wrktab(x);
+    WrkTabDS = WrkTab(x);
 
-    *in11 = f_chainusr(wrktabds.section
-                      : wrktabds.key: o_data);
+    *in11 = f_chainUsr(WrkTabDS.section
+                      : WrkTabDS.key: o_data);
 
     x = x + 1;
 
     //  Wenn der Datenbereich anders als erwartet
     //  belegt ist, ...
-    if (o_data <> wrktabds.data);
+    if (o_data <> WrkTabDS.data);
       //  ... dann keine Änderung durchführen
       iter;
     else;
       //  ... ansonsten die Änderung vollziehen
-      wrktabds = wrktab(x);
+      WrkTabDS = WrkTab(x);
       if (*in11 = '1');
-        f_writeusr(wrktabds.section
-                  : wrktabds.key: wrktabds.data);
+        f_writeUsr(WrkTabDS.section
+                  : WrkTabDS.key: WrkTabDS.data);
       else;
-        f_updatusr(wrktabds.section
-                  : wrktabds.key: wrktabds.data);
+        f_updatUsr(WrkTabDS.section
+                  : WrkTabDS.key: WrkTabDS.data);
       endif;
     endif;
 
@@ -1005,10 +1005,10 @@ endsr;
 //    GetUsrSetg    Ermitteln der Versions-Nr.                *
 //============================================================*
 
-begsr getUsrSetg;
+begsr GetUsrSetg;
 
   //  *VERSION
-  set0007 = f_getusrsg('*VERSION'  );
+  set0007 = f_getUsrSg('*VERSION'  );
 
 endsr;
 
@@ -1016,10 +1016,10 @@ endsr;
 //    SetUsrSetg    Speichern der Versions-Nr.                *
 //============================================================*
 
-begsr setUsrSetg;
+begsr SetUsrSetg;
 
   //  *DSPATR
-  p_updusrsg('*VERSION': set0007);
+  p_updUsrSg('*VERSION': set0007);
 
 endsr;
 
@@ -1027,12 +1027,12 @@ endsr;
 //  Program error handler                                     *
 //============================================================*
 
-dcl-proc errorhandler;
+dcl-proc errorHandler;
   dcl-pi *n;
-    i_condtoken    likeds(cee_fc_t) value;
-    i_pcommarea    int(10) value;
+    i_condToken    likeds(cee_fc_t) value;
+    i_pCommArea    int(10) value;
     o_action       int(10);
-    o_newcondtoken likeds(cee_fc_t);
+    o_newCondToken likeds(cee_fc_t);
   end-pi;
 
   dump;

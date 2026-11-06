@@ -15,12 +15,12 @@
 //  list API format MBRL0200
 //  (data structure can be used within the calling program
 //  to splitt XLIST into its units. See GETDBR_DMO)
-dcl-ds mbrl0200_t qualified template;
-  m2mnme char(10);
+dcl-ds MBRL0200_t qualified template;
+  M2MNme char(10);
   m2srct char(10);
   m2crdt char(13);
   m2lcdt char(13);
-  m2mtxt char(50);
+  M2MTxt char(50);
   m2tccs int(10);
 end-ds;
 

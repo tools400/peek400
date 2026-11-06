@@ -5,10 +5,10 @@ dcl-pr peek03 extpgm('PEEK03');
 /else
 dcl-pr peek03 extpgm(peek03_name);
 /endif
-  i_qFile    likeds(qobj_t) const;
+  i_qFile    likeds(qObj_t) const;
   i_rcdFmt   like(fmt_t) const;
   i_access   like(accessMode_t) const;
   i_sqlOrder like(sqlOrder_t) const;
-  o_msgId    like(msgid_t);
-  o_msgDta   like(msgdta_t);
+  o_msgID    like(msgId_t);
+  o_msgDta   like(msgDta_t);
 end-pr;

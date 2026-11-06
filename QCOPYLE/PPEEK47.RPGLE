@@ -6,9 +6,9 @@ dcl-pr peek47 extpgm('PEEK47');
 dcl-pr peek47 extpgm(peek47_name);
 /endif
   i_dsp80     like(dsp80_t) const;
-  i_copyright like(copyrght_t) const;
-  i_qfile     likeds(qobj_t) const;
+  i_copyright like(copyright_t) const;
+  i_qFile     likeds(qObj_t) const;
   i_mbr       like(mbr_t);
-  o_msgid     like(msgid_t);
-  o_msgdta    like(msgdta_t);
+  o_msgID     like(msgId_t);
+  o_msgDta    like(msgDta_t);
 end-pr;

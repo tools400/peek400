@@ -45,7 +45,7 @@
 dcl-ds set0006 likeds(set0006_t) inz;
 
 dcl-s x like(int4_t);
-dcl-s pbuffer pointer;
+dcl-s pBuffer pointer;
 dcl-s char char(1) based(pChar);
 
 dcl-s isInzSr like(bool_t) inz(bFalse);
@@ -54,11 +54,11 @@ dcl-s isInzSr like(bool_t) inz(bFalse);
 //                 S T E U E R  -  R O U T I N E                    *
 //*******************************************************************
 dcl-pi peek32;
-  io_buffer likeds(rcdbuffer_t);
-  i_bufflen like(int4_t) const;
+  io_buffer likeds(rcdBuffer_t);
+  i_buffLen like(int4_t) const;
   i_ccsid   like(int4_t) const;
-  o_msgid   like(msgid_t);
-  o_msgdta  like(msgdta_t);
+  o_msgID   like(msgId_t);
+  o_msgDta  like(msgDta_t);
 end-pi;
 //----------------------------------------------------*
 
@@ -68,8 +68,8 @@ ceehdlr(%paddr('errorHandler')
 
 exsr inzsr;
 
-o_msgid = '';
-o_msgdta = '';
+o_msgID = '';
+o_msgDta = '';
 
 //    Zeichen mit einer DOUBLE BYTE CCSID, wie 1200 oder 13488
 //    können zur Zeit nicht geprüft werden.
@@ -97,15 +97,15 @@ endsr;
 
 begsr check_sbcs;
 
-  pbuffer = %addr(io_buffer);
+  pBuffer = %addr(io_buffer);
 
-  for x = 1 to i_bufflen;
-    pChar = pbuffer + (x-1);
+  for x = 1 to i_buffLen;
+    pChar = pBuffer + (x-1);
     if (char < x'40' or char = x'FF');
       char = set0006.set_cvtc;
-      o_msgid = 'USR8163';
+      o_msgID = 'USR8163';
       usr8163.var1 = set0006.set_cvtc;
-      o_msgdta = usr8163;
+      o_msgDta = usr8163;
     else;
     // Zeichen beibehalten
     endif;
@@ -117,9 +117,9 @@ endsr;
 //    GetUsrSetg    Ermitteln der Standardsprache             *
 //============================================================*
 
-begsr getUsrSetg;
+begsr GetUsrSetg;
 
-  set0006 = f_getusrsg('*CVTCHR');
+  set0006 = f_getUsrSg('*CVTCHR');
 
 endsr;
 
@@ -135,7 +135,7 @@ begsr inzsr;
 
   isInzSr = bTrue;
 
-  exsr getUsrSetg;
+  exsr GetUsrSetg;
 
 endsr;
 
@@ -143,12 +143,12 @@ endsr;
 //  Program error handler                                     *
 //============================================================*
 
-dcl-proc errorhandler;
+dcl-proc errorHandler;
   dcl-pi *n;
-    i_condtoken    likeds(cee_fc_t) value;
-    i_pcommarea    int(10) value;
+    i_condToken    likeds(cee_fc_t) value;
+    i_pCommArea    int(10) value;
     o_action       int(10);
-    o_newcondtoken likeds(cee_fc_t);
+    o_newCondToken likeds(cee_fc_t);
   end-pi;
 
   dump;

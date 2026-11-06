@@ -52,31 +52,31 @@
 /copy QCOPYLE,PPEEK53
 /copy QCOPYLE,PPEEK58
 
-dcl-ds mbrd0200 likeds(mbrd0200_t) inz;
-dcl-ds errcode likeds(errcode_t) inz;
+dcl-ds mbrd0200 likeds(MBRD0200_t) inz;
+dcl-ds errCode likeds(errCode_t) inz;
 
 //*******************************************************************
 //           Main  Control block                                    *
 //*******************************************************************
 dcl-pi peek13;
-  i_qfile    likeds(qobj_t) const;
+  i_qFile    likeds(qObj_t) const;
   i_mbr      like(mbr_t) const;
-  o_mbrd0200 likeds(mbrd0200_t);
+  o_mbrd0200 likeds(MBRD0200_t);
 end-pi;
 
 //---------------------------------------------------*
 
 // - Meldung
-p_sndstsmg('USR8109': i_qfile + i_mbr);
+p_sndStsMg('USR8109': i_qFile + i_mbr);
 
-clear errcode;
-errcode.bytprv = %size(errcode);
+clear errCode;
+errCode.bytPrv = %size(errCode);
 
 qusrmbrd(mbrd0200: %size(mbrd0200)
         : 'MBRD0200'
-        : i_qfile: i_mbr: '0': errcode);
+        : i_qFile: i_mbr: '0': errCode);
 
-if (errcode.bytavl > 0);
+if (errCode.bytAvl > 0);
   clear o_mbrd0200;
 else;
   o_mbrd0200 = mbrd0200;

@@ -44,19 +44,19 @@
 /copy QCOPYLE,PPEEK53
 /copy QCOPYLE,PPEEK58
 
-dcl-s peek41_name like(pgmcalln_t) inz;
+dcl-s peek41_name like(pgmCallN_t) inz;
 
 dcl-s data char(512) inz;
-dcl-s nbrofkey like(int4_t) inz;
+dcl-s nbrOfKey like(int4_t) inz;
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
 //*******************************************************************
 dcl-pi peek04;
-  i_qfile  likeds(qobj_t) const;
-  i_rcdfmt like(fmt_t) const;
-  o_msgid  like(msgid_t);
-  o_msgdta like(msgdta_t);
+  i_qFile  likeds(qObj_t) const;
+  i_rcdFmt like(fmt_t) const;
+  o_msgID  like(msgId_t);
+  o_msgDta like(msgDta_t);
 end-pi;
 
 //---------------------------------------------------*
@@ -67,28 +67,28 @@ ceehdlr(%paddr('errorHandler')
 
 exsr inzsr;
 
-exsr first;
+exsr First;
 
 //  Abrufen der Dateiinformationen ...
-peek41(i_qfile: i_rcdfmt: '*CREATE'
-      : nbrofkey: data);
+peek41(i_qFile: i_rcdFmt: '*CREATE'
+      : nbrOfKey: data);
 
-if (nbrofkey > 0);
+if (nbrOfKey > 0);
   //  Abrufen der Schlüsselfeldinformationen ...
-  peek41(i_qfile: i_rcdfmt: '*KEY'
-        : nbrofkey: data);
+  peek41(i_qFile: i_rcdFmt: '*KEY'
+        : nbrOfKey: data);
 endif;
 
 //  Auch wenn schon der Abruf der Dateiinformationen fehlgeschlagen
 //  ist, gibt es keine Schlüsselinformationen.
-if (nbrofkey <= *zeros);
-  o_msgid = 'USR0006';
-  usr0006.var1 = i_qfile.name;
-  usr0006.var2 = i_qfile.lib;
-  o_msgdta = usr0006;
+if (nbrOfKey <= *zeros);
+  o_msgID = 'USR0006';
+  usr0006.var1 = i_qFile.name;
+  usr0006.var2 = i_qFile.lib;
+  o_msgDta = usr0006;
 else;
-  o_msgid = *blanks;
-  o_msgdta = *blanks;
+  o_msgID = *blanks;
+  o_msgDta = *blanks;
 endif;
 
 *inlr = '1';
@@ -97,16 +97,16 @@ endif;
 //  First  --  Initialize program                     *
 //====================================================*
 
-begsr first;
+begsr First;
 
-  nbrofkey = *zeros;
+  nbrOfKey = *zeros;
 
   // - Meldung
   //**                Callp     p_sndStsMg('USR8137': XQFile)
 
   // - Los gehts'
-  o_msgid = *blanks;
-  o_msgdta = *blanks;
+  o_msgID = *blanks;
+  o_msgDta = *blanks;
 
 endsr;
 
@@ -116,7 +116,7 @@ endsr;
 
 begsr inzsr;
 
-  peek41_name = f_pgmcalln('PEEK41');
+  peek41_name = f_pgmCallN('PEEK41');
 
 endsr;
 
@@ -124,12 +124,12 @@ endsr;
 //  Program error handler                                     *
 //============================================================*
 
-dcl-proc errorhandler;
+dcl-proc errorHandler;
   dcl-pi *n;
-    i_condtoken    likeds(cee_fc_t) value;
-    i_pcommarea    int(10) value;
+    i_condToken    likeds(cee_fc_t) value;
+    i_pCommArea    int(10) value;
     o_action       int(10);
-    o_newcondtoken likeds(cee_fc_t);
+    o_newCondToken likeds(cee_fc_t);
   end-pi;
 
   dump;

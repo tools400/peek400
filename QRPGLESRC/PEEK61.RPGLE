@@ -42,15 +42,15 @@ ctl-opt extbinint(*yes);
 
 //  Global fields
 dcl-s g_text varchar(21);
-dcl-s g_maxvalue int(10);
+dcl-s g_maxValue int(10);
 dcl-s g_marker char(1);
-dcl-s g_waitsec int(10);
+dcl-s g_waitSec int(10);
 dcl-s g_width int(10);
 
-dcl-s g_jobtype char(1);
-dcl-s g_showprgmtr ind;
-dcl-s g_lastpercentage packed(3);
-dcl-s g_lasttmstmp timestamp;
+dcl-s g_jobType char(1);
+dcl-s g_showPrgMtr ind;
+dcl-s g_lastPercentage packed(3);
+dcl-s g_lastTmStmp timestamp;
 
 dcl-c SCR_MODE_DS3 '*DS3';
 dcl-c SCR_MODE_DS4 '*DS4';
@@ -59,30 +59,30 @@ dcl-c SCR_COLUMN_DS3 80;
 dcl-c SCR_COLUMN_DS4 132;
 
 //  Private Prototypes
-dcl-pr lf_getnumdspcol uns(10) extproc('lf_getnumdspcol');
+dcl-pr lf_getNumDspCol uns(10) extproc('lf_getnumdspcol');
 end-pr;
 
-dcl-pr lf_getscreenmode char(10) extproc('lf_getscreenmode');
+dcl-pr lf_getScreenMode char(10) extproc('lf_getscreenmode');
 end-pr;
 
 //===============================================================*
 //  Initialize Progress Meter
 //===============================================================*
 
-dcl-proc p_inzprogressmeter export;
+dcl-proc p_inzProgressMeter export;
   dcl-pi *n;
     i_text     char(20) const;
-    i_maxvalue int(10) const;
+    i_maxValue int(10) const;
     i_marker   char(1) options(*nopass) const;
-    i_waitsec  int(10) options(*nopass) const;
-    i_jobtype  char(10) options(*nopass) const;
+    i_waitSec  int(10) options(*nopass) const;
+    i_jobType  char(10) options(*nopass) const;
     i_width    int(10) options(*nopass) const;
   end-pi;
 
   //  Optional parameter fields
   dcl-s marker like(i_marker);
-  dcl-s waitsec like(i_waitsec);
-  dcl-s jobtype like(i_jobtype);
+  dcl-s waitSec like(i_waitSec);
+  dcl-s jobtype like(i_jobType);
   dcl-s width like(i_width);
 
   //  Local helper fields
@@ -94,21 +94,21 @@ dcl-proc p_inzprogressmeter export;
   if (%parms() >= %parmnum(i_marker));
     marker = i_marker;
   else;
-    marker = cprgmtr_blue;
+    marker = cPrgMtr_Blue;
   endif;
 
   //  ... 'i_waitSec'
-  if (%parms() >= %parmnum(i_waitsec));
-    waitsec = i_waitsec;
+  if (%parms() >= %parmnum(i_waitSec));
+    waitSec = i_waitSec;
   else;
-    waitsec = 0;
+    waitSec = 0;
   endif;
 
   //  ... 'i_jobType'
-  if (%parms() >= %parmnum(i_jobtype));
-    jobtype = i_jobtype;
+  if (%parms() >= %parmnum(i_jobType));
+    jobtype = i_jobType;
   else;
-    jobtype = cprgmtr_jobtype_all;
+    jobtype = cPrgMtr_JobType_All;
   endif;
 
   //  ... 'i_width'
@@ -126,39 +126,39 @@ dcl-proc p_inzprogressmeter export;
   // (only interactive jobs have a display, all other job types
   //  use the batch layout)
   if (jobi0100.type = 'I');
-    g_jobtype = 'I';
+    g_jobType = 'I';
   else;
-    g_jobtype = 'B';
+    g_jobType = 'B';
   endif;
 
   g_text        = %trimr(i_text) + ' ';
-  g_maxvalue    = i_maxvalue;
-  g_waitsec     = waitsec;
+  g_maxValue    = i_maxValue;
+  g_waitSec     = waitSec;
 
-  g_lastpercentage = -1;
-  g_lasttmstmp     = *loval;
+  g_lastPercentage = -1;
+  g_lastTmStmp     = *loval;
 
   // ... if an attribute below x'20' (normal green) specified,
   //     swap for yellow reverse (safer)
   if (marker < x'20');
-    g_marker = cprgmtr_yellow;
+    g_marker = cPrgMtr_Yellow;
   else;
     g_marker = marker;
   endif;
 
   // ... change marker acording to job type
-  if ((g_jobtype = 'B') and (g_marker < ' '));
+  if ((g_jobType = 'B') and (g_marker < ' '));
     g_marker = '#';
   endif;
 
   // ... set screen width
-  if (g_jobtype = 'B');
+  if (g_jobType = 'B');
     g_width = 50;
   else;
     if (width > 0);
       g_width = width;
     else;
-      g_width = lf_getnumdspcol() -
+      g_width = lf_getNumDspCol() -
                   %len(g_text) - 10;
     endif;
   endif;
@@ -172,25 +172,25 @@ dcl-proc p_inzprogressmeter export;
   //  ... check whether the progress meter must be shown for jobs of type ...
   select;
   //      ... all Jobs
-  when (jobtype = cprgmtr_jobtype_all);
-    g_showprgmtr = bTrue;
+  when (jobtype = cPrgMtr_JobType_All);
+    g_showPrgMtr = bTrue;
   //      ... interactive jobs
-  when (jobtype = cprgmtr_jobtype_dlg);
-    if (g_jobtype <> 'B');
-      g_showprgmtr = bTrue;
+  when (jobtype = cPrgMtr_JobType_Dlg);
+    if (g_jobType <> 'B');
+      g_showPrgMtr = bTrue;
     else;
-      g_showprgmtr = bFalse;
+      g_showPrgMtr = bFalse;
     endif;
   //      ... batch jobs
-  when (jobtype = cprgmtr_jobtype_batch);
-    if (g_jobtype = 'B');
-      g_showprgmtr = bTrue;
+  when (jobtype = cPrgMtr_JobType_Batch);
+    if (g_jobType = 'B');
+      g_showPrgMtr = bTrue;
     else;
-      g_showprgmtr = bFalse;
+      g_showPrgMtr = bFalse;
     endif;
   //      ... others
   other;
-    g_showprgmtr = bFalse;
+    g_showPrgMtr = bFalse;
   endsl;
 
   return;
@@ -201,9 +201,9 @@ end-proc;
 //  Show Progress Meter
 //===============================================================*
 
-dcl-proc p_showprogressmeter export;
+dcl-proc p_showProgressMeter export;
   dcl-pi *n;
-    i_currvalue int(10) const;
+    i_currValue int(10) const;
   end-pi;
 
   //  Local helper fields
@@ -225,12 +225,12 @@ dcl-proc p_showprogressmeter export;
   dcl-s msgType char(10);
   dcl-s msgKey char(4);
 
-  dcl-ds errcode likeds(errcode_t) inz;
+  dcl-ds errCode likeds(errCode_t) inz;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   //  Check whether the progress meter must be shown
   //  (no maximum value: nothing to show, avoid dividing by zero)
-  if (not g_showprgmtr or g_maxvalue <= 0);
+  if (not g_showPrgMtr or g_maxValue <= 0);
     return;
   endif;
 
@@ -240,19 +240,19 @@ dcl-proc p_showprogressmeter export;
   %len(pointer ) = %len(progress);
 
   //  Compute new percentage, get current timestamp
-  percentage = %int(100 * i_currvalue / g_maxvalue  );
+  percentage = %int(100 * i_currValue / g_maxValue  );
 
   //  Compute elapsed time
   now = %timestamp();
-  if (g_waitsec > 0);
-    seconds = %diff(now:g_lasttmstmp:*s);
+  if (g_waitSec > 0);
+    seconds = %diff(now:g_lastTmStmp:*s);
   else;
     seconds = *hival;
   endif;
 
   //  Check whether a new value must be shown
-  if (percentage <> g_lastpercentage and
-      (seconds >= g_waitsec or g_waitsec = 0));
+  if (percentage <> g_lastPercentage and
+      (seconds >= g_waitSec or g_waitSec = 0));
 
     //  ... initialize message line with dots.
     progress = %xlate(' ': '.': progress);
@@ -289,22 +289,22 @@ dcl-proc p_showprogressmeter export;
     endif;
 
     //  Send message to this program's own queue if in batch (log in job log) ...
-    if (g_jobtype = 'B');
+    if (g_jobType = 'B');
       msgType = '*INFO';
     else;
       //  ... otherwise send status message for interactive request
       msgType = '*STATUS';
     endif;
 
-    clear errcode;
-    errcode.bytprv = %size(errcode);
+    clear errCode;
+    errCode.bytPrv = %size(errCode);
 
     qmhsndpm ('CPDA0FF': qMsgFile: msgDta: %len(msgDta): msgType
-              : '*EXT': 0: msgKey: errcode);
+              : '*EXT': 0: msgKey: errCode);
 
     //  ... remember current values
-    g_lastpercentage = percentage;
-    g_lasttmstmp     = now;
+    g_lastPercentage = percentage;
+    g_lastTmStmp     = now;
   endif;
 
   return;
@@ -315,7 +315,7 @@ end-proc;
 //  Get number of display columns
 //===============================================================*
 
-dcl-proc lf_getnumdspcol;
+dcl-proc lf_getNumDspCol;
   dcl-pi *n uns(10);
   end-pi;
 
@@ -323,7 +323,7 @@ dcl-proc lf_getnumdspcol;
   dcl-s numDspColumns uns(10) inz;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  if (lf_getscreenmode() = SCR_MODE_DS3);
+  if (lf_getScreenMode() = SCR_MODE_DS3);
     numDspColumns = SCR_COLUMN_DS3;
   else;
     numDspColumns = SCR_COLUMN_DS4;
@@ -337,36 +337,36 @@ end-proc;
 //  Get screen mode
 //===============================================================*
 
-dcl-proc lf_getscreenmode;
+dcl-proc lf_getScreenMode;
   dcl-pi *n char(10);
   end-pi;
 
   //  Definieren Funktionswert
-  dcl-s screenmode char(10) inz;
+  dcl-s screenMode char(10) inz;
 
   //  Retrieve Display Mode       Return value: Display Mode
-  dcl-pr qsnrtvmod char(1) extproc('QsnRtvMod');
-    o_dspmode    char(1) options(*omit);
-    i_hlowlvlenv int(10) options(*omit) const;
-    io_errcode   char(32767) options(*omit: *varsize);
+  dcl-pr QsnRtvMod char(1) extproc('QsnRtvMod');
+    o_dspMode    char(1) options(*omit);
+    i_hLowLvlEnv int(10) options(*omit) const;
+    io_ErrCode   char(32767) options(*omit: *varsize);
   end-pr;
 
   //  Definieren Arbeitsfelder
   dcl-s dspMode char(1);
-  dcl-ds errCode likeds(errcode_t) inz;
+  dcl-ds errCode likeds(errCode_t) inz;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   clear errCode;
 
-  qsnrtvmod(dspMode: *omit: errCode);
+  QsnRtvMod(dspMode: *omit: errCode);
 
   if (dspMode = '3');
-    screenmode = SCR_MODE_DS3;
+    screenMode = SCR_MODE_DS3;
   else;
-    screenmode = SCR_MODE_DS4;
+    screenMode = SCR_MODE_DS4;
   endif;
 
-  return screenmode;
+  return screenMode;
 
 end-proc;
 

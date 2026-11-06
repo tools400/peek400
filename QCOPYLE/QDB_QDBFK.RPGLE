@@ -6,18 +6,18 @@
 //                                                               *
 //===============================================================*
 
-dcl-ds qdb_qdbfk;
+dcl-ds Qdb_Qdbfk;
 
   // Field name
-  qdbfkfld   char(10);
+  Qdbfkfld   char(10);
 
   // Reserved_59
-  reserved59 char(3);
+  Reserved59 char(3);
 
   // Key statement seq. attribute flags
-  qdbfksq    char(1);
+  Qdbfksq    char(1);
 
   // Reserved_61
-  reserved61 char(17);
+  Reserved61 char(17);
 end-ds;
 

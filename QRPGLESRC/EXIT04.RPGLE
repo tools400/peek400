@@ -102,10 +102,10 @@ dcl-pr main extproc('main');
   i_event     like(gi_event) const;
   i_user      like(gi_user) const;
   i_timestamp like(gi_timestamp) const;
-  i_rcdnbr    like(gi_rcdnbr) const;
+  i_rcdNbr    like(gi_rcdNbr) const;
   i_size      like(gi_size) const;
-  i_bimage    like(gi_bimage) const;
-  i_aimage    like(gi_aimage) const;
+  i_bImage    like(gi_bImage) const;
+  i_aImage    like(gi_aImage) const;
 end-pr;
 
 //===============================================================*
@@ -118,14 +118,14 @@ dcl-pi exit04;
   gi_event     char(10) const;
   gi_user      char(10) const;
   gi_timestamp timestamp const;
-  gi_rcdnbr    int(10) const;
+  gi_rcdNbr    int(10) const;
   gi_size      int(10) const;
-  gi_bimage    pointer const;
-  gi_aimage    pointer const;
+  gi_bImage    pointer const;
+  gi_aImage    pointer const;
 end-pi;
 
 main(gi_file: gi_lib: gi_mbr: gi_event: gi_user: gi_timestamp
-     : gi_rcdnbr: gi_size: gi_bimage: gi_aimage);
+     : gi_rcdNbr: gi_size: gi_bImage: gi_aImage);
 
 return;
 
@@ -140,14 +140,14 @@ dcl-proc main;
     i_event     like(gi_event) const;
     i_user      like(gi_user) const;
     i_timestamp like(gi_timestamp) const;
-    i_rcdnbr    like(gi_rcdnbr) const;
+    i_rcdNbr    like(gi_rcdNbr) const;
     i_size      like(gi_size) const;
-    i_bimage    like(gi_bimage) const;
-    i_aimage    like(gi_aimage) const;
+    i_bImage    like(gi_bImage) const;
+    i_aImage    like(gi_aImage) const;
   end-pi;
 
-  dcl-s bimage char(32767) based(i_bimage);
-  dcl-s aimage char(32767) based(i_aimage);
+  dcl-s bImage char(32767) based(i_bImage);
+  dcl-s aImage char(32767) based(i_aImage);
   //---------------------------------------------------------------*
 
   open(e) exit04log;
@@ -163,15 +163,15 @@ dcl-proc main;
     log_event     = i_event;
     log_user      = i_user;
     log_timestamp = i_timestamp;
-    log_rcdnbr    = i_rcdnbr;
+    log_rcdnbr    = i_rcdNbr;
     log_size      = i_size;
-    if (i_bimage <> *null); // *CHANGE, *COPY or *DELETE
-      log_bimage = %subst(bimage: 1: i_size);
+    if (i_bImage <> *null); // *CHANGE, *COPY or *DELETE
+      log_bimage = %subst(bImage: 1: i_size);
     else;
       log_bimage = '*N';
     endif;
-    if (i_aimage <> *null); // *ADD, *CHANGE, *COPY
-      log_aimage = %subst(aimage: 1: i_size);
+    if (i_aImage <> *null); // *ADD, *CHANGE, *COPY
+      log_aimage = %subst(aImage: 1: i_size);
     else;
       log_aimage = '*N';
     endif;

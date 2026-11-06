@@ -67,88 +67,88 @@ dcl-pr p_main;
   io_user  like(gio_user);
   io_file  like(gio_file);
   io_lib   like(gio_lib);
-  o_msgid  like(go_msgid);
-  o_msgdta like(go_msgdta);
+  o_msgID  like(go_msgID);
+  o_msgDta like(go_msgDta);
 end-pr;
 
 //  retrieve user profile information
-dcl-pr f_rtvusrprfinf char(256);
+dcl-pr f_rtvUsrPrfInf char(256);
   i_user   char(10) const;
   i_format char(8) const;
-  o_msgid  like(msgid_t);
-  o_msgdta like(msgdta_t);
+  o_msgID  like(msgId_t);
+  o_msgDta like(msgDta_t);
 end-pr;
 
 //  Programminformationsdatenstruktur                            *
 dcl-ds sds qualified psds;
   // Programmname
-  pgmname  char(10);
+  pgmName  char(10);
   // Programmfehlerstatus
-  pgmstat  zoned(5);
+  PgmStat  zoned(5);
   // vorheriger Programmfehlerstatus
-  prevstat zoned(5);
+  PrevStat zoned(5);
   // Letzte Anweisungsnummer
-  lastseq  char(8);
+  LastSeq  char(8);
   // Letzte Unterroutine
-  lastsubr char(8);
+  LastSubr char(8);
   // Anzahl übergebener Parameter
-  nbrparm  zoned(3);
+  NbrParm  zoned(3);
   // Fehler-Msg
-  msgid    char(7);
+  msgID    char(7);
   //  Fehler-Art
-  msgprfx  char(3) overlay(msgid);
+  MsgPrfx  char(3) overlay(msgID);
   //  Fehler-Nummer
-  msgnbr   char(4) overlay(msgid: 4);
+  msgNbr   char(4) overlay(msgID: 4);
   // MI-Instruktions-Nr.
-  mi_instr char(4);
+  MI_Instr char(4);
   // Arbeitsbereich für Nachrichten
-  workarea char(30);
+  WorkArea char(30);
   // Programmbiblitohek
-  pgmlib   char(10);
+  PgmLib   char(10);
   // CPF-Fehlertext
-  msgtext  char(80);
+  msgText  char(80);
   // Kz der Ausnahmebedingung
   aube     char(4);
   // unbenutzt
-  unused_1 char(16);
+  Unused_1 char(16);
   // Datumsformat
   datfmt   char(8);
   // Ersten 2 stellen von *YEAR
   year     zoned(2);
   // Letzte Dateioperation: Dateiname
-  fileopr  char(8);
+  FileOpr  char(8);
   // Datei-Staus-Information
-  filestat char(35);
+  FileStat char(35);
   // Jobname
   job      char(10);
   // Benutzer
   user     char(10);
   // Jobnummer
-  jobnbr   zoned(6);
+  JobNbr   zoned(6);
   // Jobdatum, Aufbau wie UDATE
-  jobd     zoned(6);
+  JobD     zoned(6);
   // Programm-Ausführungsdatum, Aufbau wie UDATE
   jobdate  zoned(6);
   // Job-Zeit (HHMMSS)
-  jobtime  zoned(6);
+  JobTime  zoned(6);
   // Umwandlungsdatum
-  crtdate  char(6);
+  CrtDate  char(6);
   // Umwandlungszeit (HHMMSS)
-  crttime  char(6);
+  CrtTime  char(6);
   // Compiler Version
-  compver  char(4);
+  CompVer  char(4);
   // Quellendatei
-  srcfile  char(10);
+  srcFile  char(10);
   // Bibliothek mit Quellendatei
-  srclib   char(10);
+  srcLib   char(10);
   // Quellenteildatei
-  srcmbr   char(10);
+  srcMbr   char(10);
   // Program containing procedure
-  pgmproc  char(10);
+  PgmProc  char(10);
   // Module containing procedure
-  modproc  char(10);
+  ModProc  char(10);
   // unbenutzt
-  unused_2 char(76);
+  Unused_2 char(76);
 end-ds;
 
 //===============================================================*
@@ -158,15 +158,15 @@ dcl-pi exit02;
   gio_user  like(user_t);
   gio_file  like(file_t);
   gio_lib   like(lib_t);
-  go_msgid  like(msgid_t);
-  go_msgdta like(msgdta_t);
+  go_msgID  like(msgId_t);
+  go_msgDta like(msgDta_t);
 end-pi;
 
 p_main(gio_user  :
       gio_file  :
       gio_lib   :
-      go_msgid  :
-      go_msgdta );
+      go_msgID  :
+      go_msgDta );
 
 *inlr = *on;
 
@@ -179,25 +179,25 @@ dcl-proc p_main;
     io_user  like(gio_user);
     io_file  like(gio_file);
     io_lib   like(gio_lib);
-    o_msgid  like(go_msgid);
-    o_msgdta like(go_msgdta);
+    o_msgID  like(go_msgID);
+    o_msgDta like(go_msgDta);
   end-pi;
 
   //  lokale Arbeitsfelder
   dcl-ds usri0200 len(256);
-    ui2_bytret    int(10);
-    ui2_bytavl    int(10);
-    ui2_usrprf    char(10);
-    ui2_usrcls    char(10);
-    ui2_spcaut    char(15);
-    ui2_grpprf    char(10);
-    ui2_owner     char(10);
-    ui2_grpaut    char(10);
-    ui2_lmtcpb    char(10);
-    ui2_grpauttyp char(10);
-    ui2_reserved1 char(3);
-    ui2_ofssplgrp int(10);
-    ui2_numsplgrp int(10);
+    UI2_bytRet    int(10);
+    UI2_bytAvl    int(10);
+    UI2_usrPrf    char(10);
+    UI2_usrCls    char(10);
+    UI2_spcAut    char(15);
+    UI2_grpPrf    char(10);
+    UI2_owner     char(10);
+    UI2_grpAut    char(10);
+    UI2_lmtCpb    char(10);
+    UI2_grpAutTyp char(10);
+    UI2_reserved1 char(3);
+    UI2_ofsSplGrp int(10);
+    UI2_numSplGrp int(10);
   end-ds;
   //---------------------------------------------------------------*
 
@@ -208,11 +208,11 @@ dcl-proc p_main;
 
   if (io_file = '*DFT');
     io_file = sds.user;
-    io_lib  = sds.pgmlib;
+    io_lib  = sds.PgmLib;
   endif;
 
   if (io_lib = '*PRDLIB');
-    io_lib  = sds.pgmlib;
+    io_lib  = sds.PgmLib;
   endif;
 
   //  Remove "Return" statement to override settings file and
@@ -220,14 +220,14 @@ dcl-proc p_main;
   return;
 
   //  Use group profile as name of settings file
-  usri0200 = f_rtvusrprfinf(io_user    :
+  usri0200 = f_rtvUsrPrfInf(io_user    :
                            'USRI0200' :
-                           o_msgid    :
-                           o_msgdta   );
+                           o_msgID    :
+                           o_msgDta   );
 
-  if (o_msgid = ' ');
-    io_user = ui2_grpprf;
-    io_file = ui2_grpprf;
+  if (o_msgID = ' ');
+    io_user = UI2_grpPrf;
+    io_file = UI2_grpPrf;
   endif;
 
   return;
@@ -239,50 +239,50 @@ end-proc;
 //    Abrufen Informationen über Benutzerprofil                  *
 //===============================================================*
 
-dcl-proc f_rtvusrprfinf;
+dcl-proc f_rtvUsrPrfInf;
   dcl-pi *n char(256);
     i_user   char(10) const;
     i_format char(8) const;
-    o_msgid  like(msgid_t);
-    o_msgdta like(msgdta_t);
+    o_msgID  like(msgId_t);
+    o_msgDta like(msgDta_t);
   end-pi;
 
-  dcl-ds rcvvar len(256) inz;
-    rcv_bytret int(10) inz;
-    rcv_bytavl int(10) inz;
+  dcl-ds RcvVar len(256) inz;
+    rcv_bytRet int(10) inz;
+    rcv_bytAvl int(10) inz;
   end-ds;
 
-  dcl-ds errcode;
-    err_bytprv   int(10) inz(%size(errcode));
-    err_bytavl   int(10) inz;
-    err_excid    char(7) inz;
+  dcl-ds errCode;
+    err_bytPrv   int(10) inz(%size(errCode));
+    err_bytAvl   int(10) inz;
+    err_excID    char(7) inz;
     err_reserved char(1) inz;
-    err_excdata  char(256) inz;
+    err_excData  char(256) inz;
   end-ds;
 
   //  Retrieve User Information (QSYRUSRI) API
   dcl-pr qsyrusri extpgm('QSYRUSRI');
-    o_rcvvar    char(65535) options(*varsize);
-    i_rcvvarlen int(10) const;
+    o_rcvVar    char(65535) options(*varsize);
+    i_rcvVarLen int(10) const;
     i_format    char(8) const;
-    i_usrprf    char(10) const;
-    io_errcode  char(65535) options(*varsize);
+    i_usrPrf    char(10) const;
+    io_ErrCode  char(65535) options(*varsize);
   end-pr;
   //---------------------------------------------------------------*
 
-  reset errcode;
-  qsyrusri(rcvvar: %size(rcvvar): i_format:
-          i_user: errcode);
+  reset errCode;
+  qsyrusri(RcvVar: %size(RcvVar): i_format:
+          i_user: errCode);
 
-  if (err_bytavl <> 0);
-    o_msgid  = err_excid;
-    o_msgdta = err_excdata;
+  if (err_bytAvl <> 0);
+    o_msgID  = err_excID;
+    o_msgDta = err_excData;
   else;
-    o_msgid  = ' ';
-    o_msgdta = ' ';
+    o_msgID  = ' ';
+    o_msgDta = ' ';
   endif;
 
-  return %subst(rcvvar: 1: rcv_bytret);
+  return %subst(RcvVar: 1: rcv_bytRet);
 
 end-proc;
 

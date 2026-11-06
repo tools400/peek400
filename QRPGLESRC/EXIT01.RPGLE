@@ -136,17 +136,17 @@ end-pr;
 dcl-pi exit01;
   gi_qFile    likeds(qObj_t) const;
   gi_mbr      like(mbr_t) const;
-  gi_access   like(accmode_t) const;
-  gio_chgl    like(bool_t);
-  gio_chgf    like(bool_t);
-  gio_chgm    like(bool_t);
-  gio_updmd   like(bool_t);
-  gio_updky   like(bool_t);
-  gio_chgsqlw like(bool_t);
-  gio_chgsqlo like(bool_t);
-  gio_accat   like(bool_t);
-  go_msgid    like(msgid_t);
-  go_msgdta   like(msgdta_t);
+  gi_access   like(accMode_t) const;
+  gio_chgL    like(bool_t);
+  gio_chgF    like(bool_t);
+  gio_chgM    like(bool_t);
+  gio_updMd   like(bool_t);
+  gio_updKy   like(bool_t);
+  gio_chgSqlW like(bool_t);
+  gio_chgSqlO like(bool_t);
+  gio_accAt   like(bool_t);
+  go_msgID    like(msgId_t);
+  go_msgDta   like(msgDta_t);
 end-pi;
 
 p_main();
@@ -163,138 +163,138 @@ dcl-proc p_main;
 
   //  lokale Arbeitsfelder
   //  ... Ändern Bibliothek erlaubt
-  dcl-s usrchgl like(bool_t) inz(bFalse);
-  dcl-s objchgl like(bool_t) inz(bFalse);
-  dcl-s secchgl like(bool_t) inz(bFalse);
-  dcl-s chgl like(bool_t) inz(bFalse);
+  dcl-s usrChgL like(bool_t) inz(bFalse);
+  dcl-s objChgL like(bool_t) inz(bFalse);
+  dcl-s secChgL like(bool_t) inz(bFalse);
+  dcl-s chgL like(bool_t) inz(bFalse);
   //  ... Ändern Datei erlaubt
-  dcl-s usrchgf like(bool_t) inz(bFalse);
-  dcl-s objchgf like(bool_t) inz(bFalse);
-  dcl-s secchgf like(bool_t) inz(bFalse);
-  dcl-s chgf like(bool_t) inz(bFalse);
+  dcl-s usrChgF like(bool_t) inz(bFalse);
+  dcl-s objChgF like(bool_t) inz(bFalse);
+  dcl-s secChgF like(bool_t) inz(bFalse);
+  dcl-s chgF like(bool_t) inz(bFalse);
   //  ... Ändern Teildatei erlaubt
-  dcl-s usrchgm like(bool_t) inz(bFalse);
-  dcl-s objchgm like(bool_t) inz(bFalse);
-  dcl-s secchgm like(bool_t) inz(bFalse);
-  dcl-s chgm like(bool_t) inz(bFalse);
+  dcl-s usrChgM like(bool_t) inz(bFalse);
+  dcl-s objChgM like(bool_t) inz(bFalse);
+  dcl-s secChgM like(bool_t) inz(bFalse);
+  dcl-s chgM like(bool_t) inz(bFalse);
   //  ... Datensatzänderungen erlaubt
-  dcl-s usrupdmd like(bool_t) inz(bFalse);
-  dcl-s objupdmd like(bool_t) inz(bFalse);
-  dcl-s secupdmd like(bool_t) inz(bFalse);
-  dcl-s updmd like(bool_t) inz(bFalse);
+  dcl-s usrUpdMd like(bool_t) inz(bFalse);
+  dcl-s objUpdMd like(bool_t) inz(bFalse);
+  dcl-s secUpdMd like(bool_t) inz(bFalse);
+  dcl-s updMd like(bool_t) inz(bFalse);
   //  ... Schlüsseländerung erlaubt
-  dcl-s usrupdky like(bool_t) inz(bFalse);
-  dcl-s objupdky like(bool_t) inz(bFalse);
-  dcl-s secupdky like(bool_t) inz(bFalse);
-  dcl-s updky like(bool_t) inz(bFalse);
+  dcl-s usrUpdKy like(bool_t) inz(bFalse);
+  dcl-s objUpdKy like(bool_t) inz(bFalse);
+  dcl-s secUpdKy like(bool_t) inz(bFalse);
+  dcl-s updKy like(bool_t) inz(bFalse);
   //  ... Ändern SQL WHERE erlaubt
-  dcl-s usrchgsqlw like(bool_t) inz(bFalse);
-  dcl-s objchgsqlw like(bool_t) inz(bFalse);
-  dcl-s secchgsqlw like(bool_t) inz(bFalse);
-  dcl-s chgsqlw like(bool_t) inz(bFalse);
+  dcl-s usrChgSqlW like(bool_t) inz(bFalse);
+  dcl-s objChgSqlW like(bool_t) inz(bFalse);
+  dcl-s secChgSqlW like(bool_t) inz(bFalse);
+  dcl-s chgSqlW like(bool_t) inz(bFalse);
   //  ... Ändern SQL ORDERR BY erlaubt
-  dcl-s usrchgsqlo like(bool_t) inz(bFalse);
-  dcl-s objchgsqlo like(bool_t) inz(bFalse);
-  dcl-s secchgsqlo like(bool_t) inz(bFalse);
-  dcl-s chgsqlo like(bool_t) inz(bFalse);
+  dcl-s usrChgSqlO like(bool_t) inz(bFalse);
+  dcl-s objChgSqlO like(bool_t) inz(bFalse);
+  dcl-s secChgSqlO like(bool_t) inz(bFalse);
+  dcl-s chgSqlO like(bool_t) inz(bFalse);
   //  ... Zugriffsberechtigung
-  dcl-s usraccat like(bool_t) inz(bFalse);
-  dcl-s objaccat like(bool_t) inz(bFalse);
-  dcl-s secaccat like(bool_t) inz(bFalse);
-  dcl-s accat like(bool_t) inz(bFalse);
+  dcl-s usrAccAt like(bool_t) inz(bFalse);
+  dcl-s objAccAt like(bool_t) inz(bFalse);
+  dcl-s secAccAt like(bool_t) inz(bFalse);
+  dcl-s accAt like(bool_t) inz(bFalse);
 
   //  ermitteln Benutzerberechtigung ...
   //  ... genau diese Datei (  Priorität 1)
-  if (f_usraut(usrchgl
-               : usrchgf
-               : usrchgm
-               : usrupdmd
-               : usrupdky
-               : usrchgsqlw
-               : usrchgsqlo
-               : usraccat
+  if (f_usrAut(usrChgL
+               : usrChgF
+               : usrChgM
+               : usrUpdMd
+               : usrUpdKy
+               : usrChgSqlW
+               : usrChgSqlO
+               : usrAccAt
                : sds.user
                : gi_qFile.name
                : gi_qFile.lib) = bFalse);
     //      ... alle Dateien diesen Typs (Priorität 2)
-    f_usraut(usrchgl
-             : usrchgf
-             : usrchgm
-             : usrupdmd
-             : usrupdky
-             : usrchgsqlw
-             : usrchgsqlo
-             : usraccat
+    f_usrAut(usrChgL
+             : usrChgF
+             : usrChgM
+             : usrUpdMd
+             : usrUpdKy
+             : usrChgSqlW
+             : usrChgSqlO
+             : usrAccAt
              : sds.user
              : gi_qFile.name);
   endif;
 
   //  ermitteln Objektberechtigung ...
   //  ... genau diese Datei (Priorität 3)
-  if (f_objaut(objchgl
-               : objchgf
-               : objchgm
-               : objupdmd
-               : objupdky
-               : objchgsqlw
-               : objchgsqlo
-               : objaccat
+  if (f_objAut(objChgL
+               : objChgF
+               : objChgM
+               : objUpdMd
+               : objUpdKy
+               : objChgSqlW
+               : objChgSqlO
+               : objAccAt
                : gi_qFile.name
                : gi_qFile.lib) = bFalse);
     //      ... alle Dateien diesen Typs (Priorität 4)
-    f_objaut(objchgl
-             : objchgf
-             : objchgm
-             : objupdmd
-             : objupdky
-             : objchgsqlw
-             : objchgsqlo
-             : objaccat
+    f_objAut(objChgL
+             : objChgF
+             : objChgM
+             : objUpdMd
+             : objUpdKy
+             : objChgSqlW
+             : objChgSqlO
+             : objAccAt
              : gi_qFile.name);
   endif;
 
   //  ermitteln *SECATR ...
   //  ... für diesen Benutzer, diese Bibliothek (Priorität 5)
-  if (f_secaut(secchgl
-               : secchgf
-               : secchgm
-               : secupdmd
-               : secupdky
-               : secchgsqlw
-               : secchgsqlo
-               : secaccat
+  if (f_secAut(secChgL
+               : secChgF
+               : secChgM
+               : secUpdMd
+               : secUpdKy
+               : secChgSqlW
+               : secChgSqlO
+               : secAccAt
                : sds.user
                : gi_qFile.lib) = bFalse);
     //      ... für diesen Benutzer (Priorität 6)
-    if (f_secaut(secchgl
-                 : secchgf
-                 : secchgm
-                 : secupdmd
-                 : secupdky
-                 : secchgsqlw
-                 : secchgsqlo
-                 : secaccat
+    if (f_secAut(secChgL
+                 : secChgF
+                 : secChgM
+                 : secUpdMd
+                 : secUpdKy
+                 : secChgSqlW
+                 : secChgSqlO
+                 : secAccAt
                  : sds.user)  = bFalse);
       //          ... für alle Benutzer, diese Bibliothek (Priorität 7)
-      if (f_secaut(secchgl
-                   : secchgf
-                   : secchgm
-                   : secupdmd
-                   : secupdky
-                   : secchgsqlw
-                   : secchgsqlo
-                   : secaccat
+      if (f_secAut(secChgL
+                   : secChgF
+                   : secChgM
+                   : secUpdMd
+                   : secUpdKy
+                   : secChgSqlW
+                   : secChgSqlO
+                   : secAccAt
                    : *omit
                    : gi_qFile.lib) = bFalse);
         //              ... für alle Benutzer (Priorität 8)
-        if (f_secaut(secchgl
-                     : secchgf
-                     : secchgm
-                     : secupdmd
-                     : secupdky
-                     : secchgsqlw
-                     : secchgsqlo
-                     : secaccat  ) = bFalse);
+        if (f_secAut(secChgL
+                     : secChgF
+                     : secChgM
+                     : secUpdMd
+                     : secUpdKy
+                     : secChgSqlW
+                     : secChgSqlO
+                     : secAccAt  ) = bFalse);
         endif;
       endif;
     endif;
@@ -302,81 +302,81 @@ dcl-proc p_main;
 
   //  Verknüpfen Änderung der Bibliothek erlaubt aus
   //  Objekt- und Benutzerberechtigung (Prioritäten 1-9)
-  chgl   = f_mrgaut(usrchgl   :
-                   objchgl   :
-                   secchgl   :
-                   gio_chgl  );
+  chgL   = f_mrgAut(usrChgL   :
+                   objChgL   :
+                   secChgL   :
+                   gio_chgL  );
 
   //  Verknüpfen Änderung der Datei erlaubt aus
   //  Objekt- und Benutzerberechtigung (Prioritäten 1-9)
-  chgf   = f_mrgaut(usrchgf    :
-                   objchgf    :
-                   secchgf   :
-                   gio_chgf   );
+  chgF   = f_mrgAut(usrChgF    :
+                   objChgF    :
+                   secChgF   :
+                   gio_chgF   );
 
   //  Verknüpfen Änderung der Teildatei erlaubt aus
   //  Objekt- und Benutzerberechtigung (Prioritäten 1-9)
-  chgm   = f_mrgaut(usrchgm   :
-                   objchgm   :
-                   secchgm   :
-                   gio_chgm  );
+  chgM   = f_mrgAut(usrChgM   :
+                   objChgM   :
+                   secChgM   :
+                   gio_chgM  );
 
   //  verknüpfen Objekt- und Benutzerberechtigung
   //  zur Datensatzänderungen (Prioritäten 1-9)
-  updmd  = f_mrgaut(usrupdmd  :
-                   objupdmd  :
-                   secupdmd  :
-                   gio_updmd );
+  updMd  = f_mrgAut(usrUpdMd  :
+                   objUpdMd  :
+                   secUpdMd  :
+                   gio_updMd );
 
   //  verknüpfen Objekt- und Benutzerberechtigung
   //  zur Schlüsseländerung (Prioritäten 1-9)
-  updky  = f_mrgaut(usrupdky  :
-                   objupdky  :
-                   secupdky  :
-                   gio_updky );
+  updKy  = f_mrgAut(usrUpdKy  :
+                   objUpdKy  :
+                   secUpdKy  :
+                   gio_updKy );
 
   //  Verknüpfen Änderung SQL WHERE erlaubt aus
   //  Objekt- und Benutzerberechtigung (Prioritäten 1-9)
-  chgsqlw= f_mrgaut(usrchgsqlw:
-                   objchgsqlw:
-                   secchgsqlw:
-                   gio_chgsqlw);
+  chgSqlW= f_mrgAut(usrChgSqlW:
+                   objChgSqlW:
+                   secChgSqlW:
+                   gio_chgSqlW);
 
   //  Verknüpfen Änderung SQL ORDER BY erlaubt aus
   //  Objekt- und Benutzerberechtigung (Prioritäten 1-9)
-  chgsqlo= f_mrgaut(usrchgsqlo:
-                   objchgsqlo:
-                   secchgsqlo:
-                   gio_chgsqlo);
+  chgSqlO= f_mrgAut(usrChgSqlO:
+                   objChgSqlO:
+                   secChgSqlO:
+                   gio_chgSqlO);
 
   //  verknüpfen Objekt- und Benutzerberechtigung
   //  zur Zugriffsberechtigung (Prioritäten 1-9)
-  accat  = f_mrgaut(usraccat  :
-                   objaccat  :
-                   secaccat  :
-                   gio_accat );
+  accAt  = f_mrgAut(usrAccAt  :
+                   objAccAt  :
+                   secAccAt  :
+                   gio_accAt );
 
   //  Füllen Output-Parameter
-  gio_chgl    = chgl;
-  gio_chgf    = chgf;
-  gio_chgm    = chgm;
-  gio_updmd   = updmd;
-  gio_updky   = updky;
-  gio_chgsqlw = chgsqlw;
-  gio_chgsqlo = chgsqlo;
+  gio_chgL    = chgL;
+  gio_chgF    = chgF;
+  gio_chgM    = chgM;
+  gio_updMd   = updMd;
+  gio_updKy   = updKy;
+  gio_chgSqlW = chgSqlW;
+  gio_chgSqlO = chgSqlO;
 
-  if (accat  = bTrue);
-    gio_accat = bTrue;
-    go_msgid  = ' ';
-    go_msgdta = ' ';
+  if (accAt  = bTrue);
+    gio_accAt = bTrue;
+    go_msgID  = ' ';
+    go_msgDta = ' ';
   else;
-    gio_accat = bFalse;
+    gio_accAt = bFalse;
     clear usr1000;
     usr1000.var1  = gi_qFile.name;
     usr1000.var2  = gi_qFile.lib;
     usr1000.var3  = gi_mbr;
-    go_msgid  = 'USR1000';
-    go_msgdta = usr1000;
+    go_msgID  = 'USR1000';
+    go_msgDta = usr1000;
   endif;
 
   return;
@@ -388,23 +388,23 @@ end-proc;
 //    f_usrAut      Ermitteln Benutzerrechte                     *
 //===============================================================*
 
-dcl-proc f_usraut;
+dcl-proc f_usrAut;
   dcl-pi *n like(bool_t);
-    o_usrchgl    char(1);
-    o_usrchgf    char(1);
-    o_usrchgm    char(1);
-    o_usrupdmd   char(1);
-    o_usrupdky   char(1);
-    o_usrchgsqlw char(1);
-    o_usrchgsqlo char(1);
-    o_usraccat   char(1);
+    o_usrChgL    char(1);
+    o_usrChgF    char(1);
+    o_usrChgM    char(1);
+    o_usrUpdMd   char(1);
+    o_usrUpdKy   char(1);
+    o_usrChgSqlW char(1);
+    o_usrChgSqlO char(1);
+    o_usrAccAt   char(1);
     i_user       like(user_t) const;
     i_file       like(file_t) const;
     i_lib        like(lib_t) options(*nopass) const;
   end-pi;
 
   //  Funktionswert
-  dcl-s isfound like(bool_t) inz(bFalse);
+  dcl-s IsFound like(bool_t) inz(bFalse);
 
   //  Hilfsfelder für optionale Parameter
   dcl-s i5_lib like(i_lib) inz;
@@ -413,7 +413,7 @@ dcl-proc f_usraut;
   dcl-ds ex_key3 likerec(FEXIT01: *KEY);
 
   //  Öffnen Datei
-  p_openfile();
+  p_openFile();
 
   //  Prüfen optionale Parameter
   if (%parms() >= %parmnum(i_lib));
@@ -429,28 +429,28 @@ dcl-proc f_usraut;
   chain %kds(ex_key3: 3) fexit01;
   *in01 = not %found;
   if (*in01 = *off);
-    isfound     = bTrue;
-    o_usrchgl   = ex_chglib;
-    o_usrchgf   = ex_chgfile;
-    o_usrchgm   = ex_chgmbr;
-    o_usrupdmd  = ex_updmod;
-    o_usrupdky  = ex_updkey;
-    o_usrchgsqlw= ex_chgsqlw;
-    o_usrchgsqlo= ex_chgsqlo;
-    o_usraccat  = ex_accaut;
+    IsFound     = bTrue;
+    o_usrChgL   = ex_chgLib;
+    o_usrChgF   = ex_chgFile;
+    o_usrChgM   = ex_chgMbr;
+    o_usrUpdMd  = ex_updMod;
+    o_usrUpdKy  = ex_updKey;
+    o_usrChgSqlW= ex_chgSqlW;
+    o_usrChgSqlO= ex_chgSqlO;
+    o_usrAccAt  = ex_accAut;
   else;
-    isfound     = bFalse;
-    o_usrchgl   = bNotDef;
-    o_usrchgf   = bNotDef;
-    o_usrchgm   = bNotDef;
-    o_usrupdmd  = bNotDef;
-    o_usrupdky  = bNotDef;
-    o_usrchgsqlw= bNotDef;
-    o_usrchgsqlo= bNotDef;
-    o_usraccat  = bNotDef;
+    IsFound     = bFalse;
+    o_usrChgL   = bNotDef;
+    o_usrChgF   = bNotDef;
+    o_usrChgM   = bNotDef;
+    o_usrUpdMd  = bNotDef;
+    o_usrUpdKy  = bNotDef;
+    o_usrChgSqlW= bNotDef;
+    o_usrChgSqlO= bNotDef;
+    o_usrAccAt  = bNotDef;
   endif;
 
-  return isfound;
+  return IsFound;
 
 end-proc;
 
@@ -459,22 +459,22 @@ end-proc;
 //    f_objAut      Ermitteln Objektberechtigung                 *
 //===============================================================*
 
-dcl-proc f_objaut;
+dcl-proc f_objAut;
   dcl-pi *n like(bool_t);
-    o_objchgl    char(1);
-    o_objchgf    char(1);
-    o_objchgm    char(1);
-    o_objupdmd   char(1);
-    o_objupdky   char(1);
-    o_objchgsqlw char(1);
-    o_objchgsqlo char(1);
-    o_objaccat   char(1);
+    o_objChgL    char(1);
+    o_objChgF    char(1);
+    o_objChgM    char(1);
+    o_objUpdMd   char(1);
+    o_objUpdKy   char(1);
+    o_objChgSqlW char(1);
+    o_objChgSqlO char(1);
+    o_objAccAt   char(1);
     i_file       like(file_t) const;
     i_lib        like(lib_t) options(*nopass) const;
   end-pi;
 
   //  Funktionswert
-  dcl-s isfound like(bool_t) inz(bFalse);
+  dcl-s IsFound like(bool_t) inz(bFalse);
 
   //  Hilfsfelder für optionale Parameter
   dcl-s i7_lib like(i_lib);
@@ -483,7 +483,7 @@ dcl-proc f_objaut;
   dcl-ds ex_key3 likerec(FEXIT01: *KEY);
 
   //  Öffnen Datei
-  p_openfile();
+  p_openFile();
 
   //  Prüfen optionale Parameter
   if (%parms() >= %parmnum(i_lib));
@@ -499,28 +499,28 @@ dcl-proc f_objaut;
   chain %kds(ex_key3: 3) fexit01;
   *in01 = not %found;
   if (*in01 = *off);
-    isfound     = bTrue;
-    o_objchgl   = ex_chglib;
-    o_objchgf   = ex_chgfile;
-    o_objchgm   = ex_chgmbr;
-    o_objupdmd  = ex_updmod;
-    o_objupdky  = ex_updkey;
-    o_objchgsqlw= ex_chgsqlw;
-    o_objchgsqlo= ex_chgsqlo;
-    o_objaccat  = ex_accaut;
+    IsFound     = bTrue;
+    o_objChgL   = ex_chgLib;
+    o_objChgF   = ex_chgFile;
+    o_objChgM   = ex_chgMbr;
+    o_objUpdMd  = ex_updMod;
+    o_objUpdKy  = ex_updKey;
+    o_objChgSqlW= ex_chgSqlW;
+    o_objChgSqlO= ex_chgSqlO;
+    o_objAccAt  = ex_accAut;
   else;
-    isfound     = bFalse;
-    o_objchgl   = bNotDef;
-    o_objchgf   = bNotDef;
-    o_objchgm   = bNotDef;
-    o_objupdmd  = bNotDef;
-    o_objupdky  = bNotDef;
-    o_objchgsqlw= bNotDef;
-    o_objchgsqlo= bNotDef;
-    o_objaccat  = bNotDef;
+    IsFound     = bFalse;
+    o_objChgL   = bNotDef;
+    o_objChgF   = bNotDef;
+    o_objChgM   = bNotDef;
+    o_objUpdMd  = bNotDef;
+    o_objUpdKy  = bNotDef;
+    o_objChgSqlW= bNotDef;
+    o_objChgSqlO= bNotDef;
+    o_objAccAt  = bNotDef;
   endif;
 
-  return isfound;
+  return IsFound;
 
 end-proc;
 
@@ -529,22 +529,22 @@ end-proc;
 //    f_secAut      Ermitteln Sicherheitsstandardwerte           *
 //===============================================================*
 
-dcl-proc f_secaut;
+dcl-proc f_secAut;
   dcl-pi *n like(bool_t);
-    o_secchgl    char(1);
-    o_secchgf    char(1);
-    o_secchgm    char(1);
-    o_secupdmd   char(1);
-    o_secupdky   char(1);
-    o_secchgsqlw char(1);
-    o_secchgsqlo char(1);
-    o_secaccat   char(1);
+    o_secChgL    char(1);
+    o_secChgF    char(1);
+    o_secChgM    char(1);
+    o_secUpdMd   char(1);
+    o_secUpdKy   char(1);
+    o_secChgSqlW char(1);
+    o_secChgSqlO char(1);
+    o_secAccAt   char(1);
     i_user       like(user_t) options(*nopass: *omit) const;
     i_lib        like(lib_t) options(*nopass) const;
   end-pi;
 
   //  Funktionswert
-  dcl-s isfound like(bool_t) inz(bFalse);
+  dcl-s IsFound like(bool_t) inz(bFalse);
 
   //  Hilfsfelder für optionale Parameter
   dcl-s i6_user like(i_user);
@@ -554,7 +554,7 @@ dcl-proc f_secaut;
   dcl-ds ex_key3 likerec(FEXIT01: *KEY);
 
   //  Öffnen Datei
-  p_openfile();
+  p_openFile();
 
   //  Prüfen optionale Parameter ...
   //  ... user
@@ -581,28 +581,28 @@ dcl-proc f_secaut;
   chain %kds(ex_key3: 3) fexit01;
   *in01 = not %found;
   if (*in01 = *off);
-    isfound     = bTrue;
-    o_secchgl   = ex_chglib;
-    o_secchgf   = ex_chgfile;
-    o_secchgm   = ex_chgmbr;
-    o_secupdmd  = ex_updmod;
-    o_secupdky  = ex_updkey;
-    o_secchgsqlw= ex_chgsqlw;
-    o_secchgsqlo= ex_chgsqlo;
-    o_secaccat  = ex_accaut;
+    IsFound     = bTrue;
+    o_secChgL   = ex_chgLib;
+    o_secChgF   = ex_chgFile;
+    o_secChgM   = ex_chgMbr;
+    o_secUpdMd  = ex_updMod;
+    o_secUpdKy  = ex_updKey;
+    o_secChgSqlW= ex_chgSqlW;
+    o_secChgSqlO= ex_chgSqlO;
+    o_secAccAt  = ex_accAut;
   else;
-    isfound     = bFalse;
-    o_secchgl   = bNotDef;
-    o_secchgf   = bNotDef;
-    o_secchgm   = bNotDef;
-    o_secupdmd  = bNotDef;
-    o_secupdky  = bNotDef;
-    o_secchgsqlw= bNotDef;
-    o_secchgsqlo= bNotDef;
-    o_secaccat  = bNotDef;
+    IsFound     = bFalse;
+    o_secChgL   = bNotDef;
+    o_secChgF   = bNotDef;
+    o_secChgM   = bNotDef;
+    o_secUpdMd  = bNotDef;
+    o_secUpdKy  = bNotDef;
+    o_secChgSqlW= bNotDef;
+    o_secChgSqlO= bNotDef;
+    o_secAccAt  = bNotDef;
   endif;
 
-  return isfound;
+  return IsFound;
 
 end-proc;
 
@@ -611,51 +611,51 @@ end-proc;
 //    f_mrgAut     Verknüpfen Benutzer-/Objektrechte             *
 //===============================================================*
 
-dcl-proc f_mrgaut;
+dcl-proc f_mrgAut;
   dcl-pi *n like(bool_t);
-    usraut like(bool_t) const;
-    objaut like(bool_t) const;
-    secaut like(bool_t) const;
-    dftaut like(bool_t) const;
+    usrAut like(bool_t) const;
+    objAut like(bool_t) const;
+    secAut like(bool_t) const;
+    dftAut like(bool_t) const;
   end-pi;
 
   //  Funktionswert
   dcl-s aut like(bool_t);
 
   //  Arbeitsfelder
-  dcl-s tmpaut like(bool_t);
+  dcl-s tmpAut like(bool_t);
   //---------------------------------------------------------------*
 
   //  Wenn die Benutzerberechtigung definiert worden ist, ...
-  if (usraut <> bNotDef);
+  if (usrAut <> bNotDef);
     //  ... dann
     //      benutzen Benutzerberechtigung   (Priorität 1, 2)
-    tmpaut = usraut;
+    tmpAut = usrAut;
   else;
     //  ... sonst
     //      Wenn die Objektberechtigung definiert worden ist, dann ...
-    if (objaut <> bNotDef);
+    if (objAut <> bNotDef);
       //      ... dann
       //          benutzen Objektberechtigung (Priorität 3, 4)
-      tmpaut = objaut;
+      tmpAut = objAut;
     else;
       //      ... sonst
       //          Wenn die *SECATR Werte definiert worden sind, dann ...
-      if (secaut <> bNotDef);
+      if (secAut <> bNotDef);
         //          ... dann
         //              benutzen *SECATR Werte (Priorität 5-8)
-        tmpaut = secaut;
+        tmpAut = secAut;
       else;
         //          ... sonst
         //              erteilen Standardberechtigung (Priorität 9)
         //              (kommt aus Befehl PEEK oder aus der
         //              Benutzerdatei, Schlüssel *SECATRDFT)
-        tmpaut = dftaut;
+        tmpAut = dftAut;
       endif;
     endif;
   endif;
 
-  aut = tmpaut;
+  aut = tmpAut;
 
   return aut;
 
@@ -666,7 +666,7 @@ end-proc;
 //    p_openFile    Öffnen Datei                                 *
 //===============================================================*
 
-dcl-proc p_openfile;
+dcl-proc p_openFile;
   dcl-pi *n;
   end-pi;
 

@@ -65,47 +65,47 @@ dcl-ds set0008 likeds(set0008_t) inz;
 
 dcl-s yFKeys char(18) dim(32) inz;
 dcl-s yNbrOfKeys like(int4_t) inz;
-dcl-s yMsgId char(7) inz(*blanks);
-dcl-s yMsgDta char(512) inz(*blanks);
+dcl-s YMsgID char(7) inz(*blanks);
+dcl-s YMsgDta char(512) inz(*blanks);
 
-dcl-s yPgmCmd char(10) inz(*blanks);
-dcl-s yCmdDta like(pgmcmddt_t) inz;
+dcl-s YPgmCmd char(10) inz(*blanks);
+dcl-s YCmdDta like(pgmCmdDt_t) inz;
 
-dcl-s yField char(10) inz(*blanks);
+dcl-s YField char(10) inz(*blanks);
 
-dcl-s ySqlOrder like(sqlOrder_t) inz(*blanks);
+dcl-s YSqlOrder like(sqlOrder_t) inz(*blanks);
 
 dcl-s yRetFile char(10) inz(*blanks);
 dcl-s yRetLib char(10) inz(*blanks);
 
 dcl-s sfbot like(int4_t) inz;
-dcl-c nbrfkeys 3;
+dcl-c NbrFKeys 3;
 
-dcl-s peek21_name like(pgmcalln_t) inz;
-dcl-s peek23_name like(pgmcalln_t) inz;
-dcl-s peek37_name like(pgmcalln_t) inz;
-dcl-s peek38_name like(pgmcalln_t) inz;
-dcl-s peek40_name like(pgmcalln_t) inz;
+dcl-s peek21_name like(pgmCallN_t) inz;
+dcl-s peek23_name like(pgmCallN_t) inz;
+dcl-s peek37_name like(pgmCallN_t) inz;
+dcl-s peek38_name like(pgmCallN_t) inz;
+dcl-s peek40_name like(pgmCallN_t) inz;
 
-dcl-s tempscnfld like(scnfld) inz;
-dcl-s tempfldpos like(fldpos) inz;
-dcl-s templen like(int4_t) inz;
-dcl-s tempcsrrow like(int4_t) inz;
-dcl-s tempcsrcol like(int4_t) inz;
-dcl-s tempfldlen like(int4_t) inz;
-dcl-s tempfldby like(int4_t) inz;
+dcl-s tempScnFld like(ScnFld) inz;
+dcl-s tempFldPos like(FldPos) inz;
+dcl-s tempLen like(int4_t) inz;
+dcl-s tempCsrRow like(int4_t) inz;
+dcl-s tempCsrCol like(int4_t) inz;
+dcl-s tempFldLen like(int4_t) inz;
+dcl-s tempFldBy like(int4_t) inz;
 
 //  Einfügen der Schlüsselfelder in ##ORDER
 dcl-s inskeys like(sqlOrder_t) inz;
-dcl-s keylen like(int4_t) inz;
+dcl-s keyLen like(int4_t) inz;
 dcl-s scanpos like(int4_t) inz;
 dcl-s usedlen like(int4_t) inz;
 
-dcl-ds pfile qualified;
+dcl-ds pFile qualified;
   name    like(io_file);
   library like(io_library);
   member  like(io_member);
-  format  like(io_rcdfmt);
+  format  like(io_rcdFmt);
 end-ds;
 
 dcl-s isInzSr like(bool_t) inz(bFalse);
@@ -115,18 +115,18 @@ dcl-s isInzSr like(bool_t) inz(bFalse);
 //*******************************************************************
 dcl-pi peek48;
   i_dsp80       like(dsp80_t) const;
-  i_copyright   like(copyrght_t) const;
+  i_copyright   like(copyright_t) const;
   io_file       like(file_t);
   io_library    like(lib_t);
   io_member     like(mbr_t);
-  io_rcdfmt     like(fmt_t);
-  i_accessmode  like(accessmode_t) const;
-  io_sqlwhere   like(sqlwhere_t);
-  io_sqlorder   like(sqlorder_t);
-  i_enablewhere like(bool_t) const;
-  i_enableorder like(bool_t) const;
-  o_msgid       like(msgid_t);
-  o_msgdta      like(msgdta_t);
+  io_rcdFmt     like(fmt_t);
+  i_accessMode  like(accessMode_t) const;
+  io_sqlWhere   like(sqlWhere_t);
+  io_sqlOrder   like(sqlOrder_t);
+  i_enableWhere like(bool_t) const;
+  i_enableOrder like(bool_t) const;
+  o_msgID       like(msgId_t);
+  o_msgDta      like(msgDta_t);
 end-pi;
 //---------------------------------------------------*
 
@@ -135,7 +135,7 @@ ceehdlr(%paddr('errorHandler'): *null: *omit);
 
 exsr inzsr;
 
-exsr first;
+exsr First;
 
 //---------------------------------------------------*
 //  Schleife für Programmbearbeitung
@@ -149,25 +149,25 @@ dow ('1');
   //  Anzeigen der Befehlstasten
   select;
   when ((sfbot = 2) and
-     (yNbrOfKeys > nbrfkeys * (sfbot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
     write pbbot#2;
   when ((sfbot = 3) and
-     (yNbrOfKeys > nbrfkeys * (sfbot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
     write pbbot#3;
   when ((sfbot = 4) and
-     (yNbrOfKeys > nbrfkeys * (sfbot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
     write pbbot#4;
   when ((sfbot = 5) and
-     (yNbrOfKeys > nbrfkeys * (sfbot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
     write pbbot#5;
   when ((sfbot = 6) and
-     (yNbrOfKeys > nbrfkeys * (sfbot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
     write pbbot#6;
   when ((sfbot = 7) and
-     (yNbrOfKeys > nbrfkeys * (sfbot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
     write pbbot#7;
   when ((sfbot = 8) and
-     (yNbrOfKeys > nbrfkeys * (sfbot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
     write pbbot#8;
   other;
     write pbbot#1;
@@ -178,82 +178,82 @@ dow ('1');
   exfmt bild01;
 
   //  Berechnen Zeile/Spalte
-  cursorposition.row = workstn.csrpos / 256;
-  cursorposition.column = %rem(workstn.csrpos: 256);
+  cursorPosition.row = workstn.csrPos / 256;
+  cursorPosition.column = %rem(workstn.csrPos: 256);
 
   //  Nachrichten löschen
-  p_rmvpgmmg(sds.pgmname);
+  p_rmvPgmMg(sds.pgmName);
 
   //  Merken Cursorposition
-  exsr keepcsrpos;
+  exsr KeepCsrPos;
 
   //  Bezugszahlen löschen
   exsr bzoff1;
 
   //  Mappen der gedrückten Taste
   //  in Programmbefehl
-  peek21(workstn.aid: sds.pgmname
-        : yPgmCmd: yCmdDta: yMsgId: yMsgDta);
-  if (yMsgId <> *blanks);
-    p_sndpgmmg(yMsgId: yMsgDta: sds.pgmname);
-    yMsgId = '';
-    yMsgDta = '';
+  peek21(workstn.aid: sds.pgmName
+        : YPgmCmd: YCmdDta: YMsgID: YMsgDta);
+  if (YMsgID <> *blanks);
+    p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
+    YMsgID = '';
+    YMsgDta = '';
     iter;
   endif;
 
   //  Abfragen der Programmbefehle
   select;
   //  F3  - Ende
-  when (yPgmCmd = '*EXIT');
-    exsr c_endpgm;
+  when (YPgmCmd = '*EXIT');
+    exsr C_EndPgm;
     leave;
   //  F4  - Prompt
-  when (yPgmCmd = '*PROMPT');
-    tempscnfld = scnfld;
-    tempfldpos = fldpos;
-    exsr c_prompt;
+  when (YPgmCmd = '*PROMPT');
+    tempScnFld = ScnFld;
+    tempFldPos = FldPos;
+    exsr C_Prompt;
     iter;
 
   //  F5  - Aktualisieren
-  when (yPgmCmd = '*REFRESH');
-    exsr c_refresh;
+  when (YPgmCmd = '*REFRESH');
+    exsr C_Refresh;
     iter;
 
   //  F9  - Auswählen Sortierfolge
-  when (yPgmCmd = '*DSPDBR');
-    tempscnfld = scnfld;
-    tempfldpos = fldpos;
-    exsr c_selectky;
+  when (YPgmCmd = '*DSPDBR');
+    tempScnFld = ScnFld;
+    tempFldPos = FldPos;
+    exsr C_SelectKy;
     iter;
 
   //  F11 - Einfügen Keyfelder
-  when (yPgmCmd = '*INSKEYFLD');
-    tempscnfld = scnfld;
-    tempfldpos = fldpos;
-    exsr c_inskeyfd;
+  when (YPgmCmd = '*INSKEYFLD');
+    tempScnFld = ScnFld;
+    tempFldPos = FldPos;
+    exsr C_InsKeyFd;
     iter;
 
   //  F12 - Ende
-  when (yPgmCmd = '*CANCEL');
-    exsr c_endpgm;
+  when (YPgmCmd = '*CANCEL');
+    exsr C_EndPgm;
     leave;
 
   //  F24 - Weitere Tasten
-  when (yPgmCmd = '*MOREKEYS');
-    exsr c_morekeys;
+  when (YPgmCmd = '*MOREKEYS');
+    exsr C_MoreKeys;
 
   //  Datenfreigabe
-  when (yPgmCmd = '*ENTER');
-    exsr c_enter;
+  when (YPgmCmd = '*ENTER');
+    exsr C_Enter;
     if (*in99 = *off);
-      o_msgid = 'USR8112';
-      o_msgdta = *blanks;
+      o_msgID = 'USR8112';
+      o_msgDta = *blanks;
       leave;
     endif;
 
   other;
     //  Falsche Taste gedrückt
-    p_wrongkey(workstn.aid: sds.pgmname);
+    p_wrongKey(workstn.aid: sds.pgmName);
     iter;
   endsl;
 
@@ -267,27 +267,27 @@ return;
 //    C_Enter       "Datenfreigabetaste"                      *
 //============================================================*
 
-begsr c_enter;
+begsr C_Enter;
 
-  exsr dltcsrpos;
+  exsr DltCsrPos;
 
-  ##order = sql_quote(##order);
+  ##order = SQL_quote(##order);
 
-  if (sql_preparestatement(
-         '1': pfile.name: pfile.library: pfile.member: pfile.format:
-         ##where: ##order: yMsgId: yMsgDta));
-    io_file      = pfile.name;
-    io_library   = pfile.library;
-    io_member    = pfile.member;
-    io_rcdfmt    = pfile.format;
-    io_sqlwhere  = ##where;
-    io_sqlorder  = ##order;
+  if (SQL_prepareStatement(
+         '1': pFile.name: pFile.library: pFile.member: pFile.format:
+         ##where: ##order: YMsgID: YMsgDta));
+    io_file      = pFile.name;
+    io_library   = pFile.library;
+    io_member    = pFile.member;
+    io_rcdFmt    = pFile.format;
+    io_sqlWhere  = ##where;
+    io_sqlOrder  = ##order;
     *in99 = '0';
   else;
-    if (yMsgId <> '');
-      p_sndpgmmg(yMsgId: yMsgDta: sds.pgmname);
-      yMsgId = '';
-      yMsgDta = '';
+    if (YMsgID <> '');
+      p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
+      YMsgID = '';
+      YMsgDta = '';
     endif;
     *in99 = '1';
   endif;
@@ -313,11 +313,11 @@ endsr;
 //    C_EndPgm      F3/F12 - Programm beenden                 *
 //============================================================*
 
-begsr c_endpgm;
+begsr C_EndPgm;
 
-  p_rmvpgmmg(sds.pgmname);
+  p_rmvPgmMg(sds.pgmName);
 
-  o_msgid = 'USR8100';
+  o_msgID = 'USR8100';
 
   select;
   when (workstn.aid = k_f3);
@@ -328,7 +328,7 @@ begsr c_endpgm;
     usr8100.var1 = 'Fxx';
   endsl;
 
-  o_msgdta = usr8100;
+  o_msgDta = usr8100;
 
 endsr;
 
@@ -336,36 +336,36 @@ endsr;
 //    C_Prompt      F4  - Prompt                              *
 //============================================================*
 
-begsr c_prompt;
+begsr C_Prompt;
 
   //  Steht im Feld nur das Prompt-Zeichen (z. B. '?'), gilt der Prompt
   //  diesem Feld, auch wenn der Cursor nicht darin steht. Der
   //  ausgewählte Feldname ersetzt das Zeichen (pmt_field).
   if (set0008.set_prmt <> ' ');
-    if (##where = set0008.set_prmt and tempscnfld <> '##ORDER');
-      tempscnfld = '##WHERE';
-    elseif (##order = set0008.set_prmt and tempscnfld <> '##WHERE');
-      tempscnfld = '##ORDER';
+    if (##where = set0008.set_prmt and tempScnFld <> '##ORDER');
+      tempScnFld = '##WHERE';
+    elseif (##order = set0008.set_prmt and tempScnFld <> '##WHERE');
+      tempScnFld = '##ORDER';
     endif;
   endif;
 
   select;
-  when (tempscnfld = '##WHERE');
+  when (tempScnFld = '##WHERE');
     if (*in71 = *on);
-      p_sndpgmmg('USR8195': '': sds.pgmname);
+      p_sndPgmMg('USR8195': '': sds.pgmName);
     else;
-      exsr pmt_field;
+      exsr Pmt_Field;
     endif;
 
-  when (tempscnfld = '##ORDER');
+  when (tempScnFld = '##ORDER');
     if (*in72 = *on);
-      p_sndpgmmg('USR8195': '': sds.pgmname);
+      p_sndPgmMg('USR8195': '': sds.pgmName);
     else;
-      exsr pmt_field;
+      exsr Pmt_Field;
     endif;
 
   other;
-    p_sndpgmmg('USR8179': '': sds.pgmname);
+    p_sndPgmMg('USR8179': '': sds.pgmName);
   endsl;
 
 endsr;
@@ -374,77 +374,77 @@ endsr;
 //    Pmt_Field     Prompt - Field                            *
 //============================================================*
 
-begsr pmt_field;
+begsr Pmt_Field;
 
-  peek37(i_dsp80: i_copyright: yField
-        :  yMsgId: yMsgDta);
+  peek37(i_dsp80: i_copyright: YField
+        :  YMsgID: YMsgDta);
 
-  if (yMsgId = '');
+  if (YMsgID = '');
 
-    templen = %checkr(' ': yField);
+    tempLen = %checkr(' ': YField);
 
     select;
-    when (tempscnfld = '##WHERE');
+    when (tempScnFld = '##WHERE');
       if (set0008.set_prmt <> ' ' and ##where = set0008.set_prmt);
         ##where = '';
-        tempfldpos = 1;
+        tempFldPos = 1;
       endif;
-      ##where = %replace(%trimr(yField) + ' '
+      ##where = %replace(%trimr(YField) + ' '
                         : ##where
-                        : tempfldpos
+                        : tempFldPos
                         : 0);
-      tempcsrrow =  5;
-      tempcsrcol = 17;
-      tempfldpos = tempfldpos + templen + 1;
-      tempfldlen = %len(##where);
-      tempfldby  = 42;
+      tempCsrRow =  5;
+      tempCsrCol = 17;
+      tempFldPos = tempFldPos + tempLen + 1;
+      tempFldLen = %len(##where);
+      tempFldBy  = 42;
 
-    when (tempscnfld = '##ORDER');
+    when (tempScnFld = '##ORDER');
       if (set0008.set_prmt <> ' ' and ##order = set0008.set_prmt);
         ##order = '';
-        tempfldpos = 1;
+        tempFldPos = 1;
       endif;
-      ##order  = %replace(%trimr(yField) + ' '
+      ##order  = %replace(%trimr(YField) + ' '
                          : ##order
-                         : tempfldpos
+                         : tempFldPos
                          : 0);
-      tempcsrrow = 12;
-      tempcsrcol = 17;
-      tempfldpos = tempfldpos + templen + 1;
-      tempfldlen = %len(##order);
-      tempfldby  = 42;
+      tempCsrRow = 12;
+      tempCsrCol = 17;
+      tempFldPos = tempFldPos + tempLen + 1;
+      tempFldLen = %len(##order);
+      tempFldBy  = 42;
 
     other;
       //  Kein Eingabefeld: nichts einfügen, Cursor nicht versetzen
       leavesr;
     endsl;
 
-    if (tempfldpos > tempfldlen);
-      tempfldpos = tempfldlen;
+    if (tempFldPos > tempFldLen);
+      tempFldPos = tempFldLen;
     endif;
 
-    if (%rem(tempfldpos: tempfldby) = 0);
-      tempcsrcol = tempcsrcol + tempfldby;
+    if (%rem(tempFldPos: tempFldBy) = 0);
+      tempCsrCol = tempCsrCol + tempFldBy;
     else;
-      tempcsrcol = tempcsrcol +
-                  %rem(tempfldpos: tempfldby);
+      tempCsrCol = tempCsrCol +
+                  %rem(tempFldPos: tempFldBy);
     endif;
 
-    if (%rem(tempfldpos: tempfldby) = 0);
-      tempcsrrow = tempcsrrow +
-                  %int(tempfldpos/ tempfldby) - 1;
+    if (%rem(tempFldPos: tempFldBy) = 0);
+      tempCsrRow = tempCsrRow +
+                  %int(tempFldPos/ tempFldBy) - 1;
     else;
-      tempcsrrow = tempcsrrow +
-                  %int(tempfldpos/ tempfldby);
+      tempCsrRow = tempCsrRow +
+                  %int(tempFldPos/ tempFldBy);
     endif;
 
-    csrrow = tempcsrrow;
-    csrcol = tempcsrcol - 1;
+    CsrRow = tempCsrRow;
+    CsrCol = tempCsrCol - 1;
 
   else;
-    p_sndpgmmg(yMsgId: yMsgDta: sds.pgmname);
-    yMsgId = '';
-    yMsgDta = '';
+    p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
+    YMsgID = '';
+    YMsgDta = '';
   endif;
 
 endsr;
@@ -453,7 +453,7 @@ endsr;
 //    C_Refresh     F5  - Aktualisieren der Subfile           *
 //============================================================*
 
-begsr c_refresh;
+begsr C_Refresh;
 
   exsr bzoff1;
   exsr fill##;
@@ -464,17 +464,17 @@ endsr;
 //    C_SelectKy    Auswählen Sortierfolge                    *
 //============================================================*
 
-begsr c_selectky;
+begsr C_SelectKy;
 
   select;
-  when (tempscnfld = '##ORDER');
+  when (tempScnFld = '##ORDER');
     if (*in72 = *on);
-      p_sndpgmmg('USR8195': '': sds.pgmname);
+      p_sndPgmMg('USR8195': '': sds.pgmName);
     else;
-      exsr slc_key;
+      exsr Slc_Key;
     endif;
   other;
-    p_sndpgmmg('USR8211': '': sds.pgmname);
+    p_sndPgmMg('USR8211': '': sds.pgmName);
   endsl;
 
 endsr;
@@ -483,29 +483,29 @@ endsr;
 //    Slc_Key       Auswählen Sortierfolge                   *
 //============================================================*
 
-begsr slc_key;
+begsr Slc_Key;
 
-  yMsgId = '';
-  yMsgDta = '';
+  YMsgID = '';
+  YMsgDta = '';
   peek40(i_dsp80: i_copyright
         : io_file: io_library: io_member
-        : io_rcdfmt: bTrue
+        : io_rcdFmt: bTrue
         : yRetFile: yRetLib
-        : yMsgId: yMsgDta);
+        : YMsgID: YMsgDta);
 
   select;
   //  ... Fehler von PEEK40 (USR8100: mit F3/F12 verlassen)
-  when (yMsgId <> '' and yMsgId <> 'USR8100');
-    p_sndpgmmg(yMsgId: yMsgDta: sds.pgmname);
+  when (YMsgID <> '' and YMsgID <> 'USR8100');
+    p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
   //  ... Datei ausgewählt
   when (yRetFile <> *blanks);
     io_file = yRetFile;
     io_library = yRetLib;
-    exsr ins_field;
+    exsr Ins_Field;
   endsl;
 
-  yMsgId = '';
-  yMsgDta = '';
+  YMsgID = '';
+  YMsgDta = '';
 
 endsr;
 
@@ -513,17 +513,17 @@ endsr;
 //    C_InsKeyFd    Insert Key Fields                         *
 //============================================================*
 
-begsr c_inskeyfd;
+begsr C_InsKeyFd;
 
   select;
-  when (tempscnfld = '##ORDER');
+  when (tempScnFld = '##ORDER');
     if (*in72 = *on);
-      p_sndpgmmg('USR8195': '': sds.pgmname);
+      p_sndPgmMg('USR8195': '': sds.pgmName);
     else;
-      exsr ins_field;
+      exsr Ins_Field;
     endif;
   other;
-    p_sndpgmmg('USR8211': '': sds.pgmname);
+    p_sndPgmMg('USR8211': '': sds.pgmName);
   endsl;
 
 endsr;
@@ -532,37 +532,37 @@ endsr;
 //    Ins_Field     Insert Key Fields                         *
 //============================================================*
 
-begsr ins_field;
+begsr Ins_Field;
 
-  ySqlOrder = '';
-  peek38(io_file: io_library: ySqlOrder);
-  inskeys = %trimr(ySqlOrder);
+  YSqlOrder = '';
+  peek38(io_file: io_library: YSqlOrder);
+  inskeys = %trimr(YSqlOrder);
 
   //  Die Schlüsselfelder werden an der Cursorposition in ##ORDER
   //  eingefügt, vorhandener Text rückt nach rechts (wie bei F4).
   usedlen = %len(%trimr(##order));
-  if (tempfldpos - 1 > usedlen);
-    usedlen = tempfldpos - 1;
+  if (tempFldPos - 1 > usedlen);
+    usedlen = tempFldPos - 1;
   endif;
 
   //  Nur ganze Schlüsselfelder einfügen, soweit sie Platz haben.
   if (%len(inskeys) > %len(##order) - usedlen);
-    keylen = 0;
+    keyLen = 0;
     scanpos = %scan(', ': inskeys);
     dow (scanpos > 0 and scanpos - 1 <= %len(##order) - usedlen);
-      keylen = scanpos - 1;
+      keyLen = scanpos - 1;
       if (scanpos + 2 > %len(inskeys));
         leave;
       endif;
       scanpos = %scan(', ': inskeys: scanpos + 2);
     enddo;
-    inskeys = %subst(inskeys: 1: keylen);
+    inskeys = %subst(inskeys: 1: keyLen);
     //  USR8176: Warnung: Zeichenkette zu lang.
-    p_sndpgmmg('USR8176': '': sds.pgmname);
+    p_sndPgmMg('USR8176': '': sds.pgmName);
   endif;
 
   if (%len(inskeys) > 0);
-    ##order = %replace(inskeys: ##order: tempfldpos: 0);
+    ##order = %replace(inskeys: ##order: tempFldPos: 0);
   endif;
 
 endsr;
@@ -571,7 +571,7 @@ endsr;
 //    C_MoreKeys    F24 - Weitere Tasten                      *
 //============================================================*
 
-begsr c_morekeys;
+begsr C_MoreKeys;
 
   sfbot = sfbot + 1;
 
@@ -584,23 +584,23 @@ endsr;
 begsr fill##;
 
   $$sql = 'SELECT * FROM '      +
-         %trim(pfile.library)  +
+         %trim(pFile.library)  +
          '/'                   +
-         %trim(pfile.name)     +
+         %trim(pFile.name)     +
          '('                   +
-         %trim(pfile.member)   +
+         %trim(pFile.member)   +
          ')'                   +
          ' ...';
 
-  ##where = io_sqlwhere;
-  ##order = io_sqlorder;
+  ##where = io_sqlWhere;
+  ##order = io_sqlOrder;
 
   //  Schlüsselfolge als Vorgabe, auch wenn ORDER BY nicht geändert
   //  werden darf: Sie hält bei SQL-Zugriff die bisherige Reihenfolge.
-  if ((i_accessmode = KEY_SEQ) and
+  if ((i_accessMode = KEY_SEQ) and
       (##order  = ' '    ));
-    tempfldpos = 1;
-    exsr ins_field;
+    tempFldPos = 1;
+    exsr Ins_Field;
   endif;
 
 endsr;
@@ -609,12 +609,12 @@ endsr;
 //    KeepCsrPos    Beibehalten der Cursorposition            *
 //============================================================*
 
-begsr keepcsrpos;
+begsr KeepCsrPos;
 
   //  Beibehalten der Cursorosition
-  csrrow = cursorposition.row - zei;
-  csrcol = cursorposition.column - pos;
-  csrcol = csrcol - 1;
+  CsrRow = cursorPosition.row - zei;
+  CsrCol = cursorPosition.column - pos;
+  CsrCol = CsrCol - 1;
 
 endsr;
 
@@ -622,11 +622,11 @@ endsr;
 //    DltCsrPos     Löschen der Cursorposition                *
 //============================================================*
 
-begsr dltcsrpos;
+begsr DltCsrPos;
 
   //  Löschen der Cursorosition
-  csrrow = *zeros;
-  csrcol = *zeros;
+  CsrRow = *zeros;
+  CsrCol = *zeros;
 
 endsr;
 
@@ -634,10 +634,10 @@ endsr;
 //    GetUsrSetg    Ermitteln der Benutzervoreinstellungen    *
 //============================================================*
 
-begsr getusrsetg;
+begsr GetUsrSetg;
 
   //  *PROMPT
-  set0008 = f_getusrsg('*PROMPT');
+  set0008 = f_getUsrSg('*PROMPT');
 
 endsr;
 
@@ -645,7 +645,7 @@ endsr;
 //    SetScreen     Einstellen 132/80-Zeichen Auflösung       *
 //============================================================*
 
-begsr setscreen;
+begsr SetScreen;
 
   if (i_dsp80 = '0');
     //   132-Zeichen Anzeige
@@ -665,37 +665,37 @@ endsr;
 //    First         Initialisierung                           *
 //============================================================*
 
-begsr first;
+begsr First;
 
   // - Ermitteln physische Datei
-  f_basedpf(io_file    :
+  f_basedPF(io_file    :
            io_library :
            io_member  :
-           io_rcdfmt  :
+           io_rcdFmt  :
            1        :
-           pfile.name    :
-           pfile.library :
-           pfile.member  :
-           pfile.format  );
+           pFile.name    :
+           pFile.library :
+           pFile.member  :
+           pFile.format  );
 
   // - Öffnen der Dateien
   open peek48fm;
 
   // - Programm initialisieren (vor fill##, damit dessen Warnung
   //   USR8176 erhalten bleibt)
-  p_rmvpgmmg(sds.pgmname);
+  p_rmvPgmMg(sds.pgmName);
 
   // - Benutzervoreinstellungen (Prompt-Zeichen)
-  exsr getusrsetg;
+  exsr GetUsrSetg;
 
   // - Setzen Ändern erlaubt für: WHERE und ORDER BY
-  if (i_enablewhere = bTrue);
+  if (i_enableWhere = bTrue);
     *in71 = *off;
   else;
     *in71 = *on;
   endif;
 
-  if (i_enableorder = bTrue);
+  if (i_enableOrder = bTrue);
     *in72 = *off;
   else;
     *in72 = *on;
@@ -705,16 +705,16 @@ begsr first;
   exsr bzoff1;
   exsr fill##;
 
-  exsr dltcsrpos;
+  exsr DltCsrPos;
 
-  o_msgid = '';
-  o_msgdta = '';
+  o_msgID = '';
+  o_msgDta = '';
 
   // - Darstellung der Befehlstasten
   sfbot = 1;
 
   // - Einstellen der Bildschirmauflösung 80/132-Zeichen
-  exsr setscreen;
+  exsr SetScreen;
 
 endsr;
 
@@ -732,15 +732,15 @@ begsr inzsr;
 
   PGMQ = '*';
 
-  peek21_name = f_pgmcalln('PEEK21');
-  peek23_name = f_pgmcalln('PEEK23');
-  peek37_name = f_pgmcalln('PEEK37');
-  peek38_name = f_pgmcalln('PEEK38');
-  peek40_name = f_pgmcalln('PEEK40');
+  peek21_name = f_pgmCallN('PEEK21');
+  peek23_name = f_pgmCallN('PEEK23');
+  peek37_name = f_pgmCallN('PEEK37');
+  peek38_name = f_pgmCallN('PEEK38');
+  peek40_name = f_pgmCallN('PEEK40');
 
-  peek23(sds.pgmname: '*ALL': nbrfkeys
+  peek23(sds.pgmName: '*ALL': NbrFKeys
         : yFKeys: yNbrOfKeys);
-  scrnfkeys = %subarr(yFKeys: 1);
+  ScrnFKeys = %subarr(yFKeys: 1);
 
 endsr;
 
@@ -748,12 +748,12 @@ endsr;
 //  Program error handler                                     *
 //============================================================*
 
-dcl-proc errorhandler;
+dcl-proc errorHandler;
   dcl-pi *n;
-    i_condtoken    likeds(cee_fc_t) value;
-    i_pcommarea    int(10) value;
+    i_condToken    likeds(cee_fc_t) value;
+    i_pCommArea    int(10) value;
     o_action       int(10);
-    o_newcondtoken likeds(cee_fc_t);
+    o_newCondToken likeds(cee_fc_t);
   end-pi;
 
   dump;

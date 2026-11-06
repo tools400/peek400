@@ -50,7 +50,7 @@ dcl-f TEST003FM workstn(*ext) usage(*input: *output) usropn infds(workstn);
 
 dcl-ds workstn qualified;
   status zoned(5) pos(11);
-  offset int(5) pos(241);
+  Offset int(5) pos(241);
   AID    char(1) pos(369);
   csrPos int(5);
 end-ds;
@@ -149,7 +149,7 @@ dcl-ds sds qualified psds;
   excNbr        char(4) overlay(msgID: *next); // Excp Number
   reserved_1    char(4) pos(47); // Reserved
   msgWorkArea   char(30) pos(51); // Work Area Msg
-  pgmLib        char(10) pos(81); // Program Librar
+  PgmLib        char(10) pos(81); // Program Librar
   msgText       char(80) pos(91); // Rtv Excp Data
   excpID        char(4) pos(171); // Excp ID RNX900
   lastFileUsed  char(10) pos(175); // Last File Used

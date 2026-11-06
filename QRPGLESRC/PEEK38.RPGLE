@@ -42,18 +42,18 @@
 /copy QCOPYLE,PPEEK53
 /copy QCOPYLE,PPEEK58
 
-dcl-ds yqfile likeds(qobj_t) inz;
-dcl-s ydata char(512);
+dcl-ds YQFile likeds(qObj_t) inz;
+dcl-s YData char(512);
 
-dcl-s peek41_name like(pgmcalln_t);
+dcl-s peek41_name like(pgmCallN_t);
 
 dcl-s rc like(int4_t);
-dcl-s nbrofkey like(int4_t);
-dcl-s tempfield like(o_sqlorder);
+dcl-s nbrOfKey like(int4_t);
+dcl-s tempField like(o_sqlOrder);
 dcl-s keypart varchar(32);
-dcl-ds keyl0100 likeds(keyl0100_t) inz;
+dcl-ds keyl0100 likeds(KEYL0100_t) inz;
 
-dcl-s isinzsr like(bool_t) inz(bFalse);
+dcl-s isInzSr like(bool_t) inz(bFalse);
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
@@ -61,7 +61,7 @@ dcl-s isinzsr like(bool_t) inz(bFalse);
 dcl-pi peek38;
   i_file     like(file_t) const;
   i_lib      like(lib_t) const;
-  o_sqlorder like(sqlorder_t);
+  o_sqlOrder like(sqlOrder_t);
 end-pi;
 
 dcl-s do_x1 packed(7);
@@ -74,21 +74,21 @@ ceehdlr(%paddr('errorHandler')
 exsr inzsr;
 
 //  Einlesen der Dateiinformationen ...
-yqfile.name = i_file;
-yqfile.lib = i_lib;
-peek41(yqfile: '*FIRST': '*CREATE'
-      : rc: ydata);
+YQFile.name = i_file;
+YQFile.lib = i_lib;
+peek41(YQFile: '*FIRST': '*CREATE'
+      : rc: YData);
 
 //  Einlesen der Schlüsselinformationen ...
-peek41(yqfile: '*FIRST': '*KEY'
-      : nbrofkey: ydata);
+peek41(YQFile: '*FIRST': '*KEY'
+      : nbrOfKey: YData);
 
-tempfield = '';
+tempField = '';
 
-for do_x1 = 1 to nbrofkey;
-  peek41(yqfile: '*FIRST': '*READKEY'
-        : rc: ydata);
-  keyl0100 = ydata;
+for do_x1 = 1 to nbrOfKey;
+  peek41(YQFile: '*FIRST': '*READKEY'
+        : rc: YData);
+  keyl0100 = YData;
 
   keypart = '"' + %trim(keyl0100.apkeyf) + '"';
 
@@ -101,20 +101,20 @@ for do_x1 = 1 to nbrofkey;
   //          keine Schlüsselangaben gefunden
   endsl;
 
-  if (tempfield <> '');
+  if (tempField <> '');
     keypart = ', ' + keypart;
   endif;
 
   //  Nur vollständige Schlüsselfelder übernehmen: Ein abgeschnittener
   //  Name ergäbe ungültiges SQL. Dann wird nach den ersten Feldern sortiert.
-  if (%len(tempfield) + %len(keypart) > %len(tempfield: *max));
+  if (%len(tempField) + %len(keypart) > %len(tempField: *max));
     leave;
   endif;
 
-  tempfield += keypart;
+  tempField += keypart;
 endfor;
 
-o_sqlorder = tempfield;
+o_sqlOrder = tempField;
 
 return;
 
@@ -124,13 +124,13 @@ return;
 
 begsr inzsr;
 
-  if (isinzsr = bTrue);
+  if (isInzSr = bTrue);
     leavesr;
   endif;
 
-  isinzsr = bTrue;
+  isInzSr = bTrue;
 
-  peek41_name = f_pgmcalln('PEEK41');
+  peek41_name = f_pgmCallN('PEEK41');
 
 endsr;
 
@@ -138,12 +138,12 @@ endsr;
 //  Program error handler                                     *
 //============================================================*
 
-dcl-proc errorhandler;
+dcl-proc errorHandler;
   dcl-pi *n;
-    i_condtoken    likeds(cee_fc_t) value;
-    i_pcommarea    int(10) value;
+    i_condToken    likeds(cee_fc_t) value;
+    i_pCommArea    int(10) value;
     o_action       int(10);
-    o_newcondtoken likeds(cee_fc_t);
+    o_newCondToken likeds(cee_fc_t);
   end-pi;
 
   dump;

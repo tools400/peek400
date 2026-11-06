@@ -27,13 +27,13 @@
 /copy QCOPYLE,H_SPEC
 /copy QCOPYLE,COPYRIGHT
 
-dcl-f peek12fm workstn(*ext) usage(*input: *output) usropn infds(workstn) sfile(pbsfl: sflrec);
+dcl-f peek12fm workstn(*ext) usage(*input: *output) usropn infds(workstn) sfile(pbsfl: SflRec);
 
-dcl-f peekfmt usropn infds(peek_01_ds) prefix(f_);
+dcl-f peekfmt usropn infds(Peek_01_DS) prefix(f_);
 
 dcl-ds workstn likeds(workstn_t);
 
-dcl-ds peek_01_ds likeds(infds_t);
+dcl-ds Peek_01_DS likeds(infds_t);
 
 /copy QCOPYLE,D_VARDEF
 /copy QCOPYLE,D_INFDS
@@ -50,28 +50,28 @@ dcl-ds peek_01_ds likeds(infds_t);
 
 /copy QCOPYLE,USR8100
 
-dcl-ds rcdl0200 likeds(rcdl0200_t) inz;
+dcl-ds rcdl0200 likeds(RCDL0200_t) inz;
 
 dcl-s sfbot like(int4_t) inz;
 
 dcl-s lastRcdNbr like(rcdNbr_t) inz;
-dcl-s sflpage like(int4_t) inz;
-dcl-s sflrec like(sflpage) inz;
-dcl-s sfllastrcd like(sflpage) inz;
+dcl-s SflPage like(int4_t) inz;
+dcl-s SflRec like(SflPage) inz;
+dcl-s SflLastRcd like(SflPage) inz;
 dcl-c NBR_F_KEYS 3;
 
-dcl-s peek21_name like(pgmcalln_t) inz;
-dcl-s peek23_name like(pgmcalln_t) inz;
+dcl-s peek21_name like(pgmCallN_t) inz;
+dcl-s peek23_name like(pgmCallN_t) inz;
 
 //  PEEK21
-dcl-s ypgmcmd char(10) inz(*blanks);
-dcl-s ycmddta like(pgmcmddt_t) inz(*blanks);
-dcl-s ymsgid char(7) inz(*blanks);
-dcl-s ymsgdta char(512) inz(*blanks);
+dcl-s YPgmCmd char(10) inz(*blanks);
+dcl-s YCmdDta like(pgmCmdDt_t) inz(*blanks);
+dcl-s YMsgID char(7) inz(*blanks);
+dcl-s YMsgDta char(512) inz(*blanks);
 
 //  PEEK23
-dcl-s yfkeys char(18) dim(32) inz(*blanks);
-dcl-s ynbrofkeys like(int4_t) inz;
+dcl-s yFKeys char(18) dim(32) inz(*blanks);
+dcl-s yNbrOfKeys like(int4_t) inz;
 
 /copy QCOPYLE,PPEEK21
 /copy QCOPYLE,PPEEK23
@@ -80,7 +80,7 @@ dcl-s ynbrofkeys like(int4_t) inz;
 
 /copy QCOPYLE,CEECNDHDLR
 
-dcl-s isInzsr like(bool_t) inz(bFalse);
+dcl-s isInzSr like(bool_t) inz(bFalse);
 dcl-s isExitPgm like(bool_t) inz(bFalse);
 
 //*******************************************************************
@@ -88,13 +88,13 @@ dcl-s isExitPgm like(bool_t) inz(bFalse);
 //*******************************************************************
 dcl-pi peek12;
   i_dsp80     like(dsp80_t) const;
-  i_copyright like(copyrght_t) const;
-  i_fmtname   like(fmt_t) const;
-  i_fmtmode   like(mode_t) const;
-  o_rcdl0200  likeds(rcdl0200_t);
-  o_fmtnbr    like(int2_t);
-  o_msgid     like(msgid_t);
-  o_msgdta    like(msgdta_t);
+  i_copyright like(copyright_t) const;
+  i_fmtName   like(fmt_t) const;
+  i_fmtMode   like(mode_t) const;
+  o_rcdl0200  likeds(RCDL0200_t);
+  o_fmtNbr    like(int2_t);
+  o_msgID     like(msgId_t);
+  o_msgDta    like(msgDta_t);
 end-pi;
 //---------------------------------------------------*
 
@@ -104,13 +104,13 @@ ceehdlr(%paddr('errorHandler')
 
 exsr inzsr;
 
-exsr first;
+exsr First;
 
 dow (isExitPgm = bFalse);
 
   //  Prüfen Positionierung der Subfile
   if ((sfsanr <= 0     )  or
-      (sfsanr >  sflrec));
+      (sfsanr >  SflRec));
     sfsanr = 1;
   endif;
 
@@ -131,19 +131,19 @@ dow (isExitPgm = bFalse);
 
   select;
   when ((sfbot = 2) and
-     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1)));
+     (yNbrOfKeys > NBR_F_KEYS * (sfbot - 1)));
     write pbbot#2;
   when ((sfbot = 3) and
-     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1)));
+     (yNbrOfKeys > NBR_F_KEYS * (sfbot - 1)));
     write pbbot#3;
   when ((sfbot = 4) and
-     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1)));
+     (yNbrOfKeys > NBR_F_KEYS * (sfbot - 1)));
     write pbbot#4;
   when ((sfbot = 5) and
-     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1)));
+     (yNbrOfKeys > NBR_F_KEYS * (sfbot - 1)));
     write pbbot#5;
   when ((sfbot = 6) and
-     (ynbrofkeys > NBR_F_KEYS * (sfbot - 1)));
+     (yNbrOfKeys > NBR_F_KEYS * (sfbot - 1)));
     write pbbot#6;
   other;
     write pbbot#1;
@@ -154,48 +154,48 @@ dow (isExitPgm = bFalse);
   exfmt pbctl;
 
   //  Nachrichten löschen
-  p_rmvpgmmg(sds.pgmname);
+  p_rmvPgmMg(sds.pgmName);
 
   //  Aktuelle Satz-Nr.
-  sfsanr = sflcsr;
+  sfsanr = SflCsr;
 
   //  Mappen der gedrückten Taste
   //  in Programmbefehl
-  peek21(workstn.aid: sds.pgmname
-        : ypgmcmd: ycmddta: ymsgid: ymsgdta);
-  if (ymsgid <> *blanks);
-    p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
+  peek21(workstn.aid: sds.pgmName
+        : YPgmCmd: YCmdDta: YMsgID: YMsgDta);
+  if (YMsgID <> *blanks);
+    p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
     iter;
   endif;
 
   //  Abfragen der Befehlstasten
   select;
   //  F3  - Ende
-  when (ypgmcmd = '*EXIT');
-    exsr c_endpgm;
+  when (YPgmCmd = '*EXIT');
+    exsr C_EndPgm;
     leave;
 
   //  F5  - Aktualisieren
-  when (ypgmcmd = '*REFRESH');
-    exsr c_refresh;
+  when (YPgmCmd = '*REFRESH');
+    exsr C_Refresh;
     iter;
 
   //  F12 - Ende
-  when (ypgmcmd = '*CANCEL');
-    exsr c_endpgm;
+  when (YPgmCmd = '*CANCEL');
+    exsr C_EndPgm;
     leave;
 
   //  Datenfreigabe
-  when (ypgmcmd = '*ENTER');
-    exsr c_enter;
+  when (YPgmCmd = '*ENTER');
+    exsr C_Enter;
 
   //  F24 - Weitere Tasten
-  when (ypgmcmd = '*MOREKEYS');
-    exsr c_morekeys;
+  when (YPgmCmd = '*MOREKEYS');
+    exsr C_MoreKeys;
 
   other;
     //  Falsche Taste gedrückt
-    p_wrongkey(workstn.aid: sds.pgmname);
+    p_wrongKey(workstn.aid: sds.pgmName);
     iter;
   endsl;
 
@@ -209,7 +209,7 @@ close peekfmt;
 //    C_Enter       "Datenfreigabetaste"                      *
 //============================================================*
 
-begsr c_enter;
+begsr C_Enter;
 
   if (*in80 = *off);
   // Subfile ist leer
@@ -224,7 +224,7 @@ begsr c_enter;
       //  Zeilen, deren Markierung wieder gelöscht wurde, ignorieren.
       if (sfpau <> '');
         o_rcdl0200 = $$rcdl0200;
-        o_fmtnbr = fmtnbr;
+        o_fmtNbr = fmtnbr;
         leave;
       endif;
     enddo;
@@ -240,13 +240,13 @@ endsr;
 //    C_EndPgm      F3/F12 - Programm beenden                 *
 //============================================================*
 
-begsr c_endpgm;
+begsr C_EndPgm;
 
   write rmvwdw;
 
-  p_rmvpgmmg(sds.pgmname);
+  p_rmvPgmMg(sds.pgmName);
 
-  o_msgid = 'USR8100';
+  o_msgID = 'USR8100';
 
   select;
   when (workstn.aid = k_f3);
@@ -257,10 +257,10 @@ begsr c_endpgm;
     usr8100.var1 = 'Fxx';
   endsl;
 
-  o_msgdta = usr8100;
+  o_msgDta = usr8100;
 
   o_rcdl0200 = *blanks;
-  o_fmtnbr = *zeros;
+  o_fmtNbr = *zeros;
 
 endsr;
 
@@ -268,12 +268,12 @@ endsr;
 //    C_Refresh     F5  - Aktualisieren der Subfile           *
 //============================================================*
 
-begsr c_refresh;
+begsr C_Refresh;
 
-  exsr pbfirstrcd;
-  exsr pbinit;
-  exsr pbsetll;
-  exsr pbreadup;
+  exsr PBFirstRcd;
+  exsr PBInit;
+  exsr PBSetLL;
+  exsr PBReadUp;
 
 endsr;
 
@@ -281,7 +281,7 @@ endsr;
 //    C_MoreKeys    F24 - Weitere Tasten                      *
 //============================================================*
 
-begsr c_morekeys;
+begsr C_MoreKeys;
 
   sfbot = sfbot + 1;
 
@@ -292,7 +292,7 @@ endsr;
 //                  der nächsten Seite                        *
 //============================================================*
 
-begsr pbinit;
+begsr PBInit;
 
   *in89 = '0';
   write msgctl;
@@ -305,9 +305,9 @@ begsr pbinit;
 
   *in82 = '0'; // SFLCLR
 
-  sflrec = *zeros;
+  SflRec = *zeros;
 
-  sfllastrcd = *zeros;
+  SflLastRcd = *zeros;
 
 endsr;
 
@@ -316,7 +316,7 @@ endsr;
 //                  einlesen                                  *
 //============================================================*
 
-begsr pbfirstrcd;
+begsr PBFirstRcd;
 
   if (*in80 = *off);
     lastRcdNbr = 0;
@@ -337,7 +337,7 @@ endsr;
 //    PBReadUP      Vorwärts füllen der Subfile               *
 //============================================================*
 
-begsr pbreadup;
+begsr PBReadUp;
 
   dow ('1');
     read fpeekfmt;
@@ -346,25 +346,25 @@ begsr pbreadup;
       leave;
     endif;
 
-    sflrec = sflrec + 1;
+    SflRec = SflRec + 1;
 
-    if (sflrec > 9999);
+    if (SflRec > 9999);
       *in83 = bTrue;
       leave;
     endif;
 
-    exsr pbfill;
+    exsr PBFill;
 
     write pbsfl;
 
-    sfllastrcd = sflrec;
+    SflLastRcd = SflRec;
 
-    if (sflrec >= sflpage);
+    if (SflRec >= SflPage);
       leave;
     endif;
   enddo;
 
-  exsr pbexit;
+  exsr PBExit;
 
 endsr;
 
@@ -372,9 +372,9 @@ endsr;
 //    PBExit        Hinter füllen Subfile                     *
 //============================================================*
 
-begsr pbexit;
+begsr PBExit;
 
-  exsr pbfirstrcd;
+  exsr PBFirstRcd;
 
 endsr;
 
@@ -382,18 +382,18 @@ endsr;
 //    PBFill        Füllen Subfilesatz                        *
 //============================================================*
 
-begsr pbfill;
+begsr PBFill;
 
   sfpau = *blanks;
-  rcdl0200 = f_fmt;
-  $$rcdl0200 = f_fmt;
-  $$format = rcdl0200.r2fmtname;
-  $$text = rcdl0200.r2text;
-  recordNbr = peek_01_ds.rcdNbr;
-  fmtnbr = f_fmtnbr;
+  rcdl0200 = F_Fmt;
+  $$rcdl0200 = F_Fmt;
+  $$Format = rcdl0200.R2FmtName;
+  $$text = rcdl0200.R2Text;
+  recordNbr = Peek_01_DS.RcdNbr;
+  fmtnbr = F_FmtNbr;
 
   *in80 = '1'; // SFLDSP
-  lastRcdNbr = peek_01_ds.rcdNbr;
+  lastRcdNbr = Peek_01_DS.RcdNbr;
 
 endsr;
 
@@ -401,7 +401,7 @@ endsr;
 //    PBSetLL       Setzen Dateizeiger                        *
 //============================================================*
 
-begsr pbsetll;
+begsr PBSetLL;
 
   setll lastRcdNbr fpeekfmt;
 
@@ -411,7 +411,7 @@ endsr;
 //    SetScreen     Einstellen 132/80-Zeichen Auflösung       *
 //============================================================*
 
-begsr setscreen;
+begsr SetScreen;
 
   if (i_dsp80 = '0');
     //   132-Zeichen Anzeige
@@ -425,7 +425,7 @@ begsr setscreen;
     pos = 8;
   endif;
 
-  sflpage = *hival;
+  SflPage = *hival;
 
 endsr;
 
@@ -433,26 +433,26 @@ endsr;
 //    First         Initialisierung                           *
 //============================================================*
 
-begsr first;
+begsr First;
 
   // - Dateien öffnen
   open peekfmt;
 
-  o_msgid = *blanks;
-  o_msgdta = *blanks;
+  o_msgID = *blanks;
+  o_msgDta = *blanks;
 
   // - Prüfen auf Satzformat
-  if ((i_fmtmode = MODE_BATCH) and
-      ((peek_01_ds.nbrOfRcd = 1) or (i_fmtname <> '')));
+  if ((i_fmtMode = MODE_BATCH) and
+      ((Peek_01_DS.nbrOfRcd = 1) or (i_fmtName <> '')));
     setll 1 fpeekfmt;
     dou (%eof(peekfmt));
       read fpeekfmt;
       if (not %eof(peekfmt));
-        rcdl0200 = f_fmt;
-        if ((rcdl0200.r2fmtname = i_fmtname) or
-            ((peek_01_ds.nbrOfRcd = 1) and (i_fmtname = '')));
-          o_rcdl0200 = f_fmt;
-          o_fmtnbr = f_fmtnbr;
+        rcdl0200 = F_Fmt;
+        if ((rcdl0200.R2FmtName = i_fmtName) or
+            ((Peek_01_DS.nbrOfRcd = 1) and (i_fmtName = '')));
+          o_rcdl0200 = F_Fmt;
+          o_fmtNbr = F_FmtNbr;
           isExitPgm = bTrue;
           leavesr;
         endif;
@@ -461,10 +461,10 @@ begsr first;
   endif;
 
   // - Programm initialisieren
-  p_rmvpgmmg(sds.pgmname);
+  p_rmvPgmMg(sds.pgmName);
 
   o_rcdl0200 = *blanks;
-  o_fmtnbr = *zeros;
+  o_fmtNbr = *zeros;
 
   // - Darstellung der Subfile
   sflmde = '1';
@@ -473,16 +473,16 @@ begsr first;
   sfbot = 1;
 
   // - Einstellen der Bildschirmauflösung 80/132-Zeichen
-  exsr setscreen;
+  exsr SetScreen;
 
   // - Subfile füllen
   lastRcdNbr = 1;
-  exsr pbinit;
-  exsr pbsetll;
-  exsr pbreadup;
+  exsr PBInit;
+  exsr PBSetLL;
+  exsr PBReadUp;
 
   // - Copyright
-  p_sndpgmmg('USR9999': i_copyright: sds.pgmname);
+  p_sndPgmMg('USR9999': i_copyright: sds.pgmName);
 
 endsr;
 
@@ -492,20 +492,20 @@ endsr;
 
 begsr inzsr;
 
-  if (isInzsr = bTrue);
+  if (isInzSr = bTrue);
     leavesr;
   endif;
 
-  isInzsr = bTrue;
+  isInzSr = bTrue;
 
   PGMQ = '*';
 
-  peek21_name = f_pgmcalln('PEEK21');
-  peek23_name = f_pgmcalln('PEEK23');
+  peek21_name = f_pgmCallN('PEEK21');
+  peek23_name = f_pgmCallN('PEEK23');
 
-  peek23(sds.pgmname: '*ALL': NBR_F_KEYS
-        : yfkeys: ynbrofkeys);
-  scrnfkeys = %subarr(yfkeys: 1);
+  peek23(sds.pgmName: '*ALL': NBR_F_KEYS
+        : yFKeys: yNbrOfKeys);
+  ScrnFKeys = %subarr(yFKeys: 1);
 
   open peek12fm;
 
@@ -515,12 +515,12 @@ endsr;
 //  Program error handler                                     *
 //============================================================*
 
-dcl-proc errorhandler;
+dcl-proc errorHandler;
   dcl-pi *n;
-    i_condtoken    likeds(cee_fc_t) value;
-    i_pcommarea    int(10) value;
+    i_condToken    likeds(cee_fc_t) value;
+    i_pCommArea    int(10) value;
     o_action       int(10);
-    o_newcondtoken likeds(cee_fc_t);
+    o_newCondToken likeds(cee_fc_t);
   end-pi;
 
   dump;

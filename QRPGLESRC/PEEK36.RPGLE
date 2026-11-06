@@ -44,15 +44,15 @@
 /copy QCOPYLE,PPEEK53
 /copy QCOPYLE,PPEEK58
 
-dcl-s r_dateiso date(*iso) inz(*loval);
-dcl-s r_timeiso time(*iso) inz(*loval);
-dcl-s r_timestmp timestamp(12) inz(*loval);
-dcl-s r_fldlen like(int4_t);
-dcl-s r_pos like(int4_t);
-dcl-s r_buffer like(i_buffer);
-dcl-s r_value varchar(32);
+dcl-s R_DateISO date(*iso) inz(*loval);
+dcl-s R_TimeISO time(*iso) inz(*loval);
+dcl-s R_TimeStmp timestamp(12) inz(*loval);
+dcl-s R_FldLen like(int4_t);
+dcl-s R_Pos like(int4_t);
+dcl-s R_Buffer like(i_buffer);
+dcl-s R_Value varchar(32);
 dcl-s r_dftsep char(1);
-dcl-c r_bufflen %size(i_buffer);
+dcl-c R_BuffLen %size(i_buffer);
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
@@ -60,16 +60,16 @@ dcl-c r_bufflen %size(i_buffer);
 dcl-pi peek36;
   i_buffer    like(smallBuffer_t) const;
   i_type      like(dataType_t) const;
-  i_dattimfmt like(fldl0100_t.f1dtfm) const;
+  i_datTimFmt like(fldl0100_t.f1dtfm) const;
   i_separator like(fldl0100_t.f1dtsp) const;
-  o_msgid     like(msgid_t);
-  o_msgdta    like(msgdta_t);
+  o_msgID     like(msgId_t);
+  o_msgDta    like(msgDta_t);
 end-pi;
 
 //  Register error handler
 ceehdlr(%paddr('errorHandler')
        : *null: *omit);
-exsr first;
+exsr First;
 
 if (i_type <> 'L' and i_type <> 'T' and i_type <> 'Z');
   p_kill('Incorrect data type: ' + i_type);
@@ -91,20 +91,20 @@ monitor;
     exsr chktimestamp;
   endsl;
 on-error;
-  o_msgid = 'USR8242';
+  o_msgID = 'USR8242';
   return;
 endmon;
 
 //  Hinter dem Wert darf nichts mehr stehen
-r_pos = r_fldlen + 1;
-if (r_pos <= r_bufflen);
-  r_buffer = %subst(i_buffer: r_pos);
+R_Pos = R_FldLen + 1;
+if (R_Pos <= R_BuffLen);
+  R_Buffer = %subst(i_buffer: R_Pos);
 else;
-  r_buffer = '';
+  R_Buffer = '';
 endif;
 
-if (r_buffer <> '');
-  o_msgid = 'USR8242';
+if (R_Buffer <> '');
+  o_msgID = 'USR8242';
 endif;
 
 return;
@@ -116,46 +116,46 @@ return;
 begsr chkdate;
 
   select;
-  when (i_dattimfmt = '*EUR');
+  when (i_datTimFmt = '*EUR');
     r_dftsep = '.';
-    r_fldlen = 10;
-  when (i_dattimfmt = '*USA');
+    R_FldLen = 10;
+  when (i_datTimFmt = '*USA');
     r_dftsep = '/';
-    r_fldlen = 10;
-  when (i_dattimfmt = '*JIS');
+    R_FldLen = 10;
+  when (i_datTimFmt = '*JIS');
     r_dftsep = '-';
-    r_fldlen = 10;
-  when (i_dattimfmt = '*MDY' or i_dattimfmt = '*DMY' or
-        i_dattimfmt = '*YMD');
+    R_FldLen = 10;
+  when (i_datTimFmt = '*MDY' or i_datTimFmt = '*DMY' or
+        i_datTimFmt = '*YMD');
     r_dftsep = '/';
-    r_fldlen = 8;
-  when (i_dattimfmt = '*JUL');
+    R_FldLen = 8;
+  when (i_datTimFmt = '*JUL');
     r_dftsep = '/';
-    r_fldlen = 6;
+    R_FldLen = 6;
   other;
     r_dftsep = '-';
-    r_fldlen = 10;
+    R_FldLen = 10;
   endsl;
 
   exsr getvalue;
 
   select;
-  when (i_dattimfmt = '*EUR');
-    r_dateiso = %date(r_value: *eur);
-  when (i_dattimfmt = '*USA');
-    r_dateiso = %date(r_value: *usa);
-  when (i_dattimfmt = '*JIS');
-    r_dateiso = %date(r_value: *jis);
-  when (i_dattimfmt = '*MDY');
-    r_dateiso = %date(r_value: *mdy);
-  when (i_dattimfmt = '*DMY');
-    r_dateiso = %date(r_value: *dmy);
-  when (i_dattimfmt = '*YMD');
-    r_dateiso = %date(r_value: *ymd);
-  when (i_dattimfmt = '*JUL');
-    r_dateiso = %date(r_value: *jul);
+  when (i_datTimFmt = '*EUR');
+    R_DateISO = %date(R_Value: *eur);
+  when (i_datTimFmt = '*USA');
+    R_DateISO = %date(R_Value: *usa);
+  when (i_datTimFmt = '*JIS');
+    R_DateISO = %date(R_Value: *jis);
+  when (i_datTimFmt = '*MDY');
+    R_DateISO = %date(R_Value: *mdy);
+  when (i_datTimFmt = '*DMY');
+    R_DateISO = %date(R_Value: *dmy);
+  when (i_datTimFmt = '*YMD');
+    R_DateISO = %date(R_Value: *ymd);
+  when (i_datTimFmt = '*JUL');
+    R_DateISO = %date(R_Value: *jul);
   other;
-    r_dateiso = %date(r_value: *iso);
+    R_DateISO = %date(R_Value: *iso);
   endsl;
 
 endsr;
@@ -167,27 +167,27 @@ endsr;
 begsr chktime;
 
   select;
-  when (i_dattimfmt = '*HMS' or i_dattimfmt = '*USA' or
-        i_dattimfmt = '*JIS');
+  when (i_datTimFmt = '*HMS' or i_datTimFmt = '*USA' or
+        i_datTimFmt = '*JIS');
     r_dftsep = ':';
   other;
     r_dftsep = '.';
   endsl;
-  r_fldlen = 8;
+  R_FldLen = 8;
 
   exsr getvalue;
 
   select;
-  when (i_dattimfmt = '*HMS');
-    r_timeiso = %time(r_value: *hms);
-  when (i_dattimfmt = '*EUR');
-    r_timeiso = %time(r_value: *eur);
-  when (i_dattimfmt = '*USA');
-    r_timeiso = %time(r_value: *usa);
-  when (i_dattimfmt = '*JIS');
-    r_timeiso = %time(r_value: *jis);
+  when (i_datTimFmt = '*HMS');
+    R_TimeISO = %time(R_Value: *hms);
+  when (i_datTimFmt = '*EUR');
+    R_TimeISO = %time(R_Value: *eur);
+  when (i_datTimFmt = '*USA');
+    R_TimeISO = %time(R_Value: *usa);
+  when (i_datTimFmt = '*JIS');
+    R_TimeISO = %time(R_Value: *jis);
   other;
-    r_timeiso = %time(r_value: *iso);
+    R_TimeISO = %time(R_Value: *iso);
   endsl;
 
 endsr;
@@ -201,29 +201,29 @@ begsr chktimestamp;
   //  yyyy-mm-dd-hh.mm.ss ohne oder mit 1 bis 12 Nachkommastellen
   //  (TIMESTAMP(0) bis TIMESTAMP(12)): Die Länge ergibt sich aus
   //  dem Wert.
-  r_fldlen = %scan(' ': i_buffer) - 1;
-  if (r_fldlen < 0);
-    r_fldlen = r_bufflen;
+  R_FldLen = %scan(' ': i_buffer) - 1;
+  if (R_FldLen < 0);
+    R_FldLen = R_BuffLen;
   endif;
 
   //  Andere Längen wie bisher mit 26 Stellen prüfen, damit der Wert
   //  oder das, was dahinter steht, zu USR8242 führt.
-  if (r_fldlen <> 19 and (r_fldlen < 21 or r_fldlen > 32));
-    r_fldlen = 26;
+  if (R_FldLen <> 19 and (R_FldLen < 21 or R_FldLen > 32));
+    R_FldLen = 26;
   endif;
 
   //  %timestamp(...: *iso: 12) erwartet genau 12 Nachkommastellen:
   //  fehlende Stellen mit Nullen auffüllen.
-  if (r_fldlen = 19);
-    r_value = %subst(i_buffer: 1: 19) + '.';
+  if (R_FldLen = 19);
+    R_Value = %subst(i_buffer: 1: 19) + '.';
   else;
-    r_value = %subst(i_buffer: 1: r_fldlen);
+    R_Value = %subst(i_buffer: 1: R_FldLen);
   endif;
-  if (%len(r_value) < 32);
-    r_value += %subst('000000000000': 1: 32 - %len(r_value));
+  if (%len(R_Value) < 32);
+    R_Value += %subst('000000000000': 1: 32 - %len(R_Value));
   endif;
 
-  r_timestmp = %timestamp(r_value: *iso: 12);
+  R_TimeStmp = %timestamp(R_Value: *iso: 12);
 
 endsr;
 
@@ -234,9 +234,9 @@ endsr;
 
 begsr getvalue;
 
-  r_value = %subst(i_buffer: 1: r_fldlen);
+  R_Value = %subst(i_buffer: 1: R_FldLen);
   if (i_separator <> ' ' and i_separator <> r_dftsep);
-    r_value = %xlate(i_separator: r_dftsep: r_value);
+    R_Value = %xlate(i_separator: r_dftsep: R_Value);
   endif;
 
 endsr;
@@ -245,10 +245,10 @@ endsr;
 //    First         Initialisierung                           *
 //============================================================*
 
-begsr first;
+begsr First;
 
-  o_msgid = '';
-  o_msgdta = '';
+  o_msgID = '';
+  o_msgDta = '';
 
 endsr;
 
@@ -256,12 +256,12 @@ endsr;
 //  Program error handler                                     *
 //============================================================*
 
-dcl-proc errorhandler;
+dcl-proc errorHandler;
   dcl-pi *n;
-    i_condtoken    likeds(cee_fc_t) value;
-    i_pcommarea    int(10) value;
+    i_condToken    likeds(cee_fc_t) value;
+    i_pCommArea    int(10) value;
     o_action       int(10);
-    o_newcondtoken likeds(cee_fc_t);
+    o_newCondToken likeds(cee_fc_t);
   end-pi;
 
   dump;

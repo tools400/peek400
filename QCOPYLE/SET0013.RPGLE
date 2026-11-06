@@ -6,15 +6,15 @@
 
 dcl-ds set0013_t len(256) qualified template;
   //  Ändern Bibliothek erlaubt: 1=Ja; 0=Nein
-  set_chglib char(1) inz('1');
+  SET_ChgLib char(1) inz('1');
   //  Ändern Datei erlaubt: 1=Ja; 0=Nein
-  set_chgfil char(1) inz('1');
+  SET_ChgFil char(1) inz('1');
   //  Ändern Teildatei erlaubt: 1=Ja; 0=Nein
-  set_chgmbr char(1) inz('1');
+  SET_ChgMbr char(1) inz('1');
   //  Änderungsmodus: 1=Ja; 0=Nein
-  set_updmod char(1) inz('1');
+  SET_UpdMod char(1) inz('1');
   //  Allg. Zugriffsberechtigung: 1=Ja; 0=Nein
-  set_accaut char(1) inz('1');
+  SET_AccAut char(1) inz('1');
   //  Ändern Schlüsselfelder
   set_updkey char(1) inz('1');
   //  Endemarkierung

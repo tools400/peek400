@@ -6,8 +6,8 @@ dcl-pr peek69 extpgm('PEEK69');
 dcl-pr peek69 extpgm(peek69_name);
 /endif
   i_dsp80     like(dsp80_t) const;
-  i_copyright like(copyrght_t) const;
-  o_qfile     like(qobj_t);
-  o_msgid     like(msgid_t);
-  o_msgdta    like(msgdta_t);
+  i_copyright like(copyright_t) const;
+  o_qFile     like(qObj_t);
+  o_msgID     like(msgId_t);
+  o_msgDta    like(msgDta_t);
 end-pr;

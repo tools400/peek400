@@ -383,7 +383,7 @@ RNM1-D RCD_DS        E DS                  extname(FILE00)
      D UPDPGM          PI
      D  i_dsp80                            const like(dsp80_t)
      D  io_headerType                            like(headerType_t)
-     D  i_copyright                        const like(copyRght_t)
+     D  i_copyright                        const like(copyright_t)
      D  i_rcdNbr                           const like(rcdNbr_t)
      D  i_file                             const like(file_t)
      D  i_library                          const like(lib_t)
@@ -395,7 +395,7 @@ RNM1-D RCD_DS        E DS                  extname(FILE00)
      D  io_isLower                               like(bool_t)
      D  io_csrRow                                like(int4_t)
      D  io_csrCol                                like(int4_t)
-     D  o_msgID                                  like(msgID_t)
+     D  o_msgID                                  like(msgId_t)
      D  o_msgDta                                 like(msgDta_t)
       *
       *  ... umbenennen der externen Feldnamen

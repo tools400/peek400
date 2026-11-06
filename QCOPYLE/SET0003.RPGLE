@@ -4,17 +4,17 @@
 // SET0003   *ACCESSKEY
 //---------------------------------------------------------------
 
-dcl-ds set0003_t len(256) qualified template;
+dcl-ds SET0003_t len(256) qualified template;
   //  Minuszeichen
-  set_signm char(1) inz('-');
+  SET_SignM char(1) inz('-');
   //  Pluszeichen
-  set_signp char(1) inz('+');
+  SET_SignP char(1) inz('+');
   //  Dezimalpunkt
-  set_point char(1) inz(',');
+  SET_Point char(1) inz(',');
   //  Vorzeichen anzeigen: 1=Ja; 0=Nein
-  set_signx char(1) inz(btrue);
+  SET_SignX char(1) inz(bTrue);
   //  Trennzeichen zwischen den Feldern
-  set_dlmtr char(1) inz(';');
+  SET_Dlmtr char(1) inz(';');
   //  Endemarkierung
   set_0003  char(1) inz(x'8B');
 end-ds;

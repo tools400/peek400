@@ -86,32 +86,32 @@
 /copy QCOPYLE,PPEEK58
 
 //  declarations for QUSRTVUS
-dcl-ds rcvvar qualified;
-  nbrretattr int(10) inz;
-  offstotble int(10) inz;
-  rcvvardta  char(256) inz;
+dcl-ds RcvVar qualified;
+  NbrRetAttr int(10) inz;
+  OffsToTble int(10) inz;
+  RcvVarDta  char(256) inz;
 end-ds;
 
-dcl-ds netattr qualified;
-  nme     char(10) inz;
-  dtatype char(1) inz;
-  infstat char(1) inz;
-  dtalen  int(10) inz;
-  dta     char(256) inz;
+dcl-ds NetAttr qualified;
+  Nme     char(10) inz;
+  DtaType char(1) inz;
+  InfStat char(1) inz;
+  DtaLen  int(10) inz;
+  Dta     char(256) inz;
 end-ds;
 
 dcl-s x like(int4_t);
-dcl-ds errcode likeds(errcode_t) inz;
+dcl-ds errCode likeds(errCode_t) inz;
 
 //*******************************************************************
 //           Main  Control block                                    *
 //*******************************************************************
 dcl-pi peek07;
   i_attr    like(attr_t) const;
-  i_nomsg   like(bool_t) const;
-  o_attrlen like(int4_t);
-  o_attrtyp like(attrtype_t);
-  o_alue    like(attrvalue_t);
+  i_noMsg   like(bool_t) const;
+  o_attrLen like(int4_t);
+  o_attrTyp like(attrType_t);
+  o_alue    like(attrValue_t);
 end-pi;
 
 //---------------------------------------------------*
@@ -121,23 +121,23 @@ ceehdlr(%paddr('errorHandler')
        : *null: *omit);
 
 // - Meldung
-if (i_nomsg = bFalse);
-  p_sndstsmg('USR8106': ' ');
+if (i_noMsg = bFalse);
+  p_sndStsMg('USR8106': ' ');
 else;
 //        keine Statusmeldung ausgeben
 endif;
 
 //  Fehler als Rückgabewert, nicht als Escape-Nachricht, z.B.
 //  CPF1860 bei einem unbekannten Attribut
-clear errcode;
-errcode.bytprv = %size(errcode);
-qwcrneta(rcvvar: %size(rcvvar): 1: i_attr: errcode);
+clear errCode;
+errCode.bytPrv = %size(errCode);
+qwcrneta(RcvVar: %size(RcvVar): 1: i_attr: errCode);
 
-if (errcode.bytavl = 0);
-  exsr getattr;
+if (errCode.bytAvl = 0);
+  exsr GetAttr;
 else;
-  o_attrlen = 0;
-  o_attrtyp = '';
+  o_attrLen = 0;
+  o_attrTyp = '';
   o_alue = '';
 endif;
 
@@ -147,18 +147,18 @@ return;
 //  GetAttr -  Abrufen der Attributwertes             *
 //====================================================*
 
-begsr getattr;
+begsr GetAttr;
 
-  x = rcvvar.offstotble + 1;
+  x = RcvVar.OffsToTble + 1;
 
   if (x >= 1 and x <= 256);
-    netattr = %subst(rcvvar: x);
-    o_alue = netattr.dta;
-    o_attrlen = netattr.dtalen;
-    o_attrtyp = netattr.dtatype;
+    NetAttr = %subst(RcvVar: x);
+    o_alue = NetAttr.Dta;
+    o_attrLen = NetAttr.DtaLen;
+    o_attrTyp = NetAttr.DtaType;
   else;
-    o_attrlen = 0;
-    o_attrtyp = '';
+    o_attrLen = 0;
+    o_attrTyp = '';
     o_alue = '';
   endif;
 
@@ -168,12 +168,12 @@ endsr;
 //  Program error handler                                     *
 //============================================================*
 
-dcl-proc errorhandler;
+dcl-proc errorHandler;
   dcl-pi *n;
-    i_condtoken    likeds(cee_fc_t) value;
-    i_pcommarea    int(10) value;
+    i_condToken    likeds(cee_fc_t) value;
+    i_pCommArea    int(10) value;
     o_action       int(10);
-    o_newcondtoken likeds(cee_fc_t);
+    o_newCondToken likeds(cee_fc_t);
   end-pi;
 
   dump;

@@ -4,20 +4,20 @@
 
 //  Retrieve Network Attributes (QWCRNETA) API
 dcl-pr qwcrneta extpgm('QWCRNETA');
-  o_rcvvar     char(32767) options(*varsize);
-  i_lenrcv     int(10) const;
-  i_numattr    int(10) const;
-  i_attrnames  char(10) dim(50) options(*varsize) const;
-  io_errorcode char(32767) options(*varsize);
+  o_rcvVar     char(32767) options(*varsize);
+  i_lenRcv     int(10) const;
+  i_numAttr    int(10) const;
+  i_attrNames  char(10) dim(50) options(*varsize) const;
+  io_errorCode char(32767) options(*varsize);
 end-pr;
 
-dcl-ds qwcrneta_returned qualified template;
-  nume     int(10);
-  offsattr int(10);
+dcl-ds QWCRNETA_returned qualified template;
+  numE     int(10);
+  offsAttr int(10);
 end-ds;
 //  Network attribute information table   CHAR(*)
 
-dcl-ds qwcrneta_attr qualified template;
+dcl-ds QWCRNETA_attr qualified template;
   name      char(10);
   type      char(1);
   status    char(1);

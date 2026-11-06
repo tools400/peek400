@@ -58,14 +58,14 @@ dcl-pr main;
   o_pinTabR    like(go_pinTabR) dim(12);
   o_nbrPinR    like(go_nbrPinR);
   o_pinTabC    like(go_pinTabC) dim(12);
-  o_nbrPinC    like(go_nbrpinc);
-  o_file       like(go_file);
-  o_lib        like(go_lib);
-  o_mbr        like(go_mbr);
+  o_nbrPinC    like(go_nbrPinC);
+  o_file       like(go_File);
+  o_lib        like(go_Lib);
+  o_mbr        like(go_Mbr);
   o_rcdFmt     like(go_rcdFmt);
-  o_accMode    like(go_accMode);
-  o_sqlSel     like(go_sqlSel);
-  o_sqlOrd     like(go_sqlOrd);
+  o_accMode    like(go_AccMode);
+  o_sqlSel     like(go_SqlSel);
+  o_sqlOrd     like(go_SqlOrd);
   o_isKeyLower like(go_isKeyLower);
   o_msgID      like(go_msgID);
   o_msgDta     like(go_msgDta);
@@ -82,25 +82,25 @@ dcl-pi peek55;
   gi_lib        like(lib_t) const;
   gi_mbr        like(mbr_t) const;
   gi_rcdFmt     like(fmt_t) const;
-  gi_rcdFmtID   like(fmtid_t) const;
+  gi_rcdFmtID   like(fmtId_t) const;
   gi_envFile    like(file_t) const;
   gi_envLib     like(lib_t) const;
   gi_envMbr     like(mbr_t) const;
   gi_option     like(option_t) const;
-  go_pinTabR    like(pintabr_t) dim(12);
+  go_pinTabR    like(pinTabR_t) dim(12);
   go_nbrPinR    like(int4_t);
-  go_pinTabC    like(fieldnme_t) dim(12);
-  go_nbrpinc    like(int4_t);
-  go_file       like(file_t);
-  go_lib        like(lib_t);
-  go_mbr        like(mbr_t);
+  go_pinTabC    like(fieldNme_t) dim(12);
+  go_nbrPinC    like(int4_t);
+  go_File       like(file_t);
+  go_Lib        like(lib_t);
+  go_Mbr        like(mbr_t);
   go_rcdFmt     like(fmt_t);
-  go_accMode    like(accessmode_t);
-  go_sqlSel     like(sqlwhere_t);
-  go_sqlOrd     like(sqlorder_t);
+  go_AccMode    like(accessMode_t);
+  go_SqlSel     like(sqlWhere_t);
+  go_SqlOrd     like(sqlOrder_t);
   go_isKeyLower like(bool_t);
-  go_msgID      like(msgid_t);
-  go_msgDta     like(msgdta_t);
+  go_msgID      like(msgId_t);
+  go_msgDta     like(msgDta_t);
 end-pi;
 
 dcl-ds en_key4 likerec(fpeekenv: *key);
@@ -123,14 +123,14 @@ main(gi_file       :
       go_pinTabR    :
       go_nbrPinR    :
       go_pinTabC    :
-      go_nbrpinc    :
-      go_file       :
-      go_lib        :
-      go_mbr        :
+      go_nbrPinC    :
+      go_File       :
+      go_Lib        :
+      go_Mbr        :
       go_rcdFmt     :
-      go_accMode    :
-      go_sqlSel     :
-      go_sqlOrd     :
+      go_AccMode    :
+      go_SqlSel     :
+      go_SqlOrd     :
       go_isKeyLower :
       go_msgID      :
       go_msgDta     );
@@ -155,14 +155,14 @@ dcl-proc main;
     o_pinTabR    like(go_pinTabR) dim(12);
     o_nbrPinR    like(go_nbrPinR);
     o_pinTabC    like(go_pinTabC) dim(12);
-    o_nbrPinC    like(go_nbrpinc);
-    o_file       like(go_file);
-    o_lib        like(go_lib);
-    o_mbr        like(go_mbr);
+    o_nbrPinC    like(go_nbrPinC);
+    o_file       like(go_File);
+    o_lib        like(go_Lib);
+    o_mbr        like(go_Mbr);
     o_rcdFmt     like(go_rcdFmt);
-    o_accMode    like(go_accMode);
-    o_sqlSel     like(go_sqlSel);
-    o_sqlOrd     like(go_sqlOrd);
+    o_accMode    like(go_AccMode);
+    o_sqlSel     like(go_SqlSel);
+    o_sqlOrd     like(go_SqlOrd);
     o_isKeyLower like(go_isKeyLower);
     o_msgID      like(go_msgID);
     o_msgDta     like(go_msgDta);
@@ -174,8 +174,8 @@ dcl-proc main;
   dcl-s pMbr like(mbr_t);
   dcl-s pFmt like(rcdFmt_t);
   dcl-s pEnvMbr like(i_envMbr);
-  dcl-s RrcdFmtID like(fmtID_t);
-  dcl-s pMsgID like(msgID_t);
+  dcl-s RrcdFmtID like(fmtId_t);
+  dcl-s pMsgID like(msgId_t);
   dcl-s pMsgDta like(msgDta_t);
 
   dcl-ds set0015 likeds(set0015_t) inz;
@@ -194,7 +194,7 @@ dcl-proc main;
       leave;
     //  ... *ENVFILE
     when (i_envFile = '*ENVFILE');
-      set0015 = f_getusrsg('*ENVFILE'  );
+      set0015 = f_getUsrSg('*ENVFILE'  );
       i_envFile = set0015.set_envfil;
       i_envLib  = set0015.set_envlib;
     other;
@@ -205,7 +205,7 @@ dcl-proc main;
     select;
     //  ... *PRDLIB
     when (i_envLib = '*PRDLIB');
-      i_envLib = sds.pgmlib;
+      i_envLib = sds.PgmLib;
     other;
     //  ... genau diese Bibliothek
     endsl;
@@ -360,7 +360,7 @@ end-proc;
 
 dcl-proc loadFile;
   dcl-pi *n extproc(*dclcase);
-    o_file like(go_file);
+    o_file like(go_File);
   end-pi;
 
   //  definieren Arbeitsfelder ...
@@ -386,7 +386,7 @@ end-proc;
 
 dcl-proc loadLibrary;
   dcl-pi *n extproc(*dclcase);
-    o_lib like(go_lib);
+    o_lib like(go_Lib);
   end-pi;
 
   //  definieren Arbeitsfelder ...
@@ -412,7 +412,7 @@ end-proc;
 
 dcl-proc loadMember;
   dcl-pi *n extproc(*dclcase);
-    o_mbr like(go_mbr);
+    o_mbr like(go_Mbr);
   end-pi;
 
   //  definieren Arbeitsfelder ...
@@ -438,7 +438,7 @@ end-proc;
 
 dcl-proc loadRecordFormat;
   dcl-pi *n extproc(*dclcase);
-    o_rcdfmt like(go_rcdFmt);
+    o_rcdFmt like(go_rcdFmt);
   end-pi;
 
   //  definieren Arbeitsfelder ...
@@ -449,9 +449,9 @@ dcl-proc loadRecordFormat;
   en_key4.en_section = '*RCDFMT';
   chain %kds(en_key4: 2) fpeekenv;
   if (not %found(peekenv));
-    o_rcdfmt = NOT_FOUND;
+    o_rcdFmt = NOT_FOUND;
   else;
-    o_rcdfmt = en_data;
+    o_rcdFmt = en_data;
   endif;
 
   return;
@@ -464,7 +464,7 @@ end-proc;
 
 dcl-proc loadRecordFormatID;
   dcl-pi *n extproc(*dclcase);
-    o_rcdfmtid like(fmtid_t);
+    o_rcdFmtID like(fmtId_t);
   end-pi;
 
   //  definieren Arbeitsfelder ...
@@ -475,9 +475,9 @@ dcl-proc loadRecordFormatID;
   en_key4.en_section = '*RCDFMTID';
   chain %kds(en_key4: 2) fpeekenv;
   if (not %found(peekenv));
-    o_rcdfmtid = '';
+    o_rcdFmtID = '';
   else;
-    o_rcdfmtid = en_data;
+    o_rcdFmtID = en_data;
   endif;
 
   return;
@@ -490,7 +490,7 @@ end-proc;
 
 dcl-proc loadAccessMode;
   dcl-pi *n extproc(*dclcase);
-    o_accmode like(go_accMode);
+    o_accMode like(go_AccMode);
   end-pi;
 
   //  definieren Arbeitsfelder ...
@@ -501,9 +501,9 @@ dcl-proc loadAccessMode;
   en_key4.en_section = '*ACCMODE';
   chain %kds(en_key4: 2) fpeekenv;
   if (not %found(peekenv));
-    o_accmode = KEY_SEQ;
+    o_accMode = KEY_SEQ;
   else;
-    o_accmode = en_data;
+    o_accMode = en_data;
   endif;
 
   return;
@@ -518,7 +518,7 @@ dcl-proc loadSQLSelect;
   dcl-pi *n extproc(*dclcase);
     i_file   like(gi_file) const;
     i_lib    like(gi_lib) const;
-    o_sqlsel like(go_sqlSel);
+    o_sqlSel like(go_SqlSel);
   end-pi;
 
   //  definieren Arbeitsfelder ...
@@ -527,10 +527,10 @@ dcl-proc loadSQLSelect;
   dcl-s lenData like(int4_t) inz;
   //---------------------------------------------------*
 
-  o_sqlsel = '';
+  o_sqlSel = '';
 
   strPos  = 1;
-  maxLenSql  = %len(o_sqlsel: *max);
+  maxLenSql  = %len(o_sqlSel: *max);
 
   clear en_key4;
   en_key4.en_user = '*ALL';
@@ -558,11 +558,11 @@ dcl-proc loadSQLSelect;
 
     //  Die Stücke ungekürzt aneinanderhängen: Ein Leerzeichen am Ende
     //  eines Stücks gehört zur Anweisung. Gekürzt wird nur das Ergebnis.
-    o_sqlsel = o_sqlsel + en_data;
-    strPos = %len(o_sqlsel) + 1;
+    o_sqlSel = o_sqlSel + en_data;
+    strPos = %len(o_sqlSel) + 1;
   enddo;
 
-  o_sqlsel = %trimr(o_sqlsel);
+  o_sqlSel = %trimr(o_sqlSel);
 
   return;
 
@@ -576,18 +576,18 @@ dcl-proc loadSQLOrderBy;
   dcl-pi *n extproc(*dclcase);
     i_file   like(gi_file) const;
     i_lib    like(gi_lib) const;
-    o_sqlord like(go_sqlOrd);
+    o_sqlOrd like(go_SqlOrd);
   end-pi;
 
   //  definieren Arbeitsfelder ...
-  dcl-s strpos like(int4_t) inz;
+  dcl-s strPos like(int4_t) inz;
   dcl-s maxLenSql like(int4_t) inz;
   //---------------------------------------------------*
 
-  o_sqlord = '';
+  o_sqlOrd = '';
 
-  strpos  = 1;
-  maxLenSql  = %len(o_sqlord: *max);
+  strPos  = 1;
+  maxLenSql  = %len(o_sqlOrd: *max);
 
   clear en_key4;
   en_key4.en_user = '*ALL';
@@ -601,7 +601,7 @@ dcl-proc loadSQLOrderBy;
     setll %kds(en_key4: 4) fpeekenv;
   endif;
 
-  dow (strpos <= maxLenSql);
+  dow (strPos <= maxLenSql);
 
     if (i_lib = '*NONE');
       reade %kds(en_key4: 3) fpeekenv;
@@ -614,11 +614,11 @@ dcl-proc loadSQLOrderBy;
     endif;
 
     //  Die Stücke ungekürzt aneinanderhängen (siehe loadSQLSelect)
-    o_sqlord = o_sqlord + en_data;
-    strPos = %len(o_sqlord) + 1;
+    o_sqlOrd = o_sqlOrd + en_data;
+    strPos = %len(o_sqlOrd) + 1;
   enddo;
 
-  o_sqlord = %trimr(o_sqlord);
+  o_sqlOrd = %trimr(o_sqlOrd);
 
   return;
 
@@ -632,7 +632,7 @@ dcl-proc loadIsKeyLowerCase;
   dcl-pi *n extproc(*dclcase);
     i_file       like(gi_file) const;
     i_lib        like(gi_lib) const;
-    o_iskeylower like(go_isKeyLower);
+    o_isKeyLower like(go_isKeyLower);
   end-pi;
 
   //  definieren Arbeitsfelder ...
@@ -651,9 +651,9 @@ dcl-proc loadIsKeyLowerCase;
   endif;
 
   if (not %found(peekenv));
-    o_iskeylower = KEY_MODE_UPPER;
+    o_isKeyLower = KEY_MODE_UPPER;
   else;
-    o_iskeylower = en_data;
+    o_isKeyLower = en_data;
   endif;
 
   return;
@@ -668,25 +668,25 @@ dcl-proc loadPinnedRecords;
   dcl-pi *n extproc(*dclcase);
     i_file    like(gi_file) const;
     i_lib     like(gi_lib) const;
-    o_pintabr like(go_pinTabR) dim(12);
-    o_nbrpinr like(go_nbrPinR);
+    o_pinTabR like(go_pinTabR) dim(12);
+    o_nbrPinR like(go_nbrPinR);
   end-pi;
 
   //  definieren Arbeitsfelder ...
 
   dcl-ds *n;
     rcd    zoned(10) inz;
-    chrrcd char(10) overlay(rcd);
+    chrRcd char(10) overlay(rcd);
   end-ds;
-  dcl-ds pintabr likeds(pintabr_t) inz;
+  dcl-ds PinTabR likeds(pinTabR_t) inz;
   //**                                  prefix(pr_       )
   dcl-s x int(10) inz;
   //---------------------------------------------------*
 
-  clear pintabr;
+  clear PinTabR;
   for x = 1 to 12;
-    o_pintabr(x) = pintabr;
-    o_nbrpinr    = 0;
+    o_pinTabR(x) = PinTabR;
+    o_nbrPinR    = 0;
   endfor;
 
   clear en_key4;
@@ -703,12 +703,12 @@ dcl-proc loadPinnedRecords;
     endif;
 
     //  Mehr als 12 Einträge passen nicht in die Tabelle
-    if (o_nbrpinr >= %elem(o_pintabr));
+    if (o_nbrPinR >= %elem(o_pinTabR));
       leave;
     endif;
 
-    o_nbrpinr = o_nbrpinr + 1;
-    o_pintabr(o_nbrpinr) = en_data;
+    o_nbrPinR = o_nbrPinR + 1;
+    o_pinTabR(o_nbrPinR) = en_data;
   enddo;
 
   return;
@@ -723,8 +723,8 @@ dcl-proc loadPinnedColumns;
   dcl-pi *n extproc(*dclcase);
     i_file    like(gi_file) const;
     i_lib     like(gi_lib) const;
-    o_pintabc like(go_pinTabC) dim(12);
-    o_nbrpinc like(go_nbrpinc);
+    o_pinTabC like(go_pinTabC) dim(12);
+    o_nbrPinC like(go_nbrPinC);
   end-pi;
 
   //  definieren Arbeitsfelder ...
@@ -732,8 +732,8 @@ dcl-proc loadPinnedColumns;
   //---------------------------------------------------*
 
   for x = 1 to 12;
-    o_pintabc(x) = ' ';
-    o_nbrpinc    = 0;
+    o_pinTabC(x) = ' ';
+    o_nbrPinC    = 0;
   endfor;
 
   clear en_key4;
@@ -760,12 +760,12 @@ dcl-proc loadPinnedColumns;
     endif;
 
     //  Mehr als 12 Einträge passen nicht in die Tabelle
-    if (o_nbrpinc >= %elem(o_pintabc));
+    if (o_nbrPinC >= %elem(o_pinTabC));
       leave;
     endif;
 
-    o_nbrpinc = o_nbrpinc + 1;
-    o_pintabc(o_nbrpinc) = en_data;
+    o_nbrPinC = o_nbrPinC + 1;
+    o_pinTabC(o_nbrPinC) = en_data;
   enddo;
 
   return;
@@ -783,7 +783,7 @@ dcl-proc loadLayout;
   end-pi;
 
   //  Arbeitsfelder ...
-  dcl-ds env0001 likeds(env0001_t) inz(*likeds);
+  dcl-ds env0001 likeds(ENV0001_t) inz(*likeds);
   //---------------------------------------------------*
 
   open peekfld;
@@ -844,12 +844,12 @@ end-proc;
 //  Program error handler                                     *
 //============================================================*
 
-dcl-proc errorhandler;
+dcl-proc errorHandler;
   dcl-pi *n;
-    i_condtoken    likeds(cee_fc_t) value;
-    i_pcommarea    int(10) value;
+    i_condToken    likeds(cee_fc_t) value;
+    i_pCommArea    int(10) value;
     o_action       int(10);
-    o_newcondtoken likeds(cee_fc_t);
+    o_newCondToken likeds(cee_fc_t);
   end-pi;
 
   dump;

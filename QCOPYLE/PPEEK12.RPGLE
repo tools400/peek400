@@ -6,11 +6,11 @@ dcl-pr peek12 extpgm('PEEK12');
 dcl-pr peek12 extpgm(peek12_name);
 /endif
   i_dsp80     like(dsp80_t) const;
-  i_copyright like(copyrght_t) const;
-  i_fmtname   like(fmt_t) const;
-  i_fmtmode   like(mode_t) const;
-  o_rcdl0200  likeds(rcdl0200_t);
-  o_fmtnbr    like(int2_t);
-  o_msgid     like(msgid_t);
-  o_msgdta    like(msgdta_t);
+  i_copyright like(copyright_t) const;
+  i_fmtName   like(fmt_t) const;
+  i_fmtMode   like(mode_t) const;
+  o_rcdl0200  likeds(RCDL0200_t);
+  o_fmtNbr    like(int2_t);
+  o_msgID     like(msgId_t);
+  o_msgDta    like(msgDta_t);
 end-pr;

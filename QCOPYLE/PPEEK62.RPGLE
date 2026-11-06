@@ -7,6 +7,6 @@ dcl-pr peek62 extpgm(peek62_name);
 /endif
   i_file   like(file_t) const;
   i_lib    like(lib_t) const;
-  o_msgid  like(msgid_t);
-  o_msgdta like(msgdta_t);
+  o_msgID  like(msgId_t);
+  o_msgDta like(msgDta_t);
 end-pr;

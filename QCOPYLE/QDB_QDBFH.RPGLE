@@ -6,14 +6,14 @@
 //                                                               *
 //===============================================================*
 
-dcl-ds qdb_qdbfh based(fdh_ptr);
-  qdbfyret  int(10);
-  qdbfyavl  int(10);
+dcl-ds Qdb_Qdbfh based(FDH_Ptr);
+  Qdbfyret  int(10);
+  Qdbfyavl  int(10);
 
   // Number of data members
-  qdbflbnum int(5) pos(15);
+  Qdbflbnum int(5) pos(15);
 
   // Offset to the file scope array
-  qdbfos    int(10) pos(317);
+  Qdbfos    int(10) pos(317);
 end-ds;
 

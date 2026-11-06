@@ -27,9 +27,9 @@
 /copy QCOPYLE,H_SPEC
 /copy QCOPYLE,COPYRIGHT
 
-dcl-f peekfldl2 keyed usropn rename(fpeekfld: fpeekfldl2) prefix(f2) infds(peek_l2_ds);
+dcl-f peekfldl2 keyed usropn rename(fpeekfld: fpeekfldl2) prefix(f2) infds(Peek_L2_DS);
 
-dcl-ds peek_l2_ds likeds(infds_t);
+dcl-ds Peek_L2_DS likeds(infds_t);
 
 /copy QCOPYLE,D_VARDEF
 /copy QCOPYLE,D_INFDS
@@ -45,28 +45,28 @@ dcl-ds peek_l2_ds likeds(infds_t);
 /copy QCOPYLE,PPEEK53
 /copy QCOPYLE,PPEEK58
 
-dcl-s ybuffer like(rcdbuf_t) inz;
-dcl-s youtbuffer like(rcdbuf_t) inz;
-dcl-s youtbuffln like(int4_t) inz;
-dcl-s ymsgid like(msgid_t) inz;
-dcl-s ymsgdta like(msgdta_t) inz;
+dcl-s YBuffer like(rcdBuf_t) inz;
+dcl-s YOutBuffer like(rcdBuf_t) inz;
+dcl-s YOutBuffLn like(int4_t) inz;
+dcl-s YMsgID like(msgId_t) inz;
+dcl-s YMsgDta like(msgDta_t) inz;
 
 dcl-s x like(int4_t) inz;
 dcl-s y like(int4_t) inz;
 dcl-ds fldl0100 likeds(fldl0100_t) inz;
 
-dcl-s peek18_name like(pgmcalln_t) inz;
+dcl-s peek18_name like(pgmCallN_t) inz;
 
-dcl-s isinzsr like(bool_t) inz(bFalse);
+dcl-s isInzSr like(bool_t) inz(bFalse);
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
 //*******************************************************************
 dcl-pi peek19;
-  i_rcdbuffer like(rcdbuf_t) const;
-  o_keyval    like(keybuf_t);
-  o_msgid     like(msgid_t);
-  o_msgdta    like(msgdta_t);
+  i_rcdBuffer like(rcdBuf_t) const;
+  o_keyVal    like(keyBuf_t);
+  o_msgID     like(msgId_t);
+  o_msgDta    like(msgDta_t);
 end-pi;
 
 dcl-s do_x1 packed(7);
@@ -79,9 +79,9 @@ ceehdlr(%paddr('errorHandler')
 
 exsr inzsr;
 
-exsr first;
+exsr First;
 
-o_keyval = *blanks;
+o_keyVal = *blanks;
 x = 1;
 
 clear f2key_l2;
@@ -96,20 +96,20 @@ for do_x1 = 1 to *hival;
 
   fldl0100 = f2ffd;
 
-  f_rtvfld(ybuffer   :
-          i_rcdbuffer:
+  f_rtvFld(YBuffer   :
+          i_rcdBuffer:
           fldl0100  :
           bTrue     );
 
-  peek18(fldl0100: f2format: ybuffer
+  peek18(fldl0100: F2Format: YBuffer
         : '*EXTERN': '*CURRENT'
-        : youtbuffer: youtbuffln
-        : ymsgid: ymsgdta);
+        : YOutBuffer: YOutBuffLn
+        : YMsgID: YMsgDta);
 
   //  Wert ...
-  for y = 1 to youtbuffln;
-    %subst(o_keyval: x: 1) =
-      %subst(youtbuffer: y: 1);
+  for y = 1 to YOutBuffLn;
+    %subst(o_keyVal: x: 1) =
+      %subst(YOutBuffer: y: 1);
     x = x + 1;
     if (x > KEY_BUFF_LEN);
       leave;
@@ -128,10 +128,10 @@ return;
 //    First         Initialisierung                           *
 //============================================================*
 
-begsr first;
+begsr First;
 
-  o_msgid = *blanks;
-  o_msgdta = *blanks;
+  o_msgID = *blanks;
+  o_msgDta = *blanks;
 
 endsr;
 
@@ -141,13 +141,13 @@ endsr;
 
 begsr inzsr;
 
-  if (isinzsr = bTrue);
+  if (isInzSr = bTrue);
     leavesr;
   endif;
 
-  isinzsr = bTrue;
+  isInzSr = bTrue;
 
-  peek18_name = f_pgmcalln('PEEK18');
+  peek18_name = f_pgmCallN('PEEK18');
 
   open peekfldl2;
 
@@ -157,12 +157,12 @@ endsr;
 //  Program error handler                                     *
 //============================================================*
 
-dcl-proc errorhandler;
+dcl-proc errorHandler;
   dcl-pi *n;
-    i_condtoken    likeds(cee_fc_t) value;
-    i_pcommarea    int(10) value;
+    i_condToken    likeds(cee_fc_t) value;
+    i_pCommArea    int(10) value;
     o_action       int(10);
-    o_newcondtoken likeds(cee_fc_t);
+    o_newCondToken likeds(cee_fc_t);
   end-pi;
 
   dump;

@@ -83,33 +83,33 @@ dcl-s size_t uns(10) template;
 
 //  qsort -- Sort Array
 dcl-pr qsort pointer extproc('qsort');
-  memptr    pointer value;
-  numelem   like(size_t) value;
+  memPtr    pointer value;
+  numElem   like(size_t) value;
   width     like(size_t) value;
-  psortfunc pointer(*proc) value;
+  pSortFunc pointer(*proc) value;
 end-pr;
 
 //  Sort List Entries by Name                         *
-dcl-pr sortbyname int(10);
-  i_pkey pointer value;
-  i_pelm pointer value;
+dcl-pr sortByName int(10);
+  i_pKey pointer value;
+  i_pElm pointer value;
 end-pr;
 
-dcl-ds qusrspc likeds(qobj_t) inz;
-dcl-s pspcptr pointer;
-dcl-ds errcode likeds(errcode_t) inz;
+dcl-ds qUsrSpc likeds(qObj_t) inz;
+dcl-s pSpcPtr pointer;
+dcl-ds errCode likeds(errCode_t) inz;
 
 //  Organisation of generic header
-dcl-ds genheader likeds(genheader_t) based(pspcptr);
+dcl-ds GenHeader likeds(genHeader_t) based(pSpcPtr);
 
 //  List data
-dcl-s currliste like(int4_t);
-dcl-s offsetliste like(int4_t);
-dcl-s pliste pointer;
-dcl-ds liste likeds(dbrl0200_t) based(pliste);
+dcl-s currListE like(int4_t);
+dcl-s offsetListE like(int4_t);
+dcl-s pListE pointer;
+dcl-ds listE likeds(dbrl0200_t) based(pListE);
 
-dcl-s msgid like(msgid_t);
-dcl-s msgdta like(msgdta_t);
+dcl-s msgID like(msgId_t);
+dcl-s msgDta like(msgDta_t);
 
 //*******************************************************************
 //           Main  Control block                                    *
@@ -117,23 +117,23 @@ dcl-s msgdta like(msgdta_t);
 
 dcl-proc peek39;
   dcl-pi *n;
-    i_qfile    like(qobj_t) const;
+    i_qFile    like(qObj_t) const;
     i_mbr      like(mbr_t) const;
     i_function like(function_t) const;
-    o_nume     like(int4_t);
+    o_numE     like(int4_t);
     o_dbrl0200 likeds(dbrl0200_t);
   end-pi;
 
   //---------------------------------------------------*
 
-  qusrspc.lib = USRSPC_LIBRARY;
-  qusrspc.name = USRSPC_NAME;
+  qUsrSpc.lib = USRSPC_LIBRARY;
+  qUsrSpc.name = USRSPC_NAME;
 
   monitor;
 
     select;
     when (i_function = '*CREATE');
-      exsr create;
+      exsr Create;
     when (i_function = '*DELETE');
       exsr delete;
     when (i_function = '*READ');
@@ -142,46 +142,46 @@ dcl-proc peek39;
 
   on-error;
     dump;
-    o_nume = 0;
+    o_numE = 0;
   endmon;
 
   //====================================================*
   //  Create --  create user space and get database rel.*
   //====================================================*
 
-  begsr create;
+  begsr Create;
 
-    o_nume = *zeros;
+    o_numE = *zeros;
 
     //  create user space
     if (not f_exist(
-       qusrspc.name: qusrspc.lib: '*USRSPC'));
-      quscrtus(qusrspc: 'TEMP': 32767: x'00'
+       qUsrSpc.name: qUsrSpc.lib: '*USRSPC'));
+      quscrtus(qUsrSpc: 'TEMP': 32767: x'00'
               : '*ALL': 'Peek/400 - Work Area');
     endif;
 
     //  get user space pointer
-    qusptrus(qusrspc: pspcptr);
+    qusptrus(qUsrSpc: pSpcPtr);
 
     //  get database relations (Fehler über errcode statt Ausnahme)
-    clear errcode;
-    errcode.bytprv = %size(errcode);
-    qdbldbr(qusrspc: 'DBRL0200'
-           : i_qfile: i_mbr: '': errcode);
+    clear errCode;
+    errCode.bytPrv = %size(errCode);
+    qdbldbr(qUsrSpc: 'DBRL0200'
+           : i_qFile: i_mbr: '': errCode);
 
-    if (errcode.bytavl > 0);
-      o_nume = 0;
-      currliste = -1;
+    if (errCode.bytAvl > 0);
+      o_numE = 0;
+      currListE = -1;
     else;
 
       //  sort entries by name
-      qsort(pspcptr + genheader.offsetlst
-           : genheader.numlstent
-           : genheader.entrysize
-           : %paddr(sortbyname));
+      qsort(pSpcPtr + GenHeader.OffsetLst
+           : GenHeader.NumLstEnt
+           : GenHeader.EntrySize
+           : %paddr(sortByName));
 
-      o_nume = genheader.numlstent;
-      currliste = 0;
+      o_numE = GenHeader.NumLstEnt;
+      currListE = 0;
     endif;
 
   endsr;
@@ -193,12 +193,12 @@ dcl-proc peek39;
   begsr delete;
 
     if (f_exist(
-       qusrspc.name: qusrspc.lib: '*USRSPC'));
+       qUsrSpc.name: qUsrSpc.lib: '*USRSPC'));
 
       f_execute('DLTUSRSPC USRSPC(' +
-                 %trim(qusrspc.lib) + '/' +
-                 %trim(qusrspc.name) +
-               ')': msgid: msgdta);
+                 %trim(qUsrSpc.lib) + '/' +
+                 %trim(qUsrSpc.name) +
+               ')': msgID: msgDta);
     endif;
 
   endsr;
@@ -211,23 +211,23 @@ dcl-proc peek39;
 
     clear o_dbrl0200;
 
-    if (currliste < 0 or
-       currliste >= genheader.numlstent);
-      exsr seterror;
+    if (currListE < 0 or
+       currListE >= GenHeader.NumLstEnt);
+      exsr setError;
       leavesr;
     endif;
 
-    currliste = currliste + 1;
+    currListE = currListE + 1;
 
-    offsetliste =
-     genheader.offsetlst +
-     ((currliste - 1) * genheader.entrysize);
+    offsetListE =
+     GenHeader.OffsetLst +
+     ((currListE - 1) * GenHeader.EntrySize);
 
-    pliste = pspcptr + offsetliste;
+    pListE = pSpcPtr + offsetListE;
 
-    o_dbrl0200 = liste;
+    o_dbrl0200 = listE;
 
-    o_nume = genheader.numlstent - currliste;
+    o_numE = GenHeader.NumLstEnt - currListE;
 
   endsr;
 
@@ -235,9 +235,9 @@ dcl-proc peek39;
   //  Set error condition                               *
   //====================================================*
 
-  begsr seterror;
+  begsr setError;
 
-    o_nume = 0;
+    o_numE = 0;
 
   endsr;
 
@@ -246,31 +246,31 @@ end-proc;
 //====================================================*
 //  Sort List Entries by Name                         *
 //====================================================*
-dcl-proc sortbyname;
+dcl-proc sortByName;
   dcl-pi *n int(10);
-    i_pkey pointer value;
-    i_pelm pointer value;
+    i_pKey pointer value;
+    i_pElm pointer value;
   end-pi;
 
-  dcl-ds key qualified based(i_pkey);
-    depfile char(10) pos(31);
-    deplib  char(10);
-    depmbr  char(10);
+  dcl-ds key qualified based(i_pKey);
+    depFile char(10) pos(31);
+    depLib  char(10);
+    depMbr  char(10);
   end-ds;
 
-  dcl-ds elm likeds(key) based(i_pelm);
+  dcl-ds elm likeds(key) based(i_pElm);
   // - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   select;
-  when (key.deplib < elm.deplib);
+  when (key.depLib < elm.depLib);
     return -1;
-  when (key.deplib > elm.deplib);
+  when (key.depLib > elm.depLib);
     return 1;
   other;
     select;
-    when (key.depfile < elm.depfile);
+    when (key.depFile < elm.depFile);
       return -1;
-    when (key.depfile > elm.depfile);
+    when (key.depFile > elm.depFile);
       return 1;
     other;
       return 0;

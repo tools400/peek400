@@ -3,12 +3,12 @@
 /define CLIB
 
 //  Basics C data types
-dcl-s ulong_t uns(10) template;
-dcl-s uint_t uns(10) template;
+dcl-s uLong_t uns(10) template;
+dcl-s uInt_t uns(10) template;
 
 //  system -- Execute a Command
-dcl-pr system int(10) extproc('system');
-  i_clcommand pointer options(*string) value;
+dcl-pr System int(10) extproc('system');
+  i_clCommand pointer options(*string) value;
 end-pr;
 
 dcl-s excp_msgid char(7) import('_EXCP_MSGID');
@@ -21,7 +21,7 @@ end-pr;
 //  strftime -- Convert to Formatted Time
 dcl-pr strftime int(10) extproc('strftime');
   dest    pointer value;
-  maxsize int(10) value;
+  maxSize int(10) value;
   format  pointer options(*string) value;
   timeptr likeds(tm_t) const;
 end-pr;
@@ -62,14 +62,14 @@ end-pr;
 
 //  memcpy -- Copy Bytes
 dcl-pr memcpy pointer extproc('memcpy');
-  i_pdest pointer value;
-  i_psrc  pointer value;
+  i_pDest pointer value;
+  i_pSrc  pointer value;
   i_count uns(10) value;
 end-pr;
 
 //  memset -- Set Bytes to Value
 dcl-pr memset pointer extproc('memset');
-  i_pdest pointer value;
+  i_pDest pointer value;
   i_char  int(10) value;
   i_count uns(10) value;
 end-pr;
@@ -78,22 +78,22 @@ end-pr;
 //     memmove allows copying between objects that may overlap
 //     as if src is first copied into a temporary array.
 dcl-pr memmove pointer extproc('memmove');
-  pmemdest pointer value;
-  pmemsrc  pointer value;
-  memsize  like(size_t) value;
+  pMemDest pointer value;
+  pMemSrc  pointer value;
+  memSize  like(size_t) value;
 end-pr;
 
 //  memcmp -- Compare Buffers
 dcl-pr memcmp int(10) extproc('memcmp');
-  pbuf1 pointer value;
-  pbuf2 pointer value;
+  pBuf1 pointer value;
+  pBuf2 pointer value;
   count like(size_t) value;
 end-pr;
 
 //  memicmp -- Compare Bytes (ignore case)
 dcl-pr memicmp int(10) extproc('__memicmp');
-  pbuf1 pointer value;
-  pbuf2 pointer value;
+  pBuf1 pointer value;
+  pBuf2 pointer value;
   count uns(10) value;
 end-pr;
 
@@ -104,13 +104,13 @@ end-pr;
 
 //  realloc -- Change Reserved Storage Block Size
 dcl-pr realloc pointer extproc('realloc');
-  i_pmem pointer value;
+  i_pMem pointer value;
   i_size uns(10) value;
 end-pr;
 
 //  free -- Release Storage Blocks
 dcl-pr free extproc('free');
-  i_pmem pointer value;
+  i_pMem pointer value;
 end-pr;
 
 //  srand -- Set Seed for rand Function   e.g.:   srand(getSeed(*null))
@@ -125,8 +125,8 @@ end-pr;
 dcl-c rand_max 32767;
 
 //  getSeed -- Get Seed for srand function
-dcl-pr getseed int(10) extproc('time');
-  i_timeptr pointer value;
+dcl-pr getSeed int(10) extproc('time');
+  i_timePtr pointer value;
 end-pr;
 
 //  strlen -- Determine String Length
@@ -136,34 +136,34 @@ end-pr;
 
 //  tmpnam -- Produce Temporary File Name
 dcl-pr tmpnam pointer extproc('tmpnam');
-  ptmpnme pointer value;
+  pTmpNme pointer value;
 end-pr;
 
-dcl-c l_tmpnam 39; // ! <stdio.h>
+dcl-c L_tmpnam 39; // ! <stdio.h>
 
 dcl-c tmp_max 32767; // ! <stdio.h>
 
 //  qsort -- Sort Array
 dcl-pr qsort pointer extproc('qsort');
-  memptr    pointer value;
-  numelem   like(size_t) value;
+  memPtr    pointer value;
+  numElem   like(size_t) value;
   width     like(size_t) value;
-  psortfunc pointer(*proc) value;
+  pSortFunc pointer(*proc) value;
 end-pr;
 
 //  bsearch -- Search Arrays
 dcl-pr bsearch pointer extproc('bsearch');
-  keyptr     pointer value;
-  memptr     pointer value;
-  numelem    like(size_t) value;
+  keyPtr     pointer value;
+  memPtr     pointer value;
+  numElem    like(size_t) value;
   width      like(size_t) value;
-  psearchfnc pointer(*proc) value;
+  pSearchFnc pointer(*proc) value;
 end-pr;
 
 //  iconv_open()--Code Conversion Allocation API
 dcl-pr iconv_open extproc('iconv_open') like(iconv_t);
-  i_tocode   pointer value;
-  i_fromcode pointer value;
+  i_toCode   pointer value;
+  i_fromCode pointer value;
 end-pr;
 
 dcl-ds iconv_t qualified align template;
@@ -174,11 +174,11 @@ end-ds;
 dcl-ds iconv_fromcode_t qualified template;
   ibmccsid      char(8);
   ccsid         char(5);
-  convalt       char(3);
-  substalt      char(1);
-  shiftstatealt char(1);
-  inplengthopt  char(1);
-  erroption     char(1);
+  convAlt       char(3);
+  substAlt      char(1);
+  shiftStateAlt char(1);
+  inpLengthOpt  char(1);
+  errOption     char(1);
   reserved      char(12);
 end-ds;
 
@@ -189,31 +189,31 @@ dcl-ds iconv_tocode_t qualified template;
 end-ds;
 
 //  QtqIconvOpen()--Code Conversion Allocation API
-dcl-pr qtqiconv_open extproc('QtqIconvOpen') likeds(iconv_t);
-  i_tocode   likeds(qtqcode_t) const;
-  i_fromcode likeds(qtqcode_t) const;
+dcl-pr QtqIconv_open extproc('QtqIconvOpen') likeds(iconv_t);
+  i_toCode   likeds(QtqCode_t) const;
+  i_fromCode likeds(QtqCode_t) const;
 end-pr;
 
-dcl-ds qtqcode_t qualified template;
+dcl-ds QtqCode_t qualified template;
   ccsid         int(10);
-  conversiona   int(10);
-  substitutiona int(10);
-  shiftstatea   int(10);
-  inplenopt     int(10);
-  erroptmxddta  int(10);
+  conversionA   int(10);
+  substitutionA int(10);
+  shiftStateA   int(10);
+  inpLenOpt     int(10);
+  errOptMxdDta  int(10);
   reserved      char(12);
 end-ds;
 
 //  iconv()--Code Conversion API
 dcl-pr iconv uns(10) extproc('iconv');
   i_cd         likeds(iconv_t) value;
-  i_pinbuf     pointer;
-  i_inbytleft  uns(10);
-  i_poutbuf    pointer;
-  i_outbytleft uns(10);
+  i_pInBuf     pointer;
+  i_inBytLeft  uns(10);
+  i_pOutBuf    pointer;
+  i_outBytLeft uns(10);
 end-pr;
 
-dcl-c ciconv_error 4294967295;
+dcl-c cICONV_ERROR 4294967295;
 
 //  iconv_close()--Code Conversion Deallocation API
 dcl-pr iconv_close int(10) extproc('iconv_close');
@@ -222,8 +222,8 @@ end-pr;
 
 //  0/-1 = stat()--Get File Information                // include <sys/stat.h>
 dcl-pr stat int(10) extproc('stat');
-  i_ppath pointer options(*string) value;
-  i_pstat pointer value;
+  i_pPath pointer options(*string) value;
+  i_pStat pointer value;
 end-pr;
 
 dcl-ds st_stat_t qualified align template;
@@ -253,39 +253,39 @@ dcl-ds st_stat_t qualified align template;
 end-ds;
 
 //  Qp0lGetAttr()--Get Attributes
-dcl-pr qp0lgetattr int(10) extproc('Qp0lGetAttr');
-  i_path       likeds(qlg_path_name_t) const;
-  i_attrarray  like(qlg_attrarray_t) const;
-  i_pbuffer    pointer value;
-  i_bytprv     uns(10) value;
-  o_sizeneeded uns(10);
-  o_bytret     uns(10);
-  i_followlnk  uns(10) const;
+dcl-pr Qp0lGetAttr int(10) extproc('Qp0lGetAttr');
+  i_path       likeds(Qlg_Path_Name_t) const;
+  i_attrArray  like(Qlg_attrArray_t) const;
+  i_pBuffer    pointer value;
+  i_bytPrv     uns(10) value;
+  o_sizeNeeded uns(10);
+  o_bytRet     uns(10);
+  i_followLnk  uns(10) const;
 end-pr;
 
-dcl-ds qlg_path_name_t qualified align template;
+dcl-ds Qlg_Path_Name_t qualified align template;
   ccsid               int(10);
   country_id          char(2);
   language_id         char(3);
   reserved            char(3);
-  path_type           uns(10);
-  path_length         int(10);
-  path_name_delimiter char(2);
+  Path_Type           uns(10);
+  Path_Length         int(10);
+  Path_Name_Delimiter char(2);
   reserved2           char(10);
-  path_name           char(256);
+  Path_Name           char(256);
 end-ds;
 
 dcl-c qlg_path_job_ccsid 0;
 dcl-c qlg_path_job_countryid x'0000';
 dcl-c qlg_path_job_languageid x'000000';
 
-dcl-ds qlg_attrarray_t qualified template;
-  nume int(10);
+dcl-ds Qlg_attrArray_t qualified template;
+  numE int(10);
   attr int(10) dim(64);
 end-ds;
 
-dcl-ds qlg_rtnattr_t qualified template;
-  ofsnextattr int(10);
+dcl-ds Qlg_rtnAttr_t qualified template;
+  ofsNextAttr int(10);
   id          int(10);
   size        int(10);
   reserved    char(4);
@@ -320,7 +320,7 @@ dcl-s time_t int(10) template;
 
 //  opendir()--Open Directory                          // include <dirent.h>
 dcl-pr opendir pointer extproc('opendir');
-  i_pdirname pointer options(*string) value;
+  i_pDirName pointer options(*string) value;
 end-pr;
 
 //  readdir()--Read Directory Entry
@@ -363,10 +363,10 @@ end-pr;
 
 //  fd/-1 = open()--Open File                          // include <fcntl.h>
 dcl-pr open int(10) extproc('open');
-  i_ppath    pointer options(*string) value;
-  i_opnflag  int(10) value;
+  i_pPath    pointer options(*string) value;
+  i_opnFLag  int(10) value;
   i_mode     uns(10) options(*nopass) value;
-  i_codepage uns(10) options(*nopass) value;
+  i_codePage uns(10) options(*nopass) value;
 end-pr;
 
 //  <sys/stat.h>
@@ -409,14 +409,14 @@ dcl-c o_rdwr 4; // ! Read/Write
 //  value/-1 = read()--Write from Descriptor           // include <unistd.h>
 dcl-pr read extproc('read') like(ssize_t);
   i_fd      int(10) value;
-  i_pbuffer pointer value;
+  i_pBuffer pointer value;
   i_buflen  like(size_t) value;
 end-pr;
 
 //  value/-1 = write()--Write to Descriptor            // include <unistd.h>
 dcl-pr write extproc('write') like(ssize_t);
   i_fd      int(10) value;
-  i_pbuffer pointer value;
+  i_pBuffer pointer value;
   i_buflen  like(size_t) value;
 end-pr;
 
@@ -440,13 +440,13 @@ dcl-c seek_end 2; // ! seek end
 
 //  0/-1 = unlink()--Remove Link to File               // include <unistd.h>
 dcl-pr unlink int(10) extproc('unlink');
-  i_ppath pointer options(*string) value;
+  i_pPath pointer options(*string) value;
 end-pr;
 
 //  0/-1 = Qp0lRenameKeep()--Rename File or Directory, Keep "new" If It Exists
-dcl-pr qp0lrenamekeep int(10) extproc('Qp0lRenameKeep');
-  i_poldpath pointer options(*string) value;
-  i_pnewpath pointer options(*string) value;
+dcl-pr Qp0lRenameKeep int(10) extproc('Qp0lRenameKeep');
+  i_pOldPath pointer options(*string) value;
+  i_pNewPath pointer options(*string) value;
 end-pr;
 
 //  0/-1 = close()--Close File or Socket Descriptor    // include <unistd.h>
@@ -632,40 +632,40 @@ dcl-pr putenv int(10) extproc('putenv');
 end-pr;
 
 //  Qp0zDltEnv()--Delete an Environment Variable
-dcl-pr qp0zdltenv int(10) extproc('Qp0zDltEnv');
+dcl-pr Qp0zDltEnv int(10) extproc('Qp0zDltEnv');
   name pointer options(*string) value;
 end-pr;
 
 //  Qp0zInitEnv()--Initialize Environment for Variables
-dcl-pr qp0zinitenv int(10) extproc('Qp0zInitEnv');
+dcl-pr Qp0zInitEnv int(10) extproc('Qp0zInitEnv');
 end-pr;
 
 dcl-s environ pointer import('environ');
 
 //  Generate Universal Unique Identifier (GENUUID)
-dcl-pr genuuid extproc('_GENUUID');
+dcl-pr genUUID extproc('_GENUUID');
   uuid_template pointer value;
 end-pr;
 
 dcl-ds uuid_template_t qualified template;
-  bytprv   uns(10);
-  bytavl   uns(10);
+  bytPrv   uns(10);
+  bytAvl   uns(10);
   reserved char(8);
   uuid     char(16);
 end-ds;
 
 //  Convert Hex to Character (CVTHC)
 dcl-pr cvthc extproc('cvthc');
-  presult    pointer value;
-  psource    pointer value;
-  sourcesize int(10) value;
+  pResult    pointer value;
+  pSource    pointer value;
+  sourceSize int(10) value;
 end-pr;
 
 //  Convert Eight Bit Character to Hex Nibbles (CVTCH)
 dcl-pr cvtch extproc('cvtch');
-  presult   pointer value;
-  psource   pointer value;
-  sourcelen int(10) value;
+  pResult   pointer value;
+  pSource   pointer value;
+  sourceLen int(10) value;
 end-pr;
 
 //  Cipher (CIPHER)
@@ -675,28 +675,28 @@ dcl-pr cipher extproc('_CIPHER');
   *n pointer const;
 end-pr;
 
-dcl-ds cipherctrls_t qualified align template;
+dcl-ds cipherCtrls_t qualified align template;
   function      char(2) pos(1);
-  hashalg       char(1) pos(3);
+  hashAlg       char(1) pos(3);
   sequence      char(1) pos(4);
-  datalength    uns(10) pos(5);
+  dataLength    uns(10) pos(5);
   output        char(1) pos(9);
   reserved_1    char(7) pos(10);
-  hashcontext   pointer pos(17);
-  hmackey       pointer pos(33);
-  hmackeylength uns(10) pos(49);
+  hashContext   pointer pos(17);
+  HMACKey       pointer pos(33);
+  HMACKeyLength uns(10) pos(49);
   reserved_2    char(44) pos(53);
 end-ds;
 
-dcl-c ccipher_md5 x'00';
-dcl-c ccipher_sha1 x'01';
+dcl-c cCIPHER_MD5 x'00';
+dcl-c cCIPHER_SHA1 x'01';
 
-dcl-c ccipher_only x'00';
-dcl-c ccipher_first x'01';
-dcl-c ccipher_middle x'02';
-dcl-c ccipher_final x'03';
+dcl-c cCIPHER_ONLY x'00';
+dcl-c cCIPHER_FIRST x'01';
+dcl-c cCIPHER_MIDDLE x'02';
+dcl-c cCIPHER_FINAL x'03';
 
-dcl-c ccipher_hash x'00';
-dcl-c ccipher_hmac x'01';
+dcl-c cCIPHER_HASH x'00';
+dcl-c cCIPHER_HMAC x'01';
 
 /endif

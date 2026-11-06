@@ -39,8 +39,8 @@ ctl-opt nomain;
 /copy QCOPYLE,PPEEK63
 
 dcl-pr f_isSqlErr like(bool_t);
-  o_msgid  like(msgid_t);
-  o_msgdta like(msgdta_t);
+  o_msgID  like(msgId_t);
+  o_msgDta like(msgDta_t);
 end-pr;
 
 dcl-pr f_sqlMsgID char(7);
@@ -48,22 +48,22 @@ dcl-pr f_sqlMsgID char(7);
 end-pr;
 
 dcl-pr f_isDeleted like(bool_t);
-  i_hfile likeds(hfile_t) const;
+  i_hFile likeds(hFile_t) const;
 end-pr;
 
 dcl-pr p_cvtSqlMg;
-  i_tomsgid char(7) const;
-  io_msgid  like(msgid_t);
-  io_msgdta like(msgdta_t);
+  i_toMsgID char(7) const;
+  io_msgID  like(msgId_t);
+  io_msgDta like(msgDta_t);
 end-pr;
 
 dcl-pr f_getField like(varString_t);
-  i_sqlorder like(varString_t) const;
+  i_sqlOrder like(varString_t) const;
 end-pr;
 
 dcl-pr f_chgField like(varString_t);
   i_string   like(varString_t) const;
-  i_rmvorder like(bool_t) const;
+  i_rmvOrder like(bool_t) const;
 end-pr;
 
 //  ... Execute Command (QCMDEXC) API
@@ -73,14 +73,14 @@ dcl-pr qcmdexc extpgm('QCMDEXC');
 end-pr;
 
 // Für Sortierung nach relativer Satznummer
-dcl-ds g_hfile03 likeds(hfile_t);
+dcl-ds g_hFile03 likeds(hFile_t);
 
 dcl-s g_file char(10);
 dcl-s g_lib char(10);
 dcl-s g_mbr char(10);
 dcl-s g_fmt char(10);
 
-dcl-s g_cmdovrdbf like(varString_t);
+dcl-s g_cmdOvrDbf like(varString_t);
 
 //===================================================================*
 //  Prozedur:  SQL_prepareStatement                       (Body)     *
@@ -92,26 +92,26 @@ dcl-proc SQL_prepareStatement export;
     i_file      like(file_t) value;
     i_lib       like(lib_t) value;
     i_mbr       like(mbr_t) value;
-    i_fmt       like(rcdfmt_t) value;
-    i_sqlselect like(sqlSelect_t) value;
-    i_sqlorder  like(sqlWhere_t) value;
-    o_msgid     like(msgid_t);
-    o_msgdta    like(msgdta_t);
+    i_fmt       like(rcdFmt_t) value;
+    i_sqlSelect like(sqlSelect_t) value;
+    i_sqlOrder  like(sqlWhere_t) value;
+    o_msgID     like(msgId_t);
+    o_msgDta    like(msgDta_t);
   end-pi;
 
   //  definieren Funktionswert ...
-  dcl-s f_prepstmt like(bool_t);
+  dcl-s f_prepStmt like(bool_t);
 
   dcl-s i like(int4_t);
-  dcl-s sqlselectstmt like(sqlstmt_t);
-  dcl-s sqlcountstmt like(sqlstmt_t);
+  dcl-s sqlSelectStmt like(sqlStmt_t);
+  dcl-s sqlCountStmt like(sqlStmt_t);
 
-  dcl-s pfile like(file_t);
+  dcl-s pFile like(file_t);
   dcl-s plib like(lib_t);
-  dcl-s pmbr like(mbr_t);
-  dcl-s pfmt like(rcdfmt_t);
+  dcl-s pMbr like(mbr_t);
+  dcl-s pFmt like(rcdFmt_t);
 
-  dcl-s cmdovrdbf like(g_cmdovrdbf);
+  dcl-s cmdovrdbf like(g_cmdOvrDbf);
 
   // ------------------------------------------------------------------------
 
@@ -119,10 +119,10 @@ dcl-proc SQL_prepareStatement export;
   //**                                     : pFile: pLib: pMbr: pFmt) = bTrue
   //                  go ahead ...
   //**                Else
-  pfile = i_file;
+  pFile = i_file;
   plib  = i_lib;
-  pmbr  = i_mbr;
-  pfmt  = i_fmt;
+  pMbr  = i_mbr;
+  pFmt  = i_fmt;
   //**                Endif
 
   //  ovrDbf
@@ -132,10 +132,10 @@ dcl-proc SQL_prepareStatement export;
                ' TOFILE('                  +
                %trim(plib )                +
                '/'                         +
-               %trim(pfile)                +
+               %trim(pFile)                +
                ')'                         +
                ' MBR('                     +
-               %trim(pmbr)                 +
+               %trim(pMbr)                 +
                ')'                         +
                ' OVRSCOPE(*CALLLVL)'       +
                ' SHARE(*NO)'               +
@@ -144,52 +144,52 @@ dcl-proc SQL_prepareStatement export;
   qcmdexc(cmdovrdbf: %len(cmdovrdbf));
 
   //  Statement ...
-  sqlselectstmt = 'SELECT'                  +
+  sqlSelectStmt = 'SELECT'                  +
                  ' RRN(T3)';
 
   //  ... plus Datei
-  sqlselectstmt = %trim(sqlselectstmt)      +
+  sqlSelectStmt = %trim(sqlSelectStmt)      +
                  ' FROM'                   +
                  ' ' + %trim('FILE03')     +
                  ' T3';
 
   //  ... plus SELECT
-  if (i_sqlselect <> ' ');
-    sqlselectstmt = %trim(sqlselectstmt)      +
+  if (i_sqlSelect <> ' ');
+    sqlSelectStmt = %trim(sqlSelectStmt)      +
                    ' WHERE'                  +
-                   ' ' + %trim(i_sqlselect);
+                   ' ' + %trim(i_sqlSelect);
   endif;
 
   //  ... erzeugen COUNT(*) Anweisung
-  i = %scan('RRN(T3)': sqlselectstmt);
-  sqlcountstmt =
-    %replace('COUNT(*)': sqlselectstmt
+  i = %scan('RRN(T3)': sqlSelectStmt);
+  sqlCountStmt =
+    %replace('COUNT(*)': sqlSelectStmt
              : i: %len('RRN(T3)'));
 
   //  ... plus ORDER BY
-  if (i_sqlorder <> ' ');
-    sqlselectstmt = %trim(sqlselectstmt)      +
+  if (i_sqlOrder <> ' ');
+    sqlSelectStmt = %trim(sqlSelectStmt)      +
                    ' ORDER BY'               +
-                   ' ' + %trim(i_sqlorder);
+                   ' ' + %trim(i_sqlOrder);
   endif;
 
   // SQL-STATEMENT VORBEREITEN
   if (i_check = bTrue);
     EXEC SQL
-     prepare g_chkstmt from :sqlselectstmt;
+     prepare g_chkStmt from :sqlSelectStmt;
   else;
     EXEC SQL
-     prepare g_prepselectstmt from :sqlselectstmt;
-    if (f_isSqlErr(o_msgid :
-                o_msgdta) = bFalse);
+     prepare g_prepSelectStmt from :sqlSelectStmt;
+    if (f_isSqlErr(o_msgID :
+                o_msgDta) = bFalse);
       EXEC SQL
-       prepare g_prepcountstmt from :sqlcountstmt;
+       prepare g_prepCountStmt from :sqlCountStmt;
     endif;
   endif;
 
   // PRÜFUNG AUSWERTEN
-  if (f_isSqlErr(o_msgid: o_msgdta) = bTrue);
-    f_prepstmt = bFalse;
+  if (f_isSqlErr(o_msgID: o_msgDta) = bTrue);
+    f_prepStmt = bFalse;
     if (i_check = bFalse);
       g_file = '';
       g_lib = '';
@@ -197,12 +197,12 @@ dcl-proc SQL_prepareStatement export;
       g_fmt = '';
     endif;
 
-    p_cvtSqlMg('USR8210': o_msgid: o_msgdta);
+    p_cvtSqlMg('USR8210': o_msgID: o_msgDta);
 
   else;
-    f_prepstmt = bTrue;
+    f_prepStmt = bTrue;
     if (i_check = bFalse);
-      g_cmdovrdbf = cmdovrdbf;
+      g_cmdOvrDbf = cmdovrdbf;
       g_file = i_file;
       g_lib = i_lib;
       g_mbr = i_mbr;
@@ -210,7 +210,7 @@ dcl-proc SQL_prepareStatement export;
     endif;
   endif;
 
-  return f_prepstmt;
+  return f_prepStmt;
 
 end-proc;
 
@@ -220,36 +220,36 @@ end-proc;
 
 dcl-proc SQL_open export;
   dcl-pi *n like(bool_t);
-    o_hfile  likeds(hfile_t);
-    o_msgid  like(msgid_t);
-    o_msgdta like(msgdta_t);
+    o_hFile  likeds(hFile_t);
+    o_msgID  like(msgId_t);
+    o_msgDta like(msgDta_t);
   end-pi;
 
   //  definieren Funktionswert ...
-  dcl-s f_opnsql like(bool_t) inz(bFalse);
+  dcl-s f_opnSql like(bool_t) inz(bFalse);
   // ------------------------------------------------------------------------
 
   //  ovrDbf
-  callp qcmdexc(g_cmdovrdbf: %len(g_cmdovrdbf));
+  callp qcmdexc(g_cmdOvrDbf: %len(g_cmdOvrDbf));
 
   // CURSOR fileSQL DEKLARIEREN
   EXEC SQL
-   declare g_filesql scroll cursor for g_prepselectstmt;
+   declare g_fileSQL scroll cursor for g_prepSelectStmt;
 
   // CURSOR CS ÖFFNEN
   EXEC SQL
-   open g_filesql;
+   open g_fileSQL;
 
   // PRÜFUNG AUSWERTEN
-  if (f_isSqlErr(o_msgid :
-              o_msgdta) = bTrue);
+  if (f_isSqlErr(o_msgID :
+              o_msgDta) = bTrue);
 
-    p_cvtSqlMg('USR8210': o_msgid: o_msgdta);
-    cio_seterrormsg(g_hfile03: o_msgid: o_msgdta);
+    p_cvtSqlMg('USR8210': o_msgID: o_msgDta);
+    CIO_setErrorMsg(g_hFile03: o_msgID: o_msgDta);
 
-    f_opnsql = bFalse;
+    f_opnSql = bFalse;
   else;
-    if cio_open(g_hfile03
+    if CIO_open(g_hFile03
              : g_file
              : g_lib
              : g_mbr
@@ -263,20 +263,20 @@ dcl-proc SQL_open export;
     endif;
 
     if (*in99 = *on);
-      f_opnsql = bFalse;
+      f_opnSql = bFalse;
       //  Cursor schließen, sonst scheitert das nächste
       //  SQL_open() mit SQL0502.
       EXEC SQL
-       close g_filesql;
+       close g_fileSQL;
     else;
-      f_opnsql = bTrue;
+      f_opnSql = bTrue;
     endif;
   endif;
 
   //  Setzen Rückgabeparameter
-  o_hfile = g_hfile03;
+  o_hFile = g_hFile03;
 
-  return f_opnsql;
+  return f_opnSql;
 
 end-proc;
 
@@ -286,28 +286,28 @@ end-proc;
 
 dcl-proc SQL_nextRow export;
   dcl-pi *n like(bool_t);
-    o_buffer  like(rcdbuf_t);
-    o_nullmap like(nullmap_t) dim(NULL_MAP_SIZE);
-    o_hfile   likeds(hfile_t);
-    o_msgid   like(msgid_t);
-    o_msgdta  like(msgdta_t);
+    o_buffer  like(rcdBuf_t);
+    o_nullMap like(nullMap_t) dim(NULL_MAP_SIZE);
+    o_hFile   likeds(hFile_t);
+    o_msgID   like(msgId_t);
+    o_msgDta  like(msgDta_t);
   end-pi;
 
   //  definieren Funktionswert ...
-  dcl-s iseof like(bool_t) inz(bTrue);
+  dcl-s IsEOF like(bool_t) inz(bTrue);
 
   //  definieren lokale Variablen ...
-  dcl-s recnbr int(10);
+  dcl-s recNbr int(10);
   dcl-s isdeleted like(bool_t);
 
-  dcl-ds io_buff based(ptrbuffer);
-    io_bufffld like(rcdbuf_t);
+  dcl-ds IO_Buff based(ptrBuffer);
+    IO_BuffFld like(rcdBuf_t);
   end-ds;
 
-  dcl-s io_nullmap like(nullmap_t) dim(NULL_MAP_SIZE) based(ptrnullmap);
+  dcl-s IO_NullMap like(nullMap_t) dim(NULL_MAP_SIZE) based(ptrNullMap);
   // ------------------------------------------------------------------------
-  ptrbuffer = %addr(o_buffer );
-  ptrnullmap= %addr(o_nullmap);
+  ptrBuffer = %addr(o_buffer );
+  ptrNullMap= %addr(o_nullMap);
 
   //  Sätze, die nach dem Öffnen des Cursors gelöscht wurden, überlesen
   dou (isdeleted = bFalse);
@@ -315,31 +315,31 @@ dcl-proc SQL_nextRow export;
 
     // GET NEXT ROW
     EXEC SQL
-     fetch next from g_filesql into :recnbr;
+     fetch next from g_fileSQL into :recNbr;
 
     // PRÜFUNG AUSWERTEN
-    if (f_isSqlErr(o_msgid :
-                o_msgdta) = bTrue);
+    if (f_isSqlErr(o_msgID :
+                o_msgDta) = bTrue);
 
-      p_cvtSqlMg('USR8210': o_msgid: o_msgdta);
-      cio_seterrormsg(g_hfile03: o_msgid: o_msgdta);
-      iseof = bTrue;
+      p_cvtSqlMg('USR8210': o_msgID: o_msgDta);
+      CIO_setErrorMsg(g_hFile03: o_msgID: o_msgDta);
+      IsEOF = bTrue;
 
     else;
 
       if (sqlCode = 100);
-        cio_seteof_read(g_hfile03);
+        CIO_setEOF_read(g_hFile03);
       else;
 
-        if (cio_chainwithrrn(g_hfile03
-                          : recnbr
+        if (CIO_chainWithRRN(g_hFile03
+                          : recNbr
                           : bTrue
-                          : io_buff
-                          : io_nullmap) = bFalse);
-          isdeleted = f_isDeleted(g_hfile03);
-          iseof = bTrue;
+                          : IO_Buff
+                          : IO_NullMap) = bFalse);
+          isdeleted = f_isDeleted(g_hFile03);
+          IsEOF = bTrue;
         else;
-          iseof = bFalse;
+          IsEOF = bFalse;
         endif;
 
       endif;
@@ -348,9 +348,9 @@ dcl-proc SQL_nextRow export;
   enddo;
 
   //  Setzen Rückgabeparameter
-  o_hfile = g_hfile03;
+  o_hFile = g_hFile03;
 
-  return iseof;
+  return IsEOF;
 
 end-proc;
 
@@ -360,28 +360,28 @@ end-proc;
 
 dcl-proc SQL_previousRow export;
   dcl-pi *n like(bool_t);
-    o_buffer  like(rcdbuf_t);
-    o_nullmap like(nullmap_t) dim(NULL_MAP_SIZE);
-    o_hfile   likeds(hfile_t);
-    o_msgid   like(msgid_t);
-    o_msgdta  like(msgdta_t);
+    o_buffer  like(rcdBuf_t);
+    o_nullMap like(nullMap_t) dim(NULL_MAP_SIZE);
+    o_hFile   likeds(hFile_t);
+    o_msgID   like(msgId_t);
+    o_msgDta  like(msgDta_t);
   end-pi;
 
   //  definieren Funktionswert ...
-  dcl-s iseof like(bool_t) inz(bTrue);
+  dcl-s IsEOF like(bool_t) inz(bTrue);
 
   //  definieren lokale Variablen ...
-  dcl-s recnbr int(10);
+  dcl-s recNbr int(10);
   dcl-s isdeleted like(bool_t);
 
-  dcl-ds io_buff based(ptrbuffer);
-    io_bufffld like(rcdbuf_t);
+  dcl-ds IO_Buff based(ptrBuffer);
+    IO_BuffFld like(rcdBuf_t);
   end-ds;
 
-  dcl-s io_nullmap like(nullmap_t) dim(NULL_MAP_SIZE) based(ptrnullmap);
+  dcl-s IO_NullMap like(nullMap_t) dim(NULL_MAP_SIZE) based(ptrNullMap);
   // ------------------------------------------------------------------------
-  ptrbuffer = %addr(o_buffer );
-  ptrnullmap= %addr(o_nullmap);
+  ptrBuffer = %addr(o_buffer );
+  ptrNullMap= %addr(o_nullMap);
 
   //  Sätze, die nach dem Öffnen des Cursors gelöscht wurden, überlesen
   dou (isdeleted = bFalse);
@@ -389,31 +389,31 @@ dcl-proc SQL_previousRow export;
 
     // GET PREVIOUS ROW
     EXEC SQL
-     fetch prior from g_filesql into :recnbr;
+     fetch prior from g_fileSQL into :recNbr;
 
     // PRÜFUNG AUSWERTEN
-    if (f_isSqlErr(o_msgid :
-                o_msgdta) = bTrue);
+    if (f_isSqlErr(o_msgID :
+                o_msgDta) = bTrue);
 
-      p_cvtSqlMg('USR8210': o_msgid: o_msgdta);
-      cio_seterrormsg(g_hfile03: o_msgid: o_msgdta);
-      iseof = bTrue;
+      p_cvtSqlMg('USR8210': o_msgID: o_msgDta);
+      CIO_setErrorMsg(g_hFile03: o_msgID: o_msgDta);
+      IsEOF = bTrue;
 
     else;
 
       if (sqlCode = 100);
-        cio_seteof_readp(g_hfile03);
+        CIO_setEOF_readp(g_hFile03);
       else;
 
-        if (cio_chainwithrrn(g_hfile03
-                          : recnbr
+        if (CIO_chainWithRRN(g_hFile03
+                          : recNbr
                           : bTrue
-                          : io_buff
-                          : io_nullmap) = bFalse);
-          isdeleted = f_isDeleted(g_hfile03);
-          iseof = bTrue;
+                          : IO_Buff
+                          : IO_NullMap) = bFalse);
+          isdeleted = f_isDeleted(g_hFile03);
+          IsEOF = bTrue;
         else;
-          iseof = bFalse;
+          IsEOF = bFalse;
         endif;
 
       endif;
@@ -422,9 +422,9 @@ dcl-proc SQL_previousRow export;
   enddo;
 
   //  Setzen Rückgabeparameter
-  o_hfile = g_hfile03;
+  o_hFile = g_hFile03;
 
-  return iseof;
+  return IsEOF;
 
 end-proc;
 
@@ -434,31 +434,31 @@ end-proc;
 
 dcl-proc SQL_gotoTop export;
   dcl-pi *n like(bool_t);
-    o_msgid  like(msgid_t);
-    o_msgdta like(msgdta_t);
+    o_msgID  like(msgId_t);
+    o_msgDta like(msgDta_t);
   end-pi;
 
   //  definieren Funktionswert ...
-  dcl-s f_toprow like(bool_t) inz(bFalse);
+  dcl-s f_topRow like(bool_t) inz(bFalse);
 
   // ------------------------------------------------------------------------
 
   // POSITION BEFORE FIRST ROW
   EXEC SQL
-   fetch before from g_filesql;
+   fetch before from g_fileSQL;
 
   // PRÜFUNG AUSWERTEN
-  if (f_isSqlErr(o_msgid :
-              o_msgdta) = bTrue);
+  if (f_isSqlErr(o_msgID :
+              o_msgDta) = bTrue);
 
-    p_cvtSqlMg('USR8210': o_msgid: o_msgdta);
+    p_cvtSqlMg('USR8210': o_msgID: o_msgDta);
 
-    f_toprow = bFalse;
+    f_topRow = bFalse;
   else;
-    f_toprow = bTrue;
+    f_topRow = bTrue;
   endif;
 
-  return f_toprow;
+  return f_topRow;
 
 end-proc;
 
@@ -468,31 +468,31 @@ end-proc;
 
 dcl-proc SQL_gotoBottom export;
   dcl-pi *n like(bool_t);
-    o_msgid  like(msgid_t);
-    o_msgdta like(msgdta_t);
+    o_msgID  like(msgId_t);
+    o_msgDta like(msgDta_t);
   end-pi;
 
   //  definieren Funktionswert ...
-  dcl-s f_botrow like(bool_t) inz(bFalse);
+  dcl-s f_botRow like(bool_t) inz(bFalse);
 
   // ------------------------------------------------------------------------
 
   // POSITION BEFORE FIRST ROW
   EXEC SQL
-   fetch last   from g_filesql;
+   fetch last   from g_fileSQL;
 
   // PRÜFUNG AUSWERTEN
-  if (f_isSqlErr(o_msgid :
-              o_msgdta) = bTrue);
+  if (f_isSqlErr(o_msgID :
+              o_msgDta) = bTrue);
 
-    p_cvtSqlMg('USR8210': o_msgid: o_msgdta);
+    p_cvtSqlMg('USR8210': o_msgID: o_msgDta);
 
-    f_botrow = bFalse;
+    f_botRow = bFalse;
   else;
-    f_botrow = bTrue;
+    f_botRow = bTrue;
   endif;
 
-  return f_botrow;
+  return f_botRow;
 
 end-proc;
 
@@ -502,38 +502,38 @@ end-proc;
 
 dcl-proc SQL_close export;
   dcl-pi *n like(bool_t);
-    o_hfile  likeds(hfile_t);
-    o_msgid  like(msgid_t);
-    o_msgdta like(msgdta_t);
+    o_hFile  likeds(hFile_t);
+    o_msgID  like(msgId_t);
+    o_msgDta like(msgDta_t);
   end-pi;
 
   //  definieren Funktionswert ...
-  dcl-s f_clssql like(bool_t) inz(bFalse);
+  dcl-s f_clsSql like(bool_t) inz(bFalse);
 
   // ------------------------------------------------------------------------
 
   // CURSOR CS SCHLIESSEN
   EXEC SQL
-   close g_filesql;
+   close g_fileSQL;
 
   // PRÜFUNG AUSWERTEN
-  if (f_isSqlErr(o_msgid :
-              o_msgdta) = bTrue);
+  if (f_isSqlErr(o_msgID :
+              o_msgDta) = bTrue);
 
-    p_cvtSqlMg('USR8210': o_msgid: o_msgdta);
+    p_cvtSqlMg('USR8210': o_msgID: o_msgDta);
 
-    f_clssql = bFalse;
+    f_clsSql = bFalse;
   else;
-    if (cio_close(g_hfile03) = bTrue);
+    if (CIO_close(g_hFile03) = bTrue);
       *in99 = '0';
     else;
       *in99 = '1';
     endif;
 
     if (*in99 = *on);
-      f_clssql = bFalse;
+      f_clsSql = bFalse;
     else;
-      f_clssql = bTrue;
+      f_clsSql = bTrue;
       g_file = ' ';
       g_lib  = ' ';
       g_mbr  = ' ';
@@ -541,9 +541,9 @@ dcl-proc SQL_close export;
   endif;
 
   //  Setzen Rückgabeparameter
-  o_hfile = g_hfile03;
+  o_hFile = g_hFile03;
 
-  return f_clssql;
+  return f_clsSql;
 
 end-proc;
 
@@ -559,40 +559,40 @@ dcl-proc SQL_count export;
   dcl-s f_count like(int4_t);
 
   //  definieren Arbeitsfelder
-  dcl-s msgid like(msgid_t);
-  dcl-s msgdta like(msgdta_t);
+  dcl-s msgID like(msgId_t);
+  dcl-s msgDta like(msgDta_t);
   // ------------------------------------------------------------------------
 
   //  ovrDbf
-  callp(e) qcmdexc(g_cmdovrdbf: %len(g_cmdovrdbf));
+  callp(e) qcmdexc(g_cmdOvrDbf: %len(g_cmdOvrDbf));
 
   // CURSOR fileSQL DEKLARIEREN
   EXEC SQL
-   declare g_countsql scroll cursor for g_prepcountstmt;
+   declare g_countSQL scroll cursor for g_prepCountStmt;
 
   // CURSOR CS ÖFFNEN
   EXEC SQL
-   open g_countsql;
+   open g_countSQL;
 
-  if (f_isSqlErr(msgid: msgdta) = bTrue);
+  if (f_isSqlErr(msgID: msgDta) = bTrue);
     return -1;
   endif;
 
   // GET FIRST ROW
   EXEC SQL
-   fetch first from g_countsql into :f_count;
+   fetch First from g_countSQL into :f_count;
 
-  if (f_isSqlErr(msgid: msgdta) = bTrue);
+  if (f_isSqlErr(msgID: msgDta) = bTrue);
     //  Cursor schließen, sonst scheitert der nächste Aufruf.
     EXEC SQL
-     close g_countsql;
+     close g_countSQL;
     return -1;
   endif;
 
   // CURSOR CS SCHLIESSEN
   EXEC SQL
-   close g_countsql;
-  if (f_isSqlErr(msgid: msgdta) = bTrue);
+   close g_countSQL;
+  if (f_isSqlErr(msgID: msgDta) = bTrue);
     return -1;
   endif;
 
@@ -606,24 +606,24 @@ end-proc;
 
 dcl-proc f_isSqlErr;
   dcl-pi *n like(bool_t);
-    o_msgid  like(msgid_t);
-    o_msgdta like(msgdta_t);
+    o_msgID  like(msgId_t);
+    o_msgDta like(msgDta_t);
   end-pi;
 
   //  definieren Funktionswert ...
-  dcl-s f_issqlerr like(bool_t);
+  dcl-s f_isSqlErr like(bool_t);
   // ------------------------------------------------------------------------
   if (sqlCode >= 0);
-    o_msgid  = ' ';
-    o_msgdta = ' ';
-    f_issqlerr = bFalse;
+    o_msgID  = ' ';
+    o_msgDta = ' ';
+    f_isSqlErr = bFalse;
   else;
-    o_msgid  = f_sqlMsgID(sqlCode);
-    o_msgdta = %subst(sqlerm: 1: sqlerl);
-    f_issqlerr = bTrue;
+    o_msgID  = f_sqlMsgID(sqlCode);
+    o_msgDta = %subst(SqlErm: 1: SqlErl);
+    f_isSqlErr = bTrue;
   endif;
 
-  return f_issqlerr;
+  return f_isSqlErr;
 
 end-proc;
 
@@ -635,12 +635,12 @@ end-proc;
 
 dcl-proc f_isDeleted;
   dcl-pi *n like(bool_t);
-    i_hfile likeds(hfile_t) const;
+    i_hFile likeds(hFile_t) const;
   end-pi;
   // ------------------------------------------------------------------------
 
-  if (cio_geterror(i_hfile) = enorec_c or
-      cio_geterror(i_hfile) = eiorecerr_c);
+  if (CIO_getError(i_hFile) = enorec_c or
+      CIO_getError(i_hFile) = eiorecerr_c);
     return bTrue;
   endif;
 
@@ -693,9 +693,9 @@ end-proc;
 
 dcl-proc p_cvtSqlMg;
   dcl-pi *n;
-    i_tomsgid char(7) const;
-    io_msgid  like(msgid_t);
-    io_msgdta like(msgdta_t);
+    i_toMsgID char(7) const;
+    io_msgID  like(msgId_t);
+    io_msgDta like(msgDta_t);
   end-pi;
 
 /copy QCOPYLE,RTVM0100
@@ -704,12 +704,12 @@ dcl-proc p_cvtSqlMg;
   // ------------------------------------------------------------------------
 
   clear usr8210;
-  usr8210.var1 = io_msgid;
-  usr8210.var2 = f_msgtext(io_msgid : io_msgdta:
+  usr8210.var1 = io_msgID;
+  usr8210.var2 = f_msgText(io_msgID : io_msgDta:
                         'QSQLMSG': 'QSYS'   );
 
-  io_msgid = 'USR8210';
-  io_msgdta = usr8210;
+  io_msgID = 'USR8210';
+  io_msgDta = usr8210;
 
   return;
 
@@ -723,11 +723,11 @@ dcl-proc f_getField;
 
   //  definieren Procedure Interface ...
   dcl-pi *n like(varString_t);
-    i_sqlorder like(varString_t) const;
+    i_sqlOrder like(varString_t) const;
   end-pi;
   // ------------------------------------------------------------------------
 
-  return f_chgField(i_sqlorder: bTrue);
+  return f_chgField(i_sqlOrder: bTrue);
 
 end-proc;
 
@@ -752,11 +752,11 @@ end-proc;
 dcl-proc f_chgField;
   dcl-pi *n like(varString_t);
     i_string   like(varString_t) const;
-    i_rmvorder like(bool_t) const;
+    i_rmvOrder like(bool_t) const;
   end-pi;
 
   //  definieren Funktionswert ...
-  dcl-s f_chgfield like(varString_t);
+  dcl-s f_chgField like(varString_t);
 
   dcl-s x like(int4_t);
   dcl-s char char(1);
@@ -785,7 +785,7 @@ dcl-proc f_chgField;
   waitOrder = bFalse;
 
   for x = 1 to %len(i_string);
-    if (%len(f_chgfield) >= %len(f_chgfield: *max));
+    if (%len(f_chgField) >= %len(f_chgField: *max));
       leave;
     endif;
 
@@ -802,7 +802,7 @@ dcl-proc f_chgField;
 
     //  Überlesen in Hochkomma eingeschlossene Felder ...
     if (isHyphen = bTrue and isField = bTrue);
-      f_chgfield = f_chgfield + char;
+      f_chgField = f_chgField + char;
       iter;
     endif;
 
@@ -816,7 +816,7 @@ dcl-proc f_chgField;
       waitOrder = bFalse;
 
       if (char <> DOOUBLE_QUOTE);
-        f_chgfield = f_chgfield + DOOUBLE_QUOTE;
+        f_chgField = f_chgField + DOOUBLE_QUOTE;
       endif;
 
     //  Festellen Feldende ...
@@ -829,7 +829,7 @@ dcl-proc f_chgField;
       waitOrder = bTrue;
 
       if (char <> DOOUBLE_QUOTE);
-        f_chgfield = f_chgfield + DOOUBLE_QUOTE;
+        f_chgField = f_chgField + DOOUBLE_QUOTE;
       endif;
 
     //  Festellen Orderanfang ...
@@ -858,21 +858,21 @@ dcl-proc f_chgField;
     endif;
 
     //  Löschen Order ...
-    if (isOrder = bTrue and i_rmvorder = bTrue);
+    if (isOrder = bTrue and i_rmvOrder = bTrue);
     //**                Eval      y = y + 1
     //**                Eval      %subst(f_chgField: y: 1) = ' '
     else;
-      f_chgfield = f_chgfield + char;
+      f_chgField = f_chgField + char;
     endif;
 
   endfor;
 
   //  Abschließen Feldname am Ende der Zeichenkette ...
-  if (isField = bTrue and %len(f_chgfield) < %len(f_chgfield: *max));
-    f_chgfield = f_chgfield + DOOUBLE_QUOTE;
+  if (isField = bTrue and %len(f_chgField) < %len(f_chgField: *max));
+    f_chgField = f_chgField + DOOUBLE_QUOTE;
   endif;
 
-  return f_chgfield;
+  return f_chgField;
 
 end-proc;
 

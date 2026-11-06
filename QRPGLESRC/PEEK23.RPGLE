@@ -39,17 +39,17 @@
 dcl-s x like(int4_t) inz;
 dcl-s y like(int4_t) inz;
 
-dcl-s r_msgid char(4) inz(*blanks);
-dcl-s r_key like(key_t) inz(*blanks);
-dcl-s r_posf24 like(i_posf24) inz(*zeros);
+dcl-s r_msgID char(4) inz(*blanks);
+dcl-s R_Key like(KEY_t) inz(*blanks);
+dcl-s R_PosF24 like(i_posF24) inz(*zeros);
 
-dcl-s wrk_msgid like(msgid_t) inz;
-dcl-s wrk_msgtxt like(msgdta_t) inz;
-dcl-s wrk_key like(key_t) inz;
-dcl-s wrk_sectn like(section_t) inz;
-dcl-s data like(set0000_t) inz;
+dcl-s wrk_MsgID like(msgId_t) inz;
+dcl-s wrk_MsgTxt like(msgDta_t) inz;
+dcl-s Wrk_Key like(KEY_t) inz;
+dcl-s Wrk_Sectn like(SECTION_t) inz;
+dcl-s data like(SET0000_t) inz;
 
-dcl-s lastkey like(key_t) inz;
+dcl-s lastKey like(KEY_t) inz;
 
 /copy QCOPYLE,PPEEK53
 /copy QCOPYLE,PPEEK58
@@ -61,19 +61,19 @@ dcl-s lastkey like(key_t) inz;
 //*******************************************************************
 dcl-pi peek23;
   i_pgm       like(pgm_t) const;
-  i_key       like(key_t) const;
-  i_posf24    like(int4_t) const;
-  o_fkeys     like(fkeydsp_t) dim(32);
-  o_nbrofkeys like(int4_t);
-  i_exclKeys  like(pgmcmd_t) dim(25) options(*nopass) const;
+  i_key       like(KEY_t) const;
+  i_posF24    like(int4_t) const;
+  o_FKeys     like(fKeyDsp_t) dim(32);
+  o_nbrOfKeys like(int4_t);
+  i_exclKeys  like(pgmCmd_t) dim(25) options(*nopass) const;
 end-pi;
 
 //  Register error handler
 ceehdlr(%paddr('errorHandler')
        : *null: *omit);
 
-o_fkeys(*) = *blanks;
-o_nbrofkeys = *zeros;
+o_FKeys(*) = *blanks;
+o_nbrOfKeys = *zeros;
 
 exsr getKeyMap;
 
@@ -86,61 +86,61 @@ return;
 begsr getKeyMap;
 
   x = 1;
-  r_msgid = *blanks;
-  r_key = *blanks;
-  r_posf24 = i_posf24;
+  r_msgID = *blanks;
+  R_Key = *blanks;
+  R_PosF24 = i_posF24;
 
   //  Plätze für "F24=Weitere Tasten" nur reservieren, wenn der
   //  Befehl *MOREKEYS einer Taste zugeordnet ist.
-  if (i_posf24 > 0);
+  if (i_posF24 > 0);
     exsr chkMoreKeys;
-    if (r_msgid = '');
-      r_posf24 = 0;
+    if (r_msgID = '');
+      R_PosF24 = 0;
     endif;
   endif;
 
   //  Hilfetaste
   if (i_key = '*HELP' or i_key = '*ALL');
-    wrk_sectn = '*' + i_pgm;
-    p_setllusr(wrk_sectn: '*HELP');
-    lastkey = '*HELP';
+    Wrk_Sectn = '*' + i_pgm;
+    p_setllUsr(Wrk_Sectn: '*HELP');
+    lastKey = '*HELP';
     exsr readKeyMap;
   endif;
 
   //  Funktionstasten F1-F24
   if (i_key = '*ALL' or i_key <> '*HELP');
-    wrk_sectn = '*' + i_pgm;
+    Wrk_Sectn = '*' + i_pgm;
     if (i_key =  '*ALL' );
-      p_setllusr(wrk_sectn: '*F01');
-      lastkey = '*F24';
+      p_setllUsr(Wrk_Sectn: '*F01');
+      lastKey = '*F24';
     else;
-      p_setllusr(wrk_sectn: '*');
-      lastkey = *all'Z';
+      p_setllUsr(Wrk_Sectn: '*');
+      lastKey = *all'Z';
     endif;
 
     exsr readKeyMap;
 
     //  *MOREKEYS
-    if (r_msgid = '' or i_posf24 = 0);
+    if (r_msgID = '' or i_posF24 = 0);
     // Pech gehabt ...
     else;
 
       //  Anzahl Seiten berechnen
-      y = o_nbrofkeys / i_posf24;
-      x = y * i_posf24;
-      if (o_nbrofkeys <> x);
+      y = o_nbrOfKeys / i_posF24;
+      x = y * i_posF24;
+      if (o_nbrOfKeys <> x);
         y = y + 1;
       endif;
-      y = y * i_posf24;
+      y = y * i_posF24;
 
-      for x = i_posf24 by i_posF24 to y;
+      for x = i_posF24 by i_posF24 to y;
         //  Der Platz der letzten Seite kann hinter der Liste liegen
-        if (x > %elem(o_fkeys));
+        if (x > %elem(o_FKeys));
           leave;
         endif;
-        wrk_msgid = r_msgid;
-        wrk_key = r_key;
-        exsr fillfield;
+        wrk_MsgID = r_msgID;
+        Wrk_Key = R_Key;
+        exsr FillField;
       endfor;
 
     endif;
@@ -155,11 +155,11 @@ endsr;
 begsr readKeyMap;
 
   dow ('1');
-    if (f_readeusr(wrk_sectn: wrk_key: data) = '1');
+    if (f_readeUsr(Wrk_Sectn: Wrk_Key: data) = '1');
       leave;
     endif;
 
-    if (wrk_key > lastkey);
+    if (Wrk_Key > lastKey);
       leave;
     endif;
 
@@ -168,30 +168,30 @@ begsr readKeyMap;
     endif;
 
     if (%parms() >= %parmnum(i_exclKeys));
-      if (f_iskeyexc(data: i_exclKeys) = bTrue);
+      if (f_isKeyExc(data: i_exclKeys) = bTrue);
         iter;
       endif;
     endif;
 
-    wrk_msgid = f_mapCmdToMsg(data: wrk_sectn);
+    wrk_MsgID = f_mapCmdToMsg(data: Wrk_Sectn);
     if (data = '*MOREKEYS');
-      r_msgid = wrk_msgid;
-      r_key = wrk_key;
+      r_msgID = wrk_MsgID;
+      R_Key = Wrk_Key;
     else;
-      exsr fillfield;
+      exsr FillField;
       x = x + 1;
-      o_nbrofkeys = o_nbrofkeys + 1;
+      o_nbrOfKeys = o_nbrOfKeys + 1;
     endif;
 
     //  *MOREKEYS
-    if (x = r_posf24 and x <= %elem(o_fkeys));
+    if (x = R_PosF24 and x <= %elem(o_FKeys));
       //  ... Platz reservieren
       x = x + 1;
-      o_nbrofkeys = o_nbrofkeys + 1;
-      r_posf24 = r_posf24 + i_posf24;
+      o_nbrOfKeys = o_nbrOfKeys + 1;
+      R_PosF24 = R_PosF24 + i_posF24;
     endif;
 
-    if (x > %elem(o_fkeys));
+    if (x > %elem(o_FKeys));
       leave;
     endif;
 
@@ -205,22 +205,22 @@ endsr;
 
 begsr chkMoreKeys;
 
-  wrk_sectn = '*' + i_pgm;
-  p_setllusr(wrk_sectn: '*F01');
+  Wrk_Sectn = '*' + i_pgm;
+  p_setllUsr(Wrk_Sectn: '*F01');
 
-  dow (f_readeusr(wrk_sectn: wrk_key: data) = '0');
-    if (wrk_key > '*F24');
+  dow (f_readeUsr(Wrk_Sectn: Wrk_Key: data) = '0');
+    if (Wrk_Key > '*F24');
       leave;
     endif;
 
     if (data = '*MOREKEYS');
       if (%parms() >= %parmnum(i_exclKeys));
-        if (f_iskeyexc(data: i_exclKeys) = bTrue);
+        if (f_isKeyExc(data: i_exclKeys) = bTrue);
           iter;
         endif;
       endif;
-      r_msgid = f_mapCmdToMsg(data: wrk_sectn);
-      r_key = wrk_key;
+      r_msgID = f_mapCmdToMsg(data: Wrk_Sectn);
+      R_Key = Wrk_Key;
       leave;
     endif;
   enddo;
@@ -231,30 +231,30 @@ endsr;
 //    FillField                                               *
 //============================================================*
 
-begsr fillfield;
+begsr FillField;
 
-  if (wrk_msgid = '');
-    wrk_msgtxt = *all'?';
+  if (wrk_MsgID = '');
+    wrk_MsgTxt = *all'?';
   else;
-    wrk_msgid = 'KEY' + %trim(wrk_msgid);
-    wrk_msgtxt = f_msgtext(wrk_msgid: ' ');
+    wrk_MsgID = 'KEY' + %trim(wrk_MsgID);
+    wrk_MsgTxt = f_msgText(wrk_MsgID: ' ');
   endif;
 
   select;
-  when (wrk_key   = '*HELP');
-    o_fkeys(x) = 'F1';
-  when (%subst(wrk_key: 1: 3) = '*F0');
+  when (Wrk_Key   = '*HELP');
+    o_FKeys(x) = 'F1';
+  when (%subst(Wrk_Key: 1: 3) = '*F0');
     //  '*F01' bis '*F09' -> 'F1' bis 'F9'
-    o_fkeys(x) = 'F' + %subst(wrk_key: 4: 1);
-  when (%subst(wrk_key: 1: 1) = '*');
+    o_FKeys(x) = 'F' + %subst(Wrk_Key: 4: 1);
+  when (%subst(Wrk_Key: 1: 1) = '*');
     //  '*F10' bis '*F24' -> 'F10' bis 'F24', '*ENTER' -> 'ENTER'
-    o_fkeys(x) = %subst(wrk_key: 2);
+    o_FKeys(x) = %subst(Wrk_Key: 2);
   other;
     //  Auswahl, z.B. 'A'
-    o_fkeys(x) = wrk_key;
+    o_FKeys(x) = Wrk_Key;
   endsl;
 
-  o_fkeys(x) = %trimr(o_fkeys(x)) + '=' + %trim(wrk_msgtxt);
+  o_FKeys(x) = %trimr(o_FKeys(x)) + '=' + %trim(wrk_MsgTxt);
 
 endsr;
 
@@ -262,12 +262,12 @@ endsr;
 //  Program error handler                                     *
 //============================================================*
 
-dcl-proc errorhandler;
+dcl-proc errorHandler;
   dcl-pi *n;
-    i_condtoken    likeds(cee_fc_t) value;
-    i_pcommarea    int(10) value;
+    i_condToken    likeds(cee_fc_t) value;
+    i_pCommArea    int(10) value;
     o_action       int(10);
-    o_newcondtoken likeds(cee_fc_t);
+    o_newCondToken likeds(cee_fc_t);
   end-pi;
 
   dump;

@@ -7,59 +7,59 @@ dcl-ds sds qualified psds;
   // Programmname
   pgmName  char(10);
   // Programmfehlerstatus
-  pgmStat  zoned(5);
+  PgmStat  zoned(5);
   // vorheriger Programmfehlerstatus
-  prevStat zoned(5);
+  PrevStat zoned(5);
   // Letzte Anweisungsnummer
-  lastSeq  char(8);
+  LastSeq  char(8);
   // Letzte Unterroutine
-  lastSubr char(8);
+  LastSubr char(8);
   // Anzahl übergebener Parameter
-  nbrParm  zoned(3);
+  NbrParm  zoned(3);
   // Fehler-Msg
   msgID    char(7);
   //  Fehler-Art
-  msgPrfx  char(3) overlay(msgid);
+  MsgPrfx  char(3) overlay(msgID);
   //  Fehler-Nummer
-  msgNbr   char(4) overlay(msgid: 4);
+  msgNbr   char(4) overlay(msgID: 4);
   // MI-Instruktions-Nr.
-  mi_instr char(4);
+  MI_Instr char(4);
   // Arbeitsbereich für Nachrichten
-  workArea char(30);
+  WorkArea char(30);
   // Programmbiblitohek
-  pgmLib   char(10);
+  PgmLib   char(10);
   // CPF-Fehlertext
   msgText  char(80);
   // Kz der Ausnahmebedingung
   aube     char(4);
   // unbenutzt
-  unused_1 char(16);
+  Unused_1 char(16);
   // Datumsformat
   datFmt   char(8);
   // Ersten 2 stellen von *YEAR
   year     zoned(2);
   // Letzte Dateioperation: Dateiname
-  fileOpr  char(8);
+  FileOpr  char(8);
   // Datei-Staus-Information
-  fileStat char(35);
+  FileStat char(35);
   // Jobname
   job      char(10);
   // Benutzer
   user     char(10);
   // Jobnummer
-  jobNbr   zoned(6);
+  JobNbr   zoned(6);
   // Jobdatum, Aufbau wie UDATE
-  jobD     zoned(6);
+  JobD     zoned(6);
   // Programm-Ausführungsdatum, Aufbau wie UDATE
   jobDate  zoned(6);
   // Job-Zeit (HHMMSS)
-  jobTime  zoned(6);
+  JobTime  zoned(6);
   // Umwandlungsdatum
-  crtdate  char(6);
+  CrtDate  char(6);
   // Umwandlungszeit (HHMMSS)
-  crtTime  char(6);
+  CrtTime  char(6);
   // Compiler Version
-  compVer  char(4);
+  CompVer  char(4);
   // Quellendatei
   srcFile  char(10);
   // Bibliothek mit Quellendatei
@@ -67,10 +67,10 @@ dcl-ds sds qualified psds;
   // Quellenteildatei
   srcMbr   char(10);
   // Program containing procedure
-  pgmProc  char(10);
+  PgmProc  char(10);
   // Module containing procedure
-  modProc  char(10);
+  ModProc  char(10);
   // unbenutzt
-  unused_2 char(76);
+  Unused_2 char(76);
 end-ds;
 

@@ -38,26 +38,26 @@
 dcl-s value char(1) dim(256);
 dcl-s hex char(1) dim(16);
 
-dcl-ds sysinpnbr qualified;
-  sysname   char(8) inz;
-  sysvers   char(6) inz;
-  syssrlnbr char(8) inz;
-  syseon    char(1) inz(x'00');
+dcl-ds SysInpNbr qualified;
+  SysName   char(8) inz;
+  SysVers   char(6) inz;
+  SysSrlNbr char(8) inz;
+  SysEON    char(1) inz(x'00');
 end-ds;
 
 dcl-s x like(int4_t);
 dcl-s y like(int4_t);
 dcl-s a1 char(1);
-dcl-s summe packed(30);
-dcl-s rest packed(30);
+dcl-s Summe packed(30);
+dcl-s Rest packed(30);
 dcl-s zw1 packed(30);
 dcl-s zw2 packed(30);
 
 //  Konvertierung HEX ==> DEC
-dcl-s r_dec packed(30);
-dcl-s r_hex char(20);
+dcl-s R_Dec packed(30);
+dcl-s R_Hex char(20);
 
-dcl-s intsrlnbr char(20);
+dcl-s IntSrlNbr char(20);
 
 dcl-s isInzSr like(bool_t) inz(bFalse);
 
@@ -65,11 +65,11 @@ dcl-s isInzSr like(bool_t) inz(bFalse);
 //                 S T E U E R  -  R O U T I N E                    *
 //*******************************************************************
 dcl-pi peek29;
-  i_sysname    char(8) const;
-  i_sysversion char(6) const;
-  i_syssrlnbr  char(8) const;
-  i_sysdate    int(10) const;
-  o_serialnbr  char(20);
+  i_sysName    char(8) const;
+  i_sysVersion char(6) const;
+  i_sysSrlNbr  char(8) const;
+  i_sysDate    int(10) const;
+  o_serialNbr  char(20);
 end-pi;
 
 //----------------------------------------------------*
@@ -81,20 +81,20 @@ ceehdlr(%paddr('errorHandler')
 exsr inzsr;
 
 // -  Systemname des AS/400 Systems
-sysinpnbr.sysname = i_sysname;
+SysInpNbr.SysName = i_sysName;
 
 // -  PEEK-Versionsnummer
-sysinpnbr.sysvers = i_sysversion;
+SysInpNbr.SysVers = i_sysVersion;
 
 // -  Seriennummer des AS/400 Systems
-sysinpnbr.syssrlnbr = i_syssrlnbr;
+SysInpNbr.SysSrlNbr = i_sysSrlNbr;
 
 //  - Berechnung der Prüfsumme
-summe = *zeros;
+Summe = *zeros;
 
 for x = 1 to 50;
   //*   1             SUBST     SysInpNbr:X   A1
-  a1 = %subst(sysinpnbr: x: 1);
+  a1 = %subst(SysInpNbr: x: 1);
   if (a1 = x'00');
     leave;
   endif;
@@ -103,33 +103,33 @@ for x = 1 to 50;
   y = %lookup(a1: value);
   if (y > 0);
     //    ... gefunden
-    summe = summe + y;
+    Summe = Summe + y;
   else;
   //    ... nicht gefunden
   //        (kann eigentlich nicht sein)
   endif;
 
-  summe = summe + (x * 256);
+  Summe = Summe + (x * 256);
 endfor;
 
 //  - Datum als Komplement
-summe = summe - i_sysdate;
-summe = summe + 99999999;
+Summe = Summe - i_sysDate;
+Summe = Summe + 99999999;
 
 //  - Prüfsumme in HEX-Wert umsetzen
-r_dec = summe;
-exsr dectohex;
-intsrlnbr = r_hex;
+R_Dec = Summe;
+exsr DecToHex;
+IntSrlNbr = R_Hex;
 
-intsrlnbr = %trimr(intsrlnbr) + '-';
+IntSrlNbr = %trimr(IntSrlNbr) + '-';
 
 //  - Originaldatum anfügen, als Komplement gespeichert!
-r_dec = 0 - i_sysdate;
-r_dec = r_dec + 99999999;
-exsr dectohex;
-intsrlnbr = %trimr(intsrlnbr) + r_hex;
+R_Dec = 0 - i_sysDate;
+R_Dec = R_Dec + 99999999;
+exsr DecToHex;
+IntSrlNbr = %trimr(IntSrlNbr) + R_Hex;
 
-o_serialnbr = intsrlnbr;
+o_serialNbr = IntSrlNbr;
 
 return;
 
@@ -137,20 +137,20 @@ return;
 //    DecToHex      Konvertieren Decimal ==> Hex              *
 //============================================================*
 
-begsr dectohex;
+begsr DecToHex;
 
-  r_hex = *blanks;
-  rest = r_dec;
+  R_Hex = *blanks;
+  Rest = R_Dec;
 
-  dou (r_dec = 0);
-    zw1 = r_dec / 16;
+  dou (R_Dec = 0);
+    zw1 = R_Dec / 16;
     zw2 = zw1 * 16;
-    rest = r_dec - zw2;
+    Rest = R_Dec - zw2;
 
-    rest = rest + 1;
-    r_hex = %trimr(hex(rest)) + r_hex;
+    Rest = Rest + 1;
+    R_Hex = %trimr(hex(Rest)) + R_Hex;
 
-    r_dec = zw1;
+    R_Dec = zw1;
   enddo;
 
 endsr;
@@ -230,12 +230,12 @@ endsr;
 //  Program error handler                                     *
 //============================================================*
 
-dcl-proc errorhandler;
+dcl-proc errorHandler;
   dcl-pi *n;
-    i_condtoken    likeds(cee_fc_t) value;
-    i_pcommarea    int(10) value;
+    i_condToken    likeds(cee_fc_t) value;
+    i_pCommArea    int(10) value;
     o_action       int(10);
-    o_newcondtoken likeds(cee_fc_t);
+    o_newCondToken likeds(cee_fc_t);
   end-pi;
 
   dump;

@@ -6,17 +6,17 @@
 //                                                               *
 //===============================================================*
 
-dcl-ds mbrd0100_t qualified template;
-  byteprv   int(10);
-  byteavl   int(10);
-  filnme    char(10);
-  fillib    char(10);
+dcl-ds MBRD0100_t qualified template;
+  bytePrv   int(10);
+  byteAvl   int(10);
+  filNme    char(10);
+  filLib    char(10);
   mbr       char(10);
   attr      char(10);
-  srctyp    char(10);
-  crtdattim char(13);
-  chgdattim char(13);
+  srcTyp    char(10);
+  crtDatTim char(13);
+  chgDatTim char(13);
   text      char(50);
-  issrcfile char(1);
+  isSrcFile char(1);
 end-ds;
 

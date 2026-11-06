@@ -79,21 +79,21 @@ ctl-opt main(peek70);
 //  PEEK02, PEEK11, PEEK39 und PEEK46.
 dcl-c USRSPC_PEEK70 'PEEK70SPC';
 
-dcl-ds qusrspc likeds(qobj_t) inz;
-dcl-s pspcptr pointer inz(*null);
-dcl-ds errcode likeds(errcode_t) inz;
+dcl-ds qUsrSpc likeds(qObj_t) inz;
+dcl-s pSpcPtr pointer inz(*null);
+dcl-ds errCode likeds(errCode_t) inz;
 
 //  Organisation of generic header
-dcl-ds genheader likeds(genheader_t) based(pspcptr);
+dcl-ds GenHeader likeds(genHeader_t) based(pSpcPtr);
 
 //  List data (-1: keine Liste erstellt)
-dcl-s currliste like(int4_t) inz(-1);
-dcl-s offsetliste like(int4_t);
-dcl-s pliste pointer;
-dcl-ds liste likeds(objl0200_t) based(pliste);
+dcl-s currListE like(int4_t) inz(-1);
+dcl-s offsetListE like(int4_t);
+dcl-s pListE pointer;
+dcl-ds listE likeds(objl0200_t) based(pListE);
 
-dcl-s msgid like(msgid_t);
-dcl-s msgdta like(msgdta_t);
+dcl-s msgID like(msgId_t);
+dcl-s msgDta like(msgDta_t);
 
 //*******************************************************************
 //           Main  Control block                                    *
@@ -101,68 +101,68 @@ dcl-s msgdta like(msgdta_t);
 
 dcl-proc peek70;
   dcl-pi *n;
-    i_qfile    likeds(qobj_t) const;
+    i_qFile    likeds(qObj_t) const;
     i_function like(function_t) const;
-    o_nume     like(int4_t);
+    o_numE     like(int4_t);
     o_objl0200 likeds(objl0200_t);
   end-pi;
   //---------------------------------------------------*
 
-  qusrspc.lib = USRSPC_LIBRARY;
-  qusrspc.name = USRSPC_PEEK70;
+  qUsrSpc.lib = USRSPC_LIBRARY;
+  qUsrSpc.name = USRSPC_PEEK70;
 
   monitor;
 
     select;
     when (i_function = '*CREATE');
-      exsr create;
+      exsr Create;
     when (i_function = '*DELETE');
       exsr delete;
     when (i_function = '*READ');
       exsr read;
     other;
       //  Unbekannte Funktion
-      exsr seterror;
+      exsr setError;
     endsl;
 
   on-error;
     dump;
     //  Nach einem Fehler gibt es keine gültige Liste mehr
-    currliste = -1;
-    exsr seterror;
+    currListE = -1;
+    exsr setError;
   endmon;
 
   //====================================================*
   //  Create --  create user space and get database rel.*
   //====================================================*
 
-  begsr create;
+  begsr Create;
 
-    o_nume = *zeros;
-    currliste = -1;
+    o_numE = *zeros;
+    currListE = -1;
 
     //  create user space
     if (not f_exist(
-       qusrspc.name: qusrspc.lib: '*USRSPC'));
-      quscrtus(qusrspc: 'TEMP': 32767: x'00'
+       qUsrSpc.name: qUsrSpc.lib: '*USRSPC'));
+      quscrtus(qUsrSpc: 'TEMP': 32767: x'00'
               : '*ALL': 'Peek/400 - Work Area');
     endif;
 
     //  get user space pointer
-    qusptrus(qusrspc: pspcptr);
+    qusptrus(qUsrSpc: pSpcPtr);
 
     //  get list of files (errors are returned in errcode)
-    clear errcode;
-    errcode.bytprv = %size(errcode);
-    quslobj(qusrspc: 'OBJL0200'
-           : i_qfile: '*FILE': errcode);
+    clear errCode;
+    errCode.bytPrv = %size(errCode);
+    quslobj(qUsrSpc: 'OBJL0200'
+           : i_qFile: '*FILE': errCode);
 
-    if (errcode.bytavl > 0);
-      o_nume = 0;
-      currliste = -1;
+    if (errCode.bytAvl > 0);
+      o_numE = 0;
+      currListE = -1;
     else;
-      o_nume = genheader.numlstent;
-      currliste = 0;
+      o_numE = GenHeader.NumLstEnt;
+      currListE = 0;
     endif;
 
   endsr;
@@ -174,17 +174,17 @@ dcl-proc peek70;
   begsr delete;
 
     if (f_exist(
-       qusrspc.name: qusrspc.lib: '*USRSPC'));
+       qUsrSpc.name: qUsrSpc.lib: '*USRSPC'));
 
       f_execute('DLTUSRSPC USRSPC(' +
-                 %trim(qusrspc.lib) + '/' +
-                 %trim(qusrspc.name) +
-               ')': msgid: msgdta);
+                 %trim(qUsrSpc.lib) + '/' +
+                 %trim(qUsrSpc.name) +
+               ')': msgID: msgDta);
     endif;
 
-    pspcptr = *null;
-    currliste = -1;
-    o_nume = 0;
+    pSpcPtr = *null;
+    currListE = -1;
+    o_numE = 0;
 
   endsr;
 
@@ -197,27 +197,27 @@ dcl-proc peek70;
     clear o_objl0200;
 
     //  Keine Liste erstellt (oder gelöscht) oder Listenende
-    if (pspcptr = *null or currliste < 0);
-      exsr seterror;
+    if (pSpcPtr = *null or currListE < 0);
+      exsr setError;
       leavesr;
     endif;
 
-    if (currliste >= genheader.numlstent);
-      exsr seterror;
+    if (currListE >= GenHeader.NumLstEnt);
+      exsr setError;
       leavesr;
     endif;
 
-    currliste = currliste + 1;
+    currListE = currListE + 1;
 
-    offsetliste =
-     genheader.offsetlst +
-     ((currliste - 1) * genheader.entrysize);
+    offsetListE =
+     GenHeader.OffsetLst +
+     ((currListE - 1) * GenHeader.EntrySize);
 
-    pliste = pspcptr + offsetliste;
+    pListE = pSpcPtr + offsetListE;
 
-    o_objl0200 = liste;
+    o_objl0200 = listE;
 
-    o_nume = genheader.numlstent - currliste;
+    o_numE = GenHeader.NumLstEnt - currListE;
 
   endsr;
 
@@ -225,9 +225,9 @@ dcl-proc peek70;
   //  Set error condition                               *
   //====================================================*
 
-  begsr seterror;
+  begsr setError;
 
-    o_nume = 0;
+    o_numE = 0;
     clear o_objl0200;
 
   endsr;

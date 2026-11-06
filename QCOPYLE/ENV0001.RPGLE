@@ -2,7 +2,7 @@
 //---------------------------------------------------------------
 // Arbeitsumgebung:  ENV0001
 
-dcl-ds env0001_t len(64) qualified template;
+dcl-ds ENV0001_t len(64) qualified template;
   env_seq    zoned(5) inz(0);
   env_hidden char(1) inz('');
   env_color  char(1) inz('');

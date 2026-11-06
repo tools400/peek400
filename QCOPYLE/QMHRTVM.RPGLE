@@ -4,19 +4,19 @@
 
 //  Retrieve Message (QMHRTVM) API
 dcl-pr qmhrtvm extpgm('QMHRTVM');
-  o_msginf      char(65535) options(*varsize);
-  i_msginflen   int(10) const;
+  o_msgInf      char(65535) options(*varsize);
+  i_msgInfLen   int(10) const;
   i_format      char(8) const;
-  i_msgid       char(7) const;
-  i_qmsgf       char(20) const;
-  i_rpldata     char(65535) options(*varsize) const;
-  i_rpldatalen  int(10) const;
-  i_rplvars     char(10) const;
-  i_rtnctrlchrs char(10) const;
-  io_errcode    char(65535) options(*varsize);
-  i_rtvopt      char(10) options(*nopass) const; // | OptGrp 1
-  i_toccsid     int(10) options(*nopass) const; // |
-  i_ccsidrpldta int(10) options(*nopass) const; // |
+  i_msgID       char(7) const;
+  i_qMsgF       char(20) const;
+  i_rplData     char(65535) options(*varsize) const;
+  i_rpldataLen  int(10) const;
+  i_rplVars     char(10) const;
+  i_rtnCtrlChrs char(10) const;
+  io_ErrCode    char(65535) options(*varsize);
+  i_rtvOpt      char(10) options(*nopass) const; // | OptGrp 1
+  i_toCcsid     int(10) options(*nopass) const; // |
+  i_ccsidRplDta int(10) options(*nopass) const; // |
 end-pr;
 
 /endif

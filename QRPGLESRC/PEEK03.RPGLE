@@ -45,21 +45,21 @@ dcl-f peekfld usage(*update: *delete) keyed usropn prefix(f_);
 /copy QCOPYLE,PPEEK53
 /copy QCOPYLE,PPEEK58
 
-dcl-s peek41_name like(pgmcalln_t) inz;
+dcl-s peek41_name like(pgmCallN_t) inz;
 
 dcl-ds fldl0100 likeds(fldl0100_t) inz;
 
-dcl-s rtncode like(int4_t) inz;
+dcl-s rtnCode like(int4_t) inz;
 dcl-s nbrOfKey like(int4_t) inz;
 
 dcl-s x like(int4_t) inz;
 dcl-s y like(int4_t) inz;
 dcl-s z like(int4_t) inz;
-dcl-s tempstr like(i_sqlOrder) inz;
-dcl-ds keyl0100 likeds(keyl0100_t) based(pkeyl0100);
-dcl-ds keyl0100_sql likeds(keyl0100_t) inz;
+dcl-s tempStr like(i_sqlOrder) inz;
+dcl-ds keyl0100 likeds(KEYL0100_t) based(pKEYL0100);
+dcl-ds keyl0100_sql likeds(KEYL0100_t) inz;
 dcl-s data char(512) inz;
-dcl-s numkeyfld like(int4_t);
+dcl-s numKeyFld like(int4_t);
 dcl-s sqlName varchar(128) inz;
 
 dcl-s isInzSr like(bool_t) inz(bFalse);
@@ -68,12 +68,12 @@ dcl-s isInzSr like(bool_t) inz(bFalse);
 //                 S T E U E R  -  R O U T I N E                    *
 //*******************************************************************
 dcl-pi peek03;
-  i_qFile    likeds(qobj_t) const;
+  i_qFile    likeds(qObj_t) const;
   i_rcdFmt   like(fmt_t) const;
   i_access   like(accessMode_t) const;
   i_sqlOrder like(sqlOrder_t) const;
-  o_msgId    like(msgid_t);
-  o_msgDta   like(msgdta_t);
+  o_msgID    like(msgId_t);
+  o_msgDta   like(msgDta_t);
 end-pi;
 
 dcl-s do_x1 packed(7);
@@ -88,21 +88,21 @@ ceehdlr(%paddr('errorHandler')
 
 exsr inzsr;
 
-exsr first;
+exsr First;
 
 if (i_access = SQL_SEQ);
-  exsr sqlseq;
+  exsr SqlSeq;
 else;
-  exsr otherseq;
+  exsr otherSeq;
 endif;
 
 if (nbrOfKey <= *zeros);
-  o_msgId = 'USR0006';
+  o_msgID = 'USR0006';
   USR0006.var1 = i_qFile.name;
   USR0006.var2 = i_qFile.lib;
   o_msgDta = usr0006;
 else;
-  o_msgId = '';
+  o_msgID = '';
   o_msgDta = '';
 endif;
 
@@ -112,47 +112,47 @@ endif;
 //  sqlSeq     SQL-Auswahl                            *
 //====================================================*
 
-begsr sqlseq;
+begsr SqlSeq;
 
-  pkeyl0100 = %addr(keyl0100_sql);
+  pKEYL0100 = %addr(keyl0100_sql);
 
-  numkeyfld = 0;
+  numKeyFld = 0;
 
   x = 1;
-  exsr getnextfld;
+  exsr getNextFld;
 
   dow (y > 1);
 
-    tempstr = %trim(%subst(i_sqlOrder: x: y-x));
+    tempStr = %trim(%subst(i_sqlOrder: x: y-x));
     //  Ende des Feldes ...
-    z = %scan('"': tempstr: 2);
-    sqlName = %trim(%subst(tempstr: 2: z-2));
+    z = %scan('"': tempStr: 2);
+    sqlName = %trim(%subst(tempStr: 2: z-2));
     exsr getsysname;
 
     //  Alles hinter dem Feld ...
-    if (z+1 <= %len(tempstr));
-      tempstr = %trim(%subst(tempstr: z+1));
+    if (z+1 <= %len(tempStr));
+      tempStr = %trim(%subst(tempStr: z+1));
     else;
       tempStr = '';
     endif;
 
-    if (tempstr = 'DESC');
+    if (tempStr = 'DESC');
       keyl0100.apkseq  = 'D';
-      numkeyfld = numkeyfld + 1;
-      keyl0100.apkeyn = numkeyfld;
-      exsr addkeyinf;
+      numKeyFld = numKeyFld + 1;
+      keyl0100.apkeyn = numKeyFld;
+      exsr AddKeyInf;
     else;
       keyl0100.apkseq  = 'A';
-      numkeyfld = numkeyfld + 1;
-      keyl0100.apkeyn = numkeyfld;
-      exsr addkeyinf;
+      numKeyFld = numKeyFld + 1;
+      keyl0100.apkeyn = numKeyFld;
+      exsr AddKeyInf;
     endif;
 
     x = y + 1;
-    exsr getnextfld;
+    exsr getNextFld;
   enddo;
 
-  nbrOfKey = numkeyfld;
+  nbrOfKey = numKeyFld;
 
 endsr;
 
@@ -171,7 +171,7 @@ begsr getsysname;
   endif;
 
   if (%len(sqlName) <= %len(keyl0100.apkeyf));
-    f_key.f_field = sqlName;
+    f_key.F_Field = sqlName;
     chain(n) %kds(f_key) fpeekfld;
     if (%found());
       keyl0100.apkeyf = sqlName;
@@ -185,7 +185,7 @@ begsr getsysname;
   dow (not %eof());
     fldl0100 = f_ffd;
     if (fldl0100.f1afnm = sqlName);
-      keyl0100.apkeyf = f_field;
+      keyl0100.apkeyf = F_Field;
       leavesr;
     endif;
     read(n) fpeekfld;
@@ -197,7 +197,7 @@ endsr;
 //  getNextFld  nächstes Feld im SQL-String           *
 //====================================================*
 
-begsr getnextfld;
+begsr getNextFld;
 
   if (x > %len(i_sqlOrder));
     y = 0;
@@ -219,14 +219,14 @@ endsr;
 //  otherSeq   keine SQl-Auswahl                      *
 //====================================================*
 
-begsr otherseq;
+begsr otherSeq;
 
-  pkeyl0100 = %addr(data);
+  pKEYL0100 = %addr(data);
 
   //  Abrufen der Dateiinformationen ...
   peek41(i_qFile: i_rcdFmt
-        : '*CREATE': rtncode: data);
-  if (rtncode <= 0);
+        : '*CREATE': rtnCode: data);
+  if (rtnCode <= 0);
   //  ... schade, Aufruf ist fehlgeschlagen
   else;
     //  Einlesen der Schlüsselinformationen ...
@@ -235,8 +235,8 @@ begsr otherseq;
 
     for do_x1 = 1 to nbrOfKey;
       peek41(i_qFile: i_rcdFmt
-            : '*READKEY': rtncode: data);
-      exsr addkeyinf;
+            : '*READKEY': rtnCode: data);
+      exsr AddKeyInf;
     endfor;
 
   endif;
@@ -247,16 +247,16 @@ endsr;
 //  AddKeyInf  Hinzufügen Schlüsselinformationen      *
 //====================================================*
 
-begsr addkeyinf;
+begsr AddKeyInf;
 
   clear f_key;
-  f_key.f_field = keyl0100.apkeyf;
+  f_key.F_Field = keyl0100.apkeyf;
   chain %kds(f_key) fpeekfld;
   if (%found());
-    f_desc = keyl0100.apkseq;
-    f_kseq = keyl0100.apkeyn;
+    F_Desc = keyl0100.apkseq;
+    F_KSeq = keyl0100.apkeyn;
     fldl0100 = f_ffd;
-    fldl0100.f1keyf = '1';
+    fldl0100.F1KeyF = '1';
     f_ffd = fldl0100;
     update fpeekfld;
   endif;
@@ -267,15 +267,15 @@ endsr;
 //  First  --  Initialize program                     *
 //====================================================*
 
-begsr first;
+begsr First;
 
   nbrOfKey = *zeros;
 
   // - Meldung
-  p_sndstsmg('USR8137': i_qFile);
+  p_sndStsMg('USR8137': i_qFile);
 
   // - Los gehts'
-  o_msgId = *blanks;
+  o_msgID = *blanks;
   o_msgDta = *blanks;
 
 endsr;
@@ -292,7 +292,7 @@ begsr inzsr;
 
   isInzSr = bTrue;
 
-  peek41_name = f_pgmcalln('PEEK41');
+  peek41_name = f_pgmCallN('PEEK41');
 
   open peekfld;
 
@@ -302,12 +302,12 @@ endsr;
 //  Program error handler                                     *
 //============================================================*
 
-dcl-proc errorhandler;
+dcl-proc errorHandler;
   dcl-pi *n;
-    i_condtoken    likeds(cee_fc_t) value;
-    i_pcommarea    int(10) value;
+    i_condToken    likeds(cee_fc_t) value;
+    i_pCommArea    int(10) value;
     o_action       int(10);
-    o_newcondtoken likeds(cee_fc_t);
+    o_newCondToken likeds(cee_fc_t);
   end-pi;
 
   dump;

@@ -6,25 +6,25 @@
 //                                                               *
 //===============================================================*
 
-dcl-ds qdb_qdbfb;
+dcl-ds Qdb_Qdbfb;
 
   // Based on physical file/library
-  qdbfbf   char(10) pos(49);
-  qdbfbfl  char(10);
+  Qdbfbf   char(10) pos(49);
+  Qdbfbfl  char(10);
 
   // Record format name
-  qdbft    char(10);
+  Qdbft    char(10);
 
   // Bbr of select/omit statements
-  qdbfsoon int(5) pos(129);
+  Qdbfsoon int(5) pos(129);
 
   // Offset to the select/omit specification array
-  qdbfsoof int(10);
+  Qdbfsoof int(10);
 
   // Offset to the key specification array
-  qdbfksof int(10);
+  Qdbfksof int(10);
 
   // Record format full  key field count
-  qdbfksof int(5);
+  Qdbfksof int(5);
 end-ds;
 

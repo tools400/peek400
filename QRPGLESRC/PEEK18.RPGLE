@@ -62,12 +62,12 @@ dcl-f peekfld keyed usropn prefix(f_);
 /copy QCOPYLE,PPEEK58
 /copy QCOPYLE,PPEEK71
 
-dcl-ds set0003 likeds(set0003_t) inz;
+dcl-ds set0003 likeds(SET0003_t) inz;
 
 dcl-ds fldl0100 likeds(fldl0100_t) inz;
 
-dcl-s ymsgid char(7);
-dcl-s ymsgdta char(512);
+dcl-s YMsgID char(7);
+dcl-s YMsgDta char(512);
 dcl-s isMinus char(1) inz(bFalse);
 dcl-s x like(int4_t) inz;
 dcl-s a1 char(1) inz(*blanks);
@@ -76,7 +76,7 @@ dcl-s a1 char(1) inz(*blanks);
 // Siehe PEEK58, f_isNotAlw().
 dcl-ds *n;
   zoned   zoned(63) inz;
-  zoned_a char(63) overlay(zoned: 1);
+  zoned_A char(63) overlay(zoned: 1);
 end-ds;
 
 dcl-ds *n;
@@ -86,57 +86,57 @@ end-ds;
 
 dcl-ds *n;
   binary1   int(3) inz pos(1);
-  binary1_a char(1) overlay(binary1: 1);
+  binary1_A char(1) overlay(binary1: 1);
 end-ds;
 
 dcl-ds *n;
   binary2   int(5) inz pos(1);
-  binary2_a char(2) overlay(binary2: 1);
+  binary2_A char(2) overlay(binary2: 1);
 end-ds;
 
 dcl-ds *n;
   binary4   int(10) inz pos(1);
-  binary4_a char(4) overlay(binary4: 1);
+  binary4_A char(4) overlay(binary4: 1);
 end-ds;
 
 dcl-ds *n;
   binary8   int(20) inz pos(1);
-  binary8_a char(8) overlay(binary8: 1);
+  binary8_A char(8) overlay(binary8: 1);
 end-ds;
 
 dcl-s float float(8) inz;
-dcl-s float4 float(4) based(pfloat);
-dcl-s float8 float(8) based(pfloat);
+dcl-s Float4 float(4) based(pFloat);
+dcl-s Float8 float(8) based(pFloat);
 
-dcl-ds dsfloat qualified inz;
-  float8 float(8);
-  float4 float(4) overlay(float8);
+dcl-ds dsFloat qualified inz;
+  Float8 float(8);
+  Float4 float(4) overlay(Float8);
 end-ds;
 
-dcl-s htranscoder like(htranscoder_t) inz;
+dcl-s hTranscoder like(hTranscoder_t) inz;
 
-dcl-s SET_SIGN_PLUS like(set0003.set_signp) inz('+');
-dcl-s SET_SIGN_MINUS like(set0003.set_signm) inz('-');
+dcl-s SET_SIGN_PLUS like(set0003.SET_SignP) inz('+');
+dcl-s SET_SIGN_MINUS like(set0003.SET_SignM) inz('-');
 
-dcl-s r_tgtvalue like(i_tgtvalue) inz(*blanks);
-dcl-s r_dateiso date(*iso) inz(*loval);
-dcl-s r_timeiso time(*iso) inz(*loval);
-dcl-s r_timestmp timestamp inz(*loval);
+dcl-s R_TgtValue like(i_tgtValue) inz(*blanks);
+dcl-s R_DateISO date(*iso) inz(*loval);
+dcl-s R_TimeISO time(*iso) inz(*loval);
+dcl-s R_TimeStmp timestamp inz(*loval);
 
-dcl-s strpos like(int4_t) inz;
+dcl-s strPos like(int4_t) inz;
 
-dcl-s peek36_name like(pgmcalln_t) inz;
+dcl-s peek36_name like(pgmCallN_t) inz;
 
 //    Converts a given buffer into the Job ccsid.
 dcl-pr cvtToJobCcsid int(10) extproc('cvtToJobCcsid');
-  io_buffer like(rcdbuf_t);
+  io_buffer like(rcdBuf_t);
   i_length  int(10) value;
   i_ccsid   int(10) value;
 end-pr;
 
 //    Converts a given buffer into the File ccsid.
 dcl-pr cvtToFileCcsid int(10) extproc('cvtToFileCcsid');
-  io_buffer like(rcdbuf_t);
+  io_buffer like(rcdBuf_t);
   i_length  int(10) value;
   i_ccsid   int(10) value;
 end-pr;
@@ -147,15 +147,15 @@ dcl-s isInzSr like(bool_t) inz(bFalse);
 //                 S T E U E R  -  R O U T I N E                    *
 //*******************************************************************
 dcl-pi peek18;
-  i_fldl0100  likeds(fldl0100_t) const;
-  i_rcdfmt    like(fmt_t) const;
-  i_buffer    like(rcdbuf_t);
-  i_tgtformat like(format_t) const;
-  i_tgtvalue  like(format_t) const;
-  o_buffer    like(rcdbuf_t);
-  o_bufflen   like(int4_t);
-  o_msgid     like(msgid_t);
-  o_msgdta    like(msgdta_t);
+  i_FLDL0100  likeds(fldl0100_t) const;
+  i_rcdFmt    like(fmt_t) const;
+  i_buffer    like(rcdBuf_t);
+  i_tgtFormat like(format_t) const;
+  i_tgtValue  like(format_t) const;
+  o_buffer    like(rcdBuf_t);
+  o_buffLen   like(int4_t);
+  o_msgID     like(msgId_t);
+  o_msgDta    like(msgDta_t);
 end-pi;
 
 dcl-ds f_key likerec(fpeekfld: *key);
@@ -168,25 +168,25 @@ ceehdlr(%paddr('errorHandler')
 
 exsr inzsr;
 
-exsr first;
+exsr First;
 
-fldl0100 = i_fldl0100;
+fldl0100 = i_FLDL0100;
 
 o_buffer = *blanks;
-o_bufflen = *zeros;
+o_buffLen = *zeros;
 
 select;
-when (i_tgtformat = '*EXTERN');
+when (i_tgtFormat = '*EXTERN');
   //  *ACCESSKEY bei jedem Aufruf lesen, damit eine Änderung sofort
   //  wirkt (PEEK05 und PEEK20 lesen die Einstellung ebenfalls neu)
-  exsr getUsrSetg;
-  exsr toextern;
-when (i_tgtformat = '*INTERN');
-  exsr getUsrSetg;
+  exsr GetUsrSetg;
+  exsr ToExtern;
+when (i_tgtFormat = '*INTERN');
+  exsr GetUsrSetg;
   exsr toIntern;
-when (i_tgtformat = '*ZONED');
+when (i_tgtFormat = '*ZONED');
   exsr toZoned;
-when (i_tgtformat = '*FLOAT');
+when (i_tgtFormat = '*FLOAT');
   exsr toFloat;
 other;
 endsl;
@@ -197,20 +197,20 @@ return;
 //    ToExtern      Zielformat:  externe Darstellung          *
 //============================================================*
 
-begsr toextern;
+begsr ToExtern;
 
   select;
-  when (fldl0100.f1dtyp = 'A');
+  when (fldl0100.F1DTyp = 'A');
     exsr A_to_extern;
-  when (fldl0100.f1dtyp = 'G');
+  when (fldl0100.F1DTyp = 'G');
     exsr G_to_extern;
-  when (fldl0100.f1dtyp = 'S');
+  when (fldl0100.F1DTyp = 'S');
     exsr S_to_extern;
-  when (fldl0100.f1dtyp = 'B');
+  when (fldl0100.F1DTyp = 'B');
     exsr B_to_extern;
-  when (fldl0100.f1dtyp = 'P');
+  when (fldl0100.F1DTyp = 'P');
     exsr P_to_extern;
-  when (fldl0100.f1dtyp = 'F');
+  when (fldl0100.F1DTyp = 'F');
     exsr F_to_extern;
 
   other;
@@ -228,43 +228,43 @@ begsr toIntern;
   //  Art des Schlüssel ermitteln ...
   exsr getKeyType;
   //  Ascending key ...
-  if (f_desc = 'A');
+  if (F_Desc = 'A');
     //  ... Keine Umsetzung erforderlich
-    r_tgtvalue = i_tgtvalue;
+    R_TgtValue = i_tgtValue;
   else;
     //  Descending key ...
-    if (i_tgtvalue = '*HIVAL'
-        or i_tgtvalue = '*LOVAL');
+    if (i_tgtValue = '*HIVAL'
+        or i_tgtValue = '*LOVAL');
       //  ... *HIVAL ==> *LOVAL und umgekehrt
-      if (i_tgtvalue = '*HIVAL');
-        r_tgtvalue = '*LOVAL';
+      if (i_tgtValue = '*HIVAL');
+        R_TgtValue = '*LOVAL';
       else;
-        r_tgtvalue = '*HIVAL';
+        R_TgtValue = '*HIVAL';
       endif;
     else;
       //  ... Keine Umsetzung erforderlich
-      r_tgtvalue = i_tgtvalue;
+      R_TgtValue = i_tgtValue;
     endif;
   endif;
 
   select;
-  when (fldl0100.f1dtyp = 'A');
+  when (fldl0100.F1DTyp = 'A');
     exsr A_to_intern;
-  when (fldl0100.f1dtyp = 'G');
+  when (fldl0100.F1DTyp = 'G');
     exsr G_to_intern;
-  when (fldl0100.f1dtyp = 'S');
+  when (fldl0100.F1DTyp = 'S');
     exsr S_to_intern;
-  when (fldl0100.f1dtyp = 'B');
+  when (fldl0100.F1DTyp = 'B');
     exsr B_to_intern;
-  when (fldl0100.f1dtyp = 'P');
+  when (fldl0100.F1DTyp = 'P');
     exsr P_to_intern;
-  when (fldl0100.f1dtyp = 'L');
+  when (fldl0100.F1DTyp = 'L');
     exsr L_to_intern;
-  when (fldl0100.f1dtyp = 'T');
+  when (fldl0100.F1DTyp = 'T');
     exsr T_to_intern;
-  when (fldl0100.f1dtyp = 'Z');
+  when (fldl0100.F1DTyp = 'Z');
     exsr Z_to_intern;
-  when (fldl0100.f1dtyp = 'F');
+  when (fldl0100.F1DTyp = 'F');
     exsr F_to_intern;
 
   other;
@@ -279,16 +279,16 @@ endsr;
 
 begsr toZoned;
 
-  fldl0100.f1digt = %len(zoned_a);
+  fldl0100.f1digt = %len(zoned_A);
 
   select;
-  when (fldl0100.f1dtyp = 'A');
+  when (fldl0100.F1DTyp = 'A');
     exsr A_to_zoned;
-  when (fldl0100.f1dtyp = 'S');
+  when (fldl0100.F1DTyp = 'S');
     exsr S_to_zoned;
-  when (fldl0100.f1dtyp = 'B');
+  when (fldl0100.F1DTyp = 'B');
     exsr B_to_zoned;
-  when (fldl0100.f1dtyp = 'P');
+  when (fldl0100.F1DTyp = 'P');
     exsr P_to_zoned;
 
   other;
@@ -304,7 +304,7 @@ endsr;
 begsr toFloat;
 
   select;
-  when (fldl0100.f1dtyp = 'F');
+  when (fldl0100.F1DTyp = 'F');
     exsr F_to_float;
 
   other;
@@ -318,23 +318,23 @@ endsr;
 
 begsr A_to_extern;
 
-  if (f_isvarlen(fldl0100) = bTrue);
-    strpos = 3;
+  if (f_isVarLen(fldl0100) = bTrue);
+    strPos = 3;
   else;
-    strpos = 1;
+    strPos = 1;
   endif;
 
   o_buffer =
    %subst(i_buffer
-          : strpos: f_buffln(fldl0100));
+          : strPos: f_buffLn(fldl0100));
 
-  o_bufflen = f_buffln(fldl0100);
+  o_buffLen = f_buffLn(fldl0100);
 
   //  Die Länge bleibt die Feldlänge, weil PEEK20 den externen Teil so
   //  breit liest. Wird der Wert kürzer (UTF-8: 'Ä' 2 Bytes -> 1 Zeichen),
   //  füllt cvtToJobCcsid mit Leerzeichen auf.
-  if (f_hasccsid(fldl0100) = bTrue);
-    cvtToJobCcsid(o_buffer: o_bufflen: fldl0100.f1fdcc);
+  if (f_hasCcsid(fldl0100) = bTrue);
+    cvtToJobCcsid(o_buffer: o_buffLen: fldl0100.f1fdcc);
   endif;
 
   exsr addDelimiter;
@@ -347,30 +347,30 @@ endsr;
 
 begsr G_to_extern;
 
-  if (f_isvarlen(fldl0100) = bTrue);
-    strpos = 3;
+  if (f_isVarLen(fldl0100) = bTrue);
+    strPos = 3;
   else;
-    strpos = 1;
+    strPos = 1;
   endif;
 
   o_buffer =
    %subst(i_buffer
-          : strpos: f_buffln(fldl0100));
+          : strPos: f_buffLn(fldl0100));
 
-  o_bufflen = f_buffln(fldl0100);
+  o_buffLen = f_buffLn(fldl0100);
 
-  if (f_hasccsid(fldl0100) = bTrue);
-    o_bufflen =
+  if (f_hasCcsid(fldl0100) = bTrue);
+    o_buffLen =
     cvtToJobCcsid(
-     o_buffer: o_bufflen: fldl0100.f1fdcc);
+     o_buffer: o_buffLen: fldl0100.f1fdcc);
   endif;
 
   //  So breit, wie PEEK20 den externen Teil liest (Anzahl Zeichen),
   //  auch wenn die CCSID nicht umsetzbar ist (z.B. GRAPHIC 835)
   if (fldl0100.f1ndbc > 0);
-    o_bufflen = fldl0100.f1ndbc;
-    if (f_isvarlen(fldl0100) = bTrue);
-      o_bufflen = o_bufflen - 2;
+    o_buffLen = fldl0100.f1ndbc;
+    if (f_isVarLen(fldl0100) = bTrue);
+      o_buffLen = o_buffLen - 2;
     endif;
   endif;
 
@@ -426,25 +426,25 @@ endsr;
 
 begsr F_to_extern;
 
-  pfloat = %addr(i_buffer);
+  pFloat = %addr(i_buffer);
 
-  if (f_buffln(fldl0100) = 4);
-    float = float4;
+  if (f_buffLn(fldl0100) = 4);
+    float = Float4;
     exsr chgSignFloat;
-    float4 = float;
-    o_buffer = %editflt(float4);
-    o_bufflen = 14;
+    Float4 = float;
+    o_buffer = %editflt(Float4);
+    o_buffLen = 14;
   else;
-    float = float8;
+    float = Float8;
     exsr chgSignFloat;
-    float8 = float;
-    o_buffer = %editflt(float8);
-    o_bufflen = 23;
+    Float8 = float;
+    o_buffer = %editflt(Float8);
+    o_buffLen = 23;
   endif;
 
   //  Entfernen führendes Vorzeichen
   o_buffer = %subst(o_buffer: 2);
-  o_bufflen = o_bufflen - 1;
+  o_buffLen = o_buffLen - 1;
 
   exsr addSign;
   exsr addDelimiter;
@@ -501,11 +501,11 @@ endsr;
 
 begsr zonedToOutBuf;
 
-  x = %len(zoned_a) - fldl0100.f1digt + 1;
+  x = %len(zoned_A) - fldl0100.f1digt + 1;
 
-  o_bufflen = fldl0100.f1digt;
-  %subst(o_buffer: 1: o_bufflen) =
-    %subst(zoned_a: x);
+  o_buffLen = fldl0100.f1digt;
+  %subst(o_buffer: 1: o_buffLen) =
+    %subst(zoned_A: x);
 
 endsr;
 
@@ -526,16 +526,16 @@ endsr;
 
 begsr extractFloat;
 
-  pfloat = %addr(i_buffer);
+  pFloat = %addr(i_buffer);
 
-  if (f_buffln(fldl0100) = 4);
-    float = float4;
+  if (f_buffLn(fldl0100) = 4);
+    float = Float4;
   else;
-    float = float8;
+    float = Float8;
   endif;
 
   o_buffer = %editflt(float);
-  o_bufflen = 23;
+  o_buffLen = 23;
 
 endsr;
 
@@ -545,7 +545,7 @@ endsr;
 
 begsr chgSign;
 
-  if (set0003.set_signx = bFalse);
+  if (set0003.SET_SignX = bFalse);
     // ohne Vorzeichen ausgeben
     isMinus = bFalse;
   else;
@@ -568,7 +568,7 @@ endsr;
 
 begsr chgSignFloat;
 
-  if (set0003.set_signx = bFalse);
+  if (set0003.SET_SignX = bFalse);
     // ohne Vorzeichen ausgeben
     isMinus = bFalse;
   else;
@@ -591,7 +591,7 @@ endsr;
 
 begsr addSign;
 
-  if (set0003.set_signx = bFalse);
+  if (set0003.SET_SignX = bFalse);
   // ohne Vorzeichen ausgeben
   else;
     if (isMinus = bTrue);
@@ -600,14 +600,14 @@ begsr addSign;
       else;
         o_buffer = %trimr(o_buffer) + SET_SIGN_MINUS;
       endif;
-      o_bufflen = o_bufflen + 1;
+      o_buffLen = o_buffLen + 1;
     else;
       if (SET_SIGN_PLUS = '');
         o_buffer = %trimr(o_buffer) + ' ';
       else;
         o_buffer = %trimr(o_buffer) + SET_SIGN_PLUS;
       endif;
-      o_bufflen = o_bufflen + 1;
+      o_buffLen = o_buffLen + 1;
     endif;
   endif;
 
@@ -619,13 +619,13 @@ endsr;
 
 begsr addDelimiter;
 
-  if (set0003.set_dlmtr = '');
+  if (set0003.SET_Dlmtr = '');
   // ohne Delimeter ausgeben
   else;
-    if (o_bufflen < RCD_BUFF_LEN);
-      o_bufflen = o_bufflen + 1;
+    if (o_buffLen < RCD_BUFF_LEN);
+      o_buffLen = o_buffLen + 1;
       %subst(
-       o_buffer: o_bufflen: 1) = set0003.set_dlmtr;
+       o_buffer: o_buffLen: 1) = set0003.SET_Dlmtr;
     else;
     // Pufferbereich zu klein ...
     endif;
@@ -639,34 +639,34 @@ endsr;
 
 begsr A_to_intern;
 
-  if (f_isvarlen(fldl0100) = bTrue);
-    strpos = 3;
+  if (f_isVarLen(fldl0100) = bTrue);
+    strPos = 3;
   else;
-    strpos = 1;
+    strPos = 1;
   endif;
 
-  o_bufflen = f_buffln(fldl0100);
+  o_buffLen = f_buffLn(fldl0100);
 
   select;
   //  kleinester Wert ...
-  when (r_tgtvalue = '*LOVAL');
-    %subst(o_buffer: strpos: o_bufflen)
+  when (R_TgtValue = '*LOVAL');
+    %subst(o_buffer: strPos: o_buffLen)
       = *allx'00';
   //  größter Wert ...
-  when (r_tgtvalue = '*HIVAL');
-    %subst(o_buffer: strpos: o_bufflen)
+  when (R_TgtValue = '*HIVAL');
+    %subst(o_buffer: strPos: o_buffLen)
       = *allx'FF';
   //  aktueller Wert ...
-  when (r_tgtvalue = '*CURRENT');
-    if (f_hasccsid(fldl0100) = bTrue);
+  when (R_TgtValue = '*CURRENT');
+    if (f_hasCcsid(fldl0100) = bTrue);
       if (fldl0100.f1ndbc > 0);
-        o_bufflen = fldl0100.f1ndbc;
+        o_buffLen = fldl0100.f1ndbc;
       endif;
-      o_bufflen =
-       cvtToFileCcsid(i_buffer: o_bufflen: fldl0100.f1fdcc);
+      o_buffLen =
+       cvtToFileCcsid(i_buffer: o_buffLen: fldl0100.f1fdcc);
     endif;
-    %subst(o_buffer: strpos: o_bufflen)
-      = %subst(i_buffer: 1: o_bufflen);
+    %subst(o_buffer: strPos: o_buffLen)
+      = %subst(i_buffer: 1: o_buffLen);
   other;
   endsl;
 
@@ -674,11 +674,11 @@ begsr A_to_intern;
   //  folgenden Schlüsselfelder: UTF-8 wird länger ('Ä' braucht 2 Bytes)
   //  und wird abgeschnitten, ein kürzerer Wert behält die Leerzeichen
   //  aus o_buffer.
-  o_bufflen = f_buffln(fldl0100);
+  o_buffLen = f_buffLn(fldl0100);
 
   //  einfügen Längenangabe bei Feldern variabler Länge                                   R
-  if (f_isvarlen(fldl0100) = bTrue);
-    p_dectobin(o_buffer: 1: 2: o_bufflen);
+  if (f_isVarLen(fldl0100) = bTrue);
+    p_decToBin(o_buffer: 1: 2: o_buffLen);
   endif;
 
 endsr;
@@ -689,45 +689,45 @@ endsr;
 
 begsr G_to_intern;
 
-  if (f_isvarlen(fldl0100) = bTrue);
-    strpos = 3;
+  if (f_isVarLen(fldl0100) = bTrue);
+    strPos = 3;
   else;
-    strpos = 1;
+    strPos = 1;
   endif;
 
-  o_bufflen = f_buffln(fldl0100);
+  o_buffLen = f_buffLn(fldl0100);
 
   select;
   //  kleinester Wert ...
-  when (r_tgtvalue = '*LOVAL');
-    %subst(o_buffer: strpos: o_bufflen)
+  when (R_TgtValue = '*LOVAL');
+    %subst(o_buffer: strPos: o_buffLen)
       = *allx'00';
   //  größter Wert ...
-  when (r_tgtvalue = '*HIVAL');
-    %subst(o_buffer: strpos: o_bufflen)
+  when (R_TgtValue = '*HIVAL');
+    %subst(o_buffer: strPos: o_buffLen)
       = *allx'FF';
   //  aktueller Wert ...
-  when (r_tgtvalue = '*CURRENT');
-    if (f_hasccsid(fldl0100) = bTrue);
+  when (R_TgtValue = '*CURRENT');
+    if (f_hasCcsid(fldl0100) = bTrue);
       if (fldl0100.f1ndbc > 0);
-        o_bufflen = fldl0100.f1ndbc;
+        o_buffLen = fldl0100.f1ndbc;
       endif;
-      o_bufflen =
+      o_buffLen =
        cvtToFileCcsid(
-         i_buffer: o_bufflen: fldl0100.f1fdcc);
+         i_buffer: o_buffLen: fldl0100.f1fdcc);
     endif;
-    %subst(o_buffer: strpos: o_bufflen)
-      = %subst(i_buffer: 1: o_bufflen);
+    %subst(o_buffer: strPos: o_buffLen)
+      = %subst(i_buffer: 1: o_buffLen);
   other;
   endsl;
 
   //  Immer genau so lang wie das Feld (siehe A_to_intern), z.B. wenn
   //  die CCSID nicht umsetzbar ist (GRAPHIC 835)
-  o_bufflen = f_buffln(fldl0100);
+  o_buffLen = f_buffLn(fldl0100);
 
   //  einfügen Längenangabe bei Feldern variabler Länge
-  if (f_isvarlen(fldl0100) = bTrue);
-    p_dectobin(o_buffer: 1: 2: o_bufflen);
+  if (f_isVarLen(fldl0100) = bTrue);
+    p_decToBin(o_buffer: 1: 2: o_buffLen);
   endif;
 
 endsr;
@@ -745,9 +745,9 @@ begsr S_to_intern;
   zoned = zoned;
 
   //  extrahieren gezonten Wert ...
-  o_bufflen = f_buffln(fldl0100);
-  x = %len(zoned_a) - o_bufflen + 1;
-  o_buffer = %subst(zoned_a: x: o_bufflen);
+  o_buffLen = f_buffLn(fldl0100);
+  x = %len(zoned_A) - o_buffLen + 1;
+  o_buffer = %subst(zoned_A: x: o_buffLen);
 
 endsr;
 
@@ -758,17 +758,17 @@ endsr;
 begsr B_to_intern;
 
   select;
-  when (f_buffln(fldl0100) = 1);
+  when (f_buffLn(fldl0100) = 1);
     exsr B_to_intern_1;
-  when (f_buffln(fldl0100) = 2);
+  when (f_buffLn(fldl0100) = 2);
     exsr B_to_intern_2;
-  when (f_buffln(fldl0100) = 4);
+  when (f_buffLn(fldl0100) = 4);
     exsr B_to_intern_4;
-  when (f_buffln(fldl0100) = 8);
+  when (f_buffLn(fldl0100) = 8);
     exsr B_to_intern_8;
   other;
     p_kill('Illegal buffer length: ' +
-          %char(f_buffln(fldl0100)));
+          %char(f_buffLn(fldl0100)));
   endsl;
 
 endsr;
@@ -780,11 +780,11 @@ endsr;
 begsr B_to_intern_1;
 
   select;
-  when (r_tgtvalue = '*LOVAL');
+  when (R_TgtValue = '*LOVAL');
     binary1 = *loval;
-  when (r_tgtvalue = '*HIVAL');
+  when (R_TgtValue = '*HIVAL');
     binary1 = *hival;
-  when (r_tgtvalue = '*CURRENT');
+  when (R_TgtValue = '*CURRENT');
     //  ... umsetzen in gezonten Wert
     exsr cvtToZoned;
     binary1 = zoned;
@@ -792,8 +792,8 @@ begsr B_to_intern_1;
   endsl;
 
   //  extrahieren Binärwert ...
-  o_bufflen = f_buffln(fldl0100);
-  o_buffer = %subst(binary1_a: 1: o_bufflen);
+  o_buffLen = f_buffLn(fldl0100);
+  o_buffer = %subst(binary1_A: 1: o_buffLen);
 
 endsr;
 
@@ -804,11 +804,11 @@ endsr;
 begsr B_to_intern_2;
 
   select;
-  when (r_tgtvalue = '*LOVAL');
+  when (R_TgtValue = '*LOVAL');
     binary2 = *loval;
-  when (r_tgtvalue = '*HIVAL');
+  when (R_TgtValue = '*HIVAL');
     binary2 = *hival;
-  when (r_tgtvalue = '*CURRENT');
+  when (R_TgtValue = '*CURRENT');
     //  ... umsetzen in gezonten Wert
     exsr cvtToZoned;
     binary2 = zoned;
@@ -816,8 +816,8 @@ begsr B_to_intern_2;
   endsl;
 
   //  extrahieren Binärwert ...
-  o_bufflen = f_buffln(fldl0100);
-  o_buffer = %subst(binary2_a: 1: o_bufflen);
+  o_buffLen = f_buffLn(fldl0100);
+  o_buffer = %subst(binary2_A: 1: o_buffLen);
 
 endsr;
 
@@ -828,11 +828,11 @@ endsr;
 begsr B_to_intern_4;
 
   select;
-  when (r_tgtvalue = '*LOVAL');
+  when (R_TgtValue = '*LOVAL');
     binary4 = *loval;
-  when (r_tgtvalue = '*HIVAL');
+  when (R_TgtValue = '*HIVAL');
     binary4 = *hival;
-  when (r_tgtvalue = '*CURRENT');
+  when (R_TgtValue = '*CURRENT');
     //  ... umsetzen in gezonten Wert
     exsr cvtToZoned;
     binary4 = zoned;
@@ -840,8 +840,8 @@ begsr B_to_intern_4;
   endsl;
 
   //  extrahieren Binärwert ...
-  o_bufflen = f_buffln(fldl0100);
-  o_buffer = %subst(binary4_a: 1: o_bufflen);
+  o_buffLen = f_buffLn(fldl0100);
+  o_buffer = %subst(binary4_A: 1: o_buffLen);
 
 endsr;
 
@@ -852,11 +852,11 @@ endsr;
 begsr B_to_intern_8;
 
   select;
-  when (r_tgtvalue = '*LOVAL');
+  when (R_TgtValue = '*LOVAL');
     binary8 = *loval;
-  when (r_tgtvalue = '*HIVAL');
+  when (R_TgtValue = '*HIVAL');
     binary8 = *hival;
-  when (r_tgtvalue = '*CURRENT');
+  when (R_TgtValue = '*CURRENT');
     //  ... umsetzen in gezonten Wert
     exsr cvtToZoned;
     binary8 = zoned;
@@ -864,8 +864,8 @@ begsr B_to_intern_8;
   endsl;
 
   //  extrahieren Binärwert ...
-  o_bufflen = f_buffln(fldl0100);
-  o_buffer = %subst(binary8_a: 1: o_bufflen);
+  o_buffLen = f_buffLn(fldl0100);
+  o_buffer = %subst(binary8_A: 1: o_buffLen);
 
 endsr;
 
@@ -882,10 +882,10 @@ begsr P_to_intern;
   packed = zoned;
 
   //  extrahieren Binärwert ...
-  x = %len(packed_a) - f_buffln(fldl0100) + 1;
+  x = %len(packed_a) - f_buffLn(fldl0100) + 1;
 
-  o_bufflen = f_buffln(fldl0100);
-  o_buffer = %subst(packed_a: x: o_bufflen);
+  o_buffLen = f_buffLn(fldl0100);
+  o_buffer = %subst(packed_a: x: o_buffLen);
 
 endsr;
 
@@ -897,8 +897,8 @@ begsr F_to_intern;
 
   exsr cvtToFloat;
 
-  o_bufflen = f_buffln(fldl0100);
-  o_buffer = dsfloat;
+  o_buffLen = f_buffLn(fldl0100);
+  o_buffer = dsFloat;
 
 endsr;
 
@@ -910,24 +910,24 @@ begsr L_to_intern;
 
   select;
   //  kleinester Wert ...
-  when (r_tgtvalue = '*LOVAL');
-    r_dateiso = *loval;
+  when (R_TgtValue = '*LOVAL');
+    R_DateISO = *loval;
     exsr dateToBuffer;
   //  größter Wert ...
-  when (r_tgtvalue = '*HIVAL');
-    r_dateiso = *hival;
+  when (R_TgtValue = '*HIVAL');
+    R_DateISO = *hival;
     exsr dateToBuffer;
   //  aktueller Wert ...
-  when (r_tgtvalue = '*CURRENT');
+  when (R_TgtValue = '*CURRENT');
     o_buffer = i_buffer;
   other;
   endsl;
 
-  o_bufflen = f_buffln(fldl0100);
-  o_buffer = %subst(o_buffer:1:o_bufflen);
+  o_buffLen = f_buffLn(fldl0100);
+  o_buffer = %subst(o_buffer:1:o_buffLen);
 
   //  Wert überprüfen über PEEK36 ...
-  exsr chkValue;
+  exsr ChkValue;
 
 endsr;
 
@@ -940,7 +940,7 @@ begsr dateToBuffer;
 
   //  Übertragen Datum gemäß Format und Trennzeichen des Feldes
   //  (alle Formate, bisher nur *EUR und *ISO; QCOPYLE,DATTIMFMT)
-  o_buffer = f_extDate(fldl0100: r_dateiso);
+  o_buffer = f_extDate(fldl0100: R_DateISO);
 
 endsr;
 
@@ -952,24 +952,24 @@ begsr T_to_intern;
 
   select;
   //  kleinester Wert ...
-  when (r_tgtvalue = '*LOVAL');
-    r_timeiso = *loval;
+  when (R_TgtValue = '*LOVAL');
+    R_TimeISO = *loval;
     exsr timeToBuffer;
   //  größter Wert ...
-  when (r_tgtvalue = '*HIVAL');
-    r_timeiso = *hival;
+  when (R_TgtValue = '*HIVAL');
+    R_TimeISO = *hival;
     exsr timeToBuffer;
   //  aktueller Wert ...
-  when (r_tgtvalue = '*CURRENT');
+  when (R_TgtValue = '*CURRENT');
     o_buffer = i_buffer;
   other;
   endsl;
 
-  o_bufflen = f_buffln(fldl0100);
-  o_buffer = %subst(o_buffer:1:o_bufflen);
+  o_buffLen = f_buffLn(fldl0100);
+  o_buffer = %subst(o_buffer:1:o_buffLen);
 
   //  Wert überprüfen über PEEK36 ...
-  exsr chkValue;
+  exsr ChkValue;
 
 endsr;
 
@@ -982,7 +982,7 @@ begsr timeToBuffer;
 
   //  Übertragen Zeit gemäß Format und Trennzeichen des Feldes
   //  (alle Formate, bisher ohne *USA und *JIS; QCOPYLE,DATTIMFMT)
-  o_buffer = f_extTime(fldl0100: r_timeiso);
+  o_buffer = f_extTime(fldl0100: R_TimeISO);
 
 endsr;
 
@@ -994,24 +994,24 @@ begsr Z_to_intern;
 
   select;
   //  kleinester Wert ...
-  when (r_tgtvalue = '*LOVAL');
-    r_timestmp = *loval;
-    o_buffer = %char(r_timestmp: *iso);
+  when (R_TgtValue = '*LOVAL');
+    R_TimeStmp = *loval;
+    o_buffer = %char(R_TimeStmp: *iso);
   //  größter Wert ...
-  when (r_tgtvalue = '*HIVAL');
-    r_timestmp = *hival;
-    o_buffer = %char(r_timestmp: *iso);
+  when (R_TgtValue = '*HIVAL');
+    R_TimeStmp = *hival;
+    o_buffer = %char(R_TimeStmp: *iso);
   //  aktueller Wert ...
-  when (r_tgtvalue = '*CURRENT');
+  when (R_TgtValue = '*CURRENT');
     o_buffer = i_buffer;
   other;
   endsl;
 
-  o_bufflen = f_buffln(fldl0100);
-  o_buffer = %subst(o_buffer:1:o_bufflen);
+  o_buffLen = f_buffLn(fldl0100);
+  o_buffer = %subst(o_buffer:1:o_buffLen);
 
   //  Wert überprüfen über PEEK36 ...
-  exsr chkValue;
+  exsr ChkValue;
 
 endsr;
 
@@ -1020,20 +1020,20 @@ endsr;
 //                  oder Zeitstempelfeld                      *
 //============================================================*
 
-begsr chkValue;
+begsr ChkValue;
 
   peek36(o_buffer
-         : fldl0100.f1dtyp
+         : fldl0100.F1DTyp
          : fldl0100.f1dtfm
          : fldl0100.f1dtsp
-         : ymsgid: ymsgdta);
-  if (ymsgid = '');
+         : YMsgID: YMsgDta);
+  if (YMsgID = '');
   //   Alles in Ordnung ...
   else;
     //  USR8242: Ungültiger Datums-, Zeit- oder Zeitstempelwert im
     //  Feld &1
-    o_msgid = ymsgid;
-    o_msgdta = fldl0100.f1fnme;
+    o_msgID = YMsgID;
+    o_msgDta = fldl0100.f1fnme;
     leavesr;
   endif;
 
@@ -1049,16 +1049,16 @@ begsr cvtToZoned;
 
   select;
   //  kleinester Wert ...
-  when (r_tgtvalue = '*LOVAL');
+  when (R_TgtValue = '*LOVAL');
     zoned = *loval;
   //  größter Wert ...
-  when (r_tgtvalue = '*HIVAL');
+  when (R_TgtValue = '*HIVAL');
     zoned = *hival;
   //  aktueller Wert ...
-  when (r_tgtvalue = '*CURRENT');
+  when (R_TgtValue = '*CURRENT');
 
     //  ... Vorzeichen
-    if (set0003.set_signx = bFalse);
+    if (set0003.SET_SignX = bFalse);
     // ohne Vorzeichen
     else;
       // mit Vorzeichen
@@ -1078,16 +1078,16 @@ begsr cvtToZoned;
     endif;
 
     //  ... Wert
-    x = %len(zoned_a) - fldl0100.f1digt + 1;
-    %subst(zoned_a: x) =
+    x = %len(zoned_A) - fldl0100.f1digt + 1;
+    %subst(zoned_A: x) =
       %subst(i_buffer: 1: fldl0100.f1digt);
-    zoned_a = %xlate(' ':'0' : zoned_a);
+    zoned_A = %xlate(' ':'0' : zoned_A);
 
     //  ... gültige numerische Daten prüfen
-    if (%check(NUMERIC_DIGITS: zoned_a) > 0);
-      o_msgid = 'USR8138';
+    if (%check(NUMERIC_DIGITS: zoned_A) > 0);
+      o_msgID = 'USR8138';
       usr8138.var1 = fldl0100.f1fnme;
-      o_msgdta = usr8138;
+      o_msgDta = usr8138;
       leavesr;
     else;
     // Alles klar
@@ -1115,29 +1115,29 @@ begsr cvtToFloat;
 
   select;
   //  kleinester Wert ...
-  when (r_tgtvalue = '*LOVAL');
-    if (f_buffln(fldl0100) = 4);
-      dsfloat.float4 = *loval;
+  when (R_TgtValue = '*LOVAL');
+    if (f_buffLn(fldl0100) = 4);
+      dsFloat.Float4 = *loval;
     else;
-      dsfloat.float8 = *loval;
+      dsFloat.Float8 = *loval;
     endif;
   //  größter Wert ...
-  when (r_tgtvalue = '*HIVAL');
-    if (f_buffln(fldl0100) = 4);
-      dsfloat.float4 = *hival;
+  when (R_TgtValue = '*HIVAL');
+    if (f_buffLn(fldl0100) = 4);
+      dsFloat.Float4 = *hival;
     else;
-      dsfloat.float8 = *hival;
+      dsFloat.Float8 = *hival;
     endif;
   //  aktueller Wert ...
-  when (r_tgtvalue = '*CURRENT');
-    if (f_buffln(fldl0100) = 4);
+  when (R_TgtValue = '*CURRENT');
+    if (f_buffLn(fldl0100) = 4);
       x = 14;
     else;
       x = 23;
     endif;
 
     //  ... Vorzeichen
-    if (set0003.set_signx = bFalse);
+    if (set0003.SET_SignX = bFalse);
     // ohne Vorzeichen
     else;
       // mit Vorzeichen
@@ -1156,10 +1156,10 @@ begsr cvtToFloat;
     endif;
 
     //  ... gültige numerische Daten prüfen
-    if (f_vldfloat(%subst(i_buffer: 1: x-1)) = bFalse);
-      o_msgid = 'USR8138';
+    if (f_vldFloat(%subst(i_buffer: 1: x-1)) = bFalse);
+      o_msgID = 'USR8138';
       usr8138.var1 = fldl0100.f1fnme;
-      o_msgdta = usr8138;
+      o_msgDta = usr8138;
       leavesr;
     else;
     // Alles klar
@@ -1175,10 +1175,10 @@ begsr cvtToFloat;
     // positiver Wert
     endif;
 
-    if (f_buffln(fldl0100) = 4);
-      dsfloat.float4 = float;
+    if (f_buffLn(fldl0100) = 4);
+      dsFloat.Float4 = float;
     else;
-      dsfloat.float8 = float;
+      dsFloat.Float8 = float;
     endif;
 
   other;
@@ -1194,10 +1194,10 @@ begsr getZoned;
 
   zoned = 0;
 
-  x = %len(zoned_a) - f_buffln(fldl0100) + 1;
+  x = %len(zoned_A) - f_buffLn(fldl0100) + 1;
 
-  %subst(zoned_a: x) =
-    %subst(i_buffer: 1: f_buffln(fldl0100));
+  %subst(zoned_A: x) =
+    %subst(i_buffer: 1: f_buffLn(fldl0100));
 
   zoned = zoned;
 
@@ -1210,17 +1210,17 @@ endsr;
 begsr getBinary;
 
   select;
-  when (f_buffln(fldl0100) = 1);
+  when (f_buffLn(fldl0100) = 1);
     exsr getBinary_1;
-  when (f_buffln(fldl0100) = 2);
+  when (f_buffLn(fldl0100) = 2);
     exsr getBinary_2;
-  when (f_buffln(fldl0100) = 4);
+  when (f_buffLn(fldl0100) = 4);
     exsr getBinary_4;
-  when (f_buffln(fldl0100) = 8);
+  when (f_buffLn(fldl0100) = 8);
     exsr getBinary_8;
   other;
     p_kill('Illegal buffer length: ' +
-          %char(f_buffln(fldl0100)));
+          %char(f_buffLn(fldl0100)));
   endsl;
 
 endsr;
@@ -1233,8 +1233,8 @@ begsr getBinary_1;
 
   binary1 = 0;
 
-  binary1_a =
-    %subst(i_buffer: 1: f_buffln(fldl0100));
+  binary1_A =
+    %subst(i_buffer: 1: f_buffLn(fldl0100));
 
   zoned = binary1;
 
@@ -1248,8 +1248,8 @@ begsr getBinary_2;
 
   binary2 = 0;
 
-  binary2_a =
-    %subst(i_buffer: 1: f_buffln(fldl0100));
+  binary2_A =
+    %subst(i_buffer: 1: f_buffLn(fldl0100));
 
   zoned = binary2;
 
@@ -1263,8 +1263,8 @@ begsr getBinary_4;
 
   binary4 = 0;
 
-  binary4_a =
-    %subst(i_buffer: 1: f_buffln(fldl0100));
+  binary4_A =
+    %subst(i_buffer: 1: f_buffLn(fldl0100));
 
   zoned = binary4;
 
@@ -1278,8 +1278,8 @@ begsr getBinary_8;
 
   binary8 = 0;
 
-  binary8_a =
-    %subst(i_buffer: 1: f_buffln(fldl0100));
+  binary8_A =
+    %subst(i_buffer: 1: f_buffLn(fldl0100));
 
   zoned = binary8;
 
@@ -1293,10 +1293,10 @@ begsr getPacked;
 
   packed = 0;
 
-  x = %len(packed_a) - f_buffln(fldl0100) + 1;
+  x = %len(packed_a) - f_buffLn(fldl0100) + 1;
 
   %subst(packed_a: x) =
-    %subst(i_buffer: 1: f_buffln(fldl0100));
+    %subst(i_buffer: 1: f_buffLn(fldl0100));
 
   zoned = packed;
 
@@ -1306,21 +1306,21 @@ endsr;
 //    GetUsrSetg    Ermitteln der Benutzervoreinstellungen    *
 //============================================================*
 
-begsr getUsrSetg;
+begsr GetUsrSetg;
 
   //  *ACCESSKEY
-  set0003 = f_getusrsg('*ACCESSKEY');
+  set0003 = f_getUsrSg('*ACCESSKEY');
 
-  if (set0003.set_signp = '');
+  if (set0003.SET_SignP = '');
     SET_SIGN_PLUS = '';
   else;
-    SET_SIGN_PLUS = set0003.set_signp;
+    SET_SIGN_PLUS = set0003.SET_SignP;
   endif;
 
-  if (set0003.set_signm = '');
+  if (set0003.SET_SignM = '');
     SET_SIGN_MINUS = '-';
   else;
-    SET_SIGN_MINUS = set0003.set_signm;
+    SET_SIGN_MINUS = set0003.SET_SignM;
   endif;
 
 endsr;
@@ -1333,7 +1333,7 @@ endsr;
 begsr getKeyType;
 
   clear f_key;
-  f_key.f_field = fldl0100.f1fnme;
+  f_key.F_Field = fldl0100.f1fnme;
   chain %kds(f_key) fpeekfld;
   if (not %found());
     clear fpeekfld;
@@ -1345,10 +1345,10 @@ endsr;
 //    First         Initialisierung                           *
 //============================================================*
 
-begsr first;
+begsr First;
 
-  o_msgid = '';
-  o_msgdta = '';
+  o_msgID = '';
+  o_msgDta = '';
 
 endsr;
 
@@ -1364,7 +1364,7 @@ begsr inzsr;
 
   isInzSr = bTrue;
 
-  peek36_name = f_pgmcalln('PEEK36');
+  peek36_name = f_pgmCallN('PEEK36');
 
   open peekfld;
 
@@ -1375,7 +1375,7 @@ endsr;
 //============================================================*
 dcl-proc cvtToJobCcsid;
   dcl-pi *n int(10);
-    io_buffer like(rcdbuf_t);
+    io_buffer like(rcdBuf_t);
     i_length  int(10) value;
     i_ccsid   int(10) value;
   end-pi;
@@ -1386,9 +1386,9 @@ dcl-proc cvtToJobCcsid;
   //  Nicht umsetzbare CCSID (z.B. GRAPHIC 835): Puffer unverändert
   //  lassen statt abzubrechen (PEEK71 sendet CPF9897)
   monitor;
-    htranscoder = transcoder_tojobccsid(i_ccsid);
+    hTranscoder = Transcoder_toJobCcsid(i_ccsid);
     tLength =
-      transcoder_xlatebuffer(htranscoder
+      Transcoder_xlateBuffer(hTranscoder
                              : %addr(io_buffer)
                              : i_length
                              :%size(io_buffer));
@@ -1410,7 +1410,7 @@ end-proc;
 //============================================================*
 dcl-proc cvtToFileCcsid;
   dcl-pi *n int(10);
-    io_buffer like(rcdbuf_t);
+    io_buffer like(rcdBuf_t);
     i_length  int(10) value;
     i_ccsid   int(10) value;
   end-pi;
@@ -1420,10 +1420,10 @@ dcl-proc cvtToFileCcsid;
 
   //  Nicht umsetzbare CCSID: Puffer unverändert lassen
   monitor;
-    htranscoder =
-      transcoder_tofieldccsid(i_ccsid);
+    hTranscoder =
+      Transcoder_toFieldCcsid(i_ccsid);
     tLength =
-      transcoder_xlatebuffer(htranscoder
+      Transcoder_xlateBuffer(hTranscoder
                              : %addr(io_buffer)
                              : i_length
                              :%size(io_buffer));
@@ -1444,12 +1444,12 @@ end-proc;
 //  Program error handler                                     *
 //============================================================*
 
-dcl-proc errorhandler;
+dcl-proc errorHandler;
   dcl-pi *n;
-    i_condtoken    likeds(cee_fc_t) value;
-    i_pcommarea    int(10) value;
+    i_condToken    likeds(cee_fc_t) value;
+    i_pCommArea    int(10) value;
     o_action       int(10);
-    o_newcondtoken likeds(cee_fc_t);
+    o_newCondToken likeds(cee_fc_t);
   end-pi;
 
   dump;

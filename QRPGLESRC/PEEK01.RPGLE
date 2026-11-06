@@ -50,17 +50,17 @@ dcl-f peekfld usage(*update: *delete: *output) usropn prefix(f_);
 /copy QCOPYLE,PPEEK71
 /copy QCOPYLE,PEXIT06
 
-dcl-ds set0001 likeds(set0001_t);
+dcl-ds set0001 likeds(SET0001_t);
 dcl-ds fldl0100 likeds(fldl0100_t);
 
 dcl-s numFields like(int4_t);
 dcl-s rc like(int4_t);
 
-dcl-s peek02_name like(pgmcalln_t);
-dcl-s exit06_name like(pgmcalln_t);
+dcl-s peek02_name like(pgmCallN_t);
+dcl-s exit06_name like(pgmCallN_t);
 dcl-s isExit06 like(bool_t) inz(bFalse);
 
-dcl-s seqNbr like(f_seq);
+dcl-s seqNbr like(F_Seq);
 dcl-s fieldCount like(int4_t);
 
 dcl-s isInzSr like(bool_t) inz(bFalse);
@@ -69,11 +69,11 @@ dcl-s isInzSr like(bool_t) inz(bFalse);
 //                 S T E U E R  -  R O U T I N E                    *
 //*******************************************************************
 dcl-pi peek01;
-  i_qfile    likeds(qobj_t) const;
-  i_rcdfmt   like(fmt_t) const;
-  o_rcdfmtid like(fmtid_t);
-  o_msgid    like(msgid_t);
-  o_msgdta   like(msgdta_t);
+  i_qFile    likeds(qObj_t) const;
+  i_rcdFmt   like(fmt_t) const;
+  o_rcdFmtID like(fmtId_t);
+  o_msgID    like(msgId_t);
+  o_msgDta   like(msgDta_t);
 end-pi;
 
 dcl-s do_x1 packed(7);
@@ -84,10 +84,10 @@ ceehdlr(%paddr('errorHandler'): *null: *omit);
 
 exsr inzsr;
 
-exsr first;
+exsr First;
 
 //  create list of database relation
-peek02(i_qfile: i_rcdfmt: '*CREATE': numFields: fldl0100: o_rcdfmtid);
+peek02(i_qFile: i_rcdFmt: '*CREATE': numFields: fldl0100: o_rcdFmtID);
 
 seqNbr = 0;
 fieldCount = 0;
@@ -95,45 +95,45 @@ fieldCount = 0;
 //  read each entry
 for do_x1 = 1 to numFields;
 
-  peek02(i_qfile: i_rcdfmt: '*READ': rc: fldl0100: o_rcdfmtid);
+  peek02(i_qFile: i_rcdFmt: '*READ': rc: fldl0100: o_rcdFmtID);
 
   clear fpeekfld;
 
   f_format = 'FLDL0100';
-  f_field = fldl0100.f1fnme;
+  F_Field = fldl0100.f1fnme;
   seqNbr = seqNbr + 1;
   f_fldseq = seqNbr;
-  f_seq = seqNbr;
-  f_kseq = 0;
-  f_color = set0001.set_clmcol;
-  f_markcol = bFalse;
-  f_maxsize = *hival;
-  f_edtcde = fldl0100.f1edtc;
+  F_Seq = seqNbr;
+  F_KSeq = 0;
+  F_Color = set0001.SET_ClmCol;
+  F_MarkCol = bFalse;
+  F_MaxSize = *hival;
+  F_EdtCde = fldl0100.f1edtc;
 
-  f_unknown = f_isNotAlw(fldl0100);
-  if (f_unknown = bTrue);
-    f_hidden = bTrue;
-    f_istransc = bFalse;
+  F_UnKnown = f_isNotAlw(fldl0100);
+  if (F_UnKnown = bTrue);
+    F_Hidden = bTrue;
+    F_IsTransc = bFalse;
   else;
-    f_hidden = bFalse;
-    if (f_hasccsid(fldl0100) = bTrue);
+    F_Hidden = bFalse;
+    if (f_hasCcsid(fldl0100) = bTrue);
       //  PEEK71 sendet die Escape-Nachricht CPF9897, wenn die CCSID des
       //  Feldes nicht in die Job-CCSID umgesetzt werden kann, z.B.
       //  GRAPHIC mit CCSID 835. Die Feldliste wird trotzdem erstellt;
       //  PEEK06 zeigt das Feld dann leer an.
       monitor;
-        transcoder_tojobccsid(fldl0100.f1fdcc);
-        transcoder_tofieldccsid(fldl0100.f1fdcc);
-        f_istransc = bTrue;
+        Transcoder_toJobCcsid(fldl0100.f1fdcc);
+        Transcoder_toFieldCcsid(fldl0100.f1fdcc);
+        F_IsTransc = bTrue;
       on-error;
-        f_istransc = bFalse;
+        F_IsTransc = bFalse;
       endmon;
     else;
-      f_istransc = bFalse;
+      F_IsTransc = bFalse;
     endif;
   endif;
 
-  exsr cvtedtcde;
+  exsr CvtEDTCDE;
 
   //  Internal PEEK/400 field name, max.
   //  length 2 + 8 characters.
@@ -142,7 +142,7 @@ for do_x1 = 1 to numFields;
     leave;
   endif;
 
-  if (f_isvarlen(fldl0100) = bTrue);
+  if (f_isVarLen(fldl0100) = bTrue);
     fldl0100.f1vfld = 'V_' + %editc(%dec(fieldCount: 8: 0): 'X');
   else;
     fldl0100.f1vfld = 'P_' + %editc(%dec(fieldCount: 8: 0): 'X');
@@ -152,11 +152,11 @@ for do_x1 = 1 to numFields;
   fldl0100.f1seq = seqNbr;
 
   //  UCS-2 Feld
-  fldl0100.f1ucs2 = (fldl0100.f1dtyp = 'G');
+  fldl0100.f1ucs2 = (fldl0100.F1DTyp = 'G');
 
   //  Spaltenüberschriften und Feldtext über EXIT06 überschreiben
   if (isExit06 = bTrue);
-    callp(e) exit06(i_qfile.name: i_qfile.lib: sds.user: fldl0100.f1fnme
+    callp(e) exit06(i_qFile.name: i_qFile.lib: sds.user: fldl0100.f1fnme
                    : fldl0100.f1col1: fldl0100.f1col2: fldl0100.f1col3
                    : fldl0100.f1ftxt);
     if (%error());
@@ -180,14 +180,14 @@ endfor;
 //        : fldl0100: o_rcdfmtid);
 
 if (numFields = 0);
-  o_msgid = 'USR0001';
-  USR0001.var1 = i_qfile.name;
-  USR0001.var2 = i_qfile.lib;
-  USR0001.var3 = i_rcdfmt;
-  o_msgdta = usr0001;
+  o_msgID = 'USR0001';
+  USR0001.var1 = i_qFile.name;
+  USR0001.var2 = i_qFile.lib;
+  USR0001.var3 = i_rcdFmt;
+  o_msgDta = usr0001;
 else;
-  o_msgid = '';
-  o_msgdta = '';
+  o_msgID = '';
+  o_msgDta = '';
 endif;
 
 *inlr = '1';
@@ -197,73 +197,73 @@ endif;
 //                  EDTCDE mit Vorzeichen                     *
 //============================================================*
 
-begsr cvtedtcde;
+begsr CvtEDTCDE;
 
-  if (f_isnumfld(fldl0100) = bFalse);
+  if (f_isNumFld(fldl0100) = bFalse);
     leavesr;
   endif;
 
-  if (f_isfloatfld(fldl0100) = bTrue);
+  if (f_isFloatFld(fldl0100) = bTrue);
     leavesr;
   endif;
 
   select;
   //  Keine Umsetzung der EDTCDE's
-  when (set0001.set_dspsgn = '0');
+  when (set0001.SET_DspSgn = '0');
 
   //  Mappen Edit Code
-  when (set0001.set_dspsgn = '1');
+  when (set0001.SET_DspSgn = '1');
     select;
-    when (f_edtcde = '1');
-      f_edtcde = 'J';
-    when (f_edtcde = '2');
-      f_edtcde = 'K';
-    when (f_edtcde = '3');
-      f_edtcde = 'L';
-    when (f_edtcde = '4');
-      f_edtcde = 'M';
-    when (f_edtcde = 'Z');
-      f_edtcde = 'L';
-    when (f_edtcde = 'X');
-      f_edtcde = 'L';
+    when (F_EdtCde = '1');
+      F_EdtCde = 'J';
+    when (F_EdtCde = '2');
+      F_EdtCde = 'K';
+    when (F_EdtCde = '3');
+      F_EdtCde = 'L';
+    when (F_EdtCde = '4');
+      F_EdtCde = 'M';
+    when (F_EdtCde = 'Z');
+      F_EdtCde = 'L';
+    when (F_EdtCde = 'X');
+      F_EdtCde = 'L';
     other;
     //  Keine Umsetzung des EDTCDE's
     endsl;
 
   //  Mappen Edit Code - Keine Nullenunterdrückung
-  when (set0001.set_dspsgn = '2');
+  when (set0001.SET_DspSgn = '2');
     select;
-    when (f_edtcde = '1');
-      f_edtcde = 'J';
-    when (f_edtcde = '2');
-      f_edtcde = 'J';
-    when (f_edtcde = '3');
-      f_edtcde = 'L';
-    when (f_edtcde = '4');
-      f_edtcde = 'L';
+    when (F_EdtCde = '1');
+      F_EdtCde = 'J';
+    when (F_EdtCde = '2');
+      F_EdtCde = 'J';
+    when (F_EdtCde = '3');
+      F_EdtCde = 'L';
+    when (F_EdtCde = '4');
+      F_EdtCde = 'L';
 
-    when (f_edtcde = 'B');
-      f_edtcde = 'A';
-    when (f_edtcde = 'D');
-      f_edtcde = 'C';
+    when (F_EdtCde = 'B');
+      F_EdtCde = 'A';
+    when (F_EdtCde = 'D');
+      F_EdtCde = 'C';
 
-    when (f_edtcde = 'K');
-      f_edtcde = 'J';
-    when (f_edtcde = 'M');
-      f_edtcde = 'L';
+    when (F_EdtCde = 'K');
+      F_EdtCde = 'J';
+    when (F_EdtCde = 'M');
+      F_EdtCde = 'L';
 
-    when (f_edtcde = 'O');
-      f_edtcde = 'N';
-    when (f_edtcde = 'Q');
-      f_edtcde = 'P';
+    when (F_EdtCde = 'O');
+      F_EdtCde = 'N';
+    when (F_EdtCde = 'Q');
+      F_EdtCde = 'P';
 
-    when (f_edtcde = 'Z');
-      f_edtcde = 'L';
-    when (f_edtcde = 'X');
-      f_edtcde = 'L';
+    when (F_EdtCde = 'Z');
+      F_EdtCde = 'L';
+    when (F_EdtCde = 'X');
+      F_EdtCde = 'L';
 
-    when (f_edtcde = ' ');
-      f_edtcde = set0001.set_editcode;
+    when (F_EdtCde = ' ');
+      F_EdtCde = set0001.SET_editCode;
     endsl;
 
   endsl;
@@ -274,9 +274,9 @@ endsr;
 //    GetUsrSetg    Ermitteln der Benutzervoreinstellungen    *
 //============================================================*
 
-begsr getusrsetg;
+begsr GetUsrSetg;
 
-  set0001 = f_getusrsg('*DSPATTR' );
+  set0001 = f_getUsrSg('*DSPATTR' );
 
 endsr;
 
@@ -284,19 +284,19 @@ endsr;
 //  First  --  Initialize program                     *
 //====================================================*
 
-begsr first;
+begsr First;
 
   // - Meldung
-  p_sndstsmg('USR8104': i_qfile);
+  p_sndStsMg('USR8104': i_qFile);
 
   // - Benutzervoreinstellungen
-  exsr getusrsetg;
+  exsr GetUsrSetg;
 
   // - Los gehts'
-  o_msgid = *blanks;
-  o_msgdta = *blanks;
+  o_msgID = *blanks;
+  o_msgDta = *blanks;
 
-  o_rcdfmtid = *blanks;
+  o_rcdFmtID = *blanks;
 
   setll 1 fpeekfld;
 
@@ -325,10 +325,10 @@ begsr inzsr;
 
   isInzSr = bTrue;
 
-  peek02_name = f_pgmcalln('PEEK02');
+  peek02_name = f_pgmCallN('PEEK02');
 
-  exit06_name = f_pgmcalln('EXIT06');
-  isExit06 = f_exist('EXIT06': f_getprdlb(): '*PGM');
+  exit06_name = f_pgmCallN('EXIT06');
+  isExit06 = f_exist('EXIT06': f_getPrdLb(): '*PGM');
 
   open peekfld;
 
@@ -338,12 +338,12 @@ endsr;
 //  Program error handler                                     *
 //============================================================*
 
-dcl-proc errorhandler;
+dcl-proc errorHandler;
   dcl-pi *n;
-    i_condtoken    likeds(cee_fc_t) value;
-    i_pcommarea    int(10) value;
+    i_condToken    likeds(cee_fc_t) value;
+    i_pCommArea    int(10) value;
     o_action       int(10);
-    o_newcondtoken likeds(cee_fc_t);
+    o_newCondToken likeds(cee_fc_t);
   end-pi;
 
   dump;

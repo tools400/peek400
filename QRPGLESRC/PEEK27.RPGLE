@@ -44,11 +44,11 @@ dcl-s x like(int4_t) inz;
 dcl-s y like(int4_t) inz;
 dcl-s z like(int4_t) inz;
 
-dcl-s wrk_msgid like(msgid_t) inz;
-dcl-s wrk_msgtxt like(msgdta_t) inz;
-dcl-s wrk_key like(key_t) inz;
-dcl-s wrk_sectn like(section_t) inz;
-dcl-s data like(set0000_t) inz;
+dcl-s wrk_MsgID like(msgId_t) inz;
+dcl-s wrk_MsgTxt like(msgDta_t) inz;
+dcl-s Wrk_Key like(KEY_t) inz;
+dcl-s Wrk_Sectn like(SECTION_t) inz;
+dcl-s data like(SET0000_t) inz;
 
 //  Breite der Auswahlzeile und Ausschlüsse des Aufrufers
 dcl-s width like(int4_t) inz(63);
@@ -60,8 +60,8 @@ dcl-s isExclKeys like(bool_t) inz(bFalse);
 dcl-pi peek27;
   i_pgm        like(pgm_t) const;
   o_choices    like(choice_t) dim(32);
-  o_numchoices like(int4_t);
-  i_exclkeys   like(pgmcmd_t) dim(25) options(*nopass: *omit) const;
+  o_numChoices like(int4_t);
+  i_exclKeys   like(pgmCmd_t) dim(25) options(*nopass: *omit) const;
   i_width      like(int4_t) options(*nopass) const;
 end-pi;
 
@@ -75,11 +75,11 @@ ceehdlr(%paddr('errorHandler')
        : *null: *omit);
 
 o_choices(*) = *blanks;
-o_numchoices = *zeros;
+o_numChoices = *zeros;
 
 isExclKeys = bFalse;
-if (%parms() >= %parmnum(i_exclkeys));
-  if (%addr(i_exclkeys) <> *null);
+if (%parms() >= %parmnum(i_exclKeys));
+  if (%addr(i_exclKeys) <> *null);
     isExclKeys = bTrue;
   endif;
 endif;
@@ -102,27 +102,27 @@ exsr getKeyMap;
 begsr getKeyMap;
 
   x = 1;
-  o_numchoices = 1;
+  o_numChoices = 1;
 
   //  Numerische-Auswahlen ...
-  wrk_sectn = '*' + %trim(i_pgm);
-  wrk_key = *blanks;
-  wrk_key = '0' + wrk_key;
-  p_setllusr(wrk_sectn: wrk_key);
+  Wrk_Sectn = '*' + %trim(i_pgm);
+  Wrk_Key = *blanks;
+  Wrk_Key = '0' + Wrk_Key;
+  p_setllUsr(Wrk_Sectn: Wrk_Key);
 
   for do_x1 = 1 to *hival;
-    if (f_readeusr(wrk_sectn: wrk_key: data)= '1');
+    if (f_readeUsr(Wrk_Sectn: Wrk_Key: data)= '1');
       leave;
     endif;
 
     //  Überprüfen Ausschlüsse
     if (isExclKeys);
-      if (f_iskeyexc(data: i_exclkeys) = bTrue);
+      if (f_isKeyExc(data: i_exclKeys) = bTrue);
         iter;
       endif;
     endif;
 
-    exsr buildstr;
+    exsr BuildStr;
     if (x > 32);
       //          Fertig, Tabelle ist voll
       leave;
@@ -131,29 +131,29 @@ begsr getKeyMap;
   endfor;
 
   //  String-Auswahlen ...
-  wrk_sectn = '*' + %trim(i_pgm);
-  wrk_key = *allx'FF';
-  wrk_key = '*' + wrk_key;
-  p_setllusr(wrk_sectn: wrk_key);
+  Wrk_Sectn = '*' + %trim(i_pgm);
+  Wrk_Key = *allx'FF';
+  Wrk_Key = '*' + Wrk_Key;
+  p_setllUsr(Wrk_Sectn: Wrk_Key);
 
   for do_x2 = 1 to *hival;
-    if (f_readeusr(wrk_sectn: wrk_key: data)= '1');
+    if (f_readeUsr(Wrk_Sectn: Wrk_Key: data)= '1');
       leave;
     endif;
 
     //  Numerische-Auswahlen, siehe oben ...
-    if (wrk_key > '0');
+    if (Wrk_Key > '0');
       leave;
     endif;
 
     //  Überprüfen Ausschlüsse
     if (isExclKeys);
-      if (f_iskeyexc(data: i_exclkeys) = bTrue);
+      if (f_isKeyExc(data: i_exclKeys) = bTrue);
         iter;
       endif;
     endif;
 
-    exsr buildstr;
+    exsr BuildStr;
     if (x > 32);
       //          Fertig, Tabelle ist voll
       leave;
@@ -167,19 +167,19 @@ endsr;
 //    BuildStr      String zusammenbauen                      *
 //============================================================*
 
-begsr buildstr;
+begsr BuildStr;
 
-  wrk_msgid = f_mapCmdToMsg(data: wrk_sectn);
-  if (wrk_msgid <> '');
-    wrk_msgid = 'KEY' + %trim(wrk_msgid);
-    wrk_msgtxt = f_msgtext(wrk_msgid: ' ');
+  wrk_MsgID = f_mapCmdToMsg(data: Wrk_Sectn);
+  if (wrk_MsgID <> '');
+    wrk_MsgID = 'KEY' + %trim(wrk_MsgID);
+    wrk_MsgTxt = f_msgText(wrk_MsgID: ' ');
   else;
     //  Befehl ohne Nachrichtentext
-    wrk_msgtxt = '???';
+    wrk_MsgTxt = '???';
   endif;
 
   //  Stringlänge
-  z = %checkr(' ': wrk_msgtxt);
+  z = %checkr(' ': wrk_MsgTxt);
   //  Für Auswahl und "="-Zeichen
   z = z + 3;
   //  Für Trennleerraum ...
@@ -192,20 +192,20 @@ begsr buildstr;
   y = width - y;
   if (y < z);
     x = x + 1;
-    o_numchoices = o_numchoices + 1;
+    o_numChoices = o_numChoices + 1;
   endif;
 
   if (x > 32);
   //               Nix tun, Tabelle ist voll
   else;
     if (o_choices(x) = *blanks);
-      o_choices(x) = %trimr(wrk_key);
+      o_choices(x) = %trimr(Wrk_Key);
     else;
       o_choices(x) = %trimr(o_choices(x)) +
-                 '  ' + %trimr(wrk_key);
+                 '  ' + %trimr(Wrk_Key);
     endif;
     o_choices(x) = %trimr(o_choices(x)) +
-               '=' + %trim(wrk_msgtxt);
+               '=' + %trim(wrk_MsgTxt);
   endif;
 
 endsr;
@@ -214,12 +214,12 @@ endsr;
 //  Program error handler                                     *
 //============================================================*
 
-dcl-proc errorhandler;
+dcl-proc errorHandler;
   dcl-pi *n;
-    i_condtoken    likeds(cee_fc_t) value;
-    i_pcommarea    int(10) value;
+    i_condToken    likeds(cee_fc_t) value;
+    i_pCommArea    int(10) value;
     o_action       int(10);
-    o_newcondtoken likeds(cee_fc_t);
+    o_newCondToken likeds(cee_fc_t);
   end-pi;
 
   dump;

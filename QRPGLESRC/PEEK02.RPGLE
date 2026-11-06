@@ -83,19 +83,19 @@ ctl-opt main(peek02);
 /copy QCOPYLE,PPEEK53
 /copy QCOPYLE,PPEEK58
 
-dcl-ds qUsrSpc likeds(qobj_t) inz;
+dcl-ds qUsrSpc likeds(qObj_t) inz;
 dcl-s pSpcPtr pointer;
-dcl-ds errCode likeds(errcode_t) inz;
+dcl-ds errCode likeds(errCode_t) inz;
 
-dcl-ds genHeader likeds(genHeader_t) based(pSpcPtr);
-dcl-ds listHeader likeds(quslfld_header_t) based(pListHeader);
+dcl-ds GenHeader likeds(genHeader_t) based(pSpcPtr);
+dcl-ds listHeader likeds(QUSLFLD_header_t) based(pListHeader);
 
 dcl-s currListE like(int4_t);
 dcl-s offsetListE like(int4_t);
 dcl-s pListE pointer;
 dcl-ds listE likeds(fldl0100_t) based(pListE);
 
-dcl-s msgID like(msgid_t);
+dcl-s msgID like(msgId_t);
 dcl-s msgDta like(msgDta_t);
 
 //*******************************************************************
@@ -104,12 +104,12 @@ dcl-s msgDta like(msgDta_t);
 
 dcl-proc peek02;
   dcl-pi *n;
-    i_qFile    likeds(qobj_t) const;
+    i_qFile    likeds(qObj_t) const;
     i_rcdFmt   like(fmt_t) const;
     i_function like(function_t) const;
     o_numE     like(int4_t);
     o_fldl0100 likeds(fldl0100_t);
-    o_rcdFmtID like(fmtid_t);
+    o_rcdFmtID like(fmtId_t);
   end-pi;
 
   //---------------------------------------------------*
@@ -121,7 +121,7 @@ dcl-proc peek02;
 
     select;
     when (i_function = '*CREATE');
-      exsr create;
+      exsr Create;
     when (i_function = '*DELETE');
       exsr delete;
     when (i_function = '*READ');
@@ -138,7 +138,7 @@ dcl-proc peek02;
   //  Create --  create user space and get database rel.*
   //====================================================*
 
-  begsr create;
+  begsr Create;
 
     o_numE = *zeros;
 
@@ -156,17 +156,17 @@ dcl-proc peek02;
     //  (Fehler als Rückgabewert, nicht als Escape-Nachricht, z.B.
     //  CPF3C28, wenn das Satzformat nicht existiert)
     clear errCode;
-    errCode.bytprv = %size(errCode);
+    errCode.bytPrv = %size(errCode);
     quslfld(qUsrSpc: 'FLDL0100': i_qFile
            : i_rcdFmt: '0': errCode);
 
-    if (errCode.bytavl > 0);
+    if (errCode.bytAvl > 0);
       pListHeader = *null;
       o_numE = 0;
       currListE = -1;
     else;
-      pListHeader = pSpcPtr + genHeader.offsetHdr;
-      o_numE = genHeader.numLstEnt;
+      pListHeader = pSpcPtr + GenHeader.offsetHdr;
+      o_numE = GenHeader.NumLstEnt;
       o_rcdFmtID = listHeader.rcdFmtID;
       currListE = 0;
     endif;
@@ -199,22 +199,22 @@ dcl-proc peek02;
     clear o_fldl0100;
 
     if (currListE < 0 or
-       currListE >= genHeader.numlstent);
-      exsr seterror;
+       currListE >= GenHeader.NumLstEnt);
+      exsr setError;
       leavesr;
     endif;
 
     currListE = currListE + 1;
 
     offsetListE =
-     genHeader.offsetlst +
-     ((currListE - 1) * genHeader.entrysize);
+     GenHeader.OffsetLst +
+     ((currListE - 1) * GenHeader.EntrySize);
 
     pListE = pSpcPtr + offsetListE;
 
     o_fldl0100 = listE;
 
-    o_numE = genHeader.numlstent - currListE;
+    o_numE = GenHeader.NumLstEnt - currListE;
 
   endsr;
 
@@ -222,7 +222,7 @@ dcl-proc peek02;
   //  Set error condition                               *
   //====================================================*
 
-  begsr seterror;
+  begsr setError;
 
     o_numE = 0;
     currListE = -1;

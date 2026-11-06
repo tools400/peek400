@@ -48,53 +48,53 @@
 dcl-pi peek31;
   io_language like(language_t);
   i_prefix    like(prefix_t) const;
-  o_msgid     like(msgid_t);
-  o_msgdta    like(msgdta_t);
+  o_msgID     like(msgId_t);
+  o_msgDta    like(msgDta_t);
 end-pi;
 
 dcl-s do_x1 packed(7);
-dcl-ds set0004 likeds(set0004_t) inz;
+dcl-ds set0004 likeds(SET0004_t) inz;
 dcl-s isFallback like(bool_t) inz(bFalse);
-dcl-s msgf like(file_t);
+dcl-s msgF like(file_t);
 //----------------------------------------------------*
 
 //  Register error handler
 ceehdlr(%paddr('errorHandler')
        : *null: *omit);
 
-o_msgid = *blanks;
-o_msgdta = *blanks;
+o_msgID = *blanks;
+o_msgDta = *blanks;
 isFallback = bFalse;
 
 //  Ermitteln der zu verwendenden Sprache ...
 if (io_language = '*DFT');
   //  ... Standardsprache
-  set0004 = f_getusrsg('*LANGUAGE':  o_msgid: o_msgdta);
+  set0004 = f_getUsrSg('*LANGUAGE':  o_msgID: o_msgDta);
 else;
   //  ... Benutzen der übergebenen Sprache
-  set0004.set_lang = io_language;
+  set0004.SET_Lang = io_language;
 endif;
 
-if (o_msgid = '');
+if (o_msgID = '');
   //  ... Prüfen der Nachrichtendatei
   for do_x1 = 1 to 2;
 
-    if (f_exist(%trimr(i_prefix) + set0004.set_lang
-       : sds.pgmlib : '*MSGF'));
+    if (f_exist(%trimr(i_prefix) + set0004.SET_Lang
+       : sds.PgmLib : '*MSGF'));
       //  ... kein Fehler
       leave;
     else;
       //  ... Fehler aufgetreten
-      if (set0004.set_lang = 'GER');
+      if (set0004.SET_Lang = 'GER');
         //  ... Standardsprache: CPF2407 Nachrichtendatei &1 in &2
         //      nicht gefunden (aus QCPFMSG, in der Systemsprache)
-        msgf = %trimr(i_prefix) + set0004.set_lang;
-        o_msgid  = 'CPF2407';
-        o_msgdta = msgf + sds.pgmlib;
+        msgF = %trimr(i_prefix) + set0004.SET_Lang;
+        o_msgID  = 'CPF2407';
+        o_msgDta = msgF + sds.PgmLib;
         leave;
       else;
         //  ... Benutzersprache
-        set0004.set_lang = 'GER';
+        set0004.SET_Lang = 'GER';
         isFallback = bTrue;
         iter;
       endif;
@@ -103,13 +103,13 @@ if (o_msgid = '');
   endfor;
 endif;
 
-if (o_msgid = '');
+if (o_msgID = '');
   //  Nur eine gefundene Sprache speichern. Das Ausweichen auf GER gilt
   //  nur für diesen Aufruf, die eingestellte Sprache bleibt erhalten.
   if (isFallback = bFalse);
-    p_updusrsg('*LANGUAGE': set0004);
+    p_updUsrSg('*LANGUAGE': set0004);
   endif;
-  io_language = set0004.set_lang;
+  io_language = set0004.SET_Lang;
 else;
   io_language = '';
 endif;
@@ -120,12 +120,12 @@ return;
 //  Program error handler                                     *
 //============================================================*
 
-dcl-proc errorhandler;
+dcl-proc errorHandler;
   dcl-pi *n;
-    i_condtoken    likeds(cee_fc_t) value;
-    i_pcommarea    int(10) value;
+    i_condToken    likeds(cee_fc_t) value;
+    i_pCommArea    int(10) value;
     o_action       int(10);
-    o_newcondtoken likeds(cee_fc_t);
+    o_newCondToken likeds(cee_fc_t);
   end-pi;
 
   dump;

@@ -53,17 +53,17 @@
 /copy QCOPYLE,PPEEK53
 /copy QCOPYLE,PPEEK58
 
-dcl-ds objd0400 likeds(objd0400_t) inz;
-dcl-ds errcode likeds(errcode_t) inz;
+dcl-ds objd0400 likeds(OBJD0400_t) inz;
+dcl-ds errCode likeds(errCode_t) inz;
 
 //*******************************************************************
 //           Main  Control block                                    *
 //*******************************************************************
 dcl-pi peek09;
-  i_qfile  likeds(qobj_t) const;
-  o_data   likeds(objd0400_t);
-  o_msgid  like(msgid_t);
-  o_msgdta like(msgdta_t);
+  i_qFile  likeds(qObj_t) const;
+  o_data   likeds(OBJD0400_t);
+  o_msgID  like(msgId_t);
+  o_msgDta like(msgDta_t);
 end-pi;
 
 //---------------------------------------------------*
@@ -72,25 +72,25 @@ end-pi;
 ceehdlr(%paddr('errorHandler')
        : *null: *omit);
 
-p_sndstsmg('USR8107': i_qfile);
+p_sndStsMg('USR8107': i_qFile);
 
-clear errcode;
-errcode.bytprv = %size(errcode);
+clear errCode;
+errCode.bytPrv = %size(errCode);
 
 qusrobjd(objd0400: %size(objd0400)
         : 'OBJD0400'
-        : i_qfile: '*FILE'
-        : errcode);
+        : i_qFile: '*FILE'
+        : errCode);
 
-if (errcode.bytavl = 0);
+if (errCode.bytAvl = 0);
   o_data = objd0400;
-  o_msgid = *blanks;
-  o_msgdta = *blanks;
+  o_msgID = *blanks;
+  o_msgDta = *blanks;
 else;
   clear objd0400;
   o_data = objd0400;
-  o_msgid = errcode.excid;
-  o_msgdta = errcode.excdta;
+  o_msgID = errCode.excID;
+  o_msgDta = errCode.excDta;
 endif;
 
 return;
@@ -99,12 +99,12 @@ return;
 //  Program error handler                                     *
 //============================================================*
 
-dcl-proc errorhandler;
+dcl-proc errorHandler;
   dcl-pi *n;
-    i_condtoken    likeds(cee_fc_t) value;
-    i_pcommarea    int(10) value;
+    i_condToken    likeds(cee_fc_t) value;
+    i_pCommArea    int(10) value;
     o_action       int(10);
-    o_newcondtoken likeds(cee_fc_t);
+    o_newCondToken likeds(cee_fc_t);
   end-pi;
 
   dump;

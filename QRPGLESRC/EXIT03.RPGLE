@@ -68,7 +68,7 @@ dcl-pr main extproc('main');
   i_lib     like(gi_lib) const;
   i_user    like(gi_user) const;
   i_field   like(gi_field) const;
-  io_edtcde like(gio_edtcde);
+  io_edtCde like(gio_edtCde);
 end-pr;
 
 dcl-pr in ind extproc('in');
@@ -84,10 +84,10 @@ dcl-pi exit03;
   gi_lib     char(10) const;
   gi_user    char(10) const;
   gi_field   char(10) const;
-  gio_edtcde char(1);
+  gio_edtCde char(1);
 end-pi;
 
-main(gi_file: gi_lib: gi_user: gi_field: gio_edtcde);
+main(gi_file: gi_lib: gi_user: gi_field: gio_edtCde);
 
 return;
 
@@ -100,21 +100,21 @@ dcl-proc main;
     i_lib     like(gi_lib) const;
     i_user    like(gi_user) const;
     i_field   like(gi_field) const;
-    io_edtcde like(gio_edtcde);
+    io_edtCde like(gio_edtCde);
   end-pi;
 
   //  lokale Arbeitsfelder
   //---------------------------------------------------------------*
 
   select;
-  when (in(io_edtcde: '24BDKMOQ'));
-    io_edtcde = 'M';           // Minus-Zeichen, Nullenunterdrückung
-  when (io_edtcde = 'Z');
-    io_edtcde = 'M';           // Minus-Zeichen, Nullenunterdrückung
-  when (in(io_edtcde: '13ACJLNP'));
-    io_edtcde = 'L';           // Minus-Zeichen, keine Nullenunterdrückung
-  when (io_edtcde = ' ');
-    io_edtcde = 'L';           // Minus-Zeichen, keine Nullenunterdrückung
+  when (in(io_edtCde: '24BDKMOQ'));
+    io_edtCde = 'M';           // Minus-Zeichen, Nullenunterdrückung
+  when (io_edtCde = 'Z');
+    io_edtCde = 'M';           // Minus-Zeichen, Nullenunterdrückung
+  when (in(io_edtCde: '13ACJLNP'));
+    io_edtCde = 'L';           // Minus-Zeichen, keine Nullenunterdrückung
+  when (io_edtCde = ' ');
+    io_edtCde = 'L';           // Minus-Zeichen, keine Nullenunterdrückung
   endsl;
 
   return;

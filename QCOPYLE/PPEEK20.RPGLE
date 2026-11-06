@@ -5,8 +5,8 @@ dcl-pr peek20 extpgm('PEEK20');
 /else
 dcl-pr peek20 extpgm(peek20_name);
 /endif
-  i_keyval    like(keybuf_t) const;
-  o_rcdbuffer like(rcdbuf_t);
-  o_msgid     like(msgid_t);
-  o_msgdta    like(msgdta_t);
+  i_keyVal    like(keyBuf_t) const;
+  o_rcdBuffer like(rcdBuf_t);
+  o_msgID     like(msgId_t);
+  o_msgDta    like(msgDta_t);
 end-pr;

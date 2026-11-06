@@ -7,6 +7,6 @@ dcl-pr peek31 extpgm(peek31_name);
 /endif
   io_language like(language_t);
   i_prefix    like(prefix_t) const;
-  o_msgid     like(msgid_t);
-  o_msgdta    like(msgdta_t);
+  o_msgID     like(msgId_t);
+  o_msgDta    like(msgDta_t);
 end-pr;

@@ -47,25 +47,25 @@ dcl-f peekfmt usage(*update: *delete: *output) usropn prefix(f_);
 /copy QCOPYLE,PPEEK53
 /copy QCOPYLE,PPEEK58
 
-dcl-ds rcdl0200 likeds(rcdl0200_t) inz;
+dcl-ds rcdl0200 likeds(RCDL0200_t) inz;
 
-dcl-s sortseq like(f_sortseq) inz(0);
+dcl-s sortSeq like(F_SortSeq) inz(0);
 
-dcl-s peek11_name like(pgmcalln_t) inz;
+dcl-s peek11_name like(pgmCallN_t) inz;
 
-dcl-s nbroffmt like(int4_t) inz;
-dcl-s fmtcnt like(int4_t) inz;
+dcl-s nbrOfFmt like(int4_t) inz;
+dcl-s fmtCnt like(int4_t) inz;
 dcl-s rc like(int4_t) inz;
 
-dcl-s isinzsr like(bool_t) inz(bFalse);
+dcl-s isInzSr like(bool_t) inz(bFalse);
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
 //*******************************************************************
 dcl-pi peek10;
-  i_qfile  likeds(qobj_t) const;
-  o_msgid  like(msgid_t);
-  o_msgdta like(msgdta_t);
+  i_qFile  likeds(qObj_t) const;
+  o_msgID  like(msgId_t);
+  o_msgDta like(msgDta_t);
 end-pi;
 // --------------------------------------------------------------------
 // Stand Alone Fields - TOP
@@ -83,25 +83,25 @@ ceehdlr(%paddr('errorHandler')
 
 exsr inzsr;
 
-exsr first;
+exsr First;
 
 //  create list of record formats
-peek11(i_qfile:
-      '*CREATE': nbroffmt: rcdl0200);
+peek11(i_qFile:
+      '*CREATE': nbrOfFmt: rcdl0200);
 
-sortseq = *zeros;
+sortSeq = *zeros;
 //  read each entry
-for fmtcnt = 1 to nbroffmt;
+for fmtCnt = 1 to nbrOfFmt;
 
-  peek11(i_qfile: '*READ': rc: rcdl0200);
+  peek11(i_qFile: '*READ': rc: rcdl0200);
 
   clear fpeekfmt;
 
   f_format = 'RCDL0200';
-  f_fmt = rcdl0200;
-  sortseq = sortseq + 10;
-  f_sortseq = sortseq;
-  f_fmtnbr = fmtcnt;
+  F_Fmt = rcdl0200;
+  sortSeq = sortSeq + 10;
+  F_SortSeq = sortSeq;
+  F_FmtNbr = fmtCnt;
   write fpeekfmt;
 
 endfor;
@@ -114,14 +114,14 @@ endfor;
 //**                PARM                    YANZ
 //**                PARM                    YLIST
 
-if (nbroffmt = *zeros);
-  o_msgid = 'USR0002';
-  usr0002.var1 = i_qfile.name;
-  usr0002.var2 = i_qfile.lib;
-  o_msgdta = usr0002;
+if (nbrOfFmt = *zeros);
+  o_msgID = 'USR0002';
+  usr0002.var1 = i_qFile.name;
+  usr0002.var2 = i_qFile.lib;
+  o_msgDta = usr0002;
 else;
-  o_msgid = *blanks;
-  o_msgdta = *blanks;
+  o_msgID = *blanks;
+  o_msgDta = *blanks;
 endif;
 
 *inlr = '1';
@@ -130,14 +130,14 @@ endif;
 //  First  --  Initialize program                     *
 //====================================================*
 
-begsr first;
+begsr First;
 
   // - Meldung
-  p_sndstsmg('USR8105': i_qfile);
+  p_sndStsMg('USR8105': i_qFile);
 
   // - Los gehts'
-  o_msgid = *blanks;
-  o_msgdta = *blanks;
+  o_msgID = *blanks;
+  o_msgDta = *blanks;
 
   setll 1 fpeekfmt;
 
@@ -151,7 +151,7 @@ begsr first;
     delete fpeekfmt;
   endfor;
 
-  nbroffmt = *zeros;
+  nbrOfFmt = *zeros;
 
 endsr;
 
@@ -161,13 +161,13 @@ endsr;
 
 begsr inzsr;
 
-  if (isinzsr = bTrue);
+  if (isInzSr = bTrue);
     leavesr;
   endif;
 
-  isinzsr = bTrue;
+  isInzSr = bTrue;
 
-  peek11_name = f_pgmcalln('PEEK11');
+  peek11_name = f_pgmCallN('PEEK11');
 
   open peekfmt;
 
@@ -177,12 +177,12 @@ endsr;
 //  Program error handler                                     *
 //============================================================*
 
-dcl-proc errorhandler;
+dcl-proc errorHandler;
   dcl-pi *n;
-    i_condtoken    likeds(cee_fc_t) value;
-    i_pcommarea    int(10) value;
+    i_condToken    likeds(cee_fc_t) value;
+    i_pCommArea    int(10) value;
     o_action       int(10);
-    o_newcondtoken likeds(cee_fc_t);
+    o_newCondToken likeds(cee_fc_t);
   end-pi;
 
   dump;

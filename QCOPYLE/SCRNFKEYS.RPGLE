@@ -5,7 +5,7 @@
 //============================================================*
 
 dcl-ds *n;
-  scrnfkeys char(18) dim(32) inz(*blanks);
+  ScrnFKeys char(18) dim(32) inz(*blanks);
   $$fkey01  char(18) pos(1);
   $$fkey02  char(18) pos(19);
   $$fkey03  char(18) pos(37);

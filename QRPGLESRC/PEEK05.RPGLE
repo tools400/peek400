@@ -30,34 +30,34 @@
 /copy QCOPYLE,COPYRIGHT
 
 // Bildschirm
-dcl-f peek05fm workstn(*ext) usage(*input: *output) usropn infds(workstn) sfile(pbsfl132: sflrec132)
-  sfile(pbsfl080: sflrec080);
+dcl-f peek05fm workstn(*ext) usage(*input: *output) usropn infds(workstn) sfile(pbsfl132: SflRec132)
+  sfile(pbsfl080: SflRec080);
 
-dcl-f peekfldl1 keyed rename(fpeekfld: fpeekfldl1) prefix(f_) usropn infds(peek#l1);
+dcl-f peekfldl1 keyed rename(fpeekfld: fpeekfldl1) prefix(f_) usropn infds(Peek#L1);
 
-dcl-f peekfld usage(*update: *delete) keyed prefix(f_) usropn infds(peek#00);
+dcl-f peekfld usage(*update: *delete) keyed prefix(f_) usropn infds(Peek#00);
 
 dcl-ds workstn likeds(workstn_t);
 dcl-ds cursorPosition likeds(cursorPosition_t) inz;
 
-dcl-ds peek#l1 likeds(infds_t);
-dcl-ds peek#00 likeds(infds_t);
-dcl-ds file#x likeds(infds_t);
+dcl-ds Peek#L1 likeds(infds_t);
+dcl-ds Peek#00 likeds(infds_t);
+dcl-ds File#X likeds(infds_t);
 
 // Für Einzelsatzzugriff zum Löschen von Datensätzen
-dcl-ds hfile00 likeds(hfile_t);
+dcl-ds hFile00 likeds(hFile_t);
 
 // Für Sortierung nach relativer Satznummer
-dcl-ds hfile01 likeds(hfile_t);
+dcl-ds hFile01 likeds(hFile_t);
 
 // Für Sortierung nach Schlüsselfolge
-dcl-ds hfile02 likeds(hfile_t);
+dcl-ds hFile02 likeds(hFile_t);
 
 // Für SQL Zugriff
-dcl-ds hfile03 likeds(hfile_t);
+dcl-ds hFile03 likeds(hFile_t);
 
 // Für Einzelsatzzugriff zum reinen Lesen von Datensätzen
-dcl-ds hfile04 likeds(hfile_t);
+dcl-ds hFile04 likeds(hFile_t);
 
 /copy QCOPYLE,D_VARDEF
 /copy QCOPYLE,ShortCmd_D
@@ -174,10 +174,10 @@ dcl-ds hfile04 likeds(hfile_t);
 /copy QCOPYLE,PEXIT01
 /copy QCOPYLE,PEXIT04
 
-dcl-ds set0001 likeds(set0001_t) inz;
-dcl-ds set0002 likeds(set0002_t) inz;
-dcl-ds set0003 likeds(set0003_t) inz;
-dcl-ds set0005 likeds(set0005_t) inz;
+dcl-ds set0001 likeds(SET0001_t) inz;
+dcl-ds set0002 likeds(SET0002_t) inz;
+dcl-ds set0003 likeds(SET0003_t) inz;
+dcl-ds set0005 likeds(SET0005_t) inz;
 dcl-ds set0006 likeds(set0006_t) inz;
 dcl-ds set0007 likeds(set0007_t) inz;
 dcl-ds set0008 likeds(set0008_t) inz;
@@ -189,14 +189,14 @@ dcl-ds set0014 likeds(set0014_t) inz;
 dcl-ds set0015 likeds(set0015_t) inz;
 dcl-ds set0016 likeds(set0016_t) inz;
 
-dcl-ds objd0400 likeds(objd0400_t) inz;
-dcl-ds rcdl0200 likeds(rcdl0200_t) inz;
+dcl-ds objd0400 likeds(OBJD0400_t) inz;
+dcl-ds rcdl0200 likeds(RCDL0200_t) inz;
 dcl-ds fldl0100 likeds(fldl0100_t) inz;
-dcl-ds mbrd0200 likeds(mbrd0200_t) inz;
-dcl-ds fild0100 likeds(fild0100_t) inz;
+dcl-ds mbrd0200 likeds(MBRD0200_t) inz;
+dcl-ds fild0100 likeds(FILD0100_t) inz;
 
 dcl-pr f_int zoned(20);
-  inpvalue zoned(25: 5) value;
+  inpValue zoned(25: 5) value;
 end-pr;
 
 dcl-pr f_chain00 char(1);
@@ -204,7 +204,7 @@ dcl-pr f_chain00 char(1);
   i_file   like(file_t) value;
   i_lib    like(lib_t) value;
   i_mbr    like(mbr_t) value;
-  i_rcdfmt char(10) value;
+  i_rcdFmt char(10) value;
 end-pr;
 
 dcl-pr f_chain04 char(1);
@@ -212,49 +212,49 @@ dcl-pr f_chain04 char(1);
   i_file   like(file_t) value;
   i_lib    like(lib_t) value;
   i_mbr    like(mbr_t) value;
-  i_rcdfmt char(10) value;
+  i_rcdFmt char(10) value;
 end-pr;
 
 //----------------------------------------------------*
 //  I N F D S - D E F I N I T I O N E N               *
 //----------------------------------------------------*
 
-dcl-ds io_buff;
-  io_bufffld like(rcdbuf_t);
+dcl-ds IO_Buff;
+  IO_BuffFld like(rcdBuf_t);
 end-ds;
 
-dcl-s io_nullmap like(nullmap_t) dim(NULL_MAP_SIZE);
+dcl-s IO_NullMap like(nullMap_t) dim(NULL_MAP_SIZE);
 
 dcl-ds rtn qualified inz;
-  file       like(##file);
-  library    like(##library);
-  member     like(##member);
-  format     like(##format);
-  accessmode like(accessMode);
-  sqlwhere   like(sqlWhere);
-  sqlorder   like(sqlOrder);
+  file       like(##File);
+  library    like(##Library);
+  member     like(##Member);
+  format     like(##Format);
+  AccessMode like(AccessMode);
+  sqlWhere   like(sqlWhere);
+  sqlOrder   like(sqlOrder);
 end-ds;
 
-dcl-ds yQFile inz;
-  yFile    like(file_t);
+dcl-ds YQFile inz;
+  YFile    like(file_t);
   yLibrary like(lib_t);
 end-ds;
 
 dcl-s isLicenceError like(bool_t) inz(bTrue);
-dcl-s yformat like(rcdfmt_t) inz;
-dcl-s yMsgID char(7) inz;
-dcl-s yMsgDta char(512) inz;
+dcl-s YFormat like(rcdFmt_t) inz;
+dcl-s YMsgID char(7) inz;
+dcl-s YMsgDta char(512) inz;
 
 dcl-s yMember like(mbr_t) inz;
 
-dcl-s yattrlen like(int4_t) inz;
-dcl-s yattrtyp char(1) inz;
-dcl-s yvalue char(512) inz;
+dcl-s YAttrLen like(int4_t) inz;
+dcl-s YAttrTyp char(1) inz;
+dcl-s YValue char(512) inz;
 
-dcl-s ydsp80 like(set0001_t.set_dsp80) inz;
-dcl-s yCopyright like(copyrght_t) inz(copyright);
+dcl-s YDsp80 like(SET0001_t.SET_Dsp80) inz;
+dcl-s yCopyright like(copyright_t) inz(copyright);
 
-dcl-s yfmtnbr int(5) inz;
+dcl-s YFmtNbr int(5) inz;
 
 dcl-s yHeaderType char(10) inz;
 dcl-s yRcdNbr inz(0) like(rcdNbr_t);
@@ -266,99 +266,99 @@ dcl-s yIsLower char(1) inz(bFalse);
 
 dcl-ds yCursorPosition likeds(cursorPosition_t) inz;
 
-dcl-s ycvtccsid char(1) inz(bTrue);
-dcl-s ydata char(512) inz;
+dcl-s YCvtCcsid char(1) inz(bTrue);
+dcl-s YData char(512) inz;
 
 dcl-ds yRetFile likeds(qObj_t);
 
-dcl-s yrtncode char(1) inz;
+dcl-s YRtnCode char(1) inz;
 
-dcl-s yfield like(srchfield) inz;
-dcl-s yoperation like(srchop) inz;
-dcl-s yargument like(srcharg) inz;
-dcl-s ysign like(srchsign) inz;
-dcl-s ysrchnbrs like(srchnbrs) inz(0);
-dcl-s ysrchtype like(srchtype) inz;
-dcl-s ysrchcase like(srchcase) inz(bFalse);
+dcl-s YField like(SrchField) inz;
+dcl-s YOperation like(SrchOP) inz;
+dcl-s YArgument like(SrchArg) inz;
+dcl-s YSign like(SrchSign) inz;
+dcl-s YSrchNbrs like(SrchNbrs) inz(0);
+dcl-s YSrchType like(SrchType) inz;
+dcl-s YSrchCase like(SrchCase) inz(bFalse);
 
-dcl-s ybuffer like(rcdbuf_t) inz;
+dcl-s YBuffer like(rcdBuf_t) inz;
 dcl-ds *n;
-  yhexstring like(hexbuf_t);
-  youtbuffer like(rcdbuf_t) overlay(yhexstring: 1);
+  YHexString like(hexBuf_t);
+  YOutBuffer like(rcdBuf_t) overlay(YHexString: 1);
 end-ds;
 
-dcl-s youtbuffln like(int4_t) inz;
-dcl-s ytgtvalue char(10) inz;
+dcl-s YOutBuffLn like(int4_t) inz;
+dcl-s YTgtValue char(10) inz;
 
-dcl-s ykeyval like(keybuf_t) inz;
+dcl-s YKeyVal like(keyBuf_t) inz;
 
-dcl-s yPgmCmd char(10) inz;
-dcl-s ycmddta like(pgmcmddt_t) inz;
+dcl-s YPgmCmd char(10) inz;
+dcl-s YCmdDta like(pgmCmdDt_t) inz;
 
 dcl-s yFKeys char(18) dim(32) inz;
-dcl-s yNbrOFKeys like(int4_t) inz;
+dcl-s yNbrOfKeys like(int4_t) inz;
 
-dcl-s ychoice like(choice_t) dim(32) inz;
-dcl-s ynbrofch like(int4_t) inz;
+dcl-s YChoice like(choice_t) dim(32) inz;
+dcl-s YNbrOfCh like(int4_t) inz;
 
-dcl-s yflag inz(*zeros) like(int4_t);
+dcl-s YFlag inz(*zeros) like(int4_t);
 
-dcl-s buffidx like(int4_t) inz;
+dcl-s BuffIdx like(int4_t) inz;
 
-dcl-ds shortcmd likeds(shortcmd_t) inz;
-dcl-s yexeccmd like(cmdbuffer_t) inz;
-dcl-s ynbrofent like(int4_t) inz;
-dcl-s ysqlwhere like(sqlwhere_t) inz;
-dcl-s ysqlorder like(sqlorder_t) inz;
-dcl-s yalwlc char(1) inz;
-dcl-s ycase char(1) inz;
-dcl-s yrcdlock char(1) inz;
-dcl-s ynulldft char(1) inz;
-dcl-s ykeepcrs char(1) inz;
-dcl-s yenvfile like(file_t) inz;
-dcl-s yenvlib like(lib_t) inz;
-dcl-s yenvmbr like(mbr_t) inz;
-dcl-s yisautosave like(bool_t) inz(bFalse);
+dcl-ds ShortCmd likeds(ShortCmd_t) inz;
+dcl-s YExecCmd like(cmdBuffer_t) inz;
+dcl-s YNbrOfEnt like(int4_t) inz;
+dcl-s YSqlWhere like(sqlWhere_t) inz;
+dcl-s YSqlOrder like(sqlOrder_t) inz;
+dcl-s YAlwLc char(1) inz;
+dcl-s YCase char(1) inz;
+dcl-s YRcdLock char(1) inz;
+dcl-s YNullDft char(1) inz;
+dcl-s YKeepCrs char(1) inz;
+dcl-s YEnvFile like(file_t) inz;
+dcl-s YEnvLib like(lib_t) inz;
+dcl-s YEnvMbr like(mbr_t) inz;
+dcl-s YIsAutoSave like(bool_t) inz(bFalse);
 dcl-s yIsKeyLower like(bool_t) inz;
-dcl-s yoption like(option_t) inz;
-dcl-s ytext like(text_t);
-dcl-s ysflopt char(2);
-dcl-s ystring like(rcdbuf_t) inz;
-dcl-s ystringlen like(int4_t) inz;
+dcl-s YOption like(option_t) inz;
+dcl-s YText like(text_t);
+dcl-s ySflOpt char(2);
+dcl-s YString like(rcdBuf_t) inz;
+dcl-s YStringLen like(int4_t) inz;
 
 dcl-c HEX_CHAR '-';
 
 dcl-s isReadSfl like(bool_t) inz(bFalse);
-dcl-s ispbinit char(1) inz(bFalse);
-dcl-s isfirstsfl char(1) inz(bFalse);
-dcl-s isfilechg char(1) inz(bFalse);
-dcl-s istblcol char(1) inz(bFalse);
+dcl-s IsPBINIT char(1) inz(bFalse);
+dcl-s IsFirstSfl char(1) inz(bFalse);
+dcl-s IsFileChg char(1) inz(bFalse);
+dcl-s IsTblCol char(1) inz(bFalse);
 dcl-s isTargetOK like(bool_t) inz(bFalse);
 dcl-s isSeqNbrOK like(bool_t) inz(bFalse);
-dcl-s isOpen like(bool_t) inz(bFalse);
+dcl-s IsOpen like(bool_t) inz(bFalse);
 dcl-s isUpdMod like(bool_t) inz(bFalse);
 dcl-s isUpdKey like(bool_t) inz(bFalse);
 dcl-s isVisible like(bool_t) inz(bFalse);
-dcl-s isError like(bool_t) inz(bFalse);
-dcl-s isfileerror char(1) inz(bFalse);
-dcl-s iskeyavail char(1) inz(bFalse);
-dcl-s iskeychg char(1) inz(bFalse);
+dcl-s IsError like(bool_t) inz(bFalse);
+dcl-s isFileError char(1) inz(bFalse);
+dcl-s IsKeyAvail char(1) inz(bFalse);
+dcl-s IsKeyChg char(1) inz(bFalse);
 dcl-s isSflDirty char(1) inz(bFalse);
 dcl-s isTryed char(1) inz(bFalse);
-dcl-s ispinned char(1) inz(bFalse);
-dcl-s ispinmoder char(1) inz(bFalse);
+dcl-s IsPinned char(1) inz(bFalse);
+dcl-s IsPinModeR char(1) inz(bFalse);
 dcl-s isPinModeC char(1) inz(bFalse);
-dcl-s ispinok char(1) inz(bFalse);
-dcl-s ispinrmv char(1) inz(bFalse);
-dcl-s iseof char(1) inz(bFalse);
-dcl-s queryUser like(sfl_cmd) inz(*allx'00');
-dcl-s isfound char(1) inz(bFalse);
-dcl-s isCmdErr char(1) inz(bFalse);
+dcl-s IsPinOK char(1) inz(bFalse);
+dcl-s IsPinRmv char(1) inz(bFalse);
+dcl-s IsEOF char(1) inz(bFalse);
+dcl-s queryUser like(Sfl_Cmd) inz(*allx'00');
+dcl-s IsFound char(1) inz(bFalse);
+dcl-s IsCmdErr char(1) inz(bFalse);
 dcl-s isCancel char(1) inz(bFalse);
-dcl-s r#iscmderr char(1) inz(bFalse);
-dcl-s iscvtchar char(1) inz(bFalse);
+dcl-s R#IsCmdErr char(1) inz(bFalse);
+dcl-s IsCvtChar char(1) inz(bFalse);
 dcl-s isPinToClr char(1) inz(bTrue);
-dcl-s isreadc char(1) inz(bFalse);
+dcl-s IsReadC char(1) inz(bFalse);
 dcl-s isColumnException like(bool_t) inz(bFalse);
 dcl-s isKeyLower like(bool_t) inz(bFalse);
 
@@ -375,82 +375,82 @@ dcl-ds auth qualified;
   isAccessAlw        like(bool_t) inz(bFalse);
 end-ds;
 
-dcl-s sflpage like(int4_t) inz;
-dcl-s sflrec080 inz(0) like(sflpage);
-dcl-s sflrec132 inz(0) like(sflpage);
-dcl-s sflnbrrcd inz(0) like(sflpage);
+dcl-s SflPage like(int4_t) inz;
+dcl-s SflRec080 inz(0) like(SflPage);
+dcl-s SflRec132 inz(0) like(SflPage);
+dcl-s SflNbrRcd inz(0) like(SflPage);
 dcl-s sflMaxRowLen like(int4_t) inz;
-dcl-s sfldatalenfree like(int4_t) inz;
-dcl-s sftop like(int4_t) inz;
+dcl-s SflDataLenFree like(int4_t) inz;
+dcl-s SFTop like(int4_t) inz;
 dcl-s sfbot like(int4_t) inz;
-dcl-s sfl_cmd char(10) inz;
-dcl-s sflheadlrw inz(0) like(sflpage);
-dcl-s sflfirstrw inz(0) like(sflpage);
-dcl-s sfllastrw inz(0) like(sflpage);
-dcl-s sflleftofs like(int4_t) inz;
-dcl-s sflmode char(10) inz;
-dcl-s sflpinrnge like(int4_t) inz;
+dcl-s Sfl_Cmd char(10) inz;
+dcl-s SflHeadLRw inz(0) like(SflPage);
+dcl-s SflFirstRw inz(0) like(SflPage);
+dcl-s SflLastRw inz(0) like(SflPage);
+dcl-s SflLeftOfs like(int4_t) inz;
+dcl-s SflMode char(10) inz;
+dcl-s SflPinRnge like(int4_t) inz;
 
 dcl-c COPYRIGHT '1997-2026, Thomas Raddatz - PEEK v4.0.8';
 dcl-c RELEASE 'Stand: 02.11.2026';
 dcl-c VERSION 'V04R00M08';
 
-dcl-s l#file like(##file) inz;
-dcl-s l#library like(##library) inz;
-dcl-s l#member like(##member) inz;
-dcl-s l#format like(##format) inz;
-dcl-s l#maxseq like(f_seq) inz(0);
-dcl-s l#minseq like(f_seq) inz(0);
-dcl-s l#wndnbr like(##wndnbr) inz(0);
+dcl-s L#File like(##File) inz;
+dcl-s L#Library like(##Library) inz;
+dcl-s L#Member like(##Member) inz;
+dcl-s L#Format like(##Format) inz;
+dcl-s L#MaxSeq like(F_Seq) inz(0);
+dcl-s L#MinSeq like(F_Seq) inz(0);
+dcl-s L#WndNbr like(##WndNbr) inz(0);
 
-dcl-s r#size like(int4_t) inz;
+dcl-s R#Size like(int4_t) inz;
 
-dcl-s UPDPGM_NAME like(pgmcalln_t) inz;
+dcl-s UPDPGM_NAME like(pgmCallN_t) inz;
 
-dcl-s peek01_name like(pgmcalln_t) inz;
-dcl-s peek03_name like(pgmcalln_t) inz;
-dcl-s peek04_name like(pgmcalln_t) inz;
-dcl-s peek06_name like(pgmcalln_t) inz;
-dcl-s peek07_name like(pgmcalln_t) inz;
-dcl-s peek08_name like(pgmcalln_t) inz;
-dcl-s peek09_name like(pgmcalln_t) inz;
-dcl-s peek10_name like(pgmcalln_t) inz;
-dcl-s peek12_name like(pgmcalln_t) inz;
-dcl-s peek13_name like(pgmcalln_t) inz;
-dcl-s peek14_name like(pgmcalln_t) inz;
-dcl-s peek17_name like(pgmcalln_t) inz;
-dcl-s peek18_name like(pgmcalln_t) inz;
-dcl-s peek19_name like(pgmcalln_t) inz;
-dcl-s peek20_name like(pgmcalln_t) inz;
-dcl-s peek21_name like(pgmcalln_t) inz;
-dcl-s peek23_name like(pgmcalln_t) inz;
-dcl-s peek24_name like(pgmcalln_t) inz;
-dcl-s peek26_name like(pgmcalln_t) inz;
-dcl-s peek27_name like(pgmcalln_t) inz;
-dcl-s peek30_name like(pgmcalln_t) inz;
-dcl-s peek32_name like(pgmcalln_t) inz;
-dcl-s peek33_name like(pgmcalln_t) inz;
-dcl-s peek34_name like(pgmcalln_t) inz;
-dcl-s peek37_name like(pgmcalln_t) inz;
-dcl-s peek38_name like(pgmcalln_t) inz;
-dcl-s peek40_name like(pgmcalln_t) inz;
-dcl-s peek41_name like(pgmcalln_t) inz;
-dcl-s peek42_name like(pgmcalln_t) inz;
-dcl-s peek47_name like(pgmcalln_t) inz;
-dcl-s peek48_name like(pgmcalln_t) inz;
-dcl-s peek49_name like(pgmcalln_t) inz;
-dcl-s peek50_name like(pgmcalln_t) inz;
-dcl-s peek52_name like(pgmcalln_t) inz;
-dcl-s peek54_name like(pgmcalln_t) inz;
-dcl-s peek55_name like(pgmcalln_t) inz;
-dcl-s peek56_name like(pgmcalln_t) inz;
-dcl-s peek57_name like(pgmcalln_t) inz;
-dcl-s peek59_name like(pgmcalln_t) inz;
-dcl-s peek65_name like(pgmcalln_t) inz;
-dcl-s peek68_name like(pgmcalln_t) inz;
-dcl-s peek69_name like(pgmcalln_t) inz;
-dcl-s exit01_name like(pgmcalln_t) inz;
-dcl-s exit04_name like(pgmcalln_t) inz;
+dcl-s peek01_name like(pgmCallN_t) inz;
+dcl-s peek03_name like(pgmCallN_t) inz;
+dcl-s peek04_name like(pgmCallN_t) inz;
+dcl-s peek06_name like(pgmCallN_t) inz;
+dcl-s peek07_name like(pgmCallN_t) inz;
+dcl-s peek08_name like(pgmCallN_t) inz;
+dcl-s peek09_name like(pgmCallN_t) inz;
+dcl-s peek10_name like(pgmCallN_t) inz;
+dcl-s peek12_name like(pgmCallN_t) inz;
+dcl-s peek13_name like(pgmCallN_t) inz;
+dcl-s peek14_name like(pgmCallN_t) inz;
+dcl-s peek17_name like(pgmCallN_t) inz;
+dcl-s peek18_name like(pgmCallN_t) inz;
+dcl-s peek19_name like(pgmCallN_t) inz;
+dcl-s peek20_name like(pgmCallN_t) inz;
+dcl-s peek21_name like(pgmCallN_t) inz;
+dcl-s peek23_name like(pgmCallN_t) inz;
+dcl-s peek24_name like(pgmCallN_t) inz;
+dcl-s peek26_name like(pgmCallN_t) inz;
+dcl-s peek27_name like(pgmCallN_t) inz;
+dcl-s peek30_name like(pgmCallN_t) inz;
+dcl-s peek32_name like(pgmCallN_t) inz;
+dcl-s peek33_name like(pgmCallN_t) inz;
+dcl-s peek34_name like(pgmCallN_t) inz;
+dcl-s peek37_name like(pgmCallN_t) inz;
+dcl-s peek38_name like(pgmCallN_t) inz;
+dcl-s peek40_name like(pgmCallN_t) inz;
+dcl-s peek41_name like(pgmCallN_t) inz;
+dcl-s peek42_name like(pgmCallN_t) inz;
+dcl-s peek47_name like(pgmCallN_t) inz;
+dcl-s peek48_name like(pgmCallN_t) inz;
+dcl-s peek49_name like(pgmCallN_t) inz;
+dcl-s peek50_name like(pgmCallN_t) inz;
+dcl-s peek52_name like(pgmCallN_t) inz;
+dcl-s peek54_name like(pgmCallN_t) inz;
+dcl-s peek55_name like(pgmCallN_t) inz;
+dcl-s peek56_name like(pgmCallN_t) inz;
+dcl-s peek57_name like(pgmCallN_t) inz;
+dcl-s peek59_name like(pgmCallN_t) inz;
+dcl-s peek65_name like(pgmCallN_t) inz;
+dcl-s peek68_name like(pgmCallN_t) inz;
+dcl-s peek69_name like(pgmCallN_t) inz;
+dcl-s exit01_name like(pgmCallN_t) inz;
+dcl-s exit04_name like(pgmCallN_t) inz;
 
 dcl-s peekPgm like(pgm_t) inz;
 dcl-s peekDspF like(file_t) inz;
@@ -462,35 +462,35 @@ end-ds;
 dcl-c sfl_row_size %elem(sflDataRow.chars);
 
 dcl-s sflRowDataStr like(int4_t);
-dcl-s sflrowdataend like(int4_t);
-dcl-s sflrowdatalen like(int4_t);
+dcl-s sflRowDataEnd like(int4_t);
+dcl-s sflRowDataLen like(int4_t);
 
-dcl-s colrofs like(int4_t);
-dcl-s col_field char(10) dim(60);
-dcl-s col_scnstr like(int4_t) dim(60);
-dcl-s col_scnend like(int4_t) dim(60);
-dcl-s col_error like(bool_t) dim(60) inz(bFalse);
+dcl-s ColrOfs like(int4_t);
+dcl-s Col_Field char(10) dim(60);
+dcl-s Col_ScnStr like(int4_t) dim(60);
+dcl-s Col_ScnEnd like(int4_t) dim(60);
+dcl-s Col_Error like(bool_t) dim(60) inz(bFalse);
 dcl-s cp like(int4_t);
-dcl-s fldstrpos like(int4_t);
+dcl-s FldStrPos like(int4_t);
 
-dcl-s headlen like(int4_t);
-dcl-s fieldlen like(int4_t);
-dcl-s maxcollen like(int4_t);
-dcl-s columnlen like(int4_t);
+dcl-s HeadLen like(int4_t);
+dcl-s FieldLen like(int4_t);
+dcl-s MaxColLen like(int4_t);
+dcl-s ColumnLen like(int4_t);
 
-dcl-s pincol_x like(int4_t);
+dcl-s PinCol_X like(int4_t);
 dcl-c max_pin_col %elem(pinTabCol);
-dcl-s pinTabCol like(fieldnme_t) dim(12);
+dcl-s pinTabCol like(fieldNme_t) dim(12);
 //  Rückgabe des Pin-Dialogs (PEEK50): clrpincol löscht pinTabCol
-dcl-s yPinTabCol like(fieldnme_t) dim(12);
-dcl-s nbrPinCol like(int4_t);
+dcl-s yPinTabCol like(fieldNme_t) dim(12);
+dcl-s NbrPinCol like(int4_t);
 
-dcl-s pinrcd_x like(int4_t);
-dcl-c max_pin_rcd %elem(pintabrcd);
-dcl-s pinTabRcd like(pintabr_t) dim(12);
+dcl-s PinRcd_X like(int4_t);
+dcl-c max_pin_rcd %elem(PinTabRcd);
+dcl-s PinTabRcd like(pinTabR_t) dim(12);
 dcl-s nbrPinRcd like(int4_t);
 
-dcl-ds pinTabRcdE likeds(pintabr_t);
+dcl-ds pinTabRcdE likeds(pinTabR_t);
 
 //  Arbeitsfelder
 dcl-s x like(int4_t);
@@ -500,64 +500,64 @@ dcl-s a1 char(1) inz;
 
 //  Arbeitsfeld für Sortierfolge: Satzfolge/Schlüsselfolge
 //  .. aktuelle Sortierung
-dcl-s accessMode char(1) inz(RRN_SEQ);
+dcl-s AccessMode char(1) inz(RRN_SEQ);
 //  .. neue Sortierung für ChangeFile
 dcl-s newAccessMode char(1) inz(RRN_SEQ);
 //  .. Sortierung vor SQl-Mode
-dcl-s oldaccmode char(1) inz(RRN_SEQ);
+dcl-s oldAccMode char(1) inz(RRN_SEQ);
 //  Arbeitsfeld für Befehlsverarbeitung, Verhinderung von Rekursionen
-dcl-s r#pgmcmd like(yPgmCmd) inz;
+dcl-s R#PgmCmd like(YPgmCmd) inz;
 //  Arbeitsfeld für Eingabe Aufsetzkey
-dcl-s r#rcdnbr like(##rcdnbr) inz(0);
-dcl-s r#keyval like(##key) inz;
+dcl-s R#RcdNbr like(##RcdNbr) inz(0);
+dcl-s R#KeyVal like(##Key) inz;
 //  Arbeitsfeld für PIN-Funktion
-dcl-s pin#field char(10) inz;
+dcl-s Pin#Field char(10) inz;
 //  Datensatz-Nr für SETLL und SETGG zum füllen der Subfile
-dcl-s wrk#readdn like(sflpage) inz(0);
-dcl-s wrk#rcdnbr like(rcdNbr_t) inz(0);
+dcl-s Wrk#ReadDn like(SflPage) inz(0);
+dcl-s Wrk#RcdNbr like(rcdNbr_t) inz(0);
 dcl-ds *n;
-  wrk#keyval like(keybuf_t) inz;
+  Wrk#KeyVal like(keyBuf_t) inz;
 end-ds;
 //  ...
-dcl-s wrk#field inz like(f_field);
-dcl-s wrk#seqnbr inz(0) like(f_seq);
-dcl-s wrk#recno inz(0) like(sflrec132);
-dcl-s wrk#sfpau inz like(sfpau);
+dcl-s Wrk#Field inz like(F_Field);
+dcl-s Wrk#SeqNbr inz(0) like(F_Seq);
+dcl-s Wrk#Recno inz(0) like(SflRec132);
+dcl-s Wrk#SFPAU inz like(sfpau);
 //  Umschalten der Sortierung
-dcl-s last#rcdnr like(rcdNbr_t) inz(0);
+dcl-s Last#RcdNr like(rcdNbr_t) inz(0);
 //  Farbattribute einsetzen
-dcl-s wrk#ofs like(int4_t) inz;
+dcl-s Wrk#Ofs like(int4_t) inz;
 //  Felder für Suchfunktion
-dcl-s srchmode char(10) inz('*NEW');
-dcl-s srchfndrcd like(rcdNbr_t) inz(0);
-dcl-s srchfield char(10) inz;
-dcl-s srchop char(10) inz;
-dcl-s srcharg char(63) inz;
-dcl-s srchsign char(1) inz;
-dcl-s srchargfloat float(8) inz;
-dcl-s srchargval zoned(63) inz;
-dcl-c csrcharg_digits %len(srchargval);
+dcl-s SrchMode char(10) inz('*NEW');
+dcl-s SrchFndRcd like(rcdNbr_t) inz(0);
+dcl-s SrchField char(10) inz;
+dcl-s SrchOP char(10) inz;
+dcl-s SrchArg char(63) inz;
+dcl-s SrchSign char(1) inz;
+dcl-s SrchArgFloat float(8) inz;
+dcl-s SrchArgVal zoned(63) inz;
+dcl-c cSRCHARG_DIGITS %len(SrchArgVal);
 
-dcl-c csrcharg_decpos %decpos(srchargval);
+dcl-c cSRCHARG_DECPOS %decpos(SrchArgVal);
 
-dcl-s srchliketp like(int4_t) inz;
-dcl-s srchlikeln like(int4_t) inz;
-dcl-s srchnbrs packed(10) inz(0);
-dcl-s srchtype char(10) inz;
-dcl-s srchcase char(1) inz(bFalse);
-dcl-s srchcmpstr like(srcharg) inz;
-dcl-s srchcmpval like(srchargval) inz(0);
-dcl-c srch_cmp_val_length %len(srchcmpval);
+dcl-s SrchLikeTp like(int4_t) inz;
+dcl-s SrchLikeLn like(int4_t) inz;
+dcl-s SrchNbrs packed(10) inz(0);
+dcl-s SrchType char(10) inz;
+dcl-s SrchCase char(1) inz(bFalse);
+dcl-s SrchCmpStr like(SrchArg) inz;
+dcl-s SrchCmpVal like(SrchArgVal) inz(0);
+dcl-c srch_cmp_val_length %len(SrchCmpVal);
 
-dcl-c srch_cmp_val_decpos %decpos(srchcmpval);
+dcl-c srch_cmp_val_decpos %decpos(SrchCmpVal);
 
-dcl-s srchcmpfloat float(8) inz(0);
-dcl-s srchcmprcd like(rcdbuf_t) inz;
-dcl-s srchcount like(srchnbrs) inz(0);
-dcl-s srchcount2 like(srchnbrs) inz(0);
-dcl-s srchdspmsg like(srchnbrs) inz(0);
-dcl-s srchisnum char(1) inz(bFalse);
-dcl-s srchargisfloat char(1) inz(bFalse);
+dcl-s SrchCmpFloat float(8) inz(0);
+dcl-s SrchCmpRcd like(rcdBuf_t) inz;
+dcl-s SrchCount like(SrchNbrs) inz(0);
+dcl-s SrchCount2 like(SrchNbrs) inz(0);
+dcl-s SrchDspMsg like(SrchNbrs) inz(0);
+dcl-s SrchIsNum char(1) inz(bFalse);
+dcl-s SrchArgIsFloat char(1) inz(bFalse);
 
 //  Felder für Kopierfunktion
 dcl-ds copyExternal qualified;
@@ -569,55 +569,55 @@ dcl-ds copyExternal qualified;
 end-ds;
 
 //  Überlagern von ##Key132uc mit ##Key80uc
-dcl-s ##key like(##key132uc) inz;
+dcl-s ##Key like(##Key132uc) inz;
 dcl-ds *n;
-  ##key132uc char(116);
-  ##key80uc  char(67) overlay(##key132uc: 1);
+  ##Key132uc char(116);
+  ##Key80uc  char(67) overlay(##Key132uc: 1);
 end-ds;
 dcl-ds *n;
-  ##key132lc char(116);
-  ##key80lc  char(67) overlay(##key132lc: 1);
+  ##Key132lc char(116);
+  ##Key80lc  char(67) overlay(##Key132lc: 1);
   sqlWhere   like(sqlWhere_t) inz;
   sqlOrder   like(sqlOrder_t) inz;
 end-ds;
 dcl-ds *n;
-  rcdnbr# zoned(10);
-  rcdnbr$ char(10) overlay(rcdnbr#: 1);
+  rcdNbr# zoned(10);
+  rcdNbr$ char(10) overlay(rcdNbr#: 1);
 end-ds;
 
-dcl-s exitmsg varchar(512) inz;
-dcl-s colheading like(colheading_t);
+dcl-s exitMsg varchar(512) inz;
+dcl-s colHeading like(colHeading_t);
 
 //  Feldinhalte vor der Bildschirmausgabe
 dcl-ds b4 qualified;
-  wndnbr  like(##wndnbr);
-  strpage like(##strpage);
+  WndNbr  like(##WndNbr);
+  StrPage like(##StrPage);
 end-ds;
 
 /copy QCOPYLE,CEECNDHDLR
 
-dcl-s isinzsr like(bool_t) inz(bFalse);
+dcl-s isInzSr like(bool_t) inz(bFalse);
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
 //*******************************************************************
 dcl-pi peek05;
-  io_qfile    likeds(qobj_t);
+  io_qFile    likeds(qObj_t);
   i_member    like(mbr_t) const;
-  i_access    like(accessmode_t) const;
-  i_prodlib   like(lib_t) const;
-  i_chglib    like(bool_t) const;
-  i_chgfile   like(bool_t) const;
-  i_chgmbr    like(bool_t) const;
-  i_updmodkey like(bool_t) const;
-  i_chgsqlw   like(bool_t) const;
-  i_chgsqlo   like(bool_t) const;
-  i_qenvfile  likeds(qobj_t) const;
-  i_envmbr    like(mbr_t) const;
-  i_envsave   like(bool_t) const;
-  i_envlayout like(bool_t) const;
-  i_sqlwhere  like(sqlwhere_t) const;
-  i_sqlorder  like(sqlorder_t) const;
+  i_access    like(accessMode_t) const;
+  i_prodLib   like(lib_t) const;
+  i_chgLib    like(bool_t) const;
+  i_chgFile   like(bool_t) const;
+  i_chgMbr    like(bool_t) const;
+  i_updModKey like(bool_t) const;
+  i_chgSqlW   like(bool_t) const;
+  i_chgSqlO   like(bool_t) const;
+  i_qEnvFile  likeds(qObj_t) const;
+  i_envMbr    like(mbr_t) const;
+  i_envSave   like(bool_t) const;
+  i_envLayout like(bool_t) const;
+  i_sqlWhere  like(sqlWhere_t) const;
+  i_sqlOrder  like(sqlOrder_t) const;
 end-pi;
 //Prototype for 'QUSCMDLN'
 dcl-pr quscmdln extpgm('QUSCMDLN');
@@ -641,13 +641,13 @@ ceehdlr(%paddr('errorHandler'): *null: *omit);
 
 exsr inzsr;
 
-exsr first;
+exsr First;
 
 dow ('1');
 
   //  Ermitteln der Feldnummer des ersten
   //  sichtbaren Feldes
-  exsr getfrstfld;
+  exsr GetFrstFld;
 
   //  Öffnen/Schützen "Feldseite"
   if (set0010.set_fldpge = '1');
@@ -657,7 +657,7 @@ dow ('1');
   endif;
 
   //  Öffnen/Schützen "Aufsetzschlüssel/Satznummer"
-  if (accessMode = SQL_SEQ);
+  if (AccessMode = SQL_SEQ);
     *in73 = '1';
   else;
     *in73 = '0';
@@ -686,23 +686,23 @@ dow ('1');
   //  Eingabe der Schlüsselfelder in Gross- oder Kleinbuchstaben
   if (isKeyLower = bFalse);
     *in78 = *off;
-    ##key132uc = ##key;
+    ##Key132uc = ##Key;
   else;
     *in78 = *on;
-    ##key132lc = ##key;
+    ##Key132lc = ##Key;
   endif;
 
   //  Prüfen Positionierung der Subfile
   if (sfsanr <= 0);
     sfsanr = nbrPinRcd + 1;
   endif;
-  if (sfsanr > sflnbrrcd);
-    sfsanr = sflnbrrcd;
+  if (sfsanr > SflNbrRcd);
+    sfsanr = SflNbrRcd;
   endif;
 
   //  Für Prüfung: Eingabe neuer Aufsetzkey
-  r#rcdnbr = ##rcdnbr;
-  r#keyval = ##key;
+  R#RcdNbr = ##RcdNbr;
+  R#KeyVal = ##Key;
 
   //  Nachrichten anzeigen
   *in89 = '0';
@@ -714,27 +714,27 @@ dow ('1');
   endif;
 
   //  Anzeigen der Einzelauswahlen
-  if (sftop > 32
-      or sftop > ynbrofch);
-    sftop = 1;
+  if (SFTop > 32
+      or SFTop > YNbrOfCh);
+    SFTop = 1;
   endif;
-  $$choice = ychoice(sftop);
+  $$choice = YChoice(SFTop);
 
   //  Anzeigen der Befehlstasten
   select;
-  when (sfbot = 2 and yNbrOFKeys > 8);
+  when (sfbot = 2 and yNbrOfKeys > 8);
     if (*in88 = bFalse);
       write pbbot132#2;
     else;
       write pbbot080#2;
     endif;
-  when (sfbot = 3 and yNbrOFKeys > 16);
+  when (sfbot = 3 and yNbrOfKeys > 16);
     if (*in88 = bFalse);
       write pbbot132#3;
     else;
       write pbbot080#3;
     endif;
-  when (sfbot = 4 and yNbrOFKeys > 24);
+  when (sfbot = 4 and yNbrOfKeys > 24);
     if (*in88 = bFalse);
       write pbbot132#4;
     else;
@@ -750,8 +750,8 @@ dow ('1');
   endsl;
 
   //  Merken Startseite innerhalb des Feldes
-  b4.wndnbr = ##wndnbr;
-  b4.strpage = ##strpage;
+  b4.WndNbr = ##WndNbr;
+  b4.StrPage = ##StrPage;
 
   //  Anzeige der Subfile
   if (*in88 = bFalse);
@@ -762,18 +762,18 @@ dow ('1');
 
   //  Übernehmen Schlüsselfelder
   if (isKeyLower = bFalse);
-    ##key = ##key132uc;
+    ##Key = ##Key132uc;
   else;
-    ##key = ##key132lc;
+    ##Key = ##Key132lc;
   endif;
 
   //  Berechnen Zeile/Spalte
-  cursorposition.row = workstn.csrpos / 256;
-  cursorposition.column = %rem(workstn.csrpos: 256);
+  cursorPosition.row = workstn.csrPos / 256;
+  cursorPosition.column = %rem(workstn.csrPos: 256);
 
   //  Löschen der Cursorposition
-  csrrow = 0;
-  csrcol = 0;
+  CsrRow = 0;
+  CsrCol = 0;
 
   //  Merker für aktualisieren der Subfile
   isSflDirty = bFalse;
@@ -782,48 +782,48 @@ dow ('1');
   isTargetOK = bFalse;
 
   //  Nachrichten löschen
-  p_rmvpgmmg(sds.pgmname);
+  p_rmvPgmMg(sds.pgmName);
 
   //  Cursor-Pos. löschen
   *in87 = '0';
 
   //  Aktuelle Satz-Nr.
-  sfsanr = sflCsr;
+  sfsanr = SflCsr;
 
   //  Suchmodus
-  if (yPgmCmd <> '*SEARCH');
-    srchmode = '*NEW';
-    srchfndrcd = 0;
+  if (YPgmCmd <> '*SEARCH');
+    SrchMode = '*NEW';
+    SrchFndRcd = 0;
   endif;
 
   //  Mappen der gedrückten Taste
   //  in Programmbefehl
-  peek21(workstn.aid: sds.pgmname
-        : yPgmCmd: ycmddta: yMsgID: yMsgDta);
-  if (yMsgID <> *blanks);
-    p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
-    yMsgID = '';
-    yMsgDta = '';
+  peek21(workstn.aid: sds.pgmName
+        : YPgmCmd: YCmdDta: YMsgID: YMsgDta);
+  if (YMsgID <> *blanks);
+    p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
+    YMsgID = '';
+    YMsgDta = '';
   else;
     //  Abfragen der Programmbefehle
     exsr doScreenCmd;
-    if (yPgmCmd = '*EXIT' or yPgmCmd = '*CANCEL');
+    if (YPgmCmd = '*EXIT' or YPgmCmd = '*CANCEL');
       leave;
     endif;
-    if (isCmdErr = bTrue);
-      p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
-      yMsgID = '';
-      yMsgDta = '';
+    if (IsCmdErr = bTrue);
+      p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
+      YMsgID = '';
+      YMsgDta = '';
     endif;
   endif;
 
   //  ... Subfile aktualisieren
   if (isSflDirty = bTrue);
-    exsr pbrefresh;
+    exsr PBRefresh;
   endif;
 
   //  ... Offene Datei aktualisieren
-  exsr getopnfile;
+  exsr GetOpnFile;
 
 enddo;
 
@@ -839,34 +839,34 @@ begsr doScreenCmd;
   //  immer gefüllt ist:
 
   //  Verwenden der alten Werte bei F5
-  if (yPgmCmd = '*REFRESH');
-    ##wndnbr = b4.wndnbr;
-    ##strpage = b4.strpage;
+  if (YPgmCmd = '*REFRESH');
+    ##WndNbr = b4.WndNbr;
+    ##StrPage = b4.StrPage;
   else;
 
     //  Positionieren auf Feldanfang bei Wechsel des Startfeldes
-    if (##wndnbr <> b4.wndnbr
-        and ##strpage = b4.strpage);
-      ##strpage = 1;
+    if (##WndNbr <> b4.WndNbr
+        and ##StrPage = b4.StrPage);
+      ##StrPage = 1;
     endif;
 
   endif;
 
   //  Verwenden der alten Startposition von vor der Bildschirmausgabe
-  if (##strpage = *zeros);
-    ##strpage = b4.strpage;
+  if (##StrPage = *zeros);
+    ##StrPage = b4.StrPage;
   endif;
 
   //  Sicherstellen, dass das Feld gefüllt ist
-  if (##strpage = *zeros);
-    ##strpage = 1;
+  if (##StrPage = *zeros);
+    ##StrPage = 1;
   endif;
 
   //  Verarbeiten Bildschirmereignis
-  r#pgmcmd = yPgmCmd;
+  R#PgmCmd = YPgmCmd;
   //   exsr doPgmCmd;
 /copy QCOPYLE,DOPGMCMD
-  r#pgmcmd = '';
+  R#PgmCmd = '';
 
 endsr;
 
@@ -876,11 +876,11 @@ endsr;
 
 begsr doSflCmd;
 
-  if (yPgmCmd = r#pgmcmd);
-    isCmdErr = bTrue;
+  if (YPgmCmd = R#PgmCmd);
+    IsCmdErr = bTrue;
     clear usr8144;
-    usr8144.var1 = yPgmCmd;
-    p_sndpgmmg('USR8144': usr8144: sds.pgmname);
+    usr8144.var1 = YPgmCmd;
+    p_sndPgmMg('USR8144': usr8144: sds.pgmName);
   else;
   //      exsr doPgmCmd;
 /copy QCOPYLE,DOPGMCMD
@@ -892,49 +892,49 @@ endsr;
 //    C_Enter       "Datenfreigabetaste"                      *
 //============================================================*
 
-begsr c_enter;
+begsr C_Enter;
 
   //  Löschen der Cursor-Position ...
-  exsr dltcsrpos;
+  exsr DltCsrPos;
 
   //  Datei hat gewechselt ...
-  if (((##file    <> l#file) and
-      (not f_endswith('*': %trim(##file))) and
-      (%trim(##file  ) <> set0008.set_prmt)) or
-      (##library  <> l#library      ) or
-      ((##member  <> l#member) and
-      (%trim(##member) <> set0008.set_prmt)) or
-      ((##format  <> l#format) and
-      (%trim(##format) <> set0008.set_prmt)));
+  if (((##File    <> L#File) and
+      (not f_endsWith('*': %trim(##File))) and
+      (%trim(##File  ) <> set0008.set_prmt)) or
+      (##Library  <> L#Library      ) or
+      ((##Member  <> L#Member) and
+      (%trim(##Member) <> set0008.set_prmt)) or
+      ((##Format  <> L#Format) and
+      (%trim(##Format) <> set0008.set_prmt)));
     *in93 = '1';
   else;
 
     //  Abfragen Prompt?
     //  ... ##File
-    if (%trim(##file) = set0008.set_prmt or
-        f_endswith('*': %trim(##file)));
-      exsr c_prompt;
+    if (%trim(##File) = set0008.set_prmt or
+        f_endsWith('*': %trim(##File)));
+      exsr C_Prompt;
       if (*in93 = '0');
         leavesr;
       endif;
     endif;
     //  ... ##Member
-    if (%trim(##member) = set0008.set_prmt);
-      exsr c_prompt;
+    if (%trim(##Member) = set0008.set_prmt);
+      exsr C_Prompt;
       if (*in93 = '0');
         leavesr;
       endif;
     endif;
     //  ... ##Format
-    if (%trim(##format) = set0008.set_prmt);
-      exsr c_prompt;
+    if (%trim(##Format) = set0008.set_prmt);
+      exsr C_Prompt;
       if (*in93 = '0');
         leavesr;
       endif;
     endif;
     //  ... ##Field
-    if (%trim(##field ) = set0008.set_prmt);
-      exsr c_prompt;
+    if (%trim(##Field ) = set0008.set_prmt);
+      exsr C_Prompt;
       if (*in93 = '0');
         leavesr;
       endif;
@@ -959,24 +959,24 @@ begsr c_enter;
     exsr changeFile;
 
     //  Prüfen Seq-Bereich (##WndNbr) ...
-    exsr chkseqrnge;
+    exsr ChkSeqRnge;
 
     //  Wechsel des Fenster (##Field) ...
-    exsr changewnd;
+    exsr ChangeWnd;
 
     //  Wechsel des Aufsetzkeys ...
-    exsr changekey;
+    exsr ChangeKey;
 
     //  Füllen der Subfile ...
-    if (isfilechg = bTrue);
-      exsr dltcsrpos;
-      exsr c_top;
+    if (IsFileChg = bTrue);
+      exsr DltCsrPos;
+      exsr C_Top;
     else;
-      if (iskeychg = bFalse);
-        exsr pbrefresh;
+      if (IsKeyChg = bFalse);
+        exsr PBRefresh;
       else;
-        exsr dltcsrpos;
-        exsr keyhaschg;
+        exsr DltCsrPos;
+        exsr KeyHasChg;
       endif;
     endif;
 
@@ -993,16 +993,16 @@ begsr c_readSfl;
   //  Merker für: Subfile gelöscht zurück setzen
   //              abbrechen READC, wenn Subfileinhalt
   //              gelöscht worden ist über PBINIT
-  ispbinit = bFalse;
+  IsPBINIT = bFalse;
   //  Merker für: Programmablauf innerhalb der READC-Schleife
   //              verhindern einer Rekursion über
   //              C_ENTER, C_PAGEUP, C_PAGEDOWN
   isReadSfl = bTrue;
 
-  r#iscmderr = isCmdErr;
+  R#IsCmdErr = IsCmdErr;
 
   //  Mindestens 1 Eintrag verarbeitet ...
-  isreadc = bFalse;
+  IsReadC = bFalse;
 
   if (*in80 = *off);
   //           Keine Einträge vorhanden
@@ -1016,7 +1016,7 @@ begsr c_readSfl;
       //  Sätze mehr da sind, oder bis durch einen
       //  Kurzbefehl (SFPAU) die Subfile neu auf-
       //  gebaut worden ist.
-      dow (ispbinit = bFalse);
+      dow (IsPBINIT = bFalse);
 
         if (*in88 = bFalse);
           readc pbsfl132;
@@ -1030,9 +1030,9 @@ begsr c_readSfl;
 
         //  Cursorpositionierung ...
         if (*in88 = bFalse);
-          sflCsr = sflrec132;
+          SflCsr = SflRec132;
         else;
-          sflCsr = sflrec080;
+          SflCsr = SflRec080;
         endif;
 
         //  Linksbündig setzen ...
@@ -1040,15 +1040,15 @@ begsr c_readSfl;
 
         //  Prompt ...
         if (%trim(sfpau) = set0008.set_prmt);
-          exsr pmt_sfpau;
+          exsr Pmt_Sfpau;
         endif;
 
         //  Zuordnung AUSWAHL => Befehl ...
-        peek21('#' + sfpau: sds.pgmname
-              : yPgmCmd: ycmddta: yMsgID: yMsgDta);
-        if (yMsgID <> *blanks);
+        peek21('#' + sfpau: sds.pgmName
+              : YPgmCmd: YCmdDta: YMsgID: YMsgDta);
+        if (YMsgID <> *blanks);
           //  Fehlermeldung ...
-          p_sndpgmmg('USR8110': sfpau: sds.pgmname);
+          p_sndPgmMg('USR8110': sfpau: sds.pgmName);
 
           exsr pbSflChain;
           if (%found());
@@ -1063,11 +1063,11 @@ begsr c_readSfl;
         //  Ausführen SFL-Befehl ...  *
         //----------------------------*
 
-        sfl_cmd = yPgmCmd;
+        Sfl_Cmd = YPgmCmd;
 
         //  Vorrangig Blockverarbeitung (F22)
         //  verarbeiten ...
-        if (queryUser <> *allx'00' and sfl_cmd <> queryUser);
+        if (queryUser <> *allx'00' and Sfl_Cmd <> queryUser);
           exsr pbSflChain;
           if (%found());
             *in84 = '1';
@@ -1078,7 +1078,7 @@ begsr c_readSfl;
 
         //  Verarbeiten der Befehle ...
         exsr doSflCmd;
-        if (isCmdErr = bTrue);
+        if (IsCmdErr = bTrue);
           exsr pbSflChain;
           if (%found());
             *in84 = '1';
@@ -1094,15 +1094,15 @@ begsr c_readSfl;
 
         //  Mindestens ein Eintrag verarbeitet ...
         //  (ignorieren leere Auswahlen)
-        if (yPgmCmd <> '*NONE');
-          isreadc = bTrue;
+        if (YPgmCmd <> '*NONE');
+          IsReadC = bTrue;
         endif;
 
         //  Verarbeitung auswerten ...
         exsr pbSflChain;
         if (%found());
           //  ... Abbruch mit F3/F12
-          if (yMsgID = 'USR8100'); // Verarbeitung abgebrochen
+          if (YMsgID = 'USR8100'); // Verarbeitung abgebrochen
             *in84 = '1';
           else;
             //  ... Verarbeitung durchgeführt
@@ -1111,7 +1111,7 @@ begsr c_readSfl;
             sfpau = '';
           endif;
           exsr pbSflUpdate;
-          if (yMsgID = 'USR8100'); // Verarbeitung abgebrochen
+          if (YMsgID = 'USR8100'); // Verarbeitung abgebrochen
             leave;
           endif;
         endif;
@@ -1122,12 +1122,12 @@ begsr c_readSfl;
 
   endif;
 
-  isCmdErr = r#iscmderr;
+  IsCmdErr = R#IsCmdErr;
   isReadSfl = bFalse;
 
-  if (isreadc = bTrue);
-    exsr getobjattr;
-    exsr getmbrattr;
+  if (IsReadC = bTrue);
+    exsr GetObjAttr;
+    exsr GetMbrAttr;
   endif;
 
 endsr;
@@ -1139,17 +1139,17 @@ endsr;
 begsr pbSflChain;
 
   if (*in88 = *off);
-    chain sflrec132 pbsfl132;
+    chain SflRec132 pbsfl132;
   endif;
   if (*in88 = *on);
-    chain sflrec080 pbsfl080;
+    chain SflRec080 pbsfl080;
   endif;
 
   if (%found());
   //  ... alles in Ordnung
   else;
     //  ... letzte Nachricht löschen
-    p_rmvpgmmg(sds.pgmname);
+    p_rmvPgmMg(sds.pgmName);
   endif;
 
 endsr;
@@ -1158,7 +1158,7 @@ endsr;
 //    PBSflWrite    WRITE auf PBSFL                           *
 //============================================================*
 
-begsr pbsflwrite;
+begsr PBSflWrite;
 
   if (*in88 = bFalse);
     write pbsfl132;
@@ -1186,11 +1186,11 @@ endsr;
 //    C_PageUp      PgUp - Vorwärts blättern                  *
 //============================================================*
 
-begsr c_pageup;
+begsr c_pageUp;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
     //      Nix tun, keine Datei vorhanden
-    exsr msgnofile;
+    exsr MsgNoFile;
   else;
 
     //  Verarbeiten der Subfile-Auswahlen
@@ -1201,14 +1201,14 @@ begsr c_pageup;
     endif;
 
     //  Blättern
-    exsr pbInit;
+    exsr PBInit;
     exsr pbPinRcd;
-    exsr pbReadUp;
+    exsr PBReadUp;
 
     //  Keine weiteren Einträge gefunden ...
     if (*in80 = *off);
       //  ... Ende der Liste anzeigen
-      exsr c_bot;
+      exsr C_Bot;
     endif;
 
   endif;
@@ -1219,11 +1219,11 @@ endsr;
 //    C_PageDown    PgDn - Rückwärts blättern                 *
 //============================================================*
 
-begsr c_pagedown;
+begsr c_pageDown;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
     //      Nix tun, keine Datei vorhanden
-    exsr msgnofile;
+    exsr MsgNoFile;
   else;
 
     //  Verarbeiten der Subfile-Auswahlen
@@ -1234,13 +1234,13 @@ begsr c_pagedown;
     endif;
 
     //  Blättern
-    sflCsr = nbrPinRcd + 1;
-    exsr pbreadcsr;
+    SflCsr = nbrPinRcd + 1;
+    exsr PBReadCsr;
     exsr pbReadDown;
 
-    exsr pbInit;
+    exsr PBInit;
     exsr pbPinRcd;
-    exsr pbReadUp;
+    exsr PBReadUp;
 
   endif;
 
@@ -1250,36 +1250,36 @@ endsr;
 //    C_EndPgm      F3/F12 - Programm beenden                 *
 //============================================================*
 
-begsr c_endpgm;
+begsr C_EndPgm;
 
   // - Speichern der Arbeitsumgebung
-  if (i_envsave = bTrue);
-    yisautosave = bTrue;
-    exsr saveenv;
+  if (i_envSave = bTrue);
+    YIsAutoSave = bTrue;
+    exsr SaveEnv;
   endif;
 
-  exsr closefile;
-  if (isOpen = bFalse);
+  exsr CloseFile;
+  if (IsOpen = bFalse);
 
     // - Benutzervoreinstellungen
-    exsr setusrsetg;
+    exsr SetUsrSetg;
 
     // - Endenachricht
-    p_rmvpgmmg(sds.pgmname);
+    p_rmvPgmMg(sds.pgmName);
 
     clear usr8100; // Verarbeitung abgebrochen
-    usr8100.var1 = yPgmCmd;
-    exitmsg = f_msgtext('USR8100': usr8100);
+    usr8100.var1 = YPgmCmd;
+    exitMsg = f_msgText('USR8100': usr8100);
 
     clear usr9999;
-    usr9999.var1 = exitmsg;
+    usr9999.var1 = exitMsg;
     usr9999.var2 = '';
-    p_sndpgmmg('USR9999': usr9999: sds.pgmname);
-    p_movpgmmg(sds.pgmname);
+    p_sndPgmMg('USR9999': usr9999: sds.pgmName);
+    p_movPgmMg(sds.pgmName);
 
   else;
     //  Fehlermeldung ...
-    p_sndpgmmg('USR8103': '': sds.pgmname);
+    p_sndPgmMg('USR8103': '': sds.pgmName);
   endif;
 
 endsr;
@@ -1288,49 +1288,49 @@ endsr;
 //    C_Prompt      F4  - Prompt                              *
 //============================================================*
 
-begsr c_prompt;
+begsr C_Prompt;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
 
     select;
-    when ((scnfld   = '##FILE'  ) or
-       (##file   = set0008.set_prmt  ) or
-       (f_endswith('*': %trim(##file))));
-      exsr pmt_file;
-    when ((scnfld   = '##MEMBER') or
-       (##member = set0008.set_prmt  ));
-      exsr pmt_mbr;
+    when ((ScnFld   = '##FILE'  ) or
+       (##File   = set0008.set_prmt  ) or
+       (f_endsWith('*': %trim(##File))));
+      exsr Pmt_File;
+    when ((ScnFld   = '##MEMBER') or
+       (##Member = set0008.set_prmt  ));
+      exsr Pmt_Mbr;
     other;
       //      Nix tun, keine Datei vorhanden
-      exsr msgnofile;
+      exsr MsgNoFile;
     endsl;
 
   else;
 
     select;
-    when ((scnfld   = '##FIELD ') or
-       (##field  = set0008.set_prmt  ));
-      exsr pmt_field;
-    when ((scnfld   = '##FILE'  ) or
-       (##file   = set0008.set_prmt  ) or
-       (f_endswith('*': %trim(##file))));
-      exsr pmt_file;
-    when ((scnfld   = '##MEMBER') or
-       (##member = set0008.set_prmt  ));
-      exsr pmt_mbr;
-    when ((scnfld   = '##FORMAT') or
-       (##format = set0008.set_prmt  ));
-      exsr pmt_fmt;
-    when ((scnfld   = 'SFPAU'   ) or
+    when ((ScnFld   = '##FIELD ') or
+       (##Field  = set0008.set_prmt  ));
+      exsr Pmt_Field;
+    when ((ScnFld   = '##FILE'  ) or
+       (##File   = set0008.set_prmt  ) or
+       (f_endsWith('*': %trim(##File))));
+      exsr Pmt_File;
+    when ((ScnFld   = '##MEMBER') or
+       (##Member = set0008.set_prmt  ));
+      exsr Pmt_Mbr;
+    when ((ScnFld   = '##FORMAT') or
+       (##Format = set0008.set_prmt  ));
+      exsr Pmt_Fmt;
+    when ((ScnFld   = 'SFPAU'   ) or
        (sfpau    = set0008.set_prmt  ));
-      exsr pmt_sfpau;
+      exsr Pmt_Sfpau;
     other;
-      p_sndpgmmg('USR8179': '': sds.pgmname);
+      p_sndPgmMg('USR8179': '': sds.pgmName);
     endsl;
 
   endif;
 
-  exsr keepCsrPos;
+  exsr KeepCsrPos;
 
 endsr;
 
@@ -1338,18 +1338,18 @@ endsr;
 //    Pmt_Field     Prompt - Field                            *
 //============================================================*
 
-begsr pmt_field;
+begsr Pmt_Field;
 
-  peek37(set0001.set_dsp80: COPYRIGHT: yfield
-        : yMsgID: yMsgDta);
+  peek37(set0001.SET_Dsp80: COPYRIGHT: YField
+        : YMsgID: YMsgDta);
 
-  if (yMsgID = *blanks);
-    ##field = yfield;
+  if (YMsgID = *blanks);
+    ##Field = YField;
     *in93 = '1';
   else;
-    p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
-    yMsgID = '';
-    yMsgDta = '';
+    p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
+    YMsgID = '';
+    YMsgDta = '';
     *in93 = '0';
   endif;
 
@@ -1359,40 +1359,40 @@ endsr;
 //    Pmt_File      Prompt - File                             *
 //============================================================*
 
-begsr pmt_file;
+begsr Pmt_File;
 
   //  Wenn das Feld gesperrt ist, ...
   if (*in75 = *on);
     //  ... dann
     //      ausgeben Meldung
-    p_sndpgmmg('USR8179': '': sds.pgmname);
+    p_sndPgmMg('USR8179': '': sds.pgmName);
   else;
     //  ... sonst
     //      aufrufen "Auswahl Datei"
-    if (##file = *blanks
-        or ##file = set0008.set_prmt);
-      yFile = '*ALL';
+    if (##File = *blanks
+        or ##File = set0008.set_prmt);
+      YFile = '*ALL';
     else;
-      yFile = ##file;
+      YFile = ##File;
     endif;
 
-    if (##library = *blanks);
+    if (##Library = *blanks);
       yLibrary = '*LIBL';
     else;
-      yLibrary = ##library;
+      yLibrary = ##Library;
     endif;
 
-    peek69(set0001.set_dsp80: COPYRIGHT: yQFile
-          : yMsgID: yMsgDta);
+    peek69(set0001.SET_Dsp80: COPYRIGHT: YQFile
+          : YMsgID: YMsgDta);
 
-    if (yMsgID = *blanks);
-      ##file = yFile;
-      ##library = yLibrary;
+    if (YMsgID = *blanks);
+      ##File = YFile;
+      ##Library = yLibrary;
       *in93 = '1';
     else;
-      p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
-      yMsgID = '';
-      yMsgDta = '';
+      p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
+      YMsgID = '';
+      YMsgDta = '';
       *in93 = '0';
     endif;
 
@@ -1404,34 +1404,34 @@ endsr;
 //    Pmt_Mbr       Prompt - Member                           *
 //============================================================*
 
-begsr pmt_mbr;
+begsr Pmt_Mbr;
 
   //  Wenn das Feld gesperrt ist, ...
   if (*in77 = *on);
     //  ... dann
     //      ausgeben Meldung
-    p_sndpgmmg('USR8179': '': sds.pgmname);
+    p_sndPgmMg('USR8179': '': sds.pgmName);
   else;
     //  ... sonst
     //      aufrufen "Auswahl Teildatei"
-    yFile = ##file;
+    YFile = ##File;
 
-    if (##library = *blanks);
+    if (##Library = *blanks);
       yLibrary = '*LIBL';
     else;
-      yLibrary = ##library;
+      yLibrary = ##Library;
     endif;
 
-    peek47(set0001.set_dsp80: COPYRIGHT
-          : yQFile: yMember: yMsgID: yMsgDta);
+    peek47(set0001.SET_Dsp80: COPYRIGHT
+          : YQFile: yMember: YMsgID: YMsgDta);
 
-    if (yMsgID = *blanks);
-      ##member = yMember;
+    if (YMsgID = *blanks);
+      ##Member = yMember;
       *in93 = '1';
     else;
-      p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
-      yMsgID = '';
-      yMsgDta = '';
+      p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
+      YMsgID = '';
+      YMsgDta = '';
       *in93 = '0';
     endif;
 
@@ -1443,21 +1443,21 @@ endsr;
 //    Pmt_Fmt       Prompt - Format                           *
 //============================================================*
 
-begsr pmt_fmt;
+begsr Pmt_Fmt;
 
-  peek12(set0001.set_dsp80: COPYRIGHT: ##format
+  peek12(set0001.SET_Dsp80: COPYRIGHT: ##Format
         : MODE_INTER
-        : rcdl0200: yfmtnbr: yMsgID: yMsgDta);
+        : rcdl0200: YFmtNbr: YMsgID: YMsgDta);
 
-  if (yMsgID = *blanks);
-    ##fmtnbr = yfmtnbr;
-    ##format = rcdl0200.r2fmtname;
-    $$length = rcdl0200.r2rcdlen;
+  if (YMsgID = *blanks);
+    ##fmtnbr = YFmtNbr;
+    ##Format = rcdl0200.R2FmtName;
+    $$Length = rcdl0200.R2RcdLen;
     *in93 = '1';
   else;
-    p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
-    yMsgID = '';
-    yMsgDta = '';
+    p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
+    YMsgID = '';
+    YMsgDta = '';
     *in93 = '0';
   endif;
 
@@ -1467,23 +1467,23 @@ endsr;
 //    Pmt_Sfpau     Prompt - Subfileauswahl                   *
 //============================================================*
 
-begsr pmt_sfpau;
+begsr Pmt_Sfpau;
 
-  peek68(set0001.set_dsp80: sds.pgmname: COPYRIGHT
-        : ysflopt: yMsgID: yMsgDta);
+  peek68(set0001.SET_Dsp80: sds.pgmName: COPYRIGHT
+        : ySflOpt: YMsgID: YMsgDta);
 
   //  Einlesen Subfiledatensatz
-  sflrec132 = sflCsr;
-  sflrec080 = sflCsr;
+  SflRec132 = SflCsr;
+  SflRec080 = SflCsr;
   exsr pbSflChain;
 
   //  Abbruch mit F3/F12
-  if (yMsgID = 'USR8100'); // Verarbeitung abgebrochen
+  if (YMsgID = 'USR8100'); // Verarbeitung abgebrochen
     sfpau = '';
     *in84 = '1'; // SFLNXTCHG
     *in85 = '0'; // SFPAU(RI)
   else;
-    sfpau = ysflopt;
+    sfpau = ySflOpt;
     *in84 = '1'; // SFLNXTCHG
     *in85 = '0'; // SFPAU(RI)
   endif;
@@ -1491,10 +1491,10 @@ begsr pmt_sfpau;
   //  Aktualisieren Subfiledatensatz
   exsr pbSflUpdate;
 
-  if (yMsgID = 'USR8100'); // Verarbeitung abgebrochen
-    p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
-    yMsgID = '';
-    yMsgDta = '';
+  if (YMsgID = 'USR8100'); // Verarbeitung abgebrochen
+    p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
+    YMsgID = '';
+    YMsgDta = '';
   else;
     if (*in88 = bFalse);
       write pbctl132;
@@ -1509,35 +1509,35 @@ endsr;
 //    C_Refresh     F5  - Aktualisieren der Subfile           *
 //============================================================*
 
-begsr c_refresh;
+begsr C_Refresh;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
     //      Nix tun, keine Datei vorhanden
-    exsr msgnofile;
+    exsr MsgNoFile;
   else;
 
     //      ... aktualisieren "offene Datei"
-    exsr getopnfile;
+    exsr GetOpnFile;
 
     //      ... aktualisieren Subfile
-    exsr pbrefresh;
+    exsr PBRefresh;
 
     //      ... abrufen der Objektattribute
-    exsr getobjattr;
+    exsr GetObjAttr;
 
     //      ... abrufen der Anzahl Teildateien
-    exsr getnbrmbr;
+    exsr GetNbrMbr;
 
     //      ... abrufen Objektattribute
-    exsr getobjattr;
+    exsr GetObjAttr;
 
     //      ... abrufen der Teildateiattribute
-    exsr getmbrattr;
+    exsr GetMbrAttr;
   endif;
 
   //      ... positionieren Cursor
-  if (sflCsr = 0);
-    exsr c_poscsr;
+  if (SflCsr = 0);
+    exsr C_PosCsr;
   endif;
 
 endsr;
@@ -1546,29 +1546,29 @@ endsr;
 //    C_Add         F6  - Neuanlage eines Datensatz           *
 //============================================================*
 
-begsr c_add;
+begsr C_Add;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
     //      Nix tun, keine Datei vorhanden
-    exsr msgnofile;
+    exsr MsgNoFile;
   else;
 
     if (isUpdMod = bFalse);
       //      Neuanlage nicht möglich, da INPUT-Modus
       clear usr0007;
-      usr0007.var1 = ##file;
-      usr0007.var2 = ##library;
-      p_sndpgmmg('USR0007': usr0007: sds.pgmname);
+      usr0007.var1 = ##File;
+      usr0007.var2 = ##Library;
+      p_sndPgmMg('USR0007': usr0007: sds.pgmName);
     else;
 
       yFunction = '*ADD';
       exsr callUpdPgm;
 
       //  Ermitteln Objektattribute
-      exsr getobjattr;
+      exsr GetObjAttr;
 
       //  Ermitteln der Teildateiattribute (Anzahl Sätze)
-      exsr getmbrattr;
+      exsr GetMbrAttr;
 
     endif;
   endif;
@@ -1579,14 +1579,14 @@ endsr;
 //    C_ChgHead     F7  - Umschalten der Überschrift          *
 //============================================================*
 
-begsr c_chghead;
+begsr C_ChgHead;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
     //      Nix tun, keine Datei vorhanden
-    exsr msgnofile;
+    exsr MsgNoFile;
   else;
 
-    set0001.set_hedtyp = f_nextheadertype(set0001.set_hedtyp);
+    set0001.SET_HedTyp = f_nextHeaderType(set0001.SET_HedTyp);
 
     isSflDirty = bTrue;
   endif;
@@ -1597,27 +1597,27 @@ endsr;
 //    C_TgMrkCol    F8  - Spalte markieren ein/aus            *
 //============================================================*
 
-begsr c_tgmrkcol;
+begsr C_TgMrkCol;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
     // Nix tun, keine Datei vorhanden
-    exsr msgnofile;
+    exsr MsgNoFile;
   else;
 
-    exsr getfldtmrk;
+    exsr GetFldTMrk;
 
-    if (wrk#field <> '');
+    if (Wrk#Field <> '');
       isSflDirty = bTrue;
 
       // Umschalten der Farbe im Datensatz ...
       clear f_key;
-      f_key.f_field = col_field(x);
+      f_key.F_Field = Col_Field(x);
       chain(n) %kds(f_key) fpeekfld;
       if (%found(peekfld));
-        if (f_markcol = bFalse);
-          exsr c_mrkcol;
+        if (F_MarkCol = bFalse);
+          exsr C_MrkCol;
         else;
-          exsr c_unmrkcol;
+          exsr C_UnMrkCol;
         endif;
       else;
       // Datensatz nicht gefunden
@@ -1625,7 +1625,7 @@ begsr c_tgmrkcol;
     endif;
 
     // Beibehalten der Cursorposition ...
-    exsr keepCsrPos;
+    exsr KeepCsrPos;
   endif;
 
 endsr;
@@ -1634,24 +1634,24 @@ endsr;
 //    C_MrkCol      F8  - Spalte markieren ein                *
 //============================================================*
 
-begsr c_mrkcol;
+begsr C_MrkCol;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
     //      Nix tun, keine Datei vorhanden
-    exsr msgnofile;
+    exsr MsgNoFile;
   else;
 
-    exsr getfldtmrk;
+    exsr GetFldTMrk;
 
-    if (wrk#field <> '');
+    if (Wrk#Field <> '');
       isSflDirty = bTrue;
 
       //  Einschalten der Farbe im Datensatz ...
       clear f_key;
-      f_key.f_field = col_field(x);
+      f_key.F_Field = Col_Field(x);
       chain %kds(f_key) fpeekfld;
       if (%found(peekfld));
-        f_markcol = bTrue;
+        F_MarkCol = bTrue;
         update fpeekfld;
       else;
       //        Datensatz nicht gefunden
@@ -1659,7 +1659,7 @@ begsr c_mrkcol;
     endif;
 
     //  Beibehalten der Cursorposition ...
-    exsr keepCsrPos;
+    exsr KeepCsrPos;
   endif;
 
 endsr;
@@ -1668,24 +1668,24 @@ endsr;
 //    C_UnMrkCol    F8  - Spalte markieren aus                *
 //============================================================*
 
-begsr c_unmrkcol;
+begsr C_UnMrkCol;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
     //      Nix tun, keine Datei vorhanden
-    exsr msgnofile;
+    exsr MsgNoFile;
   else;
 
-    exsr getfldtmrk;
+    exsr GetFldTMrk;
 
-    if (wrk#field <> '');
+    if (Wrk#Field <> '');
       isSflDirty = bTrue;
 
       //  Ausschalten der Farbe im Datensatz ...
       clear f_key;
-      f_key.f_field = col_field(x);
+      f_key.F_Field = Col_Field(x);
       chain %kds(f_key) fpeekfld;
       if (%found(peekfld));
-        f_markcol = bFalse;
+        F_MarkCol = bFalse;
         update fpeekfld;
       else;
       //        Datensatz nicht gefunden
@@ -1693,7 +1693,7 @@ begsr c_unmrkcol;
     endif;
 
     //  Beibehalten der Cursorposition ...
-    exsr keepCsrPos;
+    exsr KeepCsrPos;
   endif;
 
 endsr;
@@ -1702,26 +1702,26 @@ endsr;
 //    C_MoveTop     F9  - Selektieren Datensatz               *
 //============================================================*
 
-begsr c_movetop;
+begsr C_MoveTop;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
     //      Nix tun, keine Datei vorhanden
-    exsr msgnofile;
+    exsr MsgNoFile;
   else;
 
     exsr getSflRcd;
 
-    if (sflCsr > 0);
+    if (SflCsr > 0);
 
-      exsr pbreadcsr;
-      exsr pbInit;
+      exsr PBReadCsr;
+      exsr PBInit;
       exsr pbPinRcd;
-      exsr pbReadUp;
+      exsr PBReadUp;
       sfsanr = nbrPinRcd + 1;
 
     else;
       //  Fehlermeldung ...
-      p_sndpgmmg('USR8102': '': sds.pgmname);
+      p_sndPgmMg('USR8102': '': sds.pgmName);
     endif;
 
   endif;
@@ -1732,7 +1732,7 @@ endsr;
 //    C_PosCsr      F10    - Cursor auf Keyeingabe pos.       *
 //============================================================*
 
-begsr c_poscsr;
+begsr C_PosCsr;
 
   *in87 = '1';
 
@@ -1742,11 +1742,11 @@ endsr;
 //    C_UserSetg    F11    - Benutzervoreinstellugnen         *
 //============================================================*
 
-begsr c_usersetg;
+begsr C_UserSetg;
 
   monitor;
-    peek24(set0001.set_dsp80: COPYRIGHT: set0001
-          : yMsgID: yMsgDta);
+    peek24(set0001.SET_Dsp80: COPYRIGHT: set0001
+          : YMsgID: YMsgDta);
     *in99 = bFalse;
   on-error;
     *in99 = bTrue;
@@ -1755,9 +1755,9 @@ begsr c_usersetg;
   if (*in99 = *on);
   //            Fehler aufgetreten
   else;
-    if (yMsgID = 'USR8112'); // Verarbeitung bestätigt.
-      p_updusrsg('*DSPATTR' : set0001);
-      exsr c_refresh;
+    if (YMsgID = 'USR8112'); // Verarbeitung bestätigt.
+      p_updUsrSg('*DSPATTR' : set0001);
+      exsr C_Refresh;
     else;
     //            Verrabeitung durch Benutzer
     //            abgebrochen
@@ -1770,34 +1770,34 @@ endsr;
 //    C_Repeat      F13 - Wiederholen der Subfileauswahl      *
 //============================================================*
 
-begsr c_repeat;
+begsr C_Repeat;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
     //      Nix tun, keine Datei vorhanden
-    exsr msgnofile;
+    exsr MsgNoFile;
   else;
 
     //  "Keine Sätze ..."
-    if (sflnbrrcd = 0);
+    if (SflNbrRcd = 0);
     //  Keine Datensätze vorhanden.
     else;
 
       //  Ermitteln der letzten Subfile-Auswahl ...
-      exsr getlastopt;
-      if (isError = bTrue);
+      exsr GetLastOpt;
+      if (IsError = bTrue);
         //  Fehlermeldung ...
-        p_sndpgmmg('USR8165': '': sds.pgmname);
+        p_sndPgmMg('USR8165': '': sds.pgmName);
       else;
 
         //  "Reaktivieren" der letzten Subfileauswahl ...
-        sflrec132 = wrk#recno;
-        sflrec080 = wrk#recno;
+        SflRec132 = Wrk#Recno;
+        SflRec080 = Wrk#Recno;
         exsr pbSflChain;
         *in84 = '1'; // SFLNXTCHG
         exsr pbSflUpdate;
         //  Verarbeitung ...
-        wrk#recno = wrk#recno + 1;
-        exsr repeatopt;
+        Wrk#Recno = Wrk#Recno + 1;
+        exsr RepeatOpt;
       endif;
 
     endif;
@@ -1809,17 +1809,17 @@ endsr;
 //    C_Layout      F15    - Layout                           *
 //============================================================*
 
-begsr c_layout;
+begsr C_Layout;
 
   monitor;
-    peek34(set0001.set_dsp80: COPYRIGHT: '*DISPLAY'
-          : yMsgID: yMsgDta);
+    peek34(set0001.SET_Dsp80: COPYRIGHT: '*DISPLAY'
+          : YMsgID: YMsgDta);
     *in99 = bFalse;
   on-error;
     *in99 = bTrue;
   endmon;
 
-  if (yMsgID = 'USR8112'); // Verarbeitung bestätigt.
+  if (YMsgID = 'USR8112'); // Verarbeitung bestätigt.
     //  Beenden und Speichern ...
     //  Merker für aktualisieren der Subfile
     isSflDirty = bTrue;
@@ -1833,72 +1833,72 @@ endsr;
 //    C_Search      F16    - Suchfunktion                     *
 //============================================================*
 
-begsr c_search;
+begsr C_Search;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
     //      Nix tun, keine Datei vorhanden
-    exsr msgnofile;
+    exsr MsgNoFile;
   else;
 
     select;
-    when (srchmode = '*NEW');
+    when (SrchMode = '*NEW');
       monitor;
-        peek17(set0001.set_dsp80: COPYRIGHT
-              : yQFile: ##member
-              : yfield: yoperation: yargument
-              : ysign: ysrchnbrs: ysrchtype
-              : ysrchcase: yMsgID: yMsgDta);
+        peek17(set0001.SET_Dsp80: COPYRIGHT
+              : YQFile: ##Member
+              : YField: YOperation: YArgument
+              : YSign: YSrchNbrs: YSrchType
+              : YSrchCase: YMsgID: YMsgDta);
         *in99 = bFalse;
       on-error;
         *in99 = bTrue;
       endmon;
 
       if (*in99 = *off);
-        if (yMsgID = 'USR8112'); // Verarbeitung bestätigt.
-          exsr srchstart;
+        if (YMsgID = 'USR8112'); // Verarbeitung bestätigt.
+          exsr SrchStart;
         else;
-          p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
-          yMsgID = '';
-          yMsgDta = '';
+          p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
+          YMsgID = '';
+          YMsgDta = '';
         endif;
       else;
       //  Fehler beim Aufruf von PEEK17 ...
       endif;
 
-    when (srchmode = '*FOUND');
-      exsr srchcont;
+    when (SrchMode = '*FOUND');
+      exsr SrchCont;
 
-    when (srchmode = '*MAXIMUM');
-      exsr srchcontm;
+    when (SrchMode = '*MAXIMUM');
+      exsr SrchContM;
 
-    when (srchmode = '*EOF');
-      exsr srcheof;
+    when (SrchMode = '*EOF');
+      exsr SrchEOF;
 
     other;
     //               ???????????
     endsl;
 
     //  Gefunden?
-    if (srchmode = '*FOUND');
-      srchfndrcd = file#x.rcdnbr;
-      exsr pbreadp;
+    if (SrchMode = '*FOUND');
+      SrchFndRcd = File#X.RcdNbr;
+      exsr PBReadP;
     else;
       exsr pbReadDown;
     endif;
 
     //  Anzeigen der Subfile
-    exsr pbInit;
+    exsr PBInit;
     exsr pbPinRcd;
-    exsr pbReadUp;
+    exsr PBReadUp;
 
     //  Meldung
     select;
-    when (srchmode = '*FOUND');
-      p_sndpgmmg('USR8130': '': sds.pgmname);
-    when (srchmode = '*EOF');
-      p_sndpgmmg('USR8131': '': sds.pgmname);
-    when (srchmode = '*MAXIMUM');
-      p_sndpgmmg('USR8132': '': sds.pgmname);
+    when (SrchMode = '*FOUND');
+      p_sndPgmMg('USR8130': '': sds.pgmName);
+    when (SrchMode = '*EOF');
+      p_sndPgmMg('USR8131': '': sds.pgmName);
+    when (SrchMode = '*MAXIMUM');
+      p_sndPgmMg('USR8132': '': sds.pgmName);
     other;
     endsl;
 
@@ -1910,17 +1910,17 @@ endsr;
 //    C_Top         F17 - Anfang der Datei                    *
 //============================================================*
 
-begsr c_top;
+begsr C_Top;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
     //      Nix tun, keine Datei vorhanden
-    exsr msgnofile;
+    exsr MsgNoFile;
   else;
 
-    exsr pbmovetop;
-    exsr pbInit;
+    exsr PBMoveTop;
+    exsr PBInit;
     exsr pbPinRcd;
-    exsr pbReadUp;
+    exsr PBReadUp;
 
     sfsanr = nbrPinRcd + 1;
   endif;
@@ -1931,20 +1931,20 @@ endsr;
 //    C_Bot         F18 - Ende der Datei                      *
 //============================================================*
 
-begsr c_bot;
+begsr C_Bot;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
     //      Nix tun, keine Datei vorhanden
-    exsr msgnofile;
+    exsr MsgNoFile;
   else;
 
-    exsr pbmovebot;
-    exsr pbInit;
+    exsr PBMoveBot;
+    exsr PBInit;
     exsr pbPinRcd;
     exsr pbReadDown;
-    exsr pbReadUp;
+    exsr PBReadUp;
 
-    sfsanr = sflnbrrcd;
+    sfsanr = SflNbrRcd;
   endif;
 
 endsr;
@@ -1953,34 +1953,34 @@ endsr;
 //    C_MoveL       F19 - Nach links verschieben              *
 //============================================================*
 
-begsr c_movel;
+begsr C_MoveL;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
     //      Nix tun, keine Datei vorhanden
-    exsr msgnofile;
+    exsr MsgNoFile;
   else;
 
-    if (##strpage > 1);
+    if (##StrPage > 1);
       if (set0010.set_scroll = '*BOTH'
           or set0010.set_scroll = '*LEFT');
-        ##strpage = ##strpage - 1;
+        ##StrPage = ##StrPage - 1;
       else;
-        ##strpage = 1;
-        ##wndnbr = ##wndnbr - 1;
+        ##StrPage = 1;
+        ##WndNbr = ##WndNbr - 1;
       endif;
     else;
-      ##wndnbr = ##wndnbr - 1;
+      ##WndNbr = ##WndNbr - 1;
       if (set0010.set_scroll = '*BOTH'
           or set0010.set_scroll = '*LEFT');
-        ##strpage = *hival;
+        ##StrPage = *hival;
       else;
-        ##strpage = 1;
+        ##StrPage = 1;
       endif;
     endif;
 
-    exsr chkseqrnge;
+    exsr ChkSeqRnge;
 
-    exsr pbrefresh;
+    exsr PBRefresh;
   endif;
 
 endsr;
@@ -1989,29 +1989,29 @@ endsr;
 //    C_MoveR       F20 - Nach rechts verschieben             *
 //============================================================*
 
-begsr c_mover;
+begsr C_MoveR;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
     //      Nix tun, keine Datei vorhanden
-    exsr msgnofile;
+    exsr MsgNoFile;
   else;
 
     if ((cp = 1) and
-        (col_error(cp) = bTrue));
+        (Col_Error(cp) = bTrue));
       if ((set0010.set_scroll = '*BOTH') or
          (set0010.set_scroll = '*RIGHT'));
-        ##strpage = ##strpage + 1;
+        ##StrPage = ##StrPage + 1;
       else;
-        ##wndnbr = ##wndnbr + 1;
-        ##strpage = 1;
+        ##WndNbr = ##WndNbr + 1;
+        ##StrPage = 1;
       endif;
     else;
-      ##wndnbr = ##wndnbr + 1;
-      ##strpage = 1;
+      ##WndNbr = ##WndNbr + 1;
+      ##StrPage = 1;
     endif;
 
-    exsr chkseqrnge;
-    exsr pbrefresh;
+    exsr ChkSeqRnge;
+    exsr PBRefresh;
   endif;
 
 endsr;
@@ -2023,79 +2023,79 @@ endsr;
 
 begsr c_pageLeft;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
     //      Nix tun, keine Datei vorhanden
-    exsr msgnofile;
+    exsr MsgNoFile;
     leavesr;
   endif;
 
   //  Prüfen "Seite innerhalb des Feldes"
-  if (##strpage > 1);
-    ##strpage = ##strpage - 1;
+  if (##StrPage > 1);
+    ##StrPage = ##StrPage - 1;
   else;
 
     //  Bereits am Anfang
-    if (##wndnbr = l#minseq
-        and ##strpage = 1);
+    if (##WndNbr = L#MinSeq
+        and ##StrPage = 1);
     else;
 
       //  Ermitteln der Feldnummer des 1. angezeigten
       //  Feldes ...
-      x = nbrPinCol + 1;
-      wrk#field = col_field(x);
-      exsr getseqnbr;
-      if (isSeqNbrOK = bFalse and l#minseq > 0);
-        wrk#seqnbr = l#minseq;
+      x = NbrPinCol + 1;
+      Wrk#Field = Col_Field(x);
+      exsr GetSeqNbr;
+      if (isSeqNbrOK = bFalse and L#MinSeq > 0);
+        Wrk#SeqNbr = L#MinSeq;
         isSeqNbrOK = bTrue;
       endif;
 
       if (isSeqNbrOK = bTrue);
-        exsr getprvseq;
-        ##wndnbr = wrk#seqnbr;
+        exsr GetPrvSeq;
+        ##WndNbr = Wrk#SeqNbr;
         if (set0010.set_scroll = '*BOTH'
            or set0010.set_scroll = '*LEFT');
-          ##strpage = *hival;
+          ##StrPage = *hival;
         else;
-          ##strpage = 1;
+          ##StrPage = 1;
         endif;
       else;
-        ##wndnbr = l#minseq;
-        ##strpage = 1;
+        ##WndNbr = L#MinSeq;
+        ##StrPage = 1;
       endif;
 
       //  Füllen einer Dummy-Zeile von rechts nach
       //  links zur Ermittlung des 1. anzuzeigenden
       //  Feldes ...
-      if (##wndnbr > l#minseq);
+      if (##WndNbr > L#MinSeq);
         exsr pbFillDataRow_Left;
         //  ... kein Feld gefunden
         if (cp <= 0);
-          ##wndnbr = l#minseq;
-          ##strpage = 1;
+          ##WndNbr = L#MinSeq;
+          ##StrPage = 1;
         else;
           //  ... Felder gefunden
           if (cp = 1);
             //      ... aber nur 1 Feld
-            wrk#field = col_field(cp);
+            Wrk#Field = Col_Field(cp);
           else;
             //      ... mehrere Felder
-            if (col_error(cp) = bFalse);
+            if (Col_Error(cp) = bFalse);
               //          ... komplett sichtbar
-              wrk#field = col_field(cp);
+              Wrk#Field = Col_Field(cp);
             else;
               //          ... nicht komplett sichtbar,
               //              nächstes Feld als Startfeld nehmen
               x = cp - 1;
-              wrk#field = col_field(x);
-              ##strpage = 1;
+              Wrk#Field = Col_Field(x);
+              ##StrPage = 1;
             endif;
             //      ... umrechnen in Feldnummer
-            exsr getseqnbr;
+            exsr GetSeqNbr;
             if (isSeqNbrOK = bTrue);
-              ##wndnbr = wrk#seqnbr;
+              ##WndNbr = Wrk#SeqNbr;
             else;
-              ##wndnbr = *loval;
-              ##strpage = 1;
+              ##WndNbr = *loval;
+              ##StrPage = 1;
             endif;
           endif;
         endif;
@@ -2103,8 +2103,8 @@ begsr c_pageLeft;
     endif;
   endif;
 
-  exsr chkseqrnge;
-  exsr pbrefresh;
+  exsr ChkSeqRnge;
+  exsr PBRefresh;
 
 endsr;
 
@@ -2115,43 +2115,43 @@ endsr;
 
 begsr c_pageRight;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
     //      Nix tun, keine Datei vorhanden
-    exsr msgnofile;
+    exsr MsgNoFile;
   else;
 
-    wrk#field = col_field(cp);
-    exsr getseqnbr;
+    Wrk#Field = Col_Field(cp);
+    exsr GetSeqNbr;
     if (isSeqNbrOK = bTrue);
 
-      if (col_error(cp) = bTrue);
-        if (cp - nbrPinCol = 1);
+      if (Col_Error(cp) = bTrue);
+        if (cp - NbrPinCol = 1);
 
           if (set0010.set_scroll = '*BOTH'
               or set0010.set_scroll = '*RIGHT');
-            ##wndnbr = wrk#seqnbr;
-            ##strpage = ##strpage + 1;
+            ##WndNbr = Wrk#SeqNbr;
+            ##StrPage = ##StrPage + 1;
           else;
-            ##wndnbr = wrk#seqnbr + 1;
-            ##strpage = 1;
+            ##WndNbr = Wrk#SeqNbr + 1;
+            ##StrPage = 1;
           endif;
 
         else;
-          ##wndnbr = wrk#seqnbr;
-          ##strpage = 1;
+          ##WndNbr = Wrk#SeqNbr;
+          ##StrPage = 1;
         endif;
       else;
-        ##wndnbr = wrk#seqnbr + 1;
-        ##strpage = 1;
+        ##WndNbr = Wrk#SeqNbr + 1;
+        ##StrPage = 1;
       endif;
 
     else;
-      ##wndnbr = *hival;
-      ##strpage = 1;
+      ##WndNbr = *hival;
+      ##StrPage = 1;
     endif;
 
-    exsr chkseqrnge;
-    exsr pbrefresh;
+    exsr ChkSeqRnge;
+    exsr PBRefresh;
   endif;
 
 endsr;
@@ -2160,9 +2160,9 @@ endsr;
 //    C_CmdLine     F21 - Befehlszeile                        *
 //============================================================*
 
-begsr c_cmdline;
+begsr C_CmdLine;
 
-  if (f_cmdline = bTrue);
+  if (f_cmdLine = bTrue);
     callp(e) quscmdln();
     *in99 = %error;
   endif;
@@ -2173,13 +2173,13 @@ endsr;
 //    C_ChgScn      F22 - Umschalten der Bildschirmauflösung  *
 //============================================================*
 
-begsr c_chgscn;
+begsr C_ChgScn;
 
-  wrk#readdn = sflpage;
-  exsr chgscreen;
-  wrk#readdn = wrk#readdn - sflpage;
+  Wrk#ReadDn = SflPage;
+  exsr ChgScreen;
+  Wrk#ReadDn = Wrk#ReadDn - SflPage;
 
-  exsr pbrefresh;
+  exsr PBRefresh;
 
 endsr;
 
@@ -2187,9 +2187,9 @@ endsr;
 //    C_MoreOpt     F23 - Weitere Auswahlen                   *
 //============================================================*
 
-begsr c_moreopt;
+begsr C_MoreOpt;
 
-  sftop = sftop + 1;
+  SFTop = SFTop + 1;
 
 endsr;
 
@@ -2197,7 +2197,7 @@ endsr;
 //    C_MoreKeys    F24 - Weitere Tasten                      *
 //============================================================*
 
-begsr c_morekeys;
+begsr C_MoreKeys;
 
   sfbot = sfbot + 1;
 
@@ -2207,34 +2207,34 @@ endsr;
 //    C_NextMark    Fxx - Nächste Markierung ansteueren       *
 //============================================================*
 
-begsr c_nextmark;
+begsr C_NextMark;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
     //      Nix tun, keine Datei vorhanden
-    exsr msgnofile;
+    exsr MsgNoFile;
   else;
 
-    exsr getfrstfld;
+    exsr GetFrstFld;
 
-    wrk#seqnbr = ##wndnbr;
-    exsr getnxtmark;
-    if (wrk#seqnbr > 0);
-      ##wndnbr = wrk#seqnbr;
-      ##strpage = 1;
+    Wrk#SeqNbr = ##WndNbr;
+    exsr GetNxtMark;
+    if (Wrk#SeqNbr > 0);
+      ##WndNbr = Wrk#SeqNbr;
+      ##StrPage = 1;
     else;
-      wrk#seqnbr = *loval;
-      exsr getnxtmark;
-      if (wrk#seqnbr > 0);
-        ##wndnbr = wrk#seqnbr;
-        ##strpage = 1;
+      Wrk#SeqNbr = *loval;
+      exsr GetNxtMark;
+      if (Wrk#SeqNbr > 0);
+        ##WndNbr = Wrk#SeqNbr;
+        ##StrPage = 1;
       else;
       //    ... keine Markierung gefunden
       endif;
     endif;
 
-    exsr chkseqrnge;
+    exsr ChkSeqRnge;
 
-    exsr pbrefresh;
+    exsr PBRefresh;
   endif;
 
 endsr;
@@ -2243,34 +2243,34 @@ endsr;
 //    C_PrevMark    Fxx - Vorherige Markierung ansteueren     *
 //============================================================*
 
-begsr c_prevmark;
+begsr C_PrevMark;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
     //      Nix tun, keine Datei vorhanden
-    exsr msgnofile;
+    exsr MsgNoFile;
   else;
 
-    exsr getfrstfld;
+    exsr GetFrstFld;
 
-    wrk#seqnbr = ##wndnbr;
-    exsr getprvmark;
-    if (wrk#seqnbr > 0);
-      ##wndnbr = wrk#seqnbr;
-      ##strpage = 1;
+    Wrk#SeqNbr = ##WndNbr;
+    exsr GetPrvMark;
+    if (Wrk#SeqNbr > 0);
+      ##WndNbr = Wrk#SeqNbr;
+      ##StrPage = 1;
     else;
-      wrk#seqnbr = *hival;
-      exsr getprvmark;
-      if (wrk#seqnbr > 0);
-        ##wndnbr = wrk#seqnbr;
-        ##strpage = 1;
+      Wrk#SeqNbr = *hival;
+      exsr GetPrvMark;
+      if (Wrk#SeqNbr > 0);
+        ##WndNbr = Wrk#SeqNbr;
+        ##StrPage = 1;
       else;
       //    ... keine Markierung gefunden
       endif;
     endif;
 
-    exsr chkseqrnge;
+    exsr ChkSeqRnge;
 
-    exsr pbrefresh;
+    exsr PBRefresh;
   endif;
 
 endsr;
@@ -2279,29 +2279,29 @@ endsr;
 //    C_BuildPgm    Erstellen Update Programm                 *
 //============================================================*
 
-begsr c_buildpgm;
+begsr C_BuildPgm;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
     //      Nix tun, keine Datei vorhanden
-    exsr msgnofile;
+    exsr MsgNoFile;
   else;
 
-    peek52(set0001.set_dsp80: COPYRIGHT
-          : yalwlc: ycase: yrcdlock: ynulldft
-          : ykeepcrs: yMsgID: yMsgDta: bFalse);
+    peek52(set0001.SET_Dsp80: COPYRIGHT
+          : YAlwLc: YCase: YRcdLock: YNullDft
+          : YKeepCrs: YMsgID: YMsgDta: bFalse);
 
-    if (yMsgID = 'USR8112'); // Verarbeitung bestätigt.
+    if (YMsgID = 'USR8112'); // Verarbeitung bestätigt.
 
       //  Rekursiver CALL auf sich selbst (= PEEK05),
       //  um die alte Referenz auf das Update-Programm zu löschen
       monitor;
-        UPDPGM_NAME = f_pgmcalln(sds.pgmname);
+        UPDPGM_NAME = f_pgmCallN(sds.pgmName);
         yHeaderType = set0001.SET_HedTyp;
-        UPDPGM(ydsp80
+        UPDPGM(YDsp80
                : yHeaderType
                : yCopyright
                : yRcdNbr
-               : yFile
+               : YFile
                : yLibrary
                : yMember
                : yFunction
@@ -2311,22 +2311,22 @@ begsr c_buildpgm;
                : yIsLower
                : yCursorPosition.row
                : yCursorPosition.column
-               : yMsgID
-               : yMsgDta);
+               : YMsgID
+               : YMsgDta);
       on-error;
       endmon;
 
       monitor;
         //  Initialisierung
-        p_rmvpgmmg(sds.pgmname);
+        p_rmvPgmMg(sds.pgmName);
 
         exsr getPgmName;
 
         //  Generierung
-        peek08(yQFile: peekPgm: rcdl0200.r2fmtname
-              : rcdl0200.r2fmtid
-              : yalwlc: ycase: yrcdlock: ynulldft
-              : ykeepcrs: sds.pgmlib: yrtncode);
+        peek08(YQFile: peekPgm: rcdl0200.R2FmtName
+              : rcdl0200.R2FmtID
+              : YAlwLc: YCase: YRcdLock: YNullDft
+              : YKeepCrs: sds.PgmLib: YRtnCode);
 
         *in99 = bFalse;
       on-error;
@@ -2334,9 +2334,9 @@ begsr c_buildpgm;
       endmon;
     endif;
 
-    peek52(set0001.set_dsp80: COPYRIGHT
-          : yalwlc: ycase: yrcdlock: ynulldft
-          : ykeepcrs: yMsgID: yMsgDta: bTrue);
+    peek52(set0001.SET_Dsp80: COPYRIGHT
+          : YAlwLc: YCase: YRcdLock: YNullDft
+          : YKeepCrs: YMsgID: YMsgDta: bTrue);
   endif;
 
 endsr;
@@ -2345,14 +2345,14 @@ endsr;
 //    C_Register    Prüfen der Registrierungsdaten            *
 //============================================================*
 
-begsr c_register;
+begsr C_Register;
 
   monitor;
-    peek30(set0001.set_dsp80: yCopyright
-          : yflag: yMsgID: yMsgDta);
-    p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
-    yMsgID = '';
-    yMsgDta = '';
+    peek30(set0001.SET_Dsp80: yCopyright
+          : YFlag: YMsgID: YMsgDta);
+    p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
+    YMsgID = '';
+    YMsgDta = '';
     *in99 = bFalse;
   on-error;
     *in99 = bTrue;
@@ -2360,19 +2360,19 @@ begsr c_register;
 
   if (*in99 = *on);
     //  Fehler beim Programmaufruf ...
-    p_movpgmmg(sds.pgmname);
+    p_movPgmMg(sds.pgmName);
     isLicenceError = bTrue;
     leavesr;
   else;
-    if (yflag <> -55
-        and yflag <> 66
-        and yflag <> 243);
+    if (YFlag <> -55
+        and YFlag <> 66
+        and YFlag <> 243);
       //  Fehler im Wertebereich ...
       isLicenceError = bTrue;
       leavesr;
     else;
       //  Datum ist abgelaufen ...
-      if (yflag = -55);
+      if (YFlag = -55);
         isLicenceError = bTrue;
         leavesr;
       else;
@@ -2382,9 +2382,9 @@ begsr c_register;
   endif;
 
   //  "Nachschießen" SPLASH-Screen
-  if (yflag = 243 and set0005.set_spla = bFalse);
-    exsr s_splashon;
-    exsr showsplash;
+  if (YFlag = 243 and set0005.set_spla = bFalse);
+    exsr S_SplashOn;
+    exsr ShowSplash;
   endif;
 
   isLicenceError = bFalse;
@@ -2395,14 +2395,14 @@ endsr;
 //    C_ClrPinRw    Löschen der Pin-Tabelle für Zeilen        *
 //============================================================*
 
-begsr c_clrpinrw;
+begsr C_ClrPinRw;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
     //      Nix tun, keine Datei vorhanden
-    exsr msgnofile;
+    exsr MsgNoFile;
   else;
 
-    exsr clrpinrow;
+    exsr ClrPinRow;
 
     //  Merker für aktualisieren der Subfile
     isSflDirty = bTrue;
@@ -2414,14 +2414,14 @@ endsr;
 //    C_ClrPinCl    Löschen der Pin-Tabelle für Spalten       *
 //============================================================*
 
-begsr c_clrpincl;
+begsr C_ClrPinCl;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
     //      Nix tun, keine Datei vorhanden
-    exsr msgnofile;
+    exsr MsgNoFile;
   else;
 
-    exsr clrpincol;
+    exsr ClrPinCol;
 
     //  Merker für aktualisieren der Subfile
     isSflDirty = bTrue;
@@ -2433,19 +2433,19 @@ endsr;
 //    C_DspDbr      Anzeigen der Datenbankrelationen          *
 //============================================================*
 
-begsr c_dspdbr;
+begsr C_DspDbr;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
     //      Nix tun, keine Datei vorhanden
-    exsr msgnofile;
+    exsr MsgNoFile;
   else;
 
     monitor;
-      peek40(set0001.set_dsp80: COPYRIGHT
-            : ##file: ##library: ##member
-            : ##format: bTrue
+      peek40(set0001.SET_Dsp80: COPYRIGHT
+            : ##File: ##Library: ##Member
+            : ##Format: bTrue
             : yRetFile.name: yRetFile.lib
-            : yMsgID: yMsgDta);
+            : YMsgID: YMsgDta);
       *in99 = bFalse;
     on-error;
       *in99 = bTrue;
@@ -2455,14 +2455,14 @@ begsr c_dspdbr;
     //  ... keine Auswahl getroffen oder Fehler aufgetreten
     else;
       //  ... prüfen auf neue Dateiauswahl
-      ##file = yRetFile.name;
-      ##library = yRetFile.lib;
+      ##File = yRetFile.name;
+      ##Library = yRetFile.lib;
 
       newAccessMode = i_access;
       exsr changeFile;
 
-      if (isfilechg = bTrue);
-        exsr c_top;
+      if (IsFileChg = bTrue);
+        exsr C_Top;
       else;
       endif;
     endif;
@@ -2474,19 +2474,19 @@ endsr;
 //    C_SortBKey    Anzeigen der Sätze in Schlüsselfolge      *
 //============================================================*
 
-begsr c_sortbkey;
+begsr C_SortBKey;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
     //      Nix tun, keine Datei vorhanden
-    exsr msgnofile;
+    exsr MsgNoFile;
   else;
-    if (accessMode = KEY_SEQ);
+    if (AccessMode = KEY_SEQ);
     //    ... Sortierung stimmt bereits
     else;
 
       //  Umschalten der Sortierung
       newAccessMode = KEY_SEQ;
-      exsr changesort;
+      exsr ChangeSort;
 
     endif;
   endif;
@@ -2497,24 +2497,24 @@ endsr;
 //    C_SortBRrn    Anzeigen der Sätze in Satzfolge           *
 //============================================================*
 
-begsr c_sortbrrn;
+begsr C_SortBRrn;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
     //      Nix tun, keine Datei vorhanden
-    exsr msgnofile;
+    exsr MsgNoFile;
   else;
-    if (accessMode = RRN_SEQ);
+    if (AccessMode = RRN_SEQ);
     //    ... Sortierung stimmt bereits
     else;
 
-      if (f_numbased(##file    :
-                  ##library :
-                  ##member  ) = 1);
+      if (f_numBased(##File    :
+                  ##Library :
+                  ##Member  ) = 1);
         newAccessMode = RRN_SEQ;
-        exsr changesort;
+        exsr ChangeSort;
       else;
         clear usr8217;
-        p_sndpgmmg('USR8217': usr8217: sds.pgmname);
+        p_sndPgmMg('USR8217': usr8217: sds.pgmName);
       endif;
 
     endif;
@@ -2526,16 +2526,16 @@ endsr;
 //    C_SortTgl     Umschalten der Sortierfolge               *
 //============================================================*
 
-begsr c_sorttgl;
+begsr C_SortTgl;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
     //      Nix tun, keine Datei vorhanden
-    exsr msgnofile;
+    exsr MsgNoFile;
   else;
-    if (accessMode = RRN_SEQ);
-      exsr c_sortbkey;
+    if (AccessMode = RRN_SEQ);
+      exsr C_SortBKey;
     else;
-      exsr c_sortbrrn;
+      exsr C_SortBRrn;
     endif;
   endif;
 
@@ -2545,16 +2545,16 @@ endsr;
 //    S_TglKeyLC_UC Umschalten Eingabe der Schlüsselfelder    *
 //============================================================*
 
-begsr s_tglkeylc_uc;
+begsr S_TglKeyLC_UC;
 
   if (isKeyLower = bFalse);
     isKeyLower = bTrue;
     clear usr8223;
-    p_sndpgmmg('USR8223': usr8223: sds.pgmname);
+    p_sndPgmMg('USR8223': usr8223: sds.pgmName);
   else;
     isKeyLower = bFalse;
     clear usr8224;
-    p_sndpgmmg('USR8224': usr8224: sds.pgmname);
+    p_sndPgmMg('USR8224': usr8224: sds.pgmName);
   endif;
 
 endsr;
@@ -2563,31 +2563,31 @@ endsr;
 //    C_PinCDlg     Pin-Dialog                                *
 //============================================================*
 
-begsr c_pincdlg;
+begsr C_PinCDlg;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
     //      Nix tun, keine Datei vorhanden
-    exsr msgnofile;
+    exsr MsgNoFile;
   else;
 
     monitor;
       yPinTabCol = pinTabCol;
-      peek50(set0001.set_dsp80: COPYRIGHT: yPinTabCol
-            : yMsgID: yMsgDta);
+      peek50(set0001.SET_Dsp80: COPYRIGHT: yPinTabCol
+            : YMsgID: YMsgDta);
       *in99 = bFalse;
     on-error;
       *in99 = bTrue;
     endmon;
 
     if (*in99 = *off);
-      if (yMsgID = 'USR8112'); // Verarbeitung bestätigt.
+      if (YMsgID = 'USR8112'); // Verarbeitung bestätigt.
 
-        exsr clrpincol;
+        exsr ClrPinCol;
 
         for y = 1 to max_pin_col;
           if (yPinTabCol(y) <> ' ');
-            wrk#field = yPinTabCol(y);
-            exsr pincol;
+            Wrk#Field = yPinTabCol(y);
+            exsr PinCol;
           endif;
         endfor;
 
@@ -2602,11 +2602,11 @@ endsr;
 //    C_Sql         SQL-Auswahl                               *
 //============================================================*
 
-begsr c_sql;
+begsr C_Sql;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
     //      Nix tun, keine Datei vorhanden
-    exsr msgnofile;
+    exsr MsgNoFile;
     leavesr;
   endif;
 
@@ -2619,30 +2619,30 @@ begsr c_sql;
       //      Sortierung nach SQL wird für "multi-member logical files"
       //      (noch) nicht unterstützt ...
       if (fild0100.atjoin = 'N' and
-          f_numbased(##file: ##library: ##member) > 1);
+          f_numBased(##File: ##Library: ##Member) > 1);
 
         clear usr8235;
-        p_sndpgmmg('USR8235': usr8235: sds.pgmname);
+        p_sndPgmMg('USR8235': usr8235: sds.pgmName);
         leavesr;
       endif;
 
     when (fild0100.atnofm > 1);
       //  Wenn es sich um eine "multi-format logical file" handelt, ...
       //  ... dann fragen, welches physiche Datei göffnet werden soll:
-      peek59(set0001.set_dsp80: '*QUESTION'
+      peek59(set0001.SET_Dsp80: '*QUESTION'
             : 'USR8212': '': 'YN'
-            : yMsgID: yMsgDta);
-      usr8190 = yMsgDta;
+            : YMsgID: YMsgDta);
+      usr8190 = YMsgDta;
       if (usr8190.var1 = '*YES');
-        f_basedpf(##file     :
-                 ##library  :
-                 ##member   :
-                 ##format   :
+        f_basedPF(##File     :
+                 ##Library  :
+                 ##Member   :
+                 ##Format   :
                  ##fmtnbr   :
-                 ##file     :
-                 ##library  :
-                 ##member   :
-                 ##format   );
+                 ##File     :
+                 ##Library  :
+                 ##Member   :
+                 ##Format   );
       else;
         leavesr;
       endif;
@@ -2653,18 +2653,18 @@ begsr c_sql;
 
   // Let the user enter the SQL WHERE and ORDER BY clauses:
   monitor;
-    yFile = ##file;
-    yLibrary = ##library;
-    yMember = ##member;
-    yformat = ##format;
-    ysqlwhere = sqlWhere;
-    ysqlorder = sqlOrder;
-    peek48(set0001.set_dsp80: COPYRIGHT
-          : yFile: yLibrary: yMember
-          : yformat
-          : accessMode: ysqlwhere: ysqlorder
+    YFile = ##File;
+    yLibrary = ##Library;
+    yMember = ##Member;
+    YFormat = ##Format;
+    YSqlWhere = sqlWhere;
+    YSqlOrder = sqlOrder;
+    peek48(set0001.SET_Dsp80: COPYRIGHT
+          : YFile: yLibrary: yMember
+          : YFormat
+          : AccessMode: YSqlWhere: YSqlOrder
           : auth.isChgSQLWhereAlw: auth.isChgSQLOrderByAlw
-          : yMsgID: yMsgDta);
+          : YMsgID: YMsgDta);
     *in99 = bFalse;
   on-error;
     *in99 = bTrue;
@@ -2674,34 +2674,34 @@ begsr c_sql;
     leavesr;
   endif;
 
-  if (yMsgID <> 'USR8112'); // Verarbeitung bestätigt.
+  if (YMsgID <> 'USR8112'); // Verarbeitung bestätigt.
     leavesr;
   endif;
 
   isPinToClr = bFalse;
 
-  exsr closefile;
+  exsr CloseFile;
 
-  ##file = yFile;
-  ##library = yLibrary;
-  ##member = yMember;
-  ##format = yformat;
+  ##File = YFile;
+  ##Library = yLibrary;
+  ##Member = yMember;
+  ##Format = YFormat;
 
-  if ((ysqlwhere  <> ' ') or
-      (ysqlorder  <> ' '));
-    if (accessMode <> SQL_SEQ);
-      oldaccmode = accessMode;
+  if ((YSqlWhere  <> ' ') or
+      (YSqlOrder  <> ' '));
+    if (AccessMode <> SQL_SEQ);
+      oldAccMode = AccessMode;
     endif;
-    accessMode = SQL_SEQ;
-    sqlWhere   = ysqlwhere;
-    sqlOrder   = ysqlorder;
+    AccessMode = SQL_SEQ;
+    sqlWhere   = YSqlWhere;
+    sqlOrder   = YSqlOrder;
   else;
-    accessMode = oldaccmode;
+    AccessMode = oldAccMode;
     sqlWhere   = ' ';
     sqlOrder   = ' ';
   endif;
 
-  exsr openfile;
+  exsr OpenFile;
 
   isPinToClr = bTrue;
 
@@ -2711,27 +2711,27 @@ endsr;
 //    S_Change      02 - Ändern Einzelsatz                    *
 //============================================================*
 
-begsr s_change;
+begsr S_Change;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
     //      Nix tun, keine Datei vorhanden
-    exsr msgnofile;
+    exsr MsgNoFile;
   else;
 
     if (isUpdMod = bFalse);
       //      Ändern nicht möglich, da INPUT-Modus
       clear usr0007;
-      usr0007.var1 = ##file;
-      usr0007.var2 = ##library;
-      p_sndpgmmg('USR0007': usr0007: sds.pgmname);
+      usr0007.var1 = ##File;
+      usr0007.var2 = ##Library;
+      p_sndPgmMg('USR0007': usr0007: sds.pgmName);
     else;
 
       exsr getSflRcd;
 
-      if (sflCsr > 0);
+      if (SflCsr > 0);
         yFunction = '*CHANGE';
         exsr callUpdPgm;
-        exsr reloadusrstg;
+        exsr ReloadUsrStg;
       else;
       //        kein Datensatz verfügbar
       endif;
@@ -2745,24 +2745,24 @@ endsr;
 //    S_Copy        03 - Kopieren Einzelsatz                  *
 //============================================================*
 
-begsr s_copy;
+begsr S_Copy;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
     //      Nix tun, keine Datei vorhanden
-    exsr msgnofile;
+    exsr MsgNoFile;
   else;
 
     if (isUpdMod = bFalse);
       //      Ändern nicht möglich, da INPUT-Modus
       clear usr0007;
-      usr0007.var1 = ##file;
-      usr0007.var2 = ##library;
-      p_sndpgmmg('USR0007': usr0007: sds.pgmname);
+      usr0007.var1 = ##File;
+      usr0007.var2 = ##Library;
+      p_sndPgmMg('USR0007': usr0007: sds.pgmName);
     else;
 
       exsr getSflRcd;
 
-      if (sflCsr > 0);
+      if (SflCsr > 0);
         yFunction = '*COPY';
         exsr callUpdPgm;
       else;
@@ -2778,11 +2778,11 @@ endsr;
 //    S_CopyExt     09 - Kopieren Einzelsatz in externe Datei *
 //============================================================*
 
-begsr s_copyExt;
+begsr S_CopyExt;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
     //      Nix tun, keine Datei vorhanden
-    exsr msgnofile;
+    exsr MsgNoFile;
   else;
 
     if (auth.isUpdAlw = bFalse);
@@ -2791,9 +2791,9 @@ begsr s_copyExt;
 
       exsr getSflRcd;
 
-      if (sflCsr > 0);
+      if (SflCsr > 0);
 
-        if (queryUser <> yPgmCmd);
+        if (queryUser <> YPgmCmd);
 
           //  Abfragen der Zielangaben ...
           exsr pbGetTarget;
@@ -2806,12 +2806,12 @@ begsr s_copyExt;
 
         else;
           //  Kopieren ohne Sicherheitsabfrage ...
-          yMsgID = 'USR8112'; // Verarbeitung bestätigt.
-          yMsgDta = '';
+          YMsgID = 'USR8112'; // Verarbeitung bestätigt.
+          YMsgDta = '';
         endif;
 
         //  Datensatz kopieren ...
-        if (yMsgID = 'USR8112'); // Verarbeitung bestätigt.
+        if (YMsgID = 'USR8112'); // Verarbeitung bestätigt.
           exsr copyExtRcd;
         endif;
 
@@ -2828,38 +2828,38 @@ endsr;
 //    S_Delete      04 - Löschen Einzelsatz                   *
 //============================================================*
 
-begsr s_delete;
+begsr S_Delete;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
     //      Nix tun, keine Datei vorhanden
-    exsr msgnofile;
+    exsr MsgNoFile;
   else;
 
     if (isUpdMod = bFalse);
       //      Löschen nicht möglich, da INPUT-Modus
       clear usr0007;
-      usr0007.var1 = ##file;
-      usr0007.var2 = ##library;
-      p_sndpgmmg('USR0007': usr0007: sds.pgmname);
+      usr0007.var1 = ##File;
+      usr0007.var2 = ##Library;
+      p_sndPgmMg('USR0007': usr0007: sds.pgmName);
     else;
 
       exsr getSflRcd;
 
-      if (sflCsr > 0);
+      if (SflCsr > 0);
 
-        if (queryUser <> yPgmCmd);
+        if (queryUser <> YPgmCmd);
 
           //  Fragen Benutzer ...
           exsr pbQueryUser;
 
         else;
           //  Löschen ohne Sicherheitsabfrage ...
-          yMsgID = 'USR8112'; // Verarbeitung bestätigt.
-          yMsgDta = '';
+          YMsgID = 'USR8112'; // Verarbeitung bestätigt.
+          YMsgDta = '';
         endif;
 
         //  Datensatz löschen ...
-        if (yMsgID = 'USR8112'); // Verarbeitung bestätigt.
+        if (YMsgID = 'USR8112'); // Verarbeitung bestätigt.
           exsr delRecord;
         endif;
 
@@ -2875,30 +2875,30 @@ endsr;
 //    S_Display     05 - Anzeigen Einzelsatz                  *
 //============================================================*
 
-begsr s_display;
+begsr S_Display;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
     //      Nix tun, keine Datei vorhanden
-    exsr msgnofile;
+    exsr MsgNoFile;
   else;
 
     exsr getSflRcd;
 
-    if (sflCsr > 0);
+    if (SflCsr > 0);
 
       monitor;
-        yHeaderType = set0001.set_hedtyp;
-        PEEK14(set0001.set_dsp80: yHeaderType: COPYRIGHT
-              : wrk#rcdnbr: h_file: h_lib: h_mbr
+        yHeaderType = set0001.SET_HedTyp;
+        PEEK14(set0001.SET_Dsp80: yHeaderType: COPYRIGHT
+              : Wrk#RcdNbr: h_file: h_lib: h_mbr
               : h_rcdfmt: '*DISPLAY': commitLvl
-              : yScreenNbr: yMsgID: yMsgDta);
-        if (yMsgID = 'USR8100'); // Verarbeitung abgebrochen
-          p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
-          yMsgID = '';
-          yMsgDta = '';
+              : yScreenNbr: YMsgID: YMsgDta);
+        if (YMsgID = 'USR8100'); // Verarbeitung abgebrochen
+          p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
+          YMsgID = '';
+          YMsgDta = '';
         else;
-          if (set0001.set_hedtyp <> yHeaderType);
-            set0001.set_hedtyp = yHeaderType;
+          if (set0001.SET_HedTyp <> yHeaderType);
+            set0001.SET_HedTyp = yHeaderType;
             exsr pbHeadline;
           endif;
         endif;
@@ -2918,29 +2918,29 @@ endsr;
 //    S_Print       06 - Drucken Datensatz                    *
 //============================================================*
 
-begsr s_print;
+begsr S_Print;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
     //      Nix tun, keine Datei vorhanden
-    exsr msgnofile;
+    exsr MsgNoFile;
   else;
 
     exsr getSflRcd;
 
-    if (sflCsr > 0);
+    if (SflCsr > 0);
 
       monitor;
-        peek65(wrk#rcdnbr: h_file: h_lib: h_mbr: ''
-              : yMsgID: yMsgDta);
+        peek65(Wrk#RcdNbr: h_file: h_lib: h_mbr: ''
+              : YMsgID: YMsgDta);
         *in99 = bFalse;
       on-error;
         *in99 = bTrue;
       endmon;
 
-      if (yMsgID <> '');
-        p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
-        yMsgID  = '';
-        yMsgDta = '';
+      if (YMsgID <> '');
+        p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
+        YMsgID  = '';
+        YMsgDta = '';
       endif;
 
     else;
@@ -2954,35 +2954,35 @@ endsr;
 //    S_PinRcd      P  - Pin Datensatz                        *
 //============================================================*
 
-begsr s_pinrcd;
+begsr S_PinRcd;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
     //**  F4Open        OREQ      '0'
     //      Nix tun, keine Datei vorhanden
-    exsr msgnofile;
+    exsr MsgNoFile;
   else;
 
-    if (f_numbased(##file: ##library: ##member) > 1);
+    if (f_numBased(##File: ##Library: ##Member) > 1);
       clear usr8218;
-      p_sndpgmmg('USR8218': usr8218: sds.pgmname);
-      isCmdErr = bTrue;
+      p_sndPgmMg('USR8218': usr8218: sds.pgmName);
+      IsCmdErr = bTrue;
       isCancel = bTrue;
     else;
 
       exsr getSflRcd;
 
-      if (sflCsr > 0);
+      if (SflCsr > 0);
 
-        if (f_chain04(wrk#rcdnbr:
+        if (f_chain04(Wrk#RcdNbr:
                    h_file   :
                    h_lib    :
                    h_mbr    :
                    h_rcdfmt ) = '0');
-          exsr pinrecord;
+          exsr PinRecord;
 
         else;
           //  Datensatz nicht gefunden ...
-          p_sndpgmmg('USR8120': '': sds.pgmname);
+          p_sndPgmMg('USR8120': '': sds.pgmName);
         endif;
 
       else;
@@ -2997,24 +2997,24 @@ endsr;
 //    S_UnPinRcd    UP - UnPin Datensatz                      *
 //============================================================*
 
-begsr s_unpinrcd;
+begsr S_UnPinRcd;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
     //      Nix tun, keine Datei vorhanden
-    exsr msgnofile;
+    exsr MsgNoFile;
   else;
 
     exsr getSflRcd;
 
-    if (sflCsr > 0);
+    if (SflCsr > 0);
 
-      exsr chkpinrcd;
-      if (ispinned = bFalse);
+      exsr ChkPinRcd;
+      if (IsPinned = bFalse);
         //  Datensatz ist nicht gepinned ...
-        p_sndpgmmg('USR8121': '': sds.pgmname);
+        p_sndPgmMg('USR8121': '': sds.pgmName);
       else;
         //  Datensatz ist gepinned ...
-        exsr rmvpinrcd;
+        exsr RmvPinRcd;
       endif;
 
     else;
@@ -3028,12 +3028,12 @@ endsr;
 //    S_TgTblPap    Toggeln Tabellierpapierfunktion           *
 //============================================================*
 
-begsr s_tgtblpap;
+begsr S_TgTblPap;
 
-  if (set0001.set_tblmde = bTrue);
-    exsr s_tblpapof;
+  if (set0001.SET_TblMde = bTrue);
+    exsr S_TblPapOf;
   else;
-    exsr s_tblpapon;
+    exsr S_TblPapOn;
   endif;
 
 endsr;
@@ -3042,13 +3042,13 @@ endsr;
 //    S_TblPapOn    Einschalten Tabellierpapier               *
 //============================================================*
 
-begsr s_tblpapon;
+begsr S_TblPapOn;
 
-  if (set0001.set_tblmde = bTrue);
+  if (set0001.SET_TblMde = bTrue);
     //  Fehlermeldung ...
-    p_sndpgmmg('USR8149': '': sds.pgmname);
+    p_sndPgmMg('USR8149': '': sds.pgmName);
   else;
-    set0001.set_tblmde = bTrue;
+    set0001.SET_TblMde = bTrue;
     isSflDirty = bTrue;
   endif;
 
@@ -3058,13 +3058,13 @@ endsr;
 //    S_TblPapOf    Ausschalten Tabellierpapier               *
 //============================================================*
 
-begsr s_tblpapof;
+begsr S_TblPapOf;
 
-  if (set0001.set_tblmde = bFalse);
+  if (set0001.SET_TblMde = bFalse);
     //  Fehlermeldung ...
-    p_sndpgmmg('USR8150': '': sds.pgmname);
+    p_sndPgmMg('USR8150': '': sds.pgmName);
   else;
-    set0001.set_tblmde = bFalse;
+    set0001.SET_TblMde = bFalse;
     isSflDirty = bTrue;
   endif;
 
@@ -3074,22 +3074,22 @@ endsr;
 //    S_TgPinCol    PC - Pin Spalte                           *
 //============================================================*
 
-begsr s_tgpincol;
+begsr S_TgPinCol;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
     //      Nix tun, keine Datei vorhanden
-    exsr msgnofile;
+    exsr MsgNoFile;
   else;
 
-    exsr getfldtmrk;
+    exsr GetFldTMrk;
 
-    if (wrk#field <> '');
-      pin#field = wrk#field;
-      exsr chkpincol;
-      if (ispinned = bFalse);
+    if (Wrk#Field <> '');
+      Pin#Field = Wrk#Field;
+      exsr ChkPinCol;
+      if (IsPinned = bFalse);
         //  Datensatz ist noch nicht gepinned ...
         //  Spalte pinnen ...
-        exsr pincol;
+        exsr PinCol;
       else;
         exsr rmvPincolumn;
       endif;
@@ -3097,7 +3097,7 @@ begsr s_tgpincol;
   endif;
 
   //  Beibehalten der Cursorposition ...
-  exsr keepCsrPos;
+  exsr KeepCsrPos;
 
 endsr;
 
@@ -3105,23 +3105,23 @@ endsr;
 //    S_PinCol      PC - Pin Spalte                           *
 //============================================================*
 
-begsr s_pincol;
+begsr S_PinCol;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
     //      Nix tun, keine Datei vorhanden
-    exsr msgnofile;
+    exsr MsgNoFile;
   else;
 
-    exsr getfldtmrk;
+    exsr GetFldTMrk;
 
-    if (wrk#field <> '');
+    if (Wrk#Field <> '');
       //  Spalte pinnen ...
-      exsr pincol;
+      exsr PinCol;
     endif;
   endif;
 
   //  Beibehalten der Cursorposition ...
-  exsr keepCsrPos;
+  exsr KeepCsrPos;
 
 endsr;
 
@@ -3129,23 +3129,23 @@ endsr;
 //    S_UnPinCol    UC - UnPin Spalte                         *
 //============================================================*
 
-begsr s_unpincol;
+begsr S_UnPinCol;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
     //      Nix tun, keine Datei vorhanden
-    exsr msgnofile;
+    exsr MsgNoFile;
   else;
 
-    exsr getfldtmrk;
+    exsr GetFldTMrk;
 
-    if (wrk#field <> '');
-      pin#field = wrk#field;
-      exsr chkpincol;
-      if (ispinned = bFalse);
+    if (Wrk#Field <> '');
+      Pin#Field = Wrk#Field;
+      exsr ChkPinCol;
+      if (IsPinned = bFalse);
         //  Spalte ist nicht gepinned ...
         clear usr8147;
-        usr8147.var1 = wrk#field;
-        p_sndpgmmg('USR8147': usr8147: sds.pgmname);
+        usr8147.var1 = Wrk#Field;
+        p_sndPgmMg('USR8147': usr8147: sds.pgmName);
       else;
         //  Spalte ist gepinned ...
         exsr rmvPincolumn;
@@ -3154,7 +3154,7 @@ begsr s_unpincol;
   endif;
 
   //  Beibehalten der Cursorposition ...
-  exsr keepCsrPos;
+  exsr KeepCsrPos;
 
 endsr;
 
@@ -3162,11 +3162,11 @@ endsr;
 //    S_SplashOn    Einschalten Splash-Screen                 *
 //============================================================*
 
-begsr s_splashon;
+begsr S_SplashOn;
 
   set0005.set_spla = bTrue;
 
-  p_sndpgmmg('USR8161': '': sds.pgmname);
+  p_sndPgmMg('USR8161': '': sds.pgmName);
 
 endsr;
 
@@ -3174,11 +3174,11 @@ endsr;
 //    S_SplashOf    Ausschalten Splash-Screen                 *
 //============================================================*
 
-begsr s_splashof;
+begsr S_SplashOf;
 
   set0005.set_spla = bFalse;
 
-  p_sndpgmmg('USR8162': '': sds.pgmname);
+  p_sndPgmMg('USR8162': '': sds.pgmName);
 
 endsr;
 
@@ -3186,25 +3186,25 @@ endsr;
 //    S_ShortCmd    Ausführen Kurzbefehl                      *
 //============================================================*
 
-begsr s_shortcmd;
+begsr S_ShortCmd;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
     //      Nix tun, keine Datei vorhanden
-    exsr msgnofile;
+    exsr MsgNoFile;
   else;
 
     exsr getSflRcd;
 
-    if (sflCsr > 0);
+    if (SflCsr > 0);
 
-      clear shortcmd;
-      shortcmd.sc_action = '*CMD';
-      shortcmd.sc_cmd = ycmddta;
+      clear ShortCmd;
+      ShortCmd.SC_Action = '*CMD';
+      ShortCmd.SC_Cmd = YCmdDta;
 
       monitor;
         peek42(h_file: h_lib: h_mbr: h_rcdfmt
-              : shortcmd: wrk#rcdnbr: yexeccmd
-              : yMsgID: yMsgDta);
+              : ShortCmd: Wrk#RcdNbr: YExecCmd
+              : YMsgID: YMsgDta);
         *in99 = bFalse;
       on-error;
         *in99 = bTrue;
@@ -3213,19 +3213,19 @@ begsr s_shortcmd;
       select;
       when (*in99 = *on);
       //           Program error
-      when (yMsgID <> *blanks);
-        p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
-        yMsgID = '';
-        yMsgDta = '';
+      when (YMsgID <> *blanks);
+        p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
+        YMsgID = '';
+        YMsgDta = '';
 
-      when (yexeccmd = *blanks);
+      when (YExecCmd = *blanks);
       //           No command to excute
       other;
-        f_execute(yexeccmd: yMsgID: yMsgDta);
-        if (yMsgID <> '');
-          p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
-          yMsgID = '';
-          yMsgDta = '';
+        f_execute(YExecCmd: YMsgID: YMsgDta);
+        if (YMsgID <> '');
+          p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
+          YMsgID = '';
+          YMsgDta = '';
         endif;
       endsl;
 
@@ -3240,11 +3240,11 @@ endsr;
 //    S_About        A - Über Peek/400                        *
 //============================================================*
 
-begsr s_about;
+begsr S_About;
 
-  peek49(set0001.set_dsp80: COPYRIGHT
+  peek49(set0001.SET_Dsp80: COPYRIGHT
         : RELEASE: VERSION
-        : yMsgID: yMsgDta);
+        : YMsgID: YMsgDta);
 
 endsr;
 
@@ -3252,18 +3252,18 @@ endsr;
 //    S_DspNrm      Normale Anzeige                           *
 //============================================================*
 
-begsr s_dspnrm;
+begsr S_DspNrm;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
     //      Nix tun, keine Datei vorhanden
-    exsr msgnofile;
+    exsr MsgNoFile;
   else;
-    if (set0001.set_dspmde = '*DSPNRM');
+    if (set0001.SET_DspMde = '*DSPNRM');
     //    ... Anzeige stimmt bereits
     else;
 
       //  Umschalten der Anzeige
-      set0001.set_dspmde = '*DSPNRM';
+      set0001.SET_DspMde = '*DSPNRM';
       isSflDirty = bTrue;
 
     endif;
@@ -3275,22 +3275,22 @@ endsr;
 //    S_DspHex      Hexadezimale Anzeige                      *
 //============================================================*
 
-begsr s_dsphex;
+begsr S_DspHex;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
     //      Nix tun, keine Datei vorhanden
-    exsr msgnofile;
+    exsr MsgNoFile;
   else;
-    if (set0001.set_dspmde = '*DSPHEX');
+    if (set0001.SET_DspMde = '*DSPHEX');
     //    ... Anzeige stimmt bereits
     else;
 
-      if (file#x.rcdlen > RCD_BUFF_LEN);
+      if (File#X.RcdLen > RCD_BUFF_LEN);
         clear usr8206;
         usr8206.var1   = RCD_BUFF_LEN;
-        p_sndpgmmg('USR8206': usr8206: sds.pgmname);
+        p_sndPgmMg('USR8206': usr8206: sds.pgmName);
       else;
-        set0001.set_dspmde = '*DSPHEX';
+        set0001.SET_DspMde = '*DSPHEX';
         isSflDirty = bTrue;
       endif;
 
@@ -3303,16 +3303,16 @@ endsr;
 //    S_DspTgl      Umschalten der Anzeige                    *
 //============================================================*
 
-begsr s_dsptgl;
+begsr S_DspTgl;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
     //      Nix tun, keine Datei vorhanden
-    exsr msgnofile;
+    exsr MsgNoFile;
   else;
-    if (set0001.set_dspmde = '*DSPNRM');
-      exsr s_dsphex;
+    if (set0001.SET_DspMde = '*DSPNRM');
+      exsr S_DspHex;
     else;
-      exsr s_dspnrm;
+      exsr S_DspNrm;
     endif;
 
     isSflDirty = bTrue;
@@ -3324,35 +3324,35 @@ endsr;
 //    S_SaveEnv     Sichern Arbeitsumgebung                   *
 //============================================================*
 
-begsr s_saveenv;
+begsr S_SaveEnv;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
     //      Nix tun, keine Datei vorhanden
-    exsr msgnofile;
+    exsr MsgNoFile;
   else;
 
-    peek56(set0001.set_dsp80: COPYRIGHT: '*SAVE'
-          : yenvfile: yenvlib: yenvmbr
+    peek56(set0001.SET_Dsp80: COPYRIGHT: '*SAVE'
+          : YEnvFile: YEnvLib: YEnvMbr
           : $$rcdfmtid
-          : yQFile: yMember: ytext: yoption
-          : yMsgID: yMsgDta);
+          : YQFile: yMember: YText: YOption
+          : YMsgID: YMsgDta);
 
-    if (yMsgID <> ' ');
-      p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
-      yMsgID = '';
-      yMsgDta = '';
+    if (YMsgID <> ' ');
+      p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
+      YMsgID = '';
+      YMsgDta = '';
     else;
 
-      yenvfile = yFile;
-      yenvlib  = yLibrary;
-      yenvmbr  = yMember;
-      yisautosave = bFalse;
-      exsr saveenv;
+      YEnvFile = YFile;
+      YEnvLib  = yLibrary;
+      YEnvMbr  = yMember;
+      YIsAutoSave = bFalse;
+      exsr SaveEnv;
 
-      if (yMsgID <> ' ');
-        p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
-        yMsgID = '';
-        yMsgDta = '';
+      if (YMsgID <> ' ');
+        p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
+        YMsgID = '';
+        YMsgDta = '';
       endif;
 
     endif;
@@ -3365,33 +3365,33 @@ endsr;
 //    S_LoadEnv     Laden Arbeitsumgebung                     *
 //============================================================*
 
-begsr s_loadenv;
+begsr S_LoadEnv;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
     //      Nix tun, keine Datei vorhanden
-    exsr msgnofile;
+    exsr MsgNoFile;
   else;
 
-    peek56(set0001.set_dsp80: COPYRIGHT: '*LOAD'
-          : yenvfile: yenvlib: yenvmbr
+    peek56(set0001.SET_Dsp80: COPYRIGHT: '*LOAD'
+          : YEnvFile: YEnvLib: YEnvMbr
           : $$rcdfmtid
-          : yQFile: yMember: ytext: yoption
-          : yMsgID: yMsgDta);
+          : YQFile: yMember: YText: YOption
+          : YMsgID: YMsgDta);
 
-    if (yMsgID <> ' ');
-      p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
-      yMsgID = '';
-      yMsgDta = '';
+    if (YMsgID <> ' ');
+      p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
+      YMsgID = '';
+      YMsgDta = '';
     else;
 
-      yenvfile = yFile;
-      yenvlib  = yLibrary;
-      yenvmbr  = yMember;
-      exsr loadenv;
-      if (yMsgID <> ' ');
-        p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
-        yMsgID = '';
-        yMsgDta = '';
+      YEnvFile = YFile;
+      YEnvLib  = yLibrary;
+      YEnvMbr  = yMember;
+      exsr LoadEnv;
+      if (YMsgID <> ' ');
+        p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
+        YMsgID = '';
+        YMsgDta = '';
       endif;
 
       isSflDirty = bTrue;
@@ -3404,71 +3404,71 @@ endsr;
 //    LoadEnv       Laden Arbeitsumgebung                     *
 //============================================================*
 
-begsr loadenv;
+begsr LoadEnv;
 
   isPinToClr = bFalse;
 
-  if (##member = '*NONE');
+  if (##Member = '*NONE');
     leavesr;
   endif;
 
   clear rtn;
-  rtn.file = ##file;
-  rtn.library = ##library;
-  rtn.member = ##member;
-  rtn.format = ##format;
-  rtn.accessmode = accessMode;
-  rtn.sqlwhere = sqlWhere;
-  rtn.sqlorder = sqlOrder;
+  rtn.file = ##File;
+  rtn.library = ##Library;
+  rtn.member = ##Member;
+  rtn.format = ##Format;
+  rtn.AccessMode = AccessMode;
+  rtn.sqlWhere = sqlWhere;
+  rtn.sqlOrder = sqlOrder;
 
-  peek55(##file: ##library: ##member: ##format
+  peek55(##File: ##Library: ##Member: ##Format
         : $$rcdfmtid
-        : yenvfile: yenvlib: yenvmbr
-        : yoption
-        : pinTabRcd: nbrPinRcd
-        : pinTabCol: nbrPinCol
+        : YEnvFile: YEnvLib: YEnvMbr
+        : YOption
+        : PinTabRcd: nbrPinRcd
+        : pinTabCol: NbrPinCol
         : rtn.file: rtn.library: rtn.member
         : rtn.format
-        : rtn.accessmode: rtn.sqlwhere
-        : rtn.sqlorder
+        : rtn.AccessMode: rtn.sqlWhere
+        : rtn.sqlOrder
         : isKeyLower
-        : yMsgID: yMsgDta);
+        : YMsgID: YMsgDta);
 
-  if (yMsgID <> ' ');
+  if (YMsgID <> ' ');
   // TODO: remove code
   // p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
   // yMsgID = '';
   // yMsgDta = '';
   else;
 
-    if (##file     <> rtn.file or
-       ##library  <> rtn.library or
-       ##member   <> rtn.member or
-       ##format   <> rtn.format or
-       accessMode <> rtn.accessmode or
-       sqlWhere   <> rtn.sqlwhere or
-       sqlOrder   <> rtn.sqlorder);
-      exsr closefile;
-      ##file     = rtn.file;
-      ##library  = rtn.library;
-      ##member   = rtn.member;
-      ##format   = rtn.format;
-      accessMode = rtn.accessmode;
-      sqlWhere   = rtn.sqlwhere;
-      sqlOrder   = rtn.sqlorder;
-      exsr openfile;
-      peek55(##file: ##library: ##member: ##format
+    if (##File     <> rtn.file or
+       ##Library  <> rtn.library or
+       ##Member   <> rtn.member or
+       ##Format   <> rtn.format or
+       AccessMode <> rtn.AccessMode or
+       sqlWhere   <> rtn.sqlWhere or
+       sqlOrder   <> rtn.sqlOrder);
+      exsr CloseFile;
+      ##File     = rtn.file;
+      ##Library  = rtn.library;
+      ##Member   = rtn.member;
+      ##Format   = rtn.format;
+      AccessMode = rtn.AccessMode;
+      sqlWhere   = rtn.sqlWhere;
+      sqlOrder   = rtn.sqlOrder;
+      exsr OpenFile;
+      peek55(##File: ##Library: ##Member: ##Format
             : $$rcdfmtid
-            : yenvfile: yenvlib: yenvmbr
-            : yoption
-            : pinTabRcd: nbrPinRcd
-            : pinTabCol: nbrPinCol
+            : YEnvFile: YEnvLib: YEnvMbr
+            : YOption
+            : PinTabRcd: nbrPinRcd
+            : pinTabCol: NbrPinCol
             : rtn.file: rtn.library: rtn.member
             : rtn.format
-            : rtn.accessmode: rtn.sqlwhere
-            : rtn.sqlorder
+            : rtn.AccessMode: rtn.sqlWhere
+            : rtn.sqlOrder
             : isKeyLower
-            :yMsgID: yMsgDta);
+            :YMsgID: YMsgDta);
     endif;
 
     isKeyLower = yIsKeyLower;
@@ -3482,17 +3482,17 @@ endsr;
 //    SaveEnv       Speichern Arbeitsumgebung                 *
 //============================================================*
 
-begsr saveenv;
+begsr SaveEnv;
 
-  peek54(##file: ##library: ##member: ##format
+  peek54(##File: ##Library: ##Member: ##Format
         : $$rcdfmtid
-        : yenvfile: yenvlib: yenvmbr
-        : yisautosave
-        : pinTabRcd: nbrPinRcd
-        : pinTabCol: nbrPinCol
-        : accessMode: sqlWhere
+        : YEnvFile: YEnvLib: YEnvMbr
+        : YIsAutoSave
+        : PinTabRcd: nbrPinRcd
+        : pinTabCol: NbrPinCol
+        : AccessMode: sqlWhere
         : sqlOrder: isKeyLower
-        : yMsgID: yMsgDta);
+        : YMsgID: YMsgDta);
 
 endsr;
 
@@ -3500,39 +3500,39 @@ endsr;
 //    S_DelEnv      Löschen Arbeitsumgebung                   *
 //============================================================*
 
-begsr s_delenv;
+begsr S_DelEnv;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
     //      Nix tun, keine Datei vorhanden
-    exsr msgnofile;
+    exsr MsgNoFile;
   else;
 
     for do_x2 = 1 to *hival;
 
-      peek56(set0001.set_dsp80: COPYRIGHT: '*DELETE'
-            : yenvfile: yenvlib: yenvmbr
+      peek56(set0001.SET_Dsp80: COPYRIGHT: '*DELETE'
+            : YEnvFile: YEnvLib: YEnvMbr
             : ''
-            : yQFile: yMember: ytext: yoption
-            : yMsgID: yMsgDta);
+            : YQFile: yMember: YText: YOption
+            : YMsgID: YMsgDta);
 
-      if (yMsgID <> ' ');
-        p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
-        yMsgID = '';
-        yMsgDta = '';
+      if (YMsgID <> ' ');
+        p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
+        YMsgID = '';
+        YMsgDta = '';
         leave;
       else;
 
-        peek57(set0001.set_dsp80: COPYRIGHT
-              : yFile: yLibrary: yMember: ytext
-              : yMsgID: yMsgDta);
+        peek57(set0001.SET_Dsp80: COPYRIGHT
+              : YFile: yLibrary: yMember: YText
+              : YMsgID: YMsgDta);
 
-        if (yMsgID <> ' ');
-          if (yMsgDta = '*CANCEL');
+        if (YMsgID <> ' ');
+          if (YMsgDta = '*CANCEL');
             iter;
           else;
-            p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
-            yMsgID = '';
-            yMsgDta = '';
+            p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
+            YMsgID = '';
+            YMsgDta = '';
             leave;
           endif;
         endif;
@@ -3549,10 +3549,10 @@ endsr;
 //    MsgNoFile     Nachricht: Keine Datei geöffnet           *
 //============================================================*
 
-begsr msgnofile;
+begsr MsgNoFile;
 
   clear usr9996;
-  p_sndpgmmg('USR9996': usr9996: sds.pgmname);
+  p_sndPgmMg('USR9996': usr9996: sds.pgmName);
 
 endsr;
 
@@ -3563,7 +3563,7 @@ endsr;
 begsr msgInvSqlFile;
 
   clear usr9993;
-  p_sndpgmmg('USR9993': usr9993: sds.pgmname);
+  p_sndPgmMg('USR9993': usr9993: sds.pgmName);
 
 endsr;
 
@@ -3571,7 +3571,7 @@ endsr;
 //    ClrPinRow     Löschen der Pin-Tabelle für Zeilen        *
 //============================================================*
 
-begsr clrpinrow;
+begsr ClrPinRow;
 
   if (isPinToClr = bTrue);
     nbrPinRcd = 0;
@@ -3587,10 +3587,10 @@ endsr;
 //    ClrPinCol     Löschen der Pin-Tabelle für Spalten       *
 //============================================================*
 
-begsr clrpincol;
+begsr ClrPinCol;
 
   if (isPinToClr = bTrue);
-    nbrPinCol = 0;
+    NbrPinCol = 0;
     clear pinTabCol;
     isSflDirty = bTrue;
   else;
@@ -3606,27 +3606,27 @@ endsr;
 begsr pbGetTarget;
 
   if (isTargetOK);
-    yMsgID = 'USR8112'; // Verarbeitung bestätigt.
-    yMsgDta = '';
+    YMsgID = 'USR8112'; // Verarbeitung bestätigt.
+    YMsgDta = '';
     leavesr;
   endif;
 
   monitor;
-    peek26(set0001.set_dsp80: yQFile: h_mbr
+    peek26(set0001.SET_Dsp80: YQFile: h_mbr
           : copyExternal.file: copyExternal.lib: copyExternal.toMbr
-          : copyExternal.mbrOpt: copyExternal.crtFile: yMsgID: yMsgDta);
+          : copyExternal.mbrOpt: copyExternal.crtFile: YMsgID: YMsgDta);
     *in99 = bFalse;
   on-error;
     *in99 = bTrue;
   endmon;
 
   if (*in99 = *on);
-    isError = bTrue;
+    IsError = bTrue;
     isTargetOK = bFalse;
   else;
-    isError = bFalse;
+    IsError = bFalse;
     //  Abbruch mit F3/F12 (USR8100): kein Ziel, nichts kopieren
-    if (yMsgID = 'USR8112'); // Verarbeitung bestätigt.
+    if (YMsgID = 'USR8112'); // Verarbeitung bestätigt.
       isTargetOK = bTrue;
     else;
       isTargetOK = bFalse;
@@ -3642,18 +3642,18 @@ endsr;
 begsr pbQueryUser;
 
   monitor;
-    yHeaderType = set0001.set_hedtyp;
-    PEEK14(set0001.set_dsp80: yHeaderType: COPYRIGHT
-          : wrk#rcdnbr: h_file: h_lib: h_mbr
-          : h_rcdfmt: yPgmCmd: commitLvl
-          : yScreenNbr: yMsgID: yMsgDta);
-    if (yMsgID = 'USR8100'); // Verarbeitung abgebrochen
-      p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
-      yMsgID = '';
-      yMsgDta = '';
+    yHeaderType = set0001.SET_HedTyp;
+    PEEK14(set0001.SET_Dsp80: yHeaderType: COPYRIGHT
+          : Wrk#RcdNbr: h_file: h_lib: h_mbr
+          : h_rcdfmt: YPgmCmd: commitLvl
+          : yScreenNbr: YMsgID: YMsgDta);
+    if (YMsgID = 'USR8100'); // Verarbeitung abgebrochen
+      p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
+      YMsgID = '';
+      YMsgDta = '';
     else;
-      if (set0001.set_hedtyp <> yHeaderType);
-        set0001.set_hedtyp = yHeaderType;
+      if (set0001.SET_HedTyp <> yHeaderType);
+        set0001.SET_HedTyp = yHeaderType;
         exsr pbHeadline;
       endif;
     endif;
@@ -3667,22 +3667,22 @@ begsr pbQueryUser;
   else;
 
     select;
-    when (yMsgID = 'USR8100'); // Verarbeitung abgebrochen. (F3/F12)
+    when (YMsgID = 'USR8100'); // Verarbeitung abgebrochen. (F3/F12)
 
-    when (yMsgID = 'USR8111'); // Alle Datensätze verarbeiten.
-      queryUser = yPgmCmd;
-      yMsgId = 'USR8112'; // Verarbeitung bestätigt.
-      yMsgDta = '';
-      p_sndpgmmg('USR8112': '': sds.pgmname); // Verarbeitung bestätigt.
+    when (YMsgID = 'USR8111'); // Alle Datensätze verarbeiten.
+      queryUser = YPgmCmd;
+      YMsgID = 'USR8112'; // Verarbeitung bestätigt.
+      YMsgDta = '';
+      p_sndPgmMg('USR8112': '': sds.pgmName); // Verarbeitung bestätigt.
 
-    when (yMsgID = 'USR8112'); // Verarbeitung bestätigt.
+    when (YMsgID = 'USR8112'); // Verarbeitung bestätigt.
 
     //  Unerwartete Nachrichten-ID ...
     other;
       clear usr9998;
-      usr9998.var1 = yMsgID;
+      usr9998.var1 = YMsgID;
       usr9998.var2 = 'PEEK14';
-      p_sndpgmmg('USR9998': usr9998: sds.pgmname);
+      p_sndPgmMg('USR9998': usr9998: sds.pgmName);
     endsl;
 
   endif;
@@ -3693,36 +3693,36 @@ endsr;
 //    PinRecord     Datensatz pinnen                          *
 //============================================================*
 
-begsr pinrecord;
+begsr PinRecord;
 
-  ispinok = bFalse;
+  IsPinOK = bFalse;
 
-  exsr chkpinrcd;
-  if (ispinned = bFalse);
+  exsr ChkPinRcd;
+  if (IsPinned = bFalse);
     //  Datensatz ist noch nicht gepinned ...
     clear pinTabRcdE;
-    x = %lookup(pinTabRcdE: pinTabRcd: x);
+    x = %lookup(pinTabRcdE: PinTabRcd: x);
     if (x > 0);
       //  ... Datensatz pinnen
-      pinTabRcdE.rcdnbr = wrk#rcdnbr;
+      pinTabRcdE.RcdNbr = Wrk#RcdNbr;
       pinTabRcdE.file = h_file;
       pinTabRcdE.lib = h_lib;
       pinTabRcdE.mbr = h_mbr;
-      pinTabRcdE.rcdfmt = h_rcdfmt;
-      pinTabRcdE.mbrnbr = h_mbrnbr;
-      pinTabRcd(x) = pinTabRcdE;
+      pinTabRcdE.rcdFmt = h_rcdfmt;
+      pinTabRcdE.mbrNbr = h_mbrnbr;
+      PinTabRcd(x) = pinTabRcdE;
 
       nbrPinRcd = x;
       isSflDirty = bTrue;
-      ispinok = bTrue;
+      IsPinOK = bTrue;
     else;
       //  Kein Platz mehr vorhanden ...
-      p_sndpgmmg('USR8118': '': sds.pgmname);
+      p_sndPgmMg('USR8118': '': sds.pgmName);
     endif;
 
   else;
     //  Datensatz ist schon gepinned
-    p_sndpgmmg('USR8119': '': sds.pgmname);
+    p_sndPgmMg('USR8119': '': sds.pgmName);
   endif;
 
 endsr;
@@ -3731,31 +3731,31 @@ endsr;
 //    PinCol        Spalte pinnen                             *
 //============================================================*
 
-begsr pincol;
+begsr PinCol;
 
-  ispinok = bFalse;
+  IsPinOK = bFalse;
 
-  pin#field = wrk#field;
-  exsr chkpincol;
-  if (ispinned = bFalse);
+  Pin#Field = Wrk#Field;
+  exsr ChkPinCol;
+  if (IsPinned = bFalse);
     //  Datensatz ist noch nicht gepinned ...
     x = 1;
-    pin#field = '';
-    x = %lookup(pin#field: pinTabCol: x);
+    Pin#Field = '';
+    x = %lookup(Pin#Field: pinTabCol: x);
     if (x > 0);
       //  ... Datensatz pinnen
-      pinTabCol(x) = wrk#field;
-      nbrPinCol = x;
+      pinTabCol(x) = Wrk#Field;
+      NbrPinCol = x;
       isSflDirty = bTrue;
-      ispinok = bTrue;
+      IsPinOK = bTrue;
     else;
       //  Kein Platz mehr vorhanden ...
-      p_sndpgmmg('USR8118': '': sds.pgmname);
+      p_sndPgmMg('USR8118': '': sds.pgmName);
     endif;
 
   else;
     //  Datensatz ist schon gepinned
-    p_sndpgmmg('USR8119': '': sds.pgmname);
+    p_sndPgmMg('USR8119': '': sds.pgmName);
   endif;
 
 endsr;
@@ -3766,42 +3766,42 @@ endsr;
 
 begsr delRecord;
 
-  if (f_chain00(wrk#rcdnbr: h_file: h_lib: h_mbr: '') = bTrue);
+  if (f_chain00(Wrk#RcdNbr: h_file: h_lib: h_mbr: '') = bTrue);
 
     //  Fehler bei Zugriff auf Datensatz ...
-    usr8200.var1 = wrk#rcdnbr;
-    p_sndpgmmg('USR8200': usr8200: sds.pgmname);
+    usr8200.var1 = Wrk#RcdNbr;
+    p_sndPgmMg('USR8200': usr8200: sds.pgmName);
 
   else;
 
-    if (cio_delete(hfile00) = bTrue);
+    if (CIO_delete(hFile00) = bTrue);
       *in99 = '0';
     else;
       *in99 = '1';
     endif;
-    exsr f0tofx;
+    exsr F0toFx;
 
     if (*in99 = *on);
       if (*in55 = bTrue);
         rolbk;
       else;
-        cio_unlock(hfile00);
+        CIO_unlock(hFile00);
       endif;
-      exsr f0tofx;
+      exsr F0toFx;
 
-      usr8200.var1 = wrk#rcdnbr;
-      p_sndpgmmg('USR8200': usr8200: sds.pgmname);
+      usr8200.var1 = Wrk#RcdNbr;
+      p_sndPgmMg('USR8200': usr8200: sds.pgmName);
     else;
       if (*in55 = bTrue);
         commit;
       else;
-        cio_unlock(hfile00);
+        CIO_unlock(hFile00);
       endif;
-      exsr f0tofx;
+      exsr F0toFx;
       exsr callExit04;
 
-      usr8201.var1 = wrk#rcdnbr;
-      p_sndpgmmg('USR8201': usr8201: sds.pgmname);
+      usr8201.var1 = Wrk#RcdNbr;
+      p_sndPgmMg('USR8201': usr8201: sds.pgmName);
       isSflDirty = bTrue;
     endif;
 
@@ -3817,9 +3817,9 @@ endsr;
 begsr callExit04;
 
   if (f_exist('EXIT04': '*LIBL': '*PGM') = bTrue);
-    callp EXIT04(file#x.file: file#x.library: file#x.member
+    callp EXIT04(File#X.file: File#X.library: File#X.member
                  : '*DELETE': sds.user: %timestamp()
-                 : wrk#rcdnbr: file#x.rcdlen: %addr(io_buff): *null);
+                 : Wrk#RcdNbr: File#X.RcdLen: %addr(IO_Buff): *null);
   endif;
 
 endsr;
@@ -3830,20 +3830,20 @@ endsr;
 
 begsr copyExtRcd;
 
-  if (f_chain04(wrk#rcdnbr:
+  if (f_chain04(Wrk#RcdNbr:
              h_file   :
              h_lib    :
              h_mbr    :
              h_rcdfmt ) = '0');
 
-    rcdnbr# = cio_getrrn(hfile04);
+    rcdNbr# = CIO_getRRN(hFile04);
 
     f_execute(
       'CPYF ' +
         'FROMFILE(' +
-          %trim(cio_getlibrary(hfile04)) +
+          %trim(CIO_getLibrary(hFile04)) +
         '/' +
-          %trim(cio_getfile(hfile04)) +
+          %trim(CIO_getFile(hFile04)) +
         ') ' +
         'TOFILE(' +
           %trim(copyExternal.lib) +
@@ -3851,7 +3851,7 @@ begsr copyExtRcd;
           %trim(copyExternal.file) +
         ') ' +
         'FROMMBR(' +
-          %trim(cio_getmember(hfile04)) +
+          %trim(CIO_getMember(hFile04)) +
         ') ' +
         'TOMBR(' +
           %trim(copyExternal.toMbr) +
@@ -3863,39 +3863,39 @@ begsr copyExtRcd;
           %trim(copyExternal.crtFile) +
         ') ' +
         'FROMRCD(' +
-          rcdnbr$ +
+          rcdNbr$ +
         ') ' +
         'TORCD(' +
-          rcdnbr$ +
+          rcdNbr$ +
         ') ' +
         'FMTOPT(' +
           '*MAP *DROP' +
         ') ' +
         'RCDFMT(' +
-          %trim(cio_getrecordformat(hfile04)) +
+          %trim(CIO_getRecordFormat(hFile04)) +
            ')'
-      : yMsgID: yMsgDta);
+      : YMsgID: YMsgDta);
 
-    if (yMsgID <> '');
-      isCmdErr = bTrue;
-      p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
-      yMsgID = '';
-      yMsgDta = '';
+    if (YMsgID <> '');
+      IsCmdErr = bTrue;
+      p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
+      YMsgID = '';
+      YMsgDta = '';
       if (*in55 = bTrue);
         rolbk;
       endif;
-      exsr f0tofx;
+      exsr F0toFx;
 
-      usr8202.var1 = wrk#rcdnbr;
-      p_sndpgmmg('USR8202': usr8202: sds.pgmname);
+      usr8202.var1 = Wrk#RcdNbr;
+      p_sndPgmMg('USR8202': usr8202: sds.pgmName);
     else;
       if (*in55 = bTrue);
         commit;
       endif;
-      exsr f0tofx;
+      exsr F0toFx;
 
-      usr8203.var1 = wrk#rcdnbr;
-      p_sndpgmmg('USR8203': usr8203: sds.pgmname);
+      usr8203.var1 = Wrk#RcdNbr;
+      p_sndPgmMg('USR8203': usr8203: sds.pgmName);
     endif;
 
   endif;
@@ -3909,106 +3909,106 @@ endsr;
 //    SrchStart     Aufsetzen mit neuer Suche                 *
 //============================================================*
 
-begsr srchstart;
+begsr SrchStart;
 
   //  Übertragen der Übergabeparameter ...
-  srchfield = yfield;
-  srchop = yoperation;
-  srcharg = %trimr(yargument);
-  srchsign = ysign;
+  SrchField = YField;
+  SrchOP = YOperation;
+  SrchArg = %trimr(YArgument);
+  SrchSign = YSign;
 
   //  ... Anpassungen für LIKE/NLIKE ...
-  if (srchop = 'LIKE'
-      or srchop = 'NLIKE');
+  if (SrchOP = 'LIKE'
+      or SrchOP = 'NLIKE');
     //      ... führendes %-Zeichen
-    a1 = %subst(srcharg:1:1);
+    a1 = %subst(SrchArg:1:1);
     if (a1 = set0002.set_wldcd);
-      srcharg = %subst(srcharg:2);
-      srchliketp = 1;
+      SrchArg = %subst(SrchArg:2);
+      SrchLikeTp = 1;
     else;
-      srcharg = srcharg;
-      srchliketp = 0;
+      SrchArg = SrchArg;
+      SrchLikeTp = 0;
     endif;
 
     //      ... nachgestelltes %-Zeichen
-    x = %checkr(' ': srcharg);
+    x = %checkr(' ': SrchArg);
     if (x > 0);
-      a1 = %subst(srcharg: x: 1);
+      a1 = %subst(SrchArg: x: 1);
 
       if (a1 = set0002.set_wldcd);
         x = x - 1;
         if (x > 0);
-          srcharg = %subst(srcharg: 1: x);
+          SrchArg = %subst(SrchArg: 1: x);
         else;
-          srcharg = *blanks;
+          SrchArg = *blanks;
         endif;
-        srchliketp = srchliketp + 2;
+        SrchLikeTp = SrchLikeTp + 2;
       endif;
 
     endif;
 
     //      ... Länge von SrchArg
-    srchlikeln = %checkr(' ': srcharg);
+    SrchLikeLn = %checkr(' ': SrchArg);
   else;
     //  ... keine Anpassungen erforderlich
-    srchliketp = 0;
-    srchlikeln = 0;
+    SrchLikeTp = 0;
+    SrchLikeLn = 0;
   endif;
 
-  srchnbrs = ysrchnbrs;
-  srchtype = ysrchtype;
-  srchcase = ysrchcase;
+  SrchNbrs = YSrchNbrs;
+  SrchType = YSrchType;
+  SrchCase = YSrchCase;
 
   //  Ermitteln der Feldattribute
   exsr srchFldAtr;
 
-  if (srchfield = '*RECORD');
-    srchisnum = bFalse;
+  if (SrchField = '*RECORD');
+    SrchIsNum = bFalse;
   else;
-    if (f_isnumfld(fldl0100) = bTrue);
-      srchisnum = bTrue;
+    if (f_isNumFld(fldl0100) = bTrue);
+      SrchIsNum = bTrue;
     else;
-      srchisnum = bFalse;
+      SrchIsNum = bFalse;
     endif;
   endif;
 
   //  Nicht Case-Sensitive suchen ...
-  if (ysrchcase = bFalse and srchisnum = bFalse);
-    srcharg = %xlate(C_LOWER: C_UPPER: srcharg);
+  if (YSrchCase = bFalse and SrchIsNum = bFalse);
+    SrchArg = %xlate(C_LOWER: C_UPPER: SrchArg);
   else;
   //      keine Konvertierung erforderlich
   endif;
 
   //  Numerische Suche ...
-  if (srchisnum = bTrue);
-    if (f_isfloatfld(fldl0100) = bTrue);
-      srchargfloat = %float(srcharg);
-      srchargval   = 0;
-      srchargisfloat = bTrue;
+  if (SrchIsNum = bTrue);
+    if (f_isFloatFld(fldl0100) = bTrue);
+      SrchArgFloat = %float(SrchArg);
+      SrchArgVal   = 0;
+      SrchArgIsFloat = bTrue;
     else;
-      srchargval   = %dec(srcharg
-                         : csrcharg_digits
-                         : csrcharg_decpos);
-      srchargfloat = 0;
-      srchargisfloat = bFalse;
+      SrchArgVal   = %dec(SrchArg
+                         : cSRCHARG_DIGITS
+                         : cSRCHARG_DECPOS);
+      SrchArgFloat = 0;
+      SrchArgIsFloat = bFalse;
     endif;
-    if (srchsign = set0003.set_signm);
+    if (SrchSign = set0003.SET_SignM);
       //  ... negativen Wert erzeugen
-      srchargval = srchargval * -1;
-      srchargfloat = srchargfloat * -1;
+      SrchArgVal = SrchArgVal * -1;
+      SrchArgFloat = SrchArgFloat * -1;
     else;
     //  ... positiven Wert belassen
     endif;
   else;
-    srchargval = 0;
-    srchargfloat = 0;
+    SrchArgVal = 0;
+    SrchArgFloat = 0;
   endif;
 
   //  Ermitteln des Startdatensatzes
-  exsr srchstrrcd;
+  exsr SrchStrRcd;
 
   //  Suchen ...
-  exsr srchup;
+  exsr SrchUp;
 
 endsr;
 
@@ -4016,16 +4016,16 @@ endsr;
 //    SrchCont      Fortsetzen der Suche nach "gefunden"      *
 //============================================================*
 
-begsr srchcont;
+begsr SrchCont;
 
   //  Ermitteln der Feldattribute
   exsr srchFldAtr;
 
   //  Ermitteln des Startdatensatzes
-  exsr srchstrrcd;
+  exsr SrchStrRcd;
 
   //  Suchen ...
-  exsr srchup;
+  exsr SrchUp;
 
 endsr;
 
@@ -4033,13 +4033,13 @@ endsr;
 //    SrchContM     Fortsetzen der Suche nach "MAXIMUM"       *
 //============================================================*
 
-begsr srchcontm;
+begsr SrchContM;
 
   //  Ermitteln der Feldattribute
   exsr srchFldAtr;
 
   //  Suchen ...
-  exsr srchup;
+  exsr SrchUp;
 
 endsr;
 
@@ -4047,16 +4047,16 @@ endsr;
 //    SrchEOF       Fortsetzen der Suche nach Dateiende       *
 //============================================================*
 
-begsr srcheof;
+begsr SrchEOF;
 
   //  Ermitteln der Feldattribute
   exsr srchFldAtr;
 
   //  Ermitteln des Startdatensatzes
-  exsr pbmovetop;
+  exsr PBMoveTop;
 
   //  Suchen ...
-  exsr srchup;
+  exsr SrchUp;
 
 endsr;
 
@@ -4064,30 +4064,30 @@ endsr;
 //    SrchStrRcd    Positionieren auf Startdatensatz          *
 //============================================================*
 
-begsr srchstrrcd;
+begsr SrchStrRcd;
 
   //---------------------------------------*
   //  Cursor im Subfilebereich ...
   //---------------------------------------*
-  if (sflCsr <> 0
-      and sflCsr > nbrPinRcd);
+  if (SflCsr <> 0
+      and SflCsr > nbrPinRcd);
 
     //  ... übersetzen in Satznummer
     exsr pbCsrToRcd;
     //  ... Fortsetzen der Suche
-    if (wrk#rcdnbr = srchfndrcd);
-      exsr pbreadcsra;
+    if (Wrk#RcdNbr = SrchFndRcd);
+      exsr PBReadCsrA;
     else;
       //  ... oder neu anfangen
-      exsr pbreadcsr;
+      exsr PBReadCsr;
     endif;
   else;
 
     //---------------------------------------*
     //  Cursor nicht im Subfilebereich ...   *
     //---------------------------------------*
-    x = sflfirstrw + nbrPinRcd;
-    if (cursorposition.row < x);
+    x = SflFirstRw + nbrPinRcd;
+    if (cursorPosition.row < x);
       //  ... oberhalb der Subfile
       exsr pbReadDown;
     else;
@@ -4106,7 +4106,7 @@ endsr;
 begsr srchFldAtr;
 
   clear f_key;
-  f_key.f_field = srchfield;
+  f_key.F_Field = SrchField;
   chain(n) %kds(f_key) fpeekfld;
   if (not %found());
     clear fldl0100;
@@ -4120,35 +4120,35 @@ endsr;
 //    SrchUp        Suchen ab einer gegebenen Satznummer      *
 //============================================================*
 
-begsr srchup;
+begsr SrchUp;
 
   //  Suche läuft ...
-  p_sndstsmg('USR8127': ' ');
+  p_sndStsMg('USR8127': ' ');
 
-  srchcount = 0;
-  srchcount2 = 0;
+  SrchCount = 0;
+  SrchCount2 = 0;
 
   for do_x3 = 1 to *hival;
-    exsr pbread;
-    if (iseof = bTrue);
-      srchmode = '*EOF';
+    exsr PBRead;
+    if (IsEOF = bTrue);
+      SrchMode = '*EOF';
       leave;
     endif;
 
-    srchcount = srchcount + 1;
-    if (srchcount >= srchnbrs);
-      srchmode = '*MAXIMUM';
+    SrchCount = SrchCount + 1;
+    if (SrchCount >= SrchNbrs);
+      SrchMode = '*MAXIMUM';
       leave;
     endif;
 
     exsr srchCompare;
-    if (isfound = bTrue);
-      srchmode = '*FOUND';
+    if (IsFound = bTrue);
+      SrchMode = '*FOUND';
       //  ... suchen & pinnen
-      if (srchtype = '*PINROW');
-        wrk#rcdnbr = file#x.rcdnbr;
-        exsr pinrecord;
-        if (ispinok = bFalse);
+      if (SrchType = '*PINROW');
+        Wrk#RcdNbr = File#X.RcdNbr;
+        exsr PinRecord;
+        if (IsPinOK = bFalse);
           leave;
         else;
         //        weiter suchen und pinnen
@@ -4159,20 +4159,20 @@ begsr srchup;
       endif;
     endif;
 
-    srchcount2 = srchcount2 + 1;
-    if (srchcount2 >= srchdspmsg);
-      srchcount2 = 0;
+    SrchCount2 = SrchCount2 + 1;
+    if (SrchCount2 >= SrchDspMsg);
+      SrchCount2 = 0;
 
       clear usr8128;
-      usr8128.var1 = srchcount;
-      usr8128.var2 = srchnbrs;
-      p_sndstsmg('USR8128': usr8128);
+      usr8128.var1 = SrchCount;
+      usr8128.var2 = SrchNbrs;
+      p_sndStsMg('USR8128': usr8128);
     endif;
 
   endfor;
 
   //  Statuszeile löschen ...
-  p_sndstsmg('USR9999': ' ');
+  p_sndStsMg('USR9999': ' ');
 
 endsr;
 
@@ -4182,21 +4182,21 @@ endsr;
 
 begsr srchCompare;
 
-  isfound = bFalse;
+  IsFound = bFalse;
 
   //  Im ganzen Datensatz suchen ...
-  if (srchfield = '*RECORD');
-    srchcmprcd = io_buff;
+  if (SrchField = '*RECORD');
+    SrchCmpRcd = IO_Buff;
   else;
-    exsr srchgetcmp;
+    exsr SrchGetCmp;
   endif;
 
   //  Im ganzen Datensatz suchen ...
-  if (srchfield = '*RECORD');
-    exsr srchcomp_r;
+  if (SrchField = '*RECORD');
+    exsr SrchComp_R;
   else;
     //  Im Datenfeld suchen ...
-    exsr srchcomp_f;
+    exsr SrchComp_F;
   endif;
 
 endsr;
@@ -4206,41 +4206,41 @@ endsr;
 //                  für Vergleich der Suchfunktion            *
 //============================================================*
 
-begsr srchgetcmp;
+begsr SrchGetCmp;
 
-  if (srchisnum = bTrue);
-    f_rtvfld(ybuffer  :
-            io_buff  :
+  if (SrchIsNum = bTrue);
+    f_rtvFld(YBuffer  :
+            IO_Buff  :
             fldl0100 :
             bTrue    );
 
-    ytgtvalue  = ' ';
+    YTgtValue  = ' ';
 
-    if (srchargisfloat = bTrue);
-      peek18(fldl0100: 'FLDL0100': ybuffer:
-            '*FLOAT': '': youtbuffer: youtbuffln
-            : yMsgID: yMsgDta);
+    if (SrchArgIsFloat = bTrue);
+      peek18(fldl0100: 'FLDL0100': YBuffer:
+            '*FLOAT': '': YOutBuffer: YOutBuffLn
+            : YMsgID: YMsgDta);
 
-      srchcmpfloat = %float(youtbuffer);
-      srchcmpval   = 0;
+      SrchCmpFloat = %float(YOutBuffer);
+      SrchCmpVal   = 0;
     else;
-      peek18(fldl0100: 'FLDL0100': ybuffer:
-            '*ZONED': '': youtbuffer: youtbuffln
-            : yMsgID: yMsgDta);
+      peek18(fldl0100: 'FLDL0100': YBuffer:
+            '*ZONED': '': YOutBuffer: YOutBuffLn
+            : YMsgID: YMsgDta);
 
-      srchcmpstr =
-       %subst(youtbuffer
-              : youtbuffln - %len(srchcmpstr) + 1
-              : youtbuffln);
-      srchcmpval = %dec(srchcmpstr
+      SrchCmpStr =
+       %subst(YOutBuffer
+              : YOutBuffLn - %len(SrchCmpStr) + 1
+              : YOutBuffLn);
+      SrchCmpVal = %dec(SrchCmpStr
                        : srch_cmp_val_length
                        : srch_cmp_val_decpos);
-      srchcmpfloat = 0;
+      SrchCmpFloat = 0;
     endif;
 
   else;
-    f_rtvfld(srchcmpstr:
-            io_buff   :
+    f_rtvFld(SrchCmpStr:
+            IO_Buff   :
             fldl0100  );
   endif;
 
@@ -4250,38 +4250,38 @@ endsr;
 //    SrchComp_R    Suchen im Datensatz                       *
 //============================================================*
 
-begsr srchcomp_r;
+begsr SrchComp_R;
 
   //  Nicht Case-Sensitive suchen ...
-  if (srchcase = bFalse);
-    srchcmprcd = %xlate(C_LOWER: C_UPPER: srchcmprcd);
+  if (SrchCase = bFalse);
+    SrchCmpRcd = %xlate(C_LOWER: C_UPPER: SrchCmpRcd);
   //  Case-Sensitive suchen ...
   endif;
 
-  x = %checkr(' ': srcharg);
+  x = %checkr(' ': SrchArg);
   if (x <> 0);
-    x = %scan(%subst(srcharg: 1: x): SrchCmpRcd: 1);
+    x = %scan(%subst(SrchArg: 1: x): SrchCmpRcd: 1);
   else;
-    x = %scan(srcharg: SrchCmpRcd: 1);
+    x = %scan(SrchArg: SrchCmpRcd: 1);
   endif;
 
   //  Gleich ...
-  if (srchop = 'LIKE');
+  if (SrchOP = 'LIKE');
     //  ... nicht gefunden
     if (x = 0);
-      isfound = bFalse;
+      IsFound = bFalse;
     else;
       //  ... gefunden
-      isfound = bTrue;
+      IsFound = bTrue;
     endif;
   else;
     //  UnGleich ...
     //  ... nicht gefunden
     if (x = 0);
-      isfound = bTrue;
+      IsFound = bTrue;
     else;
       //  ... gefunden
-      isfound = bFalse;
+      IsFound = bFalse;
     endif;
   endif;
 
@@ -4291,12 +4291,12 @@ endsr;
 //    SrchComp_F    Suchen im Feld                            *
 //============================================================*
 
-begsr srchcomp_f;
+begsr SrchComp_F;
 
   //  Nicht Case-Sensitive suchen ...
   //  (nur bei nicht numerischer Suche beachten)
-  if (srchcase = bFalse and srchisnum = bFalse);
-    srchcmpstr = %xlate(C_LOWER: C_UPPER: srchcmpstr);
+  if (SrchCase = bFalse and SrchIsNum = bFalse);
+    SrchCmpStr = %xlate(C_LOWER: C_UPPER: SrchCmpStr);
   //  Case-Sensitive suchen ...
   endif;
 
@@ -4305,132 +4305,132 @@ begsr srchcomp_f;
   //-----------------------*
   select;
   //  Gleich ...
-  when (srchop = 'EQ');
-    if (srchisnum = bFalse);
-      if (srchcmpstr = srcharg);
-        isfound = bTrue;
+  when (SrchOP = 'EQ');
+    if (SrchIsNum = bFalse);
+      if (SrchCmpStr = SrchArg);
+        IsFound = bTrue;
       endif;
     else;
-      if ((srchargisfloat = bFalse and
-          srchcmpval = srchargval) or
-          (srchargisfloat = bTrue  and
-          srchcmpfloat = srchargfloat));
-        isfound = bTrue;
+      if ((SrchArgIsFloat = bFalse and
+          SrchCmpVal = SrchArgVal) or
+          (SrchArgIsFloat = bTrue  and
+          SrchCmpFloat = SrchArgFloat));
+        IsFound = bTrue;
       endif;
     endif;
   //  UnGleich ...
-  when (srchop = 'NE');
-    if (srchisnum = bFalse);
-      if (srchcmpstr <> srcharg);
-        isfound = bTrue;
+  when (SrchOP = 'NE');
+    if (SrchIsNum = bFalse);
+      if (SrchCmpStr <> SrchArg);
+        IsFound = bTrue;
       endif;
     else;
-      if ((srchargisfloat = bFalse and
-          srchcmpval <> srchargval) or
-          (srchargisfloat = bTrue  and
-          srchcmpfloat <> srchargfloat));
-        isfound = bTrue;
+      if ((SrchArgIsFloat = bFalse and
+          SrchCmpVal <> SrchArgVal) or
+          (SrchArgIsFloat = bTrue  and
+          SrchCmpFloat <> SrchArgFloat));
+        IsFound = bTrue;
       endif;
     endif;
   //  Größer ...
-  when (srchop = 'GT');
-    if (srchisnum = bFalse);
-      if (srchcmpstr > srcharg);
-        isfound = bTrue;
+  when (SrchOP = 'GT');
+    if (SrchIsNum = bFalse);
+      if (SrchCmpStr > SrchArg);
+        IsFound = bTrue;
       endif;
     else;
-      if ((srchargisfloat = bFalse and
-          srchcmpval > srchargval) or
-          (srchargisfloat = bTrue  and
-          srchcmpfloat > srchargfloat));
-        isfound = bTrue;
+      if ((SrchArgIsFloat = bFalse and
+          SrchCmpVal > SrchArgVal) or
+          (SrchArgIsFloat = bTrue  and
+          SrchCmpFloat > SrchArgFloat));
+        IsFound = bTrue;
       endif;
     endif;
   //  Kleiner ...
-  when (srchop = 'LT');
-    if (srchisnum = bFalse);
-      if (srchcmpstr < srcharg);
-        isfound = bTrue;
+  when (SrchOP = 'LT');
+    if (SrchIsNum = bFalse);
+      if (SrchCmpStr < SrchArg);
+        IsFound = bTrue;
       endif;
     else;
-      if ((srchargisfloat = bFalse and
-          srchcmpval < srchargval) or
-          (srchargisfloat = bTrue  and
-          srchcmpfloat < srchargfloat));
-        isfound = bTrue;
+      if ((SrchArgIsFloat = bFalse and
+          SrchCmpVal < SrchArgVal) or
+          (SrchArgIsFloat = bTrue  and
+          SrchCmpFloat < SrchArgFloat));
+        IsFound = bTrue;
       endif;
     endif;
   //  Größer/Gleich ...
-  when (srchop = 'GE');
-    if (srchisnum = bFalse);
-      if (srchcmpstr >= srcharg);
-        isfound = bTrue;
+  when (SrchOP = 'GE');
+    if (SrchIsNum = bFalse);
+      if (SrchCmpStr >= SrchArg);
+        IsFound = bTrue;
       endif;
     else;
-      if ((srchargisfloat = bFalse and
-          srchcmpval >= srchargval) or
-          (srchargisfloat = bTrue  and
-          srchcmpfloat >= srchargfloat));
-        isfound = bTrue;
+      if ((SrchArgIsFloat = bFalse and
+          SrchCmpVal >= SrchArgVal) or
+          (SrchArgIsFloat = bTrue  and
+          SrchCmpFloat >= SrchArgFloat));
+        IsFound = bTrue;
       endif;
     endif;
   //  Kleiner/Gleich ...
-  when (srchop = 'LE');
-    if (srchisnum = bFalse);
-      if (srchcmpstr <= srcharg);
-        isfound = bTrue;
+  when (SrchOP = 'LE');
+    if (SrchIsNum = bFalse);
+      if (SrchCmpStr <= SrchArg);
+        IsFound = bTrue;
       endif;
     else;
-      if ((srchargisfloat = bFalse and
-          srchcmpval <= srchargval) or
-          (srchargisfloat = bTrue  and
-          srchcmpfloat <= srchargfloat));
-        isfound = bTrue;
+      if ((SrchArgIsFloat = bFalse and
+          SrchCmpVal <= SrchArgVal) or
+          (SrchArgIsFloat = bTrue  and
+          SrchCmpFloat <= SrchArgFloat));
+        IsFound = bTrue;
       endif;
     endif;
   //  Ähnlich ...
-  when (srchop = 'LIKE'
-     or srchop = 'NLIKE');
+  when (SrchOP = 'LIKE'
+     or SrchOP = 'NLIKE');
 
     select;
     //  ...   ('%ABCD')
-    when (srchliketp = 1);
-      x = %checkr(' ': srchcmpstr);
-      x = x - srchlikeln;
+    when (SrchLikeTp = 1);
+      x = %checkr(' ': SrchCmpStr);
+      x = x - SrchLikeLn;
       x = x + 1;
       if (x > 0);
-        srchcmpstr= %subst(srchcmpstr: x: srchlikeln);
-        if (srchcmpstr = srcharg);
-          isfound = bTrue;
+        SrchCmpStr= %subst(SrchCmpStr: x: SrchLikeLn);
+        if (SrchCmpStr = SrchArg);
+          IsFound = bTrue;
         endif;
       endif;
 
     //  ...   ('ABCD%')
-    when (srchliketp = 2);
-      srchcmpstr= %subst(srchcmpstr: 1: srchlikeln);
-      if (srchcmpstr = srcharg);
-        isfound = bTrue;
+    when (SrchLikeTp = 2);
+      SrchCmpStr= %subst(SrchCmpStr: 1: SrchLikeLn);
+      if (SrchCmpStr = SrchArg);
+        IsFound = bTrue;
       endif;
 
     //  ...   ('%ABCD%')
     other;
-      x = srchlikeln;
-      x = %scan(%subst(srcharg: 1: x): srchcmpstr: 1);
+      x = SrchLikeLn;
+      x = %scan(%subst(SrchArg: 1: x): SrchCmpStr: 1);
       if (x > 0);
-        isfound = bTrue;
+        IsFound = bTrue;
       endif;
 
     endsl;
 
     //  ... auswerten IsFound für LIKE/NLIKE
-    if (srchop = 'LIKE');
+    if (SrchOP = 'LIKE');
     //        ... IsFound ist bereits richtig gesetzt.
     else;
       //        ... IsFound muß negiert werden ...
-      if (isfound = bTrue);
-        isfound = bFalse;
+      if (IsFound = bTrue);
+        IsFound = bFalse;
       else;
-        isfound = bTrue;
+        IsFound = bTrue;
       endif;
     endif;
 
@@ -4443,24 +4443,24 @@ endsr;
 //    SrchInz       Initialisieren der Suchfunktion           *
 //============================================================*
 
-begsr srchinz;
+begsr SrchInz;
 
-  srchmode = '*NEW';
-  srchfndrcd = 0;
+  SrchMode = '*NEW';
+  SrchFndRcd = 0;
 
-  srchfield = *blanks;
-  srchop = *blanks;
-  srcharg = *blanks;
-  srchsign = *blanks;
-  srchnbrs = 0;
-  srchtype = *blanks;
+  SrchField = *blanks;
+  SrchOP = *blanks;
+  SrchArg = *blanks;
+  SrchSign = *blanks;
+  SrchNbrs = 0;
+  SrchType = *blanks;
 
-  srchcmpstr = *blanks;
-  srchcount = 0;
+  SrchCmpStr = *blanks;
+  SrchCount = 0;
 
-  srchcount = 0;
-  srchcount2 = 0;
-  srchdspmsg = 1000;
+  SrchCount = 0;
+  SrchCount2 = 0;
+  SrchDspMsg = 1000;
 
 endsr;
 
@@ -4481,22 +4481,22 @@ begsr callUpdPgm;
     if (yFunction = '*ADD');
       yRcdNbr = 0;
     else;
-      yRcdNbr = wrk#rcdnbr;
+      yRcdNbr = Wrk#RcdNbr;
     endif;
 
     if (not f_exist(peekDspF: '*LIBL': '*FILE'));
       *in99 = bTrue;
     else;
       monitor;
-        UPDPGM_NAME = f_pgmcalln(peekPgm);
-        yHeaderType = set0001.set_hedtyp;
-        UPDPGM(set0001.set_dsp80
+        UPDPGM_NAME = f_pgmCallN(peekPgm);
+        yHeaderType = set0001.SET_HedTyp;
+        UPDPGM(set0001.SET_Dsp80
                : yHeaderType
                : COPYRIGHT
                : yRcdNbr
-               : file#x.file
-               : file#x.library
-               : file#x.member
+               : File#X.file
+               : File#X.library
+               : File#X.member
                : yFunction
                : commitLvl
                : isUpdKey
@@ -4504,16 +4504,16 @@ begsr callUpdPgm;
                : yIsLower
                : yCursorPosition.row
                : yCursorPosition.column
-               : yMsgID
-               : yMsgDta);
-        if (yMsgID = 'USR8100'); // Verarbeitung abgebrochen
-          p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
-          yMsgID = '';
-          yMsgDta = '';
+               : YMsgID
+               : YMsgDta);
+        if (YMsgID = 'USR8100'); // Verarbeitung abgebrochen
+          p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
+          YMsgID = '';
+          YMsgDta = '';
         else;
           isSflDirty = bTrue;
-          if (set0001.set_hedtyp <> yHeaderType);
-            set0001.set_hedtyp = yHeaderType;
+          if (set0001.SET_HedTyp <> yHeaderType);
+            set0001.SET_HedTyp = yHeaderType;
             exsr pbHeadline;
           endif;
         endif;
@@ -4529,7 +4529,7 @@ begsr callUpdPgm;
       // ... und kein REBUILD stattgefunden hat, ...
       if (isTryed = bFalse);
         // ... dann versuchen, das Programm neu zu serstellen
-        exsr c_buildpgm;
+        exsr C_BuildPgm;
         isTryed = bTrue;
         if (*in99 = *off);
           // Wenn das Programm neu erstellt werden konnte,
@@ -4538,7 +4538,7 @@ begsr callUpdPgm;
           iter;
         else;
           // ... ansonsten abbrechen
-          isCmdErr = bTrue;
+          IsCmdErr = bTrue;
           isCancel = bTrue;
           leave;
         endif;
@@ -4558,22 +4558,22 @@ endsr;
 //    ReloadUsrStg  Aktualisieren Benutzereinstellungen       *
 //============================================================*
 
-begsr reloadusrstg;
+begsr ReloadUsrStg;
 
-  if (yMsgID = 'USR8100'); // Verarbeitung abgebrochen
+  if (YMsgID = 'USR8100'); // Verarbeitung abgebrochen
     leavesr;
   endif;
 
-  if (##format <> 'FPEEKUSR');
+  if (##Format <> 'FPEEKUSR');
     leavesr;
   endif;
 
-  if (##file <> sds.user);
+  if (##File <> sds.user);
     leavesr;
   endif;
 
   //  *SPLASH
-  set0005 = f_getusrsg('*SPLASH'   );
+  set0005 = f_getUsrSg('*SPLASH'   );
 
 endsr;
 
@@ -4582,10 +4582,10 @@ endsr;
 //                  der nächsten Seite                        *
 //============================================================*
 
-begsr pbInit;
+begsr PBInit;
 
   //  Merker für: Subfile gelöscht setzen
-  ispbinit = bTrue;
+  IsPBINIT = bTrue;
 
   *in80 = '0';
   *in81 = '1';
@@ -4599,25 +4599,25 @@ begsr pbInit;
 
   *in82 = '0';
 
-  sflrec132 = 0;
-  sflrec080 = 0;
+  SflRec132 = 0;
+  SflRec080 = 0;
 
-  sflnbrrcd = 0;
+  SflNbrRcd = 0;
 
-  ##rcdnbr = 0;
-  ##key = '';
+  ##RcdNbr = 0;
+  ##Key = '';
 
-  $$head132 = set0001.set_hedcol;
-  $$head080 = set0001.set_hedcol;
+  $$Head132 = set0001.SET_HedCol;
+  $$Head080 = set0001.SET_HedCol;
 
   //  Aufbereiten der Überschrift
   exsr pbHeadline;
 
   //  Logischer Schalter für Tabellierung
-  istblcol = bFalse;
+  IsTblCol = bFalse;
 
   //  Konvertieren nicht darstellbarer Zeichen
-  iscvtchar = bFalse;
+  IsCvtChar = bFalse;
 
 endsr;
 
@@ -4627,21 +4627,21 @@ endsr;
 
 begsr pbCsrToRcd;
 
-  if (sflCsr <= 0);
-    wrk#rcdnbr = 0;
+  if (SflCsr <= 0);
+    Wrk#RcdNbr = 0;
   else;
     if (*in88 = *off);
-      sflrec132 = sflCsr;
-      chain sflrec132 pbsfl132;
+      SflRec132 = SflCsr;
+      chain SflRec132 pbsfl132;
     else;
-      sflrec080 = sflCsr;
-      chain sflrec080 pbsfl080;
+      SflRec080 = SflCsr;
+      chain SflRec080 pbsfl080;
     endif;
 
     if (not %found());
-      wrk#rcdnbr = 0;
+      Wrk#RcdNbr = 0;
     else;
-      wrk#rcdnbr = recordnbr;
+      Wrk#RcdNbr = recordnbr;
     endif;
   endif;
 
@@ -4651,16 +4651,16 @@ endsr;
 //    InitSCmd      Initialisieren Kurzbefehl                 *
 //============================================================*
 
-begsr initscmd;
+begsr InitSCmd;
 
-  clear shortcmd;
-  shortcmd.sc_action = '*INIT';
-  shortcmd.sc_file = ##file;
-  shortcmd.sc_lib = ##library;
-  shortcmd.sc_mbr = ##member;
+  clear ShortCmd;
+  ShortCmd.SC_Action = '*INIT';
+  ShortCmd.SC_File = ##File;
+  ShortCmd.SC_Lib = ##Library;
+  ShortCmd.SC_Mbr = ##Member;
   peek42(h_file: h_lib: h_mbr: h_rcdfmt
-        : shortcmd: wrk#rcdnbr: yexeccmd
-        : yMsgID: yMsgDta);
+        : ShortCmd: Wrk#RcdNbr: YExecCmd
+        : YMsgID: YMsgDta);
 
 endsr;
 
@@ -4668,18 +4668,18 @@ endsr;
 //    PBReadUP      Vorwärts füllen der Subfile               *
 //============================================================*
 
-begsr pbReadUp;
+begsr PBReadUp;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
   //      Nix tun, keine Datei vorhanden
   else;
 
     //  Erster Datensatz in Subfile ...
-    isfirstsfl = bTrue;
+    IsFirstSfl = bTrue;
 
     for do_x4 = 1 to *hival;
-      exsr pbread;
-      if (iseof = bTrue);
+      exsr PBRead;
+      if (IsEOF = bTrue);
         *in83 = '1';
         leave;
       else;
@@ -4687,61 +4687,61 @@ begsr pbReadUp;
       endif;
 
       if (*in88 = bFalse);
-        sflrec132 = sflrec132 + 1;
+        SflRec132 = SflRec132 + 1;
       else;
-        sflrec080 = sflrec080 + 1;
+        SflRec080 = SflRec080 + 1;
       endif;
 
-      if (sflrec132 > 9999
-          or sflrec080 > 9999);
+      if (SflRec132 > 9999
+          or SflRec080 > 9999);
         *in83 = '1';
-        exsr pbreadp;
+        exsr PBReadP;
         leave;
       endif;
 
-      if (sflrec132 > sflpage
-          or sflrec080 > sflpage);
-        exsr pbreadp;
+      if (SflRec132 > SflPage
+          or SflRec080 > SflPage);
+        exsr PBReadP;
         leave;
       endif;
 
       exsr pbFillDataRow_Right;
 
-      exsr pbsflwrite;
+      exsr PBSflWrite;
 
       if (*in88 = bFalse);
-        sflnbrrcd = sflrec132;
+        SflNbrRcd = SflRec132;
       else;
-        sflnbrrcd = sflrec080;
+        SflNbrRcd = SflRec080;
       endif;
 
       //  Setzen Cursor auf gefundenen Datensatz
-      if (srchfndrcd = recordnbr);
+      if (SrchFndRcd = recordnbr);
         if (*in88 = bFalse);
-          sfsanr = sflrec132;
+          sfsanr = SflRec132;
         else;
-          sfsanr = sflrec080;
+          sfsanr = SflRec080;
         endif;
       endif;
 
       //  Aufbereiten Aufsetzkey bei 1. geschriebendem Datensatz
-      if (isfirstsfl = bTrue);
-        exsr pbgenkey;
+      if (IsFirstSfl = bTrue);
+        exsr PBGenKey;
       endif;
 
       //  Tabellierpapierfarben umschalten ...
-      if (set0001.set_tblmde = bFalse);
+      if (set0001.SET_TblMde = bFalse);
       //         Modus ist ausgeschaltet
       else;
-        if (istblcol = bFalse);
-          istblcol = bTrue;
+        if (IsTblCol = bFalse);
+          IsTblCol = bTrue;
         else;
-          istblcol = bFalse;
+          IsTblCol = bFalse;
         endif;
       endif;
 
       //  ... 1. Datensatz ist fertig
-      isfirstsfl = bFalse;
+      IsFirstSfl = bFalse;
 
     endfor;
 
@@ -4755,16 +4755,16 @@ endsr;
 
 begsr pbReadDown;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
   //      Nix tun, keine Datei vorhanden
   else;
 
-    wrk#readdn = wrk#readdn + sflpage;
-    wrk#readdn = wrk#readdn - nbrPinRcd;
+    Wrk#ReadDn = Wrk#ReadDn + SflPage;
+    Wrk#ReadDn = Wrk#ReadDn - nbrPinRcd;
 
-    for do_x5 = 1 to wrk#readdn;
-      exsr pbreadp;
-      if (iseof = bTrue);
+    for do_x5 = 1 to Wrk#ReadDn;
+      exsr PBReadP;
+      if (IsEOF = bTrue);
         leave;
       endif;
 
@@ -4772,7 +4772,7 @@ begsr pbReadDown;
 
   endif;
 
-  wrk#readdn = 0;
+  Wrk#ReadDn = 0;
 
 endsr;
 
@@ -4781,18 +4781,18 @@ endsr;
 //                  Cursor-Position  (SflCsr)                 *
 //============================================================*
 
-begsr pbreadcsr;
+begsr PBReadCsr;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
   //      Nix tun, keine Datei vorhanden
   else;
-    if (sflCsr = 0);
+    if (SflCsr = 0);
     //      Nix tun, keine Datei vorhanden
     else;
 
-      wrk#readdn = sflnbrrcd - sflCsr;
-      wrk#readdn = wrk#readdn + 1;
-      exsr pbmovecsrd;
+      Wrk#ReadDn = SflNbrRcd - SflCsr;
+      Wrk#ReadDn = Wrk#ReadDn + 1;
+      exsr PBMoveCsrD;
 
     endif;
   endif;
@@ -4805,18 +4805,18 @@ endsr;
 //                  Cursor-Position  +1  (SflCsr+1)           *
 //============================================================*
 
-begsr pbreadcsra;
+begsr PBReadCsrA;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
     //      Nix tun, keine Datei vorhanden
-    exsr msgnofile;
+    exsr MsgNoFile;
   else;
-    if (sflCsr = 0);
+    if (SflCsr = 0);
     //      Nix tun, keine Datei vorhanden
     else;
 
-      wrk#readdn = sflnbrrcd - sflCsr;
-      exsr pbmovecsrd;
+      Wrk#ReadDn = SflNbrRcd - SflCsr;
+      exsr PBMoveCsrD;
 
     endif;
   endif;
@@ -4827,15 +4827,15 @@ endsr;
 //    PBMoveCsrD    Verschieben Dateizeiger (Richtung BOF)    *
 //============================================================*
 
-begsr pbmovecsrd;
+begsr PBMoveCsrD;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
   //      Nix tun, keine Datei vorhanden
   else;
 
-    for do_x6 = 1 to wrk#readdn;
-      exsr pbreadp;
-      if (iseof = bTrue);
+    for do_x6 = 1 to Wrk#ReadDn;
+      exsr PBReadP;
+      if (IsEOF = bTrue);
         leave;
       endif;
 
@@ -4843,7 +4843,7 @@ begsr pbmovecsrd;
 
   endif;
 
-  wrk#readdn = 0;
+  Wrk#ReadDn = 0;
 
 endsr;
 
@@ -4856,40 +4856,40 @@ begsr pbPinColumn;
   isPinModeC = bTrue;
 
   //  Eintragen der gepinnten Spalten ...
-  for pincol_x = 1 to nbrPinCol;
+  for PinCol_X = 1 to NbrPinCol;
     if (sflRowDataStr > sfl_row_size or sflRowDataStr > sflMaxRowLen);
       leave;
     endif;
 
-    if (sflRowDataStr > sflpinrnge);
-      p_sndpgmmg('USR8148' : pinTabCol(pincol_x): sds.pgmname);
+    if (sflRowDataStr > SflPinRnge);
+      p_sndPgmMg('USR8148' : pinTabCol(PinCol_X): sds.pgmName);
       exsr rmvPincolumn;
-      if (ispinrmv = bTrue);
-        pincol_x = pincol_x - 1;
+      if (IsPinRmv = bTrue);
+        PinCol_X = PinCol_X - 1;
       endif;
       iter;
     endif;
 
     //  ... einlesen der Felddaten
     clear f_key;
-    f_key.f_field = pinTabCol(pincol_x);
+    f_key.F_Field = pinTabCol(PinCol_X);
     chain(n) %kds(f_key) fpeekfld;
     if (not %found());
       // Eintrag austragen
       exsr rmvPincolumn;
-      if (ispinrmv = bTrue);
-        pincol_x = pincol_x - 1;
+      if (IsPinRmv = bTrue);
+        PinCol_X = PinCol_X - 1;
       endif;
       iter;
     endif;
 
     //  ... Feld nicht anzeigen
-    if (f_hidden = bTrue);
+    if (F_Hidden = bTrue);
       iter;
     endif;
 
     exsr pbReadFld1;
-    if (isError = bTrue);
+    if (IsError = bTrue);
       leave;
     endif;
 
@@ -4905,49 +4905,49 @@ endsr;
 
 begsr pbPinRcd;
 
-  ispinmoder = bTrue;
+  IsPinModeR = bTrue;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
   //      Nix tun, keine Datei vorhanden
   else;
 
-    for pinrcd_x = 1 to max_pin_rcd;
-      pinTabRcdE = pinTabRcd(pinrcd_x);
-      if (pinTabRcdE.rcdnbr = 0);
+    for PinRcd_X = 1 to max_pin_rcd;
+      pinTabRcdE = PinTabRcd(PinRcd_X);
+      if (pinTabRcdE.RcdNbr = 0);
         leave;
       endif;
 
-      if (f_chain04(pinTabRcdE.rcdnbr :
+      if (f_chain04(pinTabRcdE.RcdNbr :
                  pinTabRcdE.file   :
                  pinTabRcdE.lib    :
                  pinTabRcdE.mbr    :
-                 pinTabRcdE.rcdfmt ) = '1');
+                 pinTabRcdE.rcdFmt ) = '1');
         //           Eintrag austragen
-        exsr rmvpinrcd;
-        if (ispinrmv = bTrue);
-          pinrcd_x = pinrcd_x - 1;
+        exsr RmvPinRcd;
+        if (IsPinRmv = bTrue);
+          PinRcd_X = PinRcd_X - 1;
         endif;
         iter;
       endif;
 
       exsr pbFillDataRow_Right;
 
-      sflrec132 = sflrec132 + 1;
-      sflrec080 = sflrec080 + 1;
+      SflRec132 = SflRec132 + 1;
+      SflRec080 = SflRec080 + 1;
 
-      exsr pbsflwrite;
+      exsr PBSflWrite;
 
       if (*in88 = bFalse);
-        sflnbrrcd = sflrec132;
+        SflNbrRcd = SflRec132;
       else;
-        sflnbrrcd = sflrec080;
+        SflNbrRcd = SflRec080;
       endif;
 
     endfor;
 
   endif;
 
-  ispinmoder = bFalse;
+  IsPinModeR = bFalse;
 
 endsr;
 
@@ -4955,21 +4955,21 @@ endsr;
 //    ChkPinRcd     Prüfen, ob Datensatz gepinned ist         *
 //============================================================*
 
-begsr chkpinrcd;
+begsr ChkPinRcd;
 
-  pinrcd_x = 1;
-  pinTabRcdE.rcdnbr = wrk#rcdnbr;
+  PinRcd_X = 1;
+  pinTabRcdE.RcdNbr = Wrk#RcdNbr;
   pinTabRcdE.file = h_file;
   pinTabRcdE.lib = h_lib;
   pinTabRcdE.mbr = h_mbr;
-  pinTabRcdE.rcdfmt = h_rcdfmt;
-  pinTabRcdE.mbrnbr = h_mbrnbr;
-  pinrcd_x = %lookup(
-           pinTabRcdE: pinTabRcd: pinrcd_x);
-  if (pinrcd_x > 0);
-    ispinned = bTrue;
+  pinTabRcdE.rcdFmt = h_rcdfmt;
+  pinTabRcdE.mbrNbr = h_mbrnbr;
+  PinRcd_X = %lookup(
+           pinTabRcdE: PinTabRcd: PinRcd_X);
+  if (PinRcd_X > 0);
+    IsPinned = bTrue;
   else;
-    ispinned = bFalse;
+    IsPinned = bFalse;
   endif;
 
 endsr;
@@ -4978,15 +4978,15 @@ endsr;
 //    ChkPinCol     Prüfen, ob Spalte gepinned ist            *
 //============================================================*
 
-begsr chkpincol;
+begsr ChkPinCol;
 
-  pincol_x = 1;
-  pincol_x = %lookup(
-           pin#field: pinTabCol: pincol_x);
-  if (pincol_x > 0);
-    ispinned = bTrue;
+  PinCol_X = 1;
+  PinCol_X = %lookup(
+           Pin#Field: pinTabCol: PinCol_X);
+  if (PinCol_X > 0);
+    IsPinned = bTrue;
   else;
-    ispinned = bFalse;
+    IsPinned = bFalse;
   endif;
 
 endsr;
@@ -4995,29 +4995,29 @@ endsr;
 //    RmvPinRcd     Austragen Datensatz aus PinTabR           *
 //============================================================*
 
-begsr rmvpinrcd;
+begsr RmvPinRcd;
 
-  ispinrmv = bFalse;
+  IsPinRmv = bFalse;
 
   //  Remove pinned record from table
-  for y = pinrcd_x to max_pin_rcd;
+  for y = PinRcd_X to max_pin_rcd;
     z = y + 1;
     clear pinTabRcdE;
     if (z <= max_pin_rcd);
-      pinTabRcd(y) = pinTabRcd(z);
-      pinTabRcd(z) = pinTabRcdE;
+      PinTabRcd(y) = PinTabRcd(z);
+      PinTabRcd(z) = pinTabRcdE;
     else;
-      pinTabRcd(y) = pinTabRcdE;
+      PinTabRcd(y) = pinTabRcdE;
     endif;
     isSflDirty = bTrue;
-    ispinrmv = bTrue;
+    IsPinRmv = bTrue;
   endfor;
 
   //  Detrmine number of pinned records
   //  (find first free record)
   x = 1;
   clear pinTabRcdE;
-  x = %lookup(pinTabRcdE: pinTabRcd: x);
+  x = %lookup(pinTabRcdE: PinTabRcd: x);
   if (x > 0);
     nbrPinRcd = x - 1;
   else;
@@ -5032,9 +5032,9 @@ endsr;
 
 begsr rmvPincolumn;
 
-  ispinrmv = bFalse;
+  IsPinRmv = bFalse;
 
-  for y = pincol_x to max_pin_col;
+  for y = PinCol_X to max_pin_col;
     z = y + 1;
     if (z <= max_pin_col);
       pinTabCol(y) = pinTabCol(z);
@@ -5043,16 +5043,16 @@ begsr rmvPincolumn;
       pinTabCol(y) = *blanks;
     endif;
     isSflDirty = bTrue;
-    ispinrmv = bTrue;
+    IsPinRmv = bTrue;
   endfor;
 
   x = 1;
-  pin#field = *blanks;
-  x = %lookup(pin#field: pinTabCol: x);
+  Pin#Field = *blanks;
+  x = %lookup(Pin#Field: pinTabCol: x);
   if (x > 0);
-    nbrPinCol = x - 1;
+    NbrPinCol = x - 1;
   else;
-    nbrPinCol = max_pin_col;
+    NbrPinCol = max_pin_col;
   endif;
 
 endsr;
@@ -5061,19 +5061,19 @@ endsr;
 //    PBRefresh     Aktualisieren der Subfile                 *
 //============================================================*
 
-begsr pbrefresh;
+begsr PBRefresh;
 
-  wrk#readdn = sflnbrrcd - sflpage;
+  Wrk#ReadDn = SflNbrRcd - SflPage;
   exsr pbReadDown;
-  exsr pbInit;
+  exsr PBInit;
   exsr pbPinRcd;
-  exsr pbReadUp;
+  exsr PBReadUp;
 
   //  Evtl. ist die Subfile doch nicht leer ...
   //  (letzter Satz in der Liste wurde gelöscht oder
   //   der Schlüssel wurde geändert)
   if (*in80 = *off);
-    exsr c_bot;
+    exsr C_Bot;
   endif;
 
 endsr;
@@ -5087,8 +5087,8 @@ endsr;
 begsr pbHeadline;
 
   //  Löschen der Überschrift
-  $$head132 = '';
-  $$head080 = '';
+  $$Head132 = '';
+  $$Head080 = '';
 
   if (not %open(peekfldl1));
     //  Keine Datei geöffnet
@@ -5099,19 +5099,19 @@ begsr pbHeadline;
   exsr clrFldPosArray;
 
   //  Aufbereiten Pseudo-Datensatz
-  peek20('*PHIVAL': io_buff: yMsgID: yMsgDta);
+  peek20('*PHIVAL': IO_Buff: YMsgID: YMsgDta);
 
-  if (yMsgID = '');
+  if (YMsgID = '');
 
     //  Füllen der Überschriftenzeile ...
-    sflmode = '*HEADLINE';
-    wrk#seqnbr = ##wndnbr;
+    SflMode = '*HEADLINE';
+    Wrk#SeqNbr = ##WndNbr;
     exsr pbFillHeadline_Right;
 
     //  Übertragen der Überschriftenzeile
     //  in Bildschirmfeld ...
-    $$head132 = sflDataRow;
-    $$head080 = sflDataRow;
+    $$Head132 = sflDataRow;
+    $$Head080 = sflDataRow;
   endif;
 
 endsr;
@@ -5123,7 +5123,7 @@ endsr;
 
 begsr pbFillDataRow_Left;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
   //  Keine Datei geöffnet
   else;
 
@@ -5131,13 +5131,13 @@ begsr pbFillDataRow_Left;
     exsr clrFldPosArray;
 
     //  Aufbereiten Pseudo-Datensatz
-    peek20('*PHIVAL': io_buff: yMsgID: yMsgDta);
+    peek20('*PHIVAL': IO_Buff: YMsgID: YMsgDta);
 
-    if (yMsgID = '');
+    if (YMsgID = '');
 
       //  Füllen der Überschriftenzeile ...
-      sflmode = '*HEADLINE';
-      wrk#seqnbr = ##wndnbr;
+      SflMode = '*HEADLINE';
+      Wrk#SeqNbr = ##WndNbr;
       exsr pbFillHeadline_Left;
     endif;
   endif;
@@ -5151,40 +5151,40 @@ endsr;
 
 begsr pbFillDataRow_Right;
 
-  f_basedpf(file#x.file   :
-           file#x.library:
-           file#x.member :
-           file#x.rcdfmt :
-           file#x.mbrnbr :
+  f_basedPF(File#X.file   :
+           File#X.library:
+           File#X.member :
+           File#X.rcdFmt :
+           File#X.mbrNbr :
            h_file        :
            h_lib         :
            h_mbr         :
            h_rcdfmt      );
 
   sfpau = *blanks;
-  h_mbrnbr = file#x.mbrnbr;
-  recordnbr = file#x.rcdnbr;
+  h_mbrnbr = File#X.mbrNbr;
+  recordnbr = File#X.RcdNbr;
 
   //  Prüfen auf Suchfunktion:
   //  *NORMAL/*REVERSE
-  isfound = bFalse;
+  IsFound = bFalse;
 
-  if (srchfield <> *blanks);
-    if (srchtype = '*REVERSE' or srchtype = '*UNDERLINE');
+  if (SrchField <> *blanks);
+    if (SrchType = '*REVERSE' or SrchType = '*UNDERLINE');
       exsr srchFldAtr;
       exsr srchCompare;
     endif;
   endif;
 
   //  Füllen der Datenzeile ...
-  sflmode = '*DATA';
-  wrk#seqnbr = ##wndnbr;
+  SflMode = '*DATA';
+  Wrk#SeqNbr = ##WndNbr;
   exsr pbFillHeadline_Right;
 
   //  Übertragen der Datenzeile in
   //  Bildschirmfeld ...
-  data132 = sflDataRow;
-  data080 = sflDataRow;
+  Data132 = sflDataRow;
+  Data080 = sflDataRow;
 
   //  ... anzeigen der Subfile
   *in80 = '1';
@@ -5212,7 +5212,7 @@ begsr pbFillHeadline_Right;
 
   //  Eintragen der Feldinhalte ...
   clear f1key_l1;
-  f1key_l1.f_seq = wrk#seqnbr;
+  f1key_l1.F_Seq = Wrk#SeqNbr;
   setll %kds(f1key_l1) fpeekfldl1;
 
   dow (sflRowDataStr <= sfl_row_size and sflRowDataStr <= sflMaxRowLen);
@@ -5222,14 +5222,14 @@ begsr pbFillHeadline_Right;
     endif;
 
     //  ... Feld anzeigen?
-    wrk#field = f_field;
+    Wrk#Field = F_Field;
     exsr chkVisible;
     if (isVisible = bFalse);
       iter;
     endif;
 
     exsr pbReadFld1;
-    if (isError = bTrue);
+    if (IsError = bTrue);
       leave;
     endif;
 
@@ -5254,7 +5254,7 @@ begsr pbFillHeadline_Left;
 
   //  Eintragen der Feldinhalte ...
   clear f1key_l1;
-  f1key_l1.f_seq = wrk#seqnbr;
+  f1key_l1.F_Seq = Wrk#SeqNbr;
   setgt %kds(f1key_l1) fpeekfldl1;
 
   dow (sflRowDataStr <= sfl_row_size and
@@ -5265,18 +5265,18 @@ begsr pbFillHeadline_Left;
     endif;
 
     //  ... Feld anzeigen?
-    wrk#field = f_field;
+    Wrk#Field = F_Field;
     exsr chkVisible;
     if (isVisible = bFalse);
       iter;
     endif;
 
     exsr pbReadFld1;
-    if (isError = bTrue);
+    if (IsError = bTrue);
       leave;
     endif;
 
-    if (##strpage > 1);
+    if (##StrPage > 1);
       leave;
     endif;
 
@@ -5291,10 +5291,10 @@ endsr;
 begsr pbReadFld1;
 
   //  umsetzen der Daten in die Job CCSID
-  if (sflmode = '*HEADLINE');
-    ycvtccsid = bFalse;
+  if (SflMode = '*HEADLINE');
+    YCvtCcsid = bFalse;
   else;
-    ycvtccsid = bTrue;
+    YCvtCcsid = bTrue;
   endif;
 
   //  löschen Ausnahmebedingung für Spalte
@@ -5302,63 +5302,63 @@ begsr pbReadFld1;
 
   //  merken Position für Farbattribut
   if (sflRowDataStr <= sfl_row_size);
-    colrofs = sflRowDataStr;
+    ColrOfs = sflRowDataStr;
     sflRowDataStr = sflRowDataStr + 1;
   else;
-    colrofs = 0;
+    ColrOfs = 0;
   endif;
 
   //  aufbereiten des Feldinhaltes
   //  für Anzeigeformat gemäß EDITCODE ...
   fldl0100 = f_ffd;
-  if (f_edtcde <> *blanks);
-    fldl0100.f1edtc = f_edtcde;
+  if (F_EdtCde <> *blanks);
+    fldl0100.f1edtc = F_EdtCde;
   else;
   //  ... Original EDITCODE verwenden
   endif;
 
   monitor;
     //  umsetzen Datensatzpuffer in Bildschirmdarstellung ...
-    if (set0001.set_dspmde = '*DSPNRM');
+    if (set0001.SET_DspMde = '*DSPNRM');
       //  ... für Normale Anzeige
-      if (io_nullmap(fldl0100.f1seq) = 1);
+      if (IO_NullMap(fldl0100.f1seq) = 1);
         peek06(fldl0100: 'FLDL0100': *allx'00'
-              : bFalse: ycvtccsid
-              : youtbuffer: youtbuffln
-              : yMsgID: yMsgDta);
-        if (f_isnumfld(fldl0100) = bTrue);
-          if (youtbuffln > 1);
-            %subst(youtbuffer: 1: youtbuffln - 1) = '';
+              : bFalse: YCvtCcsid
+              : YOutBuffer: YOutBuffLn
+              : YMsgID: YMsgDta);
+        if (f_isNumFld(fldl0100) = bTrue);
+          if (YOutBuffLn > 1);
+            %subst(YOutBuffer: 1: YOutBuffLn - 1) = '';
           endif;
-          %subst(youtbuffer
-                : youtbuffln
+          %subst(YOutBuffer
+                : YOutBuffLn
                 : %len(HEX_CHAR)) = HEX_CHAR;
         else;
-          youtbuffer = HEX_CHAR;
+          YOutBuffer = HEX_CHAR;
         endif;
       else;
-        peek06(fldl0100: 'FLDL0100': io_buff
-              : bFalse: ycvtccsid
-              : youtbuffer: youtbuffln
-              : yMsgID: yMsgDta);
+        peek06(fldl0100: 'FLDL0100': IO_Buff
+              : bFalse: YCvtCcsid
+              : YOutBuffer: YOutBuffLn
+              : YMsgID: YMsgDta);
       endif;
 
     else;
       //  ... für Hex-Anzeige
-      if (io_nullmap(fldl0100.f1seq) = 1);
-        yhexstring = HEX_CHAR;
-        ystringlen = f_buffln(fldl0100);
+      if (IO_NullMap(fldl0100.f1seq) = 1);
+        YHexString = HEX_CHAR;
+        YStringLen = f_buffLn(fldl0100);
       else;
-        ystringlen = f_rtvfld(ystring  :
-                             io_buff  :
+        YStringLen = f_rtvFld(YString  :
+                             IO_Buff  :
                              fldl0100 );
-        yhexstring = ' ';
-        p_hextochr(yhexstring    :
-                  ystring       :
-                  ystringlen * 2);
+        YHexString = ' ';
+        p_hexToChr(YHexString    :
+                  YString       :
+                  YStringLen * 2);
       endif;
 
-      youtbuffln = ystringlen * 2;
+      YOutBuffLn = YStringLen * 2;
     endif;
     *in99 = bFalse;
   on-error;
@@ -5368,41 +5368,41 @@ begsr pbReadFld1;
   //  Fehler bei der Aufbereitung ...
   if (*in99 = *on);
     //  ... ja
-    isError = bTrue;
+    IsError = bTrue;
   else;
     //  ... nein
-    isError = bFalse;
+    IsError = bFalse;
 
     //  ermitteln der Spaltenbreite
     //  anhand der Überschrift und
     //  der Feldlänge, sowie der
     //  maximalen Spaltenbreite ...
     fldl0100 = f_ffd;
-    columnlen = 0;
-    fieldlen = youtbuffln;
-    maxcollen = f_maxsize;
+    ColumnLen = 0;
+    FieldLen = YOutBuffLn;
+    MaxColLen = F_MaxSize;
 
     //  Konvertierung nicht darstellbarer Zeichen ...
-    if (sflmode = '*HEADLINE' or set0001.set_dspmde = '*DSPHEX');
+    if (SflMode = '*HEADLINE' or set0001.SET_DspMde = '*DSPHEX');
     //  ... keine Konvertierung bei der
     //      Aufbereitung der Überschriftenzeile
     else;
       //  ... sonst konvertieren
       monitor;
-        peek32(youtbuffer: youtbuffln: 0
-              : yMsgID: yMsgDta);
+        peek32(YOutBuffer: YOutBuffLn: 0
+              : YMsgID: YMsgDta);
         *in99 = bFalse;
       on-error;
         *in99 = bTrue;
       endmon;
 
       if (*in99 = *off);
-        if (iscvtchar = bFalse);
-          if (yMsgID <> *blanks);
-            iscvtchar = bTrue;
-            p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
-            yMsgID = '';
-            yMsgDta = '';
+        if (IsCvtChar = bFalse);
+          if (YMsgID <> *blanks);
+            IsCvtChar = bTrue;
+            p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
+            YMsgID = '';
+            YMsgDta = '';
           else;
           //         keine Nachricht anstehend
           endif;
@@ -5416,40 +5416,40 @@ begsr pbReadFld1;
 
     //  Bestimmen Länge der Überschrift
     //  und aufbereiten Überschrift ...
-    colheading = f_headline(set0001.set_hedtyp: fldl0100);
-    headlen = %checkr(' ': colheading);
+    colHeading = f_headline(set0001.SET_HedTyp: fldl0100);
+    HeadLen = %checkr(' ': colHeading);
 
-    if (sflmode = '*HEADLINE');
-      yhexstring = colheading;
+    if (SflMode = '*HEADLINE');
+      YHexString = colHeading;
     endif;
 
-    colheading = '';
+    colHeading = '';
 
     //  ... Bestimmen der Spaltenbreite
-    if (headlen > fieldlen);
-      columnlen = headlen;
+    if (HeadLen > FieldLen);
+      ColumnLen = HeadLen;
     else;
-      columnlen = fieldlen;
+      ColumnLen = FieldLen;
     endif;
 
-    if (columnlen > maxcollen);
-      columnlen = maxcollen;
+    if (ColumnLen > MaxColLen);
+      ColumnLen = MaxColLen;
     endif;
 
     //  ... numerische Werte rechtsbündig setzen,
     //      wenn Spaltenbereite kleiner als Feldlänge
-    if (sflmode   = '*HEADLINE');
+    if (SflMode   = '*HEADLINE');
 
       //      ... für die Überschrift
-      if ((columnlen < headlen ) or
-          (columnlen < fieldlen));
+      if ((ColumnLen < HeadLen ) or
+          (ColumnLen < FieldLen));
 
         select;
-        when ((headlen + 3) <= columnlen);
-          %subst(yhexstring: headlen + 1: 3)
+        when ((HeadLen + 3) <= ColumnLen);
+          %subst(YHexString: HeadLen + 1: 3)
           = %subst('...': 1: 3);
         other;
-          %subst(yhexstring: columnlen - 2 + 1: 2)
+          %subst(YHexString: ColumnLen - 2 + 1: 2)
           = %subst('...': 1: 2);
         endsl;
 
@@ -5458,25 +5458,25 @@ begsr pbReadFld1;
     else;
 
       //      ... für die Datenzeile
-      if ((sflmode   <> '*HEADLINE') and
-          (columnlen <  fieldlen   ));
-        if (f_isnumfld(fldl0100) = bTrue);
+      if ((SflMode   <> '*HEADLINE') and
+          (ColumnLen <  FieldLen   ));
+        if (f_isNumFld(fldl0100) = bTrue);
           //          ... numerische Werte
-          if ((set0001.set_enexc = bTrue) and
-              (%subst(yhexstring          :
+          if ((set0001.SET_EnExc = bTrue) and
+              (%subst(YHexString          :
                    1                   :
-                   fieldlen - columnlen) <> *blanks));
+                   FieldLen - ColumnLen) <> *blanks));
             isColumnException = bTrue;
           endif;
-          yhexstring = %subst(yhexstring              :
-                             1 + fieldlen - columnlen:
-                             columnlen               );
+          YHexString = %subst(YHexString              :
+                             1 + FieldLen - ColumnLen:
+                             ColumnLen               );
         else;
           //          ... alphanumerische Werte
-          if ((set0001.set_enexc = bTrue) and
-              (%subst(yhexstring              :
-                   columnlen + 1           :
-                   1 + fieldlen - columnlen) <> *blanks));
+          if ((set0001.SET_EnExc = bTrue) and
+              (%subst(YHexString              :
+                   ColumnLen + 1           :
+                   1 + FieldLen - ColumnLen) <> *blanks));
             isColumnException = bTrue;
           endif;
         endif;
@@ -5485,90 +5485,90 @@ begsr pbReadFld1;
     endif;
 
     //  ... Berechnen der Startposition im Puffer
-    sfldatalenfree =
+    SflDataLenFree =
      sflMaxRowLen - sflRowDataStr + 1;
 
-    if (##wndnbr = f_seq);
+    if (##WndNbr = F_Seq);
 
-      if ((##strpage * sfldatalenfree) > columnlen);
+      if ((##StrPage * SflDataLenFree) > ColumnLen);
 
-        if ((columnlen / sfldatalenfree) =
-            f_int(columnlen / sfldatalenfree));
-          ##strpage = (columnlen / sfldatalenfree);
+        if ((ColumnLen / SflDataLenFree) =
+            f_int(ColumnLen / SflDataLenFree));
+          ##StrPage = (ColumnLen / SflDataLenFree);
         else;
-          ##strpage = (columnlen / sfldatalenfree) + 1;
+          ##StrPage = (ColumnLen / SflDataLenFree) + 1;
         endif;
 
       endif;
 
-      fldstrpos = (##strpage -1) * sfldatalenfree
+      FldStrPos = (##StrPage -1) * SflDataLenFree
                  + 1;
     else;
-      fldstrpos = 1;
+      FldStrPos = 1;
     endif;
 
     //  ... Berechnen der zu extrahierenden Länge
-    buffidx = fldstrpos;
-    sflrowdataend = sflRowDataStr + columnlen;
-    sflrowdataend = sflrowdataend - fldstrpos;
+    BuffIdx = FldStrPos;
+    sflRowDataEnd = sflRowDataStr + ColumnLen;
+    sflRowDataEnd = sflRowDataEnd - FldStrPos;
 
-    if (sflrowdataend > sfl_row_size);
-      sflrowdataend = sfl_row_size;
+    if (sflRowDataEnd > sfl_row_size);
+      sflRowDataEnd = sfl_row_size;
     endif;
 
-    sflrowdatalen =
-     sflrowdataend - sflRowDataStr + 1;
+    sflRowDataLen =
+     sflRowDataEnd - sflRowDataStr + 1;
 
     //  ... übertragen aufbereitetes Feld in Subfile
     %subst(sflDataRow: sflRowDataStr) =
-    %subst(yhexstring: buffidx: sflrowdatalen);
+    %subst(YHexString: BuffIdx: sflRowDataLen);
 
     //  ... pflegen der Tabelle mit den Werten der
     //      Spaltenaufteilung ...
-    if (sflrowdataend >= sflRowDataStr);
+    if (sflRowDataEnd >= sflRowDataStr);
       //      ... pflegen der Feldpositionstabelle
-      if (sflmode = '*HEADLINE');
+      if (SflMode = '*HEADLINE');
         cp = cp + 1;
-        col_field(cp) = fldl0100.f1fnme;
-        col_scnstr(cp) = sflRowDataStr;
-        col_scnend(cp) = sflrowdataend;
+        Col_Field(cp) = fldl0100.f1fnme;
+        Col_ScnStr(cp) = sflRowDataStr;
+        Col_ScnEnd(cp) = sflRowDataEnd;
         //          ... ist das Feld komplett sichtbar?
-        if (col_scnend(cp) <= sflMaxRowLen);
+        if (Col_ScnEnd(cp) <= sflMaxRowLen);
           //              ... ja, kein Fehler
-          col_error(cp) = bFalse;
+          Col_Error(cp) = bFalse;
         else;
           //              ... nein, Fehler!
-          col_error(cp) = bTrue;
+          Col_Error(cp) = bTrue;
         endif;
       endif;
 
-      sflRowDataStr = sflrowdataend + 1;
+      sflRowDataStr = sflRowDataEnd + 1;
 
       //      ... Löschen von "überstehendem" Datenmüll
-      if (columnlen = maxcollen and
+      if (ColumnLen = MaxColLen and
          sflRowDataStr <= sfl_row_size);
         sflDataRow.chars(sflRowDataStr) = '';
       endif;
 
       //      ... umschalten auf "normale" Farbdarstellung
       if (sflRowDataStr <= sfl_row_size);
-        wrk#ofs = sflRowDataStr;
-        exsr pbstdcol;
+        Wrk#Ofs = sflRowDataStr;
+        exsr PBStdCol;
       endif;
 
       //      ... "nachziehen" der Spaltenfarbe
-      if (colrofs <= 0);
+      if (ColrOfs <= 0);
       //          ... Pech gehabt
       else;
-        if (sflmode = '*HEADLINE');
-          if ((f_kseq = 0) or
-              (accessMode = RRN_SEQ));
-            sflDataRow.chars(colrofs) = set0001.set_hedcol;
+        if (SflMode = '*HEADLINE');
+          if ((F_KSeq = 0) or
+              (AccessMode = RRN_SEQ));
+            sflDataRow.chars(ColrOfs) = set0001.SET_HedCol;
           else;
-            sflDataRow.chars(colrofs) = set0001.set_keycol;
+            sflDataRow.chars(ColrOfs) = set0001.SET_KeyCol;
           endif;
         else;
-          exsr pbcolor;
+          exsr PBColor;
         endif;
       endif;
     endif;
@@ -5581,12 +5581,12 @@ endsr;
 //    PBStdCol      Setzen der "normalen" Datensatzfarbe      *
 //============================================================*
 
-begsr pbstdcol;
+begsr PBStdCol;
 
-  if (istblcol = bFalse);
-    sflDataRow.chars(wrk#ofs) = set0001.set_stdcol;
+  if (IsTblCol = bFalse);
+    sflDataRow.chars(Wrk#Ofs) = set0001.SET_StdCol;
   else;
-    sflDataRow.chars(wrk#ofs) = set0001.set_tblcol;
+    sflDataRow.chars(Wrk#Ofs) = set0001.SET_TblCol;
   endif;
 
 endsr;
@@ -5596,12 +5596,12 @@ endsr;
 //                  für die Anzeige auf dem Bildschirm        *
 //============================================================*
 
-begsr pbgenkey;
+begsr PBGenKey;
 
-  if (accessMode = KEY_SEQ);
-    exsr pbbuildkey;
+  if (AccessMode = KEY_SEQ);
+    exsr PBBuildKey;
   else;
-    exsr pbbuildrrn;
+    exsr PBBuildRrn;
   endif;
 
 endsr;
@@ -5610,9 +5610,9 @@ endsr;
 //    PBBuildRrn    Generieren Aufsetzkey: RRN                *
 //============================================================*
 
-begsr pbbuildrrn;
+begsr PBBuildRrn;
 
-  ##rcdnbr = recordnbr;
+  ##RcdNbr = recordnbr;
 
 endsr;
 
@@ -5620,23 +5620,23 @@ endsr;
 //    PBBuildKey    Generieren Aufsetzkey                     *
 //============================================================*
 
-begsr pbbuildkey;
+begsr PBBuildKey;
 
   monitor;
-    peek19(io_buff: ykeyval: yMsgID: yMsgDta);
+    peek19(IO_Buff: YKeyVal: YMsgID: YMsgDta);
 
     //  ... Konvertieren nicht darstellbarer Zeichen
-    youtbuffer = ykeyval;
-    youtbuffln = 132;
+    YOutBuffer = YKeyVal;
+    YOutBuffLn = 132;
 
-    peek32(youtbuffer: youtbuffln: 0
-          : yMsgID: yMsgDta);
+    peek32(YOutBuffer: YOutBuffLn: 0
+          : YMsgID: YMsgDta);
     *in99 = bFalse;
   on-error;
     *in99 = bTrue;
   endmon;
 
-  ##key = youtbuffer;
+  ##Key = YOutBuffer;
 
 endsr;
 
@@ -5645,12 +5645,12 @@ endsr;
 //                  für einen Dateizugriff                    *
 //============================================================*
 
-begsr pbgenintky;
+begsr PBGenIntKy;
 
-  if (accessMode = KEY_SEQ);
-    exsr pbintkey;
+  if (AccessMode = KEY_SEQ);
+    exsr PBIntKey;
   else;
-    exsr pbintrrn;
+    exsr PBIntRrn;
   endif;
 
 endsr;
@@ -5659,9 +5659,9 @@ endsr;
 //    PBIntRrn      Generieren interne Satznummer             *
 //============================================================*
 
-begsr pbintrrn;
+begsr PBIntRrn;
 
-  wrk#rcdnbr = wrk#rcdnbr;
+  Wrk#RcdNbr = Wrk#RcdNbr;
 
 endsr;
 
@@ -5669,11 +5669,11 @@ endsr;
 //    PBIntKey      Generieren internen Aufsetzschlüssel      *
 //============================================================*
 
-begsr pbintkey;
+begsr PBIntKey;
 
-  peek20(wrk#keyval: ybuffer
-        : yMsgID: yMsgDta);
-  wrk#keyval = ybuffer;
+  peek20(Wrk#KeyVal: YBuffer
+        : YMsgID: YMsgDta);
+  Wrk#KeyVal = YBuffer;
 
 endsr;
 
@@ -5684,14 +5684,14 @@ endsr;
 //                  b) für normale Datensätze                 *
 //============================================================*
 
-begsr pbcolor;
+begsr PBColor;
 
-  if (colrofs = 0);
+  if (ColrOfs = 0);
   //                 Nix tun
   else;
 
     if (isColumnException = bTrue);
-      sflDataRow.chars(colrofs) = set0001.set_exccol;
+      sflDataRow.chars(ColrOfs) = set0001.SET_ExcCol;
     else;
 
       //---------------------------------------*
@@ -5699,60 +5699,60 @@ begsr pbcolor;
       //  a) anzeigen "normaler" Datensätze    *
       //  b) anzeigen "gepinnter" Datensätze   *
       //---------------------------------------*
-      if (ispinmoder = bFalse);
+      if (IsPinModeR = bFalse);
         if (isPinModeC = bFalse);
           //      ... nix ist gepinnt
-          ispinned = bFalse;
+          IsPinned = bFalse;
         else;
           //      ... prüfen auf gepinnte Spalten
-          pin#field = fldl0100.f1fnme;
-          exsr chkpincol;
+          Pin#Field = fldl0100.f1fnme;
+          exsr ChkPinCol;
         endif;
       else;
         //      ... prüfen auf gepinnte Zeilen (=Datensätze)
-        wrk#rcdnbr = recordnbr;
-        exsr chkpinrcd;
+        Wrk#RcdNbr = recordnbr;
+        exsr ChkPinRcd;
       endif;
 
       //---------------------------------------*
       //  ... setzen der Datenfarbe            *
       //---------------------------------------*
       //  Spaltenmarkierung ...
-      if (f_markcol = bTrue);
-        sflDataRow.chars(colrofs) = f_color;
+      if (F_MarkCol = bTrue);
+        sflDataRow.chars(ColrOfs) = F_Color;
       else;
         //  Keine Spaltenmarkierung ...
-        if (ispinned = bTrue);
+        if (IsPinned = bTrue);
           //      ... pinned Datensatz
-          sflDataRow.chars(colrofs) = set0001.set_pincol;
+          sflDataRow.chars(ColrOfs) = set0001.SET_PinCol;
         else;
           //      ... normaler Datensatz
-          wrk#ofs = colrofs;
-          exsr pbstdcol;
+          Wrk#Ofs = ColrOfs;
+          exsr PBStdCol;
         endif;
       endif;
 
       //---------------------------------------*
       //  ... Datensatz gefunden               *
       //---------------------------------------*
-      if (ispinned = bFalse);
+      if (IsPinned = bFalse);
         select;
         //      ... Suchfunktionen: *REVERSE
-        when (srchtype = '*REVERSE');
-          if (isfound = bTrue);
-            sflDataRow.chars(colrofs) = set0001.set_revcol;
+        when (SrchType = '*REVERSE');
+          if (IsFound = bTrue);
+            sflDataRow.chars(ColrOfs) = set0001.SET_RevCol;
           endif;
 
         //      ... Suchfunktionen: *UNDERLINE
-        when (srchtype = '*UNDERLINE');
-          if (isfound = bTrue);
-            sflDataRow.chars(colrofs) = set0001.set_undcol;
+        when (SrchType = '*UNDERLINE');
+          if (IsFound = bTrue);
+            sflDataRow.chars(ColrOfs) = set0001.SET_UndCol;
           endif;
 
         //      ... Suchfunktionen: *NORMAL
-        when (srchtype = '*NORMAL');
-          if (srchfndrcd = recordnbr);
-            sflDataRow.chars(colrofs) = set0001.set_nmlcol;
+        when (SrchType = '*NORMAL');
+          if (SrchFndRcd = recordnbr);
+            sflDataRow.chars(ColrOfs) = set0001.SET_NmlCol;
           endif;
 
         other;
@@ -5769,20 +5769,20 @@ endsr;
 //    PBSetLL       Setzen Dateizeiger RRN/KEY                *
 //============================================================*
 
-begsr pbsetll;
+begsr PBSetLL;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
   //      Nix tun, keine Datei vorhanden
   else;
 
     select;
-    when (accessMode = KEY_SEQ);
-      cio_setllwithkey(hfile02: wrk#keyval);
-      exsr f2tofx;
-    when (accessMode = RRN_SEQ);
-      cio_setllwithrrn(hfile01: wrk#rcdnbr);
-      exsr f1tofx;
-    when (accessMode = SQL_SEQ);
+    when (AccessMode = KEY_SEQ);
+      CIO_setllWithKey(hFile02: Wrk#KeyVal);
+      exsr F2toFx;
+    when (AccessMode = RRN_SEQ);
+      CIO_setllWithRRN(hFile01: Wrk#RcdNbr);
+      exsr F1toFx;
+    when (AccessMode = SQL_SEQ);
     other;
     endsl;
 
@@ -5794,20 +5794,20 @@ endsr;
 //    PBSetGT       Setzen Dateizeiger RRN/KEY                *
 //============================================================*
 
-begsr pbsetgt;
+begsr PBSetGT;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
   //      Nix tun, keine Datei vorhanden
   else;
 
     select;
-    when (accessMode = KEY_SEQ);
-      cio_setgtwithkey(hfile02: wrk#keyval);
-      exsr f2tofx;
-    when (accessMode = RRN_SEQ);
-      cio_setgtwithrrn(hfile01: wrk#rcdnbr);
-      exsr f1tofx;
-    when (accessMode = SQL_SEQ);
+    when (AccessMode = KEY_SEQ);
+      CIO_setgtWithKey(hFile02: Wrk#KeyVal);
+      exsr F2toFx;
+    when (AccessMode = RRN_SEQ);
+      CIO_setgtWithRRN(hFile01: Wrk#RcdNbr);
+      exsr F1toFx;
+    when (AccessMode = SQL_SEQ);
     other;
     endsl;
 
@@ -5819,25 +5819,25 @@ endsr;
 //    PBMoveTop     Setzen Dateizeiger auf BOF                *
 //============================================================*
 
-begsr pbmovetop;
+begsr PBMoveTop;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
   //      Nix tun, keine Datei vorhanden
   else;
 
-    if (accessMode = SQL_SEQ);
-      sql_gototop(yMsgID: yMsgDta);
-      if (yMsgID <> '');
-        p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
-        yMsgID = '';
-        yMsgDta = '';
+    if (AccessMode = SQL_SEQ);
+      SQL_gotoTop(YMsgID: YMsgDta);
+      if (YMsgID <> '');
+        p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
+        YMsgID = '';
+        YMsgDta = '';
       endif;
     else;
-      wrk#keyval = '*LOVAL';
-      wrk#rcdnbr = LOW_RCD_NBR;
+      Wrk#KeyVal = '*LOVAL';
+      Wrk#RcdNbr = LOW_RCD_NBR;
 
-      exsr pbgenintky;
-      exsr pbsetll;
+      exsr PBGenIntKy;
+      exsr PBSetLL;
     endif;
 
   endif;
@@ -5848,26 +5848,26 @@ endsr;
 //    PBMoveBot     Setzen Dateizeiger auf EOF                *
 //============================================================*
 
-begsr pbmovebot;
+begsr PBMoveBot;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
   //      Nix tun, keine Datei vorhanden
   else;
 
-    if (accessMode = SQL_SEQ);
-      sql_gotobottom(yMsgID: yMsgDta);
-      if (yMsgID <> '');
-        p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
-        yMsgID = '';
-        yMsgDta = '';
+    if (AccessMode = SQL_SEQ);
+      SQL_gotoBottom(YMsgID: YMsgDta);
+      if (YMsgID <> '');
+        p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
+        YMsgID = '';
+        YMsgDta = '';
       endif;
     else;
-      wrk#keyval = '*HIVAL';
-      wrk#rcdnbr = HIGH_RCD_NBR;
+      Wrk#KeyVal = '*HIVAL';
+      Wrk#RcdNbr = HIGH_RCD_NBR;
 
-      exsr pbgenintky;
-      exsr pbsetgt;
-      exsr pbreadp;
+      exsr PBGenIntKy;
+      exsr PBSetGT;
+      exsr PBReadP;
     endif;
 
   endif;
@@ -5880,10 +5880,10 @@ endsr;
 
 begsr clrFldPosArray;
 
-  col_field(*) = '';
-  col_scnstr(*) = 0;
-  col_scnend(*) = 0;
-  col_error(*) = bFalse;
+  Col_Field(*) = '';
+  Col_ScnStr(*) = 0;
+  Col_ScnEnd(*) = 0;
+  Col_Error(*) = bFalse;
   cp = 0;
 
 endsr;
@@ -5894,33 +5894,33 @@ endsr;
 
 begsr changeFile;
 
-  isfilechg = bFalse;
+  IsFileChg = bFalse;
 
-  if (l#file <> ##file
-      or l#library <> ##library
-      or l#member <> ##member
-      or l#format <> ##format);
+  if (L#File <> ##File
+      or L#Library <> ##Library
+      or L#Member <> ##Member
+      or L#Format <> ##Format);
 
-    isfilechg = bTrue;
+    IsFileChg = bTrue;
     //  ... Änderungen prüfen
-    if (##member = l#member);
-      ##member = *blanks;
+    if (##Member = L#Member);
+      ##Member = *blanks;
     endif;
 
-    if (##format = l#format);
-      ##format = *blanks;
+    if (##Format = L#Format);
+      ##Format = *blanks;
     endif;
 
-    exsr closefile;
+    exsr CloseFile;
 
-    if (##file <> *blanks);
-      accessMode = newAccessMode;
-      exsr openfile;
+    if (##File <> *blanks);
+      AccessMode = newAccessMode;
+      exsr OpenFile;
     endif;
   endif;
 
-  exsr getopnfile;
-  exsr getmaxseq;
+  exsr GetOpnFile;
+  exsr GetMaxSeq;
 
 endsr;
 
@@ -5928,29 +5928,29 @@ endsr;
 //    ChangeWnd     Prüfen, ob Fenster gewechselt hat         *
 //============================================================*
 
-begsr changewnd;
+begsr ChangeWnd;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
     //      Nix tun, keine Datei vorhanden
-    exsr msgnofile;
+    exsr MsgNoFile;
   else;
 
-    if (##field <> *blanks);
-      wrk#field = ##field;
-      exsr getseqnbr;
+    if (##Field <> *blanks);
+      Wrk#Field = ##Field;
+      exsr GetSeqNbr;
       if (isSeqNbrOK = bTrue);
-        ##wndnbr = wrk#seqnbr;
-        ##strpage = 1;
+        ##WndNbr = Wrk#SeqNbr;
+        ##StrPage = 1;
       else;
         //  Fehlermeldung ...
         clear usr8108;
-        usr8108.var1 = ##field;
-        usr8108.var2 = ##file;
-        usr8108.var3 = ##library;
-        p_sndpgmmg('USR8108': usr8108: sds.pgmname);
+        usr8108.var1 = ##Field;
+        usr8108.var2 = ##File;
+        usr8108.var3 = ##Library;
+        p_sndPgmMg('USR8108': usr8108: sds.pgmName);
       endif;
 
-      ##field = *blanks;
+      ##Field = *blanks;
     endif;
 
   endif;
@@ -5962,20 +5962,20 @@ endsr;
 //                  Auslösen über *IN93                       *
 //============================================================*
 
-begsr changekey;
+begsr ChangeKey;
 
-  if (##rcdnbr <> r#rcdnbr
-      or ##key <> r#keyval);
-    iskeychg = bTrue;
+  if (##RcdNbr <> R#RcdNbr
+      or ##Key <> R#KeyVal);
+    IsKeyChg = bTrue;
   else;
-    iskeychg = bFalse;
+    IsKeyChg = bFalse;
   endif;
 
   select;
-  when (##rcdnbr < LOW_RCD_NBR);
-    ##rcdnbr = LOW_RCD_NBR;
-  when (##rcdnbr > HIGH_RCD_NBR);
-    ##rcdnbr = HIGH_RCD_NBR;
+  when (##RcdNbr < LOW_RCD_NBR);
+    ##RcdNbr = LOW_RCD_NBR;
+  when (##RcdNbr > HIGH_RCD_NBR);
+    ##RcdNbr = HIGH_RCD_NBR;
   other;
   //    Im gültigen Bereich ...
   endsl;
@@ -5986,38 +5986,38 @@ endsr;
 //    ChangeSort    Wechseln der Sortierfolge                 *
 //============================================================*
 
-begsr changesort;
+begsr ChangeSort;
 
-  l#file = *blanks;
-  l#library = *blanks;
-  l#member = *blanks;
-  l#format = *blanks;
+  L#File = *blanks;
+  L#Library = *blanks;
+  L#Member = *blanks;
+  L#Format = *blanks;
 
   //  Merken der letzten Cursorposition
   select;
   //    ... außerhalb der Subfile
-  when (sflCsr <= *zeros);
+  when (SflCsr <= *zeros);
     //        ... wird später anhand der
     //            Cursorposition auf dem Bildschirm entschieden
-    sflCsr = *zeros;
+    SflCsr = *zeros;
 
   //    ... innerhalb der Subfile
-  when (sflCsr > nbrPinRcd);
+  when (SflCsr > nbrPinRcd);
   //        ... wird genau dort positioniert
 
   //    ... innerhalb der gepinnten Datensätze
   other;
     //        ... auf 1. angezeigten Datensatz positionieren
-    sflCsr = 1 + nbrPinRcd;
+    SflCsr = 1 + nbrPinRcd;
   endsl;
 
   //  Umsetzen Cursorposition in Satznummer
   exsr pbCsrToRcd;
-  if (wrk#rcdnbr > *zeros);
+  if (Wrk#RcdNbr > *zeros);
     //**  File#04.Open  ANDEQ     '1'
-    last#rcdnr = wrk#rcdnbr;
+    Last#RcdNr = Wrk#RcdNbr;
   else;
-    last#rcdnr = *zeros;
+    Last#RcdNr = *zeros;
   endif;
 
   //  Wechsel der Datei ...
@@ -6026,24 +6026,24 @@ begsr changesort;
   isPinToClr = bTrue;
 
   //  Prüfen Seq-Bereich (##WndNbr) ...
-  exsr chkseqrnge;
+  exsr ChkSeqRnge;
 
   //  Wechsel des Fenster (##Field) ...
-  exsr changewnd;
+  exsr ChangeWnd;
 
-  clear ##rcdnbr;
-  clear ##key;
-  clear r#rcdnbr;
-  clear r#keyval;
+  clear ##RcdNbr;
+  clear ##Key;
+  clear R#RcdNbr;
+  clear R#KeyVal;
 
-  yMsgID = *blanks;
-  yMsgDta = *blanks;
+  YMsgID = *blanks;
+  YMsgDta = *blanks;
 
-  if (last#rcdnr = *zeros);
+  if (Last#RcdNr = *zeros);
   //    Alter Datensatz ist nicht bekannt ...
   else;
     //    ... Einlesen letzten Datensatz
-    recordnbr = last#rcdnr;
+    recordnbr = Last#RcdNr;
 
     if (f_chain04(recordnbr:
                h_file   :
@@ -6053,26 +6053,26 @@ begsr changesort;
     //    ... Zugriff fehlgeschlagen
     else;
       //    ... Generieren Aufsetzkey
-      exsr pbgenkey;
+      exsr PBGenKey;
     endif;
   endif;
 
   //  Wechsel des Aufsetzkeys ...
-  exsr changekey;
+  exsr ChangeKey;
 
   //  Füllen der Subfile ...
-  if (iskeychg = bFalse);
-    if (cursorposition.row > sfllastrw);
+  if (IsKeyChg = bFalse);
+    if (cursorPosition.row > SflLastRw);
       //    ... unterhalb der Subfile
-      exsr c_bot;
+      exsr C_Bot;
     else;
       //    ... oberhalb der Subfile,
       //        bzw. kein Wechsel des Aufsetzkeys
-      exsr c_top;
+      exsr C_Top;
     endif;
   else;
     //    ... neuer Aufsetzkey innerhalb der Subfile
-    exsr keyhaschg;
+    exsr KeyHasChg;
   endif;
 
 endsr;
@@ -6081,10 +6081,10 @@ endsr;
 //    OpenFile      Datei öffnen                              *
 //============================================================*
 
-begsr openfile;
+begsr OpenFile;
 
   //  Wenn eine Datei bereits geöffnet ist ...
-  if (isOpen = bTrue);
+  if (IsOpen = bTrue);
     //  ... dann geöffnet lassen
     leavesr;
   endif;
@@ -6092,35 +6092,35 @@ begsr openfile;
   yCursorPosition.row = 0;
   yCursorPosition.column = 0;
 
-  exsr chkprvfile;
+  exsr ChkPrvFile;
 
   //  ... erst die Plausi prüfen, dann ...
-  if (##library = *blanks);
-    ##library = '*LIBL';
+  if (##Library = *blanks);
+    ##Library = '*LIBL';
   endif;
 
-  if (##member = *blanks);
-    ##member = '*FIRST';
+  if (##Member = *blanks);
+    ##Member = '*FIRST';
   endif;
 
   //  ... Objektbeschreibung
   //      ... abrufen der Objektattribute (auflösen *LIBL, *CURLIB)
-  exsr getobjattr;
-  if (isError = bTrue);
+  exsr GetObjAttr;
+  if (IsError = bTrue);
     //  Fehler aufgetreten, Öffnen abbrechen.
-    exsr msgnofile;
+    exsr MsgNoFile;
     leavesr;
   endif;
 
   //  ... Teildateien
-  if (##member = '*NONE');
+  if (##Member = '*NONE');
     $$nomb = 0;
   else;
     //      ... abrufen der Anzahl Teildateien
-    exsr getnbrmbr;
+    exsr GetNbrMbr;
     if ($$nomb = 0);
       //  Keine Teildateien vorhanden.
-      ##member = '*NONE';
+      ##Member = '*NONE';
     endif;
   endif;
 
@@ -6131,47 +6131,47 @@ begsr openfile;
   //**                ENDIF
 
   //      ... prüfen Name der Teildatei
-  exsr checkmbrname;
-  if (isError = bTrue);
+  exsr CheckMbrName;
+  if (IsError = bTrue);
     //  Fehler aufgetreten, Öffnen abbrechen.
-    exsr msgnofile;
+    exsr MsgNoFile;
     leavesr;
   endif;
 
   //  ... Satzformate
   //      ... abrufen der Satzformate
-  exsr getfmtlist;
-  if (yMsgID <> '');
+  exsr GetFmtList;
+  if (YMsgID <> '');
     //  Satzformate konnten nicht abgerufen werden (USR0002),
     //  Öffnen abbrechen.
-    p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
-    yMsgID = '';
-    yMsgDta = '';
-    exsr msgnofile;
+    p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
+    YMsgID = '';
+    YMsgDta = '';
+    exsr MsgNoFile;
     leavesr;
   endif;
   //      ... auswählen Satzformat
-  exsr getrcdfrmt;
+  exsr GetRcdFrmt;
 
   //  ... prüfen auf Schlüsselfelder
   //      und initialisieren von PEEK41 (= Dateiinformationen)
-  exsr getnbrkeyf;
+  exsr GetNbrKeyF;
   //      ... wenn keine Schlüsselinformationen
   //          vorhanden sind, ...
-  if (iskeyavail = bFalse
-      and accessMode = KEY_SEQ);
+  if (IsKeyAvail = bFalse
+      and AccessMode = KEY_SEQ);
     //          ... dann über RRN zugreifen
-    accessMode = RRN_SEQ;
+    AccessMode = RRN_SEQ;
   else;
   //          ... sonst Modus beibehalten
   endif;
 
   //  Ermitteln Sortierung bei Zugriff über SQL ...
-  if (accessMode = SQL_SEQ);
+  if (AccessMode = SQL_SEQ);
     if (sqlOrder = '*KEY');
-      peek38(##file: ##library: sqlOrder);
+      peek38(##File: ##Library: sqlOrder);
     else;
-      sqlOrder = sql_quote(f_ucase(sqlOrder));
+      sqlOrder = SQL_quote(f_ucase(sqlOrder));
     endif;
   endif;
 
@@ -6180,15 +6180,15 @@ begsr openfile;
   // -------------------------------------------------
 
   //      ... prüfen Zugriffsrechte
-  exsr s_exit01;
+  exsr s_EXIT01;
 
   //      ... Zugriff nicht erlaubt
   if (auth.isAccessAlw <> bTrue);
-    exsr closefile;
-    p_rmvpgmmg(sds.pgmname);
-    p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
-    yMsgID = '';
-    yMsgDta = '';
+    exsr CloseFile;
+    p_rmvPgmMg(sds.pgmName);
+    p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
+    YMsgID = '';
+    YMsgDta = '';
     leavesr;
   endif;
 
@@ -6196,59 +6196,59 @@ begsr openfile;
   //  Datei öffnen für Einzelzugriff (Aktualisierung)
   // -------------------------------------------------
 
-  if (##member = '*NONE');
-    clear hfile00;
-    file#x.isOpen = bFalse;
-    file#x.file = ##file;
-    file#x.library = ##library;
-    file#x.rcdlen = 0;
-    file#x.member = ##member;
-    file#x.rcdfmt = ##format;
-    file#x.mbrnbr = 0;
-    file#x.rcdnbr = 0;
-    isOpen = bFalse;
+  if (##Member = '*NONE');
+    clear hFile00;
+    File#X.IsOpen = bFalse;
+    File#X.file = ##File;
+    File#X.library = ##Library;
+    File#X.RcdLen = 0;
+    File#X.member = ##Member;
+    File#X.rcdFmt = ##Format;
+    File#X.mbrNbr = 0;
+    File#X.RcdNbr = 0;
+    IsOpen = bFalse;
   else;
 
     f_execute('OVRDBF ' +
-               'FILE(' + %trim(##file) + ') ' +
+               'FILE(' + %trim(##File) + ') ' +
                'TOFILE(' +
-                 %trim(##library) + '/' +
-                 %trim(##file) + ') ' +
-               'MBR(' + %trim(##member) + ') ' +
+                 %trim(##Library) + '/' +
+                 %trim(##File) + ') ' +
+               'MBR(' + %trim(##Member) + ') ' +
                'OVRSCOPE(*ACTGRPDFN) ' +
                'SHARE(*NO) ' +
                'SEQONLY(*NO) SECURE(*YES)'
-             : yMsgID: yMsgDta);
-    yMsgID = '';
-    yMsgDta = '';
+             : YMsgID: YMsgDta);
+    YMsgID = '';
+    YMsgDta = '';
 
     //      ... Änderungen erlaubt
     if (auth.isUpdAlw = bTrue);
       commitLvl = '1';
       //          ... mit Commit-Steuerung
-      if cio_open(hfile00
-               : ##file
-               : ##library
-               : ##member
-               : ##format
+      if CIO_open(hFile00
+               : ##File
+               : ##Library
+               : ##Member
+               : ##Format
                : 'rr+, arrseq=Y, commit=Y, +
                   nullcap=Y, riofb=Y, +
                   secure=N, ccsid=65535') = bTrue;
-        exsr f0tofx;
+        exsr F0toFx;
         isUpdMod = bTrue;
       else;
         //          ... ohne Commit-Steuerung
         commitLvl = '0';
-        if cio_open(hfile00
-                 : ##file
-                 : ##library
-                 : ##member
-                 : ##format
+        if CIO_open(hFile00
+                 : ##File
+                 : ##Library
+                 : ##Member
+                 : ##Format
                  : 'rr+ , arrseq=Y, commit=N +
                     nullcap=Y, riofb=Y, +
                     secure=N, ccsid=65535') = bTrue;
 
-          exsr f0tofx;
+          exsr F0toFx;
           isUpdMod = bTrue;
         else;
           //              ... Datei für Einzelsatzzugriff konnte nicht geöffnet werden.
@@ -6276,192 +6276,192 @@ begsr openfile;
     // -------------------------------------------------
 
     //  Sortierung 2 nach Schlüsselfelder
-    if (accessMode = KEY_SEQ);
-      if cio_open(hfile02
-               : ##file
-               : ##library
-               : ##member
-               : ##format
+    if (AccessMode = KEY_SEQ);
+      if CIO_open(hFile02
+               : ##File
+               : ##Library
+               : ##Member
+               : ##Format
                : 'rr, arrseq=N, commit=N, +
                   nullcap=Y, riofb=Y, +
                   secure=N, ccsid=65535') = bTrue;
         *in99 = *off;
       else;
         *in99 = *on;
-        cio_geterrormsg(hfile02: yMsgID: yMsgDta);
-        p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
-        yMsgID = '';
-        yMsgDta = '';
+        CIO_getErrorMsg(hFile02: YMsgID: YMsgDta);
+        p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
+        YMsgID = '';
+        YMsgDta = '';
       endif;
-      exsr f2tofx;
+      exsr F2toFx;
     endif;
 
     //  Sortierung 1 nach Satzfolge
-    if (accessMode = RRN_SEQ);
-      if cio_open(hfile01
-               : ##file
-               : ##library
-               : ##member
-               : ##format
+    if (AccessMode = RRN_SEQ);
+      if CIO_open(hFile01
+               : ##File
+               : ##Library
+               : ##Member
+               : ##Format
                : 'rr, arrseq=Y, commit=N, +
                   nullcap=Y, riofb=Y, +
                   secure=N, ccsid=65535') = bTrue;
         *in99 = *off;
       else;
         *in99 = *on;
-        cio_geterrormsg(hfile01: yMsgID: yMsgDta);
-        p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
-        yMsgID = '';
-        yMsgDta = '';
+        CIO_getErrorMsg(hFile01: YMsgID: YMsgDta);
+        p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
+        YMsgID = '';
+        YMsgDta = '';
       endif;
-      exsr f1tofx;
+      exsr F1toFx;
     endif;
 
     //  Sortierung 3 nach Sql
-    if (accessMode = SQL_SEQ);
+    if (AccessMode = SQL_SEQ);
       clear usr0013;
-      p_sndstsmg('USR0013': usr0013);
-      if (sql_preparestatement(
+      p_sndStsMg('USR0013': usr0013);
+      if (SQL_prepareStatement(
                   '0'       :
-                  ##file    :
-                  ##library :
-                  ##member  :
-                  ##format  :
+                  ##File    :
+                  ##Library :
+                  ##Member  :
+                  ##Format  :
                   sqlWhere  :
                   sqlOrder  :
-                yMsgID      :
-                yMsgDta     ) = bTrue);
-        if (sql_open(hfile03     :
-                  yMsgID      :
-                  yMsgDta     ) = bTrue);
+                YMsgID      :
+                YMsgDta     ) = bTrue);
+        if (SQL_open(hFile03     :
+                  YMsgID      :
+                  YMsgDta     ) = bTrue);
           *in99 = *off;
-          yMsgID = '';
-          yMsgDta = '';
+          YMsgID = '';
+          YMsgDta = '';
         else;
           *in99 = *on;
-          cio_geterrormsg(hfile03: yMsgID: yMsgDta);
-          p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
-          yMsgID = '';
-          yMsgDta = '';
+          CIO_getErrorMsg(hFile03: YMsgID: YMsgDta);
+          p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
+          YMsgID = '';
+          YMsgDta = '';
         endif;
-        exsr f3tofx;
+        exsr F3toFx;
       else;
         *in99 = *on;
-        p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
-        yMsgID = '';
-        yMsgDta = '';
+        p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
+        YMsgID = '';
+        YMsgDta = '';
       endif;
     endif;
 
     f_execute('DLTOVR ' +
-               'FILE(' + %trim(##file) + ') ' +
+               'FILE(' + %trim(##File) + ') ' +
                'LVL(*ACTGRPDFN) '
-             : yMsgID: yMsgDta);
-    yMsgID = '';
-    yMsgDta = '';
+             : YMsgID: YMsgDta);
+    YMsgID = '';
+    YMsgDta = '';
 
     if (*in99 = *on);
       leavesr;
     endif;
     //      Datei geöffnet ...
     //      ... OPEN-Flag
-    isOpen = bTrue;
+    IsOpen = bTrue;
 
   endif;
 
   //      ... aber Satzlänge größer 32766
-  if (file#x.rcdlen > RCD_BUFF_LEN);
-    exsr closefile;
-    p_rmvpgmmg(sds.pgmname);
+  if (File#X.RcdLen > RCD_BUFF_LEN);
+    exsr CloseFile;
+    p_rmvPgmMg(sds.pgmName);
     clear usr8207;
     usr8207.var1 = RCD_BUFF_LEN;
-    p_sndpgmmg('USR8207': usr8207: sds.pgmname);
+    p_sndPgmMg('USR8207': usr8207: sds.pgmName);
   else;
 
     // ... löschen Pin-Funktion
-    exsr clrpincol;
-    exsr clrpinrow;
+    exsr ClrPinCol;
+    exsr ClrPinRow;
     // ... auswerten Rückkehrcode
-    if (yMsgID = 'USR8100'); // Verarbeitung abgebrochen
+    if (YMsgID = 'USR8100'); // Verarbeitung abgebrochen
       // ... Abbruch mit F3/F12
-      exsr closefile;
+      exsr CloseFile;
     else;
       // ... weiter
       // ... abrufen der Feldliste
-      exsr getfldlist;
+      exsr GetFldList;
       // ... abrufen der Schlüsselfelder
-      exsr getkeylist;
+      exsr GetKeyList;
       // ... Sortieren der Schlüsselfelder
-      exsr floatkeys;
+      exsr FloatKeys;
       // ... Fensterposition
-      ##wndnbr = 0;
-      ##strpage = 0;
+      ##WndNbr = 0;
+      ##StrPage = 0;
       // ... Suchmodus
-      exsr srchinz;
+      exsr SrchInz;
       // ... Blätternfunktion Einzelsatz
       yScreenNbr = 0;
       // ... abrufen der Teildateiattribute
-      exsr getmbrattr;
+      exsr GetMbrAttr;
       // ... initialisieren Kurzbefehl
-      exsr initscmd;
+      exsr InitSCmd;
       // ... Nachrichten entfernen
-      p_rmvpgmmg(sds.pgmname);
+      p_rmvPgmMg(sds.pgmName);
       // ... einblenden Aufsetzkey
-      if (accessMode = KEY_SEQ);
+      if (AccessMode = KEY_SEQ);
         *in70 = '1';
       else;
         *in70 = '0';
       endif;
       // ... Cursor auf Keyeingabezeile setzen
-      exsr c_poscsr;
+      exsr C_PosCsr;
 
       // ... Hexmode nicht bei Satzlänge größer 32766
-      if (file#x.rcdlen > RCD_BUFF_LEN and
-          set0001.set_dspmde = '*DSPHEX');
+      if (File#X.RcdLen > RCD_BUFF_LEN and
+          set0001.SET_DspMde = '*DSPHEX');
         clear usr8206;
         usr8206.var1  = RCD_BUFF_LEN;
-        p_sndpgmmg('USR8206': usr8206: sds.pgmname);
-        exsr s_dspnrm;
+        p_sndPgmMg('USR8206': usr8206: sds.pgmName);
+        exsr S_DspNrm;
       endif;
 
       // ... Felder, welche nicht erlaubt sind
       clear f_key;
-      f_key.f_field = *blanks;
+      f_key.F_Field = *blanks;
       setll %kds(f_key) fpeekfld;
       dow ('1');
         read fpeekfld;
         if (%eof());
           leave;
         endif;
-        if (f_isnotalw(f_ffd) = bTrue);
-          p_sndpgmmg('USR8196': f_field: sds.pgmname);
+        if (f_isNotAlw(f_ffd) = bTrue);
+          p_sndPgmMg('USR8196': F_Field: sds.pgmName);
         endif;
       enddo;
 
       // ... Prüfen der Registrierung
-      exsr c_register;
+      exsr C_Register;
       if (isLicenceError = bTrue);
-        exsr closeFile;
+        exsr CloseFile;
       endif;
 
       // ... Datei geöffnet ...
-      if (isOpen = bTrue);
+      if (IsOpen = bTrue);
         if (commitLvl = '0');
           // ... ohne Commit
           *in55 = bFalse;
-          p_sndpgmmg('USR0004': '': sds.pgmname);
+          p_sndPgmMg('USR0004': '': sds.pgmName);
         else;
           // ... mit Commit
           *in55 = bTrue;
-          p_sndpgmmg('USR0003': '': sds.pgmname);
+          p_sndPgmMg('USR0003': '': sds.pgmName);
         endif;
 
         // ... Datei für ...
         if (isUpdMod = bFalse);
           // ... Input geöffnet
-          usr0007.var1 = ##file;
-          usr0007.var2 = ##library;
-          p_sndpgmmg('USR0007': usr0007: sds.pgmname);
+          usr0007.var1 = ##File;
+          usr0007.var2 = ##Library;
+          p_sndPgmMg('USR0007': usr0007: sds.pgmName);
         else;
         // ... Update geöffnet
         endif;
@@ -6481,58 +6481,58 @@ endsr;
 //    PBRead        Lesen in Satz- oder Schlüsselfolge        *
 //============================================================*
 
-begsr pbread;
+begsr PBRead;
 
-  isfileerror = bFalse;
+  isFileError = bFalse;
 
-  dou ((file#x.rcdfmt = ##format) or (*in99 = *on));
+  dou ((File#X.rcdFmt = ##Format) or (*in99 = *on));
 
     select;
-    when (accessMode = KEY_SEQ);
-      if (cio_read(hfile02: bFalse
-                : io_buff: io_nullmap) = bEOF);
+    when (AccessMode = KEY_SEQ);
+      if (CIO_read(hFile02: bFalse
+                : IO_Buff: IO_NullMap) = bEOF);
         *in99 = *on;
       else;
         *in99 = *off;
       endif;
-      exsr f2tofx;
-      isfileerror = cio_iserror(hfile02);
-    when (accessMode = RRN_SEQ);
-      if (cio_read(hfile01: bFalse
-                : io_buff: io_nullmap) = bEOF);
+      exsr F2toFx;
+      isFileError = CIO_isError(hFile02);
+    when (AccessMode = RRN_SEQ);
+      if (CIO_read(hFile01: bFalse
+                : IO_Buff: IO_NullMap) = bEOF);
         *in99 = *on;
       else;
         *in99 = *off;
       endif;
-      exsr f1tofx;
-      isfileerror = cio_iserror(hfile01);
-    when (accessMode = SQL_SEQ);
-      if (sql_nextrow(io_buff: io_nullmap: hfile03:
-                   yMsgID : yMsgDta)  = bEOF);
+      exsr F1toFx;
+      isFileError = CIO_isError(hFile01);
+    when (AccessMode = SQL_SEQ);
+      if (SQL_nextRow(IO_Buff: IO_NullMap: hFile03:
+                   YMsgID : YMsgDta)  = bEOF);
         *in99 = *on;
-        p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
-        yMsgID = '';
-        yMsgDta = '';
+        p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
+        YMsgID = '';
+        YMsgDta = '';
       else;
         *in99 = *off;
-        yMsgID = '';
-        yMsgDta = '';
+        YMsgID = '';
+        YMsgDta = '';
       endif;
-      exsr f3tofx;
-      isfileerror = cio_iserror(hfile03);
+      exsr F3toFx;
+      isFileError = CIO_isError(hFile03);
     other;
     endsl;
 
   enddo;
 
-  if (isfileerror = bTrue);
-    iseof = bTrue;
+  if (isFileError = bTrue);
+    IsEOF = bTrue;
   else;
     if (*in99 = *on);
-      exsr pbmovebot;
-      iseof = bTrue;
+      exsr PBMoveBot;
+      IsEOF = bTrue;
     else;
-      iseof = bFalse;
+      IsEOF = bFalse;
     endif;
   endif;
 
@@ -6543,53 +6543,53 @@ endsr;
 //                  Schlüsselfolge                            *
 //============================================================*
 
-begsr pbreadp;
+begsr PBReadP;
 
-  dou ((file#x.rcdfmt = ##format) or (*in99 = *on));
+  dou ((File#X.rcdFmt = ##Format) or (*in99 = *on));
 
     select;
-    when (accessMode = KEY_SEQ);
-      if (cio_readp(hfile02: bFalse
-                 : io_buff: io_nullmap) = bEOF);
+    when (AccessMode = KEY_SEQ);
+      if (CIO_readp(hFile02: bFalse
+                 : IO_Buff: IO_NullMap) = bEOF);
         *in99 = *on;
       else;
         *in99 = *off;
       endif;
-      exsr f2tofx;
-    when (accessMode = RRN_SEQ);
-      if (cio_readp(hfile01: bFalse
-                 : io_buff: io_nullmap) = bEOF);
+      exsr F2toFx;
+    when (AccessMode = RRN_SEQ);
+      if (CIO_readp(hFile01: bFalse
+                 : IO_Buff: IO_NullMap) = bEOF);
         *in99 = *on;
       else;
         *in99 = *off;
       endif;
-      exsr f1tofx;
-    when (accessMode = SQL_SEQ);
-      if (sql_previousrow(io_buff: io_nullmap: hfile03:
-                       yMsgID : yMsgDta) = bEOF);
+      exsr F1toFx;
+    when (AccessMode = SQL_SEQ);
+      if (SQL_previousRow(IO_Buff: IO_NullMap: hFile03:
+                       YMsgID : YMsgDta) = bEOF);
         *in99 = *on;
-        if (yMsgID <> '');
-          p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
-          yMsgID = '';
-          yMsgDta = '';
+        if (YMsgID <> '');
+          p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
+          YMsgID = '';
+          YMsgDta = '';
         endif;
       else;
         *in99 = *off;
-        yMsgID = '';
-        yMsgDta = '';
+        YMsgID = '';
+        YMsgDta = '';
       endif;
-      exsr f3tofx;
-      isfileerror = cio_iserror(hfile03);
+      exsr F3toFx;
+      isFileError = CIO_isError(hFile03);
     other;
     endsl;
 
   enddo;
 
   if (*in99 = *on);
-    exsr pbmovetop;
-    iseof = bTrue;
+    exsr PBMoveTop;
+    IsEOF = bTrue;
   else;
-    iseof = bFalse;
+    IsEOF = bFalse;
   endif;
 
 endsr;
@@ -6600,9 +6600,9 @@ endsr;
 //                  "globalen Felder Fx                       *
 //============================================================*
 
-begsr f0tofx;
+begsr F0toFx;
 
-  file#x = cio_getinfds(hfile00);
+  File#X = CIO_getInfDS(hFile00);
 
 endsr;
 
@@ -6612,9 +6612,9 @@ endsr;
 //                  "globalen Felder Fx                       *
 //============================================================*
 
-begsr f1tofx;
+begsr F1toFx;
 
-  file#x = cio_getinfds(hfile01);
+  File#X = CIO_getInfDS(hFile01);
 
 endsr;
 
@@ -6624,9 +6624,9 @@ endsr;
 //                  "globalen Felder Fx                       *
 //============================================================*
 
-begsr f2tofx;
+begsr F2toFx;
 
-  file#x = cio_getinfds(hfile02);
+  File#X = CIO_getInfDS(hFile02);
 
 endsr;
 
@@ -6636,9 +6636,9 @@ endsr;
 //                  "globalen Felder Fx                       *
 //============================================================*
 
-begsr f3tofx;
+begsr F3toFx;
 
-  file#x = cio_getinfds(hfile03);
+  File#X = CIO_getInfDS(hFile03);
 
 endsr;
 
@@ -6646,7 +6646,7 @@ endsr;
 //    RepeatOpt     Wiederholen der Subfileauswahl            *
 //============================================================*
 
-begsr repeatopt;
+begsr RepeatOpt;
 
   //  "Keine Sätze vorhanden"
   if (*in80 = *off);
@@ -6654,10 +6654,10 @@ begsr repeatopt;
   else;
 
     //  Lese alle Sätze der Subfile ab Wrk#Recno ...
-    for x = wrk#recno to sflnbrrcd;
+    for x = Wrk#Recno to SflNbrRcd;
 
-      sflrec132 = x;
-      sflrec080 = x;
+      SflRec132 = x;
+      SflRec080 = x;
       exsr pbSflChain;
 
       //  ... höre auf, bei Dateiende oder Fehler
@@ -6672,7 +6672,7 @@ begsr repeatopt;
           leave;
         else;
           //  ... ansonsten wiederhole die Auswahl
-          sfpau = wrk#sfpau;
+          sfpau = Wrk#SFPAU;
           *in84 = '1'; // SFLNXTCHG
           exsr pbSflUpdate;
         endif;
@@ -6689,17 +6689,17 @@ endsr;
 //                  sichtbaren Feldes                         *
 //============================================================*
 
-begsr getfrstfld;
+begsr GetFrstFld;
 
-  if (isOpen = bFalse);
-    ##wndnbr = 0;
+  if (IsOpen = bFalse);
+    ##WndNbr = 0;
   else;
 
-    ##wndnbr = 0;
+    ##WndNbr = 0;
 
     for x = 1 to cp;
 
-      wrk#field = col_field(x);
+      Wrk#Field = Col_Field(x);
       exsr chkVisible;
       if (isVisible = bFalse);
         //  ... nicht sichtbar
@@ -6708,11 +6708,11 @@ begsr getfrstfld;
         //  ... sichtbar
         //      ... ermitteln der Sequenznummer
         clear f_key;
-        f_key.f_field = col_field(x);
+        f_key.F_Field = Col_Field(x);
         chain(n) %kds(f_key) fpeekfld;
         if (%found(peekfld));
           // ... ermittelt
-          ##wndnbr = f_seq;
+          ##WndNbr = F_Seq;
           leave;
         else;
           // ... kann eigentlich nicht sein
@@ -6725,9 +6725,9 @@ begsr getfrstfld;
   endif;
 
   //  Merken letzte Feldposition
-  l#wndnbr = ##wndnbr;
+  L#WndNbr = ##WndNbr;
 
-  exsr chkseqrnge;
+  exsr ChkSeqRnge;
 
 endsr;
 
@@ -6738,8 +6738,8 @@ endsr;
 begsr getPgmName;
 
   peekPgm = 'P' +
-             %subst(rcdl0200.r2fmtid: 1: 2) +
-             %subst(rcdl0200.r2fmtid: 7: 7);
+             %subst(rcdl0200.R2FmtID: 1: 2) +
+             %subst(rcdl0200.R2FmtID: 7: 7);
 
 endsr;
 
@@ -6750,8 +6750,8 @@ endsr;
 begsr getDspName;
 
   peekDspF = 'F' +
-             %subst(rcdl0200.r2fmtid: 1: 2) +
-             %subst(rcdl0200.r2fmtid: 7: 7);
+             %subst(rcdl0200.R2FmtID: 1: 2) +
+             %subst(rcdl0200.R2FmtID: 7: 7);
 
 endsr;
 
@@ -6759,25 +6759,25 @@ endsr;
 //    GetFldTMrk    Holen des zu markierenden Feldnamens      *
 //============================================================*
 
-begsr getfldtmrk;
+begsr GetFldTMrk;
 
-  wrk#field = '';
+  Wrk#Field = '';
 
   if (cp <= 0);
     //  Funktion bei leerer Feldtabelle möglich ...
-    p_sndpgmmg('USR8145': '': sds.pgmname);
+    p_sndPgmMg('USR8145': '': sds.pgmName);
   else;
 
     for x = 1 to cp;
-      y = cursorposition.column - sflleftofs;
-      if (y >= col_scnstr(x) and y <= col_scnend(x));
-        wrk#field = col_field(x);
+      y = cursorPosition.column - SflLeftOfs;
+      if (y >= Col_ScnStr(x) and y <= Col_ScnEnd(x));
+        Wrk#Field = Col_Field(x);
         leave;
       endif;
     endfor;
 
-    if (wrk#field = '');
-      p_sndpgmmg('USR8117': '': sds.pgmname);
+    if (Wrk#Field = '');
+      p_sndPgmMg('USR8117': '': sds.pgmName);
     endif;
 
   endif;
@@ -6791,11 +6791,11 @@ endsr;
 
 begsr getSflRcd;
 
-  if (sflCsr > 0);
+  if (SflCsr > 0);
     exsr pbCsrToRcd;
   else;
-    sflCsr = 0;
-    p_sndpgmmg('USR8102': '': sds.pgmname);
+    SflCsr = 0;
+    p_sndPgmMg('USR8102': '': sds.pgmName);
   endif;
 
 endsr;
@@ -6804,13 +6804,13 @@ endsr;
 //    GetNbrKeyF    Ermitteln Anzahl Schlüsselfelder          *
 //============================================================*
 
-begsr getnbrkeyf;
+begsr GetNbrKeyF;
 
-  peek04(yQFile: ##format: yMsgID: yMsgDta);
-  if (yMsgID = 'USR0006');
-    iskeyavail = bFalse;
+  peek04(YQFile: ##Format: YMsgID: YMsgDta);
+  if (YMsgID = 'USR0006');
+    IsKeyAvail = bFalse;
   else;
-    iskeyavail = bTrue;
+    IsKeyAvail = bTrue;
   endif;
 
 endsr;
@@ -6819,12 +6819,12 @@ endsr;
 //    GetNbrMbr     Ermitteln Anzahl Teildateien              *
 //============================================================*
 
-begsr getnbrmbr;
+begsr GetNbrMbr;
 
-  peek41(yQFile: ##format
-        : '*CREATE': ynbrofent: ydata);
-  if (ynbrofent > *zeros);
-    fild0100 = ydata;
+  peek41(YQFile: ##Format
+        : '*CREATE': YNbrOfEnt: YData);
+  if (YNbrOfEnt > *zeros);
+    fild0100 = YData;
   else;
     clear fild0100;
   endif;
@@ -6837,11 +6837,11 @@ endsr;
 //    GetFmtList    Abrufrufen der Satzformatliste            *
 //============================================================*
 
-begsr getfmtlist;
+begsr GetFmtList;
 
-  yFile = ##file;
-  yLibrary = ##library;
-  peek10(yQFile: yMsgID: yMsgDta);
+  YFile = ##File;
+  yLibrary = ##Library;
+  peek10(YQFile: YMsgID: YMsgDta);
 
 endsr;
 
@@ -6849,12 +6849,12 @@ endsr;
 //    GetFldList    Abrufrufen der Feldliste                  *
 //============================================================*
 
-begsr getfldlist;
+begsr GetFldList;
 
-  yFile = ##file;
-  yLibrary = ##library;
-  peek01(yQFile: ##format: $$rcdfmtid
-        : yMsgID: yMsgDta);
+  YFile = ##File;
+  yLibrary = ##Library;
+  peek01(YQFile: ##Format: $$rcdfmtid
+        : YMsgID: YMsgDta);
 
   open peekfld;
   open peekfldl1;
@@ -6865,10 +6865,10 @@ endsr;
 //    GetKeyList    Abrufrufen der Schlüsselfelder            *
 //============================================================*
 
-begsr getkeylist;
+begsr GetKeyList;
 
-  peek03(yQFile: ##format: accessMode: sqlOrder
-        : yMsgID: yMsgDta);
+  peek03(YQFile: ##Format: AccessMode: sqlOrder
+        : YMsgID: YMsgDta);
 
 endsr;
 
@@ -6876,16 +6876,16 @@ endsr;
 //    GetRcdFrmt    Auswählen des Satzformates                *
 //============================================================*
 
-begsr getrcdfrmt;
+begsr GetRcdFrmt;
 
-  peek12(set0001.set_dsp80: COPYRIGHT: ##format
+  peek12(set0001.SET_Dsp80: COPYRIGHT: ##Format
         : MODE_BATCH
-        : rcdl0200: yfmtnbr: yMsgID: yMsgDta);
+        : rcdl0200: YFmtNbr: YMsgID: YMsgDta);
 
-  if (yMsgID <> 'USR8100'); // Verarbeitung abgebrochen
-    ##fmtnbr = yfmtnbr;
-    ##format = rcdl0200.r2fmtname;
-    $$length = rcdl0200.r2rcdlen;
+  if (YMsgID <> 'USR8100'); // Verarbeitung abgebrochen
+    ##fmtnbr = YFmtNbr;
+    ##Format = rcdl0200.R2FmtName;
+    $$Length = rcdl0200.R2RcdLen;
   else;
   //         Abbruch über F3/F12
   endif;
@@ -6897,80 +6897,80 @@ endsr;
 //                  Objektattribute                           *
 //============================================================*
 
-begsr getobjattr;
+begsr GetObjAttr;
 
   monitor;
-    yFile = ##file;
-    yLibrary = ##library;
-    peek09(yQFile: objd0400: yMsgID: yMsgDta);
+    YFile = ##File;
+    yLibrary = ##Library;
+    peek09(YQFile: objd0400: YMsgID: YMsgDta);
     *in99 = bFalse;
   on-error;
     *in99 = bTrue;
   endmon;
 
   if (*in99 = *on);
-    isError = bTrue;
+    IsError = bTrue;
   else;
-    isError = bFalse;
-    if (yMsgID <> '');
-      isError = bTrue;
+    IsError = bFalse;
+    if (YMsgID <> '');
+      IsError = bTrue;
       //  Objekt nicht gefunden ...
       select;
-      when (yMsgID = 'CPF9812');
-        usr0008.var1 = ##file;
-        usr0008.var2 = ##library;
-        p_sndpgmmg('USR0008': usr0008: sds.pgmname);
-      when (yMsgID = 'CPF9810');
-        usr0010.var1 = ##library;
-        p_sndpgmmg('USR0010': usr0010: sds.pgmname);
+      when (YMsgID = 'CPF9812');
+        usr0008.var1 = ##File;
+        usr0008.var2 = ##Library;
+        p_sndPgmMg('USR0008': usr0008: sds.pgmName);
+      when (YMsgID = 'CPF9810');
+        usr0010.var1 = ##Library;
+        p_sndPgmMg('USR0010': usr0010: sds.pgmName);
       other;
-        usr0009.var1 = ##file;
-        usr0009.var2 = ##library;
-        p_sndpgmmg('USR0009': usr0009: sds.pgmname);
+        usr0009.var1 = ##File;
+        usr0009.var2 = ##Library;
+        p_sndPgmMg('USR0009': usr0009: sds.pgmName);
       endsl;
     else;
 
-      isError = bFalse;
+      IsError = bFalse;
       //  Übertragen der Objektbezeichnung
-      ##file = objd0400.o4objname;
-      ##library = objd0400.o4retlib;
+      ##File = objd0400.O4ObjName;
+      ##Library = objd0400.O4RetLib;
 
       //  Übertragen der Objektbeschreibung
-      $$text40 = objd0400.o4text;
-      $$text50 = objd0400.o4text;
+      $$text40 = objd0400.O4Text;
+      $$text50 = objd0400.O4Text;
 
       //  Wenn die Objektgröße kleiner als 999 ist,
-      if (objd0400.o4objsize <= 999);
+      if (objd0400.O4ObjSize <= 999);
         //  ... dann in der Einheit "Byte" anzeigen ...
-        r#size = 0;
+        R#Size = 0;
         $$unit = 'Byt';
       else;
         //  ... ansonsten solange durch 1024 teilen,
         //      bis das die nächste passende Einheit
         //      gefunden werden konnte.
-        r#size = 0;
+        R#Size = 0;
 
-        dow (objd0400.o4objsize > 999);
-          objd0400.o4objsize =
-           %dech(objd0400.o4objsize / 1024: 10: 0);
-          r#size = r#size + 1;
+        dow (objd0400.O4ObjSize > 999);
+          objd0400.O4ObjSize =
+           %dech(objd0400.O4ObjSize / 1024: 10: 0);
+          R#Size = R#Size + 1;
         enddo;
 
         //  Multiplikator aus der Objektbeschreibung
         //  berücksichtigen und ...
-        if (objd0400.o4objsizem = 1024);
-          r#size = r#size + 1;
+        if (objd0400.O4ObjSizeM = 1024);
+          R#Size = R#Size + 1;
         else;
         //       keine Korrektur erforderlich
         endif;
 
         //  ... und passende Einheit wählen ...
         select;
-        when (r#size = 1);
+        when (R#Size = 1);
           $$unit = 'K';
-        when (r#size = 2);
+        when (R#Size = 2);
           $$unit = 'MByt';
-        when (r#size = 3);
+        when (R#Size = 3);
           $$unit = 'GByt';
         other;
           $$unit = 'TByt';
@@ -6978,7 +6978,7 @@ begsr getobjattr;
       endif;
 
       //  ... sowie Restgröße zur Anzeige bringen
-      $$size = objd0400.o4objsize;
+      $$size = objd0400.O4ObjSize;
     endif;
   endif;
 
@@ -6988,53 +6988,53 @@ endsr;
 //    GetMbrAttr    Abrufen der Attribute der Teildatei       *
 //============================================================*
 
-begsr getmbrattr;
+begsr GetMbrAttr;
 
   //  Beschreibung der Teildatei
-  if (isOpen = bFalse);
-    $$records = 0;
+  if (IsOpen = bFalse);
+    $$Records = 0;
     leavesr;
   endif;
 
-  if (##member = '*NONE');
+  if (##Member = '*NONE');
     clear mbrd0200;
-    $$records = 0;
-    $$lmtcnt = '';
-    $$records = 0;
+    $$Records = 0;
+    $$LmtCnt = '';
+    $$Records = 0;
     leavesr;
   endif;
 
-  yFile = ##file;
-  yLibrary = ##library;
-  peek13(yQFile: ##member: mbrd0200);
+  YFile = ##File;
+  yLibrary = ##Library;
+  peek13(YQFile: ##Member: mbrd0200);
 
   if (mbrd0200.m2bytAvl > 0);
-    if (mbrd0200.m2nbrrcdon <= 2147483647);
-      $$records = mbrd0200.m2nbrrcdon;
+    if (mbrd0200.M2NbrRcdOn <= 2147483647);
+      $$Records = mbrd0200.M2NbrRcdOn;
       *in79 = *on;
-      $$lmtcnt = '';
+      $$LmtCnt = '';
     else;
-      $$records = 0;
+      $$Records = 0;
       *in79 = *off;
-      $$lmtcnt = '*OVERFLOW';
+      $$LmtCnt = '*OVERFLOW';
     endif;
   else;
-    $$records = 0;
+    $$Records = 0;
     *in79 = *off;
-    $$lmtcnt = '*ERROR';
+    $$LmtCnt = '*ERROR';
   endif;
 
-  if (accessMode = SQL_SEQ);
-    if ($$records > set0016.set_maxrcds);
-      $$records = 0;
+  if (AccessMode = SQL_SEQ);
+    if ($$Records > set0016.set_maxrcds);
+      $$Records = 0;
       *in79 = *off;
-      $$lmtcnt = '*SQLLMTCNT';
+      $$LmtCnt = '*SQLLMTCNT';
     else;
       clear usr0014;
-      p_sndstsmg('USR0014': usr0014);
-      $$records = sql_count();
+      p_sndStsMg('USR0014': usr0014);
+      $$Records = SQL_count();
       *in79 = *on;
-      $$lmtcnt = *blanks;
+      $$LmtCnt = *blanks;
     endif;
   endif;
 
@@ -7044,22 +7044,22 @@ endsr;
 //    CheckMbrName  Prüfen Name der Teildatei                 *
 //============================================================*
 
-begsr checkmbrname;
+begsr CheckMbrName;
 
-  if (##member = '*NONE');
+  if (##Member = '*NONE');
     clear mbrd0200;
-    isError = bFalse;
+    IsError = bFalse;
     leavesr;
   endif;
 
-  yFile = ##file;
-  yLibrary = ##library;
-  peek13(yQFile: ##member: mbrd0200);
+  YFile = ##File;
+  yLibrary = ##Library;
+  peek13(YQFile: ##Member: mbrd0200);
   if (mbrd0200.m2bytAvl <> 0);
-    ##member = mbrd0200.m2member;
-    isError = bFalse;
+    ##Member = mbrd0200.M2Member;
+    IsError = bFalse;
   else;
-    isError = bTrue;
+    IsError = bTrue;
   endif;
 
 endsr;
@@ -7068,56 +7068,56 @@ endsr;
 //    GetMaxSeq     Ermitteln der Anzahl Felder               *
 //============================================================*
 
-begsr getmaxseq;
+begsr GetMaxSeq;
 
-  if (isOpen = bFalse);
-    l#maxseq = 0;
-    l#minseq = 0;
+  if (IsOpen = bFalse);
+    L#MaxSeq = 0;
+    L#MinSeq = 0;
   else;
 
     //  Ermitteln Anzahl Felder ...
     clear f1key_l1;
-    f1key_l1.f_seq = *hival;
+    f1key_l1.F_Seq = *hival;
     setgt %kds(f1key_l1) fpeekfldl1;
 
     dow ('1');
       readp fpeekfldl1;
       if (%eof());
-        l#maxseq = 0;
+        L#MaxSeq = 0;
         leave;
       endif;
 
       //  ... Prüfen, ob Feld angezeigt wird
-      wrk#field = f_field;
+      Wrk#Field = F_Field;
       exsr chkVisible;
       if (isVisible = bFalse);
         iter;
       endif;
 
-      l#maxseq = f_seq;
+      L#MaxSeq = F_Seq;
       leave;
     enddo;
 
     //  Ermitteln Erstes Feld ...
     clear f1key_l1;
-    f1key_l1.f_seq = 0;
+    f1key_l1.F_Seq = 0;
     setll %kds(f1key_l1) fpeekfldl1;
 
     dow ('1');
       read fpeekfldl1;
       if (%eof());
-        l#minseq = 0;
+        L#MinSeq = 0;
         leave;
       endif;
 
       //  ... Prüfen, ob Feld angezeigt wird
-      wrk#field = f_field;
+      Wrk#Field = F_Field;
       exsr chkVisible;
       if (isVisible = bFalse);
         iter;
       endif;
 
-      l#minseq = f_seq;
+      L#MinSeq = F_Seq;
       leave;
     enddo;
 
@@ -7129,36 +7129,36 @@ endsr;
 //    GetMaxSeq     Ermitteln vorhergehendes sichtabres Feld  *
 //============================================================*
 
-begsr getprvseq;
+begsr GetPrvSeq;
 
-  if (isOpen = bFalse);
-    wrk#seqnbr = -1;
+  if (IsOpen = bFalse);
+    Wrk#SeqNbr = -1;
     leavesr;
   endif;
 
   clear f1key_l1;
-  f1key_l1.f_seq = wrk#seqnbr;
+  f1key_l1.F_Seq = Wrk#SeqNbr;
   chain %kds(f1key_l1) fpeekfldl1;
   if (not %found());
-    wrk#seqnbr = l#minseq;
+    Wrk#SeqNbr = L#MinSeq;
     leavesr;
   endif;
 
   for do_x10 = 1 to *hival;
     readp fpeekfldl1;
     if (%eof());
-      wrk#seqnbr = l#minseq;
+      Wrk#SeqNbr = L#MinSeq;
       leave;
     endif;
 
     //  ... Prüfen, ob Feld angezeigt wird
-    wrk#field = f_field;
+    Wrk#Field = F_Field;
     exsr chkVisible;
     if (isVisible = bFalse);
       iter;
     endif;
 
-    wrk#seqnbr = f_seq;
+    Wrk#SeqNbr = F_Seq;
     leave;
   endfor;
 
@@ -7168,50 +7168,50 @@ endsr;
 //    CloseFile     Datei schließen                           *
 //============================================================*
 
-begsr closefile;
+begsr CloseFile;
 
-  if (isOpen = bTrue);
+  if (IsOpen = bTrue);
 
     yCursorPosition.row = 0;
     yCursorPosition.column = 0;
 
     //  Datei 04 für Einzelsatzzugriff
-    if (cio_isopen(hfile04) = bTrue);
-      cio_close(hfile04);
+    if (CIO_isOpen(hFile04) = bTrue);
+      CIO_close(hFile04);
     endif;
 
     select;
-    when (accessMode = KEY_SEQ);
+    when (AccessMode = KEY_SEQ);
       //  Sortierung 2 für Schlüsselfolge
-      if (cio_close(hfile02) = bTrue);
+      if (CIO_close(hFile02) = bTrue);
         *in99 = '0';
       else;
         *in99 = '1';
       endif;
-      exsr f2tofx;
-    when (accessMode = RRN_SEQ);
+      exsr F2toFx;
+    when (AccessMode = RRN_SEQ);
       //  Sortierung 1 für Satzfolge
-      if (cio_close(hfile01) = bTrue);
+      if (CIO_close(hFile01) = bTrue);
         *in99 = '0';
       else;
         *in99 = '1';
       endif;
-      exsr f1tofx;
-    when (accessMode = SQL_SEQ);
-      if (sql_close(hfile03:yMsgID :yMsgDta)
+      exsr F1toFx;
+    when (AccessMode = SQL_SEQ);
+      if (SQL_close(hFile03:YMsgID :YMsgDta)
           = bTrue);
         *in99 = *off;
-        yMsgID = '';
-        yMsgDta = '';
+        YMsgID = '';
+        YMsgDta = '';
       else;
         *in99 = *on;
-        if (yMsgID <> '');
-          p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
-          yMsgID = '';
-          yMsgDta = '';
+        if (YMsgID <> '');
+          p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
+          YMsgID = '';
+          YMsgDta = '';
         endif;
       endif;
-      exsr f3tofx;
+      exsr F3toFx;
     other;
     endsl;
 
@@ -7220,21 +7220,21 @@ begsr closefile;
   endif;
 
   //  Sortierung 0 für Einzelzugriff
-  if (cio_isopen(hfile00) = bTrue);
-    if (cio_close(hfile00) = bTrue);
+  if (CIO_isOpen(hFile00) = bTrue);
+    if (CIO_close(hFile00) = bTrue);
       *in99 = '0';
     else;
       *in99 = '1';
     endif;
-    exsr f0tofx;
+    exsr F0toFx;
   endif;
 
   if (*in99 = *off);
-    isOpen = bFalse;
+    IsOpen = bFalse;
     //  Löschen Satzaufbau
     if (%open(peekfld));
       clear f_key;
-      f_key.f_field = *blanks;
+      f_key.F_Field = *blanks;
       setll %kds(f_key) fpeekfld;
       dow ('1');
         read fpeekfld;
@@ -7249,17 +7249,17 @@ begsr closefile;
     //      ... Satzformat
     $$text40 = *blanks;
     $$text50 = *blanks;
-    $$length = 0;
-    $$records = 0;
+    $$Length = 0;
+    $$Records = 0;
     $$size = 0;
     $$rcdfmtid = *blanks;
     $$unit = *blanks;
     $$nomb = 0;
-    ##key = *blanks;
-    ##rcdnbr = 0;
+    ##Key = *blanks;
+    ##RcdNbr = 0;
     //      ... Fensterposition
-    ##wndnbr = 0;
-    ##strpage = 0;
+    ##WndNbr = 0;
+    ##StrPage = 0;
 
     //      ... SQL-Selektion
     sqlWhere  = ' ';
@@ -7273,12 +7273,12 @@ begsr closefile;
   f_execute('RCLACTGRP +
               ACTGRP(PEEKUPD) +
               OPTION(*NORMAL)'
-           : yMsgID: yMsgDta);
-  yMsgID = '';
-  yMsgDta = '';
+           : YMsgID: YMsgDta);
+  YMsgID = '';
+  YMsgDta = '';
 
   //  Subfile initialisieren
-  exsr pbInit;
+  exsr PBInit;
 
 endsr;
 
@@ -7286,12 +7286,12 @@ endsr;
 //    GetOpnFile    Ermitteln der geöffneten Datei            *
 //============================================================*
 
-begsr getopnfile;
+begsr GetOpnFile;
 
-  if (isOpen = bTrue);
-    ##file = file#x.file;
-    ##library = file#x.library;
-    ##member = file#x.member;
+  if (IsOpen = bTrue);
+    ##File = File#X.file;
+    ##Library = File#X.library;
+    ##Member = File#X.member;
   else;
     //**                MOVEL (P) *BLANKS       ##File
     //**                MOVEL (P) *BLANKS       ##Library
@@ -7303,10 +7303,10 @@ begsr getopnfile;
     $$unit = *blanks;
   endif;
 
-  l#file = ##file;
-  l#library = ##library;
-  l#member = ##member;
-  l#format = ##format;
+  L#File = ##File;
+  L#Library = ##Library;
+  L#Member = ##Member;
+  L#Format = ##Format;
 
 endsr;
 
@@ -7314,69 +7314,69 @@ endsr;
 //    GetUsrSetg    Ermitteln der Benutzervoreinstellungen    *
 //============================================================*
 
-begsr getusrsetg;
+begsr GetUsrSetg;
 
   //  *DSPATR
-  set0001 = f_getusrsg('*DSPATTR'  );
+  set0001 = f_getUsrSg('*DSPATTR'  );
 
   //  *SEARCH
-  set0002 = f_getusrsg('*SEARCH'   );
+  set0002 = f_getUsrSg('*SEARCH'   );
 
   //  *ACCESSKEY
-  set0003 = f_getusrsg('*ACCESSKEY');
+  set0003 = f_getUsrSg('*ACCESSKEY');
 
   //  *SPLASH
-  set0005 = f_getusrsg('*SPLASH'   );
+  set0005 = f_getUsrSg('*SPLASH'   );
 
   //  *CVTCHR
-  set0006 = f_getusrsg('*CVTCHR'   );
+  set0006 = f_getUsrSg('*CVTCHR'   );
 
   //  *VERSION
-  set0007 = f_getusrsg('*VERSION'  );
+  set0007 = f_getUsrSg('*VERSION'  );
 
   //  *PROMPT
-  set0008 = f_getusrsg('*PROMPT'   );
+  set0008 = f_getUsrSg('*PROMPT'   );
 
   //  *FLOATKEYS
-  set0009 = f_getusrsg('*FLOATKEYS');
+  set0009 = f_getUsrSg('*FLOATKEYS');
 
   //  *SCROLL
-  set0010 = f_getusrsg('*SCROLL'   );
+  set0010 = f_getUsrSg('*SCROLL'   );
 
   //  *DFTDSPMDE
-  set0011 = f_getusrsg('*DFTDSPMDE');
+  set0011 = f_getUsrSg('*DFTDSPMDE');
 
-  if (set0011.set_dftmde = '*LAST');
+  if (set0011.SET_DftMde = '*LAST');
   //    ... Modus belassen
   else;
-    set0001.set_dspmde = set0011.set_dftmde;
+    set0001.SET_DspMde = set0011.SET_DftMde;
   endif;
 
   select;
-  when (set0001.set_dspmde = '*DSPNRM');
-    exsr s_dspnrm;
-  when (set0001.set_dspmde = '*DSPHEX');
-    exsr s_dsphex;
+  when (set0001.SET_DspMde = '*DSPNRM');
+    exsr S_DspNrm;
+  when (set0001.SET_DspMde = '*DSPHEX');
+    exsr S_DspHex;
   other;
-    exsr s_dspnrm;
+    exsr S_DspNrm;
   endsl;
 
   // - Löschen Programmnachricht "keine Datei geöffnet"
-  p_rmvpgmmg(sds.pgmname);
+  p_rmvPgmMg(sds.pgmName);
 
   //  *SECATR ...
-  set0013 = f_getusrsg('*SECATRDFT'   );
+  set0013 = f_getUsrSg('*SECATRDFT'   );
 
   //  ... Verknüpfen *SECATRDFT mit Eingabeparametern ...
   //      ... ##Library
-  if (i_chglib = '*');
-    if (set0013.set_chglib = '1');
+  if (i_chgLib = '*');
+    if (set0013.SET_ChgLib = '1');
       auth.isChgLibAlw = bTrue;
     else;
       auth.isChgLibAlw = bFalse;
     endif;
   else;
-    if (i_chglib = '1');
+    if (i_chgLib = '1');
       auth.isChgLibAlw = bTrue;
     else;
       auth.isChgLibAlw = bFalse;
@@ -7384,14 +7384,14 @@ begsr getusrsetg;
   endif;
 
   //      ... ##File
-  if (i_chgfile = '*');
-    if (set0013.set_chgfil  = '1');
+  if (i_chgFile = '*');
+    if (set0013.SET_ChgFil  = '1');
       auth.isChgFileAlw = bTrue;
     else;
       auth.isChgFileAlw = bFalse;
     endif;
   else;
-    if (i_chgfile = '1');
+    if (i_chgFile = '1');
       auth.isChgFileAlw = bTrue;
     else;
       auth.isChgFileAlw = bFalse;
@@ -7399,14 +7399,14 @@ begsr getusrsetg;
   endif;
 
   //      ... ##Member
-  if (i_chgmbr = '*');
-    if (set0013.set_chgmbr = '1');
+  if (i_chgMbr = '*');
+    if (set0013.SET_ChgMbr = '1');
       auth.isChgMbrAlw = bTrue;
     else;
       auth.isChgMbrAlw = bFalse;
     endif;
   else;
-    if (i_chgmbr = '1');
+    if (i_chgMbr = '1');
       auth.isChgMbrAlw = bTrue;
     else;
       auth.isChgMbrAlw = bFalse;
@@ -7414,15 +7414,15 @@ begsr getusrsetg;
   endif;
 
   //      ... updMod
-  if (i_updmodkey = UPD_M_DFT);
-    if (set0013.set_updmod = '1');
+  if (i_updModKey = UPD_M_DFT);
+    if (set0013.SET_UpdMod = '1');
       auth.isUpdAlw = bTrue;
     else;
       auth.isUpdAlw = bFalse;
     endif;
   else;
-    if (i_updmodkey = UPD_M_YES or
-        i_updmodkey = UPD_M_NOKEY);
+    if (i_updModKey = UPD_M_YES or
+        i_updModKey = UPD_M_NOKEY);
       auth.isUpdAlw = bTrue;
     else;
       auth.isUpdAlw = bFalse;
@@ -7430,44 +7430,44 @@ begsr getusrsetg;
   endif;
 
   //      ... keyUpd
-  if (i_updmodkey = UPD_M_DFT or
-      i_updmodkey = UPD_M_YES);
+  if (i_updModKey = UPD_M_DFT or
+      i_updModKey = UPD_M_YES);
     auth.isUpdKeyAlw = bTrue;
   else;
     auth.isUpdKeyAlw = bFalse;
   endif;
 
   //      ... chgSqlW
-  if (i_chgsqlw = UPD_M_DFT or
-      i_chgsqlw = UPD_M_YES);
+  if (i_chgSqlW = UPD_M_DFT or
+      i_chgSqlW = UPD_M_YES);
     auth.isChgSQLWhereAlw = bTrue;
   else;
     auth.isChgSQLWhereAlw = bFalse;
   endif;
 
   //      ... chgSqlO
-  if (i_chgsqlo = UPD_M_DFT or
-      i_chgsqlo = UPD_M_YES);
+  if (i_chgSqlO = UPD_M_DFT or
+      i_chgSqlO = UPD_M_YES);
     auth.isChgSQLOrderByAlw = bTrue;
   else;
     auth.isChgSQLOrderByAlw = bFalse;
   endif;
 
   //      ... accAut
-  if (set0013.set_accaut = '1');
+  if (set0013.SET_AccAut = '1');
     auth.isAccessAlw = bTrue;
   else;
     auth.isAccessAlw = bFalse;
   endif;
 
   //  *PRVFILE
-  set0014 = f_getusrsg('*PRVFILE');
+  set0014 = f_getUsrSg('*PRVFILE');
 
   //  *ENVFILE
-  set0015 = f_getusrsg('*ENVFILE');
+  set0015 = f_getUsrSg('*ENVFILE');
 
   //  *SQLLMTCNT
-  set0016 = f_getusrsg('*SQLLMTCNT');
+  set0016 = f_getUsrSg('*SQLLMTCNT');
 
 endsr;
 
@@ -7475,17 +7475,17 @@ endsr;
 //    GetSeqNbr     Übersetzen Field Name in Sequence Nbr     *
 //============================================================*
 
-begsr getseqnbr;
+begsr GetSeqNbr;
 
   clear f_key;
-  f_key.f_field = wrk#field;
+  f_key.F_Field = Wrk#Field;
   chain(n) %kds(f_key) fpeekfld;
   if (%found());
     isSeqNbrOK = bTrue;
-    wrk#seqnbr = f_seq;
+    Wrk#SeqNbr = F_Seq;
   else;
     isSeqNbrOK = bFalse;
-    wrk#seqnbr = 0;
+    Wrk#SeqNbr = 0;
   endif;
 
 endsr;
@@ -7494,42 +7494,42 @@ endsr;
 //    GetLastOpt    Ermitteln der letzten Subfileauswahl      *
 //============================================================*
 
-begsr getlastopt;
+begsr GetLastOpt;
 
   //  "Keine Sätze vorhanden"
   if (*in80 = *off);
-    isError = bTrue;
-    wrk#sfpau = *blanks;
-    wrk#recno = 0;
+    IsError = bTrue;
+    Wrk#SFPAU = *blanks;
+    Wrk#Recno = 0;
   else;
 
-    for x = 1 to sflnbrrcd;
+    for x = 1 to SflNbrRcd;
 
-      y = sflnbrrcd - x;
+      y = SflNbrRcd - x;
       y = y + 1;
 
       if (*in88 = *off);
-        sflrec132 = y;
-        chain sflrec132 pbsfl132;
+        SflRec132 = y;
+        chain SflRec132 pbsfl132;
       else;
-        sflrec080 = y;
-        chain sflrec080 pbsfl080;
+        SflRec080 = y;
+        chain SflRec080 pbsfl080;
       endif;
 
       if (not %found());
-        isError = bTrue;
-        wrk#sfpau = '';
-        wrk#recno = 0;
+        IsError = bTrue;
+        Wrk#SFPAU = '';
+        Wrk#Recno = 0;
         leave;
       else;
         if (sfpau <> '');
-          wrk#sfpau = sfpau;
+          Wrk#SFPAU = sfpau;
           if (*in88 = bFalse);
-            wrk#recno = sflrec132;
+            Wrk#Recno = SflRec132;
           else;
-            wrk#recno = sflrec080;
+            Wrk#Recno = SflRec080;
           endif;
-          isError = bFalse;
+          IsError = bFalse;
           leave;
         else;
         //  Bitte weitersuchen ...
@@ -7546,17 +7546,17 @@ endsr;
 //    GetNxtMark    Ermtteln des nächsten markierten Feldes   *
 //============================================================*
 
-begsr getnxtmark;
+begsr GetNxtMark;
 
   //  Suchen des nächsten markierten Feldes ...
   clear f1key_l1;
-  f1key_l1.f_seq = wrk#seqnbr;
+  f1key_l1.F_Seq = Wrk#SeqNbr;
   setgt %kds(f1key_l1) fpeekfldl1;
 
   dow ('1');
     read fpeekfldl1;
     if (%eof());
-      wrk#seqnbr = *zeros;
+      Wrk#SeqNbr = *zeros;
       leave;
     endif;
 
@@ -7565,9 +7565,9 @@ begsr getnxtmark;
     // ... Feld ist nicht sichtbar
     else;
       // ... Feld ist sichtbar
-      if (f_markcol = bTrue);
+      if (F_MarkCol = bTrue);
         // ... und markiert
-        wrk#seqnbr = f_seq;
+        Wrk#SeqNbr = F_Seq;
         leave;
       else;
       // ... leider nicht markiert
@@ -7582,17 +7582,17 @@ endsr;
 //    GetPrvMark    Ermtteln des vorherigen markierten Feldes *
 //============================================================*
 
-begsr getprvmark;
+begsr GetPrvMark;
 
   //  Suchen des nächsten markierten Feldes ...
   clear f1key_l1;
-  f1key_l1.f_seq = wrk#seqnbr;
+  f1key_l1.F_Seq = Wrk#SeqNbr;
   setll %kds(f1key_l1) fpeekfldl1;
 
   dow ('1');
     readp fpeekfldl1;
     if (%eof());
-      wrk#seqnbr = 0;
+      Wrk#SeqNbr = 0;
       leave;
     endif;
 
@@ -7601,9 +7601,9 @@ begsr getprvmark;
     // ... Feld ist nicht sichtbar
     else;
       // ... Feld ist sichtbar
-      if (f_markcol = bTrue);
+      if (F_MarkCol = bTrue);
         // ... und markiert
-        wrk#seqnbr = f_seq;
+        Wrk#SeqNbr = F_Seq;
         leave;
       else;
       // ... leider nicht markiert
@@ -7618,24 +7618,24 @@ endsr;
 //    KeyHasChg     Aufsetzkey hat gewechselt                 *
 //============================================================*
 
-begsr keyhaschg;
+begsr KeyHasChg;
 
-  wrk#keyval = ##key;
-  wrk#rcdnbr = ##rcdnbr;
-  exsr pbgenintky;
-  if (yMsgID <> *blanks);
-    p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
-    yMsgID = '';
-    yMsgDta = '';
-    p_sndpgmmg('USR8139': '': sds.pgmname);
+  Wrk#KeyVal = ##Key;
+  Wrk#RcdNbr = ##RcdNbr;
+  exsr PBGenIntKy;
+  if (YMsgID <> *blanks);
+    p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
+    YMsgID = '';
+    YMsgDta = '';
+    p_sndPgmMg('USR8139': '': sds.pgmName);
   else;
-    exsr pbsetll;
-    exsr pbInit;
+    exsr PBSetLL;
+    exsr PBInit;
     exsr pbPinRcd;
-    exsr pbReadUp;
+    exsr PBReadUp;
     //  Aufsetzkey überschreitet Dateiende
     if (*in80 = *off);
-      exsr c_bot;
+      exsr C_Bot;
     endif;
   endif;
 
@@ -7645,15 +7645,15 @@ endsr;
 //    FloatKeys     Keyfelder an den Anfang sortieren         *
 //============================================================*
 
-begsr floatkeys;
+begsr FloatKeys;
 
   if ((set0009.set_float  = bTrue) and
-      ((accessMode = KEY_SEQ) or
-       (accessMode = SQL_SEQ)));
+      ((AccessMode = KEY_SEQ) or
+       (AccessMode = SQL_SEQ)));
 
     monitor;
-      peek34(set0001.set_dsp80: COPYRIGHT: '*FLOATKEYS'
-            : yMsgID: yMsgDta);
+      peek34(set0001.SET_Dsp80: COPYRIGHT: '*FLOATKEYS'
+            : YMsgID: YMsgDta);
       *in99 = bFalse;
     on-error;
       *in99 = bTrue;
@@ -7669,11 +7669,11 @@ endsr;
 //    KeepCsrPos    Beibehalten der Cursorposition            *
 //============================================================*
 
-begsr keepCsrPos;
+begsr KeepCsrPos;
 
   //  Beibehalten der Cursorosition
-  csrrow = cursorposition.row;
-  csrcol = cursorposition.column;
+  CsrRow = cursorPosition.row;
+  CsrCol = cursorPosition.column;
 
 endsr;
 
@@ -7681,11 +7681,11 @@ endsr;
 //    DltCsrPos     Löschen der Cursorposition                *
 //============================================================*
 
-begsr dltcsrpos;
+begsr DltCsrPos;
 
   //  Löschen der Cursorosition
-  csrrow = *zeros;
-  csrcol = *zeros;
+  CsrRow = *zeros;
+  CsrCol = *zeros;
 
 endsr;
 
@@ -7693,10 +7693,10 @@ endsr;
 //    SetUsrSetg    Speichern der Benutzervoreinstellungen    *
 //============================================================*
 
-begsr setusrsetg;
+begsr SetUsrSetg;
 
   //  Splash-Screen
-  p_updusrsg('*SPLASH' : set0005);
+  p_updUsrSg('*SPLASH' : set0005);
 
 endsr;
 
@@ -7711,15 +7711,15 @@ begsr chkVisible;
   for do_x14 = 1 to 1;
 
     //  ... Feld nicht anzeigen
-    if (f_hidden = bTrue);
+    if (F_Hidden = bTrue);
       isVisible = bFalse;
       leave;
     endif;
 
     //  ... gepinnte Spalten überlesen
-    pin#field = wrk#field;
-    exsr chkpincol;
-    if (ispinned = bTrue);
+    Pin#Field = Wrk#Field;
+    exsr ChkPinCol;
+    if (IsPinned = bTrue);
       isVisible = bFalse;
       leave;
     endif;
@@ -7732,31 +7732,31 @@ endsr;
 //    ChkSeqRnge    Prüfen der Fensternummer                  *
 //============================================================*
 
-begsr chkseqrnge;
+begsr ChkSeqRnge;
 
-  if (isOpen = bFalse);
+  if (IsOpen = bFalse);
   //            keine Datei geöffnet
   else;
 
-    if (##wndnbr < l#minseq);
-      ##wndnbr = l#minseq;
-      p_sndpgmmg('USR8115': '': sds.pgmname);
-      ##strpage = 1;
+    if (##WndNbr < L#MinSeq);
+      ##WndNbr = L#MinSeq;
+      p_sndPgmMg('USR8115': '': sds.pgmName);
+      ##StrPage = 1;
     endif;
 
-    if (##wndnbr > l#maxseq);
-      ##wndnbr = l#maxseq;
-      p_sndpgmmg('USR8116': '': sds.pgmname);
+    if (##WndNbr > L#MaxSeq);
+      ##WndNbr = L#MaxSeq;
+      p_sndPgmMg('USR8116': '': sds.pgmName);
       if (set0010.set_scroll = '*BOTH'
           or set0010.set_scroll = '*RIGHT');
-        ##strpage = *hival;
+        ##StrPage = *hival;
       else;
-        ##strpage = 1;
+        ##StrPage = 1;
       endif;
     endif;
 
-    if (##strpage < 1);
-      ##strpage = 1;
+    if (##StrPage < 1);
+      ##StrPage = 1;
     endif;
 
   endif;
@@ -7767,42 +7767,42 @@ endsr;
 //    SetScreen     Einstellen 132/80-Zeichen Auflösung       *
 //============================================================*
 
-begsr setscreen;
+begsr SetScreen;
 
   //    Wenn der Bildschirm keine 132-Zeichen
   //    darstellen kann, ...
-  if (workstn.numrows < 27);
+  if (workstn.numRows < 27);
     //    ... dann auf 80-Zeichen umschalten.
-    set0001.set_dsp80 = '1';
+    set0001.SET_Dsp80 = '1';
   else;
   //    ... sonst die Auflösung 80/132 beibehalten.
   endif;
 
-  if (set0001.set_dsp80 = '1');
+  if (set0001.SET_Dsp80 = '1');
     //    80-Zeichen Anzeige
     *in88 = '1';
-    sflpage = 14;
+    SflPage = 14;
     sflMaxRowLen = 64;
-    sflheadlrw = 6;
-    sflfirstrw = 7;
-    sfllastrw = 20;
-    sflleftofs = 15;
+    SflHeadLRw = 6;
+    SflFirstRw = 7;
+    SflLastRw = 20;
+    SflLeftOfs = 15;
   else;
     //   132-Zeichen Anzeige
     *in88 = '0';
-    sflpage = 16;
+    SflPage = 16;
     sflMaxRowLen = 116;
-    sflheadlrw = 6;
-    sflfirstrw = 8;
-    sfllastrw = 23;
-    sflleftofs = 15;
+    SflHeadLRw = 6;
+    SflFirstRw = 8;
+    SflLastRw = 23;
+    SflLeftOfs = 15;
   endif;
 
   //  Bereich für gepinnte Spalten
-  sflpinrnge = (sflMaxRowLen / 3) * 2;
+  SflPinRnge = (sflMaxRowLen / 3) * 2;
 
   //  Prompt-Felder anzeigen ...
-  if (set0008.set_dsppmt = bTrue
+  if (set0008.SET_DspPmt = bTrue
      and *in77 = *off);
     *in71 = '1';
   else;
@@ -7818,17 +7818,17 @@ endsr;
 //    ChgScreen     Wechseln 132/80-Zeichen Auflösung         *
 //============================================================*
 
-begsr chgscreen;
+begsr ChgScreen;
 
-  if (set0001.set_dsp80 = '1');
+  if (set0001.SET_Dsp80 = '1');
     //   132-Zeichen Anzeige
-    set0001.set_dsp80 = '0';
+    set0001.SET_Dsp80 = '0';
   else;
     //    80-Zeichen Anzeige
-    set0001.set_dsp80 = '1';
+    set0001.SET_Dsp80 = '1';
   endif;
 
-  exsr setscreen;
+  exsr SetScreen;
 
 endsr;
 
@@ -7836,7 +7836,7 @@ endsr;
 //    ShowSplash    Anzeigen SPLASH-Screen                    *
 //============================================================*
 
-begsr showsplash;
+begsr ShowSplash;
 
   if (set0005.set_spla = bFalse);
   //            kein Splash-Screen
@@ -7850,10 +7850,10 @@ endsr;
 //    ChkVersion    Prüfen der Versionsnummer                 *
 //============================================================*
 
-begsr chkversion;
+begsr ChkVersion;
 
   if (set0007.set_vsn <> VERSION);
-    peek33(VERSION: yMsgID: yMsgDta);
+    peek33(VERSION: YMsgID: YMsgDta);
   else;
   //  Kein Abgleich erforderlich ...
   endif;
@@ -7864,24 +7864,24 @@ endsr;
 //    ChkPrvFile    Prüfen vorherige Datei                    *
 //============================================================*
 
-begsr chkprvfile;
+begsr ChkPrvFile;
 
   //  Datei ...
-  if (##file = '*PRV');
-    if (set0014.set_prvfil  <> '*NONE');
-      ##file = set0014.set_prvfil;
+  if (##File = '*PRV');
+    if (set0014.SET_PrvFil  <> '*NONE');
+      ##File = set0014.SET_PrvFil;
     endif;
     //  Bibliothek ...
-    if (set0014.set_prvlib  <> '*NONE');
-      ##library = set0014.set_prvlib;
+    if (set0014.SET_PrvLib  <> '*NONE');
+      ##Library = set0014.SET_PrvLib;
     else;
-      ##library = ' ';
+      ##Library = ' ';
     endif;
     //  Teildatei ...
-    if (set0014.set_prvmbr  <> '*NONE');
-      ##member = set0014.set_prvmbr;
+    if (set0014.SET_PrvMbr  <> '*NONE');
+      ##Member = set0014.SET_PrvMbr;
     else;
-      ##member = ' ';
+      ##Member = ' ';
     endif;
   endif;
 
@@ -7891,24 +7891,24 @@ endsr;
 //  Call EXIT01. The exit program must exist.                 *
 //============================================================*
 
-begsr s_exit01;
+begsr s_EXIT01;
 
-  clear yQFile;
-  yFile = ##file;
-  yLibrary = ##library;
+  clear YQFile;
+  YFile = ##File;
+  yLibrary = ##Library;
 
-  callp EXIT01(yQFile: ##member: accessMode
+  callp EXIT01(YQFile: ##Member: AccessMode
                : auth.isChgLibAlw: auth.isChgFileAlw: auth.isChgMbrAlw
                : auth.isUpdAlw: auth.isUpdKeyAlw
                : auth.isChgSQLWhereAlw: auth.isChgSQLOrderByAlw
                : auth.isAccessAlw
-               : yMsgID: yMsgDta);
+               : YMsgID: YMsgDta);
 
-  if (yMsgID <> '');
-    p_rmvpgmmg(sds.pgmname);
-    p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
-    yMsgID = '';
-    yMsgDta = '';
+  if (YMsgID <> '');
+    p_rmvPgmMg(sds.pgmName);
+    p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
+    YMsgID = '';
+    YMsgDta = '';
   endif;
 
 endsr;
@@ -7920,8 +7920,8 @@ endsr;
 begsr clrPinTabR;
 
   clear pinTabRcdE;
-  for pinrcd_x = 1 to max_pin_rcd;
-    pinTabRcd(pinrcd_x) = pinTabRcdE;
+  for PinRcd_X = 1 to max_pin_rcd;
+    PinTabRcd(PinRcd_X) = pinTabRcdE;
   endfor;
 
 endsr;
@@ -7930,30 +7930,30 @@ endsr;
 //    First         Initialisierung                           *
 //============================================================*
 
-begsr first;
+begsr First;
 
   // - Programm initialisieren
-  p_rmvpgmmg(sds.pgmname);
+  p_rmvPgmMg(sds.pgmName);
 
   // - Zeichenumsetzung neu beginnen: Die Job-CCSID kann sich seit dem
   //   letzten Aufruf geändert haben (CHGJOB CCSID).
   transcoder_reset();
 
   // - Einlesen der Benutzervoreinstellungen
-  exsr getusrsetg;
+  exsr GetUsrSetg;
 
   // - Prüfen auf generischen Dateinamen
-  if (f_endswith('*': %trimr(io_qfile.name)));
+  if (f_endsWith('*': %trimr(io_qFile.name)));
     if (*in75 = *off); // Feld ist nicht gesperrt
-      ##file = io_qfile.name;
-      ##library = io_qfile.lib;
-      exsr pmt_file;
+      ##File = io_qFile.name;
+      ##Library = io_qFile.lib;
+      exsr Pmt_File;
       if (*in93 = bTrue);
-        io_qfile.name = ##file;
-        io_qfile.lib = ##library;
+        io_qFile.name = ##File;
+        io_qFile.lib = ##Library;
       endif;
-      ##file = '';
-      ##library = '';
+      ##File = '';
+      ##Library = '';
     endif;
   endif;
 
@@ -7961,125 +7961,125 @@ begsr first;
   open peek05fm;
 
   // - Initialisieren Bildschirm
-  ##file = io_qfile.name;
-  ##library = io_qfile.lib;
-  ##member = i_member;
-  exsr getobjattr;
+  ##File = io_qFile.name;
+  ##Library = io_qFile.lib;
+  ##Member = i_member;
+  exsr GetObjAttr;
 
-  exsr chkprvfile;
-  ##rcdnbr = 0;
-  ##key = *blanks;
-  ##wndnbr = 0;
-  ##strpage = 0;
-  ##field = *blanks;
+  exsr ChkPrvFile;
+  ##RcdNbr = 0;
+  ##Key = *blanks;
+  ##WndNbr = 0;
+  ##StrPage = 0;
+  ##Field = *blanks;
 
   exsr clrFldPosArray;
 
-  $$system = *blanks;
+  $$System = *blanks;
   $$text40 = *blanks;
   $$text50 = *blanks;
-  ##format = *blanks;
-  $$length = 0;
-  $$records = 0;
+  ##Format = *blanks;
+  $$Length = 0;
+  $$Records = 0;
   $$size = 0;
   $$rcdfmtid = *blanks;
   $$unit = *blanks;
 
-  $$head132 = *blanks;
-  $$head080 = *blanks;
+  $$Head132 = *blanks;
+  $$Head080 = *blanks;
 
   //  Last opened file
-  l#file = *blanks;
-  l#library = *blanks;
-  l#member = *blanks;
-  l#format = *blanks;
-  l#maxseq = 0;
-  l#minseq = 0;
-  l#wndnbr = 0;
+  L#File = *blanks;
+  L#Library = *blanks;
+  L#Member = *blanks;
+  L#Format = *blanks;
+  L#MaxSeq = 0;
+  L#MinSeq = 0;
+  L#WndNbr = 0;
 
   //  SQL-Selektion
   sqlWhere  = ' ';
   sqlOrder  = ' ';
 
   // - Einstellen der Bildschirmauflösung 80/132-Zeichen
-  exsr setscreen;
+  exsr SetScreen;
 
   // - SPLASH-Screen
-  exsr showsplash;
+  exsr ShowSplash;
 
   // -  Darstellung der Auswahlen/Funktionstasten
-  sftop = 1;
+  SFTop = 1;
   sfbot = 1;
 
   // -  Netzwerkattribute (ohne Statusmeldung)
   peek07('SYSNAME': bTrue
-        : yattrlen: yattrtyp: yvalue);
-  if (yattrlen > 0);
-    $$system = %subst(yvalue: 1: yattrlen);
+        : YAttrLen: YAttrTyp: YValue);
+  if (YAttrLen > 0);
+    $$System = %subst(YValue: 1: YAttrLen);
   else;
-    $$system = *blanks;
+    $$System = *blanks;
   endif;
 
   // - Öffnen der Datei
-  if (isOpen = bFalse);
-    accessMode = i_access;
-    if (accessMode = SQL_SEQ);
-      sqlWhere  = i_sqlwhere;
-      sqlOrder  = i_sqlorder;
+  if (IsOpen = bFalse);
+    AccessMode = i_access;
+    if (AccessMode = SQL_SEQ);
+      sqlWhere  = i_sqlWhere;
+      sqlOrder  = i_sqlOrder;
     endif;
-    exsr openfile;
+    exsr OpenFile;
   endif;
 
   // - laden Arbeitsumgebung / öffnen Datei
-  if (i_qenvfile.name = '*NONE');
-    yenvfile = set0015.set_envfil;
-    yenvlib  = set0015.set_envlib;
-    yenvmbr  = '*FILE';
+  if (i_qEnvFile.name = '*NONE');
+    YEnvFile = set0015.set_envfil;
+    YEnvLib  = set0015.set_envlib;
+    YEnvMbr  = '*FILE';
   else;
-    if (i_qenvfile.name = '*ENVFILE');
-      yenvfile = set0015.set_envfil;
-      yenvlib  = set0015.set_envlib;
-      yenvmbr  = '*FILE';
+    if (i_qEnvFile.name = '*ENVFILE');
+      YEnvFile = set0015.set_envfil;
+      YEnvLib  = set0015.set_envlib;
+      YEnvMbr  = '*FILE';
     else;
-      yenvfile = i_qenvfile.name;
-      yenvlib  = i_qenvfile.lib;
-      yenvmbr  = i_envmbr;
+      YEnvFile = i_qEnvFile.name;
+      YEnvLib  = i_qEnvFile.lib;
+      YEnvMbr  = i_envMbr;
     endif;
-    if (i_envlayout = bTrue);
-      yoption = '*SLCLAYOUT';
+    if (i_envLayout = bTrue);
+      YOption = '*SLCLAYOUT';
     else;
-      yoption = '*SLCENV';
+      YOption = '*SLCENV';
     endif;
-    exsr loadenv;
-    if (yMsgId = 'CPF9815'); // Teildatei nicht gefunden
-      yMsgID = '';
-      yMsgDta = '';
+    exsr LoadEnv;
+    if (YMsgID = 'CPF9815'); // Teildatei nicht gefunden
+      YMsgID = '';
+      YMsgDta = '';
     endif;
   endif;
 
   // - Ermitteln der Attribute der geöffneten Datei
-  exsr getopnfile;
-  exsr getmaxseq;
+  exsr GetOpnFile;
+  exsr GetMaxSeq;
 
   //  Wenn eine Datei geöffnet werden konnte, ...
-  if (isOpen = bTrue);
+  if (IsOpen = bTrue);
     //  ... dann
     //      abspeichern *PRVFILE
-    set0014.set_prvfil  = ##file;
-    set0014.set_prvlib  = ##library;
-    set0014.set_prvmbr  = ##member;
-    p_updusrsg('*PRVFILE' : set0014);
+    set0014.SET_PrvFil  = ##File;
+    set0014.SET_PrvLib  = ##Library;
+    set0014.SET_PrvMbr  = ##Member;
+    p_updUsrSg('*PRVFILE' : set0014);
   endif;
 
   // - Subfile füllen
-  exsr pbInit;
-  exsr c_top;
+  exsr PBInit;
+  exsr C_Top;
 
   // - Copyright
   clear usr9999;
   usr9999.var1 = COPYRIGHT;
   usr9999.var2 = RELEASE;
-  p_sndpgmmg('USR9999': usr9999: sds.pgmname);
+  p_sndPgmMg('USR9999': usr9999: sds.pgmName);
 
 endsr;
 
@@ -8089,69 +8089,69 @@ endsr;
 
 begsr inzsr;
 
-  if (isinzsr = bTrue);
+  if (isInzSr = bTrue);
     leavesr;
   endif;
 
-  isinzsr = bTrue;
+  isInzSr = bTrue;
 
   PGMQ = '*';
 
-  peek01_name = f_pgmcalln('PEEK01');
-  peek03_name = f_pgmcalln('PEEK03');
-  peek04_name = f_pgmcalln('PEEK04');
-  peek06_name = f_pgmcalln('PEEK06');
-  peek07_name = f_pgmcalln('PEEK07');
-  peek08_name = f_pgmcalln('PEEK08');
-  peek09_name = f_pgmcalln('PEEK09');
-  peek10_name = f_pgmcalln('PEEK10');
-  peek12_name = f_pgmcalln('PEEK12');
-  peek13_name = f_pgmcalln('PEEK13');
-  peek14_name = f_pgmcalln('PEEK14');
-  peek17_name = f_pgmcalln('PEEK17');
-  peek18_name = f_pgmcalln('PEEK18');
-  peek19_name = f_pgmcalln('PEEK19');
-  peek20_name = f_pgmcalln('PEEK20');
-  peek21_name = f_pgmcalln('PEEK21');
-  peek23_name = f_pgmcalln('PEEK23');
-  peek24_name = f_pgmcalln('PEEK24');
-  peek26_name = f_pgmcalln('PEEK26');
-  peek27_name = f_pgmcalln('PEEK27');
-  peek30_name = f_pgmcalln('PEEK30');
-  peek32_name = f_pgmcalln('PEEK32');
-  peek33_name = f_pgmcalln('PEEK33');
-  peek34_name = f_pgmcalln('PEEK34');
-  peek37_name = f_pgmcalln('PEEK37');
-  peek38_name = f_pgmcalln('PEEK38');
-  peek40_name = f_pgmcalln('PEEK40');
-  peek41_name = f_pgmcalln('PEEK41');
-  peek42_name = f_pgmcalln('PEEK42');
-  peek47_name = f_pgmcalln('PEEK47');
-  peek48_name = f_pgmcalln('PEEK48');
-  peek49_name = f_pgmcalln('PEEK49');
-  peek50_name = f_pgmcalln('PEEK50');
-  peek52_name = f_pgmcalln('PEEK52');
-  peek54_name = f_pgmcalln('PEEK54');
-  peek55_name = f_pgmcalln('PEEK55');
-  peek56_name = f_pgmcalln('PEEK56');
-  peek57_name = f_pgmcalln('PEEK57');
-  peek59_name = f_pgmcalln('PEEK59');
-  peek65_name = f_pgmcalln('PEEK65');
-  peek68_name = f_pgmcalln('PEEK68');
-  peek69_name = f_pgmcalln('PEEK69');
-  exit01_name = f_pgmcalln('EXIT01');
-  exit04_name = f_pgmcalln('EXIT04': '*LIBL');
+  peek01_name = f_pgmCallN('PEEK01');
+  peek03_name = f_pgmCallN('PEEK03');
+  peek04_name = f_pgmCallN('PEEK04');
+  peek06_name = f_pgmCallN('PEEK06');
+  peek07_name = f_pgmCallN('PEEK07');
+  peek08_name = f_pgmCallN('PEEK08');
+  peek09_name = f_pgmCallN('PEEK09');
+  peek10_name = f_pgmCallN('PEEK10');
+  peek12_name = f_pgmCallN('PEEK12');
+  peek13_name = f_pgmCallN('PEEK13');
+  peek14_name = f_pgmCallN('PEEK14');
+  peek17_name = f_pgmCallN('PEEK17');
+  peek18_name = f_pgmCallN('PEEK18');
+  peek19_name = f_pgmCallN('PEEK19');
+  peek20_name = f_pgmCallN('PEEK20');
+  peek21_name = f_pgmCallN('PEEK21');
+  peek23_name = f_pgmCallN('PEEK23');
+  peek24_name = f_pgmCallN('PEEK24');
+  peek26_name = f_pgmCallN('PEEK26');
+  peek27_name = f_pgmCallN('PEEK27');
+  peek30_name = f_pgmCallN('PEEK30');
+  peek32_name = f_pgmCallN('PEEK32');
+  peek33_name = f_pgmCallN('PEEK33');
+  peek34_name = f_pgmCallN('PEEK34');
+  peek37_name = f_pgmCallN('PEEK37');
+  peek38_name = f_pgmCallN('PEEK38');
+  peek40_name = f_pgmCallN('PEEK40');
+  peek41_name = f_pgmCallN('PEEK41');
+  peek42_name = f_pgmCallN('PEEK42');
+  peek47_name = f_pgmCallN('PEEK47');
+  peek48_name = f_pgmCallN('PEEK48');
+  peek49_name = f_pgmCallN('PEEK49');
+  peek50_name = f_pgmCallN('PEEK50');
+  peek52_name = f_pgmCallN('PEEK52');
+  peek54_name = f_pgmCallN('PEEK54');
+  peek55_name = f_pgmCallN('PEEK55');
+  peek56_name = f_pgmCallN('PEEK56');
+  peek57_name = f_pgmCallN('PEEK57');
+  peek59_name = f_pgmCallN('PEEK59');
+  peek65_name = f_pgmCallN('PEEK65');
+  peek68_name = f_pgmCallN('PEEK68');
+  peek69_name = f_pgmCallN('PEEK69');
+  exit01_name = f_pgmCallN('EXIT01');
+  exit04_name = f_pgmCallN('EXIT04': '*LIBL');
 
   // - PinTabR clearen
   exsr clrPinTabR;
 
   // - Versionsabgleich durchführen
-  exsr chkversion;
+  exsr ChkVersion;
 
-  peek23(sds.pgmname: '*ALL': 8: yFKeys: yNbrOFKeys);
-  scrnFKeys = %subarr(yFKeys: 1);
+  peek23(sds.pgmName: '*ALL': 8: yFKeys: yNbrOfKeys);
+  ScrnFKeys = %subarr(yFKeys: 1);
 
-  peek27(sds.pgmname: ychoice: ynbrofch);
+  peek27(sds.pgmName: YChoice: YNbrOfCh);
 
 endsr;
 
@@ -8161,14 +8161,14 @@ endsr;
 
 dcl-proc f_int;
   dcl-pi *n zoned(20);
-    inpvalue zoned(25: 5) value;
+    inpValue zoned(25: 5) value;
   end-pi;
 
-  dcl-s integerval zoned(20);
+  dcl-s integerVal zoned(20);
 
-  integerval = inpvalue;
+  integerVal = inpValue;
 
-  return integerval;
+  return integerVal;
 
 end-proc;
 
@@ -8182,49 +8182,49 @@ dcl-proc f_chain00;
     i_file   like(file_t) value;
     i_lib    like(lib_t) value;
     i_mbr    like(mbr_t) value;
-    i_rcdfmt char(10) value;
+    i_rcdFmt char(10) value;
   end-pi;
 
-  dcl-s isFound like(bool_t) inz(bFalse);
+  dcl-s IsFound like(bool_t) inz(bFalse);
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  if ((cio_getfile(hfile00)    <> i_file ) or
-      (cio_getlibrary(hfile00) <> i_lib  ) or
-      (cio_getmember(hfile00)  <> i_mbr  ));
-    if (cio_isopen(hfile00) = bTrue);
-      cio_close(hfile00);
+  if ((CIO_getFile(hFile00)    <> i_file ) or
+      (CIO_getLibrary(hFile00) <> i_lib  ) or
+      (CIO_getMember(hFile00)  <> i_mbr  ));
+    if (CIO_isOpen(hFile00) = bTrue);
+      CIO_close(hFile00);
     endif;
   endif;
 
   f_execute('OVRDBF ' +
-             'FILE(' + %trim(##file) + ') ' +
+             'FILE(' + %trim(##File) + ') ' +
              'TOFILE(' +
-               %trim(##library) + '/' +
-               %trim(##file) + ') ' +
-             'MBR(' + %trim(##member) + ') ' +
+               %trim(##Library) + '/' +
+               %trim(##File) + ') ' +
+             'MBR(' + %trim(##Member) + ') ' +
              'OVRSCOPE(*ACTGRPDFN) ' +
              'SHARE(*NO) ' +
              'SEQONLY(*NO) SECURE(*YES)'
-           : yMsgID: yMsgDta);
-  yMsgID = '';
-  yMsgDta = '';
+           : YMsgID: YMsgDta);
+  YMsgID = '';
+  YMsgDta = '';
 
-  if (cio_isopen(hfile00) = bFalse);
+  if (CIO_isOpen(hFile00) = bFalse);
     if (commitLvl = '1');
-      cio_open(hfile00
+      CIO_open(hFile00
               : i_file
               : i_lib
               : i_mbr
-              : i_rcdfmt
+              : i_rcdFmt
               : 'rr+ , arrseq=Y, commit=Y +
                  nullcap=Y, riofb=Y, +
                  secure=N, ccsid=65535');
     else;
-      cio_open(hfile00
+      CIO_open(hFile00
               : i_file
               : i_lib
               : i_mbr
-              : i_rcdfmt
+              : i_rcdFmt
               : 'rr+ , arrseq=Y, commit=N +
                  nullcap=Y, riofb=Y, +
                  secure=N, ccsid=65535');
@@ -8232,25 +8232,25 @@ dcl-proc f_chain00;
   endif;
 
   f_execute('DLTOVR ' +
-             'FILE(' + %trim(##file) + ') ' +
+             'FILE(' + %trim(##File) + ') ' +
              'LVL(*ACTGRPDFN) '
-           : yMsgID: yMsgDta);
-  yMsgID = '';
-  yMsgDta = '';
+           : YMsgID: YMsgDta);
+  YMsgID = '';
+  YMsgDta = '';
 
-  if (cio_chainwithrrn(hfile00
+  if (CIO_chainWithRRN(hFile00
                     : i_rrn
                     : bTrue
-                    : io_buff
-                    : io_nullmap) = bFalse);
-    isFound = bTrue;
+                    : IO_Buff
+                    : IO_NullMap) = bFalse);
+    IsFound = bTrue;
   else;
-    isFound = bFalse;
+    IsFound = bFalse;
   endif;
 
-  file#x = cio_getinfds(hfile00);
+  File#X = CIO_getInfDS(hFile00);
 
-  return isFound;
+  return IsFound;
 
 end-proc;
 
@@ -8264,43 +8264,43 @@ dcl-proc f_chain04;
     i_file   like(file_t) value;
     i_lib    like(lib_t) value;
     i_mbr    like(mbr_t) value;
-    i_rcdfmt char(10) value;
+    i_rcdFmt char(10) value;
   end-pi;
 
-  dcl-s isFound like(bool_t) inz(bFalse);
+  dcl-s IsFound like(bool_t) inz(bFalse);
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  if ((cio_getfile(hfile04)    <> i_file ) or
-      (cio_getlibrary(hfile04) <> i_lib  ) or
-      (cio_getmember(hfile04)  <> i_mbr  ));
-    if (cio_isopen(hfile04) = bTrue);
-      cio_close(hfile04);
+  if ((CIO_getFile(hFile04)    <> i_file ) or
+      (CIO_getLibrary(hFile04) <> i_lib  ) or
+      (CIO_getMember(hFile04)  <> i_mbr  ));
+    if (CIO_isOpen(hFile04) = bTrue);
+      CIO_close(hFile04);
     endif;
   endif;
 
-  if (cio_isopen(hfile04) = bFalse);
-    cio_open(hfile04
+  if (CIO_isOpen(hFile04) = bFalse);
+    CIO_open(hFile04
             : i_file
             : i_lib
             : i_mbr
-            : i_rcdfmt
+            : i_rcdFmt
             : 'rr , arrseq=Y, +
                nullcap=Y, riofb=Y, ccsid=65535');
   endif;
 
-  if (cio_chainwithrrn(hfile04
+  if (CIO_chainWithRRN(hFile04
                     : i_rrn
                     : bFalse
-                    : io_buff
-                    : io_nullmap) = bFalse);
-    isFound = bTrue;
+                    : IO_Buff
+                    : IO_NullMap) = bFalse);
+    IsFound = bTrue;
   else;
-    isFound = bFalse;
+    IsFound = bFalse;
   endif;
 
-  file#x = cio_getinfds(hfile04);
+  File#X = CIO_getInfDS(hFile04);
 
-  return isFound;
+  return IsFound;
 
 end-proc;
 
@@ -8310,10 +8310,10 @@ end-proc;
 
 dcl-proc errorHandler;
   dcl-pi *n;
-    i_condtoken    likeds(cee_fc_t) value;
-    i_pcommarea    int(10) value;
+    i_condToken    likeds(cee_fc_t) value;
+    i_pCommArea    int(10) value;
     o_action       int(10);
-    o_newcondtoken likeds(cee_fc_t);
+    o_newCondToken likeds(cee_fc_t);
   end-pi;
 
   dump;

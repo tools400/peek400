@@ -46,30 +46,30 @@ dcl-ds workstn likeds(workstn_t);
 /undefine internal_prototype
 
 //  Peek21
-dcl-s ypgmcmd like(pgmcmd_t);
-dcl-s ycmddta like(pgmcmddt_t);
-dcl-s ymsgid like(msgid_t);
-dcl-s ymsgdta like(msgdta_t);
+dcl-s YPgmCmd like(pgmCmd_t);
+dcl-s YCmdDta like(pgmCmdDt_t);
+dcl-s YMsgID like(msgId_t);
+dcl-s YMsgDta like(msgDta_t);
 
 //  Peek23:
-dcl-s ykey char(10);
-dcl-s yfkeys like(fkeydsp_t) dim(32);
-dcl-s ynbrofkeys like(int4_t);
+dcl-s yKey char(10);
+dcl-s yFKeys like(fKeyDsp_t) dim(32);
+dcl-s yNbrOfKeys like(int4_t);
 
 dcl-s sfbot like(int4_t);
-dcl-c nbrfkeys 2;
-dcl-s msgtext char(200);
-dcl-s strpos like(uint4_t);
-dcl-s nbrofkeys like(int4_t);
+dcl-c NbrFKeys 2;
+dcl-s msgText char(200);
+dcl-s strPos like(uint4_t);
+dcl-s nbrOfKeys like(int4_t);
 
-dcl-s peek21_name like(pgmcalln_t);
-dcl-s peek23_name like(pgmcalln_t);
+dcl-s peek21_name like(pgmCallN_t);
+dcl-s peek23_name like(pgmCallN_t);
 
 dcl-s x like(int4_t) inz;
-dcl-s tmpfkey like($$fkey01);
+dcl-s tmpFkey like($$fkey01);
 dcl-s int1 like(int4_t);
 dcl-s int2 like(int4_t);
-dcl-s ischanged like(bool_t) inz(bFalse);
+dcl-s isChanged like(bool_t) inz(bFalse);
 
 dcl-s options uns(10);
 
@@ -93,11 +93,11 @@ dcl-s isInzSr like(bool_t) inz(bFalse);
 dcl-pi peek59;
   i_dsp80  like(dsp80_t) const;
   i_type   like(type_t) const;
-  i_msgid  like(msgid_t) const;
-  i_msgdta like(msgdta_t) const;
+  i_msgID  like(msgId_t) const;
+  i_msgDta like(msgDta_t) const;
   i_keys   like(keys_t) const;
-  o_msgid  like(msgid_t);
-  o_msgdta like(msgdta_t);
+  o_msgID  like(msgId_t);
+  o_msgDta like(msgDta_t);
 end-pi;
 //---------------------------------------------------*
 
@@ -107,11 +107,11 @@ ceehdlr(%paddr('errorHandler')
 
 exsr inzsr;
 
-exsr first;
+exsr First;
 
 dow ('1');
 
-  exsr toscreen;
+  exsr ToScreen;
 
   //  Nachrichten anzeigen
   *in89 = *off;
@@ -120,37 +120,37 @@ dow ('1');
   //  Anzeigen der Befehlstasten
   select;
   when ((sfbot = 2) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
     write pbbot#2;
   when ((sfbot = 3) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
     write pbbot#3;
   when ((sfbot = 4) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
     write pbbot#4;
   when ((sfbot = 5) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
     write pbbot#5;
   when ((sfbot = 6) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
     write pbbot#6;
   when ((sfbot = 7) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
     write pbbot#7;
   when ((sfbot = 8) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
     write pbbot#8;
   when ((sfbot = 9) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
     write pbbot#9;
   when ((sfbot = 10) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
     write pbbot#10;
   when ((sfbot = 11) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
     write pbbot#11;
   when ((sfbot = 12) and
-     (ynbrofkeys > nbrfkeys * (sfbot - 1)));
+     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
     write pbbot#12;
   other;
     write pbbot#1;
@@ -160,63 +160,63 @@ dow ('1');
   //  Anzeigen Bildschirm
   exfmt bild01;
 
-  exsr fromscreen;
+  exsr FromScreen;
 
   //  Nachrichten löschen
-  p_rmvpgmmg(sds.pgmname);
+  p_rmvPgmMg(sds.pgmName);
 
   //  Bezugszahlen löschen
   exsr bzoff1;
 
   //  Mappen der gedrückten Taste
   //  in Programmbefehl
-  peek21(workstn.aid: sds.pgmname
-        : ypgmcmd: ycmddta: ymsgid: ymsgdta);
-  if (ymsgid <> ' ');
-    p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
-    ymsgid = '';
-    ymsgdta = '';
+  peek21(workstn.aid: sds.pgmName
+        : YPgmCmd: YCmdDta: YMsgID: YMsgDta);
+  if (YMsgID <> ' ');
+    p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
+    YMsgID = '';
+    YMsgDta = '';
     iter;
   endif;
 
   //  Abfragen der Programmbefehle
   select;
   //  F5  - Aktualisieren
-  when (ypgmcmd = '*REFRESH');
-    exsr c_refresh;
+  when (YPgmCmd = '*REFRESH');
+    exsr C_Refresh;
     iter;
   //  F9  - Yes
-  when ((ypgmcmd = '*YES'   )  and
+  when ((YPgmCmd = '*YES'   )  and
      (f_scan('Y': i_keys  ) <> 0));
     exsr c_yes;
     leave;
 
   //  F21 - No
-  when ((ypgmcmd = '*NO'    ) and
+  when ((YPgmCmd = '*NO'    ) and
      (f_scan('N': i_keys  ) <> 0));
     exsr c_no;
     leave;
 
   //  F12 - Cancel
-  when ((ypgmcmd = '*CANCEL') and
+  when ((YPgmCmd = '*CANCEL') and
      (f_scan('C': i_keys  ) <> 0));
     exsr c_cancel;
     leave;
 
   //  F24 - Weitere Tasten
-  when (ypgmcmd = '*MOREKEYS');
-    exsr c_morekeys;
+  when (YPgmCmd = '*MOREKEYS');
+    exsr C_MoreKeys;
     iter;
 
   //  Datenfreigabe = OK
-  when ((ypgmcmd = '*ENTER' ) and
+  when ((YPgmCmd = '*ENTER' ) and
      (f_scan('E': i_keys  ) <> 0));
-    exsr c_enter;
+    exsr C_Enter;
     leave;
 
   other;
     //  Falsche Taste gedrückt
-    p_wrongkey(workstn.aid: sds.pgmname);
+    p_wrongKey(workstn.aid: sds.pgmName);
     iter;
   endsl;
 
@@ -248,9 +248,9 @@ endsr;
 begsr c_yes;
 
   clear usr8190;
-  usr8190.var1 = ypgmcmd;
-  o_msgid  = 'USR8190';
-  o_msgdta = usr8190;
+  usr8190.var1 = YPgmCmd;
+  o_msgID  = 'USR8190';
+  o_msgDta = usr8190;
 
 endsr;
 
@@ -261,9 +261,9 @@ endsr;
 begsr c_no;
 
   clear usr8190;
-  usr8190.var1 = ypgmcmd;
-  o_msgid  = 'USR8190';
-  o_msgdta = usr8190;
+  usr8190.var1 = YPgmCmd;
+  o_msgID  = 'USR8190';
+  o_msgDta = usr8190;
 
 endsr;
 
@@ -271,12 +271,12 @@ endsr;
 //    c_enter       "Datenfreigabetaste" = OK                 *
 //============================================================*
 
-begsr c_enter;
+begsr C_Enter;
 
   clear usr8190;
-  usr8190.var1 = ypgmcmd;
-  o_msgid  = 'USR8190';
-  o_msgdta = usr8190;
+  usr8190.var1 = YPgmCmd;
+  o_msgID  = 'USR8190';
+  o_msgDta = usr8190;
 
 endsr;
 
@@ -287,9 +287,9 @@ endsr;
 begsr c_cancel;
 
   clear usr8190;
-  usr8190.var1 = ypgmcmd;
-  o_msgid  = 'USR8190';
-  o_msgdta = usr8190;
+  usr8190.var1 = YPgmCmd;
+  o_msgID  = 'USR8190';
+  o_msgDta = usr8190;
 
 endsr;
 
@@ -297,7 +297,7 @@ endsr;
 //    c_refresh     F5  - Aktualisieren der Subfile           *
 //============================================================*
 
-begsr c_refresh;
+begsr C_Refresh;
 
   exsr fill##;
 
@@ -307,7 +307,7 @@ endsr;
 //    c_moreKeys    F24 - Weitere Tasten                      *
 //============================================================*
 
-begsr c_morekeys;
+begsr C_MoreKeys;
 
   sfbot = sfbot + 1;
 
@@ -322,100 +322,100 @@ begsr fill##;
   //  Überschrift ...
   select;
   when (i_type = '*INFO');
-    $$headline = f_msgtext('MBX0001': ' ');
+    $$headLine = f_msgText('MBX0001': ' ');
   when (i_type = '*QUESTION');
-    $$headline = f_msgtext('MBX0002': ' ');
+    $$headLine = f_msgText('MBX0002': ' ');
   other;
-    $$headline = ' ';
+    $$headLine = ' ';
   endsl;
 
-  $$headline = f_center($$headline);
+  $$headLine = f_center($$headLine);
 
   //  Nachrichtentext ...
-  msgtext = f_msgtext(i_msgid: i_msgdta);
+  msgText = f_msgText(i_msgID: i_msgDta);
 
   options = cWORDWRAP_PARAGRAPH_MSGD + cWORDWRAP_PARAGRAPH_TRIMR;
 
   //  ... Zeile 1
-  strpos = 1;
-  $$line#01 = f_wordwrap(msgtext: 40: strpos: options);
+  strPos = 1;
+  $$line#01 = f_wordWrap(msgText: 40: strPos: options);
   $$line#01 = %triml($$line#01);
   //  ... Zeile 2
-  if (strpos > 0);
-    $$line#02 = f_wordwrap(msgtext: 40: strpos: options);
+  if (strPos > 0);
+    $$line#02 = f_wordWrap(msgText: 40: strPos: options);
     $$line#02 = %triml($$line#02);
   endif;
   //  ... Zeile 3
-  if (strpos > 0);
-    $$line#03 = f_wordwrap(msgtext: 40: strpos: options);
+  if (strPos > 0);
+    $$line#03 = f_wordWrap(msgText: 40: strPos: options);
     $$line#03 = %triml($$line#03);
   endif;
   //  ... Zeile 4
-  if (strpos > 0);
-    $$line#04 = f_wordwrap(msgtext: 40: strpos: options);
+  if (strPos > 0);
+    $$line#04 = f_wordWrap(msgText: 40: strPos: options);
     $$line#04 = %triml($$line#04);
   endif;
   //  ... Zeile 5
-  if (strpos > 0);
-    $$line#05 = f_wordwrap(msgtext: 40: strpos: options);
+  if (strPos > 0);
+    $$line#05 = f_wordWrap(msgText: 40: strPos: options);
     $$line#05 = %triml($$line#05);
   endif;
 
   //  Funktionstasten ...
-  nbrofkeys = 0;
-  yfkeys(*) = '';
+  nbrOfKeys = 0;
+  yFKeys(*) = '';
   $$fkey(*) = '';
   //  ... YES
   if (f_scan('Y': i_keys) <> 0);
-    nbrofkeys = nbrofkeys + 1;
-    ykey = '*YES';
-    exsr getkey;
-    $$fkey(nbrofkeys) = yfkeys(1);
+    nbrOfKeys = nbrOfKeys + 1;
+    yKey = '*YES';
+    exsr getKey;
+    $$fkey(nbrOfKeys) = yFKeys(1);
   endif;
   //  ... NO
   if (f_scan('N': i_keys) <> 0);
-    nbrofkeys = nbrofkeys + 1;
-    ykey = '*NO';
-    exsr getkey;
-    $$fkey(nbrofkeys) = yfkeys(1);
+    nbrOfKeys = nbrOfKeys + 1;
+    yKey = '*NO';
+    exsr getKey;
+    $$fkey(nbrOfKeys) = yFKeys(1);
   endif;
   //  ... OK
   if (f_scan('E': i_keys) <> 0);
-    nbrofkeys = nbrofkeys + 1;
-    ykey = '*OK';
-    exsr getkey;
-    $$fkey(nbrofkeys) = yfkeys(1);
+    nbrOfKeys = nbrOfKeys + 1;
+    yKey = '*OK';
+    exsr getKey;
+    $$fkey(nbrOfKeys) = yFKeys(1);
   endif;
   //  ... CANCEL
   if (f_scan('C': i_keys) <> 0);
-    nbrofkeys = nbrofkeys + 1;
-    ykey = '*CANCEL';
-    exsr getkey;
-    $$fkey(nbrofkeys) = yfkeys(1);
+    nbrOfKeys = nbrOfKeys + 1;
+    yKey = '*CANCEL';
+    exsr getKey;
+    $$fkey(nbrOfKeys) = yFKeys(1);
   endif;
 
   //  Sortieren der Funktionstasten nach der Nummer der F-Taste
   //  (in $$fkey: toscreen überträgt es vor jeder Anzeige in die
   //  Bildschirmfelder $$FKEY01 ff.)
-  if (nbrofkeys > 1);
-    dou (ischanged = bFalse);
-      ischanged = bFalse;
-      for x = 2 to nbrofkeys;
-        tmpfkey = %subst($$fkey(x-1): 2)+x'00';
-        int1 = atoi(%addr(tmpfkey));
-        tmpfkey = %subst($$fkey(x  ): 2)+x'00';
-        int2 = atoi(%addr(tmpfkey));
+  if (nbrOfKeys > 1);
+    dou (isChanged = bFalse);
+      isChanged = bFalse;
+      for x = 2 to nbrOfKeys;
+        tmpFkey = %subst($$fkey(x-1): 2)+x'00';
+        int1 = atoi(%addr(tmpFkey));
+        tmpFkey = %subst($$fkey(x  ): 2)+x'00';
+        int2 = atoi(%addr(tmpFkey));
         if (int2 < int1);
-          ischanged = bTrue;
-          tmpfkey = $$fkey(x-1);
+          isChanged = bTrue;
+          tmpFkey = $$fkey(x-1);
           $$fkey(x-1) = $$fkey(x);
-          $$fkey(x  ) = tmpfkey;
+          $$fkey(x  ) = tmpFkey;
         endif;
       endfor;
     enddo;
   endif;
 
-  ynbrofkeys = nbrofkeys;
+  yNbrOfKeys = nbrOfKeys;
 
 endsr;
 
@@ -423,10 +423,10 @@ endsr;
 //    getKey        Einlesen F-Taste                          *
 //============================================================*
 
-begsr getkey;
+begsr getKey;
 
-  peek23(sds.pgmname: ykey: 0
-        : yfkeys: ynbrofkeys);
+  peek23(sds.pgmName: yKey: 0
+        : yFKeys: yNbrOfKeys);
 
 endsr;
 
@@ -434,7 +434,7 @@ endsr;
 //    SetScreen     Einstellen 132/80-Zeichen Auflösung       *
 //============================================================*
 
-begsr setscreen;
+begsr SetScreen;
 
   if (i_dsp80 = *off);
     //   132-Zeichen Anzeige
@@ -454,7 +454,7 @@ endsr;
 //  Copy program fields to screen.                    *
 //====================================================*
 
-begsr toscreen;
+begsr ToScreen;
 
   $$fkey01 = $$fkey( 1);
   $$fkey02 = $$fkey( 2);
@@ -487,7 +487,7 @@ endsr;
 //  Copy screen to program fields.                    *
 //====================================================*
 
-begsr fromscreen;
+begsr FromScreen;
 
   $$fkey( 1) = $$fkey01;
   $$fkey( 2) = $$fkey02;
@@ -520,16 +520,16 @@ endsr;
 //    First         Initialisierung                           *
 //============================================================*
 
-begsr first;
+begsr First;
 
   // - Öffnen der Dateien
   open peek59fm;
 
   // - Programm initialisieren
-  p_rmvpgmmg(sds.pgmname);
+  p_rmvPgmMg(sds.pgmName);
 
-  o_msgid  = ' ';
-  o_msgdta = ' ';
+  o_msgID  = ' ';
+  o_msgDta = ' ';
 
   // - Füllen der Bildschirmfelder
   exsr bzoff1;
@@ -539,7 +539,7 @@ begsr first;
   sfbot = 1;
 
   // - Einstellen der Bildschirmauflösung 80/132-Zeichen
-  exsr setscreen;
+  exsr SetScreen;
 
 endsr;
 
@@ -557,8 +557,8 @@ begsr inzsr;
 
   PGMQ = '*';
 
-  peek21_name = f_pgmcalln('PEEK21');
-  peek23_name = f_pgmcalln('PEEK23');
+  peek21_name = f_pgmCallN('PEEK21');
+  peek23_name = f_pgmCallN('PEEK23');
 
 endsr;
 
@@ -566,12 +566,12 @@ endsr;
 //  Program error handler                                     *
 //============================================================*
 
-dcl-proc errorhandler;
+dcl-proc errorHandler;
   dcl-pi *n;
-    i_condtoken    likeds(cee_fc_t) value;
-    i_pcommarea    int(10) value;
+    i_condToken    likeds(cee_fc_t) value;
+    i_pCommArea    int(10) value;
     o_action       int(10);
-    o_newcondtoken likeds(cee_fc_t);
+    o_newCondToken likeds(cee_fc_t);
   end-pi;
 
   dump;

@@ -28,7 +28,7 @@
 /copy QCOPYLE,H_SPEC
 /copy QCOPYLE,COPYRIGHT
 
-dcl-f peek40fm workstn(*ext) usage(*input: *output) usropn infds(workstn) sfile(pbsfl: sflrec);
+dcl-f peek40fm workstn(*ext) usage(*input: *output) usropn infds(workstn) sfile(pbsfl: SflRec);
 
 dcl-ds workstn likeds(workstn_t);
 
@@ -65,70 +65,70 @@ dcl-ds workstn likeds(workstn_t);
 /copy QCOPYLE,PPEEK53
 /copy QCOPYLE,PPEEK58
 
-dcl-s yfkeys char(18) dim(32) inz(*blanks);
-dcl-s ynbrofkeys like(int4_t) inz;
-dcl-s ymsgid char(7) inz(*blanks);
-dcl-s ymsgdta char(512) inz(*blanks);
+dcl-s yFKeys char(18) dim(32) inz(*blanks);
+dcl-s yNbrOfKeys like(int4_t) inz;
+dcl-s YMsgID char(7) inz(*blanks);
+dcl-s YMsgDta char(512) inz(*blanks);
 
-dcl-s ychoice char(75) dim(32);
-dcl-s ynbrofch like(int4_t) inz;
+dcl-s YChoice char(75) dim(32);
+dcl-s YNbrOfCh like(int4_t) inz;
 
-dcl-s ypgmcmd char(10) inz(*blanks);
-dcl-s ycmddta like(pgmcmddt_t) inz(*blanks);
+dcl-s YPgmCmd char(10) inz(*blanks);
+dcl-s YCmdDta like(pgmCmdDt_t) inz(*blanks);
 
-dcl-ds yqfile likeds(qobj_t) inz;
-dcl-s ymbr char(10) inz(*blanks);
-dcl-s ydata char(512) inz(*blanks);
+dcl-ds YQFile likeds(qObj_t) inz;
+dcl-s YMbr char(10) inz(*blanks);
+dcl-s YData char(512) inz(*blanks);
 
-dcl-s isnewpos char(1) inz(bFalse);
-dcl-s isfound char(1) inz(bFalse);
-dcl-s issflerror char(1) inz(bFalse);
+dcl-s IsNewPos char(1) inz(bFalse);
+dcl-s IsFound char(1) inz(bFalse);
+dcl-s IsSflError char(1) inz(bFalse);
 
 dcl-s rc like(int4_t) inz;
-dcl-s numrel like(int4_t) inz;
-dcl-s numkey like(int4_t) inz;
-dcl-s numsel like(int4_t) inz;
+dcl-s numRel like(int4_t) inz;
+dcl-s numKey like(int4_t) inz;
+dcl-s numSel like(int4_t) inz;
 
-dcl-s sflpage like(int4_t) inz;
-dcl-s sftop like(int4_t) inz;
-dcl-s sflpagedds inz(0) like(sflpage);
-dcl-s sflrec inz(0) like(sflpage);
-dcl-s sflnbrrcd inz(0) like(sflpage);
+dcl-s SflPage like(int4_t) inz;
+dcl-s SFTop like(int4_t) inz;
+dcl-s SflPageDDS inz(0) like(SflPage);
+dcl-s SflRec inz(0) like(SflPage);
+dcl-s SflNbrRcd inz(0) like(SflPage);
 dcl-s sfbot like(int4_t) inz;
-dcl-c nbrfkeys 2;
-dcl-s sfl_cmd char(10) inz(*blanks);
+dcl-c NbrFKeys 2;
+dcl-s Sfl_Cmd char(10) inz(*blanks);
 
 dcl-c UNIQUE '*UNIQUE';
 
-dcl-s peek21_name like(pgmcalln_t) inz;
-dcl-s peek23_name like(pgmcalln_t) inz;
-dcl-s peek27_name like(pgmcalln_t) inz;
-dcl-s peek39_name like(pgmcalln_t) inz;
-dcl-s peek41_name like(pgmcalln_t) inz;
+dcl-s peek21_name like(pgmCallN_t) inz;
+dcl-s peek23_name like(pgmCallN_t) inz;
+dcl-s peek27_name like(pgmCallN_t) inz;
+dcl-s peek39_name like(pgmCallN_t) inz;
+dcl-s peek41_name like(pgmCallN_t) inz;
 
-dcl-s r_file inz(*blanks) like(##file);
-dcl-s lstfile inz(*blanks) like(##file);
-dcl-s lstnbrrcd inz(0) like(sflpage);
-dcl-s spos like(int4_t) inz;
-dcl-s srchrec inz(0) like(sflpage);
+dcl-s R_File inz(*blanks) like(##File);
+dcl-s LstFile inz(*blanks) like(##File);
+dcl-s LstNbrRcd inz(0) like(SflPage);
+dcl-s sPos like(int4_t) inz;
+dcl-s srchrec inz(0) like(SflPage);
 //  Dateinamen der Subfile-Sätze für die Suche
-dcl-s sfl_files like($$file) dim(9999);
+dcl-s sfl_files like($$File) dim(9999);
 
-dcl-s wrk_sfsanr inz(*zeros) like(sfsanr);
+dcl-s Wrk_SFSANR inz(*zeros) like(sfsanr);
 
-dcl-s buffer char(2000);
+dcl-s Buffer char(2000);
 
-dcl-s strpos like(uint4_t) inz;
+dcl-s strPos like(uint4_t) inz;
 
-dcl-s pfile inz(*blanks) like(i_file);
+dcl-s pFile inz(*blanks) like(i_file);
 dcl-s plib inz(*blanks) like(i_lib);
-dcl-s pmbr inz(*blanks) like(i_mbr);
-dcl-s pfmtname inz(*blanks) like(i_rcdfmt);
+dcl-s pMbr inz(*blanks) like(i_mbr);
+dcl-s PFmtName inz(*blanks) like(i_rcdFmt);
 
-dcl-ds fild0100 likeds(fild0100_t) inz;
-dcl-ds keyl0100 likeds(keyl0100_t) inz;
+dcl-ds fild0100 likeds(FILD0100_t) inz;
+dcl-ds keyl0100 likeds(KEYL0100_t) inz;
 dcl-ds dbrl0200 likeds(dbrl0200_t) inz;
-dcl-ds sell0100 likeds(sell0100_t) inz;
+dcl-ds sell0100 likeds(SELL0100_t) inz;
 
 dcl-s isInzSr like(bool_t) inz(bFalse);
 
@@ -137,16 +137,16 @@ dcl-s isInzSr like(bool_t) inz(bFalse);
 //*******************************************************************
 dcl-pi peek40;
   i_dsp80     like(dsp80_t) const;
-  i_copyright like(copyrght_t) const;
+  i_copyright like(copyright_t) const;
   i_file      like(file_t) const;
   i_lib       like(lib_t) const;
   i_mbr       like(mbr_t) const;
-  i_rcdfmt    like(fmt_t) const;
-  i_basephyf  like(bool_t) const;
+  i_rcdFmt    like(fmt_t) const;
+  i_basePhyF  like(bool_t) const;
   o_file      like(file_t);
   o_lib       like(lib_t);
-  o_msgid     like(msgid_t);
-  o_msgdta    like(msgdta_t);
+  o_msgID     like(msgId_t);
+  o_msgDta    like(msgDta_t);
 end-pi;
 
 dcl-s do_x2 packed(7);
@@ -161,8 +161,8 @@ ceehdlr(%paddr('errorHandler')
 
 exsr inzsr;
 
-exsr first;
-if (o_msgid = '');
+exsr First;
+if (o_msgID = '');
 
   //---------------------------------------------------*
   //  Schleife für Programmbearbeitung
@@ -187,48 +187,48 @@ if (o_msgid = '');
     endif;
 
     //  Anzeigen der Einzelauswahlen
-    if (sftop > 32
-        or sftop > ynbrofch);
-      sftop = 1;
+    if (SFTop > 32
+        or SFTop > YNbrOfCh);
+      SFTop = 1;
     endif;
-    $$choice = ychoice(sftop);
+    $$choice = YChoice(SFTop);
 
     //  Trennlinie
     write pbbot#0;
     //  Anzeigen der Befehlstasten
     select;
     when ((sfbot = 2) and
-       (ynbrofkeys > nbrfkeys * (sfbot - 1)));
+       (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
       write pbbot#2;
     when ((sfbot = 3) and
-       (ynbrofkeys > nbrfkeys * (sfbot - 1)));
+       (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
       write pbbot#3;
     when ((sfbot = 4) and
-       (ynbrofkeys > nbrfkeys * (sfbot - 1)));
+       (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
       write pbbot#4;
     when ((sfbot = 5) and
-       (ynbrofkeys > nbrfkeys * (sfbot - 1)));
+       (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
       write pbbot#5;
     when ((sfbot = 6) and
-       (ynbrofkeys > nbrfkeys * (sfbot - 1)));
+       (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
       write pbbot#6;
     when ((sfbot = 7) and
-       (ynbrofkeys > nbrfkeys * (sfbot - 1)));
+       (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
       write pbbot#7;
     when ((sfbot = 8) and
-       (ynbrofkeys > nbrfkeys * (sfbot - 1)));
+       (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
       write pbbot#8;
     when ((sfbot = 9) and
-       (ynbrofkeys > nbrfkeys * (sfbot - 1)));
+       (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
       write pbbot#9;
     when ((sfbot = 10) and
-       (ynbrofkeys > nbrfkeys * (sfbot - 1)));
+       (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
       write pbbot#10;
     when ((sfbot = 11) and
-       (ynbrofkeys > nbrfkeys * (sfbot - 1)));
+       (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
       write pbbot#11;
     when ((sfbot = 12) and
-       (ynbrofkeys > nbrfkeys * (sfbot - 1)));
+       (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
       write pbbot#12;
     other;
       write pbbot#1;
@@ -240,80 +240,80 @@ if (o_msgid = '');
     *in70 = '0';
 
     //  Nachrichten löschen
-    p_rmvpgmmg(sds.pgmname);
+    p_rmvPgmMg(sds.pgmName);
 
     //  Aktuelle Satz-Nr.
-    if (sflcsr > *zeros);
-      sfsanr = sflcsr;
+    if (SflCsr > *zeros);
+      sfsanr = SflCsr;
     endif;
 
     //  Mappen der gedrückten Taste
     //  in Programmbefehl
-    peek21(workstn.aid: sds.pgmname
-          : ypgmcmd: ycmddta: ymsgid: ymsgdta);
-    if (ymsgid <> *blanks);
-      p_sndpgmmg(ymsgid: ymsgdta: sds.pgmname);
-      ymsgid = '';
-      ymsgdta = '';
+    peek21(workstn.aid: sds.pgmName
+          : YPgmCmd: YCmdDta: YMsgID: YMsgDta);
+    if (YMsgID <> *blanks);
+      p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
+      YMsgID = '';
+      YMsgDta = '';
       iter;
     endif;
 
     //  Abfragen der Befehlstasten
     select;
     //  F3  - Ende
-    when (ypgmcmd = '*EXIT');
-      exsr c_endpgm;
+    when (YPgmCmd = '*EXIT');
+      exsr C_EndPgm;
       leave;
 
     //  F5  - Aktualisieren
-    when (ypgmcmd = '*REFRESH');
-      exsr c_refresh;
+    when (YPgmCmd = '*REFRESH');
+      exsr C_Refresh;
       iter;
 
     //  F12 - Ende
-    when (ypgmcmd = '*CANCEL');
-      exsr c_endpgm;
+    when (YPgmCmd = '*CANCEL');
+      exsr C_EndPgm;
       leave;
 
     //  F16 - Suchen
-    when (ypgmcmd = '*SEARCH');
-      exsr c_search;
+    when (YPgmCmd = '*SEARCH');
+      exsr C_Search;
       iter;
 
     //   F17 - Anfang Datensatz
-    when (ypgmcmd = '*TOP');
-      exsr c_top;
+    when (YPgmCmd = '*TOP');
+      exsr C_Top;
       iter;
 
     //   F18 - Ende Datensatz
-    when (ypgmcmd = '*BOT');
-      exsr c_bot;
+    when (YPgmCmd = '*BOT');
+      exsr C_Bot;
       iter;
 
     //  F23 - Weitere Auswahlen
-    when (ypgmcmd = '*MOREOPT');
-      exsr c_moreopt;
+    when (YPgmCmd = '*MOREOPT');
+      exsr C_MoreOpt;
 
     //  F24 - Weitere Tasten
-    when (ypgmcmd = '*MOREKEYS');
-      exsr c_morekeys;
+    when (YPgmCmd = '*MOREKEYS');
+      exsr C_MoreKeys;
 
     //  Datenfreigabe
-    when (ypgmcmd = '*ENTER');
-      exsr c_enter;
+    when (YPgmCmd = '*ENTER');
+      exsr C_Enter;
       if (o_file = *blanks);
       //  ... keine Auswahl getroffen, weiter machen
       else;
         leave;
       endif;
     //  Page up
-    when (ypgmcmd = '*PAGEUP');
+    when (YPgmCmd = '*PAGEUP');
     //  Page down
-    when (ypgmcmd = '*PAGEDOWN');
+    when (YPgmCmd = '*PAGEDOWN');
 
     other;
       //  Falsche Taste gedrückt
-      p_wrongkey(workstn.aid: sds.pgmname);
+      p_wrongKey(workstn.aid: sds.pgmName);
       iter;
     endsl;
 
@@ -329,14 +329,14 @@ return;
 //    C_Enter       "Datenfreigabetaste"                      *
 //============================================================*
 
-begsr c_enter;
+begsr C_Enter;
 
-  exsr vreadc;
+  exsr VReadC;
 
   //  Erst die ungültigen Auswahlen korrigieren, dann suchen; der
   //  Suchbegriff bleibt bis dahin stehen.
-  if (##file <> *blanks and issflerror = bFalse);
-    exsr c_search;
+  if (##File <> *blanks and IsSflError = bFalse);
+    exsr C_Search;
   endif;
 
 endsr;
@@ -345,21 +345,21 @@ endsr;
 //    C_Search      F16 - Suchen                              *
 //============================================================*
 
-begsr c_search;
+begsr C_Search;
 
-  if (##file <> *blanks);
-    lstfile = ##file;
-    ##file = *blanks;
+  if (##File <> *blanks);
+    LstFile = ##File;
+    ##File = *blanks;
   endif;
 
-  if (lstfile = *blanks);
+  if (LstFile = *blanks);
     *in70 = '1';
     clear usr8209;
-    p_sndpgmmg('USR8209': usr8209: sds.pgmname);
+    p_sndPgmMg('USR8209': usr8209: sds.pgmName);
   else;
-    exsr postofield;
-    if (isnewpos = bTrue);
-      sfsanr = wrk_sfsanr;
+    exsr PosToField;
+    if (IsNewPos = bTrue);
+      sfsanr = Wrk_SFSANR;
     endif;
   endif;
 
@@ -369,30 +369,30 @@ endsr;
 //    PosToField    Subfile neu positionieren                 *
 //============================================================*
 
-begsr postofield;
+begsr PosToField;
 
-  if (lstfile <> r_file);
-    lstnbrrcd = 0;
+  if (LstFile <> R_File);
+    LstNbrRcd = 0;
   endif;
 
-  if (lstfile = *blanks);
-    isnewpos = bFalse;
-    lstnbrrcd = 0;
+  if (LstFile = *blanks);
+    IsNewPos = bFalse;
+    LstNbrRcd = 0;
   else;
 
-    exsr srchfield;
-    if (isfound = bFalse);
-      isnewpos = bFalse;
+    exsr SrchField;
+    if (IsFound = bFalse);
+      IsNewPos = bFalse;
       //  USR8194: Datei '&1' nicht gefunden. (##file ist schon gelöscht)
       clear usr8194;
-      usr8194.var1 = lstfile;
-      p_sndpgmmg('USR8194': usr8194: sds.pgmname);
+      usr8194.var1 = LstFile;
+      p_sndPgmMg('USR8194': usr8194: sds.pgmName);
     else;
-      isnewpos = bTrue;
+      IsNewPos = bTrue;
     endif;
   endif;
 
-  r_file = lstfile;
+  R_File = LstFile;
 
 endsr;
 
@@ -400,39 +400,39 @@ endsr;
 //    SrchField     Suchen Feld in Subfile                    *
 //============================================================*
 
-begsr srchfield;
+begsr SrchField;
 
   if (*in80 = *off);
-    isfound = bFalse;
+    IsFound = bFalse;
   else;
 
-    isfound = bFalse;
-    lstnbrrcd = lstnbrrcd + 1;
+    IsFound = bFalse;
+    LstNbrRcd = LstNbrRcd + 1;
 
     //  Die Suche liest die Subfile nicht, sondern die gemerkten
     //  Dateinamen: Nach einem CHAIN auf die Subfile lieferte READC
     //  Zeilen mit Eingabefehlern (SFLNXTCHG) nicht mehr.
-    for srchrec = lstnbrrcd to sflnbrrcd;
-      spos = %check(' ': sfl_files(srchrec));
-      if (spos <= 0);
-        spos = 1;
+    for srchrec = LstNbrRcd to SflNbrRcd;
+      sPos = %check(' ': sfl_files(srchrec));
+      if (sPos <= 0);
+        sPos = 1;
       endif;
 
-      if (lstfile  =
-          %subst(sfl_files(srchrec): spos:(f_scan(' ':
-                            lstfile) - 1)));
-        isfound = bTrue;
+      if (LstFile  =
+          %subst(sfl_files(srchrec): sPos:(f_scan(' ':
+                            LstFile) - 1)));
+        IsFound = bTrue;
         leave;
       endif;
 
     endfor;
 
-    if (isfound = bTrue);
-      wrk_sfsanr = srchrec;
-      lstnbrrcd = srchrec;
+    if (IsFound = bTrue);
+      Wrk_SFSANR = srchrec;
+      LstNbrRcd = srchrec;
     else;
-      wrk_sfsanr = *zeros;
-      lstnbrrcd = 0;
+      Wrk_SFSANR = *zeros;
+      LstNbrRcd = 0;
     endif;
 
   endif;
@@ -443,11 +443,11 @@ endsr;
 //    SrchInit      Initialisieren Suchfunktion               *
 //============================================================*
 
-begsr srchinit;
+begsr SrchInit;
 
-  lstfile   = ' ';
-  lstnbrrcd = 0;
-  r_file    = lstfile;
+  LstFile   = ' ';
+  LstNbrRcd = 0;
+  R_File    = LstFile;
 
 endsr;
 
@@ -455,30 +455,30 @@ endsr;
 //    VReadC        Verarbeiten der Subfileauswahlen          *
 //============================================================*
 
-begsr vreadc;
+begsr VReadC;
 
-  issflerror = bFalse;
+  IsSflError = bFalse;
   o_file = *blanks;
 
   if (*in80 = *off);
   //   keine Einträge in Subfile vorhanden ...
   else;
 
-    for do_x2 = 1 to sflnbrrcd;
+    for do_x2 = 1 to SflNbrRcd;
       readc pbsfl;
       *in11 = %eof;
       if (*in11 = *on);
         leave;
       endif;
 
-      chain sflrec pbsfl;
+      chain SflRec pbsfl;
       *in11 = not %found;
 
-      exsr bztoscreen;
+      exsr BzToScreen;
 
       //  Cursorpositionierung ...
-      if (issflerror = bFalse);
-        sflcsr = sflrec;
+      if (IsSflError = bFalse);
+        SflCsr = SflRec;
       else;
       //  Subfile nicht neu positionieren
       endif;
@@ -489,64 +489,64 @@ begsr vreadc;
       //  Leere Auswahl wird nicht geprüft. Nur eine alte
       //  Fehlermarkierung (RI, SFLNXTCHG) wird entfernt.
       if (sfpau = *blanks);
-        exsr vsfpauclr;
-        exsr bztosubf;
+        exsr VSfpauClr;
+        exsr BzToSubf;
         update pbsfl;
         iter;
       endif;
 
       //  Zuordnung AUSWAHL => Befehl ...
-      peek21('#' + sfpau: sds.pgmname
-            : ypgmcmd: ycmddta: ymsgid: ymsgdta);
-      if (ymsgid <> *blanks);
+      peek21('#' + sfpau: sds.pgmName
+            : YPgmCmd: YCmdDta: YMsgID: YMsgDta);
+      if (YMsgID <> *blanks);
         //  Fehlermeldung ...
-        p_sndpgmmg('USR8110': sfpau: sds.pgmname);
-        exsr vsfpauerr;
+        p_sndPgmMg('USR8110': sfpau: sds.pgmName);
+        exsr VSfpauErr;
 
-        exsr bztosubf;
+        exsr BzToSubf;
         update pbsfl;
-        issflerror = bTrue;
+        IsSflError = bTrue;
         iter;
       endif;
 
       //----------------------------*
       //  Ausführen SFL-Befehl ...  *
       //----------------------------*
-      sfl_cmd = ypgmcmd;
+      Sfl_Cmd = YPgmCmd;
 
       select;
-      when (sfl_cmd = '*NONE');
-      when (sfl_cmd = '*SELECT');
+      when (Sfl_Cmd = '*NONE');
+      when (Sfl_Cmd = '*SELECT');
         //  Die erste Auswahl merken. Ausgeführt wird sie nur, wenn keine
         //  Zeile eine ungültige Auswahl enthält.
         if (o_file = *blanks);
-          exsr vpos;
+          exsr VPos;
         endif;
         *in85 = '0'; // DSPATR(RI)
-        exsr vsfpauchg;
+        exsr VSfpauChg;
       other;
         //  Unbekannter Programmbefehl
         clear usr8110;
-        usr8110.var1 = ypgmcmd;
-        p_sndpgmmg('USR8110': usr8110: sds.pgmname);
-        exsr vsfpauerr;
+        usr8110.var1 = YPgmCmd;
+        p_sndPgmMg('USR8110': usr8110: sds.pgmName);
+        exsr VSfpauErr;
 
-        exsr bztosubf;
+        exsr BzToSubf;
         update pbsfl;
-        issflerror = bTrue;
+        IsSflError = bTrue;
         iter;
       endsl;
 
-      exsr bztosubf;
+      exsr BzToSubf;
       update pbsfl;
     endfor;
 
     //  Ungültige Auswahl: keine Auswahl übernehmen und den Cursor auf
     //  die erste fehlerhafte Zeile setzen (sfsanr wird sonst nur nach
     //  der Anzeige aus SFLCSRRRN gesetzt)
-    if (issflerror = bTrue);
+    if (IsSflError = bTrue);
       o_file = *blanks;
-      sfsanr = sflcsr;
+      sfsanr = SflCsr;
     endif;
 
   endif;
@@ -557,13 +557,13 @@ endsr;
 //    C_EndPgm      F3/F12 - Programm beenden                 *
 //============================================================*
 
-begsr c_endpgm;
+begsr C_EndPgm;
 
-  p_rmvpgmmg(sds.pgmname);
+  p_rmvPgmMg(sds.pgmName);
 
-  o_msgid = 'USR8100';
-  usr8100.var1 = ypgmcmd;
-  o_msgdta = usr8100;
+  o_msgID = 'USR8100';
+  usr8100.var1 = YPgmCmd;
+  o_msgDta = usr8100;
 
 endsr;
 
@@ -571,14 +571,14 @@ endsr;
 //    C_Refresh     F5  - Aktualisieren der Subfile           *
 //============================================================*
 
-begsr c_refresh;
+begsr C_Refresh;
 
   // - Subfile neu aufbauen
-  exsr pbinit;
-  exsr pbsetll;
-  exsr pbreadup;
+  exsr PBInit;
+  exsr PBSetLL;
+  exsr PBReadUp;
 
-  exsr srchinit;
+  exsr SrchInit;
 
 endsr;
 
@@ -586,7 +586,7 @@ endsr;
 //    C_Top         F17 - Anfang der Subfile                  *
 //============================================================*
 
-begsr c_top;
+begsr C_Top;
 
   sfsanr = 1;
 
@@ -596,9 +596,9 @@ endsr;
 //    C_Bot         F18 - Ende der Subfile                    *
 //============================================================*
 
-begsr c_bot;
+begsr C_Bot;
 
-  sfsanr = sflnbrrcd;
+  sfsanr = SflNbrRcd;
 
 endsr;
 
@@ -606,9 +606,9 @@ endsr;
 //    C_MoreOpt     F23 - Weitere Auswahlen                   *
 //============================================================*
 
-begsr c_moreopt;
+begsr C_MoreOpt;
 
-  sftop = sftop + 1;
+  SFTop = SFTop + 1;
 
 endsr;
 
@@ -616,7 +616,7 @@ endsr;
 //    C_MoreKeys    F24 - Weitere Tasten                      *
 //============================================================*
 
-begsr c_morekeys;
+begsr C_MoreKeys;
 
   sfbot = sfbot + 1;
 
@@ -626,7 +626,7 @@ endsr;
 //    VPos          Verarbeiten der Eingaben                  *
 //============================================================*
 
-begsr vpos;
+begsr VPos;
 
   o_file = h_file;
   o_lib = h_lib;
@@ -637,7 +637,7 @@ endsr;
 //    VSfpauClr     Löschen Subfileauswahl                    *
 //============================================================*
 
-begsr vsfpauclr;
+begsr VSfpauClr;
 
   sfpau = *blanks;
   *in85 = '0'; // DSPATR(RI)
@@ -649,10 +649,10 @@ endsr;
 //    VSfpauErr     Anzeigen fehlerhafter Subfileauswahl      *
 //============================================================*
 
-begsr vsfpauerr;
+begsr VSfpauErr;
 
   *in85 = '1'; // DSPATR(RI)
-  exsr vsfpauchg;
+  exsr VSfpauChg;
 
 endsr;
 
@@ -661,7 +661,7 @@ endsr;
 //                  markieren                                 *
 //============================================================*
 
-begsr vsfpauchg;
+begsr VSfpauChg;
 
   *in84 = '1'; // SFLNXTCHG
 
@@ -672,7 +672,7 @@ endsr;
 //                  der nächsten Seite                        *
 //============================================================*
 
-begsr pbinit;
+begsr PBInit;
 
   *in89 = '0';
   write msgctl;
@@ -685,9 +685,9 @@ begsr pbinit;
 
   *in82 = '0'; // SFLCLR
 
-  sflrec = 0;
-  sflnbrrcd = 0;
-  $$depfile = 0;
+  SflRec = 0;
+  SflNbrRcd = 0;
+  $$DepFile = 0;
 
 endsr;
 
@@ -695,41 +695,41 @@ endsr;
 //    PBReadUP      Vorwärts füllen der Subfile               *
 //============================================================*
 
-begsr pbreadup;
+begsr PBReadUp;
 
-  for do_x3 = 1 to numrel;
+  for do_x3 = 1 to numRel;
 
-    peek39(yqfile: ymbr
+    peek39(YQFile: YMbr
           : '*READ': rc: dbrl0200);
 
-    if (dbrl0200.b2depfile = '*NONE');
+    if (dbrl0200.B2DepFile = '*NONE');
       iter;
     endif;
 
-    if (dbrl0200.b2deptype <> 'D');
+    if (dbrl0200.B2DepType <> 'D');
       iter;
     endif;
 
-    $$depfile = $$depfile + 1;
+    $$DepFile = $$DepFile + 1;
 
     //  Bei erstem Datensatz, ...
     if (*in80 = *off);
       //  ... die physische Datei anzeigen
-      h_file = dbrl0200.b2fnmeused;
-      h_lib = dbrl0200.b2lnmeused;
+      h_file = dbrl0200.B2FNmeUsed;
+      h_lib = dbrl0200.B2LNmeUsed;
       //**                EXSR      StatMsg
-      exsr pbfill;
-      exsr pbfillkey;
-      exsr pbfillsel;
+      exsr PBFill;
+      exsr PBFillKey;
+      exsr PBFillSel;
     endif;
 
     //  Anzeigen der logischen Sichten
-    h_file = dbrl0200.b2depfile;
-    h_lib = dbrl0200.b2deplib;
+    h_file = dbrl0200.B2DepFile;
+    h_lib = dbrl0200.B2DepLib;
     //**                EXSR      StatMsg
-    exsr pbfill;
-    exsr pbfillkey;
-    exsr pbfillsel;
+    exsr PBFill;
+    exsr PBFillKey;
+    exsr PBFillSel;
   endfor;
 
   //  Bei erstem Datensatz, ...
@@ -738,11 +738,11 @@ begsr pbreadup;
     clear dbrl0200;
     h_file = i_file;
     h_lib = i_lib;
-    dbrl0200.b2lnmeused = i_lib;
+    dbrl0200.B2LNmeUsed = i_lib;
     //**                EXSR      StatMsg
-    exsr pbfill;
-    exsr pbfillkey;
-    exsr pbfillsel;
+    exsr PBFill;
+    exsr PBFillKey;
+    exsr PBFillSel;
   endif;
 
 endsr;
@@ -751,12 +751,12 @@ endsr;
 //    StatMsg       Statusnachricht ausgeben                  *
 //============================================================*
 
-begsr statmsg;
+begsr StatMsg;
 
   //  Nachricht ausgeben ...
   clear usr8172;
   usr8172.var1 = %trimr(h_lib) + '/' + h_file;
-  p_sndstsmg('USR8172': usr8172);
+  p_sndStsMg('USR8172': usr8172);
 
 endsr;
 
@@ -764,7 +764,7 @@ endsr;
 //    BzToScreen    Übertragen Bezugszahlen in Bildschirm     *
 //============================================================*
 
-begsr bztoscreen;
+begsr BzToScreen;
 
   *in20 = h_in20;
   *in71 = h_in71;
@@ -775,7 +775,7 @@ endsr;
 //    BzToSubf      Übertragen Bezugszahlen in Subfile        *
 //============================================================*
 
-begsr bztosubf;
+begsr BzToSubf;
 
   h_in20 = *in20;
   h_in71 = *in71;
@@ -786,13 +786,13 @@ endsr;
 //    PBFill        Füllen Subfilesatz                        *
 //============================================================*
 
-begsr pbfill;
+begsr PBFill;
 
   //  Datensatz komplett anzeigen ...
   *in71 = '0';
 
   //  Abhängigkeit prüfen ...
-  if (dbrl0200.b2lnmeused = h_lib or
+  if (dbrl0200.B2LNmeUsed = h_lib or
      *in80 = '0');
     *in20 = '0';
   else;
@@ -800,17 +800,17 @@ begsr pbfill;
   endif;
 
   //  Einlesen der Dateiinformationen ...
-  yqfile.name = h_file;
-  yqfile.lib = h_lib;
-  peek41(yqfile
-        : '*FIRST': '*CREATE': rc: ydata);
+  YQFile.name = h_file;
+  YQFile.lib = h_lib;
+  peek41(YQFile
+        : '*FIRST': '*CREATE': rc: YData);
   //  ... Bezeichnung
-  peek41(yqfile
-        : '*FIRST': '*READTEXT': rc: ydata);
-  $$ftxt = ydata;
+  peek41(YQFile
+        : '*FIRST': '*READTEXT': rc: YData);
+  $$ftxt = YData;
 
   //  Schreiben der Subfile ...
-  exsr pbwrite;
+  exsr PbWrite;
 
 endsr;
 
@@ -818,48 +818,48 @@ endsr;
 //    PBFillKey     Füllen Subfilesatz, Schlüsselfelder       *
 //============================================================*
 
-begsr pbfillkey;
+begsr PBFillKey;
 
   //  Datensatz nicht komplett anzeigen ...
   *in71 = '1';
 
   //  Einlesen der Schlüsselinformationen ...
-  peek41(yqfile
-        : '*FIRST': '*KEY': numkey: ydata);
+  peek41(YQFile
+        : '*FIRST': '*KEY': numKey: YData);
 
-  buffer = *blanks;
+  Buffer = *blanks;
 
-  for do_x4 = 1 to numkey;
-    peek41(yqfile
-          : '*FIRST': '*READKEY': rc: ydata);
-    keyl0100 = ydata;
+  for do_x4 = 1 to numKey;
+    peek41(YQFile
+          : '*FIRST': '*READKEY': rc: YData);
+    keyl0100 = YData;
 
     if (keyl0100.apkseq = 'D');
-      buffer = %trimr(buffer) + COLOR_white;
+      Buffer = %trimr(Buffer) + COLOR_white;
     else;
-      buffer = %trimr(buffer) + COLOR_green;
+      Buffer = %trimr(Buffer) + COLOR_green;
     endif;
 
-    buffer = %trimr(buffer) + keyl0100.apkeyf;
+    Buffer = %trimr(Buffer) + keyl0100.apkeyf;
   endfor;
 
-  if (numkey >= 1 and
+  if (numKey >= 1 and
      keyl0100.apuniq = 'Y');
-    buffer = %trimr(buffer) + COLOR_white + UNIQUE;
+    Buffer = %trimr(Buffer) + COLOR_white + UNIQUE;
   endif;
 
-  buffer = %trimr(buffer) + COLOR_green;
+  Buffer = %trimr(Buffer) + COLOR_green;
 
-  strpos = 1;
-  dou (strpos = 0);
-    $$ftxt = f_wordwrap(
-                  buffer: %len($$ftxt): strpos);
+  strPos = 1;
+  dou (strPos = 0);
+    $$ftxt = f_wordWrap(
+                  Buffer: %len($$ftxt): strPos);
     //  Schreiben der Subfile ...
-    exsr pbwrite;
-    if (strpos > 0 and
-       %subst(buffer: 1: strpos-1) < x'40');
+    exsr PbWrite;
+    if (strPos > 0 and
+       %subst(Buffer: 1: strPos-1) < x'40');
       //     Positionieren auf Farb-Attribut
-      strpos = strpos - 1;
+      strPos = strPos - 1;
     endif;
   enddo;
 
@@ -869,19 +869,19 @@ endsr;
 //    PBFillSel     Füllen Subfilesatz, SELECT/OMIT           *
 //============================================================*
 
-begsr pbfillsel;
+begsr PBFillSel;
 
   //  Datensatz nicht komplett anzeigen ...
   *in71 = '1';
 
   //  Einlesen der Select/Omit Informationen ...
-  peek41(yqfile
-        : '*FIRST': '*SELECT': numsel: ydata);
+  peek41(YQFile
+        : '*FIRST': '*SELECT': numSel: YData);
 
-  for do_x5 = 1 to numsel;
-    peek41(yqfile
-          : '*FIRST': '*READSEL': rc: ydata);
-    sell0100 = ydata;
+  for do_x5 = 1 to numSel;
+    peek41(YQFile
+          : '*FIRST': '*READSEL': rc: YData);
+    sell0100 = YData;
 
     //  Wenn das Ende der Liste rreicht ist, ...
     if (sell0100.socomp = 'AL');
@@ -890,22 +890,22 @@ begsr pbfillsel;
       //  ... ansonsten den Eintrag aufbereiten und anzeigen
       select;
       when (sell0100.sorule = 'S');
-        buffer = COLOR_white + '*SELECT';
+        Buffer = COLOR_white + '*SELECT';
       when (sell0100.sorule = 'O');
-        buffer = COLOR_white + '*OMIT';
+        Buffer = COLOR_white + '*OMIT';
       other;
-        buffer = COLOR_white;
+        Buffer = COLOR_white;
       endsl;
 
-      %subst(buffer: 10: %len(sell0100.sofld)) =
+      %subst(Buffer: 10: %len(sell0100.sofld)) =
        sell0100.sofld;
-      %subst(buffer: 21: %len(sell0100.socomp)) =
+      %subst(Buffer: 21: %len(sell0100.socomp)) =
        sell0100.socomp;
-      buffer = %trimr(buffer) + ' ' +
+      Buffer = %trimr(Buffer) + ' ' +
               sell0100.sovalu + COLOR_green;
-      $$ftxt = buffer;
+      $$ftxt = Buffer;
       //  Schreiben der Subfile ...
-      exsr pbwrite;
+      exsr PbWrite;
     endif;
 
   endfor;
@@ -916,20 +916,20 @@ endsr;
 //    PBWrite       Schreiben der Subfile                     *
 //============================================================*
 
-begsr pbwrite;
+begsr PbWrite;
 
   //  Datensatz nicht komplett anzeigen ...
   if (*in71 = *on);
-    $$file = *blanks;
-    $$lib = *blanks;
+    $$File = *blanks;
+    $$Lib = *blanks;
   else;
     //  Bei erstem Datensatz, ...
     if (*in80 = *off);
-      $$file = h_file;
-      $$lib = h_lib;
+      $$File = h_file;
+      $$Lib = h_lib;
     else;
-      $$file = ' ' + h_file;
-      $$lib = h_lib;
+      $$File = ' ' + h_file;
+      $$Lib = h_lib;
     endif;
   endif;
 
@@ -937,17 +937,17 @@ begsr pbwrite;
   *in80 = '1';
 
   //  Löschen Subfileauswahl ...
-  exsr vsfpauclr;
+  exsr VSfpauClr;
 
   //  Schreiben des Subfilesatzes ...
-  sflrec = sflrec + 1;
-  exsr bztosubf;
+  SflRec = SflRec + 1;
+  exsr BzToSubf;
   write pbsfl;
-  sflnbrrcd = sflrec;
-  sfl_files(sflrec) = $$file;
+  SflNbrRcd = SflRec;
+  sfl_files(SflRec) = $$File;
 
   if (h_file = i_file and h_lib = i_lib and *in71 = *off);
-    sfsanr = sflrec;
+    sfsanr = SflRec;
   endif;
 
 endsr;
@@ -956,14 +956,14 @@ endsr;
 //    PBSetLL       Setzen Dateizeiger                        *
 //============================================================*
 
-begsr pbsetll;
+begsr PBSetLL;
 
-  yqfile.name = pfile;
-  yqfile.lib = plib;
-  ymbr = pmbr;
+  YQFile.name = pFile;
+  YQFile.lib = plib;
+  YMbr = pMbr;
 
-  peek39(yqfile: ymbr
-        : '*CREATE': numrel: dbrl0200);
+  peek39(YQFile: YMbr
+        : '*CREATE': numRel: dbrl0200);
 
 endsr;
 
@@ -971,7 +971,7 @@ endsr;
 //    SetScreen     Einstellen 132/80-Zeichen Auflösung       *
 //============================================================*
 
-begsr setscreen;
+begsr SetScreen;
 
   if (i_dsp80 = '0');
     //   132-Zeichen Anzeige
@@ -985,8 +985,8 @@ begsr setscreen;
     pos = 2;
   endif;
 
-  sflpage = *hival;
-  sflpagedds = 6;
+  SflPage = *hival;
+  SflPageDDS = 6;
 
 endsr;
 
@@ -994,62 +994,62 @@ endsr;
 //    First         Initialisierung                           *
 //============================================================*
 
-begsr first;
+begsr First;
 
   // - Öffnen der Dateien
   open peek40fm;
 
   // - Programm initialisieren
-  p_rmvpgmmg(sds.pgmname);
+  p_rmvPgmMg(sds.pgmName);
 
-  ##file = *blanks;
-  r_file = ##file;
+  ##File = *blanks;
+  R_File = ##File;
 
   // - Rückkehrcode
   o_file = *blanks;
   o_lib = *blanks;
-  o_msgid = *blanks;
-  o_msgdta = *blanks;
+  o_msgID = *blanks;
+  o_msgDta = *blanks;
 
   // - Dateityp feststellen
-  pfile = i_file;
+  pFile = i_file;
   plib = i_lib;
-  pmbr = i_mbr;
-  pfmtname = i_rcdfmt;
+  pMbr = i_mbr;
+  PFmtName = i_rcdFmt;
 
   //   ... Einlesen der Dateiinformationen
-  yqfile.name = pfile;
-  yqfile.lib = plib;
-  peek41(yqfile
-        : pfmtname: '*CREATE': rc: ydata);
+  YQFile.name = pFile;
+  YQFile.lib = plib;
+  peek41(YQFile
+        : PFmtName: '*CREATE': rc: YData);
 
   if (rc = *zeros);
     //       ... Fehler
-    o_msgid = 'USR0008';
+    o_msgID = 'USR0008';
     clear usr0008;
-    usr0008.var1 = yqfile.name;
-    usr0008.var2 = yqfile.lib;
-    o_msgdta = usr0008;
+    usr0008.var1 = YQFile.name;
+    usr0008.var2 = YQFile.lib;
+    o_msgDta = usr0008;
   else;
     //       ... kein Fehler
-    fild0100 = ydata;
+    fild0100 = YData;
     if (fild0100.atfila = '*LGL');
       //           ... logical file
-      peek41(yqfile
-            : pfmtname: '*BASED-ON': rc: ydata);
+      peek41(YQFile
+            : PFmtName: '*BASED-ON': rc: YData);
       if (rc = *zeros);
         //               ... Fehler
-        o_msgid = 'USR0008';
+        o_msgID = 'USR0008';
         clear usr0008;
-        usr0008.var1 = yqfile.name;
-        usr0008.var2 = yqfile.lib;
-        o_msgdta = usr0008;
+        usr0008.var1 = YQFile.name;
+        usr0008.var2 = YQFile.lib;
+        o_msgDta = usr0008;
       else;
-        if (i_basephyf = bTrue);
+        if (i_basePhyF = bTrue);
           //                   ... based-on
-          pfile = %subst(ydata: 1: 10);
-          plib  = %subst(ydata: 11: 10);
-          pmbr = '*FIRST';
+          pFile = %subst(YData: 1: 10);
+          plib  = %subst(YData: 11: 10);
+          pMbr = '*FIRST';
         else;
         //               ... no based-on
         endif;
@@ -1059,7 +1059,7 @@ begsr first;
     endif;
   endif;
 
-  if (o_msgid <> *blanks);
+  if (o_msgID <> *blanks);
   //   ... Fehler
   else;
 
@@ -1067,20 +1067,20 @@ begsr first;
     sflmde = '1';
 
     // -  Darstellung der Auswahlen/Funktionstasten
-    sftop = 1;
+    SFTop = 1;
     sfbot = 1;
 
     // - Einstellen der Bildschirmauflösung 80/132-Zeichen
-    exsr setscreen;
+    exsr SetScreen;
 
     // - Anzuzeigender Subfilesatz
     sfsanr = 1;
 
     // - Subfile füllen
-    exsr c_refresh;
+    exsr C_Refresh;
 
     // - Copyright
-    p_sndpgmmg('USR9999': i_copyright: sds.pgmname);
+    p_sndPgmMg('USR9999': i_copyright: sds.pgmName);
   endif;
 
 endsr;
@@ -1099,17 +1099,17 @@ begsr inzsr;
 
   PGMQ = '*';
 
-  peek21_name = f_pgmcalln('PEEK21');
-  peek23_name = f_pgmcalln('PEEK23');
-  peek27_name = f_pgmcalln('PEEK27');
-  peek39_name = f_pgmcalln('PEEK39');
-  peek41_name = f_pgmcalln('PEEK41');
+  peek21_name = f_pgmCallN('PEEK21');
+  peek23_name = f_pgmCallN('PEEK23');
+  peek27_name = f_pgmCallN('PEEK27');
+  peek39_name = f_pgmCallN('PEEK39');
+  peek41_name = f_pgmCallN('PEEK41');
 
-  peek23(sds.pgmname: '*ALL': 0
-        : yfkeys: ynbrofkeys);
-  scrnfkeys = %subarr(yfkeys: 1);
+  peek23(sds.pgmName: '*ALL': 0
+        : yFKeys: yNbrOfKeys);
+  ScrnFKeys = %subarr(yFKeys: 1);
 
-  peek27(sds.pgmname: ychoice: ynbrofch);
+  peek27(sds.pgmName: YChoice: YNbrOfCh);
 
 endsr;
 
@@ -1117,12 +1117,12 @@ endsr;
 //  Program error handler                                     *
 //============================================================*
 
-dcl-proc errorhandler;
+dcl-proc errorHandler;
   dcl-pi *n;
-    i_condtoken    likeds(cee_fc_t) value;
-    i_pcommarea    int(10) value;
+    i_condToken    likeds(cee_fc_t) value;
+    i_pCommArea    int(10) value;
     o_action       int(10);
-    o_newcondtoken likeds(cee_fc_t);
+    o_newCondToken likeds(cee_fc_t);
   end-pi;
 
   dump;
