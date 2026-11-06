@@ -954,29 +954,127 @@
        - Korrigiert, so dass ein gespeichertes Layout beim Laden einer
          Arbeitsumgebungkorrekt wiederhergestellt wird.
 
-  Version 4.0.8
+  Version 4.1.0
   =============
-  *  PEEK01
+  Die Version 4.0.8 wurde nicht veröffentlicht. Ihre Änderungen sind in
+  der Version 4.1.0 enthalten.
+
+  *  Spaltenüberschriften und Feldtexte
+       - Neue Spaltenüberschrift *COLHDG: Mit F7 können die Spalten-
+         überschriften (COLHDG) einzeilig angezeigt werden.
+       - Leere Feldtexte werden durch die Spaltenüberschriften ersetzt,
+         z.B. bei SQL Tabellen ohne LABEL ON ... TEXT IS.
+
+  *  Exit-Programme
        - Neues Exit-Programm EXIT06 zum Überschreiben der Spalten-
          überschriften und des Feldtexts. Peek/400 ruft EXIT06 für jedes
          Feld auf, wenn es in der Produktbibliothek vorhanden ist.
-       - Leere Feldtexte werden durch die Spaltenüberschriften ersetzt,
-         z.B. bei SQL Tabellen ohne LABEL ON ... TEXT IS.
-     PEEK58
-       - Neue Spaltenüberschrift: *COLHDG. Mit F7 können die Spalten-
-         überschriften (COLHDG) einzeilig angezeigt werden.
-     Allgemein
-       - Kaputte Sonderzeichen und Umlaute, sowie Akzentzeichen korrigiert.
-       - Bestehende Update-Programme werden beim Update übernommen und
-         zeigen die neue Spaltenüberschrift *COLHDG und die ersetzten
-         leeren Feldtexte erst, nachdem sie mit dem Kurzbefehl RB neu
-         erstellt wurden.
+       - EXIT03: Der zurückgegebene Edit Code wird jetzt in die Bildschirm-
+         datei der Update-Programme übernommen. Bisher schrieb PEEK15 keinen
+         Edit Code, sobald EXIT03 vorhanden war. EXIT03 erhält den Edit Code
+         aus PEEKFLD und wird nur noch für numerische Felder aufgerufen.
+       - Die Exit-Programme EXIT02 bis EXIT05 sind im Handbuch beschrieben.
 
-  Version 4.1.0
-  =============
-  *  PEEK15
-       - EXIT03: Der von EXIT03 zurückgegebene Edit Code wird jetzt in die
-         Bildschirmdatei der Update-Programme übernommen. Bisher schrieb
-         PEEK15 keinen Edit Code, sobald EXIT03 vorhanden war.
-       - EXIT03 erhält den Edit Code aus PEEKFLD und wird nur noch für
-         numerische Felder aufgerufen.
+  *  Update-Programme (Ändern, Kopieren, Einfügen)
+       - Die Vorlage PEEKSRC/PGM und der Generator (PEEK08, PEEK15, PEEK16)
+         sind auf **FREE umgestellt. Die Stellen, an denen der Generator
+         Code einfügt, sind Kommentarzeilen "//@TAG", einzelne Werte sind
+         Platzhalter "X_TAG_X". Die Umbenennung der Datenbankfelder steht
+         in einer generierten Teildatei "I<Formatkennung>", die das
+         Programm mit /include einbindet. Eigene Änderungen an der Vorlage
+         müssen in die neue Vorlage übernommen werden.
+       - Alle Datums- und Zeitformate werden unterstützt. Leere Datums- und
+         Zeitfelder werden im Format des Feldes vorbelegt.
+       - Mit F8 gesetzte NULL-Werte gehen beim Sperren vor dem Speichern
+         nicht mehr verloren. Unveränderte VARCHAR-Werte behalten ihre
+         nachgestellten Leerzeichen.
+       - Hex-Editor (F9) und Text-Editor (F10): Änderungen an NULL-Feldern
+         gehen nicht mehr verloren. Felder variabler Länge zeigen hinter
+         der aktuellen Länge keine alten Daten mehr an. Der Hex-Editor
+         setzt CHAR-Felder mit CCSID nicht mehr doppelt um.
+       - CHAR-Felder mit CCSID 1208 oder 1200 verhindern nicht mehr das
+         Erstellen der Bildschirmdatei, Editierwörter mit mehr als 26
+         Zeichen brechen die Generierung nicht mehr ab.
+       - Die Nachricht USR8215 "Eingabe in Kleinbuchstaben nicht erlaubt."
+         erscheint jetzt im Update-Programm.
+       - Bestehende Update-Programme erhalten die Änderungen erst, nachdem
+         sie mit der Subfileauswahl "RB" neu erstellt wurden.
+
+  *  Anzeige der Datensätze
+       - Felder, deren CCSID nicht in die Job-CCSID umgesetzt werden kann
+         (z.B. GRAPHIC mit CCSID 835), verhindern nicht mehr das Öffnen der
+         Datei und werden leer angezeigt.
+       - Datum, Zeit und Zeitstempel werden in allen Formaten angezeigt,
+         Zeitstempel mit bis zu 12 Nachkommastellen. Ungültige Werte melden
+         die neue Nachricht USR8242 statt eines Abbruchs.
+       - Gleitkommawerte mit mehr als 4 Nachkommastellen werden mit
+         Exponent angezeigt. Passt der Edit Code nicht zum Feld, wird der
+         Wert mit dem Edit Code L angezeigt.
+       - Satzanzeige (PEEK14): Die Cursorposition bleibt erhalten. Ein
+         inzwischen gelöschter Satz wird leer angezeigt (USR8120). Der
+         Text-Editor setzt Felder mit eigener CCSID in die Job-CCSID um.
+       - Lassen sich die Satzformate einer Datei nicht abrufen, wird die
+         Datei nicht geöffnet (USR0002). Sind mehrere Satzformate markiert,
+         gilt das erste.
+       - Nach CHGJOB CCSID setzt Peek/400 beim nächsten Start in die neue
+         Job-CCSID um. Leere Felder variabler Länge brechen die Umsetzung
+         nicht mehr ab.
+
+  *  Suchen, Positionieren und SQL-Auswahl
+       - Aufsetzschlüssel: Schlüsselfelder vom Typ REAL oder DOUBLE, mit
+         CCSID 1208 oder mit nicht umsetzbarer CCSID werden richtig
+         verarbeitet. Änderungen der Einstellung *ACCESSKEY wirken sofort.
+         Ein Schlüssel hinter dem letzten Satz positioniert an das Ende.
+       - Suchkriterien: Numerische Suchwerte mit weniger Nachkommastellen
+         als das Feld werden richtig aufgefüllt (1,5 wird zu 1,50).
+       - SQL-Auswahl: Ein Fehler beim Prüfen oder Öffnen verändert die
+         geöffnete Datei nicht mehr und lässt keinen Cursor offen.
+         Gelöschte Sätze beenden das Blättern nicht mehr.
+       - SQL-Select/Order by (PEEK38/PEEK48): F4 gilt dem Feld unter dem
+         Cursor. F11 fügt die Schlüsselfelder ein, statt den Text an der
+         Cursorposition zu überschreiben. Ein langes ORDER BY wird nicht
+         mehr mitten in einem Spaltennamen abgeschnitten.
+
+  *  Dialoge
+       - Auswahllisten (PEEK27, PEEK37, PEEK40, PEEK47, PEEK50, PEEK56,
+         PEEK68, PEEK69): Enthält eine Zeile eine ungültige Auswahl, wird
+         nichts ausgeführt, und der Cursor steht auf der ersten fehlerhaften
+         Zeile. Die Suche verändert die Zeilen nicht mehr. Auswahlzeilen
+         werden nicht mehr abgeschnitten.
+       - Tastenbelegung und Farben (PEEK22 bis PEEK25): Beschriftung der
+         Funktionstasten, *REPLACE und *ALL der Standardbelegung, F5 in
+         den Farbeinstellungen und unbekannte Farbattribute korrigiert.
+       - Kopieren in externe Datei (PEEK26): F3 und F12 brechen ab. Datei-,
+         Bibliotheks- und Teildateinamen werden geprüft, *CURLIB ist
+         zulässig.
+       - Layout (PEEK34/PEEK35): Zwei Felder können ihre Folgenummern
+         tauschen. Der Edit Code wird geprüft (neue Nachricht USR8243).
+       - Spalten pinnen (PEEK05/PEEK50): Die im Dialog gewählten Spalten
+         werden übernommen.
+       - Arbeitsumgebungen (PEEK54 bis PEEK57): WHERE und ORDER BY werden
+         vollständig gesichert und geladen. Hochkommas im Text einer
+         Umgebung sind zulässig. Das Löschen kehrt zur Liste zurück.
+       - Text-Editor (PEEK64): Einfügen und Löschen im markierten Bereich,
+         die Cursorposition und der geschützte Modus sind korrigiert.
+       - Drucken (PEEK65): Für einen nicht vorhandenen Satz kommt USR8120,
+         statt einen leeren Satz zu drucken.
+       - Kurzauswahl (PEEK66): Ein zu großer numerischer Wert meldet
+         USR8227 statt MCH1210.
+       - Auswahl Datei (PEEK69): Eine unbekannte Bibliothek meldet USR0010.
+
+  *  Einstellungen und Installation
+       - Kann Peek/400 eine Datei mit Benutzereinstellungen einer älteren
+         Version nicht anpassen, meldet es die neue Nachricht USR9989 und
+         startet nicht.
+       - Fehlt die Nachrichtendatei der eingestellten Sprache, gilt GER nur
+         für diesen Aufruf und wird nicht gespeichert.
+       - Die Dateien von Peek/400 werden mit REUSEDLT(*YES) erstellt.
+
+  *  Allgemein
+       - Kaputte Sonderzeichen und Umlaute, sowie Akzentzeichen korrigiert.
+       - Quellcode: Alle Quellen sind vollständig auf **FREE umgestellt,
+         einheitlich mit dem iRpgFormatter formatiert und die Namen in
+         camelCase geschrieben.
+       - Das veraltete Beispiel TESTPEEK_P eines generierten Update-
+         Programms und die Testprogramme TEST002, TEST003 und TEST0031 bis
+         TEST0033 wurden entfernt.
