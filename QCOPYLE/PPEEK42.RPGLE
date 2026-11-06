@@ -9,7 +9,7 @@ dcl-pr peek42 extpgm(peek42_name);
   i_library   like(lib_t) const;
   i_member    like(mbr_t) const;
   i_rcdFormat like(fmt_t) const;
-  i_shortCmd  like(ShortCmd_t) const;
+  i_shortCmd  like(shortCmd_t) const;
   i_rcdNbr    like(rcdNbr_t) const;
   o_execCmd   like(cmdBuffer_t);
   o_msgID     like(msgId_t);

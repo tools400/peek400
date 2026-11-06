@@ -44,7 +44,7 @@ dcl-f qcopyle6 extdesc('QPEEKGEN') usage(*output) usropn rename(qpeekgen: fcopy6
 
 dcl-f peeksrc usropn rename(peeksrc: finput);
 
-dcl-f peekfld usropn prefix(f_);
+dcl-f peekFld usropn prefix(f_);
 
 dcl-pr p_wrtDspF extproc(*dclcase);
   i_srcDta like(srcdta) const;
@@ -120,7 +120,7 @@ dcl-ds ds_fldDef len(112);
   $fldD_len   char(5) inz pos(30);
   $fldD_dTyp  char(1) inz pos(35);
   $fldD_decP  char(2) inz pos(36);
-  $fldD_IO    char(1) inz pos(38);
+  $fldD_io    char(1) inz pos(38);
   $fldD_row   zoned(2) pos(40);
   $fldD_row$  char(2) inz overlay($fldD_row: 1);
   $fldD_col   zoned(2) pos(43);
@@ -165,7 +165,7 @@ dcl-ds ds_msgChar len(112);
   $msgC_fldN   char(10) inz pos(19);
   $msgC_len    char(2) inz('30') pos(33);
   $msgC_dTyp   char(1) inz('A') pos(35);
-  $msgC_IO     char(1) inz('O') pos(38);
+  $msgC_io     char(1) inz('O') pos(38);
   $msgC_row    zoned(2) pos(40);
   $msgC_row$   char(2) inz overlay($msgC_row: 1);
   $msgC_col    zoned(2) pos(43);
@@ -180,7 +180,7 @@ dcl-ds ds_msgHidden len(112);
   $msgH_fldN char(10) inz pos(19);
   $msgH_len  char(1) inz('4') pos(34);
   $msgH_dTyp char(1) inz('A');
-  $msgH_IO   char(1) inz('H') pos(38);
+  $msgH_io   char(1) inz('H') pos(38);
 end-ds;
 
 dcl-ds ds_eval len(112);
@@ -250,12 +250,12 @@ dcl-ds ds_selec len(112);
 end-ds;
 
 dcl-ds ds_endsl len(112);
-  $endsl_spc char(1) inz('C') pos(6);
+  $endSl_spc char(1) inz('C') pos(6);
   $endsl_opC char(10) inz('Endsl') pos(26);
 end-ds;
 
 dcl-ds ds_remark len(112);
-  $rem_atrB char(1) inz(COLOR_white);
+  $rem_atrB char(1) inz(color_white);
   $rem_rem  char(1) inz('*') pos(7);
   $rem_txt  char(105) inz;
   $rem_info char(103) inz overlay($rem_txt: 3);
@@ -286,7 +286,7 @@ dcl-ds qPgm qualified;
   lib  char(10);
 end-ds;
 
-dcl-pr CvtEditCode extpgm(exit03);
+dcl-pr cvtEditCode extpgm(exit03);
   gi_file    char(10) const;
   gi_lib     char(10) const;
   gi_user    char(10) const;
@@ -296,10 +296,10 @@ end-pr;
 
 /copy QCOPYLE,SDS
 
-dcl-s DotLine char(40) inz(*all'.');
+dcl-s dotLine char(40) inz(*all'.');
 
 dcl-s #srcseq like(srcseq) inz;
-dcl-c #Increment 0,01;
+dcl-c #increment 0,01;
 
 dcl-c max_rows 18;
 
@@ -314,7 +314,7 @@ dcl-s curField zoned(2) inz;
 
 dcl-ds *n;
   newLen#  zoned(5) inz;
-  newlen#a char(5) overlay(newLen#: 1);
+  newLen#a char(5) overlay(newLen#: 1);
 end-ds;
 
 //  Satzformatzähler
@@ -325,7 +325,7 @@ end-ds;
 //  Feldzähler pro Satzformat
 dcl-ds *n;
   fieldCount zoned(5) inz(*zeros);
-  a#FdCount  char(5) overlay(fieldCount: 1);
+  a#fldCount char(5) overlay(fieldCount: 1);
 end-ds;
 //  Bezugszahlenzähler pro Satzformat für Felder mit unzulässigen Zeichen
 dcl-ds *n;
@@ -359,7 +359,7 @@ dcl-s p like(int4_t) inz;
 dcl-s numQuote like(int4_t) inz;
 dcl-s baseFldName like(fieldNme_t) inz;
 dcl-s fieldName like(fieldNme_t) inz;
-dcl-s r$ftxt like(fldl0100_t.f1ftxt) inz;
+dcl-s r$ftxt like(fldl0100_t.f1FTxt) inz;
 dcl-s r$text like(colHeading_t) inz;
 dcl-s refFile like(file_t) inz;
 dcl-s refLib like(lib_t) inz;
@@ -415,7 +415,7 @@ open qcopyle4;
 open qcopyle5;
 open qcopyle6;
 open qpeekgen;
-open peekfld;
+open peekFld;
 
 p = %scan('/': exit03);
 if (p > 1);
@@ -453,7 +453,7 @@ refLib = %subst(i_qFile: 11: 10);
 fieldCount = 0;
 
 //  Abarbeiten der Feldliste ...
-setll 1 peekfld;
+setll 1 peekFld;
 
 dow (f_readFld() <> bEOF);
 
@@ -471,7 +471,7 @@ dow (f_readFld() <> bEOF);
   endif;
 
   //  ... ausgeben Feld
-  exsr WrtField;
+  exsr wrtField;
 enddo;
 
 io_stage = io_stage + 1;
@@ -562,7 +562,7 @@ p_wrtCopy1(ds_remark);
 fieldCount = 0;
 
 //  Abarbeiten der Feldliste ...
-setll 1 peekfld;
+setll 1 peekFld;
 
 dow (f_readFld <> bEOF);
 
@@ -583,7 +583,7 @@ dow (f_readFld <> bEOF);
 
   //  Eval      EDT0000001 = '1'
   reset ds_eval;
-  $eval_fct2 = 'EDT' + a#FdCount + ' = ''1''';
+  $eval_fct2 = 'EDT' + a#fldCount + ' = ''1''';
   p_wrtCopy1(ds_eval);
 enddo;
 
@@ -607,7 +607,7 @@ close qcopyle4;
 close qcopyle5;
 close qcopyle6;
 close qpeekgen;
-close peekfld;
+close peekFld;
 
 io_scnNbrs = scn#;
 
@@ -773,7 +773,7 @@ endsr;
 
 //============================================================*
 
-begsr WrtField;
+begsr wrtField;
 
   //   Berechnen Anzahl benötigter Zeilen ...
   totLin = f_nbrDspRw(fldl0100);
@@ -795,7 +795,7 @@ begsr WrtField;
   //   Ausgeben Felddefinition
   // ---------------------------*
   if (fieldCount < 99999);
-    baseFldName = 'FLD' + a#FdCount;
+    baseFldName = 'FLD' + a#fldCount;
   else;
     baseFldName = '*CNT_ERROR';
   endif;
@@ -811,7 +811,7 @@ begsr WrtField;
     //  Generieren Felder für mehrzeilige GRAPHIC Felder, weil das
     //  Schlüsselwort 'CNTFLD()' für GRAPHIC Felder nicht zulässig ist.
     if (baseFldName <> '*CNT_ERROR' and
-       fldl0100.F1DTyp = 'G' and totLin > 1);
+       fldl0100.f1DTyp = 'G' and totLin > 1);
       fieldName = %trimr(baseFldName) +
                  %editc(curLin: 'X');
     else;
@@ -860,11 +860,11 @@ begsr WrtField;
     //  ... ausgeben Feld für Schlüsselanzeiger
     if (curLin = 1);
       reset ds_fldDef;
-      $fldD_fldN = 'KEY' + a#FdCount;
+      $fldD_fldN = 'KEY' + a#fldCount;
       $fldD_len  = '    1';
       $fldD_dTyp = 'A';
       $fldD_decP = '  ';
-      $fldD_IO   = 'O';
+      $fldD_io   = 'O';
       $fldD_row  = row#;
       $fldD_col  = 26;
       p_wrtDspF(ds_fldDef);
@@ -873,7 +873,7 @@ begsr WrtField;
     //  ... ausgeben "hidden field" für Nachrichtennummer TXT...
     if (curLin = 1);
       reset ds_msgHidden;
-      $msgH_fldN = 'MSG' + a#FdCount;
+      $msgH_fldN = 'MSG' + a#fldCount;
       p_wrtDspF(ds_msgHidden);
     endif;
 
@@ -883,7 +883,7 @@ begsr WrtField;
       $msgC_ind  = ind40#a;
       $msgC_len  = '';
       $msgC_dTyp = '';
-      $msgC_IO   = '';
+      $msgC_io   = '';
       $msgC_row$ = '';
       $msgC_col$ = '';
       $msgC_kWrd = '';
@@ -892,8 +892,8 @@ begsr WrtField;
       reset ds_msgChar;
       $msgC_op     = 'O';
       $msgC_ind    = ind50#a;
-      $msgC_fldN = 'TXT' + a#FdCount;
-      $msgC_fldNum = a#FdCount;
+      $msgC_fldN = 'TXT' + a#fldCount;
+      $msgC_fldNum = a#fldCount;
       $msgC_row    = row#;
       $msgC_col    = 29;
       p_wrtDspF(ds_msgChar);
@@ -920,7 +920,7 @@ begsr WrtField;
     //  (CPD7554). Das Feld wird als CHAR-Feld in Feldlänge erzeugt;
     //  beim Lesen und Schreiben des Satzes setzt die Datenbank zwischen
     //  UTF-8 und der Job-CCSID um.
-    if (fldl0100.F1DTyp = 'A' and
+    if (fldl0100.f1DTyp = 'A' and
        (fldl0100.f1fdcc = 1200 or
        fldl0100.f1fdcc = 1208));
       isutf8 = bTrue;
@@ -929,11 +929,11 @@ begsr WrtField;
     endif;
 
     //          ... Referenzfeld
-    if (fldl0100.F1DTyp <> 'G' and fldl0100.F1DTyp <> '8' and // = Graphic/Boolean
+    if (fldl0100.f1DTyp <> 'G' and fldl0100.f1DTyp <> '8' and // = Graphic/Boolean
        isutf8 = bFalse);
       $fldD_ref  = 'R';
       $fldD_kWrd = 'REFFLD(' +
-                  %trimr(fldl0100.f1fnme) + ' -';
+                  %trimr(fldl0100.f1FNme) + ' -';
       hasRefFld = bTrue;
     else;
       hasRefFld = bFalse;
@@ -941,12 +941,12 @@ begsr WrtField;
 
     //          ... Datentyp
     select;
-    when ((fldl0100.F1DTyp = 'L') or // = Date
-       (fldl0100.F1DTyp = 'T') or   // = Time
-       (fldl0100.F1DTyp = 'Z') or   // = Boolean
-       (fldl0100.F1DTyp = '8'));     // = Timestamp
+    when ((fldl0100.f1DTyp = 'L') or // = Date
+       (fldl0100.f1DTyp = 'T') or   // = Time
+       (fldl0100.f1DTyp = 'Z') or   // = Boolean
+       (fldl0100.f1DTyp = '8'));     // = Timestamp
       $fldD_dTyp = 'A';
-    when (fldl0100.F1DTyp = 'G');   // = Graphic
+    when (fldl0100.f1DTyp = 'G');   // = Graphic
       $fldD_dTyp = 'G';
     when (isutf8 = bTrue);          // = UTF-8, ohne REFFLD
       $fldD_dTyp = 'A';
@@ -956,8 +956,8 @@ begsr WrtField;
 
     //          ... Feldlänge
     if ((f_isToLong(fldl0100) = bTrue) or
-        (fldl0100.F1DTyp = 'G' and totLin > 1));
-      if (fldl0100.F1DTyp = 'G'); // = Graphic
+        (fldl0100.f1DTyp = 'G' and totLin > 1));
+      if (fldl0100.f1DTyp = 'G'); // = Graphic
         if (curLin < totLin);
           newLen# = f_cntFldLn(fldl0100);
         else;
@@ -975,12 +975,12 @@ begsr WrtField;
     endif;
 
     select;
-    when (fldl0100.F1DTyp = '8');        // = Boolean
-      $fldD_len  = newlen#a;
-    when (fldl0100.F1DTyp = 'G' or       // = Graphic
+    when (fldl0100.f1DTyp = '8');        // = Boolean
+      $fldD_len  = newLen#a;
+    when (fldl0100.f1DTyp = 'G' or       // = Graphic
           f_isToLong(fldl0100) = bTrue or
           isutf8 = bTrue);               // = UTF-8, ohne REFFLD
-      $fldD_len  = newlen#a;
+      $fldD_len  = newLen#a;
     other;
       $fldD_len  = '';
     endsl;
@@ -991,9 +991,9 @@ begsr WrtField;
     $fldD_ind50= ind50#a;
     //          ... Input Feld
     if (fldl0100.f1use = 'I');
-      $fldD_IO   = 'O';
+      $fldD_io   = 'O';
     else;
-      $fldD_IO   = 'B';
+      $fldD_io   = 'B';
     endif;
 
     $fldD_decP = '  ';
@@ -1008,7 +1008,7 @@ begsr WrtField;
     endif;
 
     //  ... Feld über mehrere Zeilen verteilen
-    if (fldl0100.F1DTyp <> 'G'); // = Graphic
+    if (fldl0100.f1DTyp <> 'G'); // = Graphic
       if (totLin > 1);
         reset ds_dspAtr;
         $dspA_atr = 'CNTFLD(35)';
@@ -1019,7 +1019,7 @@ begsr WrtField;
     endif;
 
     //  ... CCSID und Feldlänge für GRAPHIC Felder
-    if (fldl0100.F1DTyp = 'G'); // = Graphic
+    if (fldl0100.f1DTyp = 'G'); // = Graphic
       reset ds_dspAtr;
       $dspA_atr = 'CCSID(13488 ' +
                   %char(%int((newLen# / 2) + .5))
@@ -1037,7 +1037,7 @@ begsr WrtField;
     if (fldl0100.f1afnl > 0 and hasRefFld = bTrue);
       reset ds_alias;
       $alias_kWrd = 'ALIAS(' +
-                   'ALS' + a#FdCount
+                   'ALS' + a#fldCount
                    + ')';
       p_wrtDspF(ds_alias);
     endif;
@@ -1101,9 +1101,9 @@ begsr WrtField;
     if (isExit03 and
         f_isNumFld(fldl0100)   = bTrue and
         f_isFloatFld(fldl0100) = bFalse);
-      callp(e) CvtEditCode(
+      callp(e) cvtEditCode(
         refFile: refLib
-        : sds.user: fldl0100.f1fnme: F_EdtCde);
+        : sds.user: fldl0100.f1FNme: f_edtCde);
       if (%error());
         isExit03 = bFalse;
       endif;
@@ -1112,15 +1112,15 @@ begsr WrtField;
     //  EDTWRD/EDTCDE ausgeben ...
     select;
     //  EDTWRD prüfen ...
-    when (fldl0100.f1edwd <> ' '); // Edit word
+    when (fldl0100.f1EdWd <> ' '); // Edit word
       //  Hochkommas verdoppeln und das Schlüsselwort auf Folgezeilen
       //  verteilen ('-' in Stelle 80): Der Schlüsselwortbereich hat 36
       //  Stellen, ein Editierwort bis zu 64 Zeichen.
-      if (fldl0100.f1edwl > 0 and
-          fldl0100.f1edwl <= %len(fldl0100.f1edwd));
-        edtwrd = %subst(fldl0100.f1edwd: 1: fldl0100.f1edwl);
+      if (fldl0100.f1EdWl > 0 and
+          fldl0100.f1EdWl <= %len(fldl0100.f1EdWd));
+        edtwrd = %subst(fldl0100.f1EdWd: 1: fldl0100.f1EdWl);
       else;
-        edtwrd = %trimr(fldl0100.f1edwd);
+        edtwrd = %trimr(fldl0100.f1EdWd);
       endif;
       edtwrd = 'EDTWRD(''' + %scanrpl('''': '''''': edtwrd) + ''')';
       dow (%len(edtwrd) > %len($dspA_atr));
@@ -1134,17 +1134,17 @@ begsr WrtField;
       p_wrtDspF(ds_dspAtr);
 
     //  Abfragen Feld-EDTCDE aus PEEKFLD ...
-    when (F_EdtCde <> ' '           // Edit code
+    when (f_edtCde <> ' '           // Edit code
        and f_isFloatFld(fldl0100) = bFalse);
       reset ds_dspAtr;
-      $dspA_atr = 'EDTCDE(' + F_EdtCde + ')';
+      $dspA_atr = 'EDTCDE(' + f_edtCde + ')';
       p_wrtDspF(ds_dspAtr);
 
     other;
       //  Kein EDTWRD / kein EDTCDE
       if ((f_isNumFld(fldl0100)   = bTrue ) and
           (f_isFloatFld(fldl0100) = bFalse) and
-          (fldl0100.f1decp > 0            ));
+          (fldl0100.f1DecP > 0            ));
         reset ds_dspAtr;
         $dspA_atr = 'EDTCDE(' + 'P' + ')';
         p_wrtDspF(ds_dspAtr);
@@ -1153,8 +1153,8 @@ begsr WrtField;
 
     //  Lower case Attribut
     //  bei Alpha-Feldern ...
-    if ((fldl0100.F1DTyp = 'A' or
-        fldl0100.F1DTyp = 'G') and
+    if ((fldl0100.f1DTyp = 'A' or
+        fldl0100.f1DTyp = 'G') and
         (i_alwLC =  bTrue) and
         (fldl0100.f1use <> 'I'));
       reset ds_dspAtr;
@@ -1162,7 +1162,7 @@ begsr WrtField;
       p_wrtDspF(ds_dspAtr);
     endif;
 
-    if (fldl0100.F1DTyp = 'G');
+    if (fldl0100.f1DTyp = 'G');
       curLin = curLin + 1;
     else;
       curLin = curLin + totLin;
@@ -1281,7 +1281,7 @@ begsr inzScreen;
   $fldD_len  = '    3';
   $fldD_dTyp = 'S';
   $fldD_decP = ' 0';
-  $fldD_IO   = 'H';
+  $fldD_io   = 'H';
   $fldD_row$ = ' ';
   $fldD_col$ = ' ';
   p_wrtDspF(ds_fldDef);
@@ -1291,7 +1291,7 @@ begsr inzScreen;
   $fldD_len  = '    3';
   $fldD_dTyp = 'S';
   $fldD_decP = ' 0';
-  $fldD_IO   = 'H';
+  $fldD_io   = 'H';
   $fldD_row$ = ' ';
   $fldD_col$ = ' ';
   p_wrtDspF(ds_fldDef);
@@ -1312,19 +1312,19 @@ begsr wrtCopy1;
 
   //  Remark
   reset ds_remark;
-  $rem_info = 'Feld: ' + fldl0100.f1fnme;
+  $rem_info = 'Feld: ' + fldl0100.f1FNme;
   p_wrtCopy1(ds_remark);
 
   //  If        EDT0000001 = '1'
   reset ds_if;
-  $if_fct2 = 'EDT' + a#FdCount + ' = ''1''';
+  $if_fct2 = 'EDT' + a#fldCount + ' = ''1''';
   p_wrtCopy1(ds_if);
 
   //  Eval      F_FIELD = 'TEST#'
   reset ds_eval;
   $eval_fct2 =
    'F_FIELD = ' +
-   '''' + %trimr(fldl0100.f1fnme) + '''';
+   '''' + %trimr(fldl0100.f1FNme) + '''';
   p_wrtCopy1(ds_eval);
 
   closeChar1 = '';
@@ -1341,7 +1341,7 @@ begsr wrtCopy1;
 
   p_wrtCopy1(ds_eval);
 
-  if (fldl0100.F1DTyp =  'G');
+  if (fldl0100.f1DTyp =  'G');
     totFields = f_nbrDspRw(fldl0100);
   else;
     totFields = 1;
@@ -1355,15 +1355,15 @@ begsr wrtCopy1;
     clear $eval_opC;
 
     if (f_isNumFld(fldl0100) = bTrue);
-      if (fldl0100.F1DTyp = 'F');
-        $eval_fct2 = '%editflt(FLD' + a#FdCount;
+      if (fldl0100.f1DTyp = 'F');
+        $eval_fct2 = '%editflt(FLD' + a#fldCount;
         closeChar2 = ')';
       else;
-        $eval_fct2 = '%char(FLD' + a#FdCount;
+        $eval_fct2 = '%char(FLD' + a#fldCount;
         closeChar2 = ')';
       endif;
     else;
-      $eval_fct2 = 'FLD' + a#FdCount;
+      $eval_fct2 = 'FLD' + a#fldCount;
     endif;
 
     if (totFields > 1);
@@ -1409,7 +1409,7 @@ begsr wrtCopy1;
       clear $eval_opC;
 
       $eval_fct2 = %trimr($eval_fct2) +
-                  'FLD' + a#FdCount;
+                  'FLD' + a#fldCount;
       if (totFields > 1);
         $eval_fct2 = %trimr($eval_fct2) +
                     %editc(curField: 'X');
@@ -1444,13 +1444,13 @@ begsr wrtCopy1;
 
   //  Eval      EDT0000001 = *IN40
   reset ds_eval;
-  $eval_fct2 =  'EDT' + a#FdCount +
+  $eval_fct2 =  'EDT' + a#fldCount +
                ' = *IN' + ind40#a;
   p_wrtCopy1(ds_eval);
 
   //  Eval      KEY0000001 = keyChar
   reset ds_eval;
-  $eval_fct2 = 'KEY' + a#FdCount + ' = keyChar';
+  $eval_fct2 = 'KEY' + a#fldCount + ' = keyChar';
   p_wrtCopy1(ds_eval);
 
   //  If        (isVisible = bFalse)
@@ -1460,7 +1460,7 @@ begsr wrtCopy1;
 
   //  Eval      MSG00001 = '0076'
   reset ds_eval;
-  $eval_fct2 = 'MSG' + a#FdCount
+  $eval_fct2 = 'MSG' + a#fldCount
                     + ' = ''0076''';
   p_wrtCopy1(ds_eval);
 
@@ -1479,7 +1479,7 @@ begsr wrtCopy1;
   //  Eval      *IN40 = EDT0000001
   reset ds_eval;
   $eval_fct2 = '*IN' + ind40#a +
-              ' = EDT' + a#FdCount;
+              ' = EDT' + a#fldCount;
   p_wrtCopy1(ds_eval);
 
   //  Endif (reset ds_endif);
@@ -1501,7 +1501,7 @@ begsr wrtCopy1;
     p_wrtCopy1(ds_eval);
     //  Eval      &MSG0000001 = 'TXT0127'
     reset ds_eval;
-    $eval_fct2 = 'MSG' + a#FdCount
+    $eval_fct2 = 'MSG' + a#fldCount
                       + ' = ''0127''';
     p_wrtCopy1(ds_eval);
     //  Else
@@ -1538,7 +1538,7 @@ begsr wrtCopy2;
 
   //  Remark
   reset ds_remark;
-  $rem_info = 'Feld: ' + fldl0100.f1fnme;
+  $rem_info = 'Feld: ' + fldl0100.f1FNme;
   p_wrtCopy2(ds_remark);
 
   //  When      (xScnCsrRow >= 04) and
@@ -1570,13 +1570,13 @@ begsr wrtCopy2;
     //  ... NEIN
     //      If        (EDT0000001 = '1') and
     reset ds_if;
-    $if_fct2='(EDT' + a#FdCount + ' = ''1'') and';
+    $if_fct2='(EDT' + a#fldCount + ' = ''1'') and';
     p_wrtCopy2(ds_if);
 
     //                not (LNG0000001 = '1')
     reset ds_if;
     $if_opC  = ' ';
-    $if_fct2='not (LNG' + a#FdCount + ' = ''1'')';
+    $if_fct2='not (LNG' + a#fldCount + ' = ''1'')';
     p_wrtCopy2(ds_if);
 
     //      Eval      P_00000001 = FLD0000001
@@ -1590,7 +1590,7 @@ begsr wrtCopy2;
     //  Eval      yFldName = 'TEST#V    '
     reset ds_eval;
     $eval_fct2 = 'yFldName = ' +
-                '''' + fldl0100.f1fnme + '''';
+                '''' + fldl0100.f1FNme + '''';
     p_wrtCopy2(ds_eval);
 
     //  Eval      Editor = cEDITOR_HEX
@@ -1630,7 +1630,7 @@ begsr wrtCopy2;
 
     //  Eval      EDT0000006 = '1'
     reset ds_eval;
-    $eval_fct2 = 'EDT' + a#FdCount + ' = ''1''';
+    $eval_fct2 = 'EDT' + a#fldCount + ' = ''1''';
     p_wrtCopy2(ds_eval);
 
     //  Eval      %NULLIND() = *OFF
@@ -1662,7 +1662,7 @@ begsr wrtCopy3;
 
   //  EDT0000001      S              1A   inz
   reset ds_defn;
-  $defn_fldN = ' EDT' + a#FdCount;
+  $defn_fldN = ' EDT' + a#fldCount;
   $defn_type = 'S';
   $defn_len  = '      1';
   $defn_dTyp = 'A';
@@ -1681,7 +1681,7 @@ begsr wrtCopy4;
 
   //  LNG0000001      C                   const('0') / const('1')
   reset ds_defn;
-  $defn_fldN = ' LNG' + a#FdCount;
+  $defn_fldN = ' LNG' + a#fldCount;
   $defn_type = 'C';
   $defn_len  = ' ';
   $defn_dTyp = ' ';
@@ -1691,7 +1691,7 @@ begsr wrtCopy4;
 
   //  MAX0000001      C                   const('0') / const('1')
   reset ds_defn;
-  $defn_fldN = ' MAX' + a#FdCount;
+  $defn_fldN = ' MAX' + a#fldCount;
   $defn_type = 'C';
   $defn_len  = ' ';
   $defn_dTyp = ' ';
@@ -1710,7 +1710,7 @@ begsr wrtCopy5;
 
   //  Remark
   reset ds_remark;
-  $rem_info = 'Feld: ' + fldl0100.f1fnme;
+  $rem_info = 'Feld: ' + fldl0100.f1FNme;
   p_wrtCopy5(ds_remark);
 
   //  When      (xScnCsrRow >= 04) and
@@ -1780,7 +1780,7 @@ begsr wrtCopy6;
 
   //  Remark
   reset ds_remark;
-  $rem_info = 'Feld: ' + fldl0100.f1fnme;
+  $rem_info = 'Feld: ' + fldl0100.f1FNme;
   p_wrtCopy6(ds_remark);
 
   //  When      (xScnCsrRow >= 04) and
@@ -1805,7 +1805,7 @@ begsr wrtCopy6;
   //  Eval      yFldName = 'TEST#V    '
   reset ds_eval;
   $eval_fct2 = 'yFldName = ' +
-              '''' + fldl0100.f1fnme + '''';
+              '''' + fldl0100.f1FNme + '''';
   p_wrtCopy6(ds_eval);
 
   //  Input-Only Feld?
@@ -1826,7 +1826,7 @@ begsr wrtCopy6;
 
   //      If        (EDT0000001 <> '1') or
   reset ds_if;
-  $if_fct2='(EDT' + a#FdCount + ' <> ''1'')';
+  $if_fct2='(EDT' + a#fldCount + ' <> ''1'')';
   p_wrtCopy6(ds_if);
 
   //      Exsr USR8193
@@ -1843,7 +1843,7 @@ begsr wrtCopy6;
 
   //      If        (LNG0000001 = '1')
   reset ds_if;
-  $if_fct2='not (LNG' + a#FdCount + ' = ''1'')';
+  $if_fct2='not (LNG' + a#fldCount + ' = ''1'')';
   p_wrtCopy6(ds_if);
 
   //      Eval      P_00000001 = FLD0000001
@@ -1881,7 +1881,7 @@ begsr wrtCopy6;
 
   //  Eval      EDT0000006 = '1'
   reset ds_eval;
-  $eval_fct2 = 'EDT' + a#FdCount + ' = ''1''';
+  $eval_fct2 = 'EDT' + a#fldCount + ' = ''1''';
   p_wrtCopy6(ds_eval);
 
   //  Eval      %NULLIND() = *OFF
@@ -1915,7 +1915,7 @@ begsr #text;
   select;
   when (headerType = '*FIELDNAME');
     $lit_kWrd =
-     %trimr($lit_kWrd) + fldl0100.f1fnme;
+     %trimr($lit_kWrd) + fldl0100.f1FNme;
     x = %len(%trimr($lit_kWrd));
     y = x;
   // Feldtyp
@@ -1950,7 +1950,7 @@ begsr #text;
   endsl;
 
   //  Hinzufügen '........'
-  $lit_kWrd = %trimr($lit_kWrd) + DotLine;
+  $lit_kWrd = %trimr($lit_kWrd) + dotLine;
 
   //  Begrenzen Textlänge auf max. mögliche Anzahl Zeichen
   if (26 + y - x <= %len($lit_kWrd));
@@ -2037,7 +2037,7 @@ dcl-proc p_wrtDspF;
     i_srcDta like(srcdta) const;
   end-pi;
 
-  #srcseq = #srcseq + #Increment;
+  #srcseq = #srcseq + #increment;
 
   srcseq  = #srcseq;
   srcdat = 0;

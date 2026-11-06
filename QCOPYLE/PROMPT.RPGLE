@@ -2,8 +2,8 @@
 // --------------------------------------------------------------------
 // Stand Alone Fields - TOP
 // --------------------------------------------------------------------
-dcl-s ##Field char(10);
-dcl-s ##Member char(10);
+dcl-s ##field char(10);
+dcl-s ##member char(10);
 dcl-s r#field char(10);
 dcl-s r#member char(10);
 // --------------------------------------------------------------------
@@ -11,49 +11,49 @@ dcl-s r#member char(10);
 // --------------------------------------------------------------------
 
 select;
-when (ScnFld = '##FIELD');
-  C                   movel(p)  ##Field       r#field
-  C                   movel(p)  ##Field       YData
-YDataTyp = *blanks;
-  C                   z-add     10            YDataLen
-when ScnFld = '##MEMBER';
-  C                   movel(p)  ##Member      r#member
-  C                   movel(p)  ##Member      YData
-YDataTyp = *blanks;
-  C                   z-add     10            YDataLen
+when (scnFld = '##FIELD');
+  C                   movel(p)  ##field       r#field
+  C                   movel(p)  ##field       yData
+yDataTyp = *blanks;
+  C                   z-add     10            yDataLen
+when scnFld = '##MEMBER';
+  C                   movel(p)  ##member      r#member
+  C                   movel(p)  ##member      yData
+yDataTyp = *blanks;
+  C                   z-add     10            yDataLen
 other;
-  YData = *blanks;
-  YDataTyp = *blanks;
-  YDataLen = *zeros;
+  yData = *blanks;
+  yDataTyp = *blanks;
+  yDataLen = *zeros;
 endsl;
 
-C                   movel(p)  ScnFld        YPromptFor
-C                   call      peek38        P_Peek38               99
+C                   movel(p)  scnFld        yPromptFor
+C                   call      peek38        p_peek38               99
 if *in99 = *on;
 //  ... Fehler, also ungültige Rückgabedaten
 else;
 
-if (YMsgID <> *blanks);
+if (yMsgID <> *blanks);
 
-  if (YMsgID = '*NONE');
-    YMsgID = *blanks;
-    YMsgDta = *blanks;
+  if (yMsgID = '*NONE');
+    yMsgID = *blanks;
+    yMsgDta = *blanks;
   endif;
 
   select;
-  when (ScnFld = '##FIELD');
-    C                   movel(p)  r#field       ##Field
-     when ScnFld = '##MEMBER';
-    C                   movel(p)  r#member      ##Member
+  when (scnFld = '##FIELD');
+    C                   movel(p)  r#field       ##field
+     when scnFld = '##MEMBER';
+    C                   movel(p)  r#member      ##member
      endsl;
 
   else;
 
     select;
-    when (ScnFld = '##FIELD');
-      ##Field = %subst(YRetData:1:YDataLen);
-    when (ScnFld = '##MEMBER');
-      ##Member = %subst(YRetData:1:YDataLen);
+    when (scnFld = '##FIELD');
+      ##field = %subst(yRetData:1:yDataLen);
+    when (scnFld = '##MEMBER');
+      ##member = %subst(yRetData:1:yDataLen);
     endsl;
 
     endif;

@@ -31,7 +31,7 @@ dcl-f PEEKUSR usage(*update: *delete) keyed usropn extfile(g_file) prefix(S_);
 
 dcl-s g_file char(21) inz;
 
-dcl-ds set0004 likeds(SET0004_t) inz;
+dcl-ds set0004 likeds(set0004_t) inz;
 
 /copy QCOPYLE,D_VARDEF
 /copy QCOPYLE,SET0004 // Spracheinstellungen
@@ -49,12 +49,12 @@ end-ds;
 
 //  Input
 dcl-pi *n;
-  XLib   char(10);
-  XLang4 char(4);
+  xLib   char(10);
+  xLang4 char(4);
 end-pi;
 //---------------------------------------------------*
 
-g_file = %trim(XLib) + '/PEEKUSR';
+g_file = %trim(xLib) + '/PEEKUSR';
 
 open PEEKUSR;
 
@@ -65,7 +65,7 @@ key.key     = '*LANGUAGE';
 chain %kds(key) FPEEKUSR;
 if (%found(PEEKUSR));
   SET0004 = S_DATA;
-  set0004.SET_LANG = XLang4;
+  set0004.SET_LANG = xLang4;
   S_DATA = SET0004;
   update FPEEKUSR;
 endif;

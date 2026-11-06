@@ -13,7 +13,7 @@ dcl-pr qmhrtvm extpgm('QMHRTVM');
   i_rpldataLen  int(10) const;
   i_rplVars     char(10) const;
   i_rtnCtrlChrs char(10) const;
-  io_ErrCode    char(65535) options(*varsize);
+  io_errCode    char(65535) options(*varsize);
   i_rtvOpt      char(10) options(*nopass) const; // | OptGrp 1
   i_toCcsid     int(10) options(*nopass) const; // |
   i_ccsidRplDta int(10) options(*nopass) const; // |

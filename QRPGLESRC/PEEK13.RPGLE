@@ -52,7 +52,7 @@
 /copy QCOPYLE,PPEEK53
 /copy QCOPYLE,PPEEK58
 
-dcl-ds mbrd0200 likeds(MBRD0200_t) inz;
+dcl-ds mbrd0200 likeds(mbrd0200_t) inz;
 dcl-ds errCode likeds(errCode_t) inz;
 
 //*******************************************************************
@@ -61,7 +61,7 @@ dcl-ds errCode likeds(errCode_t) inz;
 dcl-pi peek13;
   i_qFile    likeds(qObj_t) const;
   i_mbr      like(mbr_t) const;
-  o_mbrd0200 likeds(MBRD0200_t);
+  o_mbrd0200 likeds(mbrd0200_t);
 end-pi;
 
 //---------------------------------------------------*

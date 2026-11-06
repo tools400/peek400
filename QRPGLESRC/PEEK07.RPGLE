@@ -86,18 +86,18 @@
 /copy QCOPYLE,PPEEK58
 
 //  declarations for QUSRTVUS
-dcl-ds RcvVar qualified;
-  NbrRetAttr int(10) inz;
-  OffsToTble int(10) inz;
-  RcvVarDta  char(256) inz;
+dcl-ds rcvVar qualified;
+  nbrRetAttr int(10) inz;
+  offsToTble int(10) inz;
+  rcvVarDta  char(256) inz;
 end-ds;
 
-dcl-ds NetAttr qualified;
-  Nme     char(10) inz;
-  DtaType char(1) inz;
-  InfStat char(1) inz;
-  DtaLen  int(10) inz;
-  Dta     char(256) inz;
+dcl-ds netAttr qualified;
+  nme     char(10) inz;
+  dtaType char(1) inz;
+  infStat char(1) inz;
+  dtaLen  int(10) inz;
+  dta     char(256) inz;
 end-ds;
 
 dcl-s x like(int4_t);
@@ -131,10 +131,10 @@ endif;
 //  CPF1860 bei einem unbekannten Attribut
 clear errCode;
 errCode.bytPrv = %size(errCode);
-qwcrneta(RcvVar: %size(RcvVar): 1: i_attr: errCode);
+qwcrneta(rcvVar: %size(rcvVar): 1: i_attr: errCode);
 
 if (errCode.bytAvl = 0);
-  exsr GetAttr;
+  exsr getAttr;
 else;
   o_attrLen = 0;
   o_attrTyp = '';
@@ -144,18 +144,18 @@ endif;
 return;
 
 //====================================================*
-//  GetAttr -  Abrufen der Attributwertes             *
+//  getAttr -  Abrufen der Attributwertes             *
 //====================================================*
 
-begsr GetAttr;
+begsr getAttr;
 
-  x = RcvVar.OffsToTble + 1;
+  x = rcvVar.offsToTble + 1;
 
   if (x >= 1 and x <= 256);
-    NetAttr = %subst(RcvVar: x);
-    o_alue = NetAttr.Dta;
-    o_attrLen = NetAttr.DtaLen;
-    o_attrTyp = NetAttr.DtaType;
+    netAttr = %subst(rcvVar: x);
+    o_alue = netAttr.dta;
+    o_attrLen = netAttr.dtaLen;
+    o_attrTyp = netAttr.dtaType;
   else;
     o_attrLen = 0;
     o_attrTyp = '';

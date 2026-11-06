@@ -30,11 +30,11 @@
 
 dcl-f peek45fm workstn(*ext) usage(*input: *output) usropn infds(workstn);
 
-dcl-f peekfld keyed usropn prefix(f_) infds(Peek_01_DS);
+dcl-f peekFld keyed usropn prefix(f_) infds(peek_01_ds);
 
 dcl-ds workstn likeds(workstn_t);
 
-dcl-ds Peek_01_DS likeds(infds_t);
+dcl-ds peek_01_ds likeds(infds_t);
 
 /copy QCOPYLE,D_VARDEF
 /copy QCOPYLE,D_INFDS
@@ -57,20 +57,20 @@ dcl-ds fldl0100 likeds(fldl0100_t) inz;
 dcl-ds set0006 likeds(set0006_t) inz;
 
 //  Peek21
-dcl-s YPgmCmd like(pgmCmd_t) inz;
-dcl-s YCmdDta like(pgmCmdDt_t) inz;
-dcl-s YMsgID like(msgId_t) inz;
-dcl-s YMsgDta like(msgDta_t) inz;
+dcl-s yPgmCmd like(pgmCmd_t) inz;
+dcl-s yCmdDta like(pgmCmdDt_t) inz;
+dcl-s yMsgID like(msgId_t) inz;
+dcl-s yMsgDta like(msgDta_t) inz;
 
 //  Peek23:
 dcl-s yFKeys like(fKeyDsp_t) inz dim(32);
 dcl-s yNbrOfKeys like(int4_t) inz;
 
 //  Peek32
-dcl-s YBuffer like(rcdBuf_t) inz;
+dcl-s yBuffer like(rcdBuf_t) inz;
 dcl-s yBuffLen like(int4_t) inz;
 
-dcl-s sfbot like(int4_t) inz;
+dcl-s sfBot like(int4_t) inz;
 dcl-c NBR_F_KEYS 3;
 
 dcl-s x like(int4_t) inz;
@@ -88,7 +88,7 @@ dcl-s peek32_name like(pgmCallN_t) inz;
 
 
 // Arbeitsfelder
-dcl-s pStartPos like(#StartPos) inz;
+dcl-s pStartPos like(#startPos) inz;
 dcl-ds *n;
   pFldInhaltSbcs like(rcdBuf_t) inz;
   pFldInhaltUcs2 like(rcdBufUcs2_t) inz overlay(pFldInhaltSbcs);
@@ -96,7 +96,7 @@ end-ds;
 dcl-s pLength like(int4_t) inz;
 dcl-s pTmpNewLen like(int4_t) inz;
 dcl-s pTmpHexLen like(int4_t) inz;
-dcl-s pTmpHexBin like(#HexString) inz;
+dcl-s pTmpHexBin like(#hexString) inz;
 
 dcl-s warning_1 like(bool_t) inz(bFalse);
 dcl-s warning_2 like(bool_t) inz(bFalse);
@@ -109,14 +109,14 @@ dcl-s warning_2 like(bool_t) inz(bFalse);
 /copy QCOPYLE,PPEEK58
 /copy QCOPYLE,PPEEK71
 
-dcl-s $OfsVal zoned(4) dim(8) inz;
+dcl-s $ofsVal zoned(4) dim(8) inz;
 
-dcl-ds #HexString;
-  #HexVal char(8) dim(32) inz;
+dcl-ds #hexString;
+  #hexVal char(8) dim(32) inz;
 end-ds;
 
-dcl-ds $expstring;
-  $StrVal char(16) dim(8) inz;
+dcl-ds $expString;
+  $strVal char(16) dim(8) inz;
 end-ds;
 
 dcl-s idx int(10) inz;
@@ -137,7 +137,7 @@ dcl-pi peek45;
   i_copyright  like(copyright_t) const;
   i_fldName    like(fieldNme_t) const;
   io_fldInhalt likeds(fldInhalt_t);
-  io_Length    like(int4_t);
+  io_length    like(int4_t);
   i_protect    like(bool_t) const;
   i_isUcs2     like(int4_t) const;
   o_msgID      like(msgId_t);
@@ -154,7 +154,7 @@ ceehdlr(%paddr('errorHandler')
 
 exsr inzsr;
 
-exsr First;
+exsr first;
 
 //---------------------------------------------------*
 //  Schleife für Programmbearbeitung
@@ -167,44 +167,44 @@ dow ('1');
 
   //  Anzeigen der Befehlstasten
   select;
-  when ((sfbot = 2) and
-     (yNbrOfKeys > NBR_F_KEYS * (sfbot - 1)));
+  when ((sfBot = 2) and
+     (yNbrOfKeys > NBR_F_KEYS * (sfBot - 1)));
     write pbbot#2;
-  when ((sfbot = 3) and
-     (yNbrOfKeys > NBR_F_KEYS * (sfbot - 1)));
+  when ((sfBot = 3) and
+     (yNbrOfKeys > NBR_F_KEYS * (sfBot - 1)));
     write pbbot#3;
-  when ((sfbot = 4) and
-     (yNbrOfKeys > NBR_F_KEYS * (sfbot - 1)));
+  when ((sfBot = 4) and
+     (yNbrOfKeys > NBR_F_KEYS * (sfBot - 1)));
     write pbbot#4;
-  when ((sfbot = 5) and
-     (yNbrOfKeys > NBR_F_KEYS * (sfbot - 1)));
+  when ((sfBot = 5) and
+     (yNbrOfKeys > NBR_F_KEYS * (sfBot - 1)));
     write pbbot#5;
-  when ((sfbot = 6) and
-     (yNbrOfKeys > NBR_F_KEYS * (sfbot - 1)));
+  when ((sfBot = 6) and
+     (yNbrOfKeys > NBR_F_KEYS * (sfBot - 1)));
     write pbbot#6;
-  when ((sfbot = 7) and
-     (yNbrOfKeys > NBR_F_KEYS * (sfbot - 1)));
+  when ((sfBot = 7) and
+     (yNbrOfKeys > NBR_F_KEYS * (sfBot - 1)));
     write pbbot#7;
-  when ((sfbot = 8) and
-     (yNbrOfKeys > NBR_F_KEYS * (sfbot - 1)));
+  when ((sfBot = 8) and
+     (yNbrOfKeys > NBR_F_KEYS * (sfBot - 1)));
     write pbbot#8;
   other;
     write pbbot#1;
-    sfbot = 1;
+    sfBot = 1;
   endsl;
 
   //  Füllen "Offset" Angaben
   idx = 0;
   ofs = pStartPos - 1;
-  for idx = 1 to %elem($OfsVal);
-    $OfsVal(idx) = ofs;
-    ofs = ofs + %len($StrVal(1));
+  for idx = 1 to %elem($ofsVal);
+    $ofsVal(idx) = ofs;
+    ofs = ofs + %len($strVal(1));
   endfor;
 
   //  Anzeigen Bildschirm
-  exsr ToScreen;
+  exsr toScreen;
   exfmt bild01;
-  exsr FromScreen;
+  exsr fromScreen;
 
   //  Daten geändert
   isDataChg = *in93;
@@ -218,68 +218,68 @@ dow ('1');
   //  Mappen der gedrückten Taste
   //  in Programmbefehl
   peek21(workstn.aid: sds.pgmName
-        : YPgmCmd: YCmdDta: YMsgID: YMsgDta);
-  if (YMsgID <> ' ');
-    p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
-    YMsgID = '';
-    YMsgDta = '';
+        : yPgmCmd: yCmdDta: yMsgID: yMsgDta);
+  if (yMsgID <> ' ');
+    p_sndPgmMg(yMsgID: yMsgDta: sds.pgmName);
+    yMsgID = '';
+    yMsgDta = '';
     iter;
   endif;
 
   //  Abfragen der Programmbefehle
   select;
   //  F3  - Ende
-  when (YPgmCmd = '*EXIT');
-    exsr C_EndPgm;
+  when (yPgmCmd = '*EXIT');
+    exsr c_endPgm;
     leave;
 
   //  F5  - Aktualisieren
-  when (YPgmCmd = '*REFRESH');
-    exsr C_Refresh;
+  when (yPgmCmd = '*REFRESH');
+    exsr c_refresh;
     iter;
 
   //  F7  - Umschalten der Eingabe
-  when (YPgmCmd = '*TGLINPUT');
-    exsr C_Enter;
+  when (yPgmCmd = '*TGLINPUT');
+    exsr c_enter;
     exsr c_tgInput;
     iter;
 
   //  F12 - Ende
-  when (YPgmCmd = '*CANCEL');
-    exsr C_EndPgm;
+  when (yPgmCmd = '*CANCEL');
+    exsr c_endPgm;
     leave;
 
   //  F17 - an den Afang gehen
-  when (YPgmCmd = '*FIRSTPOS');
+  when (yPgmCmd = '*FIRSTPOS');
     exsr c_firstPos;
 
   //  F18 - ans Ende gehen
-  when (YPgmCmd = '*LASTPOS');
+  when (yPgmCmd = '*LASTPOS');
     exsr c_lastPos;
 
   //  F19 - nach rechts verschieben (ein Feld)
-  when (YPgmCmd = '*LEFT');
-    exsr C_MoveL;
+  when (yPgmCmd = '*LEFT');
+    exsr c_moveL;
 
   //  F20 - nach links verschieben  (ein Feld)
-  when (YPgmCmd = '*RIGHT');
-    exsr C_MoveR;
+  when (yPgmCmd = '*RIGHT');
+    exsr c_moveR;
 
   //  F24 - Weitere Tasten
-  when (YPgmCmd = '*MOREKEYS');
-    exsr C_MoreKeys;
+  when (yPgmCmd = '*MOREKEYS');
+    exsr c_moreKeys;
 
   //  Page up
-  when (YPgmCmd = '*PAGEUP');
+  when (yPgmCmd = '*PAGEUP');
     exsr c_pageUp;
 
   //  Page down
-  when (YPgmCmd = '*PAGEDOWN');
+  when (yPgmCmd = '*PAGEDOWN');
     exsr c_pageDown;
 
   //  Datenfreigabe
-  when (YPgmCmd = '*ENTER');
-    exsr C_Enter;
+  when (yPgmCmd = '*ENTER');
+    exsr c_enter;
     if (isPgmError = bFalse);
       o_msgID  = 'USR8112';
       o_msgDta = ' ';
@@ -290,7 +290,7 @@ dow ('1');
         io_fldInhalt.ucs2 = pFldInhaltUcs2;
       endif;
 
-      io_Length = pLength;
+      io_length = pLength;
       leave;
     endif;
 
@@ -302,12 +302,12 @@ dow ('1');
 
 enddo;
 
-if (%open(peekfld));
-  close peekfld;
+if (%open(peekFld));
+  close peekFld;
 endif;
 
-if (%open(peekfld));
-  close peekfld;
+if (%open(peekFld));
+  close peekFld;
 endif;
 
 close peek45fm;
@@ -318,7 +318,7 @@ return;
 //    c_enter       "Datenfreigabetaste"                      *
 //============================================================*
 
-begsr C_Enter;
+begsr c_enter;
 
   if (isPgmError = bTrue);
 
@@ -331,7 +331,7 @@ begsr C_Enter;
   else;
 
     //  Prüfen der Eingaben
-    exsr prfb1;
+    exsr prfB1;
 
     if (isPgmError = bFalse);
 
@@ -342,21 +342,21 @@ begsr C_Enter;
           //  Einsetzen geänderten Hex-String ...
           //  ... umwandeln HexString (Bildschirmanzeige) nach HexWert (Pufferinhalt)
           pTmpHexBin = ' ';
-          p_ChrToHex(pTmpHexBin               :
-                    #HexString               :
-                    %len(%trimr(#HexString)));
+          p_chrToHex(pTmpHexBin               :
+                    #hexString               :
+                    %len(%trimr(#hexString)));
           //      (Länge_Hex_Nibble / 2 = Länge_Hex_Bin)
-          x = %len(%trimr(#HexString)) / 2;
+          x = %len(%trimr(#hexString)) / 2;
         else;
           pTmpHexBin = %subst(pFldInhaltSbcs:pStartPos);
-          for x = 1 to %len($expstring);
-            if (%subst($expstring: x: 1) <> set0006.set_cvtc);
+          for x = 1 to %len($expString);
+            if (%subst($expString: x: 1) <> set0006.set_cvtc);
               %subst(pTmpHexBin: x: 1) =
-                   %subst($expstring: x: 1);
+                   %subst($expString: x: 1);
             endif;
           endfor;
           //      (Länge = Feldlänge)
-          x = %len($expstring);
+          x = %len($expString);
         endif;
 
         //  ... einsetzen in Zwischenfeld für Rückgabewert
@@ -369,11 +369,11 @@ begsr C_Enter;
           pLength = %len(%trimr(pFldInhaltUcs2));
         endif;
 
-        //  Füllen #HexString und $ExpString
+        //  Füllen #hexString und $expString
         exsr fill##2;
 
         //  Merken der neuen Startposition
-        pStartPos = #StartPos;
+        pStartPos = #startPos;
 
         isPgmError = bTrue;
       endif;
@@ -389,15 +389,15 @@ endsr;
 
 begsr c_pageUp;
 
-  #StartPos = #StartPos + 128;
-  if (#StartPos > $BufLaenge);
-    #StartPos = $BufLaenge - 128 + 1;
+  #startPos = #startPos + 128;
+  if (#startPos > $bufLaenge);
+    #startPos = $bufLaenge - 128 + 1;
   endif;
 
   *in93 = *on;
   isDataChg = *in93;
 
-  exsr C_Enter;
+  exsr c_enter;
 
 endsr;
 
@@ -407,15 +407,15 @@ endsr;
 
 begsr c_pageDown;
 
-  #StartPos = #StartPos - 128;
-  if (#StartPos < 1);
-    #StartPos = 1;
+  #startPos = #startPos - 128;
+  if (#startPos < 1);
+    #startPos = 1;
   endif;
 
   *in93 = *on;
   isDataChg = *in93;
 
-  exsr C_Enter;
+  exsr c_enter;
 
 endsr;
 
@@ -448,7 +448,7 @@ endsr;
 //    prfb1         Prüfen der Eingaben                       *
 //============================================================*
 
-begsr prfb1;
+begsr prfB1;
 
   //  Länge und Zeichen des Hex-Strings
   exsr prf20;
@@ -473,20 +473,20 @@ begsr prf20;
   dou ('1');
 
     //  prüfen auf unzulässige Zeichen
-    x = %check(HEX_DIGITS: #HexString);
-    if (x > 0  and x <= %len(%trimr(#HexString)));
+    x = %check(HEX_DIGITS: #hexString);
+    if (x > 0  and x <= %len(%trimr(#hexString)));
       p_sndPgmMg('USR8174'
-                : %subst(#HexString: x: 1)
+                : %subst(#hexString: x: 1)
                 : sds.pgmName);
       isPgmError = bTrue;
       leave;
     endif;
 
     //  Zeichenkette zu lang
-    if (%len(%trimr(#HexString))/2 + pStartPos - 1 >
+    if (%len(%trimr(#hexString))/2 + pStartPos - 1 >
         f_buffLn(fldl0100));
       if (warning_2 = bTrue);
-        #HexString = %subst(#HexString :
+        #hexString = %subst(#hexString :
                            1          :
                            f_buffLn(fldl0100) * 2);
         isDataChg = bTrue;
@@ -499,7 +499,7 @@ begsr prf20;
     endif;
 
     //  Ungerade Anzahl Zeichen
-    x = %len(%trimr(#HexString));
+    x = %len(%trimr(#hexString));
     x = %rem(x: 2);
     if (x <> 0);
       p_sndPgmMg('USR8175': '': sds.pgmName);
@@ -508,24 +508,24 @@ begsr prf20;
     endif;
 
     //  Zeichenkette zu kurz
-    if (%len(%trimr(#HexString))/2 + pStartPos -1 <
+    if (%len(%trimr(#hexString))/2 + pStartPos -1 <
         f_buffLn(fldl0100)
         and
-        (%len(%trimr(#HexString)) < %len(#HexString)));
+        (%len(%trimr(#hexString)) < %len(#hexString)));
       if (warning_1 = bTrue);
-        dow ((%len(%trimr(#HexString))/2 + pStartPos -1 <
+        dow ((%len(%trimr(#hexString))/2 + pStartPos -1 <
              f_buffLn(fldl0100))
            and
-           (%len(%trimr(#HexString)) < %len(#HexString)));
+           (%len(%trimr(#hexString)) < %len(#hexString)));
 
           if (i_isUcs2 = 0);
-            #HexString = %trimr(#HexString) + '40';
+            #hexString = %trimr(#hexString) + '40';
           else;
-            #HexString = %trimr(#HexString) + '0020';
+            #hexString = %trimr(#hexString) + '0020';
           endif;
 
           pFldInhaltSbcs = %subst(pFldInhaltSbcs: 1:
-          pStartPos - 1 + %len(%trimr(#HexString)));
+          pStartPos - 1 + %len(%trimr(#hexString)));
           isDataChg = bTrue;
         enddo;
       else;
@@ -541,7 +541,7 @@ begsr prf20;
   if (isPgmError = bTrue);
     *in20 = *on;
     *in30 = *on;
-    #StartPos = pStartPos;
+    #startPos = pStartPos;
   endif;
 
 endsr;
@@ -554,13 +554,13 @@ begsr prf21;
 
   dou ('1');
 
-    if (#StartPos <= *zeros);
+    if (#startPos <= *zeros);
       p_sndPgmMg('USR8178': '': sds.pgmName);
       isPgmError = bTrue;
       leave;
     endif;
 
-    if (#StartPos > $BufLaenge);
+    if (#startPos > $bufLaenge);
       p_sndPgmMg('USR8177': '': sds.pgmName);
       isPgmError = bTrue;
       leave;
@@ -579,7 +579,7 @@ endsr;
 //    c_endPgm      F3/F12 - Programm beenden                 *
 //============================================================*
 
-begsr C_EndPgm;
+begsr c_endPgm;
 
   p_rmvPgmMg(sds.pgmName);
 
@@ -604,10 +604,10 @@ endsr;
 
 begsr c_firstPos;
 
-  #StartPos = 1;
+  #startPos = 1;
 
   isDataChg = bTrue;
-  exsr C_Enter;
+  exsr c_enter;
 
 endsr;
 
@@ -617,15 +617,15 @@ endsr;
 
 begsr c_lastPos;
 
-  #StartPos = $BufLaenge            -
-             %len(#HexString) / 2 +
+  #startPos = $bufLaenge            -
+             %len(#hexString) / 2 +
              1;
-  if (#StartPos < 0);
-    #StartPos = 1;
+  if (#startPos < 0);
+    #startPos = 1;
   endif;
 
   isDataChg = bTrue;
-  exsr C_Enter;
+  exsr c_enter;
 
 endsr;
 
@@ -633,16 +633,16 @@ endsr;
 //    c_moveL       Nach links verschieben                    *
 //============================================================*
 
-begsr C_MoveL;
+begsr c_moveL;
 
-  if (#StartPos - %len(#HexString)/2 > 0);
-    #StartPos = #StartPos - %len(#HexString)/2;
+  if (#startPos - %len(#hexString)/2 > 0);
+    #startPos = #startPos - %len(#hexString)/2;
   else;
-    #StartPos = 1;
+    #startPos = 1;
   endif;
 
   isDataChg = bTrue;
-  exsr C_Enter;
+  exsr c_enter;
 
 endsr;
 
@@ -650,20 +650,20 @@ endsr;
 //    c_moveR       Nach rechts verschieben                   *
 //============================================================*
 
-begsr C_MoveR;
+begsr c_moveR;
 
-  if (#StartPos + %len(#HexString)/2 < $BufLaenge);
-    #StartPos = #StartPos + %len(#HexString)/2;
+  if (#startPos + %len(#hexString)/2 < $bufLaenge);
+    #startPos = #startPos + %len(#hexString)/2;
   else;
-    #StartPos = $BufLaenge - %len(#HexString)/2
+    #startPos = $bufLaenge - %len(#hexString)/2
                + 1;
-    if (#StartPos < 0);
-      #StartPos = 1;
+    if (#startPos < 0);
+      #startPos = 1;
     endif;
   endif;
 
   isDataChg = bTrue;
-  exsr C_Enter;
+  exsr c_enter;
 
 endsr;
 
@@ -671,10 +671,10 @@ endsr;
 //    c_refresh     F5  - Aktualisieren der Subfile           *
 //============================================================*
 
-begsr C_Refresh;
+begsr c_refresh;
 
   pStartPos  = 1;
-  exsr GetParameters;
+  exsr getParameters;
 
   exsr bzoff1;
   exsr fill##;
@@ -701,9 +701,9 @@ endsr;
 //    c_moreKeys    F24 - Weitere Tasten                      *
 //============================================================*
 
-begsr C_MoreKeys;
+begsr c_moreKeys;
 
-  sfbot = sfbot + 1;
+  sfBot = sfBot + 1;
 
 endsr;
 
@@ -714,18 +714,18 @@ endsr;
 begsr fill##;
 
   //  anzeigen Feldüberschrift
-  $FldName = f_headline(i_headType: fldl0100);
+  $fldName = f_headline(i_headType: fldl0100);
 
   //  anzeigen alphanumerisches oder numerisches Feld
   if ((f_isNumFld(fldl0100) = bTrue) and
       (f_isFloatFld(fldl0100) = bFalse));
     *in60 = *on;
-    $FldLaenge = fldl0100.f1digt;
-    $FldDezSt  = fldl0100.f1decp;
+    $fldLaenge = fldl0100.f1Digt;
+    $fldDezSt  = fldl0100.f1DecP;
   else;
     *in60 = *off;
-    $FldLaenge = f_buffLn(fldl0100);
-    $FldDezSt  = 0;
+    $fldLaenge = f_buffLn(fldl0100);
+    $fldDezSt  = 0;
   endif;
 
   //  anzeigen Pufferlänge
@@ -735,17 +735,17 @@ begsr fill##;
     *in61 = *off;
   endif;
 
-  $BufLaenge = f_buffLn(fldl0100);
+  $bufLaenge = f_buffLn(fldl0100);
 
-  #StartPos = pStartPos;
+  #startPos = pStartPos;
 
   exsr fill##2;
 
 endsr;
 
 //=========================================================*
-//    fill##2    - füllen Felder:  #HexString             *
-//                                 $ExpString             *
+//    fill##2    - füllen Felder:  #hexString             *
+//                                 $expString             *
 //                 aus pFldInhalt                         *
 //=========================================================*
 
@@ -753,21 +753,21 @@ begsr fill##2;
 
   //  berechnen der Länge der aus dem Puffer zu
   //  entnehmenden Binärzeichenkette
-  pTmpHexLen = $BufLaenge - #StartPos + 1;
+  pTmpHexLen = $bufLaenge - #startPos + 1;
 
-  if (pTmpHexLen > %len(#HexString) / 2);
-    pTmpHexLen = %len(#HexString) / 2;
+  if (pTmpHexLen > %len(#hexString) / 2);
+    pTmpHexLen = %len(#hexString) / 2;
   endif;
 
   //  entnehmen der Binärzeichenkette aus dem Puffer
   %subst(pTmpHexBin: 1) =
-  %subst(pFldInhaltSbcs: #StartPos: pTmpHexLen);
+  %subst(pFldInhaltSbcs: #startPos: pTmpHexLen);
 
   //  umwandeln einer Binärzeichenkette in eine
   //  lesbare Hex-Zeichenkette zur Editierung
   //  durch den Benutzer
-  #HexString = ' ';
-  p_hexToChr(#HexString    :
+  #hexString = ' ';
+  p_hexToChr(#hexString    :
             pTmpHexBin    :
             pTmpHexLen * 2);
 
@@ -777,9 +777,9 @@ begsr fill##2;
       (isjobccsid = bFalse or i_isUcs2 <> 0));
     monitor;
       hTranscoder =
-       Transcoder_toJobCcsid(fldl0100.f1fdcc);
+       transcoder_toJobCcsid(fldl0100.f1fdcc);
       pTmpNewLen =
-       Transcoder_xlateBuffer(hTranscoder
+       transcoder_xlateBuffer(hTranscoder
                               : %addr(pTmpHexBin)
                               : pTmpHexLen
                               : %size(pTmpHexBin));
@@ -805,18 +805,18 @@ begsr fill##2;
 
   //  anzeigen expandierte Zeichenkette aus dem Puffer ...
   //  ... konvertieren nicht darstellbarer Zeichen
-  YBuffer    = pTmpHexBin;
+  yBuffer    = pTmpHexBin;
   yBuffLen   = pTmpHexLen;
-  peek32(YBuffer: yBuffLen: 0: YMsgID: YMsgDta);
-  $expstring = YBuffer;
+  peek32(yBuffer: yBuffLen: 0: yMsgID: yMsgDta);
+  $expString = yBuffer;
 
 endsr;
 
 //============================================================*
-//    SetScreen     Einstellen 132/80-Zeichen Auflösung       *
+//    setScreen     Einstellen 132/80-Zeichen Auflösung       *
 //============================================================*
 
-begsr SetScreen;
+begsr setScreen;
 
   if (i_dsp80 = *off);
     //   132-Zeichen Anzeige
@@ -833,10 +833,10 @@ begsr SetScreen;
 endsr;
 
 //============================================================*
-//    GetUsrSetg    Ermitteln der Benutzervoreinstellungen    *
+//    getUsrSetg    Ermitteln der Benutzervoreinstellungen    *
 //============================================================*
 
-begsr GetUsrSetg;
+begsr getUsrSetg;
 
   //  *CVTCHR
   set0006 = f_getUsrSg('*CVTCHR');
@@ -844,22 +844,22 @@ begsr GetUsrSetg;
 endsr;
 
 //============================================================*
-//    GetParameters Laden der Programmparameter               *
+//    getParameters Laden der Programmparameter               *
 //============================================================*
 
-begsr GetParameters;
+begsr getParameters;
 
   if (i_isUcs2 = 0);
     clear pFldInhaltSbcs;
-    %subst(pFldInhaltSbcs: 1: io_Length) =
+    %subst(pFldInhaltSbcs: 1: io_length) =
           io_fldInhalt.sbcs;
   else;
     clear pFldInhaltUcs2;
-    %subst(pFldInhaltUcs2: 1: io_Length) =
+    %subst(pFldInhaltUcs2: 1: io_length) =
           io_fldInhalt.ucs2;
   endif;
 
-  pLength = io_Length;
+  pLength = io_length;
 
 endsr;
 
@@ -867,7 +867,7 @@ endsr;
 //    First         Initialisierung                           *
 //============================================================*
 
-begsr First;
+begsr first;
 
   // - Steht der Wert schon in der Job-CCSID?
   if (%parms() >= %parmnum(i_isjobccsid));
@@ -877,7 +877,7 @@ begsr First;
   endif;
 
   // - Öffnen der Dateien
-  open peekfld;
+  open peekFld;
 
   open peek45fm;
 
@@ -889,9 +889,9 @@ begsr First;
 
   // - Ermitteln der Feldeigenschaften
   clear f_key;
-  f_key.F_Field = i_fldName;
+  f_key.f_field = i_fldName;
   chain %kds(f_key) fpeekfld;
-  if (not %found(peekfld));
+  if (not %found(peekFld));
     isPgmError = bTrue;
     clear fldl0100;
     clear usr8136;
@@ -904,7 +904,7 @@ begsr First;
 
   // - Übernehmen der Programmparameter
   pStartPos  = 1;
-  exsr GetParameters;
+  exsr getParameters;
 
   if (isPgmError = bTrue);
     *in70 = '1';
@@ -916,7 +916,7 @@ begsr First;
   o_msgDta = '';
 
   // - Benutzervoreinstellungen
-  exsr GetUsrSetg;
+  exsr getUsrSetg;
 
   // - Sperren Felder für Offset-Anzeige
   *in50 = '0';
@@ -930,10 +930,10 @@ begsr First;
   exsr fill##;
 
   // - Darstellung der Befehlstasten
-  sfbot = 1;
+  sfBot = 1;
 
   // - Einstellen der Bildschirmauflösung 80/132-Zeichen
-  exsr SetScreen;
+  exsr setScreen;
 
   // - Copyright
   p_sndPgmMg('USR9999': i_copyright: sds.pgmName);
@@ -944,65 +944,65 @@ endsr;
 //  Copy program fields to screen.                    *
 //====================================================*
 
-begsr ToScreen;
+begsr toScreen;
 
-  $ofs1 = $OfsVal( 1);
-  $ofs2 = $OfsVal( 2);
-  $ofs3 = $OfsVal( 3);
-  $ofs4 = $OfsVal( 4);
-  $ofs5 = $OfsVal( 5);
-  $ofs6 = $OfsVal( 6);
-  $ofs7 = $OfsVal( 7);
-  $ofs8 = $OfsVal( 8);
+  $ofs1 = $ofsVal( 1);
+  $ofs2 = $ofsVal( 2);
+  $ofs3 = $ofsVal( 3);
+  $ofs4 = $ofsVal( 4);
+  $ofs5 = $ofsVal( 5);
+  $ofs6 = $ofsVal( 6);
+  $ofs7 = $ofsVal( 7);
+  $ofs8 = $ofsVal( 8);
 
-  #hex11 = #HexVal( 1);
-  #hex12 = #HexVal( 2);
-  #hex13 = #HexVal( 3);
-  #hex14 = #HexVal( 4);
+  #hex11 = #hexVal( 1);
+  #hex12 = #hexVal( 2);
+  #hex13 = #hexVal( 3);
+  #hex14 = #hexVal( 4);
 
-  #hex21 = #HexVal( 5);
-  #hex22 = #HexVal( 6);
-  #hex23 = #HexVal( 7);
-  #hex24 = #HexVal( 8);
+  #hex21 = #hexVal( 5);
+  #hex22 = #hexVal( 6);
+  #hex23 = #hexVal( 7);
+  #hex24 = #hexVal( 8);
 
-  #hex31 = #HexVal( 9);
-  #hex32 = #HexVal(10);
-  #hex33 = #HexVal(11);
-  #hex34 = #HexVal(12);
+  #hex31 = #hexVal( 9);
+  #hex32 = #hexVal(10);
+  #hex33 = #hexVal(11);
+  #hex34 = #hexVal(12);
 
-  #hex41 = #HexVal(13);
-  #hex42 = #HexVal(14);
-  #hex43 = #HexVal(15);
-  #hex44 = #HexVal(16);
+  #hex41 = #hexVal(13);
+  #hex42 = #hexVal(14);
+  #hex43 = #hexVal(15);
+  #hex44 = #hexVal(16);
 
-  #hex51 = #HexVal(17);
-  #hex52 = #HexVal(18);
-  #hex53 = #HexVal(19);
-  #hex54 = #HexVal(20);
+  #hex51 = #hexVal(17);
+  #hex52 = #hexVal(18);
+  #hex53 = #hexVal(19);
+  #hex54 = #hexVal(20);
 
-  #hex61 = #HexVal(21);
-  #hex62 = #HexVal(22);
-  #hex63 = #HexVal(23);
-  #hex64 = #HexVal(24);
+  #hex61 = #hexVal(21);
+  #hex62 = #hexVal(22);
+  #hex63 = #hexVal(23);
+  #hex64 = #hexVal(24);
 
-  #hex71 = #HexVal(25);
-  #hex72 = #HexVal(26);
-  #hex73 = #HexVal(27);
-  #hex74 = #HexVal(28);
+  #hex71 = #hexVal(25);
+  #hex72 = #hexVal(26);
+  #hex73 = #hexVal(27);
+  #hex74 = #hexVal(28);
 
-  #hex81 = #HexVal(29);
-  #hex82 = #HexVal(30);
-  #hex83 = #HexVal(31);
-  #hex84 = #HexVal(32);
+  #hex81 = #hexVal(29);
+  #hex82 = #hexVal(30);
+  #hex83 = #hexVal(31);
+  #hex84 = #hexVal(32);
 
-  $str1 = $StrVal( 1);
-  $str2 = $StrVal( 2);
-  $str3 = $StrVal( 3);
-  $str4 = $StrVal( 4);
-  $str5 = $StrVal( 5);
-  $str6 = $StrVal( 6);
-  $str7 = $StrVal( 7);
-  $str8 = $StrVal( 8);
+  $str1 = $strVal( 1);
+  $str2 = $strVal( 2);
+  $str3 = $strVal( 3);
+  $str4 = $strVal( 4);
+  $str5 = $strVal( 5);
+  $str6 = $strVal( 6);
+  $str7 = $strVal( 7);
+  $str8 = $strVal( 8);
 
 endsr;
 
@@ -1010,65 +1010,65 @@ endsr;
 //  Copy screen to program fields.                    *
 //====================================================*
 
-begsr FromScreen;
+begsr fromScreen;
 
-  $OfsVal( 1) = $ofs1;
-  $OfsVal( 2) = $ofs2;
-  $OfsVal( 3) = $ofs3;
-  $OfsVal( 4) = $ofs4;
-  $OfsVal( 5) = $ofs5;
-  $OfsVal( 6) = $ofs6;
-  $OfsVal( 7) = $ofs7;
-  $OfsVal( 8) = $ofs8;
+  $ofsVal( 1) = $ofs1;
+  $ofsVal( 2) = $ofs2;
+  $ofsVal( 3) = $ofs3;
+  $ofsVal( 4) = $ofs4;
+  $ofsVal( 5) = $ofs5;
+  $ofsVal( 6) = $ofs6;
+  $ofsVal( 7) = $ofs7;
+  $ofsVal( 8) = $ofs8;
 
-  #HexVal( 1) = #hex11;
-  #HexVal( 2) = #hex12;
-  #HexVal( 3) = #hex13;
-  #HexVal( 4) = #hex14;
+  #hexVal( 1) = #hex11;
+  #hexVal( 2) = #hex12;
+  #hexVal( 3) = #hex13;
+  #hexVal( 4) = #hex14;
 
-  #HexVal( 5) = #hex21;
-  #HexVal( 6) = #hex22;
-  #HexVal( 7) = #hex23;
-  #HexVal( 8) = #hex24;
+  #hexVal( 5) = #hex21;
+  #hexVal( 6) = #hex22;
+  #hexVal( 7) = #hex23;
+  #hexVal( 8) = #hex24;
 
-  #HexVal( 9) = #hex31;
-  #HexVal(10) = #hex32;
-  #HexVal(11) = #hex33;
-  #HexVal(12) = #hex34;
+  #hexVal( 9) = #hex31;
+  #hexVal(10) = #hex32;
+  #hexVal(11) = #hex33;
+  #hexVal(12) = #hex34;
 
-  #HexVal(13) = #hex41;
-  #HexVal(14) = #hex42;
-  #HexVal(15) = #hex43;
-  #HexVal(16) = #hex44;
+  #hexVal(13) = #hex41;
+  #hexVal(14) = #hex42;
+  #hexVal(15) = #hex43;
+  #hexVal(16) = #hex44;
 
-  #HexVal(17) = #hex51;
-  #HexVal(18) = #hex52;
-  #HexVal(19) = #hex53;
-  #HexVal(20) = #hex54;
+  #hexVal(17) = #hex51;
+  #hexVal(18) = #hex52;
+  #hexVal(19) = #hex53;
+  #hexVal(20) = #hex54;
 
-  #HexVal(21) = #hex61;
-  #HexVal(22) = #hex62;
-  #HexVal(23) = #hex63;
-  #HexVal(24) = #hex64;
+  #hexVal(21) = #hex61;
+  #hexVal(22) = #hex62;
+  #hexVal(23) = #hex63;
+  #hexVal(24) = #hex64;
 
-  #HexVal(25) = #hex71;
-  #HexVal(26) = #hex72;
-  #HexVal(27) = #hex73;
-  #HexVal(28) = #hex74;
+  #hexVal(25) = #hex71;
+  #hexVal(26) = #hex72;
+  #hexVal(27) = #hex73;
+  #hexVal(28) = #hex74;
 
-  #HexVal(29) = #hex81;
-  #HexVal(30) = #hex82;
-  #HexVal(31) = #hex83;
-  #HexVal(32) = #hex84;
+  #hexVal(29) = #hex81;
+  #hexVal(30) = #hex82;
+  #hexVal(31) = #hex83;
+  #hexVal(32) = #hex84;
 
-  $StrVal( 1) = $str1;
-  $StrVal( 2) = $str2;
-  $StrVal( 3) = $str3;
-  $StrVal( 4) = $str4;
-  $StrVal( 5) = $str5;
-  $StrVal( 6) = $str6;
-  $StrVal( 7) = $str7;
-  $StrVal( 8) = $str8;
+  $strVal( 1) = $str1;
+  $strVal( 2) = $str2;
+  $strVal( 3) = $str3;
+  $strVal( 4) = $str4;
+  $strVal( 5) = $str5;
+  $strVal( 6) = $str6;
+  $strVal( 7) = $str7;
+  $strVal( 8) = $str8;
 
 endsr;
 
@@ -1092,7 +1092,7 @@ begsr inzsr;
 
   peek23(sds.pgmName: '*ALL': 0
         : yFKeys: yNbrOfKeys);
-  ScrnFKeys = %subarr(yFKeys: 1);
+  scrnFKeys = %subarr(yFKeys: 1);
 
 endsr;
 

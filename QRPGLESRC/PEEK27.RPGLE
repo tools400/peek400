@@ -44,11 +44,11 @@ dcl-s x like(int4_t) inz;
 dcl-s y like(int4_t) inz;
 dcl-s z like(int4_t) inz;
 
-dcl-s wrk_MsgID like(msgId_t) inz;
-dcl-s wrk_MsgTxt like(msgDta_t) inz;
-dcl-s Wrk_Key like(KEY_t) inz;
-dcl-s Wrk_Sectn like(SECTION_t) inz;
-dcl-s data like(SET0000_t) inz;
+dcl-s wrk_msgID like(msgId_t) inz;
+dcl-s wrk_msgTxt like(msgDta_t) inz;
+dcl-s wrk_key like(key_t) inz;
+dcl-s wrk_sectn like(section_t) inz;
+dcl-s data like(set0000_t) inz;
 
 //  Breite der Auswahlzeile und Ausschlüsse des Aufrufers
 dcl-s width like(int4_t) inz(63);
@@ -105,13 +105,13 @@ begsr getKeyMap;
   o_numChoices = 1;
 
   //  Numerische-Auswahlen ...
-  Wrk_Sectn = '*' + %trim(i_pgm);
-  Wrk_Key = *blanks;
-  Wrk_Key = '0' + Wrk_Key;
-  p_setllUsr(Wrk_Sectn: Wrk_Key);
+  wrk_sectn = '*' + %trim(i_pgm);
+  wrk_key = *blanks;
+  wrk_key = '0' + wrk_key;
+  p_setllUsr(wrk_sectn: wrk_key);
 
   for do_x1 = 1 to *hival;
-    if (f_readeUsr(Wrk_Sectn: Wrk_Key: data)= '1');
+    if (f_readeUsr(wrk_sectn: wrk_key: data)= '1');
       leave;
     endif;
 
@@ -122,7 +122,7 @@ begsr getKeyMap;
       endif;
     endif;
 
-    exsr BuildStr;
+    exsr buildStr;
     if (x > 32);
       //          Fertig, Tabelle ist voll
       leave;
@@ -131,18 +131,18 @@ begsr getKeyMap;
   endfor;
 
   //  String-Auswahlen ...
-  Wrk_Sectn = '*' + %trim(i_pgm);
-  Wrk_Key = *allx'FF';
-  Wrk_Key = '*' + Wrk_Key;
-  p_setllUsr(Wrk_Sectn: Wrk_Key);
+  wrk_sectn = '*' + %trim(i_pgm);
+  wrk_key = *allx'FF';
+  wrk_key = '*' + wrk_key;
+  p_setllUsr(wrk_sectn: wrk_key);
 
   for do_x2 = 1 to *hival;
-    if (f_readeUsr(Wrk_Sectn: Wrk_Key: data)= '1');
+    if (f_readeUsr(wrk_sectn: wrk_key: data)= '1');
       leave;
     endif;
 
     //  Numerische-Auswahlen, siehe oben ...
-    if (Wrk_Key > '0');
+    if (wrk_key > '0');
       leave;
     endif;
 
@@ -153,7 +153,7 @@ begsr getKeyMap;
       endif;
     endif;
 
-    exsr BuildStr;
+    exsr buildStr;
     if (x > 32);
       //          Fertig, Tabelle ist voll
       leave;
@@ -164,22 +164,22 @@ begsr getKeyMap;
 endsr;
 
 //============================================================*
-//    BuildStr      String zusammenbauen                      *
+//    buildStr      String zusammenbauen                      *
 //============================================================*
 
-begsr BuildStr;
+begsr buildStr;
 
-  wrk_MsgID = f_mapCmdToMsg(data: Wrk_Sectn);
-  if (wrk_MsgID <> '');
-    wrk_MsgID = 'KEY' + %trim(wrk_MsgID);
-    wrk_MsgTxt = f_msgText(wrk_MsgID: ' ');
+  wrk_msgID = f_mapCmdToMsg(data: wrk_sectn);
+  if (wrk_msgID <> '');
+    wrk_msgID = 'KEY' + %trim(wrk_msgID);
+    wrk_msgTxt = f_msgText(wrk_msgID: ' ');
   else;
     //  Befehl ohne Nachrichtentext
-    wrk_MsgTxt = '???';
+    wrk_msgTxt = '???';
   endif;
 
   //  Stringlänge
-  z = %checkr(' ': wrk_MsgTxt);
+  z = %checkr(' ': wrk_msgTxt);
   //  Für Auswahl und "="-Zeichen
   z = z + 3;
   //  Für Trennleerraum ...
@@ -199,13 +199,13 @@ begsr BuildStr;
   //               Nix tun, Tabelle ist voll
   else;
     if (o_choices(x) = *blanks);
-      o_choices(x) = %trimr(Wrk_Key);
+      o_choices(x) = %trimr(wrk_key);
     else;
       o_choices(x) = %trimr(o_choices(x)) +
-                 '  ' + %trimr(Wrk_Key);
+                 '  ' + %trimr(wrk_key);
     endif;
     o_choices(x) = %trimr(o_choices(x)) +
-               '=' + %trim(wrk_MsgTxt);
+               '=' + %trim(wrk_msgTxt);
   endif;
 
 endsr;

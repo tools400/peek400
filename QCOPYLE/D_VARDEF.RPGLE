@@ -114,7 +114,7 @@ end-ds;
 
 //  Verwaltung gepinnter Datensätze
 dcl-ds pinTabR_t qualified template;
-  RcdNbr int(10);
+  rcdNbr int(10);
   file   char(10);
   lib    char(10);
   mbr    char(10);

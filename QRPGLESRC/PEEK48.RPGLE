@@ -65,21 +65,21 @@ dcl-ds set0008 likeds(set0008_t) inz;
 
 dcl-s yFKeys char(18) dim(32) inz;
 dcl-s yNbrOfKeys like(int4_t) inz;
-dcl-s YMsgID char(7) inz(*blanks);
-dcl-s YMsgDta char(512) inz(*blanks);
+dcl-s yMsgID char(7) inz(*blanks);
+dcl-s yMsgDta char(512) inz(*blanks);
 
-dcl-s YPgmCmd char(10) inz(*blanks);
-dcl-s YCmdDta like(pgmCmdDt_t) inz;
+dcl-s yPgmCmd char(10) inz(*blanks);
+dcl-s yCmdDta like(pgmCmdDt_t) inz;
 
-dcl-s YField char(10) inz(*blanks);
+dcl-s yField char(10) inz(*blanks);
 
-dcl-s YSqlOrder like(sqlOrder_t) inz(*blanks);
+dcl-s ySqlOrder like(sqlOrder_t) inz(*blanks);
 
 dcl-s yRetFile char(10) inz(*blanks);
 dcl-s yRetLib char(10) inz(*blanks);
 
-dcl-s sfbot like(int4_t) inz;
-dcl-c NbrFKeys 3;
+dcl-s sfBot like(int4_t) inz;
+dcl-c nbrFKeys 3;
 
 dcl-s peek21_name like(pgmCallN_t) inz;
 dcl-s peek23_name like(pgmCallN_t) inz;
@@ -87,8 +87,8 @@ dcl-s peek37_name like(pgmCallN_t) inz;
 dcl-s peek38_name like(pgmCallN_t) inz;
 dcl-s peek40_name like(pgmCallN_t) inz;
 
-dcl-s tempScnFld like(ScnFld) inz;
-dcl-s tempFldPos like(FldPos) inz;
+dcl-s tempScnFld like(scnFld) inz;
+dcl-s tempFldPos like(fldPos) inz;
 dcl-s tempLen like(int4_t) inz;
 dcl-s tempCsrRow like(int4_t) inz;
 dcl-s tempCsrCol like(int4_t) inz;
@@ -135,7 +135,7 @@ ceehdlr(%paddr('errorHandler'): *null: *omit);
 
 exsr inzsr;
 
-exsr First;
+exsr first;
 
 //---------------------------------------------------*
 //  Schleife für Programmbearbeitung
@@ -148,30 +148,30 @@ dow ('1');
 
   //  Anzeigen der Befehlstasten
   select;
-  when ((sfbot = 2) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 2) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#2;
-  when ((sfbot = 3) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 3) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#3;
-  when ((sfbot = 4) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 4) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#4;
-  when ((sfbot = 5) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 5) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#5;
-  when ((sfbot = 6) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 6) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#6;
-  when ((sfbot = 7) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 7) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#7;
-  when ((sfbot = 8) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 8) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#8;
   other;
     write pbbot#1;
-    sfbot = 1;
+    sfBot = 1;
   endsl;
 
   //  Anzeigen Bildschirm
@@ -185,7 +185,7 @@ dow ('1');
   p_rmvPgmMg(sds.pgmName);
 
   //  Merken Cursorposition
-  exsr KeepCsrPos;
+  exsr keepCsrPos;
 
   //  Bezugszahlen löschen
   exsr bzoff1;
@@ -193,58 +193,58 @@ dow ('1');
   //  Mappen der gedrückten Taste
   //  in Programmbefehl
   peek21(workstn.aid: sds.pgmName
-        : YPgmCmd: YCmdDta: YMsgID: YMsgDta);
-  if (YMsgID <> *blanks);
-    p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
-    YMsgID = '';
-    YMsgDta = '';
+        : yPgmCmd: yCmdDta: yMsgID: yMsgDta);
+  if (yMsgID <> *blanks);
+    p_sndPgmMg(yMsgID: yMsgDta: sds.pgmName);
+    yMsgID = '';
+    yMsgDta = '';
     iter;
   endif;
 
   //  Abfragen der Programmbefehle
   select;
   //  F3  - Ende
-  when (YPgmCmd = '*EXIT');
-    exsr C_EndPgm;
+  when (yPgmCmd = '*EXIT');
+    exsr c_endPgm;
     leave;
   //  F4  - Prompt
-  when (YPgmCmd = '*PROMPT');
-    tempScnFld = ScnFld;
-    tempFldPos = FldPos;
-    exsr C_Prompt;
+  when (yPgmCmd = '*PROMPT');
+    tempScnFld = scnFld;
+    tempFldPos = fldPos;
+    exsr c_prompt;
     iter;
 
   //  F5  - Aktualisieren
-  when (YPgmCmd = '*REFRESH');
-    exsr C_Refresh;
+  when (yPgmCmd = '*REFRESH');
+    exsr c_refresh;
     iter;
 
   //  F9  - Auswählen Sortierfolge
-  when (YPgmCmd = '*DSPDBR');
-    tempScnFld = ScnFld;
-    tempFldPos = FldPos;
-    exsr C_SelectKy;
+  when (yPgmCmd = '*DSPDBR');
+    tempScnFld = scnFld;
+    tempFldPos = fldPos;
+    exsr c_selectKy;
     iter;
 
   //  F11 - Einfügen Keyfelder
-  when (YPgmCmd = '*INSKEYFLD');
-    tempScnFld = ScnFld;
-    tempFldPos = FldPos;
-    exsr C_InsKeyFd;
+  when (yPgmCmd = '*INSKEYFLD');
+    tempScnFld = scnFld;
+    tempFldPos = fldPos;
+    exsr c_insKeyFd;
     iter;
 
   //  F12 - Ende
-  when (YPgmCmd = '*CANCEL');
-    exsr C_EndPgm;
+  when (yPgmCmd = '*CANCEL');
+    exsr c_endPgm;
     leave;
 
   //  F24 - Weitere Tasten
-  when (YPgmCmd = '*MOREKEYS');
-    exsr C_MoreKeys;
+  when (yPgmCmd = '*MOREKEYS');
+    exsr c_moreKeys;
 
   //  Datenfreigabe
-  when (YPgmCmd = '*ENTER');
-    exsr C_Enter;
+  when (yPgmCmd = '*ENTER');
+    exsr c_enter;
     if (*in99 = *off);
       o_msgID = 'USR8112';
       o_msgDta = *blanks;
@@ -264,18 +264,18 @@ close peek48fm;
 return;
 
 //============================================================*
-//    C_Enter       "Datenfreigabetaste"                      *
+//    c_enter       "Datenfreigabetaste"                      *
 //============================================================*
 
-begsr C_Enter;
+begsr c_enter;
 
-  exsr DltCsrPos;
+  exsr dltCsrPos;
 
-  ##order = SQL_quote(##order);
+  ##order = sql_quote(##order);
 
-  if (SQL_prepareStatement(
+  if (sql_prepareStatement(
          '1': pFile.name: pFile.library: pFile.member: pFile.format:
-         ##where: ##order: YMsgID: YMsgDta));
+         ##where: ##order: yMsgID: yMsgDta));
     io_file      = pFile.name;
     io_library   = pFile.library;
     io_member    = pFile.member;
@@ -284,10 +284,10 @@ begsr C_Enter;
     io_sqlOrder  = ##order;
     *in99 = '0';
   else;
-    if (YMsgID <> '');
-      p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
-      YMsgID = '';
-      YMsgDta = '';
+    if (yMsgID <> '');
+      p_sndPgmMg(yMsgID: yMsgDta: sds.pgmName);
+      yMsgID = '';
+      yMsgDta = '';
     endif;
     *in99 = '1';
   endif;
@@ -310,10 +310,10 @@ begsr bzoff1;
 endsr;
 
 //============================================================*
-//    C_EndPgm      F3/F12 - Programm beenden                 *
+//    c_endPgm      F3/F12 - Programm beenden                 *
 //============================================================*
 
-begsr C_EndPgm;
+begsr c_endPgm;
 
   p_rmvPgmMg(sds.pgmName);
 
@@ -333,10 +333,10 @@ begsr C_EndPgm;
 endsr;
 
 //============================================================*
-//    C_Prompt      F4  - Prompt                              *
+//    c_prompt      F4  - Prompt                              *
 //============================================================*
 
-begsr C_Prompt;
+begsr c_prompt;
 
   //  Steht im Feld nur das Prompt-Zeichen (z. B. '?'), gilt der Prompt
   //  diesem Feld, auch wenn der Cursor nicht darin steht. Der
@@ -354,14 +354,14 @@ begsr C_Prompt;
     if (*in71 = *on);
       p_sndPgmMg('USR8195': '': sds.pgmName);
     else;
-      exsr Pmt_Field;
+      exsr pmt_field;
     endif;
 
   when (tempScnFld = '##ORDER');
     if (*in72 = *on);
       p_sndPgmMg('USR8195': '': sds.pgmName);
     else;
-      exsr Pmt_Field;
+      exsr pmt_field;
     endif;
 
   other;
@@ -371,17 +371,17 @@ begsr C_Prompt;
 endsr;
 
 //============================================================*
-//    Pmt_Field     Prompt - Field                            *
+//    pmt_field     Prompt - Field                            *
 //============================================================*
 
-begsr Pmt_Field;
+begsr pmt_field;
 
-  peek37(i_dsp80: i_copyright: YField
-        :  YMsgID: YMsgDta);
+  peek37(i_dsp80: i_copyright: yField
+        :  yMsgID: yMsgDta);
 
-  if (YMsgID = '');
+  if (yMsgID = '');
 
-    tempLen = %checkr(' ': YField);
+    tempLen = %checkr(' ': yField);
 
     select;
     when (tempScnFld = '##WHERE');
@@ -389,7 +389,7 @@ begsr Pmt_Field;
         ##where = '';
         tempFldPos = 1;
       endif;
-      ##where = %replace(%trimr(YField) + ' '
+      ##where = %replace(%trimr(yField) + ' '
                         : ##where
                         : tempFldPos
                         : 0);
@@ -404,7 +404,7 @@ begsr Pmt_Field;
         ##order = '';
         tempFldPos = 1;
       endif;
-      ##order  = %replace(%trimr(YField) + ' '
+      ##order  = %replace(%trimr(yField) + ' '
                          : ##order
                          : tempFldPos
                          : 0);
@@ -438,22 +438,22 @@ begsr Pmt_Field;
                   %int(tempFldPos/ tempFldBy);
     endif;
 
-    CsrRow = tempCsrRow;
-    CsrCol = tempCsrCol - 1;
+    csrRow = tempCsrRow;
+    csrCol = tempCsrCol - 1;
 
   else;
-    p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
-    YMsgID = '';
-    YMsgDta = '';
+    p_sndPgmMg(yMsgID: yMsgDta: sds.pgmName);
+    yMsgID = '';
+    yMsgDta = '';
   endif;
 
 endsr;
 
 //============================================================*
-//    C_Refresh     F5  - Aktualisieren der Subfile           *
+//    c_refresh     F5  - Aktualisieren der Subfile           *
 //============================================================*
 
-begsr C_Refresh;
+begsr c_refresh;
 
   exsr bzoff1;
   exsr fill##;
@@ -461,17 +461,17 @@ begsr C_Refresh;
 endsr;
 
 //============================================================*
-//    C_SelectKy    Auswählen Sortierfolge                    *
+//    c_selectKy    Auswählen Sortierfolge                    *
 //============================================================*
 
-begsr C_SelectKy;
+begsr c_selectKy;
 
   select;
   when (tempScnFld = '##ORDER');
     if (*in72 = *on);
       p_sndPgmMg('USR8195': '': sds.pgmName);
     else;
-      exsr Slc_Key;
+      exsr slc_key;
     endif;
   other;
     p_sndPgmMg('USR8211': '': sds.pgmName);
@@ -480,47 +480,47 @@ begsr C_SelectKy;
 endsr;
 
 //============================================================*
-//    Slc_Key       Auswählen Sortierfolge                   *
+//    slc_key       Auswählen Sortierfolge                   *
 //============================================================*
 
-begsr Slc_Key;
+begsr slc_key;
 
-  YMsgID = '';
-  YMsgDta = '';
+  yMsgID = '';
+  yMsgDta = '';
   peek40(i_dsp80: i_copyright
         : io_file: io_library: io_member
         : io_rcdFmt: bTrue
         : yRetFile: yRetLib
-        : YMsgID: YMsgDta);
+        : yMsgID: yMsgDta);
 
   select;
   //  ... Fehler von PEEK40 (USR8100: mit F3/F12 verlassen)
-  when (YMsgID <> '' and YMsgID <> 'USR8100');
-    p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
+  when (yMsgID <> '' and yMsgID <> 'USR8100');
+    p_sndPgmMg(yMsgID: yMsgDta: sds.pgmName);
   //  ... Datei ausgewählt
   when (yRetFile <> *blanks);
     io_file = yRetFile;
     io_library = yRetLib;
-    exsr Ins_Field;
+    exsr ins_field;
   endsl;
 
-  YMsgID = '';
-  YMsgDta = '';
+  yMsgID = '';
+  yMsgDta = '';
 
 endsr;
 
 //============================================================*
-//    C_InsKeyFd    Insert Key Fields                         *
+//    c_insKeyFd    Insert Key Fields                         *
 //============================================================*
 
-begsr C_InsKeyFd;
+begsr c_insKeyFd;
 
   select;
   when (tempScnFld = '##ORDER');
     if (*in72 = *on);
       p_sndPgmMg('USR8195': '': sds.pgmName);
     else;
-      exsr Ins_Field;
+      exsr ins_field;
     endif;
   other;
     p_sndPgmMg('USR8211': '': sds.pgmName);
@@ -529,14 +529,14 @@ begsr C_InsKeyFd;
 endsr;
 
 //============================================================*
-//    Ins_Field     Insert Key Fields                         *
+//    ins_field     Insert Key Fields                         *
 //============================================================*
 
-begsr Ins_Field;
+begsr ins_field;
 
-  YSqlOrder = '';
-  peek38(io_file: io_library: YSqlOrder);
-  inskeys = %trimr(YSqlOrder);
+  ySqlOrder = '';
+  peek38(io_file: io_library: ySqlOrder);
+  inskeys = %trimr(ySqlOrder);
 
   //  Die Schlüsselfelder werden an der Cursorposition in ##ORDER
   //  eingefügt, vorhandener Text rückt nach rechts (wie bei F4).
@@ -568,12 +568,12 @@ begsr Ins_Field;
 endsr;
 
 //============================================================*
-//    C_MoreKeys    F24 - Weitere Tasten                      *
+//    c_moreKeys    F24 - Weitere Tasten                      *
 //============================================================*
 
-begsr C_MoreKeys;
+begsr c_moreKeys;
 
-  sfbot = sfbot + 1;
+  sfBot = sfBot + 1;
 
 endsr;
 
@@ -600,41 +600,41 @@ begsr fill##;
   if ((i_accessMode = KEY_SEQ) and
       (##order  = ' '    ));
     tempFldPos = 1;
-    exsr Ins_Field;
+    exsr ins_field;
   endif;
 
 endsr;
 
 //============================================================*
-//    KeepCsrPos    Beibehalten der Cursorposition            *
+//    keepCsrPos    Beibehalten der Cursorposition            *
 //============================================================*
 
-begsr KeepCsrPos;
+begsr keepCsrPos;
 
   //  Beibehalten der Cursorosition
-  CsrRow = cursorPosition.row - zei;
-  CsrCol = cursorPosition.column - pos;
-  CsrCol = CsrCol - 1;
+  csrRow = cursorPosition.row - zei;
+  csrCol = cursorPosition.column - pos;
+  csrCol = csrCol - 1;
 
 endsr;
 
 //============================================================*
-//    DltCsrPos     Löschen der Cursorposition                *
+//    dltCsrPos     Löschen der Cursorposition                *
 //============================================================*
 
-begsr DltCsrPos;
+begsr dltCsrPos;
 
   //  Löschen der Cursorosition
-  CsrRow = *zeros;
-  CsrCol = *zeros;
+  csrRow = *zeros;
+  csrCol = *zeros;
 
 endsr;
 
 //============================================================*
-//    GetUsrSetg    Ermitteln der Benutzervoreinstellungen    *
+//    getUsrSetg    Ermitteln der Benutzervoreinstellungen    *
 //============================================================*
 
-begsr GetUsrSetg;
+begsr getUsrSetg;
 
   //  *PROMPT
   set0008 = f_getUsrSg('*PROMPT');
@@ -642,10 +642,10 @@ begsr GetUsrSetg;
 endsr;
 
 //============================================================*
-//    SetScreen     Einstellen 132/80-Zeichen Auflösung       *
+//    setScreen     Einstellen 132/80-Zeichen Auflösung       *
 //============================================================*
 
-begsr SetScreen;
+begsr setScreen;
 
   if (i_dsp80 = '0');
     //   132-Zeichen Anzeige
@@ -665,7 +665,7 @@ endsr;
 //    First         Initialisierung                           *
 //============================================================*
 
-begsr First;
+begsr first;
 
   // - Ermitteln physische Datei
   f_basedPF(io_file    :
@@ -686,7 +686,7 @@ begsr First;
   p_rmvPgmMg(sds.pgmName);
 
   // - Benutzervoreinstellungen (Prompt-Zeichen)
-  exsr GetUsrSetg;
+  exsr getUsrSetg;
 
   // - Setzen Ändern erlaubt für: WHERE und ORDER BY
   if (i_enableWhere = bTrue);
@@ -705,16 +705,16 @@ begsr First;
   exsr bzoff1;
   exsr fill##;
 
-  exsr DltCsrPos;
+  exsr dltCsrPos;
 
   o_msgID = '';
   o_msgDta = '';
 
   // - Darstellung der Befehlstasten
-  sfbot = 1;
+  sfBot = 1;
 
   // - Einstellen der Bildschirmauflösung 80/132-Zeichen
-  exsr SetScreen;
+  exsr setScreen;
 
 endsr;
 
@@ -738,9 +738,9 @@ begsr inzsr;
   peek38_name = f_pgmCallN('PEEK38');
   peek40_name = f_pgmCallN('PEEK40');
 
-  peek23(sds.pgmName: '*ALL': NbrFKeys
+  peek23(sds.pgmName: '*ALL': nbrFKeys
         : yFKeys: yNbrOfKeys);
-  ScrnFKeys = %subarr(yFKeys: 1);
+  scrnFKeys = %subarr(yFKeys: 1);
 
 endsr;
 

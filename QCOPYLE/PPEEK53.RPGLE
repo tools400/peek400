@@ -4,9 +4,9 @@
 //      Modul: Peek053
 //============================================================*
 
-dcl-s SECTION_t char(10) template;
-dcl-s KEY_t char(10) template;
-dcl-s SET0000_t char(256) template;
+dcl-s section_t char(10) template;
+dcl-s key_t char(10) template;
+dcl-s set0000_t char(256) template;
 
 //-------------------------------------------------------------------*
 dcl-pr p_crtUsrSg;
@@ -17,75 +17,75 @@ dcl-pr p_crtUsrSg;
 end-pr;
 
 //-------------------------------------------------------------------*
-dcl-pr f_getUsrSg like(SET0000_t);
-  i_key    like(KEY_t) const;
+dcl-pr f_getUsrSg like(set0000_t);
+  i_key    like(key_t) const;
   o_msgID  char(7) options(*nopass);
   o_msgDta char(512) options(*nopass);
 end-pr;
 
 //-------------------------------------------------------------------*
 dcl-pr p_updUsrSg;
-  i_key  like(KEY_t) const;
-  i_data like(SET0000_t) const;
+  i_key  like(key_t) const;
+  i_data like(set0000_t) const;
 end-pr;
 
 //-------------------------------------------------------------------*
 dcl-pr f_chainUsr like(bool_t);
-  i_section like(SECTION_t) const;
-  i_key     like(KEY_t) const;
-  o_data    like(SET0000_t);
+  i_section like(section_t) const;
+  i_key     like(key_t) const;
+  o_data    like(set0000_t);
 end-pr;
 
 //-------------------------------------------------------------------*
 dcl-pr f_updatUsr like(bool_t);
-  i_section like(SECTION_t) const;
-  i_key     like(KEY_t) const;
-  i_data    like(SET0000_t) const;
+  i_section like(section_t) const;
+  i_key     like(key_t) const;
+  i_data    like(set0000_t) const;
 end-pr;
 
 //-------------------------------------------------------------------*
 dcl-pr f_deletUsr like(bool_t);
-  i_section like(SECTION_t) const;
-  i_key     like(KEY_t) const;
+  i_section like(section_t) const;
+  i_key     like(key_t) const;
 end-pr;
 
 //-------------------------------------------------------------------*
 dcl-pr f_writeUsr like(bool_t);
-  i_section like(SECTION_t) const;
-  i_key     like(KEY_t) const;
-  i_data    like(SET0000_t);
+  i_section like(section_t) const;
+  i_key     like(key_t) const;
+  i_data    like(set0000_t);
 end-pr;
 
 //-------------------------------------------------------------------*
 dcl-pr p_setllUsr;
-  i_section like(SECTION_t) const;
-  i_key     like(KEY_t) options(*nopass) const;
+  i_section like(section_t) const;
+  i_key     like(key_t) options(*nopass) const;
 end-pr;
 
 //-------------------------------------------------------------------*
 dcl-pr p_setgtUsr;
-  i_section like(SECTION_t) const;
-  i_key     like(KEY_t) options(*nopass) const;
+  i_section like(section_t) const;
+  i_key     like(key_t) options(*nopass) const;
 end-pr;
 
 //-------------------------------------------------------------------*
 dcl-pr f_readeUsr like(bool_t);
-  i_section like(SECTION_t) const;
-  o_key     like(KEY_t) options(*nopass);
-  o_data    like(SET0000_t) options(*nopass);
+  i_section like(section_t) const;
+  o_key     like(key_t) options(*nopass);
+  o_data    like(set0000_t) options(*nopass);
 end-pr;
 
 //-------------------------------------------------------------------*
 dcl-pr p_setllDft;
-  i_section like(SECTION_t) const;
-  i_key     like(KEY_t) options(*nopass) const;
+  i_section like(section_t) const;
+  i_key     like(key_t) options(*nopass) const;
 end-pr;
 
 //-------------------------------------------------------------------*
 dcl-pr f_readeDft like(bool_t);
-  i_section like(SECTION_t) const;
-  o_key     like(KEY_t) options(*nopass);
-  o_data    like(SET0000_t) options(*nopass);
+  i_section like(section_t) const;
+  o_key     like(key_t) options(*nopass);
+  o_data    like(set0000_t) options(*nopass);
 end-pr;
 
 //-------------------------------------------------------------------*

@@ -6,9 +6,9 @@
 
 dcl-ds set0015_t len(256) qualified template;
   //  Datei mit Arbeitsumgebungen ...
-  set_envfil char(10) inz('PEEKENV');
+  set_envFil char(10) inz('PEEKENV');
   //  ... Bibliothek
-  set_envlib char(10) inz('*PRDLIB');
+  set_envLib char(10) inz('*PRDLIB');
   //  Ändern Datei erlaubt: 1=Ja; 0=Nein
   set_envchg char(1) inz('1');
   //  Funktion aktiv: 1=Ja; 0=Nein

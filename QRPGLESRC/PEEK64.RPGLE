@@ -29,11 +29,11 @@
 
 dcl-f peek64fm workstn(*ext) usage(*input: *output) usropn infds(workstn);
 
-dcl-f peekfld keyed usropn prefix(f_) infds(Peek_01_DS);
+dcl-f peekFld keyed usropn prefix(f_) infds(peek_01_ds);
 
 dcl-ds workstn likeds(workstn_t);
 
-dcl-ds Peek_01_DS likeds(infds_t);
+dcl-ds peek_01_ds likeds(infds_t);
 
 /copy QCOPYLE,D_VARDEF
 /copy QCOPYLE,D_INFDS
@@ -63,10 +63,10 @@ dcl-ds Peek_01_DS likeds(infds_t);
 
 dcl-ds fldl0100 likeds(fldl0100_t) inz;
 
-dcl-s YPgmCmd like(pgmCmd_t);
-dcl-s YCmdDta like(pgmCmdDt_t);
-dcl-s YMsgID like(msgId_t);
-dcl-s YMsgDta like(msgDta_t);
+dcl-s yPgmCmd like(pgmCmd_t);
+dcl-s yCmdDta like(pgmCmdDt_t);
+dcl-s yMsgID like(msgId_t);
+dcl-s yMsgDta like(msgDta_t);
 
 dcl-s yFKeys like(fKeyDsp_t) dim(32);
 dcl-s yNbrOfKeys like(int4_t) inz;
@@ -82,8 +82,8 @@ dcl-s peek23_name like(pgmCallN_t);
 dcl-s isPgmError like(bool_t) inz(bFalse);
 dcl-s isDataChg like(bool_t) inz(bFalse);
 
-dcl-ds Buffer qualified;
-  Offset         int(10) inz;
+dcl-ds buffer qualified;
+  offset         int(10) inz;
   maxLength      int(10) inz;
   trimLength     int(10) inz;
   pFldInhaltSbcs like(rcdBuf_t) inz;
@@ -124,7 +124,7 @@ dcl-pi peek64;
   i_copyright  like(copyright_t) const;
   i_fldName    like(fieldNme_t) const;
   io_fldInhalt likeds(fldInhalt_t);
-  io_Length    like(int4_t);
+  io_length    like(int4_t);
   i_protect    like(bool_t) const;
   i_isUcs2     like(int4_t) const;
   o_msgID      like(msgId_t);
@@ -139,7 +139,7 @@ ceehdlr(%paddr('errorHandler'): *null: *omit);
 
 exsr inzsr;
 
-exsr First;
+exsr first;
 if (isPgmError = bFalse);
 
   dow ('1');
@@ -181,7 +181,7 @@ if (isPgmError = bFalse);
 
     // Anzeigen Cursorposition im Feld #STRING/
     if (isCursorDataField());
-      $CSRPOS = H_CSRPOS + Buffer.Offset;
+      $CSRPOS = H_CSRPOS + buffer.offset;
     else;
       $CSRPOS = 0;
     endif;
@@ -218,84 +218,84 @@ if (isPgmError = bFalse);
 
     //  Mappen der gedrückten Taste
     //  in Programmbefehl
-    peek21(workstn.aid: sds.pgmName: YPgmCmd: YCmdDta: YMsgID: YMsgDta
+    peek21(workstn.aid: sds.pgmName: yPgmCmd: yCmdDta: yMsgID: yMsgDta
           : yExclKeys);
-    if (YMsgID <> ' ');
-      p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
-      YMsgID = '';
-      YMsgDta = '';
+    if (yMsgID <> ' ');
+      p_sndPgmMg(yMsgID: yMsgDta: sds.pgmName);
+      yMsgID = '';
+      yMsgDta = '';
       iter;
     endif;
 
     //  Abfragen der Programmbefehle
     select;
     //  F3  - Ende
-    when (YPgmCmd = '*EXIT' or YPgmCmd = '*NO');
-      exsr C_EndPgm;
+    when (yPgmCmd = '*EXIT' or yPgmCmd = '*NO');
+      exsr c_endPgm;
       leave;
 
     //  F5  - Aktualisieren
-    when (YPgmCmd = '*REFRESH');
-      exsr C_Refresh;
+    when (yPgmCmd = '*REFRESH');
+      exsr c_refresh;
       iter;
 
     //  F7  - Startposition
-    when (YPgmCmd = '*INSERT' and not i_protect);
+    when (yPgmCmd = '*INSERT' and not i_protect);
       exsr c_insert;
       iter;
 
     //  F8  - Endposition
-    when (YPgmCmd = '*DELETE' and not i_protect);
+    when (yPgmCmd = '*DELETE' and not i_protect);
       exsr c_delete;
       iter;
 
     //  F12 - Ende
-    when (YPgmCmd = '*CANCEL');
-      exsr C_EndPgm;
+    when (yPgmCmd = '*CANCEL');
+      exsr c_endPgm;
       leave;
 
     //  F17 - an den Afang gehen
-    when (YPgmCmd = '*FIRSTPOS');
+    when (yPgmCmd = '*FIRSTPOS');
       exsr c_firstPos;
 
     //  F18 - ans Ende gehen
-    when (YPgmCmd = '*LASTPOS');
+    when (yPgmCmd = '*LASTPOS');
       exsr c_lastPos;
 
     //  F19 - nach rechts verschieben
-    when (YPgmCmd = '*LEFT');
+    when (yPgmCmd = '*LEFT');
       exsr c_moveLeft;
 
     //  F20 - nach links verschieben
-    when (YPgmCmd = '*RIGHT');
+    when (yPgmCmd = '*RIGHT');
       exsr c_moveRight;
 
     //  F24 - Weitere Tasten
-    when (YPgmCmd = '*MOREKEYS');
-      exsr C_MoreKeys;
+    when (yPgmCmd = '*MOREKEYS');
+      exsr c_moreKeys;
 
     //  Page up
-    when (YPgmCmd = '*PAGEUP');
+    when (yPgmCmd = '*PAGEUP');
       exsr c_pageUp;
 
     //  Page down
-    when (YPgmCmd = '*PAGEDOWN');
+    when (yPgmCmd = '*PAGEDOWN');
       exsr c_pageDown;
 
     //  Datenfreigabe
-    when (YPgmCmd = '*ENTER' or YPgmCmd = '*OK');
-      exsr C_Enter;
+    when (yPgmCmd = '*ENTER' or yPgmCmd = '*OK');
+      exsr c_enter;
       if (isPgmError = bFalse and not isDataChg);
         o_msgID  = 'USR8112';
         o_msgDta = ' ';
 
         if (i_isUcs2 = 0);
-          io_fldInhalt.sbcs = Buffer.pFldInhaltSbcs;
+          io_fldInhalt.sbcs = buffer.pFldInhaltSbcs;
         else;
-          io_fldInhalt.ucs2 = Buffer.pFldInhaltUcs2;
+          io_fldInhalt.ucs2 = buffer.pFldInhaltUcs2;
         endif;
 
-        io_Length = Buffer.maxLength;
+        io_length = buffer.maxLength;
         leave;
       endif;
 
@@ -309,8 +309,8 @@ if (isPgmError = bFalse);
 
 endif;
 
-if (%open(peekfld));
-  close peekfld;
+if (%open(peekFld));
+  close peekFld;
 endif;
 
 close peek64fm;
@@ -318,10 +318,10 @@ close peek64fm;
 return;
 
 //============================================================*
-//    KeepCsrPos    Beibehalten der Cursorposition            *
+//    keepCsrPos    Beibehalten der Cursorposition            *
 //============================================================*
 
-begsr KeepCsrPos;
+begsr keepCsrPos;
 
   //  Beibehalten der Cursorosition
   H_CSRROW = cursorPosition.row - zei;
@@ -347,10 +347,10 @@ endsr;
 //    c_enter       "Datenfreigabetaste"                      *
 //============================================================*
 
-begsr C_Enter;
+begsr c_enter;
 
   //  Prüfen der Eingaben
-  exsr prfb1;
+  exsr prfB1;
 
   if (not isPgmError);
 
@@ -383,7 +383,7 @@ begsr C_Enter;
       //  Cursor auf die Startposition setzen, wenn sie angezeigt wird.
       //  Das Textfeld beginnt im Fenster (zei/pos) in Zeile 8, Spalte 4
       //  und hat %len(#ucs2_1) Zeichen je Zeile.
-      relPos = insDel.startPos - Buffer.Offset;
+      relPos = insDel.startPos - buffer.offset;
       if (relPos >= 1 and relPos <= maxEditLength);
         cursorPosition.row = zei + 8 + %div(relPos - 1: %len(#ucs2_1));
         cursorPosition.column = pos + 5 + %rem(relPos - 1: %len(#ucs2_1));
@@ -404,12 +404,12 @@ begsr C_Enter;
 
   // Bildschirm neu aufbauen
   if (not isPgmError);
-    Buffer.Offset = #StartPos - 1;
+    buffer.offset = #startPos - 1;
     exsr fill##;
   endif;
 
   if (not isPgmError and cursorPosition.row > 0);
-    exsr KeepCsrPos;
+    exsr keepCsrPos;
   endif;
 
 endsr;
@@ -428,11 +428,11 @@ begsr doInsert;
   start = insDel.startPos + length;
 
   if (i_isUcs2 = 0);
-    %subst(Buffer.pFldInhaltSbcs: start) = %subst(Buffer.pFldInhaltSbcs: insDel.startPos);
-    %subst(Buffer.pFldInhaltSbcs: insDel.startPos: length) = '';
+    %subst(buffer.pFldInhaltSbcs: start) = %subst(buffer.pFldInhaltSbcs: insDel.startPos);
+    %subst(buffer.pFldInhaltSbcs: insDel.startPos: length) = '';
   else;
-    %subst(Buffer.pFldInhaltUcs2: start) = %subst(Buffer.pFldInhaltUcs2: insDel.startPos);
-    %subst(Buffer.pFldInhaltUcs2: insDel.startPos: length) = '';
+    %subst(buffer.pFldInhaltUcs2: start) = %subst(buffer.pFldInhaltUcs2: insDel.startPos);
+    %subst(buffer.pFldInhaltUcs2: insDel.startPos: length) = '';
   endif;
 
   exsr setTrimLength;
@@ -457,11 +457,11 @@ begsr doDelete;
   start = insDel.startPos + length;
 
   if (i_isUcs2 = 0);
-    %subst(Buffer.pFldInhaltSbcs: insDel.startPos) = %subst(Buffer.pFldInhaltSbcs: start);
-    %subst(Buffer.pFldInhaltSbcs: Buffer.maxLength - length + 1: length) = '';
+    %subst(buffer.pFldInhaltSbcs: insDel.startPos) = %subst(buffer.pFldInhaltSbcs: start);
+    %subst(buffer.pFldInhaltSbcs: buffer.maxLength - length + 1: length) = '';
   else;
-    %subst(Buffer.pFldInhaltUcs2: insDel.startPos) = %subst(Buffer.pFldInhaltUcs2: start);
-    %subst(Buffer.pFldInhaltUcs2: Buffer.maxLength - length + 1: length) = '';
+    %subst(buffer.pFldInhaltUcs2: insDel.startPos) = %subst(buffer.pFldInhaltUcs2: start);
+    %subst(buffer.pFldInhaltUcs2: buffer.maxLength - length + 1: length) = '';
   endif;
 
   exsr setTrimLength;
@@ -498,18 +498,18 @@ begsr screenToBuffer;
       #ucs2(11) = #ucs2_11;
     endif;
 
-    start = Buffer.Offset + 1;
-    if (Buffer.Offset + maxEditLength > Buffer.maxLength);
-      length = Buffer.maxLength - Buffer.Offset;
+    start = buffer.offset + 1;
+    if (buffer.offset + maxEditLength > buffer.maxLength);
+      length = buffer.maxLength - buffer.offset;
     else;
       length = maxEditLength;
     endif;
 
     //  ... aktualisieren Buffer
     if (i_isUcs2 = 0);
-      %subst(Buffer.pFldInhaltSbcs: start: length) = %subst(#string: 1: length);
+      %subst(buffer.pFldInhaltSbcs: start: length) = %subst(#string: 1: length);
     else;
-      %subst(Buffer.pFldInhaltUcs2: start: length) = %subst(#ucs2str: 1: length);
+      %subst(buffer.pFldInhaltUcs2: start: length) = %subst(#ucs2str: 1: length);
     endif;
 
     exsr setTrimLength;
@@ -544,7 +544,7 @@ endsr;
 //    prfb1         Prüfen der Eingaben                       *
 //============================================================*
 
-begsr prfb1;
+begsr prfB1;
 
   isPgmError = bFalse;
 
@@ -582,13 +582,13 @@ begsr prf20;
 
   dou ('1');
 
-    if (#StartPos <= 0);
+    if (#startPos <= 0);
       p_sndPgmMg('USR8178': '': sds.pgmName);
       isPgmError = bTrue;
       leave;
     endif;
 
-    if (#StartPos > Buffer.maxLength);
+    if (#startPos > buffer.maxLength);
       p_sndPgmMg('USR8177': '': sds.pgmName);
       isPgmError = bTrue;
       leave;
@@ -611,8 +611,8 @@ begsr prf22;
 
   dou ('1');
 
-    if (Buffer.Offset + maxEditLength > Buffer.maxLength);
-      start = Buffer.maxLength - Buffer.Offset + 1;
+    if (buffer.offset + maxEditLength > buffer.maxLength);
+      start = buffer.maxLength - buffer.offset + 1;
       if (i_isUcs2 = 0);
         isPgmError = %subst(#string: start) <> '';
       else;
@@ -652,7 +652,7 @@ begsr prf23;
       leave;
     endif;
 
-    if (#selStart > Buffer.maxLength);
+    if (#selStart > buffer.maxLength);
       p_sndPgmMg('USR8177': '': sds.pgmName);
       isPgmError = bTrue;
       leave;
@@ -689,18 +689,18 @@ begsr prf24;
 
     if (insDel.mode = MODE_DELETE);
       // Löschen von Zeichen
-      if (#selStart + #selLength - 1 > Buffer.maxLength);
+      if (#selStart + #selLength - 1 > buffer.maxLength);
         clear usr8241;
-        usr8241.var1 = (#selStart + #selLength - 1) - Buffer.maxLength;
+        usr8241.var1 = (#selStart + #selLength - 1) - buffer.maxLength;
         p_sndPgmMg('USR8241': usr8241: sds.pgmName);
         isPgmError = bTrue;
         leave;
       endif;
     else;
       // Einfügen von Leerzeichen
-      if (Buffer.trimLength + #selLength > Buffer.maxLength);
+      if (buffer.trimLength + #selLength > buffer.maxLength);
         clear usr8241;
-        usr8241.var1 = (Buffer.trimLength + #selLength) - Buffer.maxLength;
+        usr8241.var1 = (buffer.trimLength + #selLength) - buffer.maxLength;
         p_sndPgmMg('USR8241': usr8241: sds.pgmName);
         isPgmError = bTrue;
         leave;
@@ -720,7 +720,7 @@ endsr;
 //    c_endPgm      F3/F12 - Programm beenden                 *
 //============================================================*
 
-begsr C_EndPgm;
+begsr c_endPgm;
 
   p_rmvPgmMg(sds.pgmName);
 
@@ -752,7 +752,7 @@ begsr c_insert;
     *in61 = bTrue;
     *in62 = bFalse;
     p_sndPgmMg('USR8236': '': sds.pgmName);
-  when (insDel.mode = MODE_INSERT and insDel.endPos <> H_CSRPOS + Buffer.Offset);
+  when (insDel.mode = MODE_INSERT and insDel.endPos <> H_CSRPOS + buffer.offset);
   // nichts zu tun
   other;
     exsr endInsDel;
@@ -761,9 +761,9 @@ begsr c_insert;
   if (insDel.mode = MODE_INSERT);
     if (isCursorDataField());
       if (insDel.startPos = 0);
-        insDel.startPos = H_CSRPOS + Buffer.Offset;
+        insDel.startPos = H_CSRPOS + buffer.offset;
       else;
-        insDel.endPos = H_CSRPOS + Buffer.Offset;
+        insDel.endPos = H_CSRPOS + buffer.offset;
       endif;
     else;
       insDel.startPos = #selStart;
@@ -787,7 +787,7 @@ begsr c_insert;
   when (#selLength = 0);
     *in24 = bTrue;
   other;
-    exsr KeepCsrPos;
+    exsr keepCsrPos;
   endsl;
 
 endsr;
@@ -805,7 +805,7 @@ begsr c_delete;
     *in61 = bFalse;
     *in62 = bTrue;
     p_sndPgmMg('USR8238': '': sds.pgmName);
-  when (insDel.mode = MODE_DELETE and insDel.endPos <> H_CSRPOS + Buffer.Offset);
+  when (insDel.mode = MODE_DELETE and insDel.endPos <> H_CSRPOS + buffer.offset);
   // nichts zu tun
   other;
     exsr endInsDel;
@@ -814,9 +814,9 @@ begsr c_delete;
   if (insDel.mode = MODE_DELETE);
     if (isCursorDataField());
       if (insDel.startPos = 0);
-        insDel.startPos = H_CSRPOS + Buffer.Offset;
+        insDel.startPos = H_CSRPOS + buffer.offset;
       else;
-        insDel.endPos = H_CSRPOS + Buffer.Offset;
+        insDel.endPos = H_CSRPOS + buffer.offset;
       endif;
     else;
       insDel.startPos = #selStart;
@@ -838,9 +838,9 @@ begsr c_delete;
   when (#selStart = 0);
     *in23 = bTrue;
   when (#selLength = 0);
-    exsr KeepCsrPos;
+    exsr keepCsrPos;
   other;
-    exsr KeepCsrPos;
+    exsr keepCsrPos;
   endsl;
 
 endsr;
@@ -851,10 +851,10 @@ endsr;
 
 begsr c_firstPos;
 
-  Buffer.Offset = 0;
+  buffer.offset = 0;
   isDataChg = bTrue;
 
-  exsr KeepCsrPos;
+  exsr keepCsrPos;
 
 endsr;
 
@@ -864,14 +864,14 @@ endsr;
 
 begsr c_lastPos;
 
-  Buffer.Offset = Buffer.maxLength - maxEditLength;
-  if (Buffer.Offset < 0);
-    Buffer.Offset = 0;
+  buffer.offset = buffer.maxLength - maxEditLength;
+  if (buffer.offset < 0);
+    buffer.offset = 0;
   endif;
 
   isDataChg = bTrue;
 
-  exsr KeepCsrPos;
+  exsr keepCsrPos;
 
 endsr;
 
@@ -899,9 +899,9 @@ endsr;
 //    c_refresh     F5  - Aktualisieren der Subfile           *
 //============================================================*
 
-begsr C_Refresh;
+begsr c_refresh;
 
-  exsr GetParameters;
+  exsr getParameters;
 
   exsr endInsDel;
 
@@ -916,7 +916,7 @@ endsr;
 //    c_moreKeys    F24 - Weitere Tasten                      *
 //============================================================*
 
-begsr C_MoreKeys;
+begsr c_moreKeys;
 
   sfBot = sfBot + 1;
 
@@ -928,16 +928,16 @@ endsr;
 
 begsr c_pageUp;
 
-  Buffer.Offset = Buffer.Offset + maxEditLength;
+  buffer.offset = buffer.offset + maxEditLength;
 
-  if (Buffer.Offset >= Buffer.maxLength);
+  if (buffer.offset >= buffer.maxLength);
     exsr c_lastPos;
     leavesr;
   endif;
 
   isDataChg = bTrue;
 
-  exsr KeepCsrPos;
+  exsr keepCsrPos;
 
 endsr;
 
@@ -947,15 +947,15 @@ endsr;
 
 begsr c_pageDown;
 
-  Buffer.Offset = Buffer.Offset - maxEditLength;
-  if (Buffer.Offset < 0);
+  buffer.offset = buffer.offset - maxEditLength;
+  if (buffer.offset < 0);
     exsr c_firstPos;
     leavesr;
   endif;
 
   isDataChg = bTrue;
 
-  exsr KeepCsrPos;
+  exsr keepCsrPos;
 
 endsr;
 
@@ -980,7 +980,7 @@ begsr fill##;
 
   if (insDel.mode = MODE_OFF);
     #selStart = 0;
-    #SelLength = 0;
+    #selLength = 0;
   else;
     #selStart = insDel.startPos;
     if (insDel.startPos > 0);
@@ -1001,21 +1001,21 @@ endsr;
 begsr bufferToScreen;
 
   //  Anzeigen Feldinhalt
-  #StartPos = Buffer.Offset + 1;
+  #startPos = buffer.offset + 1;
 
-  if (Buffer.Offset + maxEditLength > Buffer.maxLength);
-    length = Buffer.maxLength - Buffer.Offset;
+  if (buffer.offset + maxEditLength > buffer.maxLength);
+    length = buffer.maxLength - buffer.offset;
   else;
     length = maxEditLength;
   endif;
 
   if (i_isUcs2 = 0);
 
-    #string = %subst(Buffer.pFldInhaltSbcs: Buffer.Offset + 1: length);
+    #string = %subst(buffer.pFldInhaltSbcs: buffer.offset + 1: length);
 
   else;
 
-    #ucs2str = %subst(Buffer.pFldInhaltUcs2: Buffer.Offset + 1: length);
+    #ucs2str = %subst(buffer.pFldInhaltUcs2: buffer.offset + 1: length);
 
     #ucs2_1 = #ucs2(1);
     #ucs2_2 = #ucs2(2);
@@ -1032,7 +1032,7 @@ begsr bufferToScreen;
   endif;
 
   // Anzeigen: Weitere/Ende
-  if (Buffer.Offset + maxEditLength >= Buffer.maxLength);
+  if (buffer.offset + maxEditLength >= buffer.maxLength);
     *in83 = bTrue;
   else;
     *in83 = bFalse;
@@ -1041,10 +1041,10 @@ begsr bufferToScreen;
 endsr;
 
 //============================================================*
-//    SetScreen     Einstellen 132/80-Zeichen Auflösung       *
+//    setScreen     Einstellen 132/80-Zeichen Auflösung       *
 //============================================================*
 
-begsr SetScreen;
+begsr setScreen;
 
   if (i_dsp80 = *off);
     //   132-Zeichen Anzeige
@@ -1061,22 +1061,22 @@ begsr SetScreen;
 endsr;
 
 //============================================================*
-//    GetParameters Laden der Programmparameter               *
+//    getParameters Laden der Programmparameter               *
 //============================================================*
 
-begsr GetParameters;
+begsr getParameters;
 
   if (i_isUcs2 = 0);
-    clear Buffer.pFldInhaltSbcs;
-    %subst(Buffer.pFldInhaltSbcs: 1: io_Length) = io_fldInhalt.sbcs;
+    clear buffer.pFldInhaltSbcs;
+    %subst(buffer.pFldInhaltSbcs: 1: io_length) = io_fldInhalt.sbcs;
     maxEditLength = %len(#string);
   else;
-    clear Buffer.pFldInhaltUcs2;
-    %subst(Buffer.pFldInhaltUcs2: 1: io_Length) = io_fldInhalt.ucs2;
+    clear buffer.pFldInhaltUcs2;
+    %subst(buffer.pFldInhaltUcs2: 1: io_length) = io_fldInhalt.ucs2;
     maxEditLength = %len(#ucs2str);
   endif;
 
-  Buffer.maxLength = io_Length;
+  buffer.maxLength = io_length;
 
   exsr setTrimLength;
 
@@ -1089,9 +1089,9 @@ endsr;
 begsr setTrimLength;
 
   if (i_isUcs2 = 0);
-    Buffer.trimLength = %len(%trimr(Buffer.pFldInhaltSbcs));
+    buffer.trimLength = %len(%trimr(buffer.pFldInhaltSbcs));
   else;
-    Buffer.trimLength = %len(%trimr(Buffer.pFldInhaltUcs2));
+    buffer.trimLength = %len(%trimr(buffer.pFldInhaltUcs2));
   endif;
 
 endsr;
@@ -1100,7 +1100,7 @@ endsr;
 //    First         Initialisierung                           *
 //============================================================*
 
-begsr First;
+begsr first;
 
   // Einlesen Funktionstasten
   clear yExclKeys;
@@ -1110,10 +1110,10 @@ begsr First;
   endif;
 
   peek23(sds.pgmName: '*ALL': NBR_F_KEYS: yFKeys: yNbrOfKeys: yExclKeys);
-  ScrnFKeys = %subarr(yFKeys: 1);
+  scrnFKeys = %subarr(yFKeys: 1);
 
   // - Öffnen der Dateien
-  open peekfld;
+  open peekFld;
 
   open peek64fm;
 
@@ -1122,9 +1122,9 @@ begsr First;
 
   //  ermitteln der Feldeigenschaften
   clear f_key;
-  f_key.F_Field = i_fldName;
+  f_key.f_field = i_fldName;
   chain %kds(f_key) fpeekfld;
-  if (not %found(peekfld));
+  if (not %found(peekFld));
     isPgmError = bTrue;
     clear fldl0100;
     clear usr8136;
@@ -1139,10 +1139,10 @@ begsr First;
     leavesr;
   endif;
 
-  clear Buffer;
-  Buffer.Offset = 0;
+  clear buffer;
+  buffer.offset = 0;
 
-  exsr GetParameters;
+  exsr getParameters;
 
   o_msgID  = ' ';
   o_msgDta = ' ';
@@ -1158,8 +1158,8 @@ begsr First;
   // - Feld zu groß Hinweis ausgeben
   // TODO: remove code and /copy statement
   // clear usr8123;
-  // usr8123.var1 = COLOR_white_u;
-  // usr8123.var2 = COLOR_white;
+  // usr8123.var1 = color_white_u;
+  // usr8123.var2 = color_white;
   // p_sndpgmmg('USR8123': usr8123: sds.pgmname);
 
   // - Einfügen/Löschen
@@ -1180,8 +1180,8 @@ begsr First;
     H_CSRFLD = '#UCS2_1';
   endif;
 
-  $FldName = i_fldName;
-  $FldLaenge = Buffer.maxLength;
+  $fldName = i_fldName;
+  $fldLaenge = buffer.maxLength;
 
   exsr fill##;
 
@@ -1189,7 +1189,7 @@ begsr First;
   sfBot = 1;
 
   // - Einstellen der Bildschirmauflösung 80/132-Zeichen
-  exsr SetScreen;
+  exsr setScreen;
 
   // - Copyright
   p_sndPgmMg('USR9999': i_copyright: sds.pgmName);

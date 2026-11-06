@@ -5,19 +5,19 @@
 //============================================================*
 
 //  Konstants: f_wordWrap()
-dcl-c cWORDWRAP_PARAGRAPH_NONE 1;
-dcl-c cWORDWRAP_PARAGRAPH_MSGD 2;
-dcl-c cWORDWRAP_PARAGRAPH_TEXT 4;
-dcl-c cWORDWRAP_PARAGRAPH_TRIMR 8;
+dcl-c cWORDWRAP_paragraph_none 1;
+dcl-c cWORDWRAP_paragraph_msgd 2;
+dcl-c cWORDWRAP_paragraph_text 4;
+dcl-c cWORDWRAP_paragraph_trimr 8;
 
 //-------------------------------------------------------------------*
 dcl-pr f_dsplyLn like(int4_t);
-  i_FLDL0100 likeds(fldl0100_t) const;
+  i_fldl0100 likeds(fldl0100_t) const;
 end-pr;
 
 //-------------------------------------------------------------------*
 dcl-pr f_buffLn like(int4_t);
-  i_FLDL0100 likeds(fldl0100_t) const;
+  i_fldl0100 likeds(fldl0100_t) const;
   i_withLen  like(bool_t) options(*nopass) const;
 end-pr;
 
@@ -25,7 +25,7 @@ end-pr;
 //-------------------------------------------------------------------*
 dcl-pr f_curFldLn like(int4_t);
   i_buffer   like(rcdBuf_t) const;
-  i_FLDL0100 likeds(fldl0100_t) const;
+  i_fldl0100 likeds(fldl0100_t) const;
 end-pr;
 
 
@@ -33,7 +33,7 @@ end-pr;
 dcl-pr f_rtvFld opdesc like(int4_t);
   o_buffer      like(rcdBuf_t) options(*varsize);
   i_buffer      like(rcdBuf_t) const;
-  i_FLDL0100    likeds(fldl0100_t) const;
+  i_fldl0100    likeds(fldl0100_t) const;
   i_withLenByte like(bool_t) options(*nopass) const;
 end-pr;
 
@@ -41,13 +41,13 @@ end-pr;
 dcl-pr p_fldToBuf;
   io_buffer     like(rcdBuf_t);
   i_fieldData   like(rcdBuf_t);
-  i_FLDL0100    likeds(fldl0100_t) const;
+  i_fldl0100    likeds(fldl0100_t) const;
   i_withLenByte like(bool_t) options(*nopass) const;
 end-pr;
 
 //-------------------------------------------------------------------*
 dcl-pr f_isVarLen like(bool_t);
-  i_FLDL0100 likeds(fldl0100_t) const;
+  i_fldl0100 likeds(fldl0100_t) const;
 end-pr;
 
 //-------------------------------------------------------------------*
@@ -58,14 +58,14 @@ dcl-pr f_binToDec opdesc like(int4_t);
 end-pr;
 
 //-------------------------------------------------------------------*
-dcl-pr f_len_DEPRECATED opdesc like(int4_t);
+dcl-pr f_len_deprecated opdesc like(int4_t);
   i_string like(varString_t) options(*varsize) const;
 end-pr;
 
 //-------------------------------------------------------------------*
 
 dcl-pr f_scan opdesc like(int4_t);
-  SrchArg char(100) options(*varsize) const;
+  srchArg char(100) options(*varsize) const;
   string  char(100) const;
 end-pr;
 
@@ -143,27 +143,27 @@ end-pr;
 //-------------------------------------------------------------------*
 dcl-pr f_headline like(colHeading_t);
   i_headTyp  like(type_t) const;
-  i_FLDL0100 likeds(fldl0100_t) const;
+  i_fldl0100 likeds(fldl0100_t) const;
 end-pr;
 
 //-------------------------------------------------------------------*
 dcl-pr f_isNumFld like(bool_t);
-  i_FLDL0100 likeds(fldl0100_t) const;
+  i_fldl0100 likeds(fldl0100_t) const;
 end-pr;
 
 //-------------------------------------------------------------------*
 dcl-pr f_isFloatFld like(bool_t);
-  i_FLDL0100 likeds(fldl0100_t) const;
+  i_fldl0100 likeds(fldl0100_t) const;
 end-pr;
 
 //-------------------------------------------------------------------*
 dcl-pr f_isCharFld like(bool_t);
-  i_FLDL0100 likeds(fldl0100_t) const;
+  i_fldl0100 likeds(fldl0100_t) const;
 end-pr;
 
 //-------------------------------------------------------------------*
 dcl-pr f_hasCcsid like(bool_t);
-  i_FLDL0100 likeds(fldl0100_t) const;
+  i_fldl0100 likeds(fldl0100_t) const;
 end-pr;
 
 //-------------------------------------------------------------------*
@@ -189,12 +189,12 @@ end-pr;
 
 //-------------------------------------------------------------------*
 dcl-pr f_canUseRefFld like(bool_t);
-  i_FLDL0100 likeds(fldl0100_t) const;
+  i_fldl0100 likeds(fldl0100_t) const;
 end-pr;
 
 //-------------------------------------------------------------------*
 dcl-pr f_canUseCntFld like(bool_t);
-  i_FLDL0100 likeds(fldl0100_t) const;
+  i_fldl0100 likeds(fldl0100_t) const;
 end-pr;
 
 //-------------------------------------------------------------------*
@@ -203,27 +203,27 @@ end-pr;
 
 //-------------------------------------------------------------------*
 dcl-pr f_isToLong like(bool_t);
-  i_FLDL0100 likeds(fldl0100_t) const;
+  i_fldl0100 likeds(fldl0100_t) const;
 end-pr;
 
 //-------------------------------------------------------------------*
 dcl-pr f_isToLongMax like(bool_t);
-  i_FLDL0100 likeds(fldl0100_t) const;
+  i_fldl0100 likeds(fldl0100_t) const;
 end-pr;
 
 //-------------------------------------------------------------------*
 dcl-pr f_maxDspLn like(int4_t);
-  i_FLDL0100 likeds(fldl0100_t) const;
+  i_fldl0100 likeds(fldl0100_t) const;
 end-pr;
 
 //-------------------------------------------------------------------*
 dcl-pr f_cntFldLn like(int4_t);
-  i_FLDL0100 likeds(fldl0100_t) const;
+  i_fldl0100 likeds(fldl0100_t) const;
 end-pr;
 
 //-------------------------------------------------------------------*
 dcl-pr f_nbrDspRw like(int4_t);
-  i_FLDL0100 likeds(fldl0100_t) const;
+  i_fldl0100 likeds(fldl0100_t) const;
 end-pr;
 
 //-------------------------------------------------------------------*
@@ -236,12 +236,12 @@ end-pr;
 
 //-------------------------------------------------------------------*
 dcl-pr f_isNotAlw like(bool_t);
-  i_FLDL0100 likeds(fldl0100_t) const;
+  i_fldl0100 likeds(fldl0100_t) const;
 end-pr;
 
 //-------------------------------------------------------------------*
 dcl-pr f_isKeyFld like(bool_t);
-  i_FLDL0100 likeds(fldl0100_t) const;
+  i_fldl0100 likeds(fldl0100_t) const;
 end-pr;
 
 //-------------------------------------------------------------------*
@@ -293,11 +293,11 @@ dcl-pr p_keyToMsg;
 end-pr;
 
 //-------------------------------------------------------------------*
-dcl-pr f_splttxt_DEPRECATED opdesc like(int4_t);
+dcl-pr f_splttxt_deprecated opdesc like(int4_t);
   i_text   like(varString_t) options(*varsize) const;
   i_strPos like(int4_t) const;
   i_len    like(int4_t) const;
-  o_Text   like(string_t) options(*varsize);
+  o_text   like(string_t) options(*varsize);
 end-pr;
 
 //-------------------------------------------------------------------*
@@ -313,7 +313,7 @@ dcl-pr p_hexToChr extproc('cvthc');
 end-pr;
 
 //-------------------------------------------------------------------*
-dcl-pr p_ChrToHex extproc('cvtch');
+dcl-pr p_chrToHex extproc('cvtch');
   hex     like(string_t) options(*varsize);
   char    like(string_t) options(*varsize);
   lenChar like(int4_t) value;
@@ -327,19 +327,19 @@ end-pr;
 
 //-------------------------------------------------------------------*
 dcl-pr f_isKeyExc like(bool_t);
-  i_data     like(SET0000_t) value;
+  i_data     like(set0000_t) value;
   i_exclKeys like(pgmCmd_t) dim(25) value;
 end-pr;
 
 //-------------------------------------------------------------------*
-dcl-pr f_NUM_Descr like(int4_t);
+dcl-pr f_num_descr like(int4_t);
   i_type     like(int1_t) value;
   i_length   like(int1_t) value;
   i_fraction like(int1_t) value;
 end-pr;
 
 //-------------------------------------------------------------------*
-dcl-pr f_NUM_Descr2 like(int4_t);
+dcl-pr f_num_descr2 like(int4_t);
   i_type     like(dataType_t) value;
   i_length   like(int1_t) value;
   i_fraction like(int1_t) value;
@@ -354,7 +354,7 @@ dcl-pr f_errno int(10);
 end-pr;
 
 //-------------------------------------------------------------------*
-dcl-pr f_strerror like(msgDta_t);
+dcl-pr f_strError like(msgDta_t);
   i_errno int(10) const;
 end-pr;
 
@@ -418,7 +418,7 @@ end-pr;
 //-------------------------------------------------------------------*
 //  Returns the field type as a string.
 dcl-pr f_fieldTypeAsString varchar(128);
-  i_FLDL0100 likeds(fldl0100_t) const;
+  i_fldl0100 likeds(fldl0100_t) const;
 end-pr;
 
 //-------------------------------------------------------------------*
@@ -446,11 +446,11 @@ end-pr;
 //-----------------------------------------------------------------*
 dcl-pr ceedod;
   parmnum   int(10) const;
-  DescType  int(10);
-  DataType  int(10);
-  DescInfo1 int(10);
-  DescInfo2 int(10);
-  InLen     int(10);
+  descType  int(10);
+  dataType  int(10);
+  descInfo1 int(10);
+  descInfo2 int(10);
+  inLen     int(10);
   fc        char(12) options(*omit);
 end-pr;
 //-------------------------------------------------------------------*
@@ -460,6 +460,6 @@ end-pr;
 //-------------------------------------------------------------------*
 dcl-pr f_mapCmdToMsg like(msgId_t);
   i_command char(256) const;
-  i_section like(SECTION_t) options(*nopass) const;
+  i_section like(section_t) options(*nopass) const;
 end-pr;
 

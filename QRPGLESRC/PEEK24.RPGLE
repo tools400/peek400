@@ -56,26 +56,26 @@ dcl-ds cursorPosition likeds(cursorPosition_t) inz;
 /copy QCOPYLE,PPEEK53
 /copy QCOPYLE,PPEEK58
 
-dcl-s YMsgID char(7) inz(*blanks);
-dcl-s YMsgDta char(512) inz(*blanks);
+dcl-s yMsgID char(7) inz(*blanks);
+dcl-s yMsgDta char(512) inz(*blanks);
 
 dcl-s yFKeys char(18) dim(32) inz(*blanks);
 dcl-s yNbrOfKeys like(int4_t) inz;
 
-dcl-s YPgmCmd char(10) inz(*blanks);
-dcl-s YCmdDta like(pgmCmdDt_t) inz(*blanks);
+dcl-s yPgmCmd char(10) inz(*blanks);
+dcl-s yCmdDta like(pgmCmdDt_t) inz(*blanks);
 
-dcl-s sfbot like(int4_t) inz;
+dcl-s sfBot like(int4_t) inz;
 dcl-c NBR_F_KEYS 2;
 
-dcl-s Wrk_Field char(10) inz(*blanks);
-dcl-s Wrk_Color char(1) inz(*blanks);
+dcl-s wrk_field char(10) inz(*blanks);
+dcl-s wrk_color char(1) inz(*blanks);
 
 //  Farbe in SET0001, die mit PEEK25 geändert wird (aus PRF20)
 dcl-s pSetColor pointer inz(*null);
 dcl-s setColor char(1) based(pSetColor);
 
-dcl-ds set0001 likeds(SET0001_t) inz;
+dcl-ds set0001 likeds(set0001_t) inz;
 
 dcl-s peek21_name like(pgmCallN_t) inz;
 dcl-s peek23_name like(pgmCallN_t) inz;
@@ -89,7 +89,7 @@ dcl-s isInzSr like(bool_t) inz(bFalse);
 dcl-pi peek24;
   i_dsp80     like(dsp80_t) const;
   i_copyright like(copyright_t) const;
-  o_set0001   likeds(SET0001_t);
+  o_set0001   likeds(set0001_t);
   o_msgID     like(msgId_t);
   o_msgDta    like(msgDta_t);
 end-pi;
@@ -101,7 +101,7 @@ ceehdlr(%paddr('errorHandler')
 
 exsr inzsr;
 
-exsr First;
+exsr first;
 
 //  Schleife für Programmbearbeitung
 
@@ -113,24 +113,24 @@ dow ('1');
 
   //  Anzeigen der Befehlstasten
   select;
-  when ((sfbot = 2) and
-     (yNbrOfKeys > NBR_F_KEYS * (sfbot - 1)));
+  when ((sfBot = 2) and
+     (yNbrOfKeys > NBR_F_KEYS * (sfBot - 1)));
     write pbbot#2;
-  when ((sfbot = 3) and
-     (yNbrOfKeys > NBR_F_KEYS * (sfbot - 1)));
+  when ((sfBot = 3) and
+     (yNbrOfKeys > NBR_F_KEYS * (sfBot - 1)));
     write pbbot#3;
-  when ((sfbot = 4) and
-     (yNbrOfKeys > NBR_F_KEYS * (sfbot - 1)));
+  when ((sfBot = 4) and
+     (yNbrOfKeys > NBR_F_KEYS * (sfBot - 1)));
     write pbbot#4;
-  when ((sfbot = 5) and
-     (yNbrOfKeys > NBR_F_KEYS * (sfbot - 1)));
+  when ((sfBot = 5) and
+     (yNbrOfKeys > NBR_F_KEYS * (sfBot - 1)));
     write pbbot#5;
-  when ((sfbot = 6) and
-     (yNbrOfKeys > NBR_F_KEYS * (sfbot - 1)));
+  when ((sfBot = 6) and
+     (yNbrOfKeys > NBR_F_KEYS * (sfBot - 1)));
     write pbbot#6;
   other;
     write pbbot#1;
-    sfbot = 1;
+    sfBot = 1;
   endsl;
 
   //  Anzeigen Bildschirm
@@ -141,9 +141,9 @@ dow ('1');
   cursorPosition.column = %rem(workstn.csrPos: 256);
 
   //  Beibehalten der Cursorosition
-  CsrRow = cursorPosition.row - zei;
-  CsrCol = cursorPosition.column - pos;
-  CsrCol = CsrCol - 1;
+  csrRow = cursorPosition.row - zei;
+  csrCol = cursorPosition.column - pos;
+  csrCol = csrCol - 1;
 
   //  Nachrichten löschen
   p_rmvPgmMg(sds.pgmName);
@@ -154,32 +154,32 @@ dow ('1');
   //  Mappen der gedrückten Taste
   //  in Programmbefehl
   peek21(workstn.aid: sds.pgmName
-        : YPgmCmd: YCmdDta: YMsgID: YMsgDta);
-  if (YMsgID <> *blanks);
-    p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
-    YMsgID = '';
-    YMsgDta = '';
+        : yPgmCmd: yCmdDta: yMsgID: yMsgDta);
+  if (yMsgID <> *blanks);
+    p_sndPgmMg(yMsgID: yMsgDta: sds.pgmName);
+    yMsgID = '';
+    yMsgDta = '';
     iter;
   endif;
 
   //  Abfragen der Befehlstasten
   select;
-  when (YPgmCmd = '*SAVE_EXIT');
-    exsr C_Exit;
+  when (yPgmCmd = '*SAVE_EXIT');
+    exsr c_exit;
     leave;
-  when (YPgmCmd = '*EXIT');
-    exsr C_EndPgm;
+  when (yPgmCmd = '*EXIT');
+    exsr c_endPgm;
     leave;
-  when (YPgmCmd = '*REFRESH');
-    exsr C_Refresh;
+  when (yPgmCmd = '*REFRESH');
+    exsr c_refresh;
     iter;
-  when (YPgmCmd = '*CANCEL');
-    exsr C_EndPgm;
+  when (yPgmCmd = '*CANCEL');
+    exsr c_endPgm;
     leave;
-  when (YPgmCmd = '*MOREKEYS');
-    exsr C_MoreKeys;
-  when (YPgmCmd = '*ENTER');
-    exsr C_Enter;
+  when (yPgmCmd = '*MOREKEYS');
+    exsr c_moreKeys;
+  when (yPgmCmd = '*ENTER');
+    exsr c_enter;
   other;
     p_wrongKey(workstn.aid: sds.pgmName);
     iter;
@@ -193,14 +193,14 @@ close peek24fm;
 return;
 
 //============================================================*
-//    C_Enter       "Datenfreigabetaste"                      *
+//    c_enter       "Datenfreigabetaste"                      *
 //============================================================*
 
-begsr C_Enter;
+begsr c_enter;
 
-  exsr prfb1;
+  exsr prfB1;
   if (*in99 = *off);
-    exsr GetColor;
+    exsr getColor;
   else;
   //          Fehlernachricht ausgeben
   endif;
@@ -222,7 +222,7 @@ endsr;
 //    PRFB1         Prüfen der Eingaben                       *
 //============================================================*
 
-begsr prfb1;
+begsr prfB1;
 
   dou ('1');
 
@@ -243,29 +243,29 @@ begsr prf20;
 
   dou ('1');
 
-    Wrk_Field = %subst(ScnFld:3:6);
+    wrk_field = %subst(scnFld:3:6);
 
     select;
-    when (Wrk_Field = 'KEYCOL'); // Schlüsselfelder
-      pSetColor = %addr(set0001.SET_KeyCol);
-    when (Wrk_Field = 'HEDCOL'); // Überschrift
-      pSetColor = %addr(set0001.SET_HedCol);
-    when (Wrk_Field = 'PINCOL'); // Pined-Daten
-      pSetColor = %addr(set0001.SET_PinCol);
-    when (Wrk_Field = 'CLMCOL'); // SpaltenMark
-      pSetColor = %addr(set0001.SET_ClmCol);
-    when (Wrk_Field = 'STDCOL'); // Standard
-      pSetColor = %addr(set0001.SET_StdCol);
-    when (Wrk_Field = 'NMLCOL'); // Normale Suche
-      pSetColor = %addr(set0001.SET_NmlCol);
-    when (Wrk_Field = 'UNDCOL'); // Unterstrichen
-      pSetColor = %addr(set0001.SET_UndCol);
-    when (Wrk_Field = 'REVCOL'); // Reverse Suche
-      pSetColor = %addr(set0001.SET_RevCol);
-    when (Wrk_Field = 'TBLCOL'); // Tabellierpap.
-      pSetColor = %addr(set0001.SET_TblCol);
-    when (Wrk_Field = 'EXCCOL'); // Exception
-      pSetColor = %addr(set0001.SET_ExcCol);
+    when (wrk_field = 'KEYCOL'); // Schlüsselfelder
+      pSetColor = %addr(set0001.set_keyCol);
+    when (wrk_field = 'HEDCOL'); // Überschrift
+      pSetColor = %addr(set0001.set_hedCol);
+    when (wrk_field = 'PINCOL'); // Pined-Daten
+      pSetColor = %addr(set0001.set_pinCol);
+    when (wrk_field = 'CLMCOL'); // SpaltenMark
+      pSetColor = %addr(set0001.set_clmCol);
+    when (wrk_field = 'STDCOL'); // Standard
+      pSetColor = %addr(set0001.set_stdCol);
+    when (wrk_field = 'NMLCOL'); // Normale Suche
+      pSetColor = %addr(set0001.set_nmlCol);
+    when (wrk_field = 'UNDCOL'); // Unterstrichen
+      pSetColor = %addr(set0001.set_undCol);
+    when (wrk_field = 'REVCOL'); // Reverse Suche
+      pSetColor = %addr(set0001.set_revCol);
+    when (wrk_field = 'TBLCOL'); // Tabellierpap.
+      pSetColor = %addr(set0001.set_tblCol);
+    when (wrk_field = 'EXCCOL'); // Exception
+      pSetColor = %addr(set0001.set_excCol);
     other;
       pSetColor = *null;
       *in99 = '1';
@@ -273,7 +273,7 @@ begsr prf20;
       leave;
     endsl;
 
-    Wrk_Color = setColor;
+    wrk_color = setColor;
 
   enddo;
 
@@ -284,12 +284,12 @@ begsr prf20;
 endsr;
 
 //============================================================*
-//    C_Exit        F3     - Speichern und beenden            *
+//    c_exit        F3     - Speichern und beenden            *
 //============================================================*
 
-begsr C_Exit;
+begsr c_exit;
 
-  exsr SetUsrSetg;
+  exsr setUsrSetg;
 
   o_msgID = 'USR8112';
   o_msgDta = *blanks;
@@ -297,10 +297,10 @@ begsr C_Exit;
 endsr;
 
 //============================================================*
-//    C_EndPgm      F12    - Programm beenden                 *
+//    c_endPgm      F12    - Programm beenden                 *
 //============================================================*
 
-begsr C_EndPgm;
+begsr c_endPgm;
 
   p_rmvPgmMg(sds.pgmName);
 
@@ -320,24 +320,24 @@ begsr C_EndPgm;
 endsr;
 
 //============================================================*
-//    C_Refresh     F5  - Änderungen verwerfen                *
+//    c_refresh     F5  - Änderungen verwerfen                *
 //============================================================*
 
-begsr C_Refresh;
+begsr c_refresh;
 
   //  Nicht gespeicherte Änderungen zurücknehmen
-  exsr GetUsrSetg;
+  exsr getUsrSetg;
   exsr fill##;
 
 endsr;
 
 //============================================================*
-//    C_MoreKeys    F24 - Weitere Tasten                      *
+//    c_moreKeys    F24 - Weitere Tasten                      *
 //============================================================*
 
-begsr C_MoreKeys;
+begsr c_moreKeys;
 
-  sfbot = sfbot + 1;
+  sfBot = sfBot + 1;
 
 endsr;
 
@@ -347,18 +347,18 @@ endsr;
 
 begsr fill##;
 
-  //  SET_KeyCol
-  $$keycol = set0001.SET_KeyCol;
+  //  set_keyCol
+  $$keycol = set0001.set_keyCol;
   //*                 CAT       'KeyField':0  $$KEYCOL
   $$keycol = %trimr($$keycol) + 'KeyField';
 
-  //  SET_HedCol
-  $$hedcol = set0001.SET_HedCol;
+  //  set_hedCol
+  $$hedcol = set0001.set_hedCol;
   //*                 CAT       'Headline':0  $$HEDCOL
   $$hedcol = %trimr($$hedcol) + 'Headline';
 
-  //  SET_PinCol
-  $$pincol1 = set0001.SET_PinCol;
+  //  set_pinCol
+  $$pincol1 = set0001.set_pinCol;
   $$pincol2 = $$pincol1;
   //*                 CAT       'Pin-Record':0$$PINCOL1
   $$pincol1 = %trimr($$pincol1) + 'Pin-Record';
@@ -368,8 +368,8 @@ begsr fill##;
   $$pincol3 = $$pincol2;
   $$pincol4 = $$pincol2;
 
-  //  SET_StdCol
-  $$stdcol1 = set0001.SET_StdCol;
+  //  set_stdCol
+  $$stdcol1 = set0001.set_stdCol;
   $$stdcol2 = $$stdcol1;
   //*                 CAT       'Std.Color':0 $$STDCOL1
   $$stdcol1 = %trimr($$stdcol1) + 'Std.Color';
@@ -381,8 +381,8 @@ begsr fill##;
   $$stdcol5 = $$stdcol2;
   $$stdcol6 = $$stdcol2;
 
-  //  SET_ClmCol
-  $$clmcol1 = set0001.SET_ClmCol;
+  //  set_clmCol
+  $$clmcol1 = set0001.set_clmCol;
   $$clmcol2 = $$clmcol1;
   //*                 CAT       'Mark Clm':0  $$CLMCOL1
   $$clmcol1 = %trimr($$clmcol1) + 'Mark Clm';
@@ -395,19 +395,19 @@ begsr fill##;
   $$clmcol6 = $$clmcol2;
   $$clmcol7 = $$clmcol2;
 
-  //  SET_NmlCol
-  $$NmlCOL1 = set0001.SET_NmlCol;
-  $$NmlCOL2 = $$NmlCOL1;
-  //*                 CAT       'Search':0    $$NmlCOL1
-  $$NmlCOL1 = %trimr($$NmlCOL1) + 'Search';
+  //  set_nmlCol
+  $$nmlCOL1 = set0001.set_nmlCol;
+  $$nmlCOL2 = $$nmlCOL1;
+  //*                 CAT       'Search':0    $$nmlCOL1
+  $$nmlCOL1 = %trimr($$nmlCOL1) + 'Search';
 
-  //*   ' ':'x'       XLATE     $$NmlCOL2     $$NmlCOL2
-  $$NmlCOL2 = %xlate(' ': 'x': $$NmlCOL2);
-  $$nmlcol3 = $$NmlCOL2;
-  $$NmlCOL4 = $$NmlCOL2;
+  //*   ' ':'x'       XLATE     $$nmlCOL2     $$nmlCOL2
+  $$nmlCOL2 = %xlate(' ': 'x': $$nmlCOL2);
+  $$nmlcol3 = $$nmlCOL2;
+  $$nmlCOL4 = $$nmlCOL2;
 
-  //  SET_UndCol
-  $$undcol1 = set0001.SET_UndCol;
+  //  set_undCol
+  $$undcol1 = set0001.set_undCol;
   $$undcol2 = $$undcol1;
   //*                 CAT       'Search-Und':0$$UNDCOL1
   $$undcol1 = %trimr($$undcol1) + 'Search-Und';
@@ -417,8 +417,8 @@ begsr fill##;
   $$undcol3 = $$undcol2;
   $$undcol4 = $$undcol2;
 
-  //  SET_RevCol
-  $$revcol1 = set0001.SET_RevCol;
+  //  set_revCol
+  $$revcol1 = set0001.set_revCol;
   $$revcol2 = $$revcol1;
   //*                 CAT       'Search-Rev':0$$REVCOL1
   $$revcol1 = %trimr($$revcol1) + 'Search-Rev';
@@ -428,8 +428,8 @@ begsr fill##;
   $$revcol3 = $$revcol2;
   $$revcol4 = $$revcol2;
 
-  //  SET_TblCol
-  $$tblcol1 = set0001.SET_TblCol;
+  //  set_tblCol
+  $$tblcol1 = set0001.set_tblCol;
   $$tblcol2 = $$tblcol1;
   //*                 CAT       'Tabulated':0 $$TBLCOL1
   $$tblcol1 = %trimr($$tblcol1) + 'Tabulated';
@@ -439,8 +439,8 @@ begsr fill##;
   $$tblcol3 = $$tblcol2;
   $$tblcol4 = $$tblcol2;
 
-  //  SET_ExcCol
-  $$exccol1 = set0001.SET_ExcCol;
+  //  set_excCol
+  $$exccol1 = set0001.set_excCol;
   $$exccol2 = $$exccol1;
   //*                 CAT       'Exception':0 $$EXCCOL1
   $$exccol1 = %trimr($$exccol1) + 'Exception';
@@ -451,10 +451,10 @@ begsr fill##;
 endsr;
 
 //============================================================*
-//    SetScreen     Einstellen 132/80-Zeichen Auflösung       *
+//    setScreen     Einstellen 132/80-Zeichen Auflösung       *
 //============================================================*
 
-begsr SetScreen;
+begsr setScreen;
 
   if (i_dsp80 = '0');
     //   132-Zeichen Anzeige
@@ -471,33 +471,33 @@ begsr SetScreen;
 endsr;
 
 //============================================================*
-//    GetUsrSetg    Ermitteln der Benutzervoreinstellungen    *
+//    getUsrSetg    Ermitteln der Benutzervoreinstellungen    *
 //============================================================*
 
-begsr GetUsrSetg;
+begsr getUsrSetg;
 
   set0001 = o_set0001;
 
 endsr;
 
 //============================================================*
-//    SetUsrSetg    Speichern der Benutzervoreinstellungen    *
+//    setUsrSetg    Speichern der Benutzervoreinstellungen    *
 //============================================================*
 
-begsr SetUsrSetg;
+begsr setUsrSetg;
 
   o_set0001 = set0001;
 
 endsr;
 
 //============================================================*
-//    GetColor      Auswählen neue Farbe                      *
+//    getColor      Auswählen neue Farbe                      *
 //============================================================*
 
-begsr GetColor;
+begsr getColor;
 
   monitor;
-    peek25(i_dsp80: Wrk_Color: YMsgID: YMsgDta);
+    peek25(i_dsp80: wrk_color: yMsgID: yMsgDta);
     *in99 = bFalse;
   on-error;
     *in99 = bTrue;
@@ -508,7 +508,7 @@ begsr GetColor;
   else;
 
     //  Neue Farbe in das Feld von SET0001 übernehmen
-    setColor = Wrk_Color;
+    setColor = wrk_color;
 
     exsr fill##;
   endif;
@@ -519,7 +519,7 @@ endsr;
 //    First         Initialisierung                           *
 //============================================================*
 
-begsr First;
+begsr first;
 
   // - Dateien öffnen
   open peek24fm;
@@ -528,7 +528,7 @@ begsr First;
   p_rmvPgmMg(sds.pgmName);
 
   // - Benutzervoreinstellungen
-  exsr GetUsrSetg;
+  exsr getUsrSetg;
 
   // - Bildschirmfelder füllen
   exsr fill##;
@@ -537,14 +537,14 @@ begsr First;
   o_msgDta = *blanks;
 
   //  Löschen der Cursorosition
-  CsrRow = *zeros;
-  CsrCol = *zeros;
+  csrRow = *zeros;
+  csrCol = *zeros;
 
   // - Einstellen Darstellung der Funktionstasten
-  sfbot = 1;
+  sfBot = 1;
 
   // - Einstellen der Bildschirmauflösung 80/132-Zeichen
-  exsr SetScreen;
+  exsr setScreen;
 
   // - Copyright
   p_sndPgmMg('USR9999': i_copyright: sds.pgmName);
@@ -574,7 +574,7 @@ begsr inzsr;
   //  passen. Die übrigen Tasten (z.B. F12) erscheinen nach F24.
   peek23(sds.pgmName: '*ALL': 0
         : yFKeys: yNbrOfKeys);
-  ScrnFKeys = %subarr(yFKeys: 1);
+  scrnFKeys = %subarr(yFKeys: 1);
 
 endsr;
 

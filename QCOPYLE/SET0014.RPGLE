@@ -6,11 +6,11 @@
 
 dcl-ds set0014_t len(256) qualified template;
   //  Letzte geöffnete Datei ...
-  SET_PrvFil char(10) inz('*NONE');
+  set_prvFil char(10) inz('*NONE');
   //  ... Bibliothek
-  SET_PrvLib char(10) inz('*NONE');
+  set_prvLib char(10) inz('*NONE');
   //  ... Teildatei
-  SET_PrvMbr char(10) inz('*NONE');
+  set_prvMbr char(10) inz('*NONE');
   //  Endemarkierung
   set_0014   char(1) inz(x'8B');
 end-ds;

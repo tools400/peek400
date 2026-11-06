@@ -17,15 +17,15 @@
 //------------------------------------------------------------------*
 dcl-proc f_extDate;
   dcl-pi *n varchar(10);
-    i_FLDL0100 likeds(fldl0100_t) const;
+    i_fldl0100 likeds(fldl0100_t) const;
     i_date     date(*iso) value;
   end-pi;
 
   dcl-s text varchar(10);
   dcl-s dftsep char(1);
 
-  if (i_FLDL0100.f1dtfm = '*MDY' or i_FLDL0100.f1dtfm = '*DMY' or
-      i_FLDL0100.f1dtfm = '*YMD' or i_FLDL0100.f1dtfm = '*JUL');
+  if (i_fldl0100.f1dtfm = '*MDY' or i_fldl0100.f1dtfm = '*DMY' or
+      i_fldl0100.f1dtfm = '*YMD' or i_fldl0100.f1dtfm = '*JUL');
     if (i_date < D'1940-01-01');
       i_date = D'1940-01-01';
     elseif (i_date > D'2039-12-31');
@@ -34,25 +34,25 @@ dcl-proc f_extDate;
   endif;
 
   select;
-  when (i_FLDL0100.f1dtfm = '*EUR');
+  when (i_fldl0100.f1dtfm = '*EUR');
     text = %char(i_date: *eur);
     dftsep = '.';
-  when (i_FLDL0100.f1dtfm = '*USA');
+  when (i_fldl0100.f1dtfm = '*USA');
     text = %char(i_date: *usa);
     dftsep = '/';
-  when (i_FLDL0100.f1dtfm = '*JIS');
+  when (i_fldl0100.f1dtfm = '*JIS');
     text = %char(i_date: *jis);
     dftsep = '-';
-  when (i_FLDL0100.f1dtfm = '*MDY');
+  when (i_fldl0100.f1dtfm = '*MDY');
     text = %char(i_date: *mdy);
     dftsep = '/';
-  when (i_FLDL0100.f1dtfm = '*DMY');
+  when (i_fldl0100.f1dtfm = '*DMY');
     text = %char(i_date: *dmy);
     dftsep = '/';
-  when (i_FLDL0100.f1dtfm = '*YMD');
+  when (i_fldl0100.f1dtfm = '*YMD');
     text = %char(i_date: *ymd);
     dftsep = '/';
-  when (i_FLDL0100.f1dtfm = '*JUL');
+  when (i_fldl0100.f1dtfm = '*JUL');
     text = %char(i_date: *jul);
     dftsep = '/';
   other;
@@ -60,8 +60,8 @@ dcl-proc f_extDate;
     dftsep = '-';
   endsl;
 
-  if (i_FLDL0100.f1dtsp <> ' ' and i_FLDL0100.f1dtsp <> dftsep);
-    text = %xlate(dftsep: i_FLDL0100.f1dtsp: text);
+  if (i_fldl0100.f1dtsp <> ' ' and i_fldl0100.f1dtsp <> dftsep);
+    text = %xlate(dftsep: i_fldl0100.f1dtsp: text);
   endif;
 
   return text;
@@ -73,7 +73,7 @@ end-proc;
 //------------------------------------------------------------------*
 dcl-proc f_extTime;
   dcl-pi *n varchar(8);
-    i_FLDL0100 likeds(fldl0100_t) const;
+    i_fldl0100 likeds(fldl0100_t) const;
     i_time     time(*iso) value;
   end-pi;
 
@@ -82,21 +82,21 @@ dcl-proc f_extTime;
 
   //  *HIVAL ist 24.00.00. Im Format *USA wäre das '12:00 AM' und damit
   //  wieder Mitternacht am Tagesanfang; größter *USA-Wert ist 11:59 PM.
-  if (i_FLDL0100.f1dtfm = '*USA' and i_time > T'23.59.59');
+  if (i_fldl0100.f1dtfm = '*USA' and i_time > T'23.59.59');
     i_time = T'23.59.59';
   endif;
 
   select;
-  when (i_FLDL0100.f1dtfm = '*HMS');
+  when (i_fldl0100.f1dtfm = '*HMS');
     text = %char(i_time: *hms);
     dftsep = ':';
-  when (i_FLDL0100.f1dtfm = '*EUR');
+  when (i_fldl0100.f1dtfm = '*EUR');
     text = %char(i_time: *eur);
     dftsep = '.';
-  when (i_FLDL0100.f1dtfm = '*USA');
+  when (i_fldl0100.f1dtfm = '*USA');
     text = %char(i_time: *usa);
     dftsep = ':';
-  when (i_FLDL0100.f1dtfm = '*JIS');
+  when (i_fldl0100.f1dtfm = '*JIS');
     text = %char(i_time: *jis);
     dftsep = ':';
   other;
@@ -104,8 +104,8 @@ dcl-proc f_extTime;
     dftsep = '.';
   endsl;
 
-  if (i_FLDL0100.f1dtsp <> ' ' and i_FLDL0100.f1dtsp <> dftsep);
-    text = %xlate(dftsep: i_FLDL0100.f1dtsp: text);
+  if (i_fldl0100.f1dtsp <> ' ' and i_fldl0100.f1dtsp <> dftsep);
+    text = %xlate(dftsep: i_fldl0100.f1dtsp: text);
   endif;
 
   return text;

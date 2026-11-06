@@ -28,7 +28,7 @@
 /copy QCOPYLE,COPYRIGHT
 
 dcl-f peekenv usage(*update: *delete: *output) keyed usropn prefix(en_);
-dcl-f peekfld keyed usropn prefix(p_);
+dcl-f peekFld keyed usropn prefix(p_);
 
 /copy QCOPYLE,D_VARDEF
 /copy QCOPYLE,FLDL0100
@@ -58,9 +58,9 @@ dcl-pr main;
   i_nbrPinR    like(gi_nbrPinR) value;
   i_pinTabC    like(gi_pinTabC) dim(12) value;
   i_nbrPinC    like(gi_nbrPinC) value;
-  i_accMode    like(gi_AccMode) value;
-  i_sqlSel     like(gi_SqlSel) value;
-  i_sqlOrd     like(gi_SqlOrd) value;
+  i_accMode    like(gi_accMode) value;
+  i_sqlSel     like(gi_sqlSel) value;
+  i_sqlOrd     like(gi_sqlOrd) value;
   i_isKeyLower like(gi_isKeyLower) value;
   o_msgID      like(go_msgID);
   o_msgDta     like(go_msgDta);
@@ -83,9 +83,9 @@ dcl-pi peek54;
   gi_nbrPinR    like(int4_t) const;
   gi_pinTabC    like(fieldNme_t) dim(12) const;
   gi_nbrPinC    like(int4_t) const;
-  gi_AccMode    like(accessMode_t) const;
-  gi_SqlSel     like(sqlWhere_t) const;
-  gi_SqlOrd     like(sqlOrder_t) const;
+  gi_accMode    like(accessMode_t) const;
+  gi_sqlSel     like(sqlWhere_t) const;
+  gi_sqlOrd     like(sqlOrder_t) const;
   gi_isKeyLower like(bool_t) const;
   go_msgID      like(msgId_t);
   go_msgDta     like(msgDta_t);
@@ -111,9 +111,9 @@ main(gi_file    :
       gi_nbrPinR :
       gi_pinTabC :
       gi_nbrPinC :
-      gi_AccMode :
-      gi_SqlSel  :
-      gi_SqlOrd  :
+      gi_accMode :
+      gi_sqlSel  :
+      gi_sqlOrd  :
       gi_isKeyLower :
       go_msgID   :
       go_msgDta  );
@@ -139,9 +139,9 @@ dcl-proc main;
     i_nbrPinR    like(gi_nbrPinR) value;
     i_pinTabC    like(gi_pinTabC) dim(12) value;
     i_nbrPinC    like(gi_nbrPinC) value;
-    i_accMode    like(gi_AccMode) value;
-    i_sqlSel     like(gi_SqlSel) value;
-    i_sqlOrd     like(gi_SqlOrd) value;
+    i_accMode    like(gi_accMode) value;
+    i_sqlSel     like(gi_sqlSel) value;
+    i_sqlOrd     like(gi_sqlOrd) value;
     i_isKeyLower like(gi_isKeyLower) value;
     o_msgID      like(go_msgID);
     o_msgDta     like(go_msgDta);
@@ -149,7 +149,7 @@ dcl-proc main;
 
   //  Arbeitsfelder
   dcl-s pFile like(file_t);
-  dcl-s plib like(lib_t);
+  dcl-s pLib like(lib_t);
   dcl-s pMbr like(mbr_t);
   dcl-s pFmt like(fmt_t);
   dcl-s pEnvMbr like(i_envMbr);
@@ -174,7 +174,7 @@ dcl-proc main;
            i_rcdFmt  :
            -1        :
            pFile     :
-           plib      :
+           pLib      :
            pMbr      :
            pFmt      );
 
@@ -196,7 +196,7 @@ dcl-proc main;
   if (i_isAutoSave = bTrue);
     open(e) peekenv;
     if (not %error());
-      canSave =  checkAutoSave(pFile: plib);
+      canSave =  checkAutoSave(pFile: pLib);
       close peekenv;
     else;
       //     Fehler beim Öffnen aufgetreten
@@ -226,64 +226,64 @@ dcl-proc main;
       //  Öffnen Datei ...
       open peekenv;
 
-      //  Ausgeben AccessMode ...
+      //  Ausgeben accessMode ...
       writeAccessMode(pFile     :
-               plib      :
+               pLib      :
                i_accMode );
 
       //  Ausgeben Datei ...
       writeFile(pFile  :
-            plib   :
+            pLib   :
             i_file );
 
       //  Ausgeben Bibliothek ...
       writeLibrary(pFile :
-           plib  :
+           pLib  :
            i_lib );
 
       //  Ausgeben Teildatei ...
       writeMember(pFile :
-           plib  :
+           pLib  :
            i_mbr );
 
       //  Ausgeben Satzformat ...
       writeRecordFormat(pFile    :
-              plib     :
+              pLib     :
               i_rcdFmt );
 
       //  Ausgeben Satzformat-ID ...
       writeRecordFormatID(pFile     :
-                plib      :
+                pLib      :
                 i_rcdFmtID);
 
       //  Ausgeben SqlSelect ...
       writeSQLSelect(pFile     :
-              plib      :
+              pLib      :
               i_sqlSel  );
 
-      //  Ausgeben SqlOrder ...
+      //  Ausgeben sqlOrder ...
       writeSQLOrder(pFile     :
-              plib      :
+              pLib      :
               i_sqlOrd  );
 
       //  Ausgeben isKeyLower ...
       writeIsKeyLowerCase(pFile       :
-                  plib        :
+                  pLib        :
                   i_isKeyLower);
 
       //  Ausgeben Layout ...
       writeLayout(pFile     :
-              plib      );
+              pLib      );
 
       //  Ausgeben Pin-Record ...
       writePinnedRecords(pFile    :
-               plib     :
+               pLib     :
                i_pinTabR:
                i_nbrPinR);
 
       //  Ausgeben Pin-Column ...
       writePinnedColumns(pFile    :
-               plib     :
+               pLib     :
                i_pinTabC:
                i_nbrPinC);
 
@@ -581,7 +581,7 @@ dcl-proc writeAccessMode;
   dcl-pi *n extproc(*dclcase);
     i_file    like(gi_file);
     i_lib     like(gi_lib);
-    i_accMode like(gi_AccMode);
+    i_accMode like(gi_accMode);
   end-pi;
 
   //  definieren Arbeitsfelder ...
@@ -614,7 +614,7 @@ dcl-proc writeSQLSelect;
   dcl-pi *n extproc(*dclcase);
     i_file   like(gi_file);
     i_lib    like(gi_lib);
-    i_sqlSel like(gi_SqlSel);
+    i_sqlSel like(gi_sqlSel);
   end-pi;
 
   //  definieren Arbeitsfelder ...
@@ -671,7 +671,7 @@ dcl-proc writeSQLOrder;
   dcl-pi *n extproc(*dclcase);
     i_file   like(gi_file);
     i_lib    like(gi_lib);
-    i_sqlOrd like(gi_SqlOrd);
+    i_sqlOrd like(gi_sqlOrd);
   end-pi;
 
   //  definieren Arbeitsfelder ...
@@ -838,10 +838,10 @@ dcl-proc writeLayout;
   end-pi;
 
   //  Arbeitsfelder ...
-  dcl-ds env0001 likeds(ENV0001_t) inz(*likeds);
+  dcl-ds env0001 likeds(env0001_t) inz(*likeds);
   //---------------------------------------------------*
 
-  open peekfld;
+  open peekFld;
 
   clear p_key1;
   p_key1.p_field = ' ';
@@ -866,7 +866,7 @@ dcl-proc writeLayout;
     env0001.env_hidden = p_hidden;
     env0001.env_color  = p_color;
     env0001.env_mark   = p_markcol;
-    env0001.env_size   = p_maxsize;
+    env0001.env_size   = p_maxSize;
     env0001.env_edtcde = p_edtcde;
     en_data = env0001;
 
@@ -874,7 +874,7 @@ dcl-proc writeLayout;
 
   enddo;
 
-  close peekfld;
+  close peekFld;
 
   return;
 

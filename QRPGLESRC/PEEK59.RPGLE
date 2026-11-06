@@ -46,18 +46,18 @@ dcl-ds workstn likeds(workstn_t);
 /undefine internal_prototype
 
 //  Peek21
-dcl-s YPgmCmd like(pgmCmd_t);
-dcl-s YCmdDta like(pgmCmdDt_t);
-dcl-s YMsgID like(msgId_t);
-dcl-s YMsgDta like(msgDta_t);
+dcl-s yPgmCmd like(pgmCmd_t);
+dcl-s yCmdDta like(pgmCmdDt_t);
+dcl-s yMsgID like(msgId_t);
+dcl-s yMsgDta like(msgDta_t);
 
 //  Peek23:
 dcl-s yKey char(10);
 dcl-s yFKeys like(fKeyDsp_t) dim(32);
 dcl-s yNbrOfKeys like(int4_t);
 
-dcl-s sfbot like(int4_t);
-dcl-c NbrFKeys 2;
+dcl-s sfBot like(int4_t);
+dcl-c nbrFKeys 2;
 dcl-s msgText char(200);
 dcl-s strPos like(uint4_t);
 dcl-s nbrOfKeys like(int4_t);
@@ -107,11 +107,11 @@ ceehdlr(%paddr('errorHandler')
 
 exsr inzsr;
 
-exsr First;
+exsr first;
 
 dow ('1');
 
-  exsr ToScreen;
+  exsr toScreen;
 
   //  Nachrichten anzeigen
   *in89 = *off;
@@ -119,48 +119,48 @@ dow ('1');
 
   //  Anzeigen der Befehlstasten
   select;
-  when ((sfbot = 2) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 2) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#2;
-  when ((sfbot = 3) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 3) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#3;
-  when ((sfbot = 4) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 4) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#4;
-  when ((sfbot = 5) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 5) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#5;
-  when ((sfbot = 6) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 6) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#6;
-  when ((sfbot = 7) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 7) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#7;
-  when ((sfbot = 8) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 8) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#8;
-  when ((sfbot = 9) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 9) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#9;
-  when ((sfbot = 10) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 10) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#10;
-  when ((sfbot = 11) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 11) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#11;
-  when ((sfbot = 12) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 12) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#12;
   other;
     write pbbot#1;
-    sfbot = 1;
+    sfBot = 1;
   endsl;
 
   //  Anzeigen Bildschirm
   exfmt bild01;
 
-  exsr FromScreen;
+  exsr fromScreen;
 
   //  Nachrichten löschen
   p_rmvPgmMg(sds.pgmName);
@@ -171,47 +171,47 @@ dow ('1');
   //  Mappen der gedrückten Taste
   //  in Programmbefehl
   peek21(workstn.aid: sds.pgmName
-        : YPgmCmd: YCmdDta: YMsgID: YMsgDta);
-  if (YMsgID <> ' ');
-    p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
-    YMsgID = '';
-    YMsgDta = '';
+        : yPgmCmd: yCmdDta: yMsgID: yMsgDta);
+  if (yMsgID <> ' ');
+    p_sndPgmMg(yMsgID: yMsgDta: sds.pgmName);
+    yMsgID = '';
+    yMsgDta = '';
     iter;
   endif;
 
   //  Abfragen der Programmbefehle
   select;
   //  F5  - Aktualisieren
-  when (YPgmCmd = '*REFRESH');
-    exsr C_Refresh;
+  when (yPgmCmd = '*REFRESH');
+    exsr c_refresh;
     iter;
   //  F9  - Yes
-  when ((YPgmCmd = '*YES'   )  and
+  when ((yPgmCmd = '*YES'   )  and
      (f_scan('Y': i_keys  ) <> 0));
     exsr c_yes;
     leave;
 
   //  F21 - No
-  when ((YPgmCmd = '*NO'    ) and
+  when ((yPgmCmd = '*NO'    ) and
      (f_scan('N': i_keys  ) <> 0));
     exsr c_no;
     leave;
 
   //  F12 - Cancel
-  when ((YPgmCmd = '*CANCEL') and
+  when ((yPgmCmd = '*CANCEL') and
      (f_scan('C': i_keys  ) <> 0));
     exsr c_cancel;
     leave;
 
   //  F24 - Weitere Tasten
-  when (YPgmCmd = '*MOREKEYS');
-    exsr C_MoreKeys;
+  when (yPgmCmd = '*MOREKEYS');
+    exsr c_moreKeys;
     iter;
 
   //  Datenfreigabe = OK
-  when ((YPgmCmd = '*ENTER' ) and
+  when ((yPgmCmd = '*ENTER' ) and
      (f_scan('E': i_keys  ) <> 0));
-    exsr C_Enter;
+    exsr c_enter;
     leave;
 
   other;
@@ -248,7 +248,7 @@ endsr;
 begsr c_yes;
 
   clear usr8190;
-  usr8190.var1 = YPgmCmd;
+  usr8190.var1 = yPgmCmd;
   o_msgID  = 'USR8190';
   o_msgDta = usr8190;
 
@@ -261,7 +261,7 @@ endsr;
 begsr c_no;
 
   clear usr8190;
-  usr8190.var1 = YPgmCmd;
+  usr8190.var1 = yPgmCmd;
   o_msgID  = 'USR8190';
   o_msgDta = usr8190;
 
@@ -271,10 +271,10 @@ endsr;
 //    c_enter       "Datenfreigabetaste" = OK                 *
 //============================================================*
 
-begsr C_Enter;
+begsr c_enter;
 
   clear usr8190;
-  usr8190.var1 = YPgmCmd;
+  usr8190.var1 = yPgmCmd;
   o_msgID  = 'USR8190';
   o_msgDta = usr8190;
 
@@ -287,7 +287,7 @@ endsr;
 begsr c_cancel;
 
   clear usr8190;
-  usr8190.var1 = YPgmCmd;
+  usr8190.var1 = yPgmCmd;
   o_msgID  = 'USR8190';
   o_msgDta = usr8190;
 
@@ -297,7 +297,7 @@ endsr;
 //    c_refresh     F5  - Aktualisieren der Subfile           *
 //============================================================*
 
-begsr C_Refresh;
+begsr c_refresh;
 
   exsr fill##;
 
@@ -307,9 +307,9 @@ endsr;
 //    c_moreKeys    F24 - Weitere Tasten                      *
 //============================================================*
 
-begsr C_MoreKeys;
+begsr c_moreKeys;
 
-  sfbot = sfbot + 1;
+  sfBot = sfBot + 1;
 
 endsr;
 
@@ -334,7 +334,7 @@ begsr fill##;
   //  Nachrichtentext ...
   msgText = f_msgText(i_msgID: i_msgDta);
 
-  options = cWORDWRAP_PARAGRAPH_MSGD + cWORDWRAP_PARAGRAPH_TRIMR;
+  options = cWORDWRAP_paragraph_msgd + cWORDWRAP_paragraph_trimr;
 
   //  ... Zeile 1
   strPos = 1;
@@ -431,10 +431,10 @@ begsr getKey;
 endsr;
 
 //============================================================*
-//    SetScreen     Einstellen 132/80-Zeichen Auflösung       *
+//    setScreen     Einstellen 132/80-Zeichen Auflösung       *
 //============================================================*
 
-begsr SetScreen;
+begsr setScreen;
 
   if (i_dsp80 = *off);
     //   132-Zeichen Anzeige
@@ -454,7 +454,7 @@ endsr;
 //  Copy program fields to screen.                    *
 //====================================================*
 
-begsr ToScreen;
+begsr toScreen;
 
   $$fkey01 = $$fkey( 1);
   $$fkey02 = $$fkey( 2);
@@ -487,7 +487,7 @@ endsr;
 //  Copy screen to program fields.                    *
 //====================================================*
 
-begsr FromScreen;
+begsr fromScreen;
 
   $$fkey( 1) = $$fkey01;
   $$fkey( 2) = $$fkey02;
@@ -520,7 +520,7 @@ endsr;
 //    First         Initialisierung                           *
 //============================================================*
 
-begsr First;
+begsr first;
 
   // - Öffnen der Dateien
   open peek59fm;
@@ -536,10 +536,10 @@ begsr First;
   exsr fill##;
 
   // - Darstellung der Befehlstasten
-  sfbot = 1;
+  sfBot = 1;
 
   // - Einstellen der Bildschirmauflösung 80/132-Zeichen
-  exsr SetScreen;
+  exsr setScreen;
 
 endsr;
 

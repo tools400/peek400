@@ -19,7 +19,7 @@ dcl-pr qusrjobi extpgm('QUSRJOBI');
   i_format     char(8) const;
   i_qJob       char(26) const;
   i_intJobID   char(16) const;
-  io_ErrCode   char(65535) options(*nopass: *varsize); // OptGrp 1
+  io_errCode   char(65535) options(*nopass: *varsize); // OptGrp 1
   i_resPrfStat char(1) options(*nopass) const; // OptGrp 2
 end-pr;
 
@@ -124,7 +124,7 @@ dcl-ds jobi0400_t qualified template;
   dateTimeEnt   char(13);
   dateTimeAct   char(13);
   jobAcctCode   char(15);
-  JobD          char(10);
+  jobD          char(10);
   jobDLib       char(10);
   unitOfWorkID  char(24);
   mode          char(8);

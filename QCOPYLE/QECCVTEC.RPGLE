@@ -12,7 +12,7 @@ dcl-pr qeccvtec extpgm('QECCVTEC');
   i_fillOrFloatCurrencyInd char(1) const;
   i_srvVarPrecision        int(10) const;
   i_srvVarDecPos           int(10) const;
-  io_ErrCode               char(65535) options(*nopass: *varsize);
+  io_errCode               char(65535) options(*nopass: *varsize);
 end-pr;
 
 /endif

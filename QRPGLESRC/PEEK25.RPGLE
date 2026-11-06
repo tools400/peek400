@@ -55,14 +55,14 @@ dcl-ds cursorPosition likeds(cursorPosition_t) inz;
 
 dcl-s yFKeys char(18) dim(32);
 dcl-s yNbrOfKeys like(int4_t);
-dcl-s YMsgID char(7);
-dcl-s YMsgDta char(512);
+dcl-s yMsgID char(7);
+dcl-s yMsgDta char(512);
 
-dcl-s YPgmCmd char(10);
-dcl-s YCmdDta like(pgmCmdDt_t);
+dcl-s yPgmCmd char(10);
+dcl-s yCmdDta like(pgmCmdDt_t);
 
-dcl-s sfbot like(int4_t);
-dcl-c NbrFKeys 2;
+dcl-s sfBot like(int4_t);
+dcl-c nbrFKeys 2;
 
 dcl-c CHAR 'x';
 
@@ -101,7 +101,7 @@ ceehdlr(%paddr('errorHandler')
 
 exsr inzsr;
 
-exsr First;
+exsr first;
 
 //  Schleife für Programmbearbeitung
 
@@ -113,24 +113,24 @@ dow ('1');
 
   //  Anzeigen der Befehlstasten
   select;
-  when ((sfbot = 2) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 2) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#2;
-  when ((sfbot = 3) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 3) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#3;
-  when ((sfbot = 4) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 4) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#4;
-  when ((sfbot = 5) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 5) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#5;
-  when ((sfbot = 6) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 6) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#6;
   other;
     write pbbot#1;
-    sfbot = 1;
+    sfBot = 1;
   endsl;
 
   //  Anzeigen Bildschirm
@@ -141,9 +141,9 @@ dow ('1');
   cursorPosition.column = %rem(workstn.csrPos: 256);
 
   //  Beibehalten der Cursorosition
-  CsrRow = cursorPosition.row - zei;
-  CsrCol = cursorPosition.column - pos;
-  CsrCol = CsrCol - 1;
+  csrRow = cursorPosition.row - zei;
+  csrCol = cursorPosition.column - pos;
+  csrCol = csrCol - 1;
 
   //  Nachrichten löschen
   p_rmvPgmMg(sds.pgmName);
@@ -154,29 +154,29 @@ dow ('1');
   //  Mappen der gedrückten Taste
   //  in Programmbefehl
   peek21(workstn.aid: sds.pgmName
-        : YPgmCmd: YCmdDta: YMsgID: YMsgDta);
-  if (YMsgID <> *blanks);
-    p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
-    YMsgID = '';
-    YMsgDta = '';
+        : yPgmCmd: yCmdDta: yMsgID: yMsgDta);
+  if (yMsgID <> *blanks);
+    p_sndPgmMg(yMsgID: yMsgDta: sds.pgmName);
+    yMsgID = '';
+    yMsgDta = '';
     iter;
   endif;
 
   //  Abfragen der Befehlstasten
   select;
-  when (YPgmCmd = '*EXIT');
-    exsr C_EndPgm;
+  when (yPgmCmd = '*EXIT');
+    exsr c_endPgm;
     leave;
-  when (YPgmCmd = '*REFRESH');
-    exsr C_Refresh;
+  when (yPgmCmd = '*REFRESH');
+    exsr c_refresh;
     iter;
-  when (YPgmCmd = '*CANCEL');
-    exsr C_EndPgm;
+  when (yPgmCmd = '*CANCEL');
+    exsr c_endPgm;
     leave;
-  when (YPgmCmd = '*MOREKEYS');
-    exsr C_MoreKeys;
-  when (YPgmCmd = '*ENTER');
-    exsr C_Enter;
+  when (yPgmCmd = '*MOREKEYS');
+    exsr c_moreKeys;
+  when (yPgmCmd = '*ENTER');
+    exsr c_enter;
     if (*in99 = *off);
       leave;
     endif;
@@ -194,12 +194,12 @@ close peek25fm;
 return;
 
 //============================================================*
-//    C_Enter       "Datenfreigabetaste"                      *
+//    c_enter       "Datenfreigabetaste"                      *
 //============================================================*
 
-begsr C_Enter;
+begsr c_enter;
 
-  exsr prfb1;
+  exsr prfB1;
 
 endsr;
 
@@ -218,7 +218,7 @@ endsr;
 //    PRFB1         Prüfen der Eingaben                       *
 //============================================================*
 
-begsr prfb1;
+begsr prfB1;
 
   dou ('1');
 
@@ -237,15 +237,15 @@ endsr;
 
 begsr prf20;
 
-  exsr ExtrColor;
+  exsr extrColor;
 
 endsr;
 
 //============================================================*
-//    C_EndPgm      F12    - Programm beenden                 *
+//    c_endPgm      F12    - Programm beenden                 *
 //============================================================*
 
-begsr C_EndPgm;
+begsr c_endPgm;
 
   p_rmvPgmMg(sds.pgmName);
 
@@ -265,28 +265,28 @@ begsr C_EndPgm;
 endsr;
 
 //============================================================*
-//    C_Refresh     F5  - Aktualisieren der Subfile           *
+//    c_refresh     F5  - Aktualisieren der Subfile           *
 //============================================================*
 
-begsr C_Refresh;
+begsr c_refresh;
 
   exsr fill##;
   exsr posCsr;
 
   //  Cursor auf die aktuelle Farbe (DSPATR(PC)). Mit einer Position
   //  in CSRROW/CSRCOL hätte CSRLOC Vorrang.
-  CsrRow = 0;
-  CsrCol = 0;
+  csrRow = 0;
+  csrCol = 0;
 
 endsr;
 
 //============================================================*
-//    C_MoreKeys    F24 - Weitere Tasten                      *
+//    c_moreKeys    F24 - Weitere Tasten                      *
 //============================================================*
 
-begsr C_MoreKeys;
+begsr c_moreKeys;
 
-  sfbot = sfbot + 1;
+  sfBot = sfBot + 1;
 
 endsr;
 
@@ -305,7 +305,7 @@ begsr fill##;
 endsr;
 
 //============================================================*
-//    PosCsr        Positionieren Cursor auf aktuelle Farbe   *
+//    posCsr        Positionieren Cursor auf aktuelle Farbe   *
 //============================================================*
 
 begsr posCsr;
@@ -324,10 +324,10 @@ begsr posCsr;
 endsr;
 
 //============================================================*
-//    SetScreen     Einstellen 132/80-Zeichen Auflösung       *
+//    setScreen     Einstellen 132/80-Zeichen Auflösung       *
 //============================================================*
 
-begsr SetScreen;
+begsr setScreen;
 
   if (i_dsp80 = '0');
     //   132-Zeichen Anzeige
@@ -344,12 +344,12 @@ begsr SetScreen;
 endsr;
 
 //============================================================*
-//    ExtrColor     Extrahieren Farbattribut                  *
+//    extrColor     Extrahieren Farbattribut                  *
 //============================================================*
 
-begsr ExtrColor;
+begsr extrColor;
 
-  i = %lookup(ScnFld: colorName: 1: nbrColors);
+  i = %lookup(scnFld: colorName: 1: nbrColors);
   if (i > 0);
     o_colorAttr = colorAttr(i);
   else;
@@ -364,7 +364,7 @@ endsr;
 //    First         Initialisierung                           *
 //============================================================*
 
-begsr First;
+begsr first;
 
   // - Öffnen der Dateien
   open peek25fm;
@@ -380,14 +380,14 @@ begsr First;
   o_msgDta = *blanks;
 
   //  Löschen der Cursorosition
-  CsrRow = *zeros;
-  CsrCol = *zeros;
+  csrRow = *zeros;
+  csrCol = *zeros;
 
   // - Einstellen Darstellung der Funktionstasten
-  sfbot = 1;
+  sfBot = 1;
 
   // - Einstellen der Bildschirmauflösung 80/132-Zeichen
-  exsr SetScreen;
+  exsr setScreen;
 
 endsr;
 
@@ -406,34 +406,34 @@ begsr inzsr;
   PGMQ = '*';
 
   //  Farbtabelle (Bezugszahlen aus PEEK25FM)
-  addColor('$GREEN'    : COLOR_green    : 10: %addr($Green));
-  addColor('$GREEN_R'  : COLOR_green_r  : 11: %addr($Green_R));
-  addColor('$GREEN_U'  : COLOR_green_u  : 12: %addr($Green_U));
-  addColor('$GREEN_RU' : COLOR_green_ru : 13: %addr($Green_RU));
-  addColor('$WHITE'    : COLOR_white    : 20: %addr($White));
-  addColor('$WHITE_R'  : COLOR_White_R  : 21: %addr($White_R));
-  addColor('$WHITE_U'  : COLOR_white_u  : 22: %addr($White_U));
-  addColor('$RED'      : COLOR_red      : 30: %addr($Red));
-  addColor('$RED_R'    : COLOR_red_r    : 31: %addr($Red_R));
-  addColor('$RED_U'    : COLOR_red_u    : 32: %addr($Red_U));
-  addColor('$RED_RU'   : COLOR_red_ru   : 33: %addr($Red_RU));
-  addColor('$RED_B'    : COLOR_red_b    : 34: %addr($Red_B));
-  addColor('$RED_RB'   : COLOR_red_rb   : 35: %addr($Red_RB));
-  addColor('$RED_UB'   : COLOR_red_ub   : 36: %addr($Red_UB));
-  addColor('$TURKIS'   : COLOR_turkis   : 40: %addr($Turkis));
-  addColor('$TURKIS_R' : COLOR_turkis_r : 41: %addr($Turkis_R));
-  addColor('$TURKIS_U' : COLOR_turkis_u : 42: %addr($Turkis_U));
-  addColor('$TURKIS_RU': COLOR_turkis_ru: 43: %addr($Turkis_RU));
-  addColor('$YELLOW'   : COLOR_yellow   : 50: %addr($Yellow));
-  addColor('$YELLOW_R' : COLOR_yellow_r : 51: %addr($Yellow_R));
-  addColor('$YELLOW_U' : COLOR_yellow_u : 52: %addr($Yellow_U));
-  addColor('$PINK'     : COLOR_pink     : 60: %addr($Pink));
-  addColor('$PINK_R'   : COLOR_pink_r   : 61: %addr($Pink_R));
-  addColor('$PINK_U'   : COLOR_pink_u   : 62: %addr($Pink_U));
-  addColor('$PINK_RU'  : COLOR_pink_ru  : 63: %addr($Pink_RU));
-  addColor('$BLUE'     : COLOR_blue     : 70: %addr($Blue));
-  addColor('$BLUE_R'   : COLOR_blue_r   : 71: %addr($Blue_R));
-  addColor('$BLUE_U'   : COLOR_blue_u   : 72: %addr($Blue_U));
+  addColor('$GREEN'    : color_green    : 10: %addr($green));
+  addColor('$GREEN_R'  : color_green_r  : 11: %addr($green_r));
+  addColor('$GREEN_U'  : color_green_u  : 12: %addr($green_u));
+  addColor('$GREEN_RU' : color_green_ru : 13: %addr($green_ru));
+  addColor('$WHITE'    : color_white    : 20: %addr($white));
+  addColor('$WHITE_R'  : color_white_r  : 21: %addr($white_r));
+  addColor('$WHITE_U'  : color_white_u  : 22: %addr($white_u));
+  addColor('$RED'      : color_red      : 30: %addr($red));
+  addColor('$RED_R'    : color_red_r    : 31: %addr($red_r));
+  addColor('$RED_U'    : color_red_u    : 32: %addr($red_u));
+  addColor('$RED_RU'   : color_red_ru   : 33: %addr($red_ru));
+  addColor('$RED_B'    : color_red_b    : 34: %addr($red_b));
+  addColor('$RED_RB'   : color_red_rb   : 35: %addr($red_rb));
+  addColor('$RED_UB'   : color_red_ub   : 36: %addr($red_ub));
+  addColor('$TURKIS'   : color_turkis   : 40: %addr($turkis));
+  addColor('$TURKIS_R' : color_turkis_r : 41: %addr($turkis_r));
+  addColor('$TURKIS_U' : color_turkis_u : 42: %addr($turkis_u));
+  addColor('$TURKIS_RU': color_turkis_ru: 43: %addr($turkis_ru));
+  addColor('$YELLOW'   : color_yellow   : 50: %addr($yellow));
+  addColor('$YELLOW_R' : color_yellow_r : 51: %addr($yellow_r));
+  addColor('$YELLOW_U' : color_yellow_u : 52: %addr($yellow_u));
+  addColor('$PINK'     : color_pink     : 60: %addr($pink));
+  addColor('$PINK_R'   : color_pink_r   : 61: %addr($pink_r));
+  addColor('$PINK_U'   : color_pink_u   : 62: %addr($pink_u));
+  addColor('$PINK_RU'  : color_pink_ru  : 63: %addr($pink_ru));
+  addColor('$BLUE'     : color_blue     : 70: %addr($blue));
+  addColor('$BLUE_R'   : color_blue_r   : 71: %addr($blue_r));
+  addColor('$BLUE_U'   : color_blue_u   : 72: %addr($blue_u));
 
   peek21_name = f_pgmCallN('PEEK21');
   peek23_name = f_pgmCallN('PEEK23');
@@ -443,7 +443,7 @@ begsr inzsr;
   //  passen. Die übrigen Tasten (z.B. F12) erscheinen nach F24.
   peek23(sds.pgmName: '*ALL': 0
         : yFKeys: yNbrOfKeys);
-  ScrnFKeys = %subarr(yFKeys: 1);
+  scrnFKeys = %subarr(yFKeys: 1);
 
 endsr;
 

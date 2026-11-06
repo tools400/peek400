@@ -27,7 +27,7 @@
 /copy QCOPYLE,H_SPEC
 /copy QCOPYLE,COPYRIGHT
 
-dcl-f peekfld usage(*update: *delete) keyed usropn prefix(f_);
+dcl-f peekFld usage(*update: *delete) keyed usropn prefix(f_);
 
 /copy QCOPYLE,D_VARDEF
 /copy QCOPYLE,FLDL0100
@@ -56,8 +56,8 @@ dcl-s x like(int4_t) inz;
 dcl-s y like(int4_t) inz;
 dcl-s z like(int4_t) inz;
 dcl-s tempStr like(i_sqlOrder) inz;
-dcl-ds keyl0100 likeds(KEYL0100_t) based(pKEYL0100);
-dcl-ds keyl0100_sql likeds(KEYL0100_t) inz;
+dcl-ds keyl0100 likeds(keyl0100_t) based(pKEYL0100);
+dcl-ds keyl0100_sql likeds(keyl0100_t) inz;
 dcl-s data char(512) inz;
 dcl-s numKeyFld like(int4_t);
 dcl-s sqlName varchar(128) inz;
@@ -88,10 +88,10 @@ ceehdlr(%paddr('errorHandler')
 
 exsr inzsr;
 
-exsr First;
+exsr first;
 
 if (i_access = SQL_SEQ);
-  exsr SqlSeq;
+  exsr sqlSeq;
 else;
   exsr otherSeq;
 endif;
@@ -112,7 +112,7 @@ endif;
 //  sqlSeq     SQL-Auswahl                            *
 //====================================================*
 
-begsr SqlSeq;
+begsr sqlSeq;
 
   pKEYL0100 = %addr(keyl0100_sql);
 
@@ -140,12 +140,12 @@ begsr SqlSeq;
       keyl0100.apkseq  = 'D';
       numKeyFld = numKeyFld + 1;
       keyl0100.apkeyn = numKeyFld;
-      exsr AddKeyInf;
+      exsr addKeyInf;
     else;
       keyl0100.apkseq  = 'A';
       numKeyFld = numKeyFld + 1;
       keyl0100.apkeyn = numKeyFld;
-      exsr AddKeyInf;
+      exsr addKeyInf;
     endif;
 
     x = y + 1;
@@ -171,7 +171,7 @@ begsr getsysname;
   endif;
 
   if (%len(sqlName) <= %len(keyl0100.apkeyf));
-    f_key.F_Field = sqlName;
+    f_key.f_field = sqlName;
     chain(n) %kds(f_key) fpeekfld;
     if (%found());
       keyl0100.apkeyf = sqlName;
@@ -185,7 +185,7 @@ begsr getsysname;
   dow (not %eof());
     fldl0100 = f_ffd;
     if (fldl0100.f1afnm = sqlName);
-      keyl0100.apkeyf = F_Field;
+      keyl0100.apkeyf = f_field;
       leavesr;
     endif;
     read(n) fpeekfld;
@@ -236,7 +236,7 @@ begsr otherSeq;
     for do_x1 = 1 to nbrOfKey;
       peek41(i_qFile: i_rcdFmt
             : '*READKEY': rtnCode: data);
-      exsr AddKeyInf;
+      exsr addKeyInf;
     endfor;
 
   endif;
@@ -244,19 +244,19 @@ begsr otherSeq;
 endsr;
 
 //====================================================*
-//  AddKeyInf  Hinzufügen Schlüsselinformationen      *
+//  addKeyInf  Hinzufügen Schlüsselinformationen      *
 //====================================================*
 
-begsr AddKeyInf;
+begsr addKeyInf;
 
   clear f_key;
-  f_key.F_Field = keyl0100.apkeyf;
+  f_key.f_field = keyl0100.apkeyf;
   chain %kds(f_key) fpeekfld;
   if (%found());
-    F_Desc = keyl0100.apkseq;
-    F_KSeq = keyl0100.apkeyn;
+    f_desc = keyl0100.apkseq;
+    f_kSeq = keyl0100.apkeyn;
     fldl0100 = f_ffd;
-    fldl0100.F1KeyF = '1';
+    fldl0100.f1KeyF = '1';
     f_ffd = fldl0100;
     update fpeekfld;
   endif;
@@ -267,7 +267,7 @@ endsr;
 //  First  --  Initialize program                     *
 //====================================================*
 
-begsr First;
+begsr first;
 
   nbrOfKey = *zeros;
 
@@ -294,7 +294,7 @@ begsr inzsr;
 
   peek41_name = f_pgmCallN('PEEK41');
 
-  open peekfld;
+  open peekFld;
 
 endsr;
 

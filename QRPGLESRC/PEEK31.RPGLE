@@ -53,7 +53,7 @@ dcl-pi peek31;
 end-pi;
 
 dcl-s do_x1 packed(7);
-dcl-ds set0004 likeds(SET0004_t) inz;
+dcl-ds set0004 likeds(set0004_t) inz;
 dcl-s isFallback like(bool_t) inz(bFalse);
 dcl-s msgF like(file_t);
 //----------------------------------------------------*
@@ -72,29 +72,29 @@ if (io_language = '*DFT');
   set0004 = f_getUsrSg('*LANGUAGE':  o_msgID: o_msgDta);
 else;
   //  ... Benutzen der übergebenen Sprache
-  set0004.SET_Lang = io_language;
+  set0004.set_lang = io_language;
 endif;
 
 if (o_msgID = '');
   //  ... Prüfen der Nachrichtendatei
   for do_x1 = 1 to 2;
 
-    if (f_exist(%trimr(i_prefix) + set0004.SET_Lang
-       : sds.PgmLib : '*MSGF'));
+    if (f_exist(%trimr(i_prefix) + set0004.set_lang
+       : sds.pgmLib : '*MSGF'));
       //  ... kein Fehler
       leave;
     else;
       //  ... Fehler aufgetreten
-      if (set0004.SET_Lang = 'GER');
+      if (set0004.set_lang = 'GER');
         //  ... Standardsprache: CPF2407 Nachrichtendatei &1 in &2
         //      nicht gefunden (aus QCPFMSG, in der Systemsprache)
-        msgF = %trimr(i_prefix) + set0004.SET_Lang;
+        msgF = %trimr(i_prefix) + set0004.set_lang;
         o_msgID  = 'CPF2407';
-        o_msgDta = msgF + sds.PgmLib;
+        o_msgDta = msgF + sds.pgmLib;
         leave;
       else;
         //  ... Benutzersprache
-        set0004.SET_Lang = 'GER';
+        set0004.set_lang = 'GER';
         isFallback = bTrue;
         iter;
       endif;
@@ -109,7 +109,7 @@ if (o_msgID = '');
   if (isFallback = bFalse);
     p_updUsrSg('*LANGUAGE': set0004);
   endif;
-  io_language = set0004.SET_Lang;
+  io_language = set0004.set_lang;
 else;
   io_language = '';
 endif;

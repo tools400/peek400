@@ -11,7 +11,7 @@ dcl-pr quscrtus extpgm('QUSCRTUS');
   i_pubAuth       char(10) const;
   i_text          char(50) const;
   i_replace       char(10) options(*nopass) const; // | optGrp 1
-  io_ErrCode      char(65535) options(*nopass: *varsize); // |
+  io_errCode      char(65535) options(*nopass: *varsize); // |
   i_domain        char(10) options(*nopass) const; // | optGrp 2
   // | optGrp 3
   i_transSizeReq  char(10) options(*nopass) const; // |

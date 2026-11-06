@@ -6,7 +6,7 @@ dcl-pr peek09 extpgm('PEEK09');
 dcl-pr peek09 extpgm(peek09_name);
 /endif
   i_qFile  likeds(qObj_t) const;
-  o_data   likeds(OBJD0400_t);
+  o_data   likeds(objd0400_t);
   o_msgID  like(msgId_t);
   o_msgDta like(msgDta_t);
 end-pr;

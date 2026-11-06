@@ -8,7 +8,7 @@ dcl-ds set0008_t len(256) qualified template;
   //  Zeichen für Promptfunktion
   set_prmt   char(1) inz('?');
   //  F4-Felder farbig markieren
-  SET_DspPmt char(1) inz(bTrue);
+  set_dspPmt char(1) inz(bTrue);
   //  Endemarkierung
   set_0008   char(1) inz(x'8B');
 end-ds;

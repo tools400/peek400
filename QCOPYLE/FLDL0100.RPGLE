@@ -86,18 +86,18 @@
 
 //  list API format FLDL0100
 dcl-ds fldl0100_t qualified template;
-  f1fnme char(10);
-  F1DTyp char(1);
+  f1FNme char(10);
+  f1DTyp char(1);
   f1use  char(1);
   f1obuf int(10);
-  F1IBuf int(10);
-  f1flen int(10);
-  f1digt int(10);
-  f1decp int(10);
-  f1ftxt char(50);
-  f1edtc char(2);
-  f1edwl int(10);
-  f1edwd char(64);
+  f1IBuf int(10);
+  f1FLen int(10);
+  f1Digt int(10);
+  f1DecP int(10);
+  f1FTxt char(50);
+  f1EdtC char(2);
+  f1EdWl int(10);
+  f1EdWd char(64);
   f1col1 char(20);
   f1col2 char(20);
   f1col3 char(20);
@@ -115,7 +115,7 @@ dcl-ds fldl0100_t qualified template;
   f1chcc int(10);
   f1ewcc int(10);
   f1vfld char(10) pos(513);
-  F1KeyF char(2) pos(533);
+  f1KeyF char(2) pos(533);
   f1seq  int(10);
   f1ucs2 char(1);
 end-ds;

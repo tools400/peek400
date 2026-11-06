@@ -45,13 +45,13 @@
 
 /copy QCOPYLE,USR8143
 
-dcl-s Wrk_EOF char(1) inz(bFalse);
+dcl-s wrk_eof char(1) inz(bFalse);
 
-dcl-s Wrk_Sectn like(SECTION_t);
-dcl-s Wrk_Key like(KEY_t);
-dcl-s Tmp_Key like(KEY_t);
-dcl-s Wrk_Data like(SET0000_t);
-dcl-s Wrk_ExclK like(pgmCmd_t) dim(25);
+dcl-s wrk_sectn like(section_t);
+dcl-s wrk_key like(key_t);
+dcl-s tmp_key like(key_t);
+dcl-s wrk_data like(set0000_t);
+dcl-s wrk_exclK like(pgmCmd_t) dim(25);
 dcl-s p like(int4_t);
 
 dcl-s isExit05 ind inz(bFalse);
@@ -106,170 +106,170 @@ ceehdlr(%paddr('errorHandler')
 
 exsr inzsr;
 
-exsr First;
+exsr first;
 
-Wrk_Key = *blanks;
+wrk_key = *blanks;
 
 if (%subst(i_scnAID: 1: 1) = '#');
-  exsr MapSflOpt;
+  exsr mapSflOpt;
 else;
-  exsr MapCmdKey;
+  exsr mapCmdKey;
 endif;
 
 return;
 
 //============================================================*
-//    MapSflOpt    Übersetzen Subfileauswahlen                *
+//    mapSflOpt    Übersetzen Subfileauswahlen                *
 //============================================================*
 
-begsr MapSflOpt;
+begsr mapSflOpt;
 
-  //*                 SUBST (P) XscnAID:2     Wrk_Key
-  Wrk_Key = %subst(i_scnAID: 2);
+  //*                 SUBST (P) XscnAID:2     wrk_key
+  wrk_key = %subst(i_scnAID: 2);
 
   //   Übersetzen key code vor dem Mapping:
-  callExit05(i_pgm: '*OPTION': Wrk_Key);
+  callExit05(i_pgm: '*OPTION': wrk_key);
 
-  exsr MapUsrInp;
+  exsr mapUsrInp;
 
 endsr;
 
 //============================================================*
-//    MapCmdKey     Übersetzen Tastendruck in Programmbefehl  *
+//    mapCmdKey     Übersetzen Tastendruck in Programmbefehl  *
 //============================================================*
 
-begsr MapCmdKey;
+begsr mapCmdKey;
 
   select;
   when (i_scnAID = k_f1);
-    Wrk_Key = '*F01';
+    wrk_key = '*F01';
   when (i_scnAID = k_f2);
-    Wrk_Key = '*F02';
+    wrk_key = '*F02';
   when (i_scnAID = k_f3);
-    Wrk_Key = '*F03';
+    wrk_key = '*F03';
   when (i_scnAID = k_f4);
-    Wrk_Key = '*F04';
+    wrk_key = '*F04';
   when (i_scnAID = k_f5);
-    Wrk_Key = '*F05';
+    wrk_key = '*F05';
   when (i_scnAID = k_f6);
-    Wrk_Key = '*F06';
+    wrk_key = '*F06';
   when (i_scnAID = k_f7);
-    Wrk_Key = '*F07';
+    wrk_key = '*F07';
   when (i_scnAID = k_f8);
-    Wrk_Key = '*F08';
+    wrk_key = '*F08';
   when (i_scnAID = k_f9);
-    Wrk_Key = '*F09';
+    wrk_key = '*F09';
   when (i_scnAID = k_f10);
-    Wrk_Key = '*F10';
+    wrk_key = '*F10';
   when (i_scnAID = k_f11);
-    Wrk_Key = '*F11';
+    wrk_key = '*F11';
   when (i_scnAID = k_f12);
-    Wrk_Key = '*F12';
+    wrk_key = '*F12';
   when (i_scnAID = k_f13);
-    Wrk_Key = '*F13';
+    wrk_key = '*F13';
   when (i_scnAID = k_f14);
-    Wrk_Key = '*F14';
+    wrk_key = '*F14';
   when (i_scnAID = k_f15);
-    Wrk_Key = '*F15';
+    wrk_key = '*F15';
   when (i_scnAID = k_f16);
-    Wrk_Key = '*F16';
+    wrk_key = '*F16';
   when (i_scnAID = k_f17);
-    Wrk_Key = '*F17';
+    wrk_key = '*F17';
   when (i_scnAID = k_f18);
-    Wrk_Key = '*F18';
+    wrk_key = '*F18';
   when (i_scnAID = k_f19);
-    Wrk_Key = '*F19';
+    wrk_key = '*F19';
   when (i_scnAID = k_f20);
-    Wrk_Key = '*F20';
+    wrk_key = '*F20';
   when (i_scnAID = k_f21);
-    Wrk_Key = '*F21';
+    wrk_key = '*F21';
   when (i_scnAID = k_f22);
-    Wrk_Key = '*F22';
+    wrk_key = '*F22';
   when (i_scnAID = k_f23);
-    Wrk_Key = '*F23';
+    wrk_key = '*F23';
   when (i_scnAID = k_f24);
-    Wrk_Key = '*F24';
+    wrk_key = '*F24';
   when (i_scnAID = k_clear);
-    Wrk_Key = '*CLEAR';
+    wrk_key = '*CLEAR';
   when (i_scnAID = k_delete);
-    Wrk_Key = '*DELETE';
+    wrk_key = '*DELETE';
   when (i_scnAID = k_enter);
-    Wrk_Key = '*ENTER';
+    wrk_key = '*ENTER';
   when (i_scnAID = k_help);
-    Wrk_Key = '*HELP';
+    wrk_key = '*HELP';
   when (i_scnAID = k_page_down);
-    Wrk_Key = '*PAGEDOWN';
+    wrk_key = '*PAGEDOWN';
   when (i_scnAID = k_page_up);
-    Wrk_Key = '*PAGEUP';
+    wrk_key = '*PAGEUP';
   when (i_scnAID = k_print_screen);
-    Wrk_Key = '*PRINT';
+    wrk_key = '*PRINT';
   when (i_scnAID = k_reset);
-    Wrk_Key = '*RESET';
+    wrk_key = '*RESET';
   when (i_scnAID = k_light_pen);
-    Wrk_Key = '*LIGHTPEN';
+    wrk_key = '*LIGHTPEN';
 
   other;
     //  Unbekanntes AID-Byte ...
     //  muß unbekannte HEX-Wert einer
     //  unbekannten Taste sein.
-    Wrk_Key = *blanks;
+    wrk_key = *blanks;
     p_keyToMsg(i_scnAID: o_msgID: o_msgDta);
   endsl;
 
-  if (Wrk_Key = '');
+  if (wrk_key = '');
     leavesr;
   endif;
 
   //   Übersetzen key code vor dem Mapping:
-  callExit05(i_pgm: '*CMDKEY': Wrk_Key);
+  callExit05(i_pgm: '*CMDKEY': wrk_key);
 
-  exsr MapUsrInp;
+  exsr mapUsrInp;
 
 endsr;
 
 //============================================================*
-//    MapUsrInp     Übersetzen Tastendruck in Programmbefehl  *
+//    mapUsrInp     Übersetzen Tastendruck in Programmbefehl  *
 //============================================================*
 
-begsr MapUsrInp;
+begsr mapUsrInp;
 
   //   Übersetzen ...
-  Wrk_Sectn = '*' + %trim(i_pgm);
-  if (f_chainUsr(Wrk_Sectn :
-              Wrk_Key   :
-              Wrk_Data  ) = '0'   and
-      f_isKeyExc(Wrk_Data  :
-              Wrk_ExclK )= '0');
+  wrk_sectn = '*' + %trim(i_pgm);
+  if (f_chainUsr(wrk_sectn :
+              wrk_key   :
+              wrk_data  ) = '0'   and
+      f_isKeyExc(wrk_data  :
+              wrk_exclK )= '0');
 
     //   Übersetzen key code nach dem Mapping:
-    callExit05(i_pgm: '*EVENT': Wrk_Data);
+    callExit05(i_pgm: '*EVENT': wrk_data);
 
-    o_pgmCmd = Wrk_Data;
+    o_pgmCmd = wrk_data;
     o_cmdDta = *blanks;
     o_msgID = *blanks;
     o_msgDta = *blanks;
   else;
 
     //   Übersetzen key code nach dem Mapping:
-    callExit05(i_pgm: '*USROPT': Wrk_Key);
+    callExit05(i_pgm: '*USROPT': wrk_key);
 
     //   Prüfen auf Kurzbefehl ...
-    Wrk_Sectn = '*CMD';
-    if (f_chainUsr(Wrk_Sectn: Wrk_Key: Wrk_Data)='0');
+    wrk_sectn = '*CMD';
+    if (f_chainUsr(wrk_sectn: wrk_key: wrk_data)='0');
       o_pgmCmd = '*CMD';
-      o_cmdDta = Wrk_Data;
+      o_cmdDta = wrk_data;
       o_msgID = *blanks;
       o_msgDta = *blanks;
     else;
 
-      exsr ChkEntry;
+      exsr chkEntry;
       //  Wenn Tasten definiert sind,
       //  Dann Fehlermeldung ausgeben ...
-      if (Wrk_EOF = bFalse);
+      if (wrk_eof = bFalse);
         o_pgmCmd = *blanks;
         o_cmdDta = *blanks;
         o_msgID = 'USR8143';
-        usr8143.var1 = Wrk_Key;
+        usr8143.var1 = wrk_key;
         o_msgDta = usr8143;
       else;
         o_pgmCmd = '*EXIT';
@@ -283,22 +283,22 @@ begsr MapUsrInp;
 endsr;
 
 //============================================================*
-//    ChkEntry      Prüfen auf Einträge zum Programm          *
+//    chkEntry      Prüfen auf Einträge zum Programm          *
 //============================================================*
 
-begsr ChkEntry;
+begsr chkEntry;
 
   //   Prüfen ...
-  Wrk_Sectn = '*' + %trim(i_pgm);
-  p_setllUsr(Wrk_Sectn: '*F01');
-  if (f_readeUsr(Wrk_Sectn: Tmp_Key) = '1');
-    Wrk_EOF = bTrue;
+  wrk_sectn = '*' + %trim(i_pgm);
+  p_setllUsr(wrk_sectn: '*F01');
+  if (f_readeUsr(wrk_sectn: tmp_key) = '1');
+    wrk_eof = bTrue;
   else;
-    if (Tmp_Key < '*F01'
-        or Tmp_Key > '*F24');
-      Wrk_EOF = bTrue;
+    if (tmp_key < '*F01'
+        or tmp_key > '*F24');
+      wrk_eof = bTrue;
     else;
-      Wrk_EOF = bFalse;
+      wrk_eof = bFalse;
     endif;
   endif;
 
@@ -308,7 +308,7 @@ endsr;
 //    First         Initialisierung                           *
 //============================================================*
 
-begsr First;
+begsr first;
 
   // - Programm initialisieren
   //**                Callp     p_rmvPgmMg(sds.pgmName)
@@ -317,9 +317,9 @@ begsr First;
   o_msgDta = *blanks;
   //   Prüfen auf Ausschlüsse ...
   if (%parms() >= %parmnum(i_exclKeys));
-    Wrk_ExclK = %subarr(i_exclKeys: 1);
+    wrk_exclK = %subarr(i_exclKeys: 1);
   else;
-    Wrk_ExclK(*) = '';
+    wrk_exclK(*) = '';
   endif;
 
 endsr;

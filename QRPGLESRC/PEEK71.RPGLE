@@ -128,7 +128,7 @@ end-ds;
 //  Returns a Transcoder to convert from a
 //  given CCSID to the job CCSID.
 //=====================================================================*
-dcl-proc Transcoder_toJobCcsid export;
+dcl-proc transcoder_toJobCcsid export;
   dcl-pi *n like(hTranscoder_t);
     i_fromCcsid uns(10) const;
   end-pi;
@@ -138,7 +138,7 @@ dcl-proc Transcoder_toJobCcsid export;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   hTranscoder = findTranscoder(getJobCcsid(): i_fromCcsid);
-  if (Transcoder_isNull(hTranscoder));
+  if (transcoder_isNull(hTranscoder));
     hTranscoder = createTranscoder(getJobCcsid(): i_fromCcsid);
   endif;
 
@@ -150,7 +150,7 @@ end-proc;
 //  Returns a Transcoder to convert from a
 //  given CCSID to the file field CCSID.
 //=====================================================================*
-dcl-proc Transcoder_toFieldCcsid export;
+dcl-proc transcoder_toFieldCcsid export;
   dcl-pi *n like(hTranscoder_t);
     i_toCcsid uns(10) const;
   end-pi;
@@ -160,7 +160,7 @@ dcl-proc Transcoder_toFieldCcsid export;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   hTranscoder = findTranscoder(i_toCcsid: getJobCcsid());
-  if (Transcoder_isNull(hTranscoder));
+  if (transcoder_isNull(hTranscoder));
     hTranscoder = createTranscoder(i_toCcsid: getJobCcsid());
   endif;
 
@@ -171,7 +171,7 @@ end-proc;
 //=====================================================================*
 //  Initializes character translation.
 //=====================================================================*
-dcl-proc Transcoder_new export;
+dcl-proc transcoder_new export;
   dcl-pi *n like(hTranscoder_t);
     i_toCcsid   uns(10) const;
     i_fromCcsid uns(10) const;
@@ -242,7 +242,7 @@ end-proc;
 //   rc            - Returns the new length of the buffer.
 //                   Sends escape message CPF9897 on error.
 //=====================================================================*
-dcl-proc Transcoder_xlateRaw export;
+dcl-proc transcoder_xlateRaw export;
   dcl-pi *n int(10) opdesc;
     i_hTranscoder like(hTranscoder_t) const;
     i_pInBuf      pointer value;
@@ -290,7 +290,7 @@ end-proc;
 //   rc            - Returns the new length of the buffer.
 //                   Sends escape message CPF9897 on error.
 //=====================================================================*
-dcl-proc Transcoder_xlateBuffer export;
+dcl-proc transcoder_xlateBuffer export;
   dcl-pi *n int(10) opdesc;
     i_hTranscoder like(hTranscoder_t) const;
     i_pInBuf      pointer value;
@@ -349,7 +349,7 @@ end-proc;
 //   string        - Varying field containing the translated data.
 //                   Sends escape message CPF9897 on error.
 //=====================================================================*
-dcl-proc Transcoder_xlateString export;
+dcl-proc transcoder_xlateString export;
   dcl-pi *n varchar(32767) opdesc;
     i_hTranscoder like(hTranscoder_t) const;
     i_string      varchar(32767) options(*varsize) const;
@@ -402,7 +402,7 @@ end-proc;
 //  Returns:
 //   ccsid         - CCSID, a given buffer or string is translated from.
 //=====================================================================*
-dcl-proc Transcoder_getFromCcsid export;
+dcl-proc transcoder_getFromCcsid export;
   dcl-pi *n int(10);
     i_hTranscoder like(hTranscoder_t) const;
   end-pi;
@@ -426,7 +426,7 @@ end-proc;
 //  Returns:
 //   ccsid         - CCSID, a given buffer or string is translated to.
 //=====================================================================*
-dcl-proc Transcoder_getToCcsid export;
+dcl-proc transcoder_getToCcsid export;
   dcl-pi *n int(10);
     i_hTranscoder like(hTranscoder_t) const;
   end-pi;
@@ -444,7 +444,7 @@ end-proc;
 //=====================================================================*
 //  Terminates character translation.
 //=====================================================================*
-dcl-proc Transcoder_delete export;
+dcl-proc transcoder_delete export;
   dcl-pi *n;
     io_hTranscoder like(hTranscoder_t);
   end-pi;
@@ -496,7 +496,7 @@ dcl-proc transcoder_reset export;
 
   dow (g_transcoders.numE > 0);
     hTranscoder = g_transcoders.item(g_transcoders.numE).hTranscoder;
-    Transcoder_delete(hTranscoder);
+    transcoder_delete(hTranscoder);
   enddo;
 
   g_jobCcsid = 0;
@@ -508,13 +508,13 @@ end-proc;
 //=====================================================================*
 //  Returns bTrue if a given Transcoder handle is NULL.
 //=====================================================================*
-dcl-proc Transcoder_isNull export;
+dcl-proc transcoder_isNull export;
   dcl-pi *n ind;
     i_hTranscoder like(hTranscoder_t) const;
   end-pi;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  if (i_hTranscoder = Transcoder_null());
+  if (i_hTranscoder = transcoder_null());
     return bTrue;
   else;
     return bFalse;
@@ -525,7 +525,7 @@ end-proc;
 //=====================================================================*
 //  Returns a Transcoder NULL-handle.
 //=====================================================================*
-dcl-proc Transcoder_null export;
+dcl-proc transcoder_null export;
   dcl-pi *n like(hTranscoder_t);
   end-pi;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -588,7 +588,7 @@ dcl-proc performTranslation;
   endif;
 
   p_clrErrno();
-  dou ((rc <> cICONV_ERROR) or (f_errno() <> e2big_c or
+  dou ((rc <> cICONV_error) or (f_errno() <> e2big_c or
         (isMaxSize and bufSize >= i_maxSize)));
 
     if (f_errno() = e2big_c);
@@ -610,7 +610,7 @@ dcl-proc performTranslation;
 
   enddo;
 
-  if (rc = cICONV_ERROR);
+  if (rc = cICONV_error);
     errnbr = f_errno();
     //  Release the output buffer, because the escape message
     //  skips the clean-up of the caller.
@@ -647,7 +647,7 @@ dcl-proc findTranscoder;
     endif;
   endfor;
 
-  return Transcoder_null();
+  return transcoder_null();
 
 end-proc;
 
@@ -667,13 +667,13 @@ dcl-proc createTranscoder;
 
   if (g_transcoders.numE = %elem(g_transcoders.item));
     kill('Maximum number of transcoders reached.');
-    return Transcoder_null();
+    return transcoder_null();
   endif;
 
   //  Count the new transcoder only after transcoder_new() succeeded.
   //  transcoder_new() sends an escape message on error, which
   //  would otherwise leave an empty entry in the list.
-  hTranscoder = Transcoder_new(i_toCcsid: i_fromCcsid);
+  hTranscoder = transcoder_new(i_toCcsid: i_fromCcsid);
 
   g_transcoders.numE = g_transcoders.numE + 1;
 
@@ -756,7 +756,7 @@ dcl-proc kill;
 
   if (%parms() >= %parmnum(i_errno));
     text = i_text + ' (errno ' + %char(i_errno) + '): '
-           + %trimr(f_strerror(i_errno));
+           + %trimr(f_strError(i_errno));
   else;
     text = i_text;
   endif;

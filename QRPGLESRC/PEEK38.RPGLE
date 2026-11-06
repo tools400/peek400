@@ -42,8 +42,8 @@
 /copy QCOPYLE,PPEEK53
 /copy QCOPYLE,PPEEK58
 
-dcl-ds YQFile likeds(qObj_t) inz;
-dcl-s YData char(512);
+dcl-ds yQFile likeds(qObj_t) inz;
+dcl-s yData char(512);
 
 dcl-s peek41_name like(pgmCallN_t);
 
@@ -51,7 +51,7 @@ dcl-s rc like(int4_t);
 dcl-s nbrOfKey like(int4_t);
 dcl-s tempField like(o_sqlOrder);
 dcl-s keypart varchar(32);
-dcl-ds keyl0100 likeds(KEYL0100_t) inz;
+dcl-ds keyl0100 likeds(keyl0100_t) inz;
 
 dcl-s isInzSr like(bool_t) inz(bFalse);
 
@@ -74,21 +74,21 @@ ceehdlr(%paddr('errorHandler')
 exsr inzsr;
 
 //  Einlesen der Dateiinformationen ...
-YQFile.name = i_file;
-YQFile.lib = i_lib;
-peek41(YQFile: '*FIRST': '*CREATE'
-      : rc: YData);
+yQFile.name = i_file;
+yQFile.lib = i_lib;
+peek41(yQFile: '*FIRST': '*CREATE'
+      : rc: yData);
 
 //  Einlesen der Schlüsselinformationen ...
-peek41(YQFile: '*FIRST': '*KEY'
-      : nbrOfKey: YData);
+peek41(yQFile: '*FIRST': '*KEY'
+      : nbrOfKey: yData);
 
 tempField = '';
 
 for do_x1 = 1 to nbrOfKey;
-  peek41(YQFile: '*FIRST': '*READKEY'
-        : rc: YData);
-  keyl0100 = YData;
+  peek41(yQFile: '*FIRST': '*READKEY'
+        : rc: yData);
+  keyl0100 = yData;
 
   keypart = '"' + %trim(keyl0100.apkeyf) + '"';
 

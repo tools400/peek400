@@ -67,7 +67,7 @@ ceehdlr(%paddr('errorHandler')
 
 exsr inzsr;
 
-exsr First;
+exsr first;
 
 //  Abrufen der Dateiinformationen ...
 peek41(i_qFile: i_rcdFmt: '*CREATE'
@@ -97,7 +97,7 @@ endif;
 //  First  --  Initialize program                     *
 //====================================================*
 
-begsr First;
+begsr first;
 
   nbrOfKey = *zeros;
 

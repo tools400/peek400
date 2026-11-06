@@ -41,7 +41,7 @@
 /copy QCOPYLE,H_SPEC
 /copy QCOPYLE,COPYRIGHT
 
-dcl-f peekfld keyed usropn prefix(f_);
+dcl-f peekFld keyed usropn prefix(f_);
 
 /copy QCOPYLE,D_VARDEF
 /copy QCOPYLE,FLDL0100
@@ -62,12 +62,12 @@ dcl-f peekfld keyed usropn prefix(f_);
 /copy QCOPYLE,PPEEK58
 /copy QCOPYLE,PPEEK71
 
-dcl-ds set0003 likeds(SET0003_t) inz;
+dcl-ds set0003 likeds(set0003_t) inz;
 
 dcl-ds fldl0100 likeds(fldl0100_t) inz;
 
-dcl-s YMsgID char(7);
-dcl-s YMsgDta char(512);
+dcl-s yMsgID char(7);
+dcl-s yMsgDta char(512);
 dcl-s isMinus char(1) inz(bFalse);
 dcl-s x like(int4_t) inz;
 dcl-s a1 char(1) inz(*blanks);
@@ -76,7 +76,7 @@ dcl-s a1 char(1) inz(*blanks);
 // Siehe PEEK58, f_isNotAlw().
 dcl-ds *n;
   zoned   zoned(63) inz;
-  zoned_A char(63) overlay(zoned: 1);
+  zoned_a char(63) overlay(zoned: 1);
 end-ds;
 
 dcl-ds *n;
@@ -86,42 +86,42 @@ end-ds;
 
 dcl-ds *n;
   binary1   int(3) inz pos(1);
-  binary1_A char(1) overlay(binary1: 1);
+  binary1_a char(1) overlay(binary1: 1);
 end-ds;
 
 dcl-ds *n;
   binary2   int(5) inz pos(1);
-  binary2_A char(2) overlay(binary2: 1);
+  binary2_a char(2) overlay(binary2: 1);
 end-ds;
 
 dcl-ds *n;
   binary4   int(10) inz pos(1);
-  binary4_A char(4) overlay(binary4: 1);
+  binary4_a char(4) overlay(binary4: 1);
 end-ds;
 
 dcl-ds *n;
   binary8   int(20) inz pos(1);
-  binary8_A char(8) overlay(binary8: 1);
+  binary8_a char(8) overlay(binary8: 1);
 end-ds;
 
 dcl-s float float(8) inz;
-dcl-s Float4 float(4) based(pFloat);
-dcl-s Float8 float(8) based(pFloat);
+dcl-s float4 float(4) based(pFloat);
+dcl-s float8 float(8) based(pFloat);
 
 dcl-ds dsFloat qualified inz;
-  Float8 float(8);
-  Float4 float(4) overlay(Float8);
+  float8 float(8);
+  float4 float(4) overlay(float8);
 end-ds;
 
 dcl-s hTranscoder like(hTranscoder_t) inz;
 
-dcl-s SET_SIGN_PLUS like(set0003.SET_SignP) inz('+');
-dcl-s SET_SIGN_MINUS like(set0003.SET_SignM) inz('-');
+dcl-s SET_SIGN_PLUS like(set0003.set_signP) inz('+');
+dcl-s SET_SIGN_MINUS like(set0003.set_signM) inz('-');
 
-dcl-s R_TgtValue like(i_tgtValue) inz(*blanks);
-dcl-s R_DateISO date(*iso) inz(*loval);
-dcl-s R_TimeISO time(*iso) inz(*loval);
-dcl-s R_TimeStmp timestamp inz(*loval);
+dcl-s r_tgtValue like(i_tgtValue) inz(*blanks);
+dcl-s r_dateISO date(*iso) inz(*loval);
+dcl-s r_timeISO time(*iso) inz(*loval);
+dcl-s r_timeStmp timestamp inz(*loval);
 
 dcl-s strPos like(int4_t) inz;
 
@@ -147,7 +147,7 @@ dcl-s isInzSr like(bool_t) inz(bFalse);
 //                 S T E U E R  -  R O U T I N E                    *
 //*******************************************************************
 dcl-pi peek18;
-  i_FLDL0100  likeds(fldl0100_t) const;
+  i_fldl0100  likeds(fldl0100_t) const;
   i_rcdFmt    like(fmt_t) const;
   i_buffer    like(rcdBuf_t);
   i_tgtFormat like(format_t) const;
@@ -168,9 +168,9 @@ ceehdlr(%paddr('errorHandler')
 
 exsr inzsr;
 
-exsr First;
+exsr first;
 
-fldl0100 = i_FLDL0100;
+fldl0100 = i_fldl0100;
 
 o_buffer = *blanks;
 o_buffLen = *zeros;
@@ -179,10 +179,10 @@ select;
 when (i_tgtFormat = '*EXTERN');
   //  *ACCESSKEY bei jedem Aufruf lesen, damit eine Änderung sofort
   //  wirkt (PEEK05 und PEEK20 lesen die Einstellung ebenfalls neu)
-  exsr GetUsrSetg;
-  exsr ToExtern;
+  exsr getUsrSetg;
+  exsr toExtern;
 when (i_tgtFormat = '*INTERN');
-  exsr GetUsrSetg;
+  exsr getUsrSetg;
   exsr toIntern;
 when (i_tgtFormat = '*ZONED');
   exsr toZoned;
@@ -194,27 +194,27 @@ endsl;
 return;
 
 //============================================================*
-//    ToExtern      Zielformat:  externe Darstellung          *
+//    toExtern      Zielformat:  externe Darstellung          *
 //============================================================*
 
-begsr ToExtern;
+begsr toExtern;
 
   select;
-  when (fldl0100.F1DTyp = 'A');
-    exsr A_to_extern;
-  when (fldl0100.F1DTyp = 'G');
-    exsr G_to_extern;
-  when (fldl0100.F1DTyp = 'S');
-    exsr S_to_extern;
-  when (fldl0100.F1DTyp = 'B');
-    exsr B_to_extern;
-  when (fldl0100.F1DTyp = 'P');
-    exsr P_to_extern;
-  when (fldl0100.F1DTyp = 'F');
-    exsr F_to_extern;
+  when (fldl0100.f1DTyp = 'A');
+    exsr a_to_extern;
+  when (fldl0100.f1DTyp = 'G');
+    exsr g_to_extern;
+  when (fldl0100.f1DTyp = 'S');
+    exsr s_to_extern;
+  when (fldl0100.f1DTyp = 'B');
+    exsr b_to_extern;
+  when (fldl0100.f1DTyp = 'P');
+    exsr p_to_extern;
+  when (fldl0100.f1DTyp = 'F');
+    exsr f_to_extern;
 
   other;
-    exsr A_to_extern;
+    exsr a_to_extern;
   endsl;
 
 endsr;
@@ -228,47 +228,47 @@ begsr toIntern;
   //  Art des Schlüssel ermitteln ...
   exsr getKeyType;
   //  Ascending key ...
-  if (F_Desc = 'A');
+  if (f_desc = 'A');
     //  ... Keine Umsetzung erforderlich
-    R_TgtValue = i_tgtValue;
+    r_tgtValue = i_tgtValue;
   else;
     //  Descending key ...
     if (i_tgtValue = '*HIVAL'
         or i_tgtValue = '*LOVAL');
       //  ... *HIVAL ==> *LOVAL und umgekehrt
       if (i_tgtValue = '*HIVAL');
-        R_TgtValue = '*LOVAL';
+        r_tgtValue = '*LOVAL';
       else;
-        R_TgtValue = '*HIVAL';
+        r_tgtValue = '*HIVAL';
       endif;
     else;
       //  ... Keine Umsetzung erforderlich
-      R_TgtValue = i_tgtValue;
+      r_tgtValue = i_tgtValue;
     endif;
   endif;
 
   select;
-  when (fldl0100.F1DTyp = 'A');
-    exsr A_to_intern;
-  when (fldl0100.F1DTyp = 'G');
-    exsr G_to_intern;
-  when (fldl0100.F1DTyp = 'S');
-    exsr S_to_intern;
-  when (fldl0100.F1DTyp = 'B');
-    exsr B_to_intern;
-  when (fldl0100.F1DTyp = 'P');
-    exsr P_to_intern;
-  when (fldl0100.F1DTyp = 'L');
-    exsr L_to_intern;
-  when (fldl0100.F1DTyp = 'T');
-    exsr T_to_intern;
-  when (fldl0100.F1DTyp = 'Z');
-    exsr Z_to_intern;
-  when (fldl0100.F1DTyp = 'F');
-    exsr F_to_intern;
+  when (fldl0100.f1DTyp = 'A');
+    exsr a_to_intern;
+  when (fldl0100.f1DTyp = 'G');
+    exsr g_to_intern;
+  when (fldl0100.f1DTyp = 'S');
+    exsr s_to_intern;
+  when (fldl0100.f1DTyp = 'B');
+    exsr b_to_intern;
+  when (fldl0100.f1DTyp = 'P');
+    exsr p_to_intern;
+  when (fldl0100.f1DTyp = 'L');
+    exsr l_to_intern;
+  when (fldl0100.f1DTyp = 'T');
+    exsr t_to_intern;
+  when (fldl0100.f1DTyp = 'Z');
+    exsr z_to_intern;
+  when (fldl0100.f1DTyp = 'F');
+    exsr f_to_intern;
 
   other;
-    exsr A_to_intern;
+    exsr a_to_intern;
   endsl;
 
 endsr;
@@ -279,20 +279,20 @@ endsr;
 
 begsr toZoned;
 
-  fldl0100.f1digt = %len(zoned_A);
+  fldl0100.f1Digt = %len(zoned_a);
 
   select;
-  when (fldl0100.F1DTyp = 'A');
-    exsr A_to_zoned;
-  when (fldl0100.F1DTyp = 'S');
-    exsr S_to_zoned;
-  when (fldl0100.F1DTyp = 'B');
-    exsr B_to_zoned;
-  when (fldl0100.F1DTyp = 'P');
-    exsr P_to_zoned;
+  when (fldl0100.f1DTyp = 'A');
+    exsr a_to_zoned;
+  when (fldl0100.f1DTyp = 'S');
+    exsr s_to_zoned;
+  when (fldl0100.f1DTyp = 'B');
+    exsr b_to_zoned;
+  when (fldl0100.f1DTyp = 'P');
+    exsr p_to_zoned;
 
   other;
-    exsr A_to_zoned;
+    exsr a_to_zoned;
   endsl;
 
 endsr;
@@ -304,8 +304,8 @@ endsr;
 begsr toFloat;
 
   select;
-  when (fldl0100.F1DTyp = 'F');
-    exsr F_to_float;
+  when (fldl0100.f1DTyp = 'F');
+    exsr f_to_float;
 
   other;
   endsl;
@@ -316,7 +316,7 @@ endsr;
 //    A_to_Ext      alpha ==> externe Darstellung             *
 //============================================================*
 
-begsr A_to_extern;
+begsr a_to_extern;
 
   if (f_isVarLen(fldl0100) = bTrue);
     strPos = 3;
@@ -345,7 +345,7 @@ endsr;
 //    G_to_Ext      graphic => externe Darstellung            *
 //============================================================*
 
-begsr G_to_extern;
+begsr g_to_extern;
 
   if (f_isVarLen(fldl0100) = bTrue);
     strPos = 3;
@@ -382,7 +382,7 @@ endsr;
 //    S_to_Ext      Zoned ==> externe Darstellung             *
 //============================================================*
 
-begsr S_to_extern;
+begsr s_to_extern;
 
   exsr getZoned;
   exsr chgSign;
@@ -396,7 +396,7 @@ endsr;
 //    B_to_Ext      Binary ==> externe Darstellung            *
 //============================================================*
 
-begsr B_to_extern;
+begsr b_to_extern;
 
   exsr getBinary;
   exsr chgSign;
@@ -410,7 +410,7 @@ endsr;
 //    P_to_Ext      Packed ==> externe Darstellung            *
 //============================================================*
 
-begsr P_to_extern;
+begsr p_to_extern;
 
   exsr getPacked;
   exsr chgSign;
@@ -424,21 +424,21 @@ endsr;
 //    F_to_Ext      Float  ==> externe Darstellung            *
 //============================================================*
 
-begsr F_to_extern;
+begsr f_to_extern;
 
   pFloat = %addr(i_buffer);
 
   if (f_buffLn(fldl0100) = 4);
-    float = Float4;
+    float = float4;
     exsr chgSignFloat;
-    Float4 = float;
-    o_buffer = %editflt(Float4);
+    float4 = float;
+    o_buffer = %editflt(float4);
     o_buffLen = 14;
   else;
-    float = Float8;
+    float = float8;
     exsr chgSignFloat;
-    Float8 = float;
-    o_buffer = %editflt(Float8);
+    float8 = float;
+    o_buffer = %editflt(float8);
     o_buffLen = 23;
   endif;
 
@@ -452,10 +452,10 @@ begsr F_to_extern;
 endsr;
 
 //============================================================*
-//    A_to_Zoned    alpha ==> Zoned-Format                    *
+//    a_to_zoned    alpha ==> Zoned-Format                    *
 //============================================================*
 
-begsr A_to_zoned;
+begsr a_to_zoned;
 
   zoned = *zeros;
   exsr zonedToOutBuf;
@@ -463,10 +463,10 @@ begsr A_to_zoned;
 endsr;
 
 //============================================================*
-//    S_to_Zoned    Zoned ==> Zoned-Format                    *
+//    s_to_zoned    Zoned ==> Zoned-Format                    *
 //============================================================*
 
-begsr S_to_zoned;
+begsr s_to_zoned;
 
   exsr getZoned;
   exsr zonedToOutBuf;
@@ -474,10 +474,10 @@ begsr S_to_zoned;
 endsr;
 
 //============================================================*
-//    B_to_Zoned    Binary ==> Zoned-Format                   *
+//    b_to_zoned    Binary ==> Zoned-Format                   *
 //============================================================*
 
-begsr B_to_zoned;
+begsr b_to_zoned;
 
   exsr getBinary;
   exsr zonedToOutBuf;
@@ -485,10 +485,10 @@ begsr B_to_zoned;
 endsr;
 
 //============================================================*
-//    P_to_Zoned    Packed ==> Zoned-Format                   *
+//    p_to_zoned    Packed ==> Zoned-Format                   *
 //============================================================*
 
-begsr P_to_zoned;
+begsr p_to_zoned;
 
   exsr getPacked;
   exsr zonedToOutBuf;
@@ -501,19 +501,19 @@ endsr;
 
 begsr zonedToOutBuf;
 
-  x = %len(zoned_A) - fldl0100.f1digt + 1;
+  x = %len(zoned_a) - fldl0100.f1Digt + 1;
 
-  o_buffLen = fldl0100.f1digt;
+  o_buffLen = fldl0100.f1Digt;
   %subst(o_buffer: 1: o_buffLen) =
-    %subst(zoned_A: x);
+    %subst(zoned_a: x);
 
 endsr;
 
 //============================================================*
-//    F_to_Float    float ==> Float-Format                    *
+//    f_to_float    float ==> Float-Format                    *
 //============================================================*
 
-begsr F_to_float;
+begsr f_to_float;
 
   float = *zeros;
   exsr extractFloat;
@@ -529,9 +529,9 @@ begsr extractFloat;
   pFloat = %addr(i_buffer);
 
   if (f_buffLn(fldl0100) = 4);
-    float = Float4;
+    float = float4;
   else;
-    float = Float8;
+    float = float8;
   endif;
 
   o_buffer = %editflt(float);
@@ -545,7 +545,7 @@ endsr;
 
 begsr chgSign;
 
-  if (set0003.SET_SignX = bFalse);
+  if (set0003.set_signX = bFalse);
     // ohne Vorzeichen ausgeben
     isMinus = bFalse;
   else;
@@ -568,7 +568,7 @@ endsr;
 
 begsr chgSignFloat;
 
-  if (set0003.SET_SignX = bFalse);
+  if (set0003.set_signX = bFalse);
     // ohne Vorzeichen ausgeben
     isMinus = bFalse;
   else;
@@ -591,7 +591,7 @@ endsr;
 
 begsr addSign;
 
-  if (set0003.SET_SignX = bFalse);
+  if (set0003.set_signX = bFalse);
   // ohne Vorzeichen ausgeben
   else;
     if (isMinus = bTrue);
@@ -619,13 +619,13 @@ endsr;
 
 begsr addDelimiter;
 
-  if (set0003.SET_Dlmtr = '');
+  if (set0003.set_dlmtr = '');
   // ohne Delimeter ausgeben
   else;
     if (o_buffLen < RCD_BUFF_LEN);
       o_buffLen = o_buffLen + 1;
       %subst(
-       o_buffer: o_buffLen: 1) = set0003.SET_Dlmtr;
+       o_buffer: o_buffLen: 1) = set0003.set_dlmtr;
     else;
     // Pufferbereich zu klein ...
     endif;
@@ -637,7 +637,7 @@ endsr;
 //    A_to_Int      alpha ==> interne Darstellung             *
 //============================================================*
 
-begsr A_to_intern;
+begsr a_to_intern;
 
   if (f_isVarLen(fldl0100) = bTrue);
     strPos = 3;
@@ -649,15 +649,15 @@ begsr A_to_intern;
 
   select;
   //  kleinester Wert ...
-  when (R_TgtValue = '*LOVAL');
+  when (r_tgtValue = '*LOVAL');
     %subst(o_buffer: strPos: o_buffLen)
       = *allx'00';
   //  größter Wert ...
-  when (R_TgtValue = '*HIVAL');
+  when (r_tgtValue = '*HIVAL');
     %subst(o_buffer: strPos: o_buffLen)
       = *allx'FF';
   //  aktueller Wert ...
-  when (R_TgtValue = '*CURRENT');
+  when (r_tgtValue = '*CURRENT');
     if (f_hasCcsid(fldl0100) = bTrue);
       if (fldl0100.f1ndbc > 0);
         o_buffLen = fldl0100.f1ndbc;
@@ -687,7 +687,7 @@ endsr;
 //    G_to_Int      graphic => interne Darstellung            *
 //============================================================*
 
-begsr G_to_intern;
+begsr g_to_intern;
 
   if (f_isVarLen(fldl0100) = bTrue);
     strPos = 3;
@@ -699,15 +699,15 @@ begsr G_to_intern;
 
   select;
   //  kleinester Wert ...
-  when (R_TgtValue = '*LOVAL');
+  when (r_tgtValue = '*LOVAL');
     %subst(o_buffer: strPos: o_buffLen)
       = *allx'00';
   //  größter Wert ...
-  when (R_TgtValue = '*HIVAL');
+  when (r_tgtValue = '*HIVAL');
     %subst(o_buffer: strPos: o_buffLen)
       = *allx'FF';
   //  aktueller Wert ...
-  when (R_TgtValue = '*CURRENT');
+  when (r_tgtValue = '*CURRENT');
     if (f_hasCcsid(fldl0100) = bTrue);
       if (fldl0100.f1ndbc > 0);
         o_buffLen = fldl0100.f1ndbc;
@@ -721,7 +721,7 @@ begsr G_to_intern;
   other;
   endsl;
 
-  //  Immer genau so lang wie das Feld (siehe A_to_intern), z.B. wenn
+  //  Immer genau so lang wie das Feld (siehe a_to_intern), z.B. wenn
   //  die CCSID nicht umsetzbar ist (GRAPHIC 835)
   o_buffLen = f_buffLn(fldl0100);
 
@@ -736,7 +736,7 @@ endsr;
 //    S_to_Int      Zoned ==> interne Darstellung             *
 //============================================================*
 
-begsr S_to_intern;
+begsr s_to_intern;
 
   //  umsetzen in gezonten Wert ...
   exsr cvtToZoned;
@@ -746,8 +746,8 @@ begsr S_to_intern;
 
   //  extrahieren gezonten Wert ...
   o_buffLen = f_buffLn(fldl0100);
-  x = %len(zoned_A) - o_buffLen + 1;
-  o_buffer = %subst(zoned_A: x: o_buffLen);
+  x = %len(zoned_a) - o_buffLen + 1;
+  o_buffer = %subst(zoned_a: x: o_buffLen);
 
 endsr;
 
@@ -755,17 +755,17 @@ endsr;
 //    B_to_Int      Binary ==> interne Darstellung            *
 //============================================================*
 
-begsr B_to_intern;
+begsr b_to_intern;
 
   select;
   when (f_buffLn(fldl0100) = 1);
-    exsr B_to_intern_1;
+    exsr b_to_intern_1;
   when (f_buffLn(fldl0100) = 2);
-    exsr B_to_intern_2;
+    exsr b_to_intern_2;
   when (f_buffLn(fldl0100) = 4);
-    exsr B_to_intern_4;
+    exsr b_to_intern_4;
   when (f_buffLn(fldl0100) = 8);
-    exsr B_to_intern_8;
+    exsr b_to_intern_8;
   other;
     p_kill('Illegal buffer length: ' +
           %char(f_buffLn(fldl0100)));
@@ -777,14 +777,14 @@ endsr;
 //    B_to_Int1     Binary ==> interne Darstellung 1-Byte     *
 //============================================================*
 
-begsr B_to_intern_1;
+begsr b_to_intern_1;
 
   select;
-  when (R_TgtValue = '*LOVAL');
+  when (r_tgtValue = '*LOVAL');
     binary1 = *loval;
-  when (R_TgtValue = '*HIVAL');
+  when (r_tgtValue = '*HIVAL');
     binary1 = *hival;
-  when (R_TgtValue = '*CURRENT');
+  when (r_tgtValue = '*CURRENT');
     //  ... umsetzen in gezonten Wert
     exsr cvtToZoned;
     binary1 = zoned;
@@ -793,7 +793,7 @@ begsr B_to_intern_1;
 
   //  extrahieren Binärwert ...
   o_buffLen = f_buffLn(fldl0100);
-  o_buffer = %subst(binary1_A: 1: o_buffLen);
+  o_buffer = %subst(binary1_a: 1: o_buffLen);
 
 endsr;
 
@@ -801,14 +801,14 @@ endsr;
 //    B_to_Int2     Binary ==> interne Darstellung 2-Byte     *
 //============================================================*
 
-begsr B_to_intern_2;
+begsr b_to_intern_2;
 
   select;
-  when (R_TgtValue = '*LOVAL');
+  when (r_tgtValue = '*LOVAL');
     binary2 = *loval;
-  when (R_TgtValue = '*HIVAL');
+  when (r_tgtValue = '*HIVAL');
     binary2 = *hival;
-  when (R_TgtValue = '*CURRENT');
+  when (r_tgtValue = '*CURRENT');
     //  ... umsetzen in gezonten Wert
     exsr cvtToZoned;
     binary2 = zoned;
@@ -817,7 +817,7 @@ begsr B_to_intern_2;
 
   //  extrahieren Binärwert ...
   o_buffLen = f_buffLn(fldl0100);
-  o_buffer = %subst(binary2_A: 1: o_buffLen);
+  o_buffer = %subst(binary2_a: 1: o_buffLen);
 
 endsr;
 
@@ -825,14 +825,14 @@ endsr;
 //    B_to_Int4     Binary ==> interne Darstellung 4-Byte     *
 //============================================================*
 
-begsr B_to_intern_4;
+begsr b_to_intern_4;
 
   select;
-  when (R_TgtValue = '*LOVAL');
+  when (r_tgtValue = '*LOVAL');
     binary4 = *loval;
-  when (R_TgtValue = '*HIVAL');
+  when (r_tgtValue = '*HIVAL');
     binary4 = *hival;
-  when (R_TgtValue = '*CURRENT');
+  when (r_tgtValue = '*CURRENT');
     //  ... umsetzen in gezonten Wert
     exsr cvtToZoned;
     binary4 = zoned;
@@ -841,7 +841,7 @@ begsr B_to_intern_4;
 
   //  extrahieren Binärwert ...
   o_buffLen = f_buffLn(fldl0100);
-  o_buffer = %subst(binary4_A: 1: o_buffLen);
+  o_buffer = %subst(binary4_a: 1: o_buffLen);
 
 endsr;
 
@@ -849,14 +849,14 @@ endsr;
 //    B_to_Int8     Binary ==> interne Darstellung 8-Byte     *
 //============================================================*
 
-begsr B_to_intern_8;
+begsr b_to_intern_8;
 
   select;
-  when (R_TgtValue = '*LOVAL');
+  when (r_tgtValue = '*LOVAL');
     binary8 = *loval;
-  when (R_TgtValue = '*HIVAL');
+  when (r_tgtValue = '*HIVAL');
     binary8 = *hival;
-  when (R_TgtValue = '*CURRENT');
+  when (r_tgtValue = '*CURRENT');
     //  ... umsetzen in gezonten Wert
     exsr cvtToZoned;
     binary8 = zoned;
@@ -865,7 +865,7 @@ begsr B_to_intern_8;
 
   //  extrahieren Binärwert ...
   o_buffLen = f_buffLn(fldl0100);
-  o_buffer = %subst(binary8_A: 1: o_buffLen);
+  o_buffer = %subst(binary8_a: 1: o_buffLen);
 
 endsr;
 
@@ -873,7 +873,7 @@ endsr;
 //    P_to_Int      Packed ==> interne Darstellung            *
 //============================================================*
 
-begsr P_to_intern;
+begsr p_to_intern;
 
   //  umsetzen in gezonten Wert ...
   exsr cvtToZoned;
@@ -893,7 +893,7 @@ endsr;
 //    F_to_Int      Float  ==> interne Darstellung            *
 //============================================================*
 
-begsr F_to_intern;
+begsr f_to_intern;
 
   exsr cvtToFloat;
 
@@ -906,19 +906,19 @@ endsr;
 //    L_to_Int      Datum ==> interne Darstellung             *
 //============================================================*
 
-begsr L_to_intern;
+begsr l_to_intern;
 
   select;
   //  kleinester Wert ...
-  when (R_TgtValue = '*LOVAL');
-    R_DateISO = *loval;
+  when (r_tgtValue = '*LOVAL');
+    r_dateISO = *loval;
     exsr dateToBuffer;
   //  größter Wert ...
-  when (R_TgtValue = '*HIVAL');
-    R_DateISO = *hival;
+  when (r_tgtValue = '*HIVAL');
+    r_dateISO = *hival;
     exsr dateToBuffer;
   //  aktueller Wert ...
-  when (R_TgtValue = '*CURRENT');
+  when (r_tgtValue = '*CURRENT');
     o_buffer = i_buffer;
   other;
   endsl;
@@ -927,7 +927,7 @@ begsr L_to_intern;
   o_buffer = %subst(o_buffer:1:o_buffLen);
 
   //  Wert überprüfen über PEEK36 ...
-  exsr ChkValue;
+  exsr chkValue;
 
 endsr;
 
@@ -940,7 +940,7 @@ begsr dateToBuffer;
 
   //  Übertragen Datum gemäß Format und Trennzeichen des Feldes
   //  (alle Formate, bisher nur *EUR und *ISO; QCOPYLE,DATTIMFMT)
-  o_buffer = f_extDate(fldl0100: R_DateISO);
+  o_buffer = f_extDate(fldl0100: r_dateISO);
 
 endsr;
 
@@ -948,19 +948,19 @@ endsr;
 //    T_to_Int      Zeit  ==> interne Darstellung             *
 //============================================================*
 
-begsr T_to_intern;
+begsr t_to_intern;
 
   select;
   //  kleinester Wert ...
-  when (R_TgtValue = '*LOVAL');
-    R_TimeISO = *loval;
+  when (r_tgtValue = '*LOVAL');
+    r_timeISO = *loval;
     exsr timeToBuffer;
   //  größter Wert ...
-  when (R_TgtValue = '*HIVAL');
-    R_TimeISO = *hival;
+  when (r_tgtValue = '*HIVAL');
+    r_timeISO = *hival;
     exsr timeToBuffer;
   //  aktueller Wert ...
-  when (R_TgtValue = '*CURRENT');
+  when (r_tgtValue = '*CURRENT');
     o_buffer = i_buffer;
   other;
   endsl;
@@ -969,7 +969,7 @@ begsr T_to_intern;
   o_buffer = %subst(o_buffer:1:o_buffLen);
 
   //  Wert überprüfen über PEEK36 ...
-  exsr ChkValue;
+  exsr chkValue;
 
 endsr;
 
@@ -982,7 +982,7 @@ begsr timeToBuffer;
 
   //  Übertragen Zeit gemäß Format und Trennzeichen des Feldes
   //  (alle Formate, bisher ohne *USA und *JIS; QCOPYLE,DATTIMFMT)
-  o_buffer = f_extTime(fldl0100: R_TimeISO);
+  o_buffer = f_extTime(fldl0100: r_timeISO);
 
 endsr;
 
@@ -990,19 +990,19 @@ endsr;
 //    Z_to_Int      Zeitstempel=> interne Darstellung         *
 //============================================================*
 
-begsr Z_to_intern;
+begsr z_to_intern;
 
   select;
   //  kleinester Wert ...
-  when (R_TgtValue = '*LOVAL');
-    R_TimeStmp = *loval;
-    o_buffer = %char(R_TimeStmp: *iso);
+  when (r_tgtValue = '*LOVAL');
+    r_timeStmp = *loval;
+    o_buffer = %char(r_timeStmp: *iso);
   //  größter Wert ...
-  when (R_TgtValue = '*HIVAL');
-    R_TimeStmp = *hival;
-    o_buffer = %char(R_TimeStmp: *iso);
+  when (r_tgtValue = '*HIVAL');
+    r_timeStmp = *hival;
+    o_buffer = %char(r_timeStmp: *iso);
   //  aktueller Wert ...
-  when (R_TgtValue = '*CURRENT');
+  when (r_tgtValue = '*CURRENT');
     o_buffer = i_buffer;
   other;
   endsl;
@@ -1011,29 +1011,29 @@ begsr Z_to_intern;
   o_buffer = %subst(o_buffer:1:o_buffLen);
 
   //  Wert überprüfen über PEEK36 ...
-  exsr ChkValue;
+  exsr chkValue;
 
 endsr;
 
 //============================================================*
-//    ChkValue      Prüfen Wert im Zeit-, Datums-,            *
+//    chkValue      Prüfen Wert im Zeit-, Datums-,            *
 //                  oder Zeitstempelfeld                      *
 //============================================================*
 
-begsr ChkValue;
+begsr chkValue;
 
   peek36(o_buffer
-         : fldl0100.F1DTyp
+         : fldl0100.f1DTyp
          : fldl0100.f1dtfm
          : fldl0100.f1dtsp
-         : YMsgID: YMsgDta);
-  if (YMsgID = '');
+         : yMsgID: yMsgDta);
+  if (yMsgID = '');
   //   Alles in Ordnung ...
   else;
     //  USR8242: Ungültiger Datums-, Zeit- oder Zeitstempelwert im
     //  Feld &1
-    o_msgID = YMsgID;
-    o_msgDta = fldl0100.f1fnme;
+    o_msgID = yMsgID;
+    o_msgDta = fldl0100.f1FNme;
     leavesr;
   endif;
 
@@ -1049,21 +1049,21 @@ begsr cvtToZoned;
 
   select;
   //  kleinester Wert ...
-  when (R_TgtValue = '*LOVAL');
+  when (r_tgtValue = '*LOVAL');
     zoned = *loval;
   //  größter Wert ...
-  when (R_TgtValue = '*HIVAL');
+  when (r_tgtValue = '*HIVAL');
     zoned = *hival;
   //  aktueller Wert ...
-  when (R_TgtValue = '*CURRENT');
+  when (r_tgtValue = '*CURRENT');
 
     //  ... Vorzeichen
-    if (set0003.SET_SignX = bFalse);
+    if (set0003.set_signX = bFalse);
     // ohne Vorzeichen
     else;
       // mit Vorzeichen
       // ... Vorzeichen extrahieren
-      x = fldl0100.f1digt + 1;
+      x = fldl0100.f1Digt + 1;
       if (x <= RCD_BUFF_LEN);
         a1 = %subst(i_buffer: x: 1);
       else;
@@ -1078,15 +1078,15 @@ begsr cvtToZoned;
     endif;
 
     //  ... Wert
-    x = %len(zoned_A) - fldl0100.f1digt + 1;
-    %subst(zoned_A: x) =
-      %subst(i_buffer: 1: fldl0100.f1digt);
-    zoned_A = %xlate(' ':'0' : zoned_A);
+    x = %len(zoned_a) - fldl0100.f1Digt + 1;
+    %subst(zoned_a: x) =
+      %subst(i_buffer: 1: fldl0100.f1Digt);
+    zoned_a = %xlate(' ':'0' : zoned_a);
 
     //  ... gültige numerische Daten prüfen
-    if (%check(NUMERIC_DIGITS: zoned_A) > 0);
+    if (%check(NUMERIC_DIGITS: zoned_a) > 0);
       o_msgID = 'USR8138';
-      usr8138.var1 = fldl0100.f1fnme;
+      usr8138.var1 = fldl0100.f1FNme;
       o_msgDta = usr8138;
       leavesr;
     else;
@@ -1115,21 +1115,21 @@ begsr cvtToFloat;
 
   select;
   //  kleinester Wert ...
-  when (R_TgtValue = '*LOVAL');
+  when (r_tgtValue = '*LOVAL');
     if (f_buffLn(fldl0100) = 4);
-      dsFloat.Float4 = *loval;
+      dsFloat.float4 = *loval;
     else;
-      dsFloat.Float8 = *loval;
+      dsFloat.float8 = *loval;
     endif;
   //  größter Wert ...
-  when (R_TgtValue = '*HIVAL');
+  when (r_tgtValue = '*HIVAL');
     if (f_buffLn(fldl0100) = 4);
-      dsFloat.Float4 = *hival;
+      dsFloat.float4 = *hival;
     else;
-      dsFloat.Float8 = *hival;
+      dsFloat.float8 = *hival;
     endif;
   //  aktueller Wert ...
-  when (R_TgtValue = '*CURRENT');
+  when (r_tgtValue = '*CURRENT');
     if (f_buffLn(fldl0100) = 4);
       x = 14;
     else;
@@ -1137,7 +1137,7 @@ begsr cvtToFloat;
     endif;
 
     //  ... Vorzeichen
-    if (set0003.SET_SignX = bFalse);
+    if (set0003.set_signX = bFalse);
     // ohne Vorzeichen
     else;
       // mit Vorzeichen
@@ -1158,7 +1158,7 @@ begsr cvtToFloat;
     //  ... gültige numerische Daten prüfen
     if (f_vldFloat(%subst(i_buffer: 1: x-1)) = bFalse);
       o_msgID = 'USR8138';
-      usr8138.var1 = fldl0100.f1fnme;
+      usr8138.var1 = fldl0100.f1FNme;
       o_msgDta = usr8138;
       leavesr;
     else;
@@ -1176,9 +1176,9 @@ begsr cvtToFloat;
     endif;
 
     if (f_buffLn(fldl0100) = 4);
-      dsFloat.Float4 = float;
+      dsFloat.float4 = float;
     else;
-      dsFloat.Float8 = float;
+      dsFloat.float8 = float;
     endif;
 
   other;
@@ -1194,9 +1194,9 @@ begsr getZoned;
 
   zoned = 0;
 
-  x = %len(zoned_A) - f_buffLn(fldl0100) + 1;
+  x = %len(zoned_a) - f_buffLn(fldl0100) + 1;
 
-  %subst(zoned_A: x) =
+  %subst(zoned_a: x) =
     %subst(i_buffer: 1: f_buffLn(fldl0100));
 
   zoned = zoned;
@@ -1233,7 +1233,7 @@ begsr getBinary_1;
 
   binary1 = 0;
 
-  binary1_A =
+  binary1_a =
     %subst(i_buffer: 1: f_buffLn(fldl0100));
 
   zoned = binary1;
@@ -1248,7 +1248,7 @@ begsr getBinary_2;
 
   binary2 = 0;
 
-  binary2_A =
+  binary2_a =
     %subst(i_buffer: 1: f_buffLn(fldl0100));
 
   zoned = binary2;
@@ -1263,7 +1263,7 @@ begsr getBinary_4;
 
   binary4 = 0;
 
-  binary4_A =
+  binary4_a =
     %subst(i_buffer: 1: f_buffLn(fldl0100));
 
   zoned = binary4;
@@ -1278,7 +1278,7 @@ begsr getBinary_8;
 
   binary8 = 0;
 
-  binary8_A =
+  binary8_a =
     %subst(i_buffer: 1: f_buffLn(fldl0100));
 
   zoned = binary8;
@@ -1303,24 +1303,24 @@ begsr getPacked;
 endsr;
 
 //============================================================*
-//    GetUsrSetg    Ermitteln der Benutzervoreinstellungen    *
+//    getUsrSetg    Ermitteln der Benutzervoreinstellungen    *
 //============================================================*
 
-begsr GetUsrSetg;
+begsr getUsrSetg;
 
   //  *ACCESSKEY
   set0003 = f_getUsrSg('*ACCESSKEY');
 
-  if (set0003.SET_SignP = '');
+  if (set0003.set_signP = '');
     SET_SIGN_PLUS = '';
   else;
-    SET_SIGN_PLUS = set0003.SET_SignP;
+    SET_SIGN_PLUS = set0003.set_signP;
   endif;
 
-  if (set0003.SET_SignM = '');
+  if (set0003.set_signM = '');
     SET_SIGN_MINUS = '-';
   else;
-    SET_SIGN_MINUS = set0003.SET_SignM;
+    SET_SIGN_MINUS = set0003.set_signM;
   endif;
 
 endsr;
@@ -1333,7 +1333,7 @@ endsr;
 begsr getKeyType;
 
   clear f_key;
-  f_key.F_Field = fldl0100.f1fnme;
+  f_key.f_field = fldl0100.f1FNme;
   chain %kds(f_key) fpeekfld;
   if (not %found());
     clear fpeekfld;
@@ -1345,7 +1345,7 @@ endsr;
 //    First         Initialisierung                           *
 //============================================================*
 
-begsr First;
+begsr first;
 
   o_msgID = '';
   o_msgDta = '';
@@ -1366,7 +1366,7 @@ begsr inzsr;
 
   peek36_name = f_pgmCallN('PEEK36');
 
-  open peekfld;
+  open peekFld;
 
 endsr;
 
@@ -1386,9 +1386,9 @@ dcl-proc cvtToJobCcsid;
   //  Nicht umsetzbare CCSID (z.B. GRAPHIC 835): Puffer unverändert
   //  lassen statt abzubrechen (PEEK71 sendet CPF9897)
   monitor;
-    hTranscoder = Transcoder_toJobCcsid(i_ccsid);
+    hTranscoder = transcoder_toJobCcsid(i_ccsid);
     tLength =
-      Transcoder_xlateBuffer(hTranscoder
+      transcoder_xlateBuffer(hTranscoder
                              : %addr(io_buffer)
                              : i_length
                              :%size(io_buffer));
@@ -1421,9 +1421,9 @@ dcl-proc cvtToFileCcsid;
   //  Nicht umsetzbare CCSID: Puffer unverändert lassen
   monitor;
     hTranscoder =
-      Transcoder_toFieldCcsid(i_ccsid);
+      transcoder_toFieldCcsid(i_ccsid);
     tLength =
-      Transcoder_xlateBuffer(hTranscoder
+      transcoder_xlateBuffer(hTranscoder
                              : %addr(io_buffer)
                              : i_length
                              :%size(io_buffer));

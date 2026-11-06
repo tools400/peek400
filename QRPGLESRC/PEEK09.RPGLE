@@ -53,7 +53,7 @@
 /copy QCOPYLE,PPEEK53
 /copy QCOPYLE,PPEEK58
 
-dcl-ds objd0400 likeds(OBJD0400_t) inz;
+dcl-ds objd0400 likeds(objd0400_t) inz;
 dcl-ds errCode likeds(errCode_t) inz;
 
 //*******************************************************************
@@ -61,7 +61,7 @@ dcl-ds errCode likeds(errCode_t) inz;
 //*******************************************************************
 dcl-pi peek09;
   i_qFile  likeds(qObj_t) const;
-  o_data   likeds(OBJD0400_t);
+  o_data   likeds(objd0400_t);
   o_msgID  like(msgId_t);
   o_msgDta like(msgDta_t);
 end-pi;

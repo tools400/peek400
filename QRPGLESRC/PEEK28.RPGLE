@@ -39,18 +39,18 @@
 /copy QCOPYLE,PPEEK53
 /copy QCOPYLE,PPEEK58
 
-dcl-ds YRcvVar len(128) inz;
-  RcvNbrRet int(10);
-  RcvOffset int(10);
-  RcvData   char(120);
+dcl-ds yRcvVar len(128) inz;
+  rcvNbrRet int(10);
+  rcvOffset int(10);
+  rcvData   char(120);
 end-ds;
 
-dcl-ds YSystemVal len(128) inz;
-  SystemVal  char(10);
-  TypeOfData char(1);
+dcl-ds ySystemVal len(128) inz;
+  systemVal  char(10);
+  typeOfData char(1);
   infStatus  char(1);
-  LenOfData  int(10);
-  SysValData char(112);
+  lenOfData  int(10);
+  sysValData char(112);
 end-ds;
 
 dcl-s x like(int4_t) inz;
@@ -83,11 +83,11 @@ endif;
 clear errCode;
 errCode.bytPrv = %size(errCode);
 
-qwcrsval(YRcvVar: %size(YRcvVar): 1
+qwcrsval(yRcvVar: %size(yRcvVar): 1
         : i_attr: errCode);
 
 if (errCode.bytAvl = 0);
-  exsr GetAttr;
+  exsr getAttr;
 else;
   o_attrLen = 0;
   o_attrType = '';
@@ -97,20 +97,20 @@ endif;
 return;
 
 //====================================================*
-//  GetAttr -  Abrufen der Attributwertes             *
+//  getAttr -  Abrufen der Attributwertes             *
 //====================================================*
 
-begsr GetAttr;
+begsr getAttr;
 
-  x = RcvOffset + 1;
-  YSystemVal = %subst(YRcvVar: x);
+  x = rcvOffset + 1;
+  ySystemVal = %subst(yRcvVar: x);
 
-  o_attrLen = LenOfData;
-  o_attrType = TypeOfData;
+  o_attrLen = lenOfData;
+  o_attrType = typeOfData;
 
   x = 1;
   o_attrValue =
-   %subst(SysValData: x: o_attrLen);
+   %subst(sysValData: x: o_attrLen);
 
 endsr;
 

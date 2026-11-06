@@ -404,7 +404,7 @@ dcl-proc f_usrAut;
   end-pi;
 
   //  Funktionswert
-  dcl-s IsFound like(bool_t) inz(bFalse);
+  dcl-s isFound like(bool_t) inz(bFalse);
 
   //  Hilfsfelder für optionale Parameter
   dcl-s i5_lib like(i_lib) inz;
@@ -429,7 +429,7 @@ dcl-proc f_usrAut;
   chain %kds(ex_key3: 3) fexit01;
   *in01 = not %found;
   if (*in01 = *off);
-    IsFound     = bTrue;
+    isFound     = bTrue;
     o_usrChgL   = ex_chgLib;
     o_usrChgF   = ex_chgFile;
     o_usrChgM   = ex_chgMbr;
@@ -439,7 +439,7 @@ dcl-proc f_usrAut;
     o_usrChgSqlO= ex_chgSqlO;
     o_usrAccAt  = ex_accAut;
   else;
-    IsFound     = bFalse;
+    isFound     = bFalse;
     o_usrChgL   = bNotDef;
     o_usrChgF   = bNotDef;
     o_usrChgM   = bNotDef;
@@ -450,7 +450,7 @@ dcl-proc f_usrAut;
     o_usrAccAt  = bNotDef;
   endif;
 
-  return IsFound;
+  return isFound;
 
 end-proc;
 
@@ -474,7 +474,7 @@ dcl-proc f_objAut;
   end-pi;
 
   //  Funktionswert
-  dcl-s IsFound like(bool_t) inz(bFalse);
+  dcl-s isFound like(bool_t) inz(bFalse);
 
   //  Hilfsfelder für optionale Parameter
   dcl-s i7_lib like(i_lib);
@@ -499,7 +499,7 @@ dcl-proc f_objAut;
   chain %kds(ex_key3: 3) fexit01;
   *in01 = not %found;
   if (*in01 = *off);
-    IsFound     = bTrue;
+    isFound     = bTrue;
     o_objChgL   = ex_chgLib;
     o_objChgF   = ex_chgFile;
     o_objChgM   = ex_chgMbr;
@@ -509,7 +509,7 @@ dcl-proc f_objAut;
     o_objChgSqlO= ex_chgSqlO;
     o_objAccAt  = ex_accAut;
   else;
-    IsFound     = bFalse;
+    isFound     = bFalse;
     o_objChgL   = bNotDef;
     o_objChgF   = bNotDef;
     o_objChgM   = bNotDef;
@@ -520,7 +520,7 @@ dcl-proc f_objAut;
     o_objAccAt  = bNotDef;
   endif;
 
-  return IsFound;
+  return isFound;
 
 end-proc;
 
@@ -544,7 +544,7 @@ dcl-proc f_secAut;
   end-pi;
 
   //  Funktionswert
-  dcl-s IsFound like(bool_t) inz(bFalse);
+  dcl-s isFound like(bool_t) inz(bFalse);
 
   //  Hilfsfelder für optionale Parameter
   dcl-s i6_user like(i_user);
@@ -581,7 +581,7 @@ dcl-proc f_secAut;
   chain %kds(ex_key3: 3) fexit01;
   *in01 = not %found;
   if (*in01 = *off);
-    IsFound     = bTrue;
+    isFound     = bTrue;
     o_secChgL   = ex_chgLib;
     o_secChgF   = ex_chgFile;
     o_secChgM   = ex_chgMbr;
@@ -591,7 +591,7 @@ dcl-proc f_secAut;
     o_secChgSqlO= ex_chgSqlO;
     o_secAccAt  = ex_accAut;
   else;
-    IsFound     = bFalse;
+    isFound     = bFalse;
     o_secChgL   = bNotDef;
     o_secChgF   = bNotDef;
     o_secChgM   = bNotDef;
@@ -602,7 +602,7 @@ dcl-proc f_secAut;
     o_secAccAt  = bNotDef;
   endif;
 
-  return IsFound;
+  return isFound;
 
 end-proc;
 

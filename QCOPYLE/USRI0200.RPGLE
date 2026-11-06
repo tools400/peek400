@@ -1,6 +1,6 @@
 **free
 
-dcl-ds USRI0200_t qualified template;
+dcl-ds usri0200_t qualified template;
   bytRet       int(10);
   bytAvl       int(10);
   usrprf       char(10);

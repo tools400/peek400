@@ -8,7 +8,7 @@ dcl-pr quslobj extpgm('QUSLOBJ');
   i_format     char(8) const;
   i_qObj       char(20) const;
   i_objType    char(10) const;
-  io_ErrCode   char(65535) options(*nopass: *varsize); // | optGrp 1
+  io_errCode   char(65535) options(*nopass: *varsize); // | optGrp 1
   i_authCtrl   char(65535) options(*nopass: *varsize) const; // | optGrp 2
   i_slcCtrl    char(65535) options(*nopass: *varsize) const; // |
   i_auxStgPool char(65535) options(*nopass: *varsize) const; // | optGrp 3

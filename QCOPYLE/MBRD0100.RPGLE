@@ -6,7 +6,7 @@
 //                                                               *
 //===============================================================*
 
-dcl-ds MBRD0100_t qualified template;
+dcl-ds mbrd0100_t qualified template;
   bytePrv   int(10);
   byteAvl   int(10);
   filNme    char(10);

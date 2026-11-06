@@ -17,12 +17,12 @@
 //  (data structure can be used within the calling program
 //  to splitt XLIST into its units. See GETDBR_DMO)
 dcl-ds objl0200_t qualified template;
-  O2ONme char(10);
-  O2LNme char(10);
+  o2ONme char(10);
+  o2LNme char(10);
   o2type char(10);
   o2ists char(1);
   o2xatr char(10);
-  O2Text char(50);
+  o2Text char(50);
   o2uatr char(10);
 end-ds;
 

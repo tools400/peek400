@@ -7,5 +7,5 @@ dcl-pr peek13 extpgm(peek13_name);
 /endif
   i_qFile    likeds(qObj_t) const;
   i_mbr      like(mbr_t) const;
-  o_mbrd0200 likeds(MBRD0200_t);
+  o_mbrd0200 likeds(mbrd0200_t);
 end-pr;

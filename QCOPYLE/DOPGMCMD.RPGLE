@@ -4,161 +4,161 @@
 // c_readsfl -> doSlfCmd.
 
 isCancel = bFalse;
-IsCmdErr = bFalse;
+isCmdErr = bFalse;
 
 select;
 
-when (YPgmCmd = '*EXIT');      //  F3  - Programm beenden
-  exsr C_EndPgm;
-  if (IsOpen = bFalse);
+when (yPgmCmd = '*EXIT');      //  F3  - Programm beenden
+  exsr c_endPgm;
+  if (isOpen = bFalse);
   // Programm beenden
   else;
     // Weiter machen
-    YPgmCmd = '';
+    yPgmCmd = '';
   endif;
-when (YPgmCmd = '*PROMPT');    //  F4  - Prompt
-  exsr C_Prompt;
+when (yPgmCmd = '*PROMPT');    //  F4  - Prompt
+  exsr c_prompt;
   if (*in93 = bTrue);
-    exsr C_Enter;
+    exsr c_enter;
   endif;
-when (YPgmCmd = '*REFRESH');   //  F5  - Anzeige aktualisieren
-  exsr C_Refresh;
-when (YPgmCmd = '*ADD');       //  F6  - Neuanlage Datensatz
-  exsr C_Add;
-when (YPgmCmd = '*HEADLINE');  //  F7  - Umschalten der Überschrift
-  exsr C_ChgHead;
-when (YPgmCmd = '*MRKCOL');    //  F8  - Spalte markieren, ein
-  exsr C_MrkCol;
-when (YPgmCmd = '*UNMRKCOL');
-  exsr C_UnMrkCol;
-when (YPgmCmd = '*TGLMRKCOL'); //      - Spalte markieren, ein/aus
-  exsr C_TgMrkCol;
-when (YPgmCmd = '*MOVETOP');   //  F9  - Positionieren auf Datensatz
-  exsr C_MoveTop;
-when (YPgmCmd = '*POSCSR');
-  exsr C_PosCsr;
-when (YPgmCmd = '*USERSETG');  //  F11 - Benutzereinstellungen
-  exsr C_UserSetg;
-when (YPgmCmd = '*CANCEL');    //  F12 - Programm beenden
-  exsr C_EndPgm;
-  if (IsOpen = bFalse);
+when (yPgmCmd = '*REFRESH');   //  F5  - Anzeige aktualisieren
+  exsr c_refresh;
+when (yPgmCmd = '*ADD');       //  F6  - Neuanlage Datensatz
+  exsr c_add;
+when (yPgmCmd = '*HEADLINE');  //  F7  - Umschalten der Überschrift
+  exsr c_chgHead;
+when (yPgmCmd = '*MRKCOL');    //  F8  - Spalte markieren, ein
+  exsr c_mrkCol;
+when (yPgmCmd = '*UNMRKCOL');
+  exsr c_unMrkCol;
+when (yPgmCmd = '*TGLMRKCOL'); //      - Spalte markieren, ein/aus
+  exsr c_tgMrkCol;
+when (yPgmCmd = '*MOVETOP');   //  F9  - Positionieren auf Datensatz
+  exsr c_moveTop;
+when (yPgmCmd = '*POSCSR');
+  exsr c_posCsr;
+when (yPgmCmd = '*USERSETG');  //  F11 - Benutzereinstellungen
+  exsr c_userSetg;
+when (yPgmCmd = '*CANCEL');    //  F12 - Programm beenden
+  exsr c_endPgm;
+  if (isOpen = bFalse);
   // Programm beenden
   else;
     // Weiter machen
-    YPgmCmd = '';
+    yPgmCmd = '';
   endif;
-when (YPgmCmd = '*REPEAT');    //  F13 - Wiederholen
-  exsr C_Repeat;
-when (YPgmCmd = '*LAYOUT');    //  F15 - Layout
-  exsr C_Layout;
-when (YPgmCmd = '*SEARCH');    //  F16 - Suchen
-  exsr C_Search;
-when (YPgmCmd = '*TOP');       //  F17 - Anfang der Datei
-  exsr C_Top;
-when (YPgmCmd = '*BOT');       //  F18 - Ende der Datei
-  exsr C_Bot;
-when (YPgmCmd = '*LEFT');      //  F19 - nach rechts verschieben (ein Feld)
-  exsr C_MoveL;
-when (YPgmCmd = '*RIGHT');     //  F20 - nach links verschieben  (ein Feld)
-  exsr C_MoveR;
-when (YPgmCmd = '*PAGELEFT');  //  F19 - nach rechts verschieben (eine Seite)
+when (yPgmCmd = '*REPEAT');    //  F13 - Wiederholen
+  exsr c_repeat;
+when (yPgmCmd = '*LAYOUT');    //  F15 - Layout
+  exsr c_layout;
+when (yPgmCmd = '*SEARCH');    //  F16 - Suchen
+  exsr c_search;
+when (yPgmCmd = '*TOP');       //  F17 - Anfang der Datei
+  exsr c_top;
+when (yPgmCmd = '*BOT');       //  F18 - Ende der Datei
+  exsr c_bot;
+when (yPgmCmd = '*LEFT');      //  F19 - nach rechts verschieben (ein Feld)
+  exsr c_moveL;
+when (yPgmCmd = '*RIGHT');     //  F20 - nach links verschieben  (ein Feld)
+  exsr c_moveR;
+when (yPgmCmd = '*PAGELEFT');  //  F19 - nach rechts verschieben (eine Seite)
   exsr c_pageLeft;
-when (YPgmCmd = '*PAGERIGHT'); //  F20 - nach links verschieben  (eine Seite)
+when (yPgmCmd = '*PAGERIGHT'); //  F20 - nach links verschieben  (eine Seite)
   exsr c_pageRight;
-when (YPgmCmd = '*CMDLINE');   //  F21 - OS/400 Befehlzeile
-  exsr C_CmdLine;
-when (YPgmCmd = '*132/80');    //  F22 - Bildschirmauflösung 132/80
-  exsr C_ChgScn;
-when (YPgmCmd = '*MOREOPT');   //  F23 - weitere Auswahlen
-  exsr C_MoreOpt;
-when (YPgmCmd = '*MOREKEYS');  //  F24 - weitere Tasten anzeigen
-  exsr C_MoreKeys;
-when (YPgmCmd = '*NEXTMARK');  //  Fxx - zum nächsten markierten Feld verschieben
-  exsr C_NextMark;
-when (YPgmCmd = '*PREVMARK');  //  Fxx - zum vorherigen markierten Feld verschieben
-  exsr C_PrevMark;
-when (YPgmCmd = '*DSPDBR');    //  Fxx - anzeigen der Datenbankrelationen
-  exsr C_DspDbr;
-when (YPgmCmd = '*PINCOLDLG'); //  Fxx - Pin-Dialog
-  exsr C_PinCDlg;
-when (YPgmCmd = '*PAGEUP');    //  vorwärts blättern
+when (yPgmCmd = '*CMDLINE');   //  F21 - OS/400 Befehlzeile
+  exsr c_cmdLine;
+when (yPgmCmd = '*132/80');    //  F22 - Bildschirmauflösung 132/80
+  exsr c_chgScn;
+when (yPgmCmd = '*MOREOPT');   //  F23 - weitere Auswahlen
+  exsr c_moreOpt;
+when (yPgmCmd = '*MOREKEYS');  //  F24 - weitere Tasten anzeigen
+  exsr c_moreKeys;
+when (yPgmCmd = '*NEXTMARK');  //  Fxx - zum nächsten markierten Feld verschieben
+  exsr c_nextMark;
+when (yPgmCmd = '*PREVMARK');  //  Fxx - zum vorherigen markierten Feld verschieben
+  exsr c_prevMark;
+when (yPgmCmd = '*DSPDBR');    //  Fxx - anzeigen der Datenbankrelationen
+  exsr c_dspDbr;
+when (yPgmCmd = '*PINCOLDLG'); //  Fxx - Pin-Dialog
+  exsr c_pinCDlg;
+when (yPgmCmd = '*PAGEUP');    //  vorwärts blättern
   exsr c_pageUp;
-when (YPgmCmd = '*PAGEDOWN');  //  rückwärts blättern
+when (yPgmCmd = '*PAGEDOWN');  //  rückwärts blättern
   exsr c_pageDown;
-when (YPgmCmd = '*ENTER');     //  Datenfreigabe
-  exsr C_Enter;
-when (YPgmCmd = '*REBUILD');   //  Programm neu erstellen
-  exsr C_BuildPgm;
-when (YPgmCmd = '*CLRPINROW'); //  Löschen Pin-Tabelle für Zeilen
-  exsr C_ClrPinRw;
-when (YPgmCmd = '*CLRPINCOL'); //  Löschen Pin-Tabelle für Spalten
-  exsr C_ClrPinCl;
-when (YPgmCmd = '*KEY');       //  Sortierung in Schlüsselfolge
-  exsr C_SortBKey;
-when (YPgmCmd = '*RRN');       //  Sortierung in Satzfolge
-  exsr C_SortBRrn;
-when (YPgmCmd = '*TGLACCESS'); //  Umschalten der Sortierung
-  exsr C_SortTgl;
-when (YPgmCmd = '*SQL');       //  SQL-Select ...
-  exsr C_Sql;
-when (YPgmCmd = '*NONE');      //  Nix tun
+when (yPgmCmd = '*ENTER');     //  Datenfreigabe
+  exsr c_enter;
+when (yPgmCmd = '*REBUILD');   //  Programm neu erstellen
+  exsr c_buildPgm;
+when (yPgmCmd = '*CLRPINROW'); //  Löschen Pin-Tabelle für Zeilen
+  exsr c_clrPinRw;
+when (yPgmCmd = '*CLRPINCOL'); //  Löschen Pin-Tabelle für Spalten
+  exsr c_clrPinCl;
+when (yPgmCmd = '*KEY');       //  Sortierung in Schlüsselfolge
+  exsr c_sortBKey;
+when (yPgmCmd = '*RRN');       //  Sortierung in Satzfolge
+  exsr c_sortBRrn;
+when (yPgmCmd = '*TGLACCESS'); //  Umschalten der Sortierung
+  exsr c_sortTgl;
+when (yPgmCmd = '*SQL');       //  SQL-Select ...
+  exsr c_sql;
+when (yPgmCmd = '*NONE');      //  Nix tun
 // keinen Befehl ausführen
-when (YPgmCmd = '*CHANGE');    //  Ändern Datensatz ...
-  exsr S_Change;
-when (YPgmCmd = '*COPY');      //  Kopieren Datensatz ...
-  exsr S_Copy;
-when (YPgmCmd = '*DELETE');    //  Löschen Datensatz ...
-  exsr S_Delete;
-when (YPgmCmd = '*DISPLAY');   //  Anzeigen Datensatz ...
-  exsr S_Display;
-when (YPgmCmd = '*PRINT');     //  Drucken Datensatz ...
-  exsr S_Print;
-when (YPgmCmd = '*PINROW');    //  Pin-Datensatz ...
-  exsr S_PinRcd;
-when (YPgmCmd = '*UNPINROW');  //  UnPin-Datensatz ...
-  exsr S_UnPinRcd;
-when (YPgmCmd = '*PINCOL');    //  Pin-Spalte ...
-  exsr S_PinCol;
-when (YPgmCmd = '*UNPINCOL');  //  UnPin-Spalte ...
-  exsr S_UnPinCol;
-when (YPgmCmd = '*TGLPINCOL'); //  UnPin-Spalte, umschalten ...
-  exsr S_TgPinCol;
-when (YPgmCmd = '*TBLPAPON');  //  Tabellierpapier einschalten ...
-  exsr S_TblPapOn;
-when (YPgmCmd = '*TBLPAPOFF'); //  Tabellierpapier ausschalten ...
-  exsr S_TblPapOf;
-when (YPgmCmd = '*TGLTBLPAP'); //  Tabellierpapier umschalten ...
-  exsr S_TgTblPap;
-when (YPgmCmd = '*COPYEXT');   //  In extrene Datei kopieren ...
-  exsr S_CopyExt;
-when (YPgmCmd = '*SPLASHON');  //  Splash-Screen Einschalten ...
-  exsr S_SplashOn;
-when (YPgmCmd = '*SPLASHOFF'); //  Splash-Screen Ausschalten ...
-  exsr S_SplashOf;
-when (YPgmCmd = '*CMD');       //  Ausführen Kurzbefehl ...
-  exsr S_ShortCmd;
-when (YPgmCmd = '*ABOUT');     //  Anzeigen "About" ...
-  exsr S_About;
-when (YPgmCmd = '*DSPHEX');    //  Hex-Anzeige ...
-  exsr S_DspHex;
-when (YPgmCmd = '*DSPNRM');    //  Normale-Anzeige ...
-  exsr S_DspNrm;
-when (YPgmCmd = '*TGLDSP');    //  Umschalten-Anzeige ...
-  exsr S_DspTgl;
-when (YPgmCmd = '*SAVEENV');   //  Sichern Arbeitsumgebung ...
-  exsr S_SaveEnv;
-when (YPgmCmd = '*LOADENV');   //  Laden Arbeitsumgebung ...
-  exsr S_LoadEnv;
-when (YPgmCmd = '*DELETEENV'); //  Löschen Arbeitsumgebung ...
-  exsr S_DelEnv;
-when (YPgmCmd = '*TGLKEYLUC'); //  Umschalten Eingabe der Schlüsselfelder ...
-  exsr S_TglKeyLC_UC;
-  exsr C_PosCsr;
+when (yPgmCmd = '*CHANGE');    //  Ändern Datensatz ...
+  exsr s_change;
+when (yPgmCmd = '*COPY');      //  Kopieren Datensatz ...
+  exsr s_copy;
+when (yPgmCmd = '*DELETE');    //  Löschen Datensatz ...
+  exsr s_delete;
+when (yPgmCmd = '*DISPLAY');   //  Anzeigen Datensatz ...
+  exsr s_display;
+when (yPgmCmd = '*PRINT');     //  Drucken Datensatz ...
+  exsr s_print;
+when (yPgmCmd = '*PINROW');    //  Pin-Datensatz ...
+  exsr s_pinRcd;
+when (yPgmCmd = '*UNPINROW');  //  UnPin-Datensatz ...
+  exsr s_unPinRcd;
+when (yPgmCmd = '*PINCOL');    //  Pin-Spalte ...
+  exsr s_pinCol;
+when (yPgmCmd = '*UNPINCOL');  //  UnPin-Spalte ...
+  exsr s_unPinCol;
+when (yPgmCmd = '*TGLPINCOL'); //  UnPin-Spalte, umschalten ...
+  exsr s_tgPinCol;
+when (yPgmCmd = '*TBLPAPON');  //  Tabellierpapier einschalten ...
+  exsr s_tblPapOn;
+when (yPgmCmd = '*TBLPAPOFF'); //  Tabellierpapier ausschalten ...
+  exsr s_tblPapOf;
+when (yPgmCmd = '*TGLTBLPAP'); //  Tabellierpapier umschalten ...
+  exsr s_tgTblPap;
+when (yPgmCmd = '*COPYEXT');   //  In extrene Datei kopieren ...
+  exsr s_copyExt;
+when (yPgmCmd = '*SPLASHON');  //  Splash-Screen Einschalten ...
+  exsr s_splashOn;
+when (yPgmCmd = '*SPLASHOFF'); //  Splash-Screen Ausschalten ...
+  exsr s_splashOf;
+when (yPgmCmd = '*CMD');       //  Ausführen Kurzbefehl ...
+  exsr s_shortCmd;
+when (yPgmCmd = '*ABOUT');     //  Anzeigen "About" ...
+  exsr s_about;
+when (yPgmCmd = '*DSPHEX');    //  Hex-Anzeige ...
+  exsr s_dspHex;
+when (yPgmCmd = '*DSPNRM');    //  Normale-Anzeige ...
+  exsr s_dspNrm;
+when (yPgmCmd = '*TGLDSP');    //  Umschalten-Anzeige ...
+  exsr s_dspTgl;
+when (yPgmCmd = '*SAVEENV');   //  Sichern Arbeitsumgebung ...
+  exsr s_saveEnv;
+when (yPgmCmd = '*LOADENV');   //  Laden Arbeitsumgebung ...
+  exsr s_loadEnv;
+when (yPgmCmd = '*DELETEENV'); //  Löschen Arbeitsumgebung ...
+  exsr s_delEnv;
+when (yPgmCmd = '*TGLKEYLUC'); //  Umschalten Eingabe der Schlüsselfelder ...
+  exsr s_tglKeyLC_uc;
+  exsr c_posCsr;
 other;
   //  Unbekannter Programmbefehl
   clear usr8110;
-  usr8110.var1 = YPgmCmd;
+  usr8110.var1 = yPgmCmd;
   p_sndPgmMg('USR8110': usr8110: sds.pgmName);
-  IsCmdErr = bTrue;
+  isCmdErr = bTrue;
 endsl;
 

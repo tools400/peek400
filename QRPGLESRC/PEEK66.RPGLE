@@ -42,18 +42,18 @@
 /copy QCOPYLE,PPEEK58
 
 dcl-s numeric_t packed(31: 10) template;
-dcl-c cDATA_TYPE 'P';
+dcl-c cDATA_type 'P';
 dcl-c cDIGITS %len(numeric_t);
 dcl-c cDECPOS %decpos(numeric_t);
 
-dcl-c cCHR_X 'x';
+dcl-c cCHR_x 'x';
 dcl-c cQUOTE '''';
 
 dcl-pr main extproc('main');
   io_buffer   like(gio_buffer);
-  io_Length   like(gio_length);
-  i_InFormat  likeds(gi_inFormat) const;
-  i_OutFormat likeds(gi_outFormat) const;
+  io_length   like(gio_length);
+  i_inFormat  likeds(gi_inFormat) const;
+  i_outFormat likeds(gi_outFormat) const;
   o_msgID     like(go_msgID);
   o_msgDta    like(go_msgDta);
 end-pr;
@@ -61,8 +61,8 @@ end-pr;
 //  Convert from numeric value.
 dcl-pr convertFromNumeric extproc('convertFromNumeric');
   io_buffer   like(gio_buffer);
-  io_Length   like(gio_length);
-  i_OutFormat likeds(gi_outFormat) const;
+  io_length   like(gio_length);
+  i_outFormat likeds(gi_outFormat) const;
   o_msgID     like(go_msgID);
   o_msgDta    like(go_msgDta);
 end-pr;
@@ -70,8 +70,8 @@ end-pr;
 //  Convert from string value.
 dcl-pr convertFromString extproc('convertFromString');
   io_buffer   like(gio_buffer);
-  io_Length   like(gio_length);
-  i_OutFormat likeds(gi_outFormat) const;
+  io_length   like(gio_length);
+  i_outFormat likeds(gi_outFormat) const;
   o_msgID     like(go_msgID);
   o_msgDta    like(go_msgDta);
 end-pr;
@@ -79,8 +79,8 @@ end-pr;
 //  Convert to numeric value.
 dcl-pr convertToNumeric extproc('convertToNumeric');
   io_buffer   like(gio_buffer);
-  io_Length   like(gio_length);
-  i_OutFormat likeds(gi_outFormat) const;
+  io_length   like(gio_length);
+  i_outFormat likeds(gi_outFormat) const;
   o_msgID     like(go_msgID);
   o_msgDta    like(go_msgDta);
 end-pr;
@@ -88,8 +88,8 @@ end-pr;
 //  Convert to string value.
 dcl-pr convertToString extproc('convertToString');
   io_buffer   like(gio_buffer);
-  io_Length   like(gio_length);
-  i_OutFormat likeds(gi_outFormat) const;
+  io_length   like(gio_length);
+  i_outFormat likeds(gi_outFormat) const;
   o_msgID     like(go_msgID);
   o_msgDta    like(go_msgDta);
 end-pr;
@@ -128,9 +128,9 @@ return;
 dcl-proc main;
   dcl-pi *n;
     io_buffer   like(gio_buffer);
-    io_Length   like(gio_length);
-    i_InFormat  likeds(gi_inFormat) const;
-    i_OutFormat likeds(gi_outFormat) const;
+    io_length   like(gio_length);
+    i_inFormat  likeds(gi_inFormat) const;
+    i_outFormat likeds(gi_outFormat) const;
     o_msgID     like(go_msgID);
     o_msgDta    like(go_msgDta);
   end-pi;
@@ -139,11 +139,11 @@ dcl-proc main;
   clear o_msgID;
   clear o_msgDta;
 
-  if (f_isNumFld(i_InFormat) = bTrue);
-    convertFromNumeric(io_buffer: io_Length: i_OutFormat
+  if (f_isNumFld(i_inFormat) = bTrue);
+    convertFromNumeric(io_buffer: io_length: i_outFormat
                        : o_msgID: o_msgDta);
   else;
-    convertFromString(io_buffer: io_Length: i_OutFormat
+    convertFromString(io_buffer: io_length: i_outFormat
                        : o_msgID: o_msgDta);
   endif;
 
@@ -155,18 +155,18 @@ end-proc;
 dcl-proc convertFromNumeric;
   dcl-pi *n;
     io_buffer   like(gio_buffer);
-    io_Length   like(gio_length);
-    i_OutFormat likeds(gi_outFormat) const;
+    io_length   like(gio_length);
+    i_outFormat likeds(gi_outFormat) const;
     o_msgID     like(go_msgID);
     o_msgDta    like(go_msgDta);
   end-pi;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  if (f_isNumFld(i_OutFormat) = bTrue);
-    convertToNumeric(io_buffer: io_Length: i_OutFormat
+  if (f_isNumFld(i_outFormat) = bTrue);
+    convertToNumeric(io_buffer: io_length: i_outFormat
                      : o_msgID: o_msgDta);
   else;
-    convertToString(io_buffer: io_Length: i_OutFormat
+    convertToString(io_buffer: io_length: i_outFormat
                     : o_msgID: o_msgDta);
   endif;
 
@@ -178,18 +178,18 @@ end-proc;
 dcl-proc convertFromString;
   dcl-pi *n;
     io_buffer   like(gio_buffer);
-    io_Length   like(gio_length);
-    i_OutFormat likeds(gi_outFormat) const;
+    io_length   like(gio_length);
+    i_outFormat likeds(gi_outFormat) const;
     o_msgID     like(go_msgID);
     o_msgDta    like(go_msgDta);
   end-pi;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  if (f_isNumFld(i_OutFormat) = bTrue);
-    convertToNumeric(io_buffer: io_Length: i_OutFormat
+  if (f_isNumFld(i_outFormat) = bTrue);
+    convertToNumeric(io_buffer: io_length: i_outFormat
                      : o_msgID: o_msgDta);
   else;
-    convertToString(io_buffer: io_Length: i_OutFormat
+    convertToString(io_buffer: io_length: i_outFormat
                     : o_msgID: o_msgDta);
   endif;
 
@@ -201,8 +201,8 @@ end-proc;
 dcl-proc convertToNumeric;
   dcl-pi *n;
     io_buffer   like(gio_buffer);
-    io_Length   like(gio_length);
-    i_OutFormat likeds(gi_outFormat) const;
+    io_length   like(gio_length);
+    i_outFormat likeds(gi_outFormat) const;
     o_msgID     like(go_msgID);
     o_msgDta    like(go_msgDta);
   end-pi;
@@ -214,17 +214,17 @@ dcl-proc convertToNumeric;
   dcl-s tmpBuffer like(io_buffer);
   dcl-s digits int(10);
   dcl-s inbuffer like(io_buffer);
-  dcl-s inlength like(io_Length);
+  dcl-s inlength like(io_length);
 
 /copy QCOPYLE,USR8227
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   monitor;
-    inNumeric = %dec(%subst(io_buffer: 1: io_Length): cDIGITS: cDECPOS);
+    inNumeric = %dec(%subst(io_buffer: 1: io_length): cDIGITS: cDECPOS);
   on-error;
     clear usr8227;
-    usr8227.var1 = %subst(io_buffer: 1: io_Length);
-    usr8227.var2 = cDATA_TYPE;
+    usr8227.var1 = %subst(io_buffer: 1: io_length);
+    usr8227.var2 = cDATA_type;
     usr8227.var3 = cDIGITS;
     usr8227.var4 = cDECPOS;
     o_msgID  = 'USR8227';
@@ -232,10 +232,10 @@ dcl-proc convertToNumeric;
     return;
   endmon;
 
-  if ((i_OutFormat.F1DTyp = 'B' or
-       i_OutFormat.F1DTyp = 'I' or
-       i_OutFormat.F1DTyp = 'U')
-     and f_rpgToIntLength(i_OutFormat.f1digt) = 1);
+  if ((i_outFormat.f1DTyp = 'B' or
+       i_outFormat.f1DTyp = 'I' or
+       i_outFormat.f1DTyp = 'U')
+     and f_rpgToIntLength(i_outFormat.f1Digt) = 1);
     isOneByteInt = bTrue;
     oneByteIntAdjust = 1;
   else;
@@ -243,37 +243,37 @@ dcl-proc convertToNumeric;
     oneByteIntAdjust = 0;
   endif;
 
-  if (f_isFloatFld(i_OutFormat) = bTrue);
-    digits = i_OutFormat.f1flen;
+  if (f_isFloatFld(i_outFormat) = bTrue);
+    digits = i_outFormat.f1FLen;
   else;
-    digits = i_OutFormat.f1digt;
+    digits = i_outFormat.f1Digt;
   endif;
 
   inbuffer = io_buffer;
-  inlength = io_Length;
+  inlength = io_length;
 
   clear io_buffer;
-  clear io_Length;
+  clear io_length;
 
   //  Passt der Wert nicht in das Ausgabeformat, meldet CPYNV
   //  MCH1210 (Empfänger zu klein).
   monitor;
-    cpynv(f_NUM_Descr2(i_OutFormat.F1DTyp
+    cpynv(f_num_descr2(i_outFormat.f1DTyp
                        : digits + oneByteIntAdjust
-                       : i_OutFormat.f1decp)
+                       : i_outFormat.f1DecP)
           : %addr(io_buffer)
-          : f_NUM_Descr2(cDATA_TYPE
+          : f_num_descr2(cDATA_type
                          : %len(inNumeric)
                          : %decpos(inNumeric))
           : %addr(inNumeric));
   on-error;
     io_buffer = inbuffer;
-    io_Length = inlength;
+    io_length = inlength;
     clear usr8227;
-    usr8227.var1 = %subst(io_buffer: 1: io_Length);
-    usr8227.var2 = i_OutFormat.F1DTyp;
+    usr8227.var1 = %subst(io_buffer: 1: io_length);
+    usr8227.var2 = i_outFormat.f1DTyp;
     usr8227.var3 = digits;
-    usr8227.var4 = i_OutFormat.f1decp;
+    usr8227.var4 = i_outFormat.f1DecP;
     o_msgID  = 'USR8227';
     o_msgDta = usr8227;
     return;
@@ -285,24 +285,24 @@ dcl-proc convertToNumeric;
   endif;
 
   select;
-  when (i_OutFormat.F1DTyp = 'B' or
-        i_OutFormat.F1DTyp = 'I' or
-        i_OutFormat.F1DTyp = 'U');
-    io_Length = f_rpgToIntLength(i_OutFormat.f1digt);
-  when (i_OutFormat.F1DTyp = 'P');
-    io_Length = %int(i_OutFormat.f1digt / 2) + 1;
-  when (i_OutFormat.F1DTyp = 'S');
-    io_Length = i_OutFormat.f1digt;
-  when (i_OutFormat.F1DTyp = 'F');
-    io_Length = i_OutFormat.f1flen;
+  when (i_outFormat.f1DTyp = 'B' or
+        i_outFormat.f1DTyp = 'I' or
+        i_outFormat.f1DTyp = 'U');
+    io_length = f_rpgToIntLength(i_outFormat.f1Digt);
+  when (i_outFormat.f1DTyp = 'P');
+    io_length = %int(i_outFormat.f1Digt / 2) + 1;
+  when (i_outFormat.f1DTyp = 'S');
+    io_length = i_outFormat.f1Digt;
+  when (i_outFormat.f1DTyp = 'F');
+    io_length = i_outFormat.f1FLen;
   endsl;
 
-  cvthc(%addr(tmpBuffer): %addr(io_buffer): io_Length * 2);
-  io_Length = io_Length * 2;
-  io_buffer = %subst(tmpBuffer: 1: io_Length);
+  cvthc(%addr(tmpBuffer): %addr(io_buffer): io_length * 2);
+  io_length = io_length * 2;
+  io_buffer = %subst(tmpBuffer: 1: io_length);
 
-  io_buffer = cCHR_X + cQUOTE + %subst(io_buffer: 1: io_Length) + cQUOTE;
-  io_Length = io_Length + %len(cCHR_X) + %len(cQUOTE) * 2;
+  io_buffer = cCHR_x + cQUOTE + %subst(io_buffer: 1: io_length) + cQUOTE;
+  io_length = io_length + %len(cCHR_x) + %len(cQUOTE) * 2;
 
 end-proc;
 
@@ -312,15 +312,15 @@ end-proc;
 dcl-proc convertToString;
   dcl-pi *n;
     io_buffer   like(gio_buffer);
-    io_Length   like(gio_length);
-    i_OutFormat likeds(gi_outFormat) const;
+    io_length   like(gio_length);
+    i_outFormat likeds(gi_outFormat) const;
     o_msgID     like(go_msgID);
     o_msgDta    like(go_msgDta);
   end-pi;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  io_buffer = %subst(io_buffer: 1: i_OutFormat.f1flen);
-  io_Length = i_OutFormat.f1flen;
+  io_buffer = %subst(io_buffer: 1: i_outFormat.f1FLen);
+  io_length = i_outFormat.f1FLen;
 
 end-proc;
 

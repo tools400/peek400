@@ -38,26 +38,26 @@
 dcl-s value char(1) dim(256);
 dcl-s hex char(1) dim(16);
 
-dcl-ds SysInpNbr qualified;
-  SysName   char(8) inz;
-  SysVers   char(6) inz;
-  SysSrlNbr char(8) inz;
-  SysEON    char(1) inz(x'00');
+dcl-ds sysInpNbr qualified;
+  sysName   char(8) inz;
+  sysVers   char(6) inz;
+  sysSrlNbr char(8) inz;
+  sysEON    char(1) inz(x'00');
 end-ds;
 
 dcl-s x like(int4_t);
 dcl-s y like(int4_t);
 dcl-s a1 char(1);
-dcl-s Summe packed(30);
-dcl-s Rest packed(30);
+dcl-s summe packed(30);
+dcl-s rest packed(30);
 dcl-s zw1 packed(30);
 dcl-s zw2 packed(30);
 
 //  Konvertierung HEX ==> DEC
-dcl-s R_Dec packed(30);
-dcl-s R_Hex char(20);
+dcl-s r_dec packed(30);
+dcl-s r_hex char(20);
 
-dcl-s IntSrlNbr char(20);
+dcl-s intSrlNbr char(20);
 
 dcl-s isInzSr like(bool_t) inz(bFalse);
 
@@ -81,20 +81,20 @@ ceehdlr(%paddr('errorHandler')
 exsr inzsr;
 
 // -  Systemname des AS/400 Systems
-SysInpNbr.SysName = i_sysName;
+sysInpNbr.sysName = i_sysName;
 
 // -  PEEK-Versionsnummer
-SysInpNbr.SysVers = i_sysVersion;
+sysInpNbr.sysVers = i_sysVersion;
 
 // -  Seriennummer des AS/400 Systems
-SysInpNbr.SysSrlNbr = i_sysSrlNbr;
+sysInpNbr.sysSrlNbr = i_sysSrlNbr;
 
 //  - Berechnung der Prüfsumme
-Summe = *zeros;
+summe = *zeros;
 
 for x = 1 to 50;
-  //*   1             SUBST     SysInpNbr:X   A1
-  a1 = %subst(SysInpNbr: x: 1);
+  //*   1             SUBST     sysInpNbr:X   A1
+  a1 = %subst(sysInpNbr: x: 1);
   if (a1 = x'00');
     leave;
   endif;
@@ -103,54 +103,54 @@ for x = 1 to 50;
   y = %lookup(a1: value);
   if (y > 0);
     //    ... gefunden
-    Summe = Summe + y;
+    summe = summe + y;
   else;
   //    ... nicht gefunden
   //        (kann eigentlich nicht sein)
   endif;
 
-  Summe = Summe + (x * 256);
+  summe = summe + (x * 256);
 endfor;
 
 //  - Datum als Komplement
-Summe = Summe - i_sysDate;
-Summe = Summe + 99999999;
+summe = summe - i_sysDate;
+summe = summe + 99999999;
 
 //  - Prüfsumme in HEX-Wert umsetzen
-R_Dec = Summe;
-exsr DecToHex;
-IntSrlNbr = R_Hex;
+r_dec = summe;
+exsr decToHex;
+intSrlNbr = r_hex;
 
-IntSrlNbr = %trimr(IntSrlNbr) + '-';
+intSrlNbr = %trimr(intSrlNbr) + '-';
 
 //  - Originaldatum anfügen, als Komplement gespeichert!
-R_Dec = 0 - i_sysDate;
-R_Dec = R_Dec + 99999999;
-exsr DecToHex;
-IntSrlNbr = %trimr(IntSrlNbr) + R_Hex;
+r_dec = 0 - i_sysDate;
+r_dec = r_dec + 99999999;
+exsr decToHex;
+intSrlNbr = %trimr(intSrlNbr) + r_hex;
 
-o_serialNbr = IntSrlNbr;
+o_serialNbr = intSrlNbr;
 
 return;
 
 //============================================================*
-//    DecToHex      Konvertieren Decimal ==> Hex              *
+//    decToHex      Konvertieren Decimal ==> Hex              *
 //============================================================*
 
-begsr DecToHex;
+begsr decToHex;
 
-  R_Hex = *blanks;
-  Rest = R_Dec;
+  r_hex = *blanks;
+  rest = r_dec;
 
-  dou (R_Dec = 0);
-    zw1 = R_Dec / 16;
+  dou (r_dec = 0);
+    zw1 = r_dec / 16;
     zw2 = zw1 * 16;
-    Rest = R_Dec - zw2;
+    rest = r_dec - zw2;
 
-    Rest = Rest + 1;
-    R_Hex = %trimr(hex(Rest)) + R_Hex;
+    rest = rest + 1;
+    r_hex = %trimr(hex(rest)) + r_hex;
 
-    R_Dec = zw1;
+    r_dec = zw1;
   enddo;
 
 endsr;

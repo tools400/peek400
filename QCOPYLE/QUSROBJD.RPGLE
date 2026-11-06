@@ -9,7 +9,7 @@ dcl-pr qusrobjd extpgm('QUSROBJD');
   i_format     char(8) const;
   i_qObj       char(20) const;
   i_type       char(10) const;
-  io_ErrCode   char(65535) options(*nopass: *varsize); // | OptGrp 1
+  io_errCode   char(65535) options(*nopass: *varsize); // | OptGrp 1
   i_auxStgCtrl char(65535) options(*nopass: *varsize) const; // | OptGrp 2
 end-pr;
 

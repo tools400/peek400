@@ -9,7 +9,7 @@ dcl-pr quslfld extpgm('QUSLFLD');
   i_qFile    char(20) const;
   i_rcdFmt   char(10) const;
   i_override char(1) const;
-  io_ErrCode char(65535) options(*nopass: *varsize); // | optGrp 1
+  io_errCode char(65535) options(*nopass: *varsize); // | optGrp 1
 end-pr;
 
 //  Input Parameter Section
@@ -18,7 +18,7 @@ dcl-ds QUSLFLD_inpParm_t qualified template;
   format   char(8);
   qFile    likeds(qObj_t);
   rcdFmt   char(10);
-  Override char(1);
+  override char(1);
 end-ds;
 
 //  Header Section
@@ -26,7 +26,7 @@ dcl-ds QUSLFLD_header_t qualified template;
   qFileUsed     likeds(qObj_t);
   type          char(10);
   rcdFmtUsed    char(10);
-  RcdLen        int(10);
+  rcdLen        int(10);
   rcdFmtID      char(13);
   rcdText       char(50);
   reserved_1    char(1);

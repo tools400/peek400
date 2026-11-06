@@ -53,18 +53,18 @@ dcl-ds workstn likeds(workstn_t);
 
 dcl-s yFKeys char(18) dim(32) inz;
 dcl-s yNbrOfKeys like(int4_t) inz;
-dcl-s YMsgID char(7) inz;
-dcl-s YMsgDta char(512) inz;
+dcl-s yMsgID char(7) inz;
+dcl-s yMsgDta char(512) inz;
 
-dcl-s YPgmCmd char(10) inz;
-dcl-s YCmdDta like(pgmCmdDt_t) inz;
+dcl-s yPgmCmd char(10) inz;
+dcl-s yCmdDta like(pgmCmdDt_t) inz;
 
-dcl-s sfbot like(int4_t) inz;
-dcl-c NbrFKeys 2;
+dcl-s sfBot like(int4_t) inz;
+dcl-c nbrFKeys 2;
 
-dcl-s R$Vers char(2) inz(*blanks);
-dcl-s R$Modf char(2) inz(*blanks);
-dcl-s R$Rels char(2) inz(*blanks);
+dcl-s r$Vers char(2) inz(*blanks);
+dcl-s r$Modf char(2) inz(*blanks);
+dcl-s r$Rels char(2) inz(*blanks);
 
 dcl-s peek21_name like(pgmCallN_t) inz;
 dcl-s peek23_name like(pgmCallN_t) inz;
@@ -90,7 +90,7 @@ ceehdlr(%paddr('errorHandler')
 
 exsr inzsr;
 
-exsr First;
+exsr first;
 
 dow ('1');
 
@@ -100,42 +100,42 @@ dow ('1');
 
   //  Anzeigen der Befehlstasten
   select;
-  when ((sfbot = 2) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 2) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#2;
-  when ((sfbot = 3) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 3) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#3;
-  when ((sfbot = 4) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 4) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#4;
-  when ((sfbot = 5) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 5) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#5;
-  when ((sfbot = 6) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 6) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#6;
-  when ((sfbot = 7) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 7) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#7;
-  when ((sfbot = 8) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 8) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#8;
-  when ((sfbot = 9) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 9) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#9;
-  when ((sfbot = 10) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 10) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#10;
-  when ((sfbot = 11) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 11) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#11;
-  when ((sfbot = 12) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 12) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#12;
   other;
     write pbbot#1;
-    sfbot = 1;
+    sfBot = 1;
   endsl;
 
   //  Anzeigen Bildschirm
@@ -150,38 +150,38 @@ dow ('1');
   //  Mappen der gedrückten Taste
   //  in Programmbefehl
   peek21(workstn.aid: sds.pgmName
-        : YPgmCmd: YCmdDta: YMsgID: YMsgDta);
-  if (YMsgID <> *blanks);
-    p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
-    YMsgID = '';
-    YMsgDta = '';
+        : yPgmCmd: yCmdDta: yMsgID: yMsgDta);
+  if (yMsgID <> *blanks);
+    p_sndPgmMg(yMsgID: yMsgDta: sds.pgmName);
+    yMsgID = '';
+    yMsgDta = '';
     iter;
   endif;
 
   //  Abfragen der Programmbefehle
   select;
   //  F3  - Ende
-  when (YPgmCmd = '*EXIT');
-    exsr C_EndPgm;
+  when (yPgmCmd = '*EXIT');
+    exsr c_endPgm;
     leave;
 
   //  F5  - Aktualisieren
-  when (YPgmCmd = '*REFRESH');
-    exsr C_Refresh;
+  when (yPgmCmd = '*REFRESH');
+    exsr c_refresh;
     iter;
 
   //  F12 - Ende
-  when (YPgmCmd = '*CANCEL');
-    exsr C_EndPgm;
+  when (yPgmCmd = '*CANCEL');
+    exsr c_endPgm;
     leave;
 
   //  F24 - Weitere Tasten
-  when (YPgmCmd = '*MOREKEYS');
-    exsr C_MoreKeys;
+  when (yPgmCmd = '*MOREKEYS');
+    exsr c_moreKeys;
 
   //  Datenfreigabe
-  when (YPgmCmd = '*ENTER');
-    exsr C_Enter;
+  when (yPgmCmd = '*ENTER');
+    exsr c_enter;
     if (*in99 = *off);
       o_msgID = 'USR8112';
       o_msgDta = *blanks;
@@ -201,10 +201,10 @@ close peek49fm;
 return;
 
 //============================================================*
-//    C_Enter       "Datenfreigabetaste"                      *
+//    c_enter       "Datenfreigabetaste"                      *
 //============================================================*
 
-begsr C_Enter;
+begsr c_enter;
 
 
 endsr;
@@ -225,10 +225,10 @@ begsr bzoff1;
 endsr;
 
 //============================================================*
-//    C_EndPgm      F3/F12 - Programm beenden                 *
+//    c_endPgm      F3/F12 - Programm beenden                 *
 //============================================================*
 
-begsr C_EndPgm;
+begsr c_endPgm;
 
   p_rmvPgmMg(sds.pgmName);
 
@@ -248,10 +248,10 @@ begsr C_EndPgm;
 endsr;
 
 //============================================================*
-//    C_Refresh     F5  - Aktualisieren der Subfile           *
+//    c_refresh     F5  - Aktualisieren der Subfile           *
 //============================================================*
 
-begsr C_Refresh;
+begsr c_refresh;
 
   exsr bzoff1;
   exsr fill##;
@@ -259,12 +259,12 @@ begsr C_Refresh;
 endsr;
 
 //============================================================*
-//    C_MoreKeys    F24 - Weitere Tasten                      *
+//    c_moreKeys    F24 - Weitere Tasten                      *
 //============================================================*
 
-begsr C_MoreKeys;
+begsr c_moreKeys;
 
-  sfbot = sfbot + 1;
+  sfBot = sfBot + 1;
 
 endsr;
 
@@ -274,37 +274,37 @@ endsr;
 
 begsr fill##;
 
-  $$CpyRight = i_copyright;
+  $$cpyRight = i_copyright;
 
-  $$Release = %subst(i_release: 8);
-  R$Vers = %subst(i_version: 2: 2);
-  R$Modf = %subst(i_version: 5: 2);
-  R$Rels = %subst(i_version: 8: 2);
+  $$release = %subst(i_release: 8);
+  r$Vers = %subst(i_version: 2: 2);
+  r$Modf = %subst(i_version: 5: 2);
+  r$Rels = %subst(i_version: 8: 2);
 
-  if (%subst(R$Vers: 1: 1) = '0');
-    %subst(R$Vers: 1: 1) = ' ';
+  if (%subst(r$Vers: 1: 1) = '0');
+    %subst(r$Vers: 1: 1) = ' ';
   endif;
 
-  if (%subst(R$Modf: 1: 1) = '0');
-    %subst(R$Modf: 1: 1) = ' ';
+  if (%subst(r$Modf: 1: 1) = '0');
+    %subst(r$Modf: 1: 1) = ' ';
   endif;
 
-  if (%subst(R$Rels: 1: 1) = '0');
-    %subst(R$Rels: 1: 1) = ' ';
+  if (%subst(r$Rels: 1: 1) = '0');
+    %subst(r$Rels: 1: 1) = ' ';
   endif;
 
-  $$Version = 'V ' +
-             %trim(R$Vers) + '.' +
-             %trim(R$Modf) + '.' +
-             %trim(R$Rels);
+  $$version = 'V ' +
+             %trim(r$Vers) + '.' +
+             %trim(r$Modf) + '.' +
+             %trim(r$Rels);
 
 endsr;
 
 //============================================================*
-//    SetScreen     Einstellen 132/80-Zeichen Auflösung       *
+//    setScreen     Einstellen 132/80-Zeichen Auflösung       *
 //============================================================*
 
-begsr SetScreen;
+begsr setScreen;
 
   if (i_dsp80 = '0');
     //   132-Zeichen Anzeige
@@ -326,7 +326,7 @@ endsr;
 //    First         Initialisierung                           *
 //============================================================*
 
-begsr First;
+begsr first;
 
   // - Öffnen der Dateien
   open peek49fm;
@@ -342,10 +342,10 @@ begsr First;
   o_msgDta = *blanks;
 
   // - Darstellung der Befehlstasten
-  sfbot = 1;
+  sfBot = 1;
 
   // - Einstellen der Bildschirmauflösung 80/132-Zeichen
-  exsr SetScreen;
+  exsr setScreen;
 
 endsr;
 
@@ -368,7 +368,7 @@ begsr inzsr;
 
   peek23(sds.pgmName: '*ALL': 0
         : yFKeys: yNbrOfKeys);
-  ScrnFKeys = %subarr(yFKeys: 1);
+  scrnFKeys = %subarr(yFKeys: 1);
 
 endsr;
 

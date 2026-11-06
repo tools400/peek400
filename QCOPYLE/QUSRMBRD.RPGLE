@@ -10,7 +10,7 @@ dcl-pr qusrmbrd extpgm('QUSRMBRD');
   i_qFile      char(20) const;
   i_mbr        char(10) const;
   i_ovrPrc     char(1) const;
-  io_ErrCode   char(65535) options(*nopass: *varsize); // | OptGrp 1
+  io_errCode   char(65535) options(*nopass: *varsize); // | OptGrp 1
   i_findMbrPrc char(1) options(*nopass) const; // | OptGrp 2
 end-pr;
 

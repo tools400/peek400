@@ -9,7 +9,7 @@ dcl-pr quslmbr extpgm('QUSLMBR');
   i_qFile    char(20) const;
   i_mbr      char(10) const;
   i_ovrPrc   char(1) const;
-  io_ErrCode char(65535) options(*nopass: *varsize);
+  io_errCode char(65535) options(*nopass: *varsize);
 end-pr;
 
 //  Input Parameter Section

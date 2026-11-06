@@ -8,7 +8,7 @@ dcl-pr qwcrsval extpgm('QWCRSVAL');
   i_lenRcvVar int(10) const;
   i_numSysVal int(10) const;
   i_arySysVal char(10) options(*varsize) dim(128) const;
-  io_ErrCode  char(65535) options(*varsize);
+  io_errCode  char(65535) options(*varsize);
 end-pr;
 
 //  Return value
@@ -79,7 +79,7 @@ end-ds;
 //  QCHRID:         Character set and code page
 dcl-ds QWCRSVAL_chrID_t qualified;
   ccsid    char(10);
-  codepage char(10);
+  codePage char(10);
 end-ds;
 
 //  QCMNRCYLMT:     Communications recovery limit

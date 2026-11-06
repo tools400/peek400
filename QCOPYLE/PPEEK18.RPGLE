@@ -5,7 +5,7 @@ dcl-pr peek18 extpgm('PEEK18');
 /else
 dcl-pr peek18 extpgm(peek18_name);
 /endif
-  i_FLDL0100  likeds(fldl0100_t) const;
+  i_fldl0100  likeds(fldl0100_t) const;
   i_rcdFmt    like(fmt_t) const;
   i_buffer    like(rcdBuf_t);
   i_tgtFormat like(format_t) const;

@@ -29,9 +29,9 @@
 
 dcl-f peek65p printer(*ext) usage(*output) usropn oflind(*in60);
 
-dcl-f peekfldl0 keyed usropn rename(fpeekfld: fpeekfldl0) infds(Peek_00_DS) prefix(f_);
+dcl-f peekfldl0 keyed usropn rename(fpeekfld: fpeekfldl0) infds(peek_00_ds) prefix(f_);
 
-dcl-ds Peek_00_DS likeds(infds_t);
+dcl-ds peek_00_ds likeds(infds_t);
 
 dcl-ds hFile04 likeds(hFile_t);
 
@@ -56,32 +56,32 @@ dcl-ds hFile04 likeds(hFile_t);
 /copy QCOPYLE,PPEEK58
 /copy QCOPYLE,PPEEK63
 
-dcl-ds objd0400 likeds(OBJD0400_t) inz;
+dcl-ds objd0400 likeds(objd0400_t) inz;
 dcl-ds fldl0100 likeds(fldl0100_t) inz;
 
-dcl-ds IO_Buff;
-  IO_BuffFld like(rcdBuf_t);
+dcl-ds io_buff;
+  io_buffFld like(rcdBuf_t);
 end-ds;
 
-dcl-s IO_NullMap like(nullMap_t) dim(NULL_MAP_SIZE);
+dcl-s io_nullMap like(nullMap_t) dim(NULL_MAP_SIZE);
 
-dcl-s YString like(rcdBuf_t);
-dcl-s YStrLen like(int4_t);
-dcl-s YMsgID char(7);
-dcl-s YMsgDta char(512);
+dcl-s yString like(rcdBuf_t);
+dcl-s yStrLen like(int4_t);
+dcl-s yMsgID char(7);
+dcl-s yMsgDta char(512);
 
-dcl-ds YQFile likeds(qObj_t) inz;
+dcl-ds yQFile likeds(qObj_t) inz;
 
 //  Arbeitsfelder
-dcl-s IsRecord like(bool_t) inz(bFalse);
-dcl-s IsCvtChar like(bool_t) inz(bFalse);
-dcl-s IsPrinted like(bool_t) inz(bFalse);
+dcl-s isRecord like(bool_t) inz(bFalse);
+dcl-s isCvtChar like(bool_t) inz(bFalse);
+dcl-s isPrinted like(bool_t) inz(bFalse);
 
 dcl-s x like(int4_t);
 dcl-s y like(int4_t);
 dcl-s textLen like(int4_t);
 
-dcl-s r$text like(fldl0100_t.f1ftxt);
+dcl-s r$text like(fldl0100_t.f1FTxt);
 
 //  Qualifizierte Programmnamen
 dcl-s peek06_name like(pgmCallN_t);
@@ -106,7 +106,7 @@ dcl-pi peek65;
   o_msgDta    like(msgDta_t);
 end-pi;
 
-dcl-ds f1key_l0 likerec(fpeekfldl0: *key);
+dcl-ds f1Key_l0 likerec(fpeekfldl0: *key);
 //---------------------------------------------------*
 
 //  Register error handler
@@ -115,20 +115,20 @@ ceehdlr(%paddr('errorHandler')
 
 exsr inzsr;
 
-exsr First;
+exsr first;
 
 //  Drucken Datensatz
 if (o_msgID = '');
-  exsr PBInit;
-  exsr PBSetLL;
-  exsr PBReadUp;
+  exsr pbInit;
+  exsr pbSetLL;
+  exsr pbReadUp;
 
-  if (IsCvtChar = bTrue);
-    exsr PBSeite;
+  if (isCvtChar = bTrue);
+    exsr pbSeite;
     write error;
   endif;
 
-  if (IsPrinted = bTrue);
+  if (isPrinted = bTrue);
     o_msgID  = 'USR8226';
     o_msgDta = '';
   endif;
@@ -140,50 +140,50 @@ endif;
 if (%open(peekfldl0));
   close peekfldl0;
 endif;
-if (CIO_isOpen(hFile04) = bTrue);
-  CIO_close(hFile04);
+if (cio_isOpen(hFile04) = bTrue);
+  cio_close(hFile04);
 endif;
 
 return;
 
 //============================================================*
-//    PBInit        Initialisieren der Subfile zur Anzeige    *
+//    pbInit        Initialisieren der Subfile zur Anzeige    *
 //                  der nächsten Seite                        *
 //============================================================*
 
-begsr PBInit;
+begsr pbInit;
 
   //  Überlaufzeile
   *in60 = bTrue;
 
   //  Kopfinformationen
-  $$File = i_file;
-  $$Lib  = i_library;
+  $$file = i_file;
+  $$lib  = i_library;
   $$rrn  = %editc(i_rcdNbr: 'X');
-  $$desc = objd0400.O4Text;
+  $$desc = objd0400.o4Text;
 
   //  Konvertieren nicht darstellbarer Zeichen
-  IsCvtChar = bFalse;
+  isCvtChar = bFalse;
 
 endsr;
 
 //============================================================*
-//    PBSetLL       Setzen Dateizeiger                        *
+//    pbSetLL       Setzen Dateizeiger                        *
 //============================================================*
 
-begsr PBSetLL;
+begsr pbSetLL;
 
-  clear f1key_l0;
-  f1key_l0.f_fldseq = 0;
-  setll %kds(f1key_l0) fpeekfldl0;
+  clear f1Key_l0;
+  f1Key_l0.f_fldSeq = 0;
+  setll %kds(f1Key_l0) fpeekfldl0;
 
 endsr;
 
 //============================================================*
-//    PBReadUP      Drucken Datenzeilen                       *
+//    pbReadUp      Drucken Datenzeilen                       *
 //============================================================*
 
-begsr PBReadUp;
+begsr pbReadUp;
 
   dow ('1');
     read fpeekfldl0;
@@ -201,15 +201,15 @@ begsr PBReadUp;
 
     //  Ausgeben Feld
     clear item;
-    $$fnme = fldl0100.f1fnme;
+    $$fNme = fldl0100.f1FNme;
 
     x = 1;
     y = 1;
-    exsr PBFill;
+    exsr pbFill;
 
-    dow (x <= YStrLen or y <= textLen);
+    dow (x <= yStrLen or y <= textLen);
 
-      exsr PBSeite;
+      exsr pbSeite;
 
       if (y <= %len(r$text));
         $$text = %subst(r$text : y: %len($$text));
@@ -217,8 +217,8 @@ begsr PBReadUp;
         $$text = '';
       endif;
 
-      if (x <= %len(YString));
-        $$data = %subst(YString: x: %len($$data));
+      if (x <= %len(yString));
+        $$data = %subst(yString: x: %len($$data));
       else;
         $$data = '';
       endif;
@@ -226,10 +226,10 @@ begsr PBReadUp;
       write item;
       x = x + %len($$data);
       y = y + %len($$text);
-      $$fnme = '';
+      $$fNme = '';
       $$text = '';
 
-      IsPrinted = bTrue;
+      isPrinted = bTrue;
     enddo;
 
   enddo;
@@ -237,43 +237,43 @@ begsr PBReadUp;
 endsr;
 
 //============================================================*
-//    PBFill        Füllen Datenzeile                         *
+//    pbFill        Füllen Datenzeile                         *
 //============================================================*
 
-begsr PBFill;
+begsr pbFill;
 
   //      ... Überschreiben EDTCDE
-  if (F_EdtCde <> '');
-    fldl0100.f1edtc = F_EdtCde;
+  if (f_edtCde <> '');
+    fldl0100.f1EdtC = f_edtCde;
   else;
   //       Original EDITCODE verwenden
   endif;
 
   //      ... eintragen Feldbezeichnung
-  if (fldl0100.f1ftxt = '');
+  if (fldl0100.f1FTxt = '');
     r$text = '-';
   else;
-    r$text = fldl0100.f1ftxt;
+    r$text = fldl0100.f1FTxt;
   endif;
 
   textLen = %len(%trimr(r$text));
 
   //  ... NULL erlaubt?
-  if (fldl0100.f1nalw = '1' and IO_NullMap(fldl0100.f1seq) = 1);
-    YString = f_msgText('TXT0127': '');
-    YStrLen = %len(%trimr(YString));
+  if (fldl0100.f1nalw = '1' and io_nullMap(fldl0100.f1seq) = 1);
+    yString = f_msgText('TXT0127': '');
+    yStrLen = %len(%trimr(yString));
   else;
 
     monitor;
 
       //  ... aufbereiten des Feldinhaltes
-      peek06(fldl0100: 'FLDL0100': IO_Buff
-            : bFalse: bTrue: YString: YStrLen
-            : YMsgID: YMsgDta);
+      peek06(fldl0100: 'FLDL0100': io_buff
+            : bFalse: bTrue: yString: yStrLen
+            : yMsgID: yMsgDta);
 
       //  ... Konvertieren nicht darstellbarer Zeichen
-      peek32(YString: YStrLen: 0
-            : YMsgID: YMsgDta);
+      peek32(yString: yStrLen: 0
+            : yMsgID: yMsgDta);
 
       *in99 = bFalse;
     on-error;
@@ -283,18 +283,18 @@ begsr PBFill;
     if (*in99 = *off);
 
       if (f_isCharFld(fldl0100) = bTrue and
-          YStrLen < %len(YString) - 2);
-        %subst(YString: YStrLen+1: 1) = cQUOTE;
-        YStrLen = YStrLen + 1;
-        %subst(YString: 2) = YString;
-        %subst(YString: 1: 1) = cQUOTE;
-        YStrLen = YStrLen + 1;
+          yStrLen < %len(yString) - 2);
+        %subst(yString: yStrLen+1: 1) = cQUOTE;
+        yStrLen = yStrLen + 1;
+        %subst(yString: 2) = yString;
+        %subst(yString: 1: 1) = cQUOTE;
+        yStrLen = yStrLen + 1;
       endif;
 
-      if (IsCvtChar = bFalse);
-        if (YMsgID <> *blanks);
-          IsCvtChar = bTrue;
-          $$error = f_msgText(YMsgID: YMsgDta);
+      if (isCvtChar = bFalse);
+        if (yMsgID <> *blanks);
+          isCvtChar = bTrue;
+          $$error = f_msgText(yMsgID: yMsgDta);
         else;
         // keine Nachricht anstehend
         endif;
@@ -311,10 +311,10 @@ begsr PBFill;
 endsr;
 
 //============================================================*
-//    PBSeite       Prüfen auf Seitenwechsel                  *
+//    pbSeite       Prüfen auf Seitenwechsel                  *
 //============================================================*
 
-begsr PBSeite;
+begsr pbSeite;
 
   if (*in60 = bTrue);
     write newpage;
@@ -327,42 +327,42 @@ begsr PBSeite;
 endsr;
 
 //============================================================*
-//    GetObjText    Abrufrufen der Objektbezeichnung          *
+//    getObjText    Abrufrufen der Objektbezeichnung          *
 //============================================================*
 
-begsr GetObjText;
+begsr getObjText;
 
-  YQFile.name = i_file;
-  YQFile.lib = i_library;
+  yQFile.name = i_file;
+  yQFile.lib = i_library;
   monitor;
-    peek09(YQFile: objd0400: YMsgID: YMsgDta);
+    peek09(yQFile: objd0400: yMsgID: yMsgDta);
     *in99 = bFalse;
   on-error;
     *in99 = bTrue;
   endmon;
 
-  if (*in99 = '1' or YMsgID <> '');
+  if (*in99 = '1' or yMsgID <> '');
     clear objd0400;
   endif;
-  YMsgID = '';
-  YMsgDta = '';
+  yMsgID = '';
+  yMsgDta = '';
 
 endsr;
 
 //============================================================*
-//    ReadRcd       Einlesen des anzuzeigenden Satzes         *
+//    readRcd       Einlesen des anzuzeigenden Satzes         *
 //============================================================*
 
-begsr ReadRcd;
+begsr readRcd;
 
-  if (CIO_chainWithRRN(hFile04
+  if (cio_chainWithRRN(hFile04
                    : i_rcdNbr
                    : bFalse
-                   : IO_Buff
-                   : IO_NullMap) = bFalse);
-    IsRecord = bFalse;
+                   : io_buff
+                   : io_nullMap) = bFalse);
+    isRecord = bFalse;
   else;
-    IsRecord = bTrue;
+    isRecord = bTrue;
   endif;
 
 endsr;
@@ -371,17 +371,17 @@ endsr;
 //    First         Initialisierung                           *
 //============================================================*
 
-begsr First;
+begsr first;
 
   // - Programm initialisieren
   o_msgID = '';
   o_msgDta = '';
-  IsPrinted = bFalse;
+  isPrinted = bFalse;
 
   // - Öffnen der Datei und Einlesen des zu druckenden Satzes;
   //   die Druckdatei wird erst danach geöffnet, damit ohne
   //   Satz keine Liste entsteht
-  if (CIO_open(hFile04
+  if (cio_open(hFile04
               : i_file
               : i_library
               : i_member
@@ -394,29 +394,29 @@ begsr First;
     leavesr;
   endif;
 
-  exsr ReadRcd;
-  if (IsRecord = bFalse);
+  exsr readRcd;
+  if (isRecord = bFalse);
     o_msgID  = 'USR8120';
     o_msgDta = '';
     leavesr;
   endif;
 
   // - Einlesen Objektbeschreibung
-  exsr GetObjText;
+  exsr getObjText;
 
   // - Öffnen der Druckdatei und der Feldliste
   f_execute('OVRPRTF +
              FILE(PEEK65P) +
              TOFILE(' +
-               %trimr(sds.PgmLib) + '/PEEK65P) +
+               %trimr(sds.pgmLib) + '/PEEK65P) +
              SPLFNAME(' +
                %trim(i_file) + ') +
              USRDTA(''' +
                %editc(i_rcdNbr: 'X') + ''') +
              OVRSCOPE(*CALLLVL)'
-            : YMsgID: YMsgDta);
-  YMsgID = '';
-  YMsgDta = '';
+            : yMsgID: yMsgDta);
+  yMsgID = '';
+  yMsgDta = '';
 
   open peek65p;
   open peekfldl0;

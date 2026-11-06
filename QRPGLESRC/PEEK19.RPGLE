@@ -27,9 +27,9 @@
 /copy QCOPYLE,H_SPEC
 /copy QCOPYLE,COPYRIGHT
 
-dcl-f peekfldl2 keyed usropn rename(fpeekfld: fpeekfldl2) prefix(f2) infds(Peek_L2_DS);
+dcl-f peekfldl2 keyed usropn rename(fpeekfld: fpeekfldl2) prefix(f2) infds(peek_l2_ds);
 
-dcl-ds Peek_L2_DS likeds(infds_t);
+dcl-ds peek_l2_ds likeds(infds_t);
 
 /copy QCOPYLE,D_VARDEF
 /copy QCOPYLE,D_INFDS
@@ -45,11 +45,11 @@ dcl-ds Peek_L2_DS likeds(infds_t);
 /copy QCOPYLE,PPEEK53
 /copy QCOPYLE,PPEEK58
 
-dcl-s YBuffer like(rcdBuf_t) inz;
-dcl-s YOutBuffer like(rcdBuf_t) inz;
-dcl-s YOutBuffLn like(int4_t) inz;
-dcl-s YMsgID like(msgId_t) inz;
-dcl-s YMsgDta like(msgDta_t) inz;
+dcl-s yBuffer like(rcdBuf_t) inz;
+dcl-s yOutBuffer like(rcdBuf_t) inz;
+dcl-s yOutBuffLn like(int4_t) inz;
+dcl-s yMsgID like(msgId_t) inz;
+dcl-s yMsgDta like(msgDta_t) inz;
 
 dcl-s x like(int4_t) inz;
 dcl-s y like(int4_t) inz;
@@ -79,13 +79,13 @@ ceehdlr(%paddr('errorHandler')
 
 exsr inzsr;
 
-exsr First;
+exsr first;
 
 o_keyVal = *blanks;
 x = 1;
 
 clear f2key_l2;
-f2key_l2.f2kseq = 1;
+f2key_l2.f2KSeq = 1;
 setll %kds(f2key_l2) fpeekfldl2;
 
 for do_x1 = 1 to *hival;
@@ -96,20 +96,20 @@ for do_x1 = 1 to *hival;
 
   fldl0100 = f2ffd;
 
-  f_rtvFld(YBuffer   :
+  f_rtvFld(yBuffer   :
           i_rcdBuffer:
           fldl0100  :
           bTrue     );
 
-  peek18(fldl0100: F2Format: YBuffer
+  peek18(fldl0100: f2Format: yBuffer
         : '*EXTERN': '*CURRENT'
-        : YOutBuffer: YOutBuffLn
-        : YMsgID: YMsgDta);
+        : yOutBuffer: yOutBuffLn
+        : yMsgID: yMsgDta);
 
   //  Wert ...
-  for y = 1 to YOutBuffLn;
+  for y = 1 to yOutBuffLn;
     %subst(o_keyVal: x: 1) =
-      %subst(YOutBuffer: y: 1);
+      %subst(yOutBuffer: y: 1);
     x = x + 1;
     if (x > KEY_BUFF_LEN);
       leave;
@@ -128,7 +128,7 @@ return;
 //    First         Initialisierung                           *
 //============================================================*
 
-begsr First;
+begsr first;
 
   o_msgID = *blanks;
   o_msgDta = *blanks;

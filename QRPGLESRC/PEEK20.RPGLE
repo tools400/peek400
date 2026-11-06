@@ -32,12 +32,12 @@
 /copy QCOPYLE,H_SPEC
 /copy QCOPYLE,COPYRIGHT
 
-dcl-f peekfldl2 keyed usropn rename(fpeekfld: fpeekfldl2) prefix(f2) infds(Peek_L2_DS);
+dcl-f peekfldl2 keyed usropn rename(fpeekfld: fpeekfldl2) prefix(f2) infds(peek_l2_ds);
 
-dcl-f peekfldl0 keyed usropn rename(fpeekfld: fpeekfldl0) prefix(f2) infds(Peek_L0_DS);
+dcl-f peekfldl0 keyed usropn rename(fpeekfld: fpeekfldl0) prefix(f2) infds(peek_l0_ds);
 
-dcl-ds Peek_L0_DS likeds(infds_t);
-dcl-ds Peek_L2_DS likeds(infds_t);
+dcl-ds peek_l0_ds likeds(infds_t);
+dcl-ds peek_l2_ds likeds(infds_t);
 
 /copy QCOPYLE,D_VARDEF
 /copy QCOPYLE,D_INFDS
@@ -59,16 +59,16 @@ dcl-ds Peek_L2_DS likeds(infds_t);
 //  F E L D - D E F I N I T I O N E N                 *
 //----------------------------------------------------*
 
-dcl-ds yIO_Buff;
-  yIO_BuffTb char(1) dim(RCD_BUFF_LEN) inz;
+dcl-ds yIO_buff;
+  yIO_buffTb char(1) dim(RCD_BUFF_LEN) inz;
 end-ds;
 
-dcl-s YBuffer like(rcdBuf_t) inz;
-dcl-s YTgtValue char(10) inz(*blanks);
-dcl-s YOutBuffer like(rcdBuf_t) inz;
-dcl-s YOutBuffLn like(int4_t) inz;
-dcl-s YMsgID char(7) inz(*blanks);
-dcl-s YMsgDta char(512) inz(*blanks);
+dcl-s yBuffer like(rcdBuf_t) inz;
+dcl-s yTgtValue char(10) inz(*blanks);
+dcl-s yOutBuffer like(rcdBuf_t) inz;
+dcl-s yOutBuffLn like(int4_t) inz;
+dcl-s yMsgID char(7) inz(*blanks);
+dcl-s yMsgDta char(512) inz(*blanks);
 
 dcl-s x like(int4_t) inz;
 dcl-s y like(int4_t) inz;
@@ -79,10 +79,10 @@ dcl-s kp like(int4_t) inz;
 
 dcl-s peek18_name like(pgmCallN_t) inz;
 
-dcl-s Wrk_KeyVal like(i_keyVal) inz(*blanks);
+dcl-s wrk_keyVal like(i_keyVal) inz(*blanks);
 
-dcl-s DftVal char(30) inz(*blanks);
-dcl-s DftValLen like(int4_t) inz;
+dcl-s dftVal char(30) inz(*blanks);
+dcl-s dftValLen like(int4_t) inz;
 dcl-s idx like(int4_t) inz;
 
 dcl-c TIMESTMP_A '0001-01-01-00.00.00.000000';
@@ -90,7 +90,7 @@ dcl-c TIMESTAMP_D '9999-12-31-23.59.59.999999';
 
 dcl-ds fldl0100 likeds(fldl0100_t) inz;
 
-dcl-ds set0003 likeds(SET0003_t) inz;
+dcl-ds set0003 likeds(set0003_t) inz;
 
 dcl-s isInzSr like(bool_t) inz(bFalse);
 
@@ -105,7 +105,7 @@ dcl-pi peek20;
 end-pi;
 
 dcl-ds f2key_l2 likerec(fpeekfldl2: *key);
-dcl-ds f1key_l0 likerec(fpeekfldl0: *key);
+dcl-ds f1Key_l0 likerec(fpeekfldl0: *key);
 //---------------------------------------------------*
 
 //  Register error handler
@@ -114,38 +114,38 @@ ceehdlr(%paddr('errorHandler')
 
 exsr inzsr;
 
-exsr First;
+exsr first;
 
-yIO_BuffTb(*) = '';
+yIO_buffTb(*) = '';
 bp = 1;
 kp = 1;
 
 select;
 when (i_keyVal = '*PHIVAL');
-  Wrk_KeyVal = '*HIVAL';
+  wrk_keyVal = '*HIVAL';
   exsr buildPseudoKey;
 
 when (i_keyVal = '*PLOVAL');
-  Wrk_KeyVal = '*LOVAL';
+  wrk_keyVal = '*LOVAL';
   exsr buildPseudoKey;
 
 when (i_keyVal = '*HIVAL');
-  Wrk_KeyVal = '*HIVAL';
+  wrk_keyVal = '*HIVAL';
   exsr buildKey;
 
 when (i_keyVal = '*LOVAL');
-  Wrk_KeyVal = '*LOVAL';
+  wrk_keyVal = '*LOVAL';
   exsr buildKey;
 
 other;
   inpKeyLen = %len(%trimr(i_keyVal));
-  Wrk_KeyVal = i_keyVal;
+  wrk_keyVal = i_keyVal;
   exsr buildKey;
 
 endsl;
 
 if (o_msgID = '');
-  o_rcdBuffer = yIO_Buff;
+  o_rcdBuffer = yIO_buff;
 endif;
 
 return;
@@ -157,7 +157,7 @@ return;
 begsr buildKey;
 
   clear f2key_l2;
-  f2key_l2.f2kseq = 1;
+  f2key_l2.f2KSeq = 1;
   setll %kds(f2key_l2) fpeekfldl2;
 
   dow ('1');
@@ -166,7 +166,7 @@ begsr buildKey;
       leave;
     endif;
 
-    exsr Intern;
+    exsr intern;
     if (o_msgID <> '');
       leavesr;
     endif;
@@ -176,7 +176,7 @@ begsr buildKey;
     endif;
 
     if (inpKeyLen > 0 and kp > inpKeyLen);
-      Wrk_KeyVal = '*LOVAL';
+      wrk_keyVal = '*LOVAL';
       inpKeyLen = -1;
     endif;
 
@@ -190,9 +190,9 @@ endsr;
 
 begsr buildPseudoKey;
 
-  clear f1key_l0;
-  f1key_l0.f2fldseq = *zeros;
-  setll %kds(f1key_l0) fpeekfldl0;
+  clear f1Key_l0;
+  f1Key_l0.f2FldSeq = *zeros;
+  setll %kds(f1Key_l0) fpeekfldl0;
 
   dow ('1');
     read fpeekfldl0;
@@ -200,7 +200,7 @@ begsr buildPseudoKey;
       leave;
     endif;
 
-    exsr Intern;
+    exsr intern;
     if (o_msgID <> '');
       leavesr;
     endif;
@@ -216,32 +216,32 @@ endsr;
 //    Intern        Formataufbereitung                        *
 //============================================================*
 
-begsr Intern;
+begsr intern;
 
   fldl0100 = f2ffd;
 
-  if (Wrk_KeyVal = '*LOVAL' or Wrk_KeyVal = '*HIVAL');
-    YTgtValue = Wrk_KeyVal;
-    clear YBuffer;
+  if (wrk_keyVal = '*LOVAL' or wrk_keyVal = '*HIVAL');
+    yTgtValue = wrk_keyVal;
+    clear yBuffer;
   else;
-    YTgtValue = '*CURRENT';
+    yTgtValue = '*CURRENT';
 
     select;
-    when (fldl0100.F1DTyp = 'S' or  // Zoned
-    fldl0100.F1DTyp = 'B' or    // Binary
-    fldl0100.F1DTyp = 'P');      // Packed
-      y = fldl0100.f1digt;
-    when (fldl0100.F1DTyp = 'F');    // Float
-      if (fldl0100.f1flen = 4);
+    when (fldl0100.f1DTyp = 'S' or  // Zoned
+    fldl0100.f1DTyp = 'B' or    // Binary
+    fldl0100.f1DTyp = 'P');      // Packed
+      y = fldl0100.f1Digt;
+    when (fldl0100.f1DTyp = 'F');    // Float
+      if (fldl0100.f1FLen = 4);
         y = 14;
       else;
         y = 23;
       endif;
     other;
-      if (fldl0100.F1DTyp = 'G');
+      if (fldl0100.f1DTyp = 'G');
         y = fldl0100.f1ndbc;
       else;
-        y = fldl0100.f1flen;
+        y = fldl0100.f1FLen;
       endif;
     endsl;
 
@@ -260,9 +260,9 @@ begsr Intern;
     endif;
 
     if (x <= KEY_BUFF_LEN);
-      YBuffer = %subst(Wrk_KeyVal:kp:y);
+      yBuffer = %subst(wrk_keyVal:kp:y);
     else;
-      YBuffer = %subst(Wrk_KeyVal:kp);
+      yBuffer = %subst(wrk_keyVal:kp);
     endif;
 
   endif;
@@ -271,55 +271,55 @@ begsr Intern;
   //     Zeitstempelfelder
   select;
   // ... Time (im Format des Feldes, QCOPYLE,DATTIMFMT)
-  when (fldl0100.F1DTyp = 'T');
-    if (F2Desc = 'D');
-      DftVal = f_extTime(fldl0100: T'23.59.59');
+  when (fldl0100.f1DTyp = 'T');
+    if (f2Desc = 'D');
+      dftVal = f_extTime(fldl0100: T'23.59.59');
     else;
-      DftVal = f_extTime(fldl0100: T'00.00.00');
+      dftVal = f_extTime(fldl0100: T'00.00.00');
     endif;
-    DftValLen = %len(%trimr(DftVal));
-    exsr ChkValue;
+    dftValLen = %len(%trimr(dftVal));
+    exsr chkValue;
   // ... Date (im Format des Feldes, QCOPYLE,DATTIMFMT)
-  when (fldl0100.F1DTyp = 'L');
-    if (F2Desc = 'D');
-      DftVal = f_extDate(fldl0100: D'9999-12-31');
+  when (fldl0100.f1DTyp = 'L');
+    if (f2Desc = 'D');
+      dftVal = f_extDate(fldl0100: D'9999-12-31');
     else;
-      DftVal = f_extDate(fldl0100: D'0001-01-01');
+      dftVal = f_extDate(fldl0100: D'0001-01-01');
     endif;
-    DftValLen = %len(%trimr(DftVal));
-    exsr ChkValue;
+    dftValLen = %len(%trimr(dftVal));
+    exsr chkValue;
   // ... Timestamp
-  when (fldl0100.F1DTyp = 'Z');
-    if (F2Desc = 'D');
-      DftVal = TIMESTAMP_D;
-      DftValLen = %len(TIMESTAMP_D);
+  when (fldl0100.f1DTyp = 'Z');
+    if (f2Desc = 'D');
+      dftVal = TIMESTAMP_D;
+      dftValLen = %len(TIMESTAMP_D);
     else;
-      DftVal = TIMESTMP_A;
-      DftValLen = %len(TIMESTMP_A);
+      dftVal = TIMESTMP_A;
+      dftValLen = %len(TIMESTMP_A);
     endif;
-    exsr ChkValue;
+    exsr chkValue;
   // ... alle anderen Datentypen
   other;
   // werden nicht vorgeprüft
   // und vervollständigt
   endsl;
 
-  peek18(fldl0100: F2Format: YBuffer
-  : '*INTERN': YTgtValue
-  : YOutBuffer: YOutBuffLn
-  : YMsgID: YMsgDta);
-  if (YMsgID <> '');
-    o_msgID = YMsgID;
-    o_msgDta = YMsgDta;
+  peek18(fldl0100: f2Format: yBuffer
+  : '*INTERN': yTgtValue
+  : yOutBuffer: yOutBuffLn
+  : yMsgID: yMsgDta);
+  if (yMsgID <> '');
+    o_msgID = yMsgID;
+    o_msgDta = yMsgDta;
     leavesr;
   endif;
 
   if (f_isVarLen(fldl0100) = bTrue);
-    YOutBuffLn = YOutBuffLn + 2;
+    yOutBuffLn = yOutBuffLn + 2;
   endif;
 
-  for y = 1 to YOutBuffLn;
-    yIO_BuffTb(bp) = %subst(YOutBuffer:y:1);
+  for y = 1 to yOutBuffLn;
+    yIO_buffTb(bp) = %subst(yOutBuffer:y:1);
     bp = bp + 1;
     if (bp > RCD_BUFF_LEN);
       leave;
@@ -329,34 +329,34 @@ begsr Intern;
   if (bp > RCD_BUFF_LEN);
   // Puffer zu Ende
   else;
-    //  Neue Startposition in Wrk_KeyVal
+    //  Neue Startposition in wrk_keyVal
     if ((f_isNumFld(fldl0100) = bTrue) and
     (f_isFloatFld(fldl0100) = bFalse));
       // ... bei numerischen Werten
-      kp = kp + fldl0100.f1digt;
+      kp = kp + fldl0100.f1Digt;
       // ... wegen nachgestelltem Vorzeichen
-      if (set0003.SET_SignX <> bFalse);
+      if (set0003.set_signX <> bFalse);
         kp = kp + 1;
       else;
       // keine Korrektur erforderlich
       endif;
     elseif (f_isFloatFld(fldl0100) = bTrue);
       // ... bei Gleitkommawerten: %editflt ohne führendes
-      //     Vorzeichen (PEEK18 F_to_extern), nicht f1flen
-      if (fldl0100.f1flen = 4);
+      //     Vorzeichen (PEEK18 f_to_extern), nicht f1flen
+      if (fldl0100.f1FLen = 4);
         kp = kp + 13;
       else;
         kp = kp + 22;
       endif;
-      if (set0003.SET_SignX <> bFalse);
+      if (set0003.set_signX <> bFalse);
         kp = kp + 1;
       endif;
     else;
       // ... bei alpha-numerischen Werten
-      if (fldl0100.F1DTyp = 'G');
+      if (fldl0100.f1DTyp = 'G');
         kp = kp + fldl0100.f1ndbc;
       else;
-        kp = kp + fldl0100.f1flen;
+        kp = kp + fldl0100.f1FLen;
       endif;
     endif;
     if (f_isVarLen(fldl0100) = bTrue);
@@ -365,7 +365,7 @@ begsr Intern;
   endif;
 
   // Delimeter ...
-  if (set0003.SET_Dlmtr <> '');
+  if (set0003.set_dlmtr <> '');
     kp = kp + 1;
   else;
   // keine Korrektur erforderlich
@@ -374,16 +374,16 @@ begsr Intern;
 endsr;
 
 //============================================================*
-//    ChkValue      Prüfen und vervollständigen Datums-,      *
+//    chkValue      Prüfen und vervollständigen Datums-,      *
 //                  Zeit- und Zeitstempelfelder               *
 //============================================================*
 
-begsr ChkValue;
+begsr chkValue;
 
-  for idx = 1 to DftValLen;
+  for idx = 1 to dftValLen;
 
-    if (%subst(YBuffer: idx: 1) = ' ');
-      %subst(YBuffer: idx: 1) = %subst(DftVal: idx: 1);
+    if (%subst(yBuffer: idx: 1) = ' ');
+      %subst(yBuffer: idx: 1) = %subst(dftVal: idx: 1);
     endif;
 
   endfor;
@@ -391,10 +391,10 @@ begsr ChkValue;
 endsr;
 
 //============================================================*
-//    GetUsrSetg    Ermitteln der Benutzervoreinstellungen    *
+//    getUsrSetg    Ermitteln der Benutzervoreinstellungen    *
 //============================================================*
 
-begsr GetUsrSetg;
+begsr getUsrSetg;
 
   //  *ACCESSKEY
   set0003 = f_getUsrSg('*ACCESSKEY');
@@ -405,7 +405,7 @@ endsr;
 //    First         Initialisierung                           *
 //============================================================*
 
-begsr First;
+begsr first;
 
   o_rcdBuffer = '';
   o_msgID = '';
@@ -413,7 +413,7 @@ begsr First;
 
   //  *ACCESSKEY bei jedem Aufruf lesen, damit eine Änderung sofort
   //  wirkt (wie in PEEK05 und PEEK18)
-  exsr GetUsrSetg;
+  exsr getUsrSetg;
 
 endsr;
 

@@ -89,21 +89,21 @@ dcl-s g_jobCcsid uns(10) inz(0);
 
 dcl-proc f_dsplyLn export;
   dcl-pi *n like(int4_t);
-    i_FLDL0100 likeds(fldl0100_t) const;
+    i_fldl0100 likeds(fldl0100_t) const;
   end-pi;
 
   //  Funktionswert
   dcl-s fldLen like(int4_t);
   // ------------------------------------------------------------------------
 
-  if (i_FLDL0100.F1DTyp = 'G' and
-  i_FLDL0100.f1ndbc > 0);
-    return i_FLDL0100.f1ndbc;
+  if (i_fldl0100.f1DTyp = 'G' and
+  i_fldl0100.f1ndbc > 0);
+    return i_fldl0100.f1ndbc;
   endif;
 
-  fldLen = i_FLDL0100.f1flen;
+  fldLen = i_fldl0100.f1FLen;
 
-  if (i_FLDL0100.f1vfmi = '1');
+  if (i_fldl0100.f1vfmi = '1');
     //  Variable Feldlänge ...
     fldLen = fldLen - 2;
   endif;
@@ -118,7 +118,7 @@ end-proc;
 
 dcl-proc f_buffLn export;
   dcl-pi *n like(int4_t);
-    i_FLDL0100 likeds(fldl0100_t) const;
+    i_fldl0100 likeds(fldl0100_t) const;
     i_withLen  like(bool_t) options(*nopass) const;
   end-pi;
 
@@ -135,18 +135,18 @@ dcl-proc f_buffLn export;
     withLen  = bFalse;
   endif;
 
-  if (i_FLDL0100.f1vfmi = '1');
+  if (i_fldl0100.f1vfmi = '1');
     //  Variable Feldlänge ...
     if (withLen = bTrue);
       //  ... incl. Längenbyte
-      fldLen = i_FLDL0100.f1flen;
+      fldLen = i_fldl0100.f1FLen;
     else;
       //  ... ohne Längenbyte
-      fldLen = i_FLDL0100.f1flen - 2;
+      fldLen = i_fldl0100.f1FLen - 2;
     endif;
   else;
     //  Felder fester Länge
-    fldLen = i_FLDL0100.f1flen;
+    fldLen = i_fldl0100.f1FLen;
   endif;
 
   return fldLen;
@@ -160,20 +160,20 @@ end-proc;
 dcl-proc f_curFldLn export;
   dcl-pi *n like(int4_t);
     i_buffer   like(rcdBuf_t) const;
-    i_FLDL0100 likeds(fldl0100_t) const;
+    i_fldl0100 likeds(fldl0100_t) const;
   end-pi;
 
   //  Funktionswert
   dcl-s curFldLn like(int4_t) inz;
   // ------------------------------------------------------------------------
 
-  if (i_FLDL0100.f1vfmi = '1');
-    curFldLn = f_binToDec(i_buffer: i_FLDL0100.F1IBuf: 2);
+  if (i_fldl0100.f1vfmi = '1');
+    curFldLn = f_binToDec(i_buffer: i_fldl0100.f1IBuf: 2);
   else;
-    if (i_FLDL0100.f1ndbc > 0);
-      curFldLn = i_FLDL0100.f1ndbc;
+    if (i_fldl0100.f1ndbc > 0);
+      curFldLn = i_fldl0100.f1ndbc;
     else;
-      curFldLn = i_FLDL0100.f1flen;
+      curFldLn = i_fldl0100.f1FLen;
     endif;
   endif;
 
@@ -189,7 +189,7 @@ dcl-proc f_rtvFld export;
   dcl-pi *n opdesc like(int4_t);
     o_buffer   like(rcdBuf_t) options(*varsize);
     i_buffer   like(rcdBuf_t) const;
-    i_FLDL0100 likeds(fldl0100_t) const;
+    i_fldl0100 likeds(fldl0100_t) const;
     i_withLen  like(bool_t) options(*nopass) const;
   end-pi;
 
@@ -197,18 +197,18 @@ dcl-proc f_rtvFld export;
   dcl-s rtnLen like(int4_t) inz;
 
   // Parameters passed to CEEDOD
-  dcl-s DescType int(10);
-  dcl-s DataType int(10);
-  dcl-s DescInfo1 int(10);
-  dcl-s DescInfo2 int(10);
+  dcl-s descType int(10);
+  dcl-s dataType int(10);
+  dcl-s descInfo1 int(10);
+  dcl-s descInfo2 int(10);
   dcl-s parmLen int(10);
 
   //  Arbeitsfelder
   dcl-s withLen like(i_withLen) inz;
   // ------------------------------------------------------------------------
 
-  ceedod(1         : DescType : DataType :
-  DescInfo1 : DescInfo2: parmLen  :
+  ceedod(1         : descType : dataType :
+  descInfo1 : descInfo2: parmLen  :
   *omit);
 
   if (%parms() >= %parmnum(i_withLen));
@@ -217,22 +217,22 @@ dcl-proc f_rtvFld export;
     withLen  = bFalse;
   endif;
 
-  rtnLen = f_buffLn(i_FLDL0100: withLen);
+  rtnLen = f_buffLn(i_fldl0100: withLen);
   if (rtnLen > parmLen);
     rtnLen = parmLen;
   endif;
 
-  if (i_FLDL0100.f1vfmi = '1');
+  if (i_fldl0100.f1vfmi = '1');
     if (withLen = bFalse);
       %subst(o_buffer: 1: parmLen) =
-      %subst(i_buffer: i_FLDL0100.F1IBuf+2: rtnLen);
+      %subst(i_buffer: i_fldl0100.f1IBuf+2: rtnLen);
     else;
       %subst(o_buffer: 1: parmLen) =
-      %subst(i_buffer: i_FLDL0100.F1IBuf  : rtnLen);
+      %subst(i_buffer: i_fldl0100.f1IBuf  : rtnLen);
     endif;
   else;
     %subst(o_buffer: 1: parmLen) =
-    %subst(i_buffer: i_FLDL0100.F1IBuf  : rtnLen);
+    %subst(i_buffer: i_fldl0100.f1IBuf  : rtnLen);
   endif;
 
   return rtnLen;
@@ -247,7 +247,7 @@ dcl-proc p_fldToBuf export;
   dcl-pi *n;
     io_buffer  like(rcdBuf_t);
     i_fieldDta like(rcdBuf_t);
-    i_FLDL0100 likeds(fldl0100_t) const;
+    i_fldl0100 likeds(fldl0100_t) const;
     i_withLen  like(bool_t) options(*nopass) const;
   end-pi;
 
@@ -270,17 +270,17 @@ dcl-proc p_fldToBuf export;
     withLen = bFalse;
   endif;
 
-  if (i_FLDL0100.f1vfmi = '1');
+  if (i_fldl0100.f1vfmi = '1');
     //  Felder variabler Länge ...
     if (withLen = bFalse);
       //  ... ohne Längenangabe
       //      (einfügen Längenangabe)
 
-      if (i_FLDL0100.F1DTyp = 'G');
+      if (i_fldl0100.f1DTyp = 'G');
         buffLn = %len(%trimr(
                      %subst(fieldDtaUcs2
                             : 1
-                            : f_dsplyLn(i_FLDL0100))
+                            : f_dsplyLn(i_fldl0100))
                             )) * 2;
       else;
         buffLn = %len(%trimr(
@@ -288,31 +288,31 @@ dcl-proc p_fldToBuf export;
       endif;
 
       %subst(io_buffer  :
-            i_FLDL0100.F1IBuf+2 :
-            f_buffLn(i_FLDL0100: withLen))
+            i_fldl0100.f1IBuf+2 :
+            f_buffLn(i_fldl0100: withLen))
                = i_fieldDta;
 
-      if (i_FLDL0100.F1DTyp = 'G' and
-         i_FLDL0100.f1ndbc > 0);
+      if (i_fldl0100.f1DTyp = 'G' and
+         i_fldl0100.f1ndbc > 0);
         buffLn = buffLn / 2;
       endif;
 
       %subst(io_buffer  :
-            i_FLDL0100.F1IBuf   :
+            i_fldl0100.f1IBuf   :
             2          )
                = buffLnA;
     else;
       //  ... incl. Längenangabe
       %subst(io_buffer  :
-            i_FLDL0100.F1IBuf   :
-            f_buffLn(i_FLDL0100: withLen))
+            i_fldl0100.f1IBuf   :
+            f_buffLn(i_fldl0100: withLen))
                = i_fieldDta;
     endif;
   else;
     //  Felder fester Länge ...
     %subst(io_buffer  :
-          i_FLDL0100.F1IBuf   :
-          f_buffLn(i_FLDL0100))
+          i_fldl0100.f1IBuf   :
+          f_buffLn(i_fldl0100))
              = i_fieldDta;
   endif;
 
@@ -324,11 +324,11 @@ end-proc;
 
 dcl-proc f_isVarLen export;
   dcl-pi *n like(bool_t);
-    i_FLDL0100 likeds(fldl0100_t) const;
+    i_fldl0100 likeds(fldl0100_t) const;
   end-pi;
   // ------------------------------------------------------------------------
 
-  if (i_FLDL0100.f1vfmi = '1');
+  if (i_fldl0100.f1vfmi = '1');
     return bTrue;
   else;
     return bFalse;
@@ -376,23 +376,23 @@ end-proc;
 //  Funktion:  f_len                                      (Body)     *
 //===================================================================*
 
-dcl-proc f_len_DEPRECATED export;
+dcl-proc f_len_deprecated export;
   dcl-pi *n opdesc like(int4_t);
     i_string like(varString_t) options(*varsize) const;
   end-pi;
 
   // Parameters passed to CEEDOD
-  dcl-s DescType int(10);
-  dcl-s DataType int(10);
-  dcl-s DescInfo1 int(10);
-  dcl-s DescInfo2 int(10);
+  dcl-s descType int(10);
+  dcl-s dataType int(10);
+  dcl-s descInfo1 int(10);
+  dcl-s descInfo2 int(10);
   dcl-s parmLen int(10);
   // ------------------------------------------------------------------------
 
   p_kill('Deprecated procedure: f_len()');
 
-  ceedod(1         : DescType : DataType :
-  DescInfo1 : DescInfo2: parmLen  :
+  ceedod(1         : descType : dataType :
+  descInfo1 : descInfo2: parmLen  :
   *omit);
 
   return parmLen;
@@ -405,27 +405,27 @@ end-proc;
 
 dcl-proc f_scan export;
   dcl-pi *n opdesc like(int4_t);
-    SrchArg char(100) options(*varsize) const;
+    srchArg char(100) options(*varsize) const;
     string  char(100) const;
   end-pi;
 
-  dcl-s PosFound like(int4_t) inz;
+  dcl-s posFound like(int4_t) inz;
 
   // Parameters passed to CEEDOD
-  dcl-s DescType like(int4_t) inz;
-  dcl-s DataType like(int4_t) inz;
-  dcl-s DescInfo1 like(int4_t) inz;
-  dcl-s DescInfo2 like(int4_t) inz;
+  dcl-s descType like(int4_t) inz;
+  dcl-s dataType like(int4_t) inz;
+  dcl-s descInfo1 like(int4_t) inz;
+  dcl-s descInfo2 like(int4_t) inz;
   dcl-s pLen like(int4_t) inz;
   //------------------------------------------------------------*
 
-  ceedod(1         : DescType : DataType :
-  DescInfo1 : DescInfo2: pLen     :
+  ceedod(1         : descType : dataType :
+  descInfo1 : descInfo2: pLen     :
   *omit);
 
-  PosFound = %scan(%subst(SrchArg: 1: pLen): string);
+  posFound = %scan(%subst(srchArg: 1: pLen): string);
 
-  return PosFound;
+  return posFound;
 
 end-proc;
 
@@ -640,20 +640,20 @@ dcl-proc f_execute export;
   dcl-s isOK like(bool_t) inz(bFalse);
 
   //  Definieren Parameter für p_getOpDesc
-  dcl-s DescType int(10) inz;
-  dcl-s DataType int(10) inz;
+  dcl-s descType int(10) inz;
+  dcl-s dataType int(10) inz;
   dcl-s descInf1 int(10) inz;
   dcl-s descInf2 int(10) inz;
-  dcl-s DataLen int(10) inz;
+  dcl-s dataLen int(10) inz;
   dcl-s feedBack char(12) inz;
 
   //  Definitionen für QCAPCMD
   dcl-s cmdLen int(10) inz;
 
   dcl-ds optCtrl;
-    typ_CmdPrc int(10) inz(0); // like QCMDEXC
-    DBCS_Data  char(1) inz('0'); // ignore DBCS
-    prmt_Act   char(1) inz('0'); // never prompt
+    typ_cmdPrc int(10) inz(0); // like QCMDEXC
+    dbcs_data  char(1) inz('0'); // ignore DBCS
+    prmt_act   char(1) inz('0'); // never prompt
     cmdStrSntx char(1) inz('0'); // AS/400 Syntax
     msgRtvKey  char(4) inz(*blanks); // no retrieve ke
     res_01     char(9) inz(*allx'00');
@@ -671,11 +671,11 @@ dcl-proc f_execute export;
   reset errCode;
   errCode.bytPrv = %size(errCode);
 
-  ceedod(1: DescType: DataType:
+  ceedod(1: descType: dataType:
   descInf1: descInf2:
-  DataLen:  feedBack);
+  dataLen:  feedBack);
 
-  cmd        = %subst(i_cmd: 1: DataLen);
+  cmd        = %subst(i_cmd: 1: dataLen);
   cmdLen     = %len(cmd);
   lenAvl     = %len(cmd);
 
@@ -723,11 +723,11 @@ dcl-proc f_basedPF export;
   dcl-s tLib like(i_lib);
   dcl-s tMbr like(i_mbr);
   dcl-s tRcdFmt like(i_rcdFmt);
-  dcl-ds fild0100 likeds(FILD0100_t) inz;
+  dcl-ds fild0100 likeds(fild0100_t) inz;
 
-  dcl-ds YQFile likeds(qObj_t) inz;
-  dcl-s YNbrOfEnt like(int4_t);
-  dcl-s YData char(512);
+  dcl-ds yQFile likeds(qObj_t) inz;
+  dcl-s yNbrOfEnt like(int4_t);
+  dcl-s yData char(512);
   //------------------------------------------------------------*
 
   peek41_name = f_pgmCallN('PEEK41');
@@ -738,16 +738,16 @@ dcl-proc f_basedPF export;
   o_pRcdFmt = '*ERROR';
 
   //  Einlesen der Dateiinformationen ...
-  YQFile.name = i_file;
-  YQFile.lib = i_lib;
-  peek41(YQFile: i_rcdFmt: '*CREATE': YNbrOfEnt: YData);
+  yQFile.name = i_file;
+  yQFile.lib = i_lib;
+  peek41(yQFile: i_rcdFmt: '*CREATE': yNbrOfEnt: yData);
 
-  if (YNbrOfEnt = 0);
+  if (yNbrOfEnt = 0);
     return bFalse;
   endif;
 
   //      prüfen auf logische Datei
-  fild0100 = YData;
+  fild0100 = yData;
 
   if (fild0100.atfila = '*LGL');
     //      ... logical file
@@ -829,18 +829,18 @@ dcl-proc f_basedMbr export;
   dcl-ds qFile likeds(qObj_t) inz;
   dcl-ds errCode likeds(errCode_t) inz;
 
-  dcl-ds bspf0100 likeds(BSPF0100_t) inz;
+  dcl-ds bspf0100 likeds(bspf0100_t) inz;
 
   dcl-s pMbrd0300 pointer inz;
-  dcl-ds mbrd0300 likeds(MBRD0300_t) based(pMbrd0300);
+  dcl-ds mbrd0300 likeds(mbrd0300_t) based(pMbrd0300);
 
-  dcl-ds basedOnE likeds(MBRD0300_basedOnE_t) based(pBasedOnE);
+  dcl-ds basedOnE likeds(mbrd0300_basedOnE_t) based(pBasedOnE);
 
-  dcl-s Offset int(10) inz;
-  dcl-ds fild0100 likeds(FILD0100_t) inz;
+  dcl-s offset int(10) inz;
+  dcl-ds fild0100 likeds(fild0100_t) inz;
 
   dcl-s nbrOfEnt like(int4_t);
-  dcl-s YData char(512);
+  dcl-s yData char(512);
   //------------------------------------------------------------*
 
   peek41_name = f_pgmCallN('PEEK41');
@@ -863,10 +863,10 @@ dcl-proc f_basedMbr export;
   endif;
 
   //  Zuordnen Speicher
-  pMbrd0300 = realloc(pMbrd0300: mbrd0300.m3bytavl);
+  pMbrd0300 = realloc(pMbrd0300: mbrd0300.m3bytAvl);
 
   //  Abrufen Beschreibung der Teildatei
-  qusrmbrd(mbrd0300: mbrd0300.m3bytavl: 'MBRD0300': qFile: i_mbr: '0': errCode);
+  qusrmbrd(mbrd0300: mbrd0300.m3bytAvl: 'MBRD0300': qFile: i_mbr: '0': errCode);
   if (errCode.bytAvl <> 0);
     isMbrFound = bFalse;
     return isMbrFound;
@@ -874,7 +874,7 @@ dcl-proc f_basedMbr export;
 
   select;
   //  Wenn es sich um eine Join Datei oder SQL VIEW handelt, ...
-  when (mbrd0300.m3joinmbr = '1' or
+  when (mbrd0300.m3joinMbr = '1' or
   mbrd0300.m3SQLFileType = 'VIEW');
     //  ... dann
     //      zurückgeben der Eingangsmemberdaten, wegen Join Datei
@@ -907,9 +907,9 @@ dcl-proc f_basedMbr export;
     endif;
 
     if (mbrNbr > 0);
-      Offset = %size(mbrd0300) +
+      offset = %size(mbrd0300) +
         (mbrNbr - 1) * %size(basedOnE);
-      pBasedOnE  = f_addPtr(pMbrd0300: Offset);
+      pBasedOnE  = f_addPtr(pMbrd0300: offset);
       o_pFile    = basedOnE.basedOnFile;
       o_pLib     = basedOnE.basedOnLib;
       o_pMbr     = basedOnE.basedOnMbr;
@@ -929,11 +929,11 @@ dcl-proc f_basedMbr export;
     //  Einlesen der Dateiinformationen ...
     qFile.name = o_pFile;
     qFile.lib = o_pLib;
-    peek41(qFile: o_rcdFmt: '*CREATE': nbrOfEnt: YData);
-    fild0100 = YData;
+    peek41(qFile: o_rcdFmt: '*CREATE': nbrOfEnt: yData);
+    fild0100 = yData;
 
-    peek41(qFile: o_rcdFmt: '*BASED-ON': nbrOfEnt: YData);
-    bspf0100 = YData;
+    peek41(qFile: o_rcdFmt: '*BASED-ON': nbrOfEnt: yData);
+    bspf0100 = yData;
 
     if (nbrOfEnt = 1);
       o_rcdFmt = bspf0100.bfrcdfmt;
@@ -969,7 +969,7 @@ dcl-proc f_numBased export;
 
   dcl-ds mbrd0300 inz;
     m3bytPrv   int(10);
-    m3bytavl   int(10);
+    m3bytAvl   int(10);
     m3FileAttr char(10) pos(39);
     m3NbrMbr   int(10) pos(157);
   end-ds;
@@ -1033,7 +1033,7 @@ dcl-proc f_cmdLine export;
   //  Definieren Funktionswert ...
   dcl-s f_cmdLine like(bool_t) inz;
 
-  dcl-ds usri0200 likeds(USRI0200_t) inz;
+  dcl-ds usri0200 likeds(usri0200_t) inz;
   dcl-ds errCode likeds(errCode_t) inz;
   //------------------------------------------------------------*
 
@@ -1113,7 +1113,7 @@ end-proc;
 dcl-proc f_headline export;
   dcl-pi *n like(colHeading_t);
     i_headTyp  like(type_t) const;
-    i_FLDL0100 likeds(fldl0100_t) const;
+    i_fldl0100 likeds(fldl0100_t) const;
   end-pi;
 
   //  Funktionswert
@@ -1124,25 +1124,25 @@ dcl-proc f_headline export;
   select;
   //  ... Feldtext
   when (i_headTyp = '*FIELDTEXT');
-    if (i_FLDL0100.f1ftxt = ' ');
-      heading = '?' + i_FLDL0100.f1fnme;
+    if (i_fldl0100.f1FTxt = ' ');
+      heading = '?' + i_fldl0100.f1FNme;
     else;
-      heading = i_FLDL0100.f1ftxt;
+      heading = i_fldl0100.f1FTxt;
     endif;
   //  ... Spaltenüberschrift
   when (i_headTyp = '*COLHDG');
-    heading = lf_appendColHdg('': i_FLDL0100.f1col1);
-    heading = lf_appendColHdg(heading: i_FLDL0100.f1col2);
-    heading = lf_appendColHdg(heading: i_FLDL0100.f1col3);
+    heading = lf_appendColHdg('': i_fldl0100.f1col1);
+    heading = lf_appendColHdg(heading: i_fldl0100.f1col2);
+    heading = lf_appendColHdg(heading: i_fldl0100.f1col3);
     if (heading = '');
-      heading = '?' + i_FLDL0100.f1fnme;
+      heading = '?' + i_fldl0100.f1FNme;
     endif;
   //  ... Feldtyp
   when (i_headTyp = '*FIELDTYPE');
-    heading = f_fieldTypeAsString(i_FLDL0100);
+    heading = f_fieldTypeAsString(i_fldl0100);
   //  ... Feldname
   other;
-    heading = i_FLDL0100.f1fnme;
+    heading = i_fldl0100.f1FNme;
   endsl;
 
   return heading;
@@ -1195,17 +1195,17 @@ end-proc;
 
 dcl-proc f_isNumFld export;
   dcl-pi *n like(bool_t);
-    i_FLDL0100 likeds(fldl0100_t) const;
+    i_fldl0100 likeds(fldl0100_t) const;
   end-pi;
 
   //  Funktionswert
   dcl-s isNumFld like(bool_t) inz;
   // ------------------------------------------------------------------------
 
-  if ((i_FLDL0100.F1DTyp = 'S') or                                          // Zoned
-  (i_FLDL0100.F1DTyp = 'B') or                                          // Binary
-  (i_FLDL0100.F1DTyp = 'P') or                                          // Packed
-  (i_FLDL0100.F1DTyp = 'F'));                                            // Float
+  if ((i_fldl0100.f1DTyp = 'S') or                                          // Zoned
+  (i_fldl0100.f1DTyp = 'B') or                                          // Binary
+  (i_fldl0100.f1DTyp = 'P') or                                          // Packed
+  (i_fldl0100.f1DTyp = 'F'));                                            // Float
     isNumFld = bTrue;
   else;
     isNumFld = bFalse;
@@ -1221,14 +1221,14 @@ end-proc;
 
 dcl-proc f_isFloatFld export;
   dcl-pi *n like(bool_t);
-    i_FLDL0100 likeds(fldl0100_t) const;
+    i_fldl0100 likeds(fldl0100_t) const;
   end-pi;
 
   //  Funktionswert
   dcl-s isFloat like(bool_t) inz;
   // ------------------------------------------------------------------------
 
-  if (i_FLDL0100.F1DTyp = 'F');                                            // Float
+  if (i_fldl0100.f1DTyp = 'F');                                            // Float
     isFloat = bTrue;
   else;
     isFloat = bFalse;
@@ -1244,15 +1244,15 @@ end-proc;
 
 dcl-proc f_isCharFld export;
   dcl-pi *n like(bool_t);
-    i_FLDL0100 likeds(fldl0100_t) const;
+    i_fldl0100 likeds(fldl0100_t) const;
   end-pi;
 
   //  Funktionswert
   dcl-s isCharFld like(bool_t) inz;
   // ------------------------------------------------------------------------
 
-  if (i_FLDL0100.F1DTyp = 'A' or                                           // Alpha
-  i_FLDL0100.F1DTyp = 'G');                                             // Graphic
+  if (i_fldl0100.f1DTyp = 'A' or                                           // Alpha
+  i_fldl0100.f1DTyp = 'G');                                             // Graphic
     isCharFld = bTrue;
   else;
     isCharFld = bFalse;
@@ -1268,15 +1268,15 @@ end-proc;
 
 dcl-proc f_hasCcsid export;
   dcl-pi *n like(bool_t);
-    i_FLDL0100 likeds(fldl0100_t) const;
+    i_fldl0100 likeds(fldl0100_t) const;
   end-pi;
 
   //  Funktionswert
   dcl-s hasCcsid like(bool_t) inz;
   // ------------------------------------------------------------------------
 
-  if (i_FLDL0100.f1fdcc > 0 and
-  i_FLDL0100.f1fdcc <> 65535);
+  if (i_fldl0100.f1fdcc > 0 and
+  i_fldl0100.f1fdcc <> 65535);
     hasCcsid = bTrue;
   else;
     hasCcsid = bFalse;
@@ -1430,17 +1430,17 @@ end-proc;
 
 dcl-proc f_canUseRefFld export;
   dcl-pi *n like(bool_t);
-    i_FLDL0100 likeds(fldl0100_t) const;
+    i_fldl0100 likeds(fldl0100_t) const;
   end-pi;
 
   //  Funktionswert
   dcl-s canUseRefFld like(bool_t) inz;
   // ------------------------------------------------------------------------
 
-  if (i_FLDL0100.F1DTyp = 'G' or
-  (i_FLDL0100.F1DTyp = 'A' and
-  (i_FLDL0100.f1fdcc = 1200 or
-  i_FLDL0100.f1fdcc = 1208)));
+  if (i_fldl0100.f1DTyp = 'G' or
+  (i_fldl0100.f1DTyp = 'A' and
+  (i_fldl0100.f1fdcc = 1200 or
+  i_fldl0100.f1fdcc = 1208)));
     canUseRefFld = bFalse;
   else;
     canUseRefFld = bTrue;
@@ -1456,17 +1456,17 @@ end-proc;
 
 dcl-proc f_canUseCntFld export;
   dcl-pi *n like(bool_t);
-    i_FLDL0100 likeds(fldl0100_t) const;
+    i_fldl0100 likeds(fldl0100_t) const;
   end-pi;
 
   //  Funktionswert
   dcl-s canUseCntFld like(bool_t) inz;
   // ------------------------------------------------------------------------
 
-  if (i_FLDL0100.F1DTyp = 'G' or
-  (i_FLDL0100.F1DTyp = 'A' and
-  (i_FLDL0100.f1fdcc = 1200 or
-  i_FLDL0100.f1fdcc = 1208)));
+  if (i_fldl0100.f1DTyp = 'G' or
+  (i_fldl0100.f1DTyp = 'A' and
+  (i_fldl0100.f1fdcc = 1200 or
+  i_fldl0100.f1fdcc = 1208)));
     canUseCntFld = bFalse;
   else;
     canUseCntFld = bTrue;
@@ -1506,14 +1506,14 @@ end-proc;
 
 dcl-proc f_isToLong export;
   dcl-pi *n like(bool_t);
-    i_FLDL0100 likeds(fldl0100_t) const;
+    i_fldl0100 likeds(fldl0100_t) const;
   end-pi;
 
   //  Funktionswert
   dcl-s toLong like(bool_t) inz;
   // ------------------------------------------------------------------------
 
-  if (f_dsplyLn(i_FLDL0100)>f_maxDspLn(i_FLDL0100));
+  if (f_dsplyLn(i_fldl0100)>f_maxDspLn(i_fldl0100));
     toLong = bTrue;
   else;
     toLong = bFalse;
@@ -1529,14 +1529,14 @@ end-proc;
 
 dcl-proc f_isToLongMax export;
   dcl-pi *n like(bool_t);
-    i_FLDL0100 likeds(fldl0100_t) const;
+    i_fldl0100 likeds(fldl0100_t) const;
   end-pi;
 
   //  Funktionswert
   dcl-s toLong like(bool_t) inz;
   // ------------------------------------------------------------------------
 
-  if (f_buffLn(i_FLDL0100) > 1024);
+  if (f_buffLn(i_fldl0100) > 1024);
     toLong = bTrue;
   else;
     toLong = bFalse;
@@ -1552,13 +1552,13 @@ end-proc;
 
 dcl-proc f_maxDspLn export;
   dcl-pi *n like(int4_t);
-    i_FLDL0100 likeds(fldl0100_t) const;
+    i_fldl0100 likeds(fldl0100_t) const;
   end-pi;
 
   dcl-s maxLen int(10) inz;
   //------------------------------------------------------------*
 
-  maxLen =  %int(f_cntFldLn(i_FLDL0100) * 15);
+  maxLen =  %int(f_cntFldLn(i_fldl0100) * 15);
   if (maxLen > 512);
     maxLen = 512;
   endif;
@@ -1573,11 +1573,11 @@ end-proc;
 
 dcl-proc f_cntFldLn export;
   dcl-pi *n like(int4_t);
-    i_FLDL0100 likeds(fldl0100_t) const;
+    i_fldl0100 likeds(fldl0100_t) const;
   end-pi;
   //------------------------------------------------------------*
 
-  if (i_FLDL0100.F1DTyp = 'G');
+  if (i_fldl0100.f1DTyp = 'G');
     return 34;
   else;
     return 35;
@@ -1591,7 +1591,7 @@ end-proc;
 
 dcl-proc f_nbrDspRw export;
   dcl-pi *n like(int4_t);
-    i_FLDL0100 likeds(fldl0100_t) const;
+    i_fldl0100 likeds(fldl0100_t) const;
   end-pi;
 
   // Funktionswert
@@ -1601,16 +1601,16 @@ dcl-proc f_nbrDspRw export;
   dcl-s dsplyLen like(int4_t);
   //------------------------------------------------------------*
 
-  if (f_isToLong(i_FLDL0100) = bTrue);
-    dsplyLen = f_maxDspLn(i_FLDL0100);
+  if (f_isToLong(i_fldl0100) = bTrue);
+    dsplyLen = f_maxDspLn(i_fldl0100);
   else;
-    dsplyLen = f_dsplyLn(i_FLDL0100);
+    dsplyLen = f_dsplyLn(i_fldl0100);
   endif;
 
-  nbrDspRow = dsplyLen / f_cntFldLn(i_FLDL0100);
+  nbrDspRow = dsplyLen / f_cntFldLn(i_fldl0100);
 
   if (dsplyLen <>
-  (nbrDspRow * f_cntFldLn(i_FLDL0100)));
+  (nbrDspRow * f_cntFldLn(i_fldl0100)));
     nbrDspRow = nbrDspRow + 1;
   endif;
 
@@ -1631,10 +1631,10 @@ dcl-proc p_decToBin export;
   end-pi;
 
   // Parameters passed to CEEDOD
-  dcl-s DescType int(10);
-  dcl-s DataType int(10);
-  dcl-s DescInfo1 int(10);
-  dcl-s DescInfo2 int(10);
+  dcl-s descType int(10);
+  dcl-s dataType int(10);
+  dcl-s descInfo1 int(10);
+  dcl-s descInfo2 int(10);
   dcl-s parmLen int(10);
 
   // Arbeitsfelder
@@ -1645,8 +1645,8 @@ dcl-proc p_decToBin export;
   end-ds;
   // ------------------------------------------------------------------------
 
-  ceedod(1         : DescType : DataType :
-  DescInfo1 : DescInfo2: parmLen  :
+  ceedod(1         : descType : dataType :
+  descInfo1 : descInfo2: parmLen  :
   *omit);
 
   if ((i_startPos + i_length - 1) > parmLen);
@@ -1675,7 +1675,7 @@ end-proc;
 
 dcl-proc f_isNotAlw export;
   dcl-pi *n like(bool_t);
-    i_FLDL0100 likeds(fldl0100_t) const;
+    i_fldl0100 likeds(fldl0100_t) const;
   end-pi;
 
   // Funktionswert
@@ -1683,31 +1683,31 @@ dcl-proc f_isNotAlw export;
   // ------------------------------------------------------------------------
 
   //  Wenn es sich um einen der folgenden Feldtypen handelt, ...
-  if (i_FLDL0100.F1DTyp = 'A' or    // = Alpha
-  i_FLDL0100.F1DTyp = 'B' or    // = Binary
-  i_FLDL0100.F1DTyp = 'P' or    // = Packed
-  i_FLDL0100.F1DTyp = 'S' or    // = Zoned
-  i_FLDL0100.F1DTyp = 'L' or    // = Date
-  i_FLDL0100.F1DTyp = 'T' or    // = Time
-  i_FLDL0100.F1DTyp = 'Z' or    // = Timestamp
-  i_FLDL0100.F1DTyp = 'J' or    // = DBCS-Only
-  i_FLDL0100.F1DTyp = 'O' or    // = DBCS-Open
-  i_FLDL0100.F1DTyp = 'E' or    // = DBCS-Either
-  i_FLDL0100.F1DTyp = 'F' or    // = Float
-  i_FLDL0100.F1DTyp = 'G' or    // = Graphic
-  i_FLDL0100.F1DTyp = '8');     // = Boolean
+  if (i_fldl0100.f1DTyp = 'A' or    // = Alpha
+  i_fldl0100.f1DTyp = 'B' or    // = Binary
+  i_fldl0100.f1DTyp = 'P' or    // = Packed
+  i_fldl0100.f1DTyp = 'S' or    // = Zoned
+  i_fldl0100.f1DTyp = 'L' or    // = Date
+  i_fldl0100.f1DTyp = 'T' or    // = Time
+  i_fldl0100.f1DTyp = 'Z' or    // = Timestamp
+  i_fldl0100.f1DTyp = 'J' or    // = DBCS-Only
+  i_fldl0100.f1DTyp = 'O' or    // = DBCS-Open
+  i_fldl0100.f1DTyp = 'E' or    // = DBCS-Either
+  i_fldl0100.f1DTyp = 'F' or    // = Float
+  i_fldl0100.f1DTyp = 'G' or    // = Graphic
+  i_fldl0100.f1DTyp = '8');     // = Boolean
 
     //  ... dann
     //      prüfen, ob es sich um ein GRAPHIC Feld ohne CCSID handelt
-    if (i_FLDL0100.F1DTyp = 'G' and f_hasCcsid(i_FLDL0100) = bFalse);
+    if (i_fldl0100.f1DTyp = 'G' and f_hasCcsid(i_fldl0100) = bFalse);
       notAllowed = bTrue;
       return notAllowed;
     endif;
 
     //      prüfen, ob es sich um ein Packed oder Zoned Feld mit mehr als
     //      30 Stellen handelt.
-    if (i_FLDL0100.F1DTyp = 'P' or i_FLDL0100.F1DTyp = 'S');
-      if (i_FLDL0100.f1digt > 30);
+    if (i_fldl0100.f1DTyp = 'P' or i_fldl0100.f1DTyp = 'S');
+      if (i_fldl0100.f1Digt > 30);
         notAllowed = bTrue;
         return notAllowed;
       endif;
@@ -1715,11 +1715,11 @@ dcl-proc f_isNotAlw export;
 
     //      prüfen, ob es sich um ein Feld variabler Länge handelt.
     //      Wenn es sich um ein Feld variabler Länge handelt, ...
-    if (f_isVarLen(i_FLDL0100) = bTrue);
+    if (f_isVarLen(i_fldl0100) = bTrue);
       //      ... dann
       //          prüfen, ob es sich um alpha-numerisches Feld handelt.
-      if (i_FLDL0100.F1DTyp = 'A' or                                      // = Alpha
-      i_FLDL0100.F1DTyp = 'G');                                        // = Graphic
+      if (i_fldl0100.f1DTyp = 'A' or                                      // = Alpha
+      i_fldl0100.f1DTyp = 'G');                                        // = Graphic
         notAllowed = bFalse;
       else;
         notAllowed = bTrue;
@@ -1745,7 +1745,7 @@ end-proc;
 
 dcl-proc f_isKeyFld export;
   dcl-pi *n like(bool_t);
-    i_FLDL0100 likeds(fldl0100_t) const;
+    i_fldl0100 likeds(fldl0100_t) const;
   end-pi;
 
   // Funktionswert
@@ -1753,7 +1753,7 @@ dcl-proc f_isKeyFld export;
   // ------------------------------------------------------------------------
 
   //  Wenn es sich um ein Schlüsselfeld handelt, ...
-  if (i_FLDL0100.F1KeyF = '1');
+  if (i_fldl0100.f1KeyF = '1');
     //  ... dann
     isKeyFld = bTrue;
   else;
@@ -1928,8 +1928,8 @@ dcl-proc f_msgText export;
     rtvm0100 = f_rtvMsgD(i_msgID: i_msgDta: bTrue: bFalse);
   endsl;
 
-  if (RT1_LnMgRt > 0);
-    msgText = %subst(RT1_Data: 1: RT1_LnMgRt);
+  if (rt1_lnMgRt > 0);
+    msgText = %subst(rt1_data: 1: rt1_lnMgRt);
   else;
     msgText = ' ';
   endif;
@@ -2095,12 +2095,12 @@ end-proc;
 //  Prozedur:  f_spltTxt                                  (Body)     *
 //===================================================================*
 
-dcl-proc f_splttxt_DEPRECATED export;
+dcl-proc f_splttxt_deprecated export;
   dcl-pi *n opdesc like(int4_t);
     i_text   like(varString_t) options(*varsize) const;
     i_strPos like(int4_t) const;
     i_len    like(int4_t) const;
-    o_Text   like(string_t) options(*varsize);
+    o_text   like(string_t) options(*varsize);
   end-pi;
 
   //  Funktionswert
@@ -2117,7 +2117,7 @@ dcl-proc f_splttxt_DEPRECATED export;
   if (i_strPos > %len(i_text));
     //  ... dann
     //      einen Leerstring zurück geben
-    %subst(o_Text: 1: %len(o_Text)) = ' ';
+    %subst(o_text: 1: %len(o_text)) = ' ';
     rtnLen = 0;
   else;
     //  ... sonst
@@ -2128,23 +2128,23 @@ dcl-proc f_splttxt_DEPRECATED export;
       rtnLen = %len(i_text) - i_strPos + 1;
     endif;
 
-    if (rtnLen > %len(o_Text));
-      rtnLen = %len(o_Text);
+    if (rtnLen > %len(o_text));
+      rtnLen = %len(o_text);
     endif;
 
     //      Zeichenkette entnehmen
-    %subst(o_Text: 1: %len(o_Text)) =
+    %subst(o_text: 1: %len(o_text)) =
     %subst(i_text: i_strPos: rtnLen);
 
     //      Auf Zeilenwechsel prüfen
-    pNewLine = %scan('°': %subst(o_Text: 1: %len(o_Text)));
+    pNewLine = %scan('°': %subst(o_text: 1: %len(o_text)));
     if (pNewLine > 0);
       rtnLen = pNewLine;
-      %subst(o_Text: rtnLen: %len(o_Text) - rtnLen + 1) = '';
+      %subst(o_text: rtnLen: %len(o_text) - rtnLen + 1) = '';
     endif;
 
     //      Bestimmen Länge ohne nachgestellte Leezeichen
-    trimLen = %len(%trimr(%subst(o_Text: 1: rtnLen)));
+    trimLen = %len(%trimr(%subst(o_text: 1: rtnLen)));
 
     // Wenn keine nachgestellten Leezeichen
     // vorhanden sind, ...
@@ -2161,10 +2161,10 @@ dcl-proc f_splttxt_DEPRECATED export;
           //     rückwärts nach einer Lücke für
           //     den Zeilenumbruch suchen
           dow (trimLen > 0);
-            if (%subst(o_Text: trimLen: 1) = ' ');
+            if (%subst(o_text: trimLen: 1) = ' ');
               rtnLen = trimLen;
-              %subst(o_Text: 1: %len(o_Text)) =
-              %subst(o_Text: 1: rtnLen);
+              %subst(o_text: 1: %len(o_text)) =
+              %subst(o_text: 1: rtnLen);
               leave;
             endif;
             trimLen = trimLen - 1;
@@ -2244,7 +2244,7 @@ end-proc;
 
 dcl-proc f_isKeyExc export;
   dcl-pi *n like(bool_t);
-    i_data     like(SET0000_t) value;
+    i_data     like(set0000_t) value;
     i_exclKeys like(pgmCmd_t) dim(25) value;
   end-pi;
 
@@ -2272,7 +2272,7 @@ dcl-proc f_isKeyExc export;
 end-proc;
 
 //===============================================================*
-//  Prepare NUM_Descr - RPG-IV implementation of NUM_DESCR macro
+//  Prepare num_descr - RPG-IV implementation of NUM_DESCR macro
 //  V4R4 and above                Refer to: QSYSINC/MIH.MICPTCOM
 //===============================================================*
 // The following macro is used to prepare the numeric descriptor
@@ -2289,7 +2289,7 @@ end-proc;
 
 //===============================================================*
 
-dcl-proc f_NUM_Descr export;
+dcl-proc f_num_descr export;
   dcl-pi *n like(int4_t);
     i_type     like(int1_t) value;
     i_length   like(int1_t) value;
@@ -2297,26 +2297,26 @@ dcl-proc f_NUM_Descr export;
   end-pi;
 
   dcl-ds *n;
-    NUM_Descr          int(10) inz;
-    NUM_Descr_type     int(3) overlay(NUM_Descr: 1);
-    NUM_Descr_fraction int(3) overlay(NUM_Descr: 2);
-    NUM_Descr_length   int(3) overlay(NUM_Descr: 3);
+    num_descr          int(10) inz;
+    num_descr_type     int(3) overlay(num_descr: 1);
+    num_descr_fraction int(3) overlay(num_descr: 2);
+    num_descr_length   int(3) overlay(num_descr: 3);
   end-ds;
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  NUM_Descr_type     = i_type;
-  NUM_Descr_fraction = i_fraction;
-  NUM_Descr_length   = i_length;
+  num_descr_type     = i_type;
+  num_descr_fraction = i_fraction;
+  num_descr_length   = i_length;
 
-  return NUM_Descr;
+  return num_descr;
 
 end-proc;
 
 //========================================================================*
-//  f_NUM_Descr2
+//  f_num_descr2
 //========================================================================*
-dcl-proc f_NUM_Descr2 export;
+dcl-proc f_num_descr2 export;
   dcl-pi *n like(int4_t);
     i_type       like(dataType_t) value;
     i_length     like(int1_t) value;
@@ -2327,11 +2327,11 @@ dcl-proc f_NUM_Descr2 export;
 
   //  Return value
   dcl-ds *n;
-    NUM_Descr    int(10) inz;
-    NUM_Descr_24 int(3) overlay(NUM_Descr: 1);
-    NUM_Descr_16 int(3) overlay(NUM_Descr: *next);
-    NUM_Descr_8  int(3) overlay(NUM_Descr: *next);
-    NUM_Descr_0  int(3) overlay(NUM_Descr: *next);
+    num_descr    int(10) inz;
+    num_descr_24 int(3) overlay(num_descr: 1);
+    num_descr_16 int(3) overlay(num_descr: *next);
+    num_descr_8  int(3) overlay(num_descr: *next);
+    num_descr_0  int(3) overlay(num_descr: *next);
   end-ds;
 
   //  Arbeitsfelder
@@ -2342,30 +2342,30 @@ dcl-proc f_NUM_Descr2 export;
   select;
   // ... zoned
   when (i_type = 'S');
-    type = T_Zoned;
+    type = t_zoned;
   // ... packed
   when (i_type = 'P');
     type = t_packed;
   // ... binary
   when (i_type = 'B');
-    type = T_Signed;
+    type = t_signed;
     i_length = f_rpgToIntLength(i_length);
   // ... integer
   when (i_type = 'I');
-    type = T_Signed;
+    type = t_signed;
     i_length = f_rpgToIntLength(i_length);
   // ... unsigned integer
   when (i_type = 'U');
-    type = T_Signed;
+    type = t_signed;
     i_length = f_rpgToIntLength(i_length);
   // ... float
   when (i_type = 'F');
     type = t_float;
   endsl;
 
-  NUM_Descr = f_NUM_Descr(type: i_length: i_fractional);
+  num_descr = f_num_descr(type: i_length: i_fractional);
 
-  return NUM_Descr;
+  return num_descr;
 
 
 end-proc;
@@ -2437,7 +2437,7 @@ end-proc;
 //  Returns the description of a given C runtime error code.
 //===============================================================*
 
-dcl-proc f_strerror export;
+dcl-proc f_strError export;
   dcl-pi *n like(msgDta_t);
     i_errno int(10) const;
   end-pi;
@@ -2530,7 +2530,7 @@ dcl-proc f_exist export;
 
   //  Local fields
   dcl-ds objd0100 likeds(objd0100_t) inz;
-  dcl-ds mbrd0100 likeds(MBRD0100_t) inz;
+  dcl-ds mbrd0100 likeds(mbrd0100_t) inz;
   dcl-ds qObj likeds(qObj_t) inz;
   dcl-ds errCode likeds(errCode_t) inz;
 
@@ -2623,16 +2623,16 @@ end-proc;
 //   io_startPos   - The position to start from.
 //                   (Should not be changed between calls.)
 //   i_option      - Options to set.
-//                   Default:        cWORDWRAP_PARAGRAPH_NONE +
-//                                   cWORDWRAP_PARAGRAPH_TRIMR
-//                   cWORDWRAP_PARAGRAPH_NONE   Do not respect
+//                   Default:        cWORDWRAP_paragraph_none +
+//                                   cWORDWRAP_paragraph_trimr
+//                   cWORDWRAP_paragraph_none   Do not respect
 //                                              end-of-paragraph markers.
-//                   cWORDWRAP_PARAGRAPH_MSGD   Respect end-of-paragraph
+//                   cWORDWRAP_paragraph_msgd   Respect end-of-paragraph
 //                                              markers of message descriptions:
 //                                              &N, &B and &P.
-//                   cWORDWRAP_PARAGRAPH_TEXT   Respect standard text
+//                   cWORDWRAP_paragraph_text   Respect standard text
 //                                              end-of-paragraph markers: \n
-//                   cWORDWRAP_PARAGRAPH_TRIMR  Remove trailing blanks from
+//                   cWORDWRAP_paragraph_trimr  Remove trailing blanks from
 //                                              result string.
 
 //  Returns:
@@ -2655,7 +2655,7 @@ dcl-proc f_wordWrap export;
 
   //  Local fields
   dcl-ds theEOP qualified;
-    IsFound  ind inz(bFalse);
+    isFound  ind inz(bFalse);
     position int(10);
     string   varchar(2);
   end-ds;
@@ -2673,8 +2673,8 @@ dcl-proc f_wordWrap export;
   if (%parms() >= %parmnum(i_options));
     options = i_options;
   else;
-    options = cWORDWRAP_PARAGRAPH_NONE +
-      cWORDWRAP_PARAGRAPH_TRIMR;
+    options = cWORDWRAP_paragraph_none +
+      cWORDWRAP_paragraph_trimr;
   endif;
 
   // TRIM trailing blanks
@@ -2683,12 +2683,12 @@ dcl-proc f_wordWrap export;
   // Determine how to treat end-of-paragraph markers:
   select;
   // ... do not respect end-of-paragraph marker
-  when (isBitOn(cWORDWRAP_PARAGRAPH_NONE: options));
+  when (isBitOn(cWORDWRAP_paragraph_none: options));
     clear eop;
     clear esc;
     numEOP = 0;
   // ... respect end-of-paragraph marker of message descriptions: &N, &P, &B
-  when (isBitOn(cWORDWRAP_PARAGRAPH_MSGD: options));
+  when (isBitOn(cWORDWRAP_paragraph_msgd: options));
     clear eop;
     eop(1) = '&N';
     eop(2) = '&P';
@@ -2696,7 +2696,7 @@ dcl-proc f_wordWrap export;
     esc    = '&';
     numEOP = 3;
   // ... respect end-of-paragraph marker of text: \n
-  when (isBitOn(cWORDWRAP_PARAGRAPH_TEXT: options));
+  when (isBitOn(cWORDWRAP_paragraph_text: options));
     clear eop;
     eop(1) = '\N';
     esc    = '\';
@@ -2717,9 +2717,9 @@ dcl-proc f_wordWrap export;
 
     // Find next end-of-paragraph marker
     reset theEOP;
-    theEOP.IsFound = bFalse;
+    theEOP.isFound = bFalse;
     theEOP.position = %scan(esc: string: io_startPos);
-    dow (not theEOP.IsFound and theEOP.position > 0);
+    dow (not theEOP.isFound and theEOP.position > 0);
       // If there is an escape character, ...
       if (%subst(string: theEOP.position: 1) = esc);
         // ... then check it against the list of EOP marker
@@ -2731,14 +2731,14 @@ dcl-proc f_wordWrap export;
             if (f_ucase(tmpEOP) = f_ucase(eop(x)));
               // ... then set flag "EOP found"
               theEOP.string  = eop(x);
-              theEOP.IsFound = bTrue;
+              theEOP.isFound = bTrue;
               leave;
             endif;
           endif;
         endfor;
       endif;
 
-      if (not theEOP.IsFound);
+      if (not theEOP.isFound);
         if (theEOP.position < %len(string));
           theEOP.position = %scan(esc: string: theEOP.position + 1);
         else;
@@ -2748,7 +2748,7 @@ dcl-proc f_wordWrap export;
     enddo;
 
     // If no end-of-paragraph marker is found, ...
-    if (not theEOP.IsFound);
+    if (not theEOP.isFound);
       // ... then perform standard word wrap with no respect to EOP
       text = lf_wordWrap(string: i_width: io_startPos);
     else;
@@ -2785,7 +2785,7 @@ dcl-proc f_wordWrap export;
   endif;
 
   // If the user requested to remove BLANKS, ...
-  if (isBitOn(cWORDWRAP_PARAGRAPH_TRIMR: options));
+  if (isBitOn(cWORDWRAP_paragraph_trimr: options));
     // ... then remove BLANKS.
     text = %trimr(text);
   endif;
@@ -2954,7 +2954,7 @@ dcl-proc f_ucase export;
 
   if (i_string <> '');
     reqCtrlBlk.type = CVTCASE_TYPE_CCSID;
-    reqCtrlBlk.ccsid = CVTCASE_CCSID_Job;
+    reqCtrlBlk.ccsid = cvtcase_ccsid_job;
     reqCtrlBlk.case = CVTCASE_TO_UPPER;
     reqCtrlBlk.reserved = *allx'00';
 
@@ -3088,7 +3088,7 @@ end-proc;
 
 dcl-proc f_fieldTypeAsString export;
   dcl-pi *n varchar(128);
-    i_FLDL0100 likeds(fldl0100_t) const;
+    i_fldl0100 likeds(fldl0100_t) const;
   end-pi;
 
   //  Funktionswert
@@ -3101,22 +3101,22 @@ dcl-proc f_fieldTypeAsString export;
   dcl-s decPosA varchar(16) inz;
   // ------------------------------------------------------------------------
 
-  if (f_isNumFld(i_FLDL0100) = bTrue);
-    length = i_FLDL0100.f1digt;
-    decpos = i_FLDL0100.f1decp;
+  if (f_isNumFld(i_fldl0100) = bTrue);
+    length = i_fldl0100.f1Digt;
+    decpos = i_fldl0100.f1DecP;
     lengthA = %editc(length: '3');
     decPosA = %editc(decpos: '3');
   else;
-    length = i_FLDL0100.f1flen;
+    length = i_fldl0100.f1FLen;
     decpos = -1;
     lengthA = %editc(length: '3');
     decPosA = '  ';
   endif;
 
-  type = i_FLDL0100.f1fnme +
+  type = i_fldl0100.f1FNme +
   '  ' + x'41'      +
   lengthA           +
-  i_FLDL0100.F1DTyp +
+  i_fldl0100.f1DTyp +
   ' '               +
   decPosA           +
   x'41';
@@ -3171,7 +3171,7 @@ dcl-proc f_getRecordFormatInf export;
 
   dcl-ds qFile likeds(qObj_t);
   dcl-ds qFileRtn likeds(qFile);
-  dcl-ds Qdb_Qddfmt likeds(Qdb_Qddfmt_t) based(pQdb_Qddfmt);
+  dcl-ds Qdb_Qddfmt likeds(Qdb_Qddfmt_t) based(pQdb_qddfmt);
   dcl-s size int(10);
   dcl-ds errCode likeds(errCode_t) inz;
   // ----------------------------------------------------------------------
@@ -3182,14 +3182,14 @@ dcl-proc f_getRecordFormatInf export;
   qFile.lib = i_lib;
 
   size = (8);
-  pQdb_Qddfmt = %alloc(size);
+  pQdb_qddfmt = %alloc(size);
 
   monitor;
     qdbrtvfd(Qdb_Qddfmt: size: qFileRtn: 'FILD0200': qFile
       :'*FIRST' :'0' :'*LCL' :'*EXT' : errCode);
 
     size = (Qdb_Qddfmt.bytAvl);
-    pQdb_Qddfmt = %realloc(pQdb_Qddfmt: size);
+    pQdb_qddfmt = %realloc(pQdb_qddfmt: size);
     qdbrtvfd(Qdb_Qddfmt: size: qFileRtn: 'FILD0200': qFile
     :'*FIRST' :'0' :'*LCL' :'*EXT' : errCode);
 
@@ -3198,7 +3198,7 @@ dcl-proc f_getRecordFormatInf export;
   on-error;
   endmon;
 
-  dealloc(n) pQdb_Qddfmt;
+  dealloc(n) pQdb_qddfmt;
 
   return rcdFmtInf;
 
@@ -3269,14 +3269,14 @@ end-proc;
 dcl-proc f_mapCmdToMsg export;
   dcl-pi *n like(msgId_t);
     i_command char(256) const;
-    i_section like(SECTION_t) options(*nopass) const;
+    i_section like(section_t) options(*nopass) const;
   end-pi;
 
   //  Funktionswert
   dcl-s msgID like(msgId_t);
 
   //  Optionale Parameter
-  dcl-s section like(SECTION_t) inz;
+  dcl-s section like(section_t) inz;
   // ------------------------------------------------------------------------
 
   if (%parms() >= %parmnum(i_section));

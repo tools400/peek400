@@ -9,7 +9,7 @@ dcl-pr qdbldbr extpgm('QDBLDBR');
   i_qFile    char(20) const;
   i_mbr      char(10) const;
   i_rcdFmt   char(10) const;
-  io_ErrCode char(65535) options(*varsize);
+  io_errCode char(65535) options(*varsize);
 end-pr;
 
 /endif

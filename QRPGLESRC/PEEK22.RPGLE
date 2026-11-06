@@ -47,16 +47,16 @@ dcl-f default keyed usropn extdesc('PEEKUSR') extfile(g_default) rename(fpeekusr
 dcl-c DFT_USER '*NONE';
 
 dcl-s g_default char(21) inz;
-dcl-s Wrk_Sectn like(SECTION_t) inz;
-dcl-s Wrk_Key like(KEY_t) inz;
-dcl-s Wrk_Data like(SET0000_t) inz;
+dcl-s wrk_sectn like(section_t) inz;
+dcl-s wrk_key like(key_t) inz;
+dcl-s wrk_data like(set0000_t) inz;
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
 //*******************************************************************
 dcl-pi peek22;
   i_mode    like(mode_t) const;
-  i_section like(SECTION_t) const;
+  i_section like(section_t) const;
 end-pi;
 
 //---------------------------------------------------*
@@ -75,11 +75,11 @@ if (i_section = '*ALL');
     setll (DFT_USER) fdefault;
     reade (DFT_USER) fdefault;
     dow (not %eof(default));
-      Wrk_Sectn = D_Section;
-      exsr DelRecords;
-      exsr AddRecords;
+      wrk_sectn = d_section;
+      exsr delRecords;
+      exsr addRecords;
       //  ... weiter mit dem nächsten Bereich
-      setgt (DFT_USER: Wrk_Sectn) fdefault;
+      setgt (DFT_USER: wrk_sectn) fdefault;
       reade (DFT_USER) fdefault;
     enddo;
 
@@ -89,29 +89,29 @@ if (i_section = '*ALL');
 else;
 
   //  Kopieren für ein Programm
-  Wrk_Sectn = i_section;
-  exsr DelRecords;
-  exsr AddRecords;
+  wrk_sectn = i_section;
+  exsr delRecords;
+  exsr addRecords;
 
 endif;
 
 *inlr = '1';
 
 //============================================================*
-//    DelRecords    Löschen von Datensätzen                   *
+//    delRecords    Löschen von Datensätzen                   *
 //============================================================*
 
-begsr DelRecords;
+begsr delRecords;
 
   if (i_mode = '*REPLACE'
       or i_mode = '*DELETE');
 
     //  Alle Schlüssel des Bereichs, auch '*ENTER' und die leere
     //  Auswahl, die vor '*F01' sortiert werden.
-    p_setllUsr(Wrk_Sectn);
+    p_setllUsr(wrk_sectn);
 
-    dow (f_readeUsr(Wrk_Sectn: Wrk_Key)= '0');
-      f_deletUsr(Wrk_Sectn: Wrk_Key);
+    dow (f_readeUsr(wrk_sectn: wrk_key)= '0');
+      f_deletUsr(wrk_sectn: wrk_key);
     enddo;
 
   else;
@@ -123,20 +123,20 @@ begsr DelRecords;
 endsr;
 
 //============================================================*
-//    AddRecords    Hinzufügen von Datensätzen                *
+//    addRecords    Hinzufügen von Datensätzen                *
 //============================================================*
 
-begsr AddRecords;
+begsr addRecords;
 
   if (i_mode = '*ADD'
       or i_mode = '*REPLACE');
 
-    p_setllDft(Wrk_Sectn);
+    p_setllDft(wrk_sectn);
 
-    dow (f_readeDft(Wrk_Sectn: Wrk_Key: Wrk_Data)='0');
-      f_writeUsr(Wrk_Sectn :
-                Wrk_Key   :
-                Wrk_Data  );
+    dow (f_readeDft(wrk_sectn: wrk_key: wrk_data)='0');
+      f_writeUsr(wrk_sectn :
+                wrk_key   :
+                wrk_data  );
     enddo;
 
   else;

@@ -140,7 +140,7 @@ dcl-ds sds qualified psds;
   excNbr        char(4) overlay(msgID: *next); // Excp Number
   reserved_1    char(4) pos(47); // Reserved
   msgWorkArea   char(30) pos(51); // Work Area Msg
-  PgmLib        char(10) pos(81); // Program Librar
+  pgmLib        char(10) pos(81); // Program Librar
   msgText       char(80) pos(91); // Rtv Excp Data
   excpID        char(4) pos(171); // Excp ID RNX900
   lastFileUsed  char(10) pos(175); // Last File Used
@@ -163,7 +163,7 @@ dcl-ds sds qualified psds;
   srcMbr        char(10) pos(324); //         Mbr
   prcOfPgm      char(10) pos(334); // Pgm cont. Prc
   prcOfMod      char(10) pos(344); // Mod cont. Prc
-  Reserved      char(76) pos(354); // Reserved
+  reserved      char(76) pos(354); // Reserved
   curUsrPrf     char(10) pos(358); // Curr User Prf
 end-ds;
 
@@ -198,7 +198,7 @@ dcl-proc isErrorMsg;
   end-pi;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  if (i_msg.ID <> cMSG_ID_OK);
+  if (i_msg.ID <> cMSG_id_ok);
     logMsg(i_msg);
     return cTrue;
   else;
@@ -266,9 +266,9 @@ dcl-proc log;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   if (i_msgText = '');
-    msg = f_newMsg(cMSG_ID_NONE: x'41');
+    msg = f_newMsg(cMSG_id_none: x'41');
   else;
-    msg = f_newMsg(cMSG_ID_NONE: i_msgText);
+    msg = f_newMsg(cMSG_id_none: i_msgText);
   endif;
 
   logMsg(msg);
@@ -411,7 +411,7 @@ dcl-proc rcvEscMsg;
     i_msgKey   char(4) const;
     i_wait     int(10) const;
     i_action   char(10) const;
-    io_ErrCode char(32767) options(*varsize);
+    io_errCode char(32767) options(*varsize);
   end-pr;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -480,7 +480,7 @@ dcl-proc rtvMsgText;
     i_rpldataLen  int(10) const;
     i_rplVars     char(10) const;
     i_rtnCtrlChrs char(10) const;
-    io_ErrCode    char(32767) options(*varsize);
+    io_errCode    char(32767) options(*varsize);
   end-pr;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -539,7 +539,7 @@ dcl-proc sndMsg;
     i_callStkE   char(32767) options(*varsize) const;
     i_callStkC   int(10) const;
     o_msgKey     char(4);
-    io_ErrCode   char(32767) options(*varsize);
+    io_errCode   char(32767) options(*varsize);
     i_lenStkE    int(10) options(*nopass) const;
     i_callStkEQ  char(20) options(*nopass) const;
     i_wait       int(10) options(*nopass) const;

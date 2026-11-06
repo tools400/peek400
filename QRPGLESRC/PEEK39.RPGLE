@@ -82,7 +82,7 @@ ctl-opt main(peek39);
 dcl-s size_t uns(10) template;
 
 //  qsort -- Sort Array
-dcl-pr qsort pointer extproc('qsort');
+dcl-pr qSort pointer extproc('qsort');
   memPtr    pointer value;
   numElem   like(size_t) value;
   width     like(size_t) value;
@@ -100,7 +100,7 @@ dcl-s pSpcPtr pointer;
 dcl-ds errCode likeds(errCode_t) inz;
 
 //  Organisation of generic header
-dcl-ds GenHeader likeds(genHeader_t) based(pSpcPtr);
+dcl-ds genHeader likeds(genHeader_t) based(pSpcPtr);
 
 //  List data
 dcl-s currListE like(int4_t);
@@ -133,7 +133,7 @@ dcl-proc peek39;
 
     select;
     when (i_function = '*CREATE');
-      exsr Create;
+      exsr create;
     when (i_function = '*DELETE');
       exsr delete;
     when (i_function = '*READ');
@@ -149,7 +149,7 @@ dcl-proc peek39;
   //  Create --  create user space and get database rel.*
   //====================================================*
 
-  begsr Create;
+  begsr create;
 
     o_numE = *zeros;
 
@@ -175,12 +175,12 @@ dcl-proc peek39;
     else;
 
       //  sort entries by name
-      qsort(pSpcPtr + GenHeader.OffsetLst
-           : GenHeader.NumLstEnt
-           : GenHeader.EntrySize
+      qSort(pSpcPtr + genHeader.offsetLst
+           : genHeader.numLstEnt
+           : genHeader.entrySize
            : %paddr(sortByName));
 
-      o_numE = GenHeader.NumLstEnt;
+      o_numE = genHeader.numLstEnt;
       currListE = 0;
     endif;
 
@@ -212,7 +212,7 @@ dcl-proc peek39;
     clear o_dbrl0200;
 
     if (currListE < 0 or
-       currListE >= GenHeader.NumLstEnt);
+       currListE >= genHeader.numLstEnt);
       exsr setError;
       leavesr;
     endif;
@@ -220,14 +220,14 @@ dcl-proc peek39;
     currListE = currListE + 1;
 
     offsetListE =
-     GenHeader.OffsetLst +
-     ((currListE - 1) * GenHeader.EntrySize);
+     genHeader.offsetLst +
+     ((currListE - 1) * genHeader.entrySize);
 
     pListE = pSpcPtr + offsetListE;
 
     o_dbrl0200 = listE;
 
-    o_numE = GenHeader.NumLstEnt - currListE;
+    o_numE = genHeader.numLstEnt - currListE;
 
   endsr;
 

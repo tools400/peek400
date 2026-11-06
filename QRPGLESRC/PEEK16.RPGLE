@@ -43,27 +43,27 @@ dcl-f qcopyle6 extdesc('QPEEKGEN') usropn rename(qpeekgen: fcopy6);
 
 dcl-f peeksrc usropn rename(peeksrc: finput);
 
-dcl-f peekfld usropn;
+dcl-f peekFld usropn;
 
 //===============================================================*
 //  Datenstrukturen für die Codegenerierung
 //===============================================================*
 
 dcl-ds ds_page len(112);
-  $page_Spc char(1) inz('C') pos(6);
-  $page_F2a char(19) inz('When      scnNbr = ') pos(26);
-  $page_F2b zoned(3) inz;
+  $page_spc char(1) inz('C') pos(6);
+  $page_f2a char(19) inz('When      scnNbr = ') pos(26);
+  $page_f2b zoned(3) inz;
 end-ds;
 
 dcl-ds ds_chkCh len(112);
-  $chkCh_Spc char(1) inz('C') pos(6);
+  $chkCh_spc char(1) inz('C') pos(6);
   $chkCh_opC char(6) inz('Exsr') pos(26);
-  $chkCh_F2a char(7) inz('chkChar') pos(36);
-  $chkCh_F2b zoned(3) inz;
+  $chkCh_f2a char(7) inz('chkChar') pos(36);
+  $chkCh_f2b zoned(3) inz;
 end-ds;
 
 dcl-ds ds_exfmt len(112);
-  $exfmt_Spc char(1) inz('C') pos(6);
+  $exfmt_spc char(1) inz('C') pos(6);
   $exfmt_neg char(1) inz('N') pos(9);
   $exfmt_ind char(2) inz('71');
   $exfmt_opC char(6) inz('Exfmt') pos(26);
@@ -81,7 +81,7 @@ dcl-ds ds_fmtNme len(112);
 end-ds;
 
 dcl-ds ds_rnmBuf len(112);
-  $rnmBf_Spc char(1) inz('I') pos(6);
+  $rnmBf_spc char(1) inz('I') pos(6);
   $rnmBf_xFd char(10) inz pos(21);
   $rnmBf_iFd char(14) inz pos(49);
 end-ds;
@@ -126,41 +126,41 @@ end-ds;
 
 dcl-ds ds_eval len(112);
   $eval_spc  char(1) inz('C') pos(6);
-  $Eval_Code char(6) inz('Eval') pos(26);
+  $eval_code char(6) inz('Eval') pos(26);
   $eval_fct2 char(45) inz pos(36);
 end-ds;
 
 dcl-ds ds_for len(112);
-  $For_Spc  char(1) inz('C') pos(6);
-  $For_Code char(6) inz('For') pos(26);
-  $For_Fct2 char(45) inz pos(36);
+  $for_spc  char(1) inz('C') pos(6);
+  $for_code char(6) inz('For') pos(26);
+  $for_fct2 char(45) inz pos(36);
 end-ds;
 
 dcl-ds ds_endfor len(112);
-  $EndFor_Spc  char(1) inz('C') pos(6);
-  $EndFor_Oper char(6) inz('Endfor') pos(26);
+  $endFor_spc  char(1) inz('C') pos(6);
+  $endFor_oper char(6) inz('Endfor') pos(26);
 end-ds;
 
 dcl-ds ds_select len(112);
-  $Select_Spc  char(1) inz('C') pos(6);
-  $Select_Code char(6) inz('Select') pos(26);
-  $Select_Fct2 char(45) inz pos(36);
+  $select_spc  char(1) inz('C') pos(6);
+  $select_code char(6) inz('Select') pos(26);
+  $select_fct2 char(45) inz pos(36);
 end-ds;
 
 dcl-ds ds_when len(112);
   $when_spc  char(1) inz('C') pos(6);
-  $When_Code char(6) inz('When') pos(26);
+  $when_code char(6) inz('When') pos(26);
   $when_fct2 char(45) inz pos(36);
 end-ds;
 
 dcl-ds ds_endsl len(112);
-  $endsl_spc  char(1) inz('C') pos(6);
-  $EndSl_Oper char(6) inz('Endsl') pos(26);
+  $endSl_spc  char(1) inz('C') pos(6);
+  $endSl_oper char(6) inz('Endsl') pos(26);
 end-ds;
 
 dcl-ds ds_if len(112);
   $if_spc  char(1) inz('C') pos(6);
-  $If_If   char(6) inz('If') pos(26);
+  $if_if   char(6) inz('If') pos(26);
   $if_fct2 char(45) inz pos(36);
 end-ds;
 
@@ -171,22 +171,22 @@ end-ds;
 
 dcl-ds ds_else len(112);
   $else_spc  char(1) inz('C') pos(6);
-  $Else_Oper char(6) inz('Else') pos(26);
+  $else_oper char(6) inz('Else') pos(26);
 end-ds;
 
 dcl-ds ds_endif len(112);
   $endif_spc  char(1) inz('C') pos(6);
-  $Endif_Oper char(6) inz('Endif') pos(26);
+  $endif_oper char(6) inz('Endif') pos(26);
 end-ds;
 
 dcl-ds ds_clear len(112);
-  $Clear_Spc   char(1) inz('C') pos(6);
-  $Clear_Oper  char(6) inz('Clear') pos(26);
-  $Clear_Field char(14) inz pos(50);
+  $clear_spc   char(1) inz('C') pos(6);
+  $clear_oper  char(6) inz('Clear') pos(26);
+  $clear_field char(14) inz pos(50);
 end-ds;
 
 dcl-ds ds_remark len(112);
-  $rem_atrB char(1) inz(COLOR_white);
+  $rem_atrB char(1) inz(color_white);
   $rem_rem  char(1) inz('*') pos(7);
   $rem_txt  char(103) inz pos(10);
 end-ds;
@@ -209,11 +209,11 @@ dcl-ds ds_exsr len(112);
 end-ds;
 
 dcl-s #srcseq like(srcseq);
-dcl-c #Increment 0,01;
+dcl-c #increment 0,01;
 
 dcl-ds *n;
   fieldCount zoned(5) inz(*zeros);
-  a#FdCount  char(5) overlay(fieldCount: 1);
+  a#fldCount char(5) overlay(fieldCount: 1);
 end-ds;
 
 /copy QCOPYLE,SDS
@@ -470,7 +470,7 @@ begsr sub003;
 
     //  When      scnNbr = 001
     reset ds_page;
-    $page_F2b = scnNbr;
+    $page_f2b = scnNbr;
     p_wrtOut(ds_page);
 
     //  Exfmt     LC001
@@ -499,7 +499,7 @@ endsr;
 
 begsr sub004;
 
-  open peekfld;
+  open peekFld;
 
   fieldCount = 0;
 
@@ -523,7 +523,7 @@ begsr sub004;
 
   enddo;
 
-  close peekfld;
+  close peekFld;
 
   io_stage = io_stage + 1;
   p_showProgressMeter(io_stage);
@@ -536,7 +536,7 @@ endsr;
 
 begsr sub005;
 
-  open peekfld;
+  open peekFld;
 
   fieldCount = 0;
 
@@ -560,19 +560,19 @@ begsr sub005;
 
     //  If        (EDT00002 = '1') and
     reset ds_if;
-    $if_fct2='(EDT' + a#FdCount + ' = ''1'') and';
+    $if_fct2='(EDT' + a#fldCount + ' = ''1'') and';
     p_wrtOut(ds_if);
 
     //            not (LNG0000001 = '1')
     reset ds_if;
-    $If_If  = ' ';
-    $if_fct2='not (LNG' + a#FdCount + ' = ''1'')';
+    $if_if  = ' ';
+    $if_fct2='not (LNG' + a#fldCount + ' = ''1'')';
     p_wrtOut(ds_if);
 
     //  Übertragen BS-Feld in Dateifeld ...
     if (fldl0100.f1nalw = '1');
       reset ds_if;
-      $If_If   = '';
+      $if_if   = '';
       $if_fct2 = 'and not %nullind(' +
                    %trimr(fldl0100.f1vfld) + ')';
       p_wrtOut(ds_if);
@@ -588,7 +588,7 @@ begsr sub005;
 
   enddo;
 
-  close peekfld;
+  close peekFld;
 
   io_stage = io_stage + 1;
   p_showProgressMeter(io_stage);
@@ -627,7 +627,7 @@ begsr sub007;
   for scnNbr = 1 to i_scnNbrs;
 
     reset ds_chkCh;
-    $chkCh_F2b = scnNbr;
+    $chkCh_f2b = scnNbr;
     p_wrtOut(ds_chkCh);
 
   endfor;
@@ -667,7 +667,7 @@ endsr;
 
 begsr sub009;
 
-  open peekfld;
+  open peekFld;
 
   setll 1 fpeekfld;
 
@@ -675,13 +675,13 @@ begsr sub009;
 
     //  Rename
     reset ds_rnmBuf;
-    $rnmBf_xFd = fldl0100.f1fnme;
+    $rnmBf_xFd = fldl0100.f1FNme;
     $rnmBf_iFd = fldl0100.f1vfld;
     p_wrtOut(ds_rnmBuf);
 
   enddo;
 
-  close peekfld;
+  close peekFld;
 
   io_stage = io_stage + 1;
   p_showProgressMeter(io_stage);
@@ -694,7 +694,7 @@ endsr;
 
 begsr sub010;
 
-  open peekfld;
+  open peekFld;
 
   setll 1 fpeekfld;
 
@@ -703,7 +703,7 @@ begsr sub010;
     //  Rename
     reset ds_rnmEx;
     $rnmEx_xFd =
-     'extfld(' + %trim(fldl0100.f1fnme) + ')';
+     'extfld(' + %trim(fldl0100.f1FNme) + ')';
     $rnmEx_iFd = ' ' + fldl0100.f1vfld;
     p_wrtOut(ds_rnmEx);
 
@@ -712,7 +712,7 @@ begsr sub010;
   io_stage = io_stage + 1;
   p_showProgressMeter(io_stage);
 
-  close peekfld;
+  close peekFld;
 
   io_stage = io_stage + 1;
   p_showProgressMeter(io_stage);
@@ -725,7 +725,7 @@ endsr;
 
 begsr sub011;
 
-  open peekfld;
+  open peekFld;
 
   fieldCount = 0;
 
@@ -743,35 +743,35 @@ begsr sub011;
     endif;
 
     //  Kein ISO Feld
-    if ((fldl0100.F1DTyp <> 'T') and
-        (fldl0100.F1DTyp <> 'L') and
-        (fldl0100.F1DTyp <> 'Z'));
+    if ((fldl0100.f1DTyp <> 'T') and
+        (fldl0100.f1DTyp <> 'L') and
+        (fldl0100.f1DTyp <> 'Z'));
       iter;
     endif;
 
     //  If        FLD0000011= ' '
     reset ds_if;
-    $if_fct2 = 'FLD' + a#FdCount + '= '' ''';
+    $if_fct2 = 'FLD' + a#fldCount + '= '' ''';
     p_wrtOut(ds_if);
 
     //  Eval      FLD0000011 = ISOT
     reset ds_eval;
 
-    $eval_fct2 = 'FLD' + a#FdCount;
+    $eval_fct2 = 'FLD' + a#fldCount;
 
     //  Initialisieren mit dem kleinsten Wert im Format des Feldes
     //  (alle Formate, z.B. '01/01/40' für *MDY; QCOPYLE,DATTIMFMT)
     select;
     //  ... Zeitfeld
-    when (fldl0100.F1DTyp = 'T');
+    when (fldl0100.f1DTyp = 'T');
       $eval_fct2  = %trimr($eval_fct2) + ' = ''' +
                     f_extTime(fldl0100: T'00.00.00') + '''';
     //  ... Datumsfeld
-    when (fldl0100.F1DTyp = 'L');
+    when (fldl0100.f1DTyp = 'L');
       $eval_fct2  = %trimr($eval_fct2) + ' = ''' +
                     f_extDate(fldl0100: D'0001-01-01') + '''';
     //  ... Zeitstempelfeld
-    when (fldl0100.F1DTyp = 'Z');
+    when (fldl0100.f1DTyp = 'Z');
       $eval_fct2  = %trimr($eval_fct2) + ' = ISOZ';
     endsl;
 
@@ -784,7 +784,7 @@ begsr sub011;
 
   enddo;
 
-  close peekfld;
+  close peekFld;
 
   io_stage = io_stage + 1;
   p_showProgressMeter(io_stage);
@@ -864,12 +864,12 @@ begsr sub015;
 
     //  When      scnNbr = 001
     reset ds_page;
-    $page_F2b = scnNbr;
+    $page_f2b = scnNbr;
     p_wrtOut(ds_page);
 
     //  Exsr      chkChar001
     reset ds_chkCh;
-    $chkCh_F2b = scnNbr;
+    $chkCh_f2b = scnNbr;
     p_wrtOut(ds_chkCh);
 
   endfor;
@@ -969,7 +969,7 @@ endsr;
 
 begsr sub020;
 
-  open peekfld;
+  open peekFld;
 
   fieldCount = 0;
 
@@ -983,14 +983,14 @@ begsr sub020;
       iter;
     endif;
 
-    if (fldl0100.F1DTyp = 'G'); // = Graphic
+    if (fldl0100.f1DTyp = 'G'); // = Graphic
       totFields = f_nbrDspRw(fldl0100);
     else;
       totFields = 1;
     endif;
 
     reset ds_remark;
-    $rem_txt = fldl0100.f1fnme;
+    $rem_txt = fldl0100.f1FNme;
     p_wrtOut(ds_remark);
 
     //  Generieren BEGSR
@@ -1009,9 +1009,9 @@ begsr sub020;
       for curField = 1 to totFields;
         reset ds_clear;
         if (totFields = 1);
-          $Clear_Field = 'FLD' + a#FdCount;
+          $clear_field = 'FLD' + a#fldCount;
         else;
-          $Clear_Field = 'FLD' + a#FdCount
+          $clear_field = 'FLD' + a#fldCount
                               + %editc(curField: 'X');
         endif;
         p_wrtOut(ds_clear);
@@ -1047,7 +1047,7 @@ begsr sub020;
 
       //  Generieren:    For x = 1 to 8           (8 = totFields)
       reset ds_for;
-      $For_Fct2 = 'x = 1 to ' + %char(totFields);
+      $for_fct2 = 'x = 1 to ' + %char(totFields);
       p_wrtOut(ds_for);
 
       //  Generieren:    rem  = L_00000013
@@ -1098,7 +1098,7 @@ begsr sub020;
 
       if (totFields = 1);
         reset ds_eval;
-        $eval_fct2 = 'FLD' + a#FdCount +
+        $eval_fct2 = 'FLD' + a#fldCount +
                     ' = ' + fldl0100.f1vfld;
         p_wrtOut(ds_eval);
       else;
@@ -1106,7 +1106,7 @@ begsr sub020;
         //    Generieren:    FLD0001301 = %subst(P_00000013: offs+1: len)
         reset ds_eval;
         $eval_fct2 =
-        'FLD' + a#FdCount + %editc(curField: 'X') +
+        'FLD' + a#fldCount + %editc(curField: 'X') +
         ' = ' +
         '%subst(' + %trimr(fldl0100.f1vfld) +
         ': offs+1: len)';
@@ -1148,7 +1148,7 @@ begsr sub020;
 
   enddo;
 
-  close peekfld;
+  close peekFld;
 
 endsr;
 
@@ -1158,7 +1158,7 @@ endsr;
 
 begsr sub021;
 
-  open peekfld;
+  open peekFld;
 
   fieldCount = 0;
 
@@ -1172,7 +1172,7 @@ begsr sub021;
       iter;
     endif;
 
-    if (fldl0100.F1DTyp = 'G'); // = Graphic
+    if (fldl0100.f1DTyp = 'G'); // = Graphic
       totFields = f_nbrDspRw(fldl0100);
     else;
       totFields = 1;
@@ -1191,12 +1191,12 @@ begsr sub021;
     if (f_isCharFld(fldl0100) = bTrue and
         f_isVarLen(fldl0100) = bTrue and totFields = 1);
       reset ds_if;
-      $if_fct2 = '%trimR(FLD' + a#FdCount + ') <> %trimR(' +
+      $if_fct2 = '%trimR(FLD' + a#fldCount + ') <> %trimR(' +
                  %trim(fldl0100.f1vfld) + ')';
       p_wrtOut(ds_if);
       reset ds_eval;
       $eval_fct2 = %trim(fldl0100.f1vfld) +
-                   ' = %trimR(FLD' + a#FdCount + ')';
+                   ' = %trimR(FLD' + a#fldCount + ')';
       p_wrtOut(ds_eval);
       reset ds_endif;
       p_wrtOut(ds_endif);
@@ -1219,8 +1219,8 @@ begsr sub021;
     for curField = 1 to totFields;
 
       reset ds_eval;
-      clear $Eval_Code;
-      $eval_fct2 = %trim('FLD' + a#FdCount);
+      clear $eval_code;
+      $eval_fct2 = %trim('FLD' + a#fldCount);
       if (totFields > 1);
         $eval_fct2 = %trimr($eval_fct2) +
                     %editc(curField: 'X');
@@ -1234,7 +1234,7 @@ begsr sub021;
 
     if (f_isCharFld(fldl0100) = bTrue);
       reset ds_eval;
-      $Eval_Code = '';
+      $eval_code = '';
       $eval_fct2 = ')';
       p_wrtOut(ds_eval);
     endif;
@@ -1244,7 +1244,7 @@ begsr sub021;
 
   enddo;
 
-  close peekfld;
+  close peekFld;
 
 endsr;
 
@@ -1260,7 +1260,7 @@ begsr sub022;
     nullDft = '*OFF';
   endif;
 
-  open peekfld;
+  open peekFld;
 
   fieldCount = 0;
 
@@ -1289,7 +1289,7 @@ begsr sub022;
 
   enddo;
 
-  close peekfld;
+  close peekFld;
 
 endsr;
 
@@ -1332,7 +1332,7 @@ endsr;
 
 begsr sub026;
 
-  open peekfld;
+  open peekFld;
 
   fieldCount = 0;
 
@@ -1347,13 +1347,13 @@ begsr sub026;
     endif;
 
     reset ds_eval;
-    $eval_fct2 = 'nullSave(' + a#FdCount + ') = %nullind(' +
+    $eval_fct2 = 'nullSave(' + a#fldCount + ') = %nullind(' +
                  %trim(fldl0100.f1vfld) + ')';
     p_wrtOut(ds_eval);
 
   enddo;
 
-  close peekfld;
+  close peekFld;
 
 endsr;
 
@@ -1364,7 +1364,7 @@ endsr;
 
 begsr sub027;
 
-  open peekfld;
+  open peekFld;
 
   fieldCount = 0;
 
@@ -1380,12 +1380,12 @@ begsr sub027;
 
     reset ds_eval;
     $eval_fct2 = '%nullind(' + %trim(fldl0100.f1vfld) +
-                 ') = nullSave(' + a#FdCount + ')';
+                 ') = nullSave(' + a#fldCount + ')';
     p_wrtOut(ds_eval);
 
   enddo;
 
-  close peekfld;
+  close peekFld;
 
 endsr;
 
@@ -1409,7 +1409,7 @@ dcl-proc p_wrtOut;
     i_srcDta like(srcdta) const;
   end-pi;
 
-  #srcseq = #srcseq + #Increment;
+  #srcseq = #srcseq + #increment;
 
   srcseq  = #srcseq;
   srcdta  = i_srcDta;

@@ -394,7 +394,7 @@ dcl-ds QsnReadInf;
   QsnRIDtaL  int(10);
   QsnRIFDtaL int(10);
   QsnRINumF  int(10);
-  ReadLen    int(10);
+  readLen    int(10);
   QsnRIRow   int(10);
   QsnRICol   int(10);
   QsnRIAID   char(1);

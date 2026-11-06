@@ -76,7 +76,7 @@ ctl-opt nomain;
 /copy QCOPYLE,PPEEK71
 /copy QCOPYLE,PPEEK61
 
-dcl-f peekfld disk keyed usropn extfile('QTEMP/PEEKFLD') prefix(k_) rename(fpeekfld: rpeekfld);
+dcl-f peekFld disk keyed usropn extfile('QTEMP/PEEKFLD') prefix(k_) rename(fpeekfld: rpeekfld);
 
 //  Beliebige Datei, nur für die Satzlänge (PEEK62)
 dcl-f anyfile disk(32766) usropn infds(anyfile_ds) extfile(g_anyfile);
@@ -240,7 +240,7 @@ end-proc;
 
 dcl-proc test01_peek01_unconvertibleCcsid export;
   dcl-ds qFile likeds(qObj_t) inz;
-  dcl-s fmtid like(fmtId_t);
+  dcl-s fmtId like(fmtId_t);
   dcl-s msgID like(msgId_t);
   dcl-s msgDta like(msgDta_t);
   dcl-s ccsid int(10);
@@ -255,7 +255,7 @@ dcl-proc test01_peek01_unconvertibleCcsid export;
   qFile.lib = TST_LIB;
 
   monitor;
-    peek01(qFile: TST_CCSID: fmtid: msgID: msgDta);
+    peek01(qFile: TST_CCSID: fmtId: msgID: msgDta);
   on-error;
     fail('PEEK01 bricht bei GRAPHIC CCSID ' + %char(ccsid) + ' ab: '
          + lastMsg());
@@ -273,19 +273,19 @@ end-proc;
 dcl-proc test02_peek02_unknownFormat export;
   dcl-ds qFile likeds(qObj_t) inz;
   dcl-ds fldl0100 likeds(fldl0100_t) inz;
-  dcl-s fmtid like(fmtId_t);
+  dcl-s fmtId like(fmtId_t);
   dcl-s numE like(int4_t);
 
   qFile.name = TST_FILE;
   qFile.lib = TST_LIB;
 
   monitor;
-    peek02(qFile: 'NOFMT': '*CREATE': numE: fldl0100: fmtid);
+    peek02(qFile: 'NOFMT': '*CREATE': numE: fldl0100: fmtId);
     iEqual(0: numE: 'PEEK02 *CREATE mit unbekanntem Satzformat, Anzahl');
 
-    peek02(qFile: 'NOFMT': '*READ': numE: fldl0100: fmtid);
+    peek02(qFile: 'NOFMT': '*READ': numE: fldl0100: fmtId);
     iEqual(0: numE: 'PEEK02 *READ nach gescheitertem *CREATE, Anzahl');
-    aEqual('': fldl0100.f1fnme: 'PEEK02 *READ nach gescheitertem *CREATE');
+    aEqual('': fldl0100.f1FNme: 'PEEK02 *READ nach gescheitertem *CREATE');
   on-error;
     fail('PEEK02 bricht ab: ' + lastMsg());
   endmon;
@@ -489,7 +489,7 @@ dcl-proc test10_peek71_failedTranscoderUsesSlot export;
 
   for i = 1 to 70;
     monitor;
-      hTranscoder = Transcoder_toJobCcsid(ccsid);
+      hTranscoder = transcoder_toJobCcsid(ccsid);
     on-error;
       msg = getMonitoredMessage(*on);
       if (%scan('Maximum number': msg.txt) = 1);
@@ -500,7 +500,7 @@ dcl-proc test10_peek71_failedTranscoderUsesSlot export;
   endfor;
 
   monitor;
-    hTranscoder = Transcoder_toJobCcsid(37);
+    hTranscoder = transcoder_toJobCcsid(37);
   on-error;
     fail('transcoder_tojobccsid(37) scheitert nach ' + %char(failures)
          + ' gescheiterten Aufrufen mit CCSID ' + %char(ccsid) + ': '
@@ -519,7 +519,7 @@ end-proc;
 
 dcl-proc test11_peek11_failedCreate export;
   dcl-ds qFile likeds(qObj_t) inz;
-  dcl-ds rcdl0200 likeds(RCDL0200_t) inz;
+  dcl-ds rcdl0200 likeds(rcdl0200_t) inz;
   dcl-s numE like(int4_t);
 
   qFile.name = TST_FILE;
@@ -536,7 +536,7 @@ dcl-proc test11_peek11_failedCreate export;
   iEqual(0: numE: 'PEEK11 *CREATE für NOFILE, Anzahl');
 
   peek11(qFile: '*READ': numE: rcdl0200);
-  aEqual('': rcdl0200.R2FmtName
+  aEqual('': rcdl0200.r2FmtName
          : 'PEEK11 *READ nach gescheitertem *CREATE, Satzformat');
 end-proc;
 
@@ -572,7 +572,7 @@ end-proc;
 dcl-proc test13_peekfmt_reuseDeletedRecords export;
   dcl-ds qFile likeds(qObj_t) inz;
   dcl-ds qfmt likeds(qObj_t) inz;
-  dcl-ds mbrd0200 likeds(MBRD0200_t) inz;
+  dcl-ds mbrd0200 likeds(mbrd0200_t) inz;
   dcl-s msgID like(msgId_t);
   dcl-s msgDta like(msgDta_t);
   dcl-s i int(10);
@@ -587,8 +587,8 @@ dcl-proc test13_peekfmt_reuseDeletedRecords export;
   qfmt.lib = TST_LIB;
   peek13(qfmt: '*FIRST': mbrd0200);
 
-  iEqual(1: mbrd0200.M2NbrRcdOn: 'Sätze in PEEKFMT nach 3 x PEEK10');
-  iEqual(0: mbrd0200.M2NbrRcdDl
+  iEqual(1: mbrd0200.m2NbrRcdOn: 'Sätze in PEEKFMT nach 3 x PEEK10');
+  iEqual(0: mbrd0200.m2NbrRcdDl
          : 'Gelöschte Sätze in PEEKFMT nach 3 x PEEK10 (REUSEDLT(*YES)?)');
 end-proc;
 
@@ -602,8 +602,8 @@ end-proc;
 dcl-proc test14_peek18_unconvertibleCcsid export;
   dcl-ds qFile likeds(qObj_t) inz;
   dcl-ds fldl0100 likeds(fldl0100_t) inz;
-  dcl-ds set0003 likeds(SET0003_t) inz;
-  dcl-s Buffer like(rcdBuf_t);
+  dcl-ds set0003 likeds(set0003_t) inz;
+  dcl-s buffer like(rcdBuf_t);
   dcl-s outbuf like(rcdBuf_t);
   dcl-s outlen like(int4_t);
   dcl-s msgID like(msgId_t);
@@ -622,20 +622,20 @@ dcl-proc test14_peek18_unconvertibleCcsid export;
   fldl0100 = fieldOf('G');
   set0003 = f_getUsrSg('*ACCESSKEY');
 
-  Buffer = *allx'40';
+  buffer = *allx'40';
   monitor;
-    peek18(fldl0100: TST_CCSID: Buffer: '*EXTERN': '*CURRENT'
+    peek18(fldl0100: TST_CCSID: buffer: '*EXTERN': '*CURRENT'
            : outbuf: outlen: msgID: msgDta);
   on-error;
     fail('PEEK18 *EXTERN bricht bei GRAPHIC CCSID ' + %char(ccsid)
          + ' ab: ' + lastMsg());
   endmon;
-  iEqual(5 + %len(%trimr(set0003.SET_Dlmtr)): outlen
+  iEqual(5 + %len(%trimr(set0003.set_dlmtr)): outlen
          : 'PEEK18 *EXTERN Länge von GRAPHIC(5) mit Trennzeichen');
 
-  Buffer = *allx'40';
+  buffer = *allx'40';
   monitor;
-    peek18(fldl0100: TST_CCSID: Buffer: '*INTERN': '*CURRENT'
+    peek18(fldl0100: TST_CCSID: buffer: '*INTERN': '*CURRENT'
            : outbuf: outlen: msgID: msgDta);
   on-error;
     fail('PEEK18 *INTERN bricht bei GRAPHIC CCSID ' + %char(ccsid)
@@ -657,7 +657,7 @@ dcl-proc test15_peek20_floatKey export;
     d float(8);
     c char(5);
   end-ds;
-  dcl-s Buffer like(rcdBuf_t);
+  dcl-s buffer like(rcdBuf_t);
   dcl-s keyval like(keyBuf_t);
   dcl-s keyBuf like(rcdBuf_t);
   dcl-s msgID like(msgId_t);
@@ -670,9 +670,9 @@ dcl-proc test15_peek20_floatKey export;
   rcd.f = 1.5;
   rcd.d = -2.25;
   rcd.c = 'ABCDE';
-  Buffer = rcd;
+  buffer = rcd;
 
-  peek19(Buffer: keyval: msgID: msgDta);
+  peek19(buffer: keyval: msgID: msgDta);
   peek20(keyval: keyBuf: msgID: msgDta);
   aEqual('': msgID: 'PEEK20 msgid');
 
@@ -692,8 +692,8 @@ end-proc;
 
 dcl-proc test16_peek20_utf8Key export;
   dcl-ds qFile likeds(qObj_t) inz;
-  dcl-ds set0003 likeds(SET0003_t) inz;
-  dcl-s Buffer like(rcdBuf_t);
+  dcl-ds set0003 likeds(set0003_t) inz;
+  dcl-s buffer like(rcdBuf_t);
   dcl-s keyval like(keyBuf_t);
   dcl-s keyBuf like(rcdBuf_t);
   dcl-s msgID like(msgId_t);
@@ -705,14 +705,14 @@ dcl-proc test16_peek20_utf8Key export;
   set0003 = f_getUsrSg('*ACCESSKEY');
 
   //  U = 'ÄÖÜ' in UTF-8 und 4 Leerzeichen, C = 'ABCDE'
-  Buffer = x'C384C396C39C20202020' + 'ABCDE';
+  buffer = x'C384C396C39C20202020' + 'ABCDE';
 
-  peek19(Buffer: keyval: msgID: msgDta);
-  iEqual(10 + %len(%trimr(set0003.SET_Dlmtr)) + 1: %scan('ABCDE': keyval)
+  peek19(buffer: keyval: msgID: msgDta);
+  iEqual(10 + %len(%trimr(set0003.set_dlmtr)) + 1: %scan('ABCDE': keyval)
          : 'Position von C im externen Schlüssel');
 
   peek20(keyval: keyBuf: msgID: msgDta);
-  aEqual(hexOf(%subst(Buffer: 1: 15)): hexOf(%subst(keyBuf: 1: 15))
+  aEqual(hexOf(%subst(buffer: 1: 15)): hexOf(%subst(keyBuf: 1: 15))
          : 'Schlüssel nach PEEK19/PEEK20');
 end-proc;
 
@@ -729,9 +729,9 @@ dcl-proc test17_peek18_accessKeyChanged export;
     d float(8);
     c char(5);
   end-ds;
-  dcl-ds orig likeds(SET0003_t) inz;
-  dcl-ds chg likeds(SET0003_t) inz;
-  dcl-s Buffer like(rcdBuf_t);
+  dcl-ds orig likeds(set0003_t) inz;
+  dcl-ds chg likeds(set0003_t) inz;
+  dcl-s buffer like(rcdBuf_t);
   dcl-s keyval like(keyBuf_t);
   dcl-s keyBuf like(rcdBuf_t);
   dcl-s msgID like(msgId_t);
@@ -745,20 +745,20 @@ dcl-proc test17_peek18_accessKeyChanged export;
   rcd.f = 1.5;
   rcd.d = 2.25;
   rcd.c = 'ABCDE';
-  Buffer = rcd;
+  buffer = rcd;
 
   //  Erst mit der bisherigen Einstellung, damit PEEK18 und PEEK20 sie
   //  schon einmal gelesen haben.
   orig = f_getUsrSg('*ACCESSKEY');
-  peek19(Buffer: keyval: msgID: msgDta);
+  peek19(buffer: keyval: msgID: msgDta);
   peek20(keyval: keyBuf: msgID: msgDta);
 
   chg = orig;
-  chg.SET_SignX = bFalse;
-  chg.SET_Dlmtr = '|';
+  chg.set_signX = bFalse;
+  chg.set_dlmtr = '|';
   p_updUsrSg('*ACCESSKEY': chg);
   monitor;
-    peek19(Buffer: keyval: msgID: msgDta);
+    peek19(buffer: keyval: msgID: msgDta);
     peek20(keyval: keyBuf: msgID: msgDta);
   on-error;
     p_updUsrSg('*ACCESSKEY': orig);
@@ -767,7 +767,7 @@ dcl-proc test17_peek18_accessKeyChanged export;
   endmon;
   p_updUsrSg('*ACCESSKEY': orig);
 
-  //  %editflt ohne führendes Vorzeichen (PEEK18 F_to_extern)
+  //  %editflt ohne führendes Vorzeichen (PEEK18 f_to_extern)
   expected = %subst(%editflt(rcd.f): 2) + '|'
            + %subst(%editflt(rcd.d): 2) + '|ABCDE|';
   aEqual(expected: %trimr(keyval): 'PEEK19 ohne Vorzeichen, Trennzeichen |');
@@ -809,7 +809,7 @@ end-proc;
 
 dcl-proc test19_peek20_mdyDatePseudoRecord export;
   dcl-ds qFile likeds(qObj_t) inz;
-  dcl-s Buffer like(rcdBuf_t);
+  dcl-s buffer like(rcdBuf_t);
   dcl-s msgID like(msgId_t);
   dcl-s msgDta like(msgDta_t);
 
@@ -826,20 +826,20 @@ DATFMT(*MDY) DATSEP(''/'')'
   loadFields(qFile);
 
   monitor;
-    peek20('*PHIVAL': Buffer: msgID: msgDta);
+    peek20('*PHIVAL': buffer: msgID: msgDta);
   on-error;
     fail('PEEK20 *PHIVAL bricht bei *MDY/*USA ab: ' + lastMsg());
   endmon;
   aEqual('': msgID: 'PEEK20 *PHIVAL msgid');
-  chkMdyUsa(Buffer: '*PHIVAL');
+  chkMdyUsa(buffer: '*PHIVAL');
 
   monitor;
-    peek20('*PLOVAL': Buffer: msgID: msgDta);
+    peek20('*PLOVAL': buffer: msgID: msgDta);
   on-error;
     fail('PEEK20 *PLOVAL bricht bei *MDY/*USA ab: ' + lastMsg());
   endmon;
   aEqual('': msgID: 'PEEK20 *PLOVAL msgid');
-  chkMdyUsa(Buffer: '*PLOVAL');
+  chkMdyUsa(buffer: '*PLOVAL');
 end-proc;
 
 //  Felder ohne Schlüssel gelten in PEEK18 als absteigend, *HIVAL und
@@ -1019,8 +1019,8 @@ dcl-proc test24_peek23_manyKeysNoOverflow export;
   dcl-s fkeys like(fKeyDsp_t) dim(32);
   dcl-s n like(int4_t);
   dcl-s i like(int4_t);
-  dcl-s key like(KEY_t);
-  dcl-s data like(SET0000_t);
+  dcl-s key like(key_t);
+  dcl-s data like(set0000_t);
 
   peek22('*REPLACE': '*PEEK14');
   for i = 1 to 24;
@@ -1079,7 +1079,7 @@ end-proc;
 dcl-proc test26_peek27_textOfCmdWithoutMsg export;
   dcl-s choices like(choice_t) dim(32);
   dcl-s n like(int4_t);
-  dcl-s data like(SET0000_t);
+  dcl-s data like(set0000_t);
 
   peek22('*REPLACE': '*PEEK37');
   data = '*NOTEXT';
@@ -1099,7 +1099,7 @@ dcl-proc test27_peek27_exclusionLetterOption export;
   dcl-s choices like(choice_t) dim(32);
   dcl-s n like(int4_t);
   dcl-s excl like(pgmCmd_t) dim(25);
-  dcl-s data like(SET0000_t);
+  dcl-s data like(set0000_t);
   dcl-s all varchar(2500) inz;
   dcl-s i like(int4_t);
 
@@ -1128,7 +1128,7 @@ end-proc;
 dcl-proc test28_peek27_lineWidth export;
   dcl-s choices like(choice_t) dim(32);
   dcl-s n like(int4_t);
-  dcl-s data like(SET0000_t);
+  dcl-s data like(set0000_t);
   dcl-s all varchar(2500) inz;
   dcl-s i like(int4_t);
   dcl-s len like(int4_t);
@@ -1162,15 +1162,15 @@ end-proc;
 // ==========================================================================
 
 dcl-proc test29_peek31_fallbackNotSaved export;
-  dcl-ds set0004 likeds(SET0004_t);
-  dcl-ds orig likeds(SET0004_t);
+  dcl-ds set0004 likeds(set0004_t);
+  dcl-ds orig likeds(set0004_t);
   dcl-s lang like(language_t);
   dcl-s msgID like(msgId_t);
   dcl-s msgDta like(msgDta_t);
 
   orig = f_getUsrSg('*LANGUAGE');
   set0004 = orig;
-  set0004.SET_Lang = 'XYZ';
+  set0004.set_lang = 'XYZ';
   p_updUsrSg('*LANGUAGE': set0004);
 
   lang = '*DFT';
@@ -1186,7 +1186,7 @@ dcl-proc test29_peek31_fallbackNotSaved export;
 
   aEqual('': msgID: 'Nachricht');
   aEqual('GER': lang: 'Verwendete Sprache');
-  aEqual('XYZ': set0004.SET_Lang: 'Gespeicherte Sprache');
+  aEqual('XYZ': set0004.set_lang: 'Gespeicherte Sprache');
 end-proc;
 
 // ==========================================================================
@@ -1194,15 +1194,15 @@ end-proc;
 // ==========================================================================
 
 dcl-proc test30_peek31_explicitSaved export;
-  dcl-ds set0004 likeds(SET0004_t);
-  dcl-ds orig likeds(SET0004_t);
+  dcl-ds set0004 likeds(set0004_t);
+  dcl-ds orig likeds(set0004_t);
   dcl-s lang like(language_t);
   dcl-s msgID like(msgId_t);
   dcl-s msgDta like(msgDta_t);
 
   orig = f_getUsrSg('*LANGUAGE');
   set0004 = orig;
-  set0004.SET_Lang = 'XYZ';
+  set0004.set_lang = 'XYZ';
   p_updUsrSg('*LANGUAGE': set0004);
 
   lang = 'GER';
@@ -1213,7 +1213,7 @@ dcl-proc test30_peek31_explicitSaved export;
 
   aEqual('': msgID: 'Nachricht');
   aEqual('GER': lang: 'Verwendete Sprache');
-  aEqual('GER': set0004.SET_Lang: 'Gespeicherte Sprache');
+  aEqual('GER': set0004.set_lang: 'Gespeicherte Sprache');
 end-proc;
 
 // ==========================================================================
@@ -1308,14 +1308,14 @@ dcl-proc test36_peek54_saveShortWhere export;
   dcl-s msgID like(msgId_t);
 
   monitor;
-    msgID = SaveEnv('ID = 1');
+    msgID = saveEnv('ID = 1');
   on-error;
     fail('PEEK54 bricht ab: ' + lastMsg());
   endmon;
   aEqual('': msgID: 'Sichern');
 
   monitor;
-    msgID = LoadEnv('*SLCENV': TST_FMTID: loaded);
+    msgID = loadEnv('*SLCENV': TST_FMTID: loaded);
   on-error;
     fail('PEEK55 bricht ab: ' + lastMsg());
   endmon;
@@ -1344,14 +1344,14 @@ dcl-proc test37_peek55_blankAtChunkEnd export;
   endfor;
 
   monitor;
-    msgID = SaveEnv(where);
+    msgID = saveEnv(where);
   on-error;
     fail('PEEK54 bricht ab: ' + lastMsg());
   endmon;
   aEqual('': msgID: 'Sichern');
 
   monitor;
-    msgID = LoadEnv('*SLCENV': TST_FMTID: loaded);
+    msgID = loadEnv('*SLCENV': TST_FMTID: loaded);
   on-error;
     fail('PEEK55 bricht ab: ' + lastMsg());
   endmon;
@@ -1369,17 +1369,17 @@ dcl-proc test38_peek55_loadAfterUsr8234 export;
   dcl-s msgID like(msgId_t);
 
   monitor;
-    msgID = SaveEnv('');
+    msgID = saveEnv('');
   on-error;
     fail('PEEK54 bricht ab: ' + lastMsg());
   endmon;
   aEqual('': msgID: 'Sichern');
 
-  msgID = LoadEnv('*SLCLAYOUT': 'XXXXXXXXXXXXX': loaded);
+  msgID = loadEnv('*SLCLAYOUT': 'XXXXXXXXXXXXX': loaded);
   aEqual('USR8234': msgID: 'Anderes Satzformat');
 
   monitor;
-    msgID = LoadEnv('*SLCENV': TST_FMTID: loaded);
+    msgID = loadEnv('*SLCENV': TST_FMTID: loaded);
   on-error;
     fail('Zweites Laden bricht ab: ' + lastMsg());
   endmon;
@@ -1403,7 +1403,7 @@ dcl-proc test39_peek62_convertsOldFile export;
     fail('PEEK62 bricht ab: ' + lastMsg());
   endmon;
   aEqual('': msgID: 'Nachricht');
-  iEqual(PEEKUSR_LEN: RcdLen(TST_OLDU1): 'Satzlänge');
+  iEqual(PEEKUSR_LEN: rcdLen(TST_OLDU1): 'Satzlänge');
 end-proc;
 
 // ==========================================================================
@@ -1521,7 +1521,7 @@ end-proc;
 // ==========================================================================
 
 dcl-proc test46_peek66_valueFits export;
-  dcl-s Buffer like(cmdBuffer_t);
+  dcl-s buffer like(cmdBuffer_t);
   dcl-s length int(10);
   dcl-ds infmt likeds(fldl0100_t) inz;
   dcl-ds outfmt likeds(fldl0100_t) inz;
@@ -1530,16 +1530,16 @@ dcl-proc test46_peek66_valueFits export;
 
   numFmt(infmt: 'P': 9: 0);
   numFmt(outfmt: 'P': 3: 0);
-  Buffer = '123';
+  buffer = '123';
   length = 3;
 
   monitor;
-    peek66(Buffer: length: infmt: outfmt: msgID: msgDta);
+    peek66(buffer: length: infmt: outfmt: msgID: msgDta);
   on-error;
     fail('PEEK66 bricht ab: ' + lastMsg());
   endmon;
   aEqual('': msgID: 'Nachricht');
-  aEqual('x''123F''': %subst(Buffer: 1: length): 'Puffer');
+  aEqual('x''123F''': %subst(buffer: 1: length): 'Puffer');
 end-proc;
 
 // ==========================================================================
@@ -1548,7 +1548,7 @@ end-proc;
 // ==========================================================================
 
 dcl-proc test47_peek66_overflow export;
-  dcl-s Buffer like(cmdBuffer_t);
+  dcl-s buffer like(cmdBuffer_t);
   dcl-s length int(10);
   dcl-ds infmt likeds(fldl0100_t) inz;
   dcl-ds outfmt likeds(fldl0100_t) inz;
@@ -1557,16 +1557,16 @@ dcl-proc test47_peek66_overflow export;
 
   numFmt(infmt: 'P': 9: 0);
   numFmt(outfmt: 'P': 3: 0);
-  Buffer = '12345';
+  buffer = '12345';
   length = 5;
 
   monitor;
-    peek66(Buffer: length: infmt: outfmt: msgID: msgDta);
+    peek66(buffer: length: infmt: outfmt: msgID: msgDta);
   on-error;
     fail('PEEK66 bricht ab: ' + lastMsg());
   endmon;
   aEqual('USR8227': msgID: 'Nachricht');
-  aEqual('12345': %subst(Buffer: 1: length): 'Puffer');
+  aEqual('12345': %subst(buffer: 1: length): 'Puffer');
   aEqual('P': %subst(msgDta: 257: 1): 'Datentyp');
 end-proc;
 
@@ -1575,21 +1575,21 @@ end-proc;
 // ==========================================================================
 
 dcl-proc test48_peek66_overflowFromChar export;
-  dcl-s Buffer like(cmdBuffer_t);
+  dcl-s buffer like(cmdBuffer_t);
   dcl-s length int(10);
   dcl-ds infmt likeds(fldl0100_t) inz;
   dcl-ds outfmt likeds(fldl0100_t) inz;
   dcl-s msgID like(msgId_t);
   dcl-s msgDta like(msgDta_t);
 
-  infmt.F1DTyp = 'A';
-  infmt.f1flen = 10;
+  infmt.f1DTyp = 'A';
+  infmt.f1FLen = 10;
   numFmt(outfmt: 'S': 3: 0);
-  Buffer = '12345';
+  buffer = '12345';
   length = 5;
 
   monitor;
-    peek66(Buffer: length: infmt: outfmt: msgID: msgDta);
+    peek66(buffer: length: infmt: outfmt: msgID: msgDta);
   on-error;
     fail('PEEK66 bricht ab: ' + lastMsg());
   endmon;
@@ -1604,13 +1604,13 @@ end-proc;
 
 dcl-proc test49_peek71_emptyBuffer export;
   dcl-s hTranscoder like(hTranscoder_t);
-  dcl-s Buffer char(10) inz;
+  dcl-s buffer char(10) inz;
   dcl-s length int(10);
 
   monitor;
-    hTranscoder = Transcoder_toJobCcsid(1208);
-    length = Transcoder_xlateBuffer(hTranscoder: %addr(Buffer): 0
-                                    : %size(Buffer));
+    hTranscoder = transcoder_toJobCcsid(1208);
+    length = transcoder_xlateBuffer(hTranscoder: %addr(buffer): 0
+                                    : %size(buffer));
   on-error;
     fail('PEEK71 bricht ab: ' + lastMsg());
   endmon;
@@ -1626,8 +1626,8 @@ dcl-proc test50_peek71_emptyString export;
   dcl-s result varchar(100);
 
   monitor;
-    hTranscoder = Transcoder_toJobCcsid(1208);
-    result = Transcoder_xlateString(hTranscoder: '');
+    hTranscoder = transcoder_toJobCcsid(1208);
+    result = transcoder_xlateString(hTranscoder: '');
   on-error;
     fail('PEEK71 bricht ab: ' + lastMsg());
   endmon;
@@ -1658,8 +1658,8 @@ dcl-proc test51_peek71_jobCcsidChanged export;
   runCmd('CHGJOB CCSID(' + %char(newCcsid) + ')');
   monitor;
     transcoder_reset();
-    hTranscoder = Transcoder_toJobCcsid(1252);
-    toCcsid = Transcoder_getToCcsid(hTranscoder);
+    hTranscoder = transcoder_toJobCcsid(1252);
+    toCcsid = transcoder_getToCcsid(hTranscoder);
   on-error;
     runCmd('CHGJOB CCSID(' + %char(oldCcsid) + ')');
     transcoder_reset();
@@ -1682,12 +1682,12 @@ dcl-proc test52_peek71_deleteCachedHandle export;
   dcl-s hTranscoder like(hTranscoder_t);
   dcl-s fromCcsid int(10);
 
-  hTranscoder = Transcoder_toJobCcsid(500);
-  Transcoder_delete(hTranscoder);
+  hTranscoder = transcoder_toJobCcsid(500);
+  transcoder_delete(hTranscoder);
 
   monitor;
-    hTranscoder = Transcoder_toJobCcsid(500);
-    fromCcsid = Transcoder_getFromCcsid(hTranscoder);
+    hTranscoder = transcoder_toJobCcsid(500);
+    fromCcsid = transcoder_getFromCcsid(hTranscoder);
   on-error;
     fail('PEEK71 bricht ab: ' + lastMsg());
   endmon;
@@ -1704,7 +1704,7 @@ dcl-proc test53_peek71_nullHandle export;
   dcl-s ccsid int(10);
 
   monitor;
-    ccsid = Transcoder_getFromCcsid(Transcoder_null());
+    ccsid = transcoder_getFromCcsid(transcoder_null());
   on-error;
     msg = getMonitoredMessage(*on);
     aEqual('CPF9897': msg.id: 'Nachricht');
@@ -1729,8 +1729,8 @@ dcl-proc test54_peek71_longStringExpand export;
   input = aaa + x'4A';
 
   monitor;
-    hTranscoder = Transcoder_toFieldCcsid(1208);
-    result = Transcoder_xlateString(hTranscoder: input);
+    hTranscoder = transcoder_toFieldCcsid(1208);
+    result = transcoder_xlateString(hTranscoder: input);
   on-error;
     fail('PEEK71 bricht ab: ' + lastMsg());
   endmon;
@@ -1759,8 +1759,8 @@ dcl-proc test55_peek71_resetFreesCache export;
     ccsid = %int(%subst(CCSIDS: pos: nxt - pos));
     pos = nxt + 1;
     monitor;
-      hTranscoder = Transcoder_toJobCcsid(ccsid);
-      hTranscoder = Transcoder_toFieldCcsid(ccsid);
+      hTranscoder = transcoder_toJobCcsid(ccsid);
+      hTranscoder = transcoder_toFieldCcsid(ccsid);
     on-error;
       msg = getMonitoredMessage(*on);
       isFull = (%scan('Maximum number': msg.txt) > 0);
@@ -1770,7 +1770,7 @@ dcl-proc test55_peek71_resetFreesCache export;
 
   transcoder_reset();
   monitor;
-    hTranscoder = Transcoder_toJobCcsid(37);
+    hTranscoder = transcoder_toJobCcsid(37);
   on-error;
     fail('Nach transcoder_reset(): ' + lastMsg());
   endmon;
@@ -1801,7 +1801,7 @@ dcl-proc test56_peek70_unknownLib export;
   iEqual(0: numE: 'Anzahl NOSUCHLIB');
 
   peek70(qFile: '*READ': numE: objl0200);
-  aEqual('': objl0200.O2ONme: '*READ nach gescheitertem *CREATE');
+  aEqual('': objl0200.o2ONme: '*READ nach gescheitertem *CREATE');
 end-proc;
 
 // ==========================================================================
@@ -1812,7 +1812,7 @@ end-proc;
 dcl-proc test57_peek70_ownUserSpace export;
   dcl-ds qFile likeds(qObj_t) inz;
   dcl-ds objl0200 likeds(objl0200_t) inz;
-  dcl-ds rcdl0200 likeds(RCDL0200_t) inz;
+  dcl-ds rcdl0200 likeds(rcdl0200_t) inz;
   dcl-s numE int(10);
   dcl-s nrcd int(10);
 
@@ -1820,14 +1820,14 @@ dcl-proc test57_peek70_ownUserSpace export;
   qFile.lib = TST_LIB;
   peek70(qFile: '*CREATE': numE: objl0200);
   peek70(qFile: '*READ': numE: objl0200);
-  aEqual(TST_LST + '1': objl0200.O2ONme: 'Erster Eintrag');
+  aEqual(TST_LST + '1': objl0200.o2ONme: 'Erster Eintrag');
 
   qFile.name = TST_FILE;
   peek11(qFile: '*CREATE': nrcd: rcdl0200);
 
   qFile.name = TST_LST + '*';
   peek70(qFile: '*READ': numE: objl0200);
-  aEqual(TST_LST + '2': objl0200.O2ONme: 'Zweiter Eintrag nach PEEK11');
+  aEqual(TST_LST + '2': objl0200.o2ONme: 'Zweiter Eintrag nach PEEK11');
 end-proc;
 
 // ==========================================================================
@@ -1878,13 +1878,13 @@ dcl-proc numFmt;
     i_decp int(10) const;
   end-pi;
 
-  io_fmt.F1DTyp = i_type;
-  io_fmt.f1digt = i_digt;
-  io_fmt.f1decp = i_decp;
+  io_fmt.f1DTyp = i_type;
+  io_fmt.f1Digt = i_digt;
+  io_fmt.f1DecP = i_decp;
   if (i_type = 'P');
-    io_fmt.f1flen = %int(i_digt / 2) + 1;
+    io_fmt.f1FLen = %int(i_digt / 2) + 1;
   else;
-    io_fmt.f1flen = i_digt;
+    io_fmt.f1FLen = i_digt;
   endif;
 end-proc;
 
@@ -1909,7 +1909,7 @@ dcl-proc crtOldUsr;
 end-proc;
 
 //  Returns the record length of QTEMP/<i_file> (0 if it cannot be opened).
-dcl-proc RcdLen;
+dcl-proc rcdLen;
   dcl-pi *n int(10);
     i_file varchar(10) const;
   end-pi;
@@ -1919,7 +1919,7 @@ dcl-proc RcdLen;
   g_anyfile = TST_LIB + '/' + i_file;
   monitor;
     open anyfile;
-    len = anyfile_ds.RcdLen;
+    len = anyfile_ds.rcdLen;
     close anyfile;
   on-error;
     len = 0;
@@ -1930,19 +1930,19 @@ end-proc;
 
 //  Saves the environment of QTEMP/PEEKKEYS with the given WHERE into
 //  QTEMP/PEEKENVT(PEEKKEYS) and returns the message ID.
-dcl-proc SaveEnv;
+dcl-proc saveEnv;
   dcl-pi *n like(msgId_t);
     i_where varchar(512) const;
   end-pi;
 
-  dcl-ds PinTabR likeds(pinTabR_t) dim(12) inz;
+  dcl-ds pIntAbr likeds(pinTabR_t) dim(12) inz;
   dcl-s pinTabC like(fieldNme_t) dim(12) inz;
   dcl-s msgID like(msgId_t);
   dcl-s msgDta like(msgDta_t);
 
   peek54(TST_FILE: TST_LIB: TST_FILE: TST_FILE: TST_FMTID
         : TST_ENVF: TST_LIB: TST_ENVM: bFalse
-        : PinTabR: 0: pinTabC: 0
+        : pIntAbr: 0: pinTabC: 0
         : SQL_SEQ: i_where: '': KEY_MODE_UPPER
         : msgID: msgDta);
 
@@ -1950,14 +1950,14 @@ dcl-proc SaveEnv;
 end-proc;
 
 //  Loads the environment of QTEMP/PEEKKEYS and returns the message ID.
-dcl-proc LoadEnv;
+dcl-proc loadEnv;
   dcl-pi *n like(msgId_t);
     i_option like(option_t) const;
     i_fmtId  like(fmtId_t) const;
     o_where  like(sqlWhere_t);
   end-pi;
 
-  dcl-ds PinTabR likeds(pinTabR_t) dim(12) inz;
+  dcl-ds pIntAbr likeds(pinTabR_t) dim(12) inz;
   dcl-s pinTabC like(fieldNme_t) dim(12) inz;
   dcl-s nbrPinR like(int4_t);
   dcl-s nbrPinC like(int4_t);
@@ -1973,7 +1973,7 @@ dcl-proc LoadEnv;
 
   peek55(TST_FILE: TST_LIB: TST_FILE: TST_FILE: i_fmtId
         : TST_ENVF: TST_LIB: TST_ENVM: i_option
-        : PinTabR: nbrPinR: pinTabC: nbrPinC
+        : pIntAbr: nbrPinR: pinTabC: nbrPinC
         : file: lib: mbr: fmt: accMode: o_where: order: keyLower
         : msgID: msgDta);
 
@@ -2006,12 +2006,12 @@ end-proc;
 //  Sets the data of a key in the user settings (TESTUSER).
 dcl-proc setUsrData;
   dcl-pi *n;
-    i_section like(SECTION_t) const;
-    i_key     like(KEY_t) const;
+    i_section like(section_t) const;
+    i_key     like(key_t) const;
     i_data    varchar(256) const;
   end-pi;
 
-  dcl-s data like(SET0000_t);
+  dcl-s data like(set0000_t);
 
   data = i_data;
   if (f_updatUsr(i_section: i_key: data) = bTrue);
@@ -2022,11 +2022,11 @@ end-proc;
 //  Returns ' <section>/<key>' if the key is missing or still '*CHANGED'.
 dcl-proc chkUsrReset;
   dcl-pi *n varchar(100);
-    i_section like(SECTION_t) const;
-    i_key     like(KEY_t) const;
+    i_section like(section_t) const;
+    i_key     like(key_t) const;
   end-pi;
 
-  dcl-s data like(SET0000_t);
+  dcl-s data like(set0000_t);
 
   if (f_chainUsr(i_section: i_key: data) = bTrue);
     return ' ' + %trim(i_section) + '/' + %trim(i_key) + '=fehlt';
@@ -2049,13 +2049,13 @@ dcl-proc chkPeek36;
     i_msgID     char(7) const;
   end-pi;
 
-  dcl-s Buffer like(smallBuffer_t);
+  dcl-s buffer like(smallBuffer_t);
   dcl-s msgID like(msgId_t);
   dcl-s msgDta like(msgDta_t);
 
-  Buffer = i_value;
+  buffer = i_value;
   monitor;
-    peek36(Buffer: i_type: i_format: i_separator: msgID: msgDta);
+    peek36(buffer: i_type: i_format: i_separator: msgID: msgDta);
   on-error;
     fail('PEEK36 bricht bei ' + i_type + ' ' + i_format + ' '''
          + i_value + ''' ab: ' + lastMsg());
@@ -2151,8 +2151,8 @@ dcl-proc findUnconvertibleCcsid;
     //  transcoder_new() does not add the transcoder to the list.
     isConvertible = *on;
     monitor;
-      hTranscoder = Transcoder_new(getJobCcsid(): candidates(i));
-      Transcoder_delete(hTranscoder);
+      hTranscoder = transcoder_new(getJobCcsid(): candidates(i));
+      transcoder_delete(hTranscoder);
     on-error;
       isConvertible = *off;
       getMonitoredMessage(*on);
@@ -2202,11 +2202,11 @@ dcl-proc loadFields;
     i_qFile likeds(qObj_t) const;
   end-pi;
 
-  dcl-s fmtid like(fmtId_t);
+  dcl-s fmtId like(fmtId_t);
   dcl-s msgID like(msgId_t);
   dcl-s msgDta like(msgDta_t);
 
-  peek01(i_qFile: i_qFile.name: fmtid: msgID: msgDta);
+  peek01(i_qFile: i_qFile.name: fmtId: msgID: msgDta);
   if (msgID <> '');
     fail('PEEK01 für ' + %trim(i_qFile.name) + ': ' + msgID);
   endif;
@@ -2237,17 +2237,17 @@ dcl-proc fieldOf;
   end-pi;
 
   dcl-ds fldl0100 likeds(fldl0100_t) inz;
-  dcl-s IsFound ind;
+  dcl-s isFound ind;
 
-  open peekfld;
+  open peekFld;
   chain i_field rpeekfld;
-  IsFound = %found(peekfld);
-  if (IsFound);
+  isFound = %found(peekFld);
+  if (isFound);
     fldl0100 = k_ffd;
   endif;
-  close peekfld;
+  close peekFld;
 
-  if (not IsFound);
+  if (not isFound);
     fail('Feld ' + %trim(i_field) + ' nicht in QTEMP/PEEKFLD.');
   endif;
 
@@ -2279,14 +2279,14 @@ dcl-proc kseqOf;
 
   dcl-s kseq int(10);
 
-  open peekfld;
+  open peekFld;
   chain i_field rpeekfld;
-  if (%found(peekfld));
+  if (%found(peekFld));
     kseq = k_kseq;
   else;
     kseq = -1;
   endif;
-  close peekfld;
+  close peekFld;
 
   return kseq;
 end-proc;
@@ -2299,14 +2299,14 @@ dcl-proc isTranscOf;
 
   dcl-s isTransc char(1);
 
-  open peekfld;
+  open peekFld;
   chain i_field rpeekfld;
-  if (%found(peekfld));
+  if (%found(peekFld));
     isTransc = k_istransc;
   else;
     isTransc = '?';
   endif;
-  close peekfld;
+  close peekFld;
 
   return isTransc;
 end-proc;
@@ -2326,11 +2326,11 @@ dcl-proc editFloat;
   dcl-s msgDta like(msgDta_t);
   dcl-s value char(8) based(i_pValue);
 
-  fldl0100.f1fnme = 'FLOAT';
-  fldl0100.F1DTyp = 'F';
-  fldl0100.F1IBuf = 1;
+  fldl0100.f1FNme = 'FLOAT';
+  fldl0100.f1DTyp = 'F';
+  fldl0100.f1IBuf = 1;
   fldl0100.f1obuf = 1;
-  fldl0100.f1flen = i_length;
+  fldl0100.f1FLen = i_length;
   fldl0100.f1vfmi = '0';
 
   srcVar = %subst(value: 1: i_length);
@@ -2357,19 +2357,19 @@ dcl-proc editPacked;
   dcl-s msgDta like(msgDta_t);
   dcl-s value char(16) based(i_pValue);
 
-  fldl0100.f1fnme = 'PACKED';
-  fldl0100.F1DTyp = 'P';
-  fldl0100.F1IBuf = 1;
+  fldl0100.f1FNme = 'PACKED';
+  fldl0100.f1DTyp = 'P';
+  fldl0100.f1IBuf = 1;
   fldl0100.f1obuf = 1;
-  fldl0100.f1flen = %div(i_digits: 2) + 1;
-  fldl0100.f1digt = i_digits;
-  fldl0100.f1decp = 0;
+  fldl0100.f1FLen = %div(i_digits: 2) + 1;
+  fldl0100.f1Digt = i_digits;
+  fldl0100.f1DecP = 0;
   fldl0100.f1vfmi = '0';
-  fldl0100.f1edtc = i_edtcde;
-  fldl0100.f1edwd = i_edtwrd;
-  fldl0100.f1edwl = %len(i_edtwrd);
+  fldl0100.f1EdtC = i_edtcde;
+  fldl0100.f1EdWd = i_edtwrd;
+  fldl0100.f1EdWl = %len(i_edtwrd);
 
-  srcVar = %subst(value: 1: fldl0100.f1flen);
+  srcVar = %subst(value: 1: fldl0100.f1FLen);
   peek06(fldl0100: 'FLDL0100': srcVar: bFalse: bTrue
          : string: strlen: msgID: msgDta);
 

@@ -59,19 +59,19 @@ end-ds;
 
 dcl-s x like(int4_t) inz;
 
-dcl-ds WrkTabDS qualified;
-  Remark  char(5) inz(*blanks);
+dcl-ds wrkTabDS qualified;
+  remark  char(5) inz(*blanks);
   section char(10) inz(*blanks);
   key     char(10) inz(*blanks);
-  data    like(SET0000_t) inz(*blanks);
+  data    like(set0000_t) inz(*blanks);
 end-ds;
 
-dcl-ds set0001 likeds(SET0001_t) inz;
+dcl-ds set0001 likeds(set0001_t) inz;
 
-dcl-s o_data like(SET0000_t) inz;
+dcl-s o_data like(set0000_t) inz;
 
-dcl-s WrkTab char(100) dim(100) inz(*blanks);
-dcl-s WrkElem like(int4_t) inz;
+dcl-s wrkTab char(100) dim(100) inz(*blanks);
+dcl-s wrkElem like(int4_t) inz;
 
 dcl-s tb010100 char(100) dim(58) ctdata perrcd(1);
 dcl-c elm010100 %elem(tb010100);
@@ -137,23 +137,23 @@ o_msgID = '';
 o_msgDta = '';
 
 //  Ermitteln der abgespeicherten Versions-Nr. ...
-exsr GetUsrSetg;
+exsr getUsrSetg;
 
 //  Vergleichen mit jetziger Versions-Nr. ...
 if (set0007.set_vsn <> i_version);
   //  ... und bei Abweichungen den
   //      Aktualisierungsvorgang starten
-  exsr VPos;
+  exsr vPos;
 else;
 endif;
 
 *inlr = '1';
 
 //============================================================*
-//    VPos          Durchführen der Aktualisierungsarbeiten   *
+//    vPos          Durchführen der Aktualisierungsarbeiten   *
 //============================================================*
 
-begsr VPos;
+begsr vPos;
 
   //  Schleife solabge durchlaufen, bis das
   //  der jetzige Versionsstand erreicht worden ist.
@@ -280,12 +280,12 @@ begsr VPos;
     other;
       //  ... kein weiterer Schritt: aktuelle Versions-Nr. speichern
       set0007.set_vsn = i_version;
-      exsr SetUsrSetg;
+      exsr setUsrSetg;
       leave;
     endsl;
 
     //  ... Abspeichern der neuen Versions-Nr.
-    exsr SetUsrSetg;
+    exsr setUsrSetg;
   enddo;
 
 endsr;
@@ -296,8 +296,8 @@ endsr;
 
 begsr v01r01m00;
 
-  WrkTab = %subarr(tb010100: 1);
-  WrkElem = elm010100;
+  wrkTab = %subarr(tb010100: 1);
+  wrkElem = elm010100;
   exsr updPeekUsr;
 
   set0007.set_vsn = 'V01R01M00';
@@ -310,8 +310,8 @@ endsr;
 
 begsr v01r02m00;
 
-  WrkTab = %subarr(tb010200: 1);
-  WrkElem = elm010200;
+  wrkTab = %subarr(tb010200: 1);
+  wrkElem = elm010200;
   exsr updPeekUsr;
 
   set0007.set_vsn = 'V01R02M00';
@@ -324,8 +324,8 @@ endsr;
 
 begsr v01r03m00;
 
-  WrkTab = %subarr(tb010300: 1);
-  WrkElem = elm010300;
+  wrkTab = %subarr(tb010300: 1);
+  wrkElem = elm010300;
   exsr updPeekUsr;
 
   set0007.set_vsn = 'V01R03M00';
@@ -338,8 +338,8 @@ endsr;
 
 begsr v01r04m00;
 
-  WrkTab = %subarr(tb010400: 1);
-  WrkElem = elm010400;
+  wrkTab = %subarr(tb010400: 1);
+  wrkElem = elm010400;
   exsr updPeekUsr;
 
   set0007.set_vsn = 'V01R04M00';
@@ -352,8 +352,8 @@ endsr;
 
 begsr v01r05m00;
 
-  WrkTab = %subarr(tb010500: 1);
-  WrkElem = elm010500;
+  wrkTab = %subarr(tb010500: 1);
+  wrkElem = elm010500;
   exsr updPeekUsr;
 
   set0007.set_vsn = 'V01R05M00';
@@ -376,8 +376,8 @@ endsr;
 
 begsr v02r00m00;
 
-  WrkTab = %subarr(tb020000: 1);
-  WrkElem = elm020000;
+  wrkTab = %subarr(tb020000: 1);
+  wrkElem = elm020000;
   exsr updPeekUsr;
 
   set0007.set_vsn = 'V02R00M00';
@@ -390,8 +390,8 @@ endsr;
 
 begsr v02r01m00;
 
-  WrkTab = %subarr(tb020100: 1);
-  WrkElem = elm020100;
+  wrkTab = %subarr(tb020100: 1);
+  wrkElem = elm020100;
   exsr updPeekUsr;
 
   set0007.set_vsn = 'V02R01M00';
@@ -414,8 +414,8 @@ endsr;
 
 begsr v02r02m00;
 
-  WrkTab = %subarr(tb020200: 1);
-  WrkElem = elm020200;
+  wrkTab = %subarr(tb020200: 1);
+  wrkElem = elm020200;
   exsr updPeekUsr;
 
   set0007.set_vsn = 'V02R02M00';
@@ -508,8 +508,8 @@ endsr;
 
 begsr v03r00m00;
 
-  WrkTab = %subarr(tb030000: 1);
-  WrkElem = elm030000;
+  wrkTab = %subarr(tb030000: 1);
+  wrkElem = elm030000;
   exsr updPeekUsr;
 
   set0007.set_vsn = 'V03R00M00';
@@ -537,8 +537,8 @@ endsr;
 
 begsr v03r01m00;
 
-  WrkTab = %subarr(tb030100: 1);
-  WrkElem = elm030100;
+  wrkTab = %subarr(tb030100: 1);
+  wrkElem = elm030100;
   exsr updPeekUsr;
 
   set0007.set_vsn = 'V03R01M00';
@@ -551,8 +551,8 @@ endsr;
 
 begsr v03r01m01;
 
-  WrkTab = %subarr(tb030101: 1);
-  WrkElem = elm030101;
+  wrkTab = %subarr(tb030101: 1);
+  wrkElem = elm030101;
   exsr updPeekUsr;
 
   set0007.set_vsn = 'V03R01M01';
@@ -630,8 +630,8 @@ begsr v03r02m01;
   //  Eintragen Art und Weise der Umsetzung von Edit Codes in der Subfile:
   set0001 = f_getUsrSg('*DSPATTR');
 
-  if (set0001.SET_DspSgn <> '2');
-    set0001.SET_DspSgn   = '2';
+  if (set0001.set_dspSgn <> '2');
+    set0001.set_dspSgn   = '2';
     p_updUsrSg('*DSPATTR': set0001);
   endif;
 
@@ -648,9 +648,9 @@ begsr v03r02m02;
   //  Ändern Default Edit Code von 'J' auf 'L'
   set0001 = f_getUsrSg('*DSPATTR');
 
-  if (set0001.SET_editCode = 'J');
-    set0001.SET_editCode = 'L';
-    set0001.SET_DspSgn   = '2';
+  if (set0001.set_editCode = 'J');
+    set0001.set_editCode = 'L';
+    set0001.set_dspSgn   = '2';
     p_updUsrSg('*DSPATTR': set0001);
   endif;
 
@@ -682,8 +682,8 @@ endsr;
 
 begsr v03r02m05;
 
-  WrkTab = %subarr(tb030205: 1);
-  WrkElem = elm030205;
+  wrkTab = %subarr(tb030205: 1);
+  wrkElem = elm030205;
   exsr updPeekUsr;
 
   set0007.set_vsn = 'V03R02M05';
@@ -756,8 +756,8 @@ endsr;
 
 begsr v03r04m01;
 
-  WrkTab = %subarr(tb030401: 1);
-  WrkElem = elm030401;
+  wrkTab = %subarr(tb030401: 1);
+  wrkElem = elm030401;
   exsr updPeekUsr;
 
   set0007.set_vsn = 'V03R04M01';
@@ -790,8 +790,8 @@ endsr;
 
 begsr v03r05m00;
 
-  WrkTab = %subarr(tb030500: 1);
-  WrkElem = elm030500;
+  wrkTab = %subarr(tb030500: 1);
+  wrkElem = elm030500;
   exsr updPeekUsr;
 
   set0007.set_vsn = 'V03R05M00';
@@ -887,8 +887,8 @@ endsr;
 
 begsr v04r00m01;
 
-  WrkTab = %subarr(tb040001: 1);
-  WrkElem = elm040001;
+  wrkTab = %subarr(tb040001: 1);
+  wrkElem = elm040001;
   exsr updPeekUsr;
 
   set0007.set_vsn = 'V04R00M01';
@@ -971,29 +971,29 @@ endsr;
 
 begsr updPeekUsr;
 
-  for x = 1 to WrkElem;
+  for x = 1 to wrkElem;
 
-    WrkTabDS = WrkTab(x);
+    wrkTabDS = wrkTab(x);
 
-    *in11 = f_chainUsr(WrkTabDS.section
-                      : WrkTabDS.key: o_data);
+    *in11 = f_chainUsr(wrkTabDS.section
+                      : wrkTabDS.key: o_data);
 
     x = x + 1;
 
     //  Wenn der Datenbereich anders als erwartet
     //  belegt ist, ...
-    if (o_data <> WrkTabDS.data);
+    if (o_data <> wrkTabDS.data);
       //  ... dann keine Änderung durchführen
       iter;
     else;
       //  ... ansonsten die Änderung vollziehen
-      WrkTabDS = WrkTab(x);
+      wrkTabDS = wrkTab(x);
       if (*in11 = '1');
-        f_writeUsr(WrkTabDS.section
-                  : WrkTabDS.key: WrkTabDS.data);
+        f_writeUsr(wrkTabDS.section
+                  : wrkTabDS.key: wrkTabDS.data);
       else;
-        f_updatUsr(WrkTabDS.section
-                  : WrkTabDS.key: WrkTabDS.data);
+        f_updatUsr(wrkTabDS.section
+                  : wrkTabDS.key: wrkTabDS.data);
       endif;
     endif;
 
@@ -1002,10 +1002,10 @@ begsr updPeekUsr;
 endsr;
 
 //============================================================*
-//    GetUsrSetg    Ermitteln der Versions-Nr.                *
+//    getUsrSetg    Ermitteln der Versions-Nr.                *
 //============================================================*
 
-begsr GetUsrSetg;
+begsr getUsrSetg;
 
   //  *VERSION
   set0007 = f_getUsrSg('*VERSION'  );
@@ -1013,10 +1013,10 @@ begsr GetUsrSetg;
 endsr;
 
 //============================================================*
-//    SetUsrSetg    Speichern der Versions-Nr.                *
+//    setUsrSetg    Speichern der Versions-Nr.                *
 //============================================================*
 
-begsr SetUsrSetg;
+begsr setUsrSetg;
 
   //  *DSPATR
   p_updUsrSg('*VERSION': set0007);
@@ -1040,7 +1040,7 @@ dcl-proc errorHandler;
 
 end-proc;
 
-**   Section---Schlüssel-Datenbereich-------------------------- Version 1.1.0 -----------
+**   section---schlüssel-datenbereich-------------------------- version 1.1.0 -----------
 alt: *PEEK05   *F11
 neu: *PEEK05   *F11      *LAYOUT
 alt: *PEEK05   *F13      *USERSETG
@@ -1099,7 +1099,7 @@ alt: *PEEK37   *PAGEDOWN
 neu: *PEEK37   *PAGEDOWN *PAGEDOWN
 alt: *PEEK37   1
 neu: *PEEK37   1         *SELECT
-**   Section---Schlüssel-Datenbereich-------------------------- Version 1.2.0 -----------
+**   section---schlüssel-datenbereich-------------------------- version 1.2.0 -----------
 alt: *CMD      DM
 neu: *CMD      DM        DSPMSG
 alt: *CMD      EA
@@ -1136,7 +1136,7 @@ alt: *PXXXXXXXX*F17
 neu: *PXXXXXXXX*F17      *TOP
 alt: *PXXXXXXXX*F18
 neu: *PXXXXXXXX*F18      *BOT
-**   Section---Schlüssel-Datenbereich-------------------------- Version 1.3.0 -----------
+**   section---schlüssel-datenbereich-------------------------- version 1.3.0 -----------
 alt: *PXXXXXXXX*F09
 neu: *PXXXXXXXX*F09      *HEXEDIT
 alt: *PEEK45   *F03
@@ -1149,7 +1149,7 @@ alt: *PEEK45   *F24
 neu: *PEEK45   *F24      *MOREKEYS
 alt: *PEEK45   *ENTER
 neu: *PEEK45   *ENTER    *ENTER
-**   Section---Schlüssel-Datenbereich-------------------------- Version 1.4.0 -----------
+**   section---schlüssel-datenbereich-------------------------- version 1.4.0 -----------
 alt: *PEEK47   *ENTER
 neu: *PEEK47   *ENTER    *ENTER
 alt: *PEEK47   *F03
@@ -1192,7 +1192,7 @@ alt: *PEEK49   *F24
 neu: *PEEK49   *F24      *MOREKEYS
 alt: *PEEK05   A
 neu: *PEEK05   A         *ABOUT
-**   Section---Schlüssel-Datenbereich-------------------------- Version 1.5.0 -----------
+**   section---schlüssel-datenbereich-------------------------- version 1.5.0 -----------
 alt: *PEEK50
 neu: *PEEK50             *NONE
 alt: *PEEK50   *F03
@@ -1245,7 +1245,7 @@ alt: *PEEK47   *F17
 neu: *PEEK47   *F17      *TOP
 alt: *PEEK47   *F18
 neu: *PEEK47   *F18      *BOT
-**   Section---Schlüssel-Datenbereich-------------------------- Version 2.0.0 -----------
+**   section---schlüssel-datenbereich-------------------------- version 2.0.0 -----------
 alt: *PEEK48   *ENTER
 neu: *PEEK48   *ENTER    *ENTER
 alt: *PEEK48   *F03
@@ -1280,7 +1280,7 @@ alt: *PEEK40   *F17
 neu: *PEEK40   *F17      *TOP
 alt: *PEEK40   *F18
 neu: *PEEK40   *F18      *BOT
-**   Section---Schlüssel-Datenbereich-------------------------- Version 2.1.0 -----------
+**   section---schlüssel-datenbereich-------------------------- version 2.1.0 -----------
 alt: *PEEK56   *ENTER
 neu: *PEEK56   *ENTER    *ENTER
 alt: *PEEK56   *F03
@@ -1321,7 +1321,7 @@ alt: *PEEK57   *F12
 neu: *PEEK57   *F12      *CANCEL
 alt: *PEEK57   *F24
 neu: *PEEK57   *F24      *MOREKEYS
-**   Section---Schlüssel-Datenbereich-------------------------- Version 2.2.0 -----------
+**   section---schlüssel-datenbereich-------------------------- version 2.2.0 -----------
 alt: *PEEK45   *F19
 neu: *PEEK45   *F19      *LEFT
 alt: *PEEK45   *F20
@@ -1352,7 +1352,7 @@ alt: *PEEK56   1         *SELECT
 neu: *PEEK56   1         *SLCENV
 alt: *PEEK56   2
 neu: *PEEK56   2         *SLCLAYOUT
-**   Section---Schlüssel-Datenbereich-------------------------- Version 3.0.0 -----------
+**   section---schlüssel-datenbereich-------------------------- version 3.0.0 -----------
 alt: *PXXXXXXXX*F08
 neu: *PXXXXXXXX*F08      *TGLNULL
 alt: *PXXXXXXXX*F10
@@ -1375,12 +1375,12 @@ alt: *PEEK64   *F24
 neu: *PEEK64   *F24      *MOREKEYS
 alt: *PEEK05   K
 neu: *PEEK05   K         *TGLKEYLUC
-**   Section---Schlüssel-Datenbereich-------------------------- Version 3.1.0 -----------
+**   section---schlüssel-datenbereich-------------------------- version 3.1.0 -----------
 alt: *PEEK05   6
 neu: *PEEK05   6         *PRINT
 alt: *PEEK14   *F21
 neu: *PEEK14   *F21      *PRINT
-**   Section---Schlüssel-Datenbereich-------------------------- Version 3.1.1 -----------
+**   section---schlüssel-datenbereich-------------------------- version 3.1.1 -----------
 neu: *PEEK68
 neu: *PEEK68             *NONE
 alt: *PEEK68   *ENTER
@@ -1405,7 +1405,7 @@ alt: *PEEK68   *PAGEDOWN
 neu: *PEEK68   *PAGEDOWN *PAGEDOWN
 alt: *PEEK68   1
 neu: *PEEK68   1         *SELECT
-**   Section---Schlüssel-Datenbereich-------------------------- Version 3.2.5 -----------
+**   section---schlüssel-datenbereich-------------------------- version 3.2.5 -----------
 neu: *PEEK69
 neu: *PEEK69             *NONE
 alt: *PEEK69   *ENTER
@@ -1432,17 +1432,17 @@ alt: *PEEK69   *PAGEUP
 neu: *PEEK69   *PAGEUP   *PAGEUP
 alt: *PEEK69   1
 neu: *PEEK69   1         *SELECT
-**   Section---Schlüssel-Datenbereich-------------------------- Version 3.4.1 -----------
+**   section---schlüssel-datenbereich-------------------------- version 3.4.1 -----------
 alt: *PEEK45   *PAGEUP
 neu: *PEEK45   *PAGEUP   *PAGEUP
 alt: *PEEK45   *PAGEDOWN
 neu: *PEEK45   *PAGEDOWN *PAGEDOWN
-**   Section---Schlüssel-Datenbereich-------------------------- Version 3.5.0 -----------
+**   section---schlüssel-datenbereich-------------------------- version 3.5.0 -----------
 alt: *PEEK64   *ENTER    *OK
 neu: *PEEK64   *ENTER    *ENTER
 alt: *PEEK64   *F3       *NO
 neu: *PEEK64   *F3       *EXIT
-**   Section---Schlüssel-Datenbereich-------------------------- Version 4.0.1 -----------
+**   section---schlüssel-datenbereich-------------------------- version 4.0.1 -----------
 alt: *PEEK64   *F07
 neu: *PEEK64   *F07      *INSERT
 alt: *PEEK64   *F08

@@ -18,7 +18,7 @@ end-pr;
 //  Option control block
 dcl-ds cpop0100_t qualified template;
   typeCmdPrc   int(10);
-  DBCS_Data    char(1);
+  dbcs_data    char(1);
   prmtAction   char(1);
   cmdStrSyntax char(1);
   msgRtvKey    char(4);
@@ -27,38 +27,38 @@ end-ds;
 
 //  Type of command processing.
 //  The type of command processing to be performed by the system.
-dcl-c cQCAPCMD_PRC_EXC_QCMDEXC 0;
-dcl-c cQCAPCMD_PRC_CHK_QCMDCHK 1;
-dcl-c cQCAPCMD_PRC_EXC_CMDLINE 2;
-dcl-c cQCAPCMD_PRC_CHK_CMDLINE 3;
-dcl-c cQCAPCMD_PRC_CHK_CL_STMT 4;
-dcl-c cQCAPCMD_PRC_CHK_SEU_CL 5;
-dcl-c cQCAPCMD_PRC_CHK_SEU_CMD 6;
-dcl-c cQCAPCMD_PRC_CHK_SEU_BND 7;
-dcl-c cQCAPCMD_PRC_CHK_UDO 8;
-dcl-c cQCAPCMD_PRC_CHK_SEU_CLLE 9;
+dcl-c cQCAPCMD_prc_exc_qcmdexc 0;
+dcl-c cQCAPCMD_prc_chk_qcmdchk 1;
+dcl-c cQCAPCMD_prc_exc_cmdline 2;
+dcl-c cQCAPCMD_prc_chk_cmdline 3;
+dcl-c cQCAPCMD_prc_chk_cl_stmt 4;
+dcl-c cQCAPCMD_prc_chk_seu_cl 5;
+dcl-c cQCAPCMD_prc_chk_seu_cmd 6;
+dcl-c cQCAPCMD_prc_chk_seu_bnd 7;
+dcl-c cQCAPCMD_prc_chk_udo 8;
+dcl-c cQCAPCMD_prc_chk_seu_clle 9;
 
 //  DBCS data handling.
 //  Whether the command analyzer should handle the SO/SI
 //  characters as DBCS delimiters.
-dcl-c cQCAPCMD_DBCS_IGNORE '0';
-dcl-c cQCAPCMD_DBCS_HANDLE '1';
+dcl-c cQCAPCMD_dbcs_ignore '0';
+dcl-c cQCAPCMD_dbcs_handle '1';
 
 //  Prompter action.
 //  Indicates whether the prompter should be called on a command string.
-dcl-c cQCAPCMD_PROMPT_NEVER '0';
-dcl-c cQCAPCMD_PROMPT_ALWAYS '1';
-dcl-c cQCAPCMD_PROMPT_SELECTIVE '2';
-dcl-c cQCAPCMD_PROMPT_HELP '3';
+dcl-c cQCAPCMD_prompt_never '0';
+dcl-c cQCAPCMD_prompt_always '1';
+dcl-c cQCAPCMD_prompt_selective '2';
+dcl-c cQCAPCMD_prompt_help '3';
 
 //  Command string syntax.
 //  Whether command processing should be done in i5/OS mode or System/38 mode.
-dcl-c cQCAPCMD_SYNTAX_SYSTEM '0';
-dcl-c cQCAPCMD_SYNTAX_SYSTEM38 '1';
+dcl-c cQCAPCMD_syntax_system '0';
+dcl-c cQCAPCMD_syntax_system38 '1';
 
 //  CCSID of command string.
-dcl-c cQCAPCMD_CCSID_JOB 0;
-dcl-c cQCAPCMD_CCSID_UTF8 1208;
-dcl-c cQCAPCMD_CCSID_UTF16 1200;
+dcl-c cQCAPCMD_ccsid_job 0;
+dcl-c cQCAPCMD_ccsid_utf8 1208;
+dcl-c cQCAPCMD_ccsid_utf16 1200;
 
 /endif

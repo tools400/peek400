@@ -6,7 +6,7 @@
 //                                                               *
 //===============================================================*
 
-dcl-ds Qdb_Qdbfh based(FDH_Ptr);
+dcl-ds Qdb_Qdbfh based(fdh_ptr);
   Qdbfyret  int(10);
   Qdbfyavl  int(10);
 

@@ -86,13 +86,13 @@ dcl-s pSpcPtr pointer;
 dcl-ds errCode likeds(errCode_t) inz;
 
 //  Organisation of generic header
-dcl-ds GenHeader likeds(genHeader_t) based(pSpcPtr);
+dcl-ds genHeader likeds(genHeader_t) based(pSpcPtr);
 
 //  List data
 dcl-s currListE like(int4_t);
 dcl-s offsetListE like(int4_t);
 dcl-s pListE pointer;
-dcl-ds listE likeds(MBRL0200_t) based(pListE);
+dcl-ds listE likeds(mbrl0200_t) based(pListE);
 
 dcl-s msgID like(msgId_t);
 dcl-s msgDta like(msgDta_t);
@@ -107,7 +107,7 @@ dcl-proc peek46;
     i_mbr      like(mbr_t) const;
     i_function like(function_t) const;
     o_numE     like(int4_t);
-    o_mbrl0200 likeds(MBRL0200_t);
+    o_mbrl0200 likeds(mbrl0200_t);
   end-pi;
 
   //---------------------------------------------------*
@@ -119,7 +119,7 @@ dcl-proc peek46;
 
     select;
     when (i_function = '*CREATE');
-      exsr Create;
+      exsr create;
     when (i_function = '*DELETE');
       exsr delete;
     when (i_function = '*READ');
@@ -135,7 +135,7 @@ dcl-proc peek46;
   //  Create --  create user space and get database rel.*
   //====================================================*
 
-  begsr Create;
+  begsr create;
 
     o_numE = *zeros;
 
@@ -157,7 +157,7 @@ dcl-proc peek46;
       o_numE = 0;
       currListE = -1;
     else;
-      o_numE = GenHeader.NumLstEnt;
+      o_numE = genHeader.numLstEnt;
       currListE = 0;
     endif;
 
@@ -187,7 +187,7 @@ dcl-proc peek46;
     clear o_mbrl0200;
 
     if (currListE < 0 or
-       currListE >= GenHeader.NumLstEnt);
+       currListE >= genHeader.numLstEnt);
       exsr setError;
       leavesr;
     endif;
@@ -195,14 +195,14 @@ dcl-proc peek46;
     currListE = currListE + 1;
 
     offsetListE =
-     GenHeader.OffsetLst +
-     ((currListE - 1) * GenHeader.EntrySize);
+     genHeader.offsetLst +
+     ((currListE - 1) * genHeader.entrySize);
 
     pListE = pSpcPtr + offsetListE;
 
     o_mbrl0200 = listE;
 
-    o_numE = GenHeader.NumLstEnt - currListE;
+    o_numE = genHeader.numLstEnt - currListE;
 
   endsr;
 

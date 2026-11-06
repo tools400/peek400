@@ -87,7 +87,7 @@ dcl-ds qUsrSpc likeds(qObj_t) inz;
 dcl-s pSpcPtr pointer;
 dcl-ds errCode likeds(errCode_t) inz;
 
-dcl-ds GenHeader likeds(genHeader_t) based(pSpcPtr);
+dcl-ds genHeader likeds(genHeader_t) based(pSpcPtr);
 dcl-ds listHeader likeds(QUSLFLD_header_t) based(pListHeader);
 
 dcl-s currListE like(int4_t);
@@ -121,7 +121,7 @@ dcl-proc peek02;
 
     select;
     when (i_function = '*CREATE');
-      exsr Create;
+      exsr create;
     when (i_function = '*DELETE');
       exsr delete;
     when (i_function = '*READ');
@@ -138,7 +138,7 @@ dcl-proc peek02;
   //  Create --  create user space and get database rel.*
   //====================================================*
 
-  begsr Create;
+  begsr create;
 
     o_numE = *zeros;
 
@@ -165,8 +165,8 @@ dcl-proc peek02;
       o_numE = 0;
       currListE = -1;
     else;
-      pListHeader = pSpcPtr + GenHeader.offsetHdr;
-      o_numE = GenHeader.NumLstEnt;
+      pListHeader = pSpcPtr + genHeader.offsetHdr;
+      o_numE = genHeader.numLstEnt;
       o_rcdFmtID = listHeader.rcdFmtID;
       currListE = 0;
     endif;
@@ -199,7 +199,7 @@ dcl-proc peek02;
     clear o_fldl0100;
 
     if (currListE < 0 or
-       currListE >= GenHeader.NumLstEnt);
+       currListE >= genHeader.numLstEnt);
       exsr setError;
       leavesr;
     endif;
@@ -207,14 +207,14 @@ dcl-proc peek02;
     currListE = currListE + 1;
 
     offsetListE =
-     GenHeader.OffsetLst +
-     ((currListE - 1) * GenHeader.EntrySize);
+     genHeader.offsetLst +
+     ((currListE - 1) * genHeader.entrySize);
 
     pListE = pSpcPtr + offsetListE;
 
     o_fldl0100 = listE;
 
-    o_numE = GenHeader.NumLstEnt - currListE;
+    o_numE = genHeader.numLstEnt - currListE;
 
   endsr;
 

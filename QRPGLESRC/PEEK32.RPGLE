@@ -114,10 +114,10 @@ begsr check_sbcs;
 endsr;
 
 //============================================================*
-//    GetUsrSetg    Ermitteln der Standardsprache             *
+//    getUsrSetg    Ermitteln der Standardsprache             *
 //============================================================*
 
-begsr GetUsrSetg;
+begsr getUsrSetg;
 
   set0006 = f_getUsrSg('*CVTCHR');
 
@@ -135,7 +135,7 @@ begsr inzsr;
 
   isInzSr = bTrue;
 
-  exsr GetUsrSetg;
+  exsr getUsrSetg;
 
 endsr;
 

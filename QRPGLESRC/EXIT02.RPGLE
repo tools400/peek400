@@ -84,59 +84,59 @@ dcl-ds sds qualified psds;
   // Programmname
   pgmName  char(10);
   // Programmfehlerstatus
-  PgmStat  zoned(5);
+  pgmStat  zoned(5);
   // vorheriger Programmfehlerstatus
-  PrevStat zoned(5);
+  prevStat zoned(5);
   // Letzte Anweisungsnummer
-  LastSeq  char(8);
+  lastSeq  char(8);
   // Letzte Unterroutine
-  LastSubr char(8);
+  lastSubr char(8);
   // Anzahl übergebener Parameter
-  NbrParm  zoned(3);
+  nbrParm  zoned(3);
   // Fehler-Msg
   msgID    char(7);
   //  Fehler-Art
-  MsgPrfx  char(3) overlay(msgID);
+  msgPrfx  char(3) overlay(msgID);
   //  Fehler-Nummer
   msgNbr   char(4) overlay(msgID: 4);
   // MI-Instruktions-Nr.
-  MI_Instr char(4);
+  mi_instr char(4);
   // Arbeitsbereich für Nachrichten
-  WorkArea char(30);
+  workArea char(30);
   // Programmbiblitohek
-  PgmLib   char(10);
+  pgmLib   char(10);
   // CPF-Fehlertext
   msgText  char(80);
   // Kz der Ausnahmebedingung
   aube     char(4);
   // unbenutzt
-  Unused_1 char(16);
+  unused_1 char(16);
   // Datumsformat
   datfmt   char(8);
   // Ersten 2 stellen von *YEAR
   year     zoned(2);
   // Letzte Dateioperation: Dateiname
-  FileOpr  char(8);
+  fileOpr  char(8);
   // Datei-Staus-Information
-  FileStat char(35);
+  fileStat char(35);
   // Jobname
   job      char(10);
   // Benutzer
   user     char(10);
   // Jobnummer
-  JobNbr   zoned(6);
+  jobNbr   zoned(6);
   // Jobdatum, Aufbau wie UDATE
-  JobD     zoned(6);
+  jobD     zoned(6);
   // Programm-Ausführungsdatum, Aufbau wie UDATE
   jobdate  zoned(6);
   // Job-Zeit (HHMMSS)
-  JobTime  zoned(6);
+  jobTime  zoned(6);
   // Umwandlungsdatum
-  CrtDate  char(6);
+  crtDate  char(6);
   // Umwandlungszeit (HHMMSS)
-  CrtTime  char(6);
+  crtTime  char(6);
   // Compiler Version
-  CompVer  char(4);
+  compVer  char(4);
   // Quellendatei
   srcFile  char(10);
   // Bibliothek mit Quellendatei
@@ -144,11 +144,11 @@ dcl-ds sds qualified psds;
   // Quellenteildatei
   srcMbr   char(10);
   // Program containing procedure
-  PgmProc  char(10);
+  pgmProc  char(10);
   // Module containing procedure
-  ModProc  char(10);
+  modProc  char(10);
   // unbenutzt
-  Unused_2 char(76);
+  unused_2 char(76);
 end-ds;
 
 //===============================================================*
@@ -185,19 +185,19 @@ dcl-proc p_main;
 
   //  lokale Arbeitsfelder
   dcl-ds usri0200 len(256);
-    UI2_bytRet    int(10);
-    UI2_bytAvl    int(10);
-    UI2_usrPrf    char(10);
-    UI2_usrCls    char(10);
-    UI2_spcAut    char(15);
-    UI2_grpPrf    char(10);
-    UI2_owner     char(10);
-    UI2_grpAut    char(10);
-    UI2_lmtCpb    char(10);
-    UI2_grpAutTyp char(10);
-    UI2_reserved1 char(3);
-    UI2_ofsSplGrp int(10);
-    UI2_numSplGrp int(10);
+    ui2_bytRet    int(10);
+    ui2_bytAvl    int(10);
+    ui2_usrPrf    char(10);
+    ui2_usrCls    char(10);
+    ui2_spcAut    char(15);
+    ui2_grpPrf    char(10);
+    ui2_owner     char(10);
+    ui2_grpAut    char(10);
+    ui2_lmtCpb    char(10);
+    ui2_grpAutTyp char(10);
+    ui2_reserved1 char(3);
+    ui2_ofsSplGrp int(10);
+    ui2_numSplGrp int(10);
   end-ds;
   //---------------------------------------------------------------*
 
@@ -208,11 +208,11 @@ dcl-proc p_main;
 
   if (io_file = '*DFT');
     io_file = sds.user;
-    io_lib  = sds.PgmLib;
+    io_lib  = sds.pgmLib;
   endif;
 
   if (io_lib = '*PRDLIB');
-    io_lib  = sds.PgmLib;
+    io_lib  = sds.pgmLib;
   endif;
 
   //  Remove "Return" statement to override settings file and
@@ -226,8 +226,8 @@ dcl-proc p_main;
                            o_msgDta   );
 
   if (o_msgID = ' ');
-    io_user = UI2_grpPrf;
-    io_file = UI2_grpPrf;
+    io_user = ui2_grpPrf;
+    io_file = ui2_grpPrf;
   endif;
 
   return;
@@ -247,7 +247,7 @@ dcl-proc f_rtvUsrPrfInf;
     o_msgDta like(msgDta_t);
   end-pi;
 
-  dcl-ds RcvVar len(256) inz;
+  dcl-ds rcvVar len(256) inz;
     rcv_bytRet int(10) inz;
     rcv_bytAvl int(10) inz;
   end-ds;
@@ -266,12 +266,12 @@ dcl-proc f_rtvUsrPrfInf;
     i_rcvVarLen int(10) const;
     i_format    char(8) const;
     i_usrPrf    char(10) const;
-    io_ErrCode  char(65535) options(*varsize);
+    io_errCode  char(65535) options(*varsize);
   end-pr;
   //---------------------------------------------------------------*
 
   reset errCode;
-  qsyrusri(RcvVar: %size(RcvVar): i_format:
+  qsyrusri(rcvVar: %size(rcvVar): i_format:
           i_user: errCode);
 
   if (err_bytAvl <> 0);
@@ -282,7 +282,7 @@ dcl-proc f_rtvUsrPrfInf;
     o_msgDta = ' ';
   endif;
 
-  return %subst(RcvVar: 1: rcv_bytRet);
+  return %subst(rcvVar: 1: rcv_bytRet);
 
 end-proc;
 

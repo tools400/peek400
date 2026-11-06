@@ -7,7 +7,7 @@ dcl-s uLong_t uns(10) template;
 dcl-s uInt_t uns(10) template;
 
 //  system -- Execute a Command
-dcl-pr System int(10) extproc('system');
+dcl-pr system int(10) extproc('system');
   i_clCommand pointer options(*string) value;
 end-pr;
 
@@ -139,12 +139,12 @@ dcl-pr tmpnam pointer extproc('tmpnam');
   pTmpNme pointer value;
 end-pr;
 
-dcl-c L_tmpnam 39; // ! <stdio.h>
+dcl-c l_tmpnam 39; // ! <stdio.h>
 
 dcl-c tmp_max 32767; // ! <stdio.h>
 
 //  qsort -- Sort Array
-dcl-pr qsort pointer extproc('qsort');
+dcl-pr qSort pointer extproc('qsort');
   memPtr    pointer value;
   numElem   like(size_t) value;
   width     like(size_t) value;
@@ -213,7 +213,7 @@ dcl-pr iconv uns(10) extproc('iconv');
   i_outBytLeft uns(10);
 end-pr;
 
-dcl-c cICONV_ERROR 4294967295;
+dcl-c cICONV_error 4294967295;
 
 //  iconv_close()--Code Conversion Deallocation API
 dcl-pr iconv_close int(10) extproc('iconv_close');
@@ -242,7 +242,7 @@ dcl-ds st_stat_t qualified align template;
   allocsize  uns(10);
   objtype    char(11);
   reserved3  char(1);
-  codepage   uns(5);
+  codePage   uns(5);
   ccsid      uns(5);
   rdev       uns(10);
   nlink32    uns(10);
@@ -268,11 +268,11 @@ dcl-ds Qlg_Path_Name_t qualified align template;
   country_id          char(2);
   language_id         char(3);
   reserved            char(3);
-  Path_Type           uns(10);
-  Path_Length         int(10);
-  Path_Name_Delimiter char(2);
+  path_type           uns(10);
+  path_length         int(10);
+  path_name_delimiter char(2);
   reserved2           char(10);
-  Path_Name           char(256);
+  path_name           char(256);
 end-ds;
 
 dcl-c qlg_path_job_ccsid 0;
@@ -683,20 +683,20 @@ dcl-ds cipherCtrls_t qualified align template;
   output        char(1) pos(9);
   reserved_1    char(7) pos(10);
   hashContext   pointer pos(17);
-  HMACKey       pointer pos(33);
-  HMACKeyLength uns(10) pos(49);
+  hmacKey       pointer pos(33);
+  hmacKeyLength uns(10) pos(49);
   reserved_2    char(44) pos(53);
 end-ds;
 
-dcl-c cCIPHER_MD5 x'00';
-dcl-c cCIPHER_SHA1 x'01';
+dcl-c cCIPHER_md5 x'00';
+dcl-c cCIPHER_sha1 x'01';
 
-dcl-c cCIPHER_ONLY x'00';
-dcl-c cCIPHER_FIRST x'01';
-dcl-c cCIPHER_MIDDLE x'02';
-dcl-c cCIPHER_FINAL x'03';
+dcl-c cCIPHER_only x'00';
+dcl-c cCIPHER_first x'01';
+dcl-c cCIPHER_middle x'02';
+dcl-c cCIPHER_final x'03';
 
-dcl-c cCIPHER_HASH x'00';
-dcl-c cCIPHER_HMAC x'01';
+dcl-c cCIPHER_hash x'00';
+dcl-c cCIPHER_hmac x'01';
 
 /endif

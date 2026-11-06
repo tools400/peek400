@@ -9,7 +9,7 @@ dcl-pr peek26 extpgm(peek26_name);
   i_qSrcFile likeds(qObj_t) const;
   i_srcMbr   like(mbr_t) const;
   o_toFile   like(file_t);
-  o_TOLIB    like(lib_t);
+  o_toLib    like(lib_t);
   o_toMbr    like(mbr_t);
   o_mbrOpt   like(option_t);
   o_crtFile  like(option_t);

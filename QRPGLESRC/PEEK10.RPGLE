@@ -47,9 +47,9 @@ dcl-f peekfmt usage(*update: *delete: *output) usropn prefix(f_);
 /copy QCOPYLE,PPEEK53
 /copy QCOPYLE,PPEEK58
 
-dcl-ds rcdl0200 likeds(RCDL0200_t) inz;
+dcl-ds rcdl0200 likeds(rcdl0200_t) inz;
 
-dcl-s sortSeq like(F_SortSeq) inz(0);
+dcl-s sortSeq like(f_sortSeq) inz(0);
 
 dcl-s peek11_name like(pgmCallN_t) inz;
 
@@ -83,7 +83,7 @@ ceehdlr(%paddr('errorHandler')
 
 exsr inzsr;
 
-exsr First;
+exsr first;
 
 //  create list of record formats
 peek11(i_qFile:
@@ -98,10 +98,10 @@ for fmtCnt = 1 to nbrOfFmt;
   clear fpeekfmt;
 
   f_format = 'RCDL0200';
-  F_Fmt = rcdl0200;
+  f_fmt = rcdl0200;
   sortSeq = sortSeq + 10;
-  F_SortSeq = sortSeq;
-  F_FmtNbr = fmtCnt;
+  f_sortSeq = sortSeq;
+  f_fmtNbr = fmtCnt;
   write fpeekfmt;
 
 endfor;
@@ -130,7 +130,7 @@ endif;
 //  First  --  Initialize program                     *
 //====================================================*
 
-begsr First;
+begsr first;
 
   // - Meldung
   p_sndStsMg('USR8105': i_qFile);

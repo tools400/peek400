@@ -54,38 +54,38 @@ dcl-ds workstn likeds(workstn_t);
 /copy QCOPYLE,PPEEK53
 /copy QCOPYLE,PPEEK58
 
-dcl-s UsrSpcDta char(64) based(pSpcPtr);
-dcl-s YSrlNbrExt like(R_SrlNbr);
-dcl-s YDateExt like(R_SrlDate);
+dcl-s usrSpcDta char(64) based(pSpcPtr);
+dcl-s ySrlNbrExt like(r_srlNbr);
+dcl-s yDateExt like(r_srlDate);
 
-dcl-s YAttrLen like(int4_t);
-dcl-s YAttrTyp char(1);
-dcl-s YValue char(512);
+dcl-s yAttrLen like(int4_t);
+dcl-s yAttrTyp char(1);
+dcl-s yValue char(512);
 
-dcl-s YSysName char(8);
-dcl-s YSysVers char(6);
-dcl-s YSysSrlNbr char(8);
-dcl-s YSrlNbrInt like(R_SrlNbr);
-dcl-s YDateInt like(R_SrlDate);
+dcl-s ySysName char(8);
+dcl-s ySysVers char(6);
+dcl-s ySysSrlNbr char(8);
+dcl-s ySrlNbrInt like(r_srlNbr);
+dcl-s yDateInt like(r_srlDate);
 
-dcl-s R_SrlData char(20);
-dcl-s R_SrlNbr char(20);
-dcl-s R_SrlDate char(20);
+dcl-s r_srlData char(20);
+dcl-s r_srlNbr char(20);
+dcl-s r_srlDate char(20);
 
 //  Konvertierung HEX ==> DEC
-dcl-s R_Dec packed(30);
-dcl-s R_Hex like(R_SrlNbr);
+dcl-s r_dec packed(30);
+dcl-s r_hex like(r_srlNbr);
 dcl-s hex char(1) dim(16);
 dcl-s zw1 packed(30);
-dcl-s Exp like(int4_t);
+dcl-s exp like(int4_t);
 dcl-s a1 char(1);
 dcl-s x like(int4_t);
 dcl-s y like(int4_t);
 
-//  DeadDate
-dcl-s ZWInt packed(30);
-dcl-s ZWExt packed(30);
-dcl-s DeadDate packed(8);
+//  deadDate
+dcl-s zwInt packed(30);
+dcl-s zwExt packed(30);
+dcl-s deadDate packed(8);
 
 //  Aktuelle Datum und Uhrzeit
 dcl-ds *n;
@@ -98,19 +98,19 @@ dcl-ds *n;
 end-ds;
 
 dcl-ds *n;
-  CurrDateRv zoned(8);
-  CurrYearRv zoned(4) overlay(CurrDateRv) inz;
-  CurrMonRv  zoned(2) overlay(CurrDateRv: 5) inz;
-  CurrDayRv  zoned(2) overlay(CurrDateRv: 7) inz;
+  currDateRv zoned(8);
+  currYearRv zoned(4) overlay(currDateRv) inz;
+  currMonRv  zoned(2) overlay(currDateRv: 5) inz;
+  currDayRv  zoned(2) overlay(currDateRv: 7) inz;
 end-ds;
 
 dcl-c bTrueext 66;
 dcl-c bFalseext -55;
 dcl-c bShareExt 243;
 
-dcl-s IsCompOK char(1) inz(bFalse);
-dcl-s IsDateErr char(1) inz(bFalse);
-dcl-s IsWriteOK char(1) inz(bFalse);
+dcl-s isCompOK char(1) inz(bFalse);
+dcl-s isDateErr char(1) inz(bFalse);
+dcl-s isWriteOK char(1) inz(bFalse);
 
 //  declarations for QUSCRTUS
 dcl-ds qUsrSpc likeds(qObj_t) inz;
@@ -141,14 +141,14 @@ ceehdlr(%paddr('errorHandler')
 
 exsr inzsr;
 
-exsr First;
+exsr first;
 
-if (IsCompOK = bFalse);
+if (isCompOK = bFalse);
   //     Fehler in der Lizenz-Nr. ...
-  if (IsDateErr = bTrue);
+  if (isDateErr = bTrue);
     //     ... Datum abgelaufen
     //         ... Abfragen einer neuen LizenzNr.
-    exsr GetLicInf;
+    exsr getLicInf;
     if (o_flag <> bTrueext);
       //         ... wenn keine neue LizenzNr eingetragen
       //             worden ist, dann bFalse zurückliefern,
@@ -165,7 +165,7 @@ if (IsCompOK = bFalse);
     endif;
   else;
     //     ... Lizenzdaten abfragen
-    exsr GetLicInf;
+    exsr getLicInf;
   endif;
 else;
   //     Lizenznummer ist OK ...
@@ -175,16 +175,16 @@ endif;
 return;
 
 //============================================================*
-//    GetLicInf     Abfragen der Lizenznummer                 *
+//    getLicInf     Abfragen der Lizenznummer                 *
 //============================================================*
 
-begsr GetLicInf;
+begsr getLicInf;
 
   // - Öffnen der Dateien
   open peek30fm;
 
   //  Löschen Lizenznummer
-  ##LicData = *blanks;
+  ##licData = *blanks;
 
   for do_x1 = 1 to *hival;
 
@@ -205,17 +205,17 @@ begsr GetLicInf;
     select;
     //  F9  - Ende
     when (workstn.aid = k_f9);
-      exsr C_EndPgm;
+      exsr c_endPgm;
       o_flag = bShareExt;
       o_msgID = 'USR9997';
-      usr9997.var1 = COLOR_yellow_r;
-      usr9997.var2 = COLOR_white;
+      usr9997.var1 = color_yellow_r;
+      usr9997.var2 = color_white;
       o_msgDta = usr9997;
       leave;
 
     //  Datenfreigabe
     when (workstn.aid = k_enter);
-      exsr C_Enter;
+      exsr c_enter;
       if (*in99 = *off);
         o_flag = bTrueext;
         leave;
@@ -235,26 +235,26 @@ begsr GetLicInf;
 endsr;
 
 //============================================================*
-//    C_EndPgm      Programm beenden                          *
+//    c_endPgm      Programm beenden                          *
 //============================================================*
 
-begsr C_EndPgm;
+begsr c_endPgm;
 
   p_rmvPgmMg(sds.pgmName);
 
 endsr;
 
 //============================================================*
-//    C_Enter       Datenfreigabe                             *
+//    c_enter       Datenfreigabe                             *
 //============================================================*
 
-begsr C_Enter;
+begsr c_enter;
 
-  exsr prfb1;
+  exsr prfB1;
 
   if (*in99 = *off);
-    exsr WrtLicData;
-    if (IsWriteOK = bFalse);
+    exsr wrtLicData;
+    if (isWriteOK = bFalse);
       *in99 = '1';
       p_sndPgmMg('USR8159': '': sds.pgmName);
     else;
@@ -287,7 +287,7 @@ endsr;
 //    PRFB1         Prüfen der Eingaben                       *
 //============================================================*
 
-begsr prfb1;
+begsr prfB1;
 
   dou ('1');
 
@@ -308,26 +308,26 @@ begsr prf20;
 
   dou ('1');
 
-    if (##LicData = *blanks);
+    if (##licData = *blanks);
       clear usr8158;
       *in99 = '1';
       clear usr8158;
-      usr8158.var1 = ##LicData;                                              // Liz.Nr.
+      usr8158.var1 = ##licData;                                              // Liz.Nr.
       p_sndPgmMg('USR8158': usr8158: sds.pgmName);
       leave;
     endif;
 
-    R_SrlData = ##LicData;
-    exsr SplittLic;
-    YSrlNbrExt = R_SrlNbr;
-    YDateExt = R_SrlDate;
+    r_srlData = ##licData;
+    exsr splittLic;
+    ySrlNbrExt = r_srlNbr;
+    yDateExt = r_srlDate;
 
-    exsr CompLicNbr;
-    if (IsCompOK = bFalse);
+    exsr compLicNbr;
+    if (isCompOK = bFalse);
       clear usr8158;
       *in99 = '1';
       clear usr8158;
-      usr8158.var1 = ##LicData;                                              // Liz.Nr.
+      usr8158.var1 = ##licData;                                              // Liz.Nr.
       p_sndPgmMg('USR8158': usr8158: sds.pgmName);
       leave;
     endif;
@@ -348,7 +348,7 @@ endsr;
 
 begsr fill##;
 
-  IsCompOK = bTrue;
+  isCompOK = bTrue;
   leavesr;
 
   //------------------------------------------*
@@ -356,50 +356,50 @@ begsr fill##;
   //------------------------------------------*
   if (not f_exist(
      qUsrSpc.name: qUsrSpc.lib: '*USRSPC'));
-    exsr CrtUsrSpc;
+    exsr crtUsrSpc;
   endif;
 
   //------------------------------------------*
   //  ... einlesen der aktuellen Daten        *
-  //      ( = YSrlNbrExt)                     *
+  //      ( = ySrlNbrExt)                     *
   //------------------------------------------*
-  exsr RtvUsrSpc;
+  exsr rtvUsrSpc;
 
   //------------------------------------------*
   //  ... vergleichen der Lizenzdaten         *
   //------------------------------------------*
-  exsr CompLicNbr;
+  exsr compLicNbr;
 
 endsr;
 
 //============================================================*
-//    CompLicNbr    Vergleichen der Lizenzdaten               *
+//    compLicNbr    Vergleichen der Lizenzdaten               *
 //============================================================*
 
-begsr CompLicNbr;
+begsr compLicNbr;
 
   //------------------------------------------*
   //  ... berechnen der Vergleichsserien-Nr.  *
-  //      ( = YSrlNbrInt)                     *
+  //      ( = ySrlNbrInt)                     *
   //      für normale Lizenznummer            *
   //------------------------------------------*
-  IsCompOK = bFalse;
-  IsDateErr = bTrue;
+  isCompOK = bFalse;
+  isDateErr = bTrue;
 
-  exsr clcintnbr;
-  exsr CompLicNb2;
+  exsr clcIntNbr;
+  exsr compLicNb2;
 
   //------------------------------------------*
   //  ... berechnen der Vergleichsserien-Nr.  *
-  //      ( = YSrlNbrInt)                     *
+  //      ( = ySrlNbrInt)                     *
   //      für Firmenlizenznummer              *
   //------------------------------------------*
-  if (IsCompOK = bFalse);
-    IsCompOK = bFalse;
-    IsDateErr = bTrue;
+  if (isCompOK = bFalse);
+    isCompOK = bFalse;
+    isDateErr = bTrue;
 
-    exsr clcintnbrf;
-    exsr CompLicNb2;
+    exsr clcIntNbrF;
+    exsr compLicNb2;
   else;
   //    ... die Lizenznummer stimmt bereits
   endif;
@@ -407,29 +407,29 @@ begsr CompLicNbr;
 endsr;
 
 //============================================================*
-//    CompLicNb2    Vergleichen der Lizenzdaten 2             *
+//    compLicNb2    Vergleichen der Lizenzdaten 2             *
 //============================================================*
 
-begsr CompLicNb2;
+begsr compLicNb2;
 
   // -  interne Nummer umsetzen in Dezimalwert
-  R_Hex = YSrlNbrInt;
-  exsr HexToDec;
-  ZWInt = R_Dec;
+  r_hex = ySrlNbrInt;
+  exsr hexToDec;
+  zwInt = r_dec;
 
   // -  externe Nummer umsetzen in Dezimalwert
-  R_Hex = YSrlNbrExt;
-  exsr HexToDec;
-  ZWExt = R_Dec;
+  r_hex = ySrlNbrExt;
+  exsr hexToDec;
+  zwExt = r_dec;
 
   // -  externes Datum umsetzen in Dezimalwert
-  R_Hex = YDateExt;
-  exsr HexToDec;
-  DeadDate = DeadDate - R_Dec + 99999999;
+  r_hex = yDateExt;
+  exsr hexToDec;
+  deadDate = deadDate - r_dec + 99999999;
 
   // -  Angleichen externe Nummer
-  ZWExt = ZWExt - R_Dec;
-  ZWExt = ZWExt + 99999999;
+  zwExt = zwExt - r_dec;
+  zwExt = zwExt + 99999999;
 
   //------------------------------------------*
   //  ... vergleichen interne & externe       *
@@ -437,30 +437,30 @@ begsr CompLicNb2;
   //------------------------------------------*
   currTime = %dec(%char(%time(): *HMS0): 6: 0);
   currDateFW = %dec(%char(%date(): *EUR0): 8: 0);
-  CurrDayRv = currDayFW;
-  CurrMonRv = currMonFW;
-  CurrYearRv = currYearFW;
+  currDayRv = currDayFW;
+  currMonRv = currMonFW;
+  currYearRv = currYearFW;
 
-  if (ZWExt <> ZWInt);
-    IsCompOK = bFalse;
-    IsDateErr = bFalse;
+  if (zwExt <> zwInt);
+    isCompOK = bFalse;
+    isDateErr = bFalse;
   else;
-    if (DeadDate < CurrDateRv);
-      IsCompOK = bFalse;
-      IsDateErr = bTrue;
+    if (deadDate < currDateRv);
+      isCompOK = bFalse;
+      isDateErr = bTrue;
     else;
-      IsCompOK = bTrue;
-      IsDateErr = bFalse;
+      isCompOK = bTrue;
+      isDateErr = bFalse;
     endif;
   endif;
 
 endsr;
 
 //============================================================*
-//    CrtUsrSpc     Anlegen UserSpace                         *
+//    crtUsrSpc     Anlegen UserSpace                         *
 //============================================================*
 
-begsr CrtUsrSpc;
+begsr crtUsrSpc;
 
   quscrtus(qUsrSpc: 'USRSPC': 64: x'00': '*ALL'
           : 'Peek/400 Lizenzdaten');
@@ -468,121 +468,121 @@ begsr CrtUsrSpc;
 endsr;
 
 //============================================================*
-//    RtvUsrSpc     Einlesen UserSpace                        *
+//    rtvUsrSpc     Einlesen UserSpace                        *
 //============================================================*
 
-begsr RtvUsrSpc;
+begsr rtvUsrSpc;
 
   qusptrus(qUsrSpc: pSpcPtr);
 
-  R_SrlData = UsrSpcDta;
-  exsr SplittLic;
-  YSrlNbrExt = R_SrlNbr;
-  YDateExt = R_SrlDate;
+  r_srlData = usrSpcDta;
+  exsr splittLic;
+  ySrlNbrExt = r_srlNbr;
+  yDateExt = r_srlDate;
 
 endsr;
 
 //============================================================*
-//    SplittLic     Splitten der Lizenzdaten                  *
+//    splittLic     Splitten der Lizenzdaten                  *
 //============================================================*
 
-begsr SplittLic;
+begsr splittLic;
 
-  x = %scan('-': R_SrlData);
+  x = %scan('-': r_srlData);
   if (x > *zeros);
     x = x - 1;
     if (x > *zeros);
-      R_SrlNbr = %subst(R_SrlData: 1: x);
+      r_srlNbr = %subst(r_srlData: 1: x);
     else;
-      R_SrlNbr = *blanks;
+      r_srlNbr = *blanks;
     endif;
 
     x = x + 2;
     if (x <= 64);
-      R_SrlDate = %subst(R_SrlData: x);
+      r_srlDate = %subst(r_srlData: x);
     else;
-      R_SrlDate = *blanks;
+      r_srlDate = *blanks;
     endif;
   else;
-    R_SrlNbr = *blanks;
-    R_SrlDate = *blanks;
+    r_srlNbr = *blanks;
+    r_srlDate = *blanks;
   endif;
 
 endsr;
 
 //============================================================*
-//    ClcIntNbr     Berechnen der internen Serien-Nr.         *
+//    clcIntNbr     Berechnen der internen Serien-Nr.         *
 //============================================================*
 
-begsr clcintnbr;
+begsr clcIntNbr;
 
   // -  Netzwerkattribute (ohne Statusmeldung)
   peek07('SYSNAME': bTrue
-        : YAttrLen: YAttrTyp: YValue);
-  if (YAttrLen > *zeros);
-    YSysName = %subst(YValue: 1: YAttrLen);
+        : yAttrLen: yAttrTyp: yValue);
+  if (yAttrLen > *zeros);
+    ySysName = %subst(yValue: 1: yAttrLen);
   else;
-    YSysName = *blanks;
+    ySysName = *blanks;
   endif;
 
   // -  Version
-  YSysVers = '010000';
+  ySysVers = '010000';
 
   // -  Seriennummer
   peek28('QSRLNBR': bFalse
-        : YAttrLen: YAttrTyp: YValue);
-  if (YAttrLen > *zeros);
-    YSysSrlNbr = %subst(YValue: 1: YAttrLen);
+        : yAttrLen: yAttrTyp: yValue);
+  if (yAttrLen > *zeros);
+    ySysSrlNbr = %subst(yValue: 1: yAttrLen);
   else;
-    YSysSrlNbr = *blanks;
+    ySysSrlNbr = *blanks;
   endif;
 
-  peek29(YSysName: '010000'
-        : YSysSrlNbr: 0: R_SrlData);
+  peek29(ySysName: '010000'
+        : ySysSrlNbr: 0: r_srlData);
 
-  exsr SplittLic;
-  YSrlNbrInt = R_SrlNbr;
-  YDateInt = R_SrlDate;
+  exsr splittLic;
+  ySrlNbrInt = r_srlNbr;
+  yDateInt = r_srlDate;
 
 endsr;
 
 //============================================================*
-//    ClcIntNbrF    Berechnen der internen Serien-Nr.         *
+//    clcIntNbrF    Berechnen der internen Serien-Nr.         *
 //                  für eine Firmenlizenz                     *
 //============================================================*
 
-begsr clcintnbrf;
+begsr clcIntNbrF;
 
   peek29('*COMPANY': '999999'
-        : '*LICENSE': 0: R_SrlData);
+        : '*LICENSE': 0: r_srlData);
 
-  exsr SplittLic;
-  YSrlNbrInt = R_SrlNbr;
-  YDateInt = R_SrlDate;
-
-endsr;
-
-//============================================================*
-//    WrtLicData    Schreiben der Lizenzdaten                 *
-//============================================================*
-
-begsr WrtLicData;
-
-  UsrSpcDta = ##LicData;
+  exsr splittLic;
+  ySrlNbrInt = r_srlNbr;
+  yDateInt = r_srlDate;
 
 endsr;
 
 //============================================================*
-//    HexToDec      Konvertieren HEX ==> DEC                  *
+//    wrtLicData    Schreiben der Lizenzdaten                 *
 //============================================================*
 
-begsr HexToDec;
+begsr wrtLicData;
 
-  R_Dec = *zeros;
-  x = %checkr(' ':R_Hex);
+  usrSpcDta = ##licData;
+
+endsr;
+
+//============================================================*
+//    hexToDec      Konvertieren HEX ==> DEC                  *
+//============================================================*
+
+begsr hexToDec;
+
+  r_dec = *zeros;
+  x = %checkr(' ':r_hex);
 
   for y = 1 to x;
-    a1 = %subst(R_Hex: y: 1);
+    a1 = %subst(r_hex: y: 1);
     if (a1 = *blanks);
       leave;
     endif;
@@ -596,18 +596,18 @@ begsr HexToDec;
 
     zw1 = zw1 - 1;
 
-    Exp = x - y;
-    if (Exp > *zeros);
+    exp = x - y;
+    if (exp > *zeros);
       //      ... Exponenten größer 0
-      dou (Exp = *zeros);
+      dou (exp = *zeros);
         zw1 = zw1 * 16;
-        Exp = Exp - 1;
+        exp = exp - 1;
       enddo;
 
-      R_Dec = R_Dec + zw1;
+      r_dec = r_dec + zw1;
     else;
       //      ... Exponent = 0
-      R_Dec = R_Dec + zw1;
+      r_dec = r_dec + zw1;
     endif;
 
   endfor;
@@ -615,10 +615,10 @@ begsr HexToDec;
 endsr;
 
 //============================================================*
-//    SetScreen     Einstellen 132/80-Zeichen Auflösung       *
+//    setScreen     Einstellen 132/80-Zeichen Auflösung       *
 //============================================================*
 
-begsr SetScreen;
+begsr setScreen;
 
   if (i_dsp80 = '0');
     //   132-Zeichen Anzeige
@@ -638,7 +638,7 @@ endsr;
 //    First         Initialisierung                           *
 //============================================================*
 
-begsr First;
+begsr first;
 
   // - Programm initialisieren
   p_rmvPgmMg(sds.pgmName);
@@ -652,7 +652,7 @@ begsr First;
   exsr fill##;
 
   // - Einstellen der Bildschirmauflösung 80/132-Zeichen
-  exsr SetScreen;
+  exsr setScreen;
 
   // - Copyright
   p_sndPgmMg('USR9999': i_copyright: sds.pgmName);

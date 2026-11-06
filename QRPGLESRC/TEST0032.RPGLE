@@ -48,7 +48,7 @@ dcl-f TEST0032FM workstn(*ext) usage(*input: *output) usropn infds(workstn);
 
 dcl-ds workstn qualified;
   status zoned(5) pos(11);
-  Offset int(5) pos(241);
+  offset int(5) pos(241);
   AID    char(1) pos(369);
   csrPos int(5);
 end-ds;

@@ -12,7 +12,7 @@ dcl-pr qecedt extpgm('QECEDT');
   i_editMask        char(65535) options(*varsize) const;
   i_editMaskLen     int(10) const;
   i_zeroBalFillChar char(1) const;
-  io_ErrCode        char(65535) options(*nopass: *varsize);
+  io_errCode        char(65535) options(*nopass: *varsize);
 end-pr;
 
 /endif

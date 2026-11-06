@@ -12,7 +12,7 @@ dcl-pr qmhsndpm extpgm('QMHSNDPM');
   i_callStkE   char(256) const;
   i_callStkC   int(10) const;
   o_msgKey     char(4);
-  io_ErrCode   char(32767) options(*varsize);
+  io_errCode   char(32767) options(*varsize);
   i_lenStkE    int(10) options(*nopass) const; // | optGrp 1
   i_callStkEQ  char(20) options(*nopass) const; // |
   i_wait       int(10) options(*nopass) const; // |

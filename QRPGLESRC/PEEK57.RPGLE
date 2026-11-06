@@ -53,17 +53,17 @@ dcl-ds workstn likeds(workstn_t);
 /copy QCOPYLE,PPEEK58
 
 //  Peek21:
-dcl-s YPgmCmd char(10) inz(*blanks);
-dcl-s YCmdDta like(pgmCmdDt_t);
-dcl-s YMsgID char(7) inz(*blanks);
-dcl-s YMsgDta char(512) inz(*blanks);
+dcl-s yPgmCmd char(10) inz(*blanks);
+dcl-s yCmdDta like(pgmCmdDt_t);
+dcl-s yMsgID char(7) inz(*blanks);
+dcl-s yMsgDta char(512) inz(*blanks);
 
 //  Peek23:
 dcl-s yFKeys char(18) dim(32);
 dcl-s yNbrOfKeys like(int4_t);
 
-dcl-s sfbot like(int4_t);
-dcl-c NbrFKeys 2;
+dcl-s sfBot like(int4_t);
+dcl-c nbrFKeys 2;
 dcl-s isPgmError like(bool_t) inz(bFalse);
 
 dcl-s peek21_name like(pgmCallN_t);
@@ -92,7 +92,7 @@ ceehdlr(%paddr('errorHandler')
 
 exsr inzsr;
 
-exsr First;
+exsr first;
 
 dow ('1');
 
@@ -102,42 +102,42 @@ dow ('1');
 
   //  Anzeigen der Befehlstasten
   select;
-  when ((sfbot = 2) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 2) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#2;
-  when ((sfbot = 3) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 3) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#3;
-  when ((sfbot = 4) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 4) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#4;
-  when ((sfbot = 5) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 5) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#5;
-  when ((sfbot = 6) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 6) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#6;
-  when ((sfbot = 7) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 7) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#7;
-  when ((sfbot = 8) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 8) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#8;
-  when ((sfbot = 9) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 9) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#9;
-  when ((sfbot = 10) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 10) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#10;
-  when ((sfbot = 11) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 11) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#11;
-  when ((sfbot = 12) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 12) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#12;
   other;
     write pbbot#1;
-    sfbot = 1;
+    sfBot = 1;
   endsl;
 
   //  Anzeigen Bildschirm
@@ -150,30 +150,30 @@ dow ('1');
   //  Mappen der gedrückten Taste
   //  in Programmbefehl
   peek21(workstn.aid: sds.pgmName
-        : YPgmCmd: YCmdDta: YMsgID: YMsgDta);
-  if (YMsgID <> *blanks);
-    p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
-    YMsgID = '';
-    YMsgDta = '';
+        : yPgmCmd: yCmdDta: yMsgID: yMsgDta);
+  if (yMsgID <> *blanks);
+    p_sndPgmMg(yMsgID: yMsgDta: sds.pgmName);
+    yMsgID = '';
+    yMsgDta = '';
     iter;
   endif;
 
   //  Abfragen der Befehlstasten
   select;
   //  F3  - Ende
-  when (YPgmCmd = '*EXIT');
-    exsr C_EndPgm;
+  when (yPgmCmd = '*EXIT');
+    exsr c_endPgm;
     leave;
   //  F5  - Aktualisieren
-  when (YPgmCmd = '*REFRESH');
-    exsr C_Refresh;
+  when (yPgmCmd = '*REFRESH');
+    exsr c_refresh;
     iter;
 
   //  F9  - Löschen Arbeitsumgebung
   //  (nach dem Löschen zurück zur Liste; bei einem Fehler bleibt das
   //  Fenster mit der Meldung offen)
-  when (YPgmCmd = '*DELETEENV');
-    exsr C_delEnv;
+  when (yPgmCmd = '*DELETEENV');
+    exsr c_delEnv;
     if (isPgmError = bTrue);
       iter;
     else;
@@ -181,13 +181,13 @@ dow ('1');
     endif;
 
   //  F12 - Ende
-  when (YPgmCmd = '*CANCEL');
-    exsr C_EndPgm;
+  when (yPgmCmd = '*CANCEL');
+    exsr c_endPgm;
     leave;
 
   //  F24 - Weitere Tasten
-  when (YPgmCmd = '*MOREKEYS');
-    exsr C_MoreKeys;
+  when (yPgmCmd = '*MOREKEYS');
+    exsr c_moreKeys;
 
   other;
     //  Falsche Taste gedrückt
@@ -202,44 +202,44 @@ close peek57fm;
 return;
 
 //============================================================*
-//    C_EndPgm      F3/F12 - Programm beenden                 *
+//    c_endPgm      F3/F12 - Programm beenden                 *
 //============================================================*
 
-begsr C_EndPgm;
+begsr c_endPgm;
 
   p_rmvPgmMg(sds.pgmName);
 
   o_msgID = 'USR8100';
-  usr8100.var1 = YPgmCmd;
+  usr8100.var1 = yPgmCmd;
   o_msgDta = usr8100;
 
 endsr;
 
 //============================================================*
-//    C_Refresh     F5  - Aktualisieren der Subfile           *
+//    c_refresh     F5  - Aktualisieren der Subfile           *
 //============================================================*
 
-begsr C_Refresh;
+begsr c_refresh;
 
   exsr fill##;
 
 endsr;
 
 //============================================================*
-//    C_MoreKeys    F24 - Weitere Tasten                      *
+//    c_moreKeys    F24 - Weitere Tasten                      *
 //============================================================*
 
-begsr C_MoreKeys;
+begsr c_moreKeys;
 
-  sfbot = sfbot + 1;
+  sfBot = sfBot + 1;
 
 endsr;
 
 //============================================================*
-//    C_delEnv      Verarbeiten der Eingaben                  *
+//    c_delEnv      Verarbeiten der Eingaben                  *
 //============================================================*
 
-begsr C_delEnv;
+begsr c_delEnv;
 
   f_execute('RMVM'          +
            ' FILE('        +
@@ -250,13 +250,13 @@ begsr C_delEnv;
            ' MBR('         +
            %trim(i_envMbr ) +
            ')'             :
-           YMsgID          :
-           YMsgDta         );
+           yMsgID          :
+           yMsgDta         );
 
-  if (YMsgID <> '');
-    p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
-    YMsgID = '';
-    YMsgDta = '';
+  if (yMsgID <> '');
+    p_sndPgmMg(yMsgID: yMsgDta: sds.pgmName);
+    yMsgID = '';
+    yMsgDta = '';
     isPgmError = bTrue;
   else;
     isPgmError = bFalse;
@@ -270,18 +270,18 @@ endsr;
 
 begsr fill##;
 
-  ##File  = i_envFile;
-  ##Lib   = i_envLib;
-  ##Mbr   = i_envMbr;
-  ##Text  = i_envText;
+  ##file  = i_envFile;
+  ##lib   = i_envLib;
+  ##mbr   = i_envMbr;
+  ##text  = i_envText;
 
 endsr;
 
 //============================================================*
-//    SetScreen     Einstellen 132/80-Zeichen Auflösung       *
+//    setScreen     Einstellen 132/80-Zeichen Auflösung       *
 //============================================================*
 
-begsr SetScreen;
+begsr setScreen;
 
   if (i_dsp80 = '0');
     //   132-Zeichen Anzeige
@@ -301,7 +301,7 @@ endsr;
 //    First         Initialisierung                           *
 //============================================================*
 
-begsr First;
+begsr first;
 
   // - Öffnen der Dateien
   open peek57fm;
@@ -314,13 +314,13 @@ begsr First;
   o_msgDta = *blanks;
 
   // - Darstellung der Befehlstasten
-  sfbot = 1;
+  sfBot = 1;
 
   // - Einstellen der Bildschirmauflösung 80/132-Zeichen
-  exsr SetScreen;
+  exsr setScreen;
 
   // - Bildschirm füllen
-  exsr C_Refresh;
+  exsr c_refresh;
 
 endsr;
 
@@ -343,7 +343,7 @@ begsr inzsr;
 
   peek23(sds.pgmName: '*ALL': 0
         : yFKeys: yNbrOfKeys);
-  ScrnFKeys = %subarr(yFKeys: 1);
+  scrnFKeys = %subarr(yFKeys: 1);
 
 endsr;
 

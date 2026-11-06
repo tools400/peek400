@@ -84,7 +84,7 @@ dcl-s pSpcPtr pointer inz(*null);
 dcl-ds errCode likeds(errCode_t) inz;
 
 //  Organisation of generic header
-dcl-ds GenHeader likeds(genHeader_t) based(pSpcPtr);
+dcl-ds genHeader likeds(genHeader_t) based(pSpcPtr);
 
 //  List data (-1: keine Liste erstellt)
 dcl-s currListE like(int4_t) inz(-1);
@@ -115,7 +115,7 @@ dcl-proc peek70;
 
     select;
     when (i_function = '*CREATE');
-      exsr Create;
+      exsr create;
     when (i_function = '*DELETE');
       exsr delete;
     when (i_function = '*READ');
@@ -136,7 +136,7 @@ dcl-proc peek70;
   //  Create --  create user space and get database rel.*
   //====================================================*
 
-  begsr Create;
+  begsr create;
 
     o_numE = *zeros;
     currListE = -1;
@@ -161,7 +161,7 @@ dcl-proc peek70;
       o_numE = 0;
       currListE = -1;
     else;
-      o_numE = GenHeader.NumLstEnt;
+      o_numE = genHeader.numLstEnt;
       currListE = 0;
     endif;
 
@@ -202,7 +202,7 @@ dcl-proc peek70;
       leavesr;
     endif;
 
-    if (currListE >= GenHeader.NumLstEnt);
+    if (currListE >= genHeader.numLstEnt);
       exsr setError;
       leavesr;
     endif;
@@ -210,14 +210,14 @@ dcl-proc peek70;
     currListE = currListE + 1;
 
     offsetListE =
-     GenHeader.OffsetLst +
-     ((currListE - 1) * GenHeader.EntrySize);
+     genHeader.offsetLst +
+     ((currListE - 1) * genHeader.entrySize);
 
     pListE = pSpcPtr + offsetListE;
 
     o_objl0200 = listE;
 
-    o_numE = GenHeader.NumLstEnt - currListE;
+    o_numE = genHeader.numLstEnt - currListE;
 
   endsr;
 

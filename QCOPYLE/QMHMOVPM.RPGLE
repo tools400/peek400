@@ -9,7 +9,7 @@ dcl-pr QMHMOVPM extpgm('QMHMOVPM');
   i_numTypes    int(10) const;
   i_callStkE    char(256) options(*varsize) const;
   i_callStkC    int(10) const;
-  io_ErrCode    char(65535) options(*varsize);
+  io_errCode    char(65535) options(*varsize);
   i_lenStkE     int(10) options(*nopass) const; // | optGrp 1
   i_callStkEQ   char(20) options(*nopass) const; // |
   i_callStkEDT  char(10) options(*nopass) const; // | optGrp 2

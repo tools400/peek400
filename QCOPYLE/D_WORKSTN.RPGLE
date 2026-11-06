@@ -7,10 +7,10 @@ dcl-ds cursorPosition_t qualified template;
 end-ds;
 
 dcl-ds workstn_t qualified template;
-  IsOpen  char(1) pos(9);
+  isOpen  char(1) pos(9);
   status  zoned(5) pos(11);
   numRows int(5) pos(152);
-  Offset  int(5) pos(241);
+  offset  int(5) pos(241);
   aid     char(1) pos(369);
   csrPos  int(5);
 end-ds;

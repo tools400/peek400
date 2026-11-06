@@ -14,7 +14,7 @@ dcl-pr peek56 extpgm(peek56_name);
   i_rcdFmtID  like(fmtId_t) const;
   o_qFile     likeds(qObj_t);
   o_mbr       like(mbr_t);
-  o_Text      like(text_t);
+  o_text      like(text_t);
   o_option    like(option_t);
   o_msgID     like(msgId_t);
   o_msgDta    like(msgDta_t);

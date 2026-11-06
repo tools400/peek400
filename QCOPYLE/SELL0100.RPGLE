@@ -9,7 +9,7 @@
 //  list API format SELL0100
 //  (data structure can be used within the calling program
 //  to splitt XData into its units.)
-dcl-ds SELL0100_t len(256) qualified template;
+dcl-ds sell0100_t len(256) qualified template;
   sorcen char(1); // über API
   sordat char(6); // über API
   sortim char(6); // über API

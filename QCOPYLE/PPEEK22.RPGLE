@@ -6,5 +6,5 @@ dcl-pr peek22 extpgm('PEEK22');
 dcl-pr peek22 extpgm(peek22_name);
 /endif
   i_mode    like(mode_t) const;
-  i_section like(SECTION_t) const;
+  i_section like(section_t) const;
 end-pr;

@@ -59,26 +59,26 @@ dcl-ds workstn likeds(workstn_t);
 
 dcl-s yFKeys char(18) dim(32);
 dcl-s yNbrOfKeys like(int4_t);
-dcl-s YMsgID char(7);
-dcl-s YMsgDta char(512);
+dcl-s yMsgID char(7);
+dcl-s yMsgDta char(512);
 
-dcl-s YPgmCmd char(10);
-dcl-s YCmdDta like(pgmCmdDt_t);
+dcl-s yPgmCmd char(10);
+dcl-s yCmdDta like(pgmCmdDt_t);
 
-dcl-s sfbot like(int4_t);
-dcl-c NbrFKeys 2;
+dcl-s sfBot like(int4_t);
+dcl-c nbrFKeys 2;
 
 dcl-s peek21_name like(pgmCallN_t);
 dcl-s peek23_name like(pgmCallN_t);
 
-dcl-s R_SrcFile like(i_qSrcFile.name);
-dcl-s R_SrcLib like(i_qSrcFile.lib);
-dcl-s R_SrcMbr like(i_srcMbr);
+dcl-s r_srcFile like(i_qSrcFile.name);
+dcl-s r_srcLib like(i_qSrcFile.lib);
+dcl-s r_srcMbr like(i_srcMbr);
 
 //  Werte beim Öffnen des Fensters, F5 stellt sie wieder her
-dcl-s R_File like(file_t);
+dcl-s r_file like(file_t);
 dcl-s r_library like(lib_t);
-dcl-s R_Member like(mbr_t);
+dcl-s r_member like(mbr_t);
 dcl-s r_mbropt like(option_t);
 dcl-s r_crtfile like(option_t);
 
@@ -92,7 +92,7 @@ dcl-pi peek26;
   i_qSrcFile likeds(qObj_t) const;
   i_srcMbr   like(mbr_t) const;
   o_toFile   like(file_t);
-  o_TOLIB    like(lib_t);
+  o_toLib    like(lib_t);
   o_toMbr    like(mbr_t);
   o_mbrOpt   like(option_t);
   o_crtFile  like(option_t);
@@ -108,7 +108,7 @@ ceehdlr(%paddr('errorHandler')
 
 exsr inzsr;
 
-exsr First;
+exsr first;
 
 //  Schleife für Programmbearbeitung
 
@@ -120,24 +120,24 @@ dow ('1');
 
   //  Anzeigen der Befehlstasten
   select;
-  when ((sfbot = 2) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 2) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#2;
-  when ((sfbot = 3) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 3) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#3;
-  when ((sfbot = 4) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 4) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#4;
-  when ((sfbot = 5) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 5) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#5;
-  when ((sfbot = 6) and
-     (yNbrOfKeys > NbrFKeys * (sfbot - 1)));
+  when ((sfBot = 6) and
+     (yNbrOfKeys > nbrFKeys * (sfBot - 1)));
     write pbbot#6;
   other;
     write pbbot#1;
-    sfbot = 1;
+    sfBot = 1;
   endsl;
 
   //  Anzeigen Bildschirm
@@ -152,38 +152,38 @@ dow ('1');
   //  Mappen der gedrückten Taste
   //  in Programmbefehl
   peek21(workstn.aid: sds.pgmName
-        : YPgmCmd: YCmdDta: YMsgID: YMsgDta);
-  if (YMsgID <> *blanks);
-    p_sndPgmMg(YMsgID: YMsgDta: sds.pgmName);
-    YMsgID = '';
-    YMsgDta = '';
+        : yPgmCmd: yCmdDta: yMsgID: yMsgDta);
+  if (yMsgID <> *blanks);
+    p_sndPgmMg(yMsgID: yMsgDta: sds.pgmName);
+    yMsgID = '';
+    yMsgDta = '';
     iter;
   endif;
 
   //  Abfragen der Befehlstasten
   select;
   //  F3  - Ende
-  when (YPgmCmd = '*EXIT');
-    exsr C_EndPgm;
+  when (yPgmCmd = '*EXIT');
+    exsr c_endPgm;
     leave;
 
   //  F5  - Aktualisieren
-  when (YPgmCmd = '*REFRESH');
-    exsr C_Refresh;
+  when (yPgmCmd = '*REFRESH');
+    exsr c_refresh;
     iter;
 
   //  F12 - Ende
-  when (YPgmCmd = '*CANCEL');
-    exsr C_EndPgm;
+  when (yPgmCmd = '*CANCEL');
+    exsr c_endPgm;
     leave;
 
   //  F24 - Weitere Tasten
-  when (YPgmCmd = '*MOREKEYS');
-    exsr C_MoreKeys;
+  when (yPgmCmd = '*MOREKEYS');
+    exsr c_moreKeys;
 
   //  Datenfreigabe
-  when (YPgmCmd = '*ENTER');
-    exsr C_Enter;
+  when (yPgmCmd = '*ENTER');
+    exsr c_enter;
     if (*in99 = *off);
       leave;
     endif;
@@ -201,19 +201,19 @@ close peek26fm;
 return;
 
 //============================================================*
-//    C_Enter       "Datenfreigabetaste"                      *
+//    c_enter       "Datenfreigabetaste"                      *
 //============================================================*
 
-begsr C_Enter;
+begsr c_enter;
 
-  exsr prfb1;
+  exsr prfB1;
 
   if (*in99 = *off);
-    o_toFile = ##File;
-    o_TOLIB = ##Library;
-    o_toMbr = ##Member;
-    o_mbrOpt = ##MbrOpt;
-    o_crtFile = ##CrtFile;
+    o_toFile = ##file;
+    o_toLib = ##library;
+    o_toMbr = ##member;
+    o_mbrOpt = ##mbrOpt;
+    o_crtFile = ##crtFile;
     o_msgID = 'USR8112';
     o_msgDta = *blanks;
   endif;
@@ -227,18 +227,18 @@ endsr;
 begsr bzoff1;
 
   //  DSPATR(PC)
-  *in20 = '0';   // ##File
-  *in21 = '0';   // ##Library
-  *in22 = '0';   // ##Member
-  *in23 = '0';   // ##MbrOpt
-  *in24 = '0';   // ##CrtFile
+  *in20 = '0';   // ##file
+  *in21 = '0';   // ##library
+  *in22 = '0';   // ##member
+  *in23 = '0';   // ##mbrOpt
+  *in24 = '0';   // ##crtFile
 
   //  DSPATR(RI)
-  *in30 = '0';   // ##File
-  *in31 = '0';   // ##Library
-  *in32 = '0';   // ##Member
-  *in33 = '0';   // ##MbrOpt
-  *in34 = '0';   // ##CrtFile
+  *in30 = '0';   // ##file
+  *in31 = '0';   // ##library
+  *in32 = '0';   // ##member
+  *in33 = '0';   // ##mbrOpt
+  *in34 = '0';   // ##crtFile
 
   //  Fehler
   *in99 = '0';
@@ -249,7 +249,7 @@ endsr;
 //    PRFB1         Prüfen der Eingaben                       *
 //============================================================*
 
-begsr prfb1;
+begsr prfB1;
 
   dou ('1');
 
@@ -290,12 +290,12 @@ begsr prf20;
 
   dou ('1');
 
-    if (##File = '' or f_vldName(##File: YMsgID: YMsgDta) = bFalse);
-      YMsgID = '';
-      YMsgDta = '';
+    if (##file = '' or f_vldName(##file: yMsgID: yMsgDta) = bFalse);
+      yMsgID = '';
+      yMsgDta = '';
       *in99 = '1';
       clear usr8151.var1;
-      usr8151.var1 = ##File;
+      usr8151.var1 = ##file;
       p_sndPgmMg('USR8151': usr8151: sds.pgmName);
       leave;
     endif;
@@ -317,32 +317,32 @@ begsr prf21;
 
   dou ('1');
 
-    if (##Library = '');
+    if (##library = '');
       *in99 = '1';
       clear usr8152.var1;
-      usr8152.var1 = ##Library;
+      usr8152.var1 = ##library;
       p_sndPgmMg('USR8152': usr8152: sds.pgmName);
       leave;
     endif;
 
-    if (%subst(##Library: 1: 1) = '*');
+    if (%subst(##library: 1: 1) = '*');
       //  Sonderwerte ...
-      if (##Library = '*LIBL' or ##Library = '*CURLIB');
+      if (##library = '*LIBL' or ##library = '*CURLIB');
       //  ... gültig
       else;
         //  ... ungültig
         *in99 = '1';
         clear usr8152;
-        usr8152.var1 = ##Library;
+        usr8152.var1 = ##library;
         p_sndPgmMg('USR8152': usr8152: sds.pgmName);
         leave;
       endif;
-    elseif (f_vldName(##Library: YMsgID: YMsgDta) = bFalse);
-      YMsgID = '';
-      YMsgDta = '';
+    elseif (f_vldName(##library: yMsgID: yMsgDta) = bFalse);
+      yMsgID = '';
+      yMsgDta = '';
       *in99 = '1';
       clear usr8152;
-      usr8152.var1 = ##Library;
+      usr8152.var1 = ##library;
       p_sndPgmMg('USR8152': usr8152: sds.pgmName);
       leave;
     endif;
@@ -364,32 +364,32 @@ begsr prf22;
 
   dou ('1');
 
-    if (##Member = '');
+    if (##member = '');
       *in99 = '1';
       clear usr8153;
-      usr8153.var1 = ##Member;
+      usr8153.var1 = ##member;
       p_sndPgmMg('USR8153': usr8153: sds.pgmName);
       leave;
     endif;
 
-    if (%subst(##Member: 1: 1) = '*');
+    if (%subst(##member: 1: 1) = '*');
       //  Sonderwerte ...
-      if (##Member = '*FIRST');
+      if (##member = '*FIRST');
       //  ... gültig
       else;
         //  ... ungültig
         *in99 = '1';
         clear usr8153;
-        usr8153.var1 = ##Member;
+        usr8153.var1 = ##member;
         p_sndPgmMg('USR8153': usr8153: sds.pgmName);
         leave;
       endif;
-    elseif (f_vldName(##Member: YMsgID: YMsgDta) = bFalse);
-      YMsgID = '';
-      YMsgDta = '';
+    elseif (f_vldName(##member: yMsgID: yMsgDta) = bFalse);
+      yMsgID = '';
+      yMsgDta = '';
       *in99 = '1';
       clear usr8153;
-      usr8153.var1 = ##Member;
+      usr8153.var1 = ##member;
       p_sndPgmMg('USR8153': usr8153: sds.pgmName);
       leave;
     endif;
@@ -411,12 +411,12 @@ begsr prf23;
 
   dou ('1');
 
-    if (##MbrOpt <> '*ADD'
-       and ##MbrOpt <> '*REPLACE'
-       and ##MbrOpt <> '*UPDADD');
+    if (##mbrOpt <> '*ADD'
+       and ##mbrOpt <> '*REPLACE'
+       and ##mbrOpt <> '*UPDADD');
       *in99 = '1';
       clear usr8154;
-      usr8154.var1 = ##MbrOpt;
+      usr8154.var1 = ##mbrOpt;
       p_sndPgmMg('USR8154': usr8154: sds.pgmName);
       leave;
     endif;
@@ -438,23 +438,23 @@ begsr prf24;
 
   dou ('1');
 
-    if (##CrtFile <> '*YES' and ##CrtFile <> '*NO');
+    if (##crtFile <> '*YES' and ##crtFile <> '*NO');
       *in99 = '1';
       *in24 = '1';
       *in34 = '1';
       clear usr8155;
-      usr8155.var1 = ##CrtFile;
+      usr8155.var1 = ##crtFile;
       p_sndPgmMg('USR8155': usr8155: sds.pgmName);
       leave;
     endif;
 
     //  CPYF lässt *LIBL mit CRTFILE(*YES) nicht zu (CPF2877)
-    if (##CrtFile = '*YES' and ##Library = '*LIBL');
+    if (##crtFile = '*YES' and ##library = '*LIBL');
       *in99 = '1';
       *in21 = '1';
       *in31 = '1';
       clear usr8152;
-      usr8152.var1 = ##Library;
+      usr8152.var1 = ##library;
       p_sndPgmMg('USR8152': usr8152: sds.pgmName);
       leave;
     endif;
@@ -464,10 +464,10 @@ begsr prf24;
 endsr;
 
 //============================================================*
-//    C_EndPgm      F12    - Programm beenden                 *
+//    c_endPgm      F12    - Programm beenden                 *
 //============================================================*
 
-begsr C_EndPgm;
+begsr c_endPgm;
 
   p_rmvPgmMg(sds.pgmName);
 
@@ -487,29 +487,29 @@ begsr C_EndPgm;
 endsr;
 
 //============================================================*
-//    C_Refresh     F5  - Eingaben verwerfen                  *
+//    c_refresh     F5  - Eingaben verwerfen                  *
 //============================================================*
 
-begsr C_Refresh;
+begsr c_refresh;
 
   //  Werte beim Öffnen des Fensters wiederherstellen
-  ##File = R_File;
-  ##Library = r_library;
-  ##Member = R_Member;
-  ##MbrOpt = r_mbropt;
-  ##CrtFile = r_crtfile;
+  ##file = r_file;
+  ##library = r_library;
+  ##member = r_member;
+  ##mbrOpt = r_mbropt;
+  ##crtFile = r_crtfile;
 
   exsr fill##;
 
 endsr;
 
 //============================================================*
-//    C_MoreKeys    F24 - Weitere Tasten                      *
+//    c_moreKeys    F24 - Weitere Tasten                      *
 //============================================================*
 
-begsr C_MoreKeys;
+begsr c_moreKeys;
 
-  sfbot = sfbot + 1;
+  sfBot = sfBot + 1;
 
 endsr;
 
@@ -519,29 +519,29 @@ endsr;
 
 begsr fill##;
 
-  if (##Library = '');
-    ##Library = '*LIBL';
+  if (##library = '');
+    ##library = '*LIBL';
   endif;
 
-  if (##Member = '');
-    ##Member = '*FIRST';
+  if (##member = '');
+    ##member = '*FIRST';
   endif;
 
-  if (##MbrOpt = '');
-    ##MbrOpt = '*ADD';
+  if (##mbrOpt = '');
+    ##mbrOpt = '*ADD';
   endif;
 
-  if (##CrtFile = '');
-    ##CrtFile = '*NO';
+  if (##crtFile = '');
+    ##crtFile = '*NO';
   endif;
 
 endsr;
 
 //============================================================*
-//    SetScreen     Einstellen 132/80-Zeichen Auflösung       *
+//    setScreen     Einstellen 132/80-Zeichen Auflösung       *
 //============================================================*
 
-begsr SetScreen;
+begsr setScreen;
 
   if (i_dsp80 = '0');
     //   132-Zeichen Anzeige
@@ -561,25 +561,25 @@ endsr;
 //    First         Initialisierung                           *
 //============================================================*
 
-begsr First;
+begsr first;
 
   // - Quelldatei hat gewechselt ...
-  if (i_qSrcFile.name <> R_SrcFile or
-     i_qSrcFile.lib <> R_SrcLib or
-     i_srcMbr <> R_SrcMbr);
-    ##File = *blanks;
-    ##Library = *blanks;
-    ##Member = i_srcMbr;
-    R_SrcFile = i_qSrcFile.name;
-    R_SrcLib = i_qSrcFile.lib;
-    R_SrcMbr = i_srcMbr;
+  if (i_qSrcFile.name <> r_srcFile or
+     i_qSrcFile.lib <> r_srcLib or
+     i_srcMbr <> r_srcMbr);
+    ##file = *blanks;
+    ##library = *blanks;
+    ##member = i_srcMbr;
+    r_srcFile = i_qSrcFile.name;
+    r_srcLib = i_qSrcFile.lib;
+    r_srcMbr = i_srcMbr;
   else;
   // - Quelldatei hat nicht gewechselt ...
   //              alte Werte stehenlassen
   endif;
 
-  ##MbrOpt = *blanks;
-  ##CrtFile = *blanks;
+  ##mbrOpt = *blanks;
+  ##crtFile = *blanks;
 
   // - Öffnen der Dateien
   open peek26fm;
@@ -594,21 +594,21 @@ begsr First;
   exsr fill##;
 
   // - Werte für F5 merken
-  R_File = ##File;
-  r_library = ##Library;
-  R_Member = ##Member;
-  r_mbropt = ##MbrOpt;
-  r_crtfile = ##CrtFile;
+  r_file = ##file;
+  r_library = ##library;
+  r_member = ##member;
+  r_mbropt = ##mbrOpt;
+  r_crtfile = ##crtFile;
 
   //  Löschen der Cursorosition
-  CsrRow = *zeros;
-  CsrCol = *zeros;
+  csrRow = *zeros;
+  csrCol = *zeros;
 
   // - Einstellen Darstellung der Funktionstasten
-  sfbot = 1;
+  sfBot = 1;
 
   // - Einstellen der Bildschirmauflösung 80/132-Zeichen
-  exsr SetScreen;
+  exsr setScreen;
 
 endsr;
 
@@ -631,7 +631,7 @@ begsr inzsr;
 
   peek23(sds.pgmName: '*ALL': 0
         : yFKeys: yNbrOfKeys);
-  ScrnFKeys = %subarr(yFKeys: 1);
+  scrnFKeys = %subarr(yFKeys: 1);
 
 endsr;
 

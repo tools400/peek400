@@ -5,12 +5,12 @@
 //====================================================*
 
 dcl-ds rtvm0100 len(2048);
-  RT1_BytRet int(10) inz(0);
-  RT1_BytAvl int(10) inz(0);
-  RT1_LnMgRt int(10) inz(0);
-  RT1_LnMgAv int(10) inz(0);
-  RT1_LnMhRt int(10) inz(0);
-  RT1_LnMhAv int(10) inz(0);
-  RT1_Data   char(2024) inz(*blanks);
+  rt1_bytRet int(10) inz(0);
+  rt1_bytAvl int(10) inz(0);
+  rt1_lnMgRt int(10) inz(0);
+  rt1_lnMgAv int(10) inz(0);
+  rt1_lnMhRt int(10) inz(0);
+  rt1_lnMhAv int(10) inz(0);
+  rt1_data   char(2024) inz(*blanks);
 end-ds;
 

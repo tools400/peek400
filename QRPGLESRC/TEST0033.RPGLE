@@ -130,7 +130,7 @@ dcl-proc kill;
     i_callStkE   char(32767) options(*varsize) const;
     i_callStkC   int(10) const;
     o_msgKey     char(4);
-    io_ErrCode   char(32767) options(*varsize);
+    io_errCode   char(32767) options(*varsize);
     i_lenStkE    int(10) options(*nopass) const;
     i_callStkEQ  char(20) options(*nopass) const;
     i_wait       int(10) options(*nopass) const;

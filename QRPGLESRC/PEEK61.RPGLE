@@ -94,7 +94,7 @@ dcl-proc p_inzProgressMeter export;
   if (%parms() >= %parmnum(i_marker));
     marker = i_marker;
   else;
-    marker = cPrgMtr_Blue;
+    marker = cPrgMtr_blue;
   endif;
 
   //  ... 'i_waitSec'
@@ -108,7 +108,7 @@ dcl-proc p_inzProgressMeter export;
   if (%parms() >= %parmnum(i_jobType));
     jobtype = i_jobType;
   else;
-    jobtype = cPrgMtr_JobType_All;
+    jobtype = cPrgMtr_jobType_all;
   endif;
 
   //  ... 'i_width'
@@ -141,7 +141,7 @@ dcl-proc p_inzProgressMeter export;
   // ... if an attribute below x'20' (normal green) specified,
   //     swap for yellow reverse (safer)
   if (marker < x'20');
-    g_marker = cPrgMtr_Yellow;
+    g_marker = cPrgMtr_yellow;
   else;
     g_marker = marker;
   endif;
@@ -172,17 +172,17 @@ dcl-proc p_inzProgressMeter export;
   //  ... check whether the progress meter must be shown for jobs of type ...
   select;
   //      ... all Jobs
-  when (jobtype = cPrgMtr_JobType_All);
+  when (jobtype = cPrgMtr_jobType_all);
     g_showPrgMtr = bTrue;
   //      ... interactive jobs
-  when (jobtype = cPrgMtr_JobType_Dlg);
+  when (jobtype = cPrgMtr_jobType_dlg);
     if (g_jobType <> 'B');
       g_showPrgMtr = bTrue;
     else;
       g_showPrgMtr = bFalse;
     endif;
   //      ... batch jobs
-  when (jobtype = cPrgMtr_JobType_Batch);
+  when (jobtype = cPrgMtr_jobType_batch);
     if (g_jobType = 'B');
       g_showPrgMtr = bTrue;
     else;
@@ -348,7 +348,7 @@ dcl-proc lf_getScreenMode;
   dcl-pr QsnRtvMod char(1) extproc('QsnRtvMod');
     o_dspMode    char(1) options(*omit);
     i_hLowLvlEnv int(10) options(*omit) const;
-    io_ErrCode   char(32767) options(*omit: *varsize);
+    io_errCode   char(32767) options(*omit: *varsize);
   end-pr;
 
   //  Definieren Arbeitsfelder

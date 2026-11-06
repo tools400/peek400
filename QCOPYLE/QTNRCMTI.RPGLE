@@ -7,7 +7,7 @@ dcl-pr qtnrcmti extpgm('QTNRCMTI');
   o_rcvVar    char(65535) options(*varsize);
   i_rcvVarLen int(10) const;
   i_format    char(8) const;
-  io_ErrCode  char(65535) options(*varsize);
+  io_errCode  char(65535) options(*varsize);
 end-pr;
 
 //  This format returns commitment information.
@@ -24,7 +24,7 @@ dcl-ds cmti0100_t qualified template;
   actionEndJob       char(1);
   dftJrnName         char(10);
   dftJrnLib          char(10);
-  LUOW_id            char(39);
+  luow_id            char(39);
   lastAgentPermitted char(1);
   okToLeaveOut       char(1);
   acceptVoteReliable char(1);

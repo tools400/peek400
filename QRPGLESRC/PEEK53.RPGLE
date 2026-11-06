@@ -29,14 +29,14 @@ ctl-opt nomain;
 /copy QCOPYLE,H_SPEC
 /copy QCOPYLE,COPYRIGHT
 
-dcl-f peekusr usage(*update: *delete: *output) keyed usropn prefix(s_) infds(File_00_DS)
+dcl-f peekusr usage(*update: *delete: *output) keyed usropn prefix(s_) infds(file_00_ds)
   extfile(g_peekusr);
 
 dcl-f default keyed usropn extdesc('PEEKUSR') rename(fpeekusr: fdefault) prefix(d_)
-  infds(File_01_DS) extfile(g_default);
+  infds(file_01_ds) extfile(g_default);
 
-dcl-ds File_00_DS likeds(infds_t);
-dcl-ds File_01_DS likeds(infds_t);
+dcl-ds file_00_ds likeds(infds_t);
+dcl-ds file_01_ds likeds(infds_t);
 
 dcl-s g_peekusr char(21);
 dcl-s g_default char(21);
@@ -46,8 +46,8 @@ dcl-s g_user like(user_t) inz;
 dcl-s g_file like(file_t) inz;
 dcl-s g_lib like(lib_t) inz;
 
-dcl-pr f_initUsrS like(SET0000_t);
-  i_key like(KEY_t) const;
+dcl-pr f_initUsrS like(set0000_t);
+  i_key like(key_t) const;
 end-pr;
 
 dcl-pr p_opnFile;
@@ -93,7 +93,7 @@ end-pr;
 
 dcl-s peek22_name like(pgmCallN_t) inz;
 
-dcl-ds U_Key3 likerec(fpeekusr: *key);
+dcl-ds u_key3 likerec(fpeekusr: *key);
 dcl-ds d_key3 likerec(fdefault: *key);
 
 //===================================================================*
@@ -118,7 +118,7 @@ dcl-proc p_crtUsrSg export;
 
   cmd = 'CRTDUPOBJ -
            OBJ(PEEKUSR) +
-           FROMLIB(' + i_prodlib + ') +
+           FROMLIB(' + i_prodLib + ') +
            OBJTYPE(*FILE) +
            TOLIB(*FROMLIB) +
            NEWOBJ(' + i_user + ') +
@@ -142,14 +142,14 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_getUsrSg export;
-  dcl-pi *n like(SET0000_t);
-    i_key    like(KEY_t) const;
+  dcl-pi *n like(set0000_t);
+    i_key    like(key_t) const;
     o_msgID  char(7) options(*nopass);
     o_msgDta char(512) options(*nopass);
   end-pi;
 
   //  definieren Funktionswert ...
-  dcl-s f_getUsrSg like(SET0000_t) inz;
+  dcl-s f_getUsrSg like(set0000_t) inz;
 
   //  Hilfsfelder für optionale Parameter ...
   dcl-s o2_msgID like(o_msgID) inz;
@@ -158,28 +158,28 @@ dcl-proc f_getUsrSg export;
   //  definieren Arbeitsfelder ...
   dcl-s x like(int4_t);
   dcl-s y like(int4_t);
-  dcl-s set0000 like(SET0000_t);
+  dcl-s set0000 like(set0000_t);
   // ------------------------------------------------------------------------
   p_initSrvPgm();
 
   p_opnFile(o2_msgID: o3_msgDta);
   if (o2_msgID = ' ');
 
-    clear U_Key3;
-    U_Key3.S_User = g_user;
-    U_Key3.S_Section = '*PGM';
-    U_Key3.S_Key = i_key;
-    chain %kds(U_Key3: 3) fpeekusr;
+    clear u_key3;
+    u_key3.s_user = g_user;
+    u_key3.s_section = '*PGM';
+    u_key3.s_key = i_key;
+    chain %kds(u_key3: 3) fpeekusr;
     if (%found(peekusr));
       set0000 = f_initUsrS(i_key);
       exsr chkUsrSetg;
       update fpeekusr;
     else;
-      S_Data  = f_initUsrS(i_key);
+      s_data  = f_initUsrS(i_key);
       write fpeekusr;
     endif;
 
-    f_getUsrSg = S_Data;
+    f_getUsrSg = s_data;
 
   endif;
 
@@ -195,16 +195,16 @@ dcl-proc f_getUsrSg export;
   return f_getUsrSg;
 
   // ---------------------------------------------------------- *
-  //    ChkUsrSetg    Prüfen der Benutzervoreinstellungen       *
+  //    chkUsrSetg    Prüfen der Benutzervoreinstellungen       *
   //                  auf Aktualität                            *
   // ---------------------------------------------------------- *
 
   begsr chkUsrSetg;
 
     //  Ende der alten Daten
-    x = %scan(x'8B': S_Data: 1);
+    x = %scan(x'8B': s_data: 1);
     if (x = 0);
-      x = %checkr(' ': S_Data);
+      x = %checkr(' ': s_data);
     else;
       x = x - 1;
     endif;
@@ -216,12 +216,12 @@ dcl-proc f_getUsrSg export;
     //  länger als die "Altdaten" sind ...
     if (y > x);
       //  ... extrahieren alte Daten
-      S_Data = %subst(S_Data: 1: x);
+      s_data = %subst(s_data: 1: x);
       //  ... extrahieren überhang der neuen Daten
       x = x + 1;
       set0000 = %subst(set0000: x);
       //  ... zusammenfügen alt + neu
-      %subst(S_Data: x) = set0000;
+      %subst(s_data: x) = set0000;
     endif;
 
   endsr;
@@ -234,8 +234,8 @@ end-proc;
 
 dcl-proc p_updUsrSg export;
   dcl-pi *n;
-    i_key  like(KEY_t) const;
-    i_data like(SET0000_t) const;
+    i_key  like(key_t) const;
+    i_data like(set0000_t) const;
   end-pi;
 
   //  definieren Arbeitsfelder
@@ -246,13 +246,13 @@ dcl-proc p_updUsrSg export;
 
   p_opnFile(msgID: msgDta);
 
-  clear U_Key3;
-  U_Key3.S_User = g_user;
-  U_Key3.S_Section = '*PGM';
-  U_Key3.S_Key = i_key;
-  chain %kds(U_Key3: 3) fpeekusr;
+  clear u_key3;
+  u_key3.s_user = g_user;
+  u_key3.s_section = '*PGM';
+  u_key3.s_key = i_key;
+  chain %kds(u_key3: 3) fpeekusr;
   if (%found(peekusr));
-    S_Data = i_data;
+    s_data = i_data;
     update fpeekusr;
   endif;
 
@@ -265,9 +265,9 @@ end-proc;
 
 dcl-proc f_chainUsr export;
   dcl-pi *n like(bool_t);
-    i_section like(SECTION_t) const;
-    i_key     like(KEY_t) const;
-    o_data    like(SET0000_t);
+    i_section like(section_t) const;
+    i_key     like(key_t) const;
+    o_data    like(set0000_t);
   end-pi;
 
   //  definieren Funktionswert ...
@@ -278,15 +278,15 @@ dcl-proc f_chainUsr export;
   // ------------------------------------------------------------------------
   p_initSrvPgm();
 
-  clear S_Data;
+  clear s_data;
 
   p_opnFile(msgID: msgDta);
   if (msgID = '');
-    clear U_Key3;
-    U_Key3.S_User = g_user;
-    U_Key3.S_Section = i_section;
-    U_Key3.S_Key = i_key;
-    chain(n) %kds(U_Key3: 3) fpeekusr;
+    clear u_key3;
+    u_key3.s_user = g_user;
+    u_key3.s_section = i_section;
+    u_key3.s_key = i_key;
+    chain(n) %kds(u_key3: 3) fpeekusr;
     if (%found(peekusr));
       f_chainUsr = '0';
     else;
@@ -296,7 +296,7 @@ dcl-proc f_chainUsr export;
     f_chainUsr = '1';
   endif;
 
-  o_data = S_Data;
+  o_data = s_data;
 
   return f_chainUsr;
 
@@ -309,9 +309,9 @@ end-proc;
 
 dcl-proc f_updatUsr export;
   dcl-pi *n like(bool_t);
-    i_section like(SECTION_t) const;
-    i_key     like(KEY_t) const;
-    i_data    like(SET0000_t) const;
+    i_section like(section_t) const;
+    i_key     like(key_t) const;
+    i_data    like(set0000_t) const;
   end-pi;
 
   //  definieren Funktionswert ...
@@ -325,13 +325,13 @@ dcl-proc f_updatUsr export;
 
   p_opnFile(msgID: msgDta);
   if (msgID = '');
-    clear U_Key3;
-    U_Key3.S_User = g_user;
-    U_Key3.S_Section = i_section;
-    U_Key3.S_Key = i_key;
-    chain %kds(U_Key3: 3) fpeekusr;
+    clear u_key3;
+    u_key3.s_user = g_user;
+    u_key3.s_section = i_section;
+    u_key3.s_key = i_key;
+    chain %kds(u_key3: 3) fpeekusr;
     if (%found(peekusr));
-      S_Data = i_data;
+      s_data = i_data;
       update(e) fpeekusr;
       if (%error());
         f_updatUsr = bTrue;
@@ -356,8 +356,8 @@ end-proc;
 
 dcl-proc f_deletUsr export;
   dcl-pi *n like(bool_t);
-    i_section like(SECTION_t) const;
-    i_key     like(KEY_t) const;
+    i_section like(section_t) const;
+    i_key     like(key_t) const;
   end-pi;
 
   //  definieren Funktionswert ...
@@ -371,11 +371,11 @@ dcl-proc f_deletUsr export;
 
   p_opnFile(msgID: msgDta);
   if (msgID = '');
-    clear U_Key3;
-    U_Key3.S_User = g_user;
-    U_Key3.S_Section = i_section;
-    U_Key3.S_Key = i_key;
-    chain %kds(U_Key3: 3) fpeekusr;
+    clear u_key3;
+    u_key3.s_user = g_user;
+    u_key3.s_section = i_section;
+    u_key3.s_key = i_key;
+    chain %kds(u_key3: 3) fpeekusr;
     if (%found(peekusr));
       delete(e) fpeekusr;
       if (%error());
@@ -401,9 +401,9 @@ end-proc;
 
 dcl-proc f_writeUsr export;
   dcl-pi *n like(bool_t);
-    i_section like(SECTION_t) const;
-    i_key     like(KEY_t) const;
-    i_data    like(SET0000_t);
+    i_section like(section_t) const;
+    i_key     like(key_t) const;
+    i_data    like(set0000_t);
   end-pi;
 
   //  definieren Funktionswert ...
@@ -416,10 +416,10 @@ dcl-proc f_writeUsr export;
 
   p_opnFile(msgID: msgDta);
   if (msgID = '');
-    S_User = g_user;
-    S_Section = i_section;
-    S_Key = i_key;
-    S_Data = i_data;
+    s_user = g_user;
+    s_section = i_section;
+    s_key = i_key;
+    s_data = i_data;
     write(e) fpeekusr;
     if (%error());
       f_writeUsr = bTrue;
@@ -440,8 +440,8 @@ end-proc;
 
 dcl-proc p_setllUsr export;
   dcl-pi *n;
-    i_section like(SECTION_t) const;
-    i_key     like(KEY_t) options(*nopass) const;
+    i_section like(section_t) const;
+    i_key     like(key_t) options(*nopass) const;
   end-pi;
 
   //  definieren Arbeitsfelder
@@ -454,16 +454,16 @@ dcl-proc p_setllUsr export;
   if (msgID = '');
 
     if (%parms() >= %parmnum(i_key));
-      clear U_Key3;
-      U_Key3.S_User = g_user;
-      U_Key3.S_Section = i_section;
-      U_Key3.S_Key = i_key;
-      setll %kds(U_Key3: 3) fpeekusr;
+      clear u_key3;
+      u_key3.s_user = g_user;
+      u_key3.s_section = i_section;
+      u_key3.s_key = i_key;
+      setll %kds(u_key3: 3) fpeekusr;
     else;
-      clear U_Key3;
-      U_Key3.S_User = g_user;
-      U_Key3.S_Section = i_section;
-      setll %kds(U_Key3: 2) fpeekusr;
+      clear u_key3;
+      u_key3.s_user = g_user;
+      u_key3.s_section = i_section;
+      setll %kds(u_key3: 2) fpeekusr;
     endif;
 
   endif;
@@ -476,8 +476,8 @@ end-proc;
 
 dcl-proc p_setgtUsr export;
   dcl-pi *n;
-    i_section like(SECTION_t) const;
-    i_key     like(KEY_t) options(*nopass) const;
+    i_section like(section_t) const;
+    i_key     like(key_t) options(*nopass) const;
   end-pi;
 
   //  definieren Arbeitsfelder
@@ -490,16 +490,16 @@ dcl-proc p_setgtUsr export;
   if (msgID = '');
 
     if (%parms() >= %parmnum(i_key));
-      clear U_Key3;
-      U_Key3.S_User = g_user;
-      U_Key3.S_Section = i_section;
-      U_Key3.S_Key = i_key;
-      setgt %kds(U_Key3: 3) fpeekusr;
+      clear u_key3;
+      u_key3.s_user = g_user;
+      u_key3.s_section = i_section;
+      u_key3.s_key = i_key;
+      setgt %kds(u_key3: 3) fpeekusr;
     else;
-      clear U_Key3;
-      U_Key3.S_User = g_user;
-      U_Key3.S_Section = i_section;
-      setgt %kds(U_Key3: 2) fpeekusr;
+      clear u_key3;
+      u_key3.s_user = g_user;
+      u_key3.s_section = i_section;
+      setgt %kds(u_key3: 2) fpeekusr;
     endif;
 
   endif;
@@ -512,17 +512,17 @@ end-proc;
 
 dcl-proc f_readeUsr export;
   dcl-pi *n like(bool_t);
-    i_section like(SECTION_t) const;
-    o_key     like(KEY_t) options(*nopass);
-    o_data    like(SET0000_t) options(*nopass);
+    i_section like(section_t) const;
+    o_key     like(key_t) options(*nopass);
+    o_data    like(set0000_t) options(*nopass);
   end-pi;
 
   //  definieren Funktionswert ...
   dcl-s f_readeUsr like(bool_t) inz;
 
   //  definieren Hilfsfelder für optionale Parameter ...
-  dcl-s o2_key like(KEY_t) inz;
-  dcl-s o3_data like(SET0000_t) inz;
+  dcl-s o2_key like(key_t) inz;
+  dcl-s o3_data like(set0000_t) inz;
 
   //  definieren Arbeitsfelder
   dcl-s msgID char(7) inz;
@@ -530,15 +530,15 @@ dcl-proc f_readeUsr export;
   // ------------------------------------------------------------------------
   p_initSrvPgm();
 
-  clear S_Key;
-  clear S_Data;
+  clear s_key;
+  clear s_data;
 
   p_opnFile(msgID: msgDta);
   if (msgID = '');
-    clear U_Key3;
-    U_Key3.S_User = g_user;
-    U_Key3.S_Section = i_section;
-    reade(n) %kds(U_Key3: 2) fpeekusr;
+    clear u_key3;
+    u_key3.s_user = g_user;
+    u_key3.s_section = i_section;
+    reade(n) %kds(u_key3: 2) fpeekusr;
     if (not %eof());
       f_readeUsr = '0';
     else;
@@ -548,8 +548,8 @@ dcl-proc f_readeUsr export;
     f_readeUsr = '1';
   endif;
 
-  o2_key  = S_Key;
-  o3_data = S_Data;
+  o2_key  = s_key;
+  o3_data = s_data;
 
   //  Füllen optionale Rückgabeparameter ...
   if (%parms() >= %parmnum(o_key));
@@ -570,8 +570,8 @@ end-proc;
 
 dcl-proc p_setllDft export;
   dcl-pi *n;
-    i_section like(SECTION_t) const;
-    i_key     like(KEY_t) options(*nopass) const;
+    i_section like(section_t) const;
+    i_key     like(key_t) options(*nopass) const;
   end-pi;
 
   //  definieren Arbeitsfelder
@@ -584,10 +584,10 @@ dcl-proc p_setllDft export;
   if (msgID = ' ');
 
     clear d_key3;
-    d_key3.D_User = '*NONE';
-    d_key3.D_Section = i_section;
+    d_key3.d_user = '*NONE';
+    d_key3.d_section = i_section;
     if (%parms() >= %parmnum(i_key));
-      d_key3.D_Key = i_key;
+      d_key3.d_key = i_key;
       setll %kds(d_key3: 3) fdefault;
     else;
       setll %kds(d_key3: 2) fdefault;
@@ -603,17 +603,17 @@ end-proc;
 
 dcl-proc f_readeDft export;
   dcl-pi *n like(bool_t);
-    i_section like(SECTION_t) const;
-    o_key     like(KEY_t) options(*nopass);
-    o_data    like(SET0000_t) options(*nopass);
+    i_section like(section_t) const;
+    o_key     like(key_t) options(*nopass);
+    o_data    like(set0000_t) options(*nopass);
   end-pi;
 
   //  definieren Funktionswert ...
   dcl-s f_readeDft like(bool_t) inz;
 
   //  definieren Hilfsfelder für optionale Parameter ...
-  dcl-s o2_key like(KEY_t) inz;
-  dcl-s o3_data like(SET0000_t) inz;
+  dcl-s o2_key like(key_t) inz;
+  dcl-s o3_data like(set0000_t) inz;
 
   //  definieren Arbeitsfelder
   dcl-s msgID char(7) inz;
@@ -621,15 +621,15 @@ dcl-proc f_readeDft export;
   // ------------------------------------------------------------------------
   p_initSrvPgm();
 
-  clear D_Key;
-  clear D_Data;
+  clear d_key;
+  clear d_data;
 
   p_opnDft(msgID: msgDta);
   if (msgID = '');
 
     clear d_key3;
-    d_key3.D_User = '*NONE';
-    d_key3.D_Section = i_section;
+    d_key3.d_user = '*NONE';
+    d_key3.d_section = i_section;
     reade %kds(d_key3: 2) fdefault;
     if (not %eof());
       f_readeDft = '0';
@@ -640,8 +640,8 @@ dcl-proc f_readeDft export;
     f_readeDft = '1';
   endif;
 
-  o2_key  = D_Key;
-  o3_data = D_Data;
+  o2_key  = d_key;
+  o3_data = d_data;
 
   //  Füllen optionale Rückgabeparameter ...
   if (%parms() >= %parmnum(o_key));
@@ -697,18 +697,18 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_initUsrS;
-  dcl-pi *n like(SET0000_t);
-    i_key like(KEY_t) const;
+  dcl-pi *n like(set0000_t);
+    i_key like(key_t) const;
   end-pi;
 
   //  definieren Funktionswert ...
-  dcl-s f_initUsrS like(SET0000_t) inz;
+  dcl-s f_initUsrS like(set0000_t) inz;
 
-  dcl-ds set0001 likeds(SET0001_t) inz(*likeds);
-  dcl-ds set0002 likeds(SET0002_t) inz(*likeds);
-  dcl-ds set0003 likeds(SET0003_t) inz(*likeds);
-  dcl-ds set0004 likeds(SET0004_t) inz(*likeds);
-  dcl-ds set0005 likeds(SET0005_t) inz(*likeds);
+  dcl-ds set0001 likeds(set0001_t) inz(*likeds);
+  dcl-ds set0002 likeds(set0002_t) inz(*likeds);
+  dcl-ds set0003 likeds(set0003_t) inz(*likeds);
+  dcl-ds set0004 likeds(set0004_t) inz(*likeds);
+  dcl-ds set0005 likeds(set0005_t) inz(*likeds);
   dcl-ds set0006 likeds(set0006_t) inz(*likeds);
   dcl-ds set0007 likeds(set0007_t) inz(*likeds);
   dcl-ds set0008 likeds(set0008_t) inz(*likeds);
@@ -793,11 +793,11 @@ dcl-proc p_opnFile;
     o_msgDta char(512);
   end-pi;
 
-  dcl-s set0000 like(SET0000_t);
+  dcl-s set0000 like(set0000_t);
   // ------------------------------------------------------------------------
 
   //  Öffnen Datei PEEKUSR ...
-  if (File_00_DS.IsOpen <> '1');
+  if (file_00_ds.isOpen <> '1');
 
     g_peekusr = %trim(g_lib) + '/' + %trim(g_file);
 
@@ -834,7 +834,7 @@ dcl-proc p_opnDft;
   // ------------------------------------------------------------------------
 
   //  Öffnen Datei DEFAULT (PEEKUSR) ...
-  if (File_01_DS.IsOpen <> '1');
+  if (file_01_ds.isOpen <> '1');
 
     g_default = %trim(f_getPrdLb()) + '/' + 'PEEKUSR';
 
