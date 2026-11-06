@@ -15,6 +15,15 @@
 //                                                               *
 //  Generieren RPG-LE Programm                                   *
 //                                                               *
+//  Die Vorlage PEEKSRC/PGM ist ein **FREE-Quelltext mit Marken: *
+//    //@TAG     Kommentarzeile, hinter der PEEK16 den Code des  *
+//               Tags einfügt, eingerückt wie die Marke.         *
+//    X_TAG_X    Platzhalter, den PEEK16 in jeder Zeile ersetzt. *
+//    LIBRARY_NAME  Produktbibliothek in /include-Anweisungen.   *
+//  Die Eingabebestimmungen für das Umbenennen der Datenbank-    *
+//  felder (RNM2) schreibt PEEK16 in die Teildatei von QCOPYLE7, *
+//  die das generierte Programm mit /include einbindet.          *
+//                                                               *
 // ============================================================= *
 // >>PRE-COMPILER<<                                              *
 //   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
@@ -41,174 +50,33 @@ dcl-f qcopyle5 extdesc('QPEEKGEN') usropn rename(qpeekgen: fcopy5);
 
 dcl-f qcopyle6 extdesc('QPEEKGEN') usropn rename(qpeekgen: fcopy6);
 
+dcl-f qcopyle7 extdesc('QPEEKGEN') usage(*output) usropn rename(qpeekgen: fcopy7) block(*no)
+               infds(copy7Infds);
+
 dcl-f peekSrc usropn rename(peekSrc: finput);
 
 dcl-f peekFld usropn;
+
+//  Geöffnete Teildatei von QCOPYLE7 (für die /include-Anweisung)
+dcl-ds copy7Infds qualified;
+  file char(10) pos(83);
+  lib  char(10) pos(93);
+  mbr  char(10) pos(129);
+end-ds;
 
 //===============================================================*
 //  Datenstrukturen für die Codegenerierung
 //===============================================================*
 
-dcl-ds ds_page len(112);
-  $page_spc char(1) inz('C') pos(6);
-  $page_f2a char(19) inz('When      scnNbr = ') pos(26);
-  $page_f2b zoned(3) inz;
-end-ds;
-
-dcl-ds ds_chkCh len(112);
-  $chkCh_spc char(1) inz('C') pos(6);
-  $chkCh_opC char(6) inz('Exsr') pos(26);
-  $chkCh_f2a char(7) inz('chkChar') pos(36);
-  $chkCh_f2b zoned(3) inz;
-end-ds;
-
-dcl-ds ds_exfmt len(112);
-  $exfmt_spc char(1) inz('C') pos(6);
-  $exfmt_neg char(1) inz('N') pos(9);
-  $exfmt_ind char(2) inz('71');
-  $exfmt_opC char(6) inz('Exfmt') pos(26);
-  $exfmt_ext char(4) inz;
-  $exfmt_sc  char(2) inz('UC');
-  $exfmt_scN zoned(3) inz;
-end-ds;
-
-dcl-ds ds_more len(112);
-  $more_scnN zoned(3) inz pos(46);
-end-ds;
-
-dcl-ds ds_fmtNme len(112);
-  $fmtNm_xNm char(10) inz pos(51);
-end-ds;
-
+//  Eingabebestimmung (Fixed-Form) für das Umbenennen eines Feldes
 dcl-ds ds_rnmBuf len(112);
   $rnmBf_spc char(1) inz('I') pos(6);
   $rnmBf_xFd char(10) inz pos(21);
   $rnmBf_iFd char(14) inz pos(49);
 end-ds;
 
-dcl-ds ds_rnmEx len(112);
-  $rnmEx_spc char(1) inz('D') pos(6);
-  $rnmEx_iFd char(15) inz;
-  $rnmEx_ext char(1) inz('E');
-  $rnmEx_xFd char(37) inz pos(44);
-end-ds;
-
-dcl-ds ds_ovlEx len(112);
-  $ovlEx_spc char(1) inz('D') pos(6);
-  $ovlEx_iFd char(15) inz;
-  $ovlEx_typ char(5) inz pos(38);
-  $ovlEx_xFd char(37) inz pos(44);
-end-ds;
-
-dcl-ds ds_lcas len(112);
-  $lcas_inz char(6) inz pos(65);
-end-ds;
-
-dcl-ds ds_rcdLock len(112);
-  $rcdLock_inz char(6) inz pos(65);
-end-ds;
-
-dcl-ds ds_alwl len(112);
-  $alwl_inz char(6) inz pos(65);
-end-ds;
-
-dcl-ds ds_keepCrs len(112);
-  $keepCrs_inz char(4) inz pos(44);
-end-ds;
-
-dcl-ds ds_ucs2 len(112);
-  $ucs2_value char(14) inz pos(46);
-end-ds;
-
-dcl-ds ds_bufLen len(112);
-  $bufLn_ln zoned(5) inz pos(35);
-end-ds;
-
-dcl-ds ds_eval len(112);
-  $eval_spc  char(1) inz('C') pos(6);
-  $eval_code char(6) inz('Eval') pos(26);
-  $eval_fct2 char(45) inz pos(36);
-end-ds;
-
-dcl-ds ds_for len(112);
-  $for_spc  char(1) inz('C') pos(6);
-  $for_code char(6) inz('For') pos(26);
-  $for_fct2 char(45) inz pos(36);
-end-ds;
-
-dcl-ds ds_endfor len(112);
-  $endFor_spc  char(1) inz('C') pos(6);
-  $endFor_oper char(6) inz('Endfor') pos(26);
-end-ds;
-
-dcl-ds ds_select len(112);
-  $select_spc  char(1) inz('C') pos(6);
-  $select_code char(6) inz('Select') pos(26);
-  $select_fct2 char(45) inz pos(36);
-end-ds;
-
-dcl-ds ds_when len(112);
-  $when_spc  char(1) inz('C') pos(6);
-  $when_code char(6) inz('When') pos(26);
-  $when_fct2 char(45) inz pos(36);
-end-ds;
-
-dcl-ds ds_endsl len(112);
-  $endSl_spc  char(1) inz('C') pos(6);
-  $endSl_oper char(6) inz('Endsl') pos(26);
-end-ds;
-
-dcl-ds ds_if len(112);
-  $if_spc  char(1) inz('C') pos(6);
-  $if_if   char(6) inz('If') pos(26);
-  $if_fct2 char(45) inz pos(36);
-end-ds;
-
-dcl-ds ds_cont len(112);
-  $cont_spc  char(1) inz('C') pos(6);
-  $cont_fct2 char(45) inz pos(36);
-end-ds;
-
-dcl-ds ds_else len(112);
-  $else_spc  char(1) inz('C') pos(6);
-  $else_oper char(6) inz('Else') pos(26);
-end-ds;
-
-dcl-ds ds_endif len(112);
-  $endif_spc  char(1) inz('C') pos(6);
-  $endif_oper char(6) inz('Endif') pos(26);
-end-ds;
-
-dcl-ds ds_clear len(112);
-  $clear_spc   char(1) inz('C') pos(6);
-  $clear_oper  char(6) inz('Clear') pos(26);
-  $clear_field char(14) inz pos(50);
-end-ds;
-
-dcl-ds ds_remark len(112);
-  $rem_atrB char(1) inz(COLOR_white);
-  $rem_rem  char(1) inz('*') pos(7);
-  $rem_txt  char(103) inz pos(10);
-end-ds;
-
-dcl-ds ds_begsr len(112);
-  $begsr_spc char(1) inz('C') pos(6);
-  $begsr_f1  char(14) inz pos(12);
-  $begsr_opC char(10) inz('Begsr');
-end-ds;
-
-dcl-ds ds_endsr len(112);
-  $endsr_spc char(1) inz('C') pos(6);
-  $endsr_opC char(10) inz('Endsr') pos(26);
-end-ds;
-
-dcl-ds ds_exsr len(112);
-  $exsr_spc  char(1) inz('C') pos(6);
-  $exsr_opC  char(10) inz('Exsr') pos(26);
-  $exsr_fct2 char(14) inz;
-end-ds;
-
 dcl-s #srcSeq like(srcSeq);
+dcl-s #srcSeq7 like(srcSeq);
 dcl-c #Increment 0,01;
 
 dcl-ds *n;
@@ -216,14 +84,26 @@ dcl-ds *n;
   a#fldCount char(5) overlay(fieldCount: 1);
 end-ds;
 
+dcl-ds *n;
+  scn#  zoned(3) inz;
+  scn#a char(3) overlay(scn#: 1);
+end-ds;
+
 /copy QCOPYLE,SDS
 
-dcl-s cmd char(4) inz;
+dcl-s tag char(4) inz;
+dcl-s indent varchar(100) inz;
+dcl-s lvl varchar(20) inz;
+dcl-s line varchar(200) inz;
+dcl-s fldNme varchar(20) inz;
+dcl-s exprOpen varchar(40) inz;
+dcl-s exprClose varchar(4) inz;
 dcl-s scnNbr like(int4_t) inz;
+dcl-s p int(10) inz;
+dcl-s q int(10) inz;
+dcl-s e int(10) inz;
 
 dcl-c UNKNOWN_FIELD_TYPE ': Unknown field type';
-
-dcl-s pos int(10) inz;
 
 dcl-s totFields int(10) inz;
 dcl-s curField zoned(2) inz;
@@ -232,7 +112,6 @@ dcl-s nullDft char(4) inz;
 
 /copy QCOPYLE,D_VARDEF
 /copy QCOPYLE,FLDL0100
-/copy QCOPYLE,D_COLORATR
 
 /define internal_prototype
 /copy QCOPYLE,PPEEK16
@@ -241,6 +120,14 @@ dcl-s nullDft char(4) inz;
 dcl-ds fldl0100 likeds(fldl0100_t) inz;
 
 dcl-pr p_wrtOut extproc(*dclcase);
+  i_srcDta like(srcDta) const;
+end-pr;
+
+dcl-pr p_wrtCode extproc(*dclcase);
+  i_code varchar(200) const;
+end-pr;
+
+dcl-pr p_wrtCopy7 extproc(*dclcase);
   i_srcDta like(srcDta) const;
 end-pr;
 
@@ -275,9 +162,11 @@ ceehdlr(%paddr('errorHandler')
        : *null: *omit);
 
 open qpeekgen;
+open qcopyle7;
 open peekSrc;
 
 #srcSeq = 0;
+#srcSeq7 = 0;
 
 dow ('1');
   read finput;
@@ -285,178 +174,238 @@ dow ('1');
     leave;
   endif;
 
-  cmd = %subst(srcDta: 1: 4);
+  exsr getMarker;
+
+  //  Keine Marke: Platzhalter ersetzen und kopieren ...
+  if (tag = '');
+    exsr rplPlaceholders;
+    p_wrtOut(srcDta);
+    iter;
+  endif;
+
+  //  Marke kopieren und den Code des Tags einfügen
+  p_wrtOut(srcDta);
 
   select;
 
-  //  File 1
-  when (cmd = 'FMT1');
-    ds_fmtNme = srcDta;
-    $fmtNm_xNm = i_rcdFmt;
-    p_wrtOut(ds_fmtNme);
-
   //  Felddefinitionen
-  when (cmd = 'DEF1');
-    p_wrtOut(srcDta);
+  when (tag = 'DEF1');
     exsr sub014;
 
-  //  Umbenennen /copy Anweisungen
-  when (cmd = 'COPY');
-    exsr sub025;
-    p_wrtOut(srcDta);
-
   //  Konstanten für "Feld zu lang"
-  when (cmd = 'DEF2');
-    p_wrtOut(srcDta);
+  when (tag = 'DEF2');
     exsr sub016;
 
   //  Prüfen ...
-  when (cmd = 'CHKS');
-    p_wrtOut(srcDta);
+  when (tag = 'CHKS');
     exsr sub015;
 
   //  Blättern ...
-  when (cmd = 'SCRN');
-    p_wrtOut(srcDta);
+  when (tag = 'SCRN');
     exsr sub003;
 
-  //  Letzte Seite ...
-  when (cmd = 'LSCN');
-    exsr sub001;
-
-  //  isLower ...
-  when (cmd = 'LCAS');
-    exsr sub002;
-
-  //  isRcdLock...
-  when (cmd = 'RLCK');
-    exsr sub019;
+  //  1. Seite ...
+  when (tag = 'SCN1');
+    exsr sub013;
 
   //  Übertragen Dateifelder in Bildschirmfelder
-  when (cmd = 'TSCN');
-    p_wrtOut(srcDta);
+  when (tag = 'TSCN');
     exsr sub004;
 
-  //  Übertragen Felder > 512 in Dateifelder
-  when (cmd = 'FSCN');
-    p_wrtOut(srcDta);
+  //  Übertragen Bildschirmfelder in Dateifelder
+  when (tag = 'FSCN');
     exsr sub007;
     exsr sub005;
 
   //  Prüfung ungültige Zeichen
-  when (cmd = 'CHKC');
-    p_wrtOut(srcDta);
+  when (tag = 'CHKC');
     exsr sub006;
 
   //  Setzen NULL Indicator
-  when (cmd = 'NULL');
-    p_wrtOut(srcDta);
+  when (tag = 'NULL');
     exsr sub017;
 
   //  Hex-Editierung
-  when (cmd = 'HEX');
-    p_wrtOut(srcDta);
+  when (tag = 'HEX');
     exsr sub008;
 
   //  Text-Editierung
-  when (cmd = 'TXT');
-    p_wrtOut(srcDta);
+  when (tag = 'TXT');
     exsr sub018;
 
-  //  Rename-Struktur
-  when (cmd = 'RNM2');
-    p_wrtOut(srcDta);
-    exsr sub009;
-
-  //  Rename-Struktur
-  when (cmd = 'RNM1');
-    ds_bufLen = srcDta;
-    $bufLn_ln = RCD_BUFF_LEN;
-    p_wrtOut(ds_bufLen);
+  //  Rename-Struktur: Unterfelder
+  when (tag = 'RNM1');
     exsr sub010;
 
+  //  Umbenennen Dateifelder: /include der Eingabebestimmungen
+  when (tag = 'RNM2');
+    exsr sub009;
+
   //  initialisieren ISO-Felder
-  when (cmd = 'ISO ');
-    p_wrtOut(srcDta);
+  when (tag = 'ISO');
     exsr sub011;
 
-  //  isAlwLower ...
-  when (cmd = 'ALWL');
-    exsr sub012;
-
-  //  1. Seite ...
-  when (cmd = 'SCN1');
-    exsr sub013;
-
-  //  Übertragen Dateifelder in Bildschirmfelder
-  when (cmd = 'TOS');
+  //  Unterroutinen Dateifelder ==> Bildschirmfelder
+  when (tag = 'TOS');
     exsr sub020;
 
-  //  Übertragen Bildschirmfelder in Dateifelder
-  when (cmd = 'TOF');
+  //  Unterroutinen Bildschirmfelder ==> Dateifelder
+  when (tag = 'TOF');
     exsr sub021;
 
   //  Löschen Felder im Datensatz
-  when (cmd = 'CLR');
+  when (tag = 'CLR');
     exsr sub022;
 
-  //  Beibehalten Cursor Position
-  when (cmd = 'KEEP');
-    exsr sub023;
-
-  //  UCS-2 Feld für String/Hex Editor
-  when (cmd = 'UCS2');
-  //**                Exsr      SUB024
-
   //  Sichern NULL-Indikatoren
-  when (cmd = 'NSAV');
-    p_wrtOut(srcDta);
+  when (tag = 'NSAV');
     exsr sub026;
 
   //  Zurückschreiben NULL-Indikatoren
-  when (cmd = 'NRST');
-    p_wrtOut(srcDta);
+  when (tag = 'NRST');
     exsr sub027;
 
   other;
-    //  Nur kopieren ...
-    p_wrtOut(srcDta);
+  //  Unbekannte Marke: nur kopieren ...
   endsl;
 
 enddo;
 
 close qpeekgen;
+close qcopyle7;
 close peekSrc;
 
 *inlr = *on;
 
 //============================================================*
-//    SUB001        Umschalten: Weitere ... / Ende            *
+//    getMarker     Erkennen einer Marke '//@TAG'             *
+//                  Liefert tag (leer: keine Marke) und       *
+//                  indent (Einrückung der Marke).            *
 //============================================================*
 
-begsr sub001;
+begsr getMarker;
 
-  ds_more    = srcDta;
-  $more_scnN = i_scnNbrs;
-  p_wrtOut(ds_more);
+  tag = '';
+  indent = '';
+
+  p = %check(' ': srcDta);
+  if (p = 0 or p >= %len(srcDta));
+    leavesr;
+  endif;
+
+  if (%subst(srcDta: p: 2) <> '//');
+    leavesr;
+  endif;
+
+  if (p + 2 > %len(srcDta));
+    leavesr;
+  endif;
+
+  q = %check(' ': srcDta: p + 2);
+  if (q = 0 or q >= %len(srcDta));
+    leavesr;
+  endif;
+
+  if (%subst(srcDta: q: 1) <> '@');
+    leavesr;
+  endif;
+
+  e = %scan(' ': srcDta: q + 1);
+  if (e = 0);
+    e = %len(srcDta) + 1;
+  endif;
+
+  if ((e - q - 1) < 1 or (e - q - 1) > %len(tag));
+    leavesr;
+  endif;
+
+  tag = %subst(srcDta: q + 1: e - q - 1);
+
+  if (p > 1);
+    indent = %subst(srcDta: 1: p - 1);
+  endif;
 
 endsr;
 
 //============================================================*
-//    SUB002        isLower                                   *
+//    rplPlaceholders  Ersetzen der Platzhalter X_TAG_X und   *
+//                     LIBRARY_NAME in srcDta                 *
 //============================================================*
 
-begsr sub002;
+begsr rplPlaceholders;
 
-  ds_lcas = srcDta;
-
-  if (i_case = bTrue);
-    $lcas_inz = 'bTrue';
-  else;
-    $lcas_inz = 'bFalse';
+  if (%scan('X_': srcDta) = 0 and
+      %scan('LIBRARY_NAME': srcDta) = 0);
+    leavesr;
   endif;
 
-  p_wrtOut(ds_lcas);
+  line = %trimr(srcDta);
+
+  //  Satzformat der Datei
+  line = %scanrpl('X_FMT1_X': %trim(i_rcdFmt): line);
+
+  //  Anzahl Bildschirmseiten
+  line = %scanrpl('X_LSCN_X': %char(i_scnNbrs): line);
+
+  //  isLower
+  if (i_case = bTrue);
+    line = %scanrpl('X_LCAS_X': 'bTrue': line);
+  else;
+    line = %scanrpl('X_LCAS_X': 'bFalse': line);
+  endif;
+
+  //  isRcdLockDft
+  if (i_rcdLock = bTrue);
+    line = %scanrpl('X_RLCK_X': 'bTrue': line);
+  else;
+    line = %scanrpl('X_RLCK_X': 'bFalse': line);
+  endif;
+
+  //  isAlwLower
+  if (i_alwLC = bTrue);
+    line = %scanrpl('X_ALWL_X': 'bTrue': line);
+  else;
+    line = %scanrpl('X_ALWL_X': 'bFalse': line);
+  endif;
+
+  //  Beibehalten Cursor Position
+  if (i_keepCrs = bTrue);
+    line = %scanrpl('X_KEEP_X': '*on': line);
+  else;
+    line = %scanrpl('X_KEEP_X': '*off': line);
+  endif;
+
+  //  Länge der Rename-Struktur RCD_DS
+  line = %scanrpl('X_RNM1_X': %char(RCD_BUFF_LEN): line);
+
+  //  Produktbibliothek in /include- und /copy-Anweisungen
+  if (%subst(%triml(line): 1: 1) = '/' and
+      %subst(%triml(line) + ' ': 2: 1) <> '/');
+    line = %scanrpl('LIBRARY_NAME': %trim(i_prodLib): line);
+  endif;
+
+  srcDta = line;
+
+endsr;
+
+//============================================================*
+//    wrtExfmt      Anzeigen Bildschirmseite scn#a            *
+//                  (Einrückung lvl)                          *
+//============================================================*
+
+begsr wrtExfmt;
+
+  if (i_alwLC = bTrue);
+    p_wrtCode(lvl + 'if (*in71);');
+    p_wrtCode(lvl + '  exfmt LC' + scn#a + ';');
+    p_wrtCode(lvl + 'else;');
+    p_wrtCode(lvl + '  exfmt UC' + scn#a + ';');
+    p_wrtCode(lvl + 'endif;');
+  else;
+    p_wrtCode(lvl + 'if (not *in71);');
+    p_wrtCode(lvl + '  exfmt UC' + scn#a + ';');
+    p_wrtCode(lvl + 'endif;');
+  endif;
 
 endsr;
 
@@ -468,26 +417,14 @@ begsr sub003;
 
   for scnNbr = 1 to i_scnNbrs;
 
-    //  When      scnNbr = 001
-    reset ds_page;
-    $page_f2b = scnNbr;
-    p_wrtOut(ds_page);
+    scn# = scnNbr;
 
-    //  Exfmt     LC001
-    if (i_alwLC = bTrue);
-      reset ds_exfmt;
-      $exfmt_neg = ' ';
-      $exfmt_sc  = 'LC';
-      $exfmt_scN = scnNbr;
-      p_wrtOut(ds_exfmt);
-    endif;
+    //  when (scnNbr = 001);
+    p_wrtCode('when (scnNbr = ' + scn#a + ');');
 
-    //  Exfmt     UC001
-    reset ds_exfmt;
-    $exfmt_neg = 'N';
-    $exfmt_sc  = 'UC';
-    $exfmt_scN = scnNbr;
-    p_wrtOut(ds_exfmt);
+    //    exfmt LC001 / UC001
+    lvl = '  ';
+    exsr wrtExfmt;
 
   endfor;
 
@@ -510,16 +447,11 @@ begsr sub004;
     fieldCount = fieldCount + 1;
 
     if (f_isNotAlw(fldl0100) = bTrue);
-      reset ds_remark;
-      $rem_txt = fldl0100.f1vfld + UNKNOWN_FIELD_TYPE;
-      p_wrtOut(ds_remark);
+      p_wrtCode('// ' + %trimr(fldl0100.f1vfld) + UNKNOWN_FIELD_TYPE);
       iter;
     endif;
 
-    reset ds_exsr;
-    $exsr_fct2 = 's_' + %trim(fldl0100.f1vfld);
-    p_wrtOut(ds_exsr);
-
+    p_wrtCode('exsr s_' + %trim(fldl0100.f1vfld) + ';');
 
   enddo;
 
@@ -550,41 +482,25 @@ begsr sub005;
     //  Keine Felder größer als 512-Zeichen oder
     //  nicht erlaubte Feldtypen ...
     if (f_isNotAlw(fldl0100) = bTrue);
-
-      reset ds_remark;
-      $rem_txt = fldl0100.f1vfld + UNKNOWN_FIELD_TYPE;
-      p_wrtOut(ds_remark);
-
+      p_wrtCode('// ' + %trimr(fldl0100.f1vfld) + UNKNOWN_FIELD_TYPE);
       iter;
     endif;
 
-    //  If        (EDT00002 = '1') and
-    reset ds_if;
-    $if_fct2='(EDT' + a#fldCount + ' = ''1'') and';
-    p_wrtOut(ds_if);
-
-    //            not (LNG0000001 = '1')
-    reset ds_if;
-    $if_if  = ' ';
-    $if_fct2='not (LNG' + a#fldCount + ' = ''1'')';
-    p_wrtOut(ds_if);
-
-    //  Übertragen BS-Feld in Dateifeld ...
+    //  if ((EDT00002 = '1') and
+    //      not (LNG00002 = '1')
+    //      [and not %nullind(P_00000002)]);
+    p_wrtCode('if ((EDT' + a#fldCount + ' = ''1'') and');
     if (fldl0100.f1nalw = '1');
-      reset ds_if;
-      $if_if   = '';
-      $if_fct2 = 'and not %nullind(' +
-                   %trimr(fldl0100.f1vfld) + ')';
-      p_wrtOut(ds_if);
+      p_wrtCode('    not (LNG' + a#fldCount + ' = ''1'') and');
+      p_wrtCode('    not %nullind(' + %trimr(fldl0100.f1vfld) + '));');
+    else;
+      p_wrtCode('    not (LNG' + a#fldCount + ' = ''1''));');
     endif;
 
-    reset ds_exsr;
-    $exsr_fct2 = 'f_' + %trim(fldl0100.f1vfld);
-    p_wrtOut(ds_exsr);
+    //  Übertragen BS-Feld in Dateifeld ...
+    p_wrtCode('  exsr f_' + %trim(fldl0100.f1vfld) + ';');
 
-    //  ENDIF
-    reset ds_endif;
-    p_wrtOut(ds_endif);
+    p_wrtCode('endif;');
 
   enddo;
 
@@ -611,7 +527,7 @@ begsr sub006;
       leave;
     endif;
 
-    p_wrtOut(srcDta);
+    p_wrtCode(%trimr(srcDta));
   enddo;
 
   close qcopyle1;
@@ -626,15 +542,12 @@ begsr sub007;
 
   for scnNbr = 1 to i_scnNbrs;
 
-    reset ds_chkCh;
-    $chkCh_f2b = scnNbr;
-    p_wrtOut(ds_chkCh);
+    scn# = scnNbr;
+    p_wrtCode('exsr chkChar' + scn#a + ';');
 
   endfor;
 
-  //   Remark einfügen ...
-  reset ds_remark;
-  p_wrtOut(ds_remark);
+  p_wrtCode('');
 
 endsr;
 
@@ -654,7 +567,7 @@ begsr sub008;
       leave;
     endif;
 
-    p_wrtOut(srcDta);
+    p_wrtCode(%trimr(srcDta));
   enddo;
 
   close qcopyle2;
@@ -663,9 +576,18 @@ endsr;
 
 //============================================================*
 //    SUB009        Umbenennen Dateifelder                    *
+//                  Eingabebestimmungen in die Teildatei von  *
+//                  QCOPYLE7, /include im Programm            *
 //============================================================*
 
 begsr sub009;
+
+  //  /include der Eingabebestimmungen (Fixed-Form)
+  p_wrtOut('/include ' + %trim(copy7Infds.lib) + '/' +
+           %trim(copy7Infds.file) + ',' + %trim(copy7Infds.mbr));
+
+  p_wrtCopy7('      *  Peek/400 - Umbenennen der Dateifelder (PEEK16)');
+  p_wrtCopy7('     IFFILE00');
 
   open peekFld;
 
@@ -677,7 +599,7 @@ begsr sub009;
     reset ds_rnmBuf;
     $rnmBf_xFd = fldl0100.f1FNme;
     $rnmBf_iFd = fldl0100.f1vfld;
-    p_wrtOut(ds_rnmBuf);
+    p_wrtCopy7(ds_rnmBuf);
 
   enddo;
 
@@ -700,12 +622,9 @@ begsr sub010;
 
   dow (f_readFld <> bEOF);
 
-    //  Rename
-    reset ds_rnmEx;
-    $rnmEx_xFd =
-     'extfld(' + %trim(fldl0100.f1FNme) + ')';
-    $rnmEx_iFd = ' ' + fldl0100.f1vfld;
-    p_wrtOut(ds_rnmEx);
+    //  P_00000001 extfld('FIELD');
+    p_wrtCode(%trim(fldl0100.f1vfld) + ' extfld(''' +
+              %trim(fldl0100.f1FNme) + ''');');
 
   enddo;
 
@@ -749,38 +668,27 @@ begsr sub011;
       iter;
     endif;
 
-    //  If        FLD0000011= ' '
-    reset ds_if;
-    $if_fct2 = 'FLD' + a#fldCount + '= '' ''';
-    p_wrtOut(ds_if);
-
-    //  Eval      FLD0000011 = ISOT
-    reset ds_eval;
-
-    $eval_fct2 = 'FLD' + a#fldCount;
+    //  if (FLD00011 = ' ');
+    p_wrtCode('if (FLD' + a#fldCount + ' = '' '');');
 
     //  Initialisieren mit dem kleinsten Wert im Format des Feldes
     //  (alle Formate, z.B. '01/01/40' für *MDY; QCOPYLE,DATTIMFMT)
+    line = '  FLD' + a#fldCount + ' = ';
     select;
     //  ... Zeitfeld
     when (fldl0100.f1DTyp = 'T');
-      $eval_fct2  = %trimr($eval_fct2) + ' = ''' +
-                    f_extTime(fldl0100: T'00.00.00') + '''';
+      line = line + '''' + f_extTime(fldl0100: T'00.00.00') + '''';
     //  ... Datumsfeld
     when (fldl0100.f1DTyp = 'L');
-      $eval_fct2  = %trimr($eval_fct2) + ' = ''' +
-                    f_extDate(fldl0100: D'0001-01-01') + '''';
+      line = line + '''' + f_extDate(fldl0100: D'0001-01-01') + '''';
     //  ... Zeitstempelfeld
     when (fldl0100.f1DTyp = 'Z');
-      $eval_fct2  = %trimr($eval_fct2) + ' = ISOZ';
+      line = line + 'ISOZ';
     endsl;
+    p_wrtCode(line + ';');
 
-    p_wrtOut(ds_eval);
-    //  Endif (reset ds_endif);
-    p_wrtOut(ds_endif);
-    //  Remark
-    reset ds_remark;
-    p_wrtOut(ds_remark);
+    p_wrtCode('endif;');
+    p_wrtCode('');
 
   enddo;
 
@@ -792,42 +700,14 @@ begsr sub011;
 endsr;
 
 //============================================================*
-//    SUB012        isAlwLower                                *
-//============================================================*
-
-begsr sub012;
-
-  ds_alwl = srcDta;
-
-  if (i_alwLC = bTrue);
-    $alwl_inz = 'bTrue';
-  else;
-    $alwl_inz = 'bFalse';
-  endif;
-
-  p_wrtOut(ds_alwl);
-
-endsr;
-
-//============================================================*
 //    SUB013        Seite 1                                   *
 //============================================================*
 
 begsr sub013;
 
-  if (i_alwLC = bTrue);
-    reset ds_exfmt;
-    $exfmt_neg = ' ';
-    $exfmt_sc  = 'LC';
-    $exfmt_scN = 1;
-    p_wrtOut(ds_exfmt);
-  endif;
-
-  reset ds_exfmt;
-  $exfmt_neg = 'N';
-  $exfmt_sc  = 'UC';
-  $exfmt_scN = 1;
-  p_wrtOut(ds_exfmt);
+  scn# = 1;
+  lvl = '';
+  exsr wrtExfmt;
 
 endsr;
 
@@ -847,7 +727,7 @@ begsr sub014;
       leave;
     endif;
 
-    p_wrtOut(srcDta);
+    p_wrtCode(%trimr(srcDta));
   enddo;
 
   close qcopyle3;
@@ -862,15 +742,13 @@ begsr sub015;
 
   for scnNbr = 1 to i_scnNbrs;
 
-    //  When      scnNbr = 001
-    reset ds_page;
-    $page_f2b = scnNbr;
-    p_wrtOut(ds_page);
+    scn# = scnNbr;
 
-    //  Exsr      chkChar001
-    reset ds_chkCh;
-    $chkCh_f2b = scnNbr;
-    p_wrtOut(ds_chkCh);
+    //  when (scnNbr = 001);
+    p_wrtCode('when (scnNbr = ' + scn#a + ');');
+
+    //    exsr chkChar001;
+    p_wrtCode('  exsr chkChar' + scn#a + ';');
 
   endfor;
 
@@ -892,7 +770,7 @@ begsr sub016;
       leave;
     endif;
 
-    p_wrtOut(srcDta);
+    p_wrtCode(%trimr(srcDta));
   enddo;
 
   close qcopyle4;
@@ -915,7 +793,7 @@ begsr sub017;
       leave;
     endif;
 
-    p_wrtOut(srcDta);
+    p_wrtCode(%trimr(srcDta));
   enddo;
 
   close qcopyle5;
@@ -938,28 +816,10 @@ begsr sub018;
       leave;
     endif;
 
-    p_wrtOut(srcDta);
+    p_wrtCode(%trimr(srcDta));
   enddo;
 
   close qcopyle6;
-
-endsr;
-
-//============================================================*
-//    SUB019        isRcdLock                                 *
-//============================================================*
-
-begsr sub019;
-
-  ds_rcdLock = srcDta;
-
-  if (i_rcdLock = bTrue);
-    $rcdLock_inz = 'bTrue';
-  else;
-    $rcdLock_inz = 'bFalse';
-  endif;
-
-  p_wrtOut(ds_rcdLock);
 
 endsr;
 
@@ -989,162 +849,107 @@ begsr sub020;
       totFields = 1;
     endif;
 
-    reset ds_remark;
-    $rem_txt = fldl0100.f1FNme;
-    p_wrtOut(ds_remark);
-
     //  Generieren BEGSR
-    reset ds_begsr;
-    $begsr_f1 = 's_' + %trim(fldl0100.f1vfld);
-    p_wrtOut(ds_begsr);
-    reset ds_remark;
-    p_wrtOut(ds_remark);
+    p_wrtCode('// ' + %trimr(fldl0100.f1FNme));
+    p_wrtCode('begsr s_' + %trim(fldl0100.f1vfld) + ';');
+    p_wrtCode('');
 
-    pos = 1;
+    lvl = '  ';
 
     //  Löschen Felder, wenn NULL-fähig oder VARLEN
     if (fldl0100.f1nalw = '1' or
         f_isVarLen(fldl0100) = bTrue);
 
       for curField = 1 to totFields;
-        reset ds_clear;
         if (totFields = 1);
-          $clear_field = 'FLD' + a#fldCount;
+          p_wrtCode(lvl + 'clear FLD' + a#fldCount + ';');
         else;
-          $clear_field = 'FLD' + a#fldCount
-                              + %editc(curField: 'X');
+          p_wrtCode(lvl + 'clear FLD' + a#fldCount +
+                    %editc(curField: 'X') + ';');
         endif;
-        p_wrtOut(ds_clear);
       endfor;
 
-      reset ds_remark;
-      p_wrtOut(ds_remark);
+      p_wrtCode('');
 
     endif;
 
     //  Generieren Abfrage auf NULL-Indicator
     if (fldl0100.f1nalw = '1');
 
-      reset ds_if;
-      $if_fct2 = 'not %nullind(' +
-                   %trimr(fldl0100.f1vfld) + ')';
-      p_wrtOut(ds_if);
+      p_wrtCode(lvl + 'if (not %nullind(' +
+                %trimr(fldl0100.f1vfld) + '));');
+      lvl = lvl + '  ';
 
     endif;
 
     if (totFields > 1);
 
-      //  Generieren:    offs = 0
-      reset ds_remark;
-      p_wrtOut(ds_remark);
-
-      reset ds_eval;
-      $eval_fct2 = 'offs = 0';
-      p_wrtOut(ds_eval);
-
-      reset ds_remark;
-      p_wrtOut(ds_remark);
-
-      //  Generieren:    For x = 1 to 8           (8 = totFields)
-      reset ds_for;
-      $for_fct2 = 'x = 1 to ' + %char(totFields);
-      p_wrtOut(ds_for);
-
-      //  Generieren:    rem  = L_00000013
-      reset ds_eval;
-      $eval_fct2 =
-       'rem = %len(' + fldl0100.f1vfld +
-       ') - offs';
-
-      p_wrtOut(ds_eval);
-
-      //  Generieren:    If (rem > 18)            (18 = f_cntFldLn(..))
-      reset ds_if;
-      $if_fct2 = '(rem > ' +
-                 %char(f_cntFldLn(fldl0100)) + ')';
-      p_wrtOut(ds_if);
-
-      reset ds_eval;
-      $eval_fct2 = 'len = ' +
-                  %char(f_cntFldLn(fldl0100));
-      p_wrtOut(ds_eval);
-
-      reset ds_else;
-      p_wrtOut(ds_else);
-
-      reset ds_eval;
-      $eval_fct2 = 'len = rem';
-      p_wrtOut(ds_eval);
-
-      reset ds_endif;
-      p_wrtOut(ds_endif);
-
-      //  Generieren:    Select
-      reset ds_select;
-      p_wrtOut(ds_select);
-
-    endif;
-
-    //  Übertragen Dateifeld --> Bildschirmfeld
-    for curField = 1 to totFields;
-
-      //  Generieren:    When (x = 1)
-      if (totFields > 1);
-        reset ds_when;
-        $when_fct2 = '(x = ' + %char(curField) +
-                    ' and len > 0)';
-        p_wrtOut(ds_when);
+      //  Generieren:    offs = 0;
+      if (fldl0100.f1nalw = '1');
+        p_wrtCode('');
       endif;
+      p_wrtCode(lvl + 'offs = 0;');
+      p_wrtCode('');
 
-      if (totFields = 1);
-        reset ds_eval;
-        $eval_fct2 = 'FLD' + a#fldCount +
-                    ' = ' + fldl0100.f1vfld;
-        p_wrtOut(ds_eval);
-      else;
+      //  Generieren:    for x = 1 to 8;      (8 = totFields)
+      p_wrtCode(lvl + 'for x = 1 to ' + %char(totFields) + ';');
 
-        //    Generieren:    FLD0001301 = %subst(P_00000013: offs+1: len)
-        reset ds_eval;
-        $eval_fct2 =
-        'FLD' + a#fldCount + %editc(curField: 'X') +
-        ' = ' +
-        '%subst(' + %trimr(fldl0100.f1vfld) +
-        ': offs+1: len)';
-        p_wrtOut(ds_eval);
+      //  Generieren:      rem = %len(V_00000013) - offs;
+      p_wrtCode(lvl + '  rem = %len(' + %trimr(fldl0100.f1vfld) +
+                ') - offs;');
 
-      endif;
+      //  Generieren:      if (rem > 18);  (18 = f_cntFldLn(..))
+      p_wrtCode(lvl + '  if (rem > ' +
+                %char(f_cntFldLn(fldl0100)) + ');');
+      p_wrtCode(lvl + '    len = ' +
+                %char(f_cntFldLn(fldl0100)) + ';');
+      p_wrtCode(lvl + '  else;');
+      p_wrtCode(lvl + '    len = rem;');
+      p_wrtCode(lvl + '  endif;');
 
-    endfor;
+      //  Generieren:      select;
+      p_wrtCode(lvl + '  select;');
 
-    //  Generieren:    Endsl
-    if (totFields > 1);
-      reset ds_endsl;
-      p_wrtOut(ds_endsl);
+      //  Übertragen Dateifeld --> Bildschirmfeld
+      for curField = 1 to totFields;
 
-      //  Generieren:    offs = offs + len
-      reset ds_eval;
-      $eval_fct2 = 'offs = offs + len';
-      p_wrtOut(ds_eval);
+        //  Generieren:    when (x = 1 and len > 0);
+        p_wrtCode(lvl + '  when (x = ' + %char(curField) +
+                  ' and len > 0);');
 
-      //  ENDFOR von:  For-Schleife über Feldsegmente
-      reset ds_endfor;
-      p_wrtOut(ds_endfor);
+        //  Generieren:      FLD0001301 = %subst(V_00000013: offs+1: len);
+        p_wrtCode(lvl + '    FLD' + a#fldCount +
+                  %editc(curField: 'X') + ' = %subst(' +
+                  %trimr(fldl0100.f1vfld) + ': offs+1: len);');
+
+      endfor;
+
+      //  Generieren:      endsl;
+      p_wrtCode(lvl + '  endsl;');
+
+      //  Generieren:      offs = offs + len;
+      p_wrtCode(lvl + '  offs = offs + len;');
+
+      //  Generieren:    endfor;
+      p_wrtCode(lvl + 'endfor;');
+
+    else;
+
+      //  Übertragen Dateifeld --> Bildschirmfeld
+      p_wrtCode(lvl + 'FLD' + a#fldCount + ' = ' +
+                %trimr(fldl0100.f1vfld) + ';');
+
     endif;
 
     //  ENDIF von:   Generieren Abfrage auf NULL-Indicator
     if (fldl0100.f1nalw = '1');
-
-      reset ds_endif;
-      p_wrtOut(ds_endif);
-
+      p_wrtCode('  endif;');
     endif;
 
     //  Generieren ENDSR
-    reset ds_remark;
-    p_wrtOut(ds_remark);
-
-    reset ds_endsr;
-    p_wrtOut(ds_endsr);
+    p_wrtCode('');
+    p_wrtCode('endsr;');
+    p_wrtCode('');
 
   enddo;
 
@@ -1178,69 +983,60 @@ begsr sub021;
       totFields = 1;
     endif;
 
-    reset ds_begsr;
-    $begsr_f1 = 'f_' + %trim(fldl0100.f1vfld);
-    p_wrtOut(ds_begsr);
+    p_wrtCode('begsr f_' + %trim(fldl0100.f1vfld) + ';');
 
     //  Felder variabler Länge nur bei einer Änderung übernehmen: Das
     //  Bildschirmfeld hat feste Länge, %trimR entfernt sonst auch die
     //  nachgestellten Leerzeichen eines unveränderten Wertes.
-    //    If        %trimR(FLD00005) <> %trimR(P_00000005)
-    //    Eval      P_00000005 = %trimR(FLD00005)
-    //    Endif
+    //    if (%trimR(FLD00005) <> %trimR(V_00000005));
+    //      V_00000005 = %trimR(FLD00005);
+    //    endif;
     if (f_isCharFld(fldl0100) = bTrue and
         f_isVarLen(fldl0100) = bTrue and totFields = 1);
-      reset ds_if;
-      $if_fct2 = '%trimR(FLD' + a#fldCount + ') <> %trimR(' +
-                 %trim(fldl0100.f1vfld) + ')';
-      p_wrtOut(ds_if);
-      reset ds_eval;
-      $eval_fct2 = %trim(fldl0100.f1vfld) +
-                   ' = %trimR(FLD' + a#fldCount + ')';
-      p_wrtOut(ds_eval);
-      reset ds_endif;
-      p_wrtOut(ds_endif);
-      reset ds_endsr;
-      p_wrtOut(ds_endsr);
+      p_wrtCode('  if (%trimR(FLD' + a#fldCount + ') <> %trimR(' +
+                %trim(fldl0100.f1vfld) + '));');
+      p_wrtCode('    ' + %trim(fldl0100.f1vfld) +
+                ' = %trimR(FLD' + a#fldCount + ');');
+      p_wrtCode('  endif;');
+      p_wrtCode('endsr;');
+      p_wrtCode('');
       iter;
     endif;
 
+    //  P_00000005 = %trimR(FLD00005);    (Zeichenfelder)
+    //  P_00000005 = FLD00005;            (sonstige Felder)
     if (f_isCharFld(fldl0100) = bTrue);
-      reset ds_eval;
-      $eval_fct2 =
-       %trim(fldl0100.f1vfld) + ' = %trimR(';
-      p_wrtOut(ds_eval);
+      exprOpen = %trim(fldl0100.f1vfld) + ' = %trimR(';
+      exprClose = ')';
     else;
-      reset ds_eval;
-      $eval_fct2 = %trim(fldl0100.f1vfld) + ' =';
-      p_wrtOut(ds_eval);
+      exprOpen = %trim(fldl0100.f1vfld) + ' = ';
+      exprClose = '';
     endif;
 
     for curField = 1 to totFields;
 
-      reset ds_eval;
-      clear $eval_code;
-      $eval_fct2 = %trim('FLD' + a#fldCount);
+      fldNme = 'FLD' + a#fldCount;
       if (totFields > 1);
-        $eval_fct2 = %trimr($eval_fct2) +
-                    %editc(curField: 'X');
-        if (curField < totFields);
-          $eval_fct2 = %trimr($eval_fct2) + ' +';
-        endif;
+        fldNme = fldNme + %editc(curField: 'X');
       endif;
 
-      p_wrtOut(ds_eval);
+      if (curField = 1);
+        line = '  ' + exprOpen + fldNme;
+      else;
+        line = '    ' + fldNme;
+      endif;
+
+      if (curField < totFields);
+        line = line + ' +';
+      else;
+        line = line + exprClose + ';';
+      endif;
+
+      p_wrtCode(line);
     endfor;
 
-    if (f_isCharFld(fldl0100) = bTrue);
-      reset ds_eval;
-      $eval_code = '';
-      $eval_fct2 = ')';
-      p_wrtOut(ds_eval);
-    endif;
-
-    reset ds_endsr;
-    p_wrtOut(ds_endsr);
+    p_wrtCode('endsr;');
+    p_wrtCode('');
 
   enddo;
 
@@ -1276,16 +1072,9 @@ begsr sub022;
 
     //  Setzen NULL-Indicator
     if (fldl0100.f1nalw = '1');
-
-      reset ds_eval;
-      $eval_fct2 =
-       '%nullind(' +
-       %trimr(fldl0100.f1vfld) + ') = ';
-      $eval_fct2 = %trimr($eval_fct2) + nullDft;
-      p_wrtOut(ds_eval);
-
+      p_wrtCode('%nullind(' + %trimr(fldl0100.f1vfld) + ') = ' +
+                %trimr(nullDft) + ';');
     endif;
-
 
   enddo;
 
@@ -1294,40 +1083,8 @@ begsr sub022;
 endsr;
 
 //============================================================*
-//    SUB023        Beibehalten Cursor Position               *
-//============================================================*
-
-begsr sub023;
-
-  ds_keepCrs = srcDta;
-
-  if (i_keepCrs = bTrue);
-    $keepCrs_inz = '''1''';
-  else;
-    $keepCrs_inz = '''0''';
-  endif;
-
-  p_wrtOut(ds_keepCrs);
-
-endsr;
-
-//============================================================*
-//    SUB024        UCS2-Feld für String/Hex Editor           *
-//============================================================*
-
-begsr sub024;
-
-  ds_ucs2 = srcDta;
-
-  $ucs2_value = '(FLDL0100.F1UCS2 = ''1'')';
-
-  p_wrtOut(ds_ucs2);
-
-endsr;
-
-//============================================================*
 //    SUB026        Sichern NULL-Indikatoren                  *
-//                  nullSave(00005) = %nullind(P_00000005)    *
+//                  nullSave(00005) = %nullind(P_00000005);   *
 //============================================================*
 
 begsr sub026;
@@ -1346,10 +1103,8 @@ begsr sub026;
       iter;
     endif;
 
-    reset ds_eval;
-    $eval_fct2 = 'nullSave(' + a#fldCount + ') = %nullind(' +
-                 %trim(fldl0100.f1vfld) + ')';
-    p_wrtOut(ds_eval);
+    p_wrtCode('nullSave(' + a#fldCount + ') = %nullind(' +
+              %trim(fldl0100.f1vfld) + ');');
 
   enddo;
 
@@ -1359,7 +1114,7 @@ endsr;
 
 //============================================================*
 //    SUB027        Zurückschreiben NULL-Indikatoren          *
-//                  %nullind(P_00000005) = nullSave(00005)    *
+//                  %nullind(P_00000005) = nullSave(00005);   *
 //============================================================*
 
 begsr sub027;
@@ -1378,26 +1133,12 @@ begsr sub027;
       iter;
     endif;
 
-    reset ds_eval;
-    $eval_fct2 = '%nullind(' + %trim(fldl0100.f1vfld) +
-                 ') = nullSave(' + a#fldCount + ')';
-    p_wrtOut(ds_eval);
+    p_wrtCode('%nullind(' + %trim(fldl0100.f1vfld) +
+              ') = nullSave(' + a#fldCount + ');');
 
   enddo;
 
   close peekFld;
-
-endsr;
-
-//============================================================*
-//    SUB025        Umbenennen /copy Anweisungen              *
-//============================================================*
-
-begsr sub025;
-
-  srcDta = %scanrpl('LIBRARY_NAME'
-                   : %trim(i_prodLib)
-                   :srcDta);
 
 endsr;
 
@@ -1414,6 +1155,40 @@ dcl-proc p_wrtOut;
   srcSeq  = #srcSeq;
   srcDta  = i_srcDta;
   write foutput;
+
+  return;
+
+end-proc;
+
+//============================================================*
+//    wrtCode       Ausgeben generierte Codezeile, eingerückt *
+//                  wie die Marke (indent)                    *
+//============================================================*
+dcl-proc p_wrtCode;
+  dcl-pi *n;
+    i_code varchar(200) const;
+  end-pi;
+
+  p_wrtOut(indent + i_code);
+
+  return;
+
+end-proc;
+
+//============================================================*
+//    wrtCopy7      Ausgeben Zeile der Teildatei von QCOPYLE7 *
+//                  (Eingabebestimmungen für RNM2)            *
+//============================================================*
+dcl-proc p_wrtCopy7;
+  dcl-pi *n;
+    i_srcDta like(srcDta) const;
+  end-pi;
+
+  #srcSeq7 = #srcSeq7 + #Increment;
+
+  srcSeq  = #srcSeq7;
+  srcDta  = i_srcDta;
+  write fcopy7;
 
   return;
 
@@ -1459,4 +1234,3 @@ end-proc;
 //  Datum und Zeit im Format des Feldes (f_extDate, f_extTime)*
 //============================================================*
 /copy QCOPYLE,DATTIMFMT
-

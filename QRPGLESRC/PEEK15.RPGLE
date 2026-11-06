@@ -183,102 +183,6 @@ dcl-ds ds_msgHidden len(112);
   $msgH_io   char(1) inz('H') pos(38);
 end-ds;
 
-dcl-ds ds_eval len(112);
-  $eval_spc  char(1) inz('C') pos(6);
-  $eval_opC  char(6) inz('Eval') pos(26);
-  $eval_fct2 char(45) inz pos(36);
-end-ds;
-
-dcl-ds ds_callp len(112);
-  $callp_spc  char(1) inz('C') pos(6);
-  $callp_opC  char(6) inz('Callp') pos(26);
-  $callp_fct2 char(45) inz pos(36);
-end-ds;
-
-dcl-ds ds_begsr len(112);
-  $begsr_spc char(1) inz('C') pos(6);
-  $begsr_f1  char(14) inz pos(12);
-  $begsr_opC char(10) inz('Begsr');
-end-ds;
-
-dcl-ds ds_exsr len(112);
-  $exsr_spc  char(1) inz('C') pos(6);
-  $exsr_opC  char(10) inz('Exsr') pos(26);
-  $exsr_fct2 char(14) inz;
-end-ds;
-
-dcl-ds ds_if len(112);
-  $if_spc  char(1) inz('C') pos(6);
-  $if_opC  char(10) inz('If') pos(26);
-  $if_fct2 char(45) inz;
-end-ds;
-
-dcl-ds ds_endif len(112);
-  $endif_spc char(1) inz('C') pos(6);
-  $endif_opC char(10) inz('Endif') pos(26);
-end-ds;
-
-dcl-ds ds_endsr len(112);
-  $endsr_spc char(1) inz('C') pos(6);
-  $endsr_opC char(10) inz('Endsr') pos(26);
-end-ds;
-
-dcl-ds ds_leavesr len(112);
-  $leavesr_spc char(1) inz('C') pos(6);
-  $leavesr_opC char(10) inz('Leavesr') pos(26);
-end-ds;
-
-dcl-ds ds_else len(112);
-  $else_spc char(1) inz('C') pos(6);
-  $else_opC char(10) inz('Else') pos(26);
-end-ds;
-
-dcl-ds ds_when len(112);
-  $when_spc  char(1) inz('C') pos(6);
-  $when_opC  char(10) inz('When') pos(26);
-  $when_fct2 char(45) inz;
-end-ds;
-
-dcl-ds ds_cont len(112);
-  $cont_spc  char(1) inz('C') pos(6);
-  $cont_fct2 char(45) inz pos(36);
-end-ds;
-
-dcl-ds ds_selec len(112);
-  $selec_spc char(1) inz('C') pos(6);
-  $selec_opC char(10) inz('Select') pos(26);
-end-ds;
-
-dcl-ds ds_endsl len(112);
-  $endSl_spc char(1) inz('C') pos(6);
-  $endsl_opC char(10) inz('Endsl') pos(26);
-end-ds;
-
-dcl-ds ds_remark len(112);
-  $rem_atrB char(1) inz(COLOR_white);
-  $rem_rem  char(1) inz('*') pos(7);
-  $rem_txt  char(105) inz;
-  $rem_info char(103) inz overlay($rem_txt: 3);
-end-ds;
-
-dcl-ds ds_defn len(112);
-  $defn_spc  char(1) inz('D') pos(6);
-  $defn_fldN char(15) inz;
-  $defn_type char(2) inz pos(24);
-  $defn_len  char(7) inz pos(33);
-  $defn_dTyp char(1) inz;
-  $defn_decP char(2) inz;
-  $defn_keyW char(37) inz pos(44);
-end-ds;
-
-dcl-ds ds_movel len(112);
-  $movel_spc char(1) inz('C') pos(6);
-  $movel_opC char(6) inz('Movel') pos(26);
-  $movel_ext char(4) inz('(P)');
-  $movel_f2  char(14) inz;
-  $movel_r   char(14) inz;
-end-ds;
-
 dcl-s isExit03 ind inz(bFalse);
 dcl-s exit03 like(pgmCallN_t) inz;
 dcl-ds qPgm qualified;
@@ -364,16 +268,16 @@ dcl-s r$text like(colHeading_t) inz;
 dcl-s refFile like(file_t) inz;
 dcl-s refLib like(lib_t) inz;
 dcl-s fldToLong like(bool_t) inz;
-dcl-s fldToLongMax like(bool_t) inz;
-dcl-s closeChar1 varchar(1) inz;
-dcl-s closeChar2 varchar(1) inz;
+dcl-s line varchar(200) inz;
+dcl-s fldNme varchar(40) inz;
+dcl-s exprOpen varchar(40) inz;
+dcl-s exprClose varchar(4) inz;
 dcl-s headerType varchar(20) inz;
 dcl-s edtWrd varchar(140) inz;
 
 /copy QCOPYLE,D_VARDEF
 /copy QCOPYLE,FLDL0100
 /copy QCOPYLE,CEECNDHDLR
-/copy QCOPYLE,D_COLORATR
 
 /copy QCOPYLE,USR8188
 
@@ -482,48 +386,28 @@ p_showProgressMeter(io_stage);
 //  Inhalt:   chkCharXXX                     *
 //-------------------------------------------*
 
-//  Endsr
-reset ds_endsr;
-p_wrtCopy1(ds_endsr);
-//  Remark
-reset ds_remark;
-p_wrtCopy1(ds_remark);
+p_wrtCopy1('endsr;');
+p_wrtCopy1('');
 
 //-------------------------------------------*
 //  Abschließen Copy-Book 2:                 *
 //  Inhalt:   c_fldHexEd                     *
 //-------------------------------------------*
 
-//  Endsl
-reset ds_endsl;
-p_wrtCopy2(ds_endsl);
-//  Remark
-reset ds_remark;
-p_wrtCopy2(ds_remark);
-//  Endsr
-reset ds_endsr;
-p_wrtCopy2(ds_endsr);
-//  Remark
-reset ds_remark;
-p_wrtCopy2(ds_remark);
+p_wrtCopy2('  endsl;');
+p_wrtCopy2('');
+p_wrtCopy2('endsr;');
+p_wrtCopy2('');
 
 //-------------------------------------------*
 //  Abschließen Copy-Book 6:                 *
 //  Inhalt:   c_fldStrEd                     *
 //-------------------------------------------*
 
-//  Endsl
-reset ds_endsl;
-p_wrtCopy6(ds_endsl);
-//  Remark
-reset ds_remark;
-p_wrtCopy6(ds_remark);
-//  Endsr
-reset ds_endsr;
-p_wrtCopy6(ds_endsr);
-//  Remark
-reset ds_remark;
-p_wrtCopy6(ds_remark);
+p_wrtCopy6('  endsl;');
+p_wrtCopy6('');
+p_wrtCopy6('endsr;');
+p_wrtCopy6('');
 
 //-------------------------------------------*
 //  Zufügen Copy-Book 1:                     *
@@ -531,33 +415,12 @@ p_wrtCopy6(ds_remark);
 //-------------------------------------------*
 
 //  Ausgeben COPY-Strecke: EnableEdit
-
-//  Remark
-reset ds_remark;
-$rem_txt  = REM_LINE;
-p_wrtCopy1(ds_remark);
-
-//  Remark
-reset ds_remark;
-$rem_info = 'Alle Felder freischalten';
-p_wrtCopy1(ds_remark);
-
-//  Remark
-reset ds_remark;
-$rem_txt  = REM_LINE;
-p_wrtCopy1(ds_remark);
-
-//  Remark
-reset ds_remark;
-p_wrtCopy1(ds_remark);
-
-//  Begsr
-reset ds_begsr;
-$begsr_f1 = 'EnableEdit';
-p_wrtCopy1(ds_begsr);
-//  Remark
-reset ds_remark;
-p_wrtCopy1(ds_remark);
+p_wrtCopy1('//' + REM_LINE);
+p_wrtCopy1('//  Alle Felder freischalten');
+p_wrtCopy1('//' + REM_LINE);
+p_wrtCopy1('');
+p_wrtCopy1('begsr EnableEdit;');
+p_wrtCopy1('');
 
 fieldCount = 0;
 
@@ -565,11 +428,6 @@ fieldCount = 0;
 setll 1 peekFld;
 
 dow (f_readFld <> bEOF);
-
-  //**                Clear                   USR8188
-  //**                Eval      USR8188.var1 = xStage
-  //**                Eval      USR8188.var2 = FLDL0100.F1FNME
-  //**                Callp     p_sndStsMg('USR8188': USR8188)
 
   //  ... erhöhen lfd. Feldnummer
   fieldCount = fieldCount + 1;
@@ -580,25 +438,16 @@ dow (f_readFld <> bEOF);
   endif;
 
   //  ... ausgeben Initialisierung des log. Merkers
-
-  //  Eval      EDT0000001 = '1'
-  reset ds_eval;
-  $eval_fct2 = 'EDT' + a#fldCount + ' = ''1''';
-  p_wrtCopy1(ds_eval);
+  //  EDT00001 = '1';
+  p_wrtCopy1('  EDT' + a#fldCount + ' = ''1'';');
 enddo;
 
 io_stage = io_stage + 1;
 p_showProgressMeter(io_stage);
 
-//  Remark
-reset ds_remark;
-p_wrtCopy1(ds_remark);
-//  Endsr
-reset ds_endsr;
-p_wrtCopy1(ds_endsr);
-//  Remark
-reset ds_remark;
-p_wrtCopy1(ds_remark);
+p_wrtCopy1('');
+p_wrtCopy1('endsr;');
+p_wrtCopy1('');
 
 close qcopyle1;
 close qcopyle2;
@@ -639,66 +488,21 @@ begsr copyHead;
   //-------------------------------------------*
 
   //  Remark
-  reset ds_remark;
-  p_wrtCopy2(ds_remark);
+  p_wrtCopy2('');
+  p_wrtCopy2('begsr c_fldHexEd;');
+  p_wrtCopy2('');
 
-  //  Begsr
-  reset ds_begsr;
-  $begsr_f1 = 'c_fldHexEd';
-  p_wrtCopy2(ds_begsr);
-
-  //  Remark
-  reset ds_remark;
-  p_wrtCopy2(ds_remark);
-
-  //  füllen Parameter für PEEK45
-  //  Eval      yDsp80     = i_dsp80
-  reset ds_eval;
-  $eval_fct2 = 'yDsp80     = i_dsp80';
-  p_wrtCopy2(ds_eval);
-
-  //  Eval      yHeaderTyp = io_headerType
-  reset ds_eval;
-  $eval_fct2 = 'yHeaderTyp = io_headerType';
-  p_wrtCopy2(ds_eval);
-
-  //  Eval      yCopyRight = i_copyright
-  reset ds_eval;
-  $eval_fct2 = 'yCopyRight = i_copyright';
-  p_wrtCopy2(ds_eval);
-
-  //  Eval      yProtect   = '0'
-  reset ds_eval;
-  $eval_fct2 = 'yProtect   = ''0''';
-  p_wrtCopy2(ds_eval);
-
-  //  Eval      yMsgID     = ' '
-  reset ds_eval;
-  $eval_fct2 = 'yMsgID     = '' ''';
-  p_wrtCopy2(ds_eval);
-
-  //  Eval      yMsgDta    = ' '
-  reset ds_eval;
-  $eval_fct2 = 'yMsgDta    = '' ''';
-  p_wrtCopy2(ds_eval);
-
-  //  Remark
-  reset ds_remark;
-  p_wrtCopy2(ds_remark);
-
-  //  Eval      xScnCsrRow = wScnCsrRow - WndTopRow
-  reset ds_eval;
-  $eval_fct2 =
-    'xScnCsrRow = wScnCsrRow - WndTopRow';
-  p_wrtCopy2(ds_eval);
-
-  //  Remark
-  reset ds_remark;
-  p_wrtCopy2(ds_remark);
-
-  //  Select
-  reset ds_selec;
-  p_wrtCopy2(ds_selec);
+  //  füllen Parameter für PEEK45/PEEK64
+  p_wrtCopy2('  yDsp80     = i_dsp80;');
+  p_wrtCopy2('  yHeaderTyp = io_headerType;');
+  p_wrtCopy2('  yCopyRight = i_copyright;');
+  p_wrtCopy2('  yProtect   = ''0'';');
+  p_wrtCopy2('  yMsgID     = '' '';');
+  p_wrtCopy2('  yMsgDta    = '' '';');
+  p_wrtCopy2('');
+  p_wrtCopy2('  xScnCsrRow = wScnCsrRow - WndTopRow;');
+  p_wrtCopy2('');
+  p_wrtCopy2('  select;');
 
   //-------------------------------------------*
   //  Initialisieren Copy-Book 6:              *
@@ -706,66 +510,21 @@ begsr copyHead;
   //-------------------------------------------*
 
   //  Remark
-  reset ds_remark;
-  p_wrtCopy6(ds_remark);
+  p_wrtCopy6('');
+  p_wrtCopy6('begsr c_fldStrEd;');
+  p_wrtCopy6('');
 
-  //  Begsr
-  reset ds_begsr;
-  $begsr_f1 = 'c_fldStrEd';
-  p_wrtCopy6(ds_begsr);
-
-  //  Remark
-  reset ds_remark;
-  p_wrtCopy6(ds_remark);
-
-  //  füllen Parameter für PEEK45
-  //  Eval      yDsp80     = i_dsp80
-  reset ds_eval;
-  $eval_fct2 = 'yDsp80     = i_dsp80';
-  p_wrtCopy6(ds_eval);
-
-  //  Eval      yHeaderTyp = io_headerType
-  reset ds_eval;
-  $eval_fct2 = 'yHeaderTyp = io_headerType';
-  p_wrtCopy6(ds_eval);
-
-  //  Eval      yCopyRight = i_copyright
-  reset ds_eval;
-  $eval_fct2 = 'yCopyRight = i_copyright';
-  p_wrtCopy6(ds_eval);
-
-  //  Eval      yProtect   = '0'
-  reset ds_eval;
-  $eval_fct2 = 'yProtect   = ''0''';
-  p_wrtCopy6(ds_eval);
-
-  //  Eval      yMsgID     = ' '
-  reset ds_eval;
-  $eval_fct2 = 'yMsgID     = '' ''';
-  p_wrtCopy6(ds_eval);
-
-  //  Eval      yMsgDta    = ' '
-  reset ds_eval;
-  $eval_fct2 = 'yMsgDta    = '' ''';
-  p_wrtCopy6(ds_eval);
-
-  //  Remark
-  reset ds_remark;
-  p_wrtCopy6(ds_remark);
-
-  //  Eval      xScnCsrRow = wScnCsrRow - WndTopRow
-  reset ds_eval;
-  $eval_fct2 =
-    'xScnCsrRow = wScnCsrRow - WndTopRow';
-  p_wrtCopy6(ds_eval);
-
-  //  Remark
-  reset ds_remark;
-  p_wrtCopy6(ds_remark);
-
-  //  Select
-  reset ds_selec;
-  p_wrtCopy6(ds_selec);
+  //  füllen Parameter für PEEK45/PEEK64
+  p_wrtCopy6('  yDsp80     = i_dsp80;');
+  p_wrtCopy6('  yHeaderTyp = io_headerType;');
+  p_wrtCopy6('  yCopyRight = i_copyright;');
+  p_wrtCopy6('  yProtect   = ''0'';');
+  p_wrtCopy6('  yMsgID     = '' '';');
+  p_wrtCopy6('  yMsgDta    = '' '';');
+  p_wrtCopy6('');
+  p_wrtCopy6('  xScnCsrRow = wScnCsrRow - WndTopRow;');
+  p_wrtCopy6('');
+  p_wrtCopy6('  select;');
 
 endsr;
 
@@ -1056,13 +815,6 @@ begsr wrtField;
     endif;
 
     //  Feld schützen, wenn größer als 512-Zeichen ...
-    if (f_isToLongMax(fldl0100) = bTrue);
-      fldToLongMax = '1';
-    else;
-      fldToLongMax = '0';
-    endif;
-
-    //  Feld schützen, wenn größer als 512-Zeichen ...
     if ((f_isToLong(fldl0100) = bTrue) or
         (f_isNotAlw(fldl0100) = bTrue));
       if (fldl0100.f1use <> 'I');
@@ -1206,12 +958,8 @@ begsr inzScreen;
   //        Subroutine vorhanden
   else;
     //    ... ansonsten Subroutine abschließen  (Copy-Book 1)
-    //           Endsr
-    reset ds_endsr;
-    p_wrtCopy1(ds_endsr);
-    //           Remark
-    reset ds_remark;
-    p_wrtCopy1(ds_remark);
+    p_wrtCopy1('endsr;');
+    p_wrtCopy1('');
   endif;
 
   //  Eine neue Subroutine beginnen (Copy-Book 1) ...
@@ -1219,33 +967,12 @@ begsr inzScreen;
   ind50# = 50;
   scn# = scn# + 1;
 
-  //           Remark
-  reset ds_remark;
-  $rem_txt  = REM_LINE;
-  p_wrtCopy1(ds_remark);
-
-  //           Remark
-  reset ds_remark;
-  $rem_info = 'Prüfung auf ungültige Feldinhalte, Seite ' + scn#a;
-  p_wrtCopy1(ds_remark);
-
-  //           Remark
-  reset ds_remark;
-  $rem_txt  = REM_LINE;
-  p_wrtCopy1(ds_remark);
-
-  //           Remark
-  reset ds_remark;
-  p_wrtCopy1(ds_remark);
-
-  //           Begsr
-  reset ds_begsr;
-  $begsr_f1  = 'chkChar' + scn#a;
-  p_wrtCopy1(ds_begsr);
-
-  //           Remark
-  reset ds_remark;
-  p_wrtCopy1(ds_remark);
+  p_wrtCopy1('//' + REM_LINE);
+  p_wrtCopy1('//  Prüfung auf ungültige Feldinhalte, Seite ' + scn#a);
+  p_wrtCopy1('//' + REM_LINE);
+  p_wrtCopy1('');
+  p_wrtCopy1('begsr chkChar' + scn#a + ';');
+  p_wrtCopy1('');
 
   //  Einen neuen Record im DspF anfangen ...
   reset ds_rcdFmt;
@@ -1310,36 +1037,14 @@ endsr;
 
 begsr wrtCopy1;
 
-  //  Remark
-  reset ds_remark;
-  $rem_info = 'Feld: ' + fldl0100.f1FNme;
-  p_wrtCopy1(ds_remark);
+  //  Feld: TEST#
+  p_wrtCopy1('  // Feld: ' + %trimr(fldl0100.f1FNme));
 
-  //  If        EDT0000001 = '1'
-  reset ds_if;
-  $if_fct2 = 'EDT' + a#fldCount + ' = ''1''';
-  p_wrtCopy1(ds_if);
+  //  if (EDT00001 = '1');
+  p_wrtCopy1('  if (EDT' + a#fldCount + ' = ''1'');');
 
-  //  Eval      F_FIELD = 'TEST#'
-  reset ds_eval;
-  $eval_fct2 =
-   'F_FIELD = ' +
-   '''' + %trimr(fldl0100.f1FNme) + '''';
-  p_wrtCopy1(ds_eval);
-
-  closeChar1 = '';
-
-  reset ds_eval;
-  $eval_fct2 = 'yOutBuffer =';
-
-  if (f_isCharFld(fldl0100) = bTrue and
-     f_isVarLen(fldl0100) = bTrue);
-    $eval_fct2 = %trimr($eval_fct2) +
-                '%trimR(';
-    closeChar1 = ')';
-  endif;
-
-  p_wrtCopy1(ds_eval);
+  //    F_FIELD = 'TEST#';
+  p_wrtCopy1('    F_FIELD = ''' + %trimr(fldl0100.f1FNme) + ''';');
 
   if (fldl0100.f1DTyp =  'G');
     totFields = f_nbrDspRw(fldl0100);
@@ -1347,185 +1052,141 @@ begsr wrtCopy1;
     totFields = 1;
   endif;
 
+  //    yOutBuffer = FLD00001;
+  if (f_isCharFld(fldl0100) = bTrue and
+     f_isVarLen(fldl0100) = bTrue);
+    exprOpen = 'yOutBuffer = %trimR(';
+    exprClose = ')';
+  else;
+    exprOpen = 'yOutBuffer = ';
+    exprClose = '';
+  endif;
+
   for curField = 1 to totFields;
-
-    closeChar2 = '';
-
-    reset ds_eval;
-    clear $eval_opC;
 
     if (f_isNumFld(fldl0100) = bTrue);
       if (fldl0100.f1DTyp = 'F');
-        $eval_fct2 = '%editflt(FLD' + a#fldCount;
-        closeChar2 = ')';
+        fldNme = '%editflt(FLD' + a#fldCount;
       else;
-        $eval_fct2 = '%char(FLD' + a#fldCount;
-        closeChar2 = ')';
+        fldNme = '%char(FLD' + a#fldCount;
       endif;
     else;
-      $eval_fct2 = 'FLD' + a#fldCount;
+      fldNme = 'FLD' + a#fldCount;
     endif;
 
     if (totFields > 1);
-      $eval_fct2 = %trimr($eval_fct2) +
-                  %editc(curField: 'X');
+      fldNme = fldNme + %editc(curField: 'X');
     endif;
 
-    $eval_fct2 = %trimr($eval_fct2) + closeChar2;
-
-    if (curField < totFields);
-      $eval_fct2 = %trimr($eval_fct2) + ' +';
+    if (f_isNumFld(fldl0100) = bTrue);
+      fldNme = fldNme + ')';
     endif;
 
-    p_wrtCopy1(ds_eval);
+    exsr wrtExpr1;
 
   endfor;
 
-  if (closeChar1 <> '');
-    reset ds_eval;
-    clear $eval_opC;
-    $eval_fct2 = closeChar1;
-    p_wrtCopy1(ds_eval);
-  endif;
-
-  //  Eval      yOutBuffLn = ??
-
+  //    yOutBuffLn = ...;
   if (f_isCharFld(fldl0100) = bFalse);
-    reset ds_eval;
-    $eval_fct2 = 'yOutBuffLn = 0';
-    p_wrtCopy1(ds_eval);
+    p_wrtCopy1('    yOutBuffLn = 0;');
   else;
 
-    reset ds_eval;
-    $eval_fct2 = 'yOutBuffLn = %len(';
     if (f_isVarLen(fldl0100) = bTrue);
-      $eval_fct2 = %trimr($eval_fct2) + '%trimR(';
+      exprOpen = 'yOutBuffLn = %len(%trimR(';
+      exprClose = '))';
+    else;
+      exprOpen = 'yOutBuffLn = %len(';
+      exprClose = ')';
     endif;
-    p_wrtCopy1(ds_eval);
 
     for curField = 1 to totFields;
 
-      reset ds_eval;
-      clear $eval_opC;
-
-      $eval_fct2 = %trimr($eval_fct2) +
-                  'FLD' + a#fldCount;
+      fldNme = 'FLD' + a#fldCount;
       if (totFields > 1);
-        $eval_fct2 = %trimr($eval_fct2) +
-                    %editc(curField: 'X');
+        fldNme = fldNme + %editc(curField: 'X');
       endif;
 
-      if (curField < totFields);
-        $eval_fct2 = %trimr($eval_fct2) + ' +';
-      endif;
+      exsr wrtExpr1;
 
-      p_wrtCopy1(ds_eval);
     endfor;
-
-    reset ds_eval;
-    clear $eval_opC;
-    $eval_fct2 = ')';
-    if (f_isVarLen(fldl0100) = bTrue);
-      $eval_fct2 = %trimr($eval_fct2) + ')';
-    endif;
-    p_wrtCopy1(ds_eval);
 
   endif;
 
-  //  Exsr      chkChar
-  reset ds_exsr;
-  $exsr_fct2 = 'chkChar';
-  p_wrtCopy1(ds_exsr);
+  //    exsr chkChar;
+  p_wrtCopy1('    exsr chkChar;');
 
-  //  Eval      *IN40 = isVisible
-  reset ds_eval;
-  $eval_fct2 = '*IN' + ind40#a + ' = isVisible';
-  p_wrtCopy1(ds_eval);
+  //    *IN40 = isVisible;
+  p_wrtCopy1('    *IN' + ind40#a + ' = isVisible;');
 
-  //  Eval      EDT0000001 = *IN40
-  reset ds_eval;
-  $eval_fct2 =  'EDT' + a#fldCount +
-               ' = *IN' + ind40#a;
-  p_wrtCopy1(ds_eval);
+  //    EDT00001 = *IN40;
+  p_wrtCopy1('    EDT' + a#fldCount + ' = *IN' + ind40#a + ';');
 
-  //  Eval      KEY0000001 = keyChar
-  reset ds_eval;
-  $eval_fct2 = 'KEY' + a#fldCount + ' = keyChar';
-  p_wrtCopy1(ds_eval);
+  //    KEY00001 = keyChar;
+  p_wrtCopy1('    KEY' + a#fldCount + ' = keyChar;');
 
-  //  If        (isVisible = bFalse)
-  reset ds_if;
-  $if_fct2 = '(isVisible = bFalse)';
-  p_wrtCopy1(ds_if);
+  //    if (isVisible = bFalse);
+  //      MSG00001 = '0076';
+  //    endif;
+  p_wrtCopy1('    if (isVisible = bFalse);');
+  p_wrtCopy1('      MSG' + a#fldCount + ' = ''0076'';');
+  p_wrtCopy1('    endif;');
 
-  //  Eval      MSG00001 = '0076'
-  reset ds_eval;
-  $eval_fct2 = 'MSG' + a#fldCount
-                    + ' = ''0076''';
-  p_wrtCopy1(ds_eval);
-
-  //  Endif (reset ds_endif);
-  p_wrtCopy1(ds_endif);
-
-  //  Else
-  reset ds_else;
-  p_wrtCopy1(ds_else);
-
-  //  Eval      isCvtChar = bTrue
-  reset ds_eval;
-  $eval_fct2 = 'isCvtChar = bTrue';
-  p_wrtCopy1(ds_eval);
-
-  //  Eval      *IN40 = EDT0000001
-  reset ds_eval;
-  $eval_fct2 = '*IN' + ind40#a +
-              ' = EDT' + a#fldCount;
-  p_wrtCopy1(ds_eval);
-
-  //  Endif (reset ds_endif);
-  p_wrtCopy1(ds_endif);
-
-  //  Remark
-  reset ds_remark;
-  p_wrtCopy1(ds_remark);
+  //  else;
+  //    isCvtChar = bTrue;
+  //    *IN40 = EDT00001;
+  //  endif;
+  p_wrtCopy1('  else;');
+  p_wrtCopy1('    isCvtChar = bTrue;');
+  p_wrtCopy1('    *IN' + ind40#a + ' = EDT' + a#fldCount + ';');
+  p_wrtCopy1('  endif;');
+  p_wrtCopy1('');
 
   if (fldl0100.f1nalw = '1');
-    //  If        %nullind(P_0000001)
-    reset ds_if;
-    $if_fct2 =
-     '%nullind(' + %trimr(fldl0100.f1vfld) + ')';
-    p_wrtCopy1(ds_if);
-    //  Eval      *IN50 = '0'
-    reset ds_eval;
-    $eval_fct2 = '*IN' + ind50#a + ' = ''0''';
-    p_wrtCopy1(ds_eval);
-    //  Eval      &MSG0000001 = 'TXT0127'
-    reset ds_eval;
-    $eval_fct2 = 'MSG' + a#fldCount
-                      + ' = ''0127''';
-    p_wrtCopy1(ds_eval);
-    //  Else
-    reset ds_else;
-    p_wrtCopy1(ds_else);
-    //  Eval      *IN50 = '1'
-    reset ds_eval;
-    $eval_fct2 = '*IN' + ind50#a + ' = ''1''';
-    p_wrtCopy1(ds_eval);
-    //  Endif (reset ds_endif);
-    p_wrtCopy1(ds_endif);
+    //  if (%nullind(P_00000001));
+    //    *IN50 = '0';
+    //    MSG00001 = '0127';
+    //  else;
+    //    *IN50 = '1';
+    //  endif;
+    p_wrtCopy1('  if (%nullind(' + %trimr(fldl0100.f1vfld) + '));');
+    p_wrtCopy1('    *IN' + ind50#a + ' = ''0'';');
+    p_wrtCopy1('    MSG' + a#fldCount + ' = ''0127'';');
+    p_wrtCopy1('  else;');
+    p_wrtCopy1('    *IN' + ind50#a + ' = ''1'';');
+    p_wrtCopy1('  endif;');
 
   else;
 
-    //  Eval      *IN50 = '1'
-    reset ds_eval;
-    $eval_fct2 = '*IN' + ind50#a + ' = ''1''';
-    p_wrtCopy1(ds_eval);
+    //  *IN50 = '1';
+    p_wrtCopy1('  *IN' + ind50#a + ' = ''1'';');
 
   endif;
 
-  //  Remark
-  reset ds_remark;
-  p_wrtCopy1(ds_remark);
+  p_wrtCopy1('');
+
+endsr;
+
+//============================================================*
+//    wrtExpr1      Ausgeben Zeile curField des Ausdrucks     *
+//                  exprOpen + fldNme ... + exprClose         *
+//                  in Copy-Book 1                            *
+//============================================================*
+
+begsr wrtExpr1;
+
+  if (curField = 1);
+    line = '    ' + exprOpen + fldNme;
+  else;
+    line = '      ' + fldNme;
+  endif;
+
+  if (curField < totFields);
+    line = line + ' +';
+  else;
+    line = line + exprClose + ';';
+  endif;
+
+  p_wrtCopy1(line);
 
 endsr;
 
@@ -1536,118 +1197,56 @@ endsr;
 
 begsr wrtCopy2;
 
-  //  Remark
-  reset ds_remark;
-  $rem_info = 'Feld: ' + fldl0100.f1FNme;
-  p_wrtCopy2(ds_remark);
+  //  Feld: TEST#
+  p_wrtCopy2('  // Feld: ' + %trimr(fldl0100.f1FNme));
 
-  //  When      (xScnCsrRow >= 04) and
-  reset ds_when;
-  $when_fct2 =
-           '(xScnCsrRow >= ' + row#a + ') and';
-  p_wrtCopy2(ds_when);
-
-  //            (xScnCsrRow <= 04) and
-  reset ds_cont;
+  //  when ((xScnCsrRow >= 04) and
+  //        (xScnCsrRow <= 04) and
+  //        (scnNbr      = 001));
   num# = row# + totLin - 1;
-  $cont_fct2 =
-           '(xScnCsrRow <= ' + num#a + ') and';
-  p_wrtCopy2(ds_cont);
-
-  //            (scnNbr      = 001)
-  reset ds_cont;
-  $cont_fct2 =
-           '(scnNbr      = ' + scn#a + ')';
-  p_wrtCopy2(ds_cont);
+  p_wrtCopy2('  when ((xScnCsrRow >= ' + row#a + ') and');
+  p_wrtCopy2('        (xScnCsrRow <= ' + num#a + ') and');
+  p_wrtCopy2('        (scnNbr      = ' + scn#a + '));');
 
   //  Input-Only Feld?
   if (fldl0100.f1use = 'I');
     //  ... JA
-    reset ds_exsr;
-    $exsr_fct2 = 'MSG8208';
-    p_wrtCopy2(ds_exsr);
+    p_wrtCopy2('    exsr MSG8208;');
   else;
     //  ... NEIN
-    //      If        (EDT0000001 = '1') and
-    reset ds_if;
-    $if_fct2='(EDT' + a#fldCount + ' = ''1'') and';
-    p_wrtCopy2(ds_if);
+    //      if ((EDT00001 = '1') and
+    //          not (LNG00001 = '1'));
+    //        exsr f_P_00000001;
+    //      endif;
+    p_wrtCopy2('    if ((EDT' + a#fldCount + ' = ''1'') and');
+    p_wrtCopy2('        not (LNG' + a#fldCount + ' = ''1''));');
+    p_wrtCopy2('      exsr f_' + %trim(fldl0100.f1vfld) + ';');
+    p_wrtCopy2('    endif;');
 
-    //                not (LNG0000001 = '1')
-    reset ds_if;
-    $if_opC  = ' ';
-    $if_fct2='not (LNG' + a#fldCount + ' = ''1'')';
-    p_wrtCopy2(ds_if);
+    //      yFldName = 'TEST#V    ';
+    p_wrtCopy2('    yFldName = ''' + fldl0100.f1FNme + ''';');
 
-    //      Eval      P_00000001 = FLD0000001
-    reset ds_exsr;
-    $exsr_fct2 = 'f_' + %trim(fldl0100.f1vfld);
-    p_wrtCopy2(ds_exsr);
+    //      Editor = cEDITOR_HEX;
+    p_wrtCopy2('    Editor = cEDITOR_HEX;');
 
-    //  Endif (reset ds_endif);
-    p_wrtCopy2(ds_endif);
+    //      exsr fromBuffer;
+    p_wrtCopy2('    exsr fromBuffer;');
 
-    //  Eval      yFldName = 'TEST#V    '
-    reset ds_eval;
-    $eval_fct2 = 'yFldName = ' +
-                '''' + fldl0100.f1FNme + '''';
-    p_wrtCopy2(ds_eval);
-
-    //  Eval      Editor = cEDITOR_HEX
-    reset ds_eval;
-    $eval_fct2 = 'Editor = cEDITOR_HEX';
-    p_wrtCopy2(ds_eval);
-
-    //*                 If        f_isCharFld(FLDL0100) = bTrue
-    //*                 Reset                   ds_eval
-    //*                 Eval      $eval_fct2 = 'trimLen = %len(' + FLDL0100.F1VFLD + ')'
-    //*                 Callp     p_wrtCopy2(ds_eval)
-    //*                 Reset                   ds_eval
-    //*                 Eval      $eval_fct2 = 'isCharFld = bTrue'
-    //*                 Callp     p_wrtCopy2(ds_eval)
-    //*                 Else
-    //*                 Reset                   ds_eval
-    //*                 Eval      $eval_fct2 = 'trimLen = -1'
-    //*                 Callp     p_wrtCopy2(ds_eval)
-    //*                 Reset                   ds_eval
-    //*                 Eval      $eval_fct2 = 'isCharFld = bFalse'
-    //*                 Callp     p_wrtCopy2(ds_eval)
-    //*                 Endif
-
-    //  Exsr      fromBuffer
-    reset ds_exsr;
-    $exsr_fct2 = 'fromBuffer';
-    p_wrtCopy2(ds_exsr);
-
-    //  If        yMsgID = 'USR8112'
-    reset ds_if;
-    $if_fct2 = 'yMsgID = ''USR8112''';
-    p_wrtCopy2(ds_if);
-
-    reset ds_exsr;
-    $exsr_fct2 = 's_' + %trim(fldl0100.f1vfld);
-    p_wrtCopy2(ds_exsr);
-
-    //  Eval      EDT0000006 = '1'
-    reset ds_eval;
-    $eval_fct2 = 'EDT' + a#fldCount + ' = ''1''';
-    p_wrtCopy2(ds_eval);
-
-    //  Eval      %NULLIND() = *OFF
+    //      if (yMsgID = 'USR8112');
+    //        exsr s_P_00000001;
+    //        EDT00001 = '1';
+    //        %nullind(P_00000001) = *OFF;
+    //      endif;
+    p_wrtCopy2('    if (yMsgID = ''USR8112'');');
+    p_wrtCopy2('      exsr s_' + %trim(fldl0100.f1vfld) + ';');
+    p_wrtCopy2('      EDT' + a#fldCount + ' = ''1'';');
     if (fldl0100.f1nalw = '1');
-      reset ds_eval;
-      $eval_fct2 =
-       '%nullind(' +
-       %trimr(fldl0100.f1vfld) + ') = *OFF';
-      p_wrtCopy2(ds_eval);
+      p_wrtCopy2('      %nullind(' + %trimr(fldl0100.f1vfld) +
+                 ') = *OFF;');
     endif;
+    p_wrtCopy2('    endif;');
 
-    //  Endif (reset ds_endif);
-    p_wrtCopy2(ds_endif);
-
-    //  Remark
-    reset ds_remark;
-    p_wrtCopy2(ds_remark);
+    p_wrtCopy2('');
 
   endif;
 
@@ -1660,15 +1259,8 @@ endsr;
 
 begsr wrtCopy3;
 
-  //  EDT0000001      S              1A   inz
-  reset ds_defn;
-  $defn_fldN = ' EDT' + a#fldCount;
-  $defn_type = 'S';
-  $defn_len  = '      1';
-  $defn_dTyp = 'A';
-  $defn_decP = ' ';
-  $defn_keyW = 'inz';
-  p_wrtCopy3(ds_defn);
+  //  dcl-s EDT00001 char(1) inz;
+  p_wrtCopy3('dcl-s EDT' + a#fldCount + ' char(1) inz;');
 
 endsr;
 
@@ -1679,25 +1271,8 @@ endsr;
 
 begsr wrtCopy4;
 
-  //  LNG0000001      C                   const('0') / const('1')
-  reset ds_defn;
-  $defn_fldN = ' LNG' + a#fldCount;
-  $defn_type = 'C';
-  $defn_len  = ' ';
-  $defn_dTyp = ' ';
-  $defn_decP = ' ';
-  $defn_keyW = 'const(''' + fldToLong + ''')';
-  p_wrtCopy4(ds_defn);
-
-  //  MAX0000001      C                   const('0') / const('1')
-  reset ds_defn;
-  $defn_fldN = ' MAX' + a#fldCount;
-  $defn_type = 'C';
-  $defn_len  = ' ';
-  $defn_dTyp = ' ';
-  $defn_decP = ' ';
-  $defn_keyW = 'const(''' + fldToLongMax +''')';
-  p_wrtCopy4(ds_defn);
+  //  dcl-c LNG00001 '0'; / dcl-c LNG00001 '1';
+  p_wrtCopy4('dcl-c LNG' + a#fldCount + ' ''' + fldToLong + ''';');
 
 endsr;
 
@@ -1708,66 +1283,34 @@ endsr;
 
 begsr wrtCopy5;
 
-  //  Remark
-  reset ds_remark;
-  $rem_info = 'Feld: ' + fldl0100.f1FNme;
-  p_wrtCopy5(ds_remark);
+  //  Feld: TEST#
+  p_wrtCopy5('// Feld: ' + %trimr(fldl0100.f1FNme));
 
-  //  When      (xScnCsrRow >= 04) and
-  reset ds_when;
-  $when_fct2 =
-           '(xScnCsrRow >= ' + row#a + ') and';
-  p_wrtCopy5(ds_when);
-
-  //            (xScnCsrRow <= 04) and
-  reset ds_cont;
+  //  when ((xScnCsrRow >= 04) and
+  //        (xScnCsrRow <= 04) and
+  //        (scnNbr      = 001));
   num# = row# + totLin - 1;
-  $cont_fct2 =
-           '(xScnCsrRow <= ' + num#a + ') and';
-  p_wrtCopy5(ds_cont);
+  p_wrtCopy5('when ((xScnCsrRow >= ' + row#a + ') and');
+  p_wrtCopy5('      (xScnCsrRow <= ' + num#a + ') and');
+  p_wrtCopy5('      (scnNbr      = ' + scn#a + '));');
 
-  //            (scnNbr      = 001)
-  reset ds_cont;
-  $cont_fct2 =
-           '(scnNbr      = ' + scn#a + ')';
-  p_wrtCopy5(ds_cont);
-
-  // Eval      %nullind(P_00000001) =
-  //              not %nullind(P_00000001)
+  // %nullind(P_00000001) =
+  //   not %nullind(P_00000001);
   if (fldl0100.f1nalw = '1');
 
-    reset ds_eval;
-    $eval_fct2 =
-     '%nullind(' +
-     %trimr(fldl0100.f1vfld) + ') = ';
-    p_wrtCopy5(ds_eval);
-    reset ds_eval;
-    clear $eval_opC;
-    $eval_fct2 = 'not %nullind(' +
-                %trimr(fldl0100.f1vfld) + ')';
-    p_wrtCopy5(ds_eval);
+    p_wrtCopy5('  %nullind(' + %trimr(fldl0100.f1vfld) + ') =');
+    p_wrtCopy5('    not %nullind(' + %trimr(fldl0100.f1vfld) + ');');
 
   else;
 
     //  Setzen Fehlerflag: Feld ist nicht NULL-fähig
-    reset ds_eval;
-    $eval_fct2 = 'pgmMsgID = ''USR8191''';
-
-    p_wrtCopy5(ds_eval);
-    reset ds_eval;
-    $eval_fct2 = 'pgmMsgDta = FLDL0100.F1FNME';
-    p_wrtCopy5(ds_eval);
-    reset ds_callp;
-    $callp_fct2 = 'p_sndPgmMg(pgmMsgID: +
-                             pgmMsgDta: +
-                             psPgmName)';
-    p_wrtCopy5(ds_callp);
+    p_wrtCopy5('  pgmMsgID = ''USR8191'';');
+    p_wrtCopy5('  pgmMsgDta = FLDL0100.F1FNME;');
+    p_wrtCopy5('  p_sndPgmMg(pgmMsgID: pgmMsgDta: psPgmName);');
 
   endif;
 
-  //  Remark
-  reset ds_remark;
-  p_wrtCopy5(ds_remark);
+  p_wrtCopy5('');
 
 endsr;
 
@@ -1778,127 +1321,72 @@ endsr;
 
 begsr wrtCopy6;
 
-  //  Remark
-  reset ds_remark;
-  $rem_info = 'Feld: ' + fldl0100.f1FNme;
-  p_wrtCopy6(ds_remark);
+  //  Feld: TEST#
+  p_wrtCopy6('  // Feld: ' + %trimr(fldl0100.f1FNme));
 
-  //  When      (xScnCsrRow >= 04) and
-  reset ds_when;
-  $when_fct2 =
-           '(xScnCsrRow >= ' + row#a + ') and';
-  p_wrtCopy6(ds_when);
-
-  //            (xScnCsrRow <= 04) and
-  reset ds_cont;
+  //  when ((xScnCsrRow >= 04) and
+  //        (xScnCsrRow <= 04) and
+  //        (scnNbr      = 001));
   num# = row# + totLin - 1;
-  $cont_fct2 =
-           '(xScnCsrRow <= ' + num#a + ') and';
-  p_wrtCopy6(ds_cont);
+  p_wrtCopy6('  when ((xScnCsrRow >= ' + row#a + ') and');
+  p_wrtCopy6('        (xScnCsrRow <= ' + num#a + ') and');
+  p_wrtCopy6('        (scnNbr      = ' + scn#a + '));');
 
-  //            (scnNbr      = 001)
-  reset ds_cont;
-  $cont_fct2 =
-           '(scnNbr      = ' + scn#a + ')';
-  p_wrtCopy6(ds_cont);
-
-  //  Eval      yFldName = 'TEST#V    '
-  reset ds_eval;
-  $eval_fct2 = 'yFldName = ' +
-              '''' + fldl0100.f1FNme + '''';
-  p_wrtCopy6(ds_eval);
+  //    yFldName = 'TEST#V    ';
+  p_wrtCopy6('    yFldName = ''' + fldl0100.f1FNme + ''';');
 
   //  Input-Only Feld?
   if (fldl0100.f1use = 'I');
-    reset ds_exsr;
-    $exsr_fct2 = 'MSG8208';
-    p_wrtCopy6(ds_exsr);
+    p_wrtCopy6('    exsr MSG8208;');
     leavesr;
   endif;
 
   //  Not a character Feld? => Error message
   if (f_isCharFld(fldl0100) <> bTrue);
-    reset ds_exsr;
-    $exsr_fct2 = 'MSG8221';
-    p_wrtCopy6(ds_exsr);
+    p_wrtCopy6('    exsr MSG8221;');
     leavesr;
   endif;
 
-  //      If        (EDT0000001 <> '1') or
-  reset ds_if;
-  $if_fct2='(EDT' + a#fldCount + ' <> ''1'')';
-  p_wrtCopy6(ds_if);
+  //    if (EDT00001 <> '1');
+  //      exsr USR8193;
+  //      leavesr;
+  //    endif;
+  p_wrtCopy6('    if (EDT' + a#fldCount + ' <> ''1'');');
+  p_wrtCopy6('      exsr USR8193;');
+  p_wrtCopy6('      leavesr;');
+  p_wrtCopy6('    endif;');
 
-  //      Exsr USR8193
-  reset ds_exsr;
-  $exsr_fct2 = 'USR8193';
-  p_wrtCopy6(ds_exsr);
+  //    if (not (LNG00001 = '1'));
+  //      exsr f_P_00000001;
+  //    endif;
+  p_wrtCopy6('    if (not (LNG' + a#fldCount + ' = ''1''));');
+  p_wrtCopy6('      exsr f_' + %trim(fldl0100.f1vfld) + ';');
+  p_wrtCopy6('    endif;');
 
-  //      Leavesr
-  reset ds_leavesr;
-  p_wrtCopy6(ds_leavesr);
+  //    Editor = cEDITOR_STRING;
+  p_wrtCopy6('    Editor = cEDITOR_STRING;');
 
-  //      Endif (reset ds_endif);
-  p_wrtCopy6(ds_endif);
+  //    yLength = %len(P_00000001);
+  p_wrtCopy6('    yLength = %len(' + %trimr(fldl0100.f1vfld) + ');');
 
-  //      If        (LNG0000001 = '1')
-  reset ds_if;
-  $if_fct2='not (LNG' + a#fldCount + ' = ''1'')';
-  p_wrtCopy6(ds_if);
+  //    exsr fromBuffer;
+  p_wrtCopy6('    exsr fromBuffer;');
 
-  //      Eval      P_00000001 = FLD0000001
-  reset ds_exsr;
-  $exsr_fct2 = 'f_' + %trim(fldl0100.f1vfld);
-  p_wrtCopy6(ds_exsr);
-
-  //  Endif (reset ds_endif);
-  p_wrtCopy6(ds_endif);
-
-  //  Eval      Editor = cEDITOR_STRING
-  reset ds_eval;
-  $eval_fct2 = 'Editor = cEDITOR_STRING';
-  p_wrtCopy6(ds_eval);
-
-  reset ds_eval;
-  $eval_fct2 =
-   'yLength = %len(' + fldl0100.f1vfld + ')';
-  p_wrtCopy6(ds_eval);
-
-  //  Exsr      fromBuffer
-  reset ds_exsr;
-  $exsr_fct2 = 'fromBuffer';
-  p_wrtCopy6(ds_exsr);
-
-  //  If        yMsgID = 'USR8112'
-  reset ds_if;
-  $if_fct2 = 'yMsgID = ''USR8112''';
-  p_wrtCopy6(ds_if);
-
-  //  Eval      FLD0000006 = P_00000006
-  reset ds_exsr;
-  $exsr_fct2 = 's_' + %trim(fldl0100.f1vfld);
-  p_wrtCopy6(ds_exsr);
-
-  //  Eval      EDT0000006 = '1'
-  reset ds_eval;
-  $eval_fct2 = 'EDT' + a#fldCount + ' = ''1''';
-  p_wrtCopy6(ds_eval);
-
-  //  Eval      %NULLIND() = *OFF
+  //    if (yMsgID = 'USR8112');
+  //      exsr s_P_00000001;
+  //      EDT00001 = '1';
+  //      %nullind(P_00000001) = *OFF;
+  //    endif;
+  p_wrtCopy6('    if (yMsgID = ''USR8112'');');
+  p_wrtCopy6('      exsr s_' + %trim(fldl0100.f1vfld) + ';');
+  p_wrtCopy6('      EDT' + a#fldCount + ' = ''1'';');
   if (fldl0100.f1nalw = '1');
-    reset ds_eval;
-    $eval_fct2 =
-     '%nullind(' +
-     %trimr(fldl0100.f1vfld) + ') = *OFF';
-    p_wrtCopy6(ds_eval);
+    p_wrtCopy6('      %nullind(' + %trimr(fldl0100.f1vfld) +
+               ') = *OFF;');
   endif;
+  p_wrtCopy6('    endif;');
 
-  //  Endif (reset ds_endif);
-  p_wrtCopy6(ds_endif);
-
-  //  Remark
-  reset ds_remark;
-  p_wrtCopy6(ds_remark);
+  p_wrtCopy6('');
 
 endsr;
 

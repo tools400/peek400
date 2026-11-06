@@ -59,6 +59,8 @@
           DCL        VAR(&COPY4     ) TYPE(*CHAR)  LEN(10)
           DCL        VAR(&COPY5     ) TYPE(*CHAR)  LEN(10)
           DCL        VAR(&COPY6     ) TYPE(*CHAR)  LEN(10)
+/* Eingabebestimmungen (Fixed-Form), /include im RPG-Programm */
+          DCL        VAR(&COPY7     ) TYPE(*CHAR)  LEN(10)
           DCL        VAR(&FILE      ) TYPE(*CHAR)  LEN(10)
           DCL        VAR(&LIB       ) TYPE(*CHAR)  LEN(10)
           DCL        VAR(&UPDPGM    ) TYPE(*CHAR)  LEN( 7)  VALUE('*UPDPGM')
@@ -175,6 +177,8 @@
              CHGVAR     VAR(%SST(&COPY5 1 1)) VALUE('E')
              CHGVAR     VAR(&COPY6)           VALUE(&PGM)
              CHGVAR     VAR(%SST(&COPY6 1 1)) VALUE('G')
+             CHGVAR     VAR(&COPY7)           VALUE(&PGM)
+             CHGVAR     VAR(%SST(&COPY7 1 1)) VALUE('I')
 
              CHGVAR     VAR(&FILE) VALUE(%SST(&QFILE  1 10))
              CHGVAR     VAR(&LIB)  VALUE(%SST(&QFILE 11 10))
@@ -196,7 +200,7 @@
              CHGVAR     VAR(&SRCTYPE) VALUE('DSPF')
              CALLSUBR   SUBR(PRPSRCMBR)
 
- /*  COPY1 - COPY6  */
+ /*  COPY1 - COPY7  */
              CHGVAR     VAR(&SRCTYPE) VALUE('RPGLE')
              CHGVAR     VAR(&SRCMBR ) VALUE(&COPY1)
              CALLSUBR   SUBR(PRPSRCMBR)
@@ -209,6 +213,8 @@
              CHGVAR     VAR(&SRCMBR ) VALUE(&COPY5)
              CALLSUBR   SUBR(PRPSRCMBR)
              CHGVAR     VAR(&SRCMBR ) VALUE(&COPY6)
+             CALLSUBR   SUBR(PRPSRCMBR)
+             CHGVAR     VAR(&SRCMBR ) VALUE(&COPY7)
              CALLSUBR   SUBR(PRPSRCMBR)
 
  /*  OVRDBF'S  */
@@ -400,7 +406,7 @@
 
 /* ---------------------------------------------------------------- */
 /* Overrides für die Generierung: QPEEKGEN auf &SRCMBR, QCOPYLE1 -  */
-/* QCOPYLE6 auf &COPY1 - &COPY6 und PEEKSRC auf die Vorlage         */
+/* QCOPYLE7 auf &COPY1 - &COPY7 und PEEKSRC auf die Vorlage         */
 /* &TMPLMBR                                                         */
 /* ---------------------------------------------------------------- */
              SUBR       SUBR(OVRGEN)
@@ -433,6 +439,10 @@
                             MBR(&COPY6) SECURE(*YES) +
                             OVRSCOPE(*CALLLVL) SHARE(*NO)
 
+               OVRDBF     FILE(QCOPYLE7 ) TOFILE(QTEMP/QPEEKGEN ) +
+                            MBR(&COPY7) SECURE(*YES) +
+                            OVRSCOPE(*CALLLVL) SHARE(*NO)
+
                OVRDBF     FILE(PEEKSRC  ) TOFILE(&PRODLIB/PEEKSRC) +
                             MBR(&TMPLMBR) SECURE(*YES) +
                             OVRSCOPE(*CALLLVL) SHARE(*NO)
@@ -450,6 +460,7 @@
                DLTOVR     FILE(QCOPYLE4 ) LVL(*)
                DLTOVR     FILE(QCOPYLE5 ) LVL(*)
                DLTOVR     FILE(QCOPYLE6 ) LVL(*)
+               DLTOVR     FILE(QCOPYLE7 ) LVL(*)
                DLTOVR     FILE(QPEEKGEN ) LVL(*)
                DLTOVR     FILE(PEEKSRC  ) LVL(*)
 
