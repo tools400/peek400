@@ -176,14 +176,14 @@ dcl-proc SQL_prepareStatement export;
   // SQL-STATEMENT VORBEREITEN
   if (i_check = bTrue);
     EXEC SQL
-     prepare g_chkStmt from :sqlSelectStmt;
+      prepare g_chkStmt from :sqlSelectStmt;
   else;
     EXEC SQL
-     prepare g_prepSelectStmt from :sqlSelectStmt;
+      prepare g_prepSelectStmt from :sqlSelectStmt;
     if (f_isSqlErr(o_msgID :
                 o_msgDta) = bFalse);
       EXEC SQL
-       prepare g_prepCountStmt from :sqlCountStmt;
+        prepare g_prepCountStmt from :sqlCountStmt;
     endif;
   endif;
 
@@ -234,11 +234,11 @@ dcl-proc SQL_open export;
 
   // CURSOR fileSQL DEKLARIEREN
   EXEC SQL
-   declare g_fileSQL scroll cursor for g_prepSelectStmt;
+    declare g_fileSQL scroll cursor for g_prepSelectStmt;
 
   // CURSOR CS ÖFFNEN
   EXEC SQL
-   open g_fileSQL;
+    open g_fileSQL;
 
   // PRÜFUNG AUSWERTEN
   if (f_isSqlErr(o_msgID :
@@ -267,7 +267,7 @@ dcl-proc SQL_open export;
       //  Cursor schließen, sonst scheitert das nächste
       //  SQL_open() mit SQL0502.
       EXEC SQL
-       close g_fileSQL;
+        close g_fileSQL;
     else;
       f_opnSql = bTrue;
     endif;
@@ -315,7 +315,8 @@ dcl-proc SQL_nextRow export;
 
     // GET NEXT ROW
     EXEC SQL
-     fetch next from g_fileSQL into :recNbr;
+      fetch next from g_fileSQL
+        into :recNbr;
 
     // PRÜFUNG AUSWERTEN
     if (f_isSqlErr(o_msgID :
@@ -389,7 +390,8 @@ dcl-proc SQL_previousRow export;
 
     // GET PREVIOUS ROW
     EXEC SQL
-     fetch prior from g_fileSQL into :recNbr;
+      fetch prior from g_fileSQL
+        into :recNbr;
 
     // PRÜFUNG AUSWERTEN
     if (f_isSqlErr(o_msgID :
@@ -445,7 +447,7 @@ dcl-proc SQL_gotoTop export;
 
   // POSITION BEFORE FIRST ROW
   EXEC SQL
-   fetch before from g_fileSQL;
+    fetch before from g_fileSQL;
 
   // PRÜFUNG AUSWERTEN
   if (f_isSqlErr(o_msgID :
@@ -479,7 +481,7 @@ dcl-proc SQL_gotoBottom export;
 
   // POSITION BEFORE FIRST ROW
   EXEC SQL
-   fetch last   from g_fileSQL;
+    fetch last from g_fileSQL;
 
   // PRÜFUNG AUSWERTEN
   if (f_isSqlErr(o_msgID :
@@ -514,7 +516,7 @@ dcl-proc SQL_close export;
 
   // CURSOR CS SCHLIESSEN
   EXEC SQL
-   close g_fileSQL;
+    close g_fileSQL;
 
   // PRÜFUNG AUSWERTEN
   if (f_isSqlErr(o_msgID :
@@ -568,11 +570,11 @@ dcl-proc SQL_count export;
 
   // CURSOR fileSQL DEKLARIEREN
   EXEC SQL
-   declare g_countSQL scroll cursor for g_prepCountStmt;
+    declare g_countSQL scroll cursor for g_prepCountStmt;
 
   // CURSOR CS ÖFFNEN
   EXEC SQL
-   open g_countSQL;
+    open g_countSQL;
 
   if (f_isSqlErr(msgID: msgDta) = bTrue);
     return -1;
@@ -580,18 +582,19 @@ dcl-proc SQL_count export;
 
   // GET FIRST ROW
   EXEC SQL
-   fetch first from g_countSQL into :f_count;
+    fetch first from g_countSQL
+      into :f_count;
 
   if (f_isSqlErr(msgID: msgDta) = bTrue);
     //  Cursor schließen, sonst scheitert der nächste Aufruf.
     EXEC SQL
-     close g_countSQL;
+      close g_countSQL;
     return -1;
   endif;
 
   // CURSOR CS SCHLIESSEN
   EXEC SQL
-   close g_countSQL;
+    close g_countSQL;
   if (f_isSqlErr(msgID: msgDta) = bTrue);
     return -1;
   endif;
