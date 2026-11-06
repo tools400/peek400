@@ -1,139 +1,136 @@
-      *===============================================================*
-      *                                                               *
-      *  erstellt : 27.03.2012                                        *
-      *                                                               *
-      *===============================================================*
-      *                                                               *
-      *  Kurzdokumentation :                                          *
-      *                                                               *
-      *  Rahmentestprogramm mit Protokollausgabe                      *
-      *  Thema:                                                       *
-      *     Test: GRAPHIC Felder                                      *
-      *                                                               *
-      *===============================================================*
-      * >>PRE-COMPILER<<                                              *
-      *                                                               *
-      *   >>CRTCMD<< CRTRPGMOD    MODULE(&LI/&OB) +                   *
-      *                           SRCFILE(&SL/&SF) +                  *
-      *                           SRCMBR(&SM);                        *
-      *                                                               *
-      *   >>COMPILE<<                                                 *
-      *     >>PARM<< TRUNCNBR(*NO);                                   *
-      *     >>PARM<< DBGVIEW(*LIST);                                  *
-      *     >>PARM<< ALWNULL(*USRCTL);                                *
-      *   >>END-COMPILE<<                                             *
-      *                                                               *
-      *   >>EXECUTE<<                                                 *
-      *                                                               *
-      *   >>CMD<<    CRTPGM       PGM(&LI/&OB) +                      *
-      *                           MODULE(&LI/&OB          +           *
-      *                                          ) +                  *
-      *                           BNDSRVPGM(*LIBL/BASICS1      +      *
-      *                                     *LIBL/PRTLOG       +      *
-      *                                          ) +                  *
-      *                           BNDDIR(*LIBL/QC2LE) +               *
-      *                           DETAIL(*BASIC) +                    *
-      *                           ACTGRP(*NEW);                       *
-      *                                                               *
-      * >>END-PRE-COMPILER<<                                          *
-      *===============================================================*
-     H DEBUG
-     H OPTION(*SRCSTMT : *NODEBUGIO)
-     H DECEDIT('0,') DATEDIT(*DMY.)
-     H DATFMT(*ISO )  TIMFMT(*ISO )
-     H EXPROPTS(*RESDECPOS)
-     H EXTBININT(*YES)
-      *===============================================================*
-     FTEST0032FMCF   E             WORKSTN usropn
-     F                                     infds(workStn)
-      *
-     D workstn         DS                  qualified
-     D  status                11     15S 0
-     D  offset               241    242I 0
-     D  AID                  369    369A
-     D  csrPos               370    371I 0
-      *
-      /COPY QCOPYLE,D_WORKSTN
-      *
-      * ------------------------------------
-      *  Type definitions
-      * ------------------------------------
-      *
-      * ------------------------------------
-      *  External Prototypes
-      * ------------------------------------
-      *
-      * ------------------------------------
-      *  Global Fields
-      * ------------------------------------
-      *
-      * ------------------------------------
-      *  Globale Konstanten
-      * ------------------------------------
-      *
-      * ------------------------------------
-      *  Prototypes
-      * ------------------------------------
-      *
-     D PGM_ENTRY_POINT...
-     D                 PR                  extpgm('TEST0032')
-      *
-     D main...
-     D                 PR                         extproc('main')
-      *
-      *===============================================================*
-      *  Program Entry Point
-      *===============================================================*
-     D PGM_ENTRY_POINT...
-     D                 PI
-      *
-      * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      /FREE
+**FREE
+//===============================================================*
+//                                                               *
+//  erstellt : 27.03.2012                                        *
+//                                                               *
+//===============================================================*
+//                                                               *
+//  Kurzdokumentation :                                          *
+//                                                               *
+//  Rahmentestprogramm mit Protokollausgabe                      *
+//  Thema:                                                       *
+//     Test: GRAPHIC Felder                                      *
+//                                                               *
+//===============================================================*
+// >>PRE-COMPILER<<                                              *
+//                                                               *
+//   >>CRTCMD<< CRTRPGMOD    MODULE(&LI/&OB) +                   *
+//                           SRCFILE(&SL/&SF) +                  *
+//                           SRCMBR(&SM);                        *
+//                                                               *
+//   >>COMPILE<<                                                 *
+//     >>PARM<< TRUNCNBR(*NO);                                   *
+//     >>PARM<< DBGVIEW(*LIST);                                  *
+//     >>PARM<< ALWNULL(*USRCTL);                                *
+//   >>END-COMPILE<<                                             *
+//                                                               *
+//   >>EXECUTE<<                                                 *
+//                                                               *
+//   >>CMD<<    CRTPGM       PGM(&LI/&OB) +                      *
+//                           MODULE(&LI/&OB          +           *
+//                                          ) +                  *
+//                           BNDSRVPGM(*LIBL/BASICS1      +      *
+//                                     *LIBL/PRTLOG       +      *
+//                                          ) +                  *
+//                           BNDDIR(*LIBL/QC2LE) +               *
+//                           DETAIL(*BASIC) +                    *
+//                           ACTGRP(*NEW);                       *
+//                                                               *
+// >>END-PRE-COMPILER<<                                          *
+//===============================================================*
+ctl-opt DEBUG OPTION(*SRCSTMT : *NODEBUGIO);
+ctl-opt DECEDIT('0,') DATEDIT(*DMY.);
+ctl-opt DATFMT(*ISO )  TIMFMT(*ISO );
+ctl-opt EXPROPTS(*RESDECPOS);
+ctl-opt EXTBININT(*YES);
+//===============================================================*
+dcl-f TEST0032FM WORKSTN(*ext) usage(*input:*output)
+      usropn infds(workStn);
+//
+dcl-ds workstn qualified;
+  status          zoned(5) pos(11);
+  offset          int(5) pos(241);
+  AID             char(1) pos(369);
+  csrPos          int(5);
+end-ds;
+//
+/COPY QCOPYLE,D_WORKSTN
+//
+// ------------------------------------
+//  Type definitions
+// ------------------------------------
+//
+// ------------------------------------
+//  External Prototypes
+// ------------------------------------
+//
+// ------------------------------------
+//  Global Fields
+// ------------------------------------
+//
+// ------------------------------------
+//  Globale Konstanten
+// ------------------------------------
+//
+// ------------------------------------
+//  Prototypes
+// ------------------------------------
+//
+dcl-pr PGM_ENTRY_POINT
+       extpgm('TEST0032');
+end-pr;
+//
+dcl-pr main
+       extproc('main');
+end-pr;
+//
+//===============================================================*
+//  Program Entry Point
+//===============================================================*
+dcl-pi PGM_ENTRY_POINT;
+end-pi;
+//
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-         main();
+main();
 
-         *inlr = *on;
+*inlr = *on;
 
-         return;
+return;
 
-      /END-FREE
-      *
-      *===============================================================*
-      *  Main procedure
-      *===============================================================*
-     P main...
-     P                 B
-      *
-     D main...
-     D                 PI
-      * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      /FREE
+//
+//===============================================================*
+//  Main procedure
+//===============================================================*
+dcl-proc main;
+//
+dcl-pi main;
+end-pi;
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-         open TEST0032FM;
+open TEST0032FM;
 
-         dow '1';
+dow '1';
 
-            exfmt SCREEN01;
+   exfmt SCREEN01;
 
-            select;
-            when (workstn.AID = K_ENTER);
-               leave;
-            when (workstn.AID = K_F3);
-               leave;
-            when (workstn.AID = K_F12);
-               leave;
-            endsl;
+   select;
+   when (workstn.AID = K_ENTER);
+      leave;
+   when (workstn.AID = K_F3);
+      leave;
+   when (workstn.AID = K_F12);
+      leave;
+   endsl;
 
-         enddo;
+enddo;
 
-         if (%open(TEST0032FM));
-            close TEST0032FM;
-         endif;
+if (%open(TEST0032FM));
+   close TEST0032FM;
+endif;
 
-         return;
+return;
 
-      /END-FREE
-      *
-     P main...
-     P                 E
-      *
+//
+end-proc main;
+//

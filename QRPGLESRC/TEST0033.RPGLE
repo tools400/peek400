@@ -1,199 +1,194 @@
-      *===============================================================*
-      *  bitand(), V5R1 and below.                                    *
-      *===============================================================*
-      * >>PRE-COMPILER<<                                              *
-      *   >>CRTCMD<< CRTRPGMOD    MODULE(&LI/&OB) +                   *
-      *                           SRCFILE(&SL/&SF) +                  *
-      *                           SRCMBR(&SM);                        *
-      *   >>COMPILE<<                                                 *
-      *     >>PARM<< TRUNCNBR(*NO);                                   *
-      *     >>PARM<< DBGVIEW(*LIST);                                  *
-      *   >>END-COMPILE<<                                             *
-      *   >>EXECUTE<<                                                 *
-      *   >>CMD<<    CRTPGM       PGM(&LI/&OB) +                      *
-      *                           MODULE(&LI/&OB) +                   *
-      *                           BNDDIR(*LIBL/QC2LE) +               *
-      *                           DETAIL(*BASIC) +                    *
-      *                           ACTGRP(*NEW);                       *
-      * >>END-PRE-COMPILER<<                                          *
-      *===============================================================*
-     H DEBUG
-     H OPTION(*SRCSTMT : *NODEBUGIO)
-     H DECEDIT('0,') DATEDIT(*DMY.)
-     H DATFMT(*ISO )  TIMFMT(*ISO )
-     H EXPROPTS(*RESDECPOS)
-     H EXTBININT(*YES)
-      *===============================================================*
-      *
-      * ------------------------------------
-      *  Prototypes
-      * ------------------------------------
-      *
-     D PGM_ENTRY_POINT...
-     D                 PR                  extpgm('TEST0033')
-      *
-     D main...
-     D                 PR                         extproc('main')
-      *
-     D kill...
-     D                 PR                         extproc('kill')
-     D  i_text                      128A   value  varying
-      *
-      *  bitand() for V5R1 and below.
-     D bitand...
-     D                 PR            10U 0 extproc('bitand')
-     D  i_arg1                       10U 0 value
-     D  i_arg2                       10U 0 value
-      *
-      *===============================================================*
-      *  Program Entry Point
-      *===============================================================*
-     D PGM_ENTRY_POINT...
-     D                 PI
-      *
-      * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      /FREE
+**FREE
+//===============================================================*
+//  bitand(), V5R1 and below.                                    *
+//===============================================================*
+// >>PRE-COMPILER<<                                              *
+//   >>CRTCMD<< CRTRPGMOD    MODULE(&LI/&OB) +                   *
+//                           SRCFILE(&SL/&SF) +                  *
+//                           SRCMBR(&SM);                        *
+//   >>COMPILE<<                                                 *
+//     >>PARM<< TRUNCNBR(*NO);                                   *
+//     >>PARM<< DBGVIEW(*LIST);                                  *
+//   >>END-COMPILE<<                                             *
+//   >>EXECUTE<<                                                 *
+//   >>CMD<<    CRTPGM       PGM(&LI/&OB) +                      *
+//                           MODULE(&LI/&OB) +                   *
+//                           BNDDIR(*LIBL/QC2LE) +               *
+//                           DETAIL(*BASIC) +                    *
+//                           ACTGRP(*NEW);                       *
+// >>END-PRE-COMPILER<<                                          *
+//===============================================================*
+ctl-opt DEBUG OPTION(*SRCSTMT : *NODEBUGIO);
+ctl-opt DECEDIT('0,') DATEDIT(*DMY.);
+ctl-opt DATFMT(*ISO )  TIMFMT(*ISO );
+ctl-opt EXPROPTS(*RESDECPOS);
+ctl-opt EXTBININT(*YES);
+//===============================================================*
+//
+// ------------------------------------
+//  Prototypes
+// ------------------------------------
+//
+dcl-pr PGM_ENTRY_POINT
+       extpgm('TEST0033');
+end-pr;
+//
+dcl-pr main
+       extproc('main');
+end-pr;
+//
+dcl-pr kill
+       extproc('kill');
+  i_text          varchar(128) value;
+end-pr;
+//
+//  bitand() for V5R1 and below.
+dcl-pr bitand
+       uns(10) extproc('bitand');
+  i_arg1          uns(10) value;
+  i_arg2          uns(10) value;
+end-pr;
+//
+//===============================================================*
+//  Program Entry Point
+//===============================================================*
+dcl-pi PGM_ENTRY_POINT;
+end-pi;
+//
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-         main();
+main();
 
-         *inlr = *on;
+*inlr = *on;
 
-         return;
+return;
 
-      /END-FREE
-      *
-      *===============================================================*
-      *  Main procedure
-      *===============================================================*
-     P main...
-     P                 B
-      *
-     D main...
-     D                 PI
-      *
-     D arg1            S             10U 0
-     D arg2            S             10U 0
-     D result          S             10U 0
-      * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      /FREE
+//
+//===============================================================*
+//  Main procedure
+//===============================================================*
+dcl-proc main;
+//
+dcl-pi main;
+end-pi;
+//
+dcl-s arg1            uns(10);
+dcl-s arg2            uns(10);
+dcl-s result          uns(10);
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-         arg1 = x'00110011';
-         arg2 = x'00100010';
-         result = bitand(arg1: arg2);
+arg1 = x'00110011';
+arg2 = x'00100010';
+result = bitand(arg1: arg2);
 
-         if (result <> x'00100010');
-            kill('Invalid return value: ' + %char(result));
-         endif;
+if (result <> x'00100010');
+   kill('Invalid return value: ' + %char(result));
+endif;
 
-         arg1 = x'00100010';
-         arg2 = x'11001110';
-         result = bitand(arg1: arg2);
+arg1 = x'00100010';
+arg2 = x'11001110';
+result = bitand(arg1: arg2);
 
-         if (result <> x'00000010');
-            kill('Invalid return value: ' + %char(result));
-         endif;
+if (result <> x'00000010');
+   kill('Invalid return value: ' + %char(result));
+endif;
 
-         return;
+return;
 
-      /END-FREE
-      *
-     P main...
-     P                 E
-      *
-      *===============================================================*
-      *  Kills the application with an ESCAPE message.
-      *===============================================================*
-     P kill...
-     P                 B
-      *
-     D kill...
-     D                 PI
-     D  i_text                      128A   value  varying
-      *
-      *  Return value
-     D pBuffer         S               *   inz
-      *
-      *  Local fields
-     D msgKey          S              4A                        inz
-      *
-     D qMsgF           DS                  qualified            inz
-     D  name                         10A
-     D  lib                          10A
-      *
-     D errCode         DS                  qualified            inz
-     D  bytPrv                       10I 0
-     D  bytAvl                       10I 0
-     D  excID                         7A
-     D  reserved                      1A
-     D  excDta                      256A
-      *
-      *  Send Program Message (QMHSNDPM) API
-     D QMHSNDPM        PR                         extpgm('QMHSNDPM')
-     D   i_msgID                      7A   const
-     D   i_qMsgF                     20A   const
-     D   i_msgData                32767A   const  options(*varsize )
-     D   i_length                    10I 0 const
-     D   i_msgType                   10A   const
-     D   i_callStkE               32767A   const  options(*varsize )
-     D   i_callStkC                  10I 0 const
-     D   o_msgKey                     4A
-     D   io_ErrCode               32767A          options(*varsize )
-     D   i_lenStkE                   10I 0 const  options(*nopass  )
-     D   i_callStkEQ                 20A   const  options(*nopass  )
-     D   i_wait                      10I 0 const  options(*nopass  )
-     D   i_callStkEDT                10A   const  options(*nopass  )
-     D   i_ccsid                     10I 0 const  options(*nopass  )
-      * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      /FREE
+//
+end-proc main;
+//
+//===============================================================*
+//  Kills the application with an ESCAPE message.
+//===============================================================*
+dcl-proc kill;
+//
+dcl-pi kill;
+  i_text          varchar(128) value;
+end-pi;
+//
+//  Return value
+dcl-s pBuffer         pointer inz;
+//
+//  Local fields
+dcl-s msgKey          char(4) inz;
+//
+dcl-ds qMsgF qualified            inz;
+  name            char(10);
+  lib             char(10);
+end-ds;
+//
+dcl-ds errCode qualified            inz;
+  bytPrv          int(10);
+  bytAvl          int(10);
+  excID           char(7);
+  reserved        char(1);
+  excDta          char(256);
+end-ds;
+//
+//  Send Program Message (QMHSNDPM) API
+dcl-pr QMHSNDPM        extpgm('QMHSNDPM');
+  i_msgID         char(7) const;
+  i_qMsgF         char(20) const;
+  i_msgData       char(32767) const  options(*varsize );
+  i_length        int(10) const;
+  i_msgType       char(10) const;
+  i_callStkE      char(32767) const  options(*varsize );
+  i_callStkC      int(10) const;
+  o_msgKey        char(4);
+  io_ErrCode      char(32767) options(*varsize );
+  i_lenStkE       int(10) const  options(*nopass  );
+  i_callStkEQ     char(20) const  options(*nopass  );
+  i_wait          int(10) const  options(*nopass  );
+  i_callStkEDT    char(10) const  options(*nopass  );
+  i_ccsid         int(10) const  options(*nopass  );
+end-pr;
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-         clear qMsgF;
-         qMsgF.name = 'QCPFMSG';
-         qMsgF.lib  = '*LIBL';
+clear qMsgF;
+qMsgF.name = 'QCPFMSG';
+qMsgF.lib  = '*LIBL';
 
-         clear errCode;
-         errCode.bytPrv = %size(errCode);
+clear errCode;
+errCode.bytPrv = %size(errCode);
 
-         QMHSNDPM('CPF9898': qMsgF: i_text: %len(i_text): '*ESCAPE'
-                  : '*CTLBDY': 1
-                  : msgKey: errCode);
+QMHSNDPM('CPF9898': qMsgF: i_text: %len(i_text): '*ESCAPE'
+         : '*CTLBDY': 1
+         : msgKey: errCode);
 
-         return;
+return;
 
-      /END-FREE
-      *
-     P kill...
-     P                 E
-      *
-      *===============================================================*
-      *  bitand() for V5R1 and below.
-      *===============================================================*
-     P bitand...
-     P                 B
-      *
-     D bitand...
-     D                 PI            10U 0
-     D  i_arg1                       10U 0 value
-     D  i_arg2                       10U 0 value
-      *
-     D result          S             10U 0
-      *
-      *  AND String (ANDSTR) - MI Instruction
-      *  (http://publib.boulder.ibm.com/iseries/v5r1/ic2924/tstudio/tech_ref/mi/topics.htm)
-     D ANDSTR...
-     D                 PR                  extproc('_ANDSTR')
-     D  i_pReceiver                    *   value
-     D  i_pFirstSrc                    *   value
-     D  i_pSecondSrc                   *   value
-     D  i_length                     10U 0 value
-      * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      /FREE
+//
+end-proc kill;
+//
+//===============================================================*
+//  bitand() for V5R1 and below.
+//===============================================================*
+dcl-proc bitand;
+//
+dcl-pi bitand
+       uns(10);
+  i_arg1          uns(10) value;
+  i_arg2          uns(10) value;
+end-pi;
+//
+dcl-s result          uns(10);
+//
+//  AND String (ANDSTR) - MI Instruction
+//  (http://publib.boulder.ibm.com/iseries/v5r1/ic2924/tstudio/tech_ref/mi/topics.htm)
+dcl-pr ANDSTR
+       extproc('_ANDSTR');
+  i_pReceiver     pointer value;
+  i_pFirstSrc     pointer value;
+  i_pSecondSrc    pointer value;
+  i_length        uns(10) value;
+end-pr;
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-         ANDSTR(%addr(result): %addr(i_arg1): %addr(i_arg2): %len(result));
+ANDSTR(%addr(result): %addr(i_arg1): %addr(i_arg2): %len(result));
 
-         return result;
+return result;
 
-      /END-FREE
-      *
-     P bitand...
-     P                 E
-      *
+//
+end-proc bitand;
+//

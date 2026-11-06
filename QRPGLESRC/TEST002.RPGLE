@@ -1,632 +1,610 @@
-      *===============================================================*
-      *                                                               *
-      *  erstellt : 27.10.2009                                        *
-      *                                                               *
-      *===============================================================*
-      *                                                               *
-      *  Kurzdokumentation :                                          *
-      *                                                               *
-      *  Rahmentestprogramm mit Protokollausgabe                      *
-      *  Thema:                                                       *
-      *     Test: Kurzbefehl für Datei TESTPEEK                       *
-      *                                                               *
-      *===============================================================*
-      * >>PRE-COMPILER<<                                              *
-      *                                                               *
-      *   >>CRTCMD<< CRTRPGMOD    MODULE(&LI/&OB) +                   *
-      *                           SRCFILE(&SL/&SF) +                  *
-      *                           SRCMBR(&SM);                        *
-      *                                                               *
-      *   >>COMPILE<<                                                 *
-      *     >>PARM<< TRUNCNBR(*NO);                                   *
-      *     >>PARM<< DBGVIEW(*LIST);                                  *
-      *   >>END-COMPILE<<                                             *
-      *                                                               *
-      *   >>EXECUTE<<                                                 *
-      *                                                               *
-      *   >>CMD<<    CRTPGM       PGM(&LI/&OB) +                      *
-      *                           MODULE(&LI/&OB          +           *
-      *                                          ) +                  *
-      *                           BNDSRVPGM(*LIBL/BASICS1      +      *
-      *                                     *LIBL/PRTLOG       +      *
-      *                                          ) +                  *
-      *                           BNDDIR(*LIBL/QC2LE) +               *
-      *                           DETAIL(*BASIC) +                    *
-      *                           ACTGRP(*NEW);                       *
-      *                                                               *
-      * >>END-PRE-COMPILER<<                                          *
-      *===============================================================*
-     H DEBUG
-     H OPTION(*SRCSTMT : *NODEBUGIO)
-     H DECEDIT('0,') DATEDIT(*DMY.)
-     H DATFMT(*ISO )  TIMFMT(*ISO )
-     H EXPROPTS(*RESDECPOS)
-     H EXTBININT(*YES)
-      *===============================================================*
-      *
-      * ------------------------------------
-      *  Type definitions
-      * ------------------------------------
-      *
-      * ------------------------------------
-      *  External Prototypes
-      * ------------------------------------
-      /COPY QBASICS1,PBASICS1                      SrvPgm: Basics 1
-      /COPY QPRTLOG,PPRTLOG                        SrvPgm: Print log
-      *
-      * ------------------------------------
-      *  Global Fields
-      * ------------------------------------
-      *
-      *  Logger
-     D g_hLogger       S                   like(prtLog_handle_t) inz
-      *
-      * ------------------------------------
-      *  Globale Konstanten
-      * ------------------------------------
-      *
-      * ------------------------------------
-      *  Prototypes
-      * ------------------------------------
-      *
-     D PGM_ENTRY_POINT...
-     D                 PR                  extpgm('TESTPEEK')
-     D gi_real                        4F   const
-     D gi_double                      8F   const
-      *
-     D main...
-     D                 PR
-     D  i_real                        4F   const
-     D  i_double                      8F   const
-      *
-      *  Test for errors and log them.
-     D isErrorMsg...
-     D                 PR              N
-     D  i_msg                              const  likeds(msg_t    )
-      *
-      *  Open Logger
-     D openLogger...
-     D                 PR
-     D  i_layout                      1A   value
-     D  i_splF                       10A   value  varying
-     D  i_usrDta                     10A   value  varying
-      *
-      *  Logs a given string.
-     D log...
-     D                 PR
-     D  i_msgText                   256A   const  varying
-      *
-      *  Logs a given message.
-     D logMsg...
-     D                 PR
-     D  i_msg                              const  likeds(msg_t        )
-      *
-      *  Logs a monitored message.
-     D logMonitor...
-     D                 PR                         likeds(msg_t   )
-     D  i_text                      128A   const  varying
-      *
-      *  Close Logger
-     D closeLogger...
-     D                 PR
-      *
-      *  Abrufen letzte Abbruch-Nachricht.
-     D rcvEscMsg...
-     D                 PR                         likeds(msg_t    )
-     D  i_stckCnt                    10I 0 const
-      *
-      *  Abrufen Nachrichtentext für Nachricht.
-     D rtvMsgText...
-     D                 PR          1024A          varying
-     D  i_msg                                     const  likeds(msg_t   )
-      *
-      *  Sends a message to QCMD
-     D sndMsg...
-     D                 PR
-     D  i_text                      128A   value  varying
-      *
-      * ------------------------------------
-      *  Program Status Information
-      * ------------------------------------
-     D sds            SDS                  qualified
-     D  pgmName                1     10A                                        Pgm Name
-     D  statusCode            11     15S 0                                      Status Code
-     D  statusCodePrv         16     20S 0                                      Prv Stat Code
-     D  srcLineNbr            21     28A                                        Src Line Nbr
-     D  routine               29     36A                                        RPG routine
-     D  numParms              37     39S 0                                      Num of Parms
-     D  msgID                 40     46A                                        Message ID
-     D   excType                      3A   overlay(msgID)                       Excp Type
-     D   excNbr                       4A   overlay(msgID: *next)                Excp Number
-     D  reserved_1            47     50A                                        Reserved
-     D  msgWorkArea           51     80A                                        Work Area Msg
-     D  pgmLib                81     90A                                        Program Librar
-     D  msgText               91    170A                                        Rtv Excp Data
-     D  excpID               171    174A                                        Excp ID RNX900
-     D  lastFileUsed         175    184A                                        Last File Used
-     D  reserved_2           185    190A                                        Reserved
-     D  jobDate              191    198A                                        Job Date
-     D  century              199    200S 0                                      Job Date Centu
-     D  lastFileUsed8        201    208A                                        Last File Used
-     D  lastFileStat         209    243A                                        Last File Stat
-     D  job                  244    253A                                        Job Name
-     D  user                 254    263A                                        User Name
-     D  nbr                  264    269A                                        Job Number
-     D  pgmDate              270    275S 0                                      Pgm Start Date
-     D  date                 276    281S 0
-     D  time                 282    287S 0
-     D  pgmCrtDate           288    293A                                        Pgm Crt Date
-     D  pgmCrtTime           294    299A                                        Pgm Crt Time
-     D  compilerLvl          300    303A                                        Compiler Level
-     D  srcFile              304    313A                                        Source: File
-     D  srcLib               314    323A                                                Lib
-     D  srcMbr               324    333A                                                Mbr
-     D  prcOfPgm             334    343A                                        Pgm cont. Prc
-     D  prcOfMod             344    353A                                        Mod cont. Prc
-     D  Reserved             354    429A                                        Reserved
-     D  curUsrPrf            358    367A                                        Curr User Prf
-      *
-      *===============================================================*
-      *  Program Entry Point
-      *===============================================================*
-     D PGM_ENTRY_POINT...
-     D                 PI
-     D gi_real                        4F   const
-     D gi_double                      8F   const
-      *
-      * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      /FREE
+**FREE
+//===============================================================*
+//                                                               *
+//  erstellt : 27.10.2009                                        *
+//                                                               *
+//===============================================================*
+//                                                               *
+//  Kurzdokumentation :                                          *
+//                                                               *
+//  Rahmentestprogramm mit Protokollausgabe                      *
+//  Thema:                                                       *
+//     Test: Kurzbefehl für Datei TESTPEEK                       *
+//                                                               *
+//===============================================================*
+// >>PRE-COMPILER<<                                              *
+//                                                               *
+//   >>CRTCMD<< CRTRPGMOD    MODULE(&LI/&OB) +                   *
+//                           SRCFILE(&SL/&SF) +                  *
+//                           SRCMBR(&SM);                        *
+//                                                               *
+//   >>COMPILE<<                                                 *
+//     >>PARM<< TRUNCNBR(*NO);                                   *
+//     >>PARM<< DBGVIEW(*LIST);                                  *
+//   >>END-COMPILE<<                                             *
+//                                                               *
+//   >>EXECUTE<<                                                 *
+//                                                               *
+//   >>CMD<<    CRTPGM       PGM(&LI/&OB) +                      *
+//                           MODULE(&LI/&OB          +           *
+//                                          ) +                  *
+//                           BNDSRVPGM(*LIBL/BASICS1      +      *
+//                                     *LIBL/PRTLOG       +      *
+//                                          ) +                  *
+//                           BNDDIR(*LIBL/QC2LE) +               *
+//                           DETAIL(*BASIC) +                    *
+//                           ACTGRP(*NEW);                       *
+//                                                               *
+// >>END-PRE-COMPILER<<                                          *
+//===============================================================*
+ctl-opt DEBUG OPTION(*SRCSTMT : *NODEBUGIO);
+ctl-opt DECEDIT('0,') DATEDIT(*DMY.);
+ctl-opt DATFMT(*ISO )  TIMFMT(*ISO );
+ctl-opt EXPROPTS(*RESDECPOS);
+ctl-opt EXTBININT(*YES);
+//===============================================================*
+//
+// ------------------------------------
+//  Type definitions
+// ------------------------------------
+//
+// ------------------------------------
+//  External Prototypes
+// ------------------------------------
+/COPY QBASICS1,PBASICS1                      SrvPgm: Basics 1
+/COPY QPRTLOG,PPRTLOG                        SrvPgm: Print log
+//
+// ------------------------------------
+//  Global Fields
+// ------------------------------------
+//
+//  Logger
+dcl-s g_hLogger       like(prtLog_handle_t) inz;
+//
+// ------------------------------------
+//  Globale Konstanten
+// ------------------------------------
+//
+// ------------------------------------
+//  Prototypes
+// ------------------------------------
+//
+dcl-pr PGM_ENTRY_POINT
+       extpgm('TESTPEEK');
+  gi_real         float(4) const;
+  gi_double       float(8) const;
+end-pr;
+//
+dcl-pr main;
+  i_real          float(4) const;
+  i_double        float(8) const;
+end-pr;
+//
+//  Test for errors and log them.
+dcl-pr isErrorMsg
+       ind;
+  i_msg           const  likeds(msg_t    );
+end-pr;
+//
+//  Open Logger
+dcl-pr openLogger;
+  i_layout        char(1) value;
+  i_splF          varchar(10) value;
+  i_usrDta        varchar(10) value;
+end-pr;
+//
+//  Logs a given string.
+dcl-pr log;
+  i_msgText       varchar(256) const;
+end-pr;
+//
+//  Logs a given message.
+dcl-pr logMsg;
+  i_msg           const  likeds(msg_t        );
+end-pr;
+//
+//  Logs a monitored message.
+dcl-pr logMonitor
+       likeds(msg_t   );
+i_text          varchar(128) const;
+end-pr;
+//
+//  Close Logger
+dcl-pr closeLogger;
+end-pr;
+//
+//  Abrufen letzte Abbruch-Nachricht.
+dcl-pr rcvEscMsg
+       likeds(msg_t    );
+i_stckCnt       int(10) const;
+end-pr;
+//
+//  Abrufen Nachrichtentext für Nachricht.
+dcl-pr rtvMsgText
+       varchar(1024);
+  i_msg           const  likeds(msg_t   );
+end-pr;
+//
+//  Sends a message to QCMD
+dcl-pr sndMsg;
+  i_text          varchar(128) value;
+end-pr;
+//
+// ------------------------------------
+//  Program Status Information
+// ------------------------------------
+dcl-ds sds qualified psds;
+  pgmName         char(10) pos(1);                                       // Pgm Name
+  statusCode      zoned(5) pos(11);                                      // Status Code
+  statusCodePrv   zoned(5) pos(16);                                      // Prv Stat Code
+  srcLineNbr      char(8) pos(21);                                       // Src Line Nbr
+  routine         char(8) pos(29);                                       // RPG routine
+  numParms        zoned(3) pos(37);                                      // Num of Parms
+  msgID           char(7) pos(40);                                       // Message ID
+  excType         char(3) overlay(msgID);                                // Excp Type
+  excNbr          char(4) overlay(msgID: *next);                         // Excp Number
+  reserved_1      char(4) pos(47);                                       // Reserved
+  msgWorkArea     char(30) pos(51);                                      // Work Area Msg
+  pgmLib          char(10) pos(81);                                      // Program Librar
+  msgText         char(80) pos(91);                                      // Rtv Excp Data
+  excpID          char(4) pos(171);                                      // Excp ID RNX900
+  lastFileUsed    char(10) pos(175);                                     // Last File Used
+  reserved_2      char(6) pos(185);                                      // Reserved
+  jobDate         char(8) pos(191);                                      // Job Date
+  century         zoned(2) pos(199);                                     // Job Date Centu
+  lastFileUsed8   char(8) pos(201);                                      // Last File Used
+  lastFileStat    char(35) pos(209);                                     // Last File Stat
+  job             char(10) pos(244);                                     // Job Name
+  user            char(10) pos(254);                                     // User Name
+  nbr             char(6) pos(264);                                      // Job Number
+  pgmDate         zoned(6) pos(270);                                     // Pgm Start Date
+  date            zoned(6) pos(276);
+  time            zoned(6) pos(282);
+  pgmCrtDate      char(6) pos(288);                                      // Pgm Crt Date
+  pgmCrtTime      char(6) pos(294);                                      // Pgm Crt Time
+  compilerLvl     char(4) pos(300);                                      // Compiler Level
+  srcFile         char(10) pos(304);                                     // Source: File
+  srcLib          char(10) pos(314);                                     //         Lib
+  srcMbr          char(10) pos(324);                                     //         Mbr
+  prcOfPgm        char(10) pos(334);                                     // Pgm cont. Prc
+  prcOfMod        char(10) pos(344);                                     // Mod cont. Prc
+  Reserved        char(76) pos(354);                                     // Reserved
+  curUsrPrf       char(10) pos(358);                                     // Curr User Prf
+end-ds;
+//
+//===============================================================*
+//  Program Entry Point
+//===============================================================*
+dcl-pi PGM_ENTRY_POINT;
+  gi_real         float(4) const;
+  gi_double       float(8) const;
+end-pi;
+//
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-         openLogger('L': sds.pgmName: '');
+openLogger('L': sds.pgmName: '');
 
-         main(gi_real: gi_double);
+main(gi_real: gi_double);
 
-         // Close logger
-         closeLogger();
+// Close logger
+closeLogger();
 
-         *inlr = *on;
+*inlr = *on;
 
-         return;
+return;
 
-      /END-FREE
-      *
-      *===============================================================*
-      *  Test for errors and log them.
-      *===============================================================*
-     P isErrorMsg...
-     P                 B
-      *
-     D isErrorMsg...
-     D                 PI              N
-     D  i_msg                              const  likeds(msg_t    )
-      * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      /FREE
+//
+//===============================================================*
+//  Test for errors and log them.
+//===============================================================*
+dcl-proc isErrorMsg;
+//
+dcl-pi isErrorMsg
+       ind;
+  i_msg           const  likeds(msg_t    );
+end-pi;
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-         if (i_msg.ID <> cMSG_ID_OK);
-            logMsg(i_msg);
-            return cTrue;
-         else;
-            return cFalse;
-         endif;
+if (i_msg.ID <> cMSG_ID_OK);
+   logMsg(i_msg);
+   return cTrue;
+else;
+   return cFalse;
+endif;
 
-      /END-FREE
-      *
-     P isErrorMsg...
-     P                 E
-      *
-      *===============================================================*
-    R *  *** Private ***
-      *  Open Logger
-      *===============================================================*
-     P openLogger...
-     P                 B
-      *
-     D openLogger...
-     D                 PI
-     D  i_layout                      1A   value
-     D  i_splF                       10A   value  varying
-     D  i_usrDta                     10A   value  varying
-      *
-      *  Helper fields
-     D cmd             S            256A   inz   varying
-      * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      /FREE
+//
+end-proc isErrorMsg;
+//
+//===============================================================*
+//  *** Private ***
+//  Open Logger
+//===============================================================*
+dcl-proc openLogger;
+//
+dcl-pi openLogger;
+  i_layout        char(1) value;
+  i_splF          varchar(10) value;
+  i_usrDta        varchar(10) value;
+end-pi;
+//
+//  Helper fields
+dcl-s cmd             varchar(256) inz;
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-         cmd = 'OVRPRTF ' +
-                  'FILE(PRTLOGP) '               +
-                  'LPI(6) '                      +
-                  'CPI(10) '                     +
-                  'OVRSCOPE(*ACTGRPDFN) '        +
-                  'SPLFNAME(' + i_splF + ') '    +
-                  'MAXRCDS(*NOMAX) '             +
-                  'USRDTA(''' + i_usrDta + ''') ';
+cmd = 'OVRPRTF ' +
+         'FILE(PRTLOGP) '               +
+         'LPI(6) '                      +
+         'CPI(10) '                     +
+         'OVRSCOPE(*ACTGRPDFN) '        +
+         'SPLFNAME(' + i_splF + ') '    +
+         'MAXRCDS(*NOMAX) '             +
+         'USRDTA(''' + i_usrDta + ''') ';
 
-         if (i_layout = 'P');
-            cmd = cmd + 'PAGESIZE(70 80) ' +
-                        'OVRFLW(64) ';
-         else;
-            cmd = cmd + 'PAGESIZE(49 132) ' +
-                        'OVRFLW(42) ';
-         endif;
+if (i_layout = 'P');
+   cmd = cmd + 'PAGESIZE(70 80) ' +
+               'OVRFLW(64) ';
+else;
+   cmd = cmd + 'PAGESIZE(49 132) ' +
+               'OVRFLW(42) ';
+endif;
 
-         f_execute(cmd);
+f_execute(cmd);
 
-         // Open logger
-         if f_opnPrtLog('Examinee: '+ i_usrDta: cFalse: g_hLogger);   //no scndlvl Tx
-            log('######## Start of Test ########');
-         endif;
+// Open logger
+if f_opnPrtLog('Examinee: '+ i_usrDta: cFalse: g_hLogger);   //no scndlvl Tx
+   log('######## Start of Test ########');
+endif;
 
-         return;
+return;
 
-      /END-FREE
-      *
-     P openLogger...
-     P                 E
-      *
-      *===============================================================*
-    R *  *** Private ***
-      *  Logs a given string.
-      *===============================================================*
-     P log...
-     P                 B
-      *
-     D log...
-     D                 PI
-     D  i_msgText                   256A   const  varying
-      *
-      *  Helper fields
-     D msg             DS                  likeds(msg_t   ) inz
-      * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      /FREE
+//
+end-proc openLogger;
+//
+//===============================================================*
+//  *** Private ***
+//  Logs a given string.
+//===============================================================*
+dcl-proc log;
+//
+dcl-pi log;
+  i_msgText       varchar(256) const;
+end-pi;
+//
+//  Helper fields
+dcl-ds msg likeds(msg_t   ) inz;
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-         if (i_msgText = '');
-            msg = f_newMsg(cMSG_ID_NONE: x'41');
-         else;
-            msg = f_newMsg(cMSG_ID_NONE: i_msgText);
-         endif;
+if (i_msgText = '');
+   msg = f_newMsg(cMSG_ID_NONE: x'41');
+else;
+   msg = f_newMsg(cMSG_ID_NONE: i_msgText);
+endif;
 
-         logMsg(msg);
+logMsg(msg);
 
-         return;
+return;
 
-      /END-FREE
-      *
-     P log...
-     P                 E
-      *
-      *===============================================================*
-    R *  *** Private ***
-      *  Logs a given message.
-      *===============================================================*
-     P logMsg...
-     P                 B
-      *
-     D logMsg...
-     D                 PI
-     D  i_msg                              const  likeds(msg_t        )
-      * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      /FREE
+//
+end-proc log;
+//
+//===============================================================*
+//  *** Private ***
+//  Logs a given message.
+//===============================================================*
+dcl-proc logMsg;
+//
+dcl-pi logMsg;
+  i_msg           const  likeds(msg_t        );
+end-pi;
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-         f_wrtPrtLog(g_hLogger: i_msg);
+f_wrtPrtLog(g_hLogger: i_msg);
 
-         return;
+return;
 
-      /END-FREE
-      *
-     P logMsg...
-     P                 E
-      *
-      *===============================================================*
-    R *  *** Private ***
-      *  Logs a monitored message.
-      *===============================================================*
-     P logMonitor...
-     P                 B
-      *
-     D logMonitor...
-     D                 PI                         likeds(msg_t   )
-     D  i_text                      128A   const  varying
-      *
-      *  Funktionswert
-     D msg             DS                  likeds(msg_t        ) inz
-      *
-      *  Arbeitsfelder
-     D msgText         S           1024A   varying inz
-      * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      /FREE
+//
+end-proc logMsg;
+//
+//===============================================================*
+//  *** Private ***
+//  Logs a monitored message.
+//===============================================================*
+dcl-proc logMonitor;
+//
+dcl-pi logMonitor
+       likeds(msg_t   );
+i_text          varchar(128) const;
+end-pi;
+//
+//  Funktionswert
+dcl-ds msg likeds(msg_t        ) inz;
+//
+//  Arbeitsfelder
+dcl-s msgText         varchar(1024) inz;
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-         msg = rcvEscMsg(2);
+msg = rcvEscMsg(2);
 
-         msgText = 'MONITOR: ' + i_text + ' - ' + rtvMsgText(msg);
+msgText = 'MONITOR: ' + i_text + ' - ' + rtvMsgText(msg);
 
-         log(msgText);
+log(msgText);
 
-         return msg;
+return msg;
 
-      /END-FREE
-      *
-     P logMonitor...
-     P                 E
-      *
-      *===============================================================*
-    R *  *** Private ***
-      *  Close Logger
-      *===============================================================*
-     P closeLogger...
-     P                 B
-      *
-     D closeLogger...
-     D                 PI
-      * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      /FREE
+//
+end-proc logMonitor;
+//
+//===============================================================*
+//  *** Private ***
+//  Close Logger
+//===============================================================*
+dcl-proc closeLogger;
+//
+dcl-pi closeLogger;
+end-pi;
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-         log('########  End of Test  ########');
+log('########  End of Test  ########');
 
-         // Close logger
-         f_cloPrtLog(g_hLogger);
+// Close logger
+f_cloPrtLog(g_hLogger);
 
-         g_hLogger = *NULL;
+g_hLogger = *NULL;
 
-         return;
+return;
 
-      /END-FREE
-      *
-     P closeLogger...
-     P                 E
-      *
-      *===============================================================*
-    R *  *** Private ***
-      *  Abrufen letzte Abbruch-Nachricht.
-      *===============================================================*
-     P rcvEscMsg...
-     P                 B
-      *
-     D rcvEscMsg...
-     D                 PI                         likeds(msg_t    )
-     D  i_stckCnt                    10I 0 const
-      *
-      *  Funktionswert
-     D msg             DS                  likeds(msg_t    ) inz
-      *
-      *  Arbeitsfelder
-     D msgKey          S              4A   inz
-     D msgData         S            512A   inz varying
-      *
-     D rcvm0200        DS                  qualified inz
-     D  bytRet                       10I 0
-     D  bytAvl                       10I 0
-     D  msgSev                       10I 0
-     D  msgID                         7A
-     D  msgType                       2A
-     D  msgKey                        4A
-     D  msgF                         10A
-     D  msgLS                        10A
-     D  msgLU                        10A
-     D  sndJob                       10A
-     D  sndUsr                       10A
-     D  sndNbr                        6A
-     D  sndPgm                       12A
-     D  sndINb                        4A
-     D  sndDat                        7A
-     D  sndTim                        6A
-     D  rcvPgm                       10A
-     D  rcvINb                        4A
-     D  sndTyp                        1A
-     D  rcvTyp                        1A
-     D  reserved_01                   1A
-     D  cStIDTx                      10I 0
-     D  cStIDDt                      10I 0
-     D  alrOpt                        9A
-     D  ccsidMH                      10I 0
-     D  ccsidRD                      10I 0
-     D  lnRplDtR                     10I 0
-     D  lnRplDtA                     10I 0
-     D  lnMgR                        10I 0
-     D  lnMgA                        10I 0
-     D  lnMgHR                       10I 0
-     D  lnMgHA                       10I 0
-     D  value                      4096A
-      *
-     D errCode         DS                  qualified inz
-     D  bytPrv                       10I 0
-     D  bytAvl                       10I 0
-      *
-      *  Receive Program Message (QMHRCVPM) API
-     D QMHRCVPM        PR                         extpgm('QMHRCVPM')
-     D  o_rcvVar                  32767A          options(*varsize )
-     D  i_length                     10I 0 const
-     D  i_format                      8A   const
-     D  i_callStkE                   10A   const
-     D  i_callStkC                   10I 0 const
-     D  i_msgType                    10A   const
-     D  i_msgKey                      4A   const
-     D  i_wait                       10I 0 const
-     D  i_action                     10A   const
-     D  io_ErrCode                32767A          options(*varsize )
-      * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      /FREE
+//
+end-proc closeLogger;
+//
+//===============================================================*
+//  *** Private ***
+//  Abrufen letzte Abbruch-Nachricht.
+//===============================================================*
+dcl-proc rcvEscMsg;
+//
+dcl-pi rcvEscMsg
+       likeds(msg_t    );
+i_stckCnt       int(10) const;
+end-pi;
+//
+//  Funktionswert
+dcl-ds msg likeds(msg_t    ) inz;
+//
+//  Arbeitsfelder
+dcl-s msgKey          char(4) inz;
+dcl-s msgData         varchar(512) inz;
+//
+dcl-ds rcvm0200 qualified inz;
+  bytRet          int(10);
+  bytAvl          int(10);
+  msgSev          int(10);
+  msgID           char(7);
+  msgType         char(2);
+  msgKey          char(4);
+  msgF            char(10);
+  msgLS           char(10);
+  msgLU           char(10);
+  sndJob          char(10);
+  sndUsr          char(10);
+  sndNbr          char(6);
+  sndPgm          char(12);
+  sndINb          char(4);
+  sndDat          char(7);
+  sndTim          char(6);
+  rcvPgm          char(10);
+  rcvINb          char(4);
+  sndTyp          char(1);
+  rcvTyp          char(1);
+  reserved_01     char(1);
+  cStIDTx         int(10);
+  cStIDDt         int(10);
+  alrOpt          char(9);
+  ccsidMH         int(10);
+  ccsidRD         int(10);
+  lnRplDtR        int(10);
+  lnRplDtA        int(10);
+  lnMgR           int(10);
+  lnMgA           int(10);
+  lnMgHR          int(10);
+  lnMgHA          int(10);
+  value           char(4096);
+end-ds;
+//
+dcl-ds errCode qualified inz;
+  bytPrv          int(10);
+  bytAvl          int(10);
+end-ds;
+//
+//  Receive Program Message (QMHRCVPM) API
+dcl-pr QMHRCVPM        extpgm('QMHRCVPM');
+  o_rcvVar        char(32767) options(*varsize );
+  i_length        int(10) const;
+  i_format        char(8) const;
+  i_callStkE      char(10) const;
+  i_callStkC      int(10) const;
+  i_msgType       char(10) const;
+  i_msgKey        char(4) const;
+  i_wait          int(10) const;
+  i_action        char(10) const;
+  io_ErrCode      char(32767) options(*varsize );
+end-pr;
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-         QMHRCVPM(rcvm0200: %size(rcvm0200): 'RCVM0200': '*': i_stckCnt:
-                  '*ESCAPE': msgKey: 0: '*SAME': errCode);
+QMHRCVPM(rcvm0200: %size(rcvm0200): 'RCVM0200': '*': i_stckCnt:
+         '*ESCAPE': msgKey: 0: '*SAME': errCode);
 
-         if (rcvm0200.lnMgR > 0);
-            msgData = %subst(rcvm0200.value: 1: rcvm0200.lnMgR);
-         else;
-            msgData = '';
-         endif;
+if (rcvm0200.lnMgR > 0);
+   msgData = %subst(rcvm0200.value: 1: rcvm0200.lnMgR);
+else;
+   msgData = '';
+endif;
 
-         clear msg;
-         msg.file = rcvm0200.msgF;
-         msg.lib  = rcvm0200.msgLU;
-         msg.type = '*INFO';
-         msg.ID   = rcvm0200.msgID;
-         msg.data = msgData;
+clear msg;
+msg.file = rcvm0200.msgF;
+msg.lib  = rcvm0200.msgLU;
+msg.type = '*INFO';
+msg.ID   = rcvm0200.msgID;
+msg.data = msgData;
 
-         return msg;
+return msg;
 
-      /END-FREE
-      *
-     P rcvEscMsg...
-     P                 E
-      *
-      *===============================================================*
-    R *  *** Private ***
-      *  Abrufen Nachrichtentext für Nachricht.
-      *===============================================================*
-     P rtvMsgText...
-     P                 B
-      *
-     D rtvMsgText...
-     D                 PI          1024A          varying
-     D  i_msg                                     const  likeds(msg_t   )
-      *
-      *  Funktionswert
-     D msgText         S           1024A   varying inz
-      *
-      *  Arbeitsfelder
-     D rtvm0100        DS                  qualified inz
-     D  bytRet                       10I 0
-     D  bytAvl                       10I 0
-     D  lenMsgRet                    10I 0
-     D  lenMsgAvl                    10I 0
-     D  lenHlpRet                    10I 0
-     D  lenHlpAvl                    10I 0
-     D  data                       4096A
-      *
-     D qMsgF           DS                  qualified inz
-     D  name                         10A
-     D  lib                          10A
-      *
-     D errCode         DS                  qualified inz
-     D  bytPrv                       10I 0
-     D  bytAvl                       10I 0
-      *
-      *  Retrieve Message (QMHRTVM) API
-     D QMHRTVM         PR                         extpgm('QMHRTVM')
-     D  o_msgInf                  32767A          options(*varsize )
-     D  i_length                     10I 0 const
-     D  i_format                      8A   const
-     D  i_msgID                       7A   const
-     D  i_qMsgF                      20A   const
-     D  i_rplData                 32767A   const  options(*varsize )
-     D  i_rpldataLen                 10I 0 const
-     D  i_rplVars                    10A   const
-     D  i_rtnCtrlChrs                10A   const
-     D  io_ErrCode                32767A          options(*varsize )
-      * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      /FREE
+//
+end-proc rcvEscMsg;
+//
+//===============================================================*
+//  *** Private ***
+//  Abrufen Nachrichtentext für Nachricht.
+//===============================================================*
+dcl-proc rtvMsgText;
+//
+dcl-pi rtvMsgText
+       varchar(1024);
+  i_msg           const  likeds(msg_t   );
+end-pi;
+//
+//  Funktionswert
+dcl-s msgText         varchar(1024) inz;
+//
+//  Arbeitsfelder
+dcl-ds rtvm0100 qualified inz;
+  bytRet          int(10);
+  bytAvl          int(10);
+  lenMsgRet       int(10);
+  lenMsgAvl       int(10);
+  lenHlpRet       int(10);
+  lenHlpAvl       int(10);
+  data            char(4096);
+end-ds;
+//
+dcl-ds qMsgF qualified inz;
+  name            char(10);
+  lib             char(10);
+end-ds;
+//
+dcl-ds errCode qualified inz;
+  bytPrv          int(10);
+  bytAvl          int(10);
+end-ds;
+//
+//  Retrieve Message (QMHRTVM) API
+dcl-pr QMHRTVM        extpgm('QMHRTVM');
+  o_msgInf        char(32767) options(*varsize );
+  i_length        int(10) const;
+  i_format        char(8) const;
+  i_msgID         char(7) const;
+  i_qMsgF         char(20) const;
+  i_rplData       char(32767) const  options(*varsize );
+  i_rpldataLen    int(10) const;
+  i_rplVars       char(10) const;
+  i_rtnCtrlChrs   char(10) const;
+  io_ErrCode      char(32767) options(*varsize );
+end-pr;
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-         qMsgF.name = i_msg.file;
-         qMsgF.lib  = i_msg.lib;
+qMsgF.name = i_msg.file;
+qMsgF.lib  = i_msg.lib;
 
-         QMHRTVM(rtvm0100: %size(rtvm0100): 'RTVM0100': i_msg.ID: qMsgF:
-                 i_msg.data: %len(i_msg.data): '*YES': '*NO': errCode);
+QMHRTVM(rtvm0100: %size(rtvm0100): 'RTVM0100': i_msg.ID: qMsgF:
+        i_msg.data: %len(i_msg.data): '*YES': '*NO': errCode);
 
-         if (rtvm0100.lenMsgRet > 0);
-            msgText = %subst(rtvm0100.data: 1: rtvm0100.lenMsgRet);
-         else;
-            msgText = '';
-         endif;
+if (rtvm0100.lenMsgRet > 0);
+   msgText = %subst(rtvm0100.data: 1: rtvm0100.lenMsgRet);
+else;
+   msgText = '';
+endif;
 
-         return msgText;
+return msgText;
 
-      /END-FREE
-      *
-     P rtvMsgText...
-     P                 E
-      *
-      *===============================================================*
-      *  *** private ***
-      *  Sends a message to the caller.
-      *===============================================================*
-     P sndMsg...
-     P                 B
-      *
-     D sndMsg...
-     D                 PI
-     D  i_text                      128A   value  varying
-      *
-      *  Return value
-     D pBuffer         S               *   inz
-      *
-      *  Local fields
-     D msgKey          S              4A                        inz
-      *
-     D qMsgF           DS                  qualified            inz
-     D  name                         10A
-     D  lib                          10A
-      *
-     D errCode         DS                  qualified            inz
-     D  bytPrv                       10I 0
-     D  bytAvl                       10I 0
-     D  excID                         7A
-     D  reserved                      1A
-     D  excDta                      256A
-      *
-      *  Send Program Message (QMHSNDPM) API
-     D QMHSNDPM        PR                         extpgm('QMHSNDPM')
-     D   i_msgID                      7A   const
-     D   i_qMsgF                     20A   const
-     D   i_msgData                32767A   const  options(*varsize )
-     D   i_length                    10I 0 const
-     D   i_msgType                   10A   const
-     D   i_callStkE               32767A   const  options(*varsize )
-     D   i_callStkC                  10I 0 const
-     D   o_msgKey                     4A
-     D   io_ErrCode               32767A          options(*varsize )
-     D   i_lenStkE                   10I 0 const  options(*nopass  )
-     D   i_callStkEQ                 20A   const  options(*nopass  )
-     D   i_wait                      10I 0 const  options(*nopass  )
-     D   i_callStkEDT                10A   const  options(*nopass  )
-     D   i_ccsid                     10I 0 const  options(*nopass  )
-      * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      /FREE
+//
+end-proc rtvMsgText;
+//
+//===============================================================*
+//  *** private ***
+//  Sends a message to the caller.
+//===============================================================*
+dcl-proc sndMsg;
+//
+dcl-pi sndMsg;
+  i_text          varchar(128) value;
+end-pi;
+//
+//  Return value
+dcl-s pBuffer         pointer inz;
+//
+//  Local fields
+dcl-s msgKey          char(4) inz;
+//
+dcl-ds qMsgF qualified            inz;
+  name            char(10);
+  lib             char(10);
+end-ds;
+//
+dcl-ds errCode qualified            inz;
+  bytPrv          int(10);
+  bytAvl          int(10);
+  excID           char(7);
+  reserved        char(1);
+  excDta          char(256);
+end-ds;
+//
+//  Send Program Message (QMHSNDPM) API
+dcl-pr QMHSNDPM        extpgm('QMHSNDPM');
+  i_msgID         char(7) const;
+  i_qMsgF         char(20) const;
+  i_msgData       char(32767) const  options(*varsize );
+  i_length        int(10) const;
+  i_msgType       char(10) const;
+  i_callStkE      char(32767) const  options(*varsize );
+  i_callStkC      int(10) const;
+  o_msgKey        char(4);
+  io_ErrCode      char(32767) options(*varsize );
+  i_lenStkE       int(10) const  options(*nopass  );
+  i_callStkEQ     char(20) const  options(*nopass  );
+  i_wait          int(10) const  options(*nopass  );
+  i_callStkEDT    char(10) const  options(*nopass  );
+  i_ccsid         int(10) const  options(*nopass  );
+end-pr;
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-         clear qMsgF;
-         qMsgF.name = 'QCPFMSG';
-         qMsgF.lib  = '*LIBL';
+clear qMsgF;
+qMsgF.name = 'QCPFMSG';
+qMsgF.lib  = '*LIBL';
 
-         clear errCode;
-         errCode.bytPrv = %size(errCode);
+clear errCode;
+errCode.bytPrv = %size(errCode);
 
-         QMHSNDPM('CPF9897': qMsgF: i_text: %len(i_text): '*INFO'
-                  : '*CTLBDY': 1
-                  : msgKey: errCode);
+QMHSNDPM('CPF9897': qMsgF: i_text: %len(i_text): '*INFO'
+         : '*CTLBDY': 1
+         : msgKey: errCode);
 
-         return;
+return;
 
-      /END-FREE
-      *
-     P sndMsg...
-     P                 E
-      *
-      *===============================================================*
-      *  Main procedure
-      *===============================================================*
-     P main...
-     P                 B
-      *
-     D main...
-     D                 PI
-     D  i_real                        4F   const
-     D  i_double                      8F   const
-      *
-      *  Helper fields
-      * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      /FREE
+//
+end-proc sndMsg;
+//
+//===============================================================*
+//  Main procedure
+//===============================================================*
+dcl-proc main;
+//
+dcl-pi main;
+  i_real          float(4) const;
+  i_double        float(8) const;
+end-pi;
+//
+//  Helper fields
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-         // Do until everything is done or an error occured
-         dou '1';
+// Do until everything is done or an error occured
+dou '1';
 
-            log('Real:   ' + %char(i_real  ));
-            log('Double: ' + %char(i_double));
+   log('Real:   ' + %char(i_real  ));
+   log('Double: ' + %char(i_double));
 
-         enddo;
+enddo;
 
-         return;
+return;
 
-      /END-FREE
-      *
-     P main...
-     P                 E
-      *
+//
+end-proc main;
+//
