@@ -24,24 +24,24 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/COPY QCOPYLE,H_SPEC
-/COPY QCOPYLE,COPYRIGHT
+/copy QCOPYLE,H_SPEC
+/copy QCOPYLE,COPYRIGHT
 
-/COPY QCOPYLE,D_CLib
-/COPY QCOPYLE,D_VARDEF
-/COPY QCOPYLE,FLDL0100
-/COPY QCOPYLE,D_MI
-/COPY QCOPYLE,SDS
-/COPY QCOPYLE,CEECNDHDLR
+/copy QCOPYLE,D_CLib
+/copy QCOPYLE,D_VARDEF
+/copy QCOPYLE,FLDL0100
+/copy QCOPYLE,D_MI
+/copy QCOPYLE,SDS
+/copy QCOPYLE,CEECNDHDLR
 
 /define internal_prototype
-/COPY QCOPYLE,PPEEK66
+/copy QCOPYLE,PPEEK66
 /undefine internal_prototype
 
-/COPY QCOPYLE,PPEEK53
-/COPY QCOPYLE,PPEEK58
+/copy QCOPYLE,PPEEK53
+/copy QCOPYLE,PPEEK58
 
-dcl-s numeric_t packed(31:10) template;
+dcl-s numeric_t packed(31: 10) template;
 dcl-c cdata_type 'P';
 dcl-c cdigits %len(numeric_t);
 dcl-c cdecpos %decpos(numeric_t);
@@ -50,48 +50,48 @@ dcl-c cchr_x 'x';
 dcl-c cquote '''';
 
 dcl-pr main extproc('main');
-  io_buffer       like(gio_buffer);
-  io_length       like(gio_length);
-  i_informat      const  likeds(gi_informat);
-  i_outformat     const  likeds(gi_outformat);
-  o_msgid         like(go_msgid);
-  o_msgdta        like(go_msgdta);
+  io_buffer   like(gio_buffer);
+  io_length   like(gio_length);
+  i_informat  likeds(gi_informat) const;
+  i_outformat likeds(gi_outformat) const;
+  o_msgid     like(go_msgid);
+  o_msgdta    like(go_msgdta);
 end-pr;
 
 //  Convert from numeric value.
 dcl-pr convertfromnumeric extproc('convertFromNumeric');
-  io_buffer       like(gio_buffer);
-  io_length       like(gio_length);
-  i_outformat     const  likeds(gi_outformat);
-  o_msgid         like(go_msgid);
-  o_msgdta        like(go_msgdta);
+  io_buffer   like(gio_buffer);
+  io_length   like(gio_length);
+  i_outformat likeds(gi_outformat) const;
+  o_msgid     like(go_msgid);
+  o_msgdta    like(go_msgdta);
 end-pr;
 
 //  Convert from string value.
 dcl-pr convertfromstring extproc('convertFromString');
-  io_buffer       like(gio_buffer);
-  io_length       like(gio_length);
-  i_outformat     const  likeds(gi_outformat );
-  o_msgid         like(go_msgid);
-  o_msgdta        like(go_msgdta);
+  io_buffer   like(gio_buffer);
+  io_length   like(gio_length);
+  i_outformat likeds(gi_outformat) const;
+  o_msgid     like(go_msgid);
+  o_msgdta    like(go_msgdta);
 end-pr;
 
 //  Convert to numeric value.
 dcl-pr converttonumeric extproc('convertToNumeric');
-  io_buffer       like(gio_buffer);
-  io_length       like(gio_length);
-  i_outformat     const  likeds(gi_outformat );
-  o_msgid         like(go_msgid);
-  o_msgdta        like(go_msgdta);
+  io_buffer   like(gio_buffer);
+  io_length   like(gio_length);
+  i_outformat likeds(gi_outformat) const;
+  o_msgid     like(go_msgid);
+  o_msgdta    like(go_msgdta);
 end-pr;
 
 //  Convert to string value.
 dcl-pr converttostring extproc('convertToString');
-  io_buffer       like(gio_buffer);
-  io_length       like(gio_length);
-  i_outformat     const  likeds(gi_outformat);
-  o_msgid         like(go_msgid);
-  o_msgdta        like(go_msgdta);
+  io_buffer   like(gio_buffer);
+  io_length   like(gio_length);
+  i_outformat likeds(gi_outformat) const;
+  o_msgid     like(go_msgid);
+  o_msgdta    like(go_msgdta);
 end-pr;
 
 //*******************************************************************
@@ -100,12 +100,12 @@ end-pr;
 
 // ENTRY-LISTE
 dcl-pi peek66;
-  gio_buffer      like(cmdbuffer_t);
-  gio_length      like(int4_t);
-  gi_informat     const likeds(fldl0100_t);
-  gi_outformat    const likeds(fldl0100_t);
-  go_msgid        like(msgid_t);
-  go_msgdta       like(msgdta_t);
+  gio_buffer   like(cmdbuffer_t);
+  gio_length   like(int4_t);
+  gi_informat  likeds(fldl0100_t) const;
+  gi_outformat likeds(fldl0100_t) const;
+  go_msgid     like(msgid_t);
+  go_msgdta    like(msgdta_t);
 end-pi;
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -126,13 +126,13 @@ return;
 //  Main - Prozedur
 //========================================================================*
 dcl-proc main;
-  dcl-pi *N;
-    io_buffer       like(gio_buffer);
-    io_length       like(gio_length);
-    i_informat      const  likeds(gi_informat);
-    i_outformat     const  likeds(gi_outformat);
-    o_msgid         like(go_msgid);
-    o_msgdta        like(go_msgdta);
+  dcl-pi *n;
+    io_buffer   like(gio_buffer);
+    io_length   like(gio_length);
+    i_informat  likeds(gi_informat) const;
+    i_outformat likeds(gi_outformat) const;
+    o_msgid     like(go_msgid);
+    o_msgdta    like(go_msgdta);
   end-pi;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -153,12 +153,12 @@ end-proc;
 //  Convert from numeric value.
 //========================================================================*
 dcl-proc convertfromnumeric;
-  dcl-pi *N;
-    io_buffer       like(gio_buffer);
-    io_length       like(gio_length);
-    i_outformat     const  likeds(gi_outformat);
-    o_msgid         like(go_msgid);
-    o_msgdta        like(go_msgdta);
+  dcl-pi *n;
+    io_buffer   like(gio_buffer);
+    io_length   like(gio_length);
+    i_outformat likeds(gi_outformat) const;
+    o_msgid     like(go_msgid);
+    o_msgdta    like(go_msgdta);
   end-pi;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -176,12 +176,12 @@ end-proc;
 //  Convert from string value.
 //========================================================================*
 dcl-proc convertfromstring;
-  dcl-pi *N;
-    io_buffer       like(gio_buffer);
-    io_length       like(gio_length);
-    i_outformat     const  likeds(gi_outformat);
-    o_msgid         like(go_msgid);
-    o_msgdta        like(go_msgdta);
+  dcl-pi *n;
+    io_buffer   like(gio_buffer);
+    io_length   like(gio_length);
+    i_outformat likeds(gi_outformat) const;
+    o_msgid     like(go_msgid);
+    o_msgdta    like(go_msgdta);
   end-pi;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -199,24 +199,24 @@ end-proc;
 //  Convert to numeric value.
 //========================================================================*
 dcl-proc converttonumeric;
-  dcl-pi *N;
-    io_buffer       like(gio_buffer);
-    io_length       like(gio_length);
-    i_outformat     const  likeds(gi_outformat);
-    o_msgid         like(go_msgid);
-    o_msgdta        like(go_msgdta);
+  dcl-pi *n;
+    io_buffer   like(gio_buffer);
+    io_length   like(gio_length);
+    i_outformat likeds(gi_outformat) const;
+    o_msgid     like(go_msgid);
+    o_msgdta    like(go_msgdta);
   end-pi;
 
   //  Arbeitsfelder
-  dcl-s isonebyteint     like(bool_t);
+  dcl-s isonebyteint like(bool_t);
   dcl-s onebyteintadjust int(10);
-  dcl-s innumeric        like(numeric_t);
-  dcl-s tmpbuffer        like(io_buffer);
-  dcl-s digits           int(10);
-  dcl-s inbuffer         like(io_buffer);
-  dcl-s inlength         like(io_length);
+  dcl-s innumeric like(numeric_t);
+  dcl-s tmpbuffer like(io_buffer);
+  dcl-s digits int(10);
+  dcl-s inbuffer like(io_buffer);
+  dcl-s inlength like(io_length);
 
-  /COPY QCOPYLE,USR8227
+/copy QCOPYLE,USR8227
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   monitor;
@@ -310,12 +310,12 @@ end-proc;
 //  Convert to string value.
 //========================================================================*
 dcl-proc converttostring;
-  dcl-pi *N;
-    io_buffer       like(gio_buffer);
-    io_length       like(gio_length);
-    i_outformat     const  likeds(gi_outformat);
-    o_msgid         like(go_msgid);
-    o_msgdta        like(go_msgdta);
+  dcl-pi *n;
+    io_buffer   like(gio_buffer);
+    io_length   like(gio_length);
+    i_outformat likeds(gi_outformat) const;
+    o_msgid     like(go_msgid);
+    o_msgdta    like(go_msgdta);
   end-pi;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -329,11 +329,11 @@ end-proc;
 //============================================================*
 
 dcl-proc errorhandler;
-  dcl-pi *N;
-    i_condtoken     value likeds(cee_fc_t);
-    i_pcommarea     int(10) value;
-    o_action        int(10);
-    o_newcondtoken  likeds(cee_fc_t);
+  dcl-pi *n;
+    i_condtoken    likeds(cee_fc_t) value;
+    i_pcommarea    int(10) value;
+    o_action       int(10);
+    o_newcondtoken likeds(cee_fc_t);
   end-pi;
 
   dump;

@@ -26,63 +26,62 @@
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
 ctl-opt nomain;
-/COPY QCOPYLE,H_SPEC
-/COPY QCOPYLE,COPYRIGHT
+/copy QCOPYLE,H_SPEC
+/copy QCOPYLE,COPYRIGHT
 
-/COPY QCOPYLE,FLDL0100
-/COPY QCOPYLE,D_CLib
-/COPY QCOPYLE,D_CLib2
-/COPY QCOPYLE,USR9994
-/COPY QCOPYLE,SDS
+/copy QCOPYLE,FLDL0100
+/copy QCOPYLE,D_CLib
+/copy QCOPYLE,D_CLib2
+/copy QCOPYLE,USR9994
+/copy QCOPYLE,SDS
 
-/COPY QCOPYLE,PPEEK53
-/COPY QCOPYLE,PPEEK58
-/COPY QCOPYLE,PPEEK63
+/copy QCOPYLE,PPEEK53
+/copy QCOPYLE,PPEEK58
+/copy QCOPYLE,PPEEK63
 
-dcl-c OPER_OPEN      const('*OPEN');
-dcl-c OPER_CHAIN_RRN const('*CHAIN_RRN');
+dcl-c OPER_OPEN '*OPEN';
+dcl-c OPER_CHAIN_RRN '*CHAIN_RRN';
 
-dcl-c OPER_CHAIN_KEY const('*CHAIN_KEY');
+dcl-c OPER_CHAIN_KEY '*CHAIN_KEY';
 
-dcl-c OPER_SETLL_RRN const('*SETLL_RRN');
+dcl-c OPER_SETLL_RRN '*SETLL_RRN';
 
-dcl-c OPER_SETLL_KEY const('*SETLL_KEY');
-dcl-c OPER_SETGT_RRN const('*SETGT_RRN');
-dcl-c OPER_SETGT_KEY const('*SETGT_KEY');
-dcl-c OPER_READ      const('*READ');
-dcl-c OPER_READP     const('*READP');
-dcl-c OPER_CLOSE     const('*CLOSE');
-dcl-c OPER_DELETE    const('*DELETE');
-dcl-c OPER_UNLOCK    const('*UNLOCK');
+dcl-c OPER_SETLL_KEY '*SETLL_KEY';
+dcl-c OPER_SETGT_RRN '*SETGT_RRN';
+dcl-c OPER_SETGT_KEY '*SETGT_KEY';
+dcl-c OPER_READ '*READ';
+dcl-c OPER_READP '*READP';
+dcl-c OPER_CLOSE '*CLOSE';
+dcl-c OPER_DELETE '*DELETE';
+dcl-c OPER_UNLOCK '*UNLOCK';
 
-dcl-c ERROR_RRN      const(0);
+dcl-c ERROR_RRN 0;
 
 dcl-pr clearErrorMsg;
-  io_hfile        likeds(hfile_t);
+  io_hfile likeds(hfile_t);
 end-pr;
 
 dcl-pr clearBufferAndNullMap;
-  i_rfile         const  likeds(rfile_t );
-  io_rcdbuffer    like(rcdbuf_t);
-  io_nullmap      like(nullmap_t)
-     dim(NULL_MAP_SIZE);
+  i_rfile      likeds(rfile_t) const;
+  io_rcdbuffer like(rcdbuf_t);
+  io_nullmap   like(nullmap_t) dim(NULL_MAP_SIZE);
 end-pr;
 
 dcl-pr copyInNullMap;
-  i_rfile         const  likeds(rfile_t );
-  io_nullmap      like(nullmap_t) dim(NULL_MAP_SIZE);
+  i_rfile    likeds(rfile_t) const;
+  io_nullmap like(nullmap_t) dim(NULL_MAP_SIZE);
 end-pr;
 
 //  Returns the value of the specified mode parameter.
 dcl-pr getMode varchar(16);
-  i_mode          varchar(512) value;
-  i_parm          varchar(16) value;
-  i_default       varchar(16) value;
+  i_mode    varchar(512) value;
+  i_parm    varchar(16) value;
+  i_default varchar(16) value;
 end-pr;
 
 dcl-pr setEOF;
-  io_hfile        likeds(hfile_t);
-  i_operation     char(10) value;
+  io_hfile    likeds(hfile_t);
+  i_operation char(10) value;
 end-pr;
 
 //===================================================================*
@@ -90,13 +89,13 @@ end-pr;
 //===================================================================*
 
 dcl-proc CIO_open export;
-  dcl-pi *N like(bool_t);
-    o_hfile                likeds(hfile_t);
-    i_file          const  like(file_t);
-    i_lib           const  like(lib_t);
-    i_mbr           const  like(mbr_t);
-    i_rcdformat     const  like(rcdFmt_t);
-    i_mode          pointer const  options(*string);
+  dcl-pi *n like(bool_t);
+    o_hfile     likeds(hfile_t);
+    i_file      like(file_t) const;
+    i_lib       like(lib_t) const;
+    i_mbr       like(mbr_t) const;
+    i_rcdformat like(rcdFmt_t) const;
+    i_mode      pointer options(*string) const;
   end-pi;
 
   dcl-s fd pointer;
@@ -151,8 +150,8 @@ end-proc;
 //===================================================================*
 
 dcl-proc CIO_isOpen export;
-  dcl-pi *N like(bool_t);
-    i_hfile         const  likeds(hfile_t);
+  dcl-pi *n like(bool_t);
+    i_hfile likeds(hfile_t) const;
   end-pi;
   // ------------------------------------------------------------------------
 
@@ -169,8 +168,8 @@ end-proc;
 //===================================================================*
 
 dcl-proc CIO_getFile export;
-  dcl-pi *N like(file_t);
-    i_hfile         const  likeds(hfile_t);
+  dcl-pi *n like(file_t);
+    i_hfile likeds(hfile_t) const;
   end-pi;
   // ------------------------------------------------------------------------
 
@@ -188,8 +187,8 @@ end-proc;
 //===================================================================*
 
 dcl-proc CIO_getLibrary export;
-  dcl-pi *N like(lib_t);
-    i_hfile         const  likeds(hfile_t);
+  dcl-pi *n like(lib_t);
+    i_hfile likeds(hfile_t) const;
   end-pi;
   // ------------------------------------------------------------------------
 
@@ -206,8 +205,8 @@ end-proc;
 //===================================================================*
 
 dcl-proc CIO_getMember export;
-  dcl-pi *N like(lib_t);
-    i_hfile         const  likeds(hfile_t);
+  dcl-pi *n like(lib_t);
+    i_hfile likeds(hfile_t) const;
   end-pi;
   // ------------------------------------------------------------------------
 
@@ -225,8 +224,8 @@ end-proc;
 //===================================================================*
 
 dcl-proc CIO_getRecordFormat export;
-  dcl-pi *N char(10);
-    i_hfile         const  likeds(hfile_t);
+  dcl-pi *n char(10);
+    i_hfile likeds(hfile_t) const;
   end-pi;
   // ------------------------------------------------------------------------
 
@@ -243,12 +242,11 @@ end-proc;
 //===================================================================*
 
 dcl-proc CIO_getRecordLength export;
-  dcl-pi *N int(10);
-    i_hfile         const  likeds(hfile_t);
+  dcl-pi *n int(10);
+    i_hfile likeds(hfile_t) const;
   end-pi;
 
-  dcl-ds rfile likeds(rfile_t  )
-  based(i_hfile.fd);
+  dcl-ds rfile likeds(rfile_t) based(i_hfile.fd);
   // ----------------------------------------------------------------------
 
   if (CIO_isOpen(i_hfile) = bFalse);
@@ -265,8 +263,8 @@ end-proc;
 //===================================================================*
 
 dcl-proc CIO_getRrn export;
-  dcl-pi *N like(rcdNbr_t);
-    i_hfile         const  likeds(hfile_t);
+  dcl-pi *n like(rcdNbr_t);
+    i_hfile likeds(hfile_t) const;
   end-pi;
 
   dcl-ds rfile likeds(rfile_t) based(i_hfile.fd);
@@ -289,8 +287,8 @@ end-proc;
 //===================================================================*
 
 dcl-proc CIO_getMbrNbr export;
-  dcl-pi *N int(10);
-    i_hfile         const  likeds(hfile_t);
+  dcl-pi *n int(10);
+    i_hfile likeds(hfile_t) const;
   end-pi;
 
   dcl-ds xxiofb likeds(xxiofb_t) based(pxxiofb);
@@ -314,8 +312,8 @@ end-proc;
 //===================================================================*
 
 dcl-proc CIO_getInfDS export;
-  dcl-pi *N likeds(infds_t);
-    i_hfile         const  likeds(hfile_t);
+  dcl-pi *n likeds(infds_t);
+    i_hfile likeds(hfile_t) const;
   end-pi;
 
   //  Funktionswert
@@ -341,8 +339,8 @@ end-proc;
 //===================================================================*
 
 dcl-proc CIO_isError export;
-  dcl-pi *N like(bool_t);
-    i_hfile         const  likeds(hfile_t);
+  dcl-pi *n like(bool_t);
+    i_hfile likeds(hfile_t) const;
   end-pi;
   // ------------------------------------------------------------------------
 
@@ -359,10 +357,10 @@ end-proc;
 //===================================================================*
 
 dcl-proc CIO_setErrorMsg export;
-  dcl-pi *N;
-    io_hfile        likeds(hfile_t);
-    i_msgid         const  like(msgid_t);
-    i_msgdta        const  like(msgdta_t);
+  dcl-pi *n;
+    io_hfile likeds(hfile_t);
+    i_msgid  like(msgid_t) const;
+    i_msgdta like(msgdta_t) const;
   end-pi;
   // ------------------------------------------------------------------------
 
@@ -377,13 +375,13 @@ end-proc;
 //===================================================================*
 
 dcl-proc CIO_getErrorMsg export;
-  dcl-pi *N;
-    i_hfile         const  likeds(hfile_t);
-    o_msgid         like(msgid_t);
-    o_msgdta        like(msgdta_t);
+  dcl-pi *n;
+    i_hfile  likeds(hfile_t) const;
+    o_msgid  like(msgid_t);
+    o_msgdta like(msgdta_t);
   end-pi;
 
-  /COPY QCOPYLE,USR0012                      ?
+/copy QCOPYLE,USR0012 // ?
   // ------------------------------------------------------------------------
 
   if (i_hfile.msgid <> '');
@@ -404,8 +402,8 @@ end-proc;
 //===================================================================*
 
 dcl-proc CIO_getError export;
-  dcl-pi *N int(10);
-    i_hfile         const  likeds(hfile_t);
+  dcl-pi *n int(10);
+    i_hfile likeds(hfile_t) const;
   end-pi;
   // ------------------------------------------------------------------------
 
@@ -418,8 +416,8 @@ end-proc;
 //===================================================================*
 
 dcl-proc CIO_getErrorText export;
-  dcl-pi *N varchar(512);
-    i_hfile         const  likeds(hfile_t);
+  dcl-pi *n varchar(512);
+    i_hfile likeds(hfile_t) const;
   end-pi;
   // ------------------------------------------------------------------------
 
@@ -436,15 +434,15 @@ end-proc;
 //===================================================================*
 
 dcl-proc CIO_chainWithRrn export;
-  dcl-pi *N like(bool_t);
-    io_hfile        likeds(hfile_t);
-    i_rrn           const  like(rcdNbr_t);
-    i_dolock        const  like(bool_t);
-    io_rcdbuffer    like(rcdbuf_t);
-    io_nullmap      like(nullmap_t) dim(NULL_MAP_SIZE);
+  dcl-pi *n like(bool_t);
+    io_hfile     likeds(hfile_t);
+    i_rrn        like(rcdNbr_t) const;
+    i_dolock     like(bool_t) const;
+    io_rcdbuffer like(rcdbuf_t);
+    io_nullmap   like(nullmap_t) dim(NULL_MAP_SIZE);
   end-pi;
 
-  dcl-s options         int(10) inz(dft);
+  dcl-s options int(10) inz(dft);
 
   dcl-ds rfile likeds(rfile_t) based(io_hfile.fd);
   dcl-ds riofb likeds(riofb_t) based(priofb);
@@ -483,17 +481,17 @@ end-proc;
 //===================================================================*
 
 dcl-proc CIO_chainWithKey export;
-  dcl-pi *N like(bool_t);
-    io_hfile        likeds(hfile_t);
-    i_key           const  like(keybuf_t);
-    i_dolock        const  like(bool_t);
-    io_rcdbuffer    like(rcdbuf_t);
-    io_nullmap      like(nullmap_t) dim(NULL_MAP_SIZE);
+  dcl-pi *n like(bool_t);
+    io_hfile     likeds(hfile_t);
+    i_key        like(keybuf_t) const;
+    i_dolock     like(bool_t) const;
+    io_rcdbuffer like(rcdbuf_t);
+    io_nullmap   like(nullmap_t) dim(NULL_MAP_SIZE);
   end-pi;
 
-  dcl-s options         int(10) inz(dft);
-  dcl-s key             like(i_key      ) inz;
-  dcl-s keylen          int(10) inz;
+  dcl-s options int(10) inz(dft);
+  dcl-s key like(i_key) inz;
+  dcl-s keylen int(10) inz;
 
   dcl-ds rfile likeds(rfile_t) based(io_hfile.fd);
   dcl-ds riofb likeds(riofb_t) based(priofb);
@@ -535,9 +533,9 @@ end-proc;
 //===================================================================*
 
 dcl-proc CIO_setllWithRrn export;
-  dcl-pi *N like(bool_t);
-    io_hfile        likeds(hfile_t);
-    i_rrn           const  like(rcdNbr_t);
+  dcl-pi *n like(bool_t);
+    io_hfile likeds(hfile_t);
+    i_rrn    like(rcdNbr_t) const;
   end-pi;
 
   dcl-s errornbr int(10) inz;
@@ -601,14 +599,14 @@ end-proc;
 //===================================================================*
 
 dcl-proc CIO_setllWithKey export;
-  dcl-pi *N like(bool_t);
-    io_hfile        likeds(hfile_t);
-    i_key           const  like(keybuf_t);
+  dcl-pi *n like(bool_t);
+    io_hfile likeds(hfile_t);
+    i_key    like(keybuf_t) const;
   end-pi;
 
-  dcl-s options         uns(10) inz;
-  dcl-s key             like(i_key      ) inz;
-  dcl-s keylen          int(10) inz;
+  dcl-s options uns(10) inz;
+  dcl-s key like(i_key) inz;
+  dcl-s keylen int(10) inz;
 
   dcl-ds rfile likeds(rfile_t) based(io_hfile.fd);
   dcl-ds riofb likeds(riofb_t) based(priofb);
@@ -647,12 +645,12 @@ end-proc;
 //===================================================================*
 
 dcl-proc CIO_setgtWithRrn export;
-  dcl-pi *N like(bool_t);
-    io_hfile        likeds(hfile_t);
-    i_rrn           const  like(rcdNbr_t);
+  dcl-pi *n like(bool_t);
+    io_hfile likeds(hfile_t);
+    i_rrn    like(rcdNbr_t) const;
   end-pi;
 
-  dcl-s options         uns(10) inz;
+  dcl-s options uns(10) inz;
 
   dcl-ds rfile likeds(rfile_t) based(io_hfile.fd);
   dcl-ds riofb likeds(riofb_t) based(priofb);
@@ -705,14 +703,14 @@ end-proc;
 //===================================================================*
 
 dcl-proc CIO_setgtWithKey export;
-  dcl-pi *N like(bool_t);
-    io_hfile        likeds(hfile_t);
-    i_key           const  like(keybuf_t);
+  dcl-pi *n like(bool_t);
+    io_hfile likeds(hfile_t);
+    i_key    like(keybuf_t) const;
   end-pi;
 
-  dcl-s options         uns(10) inz;
-  dcl-s key             like(i_key      ) inz;
-  dcl-s keylen          int(10) inz;
+  dcl-s options uns(10) inz;
+  dcl-s key like(i_key) inz;
+  dcl-s keylen int(10) inz;
 
   dcl-ds rfile likeds(rfile_t) based(io_hfile.fd);
   dcl-ds riofb likeds(riofb_t) based(priofb);
@@ -750,17 +748,17 @@ end-proc;
 //===================================================================*
 
 dcl-proc CIO_read export;
-  dcl-pi *N like(bool_t);
-    io_hfile        likeds(hfile_t);
-    i_dolock        const  like(bool_t);
-    io_rcdbuffer    like(rcdbuf_t);
-    io_nullmap      like(nullmap_t) dim(NULL_MAP_SIZE);
+  dcl-pi *n like(bool_t);
+    io_hfile     likeds(hfile_t);
+    i_dolock     like(bool_t) const;
+    io_rcdbuffer like(rcdbuf_t);
+    io_nullmap   like(nullmap_t) dim(NULL_MAP_SIZE);
   end-pi;
 
-  dcl-s options     int(10) inz(dft);
-  dcl-s function    varchar(32) inz;
-  dcl-s msgid       like(msgid_t) inz;
-  dcl-s msgdta      like(msgdta_t) inz;
+  dcl-s options int(10) inz(dft);
+  dcl-s function varchar(32) inz;
+  dcl-s msgid like(msgid_t) inz;
+  dcl-s msgdta like(msgdta_t) inz;
 
   dcl-ds rfile likeds(rfile_t) based(io_hfile.fd);
   dcl-ds riofb likeds(riofb_t) based(priofb);
@@ -825,17 +823,17 @@ end-proc;
 //===================================================================*
 
 dcl-proc CIO_readp export;
-  dcl-pi *N like(bool_t);
-    io_hfile        likeds(hfile_t);
-    i_dolock        const  like(bool_t);
-    io_rcdbuffer    like(rcdbuf_t);
-    io_nullmap      like(nullmap_t) dim(NULL_MAP_SIZE);
+  dcl-pi *n like(bool_t);
+    io_hfile     likeds(hfile_t);
+    i_dolock     like(bool_t) const;
+    io_rcdbuffer like(rcdbuf_t);
+    io_nullmap   like(nullmap_t) dim(NULL_MAP_SIZE);
   end-pi;
 
-  dcl-s options     int(10) inz(dft);
-  dcl-s function    varchar(32) inz;
-  dcl-s msgid       like(msgid_t) inz;
-  dcl-s msgdta      like(msgdta_t) inz;
+  dcl-s options int(10) inz(dft);
+  dcl-s function varchar(32) inz;
+  dcl-s msgid like(msgid_t) inz;
+  dcl-s msgdta like(msgdta_t) inz;
 
   dcl-ds rfile likeds(rfile_t) based(io_hfile.fd);
   dcl-ds riofb likeds(riofb_t) based(priofb);
@@ -901,8 +899,8 @@ end-proc;
 //===================================================================*
 
 dcl-proc CIO_delete export;
-  dcl-pi *N like(bool_t);
-    io_hfile        likeds(hfile_t);
+  dcl-pi *n like(bool_t);
+    io_hfile likeds(hfile_t);
   end-pi;
 
   dcl-ds rfile likeds(rfile_t) based(io_hfile.fd);
@@ -930,8 +928,8 @@ end-proc;
 //===================================================================*
 
 dcl-proc CIO_unlock export;
-  dcl-pi *N like(bool_t);
-    io_hfile        likeds(hfile_t);
+  dcl-pi *n like(bool_t);
+    io_hfile likeds(hfile_t);
   end-pi;
 
   dcl-s rc int(10);
@@ -960,8 +958,8 @@ end-proc;
 //===================================================================*
 
 dcl-proc CIO_close export;
-  dcl-pi *N like(bool_t);
-    io_hfile        likeds(hfile_t);
+  dcl-pi *n like(bool_t);
+    io_hfile likeds(hfile_t);
   end-pi;
   // ------------------------------------------------------------------------
 
@@ -988,8 +986,8 @@ end-proc;
 //===================================================================*
 
 dcl-proc CIO_setEOF_read export;
-  dcl-pi *N;
-    io_hfile        likeds(hfile_t);
+  dcl-pi *n;
+    io_hfile likeds(hfile_t);
   end-pi;
   // ------------------------------------------------------------------------
 
@@ -1003,8 +1001,8 @@ end-proc;
 //===================================================================*
 
 dcl-proc CIO_setEOF_readp export;
-  dcl-pi *N;
-    io_hfile        likeds(hfile_t);
+  dcl-pi *n;
+    io_hfile likeds(hfile_t);
   end-pi;
   // ------------------------------------------------------------------------
 
@@ -1018,9 +1016,9 @@ end-proc;
 //===================================================================*
 
 dcl-proc setEOF;
-  dcl-pi *N;
-    io_hfile        likeds(hfile_t);
-    i_operation     char(10) value;
+  dcl-pi *n;
+    io_hfile    likeds(hfile_t);
+    i_operation char(10) value;
   end-pi;
 
   dcl-ds rfile likeds(rfile_t) based(io_hfile.fd);
@@ -1043,8 +1041,8 @@ end-proc;
 //===================================================================*
 
 dcl-proc clearErrorMsg;
-  dcl-pi *N;
-    io_hfile        likeds(hfile_t);
+  dcl-pi *n;
+    io_hfile likeds(hfile_t);
   end-pi;
   // ------------------------------------------------------------------------
 
@@ -1060,11 +1058,10 @@ end-proc;
 //===================================================================*
 
 dcl-proc clearBufferAndNullMap;
-  dcl-pi *N;
-    i_rfile         const  likeds(rfile_t );
-    io_rcdbuffer    like(rcdbuf_t);
-    io_nullmap      like(nullmap_t)
-         dim(NULL_MAP_SIZE);
+  dcl-pi *n;
+    i_rfile      likeds(rfile_t) const;
+    io_rcdbuffer like(rcdbuf_t);
+    io_nullmap   like(nullmap_t) dim(NULL_MAP_SIZE);
   end-pi;
 
   dcl-s x int(10);
@@ -1084,9 +1081,9 @@ end-proc;
 //===================================================================*
 
 dcl-proc copyInNullMap;
-  dcl-pi *N;
-    i_rfile         const  likeds(rfile_t );
-    io_nullmap      like(nullmap_t) dim(NULL_MAP_SIZE);
+  dcl-pi *n;
+    i_rfile    likeds(rfile_t) const;
+    io_nullmap like(nullmap_t) dim(NULL_MAP_SIZE);
   end-pi;
 
   dcl-s x int(10);
@@ -1105,10 +1102,10 @@ end-proc;
 //===================================================================*
 
 dcl-proc getMode;
-  dcl-pi *N varchar(16);
-    i_mode          varchar(512) value;
-    i_parm          varchar(16) value;
-    i_default       varchar(16) value;
+  dcl-pi *n varchar(16);
+    i_mode    varchar(512) value;
+    i_parm    varchar(16) value;
+    i_default varchar(16) value;
   end-pi;
 
   //  Local fields

@@ -26,74 +26,74 @@
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
 ctl-opt nomain;
-/COPY QCOPYLE,H_SPEC
-/COPY QCOPYLE,COPYRIGHT
+/copy QCOPYLE,H_SPEC
+/copy QCOPYLE,COPYRIGHT
 
-/COPY QCOPYLE,D_VARDEF
-/COPY QCOPYLE,FILD0100
-/COPY QCOPYLE,FLDL0100
-/COPY QCOPYLE,MBRD0100
-/COPY QCOPYLE,MBRD0300
-/COPY QCOPYLE,BSPF0100
-/COPY QCOPYLE,OBJD0100
-/COPY QCOPYLE,USRI0200
-/COPY QCOPYLE,D_CLib
-/COPY QCOPYLE,D_WORKSTN
-/COPY QCOPYLE,D_MI
-/COPY QCOPYLE,QDBRTVFD
-/COPY QCOPYLE,QUSRJOBI
-/COPY QCOPYLE,QUSROBJD
-/COPY QCOPYLE,QUSRMBRD
-/COPY QCOPYLE,QCAPCMD
-/COPY QCOPYLE,QSYRUSRI
-/COPY QCOPYLE,QMHRMVPM
-/COPY QCOPYLE,QMHSNDPM
-/COPY QCOPYLE,QMHRTVM
-/COPY QCOPYLE,QMHMOVPM
-/COPY QCOPYLE,QLGCNVCS
-/COPY QCOPYLE,SDS
+/copy QCOPYLE,D_VARDEF
+/copy QCOPYLE,FILD0100
+/copy QCOPYLE,FLDL0100
+/copy QCOPYLE,MBRD0100
+/copy QCOPYLE,MBRD0300
+/copy QCOPYLE,BSPF0100
+/copy QCOPYLE,OBJD0100
+/copy QCOPYLE,USRI0200
+/copy QCOPYLE,D_CLib
+/copy QCOPYLE,D_WORKSTN
+/copy QCOPYLE,D_MI
+/copy QCOPYLE,QDBRTVFD
+/copy QCOPYLE,QUSRJOBI
+/copy QCOPYLE,QUSROBJD
+/copy QCOPYLE,QUSRMBRD
+/copy QCOPYLE,QCAPCMD
+/copy QCOPYLE,QSYRUSRI
+/copy QCOPYLE,QMHRMVPM
+/copy QCOPYLE,QMHSNDPM
+/copy QCOPYLE,QMHRTVM
+/copy QCOPYLE,QMHMOVPM
+/copy QCOPYLE,QLGCNVCS
+/copy QCOPYLE,SDS
 
-/COPY QCOPYLE,PPEEK53
-/COPY QCOPYLE,PPEEK58
-/COPY QCOPYLE,PPEEK41
+/copy QCOPYLE,PPEEK53
+/copy QCOPYLE,PPEEK58
+/copy QCOPYLE,PPEEK41
 
-dcl-s peek41_name     like(pgmcalln_t);
+dcl-s peek41_name like(pgmcalln_t);
 
 //  Performs word wrapping on a given string without respect to
 //  end-of-paragraph markers.
 dcl-pr lf_wordwrap varchar(4096);
-  i_string        varchar(4096) const;
-  i_width         uns(10) const;
-  io_startpos     uns(10);
+  i_string    varchar(4096) const;
+  i_width     uns(10) const;
+  io_startpos uns(10);
 end-pr;
 
 //  Tests for one or more bits.
 dcl-pr isBitOn ind;
-  i_testbit       uns(10) value;
-  i_value         uns(10) value;
+  i_testbit uns(10) value;
+  i_value   uns(10) value;
 end-pr;
 
 //  Appends a line of the column heading to a heading.
 dcl-pr lf_appendColHdg like(colheading_t);
-  i_heading       like(colheading_t) const;
-  i_line          char(20) const;
+  i_heading like(colheading_t) const;
+  i_line    char(20) const;
 end-pr;
 
-dcl-s g_prdlib        like(lib_t) inz;
+dcl-s g_prdlib like(lib_t) inz;
 
-dcl-s g_jobccsid      uns(10) inz(0);
+dcl-s g_jobccsid uns(10) inz(0);
 
 //===================================================================*
 //  Funktion:  f_dsplyLn                                  (Body)     *
 //===================================================================*
 
 dcl-proc f_dsplyln export;
-  dcl-pi *N        like(int4_t);
-    i_fldl0100      const  likeds(fldl0100_t);
+  dcl-pi *n like(int4_t);
+    i_fldl0100 likeds(fldl0100_t) const;
   end-pi;
 
   //  Funktionswert
-  dcl-s fldlen          like(int4_t);
+  dcl-s fldlen like(int4_t);
   // ------------------------------------------------------------------------
 
   if (i_fldl0100.f1dtyp = 'G' and
@@ -117,17 +117,16 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_buffln export;
-  dcl-pi *N        like(int4_t);
-    i_fldl0100      const  likeds(fldl0100_t);
-    i_withlen       const  like(bool_t)
-         options(*nopass);
+  dcl-pi *n like(int4_t);
+    i_fldl0100 likeds(fldl0100_t) const;
+    i_withlen  like(bool_t) options(*nopass) const;
   end-pi;
 
   //  Funktionswert
-  dcl-s fldlen          like(int4_t) inz;
+  dcl-s fldlen like(int4_t) inz;
 
   //  Arbeitsfelder
-  dcl-s withlen         like(i_withlen) inz;
+  dcl-s withlen like(i_withlen) inz;
   // ------------------------------------------------------------------------
 
   if (%parms() >= %parmnum(i_withlen));
@@ -159,13 +158,13 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_curfldln export;
-  dcl-pi *N        like(int4_t);
-    i_buffer        const  like(rcdbuf_t);
-    i_fldl0100      const  likeds(fldl0100_t);
+  dcl-pi *n like(int4_t);
+    i_buffer   like(rcdbuf_t) const;
+    i_fldl0100 likeds(fldl0100_t) const;
   end-pi;
 
   //  Funktionswert
-  dcl-s curfldln        like(int4_t) inz;
+  dcl-s curfldln like(int4_t) inz;
   // ------------------------------------------------------------------------
 
   if (i_fldl0100.f1vfmi = '1');
@@ -187,27 +186,25 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_rtvfld export;
-  dcl-pi *N opdesc like(int4_t);
-    o_buffer        like(rcdbuf_t)
-         options(*varsize);
-    i_buffer        const  like(rcdbuf_t);
-    i_fldl0100      const  likeds(fldl0100_t);
-    i_withlen       const  like(bool_t)
-         options(*nopass);
+  dcl-pi *n opdesc like(int4_t);
+    o_buffer   like(rcdbuf_t) options(*varsize);
+    i_buffer   like(rcdbuf_t) const;
+    i_fldl0100 likeds(fldl0100_t) const;
+    i_withlen  like(bool_t) options(*nopass) const;
   end-pi;
 
   //  Funktionswert
-  dcl-s rtnlen          like(int4_t) inz;
+  dcl-s rtnlen like(int4_t) inz;
 
   // Parameters passed to CEEDOD
-  dcl-s desctype        int(10);
-  dcl-s datatype        int(10);
-  dcl-s descinfo1       int(10);
-  dcl-s descinfo2       int(10);
-  dcl-s parmlen         int(10);
+  dcl-s desctype int(10);
+  dcl-s datatype int(10);
+  dcl-s descinfo1 int(10);
+  dcl-s descinfo2 int(10);
+  dcl-s parmlen int(10);
 
   //  Arbeitsfelder
-  dcl-s withlen         like(i_withlen) inz;
+  dcl-s withlen like(i_withlen) inz;
   // ------------------------------------------------------------------------
 
   ceedod(1         : desctype : datatype :
@@ -247,23 +244,22 @@ end-proc;
 //===================================================================*
 
 dcl-proc p_fldtobuf export;
-  dcl-pi *N;
-    io_buffer       like(rcdbuf_t);
-    i_fielddta      like(rcdbuf_t);
-    i_fldl0100      const  likeds(fldl0100_t);
-    i_withlen       const  like(bool_t)
-         options(*nopass);
+  dcl-pi *n;
+    io_buffer  like(rcdbuf_t);
+    i_fielddta like(rcdbuf_t);
+    i_fldl0100 likeds(fldl0100_t) const;
+    i_withlen  like(bool_t) options(*nopass) const;
   end-pi;
 
   //  Arbeitsfelder
-  dcl-s withlen         like(i_withlen) inz;
+  dcl-s withlen like(i_withlen) inz;
 
-  dcl-s fielddta        like(rcdbuf_t) based(pfielddta);
-  dcl-s fielddtaucs2    like(rcdbufucs2_t) based(pfielddta);
+  dcl-s fielddta like(rcdbuf_t) based(pfielddta);
+  dcl-s fielddtaucs2 like(rcdbufucs2_t) based(pfielddta);
 
-  dcl-ds *N;
-    buffln          like(int2_t);
-    bufflna         char(2) overlay(buffln:  1);
+  dcl-ds *n;
+    buffln  like(int2_t);
+    bufflna char(2) overlay(buffln: 1);
   end-ds;
   // ------------------------------------------------------------------------
   pfielddta = %addr(i_fielddta);
@@ -327,8 +323,8 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_isvarlen export;
-  dcl-pi *N        like(bool_t);
-    i_fldl0100      const  likeds(fldl0100_t);
+  dcl-pi *n like(bool_t);
+    i_fldl0100 likeds(fldl0100_t) const;
   end-pi;
   // ------------------------------------------------------------------------
 
@@ -345,17 +341,17 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_bintodec export;
-  dcl-pi *N opdesc like(int4_t);
-    i_string        const  like(varString_t) options(*varsize);
-    i_startPos      const  like(int4_t);
-    i_length        const  like(int4_t);
+  dcl-pi *n opdesc like(int4_t);
+    i_string   like(varString_t) options(*varsize) const;
+    i_startPos like(int4_t) const;
+    i_length   like(int4_t) const;
   end-pi;
 
   // Funktionswert
-  dcl-ds *N;
-    intValue        like(int4_t) inz;
-    alpha2          char(2) overlay(intValue: 3);
-    alpha4          char(2) overlay(intValue: 1);
+  dcl-ds *n;
+    intValue like(int4_t) inz;
+    alpha2   char(2) overlay(intValue: 3);
+    alpha4   char(2) overlay(intValue: 1);
   end-ds;
   // ------------------------------------------------------------------------
 
@@ -381,16 +377,16 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_len_DEPRECATED export;
-  dcl-pi *N opdesc like(int4_t);
-    i_string        const like(varString_t) options(*varsize);
+  dcl-pi *n opdesc like(int4_t);
+    i_string like(varString_t) options(*varsize) const;
   end-pi;
 
   // Parameters passed to CEEDOD
-  dcl-s desctype        int(10);
-  dcl-s datatype        int(10);
-  dcl-s descinfo1       int(10);
-  dcl-s descinfo2       int(10);
-  dcl-s parmlen         int(10);
+  dcl-s desctype int(10);
+  dcl-s datatype int(10);
+  dcl-s descinfo1 int(10);
+  dcl-s descinfo2 int(10);
+  dcl-s parmlen int(10);
   // ------------------------------------------------------------------------
 
   p_kill('Deprecated procedure: f_len()');
@@ -408,19 +404,19 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_scan export;
-  dcl-pi *N opdesc like(int4_t);
-    srcharg         char(100) const  options(*varsize);
-    string          char(100) const;
+  dcl-pi *n opdesc like(int4_t);
+    srcharg char(100) options(*varsize) const;
+    string  char(100) const;
   end-pi;
 
-  dcl-s posfound        like(int4_t) inz;
+  dcl-s posfound like(int4_t) inz;
 
   // Parameters passed to CEEDOD
-  dcl-s desctype        like(int4_t) inz;
-  dcl-s datatype        like(int4_t) inz;
-  dcl-s descinfo1       like(int4_t) inz;
-  dcl-s descinfo2       like(int4_t) inz;
-  dcl-s plen            like(int4_t) inz;
+  dcl-s desctype like(int4_t) inz;
+  dcl-s datatype like(int4_t) inz;
+  dcl-s descinfo1 like(int4_t) inz;
+  dcl-s descinfo2 like(int4_t) inz;
+  dcl-s plen like(int4_t) inz;
   //------------------------------------------------------------*
 
   ceedod(1         : desctype : datatype :
@@ -438,25 +434,25 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_vldname export;
-  dcl-pi *N        like(bool_t);
-    i_name          const  like(fieldNme_t);
-    o_msgid                like(msgid_t);
-    o_msgdta               like(msgdta_t);
+  dcl-pi *n like(bool_t);
+    i_name   like(fieldNme_t) const;
+    o_msgid  like(msgid_t);
+    o_msgdta like(msgdta_t);
   end-pi;
 
   //  Funktionswert
-  dcl-s isValid         like(bool_t) inz(bFalse);
+  dcl-s isValid like(bool_t) inz(bFalse);
 
   //  Arbeitsfelder
-  dcl-s idx             like(int4_t) inz;
-  dcl-s chr             char(1) inz;
-  dcl-s startString       like(bool_t) inz(bFalse);
-  dcl-s endString       like(bool_t) inz(bFalse);
+  dcl-s idx like(int4_t) inz;
+  dcl-s chr char(1) inz;
+  dcl-s startString like(bool_t) inz(bFalse);
+  dcl-s endString like(bool_t) inz(bFalse);
 
   dcl-c VALID_FIRST_CHAR '§$#ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   dcl-c VALID_CHAR '§$#ABCDEFGHIJKLMNOPQRSTUVWXYZ_.1234567890';
 
-  /COPY QCOPYLE,USR8182
+/copy QCOPYLE,USR8182
   //-------------------------------------------------------------------*
 
   isValid = bTrue;
@@ -532,15 +528,15 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_vldfloat export;
-  dcl-pi *N        like(bool_t);
-    i_buffer        varchar(64) const;
+  dcl-pi *n like(bool_t);
+    i_buffer varchar(64) const;
   end-pi;
 
   //  Arbeitsfelder
-  dcl-s i               int(10) inz;
-  dcl-s c               char(1) inz;
-  dcl-s dummy           float(8) inz;
-  dcl-s hasexponent     like(bool_t) inz(bFalse);
+  dcl-s i int(10) inz;
+  dcl-s c char(1) inz;
+  dcl-s dummy float(8) inz;
+  dcl-s hasexponent like(bool_t) inz(bFalse);
   dcl-c cdigits '0123456789';
   //-------------------------------------------------------------------*
 
@@ -634,40 +630,40 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_execute export;
-  dcl-pi *N opdesc like(bool_t);
-    i_cmd           const like(cmdBuffer_t) options(*varsize);
-    o_msgid               like(msgid_t);
-    o_msgdta              like(msgdta_t);
+  dcl-pi *n opdesc like(bool_t);
+    i_cmd    like(cmdBuffer_t) options(*varsize) const;
+    o_msgid  like(msgid_t);
+    o_msgdta like(msgdta_t);
   end-pi;
 
   //  Definieren Funktionswert
-  dcl-s isok            like(bool_t) inz(bFalse);
+  dcl-s isok like(bool_t) inz(bFalse);
 
   //  Definieren Parameter für p_getOpDesc
-  dcl-s desctype        int(10) inz;
-  dcl-s datatype        int(10) inz;
-  dcl-s descinf1        int(10) inz;
-  dcl-s descinf2        int(10) inz;
-  dcl-s datalen         int(10) inz;
-  dcl-s feedback        char(12) inz;
+  dcl-s desctype int(10) inz;
+  dcl-s datatype int(10) inz;
+  dcl-s descinf1 int(10) inz;
+  dcl-s descinf2 int(10) inz;
+  dcl-s datalen int(10) inz;
+  dcl-s feedback char(12) inz;
 
   //  Definitionen für QCAPCMD
-  dcl-s cmdlen          int(10) inz;
+  dcl-s cmdlen int(10) inz;
 
   dcl-ds optctrl;
-    typ_cmdprc      int(10) inz(0);                                        // like QCMDEXC
-    dbcs_data       char(1) inz('0');                                      // ignore DBCS
-    prmt_act        char(1) inz('0');                                      // never prompt
-    cmdstrsntx      char(1) inz('0');                                      // AS/400 Syntax
-    msgrtvkey       char(4) inz(*blanks);                                  // no retrieve ke
-    res_01          char(9) inz(*allx'00');
+    typ_cmdprc int(10) inz(0); // like QCMDEXC
+    dbcs_data  char(1) inz('0'); // ignore DBCS
+    prmt_act   char(1) inz('0'); // never prompt
+    cmdstrsntx char(1) inz('0'); // AS/400 Syntax
+    msgrtvkey  char(4) inz(*blanks); // no retrieve ke
+    res_01     char(9) inz(*allx'00');
   end-ds;
 
-  dcl-s optctrllen      int(10) inz;
-  dcl-s optctrlfmt      char(8) inz('CPOP0100');
-  dcl-s cmd             like(i_cmd) inz;
-  dcl-s lenavl          int(10) inz;
-  dcl-s lenavlrtn       int(10) inz;
+  dcl-s optctrllen int(10) inz;
+  dcl-s optctrlfmt char(8) inz('CPOP0100');
+  dcl-s cmd like(i_cmd) inz;
+  dcl-s lenavl int(10) inz;
+  dcl-s lenavlrtn int(10) inz;
 
   dcl-ds errCode likeds(errCode_t) inz;
   //-------------------------------------------------------------------
@@ -708,30 +704,30 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_basedpf export;
-  dcl-pi *N        like(bool_t);
-    i_file          value  like(file_t);
-    i_lib           value  like(lib_t);
-    i_mbr           value  like(mbr_t);
-    i_rcdfmt        value  like(rcdfmt_t);
-    i_rcdmbrnbr     value  like(mbrnbr_t);
-    o_pfile         like(file_t);
-    o_plib          like(lib_t);
-    o_pmbr          like(mbr_t);
-    o_prcdfmt       like(rcdfmt_t);
+  dcl-pi *n like(bool_t);
+    i_file      like(file_t) value;
+    i_lib       like(lib_t) value;
+    i_mbr       like(mbr_t) value;
+    i_rcdfmt    like(rcdfmt_t) value;
+    i_rcdmbrnbr like(mbrnbr_t) value;
+    o_pfile     like(file_t);
+    o_plib      like(lib_t);
+    o_pmbr      like(mbr_t);
+    o_prcdfmt   like(rcdfmt_t);
   end-pi;
 
   //  Definieren Funktionswert ...
-  dcl-s isbasedonpf     like(bool_t) inz(bFalse);
+  dcl-s isbasedonpf like(bool_t) inz(bFalse);
 
-  dcl-s tfile           like(i_file);
-  dcl-s tlib            like(i_lib);
-  dcl-s tmbr            like(i_mbr);
-  dcl-s trcdfmt         like(i_rcdfmt);
+  dcl-s tfile like(i_file);
+  dcl-s tlib like(i_lib);
+  dcl-s tmbr like(i_mbr);
+  dcl-s trcdfmt like(i_rcdfmt);
   dcl-ds fild0100 likeds(fild0100_t) inz;
 
   dcl-ds yqfile likeds(qobj_t) inz;
-  dcl-s ynbrofent       like(int4_t);
-  dcl-s ydata           char(512);
+  dcl-s ynbrofent like(int4_t);
+  dcl-s ydata char(512);
   //------------------------------------------------------------*
 
   peek41_name = f_pgmcalln('PEEK41');
@@ -812,22 +808,22 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_basedmbr export;
-  dcl-pi *N        like(bool_t);
-    i_file          value  like(file_t);
-    i_lib           value  like(lib_t);
-    i_mbr           value  like(mbr_t);
-    i_mbrnbr        value  like(int4_t);
-    i_rcdfmt        value  like(rcdfmt_t);
-    o_pFile         like(file_t);
-    o_pLib          like(lib_t);
-    o_pmbr          like(mbr_t);
-    o_rcdfmt        like(rcdfmt_t);
+  dcl-pi *n like(bool_t);
+    i_file   like(file_t) value;
+    i_lib    like(lib_t) value;
+    i_mbr    like(mbr_t) value;
+    i_mbrnbr like(int4_t) value;
+    i_rcdfmt like(rcdfmt_t) value;
+    o_pFile  like(file_t);
+    o_pLib   like(lib_t);
+    o_pmbr   like(mbr_t);
+    o_rcdfmt like(rcdfmt_t);
   end-pi;
 
   //  Definieren Funktionswert ...
-  dcl-s isMbrFound  like(bool_t) inz(bFalse);
+  dcl-s isMbrFound like(bool_t) inz(bFalse);
 
-  dcl-s mbrNbr      like(i_mbrnbr);
+  dcl-s mbrNbr like(i_mbrnbr);
 
   //  Arbeitsfelder
   dcl-ds qFile likeds(qObj_t) inz;
@@ -840,11 +836,11 @@ dcl-proc f_basedmbr export;
 
   dcl-ds basedOnE likeds(MBRD0300_basedOnE_t) based(pBasedOnE);
 
-  dcl-s offset          int(10) inz;
+  dcl-s offset int(10) inz;
   dcl-ds fild0100 likeds(fild0100_t) inz;
 
-  dcl-s nbrOfEnt       like(int4_t);
-  dcl-s ydata           char(512);
+  dcl-s nbrOfEnt like(int4_t);
+  dcl-s ydata char(512);
   //------------------------------------------------------------*
 
   peek41_name = f_pgmcalln('PEEK41');
@@ -959,23 +955,23 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_numbased export;
-  dcl-pi *N        like(int4_t);
-    i_file          const  like(file_t);
-    i_lib           const  like(lib_t);
-    i_mbr           const  like(mbr_t);
+  dcl-pi *n like(int4_t);
+    i_file like(file_t) const;
+    i_lib  like(lib_t) const;
+    i_mbr  like(mbr_t) const;
   end-pi;
 
   //  Definieren Funktionswert ...
-  dcl-s f_numbased      like(int4_t) inz;
+  dcl-s f_numbased like(int4_t) inz;
 
   //  Arbeitsfelder
   dcl-ds errCode likeds(errCode_t) inz;
 
   dcl-ds mbrd0300 inz;
-    m3bytprv        int(10);
-    m3bytavl        int(10);
-    m3fileattr      char(10) pos(39);
-    m3nbrmbr        int(10) pos(157);
+    m3bytprv   int(10);
+    m3bytavl   int(10);
+    m3fileattr char(10) pos(39);
+    m3nbrmbr   int(10) pos(157);
   end-ds;
   //------------------------------------------------------------*
 
@@ -1003,8 +999,8 @@ end-proc;
 //===================================================================*
 
 dcl-proc p_setprdlb export;
-  dcl-pi *N;
-    i_lib           const  like(lib_t);
+  dcl-pi *n;
+    i_lib like(lib_t) const;
   end-pi;
   //------------------------------------------------------------*
 
@@ -1017,7 +1013,7 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_getprdlb export;
-  dcl-pi *N        like(lib_t);
+  dcl-pi *n like(lib_t);
   end-pi;
   //------------------------------------------------------------*
 
@@ -1030,12 +1026,12 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_cmdline export;
-  dcl-pi *N        like(bool_t);
+  dcl-pi *n like(bool_t);
   end-pi;
   //------------------------------------------------------------*
 
   //  Definieren Funktionswert ...
-  dcl-s f_cmdline       like(bool_t) inz;
+  dcl-s f_cmdline like(bool_t) inz;
 
   dcl-ds usri0200 likeds(usri0200_t) inz;
   dcl-ds errCode likeds(errCode_t) inz;
@@ -1064,20 +1060,20 @@ end-proc;
 //===================================================================*
 
 dcl-proc p_expstr export;
-  dcl-pi *N opdesc;
-    o_string               like(varString_t) options(*varsize);
-    i_string        const  like(varString_t) options(*varsize);
-    i_stepVal       const  like(int4_t) options(*nopass);
+  dcl-pi *n opdesc;
+    o_string  like(varString_t) options(*varsize);
+    i_string  like(varString_t) options(*varsize) const;
+    i_stepVal like(int4_t) options(*nopass) const;
   end-pi;
 
-  dcl-s ostrlen         int(10);
-  dcl-s istrlen         int(10);
+  dcl-s ostrlen int(10);
+  dcl-s istrlen int(10);
 
   //  Arbeitsfelder
-  dcl-s stepval         int(10) inz;
-  dcl-s iidx            int(10) inz;
-  dcl-s oidx            int(10) inz;
-  dcl-s x               int(10) inz;
+  dcl-s stepval int(10) inz;
+  dcl-s iidx int(10) inz;
+  dcl-s oidx int(10) inz;
+  dcl-s x int(10) inz;
   // ------------------------------------------------------------------------
 
   if (%parms() >= %parmnum(i_stepVal));
@@ -1115,13 +1111,13 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_headline export;
-  dcl-pi *N like(colheading_t);
-    i_headtyp       const  like(type_t);
-    i_fldl0100      const  likeds(fldl0100_t);
+  dcl-pi *n like(colheading_t);
+    i_headtyp  like(type_t) const;
+    i_fldl0100 likeds(fldl0100_t) const;
   end-pi;
 
   //  Funktionswert
-  dcl-s heading         like(colheading_t);
+  dcl-s heading like(colheading_t);
   // ------------------------------------------------------------------------
 
   //  Überschrift ...
@@ -1160,18 +1156,18 @@ end-proc;
 //=========================================================================
 
 dcl-proc lf_appendColHdg;
-  dcl-pi *N              like(colheading_t);
-    i_heading       like(colheading_t) const;
-    i_line          char(20) const;
+  dcl-pi *n like(colheading_t);
+    i_heading like(colheading_t) const;
+    i_line    char(20) const;
   end-pi;
 
   dcl-c LOWERCASE 'abcdefghijklmnopqrstuvwxyzäöüßàâçéèêëîïôùûáíóúñìò';
 
   //  Return value
-  dcl-s heading         like(colheading_t) inz;
+  dcl-s heading like(colheading_t) inz;
 
   //  Local fields
-  dcl-s line            varchar(20) inz;
+  dcl-s line varchar(20) inz;
   // ------------------------------------------------------------------------
 
   heading = i_heading;
@@ -1198,12 +1194,12 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_isnumfld export;
-  dcl-pi *N        like(bool_t);
-    i_fldl0100      const  likeds(fldl0100_t);
+  dcl-pi *n like(bool_t);
+    i_fldl0100 likeds(fldl0100_t) const;
   end-pi;
 
   //  Funktionswert
-  dcl-s isnumfld        like(bool_t) inz;
+  dcl-s isnumfld like(bool_t) inz;
   // ------------------------------------------------------------------------
 
   if (i_fldl0100.f1dtyp = 'S') or                                          // Zoned
@@ -1224,12 +1220,12 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_isfloatfld export;
-  dcl-pi *N        like(bool_t);
-    i_fldl0100      const  likeds(fldl0100_t);
+  dcl-pi *n like(bool_t);
+    i_fldl0100 likeds(fldl0100_t) const;
   end-pi;
 
   //  Funktionswert
-  dcl-s isfloat         like(bool_t) inz;
+  dcl-s isfloat like(bool_t) inz;
   // ------------------------------------------------------------------------
 
   if (i_fldl0100.f1dtyp = 'F');                                            // Float
@@ -1247,12 +1243,12 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_ischarfld export;
-  dcl-pi *N        like(bool_t);
-    i_fldl0100      const  likeds(fldl0100_t);
+  dcl-pi *n like(bool_t);
+    i_fldl0100 likeds(fldl0100_t) const;
   end-pi;
 
   //  Funktionswert
-  dcl-s ischarfld       like(bool_t) inz;
+  dcl-s ischarfld like(bool_t) inz;
   // ------------------------------------------------------------------------
 
   if (i_fldl0100.f1dtyp = 'A' or                                           // Alpha
@@ -1271,12 +1267,12 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_hasccsid export;
-  dcl-pi *N        like(bool_t);
-    i_fldl0100      const  likeds(fldl0100_t);
+  dcl-pi *n like(bool_t);
+    i_fldl0100 likeds(fldl0100_t) const;
   end-pi;
 
   //  Funktionswert
-  dcl-s hasccsid        like(bool_t) inz;
+  dcl-s hasccsid like(bool_t) inz;
   // ------------------------------------------------------------------------
 
   if (i_fldl0100.f1fdcc > 0 and
@@ -1295,7 +1291,7 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_appmsgf export;
-  dcl-pi *N        like(file_t);
+  dcl-pi *n like(file_t);
   end-pi;
   //------------------------------------------------------------*
 
@@ -1308,7 +1304,7 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_appmsgfl export;
-  dcl-pi *N        like(lib_t);
+  dcl-pi *n like(lib_t);
   end-pi;
   //------------------------------------------------------------*
 
@@ -1321,19 +1317,19 @@ end-proc;
 //===================================================================*
 
 dcl-proc p_rmvpgmmg export;
-  dcl-pi *N;
-    i_pgm        const  like(pgm_t);
+  dcl-pi *n;
+    i_pgm like(pgm_t) const;
   end-pi;
 
   //  Parameter für QMHRMVPM API
-  dcl-s stackCount         like(int4_t) inz;
-  dcl-s msgKey         char(4) inz;
+  dcl-s stackCount like(int4_t) inz;
+  dcl-s msgKey char(4) inz;
 
   dcl-ds errCode likeds(errCode_t) inz;
 
   dcl-ds qStackE qualified inz;
-    mod        like(mod_t);
-    pgm        like(pgm_t);
+    mod like(mod_t);
+    pgm like(pgm_t);
   end-ds;
   //------------------------------------------------------------*
 
@@ -1361,23 +1357,23 @@ end-proc;
 //===================================================================*
 
 dcl-proc p_sndpgmmg export;
-  dcl-pi *N;
-    i_msgid         const  like(msgid_t);
-    i_msgDta        const  like(msgdta_t);
-    i_pgmName       const  like(pgm_t);
-    i_msgType       const  like(msgtype_t) options(*nopass);
+  dcl-pi *n;
+    i_msgid   like(msgid_t) const;
+    i_msgDta  like(msgdta_t) const;
+    i_pgmName like(pgm_t) const;
+    i_msgType like(msgtype_t) options(*nopass) const;
   end-pi;
 
-  dcl-ds qMsgF      likeds(qObj_t) inz;
+  dcl-ds qMsgF likeds(qObj_t) inz;
 
-  dcl-s msgType     char(10) inz;
-  dcl-s stackE      like(proc_t) inz;
-  dcl-s stackCount  like(int4_t) inz;
-  dcl-s msgKey      char(4) inz;
+  dcl-s msgType char(10) inz;
+  dcl-s stackE like(proc_t) inz;
+  dcl-s stackCount like(int4_t) inz;
+  dcl-s msgKey char(4) inz;
 
   dcl-ds qStackE qualified;
-    module     like(mod_t) inz;
-    pgm        like(pgm_t) inz;
+    module like(mod_t) inz;
+    pgm    like(pgm_t) inz;
   end-ds;
 
   dcl-ds errCode likeds(errcode_t) inz;
@@ -1433,12 +1429,12 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_canusereffld export;
-  dcl-pi *N        like(bool_t);
-    i_fldl0100      const  likeds(fldl0100_t);
+  dcl-pi *n like(bool_t);
+    i_fldl0100 likeds(fldl0100_t) const;
   end-pi;
 
   //  Funktionswert
-  dcl-s canusereffld    like(bool_t) inz;
+  dcl-s canusereffld like(bool_t) inz;
   // ------------------------------------------------------------------------
 
   if (i_fldl0100.f1dtyp = 'G' or
@@ -1459,12 +1455,12 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_canusecntfld export;
-  dcl-pi *N        like(bool_t);
-    i_fldl0100      const  likeds(fldl0100_t);
+  dcl-pi *n like(bool_t);
+    i_fldl0100 likeds(fldl0100_t) const;
   end-pi;
 
   //  Funktionswert
-  dcl-s canusecntfld    like(bool_t) inz;
+  dcl-s canusecntfld like(bool_t) inz;
   // ------------------------------------------------------------------------
 
   if (i_fldl0100.f1dtyp = 'G' or
@@ -1485,7 +1481,7 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_mustcvtccsid export;
-  dcl-pi *N        like(bool_t);
+  dcl-pi *n like(bool_t);
   end-pi;
 
   dcl-ds jobi0400 likeds(jobi0400_t);
@@ -1509,12 +1505,12 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_istolong export;
-  dcl-pi *N        like(bool_t);
-    i_fldl0100      const  likeds(fldl0100_t);
+  dcl-pi *n like(bool_t);
+    i_fldl0100 likeds(fldl0100_t) const;
   end-pi;
 
   //  Funktionswert
-  dcl-s tolong          like(bool_t) inz;
+  dcl-s tolong like(bool_t) inz;
   // ------------------------------------------------------------------------
 
   if f_dsplyln(i_fldl0100)>f_maxdspln(i_fldl0100);
@@ -1532,12 +1528,12 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_istolongmax export;
-  dcl-pi *N        like(bool_t);
-    i_fldl0100      const  likeds(fldl0100_t);
+  dcl-pi *n like(bool_t);
+    i_fldl0100 likeds(fldl0100_t) const;
   end-pi;
 
   //  Funktionswert
-  dcl-s tolong          like(bool_t) inz;
+  dcl-s tolong like(bool_t) inz;
   // ------------------------------------------------------------------------
 
   if (f_buffln(i_fldl0100) > 1024);
@@ -1555,11 +1551,11 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_maxdspln export;
-  dcl-pi *N        like(int4_t);
-    i_fldl0100      const  likeds(fldl0100_t);
+  dcl-pi *n like(int4_t);
+    i_fldl0100 likeds(fldl0100_t) const;
   end-pi;
 
-  dcl-s maxlen          int(10) inz;
+  dcl-s maxlen int(10) inz;
   //------------------------------------------------------------*
 
   maxlen =  %int(f_cntfldln(i_fldl0100) * 15);
@@ -1576,8 +1572,8 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_cntfldln export;
-  dcl-pi *N        like(int4_t);
-    i_fldl0100      const  likeds(fldl0100_t);
+  dcl-pi *n like(int4_t);
+    i_fldl0100 likeds(fldl0100_t) const;
   end-pi;
   //------------------------------------------------------------*
 
@@ -1594,15 +1590,15 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_nbrdsprw export;
-  dcl-pi *N        like(int4_t);
-    i_fldl0100      const  likeds(fldl0100_t);
+  dcl-pi *n like(int4_t);
+    i_fldl0100 likeds(fldl0100_t) const;
   end-pi;
 
   // Funktionswert
-  dcl-s nbrdsprow       like(int4_t) inz;
+  dcl-s nbrdsprow like(int4_t) inz;
 
   // Arbeitsfelder
-  dcl-s dsplylen        like(int4_t);
+  dcl-s dsplylen like(int4_t);
   //------------------------------------------------------------*
 
   if (f_istolong(i_fldl0100) = bTrue);
@@ -1627,25 +1623,25 @@ end-proc;
 //===================================================================*
 
 dcl-proc p_dectobin export;
-  dcl-pi *N opdesc;
-    io_string       char(32767) options(*varsize);
-    i_startpos      const  like(int4_t);
-    i_length        const  like(int4_t);
-    i_value         const  like(int4_t);
+  dcl-pi *n opdesc;
+    io_string  char(32767) options(*varsize);
+    i_startpos like(int4_t) const;
+    i_length   like(int4_t) const;
+    i_value    like(int4_t) const;
   end-pi;
 
   // Parameters passed to CEEDOD
-  dcl-s desctype        int(10);
-  dcl-s datatype        int(10);
-  dcl-s descinfo1       int(10);
-  dcl-s descinfo2       int(10);
-  dcl-s parmlen         int(10);
+  dcl-s desctype int(10);
+  dcl-s datatype int(10);
+  dcl-s descinfo1 int(10);
+  dcl-s descinfo2 int(10);
+  dcl-s parmlen int(10);
 
   // Arbeitsfelder
-  dcl-ds *N;
-    intvalue        like(int4_t) inz;
-    alpha2          char(2) overlay(intvalue: 3);
-    alpha4          char(2) overlay(intvalue: 1);
+  dcl-ds *n;
+    intvalue like(int4_t) inz;
+    alpha2   char(2) overlay(intvalue: 3);
+    alpha4   char(2) overlay(intvalue: 1);
   end-ds;
   // ------------------------------------------------------------------------
 
@@ -1678,12 +1674,12 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_isnotalw export;
-  dcl-pi *N        like(bool_t);
-    i_fldl0100      const  likeds(fldl0100_t);
+  dcl-pi *n like(bool_t);
+    i_fldl0100 likeds(fldl0100_t) const;
   end-pi;
 
   // Funktionswert
-  dcl-s notAllowed      like(bool_t) inz(bTrue);
+  dcl-s notAllowed like(bool_t) inz(bTrue);
   // ------------------------------------------------------------------------
 
   //  Wenn es sich um einen der folgenden Feldtypen handelt, ...
@@ -1748,12 +1744,12 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_iskeyfld export;
-  dcl-pi *N        like(bool_t);
-    i_fldl0100      const  likeds(fldl0100_t);
+  dcl-pi *n like(bool_t);
+    i_fldl0100 likeds(fldl0100_t) const;
   end-pi;
 
   // Funktionswert
-  dcl-s iskeyfld        like(bool_t) inz(bFalse);
+  dcl-s iskeyfld like(bool_t) inz(bFalse);
   // ------------------------------------------------------------------------
 
   //  Wenn es sich um ein Schlüsselfeld handelt, ...
@@ -1774,9 +1770,9 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_pgmcalln export;
-  dcl-pi *N        like(pgmcalln_t);
-    i_pgmnme        const  like(pgm_t);
-    i_lib           const  like(lib_t) options(*nopass);
+  dcl-pi *n like(pgmcalln_t);
+    i_pgmnme like(pgm_t) const;
+    i_lib    like(lib_t) options(*nopass) const;
   end-pi;
   //------------------------------------------------------------*
 
@@ -1793,14 +1789,14 @@ end-proc;
 //===================================================================*
 
 dcl-proc p_sndstsmg export;
-  dcl-pi *N;
-    i_msgid         const like(msgid_t);
-    i_msgdta        const like(msgdta_t);
+  dcl-pi *n;
+    i_msgid  like(msgid_t) const;
+    i_msgdta like(msgdta_t) const;
   end-pi;
 
   dcl-ds yqmsgf likeds(qObj_t) inz;
 
-  dcl-s msgKey         char(4) inz;
+  dcl-s msgKey char(4) inz;
 
   dcl-ds errCode likeds(errcode_t) inz;
   //------------------------------------------------------------*
@@ -1828,32 +1824,28 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_rtvmsgd export;
-  dcl-pi *N              char(2048);
-    i_msgid         value  like(msgid_t);
-    i_msgdta        value  like(msgdta_t);
-    i_rplcsubv      const  like(bool_t)
-    options(*nopass);
-    i_rtnfmtcc      const  like(bool_t)
-    options(*nopass);
-    i_msgf          value  like(file_t)
-    options(*nopass);
-    i_msgfl         value  like(lib_t)
-    options(*nopass);
+  dcl-pi *n char(2048);
+    i_msgid    like(msgid_t) value;
+    i_msgdta   like(msgdta_t) value;
+    i_rplcsubv like(bool_t) options(*nopass) const;
+    i_rtnfmtcc like(bool_t) options(*nopass) const;
+    i_msgf     like(file_t) options(*nopass) value;
+    i_msgfl    like(lib_t) options(*nopass) value;
   end-pi;
 
   //  Funktionswert
-  /COPY QCOPYLE,RTVM0100
+/copy QCOPYLE,RTVM0100
 
   //  Parameter für QMHSNDPM
-  dcl-s msgdlen         int(10) inz;
-  dcl-s format          char(8) inz;
+  dcl-s msgdlen int(10) inz;
+  dcl-s format char(8) inz;
   dcl-ds qmsgf;
-    msgf            like(file_t)  inz;
-    msgfl           like(lib_t)  inz;
+    msgf  like(file_t) inz;
+    msgfl like(lib_t) inz;
   end-ds;
-  dcl-s msgdtaln        int(10) inz;
-  dcl-s rplcsubv        char(10) inz;
-  dcl-s rtnfmtcc        char(10) inz;
+  dcl-s msgdtaln int(10) inz;
+  dcl-s rplcsubv char(10) inz;
+  dcl-s rtnfmtcc char(10) inz;
   dcl-ds errcode likeds(errcode_t) inz;
 
   //------------------------------------------------------------*
@@ -1914,17 +1906,17 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_msgtext export;
-  dcl-pi *N              char(512);
-    i_msgid         value  like(msgid_t);
-    i_msgdta        value  like(msgdta_t);
-    i_msgf          value  like(file_t) options(*nopass);
-    i_msgfl         value  like(lib_t)  options(*nopass);
+  dcl-pi *n char(512);
+    i_msgid  like(msgid_t) value;
+    i_msgdta like(msgdta_t) value;
+    i_msgf   like(file_t) options(*nopass) value;
+    i_msgfl  like(lib_t) options(*nopass) value;
   end-pi;
 
   //  Funktionswert
-  dcl-s msgtext         char(512) inz;
+  dcl-s msgtext char(512) inz;
 
-  /COPY QCOPYLE,RTVM0100
+/copy QCOPYLE,RTVM0100
   //------------------------------------------------------------*
 
   select;
@@ -1951,18 +1943,18 @@ end-proc;
 //===================================================================*
 
 dcl-proc p_movpgmmg export;
-  dcl-pi *N;
-    i_pgmnme        const  like(pgm_t);
+  dcl-pi *n;
+    i_pgmnme like(pgm_t) const;
   end-pi;
 
-  dcl-s msgKey      char(4) inz;
+  dcl-s msgKey char(4) inz;
   dcl-s typesToMove char(10) dim(4);
 
   dcl-ds errCode likeds(errcode_t) inz;
 
   dcl-ds toQStackE qualified;
-    module       like(mod_t) inz;
-    pgm       like(pgm_t) inz;
+    module like(mod_t) inz;
+    pgm    like(pgm_t) inz;
   end-ds;
   //------------------------------------------------------------*
 
@@ -1985,17 +1977,17 @@ end-proc;
 //===================================================================*
 
 dcl-proc p_wrongkey export;
-  dcl-pi *N;
-    i_scnaid        const  like(scnaid_t);
-    i_pgmnme        const  like(pgm_t);
+  dcl-pi *n;
+    i_scnaid like(scnaid_t) const;
+    i_pgmnme like(pgm_t) const;
   end-pi;
 
   //  Arbeitsfelder
-  dcl-ds *N;
-    msgid           like(msgid_t) inz('AID');
-    msgnbr          char(4) overlay(msgid: 4);
+  dcl-ds *n;
+    msgid  like(msgid_t) inz('AID');
+    msgnbr char(4) overlay(msgid: 4);
   end-ds;
-  dcl-s msgdta      like(msgdta_t) inz;
+  dcl-s msgdta like(msgdta_t) inz;
   //------------------------------------------------------------*
 
   p_keytomsg(i_scnaid: msgid: msgdta);
@@ -2008,18 +2000,18 @@ end-proc;
 //===================================================================*
 
 dcl-proc p_keytomsg export;
-  dcl-pi *N;
-    i_scnaid        const  like(scnaid_t);
-    o_msgid         like(msgid_t);
-    o_msgdta        like(msgdta_t);
+  dcl-pi *n;
+    i_scnaid like(scnaid_t) const;
+    o_msgid  like(msgid_t);
+    o_msgdta like(msgdta_t);
   end-pi;
 
   //  Arbeitsfelder
-  dcl-ds *N;
-    msgid           like(msgid_t) inz;
-    msgnbr          char(4) overlay(msgid: 4);
+  dcl-ds *n;
+    msgid  like(msgid_t) inz;
+    msgnbr char(4) overlay(msgid: 4);
   end-ds;
-  dcl-s msgdta          like(msgdta_t) inz;
+  dcl-s msgdta like(msgdta_t) inz;
   //------------------------------------------------------------*
 
   msgid  = 'AID';
@@ -2104,20 +2096,20 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_splttxt_DEPRECATED export;
-  dcl-pi *N opdesc like(int4_t);
-    i_text          const  like(varString_t) options(*varsize);
-    i_strPos        const  like(int4_t);
-    i_len           const  like(int4_t);
-    o_text                 like(string_t) options(*varsize);
+  dcl-pi *n opdesc like(int4_t);
+    i_text   like(varString_t) options(*varsize) const;
+    i_strPos like(int4_t) const;
+    i_len    like(int4_t) const;
+    o_text   like(string_t) options(*varsize);
   end-pi;
 
   //  Funktionswert
-  dcl-s rtnLen          like(int4_t) inz;
+  dcl-s rtnLen like(int4_t) inz;
 
   //  Arbeitsfelder
-  dcl-s pNewLine        like(int4_t) inz;
-  dcl-s nextChar        char(1) inz;
-  dcl-s trimLen         like(int4_t) inz;
+  dcl-s pNewLine like(int4_t) inz;
+  dcl-s nextChar char(1) inz;
+  dcl-s trimLen like(int4_t) inz;
   //------------------------------------------------------------*
 
   //  Wenn die Startposition außerhalb des gültigen
@@ -2192,15 +2184,15 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_center export;
-  dcl-pi *N like(varString_t) opdesc;
-    i_text          const  like(varString_t) options(*varsize);
+  dcl-pi *n like(varString_t) opdesc;
+    i_text like(varString_t) options(*varsize) const;
   end-pi;
 
   // Funktionswert
   dcl-s text like(varString_t);
 
   //  Arbeitsfelder
-  dcl-s numSpaces       like(int4_t) inz;
+  dcl-s numSpaces like(int4_t) inz;
   //------------------------------------------------------------*
 
   text = %triml(i_text);
@@ -2219,13 +2211,13 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_addptr export;
-  dcl-pi *N pointer;
-    i_pointer       pointer value;
-    i_offset        int(5)  value;
+  dcl-pi *n pointer;
+    i_pointer pointer value;
+    i_offset  int(5) value;
   end-pi;
 
   //  Arbeitsfelder
-  dcl-s ofsary          char(1) dim(32767) based(pofsary);
+  dcl-s ofsary char(1) dim(32767) based(pofsary);
   //------------------------------------------------------------*
 
   dow i_offset > 0;
@@ -2251,17 +2243,17 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_iskeyexc export;
-  dcl-pi *N       like(bool_t);
-    i_data          value like(set0000_t);
-    i_exclkeys      value like(pgmcmd_t) dim(25);
+  dcl-pi *n like(bool_t);
+    i_data     like(set0000_t) value;
+    i_exclkeys like(pgmcmd_t) dim(25) value;
   end-pi;
 
   //  Funktionswert
-  dcl-s isExcluded      like(bool_t) inz;
+  dcl-s isExcluded like(bool_t) inz;
 
   //  Arbeitsfelder
-  dcl-s pgmCmd          like(pgmcmd_t) inz;
-  dcl-s in01            like(*in01     ) inz;
+  dcl-s pgmCmd like(pgmcmd_t) inz;
+  dcl-s in01 like(*in01) inz;
   //------------------------------------------------------------*
 
   in01 = *in01;
@@ -2298,20 +2290,17 @@ end-proc;
 //===============================================================*
 
 dcl-proc f_num_descr export;
-  dcl-pi *N like(int4_t);
-    i_type          value  like(int1_t);
-    i_length        value  like(int1_t);
-    i_fraction      value  like(int1_t);
+  dcl-pi *n like(int4_t);
+    i_type     like(int1_t) value;
+    i_length   like(int1_t) value;
+    i_fraction like(int1_t) value;
   end-pi;
 
-  dcl-ds *N;
-    num_descr       int(10) inz;
-    num_descr_type
-    int(3) overlay(num_descr: 1);
-    num_descr_fraction
-    int(3) overlay(num_descr: 2);
-    num_descr_length
-    int(3) overlay(num_descr: 3);
+  dcl-ds *n;
+    num_descr          int(10) inz;
+    num_descr_type     int(3) overlay(num_descr: 1);
+    num_descr_fraction int(3) overlay(num_descr: 2);
+    num_descr_length   int(3) overlay(num_descr: 3);
   end-ds;
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2328,25 +2317,25 @@ end-proc;
 //  f_NUM_Descr2
 //========================================================================*
 dcl-proc f_num_descr2 export;
-  dcl-pi *N like(int4_t);
-    i_type          value  like(dataType_t);
-    i_length        value  like(int1_t);
-    i_fractional    value  like(int1_t);
+  dcl-pi *n like(int4_t);
+    i_type       like(dataType_t) value;
+    i_length     like(int1_t) value;
+    i_fractional like(int1_t) value;
   end-pi;
 
   //  Parameter positions
 
   //  Return value
-  dcl-ds *N;
-    num_descr       int(10) inz;
-    num_descr_24    int(3) overlay(num_descr: 1);
-    num_descr_16    int(3) overlay(num_descr: *next);
-    num_descr_8     int(3) overlay(num_descr: *next);
-    num_descr_0     int(3) overlay(num_descr: *next);
+  dcl-ds *n;
+    num_descr    int(10) inz;
+    num_descr_24 int(3) overlay(num_descr: 1);
+    num_descr_16 int(3) overlay(num_descr: *next);
+    num_descr_8  int(3) overlay(num_descr: *next);
+    num_descr_0  int(3) overlay(num_descr: *next);
   end-ds;
 
   //  Arbeitsfelder
-  dcl-s type            int(3) inz;
+  dcl-s type int(3) inz;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   // Convert RPG type ...
@@ -2385,12 +2374,12 @@ end-proc;
 //  Converts a given RPG numeric field length to an integer length.
 //========================================================================*
 dcl-proc f_rpgtointlength export;
-  dcl-pi *N              int(10);
-    i_length        int(10) value;
+  dcl-pi *n int(10);
+    i_length int(10) value;
   end-pi;
 
   //  Return value
-  dcl-s intlength       int(10) inz;
+  dcl-s intlength int(10) inz;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   select;
@@ -2416,10 +2405,10 @@ end-proc;
 //===============================================================*
 
 dcl-proc p_clrerrno export;
-  dcl-pi *N;
+  dcl-pi *n;
   end-pi;
 
-  dcl-s runtimeerror    int(10) based(pruntimeerror);
+  dcl-s runtimeerror int(10) based(pruntimeerror);
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   pruntimeerror = errno();
@@ -2432,10 +2421,10 @@ end-proc;
 //===============================================================*
 
 dcl-proc f_errno export;
-  dcl-pi *N              int(10);
+  dcl-pi *n int(10);
   end-pi;
 
-  dcl-s runtimeerror    int(10) based(pruntimeerror);
+  dcl-s runtimeerror int(10) based(pruntimeerror);
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   pruntimeerror = errno();
@@ -2449,14 +2438,14 @@ end-proc;
 //===============================================================*
 
 dcl-proc f_strerror export;
-  dcl-pi *N        like(msgdta_t);
-    i_errno         int(10) const;
+  dcl-pi *n like(msgdta_t);
+    i_errno int(10) const;
   end-pi;
 
   //  Funktionswert
-  dcl-s errtext         like(msgdta_t) inz;
+  dcl-s errtext like(msgdta_t) inz;
 
-  dcl-s perrtext        pointer inz;
+  dcl-s perrtext pointer inz;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   perrtext = strerror(i_errno);
@@ -2475,16 +2464,16 @@ end-proc;
 //===============================================================*
 
 dcl-proc f_bitor export;
-  dcl-pi *N              uns(10);
-    i_arg1          uns(10) value;
-    i_arg2          uns(10) value;
-    i_arg3          uns(10) value  options(*nopass);
-    i_arg4          uns(10) value  options(*nopass);
-    i_arg5          uns(10) value  options(*nopass);
+  dcl-pi *n uns(10);
+    i_arg1 uns(10) value;
+    i_arg2 uns(10) value;
+    i_arg3 uns(10) options(*nopass) value;
+    i_arg4 uns(10) options(*nopass) value;
+    i_arg5 uns(10) options(*nopass) value;
   end-pi;
 
   //  Funktionswert
-  dcl-s result          uns(10) inz;
+  dcl-s result uns(10) inz;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   result = %bitor(i_arg1: i_arg2);
@@ -2521,13 +2510,13 @@ end-proc;
 //   doesExists    - Returns bTrue when the object exists.
 //=========================================================================
 dcl-proc f_exist export;
-  dcl-pi *N ind;
-    i_obj     char(10) const;
-    i_lib     char(10) const options(*omit);
-    i_type    char(10) const;
-    i_mbr     char(10) const options(*omit: *nopass);
-    o_msgID   like(msgID_t) options(*omit: *nopass);
-    o_msgDta  like(msgDta_t) options(*omit: *nopass);
+  dcl-pi *n ind;
+    i_obj    char(10) const;
+    i_lib    char(10) options(*omit) const;
+    i_type   char(10) const;
+    i_mbr    char(10) options(*omit: *nopass) const;
+    o_msgID  like(msgID_t) options(*omit: *nopass);
+    o_msgDta like(msgDta_t) options(*omit: *nopass);
   end-pi;
 
   //  Return value
@@ -2545,8 +2534,8 @@ dcl-proc f_exist export;
   dcl-ds qObj likeds(qobj_t) inz;
   dcl-ds errcode likeds(errcode_t) inz;
 
-  /include QCOPYLE,CPF9801
-  /include QCOPYLE,CPF9815
+/include QCOPYLE,CPF9801
+/include QCOPYLE,CPF9815
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   // Process optional parameter values ...
@@ -2651,32 +2640,32 @@ end-proc;
 //=========================================================================
 
 dcl-proc f_wordwrap export;
-  dcl-pi *N              varchar(4096);
-    i_string        varchar(4096) const;
-    i_width         uns(10) const;
-    io_startpos     uns(10);
-    i_options       uns(10) const  options(*nopass);
+  dcl-pi *n varchar(4096);
+    i_string    varchar(4096) const;
+    i_width     uns(10) const;
+    io_startpos uns(10);
+    i_options   uns(10) options(*nopass) const;
   end-pi;
 
   //  Return value
-  dcl-s text            varchar(4096) inz;
+  dcl-s text varchar(4096) inz;
 
   //  Optional parameter fields
-  dcl-s options         like(i_options) inz;
+  dcl-s options like(i_options) inz;
 
   //  Local fields
   dcl-ds theeop qualified;
-    isfound         ind inz(bFalse);
-    position        int(10);
-    string          varchar(2);
+    isfound  ind inz(bFalse);
+    position int(10);
+    string   varchar(2);
   end-ds;
-  dcl-s x               int(10) inz;
-  dcl-s tmpeop          varchar(2) inz;
-  dcl-s numeop          int(10) inz;
-  dcl-s eop             like(tmpeop) dim(3) inz;
-  dcl-s esc             char(1);
-  dcl-s startpos        like(io_startpos  ) inz;
-  dcl-s string          like(i_string     ) inz;
+  dcl-s x int(10) inz;
+  dcl-s tmpeop varchar(2) inz;
+  dcl-s numeop int(10) inz;
+  dcl-s eop like(tmpeop) dim(3) inz;
+  dcl-s esc char(1);
+  dcl-s startpos like(io_startpos) inz;
+  dcl-s string like(i_string) inz;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   // Process optional parameter values ...
@@ -2811,25 +2800,25 @@ end-proc;
 //=========================================================================
 
 dcl-proc lf_wordwrap;
-  dcl-pi *N              varchar(4096);
-    i_string        varchar(4096) const;
-    i_width         uns(10) const;
-    io_startpos     uns(10);
+  dcl-pi *n varchar(4096);
+    i_string    varchar(4096) const;
+    i_width     uns(10) const;
+    io_startpos uns(10);
   end-pi;
 
   //  Return value
-  dcl-s text            varchar(4096) inz;
+  dcl-s text varchar(4096) inz;
 
   //  Local fields
-  dcl-s spos            int(10) inz;
-  dcl-s epos            int(10) inz;
-  dcl-s eposconst       int(10) inz;
-  dcl-s length          int(10) inz;
-  dcl-s char            char(1) inz;
-  dcl-s x               int(10) inz;
+  dcl-s spos int(10) inz;
+  dcl-s epos int(10) inz;
+  dcl-s eposconst int(10) inz;
+  dcl-s length int(10) inz;
+  dcl-s char char(1) inz;
+  dcl-s x int(10) inz;
 
   //  Valid separater characters
-  dcl-c cdelimiter const(' -/\.:');
+  dcl-c cdelimiter ' -/\.:';
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   // Initialise helper fields
@@ -2906,16 +2895,16 @@ end-proc;
 //=========================================================================
 
 dcl-proc isBitOn export;
-  dcl-pi *N ind;
-    i_testbit       uns(10) value;
-    i_value         uns(10) value;
+  dcl-pi *n ind;
+    i_testbit uns(10) value;
+    i_value   uns(10) value;
   end-pi;
 
   //  Return value
-  dcl-s ison            ind inz(bTrue);
+  dcl-s ison ind inz(bTrue);
 
   //  Helper fields
-  dcl-s x               int(3) inz;
+  dcl-s x int(3) inz;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   ison = bTrue;
@@ -2948,15 +2937,15 @@ end-proc;
 //=========================================================================
 
 dcl-proc f_ucase export;
-  dcl-pi *N              varchar(4096);
-    i_string        varchar(4096) const;
+  dcl-pi *n varchar(4096);
+    i_string varchar(4096) const;
   end-pi;
 
   //  Return value
-  dcl-s string          varchar(4096) inz;
+  dcl-s string varchar(4096) inz;
 
   //  Fields for QlgConvertCase API
-  dcl-s stringbuf       char(4096) inz;
+  dcl-s stringbuf char(4096) inz;
   dcl-ds errCode likeds(errCode_t) inz;
 
   dcl-ds reqctrlblk likeds(QLGCNVCS_reqCtrlBlk_t) inz;
@@ -2995,9 +2984,9 @@ end-proc;
 //=========================================================================
 
 dcl-proc f_startsWith export;
-  dcl-pi *N              ind;
-    i_prefix        varchar(4096) const;
-    i_string        varchar(4096) const;
+  dcl-pi *n ind;
+    i_prefix varchar(4096) const;
+    i_string varchar(4096) const;
   end-pi;
 
   //  Return value
@@ -3031,13 +3020,13 @@ end-proc;
 //=========================================================================
 
 dcl-proc f_endswith export;
-  dcl-pi *N              ind;
-    i_suffix        varchar(4096) const;
-    i_string        varchar(4096) const;
+  dcl-pi *n ind;
+    i_suffix varchar(4096) const;
+    i_string varchar(4096) const;
   end-pi;
 
   //  Return value
-  dcl-s endswith        ind inz(bFalse);
+  dcl-s endswith ind inz(bFalse);
 
   //  Local fields
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -3065,17 +3054,17 @@ end-proc;
 //   void
 //=========================================================================
 dcl-proc f_sndmsgtocmdline export;
-  dcl-pi *N;
-    i_msgid         char(7) const;
-    i_msgdta        char(512) const;
+  dcl-pi *n;
+    i_msgid  char(7) const;
+    i_msgdta char(512) const;
   end-pi;
 
   //  Local fields
-  dcl-s msgkey          char(4) inz;
+  dcl-s msgkey char(4) inz;
 
   dcl-ds qmsgf qualified inz;
-    name            char(10);
-    lib             char(10);
+    name char(10);
+    lib  char(10);
   end-ds;
 
   dcl-ds errCode likeds(errCode_t) inz;
@@ -3098,18 +3087,18 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_fieldtypeasstring export;
-  dcl-pi *N              varchar(128);
-    i_fldl0100      const  likeds(fldl0100_t);
+  dcl-pi *n varchar(128);
+    i_fldl0100 likeds(fldl0100_t) const;
   end-pi;
 
   //  Funktionswert
-  dcl-s type            varchar(128) inz;
+  dcl-s type varchar(128) inz;
 
   //  Arbeitsfelder
-  dcl-s length          zoned(5) inz;
-  dcl-s decpos          zoned(2) inz;
-  dcl-s lengtha         varchar(16) inz;
-  dcl-s decposa         varchar(16) inz;
+  dcl-s length zoned(5) inz;
+  dcl-s decpos zoned(2) inz;
+  dcl-s lengtha varchar(16) inz;
+  dcl-s decposa varchar(16) inz;
   // ------------------------------------------------------------------------
 
   if (f_isnumfld(i_fldl0100) = bTrue);
@@ -3142,12 +3131,12 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_nextheadertype export;
-  dcl-pi *N              char(10);
-    i_headertype    char(10) value;
+  dcl-pi *n char(10);
+    i_headertype char(10) value;
   end-pi;
 
   //  Funktionswert
-  dcl-s type            char(10) inz;
+  dcl-s type char(10) inz;
   // ------------------------------------------------------------------------
 
   select;
@@ -3171,10 +3160,10 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_getrecordformatinf export;
-  dcl-pi *N likeds(rcdfmtinf_t);
-    i_file          value  like(file_t);
-    i_lib           value  like(lib_t);
-    i_rcdfmt        value  like(fmtid_t);
+  dcl-pi *n likeds(rcdfmtinf_t);
+    i_file   like(file_t) value;
+    i_lib    like(lib_t) value;
+    i_rcdfmt like(fmtid_t) value;
   end-pi;
 
   //  Funktionswert
@@ -3182,9 +3171,8 @@ dcl-proc f_getrecordformatinf export;
 
   dcl-ds qfile likeds(qobj_t);
   dcl-ds qfilertn likeds(qfile);
-  dcl-ds qdb_qddfmt likeds(qdb_qddfmt_t)
-  based(pqdb_qddfmt);
-  dcl-s size            int(10);
+  dcl-ds qdb_qddfmt likeds(qdb_qddfmt_t) based(pqdb_qddfmt);
+  dcl-s size int(10);
   dcl-ds errCode likeds(errCode_t) inz;
   // ----------------------------------------------------------------------
 
@@ -3221,14 +3209,14 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_space export;
-  dcl-pi *N like(varString_t);
-    i_length        int(10) value;
+  dcl-pi *n like(varString_t);
+    i_length int(10) value;
   end-pi;
 
   //  Funktionswert
-  dcl-s spaces          varchar(4096);
+  dcl-s spaces varchar(4096);
 
-  dcl-s x               int(10);
+  dcl-s x int(10);
   // ------------------------------------------------------------------------
 
   x = i_length;
@@ -3245,12 +3233,12 @@ end-proc;
 //  Funktion:  Kills the program, sending an *ESCAPE message.        *
 //===================================================================*
 dcl-proc p_kill export;
-  dcl-pi *N;
-    i_text          varchar(128) value;
+  dcl-pi *n;
+    i_text varchar(128) value;
   end-pi;
 
   //  Local fields
-  dcl-s msgKey          char(4) inz;
+  dcl-s msgKey char(4) inz;
 
   //  Qualified message file name
   dcl-ds qMsgF likeds(qObj_t) inz;
@@ -3279,16 +3267,16 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_mapcmdtomsg export;
-  dcl-pi *N like(msgid_t);
-    i_command       char(256) const;
-    i_section       const  like(section_t) options(*nopass);
+  dcl-pi *n like(msgid_t);
+    i_command char(256) const;
+    i_section like(section_t) options(*nopass) const;
   end-pi;
 
   //  Funktionswert
-  dcl-s msgid           like(msgid_t);
+  dcl-s msgid like(msgid_t);
 
   //  Optionale Parameter
-  dcl-s section         like(section_t) inz;
+  dcl-s section like(section_t) inz;
   // ------------------------------------------------------------------------
 
   if (%parms() >= %parmnum(i_section));

@@ -24,48 +24,47 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/COPY QCOPYLE,H_SPEC
-/COPY QCOPYLE,COPYRIGHT
+/copy QCOPYLE,H_SPEC
+/copy QCOPYLE,COPYRIGHT
 
-/COPY QCOPYLE,D_VARDEF
-/COPY QCOPYLE,FLDL0100
-/COPY QCOPYLE,SDS
-/COPY QCOPYLE,KEYL0100
-/COPY QCOPYLE,CEECNDHDLR
+/copy QCOPYLE,D_VARDEF
+/copy QCOPYLE,FLDL0100
+/copy QCOPYLE,SDS
+/copy QCOPYLE,KEYL0100
+/copy QCOPYLE,CEECNDHDLR
 
 /define internal_prototype
-/COPY QCOPYLE,PPEEK38
+/copy QCOPYLE,PPEEK38
 /undefine internal_prototype
 
-/COPY QCOPYLE,PPEEK41
+/copy QCOPYLE,PPEEK41
 
-/COPY QCOPYLE,PPEEK53
-/COPY QCOPYLE,PPEEK58
+/copy QCOPYLE,PPEEK53
+/copy QCOPYLE,PPEEK58
 
-dcl-ds yqfile     likeds(qobj_t) inz;
-dcl-s ydata       char(512);
+dcl-ds yqfile likeds(qobj_t) inz;
+dcl-s ydata char(512);
 
 dcl-s peek41_name like(pgmcalln_t);
 
-dcl-s rc          like(int4_t);
-dcl-s nbrofkey    like(int4_t);
-dcl-s tempfield   like(o_sqlorder );
-dcl-s keypart     varchar(32);
-dcl-ds keyl0100   likeds(keyl0100_t) inz;
+dcl-s rc like(int4_t);
+dcl-s nbrofkey like(int4_t);
+dcl-s tempfield like(o_sqlorder);
+dcl-s keypart varchar(32);
+dcl-ds keyl0100 likeds(keyl0100_t) inz;
 
-dcl-s isinzsr         like(bool_t) inz(bFalse);
+dcl-s isinzsr like(bool_t) inz(bFalse);
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
 //*******************************************************************
-
 dcl-pi peek38;
-  i_file          const like(file_t);
-  i_lib           const like(lib_t);
-  o_sqlorder      like(sqlorder_t);
+  i_file     like(file_t) const;
+  i_lib      like(lib_t) const;
+  o_sqlorder like(sqlorder_t);
 end-pi;
 
-dcl-s do_x1           packed(7);
+dcl-s do_x1 packed(7);
 //---------------------------------------------------*
 
 //  Register error handler
@@ -140,11 +139,11 @@ endsr;
 //============================================================*
 
 dcl-proc errorhandler;
-  dcl-pi *N;
-    i_condtoken     value likeds(cee_fc_t);
-    i_pcommarea     int(10) value;
-    o_action        int(10);
-    o_newcondtoken  likeds(cee_fc_t);
+  dcl-pi *n;
+    i_condtoken    likeds(cee_fc_t) value;
+    i_pcommarea    int(10) value;
+    o_action       int(10);
+    o_newcondtoken likeds(cee_fc_t);
   end-pi;
 
   dump;

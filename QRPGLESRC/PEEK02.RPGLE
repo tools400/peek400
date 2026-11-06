@@ -66,22 +66,22 @@
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
 ctl-opt main(peek02);
-/COPY QCOPYLE,H_SPEC
-/COPY QCOPYLE,COPYRIGHT
+/copy QCOPYLE,H_SPEC
+/copy QCOPYLE,COPYRIGHT
 
-/COPY QCOPYLE,D_VARDEF
-/COPY QCOPYLE,FLDL0100
-/COPY QCOPYLE,GENHEADER
-/COPY QCOPYLE,QUSCRTUS
-/COPY QCOPYLE,QUSPTRUS
-/COPY QCOPYLE,QUSLFLD
+/copy QCOPYLE,D_VARDEF
+/copy QCOPYLE,FLDL0100
+/copy QCOPYLE,GENHEADER
+/copy QCOPYLE,QUSCRTUS
+/copy QCOPYLE,QUSPTRUS
+/copy QCOPYLE,QUSLFLD
 
 /define internal_prototype
-/COPY QCOPYLE,PPEEK02
+/copy QCOPYLE,PPEEK02
 /undefine internal_prototype
 
-/COPY QCOPYLE,PPEEK53
-/COPY QCOPYLE,PPEEK58
+/copy QCOPYLE,PPEEK53
+/copy QCOPYLE,PPEEK58
 
 dcl-ds qUsrSpc likeds(qobj_t) inz;
 dcl-s pSpcPtr pointer;
@@ -90,26 +90,26 @@ dcl-ds errCode likeds(errcode_t) inz;
 dcl-ds genHeader likeds(genHeader_t) based(pSpcPtr);
 dcl-ds listHeader likeds(quslfld_header_t) based(pListHeader);
 
-dcl-s currListE       like(int4_t);
-dcl-s offsetListE     like(int4_t);
-dcl-s pListE          pointer;
+dcl-s currListE like(int4_t);
+dcl-s offsetListE like(int4_t);
+dcl-s pListE pointer;
 dcl-ds listE likeds(fldl0100_t) based(pListE);
 
-dcl-s msgID           like(msgid_t);
-dcl-s msgDta          like(msgDta_t);
+dcl-s msgID like(msgid_t);
+dcl-s msgDta like(msgDta_t);
 
 //*******************************************************************
 //           Main  Control block                                    *
 //*******************************************************************
 
 dcl-proc peek02;
-  dcl-pi *N;
-    i_qFile         const likeds(qobj_t);
-    i_rcdFmt        const like(fmt_t);
-    i_function      const like(function_t);
-    o_numE          like(int4_t);
-    o_fldl0100      likeds(fldl0100_t);
-    o_rcdFmtID      like(fmtid_t);
+  dcl-pi *n;
+    i_qFile    likeds(qobj_t) const;
+    i_rcdFmt   like(fmt_t) const;
+    i_function like(function_t) const;
+    o_numE     like(int4_t);
+    o_fldl0100 likeds(fldl0100_t);
+    o_rcdFmtID like(fmtid_t);
   end-pi;
 
   //---------------------------------------------------*

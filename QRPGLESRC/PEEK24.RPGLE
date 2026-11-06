@@ -24,76 +24,74 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/COPY QCOPYLE,H_SPEC
-/COPY QCOPYLE,COPYRIGHT
+/copy QCOPYLE,H_SPEC
+/copy QCOPYLE,COPYRIGHT
 
-dcl-f peek24fm workstn(*ext) usage(*input:*output)
-      usropn infds(workstn);
+dcl-f peek24fm workstn(*ext) usage(*input: *output) usropn infds(workstn);
 
 dcl-ds workstn likeds(workstn_t);
 dcl-ds cursorPosition likeds(cursorPosition_t) inz;
 
-/COPY QCOPYLE,D_VARDEF
-/COPY QCOPYLE,FLDL0100
-/COPY QCOPYLE,D_WORKSTN
-/COPY QCOPYLE,D_COLORATR
-/COPY QCOPYLE,ShortCmd_D
-/COPY QCOPYLE,SDS
-/COPY QCOPYLE,SCRNFKEYS
-/COPY QCOPYLE,CEECNDHDLR
+/copy QCOPYLE,D_VARDEF
+/copy QCOPYLE,FLDL0100
+/copy QCOPYLE,D_WORKSTN
+/copy QCOPYLE,D_COLORATR
+/copy QCOPYLE,ShortCmd_D
+/copy QCOPYLE,SDS
+/copy QCOPYLE,SCRNFKEYS
+/copy QCOPYLE,CEECNDHDLR
 
-/COPY QCOPYLE,SET0001
+/copy QCOPYLE,SET0001
 
 /define internal_prototype
-/COPY QCOPYLE,PPEEK24
+/copy QCOPYLE,PPEEK24
 /undefine internal_prototype
 
-/COPY QCOPYLE,USR8100
+/copy QCOPYLE,USR8100
 
-/COPY QCOPYLE,PPEEK21
-/COPY QCOPYLE,PPEEK23
-/COPY QCOPYLE,PPEEK25
+/copy QCOPYLE,PPEEK21
+/copy QCOPYLE,PPEEK23
+/copy QCOPYLE,PPEEK25
 
-/COPY QCOPYLE,PPEEK53
-/COPY QCOPYLE,PPEEK58
+/copy QCOPYLE,PPEEK53
+/copy QCOPYLE,PPEEK58
 
-dcl-s ymsgid          char(7) inz(*blanks);
-dcl-s ymsgdta         char(512) inz(*blanks);
+dcl-s ymsgid char(7) inz(*blanks);
+dcl-s ymsgdta char(512) inz(*blanks);
 
-dcl-s yfkeys          char(18) dim(32)       inz(*blanks);
-dcl-s ynbrofkeys      like(int4_t) inz;
+dcl-s yfkeys char(18) dim(32) inz(*blanks);
+dcl-s ynbrofkeys like(int4_t) inz;
 
-dcl-s ypgmcmd         char(10) inz(*blanks);
-dcl-s ycmddta         like(pgmcmddt_t) inz(*blanks);
+dcl-s ypgmcmd char(10) inz(*blanks);
+dcl-s ycmddta like(pgmcmddt_t) inz(*blanks);
 
-dcl-s sfbot           like(int4_t) inz;
-dcl-c NBR_F_KEYS const(2);
+dcl-s sfbot like(int4_t) inz;
+dcl-c NBR_F_KEYS 2;
 
-dcl-s wrk_field       char(10) inz(*blanks);
-dcl-s wrk_color       char(1) inz(*blanks);
+dcl-s wrk_field char(10) inz(*blanks);
+dcl-s wrk_color char(1) inz(*blanks);
 
 //  Farbe in SET0001, die mit PEEK25 geändert wird (aus PRF20)
-dcl-s pSetColor       pointer inz(*null);
-dcl-s setColor        char(1) based(pSetColor);
+dcl-s pSetColor pointer inz(*null);
+dcl-s setColor char(1) based(pSetColor);
 
-dcl-ds set0001        likeds(set0001_t) inz;
+dcl-ds set0001 likeds(set0001_t) inz;
 
-dcl-s peek21_name     like(pgmcalln_t) inz;
-dcl-s peek23_name     like(pgmcalln_t) inz;
-dcl-s peek25_name     like(pgmcalln_t) inz;
+dcl-s peek21_name like(pgmcalln_t) inz;
+dcl-s peek23_name like(pgmcalln_t) inz;
+dcl-s peek25_name like(pgmcalln_t) inz;
 
-dcl-s isInzSr         like(bool_t) inz(bFalse);
+dcl-s isInzSr like(bool_t) inz(bFalse);
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
 //*******************************************************************
-
 dcl-pi peek24;
-  i_dsp80         const like(dsp80_t);
-  i_copyright     const like(copyrght_t);
-  o_set0001       likeds(set0001_t);
-  o_msgid         like(msgid_t);
-  o_msgdta        like(msgdta_t);
+  i_dsp80     like(dsp80_t) const;
+  i_copyright like(copyrght_t) const;
+  o_set0001   likeds(set0001_t);
+  o_msgid     like(msgid_t);
+  o_msgdta    like(msgdta_t);
 end-pi;
 //---------------------------------------------------*
 
@@ -585,11 +583,11 @@ endsr;
 //============================================================*
 
 dcl-proc errorhandler;
-  dcl-pi *N;
-    i_condtoken     value likeds(cee_fc_t);
-    i_pcommarea     int(10) value;
-    o_action        int(10);
-    o_newcondtoken  likeds(cee_fc_t);
+  dcl-pi *n;
+    i_condtoken    likeds(cee_fc_t) value;
+    i_pcommarea    int(10) value;
+    o_action       int(10);
+    o_newcondtoken likeds(cee_fc_t);
   end-pi;
 
   dump;

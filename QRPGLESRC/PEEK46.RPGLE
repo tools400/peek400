@@ -63,51 +63,51 @@
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
 ctl-opt main(peek46);
-/COPY QCOPYLE,H_SPEC
-/COPY QCOPYLE,COPYRIGHT
+/copy QCOPYLE,H_SPEC
+/copy QCOPYLE,COPYRIGHT
 
-/COPY QCOPYLE,D_VARDEF
-/COPY QCOPYLE,MBRL0200
-/COPY QCOPYLE,GENHEADER
-/COPY QCOPYLE,FLDL0100
-/COPY QCOPYLE,QUSLMBR
-/COPY QCOPYLE,QUSCRTUS
-/COPY QCOPYLE,QUSPTRUS
+/copy QCOPYLE,D_VARDEF
+/copy QCOPYLE,MBRL0200
+/copy QCOPYLE,GENHEADER
+/copy QCOPYLE,FLDL0100
+/copy QCOPYLE,QUSLMBR
+/copy QCOPYLE,QUSCRTUS
+/copy QCOPYLE,QUSPTRUS
 
 /define internal_prototype
-/COPY QCOPYLE,PPEEK46
+/copy QCOPYLE,PPEEK46
 /undefine internal_prototype
 
-/COPY QCOPYLE,PPEEK53
-/COPY QCOPYLE,PPEEK58
+/copy QCOPYLE,PPEEK53
+/copy QCOPYLE,PPEEK58
 
 dcl-ds qusrspc likeds(qobj_t);
-dcl-s pspcptr  pointer;
+dcl-s pspcptr pointer;
 dcl-ds errcode likeds(errcode_t) inz;
 
 //  Organisation of generic header
 dcl-ds genheader likeds(genheader_t) based(pspcptr);
 
 //  List data
-dcl-s currliste       like(int4_t);
-dcl-s offsetliste     like(int4_t);
-dcl-s pliste          pointer;
+dcl-s currliste like(int4_t);
+dcl-s offsetliste like(int4_t);
+dcl-s pliste pointer;
 dcl-ds liste likeds(mbrl0200_t) based(pliste);
 
-dcl-s msgid           like(msgid_t);
-dcl-s msgdta          like(msgdta_t);
+dcl-s msgid like(msgid_t);
+dcl-s msgdta like(msgdta_t);
 
 //*******************************************************************
 //           Main  Control block                                    *
 //*******************************************************************
 
 dcl-proc peek46;
-  dcl-pi *N;
-    i_qfile         const likeds(qobj_t);
-    i_mbr           const like(mbr_t);
-    i_function      const like(function_t);
-    o_nume          like(int4_t);
-    o_mbrl0200      likeds(mbrl0200_t);
+  dcl-pi *n;
+    i_qfile    likeds(qobj_t) const;
+    i_mbr      like(mbr_t) const;
+    i_function like(function_t) const;
+    o_nume     like(int4_t);
+    o_mbrl0200 likeds(mbrl0200_t);
   end-pi;
 
   //---------------------------------------------------*

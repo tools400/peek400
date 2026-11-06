@@ -26,171 +26,168 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/COPY QCOPYLE,H_SPEC
-/COPY QCOPYLE,COPYRIGHT
+/copy QCOPYLE,H_SPEC
+/copy QCOPYLE,COPYRIGHT
 
 // Bildschirm
-dcl-f peek05fm workstn(*ext) usage(*input:*output)
-      usropn infds(workstn) sfile(pbsfl132:sflrec132)
-      sfile(pbsfl080:sflrec080);
+dcl-f peek05fm workstn(*ext) usage(*input: *output) usropn infds(workstn) sfile(pbsfl132: sflrec132)
+  sfile(pbsfl080: sflrec080);
 
-dcl-f peekfldl1 keyed rename(fpeekfld:fpeekfldl1) prefix(f_)
-      usropn infds(peek#l1);
+dcl-f peekfldl1 keyed rename(fpeekfld: fpeekfldl1) prefix(f_) usropn infds(peek#l1);
 
-dcl-f peekfld usage(*update:*delete) keyed prefix(f_)
-      usropn infds(peek#00);
+dcl-f peekfld usage(*update: *delete) keyed prefix(f_) usropn infds(peek#00);
 
 dcl-ds workstn likeds(workstn_t);
 dcl-ds cursorPosition likeds(cursorPosition_t) inz;
 
 dcl-ds peek#l1 likeds(infds_t);
 dcl-ds peek#00 likeds(infds_t);
-dcl-ds file#x  likeds(infds_t);
+dcl-ds file#x likeds(infds_t);
 
 // Für Einzelsatzzugriff zum Löschen von Datensätzen
-dcl-ds hfile00  likeds(hfile_t);
+dcl-ds hfile00 likeds(hfile_t);
 
 // Für Sortierung nach relativer Satznummer
-dcl-ds hfile01  likeds(hfile_t);
+dcl-ds hfile01 likeds(hfile_t);
 
 // Für Sortierung nach Schlüsselfolge
-dcl-ds hfile02  likeds(hfile_t);
+dcl-ds hfile02 likeds(hfile_t);
 
 // Für SQL Zugriff
-dcl-ds hfile03  likeds(hfile_t);
+dcl-ds hfile03 likeds(hfile_t);
 
 // Für Einzelsatzzugriff zum reinen Lesen von Datensätzen
-dcl-ds hfile04  likeds(hfile_t);
+dcl-ds hfile04 likeds(hfile_t);
 
-/COPY QCOPYLE,D_VARDEF
-/COPY QCOPYLE,ShortCmd_D
-/COPY QCOPYLE,D_WORKSTN
-/COPY QCOPYLE,D_COLORATR
-/COPY QCOPYLE,SCRNFKEYS
-/COPY QCOPYLE,SDS
-/COPY QCOPYLE,OBJD0400
-/COPY QCOPYLE,RCDL0200
-/COPY QCOPYLE,FLDL0100
-/COPY QCOPYLE,MBRD0200
-/COPY QCOPYLE,FILD0100
+/copy QCOPYLE,D_VARDEF
+/copy QCOPYLE,ShortCmd_D
+/copy QCOPYLE,D_WORKSTN
+/copy QCOPYLE,D_COLORATR
+/copy QCOPYLE,SCRNFKEYS
+/copy QCOPYLE,SDS
+/copy QCOPYLE,OBJD0400
+/copy QCOPYLE,RCDL0200
+/copy QCOPYLE,FLDL0100
+/copy QCOPYLE,MBRD0200
+/copy QCOPYLE,FILD0100
 
-/COPY QCOPYLE,SET0001
-/COPY QCOPYLE,SET0002
-/COPY QCOPYLE,SET0003
-/COPY QCOPYLE,SET0005
-/COPY QCOPYLE,SET0006
-/COPY QCOPYLE,SET0007
-/COPY QCOPYLE,SET0008
-/COPY QCOPYLE,SET0009
-/COPY QCOPYLE,SET0010
-/COPY QCOPYLE,SET0011
-/COPY QCOPYLE,SET0013
-/COPY QCOPYLE,SET0014
-/COPY QCOPYLE,SET0015
-/COPY QCOPYLE,SET0016
+/copy QCOPYLE,SET0001
+/copy QCOPYLE,SET0002
+/copy QCOPYLE,SET0003
+/copy QCOPYLE,SET0005
+/copy QCOPYLE,SET0006
+/copy QCOPYLE,SET0007
+/copy QCOPYLE,SET0008
+/copy QCOPYLE,SET0009
+/copy QCOPYLE,SET0010
+/copy QCOPYLE,SET0011
+/copy QCOPYLE,SET0013
+/copy QCOPYLE,SET0014
+/copy QCOPYLE,SET0015
+/copy QCOPYLE,SET0016
 
-/COPY QCOPYLE,USR0007
-/COPY QCOPYLE,USR0008
-/COPY QCOPYLE,USR0009
-/COPY QCOPYLE,USR0010
-/COPY QCOPYLE,USR0013
-/COPY QCOPYLE,USR0014
-/COPY QCOPYLE,USR8100
-/COPY QCOPYLE,USR8108
-/COPY QCOPYLE,USR8110
-/COPY QCOPYLE,USR8128
-/COPY QCOPYLE,USR8144
-/COPY QCOPYLE,USR8147
-/COPY QCOPYLE,USR8148
-/COPY QCOPYLE,USR8190
-/COPY QCOPYLE,USR8196
-/COPY QCOPYLE,USR8200
-/COPY QCOPYLE,USR8201
-/COPY QCOPYLE,USR8202
-/COPY QCOPYLE,USR8203
-/COPY QCOPYLE,USR8206
-/COPY QCOPYLE,USR8207
-/COPY QCOPYLE,USR8212
-/COPY QCOPYLE,USR8217
-/COPY QCOPYLE,USR8218
-/COPY QCOPYLE,USR8223
-/COPY QCOPYLE,USR8224
-/COPY QCOPYLE,USR8235
-/COPY QCOPYLE,USR9993
-/COPY QCOPYLE,USR9996
-/COPY QCOPYLE,USR9998
-/COPY QCOPYLE,USR9999
+/copy QCOPYLE,USR0007
+/copy QCOPYLE,USR0008
+/copy QCOPYLE,USR0009
+/copy QCOPYLE,USR0010
+/copy QCOPYLE,USR0013
+/copy QCOPYLE,USR0014
+/copy QCOPYLE,USR8100
+/copy QCOPYLE,USR8108
+/copy QCOPYLE,USR8110
+/copy QCOPYLE,USR8128
+/copy QCOPYLE,USR8144
+/copy QCOPYLE,USR8147
+/copy QCOPYLE,USR8148
+/copy QCOPYLE,USR8190
+/copy QCOPYLE,USR8196
+/copy QCOPYLE,USR8200
+/copy QCOPYLE,USR8201
+/copy QCOPYLE,USR8202
+/copy QCOPYLE,USR8203
+/copy QCOPYLE,USR8206
+/copy QCOPYLE,USR8207
+/copy QCOPYLE,USR8212
+/copy QCOPYLE,USR8217
+/copy QCOPYLE,USR8218
+/copy QCOPYLE,USR8223
+/copy QCOPYLE,USR8224
+/copy QCOPYLE,USR8235
+/copy QCOPYLE,USR9993
+/copy QCOPYLE,USR9996
+/copy QCOPYLE,USR9998
+/copy QCOPYLE,USR9999
 
 /define internal_prototype
-/COPY QCOPYLE,PPEEK05
+/copy QCOPYLE,PPEEK05
 /undefine internal_prototype
 
-/COPY QCOPYLE,PUPDPGM
-/COPY QCOPYLE,PPEEK01
-/COPY QCOPYLE,PPEEK03
-/COPY QCOPYLE,PPEEK04
-/COPY QCOPYLE,PPEEK06
-/COPY QCOPYLE,PPEEK07
-/COPY QCOPYLE,PPEEK08
-/COPY QCOPYLE,PPEEK09
-/COPY QCOPYLE,PPEEK10
-/COPY QCOPYLE,PPEEK12
-/COPY QCOPYLE,PPEEK13
-/COPY QCOPYLE,PPEEK14
-/COPY QCOPYLE,PPEEK17
-/COPY QCOPYLE,PPEEK18
-/COPY QCOPYLE,PPEEK19
-/COPY QCOPYLE,PPEEK20
-/COPY QCOPYLE,PPEEK21
-/COPY QCOPYLE,PPEEK23
-/COPY QCOPYLE,PPEEK24
-/COPY QCOPYLE,PPEEK26
-/COPY QCOPYLE,PPEEK27
-/COPY QCOPYLE,PPEEK30
-/COPY QCOPYLE,PPEEK32
-/COPY QCOPYLE,PPEEK33
-/COPY QCOPYLE,PPEEK34
-/COPY QCOPYLE,PPEEK37
-/COPY QCOPYLE,PPEEK38
-/COPY QCOPYLE,PPEEK40
-/COPY QCOPYLE,PPEEK41
-/COPY QCOPYLE,PPEEK42
-/COPY QCOPYLE,PPEEK47
-/COPY QCOPYLE,PPEEK48
-/COPY QCOPYLE,PPEEK49
-/COPY QCOPYLE,PPEEK50
-/COPY QCOPYLE,PPEEK52
-/COPY QCOPYLE,PPEEK54
-/COPY QCOPYLE,PPEEK55
-/COPY QCOPYLE,PPEEK56
-/COPY QCOPYLE,PPEEK57
-/COPY QCOPYLE,PPEEK59
-/COPY QCOPYLE,PPEEK65
-/COPY QCOPYLE,PPEEK68
-/COPY QCOPYLE,PPEEK69
-/COPY QCOPYLE,PPEEK51
-/COPY QCOPYLE,PPEEK53
-/COPY QCOPYLE,PPEEK58
-/COPY QCOPYLE,PPEEK71
-/COPY QCOPYLE,PPEEK63
+/copy QCOPYLE,PUPDPGM
+/copy QCOPYLE,PPEEK01
+/copy QCOPYLE,PPEEK03
+/copy QCOPYLE,PPEEK04
+/copy QCOPYLE,PPEEK06
+/copy QCOPYLE,PPEEK07
+/copy QCOPYLE,PPEEK08
+/copy QCOPYLE,PPEEK09
+/copy QCOPYLE,PPEEK10
+/copy QCOPYLE,PPEEK12
+/copy QCOPYLE,PPEEK13
+/copy QCOPYLE,PPEEK14
+/copy QCOPYLE,PPEEK17
+/copy QCOPYLE,PPEEK18
+/copy QCOPYLE,PPEEK19
+/copy QCOPYLE,PPEEK20
+/copy QCOPYLE,PPEEK21
+/copy QCOPYLE,PPEEK23
+/copy QCOPYLE,PPEEK24
+/copy QCOPYLE,PPEEK26
+/copy QCOPYLE,PPEEK27
+/copy QCOPYLE,PPEEK30
+/copy QCOPYLE,PPEEK32
+/copy QCOPYLE,PPEEK33
+/copy QCOPYLE,PPEEK34
+/copy QCOPYLE,PPEEK37
+/copy QCOPYLE,PPEEK38
+/copy QCOPYLE,PPEEK40
+/copy QCOPYLE,PPEEK41
+/copy QCOPYLE,PPEEK42
+/copy QCOPYLE,PPEEK47
+/copy QCOPYLE,PPEEK48
+/copy QCOPYLE,PPEEK49
+/copy QCOPYLE,PPEEK50
+/copy QCOPYLE,PPEEK52
+/copy QCOPYLE,PPEEK54
+/copy QCOPYLE,PPEEK55
+/copy QCOPYLE,PPEEK56
+/copy QCOPYLE,PPEEK57
+/copy QCOPYLE,PPEEK59
+/copy QCOPYLE,PPEEK65
+/copy QCOPYLE,PPEEK68
+/copy QCOPYLE,PPEEK69
+/copy QCOPYLE,PPEEK51
+/copy QCOPYLE,PPEEK53
+/copy QCOPYLE,PPEEK58
+/copy QCOPYLE,PPEEK71
+/copy QCOPYLE,PPEEK63
 
-/COPY QCOPYLE,PEXIT01
-/COPY QCOPYLE,PEXIT04
+/copy QCOPYLE,PEXIT01
+/copy QCOPYLE,PEXIT04
 
-dcl-ds set0001  likeds(set0001_t) inz;
-dcl-ds set0002  likeds(set0002_t) inz;
-dcl-ds set0003  likeds(set0003_t) inz;
-dcl-ds set0005  likeds(set0005_t) inz;
-dcl-ds set0006  likeds(set0006_t) inz;
-dcl-ds set0007  likeds(set0007_t) inz;
-dcl-ds set0008  likeds(set0008_t) inz;
-dcl-ds set0009  likeds(set0009_t) inz;
-dcl-ds set0010  likeds(set0010_t) inz;
-dcl-ds set0011  likeds(set0011_t) inz;
-dcl-ds set0013  likeds(set0013_t) inz;
-dcl-ds set0014  likeds(set0014_t) inz;
-dcl-ds set0015  likeds(set0015_t) inz;
-dcl-ds set0016  likeds(set0016_t) inz;
+dcl-ds set0001 likeds(set0001_t) inz;
+dcl-ds set0002 likeds(set0002_t) inz;
+dcl-ds set0003 likeds(set0003_t) inz;
+dcl-ds set0005 likeds(set0005_t) inz;
+dcl-ds set0006 likeds(set0006_t) inz;
+dcl-ds set0007 likeds(set0007_t) inz;
+dcl-ds set0008 likeds(set0008_t) inz;
+dcl-ds set0009 likeds(set0009_t) inz;
+dcl-ds set0010 likeds(set0010_t) inz;
+dcl-ds set0011 likeds(set0011_t) inz;
+dcl-ds set0013 likeds(set0013_t) inz;
+dcl-ds set0014 likeds(set0014_t) inz;
+dcl-ds set0015 likeds(set0015_t) inz;
+dcl-ds set0016 likeds(set0016_t) inz;
 
 dcl-ds objd0400 likeds(objd0400_t) inz;
 dcl-ds rcdl0200 likeds(rcdl0200_t) inz;
@@ -198,24 +195,24 @@ dcl-ds fldl0100 likeds(fldl0100_t) inz;
 dcl-ds mbrd0200 likeds(mbrd0200_t) inz;
 dcl-ds fild0100 likeds(fild0100_t) inz;
 
-dcl-pr f_int           zoned(20);
-  inpvalue        zoned(25:5) value;
+dcl-pr f_int zoned(20);
+  inpvalue zoned(25: 5) value;
 end-pr;
 
-dcl-pr f_chain00       char(1);
-  i_rrn           value  like(rcdNbr_t);
-  i_file          value  like(file_t);
-  i_lib           value  like(lib_t);
-  i_mbr           value  like(mbr_t);
-  i_rcdfmt        char(10) value;
+dcl-pr f_chain00 char(1);
+  i_rrn    like(rcdNbr_t) value;
+  i_file   like(file_t) value;
+  i_lib    like(lib_t) value;
+  i_mbr    like(mbr_t) value;
+  i_rcdfmt char(10) value;
 end-pr;
 
-dcl-pr f_chain04       char(1);
-  i_rrn           value  like(rcdNbr_t);
-  i_file          value  like(file_t);
-  i_lib           value  like(lib_t);
-  i_mbr           value  like(mbr_t);
-  i_rcdfmt        char(10) value;
+dcl-pr f_chain04 char(1);
+  i_rrn    like(rcdNbr_t) value;
+  i_file   like(file_t) value;
+  i_lib    like(lib_t) value;
+  i_mbr    like(mbr_t) value;
+  i_rcdfmt char(10) value;
 end-pr;
 
 //----------------------------------------------------*
@@ -223,420 +220,419 @@ end-pr;
 //----------------------------------------------------*
 
 dcl-ds io_buff;
-  io_bufffld      like(rcdbuf_t);
+  io_bufffld like(rcdbuf_t);
 end-ds;
 
-dcl-s io_nullmap      like(nullmap_t) dim(NULL_MAP_SIZE);
+dcl-s io_nullmap like(nullmap_t) dim(NULL_MAP_SIZE);
 
 dcl-ds rtn qualified inz;
-  file            like(##file);
-  library         like(##library);
-  member          like(##member);
-  format          like(##format);
-  accessmode      like(accessMode);
-  sqlwhere        like(sqlWhere);
-  sqlorder        like(sqlOrder);
+  file       like(##file);
+  library    like(##library);
+  member     like(##member);
+  format     like(##format);
+  accessmode like(accessMode);
+  sqlwhere   like(sqlWhere);
+  sqlorder   like(sqlOrder);
 end-ds;
 
 dcl-ds yQFile inz;
-  yFile           like(file_t);
-  yLibrary        like(lib_t);
+  yFile    like(file_t);
+  yLibrary like(lib_t);
 end-ds;
 
-dcl-s isLicenceError  like(bool_t) inz(bTrue);
-dcl-s yformat         like(rcdfmt_t) inz;
-dcl-s yMsgID          char(7) inz;
-dcl-s yMsgDta         char(512) inz;
+dcl-s isLicenceError like(bool_t) inz(bTrue);
+dcl-s yformat like(rcdfmt_t) inz;
+dcl-s yMsgID char(7) inz;
+dcl-s yMsgDta char(512) inz;
 
-dcl-s yMember         like(mbr_t) inz;
+dcl-s yMember like(mbr_t) inz;
 
-dcl-s yattrlen        like(int4_t) inz;
-dcl-s yattrtyp        char(1) inz;
-dcl-s yvalue          char(512) inz;
+dcl-s yattrlen like(int4_t) inz;
+dcl-s yattrtyp char(1) inz;
+dcl-s yvalue char(512) inz;
 
-dcl-s ydsp80          like(set0001_t.set_dsp80) inz;
-dcl-s yCopyright      like(copyrght_t) inz(COPYRIGHT);
+dcl-s ydsp80 like(set0001_t.set_dsp80) inz;
+dcl-s yCopyright like(copyrght_t) inz(copyright);
 
-dcl-s yfmtnbr         int(5) inz;
+dcl-s yfmtnbr int(5) inz;
 
-dcl-s yHeaderType     char(10) inz;
-dcl-s yRcdNbr         inz(0) like(rcdNbr_t);
-dcl-s yFunction       char(10) inz;
-dcl-s yCommitLvl      like(commitLvl) inz('0');
-dcl-s yIsUpdKey       inz(bFalse)  like(isUpdKey );
-dcl-s yScreenNbr      like(int4_t) inz;
-dcl-s yIsLower        char(1) inz(bFalse);
+dcl-s yHeaderType char(10) inz;
+dcl-s yRcdNbr inz(0) like(rcdNbr_t);
+dcl-s yFunction char(10) inz;
+dcl-s yCommitLvl like(commitLvl) inz('0');
+dcl-s yIsUpdKey inz(bFalse) like(isUpdKey);
+dcl-s yScreenNbr like(int4_t) inz;
+dcl-s yIsLower char(1) inz(bFalse);
 
 dcl-ds yCursorPosition likeds(cursorPosition_t) inz;
 
-dcl-s ycvtccsid       char(1) inz(bTrue  );
-dcl-s ydata           char(512) inz;
+dcl-s ycvtccsid char(1) inz(bTrue);
+dcl-s ydata char(512) inz;
 
-dcl-ds yRetFile       likeds(qObj_t);
+dcl-ds yRetFile likeds(qObj_t);
 
-dcl-s yrtncode        char(1) inz;
+dcl-s yrtncode char(1) inz;
 
-dcl-s yfield          like(srchfield) inz;
-dcl-s yoperation      like(srchop   ) inz;
-dcl-s yargument       like(srcharg  ) inz;
-dcl-s ysign           like(srchsign ) inz;
-dcl-s ysrchnbrs       like(srchnbrs ) inz(0 );
-dcl-s ysrchtype       like(srchtype ) inz;
-dcl-s ysrchcase       like(srchcase ) inz(bFalse );
+dcl-s yfield like(srchfield) inz;
+dcl-s yoperation like(srchop) inz;
+dcl-s yargument like(srcharg) inz;
+dcl-s ysign like(srchsign) inz;
+dcl-s ysrchnbrs like(srchnbrs) inz(0);
+dcl-s ysrchtype like(srchtype) inz;
+dcl-s ysrchcase like(srchcase) inz(bFalse);
 
-dcl-s ybuffer         like(rcdbuf_t) inz;
-dcl-ds *N;
-  yhexstring      like(hexbuf_t);
-  youtbuffer      like(rcdbuf_t) overlay(yhexstring:1);
+dcl-s ybuffer like(rcdbuf_t) inz;
+dcl-ds *n;
+  yhexstring like(hexbuf_t);
+  youtbuffer like(rcdbuf_t) overlay(yhexstring: 1);
 end-ds;
 
-dcl-s youtbuffln      like(int4_t) inz;
-dcl-s ytgtvalue       char(10) inz;
+dcl-s youtbuffln like(int4_t) inz;
+dcl-s ytgtvalue char(10) inz;
 
-dcl-s ykeyval         like(keybuf_t) inz;
+dcl-s ykeyval like(keybuf_t) inz;
 
-dcl-s yPgmCmd         char(10) inz;
-dcl-s ycmddta         like(pgmcmddt_t) inz;
+dcl-s yPgmCmd char(10) inz;
+dcl-s ycmddta like(pgmcmddt_t) inz;
 
-dcl-s yFKeys          char(18) dim(32)       inz;
-dcl-s yNbrOFKeys      like(int4_t) inz;
+dcl-s yFKeys char(18) dim(32) inz;
+dcl-s yNbrOFKeys like(int4_t) inz;
 
-dcl-s ychoice         like(choice_t) dim(32) inz;
-dcl-s ynbrofch        like(int4_t) inz;
+dcl-s ychoice like(choice_t) dim(32) inz;
+dcl-s ynbrofch like(int4_t) inz;
 
-dcl-s yflag           inz(*zeros)  like(int4_t);
+dcl-s yflag inz(*zeros) like(int4_t);
 
-dcl-s buffidx         like(int4_t) inz;
+dcl-s buffidx like(int4_t) inz;
 
 dcl-ds shortcmd likeds(shortcmd_t) inz;
-dcl-s yexeccmd        like(cmdbuffer_t) inz;
-dcl-s ynbrofent       like(int4_t) inz;
-dcl-s ysqlwhere       like(sqlwhere_t) inz;
-dcl-s ysqlorder       like(sqlorder_t) inz;
-dcl-s yalwlc          char(1) inz;
-dcl-s ycase           char(1) inz;
-dcl-s yrcdlock        char(1) inz;
-dcl-s ynulldft        char(1) inz;
-dcl-s ykeepcrs        char(1) inz;
-dcl-s yenvfile        like(file_t)  inz;
-dcl-s yenvlib         like(lib_t)  inz;
-dcl-s yenvmbr         like(mbr_t)  inz;
-dcl-s yisautosave     like(bool_t)  inz(bFalse);
-dcl-s yIsKeyLower     like(bool_t)  inz;
-dcl-s yoption         like(option_t)  inz;
-dcl-s ytext           like(text_t);
-dcl-s ysflopt         char(2);
-dcl-s ystring         like(rcdbuf_t) inz;
-dcl-s ystringlen      like(int4_t) inz;
+dcl-s yexeccmd like(cmdbuffer_t) inz;
+dcl-s ynbrofent like(int4_t) inz;
+dcl-s ysqlwhere like(sqlwhere_t) inz;
+dcl-s ysqlorder like(sqlorder_t) inz;
+dcl-s yalwlc char(1) inz;
+dcl-s ycase char(1) inz;
+dcl-s yrcdlock char(1) inz;
+dcl-s ynulldft char(1) inz;
+dcl-s ykeepcrs char(1) inz;
+dcl-s yenvfile like(file_t) inz;
+dcl-s yenvlib like(lib_t) inz;
+dcl-s yenvmbr like(mbr_t) inz;
+dcl-s yisautosave like(bool_t) inz(bFalse);
+dcl-s yIsKeyLower like(bool_t) inz;
+dcl-s yoption like(option_t) inz;
+dcl-s ytext like(text_t);
+dcl-s ysflopt char(2);
+dcl-s ystring like(rcdbuf_t) inz;
+dcl-s ystringlen like(int4_t) inz;
 
-dcl-c HEX_CHAR const('-');
+dcl-c HEX_CHAR '-';
 
-dcl-s isReadSfl         like(bool_t) inz(bFalse);
-dcl-s ispbinit          char(1) inz(bFalse);
-dcl-s isfirstsfl        char(1) inz(bFalse);
-dcl-s isfilechg         char(1) inz(bFalse);
-dcl-s istblcol          char(1) inz(bFalse);
-dcl-s isTargetOK        like(bool_t) inz(bFalse);
-dcl-s isSeqNbrOK        like(bool_t) inz(bFalse);
-dcl-s isOpen            like(bool_t) inz(bFalse);
-dcl-s isUpdMod          like(bool_t) inz(bFalse);
-dcl-s isUpdKey          like(bool_t) inz(bFalse);
-dcl-s isVisible         like(bool_t) inz(bFalse);
-dcl-s isError           like(bool_t) inz(bFalse);
-dcl-s isfileerror       char(1) inz(bFalse);
-dcl-s iskeyavail        char(1) inz(bFalse);
-dcl-s iskeychg          char(1) inz(bFalse);
-dcl-s isSflDirty        char(1) inz(bFalse);
-dcl-s isTryed           char(1) inz(bFalse);
-dcl-s ispinned          char(1) inz(bFalse);
-dcl-s ispinmoder        char(1) inz(bFalse);
-dcl-s isPinModeC        char(1) inz(bFalse);
-dcl-s ispinok           char(1) inz(bFalse);
-dcl-s ispinrmv          char(1) inz(bFalse);
-dcl-s iseof             char(1) inz(bFalse);
-dcl-s queryUser         like(sfl_cmd) inz(*allx'00');
-dcl-s isfound           char(1) inz(bFalse);
-dcl-s isCmdErr          char(1) inz(bFalse);
-dcl-s isCancel          char(1) inz(bFalse);
-dcl-s r#iscmderr        char(1) inz(bFalse);
-dcl-s iscvtchar         char(1) inz(bFalse);
-dcl-s isPinToClr        char(1) inz(bTrue );
-dcl-s isreadc           char(1) inz(bFalse);
+dcl-s isReadSfl like(bool_t) inz(bFalse);
+dcl-s ispbinit char(1) inz(bFalse);
+dcl-s isfirstsfl char(1) inz(bFalse);
+dcl-s isfilechg char(1) inz(bFalse);
+dcl-s istblcol char(1) inz(bFalse);
+dcl-s isTargetOK like(bool_t) inz(bFalse);
+dcl-s isSeqNbrOK like(bool_t) inz(bFalse);
+dcl-s isOpen like(bool_t) inz(bFalse);
+dcl-s isUpdMod like(bool_t) inz(bFalse);
+dcl-s isUpdKey like(bool_t) inz(bFalse);
+dcl-s isVisible like(bool_t) inz(bFalse);
+dcl-s isError like(bool_t) inz(bFalse);
+dcl-s isfileerror char(1) inz(bFalse);
+dcl-s iskeyavail char(1) inz(bFalse);
+dcl-s iskeychg char(1) inz(bFalse);
+dcl-s isSflDirty char(1) inz(bFalse);
+dcl-s isTryed char(1) inz(bFalse);
+dcl-s ispinned char(1) inz(bFalse);
+dcl-s ispinmoder char(1) inz(bFalse);
+dcl-s isPinModeC char(1) inz(bFalse);
+dcl-s ispinok char(1) inz(bFalse);
+dcl-s ispinrmv char(1) inz(bFalse);
+dcl-s iseof char(1) inz(bFalse);
+dcl-s queryUser like(sfl_cmd) inz(*allx'00');
+dcl-s isfound char(1) inz(bFalse);
+dcl-s isCmdErr char(1) inz(bFalse);
+dcl-s isCancel char(1) inz(bFalse);
+dcl-s r#iscmderr char(1) inz(bFalse);
+dcl-s iscvtchar char(1) inz(bFalse);
+dcl-s isPinToClr char(1) inz(bTrue);
+dcl-s isreadc char(1) inz(bFalse);
 dcl-s isColumnException like(bool_t) inz(bFalse);
-dcl-s isKeyLower        like(bool_t) inz(bFalse);
+dcl-s isKeyLower like(bool_t) inz(bFalse);
 
-dcl-s commitLvl         char(1) inz('0');
+dcl-s commitLvl char(1) inz('0');
 
 dcl-ds auth qualified;
-  isChgLibAlw         like(bool_t) inz(bFalse);
-  isChgFileAlw        like(bool_t) inz(bFalse);
-  isChgMbrAlw         like(bool_t) inz(bFalse);
-  isUpdAlw            like(bool_t) inz(bFalse);
-  isUpdKeyAlw         like(bool_t) inz(bFalse);
-  isChgSQLWhereAlw    like(bool_t) inz(bFalse);
-  isChgSQLOrderByAlw  like(bool_t) inz(bFalse);
-  isAccessAlw         like(bool_t) inz(bFalse);
+  isChgLibAlw        like(bool_t) inz(bFalse);
+  isChgFileAlw       like(bool_t) inz(bFalse);
+  isChgMbrAlw        like(bool_t) inz(bFalse);
+  isUpdAlw           like(bool_t) inz(bFalse);
+  isUpdKeyAlw        like(bool_t) inz(bFalse);
+  isChgSQLWhereAlw   like(bool_t) inz(bFalse);
+  isChgSQLOrderByAlw like(bool_t) inz(bFalse);
+  isAccessAlw        like(bool_t) inz(bFalse);
 end-ds;
 
-dcl-s sflpage         like(int4_t) inz;
-dcl-s sflrec080       inz(0) like(sflpage);
-dcl-s sflrec132       inz(0) like(sflpage);
-dcl-s sflnbrrcd       inz(0) like(sflpage);
-dcl-s sflMaxRowLen    like(int4_t) inz;
-dcl-s sfldatalenfree  like(int4_t) inz;
-dcl-s sftop           like(int4_t) inz;
-dcl-s sfbot           like(int4_t) inz;
-dcl-s sfl_cmd         char(10) inz;
-dcl-s sflheadlrw      inz(0) like(sflpage);
-dcl-s sflfirstrw      inz(0) like(sflpage);
-dcl-s sfllastrw       inz(0) like(sflpage);
-dcl-s sflleftofs      like(int4_t) inz;
-dcl-s sflmode         char(10) inz;
-dcl-s sflpinrnge      like(int4_t) inz;
+dcl-s sflpage like(int4_t) inz;
+dcl-s sflrec080 inz(0) like(sflpage);
+dcl-s sflrec132 inz(0) like(sflpage);
+dcl-s sflnbrrcd inz(0) like(sflpage);
+dcl-s sflMaxRowLen like(int4_t) inz;
+dcl-s sfldatalenfree like(int4_t) inz;
+dcl-s sftop like(int4_t) inz;
+dcl-s sfbot like(int4_t) inz;
+dcl-s sfl_cmd char(10) inz;
+dcl-s sflheadlrw inz(0) like(sflpage);
+dcl-s sflfirstrw inz(0) like(sflpage);
+dcl-s sfllastrw inz(0) like(sflpage);
+dcl-s sflleftofs like(int4_t) inz;
+dcl-s sflmode char(10) inz;
+dcl-s sflpinrnge like(int4_t) inz;
 
-dcl-c COPYRIGHT const('1997-2026, Thomas Raddatz - PEEK v4.0.8');
-dcl-c RELEASE const('Stand: 02.11.2026');
-dcl-c VERSION const('V04R00M08');
+dcl-c COPYRIGHT '1997-2026, Thomas Raddatz - PEEK v4.0.8';
+dcl-c RELEASE 'Stand: 02.11.2026';
+dcl-c VERSION 'V04R00M08';
 
-dcl-s l#file          like(##file)    inz;
-dcl-s l#library       like(##library) inz;
-dcl-s l#member        like(##member)  inz;
-dcl-s l#format        like(##format)  inz;
-dcl-s l#maxseq        like(f_seq   )  inz(0 );
-dcl-s l#minseq        like(f_seq   )  inz(0 );
-dcl-s l#wndnbr        like(##wndnbr)  inz(0 );
+dcl-s l#file like(##file) inz;
+dcl-s l#library like(##library) inz;
+dcl-s l#member like(##member) inz;
+dcl-s l#format like(##format) inz;
+dcl-s l#maxseq like(f_seq) inz(0);
+dcl-s l#minseq like(f_seq) inz(0);
+dcl-s l#wndnbr like(##wndnbr) inz(0);
 
-dcl-s r#size          like(int4_t) inz;
+dcl-s r#size like(int4_t) inz;
 
-dcl-s UPDPGM_NAME     like(pgmcalln_t) inz;
+dcl-s UPDPGM_NAME like(pgmcalln_t) inz;
 
-dcl-s peek01_name     like(pgmcalln_t) inz;
-dcl-s peek03_name     like(pgmcalln_t) inz;
-dcl-s peek04_name     like(pgmcalln_t) inz;
-dcl-s peek06_name     like(pgmcalln_t) inz;
-dcl-s peek07_name     like(pgmcalln_t) inz;
-dcl-s peek08_name     like(pgmcalln_t) inz;
-dcl-s peek09_name     like(pgmcalln_t) inz;
-dcl-s peek10_name     like(pgmcalln_t) inz;
-dcl-s peek12_name     like(pgmcalln_t) inz;
-dcl-s peek13_name     like(pgmcalln_t) inz;
-dcl-s peek14_name     like(pgmcalln_t) inz;
-dcl-s peek17_name     like(pgmcalln_t) inz;
-dcl-s peek18_name     like(pgmcalln_t) inz;
-dcl-s peek19_name     like(pgmcalln_t) inz;
-dcl-s peek20_name     like(pgmcalln_t) inz;
-dcl-s peek21_name     like(pgmcalln_t) inz;
-dcl-s peek23_name     like(pgmcalln_t) inz;
-dcl-s peek24_name     like(pgmcalln_t) inz;
-dcl-s peek26_name     like(pgmcalln_t) inz;
-dcl-s peek27_name     like(pgmcalln_t) inz;
-dcl-s peek30_name     like(pgmcalln_t) inz;
-dcl-s peek32_name     like(pgmcalln_t) inz;
-dcl-s peek33_name     like(pgmcalln_t) inz;
-dcl-s peek34_name     like(pgmcalln_t) inz;
-dcl-s peek37_name     like(pgmcalln_t) inz;
-dcl-s peek38_name     like(pgmcalln_t) inz;
-dcl-s peek40_name     like(pgmcalln_t) inz;
-dcl-s peek41_name     like(pgmcalln_t) inz;
-dcl-s peek42_name     like(pgmcalln_t) inz;
-dcl-s peek47_name     like(pgmcalln_t) inz;
-dcl-s peek48_name     like(pgmcalln_t) inz;
-dcl-s peek49_name     like(pgmcalln_t) inz;
-dcl-s peek50_name     like(pgmcalln_t) inz;
-dcl-s peek52_name     like(pgmcalln_t) inz;
-dcl-s peek54_name     like(pgmcalln_t) inz;
-dcl-s peek55_name     like(pgmcalln_t) inz;
-dcl-s peek56_name     like(pgmcalln_t) inz;
-dcl-s peek57_name     like(pgmcalln_t) inz;
-dcl-s peek59_name     like(pgmcalln_t) inz;
-dcl-s peek65_name     like(pgmcalln_t) inz;
-dcl-s peek68_name     like(pgmcalln_t) inz;
-dcl-s peek69_name     like(pgmcalln_t) inz;
-dcl-s exit01_name     like(pgmcalln_t) inz;
-dcl-s exit04_name     like(pgmcalln_t) inz;
+dcl-s peek01_name like(pgmcalln_t) inz;
+dcl-s peek03_name like(pgmcalln_t) inz;
+dcl-s peek04_name like(pgmcalln_t) inz;
+dcl-s peek06_name like(pgmcalln_t) inz;
+dcl-s peek07_name like(pgmcalln_t) inz;
+dcl-s peek08_name like(pgmcalln_t) inz;
+dcl-s peek09_name like(pgmcalln_t) inz;
+dcl-s peek10_name like(pgmcalln_t) inz;
+dcl-s peek12_name like(pgmcalln_t) inz;
+dcl-s peek13_name like(pgmcalln_t) inz;
+dcl-s peek14_name like(pgmcalln_t) inz;
+dcl-s peek17_name like(pgmcalln_t) inz;
+dcl-s peek18_name like(pgmcalln_t) inz;
+dcl-s peek19_name like(pgmcalln_t) inz;
+dcl-s peek20_name like(pgmcalln_t) inz;
+dcl-s peek21_name like(pgmcalln_t) inz;
+dcl-s peek23_name like(pgmcalln_t) inz;
+dcl-s peek24_name like(pgmcalln_t) inz;
+dcl-s peek26_name like(pgmcalln_t) inz;
+dcl-s peek27_name like(pgmcalln_t) inz;
+dcl-s peek30_name like(pgmcalln_t) inz;
+dcl-s peek32_name like(pgmcalln_t) inz;
+dcl-s peek33_name like(pgmcalln_t) inz;
+dcl-s peek34_name like(pgmcalln_t) inz;
+dcl-s peek37_name like(pgmcalln_t) inz;
+dcl-s peek38_name like(pgmcalln_t) inz;
+dcl-s peek40_name like(pgmcalln_t) inz;
+dcl-s peek41_name like(pgmcalln_t) inz;
+dcl-s peek42_name like(pgmcalln_t) inz;
+dcl-s peek47_name like(pgmcalln_t) inz;
+dcl-s peek48_name like(pgmcalln_t) inz;
+dcl-s peek49_name like(pgmcalln_t) inz;
+dcl-s peek50_name like(pgmcalln_t) inz;
+dcl-s peek52_name like(pgmcalln_t) inz;
+dcl-s peek54_name like(pgmcalln_t) inz;
+dcl-s peek55_name like(pgmcalln_t) inz;
+dcl-s peek56_name like(pgmcalln_t) inz;
+dcl-s peek57_name like(pgmcalln_t) inz;
+dcl-s peek59_name like(pgmcalln_t) inz;
+dcl-s peek65_name like(pgmcalln_t) inz;
+dcl-s peek68_name like(pgmcalln_t) inz;
+dcl-s peek69_name like(pgmcalln_t) inz;
+dcl-s exit01_name like(pgmcalln_t) inz;
+dcl-s exit04_name like(pgmcalln_t) inz;
 
-dcl-s peekPgm         like(pgm_t) inz;
-dcl-s peekDspF        like(file_t) inz;
+dcl-s peekPgm like(pgm_t) inz;
+dcl-s peekDspF like(file_t) inz;
 
 dcl-ds sflDataRow qualified;
-  chars           char(1) dim(256) inz;
+  chars char(1) dim(256) inz;
 end-ds;
 
 dcl-c sfl_row_size %elem(sflDataRow.chars);
 
-dcl-s sflRowDataStr   like(int4_t);
-dcl-s sflrowdataend   like(int4_t);
-dcl-s sflrowdatalen   like(int4_t);
+dcl-s sflRowDataStr like(int4_t);
+dcl-s sflrowdataend like(int4_t);
+dcl-s sflrowdatalen like(int4_t);
 
-dcl-s colrofs         like(int4_t);
-dcl-s col_field       char(10) dim(60);
-dcl-s col_scnstr      like(int4_t) dim(60);
-dcl-s col_scnend      like(int4_t) dim(60);
-dcl-s col_error       like(bool_t) dim(60) inz(bFalse);
-dcl-s cp              like(int4_t);
-dcl-s fldstrpos       like(int4_t);
+dcl-s colrofs like(int4_t);
+dcl-s col_field char(10) dim(60);
+dcl-s col_scnstr like(int4_t) dim(60);
+dcl-s col_scnend like(int4_t) dim(60);
+dcl-s col_error like(bool_t) dim(60) inz(bFalse);
+dcl-s cp like(int4_t);
+dcl-s fldstrpos like(int4_t);
 
-dcl-s headlen         like(int4_t);
-dcl-s fieldlen        like(int4_t);
-dcl-s maxcollen       like(int4_t);
-dcl-s columnlen       like(int4_t);
+dcl-s headlen like(int4_t);
+dcl-s fieldlen like(int4_t);
+dcl-s maxcollen like(int4_t);
+dcl-s columnlen like(int4_t);
 
-dcl-s pincol_x        like(int4_t);
+dcl-s pincol_x like(int4_t);
 dcl-c max_pin_col %elem(pinTabCol);
-dcl-s pinTabCol       like(fieldnme_t) dim(12);
+dcl-s pinTabCol like(fieldnme_t) dim(12);
 //  Rückgabe des Pin-Dialogs (PEEK50): clrpincol löscht pinTabCol
-dcl-s yPinTabCol      like(fieldnme_t) dim(12);
-dcl-s nbrPinCol       like(int4_t);
+dcl-s yPinTabCol like(fieldnme_t) dim(12);
+dcl-s nbrPinCol like(int4_t);
 
-dcl-s pinrcd_x        like(int4_t);
+dcl-s pinrcd_x like(int4_t);
 dcl-c max_pin_rcd %elem(pintabrcd);
-dcl-s pinTabRcd       like(pintabr_t) dim(12);
-dcl-s nbrPinRcd       like(int4_t);
+dcl-s pinTabRcd like(pintabr_t) dim(12);
+dcl-s nbrPinRcd like(int4_t);
 
 dcl-ds pinTabRcdE likeds(pintabr_t);
 
 //  Arbeitsfelder
-dcl-s x               like(int4_t);
-dcl-s y               like(int4_t);
-dcl-s z               like(int4_t);
-dcl-s a1              char(1) inz;
+dcl-s x like(int4_t);
+dcl-s y like(int4_t);
+dcl-s z like(int4_t);
+dcl-s a1 char(1) inz;
 
 //  Arbeitsfeld für Sortierfolge: Satzfolge/Schlüsselfolge
 //  .. aktuelle Sortierung
-dcl-s accessMode      char(1) inz(RRN_SEQ);
+dcl-s accessMode char(1) inz(RRN_SEQ);
 //  .. neue Sortierung für ChangeFile
-dcl-s newAccessMode      char(1) inz(RRN_SEQ);
+dcl-s newAccessMode char(1) inz(RRN_SEQ);
 //  .. Sortierung vor SQl-Mode
-dcl-s oldaccmode      char(1) inz(RRN_SEQ);
+dcl-s oldaccmode char(1) inz(RRN_SEQ);
 //  Arbeitsfeld für Befehlsverarbeitung, Verhinderung von Rekursionen
-dcl-s r#pgmcmd        like(yPgmCmd)  inz;
+dcl-s r#pgmcmd like(yPgmCmd) inz;
 //  Arbeitsfeld für Eingabe Aufsetzkey
-dcl-s r#rcdnbr        like(##rcdnbr)   inz(0 );
-dcl-s r#keyval        like(##key   )   inz;
+dcl-s r#rcdnbr like(##rcdnbr) inz(0);
+dcl-s r#keyval like(##key) inz;
 //  Arbeitsfeld für PIN-Funktion
-dcl-s pin#field       char(10) inz;
+dcl-s pin#field char(10) inz;
 //  Datensatz-Nr für SETLL und SETGG zum füllen der Subfile
-dcl-s wrk#readdn      like(sflpage)    inz(0);
-dcl-s wrk#rcdnbr      like(rcdNbr_t)   inz(0);
-dcl-ds *N;
-  wrk#keyval      like(keybuf_t) inz;
+dcl-s wrk#readdn like(sflpage) inz(0);
+dcl-s wrk#rcdnbr like(rcdNbr_t) inz(0);
+dcl-ds *n;
+  wrk#keyval like(keybuf_t) inz;
 end-ds;
 //  ...
-dcl-s wrk#field       inz            like(f_field);
-dcl-s wrk#seqnbr      inz(0 )   like(f_seq);
-dcl-s wrk#recno       inz(0 )   like(sflrec132);
-dcl-s wrk#sfpau       inz            like(sfpau);
+dcl-s wrk#field inz like(f_field);
+dcl-s wrk#seqnbr inz(0) like(f_seq);
+dcl-s wrk#recno inz(0) like(sflrec132);
+dcl-s wrk#sfpau inz like(sfpau);
 //  Umschalten der Sortierung
-dcl-s last#rcdnr      like(rcdNbr_t)   inz(0);
+dcl-s last#rcdnr like(rcdNbr_t) inz(0);
 //  Farbattribute einsetzen
-dcl-s wrk#ofs         like(int4_t) inz;
+dcl-s wrk#ofs like(int4_t) inz;
 //  Felder für Suchfunktion
-dcl-s srchmode        char(10) inz('*NEW');
-dcl-s srchfndrcd      like(rcdNbr_t)  inz(0 );
-dcl-s srchfield       char(10) inz;
-dcl-s srchop          char(10) inz;
-dcl-s srcharg         char(63) inz;
-dcl-s srchsign        char(1) inz;
-dcl-s srchargfloat    float(8) inz;
-dcl-s srchargval      zoned(63) inz;
+dcl-s srchmode char(10) inz('*NEW');
+dcl-s srchfndrcd like(rcdNbr_t) inz(0);
+dcl-s srchfield char(10) inz;
+dcl-s srchop char(10) inz;
+dcl-s srcharg char(63) inz;
+dcl-s srchsign char(1) inz;
+dcl-s srchargfloat float(8) inz;
+dcl-s srchargval zoned(63) inz;
 dcl-c csrcharg_digits %len(srchargval);
 
 dcl-c csrcharg_decpos %decpos(srchargval);
 
-dcl-s srchliketp      like(int4_t) inz;
-dcl-s srchlikeln      like(int4_t) inz;
-dcl-s srchnbrs        packed(10) inz(0 );
-dcl-s srchtype        char(10) inz;
-dcl-s srchcase        char(1) inz(bFalse );
-dcl-s srchcmpstr      like(srcharg)  inz;
-dcl-s srchcmpval      like(srchargval) inz(0 );
+dcl-s srchliketp like(int4_t) inz;
+dcl-s srchlikeln like(int4_t) inz;
+dcl-s srchnbrs packed(10) inz(0);
+dcl-s srchtype char(10) inz;
+dcl-s srchcase char(1) inz(bFalse);
+dcl-s srchcmpstr like(srcharg) inz;
+dcl-s srchcmpval like(srchargval) inz(0);
 dcl-c srch_cmp_val_length %len(srchcmpval);
 
 dcl-c srch_cmp_val_decpos %decpos(srchcmpval);
 
-dcl-s srchcmpfloat    float(8) inz(0 );
-dcl-s srchcmprcd      like(rcdbuf_t) inz;
-dcl-s srchcount       like(srchnbrs) inz(0);
-dcl-s srchcount2      like(srchnbrs) inz(0);
-dcl-s srchdspmsg      like(srchnbrs) inz(0);
-dcl-s srchisnum       char(1) inz(bFalse);
-dcl-s srchargisfloat  char(1) inz(bFalse );
+dcl-s srchcmpfloat float(8) inz(0);
+dcl-s srchcmprcd like(rcdbuf_t) inz;
+dcl-s srchcount like(srchnbrs) inz(0);
+dcl-s srchcount2 like(srchnbrs) inz(0);
+dcl-s srchdspmsg like(srchnbrs) inz(0);
+dcl-s srchisnum char(1) inz(bFalse);
+dcl-s srchargisfloat char(1) inz(bFalse);
 
 //  Felder für Kopierfunktion
 dcl-ds copyExternal qualified;
-  file        char(10) inz;
-  lib         char(10) inz;
-  toMbr       char(10) inz;
-  mbrOpt      char(10) inz;
-  crtFile     char(10) inz;
+  file    char(10) inz;
+  lib     char(10) inz;
+  toMbr   char(10) inz;
+  mbrOpt  char(10) inz;
+  crtFile char(10) inz;
 end-ds;
 
 //  Überlagern von ##Key132uc mit ##Key80uc
-dcl-s ##key           like(##key132uc) inz;
-dcl-ds *N;
-  ##key132uc      char(116);
-  ##key80uc       char(67) overlay(##key132uc:1);
+dcl-s ##key like(##key132uc) inz;
+dcl-ds *n;
+  ##key132uc char(116);
+  ##key80uc  char(67) overlay(##key132uc: 1);
 end-ds;
-dcl-ds *N;
-  ##key132lc      char(116);
-  ##key80lc       char(67) overlay(##key132lc:1);
-  sqlWhere        like(sqlWhere_t) inz;
-  sqlOrder        like(sqlOrder_t) inz;
+dcl-ds *n;
+  ##key132lc char(116);
+  ##key80lc  char(67) overlay(##key132lc: 1);
+  sqlWhere   like(sqlWhere_t) inz;
+  sqlOrder   like(sqlOrder_t) inz;
 end-ds;
-dcl-ds *N;
-  rcdnbr#         zoned(10);
-  rcdnbr$         char(10) overlay(rcdnbr#: 1);
+dcl-ds *n;
+  rcdnbr# zoned(10);
+  rcdnbr$ char(10) overlay(rcdnbr#: 1);
 end-ds;
 
-dcl-s exitmsg         varchar(512) inz;
-dcl-s colheading      like(colheading_t);
+dcl-s exitmsg varchar(512) inz;
+dcl-s colheading like(colheading_t);
 
 //  Feldinhalte vor der Bildschirmausgabe
 dcl-ds b4 qualified;
-  wndnbr          like(##wndnbr );
-  strpage         like(##strpage);
+  wndnbr  like(##wndnbr);
+  strpage like(##strpage);
 end-ds;
 
-/COPY QCOPYLE,CEECNDHDLR
+/copy QCOPYLE,CEECNDHDLR
 
-dcl-s isinzsr         like(bool_t) inz(bFalse);
+dcl-s isinzsr like(bool_t) inz(bFalse);
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
 //*******************************************************************
-
 dcl-pi peek05;
-  io_qfile        likeds(qobj_t);
-  i_member        const like(mbr_t);
-  i_access        const like(accessmode_t);
-  i_prodlib       const like(lib_t);
-  i_chglib        const like(bool_t);
-  i_chgfile       const like(bool_t);
-  i_chgmbr        const like(bool_t);
-  i_updmodkey     const like(bool_t);
-  i_chgsqlw       const like(bool_t);
-  i_chgsqlo       const like(bool_t);
-  i_qenvfile      const likeds(qobj_t);
-  i_envmbr        const like(mbr_t);
-  i_envsave       const like(bool_t);
-  i_envlayout     const like(bool_t);
-  i_sqlwhere      const like(sqlwhere_t);
-  i_sqlorder      const like(sqlorder_t);
+  io_qfile    likeds(qobj_t);
+  i_member    like(mbr_t) const;
+  i_access    like(accessmode_t) const;
+  i_prodlib   like(lib_t) const;
+  i_chglib    like(bool_t) const;
+  i_chgfile   like(bool_t) const;
+  i_chgmbr    like(bool_t) const;
+  i_updmodkey like(bool_t) const;
+  i_chgsqlw   like(bool_t) const;
+  i_chgsqlo   like(bool_t) const;
+  i_qenvfile  likeds(qobj_t) const;
+  i_envmbr    like(mbr_t) const;
+  i_envsave   like(bool_t) const;
+  i_envlayout like(bool_t) const;
+  i_sqlwhere  like(sqlwhere_t) const;
+  i_sqlorder  like(sqlorder_t) const;
 end-pi;
 //Prototype for 'QUSCMDLN'
 dcl-pr quscmdln extpgm('QUSCMDLN');
 end-pr;
 
-dcl-s do_x10          packed(7);
-dcl-s do_x14          packed(7);
-dcl-s do_x2           packed(7);
-dcl-s do_x3           packed(7);
-dcl-s do_x4           packed(7);
-dcl-s do_x5           packed(7);
-dcl-s do_x6           packed(7);
+dcl-s do_x10 packed(7);
+dcl-s do_x14 packed(7);
+dcl-s do_x2 packed(7);
+dcl-s do_x3 packed(7);
+dcl-s do_x4 packed(7);
+dcl-s do_x5 packed(7);
+dcl-s do_x6 packed(7);
 
 dcl-ds f1key_l1 likerec(fpeekfldl1: *key);
-dcl-ds f_key    likerec(fpeekfld: *key);
+dcl-ds f_key likerec(fpeekfld: *key);
 
 //---------------------------------------------------*
 
@@ -869,7 +865,7 @@ begsr doScreenCmd;
   //  Verarbeiten Bildschirmereignis
   r#pgmcmd = yPgmCmd;
   //   exsr doPgmCmd;
-  /COPY QCOPYLE,DOPGMCMD
+/copy QCOPYLE,DOPGMCMD
   r#pgmcmd = '';
 
 endsr;
@@ -886,8 +882,8 @@ begsr doSflCmd;
     usr8144.var1 = yPgmCmd;
     p_sndpgmmg('USR8144': usr8144: sds.pgmname);
   else;
-    //      exsr doPgmCmd;
-    /COPY QCOPYLE,DOPGMCMD
+  //      exsr doPgmCmd;
+/copy QCOPYLE,DOPGMCMD
   endif;
 
 endsr;
@@ -3439,10 +3435,10 @@ begsr loadenv;
         : yMsgID: yMsgDta);
 
   if (yMsgID <> ' ');
-    // TODO: remove code
-    // p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
-    // yMsgID = '';
-    // yMsgDta = '';
+  // TODO: remove code
+  // p_sndpgmmg(yMsgID: yMsgDta: sds.pgmname);
+  // yMsgID = '';
+  // yMsgDta = '';
   else;
 
     if (##file     <> rtn.file or
@@ -3660,7 +3656,7 @@ begsr pbQueryUser;
         set0001.set_hedtyp = yHeaderType;
         exsr pbHeadline;
       endif;
-  endif;
+    endif;
     *in99 = bFalse;
   on-error;
     *in99 = bTrue;
@@ -8164,11 +8160,11 @@ endsr;
 //============================================================*
 
 dcl-proc f_int;
-  dcl-pi *N              zoned(20);
-    inpvalue        zoned(25:5) value;
+  dcl-pi *n zoned(20);
+    inpvalue zoned(25: 5) value;
   end-pi;
 
-  dcl-s integerval      zoned(20);
+  dcl-s integerval zoned(20);
 
   integerval = inpvalue;
 
@@ -8181,12 +8177,12 @@ end-proc;
 //============================================================*
 
 dcl-proc f_chain00;
-  dcl-pi *N              char(1);
-    i_rrn           value  like(rcdNbr_t);
-    i_file          value  like(file_t);
-    i_lib           value  like(lib_t);
-    i_mbr           value  like(mbr_t);
-    i_rcdfmt        char(10) value;
+  dcl-pi *n char(1);
+    i_rrn    like(rcdNbr_t) value;
+    i_file   like(file_t) value;
+    i_lib    like(lib_t) value;
+    i_mbr    like(mbr_t) value;
+    i_rcdfmt char(10) value;
   end-pi;
 
   dcl-s isFound like(bool_t) inz(bFalse);
@@ -8263,12 +8259,12 @@ end-proc;
 //============================================================*
 
 dcl-proc f_chain04;
-  dcl-pi *N              char(1);
-    i_rrn           value  like(rcdNbr_t);
-    i_file          value  like(file_t);
-    i_lib           value  like(lib_t);
-    i_mbr           value  like(mbr_t);
-    i_rcdfmt        char(10) value;
+  dcl-pi *n char(1);
+    i_rrn    like(rcdNbr_t) value;
+    i_file   like(file_t) value;
+    i_lib    like(lib_t) value;
+    i_mbr    like(mbr_t) value;
+    i_rcdfmt char(10) value;
   end-pi;
 
   dcl-s isFound like(bool_t) inz(bFalse);
@@ -8313,11 +8309,11 @@ end-proc;
 //============================================================*
 
 dcl-proc errorHandler;
-  dcl-pi *N;
-    i_condtoken     value likeds(cee_fc_t);
-    i_pcommarea     int(10) value;
-    o_action        int(10);
-    o_newcondtoken  likeds(cee_fc_t);
+  dcl-pi *n;
+    i_condtoken    likeds(cee_fc_t) value;
+    i_pcommarea    int(10) value;
+    o_action       int(10);
+    o_newcondtoken likeds(cee_fc_t);
   end-pi;
 
   dump;

@@ -36,22 +36,22 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/COPY QCOPYLE,H_SPEC
-/COPY QCOPYLE,COPYRIGHT
+/copy QCOPYLE,H_SPEC
+/copy QCOPYLE,COPYRIGHT
 
-/COPY QCOPYLE,D_VARDEF
-/COPY QCOPYLE,FLDL0100
-/COPY QCOPYLE,QUSROBJD
-/COPY QCOPYLE,OBJD0400
+/copy QCOPYLE,D_VARDEF
+/copy QCOPYLE,FLDL0100
+/copy QCOPYLE,QUSROBJD
+/copy QCOPYLE,OBJD0400
 
-/COPY QCOPYLE,CEECNDHDLR
+/copy QCOPYLE,CEECNDHDLR
 
 /define internal_prototype
-/COPY QCOPYLE,PPEEK09
+/copy QCOPYLE,PPEEK09
 /undefine internal_prototype
 
-/COPY QCOPYLE,PPEEK53
-/COPY QCOPYLE,PPEEK58
+/copy QCOPYLE,PPEEK53
+/copy QCOPYLE,PPEEK58
 
 dcl-ds objd0400 likeds(objd0400_t) inz;
 dcl-ds errcode likeds(errcode_t) inz;
@@ -59,12 +59,11 @@ dcl-ds errcode likeds(errcode_t) inz;
 //*******************************************************************
 //           Main  Control block                                    *
 //*******************************************************************
-
-  dcl-pi peek09;
-  i_qfile         const likeds(qobj_t);
-  o_data          likeds(objd0400_t);
-  o_msgid         like(msgid_t);
-o_msgdta        like(msgdta_t);
+dcl-pi peek09;
+  i_qfile  likeds(qobj_t) const;
+  o_data   likeds(objd0400_t);
+  o_msgid  like(msgid_t);
+  o_msgdta like(msgdta_t);
 end-pi;
 
 //---------------------------------------------------*
@@ -100,16 +99,16 @@ return;
 //  Program error handler                                     *
 //============================================================*
 
-  dcl-proc errorhandler;
-    dcl-pi *N;
-    i_condtoken     value likeds(cee_fc_t);
-    i_pcommarea     int(10) value;
-    o_action        int(10);
-  o_newcondtoken  likeds(cee_fc_t);
+dcl-proc errorhandler;
+  dcl-pi *n;
+    i_condtoken    likeds(cee_fc_t) value;
+    i_pcommarea    int(10) value;
+    o_action       int(10);
+    o_newcondtoken likeds(cee_fc_t);
   end-pi;
 
   dump;
-o_action = cee_percolate;
+  o_action = cee_percolate;
 
 end-proc;
 

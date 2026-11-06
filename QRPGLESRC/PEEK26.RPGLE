@@ -24,82 +24,80 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/COPY QCOPYLE,H_SPEC
-/COPY QCOPYLE,COPYRIGHT
+/copy QCOPYLE,H_SPEC
+/copy QCOPYLE,COPYRIGHT
 
-dcl-f peek26fm workstn(*ext) usage(*input:*output)
-      usropn infds(workstn);
+dcl-f peek26fm workstn(*ext) usage(*input: *output) usropn infds(workstn);
 
 dcl-ds workstn likeds(workstn_t);
 
-/COPY QCOPYLE,D_VARDEF
-/COPY QCOPYLE,FLDL0100
-/COPY QCOPYLE,D_WORKSTN
-/COPY QCOPYLE,D_COLORATR
-/COPY QCOPYLE,ShortCmd_D
-/COPY QCOPYLE,SDS
-/COPY QCOPYLE,SCRNFKEYS
-/COPY QCOPYLE,CEECNDHDLR
+/copy QCOPYLE,D_VARDEF
+/copy QCOPYLE,FLDL0100
+/copy QCOPYLE,D_WORKSTN
+/copy QCOPYLE,D_COLORATR
+/copy QCOPYLE,ShortCmd_D
+/copy QCOPYLE,SDS
+/copy QCOPYLE,SCRNFKEYS
+/copy QCOPYLE,CEECNDHDLR
 
 /define internal_prototype
-/COPY QCOPYLE,PPEEK26
+/copy QCOPYLE,PPEEK26
 /undefine internal_prototype
 
-/COPY QCOPYLE,USR8100
-/COPY QCOPYLE,USR8151
-/COPY QCOPYLE,USR8152
-/COPY QCOPYLE,USR8153
-/COPY QCOPYLE,USR8154
-/COPY QCOPYLE,USR8155
+/copy QCOPYLE,USR8100
+/copy QCOPYLE,USR8151
+/copy QCOPYLE,USR8152
+/copy QCOPYLE,USR8153
+/copy QCOPYLE,USR8154
+/copy QCOPYLE,USR8155
 
-/COPY QCOPYLE,PPEEK21
-/COPY QCOPYLE,PPEEK23
+/copy QCOPYLE,PPEEK21
+/copy QCOPYLE,PPEEK23
 
-/COPY QCOPYLE,PPEEK53
-/COPY QCOPYLE,PPEEK58
+/copy QCOPYLE,PPEEK53
+/copy QCOPYLE,PPEEK58
 
-dcl-s yfkeys          char(18) dim(32);
-dcl-s ynbrofkeys      like(int4_t);
-dcl-s ymsgid          char(7);
-dcl-s ymsgdta         char(512);
+dcl-s yfkeys char(18) dim(32);
+dcl-s ynbrofkeys like(int4_t);
+dcl-s ymsgid char(7);
+dcl-s ymsgdta char(512);
 
-dcl-s ypgmcmd         char(10);
-dcl-s ycmddta         like(pgmcmddt_t);
+dcl-s ypgmcmd char(10);
+dcl-s ycmddta like(pgmcmddt_t);
 
-dcl-s sfbot           like(int4_t);
-dcl-c nbrfkeys const(2);
+dcl-s sfbot like(int4_t);
+dcl-c nbrfkeys 2;
 
-dcl-s peek21_name     like(pgmcalln_t);
-dcl-s peek23_name     like(pgmcalln_t);
+dcl-s peek21_name like(pgmcalln_t);
+dcl-s peek23_name like(pgmcalln_t);
 
-dcl-s r_srcfile       like(i_qsrcfile.name);
-dcl-s r_srclib        like(i_qsrcfile.lib);
-dcl-s r_srcmbr        like(i_srcmbr);
+dcl-s r_srcfile like(i_qsrcfile.name);
+dcl-s r_srclib like(i_qsrcfile.lib);
+dcl-s r_srcmbr like(i_srcmbr);
 
 //  Werte beim Öffnen des Fensters, F5 stellt sie wieder her
-dcl-s r_file          like(file_t);
-dcl-s r_library       like(lib_t);
-dcl-s r_member        like(mbr_t);
-dcl-s r_mbropt        like(option_t);
-dcl-s r_crtfile       like(option_t);
+dcl-s r_file like(file_t);
+dcl-s r_library like(lib_t);
+dcl-s r_member like(mbr_t);
+dcl-s r_mbropt like(option_t);
+dcl-s r_crtfile like(option_t);
 
-dcl-s isInzSr         like(bool_t) inz(bFalse);
+dcl-s isInzSr like(bool_t) inz(bFalse);
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
 //*******************************************************************
-
 dcl-pi peek26;
-  i_dsp80         const like(dsp80_t);
-  i_qsrcfile      const likeds(qobj_t);
-  i_srcmbr        const like(mbr_t);
-  o_tofile              like(file_t);
-  o_tolib               like(lib_t);
-  o_tombr               like(mbr_t);
-  o_mbropt              like(option_t);
-  o_crtfile             like(option_t);
-  o_msgid               like(msgid_t);
-  o_msgdta              like(msgdta_t);
+  i_dsp80    like(dsp80_t) const;
+  i_qsrcfile likeds(qobj_t) const;
+  i_srcmbr   like(mbr_t) const;
+  o_tofile   like(file_t);
+  o_tolib    like(lib_t);
+  o_tombr    like(mbr_t);
+  o_mbropt   like(option_t);
+  o_crtfile  like(option_t);
+  o_msgid    like(msgid_t);
+  o_msgdta   like(msgdta_t);
 end-pi;
 
 //---------------------------------------------------*
@@ -642,11 +640,11 @@ endsr;
 //============================================================*
 
 dcl-proc errorhandler;
-  dcl-pi *N;
-    i_condtoken     value likeds(cee_fc_t);
-    i_pcommarea     int(10) value;
-    o_action        int(10);
-    o_newcondtoken  likeds(cee_fc_t);
+  dcl-pi *n;
+    i_condtoken    likeds(cee_fc_t) value;
+    i_pcommarea    int(10) value;
+    o_action       int(10);
+    o_newcondtoken likeds(cee_fc_t);
   end-pi;
 
   dump;

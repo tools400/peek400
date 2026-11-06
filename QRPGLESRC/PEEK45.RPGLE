@@ -25,11 +25,10 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/COPY QCOPYLE,H_SPEC
-/COPY QCOPYLE,COPYRIGHT
+/copy QCOPYLE,H_SPEC
+/copy QCOPYLE,COPYRIGHT
 
-dcl-f peek45fm workstn(*ext) usage(*input:*output)
-      usropn infds(workstn);
+dcl-f peek45fm workstn(*ext) usage(*input: *output) usropn infds(workstn);
 
 dcl-f peekfld keyed usropn prefix(f_) infds(peek_01_ds);
 
@@ -37,115 +36,113 @@ dcl-ds workstn likeds(workstn_t);
 
 dcl-ds peek_01_ds likeds(infds_t);
 
-/COPY QCOPYLE,D_VARDEF
-/COPY QCOPYLE,D_INFDS
-/COPY QCOPYLE,D_WORKSTN
-/COPY QCOPYLE,SDS
-/COPY QCOPYLE,FLDL0100
-/COPY QCOPYLE,SCRNFKEYS
-/COPY QCOPYLE,CEECNDHDLR
+/copy QCOPYLE,D_VARDEF
+/copy QCOPYLE,D_INFDS
+/copy QCOPYLE,D_WORKSTN
+/copy QCOPYLE,SDS
+/copy QCOPYLE,FLDL0100
+/copy QCOPYLE,SCRNFKEYS
+/copy QCOPYLE,CEECNDHDLR
 
 /define internal_prototype
-/COPY QCOPYLE,PPEEK45
+/copy QCOPYLE,PPEEK45
 /undefine internal_prototype
 
-/COPY QCOPYLE,SET0006
+/copy QCOPYLE,SET0006
 
-/COPY QCOPYLE,USR8100
-/COPY QCOPYLE,USR8136
+/copy QCOPYLE,USR8100
+/copy QCOPYLE,USR8136
 
 dcl-ds fldl0100 likeds(fldl0100_t) inz;
-dcl-ds set0006  likeds(set0006_t) inz;
+dcl-ds set0006 likeds(set0006_t) inz;
 
 //  Peek21
-dcl-s ypgmcmd         like(pgmcmd_t) inz;
-dcl-s ycmddta         like(pgmcmddt_t) inz;
-dcl-s ymsgid          like(msgid_t) inz;
-dcl-s ymsgdta         like(msgdta_t) inz;
+dcl-s ypgmcmd like(pgmcmd_t) inz;
+dcl-s ycmddta like(pgmcmddt_t) inz;
+dcl-s ymsgid like(msgid_t) inz;
+dcl-s ymsgdta like(msgdta_t) inz;
 
 //  Peek23:
-dcl-s yfkeys          like(fkeydsp_t) inz dim(32);
-dcl-s ynbrofkeys      like(int4_t) inz;
+dcl-s yfkeys like(fkeydsp_t) inz dim(32);
+dcl-s ynbrofkeys like(int4_t) inz;
 
 //  Peek32
-dcl-s ybuffer         like(rcdbuf_t) inz;
-dcl-s ybufflen        like(int4_t) inz;
+dcl-s ybuffer like(rcdbuf_t) inz;
+dcl-s ybufflen like(int4_t) inz;
 
-dcl-s sfbot           like(int4_t) inz;
-dcl-c NBR_F_KEYS const(3);
+dcl-s sfbot like(int4_t) inz;
+dcl-c NBR_F_KEYS 3;
 
-dcl-s x               like(int4_t) inz;
-dcl-s i               like(int4_t) inz;
+dcl-s x like(int4_t) inz;
+dcl-s i like(int4_t) inz;
 
-dcl-s isstringinp     like(bool_t) inz(bFalse);
-dcl-s isPgmError      like(bool_t) inz(bFalse);
-dcl-s isdatachg       like(bool_t) inz(bFalse);
+dcl-s isstringinp like(bool_t) inz(bFalse);
+dcl-s isPgmError like(bool_t) inz(bFalse);
+dcl-s isdatachg like(bool_t) inz(bFalse);
 
-dcl-c HEX_DIGITS const('0123456789ABCDEF');
+dcl-c HEX_DIGITS '0123456789ABCDEF';
 
-dcl-s peek21_name     like(pgmcalln_t) inz;
-dcl-s peek23_name     like(pgmcalln_t) inz;
-dcl-s peek32_name     like(pgmcalln_t) inz;
+dcl-s peek21_name like(pgmcalln_t) inz;
+dcl-s peek23_name like(pgmcalln_t) inz;
+dcl-s peek32_name like(pgmcalln_t) inz;
 
 
 // Arbeitsfelder
-dcl-s pstartpos       like(#startpos) inz;
-dcl-ds *N;
-  pfldinhaltsbcs  like(rcdbuf_t) inz;
-  pfldinhaltucs2  like(rcdbufucs2_t) inz
-       overlay(pfldinhaltsbcs);
+dcl-s pstartpos like(#startpos) inz;
+dcl-ds *n;
+  pfldinhaltsbcs like(rcdbuf_t) inz;
+  pfldinhaltucs2 like(rcdbufucs2_t) inz overlay(pfldinhaltsbcs);
 end-ds;
-dcl-s plength         like(int4_t) inz;
-dcl-s ptmpnewlen      like(int4_t) inz;
-dcl-s ptmphexlen      like(int4_t) inz;
-dcl-s ptmphexbin      like(#hexstring) inz;
+dcl-s plength like(int4_t) inz;
+dcl-s ptmpnewlen like(int4_t) inz;
+dcl-s ptmphexlen like(int4_t) inz;
+dcl-s ptmphexbin like(#hexstring) inz;
 
-dcl-s warning_1       like(bool_t) inz(bFalse);
-dcl-s warning_2       like(bool_t) inz(bFalse);
+dcl-s warning_1 like(bool_t) inz(bFalse);
+dcl-s warning_2 like(bool_t) inz(bFalse);
 
-/COPY QCOPYLE,PPEEK21
-/COPY QCOPYLE,PPEEK23
-/COPY QCOPYLE,PPEEK32
+/copy QCOPYLE,PPEEK21
+/copy QCOPYLE,PPEEK23
+/copy QCOPYLE,PPEEK32
 
-/COPY QCOPYLE,PPEEK53
-/COPY QCOPYLE,PPEEK58
-/COPY QCOPYLE,PPEEK71
+/copy QCOPYLE,PPEEK53
+/copy QCOPYLE,PPEEK58
+/copy QCOPYLE,PPEEK71
 
-dcl-s $ofsval         zoned(4) dim( 8)   inz;
+dcl-s $ofsval zoned(4) dim(8) inz;
 
 dcl-ds #hexstring;
-  #hexval         char(8) dim(32)   inz;
+  #hexval char(8) dim(32) inz;
 end-ds;
 
 dcl-ds $expstring;
-  $strval         char(16) dim( 8)   inz;
+  $strval char(16) dim(8) inz;
 end-ds;
 
-dcl-s idx             int(10) inz;
-dcl-s ofs             int(10) inz;
-dcl-s htranscoder     like(htranscoder_t ) inz;
+dcl-s idx int(10) inz;
+dcl-s ofs int(10) inz;
+dcl-s htranscoder like(htranscoder_t) inz;
 
 //  Der Wert steht schon in der Job-CCSID (Änderungsprogramm, PGM)
-dcl-s isjobccsid      like(bool_t) inz(bFalse);
+dcl-s isjobccsid like(bool_t) inz(bFalse);
 
-dcl-s isInzSr         like(bool_t) inz(bFalse);
+dcl-s isInzSr like(bool_t) inz(bFalse);
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
 //*******************************************************************
-
 dcl-pi peek45;
-  i_dsp80         const like(dsp80_t);
-  i_headtype      const like(headtyp_t);
-  i_copyright     const like(copyrght_t);
-  i_fldname       const like(fieldnme_t);
-  io_fldinhalt    likeds(fldinhalt_t);
-  io_length       like(int4_t);
-  i_protect       const like(bool_t);
-  i_isucs2        const like(int4_t);
-  o_msgid         like(msgid_t);
-  o_msgdta        like(msgdta_t);
-  i_isjobccsid    const like(bool_t) options(*nopass);
+  i_dsp80      like(dsp80_t) const;
+  i_headtype   like(headtyp_t) const;
+  i_copyright  like(copyrght_t) const;
+  i_fldname    like(fieldnme_t) const;
+  io_fldinhalt likeds(fldinhalt_t);
+  io_length    like(int4_t);
+  i_protect    like(bool_t) const;
+  i_isucs2     like(int4_t) const;
+  o_msgid      like(msgid_t);
+  o_msgdta     like(msgdta_t);
+  i_isjobccsid like(bool_t) options(*nopass) const;
 end-pi;
 
 dcl-ds f_key likerec(fpeekfld: *key);
@@ -1104,11 +1101,11 @@ endsr;
 //============================================================*
 
 dcl-proc errorhandler;
-  dcl-pi *N;
-    i_condtoken     value likeds(cee_fc_t);
-    i_pcommarea     int(10) value;
-    o_action        int(10);
-    o_newcondtoken  likeds(cee_fc_t);
+  dcl-pi *n;
+    i_condtoken    likeds(cee_fc_t) value;
+    i_pcommarea    int(10) value;
+    o_action       int(10);
+    o_newcondtoken likeds(cee_fc_t);
   end-pi;
 
   dump;

@@ -25,39 +25,38 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/COPY QCOPYLE,H_SPEC
-/COPY QCOPYLE,COPYRIGHT
+/copy QCOPYLE,H_SPEC
+/copy QCOPYLE,COPYRIGHT
 
-dcl-f default keyed usropn extdesc('PEEKUSR') extfile(g_default)
-      rename(fpeekusr: fdefault) prefix(d_);
+dcl-f default keyed usropn extdesc('PEEKUSR') extfile(g_default) rename(fpeekusr: fdefault)
+  prefix(d_);
 
-/COPY QCOPYLE,D_VARDEF
-/COPY QCOPYLE,FLDL0100
-/COPY QCOPYLE,SDS
-/COPY QCOPYLE,CEECNDHDLR
+/copy QCOPYLE,D_VARDEF
+/copy QCOPYLE,FLDL0100
+/copy QCOPYLE,SDS
+/copy QCOPYLE,CEECNDHDLR
 
 /define internal_prototype
-/COPY QCOPYLE,PPEEK22
+/copy QCOPYLE,PPEEK22
 /undefine internal_prototype
 
-/COPY QCOPYLE,PPEEK53
-/COPY QCOPYLE,PPEEK58
+/copy QCOPYLE,PPEEK53
+/copy QCOPYLE,PPEEK58
 
 //  Benutzer der Standardeinstellungen
-dcl-c DFT_USER        '*NONE';
+dcl-c DFT_USER '*NONE';
 
-dcl-s g_default       char(21) inz;
-dcl-s wrk_sectn       like(section_t) inz;
-dcl-s wrk_key         like(key_t) inz;
-dcl-s wrk_data        like(set0000_t) inz;
+dcl-s g_default char(21) inz;
+dcl-s wrk_sectn like(section_t) inz;
+dcl-s wrk_key like(key_t) inz;
+dcl-s wrk_data like(set0000_t) inz;
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
 //*******************************************************************
-
 dcl-pi peek22;
-  i_mode          const like(mode_t);
-  i_section       const like(section_t);
+  i_mode    like(mode_t) const;
+  i_section like(section_t) const;
 end-pi;
 
 //---------------------------------------------------*
@@ -153,11 +152,11 @@ endsr;
 //============================================================*
 
 dcl-proc errorhandler;
-  dcl-pi *N;
-    i_condtoken     value likeds(cee_fc_t);
-    i_pcommarea     int(10) value;
-    o_action        int(10);
-    o_newcondtoken  likeds(cee_fc_t);
+  dcl-pi *n;
+    i_condtoken    likeds(cee_fc_t) value;
+    i_pcommarea    int(10) value;
+    o_action       int(10);
+    o_newcondtoken likeds(cee_fc_t);
   end-pi;
 
   dump;

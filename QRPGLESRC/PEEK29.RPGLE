@@ -24,53 +24,52 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/COPY QCOPYLE,H_SPEC
-/COPY QCOPYLE,COPYRIGHT
+/copy QCOPYLE,H_SPEC
+/copy QCOPYLE,COPYRIGHT
 
-/COPY QCOPYLE,D_VARDEF
-/COPY QCOPYLE,SDS
-/COPY QCOPYLE,CEECNDHDLR
+/copy QCOPYLE,D_VARDEF
+/copy QCOPYLE,SDS
+/copy QCOPYLE,CEECNDHDLR
 
 /define internal_prototype
-/COPY QCOPYLE,PPEEK29
+/copy QCOPYLE,PPEEK29
 /undefine internal_prototype
 
-dcl-s value           char(1) dim(256);
-dcl-s hex             char(1) dim(16);
+dcl-s value char(1) dim(256);
+dcl-s hex char(1) dim(16);
 
 dcl-ds sysinpnbr qualified;
-  sysname         char(8) inz;
-  sysvers         char(6) inz;
-  syssrlnbr       char(8) inz;
-  syseon          char(1) inz(x'00');
+  sysname   char(8) inz;
+  sysvers   char(6) inz;
+  syssrlnbr char(8) inz;
+  syseon    char(1) inz(x'00');
 end-ds;
 
-dcl-s x               like(int4_t);
-dcl-s y               like(int4_t);
-dcl-s a1              char(1);
-dcl-s summe           packed(30);
-dcl-s rest            packed(30);
-dcl-s zw1             packed(30);
-dcl-s zw2             packed(30);
+dcl-s x like(int4_t);
+dcl-s y like(int4_t);
+dcl-s a1 char(1);
+dcl-s summe packed(30);
+dcl-s rest packed(30);
+dcl-s zw1 packed(30);
+dcl-s zw2 packed(30);
 
 //  Konvertierung HEX ==> DEC
-dcl-s r_dec           packed(30);
-dcl-s r_hex           char(20);
+dcl-s r_dec packed(30);
+dcl-s r_hex char(20);
 
-dcl-s intsrlnbr       char(20);
+dcl-s intsrlnbr char(20);
 
-dcl-s isInzSr         like(bool_t) inz(bFalse);
+dcl-s isInzSr like(bool_t) inz(bFalse);
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
 //*******************************************************************
-
 dcl-pi peek29;
-  i_sysname       char(8) const;
-  i_sysversion    char(6) const;
-  i_syssrlnbr     char(8) const;
-  i_sysdate       int(10) const;
-  o_serialnbr     char(20);
+  i_sysname    char(8) const;
+  i_sysversion char(6) const;
+  i_syssrlnbr  char(8) const;
+  i_sysdate    int(10) const;
+  o_serialnbr  char(20);
 end-pi;
 
 //----------------------------------------------------*
@@ -232,11 +231,11 @@ endsr;
 //============================================================*
 
 dcl-proc errorhandler;
-  dcl-pi *N;
-    i_condtoken     value likeds(cee_fc_t);
-    i_pcommarea     int(10) value;
-    o_action        int(10);
-    o_newcondtoken  likeds(cee_fc_t);
+  dcl-pi *n;
+    i_condtoken    likeds(cee_fc_t) value;
+    i_pcommarea    int(10) value;
+    o_action       int(10);
+    o_newcondtoken likeds(cee_fc_t);
   end-pi;
 
   dump;

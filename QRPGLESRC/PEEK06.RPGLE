@@ -50,63 +50,63 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/COPY QCOPYLE,H_SPEC
-/COPY QCOPYLE,COPYRIGHT
+/copy QCOPYLE,H_SPEC
+/copy QCOPYLE,COPYRIGHT
 
-/COPY QCOPYLE,D_VARDEF
-/COPY QCOPYLE,FLDL0100
-/COPY QCOPYLE,D_MI
-/COPY QCOPYLE,QECEDT
-/COPY QCOPYLE,QECCVTEW
-/COPY QCOPYLE,QECCVTEC
+/copy QCOPYLE,D_VARDEF
+/copy QCOPYLE,FLDL0100
+/copy QCOPYLE,D_MI
+/copy QCOPYLE,QECEDT
+/copy QCOPYLE,QECCVTEW
+/copy QCOPYLE,QECCVTEC
 
 /define internal_prototype
-/COPY QCOPYLE,PPEEK06
+/copy QCOPYLE,PPEEK06
 /undefine internal_prototype
 
 //  declarations for Convert Edit Code: QECCVTEC
-dcl-s editmask        char(256) inz(*blanks);
-dcl-s editmaskln      inz(*zeros)  like(int4_t);
-dcl-s rcvvarlen       inz(*zeros)  like(int4_t);
-dcl-s zerobalanc      char(1) inz(*blanks);
-dcl-s editcode        char(1) inz(*blanks);
-dcl-s currind         char(1) inz(*blanks);
-dcl-s precision       inz(*zeros)  like(int4_t);
-dcl-s binlength       inz(*zeros)  like(int4_t);
-dcl-s decimal         inz(*zeros)  like(int4_t);
+dcl-s editmask char(256) inz(*blanks);
+dcl-s editmaskln inz(*zeros) like(int4_t);
+dcl-s rcvvarlen inz(*zeros) like(int4_t);
+dcl-s zerobalanc char(1) inz(*blanks);
+dcl-s editcode char(1) inz(*blanks);
+dcl-s currind char(1) inz(*blanks);
+dcl-s precision inz(*zeros) like(int4_t);
+dcl-s binlength inz(*zeros) like(int4_t);
+dcl-s decimal inz(*zeros) like(int4_t);
 
 //  additional
 //  declarations for Convert Edit Word: QECCVTEW
-dcl-s editword        char(256) inz(*blanks);
-dcl-s editwordln      inz(*zeros)  like(int4_t);
+dcl-s editword char(256) inz(*blanks);
+dcl-s editwordln inz(*zeros) like(int4_t);
 
 //  additional
 //  declarations for Edit: QECEDT
-dcl-s cvtvar          char(256) inz(*blanks);
-dcl-s cvtvarlen       inz(256)     like(int4_t);
-dcl-s srcvar          inz(*blanks) like(i_srcvar);
-dcl-s srcvarcls       char(10) inz(*blanks);
-dcl-s float4          float(4) based(pfloat);
-dcl-s float8          float(8) based(pfloat);
-dcl-s float4buf       char(4) based(pfloat);
-dcl-s float8buf       char(8) based(pfloat);
-dcl-s maxfloat4       packed(12:4) inz(*hival);
-dcl-s maxfloat8       packed(21:4) inz(*hival);
-dcl-s tmpfloat4       float(4) inz;
-dcl-s tmpfloat8       float(8) inz;
-dcl-s isexact         ind inz;
-dcl-s len             int(10) inz;
+dcl-s cvtvar char(256) inz(*blanks);
+dcl-s cvtvarlen inz(256) like(int4_t);
+dcl-s srcvar inz(*blanks) like(i_srcvar);
+dcl-s srcvarcls char(10) inz(*blanks);
+dcl-s float4 float(4) based(pfloat);
+dcl-s float8 float(8) based(pfloat);
+dcl-s float4buf char(4) based(pfloat);
+dcl-s float8buf char(8) based(pfloat);
+dcl-s maxfloat4 packed(12: 4) inz(*hival);
+dcl-s maxfloat8 packed(21: 4) inz(*hival);
+dcl-s tmpfloat4 float(4) inz;
+dcl-s tmpfloat8 float(8) inz;
+dcl-s isexact ind inz;
+dcl-s len int(10) inz;
 
-dcl-s tempstrlen      int(10) inz;
+dcl-s tempstrlen int(10) inz;
 
-dcl-s htranscoder     like(htranscoder_t ) inz;
+dcl-s htranscoder like(htranscoder_t) inz;
 
 //  helper fields to convert 3I0 and 20I0 fields
 dcl-ds zonedbuffer;
-  zoned3          zoned(3) inz   POS(1);
-  zoned5          zoned(5) inz   POS(1);
-  zoned10         zoned(10) inz   POS(1);
-  zoned20         zoned(20) inz   POS(1);
+  zoned3  zoned(3) inz pos(1);
+  zoned5  zoned(5) inz pos(1);
+  zoned10 zoned(10) inz pos(1);
+  zoned20 zoned(20) inz pos(1);
 end-ds;
 
 //  Sonderwerte: alle Bits des Exponenten gesetzt. Mantisse = 0: Inf,
@@ -115,29 +115,28 @@ dcl-c fltmask_exp_4 x'7F800000';
 dcl-c fltmask_man_4 x'007FFFFF';
 dcl-c fltmask_exp_8 x'7FF0000000000000';
 dcl-c fltmask_man_8 x'000FFFFFFFFFFFFF';
-dcl-c fltmask_sign  x'80';
+dcl-c fltmask_sign x'80';
 
 dcl-c spcval_nan '*NaN';
 dcl-c spcval_inf '*Inf';
 dcl-c spcval_neginf '-*Inf';
 
-/COPY QCOPYLE,PPEEK53
-/COPY QCOPYLE,PPEEK58
-/COPY QCOPYLE,PPEEK71
+/copy QCOPYLE,PPEEK53
+/copy QCOPYLE,PPEEK58
+/copy QCOPYLE,PPEEK71
 //*******************************************************************
 //           Main  Control block                                    *
 //*******************************************************************
-
 dcl-pi peek06;
-  i_fldl0100      const likeds(fldl0100_t);
-  i_rcdfmt        const like(fmt_t);
-  i_srcvar        const like(rcdbuf_t);
-  i_qcmdexc       const like(bool_t);
-  i_cvtccsid      const like(bool_t);
-  o_string              like(rcdbuf_t);
-  o_strlen              like(int4_t);
-  o_msgid               like(msgid_t);
-  o_msgdta              like(msgdta_t);
+  i_fldl0100 likeds(fldl0100_t) const;
+  i_rcdfmt   like(fmt_t) const;
+  i_srcvar   like(rcdbuf_t) const;
+  i_qcmdexc  like(bool_t) const;
+  i_cvtccsid like(bool_t) const;
+  o_string   like(rcdbuf_t);
+  o_strlen   like(int4_t);
+  o_msgid    like(msgid_t);
+  o_msgdta   like(msgdta_t);
 end-pi;
 
 dcl-ds fldl0100 likeds(fldl0100_t) inz;

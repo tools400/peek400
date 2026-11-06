@@ -25,78 +25,77 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/COPY QCOPYLE,H_SPEC
-/COPY QCOPYLE,COPYRIGHT
+/copy QCOPYLE,H_SPEC
+/copy QCOPYLE,COPYRIGHT
 
 
-/COPY QCOPYLE,D_VARDEF
-/COPY QCOPYLE,FLDL0100
-/COPY QCOPYLE,D_WORKSTN
-/COPY QCOPYLE,ShortCmd_D
-/COPY QCOPYLE,SDS
-/COPY QCOPYLE,CEECNDHDLR
+/copy QCOPYLE,D_VARDEF
+/copy QCOPYLE,FLDL0100
+/copy QCOPYLE,D_WORKSTN
+/copy QCOPYLE,ShortCmd_D
+/copy QCOPYLE,SDS
+/copy QCOPYLE,CEECNDHDLR
 
 /define internal_prototype
-/COPY QCOPYLE,PPEEK21
+/copy QCOPYLE,PPEEK21
 /undefine internal_prototype
 
-/COPY QCOPYLE,PPEEK53
-/COPY QCOPYLE,PPEEK58
+/copy QCOPYLE,PPEEK53
+/copy QCOPYLE,PPEEK58
 
-/COPY QCOPYLE,USR8143
+/copy QCOPYLE,USR8143
 
-dcl-s wrk_eof         char(1) inz(bFalse);
+dcl-s wrk_eof char(1) inz(bFalse);
 
-dcl-s wrk_sectn       like(section_t);
-dcl-s wrk_key         like(key_t);
-dcl-s tmp_key         like(key_t);
-dcl-s wrk_data        like(set0000_t);
-dcl-s wrk_exclk       like(pgmcmd_t) dim(25);
-dcl-s p               like(int4_t);
+dcl-s wrk_sectn like(section_t);
+dcl-s wrk_key like(key_t);
+dcl-s tmp_key like(key_t);
+dcl-s wrk_data like(set0000_t);
+dcl-s wrk_exclk like(pgmcmd_t) dim(25);
+dcl-s p like(int4_t);
 
-dcl-s isexit05        ind inz(bFalse);
-dcl-s exit05          like(pgmcalln_t);
+dcl-s isexit05 ind inz(bFalse);
+dcl-s exit05 like(pgmcalln_t);
 
 dcl-ds qpgm qualified;
-  name            char(10);
-  lib             char(10);
+  name char(10);
+  lib  char(10);
 end-ds;
 
-dcl-pr chgactevt        extpgm(exit05);
-  gi_file         char(10) const;
-  gi_lib          char(10) const;
-  gi_user         char(10) const;
-  gi_pgm          char(10) const;
-  gi_type         char(10) const;
-  gio_option      char(10);
+dcl-pr chgactevt extpgm(exit05);
+  gi_file    char(10) const;
+  gi_lib     char(10) const;
+  gi_user    char(10) const;
+  gi_pgm     char(10) const;
+  gi_type    char(10) const;
+  gio_option char(10);
 end-pr;
 
 dcl-ds g_exit05 qualified;
-  user            char(10) inz;
-  file            char(10) inz;
-  lib             char(10) inz;
+  user char(10) inz;
+  file char(10) inz;
+  lib  char(10) inz;
 end-ds;
 
 dcl-pr callexit05;
-  i_pgm           char(10) const;
-  i_type          char(10) const;
-  io_value        char(10);
+  i_pgm    char(10) const;
+  i_type   char(10) const;
+  io_value char(10);
 end-pr;
 
-dcl-s isInzSr         like(bool_t) inz(bFalse);
+dcl-s isInzSr like(bool_t) inz(bFalse);
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
 //*******************************************************************
-
 dcl-pi peek21;
-  i_scnaid        const like(scnaid_t);
-  i_pgm           const like(pgm_t);
-  o_pgmcmd        like(pgmcmd_t);
-  o_cmddta        like(pgmcmddt_t);
-  o_msgid         like(msgid_t);
-  o_msgdta        like(msgdta_t);
-  i_exclkeys      const like(pgmcmd_t) dim(25) options(*nopass);
+  i_scnaid   like(scnaid_t) const;
+  i_pgm      like(pgm_t) const;
+  o_pgmcmd   like(pgmcmd_t);
+  o_cmddta   like(pgmcmddt_t);
+  o_msgid    like(msgid_t);
+  o_msgdta   like(msgdta_t);
+  i_exclkeys like(pgmcmd_t) dim(25) options(*nopass) const;
 end-pi;
 
 //---------------------------------------------------*
@@ -359,10 +358,10 @@ endsr;
 //    Aufrufen EXIT05                                         *
 //============================================================*
 dcl-proc callexit05;
-  dcl-pi *N;
-    i_pgm           char(10) const;
-    i_type          char(10) const;
-    io_value        char(10);
+  dcl-pi *n;
+    i_pgm    char(10) const;
+    i_type   char(10) const;
+    io_value char(10);
   end-pi;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -384,11 +383,11 @@ end-proc;
 //============================================================*
 
 dcl-proc errorhandler;
-  dcl-pi *N;
-    i_condtoken     value likeds(cee_fc_t);
-    i_pcommarea     int(10) value;
-    o_action        int(10);
-    o_newcondtoken  likeds(cee_fc_t);
+  dcl-pi *n;
+    i_condtoken    likeds(cee_fc_t) value;
+    i_pcommarea    int(10) value;
+    o_action       int(10);
+    o_newcondtoken likeds(cee_fc_t);
   end-pi;
 
   dump;

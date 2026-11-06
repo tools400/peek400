@@ -24,118 +24,116 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/COPY QCOPYLE,H_SPEC
-/COPY QCOPYLE,COPYRIGHT
+/copy QCOPYLE,H_SPEC
+/copy QCOPYLE,COPYRIGHT
 
-dcl-f peek30fm workstn(*ext) usage(*input:*output)
-      usropn infds(workstn);
+dcl-f peek30fm workstn(*ext) usage(*input: *output) usropn infds(workstn);
 
 dcl-ds workstn likeds(workstn_t);
 
-/COPY QCOPYLE,D_VARDEF
-/COPY QCOPYLE,FLDL0100
-/COPY QCOPYLE,D_WORKSTN
-/COPY QCOPYLE,D_COLORATR
-/COPY QCOPYLE,SDS
-/COPY QCOPYLE,QUSCRTUS
-/COPY QCOPYLE,QUSPTRUS
-/COPY QCOPYLE,CEECNDHDLR
+/copy QCOPYLE,D_VARDEF
+/copy QCOPYLE,FLDL0100
+/copy QCOPYLE,D_WORKSTN
+/copy QCOPYLE,D_COLORATR
+/copy QCOPYLE,SDS
+/copy QCOPYLE,QUSCRTUS
+/copy QCOPYLE,QUSPTRUS
+/copy QCOPYLE,CEECNDHDLR
 
 /define internal_prototype
-/COPY QCOPYLE,PPEEK30
+/copy QCOPYLE,PPEEK30
 /undefine internal_prototype
 
-/COPY QCOPYLE,USR8158
-/COPY QCOPYLE,USR9997
+/copy QCOPYLE,USR8158
+/copy QCOPYLE,USR9997
 
-/COPY QCOPYLE,PPEEK07
-/COPY QCOPYLE,PPEEK28
-/COPY QCOPYLE,PPEEK29
+/copy QCOPYLE,PPEEK07
+/copy QCOPYLE,PPEEK28
+/copy QCOPYLE,PPEEK29
 
-/COPY QCOPYLE,PPEEK53
-/COPY QCOPYLE,PPEEK58
+/copy QCOPYLE,PPEEK53
+/copy QCOPYLE,PPEEK58
 
-dcl-s usrspcdta       char(64) based(pspcptr);
-dcl-s ysrlnbrext      like(r_srlnbr );
-dcl-s ydateext        like(r_srldate);
+dcl-s usrspcdta char(64) based(pspcptr);
+dcl-s ysrlnbrext like(r_srlnbr);
+dcl-s ydateext like(r_srldate);
 
-dcl-s yattrlen        like(int4_t);
-dcl-s yattrtyp        char(1);
-dcl-s yvalue          char(512);
+dcl-s yattrlen like(int4_t);
+dcl-s yattrtyp char(1);
+dcl-s yvalue char(512);
 
-dcl-s ysysname        char(8);
-dcl-s ysysvers        char(6);
-dcl-s ysyssrlnbr      char(8);
-dcl-s ysrlnbrint      like(r_srlnbr );
-dcl-s ydateint        like(r_srldate);
+dcl-s ysysname char(8);
+dcl-s ysysvers char(6);
+dcl-s ysyssrlnbr char(8);
+dcl-s ysrlnbrint like(r_srlnbr);
+dcl-s ydateint like(r_srldate);
 
-dcl-s r_srldata       char(20);
-dcl-s r_srlnbr        char(20);
-dcl-s r_srldate       char(20);
+dcl-s r_srldata char(20);
+dcl-s r_srlnbr char(20);
+dcl-s r_srldate char(20);
 
 //  Konvertierung HEX ==> DEC
-dcl-s r_dec           packed(30);
-dcl-s r_hex           like(r_srlnbr );
-dcl-s hex             char(1) dim(16);
-dcl-s zw1             packed(30);
-dcl-s exp             like(int4_t);
-dcl-s a1              char(1);
-dcl-s x               like(int4_t);
-dcl-s y               like(int4_t);
+dcl-s r_dec packed(30);
+dcl-s r_hex like(r_srlnbr);
+dcl-s hex char(1) dim(16);
+dcl-s zw1 packed(30);
+dcl-s exp like(int4_t);
+dcl-s a1 char(1);
+dcl-s x like(int4_t);
+dcl-s y like(int4_t);
 
 //  DeadDate
-dcl-s zwint           packed(30);
-dcl-s zwext           packed(30);
-dcl-s deaddate        packed(8);
+dcl-s zwint packed(30);
+dcl-s zwext packed(30);
+dcl-s deaddate packed(8);
 
 //  Aktuelle Datum und Uhrzeit
-dcl-ds *N;
-  currDatTim      zoned(14);
-  currTime        zoned(6) overlay(currDatTim) inz;
-  currDateFW      zoned(8) overlay(currDatTim:7) inz;
-  currDayFW       zoned(2) overlay(currDateFW) inz;
-  currMonFW       zoned(2) overlay(currDateFW:3) inz;
-  currYearFW      zoned(4) overlay(currDateFW:5) inz;
+dcl-ds *n;
+  currDatTim zoned(14);
+  currTime   zoned(6) overlay(currDatTim) inz;
+  currDateFW zoned(8) overlay(currDatTim: 7) inz;
+  currDayFW  zoned(2) overlay(currDateFW) inz;
+  currMonFW  zoned(2) overlay(currDateFW: 3) inz;
+  currYearFW zoned(4) overlay(currDateFW: 5) inz;
 end-ds;
 
-dcl-ds *N;
-  currdaterv      zoned(8);
-  curryearrv      zoned(4) overlay(currdaterv) inz;
-  currmonrv       zoned(2) overlay(currdaterv:5) inz;
-  currdayrv       zoned(2) overlay(currdaterv:7) inz;
+dcl-ds *n;
+  currdaterv zoned(8);
+  curryearrv zoned(4) overlay(currdaterv) inz;
+  currmonrv  zoned(2) overlay(currdaterv: 5) inz;
+  currdayrv  zoned(2) overlay(currdaterv: 7) inz;
 end-ds;
 
-dcl-c bTrueext const( 66);
-dcl-c bFalseext const(-55);
-dcl-c bshareext const(243);
+dcl-c bTrueext 66;
+dcl-c bFalseext -55;
+dcl-c bshareext 243;
 
-dcl-s iscompok        char(1) inz(bFalse);
-dcl-s isdateerr       char(1) inz(bFalse);
-dcl-s iswriteok       char(1) inz(bFalse);
+dcl-s iscompok char(1) inz(bFalse);
+dcl-s isdateerr char(1) inz(bFalse);
+dcl-s iswriteok char(1) inz(bFalse);
 
 //  declarations for QUSCRTUS
 dcl-ds qusrspc likeds(qobj_t) inz;
 
 //  Programme
-dcl-s peek07_name     like(pgmcalln_t) inz;
-dcl-s peek28_name     like(pgmcalln_t) inz;
-dcl-s peek29_name     like(pgmcalln_t) inz;
+dcl-s peek07_name like(pgmcalln_t) inz;
+dcl-s peek28_name like(pgmcalln_t) inz;
+dcl-s peek29_name like(pgmcalln_t) inz;
 
-dcl-s isInzSr         like(bool_t) inz(bFalse);
+dcl-s isInzSr like(bool_t) inz(bFalse);
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
 //*******************************************************************
-
 dcl-pi peek30;
-  i_dsp80         const like(dsp80_t);
-  i_copyright     const like(copyrght_t);
-  o_flag          like(int4_t);
-  o_msgid         like(msgid_t);
-  o_msgdta        like(msgdta_t);
+  i_dsp80     like(dsp80_t) const;
+  i_copyright like(copyrght_t) const;
+  o_flag      like(int4_t);
+  o_msgid     like(msgid_t);
+  o_msgdta    like(msgdta_t);
 end-pi;
 
-dcl-s do_x1           packed(7);
+dcl-s do_x1 packed(7);
 
 //  Register error handler
 ceehdlr(%paddr('errorHandler')
@@ -706,11 +704,11 @@ endsr;
 //============================================================*
 
 dcl-proc errorhandler;
-  dcl-pi *N;
-    i_condtoken     value likeds(cee_fc_t);
-    i_pcommarea     int(10) value;
-    o_action        int(10);
-    o_newcondtoken  likeds(cee_fc_t);
+  dcl-pi *n;
+    i_condtoken    likeds(cee_fc_t) value;
+    i_pcommarea    int(10) value;
+    o_action       int(10);
+    o_newcondtoken likeds(cee_fc_t);
   end-pi;
 
   dump;

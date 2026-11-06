@@ -24,108 +24,107 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/COPY QCOPYLE,H_SPEC
-/COPY QCOPYLE,COPYRIGHT
+/copy QCOPYLE,H_SPEC
+/copy QCOPYLE,COPYRIGHT
 
-/COPY QCOPYLE,D_VARDEF
-/COPY QCOPYLE,D_COLORATR
-/COPY QCOPYLE,SDS
-/COPY QCOPYLE,CEECNDHDLR
+/copy QCOPYLE,D_VARDEF
+/copy QCOPYLE,D_COLORATR
+/copy QCOPYLE,SDS
+/copy QCOPYLE,CEECNDHDLR
 
-/COPY QCOPYLE,SET0001                    // Benutzervoreinstellungen
-/COPY QCOPYLE,SET0007                    // Versionsnummer
-/COPY QCOPYLE,SET0012                    // Generieren Programme *CRTPGM
-/COPY QCOPYLE,SET0016                    // SQL: Limit zum Anzeigen der Anzahl Datensät
+/copy QCOPYLE,SET0001 // Benutzervoreinstellungen
+/copy QCOPYLE,SET0007 // Versionsnummer
+/copy QCOPYLE,SET0012 // Generieren Programme *CRTPGM
+/copy QCOPYLE,SET0016 // SQL: Limit zum Anzeigen der Anzahl Datensät
 
 /define internal_prototype
-/COPY QCOPYLE,PPEEK33
+/copy QCOPYLE,PPEEK33
 /undefine internal_prototype
 
-/COPY QCOPYLE,PPEEK53
+/copy QCOPYLE,PPEEK53
 
-dcl-ds set0007  likeds(set0007_t) inz;
-dcl-ds set0012  likeds(set0012_t) inz;
-dcl-ds set0016  likeds(set0016_t) inz;
+dcl-ds set0007 likeds(set0007_t) inz;
+dcl-ds set0012 likeds(set0012_t) inz;
+dcl-ds set0016 likeds(set0016_t) inz;
 
 //  Vor V3.0.0
 dcl-ds set0012_alt qualified;
   //  Kleinbuchstaben erlaubt: 1=Ja; 0=Nein
-  set_alwlc       char(10) inz('1');
+  set_alwlc char(10) inz('1');
   //  Standardmäßig Klienbuchstaben: 1=Ja; 0=Nein
-  set_case        char(10) inz('0');
+  set_case  char(10) inz('0');
   //  Endemarkierung
-  set_0012        char(1) inz(x'8B');
+  set_0012  char(1) inz(x'8B');
 end-ds;
 
-dcl-s x               like(int4_t) inz;
+dcl-s x like(int4_t) inz;
 
 dcl-ds wrktabds qualified;
-  remark          char(5) inz(*blanks);
-  section         char(10) inz(*blanks);
-  key             char(10) inz(*blanks);
-  data            like(set0000_t) inz(*blanks);
+  remark  char(5) inz(*blanks);
+  section char(10) inz(*blanks);
+  key     char(10) inz(*blanks);
+  data    like(set0000_t) inz(*blanks);
 end-ds;
 
-dcl-ds set0001        likeds(set0001_t) inz;
+dcl-ds set0001 likeds(set0001_t) inz;
 
-dcl-s o_data          like(set0000_t) inz;
+dcl-s o_data like(set0000_t) inz;
 
-dcl-s wrktab          char(100) dim(100) inz(*blanks);
-dcl-s wrkelem         like(int4_t) inz;
+dcl-s wrktab char(100) dim(100) inz(*blanks);
+dcl-s wrkelem like(int4_t) inz;
 
-dcl-s tb010100        char(100) dim( 58) ctdata perrcd(1);
-dcl-c elm010100 const(%elem(tb010100));
+dcl-s tb010100 char(100) dim(58) ctdata perrcd(1);
+dcl-c elm010100 %elem(tb010100);
 
-dcl-s tb010200        char(100) dim( 36) ctdata perrcd(1);
-dcl-c elm010200 const(%elem(tb010200));
+dcl-s tb010200 char(100) dim(36) ctdata perrcd(1);
+dcl-c elm010200 %elem(tb010200);
 
-dcl-s tb010300        char(100) dim( 12) ctdata perrcd(1);
-dcl-c elm010300 const(%elem(tb010300));
+dcl-s tb010300 char(100) dim(12) ctdata perrcd(1);
+dcl-c elm010300 %elem(tb010300);
 
-dcl-s tb010400        char(100) dim( 42) ctdata perrcd(1);
-dcl-c elm010400 const(%elem(tb010400));
+dcl-s tb010400 char(100) dim(42) ctdata perrcd(1);
+dcl-c elm010400 %elem(tb010400);
 
-dcl-s tb010500        char(100) dim( 52) ctdata perrcd(1);
-dcl-c elm010500 const(%elem(tb010500));
+dcl-s tb010500 char(100) dim(52) ctdata perrcd(1);
+dcl-c elm010500 %elem(tb010500);
 
-dcl-s tb020000        char(100) dim( 34) ctdata perrcd(1);
-dcl-c elm020000 const(%elem(tb020000));
+dcl-s tb020000 char(100) dim(34) ctdata perrcd(1);
+dcl-c elm020000 %elem(tb020000);
 
-dcl-s tb020100        char(100) dim( 40) ctdata perrcd(1);
-dcl-c elm020100 const(%elem(tb020100));
+dcl-s tb020100 char(100) dim(40) ctdata perrcd(1);
+dcl-c elm020100 %elem(tb020100);
 
-dcl-s tb020200        char(100) dim( 30) ctdata perrcd(1);
-dcl-c elm020200 const(%elem(tb020200));
+dcl-s tb020200 char(100) dim(30) ctdata perrcd(1);
+dcl-c elm020200 %elem(tb020200);
 
-dcl-s tb030000        char(100) dim( 22) ctdata perrcd(1);
-dcl-c elm030000 const(%elem(tb030000));
+dcl-s tb030000 char(100) dim(22) ctdata perrcd(1);
+dcl-c elm030000 %elem(tb030000);
 
-dcl-s tb030100        char(100) dim(  4) ctdata perrcd(1);
-dcl-c elm030100 const(%elem(tb030100));
+dcl-s tb030100 char(100) dim(4) ctdata perrcd(1);
+dcl-c elm030100 %elem(tb030100);
 
-dcl-s tb030101        char(100) dim( 24) ctdata perrcd(1);
-dcl-c elm030101 const(%elem(tb030101));
+dcl-s tb030101 char(100) dim(24) ctdata perrcd(1);
+dcl-c elm030101 %elem(tb030101);
 
-dcl-s tb030205        char(100) dim( 26) ctdata perrcd(1);
-dcl-c elm030205 const(%elem(tb030205));
+dcl-s tb030205 char(100) dim(26) ctdata perrcd(1);
+dcl-c elm030205 %elem(tb030205);
 
-dcl-s tb030401        char(100) dim(  4) ctdata perrcd(1);
-dcl-c elm030401 const(%elem(tb030401));
+dcl-s tb030401 char(100) dim(4) ctdata perrcd(1);
+dcl-c elm030401 %elem(tb030401);
 
-dcl-s tb030500        char(100) dim(  4) ctdata perrcd(1);
-dcl-c elm030500 const(%elem(tb030500));
+dcl-s tb030500 char(100) dim(4) ctdata perrcd(1);
+dcl-c elm030500 %elem(tb030500);
 
-dcl-s tb040001        char(100) dim( 16) ctdata perrcd(1);
-dcl-c elm040001 const(%elem(tb040001));
+dcl-s tb040001 char(100) dim(16) ctdata perrcd(1);
+dcl-c elm040001 %elem(tb040001);
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
 //*******************************************************************
-
 dcl-pi peek33;
-  i_version       const like(version_t);
-  o_msgid               like(msgid_t);
-  o_msgdta              like(msgdta_t);
+  i_version like(version_t) const;
+  o_msgid   like(msgid_t);
+  o_msgdta  like(msgdta_t);
 end-pi;
 
 //----------------------------------------------------*
@@ -1029,11 +1028,11 @@ endsr;
 //============================================================*
 
 dcl-proc errorhandler;
-  dcl-pi *N;
-    i_condtoken     value likeds(cee_fc_t);
-    i_pcommarea     int(10) value;
-    o_action        int(10);
-    o_newcondtoken  likeds(cee_fc_t);
+  dcl-pi *n;
+    i_condtoken    likeds(cee_fc_t) value;
+    i_pcommarea    int(10) value;
+    o_action       int(10);
+    o_newcondtoken likeds(cee_fc_t);
   end-pi;
 
   dump;

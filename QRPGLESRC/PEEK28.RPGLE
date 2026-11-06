@@ -24,48 +24,47 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/COPY QCOPYLE,H_SPEC
-/COPY QCOPYLE,COPYRIGHT
+/copy QCOPYLE,H_SPEC
+/copy QCOPYLE,COPYRIGHT
 
-/COPY QCOPYLE,D_VARDEF
-/COPY QCOPYLE,FLDL0100
-/COPY QCOPYLE,QWCRSVAL
-/COPY QCOPYLE,CEECNDHDLR
+/copy QCOPYLE,D_VARDEF
+/copy QCOPYLE,FLDL0100
+/copy QCOPYLE,QWCRSVAL
+/copy QCOPYLE,CEECNDHDLR
 
 /define internal_prototype
-/COPY QCOPYLE,PPEEK28
+/copy QCOPYLE,PPEEK28
 /undefine internal_prototype
 
-/COPY QCOPYLE,PPEEK53
-/COPY QCOPYLE,PPEEK58
+/copy QCOPYLE,PPEEK53
+/copy QCOPYLE,PPEEK58
 
 dcl-ds yrcvvar len(128) inz;
-  rcvnbrret       int(10);
-  rcvoffset       int(10);
-  rcvdata         char(120);
+  rcvnbrret int(10);
+  rcvoffset int(10);
+  rcvdata   char(120);
 end-ds;
 
 dcl-ds ysystemval len(128) inz;
-  systemval       char(10);
-  typeofdata      char(1);
-  infstatus       char(1);
-  lenofdata       int(10);
-  sysvaldata      char(112);
+  systemval  char(10);
+  typeofdata char(1);
+  infstatus  char(1);
+  lenofdata  int(10);
+  sysvaldata char(112);
 end-ds;
 
-dcl-s x        like(int4_t) inz;
+dcl-s x like(int4_t) inz;
 dcl-ds errcode likeds(errcode_t) inz;
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
 //*******************************************************************
-
 dcl-pi peek28;
-  i_attr          const like(attr_t);
-  i_nomsg         const like(bool_t);
-  o_attrlen       like(int4_t);
-  o_attrtype      like(attrtype_t);
-  o_attrvalue     like(attrvalue_t);
+  i_attr      like(attr_t) const;
+  i_nomsg     like(bool_t) const;
+  o_attrlen   like(int4_t);
+  o_attrtype  like(attrtype_t);
+  o_attrvalue like(attrvalue_t);
 end-pi;
 
 //---------------------------------------------------*
@@ -120,11 +119,11 @@ endsr;
 //============================================================*
 
 dcl-proc errorhandler;
-  dcl-pi *N;
-    i_condtoken     value likeds(cee_fc_t);
-    i_pcommarea     int(10) value;
-    o_action        int(10);
-    o_newcondtoken  likeds(cee_fc_t);
+  dcl-pi *n;
+    i_condtoken    likeds(cee_fc_t) value;
+    i_pcommarea    int(10) value;
+    o_action       int(10);
+    o_newcondtoken likeds(cee_fc_t);
   end-pi;
 
   dump;

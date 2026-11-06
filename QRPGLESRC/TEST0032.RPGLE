@@ -1,4 +1,4 @@
-**FREE
+**free
 //===============================================================*
 //                                                               *
 //  erstellt : 27.03.2012                                        *
@@ -38,24 +38,23 @@
 //                                                               *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-ctl-opt DEBUG OPTION(*SRCSTMT : *NODEBUGIO);
-ctl-opt DECEDIT('0,') DATEDIT(*DMY.);
-ctl-opt DATFMT(*ISO )  TIMFMT(*ISO );
-ctl-opt EXPROPTS(*RESDECPOS);
-ctl-opt EXTBININT(*YES);
+ctl-opt debug option(*srcstmt: *nodebugio);
+ctl-opt decedit('0,') datedit(*DMY.);
+ctl-opt datfmt(*iso) timfmt(*iso);
+ctl-opt expropts(*resdecpos);
+ctl-opt extbinint(*yes);
 //===============================================================*
-dcl-f TEST0032FM WORKSTN(*ext) usage(*input:*output)
-      usropn infds(workStn);
-//
+dcl-f TEST0032FM workstn(*ext) usage(*input: *output) usropn infds(workstn);
+
 dcl-ds workstn qualified;
-  status          zoned(5) pos(11);
-  offset          int(5) pos(241);
-  AID             char(1) pos(369);
-  csrPos          int(5);
+  status zoned(5) pos(11);
+  offset int(5) pos(241);
+  AID    char(1) pos(369);
+  csrPos int(5);
 end-ds;
-//
-/COPY QCOPYLE,D_WORKSTN
-//
+
+/copy QCOPYLE,D_WORKSTN
+
 // ------------------------------------
 //  Type definitions
 // ------------------------------------
@@ -75,21 +74,19 @@ end-ds;
 // ------------------------------------
 //  Prototypes
 // ------------------------------------
-//
-dcl-pr PGM_ENTRY_POINT
-       extpgm('TEST0032');
+
+dcl-pr PGM_ENTRY_POINT extpgm('TEST0032');
 end-pr;
-//
-dcl-pr main
-       extproc('main');
+
+dcl-pr main extproc('main');
 end-pr;
-//
+
 //===============================================================*
 //  Program Entry Point
 //===============================================================*
 dcl-pi PGM_ENTRY_POINT;
 end-pi;
-//
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 main();
@@ -98,39 +95,38 @@ main();
 
 return;
 
-//
+
 //===============================================================*
 //  Main procedure
 //===============================================================*
 dcl-proc main;
-//
-dcl-pi main;
-end-pi;
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  dcl-pi *n;
+  end-pi;
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-open TEST0032FM;
+  open TEST0032FM;
 
-dow '1';
+  dow '1';
 
-   exfmt SCREEN01;
+    exfmt SCREEN01;
 
-   select;
-   when (workstn.AID = K_ENTER);
+    select;
+    when (workstn.AID = K_ENTER);
       leave;
-   when (workstn.AID = K_F3);
+    when (workstn.AID = K_F3);
       leave;
-   when (workstn.AID = K_F12);
+    when (workstn.AID = K_F12);
       leave;
-   endsl;
+    endsl;
 
-enddo;
+  enddo;
 
-if (%open(TEST0032FM));
-   close TEST0032FM;
-endif;
+  if (%open(TEST0032FM));
+    close TEST0032FM;
+  endif;
 
-return;
+  return;
 
-//
+
 end-proc main;
-//
+

@@ -24,14 +24,14 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/COPY QCOPYLE,H_SPEC
-/COPY QCOPYLE,COPYRIGHT
+/copy QCOPYLE,H_SPEC
+/copy QCOPYLE,COPYRIGHT
 
-/COPY QCOPYLE,D_VARDEF
-/COPY QCOPYLE,CEECNDHDLR
+/copy QCOPYLE,D_VARDEF
+/copy QCOPYLE,CEECNDHDLR
 
 /define internal_prototype
-/COPY QCOPYLE,PPEEK60
+/copy QCOPYLE,PPEEK60
 /undefine internal_prototype
 
 //  Anzahl der Schritte der Fortschrittsanzeige je Programm. Sie muss zu
@@ -45,10 +45,9 @@ dcl-c cnumpasses_peek16 7;
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
 //*******************************************************************
-
-  dcl-pi peek60;
-  i_alwlc         const like(bool_t);
-o_numpasses     like(int4_t);
+dcl-pi peek60;
+  i_alwlc     like(bool_t) const;
+  o_numpasses like(int4_t);
 end-pi;
 
 //---------------------------------------------------*
@@ -64,8 +63,8 @@ o_numpasses = cnumpasses_peek08;
 o_numpasses = o_numpasses + cnumpasses_peek15;
 
 //  2. Aufruf PEEK15 (generieren Display File, lower cases)
-  if (i_alwlc = bTrue);
-o_numpasses = o_numpasses + cnumpasses_peek15;
+if (i_alwlc = bTrue);
+  o_numpasses = o_numpasses + cnumpasses_peek15;
 endif;
 
 //  3. Aufruf PEEK16 (generieren RPG Programm)
@@ -77,16 +76,16 @@ return;
 //  Program error handler                                     *
 //============================================================*
 
-  dcl-proc errorhandler;
-    dcl-pi *N;
-    i_condtoken     value likeds(cee_fc_t);
-    i_pcommarea     int(10) value;
-    o_action        int(10);
-  o_newcondtoken  likeds(cee_fc_t);
+dcl-proc errorhandler;
+  dcl-pi *n;
+    i_condtoken    likeds(cee_fc_t) value;
+    i_pcommarea    int(10) value;
+    o_action       int(10);
+    o_newcondtoken likeds(cee_fc_t);
   end-pi;
 
   dump;
-o_action = cee_percolate;
+  o_action = cee_percolate;
 
 end-proc;
 

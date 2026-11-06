@@ -25,38 +25,37 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/COPY QCOPYLE,H_SPEC
-/COPY QCOPYLE,COPYRIGHT
+/copy QCOPYLE,H_SPEC
+/copy QCOPYLE,COPYRIGHT
 
-/COPY QCOPYLE,D_VARDEF
-/COPY QCOPYLE,FLDL0100
-/COPY QCOPYLE,SDS
-/COPY QCOPYLE,CEECNDHDLR
+/copy QCOPYLE,D_VARDEF
+/copy QCOPYLE,FLDL0100
+/copy QCOPYLE,SDS
+/copy QCOPYLE,CEECNDHDLR
 
-/COPY QCOPYLE,SET0004
+/copy QCOPYLE,SET0004
 
 /define internal_prototype
-/COPY QCOPYLE,PPEEK31
+/copy QCOPYLE,PPEEK31
 /undefine internal_prototype
 
-/COPY QCOPYLE,PPEEK53
-/COPY QCOPYLE,PPEEK58
+/copy QCOPYLE,PPEEK53
+/copy QCOPYLE,PPEEK58
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
 //*******************************************************************
-
 dcl-pi peek31;
-  io_language           like(language_t);
-  i_prefix        const like(prefix_t);
-  o_msgid               like(msgid_t);
-  o_msgdta              like(msgdta_t);
+  io_language like(language_t);
+  i_prefix    like(prefix_t) const;
+  o_msgid     like(msgid_t);
+  o_msgdta    like(msgdta_t);
 end-pi;
 
-dcl-s do_x1     packed(7);
-dcl-ds set0004  likeds(set0004_t) inz;
+dcl-s do_x1 packed(7);
+dcl-ds set0004 likeds(set0004_t) inz;
 dcl-s isFallback like(bool_t) inz(bFalse);
-dcl-s msgf      like(file_t);
+dcl-s msgf like(file_t);
 //----------------------------------------------------*
 
 //  Register error handler
@@ -122,11 +121,11 @@ return;
 //============================================================*
 
 dcl-proc errorhandler;
-  dcl-pi *N;
-    i_condtoken     value likeds(cee_fc_t);
-    i_pcommarea     int(10) value;
-    o_action        int(10);
-    o_newcondtoken  likeds(cee_fc_t);
+  dcl-pi *n;
+    i_condtoken    likeds(cee_fc_t) value;
+    i_pcommarea    int(10) value;
+    o_action       int(10);
+    o_newcondtoken likeds(cee_fc_t);
   end-pi;
 
   dump;

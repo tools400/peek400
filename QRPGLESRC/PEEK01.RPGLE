@@ -25,32 +25,32 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/COPY QCOPYLE,H_SPEC
-/COPY QCOPYLE,COPYRIGHT
+/copy QCOPYLE,H_SPEC
+/copy QCOPYLE,COPYRIGHT
 
-dcl-f peekfld usage(*update:*delete:*output) usropn prefix(f_);
+dcl-f peekfld usage(*update: *delete: *output) usropn prefix(f_);
 
-/COPY QCOPYLE,D_VARDEF
-/COPY QCOPYLE,CEECNDHDLR
-/COPY QCOPYLE,FLDL0100
-/COPY QCOPYLE,D_COLORATR
-/COPY QCOPYLE,SET0001
-/COPY QCOPYLE,SDS
+/copy QCOPYLE,D_VARDEF
+/copy QCOPYLE,CEECNDHDLR
+/copy QCOPYLE,FLDL0100
+/copy QCOPYLE,D_COLORATR
+/copy QCOPYLE,SET0001
+/copy QCOPYLE,SDS
 
-/COPY QCOPYLE,USR0001
-/COPY QCOPYLE,USR8104
+/copy QCOPYLE,USR0001
+/copy QCOPYLE,USR8104
 
 /define internal_prototype
-/COPY QCOPYLE,PPEEK01
+/copy QCOPYLE,PPEEK01
 /undefine internal_prototype
 
-/COPY QCOPYLE,PPEEK02
-/COPY QCOPYLE,PPEEK53
-/COPY QCOPYLE,PPEEK58
-/COPY QCOPYLE,PPEEK71
-/COPY QCOPYLE,PEXIT06
+/copy QCOPYLE,PPEEK02
+/copy QCOPYLE,PPEEK53
+/copy QCOPYLE,PPEEK58
+/copy QCOPYLE,PPEEK71
+/copy QCOPYLE,PEXIT06
 
-dcl-ds set0001  likeds(set0001_t);
+dcl-ds set0001 likeds(set0001_t);
 dcl-ds fldl0100 likeds(fldl0100_t);
 
 dcl-s numFields like(int4_t);
@@ -68,13 +68,12 @@ dcl-s isInzSr like(bool_t) inz(bFalse);
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
 //*******************************************************************
-
 dcl-pi peek01;
-  i_qfile         const likeds(qobj_t);
-  i_rcdfmt        const like(fmt_t);
-  o_rcdfmtid      like(fmtid_t);
-  o_msgid         like(msgid_t);
-  o_msgdta        like(msgdta_t);
+  i_qfile    likeds(qobj_t) const;
+  i_rcdfmt   like(fmt_t) const;
+  o_rcdfmtid like(fmtid_t);
+  o_msgid    like(msgid_t);
+  o_msgdta   like(msgdta_t);
 end-pi;
 
 dcl-s do_x1 packed(7);
@@ -340,11 +339,11 @@ endsr;
 //============================================================*
 
 dcl-proc errorhandler;
-  dcl-pi *N;
-    i_condtoken     value likeds(cee_fc_t);
-    i_pcommarea     int(10) value;
-    o_action        int(10);
-    o_newcondtoken  likeds(cee_fc_t);
+  dcl-pi *n;
+    i_condtoken    likeds(cee_fc_t) value;
+    i_pcommarea    int(10) value;
+    o_action       int(10);
+    o_newcondtoken likeds(cee_fc_t);
   end-pi;
 
   dump;

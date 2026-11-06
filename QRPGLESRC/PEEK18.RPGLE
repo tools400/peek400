@@ -38,125 +38,124 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/COPY QCOPYLE,H_SPEC
-/COPY QCOPYLE,COPYRIGHT
+/copy QCOPYLE,H_SPEC
+/copy QCOPYLE,COPYRIGHT
 
 dcl-f peekfld keyed usropn prefix(f_);
 
-/COPY QCOPYLE,D_VARDEF
-/COPY QCOPYLE,FLDL0100
-/COPY QCOPYLE,SDS
-/COPY QCOPYLE,CEECNDHDLR
+/copy QCOPYLE,D_VARDEF
+/copy QCOPYLE,FLDL0100
+/copy QCOPYLE,SDS
+/copy QCOPYLE,CEECNDHDLR
 
 /define internal_prototype
-/COPY QCOPYLE,PPEEK18
+/copy QCOPYLE,PPEEK18
 /undefine internal_prototype
 
-/COPY QCOPYLE,SET0003
+/copy QCOPYLE,SET0003
 
-/COPY QCOPYLE,USR8138
+/copy QCOPYLE,USR8138
 
-/COPY QCOPYLE,PPEEK36
+/copy QCOPYLE,PPEEK36
 
-/COPY QCOPYLE,PPEEK53
-/COPY QCOPYLE,PPEEK58
-/COPY QCOPYLE,PPEEK71
+/copy QCOPYLE,PPEEK53
+/copy QCOPYLE,PPEEK58
+/copy QCOPYLE,PPEEK71
 
-dcl-ds set0003  likeds(set0003_t) inz;
+dcl-ds set0003 likeds(set0003_t) inz;
 
 dcl-ds fldl0100 likeds(fldl0100_t) inz;
 
-dcl-s ymsgid          char(7);
-dcl-s ymsgdta         char(512);
-dcl-s isMinus         char(1) inz(bFalse);
-dcl-s x               like(int4_t) inz;
-dcl-s a1              char(1) inz(*blanks);
+dcl-s ymsgid char(7);
+dcl-s ymsgdta char(512);
+dcl-s isMinus char(1) inz(bFalse);
+dcl-s x like(int4_t) inz;
+dcl-s a1 char(1) inz(*blanks);
 
 // Maximale Feldlänge liegt bei 30 Stellen wegen Bildschirmgroesse.
 // Siehe PEEK58, f_isNotAlw().
-dcl-ds *N;
-  zoned           zoned(63) inz;
-  zoned_a         char(63) overlay(zoned: 1);
+dcl-ds *n;
+  zoned   zoned(63) inz;
+  zoned_a char(63) overlay(zoned: 1);
 end-ds;
 
-dcl-ds *N;
-  packed          packed(63) inz;
-  packed_a        char(32) overlay(packed: 1);
+dcl-ds *n;
+  packed   packed(63) inz;
+  packed_a char(32) overlay(packed: 1);
 end-ds;
 
-dcl-ds *N;
-  binary1         int(3) inz pos(1);
-  binary1_a       char(1) overlay(binary1: 1);
+dcl-ds *n;
+  binary1   int(3) inz pos(1);
+  binary1_a char(1) overlay(binary1: 1);
 end-ds;
 
-dcl-ds *N;
-  binary2         int(5) inz pos(1);
-  binary2_a       char(2) overlay(binary2: 1);
+dcl-ds *n;
+  binary2   int(5) inz pos(1);
+  binary2_a char(2) overlay(binary2: 1);
 end-ds;
 
-dcl-ds *N;
-  binary4         int(10) inz pos(1);
-  binary4_a       char(4) overlay(binary4: 1);
+dcl-ds *n;
+  binary4   int(10) inz pos(1);
+  binary4_a char(4) overlay(binary4: 1);
 end-ds;
 
-dcl-ds *N;
-  binary8         int(20) inz pos(1);
-  binary8_a       char(8) overlay(binary8: 1);
+dcl-ds *n;
+  binary8   int(20) inz pos(1);
+  binary8_a char(8) overlay(binary8: 1);
 end-ds;
 
-dcl-s float           float(8) inz;
-dcl-s float4          float(4) based(pfloat);
-dcl-s float8          float(8) based(pfloat);
+dcl-s float float(8) inz;
+dcl-s float4 float(4) based(pfloat);
+dcl-s float8 float(8) based(pfloat);
 
 dcl-ds dsfloat qualified inz;
-  float8          float(8);
-  float4          float(4) overlay(float8);
+  float8 float(8);
+  float4 float(4) overlay(float8);
 end-ds;
 
-dcl-s htranscoder     like(htranscoder_t ) inz;
+dcl-s htranscoder like(htranscoder_t) inz;
 
-dcl-s SET_SIGN_PLUS   like(set0003.set_signp) inz('+');
-dcl-s SET_SIGN_MINUS  like(set0003.set_signm) inz('-');
+dcl-s SET_SIGN_PLUS like(set0003.set_signp) inz('+');
+dcl-s SET_SIGN_MINUS like(set0003.set_signm) inz('-');
 
-dcl-s r_tgtvalue      like(i_tgtvalue) inz(*blanks);
-dcl-s r_dateiso       date(*iso) inz(*loval );
-dcl-s r_timeiso       time(*iso) inz(*loval );
-dcl-s r_timestmp      timestamp inz(*loval );
+dcl-s r_tgtvalue like(i_tgtvalue) inz(*blanks);
+dcl-s r_dateiso date(*iso) inz(*loval);
+dcl-s r_timeiso time(*iso) inz(*loval);
+dcl-s r_timestmp timestamp inz(*loval);
 
-dcl-s strpos          like(int4_t) inz;
+dcl-s strpos like(int4_t) inz;
 
-dcl-s peek36_name     like(pgmcalln_t) inz;
+dcl-s peek36_name like(pgmcalln_t) inz;
 
 //    Converts a given buffer into the Job ccsid.
-dcl-pr cvtToJobCcsid   int(10) extproc('cvtToJobCcsid');
-  io_buffer       like(rcdbuf_t);
-  i_length        int(10) value;
-  i_ccsid         int(10) value;
+dcl-pr cvtToJobCcsid int(10) extproc('cvtToJobCcsid');
+  io_buffer like(rcdbuf_t);
+  i_length  int(10) value;
+  i_ccsid   int(10) value;
 end-pr;
 
 //    Converts a given buffer into the File ccsid.
-dcl-pr cvtToFileCcsid  int(10) extproc('cvtToFileCcsid');
-  io_buffer       like(rcdbuf_t);
-  i_length        int(10) value;
-  i_ccsid         int(10) value;
+dcl-pr cvtToFileCcsid int(10) extproc('cvtToFileCcsid');
+  io_buffer like(rcdbuf_t);
+  i_length  int(10) value;
+  i_ccsid   int(10) value;
 end-pr;
 
-dcl-s isInzSr         like(bool_t) inz(bFalse);
+dcl-s isInzSr like(bool_t) inz(bFalse);
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
 //*******************************************************************
-
 dcl-pi peek18;
-  i_fldl0100      const likeds(fldl0100_t);
-  i_rcdfmt        const like(fmt_t);
-  i_buffer              like(rcdbuf_t);
-  i_tgtformat     const like(format_t);
-  i_tgtvalue      const like(format_t);
-  o_buffer              like(rcdbuf_t);
-  o_bufflen             like(int4_t);
-  o_msgid               like(msgid_t);
-  o_msgdta              like(msgdta_t);
+  i_fldl0100  likeds(fldl0100_t) const;
+  i_rcdfmt    like(fmt_t) const;
+  i_buffer    like(rcdbuf_t);
+  i_tgtformat like(format_t) const;
+  i_tgtvalue  like(format_t) const;
+  o_buffer    like(rcdbuf_t);
+  o_bufflen   like(int4_t);
+  o_msgid     like(msgid_t);
+  o_msgdta    like(msgdta_t);
 end-pi;
 
 dcl-ds f_key likerec(fpeekfld: *key);
@@ -1375,13 +1374,13 @@ endsr;
 //    Converts a given buffer intot he Job ccsid.             *
 //============================================================*
 dcl-proc cvtToJobCcsid;
-  dcl-pi *N              int(10);
-    io_buffer       like(rcdbuf_t);
-    i_length        int(10) value;
-    i_ccsid         int(10) value;
+  dcl-pi *n int(10);
+    io_buffer like(rcdbuf_t);
+    i_length  int(10) value;
+    i_ccsid   int(10) value;
   end-pi;
 
-  dcl-s tLength         int(10);
+  dcl-s tLength int(10);
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   //  Nicht umsetzbare CCSID (z.B. GRAPHIC 835): Puffer unverändert
@@ -1410,13 +1409,13 @@ end-proc;
 //    Converts a given buffer into the File ccsid.            *
 //============================================================*
 dcl-proc cvtToFileCcsid;
-  dcl-pi *N              int(10);
-    io_buffer       like(rcdbuf_t);
-    i_length        int(10) value;
-    i_ccsid         int(10) value;
+  dcl-pi *n int(10);
+    io_buffer like(rcdbuf_t);
+    i_length  int(10) value;
+    i_ccsid   int(10) value;
   end-pi;
 
-  dcl-s tLength         int(10);
+  dcl-s tLength int(10);
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   //  Nicht umsetzbare CCSID: Puffer unverändert lassen
@@ -1446,11 +1445,11 @@ end-proc;
 //============================================================*
 
 dcl-proc errorhandler;
-  dcl-pi *N;
-    i_condtoken     value likeds(cee_fc_t);
-    i_pcommarea     int(10) value;
-    o_action        int(10);
-    o_newcondtoken  likeds(cee_fc_t);
+  dcl-pi *n;
+    i_condtoken    likeds(cee_fc_t) value;
+    i_pcommarea    int(10) value;
+    o_action       int(10);
+    o_newcondtoken likeds(cee_fc_t);
   end-pi;
 
   dump;
@@ -1461,5 +1460,5 @@ end-proc;
 //============================================================*
 //  Datum und Zeit im Format des Feldes (f_extDate, f_extTime)*
 //============================================================*
-/COPY QCOPYLE,DATTIMFMT
+/copy QCOPYLE,DATTIMFMT
 

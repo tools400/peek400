@@ -61,23 +61,23 @@
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
 ctl-opt main(peek11);
-/COPY QCOPYLE,H_SPEC
-/COPY QCOPYLE,COPYRIGHT
+/copy QCOPYLE,H_SPEC
+/copy QCOPYLE,COPYRIGHT
 
-/COPY QCOPYLE,D_VARDEF
-/COPY QCOPYLE,RCDL0200
-/COPY QCOPYLE,GENHEADER
-/COPY QCOPYLE,FLDL0100
-/COPY QCOPYLE,QUSLRCD
-/COPY QCOPYLE,QUSCRTUS
-/COPY QCOPYLE,QUSPTRUS
+/copy QCOPYLE,D_VARDEF
+/copy QCOPYLE,RCDL0200
+/copy QCOPYLE,GENHEADER
+/copy QCOPYLE,FLDL0100
+/copy QCOPYLE,QUSLRCD
+/copy QCOPYLE,QUSCRTUS
+/copy QCOPYLE,QUSPTRUS
 
 /define internal_prototype
-/COPY QCOPYLE,PPEEK11
+/copy QCOPYLE,PPEEK11
 /undefine internal_prototype
 
-/COPY QCOPYLE,PPEEK53
-/COPY QCOPYLE,PPEEK58
+/copy QCOPYLE,PPEEK53
+/copy QCOPYLE,PPEEK58
 
 dcl-ds qusrspc likeds(qobj_t) inz;
 dcl-s pspcptr pointer;
@@ -87,24 +87,24 @@ dcl-ds errcode likeds(errcode_t) inz;
 dcl-ds genheader likeds(genheader_t) based(pspcptr);
 
 //  List data
-dcl-s currliste       like(int4_t);
-dcl-s offsetliste     like(int4_t);
-dcl-s pliste          pointer;
+dcl-s currliste like(int4_t);
+dcl-s offsetliste like(int4_t);
+dcl-s pliste pointer;
 dcl-ds liste likeds(rcdl0200_t) based(pliste);
 
-dcl-s msgid           like(msgid_t);
-dcl-s msgdta          like(msgdta_t);
+dcl-s msgid like(msgid_t);
+dcl-s msgdta like(msgdta_t);
 
 //*******************************************************************
 //           Main  Control block                                    *
 //*******************************************************************
 
 dcl-proc peek11;
-  dcl-pi *N;
-    i_qfile         const likeds(qobj_t);
-    i_function      const like(function_t);
-    o_nume          like(int4_t);
-    o_rcdl0200      likeds(rcdl0200_t);
+  dcl-pi *n;
+    i_qfile    likeds(qobj_t) const;
+    i_function like(function_t) const;
+    o_nume     like(int4_t);
+    o_rcdl0200 likeds(rcdl0200_t);
   end-pi;
 
   //---------------------------------------------------*

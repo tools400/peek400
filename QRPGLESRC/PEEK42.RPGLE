@@ -34,108 +34,106 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/COPY QCOPYLE,H_SPEC
-/COPY QCOPYLE,COPYRIGHT
+/copy QCOPYLE,H_SPEC
+/copy QCOPYLE,COPYRIGHT
 
 // Aufbau des Satzformats
 dcl-f peekfld keyed usropn prefix(f_);
 
 dcl-ds io_buff;
-  io_bufffld      like(rcdbuf_t);
+  io_bufffld like(rcdbuf_t);
 end-ds;
 
-dcl-s io_nullmap      like(nullmap_t) dim(NULL_MAP_SIZE);
+dcl-s io_nullmap like(nullmap_t) dim(NULL_MAP_SIZE);
 
-/COPY QCOPYLE,D_VARDEF
-/COPY QCOPYLE,FLDL0100
-/COPY QCOPYLE,ShortCmd_d
-/COPY QCOPYLE,D_CLIB
-/COPY QCOPYLE,SDS
-/COPY QCOPYLE,CEECNDHDLR
+/copy QCOPYLE,D_VARDEF
+/copy QCOPYLE,FLDL0100
+/copy QCOPYLE,ShortCmd_d
+/copy QCOPYLE,D_CLIB
+/copy QCOPYLE,SDS
+/copy QCOPYLE,CEECNDHDLR
 
 /define internal_prototype
-/COPY QCOPYLE,PPEEK42
+/copy QCOPYLE,PPEEK42
 /undefine internal_prototype
 
-/COPY QCOPYLE,PPEEK06
-/COPY QCOPYLE,PPEEK66
+/copy QCOPYLE,PPEEK06
+/copy QCOPYLE,PPEEK66
 
-/COPY QCOPYLE,PPEEK53
-/COPY QCOPYLE,PPEEK58
-/COPY QCOPYLE,PPEEK63
+/copy QCOPYLE,PPEEK53
+/copy QCOPYLE,PPEEK58
+/copy QCOPYLE,PPEEK63
 
 dcl-pr lf_rtvfldname varchar(10);
-  i_buffer        const  like(r_shortcmd  );
-  i_startpos      const  like(int4_t);
+  i_buffer   like(r_shortcmd) const;
+  i_startpos like(int4_t) const;
 end-pr;
 
 dcl-pr lf_rtvfldformat like(bool_t);
-  io_buffer       like(r_shortcmd  );
-  i_startpos      const  like(int4_t);
-  o_fldl0100      likeds(fldl0100_t);
-  o_msgid         like(msgid_t);
-  o_msgdta        like(msgdta_t);
+  io_buffer  like(r_shortcmd);
+  i_startpos like(int4_t) const;
+  o_fldl0100 likeds(fldl0100_t);
+  o_msgid    like(msgid_t);
+  o_msgdta   like(msgdta_t);
 end-pr;
 
 dcl-pr lf_loadfldatr char(1);
-  i_fldname       char(10) const;
-  o_fldl0100      likeds(fldl0100_t);
+  i_fldname  char(10) const;
+  o_fldl0100 likeds(fldl0100_t);
 end-pr;
 
-dcl-s isInit          like(bool_t) inz(bFalse);
-dcl-s isRecord        like(bool_t) inz(bFalse);
+dcl-s isInit like(bool_t) inz(bFalse);
+dcl-s isRecord like(bool_t) inz(bFalse);
 
-dcl-s r_file          like(shortcmd_t.sc_file) inz;
-dcl-s r_lib           like(shortcmd_t.sc_lib) inz;
-dcl-s r_mbr           like(shortcmd_t.sc_mbr) inz;
-dcl-s r_shortcmd      like(o_execcmd  ) inz(*blanks);
-dcl-s r_cmd1          varchar(32702) inz(*blanks);
-dcl-s r_cmd2          varchar(32702) inz(*blanks);
-dcl-c r_maxlen const(256);
-dcl-s r_var           varchar(10) inz(*blanks);
-dcl-s r_value         varchar(32766) inz('');
-dcl-s s               like(int4_t) inz;
-dcl-s i               like(int4_t) inz;
-dcl-s fldname         varchar(10) inz(*blanks);
-dcl-s isoutformat     like(bool_t) inz(bFalse);
+dcl-s r_file like(shortcmd_t.sc_file) inz;
+dcl-s r_lib like(shortcmd_t.sc_lib) inz;
+dcl-s r_mbr like(shortcmd_t.sc_mbr) inz;
+dcl-s r_shortcmd like(o_execcmd) inz(*blanks);
+dcl-s r_cmd1 varchar(32702) inz(*blanks);
+dcl-s r_cmd2 varchar(32702) inz(*blanks);
+dcl-c r_maxlen 256;
+dcl-s r_var varchar(10) inz(*blanks);
+dcl-s r_value varchar(32766) inz('');
+dcl-s s like(int4_t) inz;
+dcl-s i like(int4_t) inz;
+dcl-s fldname varchar(10) inz(*blanks);
+dcl-s isoutformat like(bool_t) inz(bFalse);
 dcl-ds shortcmd likeds(shortcmd_t) inz;
 dcl-ds fldl0100 likeds(fldl0100_t) inz;
 dcl-ds fldl0100_out likeds(fldl0100_t) inz;
 
-dcl-s peek06_name     like(pgmcalln_t) inz;
-dcl-s peek66_name     like(pgmcalln_t) inz;
+dcl-s peek06_name like(pgmcalln_t) inz;
+dcl-s peek66_name like(pgmcalln_t) inz;
 
 //  Parameterliste PEEK06
-dcl-s youtbuffer      like(rcdbuf_t);
-dcl-s youtbuffln      like(int4_t) inz;
-dcl-s ymsgid          like(msgid_t) inz(*blanks);
-dcl-s ymsgdta         like(msgdta_t) inz(*blanks);
+dcl-s youtbuffer like(rcdbuf_t);
+dcl-s youtbuffln like(int4_t) inz;
+dcl-s ymsgid like(msgid_t) inz(*blanks);
+dcl-s ymsgdta like(msgdta_t) inz(*blanks);
 
-dcl-c NAME_PREFIX const('%');
-dcl-c cformat_start const('(');
-dcl-c cformat_end const(')');
-dcl-c cformat_delimiter
-      const(',');
+dcl-c NAME_PREFIX '%';
+dcl-c cformat_start '(';
+dcl-c cformat_end ')';
+dcl-c cformat_delimiter ',';
 
 // Für Einzelsatzzugriff
-dcl-ds hfile00  likeds(hfile_t);
+dcl-ds hfile00 likeds(hfile_t);
 
-dcl-s isInzSr         like(bool_t) inz(bFalse);
+dcl-s isInzSr like(bool_t) inz(bFalse);
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
 //*******************************************************************
-
 dcl-pi peek42;
-  i_file          const like(file_t);
-  i_library       const like(lib_t);
-  i_member        const like(mbr_t);
-  i_rcdformat     const like(fmt_t);
-  i_shortcmd      const like(shortcmd_t);
-  i_rcdNbr        const like(rcdNbr_t);
-  o_execcmd       like(cmdbuffer_t);
-  o_msgid         like(msgid_t);
-  o_msgdta        like(msgdta_t);
+  i_file      like(file_t) const;
+  i_library   like(lib_t) const;
+  i_member    like(mbr_t) const;
+  i_rcdformat like(fmt_t) const;
+  i_shortcmd  like(shortcmd_t) const;
+  i_rcdNbr    like(rcdNbr_t) const;
+  o_execcmd   like(cmdbuffer_t);
+  o_msgid     like(msgid_t);
+  o_msgdta    like(msgdta_t);
 end-pi;
 
 //---------------------------------------------------*
@@ -439,11 +437,11 @@ endsr;
 //============================================================*
 
 dcl-proc errorhandler;
-  dcl-pi *N;
-    i_condtoken     value likeds(cee_fc_t);
-    i_pcommarea     int(10) value;
-    o_action        int(10);
-    o_newcondtoken  likeds(cee_fc_t);
+  dcl-pi *n;
+    i_condtoken    likeds(cee_fc_t) value;
+    i_pcommarea    int(10) value;
+    o_action       int(10);
+    o_newcondtoken likeds(cee_fc_t);
   end-pi;
 
   dump;
@@ -455,19 +453,19 @@ end-proc;
 //    Ermitteln Feldname aus Kurzbefehl                       *
 //============================================================*
 dcl-proc lf_rtvfldname;
-  dcl-pi *N              varchar(10);
-    i_buffer        const  like(r_shortcmd  );
-    i_startpos      const  like(int4_t);
+  dcl-pi *n varchar(10);
+    i_buffer   like(r_shortcmd) const;
+    i_startpos like(int4_t) const;
   end-pi;
 
   //  Funktionswert
-  dcl-s fldname         char(10) inz;
+  dcl-s fldname char(10) inz;
 
   //  Arbeitsfelder
-  dcl-s i               like(int4_t) inz;
+  dcl-s i like(int4_t) inz;
 
   //  Gültige Zeichen für Feldnamen
-  dcl-c VALID_CHARS const('_$#§ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890');
+  dcl-c VALID_CHARS '_$#§ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   fldname = '';
@@ -489,31 +487,31 @@ end-proc;
 //    Ermitteln Feldformat                                    *
 //============================================================*
 dcl-proc lf_rtvfldformat;
-  dcl-pi *N        like(bool_t);
-    io_buffer       like(r_shortcmd  );
-    i_startpos      const  like(int4_t);
-    o_fldl0100      likeds(fldl0100_t);
-    o_msgid         like(msgid_t);
-    o_msgdta        like(msgdta_t);
+  dcl-pi *n like(bool_t);
+    io_buffer  like(r_shortcmd);
+    i_startpos like(int4_t) const;
+    o_fldl0100 likeds(fldl0100_t);
+    o_msgid    like(msgid_t);
+    o_msgdta   like(msgdta_t);
   end-pi;
 
   //  Arbeitsfelder
-  dcl-s s               like(int4_t) inz;
-  dcl-s e               like(int4_t) inz;
-  dcl-s l               like(int4_t) inz;
-  dcl-s strformat       char(256) inz;
+  dcl-s s like(int4_t) inz;
+  dcl-s e like(int4_t) inz;
+  dcl-s l like(int4_t) inz;
+  dcl-s strformat char(256) inz;
   dcl-ds data qualified inz;
-    type            char(1);
-    length          int(10);
-    decpos          int(10);
+    type   char(1);
+    length int(10);
+    decpos int(10);
   end-ds;
-  dcl-s ptoken          pointer inz;
+  dcl-s ptoken pointer inz;
   dcl-ds fldl0100_tmp likeds(fldl0100_t) inz;
 
   //  Nachrichten
-  /COPY QCOPYLE,USR8228
-  /COPY QCOPYLE,USR8229
-  /COPY QCOPYLE,USR8230
+/copy QCOPYLE,USR8228
+/copy QCOPYLE,USR8229
+/copy QCOPYLE,USR8230
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   clear o_fldl0100;
@@ -672,13 +670,13 @@ end-proc;
 //    Laden Feldattribute                                     *
 //============================================================*
 dcl-proc lf_loadfldatr;
-  dcl-pi *N              char(1);
-    i_fldname       char(10) const;
-    o_fldl0100      likeds(fldl0100_t);
+  dcl-pi *n char(1);
+    i_fldname  char(10) const;
+    o_fldl0100 likeds(fldl0100_t);
   end-pi;
 
   //  Funktionswert
-  dcl-s isloaded        char(1) inz(bFalse);
+  dcl-s isloaded char(1) inz(bFalse);
 
   //  Arbeitsfelder
   dcl-ds fldl0100 likeds(fldl0100_t) inz;

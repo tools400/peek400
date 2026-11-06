@@ -24,65 +24,63 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/COPY QCOPYLE,H_SPEC
-/COPY QCOPYLE,COPYRIGHT
+/copy QCOPYLE,H_SPEC
+/copy QCOPYLE,COPYRIGHT
 
-dcl-f peek49fm workstn(*ext) usage(*input:*output)
-      usropn infds(workstn);
+dcl-f peek49fm workstn(*ext) usage(*input: *output) usropn infds(workstn);
 
 dcl-ds workstn likeds(workstn_t);
 
-/COPY QCOPYLE,D_VARDEF
-/COPY QCOPYLE,FLDL0100
-/COPY QCOPYLE,D_WORKSTN
-/COPY QCOPYLE,ShortCmd_D
-/COPY QCOPYLE,SDS
-/COPY QCOPYLE,SCRNFKEYS
-/COPY QCOPYLE,CEECNDHDLR
+/copy QCOPYLE,D_VARDEF
+/copy QCOPYLE,FLDL0100
+/copy QCOPYLE,D_WORKSTN
+/copy QCOPYLE,ShortCmd_D
+/copy QCOPYLE,SDS
+/copy QCOPYLE,SCRNFKEYS
+/copy QCOPYLE,CEECNDHDLR
 
-/COPY QCOPYLE,USR8100
+/copy QCOPYLE,USR8100
 
 /define internal_prototype
-/COPY QCOPYLE,PPEEK49
+/copy QCOPYLE,PPEEK49
 /undefine internal_prototype
 
-/COPY QCOPYLE,PPEEK21
-/COPY QCOPYLE,PPEEK23
+/copy QCOPYLE,PPEEK21
+/copy QCOPYLE,PPEEK23
 
-/COPY QCOPYLE,PPEEK53
-/COPY QCOPYLE,PPEEK58
+/copy QCOPYLE,PPEEK53
+/copy QCOPYLE,PPEEK58
 
-dcl-s yfkeys          char(18) dim(32) inz;
-dcl-s ynbrofkeys      like(int4_t) inz;
-dcl-s ymsgid          char(7) inz;
-dcl-s ymsgdta         char(512) inz;
+dcl-s yfkeys char(18) dim(32) inz;
+dcl-s ynbrofkeys like(int4_t) inz;
+dcl-s ymsgid char(7) inz;
+dcl-s ymsgdta char(512) inz;
 
-dcl-s ypgmcmd         char(10) inz;
-dcl-s ycmddta         like(pgmcmddt_t) inz;
+dcl-s ypgmcmd char(10) inz;
+dcl-s ycmddta like(pgmcmddt_t) inz;
 
-dcl-s sfbot           like(int4_t) inz;
-dcl-c nbrfkeys const(2);
+dcl-s sfbot like(int4_t) inz;
+dcl-c nbrfkeys 2;
 
-dcl-s r$vers          char(2) inz(*blanks);
-dcl-s r$modf          char(2) inz(*blanks);
-dcl-s r$rels          char(2) inz(*blanks);
+dcl-s r$vers char(2) inz(*blanks);
+dcl-s r$modf char(2) inz(*blanks);
+dcl-s r$rels char(2) inz(*blanks);
 
-dcl-s peek21_name     like(pgmcalln_t) inz;
-dcl-s peek23_name     like(pgmcalln_t) inz;
+dcl-s peek21_name like(pgmcalln_t) inz;
+dcl-s peek23_name like(pgmcalln_t) inz;
 
-dcl-s isInzSr         like(bool_t) inz(bFalse);
+dcl-s isInzSr like(bool_t) inz(bFalse);
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
 //*******************************************************************
-
 dcl-pi peek49;
-  i_dsp80         const like(dsp80_t);
-  i_copyright     const like(copyrght_t);
-  i_release       const like(release_t);
-  i_version       const like(version_t);
-  o_msgid               like(msgid_t);
-  o_msgdta              like(msgdta_t);
+  i_dsp80     like(dsp80_t) const;
+  i_copyright like(copyrght_t) const;
+  i_release   like(release_t) const;
+  i_version   like(version_t) const;
+  o_msgid     like(msgid_t);
+  o_msgdta    like(msgdta_t);
 end-pi;
 //---------------------------------------------------*
 
@@ -379,11 +377,11 @@ endsr;
 //============================================================*
 
 dcl-proc errorhandler;
-  dcl-pi *N;
-    i_condtoken     value likeds(cee_fc_t);
-    i_pcommarea     int(10) value;
-    o_action        int(10);
-    o_newcondtoken  likeds(cee_fc_t);
+  dcl-pi *n;
+    i_condtoken    likeds(cee_fc_t) value;
+    i_pcommarea    int(10) value;
+    o_action       int(10);
+    o_newcondtoken likeds(cee_fc_t);
   end-pi;
 
   dump;

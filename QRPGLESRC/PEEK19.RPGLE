@@ -24,54 +24,52 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/COPY QCOPYLE,H_SPEC
-/COPY QCOPYLE,COPYRIGHT
+/copy QCOPYLE,H_SPEC
+/copy QCOPYLE,COPYRIGHT
 
-dcl-f peekfldl2 keyed usropn rename(fpeekfld:fpeekfldl2) prefix(f2)
-      infds(peek_l2_ds);
+dcl-f peekfldl2 keyed usropn rename(fpeekfld: fpeekfldl2) prefix(f2) infds(peek_l2_ds);
 
 dcl-ds peek_l2_ds likeds(infds_t);
 
-/COPY QCOPYLE,D_VARDEF
-/COPY QCOPYLE,D_INFDS
-/COPY QCOPYLE,FLDL0100
-/COPY QCOPYLE,SDS
-/COPY QCOPYLE,CEECNDHDLR
+/copy QCOPYLE,D_VARDEF
+/copy QCOPYLE,D_INFDS
+/copy QCOPYLE,FLDL0100
+/copy QCOPYLE,SDS
+/copy QCOPYLE,CEECNDHDLR
 
 /define internal_prototype
-/COPY QCOPYLE,PPEEK19
+/copy QCOPYLE,PPEEK19
 /undefine internal_prototype
 
-/COPY QCOPYLE,PPEEK18
-/COPY QCOPYLE,PPEEK53
-/COPY QCOPYLE,PPEEK58
+/copy QCOPYLE,PPEEK18
+/copy QCOPYLE,PPEEK53
+/copy QCOPYLE,PPEEK58
 
-dcl-s ybuffer     like(rcdbuf_t) inz;
-dcl-s youtbuffer  like(rcdbuf_t) inz;
-dcl-s youtbuffln  like(int4_t) inz;
-dcl-s ymsgid      like(msgid_t) inz;
-dcl-s ymsgdta     like(msgdta_t) inz;
+dcl-s ybuffer like(rcdbuf_t) inz;
+dcl-s youtbuffer like(rcdbuf_t) inz;
+dcl-s youtbuffln like(int4_t) inz;
+dcl-s ymsgid like(msgid_t) inz;
+dcl-s ymsgdta like(msgdta_t) inz;
 
-dcl-s x           like(int4_t) inz;
-dcl-s y           like(int4_t) inz;
-dcl-ds fldl0100   likeds(fldl0100_t) inz;
+dcl-s x like(int4_t) inz;
+dcl-s y like(int4_t) inz;
+dcl-ds fldl0100 likeds(fldl0100_t) inz;
 
 dcl-s peek18_name like(pgmcalln_t) inz;
 
-dcl-s isinzsr     like(bool_t) inz(bFalse);
+dcl-s isinzsr like(bool_t) inz(bFalse);
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
 //*******************************************************************
-
 dcl-pi peek19;
-  i_rcdbuffer     const like(rcdbuf_t);
-  o_keyval        like(keybuf_t);
-  o_msgid         like(msgid_t);
-  o_msgdta        like(msgdta_t);
+  i_rcdbuffer like(rcdbuf_t) const;
+  o_keyval    like(keybuf_t);
+  o_msgid     like(msgid_t);
+  o_msgdta    like(msgdta_t);
 end-pi;
 
-dcl-s do_x1           packed(7);
+dcl-s do_x1 packed(7);
 
 dcl-ds f2key_l2 likerec(fpeekfldl2: *key);
 
@@ -160,11 +158,11 @@ endsr;
 //============================================================*
 
 dcl-proc errorhandler;
-  dcl-pi *N;
-    i_condtoken     value likeds(cee_fc_t);
-    i_pcommarea     int(10) value;
-    o_action        int(10);
-    o_newcondtoken  likeds(cee_fc_t);
+  dcl-pi *n;
+    i_condtoken    likeds(cee_fc_t) value;
+    i_pcommarea    int(10) value;
+    o_action       int(10);
+    o_newcondtoken likeds(cee_fc_t);
   end-pi;
 
   dump;

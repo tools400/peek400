@@ -24,10 +24,10 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/COPY QCOPYLE,H_SPEC
-/COPY QCOPYLE,COPYRIGHT
+/copy QCOPYLE,H_SPEC
+/copy QCOPYLE,COPYRIGHT
 
-dcl-f peek64fm workstn(*ext) usage(*input:*output) usropn infds(workstn);
+dcl-f peek64fm workstn(*ext) usage(*input: *output) usropn infds(workstn);
 
 dcl-f peekfld keyed usropn prefix(f_) infds(peek_01_ds);
 
@@ -35,101 +35,100 @@ dcl-ds workstn likeds(workstn_t);
 
 dcl-ds peek_01_ds likeds(infds_t);
 
-/COPY QCOPYLE,D_VARDEF
-/COPY QCOPYLE,D_INFDS
-/COPY QCOPYLE,D_WORKSTN
-/COPY QCOPYLE,D_COLORATR
-/COPY QCOPYLE,SDS
-/COPY QCOPYLE,FLDL0100
-/COPY QCOPYLE,SCRNFKEYS
-/COPY QCOPYLE,CEECNDHDLR
+/copy QCOPYLE,D_VARDEF
+/copy QCOPYLE,D_INFDS
+/copy QCOPYLE,D_WORKSTN
+/copy QCOPYLE,D_COLORATR
+/copy QCOPYLE,SDS
+/copy QCOPYLE,FLDL0100
+/copy QCOPYLE,SCRNFKEYS
+/copy QCOPYLE,CEECNDHDLR
 
-/COPY QCOPYLE,USR8100
-/COPY QCOPYLE,USR8123
-/COPY QCOPYLE,USR8136
-/COPY QCOPYLE,USR8240
-/COPY QCOPYLE,USR8241
+/copy QCOPYLE,USR8100
+/copy QCOPYLE,USR8123
+/copy QCOPYLE,USR8136
+/copy QCOPYLE,USR8240
+/copy QCOPYLE,USR8241
 
 /define internal_prototype
-/COPY QCOPYLE,PPEEK64
+/copy QCOPYLE,PPEEK64
 /undefine internal_prototype
 
-/COPY QCOPYLE,PPEEK21
-/COPY QCOPYLE,PPEEK23
+/copy QCOPYLE,PPEEK21
+/copy QCOPYLE,PPEEK23
 
-/COPY QCOPYLE,PPEEK53
-/COPY QCOPYLE,PPEEK58
-/COPY QCOPYLE,PPEEK71
+/copy QCOPYLE,PPEEK53
+/copy QCOPYLE,PPEEK58
+/copy QCOPYLE,PPEEK71
 
 dcl-ds fldl0100 likeds(fldl0100_t) inz;
 
-dcl-s yPgmCmd         like(pgmcmd_t);
-dcl-s yCmdDta         like(pgmcmddt_t);
-dcl-s yMsgId          like(msgid_t);
-dcl-s yMsgDta         like(msgdta_t);
+dcl-s yPgmCmd like(pgmcmd_t);
+dcl-s yCmdDta like(pgmcmddt_t);
+dcl-s yMsgId like(msgid_t);
+dcl-s yMsgDta like(msgdta_t);
 
-dcl-s yFKeys          like(fkeydsp_t) dim(32);
-dcl-s yNbrOfKeys      like(int4_t) inz;
-dcl-s yExclKeys       like(pgmcmd_t) dim(25);
+dcl-s yFKeys like(fkeydsp_t) dim(32);
+dcl-s yNbrOfKeys like(int4_t) inz;
+dcl-s yExclKeys like(pgmcmd_t) dim(25);
 
-dcl-s sfBot           like(int4_t);
-dcl-c NBR_F_KEYS const(3);
+dcl-s sfBot like(int4_t);
+dcl-c NBR_F_KEYS 3;
 
-dcl-s peek21_name     like(pgmcalln_t);
-dcl-s peek23_name     like(pgmcalln_t);
+dcl-s peek21_name like(pgmcalln_t);
+dcl-s peek23_name like(pgmcalln_t);
 
 // Arbeitsfelder
-dcl-s isPgmError      like(bool_t) inz(bFalse);
-dcl-s isDataChg       like(bool_t) inz(bFalse);
+dcl-s isPgmError like(bool_t) inz(bFalse);
+dcl-s isDataChg like(bool_t) inz(bFalse);
 
 dcl-ds buffer qualified;
-  offset          int(10) inz;
-  maxLength       int(10) inz;
-  trimLength      int(10) inz;
-  pFldInhaltSbcs  like(rcdbuf_t) inz;
-  pFldInhaltUcs2  like(rcdbufucs2_t) overlay(pFldInhaltSbcs) inz;
+  offset         int(10) inz;
+  maxLength      int(10) inz;
+  trimLength     int(10) inz;
+  pFldInhaltSbcs like(rcdbuf_t) inz;
+  pFldInhaltUcs2 like(rcdbufucs2_t) overlay(pFldInhaltSbcs) inz;
 end-ds;
 
-dcl-s maxEditLength  int(10);
+dcl-s maxEditLength int(10);
 
-dcl-ds *N;
-  #ucs2str        ucs2(704) pos(1);
-  #ucs2           ucs2(64) ccsid(13488) dim(11) pos(1);
+dcl-ds *n;
+  #ucs2str ucs2(704) pos(1);
+  #ucs2    ucs2(64) ccsid(13488) dim(11) pos(1);
 end-ds;
 
 dcl-ds cursorPosition likeds(cursorPosition_t) inz;
 
-dcl-c MODE_OFF    '*N';
+dcl-c MODE_OFF '*N';
 dcl-c MODE_INSERT '*INSERT';
 dcl-c MODE_DELETE '*DELETE';
 
 dcl-ds insDel qualified inz;
-  mode      char(10);
-  startPos  int(10);
-  endPos    int(10);
+  mode     char(10);
+  startPos int(10);
+  endPos   int(10);
 end-ds;
 
-dcl-s start  int(10);
+dcl-s start int(10);
 dcl-s length int(10);
 dcl-s relPos int(10);
 
-dcl-s isInzSr         like(bool_t) inz(bFalse);
+dcl-s isInzSr like(bool_t) inz(bFalse);
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
 //*******************************************************************
-
 dcl-pi peek64;
-  i_dsp80         const like(dsp80_t);
-  i_headType      const like(headtyp_t);
-  i_copyright     const like(copyrght_t);
-  i_fldName       const like(fieldnme_t);
-  io_fldInhalt    likeds(fldinhalt_t);
-  io_length       like(int4_t);
-  i_protect       const like(bool_t);
-  i_isUcs2        const like(int4_t);
-  o_msgId         like(msgid_t);
-  o_msgDta        like(msgdta_t);
+  i_dsp80      like(dsp80_t) const;
+  i_headType   like(headtyp_t) const;
+  i_copyright  like(copyrght_t) const;
+  i_fldName    like(fieldnme_t) const;
+  io_fldInhalt likeds(fldinhalt_t);
+  io_length    like(int4_t);
+  i_protect    like(bool_t) const;
+  i_isUcs2     like(int4_t) const;
+  o_msgId      like(msgid_t);
+  o_msgDta     like(msgdta_t);
 end-pi;
 
 dcl-ds f_key likerec(fpeekfld: *key);
@@ -1221,7 +1220,7 @@ endsr;
 //============================================================*
 
 dcl-proc isCursorDataField;
-  dcl-pi *N ind;
+  dcl-pi *n ind;
   end-pi;
 
   if (H_CSRFLD = '#STRING' or f_startsWith('#UCS2_': H_CSRFLD));
@@ -1237,11 +1236,11 @@ end-proc;
 //============================================================*
 
 dcl-proc errorHandler;
-  dcl-pi *N;
-    i_condToken     value likeds(cee_fc_t);
-    i_pcommArea     int(10) value;
-    o_action        int(10);
-    o_newCondToken  likeds(cee_fc_t);
+  dcl-pi *n;
+    i_condToken    likeds(cee_fc_t) value;
+    i_pcommArea    int(10) value;
+    o_action       int(10);
+    o_newCondToken likeds(cee_fc_t);
   end-pi;
 
   dump;

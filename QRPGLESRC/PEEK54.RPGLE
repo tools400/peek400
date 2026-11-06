@@ -24,72 +24,71 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/COPY QCOPYLE,H_SPEC
-/COPY QCOPYLE,COPYRIGHT
+/copy QCOPYLE,H_SPEC
+/copy QCOPYLE,COPYRIGHT
 
-dcl-f peekenv usage(*update:*delete:*output) keyed usropn prefix(en_);
+dcl-f peekenv usage(*update: *delete: *output) keyed usropn prefix(en_);
 dcl-f peekfld keyed usropn prefix(p_);
 
-/COPY QCOPYLE,D_VARDEF
-/COPY QCOPYLE,FLDL0100
-/COPY QCOPYLE,FILD0100
-/COPY QCOPYLE,ENV0001
-/COPY QCOPYLE,SDS
-/COPY QCOPYLE,CEECNDHDLR
+/copy QCOPYLE,D_VARDEF
+/copy QCOPYLE,FLDL0100
+/copy QCOPYLE,FILD0100
+/copy QCOPYLE,ENV0001
+/copy QCOPYLE,SDS
+/copy QCOPYLE,CEECNDHDLR
 
 /define internal_prototype
-/COPY QCOPYLE,PPEEK54
+/copy QCOPYLE,PPEEK54
 /undefine internal_prototype
 
-/COPY QCOPYLE,PPEEK53
-/COPY QCOPYLE,PPEEK58
+/copy QCOPYLE,PPEEK53
+/copy QCOPYLE,PPEEK58
 
 dcl-pr main;
-  i_file          value  like(gi_file   );
-  i_lib           value  like(gi_lib    );
-  i_mbr           value  like(gi_mbr    );
-  i_rcdfmt        value  like(gi_rcdfmt );
-  i_rcdfmtid      value  like(gi_rcdfmtid);
-  i_envfile       value  like(gi_envfile);
-  i_envlib        value  like(gi_envlib );
-  i_envmbr        value  like(gi_envmbr );
-  i_isautosave    value  like(gi_isautosave);
-  i_pintabr       value  like(gi_pintabr) dim(12);
-  i_nbrpinr       value  like(gi_nbrpinr);
-  i_pintabc       value  like(gi_pintabc) dim(12);
-  i_nbrpinc       value  like(gi_nbrpinc);
-  i_accmode       value  like(gi_accmode);
-  i_sqlsel        value  like(gi_sqlsel );
-  i_sqlord        value  like(gi_sqlord );
-  i_iskeylower    value  like(gi_iskeylower);
-  o_msgid         like(go_msgid  );
-  o_msgdta        like(go_msgdta );
+  i_file       like(gi_file) value;
+  i_lib        like(gi_lib) value;
+  i_mbr        like(gi_mbr) value;
+  i_rcdfmt     like(gi_rcdfmt) value;
+  i_rcdfmtid   like(gi_rcdfmtid) value;
+  i_envfile    like(gi_envfile) value;
+  i_envlib     like(gi_envlib) value;
+  i_envmbr     like(gi_envmbr) value;
+  i_isautosave like(gi_isautosave) value;
+  i_pintabr    like(gi_pintabr) dim(12) value;
+  i_nbrpinr    like(gi_nbrpinr) value;
+  i_pintabc    like(gi_pintabc) dim(12) value;
+  i_nbrpinc    like(gi_nbrpinc) value;
+  i_accmode    like(gi_accmode) value;
+  i_sqlsel     like(gi_sqlsel) value;
+  i_sqlord     like(gi_sqlord) value;
+  i_iskeylower like(gi_iskeylower) value;
+  o_msgid      like(go_msgid);
+  o_msgdta     like(go_msgdta);
 end-pr;
 
 //*******************************************************************
 //           Programmsteuerung                                      *
 //*******************************************************************
-
 dcl-pi peek54;
-  gi_file         const like(file_t);
-  gi_lib          const like(lib_t);
-  gi_mbr          const like(mbr_t);
-  gi_rcdfmt       const like(fmt_t);
-  gi_rcdfmtid     const like(fmtid_t);
-  gi_envfile      const like(file_t);
-  gi_envlib       const like(lib_t);
-  gi_envmbr       const like(mbr_t);
-  gi_isautosave   const like(bool_t);
-  gi_pintabr      const like(pintabr_t) dim(12);
-  gi_nbrpinr      const like(int4_t);
-  gi_pintabc      const like(fieldnme_t) dim(12);
-  gi_nbrpinc      const like(int4_t);
-  gi_accmode      const like(accessmode_t);
-  gi_sqlsel       const like(sqlwhere_t);
-  gi_sqlord       const like(sqlorder_t);
-  gi_iskeylower   const like(bool_t);
-  go_msgid        like(msgid_t);
-  go_msgdta       like(msgdta_t);
+  gi_file       like(file_t) const;
+  gi_lib        like(lib_t) const;
+  gi_mbr        like(mbr_t) const;
+  gi_rcdfmt     like(fmt_t) const;
+  gi_rcdfmtid   like(fmtid_t) const;
+  gi_envfile    like(file_t) const;
+  gi_envlib     like(lib_t) const;
+  gi_envmbr     like(mbr_t) const;
+  gi_isautosave like(bool_t) const;
+  gi_pintabr    like(pintabr_t) dim(12) const;
+  gi_nbrpinr    like(int4_t) const;
+  gi_pintabc    like(fieldnme_t) dim(12) const;
+  gi_nbrpinc    like(int4_t) const;
+  gi_accmode    like(accessmode_t) const;
+  gi_sqlsel     like(sqlwhere_t) const;
+  gi_sqlord     like(sqlorder_t) const;
+  gi_iskeylower like(bool_t) const;
+  go_msgid      like(msgid_t);
+  go_msgdta     like(msgdta_t);
 end-pi;
 
 dcl-ds p_key1 likerec(fpeekfld: *key);
@@ -126,40 +125,40 @@ return;
 //===================================================================*
 
 dcl-proc main;
-  dcl-pi *N;
-    i_file          value  like(gi_file   );
-    i_lib           value  like(gi_lib    );
-    i_mbr           value  like(gi_mbr    );
-    i_rcdfmt        value  like(gi_rcdfmt );
-    i_rcdfmtid      value  like(gi_rcdfmtid);
-    i_envfile       value  like(gi_envfile);
-    i_envlib        value  like(gi_envlib );
-    i_envmbr        value  like(gi_envmbr );
-    i_isautosave    value  like(gi_isautosave);
-    i_pintabr       value  like(gi_pintabr) dim(12);
-    i_nbrpinr       value  like(gi_nbrpinr);
-    i_pintabc       value  like(gi_pintabc) dim(12);
-    i_nbrpinc       value  like(gi_nbrpinc);
-    i_accmode       value  like(gi_accmode);
-    i_sqlsel        value  like(gi_sqlsel );
-    i_sqlord        value  like(gi_sqlord );
-    i_iskeylower    value  like(gi_iskeylower);
-    o_msgid         like(go_msgid  );
-    o_msgdta        like(go_msgdta );
+  dcl-pi *n;
+    i_file       like(gi_file) value;
+    i_lib        like(gi_lib) value;
+    i_mbr        like(gi_mbr) value;
+    i_rcdfmt     like(gi_rcdfmt) value;
+    i_rcdfmtid   like(gi_rcdfmtid) value;
+    i_envfile    like(gi_envfile) value;
+    i_envlib     like(gi_envlib) value;
+    i_envmbr     like(gi_envmbr) value;
+    i_isautosave like(gi_isautosave) value;
+    i_pintabr    like(gi_pintabr) dim(12) value;
+    i_nbrpinr    like(gi_nbrpinr) value;
+    i_pintabc    like(gi_pintabc) dim(12) value;
+    i_nbrpinc    like(gi_nbrpinc) value;
+    i_accmode    like(gi_accmode) value;
+    i_sqlsel     like(gi_sqlsel) value;
+    i_sqlord     like(gi_sqlord) value;
+    i_iskeylower like(gi_iskeylower) value;
+    o_msgid      like(go_msgid);
+    o_msgdta     like(go_msgdta);
   end-pi;
 
   //  Arbeitsfelder
-  dcl-s pfile           like(file_t);
-  dcl-s plib            like(lib_t);
-  dcl-s pmbr            like(mbr_t);
-  dcl-s pfmt            like(fmt_t);
-  dcl-s penvmbr         like(i_envmbr);
-  dcl-s cansave         like(bool_t);
-  dcl-s pmsgid          like(msgid_t);
-  dcl-s pmsgdta         like(msgdta_t);
+  dcl-s pfile like(file_t);
+  dcl-s plib like(lib_t);
+  dcl-s pmbr like(mbr_t);
+  dcl-s pfmt like(fmt_t);
+  dcl-s penvmbr like(i_envmbr);
+  dcl-s cansave like(bool_t);
+  dcl-s pmsgid like(msgid_t);
+  dcl-s pmsgdta like(msgdta_t);
 
   //  Nachrichten
-  /COPY QCOPYLE,USR9992
+/copy QCOPYLE,USR9992
   //---------------------------------------------------*
 
   if (i_envmbr = '*FILE');
@@ -311,12 +310,12 @@ end-proc;
 //===================================================================*
 
 dcl-proc clearEnvironment;
-  dcl-pi *N extproc(*dclcase);
-    i_envfile       like(gi_envfile);
-    i_envlib        like(gi_envlib );
-    i_envmbr        like(gi_envmbr );
-    o_msgid         like(go_msgid  );
-    o_msgdta        like(go_msgdta );
+  dcl-pi *n extproc(*dclcase);
+    i_envfile like(gi_envfile);
+    i_envlib  like(gi_envlib);
+    i_envmbr  like(gi_envmbr);
+    o_msgid   like(go_msgid);
+    o_msgdta  like(go_msgdta);
   end-pi;
 
   //  definieren Arbeitsfelder ...
@@ -341,16 +340,16 @@ end-proc;
 //===================================================================*
 
 dcl-proc writeFile;
-  dcl-pi *N extproc(*dclcase);
-    i_file          like(gi_file   );
-    i_lib           like(gi_lib    );
-    i_filex         like(gi_file   );
+  dcl-pi *n extproc(*dclcase);
+    i_file  like(gi_file);
+    i_lib   like(gi_lib);
+    i_filex like(gi_file);
   end-pi;
 
   //  definieren Arbeitsfelder ...
-  dcl-ds *N;
-    idx             zoned(10) inz;
-    chridx          char(10) overlay(idx);
+  dcl-ds *n;
+    idx    zoned(10) inz;
+    chridx char(10) overlay(idx);
   end-ds;
   //---------------------------------------------------*
 
@@ -374,16 +373,16 @@ end-proc;
 //===================================================================*
 
 dcl-proc writeLibrary;
-  dcl-pi *N extproc(*dclcase);
-    i_file          like(gi_file   );
-    i_lib           like(gi_lib    );
-    i_libx          like(gi_lib    );
+  dcl-pi *n extproc(*dclcase);
+    i_file like(gi_file);
+    i_lib  like(gi_lib);
+    i_libx like(gi_lib);
   end-pi;
 
   //  definieren Arbeitsfelder ...
-  dcl-ds *N;
-    idx             zoned(10) inz;
-    chridx          char(10) overlay(idx);
+  dcl-ds *n;
+    idx    zoned(10) inz;
+    chridx char(10) overlay(idx);
   end-ds;
   //---------------------------------------------------*
 
@@ -407,16 +406,16 @@ end-proc;
 //===================================================================*
 
 dcl-proc writeMember;
-  dcl-pi *N extproc(*dclcase);
-    i_file          like(gi_file   );
-    i_lib           like(gi_lib    );
-    i_mbr           like(gi_mbr    );
+  dcl-pi *n extproc(*dclcase);
+    i_file like(gi_file);
+    i_lib  like(gi_lib);
+    i_mbr  like(gi_mbr);
   end-pi;
 
   //  definieren Arbeitsfelder ...
-  dcl-ds *N;
-    idx             zoned(10) inz;
-    chridx          char(10) overlay(idx);
+  dcl-ds *n;
+    idx    zoned(10) inz;
+    chridx char(10) overlay(idx);
   end-ds;
   //---------------------------------------------------*
 
@@ -440,16 +439,16 @@ end-proc;
 //===================================================================*
 
 dcl-proc writeRecordFormat;
-  dcl-pi *N extproc(*dclcase);
-    i_file          like(gi_file   );
-    i_lib           like(gi_lib    );
-    i_rcdfmt        like(gi_rcdfmt );
+  dcl-pi *n extproc(*dclcase);
+    i_file   like(gi_file);
+    i_lib    like(gi_lib);
+    i_rcdfmt like(gi_rcdfmt);
   end-pi;
 
   //  definieren Arbeitsfelder ...
-  dcl-ds *N;
-    idx             zoned(10) inz;
-    chridx          char(10) overlay(idx);
+  dcl-ds *n;
+    idx    zoned(10) inz;
+    chridx char(10) overlay(idx);
   end-ds;
   //---------------------------------------------------*
 
@@ -473,16 +472,16 @@ end-proc;
 //===================================================================*
 
 dcl-proc writeRecordFormatID;
-  dcl-pi *N extproc(*dclcase);
-    i_file          like(gi_file    );
-    i_lib           like(gi_lib     );
-    i_rcdfmtid      like(gi_rcdfmtid);
+  dcl-pi *n extproc(*dclcase);
+    i_file     like(gi_file);
+    i_lib      like(gi_lib);
+    i_rcdfmtid like(gi_rcdfmtid);
   end-pi;
 
   //  definieren Arbeitsfelder ...
-  dcl-ds *N;
-    idx             zoned(10) inz;
-    chridx          char(10) overlay(idx);
+  dcl-ds *n;
+    idx    zoned(10) inz;
+    chridx char(10) overlay(idx);
   end-ds;
   //---------------------------------------------------*
 
@@ -506,31 +505,31 @@ end-proc;
 //===================================================================*
 
 dcl-proc checkAutoSave;
-  dcl-pi *N like(bool_t) extproc(*dclcase);
-    i_file          like(gi_file   );
-    i_lib           like(gi_lib    );
+  dcl-pi *n like(bool_t) extproc(*dclcase);
+    i_file like(gi_file);
+    i_lib  like(gi_lib);
   end-pi;
 
   //  definieren Arbeitsfelder ...
   dcl-ds en_key1 qualified;
-    user            like(en_user   );
+    user like(en_user);
   end-ds;
 
   dcl-ds en_key3 qualified;
-    user            like(en_user   );
-    section         like(en_section);
-    file            like(en_file   );
+    user    like(en_user);
+    section like(en_section);
+    file    like(en_file);
   end-ds;
 
   dcl-ds en_key4 qualified;
-    user            like(en_user   );
-    section         like(en_section);
-    file            like(en_file   );
-    lib             like(en_lib    );
+    user    like(en_user);
+    section like(en_section);
+    file    like(en_file);
+    lib     like(en_lib);
   end-ds;
 
   //  Nachrichten
-  /COPY QCOPYLE,USR9992
+/copy QCOPYLE,USR9992
   //---------------------------------------------------*
 
   en_key1.user    = *loval;
@@ -579,16 +578,16 @@ end-proc;
 //===================================================================*
 
 dcl-proc writeAccessMode;
-  dcl-pi *N extproc(*dclcase);
-    i_file          like(gi_file   );
-    i_lib           like(gi_lib    );
-    i_accmode       like(gi_accmode);
+  dcl-pi *n extproc(*dclcase);
+    i_file    like(gi_file);
+    i_lib     like(gi_lib);
+    i_accmode like(gi_accmode);
   end-pi;
 
   //  definieren Arbeitsfelder ...
-  dcl-ds *N;
-    idx             zoned(10) inz;
-    chridx          char(10) overlay(idx);
+  dcl-ds *n;
+    idx    zoned(10) inz;
+    chridx char(10) overlay(idx);
   end-ds;
   //---------------------------------------------------*
 
@@ -612,22 +611,22 @@ end-proc;
 //===================================================================*
 
 dcl-proc writeSQLSelect;
-  dcl-pi *N extproc(*dclcase);
-    i_file          like(gi_file   );
-    i_lib           like(gi_lib    );
-    i_sqlsel        like(gi_sqlsel );
+  dcl-pi *n extproc(*dclcase);
+    i_file   like(gi_file);
+    i_lib    like(gi_lib);
+    i_sqlsel like(gi_sqlsel);
   end-pi;
 
   //  definieren Arbeitsfelder ...
-  dcl-ds *N;
-    idx             zoned(10) inz;
-    chridx          char(10) overlay(idx);
+  dcl-ds *n;
+    idx    zoned(10) inz;
+    chridx char(10) overlay(idx);
   end-ds;
 
-  dcl-s strpos          like(int4_t) inz;
-  dcl-s lensql          like(int4_t) inz;
-  dcl-s lendata         like(int4_t) inz;
-  dcl-s lenpart         like(int4_t) inz;
+  dcl-s strpos like(int4_t) inz;
+  dcl-s lensql like(int4_t) inz;
+  dcl-s lendata like(int4_t) inz;
+  dcl-s lenpart like(int4_t) inz;
   //---------------------------------------------------*
 
   clear fpeekenv;
@@ -669,22 +668,22 @@ end-proc;
 //===================================================================*
 
 dcl-proc writeSQLOrder;
-  dcl-pi *N extproc(*dclcase);
-    i_file          like(gi_file   );
-    i_lib           like(gi_lib    );
-    i_sqlord        like(gi_sqlord );
+  dcl-pi *n extproc(*dclcase);
+    i_file   like(gi_file);
+    i_lib    like(gi_lib);
+    i_sqlord like(gi_sqlord);
   end-pi;
 
   //  definieren Arbeitsfelder ...
-  dcl-ds *N;
-    idx             zoned(10) inz;
-    chridx          char(10) overlay(idx);
+  dcl-ds *n;
+    idx    zoned(10) inz;
+    chridx char(10) overlay(idx);
   end-ds;
 
-  dcl-s strpos          like(int4_t) inz;
-  dcl-s lensql          like(int4_t) inz;
-  dcl-s lendata         like(int4_t) inz;
-  dcl-s lenpart         like(int4_t) inz;
+  dcl-s strpos like(int4_t) inz;
+  dcl-s lensql like(int4_t) inz;
+  dcl-s lendata like(int4_t) inz;
+  dcl-s lenpart like(int4_t) inz;
   //---------------------------------------------------*
 
   clear fpeekenv;
@@ -726,16 +725,16 @@ end-proc;
 //===================================================================*
 
 dcl-proc writeIsKeyLowerCase;
-  dcl-pi *N extproc(*dclcase);
-    i_file          like(gi_file       );
-    i_lib           like(gi_lib        );
-    i_iskeylower    like(gi_iskeylower );
+  dcl-pi *n extproc(*dclcase);
+    i_file       like(gi_file);
+    i_lib        like(gi_lib);
+    i_iskeylower like(gi_iskeylower);
   end-pi;
 
   //  definieren Arbeitsfelder ...
-  dcl-ds *N;
-    idx             zoned(10) inz;
-    chridx          char(10) overlay(idx);
+  dcl-ds *n;
+    idx    zoned(10) inz;
+    chridx char(10) overlay(idx);
   end-ds;
   //---------------------------------------------------*
 
@@ -759,18 +758,17 @@ end-proc;
 //===================================================================*
 
 dcl-proc writePinnedRecords;
-  dcl-pi *N extproc(*dclcase);
-    i_file          like(gi_file   );
-    i_lib           like(gi_lib    );
-    i_pintabr       like(gi_pintabr)
-         dim(12);
-    i_nbrpinr       like(gi_nbrpinr);
+  dcl-pi *n extproc(*dclcase);
+    i_file    like(gi_file);
+    i_lib     like(gi_lib);
+    i_pintabr like(gi_pintabr) dim(12);
+    i_nbrpinr like(gi_nbrpinr);
   end-pi;
 
   //  definieren Arbeitsfelder ...
-  dcl-ds *N;
-    idx             zoned(10) inz;
-    chridx          char(10) overlay(idx);
+  dcl-ds *n;
+    idx    zoned(10) inz;
+    chridx char(10) overlay(idx);
   end-ds;
   //---------------------------------------------------*
 
@@ -797,18 +795,17 @@ end-proc;
 //===================================================================*
 
 dcl-proc writePinnedColumns;
-  dcl-pi *N extproc(*dclcase);
-    i_file          like(gi_file   );
-    i_lib           like(gi_lib    );
-    i_pintabc       like(gi_pintabc)
-         dim(12);
-    i_nbrpinc       like(gi_nbrpinc);
+  dcl-pi *n extproc(*dclcase);
+    i_file    like(gi_file);
+    i_lib     like(gi_lib);
+    i_pintabc like(gi_pintabc) dim(12);
+    i_nbrpinc like(gi_nbrpinc);
   end-pi;
 
   //  definieren Arbeitsfelder ...
-  dcl-ds *N;
-    idx             zoned(10) inz;
-    chridx          char(10) overlay(idx);
+  dcl-ds *n;
+    idx    zoned(10) inz;
+    chridx char(10) overlay(idx);
   end-ds;
   //---------------------------------------------------*
 
@@ -835,9 +832,9 @@ end-proc;
 //===================================================================*
 
 dcl-proc writeLayout;
-  dcl-pi *N extproc(*dclcase);
-    i_file          like(gi_file   );
-    i_lib           like(gi_lib    );
+  dcl-pi *n extproc(*dclcase);
+    i_file like(gi_file);
+    i_lib  like(gi_lib);
   end-pi;
 
   //  Arbeitsfelder ...
@@ -888,11 +885,11 @@ end-proc;
 //============================================================*
 
 dcl-proc errorHandler;
-  dcl-pi *N;
-    i_condtoken     value likeds(cee_fc_t);
-    i_pcommarea     int(10) value;
-    o_action        int(10);
-    o_newcondtoken  likeds(cee_fc_t);
+  dcl-pi *n;
+    i_condtoken    likeds(cee_fc_t) value;
+    i_pcommarea    int(10) value;
+    o_action       int(10);
+    o_newcondtoken likeds(cee_fc_t);
   end-pi;
 
   dump;

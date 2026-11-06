@@ -27,36 +27,36 @@
 // >>END-PRE-COMPILER<<
 //**************************************************************************************
 ctl-opt debug nomain;
-ctl-opt option(*srcstmt : *nodebugio);
+ctl-opt option(*srcstmt: *nodebugio);
 ctl-opt decedit('0,') datedit(*dmy.);
-ctl-opt datfmt(*iso )  timfmt(*iso );
+ctl-opt datfmt(*iso) timfmt(*iso);
 ctl-opt expropts(*resdecpos);
 ctl-opt extbinint(*yes);
 //**************************************************************************************
 
-/COPY QCOPYLE,D_VARDEF
-/COPY QCOPYLE,QUSRJOBI
-/COPY QCOPYLE,QMHSNDPM
+/copy QCOPYLE,D_VARDEF
+/copy QCOPYLE,QUSRJOBI
+/copy QCOPYLE,QMHSNDPM
 
-/COPY QCOPYLE,PPEEK61
+/copy QCOPYLE,PPEEK61
 
 //  Global fields
-dcl-s g_text          varchar(21);
-dcl-s g_maxvalue      int(10);
-dcl-s g_marker        char(1);
-dcl-s g_waitsec       int(10);
-dcl-s g_width         int(10);
+dcl-s g_text varchar(21);
+dcl-s g_maxvalue int(10);
+dcl-s g_marker char(1);
+dcl-s g_waitsec int(10);
+dcl-s g_width int(10);
 
-dcl-s g_jobtype       char(1);
-dcl-s g_showprgmtr    ind;
+dcl-s g_jobtype char(1);
+dcl-s g_showprgmtr ind;
 dcl-s g_lastpercentage packed(3);
-dcl-s g_lasttmstmp    timestamp;
+dcl-s g_lasttmstmp timestamp;
 
-dcl-c SCR_MODE_DS3     '*DS3';
-dcl-c SCR_MODE_DS4     '*DS4';
+dcl-c SCR_MODE_DS3 '*DS3';
+dcl-c SCR_MODE_DS4 '*DS4';
 
-dcl-c SCR_COLUMN_DS3   80;
-dcl-c SCR_COLUMN_DS4   132;
+dcl-c SCR_COLUMN_DS3 80;
+dcl-c SCR_COLUMN_DS4 132;
 
 //  Private Prototypes
 dcl-pr lf_getnumdspcol uns(10) extproc('lf_getnumdspcol');
@@ -70,20 +70,20 @@ end-pr;
 //===============================================================*
 
 dcl-proc p_inzprogressmeter export;
-  dcl-pi *N;
-    i_text          char(20) const;
-    i_maxvalue      int(10) const;
-    i_marker        char(1) const  options(*nopass);
-    i_waitsec       int(10) const  options(*nopass);
-    i_jobtype       char(10) const  options(*nopass);
-    i_width         int(10) const  options(*nopass);
+  dcl-pi *n;
+    i_text     char(20) const;
+    i_maxvalue int(10) const;
+    i_marker   char(1) options(*nopass) const;
+    i_waitsec  int(10) options(*nopass) const;
+    i_jobtype  char(10) options(*nopass) const;
+    i_width    int(10) options(*nopass) const;
   end-pi;
 
   //  Optional parameter fields
-  dcl-s marker          like(i_marker);
-  dcl-s waitsec         like(i_waitsec);
-  dcl-s jobtype         like(i_jobtype);
-  dcl-s width           like(i_width);
+  dcl-s marker like(i_marker);
+  dcl-s waitsec like(i_waitsec);
+  dcl-s jobtype like(i_jobtype);
+  dcl-s width like(i_width);
 
   //  Local helper fields
   dcl-ds jobi0100 likeds(jobi0100_t) inz;
@@ -202,28 +202,28 @@ end-proc;
 //===============================================================*
 
 dcl-proc p_showprogressmeter export;
-  dcl-pi *N;
-    i_currvalue     int(10) const;
+  dcl-pi *n;
+    i_currvalue int(10) const;
   end-pi;
 
   //  Local helper fields
-  dcl-s percentage      float(8) inz;
-  dcl-s now             timestamp inz;
-  dcl-s seconds         zoned(30) inz;
+  dcl-s percentage float(8) inz;
+  dcl-s now timestamp inz;
+  dcl-s seconds zoned(30) inz;
 
-  dcl-s progress        varchar(128) inz;
-  dcl-s complete        varchar(128) inz;
-  dcl-s pointer         varchar(128) inz;
-  dcl-s fraction        int(10) inz;
+  dcl-s progress varchar(128) inz;
+  dcl-s complete varchar(128) inz;
+  dcl-s pointer varchar(128) inz;
+  dcl-s fraction int(10) inz;
 
   dcl-ds qMsgFile qualified;
     name char(10) inz('QCPFMSG');
     lib  char(10) inz('*LIBL');
   end-ds;
 
-  dcl-s msgDta    varchar(512);
-  dcl-s msgType   char(10);
-  dcl-s msgKey    char(4);
+  dcl-s msgDta varchar(512);
+  dcl-s msgType char(10);
+  dcl-s msgKey char(4);
 
   dcl-ds errcode likeds(errcode_t) inz;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -316,7 +316,7 @@ end-proc;
 //===============================================================*
 
 dcl-proc lf_getnumdspcol;
-  dcl-pi *N uns(10);
+  dcl-pi *n uns(10);
   end-pi;
 
   //  Definieren Funktionswert
@@ -338,21 +338,21 @@ end-proc;
 //===============================================================*
 
 dcl-proc lf_getscreenmode;
-  dcl-pi *N              char(10);
+  dcl-pi *n char(10);
   end-pi;
 
   //  Definieren Funktionswert
-  dcl-s screenmode      char(10) inz;
+  dcl-s screenmode char(10) inz;
 
   //  Retrieve Display Mode       Return value: Display Mode
   dcl-pr qsnrtvmod char(1) extproc('QsnRtvMod');
-    o_dspmode       char(1) options(*omit);
-    i_hlowlvlenv    int(10) const  options(*omit);
-    io_errcode      char(32767) options(*omit: *varsize);
+    o_dspmode    char(1) options(*omit);
+    i_hlowlvlenv int(10) options(*omit) const;
+    io_errcode   char(32767) options(*omit: *varsize);
   end-pr;
 
   //  Definieren Arbeitsfelder
-  dcl-s dspMode     char(1);
+  dcl-s dspMode char(1);
   dcl-ds errCode likeds(errcode_t) inz;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 

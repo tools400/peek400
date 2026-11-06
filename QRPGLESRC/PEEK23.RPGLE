@@ -25,48 +25,47 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/COPY QCOPYLE,H_SPEC
-/COPY QCOPYLE,COPYRIGHT
+/copy QCOPYLE,H_SPEC
+/copy QCOPYLE,COPYRIGHT
 
-/COPY QCOPYLE,D_VARDEF
-/COPY QCOPYLE,FLDL0100
-/COPY QCOPYLE,SDS
+/copy QCOPYLE,D_VARDEF
+/copy QCOPYLE,FLDL0100
+/copy QCOPYLE,SDS
 
 /define internal_prototype
-/COPY QCOPYLE,PPEEK23
+/copy QCOPYLE,PPEEK23
 /undefine internal_prototype
 
-dcl-s x               like(int4_t) inz;
-dcl-s y               like(int4_t) inz;
+dcl-s x like(int4_t) inz;
+dcl-s y like(int4_t) inz;
 
-dcl-s r_msgid         char(4) inz(*blanks);
-dcl-s r_key           like(key_t)  inz(*blanks);
-dcl-s r_posf24        like(i_posf24)  inz(*zeros);
+dcl-s r_msgid char(4) inz(*blanks);
+dcl-s r_key like(key_t) inz(*blanks);
+dcl-s r_posf24 like(i_posf24) inz(*zeros);
 
-dcl-s wrk_msgid       like(msgid_t) inz;
-dcl-s wrk_msgtxt      like(msgdta_t) inz;
-dcl-s wrk_key         like(key_t) inz;
-dcl-s wrk_sectn       like(section_t) inz;
-dcl-s data            like(set0000_t) inz;
+dcl-s wrk_msgid like(msgid_t) inz;
+dcl-s wrk_msgtxt like(msgdta_t) inz;
+dcl-s wrk_key like(key_t) inz;
+dcl-s wrk_sectn like(section_t) inz;
+dcl-s data like(set0000_t) inz;
 
-dcl-s lastkey         like(key_t) inz;
+dcl-s lastkey like(key_t) inz;
 
-/COPY QCOPYLE,PPEEK53
-/COPY QCOPYLE,PPEEK58
+/copy QCOPYLE,PPEEK53
+/copy QCOPYLE,PPEEK58
 
-/COPY QCOPYLE,CEECNDHDLR
+/copy QCOPYLE,CEECNDHDLR
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
 //*******************************************************************
-
 dcl-pi peek23;
-  i_pgm           const like(pgm_t);
-  i_key           const like(key_t);
-  i_posf24        const like(int4_t);
-  o_fkeys               like(fkeydsp_t) dim(32);
-  o_nbrofkeys           like(int4_t);
-  i_exclKeys      const like(pgmcmd_t) dim(25) options(*nopass);
+  i_pgm       like(pgm_t) const;
+  i_key       like(key_t) const;
+  i_posf24    like(int4_t) const;
+  o_fkeys     like(fkeydsp_t) dim(32);
+  o_nbrofkeys like(int4_t);
+  i_exclKeys  like(pgmcmd_t) dim(25) options(*nopass) const;
 end-pi;
 
 //  Register error handler
@@ -264,11 +263,11 @@ endsr;
 //============================================================*
 
 dcl-proc errorhandler;
-  dcl-pi *N;
-    i_condtoken     value likeds(cee_fc_t);
-    i_pcommarea     int(10) value;
-    o_action        int(10);
-    o_newcondtoken  likeds(cee_fc_t);
+  dcl-pi *n;
+    i_condtoken    likeds(cee_fc_t) value;
+    i_pcommarea    int(10) value;
+    o_action       int(10);
+    o_newcondtoken likeds(cee_fc_t);
   end-pi;
 
   dump;

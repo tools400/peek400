@@ -24,8 +24,8 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/COPY QCOPYLE,H_SPEC
-/COPY QCOPYLE,COPYRIGHT
+/copy QCOPYLE,H_SPEC
+/copy QCOPYLE,COPYRIGHT
 
 dcl-f oldfile disk(32766) usropn infds(file_01_ds) extfile(g_oldfile);
 
@@ -37,128 +37,126 @@ dcl-ds file_02_ds likeds(infds_t);
 dcl-s g_oldfile char(21) inz;
 dcl-s g_peekusr char(21) inz;
 
-/COPY QCOPYLE,D_VARDEF
-/COPY QCOPYLE,D_INFDS
-/COPY QCOPYLE,FLDL0100
-/COPY QCOPYLE,SDS
-/COPY QCOPYLE,CEECNDHDLR
+/copy QCOPYLE,D_VARDEF
+/copy QCOPYLE,D_INFDS
+/copy QCOPYLE,FLDL0100
+/copy QCOPYLE,SDS
+/copy QCOPYLE,CEECNDHDLR
 
-/COPY QCOPYLE,USR9995
-/COPY QCOPYLE,USR9989
+/copy QCOPYLE,USR9995
+/copy QCOPYLE,USR9989
 
 /define internal_prototype
-/COPY QCOPYLE,PPEEK62
+/copy QCOPYLE,PPEEK62
 /undefine internal_prototype
 
-/COPY QCOPYLE,PPEEK53
-/COPY QCOPYLE,PPEEK58
+/copy QCOPYLE,PPEEK53
+/copy QCOPYLE,PPEEK58
 
-dcl-s long_t          int(10) template;
-dcl-s short_t         int(5) template;
+dcl-s long_t int(10) template;
+dcl-s short_t int(5) template;
 
-dcl-s henv_t          like(long_t) template;
-dcl-s hdbc_t          like(long_t) template;
-dcl-s hstmt_t         like(long_t) template;
-dcl-s retcode_t       like(sqlinteger_t) template;
-dcl-s ptr_t           pointer template;
+dcl-s henv_t like(long_t) template;
+dcl-s hdbc_t like(long_t) template;
+dcl-s hstmt_t like(long_t) template;
+dcl-s retcode_t like(sqlinteger_t) template;
+dcl-s ptr_t pointer template;
 
-dcl-s sqlinteger_t    like(long_t) template;
-dcl-s sqlsmallint_t   like(short_t) template;
-dcl-s sqlhenv_t       like(henv_t) template;
-dcl-s sqlhdbc_t       like(hdbc_t) template;
-dcl-s sqlhstmt_t      like(hstmt_t) template;
-dcl-s sqlreturn_t     like(retcode_t) template;
-dcl-s sqlpointer_t    like(ptr_t) template;
+dcl-s sqlinteger_t like(long_t) template;
+dcl-s sqlsmallint_t like(short_t) template;
+dcl-s sqlhenv_t like(henv_t) template;
+dcl-s sqlhdbc_t like(hdbc_t) template;
+dcl-s sqlhstmt_t like(hstmt_t) template;
+dcl-s sqlreturn_t like(retcode_t) template;
+dcl-s sqlpointer_t like(ptr_t) template;
 
-dcl-c SQL_NTS  -3;
+dcl-c SQL_NTS -3;
 dcl-c SQL_DROP 1;
 
 dcl-c sql_attr_commit 0;
 dcl-c sql_commit_none 1;
 
 //  Allocate Environment Handle
-dcl-pr sqlallocenv extproc('SQLAllocEnv') like(sqlreturn_t  );
-  o_phenv         pointer value;
+dcl-pr sqlallocenv extproc('SQLAllocEnv') like(sqlreturn_t);
+  o_phenv pointer value;
 end-pr;
 
 //  Allocate Connection Handle
 dcl-pr sqlallocconnect extproc('SQLAllocConnect') like(sqlreturn_t);
-  i_henv          value  like(sqlhenv_t);
-  o_phdbc         pointer value;
+  i_henv  like(sqlhenv_t) value;
+  o_phdbc pointer value;
 end-pr;
 
 //  Connect to a Data Source
 dcl-pr sqlconnect extproc('SQLConnect') like(sqlreturn_t);
-  i_hdbc          value  like(sqlhdbc_t);
-  i_szdsn         pointer value  options(*string);
-  i_cbdsn         value  like(sqlsmallint_t);
-  i_szuid         pointer value  options(*string);
-  i_cbuid         value  like(sqlsmallint_t);
-  i_szauthstr     pointer value  options(*string);
-  i_cbauthstr     value  like(sqlsmallint_t);
+  i_hdbc      like(sqlhdbc_t) value;
+  i_szdsn     pointer options(*string) value;
+  i_cbdsn     like(sqlsmallint_t) value;
+  i_szuid     pointer options(*string) value;
+  i_cbuid     like(sqlsmallint_t) value;
+  i_szauthstr pointer options(*string) value;
+  i_cbauthstr like(sqlsmallint_t) value;
 end-pr;
 
 //  Set Connection Option
-dcl-pr sqlsetconnectoption
-                  extproc('SQLSetConnectOption') like(sqlreturn_t);
-  i_hdbc          value  like(sqlhdbc_t);
-  i_foption       value  like(sqlsmallint_t);
-  i_vparam        value  like(sqlpointer_t);
+dcl-pr sqlsetconnectoption extproc('SQLSetConnectOption') like(sqlreturn_t);
+  i_hdbc    like(sqlhdbc_t) value;
+  i_foption like(sqlsmallint_t) value;
+  i_vparam  like(sqlpointer_t) value;
 end-pr;
 
 //  Allocate a Statement Handle
 dcl-pr sqlallocstmt extproc('SQLAllocStmt') like(sqlreturn_t);
-  i_hdbc          value  like(sqlhdbc_t);
-  o_phstmt        pointer value;
+  i_hdbc   like(sqlhdbc_t) value;
+  o_phstmt pointer value;
 end-pr;
 
 //  Execute a Statement Directly
 dcl-pr sqlexecdirect extproc('SQLExecDirect') like(sqlreturn_t);
-  i_hstmt         value  like(sqlhstmt_t);
-  i_szsqlstr      pointer value  options(*string);
-  i_cbsqlstr      value  like(sqlinteger_t);
+  i_hstmt    like(sqlhstmt_t) value;
+  i_szsqlstr pointer options(*string) value;
+  i_cbsqlstr like(sqlinteger_t) value;
 end-pr;
 
 //  Free (or Reset) a Statement Handle
 dcl-pr sqlfreestmt extproc('SQLFreeStmt') like(sqlreturn_t);
-  i_hstmt         value  like(sqlhstmt_t);
-  i_foption       value  like(sqlsmallint_t);
+  i_hstmt   like(sqlhstmt_t) value;
+  i_foption like(sqlsmallint_t) value;
 end-pr;
 
 //  Disconnect from a Data Source
 dcl-pr sqldisconnect extproc('SQLDisconnect') like(sqlreturn_t);
-  i_hdbc          value  like(sqlhdbc_t);
+  i_hdbc like(sqlhdbc_t) value;
 end-pr;
 
 //  Free Connection Handle
-dcl-pr sqlfreeconnect extproc('SQLFreeConnect') like(sqlreturn_t );
-  i_hdbc          value  like(sqlhdbc_t);
+dcl-pr sqlfreeconnect extproc('SQLFreeConnect') like(sqlreturn_t);
+  i_hdbc like(sqlhdbc_t) value;
 end-pr;
 
 //  Free Environment Handle
 dcl-pr sqlfreeenv extproc('SQLFreeEnv') like(sqlreturn_t);
-  i_henv          value  like(sqlhenv_t);
+  i_henv like(sqlhenv_t) value;
 end-pr;
 
-dcl-s rcdLen1         uns(10) inz;
-dcl-s rcdLen2         uns(10) inz;
+dcl-s rcdLen1 uns(10) inz;
+dcl-s rcdLen2 uns(10) inz;
 
-dcl-s cOptVal         int(10) inz;
-dcl-s retCode         like(sqlreturn_t) inz;
-dcl-s hEnv            like(sqlhenv_t  ) inz;
-dcl-s hDBc            like(sqlhdbc_t  ) inz;
-dcl-s hStmt           like(sqlhstmt_t ) inz;
-dcl-s sqlStr          char(512) inz;
+dcl-s cOptVal int(10) inz;
+dcl-s retCode like(sqlreturn_t) inz;
+dcl-s hEnv like(sqlhenv_t) inz;
+dcl-s hDBc like(sqlhdbc_t) inz;
+dcl-s hStmt like(sqlhstmt_t) inz;
+dcl-s sqlStr char(512) inz;
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
 //*******************************************************************
-
 dcl-pi peek62;
-  i_file          const like(file_t);
-  i_lib           const like(lib_t);
-  o_msgid               like(msgid_t);
-  o_msgdta              like(msgdta_t);
+  i_file   like(file_t) const;
+  i_lib    like(lib_t) const;
+  o_msgid  like(msgid_t);
+  o_msgdta like(msgdta_t);
 end-pi;
 //---------------------------------------------------*
 
@@ -298,11 +296,11 @@ return;
 //============================================================*
 
 dcl-proc errorhandler;
-  dcl-pi *N;
-    i_condtoken     value likeds(cee_fc_t);
-    i_pcommarea     int(10) value;
-    o_action        int(10);
-    o_newcondtoken  likeds(cee_fc_t);
+  dcl-pi *n;
+    i_condtoken    likeds(cee_fc_t) value;
+    i_pcommarea    int(10) value;
+    o_action       int(10);
+    o_newcondtoken likeds(cee_fc_t);
   end-pi;
 
   dump;

@@ -26,46 +26,45 @@
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
 ctl-opt nomain;
-/COPY QCOPYLE,H_SPEC
-/COPY QCOPYLE,COPYRIGHT
+/copy QCOPYLE,H_SPEC
+/copy QCOPYLE,COPYRIGHT
 
 // ------------------------------------
 //  Constants
 // ------------------------------------
 
 //  Transcoder handle identifier
-dcl-c class_transcoder
-      '*CLASS:ccsid.TRANSCODER';
+dcl-c class_transcoder '*CLASS:ccsid.TRANSCODER';
 
 // ------------------------------------
 //  Type Definitions
 // ------------------------------------
-/COPY QCOPYLE,D_VARDEF
-/COPY QCOPYLE,FLDL0100
+/copy QCOPYLE,D_VARDEF
+/copy QCOPYLE,FLDL0100
 
 //  Transcoder handle
 dcl-ds transcoder_t qualified template;
-  class           likeds(class_t );
-  fromccsid       uns(10);
-  toccsid         uns(10);
-  hiconv          likeds(iconv_t );
+  class     likeds(class_t);
+  fromccsid uns(10);
+  toccsid   uns(10);
+  hiconv    likeds(iconv_t);
 end-ds;
 
 dcl-ds class_t qualified template;
-  name            like(classname_t );
-  size            int(10);
-  reserved        char(12);
+  name     like(classname_t);
+  size     int(10);
+  reserved char(12);
 end-ds;
 
 dcl-s classname_t varchar(62) template;
 
-/COPY QCOPYLE,PPEEK71
+/copy QCOPYLE,PPEEK71
 
-/COPY QCOPYLE,D_CLIB                         C-Runtime Library
-/COPY QCOPYLE,PPEEK53                       Zugriff auf Benutzerdaten
-/COPY QCOPYLE,PPEEK58                       Allgemeine Routinen
-/COPY QCOPYLE,QUSRJOBI                       Retrieve Job Information (QUSRJOBI) API
-/COPY QCOPYLE,QMHSNDPM                       Send Program Message (QMHSNDPM) API
+/copy QCOPYLE,D_CLIB // C-Runtime Library
+/copy QCOPYLE,PPEEK53 // Zugriff auf Benutzerdaten
+/copy QCOPYLE,PPEEK58 // Allgemeine Routinen
+/copy QCOPYLE,QUSRJOBI // Retrieve Job Information (QUSRJOBI) API
+/copy QCOPYLE,QMHSNDPM // Send Program Message (QMHSNDPM) API
 
 // ------------------------------------
 //  Internal prototypes
@@ -73,31 +72,31 @@ dcl-s classname_t varchar(62) template;
 
 //  Performs charcater translation.
 dcl-pr performtranslation uns(10) extproc('performTranslation');
-  i_htranscoder   const  like(htranscoder_t);
-  i_pinbuf        pointer value;
-  i_length        int(10) const;
-  o_pto           pointer;
-  i_maxsize       int(10) const;
+  i_htranscoder like(htranscoder_t) const;
+  i_pinbuf      pointer value;
+  i_length      int(10) const;
+  o_pto         pointer;
+  i_maxsize     int(10) const;
 end-pr;
 
 //  Returns a transcoder that matches the specified "from CCSID"
 //  from the list of created transcoders.
 dcl-pr findtranscoder like(htranscoder_t) extproc('findTranscoder');
-  i_toccsid       uns(10) const;
-  i_fromccsid     uns(10) const;
+  i_toccsid   uns(10) const;
+  i_fromccsid uns(10) const;
 end-pr;
 
 //  Produces a transcoder to transcode character data from
 //  and to given CCSIDs.
 dcl-pr createtranscoder like(htranscoder_t) extproc('createTranscoder');
-  i_toccsid       uns(10) const;
-  i_fromccsid     uns(10) const;
+  i_toccsid   uns(10) const;
+  i_fromccsid uns(10) const;
 end-pr;
 
 //  Kills utility with an ESCAPE message.
 dcl-pr kill extproc('kill');
-  i_text          varchar(128) const;
-  i_errno         int(10) const  options(*nopass);
+  i_text  varchar(128) const;
+  i_errno int(10) options(*nopass) const;
 end-pr;
 
 //  Returns the CCSID of the current job.
@@ -106,23 +105,23 @@ end-pr;
 
 //  Kills utility, if a given handle is not a transcoder.
 dcl-pr checkhandle extproc('checkHandle');
-  i_htranscoder   const  like(htranscoder_t);
+  i_htranscoder like(htranscoder_t) const;
 end-pr;
 
 // ------------------------------------
 //  Global fields & constants
 // ------------------------------------
-dcl-s g_jobccsid      uns(10) inz(0);
+dcl-s g_jobccsid uns(10) inz(0);
 
 dcl-ds g_transcoders qualified;
-  nume            int(10) inz;
-  item            likeds(transcodere_t ) dim(64) inz;
+  nume int(10) inz;
+  item likeds(transcodere_t) dim(64) inz;
 end-ds;
 
 dcl-ds transcodere_t qualified;
-  htranscoder     like(htranscoder_t );
-  toccsid         int(10);
-  fromccsid       int(10);
+  htranscoder like(htranscoder_t);
+  toccsid     int(10);
+  fromccsid   int(10);
 end-ds;
 
 //=====================================================================*
@@ -130,8 +129,8 @@ end-ds;
 //  given CCSID to the job CCSID.
 //=====================================================================*
 dcl-proc transcoder_tojobccsid export;
-  dcl-pi *N        like(htranscoder_t );
-    i_fromccsid     uns(10) const;
+  dcl-pi *n like(htranscoder_t);
+    i_fromccsid uns(10) const;
   end-pi;
 
   //  Return value
@@ -152,8 +151,8 @@ end-proc;
 //  given CCSID to the file field CCSID.
 //=====================================================================*
 dcl-proc transcoder_tofieldccsid export;
-  dcl-pi *N        like(htranscoder_t );
-    i_toccsid       uns(10) const;
+  dcl-pi *n like(htranscoder_t);
+    i_toccsid uns(10) const;
   end-pi;
 
   //  Return value
@@ -173,9 +172,9 @@ end-proc;
 //  Initializes character translation.
 //=====================================================================*
 dcl-proc transcoder_new export;
-  dcl-pi *N        like(htranscoder_t);
-    i_toccsid       uns(10) const;
-    i_fromccsid     uns(10) const;
+  dcl-pi *n like(htranscoder_t);
+    i_toccsid   uns(10) const;
+    i_fromccsid uns(10) const;
   end-pi;
 
   //  Return value
@@ -244,18 +243,18 @@ end-proc;
 //                   Sends escape message CPF9897 on error.
 //=====================================================================*
 dcl-proc transcoder_xlateraw export;
-  dcl-pi *N              int(10) opdesc;
-    i_htranscoder   const  like(htranscoder_t );
-    i_pinbuf        pointer value;
-    i_size          int(10) const;
-    o_poutbuf       pointer;
+  dcl-pi *n int(10) opdesc;
+    i_htranscoder like(htranscoder_t) const;
+    i_pinbuf      pointer value;
+    i_size        int(10) const;
+    o_poutbuf     pointer;
   end-pi;
 
   //  Return value
   dcl-s rc int(10) inz(0);
 
   //  Helper fields
-  dcl-s poutbuf    pointer;
+  dcl-s poutbuf pointer;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   checkhandle(i_htranscoder);
@@ -292,21 +291,21 @@ end-proc;
 //                   Sends escape message CPF9897 on error.
 //=====================================================================*
 dcl-proc transcoder_xlatebuffer export;
-  dcl-pi *N              int(10) opdesc;
-    i_htranscoder   const  like(htranscoder_t );
-    i_pinbuf        pointer value;
-    i_size          int(10) const;
-    i_maxsize       int(10) const  options(*nopass: *omit);
+  dcl-pi *n int(10) opdesc;
+    i_htranscoder like(htranscoder_t) const;
+    i_pinbuf      pointer value;
+    i_size        int(10) const;
+    i_maxsize     int(10) options(*nopass: *omit) const;
   end-pi;
 
   //  Return value
   dcl-s rc int(10) inz(0);
 
   //  Fields for optional parameters
-  dcl-s maxsize    like(i_maxsize  );
+  dcl-s maxsize like(i_maxsize);
 
   //  Helper fields
-  dcl-s poutbuf    pointer;
+  dcl-s poutbuf pointer;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   checkhandle(i_htranscoder);
@@ -351,21 +350,21 @@ end-proc;
 //                   Sends escape message CPF9897 on error.
 //=====================================================================*
 dcl-proc transcoder_xlatestring export;
-  dcl-pi *N              varchar(32767) opdesc;
-    i_htranscoder   const  like(htranscoder_t );
-    i_string        varchar(32767) const   options(*varsize);
+  dcl-pi *n varchar(32767) opdesc;
+    i_htranscoder like(htranscoder_t) const;
+    i_string      varchar(32767) options(*varsize) const;
   end-pi;
 
   //  Return value (data covers all 32767 bytes of the string)
   dcl-ds rtn qualified;
-    string  varchar(32767);
-    len     int(5) pos(1);
-    data    char(32767) pos(3);
+    string varchar(32767);
+    len    int(5) pos(1);
+    data   char(32767) pos(3);
   end-ds;
 
   //  Helper fields
-  dcl-s pinbuf    pointer;
-  dcl-s poutbuf   pointer;
+  dcl-s pinbuf pointer;
+  dcl-s poutbuf pointer;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   checkhandle(i_htranscoder);
@@ -404,8 +403,8 @@ end-proc;
 //   ccsid         - CCSID, a given buffer or string is translated from.
 //=====================================================================*
 dcl-proc transcoder_getfromccsid export;
-  dcl-pi *N              int(10);
-    i_htranscoder   const  like(htranscoder_t );
+  dcl-pi *n int(10);
+    i_htranscoder like(htranscoder_t) const;
   end-pi;
 
   //  Transcoder handle
@@ -428,8 +427,8 @@ end-proc;
 //   ccsid         - CCSID, a given buffer or string is translated to.
 //=====================================================================*
 dcl-proc transcoder_gettoccsid export;
-  dcl-pi *N              int(10);
-    i_htranscoder   const  like(htranscoder_t );
+  dcl-pi *n int(10);
+    i_htranscoder like(htranscoder_t) const;
   end-pi;
 
   //  Transcoder handle
@@ -446,9 +445,8 @@ end-proc;
 //  Terminates character translation.
 //=====================================================================*
 dcl-proc transcoder_delete export;
-  dcl-pi *N;
-    io_htranscoder
-         like(htranscoder_t );
+  dcl-pi *n;
+    io_htranscoder like(htranscoder_t);
   end-pi;
 
   //  Helper fields
@@ -490,7 +488,7 @@ end-proc;
 //  the start of Peek, so that a changed job CCSID (CHGJOB) is used.
 //=====================================================================*
 dcl-proc transcoder_reset export;
-  dcl-pi *N;
+  dcl-pi *n;
   end-pi;
 
   dcl-s htranscoder like(htranscoder_t);
@@ -511,8 +509,8 @@ end-proc;
 //  Returns bTrue if a given Transcoder handle is NULL.
 //=====================================================================*
 dcl-proc transcoder_isnull export;
-  dcl-pi *N              ind;
-    i_htranscoder   const  like(htranscoder_t );
+  dcl-pi *n ind;
+    i_htranscoder like(htranscoder_t) const;
   end-pi;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -528,7 +526,7 @@ end-proc;
 //  Returns a Transcoder NULL-handle.
 //=====================================================================*
 dcl-proc transcoder_null export;
-  dcl-pi *N        like(htranscoder_t );
+  dcl-pi *n like(htranscoder_t);
   end-pi;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -542,27 +540,27 @@ end-proc;
 //  transcoded buffer.
 //=====================================================================*
 dcl-proc performtranslation;
-  dcl-pi *N              uns(10);
-    i_htranscoder   const  like(htranscoder_t );
-    i_pinbuf        pointer value;
-    i_length        int(10) const;
-    o_poutbuf       pointer;
-    i_maxsize       int(10) const;
+  dcl-pi *n uns(10);
+    i_htranscoder like(htranscoder_t) const;
+    i_pinbuf      pointer value;
+    i_length      int(10) const;
+    o_poutbuf     pointer;
+    i_maxsize     int(10) const;
   end-pi;
 
   //  Return value
-  dcl-s length          uns(10) inz;
+  dcl-s length uns(10) inz;
 
   //  Helper fields
-  dcl-s rc              uns(10) inz;
-  dcl-s bytprv          uns(10) inz;
-  dcl-s bytleft         uns(10) inz;
-  dcl-s bufsize         int(10) inz;
-  dcl-s pinbuf          pointer inz;
-  dcl-s poutbuf         pointer inz;
-  dcl-s extendsize      int(10) inz;
-  dcl-s ismaxsize       ind inz(bFalse);
-  dcl-s errnbr          int(10) inz;
+  dcl-s rc uns(10) inz;
+  dcl-s bytprv uns(10) inz;
+  dcl-s bytleft uns(10) inz;
+  dcl-s bufsize int(10) inz;
+  dcl-s pinbuf pointer inz;
+  dcl-s poutbuf pointer inz;
+  dcl-s extendsize int(10) inz;
+  dcl-s ismaxsize ind inz(bFalse);
+  dcl-s errnbr int(10) inz;
 
   //  Transcoder handle
   dcl-ds transcoder likeds(transcoder_t) based(i_htranscoder);
@@ -634,9 +632,9 @@ end-proc;
 //  from the list of created transcoders.
 //=====================================================================*
 dcl-proc findtranscoder;
-  dcl-pi *N        like(htranscoder_t );
-    i_toccsid       uns(10) const;
-    i_fromccsid     uns(10) const;
+  dcl-pi *n like(htranscoder_t);
+    i_toccsid   uns(10) const;
+    i_fromccsid uns(10) const;
   end-pi;
 
   dcl-s x int(10);
@@ -659,9 +657,9 @@ end-proc;
 //  and to given CCSIDs.
 //=====================================================================*
 dcl-proc createtranscoder;
-  dcl-pi *N        like(htranscoder_t );
-    i_toccsid       uns(10) const;
-    i_fromccsid     uns(10) const;
+  dcl-pi *n like(htranscoder_t);
+    i_toccsid   uns(10) const;
+    i_fromccsid uns(10) const;
   end-pi;
 
   dcl-s htranscoder like(htranscoder_t) inz;
@@ -692,7 +690,7 @@ end-proc;
 //  Returns the CCSID of the current job.
 //=====================================================================*
 dcl-proc getjobccsid;
-  dcl-pi *N              int(10);
+  dcl-pi *n int(10);
   end-pi;
 
   dcl-ds jobi0400 likeds(jobi0400_t) inz;
@@ -719,8 +717,8 @@ end-proc;
 //  a transcoder (*null, deleted or a foreign pointer).
 //=====================================================================*
 dcl-proc checkhandle;
-  dcl-pi *N;
-    i_htranscoder   const  like(htranscoder_t);
+  dcl-pi *n;
+    i_htranscoder like(htranscoder_t) const;
   end-pi;
 
   //  Transcoder handle
@@ -745,15 +743,15 @@ end-proc;
 //    Failed to transcode characters (errno 3491): <text>
 //=====================================================================*
 dcl-proc kill;
-  dcl-pi *N;
-    i_text          varchar(128) const;
-    i_errno         int(10) const  options(*nopass);
+  dcl-pi *n;
+    i_text  varchar(128) const;
+    i_errno int(10) options(*nopass) const;
   end-pi;
 
-  dcl-s text       varchar(512) inz;
-  dcl-s msgkey     char(4) inz;
-  dcl-ds qmsgf     likeds(qobj_t) inz;
-  dcl-ds errcode   likeds(errcode_t) inz;
+  dcl-s text varchar(512) inz;
+  dcl-s msgkey char(4) inz;
+  dcl-ds qmsgf likeds(qobj_t) inz;
+  dcl-ds errcode likeds(errcode_t) inz;
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   if (%parms() >= %parmnum(i_errno));

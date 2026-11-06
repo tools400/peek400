@@ -61,67 +61,67 @@
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
 ctl-opt main(peek39);
-/COPY QCOPYLE,H_SPEC
-/COPY QCOPYLE,COPYRIGHT
+/copy QCOPYLE,H_SPEC
+/copy QCOPYLE,COPYRIGHT
 
-/COPY QCOPYLE,D_VARDEF
-/COPY QCOPYLE,DBRL0200
-/COPY QCOPYLE,GENHEADER
-/COPY QCOPYLE,FLDL0100
-/COPY QCOPYLE,QDBLDBR
-/COPY QCOPYLE,QUSCRTUS
-/COPY QCOPYLE,QUSPTRUS
+/copy QCOPYLE,D_VARDEF
+/copy QCOPYLE,DBRL0200
+/copy QCOPYLE,GENHEADER
+/copy QCOPYLE,FLDL0100
+/copy QCOPYLE,QDBLDBR
+/copy QCOPYLE,QUSCRTUS
+/copy QCOPYLE,QUSPTRUS
 
 /define internal_prototype
-/COPY QCOPYLE,PPEEK39
+/copy QCOPYLE,PPEEK39
 /undefine internal_prototype
 
-/COPY QCOPYLE,PPEEK53
-/COPY QCOPYLE,PPEEK58
+/copy QCOPYLE,PPEEK53
+/copy QCOPYLE,PPEEK58
 
-dcl-s size_t          uns(10) template;
+dcl-s size_t uns(10) template;
 
 //  qsort -- Sort Array
 dcl-pr qsort pointer extproc('qsort');
-  memptr          pointer value;
-  numelem         value  like(size_t);
-  width           value  like(size_t);
-  psortfunc       pointer(*proc) value;
+  memptr    pointer value;
+  numelem   like(size_t) value;
+  width     like(size_t) value;
+  psortfunc pointer(*proc) value;
 end-pr;
 
 //  Sort List Entries by Name                         *
-dcl-pr sortbyname      int(10);
-  i_pkey          pointer value;
-  i_pelm          pointer value;
+dcl-pr sortbyname int(10);
+  i_pkey pointer value;
+  i_pelm pointer value;
 end-pr;
 
 dcl-ds qusrspc likeds(qobj_t) inz;
-dcl-s pspcptr         pointer;
+dcl-s pspcptr pointer;
 dcl-ds errcode likeds(errcode_t) inz;
 
 //  Organisation of generic header
 dcl-ds genheader likeds(genheader_t) based(pspcptr);
 
 //  List data
-dcl-s currliste       like(int4_t);
-dcl-s offsetliste     like(int4_t);
-dcl-s pliste          pointer;
+dcl-s currliste like(int4_t);
+dcl-s offsetliste like(int4_t);
+dcl-s pliste pointer;
 dcl-ds liste likeds(dbrl0200_t) based(pliste);
 
-dcl-s msgid           like(msgid_t);
-dcl-s msgdta          like(msgdta_t);
+dcl-s msgid like(msgid_t);
+dcl-s msgdta like(msgdta_t);
 
 //*******************************************************************
 //           Main  Control block                                    *
 //*******************************************************************
 
 dcl-proc peek39;
-  dcl-pi *N;
-    i_qfile         const like(qobj_t);
-    i_mbr           const like(mbr_t);
-    i_function      const like(function_t);
-    o_nume          like(int4_t);
-    o_dbrl0200      likeds(dbrl0200_t);
+  dcl-pi *n;
+    i_qfile    like(qobj_t) const;
+    i_mbr      like(mbr_t) const;
+    i_function like(function_t) const;
+    o_nume     like(int4_t);
+    o_dbrl0200 likeds(dbrl0200_t);
   end-pi;
 
   //---------------------------------------------------*
@@ -247,15 +247,15 @@ end-proc;
 //  Sort List Entries by Name                         *
 //====================================================*
 dcl-proc sortbyname;
-  dcl-pi *N              int(10);
-    i_pkey          pointer value;
-    i_pelm          pointer value;
+  dcl-pi *n int(10);
+    i_pkey pointer value;
+    i_pelm pointer value;
   end-pi;
 
-  dcl-ds key qualified   based(i_pkey);
-    depfile         char(10) pos(31);
-    deplib          char(10);
-    depmbr          char(10);
+  dcl-ds key qualified based(i_pkey);
+    depfile char(10) pos(31);
+    deplib  char(10);
+    depmbr  char(10);
   end-ds;
 
   dcl-ds elm likeds(key) based(i_pelm);

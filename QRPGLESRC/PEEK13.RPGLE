@@ -37,20 +37,20 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/COPY QCOPYLE,H_SPEC
-/COPY QCOPYLE,COPYRIGHT
+/copy QCOPYLE,H_SPEC
+/copy QCOPYLE,COPYRIGHT
 
-/COPY QCOPYLE,D_VARDEF
-/COPY QCOPYLE,FLDL0100
-/COPY QCOPYLE,QUSRMBRD
-/COPY QCOPYLE,MBRD0200
+/copy QCOPYLE,D_VARDEF
+/copy QCOPYLE,FLDL0100
+/copy QCOPYLE,QUSRMBRD
+/copy QCOPYLE,MBRD0200
 
 /define internal_prototype
-/COPY QCOPYLE,PPEEK13
+/copy QCOPYLE,PPEEK13
 /undefine internal_prototype
 
-/COPY QCOPYLE,PPEEK53
-/COPY QCOPYLE,PPEEK58
+/copy QCOPYLE,PPEEK53
+/copy QCOPYLE,PPEEK58
 
 dcl-ds mbrd0200 likeds(mbrd0200_t) inz;
 dcl-ds errcode likeds(errcode_t) inz;
@@ -58,11 +58,10 @@ dcl-ds errcode likeds(errcode_t) inz;
 //*******************************************************************
 //           Main  Control block                                    *
 //*******************************************************************
-
 dcl-pi peek13;
-  i_qfile         const likeds(qobj_t);
-  i_mbr           const like(mbr_t);
-  o_mbrd0200      likeds(mbrd0200_t);
+  i_qfile    likeds(qobj_t) const;
+  i_mbr      like(mbr_t) const;
+  o_mbrd0200 likeds(mbrd0200_t);
 end-pi;
 
 //---------------------------------------------------*

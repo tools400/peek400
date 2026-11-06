@@ -25,93 +25,93 @@
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
 ctl-opt nomain;
-/COPY QCOPYLE,H_SPEC
-/COPY QCOPYLE,COPYRIGHT
+/copy QCOPYLE,H_SPEC
+/copy QCOPYLE,COPYRIGHT
 
-/COPY QCOPYLE,D_CLIB
-/COPY QCOPYLE,D_VARDEF
-/COPY QCOPYLE,D_INFDS
-/COPY QCOPYLE,FLDL0100
+/copy QCOPYLE,D_CLIB
+/copy QCOPYLE,D_VARDEF
+/copy QCOPYLE,D_INFDS
+/copy QCOPYLE,FLDL0100
 
-/COPY QCOPYLE,PPEEK51
-/COPY QCOPYLE,PPEEK53
-/COPY QCOPYLE,PPEEK58
-/COPY QCOPYLE,PPEEK63
+/copy QCOPYLE,PPEEK51
+/copy QCOPYLE,PPEEK53
+/copy QCOPYLE,PPEEK58
+/copy QCOPYLE,PPEEK63
 
 dcl-pr f_isSqlErr like(bool_t);
-  o_msgid         like(msgid_t);
-  o_msgdta        like(msgdta_t);
+  o_msgid  like(msgid_t);
+  o_msgdta like(msgdta_t);
 end-pr;
 
-dcl-pr f_sqlMsgID      char(7);
-  i_sqlCode        int(10) const;
+dcl-pr f_sqlMsgID char(7);
+  i_sqlCode int(10) const;
 end-pr;
 
 dcl-pr f_isDeleted like(bool_t);
-  i_hfile         const likeds(hfile_t);
+  i_hfile likeds(hfile_t) const;
 end-pr;
 
 dcl-pr p_cvtSqlMg;
-  i_tomsgid       char(7) const;
-  io_msgid        like(msgid_t);
-  io_msgdta       like(msgdta_t);
+  i_tomsgid char(7) const;
+  io_msgid  like(msgid_t);
+  io_msgdta like(msgdta_t);
 end-pr;
 
 dcl-pr f_getField like(varString_t);
-  i_sqlorder      const like(varString_t);
+  i_sqlorder like(varString_t) const;
 end-pr;
 
 dcl-pr f_chgField like(varString_t);
-  i_string        const  like(varString_t);
-  i_rmvorder      const  like(bool_t);
+  i_string   like(varString_t) const;
+  i_rmvorder like(bool_t) const;
 end-pr;
 
 //  ... Execute Command (QCMDEXC) API
 dcl-pr qcmdexc extpgm('QCMDEXC');
-  i_cmd           char(32702) const  options(*varsize);
-  i_length        packed(15:5) const;
+  i_cmd    char(32702) options(*varsize) const;
+  i_length packed(15: 5) const;
 end-pr;
 
 // Für Sortierung nach relativer Satznummer
 dcl-ds g_hfile03 likeds(hfile_t);
 
-dcl-s g_file          char(10);
-dcl-s g_lib           char(10);
-dcl-s g_mbr           char(10);
-dcl-s g_fmt           char(10);
+dcl-s g_file char(10);
+dcl-s g_lib char(10);
+dcl-s g_mbr char(10);
+dcl-s g_fmt char(10);
 
-dcl-s g_cmdovrdbf     like(varString_t);
+dcl-s g_cmdovrdbf like(varString_t);
 
 //===================================================================*
 //  Prozedur:  SQL_prepareStatement                       (Body)     *
 //===================================================================*
 
 dcl-proc SQL_prepareStatement export;
-  dcl-pi *N like(bool_t);
-    i_check         value  like(bool_t);
-    i_file          value  like(file_t);
-    i_lib           value  like(lib_t);
-    i_mbr           value  like(mbr_t);
-    i_fmt           value  like(rcdfmt_t);
-    i_sqlselect     value  like(sqlSelect_t);
-    i_sqlorder      value  like(sqlWhere_t);
-    o_msgid                like(msgid_t);
-    o_msgdta               like(msgdta_t);
+  dcl-pi *n like(bool_t);
+    i_check     like(bool_t) value;
+    i_file      like(file_t) value;
+    i_lib       like(lib_t) value;
+    i_mbr       like(mbr_t) value;
+    i_fmt       like(rcdfmt_t) value;
+    i_sqlselect like(sqlSelect_t) value;
+    i_sqlorder  like(sqlWhere_t) value;
+    o_msgid     like(msgid_t);
+    o_msgdta    like(msgdta_t);
   end-pi;
 
   //  definieren Funktionswert ...
-  dcl-s f_prepstmt      like(bool_t);
+  dcl-s f_prepstmt like(bool_t);
 
-  dcl-s i               like(int4_t);
-  dcl-s sqlselectstmt   like(sqlstmt_t);
-  dcl-s sqlcountstmt    like(sqlstmt_t);
+  dcl-s i like(int4_t);
+  dcl-s sqlselectstmt like(sqlstmt_t);
+  dcl-s sqlcountstmt like(sqlstmt_t);
 
-  dcl-s pfile           like(file_t);
-  dcl-s plib            like(lib_t);
-  dcl-s pmbr            like(mbr_t);
-  dcl-s pfmt            like(rcdfmt_t);
+  dcl-s pfile like(file_t);
+  dcl-s plib like(lib_t);
+  dcl-s pmbr like(mbr_t);
+  dcl-s pfmt like(rcdfmt_t);
 
-  dcl-s cmdovrdbf       like(g_cmdovrdbf);
+  dcl-s cmdovrdbf like(g_cmdovrdbf);
 
   // ------------------------------------------------------------------------
 
@@ -219,14 +219,14 @@ end-proc;
 //===================================================================*
 
 dcl-proc SQL_open export;
-  dcl-pi *N like(bool_t);
-    o_hfile                likeds(hfile_t);
-    o_msgid                like(msgid_t);
-    o_msgdta               like(msgdta_t);
+  dcl-pi *n like(bool_t);
+    o_hfile  likeds(hfile_t);
+    o_msgid  like(msgid_t);
+    o_msgdta like(msgdta_t);
   end-pi;
 
   //  definieren Funktionswert ...
-  dcl-s f_opnsql        like(bool_t) inz(bFalse);
+  dcl-s f_opnsql like(bool_t) inz(bFalse);
   // ------------------------------------------------------------------------
 
   //  ovrDbf
@@ -285,27 +285,26 @@ end-proc;
 //===================================================================*
 
 dcl-proc SQL_nextRow export;
-  dcl-pi *N like(bool_t);
-    o_buffer               like(rcdbuf_t);
-    o_nullmap              like(nullmap_t) dim(NULL_MAP_SIZE);
-    o_hfile                likeds(hfile_t);
-    o_msgid                like(msgid_t);
-    o_msgdta               like(msgdta_t);
+  dcl-pi *n like(bool_t);
+    o_buffer  like(rcdbuf_t);
+    o_nullmap like(nullmap_t) dim(NULL_MAP_SIZE);
+    o_hfile   likeds(hfile_t);
+    o_msgid   like(msgid_t);
+    o_msgdta  like(msgdta_t);
   end-pi;
 
   //  definieren Funktionswert ...
-  dcl-s iseof           like(bool_t) inz(bTrue);
+  dcl-s iseof like(bool_t) inz(bTrue);
 
   //  definieren lokale Variablen ...
-  dcl-s recnbr          int(10);
-  dcl-s isdeleted       like(bool_t);
+  dcl-s recnbr int(10);
+  dcl-s isdeleted like(bool_t);
 
   dcl-ds io_buff based(ptrbuffer);
-    io_bufffld      like(rcdbuf_t);
+    io_bufffld like(rcdbuf_t);
   end-ds;
 
-  dcl-s io_nullmap      like(nullmap_t) dim(NULL_MAP_SIZE)
-  based(ptrnullmap);
+  dcl-s io_nullmap like(nullmap_t) dim(NULL_MAP_SIZE) based(ptrnullmap);
   // ------------------------------------------------------------------------
   ptrbuffer = %addr(o_buffer );
   ptrnullmap= %addr(o_nullmap);
@@ -360,27 +359,26 @@ end-proc;
 //===================================================================*
 
 dcl-proc SQL_previousRow export;
-  dcl-pi *N like(bool_t);
-    o_buffer               like(rcdbuf_t);
-    o_nullmap              like(nullmap_t) dim(NULL_MAP_SIZE);
-    o_hfile                likeds(hfile_t);
-    o_msgid                like(msgid_t);
-    o_msgdta               like(msgdta_t);
+  dcl-pi *n like(bool_t);
+    o_buffer  like(rcdbuf_t);
+    o_nullmap like(nullmap_t) dim(NULL_MAP_SIZE);
+    o_hfile   likeds(hfile_t);
+    o_msgid   like(msgid_t);
+    o_msgdta  like(msgdta_t);
   end-pi;
 
   //  definieren Funktionswert ...
-  dcl-s iseof           like(bool_t) inz(bTrue);
+  dcl-s iseof like(bool_t) inz(bTrue);
 
   //  definieren lokale Variablen ...
-  dcl-s recnbr          int(10);
-  dcl-s isdeleted       like(bool_t);
+  dcl-s recnbr int(10);
+  dcl-s isdeleted like(bool_t);
 
   dcl-ds io_buff based(ptrbuffer);
-    io_bufffld      like(rcdbuf_t);
+    io_bufffld like(rcdbuf_t);
   end-ds;
 
-  dcl-s io_nullmap      like(nullmap_t) dim(NULL_MAP_SIZE)
-  based(ptrnullmap);
+  dcl-s io_nullmap like(nullmap_t) dim(NULL_MAP_SIZE) based(ptrnullmap);
   // ------------------------------------------------------------------------
   ptrbuffer = %addr(o_buffer );
   ptrnullmap= %addr(o_nullmap);
@@ -435,9 +433,9 @@ end-proc;
 //===================================================================*
 
 dcl-proc SQL_gotoTop export;
-  dcl-pi *N like(bool_t);
-    o_msgid                like(msgid_t);
-    o_msgdta               like(msgdta_t);
+  dcl-pi *n like(bool_t);
+    o_msgid  like(msgid_t);
+    o_msgdta like(msgdta_t);
   end-pi;
 
   //  definieren Funktionswert ...
@@ -469,9 +467,9 @@ end-proc;
 //===================================================================*
 
 dcl-proc SQL_gotoBottom export;
-  dcl-pi *N like(bool_t);
-    o_msgid                like(msgid_t);
-    o_msgdta               like(msgdta_t);
+  dcl-pi *n like(bool_t);
+    o_msgid  like(msgid_t);
+    o_msgdta like(msgdta_t);
   end-pi;
 
   //  definieren Funktionswert ...
@@ -503,10 +501,10 @@ end-proc;
 //===================================================================*
 
 dcl-proc SQL_close export;
-  dcl-pi *N like(bool_t);
-    o_hfile                likeds(hfile_t);
-    o_msgid                like(msgid_t);
-    o_msgdta               like(msgdta_t);
+  dcl-pi *n like(bool_t);
+    o_hfile  likeds(hfile_t);
+    o_msgid  like(msgid_t);
+    o_msgdta like(msgdta_t);
   end-pi;
 
   //  definieren Funktionswert ...
@@ -554,7 +552,7 @@ end-proc;
 //===================================================================*
 
 dcl-proc SQL_count export;
-  dcl-pi *N like(int4_t);
+  dcl-pi *n like(int4_t);
   end-pi;
 
   //  definieren Funktionswert ...
@@ -607,13 +605,13 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_isSqlErr;
-  dcl-pi *N like(bool_t);
-    o_msgid                like(msgid_t);
-    o_msgdta               like(msgdta_t);
+  dcl-pi *n like(bool_t);
+    o_msgid  like(msgid_t);
+    o_msgdta like(msgdta_t);
   end-pi;
 
   //  definieren Funktionswert ...
-  dcl-s f_issqlerr      like(bool_t);
+  dcl-s f_issqlerr like(bool_t);
   // ------------------------------------------------------------------------
   if (sqlCode >= 0);
     o_msgid  = ' ';
@@ -636,8 +634,8 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_isDeleted;
-  dcl-pi *N like(bool_t);
-    i_hfile         const likeds(hfile_t);
+  dcl-pi *n like(bool_t);
+    i_hfile likeds(hfile_t) const;
   end-pi;
   // ------------------------------------------------------------------------
 
@@ -655,8 +653,8 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_sqlMsgID;
-  dcl-pi *N char(7);
-    i_sqlCode   int(10) const;
+  dcl-pi *n char(7);
+    i_sqlCode int(10) const;
   end-pi;
 
   //  definieren Funktionswert ...
@@ -664,12 +662,12 @@ dcl-proc f_sqlMsgID;
 
   //  lokale variablen ...
   dcl-ds ds_sqlCode qualified;
-    sqlCode  zoned(10) inz;
-    msgID    char(7) overlay(sqlCode: 4);
+    sqlCode zoned(10) inz;
+    msgID   char(7) overlay(sqlCode: 4);
   end-ds;
 
-  dcl-s idx       int(10);
-  dcl-c SQL0000   'SQL0000';
+  dcl-s idx int(10);
+  dcl-c SQL0000 'SQL0000';
 
   // ------------------------------------------------------------------------
 
@@ -694,15 +692,15 @@ end-proc;
 //===================================================================*
 
 dcl-proc p_cvtSqlMg;
-  dcl-pi *N;
-    i_tomsgid       char(7) const;
-    io_msgid               like(msgid_t);
-    io_msgdta              like(msgdta_t);
+  dcl-pi *n;
+    i_tomsgid char(7) const;
+    io_msgid  like(msgid_t);
+    io_msgdta like(msgdta_t);
   end-pi;
 
-  /COPY QCOPYLE,RTVM0100
+/copy QCOPYLE,RTVM0100
 
-  /COPY QCOPYLE,USR8210
+/copy QCOPYLE,USR8210
   // ------------------------------------------------------------------------
 
   clear usr8210;
@@ -724,22 +722,22 @@ end-proc;
 dcl-proc f_getField;
 
   //  definieren Procedure Interface ...
-  dcl-pi f_getField like(varString_t);
-    i_sqlorder      const  like(varString_t);
+  dcl-pi *n like(varString_t);
+    i_sqlorder like(varString_t) const;
   end-pi;
   // ------------------------------------------------------------------------
 
   return f_chgField(i_sqlorder: bTrue);
 
-end-proc f_getField;
+end-proc;
 
 //===================================================================*
 //  Prozedur:  SQL_quote                                  (Body)     *
 //===================================================================*
 
 dcl-proc SQL_quote export;
-  dcl-pi *N like(varString_t);
-    i_string        const  like(varString_t);
+  dcl-pi *n like(varString_t);
+    i_string like(varString_t) const;
   end-pi;
   // ------------------------------------------------------------------------
 
@@ -752,31 +750,31 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_chgField;
-  dcl-pi *N like(varString_t);
-    i_string        const  like(varString_t);
-    i_rmvorder      const  like(bool_t);
+  dcl-pi *n like(varString_t);
+    i_string   like(varString_t) const;
+    i_rmvorder like(bool_t) const;
   end-pi;
 
   //  definieren Funktionswert ...
-  dcl-s f_chgfield  like(varString_t);
+  dcl-s f_chgfield like(varString_t);
 
-  dcl-s x           like(int4_t);
-  dcl-s char        char(1);
+  dcl-s x like(int4_t);
+  dcl-s char char(1);
 
-  dcl-s isHyphen    like(bool_t);
-  dcl-s isField     like(bool_t);
-  dcl-s isOrder     like(bool_t);
+  dcl-s isHyphen like(bool_t);
+  dcl-s isField like(bool_t);
+  dcl-s isOrder like(bool_t);
 
-  dcl-s waitField   like(bool_t);
-  dcl-s waitOrder   like(bool_t);
+  dcl-s waitField like(bool_t);
+  dcl-s waitOrder like(bool_t);
 
   dcl-s isEndOfQuotedValue like(bool_t);
 
-  dcl-c DOOUBLE_QUOTE   '"';
-  dcl-c SIGNLE_QUOTE    '''';
-  dcl-c COMMA           ',';
-  dcl-c SPACE           ' ';
-  dcl-c END_OF_FIELD    '"'', ';
+  dcl-c DOOUBLE_QUOTE '"';
+  dcl-c SIGNLE_QUOTE '''';
+  dcl-c COMMA ',';
+  dcl-c SPACE ' ';
+  dcl-c END_OF_FIELD '"'', ';
   // ------------------------------------------------------------------------
 
   isHyphen  = bFalse;

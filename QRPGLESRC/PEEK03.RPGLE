@@ -24,60 +24,59 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/COPY QCOPYLE,H_SPEC
-/COPY QCOPYLE,COPYRIGHT
+/copy QCOPYLE,H_SPEC
+/copy QCOPYLE,COPYRIGHT
 
-dcl-f peekfld usage(*update:*delete) keyed usropn prefix(f_);
+dcl-f peekfld usage(*update: *delete) keyed usropn prefix(f_);
 
-/COPY QCOPYLE,D_VARDEF
-/COPY QCOPYLE,FLDL0100
-/COPY QCOPYLE,KEYL0100
-/COPY QCOPYLE,SDS
-/COPY QCOPYLE,CEECNDHDLR
+/copy QCOPYLE,D_VARDEF
+/copy QCOPYLE,FLDL0100
+/copy QCOPYLE,KEYL0100
+/copy QCOPYLE,SDS
+/copy QCOPYLE,CEECNDHDLR
 
-/COPY QCOPYLE,USR0006
+/copy QCOPYLE,USR0006
 
 /define internal_prototype
-/COPY QCOPYLE,PPEEK03
+/copy QCOPYLE,PPEEK03
 /undefine internal_prototype
 
-/COPY QCOPYLE,PPEEK41
-/COPY QCOPYLE,PPEEK53
-/COPY QCOPYLE,PPEEK58
+/copy QCOPYLE,PPEEK41
+/copy QCOPYLE,PPEEK53
+/copy QCOPYLE,PPEEK58
 
-dcl-s peek41_name     like(pgmcalln_t) inz;
+dcl-s peek41_name like(pgmcalln_t) inz;
 
 dcl-ds fldl0100 likeds(fldl0100_t) inz;
 
-dcl-s rtncode         like(int4_t) inz;
-dcl-s nbrOfKey        like(int4_t) inz;
+dcl-s rtncode like(int4_t) inz;
+dcl-s nbrOfKey like(int4_t) inz;
 
-dcl-s x               like(int4_t) inz;
-dcl-s y               like(int4_t) inz;
-dcl-s z               like(int4_t) inz;
-dcl-s tempstr         like(i_sqlOrder ) inz;
+dcl-s x like(int4_t) inz;
+dcl-s y like(int4_t) inz;
+dcl-s z like(int4_t) inz;
+dcl-s tempstr like(i_sqlOrder) inz;
 dcl-ds keyl0100 likeds(keyl0100_t) based(pkeyl0100);
 dcl-ds keyl0100_sql likeds(keyl0100_t) inz;
-dcl-s data            char(512) inz;
-dcl-s numkeyfld       like(int4_t);
-dcl-s sqlName         varchar(128) inz;
+dcl-s data char(512) inz;
+dcl-s numkeyfld like(int4_t);
+dcl-s sqlName varchar(128) inz;
 
-dcl-s isInzSr         like(bool_t) inz(bFalse);
+dcl-s isInzSr like(bool_t) inz(bFalse);
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
 //*******************************************************************
-
 dcl-pi peek03;
-  i_qFile         const likeds(qobj_t);
-  i_rcdFmt        const like(fmt_t);
-  i_access        const like(accessMode_t);
-  i_sqlOrder      const like(sqlOrder_t);
-  o_msgId         like(msgid_t);
-  o_msgDta        like(msgdta_t);
+  i_qFile    likeds(qobj_t) const;
+  i_rcdFmt   like(fmt_t) const;
+  i_access   like(accessMode_t) const;
+  i_sqlOrder like(sqlOrder_t) const;
+  o_msgId    like(msgid_t);
+  o_msgDta   like(msgdta_t);
 end-pi;
 
-dcl-s do_x1           packed(7);
+dcl-s do_x1 packed(7);
 
 dcl-ds f_key likerec(fpeekfld: *key);
 
@@ -304,11 +303,11 @@ endsr;
 //============================================================*
 
 dcl-proc errorhandler;
-  dcl-pi *N;
-    i_condtoken     value likeds(cee_fc_t);
-    i_pcommarea     int(10) value;
-    o_action        int(10);
-    o_newcondtoken  likeds(cee_fc_t);
+  dcl-pi *n;
+    i_condtoken    likeds(cee_fc_t) value;
+    i_pcommarea    int(10) value;
+    o_action       int(10);
+    o_newcondtoken likeds(cee_fc_t);
   end-pi;
 
   dump;

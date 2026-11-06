@@ -28,43 +28,42 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/COPY QCOPYLE,H_SPEC
-/COPY QCOPYLE,COPYRIGHT
+/copy QCOPYLE,H_SPEC
+/copy QCOPYLE,COPYRIGHT
 
-/COPY QCOPYLE,D_VARDEF
-/COPY QCOPYLE,FLDL0100
-/COPY QCOPYLE,CEECNDHDLR
+/copy QCOPYLE,D_VARDEF
+/copy QCOPYLE,FLDL0100
+/copy QCOPYLE,CEECNDHDLR
 
-/COPY QCOPYLE,USR8171
+/copy QCOPYLE,USR8171
 
 /define internal_prototype
-/COPY QCOPYLE,PPEEK36
+/copy QCOPYLE,PPEEK36
 /undefine internal_prototype
 
-/COPY QCOPYLE,PPEEK53
-/COPY QCOPYLE,PPEEK58
+/copy QCOPYLE,PPEEK53
+/copy QCOPYLE,PPEEK58
 
-dcl-s r_dateiso       date(*iso) inz(*loval );
-dcl-s r_timeiso       time(*iso) inz(*loval );
-dcl-s r_timestmp      timestamp(12) inz(*loval );
-dcl-s r_fldlen        like(int4_t);
-dcl-s r_pos           like(int4_t);
-dcl-s r_buffer        like(i_buffer);
-dcl-s r_value         varchar(32);
-dcl-s r_dftsep        char(1);
-dcl-c r_bufflen       const(%size(i_buffer));
+dcl-s r_dateiso date(*iso) inz(*loval);
+dcl-s r_timeiso time(*iso) inz(*loval);
+dcl-s r_timestmp timestamp(12) inz(*loval);
+dcl-s r_fldlen like(int4_t);
+dcl-s r_pos like(int4_t);
+dcl-s r_buffer like(i_buffer);
+dcl-s r_value varchar(32);
+dcl-s r_dftsep char(1);
+dcl-c r_bufflen %size(i_buffer);
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
 //*******************************************************************
-
 dcl-pi peek36;
-  i_buffer        const like(smallBuffer_t);
-  i_type          const like(dataType_t);
-  i_dattimfmt     const like(fldl0100_t.f1dtfm);
-  i_separator     const like(fldl0100_t.f1dtsp);
-  o_msgid         like(msgid_t);
-  o_msgdta        like(msgdta_t);
+  i_buffer    like(smallBuffer_t) const;
+  i_type      like(dataType_t) const;
+  i_dattimfmt like(fldl0100_t.f1dtfm) const;
+  i_separator like(fldl0100_t.f1dtsp) const;
+  o_msgid     like(msgid_t);
+  o_msgdta    like(msgdta_t);
 end-pi;
 
 //  Register error handler
@@ -258,11 +257,11 @@ endsr;
 //============================================================*
 
 dcl-proc errorhandler;
-  dcl-pi *N;
-    i_condtoken     value likeds(cee_fc_t);
-    i_pcommarea     int(10) value;
-    o_action        int(10);
-    o_newcondtoken  likeds(cee_fc_t);
+  dcl-pi *n;
+    i_condtoken    likeds(cee_fc_t) value;
+    i_pcommarea    int(10) value;
+    o_action       int(10);
+    o_newcondtoken likeds(cee_fc_t);
   end-pi;
 
   dump;

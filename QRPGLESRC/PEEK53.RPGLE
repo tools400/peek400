@@ -26,73 +26,72 @@
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
 ctl-opt nomain;
-/COPY QCOPYLE,H_SPEC
-/COPY QCOPYLE,COPYRIGHT
+/copy QCOPYLE,H_SPEC
+/copy QCOPYLE,COPYRIGHT
 
-dcl-f peekusr usage(*update:*delete:*output) keyed usropn prefix(s_)
-      infds(file_00_ds) extfile(g_peekusr);
+dcl-f peekusr usage(*update: *delete: *output) keyed usropn prefix(s_) infds(file_00_ds)
+  extfile(g_peekusr);
 
-dcl-f default keyed usropn extdesc('PEEKUSR')
-      rename(fpeekusr: fdefault) prefix(d_) infds(file_01_ds)
-      extfile(g_default);
+dcl-f default keyed usropn extdesc('PEEKUSR') rename(fpeekusr: fdefault) prefix(d_)
+  infds(file_01_ds) extfile(g_default);
 
 dcl-ds file_00_ds likeds(infds_t);
 dcl-ds file_01_ds likeds(infds_t);
 
-dcl-s g_peekusr       char(21);
-dcl-s g_default       char(21);
+dcl-s g_peekusr char(21);
+dcl-s g_default char(21);
 
-dcl-s g_isinit        like(bool_t) inz(bFalse);
-dcl-s g_user          like(user_t) inz;
-dcl-s g_file          like(file_t) inz;
-dcl-s g_lib           like(lib_t) inz;
+dcl-s g_isinit like(bool_t) inz(bFalse);
+dcl-s g_user like(user_t) inz;
+dcl-s g_file like(file_t) inz;
+dcl-s g_lib like(lib_t) inz;
 
-dcl-pr f_initusrs        like(set0000_t);
-  i_key           const  like(key_t);
+dcl-pr f_initusrs like(set0000_t);
+  i_key like(key_t) const;
 end-pr;
 
 dcl-pr p_opnfile;
-  o_msgid         char(7);
-  o_msgdta        char(512);
+  o_msgid  char(7);
+  o_msgdta char(512);
 end-pr;
 
 dcl-pr p_opndft;
-  o_msgid         char(7);
-  o_msgdta        char(512);
+  o_msgid  char(7);
+  o_msgdta char(512);
 end-pr;
 
 dcl-pr p_initsrvpgm;
 end-pr;
 
-/COPY QCOPYLE,D_VARDEF
-/COPY QCOPYLE,D_INFDS
-/COPY QCOPYLE,FLDL0100
-/COPY QCOPYLE,D_COLORATR
-/COPY QCOPYLE,SDS
+/copy QCOPYLE,D_VARDEF
+/copy QCOPYLE,D_INFDS
+/copy QCOPYLE,FLDL0100
+/copy QCOPYLE,D_COLORATR
+/copy QCOPYLE,SDS
 
-/COPY QCOPYLE,SET0001
-/COPY QCOPYLE,SET0002
-/COPY QCOPYLE,SET0003
-/COPY QCOPYLE,SET0004
-/COPY QCOPYLE,SET0005
-/COPY QCOPYLE,SET0006
-/COPY QCOPYLE,SET0007
-/COPY QCOPYLE,SET0008
-/COPY QCOPYLE,SET0009
-/COPY QCOPYLE,SET0010
-/COPY QCOPYLE,SET0011
-/COPY QCOPYLE,SET0012
-/COPY QCOPYLE,SET0013
-/COPY QCOPYLE,SET0014
-/COPY QCOPYLE,SET0015
-/COPY QCOPYLE,SET0016
+/copy QCOPYLE,SET0001
+/copy QCOPYLE,SET0002
+/copy QCOPYLE,SET0003
+/copy QCOPYLE,SET0004
+/copy QCOPYLE,SET0005
+/copy QCOPYLE,SET0006
+/copy QCOPYLE,SET0007
+/copy QCOPYLE,SET0008
+/copy QCOPYLE,SET0009
+/copy QCOPYLE,SET0010
+/copy QCOPYLE,SET0011
+/copy QCOPYLE,SET0012
+/copy QCOPYLE,SET0013
+/copy QCOPYLE,SET0014
+/copy QCOPYLE,SET0015
+/copy QCOPYLE,SET0016
 
-/COPY QCOPYLE,PPEEK53
-/COPY QCOPYLE,PPEEK58
+/copy QCOPYLE,PPEEK53
+/copy QCOPYLE,PPEEK58
 
-/COPY QCOPYLE,PPEEK22
+/copy QCOPYLE,PPEEK22
 
-dcl-s peek22_name     like(pgmcalln_t) inz;
+dcl-s peek22_name like(pgmcalln_t) inz;
 
 dcl-ds u_key3 likerec(fpeekusr: *key);
 dcl-ds d_key3 likerec(fdefault: *key);
@@ -102,14 +101,14 @@ dcl-ds d_key3 likerec(fdefault: *key);
 //===================================================================*
 
 dcl-proc p_crtusrsg export;
-  dcl-pi *N;
-    i_prodlib       const  like(lib_t);
-    i_user          const  like(user_t);
-    o_msgID         like(msgid_t);
-    o_msgDta        like(msgdta_t);
+  dcl-pi *n;
+    i_prodlib like(lib_t) const;
+    i_user    like(user_t) const;
+    o_msgID   like(msgid_t);
+    o_msgDta  like(msgdta_t);
   end-pi;
 
-  dcl-s cmd             char(256) inz;
+  dcl-s cmd char(256) inz;
   // ------------------------------------------------------------------------
   p_initsrvpgm();
 
@@ -143,23 +142,23 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_getusrsg export;
-  dcl-pi *N        like(set0000_t);
-    i_key           const  like(key_t);
-    o_msgid         char(7) options(*nopass);
-    o_msgdta        char(512) options(*nopass);
+  dcl-pi *n like(set0000_t);
+    i_key    like(key_t) const;
+    o_msgid  char(7) options(*nopass);
+    o_msgdta char(512) options(*nopass);
   end-pi;
 
   //  definieren Funktionswert ...
-  dcl-s f_getusrsg      like(set0000_t) inz;
+  dcl-s f_getusrsg like(set0000_t) inz;
 
   //  Hilfsfelder für optionale Parameter ...
-  dcl-s o2_msgid        like(o_msgid) inz;
-  dcl-s o3_msgdta       like(o_msgdta) inz;
+  dcl-s o2_msgid like(o_msgid) inz;
+  dcl-s o3_msgdta like(o_msgdta) inz;
 
   //  definieren Arbeitsfelder ...
-  dcl-s x               like(int4_t);
-  dcl-s y               like(int4_t);
-  dcl-s set0000         like(set0000_t);
+  dcl-s x like(int4_t);
+  dcl-s y like(int4_t);
+  dcl-s set0000 like(set0000_t);
   // ------------------------------------------------------------------------
   p_initsrvpgm();
 
@@ -234,14 +233,14 @@ end-proc;
 //===================================================================*
 
 dcl-proc p_updusrsg export;
-  dcl-pi *N;
-    i_key           const  like(key_t);
-    i_data          const  like(set0000_t);
+  dcl-pi *n;
+    i_key  like(key_t) const;
+    i_data like(set0000_t) const;
   end-pi;
 
   //  definieren Arbeitsfelder
-  dcl-s msgid           char(7) inz;
-  dcl-s msgdta          char(512) inz;
+  dcl-s msgid char(7) inz;
+  dcl-s msgdta char(512) inz;
   // ------------------------------------------------------------------------
   p_initsrvpgm();
 
@@ -265,17 +264,17 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_chainusr export;
-  dcl-pi *N        like(bool_t);
-    i_section       const  like(section_t);
-    i_key           const  like(key_t);
-    o_data          like(set0000_t);
+  dcl-pi *n like(bool_t);
+    i_section like(section_t) const;
+    i_key     like(key_t) const;
+    o_data    like(set0000_t);
   end-pi;
 
   //  definieren Funktionswert ...
-  dcl-s f_chainusr      like(bool_t) inz;
+  dcl-s f_chainusr like(bool_t) inz;
   //  definieren Arbeitsfelder
-  dcl-s msgid           char(7) inz;
-  dcl-s msgdta          char(512) inz;
+  dcl-s msgid char(7) inz;
+  dcl-s msgdta char(512) inz;
   // ------------------------------------------------------------------------
   p_initsrvpgm();
 
@@ -309,18 +308,18 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_updatusr export;
-  dcl-pi *N        like(bool_t);
-    i_section       const  like(section_t);
-    i_key           const  like(key_t);
-    i_data          const  like(set0000_t);
+  dcl-pi *n like(bool_t);
+    i_section like(section_t) const;
+    i_key     like(key_t) const;
+    i_data    like(set0000_t) const;
   end-pi;
 
   //  definieren Funktionswert ...
-  dcl-s f_updatusr      like(bool_t) inz;
+  dcl-s f_updatusr like(bool_t) inz;
 
   //  definieren Arbeitsfelder
-  dcl-s msgid           char(7) inz;
-  dcl-s msgdta          char(512) inz;
+  dcl-s msgid char(7) inz;
+  dcl-s msgdta char(512) inz;
   // ------------------------------------------------------------------------
   p_initsrvpgm();
 
@@ -356,17 +355,17 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_deletusr export;
-  dcl-pi *N        like(bool_t);
-    i_section       const  like(section_t);
-    i_key           const  like(key_t);
+  dcl-pi *n like(bool_t);
+    i_section like(section_t) const;
+    i_key     like(key_t) const;
   end-pi;
 
   //  definieren Funktionswert ...
-  dcl-s f_deletusr      like(bool_t) inz;
+  dcl-s f_deletusr like(bool_t) inz;
 
   //  definieren Arbeitsfelder
-  dcl-s msgid           char(7) inz;
-  dcl-s msgdta          char(512) inz;
+  dcl-s msgid char(7) inz;
+  dcl-s msgdta char(512) inz;
   // ------------------------------------------------------------------------
   p_initsrvpgm();
 
@@ -401,17 +400,17 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_writeusr export;
-  dcl-pi *N        like(bool_t);
-    i_section       const  like(section_t);
-    i_key           const  like(key_t);
-    i_data          like(set0000_t);
+  dcl-pi *n like(bool_t);
+    i_section like(section_t) const;
+    i_key     like(key_t) const;
+    i_data    like(set0000_t);
   end-pi;
 
   //  definieren Funktionswert ...
-  dcl-s f_writeusr      like(bool_t) inz;
+  dcl-s f_writeusr like(bool_t) inz;
   //  definieren Arbeitsfelder
-  dcl-s msgid           char(7) inz;
-  dcl-s msgdta          char(512) inz;
+  dcl-s msgid char(7) inz;
+  dcl-s msgdta char(512) inz;
   // ------------------------------------------------------------------------
   p_initsrvpgm();
 
@@ -440,14 +439,14 @@ end-proc;
 //===================================================================*
 
 dcl-proc p_setllusr export;
-  dcl-pi *N;
-    i_section       const  like(section_t);
-    i_key           const  like(key_t) options(*nopass);
+  dcl-pi *n;
+    i_section like(section_t) const;
+    i_key     like(key_t) options(*nopass) const;
   end-pi;
 
   //  definieren Arbeitsfelder
-  dcl-s msgid           char(7) inz;
-  dcl-s msgdta          char(512) inz;
+  dcl-s msgid char(7) inz;
+  dcl-s msgdta char(512) inz;
   // ------------------------------------------------------------------------
   p_initsrvpgm();
 
@@ -476,14 +475,14 @@ end-proc;
 //===================================================================*
 
 dcl-proc p_setgtusr export;
-  dcl-pi *N;
-    i_section       const  like(section_t);
-    i_key           const  like(key_t) options(*nopass);
+  dcl-pi *n;
+    i_section like(section_t) const;
+    i_key     like(key_t) options(*nopass) const;
   end-pi;
 
   //  definieren Arbeitsfelder
-  dcl-s msgid           char(7) inz;
-  dcl-s msgdta          char(512) inz;
+  dcl-s msgid char(7) inz;
+  dcl-s msgdta char(512) inz;
   // ------------------------------------------------------------------------
   p_initsrvpgm();
 
@@ -512,22 +511,22 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_readeusr export;
-  dcl-pi *N        like(bool_t);
-    i_section       const  like(section_t);
-    o_key           like(key_t) options(*nopass);
-    o_data          like(set0000_t) options(*nopass);
+  dcl-pi *n like(bool_t);
+    i_section like(section_t) const;
+    o_key     like(key_t) options(*nopass);
+    o_data    like(set0000_t) options(*nopass);
   end-pi;
 
   //  definieren Funktionswert ...
-  dcl-s f_readeusr      like(bool_t) inz;
+  dcl-s f_readeusr like(bool_t) inz;
 
   //  definieren Hilfsfelder für optionale Parameter ...
-  dcl-s o2_key          like(key_t) inz;
-  dcl-s o3_data         like(set0000_t) inz;
+  dcl-s o2_key like(key_t) inz;
+  dcl-s o3_data like(set0000_t) inz;
 
   //  definieren Arbeitsfelder
-  dcl-s msgid           char(7) inz;
-  dcl-s msgdta          char(512) inz;
+  dcl-s msgid char(7) inz;
+  dcl-s msgdta char(512) inz;
   // ------------------------------------------------------------------------
   p_initsrvpgm();
 
@@ -570,14 +569,14 @@ end-proc;
 //===================================================================*
 
 dcl-proc p_setlldft export;
-  dcl-pi *N;
-    i_section       const  like(section_t);
-    i_key           const  like(key_t) options(*nopass);
+  dcl-pi *n;
+    i_section like(section_t) const;
+    i_key     like(key_t) options(*nopass) const;
   end-pi;
 
   //  definieren Arbeitsfelder
-  dcl-s msgid           char(7) inz;
-  dcl-s msgdta          char(512) inz;
+  dcl-s msgid char(7) inz;
+  dcl-s msgdta char(512) inz;
   // ------------------------------------------------------------------------
   p_initsrvpgm();
 
@@ -603,24 +602,22 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_readedft export;
-  dcl-pi *N        like(bool_t);
-    i_section       const  like(section_t);
-    o_key           like(key_t)
-         options(*nopass);
-    o_data          like(set0000_t)
-         options(*nopass);
+  dcl-pi *n like(bool_t);
+    i_section like(section_t) const;
+    o_key     like(key_t) options(*nopass);
+    o_data    like(set0000_t) options(*nopass);
   end-pi;
 
   //  definieren Funktionswert ...
-  dcl-s f_readedft      like(bool_t) inz;
+  dcl-s f_readedft like(bool_t) inz;
 
   //  definieren Hilfsfelder für optionale Parameter ...
-  dcl-s o2_key          like(key_t) inz;
-  dcl-s o3_data         like(set0000_t) inz;
+  dcl-s o2_key like(key_t) inz;
+  dcl-s o3_data like(set0000_t) inz;
 
   //  definieren Arbeitsfelder
-  dcl-s msgid           char(7) inz;
-  dcl-s msgdta          char(512) inz;
+  dcl-s msgid char(7) inz;
+  dcl-s msgdta char(512) inz;
   // ------------------------------------------------------------------------
   p_initsrvpgm();
 
@@ -664,10 +661,10 @@ end-proc;
 //===================================================================*
 
 dcl-proc p_setusr export;
-  dcl-pi *N;
-    i_user          const  like(user_t);
-    i_file          const  like(file_t);
-    i_lib           const  like(lib_t);
+  dcl-pi *n;
+    i_user like(user_t) const;
+    i_file like(file_t) const;
+    i_lib  like(lib_t) const;
   end-pi;
   // ------------------------------------------------------------------------
 
@@ -682,9 +679,9 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_getusr export;
-  dcl-pi *N        like(user_t);
-    o_file          like(file_t);
-    o_lib           like(lib_t);
+  dcl-pi *n like(user_t);
+    o_file like(file_t);
+    o_lib  like(lib_t);
   end-pi;
   // ------------------------------------------------------------------------
 
@@ -700,12 +697,12 @@ end-proc;
 //===================================================================*
 
 dcl-proc f_initusrs;
-  dcl-pi *N        like(set0000_t);
-    i_key           const  like(key_t);
+  dcl-pi *n like(set0000_t);
+    i_key like(key_t) const;
   end-pi;
 
   //  definieren Funktionswert ...
-  dcl-s f_initusrs      like(set0000_t) inz;
+  dcl-s f_initusrs like(set0000_t) inz;
 
   dcl-ds set0001 likeds(set0001_t) inz(*likeds);
   dcl-ds set0002 likeds(set0002_t) inz(*likeds);
@@ -791,12 +788,12 @@ end-proc;
 //===================================================================*
 
 dcl-proc p_opnfile;
-  dcl-pi *N;
-    o_msgid         char(7);
-    o_msgdta        char(512);
+  dcl-pi *n;
+    o_msgid  char(7);
+    o_msgdta char(512);
   end-pi;
 
-  dcl-s set0000         like(set0000_t);
+  dcl-s set0000 like(set0000_t);
   // ------------------------------------------------------------------------
 
   //  Öffnen Datei PEEKUSR ...
@@ -830,9 +827,9 @@ end-proc;
 //===================================================================*
 
 dcl-proc p_opndft;
-  dcl-pi *N;
-    o_msgid         char(7);
-    o_msgdta        char(512);
+  dcl-pi *n;
+    o_msgid  char(7);
+    o_msgdta char(512);
   end-pi;
   // ------------------------------------------------------------------------
 
@@ -862,7 +859,7 @@ end-proc;
 //===================================================================*
 
 dcl-proc p_initsrvpgm;
-  dcl-pi *N;
+  dcl-pi *n;
   end-pi;
   // ------------------------------------------------------------------------
 

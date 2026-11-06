@@ -25,53 +25,52 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/COPY QCOPYLE,H_SPEC
-/COPY QCOPYLE,COPYRIGHT
+/copy QCOPYLE,H_SPEC
+/copy QCOPYLE,COPYRIGHT
 
-dcl-f peekfmt usage(*update:*delete:*output) usropn prefix(f_);
+dcl-f peekfmt usage(*update: *delete: *output) usropn prefix(f_);
 
-/COPY QCOPYLE,D_VARDEF
-/COPY QCOPYLE,FLDL0100
-/COPY QCOPYLE,RCDL0200
-/COPY QCOPYLE,CEECNDHDLR
-/COPY QCOPYLE,SDS
+/copy QCOPYLE,D_VARDEF
+/copy QCOPYLE,FLDL0100
+/copy QCOPYLE,RCDL0200
+/copy QCOPYLE,CEECNDHDLR
+/copy QCOPYLE,SDS
 
-/COPY QCOPYLE,USR0002
-/COPY QCOPYLE,USR8105
+/copy QCOPYLE,USR0002
+/copy QCOPYLE,USR8105
 
 /define internal_prototype
-/COPY QCOPYLE,PPEEK10
+/copy QCOPYLE,PPEEK10
 /undefine internal_prototype
 
-/COPY QCOPYLE,PPEEK11
-/COPY QCOPYLE,PPEEK53
-/COPY QCOPYLE,PPEEK58
+/copy QCOPYLE,PPEEK11
+/copy QCOPYLE,PPEEK53
+/copy QCOPYLE,PPEEK58
 
 dcl-ds rcdl0200 likeds(rcdl0200_t) inz;
 
-dcl-s sortseq         like(f_sortseq) inz(0);
+dcl-s sortseq like(f_sortseq) inz(0);
 
-dcl-s peek11_name     like(pgmcalln_t) inz;
+dcl-s peek11_name like(pgmcalln_t) inz;
 
-dcl-s nbroffmt        like(int4_t) inz;
-dcl-s fmtcnt          like(int4_t) inz;
-dcl-s rc              like(int4_t) inz;
+dcl-s nbroffmt like(int4_t) inz;
+dcl-s fmtcnt like(int4_t) inz;
+dcl-s rc like(int4_t) inz;
 
-dcl-s isinzsr         like(bool_t) inz(bFalse);
+dcl-s isinzsr like(bool_t) inz(bFalse);
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
 //*******************************************************************
-
 dcl-pi peek10;
-  i_qfile         const likeds(qobj_t);
-  o_msgid         like(msgid_t);
-  o_msgdta        like(msgdta_t);
+  i_qfile  likeds(qobj_t) const;
+  o_msgid  like(msgid_t);
+  o_msgdta like(msgdta_t);
 end-pi;
 // --------------------------------------------------------------------
 // Stand Alone Fields - TOP
 // --------------------------------------------------------------------
-dcl-s do_x1           packed(7);
+dcl-s do_x1 packed(7);
 // --------------------------------------------------------------------
 // Stand Alone Fields - BOTTOM
 // --------------------------------------------------------------------
@@ -179,11 +178,11 @@ endsr;
 //============================================================*
 
 dcl-proc errorhandler;
-  dcl-pi *N;
-    i_condtoken     value likeds(cee_fc_t);
-    i_pcommarea     int(10) value;
-    o_action        int(10);
-    o_newcondtoken  likeds(cee_fc_t);
+  dcl-pi *n;
+    i_condtoken    likeds(cee_fc_t) value;
+    i_pcommarea    int(10) value;
+    o_action       int(10);
+    o_newcondtoken likeds(cee_fc_t);
   end-pi;
 
   dump;

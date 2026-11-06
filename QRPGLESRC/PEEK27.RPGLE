@@ -25,49 +25,48 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/COPY QCOPYLE,H_SPEC
-/COPY QCOPYLE,COPYRIGHT
+/copy QCOPYLE,H_SPEC
+/copy QCOPYLE,COPYRIGHT
 
-/COPY QCOPYLE,D_VARDEF
-/COPY QCOPYLE,FLDL0100
-/COPY QCOPYLE,SDS
-/COPY QCOPYLE,CEECNDHDLR
+/copy QCOPYLE,D_VARDEF
+/copy QCOPYLE,FLDL0100
+/copy QCOPYLE,SDS
+/copy QCOPYLE,CEECNDHDLR
 
 /define internal_prototype
-/COPY QCOPYLE,PPEEK27
+/copy QCOPYLE,PPEEK27
 /undefine internal_prototype
 
-/COPY QCOPYLE,PPEEK53
-/COPY QCOPYLE,PPEEK58
+/copy QCOPYLE,PPEEK53
+/copy QCOPYLE,PPEEK58
 
-dcl-s x               like(int4_t) inz;
-dcl-s y               like(int4_t) inz;
-dcl-s z               like(int4_t) inz;
+dcl-s x like(int4_t) inz;
+dcl-s y like(int4_t) inz;
+dcl-s z like(int4_t) inz;
 
-dcl-s wrk_msgid       like(msgid_t) inz;
-dcl-s wrk_msgtxt      like(msgdta_t) inz;
-dcl-s wrk_key         like(key_t) inz;
-dcl-s wrk_sectn       like(section_t) inz;
-dcl-s data            like(set0000_t) inz;
+dcl-s wrk_msgid like(msgid_t) inz;
+dcl-s wrk_msgtxt like(msgdta_t) inz;
+dcl-s wrk_key like(key_t) inz;
+dcl-s wrk_sectn like(section_t) inz;
+dcl-s data like(set0000_t) inz;
 
 //  Breite der Auswahlzeile und Ausschlüsse des Aufrufers
-dcl-s width           like(int4_t) inz(63);
-dcl-s isExclKeys      like(bool_t) inz(bFalse);
+dcl-s width like(int4_t) inz(63);
+dcl-s isExclKeys like(bool_t) inz(bFalse);
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
 //*******************************************************************
-
 dcl-pi peek27;
-  i_pgm           const like(pgm_t);
-  o_choices             like(choice_t) dim(32);
-  o_numchoices          like(int4_t);
-  i_exclkeys      const like(pgmcmd_t) dim(25) options(*nopass: *omit);
-  i_width         const like(int4_t) options(*nopass);
+  i_pgm        like(pgm_t) const;
+  o_choices    like(choice_t) dim(32);
+  o_numchoices like(int4_t);
+  i_exclkeys   like(pgmcmd_t) dim(25) options(*nopass: *omit) const;
+  i_width      like(int4_t) options(*nopass) const;
 end-pi;
 
-dcl-s do_x1           packed(7);
-dcl-s do_x2           packed(7);
+dcl-s do_x1 packed(7);
+dcl-s do_x2 packed(7);
 
 //----------------------------------------------------*
 
@@ -216,11 +215,11 @@ endsr;
 //============================================================*
 
 dcl-proc errorhandler;
-  dcl-pi *N;
-    i_condtoken     value likeds(cee_fc_t);
-    i_pcommarea     int(10) value;
-    o_action        int(10);
-    o_newcondtoken  likeds(cee_fc_t);
+  dcl-pi *n;
+    i_condtoken    likeds(cee_fc_t) value;
+    i_pcommarea    int(10) value;
+    o_action       int(10);
+    o_newcondtoken likeds(cee_fc_t);
   end-pi;
 
   dump;

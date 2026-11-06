@@ -24,112 +24,110 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/COPY QCOPYLE,H_SPEC
-/COPY QCOPYLE,COPYRIGHT
+/copy QCOPYLE,H_SPEC
+/copy QCOPYLE,COPYRIGHT
 
-dcl-f peek69fm workstn(*ext) usage(*input:*output)
-      usropn infds(workstn) sfile(pbsfl:sflrec);
+dcl-f peek69fm workstn(*ext) usage(*input: *output) usropn infds(workstn) sfile(pbsfl: sflrec);
 
 dcl-ds workstn likeds(workstn_t);
 
-/COPY QCOPYLE,D_VARDEF
-/COPY QCOPYLE,FLDL0100
-/COPY QCOPYLE,D_WORKSTN
-/COPY QCOPYLE,ShortCmd_D
-/COPY QCOPYLE,SDS
-/COPY QCOPYLE,OBJL0200
-/COPY QCOPYLE,SCRNFKEYS
-/COPY QCOPYLE,CEECNDHDLR
+/copy QCOPYLE,D_VARDEF
+/copy QCOPYLE,FLDL0100
+/copy QCOPYLE,D_WORKSTN
+/copy QCOPYLE,ShortCmd_D
+/copy QCOPYLE,SDS
+/copy QCOPYLE,OBJL0200
+/copy QCOPYLE,SCRNFKEYS
+/copy QCOPYLE,CEECNDHDLR
 
-/COPY QCOPYLE,USR0010
-/COPY QCOPYLE,USR8100
-/COPY QCOPYLE,USR8110
-/COPY QCOPYLE,USR8194
-/COPY QCOPYLE,USR8209
+/copy QCOPYLE,USR0010
+/copy QCOPYLE,USR8100
+/copy QCOPYLE,USR8110
+/copy QCOPYLE,USR8194
+/copy QCOPYLE,USR8209
 
 /define internal_prototype
-/COPY QCOPYLE,PPEEK69
+/copy QCOPYLE,PPEEK69
 /undefine internal_prototype
 
-/COPY QCOPYLE,PPEEK21
-/COPY QCOPYLE,PPEEK23
-/COPY QCOPYLE,PPEEK27
-/COPY QCOPYLE,PPEEK70
+/copy QCOPYLE,PPEEK21
+/copy QCOPYLE,PPEEK23
+/copy QCOPYLE,PPEEK27
+/copy QCOPYLE,PPEEK70
 
-/COPY QCOPYLE,PPEEK53
-/COPY QCOPYLE,PPEEK58
+/copy QCOPYLE,PPEEK53
+/copy QCOPYLE,PPEEK58
 
 //  Retrieve Display Mode       Return value: Display Mode
 dcl-pr qsnrtvmod char(1) extproc('QsnRtvMod');
-  o_dspmode       char(1) options(*omit);
-  i_hlowlvlenv    int(10) const  options(*omit);
-  io_errcode      char(32767) options(*omit: *varsize);
+  o_dspmode    char(1) options(*omit);
+  i_hlowlvlenv int(10) options(*omit) const;
+  io_errcode   char(32767) options(*omit: *varsize);
 end-pr;
 
-dcl-s yfkeys          char(18) dim(32);
-dcl-s ynbrofkeys      like(int4_t);
-dcl-s ymsgid          char(7);
-dcl-s ymsgdta         char(512);
+dcl-s yfkeys char(18) dim(32);
+dcl-s ynbrofkeys like(int4_t);
+dcl-s ymsgid char(7);
+dcl-s ymsgdta char(512);
 
-dcl-s ypgmcmd         char(10);
-dcl-s ycmddta         like(pgmcmddt_t);
+dcl-s ypgmcmd char(10);
+dcl-s ycmddta like(pgmcmddt_t);
 
-dcl-s ychoice         char(75) dim(32);
-dcl-s ynbrofch        like(int4_t);
+dcl-s ychoice char(75) dim(32);
+dcl-s ynbrofch like(int4_t);
 
 dcl-ds yqfile likeds(qobj_t) inz;
 dcl-ds rtnfile likeds(qobj_t) inz;
 
-dcl-s isnewpos        char(1) inz(bFalse);
-dcl-s isfound         char(1) inz(bFalse);
-dcl-s issflerror      char(1) inz(bFalse);
+dcl-s isnewpos char(1) inz(bFalse);
+dcl-s isfound char(1) inz(bFalse);
+dcl-s issflerror char(1) inz(bFalse);
 
-dcl-s sftop           like(int4_t) inz;
-dcl-s sflpage         like(int4_t) inz;
-dcl-s sflpagedds      like(sflpage   ) inz;
-dcl-s sflrec          like(sflpage   ) inz;
-dcl-s sflnbrrcd       like(sflpage   ) inz;
-dcl-s sfbot           like(int4_t) inz;
-dcl-s sfl_cmd         char(10) inz(*blanks);
-dcl-c nbrfkeys const(3);
+dcl-s sftop like(int4_t) inz;
+dcl-s sflpage like(int4_t) inz;
+dcl-s sflpagedds like(sflpage) inz;
+dcl-s sflrec like(sflpage) inz;
+dcl-s sflnbrrcd like(sflpage) inz;
+dcl-s sfbot like(int4_t) inz;
+dcl-s sfl_cmd char(10) inz(*blanks);
+dcl-c nbrfkeys 3;
 
-dcl-s peek21_name     like(pgmcalln_t) inz;
-dcl-s peek23_name     like(pgmcalln_t) inz;
-dcl-s peek27_name     like(pgmcalln_t) inz;
-dcl-s peek70_name     like(pgmcalln_t) inz;
+dcl-s peek21_name like(pgmcalln_t) inz;
+dcl-s peek23_name like(pgmcalln_t) inz;
+dcl-s peek27_name like(pgmcalln_t) inz;
+dcl-s peek70_name like(pgmcalln_t) inz;
 
-dcl-s r_file          inz(*blanks) like(##file );
-dcl-s lstfile         inz(*blanks) like(##file );
-dcl-s lstnbrrcd       inz(0) like(sflpage);
-dcl-s srchrec         like(sflpage);
+dcl-s r_file inz(*blanks) like(##file);
+dcl-s lstfile inz(*blanks) like(##file);
+dcl-s lstnbrrcd inz(0) like(sflpage);
+dcl-s srchrec like(sflpage);
 
 //  Dateinamen der Subfile für die Suche
-dcl-s sfl_files       like($$fnme) dim(9999);
+dcl-s sfl_files like($$fnme) dim(9999);
 
-dcl-s wrk_sfsanr      like(sfsanr);
+dcl-s wrk_sfsanr like(sfsanr);
 
-dcl-s numfiles        like(int4_t);
+dcl-s numfiles like(int4_t);
 dcl-ds objl0200 likeds(objl0200_t) inz;
 
-dcl-s dspmoderaw      char(1);
+dcl-s dspmoderaw char(1);
 dcl-ds errcode likeds(errcode_t) inz;
 
-dcl-s isInzSr         like(bool_t) inz(bFalse);
+dcl-s isInzSr like(bool_t) inz(bFalse);
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
 //*******************************************************************
-
 dcl-pi peek69;
-  i_dsp80         const like(dsp80_t);
-  i_copyright     const like(copyrght_t);
-  o_qfile         like(qobj_t);
-  o_msgid         like(msgid_t);
-  o_msgdta        like(msgdta_t);
+  i_dsp80     like(dsp80_t) const;
+  i_copyright like(copyrght_t) const;
+  o_qfile     like(qobj_t);
+  o_msgid     like(msgid_t);
+  o_msgdta    like(msgdta_t);
 end-pi;
 
-dcl-s do_x1           packed(7);
-dcl-s do_x2           packed(7);
+dcl-s do_x1 packed(7);
+dcl-s do_x2 packed(7);
 //---------------------------------------------------*
 
 //  Register error handler
@@ -825,11 +823,11 @@ endsr;
 //============================================================*
 
 dcl-proc errorhandler;
-  dcl-pi *N;
-    i_condtoken     value likeds(cee_fc_t);
-    i_pcommarea     int(10) value;
-    o_action        int(10);
-    o_newcondtoken  likeds(cee_fc_t);
+  dcl-pi *n;
+    i_condtoken    likeds(cee_fc_t) value;
+    i_pcommarea    int(10) value;
+    o_action       int(10);
+    o_newcondtoken likeds(cee_fc_t);
   end-pi;
 
   dump;

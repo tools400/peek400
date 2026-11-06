@@ -24,24 +24,24 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/COPY QCOPYLE,H_SPEC
-/COPY QCOPYLE,COPYRIGHT
+/copy QCOPYLE,H_SPEC
+/copy QCOPYLE,COPYRIGHT
 
-dcl-f qpeekgen extdesc('QPEEKGEN') usage(*output) usropn rename(qpeekgen :foutput) block(*no);
+dcl-f qpeekgen extdesc('QPEEKGEN') usage(*output) usropn rename(qpeekgen: foutput) block(*no);
 
-dcl-f qcopyle1 extdesc('QPEEKGEN') usropn rename(qpeekgen :fcopy1);
+dcl-f qcopyle1 extdesc('QPEEKGEN') usropn rename(qpeekgen: fcopy1);
 
-dcl-f qcopyle2 extdesc('QPEEKGEN') usropn rename(qpeekgen :fcopy2);
+dcl-f qcopyle2 extdesc('QPEEKGEN') usropn rename(qpeekgen: fcopy2);
 
-dcl-f qcopyle3 extdesc('QPEEKGEN') usropn rename(qpeekgen :fcopy3);
+dcl-f qcopyle3 extdesc('QPEEKGEN') usropn rename(qpeekgen: fcopy3);
 
-dcl-f qcopyle4 extdesc('QPEEKGEN') usropn rename(qpeekgen :fcopy4);
+dcl-f qcopyle4 extdesc('QPEEKGEN') usropn rename(qpeekgen: fcopy4);
 
-dcl-f qcopyle5 extdesc('QPEEKGEN') usropn rename(qpeekgen :fcopy5);
+dcl-f qcopyle5 extdesc('QPEEKGEN') usropn rename(qpeekgen: fcopy5);
 
-dcl-f qcopyle6 extdesc('QPEEKGEN') usropn rename(qpeekgen :fcopy6);
+dcl-f qcopyle6 extdesc('QPEEKGEN') usropn rename(qpeekgen: fcopy6);
 
-dcl-f peeksrc usropn rename(peeksrc:finput);
+dcl-f peeksrc usropn rename(peeksrc: finput);
 
 dcl-f peekfld usropn;
 
@@ -50,198 +50,198 @@ dcl-f peekfld usropn;
 //===============================================================*
 
 dcl-ds ds_page len(112);
-  $page_spc       char(1) inz('C') pos(6);
-  $page_f2a       char(19) inz('When      scnNbr = ') pos(26);
-  $page_f2b       zoned(3) inz;
+  $page_spc char(1) inz('C') pos(6);
+  $page_f2a char(19) inz('When      scnNbr = ') pos(26);
+  $page_f2b zoned(3) inz;
 end-ds;
 
 dcl-ds ds_chkch len(112);
-  $chkch_spc      char(1) inz('C') pos(6);
-  $chkch_opc      char(6) inz('Exsr') pos(26);
-  $chkch_f2a      char(7) inz('chkChar') pos(36);
-  $chkch_f2b      zoned(3) inz;
+  $chkch_spc char(1) inz('C') pos(6);
+  $chkch_opc char(6) inz('Exsr') pos(26);
+  $chkch_f2a char(7) inz('chkChar') pos(36);
+  $chkch_f2b zoned(3) inz;
 end-ds;
 
 dcl-ds ds_exfmt len(112);
-  $exfmt_spc      char(1) inz('C') pos(6);
-  $exfmt_neg      char(1) inz('N') pos(9);
-  $exfmt_ind      char(2) inz('71');
-  $exfmt_opc      char(6) inz('Exfmt') pos(26);
-  $exfmt_ext      char(4) inz;
-  $exfmt_sc       char(2) inz('UC');
-  $exfmt_scn      zoned(3) inz;
+  $exfmt_spc char(1) inz('C') pos(6);
+  $exfmt_neg char(1) inz('N') pos(9);
+  $exfmt_ind char(2) inz('71');
+  $exfmt_opc char(6) inz('Exfmt') pos(26);
+  $exfmt_ext char(4) inz;
+  $exfmt_sc  char(2) inz('UC');
+  $exfmt_scn zoned(3) inz;
 end-ds;
 
 dcl-ds ds_more len(112);
-  $more_scnn      zoned(3) inz pos(46);
+  $more_scnn zoned(3) inz pos(46);
 end-ds;
 
 dcl-ds ds_fmtnme len(112);
-  $fmtnm_xnm      char(10) inz pos(51);
+  $fmtnm_xnm char(10) inz pos(51);
 end-ds;
 
 dcl-ds ds_rnmbuf len(112);
-  $rnmbf_spc      char(1) inz('I') pos(6);
-  $rnmbf_xfd      char(10) inz pos(21);
-  $rnmbf_ifd      char(14) inz pos(49);
+  $rnmbf_spc char(1) inz('I') pos(6);
+  $rnmbf_xfd char(10) inz pos(21);
+  $rnmbf_ifd char(14) inz pos(49);
 end-ds;
 
 dcl-ds ds_rnmex len(112);
-  $rnmex_spc      char(1) inz('D') pos(6);
-  $rnmex_ifd      char(15) inz;
-  $rnmex_ext      char(1) inz('E');
-  $rnmex_xfd      char(37) inz pos(44);
+  $rnmex_spc char(1) inz('D') pos(6);
+  $rnmex_ifd char(15) inz;
+  $rnmex_ext char(1) inz('E');
+  $rnmex_xfd char(37) inz pos(44);
 end-ds;
 
 dcl-ds ds_ovlex len(112);
-  $ovlex_spc      char(1) inz('D') pos(6);
-  $ovlex_ifd      char(15) inz;
-  $ovlex_typ      char(5) inz pos(38);
-  $ovlex_xfd      char(37) inz pos(44);
+  $ovlex_spc char(1) inz('D') pos(6);
+  $ovlex_ifd char(15) inz;
+  $ovlex_typ char(5) inz pos(38);
+  $ovlex_xfd char(37) inz pos(44);
 end-ds;
 
 dcl-ds ds_lcas len(112);
-  $lcas_inz       char(6) inz pos(65);
+  $lcas_inz char(6) inz pos(65);
 end-ds;
 
 dcl-ds ds_rcdlock len(112);
-  $rcdlock_inz    char(6) inz pos(65);
+  $rcdlock_inz char(6) inz pos(65);
 end-ds;
 
 dcl-ds ds_alwl len(112);
-  $alwl_inz       char(6) inz pos(65);
+  $alwl_inz char(6) inz pos(65);
 end-ds;
 
 dcl-ds ds_keepcrs len(112);
-  $keepcrs_inz    char(4) inz pos(44);
+  $keepcrs_inz char(4) inz pos(44);
 end-ds;
 
 dcl-ds ds_ucs2 len(112);
-  $ucs2_value     char(14) inz pos(46);
+  $ucs2_value char(14) inz pos(46);
 end-ds;
 
 dcl-ds ds_buflen len(112);
-  $bufln_ln       zoned(5) inz pos(35);
+  $bufln_ln zoned(5) inz pos(35);
 end-ds;
 
 dcl-ds ds_eval len(112);
-  $eval_spc       char(1) inz('C') pos(6);
-  $eval_code      char(6) inz('Eval') pos(26);
-  $eval_fct2      char(45) inz pos(36);
+  $eval_spc  char(1) inz('C') pos(6);
+  $eval_code char(6) inz('Eval') pos(26);
+  $eval_fct2 char(45) inz pos(36);
 end-ds;
 
 dcl-ds ds_for len(112);
-  $for_spc        char(1) inz('C') pos(6);
-  $for_code       char(6) inz('For') pos(26);
-  $for_fct2       char(45) inz pos(36);
+  $for_spc  char(1) inz('C') pos(6);
+  $for_code char(6) inz('For') pos(26);
+  $for_fct2 char(45) inz pos(36);
 end-ds;
 
 dcl-ds ds_endfor len(112);
-  $endfor_spc     char(1) inz('C') pos(6);
-  $endfor_oper    char(6) inz('Endfor') pos(26);
+  $endfor_spc  char(1) inz('C') pos(6);
+  $endfor_oper char(6) inz('Endfor') pos(26);
 end-ds;
 
 dcl-ds ds_select len(112);
-  $select_spc     char(1) inz('C') pos(6);
-  $select_code    char(6) inz('Select') pos(26);
-  $select_fct2    char(45) inz pos(36);
+  $select_spc  char(1) inz('C') pos(6);
+  $select_code char(6) inz('Select') pos(26);
+  $select_fct2 char(45) inz pos(36);
 end-ds;
 
 dcl-ds ds_when len(112);
-  $when_spc       char(1) inz('C') pos(6);
-  $when_code      char(6) inz('When') pos(26);
-  $when_fct2      char(45) inz pos(36);
+  $when_spc  char(1) inz('C') pos(6);
+  $when_code char(6) inz('When') pos(26);
+  $when_fct2 char(45) inz pos(36);
 end-ds;
 
 dcl-ds ds_endsl len(112);
-  $endsl_spc      char(1) inz('C') pos(6);
-  $endsl_oper     char(6) inz('Endsl') pos(26);
+  $endsl_spc  char(1) inz('C') pos(6);
+  $endsl_oper char(6) inz('Endsl') pos(26);
 end-ds;
 
 dcl-ds ds_if len(112);
-  $if_spc         char(1) inz('C') pos(6);
-  $if_if          char(6) inz('If') pos(26);
-  $if_fct2        char(45) inz pos(36);
+  $if_spc  char(1) inz('C') pos(6);
+  $if_if   char(6) inz('If') pos(26);
+  $if_fct2 char(45) inz pos(36);
 end-ds;
 
 dcl-ds ds_cont len(112);
-  $cont_spc       char(1) inz('C') pos(6);
-  $cont_fct2      char(45) inz pos(36);
+  $cont_spc  char(1) inz('C') pos(6);
+  $cont_fct2 char(45) inz pos(36);
 end-ds;
 
 dcl-ds ds_else len(112);
-  $else_spc       char(1) inz('C') pos(6);
-  $else_oper      char(6) inz('Else') pos(26);
+  $else_spc  char(1) inz('C') pos(6);
+  $else_oper char(6) inz('Else') pos(26);
 end-ds;
 
 dcl-ds ds_endif len(112);
-  $endif_spc      char(1) inz('C') pos(6);
-  $endif_oper     char(6) inz('Endif') pos(26);
+  $endif_spc  char(1) inz('C') pos(6);
+  $endif_oper char(6) inz('Endif') pos(26);
 end-ds;
 
 dcl-ds ds_clear len(112);
-  $clear_spc      char(1) inz('C') pos(6);
-  $clear_oper     char(6) inz('Clear') pos(26);
-  $clear_field    char(14) inz pos(50);
+  $clear_spc   char(1) inz('C') pos(6);
+  $clear_oper  char(6) inz('Clear') pos(26);
+  $clear_field char(14) inz pos(50);
 end-ds;
 
 dcl-ds ds_remark len(112);
-  $rem_atrb       char(1) inz(COLOR_white);
-  $rem_rem        char(1) inz('*') pos(7);
-  $rem_txt        char(103) inz pos(10);
+  $rem_atrb char(1) inz(COLOR_white);
+  $rem_rem  char(1) inz('*') pos(7);
+  $rem_txt  char(103) inz pos(10);
 end-ds;
 
 dcl-ds ds_begsr len(112);
-  $begsr_spc      char(1) inz('C') pos(6);
-  $begsr_f1       char(14) inz pos(12);
-  $begsr_opc      char(10) inz('Begsr');
+  $begsr_spc char(1) inz('C') pos(6);
+  $begsr_f1  char(14) inz pos(12);
+  $begsr_opc char(10) inz('Begsr');
 end-ds;
 
 dcl-ds ds_endsr len(112);
-  $endsr_spc      char(1) inz('C') pos(6);
-  $endsr_opc      char(10) inz('Endsr') pos(26);
+  $endsr_spc char(1) inz('C') pos(6);
+  $endsr_opc char(10) inz('Endsr') pos(26);
 end-ds;
 
 dcl-ds ds_exsr len(112);
-  $exsr_spc       char(1) inz('C') pos(6);
-  $exsr_opc       char(10) inz('Exsr') pos(26);
-  $exsr_fct2      char(14) inz;
+  $exsr_spc  char(1) inz('C') pos(6);
+  $exsr_opc  char(10) inz('Exsr') pos(26);
+  $exsr_fct2 char(14) inz;
 end-ds;
 
-dcl-s #srcseq         like(srcseq);
-dcl-c #increment const(0,01);
+dcl-s #srcseq like(srcseq);
+dcl-c #increment 0,01;
 
-dcl-ds *N;
-  fieldcount      zoned(5) inz(*zeros);
-  a#fdcount       char(5) overlay(fieldcount:1);
+dcl-ds *n;
+  fieldcount zoned(5) inz(*zeros);
+  a#fdcount  char(5) overlay(fieldcount: 1);
 end-ds;
 
-/COPY QCOPYLE,SDS
+/copy QCOPYLE,SDS
 
-dcl-s cmd             char(4) inz;
-dcl-s scnnbr          like(int4_t) inz;
+dcl-s cmd char(4) inz;
+dcl-s scnnbr like(int4_t) inz;
 
-dcl-c UNKNOWN_FIELD_TYPE const(': Unknown field type');
+dcl-c UNKNOWN_FIELD_TYPE ': Unknown field type';
 
-dcl-s pos             int(10) inz;
+dcl-s pos int(10) inz;
 
-dcl-s totfields       int(10) inz;
-dcl-s curfield        zoned(2) inz;
+dcl-s totfields int(10) inz;
+dcl-s curfield zoned(2) inz;
 
-dcl-s nulldft         char(4) inz;
+dcl-s nulldft char(4) inz;
 
-/COPY QCOPYLE,D_VARDEF
-/COPY QCOPYLE,FLDL0100
-/COPY QCOPYLE,D_COLORATR
+/copy QCOPYLE,D_VARDEF
+/copy QCOPYLE,FLDL0100
+/copy QCOPYLE,D_COLORATR
 
 /define internal_prototype
-/COPY QCOPYLE,PPEEK16
+/copy QCOPYLE,PPEEK16
 /undefine internal_prototype
 
 dcl-ds fldl0100 likeds(fldl0100_t) inz;
 
 dcl-pr p_wrtout extproc(*dclcase);
-  i_srcdta        const like(srcdta);
+  i_srcdta like(srcdta) const;
 end-pr;
 
 dcl-pr f_readfld like(bool_t) extproc(*dclcase);
@@ -251,24 +251,23 @@ end-pr;
 //  Steuerleiste
 //====================================================*
 
-/COPY QCOPYLE,PPEEK53
-/COPY QCOPYLE,PPEEK58
-/COPY QCOPYLE,PPEEK61
+/copy QCOPYLE,PPEEK53
+/copy QCOPYLE,PPEEK58
+/copy QCOPYLE,PPEEK61
 
-/COPY QCOPYLE,CEECNDHDLR
-
+/copy QCOPYLE,CEECNDHDLR
 dcl-pi peek16;
-  i_prodlib       const like(lib_t);
-  i_filename      const likeds(qobj_t);
-  i_rcdfmt        const like(rcdfmt_t);
-  i_scnnbrs       const like(int2_t);
-  i_alwlc         const like(bool_t);
-  i_case          const like(bool_t);
-  i_rcdlock       const like(bool_t);
-  i_nulldft       const like(bool_t);
-  i_keepcrs       const like(bool_t);
-  io_stage              like(int4_t);
-  i_numpasses     const like(int4_t);
+  i_prodlib   like(lib_t) const;
+  i_filename  likeds(qobj_t) const;
+  i_rcdfmt    like(rcdfmt_t) const;
+  i_scnnbrs   like(int2_t) const;
+  i_alwlc     like(bool_t) const;
+  i_case      like(bool_t) const;
+  i_rcdlock   like(bool_t) const;
+  i_nulldft   like(bool_t) const;
+  i_keepcrs   like(bool_t) const;
+  io_stage    like(int4_t);
+  i_numpasses like(int4_t) const;
 end-pi;
 
 //  Register error handler
@@ -1406,8 +1405,8 @@ endsr;
 //    wrtOut        Ausgeben Quellenzeile                     *
 //============================================================*
 dcl-proc p_wrtout;
-  dcl-pi *N;
-    i_srcdta        const like(srcdta);
+  dcl-pi *n;
+    i_srcdta like(srcdta) const;
   end-pi;
 
   #srcseq = #srcseq + #increment;
@@ -1425,7 +1424,7 @@ end-proc;
 // Returns bTrue on end-of-file, else bFalse.                 *
 //============================================================*
 dcl-proc f_readfld;
-  dcl-pi *N       like(bool_t);
+  dcl-pi *n like(bool_t);
   end-pi;
   //------------------------------------------------------------
 
@@ -1444,11 +1443,11 @@ end-proc;
 //============================================================*
 
 dcl-proc errorhandler;
-  dcl-pi *N;
-    i_condtoken     value likeds(cee_fc_t);
-    i_pcommarea     int(10) value;
-    o_action        int(10);
-    o_newcondtoken  likeds(cee_fc_t);
+  dcl-pi *n;
+    i_condtoken    likeds(cee_fc_t) value;
+    i_pcommarea    int(10) value;
+    o_action       int(10);
+    o_newcondtoken likeds(cee_fc_t);
   end-pi;
 
   dump;
@@ -1459,5 +1458,5 @@ end-proc;
 //============================================================*
 //  Datum und Zeit im Format des Feldes (f_extDate, f_extTime)*
 //============================================================*
-/COPY QCOPYLE,DATTIMFMT
+/copy QCOPYLE,DATTIMFMT
 

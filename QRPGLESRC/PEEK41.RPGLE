@@ -69,40 +69,40 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/COPY QCOPYLE,H_SPEC
-/COPY QCOPYLE,COPYRIGHT
+/copy QCOPYLE,H_SPEC
+/copy QCOPYLE,COPYRIGHT
 
-/COPY QCOPYLE,D_VARDEF
-/COPY QCOPYLE,FLDL0100
-/COPY QCOPYLE,QDBRTVFD
-/COPY QCOPYLE,KEYL0100
-/COPY QCOPYLE,FILD0100
-/COPY QCOPYLE,SELL0100
-/COPY QCOPYLE,BSPF0100
-/COPY QCOPYLE,CEECNDHDLR
+/copy QCOPYLE,D_VARDEF
+/copy QCOPYLE,FLDL0100
+/copy QCOPYLE,QDBRTVFD
+/copy QCOPYLE,KEYL0100
+/copy QCOPYLE,FILD0100
+/copy QCOPYLE,SELL0100
+/copy QCOPYLE,BSPF0100
+/copy QCOPYLE,CEECNDHDLR
 
 /define internal_prototype
-/COPY QCOPYLE,PPEEK41
+/copy QCOPYLE,PPEEK41
 /undefine internal_prototype
 
-/COPY QCOPYLE,PPEEK53
-/COPY QCOPYLE,PPEEK58
+/copy QCOPYLE,PPEEK53
+/copy QCOPYLE,PPEEK58
 
 //----------------------------------------------------*
 //  API - DATENSTRUKTUREN                             *
 //----------------------------------------------------*
 
 //  declarations for QDBRTVFD
-dcl-ds *N;
-  rcvVarTab      char(1) dim(32000);
-  rcvVar         char(32000) pos(1) inz;
+dcl-ds *n;
+  rcvVarTab char(1) dim(32000);
+  rcvVar    char(32000) pos(1) inz;
 end-ds;
 
-dcl-s rcvVarLn   int(10) inz(32000);
+dcl-s rcvVarLn int(10) inz(32000);
 
-dcl-ds retQfile  likeds(qobj_t);
+dcl-ds retQfile likeds(qobj_t);
 
-dcl-ds errCode   likeds(errcode_t) inz;
+dcl-ds errCode likeds(errcode_t) inz;
 
 //  declarations for File definition header  (Qdb_Qdbfh), 1.9.3.2
 dcl-s pFiledefhd pointer;
@@ -125,31 +125,31 @@ dcl-s pSelparmay pointer;
 
 dcl-ds selparmay likeds(qdb_qdbfsp_t) based(pSelparmay);
 
-dcl-s offset     like(int4_t);
-dcl-s counter    like(int4_t);
-dcl-s mbrnbr     like(int4_t);
+dcl-s offset like(int4_t);
+dcl-s counter like(int4_t);
+dcl-s mbrnbr like(int4_t);
 dcl-s nbrofkeyfd like(int4_t);
 dcl-s posofkeyfd like(int4_t);
-dcl-s lenofslom  like(int4_t);
-dcl-s nbrofslom  like(int4_t);
-dcl-s posofslom  like(int4_t);
-dcl-s xpos       like(int4_t);
-dcl-s r_valu     like(sell0100_t.sovalu);
+dcl-s lenofslom like(int4_t);
+dcl-s nbrofslom like(int4_t);
+dcl-s posofslom like(int4_t);
+dcl-s xpos like(int4_t);
+dcl-s r_valu like(sell0100_t.sovalu);
 
-dcl-ds keyl0100  likeds(keyl0100_t);
-dcl-ds fild0100  likeds(fild0100_t);
-dcl-ds sell0100  likeds(sell0100_t);
-dcl-ds bspf0100  likeds(bspf0100_t);
+dcl-ds keyl0100 likeds(keyl0100_t);
+dcl-ds fild0100 likeds(fild0100_t);
+dcl-ds sell0100 likeds(sell0100_t);
+dcl-ds bspf0100 likeds(bspf0100_t);
 
 //  Boolean variables & constants
-dcl-s isfound    like(bool_t) inz(bFalse);
+dcl-s isfound like(bool_t) inz(bFalse);
 dcl-s isjoinfile like(bool_t) inz(bFalse);
 
 dcl-ds now qualified;
-  date     likeds(ts_date_t) pos(1);
-  date6    char(6) pos(3);
-  time     likeds(ts_time_t) pos(9);
-  time6    char(6) pos(9);
+  date  likeds(ts_date_t) pos(1);
+  date6 char(6) pos(3);
+  time  likeds(ts_time_t) pos(9);
+  time6 char(6) pos(9);
 end-ds;
 
 dcl-ds ts_date_t qualified template;
@@ -160,22 +160,21 @@ dcl-ds ts_date_t qualified template;
 end-ds;
 
 dcl-ds ts_time_t qualified template;
-  hour    zoned(2);
-  minute  zoned(2);
-  second  zoned(2);
-  mSecs   zoned(6);
+  hour   zoned(2);
+  minute zoned(2);
+  second zoned(2);
+  mSecs  zoned(6);
 end-ds;
 
 //*******************************************************************
 //           Main  Control block                                    *
 //*******************************************************************
-
 dcl-pi peek41;
-  i_qfile         const likeds(qobj_t);
-  i_rcdfmt        const like(fmt_t);
-  i_function      const like(function_t);
-  o_nbrofent      like(int4_t);
-  o_data          char(512);
+  i_qfile    likeds(qobj_t) const;
+  i_rcdfmt   like(fmt_t) const;
+  i_function like(function_t) const;
+  o_nbrofent like(int4_t);
+  o_data     char(512);
 end-pi;
 //---------------------------------------------------*
 
@@ -842,11 +841,11 @@ endsr;
 //============================================================*
 
 dcl-proc errorhandler;
-  dcl-pi *N;
-    i_condtoken     value likeds(cee_fc_t);
-    i_pcommarea     int(10) value;
-    o_action        int(10);
-    o_newcondtoken  likeds(cee_fc_t);
+  dcl-pi *n;
+    i_condtoken    likeds(cee_fc_t) value;
+    i_pcommarea    int(10) value;
+    o_action       int(10);
+    o_newcondtoken likeds(cee_fc_t);
   end-pi;
 
   dump;

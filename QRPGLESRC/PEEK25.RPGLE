@@ -24,76 +24,74 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/COPY QCOPYLE,H_SPEC
-/COPY QCOPYLE,COPYRIGHT
+/copy QCOPYLE,H_SPEC
+/copy QCOPYLE,COPYRIGHT
 
-dcl-f peek25fm workstn(*ext) usage(*input:*output)
-      usropn infds(workstn);
+dcl-f peek25fm workstn(*ext) usage(*input: *output) usropn infds(workstn);
 
 dcl-ds workstn likeds(workstn_t);
 dcl-ds cursorPosition likeds(cursorPosition_t) inz;
 
-/COPY QCOPYLE,D_VARDEF
-/COPY QCOPYLE,FLDL0100
-/COPY QCOPYLE,D_WORKSTN
-/COPY QCOPYLE,D_COLORATR
-/COPY QCOPYLE,ShortCmd_D
-/COPY QCOPYLE,SDS
-/COPY QCOPYLE,SCRNFKEYS
-/COPY QCOPYLE,CEECNDHDLR
+/copy QCOPYLE,D_VARDEF
+/copy QCOPYLE,FLDL0100
+/copy QCOPYLE,D_WORKSTN
+/copy QCOPYLE,D_COLORATR
+/copy QCOPYLE,ShortCmd_D
+/copy QCOPYLE,SDS
+/copy QCOPYLE,SCRNFKEYS
+/copy QCOPYLE,CEECNDHDLR
 
 /define internal_prototype
-/COPY QCOPYLE,PPEEK25
+/copy QCOPYLE,PPEEK25
 /undefine internal_prototype
 
-/COPY QCOPYLE,USR8100
+/copy QCOPYLE,USR8100
 
-/COPY QCOPYLE,PPEEK21
-/COPY QCOPYLE,PPEEK23
+/copy QCOPYLE,PPEEK21
+/copy QCOPYLE,PPEEK23
 
-/COPY QCOPYLE,PPEEK53
-/COPY QCOPYLE,PPEEK58
+/copy QCOPYLE,PPEEK53
+/copy QCOPYLE,PPEEK58
 
-dcl-s yfkeys          char(18) dim(32);
-dcl-s ynbrofkeys      like(int4_t);
-dcl-s ymsgid          char(7);
-dcl-s ymsgdta         char(512);
+dcl-s yfkeys char(18) dim(32);
+dcl-s ynbrofkeys like(int4_t);
+dcl-s ymsgid char(7);
+dcl-s ymsgdta char(512);
 
-dcl-s ypgmcmd         char(10);
-dcl-s ycmddta         like(pgmcmddt_t);
+dcl-s ypgmcmd char(10);
+dcl-s ycmddta like(pgmcmddt_t);
 
-dcl-s sfbot           like(int4_t);
-dcl-c nbrfkeys const(2);
+dcl-s sfbot like(int4_t);
+dcl-c nbrfkeys 2;
 
-dcl-c CHAR const('x');
+dcl-c CHAR 'x';
 
 //  Farbtabelle: Bildschirmfeld, Farbattribut, Bezugszahl für
 //  DSPATR(PC) und Adresse des Bildschirmfelds
-dcl-c MAX_COLORS const(28);
-dcl-s colorName       char(10) dim(MAX_COLORS);
-dcl-s colorAttr       char(1) dim(MAX_COLORS);
-dcl-s colorInd        int(5) dim(MAX_COLORS);
-dcl-s colorField      pointer dim(MAX_COLORS);
-dcl-s nbrColors       like(int4_t) inz(0);
+dcl-c MAX_COLORS 28;
+dcl-s colorName char(10) dim(MAX_COLORS);
+dcl-s colorAttr char(1) dim(MAX_COLORS);
+dcl-s colorInd int(5) dim(MAX_COLORS);
+dcl-s colorField pointer dim(MAX_COLORS);
+dcl-s nbrColors like(int4_t) inz(0);
 
-dcl-s pScnColor       pointer inz(*null);
-dcl-s scnColor        char(3) based(pScnColor);
-dcl-s i               like(int4_t);
+dcl-s pScnColor pointer inz(*null);
+dcl-s scnColor char(3) based(pScnColor);
+dcl-s i like(int4_t);
 
-dcl-s peek21_name     like(pgmcalln_t) inz;
-dcl-s peek23_name     like(pgmcalln_t) inz;
+dcl-s peek21_name like(pgmcalln_t) inz;
+dcl-s peek23_name like(pgmcalln_t) inz;
 
-dcl-s isInzSr         like(bool_t) inz(bFalse);
+dcl-s isInzSr like(bool_t) inz(bFalse);
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *
 //*******************************************************************
-
 dcl-pi peek25;
-  i_dsp80         const like(dsp80_t);
-  o_colorattr           like(color_t);
-  o_msgid               like(msgid_t);
-  o_msgdta              like(msgdta_t);
+  i_dsp80     like(dsp80_t) const;
+  o_colorattr like(color_t);
+  o_msgid     like(msgid_t);
+  o_msgdta    like(msgdta_t);
 end-pi;
 //---------------------------------------------------*
 
@@ -454,10 +452,10 @@ endsr;
 //============================================================*
 dcl-proc addColor;
   dcl-pi *n;
-    i_name          char(10) const;
-    i_attr          char(1) const;
-    i_ind           int(5) const;
-    i_field         pointer const;
+    i_name  char(10) const;
+    i_attr  char(1) const;
+    i_ind   int(5) const;
+    i_field pointer const;
   end-pi;
 
   nbrColors += 1;
@@ -473,11 +471,11 @@ end-proc;
 //============================================================*
 
 dcl-proc errorhandler;
-  dcl-pi *N;
-    i_condtoken     value likeds(cee_fc_t);
-    i_pcommarea     int(10) value;
-    o_action        int(10);
-    o_newcondtoken  likeds(cee_fc_t);
+  dcl-pi *n;
+    i_condtoken    likeds(cee_fc_t) value;
+    i_pcommarea    int(10) value;
+    o_action       int(10);
+    o_newcondtoken likeds(cee_fc_t);
   end-pi;
 
   dump;
